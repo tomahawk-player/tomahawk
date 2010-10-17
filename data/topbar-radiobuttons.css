@@ -1,0 +1,55 @@
+QWidget#widgetRadio {
+  margin:0;
+  padding:0;
+  border: 0;
+}
+
+QRadioButton {
+  border: 0;
+  margin:0;
+  padding:0;
+  background-repeat: none;
+  /*width:0; height:0;*/
+} 
+
+QRadioButton::indicator {
+  width: 29px;
+  height: 30px;
+ }
+
+QRadioButton::indicator::unchecked {
+  background-image: url(:/data/images/view-toggle-inactive-centre.png);
+  image: url(:/data/images/view-toggle-icon-artist-inactive.png);
+}
+QRadioButton::indicator::checked {
+  background-image: url(:/data/images/view-toggle-active-centre.png);
+  image: url(:/data/images/view-toggle-icon-artist-active.png);
+}
+QRadioButton::indicator::pressed {
+  background-image: url(:/data/images/view-toggle-pressed-centre.png);
+  image: url(:/data/images/view-toggle-icon-artist-active.png);
+}
+QRadioButton#radioNormal::indicator::unchecked {
+  background-image: url(:/data/images/view-toggle-inactive-left.png);
+  image: url(:/data/images/view-toggle-icon-list-inactive.png);
+}
+QRadioButton#radioNormal::indicator::checked {
+  background-image: url(:/data/images/view-toggle-active-left.png);
+  image: url(:/data/images/view-toggle-icon-list-active.png);
+}
+QRadioButton#radioNormal::indicator::pressed {
+  background-image: url(:/data/images/view-toggle-pressed-left.png);
+  image: url(:/data/images/view-toggle-icon-list-active.png);
+}
+QRadioButton#radioCloud::indicator::unchecked {
+  background-image: url(:/data/images/view-toggle-inactive-right.png);
+  image: url(:/data/images/view-toggle-icon-cloud-inactive.png);
+}
+QRadioButton#radioCloud::indicator::checked {
+  background-image: url(:/data/images/view-toggle-active-right.png);
+  image: url(:/data/images/view-toggle-icon-cloud-active.png);
+}
+QRadioButton#radioCloud::indicator::pressed {
+  background-image: url(:/data/images/view-toggle-pressed-right.png);
+  image: url(:/data/images/view-toggle-icon-cloud-active.png);
+}

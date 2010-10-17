@@ -1,0 +1,28 @@
+ADD_DEFINITIONS( -ggdb )
+ADD_DEFINITIONS( -Wall )
+ADD_DEFINITIONS( -g )
+ADD_DEFINITIONS( -fno-operator-names )
+ADD_DEFINITIONS( -fPIC )
+
+SET( GLOOX_LIBS ${GLOOX_LIBS} resolv gloox.a )
+
+SET( OS_SPECIFIC_LINK_LIBRARIES 
+        ${LIBLASTFM_LIBRARY}
+        ${GLOOX_LIBS}
+        qxtweb-standalone
+        qjson
+        tag
+)
+
+IF( "${gui}" STREQUAL "no" )
+ELSE()
+	SET( OS_SPECIFIC_LINK_LIBRARIES 
+		 ${OS_SPECIFIC_LINK_LIBRARIES}
+		 mad 
+		 vorbisfile 
+		 ogg
+		)
+		
+	SET( tomahawkSourcesGui ${tomahawkSourcesGui} audio/vorbistranscode.cpp scrobbler.cpp )
+	SET( tomahawkHeadersGui ${tomahawkHeadersGui} audio/vorbistranscode.h scrobbler.h )
+ENDIF()

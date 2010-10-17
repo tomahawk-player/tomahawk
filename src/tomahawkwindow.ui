@@ -1,0 +1,151 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>TomahawkWindow</class>
+ <widget class="QMainWindow" name="TomahawkWindow">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>800</width>
+    <height>480</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>Tomahawk</string>
+  </property>
+  <widget class="QWidget" name="centralWidget">
+   <layout class="QVBoxLayout" name="verticalLayout_2">
+    <item>
+     <layout class="QHBoxLayout" name="horizontalLayout">
+      <item>
+       <widget class="SourceTreeView" name="sourceTreeView">
+        <property name="sizePolicy">
+         <sizepolicy hsizetype="Fixed" vsizetype="Expanding">
+          <horstretch>0</horstretch>
+          <verstretch>0</verstretch>
+         </sizepolicy>
+        </property>
+        <property name="minimumSize">
+         <size>
+          <width>250</width>
+          <height>0</height>
+         </size>
+        </property>
+        <property name="maximumSize">
+         <size>
+          <width>250</width>
+          <height>16777215</height>
+         </size>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <layout class="QVBoxLayout" name="verticalLayout">
+        <item>
+         <widget class="PlaylistView" name="playlistView"/>
+        </item>
+        <item>
+         <widget class="QProgressBar" name="actionProgress"/>
+        </item>
+       </layout>
+      </item>
+     </layout>
+    </item>
+   </layout>
+  </widget>
+  <widget class="QMenuBar" name="menuBar">
+   <property name="geometry">
+    <rect>
+     <x>0</x>
+     <y>0</y>
+     <width>800</width>
+     <height>19</height>
+    </rect>
+   </property>
+   <widget class="QMenu" name="menuSettings">
+    <property name="title">
+     <string>&amp;Settings</string>
+    </property>
+    <addaction name="actionPreferences"/>
+   </widget>
+   <widget class="QMenu" name="menuApp">
+    <property name="title">
+     <string>Music &amp;Player</string>
+    </property>
+    <addaction name="actionAddPeerManually"/>
+    <addaction name="actionRescanCollection"/>
+    <addaction name="separator"/>
+    <addaction name="actionExit"/>
+   </widget>
+   <widget class="QMenu" name="menuPlaylist">
+    <property name="title">
+     <string>&amp;Playlist</string>
+    </property>
+    <addaction name="actionCreatePlaylist"/>
+    <addaction name="separator"/>
+    <addaction name="actionLoadXSPF"/>
+   </widget>
+   <addaction name="menuApp"/>
+   <addaction name="menuPlaylist"/>
+   <addaction name="menuSettings"/>
+  </widget>
+  <widget class="QStatusBar" name="statusBar"/>
+  <action name="actionExit">
+   <property name="text">
+    <string>&amp;Quit</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+Q</string>
+   </property>
+   <property name="menuRole">
+    <enum>QAction::QuitRole</enum>
+   </property>
+  </action>
+  <action name="actionAddPeerManually">
+   <property name="text">
+    <string>&amp;Add Peer Manually</string>
+   </property>
+  </action>
+  <action name="actionRescanCollection">
+   <property name="text">
+    <string>Re&amp;scan Collection</string>
+   </property>
+  </action>
+  <action name="actionPreferences">
+   <property name="text">
+    <string>&amp;Configure Tomahawk...</string>
+   </property>
+   <property name="menuRole">
+    <enum>QAction::PreferencesRole</enum>
+   </property>
+  </action>
+  <action name="actionLoadXSPF">
+   <property name="text">
+    <string>Load &amp;XSPF</string>
+   </property>
+  </action>
+  <action name="actionCreatePlaylist">
+   <property name="text">
+    <string>Create &amp;New Playlist...</string>
+   </property>
+  </action>
+ </widget>
+ <layoutdefault spacing="6" margin="11"/>
+ <customwidgets>
+  <customwidget>
+   <class>PlaylistView</class>
+   <extends>QTreeView</extends>
+   <header>playlistview.h</header>
+  </customwidget>
+  <customwidget>
+   <class>SourceTreeView</class>
+   <extends>QTreeView</extends>
+   <header>sourcetreeview.h</header>
+  </customwidget>
+ </customwidgets>
+ <resources/>
+ <connections/>
+ <slots>
+  <slot>on_btnResolve_clicked()</slot>
+ </slots>
+</ui>

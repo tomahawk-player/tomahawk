@@ -1,0 +1,11 @@
+qtcreator-build/*
+build/*
+.directory
+*.a
+*.o
+._*
+*.user
+Makefile*
+moc_*
+*~
+/playdar

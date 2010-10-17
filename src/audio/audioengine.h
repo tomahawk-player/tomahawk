@@ -1,0 +1,94 @@
+#ifndef AUDIOENGINE_H
+#define AUDIOENGINE_H
+
+#include <QThread>
+#include <QMutex>
+#include <QBuffer>
+
+#include "tomahawk/playlistmodelinterface.h"
+#include "tomahawk/result.h"
+#include "tomahawk/typedefs.h"
+#include "playlistmodel.h"
+#include "playlistitem.h"
+
+#include "rtaudiooutput.h"
+#include "alsaplayback.h"
+#include "transcodeinterface.h"
+
+#define AUDIO_VOLUME_STEP 5
+
+class AudioEngine : public QThread
+{
+Q_OBJECT
+
+public:
+    enum AudioErrorCode { StreamReadError, AudioDeviceError, DecodeError };
+
+    explicit AudioEngine();
+    ~AudioEngine();
+
+    unsigned int volume() { if ( m_audio ) return m_audio->volume() * 100.0; else return 0; }; // in percent
+
+signals:
+    void loading( const Tomahawk::result_ptr& track );
+    void started( const Tomahawk::result_ptr& track );
+    void stopped();
+    void paused();
+    void resumed();
+
+    void volumeChanged( int volume /* in percent */ );
+
+    void timerSeconds( unsigned int secondsElapsed );
+    void timerPercentage( unsigned int percentage );
+
+    void error( AudioErrorCode errorCode );
+
+public slots:
+    void play();
+    void pause();
+    void stop();
+
+    void previous();
+    void next();
+
+    void setVolume( int percentage );
+    void lowerVolume() { setVolume( volume() - AUDIO_VOLUME_STEP ); }
+    void raiseVolume() { setVolume( volume() + AUDIO_VOLUME_STEP ); }
+    void onVolumeChanged( float volume ) { emit volumeChanged( volume * 100 ); }
+
+    void playItem( PlaylistModelInterface* model, PlaylistItem* item );
+    void onPlaylistActivated( PlaylistModelInterface* model );
+
+    void onTrackAboutToClose();
+
+private slots:
+    bool loadTrack( PlaylistItem* item );
+    void loadPreviousTrack();
+    void loadNextTrack();
+
+    void setStreamData( long sampleRate, int channels );
+    void timerTriggered( unsigned int seconds );
+
+    void engineLoop();
+    void loop();
+
+private:
+    void run();
+
+    QSharedPointer<QIODevice> m_input;
+    QSharedPointer<TranscodeInterface> m_transcode;
+
+#ifdef Q_WS_X11
+    AlsaPlayback* m_audio;
+#else
+    RTAudioOutput* m_audio;
+#endif
+
+    Tomahawk::result_ptr m_currentTrack;
+    PlaylistModelInterface* m_playlist;
+    QMutex m_mutex;
+
+    int m_i;
+};
+
+#endif // AUDIOENGINE_H

@@ -1,0 +1,87 @@
+Quickstart on Ubuntu
+--------------------
+
+ sudo apt-get install build-essential cmake libtag1c2a libtag1-dev liblastfm-dev \
+                      libqt4-dev libqt4-sql-sqlite libvorbis-dev libmad0-dev \ 
+                      libasound2-dev libboost-dev zlib1g-dev libgnutls-dev pkg-config 
+
+
+Gloox 1.0 (XMPP library)
+------------------------
+ See: http://camaya.net/glooxdownload
+ You need to build gloox 1.0 from source, Ubuntu 10.04 only packages v0.9.
+
+ $ # Download and unpack tarball
+ $ CXXFLAGS=-fPIC ./configure --without-openssl --with-gnutls --without-libidn --with-zlib --without-examples --without-tests
+ $ CXXFLAGS=-fPIC make 
+ $ sudo make install
+
+QJson (Qt JSON library)
+-----------------------
+ On Ubuntu 10.04:
+ $ sudo apt-get install libqjson-dev
+
+ Otherwise:
+ See: http://sourceforge.net/projects/qjson/files/ (developed using 0.7.1)
+
+ $ # Download and unpack tarball
+ $ ./configure && make
+ $ sudo make install 
+
+Now compile Tomahawk
+-------------------
+ $ sudo ldconfig -v | grep -Ei 'qjson|gloox'
+ $ mkdir build 
+ $ cd build 
+ $ cmake .. 
+ $ make 
+ $ cd ..
+ $ ./tomahawk
+
+
+Dependencies
+------------
+
+  CMake 2.8.0 http://www.cmake.org/
+  Qt 4.6.2 http://qt.nokia.com/
+  QJson 0.7.1 http://qjson.sourceforge.net/
+  Gloox 1.0 (0.9.x will fail) http://camaya.net/gloox/
+  SQLite 3.6.22 http://www.sqlite.org/
+  TagLib 1.6.2 http://developer.kde.org/~wheeler/taglib.html
+  Boost 1.3x http://www.boost.org/
+
+ Unless you enable the headless mode (no GUI), we also require the following libraries:
+
+  libmad 0.15.1b http://www.underbit.com/products/mad/
+  libvorbis 1.2.3 http://xiph.org/vorbis/
+  libogg 1.1.4 http://xiph.org/ogg/
+  liblastfm 0.3.0 http://github.com/mxcl/liblastfm/
+
+ Third party libraries that we ship with our source:
+
+  RtAudio 4.0.7 http://www.music.mcgill.ca/~gary/rtaudio/
+  MiniUPnP http://miniupnp.free.fr/
+
+
+To build the app:
+-----------------
+ $ mkdir build
+ $ cd build
+
+ (Pick one of the following two choices. If unsure pick the second one, you probably want a GUI)
+ $ cmake -Dgui=no ..     # enables headless mode, build without GUI
+ $ cmake ..              # normal build including GUI
+
+ $ make
+
+To run the app:
+---------------
+ $ cd ..                 # return to the top-level tomahawk dir
+
+ (Only run the next two commands if you installed any of the dependencies from source on Linux)
+ $ export LD_LIBRARY_PATH=/usr/local/lib:$LD_LIBRARY_PATH
+ $ sudo ldconfig -v
+
+ $ ./tomahawk
+
+Enjoy!

@@ -1,0 +1,31 @@
+PROJECT( tomahawk )
+CMAKE_MINIMUM_REQUIRED( VERSION 2.8 )
+
+SET( CMAKE_MODULE_PATH "${CMAKE_MODULE_PATH}" "${CMAKE_CURRENT_SOURCE_DIR}/CMakeModules" )
+
+# Check if we need qtgui:
+IF( "${gui}" STREQUAL "no" )
+    ADD_DEFINITIONS( -DENABLE_HEADLESS )
+    MESSAGE( STATUS "Building in HEADLESS mode ***" )
+	FIND_PACKAGE( Qt4 4.6.0 COMPONENTS QtCore QtXml QtNetwork REQUIRED )
+ELSE()
+    MESSAGE( STATUS "Building full GUI version ***" )
+	FIND_PACKAGE( Qt4 4.6.0 COMPONENTS QtGui QtCore QtXml QtNetwork REQUIRED )
+ENDIF()
+
+FIND_PACKAGE( Taglib 1.6.0 REQUIRED )
+FIND_PACKAGE( LibLastFm REQUIRED )
+
+IF( "${gui}" STREQUAL "no" )
+ELSE()
+        IF( UNIX AND NOT APPLE )
+                ADD_SUBDIRECTORY( alsa-playback )
+        ELSE()
+                ADD_SUBDIRECTORY( rtaudio )
+        ENDIF( UNIX AND NOT APPLE )
+ENDIF()
+
+ADD_SUBDIRECTORY( libportfwd )
+ADD_SUBDIRECTORY( qxtweb-standalone )
+ADD_SUBDIRECTORY( src )
+

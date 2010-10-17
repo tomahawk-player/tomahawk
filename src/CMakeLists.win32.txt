@@ -1,0 +1,51 @@
+ADD_DEFINITIONS( /DNOMINMAX )
+ADD_DEFINITIONS( /DWIN32_LEAN_AND_MEAN )
+ADD_DEFINITIONS( -static-libgcc )
+ADD_DEFINITIONS( -DNO_LIBLASTFM )
+ADD_DEFINITIONS( -DNO_OGG )
+
+# Add manual locations to stuff:
+INCLUDE_DIRECTORIES(
+	../../libmad-0.15.1b
+	../../boost_1_43_0
+	../../gloox-1.0
+	../../qjson
+	../../liblastfm/_include
+	../../taglib-1.6.3/
+	../../taglib-1.6.3/build
+	../../taglib-1.6.3/taglib
+	../../taglib-1.6.3/taglib/toolkit
+)
+
+SET( OS_SPECIFIC_LINK_LIBRARIES 
+	"${CMAKE_CURRENT_SOURCE_DIR}/../../gloox-1.0/src/.libs/libgloox.a"
+	"${CMAKE_CURRENT_SOURCE_DIR}/../../qjson/build/lib/libqjson.dll.a"
+	"${CMAKE_CURRENT_SOURCE_DIR}/../../taglib-1.6.3/build/taglib/libtag.dll"
+	"${CMAKE_CURRENT_SOURCE_DIR}/../../zlib-1.2.3/lib/libz.a"
+	"secur32.dll"
+	"Crypt32.dll"
+	"ws2_32.dll"
+	"dnsapi.dll"
+	"${CMAKE_CURRENT_SOURCE_DIR}/../qxtweb-standalone/libqxtweb-standalone.dll"
+)
+
+SET( OS_SPECIFIC_LINK_LIBRARIES 
+	${OS_SPECIFIC_LINK_LIBRARIES} 
+	"${CMAKE_CURRENT_SOURCE_DIR}/../admin/win/tomahawk.res"
+	)
+
+IF( "${gui}" STREQUAL "no" )
+ELSE()
+    SET( tomahawkSourcesGui ${tomahawkSourcesGui}
+         audio/rtaudiooutput.cpp
+    )
+    SET( tomahawkHeadersGui ${tomahawkHeadersGui} audio/rtaudiooutput.h )
+	
+	SET( OS_SPECIFIC_LINK_LIBRARIES 
+		 ${OS_SPECIFIC_LINK_LIBRARIES} 
+		 "dsound.dll" 
+		 "winmm.dll" 
+		 "${CMAKE_CURRENT_SOURCE_DIR}/../rtaudio/librtaudio.dll"
+		 "${CMAKE_CURRENT_SOURCE_DIR}/../admin/win/dlls/libmad.dll"
+	)
+ENDIF()
