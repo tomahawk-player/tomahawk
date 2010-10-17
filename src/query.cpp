@@ -32,7 +32,7 @@ Query::addResults( const QList< Tomahawk::result_ptr >& newresults )
 void
 Query::resultUnavailable()
 {
-    Result * result = (Result*) sender();
+    Result* result = (Result*) sender();
     Q_ASSERT( result );
 
     for(int i = 0; i < m_results.length(); ++i )
@@ -83,8 +83,12 @@ QID Query::id() const
 {
     if ( m_qid.isEmpty() )
     {
-        m_qid = m_v.toMap().value( "qid" ).toString();
-        Q_ASSERT( !m_qid.isEmpty() );
+        m_qid = uuid();
+
+        QVariantMap m = m_v.toMap();
+        m.insert( "qid", m_qid );
+
+        m_v = m;
     }
     return m_qid;
 }

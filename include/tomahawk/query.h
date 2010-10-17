@@ -24,10 +24,10 @@ public:
     {
         // ensure a QID is present:
         QVariantMap m = m_v.toMap();
-        if( !m.contains("qid") )
-            m.insert( "qid", uuid() );
 
-        m_v = m;
+        m_artist = m.value( "artist" ).toString();
+        m_album = m.value( "album" ).toString();
+        m_track = m.value( "track" ).toString();
     }
 
     QVariant toVariant() const { return m_v; }
@@ -55,9 +55,9 @@ public:
         return QString( "Query(%1, %2 - %3)" ).arg( id() ).arg( artist() ).arg( track() );
     }
 
-    QString artist() const { return m_v.toMap().value( "artist" ).toString(); }
-    QString album()  const { return m_v.toMap().value( "album" ).toString(); }
-    QString track()  const { return m_v.toMap().value( "track" ).toString(); }
+    QString artist() const { return m_artist; }
+    QString album()  const { return m_album; }
+    QString track()  const { return m_track; }
 
 signals:
     void resultsAdded( const QList<Tomahawk::result_ptr>& );
@@ -74,11 +74,15 @@ private slots:
 
 private:
     mutable QMutex m_mut;
-    QVariant m_v;
+    mutable QVariant m_v;
     QList< Tomahawk::result_ptr > m_results;
     bool m_solved;
     mutable QID m_qid;
     unsigned int m_lastpipelineweight;
+
+    QString m_artist;
+    QString m_album;
+    QString m_track;
 };
 
 }; //ns
