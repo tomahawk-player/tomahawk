@@ -37,6 +37,7 @@
 
 // Must not be smaller than 8500 bytes!
 #define OGG_BUFFER 8500
+#define OGG_BUFFER_PREFERRED 32768
 
 class VorbisTranscode : public TranscodeInterface
 {
@@ -50,6 +51,8 @@ class VorbisTranscode : public TranscodeInterface
 
         int needData() { return OGG_BUFFER - m_buffer.count(); }
         bool haveData() { return !m_outBuffer.isEmpty(); }
+
+        unsigned int preferredDataSize() { return OGG_BUFFER_PREFERRED; }
 
         QByteArray data() { QByteArray b = m_outBuffer; m_outBuffer.clear(); return b; }
 

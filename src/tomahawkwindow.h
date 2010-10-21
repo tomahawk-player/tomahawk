@@ -5,16 +5,15 @@
 #include <QVariantMap>
 #include <QNetworkAccessManager>
 #include <QString>
+#include <QStackedWidget>
 
 #include "tomahawk/pipeline.h"
 
 class QAction;
 
 class AudioControls;
-class PlaylistView;
+class PlaylistManager;
 class TopBar;
-
-typedef int AudioErrorCode; // FIXME why do we need this?
 
 namespace Ui
 {
@@ -29,8 +28,9 @@ public:
     TomahawkWindow( QWidget* parent = 0 );
     ~TomahawkWindow();
 
-    PlaylistView* playlistView();
+    PlaylistManager* playlistManager();
     AudioControls* audioControls() { return m_audioControls; }
+    QStackedWidget* playlistStack();
 
 signals:
     void settingsChanged();
@@ -48,10 +48,6 @@ private slots:
     void rescanCollectionManually();
     void addPeerManually();
 
-    //void onPlaylistStatsChanged( unsigned int friends, unsigned int artists, unsigned int tracks, unsigned int filtered );
-
-    void audioEngineError( AudioErrorCode errorCode );
-
 private:
     void loadSettings();
     void saveSettings();
@@ -60,6 +56,7 @@ private:
     Ui::TomahawkWindow* ui;
     TopBar* m_topbar;
     AudioControls* m_audioControls;
+    PlaylistManager* m_playlistManager;
 
     QNetworkAccessManager m_nam;
 };

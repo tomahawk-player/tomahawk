@@ -8,4 +8,4 @@ build/*
 Makefile*
 moc_*
 *~
-/playdar
+/tomahawk

@@ -5,17 +5,16 @@
 #include <QMutex>
 #include <QBuffer>
 
-#include "tomahawk/playlistmodelinterface.h"
 #include "tomahawk/result.h"
 #include "tomahawk/typedefs.h"
-#include "playlistmodel.h"
-#include "playlistitem.h"
 
 #include "rtaudiooutput.h"
 #include "alsaplayback.h"
 #include "transcodeinterface.h"
 
 #define AUDIO_VOLUME_STEP 5
+
+class PlaylistInterface;
 
 class AudioEngine : public QThread
 {
@@ -56,13 +55,13 @@ public slots:
     void raiseVolume() { setVolume( volume() + AUDIO_VOLUME_STEP ); }
     void onVolumeChanged( float volume ) { emit volumeChanged( volume * 100 ); }
 
-    void playItem( PlaylistModelInterface* model, PlaylistItem* item );
-    void onPlaylistActivated( PlaylistModelInterface* model );
+    void playItem( PlaylistInterface* playlist, const Tomahawk::result_ptr& result );
+    void setPlaylist( PlaylistInterface* playlist ) { m_playlist = playlist; }
 
     void onTrackAboutToClose();
 
 private slots:
-    bool loadTrack( PlaylistItem* item );
+    bool loadTrack( const Tomahawk::result_ptr& result );
     void loadPreviousTrack();
     void loadNextTrack();
 
@@ -85,7 +84,7 @@ private:
 #endif
 
     Tomahawk::result_ptr m_currentTrack;
-    PlaylistModelInterface* m_playlist;
+    PlaylistInterface* m_playlist;
     QMutex m_mutex;
 
     int m_i;

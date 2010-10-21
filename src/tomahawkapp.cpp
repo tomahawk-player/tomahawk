@@ -24,7 +24,6 @@
 #ifndef TOMAHAWK_HEADLESS
     #include "audioengine.h"
     #include "tomahawkwindow.h"
-    #include "playlistview.h"
 #endif
 
 #include <iostream>
@@ -225,10 +224,10 @@ TomahawkApp::audioControls()
 }
 
 
-PlaylistView*
-TomahawkApp::playlistView()
+PlaylistManager*
+TomahawkApp::playlistManager()
 {
-    return m_mainwindow->playlistView();
+    return m_mainwindow->playlistManager();
 }
 #endif
 
@@ -264,7 +263,6 @@ TomahawkApp::registerMetaTypes()
     qRegisterMetaType< QTcpSocket* >("QTcpSocket*");
 
     #ifndef TOMAHAWK_HEADLESS
-    qRegisterMetaType< QList<PlaylistItem*> >("QList<PlaylistItem*>");
     qRegisterMetaType< AudioErrorCode >("AudioErrorCode");
     #endif
 }

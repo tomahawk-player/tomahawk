@@ -20,12 +20,11 @@
 #include "topbar/topbar.h"
 
 #include "audiocontrols.h"
-#include "audioengine.h"
 #include "controlconnection.h"
 #include "database.h"
 #include "musicscanner.h"
-#include "playlistview.h"
-#include "playlistproxymodel.h"
+#include "playlistmanager.h"
+#include "proxystyle.h"
 #include "settingsdialog.h"
 #include "xspfloader.h"
 #include "proxystyle.h"
@@ -40,6 +39,7 @@ TomahawkWindow::TomahawkWindow( QWidget* parent )
     , ui( new Ui::TomahawkWindow )
     , m_topbar( new TopBar( this ) )
     , m_audioControls( new AudioControls( this ) )
+    , m_playlistManager( new PlaylistManager( this ) )
 {
     qApp->setStyle( new ProxyStyle() );
     setWindowIcon( QIcon( RESPATH "icons/tomahawk-icon-128.png" ) );
@@ -49,17 +49,18 @@ TomahawkWindow::TomahawkWindow( QWidget* parent )
 #endif
 
     ui->setupUi( this );
-    ui->playlistView->connectProgressBar( ui->actionProgress );
-    ui->playlistView->setFocus();
+//    ui->playlistView->connectProgressBar( ui->actionProgress );
+//    ui->playlistView->setFocus();
 
 #ifndef Q_WS_MAC
     ui->centralWidget->layout()->setContentsMargins( 4, 4, 4, 2 );
 #else
-    ui->verticalLayout->setSpacing( 0 );
     ui->actionProgress->setAttribute( Qt::WA_MacShowFocusRect, 0 );
     ui->playlistView->setAttribute( Qt::WA_MacShowFocusRect, 0 );
     ui->sourceTreeView->setAttribute( Qt::WA_MacShowFocusRect, 0 );
 #endif
+
+    ui->mainLayout->addWidget( m_playlistManager->widget() );
 
     QToolBar* toolbar = addToolBar( "TomahawkToolbar" );
     toolbar->setObjectName( "TomahawkToolbar" );
@@ -68,9 +69,6 @@ TomahawkWindow::TomahawkWindow( QWidget* parent )
     toolbar->setFloatable( false );
     toolbar->installEventFilter( new WidgetDragFilter( toolbar ) );
     
-    m_audioControls->installEventFilter( new WidgetDragFilter( m_audioControls ) );
-    
-    menuBar()->installEventFilter( new WidgetDragFilter( menuBar() ) );
     statusBar()->addPermanentWidget( m_audioControls, 1 );
 
     loadSettings();
@@ -117,26 +115,32 @@ TomahawkWindow::setupSignals()
 
     // <Playlist>
     connect( m_topbar,         SIGNAL( filterTextChanged( const QString& ) ),
-             ui->playlistView,   SLOT( setFilter( const QString& ) ) );
+             playlistManager(),  SLOT( setFilter( const QString& ) ) );
 
-    connect( ui->playlistView, SIGNAL( numSourcesChanged( unsigned int ) ),
-             m_topbar,           SLOT( setNumSources( unsigned int ) ) );
+    connect( playlistManager(), SIGNAL( numSourcesChanged( unsigned int ) ),
+             m_topbar,            SLOT( setNumSources( unsigned int ) ) );
 
-    connect( ui->playlistView, SIGNAL( numTracksChanged( unsigned int ) ),
-             m_topbar,           SLOT( setNumTracks( unsigned int ) ) );
+    connect( playlistManager(), SIGNAL( numTracksChanged( unsigned int ) ),
+             m_topbar,            SLOT( setNumTracks( unsigned int ) ) );
 
-    connect( ui->playlistView, SIGNAL( numArtistsChanged( unsigned int ) ),
-             m_topbar,           SLOT( setNumArtists( unsigned int ) ) );
+    connect( playlistManager(), SIGNAL( numArtistsChanged( unsigned int ) ),
+             m_topbar,            SLOT( setNumArtists( unsigned int ) ) );
 
-    connect( ui->playlistView, SIGNAL( numShownChanged( unsigned int ) ),
-             m_topbar,           SLOT( setNumShown( unsigned int ) ) );
+    connect( playlistManager(), SIGNAL( numShownChanged( unsigned int ) ),
+             m_topbar,            SLOT( setNumShown( unsigned int ) ) );
 
-    // <From PlaylistView>
-    connect( ui->playlistView->model(), SIGNAL( repeatModeChanged( PlaylistModelInterface::RepeatMode ) ),
-             m_audioControls, SLOT( onRepeatModeChanged( PlaylistModelInterface::RepeatMode ) ) );
+    connect( m_topbar,         SIGNAL( flatMode() ),
+             m_playlistManager,  SLOT( setTableMode() ) );
 
-    connect( ui->playlistView->model(), SIGNAL( shuffleModeChanged( bool ) ),
-             m_audioControls, SLOT( onShuffleModeChanged( bool ) ) );
+    connect( m_topbar,         SIGNAL( artistMode() ),
+             m_playlistManager,  SLOT( setTreeMode() ) );
+
+    // <From PlaylistManager>
+    connect( playlistManager(), SIGNAL( repeatModeChanged( PlaylistInterface::RepeatMode ) ),
+             m_audioControls,     SLOT( onRepeatModeChanged( PlaylistInterface::RepeatMode ) ) );
+
+    connect( playlistManager(), SIGNAL( shuffleModeChanged( bool ) ),
+             m_audioControls,     SLOT( onShuffleModeChanged( bool ) ) );
 
     // <Menu Items>
     connect( ui->actionPreferences, SIGNAL( triggered() ),
@@ -147,10 +151,6 @@ TomahawkWindow::setupSignals()
 
     connect( ui->actionRescanCollection, SIGNAL( triggered() ),
              SLOT( rescanCollectionManually() ) );
-
-    // <Audio Engine>
-    connect( APP->audioEngine(), SIGNAL( error( AudioErrorCode ) ),
-             SLOT( audioEngineError( AudioErrorCode ) ) );
 }
 
 
@@ -171,26 +171,10 @@ TomahawkWindow::changeEvent( QEvent* e )
 }
 
 
-PlaylistView*
-TomahawkWindow::playlistView()
+PlaylistManager*
+TomahawkWindow::playlistManager()
 {
-    return ui->playlistView;
-}
-
-
-void
-TomahawkWindow::audioEngineError( AudioErrorCode errorCode )
-{
-    switch ( errorCode )
-    {
-        case AudioEngine::AudioDeviceError:
-            QMessageBox::critical( this, tr( "Audio Error" ), tr( "Error opening the audio device!" ), QMessageBox::Ok );
-            break;
-
-        case AudioEngine::DecodeError:
-            QMessageBox::critical( this, tr( "Audio Error" ), tr( "We're really sorry, but we can't decode this audio format... yet!" ), QMessageBox::Ok );
-            break;
-    }
+    return m_playlistManager;
 }
 
 
@@ -200,6 +184,7 @@ TomahawkWindow::showSettingsDialog()
     qDebug() << Q_FUNC_INFO;
     SettingsDialog win;
     win.exec();
+
     // settings are written in SettingsDialog destructor, bleh
     QTimer::singleShot( 0, this, SIGNAL( settingsChanged() ) );
 }

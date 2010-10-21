@@ -15,17 +15,12 @@ public:
         qDebug() << Q_FUNC_INFO;
     }
 
-    virtual void loadAllTracks( boost::function<void( const QList<QVariant>&, Tomahawk::collection_ptr )> callback );
+    virtual void loadAllTracks();
     virtual void loadPlaylists();
 
 public slots:
     virtual void addTracks( const QList<QVariant> &newitems );
     virtual void removeTracks( const QList<QVariant> &olditems );
-
-    void callCallback( const QList<QVariant>& res );
-
-private:
-    boost::function<void( const QList<QVariant>&, Tomahawk::collection_ptr )> m_callback;
 };
 
 #endif // DATABASECOLLECTION_H

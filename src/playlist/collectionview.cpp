@@ -1,4 +1,4 @@
-#include "playlistview.h"
+#include "collectionview.h"
 
 #include <QDebug>
 #include <QHeaderView>
@@ -8,22 +8,22 @@
 
 #include "tomahawk/tomahawkapp.h"
 #include "audioengine.h"
-#include "playlistmodel.h"
-#include "playlistproxymodel.h"
+
+#include <tomahawksettings.h>
+#include "collectionmodel.h"
+#include "collectionproxymodel.h"
 #include "trackproxymodel.h"
-#include "tomahawksettings.h"
 
 using namespace Tomahawk;
 
 
-PlaylistView::PlaylistView( QWidget* parent )
+CollectionView::CollectionView( QWidget* parent )
     : QTreeView( parent )
     , m_model( 0 )
-    , m_proxyModel( new PlaylistProxyModel( this ) )
+    , m_proxyModel( new CollectionProxyModel( this ) )
     , m_delegate( new PlaylistItemDelegate( this, m_proxyModel ) )
     , m_resizing( false )
 {
-    setSortingEnabled( false );
     setAlternatingRowColors( true );
     setMouseTracking( true );
     setSelectionMode( QAbstractItemView::ExtendedSelection );
@@ -33,6 +33,9 @@ PlaylistView::PlaylistView( QWidget* parent )
     setDragDropMode( QAbstractItemView::InternalMove );
     setDragDropOverwriteMode ( false );
     setAllColumnsShowFocus( true );
+
+    setSortingEnabled( true );
+    sortByColumn( 0, Qt::AscendingOrder );
 
     setItemDelegate( m_delegate );
     m_proxyModel->setSourceModel( m_model );
@@ -48,7 +51,7 @@ PlaylistView::PlaylistView( QWidget* parent )
 }
 
 
-PlaylistView::~PlaylistView()
+CollectionView::~CollectionView()
 {
     qDebug() << Q_FUNC_INFO;
 
@@ -57,7 +60,7 @@ PlaylistView::~PlaylistView()
 
 
 void
-PlaylistView::setModel( TrackModel* model, PlaylistInterface* modelInterface )
+CollectionView::setModel( TrackModel* model, PlaylistInterface* modelInterface )
 {
     m_model = model;
     m_modelInterface = modelInterface;
@@ -65,18 +68,19 @@ PlaylistView::setModel( TrackModel* model, PlaylistInterface* modelInterface )
 
     connect( m_model, SIGNAL( itemSizeChanged( QModelIndex ) ), SLOT( onItemResized( QModelIndex ) ) );
 
-    setAcceptDrops( true );
+    setAcceptDrops( false );
     setRootIsDecorated( false );
     setUniformRowHeights( true );
 }
 
 
 void
-PlaylistView::restoreColumnsState()
+CollectionView::restoreColumnsState()
 {
     TomahawkSettings* s = APP->settings();
     QList<QVariant> list = s->playlistColumnSizes();
 
+    m_artistColumnWeights << 0.66 << 0.10 << 0.10 << 0.14;
     if ( list.count() != 6 ) // FIXME: const
     {
         m_columnWeights << 0.22 << 0.29 << 0.19 << 0.08 << 0.08 << 0.14;
@@ -89,11 +93,14 @@ PlaylistView::restoreColumnsState()
 
     for ( int i = 0; i < m_columnWeights.count(); i++ )
         m_columnWidths << 0;
+
+    for ( int i = 0; i < m_artistColumnWeights.count(); i++ )
+        m_artistColumnWidths << 0;
 }
 
 
 void
-PlaylistView::saveColumnsState()
+CollectionView::saveColumnsState()
 {
     TomahawkSettings *s = APP->settings();
     QList<QVariant> wlist;
@@ -110,14 +117,14 @@ PlaylistView::saveColumnsState()
 
 
 void
-PlaylistView::onSectionResized( int logicalIndex, int oldSize, int newSize )
+CollectionView::onSectionResized( int logicalIndex, int oldSize, int newSize )
 {
     return;
 }
 
 
 void
-PlaylistView::onItemActivated( const QModelIndex& index )
+CollectionView::onItemActivated( const QModelIndex& index )
 {
     PlItem* item = ((PlaylistInterface*)m_model)->itemFromIndex( m_proxyModel->mapToSource( index ) );
     if ( item && item->query()->numResults() )
@@ -130,7 +137,7 @@ PlaylistView::onItemActivated( const QModelIndex& index )
 
 
 void
-PlaylistView::onItemResized( const QModelIndex& index )
+CollectionView::onItemResized( const QModelIndex& index )
 {
     qDebug() << Q_FUNC_INFO;
     m_delegate->updateRowSize( index );
@@ -138,7 +145,7 @@ PlaylistView::onItemResized( const QModelIndex& index )
 
 
 void
-PlaylistView::resizeEvent( QResizeEvent* event )
+CollectionView::resizeEvent( QResizeEvent* event )
 {
 //    qDebug() << Q_FUNC_INFO;
     resizeColumns();
@@ -146,7 +153,7 @@ PlaylistView::resizeEvent( QResizeEvent* event )
 
 
 void
-PlaylistView::resizeColumns()
+CollectionView::resizeColumns()
 {
     double cw = contentsRect().width();
     int i = 0;
@@ -181,7 +188,7 @@ PlaylistView::resizeColumns()
 
 
 void
-PlaylistView::keyPressEvent( QKeyEvent* event )
+CollectionView::keyPressEvent( QKeyEvent* event )
 {
 //    qDebug() << Q_FUNC_INFO;
     QTreeView::keyPressEvent( event );
@@ -214,7 +221,7 @@ PlaylistView::keyPressEvent( QKeyEvent* event )
 
 
 void
-PlaylistView::dragEnterEvent( QDragEnterEvent* event )
+CollectionView::dragEnterEvent( QDragEnterEvent* event )
 {
     qDebug() << Q_FUNC_INFO;
     QTreeView::dragEnterEvent( event );
@@ -231,7 +238,7 @@ PlaylistView::dragEnterEvent( QDragEnterEvent* event )
 
 
 void
-PlaylistView::dragMoveEvent( QDragMoveEvent* event )
+CollectionView::dragMoveEvent( QDragMoveEvent* event )
 {
     QTreeView::dragMoveEvent( event );
 
@@ -265,7 +272,7 @@ PlaylistView::dragMoveEvent( QDragMoveEvent* event )
 
 
 void
-PlaylistView::dropEvent( QDropEvent* event )
+CollectionView::dropEvent( QDropEvent* event )
 {
 /*    const QPoint pos = event->pos();
     const QModelIndex index = indexAt( pos );
@@ -287,7 +294,7 @@ PlaylistView::dropEvent( QDropEvent* event )
 
 
 void
-PlaylistView::paintEvent( QPaintEvent* event )
+CollectionView::paintEvent( QPaintEvent* event )
 {
     QTreeView::paintEvent( event );
 
@@ -319,7 +326,7 @@ PlaylistView::paintEvent( QPaintEvent* event )
 
 
 void
-PlaylistView::onFilterChanged( const QString& )
+CollectionView::onFilterChanged( const QString& )
 {
     if ( selectedIndexes().count() )
         scrollTo( selectedIndexes().at( 0 ), QAbstractItemView::PositionAtCenter );

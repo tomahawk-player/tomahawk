@@ -84,6 +84,7 @@ SourceList::lookup( unsigned int id ) const
     return m_sources.value( m_sources_id2name.value( id ) );
 }
 
+
 source_ptr
 SourceList::lookup( const QString& username ) const
 {
@@ -93,7 +94,7 @@ SourceList::lookup( const QString& username ) const
 
 
 unsigned int
-SourceList::length() const
+SourceList::count() const
 {
     QMutexLocker lock( &m_mut );
     return m_sources.size();

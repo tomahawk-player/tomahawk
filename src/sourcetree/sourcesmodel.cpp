@@ -10,7 +10,6 @@
 #include "tomahawk/sourcelist.h"
 #include "sourcetreeitem.h"
 #include "imagebutton.h"
-#include "playlistview.h"
 
 using namespace Tomahawk;
 

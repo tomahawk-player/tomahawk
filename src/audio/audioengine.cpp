@@ -4,6 +4,7 @@
 #include <QMutexLocker>
 
 #include <tomahawk/tomahawkapp.h>
+#include "tomahawk/playlistinterface.h"
 
 #include "madtranscode.h"
 #ifndef NO_OGG
@@ -17,7 +18,9 @@ AudioEngine::AudioEngine()
     , m_i( 0 )
 {
     qDebug() << "Init AudioEngine";
+
     moveToThread( this );
+    qRegisterMetaType< AudioErrorCode >("AudioErrorCode");
 
 #ifdef Q_WS_X11
     m_audio = new AlsaPlayback();
@@ -111,10 +114,7 @@ AudioEngine::setVolume( int percentage )
 {
     //qDebug() << Q_FUNC_INFO;
 
-    if ( percentage > 100 )
-        percentage = 100;
-    if ( percentage < 0 )
-        percentage = 0;
+    percentage = qBound( 0, percentage, 100 );
 
     m_audio->setVolume( percentage );
     emit volumeChanged( percentage );
@@ -133,9 +133,9 @@ AudioEngine::onTrackAboutToClose()
 
 
 bool
-AudioEngine::loadTrack( PlaylistItem* item )
+AudioEngine::loadTrack( const Tomahawk::result_ptr& result )
 {
-    qDebug() << Q_FUNC_INFO << thread() << item;
+    qDebug() << Q_FUNC_INFO << thread() << result;
     bool err = false;
 
     // in a separate scope due to the QMutexLocker!
@@ -143,11 +143,11 @@ AudioEngine::loadTrack( PlaylistItem* item )
         QMutexLocker lock( &m_mutex );
         QSharedPointer<QIODevice> io;
 
-        if ( !item )
+        if ( result.isNull() )
             err = true;
         else
         {
-            m_currentTrack = item->query()->results().at( 0 );
+            m_currentTrack = result;
             io = TomahawkApp::instance()->getIODeviceForUrl( m_currentTrack );
 
             if ( !io || io.isNull() )
@@ -229,7 +229,11 @@ AudioEngine::loadPreviousTrack()
         return;
     }
 
-    loadTrack( m_playlist->previousItem() );
+    PlItem* pl = m_playlist->previousItem();
+    if ( pl )
+        loadTrack( pl->query()->results().at( 0 ) );
+    else
+        stop();
 }
 
 
@@ -244,24 +248,21 @@ AudioEngine::loadNextTrack()
         return;
     }
 
-    loadTrack( m_playlist->nextItem() );
+    PlItem* pl = m_playlist->nextItem();
+    if ( pl )
+        loadTrack( pl->query()->results().at( 0 ) );
+    else
+        stop();
 }
 
 
 void
-AudioEngine::playItem( PlaylistModelInterface* model, PlaylistItem* item )
+AudioEngine::playItem( PlaylistInterface* playlist, const Tomahawk::result_ptr& result )
 {
     qDebug() << Q_FUNC_INFO;
-    m_playlist = model;
-    loadTrack( item );
-}
 
-
-void
-AudioEngine::onPlaylistActivated( PlaylistModelInterface* model )
-{
-    qDebug() << Q_FUNC_INFO;
-    m_playlist = model;
+    m_playlist = playlist;
+    loadTrack( result );
 }
 
 
@@ -347,7 +348,7 @@ AudioEngine::loop()
 
             if ( m_transcode->needData() > 0 )
             {
-                QByteArray encdata = m_input->read( 8192 ); //FIXME CONSTANT VALUE
+                QByteArray encdata = m_input->read( m_transcode->preferredDataSize() );
                 m_transcode->processData( encdata, m_input->atEnd() );
             }
 
@@ -366,7 +367,7 @@ AudioEngine::loop()
     // are we cleanly at the end of a track, and ready for the next one?
     if ( !m_input.isNull() &&
           m_input->atEnd() &&
-          m_input->isOpen() &&
+//          m_input->isOpen() &&
          !m_input->bytesAvailable() &&
          !m_audio->haveData() &&
          !m_audio->isPaused() )

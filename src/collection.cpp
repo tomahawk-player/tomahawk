@@ -25,18 +25,6 @@ Collection::~Collection()
 }
 
 
-void
-Collection::invokeSlotTracks( QObject* obj, const char* slotname,
-                              const QList<QVariant>& val,
-                              collection_ptr collection )
-{
-    qDebug() << Q_FUNC_INFO << obj << slotname;
-    QMetaObject::invokeMethod( obj, slotname, Qt::QueuedConnection,
-                               Q_ARG( QList<QVariant>, val ),
-                               Q_ARG( Tomahawk::collection_ptr, collection ) );
-}
-
-
 QString
 Collection::name() const
 {
@@ -71,18 +59,6 @@ Collection::deletePlaylist( const Tomahawk::playlist_ptr& p )
                             << "from source id" << source()->id()
                             << "numplaylists:" << m_playlists.length();
     emit playlistsDeleted( todelete );
-}
-
-
-void
-Collection::loadTracks( QObject* obj, const char* slotname )
-{
-    if ( !obj )
-        obj = this;
-
-    boost::function< void( const QList<QVariant>&, Tomahawk::collection_ptr )> cb =
-            boost::bind( &Collection::invokeSlotTracks, this, obj, slotname, _1, _2 );
-    loadAllTracks( cb );
 }
 
 

@@ -56,6 +56,9 @@ TopBar::TopBar( QWidget* parent )
     ui->radioDetailed->setFocusPolicy( Qt::NoFocus );
     ui->radioCloud->setFocusPolicy( Qt::NoFocus );
 
+    connect( ui->radioNormal, SIGNAL( clicked() ), SIGNAL( flatMode() ) );
+    connect( ui->radioDetailed, SIGNAL( clicked() ), SIGNAL( artistMode() ) );
+
     ui->widgetRadio->hide(); // FIXME
 
     setNumSources( 0 );
@@ -124,11 +127,11 @@ TopBar::fadeOutDude( unsigned int i )
     ani->start();
 }
 
+
 void
 TopBar::setNumSources( unsigned int i )
 {
 //    qDebug() << Q_FUNC_INFO << i;
-    Q_ASSERT( i < 1000000 );
 
     // Dude0 Dude1 Dude2
     ui->statsLabelNumSources->setText( QString( "%L1 %2" ).arg( i ).arg( tr( "Sources" ) ) );
@@ -163,7 +166,6 @@ void
 TopBar::setNumTracks( unsigned int i )
 {
     m_tracks = i;
-    ui->statsLabelNumShown->setVisible( false ); // FIXME
     ui->statsLabelNumTracks->setVal( i );
 }
 
@@ -172,6 +174,7 @@ void
 TopBar::setNumArtists( unsigned int i )
 {
     m_artists = i;
+    ui->statsLabelNumArtists->setVisible( m_artists > 0 );
     ui->statsLabelNumArtists->setVal( i );
 }
 
@@ -179,11 +182,9 @@ TopBar::setNumArtists( unsigned int i )
 void
 TopBar::setNumShown( unsigned int i )
 {
-    ui->statsLabelNumShown->setVisible( false ); // FIXME
-
-/*    m_shown = i;
-    ui->statsLabelNumShown->setVisible( m_shown == m_tracks );
-    ui->statsLabelNumShown->setText( QString( "%L1 %2" ).arg( i ).arg( tr( "Shown" ) ) );*/
+    m_shown = i;
+    ui->statsLabelNumShown->setVisible( m_shown != m_tracks );
+    ui->statsLabelNumShown->setText( QString( "%L1 %2" ).arg( i ).arg( tr( "Shown" ) ) );
 }
 
 

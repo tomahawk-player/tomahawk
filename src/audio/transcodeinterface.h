@@ -18,6 +18,8 @@ class TranscodeInterface : public QObject
         virtual int needData() = 0;
         virtual bool haveData() = 0;
 
+        virtual unsigned int preferredDataSize() = 0;
+
         virtual QByteArray data() = 0;
 
 //        virtual void setBufferCapacity( int bytes ) = 0;

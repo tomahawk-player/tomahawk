@@ -8,8 +8,7 @@
 
 #include "audioengine.h"
 #include "imagebutton.h"
-#include "playlistproxymodel.h"
-#include "playlistview.h"
+#include "playlist/playlistmanager.h"
 
 #define LASTFM_DEFAULT_COVER "http://cdn.last.fm/flatness/catalogue/noimage"
 
@@ -17,7 +16,7 @@
 AudioControls::AudioControls( QWidget* parent )
     : QWidget( parent )
     , ui( new Ui::AudioControls )
-    , m_repeatMode( PlaylistModelInterface::NoRepeat )
+    , m_repeatMode( PlaylistInterface::NoRepeat )
     , m_shuffled( false )
 {
     ui->setupUi( this );
@@ -65,8 +64,8 @@ AudioControls::AudioControls( QWidget* parent )
                                    "margin-left: 5px; margin-right: -5px; "
                                    "width: 0px;"
 
-                                   //"margin-bottom: -1px; margin-top: -1px; "
-                                   //"height: 17px; width: 6px; "
+                                   //"margin-bottom: -7px; margin-top: -7px;"
+                                   //"height: 17px; width: 16px;"
                                    //"background-image: url(" RESPATH "images/seek-and-volume-knob-rest.png);"
                                    //"background-repeat: no-repeat;"
                                    "}"
@@ -82,7 +81,8 @@ AudioControls::AudioControls( QWidget* parent )
     ui->volumeSlider->setValue( APP->audioEngine()->volume() );
     ui->volumeSlider->setStyleSheet( "QSlider::groove::horizontal {"
                                      "margin: 5px; border-width: 3px;"
-                                     "border-image: url(" RESPATH "images/volume-slider-bkg.png) 3 3 3 3 stretch stretch;}"
+                                     "border-image: url(" RESPATH "images/volume-slider-bkg.png) 3 3 3 3 stretch stretch;"
+                                     "}"
 
                                      "QSlider::sub-page:horizontal {"
                                      "margin: 5px; border-width: 3px;"
@@ -90,9 +90,8 @@ AudioControls::AudioControls( QWidget* parent )
                                      "}"
 
                                      "QSlider::handle::horizontal {"
-                                     "margin-left: 0px; margin-right: 0px;"
-                                     "margin-bottom: -1px; margin-top: -1px; "
-                                     "height: 17px; width: 6px; "
+                                     "margin-bottom: -7px; margin-top: -7px;"
+                                     "height: 17px; width: 16px;"
                                      "background-image: url(" RESPATH "images/seek-and-volume-knob-rest.png);"
                                      "background-repeat: no-repeat;"
                                      "}"
@@ -308,13 +307,13 @@ AudioControls::onPlaybackTimer( unsigned int seconds )
 
 
 void
-AudioControls::onRepeatModeChanged( PlaylistModelInterface::RepeatMode mode )
+AudioControls::onRepeatModeChanged( PlaylistInterface::RepeatMode mode )
 {
     m_repeatMode = mode;
 
     switch ( m_repeatMode )
     {
-        case PlaylistModelInterface::NoRepeat:
+        case PlaylistInterface::NoRepeat:
         {
             // switch to RepeatOne
             ui->repeatButton->setPixmap( RESPATH "images/repeat-off-rest.png" );
@@ -322,7 +321,7 @@ AudioControls::onRepeatModeChanged( PlaylistModelInterface::RepeatMode mode )
         }
         break;
 
-        case PlaylistModelInterface::RepeatOne:
+        case PlaylistInterface::RepeatOne:
         {
             // switch to RepeatAll
             ui->repeatButton->setPixmap( RESPATH "images/repeat-1-on-rest.png" );
@@ -330,7 +329,7 @@ AudioControls::onRepeatModeChanged( PlaylistModelInterface::RepeatMode mode )
         }
         break;
 
-        case PlaylistModelInterface::RepeatAll:
+        case PlaylistInterface::RepeatAll:
         {
             // switch to NoRepeat
             ui->repeatButton->setPixmap( RESPATH "images/repeat-all-on-rest.png" );
@@ -349,24 +348,24 @@ AudioControls::onRepeatClicked()
 {
     switch ( m_repeatMode )
     {
-        case PlaylistModelInterface::NoRepeat:
+        case PlaylistInterface::NoRepeat:
         {
             // switch to RepeatOne
-            APP->playlistView()->model()->setRepeatMode( PlaylistModelInterface::RepeatOne );
+            APP->playlistManager()->setRepeatMode( PlaylistInterface::RepeatOne );
         }
         break;
 
-        case PlaylistModelInterface::RepeatOne:
+        case PlaylistInterface::RepeatOne:
         {
             // switch to RepeatAll
-            APP->playlistView()->model()->setRepeatMode( PlaylistModelInterface::RepeatAll );
+            APP->playlistManager()->setRepeatMode( PlaylistInterface::RepeatAll );
         }
         break;
 
-        case PlaylistModelInterface::RepeatAll:
+        case PlaylistInterface::RepeatAll:
         {
             // switch to NoRepeat
-            APP->playlistView()->model()->setRepeatMode( PlaylistModelInterface::NoRepeat );
+            APP->playlistManager()->setRepeatMode( PlaylistInterface::NoRepeat );
         }
         break;
 
@@ -401,5 +400,5 @@ AudioControls::onShuffleModeChanged( bool enabled )
 void
 AudioControls::onShuffleClicked()
 {
-    APP->playlistView()->model()->setShuffled( m_shuffled ^ true );
+    APP->playlistManager()->setShuffled( m_shuffled ^ true );
 }

@@ -1,5 +1,5 @@
-#ifndef PLAYLISTVIEW_H
-#define PLAYLISTVIEW_H
+#ifndef COLLECTIONVIEW_H
+#define COLLECTIONVIEW_H
 
 #include <QHeaderView>
 #include <QTreeView>
@@ -7,22 +7,21 @@
 #include <QSortFilterProxyModel>
 
 #include "tomahawk/source.h"
+#include "playlist/trackmodel.h"
 #include "plitem.h"
-#include "trackmodel.h"
 #include "playlistitemdelegate.h"
 
-class PlaylistModel;
-class PlaylistProxyModel;
-class PlaylistInterface;
+class CollectionProxyModel;
 class TrackProxyModel;
+class PlaylistInterface;
 
-class PlaylistView : public QTreeView
+class CollectionView : public QTreeView
 {
 Q_OBJECT
 
 public:
-    explicit PlaylistView( QWidget* parent = 0 );
-    ~PlaylistView();
+    explicit CollectionView( QWidget* parent = 0 );
+    ~CollectionView();
 
     TrackModel* model() { return m_model; }
     TrackProxyModel* proxyModel() { return (TrackProxyModel*)m_proxyModel; }
@@ -56,15 +55,17 @@ private:
 
     TrackModel* m_model;
     PlaylistInterface* m_modelInterface;
-    PlaylistProxyModel* m_proxyModel;
+    CollectionProxyModel* m_proxyModel;
     PlaylistItemDelegate* m_delegate;
 
     QList<double> m_columnWeights;
+    QList<double> m_artistColumnWeights;
     QList<int> m_columnWidths;
+    QList<int> m_artistColumnWidths;
 
     bool m_resizing;
     bool m_dragging;
     QRect m_dropRect;
 };
 
-#endif // PLAYLISTVIEW_H
+#endif // COLLECTIONVIEW_H

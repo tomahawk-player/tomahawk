@@ -35,6 +35,7 @@
 #include <QMutex>
 
 #define MP3_BUFFER 32768
+#define MP3_BUFFER_PREFERRED 32768
 
 class MADTranscode : public TranscodeInterface
 {
@@ -48,6 +49,8 @@ class MADTranscode : public TranscodeInterface
 
         int needData() { return MP3_BUFFER - m_encodedBuffer.count(); }
         bool haveData() { return !m_decodedBuffer.isEmpty(); }
+
+        unsigned int preferredDataSize() { return MP3_BUFFER_PREFERRED; }
 
         QByteArray data() { QByteArray b = m_decodedBuffer; m_decodedBuffer.clear(); return b; }
 

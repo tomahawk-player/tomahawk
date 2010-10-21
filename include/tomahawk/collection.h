@@ -34,18 +34,14 @@ public:
     Collection( const source_ptr& source, const QString& name, QObject* parent = 0 );
     virtual ~Collection();
 
-    void invokeSlotTracks( QObject* obj, const char* slotname, const QList<QVariant>& val, collection_ptr collection );
-
     virtual QString name() const;
 
     virtual void loadPlaylists() = 0;
+    virtual void loadAllTracks() = 0;
 
     virtual Tomahawk::playlist_ptr playlist( const QString& guid );
     virtual void addPlaylist( const Tomahawk::playlist_ptr& p );
     virtual void deletePlaylist( const Tomahawk::playlist_ptr& p );
-
-    /// async calls that fetch data from DB/whatever:
-    void loadTracks( QObject* obj, const char* slotname );
 
     virtual const QList< Tomahawk::playlist_ptr >& playlists() const { return m_playlists; }
 
@@ -57,8 +53,9 @@ public:
     static bool trackSorter( const QVariant& left, const QVariant &right );
 
 signals:
-    void tracksAdded( const QList<QVariant>&, Tomahawk::collection_ptr );
-    void tracksRemoved( const QList<QVariant>&, Tomahawk::collection_ptr );
+    void tracksAdded( const QList<QVariant>&, const Tomahawk::collection_ptr& );
+    void tracksRemoved( const QList<QVariant>&, const Tomahawk::collection_ptr& );
+    void tracksFinished( const Tomahawk::collection_ptr& );
 
     void playlistsAdded( const QList<Tomahawk::playlist_ptr>& );
     void playlistsDeleted( const QList<Tomahawk::playlist_ptr>& );
@@ -79,8 +76,6 @@ public slots:
     }
 
 protected:
-    virtual void loadAllTracks( boost::function<void( const QList<QVariant>&, collection_ptr )> callback ) = 0;
-
     QString m_name;
     bool m_loaded;
     unsigned int m_lastmodified; // unix time of last change to collection

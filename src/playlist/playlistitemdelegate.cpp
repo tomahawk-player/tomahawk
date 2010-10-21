@@ -2,16 +2,19 @@
 
 #include <QDebug>
 #include <QPainter>
+#include <QAbstractItemView>
 
 #include "tomahawk/query.h"
 #include "tomahawk/result.h"
-#include "playlistview.h"
-#include "playlistitem.h"
-#include "playlistmodel.h"
+
+#include "playlist/plitem.h"
+#include "playlist/trackproxymodel.h"
 
 
-PlaylistItemDelegate::PlaylistItemDelegate( QObject* parent )
-    : QStyledItemDelegate( parent )
+PlaylistItemDelegate::PlaylistItemDelegate( QAbstractItemView* parent, TrackProxyModel* proxy )
+    : QStyledItemDelegate( (QObject*)parent )
+    , m_view( parent )
+    , m_model( proxy )
 {
 }
 
@@ -27,22 +30,6 @@ QSize
 PlaylistItemDelegate::sizeHint( const QStyleOptionViewItem& option, const QModelIndex& index ) const
 {
     QSize size = QStyledItemDelegate::sizeHint( option, index );
-    return size; // + QSize( 0, 3 ); // FIXME: a hack for now (due to UniformRowHeights)
-
-    PlaylistItem* item = PlaylistModel::indexToPlaylistItem( index );
-    if ( !item )
-        return size;
-
-    if ( item->beingRemoved() && m_removalProgress > 0.0 && m_removalProgress < 50.0 )
-    {
-        int h = (((qreal)m_removalProgress * 2.0 ) / (qreal)100.0 ) * (qreal)size.height();
-        if ( h < 2 )
-            h = 0;
-        return QSize( size.width(), h );
-    }
-    else
-        return size;
-
     return size;
 }
 
@@ -50,19 +37,43 @@ PlaylistItemDelegate::sizeHint( const QStyleOptionViewItem& option, const QModel
 void
 PlaylistItemDelegate::paint( QPainter* painter, const QStyleOptionViewItem& option, const QModelIndex& index ) const
 {
-    PlaylistItem* item = PlaylistModel::indexToPlaylistItem( index );
-    if ( item )
-    {
-        if ( item->beingRemoved() )
-            painter->setOpacity( (qreal)m_removalProgress / (qreal)100.0 );
-        else
-        {
-            if ( item->query()->results().count() )
-                painter->setOpacity( item->query()->results().at( 0 )->score() );
-            else
-                painter->setOpacity( 0.3 );
-        }
-    }
+    PlItem* item = m_model->itemFromIndex( m_model->mapToSource( index ) );
+    if ( item->query()->results().count() )
+        painter->setOpacity( item->query()->results().at( 0 )->score() );
+    else
+        painter->setOpacity( 0.3 );
 
-    QStyledItemDelegate::paint( painter, option, index );
+    if ( item->isPlaying()   )
+    {
+        painter->save();
+        painter->setRenderHint( QPainter::Antialiasing );
+
+        {
+            QRect r = option.rect.adjusted( 3, 0, 0, -3 );
+            if ( index.column() == 0 )
+            {
+                painter->drawPixmap( r.adjusted( 3, 3, 18 - r.width(), 0 ), QPixmap( index.data( Qt::DecorationRole ).toString() ) );
+                r = r.adjusted( 22, 0, 0, 0 );
+            }
+
+            painter->setPen( option.palette.text().color() );
+            painter->drawText( r, index.data().toString() );
+        }
+
+        if ( index.column() == index.model()->columnCount() - 1 )
+        {
+            QRect r = QRect( 3, option.rect.y() + 1, m_view->contentsRect().width() - 6, option.rect.height() - 2 );
+            painter->setPen( option.palette.highlight().color() );
+            QPen pen = painter->pen();
+            pen.setWidth( 1.0 );
+            painter->setPen( pen );
+            painter->drawRoundedRect( r, 3.0, 3.0 );
+        }
+
+        painter->restore();
+    }
+    else
+    {
+        QStyledItemDelegate::paint( painter, option, index );
+    }
 }

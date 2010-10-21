@@ -1,6 +1,7 @@
-#ifndef PLAYLISTMODEL_H
-#define PLAYLISTMODEL_H
+#ifndef COLLECTIONFLATMODEL_H
+#define COLLECTIONFLATMODEL_H
 
+#include <QAbstractItemModel>
 #include <QList>
 #include <QHash>
 
@@ -15,20 +16,21 @@
 
 class QMetaData;
 
-class PlaylistModel : public TrackModel
+class CollectionFlatModel : public TrackModel
 {
 Q_OBJECT
 
 public:
-    explicit PlaylistModel( QObject* parent = 0 );
-    ~PlaylistModel();
+    explicit CollectionFlatModel( QObject* parent = 0 );
+    ~CollectionFlatModel();
 
     int columnCount( const QModelIndex& parent = QModelIndex() ) const;
 
     QVariant data( const QModelIndex& index, int role ) const;
     QVariant headerData( int section, Qt::Orientation orientation, int role ) const;
 
-    void loadPlaylist( const Tomahawk::playlist_ptr& playlist );
+    void addCollection( const Tomahawk::collection_ptr& collection );
+    void removeCollection( const Tomahawk::collection_ptr& collection );
 
 signals:
     void repeatModeChanged( PlaylistInterface::RepeatMode mode );
@@ -42,8 +44,11 @@ signals:
 private slots:
     void onDataChanged();
 
+    void onTracksAdded( const QList<QVariant>& tracks, const Tomahawk::collection_ptr& collection );
+    void onTracksAddingFinished( const Tomahawk::collection_ptr& collection );
+
 private:
-    Tomahawk::playlist_ptr m_playlist;
+    QMap< Tomahawk::collection_ptr, PlItem* > m_collectionIndex;
 };
 
-#endif // PLAYLISTMODEL_H
+#endif // COLLECTIONFLATMODEL_H

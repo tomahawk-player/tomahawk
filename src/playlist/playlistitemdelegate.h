@@ -3,12 +3,14 @@
 
 #include <QStyledItemDelegate>
 
+class TrackProxyModel;
+
 class PlaylistItemDelegate : public QStyledItemDelegate
 {
 Q_OBJECT
 
 public:
-    PlaylistItemDelegate( QObject* parent = 0 );
+    PlaylistItemDelegate( QAbstractItemView* parent = 0, TrackProxyModel* proxy = 0 );
 
     void updateRowSize( const QModelIndex& index );
 
@@ -21,6 +23,8 @@ protected:
 
 private:
     unsigned int m_removalProgress;
+    QAbstractItemView* m_view;
+    TrackProxyModel* m_model;
 };
 
 #endif // PLAYLISTITEMDELEGATE_H

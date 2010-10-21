@@ -12,6 +12,7 @@
 #include <QSettings>
 #include <QNetworkAccessManager>
 #include <QDir>
+#include <QStackedWidget>
 
 #include "QxtHttpServerConnector"
 #include "QxtHttpSessionManager"
@@ -24,7 +25,6 @@
 
 #include "utils/tomahawkutils.h"
 
-
 #include "sourcelist.h"
 #include "servent.h"
 
@@ -36,7 +36,7 @@ class TomahawkSettings;
 #ifndef TOMAHAWK_HEADLESS
 class AudioEngine;
 class TomahawkWindow;
-class PlaylistView;
+class PlaylistManager;
 
 #ifndef NO_LIBLASTFM
 #include <lastfm/NetworkAccessManager>
@@ -68,7 +68,7 @@ public:
 
 #ifndef TOMAHAWK_HEADLESS
     AudioControls* audioControls();
-    PlaylistView* playlistView();
+    PlaylistManager* playlistManager();
     AudioEngine* audioEngine() { return m_audioEngine; }
 #endif
 

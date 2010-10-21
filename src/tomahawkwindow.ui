@@ -11,7 +11,7 @@
    </rect>
   </property>
   <property name="windowTitle">
-   <string>Tomahawk</string>
+   <string>EchoChamber</string>
   </property>
   <widget class="QWidget" name="centralWidget">
    <layout class="QVBoxLayout" name="verticalLayout_2">
@@ -40,13 +40,10 @@
        </widget>
       </item>
       <item>
-       <layout class="QVBoxLayout" name="verticalLayout">
-        <item>
-         <widget class="PlaylistView" name="playlistView"/>
-        </item>
-        <item>
-         <widget class="QProgressBar" name="actionProgress"/>
-        </item>
+       <layout class="QVBoxLayout" name="mainLayout">
+        <property name="spacing">
+         <number>0</number>
+        </property>
        </layout>
       </item>
      </layout>
@@ -59,7 +56,7 @@
      <x>0</x>
      <y>0</y>
      <width>800</width>
-     <height>19</height>
+     <height>22</height>
     </rect>
    </property>
    <widget class="QMenu" name="menuSettings">
@@ -132,11 +129,6 @@
  </widget>
  <layoutdefault spacing="6" margin="11"/>
  <customwidgets>
-  <customwidget>
-   <class>PlaylistView</class>
-   <extends>QTreeView</extends>
-   <header>playlistview.h</header>
-  </customwidget>
   <customwidget>
    <class>SourceTreeView</class>
    <extends>QTreeView</extends>

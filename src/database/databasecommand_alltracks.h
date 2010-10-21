@@ -5,15 +5,15 @@
 #include <QVariantMap>
 
 #include "databasecommand.h"
-#include "tomahawk/source.h"
+#include "tomahawk/collection.h"
 #include "tomahawk/typedefs.h"
 
 class DatabaseCommand_AllTracks : public DatabaseCommand
 {
 Q_OBJECT
 public:
-    explicit DatabaseCommand_AllTracks( const Tomahawk::source_ptr& source, QObject* parent = 0 )
-        : DatabaseCommand( parent ), m_source( source )
+    explicit DatabaseCommand_AllTracks( const Tomahawk::collection_ptr& collection, QObject* parent = 0 )
+        : DatabaseCommand( parent ), m_collection( collection )
     {}
 
     virtual void exec( DatabaseImpl* );
@@ -22,10 +22,11 @@ public:
     virtual QString commandname() const { return "alltracks"; }
 
 signals:
-    void done( const QList<QVariant>& );
+    void tracks( const QList<QVariant>&, const Tomahawk::collection_ptr& );
+    void done( const Tomahawk::collection_ptr& );
 
 private:
-    Tomahawk::source_ptr m_source;
+    Tomahawk::collection_ptr m_collection;
 };
 
 #endif // DATABASECOMMAND_ALLTRACKS_H

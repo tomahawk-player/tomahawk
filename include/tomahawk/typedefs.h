@@ -26,6 +26,8 @@ namespace Tomahawk
 
 }; // ns
 
+typedef int AudioErrorCode;
+
 // creates 36char ascii guid without {} around it
 inline static QString uuid()
 {

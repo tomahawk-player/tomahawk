@@ -3,8 +3,8 @@
 
 #include <QWidget>
 
-#include "tomahawk/playlistmodelinterface.h"
 #include "tomahawk/result.h"
+#include "tomahawk/playlistinterface.h"
 
 namespace Ui
 {
@@ -20,7 +20,7 @@ public:
     ~AudioControls();
 
 public slots:
-    void onRepeatModeChanged( PlaylistModelInterface::RepeatMode mode );
+    void onRepeatModeChanged( PlaylistInterface::RepeatMode mode );
     void onShuffleModeChanged( bool enabled );
 
 protected:
@@ -51,7 +51,7 @@ private:
     QPixmap m_defaultCover;
 
     Tomahawk::result_ptr m_currentTrack;
-    PlaylistModelInterface::RepeatMode m_repeatMode;
+    PlaylistInterface::RepeatMode m_repeatMode;
     bool m_shuffled;
 };
 

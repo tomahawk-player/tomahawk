@@ -23,7 +23,7 @@ public:
     QList<Tomahawk::source_ptr> sources() const;
     Tomahawk::source_ptr lookup( const QString& username ) const;
     Tomahawk::source_ptr lookup( unsigned int id ) const;
-    unsigned int length() const;
+    unsigned int count() const;
 
 signals:
     void sourceAdded( const Tomahawk::source_ptr& );

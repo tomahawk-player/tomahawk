@@ -22,6 +22,8 @@ public:
 
 signals:
     void filterTextChanged( const QString& newtext );
+    void flatMode();
+    void artistMode();
 
 public slots:
     void setNumSources( unsigned int );

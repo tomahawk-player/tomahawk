@@ -6,6 +6,7 @@
 
 #include "tomahawk/source.h"
 
+class CollectionModel;
 class PlaylistModel;
 class SourcesModel;
 
@@ -44,7 +45,7 @@ protected:
 private:
     void setupMenus();
 
-    PlaylistModel* m_collectionModel;
+    CollectionModel* m_collectionModel;
     SourcesModel* m_model;
     QModelIndex m_contextMenuIndex;
 
@@ -54,7 +55,6 @@ private:
 
     bool m_dragging;
     QRect m_dropRect;
-    QList<Tomahawk::source_ptr> m_sources;
 };
 
 #endif // SOURCETREEVIEW_H

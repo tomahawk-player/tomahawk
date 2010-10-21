@@ -2,10 +2,10 @@
 
 #include "tomahawk/tomahawkapp.h"
 #include "tomahawk/playlist.h"
+#include "collectionmodel.h"
+#include "playlistmanager.h"
 #include "sourcetreeitem.h"
 #include "sourcesmodel.h"
-#include "playlistview.h"
-#include "playlistmodel.h"
 
 #include <QAction>
 #include <QContextMenuEvent>
@@ -18,7 +18,7 @@ using namespace Tomahawk;
 
 SourceTreeView::SourceTreeView( QWidget* parent )
     : QTreeView( parent )
-    , m_collectionModel( new PlaylistModel() )
+    , m_collectionModel( new CollectionModel( this ) )
     , m_dragging( false )
 {
     setHeaderHidden( true );
@@ -67,12 +67,11 @@ void
 SourceTreeView::onSourceOffline( Tomahawk::source_ptr src )
 {
     qDebug() << Q_FUNC_INFO;
-    if ( m_sources.contains( src ) )
+
+    if ( APP->playlistManager()->superCollections().contains( src->collection() ) )
     {
         qDebug() << "Removing source from active view";
-        m_sources.removeAll( src );
-        m_collectionModel->removeSource( src );
-      //  emit onOffline( index ); // FIXME still need to emit this here i think
+        APP->playlistManager()->show( src->collection() );
     }
     else
     {
@@ -92,32 +91,20 @@ SourceTreeView::onItemActivated( const QModelIndex& index )
         SourceTreeItem* item = SourcesModel::indexToTreeItem( index );
         if ( item )
         {
-            if ( APP->playlistView()->playlistModel() == 0 || APP->playlistView()->playlistModel() == m_collectionModel )
+            if ( APP->playlistManager()->isSuperCollectionVisible() )
             {
-                if ( m_collectionModel->isBusy() )
-                    return;
-
                 qDebug() << "SourceTreeItem toggled:" << item->source()->userName();
+                APP->playlistManager()->show( item->source()->collection() );
 
-                if ( !APP->playlistView()->playlistModel() )
-                    APP->playlistView()->setModel( m_collectionModel );
-
-                // Merge / unmerge the Source's collection(s) in the PlaylistView
-                if ( m_sources.contains( item->source() ) )
+                if ( APP->playlistManager()->superCollections().contains( item->source()->collection() ) )
                 {
-                    m_sources.removeAll( item->source() );
-                    m_collectionModel->removeSource( item->source() );
-                    emit onOffline( index );
+                    emit onOnline( index );
                 }
                 else
                 {
-                    m_sources.append( item->source() );
-                    m_collectionModel->addSource( item->source() );
-                    emit onOnline( index );
+                    emit onOffline( index );
                 }
             }
-            else
-                APP->playlistView()->setModel( m_collectionModel );
         }
     }
     else if ( type == 1 )
@@ -127,13 +114,7 @@ SourceTreeView::onItemActivated( const QModelIndex& index )
         {
             qDebug() << "Playlist activated:" << playlist->title();
 
-            PlaylistModel* pm = new PlaylistModel();
-            pm->loadPlaylist( playlist );
-
-            // load playlist before setting it on the model
-            // so the view knows about sorting settings
-            APP->playlistView()->setModel( pm );
-            playlist->resolve();
+            APP->playlistManager()->show( playlist );
         }
     }
 }

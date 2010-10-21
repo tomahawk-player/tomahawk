@@ -84,20 +84,24 @@ SET( tomahawkSources ${tomahawkSources}
 SET( tomahawkSourcesGui ${tomahawkSourcesGui}
      xspfloader.cpp
 
-#    utils/modeltest.cpp
-     utils/animatedrowremover.cpp
      utils/imagebutton.cpp
      utils/progresstreeview.cpp
 
      audio/madtranscode.cpp
      audio/audioengine.cpp
 
-     playlist/playlistproxymodel.cpp
+     playlist/collectionmodel.cpp
+     playlist/collectionproxymodel.cpp
+     playlist/collectionflatmodel.cpp
+     playlist/collectionview.cpp
+     playlist/playlistmanager.cpp
+     playlist/plitem.cpp
      playlist/playlistmodel.cpp
-     playlist/playlistmodelworker.cpp
-     playlist/playlistitem.cpp
-     playlist/playlistitemdelegate.cpp
+     playlist/playlistproxymodel.cpp
      playlist/playlistview.cpp
+     playlist/playlistitemdelegate.cpp
+     playlist/trackmodel.cpp
+     playlist/trackproxymodel.cpp
 
      sourcetree/sourcesmodel.cpp
      sourcetree/sourcetreeitem.cpp
@@ -184,9 +188,7 @@ SET( tomahawkHeaders ${tomahawkHeaders}
 SET( tomahawkHeadersGui ${tomahawkHeadersGui}
      xspfloader.h
 
-#     utils/modeltest.h
      utils/animatedcounterlabel.h
-     utils/animatedrowremover.h
      utils/imagebutton.h
      utils/progresstreeview.h
 
@@ -194,12 +196,18 @@ SET( tomahawkHeadersGui ${tomahawkHeadersGui}
      audio/madtranscode.h
      audio/audioengine.h
 
-     playlist/playlistproxymodel.h
+     playlist/collectionmodel.h
+     playlist/collectionproxymodel.h
+     playlist/collectionflatmodel.h
+     playlist/collectionview.h
+     playlist/playlistmanager.h
+     playlist/plitem.h
      playlist/playlistmodel.h
-     playlist/playlistmodelworker.h
-     playlist/playlistitem.h
-     playlist/playlistitemdelegate.h
+     playlist/playlistproxymodel.h
      playlist/playlistview.h
+     playlist/playlistitemdelegate.h
+     playlist/trackmodel.h
+     playlist/trackproxymodel.h
 
      sourcetree/sourcesmodel.h
      sourcetree/sourcetreeitem.h
