@@ -8,7 +8,10 @@ Quickstart on Ubuntu
 
 Gloox 1.0 (XMPP library)
 ------------------------
- See: http://camaya.net/glooxdownload
+ On Ubuntu 10.10:
+ $ sudo apt-get install libgloox-dev
+
+ Otherwise see: http://camaya.net/glooxdownload
  You need to build gloox 1.0 from source, Ubuntu 10.04 only packages v0.9.
 
  $ # Download and unpack tarball
@@ -21,12 +24,12 @@ QJson (Qt JSON library)
  On Ubuntu 10.04:
  $ sudo apt-get install libqjson-dev
 
- Otherwise:
- See: http://sourceforge.net/projects/qjson/files/ (developed using 0.7.1)
+ Otherwise see: http://sourceforge.net/projects/qjson/files/ (developed using 0.7.1)
 
  $ # Download and unpack tarball
  $ ./configure && make
  $ sudo make install 
+
 
 Now compile Tomahawk
 -------------------
@@ -43,7 +46,7 @@ Dependencies
 ------------
 
   CMake 2.8.0 http://www.cmake.org/
-  Qt 4.6.2 http://qt.nokia.com/
+  Qt 4.7.0 http://qt.nokia.com/
   QJson 0.7.1 http://qjson.sourceforge.net/
   Gloox 1.0 (0.9.x will fail) http://camaya.net/gloox/
   SQLite 3.6.22 http://www.sqlite.org/
