@@ -75,7 +75,6 @@ SET( tomahawkSources ${tomahawkSources}
 
      web/api_v1.cpp
 
-     widgetdragfilter.cpp
      tomahawksettings.cpp
      tomahawkapp.cpp
      main.cpp
@@ -118,6 +117,8 @@ SET( tomahawkSourcesGui ${tomahawkSourcesGui}
      audiocontrols.cpp
      settingsdialog.cpp
      proxystyle.cpp
+
+     widgetdragfilter.cpp
 )
 
 SET( tomahawkHeaders ${tomahawkHeaders}
@@ -180,7 +181,6 @@ SET( tomahawkHeaders ${tomahawkHeaders}
      servent.h
      scriptresolver.h
      tomahawksettings.h
-     widgetdragfilter.h
 
      web/api_v1.h
 )
@@ -224,6 +224,8 @@ SET( tomahawkHeadersGui ${tomahawkHeadersGui}
      tomahawkwindow.h
      audiocontrols.h
      settingsdialog.h
+
+     widgetdragfilter.h
 )
 
 SET( tomahawkUI ${tomahawkUI}

@@ -1,14 +1,19 @@
 #include "tomahawksettings.h"
-#include "settingsdialog.h"
+
+#ifdef TOMAHAWK_HEADLESS
+    #include "settingsdialog.h"
+    #include <QDesktopServices>
+#endif
 
 #include <QDir>
 #include <QDebug>
-#include <QDesktopServices>
+
 
 
 TomahawkSettings::TomahawkSettings( QObject* parent )
     : QSettings( parent )
 {
+    #ifdef TOMAHAWK_HEADLESS
     if( !contains( "configversion") )
     {
         setValue( "configversion", SettingsDialog::VERSION );
@@ -22,6 +27,7 @@ TomahawkSettings::TomahawkSettings( QObject* parent )
         // insert upgrade code here as required
         setValue( "configversion", SettingsDialog::VERSION );
     }
+    #endif
 }
 
 TomahawkSettings::~TomahawkSettings()
@@ -31,7 +37,11 @@ TomahawkSettings::~TomahawkSettings()
 
 QString TomahawkSettings::scannerPath() const
 {
+    #ifdef TOMAHAWK_HEADLESS
     return value( "scannerpath", QDesktopServices::storageLocation( QDesktopServices::MusicLocation ) ).toString();
+    #else
+    return value( "scannerpath", "" ).toString();
+    #endif
 }
 
 void TomahawkSettings::setScannerPath(const QString& path)

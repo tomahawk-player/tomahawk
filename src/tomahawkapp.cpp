@@ -4,7 +4,6 @@
 #include <QDir>
 #include <QMetaType>
 #include <QTime>
-#include <QMessageBox>
 #include <QNetworkReply>
 
 #include "tomahawk/collection.h"
@@ -19,11 +18,12 @@
 
 #include "controlconnection.h"
 #include "tomahawkzeroconf.h"
-#include "settingsdialog.h"
 
 #ifndef TOMAHAWK_HEADLESS
     #include "audioengine.h"
     #include "tomahawkwindow.h"
+    #include "settingsdialog.h"
+    #include <QMessageBox>
 #endif
 
 #include <iostream>
@@ -150,10 +150,10 @@ TomahawkApp::TomahawkApp( int& argc, char *argv[] )
 #else
         m_nam = new QNetworkAccessManager;
 #endif
-
         m_mainwindow = new TomahawkWindow();
         m_mainwindow->show();
         connect( m_mainwindow, SIGNAL( settingsChanged() ), SIGNAL( settingsChanged() ) );
+
     }
 #endif
 
@@ -179,11 +179,13 @@ TomahawkApp::TomahawkApp( int& argc, char *argv[] )
                                SLOT( lanHostFound( const QString&, int, const QString&, const QString& ) ) );
         m_zeroconf->advertise();
     }
-    
+
+    #ifndef TOMAHAWK_HEADLESS
     if ( !m_settings->hasScannerPath() )
     {
         m_mainwindow->showSettingsDialog();
     }
+    #endif
 }
 
 

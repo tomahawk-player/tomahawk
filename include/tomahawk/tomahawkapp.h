@@ -12,7 +12,6 @@
 #include <QSettings>
 #include <QNetworkAccessManager>
 #include <QDir>
-#include <QStackedWidget>
 
 #include "QxtHttpServerConnector"
 #include "QxtHttpSessionManager"
@@ -37,6 +36,7 @@ class TomahawkSettings;
 class AudioEngine;
 class TomahawkWindow;
 class PlaylistManager;
+#include <QStackedWidget>
 
 #ifndef NO_LIBLASTFM
 #include <lastfm/NetworkAccessManager>
