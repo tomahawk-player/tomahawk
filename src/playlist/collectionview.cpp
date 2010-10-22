@@ -11,6 +11,12 @@ CollectionView::CollectionView( QWidget* parent )
     : TrackView( parent )
 {
     setProxyModel( new CollectionProxyModel( this ) );
+
+    setSortingEnabled( true );
+    sortByColumn( 0, Qt::AscendingOrder );
+
+    setDragDropMode( QAbstractItemView::DragOnly );
+    setAcceptDrops( false );
 }
 
 

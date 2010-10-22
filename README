@@ -15,7 +15,7 @@ Gloox 1.0 (XMPP library)
  You need to build gloox 1.0 from source, Ubuntu 10.04 only packages v0.9.
 
  $ # Download and unpack tarball
- $ CXXFLAGS=-fPIC ./configure --without-openssl --with-gnutls --without-libidn --with-zlib --without-examples --without-tests
+ $ ./configure --without-openssl --with-gnutls --without-libidn --with-zlib --without-examples --without-tests
  $ CXXFLAGS=-fPIC make 
  $ sudo make install
 

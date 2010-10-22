@@ -150,10 +150,10 @@ TomahawkApp::TomahawkApp( int& argc, char *argv[] )
 #else
         m_nam = new QNetworkAccessManager;
 #endif
+
         m_mainwindow = new TomahawkWindow();
         m_mainwindow->show();
         connect( m_mainwindow, SIGNAL( settingsChanged() ), SIGNAL( settingsChanged() ) );
-
     }
 #endif
 
