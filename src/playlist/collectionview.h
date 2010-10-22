@@ -32,7 +32,8 @@ public:
 protected:
     virtual void resizeEvent( QResizeEvent* event );
     virtual void keyPressEvent( QKeyEvent* event );
-
+    
+    virtual void startDrag( Qt::DropActions supportedActions );
     virtual void dragEnterEvent( QDragEnterEvent* event );
     virtual void dragLeaveEvent( QDragLeaveEvent* event ) { m_dragging = false; setDirtyRegion( m_dropRect ); }
     virtual void dragMoveEvent( QDragMoveEvent* event );
@@ -52,6 +53,7 @@ private slots:
 private:
     void restoreColumnsState();
     void saveColumnsState();
+    QPixmap createDragPixmap( int itemCount ) const;
 
     TrackModel* m_model;
     PlaylistInterface* m_modelInterface;

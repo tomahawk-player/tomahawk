@@ -67,5 +67,8 @@
 <file>./data/icons/tomahawk-icon-128.png</file>
 <file>./data/icons/tomahawk-icon-256.png</file>
 <file>./data/icons/tomahawk-icon-512.png</file>
+<file>./data/icons/audio-x-generic-22.png</file>
+<file>./data/icons/audio-x-generic-32.png</file>
+<file>./data/icons/audio-x-generic-16.png</file>
 </qresource>
 </RCC>
