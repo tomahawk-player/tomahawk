@@ -219,6 +219,8 @@ SourceTreeView::dragMoveEvent( QDragMoveEvent* event )
                 if ( !playlist.isNull() && playlist->author()->isLocal() )
                     accept = true;
             }
+        } else {
+            m_dropRect = QRect();
         }
 
         if ( accept )
