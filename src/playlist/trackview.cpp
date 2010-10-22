@@ -24,7 +24,6 @@ TrackView::TrackView( QWidget* parent )
 {
     setSortingEnabled( false );
     setAlternatingRowColors( true );
-    setMouseTracking( true );
     setSelectionMode( QAbstractItemView::ExtendedSelection );
     setSelectionBehavior( QAbstractItemView::SelectRows );
     setDragEnabled( true );
