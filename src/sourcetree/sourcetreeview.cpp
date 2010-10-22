@@ -302,8 +302,6 @@ SourceTreeView::dropEvent( QDropEvent* event )
 void
 SourceTreeView::paintEvent( QPaintEvent* event )
 {
-    QTreeView::paintEvent( event );
-
     if ( m_dragging && !m_dropRect.isEmpty() )
     {
         QPainter painter( viewport() );
@@ -313,8 +311,9 @@ SourceTreeView::paintEvent( QPaintEvent* event )
         QStyleOptionViewItemV4 opt;
         opt.initFrom( this );
         opt.rect = itemRect;
-        opt.state = QStyle::State_Enabled | QStyle::State_MouseOver;
+        opt.state = QStyle::State_Enabled | QStyle::State_Selected;
 
-        style()->drawPrimitive( QStyle::PE_PanelItemViewItem, &opt, &painter, this );
+        style()->drawPrimitive( QStyle::PE_PanelItemViewRow, &opt, &painter, this );
     }
+    QTreeView::paintEvent( event );
 }
