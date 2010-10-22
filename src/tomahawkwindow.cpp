@@ -55,8 +55,8 @@ TomahawkWindow::TomahawkWindow( QWidget* parent )
 #ifndef Q_WS_MAC
     ui->centralWidget->layout()->setContentsMargins( 4, 4, 4, 2 );
 #else
-    ui->actionProgress->setAttribute( Qt::WA_MacShowFocusRect, 0 );
-    ui->playlistView->setAttribute( Qt::WA_MacShowFocusRect, 0 );
+//     ui->actionProgress->setAttribute( Qt::WA_MacShowFocusRect, 0 );
+//     ui->playlistView->setAttribute( Qt::WA_MacShowFocusRect, 0 );
     ui->sourceTreeView->setAttribute( Qt::WA_MacShowFocusRect, 0 );
 #endif
 
