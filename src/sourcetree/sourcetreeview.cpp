@@ -29,7 +29,6 @@ SourceTreeView::SourceTreeView( QWidget* parent )
     setDragDropMode( QAbstractItemView::DropOnly );
     setAcceptDrops( true );
     setDropIndicatorShown( false );
-    setMouseTracking( true );
     setAllColumnsShowFocus( false );
 
     setupMenus();
