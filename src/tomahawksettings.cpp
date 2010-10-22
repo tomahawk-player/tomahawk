@@ -1,10 +1,11 @@
+#include "tomahawk/tomahawkapp.h"
 #include "tomahawksettings.h"
 
 #ifndef TOMAHAWK_HEADLESS
+    #include <QDesktopServices>
     #include "settingsdialog.h"
 #endif
 
-#include <QDesktopServices>
 #include <QDir>
 #include <QDebug>
 
@@ -37,7 +38,7 @@ TomahawkSettings::~TomahawkSettings()
 
 QString TomahawkSettings::scannerPath() const
 {
-    #ifdef TOMAHAWK_HEADLESS
+    #ifndef TOMAHAWK_HEADLESS
     return value( "scannerpath", QDesktopServices::storageLocation( QDesktopServices::MusicLocation ) ).toString();
     #else
     return value( "scannerpath", "" ).toString();
