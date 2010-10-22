@@ -22,7 +22,7 @@ PlaylistManager::PlaylistManager( QObject* parent )
     , m_superCollectionVisible( true )
 {
     m_superCollectionViews << new CollectionView();
-    m_superCollectionViews.first()->setModel( m_superCollectionFlatModel, m_superCollectionFlatModel );
+    m_superCollectionViews.first()->setModel( m_superCollectionFlatModel );
     m_widget->addWidget( m_superCollectionViews.first() );
 
     connect( &m_filterTimer, SIGNAL( timeout() ), SLOT( applyFilter() ) );
@@ -46,7 +46,7 @@ PlaylistManager::show( const Tomahawk::playlist_ptr& playlist )
         {
             PlaylistView* view = new PlaylistView();
             PlaylistModel* model = new PlaylistModel();
-            view->setModel( model, model );
+            view->setModel( model );
             views << view;
 
             m_currentProxyModel = view->proxyModel();

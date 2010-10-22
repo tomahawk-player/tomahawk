@@ -101,6 +101,7 @@ SET( tomahawkSourcesGui ${tomahawkSourcesGui}
      playlist/playlistitemdelegate.cpp
      playlist/trackmodel.cpp
      playlist/trackproxymodel.cpp
+     playlist/trackview.cpp
 
      sourcetree/sourcesmodel.cpp
      sourcetree/sourcetreeitem.cpp
@@ -208,6 +209,7 @@ SET( tomahawkHeadersGui ${tomahawkHeadersGui}
      playlist/playlistitemdelegate.h
      playlist/trackmodel.h
      playlist/trackproxymodel.h
+     playlist/trackview.h
 
      sourcetree/sourcesmodel.h
      sourcetree/sourcetreeitem.h
