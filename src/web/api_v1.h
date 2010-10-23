@@ -86,7 +86,7 @@ public slots:
     void stat( QxtWebRequestEvent* event )
     {
         QVariantMap m;
-        m.insert( "name", "tomahawk" );
+        m.insert( "name", "playdar" );
         m.insert( "version", "0.1.1" ); // TODO (needs to be >=0.1.1 for JS to work)
         m.insert( "authenticated", true ); // TODO
         m.insert( "capabilities", QVariantList() );
