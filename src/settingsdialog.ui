@@ -245,7 +245,7 @@
           <enum>Qt::RightToLeft</enum>
          </property>
          <property name="text">
-          <string>Tomahawk HTTP API - NO AUTH</string>
+          <string>Playdar HTTP API - NO AUTH</string>
          </property>
          <property name="checked">
           <bool>false</bool>
