@@ -38,7 +38,6 @@ Now compile Tomahawk
  $ cd build 
  $ cmake .. 
  $ make 
- $ cd ..
  $ ./tomahawk
 
 
@@ -79,8 +78,6 @@ To build the app:
 
 To run the app:
 ---------------
- $ cd ..                 # return to the top-level tomahawk dir
-
  (Only run the next two commands if you installed any of the dependencies from source on Linux)
  $ export LD_LIBRARY_PATH=/usr/local/lib:$LD_LIBRARY_PATH
  $ sudo ldconfig -v
