@@ -49,6 +49,7 @@ private slots:
 
 private:
     QMap< Tomahawk::collection_ptr, PlItem* > m_collectionIndex;
+    QMap< Tomahawk::collection_ptr, QPair< int, int > > m_collectionRows;
 };
 
 #endif // COLLECTIONFLATMODEL_H

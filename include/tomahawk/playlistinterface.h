@@ -14,7 +14,7 @@ public:
 
     PlaylistInterface()
     {
-        m_rootItem = new PlItem();
+        m_rootItem = 0;
     }
 
     virtual ~PlaylistInterface() {}

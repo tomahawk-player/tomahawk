@@ -2,7 +2,8 @@
 #define PLITEM_H
 
 #include <QHash>
-#include <QPersistentModelIndex>
+#include <QModelIndex>
+#include <QAbstractItemModel>
 
 #include "tomahawk/query.h"
 #include "tomahawk/result.h"
@@ -14,7 +15,7 @@ Q_OBJECT
 public:
     ~PlItem();
 
-    explicit PlItem( PlItem* parent = 0 );
+    explicit PlItem( PlItem* parent = 0, QAbstractItemModel* model = 0 );
     explicit PlItem( const QString& caption, PlItem* parent = 0 );
     explicit PlItem( const Tomahawk::query_ptr& query, PlItem* parent = 0 );
     explicit PlItem( const Tomahawk::plentry_ptr& entry, PlItem* parent = 0 );
@@ -31,12 +32,15 @@ public:
     QString caption;
     int childCount;
     QModelIndex index;
+    QAbstractItemModel* model;
+    bool toberemoved;
 
 signals:
     void dataChanged();
 
 private slots:
     void onResultsAdded( const QList<Tomahawk::result_ptr>& result );
+    void onModelRowsRemoved( const QModelIndex& index, int start, int end );
 
 private:
     void setupItem( const Tomahawk::query_ptr& query, PlItem* parent );
@@ -44,6 +48,7 @@ private:
     Tomahawk::plentry_ptr m_entry;
     Tomahawk::query_ptr m_query;
     bool m_isPlaying;
+    int m_parentPos;
 };
 
 #endif // PLITEM_H

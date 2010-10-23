@@ -11,19 +11,24 @@ PlItem::~PlItem()
 {
     qDeleteAll( children );
 
+//    Q_ASSERT( parent->children.at( m_parentPos ) == this );
+
     if ( parent )
-        parent->children.removeOne( this );
+        parent->children.removeAt( m_parentPos );
 }
 
 
-PlItem::PlItem( PlItem* parent )
+PlItem::PlItem( PlItem* parent, QAbstractItemModel* model )
 {
     this->parent = parent;
+    this->model = model;
     childCount = 0;
+    toberemoved = false;
 
     if ( parent )
     {
         parent->children.append( this );
+        m_parentPos = parent->children.count() - 1;
     }
 }
 
@@ -32,12 +37,15 @@ PlItem::PlItem( const QString& caption, PlItem* parent )
 {
     this->parent = parent;
     this->caption = caption;
+    this->model = parent->model;
     childCount = 0;
     m_isPlaying = false;
+    toberemoved = false;
 
     if ( parent )
     {
         parent->children.append( this );
+        m_parentPos = parent->children.count() - 1;
     }
 }
 
@@ -64,9 +72,15 @@ PlItem::setupItem( const Tomahawk::query_ptr& query, PlItem* parent )
     if ( parent )
     {
         parent->children.append( this );
+        m_parentPos = parent->children.count() - 1;
+        this->model = parent->model;
+
+        connect( model, SIGNAL( rowsRemoved( QModelIndex, int, int ) ),
+                          SLOT( onModelRowsRemoved( QModelIndex, int, int ) ) );
     }
 
     m_isPlaying = false;
+    toberemoved = false;
     m_query = query;
     if ( query->numResults() )
         onResultsAdded( query->results() );
@@ -83,3 +97,20 @@ PlItem::onResultsAdded( const QList<Tomahawk::result_ptr>& results )
     emit dataChanged();
 }
 
+
+void
+PlItem::onModelRowsRemoved( const QModelIndex& index, int start, int end )
+{
+    if ( !toberemoved && this->parent->index == index )
+    {
+        if ( ( start <= m_parentPos ) && ( m_parentPos <= end ) )
+            toberemoved = true;
+        else
+        {
+            if ( start < m_parentPos )
+            {
+                m_parentPos -= ( end - start ) + 1;
+            }
+        }
+    }
+}

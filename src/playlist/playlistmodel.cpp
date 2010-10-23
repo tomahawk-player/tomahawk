@@ -11,6 +11,7 @@ PlaylistModel::PlaylistModel( QObject* parent )
     : TrackModel( parent )
 {
     qDebug() << Q_FUNC_INFO;
+    m_rootItem = new PlItem( 0, this );
 }
 
 
@@ -48,7 +49,7 @@ PlaylistModel::loadPlaylist( const Tomahawk::playlist_ptr& playlist )
 
     emit beginRemoveRows( QModelIndex(), 0, rowCount( QModelIndex() ) - 1 );
     delete m_rootItem;
-    m_rootItem = new PlItem();
+    m_rootItem = new PlItem( 0, this );
     emit endRemoveRows();
 
     m_playlist = playlist;

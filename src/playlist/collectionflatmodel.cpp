@@ -11,6 +11,7 @@ CollectionFlatModel::CollectionFlatModel( QObject* parent )
     : TrackModel( parent )
 {
     qDebug() << Q_FUNC_INFO;
+    m_rootItem = new PlItem( 0, this );
 }
 
 
@@ -65,41 +66,55 @@ CollectionFlatModel::removeCollection( const collection_ptr& collection )
                 this, SLOT( onTracksAddingFinished( Tomahawk::collection_ptr ) ) );
 
     QList<PlItem*> plitems = m_collectionIndex.values( collection );
-    QList<int> rows;
+    QList< QPair< int, int > > rows;
+    QList< QPair< int, int > > sortrows;
+    QPair< int, int > row;
+    QPair< int, int > rowf;
+    rows = m_collectionRows.values( collection );
 
-    if ( plitems.count() )
+    while ( rows.count() )
     {
-        foreach( PlItem* item, plitems )
+        int x = -1;
+        int j = 0;
+        foreach( row, rows )
         {
-            rows << item->index.row();
+            if ( x < 0 || row.first > rows.at( x ).first )
+                x = j;
+
+            j++;
         }
 
-        qSort( rows );
-        int start = rows.first();
-        int end = rows.first();
-
-        foreach( int i, rows )
-        {
-            if ( i > end + 1 )
-            {
-                qDebug() << start << end;
-                emit beginRemoveRows( plitems.first()->parent->index, start, end );
-                emit endRemoveRows();
-
-                start = i;
-            }
-
-            end = i;
-        }
-
-        qDebug() << start << end;
-
-        emit beginRemoveRows( plitems.first()->parent->index, start, end );
-        emit endRemoveRows();
-
-        qDeleteAll( plitems );
+        sortrows.append( rows.at( x ) );
+        rows.removeAt( x );
     }
 
+    foreach( row, sortrows )
+    {
+        QMap< Tomahawk::collection_ptr, QPair< int, int > > newrows;
+        foreach ( const collection_ptr& col, m_collectionRows.uniqueKeys() )
+        {
+            if ( col.data() == collection.data() )
+                continue;
+
+            foreach ( rowf, m_collectionRows.values( col ) )
+            {
+                if ( rowf.first > row.first )
+                {
+                    rowf.first -= ( row.second - row.first ) + 1;
+                    rowf.second -= ( row.second - row.first ) + 1;
+                }
+                newrows.insertMulti( col, rowf );
+            }
+        }
+
+        m_collectionRows = newrows;
+
+        qDebug() << "Removing rows:" << row.first << row.second;
+        emit beginRemoveRows( QModelIndex(), row.first, row.second );
+        emit endRemoveRows();
+    }
+
+    qDeleteAll( plitems );
     m_collectionIndex.remove( collection );
 }
 
@@ -108,7 +123,11 @@ void
 CollectionFlatModel::onTracksAdded( const QList<QVariant>& tracks, const collection_ptr& collection )
 {
     int c = rowCount( QModelIndex() );
-    emit beginInsertRows( QModelIndex(), c, c + tracks.count() - 1 );
+    QPair< int, int > crows;
+    crows.first = c;
+    crows.second = c + tracks.count() - 1;
+
+    emit beginInsertRows( QModelIndex(), crows.first, crows.second );
 
     PlItem* plitem;
     foreach( const QVariant& v, tracks )
@@ -132,6 +151,7 @@ CollectionFlatModel::onTracksAdded( const QList<QVariant>& tracks, const collect
         m_collectionIndex.insertMulti( collection, plitem );
     }
 
+    m_collectionRows.insertMulti( collection, crows );
     emit endInsertRows();
 
     emit trackCountChanged( rowCount( QModelIndex() ) );
