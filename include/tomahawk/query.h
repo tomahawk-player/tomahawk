@@ -18,17 +18,7 @@ class Query : public QObject
 Q_OBJECT
 
 public:
-    explicit Query( const QVariant& v )
-        : m_v( v )
-        , m_solved( false )
-    {
-        // ensure a QID is present:
-        QVariantMap m = m_v.toMap();
-
-        m_artist = m.value( "artist" ).toString();
-        m_album = m.value( "album" ).toString();
-        m_track = m.value( "track" ).toString();
-    }
+    explicit Query( const QVariant& v );
 
     QVariant toVariant() const { return m_v; }
 

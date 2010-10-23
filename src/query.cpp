@@ -4,6 +4,21 @@
 
 using namespace Tomahawk;
 
+Query::Query( const QVariant& v )
+    : m_v( v )
+    , m_solved( false )
+{
+    // ensure a QID is present:
+    QVariantMap m = m_v.toMap();
+
+    m_artist = m.value( "artist" ).toString();
+    m_album = m.value( "album" ).toString();
+    m_track = m.value( "track" ).toString();
+
+    m_qid = m.value( "qid" ).toString();
+}
+
+
 void
 Query::addResults( const QList< Tomahawk::result_ptr >& newresults )
 {

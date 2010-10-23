@@ -44,7 +44,6 @@ public slots:
             if( method == "stat" )          return stat(event);
             if( method == "resolve" )       return resolve(event);
             if( method == "get_results" )   return get_results(event);
-
         }
 
         send404( event );
