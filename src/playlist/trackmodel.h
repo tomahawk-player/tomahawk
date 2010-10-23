@@ -23,7 +23,7 @@ public:
     virtual int rowCount( const QModelIndex& parent ) const;
     virtual int columnCount( const QModelIndex& parent ) const;
 
-    virtual QVariant data( const QModelIndex& index, int role ) const;
+    virtual QVariant data( const QModelIndex& index, int role = Qt::DisplayRole ) const;
     virtual QVariant headerData( int section, Qt::Orientation orientation, int role ) const;
 
     virtual PlItem* previousItem() { return 0; }

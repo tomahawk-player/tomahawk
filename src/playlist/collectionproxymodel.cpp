@@ -16,8 +16,8 @@ CollectionProxyModel::CollectionProxyModel( QObject* parent )
 bool
 CollectionProxyModel::lessThan( const QModelIndex& left, const QModelIndex& right ) const
 {
-    PlItem* p1 = ((PlaylistInterface*)model())->itemFromIndex( left );
-    PlItem* p2 = ((PlaylistInterface*)model())->itemFromIndex( right );
+    PlItem* p1 = itemFromIndex( left );
+    PlItem* p2 = itemFromIndex( right );
 
     if ( !p1 )
         return true;

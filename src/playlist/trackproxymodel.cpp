@@ -132,7 +132,7 @@ TrackProxyModel::filterAcceptsRow( int sourceRow, const QModelIndex& sourceParen
     if ( filterRegExp().isEmpty() )
         return true;
 
-    PlItem* pi = ((PlaylistInterface*)model())->itemFromIndex( model()->index( sourceRow, 0, sourceParent ) );
+    PlItem* pi = itemFromIndex( sourceModel()->index( sourceRow, 0, sourceParent ) );
     if ( !pi )
         return false;
 
