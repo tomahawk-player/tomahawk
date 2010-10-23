@@ -13,7 +13,7 @@ Q_OBJECT
 
 public:
     explicit TrackModel( QObject* parent = 0 );
-    ~TrackModel();
+    virtual ~TrackModel();
 
     virtual QModelIndex index( int row, int column, const QModelIndex& parent ) const;
     virtual QModelIndex parent( const QModelIndex& child ) const;

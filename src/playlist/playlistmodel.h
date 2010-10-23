@@ -42,6 +42,8 @@ signals:
 private slots:
     void onDataChanged();
 
+    void onRevisionLoaded( Tomahawk::PlaylistRevision revision );
+
 private:
     Tomahawk::playlist_ptr m_playlist;
 };

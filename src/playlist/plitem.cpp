@@ -9,7 +9,10 @@ using namespace Tomahawk;
 
 PlItem::~PlItem()
 {
-    parent->children.removeOne( this );
+    qDeleteAll( children );
+
+    if ( parent )
+        parent->children.removeOne( this );
 }
 
 

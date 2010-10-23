@@ -16,7 +16,6 @@ CollectionFlatModel::CollectionFlatModel( QObject* parent )
 
 CollectionFlatModel::~CollectionFlatModel()
 {
-    delete m_rootItem;
 }
 
 
