@@ -1,6 +1,7 @@
 #include "collectionview.h"
 
 #include <QDebug>
+#include <QDragEnterEvent>
 
 #include "playlist/collectionproxymodel.h"
 
@@ -24,3 +25,12 @@ CollectionView::~CollectionView()
 {
     qDebug() << Q_FUNC_INFO;
 }
+
+
+void
+CollectionView::dragEnterEvent( QDragEnterEvent* event )
+{
+    qDebug() << Q_FUNC_INFO;
+    event->ignore();
+}
+
