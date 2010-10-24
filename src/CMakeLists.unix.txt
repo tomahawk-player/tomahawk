@@ -4,7 +4,7 @@ ADD_DEFINITIONS( -g )
 ADD_DEFINITIONS( -fno-operator-names )
 ADD_DEFINITIONS( -fPIC )
 
-SET( GLOOX_LIBS ${GLOOX_LIBS} resolv gloox.so )
+SET( GLOOX_LIBS ${GLOOX_LIBS} resolv gloox )
 
 SET( OS_SPECIFIC_LINK_LIBRARIES 
         ${LIBLASTFM_LIBRARY}
