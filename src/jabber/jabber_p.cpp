@@ -108,7 +108,7 @@ Jabber_p::doJabberRecv()
 void
 Jabber_p::disconnect()
 {
-    if(m_client)
+    if ( m_client )
     {
         m_client->disconnect();
     }

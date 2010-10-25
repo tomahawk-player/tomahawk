@@ -12,6 +12,8 @@ CollectionFlatModel::CollectionFlatModel( QObject* parent )
 {
     qDebug() << Q_FUNC_INFO;
     m_rootItem = new PlItem( 0, this );
+
+    connect( &APP->sourcelist(), SIGNAL( sourceRemoved( Tomahawk::source_ptr ) ), SLOT( onSourceOffline( Tomahawk::source_ptr ) ) );
 }
 
 
@@ -173,4 +175,16 @@ CollectionFlatModel::onDataChanged()
     PlItem* p = (PlItem*)sender();
 //    emit itemSizeChanged( p->index );
     emit dataChanged( p->index, p->index.sibling( p->index.row(), columnCount() - 1 ) );
+}
+
+
+void
+CollectionFlatModel::onSourceOffline( const Tomahawk::source_ptr& src )
+{
+    qDebug() << Q_FUNC_INFO;
+
+    if ( m_collectionIndex.contains( src->collection() ) )
+    {
+        removeCollection( src->collection() );
+    }
 }

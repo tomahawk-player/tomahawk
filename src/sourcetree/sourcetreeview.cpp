@@ -66,17 +66,8 @@ void
 SourceTreeView::onSourceOffline( Tomahawk::source_ptr src )
 {
     qDebug() << Q_FUNC_INFO;
-
-    if ( APP->playlistManager()->superCollections().contains( src->collection() ) )
-    {
-        qDebug() << "Removing source from active view";
-        APP->playlistManager()->show( src->collection() );
-    }
-    else
-    {
-        qDebug() << "not removing source from active view (not active)";
-    }
 }
+
 
 void
 SourceTreeView::onItemActivated( const QModelIndex& index )
