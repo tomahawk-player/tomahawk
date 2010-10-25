@@ -84,6 +84,7 @@ private:
 #endif
 
     Tomahawk::result_ptr m_currentTrack;
+    Tomahawk::result_ptr m_lastTrack;
     PlaylistInterface* m_playlist;
     QMutex m_mutex;
 

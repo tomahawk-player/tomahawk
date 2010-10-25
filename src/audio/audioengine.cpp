@@ -147,6 +147,7 @@ AudioEngine::loadTrack( const Tomahawk::result_ptr& result )
             err = true;
         else
         {
+            m_lastTrack = m_currentTrack;
             m_currentTrack = result;
             io = TomahawkApp::instance()->getIODeviceForUrl( m_currentTrack );
 
@@ -170,28 +171,33 @@ AudioEngine::loadTrack( const Tomahawk::result_ptr& result )
                 m_input.clear();
             }
 
+            if ( m_lastTrack.isNull() || ( m_currentTrack->mimetype() != m_lastTrack->mimetype() ) )
+            {
+                if ( !m_transcode.isNull() )
+                {
+                    m_transcode.clear();
+                }
+
+                if ( m_currentTrack->mimetype() == "audio/mpeg" )
+                {
+                    m_transcode = QSharedPointer<TranscodeInterface>(new MADTranscode());
+                }
+#ifndef NO_OGG
+                else if ( m_currentTrack->mimetype() == "application/ogg" )
+                {
+                    m_transcode = QSharedPointer<TranscodeInterface>(new VorbisTranscode());
+                }
+#endif
+                else
+                    qDebug() << "Could NOT find suitable transcoder! Stopping audio.";
+
+                if ( !m_transcode.isNull() )
+                    connect( m_transcode.data(), SIGNAL( streamInitialized( long, int ) ), SLOT( setStreamData( long, int ) ), Qt::DirectConnection );
+            }
+
             if ( !m_transcode.isNull() )
             {
                 m_transcode->clearBuffers();
-                m_transcode.clear();
-            }
-
-            if ( m_currentTrack->mimetype() == "audio/mpeg" )
-            {
-                m_transcode = QSharedPointer<TranscodeInterface>(new MADTranscode());
-            }
-    #ifndef NO_OGG
-            else if ( m_currentTrack->mimetype() == "application/ogg" )
-            {
-                m_transcode = QSharedPointer<TranscodeInterface>(new VorbisTranscode());
-            }
-    #endif
-            else
-                qDebug() << "Could NOT find suitable transcoder! Stopping audio.";
-
-            if ( !m_transcode.isNull() )
-            {
-                connect( m_transcode.data(), SIGNAL( streamInitialized( long, int ) ), SLOT( setStreamData( long, int ) ), Qt::DirectConnection );
                 m_input = io;
 
                 m_audio->clearBuffers();

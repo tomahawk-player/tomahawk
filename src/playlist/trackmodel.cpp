@@ -98,7 +98,7 @@ TrackModel::data( const QModelIndex& index, int role ) const
         return QSize( 0, 18 );
     }
 
-    if ( role != Qt::DisplayRole )
+    if ( role != Qt::DisplayRole ) // && role != Qt::ToolTipRole )
         return QVariant();
 
     const query_ptr& query = entry->query();
