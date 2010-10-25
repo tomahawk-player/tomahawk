@@ -40,6 +40,7 @@ signals:
 
 private slots:
     void onResultsAdded( const QList<Tomahawk::result_ptr>& result );
+    void onResultsRemoved( const Tomahawk::result_ptr& result );
     void onModelRowsRemoved( const QModelIndex& index, int start, int end );
 
 private:

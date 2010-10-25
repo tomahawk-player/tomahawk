@@ -47,34 +47,39 @@ Query::addResults( const QList< Tomahawk::result_ptr >& newresults )
 void
 Query::resultUnavailable()
 {
+    qDebug() << Q_FUNC_INFO;
+
     Result* result = (Result*) sender();
     Q_ASSERT( result );
 
-    for(int i = 0; i < m_results.length(); ++i )
+    for ( int i = 0; i < m_results.length(); ++i )
     {
-        if( m_results.value( i ).data() == result )
+        if ( m_results.value( i ).data() == result )
         {
+            result_ptr r  = m_results.value( i );
             m_results.removeAt( i );
+
+            emit resultsRemoved( r );
             break;
         }
     }
+
+    if ( m_results.isEmpty() )  // FIXME proper score checking
+        emit solvedStateChanged( false );
 }
 
 
 void
-Query::removeResult( Tomahawk::result_ptr result )
+Query::removeResult( const Tomahawk::result_ptr& result )
 {
-    bool becameUnsolved = false;
     {
         QMutexLocker lock( &m_mut );
         m_results.removeAll( result );
-
-        if ( m_results.isEmpty() )  // FIXME proper score checking
-            becameUnsolved = true;
-
     }
     emit resultsRemoved( result );
-    if( becameUnsolved ) emit solvedStateChanged( false );
+
+    if ( m_results.isEmpty() )  // FIXME proper score checking
+        emit solvedStateChanged( false );
 }
 
 
