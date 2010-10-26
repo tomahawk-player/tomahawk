@@ -65,7 +65,8 @@ Dependencies
   libmad 0.15.1b http://www.underbit.com/products/mad/
   libvorbis 1.2.3 http://xiph.org/vorbis/
   libogg 1.1.4 http://xiph.org/ogg/
-  liblastfm 0.3.0 http://github.com/mxcl/liblastfm/
+  liblastfm 0.3.3 http://github.com/mxcl/liblastfm/
+  libechonest 0.1 git://git.kde.org/libechonest.git
 
  Third party libraries that we ship with our source:
 
