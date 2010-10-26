@@ -47,8 +47,6 @@ Query::addResults( const QList< Tomahawk::result_ptr >& newresults )
 void
 Query::resultUnavailable()
 {
-    qDebug() << Q_FUNC_INFO;
-
     Result* result = (Result*) sender();
     Q_ASSERT( result );
 

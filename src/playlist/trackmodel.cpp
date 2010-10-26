@@ -260,3 +260,31 @@ TrackModel::mimeData( const QModelIndexList &indexes ) const
 
     return mimeData;
 }
+
+
+void
+TrackModel::removeIndex( const QModelIndex& index )
+{
+    qDebug() << Q_FUNC_INFO;
+
+    if ( index.column() > 0 )
+        return;
+
+    PlItem* item = itemFromIndex( index );
+    if ( item )
+    {
+        emit beginRemoveRows( index.parent(), index.row(), index.row() );
+        delete item;
+        emit endRemoveRows();
+    }
+}
+
+
+void
+TrackModel::removeIndexes( const QList<QModelIndex>& indexes )
+{
+    foreach( const QModelIndex& idx, indexes )
+    {
+        removeIndex( idx );
+    }
+}

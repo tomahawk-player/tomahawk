@@ -26,6 +26,9 @@ public:
     virtual QVariant data( const QModelIndex& index, int role = Qt::DisplayRole ) const;
     virtual QVariant headerData( int section, Qt::Orientation orientation, int role ) const;
 
+    virtual void removeIndex( const QModelIndex& index );
+    virtual void removeIndexes( const QList<QModelIndex>& indexes );
+
     virtual PlItem* previousItem() { return 0; }
     virtual PlItem* nextItem() { return 0; }
     virtual PlItem* siblingItem( int direction ) { return 0; }

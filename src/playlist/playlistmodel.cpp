@@ -9,6 +9,7 @@ using namespace Tomahawk;
 
 PlaylistModel::PlaylistModel( QObject* parent )
     : TrackModel( parent )
+    , m_waitForUpdate( false )
 {
     qDebug() << Q_FUNC_INFO;
     m_rootItem = new PlItem( 0, this );
@@ -51,8 +52,8 @@ PlaylistModel::loadPlaylist( const Tomahawk::playlist_ptr& playlist )
     {
         emit beginRemoveRows( QModelIndex(), 0, rowCount( QModelIndex() ) - 1 );
         delete m_rootItem;
-        m_rootItem = new PlItem( 0, this );
         emit endRemoveRows();
+        m_rootItem = new PlItem( 0, this );
     }
 
     m_playlist = playlist;
@@ -68,6 +69,7 @@ PlaylistModel::loadPlaylist( const Tomahawk::playlist_ptr& playlist )
 
     foreach( const plentry_ptr& entry, entries )
     {
+        qDebug() << entry->query()->toString();
         plitem = new PlItem( entry, m_rootItem );
         plitem->index = createIndex( m_rootItem->children.count() - 1, 0, plitem );
 
@@ -95,5 +97,121 @@ PlaylistModel::onRevisionLoaded( Tomahawk::PlaylistRevision revision )
 {
     qDebug() << Q_FUNC_INFO;
 
-    loadPlaylist( m_playlist );
+    if ( m_waitForUpdate )
+    {
+        qDebug() << m_playlist->currentrevision() << revision.revisionguid;
+        m_waitForUpdate = false;
+    }
+    else
+        loadPlaylist( m_playlist );
+}
+
+
+bool
+PlaylistModel::dropMimeData( const QMimeData* data, Qt::DropAction action, int row, int column, const QModelIndex& parent )
+{
+    if ( action == Qt::IgnoreAction )
+        return true;
+
+    if ( !data->hasFormat( "application/tomahawk.query.list" ) && !data->hasFormat( "application/tomahawk.plentry.list" ) )
+        return false;
+
+    int beginRow;
+    if ( row != -1 )
+        beginRow = row;
+    else if ( parent.isValid() )
+        beginRow = parent.row();
+    else
+        beginRow = rowCount( QModelIndex() );
+
+    qDebug() << data->formats();
+
+    if ( data->hasFormat( "application/tomahawk.query.list" ) )
+    {
+        QByteArray itemData = data->data( "application/tomahawk.query.list" );
+        QDataStream stream( &itemData, QIODevice::ReadOnly );
+        QList<Tomahawk::query_ptr> queries;
+
+        while ( !stream.atEnd() )
+        {
+            qlonglong qptr;
+            stream >> qptr;
+
+            Tomahawk::query_ptr* query = reinterpret_cast<Tomahawk::query_ptr*>(qptr);
+            if ( query && !query->isNull() )
+            {
+                qDebug() << "Dropped query item:" << query->data()->artist() << "-" << query->data()->track();
+                queries << *query;
+            }
+        }
+
+        emit beginInsertRows( QModelIndex(), beginRow, beginRow + queries.count() - 1 );
+        foreach( const Tomahawk::query_ptr& query, queries )
+        {
+            plentry_ptr e( new PlaylistEntry() );
+            e->setGuid( uuid() );
+
+            if ( query->results().count() )
+                e->setDuration( query->results().at( 0 )->duration() );
+            else
+                e->setDuration( 0 );
+
+            e->setLastmodified( 0 );
+            e->setAnnotation( "" ); // FIXME
+            e->setQuery( query );
+
+            PlItem* plitem = new PlItem( e, m_rootItem, beginRow );
+            plitem->index = createIndex( beginRow++, 0, plitem );
+
+            connect( plitem, SIGNAL( dataChanged() ), SLOT( onDataChanged() ) );
+        }
+        emit endInsertRows();
+    }
+
+    return true;
+}
+
+
+void
+PlaylistModel::onPlaylistChanged()
+{
+    qDebug() << Q_FUNC_INFO;
+
+    QList<plentry_ptr> l = playlistEntries();
+    foreach( const plentry_ptr& ple, l )
+    {
+        qDebug() << "updateinternal:" << ple->query()->toString();
+    }
+
+    QString newrev = uuid();
+    m_playlist->createNewRevision( newrev, m_playlist->currentrevision(), l );
+}
+
+
+QList<Tomahawk::plentry_ptr>
+PlaylistModel::playlistEntries() const
+{
+    QList<plentry_ptr> l;
+    for ( int i = 0; i < rowCount( QModelIndex() ); i++ )
+    {
+        QModelIndex idx = index( i, 0, QModelIndex() );
+        if ( !idx.isValid() )
+            continue;
+
+        PlItem* item = itemFromIndex( idx );
+        if ( item )
+            l << item->entry();
+    }
+
+    return l;
+}
+
+
+void
+PlaylistModel::removeIndex( const QModelIndex& index )
+{
+    TrackModel::removeIndex( index );
+
+    m_waitForUpdate = true;
+    onPlaylistChanged();
 }
