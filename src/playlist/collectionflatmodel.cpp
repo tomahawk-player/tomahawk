@@ -67,7 +67,7 @@ CollectionFlatModel::removeCollection( const collection_ptr& collection )
     disconnect( collection.data(), SIGNAL( tracksFinished( Tomahawk::collection_ptr ) ),
                 this, SLOT( onTracksAddingFinished( Tomahawk::collection_ptr ) ) );
 
-    QList<PlItem*> plitems = m_collectionIndex.values( collection );
+//    QList<PlItem*> plitems = m_collectionIndex.values( collection );
     QList< QPair< int, int > > rows;
     QList< QPair< int, int > > sortrows;
     QPair< int, int > row;
@@ -113,11 +113,15 @@ CollectionFlatModel::removeCollection( const collection_ptr& collection )
 
         qDebug() << "Removing rows:" << row.first << row.second;
         emit beginRemoveRows( QModelIndex(), row.first, row.second );
+        for ( int i = row.second; i >= row.first; i-- )
+        {
+            PlItem* item = itemFromIndex( index( i, 0, QModelIndex() ) );
+            delete item;
+        }
         emit endRemoveRows();
     }
 
-    qDeleteAll( plitems );
-    m_collectionIndex.remove( collection );
+//    m_collectionIndex.remove( collection );
 }
 
 
@@ -150,7 +154,7 @@ CollectionFlatModel::onTracksAdded( const QList<QVariant>& tracks, const collect
 
         connect( plitem, SIGNAL( dataChanged() ), SLOT( onDataChanged() ) );
 
-        m_collectionIndex.insertMulti( collection, plitem );
+//        m_collectionIndex.insertMulti( collection, plitem );
     }
 
     m_collectionRows.insertMulti( collection, crows );
@@ -183,7 +187,7 @@ CollectionFlatModel::onSourceOffline( const Tomahawk::source_ptr& src )
 {
     qDebug() << Q_FUNC_INFO;
 
-    if ( m_collectionIndex.contains( src->collection() ) )
+    if ( m_collectionRows.contains( src->collection() ) )
     {
         removeCollection( src->collection() );
     }

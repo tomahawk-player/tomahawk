@@ -31,7 +31,8 @@ SourceTreeView::SourceTreeView( QWidget* parent )
     setDropIndicatorShown( false );
     setAllColumnsShowFocus( false );
 
-    setupMenus();
+    setContextMenuPolicy( Qt::CustomContextMenu );
+    connect( this, SIGNAL( customContextMenuRequested( const QPoint& ) ), SLOT( onCustomContextMenu( const QPoint& ) ) );
 
     m_model = new SourcesModel( this );
     setModel( m_model );
@@ -50,15 +51,30 @@ SourceTreeView::SourceTreeView( QWidget* parent )
 void
 SourceTreeView::setupMenus()
 {
+    m_playlistMenu.clear();
+
     m_loadPlaylistAction = m_playlistMenu.addAction( tr( "&Load Playlist" ) );
     m_playlistMenu.addSeparator();
     m_deletePlaylistAction = m_playlistMenu.addAction( tr( "&Delete Playlist" ) );
 
+    bool readonly = true;
+    int type = SourcesModel::indexType( m_contextMenuIndex );
+    if ( type == 1 )
+    {
+        playlist_ptr playlist = SourcesModel::indexToPlaylist( m_contextMenuIndex );
+        if ( !playlist.isNull() )
+        {
+            readonly = !playlist->author()->isLocal();
+        }
+    }
+
+    if ( readonly )
+    {
+        m_deletePlaylistAction->setEnabled( !readonly );
+    }
+
     connect( m_loadPlaylistAction,   SIGNAL( triggered() ), SLOT( loadPlaylist() ) );
     connect( m_deletePlaylistAction, SIGNAL( triggered() ), SLOT( deletePlaylist() ) );
-
-    setContextMenuPolicy( Qt::CustomContextMenu );
-    connect( this, SIGNAL( customContextMenuRequested( const QPoint& ) ), SLOT( onCustomContextMenu( const QPoint& ) ) );
 }
 
 
@@ -161,6 +177,8 @@ SourceTreeView::onCustomContextMenu( const QPoint& pos )
     QModelIndex idx = m_contextMenuIndex = indexAt( pos );
     if ( !idx.isValid() )
         return;
+
+    setupMenus();
 
     if ( SourcesModel::indexType( idx ) )
     {

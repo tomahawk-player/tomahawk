@@ -208,6 +208,12 @@ TrackView::dragMoveEvent( QDragMoveEvent* event )
 {
     QTreeView::dragMoveEvent( event );
 
+    if ( model()->isReadOnly() )
+    {
+        event->ignore();
+        return;
+    }
+
     if ( event->mimeData()->hasFormat( "application/tomahawk.query.list" ) || event->mimeData()->hasFormat( "application/tomahawk.plentry.list" ) )
     {
         setDirtyRegion( m_dropRect );

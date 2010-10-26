@@ -21,7 +21,7 @@ private slots:
     void onCustomContextMenu( const QPoint& pos );
 
     void playItem();
-    void addItemToPlaylist();
+    void addItemsToPlaylist();
     void deleteItem();
 
 private:

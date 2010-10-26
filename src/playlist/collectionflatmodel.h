@@ -50,7 +50,6 @@ private slots:
     void onSourceOffline( const Tomahawk::source_ptr& src );
 
 private:
-    QMap< Tomahawk::collection_ptr, PlItem* > m_collectionIndex;
     QMap< Tomahawk::collection_ptr, QPair< int, int > > m_collectionRows;
 };
 

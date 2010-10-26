@@ -59,6 +59,8 @@ PlaylistModel::loadPlaylist( const Tomahawk::playlist_ptr& playlist )
     m_playlist = playlist;
     connect( playlist.data(), SIGNAL( revisionLoaded( Tomahawk::PlaylistRevision ) ), SLOT( onRevisionLoaded( Tomahawk::PlaylistRevision ) ) );
 
+    setReadOnly( !m_playlist->author()->isLocal() );
+
     PlItem* plitem;
     QList<plentry_ptr> entries = playlist->entries();
     int c = rowCount( QModelIndex() );
@@ -110,7 +112,7 @@ PlaylistModel::onRevisionLoaded( Tomahawk::PlaylistRevision revision )
 bool
 PlaylistModel::dropMimeData( const QMimeData* data, Qt::DropAction action, int row, int column, const QModelIndex& parent )
 {
-    if ( action == Qt::IgnoreAction )
+    if ( action == Qt::IgnoreAction || isReadOnly() )
         return true;
 
     if ( !data->hasFormat( "application/tomahawk.query.list" ) && !data->hasFormat( "application/tomahawk.plentry.list" ) )
@@ -210,6 +212,9 @@ PlaylistModel::playlistEntries() const
 void
 PlaylistModel::removeIndex( const QModelIndex& index )
 {
+    if ( isReadOnly() )
+        return;
+
     TrackModel::removeIndex( index );
 
     m_waitForUpdate = true;

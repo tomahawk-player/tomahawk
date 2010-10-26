@@ -41,6 +41,9 @@
 #include <gloox/error.h>
 #include <gloox/presence.h>
 #include <gloox/rosteritem.h>
+#include <gloox/vcard.h>
+#include <gloox/vcardhandler.h>
+#include <gloox/vcardmanager.h>
 
 #if defined( WIN32 ) || defined( _WIN32 )
 # include <windows.h>
@@ -51,6 +54,7 @@ class Jabber_p :
        public gloox::ConnectionListener,
        public gloox::RosterListener,
        public gloox::MessageHandler,
+       public gloox::VCardHandler,
        gloox::LogHandler
        //public gloox::DiscoHandler,
 {
@@ -91,6 +95,9 @@ public:
     virtual void handleNonrosterPresence( const gloox::Presence& presence );
     /// END ROSTER STUFF
 
+    virtual void handleVCard( const gloox::JID& jid, const gloox::VCard* vcard );
+    virtual void handleVCardResult( gloox::VCardHandler::VCardContext context, const gloox::JID& jid, gloox::StanzaError se );
+
     /// DISCO STUFF
     virtual void handleDiscoInfo( const gloox::JID& from, const gloox::Disco::Info& info, int context);
     virtual void handleDiscoItems( const gloox::JID& /*iq*/, const gloox::Disco::Items&, int /*context*/ );
@@ -115,7 +122,6 @@ public slots:
     void broadcastMsg( const QString &msg );
 
 private slots:
-
     void doJabberRecv();
 
 private:
@@ -125,6 +131,7 @@ private:
     gloox::JID m_jid;
     QMap<gloox::Presence::PresenceType, QString> m_presences;
     QMap<QString, gloox::Presence::PresenceType> m_peers;
+    QSharedPointer<gloox::VCardManager> m_vcardManager;
     QTimer m_timer; // for recv()
 };
 

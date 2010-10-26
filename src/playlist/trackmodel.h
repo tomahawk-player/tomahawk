@@ -18,6 +18,8 @@ public:
     virtual QModelIndex index( int row, int column, const QModelIndex& parent ) const;
     virtual QModelIndex parent( const QModelIndex& child ) const;
 
+    virtual bool isReadOnly() const { return m_readOnly; }
+
     virtual int trackCount() const { return rowCount( QModelIndex() ); }
 
     virtual int rowCount( const QModelIndex& parent ) const;
@@ -52,8 +54,12 @@ public slots:
     virtual void setRepeatMode( PlaylistInterface::RepeatMode mode ) {}
     virtual void setShuffled( bool shuffled ) {}
 
+protected:
+    virtual void setReadOnly( bool b ) { m_readOnly = b; }
+
 private:
     QPersistentModelIndex m_currentIndex;
+    bool m_readOnly;
 };
 
 #endif // TRACKMODEL_H

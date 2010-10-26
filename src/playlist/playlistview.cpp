@@ -12,7 +12,9 @@ PlaylistView::PlaylistView( QWidget* parent )
     : TrackView( parent )
 {
     setProxyModel( new PlaylistProxyModel( this ) );
-    setupMenus();
+
+    setContextMenuPolicy( Qt::CustomContextMenu );
+    connect( this, SIGNAL( customContextMenuRequested( const QPoint& ) ), SLOT( onCustomContextMenu( const QPoint& ) ) );
 }
 
 
@@ -25,18 +27,20 @@ PlaylistView::~PlaylistView()
 void
 PlaylistView::setupMenus()
 {
+    m_itemMenu.clear();
+
     m_playItemAction = m_itemMenu.addAction( tr( "&Play" ) );
     m_itemMenu.addSeparator();
     m_addItemsToPlaylistAction = m_itemMenu.addAction( tr( "&Add to Playlist" ) );
     m_itemMenu.addSeparator();
     m_deleteItemAction = m_itemMenu.addAction( tr( "&Delete Item" ) );
 
+    if ( model() )
+        m_deleteItemAction->setEnabled( !model()->isReadOnly() );
+
     connect( m_playItemAction,           SIGNAL( triggered() ), SLOT( playItem() ) );
     connect( m_addItemsToPlaylistAction, SIGNAL( triggered() ), SLOT( addItemsToPlaylist() ) );
     connect( m_deleteItemAction,         SIGNAL( triggered() ), SLOT( deleteItem() ) );
-
-    setContextMenuPolicy( Qt::CustomContextMenu );
-    connect( this, SIGNAL( customContextMenuRequested( const QPoint& ) ), SLOT( onCustomContextMenu( const QPoint& ) ) );
 }
 
 
@@ -44,6 +48,7 @@ void
 PlaylistView::onCustomContextMenu( const QPoint& pos )
 {
     qDebug() << Q_FUNC_INFO;
+    setupMenus();
 
     QModelIndex idx = indexAt( pos );
     idx = idx.sibling( idx.row(), 0 );
@@ -81,7 +86,7 @@ PlaylistView::playItem()
 
 
 void
-PlaylistView::addItemToPlaylist()
+PlaylistView::addItemsToPlaylist()
 {
 }
 

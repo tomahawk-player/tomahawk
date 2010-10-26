@@ -425,7 +425,7 @@ Jabber_p::handleRosterPresence( const RosterItem& item, const std::string& resou
         return;
     }
 
-    // "coming online " event
+    // "coming online" event
     if( presenceMeansOnline( presence ) &&
         ( !m_peers.contains( fulljid ) ||
           !presenceMeansOnline( m_peers.value( fulljid ) )
@@ -478,6 +478,20 @@ Jabber_p::handleNonrosterPresence( const Presence& presence )
 /// END ROSTER STUFF
 
 
+void
+Jabber_p::handleVCard( const JID& jid, const VCard* vcard )
+{
+    qDebug() << "VCARD RECEIVED!" << jid.bare().c_str();
+}
+
+
+void
+Jabber_p::handleVCardResult( VCardContext context, const JID& jid, StanzaError se )
+{
+    qDebug() << "VCARD RESULT RECEIVED!" << jid.bare().c_str();
+}
+
+
 /// DISCO STUFF
 void
 Jabber_p::handleDiscoInfo( const JID& from, const Disco::Info& info, int context)
@@ -525,8 +539,3 @@ bool Jabber_p::presenceMeansOnline( Presence::PresenceType p )
             return true;
     }
 }
-
-
-
-
-

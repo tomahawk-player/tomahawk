@@ -11,6 +11,7 @@ using namespace Tomahawk;
 
 TrackModel::TrackModel( QObject* parent )
     : QAbstractItemModel( parent )
+    , m_readOnly( true )
 {
     qDebug() << Q_FUNC_INFO;
 }
