@@ -33,6 +33,8 @@ QJson (Qt JSON library)
 libEchonest 0.1
 ---------------
 
+ See: http://projects.kde.org/projects/playground/libs/libechonest/
+
  $ git clone git://git.kde.org/libechonest.git
  $ cd libechonest
  $ mkdir build && cd build
@@ -66,7 +68,7 @@ Dependencies
   libvorbis 1.2.3 http://xiph.org/vorbis/
   libogg 1.1.4 http://xiph.org/ogg/
   liblastfm 0.3.3 http://github.com/mxcl/liblastfm/
-  libechonest 0.1 git://git.kde.org/libechonest.git
+  libechonest 0.1.2 http://projects.kde.org/projects/playground/libs/libechonest/
 
  Third party libraries that we ship with our source:
 
