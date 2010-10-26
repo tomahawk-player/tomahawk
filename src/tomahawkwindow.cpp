@@ -49,8 +49,6 @@ TomahawkWindow::TomahawkWindow( QWidget* parent )
 #endif
 
     ui->setupUi( this );
-//    ui->playlistView->connectProgressBar( ui->actionProgress );
-//    ui->playlistView->setFocus();
 
 #ifndef Q_WS_MAC
     ui->centralWidget->layout()->setContentsMargins( 4, 4, 4, 2 );
@@ -60,7 +58,10 @@ TomahawkWindow::TomahawkWindow( QWidget* parent )
     ui->sourceTreeView->setAttribute( Qt::WA_MacShowFocusRect, 0 );
 #endif
 
-    ui->mainLayout->addWidget( m_playlistManager->widget() );
+    delete ui->playlistWidget;
+    ui->splitter->addWidget( m_playlistManager->widget() );
+    ui->splitter->setStretchFactor( 0, 1 );
+    ui->splitter->setStretchFactor( 1, 3 );
 
     QToolBar* toolbar = addToolBar( "TomahawkToolbar" );
     toolbar->setObjectName( "TomahawkToolbar" );
