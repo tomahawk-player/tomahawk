@@ -2,6 +2,8 @@
 
 #include <QDebug>
 #include <QTime>
+#include <QString>
+#include <QRegExp>
 
 using namespace gloox;
 using namespace std;
@@ -62,6 +64,40 @@ Jabber_p::~Jabber_p()
     }
 }
 
+
+void
+Jabber_p::setProxy( QNetworkProxy* proxy )
+{
+    qDebug() << Q_FUNC_INFO;
+
+    if( !m_client || !proxy )
+    {
+        qDebug() << "No client or no proxy";
+        return;
+    }
+
+    QNetworkProxy appProx = QNetworkProxy::applicationProxy();
+    QNetworkProxy* prox = proxy->type() == QNetworkProxy::DefaultProxy ? &appProx : proxy;
+
+    if( prox->type() == QNetworkProxy::NoProxy )
+    {
+        qDebug() << "Setting proxy to none";
+        m_client->setConnectionImpl( new gloox::ConnectionTCPClient( m_client.data(), m_client->logInstance(), m_client->server(), m_client->port() ) );
+    }
+    else if( proxy->type() == QNetworkProxy::Socks5Proxy )
+    {
+        qDebug() << "Setting proxy to SOCKS5";
+        m_client->setConnectionImpl( new gloox::ConnectionSOCKS5Proxy( m_client.data(),
+                                     new gloox::ConnectionTCPClient( m_client->logInstance(), proxy->hostName().toStdString(), proxy->port() ),
+                                     m_client->logInstance(), m_client->server(), m_client->port() ) );
+    }
+    else
+    {
+        qDebug() << "Proxy type unknown";
+    }
+}
+
+
 void
 Jabber_p::go()
 {
@@ -79,8 +115,10 @@ Jabber_p::go()
     
     m_client->setPresence( Presence::Available, 1, "Tomahawk available" );
 
-   // m_client->connect();
-   // return;
+    // m_client->connect();
+    // return;
+
+    // Handle proxy
     
     if( m_client->connect( false ) )
     {
@@ -400,13 +438,20 @@ Jabber_p::handleRosterPresence( const RosterItem& item, const std::string& resou
         return;
 
     // ignore anyone not running tomahawk:
-    if( jid.full().find( "/tomahawk" ) == string::npos )
+    // convert to QString to get proper regex support
+    QString res( jid.resource().c_str() );
+    QRegExp regex( "tomahawk\\d+" );
+    if( res != "tomahawk-tomahawk" && !res.contains( regex ) )
     {
+        qDebug() << "not considering resource of " << res;
         // Disco them to check if they are tomahawk-capable
+
         //qDebug() <<   "No tomahawk resource, DISCOing... " << jid.full().c_str();
         //m_client->disco()->getDiscoInfo( jid, "", this, 0 );
         return;
     }
+
+    qDebug() << "handling presence for resource of " << res;
 
     //qDebug() << Q_FUNC_INFO << "jid: " << QString::fromStdString(item.jid())
     //        << " resource: " << QString::fromStdString(resource)

@@ -11,17 +11,19 @@ class Jabber : public QObject
     Q_OBJECT
 public:
 
-    Jabber(const QString &jid,
-           const QString password,
-           const QString server = "",
-           const int port=-1)
-    : p( jid, password, server, port )
+    Jabber( const QString &jid, const QString password, const QString server = "", const int port=-1 )
+       : p( jid, password, server, port )
     {
     }
 
     ~Jabber()
     {
        // p.disconnect();
+    }
+
+    void setProxy( QNetworkProxy* proxy )
+    {
+        p.setProxy( proxy );
     }
 
 public slots:

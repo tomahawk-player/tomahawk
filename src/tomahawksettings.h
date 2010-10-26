@@ -50,7 +50,22 @@ public:
     
     bool upnpEnabled() const; /// true by default
     void setUPnPEnabled( bool enable );
-    
+
+    QString proxyHost() const;
+    void setProxyHost( const QString &host );
+
+    qulonglong proxyPort() const;
+    void setProxyPort( const qulonglong port );
+
+    QString proxyUsername() const;
+    void setProxyUsername( const QString &username );
+
+    QString proxyPassword() const;
+    void setProxyPassword( const QString &password );
+
+    int proxyType() const;
+    void setProxyType( const int type );
+
     /// Last.fm settings
     bool scrobblingEnabled() const; /// false by default
     void setScrobblingEnabled( bool enable );
@@ -63,6 +78,19 @@ public:
     
     QByteArray lastFmSessionKey() const;
     void setLastFmSessionKey( const QByteArray& key );
+
+    /// XMPP Component Settings
+    QString xmppBotServer() const;
+    void setXmppBotServer( const QString &server );
+
+    QString xmppBotJid() const;
+    void setXmppBotJid( const QString &component );
+
+    QString xmppBotPassword() const;
+    void setXmppBotPassword( const QString &password );
+
+    int xmppBotPort() const;
+    void setXmppBotPort( const int port );
 };
 
 #endif

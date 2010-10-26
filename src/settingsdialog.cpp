@@ -1,5 +1,6 @@
 #include "settingsdialog.h"
 #include "ui_settingsdialog.h"
+#include "ui_proxydialog.h"
 
 #include <QCryptographicHash>
 #include <QDebug>
@@ -17,7 +18,8 @@
 #include <QDesktopServices>
 
 
-static QString md5( const QByteArray& src )
+static QString
+md5( const QByteArray& src )
 {
     QByteArray const digest = QCryptographicHash::hash( src, QCryptographicHash::Md5 );
     return QString::fromLatin1( digest.toHex() ).rightJustified( 32, '0' );
@@ -27,6 +29,7 @@ static QString md5( const QByteArray& src )
 SettingsDialog::SettingsDialog( QWidget *parent )
     : QDialog( parent )
     , ui( new Ui::SettingsDialog )
+    , m_proxySettings( this )
     , m_rejected( false )
     , m_testLastFmQuery( 0 )
 {
@@ -39,9 +42,10 @@ SettingsDialog::SettingsDialog( QWidget *parent )
     // JABBER
     ui->checkBoxJabberAutoConnect->setChecked( s->jabberAutoConnect() );
     ui->jabberUsername->setText( s->jabberUsername() );
-    ui->jabberPassword->setText(s->jabberPassword() );
-    ui->jabberServer->setText(   s->jabberServer() );
+    ui->jabberPassword->setText( s->jabberPassword() );
+    ui->jabberServer->setText( s->jabberServer() );
     ui->jabberPort->setValue( s->jabberPort() );
+    ui->proxyButton->setVisible( false );
 
     if ( ui->jabberPort->text().toInt() != 5222 || !ui->jabberServer->text().isEmpty() )
     {
@@ -67,6 +71,7 @@ SettingsDialog::SettingsDialog( QWidget *parent )
     connect( ui->pushButtonTestLastfmLogin, SIGNAL( clicked( bool) ), this, SLOT( testLastFmLogin() ) );
     
     connect( ui->buttonBrowse, SIGNAL( clicked() ),  SLOT( showPathSelector() ) );
+    connect( ui->proxyButton,  SIGNAL( clicked() ),  SLOT( showProxySettings() ) );
     connect( this,             SIGNAL( rejected() ), SLOT( onRejected() ) );
 }
 
@@ -117,7 +122,6 @@ SettingsDialog::~SettingsDialog()
         {
             APP->reconnectJabber();
         }
-        
     }
     else
         qDebug() << "Settings dialog cancelled, NOT saving prefs.";
@@ -126,7 +130,8 @@ SettingsDialog::~SettingsDialog()
 }
 
 
-void SettingsDialog::showPathSelector()
+void
+SettingsDialog::showPathSelector()
 {
     QString path = QFileDialog::getExistingDirectory(
                    this,
@@ -141,7 +146,8 @@ void SettingsDialog::showPathSelector()
 }
 
 
-void SettingsDialog::doScan()
+void
+SettingsDialog::doScan()
 {
     // TODO this doesnt really belong here..
     QString path = ui->lineEditMusicPath->text();
@@ -155,13 +161,15 @@ void SettingsDialog::doScan()
 }
 
 
-void SettingsDialog::onRejected()
+void
+SettingsDialog::onRejected()
 {
     m_rejected = true;
 }
 
 
-void SettingsDialog::changeEvent( QEvent *e )
+void
+SettingsDialog::changeEvent( QEvent *e )
 {
     QDialog::changeEvent( e );
     switch ( e->type() )
@@ -176,7 +184,17 @@ void SettingsDialog::changeEvent( QEvent *e )
 }
 
 
-void SettingsDialog::testLastFmLogin()
+void
+SettingsDialog::showProxySettings()
+{
+    m_proxySettings.exec();
+    if ( m_proxySettings.result() == QDialog::Accepted )
+        m_proxySettings.saveSettings();
+}
+
+
+void
+SettingsDialog::testLastFmLogin()
 {
 #ifndef NO_LIBLASTFM
     ui->pushButtonTestLastfmLogin->setEnabled( false );
@@ -196,7 +214,8 @@ void SettingsDialog::testLastFmLogin()
 }
 
 
-void SettingsDialog::onLastFmFinished()
+void
+SettingsDialog::onLastFmFinished()
 {
 #ifndef NO_LIBLASTFM
     lastfm::XmlQuery lfm = lastfm::XmlQuery( m_testLastFmQuery->readAll() );
@@ -233,3 +252,61 @@ void SettingsDialog::onLastFmFinished()
 #endif
 }
 
+
+ProxyDialog::ProxyDialog( QWidget *parent )
+    : QDialog( parent )
+    , ui( new Ui::ProxyDialog )
+{
+    ui->setupUi( this );
+
+    // ugly, I know, but...
+    QHash<int,int> enumMap;
+    int i = 0;
+    ui->typeBox->insertItem( i, "No Proxy", QNetworkProxy::NoProxy );
+    enumMap[QNetworkProxy::NoProxy] = i++;
+    ui->typeBox->insertItem( i, "SOCKS 5", QNetworkProxy::Socks5Proxy );
+    enumMap[QNetworkProxy::Socks5Proxy] = i++;
+
+    TomahawkSettings* s = TomahawkApp::instance()->settings();
+
+    ui->typeBox->setCurrentIndex( enumMap[s->proxyType()] );
+    ui->hostLineEdit->setText( s->proxyHost() );
+    ui->portLineEdit->setText( QString::number( s->proxyPort() ) );
+    ui->userLineEdit->setText( s->proxyUsername() );
+    ui->passwordLineEdit->setText( s->proxyPassword() );
+}
+
+
+void
+ProxyDialog::saveSettings()
+{
+    qDebug() << Q_FUNC_INFO;
+
+    //First set settings
+    TomahawkSettings* s = TomahawkApp::instance()->settings();
+    s->setProxyHost( ui->hostLineEdit->text() );
+
+    bool ok;
+    qulonglong port = ui->portLineEdit->text().toULongLong( &ok );
+    if( ok )
+        s->setProxyPort( port );
+
+    s->setProxyUsername( ui->userLineEdit->text() );
+    s->setProxyPassword( ui->passwordLineEdit->text() );
+    s->setProxyType( ui->typeBox->itemData( ui->typeBox->currentIndex() ).toInt() );
+
+    // Now, if a proxy is defined, set QNAM
+    if( s->proxyType() == QNetworkProxy::NoProxy || s->proxyHost().isEmpty() )
+        return;
+
+    QNetworkProxy proxy( static_cast<QNetworkProxy::ProxyType>(s->proxyType()), s->proxyHost(), s->proxyPort(), s->proxyUsername(), s->proxyPassword() );
+    QNetworkAccessManager* nam = TomahawkApp::instance()->nam();
+    nam->setProxy( proxy );
+    QNetworkProxy* globalProxy = TomahawkApp::instance()->proxy();
+    QNetworkProxy* oldProxy = globalProxy;
+    globalProxy = new QNetworkProxy( proxy );
+    if( oldProxy )
+        delete oldProxy;
+
+    QNetworkProxy::setApplicationProxy( proxy );
+}

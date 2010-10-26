@@ -7,12 +7,14 @@
 #include <QNetworkReply>
 
 #include "tomahawk/collection.h"
+#include "tomahawk/infosystem.h"
 #include "database/database.h"
 #include "database/databasecollection.h"
 #include "database/databasecommand_collectionstats.h"
 #include "database/databaseresolver.h"
 #include "jabber/jabber.h"
 #include "utils/tomahawkutils.h"
+#include "xmppbot/xmppbot.h"
 #include "web/api_v1.h"
 #include "scriptresolver.h"
 
@@ -101,6 +103,8 @@ TomahawkApp::TomahawkApp( int& argc, char *argv[] )
     , m_zeroconf( 0 )
     , m_settings( 0 )
     , m_nam( 0 )
+    , m_proxy( 0 )
+    , m_infoSystem( 0 )
 {
     qsrand( QTime( 0, 0, 0 ).secsTo( QTime::currentTime() ) );
 
@@ -156,6 +160,24 @@ TomahawkApp::TomahawkApp( int& argc, char *argv[] )
         connect( m_mainwindow, SIGNAL( settingsChanged() ), SIGNAL( settingsChanged() ) );
     }
 #endif
+
+    // Set up proxy
+    if( m_settings->proxyType() != QNetworkProxy::NoProxy && !m_settings->proxyHost().isEmpty() )
+    {
+        qDebug() << "Setting proxy to saved values";
+        m_proxy = new QNetworkProxy( static_cast<QNetworkProxy::ProxyType>(m_settings->proxyType()), m_settings->proxyHost(), m_settings->proxyPort(), m_settings->proxyUsername(), m_settings->proxyPassword() );
+        qDebug() << "Proxy type = " << QString::number( static_cast<int>(m_proxy->type()) );
+        qDebug() << "Proxy host = " << m_proxy->hostName();
+        QNetworkAccessManager* nam = TomahawkApp::instance()->nam();
+        nam->setProxy( *m_proxy );
+    }
+    else
+        m_proxy = new QNetworkProxy( QNetworkProxy::NoProxy );
+
+    QNetworkProxy::setApplicationProxy( *m_proxy );
+
+    m_infoSystem = new Tomahawk::InfoSystem::InfoSystem( this );
+    m_xmppBot = new XMPPBot( this );
 
     boost::function<QSharedPointer<QIODevice>(result_ptr)> fac =
         boost::bind( &TomahawkApp::httpIODeviceFactory, this, _1 );
@@ -449,6 +471,7 @@ TomahawkApp::setupJabber() //const QString& jid, const QString& pass, const QStr
     connect( m_jabber.data(), SIGNAL( connected() ), SLOT( jabberConnected() ) );
     connect( m_jabber.data(), SIGNAL( authError(int, const QString&) ), SLOT( jabberAuthError(int,const QString&) ) );
 
+    m_jabber->setProxy( m_proxy );
     m_jabber->start();
 }
 

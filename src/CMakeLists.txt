@@ -36,6 +36,10 @@ SET( tomahawkSources ${tomahawkSources}
      utils/tomahawkutils.cpp
      jabber/jabber_p.cpp
 
+     infosystem/infosystem.cpp
+     infosystem/infoplugins/echonestplugin.cpp
+     infosystem/infoplugins/musixmatchplugin.cpp
+
      bufferiodevice.cpp
      connection.cpp
      msgprocessor.cpp
@@ -72,6 +76,8 @@ SET( tomahawkSources ${tomahawkSources}
      database/databasecommand_loadops.cpp
      database/databasecommand_updatesearchindex.cpp
      database/databasecollection.cpp
+
+     xmppbot/xmppbot.cpp
 
      web/api_v1.cpp
 
@@ -139,6 +145,8 @@ SET( tomahawkHeaders ${tomahawkHeaders}
      "${TOMAHAWK_INC_DIR}/tomahawk/track.h"
      "${TOMAHAWK_INC_DIR}/tomahawk/playlist.h"
 
+     "${TOMAHAWK_INC_DIR}/tomahawk/infosystem.h"
+
      "${TOMAHAWK_INC_DIR}/tomahawk/functimeout.h"
 #     "${TOMAHAWK_INC_DIR}/tomahawk/tomahawkplugin.h"
 
@@ -170,6 +178,9 @@ SET( tomahawkHeaders ${tomahawkHeaders}
      jabber/jabber.h
      jabber/jabber_p.h
 
+     infosystem/infoplugins/echonestplugin.h
+     infosystem/infoplugins/musixmatchplugin.h
+
      bufferiodevice.h
      connection.h
      msgprocessor.h
@@ -182,6 +193,8 @@ SET( tomahawkHeaders ${tomahawkHeaders}
      servent.h
      scriptresolver.h
      tomahawksettings.h
+
+     xmppbot/xmppbot.h
 
      web/api_v1.h
 )
@@ -231,12 +244,13 @@ SET( tomahawkHeadersGui ${tomahawkHeadersGui}
 )
 
 SET( tomahawkUI ${tomahawkUI}
-     tomahawkwindow.ui 
-     settingsdialog.ui 
+     tomahawkwindow.ui
+     settingsdialog.ui
+     proxydialog.ui
 
-     audiocontrols.ui 
-     sourcetree/sourcetreeitemwidget.ui 
-     topbar/topbar.ui 
+     audiocontrols.ui
+     sourcetree/sourcetreeitemwidget.ui
+     topbar/topbar.ui
 )
 
 INCLUDE_DIRECTORIES(
@@ -258,6 +272,7 @@ INCLUDE_DIRECTORIES(
 
     /usr/include/taglib
     /usr/local/include/taglib
+    /usr/local/include/echonest
     /usr/local/include
 )
 
@@ -304,6 +319,7 @@ TARGET_LINK_LIBRARIES( tomahawk
     ${QT_LIBRARIES}
     ${MAC_EXTRA_LIBS}
     ${OS_SPECIFIC_LINK_LIBRARIES}
+    echonest
     portfwd
 )
 

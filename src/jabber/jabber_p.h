@@ -9,6 +9,7 @@
 #include <QObject>
 #include <QSharedPointer>
 #include <QMap>
+#include <QNetworkProxy>
 #include <QThread>
 #include <QTimer>
 
@@ -63,6 +64,8 @@ Q_OBJECT
 public:
     explicit Jabber_p( const QString& jid, const QString& password, const QString& server = "", const int port = -1 );
     virtual ~Jabber_p();
+
+    void setProxy( QNetworkProxy* proxy );
 
     void disconnect();
 
