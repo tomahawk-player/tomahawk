@@ -8,7 +8,22 @@ class QNetworkReply;
 namespace Ui
 {
     class SettingsDialog;
+    class ProxyDialog;
 }
+
+class ProxyDialog : public QDialog
+{
+Q_OBJECT
+
+public:
+    explicit ProxyDialog( QWidget *parent = 0 );
+    ~ProxyDialog() {};
+
+    void saveSettings();
+
+private:
+    Ui::ProxyDialog *ui;
+};
 
 class SettingsDialog : public QDialog
 {
@@ -31,12 +46,15 @@ private slots:
     void showPathSelector();
     void doScan();
     
+    void showProxySettings();
+
     void testLastFmLogin();
     void onLastFmFinished();
 
 private:
     Ui::SettingsDialog *ui;
 
+    ProxyDialog m_proxySettings;
     bool m_rejected;
     QNetworkReply* m_testLastFmQuery;
 };

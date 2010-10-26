@@ -168,3 +168,30 @@ TrackProxyModel::filterAcceptsRow( int sourceRow, const QModelIndex& sourceParen
 
     return found;
 }
+
+
+void
+TrackProxyModel::removeIndex( const QModelIndex& index )
+{
+    qDebug() << Q_FUNC_INFO;
+
+    if ( !sourceModel() )
+        return;
+    if ( index.column() > 0 )
+        return;
+
+    sourceModel()->removeIndex( mapToSource( index ) );
+}
+
+
+void
+TrackProxyModel::removeIndexes( const QList<QModelIndex>& indexes )
+{
+    if ( !sourceModel() )
+        return;
+
+    foreach( const QModelIndex& idx, indexes )
+    {
+        removeIndex( idx );
+    }
+}

@@ -29,8 +29,17 @@
 
 class Database;
 class Jabber;
+class XMPPBot;
 class TomahawkZeroconf;
 class TomahawkSettings;
+
+namespace Tomahawk
+{
+    namespace InfoSystem
+    {
+        class InfoSystem;
+    }
+}
 
 #ifndef TOMAHAWK_HEADLESS
 class AudioEngine;
@@ -64,6 +73,9 @@ public:
     SourceList& sourcelist() { return m_sources; }
     Servent& servent() { return m_servent; }
     QNetworkAccessManager* nam() { return m_nam; }
+    QNetworkProxy* proxy() { return m_proxy; }
+    Tomahawk::InfoSystem::InfoSystem* infoSystem() { return m_infoSystem; }
+    XMPPBot* xmppBot() { return m_xmppBot; }
     const QString& nodeID() const;
 
 #ifndef TOMAHAWK_HEADLESS
@@ -114,6 +126,7 @@ private:
     SourceList m_sources;
     TomahawkZeroconf* m_zeroconf;
     QSharedPointer<Jabber> m_jabber;
+    XMPPBot* m_xmppBot;
 
 #ifndef TOMAHAWK_HEADLESS
     TomahawkWindow* m_mainwindow;
@@ -129,6 +142,9 @@ private:
     TomahawkSettings* m_settings;
 
     QNetworkAccessManager* m_nam;
+    QNetworkProxy* m_proxy;
+
+    Tomahawk::InfoSystem::InfoSystem* m_infoSystem;
 
     QxtHttpServerConnector m_connector;
     QxtHttpSessionManager m_session;

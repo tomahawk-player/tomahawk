@@ -26,9 +26,11 @@ public:
 
     void setModel( TrackModel* model );
 
+public slots:
+    void onItemActivated( const QModelIndex& index );
+
 protected:
     virtual void resizeEvent( QResizeEvent* event );
-    virtual void keyPressEvent( QKeyEvent* event );
 
     virtual void startDrag( Qt::DropActions supportedActions );
     virtual void dragEnterEvent( QDragEnterEvent* event );
@@ -39,7 +41,6 @@ protected:
     void paintEvent( QPaintEvent* event );
 
 private slots:
-    void onItemActivated( const QModelIndex& index );
     void onItemResized( const QModelIndex& index );
 
     void resizeColumns();

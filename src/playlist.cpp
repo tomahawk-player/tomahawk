@@ -299,8 +299,6 @@ Playlist::setRevision( const QString& rev,
         m_currentrevision = rev;
     pr.applied = applied;
 
-
-
     emit revisionLoaded( pr );
 }
 

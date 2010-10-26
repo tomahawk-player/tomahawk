@@ -9,12 +9,16 @@ using namespace Tomahawk;
 
 PlItem::~PlItem()
 {
-    qDeleteAll( children );
+    // Don't use qDeleteAll here! The children will remove themselves
+    // from the list when they get deleted and the qDeleteAll iterator
+    // will fail badly!
+    for ( int i = children.count() - 1; i >= 0; i-- )
+        delete children.at( i );
 
-//    Q_ASSERT( parent->children.at( m_parentPos ) == this );
-
-    if ( parent )
-        parent->children.removeAt( m_parentPos );
+    if ( parent && index.isValid() )
+    {
+        parent->children.removeAt( index.row() );
+    }
 }
 
 
@@ -28,7 +32,6 @@ PlItem::PlItem( PlItem* parent, QAbstractItemModel* model )
     if ( parent )
     {
         parent->children.append( this );
-        m_parentPos = parent->children.count() - 1;
     }
 }
 
@@ -45,38 +48,42 @@ PlItem::PlItem( const QString& caption, PlItem* parent )
     if ( parent )
     {
         parent->children.append( this );
-        m_parentPos = parent->children.count() - 1;
     }
 }
 
 
-PlItem::PlItem( const Tomahawk::query_ptr& query, PlItem* parent )
+PlItem::PlItem( const Tomahawk::query_ptr& query, PlItem* parent, int row )
     : QObject( parent )
 {
-    setupItem( query, parent );
+    setupItem( query, parent, row );
 }
 
 
-PlItem::PlItem( const Tomahawk::plentry_ptr& entry, PlItem* parent )
+PlItem::PlItem( const Tomahawk::plentry_ptr& entry, PlItem* parent, int row )
     : QObject( parent )
     , m_entry( entry )
 {
-    setupItem( entry->query(), parent );
+    setupItem( entry->query(), parent, row );
 }
 
 
 void
-PlItem::setupItem( const Tomahawk::query_ptr& query, PlItem* parent )
+PlItem::setupItem( const Tomahawk::query_ptr& query, PlItem* parent, int row )
 {
     this->parent = parent;
     if ( parent )
     {
-        parent->children.append( this );
-        m_parentPos = parent->children.count() - 1;
-        this->model = parent->model;
+        if ( row < 0 )
+        {
+            parent->children.append( this );
+            row = parent->children.count() - 1;
+        }
+        else
+        {
+            parent->children.insert( row, this );
+        }
 
-        connect( model, SIGNAL( rowsRemoved( QModelIndex, int, int ) ),
-                          SLOT( onModelRowsRemoved( QModelIndex, int, int ) ) );
+        this->model = parent->model;
     }
 
     m_isPlaying = false;
@@ -85,8 +92,11 @@ PlItem::setupItem( const Tomahawk::query_ptr& query, PlItem* parent )
     if ( query->numResults() )
         onResultsAdded( query->results() );
 
-    connect( query.data(), SIGNAL( resultsAdded( const QList<Tomahawk::result_ptr>& ) ),
-                             SLOT( onResultsAdded( const QList<Tomahawk::result_ptr>& ) ), Qt::DirectConnection );
+    connect( query.data(), SIGNAL( resultsAdded( QList<Tomahawk::result_ptr> ) ),
+                             SLOT( onResultsAdded( QList<Tomahawk::result_ptr> ) ), Qt::DirectConnection );
+
+    connect( query.data(), SIGNAL( resultsRemoved( Tomahawk::result_ptr ) ),
+                             SLOT( onResultsRemoved( Tomahawk::result_ptr ) ), Qt::DirectConnection );
 }
 
 
@@ -99,18 +109,7 @@ PlItem::onResultsAdded( const QList<Tomahawk::result_ptr>& results )
 
 
 void
-PlItem::onModelRowsRemoved( const QModelIndex& index, int start, int end )
+PlItem::onResultsRemoved( const Tomahawk::result_ptr& result )
 {
-    if ( !toberemoved && this->parent->index == index )
-    {
-        if ( ( start <= m_parentPos ) && ( m_parentPos <= end ) )
-            toberemoved = true;
-        else
-        {
-            if ( start < m_parentPos )
-            {
-                m_parentPos -= ( end - start ) + 1;
-            }
-        }
-    }
+    emit dataChanged();
 }

@@ -51,13 +51,13 @@ public:
 
 signals:
     void resultsAdded( const QList<Tomahawk::result_ptr>& );
-    void resultsRemoved( Tomahawk::result_ptr );
+    void resultsRemoved( const Tomahawk::result_ptr& );
     void solvedStateChanged( bool state );
 
 public slots:
     /// (indirectly) called by resolver plugins when results are found
     void addResults( const QList< Tomahawk::result_ptr >& );
-    void removeResult( Tomahawk::result_ptr );
+    void removeResult( const Tomahawk::result_ptr& );
 
 private slots:
     void resultUnavailable();

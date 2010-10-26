@@ -29,7 +29,7 @@ TrackView::TrackView( QWidget* parent )
     setDragEnabled( true );
     setDropIndicatorShown( false );
     setDragDropMode( QAbstractItemView::InternalMove );
-    setDragDropOverwriteMode ( false );
+    setDragDropOverwriteMode( false );
     setAllColumnsShowFocus( true );
 
     header()->setMinimumSectionSize( 60 );
@@ -187,39 +187,6 @@ TrackView::resizeColumns()
 
 
 void
-TrackView::keyPressEvent( QKeyEvent* event )
-{
-//    qDebug() << Q_FUNC_INFO;
-    QTreeView::keyPressEvent( event );
-
-    if ( !m_model )
-        return;
-
-    if ( event->key() == Qt::Key_Delete )
-    {
-/*        if ( m_model->isPlaylistBacked() && selectedIndexes().count() )
-        {
-            qDebug() << "Removing selected items";
-            QList<PlaylistItem*> items;
-
-            QModelIndexList sidxs = selectedIndexes();
-            foreach( const QModelIndex& idx, sidxs )
-            {
-                if ( idx.column() > 0 )
-                    continue;
-
-                PlaylistItem* item = PlaylistModel::indexToPlaylistItem( idx );
-                if ( item )
-                    items << item;
-            }
-
-            m_model->removeItems( items );
-        }*/
-    }
-}
-
-
-void
 TrackView::dragEnterEvent( QDragEnterEvent* event )
 {
     qDebug() << Q_FUNC_INFO;
@@ -240,6 +207,12 @@ void
 TrackView::dragMoveEvent( QDragMoveEvent* event )
 {
     QTreeView::dragMoveEvent( event );
+
+    if ( model()->isReadOnly() )
+    {
+        event->ignore();
+        return;
+    }
 
     if ( event->mimeData()->hasFormat( "application/tomahawk.query.list" ) || event->mimeData()->hasFormat( "application/tomahawk.plentry.list" ) )
     {
@@ -329,24 +302,25 @@ TrackView::onFilterChanged( const QString& )
 void
 TrackView::startDrag( Qt::DropActions supportedActions )
 {
+    QList<QPersistentModelIndex> pindexes;
     QModelIndexList indexes = selectedIndexes();
-    qDebug() << "Dragging" << indexes.count() << "indexes";
     for( int i = indexes.count() - 1 ; i >= 0; --i )
     {
-        if( !( m_proxyModel->flags( indexes.at( i ) ) & Qt::ItemIsDragEnabled ) )
+        if ( !( m_proxyModel->flags( indexes.at( i ) ) & Qt::ItemIsDragEnabled ) )
             indexes.removeAt( i );
+        else
+            pindexes << indexes.at( i );
     }
 
-    if( indexes.count() == 0 )
+    if ( indexes.count() == 0 )
         return;
 
     qDebug() << "Dragging" << indexes.count() << "indexes";
-
-    QMimeData *data = m_proxyModel->mimeData( indexes );
+    QMimeData* data = m_proxyModel->mimeData( indexes );
     if ( !data )
         return;
 
-    QDrag *drag = new QDrag( this );
+    QDrag* drag = new QDrag( this );
     drag->setMimeData( data );
     const QPixmap p = createDragPixmap( indexes.count() );
     drag->setPixmap( p );
@@ -355,7 +329,15 @@ TrackView::startDrag( Qt::DropActions supportedActions )
     // NOTE: if we support moving items in the model
     //       in the future, if exec() returns Qt::MoveAction
     //       we need to clean up ourselves.
-    drag->exec( supportedActions, Qt::CopyAction );
+    Qt::DropAction action = drag->exec( supportedActions, Qt::CopyAction );
+
+    if ( action == Qt::MoveAction )
+    {
+        foreach ( const QPersistentModelIndex& idx, pindexes )
+        {
+            m_proxyModel->removeIndex( idx );
+        }
+    }
 }
 
 
@@ -396,22 +378,22 @@ TrackView::createDragPixmap( int itemCount ) const
     QPixmap dragPixmap( xCount * size + xCount - 1, yCount * size + yCount - 1 );
     dragPixmap.fill( Qt::transparent );
 
-    QPainter painter(&dragPixmap);
+    QPainter painter( &dragPixmap );
     painter.setRenderHint( QPainter::Antialiasing );
     int x = 0;
     int y = 0;
     for( int i = 0; i < itemCount; ++i )
     {
-        const QPixmap pixmap = QPixmap( QString( RESPATH "icons/audio-x-generic-%2.png" ).arg( size ) );
-        painter.drawPixmap(x, y, pixmap);
+        const QPixmap pixmap = QPixmap( QString( ":/data/icons/audio-x-generic-%2.png" ).arg( size ) );
+        painter.drawPixmap( x, y, pixmap );
 
         x += size + 1;
-        if (x >= dragPixmap.width())
+        if ( x >= dragPixmap.width() )
         {
             x = 0;
             y += size + 1;
         }
-        if (y >= dragPixmap.height())
+        if ( y >= dragPixmap.height() )
         {
             break;
         }

@@ -21,6 +21,9 @@ public:
 
     virtual int trackCount() const { return rowCount( QModelIndex() ); }
 
+    virtual void removeIndex( const QModelIndex& index );
+    virtual void removeIndexes( const QList<QModelIndex>& indexes );
+
     virtual PlItem* previousItem();
     virtual PlItem* nextItem();
     virtual PlItem* siblingItem( int itemsAway );

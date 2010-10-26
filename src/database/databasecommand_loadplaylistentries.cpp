@@ -91,6 +91,7 @@ DatabaseCommand_LoadPlaylistEntries::exec( DatabaseImpl* dbi )
 
         if( !query_entries_old.next() )
         {
+            return;
             Q_ASSERT( false );
         }
 

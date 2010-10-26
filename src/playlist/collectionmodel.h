@@ -63,6 +63,8 @@ private slots:
     void onTracksAdded( const QList<QVariant>& tracks, const Tomahawk::collection_ptr& collection );
     void onTracksAddingFinished( const Tomahawk::collection_ptr& collection );
 
+    void onSourceOffline( Tomahawk::source_ptr src );
+
 private:
     QMap< Tomahawk::collection_ptr, PlItem* > m_collectionIndex;
 };

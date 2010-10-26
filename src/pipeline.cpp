@@ -17,12 +17,14 @@ Pipeline::Pipeline( QObject* parent )
 
 }
 
+
 void
 Pipeline::databaseReady()
 {
     connect( APP->database(), SIGNAL(indexReady()), this, SLOT(indexReady()), Qt::QueuedConnection );
     APP->database()->loadIndex();
 }
+
 
 void Pipeline::indexReady()
 {
@@ -36,11 +38,13 @@ void Pipeline::indexReady()
     m_queries_pending.clear();
 }
 
+
 void
 Pipeline::removeResolver( Resolver* r )
 {
     m_resolvers.removeAll( r );
 }
+
 
 void
 Pipeline::addResolver( Resolver* r, bool sort )

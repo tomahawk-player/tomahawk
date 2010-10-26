@@ -30,12 +30,21 @@ QJson (Qt JSON library)
  $ ./configure && make
  $ sudo make install 
 
+libEchonest 0.1
+---------------
+ See: http://projects.kde.org/projects/playground/libs/libechonest/
+
+ $ git clone git://git.kde.org/libechonest.git
+ $ cd libechonest
+ $ mkdir build && cd build
+ $ cmake ..
+ $ make
+ $ sudo make install
 
 Now compile Tomahawk
 -------------------
  $ sudo ldconfig -v | grep -Ei 'qjson|gloox'
- $ mkdir build 
- $ cd build 
+ $ mkdir build && cd build 
  $ cmake .. 
  $ make 
  $ ./tomahawk
@@ -57,7 +66,8 @@ Dependencies
   libmad 0.15.1b http://www.underbit.com/products/mad/
   libvorbis 1.2.3 http://xiph.org/vorbis/
   libogg 1.1.4 http://xiph.org/ogg/
-  liblastfm 0.3.0 http://github.com/mxcl/liblastfm/
+  liblastfm 0.3.3 http://github.com/mxcl/liblastfm/
+  libechonest 0.1.2 http://projects.kde.org/projects/playground/libs/libechonest/
 
  Third party libraries that we ship with our source:
 

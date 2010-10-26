@@ -28,7 +28,11 @@ public:
     QVariant data( const QModelIndex& index, int role ) const;
     QVariant headerData( int section, Qt::Orientation orientation, int role ) const;
 
+    virtual bool dropMimeData( const QMimeData* data, Qt::DropAction action, int row, int column, const QModelIndex& parent );
+
     void loadPlaylist( const Tomahawk::playlist_ptr& playlist );
+
+    virtual void removeIndex( const QModelIndex& index );
 
 signals:
     void repeatModeChanged( PlaylistInterface::RepeatMode mode );
@@ -43,9 +47,13 @@ private slots:
     void onDataChanged();
 
     void onRevisionLoaded( Tomahawk::PlaylistRevision revision );
+    void onPlaylistChanged();
 
 private:
+    QList<Tomahawk::plentry_ptr> playlistEntries() const;
+
     Tomahawk::playlist_ptr m_playlist;
+    bool m_waitForUpdate;
 };
 
 #endif // PLAYLISTMODEL_H

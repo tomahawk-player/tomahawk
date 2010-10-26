@@ -76,7 +76,9 @@ void
 Source::remove()
 {
     qDebug() << Q_FUNC_INFO;
+
     m_cc = 0;
+    emit offline();
     APP->sourcelist().remove( this );
     m_collections.clear();
 }

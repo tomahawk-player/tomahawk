@@ -11,6 +11,8 @@ CollectionModel::CollectionModel( QObject* parent )
     : QAbstractItemModel( parent )
 {
     qDebug() << Q_FUNC_INFO;
+
+    connect( &APP->sourcelist(), SIGNAL( sourceRemoved( Tomahawk::source_ptr ) ), SLOT( onSourceOffline( Tomahawk::source_ptr ) ) );
 }
 
 
@@ -241,4 +243,16 @@ CollectionModel::onTracksAddingFinished( const Tomahawk::collection_ptr& /* coll
 {
     qDebug() << "Finished loading tracks";
     emit loadingFinished();
+}
+
+
+void
+CollectionModel::onSourceOffline( Tomahawk::source_ptr src )
+{
+    qDebug() << Q_FUNC_INFO;
+
+    if ( m_collectionIndex.contains( src->collection() ) )
+    {
+        removeCollection( src->collection() );
+    }
 }

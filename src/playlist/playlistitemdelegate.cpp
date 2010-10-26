@@ -38,6 +38,9 @@ void
 PlaylistItemDelegate::paint( QPainter* painter, const QStyleOptionViewItem& option, const QModelIndex& index ) const
 {
     PlItem* item = m_model->itemFromIndex( m_model->mapToSource( index ) );
+    if ( !item )
+        return;
+
     if ( item->query()->results().count() )
         painter->setOpacity( item->query()->results().at( 0 )->score() );
     else

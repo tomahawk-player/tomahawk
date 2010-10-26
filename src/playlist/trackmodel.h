@@ -18,6 +18,8 @@ public:
     virtual QModelIndex index( int row, int column, const QModelIndex& parent ) const;
     virtual QModelIndex parent( const QModelIndex& child ) const;
 
+    virtual bool isReadOnly() const { return m_readOnly; }
+
     virtual int trackCount() const { return rowCount( QModelIndex() ); }
 
     virtual int rowCount( const QModelIndex& parent ) const;
@@ -25,6 +27,9 @@ public:
 
     virtual QVariant data( const QModelIndex& index, int role = Qt::DisplayRole ) const;
     virtual QVariant headerData( int section, Qt::Orientation orientation, int role ) const;
+
+    virtual void removeIndex( const QModelIndex& index );
+    virtual void removeIndexes( const QList<QModelIndex>& indexes );
 
     virtual PlItem* previousItem() { return 0; }
     virtual PlItem* nextItem() { return 0; }
@@ -49,8 +54,12 @@ public slots:
     virtual void setRepeatMode( PlaylistInterface::RepeatMode mode ) {}
     virtual void setShuffled( bool shuffled ) {}
 
+protected:
+    virtual void setReadOnly( bool b ) { m_readOnly = b; }
+
 private:
     QPersistentModelIndex m_currentIndex;
+    bool m_readOnly;
 };
 
 #endif // TRACKMODEL_H

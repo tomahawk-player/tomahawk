@@ -2,7 +2,7 @@
 #define PLITEM_H
 
 #include <QHash>
-#include <QModelIndex>
+#include <QPersistentModelIndex>
 #include <QAbstractItemModel>
 
 #include "tomahawk/query.h"
@@ -17,8 +17,8 @@ public:
 
     explicit PlItem( PlItem* parent = 0, QAbstractItemModel* model = 0 );
     explicit PlItem( const QString& caption, PlItem* parent = 0 );
-    explicit PlItem( const Tomahawk::query_ptr& query, PlItem* parent = 0 );
-    explicit PlItem( const Tomahawk::plentry_ptr& entry, PlItem* parent = 0 );
+    explicit PlItem( const Tomahawk::query_ptr& query, PlItem* parent = 0, int row = -1 );
+    explicit PlItem( const Tomahawk::plentry_ptr& entry, PlItem* parent = 0, int row = -1 );
 
     const Tomahawk::plentry_ptr& entry() const { return m_entry; };
     const Tomahawk::query_ptr& query() const { return m_query; };
@@ -31,7 +31,7 @@ public:
     QHash<QString, PlItem*> hash;
     QString caption;
     int childCount;
-    QModelIndex index;
+    QPersistentModelIndex index;
     QAbstractItemModel* model;
     bool toberemoved;
 
@@ -40,15 +40,14 @@ signals:
 
 private slots:
     void onResultsAdded( const QList<Tomahawk::result_ptr>& result );
-    void onModelRowsRemoved( const QModelIndex& index, int start, int end );
+    void onResultsRemoved( const Tomahawk::result_ptr& result );
 
 private:
-    void setupItem( const Tomahawk::query_ptr& query, PlItem* parent );
+    void setupItem( const Tomahawk::query_ptr& query, PlItem* parent, int row = -1 );
 
     Tomahawk::plentry_ptr m_entry;
     Tomahawk::query_ptr m_query;
     bool m_isPlaying;
-    int m_parentPos;
 };
 
 #endif // PLITEM_H
