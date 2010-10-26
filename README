@@ -32,7 +32,6 @@ QJson (Qt JSON library)
 
 libEchonest 0.1
 ---------------
-
  See: http://projects.kde.org/projects/playground/libs/libechonest/
 
  $ git clone git://git.kde.org/libechonest.git

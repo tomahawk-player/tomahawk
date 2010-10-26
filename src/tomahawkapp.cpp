@@ -686,7 +686,6 @@ TomahawkApp::httpIODeviceFactory( const Tomahawk::result_ptr& result )
 }
 
 
-
 const QString&
 TomahawkApp::nodeID() const
 {
