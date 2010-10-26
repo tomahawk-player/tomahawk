@@ -272,6 +272,7 @@ INCLUDE_DIRECTORIES(
 
     /usr/include/taglib
     /usr/local/include/taglib
+    /usr/include/echonest
     /usr/local/include/echonest
     /usr/local/include
 )
