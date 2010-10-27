@@ -97,6 +97,7 @@ public:
                                          bool shared );
 
     static bool remove( const playlist_ptr& playlist );
+    bool rename( const QString& title );
 
     virtual void loadRevision( const QString& rev = "" );
 
@@ -117,14 +118,14 @@ public:
     // these need to exist and be public for the json serialization stuff
     // you SHOULD NOT call them.  They are used for an alternate CTOR method from json.
     // maybe friend QObjectHelper and make them private?
-    Playlist( const source_ptr& author ) :
-            m_source( author )
-            , m_lastmodified( 0 )
+    Playlist( const source_ptr& author )
+        : m_source( author )
+        , m_lastmodified( 0 )
     {
         qDebug() << Q_FUNC_INFO << "JSON";
     }
     void setCurrentrevision( const QString& s ) { m_currentrevision = s; }
-    void setTitle( const QString& s )           { m_title= s; }
+    void setTitle( const QString& s )           { m_title = s; }
     void setInfo( const QString& s )            { m_info = s; }
     void setCreator( const QString& s )         { m_creator = s; }
     void setGuid( const QString& s )            { m_guid = s; }

@@ -52,7 +52,14 @@ SourcesModel::flags( const QModelIndex& index ) const
     Qt::ItemFlags defaultFlags = QStandardItemModel::flags( index );
 
     if ( index.isValid() )
+    {
+        QModelIndex idx = index.model()->index( index.row(), 0, index.parent() );
+        int type = idx.data( Qt::UserRole + 1 ).toInt();
+        if ( type == 1 )
+            defaultFlags |= Qt::ItemIsEditable;
+
         return Qt::ItemIsDragEnabled | Qt::ItemIsDropEnabled | defaultFlags;
+    }
     else
         return defaultFlags;
 }
@@ -197,4 +204,31 @@ SourcesModel::indexToTreeItem( const QModelIndex& index )
     }
 
     return 0;
+}
+
+
+bool
+SourcesModel::setData( const QModelIndex& index, const QVariant& value, int role )
+{
+    qDebug() << Q_FUNC_INFO;
+
+    if ( !index.isValid() )
+        return false;
+
+    QModelIndex idx = index.model()->index( index.row(), 0, index.parent() );
+    int type = idx.data( Qt::UserRole + 1 ).toInt();
+    if ( type == 1 )
+    {
+        qlonglong pptr = idx.data( Qt::UserRole + 3 ).toLongLong();
+        playlist_ptr* playlist = reinterpret_cast<playlist_ptr*>(pptr);
+        if ( playlist )
+        {
+            playlist->data()->rename( value.toString() );
+            QStandardItemModel::setData( index, value, Qt::DisplayRole );
+        }
+
+        return true;
+    }
+
+    return false;
 }

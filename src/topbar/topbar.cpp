@@ -157,7 +157,7 @@ TopBar::setNumSources( unsigned int i )
         {
             fadeOutDude( k );
             m_sources--;
-        } while( k-- > i );
+        } while( (unsigned int)k-- > i );
 
         m_sources = i;
     }

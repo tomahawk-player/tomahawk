@@ -73,6 +73,7 @@ SET( tomahawkSources ${tomahawkSources}
      database/databasecommand_loadallplaylists.cpp
      database/databasecommand_createplaylist.cpp
      database/databasecommand_deleteplaylist.cpp
+     database/databasecommand_renameplaylist.cpp
      database/databasecommand_loadops.cpp
      database/databasecommand_updatesearchindex.cpp
      database/databasecollection.cpp
@@ -113,6 +114,7 @@ SET( tomahawkSourcesGui ${tomahawkSourcesGui}
      sourcetree/sourcetreeitem.cpp
      sourcetree/sourcetreeitemwidget.cpp
      sourcetree/sourcetreeview.cpp
+     sourcetree/sourcetreedelegate.cpp
 
      topbar/topbar.cpp
      topbar/clearbutton.cpp  
@@ -171,6 +173,7 @@ SET( tomahawkHeaders ${tomahawkHeaders}
      database/databasecommand_loadallplaylists.h
      database/databasecommand_createplaylist.h
      database/databasecommand_deleteplaylist.h
+     database/databasecommand_renameplaylist.h
      database/databasecommand_loadops.h
      database/databasecommand_updatesearchindex.h
      database/databasecollection.h
@@ -228,6 +231,7 @@ SET( tomahawkHeadersGui ${tomahawkHeadersGui}
      sourcetree/sourcetreeitem.h
      sourcetree/sourcetreeitemwidget.h
      sourcetree/sourcetreeview.h
+     sourcetree/sourcetreedelegate.h
 
      topbar/topbar.h
      topbar/clearbutton.h 

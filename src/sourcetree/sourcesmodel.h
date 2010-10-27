@@ -29,6 +29,9 @@ public:
 signals:
     void clicked( const QModelIndex& );
 
+protected:
+    bool setData( const QModelIndex& index, const QVariant& value, int role = Qt::EditRole );
+
 private slots:
     void onSourceAdded( const Tomahawk::source_ptr& source );
     void onSourceRemoved( const Tomahawk::source_ptr& source );
