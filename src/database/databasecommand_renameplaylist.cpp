@@ -27,7 +27,7 @@ DatabaseCommand_RenamePlaylist::exec( DatabaseImpl* lib )
 
     cre.prepare( sql );
     cre.bindValue( ":id", m_playlistguid );
-    cre.bindValue( ":title", m_playlistguid );
+    cre.bindValue( ":title", m_playlistTitle );
 
     bool ok = cre.exec();
     if( !ok )
