@@ -373,6 +373,6 @@ SourceDelegate::paint( QPainter* painter, const QStyleOptionViewItem& option, co
         o.state = QStyle::State_Enabled;
     }
 
-    QStyledItemDelegate::paint( painter, option, QModelIndex() );
+    QStyledItemDelegate::paint( painter, option, index.model()->index( 0, 0 ) );
     QStyledItemDelegate::paint( painter, o, index );
 }
