@@ -3,8 +3,8 @@ CMAKE_MINIMUM_REQUIRED(VERSION 2.6 FATAL_ERROR)
 SET(CMAKE_VERBOSE_MAKEFILE ON)
 #SET(CMAKE_INSTALL_PREFIX ".")
 
-SET(MINIUPNP_DIR    "third-party/miniupnpc-20090605/")
-SET(NATPMP_DIR      "third-party/libnatpmp")
+SET(MINIUPNP_DIR    "third-party/miniupnpc-1.4.20100609/")
+SET(NATPMP_DIR      "third-party/libnatpmp-20100202")
 
 SET(CMAKE_RUNTIME_OUTPUT_DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}")
 SET(CMAKE_LIBRARY_OUTPUT_DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}")
@@ -20,6 +20,7 @@ INCLUDE_DIRECTORIES(${MINIUPNP_DIR} include)
 ADD_LIBRARY(portfwd STATIC
 
         # the needed bits of miniupnpc (no python module, no tests, no cli)
+        ${MINIUPNP_DIR}/connecthostport.c
         ${MINIUPNP_DIR}/igd_desc_parse.c
         ${MINIUPNP_DIR}/minisoap.c
         ${MINIUPNP_DIR}/minissdpc.c
