@@ -73,6 +73,7 @@ SET( tomahawkSources ${tomahawkSources}
      database/databasecommand_loadallplaylists.cpp
      database/databasecommand_createplaylist.cpp
      database/databasecommand_deleteplaylist.cpp
+     database/databasecommand_renameplaylist.cpp
      database/databasecommand_loadops.cpp
      database/databasecommand_updatesearchindex.cpp
      database/databasecollection.cpp
@@ -171,6 +172,7 @@ SET( tomahawkHeaders ${tomahawkHeaders}
      database/databasecommand_loadallplaylists.h
      database/databasecommand_createplaylist.h
      database/databasecommand_deleteplaylist.h
+     database/databasecommand_renameplaylist.h
      database/databasecommand_loadops.h
      database/databasecommand_updatesearchindex.h
      database/databasecollection.h

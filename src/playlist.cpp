@@ -9,6 +9,7 @@
 #include "databasecommand_setplaylistrevision.h"
 #include "databasecommand_createplaylist.h"
 #include "databasecommand_deleteplaylist.h"
+#include "databasecommand_renameplaylist.h"
 
 using namespace Tomahawk;
 
@@ -102,6 +103,16 @@ bool
 Playlist::remove( const playlist_ptr& playlist )
 {
     DatabaseCommand_DeletePlaylist* cmd = new DatabaseCommand_DeletePlaylist( playlist->author(), playlist->guid() );
+    APP->database()->enqueue( QSharedPointer<DatabaseCommand>(cmd) );
+
+    return true; // FIXME
+}
+
+
+bool
+Playlist::rename( const QString& title )
+{
+    DatabaseCommand_RenamePlaylist* cmd = new DatabaseCommand_RenamePlaylist( author(), guid(), title );
     APP->database()->enqueue( QSharedPointer<DatabaseCommand>(cmd) );
 
     return true; // FIXME

@@ -47,7 +47,7 @@ Jabber_p::Jabber_p( const QString& jid, const QString& password, const QString& 
         }
     }
 
-    m_client = QSharedPointer<gloox::Client>( new gloox::Client( m_jid, password.toStdString(), port) );
+    m_client = QSharedPointer<gloox::Client>( new gloox::Client( m_jid, password.toStdString(), port ) );
     if( !server.isEmpty() )
         m_client->setServer( server.toStdString() );
 }
@@ -443,19 +443,19 @@ Jabber_p::handleRosterPresence( const RosterItem& item, const std::string& resou
     QRegExp regex( "tomahawk\\d+" );
     if( res != "tomahawk-tomahawk" && !res.contains( regex ) )
     {
-        qDebug() << "not considering resource of " << res;
+        //qDebug() << "not considering resource of" << res;
         // Disco them to check if they are tomahawk-capable
 
-        //qDebug() <<   "No tomahawk resource, DISCOing... " << jid.full().c_str();
+        //qDebug() << "No tomahawk resource, DISCOing..." << jid.full().c_str();
         //m_client->disco()->getDiscoInfo( jid, "", this, 0 );
         return;
     }
 
-    qDebug() << "handling presence for resource of " << res;
+    //qDebug() << "handling presence for resource of" << res;
 
-    //qDebug() << Q_FUNC_INFO << "jid: " << QString::fromStdString(item.jid())
-    //        << " resource: " << QString::fromStdString(resource)
-    //        << " presencetype " << presence;
+    //qDebug() << Q_FUNC_INFO << "jid:" << QString::fromStdString(item.jid())
+    //        << " resource:" << QString::fromStdString(resource)
+    //        << " presencetype" << presence;
 
     // "going offline" event
     if ( !presenceMeansOnline( presence ) &&

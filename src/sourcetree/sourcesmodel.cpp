@@ -52,9 +52,30 @@ SourcesModel::flags( const QModelIndex& index ) const
     Qt::ItemFlags defaultFlags = QStandardItemModel::flags( index );
 
     if ( index.isValid() )
+    {
+        if ( indexType( index ) == 1 )
+        {
+            playlist_ptr playlist = indexToPlaylist( index );
+            if ( !playlist.isNull() && playlist->author()->isLocal() )
+                defaultFlags |= Qt::ItemIsEditable;
+        }
+
         return Qt::ItemIsDragEnabled | Qt::ItemIsDropEnabled | defaultFlags;
+    }
     else
         return defaultFlags;
+}
+
+
+QVariant
+SourcesModel::data( const QModelIndex& index, int role ) const
+{
+    if ( role == Qt::SizeHintRole )
+    {
+        return QSize( 0, 18 );
+    }
+
+    return QStandardItemModel::data( index, role );
 }
 
 
@@ -166,10 +187,9 @@ SourcesModel::indexToPlaylist( const QModelIndex& index )
     if ( !index.isValid() )
         return res;
 
-    QModelIndex idx = index.model()->index( index.row(), 0, index.parent() );
-    int type = idx.data( Qt::UserRole + 1 ).toInt();
-    if ( type == 1 )
+    if ( indexType( index ) == 1 )
     {
+        QModelIndex idx = index.model()->index( index.row(), 0, index.parent() );
         qlonglong pptr = idx.data( Qt::UserRole + 3 ).toLongLong();
         playlist_ptr* playlist = reinterpret_cast<playlist_ptr*>(pptr);
         if ( playlist )
@@ -186,10 +206,10 @@ SourcesModel::indexToTreeItem( const QModelIndex& index )
     if ( !index.isValid() )
         return 0;
 
-    QModelIndex idx = index.model()->index( index.row(), 0, index.parent() );
-    int type = idx.data( Qt::UserRole + 1 ).toInt();
+    int type = indexType( index );
     if ( type == 0 || type == 1 )
     {
+        QModelIndex idx = index.model()->index( index.row(), 0, index.parent() );
         qlonglong pptr = idx.data( Qt::UserRole + 2 ).toLongLong();
         SourceTreeItem* item = reinterpret_cast<SourceTreeItem*>(pptr);
         if ( item )
@@ -197,4 +217,28 @@ SourcesModel::indexToTreeItem( const QModelIndex& index )
     }
 
     return 0;
+}
+
+
+bool
+SourcesModel::setData( const QModelIndex& index, const QVariant& value, int role )
+{
+    qDebug() << Q_FUNC_INFO;
+
+    if ( !index.isValid() )
+        return false;
+
+    if ( indexType( index ) == 1 )
+    {
+        playlist_ptr playlist = indexToPlaylist( index );
+        if ( !playlist.isNull() )
+        {
+            playlist->rename( value.toString() );
+            QStandardItemModel::setData( index, value, Qt::DisplayRole );
+        }
+
+        return true;
+    }
+
+    return false;
 }

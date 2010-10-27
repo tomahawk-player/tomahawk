@@ -33,7 +33,7 @@ private slots:
 
 protected:
     void drawBranches( QPainter* painter, const QRect& rect, const QModelIndex& index ) const {}
-    void drawTree( QPainter* painter, const QRegion& region ) const {}
+    void drawRow( QPainter* painter, const QStyleOptionViewItem& option, const QModelIndex& index ) const;
 
     virtual void paintEvent( QPaintEvent* event );
 
@@ -51,6 +51,7 @@ private:
 
     QMenu m_playlistMenu;
     QAction* m_loadPlaylistAction;
+    QAction* m_renamePlaylistAction;
     QAction* m_deletePlaylistAction;
 
     bool m_dragging;

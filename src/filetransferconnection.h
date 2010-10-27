@@ -32,10 +32,7 @@ public:
     void setup();
     Connection* clone();
 
-    const QSharedPointer<QIODevice>& iodevice()
-    {
-        return m_iodev;
-    }
+    const QSharedPointer<QIODevice>& iodevice() { return m_iodev; }
 
     Type type() const { return m_type; }
     QString fid() const { return m_fid; }

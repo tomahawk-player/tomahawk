@@ -62,7 +62,7 @@ protected:
     
     // MessageHandler
     virtual void handleMessage(const gloox::Message &msg, gloox::MessageSession *session = 0);
-    
+
 private:
     QWeakPointer<XMPPBotClient> m_client;
     Tomahawk::result_ptr m_currTrack;

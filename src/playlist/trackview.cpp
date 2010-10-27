@@ -35,7 +35,7 @@ TrackView::TrackView( QWidget* parent )
     header()->setMinimumSectionSize( 60 );
     restoreColumnsState();
 
-    connect( this, SIGNAL( activated( QModelIndex ) ), SLOT( onItemActivated( QModelIndex ) ) );
+    connect( this, SIGNAL( doubleClicked( QModelIndex ) ), SLOT( onItemActivated( QModelIndex ) ) );
     connect( header(), SIGNAL( sectionResized( int, int, int ) ), SLOT( onSectionResized( int, int, int ) ) );
 }
 

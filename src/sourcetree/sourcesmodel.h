@@ -18,6 +18,7 @@ public:
     virtual QStringList mimeTypes() const;
     virtual Qt::DropActions supportedDropActions() const;
     virtual Qt::ItemFlags flags( const QModelIndex& index ) const;
+    QVariant data( const QModelIndex& index, int role ) const;
 
     bool appendItem( const Tomahawk::source_ptr& source );
     bool removeItem( const Tomahawk::source_ptr& source );
@@ -28,6 +29,9 @@ public:
 
 signals:
     void clicked( const QModelIndex& );
+
+protected:
+    bool setData( const QModelIndex& index, const QVariant& value, int role = Qt::EditRole );
 
 private slots:
     void onSourceAdded( const Tomahawk::source_ptr& source );

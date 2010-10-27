@@ -34,6 +34,13 @@ PlaylistItemDelegate::sizeHint( const QStyleOptionViewItem& option, const QModel
 }
 
 
+QWidget*
+PlaylistItemDelegate::createEditor ( QWidget* parent, const QStyleOptionViewItem& option, const QModelIndex& index ) const
+{
+    return 0;
+}
+
+
 void
 PlaylistItemDelegate::paint( QPainter* painter, const QStyleOptionViewItem& option, const QModelIndex& index ) const
 {

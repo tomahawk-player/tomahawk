@@ -65,8 +65,8 @@ public:
     qint64 bytesSent() const { return m_tx_bytes; }
     qint64 bytesReceived() const { return m_rx_bytes; }
 
-    void setMsgProcessorModeOut( quint32 m ) { m_msgprocessor_out.setMode(m); }
-    void setMsgProcessorModeIn( quint32 m ) { m_msgprocessor_in.setMode(m); }
+    void setMsgProcessorModeOut( quint32 m ) { m_msgprocessor_out.setMode( m ); }
+    void setMsgProcessorModeIn( quint32 m ) { m_msgprocessor_in.setMode( m ); }
 
 signals:
     void ready();
@@ -74,7 +74,7 @@ signals:
     void finished();
     void statsTick( qint64 tx_bytes_sec, qint64 rx_bytes_sec );
     void socketClosed();
-    void socketErrored(QAbstractSocket::SocketError);
+    void socketErrored( QAbstractSocket::SocketError );
 
 protected:
     virtual void setup() = 0;
@@ -93,7 +93,7 @@ private slots:
     void handleIncomingQueueEmpty();
     void sendMsg_now( msg_ptr );
     void socketDisconnected();
-    void socketDisconnectedError(QAbstractSocket::SocketError);
+    void socketDisconnectedError( QAbstractSocket::SocketError );
     void readyRead();
     void doSetup();
     void authCheckTimeout();

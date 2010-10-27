@@ -12,8 +12,29 @@
 #include <QDragEnterEvent>
 #include <QHeaderView>
 #include <QPainter>
+#include <QStyledItemDelegate>
 
 using namespace Tomahawk;
+
+
+class SourceDelegate : public QStyledItemDelegate
+{
+public:
+    SourceDelegate( QAbstractItemView* parent = 0 ) : QStyledItemDelegate( parent ), m_parent( parent ) {}
+
+protected:
+    void paint( QPainter* painter, const QStyleOptionViewItem& option, const QModelIndex& index ) const;
+    void updateEditorGeometry( QWidget* editor, const QStyleOptionViewItem& option, const QModelIndex& index ) const
+    {
+        if ( SourcesModel::indexType( index ) == 1 )
+            editor->setGeometry( option.rect.adjusted( 32, 0, 0, 0 ) );
+        else
+            QStyledItemDelegate::updateEditorGeometry( editor, option, index );
+    }
+
+private:
+    QAbstractItemView* m_parent;
+};
 
 
 SourceTreeView::SourceTreeView( QWidget* parent )
@@ -29,7 +50,11 @@ SourceTreeView::SourceTreeView( QWidget* parent )
     setDragDropMode( QAbstractItemView::DropOnly );
     setAcceptDrops( true );
     setDropIndicatorShown( false );
-    setAllColumnsShowFocus( false );
+    setAllColumnsShowFocus( true );
+    setUniformRowHeights( false );
+    setIndentation( 0 );
+
+    setItemDelegate( new SourceDelegate( this ) );
 
     setContextMenuPolicy( Qt::CustomContextMenu );
     connect( this, SIGNAL( customContextMenuRequested( const QPoint& ) ), SLOT( onCustomContextMenu( const QPoint& ) ) );
@@ -54,6 +79,7 @@ SourceTreeView::setupMenus()
     m_playlistMenu.clear();
 
     m_loadPlaylistAction = m_playlistMenu.addAction( tr( "&Load Playlist" ) );
+    m_renamePlaylistAction = m_playlistMenu.addAction( tr( "&Rename Playlist" ) );
     m_playlistMenu.addSeparator();
     m_deletePlaylistAction = m_playlistMenu.addAction( tr( "&Delete Playlist" ) );
 
@@ -324,5 +350,29 @@ SourceTreeView::paintEvent( QPaintEvent* event )
 
         style()->drawPrimitive( QStyle::PE_PanelItemViewRow, &opt, &painter, this );
     }
+
     QTreeView::paintEvent( event );
+}
+
+
+void
+SourceTreeView::drawRow( QPainter* painter, const QStyleOptionViewItem& option, const QModelIndex& index ) const
+{
+    QTreeView::drawRow( painter, option, index );
+}
+
+
+void
+SourceDelegate::paint( QPainter* painter, const QStyleOptionViewItem& option, const QModelIndex& index ) const
+{
+    QStyleOptionViewItem o = option;
+    o.rect.adjust( 12, 0, 0, 0 );
+
+    if ( ( option.state & QStyle::State_Enabled ) == QStyle::State_Enabled )
+    {
+        o.state = QStyle::State_Enabled;
+    }
+
+    QStyledItemDelegate::paint( painter, option, QModelIndex() );
+    QStyledItemDelegate::paint( painter, o, index );
 }

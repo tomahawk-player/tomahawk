@@ -97,8 +97,8 @@ TopBar::fadeInDude( unsigned int i )
 {
 //    qDebug() << Q_FUNC_INFO << i;
 
-    QLabel * dude = m_dudes.at( i );
-    QPropertyAnimation * ani = new QPropertyAnimation( dude, "pos" );
+    QLabel* dude = m_dudes.at( i );
+    QPropertyAnimation* ani = new QPropertyAnimation( dude, "pos" );
     ani->setDuration( 1000 );
     ani->setEasingCurve( QEasingCurve::InQuad );
     ani->setStartValue( QPoint( -10,0 ) );
@@ -115,8 +115,8 @@ TopBar::fadeOutDude( unsigned int i )
 {
 //    qDebug() << Q_FUNC_INFO << i;
 
-    QLabel * dude = m_dudes.at( i );
-    QPropertyAnimation * ani = new QPropertyAnimation( dude, "pos" );
+    QLabel* dude = m_dudes.at( i );
+    QPropertyAnimation* ani = new QPropertyAnimation( dude, "pos" );
     ani->setDuration( 1000 );
     ani->setEasingCurve( QEasingCurve::OutQuad );
     ani->setStartValue( dude->pos() );
@@ -152,12 +152,14 @@ TopBar::setNumSources( unsigned int i )
     }
     else
     {
-        int k = qMin( (unsigned int)2, m_sources - 1 );
+        int k = qMin( (unsigned int)MAXDUDES - 1, m_sources - 1 );
         do
         {
-            fadeOutDude( k-- );
+            fadeOutDude( k );
             m_sources--;
-        } while( m_sources != i );
+        } while( (unsigned int)k-- > i );
+
+        m_sources = i;
     }
 }
 
