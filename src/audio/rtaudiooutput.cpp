@@ -67,6 +67,7 @@ RTAudioOutput::RTAudioOutput() :
 RTAudioOutput::~RTAudioOutput()
 {
     qDebug() << Q_FUNC_INFO;
+    stopPlayback();
 }
 
 
