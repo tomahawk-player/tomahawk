@@ -6,7 +6,6 @@
 #include "playlistmanager.h"
 #include "sourcetreeitem.h"
 #include "sourcesmodel.h"
-#include "sourcetreedelegate.h"
 
 #include <QAction>
 #include <QContextMenuEvent>
@@ -35,9 +34,6 @@ SourceTreeView::SourceTreeView( QWidget* parent )
 
     setContextMenuPolicy( Qt::CustomContextMenu );
     connect( this, SIGNAL( customContextMenuRequested( const QPoint& ) ), SLOT( onCustomContextMenu( const QPoint& ) ) );
-
-    m_delegate = new SourceTreeDelegate( this );
-    setItemDelegate( m_delegate );
 
     m_model = new SourcesModel( this );
     setModel( m_model );

@@ -9,7 +9,6 @@
 class CollectionModel;
 class PlaylistModel;
 class SourcesModel;
-class SourceTreeDelegate;
 
 class SourceTreeView : public QTreeView
 {
@@ -48,7 +47,6 @@ private:
 
     CollectionModel* m_collectionModel;
     SourcesModel* m_model;
-    SourceTreeDelegate* m_delegate;
     QModelIndex m_contextMenuIndex;
 
     QMenu m_playlistMenu;

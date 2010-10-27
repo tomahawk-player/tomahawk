@@ -67,6 +67,18 @@ SourcesModel::flags( const QModelIndex& index ) const
 }
 
 
+QVariant
+SourcesModel::data( const QModelIndex& index, int role ) const
+{
+    if ( role == Qt::SizeHintRole )
+    {
+        return QSize( 0, 18 );
+    }
+
+    return QStandardItemModel::data( index, role );
+}
+
+
 void
 SourcesModel::loadSources()
 {

@@ -114,7 +114,6 @@ SET( tomahawkSourcesGui ${tomahawkSourcesGui}
      sourcetree/sourcetreeitem.cpp
      sourcetree/sourcetreeitemwidget.cpp
      sourcetree/sourcetreeview.cpp
-     sourcetree/sourcetreedelegate.cpp
 
      topbar/topbar.cpp
      topbar/clearbutton.cpp  
@@ -231,7 +230,6 @@ SET( tomahawkHeadersGui ${tomahawkHeadersGui}
      sourcetree/sourcetreeitem.h
      sourcetree/sourcetreeitemwidget.h
      sourcetree/sourcetreeview.h
-     sourcetree/sourcetreedelegate.h
 
      topbar/topbar.h
      topbar/clearbutton.h 
