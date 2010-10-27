@@ -16,8 +16,7 @@
 using namespace Tomahawk;
 
 
-FileTransferConnection::FileTransferConnection( Servent* s, ControlConnection* cc,
-                                                QString fid, unsigned int size )
+FileTransferConnection::FileTransferConnection( Servent* s, ControlConnection* cc, QString fid, unsigned int size )
     : Connection( s )
     , m_cc( cc )
     , m_fid( fid )
@@ -27,8 +26,9 @@ FileTransferConnection::FileTransferConnection( Servent* s, ControlConnection* c
     , m_allok( false )
 {
     qDebug() << Q_FUNC_INFO;
-    BufferIODevice * bio = new BufferIODevice(size);
-    m_iodev  = QSharedPointer<QIODevice>( bio ); // device audio data gets written to
+
+    BufferIODevice* bio = new BufferIODevice( size );
+    m_iodev = QSharedPointer<QIODevice>( bio ); // device audio data gets written to
     m_iodev->open( QIODevice::ReadWrite );
 
     APP->servent().registerFileTransferConnection( this );
@@ -41,13 +41,18 @@ FileTransferConnection::FileTransferConnection( Servent* s, ControlConnection* c
     connect( this, SIGNAL( finished() ), SLOT( deleteLater() ), Qt::QueuedConnection );
 
     // don't fuck with our messages at all. No compression, no parsing, nothing:
-    this->setMsgProcessorModeIn(  MsgProcessor::NOTHING );
+    this->setMsgProcessorModeIn ( MsgProcessor::NOTHING );
     this->setMsgProcessorModeOut( MsgProcessor::NOTHING );
 }
 
 
 FileTransferConnection::FileTransferConnection( Servent* s, QString fid )
-    : Connection(s), m_fid(fid), m_type(SENDING), m_badded(0), m_bsent(0), m_allok( false )
+    : Connection( s )
+    , m_fid( fid )
+    , m_type( SENDING )
+    , m_badded( 0 )
+    , m_bsent( 0 )
+    , m_allok( false )
 {
     APP->servent().registerFileTransferConnection( this );
     // auto delete when connection closes:
@@ -65,7 +70,10 @@ FileTransferConnection::~FileTransferConnection()
 
         // protected, we could expose it:
         //m_iodev->setErrorString("FTConnection providing data went away mid-transfer");
+
+        ((BufferIODevice*)m_iodev.data())->inputComplete();
     }
+
     APP->servent().fileTransferFinished( this );
 }
 
@@ -73,9 +81,9 @@ FileTransferConnection::~FileTransferConnection()
 QString
 FileTransferConnection::id() const
 {
-    return QString("FTC[%1 %2]")
-            .arg( m_type == SENDING ? "TX" : "RX" )
-            .arg(m_fid);
+    return QString( "FTC[%1 %2]" )
+              .arg( m_type == SENDING ? "TX" : "RX" )
+              .arg( m_fid );
 }
 
 
@@ -85,8 +93,8 @@ FileTransferConnection::showStats( qint64 tx, qint64 rx )
     if( tx > 0 || rx > 0 )
     {
         qDebug() << id()
-                 << QString("Down: %L1 bytes/sec, ").arg(rx)
-                 << QString("Up: %L1 bytes/sec").arg(tx);
+                 << QString( "Down: %L1 bytes/sec," ).arg( rx )
+                 << QString( "Up: %L1 bytes/sec" ).arg( tx );
     }
 }
 
@@ -95,7 +103,7 @@ void
 FileTransferConnection::setup()
 {
     connect( this, SIGNAL( statsTick( qint64, qint64 ) ), SLOT( showStats( qint64, qint64 ) ) );
-    if(m_type == RECEIVING)
+    if( m_type == RECEIVING )
     {
         qDebug() << "in RX mode";
         return;
@@ -103,25 +111,25 @@ FileTransferConnection::setup()
 
     qDebug() << "in TX mode, fid:" << m_fid;
 
-    DatabaseCommand_LoadFile * cmd = new DatabaseCommand_LoadFile(m_fid);
-    connect(cmd, SIGNAL(result(QVariantMap)), this, SLOT(startSending(QVariantMap)));
-    TomahawkApp::instance()->database()->enqueue(QSharedPointer<DatabaseCommand>(cmd));
+    DatabaseCommand_LoadFile* cmd = new DatabaseCommand_LoadFile( m_fid );
+    connect( cmd, SIGNAL( result( QVariantMap ) ), SLOT( startSending( QVariantMap ) ) );
+    TomahawkApp::instance()->database()->enqueue( QSharedPointer<DatabaseCommand>( cmd ) );
 }
 
 
 void
 FileTransferConnection::startSending( QVariantMap f )
 {
-    Tomahawk::result_ptr result(new Tomahawk::Result(f, collection_ptr()));
+    Tomahawk::result_ptr result( new Tomahawk::Result( f, collection_ptr() ) );
     qDebug() << "Starting to transmit" << result->url();
-    QSharedPointer<QIODevice> io = TomahawkApp::instance()->getIODeviceForUrl(result);
-    if(!io)
+    QSharedPointer<QIODevice> io = TomahawkApp::instance()->getIODeviceForUrl( result );
+    if( !io )
     {
         qDebug() << "Couldn't read from source:" << result->url();
         shutdown();
         return;
     }
-    m_readdev = QSharedPointer<QIODevice>(io);
+    m_readdev = QSharedPointer<QIODevice>( io );
     sendSome();
 }
 
@@ -129,7 +137,7 @@ FileTransferConnection::startSending( QVariantMap f )
 void
 FileTransferConnection::handleMsg( msg_ptr msg )
 {
-    Q_ASSERT(m_type == FileTransferConnection::RECEIVING);
+    Q_ASSERT( m_type == FileTransferConnection::RECEIVING );
     Q_ASSERT( msg->is( Msg::RAW ) );
 
     m_badded += msg->payload().length();
@@ -139,13 +147,11 @@ FileTransferConnection::handleMsg( msg_ptr msg )
     //         << "payload len" << msg->payload().length()
     //         << "written to device so far: " << m_badded;
 
-
     if( !msg->is( Msg::FRAGMENT ) )
     {
-        qDebug() << endl
-                << "*** Got last msg in filetransfer. added" << m_badded
-                 << "io size" << m_iodev->size()
-                 << endl;
+        qDebug() << "*** Got last msg in filetransfer. added" << m_badded
+                 << "io size" << m_iodev->size();
+
         m_allok = true;
         // tell our iodev there is no more data to read, no args meaning a success:
         ((BufferIODevice*)m_iodev.data())->inputComplete();
@@ -156,23 +162,24 @@ FileTransferConnection::handleMsg( msg_ptr msg )
 
 Connection* FileTransferConnection::clone()
 {
-    Q_ASSERT(false); return 0;
+    Q_ASSERT( false );
+    return 0;
 }
 
 
 void FileTransferConnection::sendSome()
 {
-    Q_ASSERT(m_type == FileTransferConnection::SENDING);
+    Q_ASSERT( m_type == FileTransferConnection::SENDING );
 
-    QByteArray ba = m_readdev->read(BLOCKSIZE);
+    QByteArray ba = m_readdev->read( BLOCKSIZE );
     m_bsent += ba.length();
-    //qDebug() << "Sending " << ba.length() << " bytes of audiofile";
+    //qDebug() << "Sending" << ba.length() << "bytes of audiofile";
 
     if( m_readdev->atEnd() )
     {
         sendMsg( Msg::factory( ba, Msg::RAW ) );
-        qDebug() << "Sent all. DONE. " << m_bsent;
-        shutdown(true);
+        qDebug() << "Sent all. DONE." << m_bsent;
+        shutdown( true );
         return;
     }
     else

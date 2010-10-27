@@ -266,10 +266,17 @@ Connection::socketDisconnected()
 void
 Connection::socketDisconnectedError(QAbstractSocket::SocketError e)
 {
-    qDebug() << "SOCKET ERROR CODE" << e << this->name() << " CALLING Connection::shutdown(false)";
+    if ( e == QAbstractSocket::RemoteHostClosedError )
+        return;
+
+    qDebug() << "SOCKET ERROR CODE" << e << this->name() << "CALLING Connection::shutdown(false)";
+
     m_peer_disconnected = true;
+
     emit socketErrored(e);
-    shutdown(false);
+    emit socketClosed();
+
+    shutdown( false );
 }
 
 

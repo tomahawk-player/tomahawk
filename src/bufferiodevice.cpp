@@ -1,10 +1,11 @@
 #include <QDebug>
 #include "bufferiodevice.h"
 
+
 BufferIODevice::BufferIODevice( unsigned int size, QObject *parent ) :
     QIODevice( parent ),
-    m_size(size),
-    m_received(0)
+    m_size( size ),
+    m_received( 0 )
 {
 }
 
@@ -27,7 +28,6 @@ BufferIODevice::close()
 
     qDebug() << Q_FUNC_INFO;
     QIODevice::close();
-    // TODO ?
 }
 
 
@@ -38,6 +38,7 @@ BufferIODevice::inputComplete( const QString& errmsg )
     setErrorString( errmsg );
     emit readChannelFinished();
 }
+
 
 void
 BufferIODevice::addData( QByteArray ba )
@@ -57,10 +58,8 @@ BufferIODevice::bytesAvailable() const
 qint64
 BufferIODevice::readData( char * data, qint64 maxSize )
 {
-    //    qDebug() << Q_FUNC_INFO << maxSize;
-
+    //qDebug() << Q_FUNC_INFO << maxSize;
     QMutexLocker lock( &m_mut );
-//    qDebug() << "readData begins, bufersize:" << m_buffer.length();
 
     qint64 size = maxSize;
     if ( m_buffer.length() < maxSize )
@@ -69,7 +68,7 @@ BufferIODevice::readData( char * data, qint64 maxSize )
     memcpy( data, m_buffer.data(), size );
     m_buffer.remove( 0, size );
 
-//    qDebug() << "readData ends, bufersize:" << m_buffer.length();
+    //qDebug() << "readData ends, bufersize:" << m_buffer.length();
     return size;
 }
 
@@ -93,12 +92,13 @@ qint64 BufferIODevice::size() const
     return m_size;
 }
 
+
 bool BufferIODevice::atEnd() const
 {
     QMutexLocker lock( &m_mut );
-    return m_size == m_received &&
-           m_buffer.length() == 0;
+    return ( m_size == m_received && m_buffer.length() == 0 );
 }
+
 
 void
 BufferIODevice::clear()

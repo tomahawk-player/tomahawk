@@ -21,7 +21,6 @@ public:
     void addData( QByteArray ba );
     void clear();
 
-    bool isOpen() const { qDebug() << "isOpen"; return true; }
     OpenMode openMode() const { qDebug() << "openMode"; return QIODevice::ReadWrite; }
 
     void inputComplete( const QString& errmsg = "" );
