@@ -8,6 +8,8 @@
 #include <gloox/client.h>
 #include <gloox/rostermanager.h>
 #include <gloox/message.h>
+#include <gloox/connectiontcpclient.h>
+
 #include <QtCore/QStringList>
 
 using namespace gloox;
@@ -29,15 +31,17 @@ XMPPBot::XMPPBot(QObject *parent)
         return;
     
     JID jid(jidstring.toStdString());
-    
+    jid.setResource( QString( "tomahawkbot%1" ).arg( qrand() ).toStdString() );
+
     m_client = new XMPPBotClient(this, jid, password.toStdString(), port);
     if (!server.isEmpty())
         m_client.data()->setServer(server.toStdString());
-        
+
     m_client.data()->registerConnectionListener(this);
     m_client.data()->registerSubscriptionHandler(this);
     m_client.data()->registerMessageHandler(this);
-    
+    m_client.data()->setPresence(Presence::Available, 1, "Tomahawkbot available");
+
     connect(TomahawkApp::instance()->audioEngine(), SIGNAL(started(const Tomahawk::result_ptr &)),
             SLOT(newTrackSlot(const Tomahawk::result_ptr &)));
 
@@ -46,7 +50,7 @@ XMPPBot::XMPPBot(QObject *parent)
         SLOT(infoReturnedSlot(QString, Tomahawk::InfoSystem::InfoType, QVariant, QVariant, Tomahawk::InfoSystem::InfoCustomDataHash)));
     
     connect(TomahawkApp::instance()->infoSystem(), SIGNAL(finished(QString)), SLOT(infoFinishedSlot(QString)));
-    
+
     bool success = m_client.data()->gloox::Client::connect(false);
     if (success)
         m_client.data()->run();
@@ -70,7 +74,8 @@ void XMPPBot::newTrackSlot(const Tomahawk::result_ptr &track)
                     .arg(track->artist())
                     .arg(track->track())
                     .arg(track->album());
-    m_client.data()->setPresence(Presence::Chat, 1, status.toStdString());
+
+    m_client.data()->setPresence(Presence::Available, 1, status.toStdString());
 }
 
 void XMPPBot::onConnect()
@@ -83,8 +88,7 @@ void XMPPBot::onDisconnect(ConnectionError e)
 {
     qDebug() << Q_FUNC_INFO;
     qDebug() << "XMPPBot Disconnected";
-    if (e != gloox::ConnNoError && e != gloox::ConnUserDisconnected)
-        qDebug() << "ERROR: in XMPPBot, disconnected";
+    qDebug() << "Connection error msg:" << e;
 }
 
 bool XMPPBot::onTLSConnect(const gloox::CertInfo& info)
@@ -125,13 +129,15 @@ void XMPPBot::handleMessage(const Message& msg, MessageSession* session)
     if (msg.subtype() != Message::Chat || msg.from().full().empty() || msg.to().full().empty())
         return;
     
-    qDebug() << "jid from: " << QString::fromStdString(msg.from().full()) << ", jid to: " << QString::fromStdString(msg.to().full());
-    
     QString body = QString::fromStdString(msg.body());
     QString originatingJid = QString::fromStdString(msg.from().full());
     QStringList tokens(body.split(QString(" and "), QString::SkipEmptyParts));
-    
-    qDebug() << "Operating on tokens: " << tokens;
+
+    if ( tokens.isEmpty() )
+        return;
+
+    qDebug() << "jid from:" << QString::fromStdString(msg.from().full()) << ", jid to:" << QString::fromStdString(msg.to().full());
+    qDebug() << "Operating on tokens:" << tokens;
     
     if (m_currTrack.isNull() || m_currTrack->artist().isEmpty() || m_currTrack->track().isEmpty())
     {
@@ -357,20 +363,6 @@ XMPPBotClient::XMPPBotClient(QObject *parent, JID &jid, std::string password, in
     , m_timer(this)
 {
     qDebug() << Q_FUNC_INFO;
-    setResource(QString( "tomahawkbot%1" ).arg( qrand() ).toStdString() );
-
-    // the google hack, because they filter disco features they don't know.
-    if( server().find( "googlemail." ) != std::string::npos
-        || server().find( "gmail." ) != std::string::npos
-        || server().find( "gtalk." ) != std::string::npos )
-    {
-        if( resource().find( "tomahawkbot" ) == std::string::npos )
-        {
-            qDebug() << "Forcing your /resource to contain 'tomahawk' (the google workaround)";
-            setResource( "tomahawkbot-tomahawkbot" );
-        }
-    }
-
 }
 
 XMPPBotClient::~XMPPBotClient()
@@ -381,7 +373,6 @@ XMPPBotClient::~XMPPBotClient()
 void XMPPBotClient::run()
 {
     qDebug() << Q_FUNC_INFO;
-    setPresence(Presence::Chat, 1, "Hi!");
     QObject::connect(&m_timer, SIGNAL(timeout()), SLOT(recvSlot()));
     m_timer.start(200);
     qDebug() << "XMPPBot running";
@@ -391,6 +382,5 @@ void XMPPBotClient::recvSlot()
 {
     gloox::ConnectionError error = recv(100);
     if (error != gloox::ConnNoError)
-        qDebug() << "ERROR: in XMPPBotClient::recvSlot";
+        qDebug() << "ERROR: in XMPPBotClient::recvSlot" << error;
 }
-

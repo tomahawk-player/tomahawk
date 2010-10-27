@@ -47,7 +47,7 @@ Jabber_p::Jabber_p( const QString& jid, const QString& password, const QString& 
         }
     }
 
-    m_client = QSharedPointer<gloox::Client>( new gloox::Client( m_jid, password.toStdString(), port) );
+    m_client = QSharedPointer<gloox::Client>( new gloox::Client( m_jid, password.toStdString(), port ) );
     if( !server.isEmpty() )
         m_client->setServer( server.toStdString() );
 }

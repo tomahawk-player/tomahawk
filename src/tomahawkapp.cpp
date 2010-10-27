@@ -177,7 +177,6 @@ TomahawkApp::TomahawkApp( int& argc, char *argv[] )
     QNetworkProxy::setApplicationProxy( *m_proxy );
 
     m_infoSystem = new Tomahawk::InfoSystem::InfoSystem( this );
-    m_xmppBot = new XMPPBot( this );
 
     boost::function<QSharedPointer<QIODevice>(result_ptr)> fac =
         boost::bind( &TomahawkApp::httpIODeviceFactory, this, _1 );
@@ -192,6 +191,7 @@ TomahawkApp::TomahawkApp( int& argc, char *argv[] )
         startHTTP();
 
     if( !arguments().contains("--nojabber") ) setupJabber();
+    m_xmppBot = new XMPPBot( this );
 
     if ( !arguments().contains( "--nozeroconf" ) )
     {
