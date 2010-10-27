@@ -53,10 +53,12 @@ SourcesModel::flags( const QModelIndex& index ) const
 
     if ( index.isValid() )
     {
-        QModelIndex idx = index.model()->index( index.row(), 0, index.parent() );
-        int type = idx.data( Qt::UserRole + 1 ).toInt();
-        if ( type == 1 )
-            defaultFlags |= Qt::ItemIsEditable;
+        if ( indexType( index ) == 1 )
+        {
+            playlist_ptr playlist = indexToPlaylist( index );
+            if ( !playlist.isNull() && playlist->author()->isLocal() )
+                defaultFlags |= Qt::ItemIsEditable;
+        }
 
         return Qt::ItemIsDragEnabled | Qt::ItemIsDropEnabled | defaultFlags;
     }
@@ -173,10 +175,9 @@ SourcesModel::indexToPlaylist( const QModelIndex& index )
     if ( !index.isValid() )
         return res;
 
-    QModelIndex idx = index.model()->index( index.row(), 0, index.parent() );
-    int type = idx.data( Qt::UserRole + 1 ).toInt();
-    if ( type == 1 )
+    if ( indexType( index ) == 1 )
     {
+        QModelIndex idx = index.model()->index( index.row(), 0, index.parent() );
         qlonglong pptr = idx.data( Qt::UserRole + 3 ).toLongLong();
         playlist_ptr* playlist = reinterpret_cast<playlist_ptr*>(pptr);
         if ( playlist )
@@ -193,10 +194,10 @@ SourcesModel::indexToTreeItem( const QModelIndex& index )
     if ( !index.isValid() )
         return 0;
 
-    QModelIndex idx = index.model()->index( index.row(), 0, index.parent() );
-    int type = idx.data( Qt::UserRole + 1 ).toInt();
+    int type = indexType( index );
     if ( type == 0 || type == 1 )
     {
+        QModelIndex idx = index.model()->index( index.row(), 0, index.parent() );
         qlonglong pptr = idx.data( Qt::UserRole + 2 ).toLongLong();
         SourceTreeItem* item = reinterpret_cast<SourceTreeItem*>(pptr);
         if ( item )
@@ -215,15 +216,12 @@ SourcesModel::setData( const QModelIndex& index, const QVariant& value, int role
     if ( !index.isValid() )
         return false;
 
-    QModelIndex idx = index.model()->index( index.row(), 0, index.parent() );
-    int type = idx.data( Qt::UserRole + 1 ).toInt();
-    if ( type == 1 )
+    if ( indexType( index ) == 1 )
     {
-        qlonglong pptr = idx.data( Qt::UserRole + 3 ).toLongLong();
-        playlist_ptr* playlist = reinterpret_cast<playlist_ptr*>(pptr);
-        if ( playlist )
+        playlist_ptr playlist = indexToPlaylist( index );
+        if ( !playlist.isNull() )
         {
-            playlist->data()->rename( value.toString() );
+            playlist->rename( value.toString() );
             QStandardItemModel::setData( index, value, Qt::DisplayRole );
         }
 
