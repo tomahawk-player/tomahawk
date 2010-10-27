@@ -23,7 +23,9 @@
 #define uint16_t unsigned short
 #endif
 /* Hack */
+#include <winsock.h>
 #define UNIX_PATH_LEN   108
+#include <stdint.h>
 struct sockaddr_un {
   uint16_t sun_family;
   char     sun_path[UNIX_PATH_LEN];

@@ -1,3 +1,5 @@
+#ifndef LIBPORTFWD_PORTFWD_H
+#define LIBPORTFWD_PORTFWD_H true
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -34,3 +36,4 @@ class Portfwd
         unsigned int m_upbps, m_downbps;
 };
 
+#endif
