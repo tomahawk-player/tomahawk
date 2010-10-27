@@ -348,7 +348,7 @@ SourceTreeView::paintEvent( QPaintEvent* event )
         opt.rect = itemRect;
         opt.state = QStyle::State_Enabled | QStyle::State_Selected;
 
-        style()->drawPrimitive( QStyle::PE_PanelItemViewItem, &opt, &painter, this );
+        style()->drawPrimitive( QStyle::PE_PanelItemViewRow, &opt, &painter, this );
     }
 
     QTreeView::paintEvent( event );
