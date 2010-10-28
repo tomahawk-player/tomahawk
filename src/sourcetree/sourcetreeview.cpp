@@ -371,6 +371,12 @@ SourceDelegate::paint( QPainter* painter, const QStyleOptionViewItem& option, co
     if ( ( option.state & QStyle::State_Enabled ) == QStyle::State_Enabled )
     {
         o.state = QStyle::State_Enabled;
+
+        if ( SourcesModel::indexType( index ) == 1 &&
+           ( option.state & QStyle::State_Selected ) == QStyle::State_Selected )
+        {
+            o.palette.setColor( QPalette::Text, o.palette.color( QPalette::HighlightedText ) );
+        }
     }
 
     QStyledItemDelegate::paint( painter, option, index.model()->index( 0, 0 ) );
