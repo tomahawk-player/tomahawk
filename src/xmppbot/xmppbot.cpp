@@ -2,6 +2,7 @@
 
 #include "tomahawk/tomahawkapp.h"
 #include "tomahawk/infosystem.h"
+#include "tomahawk/typedefs.h"
 #include <tomahawksettings.h>
 #include <audio/audioengine.h>
 
@@ -129,10 +130,30 @@ void XMPPBot::handleMessage(const Message& msg, MessageSession* session)
     if (msg.subtype() != Message::Chat || msg.from().full().empty() || msg.to().full().empty())
         return;
     
-    QString body = QString::fromStdString(msg.body());
-    QString originatingJid = QString::fromStdString(msg.from().full());
-    QStringList tokens(body.split(QString(" and "), QString::SkipEmptyParts));
+    QString body = QString::fromStdString( msg.body() );
+    QString originatingJid = QString::fromStdString( msg.from().full() );
 
+    if ( body.toLower().startsWith( "play" ) )
+    {
+        QStringList tokens = body.right( body.length() - 5 ).split( QString( "-" ), QString::SkipEmptyParts );
+
+        qDebug() << tokens;
+
+        QVariantMap qv;
+        qv["artist"] = tokens.first().trimmed();
+        qv["track"] = tokens.last().trimmed();
+        Tomahawk::query_ptr q( new Tomahawk::Query( qv ) );
+        connect( q.data(), SIGNAL( resultsAdded( QList<Tomahawk::result_ptr> ) ),
+                             SLOT( onResultsAdded( QList<Tomahawk::result_ptr> ) ) );
+
+        QList<Tomahawk::query_ptr> ql;
+        ql.append( q );
+
+        APP->pipeline()->add( ql );
+        return;
+    }
+
+    QStringList tokens( body.toLower().split( QString( " and " ), QString::SkipEmptyParts ) );
     if ( tokens.isEmpty() )
         return;
 
@@ -353,6 +374,12 @@ void XMPPBot::infoFinishedSlot(QString caller)
     m_client.data()->send(msg);
     m_currReturnMessage = QString("\n");
     m_currReturnJid.clear();
+}
+
+
+void XMPPBot::onResultsAdded( const QList<Tomahawk::result_ptr>& result )
+{
+    APP->audioEngine()->playItem( 0, result.first() );
 }
 
 ///////////////////////////////////////////////////////////////////////////////////////

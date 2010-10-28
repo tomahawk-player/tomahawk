@@ -63,6 +63,9 @@ protected:
     // MessageHandler
     virtual void handleMessage(const gloox::Message &msg, gloox::MessageSession *session = 0);
 
+private slots:
+    void onResultsAdded( const QList<Tomahawk::result_ptr>& result );
+
 private:
     QWeakPointer<XMPPBotClient> m_client;
     Tomahawk::result_ptr m_currTrack;
