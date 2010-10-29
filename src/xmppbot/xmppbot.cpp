@@ -130,14 +130,14 @@ void XMPPBot::handleMessage(const Message& msg, MessageSession* session)
     if (msg.subtype() != Message::Chat || msg.from().full().empty() || msg.to().full().empty())
         return;
     
-    QString body = QString::fromStdString( msg.body() );
+    QString body = QString::fromStdString( msg.body() ).toLower().trimmed();
     QString originatingJid = QString::fromStdString( msg.from().full() );
 
-    if ( body.toLower().startsWith( "play" ) )
+    if ( body.startsWith( "play" ) )
     {
         QStringList tokens = body.right( body.length() - 5 ).split( QString( "-" ), QString::SkipEmptyParts );
-
-        qDebug() << tokens;
+        if ( tokens.count() < 2 )
+            APP->audioEngine()->play();
 
         QVariantMap qv;
         qv["artist"] = tokens.first().trimmed();
@@ -152,8 +152,28 @@ void XMPPBot::handleMessage(const Message& msg, MessageSession* session)
         APP->pipeline()->add( ql );
         return;
     }
+    else if ( body.startsWith( "stop" ) )
+    {
+        APP->audioEngine()->stop();
+        return;
+    }
+    else if ( body.startsWith( "prev" ) )
+    {
+        APP->audioEngine()->previous();
+        return;
+    }
+    else if ( body.startsWith( "next" ) )
+    {
+        APP->audioEngine()->next();
+        return;
+    }
+    else if ( body.startsWith( "pause" ) )
+    {
+        APP->audioEngine()->pause();
+        return;
+    }
 
-    QStringList tokens( body.toLower().split( QString( " and " ), QString::SkipEmptyParts ) );
+    QStringList tokens( body.split( QString( " and " ), QString::SkipEmptyParts ) );
     if ( tokens.isEmpty() )
         return;
 
