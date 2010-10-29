@@ -7,7 +7,7 @@
 
 
 DatabaseCommandLoggable*
-DatabaseCommandLoggable::factory( QVariantMap c )
+DatabaseCommandLoggable::factory( const QVariantMap& c )
 {
     const QString name = c.value( "command" ).toString();
     //TODO dynamic class loading, factory blah

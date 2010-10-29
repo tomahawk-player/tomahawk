@@ -17,10 +17,12 @@ ScriptResolver::ScriptResolver(const QString& exe) :
     m_proc.start( m_cmd );
 }
 
+
 void ScriptResolver::readStderr()
 {
     qDebug() << "SCRIPT_STDERR" << m_cmd << m_proc.readAllStandardError();
 }
+
 
 void ScriptResolver::readStdout()
 {
@@ -48,6 +50,7 @@ void ScriptResolver::readStdout()
     }
 }
 
+
 void ScriptResolver::sendMsg( const QByteArray& msg )
 {
     qDebug() << Q_FUNC_INFO << m_ready << msg;
@@ -59,6 +62,7 @@ void ScriptResolver::sendMsg( const QByteArray& msg )
     m_proc.write( (const char*) &len, 4 );
     m_proc.write( msg );
 }
+
 
 void ScriptResolver::handleMsg( const QByteArray& msg )
 {
@@ -114,13 +118,15 @@ void ScriptResolver::cmdExited(int code, QProcess::ExitStatus status)
     }
 }
 
-void ScriptResolver::resolve( QVariant v )
+
+void ScriptResolver::resolve( const QVariant& v )
 {
     QVariantMap m = v.toMap();
     m.insert( "_msgtype", "rq" );
     const QByteArray msg = m_serializer.serialize( m );
     sendMsg( msg );
 }
+
 
 void ScriptResolver::doSetup( const QVariantMap& m )
 {

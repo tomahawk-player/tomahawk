@@ -29,15 +29,7 @@ DatabaseCommand_RenamePlaylist::exec( DatabaseImpl* lib )
     cre.bindValue( ":id", m_playlistguid );
     cre.bindValue( ":title", m_playlistTitle );
 
-    bool ok = cre.exec();
-    if( !ok )
-    {
-        qDebug() << cre.lastError().databaseText()
-                 << cre.lastError().driverText()
-                 << cre.executedQuery()
-                 << cre.boundValues();
-        Q_ASSERT( ok );
-    }
+    cre.exec();
 }
 
 

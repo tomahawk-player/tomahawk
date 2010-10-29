@@ -26,15 +26,7 @@ DatabaseCommand_DeletePlaylist::exec( DatabaseImpl* lib )
     cre.prepare( sql );
     cre.bindValue( ":id", m_playlistguid );
 
-    bool ok = cre.exec();
-    if( !ok )
-    {
-        qDebug() << cre.lastError().databaseText()
-                 << cre.lastError().driverText()
-                 << cre.executedQuery()
-                 << cre.boundValues();
-        Q_ASSERT( ok );
-    }
+    cre.exec();
 }
 
 

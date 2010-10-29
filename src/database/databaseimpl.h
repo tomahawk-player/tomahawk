@@ -17,11 +17,14 @@
 #include "fuzzyindex.h"
 
 class Database;
+
 class DatabaseImpl : public QObject
 {
 Q_OBJECT
+
 friend class FuzzyIndex;
 friend class DatabaseCommand_UpdateSearchIndex;
+
 public:
     DatabaseImpl( const QString& dbname, Database* parent = 0 );
     ~DatabaseImpl();

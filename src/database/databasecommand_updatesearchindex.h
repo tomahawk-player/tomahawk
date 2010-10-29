@@ -1,5 +1,6 @@
 #ifndef DATABASECOMMAND_UPDATESEARCHINDEX_H
 #define DATABASECOMMAND_UPDATESEARCHINDEX_H
+
 #include "databasecommand.h"
 #include "databaseimpl.h"
 

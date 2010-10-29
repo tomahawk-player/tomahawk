@@ -7,7 +7,7 @@
 using namespace Tomahawk;
 
 
-DatabaseCommand_Resolve::DatabaseCommand_Resolve( QVariant v, bool searchlocal )
+DatabaseCommand_Resolve::DatabaseCommand_Resolve( const QVariant& v, bool searchlocal )
     : DatabaseCommand()
     , m_v( v )
     , m_searchlocal( searchlocal )
@@ -18,8 +18,6 @@ DatabaseCommand_Resolve::DatabaseCommand_Resolve( QVariant v, bool searchlocal )
 void
 DatabaseCommand_Resolve::exec( DatabaseImpl* lib )
 {
-    QTime timer;
-
     const Tomahawk::QID qid = m_v.toMap().value("qid").toString();
     const QString artistname = m_v.toMap().value("artist").toString();
     const QString albumname  = m_v.toMap().value("album").toString();
@@ -37,7 +35,6 @@ DatabaseCommand_Resolve::exec( DatabaseImpl* lib )
     typedef QPair<int,float> scorepair_t;
 
     // STEP 1
-    timer.start();
     QList< int > artists = lib->searchTable( "artist", artistname, 10 );
     QList< int > tracks  = lib->searchTable( "track",  trackname, 10 );
     QList< int > albums  = lib->searchTable( "album",  albumname, 10 );
@@ -52,41 +49,37 @@ DatabaseCommand_Resolve::exec( DatabaseImpl* lib )
     }
 
     // STEP 2
-
     TomahawkSqlQuery files_query = lib->newquery();
 
     QStringList artsl, trksl;
     foreach( int i, artists ) artsl.append( QString::number(i) );
     foreach( int i, tracks  ) trksl.append( QString::number(i) );
 
-    QString sql = QString("SELECT "
-    "url, mtime, size, md5, mimetype, duration, bitrate, file_join.artist, file_join.album, file_join.track, "
-    "artist.name as artname, "
-    "album.name as albname, "
-    "track.name as trkname, "
-    "file.source, "
-    "file_join.albumpos "
-    "FROM file, file_join, artist, track "
-    "LEFT JOIN album ON album.id = file_join.album "
-    "WHERE "
-    "artist.id = file_join.artist AND "
-    "track.id = file_join.track AND "
-    "file.source %1 AND "
-    "file.id = file_join.file AND "
-    "file_join.artist IN (%2) AND "
-    "file_join.track IN (%3) "
-    "ORDER by file_join.artist,file_join.track"
-    ).arg( m_searchlocal ? "IS NULL" : " IN (SELECT id FROM source WHERE isonline = 'true') " )
-     .arg( artsl.join(",") )
-     .arg( trksl.join(",") );
-
-    timer.start();
+    QString sql = QString( "SELECT "
+                            "url, mtime, size, md5, mimetype, duration, bitrate, file_join.artist, file_join.album, file_join.track, "
+                            "artist.name as artname, "
+                            "album.name as albname, "
+                            "track.name as trkname, "
+                            "file.source, "
+                            "file_join.albumpos "
+                            "FROM file, file_join, artist, track "
+                            "LEFT JOIN album ON album.id = file_join.album "
+                            "WHERE "
+                            "artist.id = file_join.artist AND "
+                            "track.id = file_join.track AND "
+                            "file.source %1 AND "
+                            "file.id = file_join.file AND "
+                            "file_join.artist IN (%2) AND "
+                            "file_join.track IN (%3) "
+                            "ORDER by file_join.artist,file_join.track"
+        ).arg( m_searchlocal ? "IS NULL" : " IN (SELECT id FROM source WHERE isonline = 'true') " )
+         .arg( artsl.join(",") )
+         .arg( trksl.join(",") );
 
     files_query.prepare( sql );
-
     bool ok = files_query.exec();
-    Q_ASSERT( ok );
-    if(!ok) throw "Error";
+    if(!ok)
+        throw "Error";
 
     //qDebug() << "SQL exec() duration, ms, " << timer.elapsed()
     //         << "numresults" << files_query.numRowsAffected();
@@ -141,21 +134,19 @@ DatabaseCommand_Resolve::exec( DatabaseImpl* lib )
         //int albid = files_query.value( 8 ).toInt();
         //int trkid = files_query.value( 9 ).toInt();
 
-        timer.start();
         float score = how_similar( m_v.toMap(), m );
         //qDebug() << "Score calc:" << timer.elapsed();
 
         m["score"] = score;
-
         //qDebug() << "RESULT" << score << m;
 
-        if( score < MINSCORE ) continue;
+        if( score < MINSCORE )
+            continue;
 
         res << Tomahawk::result_ptr( new Tomahawk::Result( m, coll ) );
     }
 
     // return results, if any found
-
     if( res.length() > 0 )
     {
         emit results( qid, res );

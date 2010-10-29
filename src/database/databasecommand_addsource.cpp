@@ -35,8 +35,7 @@ DatabaseCommand_addSource::exec( DatabaseImpl* dbi )
     query.addBindValue( m_username );
     query.addBindValue( m_fname );
     query.addBindValue( true );
-    bool ok = query.exec();
-    Q_ASSERT( ok );
+    query.exec();
 
     unsigned int id = query.lastInsertId().toUInt();
     qDebug() << "Inserted new source to DB, id:" << id << " friendlyname" << m_username;

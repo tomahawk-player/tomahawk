@@ -24,11 +24,11 @@ public:
     {}
 
     explicit DatabaseCommand_SetPlaylistRevision( const source_ptr& s,
-                                                  QString playlistguid,
-                                                  QString newrev,
-                                                  QString oldrev,
-                                                  QStringList orderedguids,
-                                                  QList<Tomahawk::plentry_ptr> addedentries );
+                                                  const QString& playlistguid,
+                                                  const QString& newrev,
+                                                  const QString& oldrev,
+                                                  const QStringList& orderedguids,
+                                                  const QList<Tomahawk::plentry_ptr>& addedentries );
 
     QString commandname() const { return "setplaylistrevision"; }
 

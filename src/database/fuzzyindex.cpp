@@ -1,11 +1,16 @@
 #include "fuzzyindex.h"
+
 #include "databaseimpl.h"
+
 #include <QTime>
 
-FuzzyIndex::FuzzyIndex(DatabaseImpl &db) :
-    QObject(), m_db( db ), m_loaded( false )
+FuzzyIndex::FuzzyIndex( DatabaseImpl &db )
+    : QObject()
+    , m_db( db )
+    , m_loaded( false )
 {
 }
+
 
 void
 FuzzyIndex::loadNgramIndex()
@@ -61,7 +66,8 @@ FuzzyIndex::loadNgramIndex_helper( QHash< QString, QMap<quint32, quint16> >& idx
              << "in" << t.elapsed();
 }
 
-void FuzzyIndex::mergeIndex(const QString& table, QHash< QString, QMap<quint32, quint16> > tomerge)
+
+void FuzzyIndex::mergeIndex( const QString& table, QHash< QString, QMap<quint32, quint16> > tomerge )
 {
     qDebug() << Q_FUNC_INFO << table << tomerge.keys().size();
 
@@ -98,7 +104,9 @@ void FuzzyIndex::mergeIndex(const QString& table, QHash< QString, QMap<quint32, 
     qDebug() << Q_FUNC_INFO << table << "merge complete, num items:" << tomerge.size();
 }
 
-QMap< int, float > FuzzyIndex::search( const QString& table, const QString& name )
+
+QMap< int, float >
+FuzzyIndex::search( const QString& table, const QString& name )
 {
     QMap< int, float > resultsmap;
 

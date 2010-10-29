@@ -171,4 +171,3 @@ DatabaseCommand_AddFiles::exec( DatabaseImpl* dbi )
     qDebug() << "Done.";
     emit done( m_files, source()->collection() );
 }
-

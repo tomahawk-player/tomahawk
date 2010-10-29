@@ -14,6 +14,7 @@ DatabaseCommand_CreatePlaylist::DatabaseCommand_CreatePlaylist( QObject* parent 
     qDebug() << Q_FUNC_INFO << "def";
 }
 
+
 DatabaseCommand_CreatePlaylist::DatabaseCommand_CreatePlaylist( const source_ptr& author,
                                                                 const playlist_ptr& playlist )
     : DatabaseCommandLoggable( author )
@@ -28,12 +29,12 @@ void
 DatabaseCommand_CreatePlaylist::exec( DatabaseImpl* lib )
 {
     qDebug() << Q_FUNC_INFO;
+    Q_ASSERT( !m_playlist.isNull() );
+    Q_ASSERT( !source().isNull() );
 
     TomahawkSqlQuery cre = lib->newquery();
     cre.prepare( "INSERT INTO playlist( guid, source, shared, title, info, creator, lastmodified) "
                  "VALUES( :guid, :source, :shared, :title, :info, :creator, :lastmodified )" );
-    Q_ASSERT( !m_playlist.isNull() );
-    Q_ASSERT( !source().isNull() );
     cre.bindValue( ":guid", m_playlist->guid() );
     cre.bindValue( ":source", source()->isLocal() ? QVariant(QVariant::Int) : source()->id() );
     cre.bindValue( ":shared", m_playlist->shared() );
@@ -44,15 +45,7 @@ DatabaseCommand_CreatePlaylist::exec( DatabaseImpl* lib )
 
     qDebug() << "CREATE PLAYLIST:" << cre.boundValues();
 
-    bool ok = cre.exec();
-    if( !ok )
-    {
-        qDebug() << cre.lastError().databaseText()
-                 << cre.lastError().driverText()
-                 << cre.executedQuery()
-                 << cre.boundValues();
-        Q_ASSERT( ok );
-    }
+    cre.exec();
 }
 
 

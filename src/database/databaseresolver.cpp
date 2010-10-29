@@ -13,7 +13,7 @@ DatabaseResolver::DatabaseResolver( bool searchlocal, int weight )
 
 
 void
-DatabaseResolver::resolve( QVariant v )
+DatabaseResolver::resolve( const QVariant& v )
 {
     //qDebug() << Q_FUNC_INFO << v;
 

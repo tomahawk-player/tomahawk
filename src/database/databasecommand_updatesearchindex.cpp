@@ -1,4 +1,6 @@
 #include "databasecommand_updatesearchindex.h"
+
+
 DatabaseCommand_UpdateSearchIndex::DatabaseCommand_UpdateSearchIndex( const QString& t, int p )
     : DatabaseCommand()
     , table( t )
@@ -10,6 +12,7 @@ DatabaseCommand_UpdateSearchIndex::DatabaseCommand_UpdateSearchIndex( const QStr
         return;
     }
 }
+
 
 void DatabaseCommand_UpdateSearchIndex::exec(DatabaseImpl *db)
 {

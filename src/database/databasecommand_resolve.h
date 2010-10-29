@@ -1,16 +1,17 @@
 #ifndef DATABASECOMMAND_RESOLVE_H
 #define DATABASECOMMAND_RESOLVE_H
+
 #include "databasecommand.h"
 #include "databaseimpl.h"
 #include "tomahawk/result.h"
+
 #include <QVariant>
 
 class DatabaseCommand_Resolve : public DatabaseCommand
 {
 Q_OBJECT
 public:
-    //explicit DatabaseCommand_Resolve(QObject *parent = 0);
-    explicit DatabaseCommand_Resolve( QVariant v, bool searchlocal );
+    explicit DatabaseCommand_Resolve( const QVariant& v, bool searchlocal );
 
     virtual QString commandname() const { return "dbresolve"; }
     virtual bool doesMutates() const { return false; }

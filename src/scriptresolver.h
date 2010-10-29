@@ -1,5 +1,6 @@
 #ifndef SCRIPTRESOLVER_H
 #define SCRIPTRESOLVER_H
+
 #include <QProcess>
 
 #include <qjson/parser.h>
@@ -20,7 +21,7 @@ public:
     virtual unsigned int preference() const { return m_preference; }
     virtual unsigned int timeout() const    { return m_timeout; }
 
-    virtual void resolve( QVariant v );
+    virtual void resolve( const QVariant& v );
 
 signals:
 
@@ -35,7 +36,6 @@ private:
     void handleMsg( const QByteArray& msg );
     void sendMsg( const QByteArray& msg );
     void doSetup( const QVariantMap& m );
-
 
     QProcess m_proc;
     QString m_name, m_cmd;

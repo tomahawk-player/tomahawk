@@ -105,6 +105,7 @@ DatabaseImpl::~DatabaseImpl()
     m_indexThread.wait(5000);
 }
 
+
 void
 DatabaseImpl::loadIndex()
 {
@@ -114,6 +115,7 @@ DatabaseImpl::loadIndex()
     connect( &m_fuzzyIndex, SIGNAL(indexReady()), this, SIGNAL(indexReady()) );
     m_indexThread.start();
 }
+
 
 void
 DatabaseImpl::updateSearchIndex( const QString& table, int pkey )

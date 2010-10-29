@@ -8,11 +8,11 @@
 
 DatabaseCommand_SetPlaylistRevision::DatabaseCommand_SetPlaylistRevision(
                       const source_ptr& s,
-                      QString playlistguid,
-                      QString newrev,
-                      QString oldrev,
-                      QStringList orderedguids,
-                      QList<plentry_ptr> addedentries )
+                      const QString& playlistguid,
+                      const QString& newrev,
+                      const QString& oldrev,
+                      const QStringList& orderedguids,
+                      const QList<plentry_ptr>& addedentries )
     : DatabaseCommandLoggable( s )
     , m_newrev( newrev )
     , m_oldrev( oldrev )
@@ -84,7 +84,6 @@ DatabaseCommand_SetPlaylistRevision::exec( DatabaseImpl* lib )
     }
 
     QVariantList vlist = m_orderedguids;
-
     QJson::Serializer ser;
     const QByteArray entries = ser.serialize( vlist );
 
@@ -111,17 +110,7 @@ DatabaseCommand_SetPlaylistRevision::exec( DatabaseImpl* lib )
         adde.bindValue( 7, e->lastmodified() );
         adde.bindValue( 8, source()->isLocal() ? QVariant(QVariant::Int) : source()->id() );
         adde.bindValue( 9, "" );
-        bool ok = adde.exec();
-        if( !ok )
-        {
-            qDebug() << adde.lastError().databaseText() << adde.lastError().driverText() << "\n"
-                     << sql << endl
-                     << adde.boundValues().size() ;
-            int i = 0;
-            foreach(QVariant param, adde.boundValues()) qDebug() << i++ << param;
-            Q_ASSERT( ok );
-        }
-
+        adde.exec();
     }
 
     // add the new revision:
@@ -138,11 +127,7 @@ DatabaseCommand_SetPlaylistRevision::exec( DatabaseImpl* lib )
     query.addBindValue( source()->isLocal() ? QVariant(QVariant::Int) : source()->id() );
     query.addBindValue( 0 ); //ts
     query.addBindValue( m_oldrev.isEmpty() ? QVariant(QVariant::String) : m_oldrev );
-
-    //qDebug() << sql << "\n" << query.boundValues();
-
-    bool ok = query.exec();
-    Q_ASSERT( ok );
+    query.exec();
 
     qDebug() << "Currentrevision:" << currentrevision << "oldrev:" << m_oldrev;
     // if optimistic locking is ok, update current revision to this new one
@@ -153,22 +138,22 @@ DatabaseCommand_SetPlaylistRevision::exec( DatabaseImpl* lib )
         query2.prepare("UPDATE playlist SET currentrevision = ? WHERE guid = ?");
         query2.bindValue( 0, m_newrev );
         query2.bindValue( 1, m_playlistguid );
-        bool uok = query2.exec();
-        Q_ASSERT( uok );
-        m_applied = true;
+        query2.exec();
 
+        m_applied = true;
 
         // load previous revision entries, which we need to pass on
         // so the change can be diffed
         TomahawkSqlQuery query_entries = lib->newquery();
-        query_entries.prepare("SELECT entries, playlist, author, timestamp, previous_revision "
-                              "FROM playlist_revision "
-                              "WHERE guid = :guid");
+        query_entries.prepare( "SELECT entries, playlist, author, timestamp, previous_revision "
+                               "FROM playlist_revision "
+                               "WHERE guid = :guid" );
         query_entries.bindValue( ":guid", m_oldrev );
         query_entries.exec();
         if( query_entries.next() )
         {
             // entries should be a list of strings:
+            bool ok;
             QJson::Parser parser;
             QVariant v = parser.parse( query_entries.value(0).toByteArray(), &ok );
             Q_ASSERT( ok && v.type() == QVariant::List ); //TODO
@@ -179,5 +164,4 @@ DatabaseCommand_SetPlaylistRevision::exec( DatabaseImpl* lib )
     {
         qDebug() << "Not updating current revision, optimistic locking fail";
     }
-
 }

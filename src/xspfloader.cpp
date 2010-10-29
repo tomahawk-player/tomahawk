@@ -13,12 +13,13 @@ XSPFLoader::load( const QUrl& url )
 {
     QNetworkRequest request( url );
     QNetworkReply* reply = APP->nam()->get( request );
+
     // isn't there a race condition here? something could happen before we connect()
     connect( reply, SIGNAL( finished() ),
-             this,  SLOT( networkLoadFinished() ) );
+                      SLOT( networkLoadFinished() ) );
 
-    connect( reply, SIGNAL(error(QNetworkReply::NetworkError)),
-             this,  SLOT( networkError(QNetworkReply::NetworkError) ) );
+    connect( reply, SIGNAL( error( QNetworkReply::NetworkError ) ),
+                      SLOT( networkError( QNetworkReply::NetworkError ) ) );
 }
 
 
@@ -106,13 +107,10 @@ XSPFLoader::gotBody()
         v.insert( "track", e.firstChildElement( "title" ).text() );
 
         p->setQuery( Tomahawk::query_ptr(new Tomahawk::Query(v)) );
-
         entries << p;
     }
 
-
     m_playlist->createNewRevision( uuid(), m_playlist->currentrevision(), entries );
-
     emit ok( m_playlist );
 
     deleteLater();

@@ -16,7 +16,7 @@ public:
     virtual unsigned int preference() const { return 100; }
     virtual unsigned int timeout() const { return 1000; }
 
-    virtual void resolve( QVariant v );
+    virtual void resolve( const QVariant& v );
 
 private slots:
     void gotResults( const Tomahawk::QID qid, QList< Tomahawk::result_ptr> results );

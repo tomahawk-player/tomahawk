@@ -22,7 +22,7 @@ public:
 
     virtual bool loggable() const { return true; }
 
-    static DatabaseCommandLoggable* factory( QVariantMap c );
+    static DatabaseCommandLoggable* factory( const QVariantMap& c );
 
 };
 

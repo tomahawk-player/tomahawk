@@ -21,11 +21,13 @@ Database::~Database()
     delete m_impl;
 }
 
+
 void
 Database::loadIndex()
 {
     m_impl->loadIndex();
 }
+
 
 void
 Database::enqueue( QSharedPointer<DatabaseCommand> lc )

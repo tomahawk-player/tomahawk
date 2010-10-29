@@ -21,7 +21,7 @@ public:
         UPDATE = 3
     };
 
-    explicit DatabaseCommand_ModifyPlaylist( Tomahawk::Playlist* playlist, QList< Tomahawk::plentry_ptr > entries, Mode mode );
+    explicit DatabaseCommand_ModifyPlaylist( Tomahawk::Playlist* playlist, const QList< Tomahawk::plentry_ptr >& entries, Mode mode );
 
     virtual bool doesMutates() const { return true; }
 

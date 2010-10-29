@@ -45,9 +45,7 @@ DatabaseCommand_LoadPlaylistEntries::exec( DatabaseImpl* dbi )
                               "WHERE guid IN %1").arg( inclause );
         //qDebug() << sql;
 
-        bool xok = query.exec( sql );
-        Q_ASSERT( xok );
-
+        query.exec( sql );
         while( query.next() )
         {
             plentry_ptr e( new PlaylistEntry );
@@ -86,9 +84,8 @@ DatabaseCommand_LoadPlaylistEntries::exec( DatabaseImpl* dbi )
         query_entries_old.addBindValue( m_guid );
         query_entries_old.addBindValue( query_entries.value( 1 ).toString() );
         query_entries_old.addBindValue( prevrev );
-        bool ex = query_entries_old.exec();
-        Q_ASSERT( ex );
 
+        query_entries_old.exec();
         if( !query_entries_old.next() )
         {
             return;
