@@ -1,7 +1,9 @@
 #include "tomahawk/infosystem.h"
 #include "tomahawk/tomahawkapp.h"
 #include "musixmatchplugin.h"
+
 #include <QNetworkReply>
+#include <QDomDocument>
 
 using namespace Tomahawk::InfoSystem;
 
