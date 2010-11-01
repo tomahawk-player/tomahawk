@@ -1,8 +1,6 @@
 ADD_DEFINITIONS( /DNOMINMAX )
 ADD_DEFINITIONS( /DWIN32_LEAN_AND_MEAN )
 ADD_DEFINITIONS( -static-libgcc )
-ADD_DEFINITIONS( -DNO_LIBLASTFM )
-ADD_DEFINITIONS( -DNO_OGG )
 
 # Add manual locations to stuff:
 INCLUDE_DIRECTORIES(
@@ -47,5 +45,7 @@ ELSE()
 		 "winmm.dll" 
 		 "${CMAKE_CURRENT_SOURCE_DIR}/../rtaudio/librtaudio.dll"
 		 "${CMAKE_CURRENT_SOURCE_DIR}/../admin/win/dlls/libmad.dll"
+		 "${CMAKE_CURRENT_SOURCE_DIR}/../admin/win/dlls/libvorbisfile.dll"
+		 "${CMAKE_CURRENT_SOURCE_DIR}/../admin/win/dlls/liblastfm.dll"
 	)
 ENDIF()
