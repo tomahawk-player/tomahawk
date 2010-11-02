@@ -85,7 +85,7 @@ DatabaseCommand::factory( const QVariant& op, const source_ptr& source )
         return cmd;
     }
 
-    qDebug() << "ERRROR in" << Q_FUNC_INFO;
-    Q_ASSERT( false );
+    qDebug() << "ERRROR in" << Q_FUNC_INFO << name;
+//    Q_ASSERT( false );
     return NULL;
 }
