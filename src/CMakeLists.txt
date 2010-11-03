@@ -321,9 +321,17 @@ MESSAGE( STATUS "OS_SPECIFIC_LINK_LIBRARIES: ${OS_SPECIFIC_LINK_LIBRARIES}" )
 TARGET_LINK_LIBRARIES( tomahawk
     ${QT_LIBRARIES}
     ${MAC_EXTRA_LIBS}
-    ${OS_SPECIFIC_LINK_LIBRARIES}
-    echonest
     portfwd
+    ${OS_SPECIFIC_LINK_LIBRARIES}
+    lastfm
+    qjson
+    tag
+    mad
+    vorbis
+    vorbisenc
+    vorbisfile
+    gloox
+    echonest
 )
 
 INCLUDE( "CPack.txt" )

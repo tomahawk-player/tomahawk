@@ -6,6 +6,7 @@
 #include <QDebug>
 #include <QFileDialog>
 #include <QMessageBox>
+#include <QNetworkProxy>
 
 #ifndef NO_LIBLASTFM
 #include <lastfm/ws.h>
