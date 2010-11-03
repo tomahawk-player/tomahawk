@@ -384,7 +384,7 @@ TrackView::createDragPixmap( int itemCount ) const
     int y = 0;
     for( int i = 0; i < itemCount; ++i )
     {
-        const QPixmap pixmap = QPixmap( QString( ":/data/icons/audio-x-generic-%2.png" ).arg( size ) );
+        const QPixmap pixmap = QPixmap( QString( ":/data/icons/audio-x-generic-%2x%2.png" ).arg( size ) );
         painter.drawPixmap( x, y, pixmap );
 
         x += size + 1;

@@ -9,6 +9,8 @@ SET( QT_USE_QTNETWORK TRUE )
 SET( QT_USE_QTXML TRUE )
 INCLUDE( ${QT_USE_FILE} )
 
+INCLUDE( ${CMAKE_MODULE_PATH}/AddAppIconMacro.cmake )
+
 SET( CMAKE_BUILD_TYPE "debugfull" )
 SET( CMAKE_VERBOSE_MAKEFILE ON )
 SET( CMAKE_RUNTIME_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}" )
@@ -294,6 +296,7 @@ IF( UNIX AND NOT APPLE )
   INCLUDE( "CMakeLists.linux.txt" )
 ENDIF( UNIX AND NOT APPLE )
 
+kde4_add_app_icon( tomahawkSources "${CMAKE_CURRENT_SOURCE_DIR}/../data/icons/tomahawk-icon-*.png" )
 qt4_add_resources( RC_SRCS "../resources.qrc" )
 qt4_wrap_cpp( tomahawkMoc ${tomahawkHeaders} )
 
