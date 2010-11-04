@@ -16,12 +16,12 @@
 ;-----------------------------------------------------------------------------
 !define MING_PATH "/usr/i686-pc-mingw32/sys-root/mingw"
 !define MING_BIN "${MING_PATH}/bin"
-!define MING_DLL_PATH "${MING_BIN}"
+!define MING_DLL_PATH "dlls" ; "${MING_BIN}"
 !define ROOT_PATH "..\.." ; assuming the script is in ROOT/admin/win/
-!define QT_DLL_PATH "${MING_BIN}"
-!define SQLITE_DLL_PATH "${MING_PATH}/lib/qt4/plugins/sqldrivers/"
-!define RTAUDIO_DLL_PATH "../../rtaudio/"
-!define QXTWEB_DLL_PATH "../../qxtweb-standalone/"
+!define QT_DLL_PATH "dlls"
+!define SQLITE_DLL_PATH "dlls\sqldrivers" ; "${MING_PATH}/lib/qt4/plugins/sqldrivers/"
+!define RTAUDIO_DLL_PATH "dlls" ; "../../rtaudio/"
+!define QXTWEB_DLL_PATH "dlls" ; "../../qxtweb-standalone/"
 
 ;-----------------------------------------------------------------------------
 ; Increment installer revision number as part of this script.
@@ -32,8 +32,8 @@
 !appendfile revision.txt ${REVISION}
 
 !define VER_MAJOR "0"
-!define VER_MINOR "1"
-!define VER_BUILD "1"
+!define VER_MINOR "0"
+!define VER_BUILD "0"
 
 !define VERSION "${VER_MAJOR}.${VER_MINOR}.${VER_BUILD}"
 
@@ -385,7 +385,7 @@ Function un.UnPageUserAppData
    ${NSD_CreateLabel} 0 0 100% 12u "Do you want to delete Tomahawk's data folder?"
    Pop $0
 
-   ${NSD_CreateText} 0 13u 100% 12u "$APPDATA\Tomahawk"
+   ${NSD_CreateText} 0 13u 100% 12u "$LOCALAPPDATA\Tomahawk"
    Pop $UnPageUserAppDataEditBox
    SendMessage $UnPageUserAppDataEditBox ${EM_SETREADONLY} 1 0
 
@@ -441,7 +441,7 @@ Section Uninstall
   
    ;Uninstall User Data if option is checked, otherwise skip.
    ${If} $UnPageUserAppDataCheckbox_State == ${BST_CHECKED}
-      RMDir /r "$APPDATA\Tomahawk"
+      RMDir /r "$LOCALAPPDATA\Tomahawk"
    ${EndIf}
 
    SetDetailsPrint textonly
