@@ -292,7 +292,7 @@ Jabber_p::onDisconnect( ConnectionError e )
 
     emit disconnected();
 
-    Q_ASSERT(0); //this->exit(1);
+//    Q_ASSERT(0); //this->exit(1);
 }
 
 
