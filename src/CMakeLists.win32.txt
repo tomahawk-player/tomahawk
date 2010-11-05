@@ -18,17 +18,17 @@ INCLUDE_DIRECTORIES(
 )
 
 SET( OS_SPECIFIC_LINK_LIBRARIES 
+        ${LIBLASTFM_LIBRARY}
+        gloox
+)
+
+SET( OS_SPECIFIC_LINK_LIBRARIES 
 	"secur32.dll"
 	"crypt32.dll"
 	"ws2_32.dll"
 	"dnsapi.dll"
 	"${CMAKE_CURRENT_SOURCE_DIR}/../qxtweb-standalone/libqxtweb-standalone.dll"
 )
-
-SET( OS_SPECIFIC_LINK_LIBRARIES 
-	${OS_SPECIFIC_LINK_LIBRARIES} 
-	#"${CMAKE_CURRENT_SOURCE_DIR}/../admin/win/tomahawk.res"
-	)
 
 IF( "${gui}" STREQUAL "no" )
 ELSE()
@@ -37,12 +37,15 @@ ELSE()
     )
     SET( tomahawkHeadersGui ${tomahawkHeadersGui} audio/rtaudiooutput.h )
 	
-	SET( OS_SPECIFIC_LINK_LIBRARIES 
-		 ${OS_SPECIFIC_LINK_LIBRARIES} 
-		 "dsound.dll" 
-		 "winmm.dll"
-                 "iphlpapi.a"
-		 "${CMAKE_CURRENT_SOURCE_DIR}/../rtaudio/librtaudio.dll"
-	)
+    SET( OS_SPECIFIC_LINK_LIBRARIES 
+	 ${OS_SPECIFIC_LINK_LIBRARIES} 
+	 "dsound.dll" 
+	 "winmm.dll"
+         "iphlpapi.a"
+         "mad"
+	 "vorbisfile"
+	 "ogg"
+	 "${CMAKE_CURRENT_SOURCE_DIR}/../rtaudio/librtaudio.dll"
+    )
 ENDIF()
 

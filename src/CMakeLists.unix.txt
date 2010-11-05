@@ -10,8 +10,6 @@ SET( OS_SPECIFIC_LINK_LIBRARIES
         ${LIBLASTFM_LIBRARY}
         ${GLOOX_LIBS}
         qxtweb-standalone
-        qjson
-        tag
 )
 
 IF( "${gui}" STREQUAL "no" )
