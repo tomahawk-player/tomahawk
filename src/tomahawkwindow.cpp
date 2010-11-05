@@ -42,7 +42,7 @@ TomahawkWindow::TomahawkWindow( QWidget* parent )
     , m_playlistManager( new PlaylistManager( this ) )
 {
     qApp->setStyle( new ProxyStyle() );
-    setWindowIcon( QIcon( RESPATH "icons/tomahawk-icon-128.png" ) );
+    setWindowIcon( QIcon( RESPATH "icons/tomahawk-icon-128x128.png" ) );
 
 #ifdef Q_WS_MAC
     setUnifiedTitleAndToolBarOnMac( true );

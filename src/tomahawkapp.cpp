@@ -114,7 +114,7 @@ TomahawkApp::TomahawkApp( int& argc, char *argv[] )
     m_audioEngine = 0;
     m_mainwindow = 0;
     m_headless = arguments().contains( "--headless" );
-    setWindowIcon( QIcon( RESPATH "icons/tomahawk-icon-128.png" ) );
+    setWindowIcon( QIcon( RESPATH "icons/tomahawk-icon-128x128.png" ) );
 #ifndef NO_LIBLASTFM
     m_scrobbler = 0;
 #endif
