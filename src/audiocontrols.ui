@@ -207,6 +207,9 @@
             <layout class="QVBoxLayout" name="trackLabelLayout">
              <item>
               <widget class="QLabel" name="artistTrackLabel">
+               <property name="cursor">
+                <cursorShape>PointingHandCursor</cursorShape>
+               </property>
                <property name="text">
                 <string>Artist</string>
                </property>
