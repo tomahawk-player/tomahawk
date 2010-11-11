@@ -31,14 +31,14 @@ DatabaseCollection::loadPlaylists()
 
 
 void
-DatabaseCollection::loadAllTracks()
+DatabaseCollection::loadTracks()
 {
     qDebug() << Q_FUNC_INFO << source()->userName();
     DatabaseCommand_AllTracks* cmd = new DatabaseCommand_AllTracks( source()->collection() );
     connect( cmd,  SIGNAL( tracks( QList<QVariant>, Tomahawk::collection_ptr ) ),
-                   SIGNAL( tracksAdded( QList<QVariant>, Tomahawk::collection_ptr ) ) );
-    connect( cmd,  SIGNAL( done( Tomahawk::collection_ptr ) ),
-                   SIGNAL( tracksFinished( Tomahawk::collection_ptr ) ) );
+                     SLOT( setTracks( QList<QVariant>, Tomahawk::collection_ptr ) ) );
+/*    connect( cmd,  SIGNAL( done( Tomahawk::collection_ptr ) ),
+                   SIGNAL( tracksFinished( Tomahawk::collection_ptr ) ) );*/
 
     TomahawkApp::instance()->database()->enqueue(
             QSharedPointer<DatabaseCommand>( cmd )
@@ -65,4 +65,32 @@ DatabaseCollection::removeTracks( const QList<QVariant> &olditems )
 
     // TODO RemoveTracks cmd, probably builds a temp table of all the URLs in
     // olditems, then joins on that to batch-delete.
+}
+
+
+QList< Tomahawk::playlist_ptr >
+DatabaseCollection::playlists()
+{
+    qDebug() << Q_FUNC_INFO;
+
+    if ( Collection::playlists().isEmpty() )
+    {
+        loadPlaylists();
+    }
+
+    return Collection::playlists();
+}
+
+
+QList< Tomahawk::query_ptr >
+DatabaseCollection::tracks()
+{
+    qDebug() << Q_FUNC_INFO;
+
+    if ( Collection::tracks().isEmpty() )
+    {
+        loadTracks();
+    }
+
+    return Collection::tracks();
 }

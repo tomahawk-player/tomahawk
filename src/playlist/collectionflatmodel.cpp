@@ -52,8 +52,10 @@ CollectionFlatModel::addCollection( const collection_ptr& collection )
 
     emit loadingStarts();
 
-    connect( collection.data(), SIGNAL( tracksAdded( QList<QVariant>, Tomahawk::collection_ptr ) ),
-             SLOT( onTracksAdded( QList<QVariant>, Tomahawk::collection_ptr ) ) );
+    onTracksAdded( collection->tracks(), collection );
+
+    connect( collection.data(), SIGNAL( tracksAdded( QList<Tomahawk::query_ptr>, Tomahawk::collection_ptr ) ),
+             SLOT( onTracksAdded( QList<Tomahawk::query_ptr>, Tomahawk::collection_ptr ) ) );
     connect( collection.data(), SIGNAL( tracksFinished( Tomahawk::collection_ptr ) ),
              SLOT( onTracksAddingFinished( Tomahawk::collection_ptr ) ) );
 }
@@ -62,8 +64,8 @@ CollectionFlatModel::addCollection( const collection_ptr& collection )
 void
 CollectionFlatModel::removeCollection( const collection_ptr& collection )
 {
-    disconnect( collection.data(), SIGNAL( tracksAdded( QList<QVariant>, Tomahawk::collection_ptr ) ),
-                this, SLOT( onTracksAdded( QList<QVariant>, Tomahawk::collection_ptr ) ) );
+    disconnect( collection.data(), SIGNAL( tracksAdded( QList<Tomahawk::query_ptr>, Tomahawk::collection_ptr ) ),
+                this, SLOT( onTracksAdded( QList<Tomahawk::query_ptr>, Tomahawk::collection_ptr ) ) );
     disconnect( collection.data(), SIGNAL( tracksFinished( Tomahawk::collection_ptr ) ),
                 this, SLOT( onTracksAddingFinished( Tomahawk::collection_ptr ) ) );
 
@@ -126,7 +128,7 @@ CollectionFlatModel::removeCollection( const collection_ptr& collection )
 
 
 void
-CollectionFlatModel::onTracksAdded( const QList<QVariant>& tracks, const collection_ptr& collection )
+CollectionFlatModel::onTracksAdded( const QList<Tomahawk::query_ptr>& tracks, const Tomahawk::collection_ptr& collection )
 {
     int c = rowCount( QModelIndex() );
     QPair< int, int > crows;
@@ -136,25 +138,12 @@ CollectionFlatModel::onTracksAdded( const QList<QVariant>& tracks, const collect
     emit beginInsertRows( QModelIndex(), crows.first, crows.second );
 
     PlItem* plitem;
-    foreach( const QVariant& v, tracks )
+    foreach( const query_ptr& query, tracks )
     {
-        Tomahawk::query_ptr query = query_ptr( new Query( v ) );
-
-        // FIXME: needs merging
-        // Manually add a result, since it's coming from the local collection
-        QVariantMap t = query->toVariant().toMap();
-        t["score"] = 1.0;
-        QList<result_ptr> results;
-        result_ptr result = result_ptr( new Result( t, collection ) );
-        results << result;
-        query->addResults( results );
-
         plitem = new PlItem( query, m_rootItem );
         plitem->index = createIndex( m_rootItem->children.count() - 1, 0, plitem );
 
         connect( plitem, SIGNAL( dataChanged() ), SLOT( onDataChanged() ) );
-
-//        m_collectionIndex.insertMulti( collection, plitem );
     }
 
     m_collectionRows.insertMulti( collection, crows );
@@ -166,9 +155,10 @@ CollectionFlatModel::onTracksAdded( const QList<QVariant>& tracks, const collect
 
 
 void
-CollectionFlatModel::onTracksAddingFinished( const Tomahawk::collection_ptr& /* collection */ )
+CollectionFlatModel::onTracksAddingFinished( const Tomahawk::collection_ptr& collection )
 {
-    qDebug() << "Finished loading tracks";
+    qDebug() << "Finished loading tracks" << collection->source()->friendlyName();
+
     emit loadingFinished();
 }
 

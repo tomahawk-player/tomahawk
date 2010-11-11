@@ -16,23 +16,36 @@ SourceTreeItemWidget::SourceTreeItemWidget( const source_ptr& source, QWidget* p
     ui( new Ui::SourceTreeItemWidget )
 {
 //    qDebug() << Q_FUNC_INFO;
+
     ui->setupUi( this );
     ui->verticalLayout->setSpacing( 3 );
 
-    connect( source.data(), SIGNAL( loadingStateChanged( DBSyncConnection::State, DBSyncConnection::State, QString ) ),
-                              SLOT( onLoadingStateChanged( DBSyncConnection::State, DBSyncConnection::State, QString ) ) );
+    QString displayname;
+    if ( source.isNull() )
+    {
+        ui->avatarImage->setPixmap( QPixmap( RESPATH "images/user-avatar.png" ) );
 
-    connect( source.data(), SIGNAL( stats( const QVariantMap& ) ), SLOT( gotStats( const QVariantMap& ) ) );
+        displayname = tr( "Super Collection" );
+        ui->infoLabel->setText( tr( "All available tracks" ) );
+    }
+    else
+    {
+        connect( source.data(), SIGNAL( loadingStateChanged( DBSyncConnection::State, DBSyncConnection::State, QString ) ),
+                                  SLOT( onLoadingStateChanged( DBSyncConnection::State, DBSyncConnection::State, QString ) ) );
 
-    ui->avatarImage->setPixmap( QPixmap( RESPATH "images/user-avatar.png" ) );
+        connect( source.data(), SIGNAL( stats( QVariantMap ) ), SLOT( gotStats( QVariantMap ) ) );
 
-    QString displayname = source->friendlyName();
-    if( displayname.isEmpty() )
-        displayname = source->userName();
+        ui->avatarImage->setPixmap( QPixmap( RESPATH "images/user-avatar.png" ) );
+
+        displayname = source->friendlyName();
+        if( displayname.isEmpty() )
+            displayname = source->userName();
+
+        ui->infoLabel->setText( "???" );
+    }
 
     ui->nameLabel->setText( displayname );
     ui->infoLabel->setForegroundRole( QPalette::Dark );
-    ui->infoLabel->setText( "???" );
 
     connect( ui->onOffButton, SIGNAL( clicked() ), SIGNAL( clicked() ) );
 
@@ -106,12 +119,14 @@ SourceTreeItemWidget::onLoadingStateChanged( DBSyncConnection::State newstate, D
 void
 SourceTreeItemWidget::onOnline()
 {
-    ui->onOffButton->setPixmap( RESPATH "images/source-on-rest.png" );
+    if ( !m_source.isNull() )
+        ui->onOffButton->setPixmap( RESPATH "images/source-on-rest.png" );
 }
 
 
 void
 SourceTreeItemWidget::onOffline()
 {
-    ui->onOffButton->setPixmap( RESPATH "images/source-off-rest.png" );
+    if ( !m_source.isNull() )
+        ui->onOffButton->setPixmap( RESPATH "images/source-off-rest.png" );
 }

@@ -11,7 +11,6 @@ using namespace Tomahawk;
 Collection::Collection( const source_ptr& source, const QString& name, QObject* parent )
     : QObject( parent )
     , m_name( name )
-    , m_loaded( false )
     , m_lastmodified( 0 )
     , m_source( source )
 {
@@ -75,20 +74,37 @@ Collection::playlist( const QString& guid )
 }
 
 
-bool
-Collection::trackSorter( const QVariant& left, const QVariant& right )
+void
+Collection::setPlaylists( const QList<Tomahawk::playlist_ptr>& plists )
 {
-    int art = left.toMap().value( "artist" ).toString()
-              .localeAwareCompare( right.toMap().value( "artist" ).toString() );
+    qDebug() << Q_FUNC_INFO << plists.count();
 
-    if ( art == 0 )
+    m_playlists.append( plists );
+    emit playlistsAdded( plists );
+}
+
+
+void
+Collection::setTracks( const QList<QVariant>& tracks, Tomahawk::collection_ptr collection )
+{
+    qDebug() << Q_FUNC_INFO << tracks.count() << collection->name();
+
+    QList<query_ptr> qs;
+    foreach( const QVariant& v, tracks )
     {
-        int trk = left.toMap().value( "track" ).toString()
-                  .localeAwareCompare( right.toMap().value( "track" ).toString() );
-        return trk < 0;
+        query_ptr query = query_ptr( new Query( v ) );
+
+        QVariantMap t = query->toVariant().toMap();
+        t["score"] = 1.0;
+
+        QList<result_ptr> results;
+        result_ptr result = result_ptr( new Result( t, collection ) );
+        results << result;
+        query->addResults( results );
+
+        qs << query;
     }
-    else
-    {
-        return art < 0;
-    }
+
+    m_tracks << qs;
+    emit tracksAdded( qs, collection );
 }

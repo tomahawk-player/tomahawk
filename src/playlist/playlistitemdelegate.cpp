@@ -53,7 +53,7 @@ PlaylistItemDelegate::paint( QPainter* painter, const QStyleOptionViewItem& opti
     else
         painter->setOpacity( 0.3 );
 
-    if ( item->isPlaying()   )
+    if ( item->isPlaying() )
     {
         painter->save();
         painter->setRenderHint( QPainter::Antialiasing );
@@ -67,7 +67,7 @@ PlaylistItemDelegate::paint( QPainter* painter, const QStyleOptionViewItem& opti
             }
 
             painter->setPen( option.palette.text().color() );
-            painter->drawText( r, index.data().toString() );
+            painter->drawText( r.adjusted( 0, 2, 0, 0 ), index.data().toString() );
         }
 
         if ( index.column() == index.model()->columnCount() - 1 )

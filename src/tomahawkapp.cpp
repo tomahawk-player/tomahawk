@@ -428,12 +428,11 @@ TomahawkApp::loadPlugins()
 
 
 void
-TomahawkApp::setupJabber() //const QString& jid, const QString& pass, const QString server
+TomahawkApp::setupJabber()
 {
     qDebug() << Q_FUNC_INFO;
-    if( !m_jabber.isNull() )
+    if ( !m_jabber.isNull() )
         return;
-
     if ( !m_settings->value( "jabber/autoconnect", true ).toBool() )
         return;
 
@@ -443,9 +442,7 @@ TomahawkApp::setupJabber() //const QString& jid, const QString& pass, const QStr
     unsigned int port = m_settings->value( "jabber/port", 5222 ).toUInt();
 
     // gtalk check
-    if( server.isEmpty() && (
-            jid.contains("@gmail.com") ||
-            jid.contains("@googlemail.com") ) )
+    if( server.isEmpty() && ( jid.contains("@gmail.com") || jid.contains("@googlemail.com") ) )
     {
         qDebug() << "Setting jabber server to talk.google.com";
         server = "talk.google.com";
@@ -459,17 +456,13 @@ TomahawkApp::setupJabber() //const QString& jid, const QString& pass, const QStr
 
     m_jabber = QSharedPointer<Jabber>( new Jabber( jid, password, server, port ) );
 
-    connect( m_jabber.data(), SIGNAL( peerOnline( const QString& ) ),
-                                SLOT( jabberPeerOnline( const QString& ) ) );
-    connect( m_jabber.data(), SIGNAL( peerOffline( const QString& ) ),
-                                SLOT( jabberPeerOffline( const QString& ) ) );
-    connect( m_jabber.data(), SIGNAL( msgReceived( const QString&, const QString& ) ),
-                                SLOT( jabberMessage( const QString&, const QString& ) ) );
+    connect( m_jabber.data(), SIGNAL( peerOnline( QString ) ), SLOT( jabberPeerOnline( QString ) ) );
+    connect( m_jabber.data(), SIGNAL( peerOffline( QString ) ), SLOT( jabberPeerOffline( QString ) ) );
+    connect( m_jabber.data(), SIGNAL( msgReceived( QString, QString ) ), SLOT( jabberMessage( QString, QString ) ) );
 
-    connect( m_jabber.data(), SIGNAL( disconnected() ),  SLOT( jabberDisconnected() ) );
-    //connect( m_jabber.data(), SIGNAL( finished() ),  SLOT( jabberDisconnected() ) );
     connect( m_jabber.data(), SIGNAL( connected() ), SLOT( jabberConnected() ) );
-    connect( m_jabber.data(), SIGNAL( authError(int, const QString&) ), SLOT( jabberAuthError(int,const QString&) ) );
+    connect( m_jabber.data(), SIGNAL( disconnected() ),  SLOT( jabberDisconnected() ) );
+    connect( m_jabber.data(), SIGNAL( authError( int, QString ) ), SLOT( jabberAuthError( int, QString ) ) );
 
     m_jabber->setProxy( m_proxy );
     m_jabber->start();
@@ -502,6 +495,9 @@ TomahawkApp::jabberAuthError( int code, const QString& msg )
                               QMessageBox::Ok );
     }
 #endif
+
+    if ( code != gloox::ConnAuthenticationFailed )
+        QTimer::singleShot( 10000, this, SLOT( reconnectJabber() ) );
 }
 
 
@@ -534,7 +530,6 @@ TomahawkApp::jabberDisconnected()
                                       .arg( (servent().externalPort() > 0) ? QString( "YES:%1" ).arg(servent().externalPort()):"NO" ) );
     }
 #endif
-    m_jabber.clear();
 }
 
 

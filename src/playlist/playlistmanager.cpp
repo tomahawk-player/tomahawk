@@ -14,18 +14,20 @@
 PlaylistManager::PlaylistManager( QObject* parent )
     : QObject( parent )
     , m_widget( new QStackedWidget() )
-    , m_superCollectionModel( new CollectionModel() )
-    , m_superCollectionFlatModel( new CollectionFlatModel() )
     , m_currentProxyModel( 0 )
     , m_currentModel( 0 )
+    , m_currentView( 0 )
     , m_currentMode( 0 )
     , m_superCollectionVisible( true )
 {
     m_widget->setMinimumWidth( 620 );
 
-    m_superCollectionViews << new CollectionView();
-    m_superCollectionViews.first()->setModel( m_superCollectionFlatModel );
-    m_widget->addWidget( m_superCollectionViews.first() );
+    m_superCollectionView = new CollectionView();
+    m_superCollectionFlatModel = new CollectionFlatModel( m_superCollectionView );
+    m_superCollectionView->setModel( m_superCollectionFlatModel );
+
+    m_widget->addWidget( m_superCollectionView );
+    m_currentView = m_superCollectionView;
 
     connect( &m_filterTimer, SIGNAL( timeout() ), SLOT( applyFilter() ) );
 }
@@ -61,6 +63,7 @@ PlaylistManager::show( const Tomahawk::playlist_ptr& playlist )
         m_views.insert( playlist, views );
         m_widget->addWidget( views.first() );
         m_widget->setCurrentWidget( views.first() );
+        m_currentView = views.first();
     }
     else
     {
@@ -68,13 +71,13 @@ PlaylistManager::show( const Tomahawk::playlist_ptr& playlist )
         m_widget->setCurrentWidget( views.first() );
         m_currentProxyModel = views.first()->proxyModel();
         m_currentModel = views.first()->model();
+        m_currentView = views.first();
     }
 
     m_superCollectionVisible = false;
     linkPlaylist();
 
     emit numSourcesChanged( APP->sourcelist().count() );
-
     return true;
 }
 
@@ -82,42 +85,68 @@ PlaylistManager::show( const Tomahawk::playlist_ptr& playlist )
 bool
 PlaylistManager::show( const Tomahawk::collection_ptr& collection )
 {
-    if ( m_superCollectionVisible )
-    {
-        if ( !m_superCollections.contains( collection ) )
-        {
-            m_superCollections.append( collection );
-            m_superCollectionFlatModel->addCollection( collection );
-
-            collection->loadAllTracks();
-        }
-        else
-        {
-            m_superCollectionFlatModel->removeCollection( collection );
-            m_superCollections.removeAll( collection );
-        }
-    }
-
     unlinkPlaylist();
 
-    if ( m_currentMode == 0 )
+    if ( !m_collectionViews.contains( collection ) )
     {
-        m_widget->setCurrentWidget( m_superCollectionViews.first() );
-        m_currentProxyModel = m_superCollectionViews.first()->proxyModel();
-        m_currentModel = m_superCollectionViews.first()->model();
+        QList<CollectionView*> views;
+        {
+            CollectionView* view = new CollectionView();
+            CollectionFlatModel* model = new CollectionFlatModel();
+            view->setModel( model );
+            views << view;
+
+            m_currentProxyModel = view->proxyModel();
+            m_currentModel = view->model();
+
+            model->addCollection( collection );
+//            collection->loadAllTracks();
+        }
+
+        m_collectionViews.insert( collection, views );
+        m_widget->addWidget( views.first() );
+        m_widget->setCurrentWidget( views.first() );
+        m_currentView = views.first();
     }
     else
     {
-        m_widget->setCurrentWidget( m_superCollectionViews.at( 1 ) );
-        m_currentProxyModel = m_superCollectionViews.at( 1 )->proxyModel();
-        m_currentModel = m_superCollectionViews.at( 1 )->model();
+        QList<CollectionView*> views = m_collectionViews.value( collection );
+        m_widget->setCurrentWidget( views.first() );
+        m_currentProxyModel = views.first()->proxyModel();
+        m_currentModel = views.first()->model();
+        m_currentView = views.first();
     }
+
+    m_superCollectionVisible = false;
+    linkPlaylist();
+
+    emit numSourcesChanged( 1 );
+    return true;
+}
+
+
+bool
+PlaylistManager::showSuperCollection()
+{
+    foreach( const Tomahawk::source_ptr& source, APP->sourcelist().sources() )
+    {
+        if ( !m_superCollections.contains( source->collection() ) )
+        {
+            m_superCollections.append( source->collection() );
+            m_superCollectionFlatModel->addCollection( source->collection() );
+//            source->collection()->loadAllTracks();
+        }
+    }
+
+    m_widget->setCurrentWidget( m_superCollectionView );
+    m_currentProxyModel = m_superCollectionView->proxyModel();
+    m_currentModel = m_superCollectionView->model();
+    m_currentView = m_superCollectionView;
 
     m_superCollectionVisible = true;
     linkPlaylist();
 
     emit numSourcesChanged( m_superCollections.count() );
-
     return true;
 }
 
@@ -130,7 +159,7 @@ PlaylistManager::setTreeMode()
     qDebug() << Q_FUNC_INFO;
 
     m_currentMode = 1;
-    m_widget->setCurrentWidget( m_superCollectionViews.at( 1 ) );
+    m_widget->setCurrentWidget( m_superCollectionView );
 }
 
 
@@ -140,7 +169,7 @@ PlaylistManager::setTableMode()
     qDebug() << Q_FUNC_INFO;
 
     m_currentMode = 0;
-    m_widget->setCurrentWidget( m_superCollectionViews.first() );
+    m_widget->setCurrentWidget( m_superCollectionView );
 }
 
 
@@ -234,4 +263,12 @@ PlaylistManager::setShuffled( bool enabled )
 {
     if ( m_currentProxyModel )
         m_currentProxyModel->setShuffled( enabled );
+}
+
+
+void
+PlaylistManager::showCurrentTrack()
+{
+    if ( m_currentView && m_currentProxyModel )
+        m_currentView->scrollTo( m_currentProxyModel->currentItem(), QAbstractItemView::PositionAtCenter );
 }

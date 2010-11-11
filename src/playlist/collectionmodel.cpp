@@ -239,9 +239,15 @@ CollectionModel::onTracksAdded( const QList<QVariant>& tracks, const collection_
 
 
 void
-CollectionModel::onTracksAddingFinished( const Tomahawk::collection_ptr& /* collection */ )
+CollectionModel::onTracksAddingFinished( const Tomahawk::collection_ptr& collection )
 {
-    qDebug() << "Finished loading tracks";
+    qDebug() << "Finished loading tracks" << collection->source()->friendlyName();
+
+    disconnect( collection.data(), SIGNAL( tracksAdded( QList<QVariant>, Tomahawk::collection_ptr ) ),
+                this, SLOT( onTracksAdded( QList<QVariant>, Tomahawk::collection_ptr ) ) );
+    disconnect( collection.data(), SIGNAL( tracksFinished( Tomahawk::collection_ptr ) ),
+                this, SLOT( onTracksAddingFinished( Tomahawk::collection_ptr ) ) );
+
     emit loadingFinished();
 }
 

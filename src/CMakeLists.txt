@@ -43,16 +43,17 @@ SET( tomahawkSources ${tomahawkSources}
      infosystem/infoplugins/musixmatchplugin.cpp
 
      bufferiodevice.cpp
-     connection.cpp
      msgprocessor.cpp
-     controlconnection.cpp
      collection.cpp
-     filetransferconnection.cpp
-     dbsyncconnection.cpp
      musicscanner.cpp
-     remotecollection.cpp
-     servent.cpp
      scriptresolver.cpp
+
+     network/connection.cpp
+     network/controlconnection.cpp
+     network/filetransferconnection.cpp
+     network/dbsyncconnection.cpp
+     network/remotecollection.cpp
+     network/servent.cpp
 
      database/fuzzyindex.cpp
      database/database.cpp
@@ -94,6 +95,8 @@ SET( tomahawkSourcesGui ${tomahawkSourcesGui}
 
      utils/imagebutton.cpp
      utils/progresstreeview.cpp
+     utils/proxystyle.cpp
+     utils/widgetdragfilter.cpp
 
      audio/madtranscode.cpp
      audio/audioengine.cpp
@@ -126,9 +129,6 @@ SET( tomahawkSourcesGui ${tomahawkSourcesGui}
      tomahawkwindow.cpp
      audiocontrols.cpp
      settingsdialog.cpp
-     proxystyle.cpp
-
-     widgetdragfilter.cpp
 )
 
 SET( tomahawkHeaders ${tomahawkHeaders}
@@ -186,17 +186,18 @@ SET( tomahawkHeaders ${tomahawkHeaders}
      infosystem/infoplugins/musixmatchplugin.h
 
      bufferiodevice.h
-     connection.h
      msgprocessor.h
-     controlconnection.h
-     filetransferconnection.h
-     dbsyncconnection.h
      musicscanner.h
-     tomahawkzeroconf.h 
-     remotecollection.h
-     servent.h
      scriptresolver.h
      tomahawksettings.h
+     tomahawkzeroconf.h 
+
+     network/remotecollection.h
+     network/servent.h
+     network/connection.h
+     network/controlconnection.h
+     network/filetransferconnection.h
+     network/dbsyncconnection.h
 
      xmppbot/xmppbot.h
 
@@ -209,6 +210,7 @@ SET( tomahawkHeadersGui ${tomahawkHeadersGui}
      utils/animatedcounterlabel.h
      utils/imagebutton.h
      utils/progresstreeview.h
+     utils/widgetdragfilter.h
 
      audio/transcodeinterface.h
      audio/madtranscode.h
@@ -243,8 +245,6 @@ SET( tomahawkHeadersGui ${tomahawkHeadersGui}
      tomahawkwindow.h
      audiocontrols.h
      settingsdialog.h
-
-     widgetdragfilter.h
 )
 
 SET( tomahawkUI ${tomahawkUI}
@@ -265,6 +265,7 @@ INCLUDE_DIRECTORIES(
     audio
     database
     playlist
+    network
     sourcetree
     topbar
     utils

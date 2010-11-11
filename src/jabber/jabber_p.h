@@ -11,7 +11,6 @@
 #include <QMap>
 #include <QNetworkProxy>
 #include <QThread>
-#include <QTimer>
 
 #include <string>
 
@@ -135,7 +134,6 @@ private:
     QMap<gloox::Presence::PresenceType, QString> m_presences;
     QMap<QString, gloox::Presence::PresenceType> m_peers;
     QSharedPointer<gloox::VCardManager> m_vcardManager;
-    QTimer m_timer; // for recv()
 };
 
 #endif // JABBER_H

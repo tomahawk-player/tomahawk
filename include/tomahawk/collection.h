@@ -36,24 +36,21 @@ public:
 
     virtual QString name() const;
 
-    virtual void loadPlaylists() = 0;
-    virtual void loadAllTracks() = 0;
+    virtual void loadPlaylists() { qDebug() << Q_FUNC_INFO; }
+    virtual void loadTracks() { qDebug() << Q_FUNC_INFO; }
 
     virtual Tomahawk::playlist_ptr playlist( const QString& guid );
     virtual void addPlaylist( const Tomahawk::playlist_ptr& p );
     virtual void deletePlaylist( const Tomahawk::playlist_ptr& p );
 
-    virtual const QList< Tomahawk::playlist_ptr >& playlists() const { return m_playlists; }
-
-    bool isLoaded() const { return m_loaded; }
+    virtual QList< Tomahawk::playlist_ptr > playlists() { return m_playlists; }
+    virtual QList< Tomahawk::query_ptr > tracks() { return m_tracks; }
 
     const source_ptr& source() const { return m_source; }
     unsigned int lastmodified() const { return m_lastmodified; }
 
-    static bool trackSorter( const QVariant& left, const QVariant &right );
-
 signals:
-    void tracksAdded( const QList<QVariant>&, const Tomahawk::collection_ptr& );
+    void tracksAdded( const QList<Tomahawk::query_ptr>& tracks, const Tomahawk::collection_ptr& );
     void tracksRemoved( const QList<QVariant>&, const Tomahawk::collection_ptr& );
     void tracksFinished( const Tomahawk::collection_ptr& );
 
@@ -64,25 +61,17 @@ public slots:
     virtual void addTracks( const QList<QVariant> &newitems ) = 0;
     virtual void removeTracks( const QList<QVariant> &olditems ) = 0;
 
-    void setPlaylists( const QList<Tomahawk::playlist_ptr>& plists )
-    {
-        qDebug() << Q_FUNC_INFO << plists.length();
-        m_playlists.append( plists );
-        if( !m_loaded )
-        {
-            m_loaded = true;
-            emit playlistsAdded( plists );
-        }
-    }
+    void setPlaylists( const QList<Tomahawk::playlist_ptr>& plists );
+    void setTracks( const QList<QVariant>& tracks, Tomahawk::collection_ptr collection );
 
 protected:
     QString m_name;
-    bool m_loaded;
     unsigned int m_lastmodified; // unix time of last change to collection
 
 private:
     source_ptr m_source;
     QList< Tomahawk::playlist_ptr > m_playlists;
+    QList< Tomahawk::query_ptr > m_tracks;
 };
 
 }; // ns

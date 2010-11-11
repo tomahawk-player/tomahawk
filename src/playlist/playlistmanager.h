@@ -14,6 +14,7 @@ class CollectionView;
 class PlaylistView;
 class TrackProxyModel;
 class TrackModel;
+class TrackView;
 
 class PlaylistManager : public QObject
 {
@@ -26,12 +27,14 @@ public:
     QWidget* widget() const { return m_widget; }
 
     bool isSuperCollectionVisible() const { return true; }
-    QList< Tomahawk::collection_ptr > superCollections() const { return m_superCollections; }
 
     QList<PlaylistView*> views( const Tomahawk::playlist_ptr& playlist ) { return m_views.value( playlist ); }
 
     bool show( const Tomahawk::playlist_ptr& playlist );
     bool show( const Tomahawk::collection_ptr& collection );
+    bool showSuperCollection();
+
+    void showCurrentTrack();
 
 signals:
     void numSourcesChanged( unsigned int sources );
@@ -61,14 +64,17 @@ private:
 
     QStackedWidget* m_widget;
 
-    CollectionModel* m_superCollectionModel;
     CollectionFlatModel* m_superCollectionFlatModel;
-    QList<CollectionView*> m_superCollectionViews;
+    CollectionView* m_superCollectionView;
+
     QList< Tomahawk::collection_ptr > m_superCollections;
 
+    QHash< Tomahawk::collection_ptr, QList<CollectionView*> > m_collectionViews;
     QHash< Tomahawk::playlist_ptr, QList<PlaylistView*> > m_views;
+
     TrackProxyModel* m_currentProxyModel;
     TrackModel* m_currentModel;
+    TrackView* m_currentView;
 
     int m_currentMode;
     bool m_superCollectionVisible;

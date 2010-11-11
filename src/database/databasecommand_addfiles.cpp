@@ -40,7 +40,7 @@ DatabaseCommand_AddFiles::postCommitHook()
     Collection* coll = source()->collection().data();
 
     connect( this, SIGNAL( notify( const QList<QVariant>&, Tomahawk::collection_ptr ) ),
-             coll, SIGNAL( tracksAdded( const QList<QVariant>&, Tomahawk::collection_ptr ) ),
+             coll, SIGNAL( setTracks( const QList<QVariant>&, Tomahawk::collection_ptr ) ),
              Qt::QueuedConnection );
     // do it like this so it gets called in the right thread:
     emit notify( m_files, source()->collection() );

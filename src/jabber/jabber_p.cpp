@@ -2,6 +2,7 @@
 
 #include <QDebug>
 #include <QTime>
+#include <QTimer>
 #include <QString>
 #include <QRegExp>
 
@@ -56,7 +57,7 @@ Jabber_p::Jabber_p( const QString& jid, const QString& password, const QString& 
 Jabber_p::~Jabber_p()
 {
    // qDebug() << Q_FUNC_INFO;
-    if( m_client )
+    if ( !m_client.isNull() )
     {
        // m_client->disco()->removeDiscoHandler( this );
         m_client->rosterManager()->removeRosterListener();
@@ -70,16 +71,16 @@ Jabber_p::setProxy( QNetworkProxy* proxy )
 {
     qDebug() << Q_FUNC_INFO;
 
-    if( !m_client || !proxy )
+    if( !m_client.isNull() || !proxy )
     {
         qDebug() << "No client or no proxy";
         return;
     }
 
     QNetworkProxy appProx = QNetworkProxy::applicationProxy();
-    QNetworkProxy* prox = proxy->type() == QNetworkProxy::DefaultProxy ? &appProx : proxy;
+    QNetworkProxy* p = proxy->type() == QNetworkProxy::DefaultProxy ? &appProx : proxy;
 
-    if( prox->type() == QNetworkProxy::NoProxy )
+    if( p->type() == QNetworkProxy::NoProxy )
     {
         qDebug() << "Setting proxy to none";
         m_client->setConnectionImpl( new gloox::ConnectionTCPClient( m_client.data(), m_client->logInstance(), m_client->server(), m_client->port() ) );
@@ -120,10 +121,10 @@ Jabber_p::go()
 
     // Handle proxy
     
-    if( m_client->connect( false ) )
+    if ( m_client->connect( false ) )
     {
         emit connected();
-        m_timer.singleShot(0, this, SLOT(doJabberRecv()));
+        QTimer::singleShot( 0, this, SLOT( doJabberRecv() ) );
     }
 }
 
@@ -131,14 +132,17 @@ Jabber_p::go()
 void
 Jabber_p::doJabberRecv()
 {
-    ConnectionError ce = m_client->recv(100);
-    if( ce != ConnNoError )
+    if ( m_client.isNull() )
+        return;
+
+    ConnectionError ce = m_client->recv( 100 );
+    if ( ce != ConnNoError )
     {
         qDebug() << "Jabber_p::Recv failed, disconnected";
     }
     else
     {
-        m_timer.singleShot(100, this, SLOT(doJabberRecv()));
+        QTimer::singleShot( 100, this, SLOT( doJabberRecv() ) );
     }
 }
 
@@ -146,7 +150,7 @@ Jabber_p::doJabberRecv()
 void
 Jabber_p::disconnect()
 {
-    if ( m_client )
+    if ( !m_client.isNull() )
     {
         m_client->disconnect();
     }
@@ -156,7 +160,7 @@ Jabber_p::disconnect()
 void
 Jabber_p::sendMsg( const QString& to, const QString& msg )
 {
-    if( QThread::currentThread() != thread() )
+    if ( QThread::currentThread() != thread() )
     {
         qDebug() << Q_FUNC_INFO << "invoking in correct thread, not"
                  << QThread::currentThread();
@@ -169,8 +173,12 @@ Jabber_p::sendMsg( const QString& to, const QString& msg )
         return;
     }
 
+    if ( m_client.isNull() )
+        return;
+
     qDebug() << Q_FUNC_INFO << to << msg;
     Message m( Message::Chat, JID(to.toStdString()), msg.toStdString(), "" );
+
     m_client->send( m ); // assuming this is threadsafe
 }
 
@@ -178,7 +186,7 @@ Jabber_p::sendMsg( const QString& to, const QString& msg )
 void
 Jabber_p::broadcastMsg( const QString &msg )
 {
-    if( QThread::currentThread() != thread() )
+    if ( QThread::currentThread() != thread() )
     {
         QMetaObject::invokeMethod( this, "broadcastMsg",
                                    Qt::QueuedConnection,
@@ -186,6 +194,10 @@ Jabber_p::broadcastMsg( const QString &msg )
                                  );
         return;
     }
+
+    if ( m_client.isNull() )
+        return;
+
     std::string msg_s = msg.toStdString();
     foreach( const QString& jidstr, m_peers.keys() )
     {
@@ -202,7 +214,7 @@ Jabber_p::onConnect()
 {
     // update jid resource, servers like gtalk use resource binding and may
     // have changed our requested /resource
-    if( m_client->resource() != m_jid.resource() )
+    if ( m_client->resource() != m_jid.resource() )
     {
         m_jid.setResource( m_client->resource() );
         QString jidstr( m_jid.full().c_str() );
@@ -218,15 +230,18 @@ Jabber_p::onDisconnect( ConnectionError e )
 {
     qDebug() << "Jabber Disconnected";
     QString error;
-    switch(e)
+
+    switch( e )
     {
     case AuthErrorUndefined:
         error = " No error occurred, or error condition is unknown";
         break;
+
     case SaslAborted:
         error = "The receiving entity acknowledges an &lt;abort/&gt; element sent "
                 "by the initiating entity; sent in reply to the &lt;abort/&gt; element.";
         break;
+
     case SaslIncorrectEncoding:
         error = "The data provided by the initiating entity could not be processed "
                 "because the [BASE64] encoding is incorrect (e.g., because the encoding "
@@ -234,6 +249,7 @@ Jabber_p::onDisconnect( ConnectionError e )
                 "reply to a &lt;response/&gt; element or an &lt;auth/&gt; element with "
                 "initial response data.";
         break;
+
     case SaslInvalidAuthzid:
         error = "The authzid provided by the initiating entity is invalid, either "
                 "because it is incorrectly formatted or because the initiating entity "
@@ -241,58 +257,70 @@ Jabber_p::onDisconnect( ConnectionError e )
                 "&lt;response/&gt; element or an &lt;auth/&gt; element with initial "
                 "response data.";
         break;
+
     case SaslInvalidMechanism:
         error = "The initiating entity did not provide a mechanism or requested a "
                 "mechanism that is not supported by the receiving entity; sent in reply "
                 "to an &lt;auth/&gt; element.";
         break;
+
     case SaslMalformedRequest:
         error = "The request is malformed (e.g., the &lt;auth/&gt; element includes "
                 "an initial response but the mechanism does not allow that); sent in "
                 "reply to an &lt;abort/&gt;, &lt;auth/&gt;, &lt;challenge/&gt;, or "
                 "&lt;response/&gt; element.";
         break;
+
     case SaslMechanismTooWeak:
         error = "The mechanism requested by the initiating entity is weaker than "
                 "server policy permits for that initiating entity; sent in reply to a "
                 "&lt;response/&gt; element or an &lt;auth/&gt; element with initial "
                 "response data.";
         break;
+
     case SaslNotAuthorized:
         error = "The authentication failed because the initiating entity did not "
                 "provide valid credentials (this includes but is not limited to the "
                 "case of an unknown username); sent in reply to a &lt;response/&gt; "
                 "element or an &lt;auth/&gt; element with initial response data. ";
         break;
+
     case SaslTemporaryAuthFailure:
         error = "The authentication failed because of a temporary error condition "
                 "within the receiving entity; sent in reply to an &lt;auth/&gt; element "
                 "or &lt;response/&gt; element.";
         break;
+
     case NonSaslConflict:
         error = "XEP-0078: Resource Conflict";
         break;
+
     case NonSaslNotAcceptable:
         error = "XEP-0078: Required Information Not Provided";
         break;
+
     case NonSaslNotAuthorized:
         error = "XEP-0078: Incorrect Credentials";
         break;
+
     case ConnAuthenticationFailed:
         error = "Authentication failed";
         break;
+
     case ConnNoSupportedAuth:
         error = "No supported auth mechanism";
         break;
-    default :
-            error ="UNKNOWN ERROR";
-    }
-    qDebug() << "Connection error msg:" << error;
-    emit authError(e, error);
 
+    default :
+        error = "UNKNOWN ERROR";
+    }
+
+    qDebug() << "Connection error msg:" << error;
+
+    emit authError( e, error );
     emit disconnected();
 
-//    Q_ASSERT(0); //this->exit(1);
+    // trigger reconnect
 }
 
 
@@ -322,7 +350,8 @@ Jabber_p::handleMessage( const Message& m, MessageSession * /*session*/ )
     QString from = QString::fromStdString( m.from().full() );
     QString msg = QString::fromStdString( m.body() );
 
-    if( msg.length() == 0 ) return;
+    if ( !msg.length() )
+        return;
 
     qDebug() << "Jabber_p::handleMessage" << from << msg;
 
@@ -340,9 +369,9 @@ void
 Jabber_p::handleLog( LogLevel level, LogArea area, const std::string& message )
 {
     qDebug() << Q_FUNC_INFO
-            << "level:" << level
-            << "area:" << area
-            << "msg:" << message.c_str();
+             << "level:" << level
+             << "area:" << area
+             << "msg:" << message.c_str();
 }
 
 
@@ -460,7 +489,7 @@ Jabber_p::handleRosterPresence( const RosterItem& item, const std::string& resou
     // "going offline" event
     if ( !presenceMeansOnline( presence ) &&
          ( !m_peers.contains( fulljid ) ||
-           presenceMeansOnline( m_peers.value(fulljid) )
+           presenceMeansOnline( m_peers.value( fulljid ) )
          )
        )
     {
@@ -571,7 +600,8 @@ Jabber_p::handleDiscoError( const JID& j, const Error* e, int /*context*/ )
 /// END DISCO STUFF
 
 
-bool Jabber_p::presenceMeansOnline( Presence::PresenceType p )
+bool
+Jabber_p::presenceMeansOnline( Presence::PresenceType p )
 {
     switch(p)
     {

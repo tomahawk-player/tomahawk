@@ -38,8 +38,8 @@ SourceList::add( const Tomahawk::source_ptr& s )
             m_local = s;
         }
     }
+
     emit sourceAdded( s );
-    s->collection()->loadPlaylists();
 }
 
 
@@ -65,6 +65,7 @@ SourceList::remove( Tomahawk::Source* s )
         m_sources.remove( s->userName() );
         qDebug() << "SourceList::remove(" << s->userName() << "), total sources now:" << m_sources.size();
     }
+
     emit sourceRemoved( src );
 }
 

@@ -53,6 +53,7 @@ SourceTreeView::SourceTreeView( QWidget* parent )
     setAllColumnsShowFocus( true );
     setUniformRowHeights( false );
     setIndentation( 0 );
+    setAnimated( false );
 
     setItemDelegate( new SourceDelegate( this ) );
 
@@ -70,6 +71,8 @@ SourceTreeView::SourceTreeView( QWidget* parent )
 
     connect( selectionModel(), SIGNAL( selectionChanged( const QItemSelection&, const QItemSelection& ) ), SLOT( onSelectionChanged() ) );
     connect( &APP->sourcelist(), SIGNAL( sourceRemoved( Tomahawk::source_ptr ) ), SLOT( onSourceOffline( Tomahawk::source_ptr ) ) );
+
+    m_model->appendItem( source_ptr() );
 }
 
 
@@ -123,19 +126,23 @@ SourceTreeView::onItemActivated( const QModelIndex& index )
         SourceTreeItem* item = SourcesModel::indexToTreeItem( index );
         if ( item )
         {
-            if ( APP->playlistManager()->isSuperCollectionVisible() )
+            if ( item->source().isNull() )
+            {
+                APP->playlistManager()->showSuperCollection();
+            }
+            else
             {
                 qDebug() << "SourceTreeItem toggled:" << item->source()->userName();
                 APP->playlistManager()->show( item->source()->collection() );
 
-                if ( APP->playlistManager()->superCollections().contains( item->source()->collection() ) )
+                /*if ( APP->playlistManager()->superCollections().contains( item->source()->collection() ) )
                 {
                     emit onOnline( index );
                 }
                 else
                 {
                     emit onOffline( index );
-                }
+                }*/
             }
         }
     }
@@ -155,14 +162,14 @@ SourceTreeView::onItemActivated( const QModelIndex& index )
 void
 SourceTreeView::onSelectionChanged()
 {
-    QModelIndexList si = selectedIndexes();
+/*    QModelIndexList si = selectedIndexes();
 
     foreach( const QModelIndex& idx, si )
     {
         int type = SourcesModel::indexType( idx );
         if ( type == 0 )
             selectionModel()->select( idx, QItemSelectionModel::Deselect );
-    }
+    }*/
 }
 
 

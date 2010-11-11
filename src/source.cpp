@@ -45,9 +45,12 @@ Source::~Source()
 }
 
 
-collection_ptr Source::collection() const
+collection_ptr
+Source::collection() const
 {
-    if( m_collections.length() ) return m_collections.first();
+    if( m_collections.length() )
+        return m_collections.first();
+
     collection_ptr tmp;
     return tmp;
 }

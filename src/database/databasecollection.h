@@ -15,8 +15,11 @@ public:
         qDebug() << Q_FUNC_INFO;
     }
 
-    virtual void loadAllTracks();
+    virtual void loadTracks();
     virtual void loadPlaylists();
+
+    virtual QList< Tomahawk::playlist_ptr > playlists();
+    virtual QList< Tomahawk::query_ptr > tracks();
 
 public slots:
     virtual void addTracks( const QList<QVariant> &newitems );

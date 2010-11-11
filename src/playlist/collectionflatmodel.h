@@ -44,7 +44,7 @@ signals:
 private slots:
     void onDataChanged();
 
-    void onTracksAdded( const QList<QVariant>& tracks, const Tomahawk::collection_ptr& collection );
+    void onTracksAdded( const QList<Tomahawk::query_ptr>& tracks, const Tomahawk::collection_ptr& collection );
     void onTracksAddingFinished( const Tomahawk::collection_ptr& collection );
 
     void onSourceOffline( const Tomahawk::source_ptr& src );

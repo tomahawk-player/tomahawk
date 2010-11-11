@@ -24,9 +24,6 @@ SourcesModel::SourcesModel( QObject* parent )
 
     connect( parent, SIGNAL( onOnline( QModelIndex ) ), SLOT( onItemOnline( QModelIndex ) ) );
     connect( parent, SIGNAL( onOffline( QModelIndex ) ), SLOT( onItemOffline( QModelIndex ) ) );
-
-    // load sources after the view initialised completely
-//    QTimer::singleShot( 0, this, SLOT( loadSources() ) );
 }
 
 

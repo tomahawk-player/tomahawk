@@ -16,15 +16,20 @@ SourceTreeItem::SourceTreeItem( const source_ptr& source, QObject* parent )
 {
     QStandardItem* item = new QStandardItem( "" );
     item->setEditable( false );
-    item->setData( (qlonglong)this, Qt::UserRole + 2 );
     item->setData( 0, Qt::UserRole + 1 );
+    item->setData( (qlonglong)this, Qt::UserRole + 2 );
     m_columns << item;
 
-    connect( source.data()->collection().data(), SIGNAL( playlistsAdded( QList<Tomahawk::playlist_ptr> ) ),
-                                                   SLOT( onPlaylistsAdded( QList<Tomahawk::playlist_ptr> ) ) );
+    if ( !source.isNull() )
+    {
+        onPlaylistsAdded( source->collection()->playlists() );
 
-    connect( source.data()->collection().data(), SIGNAL( playlistsDeleted( QList<Tomahawk::playlist_ptr> ) ),
-                                                   SLOT( onPlaylistsDeleted( QList<Tomahawk::playlist_ptr> ) ) );
+        connect( source->collection().data(), SIGNAL( playlistsAdded( QList<Tomahawk::playlist_ptr> ) ),
+                                                SLOT( onPlaylistsAdded( QList<Tomahawk::playlist_ptr> ) ) );
+
+        connect( source->collection().data(), SIGNAL( playlistsDeleted( QList<Tomahawk::playlist_ptr> ) ),
+                                                SLOT( onPlaylistsDeleted( QList<Tomahawk::playlist_ptr> ) ) );
+    }
 
     m_widget = new SourceTreeItemWidget( source, (QWidget*)parent->parent() );
     connect( m_widget, SIGNAL( clicked() ), SLOT( onClicked() ) );
@@ -55,8 +60,6 @@ SourceTreeItem::onOffline()
 void
 SourceTreeItem::onPlaylistsAdded( const QList<playlist_ptr>& playlists )
 {
-//    qDebug() << playlists;
-
     // const-ness is important for getting the right pointer!
     foreach( const playlist_ptr& p, playlists )
     {
