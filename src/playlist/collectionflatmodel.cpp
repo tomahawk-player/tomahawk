@@ -130,6 +130,9 @@ CollectionFlatModel::removeCollection( const collection_ptr& collection )
 void
 CollectionFlatModel::onTracksAdded( const QList<Tomahawk::query_ptr>& tracks, const Tomahawk::collection_ptr& collection )
 {
+    if ( !tracks.count() )
+        return;
+
     int c = rowCount( QModelIndex() );
     QPair< int, int > crows;
     crows.first = c;
