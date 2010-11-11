@@ -143,6 +143,10 @@ TomahawkWindow::setupSignals()
     connect( playlistManager(), SIGNAL( shuffleModeChanged( bool ) ),
              m_audioControls,     SLOT( onShuffleModeChanged( bool ) ) );
 
+    // <From AudioEngine>
+    connect( (QObject*)APP->audioEngine(), SIGNAL( loading( const Tomahawk::result_ptr& ) ),
+                                             SLOT( onPlaybackLoading( const Tomahawk::result_ptr& ) ) );
+
     // <Menu Items>
     connect( ui->actionPreferences, SIGNAL( triggered() ),
              SLOT( showSettingsDialog() ) );
@@ -281,4 +285,27 @@ TomahawkWindow::createPlaylist()
     QString info  = ""; // FIXME
     QString creator = "someone"; // FIXME
     Playlist::create( author, id, name, info, creator, false /* shared */ );
+}
+
+
+void
+TomahawkWindow::onPlaybackLoading( const Tomahawk::result_ptr& result )
+{
+    m_currentTrack = result;
+    setWindowTitle( m_windowTitle );
+}
+
+
+void
+TomahawkWindow::setWindowTitle( const QString& title )
+{
+    m_windowTitle = title;
+
+    if ( m_currentTrack.isNull() )
+        QMainWindow::setWindowTitle( title );
+    else
+    {
+        QString s = m_currentTrack->artist() + " - " + m_currentTrack->track();
+        QMainWindow::setWindowTitle( s + " - " + title );
+    }
 }

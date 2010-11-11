@@ -32,6 +32,8 @@ public:
     AudioControls* audioControls() { return m_audioControls; }
     QStackedWidget* playlistStack();
 
+    void setWindowTitle( const QString& title );
+
 signals:
     void settingsChanged();
     
@@ -48,6 +50,8 @@ private slots:
     void rescanCollectionManually();
     void addPeerManually();
 
+    void onPlaybackLoading( const Tomahawk::result_ptr& result );
+
 private:
     void loadSettings();
     void saveSettings();
@@ -57,8 +61,10 @@ private:
     TopBar* m_topbar;
     AudioControls* m_audioControls;
     PlaylistManager* m_playlistManager;
-
     QNetworkAccessManager m_nam;
+
+    Tomahawk::result_ptr m_currentTrack;
+    QString m_windowTitle;
 };
 
 #endif // TOMAHAWKWINDOW_H
