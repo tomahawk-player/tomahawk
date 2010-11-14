@@ -18,11 +18,11 @@
 #include "web/api_v1.h"
 #include "scriptresolver.h"
 
+#include "audioengine.h"
 #include "controlconnection.h"
 #include "tomahawkzeroconf.h"
 
 #ifndef TOMAHAWK_HEADLESS
-    #include "audioengine.h"
     #include "tomahawkwindow.h"
     #include "settingsdialog.h"
     #include <QMessageBox>
@@ -100,6 +100,7 @@ using namespace Tomahawk;
 
 TomahawkApp::TomahawkApp( int& argc, char *argv[] )
     : TOMAHAWK_APPLICATION( argc, argv )
+    , m_audioEngine( 0 )
     , m_zeroconf( 0 )
     , m_settings( 0 )
     , m_nam( 0 )
@@ -111,7 +112,6 @@ TomahawkApp::TomahawkApp( int& argc, char *argv[] )
 #ifdef TOMAHAWK_HEADLESS
     m_headless = true;
 #else
-    m_audioEngine = 0;
     m_mainwindow = 0;
     m_headless = arguments().contains( "--headless" );
     setWindowIcon( QIcon( RESPATH "icons/tomahawk-icon-128x128.png" ) );
@@ -129,12 +129,12 @@ TomahawkApp::TomahawkApp( int& argc, char *argv[] )
     setupLogfile();
 
     m_settings = new TomahawkSettings( this );
+    m_audioEngine = new AudioEngine;
     setupDatabase();
 
 #ifndef TOMAHAWK_HEADLESS
     if ( !m_headless )
     {
-        m_audioEngine = new AudioEngine;
 
 #ifndef NO_LIBLASTFM
         m_scrobbler = new Scrobbler( this );
