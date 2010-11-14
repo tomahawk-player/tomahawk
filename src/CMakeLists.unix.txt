@@ -12,15 +12,9 @@ SET( OS_SPECIFIC_LINK_LIBRARIES
         qxtweb-standalone
 )
 
-IF( "${gui}" STREQUAL "no" )
-ELSE()
-	SET( OS_SPECIFIC_LINK_LIBRARIES 
-		 ${OS_SPECIFIC_LINK_LIBRARIES}
-		 mad 
-		 vorbisfile 
-		 ogg
-		)
-		
-	SET( tomahawkSourcesGui ${tomahawkSourcesGui} audio/vorbistranscode.cpp scrobbler.cpp )
-	SET( tomahawkHeadersGui ${tomahawkHeadersGui} audio/vorbistranscode.h scrobbler.h )
-ENDIF()
+SET( OS_SPECIFIC_LINK_LIBRARIES 
+	 ${OS_SPECIFIC_LINK_LIBRARIES}
+	 mad 
+	 vorbisfile 
+	 ogg
+)

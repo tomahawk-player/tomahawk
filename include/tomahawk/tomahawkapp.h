@@ -27,6 +27,7 @@
 #include "sourcelist.h"
 #include "servent.h"
 
+class AudioEngine;
 class Database;
 class Jabber;
 class XMPPBot;
@@ -42,7 +43,6 @@ namespace Tomahawk
 }
 
 #ifndef TOMAHAWK_HEADLESS
-class AudioEngine;
 class TomahawkWindow;
 class PlaylistManager;
 #include <QStackedWidget>
@@ -69,6 +69,7 @@ public:
     static TomahawkApp* instance();
 
     Tomahawk::Pipeline* pipeline() { return &m_pipeline; }
+    AudioEngine* audioEngine() { return m_audioEngine; }
     Database* database() { return m_db; }
     SourceList& sourcelist() { return m_sources; }
     Servent& servent() { return m_servent; }
@@ -78,10 +79,10 @@ public:
     XMPPBot* xmppBot() { return m_xmppBot; }
     const QString& nodeID() const;
 
+
 #ifndef TOMAHAWK_HEADLESS
     AudioControls* audioControls();
     PlaylistManager* playlistManager();
-    AudioEngine* audioEngine() { return m_audioEngine; }
 #endif
 
     void registerIODeviceFactory( const QString &proto, boost::function<QSharedPointer<QIODevice>(Tomahawk::result_ptr)> fac );
@@ -121,6 +122,7 @@ private:
     QList<TomahawkPlugin*> m_plugins;
 
     Tomahawk::Pipeline m_pipeline;
+    AudioEngine* m_audioEngine;
     Database* m_db;
     Servent m_servent;
     SourceList m_sources;
@@ -130,7 +132,6 @@ private:
 
 #ifndef TOMAHAWK_HEADLESS
     TomahawkWindow* m_mainwindow;
-    AudioEngine* m_audioEngine;
 #ifndef NO_LIBLASTFM
     Scrobbler* m_scrobbler;
 #endif

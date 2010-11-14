@@ -31,22 +31,17 @@ SET( OS_SPECIFIC_LINK_LIBRARIES
 	"${CMAKE_CURRENT_SOURCE_DIR}/../qxtweb-standalone/libqxtweb-standalone.dll"
 )
 
-IF( "${gui}" STREQUAL "no" )
-ELSE()
-    SET( tomahawkSourcesGui ${tomahawkSourcesGui}
-         audio/rtaudiooutput.cpp
-    )
-    SET( tomahawkHeadersGui ${tomahawkHeadersGui} audio/rtaudiooutput.h )
+SET( tomahawkSourcesGui ${tomahawkSourcesGui} audio/rtaudiooutput.cpp )
+SET( tomahawkHeadersGui ${tomahawkHeadersGui} audio/rtaudiooutput.h )
 	
-    SET( OS_SPECIFIC_LINK_LIBRARIES 
-	 ${OS_SPECIFIC_LINK_LIBRARIES} 
-	 "dsound.dll" 
-	 "winmm.dll"
-         "iphlpapi.a"
-         "mad"
-	 "vorbisfile"
-	 "ogg"
-	 "${CMAKE_CURRENT_SOURCE_DIR}/../rtaudio/librtaudio.dll"
-    )
-ENDIF()
+SET( OS_SPECIFIC_LINK_LIBRARIES 
+	${OS_SPECIFIC_LINK_LIBRARIES} 
+	"dsound.dll" 
+	"winmm.dll"
+        "iphlpapi.a"
+        "mad"
+	"vorbisfile"
+	"ogg"
+	"${CMAKE_CURRENT_SOURCE_DIR}/../rtaudio/librtaudio.dll"
+)
 

@@ -35,6 +35,10 @@ SET( tomahawkSources ${tomahawkSources}
      source.cpp
      sourcelist.cpp
 
+     audio/madtranscode.cpp
+     audio/vorbistranscode.cpp
+     audio/audioengine.cpp
+
      utils/tomahawkutils.cpp
      jabber/jabber_p.cpp
 
@@ -81,8 +85,9 @@ SET( tomahawkSources ${tomahawkSources}
      database/databasecommand_updatesearchindex.cpp
      database/databasecollection.cpp
 
-     xmppbot/xmppbot.cpp
+     scrobbler.cpp
 
+     xmppbot/xmppbot.cpp
      web/api_v1.cpp
 
      tomahawksettings.cpp
@@ -97,9 +102,6 @@ SET( tomahawkSourcesGui ${tomahawkSourcesGui}
      utils/progresstreeview.cpp
      utils/proxystyle.cpp
      utils/widgetdragfilter.cpp
-
-     audio/madtranscode.cpp
-     audio/audioengine.cpp
 
      playlist/collectionmodel.cpp
      playlist/collectionproxymodel.cpp
@@ -153,6 +155,11 @@ SET( tomahawkHeaders ${tomahawkHeaders}
      "${TOMAHAWK_INC_DIR}/tomahawk/functimeout.h"
 #     "${TOMAHAWK_INC_DIR}/tomahawk/tomahawkplugin.h"
 
+     audio/transcodeinterface.h
+     audio/madtranscode.h
+     audio/vorbistranscode.h
+     audio/audioengine.h
+
      database/fuzzyindex.h
      database/database.h
      database/databaseworker.h
@@ -199,8 +206,9 @@ SET( tomahawkHeaders ${tomahawkHeaders}
      network/filetransferconnection.h
      network/dbsyncconnection.h
 
-     xmppbot/xmppbot.h
+     scrobbler.h
 
+     xmppbot/xmppbot.h
      web/api_v1.h
 )
 
@@ -211,10 +219,6 @@ SET( tomahawkHeadersGui ${tomahawkHeadersGui}
      utils/imagebutton.h
      utils/progresstreeview.h
      utils/widgetdragfilter.h
-
-     audio/transcodeinterface.h
-     audio/madtranscode.h
-     audio/audioengine.h
 
      playlist/collectionmodel.h
      playlist/collectionproxymodel.h
