@@ -248,7 +248,7 @@ Servent::readyRead()
     {
         if( cc->id() == nodeid )
         {
-            qDebug() << "Duplicate control connection detected, dropping:" << nodeid;
+            qDebug() << "Duplicate control connection detected, dropping:" << nodeid << conntype;
             goto closeconnection;
         }
     }

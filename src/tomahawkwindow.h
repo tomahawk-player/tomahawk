@@ -52,6 +52,8 @@ private slots:
 
     void onPlaybackLoading( const Tomahawk::result_ptr& result );
 
+    void showAboutTomahawk();
+
 private:
     void loadSettings();
     void saveSettings();

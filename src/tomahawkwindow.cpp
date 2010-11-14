@@ -148,14 +148,10 @@ TomahawkWindow::setupSignals()
                                              SLOT( onPlaybackLoading( const Tomahawk::result_ptr& ) ) );
 
     // <Menu Items>
-    connect( ui->actionPreferences, SIGNAL( triggered() ),
-             SLOT( showSettingsDialog() ) );
-
-    connect( ui->actionAddPeerManually, SIGNAL( triggered() ),
-             SLOT( addPeerManually() ) );
-
-    connect( ui->actionRescanCollection, SIGNAL( triggered() ),
-             SLOT( rescanCollectionManually() ) );
+    connect( ui->actionPreferences, SIGNAL( triggered() ), SLOT( showSettingsDialog() ) );
+    connect( ui->actionAddPeerManually, SIGNAL( triggered() ), SLOT( addPeerManually() ) );
+    connect( ui->actionRescanCollection, SIGNAL( triggered() ), SLOT( rescanCollectionManually() ) );
+    connect( ui->actionAbout_Tomahawk, SIGNAL( triggered() ), SLOT( showAboutTomahawk() ) );
 }
 
 
@@ -308,4 +304,11 @@ TomahawkWindow::setWindowTitle( const QString& title )
         QString s = m_currentTrack->artist() + " - " + m_currentTrack->track();
         QMainWindow::setWindowTitle( s + " - " + title );
     }
+}
+
+
+void
+TomahawkWindow::showAboutTomahawk()
+{
+    QMessageBox::about( this, "About Tomahawk", "Copyright 2010 Christian Muehlhaeuser <muesli@gmail.com>\nThanks to: Leo Franchi, Dominik Schmidt and Steve Robertson" );
 }

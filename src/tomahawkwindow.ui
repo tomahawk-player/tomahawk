@@ -39,7 +39,7 @@
      <x>0</x>
      <y>0</y>
      <width>800</width>
-     <height>22</height>
+     <height>20</height>
     </rect>
    </property>
    <widget class="QMenu" name="menuSettings">
@@ -52,7 +52,6 @@
     <property name="title">
      <string>Music &amp;Player</string>
     </property>
-    <addaction name="actionAddPeerManually"/>
     <addaction name="actionRescanCollection"/>
     <addaction name="separator"/>
     <addaction name="actionExit"/>
@@ -65,9 +64,23 @@
     <addaction name="separator"/>
     <addaction name="actionLoadXSPF"/>
    </widget>
+   <widget class="QMenu" name="menuNetwork">
+    <property name="title">
+     <string>Network</string>
+    </property>
+    <addaction name="actionAddPeerManually"/>
+   </widget>
+   <widget class="QMenu" name="menu_Help">
+    <property name="title">
+     <string>&amp;Help</string>
+    </property>
+    <addaction name="actionAbout_Tomahawk"/>
+   </widget>
    <addaction name="menuApp"/>
    <addaction name="menuPlaylist"/>
+   <addaction name="menuNetwork"/>
    <addaction name="menuSettings"/>
+   <addaction name="menu_Help"/>
   </widget>
   <widget class="QStatusBar" name="statusBar"/>
   <action name="actionExit">
@@ -107,6 +120,11 @@
   <action name="actionCreatePlaylist">
    <property name="text">
     <string>Create &amp;New Playlist...</string>
+   </property>
+  </action>
+  <action name="actionAbout_Tomahawk">
+   <property name="text">
+    <string>About &amp;Tomahawk</string>
    </property>
   </action>
  </widget>

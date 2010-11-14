@@ -489,10 +489,13 @@ TomahawkApp::jabberAuthError( int code, const QString& msg )
                                       .arg( "AUTH_ERROR" )
                                       .arg( (servent().externalPort() > 0) ? QString( "YES:%1" ).arg(servent().externalPort()) :"NO" ) );
 
-        QMessageBox::warning( m_mainwindow,
-                              "Jabber Auth Error",
-                              QString("Error connecting to Jabber (%1) %2").arg(code).arg(msg),
-                              QMessageBox::Ok );
+        if ( code == gloox::ConnAuthenticationFailed )
+        {
+            QMessageBox::warning( m_mainwindow,
+                                  "Jabber Auth Error",
+                                  QString("Error connecting to Jabber (%1) %2").arg(code).arg(msg),
+                                  QMessageBox::Ok );
+        }
     }
 #endif
 
@@ -621,13 +624,14 @@ TomahawkApp::jabberMessage( const QString& from, const QString& msg )
         }
         else
         {
-            qDebug() << Q_FUNC_INFO << "THey should be conecting to us...";
+            qDebug() << Q_FUNC_INFO << "They should be conecting to us...";
         }
     }
     else
     {
-        qDebug() << Q_FUNC_INFO << "THey are not visible, doing nothing atm";
-        if( m_servent.visibleExternally() ) jabberPeerOnline( from ); // HACK FIXME
+        qDebug() << Q_FUNC_INFO << "They are not visible, doing nothing atm";
+        if ( m_servent.visibleExternally() )
+            jabberPeerOnline( from ); // HACK FIXME
     }
 }
 
