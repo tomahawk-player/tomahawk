@@ -43,7 +43,7 @@ libEchonest 0.1
 
 Now compile Tomahawk
 -------------------
- $ sudo ldconfig -v | grep -Ei 'qjson|gloox'
+ $ sudo ldconfig -v | grep -Ei 'qjson|gloox|echonest'
  $ mkdir build && cd build 
  $ cmake .. 
  $ make 
