@@ -42,16 +42,15 @@ namespace Tomahawk
     }
 }
 
-#ifndef TOMAHAWK_HEADLESS
-class TomahawkWindow;
-class PlaylistManager;
-#include <QStackedWidget>
-
 #ifndef NO_LIBLASTFM
 #include <lastfm/NetworkAccessManager>
 #include "scrobbler.h"
 #endif
 
+#ifndef TOMAHAWK_HEADLESS
+class TomahawkWindow;
+class PlaylistManager;
+#include <QStackedWidget>
 #endif
 
 
@@ -130,11 +129,12 @@ private:
     QSharedPointer<Jabber> m_jabber;
     XMPPBot* m_xmppBot;
 
-#ifndef TOMAHAWK_HEADLESS
-    TomahawkWindow* m_mainwindow;
 #ifndef NO_LIBLASTFM
     Scrobbler* m_scrobbler;
 #endif
+
+#ifndef TOMAHAWK_HEADLESS
+    TomahawkWindow* m_mainwindow;
 #endif    
 
     QMap< QString,boost::function<QSharedPointer<QIODevice>(Tomahawk::result_ptr)> > m_iofactories;

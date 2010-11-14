@@ -115,9 +115,10 @@ TomahawkApp::TomahawkApp( int& argc, char *argv[] )
     m_mainwindow = 0;
     m_headless = arguments().contains( "--headless" );
     setWindowIcon( QIcon( RESPATH "icons/tomahawk-icon-128x128.png" ) );
+#endif
+
 #ifndef NO_LIBLASTFM
     m_scrobbler = 0;
-#endif
 #endif
 
     qDebug() << "TomahawkApp thread:" << this->thread();
@@ -131,10 +132,6 @@ TomahawkApp::TomahawkApp( int& argc, char *argv[] )
     m_settings = new TomahawkSettings( this );
     m_audioEngine = new AudioEngine;
     setupDatabase();
-
-#ifndef TOMAHAWK_HEADLESS
-    if ( !m_headless )
-    {
 
 #ifndef NO_LIBLASTFM
         m_scrobbler = new Scrobbler( this );
@@ -154,6 +151,10 @@ TomahawkApp::TomahawkApp( int& argc, char *argv[] )
 #else
         m_nam = new QNetworkAccessManager;
 #endif
+
+#ifndef TOMAHAWK_HEADLESS
+    if ( !m_headless )
+    {
 
         m_mainwindow = new TomahawkWindow();
         m_mainwindow->show();
