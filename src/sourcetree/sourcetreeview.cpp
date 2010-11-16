@@ -162,14 +162,6 @@ SourceTreeView::onItemActivated( const QModelIndex& index )
 void
 SourceTreeView::onSelectionChanged()
 {
-/*    QModelIndexList si = selectedIndexes();
-
-    foreach( const QModelIndex& idx, si )
-    {
-        int type = SourcesModel::indexType( idx );
-        if ( type == 0 )
-            selectionModel()->select( idx, QItemSelectionModel::Deselect );
-    }*/
 }
 
 

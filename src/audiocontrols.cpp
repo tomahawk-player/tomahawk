@@ -194,7 +194,7 @@ AudioControls::onCoverArtDownloaded()
     }
     else
     {
-//        qDebug() << "Following redirect to" << redir.toString();
+        // Follow HTTP redirect
         QNetworkRequest req( redir );
         QNetworkReply* reply = APP->nam()->get( req );
         connect( reply, SIGNAL( finished() ), SLOT( onCoverArtDownloaded() ) );
@@ -231,7 +231,7 @@ AudioControls::onPlaybackLoading( const Tomahawk::result_ptr& result )
     ui->coverImage->setPixmap( m_defaultCover );
 
     if ( ui->timeLabel->text().isEmpty() )
-        ui->timeLabel->setText( "00:00" );
+        ui->timeLabel->setText( TomahawkUtils::timeToString( 0 ) );
 
     if ( ui->timeLeftLabel->text().isEmpty() )
         ui->timeLeftLabel->setText( "-" + TomahawkUtils::timeToString( result->duration() ) );

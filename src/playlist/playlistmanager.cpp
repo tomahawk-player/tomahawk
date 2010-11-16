@@ -269,6 +269,30 @@ PlaylistManager::setShuffled( bool enabled )
 void
 PlaylistManager::showCurrentTrack()
 {
+    bool found = false;
+
+    foreach ( const QList<PlaylistView*>& pv, m_views.values() )
+    {
+        if ( APP->audioEngine()->currentPlaylist() == pv.first()->proxyModel() )
+        {
+            Tomahawk::playlist_ptr pptr = m_views.key( pv );
+            show( pptr );
+            found = true;
+        }
+    }
+
+    if ( !found )
+    {
+        foreach ( const QList<CollectionView*>& pv, m_collectionViews.values() )
+        {
+            if ( APP->audioEngine()->currentPlaylist() == pv.first()->proxyModel() )
+            {
+                Tomahawk::collection_ptr cptr = m_collectionViews.key( pv );
+                show( cptr );
+            }
+        }
+    }
+
     if ( m_currentView && m_currentProxyModel )
         m_currentView->scrollTo( m_currentProxyModel->currentItem(), QAbstractItemView::PositionAtCenter );
 }

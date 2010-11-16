@@ -268,6 +268,7 @@ AudioEngine::playItem( PlaylistInterface* playlist, const Tomahawk::result_ptr& 
     qDebug() << Q_FUNC_INFO;
 
     m_playlist = playlist;
+    m_currentPlaylist = playlist;
     loadTrack( result );
 }
 

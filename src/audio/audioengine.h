@@ -28,19 +28,11 @@ public:
 
     unsigned int volume() { if ( m_audio ) return m_audio->volume() * 100.0; else return 0; }; // in percent
 
-signals:
-    void loading( const Tomahawk::result_ptr& track );
-    void started( const Tomahawk::result_ptr& track );
-    void stopped();
-    void paused();
-    void resumed();
+    /* Returns the PlaylistInterface of the currently playing track. Note: This might be different to the current playlist! */
+    PlaylistInterface* currentPlaylist() const { return m_currentPlaylist; }
 
-    void volumeChanged( int volume /* in percent */ );
-
-    void timerSeconds( unsigned int secondsElapsed );
-    void timerPercentage( unsigned int percentage );
-
-    void error( AudioErrorCode errorCode );
+    /* Returns the PlaylistInterface of the current playlist. Note: The currently playing track might still be from a different playlist! */
+    PlaylistInterface* playlist() const { return m_playlist; }
 
 public slots:
     void play();
@@ -59,6 +51,20 @@ public slots:
     void setPlaylist( PlaylistInterface* playlist ) { m_playlist = playlist; }
 
     void onTrackAboutToClose();
+
+signals:
+    void loading( const Tomahawk::result_ptr& track );
+    void started( const Tomahawk::result_ptr& track );
+    void stopped();
+    void paused();
+    void resumed();
+
+    void volumeChanged( int volume /* in percent */ );
+
+    void timerSeconds( unsigned int secondsElapsed );
+    void timerPercentage( unsigned int percentage );
+
+    void error( AudioErrorCode errorCode );
 
 private slots:
     bool loadTrack( const Tomahawk::result_ptr& result );
@@ -86,6 +92,7 @@ private:
     Tomahawk::result_ptr m_currentTrack;
     Tomahawk::result_ptr m_lastTrack;
     PlaylistInterface* m_playlist;
+    PlaylistInterface* m_currentPlaylist;
     QMutex m_mutex;
 
     int m_i;
