@@ -206,7 +206,7 @@
            <item>
             <layout class="QVBoxLayout" name="trackLabelLayout">
              <item>
-              <widget class="QLabel" name="artistTrackLabel">
+              <widget class="ElidedLabel" name="artistTrackLabel">
                <property name="cursor">
                 <cursorShape>PointingHandCursor</cursorShape>
                </property>
@@ -454,6 +454,11 @@
    <class>ImageButton</class>
    <extends>QPushButton</extends>
    <header>imagebutton.h</header>
+  </customwidget>
+  <customwidget>
+   <class>ElidedLabel</class>
+   <extends>QLabel</extends>
+   <header location="global">elidedlabel.h</header>
   </customwidget>
  </customwidgets>
  <resources/>

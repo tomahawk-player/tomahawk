@@ -38,7 +38,7 @@ private slots:
 
     void onRepeatClicked();
     void onShuffleClicked();
-    void onTrackClicked( const QString& link );
+    void onTrackClicked();
 
     void onCoverArtDownloaded();
 

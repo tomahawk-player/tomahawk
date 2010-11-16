@@ -98,6 +98,7 @@ SET( tomahawkSources ${tomahawkSources}
 SET( tomahawkSourcesGui ${tomahawkSourcesGui}
      xspfloader.cpp
 
+     utils/elidedlabel.cpp
      utils/imagebutton.cpp
      utils/progresstreeview.cpp
      utils/proxystyle.cpp
@@ -215,6 +216,7 @@ SET( tomahawkHeaders ${tomahawkHeaders}
 SET( tomahawkHeadersGui ${tomahawkHeadersGui}
      xspfloader.h
 
+     utils/elidedlabel.h
      utils/animatedcounterlabel.h
      utils/imagebutton.h
      utils/progresstreeview.h
@@ -277,7 +279,7 @@ INCLUDE_DIRECTORIES(
     ../rtaudio
     ../alsa-playback
     ../libportfwd/include
-    ../qxtweb-standalone/qxtweb/
+    ../qxt/qxtweb-standalone/qxtweb
 
     /usr/include/taglib
     /usr/local/include/taglib

@@ -28,6 +28,8 @@ AudioControls::AudioControls( QWidget* parent )
     font.setPixelSize( 12 );
 
     ui->artistTrackLabel->setFont( font );
+    ui->artistTrackLabel->setElideMode( Qt::ElideMiddle );
+
     ui->albumLabel->setFont( font );
     ui->timeLabel->setFont( font );
     ui->timeLeftLabel->setFont( font );
@@ -119,7 +121,7 @@ AudioControls::AudioControls( QWidget* parent )
     connect( ui->repeatButton,     SIGNAL( clicked() ), SLOT( onRepeatClicked() ) );
     connect( ui->shuffleButton,    SIGNAL( clicked() ), SLOT( onShuffleClicked() ) );
 
-    connect( ui->artistTrackLabel, SIGNAL( linkActivated( QString ) ), SLOT( onTrackClicked( QString ) ) );
+    connect( ui->artistTrackLabel, SIGNAL( clicked() ), SLOT( onTrackClicked() ) );
 
     // <From AudioEngine>
     connect( (QObject*)TomahawkApp::instance()->audioEngine(), SIGNAL( loading( const Tomahawk::result_ptr& ) ), SLOT( onPlaybackLoading( const Tomahawk::result_ptr& ) ) );
@@ -223,7 +225,7 @@ AudioControls::onPlaybackLoading( const Tomahawk::result_ptr& result )
 
     m_currentTrack = result;
 
-    ui->artistTrackLabel->setText( "<a style='color:black; text-decoration:none;' href='#'>" + QString( "%1 - %2" ).arg( result->artist() ).arg( result->track() ) + "</a>" );
+    ui->artistTrackLabel->setText( QString( "%1 - %2" ).arg( result->artist() ).arg( result->track() ) );
     ui->albumLabel->setText( result->album() );
     ui->ownerLabel->setText( result->collection()->source()->friendlyName() );
     ui->coverImage->setPixmap( m_defaultCover );
@@ -407,7 +409,7 @@ AudioControls::onShuffleClicked()
 
 
 void
-AudioControls::onTrackClicked( const QString& /* link */ )
+AudioControls::onTrackClicked()
 {
      APP->playlistManager()->showCurrentTrack();
 }

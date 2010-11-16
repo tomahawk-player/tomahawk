@@ -28,7 +28,7 @@ SET( OS_SPECIFIC_LINK_LIBRARIES
 	"crypt32.dll"
 	"ws2_32.dll"
 	"dnsapi.dll"
-	"${CMAKE_CURRENT_SOURCE_DIR}/../qxtweb-standalone/libqxtweb-standalone.dll"
+	"${CMAKE_CURRENT_SOURCE_DIR}/../qxt/qxtweb-standalone/libqxtweb-standalone.dll"
 )
 
 SET( tomahawkSourcesGui ${tomahawkSourcesGui} audio/rtaudiooutput.cpp )
