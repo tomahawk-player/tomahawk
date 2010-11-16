@@ -301,7 +301,7 @@ TomahawkWindow::setWindowTitle( const QString& title )
         QMainWindow::setWindowTitle( title );
     else
     {
-        QString s = m_currentTrack->artist() + " - " + m_currentTrack->track();
+        QString s = m_currentTrack->track() + " " + tr( "by" ) + " " + m_currentTrack->artist();
         QMainWindow::setWindowTitle( s + " - " + title );
     }
 }
