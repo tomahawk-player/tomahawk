@@ -20,7 +20,7 @@ PlaylistManager::PlaylistManager( QObject* parent )
     , m_currentMode( 0 )
     , m_superCollectionVisible( true )
 {
-    m_widget->setMinimumWidth( 620 );
+    m_widget->setMinimumWidth( 690 );
 
     m_superCollectionView = new CollectionView();
     m_superCollectionFlatModel = new CollectionFlatModel( m_superCollectionView );
