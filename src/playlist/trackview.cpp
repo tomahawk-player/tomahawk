@@ -83,9 +83,9 @@ TrackView::restoreColumnsState()
     TomahawkSettings* s = APP->settings();
     QList<QVariant> list = s->playlistColumnSizes();
 
-    if ( list.count() != 6 ) // FIXME: const
+    if ( list.count() != 7 ) // FIXME: const
     {
-        m_columnWeights << 0.22 << 0.29 << 0.19 << 0.08 << 0.08 << 0.14;
+        m_columnWeights << 0.19 << 0.25 << 0.18 << 0.07 << 0.07 << 0.10 << 0.14;
     }
     else
     {

@@ -1,7 +1,9 @@
 #include "tomahawkutils.h"
 
 #include <QCoreApplication>
+#include <QDateTime>
 #include <QDebug>
+#include <QDir>
 
 #ifdef WIN32
     #include <windows.h>
@@ -124,6 +126,69 @@ timeToString( int seconds )
     return QString( "%1%2:%3" ).arg( hrs > 0 ? hrs  < 10 ? "0" + QString::number( hrs ) + ":" : QString::number( hrs ) + ":" : "" )
                                .arg( mins < 10 ? "0" + QString::number( mins ) : QString::number( mins ) )
                                .arg( secs < 10 ? "0" + QString::number( secs ) : QString::number( secs ) );
+}
+
+QString
+ageToString( const QDateTime& time )
+{
+    QDateTime now = QDateTime::currentDateTime();
+
+    int mins = time.secsTo( now ) / 60;
+    int hours = mins / 60;
+    int days = time.daysTo( now );
+    int weeks = days / 7;
+    int months = days / 30.42;
+    int years = months / 12;
+
+    if ( years )
+    {
+        if ( years > 1 )
+            return QString( "%1 years ago" ).arg( years );
+        else
+            return QString( "%1 year ago" ).arg( years );
+    }
+
+    if ( months )
+    {
+        if ( months > 1 )
+           return QString( "%1 months ago" ).arg( months );
+        else
+            return QString( "%1 month ago" ).arg( months );
+    }
+
+    if ( weeks )
+    {
+        if ( weeks > 1 )
+            return QString( "%1 weeks ago" ).arg( weeks );
+        else
+            return QString( "%1 week ago" ).arg( weeks );
+    }
+
+    if ( days )
+    {
+        if ( days > 1 )
+            return QString( "%1 days ago" ).arg( days );
+        else
+            return QString( "%1 day ago" ).arg( days );
+    }
+
+    if ( hours )
+    {
+        if ( hours > 1 )
+            return QString( "%1 hours ago" ).arg( hours );
+        else
+            return QString( "%1 hour ago" ).arg( hours );
+    }
+
+    if ( mins )
+    {
+        if ( mins > 1 )
+            return QString( "%1 minutes ago" ).arg( mins );
+        else
+            return QString( "%1 minute ago" ).arg( mins );
+    }
+
+    return QString();
 }
 
 } // ns

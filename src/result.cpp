@@ -19,6 +19,7 @@ Result::Result( const QVariant& v, const collection_ptr& collection )
     m_bitrate = m.value( "bitrate" ).toUInt();
     m_size = m.value( "size" ).toUInt();
     m_albumpos = m.value( "albumpos" ).toUInt();
+    m_modtime = m.value( "mtime" ).toUInt();
 
     if ( !m_collection.isNull() )
         connect( m_collection->source().data(), SIGNAL( offline() ), SIGNAL( becomingUnavailable() ), Qt::QueuedConnection );

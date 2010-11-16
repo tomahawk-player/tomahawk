@@ -1,7 +1,9 @@
 #ifndef TOMAHAWKUTILS_H
 #define TOMAHAWKUTILS_H
 
-#include <QDir>
+class QDir;
+class QDateTime;
+class QString;
 
 namespace TomahawkUtils
 {
@@ -9,6 +11,7 @@ namespace TomahawkUtils
     QDir appDataDir();
 
     QString timeToString( int seconds );
+    QString ageToString( const QDateTime& time );
 }
 
 #endif // TOMAHAWKUTILS_H

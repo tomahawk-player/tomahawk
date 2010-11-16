@@ -48,7 +48,7 @@ DatabaseCommand_AllTracks::exec( DatabaseImpl* dbi )
         t["size"]     = query.value( 4 ).toInt();
         t["duration"] = query.value( 5 ).toInt();
         t["bitrate"]  = query.value( 6 ).toInt();
-        t["lastmodified"] = query.value( 9 ).toInt();
+        t["mtime"] = query.value( 9 ).toInt();
         t["mimetype"] = query.value( 10 ).toString();
         t["albumpos"] = query.value( 11 ).toUInt();
         tl.append( t );

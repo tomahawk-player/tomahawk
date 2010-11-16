@@ -40,6 +40,7 @@ CollectionProxyModel::lessThan( const QModelIndex& left, const QModelIndex& righ
     QString track2 = q2->track();
     unsigned int albumpos1 = 0, albumpos2 = 0;
     unsigned int bitrate1 = 0, bitrate2 = 0;
+    unsigned int mtime1 = 0, mtime2 = 0;
 
     if ( q1->numResults() )
     {
@@ -49,6 +50,7 @@ CollectionProxyModel::lessThan( const QModelIndex& left, const QModelIndex& righ
         track1 = r->track();
         albumpos1 = r->albumpos();
         bitrate1 = r->bitrate();
+        mtime1 = r->modificationTime();
     }
     if ( q2->numResults() )
     {
@@ -58,6 +60,7 @@ CollectionProxyModel::lessThan( const QModelIndex& left, const QModelIndex& righ
         track2 = r->track();
         albumpos2 = r->albumpos();
         bitrate2 = r->bitrate();
+        mtime2 = r->modificationTime();
     }
 
     if ( left.column() == 0 ) // sort by artist
@@ -91,6 +94,10 @@ CollectionProxyModel::lessThan( const QModelIndex& left, const QModelIndex& righ
     else if ( left.column() == 4 ) // sort by bitrate
     {
         return bitrate1 < bitrate2;
+    }
+    else if ( left.column() == 5 ) // sort by mtime
+    {
+        return mtime1 < mtime2;
     }
 
     return QString::localeAwareCompare( sourceModel()->data( left ).toString(),

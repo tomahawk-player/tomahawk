@@ -55,7 +55,7 @@ TrackModel::rowCount( const QModelIndex& parent ) const
 int
 TrackModel::columnCount( const QModelIndex& parent ) const
 {
-    return 6;
+    return 7;
 }
 
 
@@ -160,6 +160,10 @@ TrackModel::data( const QModelIndex& index, int role ) const
                 break;
 
             case 5:
+                return TomahawkUtils::ageToString( QDateTime::fromTime_t( query->results().first()->modificationTime() ) );
+                break;
+
+            case 6:
                 return query->results().first()->collection()->source()->friendlyName();
                 break;
         }
@@ -173,7 +177,7 @@ QVariant
 TrackModel::headerData( int section, Qt::Orientation orientation, int role ) const
 {
     QStringList headers;
-    headers << tr( "Artist" ) << tr( "Track" ) << tr( "Album" ) << tr( "Duration" ) << tr( "Bitrate" ) << tr( "Origin" );
+    headers << tr( "Artist" ) << tr( "Track" ) << tr( "Album" ) << tr( "Duration" ) << tr( "Bitrate" ) << tr( "Last Modified" ) << tr( "Origin" );
     if ( orientation == Qt::Horizontal && role == Qt::DisplayRole && section >= 0 )
     {
         return headers.at( section );

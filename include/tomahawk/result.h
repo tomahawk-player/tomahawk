@@ -4,7 +4,6 @@
 #include <QObject>
 
 #include "collection.h"
-#include "source.h"
 #include "tomahawk/typedefs.h"
 
 namespace Tomahawk
@@ -32,11 +31,12 @@ public:
     unsigned int bitrate() const { return m_bitrate; }
     unsigned int size() const { return m_size; }
     unsigned int albumpos() const { return m_albumpos; }
+    unsigned int modificationTime() const { return m_modtime; }
 
     // for debug output:
     QString toString() const
     {
-      return QString( "Result(%1 %2\t%3 - %4  %5" ).arg( id() ).arg( score() ).arg( artist() ).arg( track() ).arg( url() );
+        return QString( "Result(%1 %2\t%3 - %4  %5" ).arg( id() ).arg( score() ).arg( artist() ).arg( track() ).arg( url() );
     }
 
 signals:
@@ -53,10 +53,12 @@ private:
     QString m_track;
     QString m_url;
     QString m_mimetype;
+
     unsigned int m_duration;
     unsigned int m_bitrate;
     unsigned int m_size;
     unsigned int m_albumpos;
+    unsigned int m_modtime;
 };
 
 }; //ns
