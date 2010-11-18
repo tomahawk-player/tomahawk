@@ -16,12 +16,13 @@
 ;-----------------------------------------------------------------------------
 !define MING_PATH "/usr/i686-pc-mingw32/sys-root/mingw"
 !define MING_BIN "${MING_PATH}/bin"
-!define MING_DLL_PATH "dlls" ; "${MING_BIN}"
+!define MING_DLL_PATH "${MING_BIN}"
+!define MING_LIB "${MING_PATH}/lib"
 !define ROOT_PATH "..\.." ; assuming the script is in ROOT/admin/win/
-!define QT_DLL_PATH "dlls"
-!define SQLITE_DLL_PATH "dlls\sqldrivers" ; "${MING_PATH}/lib/qt4/plugins/sqldrivers/"
-!define RTAUDIO_DLL_PATH "dlls" ; "../../rtaudio/"
-!define QXTWEB_DLL_PATH "dlls" ; "../../qxtweb-standalone/"
+!define QT_DLL_PATH "${MING_BIN}"
+!define SQLITE_DLL_PATH "${MING_LIB}/qt4/plugins/sqldrivers"
+!define RTAUDIO_DLL_PATH "../../rtaudio/"
+!define QXTWEB_DLL_PATH "../../qxt/qxtweb-standalone/"
 
 ;-----------------------------------------------------------------------------
 ; Increment installer revision number as part of this script.
@@ -56,7 +57,7 @@ InstType Full
 InstType Minimal
 CRCCheck On
 SetCompressor /SOLID lzma
-RequestExecutionLevel user ;Using the UAC plugin.
+;RequestExecutionLevel user ;Using the UAC plugin.
 ReserveFile tomahawk.ini
 ReserveFile "${NSISDIR}\Plugins\InstallOptions.dll"
 
@@ -70,7 +71,7 @@ ReserveFile "${NSISDIR}\Plugins\InstallOptions.dll"
 !include Memento.nsh ;Remember user selections.
 !include WinVer.nsh ;Windows version detection.
 !include WordFunc.nsh  ;Used by VersionCompare macro function.
-!include UAC.nsh ;Used by the UAC elevation to install as user or admin.
+;!include UAC.nsh ;Used by the UAC elevation to install as user or admin.
 
 ;-----------------------------------------------------------------------------
 ; Memento selections stored in registry.
@@ -135,7 +136,7 @@ UninstPage custom un.UnPageUserAppData un.UnPageUserAppDataLeave
 ##############################################################################
 
 Function LaunchTomahawk
-   ${UAC.CallFunctionAsUser} LaunchTomahawkAsUser
+   ;${UAC.CallFunctionAsUser} LaunchTomahawkAsUser
 FunctionEnd
 
 Function LaunchTomahawkAsUser
@@ -210,7 +211,7 @@ Function PageLeaveReinstall
       RMDir $INSTDIR
    no_remove_uninstaller:
       StrCmp $R0 "2" 0 +3
-      UAC::Unload
+      ;UAC::Unload
       Quit
       BringToFront
    reinst_done:
@@ -260,6 +261,10 @@ Section "Tomahawk Player" SEC_TOMAHAWK_PLAYER
    ;Audio stuff
    ;File "${MING_DLL_PATH}\libmad.dll"
    ;File "${MING_DLL_PATH}\librtaudio.dll"
+   File "${RTAUDIO_DLL_PATH}\librtaudio.dll"
+   File "${MING_DLL_PATH}\libogg-0.dll"
+   File "${MING_DLL_PATH}\libvorbisfile-3.dll"
+   File "${MING_DLL_PATH}\libvorbis-0.dll"
     
    ;Other
    File "${MING_DLL_PATH}\libqjson.dll"
@@ -267,8 +272,10 @@ Section "Tomahawk Player" SEC_TOMAHAWK_PLAYER
    File "${MING_DLL_PATH}\libgloox-8.dll"
    File "${MING_DLL_PATH}\libpng14-14.dll"
    File "${MING_DLL_PATH}\zlib1.dll"
+
    File "${MING_DLL_PATH}\libechonest.dll"
-   File "${RTAUDIO_DLL_PATH}\librtaudio.dll"
+   File "${MING_DLL_PATH}\liblastfm.dll"
+
    File "${QXTWEB_DLL_PATH}\libqxtweb-standalone.dll"
 SectionEnd
 
@@ -466,25 +473,25 @@ Function .onInit
 
    ${MementoSectionRestore}
 
-   UAC_Elevate:
-      UAC::RunElevated 
-      StrCmp 1223 $0 UAC_ElevationAborted ; UAC dialog aborted by user?
-      StrCmp 0 $0 0 UAC_Err ; Error?
-      StrCmp 1 $1 0 UAC_Success ;Are we the real deal or just the wrapper?
-      Quit
+   ;UAC_Elevate:
+      ;UAC::RunElevated 
+      ;StrCmp 1223 $0 UAC_ElevationAborted ; UAC dialog aborted by user?
+      ;StrCmp 0 $0 0 UAC_Err ; Error?
+      ;StrCmp 1 $1 0 UAC_Success ;Are we the real deal or just the wrapper?
+      ;Quit
     
-   UAC_Err:
-      MessageBox MB_ICONSTOP "Unable to elevate, error $0"
-      Abort
+   ;UAC_Err:
+      ;MessageBox MB_ICONSTOP "Unable to elevate, error $0"
+      ;Abort
     
-   UAC_ElevationAborted:
-      Abort
+   ;UAC_ElevationAborted:
+      ;Abort
     
-   UAC_Success:
-      StrCmp 1 $3 +4 ;Admin?
-      StrCmp 3 $1 0 UAC_ElevationAborted ;Try again?
-      MessageBox MB_ICONSTOP "This installer requires admin access, try again"
-      goto UAC_Elevate 
+   ;UAC_Success:
+      ;StrCmp 1 $3 +4 ;Admin?
+      ;StrCmp 3 $1 0 UAC_ElevationAborted ;Try again?
+      ;MessageBox MB_ICONSTOP "This installer requires admin access, try again"
+      ;goto UAC_Elevate 
 
    ;Prevent multiple instances.
    System::Call 'kernel32::CreateMutexA(i 0, i 0, t "tomahawkInstaller") i .r1 ?e'
@@ -496,11 +503,11 @@ FunctionEnd
 
 Function .onInstSuccess
    ${MementoSectionSave}
-   UAC::Unload ;Must call unload!
+   ;UAC::Unload ;Must call unload!
 FunctionEnd
 
 Function .onInstFailed
-   UAC::Unload ;Must call unload!
+   ;UAC::Unload ;Must call unload!
 FunctionEnd
 
 ##############################################################################
@@ -511,25 +518,25 @@ FunctionEnd
 
 Function un.onInit
 
-   UAC_Elevate:
-      UAC::RunElevated 
-      StrCmp 1223 $0 UAC_ElevationAborted ; UAC dialog aborted by user?
-      StrCmp 0 $0 0 UAC_Err ; Error?
-      StrCmp 1 $1 0 UAC_Success ;Are we the real deal or just the wrapper?
-      Quit
+   ;UAC_Elevate:
+      ;UAC::RunElevated 
+      ;StrCmp 1223 $0 UAC_ElevationAborted ; UAC dialog aborted by user?
+      ;StrCmp 0 $0 0 UAC_Err ; Error?
+      ;StrCmp 1 $1 0 UAC_Success ;Are we the real deal or just the wrapper?
+      ;Quit
     
-   UAC_Err:
-      MessageBox MB_ICONSTOP "Unable to elevate, error $0"
-      Abort
+   ;UAC_Err:
+      ;MessageBox MB_ICONSTOP "Unable to elevate, error $0"
+      ;Abort
     
-   UAC_ElevationAborted:
-      Abort
+   ;UAC_ElevationAborted:
+      ;Abort
     
-   UAC_Success:
-      StrCmp 1 $3 +4 ;Admin?
-      StrCmp 3 $1 0 UAC_ElevationAborted ;Try again?
-      MessageBox MB_ICONSTOP "This uninstaller requires admin access, try again"
-      goto UAC_Elevate 
+   ;UAC_Success:
+      ;StrCmp 1 $3 +4 ;Admin?
+      ;StrCmp 3 $1 0 UAC_ElevationAborted ;Try again?
+      ;MessageBox MB_ICONSTOP "This uninstaller requires admin access, try again"
+      ;goto UAC_Elevate 
 
    ;Prevent multiple instances.
    System::Call 'kernel32::CreateMutexA(i 0, i 0, t "tomahawkUninstaller") i .r1 ?e'
@@ -540,9 +547,9 @@ Function un.onInit
 FunctionEnd
 
 Function un.onUnInstSuccess
-   UAC::Unload ;Must call unload!
+   ;UAC::Unload ;Must call unload!
 FunctionEnd
 
 Function un.onUnInstFailed
-   UAC::Unload ;Must call unload!
+   ;UAC::Unload ;Must call unload!
 FunctionEnd
