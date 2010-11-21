@@ -4,20 +4,18 @@
 #include <QObject>
 #include <QSharedPointer>
 
-#include "artist.h"
+#include "tomahawk/artist.h"
+#include "tomahawk/typedefs.h"
 
 namespace Tomahawk
 {
-
-class Track;
-typedef QSharedPointer<Track> track_ptr;
 
 class Track : public QObject
 {
 Q_OBJECT
 
 public:
-    Track( artist_ptr artist, const QString& name )
+    Track( Tomahawk::artist_ptr artist, const QString& name )
         : m_name( name )
         , m_artist( artist )
     {}

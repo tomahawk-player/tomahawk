@@ -25,6 +25,15 @@ PlaylistView::~PlaylistView()
 
 
 void
+PlaylistView::setModel( TrackModel* model )
+{
+    TrackView::setModel( model );
+
+    // setColumnHidden( 5, true ); // Hide age column per default
+}
+
+
+void
 PlaylistView::setupMenus()
 {
     m_itemMenu.clear();

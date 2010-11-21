@@ -6,7 +6,8 @@
 #include <QAbstractItemModel>
 
 #include "tomahawk/query.h"
-#include "tomahawk/result.h"
+
+#include "tomahawk/typedefs.h"
 
 class PlItem : public QObject
 {

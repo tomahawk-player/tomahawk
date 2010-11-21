@@ -3,6 +3,7 @@
 #include <QDebug>
 #include <QTreeView>
 
+#include "tomahawk/album.h"
 #include "tomahawk/query.h"
 #include "collectionmodel.h"
 
@@ -41,26 +42,34 @@ CollectionProxyModel::lessThan( const QModelIndex& left, const QModelIndex& righ
     unsigned int albumpos1 = 0, albumpos2 = 0;
     unsigned int bitrate1 = 0, bitrate2 = 0;
     unsigned int mtime1 = 0, mtime2 = 0;
+    unsigned int id1 = 0, id2 = 0;
 
     if ( q1->numResults() )
     {
         const Tomahawk::result_ptr& r = q1->results().at( 0 );
-        artist1 = r->artist();
-        album1 = r->album();
+        artist1 = r->artist()->name();
+        album1 = r->album()->name();
         track1 = r->track();
         albumpos1 = r->albumpos();
         bitrate1 = r->bitrate();
         mtime1 = r->modificationTime();
+        id1 = r->dbid();
     }
     if ( q2->numResults() )
     {
         const Tomahawk::result_ptr& r = q2->results().at( 0 );
-        artist2 = r->artist();
-        album2 = r->album();
+        artist2 = r->artist()->name();
+        album2 = r->album()->name();
         track2 = r->track();
         albumpos2 = r->albumpos();
         bitrate2 = r->bitrate();
         mtime2 = r->modificationTime();
+        id2 = r->dbid();
+    }
+
+    if ( album1 == "Gern Geschehen" )
+    {
+        qDebug() << artist1 << artist2 << album1 << album2 << id1 << id2;
     }
 
     if ( left.column() == 0 ) // sort by artist
@@ -71,7 +80,7 @@ CollectionProxyModel::lessThan( const QModelIndex& left, const QModelIndex& righ
             {
                 if ( albumpos1 == albumpos2 )
                 {
-                    return QString::localeAwareCompare( track1, track2 ) < 0;
+                    return id1 < id2;
                 }
 
                 return albumpos1 < albumpos2;

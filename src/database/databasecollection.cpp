@@ -19,14 +19,12 @@ void
 DatabaseCollection::loadPlaylists()
 {
     qDebug() << Q_FUNC_INFO;
-    // load our playlists
     DatabaseCommand_LoadAllPlaylists* cmd = new DatabaseCommand_LoadAllPlaylists( source() );
+
     connect( cmd,  SIGNAL( done( const QList<Tomahawk::playlist_ptr>& ) ),
                      SLOT( setPlaylists( const QList<Tomahawk::playlist_ptr>& ) ) );
 
-    TomahawkApp::instance()->database()->enqueue(
-            QSharedPointer<DatabaseCommand>( cmd )
-    );
+    TomahawkApp::instance()->database()->enqueue( QSharedPointer<DatabaseCommand>( cmd ) );
 }
 
 
@@ -35,14 +33,13 @@ DatabaseCollection::loadTracks()
 {
     qDebug() << Q_FUNC_INFO << source()->userName();
     DatabaseCommand_AllTracks* cmd = new DatabaseCommand_AllTracks( source()->collection() );
-    connect( cmd,  SIGNAL( tracks( QList<QVariant>, Tomahawk::collection_ptr ) ),
-                     SLOT( setTracks( QList<QVariant>, Tomahawk::collection_ptr ) ) );
+
+    connect( cmd,  SIGNAL( tracks( QList<Tomahawk::query_ptr>, Tomahawk::collection_ptr ) ),
+                     SLOT( setTracks( QList<Tomahawk::query_ptr>, Tomahawk::collection_ptr ) ) );
 /*    connect( cmd,  SIGNAL( done( Tomahawk::collection_ptr ) ),
                    SIGNAL( tracksFinished( Tomahawk::collection_ptr ) ) );*/
 
-    TomahawkApp::instance()->database()->enqueue(
-            QSharedPointer<DatabaseCommand>( cmd )
-    );
+    TomahawkApp::instance()->database()->enqueue( QSharedPointer<DatabaseCommand>( cmd ) );
 }
 
 
@@ -51,9 +48,8 @@ DatabaseCollection::addTracks( const QList<QVariant> &newitems )
 {
     qDebug() << Q_FUNC_INFO << newitems.length();
     DatabaseCommand_AddFiles* cmd = new DatabaseCommand_AddFiles( newitems, source() );
-    TomahawkApp::instance()->database()->enqueue(
-            QSharedPointer<DatabaseCommand>( cmd )
-    );
+
+    TomahawkApp::instance()->database()->enqueue( QSharedPointer<DatabaseCommand>( cmd ) );
 }
 
 

@@ -68,9 +68,9 @@ void EchoNestPlugin::getArtistBiography(const QString &caller, const QVariant& d
     if( !isValidArtistData( caller, data, customData ) )
         return;
     
-    Artist artist( data.toString() );
+    Echonest::Artist artist( data.toString() );
     QNetworkReply *reply = artist.fetchBiographies();
-    reply->setProperty("artist", QVariant::fromValue<Artist>(artist)); 
+    reply->setProperty("artist", QVariant::fromValue<Echonest::Artist>(artist));
     reply->setProperty( "data", data );
     m_replyMap[reply] = customData;
     m_callerMap[reply] = caller;
@@ -83,9 +83,9 @@ void EchoNestPlugin::getArtistFamiliarity(const QString &caller, const QVariant&
         return;
     
     qDebug() << "Fetching artist familiarity!" << data;
-    Artist artist( data.toString() );
+    Echonest::Artist artist( data.toString() );
     QNetworkReply* reply = artist.fetchFamiliarity();
-    reply->setProperty( "artist", QVariant::fromValue<Artist>(artist)); 
+    reply->setProperty( "artist", QVariant::fromValue<Echonest::Artist>(artist));
     reply->setProperty( "data", data );
     m_replyMap[reply] = customData;
     m_callerMap[reply] = caller;
@@ -97,9 +97,9 @@ void EchoNestPlugin::getArtistHotttnesss(const QString &caller, const QVariant& 
     if( !isValidArtistData( caller, data, customData ) )
         return;
     
-    Artist artist( data.toString() );
+    Echonest::Artist artist( data.toString() );
     QNetworkReply* reply = artist.fetchHotttnesss();
-    reply->setProperty( "artist", QVariant::fromValue<Artist>(artist)); 
+    reply->setProperty( "artist", QVariant::fromValue<Echonest::Artist>(artist));
     reply->setProperty( "data", data );
     m_replyMap[reply] = customData;
     m_callerMap[reply] = caller;
@@ -111,9 +111,9 @@ void EchoNestPlugin::getArtistTerms(const QString &caller, const QVariant& data,
     if( !isValidArtistData( caller, data, customData ) )
         return;
     
-    Artist artist( data.toString() );
+    Echonest::Artist artist( data.toString() );
     QNetworkReply* reply = artist.fetchTerms( Echonest::Artist::Weight );
-    reply->setProperty( "artist", QVariant::fromValue<Artist>(artist)); 
+    reply->setProperty( "artist", QVariant::fromValue<Echonest::Artist>(artist));
     reply->setProperty( "data", data );
     m_replyMap[reply] = customData;
     m_callerMap[reply] = caller;
@@ -122,7 +122,7 @@ void EchoNestPlugin::getArtistTerms(const QString &caller, const QVariant& data,
 
 void EchoNestPlugin::getMiscTopTerms(const QString &caller, const QVariant& data, InfoCustomDataHash& customData)
 {
-    QNetworkReply* reply = Artist::topTerms( 20 );
+    QNetworkReply* reply = Echonest::Artist::topTerms( 20 );
     m_replyMap[reply] = customData;
     m_callerMap[reply] = caller;
     connect( reply,SIGNAL(finished()), SLOT( getMiscTopSlot()));
@@ -132,7 +132,7 @@ void EchoNestPlugin::getMiscTopTerms(const QString &caller, const QVariant& data
 void EchoNestPlugin::getArtistBiographySlot()
 {
     QNetworkReply* reply = qobject_cast<QNetworkReply*>( sender() );
-    Artist artist = artistFromReply( reply );
+    Echonest::Artist artist = artistFromReply( reply );
     BiographyList biographies = artist.biographies();
     InfoGenericMap biographyMap;
     Q_FOREACH(const Biography& biography, biographies)
@@ -155,7 +155,7 @@ void EchoNestPlugin::getArtistBiographySlot()
 void EchoNestPlugin::getArtistFamiliaritySlot()
 {
     QNetworkReply* reply = qobject_cast<QNetworkReply*>( sender() );
-    Artist artist = artistFromReply( reply );
+    Echonest::Artist artist = artistFromReply( reply );
     qreal familiarity = artist.familiarity();
     emit info( m_callerMap[reply], Tomahawk::InfoSystem::InfoArtistFamiliarity, reply->property( "data" ), familiarity, m_replyMap[reply] );
     emit finished( m_callerMap[reply], Tomahawk::InfoSystem::InfoArtistFamiliarity);
@@ -167,7 +167,7 @@ void EchoNestPlugin::getArtistFamiliaritySlot()
 void EchoNestPlugin::getArtistHotttnesssSlot()
 {
     QNetworkReply* reply = qobject_cast<QNetworkReply*>( sender() );
-    Artist artist = artistFromReply( reply );
+    Echonest::Artist artist = artistFromReply( reply );
     qreal hotttnesss = artist.hotttnesss();
     emit info( m_callerMap[reply], Tomahawk::InfoSystem::InfoArtistHotttness, reply->property( "data" ), hotttnesss, m_replyMap[reply] );
     emit finished( m_callerMap[reply], Tomahawk::InfoSystem::InfoArtistHotttness);
@@ -179,7 +179,7 @@ void EchoNestPlugin::getArtistHotttnesssSlot()
 void EchoNestPlugin::getArtistTermsSlot()
 {
     QNetworkReply* reply = qobject_cast<QNetworkReply*>( sender() );
-    Artist artist = artistFromReply( reply );
+    Echonest::Artist artist = artistFromReply( reply );
     TermList terms = artist.terms();
     InfoGenericMap termsMap;
     Q_FOREACH( const Echonest::Term& term, terms ) {
@@ -198,7 +198,7 @@ void EchoNestPlugin::getArtistTermsSlot()
 void EchoNestPlugin::getMiscTopSlot()
 {
     QNetworkReply* reply = qobject_cast<QNetworkReply*>( sender() );
-    TermList terms = Artist::parseTopTerms( reply );
+    TermList terms = Echonest::Artist::parseTopTerms( reply );
     InfoGenericMap termsMap;
     Q_FOREACH( const Echonest::Term& term, terms ) {
         QMap< QString, QString > termMap;
@@ -250,7 +250,7 @@ bool EchoNestPlugin::isValidTrackData(const QString &caller, const QVariant& dat
 
 Artist EchoNestPlugin::artistFromReply(QNetworkReply* reply)
 {
-    Artist artist = reply->property("artist").value<Artist>();
+    Echonest::Artist artist = reply->property("artist").value<Echonest::Artist>();
     try {
         artist.parseProfile(reply);
     } catch( const Echonest::ParseError& e ) {

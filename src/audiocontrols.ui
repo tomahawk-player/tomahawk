@@ -216,7 +216,10 @@
               </widget>
              </item>
              <item>
-              <widget class="QLabel" name="albumLabel">
+              <widget class="ElidedLabel" name="albumLabel">
+               <property name="cursor">
+                <cursorShape>PointingHandCursor</cursorShape>
+               </property>
                <property name="text">
                 <string>Album</string>
                </property>

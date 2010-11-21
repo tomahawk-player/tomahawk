@@ -6,6 +6,8 @@
 
 namespace Tomahawk
 {
+    class Artist;
+    class Album;
     class Collection;
     class Playlist;
     class PlaylistEntry;
@@ -19,6 +21,8 @@ namespace Tomahawk
     typedef QSharedPointer<Query> query_ptr;
     typedef QSharedPointer<Result> result_ptr;
     typedef QSharedPointer<Source> source_ptr;
+    typedef QSharedPointer<Artist> artist_ptr;
+    typedef QSharedPointer<Album> album_ptr;
 
     // let's keep these typesafe, they are different kinds of GUID:
     typedef QString QID; //query id

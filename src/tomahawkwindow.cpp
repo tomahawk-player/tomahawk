@@ -301,7 +301,7 @@ TomahawkWindow::setWindowTitle( const QString& title )
         QMainWindow::setWindowTitle( title );
     else
     {
-        QString s = m_currentTrack->track() + " " + tr( "by" ) + " " + m_currentTrack->artist();
+        QString s = m_currentTrack->track() + " " + tr( "by" ) + " " + m_currentTrack->artist()->name();
         QMainWindow::setWindowTitle( s + " - " + title );
     }
 }
@@ -310,5 +310,5 @@ TomahawkWindow::setWindowTitle( const QString& title )
 void
 TomahawkWindow::showAboutTomahawk()
 {
-    QMessageBox::about( this, "About Tomahawk", "Copyright 2010 Christian Muehlhaeuser <muesli@gmail.com>\nThanks to: Leo Franchi, Dominik Schmidt and Steve Robertson" );
+    QMessageBox::about( this, "About Tomahawk", "Copyright 2010 Christian Muehlhaeuser <muesli@gmail.com>\n\nThanks to: Leo Franchi, Jeff Mitchell, Dominik Schmidt and Steve Robertson" );
 }

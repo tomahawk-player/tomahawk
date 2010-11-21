@@ -200,7 +200,6 @@ AudioEngine::loadTrack( const Tomahawk::result_ptr& result )
                 m_transcode->clearBuffers();
                 m_input = io;
 
-                m_audio->clearBuffers();
                 if ( m_audio->isPaused() )
                     m_audio->resume();
             }
@@ -235,9 +234,9 @@ AudioEngine::loadPreviousTrack()
         return;
     }
 
-    PlItem* pl = m_playlist->previousItem();
-    if ( pl )
-        loadTrack( pl->query()->results().at( 0 ) );
+    Tomahawk::result_ptr result = m_playlist->previousItem();
+    if ( !result.isNull() )
+        loadTrack( result );
     else
         stop();
 }
@@ -254,9 +253,9 @@ AudioEngine::loadNextTrack()
         return;
     }
 
-    PlItem* pl = m_playlist->nextItem();
-    if ( pl )
-        loadTrack( pl->query()->results().at( 0 ) );
+    Tomahawk::result_ptr result = m_playlist->nextItem();
+    if ( !result.isNull() )
+        loadTrack( result );
     else
         stop();
 }

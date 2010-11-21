@@ -39,6 +39,7 @@ private slots:
     void onRepeatClicked();
     void onShuffleClicked();
     void onTrackClicked();
+    void onAlbumClicked();
 
     void onCoverArtDownloaded();
 

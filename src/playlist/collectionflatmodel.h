@@ -14,6 +14,8 @@
 #include "tomahawk/playlist.h"
 #include "tomahawk/playlistinterface.h"
 
+#include "databasecommand_alltracks.h"
+
 class QMetaData;
 
 class CollectionFlatModel : public TrackModel
@@ -31,6 +33,8 @@ public:
 
     void addCollection( const Tomahawk::collection_ptr& collection );
     void removeCollection( const Tomahawk::collection_ptr& collection );
+
+    void addFilteredCollection( const Tomahawk::collection_ptr& collection, unsigned int amount, DatabaseCommand_AllTracks::SortOrder order );
 
 signals:
     void repeatModeChanged( PlaylistInterface::RepeatMode mode );

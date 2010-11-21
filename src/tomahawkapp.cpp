@@ -6,6 +6,8 @@
 #include <QTime>
 #include <QNetworkReply>
 
+#include "tomahawk/artist.h"
+#include "tomahawk/album.h"
 #include "tomahawk/collection.h"
 #include "tomahawk/infosystem.h"
 #include "database/database.h"
@@ -282,6 +284,8 @@ TomahawkApp::registerMetaTypes()
     qRegisterMetaType< QList<Tomahawk::plentry_ptr> >("QList<Tomahawk::plentry_ptr>");
     qRegisterMetaType< QList<Tomahawk::query_ptr> >("QList<Tomahawk::query_ptr>");
     qRegisterMetaType< QList<Tomahawk::result_ptr> >("QList<Tomahawk::result_ptr>");
+    qRegisterMetaType< QList<Tomahawk::artist_ptr> >("QList<Tomahawk::artist_ptr>");
+    qRegisterMetaType< QList<Tomahawk::album_ptr> >("QList<Tomahawk::album_ptr>");
     qRegisterMetaType< QMap< QString, Tomahawk::plentry_ptr > >("QMap< QString, Tomahawk::plentry_ptr >");
     qRegisterMetaType< Tomahawk::PlaylistRevision >("Tomahawk::PlaylistRevision");
     qRegisterMetaType< Tomahawk::QID >("Tomahawk::QID");

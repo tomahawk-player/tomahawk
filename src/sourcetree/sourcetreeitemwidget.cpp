@@ -3,9 +3,11 @@
 #include "ui_sourcetreeitemwidget.h"
 
 #include "tomahawk/tomahawkapp.h"
+#include "tomahawk/album.h"
 #include "database.h"
 #include "databasecommand_collectionstats.h"
 #include "dbsyncconnection.h"
+#include "playlistmanager.h"
 
 using namespace Tomahawk;
 
@@ -27,6 +29,8 @@ SourceTreeItemWidget::SourceTreeItemWidget( const source_ptr& source, QWidget* p
 
         displayname = tr( "Super Collection" );
         ui->infoLabel->setText( tr( "All available tracks" ) );
+
+        ui->onOffButton->hide();
     }
     else
     {
@@ -42,12 +46,16 @@ SourceTreeItemWidget::SourceTreeItemWidget( const source_ptr& source, QWidget* p
             displayname = source->userName();
 
         ui->infoLabel->setText( "???" );
+
+        ui->onOffButton->hide();
+        ui->infoButton->setPixmap( RESPATH "images/source-info.png" );
     }
 
     ui->nameLabel->setText( displayname );
     ui->infoLabel->setForegroundRole( QPalette::Dark );
 
     connect( ui->onOffButton, SIGNAL( clicked() ), SIGNAL( clicked() ) );
+    connect( ui->infoButton, SIGNAL( clicked() ), SLOT( onInfoButtonClicked() ) );
 
     onOffline();
 }
@@ -119,6 +127,8 @@ SourceTreeItemWidget::onLoadingStateChanged( DBSyncConnection::State newstate, D
 void
 SourceTreeItemWidget::onOnline()
 {
+    return;
+
     if ( !m_source.isNull() )
         ui->onOffButton->setPixmap( RESPATH "images/source-on-rest.png" );
 }
@@ -127,6 +137,15 @@ SourceTreeItemWidget::onOnline()
 void
 SourceTreeItemWidget::onOffline()
 {
+    return;
+
     if ( !m_source.isNull() )
         ui->onOffButton->setPixmap( RESPATH "images/source-off-rest.png" );
+}
+
+
+void
+SourceTreeItemWidget::onInfoButtonClicked()
+{
+    APP->playlistManager()->show( m_source );
 }

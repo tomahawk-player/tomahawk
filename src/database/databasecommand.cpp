@@ -39,7 +39,7 @@ DatabaseCommand::_exec( DatabaseImpl* lib )
     m_state = RUNNING;
     emit running();
     exec( lib );
-    m_state=FINISHED;
+    m_state = FINISHED;
     //qDebug() << "FINISHED" << thread();
 }
 

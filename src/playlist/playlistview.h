@@ -14,6 +14,8 @@ public:
     explicit PlaylistView( QWidget* parent = 0 );
     ~PlaylistView();
 
+    void setModel( TrackModel* model );
+
 protected:
     virtual void keyPressEvent( QKeyEvent* event );
 

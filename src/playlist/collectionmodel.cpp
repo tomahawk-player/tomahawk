@@ -9,6 +9,7 @@ using namespace Tomahawk;
 
 CollectionModel::CollectionModel( QObject* parent )
     : QAbstractItemModel( parent )
+    , m_rootItem( 0 )
 {
     qDebug() << Q_FUNC_INFO;
 
@@ -260,5 +261,17 @@ CollectionModel::onSourceOffline( Tomahawk::source_ptr src )
     if ( m_collectionIndex.contains( src->collection() ) )
     {
         removeCollection( src->collection() );
+    }
+}
+
+
+PlItem*
+CollectionModel::itemFromIndex( const QModelIndex& index ) const
+{
+    if ( index.isValid() )
+        return static_cast<PlItem*>( index.internalPointer() );
+    else
+    {
+        return m_rootItem;
     }
 }

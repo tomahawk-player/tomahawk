@@ -2,6 +2,7 @@
 
 #include "tomahawk/tomahawkapp.h"
 #include "tomahawk/infosystem.h"
+#include "tomahawk/album.h"
 #include "tomahawk/typedefs.h"
 #include <tomahawksettings.h>
 #include <audio/audioengine.h>
@@ -72,9 +73,9 @@ void XMPPBot::newTrackSlot(const Tomahawk::result_ptr &track)
     if (!track)
         return;
     QString status = QString("%1 - %2 (%3)")
-                    .arg(track->artist())
+                    .arg(track->artist()->name())
                     .arg(track->track())
-                    .arg(track->album());
+                    .arg(track->album()->name());
 
     m_client.data()->setPresence(Presence::Available, 1, status.toStdString());
 }
@@ -180,7 +181,7 @@ void XMPPBot::handleMessage(const Message& msg, MessageSession* session)
     qDebug() << "jid from:" << QString::fromStdString(msg.from().full()) << ", jid to:" << QString::fromStdString(msg.to().full());
     qDebug() << "Operating on tokens:" << tokens;
     
-    if (m_currTrack.isNull() || m_currTrack->artist().isEmpty() || m_currTrack->track().isEmpty())
+    if (m_currTrack.isNull() || m_currTrack->artist()->name().isEmpty() || m_currTrack->track().isEmpty())
     {
         qDebug() << "XMPPBot can't figure out track";
         QString m_currReturnMessage("\n\nSorry, I can't figure out what track is playing.\n\n");
@@ -193,18 +194,18 @@ void XMPPBot::handleMessage(const Message& msg, MessageSession* session)
     Q_FOREACH(QString token, tokens)
     {
         if (token == "biography")
-            infoMap[InfoArtistBiography] = m_currTrack.data()->artist();
+            infoMap[InfoArtistBiography] = m_currTrack.data()->artist()->name();
         if (token == "terms")
-            infoMap[InfoArtistTerms] = m_currTrack.data()->artist();
+            infoMap[InfoArtistTerms] = m_currTrack.data()->artist()->name();
         if (token == "hotttness")
-            infoMap[InfoArtistHotttness] = m_currTrack.data()->artist();
+            infoMap[InfoArtistHotttness] = m_currTrack.data()->artist()->name();
         if (token == "familiarity")
-            infoMap[InfoArtistFamiliarity] = m_currTrack.data()->artist();
+            infoMap[InfoArtistFamiliarity] = m_currTrack.data()->artist()->name();
         if (token == "lyrics")
         {
             MusixMatchHash myhash;
             myhash["trackName"] = m_currTrack.data()->track();
-            myhash["artistName"] = m_currTrack.data()->artist();
+            myhash["artistName"] = m_currTrack.data()->artist()->name();
             infoMap[InfoTrackLyrics] = QVariant::fromValue<Tomahawk::InfoSystem::MusixMatchHash>(myhash);
         }
     }

@@ -5,12 +5,14 @@
 #include <QTreeView>
 
 #include "tomahawk/tomahawkapp.h"
+#include "tomahawk/album.h"
 
 using namespace Tomahawk;
 
 
 TrackModel::TrackModel( QObject* parent )
     : QAbstractItemModel( parent )
+    , m_rootItem( new PlItem( 0, this ) )
     , m_readOnly( true )
 {
     qDebug() << Q_FUNC_INFO;
@@ -140,7 +142,7 @@ TrackModel::data( const QModelIndex& index, int role ) const
         switch( index.column() )
         {
             case 0:
-                return query->results().first()->artist();
+                return query->results().first()->artist()->name();
                 break;
 
             case 1:
@@ -148,7 +150,7 @@ TrackModel::data( const QModelIndex& index, int role ) const
                 break;
 
             case 2:
-                return query->results().first()->album();
+                return query->results().first()->album()->name();
                 break;
 
             case 3:
@@ -291,5 +293,17 @@ TrackModel::removeIndexes( const QList<QModelIndex>& indexes )
     foreach( const QModelIndex& idx, indexes )
     {
         removeIndex( idx );
+    }
+}
+
+
+PlItem*
+TrackModel::itemFromIndex( const QModelIndex& index ) const
+{
+    if ( index.isValid() )
+        return static_cast<PlItem*>( index.internalPointer() );
+    else
+    {
+        return m_rootItem;
     }
 }

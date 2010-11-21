@@ -4,6 +4,7 @@
 #include <QNetworkReply>
 
 #include "tomahawk/tomahawkapp.h"
+#include "tomahawk/album.h"
 #include "utils/tomahawkutils.h"
 
 #include "audioengine.h"
@@ -25,7 +26,7 @@ AudioControls::AudioControls( QWidget* parent )
     ui->trackLabelLayout->setSpacing( 3 );
 
     QFont font( ui->artistTrackLabel->font() );
-    font.setPixelSize( 12 );
+//    font.setPixelSize( 12 );
 
     ui->artistTrackLabel->setFont( font );
     ui->artistTrackLabel->setElideMode( Qt::ElideMiddle );
@@ -122,6 +123,7 @@ AudioControls::AudioControls( QWidget* parent )
     connect( ui->shuffleButton,    SIGNAL( clicked() ), SLOT( onShuffleClicked() ) );
 
     connect( ui->artistTrackLabel, SIGNAL( clicked() ), SLOT( onTrackClicked() ) );
+    connect( ui->albumLabel,       SIGNAL( clicked() ), SLOT( onAlbumClicked() ) );
 
     // <From AudioEngine>
     connect( (QObject*)TomahawkApp::instance()->audioEngine(), SIGNAL( loading( const Tomahawk::result_ptr& ) ), SLOT( onPlaybackLoading( const Tomahawk::result_ptr& ) ) );
@@ -212,7 +214,7 @@ AudioControls::onPlaybackStarted( const Tomahawk::result_ptr& result )
     onPlaybackLoading( result );
 
     QString imgurl = "http://ws.audioscrobbler.com/2.0/?method=album.imageredirect&artist=%1&album=%2&size=medium&api_key=7a90f6672a04b809ee309af169f34b8b";
-    QNetworkRequest req( imgurl.arg( result->artist() ).arg( result->album() ) );
+    QNetworkRequest req( imgurl.arg( result->artist()->name() ).arg( result->album()->name() ) );
     QNetworkReply* reply = APP->nam()->get( req );
     connect( reply, SIGNAL( finished() ), SLOT( onCoverArtDownloaded() ) );
 }
@@ -225,8 +227,8 @@ AudioControls::onPlaybackLoading( const Tomahawk::result_ptr& result )
 
     m_currentTrack = result;
 
-    ui->artistTrackLabel->setText( QString( "%1 - %2" ).arg( result->artist() ).arg( result->track() ) );
-    ui->albumLabel->setText( result->album() );
+    ui->artistTrackLabel->setText( QString( "%1 - %2" ).arg( result->artist()->name() ).arg( result->track() ) );
+    ui->albumLabel->setText( result->album()->name() );
     ui->ownerLabel->setText( result->collection()->source()->friendlyName() );
     ui->coverImage->setPixmap( m_defaultCover );
 
@@ -411,5 +413,12 @@ AudioControls::onShuffleClicked()
 void
 AudioControls::onTrackClicked()
 {
-     APP->playlistManager()->showCurrentTrack();
+    APP->playlistManager()->showCurrentTrack();
+}
+
+
+void
+AudioControls::onAlbumClicked()
+{
+    APP->playlistManager()->show( m_currentTrack->album() );
 }

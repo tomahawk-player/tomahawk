@@ -4,6 +4,8 @@
 #include <QMimeData>
 #include <QTreeView>
 
+#include "database.h"
+
 using namespace Tomahawk;
 
 
@@ -11,7 +13,6 @@ CollectionFlatModel::CollectionFlatModel( QObject* parent )
     : TrackModel( parent )
 {
     qDebug() << Q_FUNC_INFO;
-    m_rootItem = new PlItem( 0, this );
 
     connect( &APP->sourcelist(), SIGNAL( sourceRemoved( Tomahawk::source_ptr ) ), SLOT( onSourceOffline( Tomahawk::source_ptr ) ) );
 }
@@ -58,6 +59,28 @@ CollectionFlatModel::addCollection( const collection_ptr& collection )
              SLOT( onTracksAdded( QList<Tomahawk::query_ptr>, Tomahawk::collection_ptr ) ) );
     connect( collection.data(), SIGNAL( tracksFinished( Tomahawk::collection_ptr ) ),
              SLOT( onTracksAddingFinished( Tomahawk::collection_ptr ) ) );
+}
+
+
+void
+CollectionFlatModel::addFilteredCollection( const collection_ptr& collection, unsigned int amount, DatabaseCommand_AllTracks::SortOrder order )
+{
+    qDebug() << Q_FUNC_INFO << collection->name()
+                            << collection->source()->id()
+                            << collection->source()->userName()
+                            << amount << order;
+
+    emit loadingStarts();
+
+    DatabaseCommand_AllTracks* cmd = new DatabaseCommand_AllTracks( collection );
+    cmd->setLimit( amount );
+    cmd->setSortOrder( order );
+    cmd->setSortDescending( true );
+
+    connect( cmd, SIGNAL( tracks( QList<Tomahawk::query_ptr>, Tomahawk::collection_ptr ) ),
+                    SLOT( onTracksAdded( QList<Tomahawk::query_ptr>, Tomahawk::collection_ptr ) ) );
+
+    TomahawkApp::instance()->database()->enqueue( QSharedPointer<DatabaseCommand>( cmd ) );
 }
 
 

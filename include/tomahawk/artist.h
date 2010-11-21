@@ -7,9 +7,6 @@
 namespace Tomahawk
 {
 
-class Artist;
-typedef QSharedPointer<Artist> artist_ptr;
-
 class Artist : public QObject
 {
 Q_OBJECT
@@ -19,7 +16,7 @@ public:
         : m_name( name )
     {};
 
-    const QString& name() const { return m_name; }
+    QString name() const { return m_name; }
 
 private:
     QString m_name;

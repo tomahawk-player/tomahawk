@@ -3,8 +3,10 @@
 
 #include <QObject>
 
-#include "collection.h"
 #include "tomahawk/typedefs.h"
+#include "collection.h"
+#include "artist.h"
+#include "album.h"
 
 namespace Tomahawk
 {
@@ -21,11 +23,11 @@ public:
     RID id() const;
     collection_ptr collection() const { return m_collection; }
 
-    QString artist()   const { return m_artist; }
-    QString album()    const { return m_album; }
-    QString track()    const { return m_track; }
-    QString url()      const { return m_url; }
-    QString mimetype() const { return m_mimetype; }
+    Tomahawk::artist_ptr artist() const { return m_artist; }
+    Tomahawk::album_ptr album()   const { return m_album; }
+    QString track()     const { return m_track; }
+    QString url()       const { return m_url; }
+    QString mimetype()  const { return m_mimetype; }
 
     unsigned int duration() const { return m_duration; }
     unsigned int bitrate() const { return m_bitrate; }
@@ -33,11 +35,10 @@ public:
     unsigned int albumpos() const { return m_albumpos; }
     unsigned int modificationTime() const { return m_modtime; }
 
+    unsigned int dbid() const { return m_id; }
+
     // for debug output:
-    QString toString() const
-    {
-        return QString( "Result(%1 %2\t%3 - %4  %5" ).arg( id() ).arg( score() ).arg( artist() ).arg( track() ).arg( url() );
-    }
+    QString toString() const;
 
 signals:
     // emitted when the collection this result comes from is going offline:
@@ -48,8 +49,8 @@ private:
     mutable RID m_rid;
     collection_ptr m_collection;
 
-    QString m_artist;
-    QString m_album;
+    Tomahawk::artist_ptr m_artist;
+    Tomahawk::album_ptr m_album;
     QString m_track;
     QString m_url;
     QString m_mimetype;
@@ -59,6 +60,8 @@ private:
     unsigned int m_size;
     unsigned int m_albumpos;
     unsigned int m_modtime;
+
+    unsigned int m_id;
 };
 
 }; //ns

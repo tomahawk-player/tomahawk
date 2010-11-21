@@ -85,26 +85,10 @@ Collection::setPlaylists( const QList<Tomahawk::playlist_ptr>& plists )
 
 
 void
-Collection::setTracks( const QList<QVariant>& tracks, Tomahawk::collection_ptr collection )
+Collection::setTracks( const QList<Tomahawk::query_ptr>& tracks, Tomahawk::collection_ptr collection )
 {
     qDebug() << Q_FUNC_INFO << tracks.count() << collection->name();
 
-    QList<query_ptr> qs;
-    foreach( const QVariant& v, tracks )
-    {
-        query_ptr query = query_ptr( new Query( v ) );
-
-        QVariantMap t = query->toVariant().toMap();
-        t["score"] = 1.0;
-
-        QList<result_ptr> results;
-        result_ptr result = result_ptr( new Result( t, collection ) );
-        results << result;
-        query->addResults( results );
-
-        qs << query;
-    }
-
-    m_tracks << qs;
-    emit tracksAdded( qs, collection );
+    m_tracks << tracks;
+    emit tracksAdded( tracks, collection );
 }

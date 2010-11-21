@@ -1,37 +1,33 @@
-#ifndef TRACKMODEL_H
-#define TRACKMODEL_H
+#ifndef ALBUMMODEL_H
+#define ALBUMMODEL_H
 
 #include <QAbstractItemModel>
+#include <QPixmap>
 
+#include "tomahawk/album.h"
+#include "tomahawk/collection.h"
 #include "tomahawk/playlistinterface.h"
-#include "playlist/plitem.h"
+#include "database/databasecommand_allalbums.h"
+
+#include "albumitem.h"
 
 class QMetaData;
 
-class TrackModel : public QAbstractItemModel, public PlaylistInterface
+class AlbumModel : public QAbstractItemModel, public PlaylistInterface
 {
 Q_OBJECT
 
 public:
-    enum Columns {
-        Artist = 0,
-        Track = 1,
-        Album = 2,
-        Duration = 3,
-        Bitrate = 4,
-        Age = 5,
-        Origin = 6
-    };
-
-    explicit TrackModel( QObject* parent = 0 );
-    virtual ~TrackModel();
+    explicit AlbumModel( QObject* parent = 0 );
+    virtual ~AlbumModel();
 
     virtual QModelIndex index( int row, int column, const QModelIndex& parent ) const;
     virtual QModelIndex parent( const QModelIndex& child ) const;
 
-    virtual bool isReadOnly() const { return m_readOnly; }
+    virtual bool isReadOnly() const { return true; }
 
     virtual int trackCount() const { return rowCount( QModelIndex() ); }
+    virtual int albumCount() const { return rowCount( QModelIndex() ); }
 
     virtual int rowCount( const QModelIndex& parent ) const;
     virtual int columnCount( const QModelIndex& parent ) const;
@@ -46,19 +42,28 @@ public:
     virtual Tomahawk::result_ptr nextItem() { return Tomahawk::result_ptr(); }
     virtual Tomahawk::result_ptr siblingItem( int direction ) { return Tomahawk::result_ptr(); }
 
-    virtual QMimeData* mimeData( const QModelIndexList& indexes ) const;
-    virtual QStringList mimeTypes() const;
-    virtual Qt::DropActions supportedDropActions() const;
-    virtual Qt::ItemFlags flags( const QModelIndex& index ) const;
-
-    virtual QPersistentModelIndex currentItem() { return m_currentIndex; }
-
     virtual PlaylistInterface::RepeatMode repeatMode() const { return PlaylistInterface::NoRepeat; }
     virtual bool shuffled() const { return false; }
 
-    PlItem* itemFromIndex( const QModelIndex& index ) const;
+    virtual QMimeData* mimeData( const QModelIndexList& indexes ) const;
+    virtual QStringList mimeTypes() const;
+    virtual Qt::ItemFlags flags( const QModelIndex& index ) const;
 
-    PlItem* m_rootItem;
+    void addFilteredCollection( const Tomahawk::collection_ptr& collection, unsigned int amount, DatabaseCommand_AllAlbums::SortOrder order );
+
+    AlbumItem* itemFromIndex( const QModelIndex& index ) const
+    {
+        if ( index.isValid() )
+            return static_cast<AlbumItem*>( index.internalPointer() );
+        else
+        {
+            return m_rootItem;
+        }
+    }
+
+public slots:
+    virtual void setRepeatMode( PlaylistInterface::RepeatMode mode ) {}
+    virtual void setShuffled( bool shuffled ) {}
 
 signals:
     void repeatModeChanged( PlaylistInterface::RepeatMode mode );
@@ -66,18 +71,16 @@ signals:
 
     void trackCountChanged( unsigned int tracks );
 
-public slots:
-    virtual void setCurrentItem( const QModelIndex& index );
-
-    virtual void setRepeatMode( PlaylistInterface::RepeatMode mode ) {}
-    virtual void setShuffled( bool shuffled ) {}
-
 protected:
-    virtual void setReadOnly( bool b ) { m_readOnly = b; }
+
+private slots:
+    void onAlbumsAdded( const QList<Tomahawk::album_ptr>& albums, const Tomahawk::collection_ptr& collection );
+    void onCoverArtDownloaded();
 
 private:
     QPersistentModelIndex m_currentIndex;
-    bool m_readOnly;
+    AlbumItem* m_rootItem;
+    QPixmap m_defaultCover;
 };
 
-#endif // TRACKMODEL_H
+#endif // ALBUMMODEL_H

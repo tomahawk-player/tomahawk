@@ -49,7 +49,7 @@ public:
     void setLastmodified( unsigned int i ) { m_lastmodified = i; }
 
     source_ptr lastsource() const { return m_lastsource; }
-    void setLastsource( source_ptr s ) { m_lastsource = s ; }
+    void setLastsource( source_ptr s ) { m_lastsource = s; }
 
 private:
     QString m_guid;

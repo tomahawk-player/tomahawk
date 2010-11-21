@@ -37,11 +37,9 @@ public:
     void addCollection( const Tomahawk::collection_ptr& collection );
     void removeCollection( const Tomahawk::collection_ptr& collection );
 
-//    PlItem* itemFromIndex( const QModelIndex& index ) const;
-
-    virtual PlItem* previousItem() { return 0; }
-    virtual PlItem* nextItem() { return 0; }
-    virtual PlItem* siblingItem( int direction ) { return 0; }
+    virtual Tomahawk::result_ptr previousItem() { return Tomahawk::result_ptr(); }
+    virtual Tomahawk::result_ptr nextItem() { return Tomahawk::result_ptr(); }
+    virtual Tomahawk::result_ptr siblingItem( int direction ) { return Tomahawk::result_ptr(); }
 
     virtual void setCurrentItem( const QModelIndex& index ) {}
 
@@ -50,6 +48,8 @@ public:
 
     virtual void setRepeatMode( PlaylistInterface::RepeatMode mode ) {}
     virtual void setShuffled( bool shuffled ) {}
+
+    PlItem* itemFromIndex( const QModelIndex& index ) const;
 
 signals:
     void repeatModeChanged( PlaylistInterface::RepeatMode mode );
@@ -66,6 +66,7 @@ private slots:
     void onSourceOffline( Tomahawk::source_ptr src );
 
 private:
+    PlItem* m_rootItem;
     QMap< Tomahawk::collection_ptr, PlItem* > m_collectionIndex;
 };
 

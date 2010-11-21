@@ -27,6 +27,7 @@ SET( TOMAHAWK_INC_DIR "${CMAKE_CURRENT_SOURCE_DIR}/../include/" )
 #ENDFOREACH( moddir )
 
 SET( tomahawkSources ${tomahawkSources}
+     album.cpp
      pipeline.cpp
      playlist.cpp
      pluginapi.cpp
@@ -67,6 +68,7 @@ SET( tomahawkSources ${tomahawkSources}
      database/databasecommand.cpp
      database/databasecommandloggable.cpp
      database/databasecommand_resolve.cpp
+     database/databasecommand_allalbums.cpp
      database/databasecommand_alltracks.cpp
      database/databasecommand_addfiles.cpp
      database/databasecommand_dirmtimes.cpp
@@ -117,6 +119,10 @@ SET( tomahawkSourcesGui ${tomahawkSourcesGui}
      playlist/trackmodel.cpp
      playlist/trackproxymodel.cpp
      playlist/trackview.cpp
+     playlist/albumitem.cpp
+     playlist/albummodel.cpp
+     playlist/albumproxymodel.cpp
+     playlist/albumview.cpp
 
      sourcetree/sourcesmodel.cpp
      sourcetree/sourcetreeitem.cpp
@@ -128,6 +134,8 @@ SET( tomahawkSourcesGui ${tomahawkSourcesGui}
      topbar/searchlineedit.cpp  
      topbar/lineedit.cpp
      topbar/searchbutton.cpp
+
+     infowidgets/sourceinfowidget.cpp
 
      tomahawkwindow.cpp
      audiocontrols.cpp
@@ -169,6 +177,7 @@ SET( tomahawkHeaders ${tomahawkHeaders}
      database/databasecommand.h
      database/databasecommandloggable.h
      database/databasecommand_resolve.h
+     database/databasecommand_allalbums.h
      database/databasecommand_alltracks.h
      database/databasecommand_addfiles.h
      database/databasecommand_dirmtimes.h
@@ -235,6 +244,10 @@ SET( tomahawkHeadersGui ${tomahawkHeadersGui}
      playlist/trackmodel.h
      playlist/trackproxymodel.h
      playlist/trackview.h
+     playlist/albumitem.h
+     playlist/albummodel.h
+     playlist/albumproxymodel.h
+     playlist/albumview.h
 
      sourcetree/sourcesmodel.h
      sourcetree/sourcetreeitem.h
@@ -247,6 +260,8 @@ SET( tomahawkHeadersGui ${tomahawkHeadersGui}
      topbar/lineedit.h
      topbar/lineedit_p.h
      topbar/searchbutton.h
+
+     infowidgets/sourceinfowidget.h
 
      tomahawkwindow.h
      audiocontrols.h
@@ -261,6 +276,7 @@ SET( tomahawkUI ${tomahawkUI}
      audiocontrols.ui
      sourcetree/sourcetreeitemwidget.ui
      topbar/topbar.ui
+     infowidgets/sourceinfowidget.ui
 )
 
 INCLUDE_DIRECTORIES(

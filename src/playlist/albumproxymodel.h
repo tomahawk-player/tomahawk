@@ -1,39 +1,35 @@
-#ifndef TRACKPROXYMODEL_H
-#define TRACKPROXYMODEL_H
+#ifndef ALBUMPROXYMODEL_H
+#define ALBUMPROXYMODEL_H
 
 #include <QSortFilterProxyModel>
 
 #include "tomahawk/playlistinterface.h"
-#include "playlist/trackmodel.h"
+#include "playlist/albummodel.h"
 
-class TrackProxyModel : public QSortFilterProxyModel, public PlaylistInterface
+class AlbumProxyModel : public QSortFilterProxyModel, public PlaylistInterface
 {
 Q_OBJECT
 
 public:
-    explicit TrackProxyModel ( QObject* parent = 0 );
+    explicit AlbumProxyModel( QObject* parent = 0 );
 
-    virtual TrackModel* sourceModel() const { return m_model; }
-    virtual void setSourceModel( TrackModel* sourceModel );
-
-    virtual QPersistentModelIndex currentItem() const { return mapFromSource( m_model->currentItem() ); }
-    virtual void setCurrentItem( const QModelIndex& index ) { m_model->setCurrentItem( mapToSource( index ) ); }
+    virtual AlbumModel* sourceModel() const { return m_model; }
+    virtual void setSourceModel( AlbumModel* sourceModel );
 
     virtual int trackCount() const { return rowCount( QModelIndex() ); }
+    virtual int albumCount() const { return rowCount( QModelIndex() ); }
 
     virtual void removeIndex( const QModelIndex& index );
     virtual void removeIndexes( const QList<QModelIndex>& indexes );
 
     virtual Tomahawk::result_ptr previousItem();
     virtual Tomahawk::result_ptr nextItem();
-    virtual Tomahawk::result_ptr siblingItem( int itemsAway );
+    virtual Tomahawk::result_ptr siblingItem( int direction );
 
     void setFilterRegExp( const QString& pattern );
 
     virtual PlaylistInterface::RepeatMode repeatMode() const { return m_repeatMode; }
     virtual bool shuffled() const { return m_shuffled; }
-
-    PlItem* itemFromIndex( const QModelIndex& index ) const { return sourceModel()->itemFromIndex( index ); }
 
 signals:
     void repeatModeChanged( PlaylistInterface::RepeatMode mode );
@@ -51,9 +47,9 @@ protected:
     bool filterAcceptsRow( int sourceRow, const QModelIndex& sourceParent ) const;
 
 private:
-    TrackModel* m_model;
+    AlbumModel* m_model;
     RepeatMode m_repeatMode;
     bool m_shuffled;
 };
 
-#endif // TRACKPROXYMODEL_H
+#endif // ALBUMPROXYMODEL_H

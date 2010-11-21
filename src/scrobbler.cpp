@@ -5,6 +5,7 @@
 #include <QCryptographicHash>
 
 #include <tomahawk/tomahawkapp.h>
+#include "tomahawk/album.h"
 #include "tomahawk/typedefs.h"
 #include "audio/audioengine.h"
 #include "tomahawksettings.h"
@@ -81,8 +82,8 @@ Scrobbler::trackStarted( const Tomahawk::result_ptr& track )
     m_track.stamp();
 
     m_track.setTitle( track->track() );
-    m_track.setArtist( track->artist() );
-    m_track.setAlbum( track->album() );
+    m_track.setArtist( track->artist()->name() );
+    m_track.setAlbum( track->album()->name() );
     m_track.setDuration( track->duration() );
     m_track.setSource( lastfm::Track::Player );
 

@@ -4,6 +4,8 @@
 #include <QMimeData>
 #include <QTreeView>
 
+#include "tomahawk/album.h"
+
 using namespace Tomahawk;
 
 
@@ -12,7 +14,6 @@ PlaylistModel::PlaylistModel( QObject* parent )
     , m_waitForUpdate( false )
 {
     qDebug() << Q_FUNC_INFO;
-    m_rootItem = new PlItem( 0, this );
 }
 
 
@@ -82,6 +83,61 @@ PlaylistModel::loadPlaylist( const Tomahawk::playlist_ptr& playlist )
 
     qDebug() << rowCount( QModelIndex() );
     emit loadingFinished();
+}
+
+
+void
+PlaylistModel::loadAlbum( const Tomahawk::album_ptr& album )
+{
+    if ( album.isNull() )
+        return;
+
+    if ( rowCount( QModelIndex() ) )
+    {
+        emit beginRemoveRows( QModelIndex(), 0, rowCount( QModelIndex() ) - 1 );
+        delete m_rootItem;
+        emit endRemoveRows();
+        m_rootItem = new PlItem( 0, this );
+    }
+
+    m_playlist.clear();
+    setReadOnly( false );
+
+    connect( album.data(), SIGNAL( tracksAdded( QList<Tomahawk::query_ptr>, Tomahawk::collection_ptr ) ),
+                             SLOT( onTracksAdded( QList<Tomahawk::query_ptr>, Tomahawk::collection_ptr ) ) );
+
+    onTracksAdded( album->tracks(), album->collection() );
+}
+
+
+void
+PlaylistModel::onTracksAdded( const QList<Tomahawk::query_ptr>& tracks, const Tomahawk::collection_ptr& collection )
+{
+    if ( !tracks.count() )
+        return;
+
+    int c = rowCount( QModelIndex() );
+    QPair< int, int > crows;
+    crows.first = c;
+    crows.second = c + tracks.count() - 1;
+
+    emit beginInsertRows( QModelIndex(), crows.first, crows.second );
+
+    PlItem* plitem;
+    foreach( const query_ptr& query, tracks )
+    {
+        plentry_ptr entry = plentry_ptr( new PlaylistEntry() );
+        entry->setQuery( query );
+
+        plitem = new PlItem( entry, m_rootItem );
+        plitem->index = createIndex( m_rootItem->children.count() - 1, 0, plitem );
+
+        connect( plitem, SIGNAL( dataChanged() ), SLOT( onDataChanged() ) );
+    }
+
+    emit endInsertRows();
+    emit trackCountChanged( rowCount( QModelIndex() ) );
+    qDebug() << rowCount( QModelIndex() );
 }
 
 
@@ -179,7 +235,13 @@ PlaylistModel::onPlaylistChanged()
 {
     qDebug() << Q_FUNC_INFO;
 
+    if ( m_playlist.isNull() )
+        return;
+
     QList<plentry_ptr> l = playlistEntries();
+    if ( !l.count() )
+        return;
+
     foreach( const plentry_ptr& ple, l )
     {
         qDebug() << "updateinternal:" << ple->query()->toString();

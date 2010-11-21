@@ -125,7 +125,7 @@ TrackView::onSectionResized( int logicalIndex, int oldSize, int newSize )
 void
 TrackView::onItemActivated( const QModelIndex& index )
 {
-    PlItem* item = ((PlaylistInterface*)m_model)->itemFromIndex( m_proxyModel->mapToSource( index ) );
+    PlItem* item = m_model->itemFromIndex( m_proxyModel->mapToSource( index ) );
     if ( item && item->query()->numResults() )
     {
         qDebug() << "Result activated:" << item->query()->toString() << item->query()->results().first()->url();

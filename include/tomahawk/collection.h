@@ -21,11 +21,6 @@
 namespace Tomahawk
 {
 
-/*
-    Call load(), then wait for the finishedLoading() signal,
-    then call tracks() to get all tracks.
- */
-
 class Collection : public QObject
 {
 Q_OBJECT
@@ -62,7 +57,7 @@ public slots:
     virtual void removeTracks( const QList<QVariant> &olditems ) = 0;
 
     void setPlaylists( const QList<Tomahawk::playlist_ptr>& plists );
-    void setTracks( const QList<QVariant>& tracks, Tomahawk::collection_ptr collection );
+    void setTracks( const QList<Tomahawk::query_ptr>& tracks, Tomahawk::collection_ptr collection );
 
 protected:
     QString m_name;

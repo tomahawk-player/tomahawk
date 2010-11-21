@@ -133,16 +133,9 @@ SourceTreeView::onItemActivated( const QModelIndex& index )
             else
             {
                 qDebug() << "SourceTreeItem toggled:" << item->source()->userName();
-                APP->playlistManager()->show( item->source()->collection() );
 
-                /*if ( APP->playlistManager()->superCollections().contains( item->source()->collection() ) )
-                {
-                    emit onOnline( index );
-                }
-                else
-                {
-                    emit onOffline( index );
-                }*/
+                APP->playlistManager()->show( item->source()->collection() );
+//                APP->playlistManager()->show( item->source() );
             }
         }
     }

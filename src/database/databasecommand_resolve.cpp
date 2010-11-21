@@ -1,6 +1,7 @@
 #include "databasecommand_resolve.h"
 
 #include "tomahawk/tomahawkapp.h"
+#include "tomahawk/album.h"
 
 #define MINSCORE 0.5
 
@@ -61,7 +62,9 @@ DatabaseCommand_Resolve::exec( DatabaseImpl* lib )
                             "album.name as albname, "
                             "track.name as trkname, "
                             "file.source, "
-                            "file_join.albumpos "
+                            "file_join.albumpos, "
+                            "artist.id as artid, "
+                            "album.id as albid "
                             "FROM file, file_join, artist, track "
                             "LEFT JOIN album ON album.id = file_join.album "
                             "WHERE "
@@ -98,7 +101,9 @@ DatabaseCommand_Resolve::exec( DatabaseImpl* lib )
         m["duration"] = files_query.value(5).toInt();
         m["bitrate"]  = files_query.value(6).toInt();
         m["artist"]   = files_query.value(10).toString();
+        m["artistid"] = files_query.value(15).toUInt();
         m["album"]    = files_query.value(11).toString();
+        m["albumid"]  = files_query.value(16).toUInt();
         m["track"]    = files_query.value(12).toString();
         m["srcid"]    = files_query.value(13).toInt();
         m["albumpos"] = files_query.value(14).toUInt();

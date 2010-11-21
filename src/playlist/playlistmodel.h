@@ -31,6 +31,7 @@ public:
     virtual bool dropMimeData( const QMimeData* data, Qt::DropAction action, int row, int column, const QModelIndex& parent );
 
     void loadPlaylist( const Tomahawk::playlist_ptr& playlist );
+    void loadAlbum( const Tomahawk::album_ptr& album );
 
     virtual void removeIndex( const QModelIndex& index );
 
@@ -48,6 +49,8 @@ private slots:
 
     void onRevisionLoaded( Tomahawk::PlaylistRevision revision );
     void onPlaylistChanged();
+
+    void onTracksAdded( const QList<Tomahawk::query_ptr>& tracks, const Tomahawk::collection_ptr& collection );
 
 private:
     QList<Tomahawk::plentry_ptr> playlistEntries() const;

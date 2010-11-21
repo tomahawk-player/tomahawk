@@ -3,6 +3,7 @@
 #include <QDebug>
 #include <QTreeView>
 
+#include "tomahawk/album.h"
 #include "tomahawk/query.h"
 #include "collectionmodel.h"
 
@@ -43,27 +44,26 @@ TrackProxyModel::setFilterRegExp( const QString& pattern )
 }
 
 
-PlItem*
+Tomahawk::result_ptr
 TrackProxyModel::previousItem()
 {
     return siblingItem( -1 );
 }
 
 
-PlItem*
+Tomahawk::result_ptr
 TrackProxyModel::nextItem()
 {
     return siblingItem( 1 );
 }
 
 
-PlItem*
+Tomahawk::result_ptr
 TrackProxyModel::siblingItem( int itemsAway )
 {
     qDebug() << Q_FUNC_INFO;
 
     QModelIndex idx = index( 0, 0 );
-
     if( rowCount() )
     {
         if ( m_shuffled )
@@ -114,7 +114,7 @@ TrackProxyModel::siblingItem( int itemsAway )
         {
             qDebug() << "Next PlaylistItem found:" << item->query()->toString() << item->query()->results().at( 0 )->url();
             setCurrentItem( idx );
-            return item;
+            return item->query()->results().at( 0 );
         }
 
         idx = index( idx.row() + ( itemsAway > 0 ? 1 : -1 ), 0 );
@@ -122,7 +122,7 @@ TrackProxyModel::siblingItem( int itemsAway )
     while ( idx.isValid() );
 
     setCurrentItem( QModelIndex() );
-    return 0;
+    return Tomahawk::result_ptr();
 }
 
 
@@ -148,8 +148,8 @@ TrackProxyModel::filterAcceptsRow( int sourceRow, const QModelIndex& sourceParen
     {
         if ( !r.isNull() )
         {
-            if ( !r->artist().contains( s, Qt::CaseInsensitive ) &&
-                 !r->album() .contains( s, Qt::CaseInsensitive ) &&
+            if ( !r->artist()->name().contains( s, Qt::CaseInsensitive ) &&
+                 !r->album()->name().contains( s, Qt::CaseInsensitive ) &&
                  !r->track() .contains( s, Qt::CaseInsensitive ) )
             {
                 found = false;
