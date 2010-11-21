@@ -26,7 +26,9 @@ AudioControls::AudioControls( QWidget* parent )
     ui->trackLabelLayout->setSpacing( 3 );
 
     QFont font( ui->artistTrackLabel->font() );
-//    font.setPixelSize( 12 );
+    font.setPixelSize( 12 );
+    ui->artistTrackLabel->setMinimumSize( ui->artistTrackLabel->minimumSizeHint() );
+    ui->albumLabel->setMinimumSize( ui->albumLabel->minimumSizeHint() );
 
     ui->artistTrackLabel->setFont( font );
     ui->artistTrackLabel->setElideMode( Qt::ElideMiddle );

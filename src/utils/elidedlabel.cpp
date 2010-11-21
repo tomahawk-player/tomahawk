@@ -87,6 +87,7 @@ ElidedLabel::init( const QString& txt )
     m_text = txt;
     align = Qt::AlignLeft;
     mode = Qt::ElideMiddle;
+    setContentsMargins( 0, 0, 0, 0 );
 }
 
 
