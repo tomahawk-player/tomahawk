@@ -45,20 +45,6 @@ TrackProxyModel::setFilterRegExp( const QString& pattern )
 
 
 Tomahawk::result_ptr
-TrackProxyModel::previousItem()
-{
-    return siblingItem( -1 );
-}
-
-
-Tomahawk::result_ptr
-TrackProxyModel::nextItem()
-{
-    return siblingItem( 1 );
-}
-
-
-Tomahawk::result_ptr
 TrackProxyModel::siblingItem( int itemsAway )
 {
     qDebug() << Q_FUNC_INFO;

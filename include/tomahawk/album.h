@@ -30,8 +30,6 @@ public:
     QList<Tomahawk::query_ptr> tracks();
 
     virtual int trackCount() const { return m_queries.count(); }
-    virtual Tomahawk::result_ptr previousItem() { return siblingItem( -1 ); }
-    virtual Tomahawk::result_ptr nextItem() { return siblingItem( 1 ); }
     virtual Tomahawk::result_ptr siblingItem( int itemsAway );
 
     virtual PlaylistInterface::RepeatMode repeatMode() const { return PlaylistInterface::NoRepeat; }

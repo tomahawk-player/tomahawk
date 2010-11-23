@@ -42,8 +42,6 @@ public:
     virtual void removeIndex( const QModelIndex& index );
     virtual void removeIndexes( const QList<QModelIndex>& indexes );
 
-    virtual Tomahawk::result_ptr previousItem() { return Tomahawk::result_ptr(); }
-    virtual Tomahawk::result_ptr nextItem() { return Tomahawk::result_ptr(); }
     virtual Tomahawk::result_ptr siblingItem( int direction ) { return Tomahawk::result_ptr(); }
 
     virtual QMimeData* mimeData( const QModelIndexList& indexes ) const;

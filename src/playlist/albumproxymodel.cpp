@@ -95,20 +95,6 @@ AlbumProxyModel::removeIndexes( const QList<QModelIndex>& indexes )
 
 
 Tomahawk::result_ptr
-AlbumProxyModel::previousItem()
-{
-    return siblingItem( -1 );
-}
-
-
-Tomahawk::result_ptr
-AlbumProxyModel::nextItem()
-{
-    return siblingItem( 1 );
-}
-
-
-Tomahawk::result_ptr
 AlbumProxyModel::siblingItem( int itemsAway )
 {
     qDebug() << Q_FUNC_INFO;
