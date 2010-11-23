@@ -33,7 +33,7 @@ ImageButton::ImageButton( const QString& path, QWidget* parent )
 void
 ImageButton::init( const QPixmap& p )
 {
-    setPixmap( p );
+    setPixmap( p, QIcon::Off );
     m_sizeHint = p.size();
     updateGeometry();
 }
@@ -43,6 +43,13 @@ void
 ImageButton::setPixmap( const QString& path )
 {
     init( QPixmap( path ) );
+}
+
+
+void
+ImageButton::setPixmap( const QPixmap& pixmap )
+{
+    init( pixmap );
 }
 
 

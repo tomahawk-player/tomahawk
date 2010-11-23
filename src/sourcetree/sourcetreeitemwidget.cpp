@@ -48,7 +48,7 @@ SourceTreeItemWidget::SourceTreeItemWidget( const source_ptr& source, QWidget* p
         ui->infoLabel->setText( "???" );
 
         ui->onOffButton->hide();
-        ui->infoButton->setPixmap( RESPATH "images/source-info.png" );
+        ui->infoButton->setPixmap( QPixmap( RESPATH "images/source-info.png" ) .scaledToHeight( 32, Qt::SmoothTransformation ) );
     }
 
     ui->nameLabel->setText( displayname );

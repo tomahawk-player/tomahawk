@@ -17,8 +17,10 @@ public:
     explicit ImageButton( const QString& path, QWidget* parent = 0 );
     
     void setPixmap( const QString& path );
+    void setPixmap( const QPixmap& pixmap );
+
     void setPixmap( const QString&, const QIcon::State, QIcon::Mode = QIcon::Normal );
-    void setPixmap( const QPixmap&, const QIcon::State = QIcon::Off, QIcon::Mode = QIcon::Normal );
+    void setPixmap( const QPixmap&, const QIcon::State, QIcon::Mode = QIcon::Normal );
     
     virtual QSize sizeHint() const { return m_sizeHint; }
     
