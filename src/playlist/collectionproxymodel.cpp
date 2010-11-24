@@ -67,11 +67,6 @@ CollectionProxyModel::lessThan( const QModelIndex& left, const QModelIndex& righ
         id2 = r->dbid();
     }
 
-    if ( album1 == "Gern Geschehen" )
-    {
-        qDebug() << artist1 << artist2 << album1 << album2 << id1 << id2;
-    }
-
     if ( left.column() == 0 ) // sort by artist
     {
         if ( artist1 == artist2 )
@@ -79,9 +74,7 @@ CollectionProxyModel::lessThan( const QModelIndex& left, const QModelIndex& righ
             if ( album1 == album2 )
             {
                 if ( albumpos1 == albumpos2 )
-                {
                     return id1 < id2;
-                }
 
                 return albumpos1 < albumpos2;
             }
@@ -95,6 +88,9 @@ CollectionProxyModel::lessThan( const QModelIndex& left, const QModelIndex& righ
     {
         if ( album1 == album2 )
         {
+            if ( albumpos1 == albumpos2 )
+                return id1 < id2;
+
             return albumpos1 < albumpos2;
         }
 
@@ -102,10 +98,16 @@ CollectionProxyModel::lessThan( const QModelIndex& left, const QModelIndex& righ
     }
     else if ( left.column() == 4 ) // sort by bitrate
     {
+        if ( bitrate1 == bitrate2 )
+            return id1 < id2;
+
         return bitrate1 < bitrate2;
     }
     else if ( left.column() == 5 ) // sort by mtime
     {
+        if ( mtime1 == mtime2 )
+            return id1 < id2;
+
         return mtime1 < mtime2;
     }
 
