@@ -194,7 +194,9 @@ CollectionFlatModel::onDataChanged()
 {
     PlItem* p = (PlItem*)sender();
 //    emit itemSizeChanged( p->index );
-    emit dataChanged( p->index, p->index.sibling( p->index.row(), columnCount() - 1 ) );
+
+    if ( p && p->index.isValid() )
+        emit dataChanged( p->index, p->index.sibling( p->index.row(), columnCount() - 1 ) );
 }
 
 
