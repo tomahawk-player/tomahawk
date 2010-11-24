@@ -32,9 +32,11 @@ TrackView::TrackView( QWidget* parent )
     setDragDropOverwriteMode( false );
     setAllColumnsShowFocus( true );
 
+#ifndef Q_WS_WIN
     QFont f = font();
     f.setPointSize( f.pointSize() - 1 );
     setFont( f );
+#endif
 
     header()->setMinimumSectionSize( 60 );
     restoreColumnsState();
