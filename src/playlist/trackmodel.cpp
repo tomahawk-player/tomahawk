@@ -284,6 +284,8 @@ TrackModel::removeIndex( const QModelIndex& index )
         delete item;
         emit endRemoveRows();
     }
+
+    emit trackCountChanged( rowCount( QModelIndex() ) );
 }
 
 
