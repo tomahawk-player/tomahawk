@@ -340,11 +340,14 @@ PlaylistManager::showCurrentTrack()
 
     if ( m_views.contains( playlist ) )
     {
+        unlinkPlaylist();
+
         m_currentView = m_views.value( playlist );
         m_currentProxyModel = m_currentView->proxyModel();
         m_currentModel = m_currentView->model();
 
         m_widget->setCurrentWidget( m_currentView );
+        linkPlaylist();
     }
 
     if ( m_currentView && m_currentProxyModel )

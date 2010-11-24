@@ -147,6 +147,8 @@ CollectionFlatModel::removeCollection( const collection_ptr& collection )
     }
 
 //    m_collectionIndex.remove( collection );
+
+    emit trackCountChanged( rowCount( QModelIndex() ) );
 }
 
 
