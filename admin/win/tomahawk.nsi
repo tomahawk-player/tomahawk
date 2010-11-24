@@ -4,7 +4,7 @@
 ; Some installer script options (comment-out options not required)
 ;-----------------------------------------------------------------------------
 ;!define OPTION_LICENSE_AGREEMENT
-;!define OPTION_UAC_ENHANCED
+;!define OPTION_UAC_PLUGIN_ENHANCED
 !define OPTION_SECTION_SC_START_MENU
 !define OPTION_SECTION_SC_DESKTOP
 !define OPTION_SECTION_SC_QUICK_LAUNCH
