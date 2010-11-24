@@ -56,7 +56,7 @@ AudioControls::AudioControls( QWidget* parent )
     ui->volumeHighButton->setPixmap( RESPATH "images/volume-icon-full.png" );
 
     ui->ownerLabel->setForegroundRole( QPalette::Dark );
-    ui->metadataArea->setStyleSheet( "QWidget#metadataArea {\nborder-width: 4px;\nborder-image: url(" RESPATH "images/now-playing-panel.png) 4 4 4 4 stretch stretch; }" );
+    ui->metaDataArea->setStyleSheet( "QWidget#metaDataArea {\nborder-width: 4px;\nborder-image: url(" RESPATH "images/now-playing-panel.png) 4 4 4 4 stretch stretch; }" );
 
     ui->seekSlider->setFixedHeight( 20 );
     ui->seekSlider->setEnabled( false );
