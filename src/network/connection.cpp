@@ -25,7 +25,6 @@ Connection::Connection( Servent* parent )
     , m_tx_bytes_requested( 0 )
     , m_rx_bytes( 0 )
     , m_id( "Connection()" )
-    , m_pingtimer( 0 )
     , m_statstimer( 0 )
     , m_stats_tx_bytes_per_sec( 0 )
     , m_stats_rx_bytes_per_sec( 0 )
@@ -59,7 +58,6 @@ Connection::~Connection()
         qDebug() << "no valid sock to delete";
     }
 
-    delete m_pingtimer;
     delete m_statstimer;
 }
 
@@ -215,12 +213,6 @@ Connection::doSetup()
     connect( m_statstimer, SIGNAL( timeout() ), SLOT( calcStats() ) );
     m_statstimer->start();
     m_statstimer_mark.start();
-
-    m_pingtimer = new QTimer;
-    m_pingtimer->moveToThread( this->thread() );
-    m_pingtimer->setInterval( 5000 );
-    connect( m_pingtimer, SIGNAL( timeout() ), SLOT( onPingTimer() ) );
-    m_pingtimer->start();
 
     m_sock->moveToThread( thread() );
 
@@ -407,7 +399,7 @@ Connection::sendMsg( msg_ptr msg )
     if( m_do_shutdown )
     {
         qDebug() << Q_FUNC_INFO << "SHUTTING DOWN, NOT SENDING msg flags:"
-                << (int)msg->flags() << "length:" << msg->length();
+                << (int)msg->flags() << "length:" << msg->length() << id();
         return;
     }
 
@@ -426,7 +418,7 @@ Connection::sendMsg_now( msg_ptr msg )
     if( m_sock.isNull() || !m_sock->isOpen() || !m_sock->isWritable() )
     {
         qDebug() << "***** Socket problem, whilst in sendMsg(). Cleaning up. *****";
-        shutdown( true );
+        shutdown( false );
         return;
     }
 
@@ -461,12 +453,4 @@ Connection::calcStats()
     m_tx_bytes_last = m_tx_bytes;
 
     emit statsTick( m_stats_tx_bytes_per_sec, m_stats_rx_bytes_per_sec );
-}
-
-
-void
-Connection::onPingTimer()
-{
-    qDebug() << Q_FUNC_INFO;
-    sendMsg( Msg::factory( QByteArray(), Msg::PING ) );
 }

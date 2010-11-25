@@ -37,6 +37,7 @@ signals:
 private slots:
     void dbSyncConnFinished( QObject* c );
     void registerSource();
+    void onPingTimer();
 
 private:
     void setupDbSyncConnection( bool ondemand = false );
@@ -46,6 +47,8 @@ private:
 
     QString m_dbconnkey;
     bool m_registered;
+
+    QTimer* m_pingtimer;
 };
 
 #endif // CONTROLCONNECTION_H

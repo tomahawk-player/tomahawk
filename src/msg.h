@@ -30,14 +30,13 @@ class Msg
 public:
     enum Flag
     {
-        PING = 0,
         RAW = 1,
         JSON = 2,
         FRAGMENT = 4,
         COMPRESSED = 8,
         DBOP = 16,
-        UNUSED_FLAG_6 = 32,
-        UNUSED_FLAG_7 = 64,
+        PING = 32,
+        PONG = 64,
         SETUP = 128 // used to handshake/auth the connection prior to handing over to Connection subclass
     };
 

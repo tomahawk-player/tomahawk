@@ -14,6 +14,7 @@ ControlConnection::ControlConnection( Servent* parent )
     : Connection( parent )
     , m_dbsyncconn( 0 )
     , m_registered( false )
+    , m_pingtimer( 0 )
 {
     qDebug() << "CTOR controlconnection";
     setId("ControlConnection()");
@@ -29,6 +30,8 @@ ControlConnection::ControlConnection( Servent* parent )
 ControlConnection::~ControlConnection()
 {
     qDebug() << "DTOR controlconnection";
+
+    delete m_pingtimer;
     m_servent->unregisterControlConnection(this);
     if( m_dbsyncconn ) m_dbsyncconn->deleteLater();
 }
@@ -71,6 +74,11 @@ ControlConnection::setup()
                                 SLOT( registerSource() ), Qt::QueuedConnection );
 
     m_source->doDBSync();
+
+    m_pingtimer = new QTimer;
+    m_pingtimer->setInterval( 5000 );
+    connect( m_pingtimer, SIGNAL( timeout() ), SLOT( onPingTimer() ) );
+    m_pingtimer->start();
 }
 
 
@@ -169,6 +177,17 @@ ControlConnection::handleMsg( msg_ptr msg )
         qDebug() << id() << "got msg:" << QString::fromAscii( msg->payload() );
     }
 
+    qDebug() << msg->flags();
+    if ( msg->is( Msg::PING ) )
+    {
+        qDebug() << "Received Connection PING, sending PONG.";
+        sendMsg( Msg::factory( QByteArray(), Msg::PONG ) );
+    }
+    else if ( msg->is( Msg::PONG ) )
+    {
+        qDebug() << "Received Connection PONG, nice.";
+    }
+
     // All control connection msgs are JSON
     if( !msg->is( Msg::JSON ) )
     {
@@ -206,4 +225,13 @@ ControlConnection::handleMsg( msg_ptr msg )
     }
 
     qDebug() << id() << "Invalid msg:" << QString::fromAscii(msg->payload());
+}
+
+
+
+void
+ControlConnection::onPingTimer()
+{
+    qDebug() << Q_FUNC_INFO;
+    sendMsg( Msg::factory( QByteArray(), Msg::PING ) );
 }
