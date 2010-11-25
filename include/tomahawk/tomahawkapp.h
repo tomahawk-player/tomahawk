@@ -78,10 +78,10 @@ public:
     XMPPBot* xmppBot() { return m_xmppBot; }
     const QString& nodeID() const;
 
-
 #ifndef TOMAHAWK_HEADLESS
     AudioControls* audioControls();
     PlaylistManager* playlistManager();
+    TomahawkWindow* mainWindow() const { return m_mainwindow; }
 #endif
 
     void registerIODeviceFactory( const QString &proto, boost::function<QSharedPointer<QIODevice>(Tomahawk::result_ptr)> fac );

@@ -138,6 +138,7 @@ SET( tomahawkSourcesGui ${tomahawkSourcesGui}
      infowidgets/sourceinfowidget.cpp
 
      tomahawkwindow.cpp
+     tomahawktrayicon.cpp
      audiocontrols.cpp
      settingsdialog.cpp
 )
@@ -264,6 +265,7 @@ SET( tomahawkHeadersGui ${tomahawkHeadersGui}
      infowidgets/sourceinfowidget.h
 
      tomahawkwindow.h
+     tomahawktrayicon.h
      audiocontrols.h
      settingsdialog.h
 )

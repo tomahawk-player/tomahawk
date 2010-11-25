@@ -26,7 +26,8 @@ public:
     explicit AudioEngine();
     ~AudioEngine();
 
-    unsigned int volume() { if ( m_audio ) return m_audio->volume() * 100.0; else return 0; }; // in percent
+    unsigned int volume() const { if ( m_audio ) return m_audio->volume() * 100.0; else return 0; }; // in percent
+    bool isPaused() const { return m_audio->isPaused(); }
 
     /* Returns the PlaylistInterface of the currently playing track. Note: This might be different to the current playlist! */
     PlaylistInterface* currentPlaylist() const { return m_currentPlaylist; }

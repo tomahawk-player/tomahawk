@@ -108,18 +108,18 @@ AudioControls::AudioControls( QWidget* parent )
     m_prevAction  = new QAction( this );
     m_nextAction  = new QAction( this );
 
-    connect( m_playAction,  SIGNAL( triggered() ), (QObject*)TomahawkApp::instance()->audioEngine(), SLOT( play() ) );
-    connect( m_pauseAction, SIGNAL( triggered() ), (QObject*)TomahawkApp::instance()->audioEngine(), SLOT( pause() ) );
-    connect( m_prevAction,  SIGNAL( triggered() ), (QObject*)TomahawkApp::instance()->audioEngine(), SLOT( previous() ) );
-    connect( m_nextAction,  SIGNAL( triggered() ), (QObject*)TomahawkApp::instance()->audioEngine(), SLOT( next() ) ); */
+    connect( m_playAction,  SIGNAL( triggered() ), (QObject*)APP->audioEngine(), SLOT( play() ) );
+    connect( m_pauseAction, SIGNAL( triggered() ), (QObject*)APP->audioEngine(), SLOT( pause() ) );
+    connect( m_prevAction,  SIGNAL( triggered() ), (QObject*)APP->audioEngine(), SLOT( previous() ) );
+    connect( m_nextAction,  SIGNAL( triggered() ), (QObject*)APP->audioEngine(), SLOT( next() ) ); */
 
-    connect( ui->volumeSlider,     SIGNAL( valueChanged( int ) ), (QObject*)TomahawkApp::instance()->audioEngine(), SLOT( setVolume( int ) ) );
-    connect( ui->prevButton,       SIGNAL( clicked() ), (QObject*)TomahawkApp::instance()->audioEngine(), SLOT( previous() ) );
-    connect( ui->playPauseButton,  SIGNAL( clicked() ), (QObject*)TomahawkApp::instance()->audioEngine(), SLOT( play() ) );
-    connect( ui->pauseButton,      SIGNAL( clicked() ), (QObject*)TomahawkApp::instance()->audioEngine(), SLOT( pause() ) );
-    connect( ui->nextButton,       SIGNAL( clicked() ), (QObject*)TomahawkApp::instance()->audioEngine(), SLOT( next() ) );
-    connect( ui->volumeLowButton,  SIGNAL( clicked() ), (QObject*)TomahawkApp::instance()->audioEngine(), SLOT( lowerVolume() ) );
-    connect( ui->volumeHighButton, SIGNAL( clicked() ), (QObject*)TomahawkApp::instance()->audioEngine(), SLOT( raiseVolume() ) );
+    connect( ui->volumeSlider,     SIGNAL( valueChanged( int ) ), (QObject*)APP->audioEngine(), SLOT( setVolume( int ) ) );
+    connect( ui->prevButton,       SIGNAL( clicked() ), (QObject*)APP->audioEngine(), SLOT( previous() ) );
+    connect( ui->playPauseButton,  SIGNAL( clicked() ), (QObject*)APP->audioEngine(), SLOT( play() ) );
+    connect( ui->pauseButton,      SIGNAL( clicked() ), (QObject*)APP->audioEngine(), SLOT( pause() ) );
+    connect( ui->nextButton,       SIGNAL( clicked() ), (QObject*)APP->audioEngine(), SLOT( next() ) );
+    connect( ui->volumeLowButton,  SIGNAL( clicked() ), (QObject*)APP->audioEngine(), SLOT( lowerVolume() ) );
+    connect( ui->volumeHighButton, SIGNAL( clicked() ), (QObject*)APP->audioEngine(), SLOT( raiseVolume() ) );
 
     connect( ui->repeatButton,     SIGNAL( clicked() ), SLOT( onRepeatClicked() ) );
     connect( ui->shuffleButton,    SIGNAL( clicked() ), SLOT( onShuffleClicked() ) );
@@ -128,13 +128,13 @@ AudioControls::AudioControls( QWidget* parent )
     connect( ui->albumLabel,       SIGNAL( clicked() ), SLOT( onAlbumClicked() ) );
 
     // <From AudioEngine>
-    connect( (QObject*)TomahawkApp::instance()->audioEngine(), SIGNAL( loading( const Tomahawk::result_ptr& ) ), SLOT( onPlaybackLoading( const Tomahawk::result_ptr& ) ) );
-    connect( (QObject*)TomahawkApp::instance()->audioEngine(), SIGNAL( started( const Tomahawk::result_ptr& ) ), SLOT( onPlaybackStarted( const Tomahawk::result_ptr& ) ) );
-    connect( (QObject*)TomahawkApp::instance()->audioEngine(), SIGNAL( paused() ), SLOT( onPlaybackPaused() ) );
-    connect( (QObject*)TomahawkApp::instance()->audioEngine(), SIGNAL( resumed() ), SLOT( onPlaybackResumed() ) );
-    connect( (QObject*)TomahawkApp::instance()->audioEngine(), SIGNAL( stopped() ), SLOT( onPlaybackStopped() ) );
-    connect( (QObject*)TomahawkApp::instance()->audioEngine(), SIGNAL( timerSeconds( unsigned int ) ), SLOT( onPlaybackTimer( unsigned int ) ) );
-    connect( (QObject*)TomahawkApp::instance()->audioEngine(), SIGNAL( volumeChanged( int ) ), SLOT( onVolumeChanged( int ) ) );
+    connect( (QObject*)APP->audioEngine(), SIGNAL( loading( Tomahawk::result_ptr ) ), SLOT( onPlaybackLoading( Tomahawk::result_ptr ) ) );
+    connect( (QObject*)APP->audioEngine(), SIGNAL( started( Tomahawk::result_ptr ) ), SLOT( onPlaybackStarted( Tomahawk::result_ptr ) ) );
+    connect( (QObject*)APP->audioEngine(), SIGNAL( paused() ), SLOT( onPlaybackPaused() ) );
+    connect( (QObject*)APP->audioEngine(), SIGNAL( resumed() ), SLOT( onPlaybackResumed() ) );
+    connect( (QObject*)APP->audioEngine(), SIGNAL( stopped() ), SLOT( onPlaybackStopped() ) );
+    connect( (QObject*)APP->audioEngine(), SIGNAL( timerSeconds( unsigned int ) ), SLOT( onPlaybackTimer( unsigned int ) ) );
+    connect( (QObject*)APP->audioEngine(), SIGNAL( volumeChanged( int ) ), SLOT( onVolumeChanged( int ) ) );
 
     m_defaultCover = QPixmap( RESPATH "images/no-album-art-placeholder.png" )
                      .scaled( ui->coverImage->size(), Qt::IgnoreAspectRatio, Qt::SmoothTransformation );

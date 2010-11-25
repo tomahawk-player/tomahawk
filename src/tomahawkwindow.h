@@ -14,6 +14,7 @@ class QAction;
 class AudioControls;
 class PlaylistManager;
 class TopBar;
+class TomahawkTrayIcon;
 
 namespace Ui
 {
@@ -63,6 +64,7 @@ private:
     TopBar* m_topbar;
     AudioControls* m_audioControls;
     PlaylistManager* m_playlistManager;
+    TomahawkTrayIcon* m_trayIcon;
     QNetworkAccessManager m_nam;
 
     Tomahawk::result_ptr m_currentTrack;

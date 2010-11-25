@@ -29,6 +29,7 @@
 #include "xspfloader.h"
 #include "proxystyle.h"
 #include "tomahawksettings.h"
+#include "tomahawktrayicon.h"
 #include "widgetdragfilter.h"
 
 using namespace Tomahawk;
@@ -40,6 +41,7 @@ TomahawkWindow::TomahawkWindow( QWidget* parent )
     , m_topbar( new TopBar( this ) )
     , m_audioControls( new AudioControls( this ) )
     , m_playlistManager( new PlaylistManager( this ) )
+    , m_trayIcon( new TomahawkTrayIcon( this ) )
 {
     qApp->setStyle( new ProxyStyle() );
     setWindowIcon( QIcon( RESPATH "icons/tomahawk-icon-128x128.png" ) );
