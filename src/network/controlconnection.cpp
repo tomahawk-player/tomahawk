@@ -7,6 +7,8 @@
 #include "databasecommand_collectionstats.h"
 #include "dbsyncconnection.h"
 
+#define TCP_TIMEOUT 30
+
 using namespace Tomahawk;
 
 
@@ -79,6 +81,7 @@ ControlConnection::setup()
     m_pingtimer->setInterval( 5000 );
     connect( m_pingtimer, SIGNAL( timeout() ), SLOT( onPingTimer() ) );
     m_pingtimer->start();
+    m_pingtimer_mark.start();
 }
 
 
@@ -171,23 +174,23 @@ ControlConnection::dbSyncConnection()
 void
 ControlConnection::handleMsg( msg_ptr msg )
 {
-    // if small and not compresed, print it out for debug
-    if( msg->length() < 1024 && !msg->is( Msg::COMPRESSED ) )
-    {
-        qDebug() << id() << "got msg:" << QString::fromAscii( msg->payload() );
-    }
-
-    qDebug() << msg->flags();
     if ( msg->is( Msg::PING ) )
     {
-        qDebug() << "Received Connection PING, sending PONG.";
+        qDebug() << "Received Connection PING, sending PONG." << m_pingtimer_mark.elapsed();
         sendMsg( Msg::factory( QByteArray(), Msg::PONG ) );
         return;
     }
     else if ( msg->is( Msg::PONG ) )
     {
         qDebug() << "Received Connection PONG, nice.";
+        m_pingtimer_mark.restart();
         return;
+    }
+
+    // if small and not compresed, print it out for debug
+    if( msg->length() < 1024 && !msg->is( Msg::COMPRESSED ) )
+    {
+        qDebug() << id() << "got msg:" << QString::fromAscii( msg->payload() );
     }
 
     // All control connection msgs are JSON
@@ -235,5 +238,11 @@ void
 ControlConnection::onPingTimer()
 {
     qDebug() << Q_FUNC_INFO;
+
+    if ( m_pingtimer_mark.elapsed() >= TCP_TIMEOUT * 1000 )
+    {
+        shutdown( false );
+    }
+
     sendMsg( Msg::factory( QByteArray(), Msg::PING ) );
 }

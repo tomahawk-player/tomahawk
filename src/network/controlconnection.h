@@ -49,6 +49,7 @@ private:
     bool m_registered;
 
     QTimer* m_pingtimer;
+    QTime m_pingtimer_mark;
 };
 
 #endif // CONTROLCONNECTION_H

@@ -119,7 +119,7 @@ private:
     QString m_id;
 
     QTimer* m_statstimer;
-    QTime  m_statstimer_mark;
+    QTime m_statstimer_mark;
     qint64 m_stats_tx_bytes_per_sec, m_stats_rx_bytes_per_sec;
     qint64 m_rx_bytes_last, m_tx_bytes_last;
 
