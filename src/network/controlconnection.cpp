@@ -231,8 +231,6 @@ ControlConnection::handleMsg( msg_ptr msg )
 void
 ControlConnection::onPingTimer()
 {
-    qDebug() << Q_FUNC_INFO;
-
     if ( m_pingtimer_mark.elapsed() >= TCP_TIMEOUT * 1000 )
     {
         shutdown( false );
