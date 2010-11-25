@@ -8,7 +8,7 @@
 
 #include "servent.h"
 
-#define PROTOVER "2" // must match remote peer, or we can't talk.
+#define PROTOVER "3" // must match remote peer, or we can't talk.
 
 
 Connection::Connection( Servent* parent )
@@ -25,6 +25,7 @@ Connection::Connection( Servent* parent )
     , m_tx_bytes_requested( 0 )
     , m_rx_bytes( 0 )
     , m_id( "Connection()" )
+    , m_pingtimer( 0 )
     , m_statstimer( 0 )
     , m_stats_tx_bytes_per_sec( 0 )
     , m_stats_rx_bytes_per_sec( 0 )
@@ -57,6 +58,8 @@ Connection::~Connection()
     {
         qDebug() << "no valid sock to delete";
     }
+
+    delete m_pingtimer;
     delete m_statstimer;
 }
 
@@ -208,19 +211,16 @@ Connection::doSetup()
     //stats timer calculates BW used by this connection
     m_statstimer = new QTimer;
     m_statstimer->moveToThread( this->thread() );
-    m_statstimer->setInterval(1000);
+    m_statstimer->setInterval( 1000 );
     connect( m_statstimer, SIGNAL( timeout() ), SLOT( calcStats() ) );
     m_statstimer->start();
     m_statstimer_mark.start();
 
-    m_sock->setSocketOption( QAbstractSocket::KeepAliveOption, 1 );
-    int sockID = m_sock.data()->socketDescriptor();
-    int idle = 30;
-    int intvl = 5;
-    int cnt = 3;
-    setsockopt( sockID, SOL_TCP, TCP_KEEPIDLE, &idle, sizeof( idle ) );
-    setsockopt( sockID, SOL_TCP, TCP_KEEPINTVL, &intvl, sizeof( intvl ) );
-    setsockopt( sockID, SOL_TCP, TCP_KEEPCNT, &cnt, sizeof( cnt ) );
+    m_pingtimer = new QTimer;
+    m_pingtimer->moveToThread( this->thread() );
+    m_pingtimer->setInterval( 5000 );
+    connect( m_pingtimer, SIGNAL( timeout() ), SLOT( onPingTimer() ) );
+    m_pingtimer->start();
 
     m_sock->moveToThread( thread() );
 
@@ -461,4 +461,12 @@ Connection::calcStats()
     m_tx_bytes_last = m_tx_bytes;
 
     emit statsTick( m_stats_tx_bytes_per_sec, m_stats_rx_bytes_per_sec );
+}
+
+
+void
+Connection::onPingTimer()
+{
+    qDebug() << Q_FUNC_INFO;
+    sendMsg( Msg::factory( QByteArray(), Msg::PING ) );
 }

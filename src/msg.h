@@ -30,6 +30,7 @@ class Msg
 public:
     enum Flag
     {
+        PING = 0,
         RAW = 1,
         JSON = 2,
         FRAGMENT = 4,

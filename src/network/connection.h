@@ -99,6 +99,7 @@ private slots:
     void authCheckTimeout();
     void bytesWritten( qint64 );
     void calcStats();
+    void onPingTimer();
 
 protected:
     QPointer<QTcpSocket> m_sock;
@@ -117,6 +118,8 @@ private:
     qint64 m_tx_bytes, m_tx_bytes_requested;
     qint64 m_rx_bytes;
     QString m_id;
+
+    QTimer* m_pingtimer;
 
     QTimer* m_statstimer;
     QTime  m_statstimer_mark;

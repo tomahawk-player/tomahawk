@@ -60,7 +60,9 @@ void MsgProcessor::handleProcessedMsg( msg_ptr msg )
             msg_ptr m = m_msgs.takeFirst();
             m_msg_ready.remove( m.data() );
             //qDebug() << Q_FUNC_INFO << "totmsgsize:" << m_totmsgsize;
-            emit ready( m );
+
+            if ( !msg->is( Msg::PING ) )
+                emit ready( m );
         }
         else
         {
