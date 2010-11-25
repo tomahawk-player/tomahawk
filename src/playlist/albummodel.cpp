@@ -257,7 +257,7 @@ AlbumModel::onAlbumsAdded( const QList<Tomahawk::album_ptr>& albums, const Tomah
         QNetworkReply* reply = APP->nam()->get( req );
         connect( reply, SIGNAL( finished() ), SLOT( onCoverArtDownloaded() ) );
 
-//        connect( albumitem, SIGNAL( dataChanged() ), SLOT( onDataChanged() ) );
+        connect( albumitem, SIGNAL( dataChanged() ), SLOT( onDataChanged() ) );
     }
 
     emit endInsertRows();
@@ -269,7 +269,6 @@ void
 AlbumModel::onCoverArtDownloaded()
 {
     QNetworkReply* reply = qobject_cast<QNetworkReply*>( sender() );
-    qDebug() << "attr:" << reply->request().attribute( QNetworkRequest::User );
 
     QUrl redir = reply->attribute( QNetworkRequest::RedirectionTargetAttribute ).toUrl();
     if ( redir.isEmpty() )
@@ -289,7 +288,7 @@ AlbumModel::onCoverArtDownloaded()
             }
             else
             {
-                ai->cover = pm.scaled( QSize( 64, 64 ), Qt::IgnoreAspectRatio, Qt::SmoothTransformation );
+                ai->setCover( pm.scaled( QSize( 64, 64 ), Qt::IgnoreAspectRatio, Qt::SmoothTransformation ) );
             }
         }
     }
@@ -303,4 +302,12 @@ AlbumModel::onCoverArtDownloaded()
     }
 
     reply->deleteLater();
+}
+
+
+void
+AlbumModel::onDataChanged()
+{
+    AlbumItem* p = (AlbumItem*)sender();
+    emit dataChanged( p->index, p->index.sibling( p->index.row(), columnCount( QModelIndex() ) - 1 ) );
 }

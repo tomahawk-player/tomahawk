@@ -74,6 +74,7 @@ protected:
 private slots:
     void onAlbumsAdded( const QList<Tomahawk::album_ptr>& albums, const Tomahawk::collection_ptr& collection );
     void onCoverArtDownloaded();
+    void onDataChanged();
 
 private:
     QPersistentModelIndex m_currentIndex;

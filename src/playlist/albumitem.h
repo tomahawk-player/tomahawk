@@ -19,6 +19,7 @@ public:
     explicit AlbumItem( const Tomahawk::album_ptr& album, AlbumItem* parent = 0, int row = -1 );
 
     const Tomahawk::album_ptr& album() const { return m_album; };
+    void setCover( const QPixmap& cover ) { this->cover = cover; emit dataChanged(); }
 
     AlbumItem* parent;
     QList<AlbumItem*> children;
