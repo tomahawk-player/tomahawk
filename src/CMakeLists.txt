@@ -47,12 +47,12 @@ SET( tomahawkSources ${tomahawkSources}
      infosystem/infoplugins/echonestplugin.cpp
      infosystem/infoplugins/musixmatchplugin.cpp
 
-     bufferiodevice.cpp
-     msgprocessor.cpp
      collection.cpp
      musicscanner.cpp
      scriptresolver.cpp
 
+     network/bufferiodevice.cpp
+     network/msgprocessor.cpp
      network/connection.cpp
      network/controlconnection.cpp
      network/filetransferconnection.cpp
@@ -88,7 +88,6 @@ SET( tomahawkSources ${tomahawkSources}
      database/databasecollection.cpp
 
      scrobbler.cpp
-
      xmppbot/xmppbot.cpp
      web/api_v1.cpp
 
@@ -203,13 +202,8 @@ SET( tomahawkHeaders ${tomahawkHeaders}
      infosystem/infoplugins/echonestplugin.h
      infosystem/infoplugins/musixmatchplugin.h
 
-     bufferiodevice.h
-     msgprocessor.h
-     musicscanner.h
-     scriptresolver.h
-     tomahawksettings.h
-     tomahawkzeroconf.h 
-
+     network/bufferiodevice.h
+     network/msgprocessor.h
      network/remotecollection.h
      network/servent.h
      network/connection.h
@@ -217,8 +211,12 @@ SET( tomahawkHeaders ${tomahawkHeaders}
      network/filetransferconnection.h
      network/dbsyncconnection.h
 
-     scrobbler.h
+     musicscanner.h
+     scriptresolver.h
+     tomahawksettings.h
+     tomahawkzeroconf.h 
 
+     scrobbler.h
      xmppbot/xmppbot.h
      web/api_v1.h
 )
