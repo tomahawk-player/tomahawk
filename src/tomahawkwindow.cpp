@@ -178,8 +178,9 @@ TomahawkWindow::closeEvent( QCloseEvent* e )
 #ifndef Q_WS_MAC
     if ( QSystemTrayIcon::isSystemTrayAvailable() )
     {
-        e->ignore();
         hide();
+        e->ignore();
+        return;
     }
 #endif
 

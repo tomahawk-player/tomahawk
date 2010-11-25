@@ -109,7 +109,7 @@ TomahawkTrayIcon::onActivated( QSystemTrayIcon::ActivationReason reason )
 {
     switch( reason )
     {
-        case QSystemTrayIcon::DoubleClick:
+        case QSystemTrayIcon::Trigger:
         {
             TomahawkWindow* mainwindow = APP->mainWindow();
             if ( mainwindow->isVisible() )
