@@ -42,9 +42,9 @@ ControlConnection::~ControlConnection()
 Connection*
 ControlConnection::clone()
 {
-    ControlConnection * clone = new ControlConnection(servent());
-    clone->setOnceOnly(onceOnly());
-    clone->setName(name());
+    ControlConnection* clone = new ControlConnection( servent() );
+    clone->setOnceOnly( onceOnly() );
+    clone->setName( name() );
     return clone;
 }
 
@@ -176,13 +176,7 @@ ControlConnection::handleMsg( msg_ptr msg )
 {
     if ( msg->is( Msg::PING ) )
     {
-        qDebug() << "Received Connection PING, sending PONG." << m_pingtimer_mark.elapsed();
-        sendMsg( Msg::factory( QByteArray(), Msg::PONG ) );
-        return;
-    }
-    else if ( msg->is( Msg::PONG ) )
-    {
-        qDebug() << "Received Connection PONG, nice.";
+        qDebug() << "Received Connection PING, nice." << m_pingtimer_mark.elapsed();
         m_pingtimer_mark.restart();
         return;
     }

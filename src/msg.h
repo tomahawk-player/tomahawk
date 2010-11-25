@@ -36,7 +36,7 @@ public:
         COMPRESSED = 8,
         DBOP = 16,
         PING = 32,
-        PONG = 64,
+        RESERVED_1 = 64,
         SETUP = 128 // used to handshake/auth the connection prior to handing over to Connection subclass
     };
 
