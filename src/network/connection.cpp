@@ -3,9 +3,6 @@
 #include <QTime>
 #include <QThread>
 
-#include <arpa/inet.h>
-#include <netinet/tcp.h>
-
 #include "servent.h"
 
 #define PROTOVER "3" // must match remote peer, or we can't talk.
