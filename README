@@ -60,9 +60,6 @@ Dependencies
   SQLite 3.6.22 http://www.sqlite.org/
   TagLib 1.6.2 http://developer.kde.org/~wheeler/taglib.html
   Boost 1.3x http://www.boost.org/
-
- Unless you enable the headless mode (no GUI), we also require the following libraries:
-
   libmad 0.15.1b http://www.underbit.com/products/mad/
   libvorbis 1.2.3 http://xiph.org/vorbis/
   libogg 1.1.4 http://xiph.org/ogg/
