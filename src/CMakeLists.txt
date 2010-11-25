@@ -38,6 +38,7 @@ SET( tomahawkSources ${tomahawkSources}
 
      audio/madtranscode.cpp
      audio/vorbistranscode.cpp
+     audio/flactranscode.cpp
      audio/audioengine.cpp
 
      utils/tomahawkutils.cpp
@@ -167,6 +168,7 @@ SET( tomahawkHeaders ${tomahawkHeaders}
      audio/transcodeinterface.h
      audio/madtranscode.h
      audio/vorbistranscode.h
+     audio/flactranscode.h
      audio/audioengine.h
 
      database/fuzzyindex.h

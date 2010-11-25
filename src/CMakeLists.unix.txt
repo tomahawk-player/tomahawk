@@ -17,4 +17,5 @@ SET( OS_SPECIFIC_LINK_LIBRARIES
 	 mad 
 	 vorbisfile 
 	 ogg
+	 FLAC++
 )

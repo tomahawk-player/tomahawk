@@ -10,6 +10,9 @@
 #ifndef NO_OGG
 #include "vorbistranscode.h"
 #endif
+#ifndef NO_FLAC
+#include "flactranscode.h"
+#endif
 
 
 AudioEngine::AudioEngine()
@@ -186,6 +189,12 @@ AudioEngine::loadTrack( const Tomahawk::result_ptr& result )
                 else if ( m_currentTrack->mimetype() == "application/ogg" )
                 {
                     m_transcode = QSharedPointer<TranscodeInterface>(new VorbisTranscode());
+                }
+#endif
+#ifndef NO_FLAC
+                else if ( m_currentTrack->mimetype() == "audio/flac" )
+                {
+                    m_transcode = QSharedPointer<TranscodeInterface>(new FLACTranscode());
                 }
 #endif
                 else
