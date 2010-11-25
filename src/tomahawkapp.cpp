@@ -270,6 +270,7 @@ TomahawkApp::registerMetaTypes()
     qRegisterMetaType< QList<QString> >("QList<QString>");
     qRegisterMetaType< Connection* >("Connection*");
     qRegisterMetaType< QAbstractSocket::SocketError >("QAbstractSocket::SocketError");
+    qRegisterMetaType< QTcpSocket* >("QTcpSocket*");
     qRegisterMetaType< QSharedPointer<QIODevice> >("QSharedPointer<QIODevice>");
     qRegisterMetaType< QFileInfo >("QFileInfo");
     qRegisterMetaType< QMap<QString, unsigned int> >("QMap<QString, unsigned int>");
@@ -289,11 +290,8 @@ TomahawkApp::registerMetaTypes()
     qRegisterMetaType< QMap< QString, Tomahawk::plentry_ptr > >("QMap< QString, Tomahawk::plentry_ptr >");
     qRegisterMetaType< Tomahawk::PlaylistRevision >("Tomahawk::PlaylistRevision");
     qRegisterMetaType< Tomahawk::QID >("Tomahawk::QID");
-    qRegisterMetaType< QTcpSocket* >("QTcpSocket*");
 
-    #ifndef TOMAHAWK_HEADLESS
     qRegisterMetaType< AudioErrorCode >("AudioErrorCode");
-    #endif
 }
 
 

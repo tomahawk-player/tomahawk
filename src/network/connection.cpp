@@ -3,6 +3,9 @@
 #include <QTime>
 #include <QThread>
 
+#include <arpa/inet.h>
+#include <netinet/tcp.h>
+
 #include "servent.h"
 
 #define PROTOVER "2" // must match remote peer, or we can't talk.
@@ -210,6 +213,15 @@ Connection::doSetup()
     m_statstimer->start();
     m_statstimer_mark.start();
 
+    m_sock->setSocketOption( QAbstractSocket::KeepAliveOption, 1 );
+    int sockID = m_sock.data()->socketDescriptor();
+    int idle = 30;
+    int intvl = 5;
+    int cnt = 3;
+    setsockopt( sockID, SOL_TCP, TCP_KEEPIDLE, &idle, sizeof( idle ) );
+    setsockopt( sockID, SOL_TCP, TCP_KEEPINTVL, &intvl, sizeof( intvl ) );
+    setsockopt( sockID, SOL_TCP, TCP_KEEPCNT, &cnt, sizeof( cnt ) );
+
     m_sock->moveToThread( thread() );
 
     qsrand( QTime( 0, 0, 0 ).secsTo( QTime::currentTime() ) );
@@ -248,7 +260,7 @@ Connection::doSetup()
 void
 Connection::socketDisconnected()
 {
-    qDebug() << "SOCKET DISCONNECTED" << this->name()
+    qDebug() << "SOCKET DISCONNECTED" << this->name() << id()
              << "shutdown will happen after incoming queue empties."
              << "bytesavail:" << m_sock->bytesAvailable()
              << "bytesRecvd" << bytesReceived();
