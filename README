@@ -2,7 +2,7 @@ Quickstart on Ubuntu
 --------------------
 
  sudo apt-get install build-essential cmake libtag1c2a libtag1-dev liblastfm-dev \
-                      libqt4-dev libqt4-sql-sqlite libvorbis-dev libmad0-dev \ 
+                      libqt4-dev libqt4-sql-sqlite libvorbis-dev libmad0-dev libflac++-dev \ 
                       libasound2-dev libboost-dev zlib1g-dev libgnutls-dev pkg-config 
 
 
@@ -66,6 +66,7 @@ Dependencies
   libmad 0.15.1b http://www.underbit.com/products/mad/
   libvorbis 1.2.3 http://xiph.org/vorbis/
   libogg 1.1.4 http://xiph.org/ogg/
+  libflac++ 1.2.0 http://flac.sourceforge.net/
   liblastfm 0.3.3 http://github.com/mxcl/liblastfm/
   libechonest 0.1.2 http://projects.kde.org/projects/playground/libs/libechonest/
 
