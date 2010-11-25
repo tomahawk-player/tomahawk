@@ -40,6 +40,7 @@ signals:
     
 protected:
     void changeEvent( QEvent* e );
+    void closeEvent( QCloseEvent* e );
 
 public slots:
     void createPlaylist();
@@ -50,6 +51,7 @@ private slots:
     void scanFinished();
     void rescanCollectionManually();
     void addPeerManually();
+    void addFriendManually();
 
     void onPlaybackLoading( const Tomahawk::result_ptr& result );
 

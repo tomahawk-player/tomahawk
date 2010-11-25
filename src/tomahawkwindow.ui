@@ -50,7 +50,7 @@
    </widget>
    <widget class="QMenu" name="menuApp">
     <property name="title">
-     <string>Music &amp;Player</string>
+     <string>&amp;Music Player</string>
     </property>
     <addaction name="actionRescanCollection"/>
     <addaction name="separator"/>
@@ -66,15 +66,16 @@
    </widget>
    <widget class="QMenu" name="menuNetwork">
     <property name="title">
-     <string>Network</string>
+     <string>&amp;Network</string>
     </property>
     <addaction name="actionAddPeerManually"/>
+    <addaction name="actionAddFriendManually"/>
    </widget>
    <widget class="QMenu" name="menu_Help">
     <property name="title">
      <string>&amp;Help</string>
     </property>
-    <addaction name="actionAbout_Tomahawk"/>
+    <addaction name="actionAboutTomahawk"/>
    </widget>
    <addaction name="menuApp"/>
    <addaction name="menuPlaylist"/>
@@ -96,12 +97,17 @@
   </action>
   <action name="actionAddPeerManually">
    <property name="text">
-    <string>&amp;Add Peer Manually</string>
+    <string>Add &amp;Peer Manually...</string>
+   </property>
+  </action>
+  <action name="actionAddFriendManually">
+   <property name="text">
+    <string>Add &amp;Friend...</string>
    </property>
   </action>
   <action name="actionRescanCollection">
    <property name="text">
-    <string>Re&amp;scan Collection</string>
+    <string>Re&amp;scan Collection...</string>
    </property>
   </action>
   <action name="actionPreferences">
@@ -114,7 +120,7 @@
   </action>
   <action name="actionLoadXSPF">
    <property name="text">
-    <string>Load &amp;XSPF</string>
+    <string>Load &amp;XSPF...</string>
    </property>
   </action>
   <action name="actionCreatePlaylist">
@@ -122,9 +128,12 @@
     <string>Create &amp;New Playlist...</string>
    </property>
   </action>
-  <action name="actionAbout_Tomahawk">
+  <action name="actionAboutTomahawk">
    <property name="text">
-    <string>About &amp;Tomahawk</string>
+    <string>About &amp;Tomahawk...</string>
+   </property>
+   <property name="menuRole">
+    <enum>QAction::AboutRole</enum>
    </property>
   </action>
  </widget>

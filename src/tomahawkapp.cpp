@@ -481,6 +481,13 @@ TomahawkApp::reconnectJabber()
 
 
 void
+TomahawkApp::jabberAddContact( const QString& jid )
+{
+    m_jabber->addContact( jid );
+}
+
+
+void
 TomahawkApp::jabberAuthError( int code, const QString& msg )
 {
     qWarning() << "Failed to connect to jabber" << code << msg;

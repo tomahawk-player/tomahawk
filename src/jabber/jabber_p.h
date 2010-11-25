@@ -92,6 +92,7 @@ public:
                                        gloox::Presence::PresenceType presence, const std::string& /*msg*/ );
     virtual void handleSelfPresence( const gloox::RosterItem& item, const std::string& resource,
                                        gloox::Presence::PresenceType presence, const std::string& msg );
+    virtual bool handleSubscription( const gloox::JID& jid, const std::string& /*msg*/ );
     virtual bool handleSubscriptionRequest( const gloox::JID& jid, const std::string& /*msg*/ );
     virtual bool handleUnsubscriptionRequest( const gloox::JID& jid, const std::string& /*msg*/ );
     virtual void handleNonrosterPresence( const gloox::Presence& presence );
@@ -121,7 +122,8 @@ signals:
 public slots:
     void go();
     void sendMsg( const QString& to, const QString& msg );
-    void broadcastMsg( const QString &msg );
+    void broadcastMsg( const QString& msg );
+    void addContact( const QString& jid, const QString& msg = QString() );
 
 private slots:
     void doJabberRecv();

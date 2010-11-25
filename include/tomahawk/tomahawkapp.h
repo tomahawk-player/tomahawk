@@ -96,6 +96,7 @@ signals:
 public slots:
     QSharedPointer<QIODevice> getIODeviceForUrl( const Tomahawk::result_ptr& result );
     void reconnectJabber();
+    void jabberAddContact( const QString& jid );
 
 private slots:
     void jabberMessage( const QString&, const QString& );

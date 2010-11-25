@@ -207,6 +207,23 @@ Jabber_p::broadcastMsg( const QString &msg )
 }
 
 
+void
+Jabber_p::addContact( const QString& jid, const QString& msg )
+{
+    if ( QThread::currentThread() != thread() )
+    {
+        QMetaObject::invokeMethod( this, "addContact",
+                                   Qt::QueuedConnection,
+                                   Q_ARG(const QString, jid),
+                                   Q_ARG(const QString, msg)
+                                 );
+        return;
+    }
+
+    handleSubscription(JID(jid.toStdString()), msg.toStdString());
+    return;
+}
+
 /// GLOOX IMPL STUFF FOLLOWS
 
 void
@@ -521,8 +538,18 @@ void
 Jabber_p::handleSelfPresence( const RosterItem& item, const std::string& resource,
                             Presence::PresenceType presence, const std::string& msg )
 {
-//    qDebug() << Q_FUNC_INFO;
     handleRosterPresence( item, resource, presence, msg );
+}
+
+
+bool
+Jabber_p::handleSubscription( const JID& jid, const std::string& /*msg*/ )
+{
+    qDebug() << Q_FUNC_INFO << jid.bare().c_str();
+
+    StringList groups;
+    m_client->rosterManager()->subscribe( jid, "", groups, "" );
+    return true;
 }
 
 

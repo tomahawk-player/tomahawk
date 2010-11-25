@@ -2,6 +2,7 @@
 #include "ui_tomahawkwindow.h"
 
 #include <QAction>
+#include <QCloseEvent>
 #include <QInputDialog>
 #include <QPixmap>
 #include <QPropertyAnimation>
@@ -55,7 +56,6 @@ TomahawkWindow::TomahawkWindow( QWidget* parent )
 #ifndef Q_WS_MAC
     ui->centralWidget->layout()->setContentsMargins( 4, 4, 4, 2 );
 #else
-//     ui->actionProgress->setAttribute( Qt::WA_MacShowFocusRect, 0 );
 //     ui->playlistView->setAttribute( Qt::WA_MacShowFocusRect, 0 );
     ui->sourceTreeView->setAttribute( Qt::WA_MacShowFocusRect, 0 );
 #endif
@@ -71,7 +71,7 @@ TomahawkWindow::TomahawkWindow( QWidget* parent )
     toolbar->setMovable( false );
     toolbar->setFloatable( false );
     toolbar->installEventFilter( new WidgetDragFilter( toolbar ) );
-    
+
     statusBar()->addPermanentWidget( m_audioControls, 1 );
 
     loadSettings();
@@ -110,12 +110,6 @@ TomahawkWindow::saveSettings()
 void
 TomahawkWindow::setupSignals()
 {
-    connect( ui->actionExit, SIGNAL( triggered() ),
-             qApp,             SLOT( closeAllWindows() ) );
-
-    connect( ui->actionLoadXSPF, SIGNAL( triggered() ), SLOT( loadSpiff() ));
-    connect( ui->actionCreatePlaylist, SIGNAL( triggered() ), SLOT( createPlaylist() ));
-
     // <Playlist>
     connect( m_topbar,         SIGNAL( filterTextChanged( const QString& ) ),
              playlistManager(),  SLOT( setFilter( const QString& ) ) );
@@ -133,10 +127,10 @@ TomahawkWindow::setupSignals()
              m_topbar,            SLOT( setNumShown( unsigned int ) ) );
 
     connect( m_topbar,         SIGNAL( flatMode() ),
-             m_playlistManager,  SLOT( setTableMode() ) );
+             playlistManager(),  SLOT( setTableMode() ) );
 
     connect( m_topbar,         SIGNAL( artistMode() ),
-             m_playlistManager,  SLOT( setTreeMode() ) );
+             playlistManager(),  SLOT( setTreeMode() ) );
 
     // <From PlaylistManager>
     connect( playlistManager(), SIGNAL( repeatModeChanged( PlaylistInterface::RepeatMode ) ),
@@ -152,8 +146,12 @@ TomahawkWindow::setupSignals()
     // <Menu Items>
     connect( ui->actionPreferences, SIGNAL( triggered() ), SLOT( showSettingsDialog() ) );
     connect( ui->actionAddPeerManually, SIGNAL( triggered() ), SLOT( addPeerManually() ) );
+    connect( ui->actionAddFriendManually, SIGNAL( triggered() ), SLOT( addFriendManually() ) );
     connect( ui->actionRescanCollection, SIGNAL( triggered() ), SLOT( rescanCollectionManually() ) );
-    connect( ui->actionAbout_Tomahawk, SIGNAL( triggered() ), SLOT( showAboutTomahawk() ) );
+    connect( ui->actionLoadXSPF, SIGNAL( triggered() ), SLOT( loadSpiff() ));
+    connect( ui->actionCreatePlaylist, SIGNAL( triggered() ), SLOT( createPlaylist() ));
+    connect( ui->actionAboutTomahawk, SIGNAL( triggered() ), SLOT( showAboutTomahawk() ) );
+    connect( ui->actionExit, SIGNAL( triggered() ), APP, SLOT( quit() ) );
 }
 
 
@@ -170,6 +168,21 @@ TomahawkWindow::changeEvent( QEvent* e )
 
         default:
             break;
+    }
+}
+
+
+void
+TomahawkWindow::closeEvent( QCloseEvent* e )
+{
+    if ( QSystemTrayIcon::isSystemTrayAvailable() )
+    {
+        e->ignore();
+        hide();
+    }
+    else
+    {
+        e->accept();
     }
 }
 
@@ -225,16 +238,15 @@ void
 TomahawkWindow::addPeerManually()
 {
     TomahawkSettings* s = APP->settings();
-    // stealing this for connecting to peers for now:
     bool ok;
-    QString addr = QInputDialog::getText( this, tr( "Connect to peer" ),
+    QString addr = QInputDialog::getText( this, tr( "Connect To Peer" ),
                                                 tr( "Enter peer address:" ), QLineEdit::Normal,
                                                 s->value( "connip" ).toString(), &ok ); // FIXME
     if ( !ok )
         return;
 
     s->setValue( "connip", addr );
-    QString ports = QInputDialog::getText( this, tr( "Connect to peer" ),
+    QString ports = QInputDialog::getText( this, tr( "Connect To Peer" ),
                                                  tr( "Enter peer port:" ), QLineEdit::Normal,
                                                  s->value( "connport", "50210" ).toString(), &ok );
     if ( !ok )
@@ -242,14 +254,29 @@ TomahawkWindow::addPeerManually()
 
     s->setValue( "connport", ports );
     int port = ports.toInt();
-    QString key = QInputDialog::getText( this, tr( "Connect to peer" ),
+    QString key = QInputDialog::getText( this, tr( "Connect To Peer" ),
                                                tr( "Enter peer key:" ), QLineEdit::Normal,
                                                "whitelist", &ok );
     if ( !ok )
         return;
 
-    qDebug() << "Attempting to connect to " << addr;
+    qDebug() << "Attempting to connect to" << addr;
     APP->servent().connectToPeer( addr, port, key );
+}
+
+
+void
+TomahawkWindow::addFriendManually()
+{
+    bool ok;
+    QString id = QInputDialog::getText( this, tr( "Add Friend" ),
+                                              tr( "Enter Jabber ID:" ), QLineEdit::Normal,
+                                              "", &ok );
+    if ( !ok )
+        return;
+
+    qDebug() << "Attempting to add jabber contact to roster:" << id;
+    APP->jabberAddContact( id );
 }
 
 
