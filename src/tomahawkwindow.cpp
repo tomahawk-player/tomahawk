@@ -175,15 +175,15 @@ TomahawkWindow::changeEvent( QEvent* e )
 void
 TomahawkWindow::closeEvent( QCloseEvent* e )
 {
+#ifndef Q_WS_MAC
     if ( QSystemTrayIcon::isSystemTrayAvailable() )
     {
         e->ignore();
         hide();
     }
-    else
-    {
-        e->accept();
-    }
+#endif
+
+    e->accept();
 }
 
 
