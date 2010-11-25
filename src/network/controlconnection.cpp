@@ -182,10 +182,12 @@ ControlConnection::handleMsg( msg_ptr msg )
     {
         qDebug() << "Received Connection PING, sending PONG.";
         sendMsg( Msg::factory( QByteArray(), Msg::PONG ) );
+        return;
     }
     else if ( msg->is( Msg::PONG ) )
     {
         qDebug() << "Received Connection PONG, nice.";
+        return;
     }
 
     // All control connection msgs are JSON
