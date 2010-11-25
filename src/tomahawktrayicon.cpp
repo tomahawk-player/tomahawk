@@ -107,6 +107,10 @@ TomahawkTrayIcon::onAnimationTimer()
 void
 TomahawkTrayIcon::onActivated( QSystemTrayIcon::ActivationReason reason )
 {
+#ifdef Q_WS_MAC
+    return;
+#endif
+
     switch( reason )
     {
         case QSystemTrayIcon::Trigger:
