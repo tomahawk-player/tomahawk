@@ -79,9 +79,9 @@ FLACTranscode::read_callback( FLAC__byte buffer[], size_t *bytes )
     memcpy( buffer, (char*)m_buffer.data(), *bytes );
     m_buffer.remove( 0, *bytes );
 
-    if ( !*bytes )
-        return FLAC__STREAM_DECODER_READ_STATUS_ABORT;
-    else
+//    if ( !*bytes )
+//        return FLAC__STREAM_DECODER_READ_STATUS_ABORT;
+//    else
         return FLAC__STREAM_DECODER_READ_STATUS_CONTINUE;
 }
 
