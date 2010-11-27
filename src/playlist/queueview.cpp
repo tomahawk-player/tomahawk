@@ -11,7 +11,6 @@ using namespace Tomahawk;
 QueueView::QueueView( QWidget* parent )
     : QWidget( parent )
 {
-    setMinimumHeight( 27 );
     setLayout( new QVBoxLayout() );
 
     m_queue = new PlaylistView( this );

@@ -5,6 +5,12 @@
 
 #define ANIMATION_TIME 500
 
+#ifdef Q_WS_MAC
+#define MINIMUM_HEIGHT 38
+#else
+#define MINIMUM_HEIGHT 27
+#endif
+
 
 AnimatedSplitter::AnimatedSplitter( QWidget* parent )
     : QSplitter( parent )
@@ -60,7 +66,7 @@ AnimatedSplitter::hide( int index, bool animate )
     m_animateIndex = index;
 
     QWidget* w = widget( index );
-    w->setMinimumHeight( 27 );
+    w->setMinimumHeight( MINIMUM_HEIGHT );
     m_greedyHeight = widget( m_greedyIndex )->height();
 
     m_animateForward = false;
@@ -68,7 +74,7 @@ AnimatedSplitter::hide( int index, bool animate )
     {
 
         QTimeLine *timeLine = new QTimeLine( ANIMATION_TIME, this );
-        timeLine->setFrameRange( 27, w->height() );
+        timeLine->setFrameRange( MINIMUM_HEIGHT, w->height() );
         timeLine->setUpdateInterval( 5 );
         timeLine->setDirection( QTimeLine::Backward );
         timeLine->setEasingCurve( QEasingCurve::OutBack );
@@ -79,7 +85,7 @@ AnimatedSplitter::hide( int index, bool animate )
     }
     else
     {
-        onAnimationStep( 27 );
+        onAnimationStep( MINIMUM_HEIGHT );
         onAnimationFinished();
     }
 
@@ -180,7 +186,7 @@ AnimatedSplitter::onAnimationFinished()
     }
     else
     {
-        w->setMaximumHeight( 27 );
+        w->setMaximumHeight( MINIMUM_HEIGHT );
     }
 
     m_animateIndex = -1;
