@@ -26,7 +26,6 @@ AnimatedSplitter::show( int index, bool animate )
     QWidget* w = widget( index );
     QSize size = w->sizeHint();
     w->setMaximumHeight( QWIDGETSIZE_MAX );
-    qDebug() << "SizeHint:" << index << w->height() << size;
 
     m_animateForward = true;
     if ( animate )
@@ -61,7 +60,6 @@ AnimatedSplitter::hide( int index, bool animate )
     m_animateIndex = index;
 
     QWidget* w = widget( index );
-    qDebug() << "SizeHint:" << index << w->height();
     w->setMinimumHeight( 25 );
     m_greedyHeight = widget( m_greedyIndex )->height();
 
@@ -144,8 +142,6 @@ AnimatedSplitter::onHideRequest()
 void
 AnimatedSplitter::onAnimationStep( int frame )
 {
-    qDebug() << Q_FUNC_INFO << frame;
-
     QList< int > sizes;
 
     for ( int i = 0; i < count(); i ++ )
@@ -168,7 +164,6 @@ AnimatedSplitter::onAnimationStep( int frame )
         sizes << j;
     }
 
-    qDebug() << sizes;
     setSizes( sizes );
 }
 
