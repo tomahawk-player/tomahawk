@@ -307,9 +307,10 @@ INCLUDE_DIRECTORIES(
 
     /usr/include/taglib
     /usr/local/include/taglib
-    /usr/include/echonest
-    /usr/local/include/echonest
     /usr/local/include
+
+    ${LIBECHONEST_INCLUDE_DIR}
+    ${LIBECHONEST_INCLUDE_DIR}/..
 )
 
 SET( OS_SPECIFIC_LINK_LIBRARIES "" )
@@ -357,7 +358,7 @@ TARGET_LINK_LIBRARIES( tomahawk
     ${MAC_EXTRA_LIBS}
     portfwd
     ${OS_SPECIFIC_LINK_LIBRARIES}
-    echonest
+    ${LIBECHONEST_LIBRARY}
     qjson
     tag
 )
