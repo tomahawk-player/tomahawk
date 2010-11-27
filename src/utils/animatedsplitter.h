@@ -10,8 +10,8 @@ Q_OBJECT
 public:
     explicit AnimatedSplitter( QWidget* parent = 0 );
 
-    void show( int index );
-    void hide( int index );
+    void show( int index, bool animate = true );
+    void hide( int index, bool animate = true );
 
     void setGreedyWidget( int index ) { m_greedyIndex = index; }
 

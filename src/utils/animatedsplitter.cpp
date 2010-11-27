@@ -3,6 +3,8 @@
 #include <QDebug>
 #include <QTimeLine>
 
+#define ANIMATION_TIME 300
+
 
 AnimatedSplitter::AnimatedSplitter( QWidget* parent )
     : QSplitter( parent )
@@ -14,11 +16,12 @@ AnimatedSplitter::AnimatedSplitter( QWidget* parent )
 
 
 void
-AnimatedSplitter::show( int index )
+AnimatedSplitter::show( int index, bool animate )
 {
     if ( m_greedyIndex < 0 )
         return;
 
+    int time = animate ? ANIMATION_TIME : 0;
     m_animateIndex = index;
 
     QWidget* w = widget( index );
@@ -27,7 +30,7 @@ AnimatedSplitter::show( int index )
 
     m_greedyHeight = widget( m_greedyIndex )->height();
 
-    QTimeLine *timeLine = new QTimeLine( 300, this );
+    QTimeLine *timeLine = new QTimeLine( time, this );
     timeLine->setFrameRange( w->height(), size.height() );
     timeLine->setUpdateInterval( 10 );
     timeLine->setCurveShape( QTimeLine::EaseOutCurve );
@@ -41,11 +44,12 @@ AnimatedSplitter::show( int index )
 
 
 void
-AnimatedSplitter::hide( int index )
+AnimatedSplitter::hide( int index, bool animate )
 {
     if ( m_greedyIndex < 0 )
         return;
 
+    int time = animate ? ANIMATION_TIME : 0;
     m_animateIndex = index;
 
     QWidget* w = widget( index );
@@ -53,7 +57,7 @@ AnimatedSplitter::hide( int index )
 
     m_greedyHeight = widget( m_greedyIndex )->height();
 
-    QTimeLine *timeLine = new QTimeLine( 300, this );
+    QTimeLine *timeLine = new QTimeLine( time, this );
     timeLine->setFrameRange( 25, w->height() );
     timeLine->setUpdateInterval( 10 );
     timeLine->setDirection( QTimeLine::Backward );
