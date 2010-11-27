@@ -279,22 +279,21 @@ TrackView::dropEvent( QDropEvent* event )
     if ( event->isAccepted() )
     {
         qDebug() << "Ignoring accepted event!";
-        return;
     }
-
-    if ( event->mimeData()->hasFormat( "application/tomahawk.query.list" ) )
-    {
-        const QPoint pos = event->pos();
-        const QModelIndex index = indexAt( pos );
-
-        qDebug() << "Drop Event accepted at row:" << index.row();
-        event->acceptProposedAction();
-
-        if ( !model()->isReadOnly() )
+    else
+        if ( event->mimeData()->hasFormat( "application/tomahawk.query.list" ) )
         {
-            model()->dropMimeData( event->mimeData(), event->proposedAction(), index.row(), 0, index.parent() );
+            const QPoint pos = event->pos();
+            const QModelIndex index = indexAt( pos );
+
+            qDebug() << "Drop Event accepted at row:" << index.row();
+            event->acceptProposedAction();
+
+            if ( !model()->isReadOnly() )
+            {
+                model()->dropMimeData( event->mimeData(), event->proposedAction(), index.row(), 0, index.parent() );
+            }
         }
-    }
 
     m_dragging = false;
 }
@@ -344,13 +343,14 @@ void
 TrackView::startDrag( Qt::DropActions supportedActions )
 {
     QList<QPersistentModelIndex> pindexes;
-    QModelIndexList indexes = selectedIndexes();
-    for( int i = indexes.count() - 1 ; i >= 0; --i )
+    QModelIndexList indexes;
+    foreach( const QModelIndex& idx, selectedIndexes() )
     {
-        if ( !( m_proxyModel->flags( indexes.at( i ) ) & Qt::ItemIsDragEnabled ) )
-            indexes.removeAt( i );
-        else
-            pindexes << indexes.at( i );
+        if ( ( m_proxyModel->flags( idx ) & Qt::ItemIsDragEnabled ) )
+        {
+            indexes << idx;
+            pindexes << idx;
+        }
     }
 
     if ( indexes.count() == 0 )
@@ -367,17 +367,10 @@ TrackView::startDrag( Qt::DropActions supportedActions )
     drag->setPixmap( p );
     drag->setHotSpot( QPoint( -20, -20 ) );
 
-    // NOTE: if we support moving items in the model
-    //       in the future, if exec() returns Qt::MoveAction
-    //       we need to clean up ourselves.
     Qt::DropAction action = drag->exec( supportedActions, Qt::CopyAction );
-
     if ( action == Qt::MoveAction )
     {
-        foreach ( const QPersistentModelIndex& idx, pindexes )
-        {
-            m_proxyModel->removeIndex( idx );
-        }
+        m_proxyModel->removeIndexes( pindexes );
     }
 }
 

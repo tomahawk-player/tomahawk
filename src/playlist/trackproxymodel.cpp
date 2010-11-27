@@ -171,7 +171,32 @@ TrackProxyModel::removeIndex( const QModelIndex& index )
 
 
 void
-TrackProxyModel::removeIndexes( const QList<QModelIndex>& indexes )
+TrackProxyModel::removeIndexes( const QModelIndexList& indexes )
+{
+    if ( !sourceModel() )
+        return;
+
+    QList<QPersistentModelIndex> pil;
+    foreach( const QModelIndex& idx, indexes )
+    {
+        if ( idx.isValid() && idx.column() == 0 )
+            pil << mapToSource( idx );
+    }
+
+    bool b = true;
+    foreach( const QPersistentModelIndex& idx, pil )
+    {
+        if ( idx == pil.last() )
+            b = false;
+
+        qDebug() << "b is:" << b;
+        sourceModel()->removeIndex( idx, b );
+    }
+}
+
+
+void
+TrackProxyModel::removeIndexes( const QList<QPersistentModelIndex>& indexes )
 {
     if ( !sourceModel() )
         return;

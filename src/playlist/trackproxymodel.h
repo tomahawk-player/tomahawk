@@ -22,7 +22,8 @@ public:
     virtual int trackCount() const { return rowCount( QModelIndex() ); }
 
     virtual void removeIndex( const QModelIndex& index );
-    virtual void removeIndexes( const QList<QModelIndex>& indexes );
+    virtual void removeIndexes( const QModelIndexList& indexes );
+    virtual void removeIndexes( const QList<QPersistentModelIndex>& indexes );
 
     virtual Tomahawk::result_ptr siblingItem( int itemsAway );
 
