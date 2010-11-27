@@ -30,6 +30,7 @@ private slots:
 
 private:
     int m_animateIndex;
+    bool m_animateForward;
 
     int m_greedyIndex;
     int m_greedyHeight;

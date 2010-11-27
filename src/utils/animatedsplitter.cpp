@@ -21,23 +21,32 @@ AnimatedSplitter::show( int index, bool animate )
     if ( m_greedyIndex < 0 )
         return;
 
-    int time = animate ? ANIMATION_TIME : 0;
     m_animateIndex = index;
 
     QWidget* w = widget( index );
     QSize size = w->sizeHint();
+    w->setMaximumHeight( QWIDGETSIZE_MAX );
     qDebug() << "SizeHint:" << index << w->height() << size;
 
-    m_greedyHeight = widget( m_greedyIndex )->height();
+    m_animateForward = true;
+    if ( animate )
+    {
+        m_greedyHeight = widget( m_greedyIndex )->height();
 
-    QTimeLine *timeLine = new QTimeLine( time, this );
-    timeLine->setFrameRange( w->height(), size.height() );
-    timeLine->setUpdateInterval( 10 );
-    timeLine->setCurveShape( QTimeLine::EaseOutCurve );
+        QTimeLine *timeLine = new QTimeLine( ANIMATION_TIME, this );
+        timeLine->setFrameRange( w->height(), size.height() );
+        timeLine->setUpdateInterval( 10 );
+        timeLine->setCurveShape( QTimeLine::EaseOutCurve );
 
-    connect( timeLine, SIGNAL( frameChanged( int ) ), SLOT( onAnimationStep( int ) ) );
-    connect( timeLine, SIGNAL( finished() ), SLOT( onAnimationFinished() ) );
-    timeLine->start();
+        connect( timeLine, SIGNAL( frameChanged( int ) ), SLOT( onAnimationStep( int ) ) );
+        connect( timeLine, SIGNAL( finished() ), SLOT( onAnimationFinished() ) );
+        timeLine->start();
+    }
+    else
+    {
+        onAnimationStep( size.height() );
+        onAnimationFinished();
+    }
 
     emit shown( w );
 }
@@ -49,23 +58,31 @@ AnimatedSplitter::hide( int index, bool animate )
     if ( m_greedyIndex < 0 )
         return;
 
-    int time = animate ? ANIMATION_TIME : 0;
     m_animateIndex = index;
 
     QWidget* w = widget( index );
     qDebug() << "SizeHint:" << index << w->height();
-
     m_greedyHeight = widget( m_greedyIndex )->height();
 
-    QTimeLine *timeLine = new QTimeLine( time, this );
-    timeLine->setFrameRange( 25, w->height() );
-    timeLine->setUpdateInterval( 10 );
-    timeLine->setDirection( QTimeLine::Backward );
-    timeLine->setCurveShape( QTimeLine::EaseOutCurve );
+    m_animateForward = false;
+    if ( animate )
+    {
 
-    connect( timeLine, SIGNAL( frameChanged( int ) ), SLOT( onAnimationStep( int ) ) );
-    connect( timeLine, SIGNAL( finished() ), SLOT( onAnimationFinished() ) );
-    timeLine->start();
+        QTimeLine *timeLine = new QTimeLine( ANIMATION_TIME, this );
+        timeLine->setFrameRange( 25, w->height() );
+        timeLine->setUpdateInterval( 10 );
+        timeLine->setDirection( QTimeLine::Backward );
+        timeLine->setCurveShape( QTimeLine::EaseOutCurve );
+
+        connect( timeLine, SIGNAL( frameChanged( int ) ), SLOT( onAnimationStep( int ) ) );
+        connect( timeLine, SIGNAL( finished() ), SLOT( onAnimationFinished() ) );
+        timeLine->start();
+    }
+    else
+    {
+        onAnimationStep( 25 );
+        onAnimationFinished();
+    }
 
     emit hidden( w );
 }
@@ -160,5 +177,17 @@ AnimatedSplitter::onAnimationFinished()
 {
     qDebug() << Q_FUNC_INFO;
 
-    sender()->deleteLater();
+    QWidget* w = widget( m_animateIndex );
+    if ( m_animateForward )
+        w->setMinimumHeight( 100 );
+    else
+    {
+        w->setMinimumHeight( 25 );
+        w->setMaximumHeight( 25 );
+    }
+
+    m_animateIndex = -1;
+
+    if ( sender() )
+        sender()->deleteLater();
 }
