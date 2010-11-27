@@ -273,14 +273,15 @@ TrackModel::mimeData( const QModelIndexList &indexes ) const
 
 
 void
-TrackModel::removeIndex( const QModelIndex& index )
+TrackModel::removeIndex( const QModelIndex& index, bool moreToCome )
 {
     if ( QThread::currentThread() != thread() )
     {
         qDebug() << "Reinvoking in correct thread:" << Q_FUNC_INFO;
         QMetaObject::invokeMethod( this, "removeIndex",
                                    Qt::QueuedConnection,
-                                   Q_ARG(const QModelIndex, index)
+                                   Q_ARG(const QModelIndex, index),
+                                   Q_ARG(bool, moreToCome)
                                  );
         return;
     }

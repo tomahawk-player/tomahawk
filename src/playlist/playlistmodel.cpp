@@ -213,7 +213,7 @@ PlaylistModel::dropMimeData( const QMimeData* data, Qt::DropAction action, int r
             Tomahawk::query_ptr* query = reinterpret_cast<Tomahawk::query_ptr*>(qptr);
             if ( query && !query->isNull() )
             {
-                qDebug() << "Dropped query item:" << query->data()->artist() << "-" << query->data()->track();
+                qDebug() << "Dropped query item:" << query->data()->artist() << "-" << query->data()->track() << action;
                 queries << *query;
             }
         }
@@ -239,6 +239,11 @@ PlaylistModel::dropMimeData( const QMimeData* data, Qt::DropAction action, int r
             connect( plitem, SIGNAL( dataChanged() ), SLOT( onDataChanged() ) );
         }
         emit endInsertRows();
+
+        if ( action == Qt::CopyAction )
+        {
+            onPlaylistChanged();
+        }
     }
 
     return true;
@@ -246,7 +251,7 @@ PlaylistModel::dropMimeData( const QMimeData* data, Qt::DropAction action, int r
 
 
 void
-PlaylistModel::onPlaylistChanged()
+PlaylistModel::onPlaylistChanged( bool waitForUpdate )
 {
     qDebug() << Q_FUNC_INFO;
 
@@ -254,14 +259,13 @@ PlaylistModel::onPlaylistChanged()
         return;
 
     QList<plentry_ptr> l = playlistEntries();
-    if ( !l.count() )
-        return;
 
     foreach( const plentry_ptr& ple, l )
     {
         qDebug() << "updateinternal:" << ple->query()->toString();
     }
 
+    m_waitForUpdate = waitForUpdate;
     QString newrev = uuid();
     m_playlist->createNewRevision( newrev, m_playlist->currentrevision(), l );
 }
@@ -287,16 +291,15 @@ PlaylistModel::playlistEntries() const
 
 
 void
-PlaylistModel::removeIndex( const QModelIndex& index )
+PlaylistModel::removeIndex( const QModelIndex& index, bool moreToCome )
 {
     if ( isReadOnly() )
         return;
 
     TrackModel::removeIndex( index );
 
-    if ( !m_playlist.isNull() )
+    if ( !moreToCome && !m_playlist.isNull() )
     {
-        m_waitForUpdate = true;
         onPlaylistChanged();
     }
 }

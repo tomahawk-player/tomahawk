@@ -274,21 +274,28 @@ TrackView::dragMoveEvent( QDragMoveEvent* event )
 void
 TrackView::dropEvent( QDropEvent* event )
 {
-/*    const QPoint pos = event->pos();
-    const QModelIndex index = indexAt( pos );
+    QTreeView::dropEvent( event );
+
+    if ( event->isAccepted() )
+    {
+        qDebug() << "Ignoring accepted event!";
+        return;
+    }
 
     if ( event->mimeData()->hasFormat( "application/tomahawk.query.list" ) )
     {
         const QPoint pos = event->pos();
         const QModelIndex index = indexAt( pos );
 
-        if ( index.isValid() )
-        {
-            event->acceptProposedAction();
-        }
-    }*/
+        qDebug() << "Drop Event accepted at row:" << index.row();
+        event->acceptProposedAction();
 
-    QTreeView::dropEvent( event );
+        if ( !model()->isReadOnly() )
+        {
+            model()->dropMimeData( event->mimeData(), event->proposedAction(), index.row(), 0, index.parent() );
+        }
+    }
+
     m_dragging = false;
 }
 

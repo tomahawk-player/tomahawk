@@ -39,8 +39,6 @@ public:
     virtual QVariant data( const QModelIndex& index, int role = Qt::DisplayRole ) const;
     virtual QVariant headerData( int section, Qt::Orientation orientation, int role ) const;
 
-    virtual void removeIndexes( const QList<QModelIndex>& indexes );
-
     virtual Tomahawk::result_ptr siblingItem( int direction ) { return Tomahawk::result_ptr(); }
 
     virtual QMimeData* mimeData( const QModelIndexList& indexes ) const;
@@ -68,7 +66,8 @@ signals:
 public slots:
     virtual void setCurrentItem( const QModelIndex& index );
 
-    virtual void removeIndex( const QModelIndex& index );
+    virtual void removeIndex( const QModelIndex& index, bool moreToCome = false );
+    virtual void removeIndexes( const QList<QModelIndex>& indexes );
 
     virtual void setRepeatMode( PlaylistInterface::RepeatMode mode ) {}
     virtual void setShuffled( bool shuffled ) {}

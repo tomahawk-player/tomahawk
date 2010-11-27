@@ -35,7 +35,7 @@ public:
 
     void appendTrack( const Tomahawk::query_ptr& query );
 
-    virtual void removeIndex( const QModelIndex& index );
+    virtual void removeIndex( const QModelIndex& index, bool moreToCome = false );
 
 signals:
     void repeatModeChanged( PlaylistInterface::RepeatMode mode );
@@ -50,7 +50,7 @@ private slots:
     void onDataChanged();
 
     void onRevisionLoaded( Tomahawk::PlaylistRevision revision );
-    void onPlaylistChanged();
+    void onPlaylistChanged( bool waitForUpdate = true );
 
     void onTracksAdded( const QList<Tomahawk::query_ptr>& tracks, const Tomahawk::collection_ptr& collection = Tomahawk::collection_ptr() );
 
