@@ -3,7 +3,7 @@
 #include <QDebug>
 #include <QTimeLine>
 
-#define ANIMATION_TIME 300
+#define ANIMATION_TIME 500
 
 
 AnimatedSplitter::AnimatedSplitter( QWidget* parent )
@@ -18,7 +18,7 @@ AnimatedSplitter::AnimatedSplitter( QWidget* parent )
 void
 AnimatedSplitter::show( int index, bool animate )
 {
-    if ( m_greedyIndex < 0 )
+    if ( m_greedyIndex < 0 || m_animateIndex != -1 )
         return;
 
     m_animateIndex = index;
@@ -35,8 +35,8 @@ AnimatedSplitter::show( int index, bool animate )
 
         QTimeLine *timeLine = new QTimeLine( ANIMATION_TIME, this );
         timeLine->setFrameRange( w->height(), size.height() );
-        timeLine->setUpdateInterval( 10 );
-        timeLine->setCurveShape( QTimeLine::EaseOutCurve );
+        timeLine->setUpdateInterval( 5 );
+        timeLine->setEasingCurve( QEasingCurve::OutBack );
 
         connect( timeLine, SIGNAL( frameChanged( int ) ), SLOT( onAnimationStep( int ) ) );
         connect( timeLine, SIGNAL( finished() ), SLOT( onAnimationFinished() ) );
@@ -55,13 +55,14 @@ AnimatedSplitter::show( int index, bool animate )
 void
 AnimatedSplitter::hide( int index, bool animate )
 {
-    if ( m_greedyIndex < 0 )
+    if ( m_greedyIndex < 0 || m_animateIndex != -1 )
         return;
 
     m_animateIndex = index;
 
     QWidget* w = widget( index );
     qDebug() << "SizeHint:" << index << w->height();
+    w->setMinimumHeight( 25 );
     m_greedyHeight = widget( m_greedyIndex )->height();
 
     m_animateForward = false;
@@ -70,9 +71,9 @@ AnimatedSplitter::hide( int index, bool animate )
 
         QTimeLine *timeLine = new QTimeLine( ANIMATION_TIME, this );
         timeLine->setFrameRange( 25, w->height() );
-        timeLine->setUpdateInterval( 10 );
+        timeLine->setUpdateInterval( 5 );
         timeLine->setDirection( QTimeLine::Backward );
-        timeLine->setCurveShape( QTimeLine::EaseOutCurve );
+        timeLine->setEasingCurve( QEasingCurve::OutBack );
 
         connect( timeLine, SIGNAL( frameChanged( int ) ), SLOT( onAnimationStep( int ) ) );
         connect( timeLine, SIGNAL( finished() ), SLOT( onAnimationFinished() ) );
@@ -179,10 +180,11 @@ AnimatedSplitter::onAnimationFinished()
 
     QWidget* w = widget( m_animateIndex );
     if ( m_animateForward )
+    {
         w->setMinimumHeight( 100 );
+    }
     else
     {
-        w->setMinimumHeight( 25 );
         w->setMaximumHeight( 25 );
     }
 
