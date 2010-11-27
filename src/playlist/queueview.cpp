@@ -28,6 +28,7 @@ QueueView::QueueView( QWidget* parent )
     layout()->setMargin( 0 );
     layout()->addWidget( m_button );
     layout()->addWidget( m_queue );
+    layout()->setAlignment( Qt::AlignTop );
 
     m_queue->hide();
 }
@@ -49,12 +50,15 @@ QueueView::showQueue()
     disconnect( m_button, SIGNAL( clicked() ), this, SLOT( showQueue() ) );
     connect( m_button, SIGNAL( clicked() ), SLOT( hideQueue() ) );
 
-    m_queue->setMaximumHeight( 0 );
+    m_queue->setMaximumHeight( m_prevHeight );
+    m_queue->resize( m_queue->width(), m_prevHeight );
     m_queue->show();
 
     QTimeLine *timeLine = new QTimeLine( 300, this );
     timeLine->setFrameRange( 0, m_prevHeight );
     timeLine->setUpdateInterval( 20 );
+    timeLine->setCurveShape( QTimeLine::EaseOutCurve );
+
     connect( timeLine, SIGNAL( frameChanged( int ) ), SLOT( onAnimationStep( int ) ) );
     connect( timeLine, SIGNAL( finished() ), SLOT( onAnimationFinished() ) );
     timeLine->start();
@@ -76,6 +80,8 @@ QueueView::hideQueue()
     timeLine->setFrameRange( 0, m_prevHeight );
     timeLine->setUpdateInterval( 20 );
     timeLine->setDirection( QTimeLine::Backward );
+    timeLine->setCurveShape( QTimeLine::EaseOutCurve );
+
     connect( timeLine, SIGNAL( frameChanged( int ) ), SLOT( onAnimationStep( int ) ) );
     connect( timeLine, SIGNAL( finished() ), SLOT( onAnimationFinished() ) );
     timeLine->start();
@@ -86,15 +92,10 @@ void
 QueueView::onAnimationStep( int frame )
 {
     setUpdatesEnabled( false );
-    m_queue->setUpdatesEnabled( false );
 
     setMinimumHeight( frame + 25 );
     setMaximumHeight( frame + 25 );
 
-    m_queue->setMaximumHeight( frame );
-    m_queue->resize( m_queue->width(), frame );
-
-    m_queue->setUpdatesEnabled( true );
     setUpdatesEnabled( true );
 }
 
@@ -113,8 +114,8 @@ QueueView::onAnimationFinished()
     else
     {
         setMinimumHeight( 200 );
-        m_queue->setMaximumHeight( QWIDGETSIZE_MAX );
         setMaximumHeight( QWIDGETSIZE_MAX );
+        m_queue->setMaximumHeight( QWIDGETSIZE_MAX );
     }
 
     sender()->deleteLater();
