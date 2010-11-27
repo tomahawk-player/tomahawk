@@ -11,7 +11,7 @@ using namespace Tomahawk;
 QueueView::QueueView( QWidget* parent )
     : QWidget( parent )
 {
-    setMinimumHeight( 25 );
+    setMinimumHeight( 27 );
     setLayout( new QVBoxLayout() );
 
     m_queue = new PlaylistView( this );
@@ -24,8 +24,8 @@ QueueView::QueueView( QWidget* parent )
     connect( m_button, SIGNAL( clicked() ), SIGNAL( showWidget() ) );
 
     layout()->setMargin( 0 );
-    layout()->addWidget( m_button );
     layout()->addWidget( m_queue );
+    layout()->addWidget( m_button );
 }
 
 
