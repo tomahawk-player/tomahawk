@@ -273,12 +273,6 @@ AudioEngine::loadNextTrack()
         result = m_playlist->nextItem();
     }
 
-    if ( result.isNull() )
-    {
-        stop();
-        return;
-    }
-
     if ( !result.isNull() )
         loadTrack( result );
     else

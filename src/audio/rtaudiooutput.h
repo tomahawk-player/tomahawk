@@ -20,7 +20,7 @@ class RTAudioOutput : public QObject
         bool isPaused() { return m_paused; }
         virtual bool isPlaying() { return m_playing; }
 
-        bool haveData() { return m_buffer.length() > 0; }
+        bool haveData() { return m_buffer.length() > 2048; }
         bool needData();
         void processData( const QByteArray &buffer );
 
