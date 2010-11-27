@@ -85,11 +85,17 @@ QueueView::hideQueue()
 void
 QueueView::onAnimationStep( int frame )
 {
+    setUpdatesEnabled( false );
+    m_queue->setUpdatesEnabled( false );
+
     setMinimumHeight( frame + 25 );
     setMaximumHeight( frame + 25 );
-    m_queue->setMaximumHeight( frame );
 
+    m_queue->setMaximumHeight( frame );
     m_queue->resize( m_queue->width(), frame );
+
+    m_queue->setUpdatesEnabled( true );
+    setUpdatesEnabled( true );
 }
 
 
