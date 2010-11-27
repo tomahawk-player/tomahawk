@@ -22,17 +22,16 @@ protected:
 private slots:
     void onCustomContextMenu( const QPoint& pos );
 
-    void playItem();
     void addItemsToPlaylist();
     void deleteItem();
 
 private:
     void setupMenus();
 
-    QModelIndex m_contextMenuIndex;
-
     QMenu m_itemMenu;
+
     QAction* m_playItemAction;
+    QAction* m_addItemsToQueueAction;
     QAction* m_addItemsToPlaylistAction;
     QAction* m_deleteItemAction;
 };

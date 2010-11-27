@@ -39,6 +39,7 @@ PlaylistView::setupMenus()
     m_itemMenu.clear();
 
     m_playItemAction = m_itemMenu.addAction( tr( "&Play" ) );
+    m_addItemsToQueueAction = m_itemMenu.addAction( tr( "Add to &Queue" ) );
     m_itemMenu.addSeparator();
     m_addItemsToPlaylistAction = m_itemMenu.addAction( tr( "&Add to Playlist" ) );
     m_itemMenu.addSeparator();
@@ -48,6 +49,7 @@ PlaylistView::setupMenus()
         m_deleteItemAction->setEnabled( !model()->isReadOnly() );
 
     connect( m_playItemAction,           SIGNAL( triggered() ), SLOT( playItem() ) );
+    connect( m_addItemsToQueueAction,    SIGNAL( triggered() ), SLOT( addItemsToQueue() ) );
     connect( m_addItemsToPlaylistAction, SIGNAL( triggered() ), SLOT( addItemsToPlaylist() ) );
     connect( m_deleteItemAction,         SIGNAL( triggered() ), SLOT( deleteItem() ) );
 }
@@ -61,7 +63,7 @@ PlaylistView::onCustomContextMenu( const QPoint& pos )
 
     QModelIndex idx = indexAt( pos );
     idx = idx.sibling( idx.row(), 0 );
-    m_contextMenuIndex = idx;
+    setContextMenuIndex( idx );
 
     if ( !idx.isValid() )
         return;
@@ -88,13 +90,6 @@ PlaylistView::keyPressEvent( QKeyEvent* event )
 
 
 void
-PlaylistView::playItem()
-{
-    onItemActivated( m_contextMenuIndex );
-}
-
-
-void
 PlaylistView::addItemsToPlaylist()
 {
 }
@@ -103,5 +98,5 @@ PlaylistView::addItemsToPlaylist()
 void
 PlaylistView::deleteItem()
 {
-    proxyModel()->removeIndex( m_contextMenuIndex );
+    proxyModel()->removeIndex( contextMenuIndex() );
 }

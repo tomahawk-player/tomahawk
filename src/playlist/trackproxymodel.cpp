@@ -163,7 +163,7 @@ TrackProxyModel::removeIndex( const QModelIndex& index )
 
     if ( !sourceModel() )
         return;
-    if ( index.column() > 0 )
+    if ( !index.isValid() )
         return;
 
     sourceModel()->removeIndex( mapToSource( index ) );

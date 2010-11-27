@@ -26,8 +26,14 @@ public:
 
     void setModel( TrackModel* model );
 
+    QModelIndex contextMenuIndex() const { return m_contextMenuIndex; }
+    void setContextMenuIndex( const QModelIndex& idx ) { m_contextMenuIndex = idx; }
+
 public slots:
     void onItemActivated( const QModelIndex& index );
+
+    void playItem();
+    void addItemsToQueue();
 
 protected:
     virtual void resizeEvent( QResizeEvent* event );
@@ -65,6 +71,8 @@ private:
     bool m_resizing;
     bool m_dragging;
     QRect m_dropRect;
+
+    QModelIndex m_contextMenuIndex;
 };
 
 #endif // TRACKVIEW_H

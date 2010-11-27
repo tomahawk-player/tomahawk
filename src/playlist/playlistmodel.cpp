@@ -14,6 +14,8 @@ PlaylistModel::PlaylistModel( QObject* parent )
     , m_waitForUpdate( false )
 {
     qDebug() << Q_FUNC_INFO;
+
+    setReadOnly( false );
 }
 
 
@@ -111,6 +113,19 @@ PlaylistModel::loadAlbum( const Tomahawk::album_ptr& album )
 
 
 void
+PlaylistModel::appendTrack( const Tomahawk::query_ptr& query )
+{
+    if ( query.isNull() )
+        return;
+
+    QList< Tomahawk::query_ptr > ql;
+    ql << query;
+
+    onTracksAdded( ql );
+}
+
+
+void
 PlaylistModel::onTracksAdded( const QList<Tomahawk::query_ptr>& tracks, const Tomahawk::collection_ptr& collection )
 {
     if ( !tracks.count() )
@@ -145,7 +160,8 @@ void
 PlaylistModel::onDataChanged()
 {
     PlItem* p = (PlItem*)sender();
-    emit dataChanged( p->index, p->index.sibling( p->index.row(), columnCount() - 1 ) );
+    if ( p && p->index.isValid() )
+        emit dataChanged( p->index, p->index.sibling( p->index.row(), columnCount() - 1 ) );
 }
 
 
@@ -278,6 +294,9 @@ PlaylistModel::removeIndex( const QModelIndex& index )
 
     TrackModel::removeIndex( index );
 
-    m_waitForUpdate = true;
-    onPlaylistChanged();
+    if ( !m_playlist.isNull() )
+    {
+        m_waitForUpdate = true;
+        onPlaylistChanged();
+    }
 }

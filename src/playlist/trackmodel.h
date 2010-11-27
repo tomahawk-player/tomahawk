@@ -39,7 +39,6 @@ public:
     virtual QVariant data( const QModelIndex& index, int role = Qt::DisplayRole ) const;
     virtual QVariant headerData( int section, Qt::Orientation orientation, int role ) const;
 
-    virtual void removeIndex( const QModelIndex& index );
     virtual void removeIndexes( const QList<QModelIndex>& indexes );
 
     virtual Tomahawk::result_ptr siblingItem( int direction ) { return Tomahawk::result_ptr(); }
@@ -54,6 +53,8 @@ public:
     virtual PlaylistInterface::RepeatMode repeatMode() const { return PlaylistInterface::NoRepeat; }
     virtual bool shuffled() const { return false; }
 
+    virtual void appendTrack( const Tomahawk::query_ptr& query ) = 0;
+
     PlItem* itemFromIndex( const QModelIndex& index ) const;
 
     PlItem* m_rootItem;
@@ -67,11 +68,17 @@ signals:
 public slots:
     virtual void setCurrentItem( const QModelIndex& index );
 
+    virtual void removeIndex( const QModelIndex& index );
+
     virtual void setRepeatMode( PlaylistInterface::RepeatMode mode ) {}
     virtual void setShuffled( bool shuffled ) {}
 
 protected:
     virtual void setReadOnly( bool b ) { m_readOnly = b; }
+
+private slots:
+    void onPlaybackFinished( const Tomahawk::result_ptr& result );
+    void onPlaybackStopped();
 
 private:
     QPersistentModelIndex m_currentIndex;

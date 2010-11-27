@@ -7,6 +7,8 @@
 #include <QScrollBar>
 
 #include "tomahawk/tomahawkapp.h"
+#include "playlist/playlistmanager.h"
+#include "playlist/queueview.h"
 #include "audioengine.h"
 #include "tomahawksettings.h"
 #include "trackmodel.h"
@@ -31,6 +33,7 @@ TrackView::TrackView( QWidget* parent )
     setDragDropMode( QAbstractItemView::InternalMove );
     setDragDropOverwriteMode( false );
     setAllColumnsShowFocus( true );
+    setMinimumWidth( 690 );
 
 #ifndef Q_WS_WIN
     QFont f = font();
@@ -146,6 +149,31 @@ TrackView::onItemResized( const QModelIndex& index )
 {
     qDebug() << Q_FUNC_INFO;
     m_delegate->updateRowSize( index );
+}
+
+
+void
+TrackView::playItem()
+{
+    onItemActivated( m_contextMenuIndex );
+}
+
+
+void
+TrackView::addItemsToQueue()
+{
+    foreach( const QModelIndex& idx, selectedIndexes() )
+    {
+        if ( idx.column() )
+            continue;
+
+        PlItem* item = model()->itemFromIndex( proxyModel()->mapToSource( idx ) );
+        if ( item && item->query()->numResults() )
+        {
+            APP->playlistManager()->queue()->model()->appendTrack( item->query() );
+            APP->playlistManager()->showQueue();
+        }
+    }
 }
 
 

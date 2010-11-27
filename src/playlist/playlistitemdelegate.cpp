@@ -6,9 +6,12 @@
 
 #include "tomahawk/query.h"
 #include "tomahawk/result.h"
+#include "tomahawk/tomahawkapp.h"
 
 #include "playlist/plitem.h"
 #include "playlist/trackproxymodel.h"
+
+#include "audio/audioengine.h"
 
 
 PlaylistItemDelegate::PlaylistItemDelegate( QAbstractItemView* parent, TrackProxyModel* proxy )
@@ -45,8 +48,10 @@ void
 PlaylistItemDelegate::paint( QPainter* painter, const QStyleOptionViewItem& option, const QModelIndex& index ) const
 {
     PlItem* item = m_model->itemFromIndex( m_model->mapToSource( index ) );
-    if ( !item )
+    if ( !item || item->query().isNull() )
+    {
         return;
+    }
 
     if ( item->query()->results().count() )
         painter->setOpacity( item->query()->results().at( 0 )->score() );

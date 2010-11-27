@@ -4,6 +4,7 @@
 #include <QObject>
 #include <QHash>
 #include <QStackedWidget>
+#include <QSplitter>
 
 #include "tomahawk/collection.h"
 #include "tomahawk/playlistinterface.h"
@@ -11,7 +12,9 @@
 class CollectionModel;
 class CollectionFlatModel;
 class CollectionView;
+class PlaylistModel;
 class PlaylistView;
+class QueueView;
 class TrackProxyModel;
 class TrackModel;
 class TrackView;
@@ -26,10 +29,9 @@ public:
     ~PlaylistManager();
 
     QWidget* widget() const { return m_widget; }
+    PlaylistView* queue() const;
 
     bool isSuperCollectionVisible() const { return true; }
-
-//    QList<PlaylistView*> views( const Tomahawk::playlist_ptr& playlist ) { return m_views.value( playlist ); }
 
     bool show( const Tomahawk::playlist_ptr& playlist );
     bool show( const Tomahawk::album_ptr& album );
@@ -52,6 +54,9 @@ public slots:
     void setTreeMode();
     void setTableMode();
 
+    void showQueue();
+    void hideQueue();
+
     void setFilter( const QString& filter );
 
     void setRepeatMode( PlaylistInterface::RepeatMode mode );
@@ -65,7 +70,12 @@ private:
     void unlinkPlaylist();
     void linkPlaylist();
 
-    QStackedWidget* m_widget;
+    QWidget* m_widget;
+    QStackedWidget* m_stack;
+    QSplitter* m_splitter;
+
+    PlaylistModel* m_queueModel;
+    QueueView* m_queueView;
 
     CollectionFlatModel* m_superCollectionFlatModel;
     CollectionView* m_superCollectionView;

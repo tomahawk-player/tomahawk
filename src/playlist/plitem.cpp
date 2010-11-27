@@ -12,13 +12,13 @@ PlItem::~PlItem()
     // Don't use qDeleteAll here! The children will remove themselves
     // from the list when they get deleted and the qDeleteAll iterator
     // will fail badly!
-    for ( int i = children.count() - 1; i >= 0; i-- )
-        delete children.at( i );
-
     if ( parent && index.isValid() )
     {
         parent->children.removeAt( index.row() );
     }
+
+    for ( int i = children.count() - 1; i >= 0; i-- )
+        delete children.at( i );
 }
 
 

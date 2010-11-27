@@ -22,7 +22,7 @@ public:
     explicit PlItem( const Tomahawk::plentry_ptr& entry, PlItem* parent = 0, int row = -1 );
 
     const Tomahawk::plentry_ptr& entry() const { return m_entry; };
-    const Tomahawk::query_ptr& query() const { return m_query; };
+    const Tomahawk::query_ptr& query() const { if ( !m_entry.isNull() ) return m_entry->query(); else return m_query; };
 
     bool isPlaying() { return m_isPlaying; }
     void setIsPlaying( bool b ) { m_isPlaying = b; emit dataChanged(); }

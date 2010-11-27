@@ -18,6 +18,8 @@
 AudioEngine::AudioEngine()
     : QThread()
     , m_playlist( 0 )
+    , m_currentTrackPlaylist( 0 )
+    , m_queue( 0 )
     , m_i( 0 )
 {
     qDebug() << "Init AudioEngine";
@@ -151,6 +153,9 @@ AudioEngine::loadTrack( const Tomahawk::result_ptr& result )
         else
         {
             m_lastTrack = m_currentTrack;
+            if ( !m_lastTrack.isNull() )
+                emit finished( m_lastTrack );
+
             m_currentTrack = result;
             io = TomahawkApp::instance()->getIODeviceForUrl( m_currentTrack );
 
@@ -256,13 +261,24 @@ AudioEngine::loadNextTrack()
 {
     qDebug() << Q_FUNC_INFO;
 
-    if ( !m_playlist )
+    Tomahawk::result_ptr result;
+
+    if ( m_queue && m_queue->trackCount() )
+    {
+        result = m_queue->nextItem();
+    }
+
+    if ( m_playlist && result.isNull() )
+    {
+        result = m_playlist->nextItem();
+    }
+
+    if ( result.isNull() )
     {
         stop();
         return;
     }
 
-    Tomahawk::result_ptr result = m_playlist->nextItem();
     if ( !result.isNull() )
         loadTrack( result );
     else
@@ -276,7 +292,7 @@ AudioEngine::playItem( PlaylistInterface* playlist, const Tomahawk::result_ptr& 
     qDebug() << Q_FUNC_INFO;
 
     m_playlist = playlist;
-    m_currentPlaylist = playlist;
+    m_currentTrackPlaylist = playlist;
     loadTrack( result );
 }
 

@@ -1,11 +1,14 @@
 #include "playlistmanager.h"
 
+#include <QVBoxLayout>
+
 #include "audioengine.h"
 #include "collectionmodel.h"
 #include "collectionflatmodel.h"
 #include "collectionview.h"
 #include "playlistmodel.h"
 #include "playlistview.h"
+#include "queueview.h"
 #include "trackproxymodel.h"
 #include "trackmodel.h"
 
@@ -13,22 +16,42 @@
 
 #define FILTER_TIMEOUT 280
 
+
 PlaylistManager::PlaylistManager( QObject* parent )
     : QObject( parent )
-    , m_widget( new QStackedWidget() )
+    , m_widget( new QWidget() )
     , m_currentProxyModel( 0 )
     , m_currentModel( 0 )
     , m_currentView( 0 )
     , m_currentMode( 0 )
     , m_superCollectionVisible( true )
 {
-    m_widget->setMinimumWidth( 690 );
+    m_stack = new QStackedWidget();
+
+    m_queueView = new QueueView();
+    m_queueModel = new PlaylistModel( m_queueView );
+    m_queueView->queue()->setModel( m_queueModel );
+    APP->audioEngine()->setQueue( m_queueView->queue()->proxyModel() );
+
+    m_widget->setLayout( new QVBoxLayout() );
+
+    m_splitter = new QSplitter();
+    m_splitter->setOrientation( Qt::Vertical );
+    m_splitter->setChildrenCollapsible( false );
+
+    m_splitter->addWidget( m_stack );
+    m_splitter->addWidget( m_queueView );
+    m_splitter->setStretchFactor( 0, 3 );
+    m_splitter->setStretchFactor( 1, 1 );
+
+    m_widget->layout()->setMargin( 0 );
+    m_widget->layout()->addWidget( m_splitter );
 
     m_superCollectionView = new CollectionView();
     m_superCollectionFlatModel = new CollectionFlatModel( m_superCollectionView );
     m_superCollectionView->setModel( m_superCollectionFlatModel );
 
-    m_widget->addWidget( m_superCollectionView );
+    m_stack->addWidget( m_superCollectionView );
     m_currentView = m_superCollectionView;
 
     connect( &m_filterTimer, SIGNAL( timeout() ), SLOT( applyFilter() ) );
@@ -38,6 +61,13 @@ PlaylistManager::PlaylistManager( QObject* parent )
 PlaylistManager::~PlaylistManager()
 {
     delete m_widget;
+}
+
+
+PlaylistView*
+PlaylistManager::queue() const
+{
+    return m_queueView->queue();
 }
 
 
@@ -61,14 +91,14 @@ PlaylistManager::show( const Tomahawk::playlist_ptr& playlist )
         m_playlistViews.insert( playlist, view );
         m_views.insert( (PlaylistInterface*)m_currentProxyModel, view );
 
-        m_widget->addWidget( view );
-        m_widget->setCurrentWidget( view );
+        m_stack->addWidget( view );
+        m_stack->setCurrentWidget( view );
         m_currentView = view;
     }
     else
     {
         PlaylistView* view = m_playlistViews.value( playlist );
-        m_widget->setCurrentWidget( view );
+        m_stack->setCurrentWidget( view );
         m_currentProxyModel = view->proxyModel();
         m_currentModel = view->model();
         m_currentView = view;
@@ -102,14 +132,14 @@ PlaylistManager::show( const Tomahawk::album_ptr& album )
         m_albumViews.insert( album, view );
         m_views.insert( (PlaylistInterface*)m_currentProxyModel, view );
 
-        m_widget->addWidget( view );
-        m_widget->setCurrentWidget( view );
+        m_stack->addWidget( view );
+        m_stack->setCurrentWidget( view );
         m_currentView = view;
     }
     else
     {
         PlaylistView* view = m_albumViews.value( album );
-        m_widget->setCurrentWidget( view );
+        m_stack->setCurrentWidget( view );
         m_currentProxyModel = view->proxyModel();
         m_currentModel = view->model();
         m_currentView = view;
@@ -142,14 +172,14 @@ PlaylistManager::show( const Tomahawk::collection_ptr& collection )
         m_collectionViews.insert( collection, view );
         m_views.insert( (PlaylistInterface*)m_currentProxyModel, view );
 
-        m_widget->addWidget( view );
-        m_widget->setCurrentWidget( view );
+        m_stack->addWidget( view );
+        m_stack->setCurrentWidget( view );
         m_currentView = view;
     }
     else
     {
         CollectionView* view = m_collectionViews.value( collection );
-        m_widget->setCurrentWidget( view );
+        m_stack->setCurrentWidget( view );
         m_currentProxyModel = view->proxyModel();
         m_currentModel = view->model();
         m_currentView = view;
@@ -176,7 +206,7 @@ PlaylistManager::show( const Tomahawk::source_ptr& source )
     {
         SourceInfoWidget* swidget = new SourceInfoWidget( source );
         m_currentInfoWidget = swidget;
-        m_widget->addWidget( m_currentInfoWidget );
+        m_stack->addWidget( m_currentInfoWidget );
         m_sourceViews.insert( source, swidget );
     }
     else
@@ -184,7 +214,7 @@ PlaylistManager::show( const Tomahawk::source_ptr& source )
         m_currentInfoWidget = m_sourceViews.value( source );
     }
 
-    m_widget->setCurrentWidget( m_currentInfoWidget );
+    m_stack->setCurrentWidget( m_currentInfoWidget );
     m_superCollectionVisible = false;
 
     emit numSourcesChanged( 1 );
@@ -204,7 +234,7 @@ PlaylistManager::showSuperCollection()
         }
     }
 
-    m_widget->setCurrentWidget( m_superCollectionView );
+    m_stack->setCurrentWidget( m_superCollectionView );
     m_currentProxyModel = m_superCollectionView->proxyModel();
     m_currentModel = m_superCollectionView->model();
     m_currentView = m_superCollectionView;
@@ -226,7 +256,7 @@ PlaylistManager::setTreeMode()
     qDebug() << Q_FUNC_INFO;
 
     m_currentMode = 1;
-    m_widget->setCurrentWidget( m_superCollectionView );
+    m_stack->setCurrentWidget( m_superCollectionView );
 }
 
 
@@ -236,7 +266,37 @@ PlaylistManager::setTableMode()
     qDebug() << Q_FUNC_INFO;
 
     m_currentMode = 0;
-    m_widget->setCurrentWidget( m_superCollectionView );
+    m_stack->setCurrentWidget( m_superCollectionView );
+}
+
+
+void
+PlaylistManager::showQueue()
+{
+    if ( QThread::currentThread() != thread() )
+    {
+        qDebug() << "Reinvoking in correct thread:" << Q_FUNC_INFO;
+        QMetaObject::invokeMethod( this, "showQueue",
+                                   Qt::QueuedConnection );
+        return;
+    }
+
+    m_queueView->showQueue();
+}
+
+
+void
+PlaylistManager::hideQueue()
+{
+    if ( QThread::currentThread() != thread() )
+    {
+        qDebug() << "Reinvoking in correct thread:" << Q_FUNC_INFO;
+        QMetaObject::invokeMethod( this, "hideQueue",
+                                   Qt::QueuedConnection );
+        return;
+    }
+
+    m_queueView->hideQueue();
 }
 
 
@@ -336,7 +396,7 @@ PlaylistManager::setShuffled( bool enabled )
 void
 PlaylistManager::showCurrentTrack()
 {
-    PlaylistInterface* playlist = APP->audioEngine()->currentPlaylist();
+    PlaylistInterface* playlist = APP->audioEngine()->currentTrackPlaylist();
 
     if ( m_views.contains( playlist ) )
     {
@@ -346,7 +406,7 @@ PlaylistManager::showCurrentTrack()
         m_currentProxyModel = m_currentView->proxyModel();
         m_currentModel = m_currentView->model();
 
-        m_widget->setCurrentWidget( m_currentView );
+        m_stack->setCurrentWidget( m_currentView );
         linkPlaylist();
     }
 

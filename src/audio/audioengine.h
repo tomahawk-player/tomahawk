@@ -30,7 +30,7 @@ public:
     bool isPaused() const { return m_audio->isPaused(); }
 
     /* Returns the PlaylistInterface of the currently playing track. Note: This might be different to the current playlist! */
-    PlaylistInterface* currentPlaylist() const { return m_currentPlaylist; }
+    PlaylistInterface* currentTrackPlaylist() const { return m_currentTrackPlaylist; }
 
     /* Returns the PlaylistInterface of the current playlist. Note: The currently playing track might still be from a different playlist! */
     PlaylistInterface* playlist() const { return m_playlist; }
@@ -50,12 +50,14 @@ public slots:
 
     void playItem( PlaylistInterface* playlist, const Tomahawk::result_ptr& result );
     void setPlaylist( PlaylistInterface* playlist ) { m_playlist = playlist; }
+    void setQueue( PlaylistInterface* queue ) { m_queue = queue; }
 
     void onTrackAboutToClose();
 
 signals:
     void loading( const Tomahawk::result_ptr& track );
     void started( const Tomahawk::result_ptr& track );
+    void finished( const Tomahawk::result_ptr& track );
     void stopped();
     void paused();
     void resumed();
@@ -93,7 +95,8 @@ private:
     Tomahawk::result_ptr m_currentTrack;
     Tomahawk::result_ptr m_lastTrack;
     PlaylistInterface* m_playlist;
-    PlaylistInterface* m_currentPlaylist;
+    PlaylistInterface* m_currentTrackPlaylist;
+    PlaylistInterface* m_queue;
     QMutex m_mutex;
 
     int m_i;

@@ -16,6 +16,9 @@ TrackModel::TrackModel( QObject* parent )
     , m_readOnly( true )
 {
     qDebug() << Q_FUNC_INFO;
+
+    connect( (QObject*)APP->audioEngine(), SIGNAL( finished( Tomahawk::result_ptr ) ), SLOT( onPlaybackFinished( Tomahawk::result_ptr ) ), Qt::DirectConnection );
+    connect( (QObject*)APP->audioEngine(), SIGNAL( stopped() ), SLOT( onPlaybackStopped() ), Qt::DirectConnection );
 }
 
 
@@ -272,6 +275,16 @@ TrackModel::mimeData( const QModelIndexList &indexes ) const
 void
 TrackModel::removeIndex( const QModelIndex& index )
 {
+    if ( QThread::currentThread() != thread() )
+    {
+        qDebug() << "Reinvoking in correct thread:" << Q_FUNC_INFO;
+        QMetaObject::invokeMethod( this, "removeIndex",
+                                   Qt::QueuedConnection,
+                                   Q_ARG(const QModelIndex, index)
+                                 );
+        return;
+    }
+
     qDebug() << Q_FUNC_INFO;
 
     if ( index.column() > 0 )
@@ -307,5 +320,28 @@ TrackModel::itemFromIndex( const QModelIndex& index ) const
     else
     {
         return m_rootItem;
+    }
+}
+
+
+void
+TrackModel::onPlaybackFinished( const Tomahawk::result_ptr& result )
+{
+    PlItem* oldEntry = itemFromIndex( m_currentIndex );
+    qDebug() << oldEntry->query();
+    if ( oldEntry && !oldEntry->query().isNull() && oldEntry->query()->results().contains( result ) )
+    {
+        oldEntry->setIsPlaying( false );
+    }
+}
+
+
+void
+TrackModel::onPlaybackStopped()
+{
+    PlItem* oldEntry = itemFromIndex( m_currentIndex );
+    if ( oldEntry )
+    {
+        oldEntry->setIsPlaying( false );
     }
 }
