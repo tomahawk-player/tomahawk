@@ -44,8 +44,7 @@ PlaylistManager::PlaylistManager( QObject* parent )
 
     m_splitter->addWidget( m_stack );
     m_splitter->addWidget( m_queueView );
-    m_splitter->setStretchFactor( 0, 3 );
-    m_splitter->setStretchFactor( 1, 1 );
+    m_splitter->hide( 1 );
 
     m_widget->layout()->setMargin( 0 );
     m_widget->layout()->addWidget( m_splitter );

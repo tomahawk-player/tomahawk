@@ -29,7 +29,7 @@ AnimatedSplitter::show( int index )
 
     QTimeLine *timeLine = new QTimeLine( 300, this );
     timeLine->setFrameRange( w->height(), size.height() );
-    timeLine->setUpdateInterval( 20 );
+    timeLine->setUpdateInterval( 10 );
     timeLine->setCurveShape( QTimeLine::EaseOutCurve );
 
     connect( timeLine, SIGNAL( frameChanged( int ) ), SLOT( onAnimationStep( int ) ) );
@@ -55,7 +55,7 @@ AnimatedSplitter::hide( int index )
 
     QTimeLine *timeLine = new QTimeLine( 300, this );
     timeLine->setFrameRange( 25, w->height() );
-    timeLine->setUpdateInterval( 20 );
+    timeLine->setUpdateInterval( 10 );
     timeLine->setDirection( QTimeLine::Backward );
     timeLine->setCurveShape( QTimeLine::EaseOutCurve );
 
