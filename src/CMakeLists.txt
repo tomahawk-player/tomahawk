@@ -105,6 +105,7 @@ SET( tomahawkSourcesGui ${tomahawkSourcesGui}
      utils/progresstreeview.cpp
      utils/proxystyle.cpp
      utils/widgetdragfilter.cpp
+     utils/animatedsplitter.cpp
 
      playlist/collectionmodel.cpp
      playlist/collectionproxymodel.cpp
@@ -233,6 +234,7 @@ SET( tomahawkHeadersGui ${tomahawkHeadersGui}
      utils/imagebutton.h
      utils/progresstreeview.h
      utils/widgetdragfilter.h
+     utils/animatedsplitter.h
 
      playlist/collectionmodel.h
      playlist/collectionproxymodel.h

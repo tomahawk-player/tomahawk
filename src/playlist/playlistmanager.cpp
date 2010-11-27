@@ -2,7 +2,9 @@
 
 #include <QVBoxLayout>
 
-#include "audioengine.h"
+#include "audio/audioengine.h"
+#include "utils/animatedsplitter.h"
+
 #include "collectionmodel.h"
 #include "collectionflatmodel.h"
 #include "collectionview.h"
@@ -35,9 +37,10 @@ PlaylistManager::PlaylistManager( QObject* parent )
 
     m_widget->setLayout( new QVBoxLayout() );
 
-    m_splitter = new QSplitter();
+    m_splitter = new AnimatedSplitter();
     m_splitter->setOrientation( Qt::Vertical );
     m_splitter->setChildrenCollapsible( false );
+    m_splitter->setGreedyWidget( 0 );
 
     m_splitter->addWidget( m_stack );
     m_splitter->addWidget( m_queueView );
@@ -281,7 +284,7 @@ PlaylistManager::showQueue()
         return;
     }
 
-    m_queueView->showQueue();
+    m_splitter->show( 1 );
 }
 
 
@@ -296,7 +299,7 @@ PlaylistManager::hideQueue()
         return;
     }
 
-    m_queueView->hideQueue();
+    m_splitter->hide( 1 );
 }
 
 

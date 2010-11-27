@@ -15,18 +15,19 @@ public:
 
     PlaylistView* queue() const { return m_queue; }
 
-public slots:
-    void showQueue();
-    void hideQueue();
+    QSize sizeHint() const { return QSize( 0, 200 ); }
 
-private slots:
-    void onAnimationStep( int frame );
-    void onAnimationFinished();
+public slots:
+    void onShown( QWidget* );
+    void onHidden( QWidget* );
+
+signals:
+    void showWidget();
+    void hideWidget();
 
 private:
     PlaylistView* m_queue;
     QPushButton* m_button;
-    unsigned int m_prevHeight;
 };
 
 #endif // QUEUEVIEW_H

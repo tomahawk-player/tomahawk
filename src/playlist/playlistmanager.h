@@ -4,11 +4,11 @@
 #include <QObject>
 #include <QHash>
 #include <QStackedWidget>
-#include <QSplitter>
 
 #include "tomahawk/collection.h"
 #include "tomahawk/playlistinterface.h"
 
+class AnimatedSplitter;
 class CollectionModel;
 class CollectionFlatModel;
 class CollectionView;
@@ -72,7 +72,7 @@ private:
 
     QWidget* m_widget;
     QStackedWidget* m_stack;
-    QSplitter* m_splitter;
+    AnimatedSplitter* m_splitter;
 
     PlaylistModel* m_queueModel;
     QueueView* m_queueView;
