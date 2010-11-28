@@ -55,7 +55,7 @@ void
 TransferView::onTransferUpdate()
 {
     FileTransferConnection* ftc = (FileTransferConnection*)sender();
-    if ( ftc->track().isNull() )
+    if ( ftc->track().isNull() || ftc->source().isNull() )
         return;
 
     QTreeWidgetItem* ti = 0;
