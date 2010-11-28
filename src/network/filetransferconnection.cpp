@@ -24,6 +24,7 @@ FileTransferConnection::FileTransferConnection( Servent* s, ControlConnection* c
     , m_badded( 0 )
     , m_bsent( 0 )
     , m_allok( false )
+    , m_transferRate( 0 )
 {
     qDebug() << Q_FUNC_INFO;
 
@@ -54,6 +55,7 @@ FileTransferConnection::FileTransferConnection( Servent* s, ControlConnection* c
     , m_badded( 0 )
     , m_bsent( 0 )
     , m_allok( false )
+    , m_transferRate( 0 )
 {
     APP->servent().registerFileTransferConnection( this );
     // auto delete when connection closes:
@@ -151,6 +153,8 @@ FileTransferConnection::startSending( const QVariantMap& f )
 
     m_readdev = QSharedPointer<QIODevice>( io );
     sendSome();
+
+    emit updated();
 }
 
 
