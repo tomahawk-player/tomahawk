@@ -10,6 +10,7 @@
 #include "typedefs.h"
 
 class ControlConnection;
+class FileTransferConnection;
 
 namespace Tomahawk
 {
@@ -71,8 +72,10 @@ private:
     QString m_username, m_friendlyname;
     unsigned int m_id;
     QList< QSharedPointer<Collection> > m_collections;
-    ControlConnection* m_cc;
     QVariantMap m_stats;
+
+    ControlConnection* m_cc;
+    FileTransferConnection* m_ftc;
 };
 
 };

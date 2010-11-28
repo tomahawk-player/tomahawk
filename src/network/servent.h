@@ -82,7 +82,7 @@ public:
 
     void connectToPeer( const QString& ha, int port, const QString &key, const QString& name = "", const QString& id = "" );
     void connectToPeer( const QString& ha, int port, const QString &key, Connection* conn );
-    void reverseOfferRequest( Connection* orig_conn, const QString& key, const QString& theirkey );
+    void reverseOfferRequest( ControlConnection* orig_conn, const QString& key, const QString& theirkey );
 
     void setExternalAddress( QHostAddress ha, int port );
     bool visibleExternally() const { return m_externalPort > 0; }
@@ -93,8 +93,13 @@ public:
     static bool isIPWhitelisted( QHostAddress ip );
 
     bool connectedToSession( const QString& session );
-
     unsigned int numConnectedPeers() const { return m_controlconnections.length(); }
+
+    QList< FileTransferConnection* > fileTransfers() const { return m_ftsessions; }
+
+signals:
+    void fileTransferStarted( FileTransferConnection* );
+    void fileTransferFinished( FileTransferConnection* );
 
 protected:
     void incomingConnection( int sd );
@@ -104,7 +109,7 @@ public slots:
     void createParallelConnection( Connection* orig_conn, Connection* new_conn, const QString& key );
 
     void registerFileTransferConnection( FileTransferConnection* );
-    void fileTransferFinished( FileTransferConnection* ftc );
+    void onFileTransferFinished( FileTransferConnection* ftc );
 
     void socketConnected();
     void triggerDBSync();
@@ -112,7 +117,7 @@ public slots:
 private slots:
     void readyRead();
 
-    Connection* claimOffer( const QString &key, const QHostAddress peer = QHostAddress::Any );
+    Connection* claimOffer( ControlConnection* cc, const QString &key, const QHostAddress peer = QHostAddress::Any );
 
 private:
     void handoverSocket( Connection* conn, QTcpSocketExtra* sock );

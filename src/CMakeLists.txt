@@ -140,6 +140,7 @@ SET( tomahawkSourcesGui ${tomahawkSourcesGui}
 
      infowidgets/sourceinfowidget.cpp
 
+     transferview.cpp
      tomahawkwindow.cpp
      tomahawktrayicon.cpp
      audiocontrols.cpp
@@ -270,6 +271,7 @@ SET( tomahawkHeadersGui ${tomahawkHeadersGui}
 
      infowidgets/sourceinfowidget.h
 
+     transferview.h
      tomahawkwindow.h
      tomahawktrayicon.h
      audiocontrols.h
@@ -321,12 +323,6 @@ ENDIF( WIN32 )
 IF( UNIX )
   INCLUDE( "CMakeLists.unix.txt" )
 ENDIF( UNIX )
-IF( APPLE )
-  INCLUDE( "CMakeLists.osx.txt" )
-ENDIF( APPLE )
-IF( UNIX AND NOT APPLE )
-  INCLUDE( "CMakeLists.linux.txt" )
-ENDIF( UNIX AND NOT APPLE )
 
 kde4_add_app_icon( tomahawkSources "${CMAKE_CURRENT_SOURCE_DIR}/../data/icons/tomahawk-icon-*.png" )
 qt4_add_resources( RC_SRCS "../resources.qrc" )

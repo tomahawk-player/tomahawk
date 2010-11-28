@@ -20,13 +20,19 @@
       <property name="orientation">
        <enum>Qt::Horizontal</enum>
       </property>
-      <widget class="SourceTreeView" name="sourceTreeView">
-       <property name="minimumSize">
-        <size>
-         <width>250</width>
-         <height>0</height>
-        </size>
+      <widget class="AnimatedSplitter" name="splitter_2">
+       <property name="orientation">
+        <enum>Qt::Vertical</enum>
        </property>
+       <widget class="SourceTreeView" name="sourceTreeView">
+        <property name="minimumSize">
+         <size>
+          <width>250</width>
+          <height>0</height>
+         </size>
+        </property>
+       </widget>
+       <widget class="TransferView" name="treeWidget"/>
       </widget>
       <widget class="QWidget" name="playlistWidget" native="true"/>
      </widget>
@@ -143,6 +149,17 @@
    <class>SourceTreeView</class>
    <extends>QTreeView</extends>
    <header>sourcetreeview.h</header>
+  </customwidget>
+  <customwidget>
+   <class>AnimatedSplitter</class>
+   <extends>QSplitter</extends>
+   <header location="global">animatedsplitter.h</header>
+   <container>1</container>
+  </customwidget>
+  <customwidget>
+   <class>TransferView</class>
+   <extends>QTreeWidget</extends>
+   <header>transferview.h</header>
   </customwidget>
  </customwidgets>
  <resources/>

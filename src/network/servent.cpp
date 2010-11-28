@@ -121,9 +121,10 @@ QString
 Servent::createConnectionKey( const QString& name )
 {
     Q_ASSERT( this->thread() == QThread::currentThread() );
+
     QString key = uuid();
     ControlConnection * cc = new ControlConnection( this );
-    cc->setName( name=="" ? QString( "KEY(%1)" ).arg(key) : name );
+    cc->setName( name.isEmpty() ? QString( "KEY(%1)" ).arg( key ) : name );
     registerOffer( key, cc );
     return key;
 }
@@ -227,37 +228,51 @@ Servent::readyRead()
     sock->_msg->fill( ba );
     Q_ASSERT( sock->_msg->is( Msg::JSON ) );
 
+    ControlConnection* cc = 0;
     bool ok;
     int pport = 0;
-    QString key, conntype, nodeid;
+    QString key, conntype, nodeid, controlid;
     QVariantMap m = parser.parse( sock->_msg->payload(), &ok ).toMap();
     if( !ok )
     {
         qDebug() << "Invalid JSON on new conection, aborting";
         goto closeconnection;
     }
-    conntype = m.value( "conntype" ).toString();
-    key      = m.value( "key" ).toString();
-    pport    = m.value( "port" ).toInt();
-    nodeid   = m.value( "nodeid" ).toString();
+    conntype  = m.value( "conntype" ).toString();
+    key       = m.value( "key" ).toString();
+    pport     = m.value( "port" ).toInt();
+    nodeid    = m.value( "nodeid" ).toString();
+    controlid = m.value( "controlid" ).toString();
 
     qDebug() << m;
 
-    if( !nodeid.isEmpty() ) // only control connections send nodeid
-    foreach( ControlConnection* cc, m_controlconnections )
+    if( !nodeid.isEmpty() && cc != 0 ) // only control connections send nodeid
     {
-        if( cc->id() == nodeid )
+        foreach( ControlConnection* con, m_controlconnections )
         {
-            qDebug() << "Duplicate control connection detected, dropping:" << nodeid << conntype;
-            goto closeconnection;
+            qDebug() << con->socket() << sock;
+            if( con->id() == nodeid )
+            {
+                qDebug() << "Duplicate control connection detected, dropping:" << nodeid << conntype;
+                goto closeconnection;
+            }
         }
+    }
+
+    foreach( ControlConnection* con, m_controlconnections )
+    {
+        qDebug() << "cons:" << con;
+        qDebug() << "conid:" << con->id();
+
+        if ( con->id() == controlid )
+            cc = con;
     }
 
     // they connected to us and want something we are offering
     if( conntype == "accept-offer" || "push-offer" )
     {
         sock->_msg.clear();
-        Connection * conn = claimOffer( key, sock->peerAddress() );
+        Connection* conn = claimOffer( cc, key, sock->peerAddress() );
         if( !conn )
         {
             qDebug() << "claimOffer FAILED, key:" << key;
@@ -265,10 +280,10 @@ Servent::readyRead()
         }
         qDebug() << "claimOffer OK:" << key;
 
-        if( !nodeid.isEmpty() ) conn->setId( nodeid );
+        if( !nodeid.isEmpty() )
+            conn->setId( nodeid );
 
         handoverSocket( conn, sock );
-
         return;
     }
     else
@@ -310,6 +325,7 @@ Servent::createParallelConnection( Connection* orig_conn, Connection* new_conn, 
         m.insert( "key", tmpkey );
         m.insert( "offer", key );
         m.insert( "port", externalPort() );
+        m.insert( "controlid", orig_conn->id() );
 
         QJson::Serializer ser;
         orig_conn->sendMsg( Msg::factory( ser.serialize(m), Msg::JSON ) );
@@ -383,10 +399,10 @@ Servent::connectToPeer( const QString& ha, int port, const QString &key, const Q
 
     ControlConnection* conn = new ControlConnection( this );
     QVariantMap m;
-    m["conntype"] = "accept-offer";
-    m["key"]      = key;
-    m["port"]     = externalPort();
-    m["nodeid"]   = APP->nodeID();
+    m["conntype"]  = "accept-offer";
+    m["key"]       = key;
+    m["port"]      = externalPort();
+    m["nodeid"]    = APP->nodeID();
 
     conn->setFirstMessage( m );
     if( name.length() )
@@ -411,9 +427,10 @@ Servent::connectToPeer( const QString& ha, int port, const QString &key, Connect
     if( key.length() && conn->firstMessage().isNull() )
     {
         QVariantMap m;
-        m["conntype"] = "accept-offer";
-        m["key"]      = key;
-        m["port"]     = externalPort();
+        m["conntype"]  = "accept-offer";
+        m["key"]       = key;
+        m["port"]      = externalPort();
+        m["controlid"] = APP->nodeID();
         conn->setFirstMessage( m );
     }
 
@@ -435,13 +452,13 @@ Servent::connectToPeer( const QString& ha, int port, const QString &key, Connect
 
 
 void
-Servent::reverseOfferRequest( Connection* orig_conn, const QString& key, const QString& theirkey )
+Servent::reverseOfferRequest( ControlConnection* orig_conn, const QString& key, const QString& theirkey )
 {
     Q_ASSERT( this->thread() == QThread::currentThread() );
 
     qDebug() << "Servent::reverseOfferRequest received for" << key;
-    Connection * new_conn = claimOffer( key );
-    if( !new_conn )
+    Connection* new_conn = claimOffer( orig_conn, key );
+    if ( !new_conn )
     {
         qDebug() << "claimOffer failed, killing requesting connection out of spite";
         orig_conn->shutdown();
@@ -449,9 +466,10 @@ Servent::reverseOfferRequest( Connection* orig_conn, const QString& key, const Q
     }
 
     QVariantMap m;
-    m["conntype"] = "push-offer";
-    m["key"]      = theirkey;
-    m["port"]     = externalPort();
+    m["conntype"]  = "push-offer";
+    m["key"]       = theirkey;
+    m["port"]      = externalPort();
+    m["controlid"] = orig_conn->id();
     new_conn->setFirstMessage( m );
     createParallelConnection( orig_conn, new_conn, QString() );
 }
@@ -459,12 +477,12 @@ Servent::reverseOfferRequest( Connection* orig_conn, const QString& key, const Q
 
 // return the appropriate connection for a given offer key, or NULL if invalid
 Connection*
-Servent::claimOffer( const QString &key, const QHostAddress peer )
+Servent::claimOffer( ControlConnection* cc, const QString &key, const QHostAddress peer )
 {
     bool noauth = qApp->arguments().contains( "--noauth" );
 
     // magic key for file transfers:
-    if( key.startsWith("FILE_REQUEST_KEY:") )
+    if( key.startsWith( "FILE_REQUEST_KEY:" ) )
     {
         // check if the source IP matches an existing, authenticated connection
         if ( !noauth && peer != QHostAddress::Any && !isIPWhitelisted( peer ) )
@@ -486,13 +504,13 @@ Servent::claimOffer( const QString &key, const QHostAddress peer )
         }
 
         QString fid = key.right( key.length() - 17 );
-        FileTransferConnection* ftc = new FileTransferConnection( this, fid );
+        FileTransferConnection* ftc = new FileTransferConnection( this, cc, fid );
         return ftc;
     }
 
     if( key == "whitelist" ) // LAN IP address, check source IP
     {
-        if( isIPWhitelisted(peer) )
+        if( isIPWhitelisted( peer ) )
         {
             qDebug() << "Connection is from whitelisted IP range (LAN)";
             Connection* conn = new ControlConnection( this );
@@ -567,23 +585,28 @@ void
 Servent::registerFileTransferConnection( FileTransferConnection* ftc )
 {
     Q_ASSERT( !m_ftsessions.contains( ftc ) );
-    QMutexLocker lock( &m_ftsession_mut );
     qDebug() << "Registering FileTransfer" << m_ftsessions.length() + 1;
+
+    QMutexLocker lock( &m_ftsession_mut );
     m_ftsessions.append( ftc );
+
     printCurrentTransfers();
+    emit fileTransferStarted( ftc );
 }
 
 
 void
-Servent::fileTransferFinished( FileTransferConnection* ftc )
+Servent::onFileTransferFinished( FileTransferConnection* ftc )
 {
     Q_ASSERT( ftc );
-
     qDebug() << "FileTransfer Finished, unregistering" << ftc->id();
+
     QMutexLocker lock( &m_ftsession_mut );
     int rem = m_ftsessions.removeAll( ftc );
     Q_ASSERT( rem == 1 );
+
     printCurrentTransfers();
+    emit fileTransferFinished( ftc );
 }
 
 
@@ -608,11 +631,11 @@ Servent::isIPWhitelisted( QHostAddress ip )
     static QList<range> whitelist;
     if( whitelist.isEmpty() )
     {
-        whitelist   << range( QHostAddress("10.0.0.0"), 8 )
-                    << range( QHostAddress("172.16.0.0"), 12 )
-                    << range( QHostAddress("192.168.0.0"), 16 )
-                    << range( QHostAddress("169.254.0.0"), 16 )
-                    << range( QHostAddress("127.0.0.0"), 24 );
+        whitelist   << range( QHostAddress( "10.0.0.0" ), 8 )
+                    << range( QHostAddress( "172.16.0.0" ), 12 )
+                    << range( QHostAddress( "192.168.0.0" ), 16 )
+                    << range( QHostAddress( "169.254.0.0" ), 16 )
+                    << range( QHostAddress( "127.0.0.0" ), 24 );
 
 //        qDebug() << "Loaded whitelist IP range:" << whitelist;
     }

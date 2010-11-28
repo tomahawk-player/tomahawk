@@ -19,3 +19,10 @@ SET( OS_SPECIFIC_LINK_LIBRARIES
 	 ogg
 	 FLAC++
 )
+
+IF( APPLE )
+  INCLUDE( "CMakeLists.osx.txt" )
+ENDIF( APPLE )
+IF( UNIX AND NOT APPLE )
+  INCLUDE( "CMakeLists.linux.txt" )
+ENDIF( UNIX AND NOT APPLE )

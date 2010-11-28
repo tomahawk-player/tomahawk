@@ -90,7 +90,7 @@ void
 ControlConnection::registerSource()
 {
     qDebug() << Q_FUNC_INFO;
-    Source * source = (Source*) sender();
+    Source* source = (Source*) sender();
     Q_ASSERT( source == m_source.data() );
     // .. but we'll use the shared pointer we've already made:
 
@@ -100,7 +100,7 @@ ControlConnection::registerSource()
 
     m_registered = true;
     setupDbSyncConnection();
-    m_servent->registerControlConnection(this);
+    m_servent->registerControlConnection( this );
 }
 
 
@@ -176,7 +176,7 @@ ControlConnection::handleMsg( msg_ptr msg )
 {
     if ( msg->is( Msg::PING ) )
     {
-        qDebug() << "Received Connection PING, nice." << m_pingtimer_mark.elapsed();
+        // qDebug() << "Received Connection PING, nice." << m_pingtimer_mark.elapsed();
         m_pingtimer_mark.restart();
         return;
     }

@@ -46,8 +46,9 @@ FileTransferConnection::FileTransferConnection( Servent* s, ControlConnection* c
 }
 
 
-FileTransferConnection::FileTransferConnection( Servent* s, QString fid )
+FileTransferConnection::FileTransferConnection( Servent* s, ControlConnection* cc, QString fid )
     : Connection( s )
+    , m_cc( cc )
     , m_fid( fid )
     , m_type( SENDING )
     , m_badded( 0 )
@@ -74,7 +75,7 @@ FileTransferConnection::~FileTransferConnection()
         ((BufferIODevice*)m_iodev.data())->inputComplete();
     }
 
-    APP->servent().fileTransferFinished( this );
+    APP->servent().onFileTransferFinished( this );
 }
 
 
@@ -96,12 +97,29 @@ FileTransferConnection::showStats( qint64 tx, qint64 rx )
                  << QString( "Down: %L1 bytes/sec," ).arg( rx )
                  << QString( "Up: %L1 bytes/sec" ).arg( tx );
     }
+
+    m_transferRate = tx + rx;
+    emit updated();
 }
 
 
 void
 FileTransferConnection::setup()
 {
+    QList<source_ptr> sources = APP->sourcelist().sources();
+    foreach( const source_ptr& src, sources )
+    {
+        // local src doesnt have a control connection, skip it:
+        if( src.isNull() || src->isLocal() )
+            continue;
+
+        if ( src->controlConnection() == m_cc )
+        {
+            m_source = src;
+            break;
+        }
+    }
+
     connect( this, SIGNAL( statsTick( qint64, qint64 ) ), SLOT( showStats( qint64, qint64 ) ) );
     if( m_type == RECEIVING )
     {
@@ -118,17 +136,19 @@ FileTransferConnection::setup()
 
 
 void
-FileTransferConnection::startSending( QVariantMap f )
+FileTransferConnection::startSending( const QVariantMap& f )
 {
-    Tomahawk::result_ptr result( new Tomahawk::Result( f, collection_ptr() ) );
-    qDebug() << "Starting to transmit" << result->url();
-    QSharedPointer<QIODevice> io = TomahawkApp::instance()->getIODeviceForUrl( result );
+    m_result = Tomahawk::result_ptr( new Tomahawk::Result( f, collection_ptr() ) );
+    qDebug() << "Starting to transmit" << m_result->url();
+
+    QSharedPointer<QIODevice> io = TomahawkApp::instance()->getIODeviceForUrl( m_result );
     if( !io )
     {
-        qDebug() << "Couldn't read from source:" << result->url();
+        qDebug() << "Couldn't read from source:" << m_result->url();
         shutdown();
         return;
     }
+
     m_readdev = QSharedPointer<QIODevice>( io );
     sendSome();
 }

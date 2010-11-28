@@ -6,6 +6,7 @@
 #include <QIODevice>
 
 #include "connection.h"
+#include "tomahawk/result.h"
 
 class ControlConnection;
 class BufferIODevice;
@@ -22,9 +23,9 @@ public:
     };
 
     // RX:
-    explicit FileTransferConnection( Servent* s, ControlConnection* parent, QString fid, unsigned int size );
+    explicit FileTransferConnection( Servent* s, ControlConnection* cc, QString fid, unsigned int size );
     // TX:
-    explicit FileTransferConnection( Servent* s, QString fid );
+    explicit FileTransferConnection( Servent* s, ControlConnection* cc, QString fid );
 
     virtual ~FileTransferConnection();
 
@@ -33,15 +34,23 @@ public:
     Connection* clone();
 
     const QSharedPointer<QIODevice>& iodevice() { return m_iodev; }
+    ControlConnection* controlConnection() const { return m_cc; }
+
+    Tomahawk::source_ptr source() const { return m_source; }
+    Tomahawk::result_ptr track() const { return m_result; }
+    qint64 transferRate() const { return m_transferRate; }
 
     Type type() const { return m_type; }
     QString fid() const { return m_fid; }
+
+signals:
+    void updated();
 
 protected slots:
     virtual void handleMsg( msg_ptr msg );
 
 private slots:
-    void startSending( QVariantMap );
+    void startSending( const QVariantMap& );
     void sendSome();
     void showStats(qint64 tx, qint64 rx);
 
@@ -54,6 +63,10 @@ private:
 
     int m_badded, m_bsent;
     bool m_allok; // got last msg ok, transfer complete?
+
+    Tomahawk::source_ptr m_source;
+    Tomahawk::result_ptr m_result;
+    qint64 m_transferRate;
 };
 
 #endif // FILETRANSFERCONNECTION_H

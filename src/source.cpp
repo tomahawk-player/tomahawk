@@ -18,6 +18,7 @@ Source::Source( const QString &username, ControlConnection* cc )
     , m_username( username )
     , m_id( 0 )
     , m_cc( cc )
+    , m_ftc( 0 )
 {
     // source for local machine doesn't have a controlconnection. this is normal.
     if ( cc )
