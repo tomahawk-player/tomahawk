@@ -25,7 +25,7 @@
 
 // close the dbsync connection after this much inactivity.
 // it's automatically reestablished as needed.
-#define IDLE_TIMEOUT 60000
+#define IDLE_TIMEOUT 600000
 
 using namespace Tomahawk;
 

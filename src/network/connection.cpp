@@ -298,7 +298,8 @@ Connection::setId( const QString& id )
 void
 Connection::readyRead()
 {
-    //qDebug() << "readyRead, m_bs:" << m_bs << "bytesavail:" << m_sock->bytesAvailable();
+    qDebug() << "readyRead, bytesavail:" << m_sock->bytesAvailable();
+
     if( m_msg.isNull() )
     {
         if( m_sock->bytesAvailable() < Msg::headerSize() )
