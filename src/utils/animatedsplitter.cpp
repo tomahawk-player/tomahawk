@@ -110,8 +110,6 @@ AnimatedSplitter::addWidget( AnimatedWidget* widget )
 void
 AnimatedSplitter::onShowRequest()
 {
-    qDebug() << Q_FUNC_INFO;
-
     int j = -1;
     for ( int i = 0; i < count(); i ++ )
     {
@@ -132,8 +130,6 @@ AnimatedSplitter::onShowRequest()
 void
 AnimatedSplitter::onHideRequest()
 {
-    qDebug() << Q_FUNC_INFO;
-
     int j = -1;
     for ( int i = 0; i < count(); i ++ )
     {
