@@ -261,11 +261,13 @@ Servent::readyRead()
 
     foreach( ControlConnection* con, m_controlconnections )
     {
-        qDebug() << "cons:" << con;
         qDebug() << "conid:" << con->id();
 
         if ( con->id() == controlid )
+        {
             cc = con;
+            break;
+        }
     }
 
     // they connected to us and want something we are offering
