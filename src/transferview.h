@@ -31,7 +31,7 @@ private slots:
     void onTransferUpdate();
 
 private:
-    QHash< FileTransferConnection*, int > m_index;
+    QHash< FileTransferConnection*, QPersistentModelIndex > m_index;
     QTreeWidget* m_tree;
     AnimatedSplitter* m_parent;
 };

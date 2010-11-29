@@ -51,8 +51,8 @@ TransferView::fileTransferFinished( FileTransferConnection* ftc )
     if ( !m_index.contains( ftc ) )
         return;
 
-    int i = m_index.take( ftc );
-    delete m_tree->invisibleRootItem()->takeChild( i );
+    QPersistentModelIndex i = m_index.take( ftc );
+    delete m_tree->invisibleRootItem()->takeChild( i.row() );
 
     if ( m_tree->invisibleRootItem()->childCount() > 0 )
         emit showWidget();
@@ -71,7 +71,8 @@ void
 TransferView::onTransferUpdate()
 {
     FileTransferConnection* ftc = (FileTransferConnection*)sender();
-    qDebug() << Q_FUNC_INFO << ftc->track().isNull() << ftc->source().isNull();
+//    qDebug() << Q_FUNC_INFO << ftc->track().isNull() << ftc->source().isNull();
+
     if ( ftc->track().isNull() || ftc->source().isNull() )
         return;
 
@@ -79,13 +80,13 @@ TransferView::onTransferUpdate()
 
     if ( m_index.contains( ftc ) )
     {
-        int i = m_index.value( ftc );
-        ti = m_tree->invisibleRootItem()->child( i );
+        QPersistentModelIndex i = m_index.value( ftc );
+        ti = m_tree->invisibleRootItem()->child( i.row() );
     }
     else
     {
         ti = new QTreeWidgetItem( m_tree );
-        m_index.insert( ftc, m_tree->invisibleRootItem()->childCount() - 1 );
+        m_index.insert( ftc, QPersistentModelIndex( m_tree->model()->index( m_tree->invisibleRootItem()->childCount() - 1, 0 ) ) );
         emit showWidget();
     }
 
