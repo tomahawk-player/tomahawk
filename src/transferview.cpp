@@ -42,6 +42,7 @@ TransferView::fileTransferRegistered( FileTransferConnection* ftc )
 {
     qDebug() << Q_FUNC_INFO;
     connect( ftc, SIGNAL( updated() ), SLOT( onTransferUpdate() ) );
+    emit showWidget();
 }
 
 
@@ -87,6 +88,9 @@ TransferView::onTransferUpdate()
         ti = new QTreeWidgetItem( m_tree );
         m_index.insert( ftc, m_tree->invisibleRootItem()->childCount() - 1 );
     }
+
+    if ( !ti )
+        return;
 
     ti->setText( 0, ftc->source()->friendlyName() );
     ti->setText( 1, QString( "%1 kb/s" ).arg( ftc->transferRate() / 1024 ) );
