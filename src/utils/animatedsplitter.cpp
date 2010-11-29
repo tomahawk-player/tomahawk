@@ -26,10 +26,11 @@ AnimatedSplitter::show( int index, bool animate )
 
     QWidget* w = widget( index );
     QSize size = w->sizeHint();
-    w->setMaximumHeight( QWIDGETSIZE_MAX );
 
     if ( w->height() == size.height() )
         return;
+
+    w->setMaximumHeight( QWIDGETSIZE_MAX );
     qDebug() << "animating to:" << size.height() << "from" << w->height();
 
     m_animateForward = true;
@@ -59,10 +60,11 @@ AnimatedSplitter::hide( int index, bool animate )
 
     QWidget* w = widget( index );
     int minHeight = m_sizes.at( index ).height();
-    w->setMinimumHeight( minHeight );
 
     if ( w->height() == minHeight )
         return;
+
+    w->setMinimumHeight( minHeight );
     qDebug() << "animating to:" << w->height() << "from" << minHeight;
 
     m_animateForward = false;
