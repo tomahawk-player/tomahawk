@@ -17,9 +17,7 @@ DatabaseCommand_LoadPlaylistEntries::exec( DatabaseImpl* dbi )
                           "FROM playlist_revision "
                           "WHERE guid = :guid");
     query_entries.bindValue( ":guid", m_guid );
-
-    bool aok = query_entries.exec();
-    Q_ASSERT( aok );
+    query_entries.exec();
 
     QStringList guids;
     QMap< QString, plentry_ptr > entrymap;

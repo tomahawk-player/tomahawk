@@ -65,8 +65,11 @@ TomahawkWindow::TomahawkWindow( QWidget* parent )
     ui->splitter->setStretchFactor( 0, 1 );
     ui->splitter->setStretchFactor( 1, 3 );
 
-    ui->splitter_2->setStretchFactor( 0, 3 );
-    ui->splitter_2->setStretchFactor( 1, 1 );
+    ui->sidebarSplitter->setChildrenCollapsible( false );
+    ui->sidebarSplitter->setGreedyWidget( 0 );
+    ui->sidebarSplitter->setStretchFactor( 0, 3 );
+    ui->sidebarSplitter->setStretchFactor( 1, 1 );
+    ui->sidebarSplitter->hide( 1, false );
 
     QToolBar* toolbar = addToolBar( "TomahawkToolbar" );
     toolbar->setObjectName( "TomahawkToolbar" );

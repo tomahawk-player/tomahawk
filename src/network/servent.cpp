@@ -602,8 +602,7 @@ Servent::onFileTransferFinished( FileTransferConnection* ftc )
     qDebug() << "FileTransfer Finished, unregistering" << ftc->id();
 
     QMutexLocker lock( &m_ftsession_mut );
-    int rem = m_ftsessions.removeAll( ftc );
-    Q_ASSERT( rem == 1 );
+    m_ftsessions.removeAll( ftc );
 
     printCurrentTransfers();
     emit fileTransferFinished( ftc );

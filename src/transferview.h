@@ -5,19 +5,22 @@
 #include <QTreeWidget>
 
 #include "tomahawk/typedefs.h"
+#include "utils/animatedsplitter.h"
 
 class FileTransferConnection;
 
-class TransferView : public QTreeWidget
+class TransferView : public AnimatedWidget
 {
 Q_OBJECT
 
 public:
-    explicit TransferView( QWidget* parent = 0 );
+    explicit TransferView( AnimatedSplitter* parent = 0 );
     virtual ~TransferView()
     {
         qDebug() << Q_FUNC_INFO;
     }
+
+    QSize sizeHint() const;
 
 signals:
 
@@ -31,6 +34,8 @@ private slots:
 
 private:
     QHash< FileTransferConnection*, int > m_index;
+    QTreeWidget* m_tree;
+    AnimatedSplitter* m_parent;
 };
 
 #endif // TRANSFERVIEW_H

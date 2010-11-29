@@ -2,6 +2,9 @@
 #define ANIMATEDSPLITTER_H
 
 #include <QSplitter>
+#include <QTimeLine>
+
+class AnimatedWidget;
 
 class AnimatedSplitter : public QSplitter
 {
@@ -16,6 +19,7 @@ public:
     void setGreedyWidget( int index ) { m_greedyIndex = index; }
 
     void addWidget( QWidget* widget );
+    void addWidget( AnimatedWidget* widget );
 
 signals:
     void shown( QWidget* );
@@ -28,12 +32,39 @@ private slots:
     void onAnimationStep( int frame );
     void onAnimationFinished();
 
+    void onHiddenSizeChanged();
+
 private:
     int m_animateIndex;
     bool m_animateForward;
 
     int m_greedyIndex;
-    int m_greedyHeight;
+    QList<QSize> m_sizes;
+    QTimeLine* m_timeLine;
+};
+
+class AnimatedWidget : public QWidget
+{
+Q_OBJECT
+public:
+    explicit AnimatedWidget( AnimatedSplitter* parent );
+
+    QSize hiddenSize() const { return m_hiddenSize; }
+    void setHiddenSize( const QSize& size ) { m_hiddenSize = size; emit hiddenSizeChanged(); }
+
+public slots:
+    virtual void onShown( QWidget* ) {}
+    virtual void onHidden( QWidget* ) {}
+
+signals:
+    void showWidget();
+    void hideWidget();
+
+    void hiddenSizeChanged();
+
+private:
+    AnimatedSplitter* m_parent;
+    QSize m_hiddenSize;
 };
 
 #endif //ANIMATEDSPLITTER_H

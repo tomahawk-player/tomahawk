@@ -101,14 +101,14 @@ void
 Connection::shutdown( bool waitUntilSentAll )
 {
     qDebug() << Q_FUNC_INFO << waitUntilSentAll;
-    if(m_do_shutdown)
+    if ( m_do_shutdown )
     {
         //qDebug() << id() << " already shutting down";
         return;
     }
 
     m_do_shutdown = true;
-    if( !waitUntilSentAll )
+    if ( !waitUntilSentAll )
     {
         qDebug() << "Shutting down immediately " << id();
         actualShutdown();
@@ -255,12 +255,12 @@ Connection::socketDisconnected()
              << "bytesRecvd" << bytesReceived();
 
     m_peer_disconnected = true;
-
     emit socketClosed();
 
     if( m_msgprocessor_in.length() == 0 && m_sock->bytesAvailable() == 0 )
     {
         handleIncomingQueueEmpty();
+        actualShutdown();
     }
 }
 
@@ -433,7 +433,7 @@ Connection::bytesWritten( qint64 i )
 {
     m_tx_bytes += i;
     // if we are waiting to shutdown, and have sent all queued data, do actual shutdown:
-    if( m_do_shutdown && m_tx_bytes == m_tx_bytes_requested )
+    if ( m_do_shutdown && m_tx_bytes == m_tx_bytes_requested )
         actualShutdown();
 }
 

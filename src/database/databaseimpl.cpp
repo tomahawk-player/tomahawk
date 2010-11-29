@@ -327,8 +327,7 @@ DatabaseImpl::searchTable( const QString& table, const QString& name_orig, uint 
     // first check for exact matches:
     query.prepare( QString( "SELECT id FROM %1 WHERE sortname = ?" ).arg( table ) );
     query.addBindValue( name );
-    bool exactok = query.exec();
-    Q_ASSERT( exactok );
+    query.exec();
 
     while( query.next() )
         results.append( query.value( 0 ).toInt() );

@@ -5,12 +5,19 @@
 
 #include "playlist/queueproxymodel.h"
 
+#ifdef Q_WS_MAC
+#define MINIMUM_HEIGHT 38
+#else
+#define MINIMUM_HEIGHT 27
+#endif
+
 using namespace Tomahawk;
 
 
-QueueView::QueueView( QWidget* parent )
-    : QWidget( parent )
+QueueView::QueueView( AnimatedSplitter* parent )
+    : AnimatedWidget( parent )
 {
+    setHiddenSize( QSize( 0, MINIMUM_HEIGHT ) );
     setLayout( new QVBoxLayout() );
 
     m_queue = new PlaylistView( this );

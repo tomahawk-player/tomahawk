@@ -20,7 +20,7 @@
       <property name="orientation">
        <enum>Qt::Horizontal</enum>
       </property>
-      <widget class="AnimatedSplitter" name="splitter_2">
+      <widget class="AnimatedSplitter" name="sidebarSplitter">
        <property name="orientation">
         <enum>Qt::Vertical</enum>
        </property>

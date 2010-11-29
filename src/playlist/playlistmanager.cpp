@@ -30,20 +30,19 @@ PlaylistManager::PlaylistManager( QObject* parent )
 {
     m_stack = new QStackedWidget();
 
-    m_queueView = new QueueView();
-    m_queueModel = new PlaylistModel( m_queueView );
-    m_queueView->queue()->setModel( m_queueModel );
-    APP->audioEngine()->setQueue( m_queueView->queue()->proxyModel() );
-
     m_widget->setLayout( new QVBoxLayout() );
 
     m_splitter = new AnimatedSplitter();
     m_splitter->setOrientation( Qt::Vertical );
     m_splitter->setChildrenCollapsible( false );
     m_splitter->setGreedyWidget( 0 );
-
     m_splitter->addWidget( m_stack );
-    m_splitter->addWidget( m_queueView );
+
+    m_queueView = new QueueView( m_splitter );
+    m_queueModel = new PlaylistModel( m_queueView );
+    m_queueView->queue()->setModel( m_queueModel );
+    APP->audioEngine()->setQueue( m_queueView->queue()->proxyModel() );
+
     m_splitter->hide( 1, false );
 
     m_widget->layout()->setMargin( 0 );

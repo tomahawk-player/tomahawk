@@ -66,6 +66,7 @@ DatabaseWorker::doWork( QSharedPointer<DatabaseCommand> cmd )
     {
         bool transok = m_dbimpl->database().transaction();
         Q_ASSERT( transok );
+        Q_UNUSED( transok );
     }
     try
     {

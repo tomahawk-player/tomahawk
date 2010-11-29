@@ -3,14 +3,15 @@
 
 #include <QPushButton>
 
+#include "utils/animatedsplitter.h"
 #include "playlistview.h"
 
-class QueueView : public QWidget
+class QueueView : public AnimatedWidget
 {
 Q_OBJECT
 
 public:
-    explicit QueueView( QWidget* parent = 0 );
+    explicit QueueView( AnimatedSplitter* parent );
     ~QueueView();
 
     PlaylistView* queue() const { return m_queue; }
@@ -18,12 +19,8 @@ public:
     QSize sizeHint() const { return QSize( 0, 200 ); }
 
 public slots:
-    void onShown( QWidget* );
-    void onHidden( QWidget* );
-
-signals:
-    void showWidget();
-    void hideWidget();
+    virtual void onShown( QWidget* );
+    virtual void onHidden( QWidget* );
 
 private:
     PlaylistView* m_queue;
