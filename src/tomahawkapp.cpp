@@ -640,8 +640,8 @@ TomahawkApp::jabberMessage( const QString& from, const QString& msg )
     else
     {
         qDebug() << Q_FUNC_INFO << "They are not visible, doing nothing atm";
-        if ( m_servent.visibleExternally() )
-            jabberPeerOnline( from ); // HACK FIXME
+//        if ( m_servent.visibleExternally() )
+//            jabberPeerOnline( from ); // HACK FIXME
     }
 }
 

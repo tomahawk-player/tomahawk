@@ -42,7 +42,6 @@ TransferView::fileTransferRegistered( FileTransferConnection* ftc )
 {
     qDebug() << Q_FUNC_INFO;
     connect( ftc, SIGNAL( updated() ), SLOT( onTransferUpdate() ) );
-    emit showWidget();
 }
 
 
@@ -87,6 +86,7 @@ TransferView::onTransferUpdate()
     {
         ti = new QTreeWidgetItem( m_tree );
         m_index.insert( ftc, m_tree->invisibleRootItem()->childCount() - 1 );
+        emit showWidget();
     }
 
     if ( !ti )
