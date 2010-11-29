@@ -70,8 +70,8 @@ TransferView::fileTransferFinished( FileTransferConnection* ftc )
 void
 TransferView::onTransferUpdate()
 {
-    qDebug() << Q_FUNC_INFO;
     FileTransferConnection* ftc = (FileTransferConnection*)sender();
+    qDebug() << Q_FUNC_INFO << ftc->track().isNull() << ftc->source().isNull();
     if ( ftc->track().isNull() || ftc->source().isNull() )
         return;
 

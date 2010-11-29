@@ -325,7 +325,7 @@ Servent::createParallelConnection( Connection* orig_conn, Connection* new_conn, 
         m.insert( "key", tmpkey );
         m.insert( "offer", key );
         m.insert( "port", externalPort() );
-        m.insert( "controlid", orig_conn->id() );
+        m.insert( "controlid", APP->nodeID() );
 
         QJson::Serializer ser;
         orig_conn->sendMsg( Msg::factory( ser.serialize(m), Msg::JSON ) );
@@ -469,7 +469,7 @@ Servent::reverseOfferRequest( ControlConnection* orig_conn, const QString& key, 
     m["conntype"]  = "push-offer";
     m["key"]       = theirkey;
     m["port"]      = externalPort();
-    m["controlid"] = orig_conn->id();
+    m["controlid"] = APP->nodeID();
     new_conn->setFirstMessage( m );
     createParallelConnection( orig_conn, new_conn, QString() );
 }
