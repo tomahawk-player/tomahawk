@@ -42,6 +42,7 @@ SET( OS_SPECIFIC_LINK_LIBRARIES
         "mad"
 	"vorbisfile"
 	"ogg"
+        "FLAC++"
 	"${CMAKE_CURRENT_SOURCE_DIR}/../rtaudio/librtaudio.dll"
 )
 

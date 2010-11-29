@@ -283,6 +283,8 @@ Section "Tomahawk Player" SEC_TOMAHAWK_PLAYER
    File "${MING_DLL_PATH}\libogg-0.dll"
    File "${MING_DLL_PATH}\libvorbisfile-3.dll"
    File "${MING_DLL_PATH}\libvorbis-0.dll"
+   File "${MING_DLL_PATH}\libFLAC-8.dll"
+   File "${MING_DLL_PATH}\libFLAC++-6.dll"
     
    ;Other
    File "${MING_DLL_PATH}\libqjson.dll"
