@@ -23,7 +23,7 @@ public:
     };
 
     // RX:
-    explicit FileTransferConnection( Servent* s, ControlConnection* cc, QString fid, unsigned int size );
+    explicit FileTransferConnection( Servent* s, ControlConnection* cc, QString fid, const Tomahawk::result_ptr& result );
     // TX:
     explicit FileTransferConnection( Servent* s, ControlConnection* cc, QString fid );
 
@@ -50,9 +50,9 @@ protected slots:
     virtual void handleMsg( msg_ptr msg );
 
 private slots:
-    void startSending( const QVariantMap& );
+    void startSending( const Tomahawk::result_ptr& );
     void sendSome();
-    void showStats(qint64 tx, qint64 rx);
+    void showStats( qint64 tx, qint64 rx );
 
 private:
     QSharedPointer<QIODevice> m_iodev;

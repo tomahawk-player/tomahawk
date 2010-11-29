@@ -575,7 +575,7 @@ Servent::remoteIODeviceFactory( const result_ptr& result )
         return sp;
 
     ControlConnection* cc = s->controlConnection();
-    FileTransferConnection* ftc = new FileTransferConnection( this, cc, fileId, result->size() );
+    FileTransferConnection* ftc = new FileTransferConnection( this, cc, fileId, result );
     createParallelConnection( cc, ftc, QString( "FILE_REQUEST_KEY:%1" ).arg( fileId ) );
     return ftc->iodevice();
 }

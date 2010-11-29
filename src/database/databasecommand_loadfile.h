@@ -18,7 +18,7 @@ public:
     virtual QString commandname() const { return "loadfile"; }
 
 signals:
-    void result( QVariantMap );
+    void result( const Tomahawk::result_ptr result );
 
 private:
     QString m_id;

@@ -16,7 +16,7 @@
 using namespace Tomahawk;
 
 
-FileTransferConnection::FileTransferConnection( Servent* s, ControlConnection* cc, QString fid, unsigned int size )
+FileTransferConnection::FileTransferConnection( Servent* s, ControlConnection* cc, QString fid, const Tomahawk::result_ptr& result )
     : Connection( s )
     , m_cc( cc )
     , m_fid( fid )
@@ -24,11 +24,12 @@ FileTransferConnection::FileTransferConnection( Servent* s, ControlConnection* c
     , m_badded( 0 )
     , m_bsent( 0 )
     , m_allok( false )
+    , m_result( result )
     , m_transferRate( 0 )
 {
     qDebug() << Q_FUNC_INFO;
 
-    BufferIODevice* bio = new BufferIODevice( size );
+    BufferIODevice* bio = new BufferIODevice( result->size() );
     m_iodev = QSharedPointer<QIODevice>( bio ); // device audio data gets written to
     m_iodev->open( QIODevice::ReadWrite );
 
@@ -126,21 +127,22 @@ FileTransferConnection::setup()
     if( m_type == RECEIVING )
     {
         qDebug() << "in RX mode";
+        emit updated();
         return;
     }
 
     qDebug() << "in TX mode, fid:" << m_fid;
 
     DatabaseCommand_LoadFile* cmd = new DatabaseCommand_LoadFile( m_fid );
-    connect( cmd, SIGNAL( result( QVariantMap ) ), SLOT( startSending( QVariantMap ) ) );
+    connect( cmd, SIGNAL( result( Tomahawk::result_ptr ) ), SLOT( startSending( Tomahawk::result_ptr ) ) );
     TomahawkApp::instance()->database()->enqueue( QSharedPointer<DatabaseCommand>( cmd ) );
 }
 
 
 void
-FileTransferConnection::startSending( const QVariantMap& f )
+FileTransferConnection::startSending( const Tomahawk::result_ptr& result )
 {
-    m_result = Tomahawk::result_ptr( new Tomahawk::Result( f, collection_ptr() ) );
+    m_result = result;
     qDebug() << "Starting to transmit" << m_result->url();
 
     QSharedPointer<QIODevice> io = TomahawkApp::instance()->getIODeviceForUrl( m_result );

@@ -233,6 +233,7 @@ ControlConnection::onPingTimer()
 {
     if ( m_pingtimer_mark.elapsed() >= TCP_TIMEOUT * 1000 )
     {
+        qDebug() << "Timeout reached! Shutting down connection to" << m_source->friendlyName();
         shutdown( false );
     }
 

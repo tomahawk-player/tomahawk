@@ -1,6 +1,7 @@
 #include "databasecommand_loadfile.h"
 
 #include "databaseimpl.h"
+#include "tomahawk/collection.h"
 
 
 DatabaseCommand_LoadFile::DatabaseCommand_LoadFile( const QString& id, QObject* parent )
@@ -11,7 +12,7 @@ DatabaseCommand_LoadFile::DatabaseCommand_LoadFile( const QString& id, QObject* 
 
 
 void
-DatabaseCommand_LoadFile::exec(DatabaseImpl* dbi)
+DatabaseCommand_LoadFile::exec( DatabaseImpl* dbi )
 {
     QVariantMap r;
     // file ids internally are really ints, at least for now:
@@ -25,5 +26,5 @@ DatabaseCommand_LoadFile::exec(DatabaseImpl* dbi)
         r = dbi->file( fid );
     } while( false );
 
-    emit result( r );
+    emit result( Tomahawk::result_ptr( new Tomahawk::Result( r, Tomahawk::collection_ptr() ) ) );
 }
