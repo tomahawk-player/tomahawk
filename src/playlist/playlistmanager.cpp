@@ -43,6 +43,7 @@ PlaylistManager::PlaylistManager( QObject* parent )
     m_queueView->queue()->setModel( m_queueModel );
     APP->audioEngine()->setQueue( m_queueView->queue()->proxyModel() );
 
+    m_splitter->addWidget( m_queueView );
     m_splitter->hide( 1, false );
 
     m_widget->layout()->setMargin( 0 );

@@ -1,6 +1,7 @@
 #ifndef ANIMATEDSPLITTER_H
 #define ANIMATEDSPLITTER_H
 
+#include <QDebug>
 #include <QSplitter>
 #include <QTimeLine>
 
@@ -52,9 +53,11 @@ public:
     QSize hiddenSize() const { return m_hiddenSize; }
     void setHiddenSize( const QSize& size ) { m_hiddenSize = size; emit hiddenSizeChanged(); }
 
+    bool isHidden() const { return m_isHidden; }
+
 public slots:
-    virtual void onShown( QWidget* ) {}
-    virtual void onHidden( QWidget* ) {}
+    virtual void onShown( QWidget* );
+    virtual void onHidden( QWidget* );
 
 signals:
     void showWidget();
@@ -65,6 +68,7 @@ signals:
 private:
     AnimatedSplitter* m_parent;
     QSize m_hiddenSize;
+    bool m_isHidden;
 };
 
 #endif //ANIMATEDSPLITTER_H

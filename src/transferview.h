@@ -24,8 +24,6 @@ public:
 
 signals:
 
-public slots:
-
 private slots:
     void fileTransferRegistered( FileTransferConnection* ftc );
     void fileTransferFinished( FileTransferConnection* ftc );

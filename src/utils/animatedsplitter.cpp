@@ -1,7 +1,5 @@
 #include "animatedsplitter.h"
 
-#include <QDebug>
-
 #define ANIMATION_TIME 500
 
 
@@ -30,6 +28,7 @@ AnimatedSplitter::show( int index, bool animate )
     if ( w->height() == size.height() )
         return;
 
+    emit shown( w );
     w->setMaximumHeight( QWIDGETSIZE_MAX );
     qDebug() << "animating to:" << size.height() << "from" << w->height();
 
@@ -48,8 +47,6 @@ AnimatedSplitter::show( int index, bool animate )
         onAnimationStep( size.height() );
         onAnimationFinished();
     }
-
-    emit shown( w );
 }
 
 
@@ -64,6 +61,7 @@ AnimatedSplitter::hide( int index, bool animate )
     if ( w->height() == minHeight )
         return;
 
+    emit hidden( w );
     w->setMinimumHeight( minHeight );
     qDebug() << "animating to:" << w->height() << "from" << minHeight;
 
@@ -82,8 +80,6 @@ AnimatedSplitter::hide( int index, bool animate )
         onAnimationStep( minHeight );
         onAnimationFinished();
     }
-
-    emit hidden( w );
 }
 
 
@@ -98,8 +94,11 @@ AnimatedSplitter::addWidget( QWidget* widget )
 void
 AnimatedSplitter::addWidget( AnimatedWidget* widget )
 {
+    qDebug() << Q_FUNC_INFO << widget;
     QSplitter::addWidget( widget );
     m_sizes << widget->hiddenSize();
+
+    qDebug() << m_sizes.count();
 
     connect( widget, SIGNAL( showWidget() ), SLOT( onShowRequest() ) );
     connect( widget, SIGNAL( hideWidget() ), SLOT( onHideRequest() ) );
@@ -112,6 +111,8 @@ AnimatedSplitter::addWidget( AnimatedWidget* widget )
 void
 AnimatedSplitter::onShowRequest()
 {
+    qDebug() << Q_FUNC_INFO << sender();
+
     int j = -1;
     for ( int i = 0; i < count(); i ++ )
     {
@@ -202,12 +203,30 @@ AnimatedSplitter::onHiddenSizeChanged()
 {
     AnimatedWidget* w = (AnimatedWidget*)(sender());
     int i = indexOf( w );
+
     m_sizes.replace( i, w->hiddenSize() );
 }
 
 
 AnimatedWidget::AnimatedWidget( AnimatedSplitter* parent )
     : m_parent( parent )
+    , m_isHidden( false )
 {
-    m_parent->addWidget( this );
+    qDebug() << Q_FUNC_INFO;
+}
+
+
+void
+AnimatedWidget::onShown( QWidget* )
+{
+    qDebug() << Q_FUNC_INFO << this;
+    m_isHidden = false;
+}
+
+
+void
+AnimatedWidget::onHidden( QWidget* )
+{
+    qDebug() << Q_FUNC_INFO << this;
+    m_isHidden = true;
 }

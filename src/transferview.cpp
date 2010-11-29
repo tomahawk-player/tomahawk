@@ -13,7 +13,6 @@ TransferView::TransferView( AnimatedSplitter* parent )
     , m_parent( parent )
 {
     setHiddenSize( QSize( 0, 0 ) );
-
     setLayout( new QVBoxLayout() );
     m_tree = new QTreeWidget( this );
 
@@ -41,6 +40,7 @@ TransferView::TransferView( AnimatedSplitter* parent )
 void
 TransferView::fileTransferRegistered( FileTransferConnection* ftc )
 {
+    qDebug() << Q_FUNC_INFO;
     connect( ftc, SIGNAL( updated() ), SLOT( onTransferUpdate() ) );
 }
 
@@ -70,6 +70,7 @@ TransferView::fileTransferFinished( FileTransferConnection* ftc )
 void
 TransferView::onTransferUpdate()
 {
+    qDebug() << Q_FUNC_INFO;
     FileTransferConnection* ftc = (FileTransferConnection*)sender();
     if ( ftc->track().isNull() || ftc->source().isNull() )
         return;
@@ -91,7 +92,8 @@ TransferView::onTransferUpdate()
     ti->setText( 1, QString( "%1 kb/s" ).arg( ftc->transferRate() / 1024 ) );
     ti->setText( 2, QString( "%1 - %2" ).arg( ftc->track()->artist()->name() ).arg( ftc->track()->track() ) );
 
-    emit showWidget();
+    if ( isHidden() )
+        emit showWidget();
 }
 
 
