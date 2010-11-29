@@ -260,7 +260,7 @@ Connection::socketDisconnected()
     if( m_msgprocessor_in.length() == 0 && m_sock->bytesAvailable() == 0 )
     {
         handleIncomingQueueEmpty();
-//        actualShutdown();
+        actualShutdown();
     }
 }
 
