@@ -142,6 +142,13 @@ FileTransferConnection::setup()
 void
 FileTransferConnection::startSending( const Tomahawk::result_ptr& result )
 {
+    if ( result.isNull() )
+    {
+        qDebug() << "Can't handle invalid result!";
+        shutdown();
+        return;
+    }
+
     m_result = result;
     qDebug() << "Starting to transmit" << m_result->url();
 
