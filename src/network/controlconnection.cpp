@@ -7,7 +7,7 @@
 #include "databasecommand_collectionstats.h"
 #include "dbsyncconnection.h"
 
-#define TCP_TIMEOUT 60
+#define TCP_TIMEOUT 600
 
 using namespace Tomahawk;
 
