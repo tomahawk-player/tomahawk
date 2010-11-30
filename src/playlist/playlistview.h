@@ -23,7 +23,7 @@ private slots:
     void onCustomContextMenu( const QPoint& pos );
 
     void addItemsToPlaylist();
-    void deleteItem();
+    void deleteItems();
 
 private:
     void setupMenus();
@@ -33,7 +33,7 @@ private:
     QAction* m_playItemAction;
     QAction* m_addItemsToQueueAction;
     QAction* m_addItemsToPlaylistAction;
-    QAction* m_deleteItemAction;
+    QAction* m_deleteItemsAction;
 };
 
 #endif // PLAYLISTVIEW_H

@@ -43,15 +43,15 @@ PlaylistView::setupMenus()
     m_itemMenu.addSeparator();
     m_addItemsToPlaylistAction = m_itemMenu.addAction( tr( "&Add to Playlist" ) );
     m_itemMenu.addSeparator();
-    m_deleteItemAction = m_itemMenu.addAction( tr( "&Delete Item" ) );
+    m_deleteItemsAction = m_itemMenu.addAction( tr( "&Delete Item" ) );
 
     if ( model() )
-        m_deleteItemAction->setEnabled( !model()->isReadOnly() );
+        m_deleteItemsAction->setEnabled( !model()->isReadOnly() );
 
     connect( m_playItemAction,           SIGNAL( triggered() ), SLOT( playItem() ) );
     connect( m_addItemsToQueueAction,    SIGNAL( triggered() ), SLOT( addItemsToQueue() ) );
     connect( m_addItemsToPlaylistAction, SIGNAL( triggered() ), SLOT( addItemsToPlaylist() ) );
-    connect( m_deleteItemAction,         SIGNAL( triggered() ), SLOT( deleteItem() ) );
+    connect( m_deleteItemsAction,        SIGNAL( triggered() ), SLOT( deleteItems() ) );
 }
 
 
@@ -96,7 +96,7 @@ PlaylistView::addItemsToPlaylist()
 
 
 void
-PlaylistView::deleteItem()
+PlaylistView::deleteItems()
 {
-    proxyModel()->removeIndex( contextMenuIndex() );
+    proxyModel()->removeIndexes( selectedIndexes() );
 }
