@@ -10,6 +10,7 @@
 #include "audioengine.h"
 #include "tomahawksettings.h"
 
+#include "albumitemdelegate.h"
 #include "albummodel.h"
 #include "albumproxymodel.h"
 #include "playlistmanager.h"
@@ -27,11 +28,12 @@ AlbumView::AlbumView( QWidget* parent )
     setDropIndicatorShown( false );
     setDragDropOverwriteMode( false );
     setUniformItemSizes( true );
-    setSpacing( 8 );
+    setSpacing( 20 );
+    setWordWrap( true );
 
     setResizeMode( Adjust );
     setViewMode( IconMode );
-    setIconSize( QSize( 64, 64 ) );
+//    setIconSize( QSize( 64, 64 ) );
 
     setProxyModel( new AlbumProxyModel( this ) );
 
@@ -49,8 +51,7 @@ void
 AlbumView::setProxyModel( AlbumProxyModel* model )
 {
     m_proxyModel = model;
-//    m_delegate = new PlaylistItemDelegate( this, m_proxyModel );
-//    setItemDelegate( m_delegate );
+    setItemDelegate( new AlbumItemDelegate( this, m_proxyModel ) );
 
     QListView::setModel( m_proxyModel );
 }

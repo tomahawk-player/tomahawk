@@ -125,6 +125,7 @@ SET( tomahawkSourcesGui ${tomahawkSourcesGui}
      playlist/albumitem.cpp
      playlist/albummodel.cpp
      playlist/albumproxymodel.cpp
+     playlist/albumitemdelegate.cpp
      playlist/albumview.cpp
 
      sourcetree/sourcesmodel.cpp
@@ -255,6 +256,7 @@ SET( tomahawkHeadersGui ${tomahawkHeadersGui}
      playlist/albumitem.h
      playlist/albummodel.h
      playlist/albumproxymodel.h
+     playlist/albumitemdelegate.h
      playlist/albumview.h
 
      sourcetree/sourcesmodel.h

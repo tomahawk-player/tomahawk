@@ -38,12 +38,17 @@ PlaylistView::setupMenus()
 {
     m_itemMenu.clear();
 
+    unsigned int i = 0;
+    foreach( const QModelIndex& idx, selectedIndexes() )
+        if ( idx.column() == 0 )
+            i++;
+
     m_playItemAction = m_itemMenu.addAction( tr( "&Play" ) );
     m_addItemsToQueueAction = m_itemMenu.addAction( tr( "Add to &Queue" ) );
     m_itemMenu.addSeparator();
     m_addItemsToPlaylistAction = m_itemMenu.addAction( tr( "&Add to Playlist" ) );
     m_itemMenu.addSeparator();
-    m_deleteItemsAction = m_itemMenu.addAction( tr( "&Delete Item" ) );
+    m_deleteItemsAction = m_itemMenu.addAction( i > 1 ? tr( "&Delete Items" ) : tr( "&Delete Item" ) );
 
     if ( model() )
         m_deleteItemsAction->setEnabled( !model()->isReadOnly() );

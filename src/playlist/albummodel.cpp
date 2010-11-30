@@ -20,7 +20,7 @@ AlbumModel::AlbumModel( QObject* parent )
     qDebug() << Q_FUNC_INFO;
 
     m_defaultCover = QPixmap( RESPATH "images/no-album-art-placeholder.png" )
-                     .scaled( QSize( 64, 64 ), Qt::IgnoreAspectRatio, Qt::SmoothTransformation );
+                     .scaled( QSize( 120, 120 ), Qt::IgnoreAspectRatio, Qt::SmoothTransformation );
 }
 
 
@@ -100,7 +100,7 @@ AlbumModel::data( const QModelIndex& index, int role ) const
 
     if ( role == Qt::SizeHintRole )
     {
-        return QSize( 90, 90 );
+        return QSize( 116, 150 );
     }
 
     if ( role != Qt::DisplayRole ) // && role != Qt::ToolTipRole )
@@ -110,7 +110,7 @@ AlbumModel::data( const QModelIndex& index, int role ) const
     switch( index.column() )
     {
         case 0:
-            return album->name();
+            return album->name() + "<br/>Test\nTest2";
             break;
 
     }
@@ -251,7 +251,7 @@ AlbumModel::onAlbumsAdded( const QList<Tomahawk::album_ptr>& albums, const Tomah
         albumitem->cover = m_defaultCover;
         albumitem->index = createIndex( m_rootItem->children.count() - 1, 0, albumitem );
 
-        QString imgurl = "http://ws.audioscrobbler.com/2.0/?method=album.imageredirect&artist=%1&album=%2&size=medium&api_key=7a90f6672a04b809ee309af169f34b8b";
+        QString imgurl = "http://ws.audioscrobbler.com/2.0/?method=album.imageredirect&artist=%1&album=%2&size=large&api_key=7a90f6672a04b809ee309af169f34b8b";
         QNetworkRequest req( imgurl.arg( album->artist()->name() ).arg( album->name() ) );
         req.setAttribute( QNetworkRequest::User, (qlonglong)albumitem );
         QNetworkReply* reply = APP->nam()->get( req );
@@ -288,7 +288,7 @@ AlbumModel::onCoverArtDownloaded()
             }
             else
             {
-                ai->setCover( pm.scaled( QSize( 64, 64 ), Qt::IgnoreAspectRatio, Qt::SmoothTransformation ) );
+                ai->setCover( pm.scaled( QSize( 150, 150 ), Qt::IgnoreAspectRatio, Qt::SmoothTransformation ) );
             }
         }
     }
