@@ -102,6 +102,7 @@ void
 AudioEngine::previous()
 {
     qDebug() << Q_FUNC_INFO;
+    clearBuffers();
     loadPreviousTrack();
 }
 
@@ -110,6 +111,7 @@ void
 AudioEngine::next()
 {
     qDebug() << Q_FUNC_INFO;
+    clearBuffers();
     loadNextTrack();
 }
 
@@ -285,8 +287,11 @@ AudioEngine::playItem( PlaylistInterface* playlist, const Tomahawk::result_ptr& 
 {
     qDebug() << Q_FUNC_INFO;
 
+    clearBuffers();
+
     m_playlist = playlist;
     m_currentTrackPlaylist = playlist;
+
     loadTrack( result );
 }
 
@@ -324,6 +329,14 @@ AudioEngine::timerTriggered( unsigned int seconds )
     {
         emit timerPercentage( (unsigned int)( seconds / m_currentTrack->duration() ) );
     }
+}
+
+
+void
+AudioEngine::clearBuffers()
+{
+    QMutexLocker lock( &m_mutex );
+    m_audio->clearBuffers();
 }
 
 
@@ -398,14 +411,14 @@ AudioEngine::loop()
          !m_audio->isPaused() )
     {
         qDebug() << "Starting next track then";
-        next();
+        loadNextTrack();
         // will need data immediately:
         nextdelay = 0;
     }
     else if ( !m_input.isNull() && !m_input->isOpen() )
     {
         qDebug() << "AudioEngine IODev closed. errorString:" << m_input->errorString();
-        next();
+        loadNextTrack();
         nextdelay = 0;
     }
 

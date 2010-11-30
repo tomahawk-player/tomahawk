@@ -82,6 +82,7 @@ private slots:
 
 private:
     void run();
+    void clearBuffers();
 
     QSharedPointer<QIODevice> m_input;
     QSharedPointer<TranscodeInterface> m_transcode;
