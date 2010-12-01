@@ -81,7 +81,7 @@ void
 PlaylistView::keyPressEvent( QKeyEvent* event )
 {
     qDebug() << Q_FUNC_INFO;
-    QTreeView::keyPressEvent( event );
+    TrackView::keyPressEvent( event );
 
     if ( !model() )
         return;

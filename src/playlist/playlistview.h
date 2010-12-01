@@ -17,7 +17,7 @@ public:
     void setModel( TrackModel* model );
 
 protected:
-    virtual void keyPressEvent( QKeyEvent* event );
+    void keyPressEvent( QKeyEvent* event );
 
 private slots:
     void onCustomContextMenu( const QPoint& pos );

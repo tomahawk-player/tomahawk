@@ -145,6 +145,22 @@ TrackView::onItemActivated( const QModelIndex& index )
 
 
 void
+TrackView::keyPressEvent( QKeyEvent* event )
+{
+    qDebug() << Q_FUNC_INFO;
+    QTreeView::keyPressEvent( event );
+
+    if ( !model() )
+        return;
+
+    if ( event->key() == Qt::Key_Enter || event->key() == Qt::Key_Return )
+    {
+        onItemActivated( currentIndex() );
+    }
+}
+
+
+void
 TrackView::onItemResized( const QModelIndex& index )
 {
     qDebug() << Q_FUNC_INFO;

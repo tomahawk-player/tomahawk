@@ -45,6 +45,7 @@ protected:
     virtual void dropEvent( QDropEvent* event );
 
     void paintEvent( QPaintEvent* event );
+    void keyPressEvent( QKeyEvent* event );
 
 private slots:
     void onItemResized( const QModelIndex& index );
