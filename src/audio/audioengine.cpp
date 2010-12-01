@@ -300,6 +300,9 @@ void
 AudioEngine::setStreamData( long sampleRate, int channels )
 {
     qDebug() << Q_FUNC_INFO << sampleRate << channels << thread();
+
+    if ( sampleRate < 44100 )
+        sampleRate = 44100;
     m_audio->initAudio( sampleRate, channels );
     if ( m_audio->startPlayback() )
     {
