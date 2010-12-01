@@ -66,22 +66,25 @@ PlaylistModel::loadPlaylist( const Tomahawk::playlist_ptr& playlist )
 
     PlItem* plitem;
     QList<plentry_ptr> entries = playlist->entries();
-    int c = rowCount( QModelIndex() );
-
-    qDebug() << "starting loading" << playlist->title();
-    emit loadingStarts();
-    emit beginInsertRows( QModelIndex(), c, c + entries.count() - 1 );
-
-    foreach( const plentry_ptr& entry, entries )
+    if ( entries.count() )
     {
-        qDebug() << entry->query()->toString();
-        plitem = new PlItem( entry, m_rootItem );
-        plitem->index = createIndex( m_rootItem->children.count() - 1, 0, plitem );
+        int c = rowCount( QModelIndex() );
 
-        connect( plitem, SIGNAL( dataChanged() ), SLOT( onDataChanged() ) );
+        qDebug() << "starting loading" << playlist->title();
+        emit loadingStarts();
+        emit beginInsertRows( QModelIndex(), c, c + entries.count() - 1 );
+
+        foreach( const plentry_ptr& entry, entries )
+        {
+            qDebug() << entry->query()->toString();
+            plitem = new PlItem( entry, m_rootItem );
+            plitem->index = createIndex( m_rootItem->children.count() - 1, 0, plitem );
+
+            connect( plitem, SIGNAL( dataChanged() ), SLOT( onDataChanged() ) );
+        }
+
+        emit endInsertRows();
     }
-
-    emit endInsertRows();
 
     qDebug() << rowCount( QModelIndex() );
     emit loadingFinished();
