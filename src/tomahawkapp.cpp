@@ -230,6 +230,7 @@ TomahawkApp::~TomahawkApp()
 
     delete m_zeroconf;
     delete m_db;
+    m_db = 0;
 
     // always last thing, incase other objects save state on exit:
     delete m_settings;

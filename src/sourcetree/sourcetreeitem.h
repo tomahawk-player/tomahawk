@@ -13,10 +13,7 @@ Q_OBJECT
 
 public:
     explicit SourceTreeItem( const Tomahawk::source_ptr& source, QObject* parent );
-    virtual ~SourceTreeItem()
-    {
-        qDebug() << Q_FUNC_INFO;
-    }
+    virtual ~SourceTreeItem();
 
     const Tomahawk::source_ptr& source() const { return m_source; };
     QList<QStandardItem*> columns() const { return m_columns; };

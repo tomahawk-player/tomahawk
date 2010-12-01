@@ -14,7 +14,7 @@ PlItem::~PlItem()
     // will fail badly!
     if ( parent && index.isValid() )
     {
-        parent->children.removeAt( index.row() );
+        parent->children.remove( index.row() );
     }
 
     for ( int i = children.count() - 1; i >= 0; i-- )
@@ -91,12 +91,14 @@ PlItem::setupItem( const Tomahawk::query_ptr& query, PlItem* parent, int row )
     m_query = query;
     if ( query->numResults() )
         onResultsAdded( query->results() );
+    else
+    {
+        connect( query.data(), SIGNAL( resultsAdded( QList<Tomahawk::result_ptr> ) ),
+                                 SLOT( onResultsAdded( QList<Tomahawk::result_ptr> ) ), Qt::DirectConnection );
 
-    connect( query.data(), SIGNAL( resultsAdded( QList<Tomahawk::result_ptr> ) ),
-                             SLOT( onResultsAdded( QList<Tomahawk::result_ptr> ) ), Qt::DirectConnection );
-
-    connect( query.data(), SIGNAL( resultsRemoved( Tomahawk::result_ptr ) ),
-                             SLOT( onResultsRemoved( Tomahawk::result_ptr ) ), Qt::DirectConnection );
+        connect( query.data(), SIGNAL( resultsRemoved( Tomahawk::result_ptr ) ),
+                                 SLOT( onResultsRemoved( Tomahawk::result_ptr ) ), Qt::DirectConnection );
+    }
 }
 
 

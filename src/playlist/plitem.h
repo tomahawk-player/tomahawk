@@ -28,7 +28,7 @@ public:
     void setIsPlaying( bool b ) { m_isPlaying = b; emit dataChanged(); }
 
     PlItem* parent;
-    QList<PlItem*> children;
+    QVector<PlItem*> children;
     QHash<QString, PlItem*> hash;
     QString caption;
     int childCount;

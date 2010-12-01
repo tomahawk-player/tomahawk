@@ -31,8 +31,14 @@ SourceTreeItem::SourceTreeItem( const source_ptr& source, QObject* parent )
                                                 SLOT( onPlaylistsDeleted( QList<Tomahawk::playlist_ptr> ) ) );
     }
 
-    m_widget = new SourceTreeItemWidget( source, (QWidget*)parent->parent() );
+    m_widget = new SourceTreeItemWidget( source );
     connect( m_widget, SIGNAL( clicked() ), SLOT( onClicked() ) );
+}
+
+
+SourceTreeItem::~SourceTreeItem()
+{
+    qDebug() << Q_FUNC_INFO;
 }
 
 

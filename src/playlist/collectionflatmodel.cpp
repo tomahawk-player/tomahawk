@@ -78,7 +78,7 @@ CollectionFlatModel::addFilteredCollection( const collection_ptr& collection, un
     cmd->setSortDescending( true );
 
     connect( cmd, SIGNAL( tracks( QList<Tomahawk::query_ptr>, Tomahawk::collection_ptr ) ),
-                    SLOT( onTracksAdded( QList<Tomahawk::query_ptr>, Tomahawk::collection_ptr ) ) );
+                    SLOT( onTracksAdded( QList<Tomahawk::query_ptr>, Tomahawk::collection_ptr ) ), Qt::QueuedConnection );
 
     TomahawkApp::instance()->database()->enqueue( QSharedPointer<DatabaseCommand>( cmd ) );
 }
@@ -91,6 +91,9 @@ CollectionFlatModel::removeCollection( const collection_ptr& collection )
                 this, SLOT( onTracksAdded( QList<Tomahawk::query_ptr>, Tomahawk::collection_ptr ) ) );
     disconnect( collection.data(), SIGNAL( tracksFinished( Tomahawk::collection_ptr ) ),
                 this, SLOT( onTracksAddingFinished( Tomahawk::collection_ptr ) ) );
+
+    QTime timer;
+    timer.start();
 
 //    QList<PlItem*> plitems = m_collectionIndex.values( collection );
     QList< QPair< int, int > > rows;
@@ -133,7 +136,6 @@ CollectionFlatModel::removeCollection( const collection_ptr& collection )
                 newrows.insertMulti( col, rowf );
             }
         }
-
         m_collectionRows = newrows;
 
         qDebug() << "Removing rows:" << row.first << row.second;
@@ -146,7 +148,7 @@ CollectionFlatModel::removeCollection( const collection_ptr& collection )
         emit endRemoveRows();
     }
 
-//    m_collectionIndex.remove( collection );
+    qDebug() << "Collection removed, time elapsed:" << timer.elapsed();
 
     emit trackCountChanged( rowCount( QModelIndex() ) );
 }
@@ -197,7 +199,7 @@ CollectionFlatModel::onDataChanged()
     PlItem* p = (PlItem*)sender();
 //    emit itemSizeChanged( p->index );
 
-    if ( p && p->index.isValid() )
+    if ( p )
         emit dataChanged( p->index, p->index.sibling( p->index.row(), columnCount() - 1 ) );
 }
 

@@ -39,9 +39,11 @@ Source::Source( const QString &username )
 
 Source::~Source()
 {
-    qDebug() << Q_FUNC_INFO;
+    qDebug() << Q_FUNC_INFO << friendlyName();
+
+    return;
     // TODO mark source as offline in database
-    DatabaseCommand_SourceOffline * cmd = new DatabaseCommand_SourceOffline( id() );
+    DatabaseCommand_SourceOffline* cmd = new DatabaseCommand_SourceOffline( id() );
     APP->database()->enqueue( QSharedPointer<DatabaseCommand>(cmd) );
 }
 
