@@ -378,6 +378,7 @@ TrackHeader::TrackHeader( TrackView* parent )
     setStretchLastSection( false );
     setResizeMode( QHeaderView::Interactive );
     setMinimumSectionSize( 60 );
+    setDefaultAlignment( Qt::AlignLeft );
 
     connect( this, SIGNAL( sectionResized( int, int, int ) ), SLOT( onSectionResized( int, int, int ) ) );
 }
