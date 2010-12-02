@@ -143,49 +143,49 @@ ageToString( const QDateTime& time )
     if ( years )
     {
         if ( years > 1 )
-            return QString( "%1 years ago" ).arg( years );
+            return QString( "%1 years" ).arg( years );
         else
-            return QString( "%1 year ago" ).arg( years );
+            return QString( "%1 year" ).arg( years );
     }
 
     if ( months )
     {
         if ( months > 1 )
-           return QString( "%1 months ago" ).arg( months );
+           return QString( "%1 months" ).arg( months );
         else
-            return QString( "%1 month ago" ).arg( months );
+            return QString( "%1 month" ).arg( months );
     }
 
     if ( weeks )
     {
         if ( weeks > 1 )
-            return QString( "%1 weeks ago" ).arg( weeks );
+            return QString( "%1 weeks" ).arg( weeks );
         else
-            return QString( "%1 week ago" ).arg( weeks );
+            return QString( "%1 week" ).arg( weeks );
     }
 
     if ( days )
     {
         if ( days > 1 )
-            return QString( "%1 days ago" ).arg( days );
+            return QString( "%1 days" ).arg( days );
         else
-            return QString( "%1 day ago" ).arg( days );
+            return QString( "%1 day" ).arg( days );
     }
 
     if ( hours )
     {
         if ( hours > 1 )
-            return QString( "%1 hours ago" ).arg( hours );
+            return QString( "%1 hours" ).arg( hours );
         else
-            return QString( "%1 hour ago" ).arg( hours );
+            return QString( "%1 hour" ).arg( hours );
     }
 
     if ( mins )
     {
         if ( mins > 1 )
-            return QString( "%1 minutes ago" ).arg( mins );
+            return QString( "%1 minutes" ).arg( mins );
         else
-            return QString( "%1 minute ago" ).arg( mins );
+            return QString( "%1 minute" ).arg( mins );
     }
 
     return QString();

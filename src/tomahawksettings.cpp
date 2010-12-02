@@ -183,7 +183,7 @@ TomahawkSettings::playlistColumnSizes() const
 void
 TomahawkSettings::setPlaylistColumnSizes( const QList<QVariant>& cols )
 {
-    setValue( "ui/playlist/geometry", cols );
+    setValue( "ui/playlist/columnSize", cols );
 }
 
 

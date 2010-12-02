@@ -29,10 +29,10 @@ AlbumView::AlbumView( QWidget* parent )
     setDragDropOverwriteMode( false );
     setUniformItemSizes( true );
     setSpacing( 20 );
-    setWordWrap( true );
 
     setResizeMode( Adjust );
     setViewMode( IconMode );
+    setVerticalScrollMode( QAbstractItemView::ScrollPerPixel );
 //    setIconSize( QSize( 64, 64 ) );
 
     setProxyModel( new AlbumProxyModel( this ) );

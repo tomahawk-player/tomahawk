@@ -1,7 +1,6 @@
 #include "trackview.h"
 
 #include <QDebug>
-#include <QHeaderView>
 #include <QKeyEvent>
 #include <QPainter>
 #include <QScrollBar>
@@ -22,6 +21,7 @@ TrackView::TrackView( QWidget* parent )
     , m_model( 0 )
     , m_proxyModel( 0 )
     , m_delegate( 0 )
+    , m_header( new TrackHeader( this ) )
     , m_resizing( false )
 {
     setSortingEnabled( false );
@@ -33,7 +33,10 @@ TrackView::TrackView( QWidget* parent )
     setDragDropMode( QAbstractItemView::InternalMove );
     setDragDropOverwriteMode( false );
     setAllColumnsShowFocus( true );
+    setVerticalScrollMode( QAbstractItemView::ScrollPerPixel );
     setMinimumWidth( 690 );
+
+    setHeader( m_header );
 
 #ifndef Q_WS_WIN
     QFont f = font();
@@ -41,19 +44,13 @@ TrackView::TrackView( QWidget* parent )
     setFont( f );
 #endif
 
-    header()->setMinimumSectionSize( 60 );
-    restoreColumnsState();
-
     connect( this, SIGNAL( doubleClicked( QModelIndex ) ), SLOT( onItemActivated( QModelIndex ) ) );
-    connect( header(), SIGNAL( sectionResized( int, int, int ) ), SLOT( onSectionResized( int, int, int ) ) );
 }
 
 
 TrackView::~TrackView()
 {
     qDebug() << Q_FUNC_INFO;
-
-    saveColumnsState();
 }
 
 
@@ -83,51 +80,6 @@ TrackView::setModel( TrackModel* model )
     setAcceptDrops( true );
     setRootIsDecorated( false );
     setUniformRowHeights( true );
-}
-
-
-void
-TrackView::restoreColumnsState()
-{
-    TomahawkSettings* s = APP->settings();
-    QList<QVariant> list = s->playlistColumnSizes();
-
-    if ( list.count() != 7 ) // FIXME: const
-    {
-        m_columnWeights << 0.19 << 0.24 << 0.18 << 0.07 << 0.07 << 0.11 << 0.14;
-    }
-    else
-    {
-        foreach( const QVariant& v, list )
-            m_columnWeights << v.toDouble();
-    }
-
-    for ( int i = 0; i < m_columnWeights.count(); i++ )
-        m_columnWidths << 0;
-}
-
-
-void
-TrackView::saveColumnsState()
-{
-    TomahawkSettings *s = APP->settings();
-    QList<QVariant> wlist;
-//    int i = 0;
-
-    foreach( double w, m_columnWeights )
-    {
-        wlist << QVariant( w );
-//        qDebug() << "Storing weight for column" << i++ << w;
-    }
-
-    s->setPlaylistColumnSizes( wlist );
-}
-
-
-void
-TrackView::onSectionResized( int logicalIndex, int oldSize, int newSize )
-{
-    return;
 }
 
 
@@ -196,43 +148,8 @@ TrackView::addItemsToQueue()
 void
 TrackView::resizeEvent( QResizeEvent* event )
 {
-//    qDebug() << Q_FUNC_INFO;
-    resizeColumns();
-}
-
-
-void
-TrackView::resizeColumns()
-{
-    double cw = contentsRect().width();
-    int i = 0;
-    int total = 0;
-
-    QList<double> mcw = m_columnWeights;
-
-    if ( verticalScrollBar() && verticalScrollBar()->isVisible() )
-    {
-        cw -= verticalScrollBar()->width() + 1;
-    }
-
-    m_resizing = true;
-    foreach( double w, mcw )
-    {
-        int fw = (int)( cw * w );
-        if ( fw < header()->minimumSectionSize() )
-            fw = header()->minimumSectionSize();
-
-        if ( i + 1 == header()->count() )
-            fw = cw - total;
-
-        total += fw;
-//        qDebug() << "Resizing column:" << i << fw;
-
-        m_columnWidths[ i ] = fw;
-
-        header()->resizeSection( i++, fw );
-    }
-    m_resizing = false;
+    qDebug() << Q_FUNC_INFO;
+    m_header->onResized();
 }
 
 
@@ -450,4 +367,138 @@ TrackView::createDragPixmap( int itemCount ) const
     }
 
     return dragPixmap;
+}
+
+
+TrackHeader::TrackHeader( TrackView* parent )
+    : QHeaderView( Qt::Horizontal, parent )
+    , m_parent( parent )
+    , m_init( false )
+{
+    setStretchLastSection( false );
+    setResizeMode( QHeaderView::Interactive );
+    setMinimumSectionSize( 60 );
+
+    connect( this, SIGNAL( sectionResized( int, int, int ) ), SLOT( onSectionResized( int, int, int ) ) );
+}
+
+
+TrackHeader::~TrackHeader()
+{
+    saveColumnsState();
+}
+
+
+static uint negativeWidth = 0;
+
+void
+TrackHeader::onSectionResized( int logicalIndex, int oldSize, int newSize )
+{
+    qDebug() << Q_FUNC_INFO;
+
+    if ( !m_init )
+        return;
+
+    blockSignals( true );
+
+    if ( newSize < 0 )
+        resizeSection( logicalIndex, 0 );
+
+    for ( int i = logicalIndex + 1; i < count(); i++ )
+    {
+        int ns = sectionSize( i ) + oldSize - newSize;
+
+        if ( ns < minimumSectionSize() )
+        {
+            resizeSection( logicalIndex, newSize - ( minimumSectionSize() - ns ) );
+            ns = minimumSectionSize();
+        }
+
+        resizeSection( i, ns );
+        break;
+    }
+
+    blockSignals( false );
+
+    negativeWidth = 0;
+    uint w = 0;
+
+    for ( int x = 0; x < m_columnWeights.count(); x++ )
+    {
+        w += sectionSize( x );
+        negativeWidth += sectionSize( x );
+    }
+
+    for ( int x = 0; x < m_columnWeights.count(); x++ )
+    {
+        m_columnWeights[x] = (double)sectionSize( x ) / double( w );
+    }
+
+    negativeWidth -= w;
+}
+
+
+void
+TrackHeader::onResized()
+{
+    qDebug() << Q_FUNC_INFO;
+
+    if ( !m_init && count() )
+        restoreColumnsState();
+
+    m_init = false;
+    blockSignals( true );
+
+    double width = m_parent->contentsRect().width();
+#ifdef Q_WS_MAC
+    if ( m_parent->verticalScrollBar() && m_parent->verticalScrollBar()->isVisible() )
+    {
+        width -= m_parent->verticalScrollBar()->width() + 1;
+    }
+#endif
+
+    blockSignals( false );
+
+    for ( int i = 0; i < m_columnWeights.count(); i++ )
+    {
+        if ( m_columnWeights[i] > 0 )
+            resizeSection( i, int( width * m_columnWeights[i] ) );
+    }
+
+    m_init = true;
+}
+
+
+void
+TrackHeader::restoreColumnsState()
+{
+    TomahawkSettings* s = APP->settings();
+    QList<QVariant> list = s->playlistColumnSizes();
+
+    qDebug() << "COOOOOOUNT:" << count() << list.count();
+    if ( list.count() != count() ) // FIXME: const
+    {
+        m_columnWeights << 0.19 << 0.24 << 0.18 << 0.07 << 0.07 << 0.11 << 0.14;
+    }
+    else
+    {
+        foreach( const QVariant& v, list )
+            m_columnWeights << v.toDouble();
+    }
+}
+
+
+void
+TrackHeader::saveColumnsState()
+{
+    TomahawkSettings *s = APP->settings();
+    QList<QVariant> wlist;
+
+    foreach( double w, m_columnWeights )
+    {
+        wlist << QVariant( w );
+//        qDebug() << "Storing weight for column" << i++ << w;
+    }
+
+    s->setPlaylistColumnSizes( wlist );
 }

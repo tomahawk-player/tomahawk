@@ -24,7 +24,7 @@ public:
     
     QByteArray mainWindowState() const;
     void setMainWindowState( const QByteArray& state );
-    
+
     QList<QVariant> playlistColumnSizes() const;
     void setPlaylistColumnSizes( const QList<QVariant>& cols );
     

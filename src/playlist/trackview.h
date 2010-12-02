@@ -1,6 +1,7 @@
 #ifndef TRACKVIEW_H
 #define TRACKVIEW_H
 
+#include <QHeaderView>
 #include <QTreeView>
 #include <QSortFilterProxyModel>
 
@@ -9,6 +10,31 @@
 class PlaylistInterface;
 class TrackModel;
 class TrackProxyModel;
+class TrackView;
+
+class TrackHeader : public QHeaderView
+{
+Q_OBJECT
+
+public:
+    explicit TrackHeader( TrackView* parent = 0 );
+    ~TrackHeader();
+
+public slots:
+    void onResized();
+
+private slots:
+    void onSectionResized( int logicalIndex, int oldSize, int newSize );
+
+private:
+    void restoreColumnsState();
+    void saveColumnsState();
+
+    TrackView* m_parent;
+
+    QList<double> m_columnWeights;
+    bool m_init;
+};
 
 class TrackView : public QTreeView
 {
@@ -50,24 +76,16 @@ protected:
 private slots:
     void onItemResized( const QModelIndex& index );
 
-    void resizeColumns();
-    void onSectionResized( int logicalIndex, int oldSize, int newSize );
-
     void onFilterChanged( const QString& filter );
 
 private:
-    void restoreColumnsState();
-    void saveColumnsState();
-
     QPixmap createDragPixmap( int itemCount ) const;
 
     TrackModel* m_model;
     TrackProxyModel* m_proxyModel;
     PlaylistInterface* m_modelInterface;
     PlaylistItemDelegate* m_delegate;
-
-    QList<double> m_columnWeights;
-    QList<int> m_columnWidths;
+    TrackHeader* m_header;
 
     bool m_resizing;
     bool m_dragging;
