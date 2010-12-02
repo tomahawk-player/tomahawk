@@ -34,7 +34,7 @@ TrackView::TrackView( QWidget* parent )
     setDragDropOverwriteMode( false );
     setAllColumnsShowFocus( true );
     setVerticalScrollMode( QAbstractItemView::ScrollPerPixel );
-    setMinimumWidth( 690 );
+    setMinimumWidth( 700 );
 
     setHeader( m_header );
 
@@ -148,7 +148,6 @@ TrackView::addItemsToQueue()
 void
 TrackView::resizeEvent( QResizeEvent* event )
 {
-    qDebug() << Q_FUNC_INFO;
     m_header->onResized();
 }
 
@@ -379,6 +378,7 @@ TrackHeader::TrackHeader( TrackView* parent )
     setResizeMode( QHeaderView::Interactive );
     setMinimumSectionSize( 60 );
     setDefaultAlignment( Qt::AlignLeft );
+    setMovable( true );
 
     connect( this, SIGNAL( sectionResized( int, int, int ) ), SLOT( onSectionResized( int, int, int ) ) );
 }
@@ -390,44 +390,36 @@ TrackHeader::~TrackHeader()
 }
 
 
-static uint negativeWidth = 0;
-
 void
-TrackHeader::onSectionResized( int logicalIndex, int oldSize, int newSize )
+TrackHeader::onSectionResized( int logicalidx, int oldSize, int newSize )
 {
-    qDebug() << Q_FUNC_INFO;
-
     if ( !m_init )
         return;
 
     blockSignals( true );
 
-    if ( newSize < 0 )
-        resizeSection( logicalIndex, 0 );
+    int visualidx = visualIndex( logicalidx );
 
-    for ( int i = logicalIndex + 1; i < count(); i++ )
+    for ( int i = visualidx + 1; i < count(); i++ )
     {
-        int ns = sectionSize( i ) + oldSize - newSize;
+        int ns = sectionSize( logicalIndex( i ) ) + oldSize - newSize;
 
         if ( ns < minimumSectionSize() )
         {
-            resizeSection( logicalIndex, newSize - ( minimumSectionSize() - ns ) );
+            resizeSection( logicalidx, newSize - ( minimumSectionSize() - ns ) );
             ns = minimumSectionSize();
         }
 
-        resizeSection( i, ns );
+        resizeSection( logicalIndex( i ), ns );
         break;
     }
 
     blockSignals( false );
 
-    negativeWidth = 0;
     uint w = 0;
-
     for ( int x = 0; x < m_columnWeights.count(); x++ )
     {
         w += sectionSize( x );
-        negativeWidth += sectionSize( x );
     }
 
     for ( int x = 0; x < m_columnWeights.count(); x++ )
@@ -435,15 +427,13 @@ TrackHeader::onSectionResized( int logicalIndex, int oldSize, int newSize )
         m_columnWeights[x] = (double)sectionSize( x ) / double( w );
     }
 
-    negativeWidth -= w;
+    saveColumnsState();
 }
 
 
 void
 TrackHeader::onResized()
 {
-    qDebug() << Q_FUNC_INFO;
-
     if ( !m_init && count() )
         restoreColumnsState();
 
@@ -476,10 +466,9 @@ TrackHeader::restoreColumnsState()
     TomahawkSettings* s = APP->settings();
     QList<QVariant> list = s->playlistColumnSizes();
 
-    qDebug() << "COOOOOOUNT:" << count() << list.count();
     if ( list.count() != count() ) // FIXME: const
     {
-        m_columnWeights << 0.19 << 0.24 << 0.18 << 0.07 << 0.07 << 0.11 << 0.14;
+        m_columnWeights << 0.20 << 0.24 << 0.19 << 0.07 << 0.07 << 0.07 << 0.15;
     }
     else
     {
@@ -496,10 +485,7 @@ TrackHeader::saveColumnsState()
     QList<QVariant> wlist;
 
     foreach( double w, m_columnWeights )
-    {
         wlist << QVariant( w );
-//        qDebug() << "Storing weight for column" << i++ << w;
-    }
 
     s->setPlaylistColumnSizes( wlist );
 }
