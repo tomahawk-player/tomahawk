@@ -24,6 +24,8 @@ TrackHeader::TrackHeader( TrackView* parent )
     setMinimumSectionSize( 60 );
     setDefaultAlignment( Qt::AlignLeft );
     setMovable( true );
+    setCascadingSectionResizes( true );
+    setStretchLastSection( true );
 
     m_menu->addAction( tr( "Resize columns to fit window" ), this, SLOT( onToggleResizeColumns() ) );
     m_menu->addSeparator();
