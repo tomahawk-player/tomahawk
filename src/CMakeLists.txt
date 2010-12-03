@@ -91,6 +91,10 @@ SET( tomahawkSources ${tomahawkSources}
      database/databasecommand_updatesearchindex.cpp
      database/databasecollection.cpp
 
+     dynamic/dynamicplaylist.cpp
+     dynamic/dynamiccontrol.cpp
+     dynamic/generatorfactory.cpp
+
      scrobbler.cpp
      xmppbot/xmppbot.cpp
      web/api_v1.cpp
@@ -222,6 +226,11 @@ SET( tomahawkHeaders ${tomahawkHeaders}
      network/filetransferconnection.h
      network/dbsyncconnection.h
 
+     dynamic/dynamicplaylist.h
+     dynamic/dynamiccontrol.h
+     dynamic/generatorfactory.h
+     dynamic/generatorinterface.h
+
      musicscanner.h
      scriptresolver.h
      tomahawksettings.h
@@ -308,6 +317,7 @@ INCLUDE_DIRECTORIES(
     sourcetree
     topbar
     utils
+    dynamic
 
     ../rtaudio
     ../alsa-playback

@@ -118,7 +118,7 @@ public:
     // these need to exist and be public for the json serialization stuff
     // you SHOULD NOT call them.  They are used for an alternate CTOR method from json.
     // maybe friend QObjectHelper and make them private?
-    Playlist( const source_ptr& author )
+    explicit Playlist( const source_ptr& author )
         : m_source( author )
         , m_lastmodified( 0 )
     {
@@ -155,7 +155,7 @@ public slots:
 
     void resolve();
 
-private:
+protected:
     // called from loadAllPlaylists DB cmd:
     explicit Playlist( const source_ptr& src,
                        const QString& currentrevision,
@@ -173,9 +173,14 @@ private:
                        const QString& info,
                        const QString& creator,
                        bool shared );
-
-    void rundb();
-
+    
+    QList<plentry_ptr> newEntries( const QList< plentry_ptr >& entries );
+    PlaylistRevision setNewRevision( const QString& rev,
+                                     const QList<QString>& neworderedguids,
+                                     const QList<QString>& oldorderedguids,
+                                     bool is_newest_rev,
+                                     const QMap< QString, Tomahawk::plentry_ptr >& addedmap );
+private:
     source_ptr m_source;
     QString m_currentrevision;
     QString m_guid, m_title, m_info, m_creator;

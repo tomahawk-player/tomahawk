@@ -1,0 +1,6 @@
+#ifndef DYNAMIC_PLAYLIST_CONTROL
+#define DYNAMIC_PLAYLIST_CONTROL
+
+
+
+#endif
