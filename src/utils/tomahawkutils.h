@@ -12,6 +12,7 @@ namespace TomahawkUtils
 
     QString timeToString( int seconds );
     QString ageToString( const QDateTime& time );
+    QString filesizeToString( unsigned int size );
 }
 
 #endif // TOMAHAWKUTILS_H

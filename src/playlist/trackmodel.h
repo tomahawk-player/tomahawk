@@ -20,7 +20,9 @@ public:
         Duration = 3,
         Bitrate = 4,
         Age = 5,
-        Origin = 6
+        Year = 6,
+        Filesize = 7,
+        Origin = 8
     };
 
     explicit TrackModel( QObject* parent = 0 );

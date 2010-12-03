@@ -64,12 +64,15 @@ DatabaseCommand_AddFiles::exec( DatabaseImpl* dbi )
 
     TomahawkSqlQuery query_file = dbi->newquery();
     TomahawkSqlQuery query_filejoin = dbi->newquery();
+    TomahawkSqlQuery query_trackattr = dbi->newquery();
     TomahawkSqlQuery query_file_del = dbi->newquery();
 
     query_file.prepare( "INSERT INTO file(source, url, size, mtime, md5, mimetype, duration, bitrate) "
                         "VALUES (?, ?, ?, ?, ?, ?, ?, ?)" );
     query_filejoin.prepare( "INSERT INTO file_join(file, artist ,album, track, albumpos) "
                             "VALUES (?,?,?,?,?)" );
+    query_trackattr.prepare( "INSERT INTO track_attributes(id, k, v) "
+                             "VALUES (?,?,?)" );
     query_file_del.prepare( QString( "DELETE FROM file WHERE source %1 AND url = ?" )
                                .arg( source()->isLocal() ? "IS NULL" : QString( "= %1" ).arg( source()->id() )
                           ) );
@@ -100,6 +103,7 @@ DatabaseCommand_AddFiles::exec( DatabaseImpl* dbi )
         QString album       = m.value( "album" ).toString();
         QString track       = m.value( "track" ).toString();
         int albumpos        = m.value( "albumpos" ).toInt();
+        int year            = m.value( "year" ).toInt();
 
         int fileid = 0;
         query_file_del.bindValue( 0, url );
@@ -158,6 +162,12 @@ DatabaseCommand_AddFiles::exec( DatabaseImpl* dbi )
             qDebug() << "Error inserting into file_join table";
             continue;
         }
+
+        query_trackattr.bindValue( 0, trkid );
+        query_trackattr.bindValue( 1, "releaseyear" );
+        query_trackattr.bindValue( 2, year );
+        query_trackattr.exec();
+
         added++;
     }
     qDebug() << "Inserted" << added;

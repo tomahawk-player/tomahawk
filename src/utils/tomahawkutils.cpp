@@ -191,4 +191,23 @@ ageToString( const QDateTime& time )
     return QString();
 }
 
+
+QString
+filesizeToString( unsigned int size )
+{
+    int kb = size / 1024;
+    int mb = kb / 1024;
+
+    if ( mb )
+    {
+        return QString( "%1.%2 Mb" ).arg( mb ).arg( int( ( kb % 1024 ) / 100 ) );
+    }
+    else if ( kb )
+    {
+        return QString( "%1 Kb" ).arg( kb );
+    }
+    else
+        return QString::number( size );
+}
+
 } // ns

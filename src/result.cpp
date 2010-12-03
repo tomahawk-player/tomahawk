@@ -22,6 +22,7 @@ Result::Result( const QVariant& v, const collection_ptr& collection )
     m_size = m.value( "size" ).toUInt();
     m_albumpos = m.value( "albumpos" ).toUInt();
     m_modtime = m.value( "mtime" ).toUInt();
+    m_year = 0;
 
     m_id = m.value( "id" ).toUInt();
 
@@ -52,4 +53,14 @@ QString
 Result::toString() const
 {
     return QString( "Result(%1 %2\t%3 - %4  %5" ).arg( id() ).arg( score() ).arg( artist()->name() ).arg( track() ).arg( url() );
+}
+
+
+void
+Result::updateAttributes()
+{
+    if ( m_attributes.contains( "releaseyear" ) )
+    {
+        m_year = m_attributes.value( "releaseyear" ).toInt();
+    }
 }

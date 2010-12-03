@@ -206,6 +206,7 @@ MusicScanner::readFile( const QFileInfo& fi )
     m["album"]        = album;
     m["track"]        = track;
     m["albumpos"]     = tag->track();
+    m["year"]         = tag->year();
 
     m_scanned++;
     return m;

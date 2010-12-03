@@ -1,40 +1,15 @@
 #ifndef TRACKVIEW_H
 #define TRACKVIEW_H
 
-#include <QHeaderView>
 #include <QTreeView>
 #include <QSortFilterProxyModel>
 
 #include "playlistitemdelegate.h"
 
 class PlaylistInterface;
+class TrackHeader;
 class TrackModel;
 class TrackProxyModel;
-class TrackView;
-
-class TrackHeader : public QHeaderView
-{
-Q_OBJECT
-
-public:
-    explicit TrackHeader( TrackView* parent = 0 );
-    ~TrackHeader();
-
-public slots:
-    void onResized();
-
-private slots:
-    void onSectionResized( int logicalIndex, int oldSize, int newSize );
-
-private:
-    void restoreColumnsState();
-    void saveColumnsState();
-
-    TrackView* m_parent;
-
-    QList<double> m_columnWeights;
-    bool m_init;
-};
 
 class TrackView : public QTreeView
 {
@@ -49,6 +24,7 @@ public:
     TrackModel* model() { return m_model; }
     TrackProxyModel* proxyModel() { return (TrackProxyModel*)m_proxyModel; }
     PlaylistItemDelegate* delegate() { return m_delegate; }
+    TrackHeader* header() { return m_header; }
 
     void setModel( TrackModel* model );
 

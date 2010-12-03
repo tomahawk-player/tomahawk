@@ -34,6 +34,10 @@ public:
     unsigned int size() const { return m_size; }
     unsigned int albumpos() const { return m_albumpos; }
     unsigned int modificationTime() const { return m_modtime; }
+    int year() const { return m_year; }
+
+    QVariantMap attributes() const { return m_attributes; }
+    void setAttributes( const QVariantMap& map ) { m_attributes = map; updateAttributes(); }
 
     unsigned int dbid() const { return m_id; }
 
@@ -45,6 +49,8 @@ signals:
     void becomingUnavailable();
 
 private:
+    void updateAttributes();
+
     QVariant m_v;
     mutable RID m_rid;
     collection_ptr m_collection;
@@ -60,6 +66,9 @@ private:
     unsigned int m_size;
     unsigned int m_albumpos;
     unsigned int m_modtime;
+    int m_year;
+
+    QVariantMap m_attributes;
 
     unsigned int m_id;
 };

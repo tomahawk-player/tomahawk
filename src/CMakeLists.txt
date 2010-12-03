@@ -122,6 +122,7 @@ SET( tomahawkSourcesGui ${tomahawkSourcesGui}
      playlist/trackmodel.cpp
      playlist/trackproxymodel.cpp
      playlist/trackview.cpp
+     playlist/trackheader.cpp
      playlist/albumitem.cpp
      playlist/albummodel.cpp
      playlist/albumproxymodel.cpp
@@ -253,6 +254,7 @@ SET( tomahawkHeadersGui ${tomahawkHeadersGui}
      playlist/trackmodel.h
      playlist/trackproxymodel.h
      playlist/trackview.h
+     playlist/trackheader.h
      playlist/albumitem.h
      playlist/albummodel.h
      playlist/albumproxymodel.h

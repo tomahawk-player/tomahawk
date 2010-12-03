@@ -6,10 +6,10 @@
 #include <QScrollBar>
 
 #include "tomahawk/tomahawkapp.h"
+#include "playlist/trackheader.h"
 #include "playlist/playlistmanager.h"
 #include "playlist/queueview.h"
 #include "audioengine.h"
-#include "tomahawksettings.h"
 #include "trackmodel.h"
 #include "trackproxymodel.h"
 
@@ -366,126 +366,4 @@ TrackView::createDragPixmap( int itemCount ) const
     }
 
     return dragPixmap;
-}
-
-
-TrackHeader::TrackHeader( TrackView* parent )
-    : QHeaderView( Qt::Horizontal, parent )
-    , m_parent( parent )
-    , m_init( false )
-{
-    setStretchLastSection( false );
-    setResizeMode( QHeaderView::Interactive );
-    setMinimumSectionSize( 60 );
-    setDefaultAlignment( Qt::AlignLeft );
-    setMovable( true );
-
-    connect( this, SIGNAL( sectionResized( int, int, int ) ), SLOT( onSectionResized( int, int, int ) ) );
-}
-
-
-TrackHeader::~TrackHeader()
-{
-    saveColumnsState();
-}
-
-
-void
-TrackHeader::onSectionResized( int logicalidx, int oldSize, int newSize )
-{
-    if ( !m_init )
-        return;
-
-    blockSignals( true );
-
-    int visualidx = visualIndex( logicalidx );
-
-    for ( int i = visualidx + 1; i < count(); i++ )
-    {
-        int ns = sectionSize( logicalIndex( i ) ) + oldSize - newSize;
-
-        if ( ns < minimumSectionSize() )
-        {
-            resizeSection( logicalidx, newSize - ( minimumSectionSize() - ns ) );
-            ns = minimumSectionSize();
-        }
-
-        resizeSection( logicalIndex( i ), ns );
-        break;
-    }
-
-    blockSignals( false );
-
-    uint w = 0;
-    for ( int x = 0; x < m_columnWeights.count(); x++ )
-    {
-        w += sectionSize( x );
-    }
-
-    for ( int x = 0; x < m_columnWeights.count(); x++ )
-    {
-        m_columnWeights[x] = (double)sectionSize( x ) / double( w );
-    }
-
-    saveColumnsState();
-}
-
-
-void
-TrackHeader::onResized()
-{
-    if ( !m_init && count() )
-        restoreColumnsState();
-
-    m_init = false;
-    blockSignals( true );
-
-    double width = m_parent->contentsRect().width();
-#ifdef Q_WS_MAC
-    if ( m_parent->verticalScrollBar() && m_parent->verticalScrollBar()->isVisible() )
-    {
-        width -= m_parent->verticalScrollBar()->width() + 1;
-    }
-#endif
-
-    blockSignals( false );
-
-    for ( int i = 0; i < m_columnWeights.count(); i++ )
-    {
-        if ( m_columnWeights[i] > 0 )
-            resizeSection( i, int( width * m_columnWeights[i] ) );
-    }
-
-    m_init = true;
-}
-
-
-void
-TrackHeader::restoreColumnsState()
-{
-    TomahawkSettings* s = APP->settings();
-    QList<QVariant> list = s->playlistColumnSizes();
-
-    if ( list.count() != count() ) // FIXME: const
-    {
-        m_columnWeights << 0.20 << 0.24 << 0.19 << 0.07 << 0.07 << 0.07 << 0.15;
-    }
-    else
-    {
-        foreach( const QVariant& v, list )
-            m_columnWeights << v.toDouble();
-    }
-}
-
-
-void
-TrackHeader::saveColumnsState()
-{
-    TomahawkSettings *s = APP->settings();
-    QList<QVariant> wlist;
-
-    foreach( double w, m_columnWeights )
-        wlist << QVariant( w );
-
-    s->setPlaylistColumnSizes( wlist );
 }

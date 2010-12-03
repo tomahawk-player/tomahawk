@@ -29,7 +29,7 @@ DatabaseCommand_AllTracks::exec( DatabaseImpl* dbi )
 
     QString sql = QString(
             "SELECT file.id, artist.name, album.name, track.name, file.size, "
-                   "file.duration, file.bitrate, file.url, file.source, file.mtime, file.mimetype, file_join.albumpos, artist.id, album.id "
+                   "file.duration, file.bitrate, file.url, file.source, file.mtime, file.mimetype, file_join.albumpos, artist.id, album.id, track.id "
             "FROM file, artist, track, file_join "
             "LEFT OUTER JOIN album "
             "ON file_join.album = album.id "
@@ -52,7 +52,10 @@ DatabaseCommand_AllTracks::exec( DatabaseImpl* dbi )
     while( query.next() )
     {
         QVariantMap t;
+        QVariantMap attr;
         QString url;
+        TomahawkSqlQuery attrQuery = dbi->newquery();
+
         url = query.value( 7 ).toString();
         if( m_collection->source()->isLocal() )
             t["url"] = url;
@@ -71,12 +74,23 @@ DatabaseCommand_AllTracks::exec( DatabaseImpl* dbi )
         t["mtime"] = query.value( 9 ).toInt();
         t["mimetype"] = query.value( 10 ).toString();
         t["albumpos"] = query.value( 11 ).toUInt();
+        unsigned int trkid = query.value( 14 ).toInt();
+
+        attrQuery.prepare( "SELECT k, v FROM track_attributes WHERE id = ?" );
+        attrQuery.bindValue( 0, trkid );
+        attrQuery.exec();
+        while ( attrQuery.next() )
+        {
+            attr[ attrQuery.value( 0 ).toString() ] = attrQuery.value( 1 ).toString();
+        }
 
         Tomahawk::query_ptr query = Tomahawk::query_ptr( new Tomahawk::Query( t ) );
         t["score"] = 1.0;
 
-        QList<Tomahawk::result_ptr> results;
         Tomahawk::result_ptr result = Tomahawk::result_ptr( new Tomahawk::Result( t, m_collection ) );
+        result->setAttributes( attr );
+
+        QList<Tomahawk::result_ptr> results;
         results << result;
         query->addResults( results );
 
