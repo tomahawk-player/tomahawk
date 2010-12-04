@@ -92,8 +92,9 @@ SET( tomahawkSources ${tomahawkSources}
      database/databasecollection.cpp
 
      dynamic/dynamicplaylist.cpp
-     dynamic/dynamiccontrol.cpp
      dynamic/generatorfactory.cpp
+     dynamic/echonest/echonestgenerator.cpp
+     dynamic/echonest/echonestcontrol.cpp
 
      scrobbler.cpp
      xmppbot/xmppbot.cpp
@@ -230,6 +231,8 @@ SET( tomahawkHeaders ${tomahawkHeaders}
      dynamic/dynamiccontrol.h
      dynamic/generatorfactory.h
      dynamic/generatorinterface.h
+     dynamic/echonest/echonestgenerator.h
+     dynamic/echonest/echonestcontrol.h
 
      musicscanner.h
      scriptresolver.h

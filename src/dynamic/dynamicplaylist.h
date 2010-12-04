@@ -1,3 +1,19 @@
+/****************************************************************************************
+ * Copyright (c) 2010 Leo Franchi <lfranchi@kde.org>                                    *
+ *                                                                                      *
+ * This program is free software; you can redistribute it and/or modify it under        *
+ * the terms of the GNU General Public License as published by the Free Software        *
+ * Foundation; either version 2 of the License, or (at your option) any later           *
+ * version.                                                                             *
+ *                                                                                      *
+ * This program is distributed in the hope that it will be useful, but WITHOUT ANY      *
+ * WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A      *
+ * PARTICULAR PURPOSE. See the GNU General Public License for more details.             *
+ *                                                                                      *
+ * You should have received a copy of the GNU General Public License along with         *
+ * this program.  If not, see <http://www.gnu.org/licenses/>.                           *
+ ****************************************************************************************/
+
 #ifndef DYNAMIC_PLAYLIST_H
 #define DYNAMIC_PLAYLIST_H
 
@@ -15,6 +31,23 @@ namespace Tomahawk {
  *  It uses normal PlaylistEntries but also has a mode, a generator, and a list of controls
 */
 
+struct DynamicPlaylistRevision : PlaylistRevision
+{
+    QList< dyncontrol_ptr > controls;
+    Tomahawk::GeneratorMode mode;
+    QString type;
+    
+    DynamicPlaylistRevision( const PlaylistRevision& other ) 
+    { 
+        revisionguid = other.revisionguid; 
+        oldrevisionguid = other.oldrevisionguid; 
+        newlist = other.newlist;
+        applied = other.applied;    
+    }
+    
+    DynamicPlaylistRevision() {}
+};
+
 class DynamicPlaylist : public Playlist
 {
     Q_OBJECT
@@ -22,12 +55,7 @@ class DynamicPlaylist : public Playlist
     Q_PROPERTY( GeneratorMode mode  WRITE setMode   READ mode )
     Q_PROPERTY( QString type                  WRITE setType   READ type )
         
-public:
-    enum DynamicPlaylistMode {
-        OnDemand = 0,
-        StaticPlaylist
-    };
-    
+public:    
     /// Generate an empty dynamic playlist with default generator
     static Tomahawk::dynplaylist_ptr create( const source_ptr& author,
                                           const QString& guid,
@@ -42,7 +70,7 @@ public:
     
     GeneratorMode mode() const { return m_generator->mode(); }
     QString type() const { return m_generator->type(); }
-    generatorinterface_ptr generator() const { return m_generator; }
+    geninterface_ptr generator() const { return m_generator; }
     
     // <IGNORE hack="true">
     // these need to exist and be public for the json serialization stuff
@@ -55,7 +83,7 @@ public:
     }
     void setMode( GeneratorMode mode ) { m_generator->setMode( mode ); }
     void setType( const QString& type )           { /** TODO */; }
-    void setGenerator( const generatorinterface_ptr& gen_ptr )            { m_generator = gen_ptr; }
+    void setGenerator( const geninterface_ptr& gen_ptr )            { m_generator = gen_ptr; }
     // </IGNORE>
     
 signals:
@@ -112,7 +140,7 @@ private:
                        bool shared );
     
 private:
-    generatorinterface_ptr m_generator;
+    geninterface_ptr m_generator;
 };
 
 }; // namespace

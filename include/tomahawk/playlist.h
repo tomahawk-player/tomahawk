@@ -7,6 +7,7 @@
 
 #include "tomahawk/query.h"
 #include "tomahawk/typedefs.h"
+#include "typedefs.h"
 
 class DatabaseCommand_LoadAllPlaylists;
 class DatabaseCommand_SetPlaylistRevision;
@@ -174,7 +175,7 @@ protected:
                        const QString& creator,
                        bool shared );
     
-    QList<plentry_ptr> newEntries( const QList< plentry_ptr >& entries );
+    QList< plentry_ptr > newEntries( const QList< plentry_ptr >& entries );
     PlaylistRevision setNewRevision( const QString& rev,
                                      const QList<QString>& neworderedguids,
                                      const QList<QString>& oldorderedguids,

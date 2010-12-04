@@ -312,6 +312,7 @@ Playlist::setNewRevision( const QString& rev,
         //         << "total entries" << m_entries.size();
         
         pr.newlist = entries;
+        return pr;
 }
 
 void Playlist::resolve()
@@ -363,7 +364,7 @@ Playlist::addEntries( const QList<query_ptr>& queries, const QString& oldrev )
 }
 
 QList< plentry_ptr >
-Playlist::newEntries( const QList< plentry_ptr > entries )
+Playlist::newEntries( const QList< plentry_ptr >& entries )
 {
     QSet<QString> currentguids;
     foreach( plentry_ptr p, m_entries )

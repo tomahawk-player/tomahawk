@@ -8,7 +8,6 @@ Query::Query( const QVariant& v )
     : m_v( v )
     , m_solved( false )
 {
-    // ensure a QID is present:
     QVariantMap m = m_v.toMap();
 
     m_artist = m.value( "artist" ).toString();

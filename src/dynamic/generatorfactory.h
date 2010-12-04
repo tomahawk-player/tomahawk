@@ -4,6 +4,8 @@
 #include <QHash>
 #include <QString>
 
+#include "dynamic/generatorinterface.h"
+
 namespace Tomahawk {
     
 /**
@@ -12,7 +14,9 @@ namespace Tomahawk {
 class GeneratorFactoryInterface
 {
 public:
-    GeneratorInterface* create() = 0;
+    GeneratorFactoryInterface() {}
+    
+    virtual GeneratorInterface* create() = 0;
 };
 
 /**
@@ -21,15 +25,11 @@ public:
 class GeneratorFactory
 {
 public:
-    GeneratorFactory();
-    ~GeneratorFactory();
-    
-    generatorinterface_ptr create( const QString& type );
-    
-    void registerFactory( const QString& type, GeneratorFactoryInterface* interface );
+    static geninterface_ptr create( const QString& type );
+    static void registerFactory( const QString& type, GeneratorFactoryInterface* interface );
     
 private:
-    QHash<QString, GeneratorFactoryInterface*> m_factories;
+    static QHash<QString, GeneratorFactoryInterface*> m_factories;
     
 };
 
