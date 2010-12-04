@@ -48,7 +48,8 @@ AlbumItemDelegate::paint( QPainter* painter, const QStyleOptionViewItem& option,
     painter->setRenderHint( QPainter::Antialiasing );
     painter->setPen( opt.palette.color( QPalette::Text ) );
 
-    painter->drawPixmap( option.rect.adjusted( 4, 4, -4, -38 ), item->cover );
+    painter->drawPixmap( option.rect.adjusted( 4, 4, -4, -38 ), QPixmap( RESPATH "images/cover-shadow.png" ) );
+    painter->drawPixmap( option.rect.adjusted( 6, 4, -6, -41 ), item->cover );
 
     QTextOption to;
     to.setAlignment( Qt::AlignHCenter );
