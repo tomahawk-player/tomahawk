@@ -52,6 +52,7 @@ DynamicPlaylist::DynamicPlaylist ( const Tomahawk::source_ptr& src,
 {
     qDebug() << "Creating Dynamic Playlist 1";
     // TODO instantiate generator
+    m_generator = geninterface_ptr( GeneratorFactory::create( type ) );
 }
 
 
@@ -65,46 +66,52 @@ DynamicPlaylist::DynamicPlaylist ( const Tomahawk::source_ptr& author,
                                    bool shared )
     : Playlist ( author, guid, title, info, creator, shared )
 {
-        qDebug() << "Creating Dynamic Playlist 2";
-    // TODO instantiate generator
+    qDebug() << "Creating Dynamic Playlist 2";
+    m_generator = geninterface_ptr( GeneratorFactory::create( type ) );
 }
 
-geninterface_ptr DynamicPlaylist::generator() const
+geninterface_ptr 
+DynamicPlaylist::generator() const
 {
     return m_generator;
 }
 
-GeneratorMode DynamicPlaylist::mode() const
+GeneratorMode 
+DynamicPlaylist::mode() const
 {
     return m_generator->mode();
 }
 
-void DynamicPlaylist::setGenerator(const Tomahawk::geninterface_ptr& gen_ptr)
+void 
+DynamicPlaylist::setGenerator(const Tomahawk::geninterface_ptr& gen_ptr)
 {
     m_generator = gen_ptr;
 }
 
-QString DynamicPlaylist::type() const
+QString 
+DynamicPlaylist::type() const
 {
     return m_generator->type();
 }
 
-void DynamicPlaylist::setMode(GeneratorMode mode)
+void 
+DynamicPlaylist::setMode(GeneratorMode mode)
 {
     m_generator->setMode( mode );
 }
 
 
 
-dynplaylist_ptr DynamicPlaylist::create( const Tomahawk::source_ptr& author, 
+dynplaylist_ptr 
+DynamicPlaylist::create( const Tomahawk::source_ptr& author, 
                                          const QString& guid, 
                                          const QString& title, 
                                          const QString& info, 
                                          const QString& creator, 
                                          bool shared )
 {
-    // TODO default generator?
-    QString type = "default_generator";
+    // default generator
+    QString type = "";
     dynplaylist_ptr dynplaylist = dynplaylist_ptr( new DynamicPlaylist( author, guid, title, info, creator, type, shared ) );
     
     DatabaseCommand_CreateDynamicPlaylist* cmd = new DatabaseCommand_CreateDynamicPlaylist( author, dynplaylist );
@@ -116,7 +123,8 @@ dynplaylist_ptr DynamicPlaylist::create( const Tomahawk::source_ptr& author,
 }
 
 // create a new revision that will be a static playlist, as it has entries
-void DynamicPlaylist::createNewRevision( const QString& newrev, 
+void 
+DynamicPlaylist::createNewRevision( const QString& newrev, 
                                           const QString& oldrev, 
                                           const QString& type, 
                                           const QList< dyncontrol_ptr>& controls, 
@@ -142,13 +150,14 @@ void DynamicPlaylist::createNewRevision( const QString& newrev,
                                                      orderedguids,
                                                      added,
                                                      type,
-                                                     OnDemand,
+                                                     Static,
                                                     controls );
     APP->database()->enqueue( QSharedPointer<DatabaseCommand>( cmd ) );
 }
 
 // create a new revision that will be an ondemand playlist, as it has no entries
-void DynamicPlaylist::createNewRevision( const QString& newrev, 
+void 
+DynamicPlaylist::createNewRevision( const QString& newrev, 
                                           const QString& oldrev, 
                                           const QString& type, 
                                           const QList< dyncontrol_ptr>& controls )
@@ -162,12 +171,13 @@ void DynamicPlaylist::createNewRevision( const QString& newrev,
                                                     newrev,
                                                     oldrev,
                                                     type,
-                                                    Static,
+                                                    OnDemand,
                                                     controls );
     APP->database()->enqueue( QSharedPointer<DatabaseCommand>( cmd ) );
 }
 
-void DynamicPlaylist::loadRevision( const QString& rev )
+void 
+DynamicPlaylist::loadRevision( const QString& rev )
 {
     qDebug() << Q_FUNC_INFO;
     
@@ -206,29 +216,37 @@ void DynamicPlaylist::loadRevision( const QString& rev )
     APP->database()->enqueue( QSharedPointer<DatabaseCommand>( cmd ) );
 }
 
-bool DynamicPlaylist::remove( const Tomahawk::dynplaylist_ptr& playlist )
+bool 
+DynamicPlaylist::remove( const Tomahawk::dynplaylist_ptr& playlist )
 {
-    return Playlist::remove( playlist.staticCast<Tomahawk::Playlist>() );
+    // TODO
+//     DatabaseCommand_DeletePlaylist* cmd = new DatabaseCommand_DeletePlaylist( playlist->author(), playlist->guid() );
+//     APP->database()->enqueue( QSharedPointer<DatabaseCommand>(cmd) );
+        
+    return false;
 }
 
-void DynamicPlaylist::reportCreated( const Tomahawk::dynplaylist_ptr& self )
+void 
+DynamicPlaylist::reportCreated( const Tomahawk::dynplaylist_ptr& self )
 {
     qDebug() << Q_FUNC_INFO;
     Q_ASSERT( self.data() == this );
     // will emit Collection::playlistCreated(...)
-    author()->collection()->addPlaylist( self.staticCast<Tomahawk::Playlist>() );    
+    author()->collection()->addDynamicPlaylist( self );    
 }
 
-void DynamicPlaylist::reportDeleted( const Tomahawk::dynplaylist_ptr& self )
+void 
+DynamicPlaylist::reportDeleted( const Tomahawk::dynplaylist_ptr& self )
 {
     qDebug() << Q_FUNC_INFO;
     Q_ASSERT( self.data() == this );
     // will emit Collection::playlistCreated(...)
-    author()->collection()->deletePlaylist( self.staticCast<Tomahawk::Playlist>() ); 
+    author()->collection()->deleteDynamicPlaylist( self ); 
 }
 
 // static version
-void DynamicPlaylist::setRevision( const QString& rev, 
+void 
+DynamicPlaylist::setRevision( const QString& rev, 
                                     const QList< QString >& neworderedguids, 
                                     const QList< QString >& oldorderedguids, 
                                     const QString& type, 
@@ -273,7 +291,8 @@ void DynamicPlaylist::setRevision( const QString& rev,
 }
 
 // ondemand version
-void DynamicPlaylist::setRevision( const QString& rev, 
+void 
+DynamicPlaylist::setRevision( const QString& rev, 
                                     bool is_newest_rev, 
                                     const QString& type, 
                                     const QList< dyncontrol_ptr>& controls, 

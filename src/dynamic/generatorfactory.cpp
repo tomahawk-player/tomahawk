@@ -7,6 +7,9 @@ QHash< QString, GeneratorFactoryInterface* > GeneratorFactory::s_factories = QHa
 
 geninterface_ptr GeneratorFactory::create ( const QString& type )
 {
+    if( type.isEmpty() && !s_factories.isEmpty() ) // default, return first
+        return geninterface_ptr( s_factories.begin().value()->create() );
+    
     if( !s_factories.contains( type ) )
         return geninterface_ptr();
     
