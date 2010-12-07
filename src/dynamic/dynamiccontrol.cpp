@@ -14,42 +14,21 @@
  * this program.  If not, see <http://www.gnu.org/licenses/>.                           *
  ****************************************************************************************/
 
-#ifndef ECHONEST_GENERATOR_H
-#define ECHONEST_GENERATOR_H
+#include "dynamiccontrol.h"
 
-#include <echonest/Playlist.h>
-
-#include "dynamic/generatorinterface.h"
-#include "dynamic/generatorfactory.h"
-
-
-namespace Tomahawk 
+Tomahawk::DynamicControl::DynamicControl()
 {
 
-class EchonestFactory : public GeneratorFactoryInterface
-{
-public:
-    EchonestFactory();
-    
-    virtual GeneratorInterface* create();
-    
-};
-    
-class EchonestGenerator : public GeneratorInterface
-{
-    Q_OBJECT
-public:
-    explicit EchonestGenerator( QObject* parent = 0 );
-    virtual ~EchonestGenerator();
-    
-    virtual dyncontrol_ptr createControl( const QString& type = QString() ) const;
-    
-    virtual void generate ( int number = -1 );
-    
-private slots:
-    void staticFinished();
-};
+}
 
-};
+Tomahawk::DynamicControl::~DynamicControl()
+{
 
-#endif
+}
+
+Tomahawk::DynamicControl::DynamicControl(const QString& selectedType, QObject* parent)
+    : QObject(parent)
+    , m_selectedType( selectedType )
+{
+
+}

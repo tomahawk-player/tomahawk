@@ -22,8 +22,8 @@
 #include <QLineEdit>
 
 
-Tomahawk::EchonestControl::EchonestControl( const QString& type, const QStringList& typeSelectors, QObject* parent )
-    : DynamicControl ( type, typeSelectors, parent )
+Tomahawk::EchonestControl::EchonestControl( const QString& type, QObject* parent )
+    : DynamicControl ( type, parent )
 {
     updateWidgets();
 }
@@ -76,11 +76,11 @@ Tomahawk::EchonestControl::updateWidgets()
 void Tomahawk::EchonestControl::updateData()
 {
     if( selectedType() == "Artist" ) {
-        QWeakPointer<QComboBox> combo = qWeakPointerCast( m_match );
+        QWeakPointer<QComboBox> combo = qWeakPointerCast<QComboBox, QWidget>( m_match );
         if( !combo.isNull() )
-            m_data.first = static_cast<Echonest::DynamicPlaylist::PlaylistParam>( combo.data()->itemData( combo->currentIndex() ) );
-        QWeakPointer<QLineEdit> edit = qWeakPointerCast( m_input );
+            m_data.first = static_cast<Echonest::DynamicPlaylist::PlaylistParam>( combo.data()->itemData( combo.data()->currentIndex() ).toInt() );
+        QWeakPointer<QLineEdit> edit = qWeakPointerCast<QLineEdit, QWidget>( m_input );
         if( !edit.isNull() )
-            m_data.second = qWeakPointerCast->text();
+            m_data.second = edit.data()->text();
     }
 }

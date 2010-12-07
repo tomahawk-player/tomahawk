@@ -27,6 +27,19 @@ DatabaseCollection::loadPlaylists()
     TomahawkApp::instance()->database()->enqueue( QSharedPointer<DatabaseCommand>( cmd ) );
 }
 
+void
+DatabaseCollection::loadDynamicPlaylists()
+{
+    qDebug() << Q_FUNC_INFO;
+//     DatabaseCommand_LoadAllDynamicPlaylists* cmd = new DatabaseCommand_LoadAllDynamicPlaylists( source() );
+//     
+//     connect( cmd,  SIGNAL( done( const QList<Tomahawk::dynplaylist_ptr>& ) ),
+//              SLOT( setDynamicPlaylists( const QList<Tomahawk::dynplaylist_ptr>& ) ) );
+//     
+//     TomahawkApp::instance()->database()->enqueue( QSharedPointer<DatabaseCommand>( cmd ) );
+}
+
+
 
 void
 DatabaseCollection::loadTracks()
@@ -76,6 +89,19 @@ DatabaseCollection::playlists()
 
     return Collection::playlists();
 }
+
+QList< dynplaylist_ptr > DatabaseCollection::dynamicPlaylists()
+{
+    qDebug() << Q_FUNC_INFO;
+    
+    if ( Collection::dynamicPlaylists().isEmpty() )
+    {
+        loadDynamicPlaylists();
+    }
+    
+    return Collection::dynamicPlaylists();
+}
+
 
 
 QList< Tomahawk::query_ptr >

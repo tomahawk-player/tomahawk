@@ -89,10 +89,16 @@ SET( tomahawkSources ${tomahawkSources}
      database/databasecommand_renameplaylist.cpp
      database/databasecommand_loadops.cpp
      database/databasecommand_updatesearchindex.cpp
+     database/databasecommand_loadallplaylists.cpp
+     database/databasecommand_setdynamicplaylistrevision.cpp
+     database/databasecommand_createdynamicplaylist.cpp
+     database/databasecommand_loaddynamicplaylist.cpp
      database/databasecollection.cpp
 
      dynamic/dynamicplaylist.cpp
+     dynamic/dynamiccontrol.cpp
      dynamic/generatorfactory.cpp
+     dynamic/generatorinterface.cpp
      dynamic/echonest/echonestgenerator.cpp
      dynamic/echonest/echonestcontrol.cpp
 
@@ -207,6 +213,9 @@ SET( tomahawkHeaders ${tomahawkHeaders}
      database/databasecommand_loadallplaylists.h
      database/databasecommand_createplaylist.h
      database/databasecommand_deleteplaylist.h
+     database/databasecommand_setdynamicplaylistrevision.h
+     database/databasecommand_createdynamicplaylist.h
+     database/databasecommand_loaddynamicplaylist.h
      database/databasecommand_renameplaylist.h
      database/databasecommand_loadops.h
      database/databasecommand_updatesearchindex.h

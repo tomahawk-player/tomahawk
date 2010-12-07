@@ -16,12 +16,12 @@
 
 #include "echonest/echonestgenerator.h"
 #include "echonest/echonestcontrol.h"
-#include "query.h"
+#include "tomahawk/query.h"
 
 using namespace Tomahawk;
 
 
-EchonestFactory::GeneratorFactoryInterface()
+EchonestFactory::EchonestFactory()
 {}
 
 GeneratorInterface* 
@@ -32,12 +32,12 @@ EchonestFactory::create()
 
 EchonestGenerator::EchonestGenerator ( QObject* parent ) 
     : GeneratorInterface ( parent )
-    , m_type( "echonest" )
-    , m_mode( OnDemand )
 {
     m_typeSelectors << "Variety" << "Artist" << "Description" << "Tempo" << "Duration" << "Loudness" 
                     << "Danceability" << "Energy" << "Artist Familiarity" << "Artist Hotttnesss" << "Song Familiarity" 
                     << "Longitude" << "Latitude" <<  "Mode" << "Key" << "Sorting";
+    m_type = "echonest";
+    m_mode = OnDemand;
                     
 }
 
@@ -49,7 +49,7 @@ EchonestGenerator::~EchonestGenerator()
 dyncontrol_ptr 
 EchonestGenerator::createControl( const QString& type ) const
 {
-    return dyncontrol_ptr( new EchonestControl( type, m_typeSelectors ) );
+    return dyncontrol_ptr( new EchonestControl( type ) );
 }
 
 void 

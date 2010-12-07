@@ -1,6 +1,7 @@
 #include "plitem.h"
 
 #include "utils/tomahawkutils.h"
+#include "tomahawk/playlist.h"
 
 #include <QDebug>
 
@@ -64,6 +65,18 @@ PlItem::PlItem( const Tomahawk::plentry_ptr& entry, PlItem* parent, int row )
     , m_entry( entry )
 {
     setupItem( entry->query(), parent, row );
+}
+
+const Tomahawk::plentry_ptr& 
+PlItem::entry() const
+{
+    return m_entry;
+}
+
+const Tomahawk::query_ptr& 
+PlItem::query() const
+{
+    if ( !m_entry.isNull() ) return m_entry->query(); else return m_query;
 }
 
 

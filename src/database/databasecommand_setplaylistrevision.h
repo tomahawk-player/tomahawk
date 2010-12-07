@@ -69,14 +69,16 @@ public:
     void setOrderedguids( const QVariantList& l ) { m_orderedguids = l; }
     QVariantList orderedguids() const { return m_orderedguids; }
 
+protected:
+    bool m_applied;
+    QStringList m_previous_rev_orderedguids;
+    QMap<QString, Tomahawk::plentry_ptr> m_addedmap;
+    
 private:
     QString m_playlistguid;
     QString m_newrev, m_oldrev;
     QVariantList m_orderedguids;
-    QStringList m_previous_rev_orderedguids;
     QList<Tomahawk::plentry_ptr> m_addedentries;
-    bool m_applied;
-    QMap<QString, Tomahawk::plentry_ptr> m_addedmap;
 };
 
 #endif // DATABASECOMMAND_SETPLAYLISTREVISION_H

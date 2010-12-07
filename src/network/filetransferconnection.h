@@ -1,3 +1,4 @@
+
 #ifndef FILETRANSFERCONNECTION_H
 #define FILETRANSFERCONNECTION_H
 
@@ -7,6 +8,7 @@
 
 #include "connection.h"
 #include "tomahawk/result.h"
+#include "tomahawk/source.h"
 
 class ControlConnection;
 class BufferIODevice;

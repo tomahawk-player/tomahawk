@@ -17,9 +17,11 @@ public:
 
     virtual void loadTracks();
     virtual void loadPlaylists();
+    virtual void loadDynamicPlaylists();
 
     virtual QList< Tomahawk::playlist_ptr > playlists();
     virtual QList< Tomahawk::query_ptr > tracks();
+    virtual QList< Tomahawk::dynplaylist_ptr > dynamicPlaylists();
 
 public slots:
     virtual void addTracks( const QList<QVariant> &newitems );

@@ -36,12 +36,12 @@ public:
     
 public slots:
     virtual void setSelectedType ( const QString& type );
-    
-protected:
-    explicit EchonestControl( const QString& type, const QStringList& typeSelectors, QObject* parent = 0 );
-    
+        
 private slots:
     void updateData();
+    
+protected:
+    explicit EchonestControl( const QString& type, QObject* parent = 0 );
     
 private:
     void updateWidgets();
@@ -50,6 +50,8 @@ private:
     QWeakPointer< QWidget > m_match;
     
     Echonest::DynamicPlaylist::PlaylistParamData m_data;
+    
+    friend class EchonestGenerator;
 };
 
 typedef QSharedPointer<EchonestControl> encontrol_ptr;

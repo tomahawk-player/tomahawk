@@ -4,6 +4,7 @@
 #include <QGenericArgument>
 
 #include "tomahawk/playlist.h"
+#include "dynamic/dynamicplaylist.h"
 
 using namespace Tomahawk;
 
@@ -45,6 +46,20 @@ Collection::addPlaylist( const Tomahawk::playlist_ptr& p )
     emit playlistsAdded( toadd );
 }
 
+void
+Collection::addDynamicPlaylist( const Tomahawk::dynplaylist_ptr& p )
+{
+    qDebug() << Q_FUNC_INFO;
+    QList<dynplaylist_ptr> toadd;
+    toadd << p;
+    m_dynplaylists.append( toadd );
+    
+    qDebug() << Q_FUNC_INFO << "Collection name" << name()
+    << "from source id" << source()->id()
+    << "numplaylists:" << m_playlists.length();
+    emit dynamicPlaylistsAdded( toadd );
+}
+
 
 void
 Collection::deletePlaylist( const Tomahawk::playlist_ptr& p )
@@ -58,6 +73,20 @@ Collection::deletePlaylist( const Tomahawk::playlist_ptr& p )
                             << "from source id" << source()->id()
                             << "numplaylists:" << m_playlists.length();
     emit playlistsDeleted( todelete );
+}
+
+void
+Collection::deleteDynamicPlaylist( const Tomahawk::dynplaylist_ptr& p )
+{
+    qDebug() << Q_FUNC_INFO;
+    QList<dynplaylist_ptr> todelete;
+    todelete << p;
+    m_dynplaylists.removeAll( p );
+    
+    qDebug() << Q_FUNC_INFO << "Collection name" << name()
+    << "from source id" << source()->id()
+    << "numplaylists:" << m_playlists.length();
+    emit dynamicPlaylistsDeleted( todelete );
 }
 
 
@@ -74,6 +103,19 @@ Collection::playlist( const QString& guid )
 }
 
 
+dynplaylist_ptr
+Collection::dynamicPlaylist( const QString& guid )
+{
+    foreach( const dynplaylist_ptr& pp, m_dynplaylists )
+    {
+        if( pp->guid() == guid )
+            return pp;
+    }
+    
+    return dynplaylist_ptr();
+}
+
+
 void
 Collection::setPlaylists( const QList<Tomahawk::playlist_ptr>& plists )
 {
@@ -83,6 +125,14 @@ Collection::setPlaylists( const QList<Tomahawk::playlist_ptr>& plists )
     emit playlistsAdded( plists );
 }
 
+void
+Collection::setDynamicPlaylistS( const QList< Tomahawk::dynplaylist_ptr >& plists )
+{
+    qDebug() << Q_FUNC_INFO << plists.count();
+    
+    m_dynplaylists.append( plists );
+    emit dynamicPlaylistsAdded( plists );
+}
 
 void
 Collection::setTracks( const QList<Tomahawk::query_ptr>& tracks, Tomahawk::collection_ptr collection )

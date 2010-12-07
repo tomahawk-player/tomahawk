@@ -35,6 +35,9 @@ public:
         QJson::QObjectHelper::qvariant2qobject( v.toMap(), p );
         m_playlist = playlist_ptr( p );
     }
+    
+protected:
+    bool report() { return m_report; }
 
 private:
     Tomahawk::playlist_ptr m_playlist;

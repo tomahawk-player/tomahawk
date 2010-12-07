@@ -6,7 +6,7 @@
 #include <QList>
 #include <QVariant>
 
-#include "tomahawk/collection.h"
+// #include "tomahawk/collection.h"
 #include "tomahawk/result.h"
 #include "tomahawk/typedefs.h"
 

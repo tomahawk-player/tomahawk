@@ -30,6 +30,25 @@ Result::Result( const QVariant& v, const collection_ptr& collection )
         connect( m_collection->source().data(), SIGNAL( offline() ), SIGNAL( becomingUnavailable() ), Qt::QueuedConnection );
 }
 
+Result::~Result() {}
+
+artist_ptr 
+Result::artist() const
+{
+    return m_artist;
+}
+
+album_ptr 
+Result::album() const
+{
+    return m_album;
+}
+
+collection_ptr 
+Result::collection() const
+{
+    return m_collection;
+}
 
 float
 Result::score() const

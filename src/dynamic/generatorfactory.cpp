@@ -1,24 +1,19 @@
 #include "dynamic/generatorfactory.h"
 #include "dynamic/generatorinterface.h"
 
-Tomahawk::GeneratorFactory::GeneratorFactory()
-{
-}
+using namespace Tomahawk;
 
-Tomahawk::GeneratorFactory::~GeneratorFactory()
-{
-    qDeleteAll( m_factories.values() );
-}
+QHash< QString, GeneratorFactoryInterface* > GeneratorFactory::s_factories = QHash< QString, GeneratorFactoryInterface* >();
 
-generatorinterface_ptr Tomahawk::GeneratorFactory::create ( const QString& type )
+geninterface_ptr GeneratorFactory::create ( const QString& type )
 {
-    if( !m_factories.contains( type ) )
+    if( !s_factories.contains( type ) )
         return geninterface_ptr();
     
-    return geninterface_ptr( m_factories.value( type )->create() );
+    return geninterface_ptr( s_factories.value( type )->create() );
 }
 
-void Tomahawk::GeneratorFactory::registerFactory ( const QString& type, Tomahawk::GeneratorFactoryInterface* interface )
+void GeneratorFactory::registerFactory ( const QString& type, GeneratorFactoryInterface* interface )
 {
-    m_factories.insert( type, interface );
+    s_factories.insert( type, interface );
 }

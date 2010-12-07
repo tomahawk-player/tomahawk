@@ -24,12 +24,7 @@
 #include <tomahawk/typedefs.h>
 
 namespace Tomahawk {
-
-enum GeneratorMode {
-    OnDemand = 0,
-    Static
-};
-    
+   
 /**
  * The abstract interface for Dynamic Playlist Generators. Generators have the following features:
  *      - They create new DynamicControls that are appropriate for the generator
@@ -43,11 +38,12 @@ class GeneratorInterface : public QObject
     Q_OBJECT
     Q_PROPERTY( QString         type READ type )
     Q_PROPERTY( GeneratorMode   mode READ mode WRITE setMode );
-    Q_ENUMS( GeneratorMode )
     
 public:
-    explicit GeneratorInterface( QObject* parent = 0 ) : QObject( parent ) {}
-    virtual ~GeneratorInterface() {}
+    // can't inline constructors/destructors for forward declared shared pointer types
+    GeneratorInterface();
+    explicit GeneratorInterface( QObject* parent = 0 );
+    virtual ~GeneratorInterface();
     
     // Can't make it pure otherwise we can't shove it in QVariants :-/
     // empty QString means use default
@@ -85,6 +81,9 @@ protected:
     GeneratorMode m_mode;
     QList< dyncontrol_ptr > m_controls;
     QStringList m_typeSelectors;
+    
+private:
+    Q_DISABLE_COPY(GeneratorInterface)
 };
 
 typedef QSharedPointer<GeneratorInterface> geninterface_ptr;

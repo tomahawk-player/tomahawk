@@ -13,11 +13,11 @@ DatabaseCommand_SetPlaylistRevision::DatabaseCommand_SetPlaylistRevision(
                       const QString& oldrev,
                       const QStringList& orderedguids,
                       const QList<plentry_ptr>& addedentries )
-    : DatabaseCommandLoggable( s )
+: DatabaseCommandLoggable( s )
+    , m_applied( false )
     , m_newrev( newrev )
     , m_oldrev( oldrev )
     , m_addedentries( addedentries )
-    , m_applied( false )
 {
     setPlaylistguid( playlistguid );
 

@@ -97,6 +97,28 @@ CREATE TABLE IF NOT EXISTS playlist_revision (
     previous_revision TEXT REFERENCES playlist_revision(guid) DEFERRABLE INITIALLY DEFERRED
 );
 
+CREATE TABLE IF NOT EXISTS dynamic_playlist {
+    guid TEXT PRIMARY KEY,
+    pltype TEXT, -- the generator type
+    plmode INTEGER -- the mode of this playlist
+};
+
+-- list of controls in each playlist. each control saves a selectedType, a match, and an input
+CREATE TABLE IF NOT EXISTS dynamic_playlist_controls {
+    id TEXT PRIMARY KEY,
+    playlist TEXT NOT NULL REFERENCES playlist(guid) ON DELETE CASCADE ON UPDATE CASCADE DEFERRABLE INITIALLY DEFERRED,
+    selectedType TEXT,
+    match TEXT,
+    input TEXT
+};
+    
+CREATE TABLE IF NOT EXISTS dynamic_playlist_revision {
+    guid TEXT PRIMARY KEY,
+    controls TEXT, -- qlist( id, id, id )
+    plmode INTEGER REFERENCES dynamic_playlist( plmode ) ON DELETE CASCADE ON UPDATE CASCADE DEFERRABLE INITIALLY DEFERRED,
+    pltype TEXT REFERENCES dynamic_playlist( pltype ) ON DELETE CASCADE ON UPDATE CASCADE DEFERRABLE INITIALLY DEFERRED
+};
+
 --INSERT INTO playlist_revision(guid, playlist, entries)
 --       VALUES('revisionguid-1', 'playlistguid-1', '["itemguid-2","itemguid-1","itemguid-3"]');
 

@@ -10,7 +10,6 @@
 
 using namespace Tomahawk;
 
-
 Source::Source( const QString &username, ControlConnection* cc )
     : QObject()
     , m_isLocal( false )

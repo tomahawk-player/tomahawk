@@ -3,6 +3,7 @@
 
 #include <QObject>
 #include <QList>
+#include <QDebug>
 #include <QSharedPointer>
 
 #include "tomahawk/query.h"
@@ -119,12 +120,7 @@ public:
     // these need to exist and be public for the json serialization stuff
     // you SHOULD NOT call them.  They are used for an alternate CTOR method from json.
     // maybe friend QObjectHelper and make them private?
-    explicit Playlist( const source_ptr& author )
-        : m_source( author )
-        , m_lastmodified( 0 )
-    {
-        qDebug() << Q_FUNC_INFO << "JSON";
-    }
+    explicit Playlist( const source_ptr& author );
     void setCurrentrevision( const QString& s ) { m_currentrevision = s; }
     void setTitle( const QString& s )           { m_title = s; }
     void setInfo( const QString& s )            { m_info = s; }
@@ -182,6 +178,8 @@ protected:
                                      bool is_newest_rev,
                                      const QMap< QString, Tomahawk::plentry_ptr >& addedmap );
 private:
+    Playlist();
+    
     source_ptr m_source;
     QString m_currentrevision;
     QString m_guid, m_title, m_info, m_creator;

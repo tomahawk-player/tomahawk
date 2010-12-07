@@ -22,7 +22,8 @@
 #include <QSharedPointer>
 
 #include "tomahawk/playlist.h"
-#include "dynamic/generatorinterface.h"
+#include "tomahawk/typedefs.h"
+#include "dynamic/dynamiccontrol.h"
 
 namespace Tomahawk {
     
@@ -42,6 +43,8 @@ struct DynamicPlaylistRevision : PlaylistRevision
         revisionguid = other.revisionguid; 
         oldrevisionguid = other.oldrevisionguid; 
         newlist = other.newlist;
+        added = other.added;
+        removed = other.removed;
         applied = other.applied;    
     }
     
@@ -56,6 +59,8 @@ class DynamicPlaylist : public Playlist
     Q_PROPERTY( QString type                  WRITE setType   READ type )
         
 public:    
+    virtual ~DynamicPlaylist();
+    
     /// Generate an empty dynamic playlist with default generator
     static Tomahawk::dynplaylist_ptr create( const source_ptr& author,
                                           const QString& guid,
@@ -68,22 +73,18 @@ public:
     
     virtual void loadRevision( const QString& rev = "" );
     
-    GeneratorMode mode() const { return m_generator->mode(); }
-    QString type() const { return m_generator->type(); }
-    geninterface_ptr generator() const { return m_generator; }
+    GeneratorMode mode() const;
+    QString type() const;
+    geninterface_ptr generator() const;
     
     // <IGNORE hack="true">
     // these need to exist and be public for the json serialization stuff
     // you SHOULD NOT call them.  They are used for an alternate CTOR method from json.
     // maybe friend QObjectHelper and make them private?
-    explicit DynamicPlaylist( const source_ptr& author )
-    : Playlist( author )
-    {
-        qDebug() << Q_FUNC_INFO << "JSON";
-    }
-    void setMode( GeneratorMode mode ) { m_generator->setMode( mode ); }
+    explicit DynamicPlaylist( const source_ptr& author );
+    void setMode( GeneratorMode mode );
     void setType( const QString& type )           { /** TODO */; }
-    void setGenerator( const geninterface_ptr& gen_ptr )            { m_generator = gen_ptr; }
+    void setGenerator( const geninterface_ptr& gen_ptr );
     // </IGNORE>
     
 signals:
@@ -140,6 +141,7 @@ private:
                        bool shared );
     
 private:
+    Q_DISABLE_COPY(DynamicPlaylist)
     geninterface_ptr m_generator;
 };
 

@@ -21,6 +21,7 @@
 #include <QtCore/QSharedPointer>
 #include <QStringList>
 #include <QtGui/QWidget>
+#include <tomahawk/typedefs.h>
 
 namespace Tomahawk 
 {
@@ -38,39 +39,62 @@ namespace Tomahawk
 class DynamicControl : public QObject 
 {
     Q_OBJECT
+    Q_PROPERTY( QString id READ id WRITE setId )
     Q_PROPERTY( QString selectedType READ selectedType WRITE setSelectedType )
-    Q_PROPERTY( QStringList typeSelectors READ typeSelectors )
+    Q_PROPERTY( QString match READ match WRITE setMatch )
+    Q_PROPERTY( QString input READ input WRITE setInput )
     
 public:
+    // eff this :P
+    DynamicControl();
     virtual ~DynamicControl();
+    
     
     /// The current type of this control
     QString  selectedType() const { return m_selectedType; }
     /// The match selector widget based on this control's type
-    virtual QWidget* matchSelector() { return 0; }
+    virtual QWidget* matchSelector()  { Q_ASSERT( false ); return 0; }
     /// The input field widget that is associated with this type
-    virtual QWidget* inputField() { return 0; }
+    virtual QWidget* inputField()  { Q_ASSERT( false ); return 0;  }
+    
+    /// the serializable value of the match
+    QString match() const  { Q_ASSERT( false ); return QString(); }
+    /// the serializable value of the input
+    QString input() const { Q_ASSERT( false ); return QString(); }
+    
+    // used by JSON serialization
+    void setMatch( const QString& match ) { m_match = match; }
+    void setInput( const QString& input ) { m_input = input; }
     
     /// All the potential type selectors for this control
     QStringList typeSelectors() const { return m_typeSelectors; }
+    
+    QString id() {
+        if( m_id.isEmpty() )
+            m_id = uuid();
+        return m_id;
+    };
+    void setId( const QString& id ) { m_id = id; }
     
 public slots:
     /**
      * Sets the type to the newly specified one. Note that this will update the matchSelector
      *  and inputField widgets, so you should fetch the new widgets for use immediately.
      */
-    virtual void setSelectedType( const QString& type ) { m_selectedType = type; }
+    virtual void setSelectedType( const QString& selectedType ) { m_selectedType = selectedType; }
     
 protected:
     // Private constructor, you can't make one. Get it from your Generator.
-    explicit DynamicControl( const QString& type, const QStringList& typeSelectors, QObject* parent = 0 ) : QObject( parent ), m_selectedType( type ), m_typeSelectors( typeSelectors ) {}
+    explicit DynamicControl( const QString& selectedType, QObject* parent = 0 );
+    
+    QString m_match;
+    QString m_input;
     
 private:
     QString m_selectedType;
     QStringList m_typeSelectors;
+    QString m_id;
 };
-
-typedef QSharedPointer<DynamicControl> dyncontrol_ptr;
 
 };
 

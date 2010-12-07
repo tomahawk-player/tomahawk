@@ -1,12 +1,11 @@
+
 #ifndef RESULT_H
 #define RESULT_H
+#include <qvariant.h>
 
 #include <QObject>
-
+#include <QVariant>
 #include "tomahawk/typedefs.h"
-#include "collection.h"
-#include "artist.h"
-#include "album.h"
 
 namespace Tomahawk
 {
@@ -17,14 +16,16 @@ Q_OBJECT
 
 public:
     explicit Result( const QVariant& v, const collection_ptr& collection );
+    virtual ~Result();
+    
     QVariant toVariant() const { return m_v; }
 
     float score() const;
     RID id() const;
-    collection_ptr collection() const { return m_collection; }
+    collection_ptr collection() const;
 
-    Tomahawk::artist_ptr artist() const { return m_artist; }
-    Tomahawk::album_ptr album()   const { return m_album; }
+    Tomahawk::artist_ptr artist() const;
+    Tomahawk::album_ptr album()   const;
     QString track()     const { return m_track; }
     QString url()       const { return m_url; }
     QString mimetype()  const { return m_mimetype; }

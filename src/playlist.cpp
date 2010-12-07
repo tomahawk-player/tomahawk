@@ -28,6 +28,13 @@ PlaylistEntry::queryvariant() const
 }
 
 
+Playlist::Playlist( const source_ptr& author )
+    : m_source( author )
+    , m_lastmodified( 0 )
+{
+    qDebug() << Q_FUNC_INFO << "JSON";
+}
+
 // used when loading from DB:
 Playlist::Playlist( const source_ptr& src,
                     const QString& currentrevision,

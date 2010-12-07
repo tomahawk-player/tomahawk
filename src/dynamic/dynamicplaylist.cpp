@@ -20,8 +20,23 @@
 #include "generatorfactory.h"
 #include "database.h"
 #include "databasecommand.h"
+#include "databasecommand_createdynamicplaylist.h"
+#include "databasecommand_setdynamicplaylistrevision.h"
+#include "databasecommand_loaddynamicplaylist.h"
 
 using namespace Tomahawk;
+
+DynamicPlaylist::DynamicPlaylist(const Tomahawk::source_ptr& author)
+    : Playlist(author)
+{
+    qDebug() << Q_FUNC_INFO << "JSON";
+}
+
+
+DynamicPlaylist::~DynamicPlaylist()
+{
+
+}
 
 // Called by loadAllPlaylists command
 DynamicPlaylist::DynamicPlaylist ( const Tomahawk::source_ptr& src, 
@@ -53,6 +68,33 @@ DynamicPlaylist::DynamicPlaylist ( const Tomahawk::source_ptr& author,
         qDebug() << "Creating Dynamic Playlist 2";
     // TODO instantiate generator
 }
+
+geninterface_ptr DynamicPlaylist::generator() const
+{
+    return m_generator;
+}
+
+GeneratorMode DynamicPlaylist::mode() const
+{
+    return m_generator->mode();
+}
+
+void DynamicPlaylist::setGenerator(const Tomahawk::geninterface_ptr& gen_ptr)
+{
+    m_generator = gen_ptr;
+}
+
+QString DynamicPlaylist::type() const
+{
+    return m_generator->type();
+}
+
+void DynamicPlaylist::setMode(GeneratorMode mode)
+{
+    m_generator->setMode( mode );
+}
+
+
 
 dynplaylist_ptr DynamicPlaylist::create( const Tomahawk::source_ptr& author, 
                                          const QString& guid, 
@@ -129,8 +171,7 @@ void DynamicPlaylist::loadRevision( const QString& rev )
 {
     qDebug() << Q_FUNC_INFO;
     
-    DatabaseCommand_LoadDynamicPlaylist* cmd =
-    new DatabaseCommand_LoadDynamicPlaylist( rev.isEmpty() ? currentrevision() : rev, m_generator->mode() );
+    DatabaseCommand_LoadDynamicPlaylist* cmd = new DatabaseCommand_LoadDynamicPlaylist( rev.isEmpty() ? currentrevision() : rev );
     
     if( m_generator->mode() == OnDemand ) {
         connect( cmd, SIGNAL( done( QString,
@@ -238,6 +279,18 @@ void DynamicPlaylist::setRevision( const QString& rev,
                                     const QList< dyncontrol_ptr>& controls, 
                                     bool applied )
 {
+    if( QThread::currentThread() != thread() )
+    {
+        QMetaObject::invokeMethod( this,
+                                   "setRevision",
+                                   Qt::BlockingQueuedConnection,
+                                   Q_ARG( QString, rev ),
+                                   Q_ARG( bool, is_newest_rev ),
+                                   Q_ARG( QString, type ),
+                                   QGenericArgument( "QList< dyncontrol_ptr >" , (const void*)&controls ),
+                                   Q_ARG( bool, applied ) );
+        return;
+    }
     if( m_generator->type() != type ) { // new generator needed
         m_generator = geninterface_ptr( GeneratorFactory::create( type ) );
     }

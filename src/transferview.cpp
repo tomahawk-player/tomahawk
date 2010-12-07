@@ -4,6 +4,7 @@
 #include <QVBoxLayout>
 
 #include "tomahawk/tomahawkapp.h"
+#include "tomahawk/artist.h"
 #include "network/filetransferconnection.h"
 #include "network/servent.h"
 

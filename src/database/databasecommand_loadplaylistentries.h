@@ -28,6 +28,14 @@ signals:
                const QMap< QString, Tomahawk::plentry_ptr >& added,
                bool applied );
 
+protected:
+    void generateEntries( DatabaseImpl* dbi );
+    
+    QStringList m_guids;
+    QMap< QString, Tomahawk::plentry_ptr > m_entrymap;
+    bool m_islatest;
+    QStringList m_oldentries;
+    
 private:
     QString m_guid;
 };

@@ -14,42 +14,20 @@
  * this program.  If not, see <http://www.gnu.org/licenses/>.                           *
  ****************************************************************************************/
 
-#ifndef ECHONEST_GENERATOR_H
-#define ECHONEST_GENERATOR_H
-
-#include <echonest/Playlist.h>
-
 #include "dynamic/generatorinterface.h"
-#include "dynamic/generatorfactory.h"
 
-
-namespace Tomahawk 
+// lame
+Tomahawk::GeneratorInterface::GeneratorInterface()
 {
 
-class EchonestFactory : public GeneratorFactoryInterface
-{
-public:
-    EchonestFactory();
-    
-    virtual GeneratorInterface* create();
-    
-};
-    
-class EchonestGenerator : public GeneratorInterface
-{
-    Q_OBJECT
-public:
-    explicit EchonestGenerator( QObject* parent = 0 );
-    virtual ~EchonestGenerator();
-    
-    virtual dyncontrol_ptr createControl( const QString& type = QString() ) const;
-    
-    virtual void generate ( int number = -1 );
-    
-private slots:
-    void staticFinished();
-};
+}
 
-};
+Tomahawk::GeneratorInterface::GeneratorInterface( QObject* parent ): QObject( parent )
+{
 
-#endif
+}
+
+Tomahawk::GeneratorInterface::~GeneratorInterface()
+{
+
+}

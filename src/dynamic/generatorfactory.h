@@ -29,7 +29,7 @@ public:
     static void registerFactory( const QString& type, GeneratorFactoryInterface* interface );
     
 private:
-    static QHash<QString, GeneratorFactoryInterface*> m_factories;
+    static QHash<QString, GeneratorFactoryInterface*> s_factories;
     
 };
 

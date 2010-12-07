@@ -16,6 +16,7 @@
 #include "tomahawk/functimeout.h"
 #include "tomahawk/playlist.h"
 #include "tomahawk/query.h"
+#include "tomahawk/artist.h"
 
 #include "database/databasecommand_collectionstats.h"
 #include "topbar/topbar.h"
