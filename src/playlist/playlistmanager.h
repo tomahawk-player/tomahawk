@@ -90,11 +90,6 @@ private:
     QHash< Tomahawk::album_ptr, PlaylistView* > m_albumViews;
     QHash< Tomahawk::source_ptr, SourceInfoWidget* > m_sourceViews;
 
-    /*TrackProxyModel* m_currentProxyModel;
-    TrackModel* m_currentModel;
-    TrackView* m_currentView;*/
-
-//    QWidget* m_currentView;
     PlaylistInterface* m_currentInterface;
 
     QWidget* m_currentInfoWidget;
