@@ -76,17 +76,14 @@ XSPFLoader::gotBody()
     xmldoc.setContent( m_body );
     QDomElement docElement( xmldoc.documentElement() );
 
-    QString title, info, creator;
-    title   = docElement.firstChildElement( "title" ).text();
+    QString origTitle, title, info, creator;
+    origTitle = docElement.firstChildElement( "title" ).text();
     info    = docElement.firstChildElement( "creator" ).text();
     creator = docElement.firstChildElement( "info" ).text();
 
+    title = origTitle;
     if ( title.isEmpty() )
-    {
-        QMessageBox::critical( APP->mainWindow(), tr( "XSPF Error" ), tr( "This is not a valid XSPF playlist." ) );
-        deleteLater();
-        return;
-    }
+        title = tr( "New Playlist" );
 
     m_playlist = Playlist::create( APP->sourcelist().getLocal(),
                                    uuid(),
@@ -116,6 +113,13 @@ XSPFLoader::gotBody()
 
         p->setQuery( Tomahawk::query_ptr(new Tomahawk::Query(v)) );
         entries << p;
+    }
+
+    if ( origTitle.isEmpty() && entries.isEmpty() )
+    {
+        QMessageBox::critical( APP->mainWindow(), tr( "XSPF Error" ), tr( "This is not a valid XSPF playlist." ) );
+        deleteLater();
+        return;
     }
 
     m_playlist->createNewRevision( uuid(), m_playlist->currentrevision(), entries );
