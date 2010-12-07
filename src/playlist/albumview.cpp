@@ -33,7 +33,6 @@ AlbumView::AlbumView( QWidget* parent )
     setResizeMode( Adjust );
     setViewMode( IconMode );
     setVerticalScrollMode( QAbstractItemView::ScrollPerPixel );
-//    setIconSize( QSize( 64, 64 ) );
 
     setProxyModel( new AlbumProxyModel( this ) );
 
@@ -63,7 +62,10 @@ AlbumView::setModel( AlbumModel* model )
     m_model = model;
 
     if ( m_proxyModel )
+    {
         m_proxyModel->setSourceModel( model );
+        m_proxyModel->sort( 0 );
+    }
 
     connect( m_proxyModel, SIGNAL( filterChanged( QString ) ), SLOT( onFilterChanged( QString ) ) );
 

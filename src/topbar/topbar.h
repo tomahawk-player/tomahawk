@@ -33,6 +33,9 @@ public slots:
     void setNumArtists( unsigned int );
     void setNumShown( unsigned int );
 
+    void setStatsVisible( bool b );
+    void setModesVisible( bool b );
+
     void addSource();
     void removeSource();
 

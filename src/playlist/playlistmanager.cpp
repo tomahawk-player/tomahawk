@@ -28,6 +28,8 @@ PlaylistManager::PlaylistManager( QObject* parent )
     , m_currentInterface( 0 )
     , m_currentMode( 0 )
     , m_superCollectionVisible( true )
+    , m_statsAvailable( false )
+    , m_modesAvailable( false )
 {
     m_stack = new QStackedWidget();
 
@@ -54,7 +56,12 @@ PlaylistManager::PlaylistManager( QObject* parent )
     m_superCollectionFlatModel = new CollectionFlatModel( m_superCollectionView );
     m_superCollectionView->setModel( m_superCollectionFlatModel );
 
+    m_superAlbumView = new AlbumView();
+    m_superAlbumModel = new AlbumModel( m_superAlbumView );
+    m_superAlbumView->setModel( m_superAlbumModel );
+
     m_stack->addWidget( m_superCollectionView );
+    m_stack->addWidget( m_superAlbumView );
     m_currentInterface = m_superCollectionView->proxyModel();
 
     connect( &m_filterTimer, SIGNAL( timeout() ), SLOT( applyFilter() ) );
@@ -102,6 +109,8 @@ PlaylistManager::show( const Tomahawk::playlist_ptr& playlist )
     }
 
     m_superCollectionVisible = false;
+    m_statsAvailable = true;
+    m_modesAvailable = false;
     linkPlaylist();
 
     emit numSourcesChanged( APP->sourcelist().count() );
@@ -136,6 +145,8 @@ PlaylistManager::show( const Tomahawk::album_ptr& album )
     }
 
     m_superCollectionVisible = false;
+    m_statsAvailable = false;
+    m_modesAvailable = false;
     linkPlaylist();
 
     emit numSourcesChanged( 1 );
@@ -148,6 +159,7 @@ PlaylistManager::show( const Tomahawk::collection_ptr& collection )
 {
     unlinkPlaylist();
 
+    m_currentCollection = collection;
     if ( m_currentMode == 0 )
     {
         if ( !m_collectionViews.contains( collection ) )
@@ -195,6 +207,8 @@ PlaylistManager::show( const Tomahawk::collection_ptr& collection )
     }
 
     m_superCollectionVisible = false;
+    m_statsAvailable = ( m_currentMode == 0 );
+    m_modesAvailable = true;
     linkPlaylist();
 
     emit numSourcesChanged( 1 );
@@ -223,6 +237,10 @@ PlaylistManager::show( const Tomahawk::source_ptr& source )
 
     m_stack->setCurrentWidget( m_currentInfoWidget );
     m_superCollectionVisible = false;
+    m_statsAvailable = false;
+    m_modesAvailable = false;
+
+    linkPlaylist();
 
     emit numSourcesChanged( 1 );
     return true;
@@ -238,13 +256,24 @@ PlaylistManager::showSuperCollection()
         {
             m_superCollections.append( source->collection() );
             m_superCollectionFlatModel->addCollection( source->collection() );
+            m_superAlbumModel->addCollection( source->collection() );
         }
     }
 
-    m_stack->setCurrentWidget( m_superCollectionView );
-    m_currentInterface = m_superCollectionView->proxyModel();
+    if ( m_currentMode == 0 )
+    {
+        m_stack->setCurrentWidget( m_superCollectionView );
+        m_currentInterface = m_superCollectionView->proxyModel();
+    }
+    else if ( m_currentMode == 2 )
+    {
+        m_stack->setCurrentWidget( m_superAlbumView );
+        m_currentInterface = m_superAlbumView->proxyModel();
+    }
 
     m_superCollectionVisible = true;
+    m_statsAvailable = ( m_currentMode == 0 );
+    m_modesAvailable = true;
     linkPlaylist();
 
     emit numSourcesChanged( m_superCollections.count() );
@@ -258,7 +287,11 @@ PlaylistManager::setTableMode()
     qDebug() << Q_FUNC_INFO;
 
     m_currentMode = 0;
-    m_stack->setCurrentWidget( m_superCollectionView );
+
+    if ( m_superCollectionVisible )
+        showSuperCollection();
+    else
+        show( m_currentCollection );
 }
 
 
@@ -270,7 +303,11 @@ PlaylistManager::setTreeMode()
     qDebug() << Q_FUNC_INFO;
 
     m_currentMode = 1;
-    m_stack->setCurrentWidget( m_superCollectionView );
+
+    if ( m_superCollectionVisible )
+        showSuperCollection();
+    else
+        show( m_currentCollection );
 }
 
 
@@ -280,7 +317,11 @@ PlaylistManager::setAlbumMode()
     qDebug() << Q_FUNC_INFO;
 
     m_currentMode = 2;
-    m_stack->setCurrentWidget( m_superCollectionView );
+
+    if ( m_superCollectionVisible )
+        showSuperCollection();
+    else
+        show( m_currentCollection );
 }
 
 
@@ -377,13 +418,17 @@ PlaylistManager::linkPlaylist()
     applyFilter();
     APP->audioEngine()->setPlaylist( m_currentInterface );
 
-    if ( m_currentInterface )
+    if ( m_currentInterface && m_statsAvailable )
     {
         emit numTracksChanged( m_currentInterface->unfilteredTrackCount() );
         emit numShownChanged( m_currentInterface->trackCount() );
         emit repeatModeChanged( m_currentInterface->repeatMode() );
         emit shuffleModeChanged( m_currentInterface->shuffled() );
+
     }
+
+    emit statsAvailable( m_statsAvailable );
+    emit modesAvailable( m_modesAvailable );
 }
 
 

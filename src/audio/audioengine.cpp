@@ -40,10 +40,9 @@ AudioEngine::AudioEngine()
 
 AudioEngine::~AudioEngine()
 {
-    qDebug() << Q_FUNC_INFO << "waiting for event loop to finish..";
+    qDebug() << Q_FUNC_INFO << "waiting for event loop to finish...";
     quit();
     wait( 1000 );
-    qDebug() << Q_FUNC_INFO << "ok";
 
     m_input.clear();
     delete m_audio;

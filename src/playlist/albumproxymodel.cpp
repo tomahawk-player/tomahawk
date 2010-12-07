@@ -11,6 +11,8 @@ AlbumProxyModel::AlbumProxyModel( QObject* parent )
     : QSortFilterProxyModel( parent )
     , PlaylistInterface( this )
     , m_model( 0 )
+    , m_repeatMode( PlaylistInterface::NoRepeat )
+    , m_shuffled( false )
 {
     qsrand( QTime( 0, 0, 0 ).secsTo( QTime::currentTime() ) );
 
@@ -68,6 +70,26 @@ AlbumProxyModel::filterAcceptsRow( int sourceRow, const QModelIndex& sourceParen
     }
 
     return found;
+}
+
+
+bool
+AlbumProxyModel::lessThan( const QModelIndex& left, const QModelIndex& right ) const
+{
+    AlbumItem* p1 = sourceModel()->itemFromIndex( left );
+    AlbumItem* p2 = sourceModel()->itemFromIndex( right );
+
+    if ( !p1 )
+        return true;
+    if ( !p2 )
+        return false;
+
+    if ( p1->album()->artist()->name() == p2->album()->artist()->name() )
+    {
+        return QString::localeAwareCompare( p1->album()->name(), p2->album()->name() ) < 0;
+    }
+
+    return QString::localeAwareCompare( p1->album()->artist()->name(), p2->album()->artist()->name() ) < 0;
 }
 
 

@@ -45,6 +45,7 @@ public slots:
 
 protected:
     bool filterAcceptsRow( int sourceRow, const QModelIndex& sourceParent ) const;
+    bool lessThan( const QModelIndex& left, const QModelIndex& right ) const;
 
 private:
     AlbumModel* m_model;

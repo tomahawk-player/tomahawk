@@ -337,7 +337,6 @@ void
 TrackModel::onPlaybackFinished( const Tomahawk::result_ptr& result )
 {
     PlItem* oldEntry = itemFromIndex( m_currentIndex );
-    qDebug() << oldEntry->query();
     if ( oldEntry && !oldEntry->query().isNull() && oldEntry->query()->results().contains( result ) )
     {
         oldEntry->setIsPlaying( false );

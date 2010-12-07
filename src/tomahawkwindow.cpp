@@ -142,6 +142,12 @@ TomahawkWindow::setupSignals()
     connect( m_topbar,         SIGNAL( albumMode() ),
              playlistManager(),  SLOT( setAlbumMode() ) );
 
+    connect( playlistManager(), SIGNAL( statsAvailable( bool ) ),
+             m_topbar,            SLOT( setStatsVisible( bool ) ) );
+
+    connect( playlistManager(), SIGNAL( modesAvailable( bool ) ),
+             m_topbar,            SLOT( setModesVisible( bool ) ) );
+
     // <From PlaylistManager>
     connect( playlistManager(), SIGNAL( repeatModeChanged( PlaylistInterface::RepeatMode ) ),
              m_audioControls,     SLOT( onRepeatModeChanged( PlaylistInterface::RepeatMode ) ) );

@@ -31,6 +31,13 @@ public:
     }
 
 public slots:
+    void setVisible( bool b )
+    {
+        QLabel::setVisible( b );
+        if ( !m_diff.isNull() )
+            m_diff.data()->setVisible( b );
+    }
+
     void frame( int f )
     {
         m_displayed = f;
@@ -65,24 +72,25 @@ public slots:
     void showDiff()
     {
         int differ = m_val - m_oldval;
-        QLabel* diff = new QLabel( QString("%1 %L2" ).arg( differ > 0 ? "+" : "" )
+        m_diff = new QLabel( QString("%1 %L2" ).arg( differ > 0 ? "+" : "" )
                                                      .arg( (int)m_val - (int)m_oldval ),
                                                      this->parentWidget() );
 
-        diff->setStyleSheet( "font-size:9px; color:grey;" );
-        diff->move( QPoint( this->pos().x(), this->pos().y() ) );
-        QPropertyAnimation* a = new QPropertyAnimation( diff, "pos" );
+        m_diff.data()->setStyleSheet( "font-size:9px; color:grey;" );
+        m_diff.data()->move( QPoint( this->pos().x(), this->pos().y() ) );
+        QPropertyAnimation* a = new QPropertyAnimation( m_diff.data(), "pos" );
         a->setEasingCurve( QEasingCurve( QEasingCurve::InQuad ) );
-        a->setStartValue( diff->pos() + QPoint( 0, -10 ) );
-        a->setEndValue( QPoint( diff->pos().x(), diff->pos().y() - 25 ) );
+        a->setStartValue( m_diff.data()->pos() + QPoint( 0, -10 ) );
+        a->setEndValue( QPoint( m_diff.data()->pos().x(), m_diff.data()->pos().y() - 25 ) );
         a->setDuration( 1000 );
         //        qDebug() << "ANIMATING DIFF:" << a->startValue() << a->endValue();
 
-        connect( a, SIGNAL( finished() ), diff, SLOT( hide() ) );
-        connect( a, SIGNAL( finished() ), diff, SLOT( deleteLater() ) );
+        connect( a, SIGNAL( finished() ), m_diff.data(), SLOT( hide() ) );
+        connect( a, SIGNAL( finished() ), m_diff.data(), SLOT( deleteLater() ) );
         connect( a, SIGNAL( finished() ), a, SLOT( deleteLater() ) );
 
-        diff->show();
+        m_diff.data()->show();
+        m_diff.data()->setVisible( this->isVisible() );
         a->start();
     }
 
@@ -96,7 +104,7 @@ private:
     unsigned int m_val, m_oldval;
 
     QString m_format;
-
+    QWeakPointer<QLabel> m_diff;
 };
 
 #endif // ANIMATEDCOUNTERLABEL_H

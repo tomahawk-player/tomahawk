@@ -98,8 +98,6 @@ AnimatedSplitter::addWidget( AnimatedWidget* widget )
     QSplitter::addWidget( widget );
     m_sizes << widget->hiddenSize();
 
-    qDebug() << m_sizes.count();
-
     connect( widget, SIGNAL( showWidget() ), SLOT( onShowRequest() ) );
     connect( widget, SIGNAL( hideWidget() ), SLOT( onHideRequest() ) );
     connect( widget, SIGNAL( hiddenSizeChanged() ), SLOT( onHiddenSizeChanged() ) );

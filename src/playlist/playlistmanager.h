@@ -9,6 +9,7 @@
 #include "tomahawk/playlistinterface.h"
 
 class AnimatedSplitter;
+class AlbumModel;
 class AlbumView;
 class CollectionModel;
 class CollectionFlatModel;
@@ -51,6 +52,9 @@ signals:
     void repeatModeChanged( PlaylistInterface::RepeatMode mode );
     void shuffleModeChanged( bool enabled );
 
+    void statsAvailable( bool b );
+    void modesAvailable( bool b );
+
 public slots:
     void setTreeMode();
     void setTableMode();
@@ -78,6 +82,8 @@ private:
     PlaylistModel* m_queueModel;
     QueueView* m_queueView;
 
+    AlbumModel* m_superAlbumModel;
+    AlbumView* m_superAlbumView;
     CollectionFlatModel* m_superCollectionFlatModel;
     CollectionView* m_superCollectionView;
 
@@ -94,8 +100,12 @@ private:
 
     QWidget* m_currentInfoWidget;
 
+    Tomahawk::collection_ptr m_currentCollection;
+
     int m_currentMode;
     bool m_superCollectionVisible;
+    bool m_statsAvailable;
+    bool m_modesAvailable;
 
     QTimer m_filterTimer;
     QString m_filter;

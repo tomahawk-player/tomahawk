@@ -171,7 +171,6 @@ void
 TopBar::setNumTracks( unsigned int i )
 {
     m_tracks = i;
-    ui->statsLabelNumTracks->setVisible( m_tracks > 0 );
     ui->statsLabelNumTracks->setVal( i );
 }
 
@@ -189,7 +188,7 @@ void
 TopBar::setNumShown( unsigned int i )
 {
     m_shown = i;
-    ui->statsLabelNumShown->setVisible( m_shown != m_tracks );
+    ui->statsLabelNumShown->setVisible( m_shown != m_tracks && ui->statsLabelNumTracks->isVisible() );
     ui->statsLabelNumShown->setText( QString( "%L1 %2" ).arg( i ).arg( tr( "Shown" ) ) );
 }
 
@@ -208,4 +207,24 @@ TopBar::removeSource()
 //    qDebug() << Q_FUNC_INFO;
     Q_ASSERT( m_sources > 0 );
     setNumSources( m_sources - 1 );
+}
+
+
+void
+TopBar::setStatsVisible( bool b )
+{
+    foreach( QLabel* dude, m_dudes )
+        dude->setVisible( b );
+
+//    ui->statsLabelNumArtists->setVisible( b );
+//    ui->statsLabelNumShown->setVisible( b );
+    ui->statsLabelNumSources->setVisible( b );
+    ui->statsLabelNumTracks->setVisible( b );
+}
+
+
+void
+TopBar::setModesVisible( bool b )
+{
+    ui->widgetRadio->setVisible( b );
 }
