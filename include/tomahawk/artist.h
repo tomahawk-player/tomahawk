@@ -5,6 +5,7 @@
 #include <QSharedPointer>
 
 #include "tomahawk/typedefs.h"
+#include "tomahawk/collection.h"
 
 namespace Tomahawk
 {
