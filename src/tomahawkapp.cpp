@@ -377,7 +377,7 @@ TomahawkApp::initLocalCollection()
 void
 TomahawkApp::startServent()
 {
-    bool upnp = arguments().contains( "--upnp" ) || settings()->value( "network/upnp", true ).toBool();
+    bool upnp = !arguments().contains( "--noupnp" ) && settings()->value( "network/upnp", true ).toBool();
     if ( !m_servent.startListening( QHostAddress( QHostAddress::Any ), upnp ) )
     {
         qDebug() << "Failed to start listening with servent";
