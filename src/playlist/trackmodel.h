@@ -8,7 +8,7 @@
 
 class QMetaData;
 
-class TrackModel : public QAbstractItemModel, public PlaylistInterface
+class TrackModel : public QAbstractItemModel
 {
 Q_OBJECT
 
@@ -40,8 +40,6 @@ public:
 
     virtual QVariant data( const QModelIndex& index, int role = Qt::DisplayRole ) const;
     virtual QVariant headerData( int section, Qt::Orientation orientation, int role ) const;
-
-    virtual Tomahawk::result_ptr siblingItem( int direction ) { return Tomahawk::result_ptr(); }
 
     virtual QMimeData* mimeData( const QModelIndexList& indexes ) const;
     virtual QStringList mimeTypes() const;

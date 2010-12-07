@@ -22,7 +22,7 @@ public:
     void setProxyModel( TrackProxyModel* model );
 
     TrackModel* model() { return m_model; }
-    TrackProxyModel* proxyModel() { return (TrackProxyModel*)m_proxyModel; }
+    TrackProxyModel* proxyModel() { return m_proxyModel; }
     PlaylistItemDelegate* delegate() { return m_delegate; }
     TrackHeader* header() { return m_header; }
 
@@ -59,7 +59,6 @@ private:
 
     TrackModel* m_model;
     TrackProxyModel* m_proxyModel;
-    PlaylistInterface* m_modelInterface;
     PlaylistItemDelegate* m_delegate;
     TrackHeader* m_header;
 

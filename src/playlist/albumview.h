@@ -18,7 +18,7 @@ public:
     void setProxyModel( AlbumProxyModel* model );
 
     AlbumModel* model() { return m_model; }
-    AlbumProxyModel* proxyModel() { return (AlbumProxyModel*)m_proxyModel; }
+    AlbumProxyModel* proxyModel() { return m_proxyModel; }
 //    PlaylistItemDelegate* delegate() { return m_delegate; }
 
     void setModel( AlbumModel* model );

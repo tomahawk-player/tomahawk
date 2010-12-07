@@ -10,6 +10,7 @@
 
 TrackProxyModel::TrackProxyModel( QObject* parent )
     : QSortFilterProxyModel( parent )
+    , PlaylistInterface( this )
     , m_model( 0 )
     , m_repeatMode( PlaylistInterface::NoRepeat )
     , m_shuffled( false )
@@ -29,15 +30,19 @@ TrackProxyModel::setSourceModel( TrackModel* sourceModel )
 {
     m_model = sourceModel;
 
+    if ( m_model )
+        connect( m_model, SIGNAL( trackCountChanged( unsigned int ) ),
+                          SIGNAL( sourceTrackCountChanged( unsigned int ) ) );
+
     QSortFilterProxyModel::setSourceModel( sourceModel );
 }
 
 
 void
-TrackProxyModel::setFilterRegExp( const QString& pattern )
+TrackProxyModel::setFilter( const QString& pattern )
 {
     qDebug() << Q_FUNC_INFO;
-    QSortFilterProxyModel::setFilterRegExp( pattern );
+    setFilterRegExp( pattern );
 
     emit filterChanged( pattern );
     emit trackCountChanged( trackCount() );

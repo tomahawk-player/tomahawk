@@ -34,6 +34,8 @@ TrackView::TrackView( QWidget* parent )
     setDragDropOverwriteMode( false );
     setAllColumnsShowFocus( true );
     setVerticalScrollMode( QAbstractItemView::ScrollPerPixel );
+    setRootIsDecorated( false );
+    setUniformRowHeights( true );
     setMinimumWidth( 700 );
 
     setHeader( m_header );
@@ -58,6 +60,8 @@ void
 TrackView::setProxyModel( TrackProxyModel* model )
 {
     m_proxyModel = model;
+    m_proxyModel->setWidget( this );
+
     m_delegate = new PlaylistItemDelegate( this, m_proxyModel );
     setItemDelegate( m_delegate );
 
@@ -69,17 +73,16 @@ void
 TrackView::setModel( TrackModel* model )
 {
     m_model = model;
-    m_modelInterface = (PlaylistInterface*)model;
 
     if ( m_proxyModel )
+    {
         m_proxyModel->setSourceModel( model );
+    }
 
     connect( m_model, SIGNAL( itemSizeChanged( QModelIndex ) ), SLOT( onItemResized( QModelIndex ) ) );
     connect( m_proxyModel, SIGNAL( filterChanged( QString ) ), SLOT( onFilterChanged( QString ) ) );
 
     setAcceptDrops( true );
-    setRootIsDecorated( false );
-    setUniformRowHeights( true );
 }
 
 

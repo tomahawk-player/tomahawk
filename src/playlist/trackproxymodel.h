@@ -19,6 +19,7 @@ public:
     virtual QPersistentModelIndex currentItem() const { return mapFromSource( m_model->currentItem() ); }
     virtual void setCurrentItem( const QModelIndex& index ) { m_model->setCurrentItem( mapToSource( index ) ); }
 
+    virtual int unfilteredTrackCount() const { return sourceModel()->rowCount( QModelIndex() ); }
     virtual int trackCount() const { return rowCount( QModelIndex() ); }
 
     virtual void removeIndex( const QModelIndex& index );
@@ -27,7 +28,7 @@ public:
 
     virtual Tomahawk::result_ptr siblingItem( int itemsAway );
 
-    void setFilterRegExp( const QString& pattern );
+    virtual void setFilter( const QString& pattern );
 
     virtual PlaylistInterface::RepeatMode repeatMode() const { return m_repeatMode; }
     virtual bool shuffled() const { return m_shuffled; }
@@ -39,6 +40,7 @@ signals:
     void shuffleModeChanged( bool enabled );
 
     void trackCountChanged( unsigned int tracks );
+    void sourceTrackCountChanged( unsigned int tracks );
 
     void filterChanged( const QString& filter );
 

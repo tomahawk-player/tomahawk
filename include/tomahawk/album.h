@@ -29,6 +29,7 @@ public:
     Tomahawk::collection_ptr collection() const { return m_collection; }
     QList<Tomahawk::query_ptr> tracks();
 
+    virtual int unfilteredTrackCount() const { return m_queries.count(); }
     virtual int trackCount() const { return m_queries.count(); }
     virtual Tomahawk::result_ptr siblingItem( int itemsAway );
 
@@ -38,12 +39,15 @@ public:
     virtual void setRepeatMode( PlaylistInterface::RepeatMode ) {}
     virtual void setShuffled( bool ) {}
 
+    virtual void setFilter( const QString& pattern ) {}
+
 signals:
     void repeatModeChanged( PlaylistInterface::RepeatMode mode );
     void shuffleModeChanged( bool enabled );
 
     void tracksAdded( const QList<Tomahawk::query_ptr>& tracks, const Tomahawk::collection_ptr& );
     void trackCountChanged( unsigned int tracks );
+    void sourceTrackCountChanged( unsigned int tracks );
 
 private slots:
     void onTracksAdded( const QList<Tomahawk::query_ptr>& tracks, const Tomahawk::collection_ptr& collection );

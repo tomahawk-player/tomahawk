@@ -139,6 +139,9 @@ TomahawkWindow::setupSignals()
     connect( m_topbar,         SIGNAL( artistMode() ),
              playlistManager(),  SLOT( setTreeMode() ) );
 
+    connect( m_topbar,         SIGNAL( albumMode() ),
+             playlistManager(),  SLOT( setAlbumMode() ) );
+
     // <From PlaylistManager>
     connect( playlistManager(), SIGNAL( repeatModeChanged( PlaylistInterface::RepeatMode ) ),
              m_audioControls,     SLOT( onRepeatModeChanged( PlaylistInterface::RepeatMode ) ) );

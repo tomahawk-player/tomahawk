@@ -16,6 +16,7 @@ public:
     virtual AlbumModel* sourceModel() const { return m_model; }
     virtual void setSourceModel( AlbumModel* sourceModel );
 
+    virtual int unfilteredTrackCount() const { return sourceModel()->rowCount( QModelIndex() ); }
     virtual int trackCount() const { return rowCount( QModelIndex() ); }
     virtual int albumCount() const { return rowCount( QModelIndex() ); }
 
@@ -24,7 +25,7 @@ public:
 
     virtual Tomahawk::result_ptr siblingItem( int direction );
 
-    void setFilterRegExp( const QString& pattern );
+    virtual void setFilter( const QString& pattern );
 
     virtual PlaylistInterface::RepeatMode repeatMode() const { return m_repeatMode; }
     virtual bool shuffled() const { return m_shuffled; }
@@ -34,6 +35,7 @@ signals:
     void shuffleModeChanged( bool enabled );
 
     void trackCountChanged( unsigned int tracks );
+    void sourceTrackCountChanged( unsigned int tracks );
 
     void filterChanged( const QString& filter );
 

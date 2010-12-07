@@ -15,7 +15,7 @@
 
 class QMetaData;
 
-class CollectionModel : public QAbstractItemModel, public PlaylistInterface
+class CollectionModel : public QAbstractItemModel
 {
 Q_OBJECT
 
@@ -36,12 +36,6 @@ public:
 
     void addCollection( const Tomahawk::collection_ptr& collection );
     void removeCollection( const Tomahawk::collection_ptr& collection );
-
-    virtual Tomahawk::result_ptr previousItem() { return Tomahawk::result_ptr(); }
-    virtual Tomahawk::result_ptr nextItem() { return Tomahawk::result_ptr(); }
-    virtual Tomahawk::result_ptr siblingItem( int direction ) { return Tomahawk::result_ptr(); }
-
-    virtual void setCurrentItem( const QModelIndex& index ) {}
 
     virtual PlaylistInterface::RepeatMode repeatMode() const { return PlaylistInterface::NoRepeat; }
     virtual bool shuffled() const { return false; }

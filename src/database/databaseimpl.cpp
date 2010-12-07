@@ -170,6 +170,9 @@ DatabaseImpl::file( int fid )
         m["mimetype"] = query.value( 4 ).toString();
         m["duration"] = query.value( 5 ).toInt();
         m["bitrate"]  = query.value( 6 ).toInt();
+        m["artistid"] = query.value( 7 ).toInt();
+        m["albumid"]  = query.value( 8 ).toInt();
+        m["trackid"]  = query.value( 8 ).toInt();
         m["artist"]   = query.value( 10 ).toString();
         m["album"]    = query.value( 11 ).toString();
         m["track"]    = query.value( 12 ).toString();

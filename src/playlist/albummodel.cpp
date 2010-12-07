@@ -212,6 +212,22 @@ AlbumModel::removeIndexes( const QList<QModelIndex>& indexes )
 
 
 void
+AlbumModel::addCollection( const collection_ptr& collection )
+{
+    qDebug() << Q_FUNC_INFO << collection->name()
+                            << collection->source()->id()
+                            << collection->source()->userName();
+
+    DatabaseCommand_AllAlbums* cmd = new DatabaseCommand_AllAlbums( collection );
+
+    connect( cmd, SIGNAL( albums( QList<Tomahawk::album_ptr>, Tomahawk::collection_ptr ) ),
+                    SLOT( onAlbumsAdded( QList<Tomahawk::album_ptr>, Tomahawk::collection_ptr ) ) );
+
+    TomahawkApp::instance()->database()->enqueue( QSharedPointer<DatabaseCommand>( cmd ) );
+}
+
+
+void
 AlbumModel::addFilteredCollection( const collection_ptr& collection, unsigned int amount, DatabaseCommand_AllAlbums::SortOrder order )
 {
     qDebug() << Q_FUNC_INFO << collection->name()

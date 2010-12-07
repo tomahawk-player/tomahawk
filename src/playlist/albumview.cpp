@@ -51,6 +51,8 @@ void
 AlbumView::setProxyModel( AlbumProxyModel* model )
 {
     m_proxyModel = model;
+    qDebug() << "NOOOOOOOOOOOOOOW CUUUUUUUUUUUUUUUUUR:" << m_proxyModel << (PlaylistInterface*)m_proxyModel;
+
     setItemDelegate( new AlbumItemDelegate( this, m_proxyModel ) );
 
     QListView::setModel( m_proxyModel );

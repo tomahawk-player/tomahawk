@@ -11,7 +11,7 @@ Result::Result( const QVariant& v, const collection_ptr& collection )
 {
     QVariantMap m = m_v.toMap();
 
-    m_artist = artist_ptr( new Artist( m.value( "artist" ).toString() ) );
+    m_artist = Artist::get( m.value( "artistid" ).toUInt(), m.value( "artist" ).toString(), collection );
     m_album = Album::get( m.value( "albumid" ).toUInt(), m.value( "album" ).toString(), m_artist, collection );
     m_track = m.value( "track" ).toString();
     m_url = m.value( "url" ).toString();

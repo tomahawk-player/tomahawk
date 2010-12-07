@@ -13,6 +13,9 @@
 #include "queueview.h"
 #include "trackproxymodel.h"
 #include "trackmodel.h"
+#include "albumview.h"
+#include "albumproxymodel.h"
+#include "albummodel.h"
 
 #include "infowidgets/sourceinfowidget.h"
 
@@ -22,9 +25,7 @@
 PlaylistManager::PlaylistManager( QObject* parent )
     : QObject( parent )
     , m_widget( new QWidget() )
-    , m_currentProxyModel( 0 )
-    , m_currentModel( 0 )
-    , m_currentView( 0 )
+    , m_currentInterface( 0 )
     , m_currentMode( 0 )
     , m_superCollectionVisible( true )
 {
@@ -54,7 +55,7 @@ PlaylistManager::PlaylistManager( QObject* parent )
     m_superCollectionView->setModel( m_superCollectionFlatModel );
 
     m_stack->addWidget( m_superCollectionView );
-    m_currentView = m_superCollectionView;
+    m_currentInterface = m_superCollectionView->proxyModel();
 
     connect( &m_filterTimer, SIGNAL( timeout() ), SLOT( applyFilter() ) );
 }
@@ -84,26 +85,20 @@ PlaylistManager::show( const Tomahawk::playlist_ptr& playlist )
         PlaylistModel* model = new PlaylistModel();
         view->setModel( model );
 
-        m_currentProxyModel = view->proxyModel();
-        m_currentModel = view->model();
-
         model->loadPlaylist( playlist );
         playlist->resolve();
 
+        m_currentInterface = view->proxyModel();
         m_playlistViews.insert( playlist, view );
-        m_views.insert( (PlaylistInterface*)m_currentProxyModel, view );
 
         m_stack->addWidget( view );
         m_stack->setCurrentWidget( view );
-        m_currentView = view;
     }
     else
     {
         PlaylistView* view = m_playlistViews.value( playlist );
         m_stack->setCurrentWidget( view );
-        m_currentProxyModel = view->proxyModel();
-        m_currentModel = view->model();
-        m_currentView = view;
+        m_currentInterface = view->proxyModel();
     }
 
     m_superCollectionVisible = false;
@@ -125,26 +120,19 @@ PlaylistManager::show( const Tomahawk::album_ptr& album )
         PlaylistView* view = new PlaylistView();
         PlaylistModel* model = new PlaylistModel();
         view->setModel( model );
-
-        m_currentProxyModel = view->proxyModel();
-        m_currentModel = view->model();
-
         model->loadAlbum( album );
 
+        m_currentInterface = view->proxyModel();
         m_albumViews.insert( album, view );
-        m_views.insert( (PlaylistInterface*)m_currentProxyModel, view );
 
         m_stack->addWidget( view );
         m_stack->setCurrentWidget( view );
-        m_currentView = view;
     }
     else
     {
         PlaylistView* view = m_albumViews.value( album );
         m_stack->setCurrentWidget( view );
-        m_currentProxyModel = view->proxyModel();
-        m_currentModel = view->model();
-        m_currentView = view;
+        m_currentInterface = view->proxyModel();
     }
 
     m_superCollectionVisible = false;
@@ -160,31 +148,50 @@ PlaylistManager::show( const Tomahawk::collection_ptr& collection )
 {
     unlinkPlaylist();
 
-    if ( !m_collectionViews.contains( collection ) )
+    if ( m_currentMode == 0 )
     {
-        CollectionView* view = new CollectionView();
-        CollectionFlatModel* model = new CollectionFlatModel();
-        view->setModel( model );
+        if ( !m_collectionViews.contains( collection ) )
+        {
+            CollectionView* view = new CollectionView();
+            CollectionFlatModel* model = new CollectionFlatModel();
+            view->setModel( model );
+            model->addCollection( collection );
 
-        m_currentProxyModel = view->proxyModel();
-        m_currentModel = view->model();
+            m_currentInterface = view->proxyModel();
+            m_collectionViews.insert( collection, view );
 
-        model->addCollection( collection );
-
-        m_collectionViews.insert( collection, view );
-        m_views.insert( (PlaylistInterface*)m_currentProxyModel, view );
-
-        m_stack->addWidget( view );
-        m_stack->setCurrentWidget( view );
-        m_currentView = view;
+            m_stack->addWidget( view );
+            m_stack->setCurrentWidget( view );
+        }
+        else
+        {
+            CollectionView* view = m_collectionViews.value( collection );
+            m_stack->setCurrentWidget( view );
+            m_currentInterface = view->proxyModel();
+        }
     }
-    else
+
+    if ( m_currentMode == 2 )
     {
-        CollectionView* view = m_collectionViews.value( collection );
-        m_stack->setCurrentWidget( view );
-        m_currentProxyModel = view->proxyModel();
-        m_currentModel = view->model();
-        m_currentView = view;
+        if ( !m_collectionAlbumViews.contains( collection ) )
+        {
+            AlbumView* aview = new AlbumView();
+            AlbumModel* amodel = new AlbumModel( aview );
+            aview->setModel( amodel );
+            amodel->addCollection( collection );
+
+            m_currentInterface = aview->proxyModel();
+            m_collectionAlbumViews.insert( collection, aview );
+
+            m_stack->addWidget( aview );
+            m_stack->setCurrentWidget( aview );
+        }
+        else
+        {
+            AlbumView* view = m_collectionAlbumViews.value( collection );
+            m_stack->setCurrentWidget( view );
+            m_currentInterface = view->proxyModel();
+        }
     }
 
     m_superCollectionVisible = false;
@@ -200,9 +207,7 @@ PlaylistManager::show( const Tomahawk::source_ptr& source )
 {
     unlinkPlaylist();
 
-    m_currentProxyModel = 0;
-    m_currentModel = 0;
-    m_currentView = 0;
+    m_currentInterface = 0;
 
     if ( !m_sourceViews.contains( source ) )
     {
@@ -237,16 +242,23 @@ PlaylistManager::showSuperCollection()
     }
 
     m_stack->setCurrentWidget( m_superCollectionView );
-    m_currentProxyModel = m_superCollectionView->proxyModel();
-    m_currentModel = m_superCollectionView->model();
-    m_currentView = m_superCollectionView;
-    m_views.insert( (PlaylistInterface*)m_currentProxyModel, m_superCollectionView );
+    m_currentInterface = m_superCollectionView->proxyModel();
 
     m_superCollectionVisible = true;
     linkPlaylist();
 
     emit numSourcesChanged( m_superCollections.count() );
     return true;
+}
+
+
+void
+PlaylistManager::setTableMode()
+{
+    qDebug() << Q_FUNC_INFO;
+
+    m_currentMode = 0;
+    m_stack->setCurrentWidget( m_superCollectionView );
 }
 
 
@@ -263,11 +275,11 @@ PlaylistManager::setTreeMode()
 
 
 void
-PlaylistManager::setTableMode()
+PlaylistManager::setAlbumMode()
 {
     qDebug() << Q_FUNC_INFO;
 
-    m_currentMode = 0;
+    m_currentMode = 2;
     m_stack->setCurrentWidget( m_superCollectionView );
 }
 
@@ -319,30 +331,27 @@ PlaylistManager::applyFilter()
 {
     qDebug() << Q_FUNC_INFO;
 
-    if ( m_currentProxyModel )
-        m_currentProxyModel->setFilterRegExp( m_filter );
+    if ( m_currentInterface )
+        m_currentInterface->setFilter( m_filter );
 }
 
 
 void
 PlaylistManager::unlinkPlaylist()
 {
-    if ( m_currentModel )
+    if ( m_currentInterface )
     {
-        disconnect( m_currentModel,      SIGNAL( trackCountChanged( unsigned int ) ),
-                    this,                  SLOT( onTrackCountChanged( unsigned int ) ) );
-    }
+        disconnect( m_currentInterface->object(), SIGNAL( sourceTrackCountChanged( unsigned int ) ),
+                    this,                         SIGNAL( numTracksChanged( unsigned int ) ) );
 
-    if ( m_currentProxyModel )
-    {
-        disconnect( m_currentProxyModel, SIGNAL( trackCountChanged( unsigned int ) ),
-                    this,                  SLOT( onTrackCountChanged( unsigned int ) ) );
+        disconnect( m_currentInterface->object(), SIGNAL( trackCountChanged( unsigned int ) ),
+                    this,                         SIGNAL( numShownChanged( unsigned int ) ) );
 
-        disconnect( m_currentProxyModel, SIGNAL( repeatModeChanged( PlaylistInterface::RepeatMode ) ),
-                    this,                SIGNAL( repeatModeChanged( PlaylistInterface::RepeatMode ) ) );
+        disconnect( m_currentInterface->object(), SIGNAL( repeatModeChanged( PlaylistInterface::RepeatMode ) ),
+                    this,                         SIGNAL( repeatModeChanged( PlaylistInterface::RepeatMode ) ) );
 
-        disconnect( m_currentProxyModel, SIGNAL( shuffleModeChanged( bool ) ),
-                    this,                SIGNAL( shuffleModeChanged( bool ) ) );
+        disconnect( m_currentInterface->object(), SIGNAL( shuffleModeChanged( bool ) ),
+                    this,                         SIGNAL( shuffleModeChanged( bool ) ) );
     }
 }
 
@@ -350,68 +359,62 @@ PlaylistManager::unlinkPlaylist()
 void
 PlaylistManager::linkPlaylist()
 {
-    connect( m_currentModel,      SIGNAL( trackCountChanged( unsigned int ) ),
-             this,                  SLOT( onTrackCountChanged( unsigned int ) ) );
+    if ( m_currentInterface )
+    {
+        connect( m_currentInterface->object(), SIGNAL( sourceTrackCountChanged( unsigned int ) ),
+                 this,                         SIGNAL( numTracksChanged( unsigned int ) ) );
 
-    connect( m_currentProxyModel, SIGNAL( trackCountChanged( unsigned int ) ),
-             this,                  SLOT( onTrackCountChanged( unsigned int ) ) );
+        connect( m_currentInterface->object(), SIGNAL( trackCountChanged( unsigned int ) ),
+                 this,                         SIGNAL( numShownChanged( unsigned int ) ) );
 
-    connect( m_currentProxyModel, SIGNAL( repeatModeChanged( PlaylistInterface::RepeatMode ) ),
-             this,                SIGNAL( repeatModeChanged( PlaylistInterface::RepeatMode ) ) );
+        connect( m_currentInterface->object(), SIGNAL( repeatModeChanged( PlaylistInterface::RepeatMode ) ),
+                 this,                         SIGNAL( repeatModeChanged( PlaylistInterface::RepeatMode ) ) );
 
-    connect( m_currentProxyModel, SIGNAL( shuffleModeChanged( bool ) ),
-             this,                SIGNAL( shuffleModeChanged( bool ) ) );
+        connect( m_currentInterface->object(), SIGNAL( shuffleModeChanged( bool ) ),
+                 this,                         SIGNAL( shuffleModeChanged( bool ) ) );
+    }
 
     applyFilter();
-    APP->audioEngine()->setPlaylist( (PlaylistInterface*)m_currentProxyModel );
+    APP->audioEngine()->setPlaylist( m_currentInterface );
 
-    emit numTracksChanged( m_currentModel->trackCount() );
-    emit repeatModeChanged( m_currentProxyModel->repeatMode() );
-    emit shuffleModeChanged( m_currentProxyModel->shuffled() );
-}
-
-
-void
-PlaylistManager::onTrackCountChanged( unsigned int )
-{
-    emit numTracksChanged( m_currentModel->trackCount() );
-    emit numShownChanged( m_currentProxyModel->trackCount() );
+    if ( m_currentInterface )
+    {
+        emit numTracksChanged( m_currentInterface->unfilteredTrackCount() );
+        emit numShownChanged( m_currentInterface->trackCount() );
+        emit repeatModeChanged( m_currentInterface->repeatMode() );
+        emit shuffleModeChanged( m_currentInterface->shuffled() );
+    }
 }
 
 
 void
 PlaylistManager::setRepeatMode( PlaylistInterface::RepeatMode mode )
 {
-    if ( m_currentProxyModel )
-        m_currentProxyModel->setRepeatMode( mode );
+    if ( m_currentInterface )
+        m_currentInterface->setRepeatMode( mode );
 }
 
 
 void
 PlaylistManager::setShuffled( bool enabled )
 {
-    if ( m_currentProxyModel )
-        m_currentProxyModel->setShuffled( enabled );
+    if ( m_currentInterface )
+        m_currentInterface->setShuffled( enabled );
 }
 
 
 void
 PlaylistManager::showCurrentTrack()
 {
-    PlaylistInterface* playlist = APP->audioEngine()->currentTrackPlaylist();
+    m_currentInterface = APP->audioEngine()->currentTrackPlaylist();
 
-    if ( m_views.contains( playlist ) )
-    {
-        unlinkPlaylist();
+    unlinkPlaylist();
 
-        m_currentView = m_views.value( playlist );
-        m_currentProxyModel = m_currentView->proxyModel();
-        m_currentModel = m_currentView->model();
+    if ( m_currentInterface->widget() )
+        m_stack->setCurrentWidget( m_currentInterface->widget() );
 
-        m_stack->setCurrentWidget( m_currentView );
-        linkPlaylist();
-    }
+    linkPlaylist();
 
-    if ( m_currentView && m_currentProxyModel )
-        m_currentView->scrollTo( m_currentProxyModel->currentItem(), QAbstractItemView::PositionAtCenter );
+/*    if ( m_currentView && m_currentProxyModel )
+        m_currentView->scrollTo( m_currentProxyModel->currentItem(), QAbstractItemView::PositionAtCenter );*/
 }

@@ -41,7 +41,7 @@ DatabaseCommand_AllAlbums::exec( DatabaseImpl* dbi )
 
     while( query.next() )
     {
-        Tomahawk::artist_ptr artist = Tomahawk::artist_ptr( new Tomahawk::Artist( query.value( 3 ).toString() ) );
+        Tomahawk::artist_ptr artist = Tomahawk::Artist::get( query.value( 2 ).toUInt(), query.value( 3 ).toString(), m_collection );
         Tomahawk::album_ptr album = Tomahawk::Album::get( query.value( 0 ).toUInt(), query.value( 1 ).toString(), artist, m_collection );
 
         al << album;

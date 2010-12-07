@@ -56,10 +56,13 @@ TopBar::TopBar( QWidget* parent )
     ui->radioDetailed->setFocusPolicy( Qt::NoFocus );
     ui->radioCloud->setFocusPolicy( Qt::NoFocus );
 
+    ui->radioDetailed->setEnabled( false );
+
     connect( ui->radioNormal, SIGNAL( clicked() ), SIGNAL( flatMode() ) );
     connect( ui->radioDetailed, SIGNAL( clicked() ), SIGNAL( artistMode() ) );
+    connect( ui->radioCloud, SIGNAL( clicked() ), SIGNAL( albumMode() ) );
 
-    ui->widgetRadio->hide(); // FIXME
+//    ui->widgetRadio->hide(); // FIXME
 
     setNumSources( 0 );
     setNumTracks( 0 );
@@ -168,6 +171,7 @@ void
 TopBar::setNumTracks( unsigned int i )
 {
     m_tracks = i;
+    ui->statsLabelNumTracks->setVisible( m_tracks > 0 );
     ui->statsLabelNumTracks->setVal( i );
 }
 

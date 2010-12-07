@@ -27,6 +27,7 @@ SET( TOMAHAWK_INC_DIR "${CMAKE_CURRENT_SOURCE_DIR}/../include/" )
 #ENDFOREACH( moddir )
 
 SET( tomahawkSources ${tomahawkSources}
+     artist.cpp
      album.cpp
      pipeline.cpp
      playlist.cpp

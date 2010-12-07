@@ -13,7 +13,7 @@
 
 class QMetaData;
 
-class AlbumModel : public QAbstractItemModel, public PlaylistInterface
+class AlbumModel : public QAbstractItemModel
 {
 Q_OBJECT
 
@@ -38,8 +38,6 @@ public:
     virtual void removeIndex( const QModelIndex& index );
     virtual void removeIndexes( const QList<QModelIndex>& indexes );
 
-    virtual Tomahawk::result_ptr siblingItem( int direction ) { return Tomahawk::result_ptr(); }
-
     virtual PlaylistInterface::RepeatMode repeatMode() const { return PlaylistInterface::NoRepeat; }
     virtual bool shuffled() const { return false; }
 
@@ -47,6 +45,7 @@ public:
     virtual QStringList mimeTypes() const;
     virtual Qt::ItemFlags flags( const QModelIndex& index ) const;
 
+    void addCollection( const Tomahawk::collection_ptr& collection );
     void addFilteredCollection( const Tomahawk::collection_ptr& collection, unsigned int amount, DatabaseCommand_AllAlbums::SortOrder order );
 
     AlbumItem* itemFromIndex( const QModelIndex& index ) const

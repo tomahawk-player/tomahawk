@@ -28,7 +28,8 @@ Album::get( unsigned int id, const QString& name, const Tomahawk::artist_ptr& ar
 
 
 Album::Album( unsigned int id, const QString& name, const Tomahawk::artist_ptr& artist, const Tomahawk::collection_ptr& collection )
-    : m_id( id )
+    : PlaylistInterface( this )
+    , m_id( id )
     , m_name( name )
     , m_artist( artist )
     , m_collection( collection )

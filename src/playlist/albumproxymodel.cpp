@@ -9,6 +9,7 @@
 
 AlbumProxyModel::AlbumProxyModel( QObject* parent )
     : QSortFilterProxyModel( parent )
+    , PlaylistInterface( this )
     , m_model( 0 )
 {
     qsrand( QTime( 0, 0, 0 ).secsTo( QTime::currentTime() ) );
@@ -26,15 +27,18 @@ AlbumProxyModel::setSourceModel( AlbumModel* sourceModel )
 {
     m_model = sourceModel;
 
+    connect( m_model, SIGNAL( trackCountChanged( unsigned int ) ),
+                      SIGNAL( sourceTrackCountChanged( unsigned int ) ) );
+
     QSortFilterProxyModel::setSourceModel( sourceModel );
 }
 
 
 void
-AlbumProxyModel::setFilterRegExp( const QString& pattern )
+AlbumProxyModel::setFilter( const QString& pattern )
 {
     qDebug() << Q_FUNC_INFO;
-    QSortFilterProxyModel::setFilterRegExp( pattern );
+    setFilterRegExp( pattern );
 
     emit filterChanged( pattern );
 }
@@ -53,11 +57,11 @@ AlbumProxyModel::filterAcceptsRow( int sourceRow, const QModelIndex& sourceParen
     const Tomahawk::album_ptr& q = pi->album();
 
     QStringList sl = filterRegExp().pattern().split( " ", QString::SkipEmptyParts );
-    bool found = true;
 
+    bool found = true;
     foreach( const QString& s, sl )
     {
-        if ( !q->name().contains( s, Qt::CaseInsensitive ) )
+        if ( !q->name().contains( s, Qt::CaseInsensitive ) && !q->artist()->name().contains( s, Qt::CaseInsensitive ) )
         {
             found = false;
         }
@@ -98,5 +102,5 @@ Tomahawk::result_ptr
 AlbumProxyModel::siblingItem( int itemsAway )
 {
     qDebug() << Q_FUNC_INFO;
-    return Tomahawk::result_ptr();
+    return Tomahawk::result_ptr( 0 );
 }

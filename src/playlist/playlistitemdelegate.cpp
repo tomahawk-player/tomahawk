@@ -77,7 +77,7 @@ PlaylistItemDelegate::paint( QPainter* painter, const QStyleOptionViewItem& opti
 
         if ( index.column() == index.model()->columnCount() - 1 )
         {
-            QRect r = QRect( 3, option.rect.y() + 1, m_view->contentsRect().width() - 6, option.rect.height() - 2 );
+            QRect r = QRect( 3, option.rect.y() + 1, m_view->viewport()->width() - 6, option.rect.height() - 2 );
             painter->setPen( option.palette.highlight().color() );
             QPen pen = painter->pen();
             pen.setWidth( 1.0 );

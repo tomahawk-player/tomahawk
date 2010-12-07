@@ -9,6 +9,7 @@
 #include "tomahawk/playlistinterface.h"
 
 class AnimatedSplitter;
+class AlbumView;
 class CollectionModel;
 class CollectionFlatModel;
 class CollectionView;
@@ -53,6 +54,7 @@ signals:
 public slots:
     void setTreeMode();
     void setTableMode();
+    void setAlbumMode();
 
     void showQueue();
     void hideQueue();
@@ -64,7 +66,6 @@ public slots:
 
 private slots:
     void applyFilter();
-    void onTrackCountChanged( unsigned int );
 
 private:
     void unlinkPlaylist();
@@ -82,15 +83,19 @@ private:
 
     QList< Tomahawk::collection_ptr > m_superCollections;
 
-    QHash< PlaylistInterface*, TrackView* > m_views;
     QHash< Tomahawk::collection_ptr, CollectionView* > m_collectionViews;
+    QHash< Tomahawk::collection_ptr, AlbumView* > m_collectionAlbumViews;
+
     QHash< Tomahawk::playlist_ptr, PlaylistView* > m_playlistViews;
     QHash< Tomahawk::album_ptr, PlaylistView* > m_albumViews;
     QHash< Tomahawk::source_ptr, SourceInfoWidget* > m_sourceViews;
 
-    TrackProxyModel* m_currentProxyModel;
+    /*TrackProxyModel* m_currentProxyModel;
     TrackModel* m_currentModel;
-    TrackView* m_currentView;
+    TrackView* m_currentView;*/
+
+//    QWidget* m_currentView;
+    PlaylistInterface* m_currentInterface;
 
     QWidget* m_currentInfoWidget;
 
