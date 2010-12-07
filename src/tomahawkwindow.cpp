@@ -169,6 +169,7 @@ TomahawkWindow::setupSignals()
     connect( ui->actionRescanCollection, SIGNAL( triggered() ), SLOT( rescanCollectionManually() ) );
     connect( ui->actionLoadXSPF, SIGNAL( triggered() ), SLOT( loadSpiff() ));
     connect( ui->actionCreatePlaylist, SIGNAL( triggered() ), SLOT( createPlaylist() ));
+    connect( ui->actionCreateDynamicPlaylist, SIGNAL( triggered() ), SLOT( createDynamicPlaylist() ));
     connect( ui->actionAboutTomahawk, SIGNAL( triggered() ), SLOT( showAboutTomahawk() ) );
     connect( ui->actionExit, SIGNAL( triggered() ), APP, SLOT( quit() ) );
 
@@ -319,9 +320,15 @@ TomahawkWindow::loadSpiff()
     loader->load( url );
 }
 
+void 
+TomahawkWindow::createDynamicPlaylist()
+{
+    createPlaylist( true );
+}
+
 
 void
-TomahawkWindow::createPlaylist()
+TomahawkWindow::createPlaylist( bool dynamic )
 {
     qDebug() << Q_FUNC_INFO;
 
@@ -334,7 +341,10 @@ TomahawkWindow::createPlaylist()
     QString id = uuid();
     QString info  = ""; // FIXME
     QString creator = "someone"; // FIXME
-    Playlist::create( author, id, name, info, creator, false /* shared */ );
+    if( dynamic )
+        DynamicPlaylist::create( author, id, name, info, creator, false );
+    else
+        Playlist::create( author, id, name, info, creator, false /* shared */ );
 }
 
 

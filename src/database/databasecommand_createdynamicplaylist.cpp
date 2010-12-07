@@ -19,8 +19,8 @@ DatabaseCommand_CreateDynamicPlaylist::DatabaseCommand_CreateDynamicPlaylist( QO
 
 DatabaseCommand_CreateDynamicPlaylist::DatabaseCommand_CreateDynamicPlaylist( const source_ptr& author,
                                                                 const dynplaylist_ptr& playlist )
-: DatabaseCommand_CreatePlaylist( author, playlist.staticCast<Playlist>() )
-, m_playlist( playlist )
+    : DatabaseCommand_CreatePlaylist( author, playlist.staticCast<Playlist>() )
+    , m_playlist( playlist )
 {
     qDebug() << Q_FUNC_INFO << "creating dynamiccreatecommand 2";
 }
@@ -34,13 +34,14 @@ DatabaseCommand_CreateDynamicPlaylist::exec( DatabaseImpl* lib )
     Q_ASSERT( !source().isNull() );
     
     DatabaseCommand_CreatePlaylist::exec( lib );
+    qDebug() << "Created normal playlist, now creating additional dynamic info!" << m_playlist.isNull();
     
     TomahawkSqlQuery cre = lib->newquery();
-    cre.prepare( "INSERT INTO dynamic_playlist( guid, pltype, plmode) "
-                 "VALUES( :guid, :pltype, :plmode )" );
-    cre.bindValue( ":guid", m_playlist->guid() );
-    cre.bindValue( ":pltype", m_playlist->type() );
-    cre.bindValue( ":plmode", m_playlist->mode() );
+    cre.prepare( "INSERT INTO dynamic_playlist( guid, pltype, plmode ) "
+                 "VALUES( ?, ?, ? )" );
+    cre.bindValue( 0, m_playlist->guid() );
+    cre.bindValue( 1, m_playlist->type() );
+    cre.bindValue( 2, m_playlist->mode() );
     
     qDebug() << "CREATE DYNPLAYLIST:" << cre.boundValues();
     

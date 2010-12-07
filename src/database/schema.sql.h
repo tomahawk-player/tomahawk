@@ -1,5 +1,5 @@
 /*
-    This file was automatically generated from schema.sql on Tue Jul 13 12:23:44 CEST 2010.
+    This file was automatically generated from schema.sql on Mon Dec  6 22:41:52 EST 2010.
 */
 
 static const char * tomahawk_schema_sql = 
@@ -49,7 +49,8 @@ static const char * tomahawk_schema_sql =
 "    info TEXT,"
 "    creator TEXT,"
 "    lastmodified INTEGER NOT NULL DEFAULT 0,"
-"    currentrevision TEXT REFERENCES playlist_revision(guid) DEFERRABLE INITIALLY DEFERRED"
+"    currentrevision TEXT REFERENCES playlist_revision(guid) DEFERRABLE INITIALLY DEFERRED,"
+"    dynplaylist BOOLEAN DEFAULT false"
 ");"
 "CREATE TABLE IF NOT EXISTS playlist_item ("
 "    guid TEXT PRIMARY KEY,"
@@ -71,6 +72,25 @@ static const char * tomahawk_schema_sql =
 "    author INTEGER REFERENCES source(id) ON DELETE CASCADE ON UPDATE CASCADE DEFERRABLE INITIALLY DEFERRED,"
 "    timestamp INTEGER NOT NULL DEFAULT 0,"
 "    previous_revision TEXT REFERENCES playlist_revision(guid) DEFERRABLE INITIALLY DEFERRED"
+");"
+"CREATE TABLE IF NOT EXISTS dynamic_playlist ("
+"    guid TEXT PRIMARY KEY,"
+"    pltype TEXT, "
+"    plmode INTEGER "
+");"
+"CREATE TABLE IF NOT EXISTS dynamic_playlist_controls ("
+"    id TEXT PRIMARY KEY,"
+"    playlist TEXT NOT NULL REFERENCES playlist(guid) ON DELETE CASCADE ON UPDATE CASCADE DEFERRABLE INITIALLY DEFERRED,"
+"    selectedType TEXT,"
+"    match TEXT,"
+"    input TEXT"
+");"
+""
+"CREATE TABLE IF NOT EXISTS dynamic_playlist_revision ("
+"    guid TEXT PRIMARY KEY,"
+"    controls TEXT, "
+"    plmode INTEGER REFERENCES dynamic_playlist( plmode ) ON DELETE CASCADE ON UPDATE CASCADE DEFERRABLE INITIALLY DEFERRED,"
+"    pltype TEXT REFERENCES dynamic_playlist( pltype ) ON DELETE CASCADE ON UPDATE CASCADE DEFERRABLE INITIALLY DEFERRED"
 ");"
 "CREATE TABLE IF NOT EXISTS artist_search_index ("
 "    ngram TEXT NOT NULL,"
