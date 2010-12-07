@@ -1,6 +1,7 @@
-#include <QDomDocument>
-
 #include "xspfloader.h"
+
+#include <QDomDocument>
+#include <QMessageBox>
 
 #include "tomahawk/tomahawkapp.h"
 #include "tomahawk/playlist.h"
@@ -79,6 +80,13 @@ XSPFLoader::gotBody()
     title   = docElement.firstChildElement( "title" ).text();
     info    = docElement.firstChildElement( "creator" ).text();
     creator = docElement.firstChildElement( "info" ).text();
+
+    if ( title.isEmpty() )
+    {
+        QMessageBox::critical( APP->mainWindow(), tr( "XSPF Error" ), tr( "This is not a valid XSPF playlist." ) );
+        deleteLater();
+        return;
+    }
 
     m_playlist = Playlist::create( APP->sourcelist().getLocal(),
                                    uuid(),
