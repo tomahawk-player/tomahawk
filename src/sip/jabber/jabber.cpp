@@ -35,6 +35,7 @@ JabberPlugin::connect()
         return false;
     }
 
+    delete p;
     p = new Jabber_p( jid, password, server, port );
 
     QObject::connect( p, SIGNAL( peerOnline( QString ) ), SIGNAL( peerOnline( QString ) ) );
