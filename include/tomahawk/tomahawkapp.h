@@ -29,10 +29,10 @@
 
 class AudioEngine;
 class Database;
-class Jabber;
-class XMPPBot;
+class SipHandler;
 class TomahawkZeroconf;
 class TomahawkSettings;
+class XMPPBot;
 
 namespace Tomahawk
 {
@@ -72,6 +72,7 @@ public:
     Database* database() { return m_db; }
     SourceList& sourcelist() { return m_sources; }
     Servent& servent() { return m_servent; }
+    SipHandler* sipHandler() { return m_sipHandler; }
     QNetworkAccessManager* nam() { return m_nam; }
     QNetworkProxy* proxy() { return m_proxy; }
     Tomahawk::InfoSystem::InfoSystem* infoSystem() { return m_infoSystem; }
@@ -95,17 +96,8 @@ signals:
     
 public slots:
     QSharedPointer<QIODevice> getIODeviceForUrl( const Tomahawk::result_ptr& result );
-    void reconnectJabber();
-    void jabberAddContact( const QString& jid );
 
 private slots:
-    void jabberMessage( const QString&, const QString& );
-    void jabberPeerOffline( const QString& );
-    void jabberPeerOnline( const QString& );
-    void jabberAuthError( int code, const QString& msg );
-    void jabberDisconnected();
-    void jabberConnected();
-
     void lanHostFound( const QString&, int, const QString&, const QString& );
 
 private:
@@ -114,7 +106,7 @@ private:
     void registerMetaTypes();
     void startServent();
     void setupDatabase();
-    void setupJabber();
+    void setupSIP();
     void setupPipeline();
     void startHTTP();
 
@@ -127,7 +119,7 @@ private:
     Servent m_servent;
     SourceList m_sources;
     TomahawkZeroconf* m_zeroconf;
-    QSharedPointer<Jabber> m_jabber;
+    SipHandler* m_sipHandler;
     XMPPBot* m_xmppBot;
 
 #ifndef NO_LIBLASTFM

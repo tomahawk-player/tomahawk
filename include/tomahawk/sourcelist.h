@@ -21,8 +21,8 @@ public:
     void remove( Tomahawk::Source* s );
 
     QList<Tomahawk::source_ptr> sources() const;
-    Tomahawk::source_ptr lookup( const QString& username ) const;
-    Tomahawk::source_ptr lookup( unsigned int id ) const;
+    Tomahawk::source_ptr get( const QString& username ) const;
+    Tomahawk::source_ptr get( unsigned int id ) const;
     unsigned int count() const;
 
 signals:

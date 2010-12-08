@@ -120,7 +120,7 @@ DatabaseCommand_Resolve::exec( DatabaseImpl* lib )
         }
         else
         {
-            source_ptr s = APP->sourcelist().lookup( files_query.value( 13 ).toUInt() );
+            source_ptr s = APP->sourcelist().get( files_query.value( 13 ).toUInt() );
             if( s.isNull() )
             {
                 //qDebug() << "Skipping result for offline sourceid:" << files_query.value(13).toUInt();

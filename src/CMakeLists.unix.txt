@@ -6,7 +6,7 @@ ADD_DEFINITIONS( -fPIC )
 
 SET( GLOOX_LIBS ${GLOOX_LIBS} resolv gloox )
 
-SET( OS_SPECIFIC_LINK_LIBRARIES 
+SET( OS_SPECIFIC_LINK_LIBRARIES
         ${LIBLASTFM_LIBRARY}
         ${GLOOX_LIBS}
         qxtweb-standalone

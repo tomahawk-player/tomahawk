@@ -79,7 +79,7 @@ SourceList::sources() const
 
 
 source_ptr
-SourceList::lookup( unsigned int id ) const
+SourceList::get( unsigned int id ) const
 {
     QMutexLocker lock( &m_mut );
     return m_sources.value( m_sources_id2name.value( id ) );
@@ -87,7 +87,7 @@ SourceList::lookup( unsigned int id ) const
 
 
 source_ptr
-SourceList::lookup( const QString& username ) const
+SourceList::get( const QString& username ) const
 {
     QMutexLocker lock( &m_mut );
     return m_sources.value( username );

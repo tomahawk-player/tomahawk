@@ -20,6 +20,8 @@
 #include "database/databasecommand_collectionstats.h"
 #include "topbar/topbar.h"
 
+#include "sip/SipHandler.h"
+
 #include "audiocontrols.h"
 #include "controlconnection.h"
 #include "database.h"
@@ -168,6 +170,11 @@ TomahawkWindow::setupSignals()
     connect( ui->actionCreatePlaylist, SIGNAL( triggered() ), SLOT( createPlaylist() ));
     connect( ui->actionAboutTomahawk, SIGNAL( triggered() ), SLOT( showAboutTomahawk() ) );
     connect( ui->actionExit, SIGNAL( triggered() ), APP, SLOT( quit() ) );
+
+    // <SipHandler>
+    connect( APP->sipHandler(), SIGNAL( connected() ), SLOT( onSipConnected() ) );
+    connect( APP->sipHandler(), SIGNAL( disconnected() ), SLOT( onSipDisconnected() ) );
+    connect( APP->sipHandler(), SIGNAL( authError() ), SLOT( onSipError() ) );
 }
 
 
@@ -293,7 +300,7 @@ TomahawkWindow::addFriendManually()
         return;
 
     qDebug() << "Attempting to add jabber contact to roster:" << id;
-    APP->jabberAddContact( id );
+    APP->sipHandler()->addContact( id );
 }
 
 
@@ -335,6 +342,32 @@ TomahawkWindow::onPlaybackLoading( const Tomahawk::result_ptr& result )
 {
     m_currentTrack = result;
     setWindowTitle( m_windowTitle );
+}
+
+
+void
+TomahawkWindow::onSipConnected()
+{
+    ui->statusButton->setText( tr( "Online" ) );
+}
+
+
+void
+TomahawkWindow::onSipDisconnected()
+{
+    ui->statusButton->setText( tr( "Offline" ) );
+}
+
+
+void
+TomahawkWindow::onSipError()
+{
+    onSipDisconnected();
+
+    QMessageBox::warning( this,
+                          tr( "Authentication Error" ),
+                          QString( "Error connecting to SIP: Authentication failed!" ),
+                          QMessageBox::Ok );
 }
 
 

@@ -14,14 +14,13 @@
 #include "database/databasecollection.h"
 #include "database/databasecommand_collectionstats.h"
 #include "database/databaseresolver.h"
-#include "jabber/jabber.h"
+#include "sip/SipHandler.h"
 #include "utils/tomahawkutils.h"
 #include "xmppbot/xmppbot.h"
 #include "web/api_v1.h"
 #include "scriptresolver.h"
 
 #include "audioengine.h"
-#include "controlconnection.h"
 #include "tomahawkzeroconf.h"
 
 #ifndef TOMAHAWK_HEADLESS
@@ -154,16 +153,6 @@ TomahawkApp::TomahawkApp( int& argc, char *argv[] )
         m_nam = new QNetworkAccessManager;
 #endif
 
-#ifndef TOMAHAWK_HEADLESS
-    if ( !m_headless )
-    {
-        m_mainwindow = new TomahawkWindow();
-        m_mainwindow->setWindowTitle( "Tomahawk" );
-        m_mainwindow->show();
-        connect( m_mainwindow, SIGNAL( settingsChanged() ), SIGNAL( settingsChanged() ) );
-    }
-#endif
-
     // Set up proxy
     if( m_settings->proxyType() != QNetworkProxy::NoProxy && !m_settings->proxyHost().isEmpty() )
     {
@@ -185,6 +174,22 @@ TomahawkApp::TomahawkApp( int& argc, char *argv[] )
         boost::bind( &TomahawkApp::httpIODeviceFactory, this, _1 );
     this->registerIODeviceFactory( "http", fac );
 
+    if( !arguments().contains("--nojabber") )
+    {
+        setupSIP();
+        m_xmppBot = new XMPPBot( this );
+    }
+
+#ifndef TOMAHAWK_HEADLESS
+    if ( !m_headless )
+    {
+        m_mainwindow = new TomahawkWindow();
+        m_mainwindow->setWindowTitle( "Tomahawk" );
+        m_mainwindow->show();
+        connect( m_mainwindow, SIGNAL( settingsChanged() ), SIGNAL( settingsChanged() ) );
+    }
+#endif
+
     setupPipeline();
     initLocalCollection();
     startServent();
@@ -192,9 +197,6 @@ TomahawkApp::TomahawkApp( int& argc, char *argv[] )
 
     if( arguments().contains( "--http" ) || settings()->value( "network/http", true ).toBool() )
         startHTTP();
-
-    if( !arguments().contains("--nojabber") ) setupJabber();
-    m_xmppBot = new XMPPBot( this );
 
     if ( !arguments().contains( "--nozeroconf" ) )
     {
@@ -205,12 +207,14 @@ TomahawkApp::TomahawkApp( int& argc, char *argv[] )
         m_zeroconf->advertise();
     }
 
-    #ifndef TOMAHAWK_HEADLESS
+    m_sipHandler->connect();
+
+#ifndef TOMAHAWK_HEADLESS
     if ( !m_settings->hasScannerPath() )
     {
         m_mainwindow->showSettingsDialog();
     }
-    #endif
+#endif
 }
 
 
@@ -218,10 +222,7 @@ TomahawkApp::~TomahawkApp()
 {
     qDebug() << Q_FUNC_INFO;
 
-    if ( !m_jabber.isNull() )
-    {
-        m_jabber.clear();
-    }
+    delete m_sipHandler;
 
 #ifndef TOMAHAWK_HEADLESS
     delete m_mainwindow;
@@ -432,218 +433,13 @@ TomahawkApp::loadPlugins()
 
 
 void
-TomahawkApp::setupJabber()
-{
-    qDebug() << Q_FUNC_INFO;
-    if ( !m_jabber.isNull() )
-        return;
-    if ( !m_settings->value( "jabber/autoconnect", true ).toBool() )
-        return;
-
-    QString jid       = m_settings->value( "jabber/username"   ).toString();
-    QString server    = m_settings->value( "jabber/server"     ).toString();
-    QString password  = m_settings->value( "jabber/password"   ).toString();
-    unsigned int port = m_settings->value( "jabber/port", 5222 ).toUInt();
-
-    // gtalk check
-    if( server.isEmpty() && ( jid.contains("@gmail.com") || jid.contains("@googlemail.com") ) )
-    {
-        qDebug() << "Setting jabber server to talk.google.com";
-        server = "talk.google.com";
-    }
-
-    if ( port < 1 || port > 65535 || jid.isEmpty() || password.isEmpty() )
-    {
-        qDebug() << "Jabber credentials look wrong, not connecting";
-        return;
-    }
-
-    m_jabber = QSharedPointer<Jabber>( new Jabber( jid, password, server, port ) );
-
-    connect( m_jabber.data(), SIGNAL( peerOnline( QString ) ), SLOT( jabberPeerOnline( QString ) ) );
-    connect( m_jabber.data(), SIGNAL( peerOffline( QString ) ), SLOT( jabberPeerOffline( QString ) ) );
-    connect( m_jabber.data(), SIGNAL( msgReceived( QString, QString ) ), SLOT( jabberMessage( QString, QString ) ) );
-
-    connect( m_jabber.data(), SIGNAL( connected() ), SLOT( jabberConnected() ) );
-    connect( m_jabber.data(), SIGNAL( disconnected() ),  SLOT( jabberDisconnected() ) );
-    connect( m_jabber.data(), SIGNAL( authError( int, QString ) ), SLOT( jabberAuthError( int, QString ) ) );
-
-    m_jabber->setProxy( m_proxy );
-    m_jabber->start();
-}
-
-
-void
-TomahawkApp::reconnectJabber()
-{
-    m_jabber.clear();
-    setupJabber();
-}
-
-
-void
-TomahawkApp::jabberAddContact( const QString& jid )
-{
-    m_jabber->addContact( jid );
-}
-
-
-void
-TomahawkApp::jabberAuthError( int code, const QString& msg )
-{
-    qWarning() << "Failed to connect to jabber" << code << msg;
-
-#ifndef TOMAHAWK_HEADLESS
-    if( m_mainwindow )
-    {
-        m_mainwindow->setWindowTitle( QString("Tomahawk [jabber: %1, portfwd: %2]")
-                                      .arg( "AUTH_ERROR" )
-                                      .arg( (servent().externalPort() > 0) ? QString( "YES:%1" ).arg(servent().externalPort()) :"NO" ) );
-
-        if ( code == gloox::ConnAuthenticationFailed )
-        {
-            QMessageBox::warning( m_mainwindow,
-                                  "Jabber Auth Error",
-                                  QString("Error connecting to Jabber (%1) %2").arg(code).arg(msg),
-                                  QMessageBox::Ok );
-        }
-    }
-#endif
-
-    if ( code != gloox::ConnAuthenticationFailed )
-        QTimer::singleShot( 10000, this, SLOT( reconnectJabber() ) );
-}
-
-
-void
-TomahawkApp::jabberConnected()
+TomahawkApp::setupSIP()
 {
     qDebug() << Q_FUNC_INFO;
 
-#ifndef TOMAHAWK_HEADLESS
-    if( m_mainwindow )
-    {
-        m_mainwindow->setWindowTitle( QString("Tomahawk [jabber: %1, portfwd: %2]")
-                                      .arg( "CONNECTED" )
-                                      .arg( (servent().externalPort() > 0) ? QString( "YES:%1" ).arg(servent().externalPort()):"NO" ) );
-    }
-#endif
-}
+    m_sipHandler = new SipHandler( this );
 
-
-void
-TomahawkApp::jabberDisconnected()
-{
-    qDebug() << Q_FUNC_INFO;
-
-#ifndef TOMAHAWK_HEADLESS
-    if( m_mainwindow )
-    {
-        m_mainwindow->setWindowTitle( QString("Tomahawk [jabber: %1, portfwd: %2]")
-                                      .arg( "DISCONNECTED" )
-                                      .arg( (servent().externalPort() > 0) ? QString( "YES:%1" ).arg(servent().externalPort()):"NO" ) );
-    }
-#endif
-}
-
-
-void
-TomahawkApp::jabberPeerOnline( const QString& jid )
-{
-//    qDebug() << Q_FUNC_INFO;
-//    qDebug() << "Jabber Peer online:" << jid;
-
-    QVariantMap m;
-    if( m_servent.visibleExternally() )
-    {
-        QString key = uuid();
-        ControlConnection* conn = new ControlConnection( &m_servent );
-
-        const QString& nodeid = APP->nodeID();
-        conn->setName( jid.left( jid.indexOf( "/" ) ) );
-        conn->setId( nodeid );
-
-        // FIXME strip /resource, but we should use a UID per database install
-        //QString uniqname = jid.left( jid.indexOf("/") );
-        //conn->setName( uniqname ); //FIXME
-
-        // FIXME:
-        //QString ouruniqname = m_settings->value( "jabber/username" ).toString()
-        //                      .left( m_settings->value( "jabber/username" ).toString().indexOf("/") );
-
-        m_servent.registerOffer( key, conn );
-        m["visible"] = true;
-        m["ip"] = m_servent.externalAddress().toString();
-        m["port"] = m_servent.externalPort();
-        m["key"] = key;
-        m["uniqname"] = nodeid;
-
-        qDebug() << "Asking them to connect to us:" << m;
-    }
-    else
-    {
-        m["visible"] = false;
-        qDebug() << "We are not visible externally:" << m;
-    }
-
-    QJson::Serializer ser;
-    QByteArray ba = ser.serialize( m );
-    m_jabber->sendMsg( jid, QString::fromAscii( ba ) );
-}
-
-
-void
-TomahawkApp::jabberPeerOffline( const QString& jid )
-{
-//    qDebug() << Q_FUNC_INFO;
-//    qDebug() << "Jabber Peer offline:" << jid;
-}
-
-
-void
-TomahawkApp::jabberMessage( const QString& from, const QString& msg )
-{
-    qDebug() << Q_FUNC_INFO;
-    qDebug() << "Jabber Message:" << from << msg;
-
-    QJson::Parser parser;
-    bool ok;
-    QVariant v = parser.parse( msg.toAscii(), &ok );
-    if ( !ok  || v.type() != QVariant::Map )
-    {
-        qDebug() << "Invalid JSON in XMPP msg";
-        return;
-    }
-
-    QVariantMap m = v.toMap();
-    /*
-      If only one party is externally visible, connection is obvious
-      If both are, peer with lowest IP address initiates the connection.
-      This avoids dupe connections.
-     */
-    if ( m.value( "visible" ).toBool() )
-    {
-        if( !m_servent.visibleExternally() ||
-            m_servent.externalAddress().toString() <= m.value( "ip" ).toString() )
-        {
-            qDebug() << "Initiate connection to" << from;
-            m_servent.connectToPeer( m.value( "ip"   ).toString(),
-                                     m.value( "port" ).toInt(),
-                                     m.value( "key"  ).toString(),
-                                     from,
-                                     m.value( "uniqname" ).toString() );
-        }
-        else
-        {
-            qDebug() << Q_FUNC_INFO << "They should be conecting to us...";
-        }
-    }
-    else
-    {
-        qDebug() << Q_FUNC_INFO << "They are not visible, doing nothing atm";
-//        if ( m_servent.visibleExternally() )
-//            jabberPeerOnline( from ); // HACK FIXME
-    }
+//    m_sipHandler->setProxy( m_proxy );
 }
 
 

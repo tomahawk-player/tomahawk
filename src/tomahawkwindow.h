@@ -50,6 +50,11 @@ public slots:
 private slots:
     void scanFinished();
     void rescanCollectionManually();
+
+    void onSipConnected();
+    void onSipDisconnected();
+    void onSipError();
+
     void addPeerManually();
     void addFriendManually();
 

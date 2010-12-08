@@ -43,7 +43,9 @@ SET( tomahawkSources ${tomahawkSources}
      audio/audioengine.cpp
 
      utils/tomahawkutils.cpp
-     jabber/jabber_p.cpp
+
+     sip/SipHandler.cpp
+     sip/SipPlugin.cpp
 
      infosystem/infosystem.cpp
      infosystem/infoplugins/echonestplugin.cpp
@@ -205,8 +207,8 @@ SET( tomahawkHeaders ${tomahawkHeaders}
      database/databasecommand_updatesearchindex.h
      database/databasecollection.h
 
-     jabber/jabber.h
-     jabber/jabber_p.h
+     sip/SipHandler.h
+     sip/SipPlugin.h
 
      infosystem/infoplugins/echonestplugin.h
      infosystem/infoplugins/musixmatchplugin.h
@@ -328,6 +330,8 @@ ENDIF( WIN32 )
 IF( UNIX )
   INCLUDE( "CMakeLists.unix.txt" )
 ENDIF( UNIX )
+
+ADD_SUBDIRECTORY( sip/jabber )
 
 kde4_add_app_icon( tomahawkSources "${CMAKE_CURRENT_SOURCE_DIR}/../data/icons/tomahawk-icon-*.png" )
 qt4_add_resources( RC_SRCS "../resources.qrc" )

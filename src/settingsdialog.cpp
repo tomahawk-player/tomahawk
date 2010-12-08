@@ -4,6 +4,7 @@
 
 #include <QCryptographicHash>
 #include <QDebug>
+#include <QDesktopServices>
 #include <QFileDialog>
 #include <QMessageBox>
 #include <QNetworkProxy>
@@ -16,7 +17,7 @@
 #include "tomahawk/tomahawkapp.h"
 #include "musicscanner.h"
 #include "tomahawksettings.h"
-#include <QDesktopServices>
+#include "sip/SipHandler.h"
 
 
 static QString
@@ -121,7 +122,8 @@ SettingsDialog::~SettingsDialog()
 
         if( rejabber )
         {
-            APP->reconnectJabber();
+            APP->sipHandler()->disconnect();
+            APP->sipHandler()->connect();
         }
     }
     else

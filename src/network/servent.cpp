@@ -572,7 +572,7 @@ Servent::remoteIODeviceFactory( const result_ptr& result )
     QStringList parts = result->url().mid( QString( "servent://" ).length()).split( "\t" );
     const QString& sourceName = parts.at( 0 );
     const QString& fileId = parts.at( 1 );
-    const source_ptr& s = TomahawkApp::instance()->sourcelist().lookup( sourceName );
+    const source_ptr& s = TomahawkApp::instance()->sourcelist().get( sourceName );
     if ( s.isNull() )
         return sp;
 
