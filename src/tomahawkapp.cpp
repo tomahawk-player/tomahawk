@@ -17,7 +17,6 @@
 #include "sip/SipHandler.h"
 #include "dynamic/generatorfactory.h"
 #include "dynamic/echonest/echonestgenerator.h"
-#include "jabber/jabber.h"
 #include "utils/tomahawkutils.h"
 #include "xmppbot/xmppbot.h"
 #include "web/api_v1.h"

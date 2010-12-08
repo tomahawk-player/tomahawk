@@ -4,11 +4,10 @@
 #include <QObject>
 #include <QList>
 #include <QDebug>
+#include <QVariant>
 #include <QSharedPointer>
 
-#include "tomahawk/query.h"
 #include "tomahawk/typedefs.h"
-#include "typedefs.h"
 
 class DatabaseCommand_LoadAllPlaylists;
 class DatabaseCommand_SetPlaylistRevision;
@@ -28,9 +27,12 @@ Q_PROPERTY( unsigned int lastmodified READ lastmodified WRITE setLastmodified )
 Q_PROPERTY( QVariant query            READ queryvariant WRITE setQueryvariant )
 
 public:
-    void setQuery( const Tomahawk::query_ptr& q ) { m_query = q; }
-    const Tomahawk::query_ptr& query() const { return m_query; }
-
+    PlaylistEntry();
+    virtual ~PlaylistEntry();
+    
+    void setQuery( const Tomahawk::query_ptr& q );
+    const Tomahawk::query_ptr& query() const;
+    
     // I wish Qt did this for me once i specified the Q_PROPERTIES:
     void setQueryvariant( const QVariant& v );
     QVariant queryvariant() const;
@@ -50,10 +52,10 @@ public:
     unsigned int lastmodified() const { return m_lastmodified; }
     void setLastmodified( unsigned int i ) { m_lastmodified = i; }
 
-    source_ptr lastsource() const { return m_lastsource; }
-    void setLastsource( source_ptr s ) { m_lastsource = s; }
+    source_ptr lastsource() const;
+    void setLastsource( source_ptr s );
 
-private:
+private:    
     QString m_guid;
     Tomahawk::query_ptr m_query;
     QString m_annotation;
@@ -90,6 +92,8 @@ friend class ::DatabaseCommand_SetPlaylistRevision;
 friend class ::DatabaseCommand_CreatePlaylist;
 
 public:
+    ~Playlist();
+    
     // one CTOR is private, only called by DatabaseCommand_LoadAllPlaylists
     static Tomahawk::playlist_ptr create( const source_ptr& author,
                                          const QString& guid,
@@ -103,7 +107,7 @@ public:
 
     virtual void loadRevision( const QString& rev = "" );
 
-    const source_ptr& author()          { return m_source; }
+    const source_ptr& author();
     const QString& currentrevision()    { return m_currentrevision; }
     const QString& title()              { return m_title; }
     const QString& info()               { return m_info; }

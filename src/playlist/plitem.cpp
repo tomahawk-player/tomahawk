@@ -2,6 +2,7 @@
 
 #include "utils/tomahawkutils.h"
 #include "tomahawk/playlist.h"
+#include "tomahawk/query.h"
 
 #include <QDebug>
 

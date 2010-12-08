@@ -31,6 +31,11 @@ Collection::name() const
     return m_name;
 }
 
+const 
+source_ptr& Collection::source() const
+{
+    return m_source;
+}
 
 void
 Collection::addPlaylist( const Tomahawk::playlist_ptr& p )

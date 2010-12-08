@@ -13,6 +13,8 @@
 
 using namespace Tomahawk;
 
+PlaylistEntry::PlaylistEntry() {}
+PlaylistEntry::~PlaylistEntry() {}
 
 void
 PlaylistEntry::setQueryvariant( const QVariant& v )
@@ -27,6 +29,30 @@ PlaylistEntry::queryvariant() const
     return m_query->toVariant();
 }
 
+void 
+PlaylistEntry::setQuery( const Tomahawk::query_ptr& q )
+{
+    m_query = q;
+}
+
+const Tomahawk::query_ptr& 
+PlaylistEntry::query() const
+{
+    return m_query;
+}
+
+
+source_ptr 
+PlaylistEntry::lastsource() const
+{
+    return m_lastsource;
+}
+
+void 
+PlaylistEntry::setLastsource( source_ptr s )
+{
+    m_lastsource = s;
+}
 
 Playlist::Playlist( const source_ptr& author )
     : m_source( author )
@@ -76,6 +102,7 @@ Playlist::Playlist( const source_ptr& author,
     qDebug() << Q_FUNC_INFO << "2";
 }
 
+Playlist::~Playlist() {}
 
 playlist_ptr
 Playlist::create( const source_ptr& author,
@@ -320,6 +347,12 @@ Playlist::setNewRevision( const QString& rev,
         
         pr.newlist = entries;
         return pr;
+}
+
+const source_ptr&
+Playlist::author()
+{ 
+    return m_source; 
 }
 
 void Playlist::resolve()

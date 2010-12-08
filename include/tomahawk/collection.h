@@ -14,6 +14,7 @@
 #include <QDebug>
 
 #include "tomahawk/functimeout.h"
+#include "tomahawk/query.h"
 #include "tomahawk/source.h"
 #include "tomahawk/typedefs.h"
 #include "typedefs.h"
@@ -49,7 +50,7 @@ public:
     virtual QList< Tomahawk::dynplaylist_ptr > dynamicPlaylists() { return m_dynplaylists; }
     virtual QList< Tomahawk::query_ptr > tracks() { return m_tracks; }
 
-    const source_ptr& source() const { return m_source; }
+    const source_ptr& source() const;
     unsigned int lastmodified() const { return m_lastmodified; }
 
 signals:
