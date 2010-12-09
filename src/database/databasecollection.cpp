@@ -5,6 +5,7 @@
 #include "databasecommand_alltracks.h"
 #include "databasecommand_addfiles.h"
 #include "databasecommand_loadallplaylists.h"
+#include "databasecommand_loadalldynamicplaylists.h"
 
 using namespace Tomahawk;
 
@@ -31,12 +32,12 @@ void
 DatabaseCollection::loadDynamicPlaylists()
 {
     qDebug() << Q_FUNC_INFO;
-//     DatabaseCommand_LoadAllDynamicPlaylists* cmd = new DatabaseCommand_LoadAllDynamicPlaylists( source() );
-//     
-//     connect( cmd,  SIGNAL( done( const QList<Tomahawk::dynplaylist_ptr>& ) ),
-//              SLOT( setDynamicPlaylists( const QList<Tomahawk::dynplaylist_ptr>& ) ) );
-//     
-//     TomahawkApp::instance()->database()->enqueue( QSharedPointer<DatabaseCommand>( cmd ) );
+    DatabaseCommand_LoadAllDynamicPlaylists* cmd = new DatabaseCommand_LoadAllDynamicPlaylists( source() );
+    
+    connect( cmd,  SIGNAL( done( const QList<Tomahawk::dynplaylist_ptr>& ) ),
+             SLOT( setDynamicPlaylists( const QList<Tomahawk::dynplaylist_ptr>& ) ) );
+    
+    TomahawkApp::instance()->database()->enqueue( QSharedPointer<DatabaseCommand>( cmd ) );
 }
 
 

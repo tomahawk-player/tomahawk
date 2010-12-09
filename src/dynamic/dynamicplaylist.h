@@ -25,6 +25,10 @@
 #include "tomahawk/typedefs.h"
 #include "dynamic/dynamiccontrol.h"
 
+class DatabaseCommand_LoadAllDynamicPlaylists;
+class DatabaseCommand_SetDynamicPlaylistRevision;
+class DatabaseCommand_CreateDynamicPlaylist;
+
 namespace Tomahawk {
     
 /**
@@ -57,7 +61,11 @@ class DynamicPlaylist : public Playlist
     
     Q_PROPERTY( GeneratorMode mode  WRITE setMode   READ mode )
     Q_PROPERTY( QString type                  WRITE setType   READ type )
-        
+    
+    friend class ::DatabaseCommand_LoadAllDynamicPlaylists;
+    friend class ::DatabaseCommand_SetDynamicPlaylistRevision;
+    friend class ::DatabaseCommand_CreateDynamicPlaylist;
+    
 public:    
     virtual ~DynamicPlaylist();
     

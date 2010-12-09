@@ -1,5 +1,5 @@
 /*
-    This file was automatically generated from schema.sql on Mon Dec  6 22:41:52 EST 2010.
+    This file was automatically generated from schema.sql on Wed Dec  8 22:37:14 EST 2010.
 */
 
 static const char * tomahawk_schema_sql = 
@@ -52,6 +52,8 @@ static const char * tomahawk_schema_sql =
 "    currentrevision TEXT REFERENCES playlist_revision(guid) DEFERRABLE INITIALLY DEFERRED,"
 "    dynplaylist BOOLEAN DEFAULT false"
 ");"
+"INSERT INTO playlist(guid, title, info, currentrevision, dynplaylist)"
+"VALUES('dynamic_playlist-guid-1','Test Dynamic Playlist','this playlist automatically created and used for testing','revisionguid-1', 1);"
 "CREATE TABLE IF NOT EXISTS playlist_item ("
 "    guid TEXT PRIMARY KEY,"
 "    playlist TEXT NOT NULL REFERENCES playlist(guid) ON DELETE CASCADE ON UPDATE CASCADE DEFERRABLE INITIALLY DEFERRED,"
@@ -73,11 +75,17 @@ static const char * tomahawk_schema_sql =
 "    timestamp INTEGER NOT NULL DEFAULT 0,"
 "    previous_revision TEXT REFERENCES playlist_revision(guid) DEFERRABLE INITIALLY DEFERRED"
 ");"
+"INSERT INTO playlist_revision(guid, playlist, entries)"
+"      VALUES('revisionguid-1', 'playlistguid-1', '[\"itemguid-2\",\"itemguid-1\",\"itemguid-3\"]');"
 "CREATE TABLE IF NOT EXISTS dynamic_playlist ("
 "    guid TEXT PRIMARY KEY,"
 "    pltype TEXT, "
 "    plmode INTEGER "
 ");"
+"INSERT INTO dynamic_playlist(guid, pltype, plmode)"
+"      VALUES('dynamic_playlist-guid-1', 'echonest', 0);"
+"INSERT INTO dynamic_playlist(guid, pltype, plmode)"
+"      VALUES('dynamic_playlist-guid-2', 'echonest', 0);"
 "CREATE TABLE IF NOT EXISTS dynamic_playlist_controls ("
 "    id TEXT PRIMARY KEY,"
 "    playlist TEXT NOT NULL REFERENCES playlist(guid) ON DELETE CASCADE ON UPDATE CASCADE DEFERRABLE INITIALLY DEFERRED,"
@@ -85,6 +93,8 @@ static const char * tomahawk_schema_sql =
 "    match TEXT,"
 "    input TEXT"
 ");"
+"INSERT INTO dynamic_playlist_controls(id, playlist, selectedType, match, input)"
+"      VALUES('controlid-1', 'dynamic_playlist-guid-1', \"artist\", 0, \"FooArtist\" );"
 ""
 "CREATE TABLE IF NOT EXISTS dynamic_playlist_revision ("
 "    guid TEXT PRIMARY KEY,"
@@ -92,6 +102,8 @@ static const char * tomahawk_schema_sql =
 "    plmode INTEGER REFERENCES dynamic_playlist( plmode ) ON DELETE CASCADE ON UPDATE CASCADE DEFERRABLE INITIALLY DEFERRED,"
 "    pltype TEXT REFERENCES dynamic_playlist( pltype ) ON DELETE CASCADE ON UPDATE CASCADE DEFERRABLE INITIALLY DEFERRED"
 ");"
+"INSERT INTO dynamic_playlist_revision(guid, controls, plmode, pltype)"
+"      VALUES('revisionguid-1', '[\"controlid-1\"]', 0, \"echonest\");"
 "CREATE TABLE IF NOT EXISTS artist_search_index ("
 "    ngram TEXT NOT NULL,"
 "    id INTEGER NOT NULL REFERENCES artist(id) ON DELETE CASCADE ON UPDATE CASCADE DEFERRABLE INITIALLY DEFERRED,"

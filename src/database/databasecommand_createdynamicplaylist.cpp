@@ -1,6 +1,7 @@
 #include "databasecommand_createdynamicplaylist.h"
 
 #include <QSqlQuery>
+#include <QSqlDriver>
 
 #include "tomahawk/tomahawkapp.h"
 #include "dynamic/dynamicplaylist.h"
@@ -34,17 +35,13 @@ DatabaseCommand_CreateDynamicPlaylist::exec( DatabaseImpl* lib )
     Q_ASSERT( !source().isNull() );
     
     DatabaseCommand_CreatePlaylist::exec( lib );
-    qDebug() << "Created normal playlist, now creating additional dynamic info!" << m_playlist.isNull();
+    qDebug() << "Created normal playlist, now creating additional dynamic info!";
     
     TomahawkSqlQuery cre = lib->newquery();
-    cre.prepare( "INSERT INTO dynamic_playlist( guid, pltype, plmode ) "
-                 "VALUES( ?, ?, ? )" );
-    cre.bindValue( 0, m_playlist->guid() );
-    cre.bindValue( 1, m_playlist->type() );
-    cre.bindValue( 2, m_playlist->mode() );
-    
-    qDebug() << "CREATE DYNPLAYLIST:" << cre.boundValues();
-    
+    qDebug() << "open driver?" << cre.driver()->isOpen();
+    cre.prepare( QString( "INSERT INTO dynamic_playlist( guid, pltype, plmode ) "
+                 "VALUES( '%1', '%2', %3 )" ).arg( m_playlist->guid() ).arg( m_playlist->type() ).arg( m_playlist->mode() ) );
+        
     cre.exec();
     
     // save the controls

@@ -93,6 +93,8 @@ SET( tomahawkSources ${tomahawkSources}
      database/databasecommand_setdynamicplaylistrevision.cpp
      database/databasecommand_createdynamicplaylist.cpp
      database/databasecommand_loaddynamicplaylist.cpp
+     database/databasecommand_loadalldynamicplaylists.cpp
+     database/databasecommand_deletedynamicplaylist.cpp
      database/databasecollection.cpp
 
      dynamic/dynamicplaylist.cpp
@@ -216,6 +218,8 @@ SET( tomahawkHeaders ${tomahawkHeaders}
      database/databasecommand_setdynamicplaylistrevision.h
      database/databasecommand_createdynamicplaylist.h
      database/databasecommand_loaddynamicplaylist.h
+     database/databasecommand_deletedynamicplaylist.h
+     database/databasecommand_loadalldynamicplaylists.h
      database/databasecommand_renameplaylist.h
      database/databasecommand_loadops.h
      database/databasecommand_updatesearchindex.h
