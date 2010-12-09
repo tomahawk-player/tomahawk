@@ -451,9 +451,9 @@ PlaylistManager::setShuffled( bool enabled )
 void
 PlaylistManager::showCurrentTrack()
 {
-    m_currentInterface = APP->audioEngine()->currentTrackPlaylist();
-
     unlinkPlaylist();
+
+    m_currentInterface = APP->audioEngine()->currentTrackPlaylist();
 
     if ( m_currentInterface->widget() )
         m_stack->setCurrentWidget( m_currentInterface->widget() );

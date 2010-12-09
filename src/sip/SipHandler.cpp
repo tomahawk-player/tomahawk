@@ -83,7 +83,7 @@ void
 SipHandler::onPeerOnline( const QString& jid )
 {
 //    qDebug() << Q_FUNC_INFO;
-    qDebug() << "Jabber online:" << jid;
+    qDebug() << "SIP online:" << jid;
 
     SipPlugin* sip = qobject_cast<SipPlugin*>(sender());
 
@@ -131,7 +131,7 @@ void
 SipHandler::onPeerOffline( const QString& jid )
 {
 //    qDebug() << Q_FUNC_INFO;
-    qDebug() << "Jabber offline:" << jid;
+    qDebug() << "SIP offline:" << jid;
 }
 
 
@@ -139,7 +139,7 @@ void
 SipHandler::onMessage( const QString& from, const QString& msg )
 {
     qDebug() << Q_FUNC_INFO;
-    qDebug() << "Jabber Message:" << from << msg;
+    qDebug() << "SIP Message:" << from << msg;
 
     QJson::Parser parser;
     bool ok;
@@ -193,6 +193,7 @@ SipHandler::onError( int code, const QString& msg )
     }
     else
     {
-//        QTimer::singleShot( 10000, this, SLOT( reconnectJabber() ) );
+        SipPlugin* sip = qobject_cast<SipPlugin*>(sender());
+        QTimer::singleShot( 10000, sip, SLOT( connect() ) );
     }
 }

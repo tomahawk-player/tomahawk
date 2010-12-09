@@ -18,9 +18,9 @@ public:
 
     void setProxy( QNetworkProxy* proxy );
 
+public slots:
     virtual bool connect();
 
-public slots:
     void disconnect()
     {
         QMetaObject::invokeMethod( p,

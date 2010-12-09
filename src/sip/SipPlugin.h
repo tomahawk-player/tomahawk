@@ -13,6 +13,7 @@ public:
 
     virtual ~SipPlugin() {}
 
+public slots:
     virtual bool connect() = 0;
     virtual void disconnect() = 0;
 
