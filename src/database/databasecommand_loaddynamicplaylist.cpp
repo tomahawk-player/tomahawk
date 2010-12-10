@@ -21,10 +21,10 @@ DatabaseCommand_LoadDynamicPlaylist::exec( DatabaseImpl* dbi )
     // now load the controls etc
     
     TomahawkSqlQuery controlsQuery = dbi->newquery();
-    controlsQuery.prepare("SELECT controls, plmode, pltype"
+    controlsQuery.prepare("SELECT controls, plmode, pltype "
                           "FROM dynamic_playlist_revision "
-                          "WHERE guid = :guid");
-    controlsQuery.bindValue( ":guid", guid() );
+                          "WHERE guid = ?");
+    controlsQuery.addBindValue( guid() );
     controlsQuery.exec();
     
     QList< dyncontrol_ptr > controls;

@@ -135,7 +135,9 @@ TomahawkApp::TomahawkApp( int& argc, char *argv[] )
     m_settings = new TomahawkSettings( this );
     m_audioEngine = new AudioEngine;
     setupDatabase();
-
+    
+    GeneratorFactory::registerFactory( "echonest", new EchonestFactory );
+    
 #ifndef NO_LIBLASTFM
         m_scrobbler = new Scrobbler( this );
         m_nam = new lastfm::NetworkAccessManager( this );
@@ -217,8 +219,6 @@ TomahawkApp::TomahawkApp( int& argc, char *argv[] )
         m_mainwindow->showSettingsDialog();
     }
 #endif
-    
-    GeneratorFactory::registerFactory( "echonest", new EchonestFactory );
 }
 
 
@@ -288,6 +288,7 @@ TomahawkApp::registerMetaTypes()
     qRegisterMetaType< Tomahawk::result_ptr >("Tomahawk::result_ptr");
     qRegisterMetaType< Tomahawk::source_ptr >("Tomahawk::source_ptr");
     qRegisterMetaType< QList<Tomahawk::playlist_ptr> >("QList<Tomahawk::playlist_ptr>");
+    qRegisterMetaType< QList<Tomahawk::dynplaylist_ptr> >("QList<Tomahawk::dynplaylist_ptr>");
     qRegisterMetaType< QList<Tomahawk::plentry_ptr> >("QList<Tomahawk::plentry_ptr>");
     qRegisterMetaType< QList<Tomahawk::query_ptr> >("QList<Tomahawk::query_ptr>");
     qRegisterMetaType< QList<Tomahawk::result_ptr> >("QList<Tomahawk::result_ptr>");
@@ -295,6 +296,7 @@ TomahawkApp::registerMetaTypes()
     qRegisterMetaType< QList<Tomahawk::album_ptr> >("QList<Tomahawk::album_ptr>");
     qRegisterMetaType< QMap< QString, Tomahawk::plentry_ptr > >("QMap< QString, Tomahawk::plentry_ptr >");
     qRegisterMetaType< Tomahawk::PlaylistRevision >("Tomahawk::PlaylistRevision");
+    qRegisterMetaType< Tomahawk::DynamicPlaylistRevision >("Tomahawk::DynamicPlaylistRevision");
     qRegisterMetaType< Tomahawk::QID >("Tomahawk::QID");
 
     qRegisterMetaType< AudioErrorCode >("AudioErrorCode");

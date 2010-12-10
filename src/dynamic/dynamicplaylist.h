@@ -135,6 +135,7 @@ private:
                        const QString& info,
                        const QString& creator,
                        const QString& type,
+                       GeneratorMode mode,
                        bool shared,
                        int lastmod,
                        const QString& guid = "" ); // populate db
@@ -149,7 +150,6 @@ private:
                        bool shared );
     
 private:
-    Q_DISABLE_COPY(DynamicPlaylist)
     geninterface_ptr m_generator;
 };
 

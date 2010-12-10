@@ -45,6 +45,7 @@ DynamicPlaylist::DynamicPlaylist ( const Tomahawk::source_ptr& src,
                                    const QString& info, 
                                    const QString& creator, 
                                    const QString& type, 
+                                   GeneratorMode mode,
                                    bool shared, 
                                    int lastmod, 
                                    const QString& guid )
@@ -53,6 +54,7 @@ DynamicPlaylist::DynamicPlaylist ( const Tomahawk::source_ptr& src,
     qDebug() << "Creating Dynamic Playlist 1";
     // TODO instantiate generator
     m_generator = geninterface_ptr( GeneratorFactory::create( type ) );
+    m_generator->setMode( mode );
 }
 
 

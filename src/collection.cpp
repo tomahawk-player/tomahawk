@@ -131,7 +131,7 @@ Collection::setPlaylists( const QList<Tomahawk::playlist_ptr>& plists )
 }
 
 void
-Collection::setDynamicPlaylistS( const QList< Tomahawk::dynplaylist_ptr >& plists )
+Collection::setDynamicPlaylists( const QList< Tomahawk::dynplaylist_ptr >& plists )
 {
     qDebug() << Q_FUNC_INFO << plists.count();
     
