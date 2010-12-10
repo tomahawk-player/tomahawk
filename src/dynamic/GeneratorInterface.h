@@ -20,7 +20,7 @@
 #include <QtCore/QObject>
 #include <QtCore/QSharedPointer>
 
-#include "dynamic/dynamiccontrol.h"
+#include "dynamic/DynamicControl.h"
 #include <tomahawk/typedefs.h>
 
 namespace Tomahawk {

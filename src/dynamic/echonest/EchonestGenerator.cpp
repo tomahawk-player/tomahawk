@@ -14,8 +14,8 @@
  * this program.  If not, see <http://www.gnu.org/licenses/>.                           *
  ****************************************************************************************/
 
-#include "echonest/echonestgenerator.h"
-#include "echonest/echonestcontrol.h"
+#include "echonest/EchonestGenerator.h"
+#include "echonest/EchonestControl.h"
 #include "tomahawk/query.h"
 
 using namespace Tomahawk;

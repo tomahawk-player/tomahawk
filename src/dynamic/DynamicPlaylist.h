@@ -23,7 +23,7 @@
 
 #include "tomahawk/playlist.h"
 #include "tomahawk/typedefs.h"
-#include "dynamic/dynamiccontrol.h"
+#include "dynamic/DynamicControl.h"
 
 class DatabaseCommand_LoadAllDynamicPlaylists;
 class DatabaseCommand_SetDynamicPlaylistRevision;

@@ -1,5 +1,5 @@
-#include "dynamic/generatorfactory.h"
-#include "dynamic/generatorinterface.h"
+#include "dynamic/GeneratorFactory.h"
+#include "dynamic/GeneratorInterface.h"
 
 using namespace Tomahawk;
 

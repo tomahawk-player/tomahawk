@@ -5,8 +5,8 @@
 
 #include "databaseimpl.h"
 #include "tomahawksqlquery.h"
-#include "dynamic/dynamiccontrol.h"
-#include "dynamic/generatorinterface.h"
+#include "dynamic/DynamicControl.h"
+#include "dynamic/GeneratorInterface.h"
 
 using namespace Tomahawk;
 

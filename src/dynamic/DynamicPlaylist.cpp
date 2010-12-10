@@ -14,10 +14,10 @@
  * this program.  If not, see <http://www.gnu.org/licenses/>.                           *
  ****************************************************************************************/
 
-#include "dynamicplaylist.h"
+#include "DynamicPlaylist.h"
 
 #include "tomahawk/tomahawkapp.h"
-#include "generatorfactory.h"
+#include "GeneratorFactory.h"
 #include "database.h"
 #include "databasecommand.h"
 #include "databasecommand_createdynamicplaylist.h"

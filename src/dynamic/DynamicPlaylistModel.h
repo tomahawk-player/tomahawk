@@ -13,49 +13,27 @@
  * You should have received a copy of the GNU General Public License along with         *
  * this program.  If not, see <http://www.gnu.org/licenses/>.                           *
  ****************************************************************************************/
+#ifndef DYNAMIC_PLAYLIST_MODEL_H
+#define DYNAMIC_PLAYLIST_MODEL_H
 
-#ifndef ECHONEST_CONTROL_H
-#define ECHONEST_CONTROL_H
-
-#include <echonest/Playlist.h>
-
-#include "dynamic/dynamiccontrol.h"
-
-namespace Tomahawk
-{
+#include "tomahawk/typedefs.h"
+#include "playlist/playlistmodel.h"
     
-class EchonestControl : public DynamicControl
+/**
+ * Simple model that extends PlaylistModel with support for adding/removing tracks from top and bottom.
+ */
+class DynamicPlaylistModel : public PlaylistModel
 {
-    Q_OBJECT
+Q_OBJECT
 public:
-    virtual QWidget* inputField();
-    virtual QWidget* matchSelector();
+    explicit DynamicPlaylistModel( QObject* parent = 0 );
+    ~DynamicPlaylistModel();
     
-    /// Converts this to an echonest suitable parameter
-    Echonest::DynamicPlaylist::PlaylistParamData toENParam() const;
-    
-public slots:
-    virtual void setSelectedType ( const QString& type );
-        
-private slots:
-    void updateData();
-    
-protected:
-    explicit EchonestControl( const QString& type, QObject* parent = 0 );
+    void loadPlaylist( const Tomahawk::dynplaylist_ptr& playlist );
     
 private:
-    void updateWidgets();
-    
-    QWeakPointer< QWidget > m_input;
-    QWeakPointer< QWidget > m_match;
-    
-    Echonest::DynamicPlaylist::PlaylistParamData m_data;
-    
-    friend class EchonestGenerator;
+    Tomahawk::dynplaylist_ptr m_playlist;
 };
 
-typedef QSharedPointer<EchonestControl> encontrol_ptr;
-
-};
 
 #endif

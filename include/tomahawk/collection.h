@@ -18,7 +18,7 @@
 #include "tomahawk/source.h"
 #include "tomahawk/typedefs.h"
 #include "typedefs.h"
-#include "dynamic/dynamicplaylist.h"
+#include "dynamic/DynamicPlaylist.h"
 
 namespace Tomahawk
 {

@@ -14,20 +14,21 @@
  * this program.  If not, see <http://www.gnu.org/licenses/>.                           *
  ****************************************************************************************/
 
-#include "dynamic/generatorinterface.h"
+#include "DynamicControl.h"
 
-// lame
-Tomahawk::GeneratorInterface::GeneratorInterface()
+Tomahawk::DynamicControl::DynamicControl()
 {
 
 }
 
-Tomahawk::GeneratorInterface::GeneratorInterface( QObject* parent ): QObject( parent )
+Tomahawk::DynamicControl::~DynamicControl()
 {
 
 }
 
-Tomahawk::GeneratorInterface::~GeneratorInterface()
+Tomahawk::DynamicControl::DynamicControl(const QString& selectedType, QObject* parent)
+    : QObject(parent)
+    , m_selectedType( selectedType )
 {
 
 }

@@ -17,7 +17,7 @@
 
 #include <QSqlQuery>
 
-#include "dynamic/dynamicplaylist.h"
+#include "dynamic/DynamicPlaylist.h"
 #include "databaseimpl.h"
 
 using namespace Tomahawk;

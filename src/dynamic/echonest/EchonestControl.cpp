@@ -14,7 +14,7 @@
  * this program.  If not, see <http://www.gnu.org/licenses/>.                           *
  ****************************************************************************************/
 
-#include "echonest/echonestcontrol.h"
+#include "echonest/EchonestControl.h"
 
 #include <echonest/Playlist.h>
 

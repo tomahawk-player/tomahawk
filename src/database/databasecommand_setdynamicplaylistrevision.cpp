@@ -3,8 +3,8 @@
 #include <QSqlQuery>
 
 #include "tomahawksqlquery.h"
-#include "dynamic/dynamicplaylist.h"
-#include "dynamic/dynamiccontrol.h"
+#include "dynamic/DynamicPlaylist.h"
+#include "dynamic/DynamicControl.h"
 #include "tomahawk/tomahawkapp.h"
 
 DatabaseCommand_SetDynamicPlaylistRevision::DatabaseCommand_SetDynamicPlaylistRevision(const Tomahawk::source_ptr& s, 

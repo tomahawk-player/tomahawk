@@ -4,9 +4,9 @@
 #include <QSqlDriver>
 
 #include "tomahawk/tomahawkapp.h"
-#include "dynamic/dynamicplaylist.h"
-#include "dynamic/dynamiccontrol.h"
-#include "dynamic/generatorinterface.h"
+#include "dynamic/DynamicPlaylist.h"
+#include "dynamic/DynamicControl.h"
+#include "dynamic/GeneratorInterface.h"
 
 using namespace Tomahawk;
 

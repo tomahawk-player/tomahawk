@@ -14,21 +14,48 @@
  * this program.  If not, see <http://www.gnu.org/licenses/>.                           *
  ****************************************************************************************/
 
-#include "dynamiccontrol.h"
+#ifndef ECHONEST_CONTROL_H
+#define ECHONEST_CONTROL_H
 
-Tomahawk::DynamicControl::DynamicControl()
+#include <echonest/Playlist.h>
+
+#include "dynamic/DynamicControl.h"
+
+namespace Tomahawk
 {
-
-}
-
-Tomahawk::DynamicControl::~DynamicControl()
+    
+class EchonestControl : public DynamicControl
 {
+    Q_OBJECT
+public:
+    virtual QWidget* inputField();
+    virtual QWidget* matchSelector();
+    
+    /// Converts this to an echonest suitable parameter
+    Echonest::DynamicPlaylist::PlaylistParamData toENParam() const;
+    
+public slots:
+    virtual void setSelectedType ( const QString& type );
+        
+private slots:
+    void updateData();
+    
+protected:
+    explicit EchonestControl( const QString& type, QObject* parent = 0 );
+    
+private:
+    void updateWidgets();
+    
+    QWeakPointer< QWidget > m_input;
+    QWeakPointer< QWidget > m_match;
+    
+    Echonest::DynamicPlaylist::PlaylistParamData m_data;
+    
+    friend class EchonestGenerator;
+};
 
-}
+typedef QSharedPointer<EchonestControl> encontrol_ptr;
 
-Tomahawk::DynamicControl::DynamicControl(const QString& selectedType, QObject* parent)
-    : QObject(parent)
-    , m_selectedType( selectedType )
-{
+};
 
-}
+#endif

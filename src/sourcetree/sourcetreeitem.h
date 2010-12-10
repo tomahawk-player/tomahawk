@@ -6,7 +6,7 @@
 
 #include "tomahawk/typedefs.h"
 #include "sourcetreeitemwidget.h"
-#include "dynamic/dynamicplaylist.h"
+#include "dynamic/DynamicPlaylist.h"
 
 class SourceTreeItem : public QObject
 {

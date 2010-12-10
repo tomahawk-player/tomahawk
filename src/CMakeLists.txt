@@ -97,12 +97,12 @@ SET( tomahawkSources ${tomahawkSources}
      database/databasecommand_deletedynamicplaylist.cpp
      database/databasecollection.cpp
 
-     dynamic/dynamicplaylist.cpp
-     dynamic/dynamiccontrol.cpp
-     dynamic/generatorfactory.cpp
-     dynamic/generatorinterface.cpp
-     dynamic/echonest/echonestgenerator.cpp
-     dynamic/echonest/echonestcontrol.cpp
+     dynamic/DynamicPlaylist.cpp
+     dynamic/DynamicControl.cpp
+     dynamic/GeneratorFactory.cpp
+     dynamic/GeneratorInterface.cpp
+     dynamic/echonest/EchonestGenerator.cpp
+     dynamic/echonest/EchonestControl.cpp
 
      scrobbler.cpp
      xmppbot/xmppbot.cpp
@@ -150,6 +150,9 @@ SET( tomahawkSourcesGui ${tomahawkSourcesGui}
      sourcetree/sourcetreeitemwidget.cpp
      sourcetree/sourcetreeview.cpp
 
+     dynamic/widgets/DynamicWidget.cpp
+     dynamic/DynamicPlaylistModel.cpp
+
      topbar/topbar.cpp
      topbar/clearbutton.cpp  
      topbar/searchlineedit.cpp  
@@ -157,6 +160,7 @@ SET( tomahawkSourcesGui ${tomahawkSourcesGui}
      topbar/searchbutton.cpp
 
      infowidgets/sourceinfowidget.cpp
+
 
      transferview.cpp
      tomahawkwindow.cpp
@@ -240,12 +244,12 @@ SET( tomahawkHeaders ${tomahawkHeaders}
      network/filetransferconnection.h
      network/dbsyncconnection.h
 
-     dynamic/dynamicplaylist.h
-     dynamic/dynamiccontrol.h
-     dynamic/generatorfactory.h
-     dynamic/generatorinterface.h
-     dynamic/echonest/echonestgenerator.h
-     dynamic/echonest/echonestcontrol.h
+     dynamic/DynamicPlaylist.h
+     dynamic/DynamicControl.h
+     dynamic/GeneratorFactory.h
+     dynamic/GeneratorInterface.h
+     dynamic/echonest/EchonestGenerator.h
+     dynamic/echonest/EchonestControl.h
 
      musicscanner.h
      scriptresolver.h
@@ -302,6 +306,9 @@ SET( tomahawkHeadersGui ${tomahawkHeadersGui}
      topbar/searchbutton.h
 
      infowidgets/sourceinfowidget.h
+
+     dynamic/widgets/DynamicWidget.cpp
+     dynamic/DynamicPlaylistModel.h
 
      transferview.h
      tomahawkwindow.h

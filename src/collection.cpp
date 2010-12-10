@@ -4,7 +4,7 @@
 #include <QGenericArgument>
 
 #include "tomahawk/playlist.h"
-#include "dynamic/dynamicplaylist.h"
+#include "dynamic/DynamicPlaylist.h"
 
 using namespace Tomahawk;
 

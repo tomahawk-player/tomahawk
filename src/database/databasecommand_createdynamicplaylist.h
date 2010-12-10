@@ -3,7 +3,7 @@
 
 #include "databaseimpl.h"
 #include "databasecommand_createplaylist.h"
-#include "dynamic/dynamicplaylist.h"
+#include "dynamic/DynamicPlaylist.h"
 #include "tomahawk/typedefs.h"
 
 class DatabaseCommand_CreateDynamicPlaylist : public DatabaseCommand_CreatePlaylist

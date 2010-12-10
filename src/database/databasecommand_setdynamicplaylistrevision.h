@@ -5,7 +5,7 @@
 #include "databaseimpl.h"
 #include "tomahawk/collection.h"
 #include "tomahawk/playlist.h"
-#include <generatorinterface.h>
+#include "dynamic/GeneratorInterface.h"
 
 using namespace Tomahawk;
 

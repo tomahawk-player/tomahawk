@@ -4,7 +4,7 @@
 #include <QHash>
 #include <QString>
 
-#include "dynamic/generatorinterface.h"
+#include "dynamic/GeneratorInterface.h"
 
 namespace Tomahawk {
     

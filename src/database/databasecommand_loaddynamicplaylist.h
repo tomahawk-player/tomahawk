@@ -8,7 +8,7 @@
 #include "databasecommand.h"
 #include "databasecommand_loadplaylistentries.h"
 #include "tomahawk/playlist.h"
-#include "dynamic/dynamiccontrol.h"
+#include "dynamic/DynamicControl.h"
 
 class DatabaseCommand_LoadDynamicPlaylist : public DatabaseCommand_LoadPlaylistEntries
 {
