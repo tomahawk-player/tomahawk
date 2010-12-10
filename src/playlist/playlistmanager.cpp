@@ -63,7 +63,11 @@ PlaylistManager::PlaylistManager( QObject* parent )
     m_stack->addWidget( m_superCollectionView );
     m_stack->addWidget( m_superAlbumView );
     m_currentInterface = m_superCollectionView->proxyModel();
-
+    
+    m_playlistView = new PlaylistView();
+    m_stack->addWidget( m_playlistView );
+    m_playlistModel = new PlaylistModel();
+    
     connect( &m_filterTimer, SIGNAL( timeout() ), SLOT( applyFilter() ) );
 }
 
@@ -85,29 +89,23 @@ bool
 PlaylistManager::show( const Tomahawk::playlist_ptr& playlist )
 {
     unlinkPlaylist();
-
-    if ( !m_playlistViews.contains( playlist ) )
+    
+    m_playlistModel->loadPlaylist( playlist );
+    m_playlistView->setModel( m_playlistModel );
+    
+    if ( !m_loadedPlaylists.contains( playlist ) )
     {
-        PlaylistView* view = new PlaylistView();
-        PlaylistModel* model = new PlaylistModel();
-        view->setModel( model );
-
-        model->loadPlaylist( playlist );
         playlist->resolve();
 
-        m_currentInterface = view->proxyModel();
-        m_playlistViews.insert( playlist, view );
-
-        m_stack->addWidget( view );
-        m_stack->setCurrentWidget( view );
     }
     else
     {
-        PlaylistView* view = m_playlistViews.value( playlist );
-        m_stack->setCurrentWidget( view );
-        m_currentInterface = view->proxyModel();
+        m_loadedPlaylists << playlist;
     }
-
+    
+    m_currentInterface = m_playlistView->proxyModel();
+    m_stack->setCurrentWidget( m_playlistView );
+    
     m_superCollectionVisible = false;
     m_statsAvailable = true;
     m_modesAvailable = false;
@@ -124,26 +122,11 @@ PlaylistManager::show( const Tomahawk::album_ptr& album )
     qDebug() << Q_FUNC_INFO << &album << album.data();
     unlinkPlaylist();
 
-    if ( !m_albumViews.contains( album ) )
-    {
-        PlaylistView* view = new PlaylistView();
-        PlaylistModel* model = new PlaylistModel();
-        view->setModel( model );
-        model->loadAlbum( album );
-
-        m_currentInterface = view->proxyModel();
-        m_albumViews.insert( album, view );
-
-        m_stack->addWidget( view );
-        m_stack->setCurrentWidget( view );
-    }
-    else
-    {
-        PlaylistView* view = m_albumViews.value( album );
-        m_stack->setCurrentWidget( view );
-        m_currentInterface = view->proxyModel();
-    }
-
+    m_playlistModel->loadAlbum( album );
+    m_stack->setCurrentWidget( m_playlistView );
+    
+    m_currentInterface = m_playlistView->proxyModel();
+    
     m_superCollectionVisible = false;
     m_statsAvailable = false;
     m_modesAvailable = false;

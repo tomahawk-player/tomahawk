@@ -96,7 +96,7 @@ PlaylistModel::loadAlbum( const Tomahawk::album_ptr& album )
 {
     if ( album.isNull() )
         return;
-
+    
     if ( rowCount( QModelIndex() ) )
     {
         emit beginRemoveRows( QModelIndex(), 0, rowCount( QModelIndex() ) - 1 );
