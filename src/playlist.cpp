@@ -266,11 +266,10 @@ Playlist::setNewRevision( const QString& rev,
                                  bool is_newest_rev,
                                  const QMap< QString, Tomahawk::plentry_ptr >& addedmap )
 {
-    //qDebug() << Q_FUNC_INFO << (qlonglong)this
-    //        << rev << neworderedguids << oldorderedguids
-    //        << "isnewest:" << is_newest_rev << addedmap << applied << m_entries
-    //        ;
-    
+    qDebug() << Q_FUNC_INFO << (qlonglong)this
+           << rev << neworderedguids << oldorderedguids
+           << "isnewest:" << is_newest_rev << addedmap << m_entries;
+           
     // build up correctly ordered new list of plentry_ptrs from
     // existing ones, and the ones that have been added
     QMap<QString, plentry_ptr> entriesmap;
@@ -285,11 +284,11 @@ Playlist::setNewRevision( const QString& rev,
         //qDebug() << "counters:" << neworderedguids.count() << entriesmap.count() << addedmap.count();
         foreach( const QString& id, neworderedguids )
         {
-            qDebug() << "id:" << id;
-            qDebug() << "newordered:" << neworderedguids.count() << neworderedguids;
-            qDebug() << "entriesmap:" << entriesmap.count() << entriesmap;
-            qDebug() << "addedmap:" << addedmap.count() << addedmap;
-            qDebug() << "m_entries" << m_entries;
+//             qDebug() << "id:" << id;
+//             qDebug() << "newordered:" << neworderedguids.count() << neworderedguids;
+//             qDebug() << "entriesmap:" << entriesmap.count() << entriesmap;
+//             qDebug() << "addedmap:" << addedmap.count() << addedmap;
+//             qDebug() << "m_entries" << m_entries;
             
             if( entriesmap.contains( id ) )
             {

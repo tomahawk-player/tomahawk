@@ -17,7 +17,7 @@ public:
         Type = Qt::UserRole + 1, /// Value is SourcesModel::SourceType
         SourceItemPointer = Qt::UserRole + 2, /// value is the sourcetreeritem of the collection itself.
         PlaylistPointer = Qt::UserRole + 3,  /// Value is the playlist_ptr.data()
-        DynamicPlaylistPointer = Qt::UserRole + 4 /// Value is the playlist_ptr.data()
+        DynamicPlaylistPointer = Qt::UserRole + 4 /// Value is the dynplaylist_ptr.data()
     };
     
     
@@ -51,11 +51,9 @@ private slots:
     
     void onDynamicPlaylistsAdded( const QList<Tomahawk::dynplaylist_ptr>& playlists );
     void onDynamicPlaylistsDeleted( const QList<Tomahawk::dynplaylist_ptr>& playlists );
-    void onDynamicPlaylistsLoaded( Tomahawk::DynamicPlaylistRevision revision );
+    void onDynamicPlaylistLoaded( Tomahawk::DynamicPlaylistRevision revision );
 private:
-    void playlistsAdded( const QList<Tomahawk::playlist_ptr>& playlists, bool dynamic );
-    void playlistsDeleted( const QList<Tomahawk::playlist_ptr>& playlists, bool dynamic );
-    void playlistLoaded( Tomahawk::PlaylistRevision revision, bool dynamic );
+    void playlistAddedInternal( qlonglong ptr, const Tomahawk::playlist_ptr& pl, bool dynamic );
     
     QList<QStandardItem*> m_columns;
     Tomahawk::source_ptr m_source;

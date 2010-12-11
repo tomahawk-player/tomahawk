@@ -28,7 +28,7 @@ signals:
     // used if loading an ondemand playlist
     void done( QString,
                      bool,
-                     const QString,
+                     QString,
                      QList< Tomahawk::dyncontrol_ptr>,
                      bool );
     // used when loading a static playlist
@@ -38,7 +38,7 @@ signals:
                QString,
                QList< Tomahawk::dyncontrol_ptr>,
                bool,
-               const QMap< QString, Tomahawk::plentry_ptr >,
+               QMap< QString, Tomahawk::plentry_ptr >,
                bool );
     
 private:

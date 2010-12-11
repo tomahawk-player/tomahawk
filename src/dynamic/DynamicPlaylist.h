@@ -116,7 +116,7 @@ public slots:
                       const QList<QString>& neworderedguids,
                       const QList<QString>& oldorderedguids,
                       const QString& type,
-                      const QList< dyncontrol_ptr>& controls,
+                      const QList< Tomahawk::dyncontrol_ptr>& controls,
                       bool is_newest_rev,
                       const QMap< QString, Tomahawk::plentry_ptr >& addedmap,
                       bool applied );
@@ -125,7 +125,7 @@ public slots:
     void setRevision( const QString& rev,
                       bool is_newest_rev,
                       const QString& type,
-                      const QList< dyncontrol_ptr>& controls,
+                      const QList< Tomahawk::dyncontrol_ptr>& controls,
                       bool applied );
 private:
     // called from loadAllPlaylists DB cmd:

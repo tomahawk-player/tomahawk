@@ -188,30 +188,30 @@ DynamicPlaylist::loadRevision( const QString& rev )
     if( m_generator->mode() == OnDemand ) {
         connect( cmd, SIGNAL( done( QString,
                                     bool,
-                                    const QString,
-                                    QList< dyncontrol_ptr>,
+                                    QString,
+                                    QList< Tomahawk::dyncontrol_ptr>,
                                     bool ) ),
                  SLOT( setRevision( QString,
                                     bool,
-                                    const QString,
-                                    QList< dyncontrol_ptr>,
+                                    QString,
+                                    QList< Tomahawk::dyncontrol_ptr>,
                                     bool) ) );
     } else if( m_generator->mode() == Static ) {
         connect( cmd, SIGNAL( done( QString,
                                     QList< QString >,
                                     QList< QString >,
                                     QString,
-                                    QList< dyncontrol_ptr>,
+                                    QList< Tomahawk::dyncontrol_ptr>,
                                     bool,
-                                    const QMap< QString, Tomahawk::plentry_ptr >,
+                                    QMap< QString, Tomahawk::plentry_ptr >,
                                     bool ) ),
                  SLOT( setRevision( QString,
                                     QList< QString >,
                                     QList< QString >,
                                     QString,
-                                    QList< dyncontrol_ptr>,
+                                    QList< Tomahawk::dyncontrol_ptr>,
                                     bool,
-                                    const QMap< QString, Tomahawk::plentry_ptr >,
+                                    QMap< QString, Tomahawk::plentry_ptr >,
                                     bool ) ) );        
         
     }
