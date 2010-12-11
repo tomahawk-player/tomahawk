@@ -230,4 +230,6 @@ void SourceTreeItem::playlistAddedInternal( qlonglong ptr, const Tomahawk::playl
     m_columns.at( 0 )->appendRow( subitem );
     Q_ASSERT( qobject_cast<QTreeView*>((parent()->parent()) ) );
     qobject_cast<QTreeView*>((parent()->parent()))->expandAll();
+    
+    p->loadRevision();
 }
