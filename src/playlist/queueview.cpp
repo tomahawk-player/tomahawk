@@ -47,6 +47,8 @@ QueueView::onShown( QWidget* widget )
     qDebug() << Q_FUNC_INFO << widget;
     if ( widget != this )
         return;
+    
+    AnimatedWidget::onShown( widget );
 
     m_button->setText( tr( "Click to hide queue" ) );
     disconnect( m_button, SIGNAL( clicked() ), this, SIGNAL( showWidget() ) );
@@ -60,7 +62,9 @@ QueueView::onHidden( QWidget* widget )
     qDebug() << Q_FUNC_INFO << widget;
     if ( widget != this )
         return;
-
+    
+    AnimatedWidget::onHidden( widget );
+    
     m_button->setText( tr( "Click to show queue" ) );
     disconnect( m_button, SIGNAL( clicked() ), this, SIGNAL( hideWidget() ) );
     connect( m_button, SIGNAL( clicked() ), SIGNAL( showWidget() ) );

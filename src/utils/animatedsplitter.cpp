@@ -1,6 +1,6 @@
 #include "animatedsplitter.h"
 
-#define ANIMATION_TIME 500
+#define ANIMATION_TIME 400
 
 
 AnimatedSplitter::AnimatedSplitter( QWidget* parent )
@@ -213,6 +213,10 @@ AnimatedWidget::AnimatedWidget( AnimatedSplitter* parent )
     qDebug() << Q_FUNC_INFO;
 }
 
+AnimatedWidget::~AnimatedWidget()
+{
+
+}
 
 void
 AnimatedWidget::onShown( QWidget* )

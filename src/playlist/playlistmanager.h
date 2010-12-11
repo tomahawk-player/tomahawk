@@ -8,6 +8,10 @@
 #include "tomahawk/collection.h"
 #include "tomahawk/playlistinterface.h"
 
+namespace Tomahawk {
+class DynamicWidget;
+}
+
 class AnimatedSplitter;
 class AlbumModel;
 class AlbumView;
@@ -36,6 +40,7 @@ public:
     bool isSuperCollectionVisible() const { return true; }
 
     bool show( const Tomahawk::playlist_ptr& playlist );
+    bool show( const Tomahawk::dynplaylist_ptr& playlist );
     bool show( const Tomahawk::album_ptr& album );
     bool show( const Tomahawk::collection_ptr& collection );
     bool show( const Tomahawk::source_ptr& source );
@@ -92,6 +97,7 @@ private:
     QList< Tomahawk::collection_ptr > m_superCollections;
     PlaylistModel* m_playlistModel;
 
+    QHash< Tomahawk::dynplaylist_ptr, Tomahawk::DynamicWidget* > m_dynamicWidgets;
     QHash< Tomahawk::collection_ptr, CollectionView* > m_collectionViews;
     QHash< Tomahawk::collection_ptr, AlbumView* > m_collectionAlbumViews;
     QHash< Tomahawk::source_ptr, SourceInfoWidget* > m_sourceViews;

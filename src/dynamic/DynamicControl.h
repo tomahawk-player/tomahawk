@@ -52,9 +52,17 @@ public:
     
     /// The current type of this control
     QString  selectedType() const { return m_selectedType; }
-    /// The match selector widget based on this control's type
+    /**
+     * The match selector widget based on this control's type
+     * 
+     * The control manages the lifetime of the widget.
+     */
     virtual QWidget* matchSelector()  { Q_ASSERT( false ); return 0; }
-    /// The input field widget that is associated with this type
+    /**
+     * The input field widget that is associated with this type
+     * 
+     * The control manages the lifetime of the widget.
+     */
     virtual QWidget* inputField()  { Q_ASSERT( false ); return 0;  }
     
     /// the serializable value of the match

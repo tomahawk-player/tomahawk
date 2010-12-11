@@ -18,6 +18,7 @@
 #include "albummodel.h"
 
 #include "infowidgets/sourceinfowidget.h"
+#include <widgets/DynamicWidget.h>
 
 #define FILTER_TIMEOUT 280
 
@@ -112,6 +113,27 @@ PlaylistManager::show( const Tomahawk::playlist_ptr& playlist )
     linkPlaylist();
 
     emit numSourcesChanged( APP->sourcelist().count() );
+    return true;
+}
+
+bool 
+PlaylistManager::show(const Tomahawk::dynplaylist_ptr& playlist)
+{
+    unlinkPlaylist();
+    
+    if( !m_dynamicWidgets.contains( playlist ) ) {
+       m_dynamicWidgets[ playlist ] = new Tomahawk::DynamicWidget( playlist, m_stack );
+    }
+    
+    m_stack->setCurrentWidget( m_dynamicWidgets.value( playlist ) );
+    m_currentInterface = m_dynamicWidgets.value( playlist )->playlistInterface();
+    
+    m_superCollectionVisible = false;
+    m_statsAvailable = true;
+    m_modesAvailable = false;
+    linkPlaylist();
+    
+    emit numSourcesChanged( APP->sourcelist().count() );\
     return true;
 }
 

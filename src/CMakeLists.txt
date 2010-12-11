@@ -151,6 +151,8 @@ SET( tomahawkSourcesGui ${tomahawkSourcesGui}
      sourcetree/sourcetreeview.cpp
 
      dynamic/widgets/DynamicWidget.cpp
+     dynamic/widgets/DynamicControlWidget.cpp
+     dynamic/widgets/DynamicControlList.cpp
      dynamic/DynamicPlaylistModel.cpp
 
      topbar/topbar.cpp
@@ -307,7 +309,9 @@ SET( tomahawkHeadersGui ${tomahawkHeadersGui}
 
      infowidgets/sourceinfowidget.h
 
-     dynamic/widgets/DynamicWidget.cpp
+     dynamic/widgets/DynamicWidget.h
+     dynamic/widgets/DynamicControlWidget.h
+     dynamic/widgets/DynamicControlList.h
      dynamic/DynamicPlaylistModel.h
 
      transferview.h

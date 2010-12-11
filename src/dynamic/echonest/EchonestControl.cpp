@@ -43,7 +43,13 @@ Tomahawk::EchonestControl::matchSelector()
 void 
 Tomahawk::EchonestControl::setSelectedType ( const QString& type )
 {
+    if( !m_input.isNull() )
+        delete m_input.data();
+    if( !m_match.isNull() )
+        delete m_match.data();
+    
     Tomahawk::DynamicControl::setSelectedType ( type );
+    updateWidgets();
 }
 
 Echonest::DynamicPlaylist::PlaylistParamData 
@@ -73,7 +79,8 @@ Tomahawk::EchonestControl::updateWidgets()
     }
 }
 
-void Tomahawk::EchonestControl::updateData()
+void 
+Tomahawk::EchonestControl::updateData()
 {
     if( selectedType() == "Artist" ) {
         QWeakPointer<QComboBox> combo = qWeakPointerCast<QComboBox, QWidget>( m_match );

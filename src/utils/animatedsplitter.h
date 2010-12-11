@@ -48,8 +48,9 @@ class AnimatedWidget : public QWidget
 {
 Q_OBJECT
 public:
-    explicit AnimatedWidget( AnimatedSplitter* parent );
-
+    explicit AnimatedWidget( AnimatedSplitter* parent = 0 );
+    virtual ~AnimatedWidget();
+    
     QSize hiddenSize() const { return m_hiddenSize; }
     void setHiddenSize( const QSize& size ) { m_hiddenSize = size; emit hiddenSizeChanged(); }
 
