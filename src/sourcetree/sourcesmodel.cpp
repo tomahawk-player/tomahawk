@@ -243,15 +243,18 @@ SourcesModel::setData( const QModelIndex& index, const QVariant& value, int role
     if ( !index.isValid() )
         return false;
 
+    playlist_ptr playlist;
     if ( indexType( index ) == PlaylistSource )
     {
-        playlist_ptr playlist = indexToPlaylist( index );
-        if ( !playlist.isNull() )
-        {
-            playlist->rename( value.toString() );
-            QStandardItemModel::setData( index, value, Qt::DisplayRole );
-        }
-
+        playlist = indexToPlaylist( index );
+    } else if ( indexType( index ) == DynamicPlaylistSource ) {
+        playlist = indexToDynamicPlaylist( index ).staticCast< Playlist >();
+    }
+    
+    if ( !playlist.isNull() )
+    {
+        playlist->rename( value.toString() );
+        QStandardItemModel::setData( index, value, Qt::DisplayRole );   
         return true;
     }
 

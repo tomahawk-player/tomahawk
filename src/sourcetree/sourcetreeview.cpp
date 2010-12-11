@@ -26,7 +26,7 @@ protected:
     void paint( QPainter* painter, const QStyleOptionViewItem& option, const QModelIndex& index ) const;
     void updateEditorGeometry( QWidget* editor, const QStyleOptionViewItem& option, const QModelIndex& index ) const
     {
-        if ( SourcesModel::indexType( index ) == 1 )
+        if ( SourcesModel::indexType( index ) == SourcesModel::PlaylistSource || SourcesModel::indexType( index ) == SourcesModel::DynamicPlaylistSource )
             editor->setGeometry( option.rect.adjusted( 32, 0, 0, 0 ) );
         else
             QStyledItemDelegate::updateEditorGeometry( editor, option, index );
@@ -185,9 +185,11 @@ SourceTreeView::deletePlaylist()
         return;
 
     SourcesModel::SourceType type = SourcesModel::indexType( idx );
-    if ( type == SourcesModel::PlaylistSource )
+    if ( type == SourcesModel::PlaylistSource || type == SourcesModel::DynamicPlaylistSource )
     {
-        playlist_ptr playlist = SourcesModel::indexToPlaylist( idx );
+        playlist_ptr playlist = ( type == SourcesModel::DynamicPlaylistSource )
+                                                        ? SourcesModel::indexToDynamicPlaylist( idx ).staticCast< Playlist >()
+                                                        : SourcesModel::indexToPlaylist( idx );
         if ( !playlist.isNull() )
         {
             qDebug() << "Playlist about to be deleted:" << playlist->title();
@@ -374,7 +376,7 @@ SourceDelegate::paint( QPainter* painter, const QStyleOptionViewItem& option, co
     {
         o.state = QStyle::State_Enabled;
 
-        if ( SourcesModel::indexType( index ) == SourcesModel::PlaylistSource &&
+        if ( ( SourcesModel::indexType( index ) == SourcesModel::PlaylistSource || SourcesModel::indexType( index ) == SourcesModel::PlaylistSource ) &&
            ( option.state & QStyle::State_Selected ) == QStyle::State_Selected )
         {
             o.palette.setColor( QPalette::Text, o.palette.color( QPalette::HighlightedText ) );
