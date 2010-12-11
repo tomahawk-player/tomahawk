@@ -170,7 +170,7 @@ SourceTreeItem::playlistsAdded( const QList< playlist_ptr >& playlists, bool dyn
         subitem->setEditable( false );
         subitem->setEnabled( false );
         subitem->setData( ptr, PlaylistPointer );
-        subitem->setData( dynamic ? SourcesModel::DynamicPlaylistSource : SourcesModel::DynamicPlaylistSource, Type );
+        subitem->setData( dynamic ? SourcesModel::DynamicPlaylistSource : SourcesModel::PlaylistSource, Type );
         subitem->setData( (qlonglong)this, SourceItemPointer );
         
         m_columns.at( 0 )->appendRow( subitem );
