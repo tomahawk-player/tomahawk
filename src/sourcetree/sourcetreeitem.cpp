@@ -6,6 +6,7 @@
 #include "tomahawk/collection.h"
 #include "tomahawk/playlist.h"
 #include "tomahawk/tomahawkapp.h"
+#include "sourcesmodel.h"
 
 using namespace Tomahawk;
 
@@ -24,8 +25,8 @@ SourceTreeItem::SourceTreeItem( const source_ptr& source, QObject* parent )
 {
     QStandardItem* item = new QStandardItem( "" );
     item->setEditable( false );
-    item->setData( 0, Qt::UserRole + 1 );
-    item->setData( (qlonglong)this, Qt::UserRole + 2 );
+    item->setData( SourcesModel::CollectionSource, Type );
+    item->setData( (qlonglong)this, SourceItemPointer );
     m_columns << item;
 
     if ( !source.isNull() )
@@ -123,9 +124,9 @@ SourceTreeItem::playlistLoaded( PlaylistRevision revision, bool dynamic )
         QStandardItem* pi = item->child( i );
         qlonglong piptr = pi->data( PlaylistPointer ).toLongLong();
         playlist_ptr* pl = reinterpret_cast<playlist_ptr*>(piptr);
-        int type = pi->data( Type ).toInt();
+        SourcesModel::SourceType type = static_cast<SourcesModel::SourceType>( pi->data( Type ).toInt() );
         
-        if ( type == 1 && ptr == qlonglong( pl->data() ) )
+        if ( ( type == SourcesModel::PlaylistSource || type == SourcesModel::DynamicPlaylistSource ) && ptr == qlonglong( pl->data() ) )
         {
             //qDebug() << "Found playlist!";
             pi->setEnabled( true );
@@ -169,7 +170,7 @@ SourceTreeItem::playlistsAdded( const QList< playlist_ptr >& playlists, bool dyn
         subitem->setEditable( false );
         subitem->setEnabled( false );
         subitem->setData( ptr, PlaylistPointer );
-        subitem->setData( 1, Type );
+        subitem->setData( dynamic ? SourcesModel::DynamicPlaylistSource : SourcesModel::DynamicPlaylistSource, Type );
         subitem->setData( (qlonglong)this, SourceItemPointer );
         
         m_columns.at( 0 )->appendRow( subitem );
@@ -196,9 +197,9 @@ SourceTreeItem::playlistsDeleted( const QList< playlist_ptr >& playlists, bool d
             QStandardItem* pi = item->child( i );
             qlonglong piptr = pi->data( PlaylistPointer ).toLongLong();
             playlist_ptr* pl = reinterpret_cast<playlist_ptr*>(piptr);
-            int type = pi->data( Type ).toInt();
+            SourcesModel::SourceType type = static_cast<SourcesModel::SourceType>( pi->data( Type ).toInt() );
             
-            if ( type == 1 && ptr == qlonglong( pl->data() ) )
+            if ( ( type == SourcesModel::PlaylistSource || type == SourcesModel::DynamicPlaylistSource ) && ptr == qlonglong( pl->data() ) )
             {
                 if( dynamic )
                     m_dynplaylists.removeAll( p.staticCast<Tomahawk::DynamicPlaylist>() );

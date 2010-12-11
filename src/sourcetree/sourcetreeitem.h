@@ -11,14 +11,16 @@
 class SourceTreeItem : public QObject
 {
 Q_OBJECT
-
-enum PlaylistItemType {
-    Type = Qt::UserRole + 1,
-    SourceItemPointer = Qt::UserRole + 2,
-    PlaylistPointer = Qt::UserRole + 3
-};
-
 public:
+    
+    enum PlaylistItemType {
+        Type = Qt::UserRole + 1, /// Value is SourcesModel::SourceType
+        SourceItemPointer = Qt::UserRole + 2, /// value is the sourcetreeritem of the collection itself.
+        PlaylistPointer = Qt::UserRole + 3,  /// Value is the playlist_ptr.data()
+        DynamicPlaylistPointer = Qt::UserRole + 4 /// Value is the playlist_ptr.data()
+    };
+    
+    
     explicit SourceTreeItem( const Tomahawk::source_ptr& source, QObject* parent );
     virtual ~SourceTreeItem();
 
