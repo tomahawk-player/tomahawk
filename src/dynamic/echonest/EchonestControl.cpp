@@ -23,7 +23,7 @@
 
 
 Tomahawk::EchonestControl::EchonestControl( const QString& type, QObject* parent )
-    : DynamicControl ( type, parent )
+    : DynamicControl ( type.isEmpty() ? "Artist" : type, parent )
 {
     updateWidgets();
 }

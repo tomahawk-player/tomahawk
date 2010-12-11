@@ -119,6 +119,7 @@ PlaylistManager::show(const Tomahawk::dynplaylist_ptr& playlist)
     
     if( !m_dynamicWidgets.contains( playlist ) ) {
        m_dynamicWidgets[ playlist ] = new Tomahawk::DynamicWidget( playlist, m_stack );
+       m_stack->addWidget( m_dynamicWidgets[ playlist ] );
     }
     
     m_stack->setCurrentWidget( m_dynamicWidgets.value( playlist ) );
@@ -129,7 +130,7 @@ PlaylistManager::show(const Tomahawk::dynplaylist_ptr& playlist)
     m_modesAvailable = false;
     linkPlaylist();
     
-    emit numSourcesChanged( APP->sourcelist().count() );\
+    emit numSourcesChanged( APP->sourcelist().count() );
     return true;
 }
 

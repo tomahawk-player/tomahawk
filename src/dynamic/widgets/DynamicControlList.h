@@ -21,6 +21,7 @@
 #include "tomahawk/typedefs.h"
 #include "dynamic/DynamicPlaylist.h"
 
+class QVBoxLayout;
 namespace Tomahawk
 {
 
@@ -43,6 +44,7 @@ public:
     
     void setControls( const QList< dyncontrol_ptr >& controls );
     
+    virtual void paintEvent(QPaintEvent* );
     
 public slots:
     virtual void onHidden(QWidget* );
@@ -51,6 +53,7 @@ public slots:
 private:
     void init();
     
+    QVBoxLayout* m_layout;
     QList< DynamicControlWidget* > m_controls;
     QWidget* m_summaryWidget;
 };

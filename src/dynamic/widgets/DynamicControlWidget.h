@@ -42,6 +42,7 @@ public:
     void setShowPlusButton( bool show );
     bool showPlusButton() const;
     
+    virtual void paintEvent(QPaintEvent* );
 private slots:
     void typeSelectorChanged( QString );
     
@@ -56,3 +57,5 @@ private:
 };
 
 #endif
+
+class QPaintEvent;

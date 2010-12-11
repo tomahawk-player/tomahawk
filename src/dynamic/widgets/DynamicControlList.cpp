@@ -18,11 +18,14 @@
 #include <QLayout>
 #include <QLabel>
 #include "DynamicControlWidget.h"
+#include <QPaintEvent>
+#include <QPainter>
 
 using namespace Tomahawk;
 
 DynamicControlList::DynamicControlList()
     : AnimatedWidget()
+    , m_layout( new QVBoxLayout )
     , m_summaryWidget( 0 )
 {
     init();
@@ -30,6 +33,7 @@ DynamicControlList::DynamicControlList()
 
 DynamicControlList::DynamicControlList( AnimatedSplitter* parent )
     : AnimatedWidget( parent )
+    , m_layout( new QVBoxLayout )
     , m_summaryWidget( 0 )
 {
     init();
@@ -37,6 +41,7 @@ DynamicControlList::DynamicControlList( AnimatedSplitter* parent )
 
 DynamicControlList::DynamicControlList( const QList< dyncontrol_ptr >& controls, AnimatedSplitter* parent)
     : AnimatedWidget(parent)
+    , m_layout( new QVBoxLayout )
     , m_summaryWidget( 0 )
 {
     init();
@@ -51,26 +56,32 @@ DynamicControlList::~DynamicControlList()
 void 
 DynamicControlList::init()
 {
-    setLayout( new QVBoxLayout );
-    layout()->setMargin( 0 );
-    layout()->setSpacing( 0 );
+    setLayout( m_layout );
+    m_layout->setMargin( 0 );
+    m_layout->setSpacing( 0 );
+//     setSizePolicy( QSizePolicy::Expanding, QSizePolicy::Ignored );
     
-    m_summaryWidget = new QWidget();
+    m_summaryWidget = new QWidget( this );
     // TODO replace
-    m_summaryWidget->setMaximumHeight( 24 );
+//     m_summaryWidget->setMinimumHeight( 24 );
+//     m_summaryWidget->setMaximumHeight( 24 );
     m_summaryWidget->setSizePolicy( QSizePolicy::Expanding, QSizePolicy::Fixed );
     m_summaryWidget->setLayout( new QVBoxLayout );
     m_summaryWidget->layout()->setMargin( 0 );
     m_summaryWidget->layout()->addWidget( new QLabel( "replace me plz", m_summaryWidget ) );
     
     setHiddenSize( m_summaryWidget->size() );
+    
+    emit showWidget();
 }
 
 void 
 DynamicControlList::setControls(const QList< dyncontrol_ptr >& controls)
 {
-    foreach( const dyncontrol_ptr& control, controls )
+    foreach( const dyncontrol_ptr& control, controls ) {
         m_controls << new DynamicControlWidget( control, false, this );
+    }
+    onShown( this );
 }
 
 void 
@@ -82,9 +93,11 @@ DynamicControlList::onHidden( QWidget* w )
     AnimatedWidget::onHidden( w );
     
     foreach( DynamicControlWidget* control, m_controls ) {
-        layout()->removeWidget( control );
+        m_layout->removeWidget( control );
+        control->hide();
     }
-    layout()->addWidget( m_summaryWidget );
+    m_layout->addWidget( m_summaryWidget );
+    m_summaryWidget->show();
 }
 
 void 
@@ -95,10 +108,15 @@ DynamicControlList::onShown( QWidget* w )
     
     AnimatedWidget::onShown( w );
     
-    layout()->removeWidget( m_summaryWidget );
+    m_layout->removeWidget( m_summaryWidget );
+    m_summaryWidget->hide();
     foreach( DynamicControlWidget* control, m_controls ) {
-        layout()->addWidget( control );
-        
+        m_layout->addWidget( control );
+        control->show();
         control->setShowPlusButton( control == m_controls.last() );
     }
+}
+
+void DynamicControlList::paintEvent(QPaintEvent* )
+{
 }

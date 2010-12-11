@@ -19,9 +19,9 @@
 
 #include <QtCore/QObject>
 #include <QtCore/QSharedPointer>
+#include <QStringList>
 
-#include "dynamic/DynamicControl.h"
-#include <tomahawk/typedefs.h>
+#include "tomahawk/typedefs.h"
 
 namespace Tomahawk {
    
@@ -47,7 +47,7 @@ public:
     
     // Can't make it pure otherwise we can't shove it in QVariants :-/
     // empty QString means use default
-    virtual dyncontrol_ptr createControl( const QString& type = QString()  ) const { return dyncontrol_ptr(); }
+    virtual dyncontrol_ptr createControl( const QString& type = QString()  ) const;
     
     /**
      * Generate tracks from the controls in this playlist. If the current mode is
@@ -57,7 +57,7 @@ public:
      * Connect to the generated() signal for the results.
      * 
      */
-    virtual void generate( int number = -1 ) {};
+    virtual void generate( int number = -1 ) {}
     
     /// The type of this generator
     QString type() const { return m_type; }
@@ -66,10 +66,10 @@ public:
     void setMode( GeneratorMode mode ) { m_mode = mode; }
     
     // control functions
-    QList< dyncontrol_ptr > controls() const { return m_controls; }
-    void addControl( const dyncontrol_ptr& control ) { m_controls << control; }
-    void clearControls() { m_controls.clear(); }
-    void setControls( const QList< dyncontrol_ptr>& controls ) { m_controls = controls; }
+    QList< dyncontrol_ptr > controls() const;
+    void addControl( const dyncontrol_ptr& control );
+    void clearControls();
+    void setControls( const QList< dyncontrol_ptr>& controls );
     
     QStringList typeSelectors() const { return m_typeSelectors; }
     
@@ -81,9 +81,6 @@ protected:
     GeneratorMode m_mode;
     QList< dyncontrol_ptr > m_controls;
     QStringList m_typeSelectors;
-    
-private:
-    Q_DISABLE_COPY(GeneratorInterface)
 };
 
 typedef QSharedPointer<GeneratorInterface> geninterface_ptr;

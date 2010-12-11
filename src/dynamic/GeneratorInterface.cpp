@@ -31,3 +31,37 @@ Tomahawk::GeneratorInterface::~GeneratorInterface()
 {
 
 }
+
+QList< Tomahawk::dyncontrol_ptr > 
+Tomahawk::GeneratorInterface::controls() const
+{
+    if( m_controls.isEmpty() ) { // return a default control (so the user can add more)
+        return QList< Tomahawk::dyncontrol_ptr >() << createControl();
+    }
+    
+    return m_controls;
+}
+
+void 
+Tomahawk::GeneratorInterface::addControl( const Tomahawk::dyncontrol_ptr& control )
+{
+    m_controls << control;
+}
+
+void 
+Tomahawk::GeneratorInterface::clearControls()
+{
+    m_controls.clear();
+}
+
+void 
+Tomahawk::GeneratorInterface::setControls( const QList< Tomahawk::dyncontrol_ptr >& controls )
+{
+    m_controls = controls;
+}
+
+Tomahawk::dyncontrol_ptr Tomahawk::GeneratorInterface::createControl(const QString& type) const
+{
+    return dyncontrol_ptr();
+}
+
