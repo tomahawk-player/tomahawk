@@ -43,6 +43,8 @@ DynamicWidget::DynamicWidget( const Tomahawk::dynplaylist_ptr& playlist, QWidget
     
     m_splitter = new AnimatedSplitter( this );
     m_splitter->setOrientation( Qt::Vertical );
+    m_splitter->setChildrenCollapsible( false );
+    
     layout()->addWidget( m_splitter );
     m_controls = new DynamicControlList( m_splitter );
     m_model = new PlaylistModel( this );
@@ -53,7 +55,8 @@ DynamicWidget::DynamicWidget( const Tomahawk::dynplaylist_ptr& playlist, QWidget
     m_splitter->addWidget( m_view );
     m_splitter->setGreedyWidget( 1 );
     
-    m_splitter->show( 0 );
+    m_splitter->show( 0, false );
+    
     if( !m_playlist.isNull() ) {
         m_controls->setControls( m_playlist->generator()->controls() );
         

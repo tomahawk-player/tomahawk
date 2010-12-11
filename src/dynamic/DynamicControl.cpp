@@ -16,7 +16,8 @@
 
 #include "DynamicControl.h"
 
-Tomahawk::DynamicControl::DynamicControl()
+Tomahawk::DynamicControl::DynamicControl( const QStringList& typeSelectors )
+    : m_typeSelectors( typeSelectors )
 {
 
 }
@@ -26,9 +27,10 @@ Tomahawk::DynamicControl::~DynamicControl()
 
 }
 
-Tomahawk::DynamicControl::DynamicControl(const QString& selectedType, QObject* parent)
+Tomahawk::DynamicControl::DynamicControl(const QString& selectedType, const QStringList& typeSelectors, QObject* parent)
     : QObject(parent)
     , m_selectedType( selectedType )
+    , m_typeSelectors( typeSelectors )
 {
 
 }

@@ -45,8 +45,7 @@ class DynamicControl : public QObject
     Q_PROPERTY( QString input READ input WRITE setInput )
     
 public:
-    // eff this :P
-    DynamicControl();
+    DynamicControl( const QStringList& typeSelectors = QStringList() );
     virtual ~DynamicControl();
     
     
@@ -93,7 +92,7 @@ public slots:
     
 protected:
     // Private constructor, you can't make one. Get it from your Generator.
-    explicit DynamicControl( const QString& selectedType, QObject* parent = 0 );
+    explicit DynamicControl( const QString& selectedType, const QStringList& typeSelectors, QObject* parent = 0 );
     
     QString m_match;
     QString m_input;

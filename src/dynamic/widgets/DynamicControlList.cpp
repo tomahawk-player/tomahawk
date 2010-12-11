@@ -79,7 +79,7 @@ void
 DynamicControlList::setControls(const QList< dyncontrol_ptr >& controls)
 {
     foreach( const dyncontrol_ptr& control, controls ) {
-        m_controls << new DynamicControlWidget( control, false, this );
+        m_controls << new DynamicControlWidget( control, false, false, this );
     }
     onShown( this );
 }
@@ -114,6 +114,7 @@ DynamicControlList::onShown( QWidget* w )
         m_layout->addWidget( control );
         control->show();
         control->setShowPlusButton( control == m_controls.last() );
+        control->setShowCollapseButton( control == m_controls.last() );
     }
 }
 

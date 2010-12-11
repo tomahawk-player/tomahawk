@@ -36,11 +36,14 @@ class DynamicControlWidget : public QWidget
 {
     Q_OBJECT 
 public:
-    explicit DynamicControlWidget( const dyncontrol_ptr& control, bool showPlus = false, QWidget* parent = 0);
+    explicit DynamicControlWidget( const dyncontrol_ptr& control, bool showPlus = false, bool showCollaps = false, QWidget* parent = 0);
     virtual ~DynamicControlWidget();
     
     void setShowPlusButton( bool show );
     bool showPlusButton() const;
+    
+    void setShowCollapseButton( bool show );
+    
     
     virtual void paintEvent(QPaintEvent* );
 private slots:
@@ -48,7 +51,10 @@ private slots:
     
 private:
     bool m_showPlus;
+    bool m_showCollapse;
     QToolButton* m_plusButton;
+    QToolButton* m_collapseButton;
+    
     dyncontrol_ptr m_control;
     QComboBox* m_typeSelector;
     QHBoxLayout* m_layout;

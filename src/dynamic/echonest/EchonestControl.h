@@ -41,7 +41,7 @@ private slots:
     void updateData();
     
 protected:
-    explicit EchonestControl( const QString& type, QObject* parent = 0 );
+    explicit EchonestControl( const QString& type, const QStringList& typeSelectors, QObject* parent = 0 );
     
 private:
     void updateWidgets();

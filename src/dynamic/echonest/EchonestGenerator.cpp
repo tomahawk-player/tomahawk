@@ -33,7 +33,7 @@ EchonestFactory::create()
 EchonestGenerator::EchonestGenerator ( QObject* parent ) 
     : GeneratorInterface ( parent )
 {
-    m_typeSelectors << "Variety" << "Artist" << "Description" << "Tempo" << "Duration" << "Loudness" 
+    m_typeSelectors << "Artist" << "Variety"  << "Description" << "Tempo" << "Duration" << "Loudness" 
                     << "Danceability" << "Energy" << "Artist Familiarity" << "Artist Hotttnesss" << "Song Familiarity" 
                     << "Longitude" << "Latitude" <<  "Mode" << "Key" << "Sorting";
     m_type = "echonest";
@@ -49,7 +49,7 @@ EchonestGenerator::~EchonestGenerator()
 dyncontrol_ptr 
 EchonestGenerator::createControl( const QString& type ) const
 {
-    return dyncontrol_ptr( new EchonestControl( type ) );
+    return dyncontrol_ptr( new EchonestControl( type, m_typeSelectors ) );
 }
 
 void 

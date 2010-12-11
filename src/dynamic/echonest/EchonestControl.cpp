@@ -22,8 +22,8 @@
 #include <QLineEdit>
 
 
-Tomahawk::EchonestControl::EchonestControl( const QString& type, QObject* parent )
-    : DynamicControl ( type.isEmpty() ? "Artist" : type, parent )
+Tomahawk::EchonestControl::EchonestControl( const QString& type, const QStringList& typeSelectors, QObject* parent )
+    : DynamicControl ( type.isEmpty() ? "Artist" : type, typeSelectors, parent )
 {
     updateWidgets();
 }
@@ -70,6 +70,7 @@ Tomahawk::EchonestControl::updateWidgets()
         match->addItem( "Similar To", Echonest::DynamicPlaylist::ArtistRadioType );
         
         input->setPlaceholderText( "Artist name" );
+        input->setSizePolicy( QSizePolicy::Fixed, QSizePolicy::Ignored );
         
         connect( match, SIGNAL( currentIndexChanged(int) ), this, SLOT( updateData() ) );
         connect( input, SIGNAL( textChanged(QString) ), this, SLOT( updateData() ) );
