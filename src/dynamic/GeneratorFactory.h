@@ -27,6 +27,7 @@ class GeneratorFactory
 public:
     static geninterface_ptr create( const QString& type );
     static void registerFactory( const QString& type, GeneratorFactoryInterface* interface );
+    static QStringList types();
     
 private:
     static QHash<QString, GeneratorFactoryInterface*> s_factories;

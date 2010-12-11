@@ -44,6 +44,7 @@ DynamicControlWidget::DynamicControlWidget( const Tomahawk::dyncontrol_ptr& cont
     m_typeSelector = new QComboBox( this );
     
     m_layout->setMargin( 0 );
+    m_layout->setSpacing( 0 );
     setContentsMargins( 0, 0, 0, 0 );
     
     m_plusButton= new QToolButton( this );
@@ -66,13 +67,12 @@ DynamicControlWidget::DynamicControlWidget( const Tomahawk::dyncontrol_ptr& cont
     
     connect( m_typeSelector, SIGNAL( currentIndexChanged( QString ) ), SLOT( typeSelectorChanged( QString ) ) );
     
+    m_layout->addWidget( m_typeSelector, 0, Qt::AlignLeft );
     if( !control.isNull() ) {
         foreach( const QString& type, control->typeSelectors() )
             m_typeSelector->addItem( type );
         
-        m_layout->insertWidget( 0, m_typeSelector, 0, Qt::AlignLeft );
-        m_layout->insertWidget( 1, m_control->matchSelector(), 0, Qt::AlignCenter );
-        m_layout->insertWidget( 2, m_control->inputField(), 1, Qt::AlignAbsolute );
+        typeSelectorChanged( m_control->selectedType() );
     }
     
     if( m_showCollapse ) {
@@ -80,7 +80,7 @@ DynamicControlWidget::DynamicControlWidget( const Tomahawk::dyncontrol_ptr& cont
         m_plusButton->show();
     }
     if( m_showPlus ) {
-        m_layout->insertWidget( 4, m_plusButton, 0, Qt::AlignRight );
+        m_layout->insertWidget( m_showCollapse ? 4 : 3, m_plusButton, 0, Qt::AlignRight );
         m_plusButton->show();
     }
     
@@ -97,15 +97,25 @@ DynamicControlWidget::typeSelectorChanged( QString type )
 {
     Q_ASSERT( m_layout );
     // remove the two widgets, change the control,and re-add the new ones
-    if( m_layout->count() >= 4 )
-    {
-        m_layout->removeWidget( m_control->matchSelector() );
-        m_layout->removeWidget( m_control->inputField() );
+    
+    if( m_layout->indexOf( m_control->matchSelector() ) > -1 ) m_layout->removeWidget( m_control->matchSelector() );
+    if( m_layout->indexOf( m_control->inputField() ) > -1 ) m_layout->removeWidget( m_control->inputField() );
+
+    m_control->setSelectedType( type );
+    
+    if( m_control->matchSelector() ) {
+        m_control->matchSelector()->show();
+        m_layout->insertWidget( 1, m_control->matchSelector(), 0 );
+    }
+    if( m_control->inputField() ) {
+        m_control->inputField()->show();
+        m_layout->insertWidget( 2, m_control->inputField(), 1  );
     }
     
-    m_control->setSelectedType( type );
-    m_layout->insertWidget( 1, m_control->matchSelector(), 0, Qt::AlignCenter );
-    m_layout->insertWidget( 2, m_control->inputField(), 1, Qt::AlignAbsolute );
+    qDebug() << m_layout->count();
+    for( int i = 0; i < m_layout->count(); i++ ){
+        qDebug() << i << ( m_layout->itemAt( i )->widget() ? m_layout->itemAt( i )->widget()->metaObject()->className() : "null" ) << m_layout->stretch( i ) << m_layout->itemAt( i )->sizeHint();
+    }
 }
 
 void 
@@ -114,7 +124,7 @@ DynamicControlWidget::setShowPlusButton(bool show)
     
     if( m_showPlus != show ) {
         if( show ) {
-            m_layout->insertWidget( m_layout->count() - 1, m_plusButton, 0, Qt::AlignRight );
+            m_layout->insertWidget( m_showCollapse ? 4 : 3, m_plusButton, 0, Qt::AlignRight );
             m_plusButton->show();
         } else {
             m_layout->removeWidget( m_plusButton );
@@ -149,9 +159,7 @@ DynamicControlWidget::setShowCollapseButton(bool show)
 }
 
 void 
-DynamicControlWidget::paintEvent(QPaintEvent* e)
+DynamicControlWidget::paintEvent(QPaintEvent* )
 {
-    QPainter p;
-    p.fillRect( e->rect(), Qt::yellow );
 }
 

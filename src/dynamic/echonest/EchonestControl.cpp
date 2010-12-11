@@ -61,6 +61,11 @@ Tomahawk::EchonestControl::toENParam() const
 void 
 Tomahawk::EchonestControl::updateWidgets()
 {
+    if( !m_input.isNull() )
+        delete m_input.data();
+    if( !m_match.isNull() )
+        delete m_match.data();
+    
     // make sure the widgets are the proper kind for the selected type, and hook up to their slots
     if( selectedType() == "Artist" ) {
         QComboBox* match = new QComboBox();
@@ -75,6 +80,8 @@ Tomahawk::EchonestControl::updateWidgets()
         connect( match, SIGNAL( currentIndexChanged(int) ), this, SLOT( updateData() ) );
         connect( input, SIGNAL( textChanged(QString) ), this, SLOT( updateData() ) );
         
+        match->hide();
+        input->hide();
         m_match = QWeakPointer< QWidget >( match );
         m_input = QWeakPointer< QWidget >( input );
     }

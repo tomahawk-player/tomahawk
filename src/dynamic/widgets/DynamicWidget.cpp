@@ -24,28 +24,55 @@
 #include "playlistmodel.h"
 #include "trackproxymodel.h"
 #include "dynamic/GeneratorInterface.h"
+#include <QComboBox>
+#include "dynamic/GeneratorFactory.h"
+#include <QPushButton>
 
 using namespace Tomahawk;
 
 DynamicWidget::DynamicWidget( const Tomahawk::dynplaylist_ptr& playlist, QWidget* parent )
     : QWidget(parent)
-    , m_header( 0 )
     , m_playlist( playlist )
+    , m_layout( new QVBoxLayout )
+    , m_headerText( 0 )
+    , m_headerLayout( 0 )
+    , m_modeCombo( 0 )
+    , m_generatorCombo( 0 )
+    , m_logo( 0 )
+    , m_generateButton( 0 )
     , m_controls( 0 )
     , m_splitter( 0 )
     , m_view( 0 )
     , m_model()
-{
-    setLayout( new QVBoxLayout );
+{   
+    m_headerLayout = new QHBoxLayout;
+    m_headerText = new QLabel( "Dynamic Playlist Type:", this );
+    m_headerLayout->addWidget( m_headerText );
+    m_modeCombo = new QComboBox( this );
+    m_modeCombo->addItem( "Static", 0 );
+    m_modeCombo->addItem( "On Demand", 1 );
+    m_headerLayout->addWidget( m_modeCombo );
+    m_generatorCombo = new QComboBox( this );
+    foreach( const QString& type, GeneratorFactory::types() )
+        m_generatorCombo->addItem( type );
+    m_headerLayout->addWidget( m_generatorCombo );
     
-    m_header = new QLabel( "TODO DYN PLAYLIST HEADER", this );
-    layout()->addWidget( m_header );
+    m_headerLayout->addSpacing( 1 );
+    
+    m_generateButton = new QPushButton( this );
+    m_generateButton->hide();
+    if( playlist->mode() == Static ) {
+        m_generateButton->show();
+        m_headerLayout->addWidget( m_generateButton );
+    }
+    
+    m_layout->addLayout( m_headerLayout );
     
     m_splitter = new AnimatedSplitter( this );
     m_splitter->setOrientation( Qt::Vertical );
     m_splitter->setChildrenCollapsible( false );
     
-    layout()->addWidget( m_splitter );
+    m_layout->addWidget( m_splitter );
     m_controls = new DynamicControlList( m_splitter );
     m_model = new PlaylistModel( this );
     m_view = new PlaylistView( this );
@@ -63,6 +90,7 @@ DynamicWidget::DynamicWidget( const Tomahawk::dynplaylist_ptr& playlist, QWidget
         m_model->loadPlaylist( m_playlist );
     }
     
+    setLayout( m_layout );
 }
 
 DynamicWidget::~DynamicWidget()

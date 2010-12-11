@@ -20,3 +20,8 @@ void GeneratorFactory::registerFactory ( const QString& type, GeneratorFactoryIn
 {
     s_factories.insert( type, interface );
 }
+
+QStringList GeneratorFactory::types()
+{
+    return s_factories.keys();
+}

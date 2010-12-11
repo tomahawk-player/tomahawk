@@ -20,6 +20,10 @@
 #include <QWidget>
 #include <tomahawk/typedefs.h>
 
+class QVBoxLayout;
+class QHBoxLayout;
+class QPushButton;
+class QComboBox;
 class PlaylistInterface;
 class PlaylistModel;
 class PlaylistView;
@@ -46,8 +50,15 @@ public:
     PlaylistInterface* playlistInterface() const;
     
 private:
-    QLabel* m_header;
     dynplaylist_ptr m_playlist;
+    QVBoxLayout* m_layout;
+    
+    QLabel* m_headerText;
+    QHBoxLayout* m_headerLayout;
+    QComboBox* m_modeCombo;
+    QComboBox* m_generatorCombo;
+    QLabel* m_logo;
+    QPushButton* m_generateButton;
     
     DynamicControlList* m_controls;
     AnimatedSplitter* m_splitter;
