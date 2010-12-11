@@ -97,10 +97,6 @@ PlaylistManager::show( const Tomahawk::playlist_ptr& playlist )
     if ( !m_loadedPlaylists.contains( playlist ) )
     {
         playlist->resolve();
-
-    }
-    else
-    {
         m_loadedPlaylists << playlist;
     }
     

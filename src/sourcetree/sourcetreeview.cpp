@@ -376,7 +376,7 @@ SourceDelegate::paint( QPainter* painter, const QStyleOptionViewItem& option, co
     {
         o.state = QStyle::State_Enabled;
 
-        if ( ( SourcesModel::indexType( index ) == SourcesModel::PlaylistSource || SourcesModel::indexType( index ) == SourcesModel::PlaylistSource ) &&
+        if ( ( SourcesModel::indexType( index ) == SourcesModel::PlaylistSource || SourcesModel::indexType( index ) == SourcesModel::DynamicPlaylistSource ) &&
            ( option.state & QStyle::State_Selected ) == QStyle::State_Selected )
         {
             o.palette.setColor( QPalette::Text, o.palette.color( QPalette::HighlightedText ) );

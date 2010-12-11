@@ -55,6 +55,11 @@ SourcesModel::flags( const QModelIndex& index ) const
             playlist_ptr playlist = indexToPlaylist( index );
             if ( !playlist.isNull() && playlist->author()->isLocal() )
                 defaultFlags |= Qt::ItemIsEditable;
+        } else if ( indexType( index ) == DynamicPlaylistSource )
+        {
+            dynplaylist_ptr playlist = indexToDynamicPlaylist( index );
+            if ( !playlist.isNull() && playlist->author()->isLocal() )
+                defaultFlags |= Qt::ItemIsEditable;
         }
 
         return Qt::ItemIsDragEnabled | Qt::ItemIsDropEnabled | defaultFlags;
