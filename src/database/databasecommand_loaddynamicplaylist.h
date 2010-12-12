@@ -17,7 +17,7 @@ class DatabaseCommand_LoadDynamicPlaylist : public DatabaseCommand_LoadPlaylistE
 public:
     explicit DatabaseCommand_LoadDynamicPlaylist( QString revision_guid, QObject* parent = 0 )
     : DatabaseCommand_LoadPlaylistEntries( revision_guid, parent )
-    {}
+    { qDebug() << "loaded with:" << revision_guid << guid(); }
     
     
     virtual void exec( DatabaseImpl* );

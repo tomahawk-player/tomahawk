@@ -181,7 +181,7 @@ DynamicPlaylist::createNewRevision( const QString& newrev,
 void 
 DynamicPlaylist::loadRevision( const QString& rev )
 {
-    qDebug() << Q_FUNC_INFO;
+    qDebug() << Q_FUNC_INFO << "Loading with:" << ( rev.isEmpty() ? currentrevision() : rev );
     
     DatabaseCommand_LoadDynamicPlaylist* cmd = new DatabaseCommand_LoadDynamicPlaylist( rev.isEmpty() ? currentrevision() : rev );
     

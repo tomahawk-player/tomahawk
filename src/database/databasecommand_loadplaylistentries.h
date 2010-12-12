@@ -13,13 +13,14 @@ Q_OBJECT
 
 public:
     explicit DatabaseCommand_LoadPlaylistEntries( QString revision_guid, QObject* parent = 0 )
-        : DatabaseCommand( parent ), m_guid( revision_guid )
+    : DatabaseCommand( parent ), m_revguid( revision_guid )
     {}
 
     virtual void exec( DatabaseImpl* );
     virtual bool doesMutates() const { return false; }
     virtual QString commandname() const { return "loadplaylistentries"; }
 
+    QString revisionGuid() const { return m_revguid; }
 signals:
     void done( const QString& rev,
                const QList<QString>& orderedguid,
@@ -37,7 +38,7 @@ protected:
     QStringList m_oldentries;
     
 private:
-    QString m_guid;
+    QString m_revguid;
 };
 
 #endif

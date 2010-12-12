@@ -10,10 +10,10 @@ using namespace Tomahawk;
 void
 DatabaseCommand_LoadPlaylistEntries::exec( DatabaseImpl* dbi )
 {
-    qDebug() << "Loading playlist entries for revision" << m_guid;
+    qDebug() << "Loading playlist entries for revision" << m_revguid;
     generateEntries( dbi );
     
-    emit done( m_guid, m_guids, m_oldentries, m_islatest, m_entrymap, true );
+    emit done( m_revguid, m_guids, m_oldentries, m_islatest, m_entrymap, true );
 }
 
 void DatabaseCommand_LoadPlaylistEntries::generateEntries( DatabaseImpl* dbi )
@@ -22,7 +22,7 @@ void DatabaseCommand_LoadPlaylistEntries::generateEntries( DatabaseImpl* dbi )
     query_entries.prepare("SELECT entries, playlist, author, timestamp, previous_revision "
                           "FROM playlist_revision "
                           "WHERE guid = :guid");
-    query_entries.bindValue( ":guid", m_guid );
+    query_entries.bindValue( ":guid", m_revguid );
     query_entries.exec();
     
     QString prevrev;
@@ -81,7 +81,7 @@ void DatabaseCommand_LoadPlaylistEntries::generateEntries( DatabaseImpl* dbi )
                                    "(SELECT currentrevision = ? FROM playlist WHERE guid = ?) "
                                    "FROM playlist_revision "
                                    "WHERE guid = ?" );
-        query_entries_old.addBindValue( m_guid );
+        query_entries_old.addBindValue( m_revguid );
         query_entries_old.addBindValue( query_entries.value( 1 ).toString() );
         query_entries_old.addBindValue( prevrev );
         

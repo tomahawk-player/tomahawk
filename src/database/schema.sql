@@ -65,7 +65,10 @@ CREATE TABLE IF NOT EXISTS playlist (
 );
 
 INSERT INTO playlist(guid, title, info, currentrevision, dynplaylist) 
-VALUES('dynamic_playlist-guid-1','Test Dynamic Playlist','this playlist automatically created and used for testing','revisionguid-1', 1);
+VALUES('dynamic_playlist-guid-1','Test Dynamic Playlist Dynamic','this playlist automatically created and used for testing','revisionguid-1', 1);
+
+INSERT INTO playlist(guid, title, info, currentrevision, dynplaylist) 
+VALUES('dynamic_playlist-guid-2','Test Dynamic Playlist Static','this playlist automatically created and used for testing','revisionguid-11', 1);
 
 CREATE TABLE IF NOT EXISTS playlist_item (
     guid TEXT PRIMARY KEY,
@@ -99,7 +102,9 @@ CREATE TABLE IF NOT EXISTS playlist_revision (
 );
 
 INSERT INTO playlist_revision(guid, playlist, entries)
-      VALUES('revisionguid-1', 'playlistguid-1', '["itemguid-2","itemguid-1","itemguid-3"]');
+      VALUES('revisionguid-1', 'dynamic_playlist-guid-1', '[]');
+INSERT INTO playlist_revision(guid, playlist, entries)
+      VALUES('revisionguid-11', 'dynamic_playlist-guid-2', '[]');
 
 CREATE TABLE IF NOT EXISTS dynamic_playlist (
     guid TEXT PRIMARY KEY,
@@ -110,7 +115,7 @@ CREATE TABLE IF NOT EXISTS dynamic_playlist (
 INSERT INTO dynamic_playlist(guid, pltype, plmode)
       VALUES('dynamic_playlist-guid-1', 'echonest', 0);
 INSERT INTO dynamic_playlist(guid, pltype, plmode)
-      VALUES('dynamic_playlist-guid-2', 'echonest', 0);
+      VALUES('dynamic_playlist-guid-2', 'echonest', 1);
 
 -- list of controls in each playlist. each control saves a selectedType, a match, and an input
 CREATE TABLE IF NOT EXISTS dynamic_playlist_controls (
@@ -134,6 +139,8 @@ CREATE TABLE IF NOT EXISTS dynamic_playlist_revision (
 
 INSERT INTO dynamic_playlist_revision(guid, controls, plmode, pltype)
       VALUES('revisionguid-1', '["controlid-1"]', 0, "echonest");
+INSERT INTO dynamic_playlist_revision(guid, controls, plmode, pltype)
+      VALUES('revisionguid-11', '["controlid-1"]', 1, "echonest");
 
 -- the trigram search indexes
 

@@ -42,7 +42,7 @@ void DatabaseCommand_LoadAllDynamicPlaylists::exec( DatabaseImpl* dbi )
                                       query.value(2).toString(), //info
                                       query.value(3).toString(), //creator
                                       query.value(7).toString(), // dynamic type
-                                      static_cast<GeneratorMode>(query.value(7).toInt()), // dynamic mode
+                                      static_cast<GeneratorMode>(query.value(8).toInt()), // dynamic mode
                                       query.value(5).toBool(),   //shared
                                       query.value(4).toInt(),    //lastmod
                                       query.value(0).toString()  //GUID

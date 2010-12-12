@@ -21,21 +21,23 @@ DatabaseCommand_LoadDynamicPlaylist::exec( DatabaseImpl* dbi )
     // now load the controls etc
     
     TomahawkSqlQuery controlsQuery = dbi->newquery();
-    controlsQuery.prepare("SELECT controls, plmode, pltype "
-                          "FROM dynamic_playlist_revision "
-                          "WHERE guid = ?");
-    controlsQuery.addBindValue( guid() );
+    controlsQuery.prepare("SELECT playlist_revision.playlist, controls, plmode, pltype "
+                          "FROM dynamic_playlist_revision, playlist_revision "
+                          "WHERE dynamic_playlist_revision.guid = ? AND playlist_revision.guid = dynamic_playlist_revision.guid");
+    controlsQuery.addBindValue( revisionGuid() );
     controlsQuery.exec();
     
     QList< dyncontrol_ptr > controls;
+    QString playlist_guid;
     if( controlsQuery.next() ) 
     {
-        QStringList controlIds = controlsQuery.value( 0 ).toStringList();
+        playlist_guid = controlsQuery.value( 0 ).toString();
+        QStringList controlIds = controlsQuery.value( 1 ).toStringList();
         foreach( const QString& controlId, controlIds )
         {
             TomahawkSqlQuery controlQuery = dbi->newquery();
-            controlQuery.prepare( "SELECT selectedType, match, input"
-                                  "FROM dynamic_playlist_controls"
+            controlQuery.prepare( "SELECT selectedType, match, input "
+                                  "FROM dynamic_playlist_controls "
                                   "WHERE id = :id" );
             controlQuery.bindValue( ":id", controlId );
             controlQuery.exec();
@@ -51,14 +53,22 @@ DatabaseCommand_LoadDynamicPlaylist::exec( DatabaseImpl* dbi )
         }
     }
     
-    
-    QString type = controlsQuery.value( 2 ).toString();
-    GeneratorMode mode = static_cast<GeneratorMode>( controlsQuery.value( 1 ).toInt() );
+    TomahawkSqlQuery info = dbi->newquery();
+    info.prepare( QString( "SELECT dynamic_playlist.pltype, dynamic_playlist.plmode FROM playlist, dynamic_playlist WHERE playlist.guid = \"%1\" AND playlist.guid = dynamic_playlist.guid" ).arg( playlist_guid ) );
+    if( !info.exec()  ) {
+        qWarning() << "Failed to load dynplaylist info..";
+        return;
+    } else if( !info.first() ) {
+        qWarning() << "Noo results for queryL:" << info.lastQuery();
+        return;
+    }
+    QString type = info.value( 0 ).toString();
+    GeneratorMode mode = static_cast<GeneratorMode>( info.value( 1 ).toInt() );
     if( mode == OnDemand ) { 
         Q_ASSERT( m_entrymap.isEmpty() ); // ondemand should have no entry
         
-        emit done( guid(), m_islatest, type, controls, true );
+        emit done( revisionGuid(), m_islatest, type, controls, true );
     } else {
-        emit done( guid(), m_guids, m_oldentries, type, controls, m_islatest, m_entrymap, true );
+        emit done( revisionGuid(), m_guids, m_oldentries, type, controls, m_islatest, m_entrymap, true );
     }
 }
