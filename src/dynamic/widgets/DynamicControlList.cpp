@@ -15,11 +15,14 @@
  ****************************************************************************************/
 
 #include "DynamicControlList.h"
+
 #include <QLayout>
 #include <QLabel>
-#include "DynamicControlWidget.h"
 #include <QPaintEvent>
 #include <QPainter>
+
+#include "DynamicControlWidget.h"
+#include "GeneratorInterface.h"
 
 using namespace Tomahawk;
 
@@ -39,13 +42,14 @@ DynamicControlList::DynamicControlList( AnimatedSplitter* parent )
     init();
 }
 
-DynamicControlList::DynamicControlList( const QList< dyncontrol_ptr >& controls, AnimatedSplitter* parent)
+DynamicControlList::DynamicControlList( const geninterface_ptr& generator, const QList< dyncontrol_ptr >& controls, AnimatedSplitter* parent)
     : AnimatedWidget(parent)
+    , m_generator( generator )
     , m_layout( new QVBoxLayout )
     , m_summaryWidget( 0 )
 {
     init();
-    setControls( controls );
+    setControls(  generator, controls );
 }
 
 DynamicControlList::~DynamicControlList()
@@ -76,10 +80,12 @@ DynamicControlList::init()
 }
 
 void 
-DynamicControlList::setControls(const QList< dyncontrol_ptr >& controls)
+DynamicControlList::setControls( const geninterface_ptr& generator, const QList< dyncontrol_ptr >& controls)
 {
+    m_generator = generator;
     foreach( const dyncontrol_ptr& control, controls ) {
-        m_controls << new DynamicControlWidget( control, false, false, this );
+        m_controls << new DynamicControlWidget( control, false, false, false, this );
+        connect( m_controls.last(), SIGNAL( addNewControl() ), this, SLOT( addNewControl() ) );
     }
     onShown( this );
 }
@@ -113,10 +119,22 @@ DynamicControlList::onShown( QWidget* w )
     foreach( DynamicControlWidget* control, m_controls ) {
         m_layout->addWidget( control );
         control->show();
+        control->setShowMinusButton( control != m_controls.last() );
         control->setShowPlusButton( control == m_controls.last() );
         control->setShowCollapseButton( control == m_controls.last() );
     }
 }
+
+void DynamicControlList::addNewControl()
+{
+    m_controls.last()->setShowCollapseButton( false );
+    m_controls.last()->setShowPlusButton( false );
+    m_controls.last()->setShowMinusButton( true );
+    m_controls.append( new DynamicControlWidget( m_generator->createControl(), true, false, true, this ) );
+    m_layout->addWidget( m_controls.last() );
+    connect( m_controls.last(), SIGNAL( addNewControl() ), this, SLOT( addNewControl() ) );
+}
+
 
 void DynamicControlList::paintEvent(QPaintEvent* )
 {

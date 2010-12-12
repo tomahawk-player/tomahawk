@@ -25,20 +25,24 @@
 #include <QToolButton>
 #include <QPaintEvent>
 #include <QPainter>
+#include <qstackedlayout.h>
 
 using namespace Tomahawk;
 
-DynamicControlWidget::DynamicControlWidget( const Tomahawk::dyncontrol_ptr& control, bool showPlus, bool showCollapse, QWidget* parent )
+DynamicControlWidget::DynamicControlWidget( const Tomahawk::dyncontrol_ptr& control, bool showPlus, bool showMinus, bool showCollapse, QWidget* parent )
      : QWidget(parent)
      , m_showPlus( showPlus )
+     , m_showMinus( showMinus )
      , m_showCollapse( showCollapse )
      , m_plusButton( 0 )
+     , m_minusButton( 0 )
      , m_collapseButton( 0 )
      , m_control( control )
      , m_typeSelector( 0 )
      , m_layout( 0 )
 {
     setSizePolicy( QSizePolicy::Expanding, QSizePolicy::Fixed );
+    setMouseTracking( true );
     
     m_layout = new QHBoxLayout;
     m_typeSelector = new QComboBox( this );
@@ -47,42 +51,56 @@ DynamicControlWidget::DynamicControlWidget( const Tomahawk::dyncontrol_ptr& cont
     m_layout->setSpacing( 0 );
     setContentsMargins( 0, 0, 0, 0 );
     
-    m_plusButton= new QToolButton( this );
-    m_plusButton->setIcon( QIcon( RESPATH "images/list-add.png" ) );
-    m_plusButton->setSizePolicy( QSizePolicy::Fixed, QSizePolicy::Fixed );
-    m_plusButton->setIconSize( QSize( 16, 16 ) );
-    m_plusButton->setToolButtonStyle( Qt::ToolButtonIconOnly );
-    m_plusButton->setAutoRaise( true );
-    m_plusButton->setContentsMargins( 0, 0, 0, 0 );
-    m_plusButton->hide();
+    m_plusButton = initButton();
     
-    m_collapseButton= new QToolButton( this );
+    m_plusButton->setIcon( QIcon( RESPATH "images/list-add.png" ) );
+    connect( m_plusButton, SIGNAL( clicked( bool ) ), this, SIGNAL( addNewControl() ) );
+    m_plusL = new QStackedLayout;
+    m_plusL->setContentsMargins( 0, 0, 0, 0 );
+    m_plusL->addWidget( m_plusButton );
+    m_plusL->addWidget( createDummy( m_plusButton ) ); // :-(
+    m_plusL->setCurrentIndex( 0 );
+    
+    m_minusButton = initButton();
+    m_minusButton->setIcon( QIcon( RESPATH "images/list-remove.png" ) );
+    connect( m_minusButton, SIGNAL( clicked( bool ) ), this, SIGNAL( removeControl() ) );
+    m_minusL = new QStackedLayout;
+    m_minusL->setContentsMargins( 0, 0, 0, 0 );
+    m_minusL->addWidget( m_minusButton );
+    m_minusL->addWidget( createDummy( m_plusButton ) ); // :-(
+    m_minusL->setCurrentIndex( 0 );
+    
+    m_collapseButton = initButton();
     m_collapseButton->setIcon( QIcon( RESPATH "images/arrow-up-double.png" ) );
-    m_collapseButton->setSizePolicy( QSizePolicy::Fixed, QSizePolicy::Fixed );
-    m_collapseButton->setIconSize( QSize( 16, 16 ) );
-    m_collapseButton->setToolButtonStyle( Qt::ToolButtonIconOnly );
-    m_collapseButton->setAutoRaise( true );
-    m_collapseButton->setContentsMargins( 0, 0, 0, 0 );
-    m_collapseButton->hide();
+    m_collapseL = new QStackedLayout;
+    m_collapseL->setContentsMargins( 0, 0, 0, 0 );
+    m_collapseL->addWidget( m_collapseButton );
+    m_collapseL->addWidget( createDummy( m_collapseButton ) ); // :-(
+    m_collapseL->setCurrentIndex( 0 );
+    
+    connect( m_collapseButton, SIGNAL( clicked( bool ) ), this, SIGNAL( collapse() ) );
     
     connect( m_typeSelector, SIGNAL( currentIndexChanged( QString ) ), SLOT( typeSelectorChanged( QString ) ) );
     
     m_layout->addWidget( m_typeSelector, 0, Qt::AlignLeft );
+    
     if( !control.isNull() ) {
         foreach( const QString& type, control->typeSelectors() )
             m_typeSelector->addItem( type );
-        
-        typeSelectorChanged( m_control->selectedType() );
     }
     
-    if( m_showCollapse ) {
-        m_layout->insertWidget( 3, m_collapseButton, 0, Qt::AlignRight );
-        m_plusButton->show();
-    }
-    if( m_showPlus ) {
-        m_layout->insertWidget( m_showCollapse ? 4 : 3, m_plusButton, 0, Qt::AlignRight );
-        m_plusButton->show();
-    }
+    typeSelectorChanged( m_control.isNull() ? "" : m_control->selectedType() );
+       
+    m_layout->addLayout( m_collapseL, 0 );
+    m_layout->addLayout( m_minusL, 0 );
+    m_layout->addLayout( m_plusL, 0 );
+    
+    if( m_showCollapse )
+        m_collapseL->setCurrentIndex( 0 );
+    if( m_showPlus )
+        m_plusL->setCurrentIndex( 0 );
+    if( m_showMinus )
+        m_minusL->setCurrentIndex( 0 );
     
     setLayout( m_layout );
 }
@@ -92,30 +110,45 @@ DynamicControlWidget::~DynamicControlWidget()
 
 }
 
+QToolButton* DynamicControlWidget::initButton()
+{
+    QToolButton* btn = new QToolButton( this );
+    btn->setSizePolicy( QSizePolicy::Fixed, QSizePolicy::Fixed );
+    btn->setIconSize( QSize( 16, 16 ) );
+    btn->setToolButtonStyle( Qt::ToolButtonIconOnly );
+    btn->setAutoRaise( true );
+    btn->setContentsMargins( 0, 0, 0, 0 );
+    return btn;
+}
+
+QWidget* DynamicControlWidget::createDummy( QWidget* fromW )
+{
+    QWidget* dummy = new QWidget( this );
+    dummy->setSizePolicy( QSizePolicy::Fixed, QSizePolicy::Fixed );
+    dummy->setMinimumSize( fromW->size() );
+    dummy->setMaximumSize( fromW->size() );
+    return dummy;
+}
+
+
 void 
 DynamicControlWidget::typeSelectorChanged( QString type )
 {
     Q_ASSERT( m_layout );
-    // remove the two widgets, change the control,and re-add the new ones
+    m_layout->removeWidget( m_control->matchSelector() );
+    m_layout->removeWidget( m_control->inputField() );
     
-    if( m_layout->indexOf( m_control->matchSelector() ) > -1 ) m_layout->removeWidget( m_control->matchSelector() );
-    if( m_layout->indexOf( m_control->inputField() ) > -1 ) m_layout->removeWidget( m_control->inputField() );
-
     m_control->setSelectedType( type );
     
     if( m_control->matchSelector() ) {
-        m_control->matchSelector()->show();
         m_layout->insertWidget( 1, m_control->matchSelector(), 0 );
+        m_control->matchSelector()->show();
     }
     if( m_control->inputField() ) {
-        m_control->inputField()->show();
         m_layout->insertWidget( 2, m_control->inputField(), 1  );
+        m_control->inputField()->show();
     }
     
-    qDebug() << m_layout->count();
-    for( int i = 0; i < m_layout->count(); i++ ){
-        qDebug() << i << ( m_layout->itemAt( i )->widget() ? m_layout->itemAt( i )->widget()->metaObject()->className() : "null" ) << m_layout->stretch( i ) << m_layout->itemAt( i )->sizeHint();
-    }
 }
 
 void 
@@ -123,40 +156,43 @@ DynamicControlWidget::setShowPlusButton(bool show)
 {
     
     if( m_showPlus != show ) {
-        if( show ) {
-            m_layout->insertWidget( m_showCollapse ? 4 : 3, m_plusButton, 0, Qt::AlignRight );
-            m_plusButton->show();
-        } else {
-            m_layout->removeWidget( m_plusButton );
-            m_plusButton->hide();
-        }
+        show ? m_plusL->setCurrentIndex( 0 ) : m_plusL->setCurrentIndex( 1 );
     }
     
     m_showPlus = show;
 }
 
-bool 
-DynamicControlWidget::showPlusButton() const
-{
-    return m_showPlus;
-}
 
 void 
 DynamicControlWidget::setShowCollapseButton(bool show)
 {
-    
     if( m_showCollapse != show ) {
-        if( show ) {
-            m_layout->insertWidget( 3, m_collapseButton, 0, Qt::AlignRight );
-            m_collapseButton->show();
-        } else {
-            m_layout->removeWidget( m_collapseButton );
-            m_collapseButton->hide();
-        }
+        show ? m_collapseL->setCurrentIndex( 0 ) : m_collapseL->setCurrentIndex( 1 );
     }
     
     m_showCollapse = show;
 }
+
+void DynamicControlWidget::setShowMinusButton(bool show)
+{   
+    m_showMinus = show;
+}
+
+void DynamicControlWidget::enterEvent(QEvent* ev)
+{
+    if( m_showMinus )
+        m_minusL->setCurrentIndex( 0 );
+    
+    QWidget::enterEvent( ev );
+}
+
+void DynamicControlWidget::leaveEvent(QEvent* ev)
+{
+    m_minusL->setCurrentIndex( 1 );
+    
+    QWidget::leaveEvent( ev );
+}
+
 
 void 
 DynamicControlWidget::paintEvent(QPaintEvent* )

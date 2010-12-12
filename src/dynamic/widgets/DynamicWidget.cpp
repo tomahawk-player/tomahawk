@@ -49,8 +49,9 @@ DynamicWidget::DynamicWidget( const Tomahawk::dynplaylist_ptr& playlist, QWidget
     m_headerText = new QLabel( "Dynamic Playlist Type:", this );
     m_headerLayout->addWidget( m_headerText );
     m_modeCombo = new QComboBox( this );
-    m_modeCombo->addItem( "Static", 0 );
-    m_modeCombo->addItem( "On Demand", 1 );
+    m_modeCombo->addItem( "On Demand", 0 );
+    m_modeCombo->addItem( "Static", 1 );
+    m_modeCombo->setCurrentIndex( static_cast<int>( playlist->mode() ) );
     m_headerLayout->addWidget( m_modeCombo );
     m_generatorCombo = new QComboBox( this );
     foreach( const QString& type, GeneratorFactory::types() )
@@ -59,7 +60,7 @@ DynamicWidget::DynamicWidget( const Tomahawk::dynplaylist_ptr& playlist, QWidget
     
     m_headerLayout->addSpacing( 1 );
     
-    m_generateButton = new QPushButton( this );
+    m_generateButton = new QPushButton( "Generate", this );
     m_generateButton->hide();
     if( playlist->mode() == Static ) {
         m_generateButton->show();
@@ -85,7 +86,7 @@ DynamicWidget::DynamicWidget( const Tomahawk::dynplaylist_ptr& playlist, QWidget
     m_splitter->show( 0, false );
     
     if( !m_playlist.isNull() ) {
-        m_controls->setControls( m_playlist->generator()->controls() );
+        m_controls->setControls( m_playlist->generator(), m_playlist->generator()->controls() );
         
         m_model->loadPlaylist( m_playlist );
     }

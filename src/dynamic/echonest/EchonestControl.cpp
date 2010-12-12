@@ -75,7 +75,7 @@ Tomahawk::EchonestControl::updateWidgets()
         match->addItem( "Similar To", Echonest::DynamicPlaylist::ArtistRadioType );
         
         input->setPlaceholderText( "Artist name" );
-        input->setSizePolicy( QSizePolicy::Fixed, QSizePolicy::Ignored );
+        input->setSizePolicy( QSizePolicy::Ignored, QSizePolicy::Fixed );
         
         connect( match, SIGNAL( currentIndexChanged(int) ), this, SLOT( updateData() ) );
         connect( input, SIGNAL( textChanged(QString) ), this, SLOT( updateData() ) );
@@ -84,6 +84,9 @@ Tomahawk::EchonestControl::updateWidgets()
         input->hide();
         m_match = QWeakPointer< QWidget >( match );
         m_input = QWeakPointer< QWidget >( input );
+    } else {
+        m_match = QWeakPointer<QWidget>( new QWidget );
+        m_input = QWeakPointer<QWidget>( new QWidget );
     }
 }
 

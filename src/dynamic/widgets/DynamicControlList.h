@@ -38,20 +38,23 @@ class DynamicControlList : public AnimatedWidget
     Q_OBJECT    
 public:
     DynamicControlList(); // bad compiler!
-    explicit DynamicControlList( AnimatedSplitter* parent );
-    explicit DynamicControlList( const QList< dyncontrol_ptr >& controls, AnimatedSplitter* parent );
+    explicit DynamicControlList(AnimatedSplitter* parent );
+    explicit DynamicControlList( const geninterface_ptr& generator, const QList< dyncontrol_ptr >& controls, AnimatedSplitter* parent );
     virtual ~DynamicControlList();
     
-    void setControls( const QList< dyncontrol_ptr >& controls );
+    QList< dyncontrol_ptr >& controls() const;
+    void setControls( const geninterface_ptr& generator, const QList< dyncontrol_ptr >& controls );
     
     virtual void paintEvent(QPaintEvent* );
     
 public slots:
     virtual void onHidden(QWidget* );
     virtual void onShown(QWidget* );
+    void addNewControl();
     
 private:
     void init();
+    geninterface_ptr m_generator;
     
     QVBoxLayout* m_layout;
     QList< DynamicControlWidget* > m_controls;

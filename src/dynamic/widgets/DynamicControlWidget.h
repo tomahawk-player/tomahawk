@@ -21,6 +21,8 @@
 
 #include "tomahawk/typedefs.h"
 
+class QStackedLayout;
+class QEvent;
 class QToolButton;
 class QHBoxLayout;
 class QComboBox;
@@ -36,23 +38,38 @@ class DynamicControlWidget : public QWidget
 {
     Q_OBJECT 
 public:
-    explicit DynamicControlWidget( const dyncontrol_ptr& control, bool showPlus = false, bool showCollaps = false, QWidget* parent = 0);
+    explicit DynamicControlWidget( const dyncontrol_ptr& control, bool showPlus = false, bool showMinus = false, bool showCollapse = false, QWidget* parent = 0);
     virtual ~DynamicControlWidget();
     
     void setShowPlusButton( bool show );
-    bool showPlusButton() const;
-    
+    void setShowMinusButton( bool show );
     void setShowCollapseButton( bool show );
-    
-    
+       
     virtual void paintEvent(QPaintEvent* );
+    virtual void enterEvent(QEvent* );
+    virtual void leaveEvent(QEvent* );
+    
+signals:
+    void addNewControl();
+    void collapse();
+    void removeControl();
+    
 private slots:
     void typeSelectorChanged( QString );
     
 private:
+    QToolButton* initButton();
+    QWidget* createDummy( QWidget* fromW );
+    
     bool m_showPlus;
+    bool m_showMinus;
     bool m_showCollapse;
+    // i hate qlayout
+    QStackedLayout* m_plusL;
     QToolButton* m_plusButton;
+    QStackedLayout* m_minusL;
+    QToolButton* m_minusButton;
+    QStackedLayout* m_collapseL;
     QToolButton* m_collapseButton;
     
     dyncontrol_ptr m_control;
