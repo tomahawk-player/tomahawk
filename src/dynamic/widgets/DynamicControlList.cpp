@@ -86,6 +86,7 @@ DynamicControlList::setControls( const geninterface_ptr& generator, const QList<
     foreach( const dyncontrol_ptr& control, controls ) {
         m_controls << new DynamicControlWidget( control, false, false, false, this );
         connect( m_controls.last(), SIGNAL( addNewControl() ), this, SLOT( addNewControl() ) );
+        connect( m_controls.last(), SIGNAL( removeControl() ), this, SLOT( removeControl() ) );
     }
     onShown( this );
 }
@@ -133,6 +134,23 @@ void DynamicControlList::addNewControl()
     m_controls.append( new DynamicControlWidget( m_generator->createControl(), true, false, true, this ) );
     m_layout->addWidget( m_controls.last() );
     connect( m_controls.last(), SIGNAL( addNewControl() ), this, SLOT( addNewControl() ) );
+    connect( m_controls.last(), SIGNAL( removeControl() ), this, SLOT( removeControl() ) );
+}
+
+void DynamicControlList::removeControl()
+{
+    DynamicControlWidget* w = qobject_cast<DynamicControlWidget*>( sender() );
+    m_layout->removeWidget( w );
+    delete w;
+    
+    m_controls.last()->setShowCollapseButton( true );
+    m_controls.last()->setShowPlusButton( true );
+    m_controls.last()->setShowMinusButton( false );
+}
+
+QList< dyncontrol_ptr >& DynamicControlList::controls() const
+{
+
 }
 
 

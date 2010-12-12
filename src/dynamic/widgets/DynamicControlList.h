@@ -51,6 +51,7 @@ public slots:
     virtual void onHidden(QWidget* );
     virtual void onShown(QWidget* );
     void addNewControl();
+    void removeControl();
     
 private:
     void init();

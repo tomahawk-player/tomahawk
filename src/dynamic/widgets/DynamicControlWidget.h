@@ -67,7 +67,6 @@ private:
     // i hate qlayout
     QStackedLayout* m_plusL;
     QToolButton* m_plusButton;
-    QStackedLayout* m_minusL;
     QToolButton* m_minusButton;
     QStackedLayout* m_collapseL;
     QToolButton* m_collapseButton;

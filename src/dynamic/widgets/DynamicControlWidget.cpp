@@ -51,24 +51,19 @@ DynamicControlWidget::DynamicControlWidget( const Tomahawk::dyncontrol_ptr& cont
     m_layout->setSpacing( 0 );
     setContentsMargins( 0, 0, 0, 0 );
     
-    m_plusButton = initButton();
+    m_minusButton = initButton();
+    m_minusButton->setIcon( QIcon( RESPATH "images/list-remove.png" ) );
+    connect( m_minusButton, SIGNAL( clicked( bool ) ), this, SIGNAL( removeControl() ) );
     
+    m_plusButton = initButton();
     m_plusButton->setIcon( QIcon( RESPATH "images/list-add.png" ) );
     connect( m_plusButton, SIGNAL( clicked( bool ) ), this, SIGNAL( addNewControl() ) );
     m_plusL = new QStackedLayout;
     m_plusL->setContentsMargins( 0, 0, 0, 0 );
     m_plusL->addWidget( m_plusButton );
+    m_plusL->addWidget( m_minusButton );
     m_plusL->addWidget( createDummy( m_plusButton ) ); // :-(
     m_plusL->setCurrentIndex( 0 );
-    
-    m_minusButton = initButton();
-    m_minusButton->setIcon( QIcon( RESPATH "images/list-remove.png" ) );
-    connect( m_minusButton, SIGNAL( clicked( bool ) ), this, SIGNAL( removeControl() ) );
-    m_minusL = new QStackedLayout;
-    m_minusL->setContentsMargins( 0, 0, 0, 0 );
-    m_minusL->addWidget( m_minusButton );
-    m_minusL->addWidget( createDummy( m_plusButton ) ); // :-(
-    m_minusL->setCurrentIndex( 0 );
     
     m_collapseButton = initButton();
     m_collapseButton->setIcon( QIcon( RESPATH "images/arrow-up-double.png" ) );
@@ -92,7 +87,6 @@ DynamicControlWidget::DynamicControlWidget( const Tomahawk::dyncontrol_ptr& cont
     typeSelectorChanged( m_control.isNull() ? "" : m_control->selectedType() );
        
     m_layout->addLayout( m_collapseL, 0 );
-    m_layout->addLayout( m_minusL, 0 );
     m_layout->addLayout( m_plusL, 0 );
     
     if( m_showCollapse )
@@ -100,7 +94,7 @@ DynamicControlWidget::DynamicControlWidget( const Tomahawk::dyncontrol_ptr& cont
     if( m_showPlus )
         m_plusL->setCurrentIndex( 0 );
     if( m_showMinus )
-        m_minusL->setCurrentIndex( 0 );
+        m_plusL->setCurrentIndex( 1 );
     
     setLayout( m_layout );
 }
@@ -156,7 +150,7 @@ DynamicControlWidget::setShowPlusButton(bool show)
 {
     
     if( m_showPlus != show ) {
-        show ? m_plusL->setCurrentIndex( 0 ) : m_plusL->setCurrentIndex( 1 );
+        show ? m_plusL->setCurrentIndex( 0 ) : m_plusL->setCurrentIndex( 2 );
     }
     
     m_showPlus = show;
@@ -181,14 +175,15 @@ void DynamicControlWidget::setShowMinusButton(bool show)
 void DynamicControlWidget::enterEvent(QEvent* ev)
 {
     if( m_showMinus )
-        m_minusL->setCurrentIndex( 0 );
+        m_plusL->setCurrentIndex( 1 );
     
     QWidget::enterEvent( ev );
 }
 
 void DynamicControlWidget::leaveEvent(QEvent* ev)
 {
-    m_minusL->setCurrentIndex( 1 );
+    if( m_showMinus )
+        m_plusL->setCurrentIndex( 2 );
     
     QWidget::leaveEvent( ev );
 }
