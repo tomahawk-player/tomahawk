@@ -22,6 +22,8 @@
 #include <QStringList>
 
 #include "tomahawk/typedefs.h"
+#include "tomahawk/query.h"
+#include "dynamic/DynamicControl.h"
 
 namespace Tomahawk {
    
@@ -47,7 +49,9 @@ public:
     
     // Can't make it pure otherwise we can't shove it in QVariants :-/
     // empty QString means use default
-    virtual dyncontrol_ptr createControl( const QString& type = QString()  ) const;
+    /// The generator will keep track of all the controls it creates. No need to tell it about controls
+    ///  you ask it to create
+    virtual dyncontrol_ptr createControl( const QString& type = QString() );
     
     /**
      * Generate tracks from the controls in this playlist. If the current mode is
@@ -66,7 +70,7 @@ public:
     void setMode( GeneratorMode mode ) { m_mode = mode; }
     
     // control functions
-    QList< dyncontrol_ptr > controls() const;
+    QList< dyncontrol_ptr > controls();
     void addControl( const dyncontrol_ptr& control );
     void clearControls();
     void setControls( const QList< dyncontrol_ptr>& controls );
@@ -74,7 +78,7 @@ public:
     QStringList typeSelectors() const { return m_typeSelectors; }
     
 signals:
-    void generated( const QList< query_ptr>& queries );
+    void generated( const QList< Tomahawk::query_ptr>& queries );
     
 protected:
     QString m_type;

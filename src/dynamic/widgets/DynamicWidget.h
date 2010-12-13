@@ -49,6 +49,10 @@ public:
     
     PlaylistInterface* playlistInterface() const;
     
+private slots:
+    void generate();
+    void tracksGenerated( const QList< Tomahawk::query_ptr>& queries );
+    
 private:
     dynplaylist_ptr m_playlist;
     QVBoxLayout* m_layout;

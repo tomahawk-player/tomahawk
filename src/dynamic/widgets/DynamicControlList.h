@@ -42,7 +42,6 @@ public:
     explicit DynamicControlList( const geninterface_ptr& generator, const QList< dyncontrol_ptr >& controls, AnimatedSplitter* parent );
     virtual ~DynamicControlList();
     
-    QList< dyncontrol_ptr >& controls() const;
     void setControls( const geninterface_ptr& generator, const QList< dyncontrol_ptr >& controls );
     
     virtual void paintEvent(QPaintEvent* );

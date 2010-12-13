@@ -104,6 +104,13 @@ Collection::playlist( const QString& guid )
             return pp;
     }
     
+    // TODO do we really want to do this?
+    foreach( const dynplaylist_ptr& pp, m_dynplaylists )
+    {
+        if( pp->guid() == guid )
+            return pp.staticCast<Playlist>();
+    }
+    
     return playlist_ptr();
 }
 

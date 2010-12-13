@@ -49,6 +49,8 @@ public:
     virtual void enterEvent(QEvent* );
     virtual void leaveEvent(QEvent* );
     
+    dyncontrol_ptr control() const;
+    
 signals:
     void addNewControl();
     void collapse();

@@ -52,7 +52,7 @@ Tomahawk::EchonestControl::setSelectedType ( const QString& type )
     updateWidgets();
 }
 
-Echonest::DynamicPlaylist::PlaylistParamData 
+Echonest::DynamicPlaylist::PlaylistParamData
 Tomahawk::EchonestControl::toENParam() const
 {
     return m_data;
@@ -68,6 +68,8 @@ Tomahawk::EchonestControl::updateWidgets()
     
     // make sure the widgets are the proper kind for the selected type, and hook up to their slots
     if( selectedType() == "Artist" ) {
+        m_currentType = Echonest::DynamicPlaylist::Artist;
+        
         QComboBox* match = new QComboBox();
         QLineEdit* input =  new QLineEdit();
         
@@ -93,12 +95,15 @@ Tomahawk::EchonestControl::updateWidgets()
 void 
 Tomahawk::EchonestControl::updateData()
 {
+    qDebug() << "Sender:" << sender() << qobject_cast<QLineEdit*>(sender()) << m_input << qobject_cast<QLineEdit*>(m_input.data());
     if( selectedType() == "Artist" ) {
-        QWeakPointer<QComboBox> combo = qWeakPointerCast<QComboBox, QWidget>( m_match );
-        if( !combo.isNull() )
-            m_data.first = static_cast<Echonest::DynamicPlaylist::PlaylistParam>( combo.data()->itemData( combo.data()->currentIndex() ).toInt() );
-        QWeakPointer<QLineEdit> edit = qWeakPointerCast<QLineEdit, QWidget>( m_input );
-        if( !edit.isNull() )
-            m_data.second = edit.data()->text();
+        QComboBox* combo = qobject_cast<QComboBox*>( m_match.data() );
+        if( combo ) {
+        }
+        QLineEdit* edit = qobject_cast<QLineEdit*>( m_input.data() );
+        if( edit && !edit->text().isEmpty() ) {
+            m_data.first = m_currentType;
+            m_data.second = edit->text();
+        }
     }
 }

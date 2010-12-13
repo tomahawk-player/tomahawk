@@ -148,12 +148,6 @@ void DynamicControlList::removeControl()
     m_controls.last()->setShowMinusButton( false );
 }
 
-QList< dyncontrol_ptr >& DynamicControlList::controls() const
-{
-
-}
-
-
 void DynamicControlList::paintEvent(QPaintEvent* )
 {
 }

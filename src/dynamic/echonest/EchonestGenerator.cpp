@@ -47,25 +47,29 @@ EchonestGenerator::~EchonestGenerator()
 }
 
 dyncontrol_ptr 
-EchonestGenerator::createControl( const QString& type ) const
+EchonestGenerator::createControl( const QString& type )
 {
-    return dyncontrol_ptr( new EchonestControl( type, m_typeSelectors ) );
+    m_controls << dyncontrol_ptr( new EchonestControl( type, m_typeSelectors ) );
+    return m_controls.last();
 }
 
 void 
 EchonestGenerator::generate ( int number )
 {
    // convert to an echonest query, and fire it off
-   if( number < 0 ) { // dynamic
+    if( number < 0 ) { // dynamic
         
-   } else { // static
-       Echonest::DynamicPlaylist::PlaylistParams params;
-       foreach( const dyncontrol_ptr& control, m_controls ) 
-           params.append( control.dynamicCast<EchonestControl>()->toENParam() );
-       
-       QNetworkReply* reply = Echonest::DynamicPlaylist::staticPlaylist( params );
-       connect( reply, SIGNAL( finished() ), this, SLOT( staticFinished() ) );
-   }
+    } else { // static
+        Echonest::DynamicPlaylist::PlaylistParams params;
+        foreach( const dyncontrol_ptr& control, m_controls ) {
+            params.append( control.dynamicCast<EchonestControl>()->toENParam() );
+        }
+        params.append( Echonest::DynamicPlaylist::PlaylistParamData( Echonest::DynamicPlaylist::Type, determineRadioType() ) );
+        params.append( Echonest::DynamicPlaylist::PlaylistParamData( Echonest::DynamicPlaylist::Results, number ) );
+        QNetworkReply* reply = Echonest::DynamicPlaylist::staticPlaylist( params );
+        qDebug() << "Generating a static playlist from echonest!" << reply->url().toString();
+        connect( reply, SIGNAL( finished() ), this, SLOT( staticFinished() ) );
+    }
 }
 
 void 
@@ -97,3 +101,12 @@ EchonestGenerator::staticFinished()
     
     emit generated( queries );
 }
+
+
+// tries to heuristically determine what sort of radio this is based on the controls
+Echonest::DynamicPlaylist::ArtistTypeEnum EchonestGenerator::determineRadioType() const
+{
+    // TODO
+    return Echonest::DynamicPlaylist::ArtistRadioType;
+}
+

@@ -46,6 +46,8 @@ protected:
 private:
     void updateWidgets();
     
+    Echonest::DynamicPlaylist::PlaylistParam m_currentType;
+    
     QWeakPointer< QWidget > m_input;
     QWeakPointer< QWidget > m_match;
     

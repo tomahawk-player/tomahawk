@@ -21,7 +21,7 @@
 
 #include "dynamic/GeneratorInterface.h"
 #include "dynamic/GeneratorFactory.h"
-
+#include "dynamic/DynamicControl.h"
 
 namespace Tomahawk 
 {
@@ -42,12 +42,15 @@ public:
     explicit EchonestGenerator( QObject* parent = 0 );
     virtual ~EchonestGenerator();
     
-    virtual dyncontrol_ptr createControl( const QString& type = QString() ) const;
+    virtual dyncontrol_ptr createControl( const QString& type = QString() );
     
     virtual void generate ( int number = -1 );
     
 private slots:
     void staticFinished();
+    
+private:
+    Echonest::DynamicPlaylist::ArtistTypeEnum determineRadioType() const;
 };
 
 };

@@ -104,6 +104,12 @@ DynamicControlWidget::~DynamicControlWidget()
 
 }
 
+dyncontrol_ptr DynamicControlWidget::control() const
+{
+    return m_control;
+}
+
+
 QToolButton* DynamicControlWidget::initButton()
 {
     QToolButton* btn = new QToolButton( this );

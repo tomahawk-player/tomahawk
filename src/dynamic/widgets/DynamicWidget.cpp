@@ -66,6 +66,7 @@ DynamicWidget::DynamicWidget( const Tomahawk::dynplaylist_ptr& playlist, QWidget
         m_generateButton->show();
         m_headerLayout->addWidget( m_generateButton );
     }
+    connect( m_generateButton, SIGNAL( clicked( bool ) ), this, SLOT( generate() ) );
     
     m_layout->addLayout( m_headerLayout );
     
@@ -91,6 +92,8 @@ DynamicWidget::DynamicWidget( const Tomahawk::dynplaylist_ptr& playlist, QWidget
         m_model->loadPlaylist( m_playlist );
     }
     
+    connect( m_playlist->generator().data(), SIGNAL( generated( QList<Tomahawk::query_ptr> ) ), this, SLOT( tracksGenerated( QList<Tomahawk::query_ptr> ) ) );
+    
     setLayout( m_layout );
 }
 
@@ -109,4 +112,19 @@ PlaylistInterface*
 DynamicWidget::playlistInterface() const
 {
     return m_view->proxyModel();
+}
+
+void 
+DynamicWidget::generate()
+{
+    // get the items from the generator, and put them in the playlist
+    m_playlist->generator()->generate( 15 );
+}
+
+void 
+DynamicWidget::tracksGenerated( const QList< query_ptr >& queries )
+{
+    m_playlist->addEntries( queries, m_playlist->currentrevision() );
+//     connect( m_playlist.data(), SIGNAL( revisionLoaded( Tomahawk::PlaylistRevision) ), m_playlist.data(), SLOT( resolve() ) );
+    m_playlist->resolve();
 }
