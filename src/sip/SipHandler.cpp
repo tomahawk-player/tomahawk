@@ -12,6 +12,7 @@
 SipHandler::SipHandler( QObject* parent )
     : QObject( parent )
 {
+    m_connected = false;
     loadPlugins();
 }
 
@@ -80,6 +81,7 @@ SipHandler::connect()
 {
     foreach( SipPlugin* sip, m_plugins )
         sip->connect();
+    m_connected = true;
 }
 
 
@@ -88,6 +90,17 @@ SipHandler::disconnect()
 {
     foreach( SipPlugin* sip, m_plugins )
         sip->disconnect();
+    APP->sourcelist().removeAllRemote();
+    m_connected = false;
+}
+
+void
+SipHandler::toggleConnect()
+{
+    if( m_connected )
+        disconnect();
+    else
+        connect();
 }
 
 

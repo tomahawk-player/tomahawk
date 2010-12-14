@@ -69,6 +69,16 @@ SourceList::remove( Tomahawk::Source* s )
     emit sourceRemoved( src );
 }
 
+void
+SourceList::removeAllRemote()
+{
+    foreach( source_ptr s, m_sources )
+    {
+        if( s != m_local )
+            remove( s );
+    }
+}
+
 
 QList<source_ptr>
 SourceList::sources() const

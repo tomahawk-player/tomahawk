@@ -19,6 +19,7 @@ public:
     void add( const Tomahawk::source_ptr& s );
     void remove( const Tomahawk::source_ptr& s );
     void remove( Tomahawk::Source* s );
+    void removeAllRemote();
 
     QList<Tomahawk::source_ptr> sources() const;
     Tomahawk::source_ptr get( const QString& username ) const;

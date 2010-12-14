@@ -21,6 +21,7 @@ public slots:
 
     void connect();
     void disconnect();
+    void toggleConnect();
 
 signals:
     void connected();
@@ -38,6 +39,7 @@ private:
     void loadPlugin( QObject* plugin );
 
     QList< SipPlugin* > m_plugins;
+    bool m_connected;
 };
 
 #endif

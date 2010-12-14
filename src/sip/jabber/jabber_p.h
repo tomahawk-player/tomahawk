@@ -66,8 +66,6 @@ public:
 
     void setProxy( QNetworkProxy* proxy );
 
-    void disconnect();
-
     /// GLOOX IMPLEMENTATION STUFF FOLLOWS
     virtual void onConnect();
     virtual void onDisconnect( gloox::ConnectionError e );
@@ -124,6 +122,7 @@ public slots:
     void sendMsg( const QString& to, const QString& msg );
     void broadcastMsg( const QString& msg );
     void addContact( const QString& jid, const QString& msg = QString() );
+    void disconnect();
 
 private slots:
     void doJabberRecv();
