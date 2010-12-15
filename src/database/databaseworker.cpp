@@ -161,9 +161,13 @@ DatabaseWorker::logOp( DatabaseCommandLoggable* command )
                         "VALUES(?, ?, ?, ?, ?) ");
 
     QVariantMap variant = QJson::QObjectHelper::qobject2qvariant( command );
+    qDebug() << "trying to serialize:" << variant.keys();
+    foreach( const QString& key, variant.keys() ) {
+        qDebug() << key << ":" << variant.value( key );
+    }
     QByteArray ba = m_serializer.serialize( variant );
 
-    //qDebug() << "OP JSON:" << ba; // debug
+//     qDebug() << "OP JSON:" << ba.isNull() << ba << "from:" << variant; // debug
 
     bool compressed = false;
     if( ba.length() >= 512 )

@@ -379,28 +379,36 @@ void
 Playlist::addEntries( const QList<query_ptr>& queries, const QString& oldrev )
 {
     //qDebug() << Q_FUNC_INFO;
+    
+    QList<plentry_ptr> el = addEntriesInternal( queries );
 
+    QString newrev = uuid();
+    createNewRevision( newrev, oldrev, el );
+}
+
+QList<plentry_ptr> 
+Playlist::addEntriesInternal( const QList<Tomahawk::query_ptr>& queries )
+{
     QList<plentry_ptr> el = entries();
     foreach( const query_ptr& query, queries )
     {
         plentry_ptr e( new PlaylistEntry() );
         e->setGuid( uuid() );
-
+        
         if ( query->results().count() )
             e->setDuration( query->results().at( 0 )->duration() );
         else
             e->setDuration( 0 );
-
+        
         e->setLastmodified( 0 );
         e->setAnnotation( "" ); // FIXME
         e->setQuery( query );
-
+        
         el << e;
     }
-
-    QString newrev = uuid();
-    createNewRevision( newrev, oldrev, el );
+    return el;
 }
+
 
 QList< plentry_ptr >
 Playlist::newEntries( const QList< plentry_ptr >& entries )

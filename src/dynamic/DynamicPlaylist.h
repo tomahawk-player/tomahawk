@@ -85,6 +85,9 @@ public:
     QString type() const;
     geninterface_ptr generator() const;
     
+    virtual void addEntries( const QList< query_ptr >& queries, const QString& oldrev );
+    virtual void addEntry( const Tomahawk::query_ptr& query, const QString& oldrev );
+    
     // <IGNORE hack="true">
     // these need to exist and be public for the json serialization stuff
     // you SHOULD NOT call them.  They are used for an alternate CTOR method from json.

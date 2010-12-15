@@ -65,9 +65,9 @@ public:
     virtual QWidget* inputField()  { Q_ASSERT( false ); return 0;  }
     
     /// the serializable value of the match
-    QString match() const  { Q_ASSERT( false ); return QString(); }
+    QString match() const  { return m_match; }
     /// the serializable value of the input
-    QString input() const { Q_ASSERT( false ); return QString(); }
+    QString input() const { return m_input; }
     
     // used by JSON serialization
     void setMatch( const QString& match ) { m_match = match; }

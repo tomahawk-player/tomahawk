@@ -117,8 +117,8 @@ public:
     bool shared() const                 { return m_shared; }
 
     const QList< plentry_ptr >& entries() { return m_entries; }
-    void addEntry( const Tomahawk::query_ptr& query, const QString& oldrev );
-    void addEntries( const QList<Tomahawk::query_ptr>& queries, const QString& oldrev );
+    virtual void addEntry( const Tomahawk::query_ptr& query, const QString& oldrev );
+    virtual void addEntries( const QList<Tomahawk::query_ptr>& queries, const QString& oldrev );
 
     // <IGNORE hack="true">
     // these need to exist and be public for the json serialization stuff
@@ -181,6 +181,8 @@ protected:
                                      const QList<QString>& oldorderedguids,
                                      bool is_newest_rev,
                                      const QMap< QString, Tomahawk::plentry_ptr >& addedmap );
+    
+    QList<plentry_ptr> addEntriesInternal( const QList<Tomahawk::query_ptr>& queries );
 private:
     Playlist();
     
