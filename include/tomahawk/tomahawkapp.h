@@ -30,7 +30,6 @@
 class AudioEngine;
 class Database;
 class SipHandler;
-class TomahawkZeroconf;
 class TomahawkSettings;
 class XMPPBot;
 
@@ -97,9 +96,6 @@ signals:
 public slots:
     QSharedPointer<QIODevice> getIODeviceForUrl( const Tomahawk::result_ptr& result );
 
-private slots:
-    void lanHostFound( const QString&, int, const QString&, const QString& );
-
 private:
     void initLocalCollection();
     void loadPlugins();
@@ -118,7 +114,6 @@ private:
     Database* m_db;
     Servent m_servent;
     SourceList m_sources;
-    TomahawkZeroconf* m_zeroconf;
     SipHandler* m_sipHandler;
     XMPPBot* m_xmppBot;
 

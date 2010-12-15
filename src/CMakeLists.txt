@@ -225,7 +225,6 @@ SET( tomahawkHeaders ${tomahawkHeaders}
      musicscanner.h
      scriptresolver.h
      tomahawksettings.h
-     tomahawkzeroconf.h 
 
      scrobbler.h
      xmppbot/xmppbot.h
@@ -332,6 +331,7 @@ IF( UNIX )
 ENDIF( UNIX )
 
 ADD_SUBDIRECTORY( sip/jabber )
+ADD_SUBDIRECTORY( sip/zeroconf )
 
 kde4_add_app_icon( tomahawkSources "${CMAKE_CURRENT_SOURCE_DIR}/../data/icons/tomahawk-icon-*.png" )
 qt4_add_resources( RC_SRCS "../resources.qrc" )

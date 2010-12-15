@@ -27,7 +27,7 @@ signals:
 
     void peerOnline( const QString& );
     void peerOffline( const QString& );
-    void msgReceived( const QString&, const QString& );
+    void msgReceived( const QString& from, const QString& msg );
 };
 
 Q_DECLARE_INTERFACE( SipPlugin, "tomahawk.Sip/1.0" )

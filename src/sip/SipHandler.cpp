@@ -30,16 +30,17 @@ SipHandler::loadPlugins()
     QDir pluginsDir( TomahawkApp::instance()->applicationDirPath() );
 
     #if defined(Q_OS_WIN)
-    if (pluginsDir.dirName().toLower() == "debug" || pluginsDir.dirName().toLower() == "release")
+    if ( pluginsDir.dirName().toLower() == "debug" || pluginsDir.dirName().toLower() == "release" )
       pluginsDir.cdUp();
     #elif defined(Q_OS_MAC)
-    if (pluginsDir.dirName() == "MacOS") {
+    if ( pluginsDir.dirName() == "MacOS" )
+    {
       pluginsDir.cdUp();
       pluginsDir.cdUp();
       pluginsDir.cdUp();
     }
     #endif
-    pluginsDir.cd("plugins");
+    pluginsDir.cd( "plugins" );
 
     foreach ( QString fileName, pluginsDir.entryList( QDir::Files ) )
     {
@@ -122,14 +123,6 @@ SipHandler::onPeerOnline( const QString& jid )
         conn->setName( jid.left( jid.indexOf( "/" ) ) );
         conn->setId( nodeid );
 
-        // FIXME strip /resource, but we should use a UID per database install
-        //QString uniqname = jid.left( jid.indexOf("/") );
-        //conn->setName( uniqname ); //FIXME
-
-        // FIXME:
-        //QString ouruniqname = m_settings->value( "jabber/username" ).toString()
-        //                      .left( m_settings->value( "jabber/username" ).toString().indexOf("/") );
-
         APP->servent().registerOffer( key, conn );
         m["visible"] = true;
         m["ip"] = APP->servent().externalAddress().toString();
@@ -187,11 +180,11 @@ SipHandler::onMessage( const QString& from, const QString& msg )
             APP->servent().externalAddress().toString() <= m.value( "ip" ).toString() )
         {
             qDebug() << "Initiate connection to" << from;
-            APP->servent().connectToPeer( m.value( "ip"   ).toString(),
-                                     m.value( "port" ).toInt(),
-                                     m.value( "key"  ).toString(),
-                                     from,
-                                     m.value( "uniqname" ).toString() );
+            APP->servent().connectToPeer( m.value( "ip" ).toString(),
+                                          m.value( "port" ).toInt(),
+                                          m.value( "key" ).toString(),
+                                          from,
+                                          m.value( "uniqname" ).toString() );
         }
         else
         {
@@ -201,8 +194,6 @@ SipHandler::onMessage( const QString& from, const QString& msg )
     else
     {
         qDebug() << Q_FUNC_INFO << "They are not visible, doing nothing atm";
-//        if ( m_servent.visibleExternally() )
-//            jabberPeerOnline( from ); // HACK FIXME
     }
 }
 

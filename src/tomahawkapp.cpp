@@ -21,7 +21,6 @@
 #include "scriptresolver.h"
 
 #include "audioengine.h"
-#include "tomahawkzeroconf.h"
 
 #ifndef TOMAHAWK_HEADLESS
     #include "tomahawkwindow.h"
@@ -102,7 +101,6 @@ using namespace Tomahawk;
 TomahawkApp::TomahawkApp( int& argc, char *argv[] )
     : TOMAHAWK_APPLICATION( argc, argv )
     , m_audioEngine( 0 )
-    , m_zeroconf( 0 )
     , m_settings( 0 )
     , m_nam( 0 )
     , m_proxy( 0 )
@@ -198,15 +196,6 @@ TomahawkApp::TomahawkApp( int& argc, char *argv[] )
     if( arguments().contains( "--http" ) || settings()->value( "network/http", true ).toBool() )
         startHTTP();
 
-    if ( !arguments().contains( "--nozeroconf" ) )
-    {
-        // advertise our servent on the LAN
-        m_zeroconf = new TomahawkZeroconf( m_servent.port(), this );
-        connect( m_zeroconf, SIGNAL( tomahawkHostFound( const QString&, int, const QString&, const QString& ) ),
-                               SLOT( lanHostFound( const QString&, int, const QString&, const QString& ) ) );
-        m_zeroconf->advertise();
-    }
-
     m_sipHandler->connect();
 
 #ifndef TOMAHAWK_HEADLESS
@@ -229,7 +218,6 @@ TomahawkApp::~TomahawkApp()
     delete m_audioEngine;
 #endif
 
-    delete m_zeroconf;
     delete m_db;
     m_db = 0;
 
@@ -313,16 +301,6 @@ TomahawkApp::setupDatabase()
     qDebug() << "Using database:" << dbpath;
     m_db = new Database( dbpath, this );
     m_pipeline.databaseReady();
-}
-
-
-void
-TomahawkApp::lanHostFound( const QString& host, int port, const QString& name, const QString& nodeid )
-{
-    qDebug() << "Found LAN host:" << host << port << nodeid;
-
-    if ( !m_servent.connectedToSession( nodeid ) )
-        m_servent.connectToPeer( host, port, "whitelist", name, nodeid );
 }
 
 

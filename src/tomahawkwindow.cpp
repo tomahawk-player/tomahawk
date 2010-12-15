@@ -170,7 +170,7 @@ TomahawkWindow::setupSignals()
     connect( ui->actionCreatePlaylist, SIGNAL( triggered() ), SLOT( createPlaylist() ));
     connect( ui->actionAboutTomahawk, SIGNAL( triggered() ), SLOT( showAboutTomahawk() ) );
     connect( ui->actionExit, SIGNAL( triggered() ), APP, SLOT( quit() ) );
-    connect( ui->statusButton, SIGNAL( clicked() ), APP->sipHandler(), SLOT(toggleConnect() ) );
+    connect( ui->statusButton, SIGNAL( clicked() ), APP->sipHandler(), SLOT( toggleConnect() ) );
 
     // <SipHandler>
     connect( APP->sipHandler(), SIGNAL( connected() ), SLOT( onSipConnected() ) );
