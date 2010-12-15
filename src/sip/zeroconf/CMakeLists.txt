@@ -23,7 +23,6 @@ add_library( sip_zeroconf SHARED ${zeroconfSources} ${zeroconfMoc} )
 
 target_link_libraries( sip_zeroconf
 	${QT_LIBRARIES}
-        ${GLOOX_LIBS}
 )
 
 IF( APPLE )
