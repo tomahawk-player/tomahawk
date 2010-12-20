@@ -72,11 +72,12 @@ public:
 protected:
     bool m_applied;
     QStringList m_previous_rev_orderedguids;
-    QMap<QString, Tomahawk::plentry_ptr> m_addedmap;
-    
-private:
     QString m_playlistguid;
     QString m_newrev, m_oldrev;
+    QMap<QString, Tomahawk::plentry_ptr> m_addedmap;
+    
+    QString m_currentRevision;
+private:
     QVariantList m_orderedguids;
     QList<Tomahawk::plentry_ptr> m_addedentries;
 };

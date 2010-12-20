@@ -13,7 +13,7 @@ class DatabaseCommand_SetDynamicPlaylistRevision : public DatabaseCommand_SetPla
 {
     Q_OBJECT
     Q_PROPERTY( QString type                     READ type          WRITE setType )
-    Q_PROPERTY( GeneratorMode mode               READ mode          WRITE setMode )
+    Q_PROPERTY( int           mode               READ mode          WRITE setMode )
     Q_PROPERTY( QVariantList controls            READ controlsV     WRITE setControlsV )
     
 public:
@@ -53,10 +53,12 @@ public:
     QVariantList controlsV();
     
     QString type() const { return m_type; }
-    GeneratorMode mode() const { return m_mode; }
+//     GeneratorMode mode() const { return m_mode; }
+    int mode() const { return (int)m_mode; }
     
     void setType( const QString& type ) { m_type = type; }
-    void setMode( GeneratorMode mode ) { m_mode = mode; }
+//     void setMode( GeneratorMode mode ) { m_mode = mode; }
+    void setMode( int mode ) { m_mode = (GeneratorMode)mode; }
     
 private:
     QString m_type;

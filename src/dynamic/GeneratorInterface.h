@@ -39,7 +39,8 @@ class GeneratorInterface : public QObject
 {
     Q_OBJECT
     Q_PROPERTY( QString         type READ type )
-    Q_PROPERTY( GeneratorMode   mode READ mode WRITE setMode );
+    Q_PROPERTY( GeneratorMode   mode READ mode WRITE setMode )
+    Q_ENUMS( GeneratorMode )
     
 public:
     // can't inline constructors/destructors for forward declared shared pointer types
