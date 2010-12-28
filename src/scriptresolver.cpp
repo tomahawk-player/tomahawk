@@ -1,6 +1,10 @@
-#include <QtEndian>
-#include "tomahawk/tomahawkapp.h"
 #include "scriptresolver.h"
+
+#include <QtEndian>
+
+#include "pipeline.h"
+#include "sourcelist.h"
+
 
 ScriptResolver::ScriptResolver(const QString& exe) :
     Tomahawk::Resolver()
@@ -88,14 +92,14 @@ void ScriptResolver::handleMsg( const QByteArray& msg )
         QList< Tomahawk::result_ptr > results;
         const QString& qid = m.value( "qid" ).toString();
         const QVariantList& reslist = m.value( "results" ).toList();
-        Tomahawk::collection_ptr coll = APP->sourcelist().getLocal()->collection();
+        Tomahawk::collection_ptr coll = SourceList::instance()->getLocal()->collection();
         foreach( const QVariant& rv, reslist )
         {
             qDebug() << "RES" << rv;
             Tomahawk::result_ptr rp( new Tomahawk::Result( rv, coll ) );
             results << rp;
         }
-        APP->pipeline()->reportResults( qid, results );
+        Tomahawk::Pipeline::instance()->reportResults( qid, results );
     }
 }
 
@@ -104,7 +108,7 @@ void ScriptResolver::cmdExited(int code, QProcess::ExitStatus status)
 {
     m_ready = false;
     qDebug() << Q_FUNC_INFO << "SCRIPT EXITED, code" << code << "status" << status << m_cmd;
-    APP->pipeline()->removeResolver( this );
+    Tomahawk::Pipeline::instance()->removeResolver( this );
 
     if( m_num_restarts < 10 )
     {
@@ -142,5 +146,5 @@ void ScriptResolver::doSetup( const QVariantMap& m )
              << " preference" << m_preference
              ;
     m_ready = true;
-    APP->pipeline()->addResolver( this );
+    Tomahawk::Pipeline::instance()->addResolver( this );
 }

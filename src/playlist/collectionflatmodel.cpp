@@ -4,7 +4,8 @@
 #include <QMimeData>
 #include <QTreeView>
 
-#include "database.h"
+#include "database/database.h"
+#include "sourcelist.h"
 
 using namespace Tomahawk;
 
@@ -14,7 +15,7 @@ CollectionFlatModel::CollectionFlatModel( QObject* parent )
 {
     qDebug() << Q_FUNC_INFO;
 
-    connect( &APP->sourcelist(), SIGNAL( sourceRemoved( Tomahawk::source_ptr ) ), SLOT( onSourceOffline( Tomahawk::source_ptr ) ) );
+    connect( SourceList::instance(), SIGNAL( sourceRemoved( Tomahawk::source_ptr ) ), SLOT( onSourceOffline( Tomahawk::source_ptr ) ) );
 }
 
 
@@ -80,7 +81,7 @@ CollectionFlatModel::addFilteredCollection( const collection_ptr& collection, un
     connect( cmd, SIGNAL( tracks( QList<Tomahawk::query_ptr>, Tomahawk::collection_ptr ) ),
                     SLOT( onTracksAdded( QList<Tomahawk::query_ptr>, Tomahawk::collection_ptr ) ), Qt::QueuedConnection );
 
-    TomahawkApp::instance()->database()->enqueue( QSharedPointer<DatabaseCommand>( cmd ) );
+    Database::instance()->enqueue( QSharedPointer<DatabaseCommand>( cmd ) );
 }
 
 

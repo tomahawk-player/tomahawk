@@ -1,9 +1,10 @@
 #include "musicscanner.h"
 
 #include "tomahawk/tomahawkapp.h"
-#include "database.h"
-#include "databasecommand_dirmtimes.h"
-#include "databasecommand_addfiles.h"
+#include "sourcelist.h"
+#include "database/database.h"
+#include "database/databasecommand_dirmtimes.h"
+#include "database/databasecommand_addfiles.h"
 
 using namespace Tomahawk;
 
@@ -53,7 +54,7 @@ MusicScanner::startScan()
     connect( cmd, SIGNAL( done( const QMap<QString,unsigned int>& ) ),
                     SLOT( scan() ), Qt::DirectConnection );
 
-    TomahawkApp::instance()->database()->enqueue( QSharedPointer<DatabaseCommand>(cmd) );
+    Database::instance()->enqueue( QSharedPointer<DatabaseCommand>(cmd) );
 }
 
 
@@ -67,7 +68,7 @@ MusicScanner::setMtimes( const QMap<QString, unsigned int>& m )
 void
 MusicScanner::scan()
 {
-    TomahawkApp::instance()->sourcelist().getLocal()->scanningProgress( 0 );
+    SourceList::instance()->getLocal()->scanningProgress( 0 );
     qDebug() << "Scanning, num saved mtimes from last scan:" << m_dirmtimes.size();
 
     connect( this, SIGNAL( batchReady( QVariantList ) ),
@@ -95,14 +96,14 @@ MusicScanner::listerFinished( const QMap<QString, unsigned int>& newmtimes )
     // any remaining stuff that wasnt emitted as a batch:
     if( m_scannedfiles.length() )
     {
-        TomahawkApp::instance()->sourcelist().getLocal()->scanningProgress( m_scanned );
+        SourceList::instance()->getLocal()->scanningProgress( m_scanned );
         commitBatch( m_scannedfiles );
     }
 
     // save mtimes, then quit thread
     DatabaseCommand_DirMtimes* cmd = new DatabaseCommand_DirMtimes( newmtimes );
     connect( cmd, SIGNAL( finished() ), SLOT( quit() ) );
-    TomahawkApp::instance()->database()->enqueue( QSharedPointer<DatabaseCommand>(cmd) );
+    Database::instance()->enqueue( QSharedPointer<DatabaseCommand>(cmd) );
 
     qDebug() << "Scanning complete, saving to database. "
                 "(scanned" << m_scanned << "skipped" << m_skipped << ")";
@@ -119,8 +120,8 @@ MusicScanner::commitBatch( const QVariantList& tracks )
     if ( tracks.length() )
     {
         qDebug() << Q_FUNC_INFO << tracks.length();
-        source_ptr localsrc = TomahawkApp::instance()->sourcelist().getLocal();
-        TomahawkApp::instance()->database()->enqueue(
+        source_ptr localsrc = SourceList::instance()->getLocal();
+        Database::instance()->enqueue(
             QSharedPointer<DatabaseCommand>( new DatabaseCommand_AddFiles( tracks, localsrc ) )
         );
     }
@@ -155,7 +156,7 @@ MusicScanner::readFile( const QFileInfo& fi )
     }
 
     if( m_scanned % 3 == 0 )
-        TomahawkApp::instance()->sourcelist().getLocal()->scanningProgress( m_scanned );
+        SourceList::instance()->getLocal()->scanningProgress( m_scanned );
     if( m_scanned % 100 == 0 )
         qDebug() << "SCAN" << m_scanned << fi.absoluteFilePath();
 

@@ -2,7 +2,7 @@
 #ifndef TOMAHAWK_SCROBBLER_H
 #define TOMAHAWK_SCROBBLER_H
 
-#include "tomahawk/result.h"
+#include "result.h"
 
 #include <lastfm/Track>
 #include <lastfm/Audioscrobbler>

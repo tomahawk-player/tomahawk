@@ -1,14 +1,13 @@
 #include "zeroconf.h"
 
-#include "tomahawk/tomahawkapp.h"
-#include "tomahawksettings.h"
+#include <QtPlugin>
 
 
 bool
 ZeroconfPlugin::connect()
 {
     delete m_zeroconf;
-    m_zeroconf = new TomahawkZeroconf( APP->servent().port(), this );
+    m_zeroconf = new TomahawkZeroconf( Servent::instance()->port(), this );
     QObject::connect( m_zeroconf, SIGNAL( tomahawkHostFound( const QString&, int, const QString&, const QString& ) ),
                                     SLOT( lanHostFound( const QString&, int, const QString&, const QString& ) ) );
 
@@ -23,8 +22,8 @@ ZeroconfPlugin::lanHostFound( const QString& host, int port, const QString& name
 {
     qDebug() << "Found LAN host:" << host << port << nodeid;
 
-    if ( !APP->servent().connectedToSession( nodeid ) )
-        APP->servent().connectToPeer( host, port, "whitelist", name, nodeid );
+    if ( !Servent::instance()->connectedToSession( nodeid ) )
+        Servent::instance()->connectToPeer( host, port, "whitelist", name, nodeid );
 }
 
 Q_EXPORT_PLUGIN2( sip, ZeroconfPlugin )

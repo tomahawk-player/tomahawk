@@ -3,9 +3,9 @@
 
 #include <QWidget>
 
-#include "tomahawk/album.h"
-#include "tomahawk/result.h"
-#include "tomahawk/playlistinterface.h"
+#include "album.h"
+#include "result.h"
+#include "playlistinterface.h"
 
 class AlbumModel;
 class CollectionFlatModel;

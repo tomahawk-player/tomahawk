@@ -7,7 +7,7 @@
 #include <QString>
 #include <QStackedWidget>
 
-#include "tomahawk/pipeline.h"
+#include "result.h"
 
 class QAction;
 

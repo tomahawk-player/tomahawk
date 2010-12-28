@@ -3,8 +3,8 @@
 
 #include <QWidget>
 
-#include "tomahawk/result.h"
-#include "tomahawk/playlistinterface.h"
+#include "result.h"
+#include "playlistinterface.h"
 
 namespace Ui
 {

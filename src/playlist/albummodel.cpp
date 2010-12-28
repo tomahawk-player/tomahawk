@@ -6,7 +6,7 @@
 #include <QNetworkReply>
 
 #include "tomahawk/tomahawkapp.h"
-#include "database.h"
+#include "database/database.h"
 
 #define LASTFM_DEFAULT_COVER "http://cdn.last.fm/flatness/catalogue/noimage"
 
@@ -223,7 +223,7 @@ AlbumModel::addCollection( const collection_ptr& collection )
     connect( cmd, SIGNAL( albums( QList<Tomahawk::album_ptr>, Tomahawk::collection_ptr ) ),
                     SLOT( onAlbumsAdded( QList<Tomahawk::album_ptr>, Tomahawk::collection_ptr ) ) );
 
-    TomahawkApp::instance()->database()->enqueue( QSharedPointer<DatabaseCommand>( cmd ) );
+    Database::instance()->enqueue( QSharedPointer<DatabaseCommand>( cmd ) );
 }
 
 
@@ -243,7 +243,7 @@ AlbumModel::addFilteredCollection( const collection_ptr& collection, unsigned in
     connect( cmd, SIGNAL( albums( QList<Tomahawk::album_ptr>, Tomahawk::collection_ptr ) ),
                     SLOT( onAlbumsAdded( QList<Tomahawk::album_ptr>, Tomahawk::collection_ptr ) ) );
 
-    TomahawkApp::instance()->database()->enqueue( QSharedPointer<DatabaseCommand>( cmd ) );
+    Database::instance()->enqueue( QSharedPointer<DatabaseCommand>( cmd ) );
 }
 
 

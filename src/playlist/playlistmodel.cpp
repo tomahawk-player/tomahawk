@@ -4,7 +4,7 @@
 #include <QMimeData>
 #include <QTreeView>
 
-#include "tomahawk/album.h"
+#include "album.h"
 
 using namespace Tomahawk;
 

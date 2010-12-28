@@ -10,7 +10,8 @@
 #include <QUdpSocket>
 #include <QTimer>
 
-#include "tomahawk/tomahawkapp.h"
+#include "database/database.h"
+#include "network/servent.h"
 
 class Node : public QObject
 {
@@ -68,7 +69,7 @@ public slots:
         qDebug() << "Advertising us on the LAN";
         QByteArray advert = QString( "TOMAHAWKADVERT:%1:%2" )
                             .arg( m_port )
-                            .arg( TomahawkApp::instance()->nodeID() )
+                            .arg( Database::instance()->dbid() )
                             .toAscii();
         m_sock.writeDatagram( advert.data(), advert.size(),
                               QHostAddress::Broadcast, ZCONF_PORT );
@@ -100,7 +101,7 @@ private slots:
             {
                 bool ok;
                 int port = parts.at(1).toInt( &ok );
-                if(ok && TomahawkApp::instance()->nodeID() != parts.at( 2 ) )
+                if(ok && Database::instance()->dbid() != parts.at( 2 ) )
                 {
                     qDebug() << "ADVERT received:" << sender << port;
                     Node *n = new Node( sender.toString(), parts.at( 2 ), port );

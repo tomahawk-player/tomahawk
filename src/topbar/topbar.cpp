@@ -6,7 +6,6 @@
 #include <QRadioButton>
 #include <QFile>
 
-#include "tomahawk/functimeout.h"
 #include "tomahawk/tomahawkapp.h"
 
 #define MAXDUDES 3

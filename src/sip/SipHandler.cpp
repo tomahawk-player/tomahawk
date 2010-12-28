@@ -1,12 +1,14 @@
 #include "SipHandler.h"
 #include "sip/SipPlugin.h"
 
+#include <QCoreApplication>
 #include <QDir>
 #include <QPluginLoader>
 #include <QMessageBox>
 
-#include "tomahawk/tomahawkapp.h"
-#include "controlconnection.h"
+#include "database/database.h"
+#include "network/controlconnection.h"
+#include "sourcelist.h"
 
 
 SipHandler::SipHandler( QObject* parent )
@@ -25,9 +27,7 @@ SipHandler::~SipHandler()
 void
 SipHandler::loadPlugins()
 {
-    qDebug() << TomahawkApp::instance();
-    qDebug() << TomahawkApp::instance()->applicationDirPath();
-    QDir pluginsDir( TomahawkApp::instance()->applicationDirPath() );
+    QDir pluginsDir( qApp->applicationDirPath() );
 
     #if defined(Q_OS_WIN)
     if ( pluginsDir.dirName().toLower() == "debug" || pluginsDir.dirName().toLower() == "release" )
@@ -91,7 +91,7 @@ SipHandler::disconnect()
 {
     foreach( SipPlugin* sip, m_plugins )
         sip->disconnect();
-    APP->sourcelist().removeAllRemote();
+    SourceList::instance()->removeAllRemote();
     m_connected = false;
 }
 
@@ -114,19 +114,19 @@ SipHandler::onPeerOnline( const QString& jid )
     SipPlugin* sip = qobject_cast<SipPlugin*>(sender());
 
     QVariantMap m;
-    if( APP->servent().visibleExternally() )
+    if( Servent::instance()->visibleExternally() )
     {
         QString key = uuid();
-        ControlConnection* conn = new ControlConnection( &APP->servent() );
+        ControlConnection* conn = new ControlConnection( Servent::instance() );
 
-        const QString& nodeid = APP->nodeID();
+        const QString& nodeid = Database::instance()->dbid();
         conn->setName( jid.left( jid.indexOf( "/" ) ) );
         conn->setId( nodeid );
 
-        APP->servent().registerOffer( key, conn );
+        Servent::instance()->registerOffer( key, conn );
         m["visible"] = true;
-        m["ip"] = APP->servent().externalAddress().toString();
-        m["port"] = APP->servent().externalPort();
+        m["ip"] = Servent::instance()->externalAddress().toString();
+        m["port"] = Servent::instance()->externalPort();
         m["key"] = key;
         m["uniqname"] = nodeid;
 
@@ -176,11 +176,11 @@ SipHandler::onMessage( const QString& from, const QString& msg )
      */
     if ( m.value( "visible" ).toBool() )
     {
-        if( !APP->servent().visibleExternally() ||
-            APP->servent().externalAddress().toString() <= m.value( "ip" ).toString() )
+        if( !Servent::instance()->visibleExternally() ||
+            Servent::instance()->externalAddress().toString() <= m.value( "ip" ).toString() )
         {
             qDebug() << "Initiate connection to" << from;
-            APP->servent().connectToPeer( m.value( "ip" ).toString(),
+            Servent::instance()->connectToPeer( m.value( "ip" ).toString(),
                                           m.value( "port" ).toInt(),
                                           m.value( "key" ).toString(),
                                           from,

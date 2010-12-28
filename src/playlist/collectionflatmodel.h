@@ -7,14 +7,13 @@
 
 #include "plitem.h"
 #include "trackmodel.h"
-#include "tomahawk/tomahawkapp.h"
-#include "tomahawk/collection.h"
-#include "tomahawk/query.h"
-#include "tomahawk/typedefs.h"
-#include "tomahawk/playlist.h"
-#include "tomahawk/playlistinterface.h"
+#include "collection.h"
+#include "query.h"
+#include "typedefs.h"
+#include "playlist.h"
+#include "playlistinterface.h"
 
-#include "databasecommand_alltracks.h"
+#include "database/databasecommand_alltracks.h"
 
 class QMetaData;
 

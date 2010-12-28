@@ -16,6 +16,7 @@
 #include "albumview.h"
 #include "albumproxymodel.h"
 #include "albummodel.h"
+#include "sourcelist.h"
 
 #include "infowidgets/sourceinfowidget.h"
 
@@ -113,7 +114,7 @@ PlaylistManager::show( const Tomahawk::playlist_ptr& playlist )
     m_modesAvailable = false;
     linkPlaylist();
 
-    emit numSourcesChanged( APP->sourcelist().count() );
+    emit numSourcesChanged( SourceList::instance()->count() );
     return true;
 }
 
@@ -250,7 +251,7 @@ PlaylistManager::show( const Tomahawk::source_ptr& source )
 bool
 PlaylistManager::showSuperCollection()
 {
-    foreach( const Tomahawk::source_ptr& source, APP->sourcelist().sources() )
+    foreach( const Tomahawk::source_ptr& source, SourceList::instance()->sources() )
     {
         if ( !m_superCollections.contains( source->collection() ) )
         {

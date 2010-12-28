@@ -1,9 +1,10 @@
 #ifndef TOMAHAWK_PLUGIN_H
 #define TOMAHAWK_PLUGIN_H
+
 #include <QString>
 #include <QtPlugin>
 
-#include "tomahawk/pluginapi.h"
+#include "pluginapi.h"
 
 class TomahawkPlugin
 {

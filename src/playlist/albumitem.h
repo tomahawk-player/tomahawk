@@ -6,7 +6,7 @@
 #include <QPersistentModelIndex>
 #include <QPixmap>
 
-#include "tomahawk/album.h"
+#include "album.h"
 
 class AlbumItem : public QObject
 {

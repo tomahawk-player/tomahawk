@@ -3,7 +3,7 @@
 
 #include <QSortFilterProxyModel>
 
-#include "tomahawk/playlistinterface.h"
+#include "playlistinterface.h"
 #include "playlist/trackmodel.h"
 
 class TrackProxyModel : public QSortFilterProxyModel, public PlaylistInterface

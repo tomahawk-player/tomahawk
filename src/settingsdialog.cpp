@@ -36,7 +36,7 @@ SettingsDialog::SettingsDialog( QWidget *parent )
     , m_testLastFmQuery( 0 )
 {
     ui->setupUi( this );
-    TomahawkSettings* s = TomahawkApp::instance()->settings();
+    TomahawkSettings* s = TomahawkSettings::instance();
 
     ui->checkBoxHttp->setChecked( s->httpEnabled() );
     ui->checkBoxUpnp->setChecked( s->upnpEnabled() );
@@ -84,7 +84,7 @@ SettingsDialog::~SettingsDialog()
 
     if ( !m_rejected )
     {
-        TomahawkSettings* s = TomahawkApp::instance()->settings();
+        TomahawkSettings* s = TomahawkSettings::instance();
 
         // if jabber or scan dir changed, reconnect/rescan
         bool rescan = ui->lineEditMusicPath->text() != s->scannerPath();
@@ -270,7 +270,7 @@ ProxyDialog::ProxyDialog( QWidget *parent )
     ui->typeBox->insertItem( i, "SOCKS 5", QNetworkProxy::Socks5Proxy );
     enumMap[QNetworkProxy::Socks5Proxy] = i++;
 
-    TomahawkSettings* s = TomahawkApp::instance()->settings();
+    TomahawkSettings* s = TomahawkSettings::instance();
 
     ui->typeBox->setCurrentIndex( enumMap[s->proxyType()] );
     ui->hostLineEdit->setText( s->proxyHost() );
@@ -286,7 +286,7 @@ ProxyDialog::saveSettings()
     qDebug() << Q_FUNC_INFO;
 
     //First set settings
-    TomahawkSettings* s = TomahawkApp::instance()->settings();
+    TomahawkSettings* s = TomahawkSettings::instance();
     s->setProxyHost( ui->hostLineEdit->text() );
 
     bool ok;

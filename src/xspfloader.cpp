@@ -4,7 +4,8 @@
 #include <QMessageBox>
 
 #include "tomahawk/tomahawkapp.h"
-#include "tomahawk/playlist.h"
+#include "sourcelist.h"
+#include "playlist.h"
 
 using namespace Tomahawk;
 
@@ -85,7 +86,7 @@ XSPFLoader::gotBody()
     if ( title.isEmpty() )
         title = tr( "New Playlist" );
 
-    m_playlist = Playlist::create( APP->sourcelist().getLocal(),
+    m_playlist = Playlist::create( SourceList::instance()->getLocal(),
                                    uuid(),
                                    title,
                                    info,

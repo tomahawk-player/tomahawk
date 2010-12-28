@@ -4,8 +4,8 @@
 #include <QPainter>
 #include <QAbstractItemView>
 
-#include "tomahawk/query.h"
-#include "tomahawk/result.h"
+#include "query.h"
+#include "result.h"
 #include "tomahawk/tomahawkapp.h"
 
 #include "playlist/albumitem.h"

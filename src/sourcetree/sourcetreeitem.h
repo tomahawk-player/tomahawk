@@ -4,7 +4,7 @@
 #include <QObject>
 #include <QStandardItem>
 
-#include "tomahawk/typedefs.h"
+#include "typedefs.h"
 #include "sourcetreeitemwidget.h"
 
 class SourceTreeItem : public QObject

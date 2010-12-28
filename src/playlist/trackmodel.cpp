@@ -5,7 +5,7 @@
 #include <QTreeView>
 
 #include "tomahawk/tomahawkapp.h"
-#include "tomahawk/album.h"
+#include "album.h"
 
 using namespace Tomahawk;
 

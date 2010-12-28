@@ -5,7 +5,7 @@
 #include <QTimer>
 #include <QMenu>
 
-#include "tomahawk/result.h"
+#include "result.h"
 
 class TomahawkTrayIcon : public QSystemTrayIcon
 {

@@ -3,8 +3,8 @@
 #include <QUrl>
 #include <QMutexLocker>
 
-#include <tomahawk/tomahawkapp.h>
-#include "tomahawk/playlistinterface.h"
+#include "playlistinterface.h"
+#include "network/servent.h"
 
 #include "madtranscode.h"
 #ifndef NO_OGG
@@ -158,7 +158,7 @@ AudioEngine::loadTrack( const Tomahawk::result_ptr& result )
                 emit finished( m_lastTrack );
 
             m_currentTrack = result;
-            io = TomahawkApp::instance()->getIODeviceForUrl( m_currentTrack );
+            io = Servent::instance()->getIODeviceForUrl( m_currentTrack );
 
             if ( !io || io.isNull() )
             {

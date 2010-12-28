@@ -6,8 +6,8 @@
 #include <QStandardItemModel>
 
 #include "tomahawk/tomahawkapp.h"
-#include "tomahawk/query.h"
-#include "tomahawk/sourcelist.h"
+#include "query.h"
+#include "sourcelist.h"
 #include "sourcetreeitem.h"
 #include "imagebutton.h"
 
@@ -19,8 +19,8 @@ SourcesModel::SourcesModel( QObject* parent )
 {
     setColumnCount( 1 );
 
-    connect( &APP->sourcelist(), SIGNAL( sourceAdded( Tomahawk::source_ptr ) ), SLOT( onSourceAdded( Tomahawk::source_ptr ) ) );
-    connect( &APP->sourcelist(), SIGNAL( sourceRemoved( Tomahawk::source_ptr ) ), SLOT( onSourceRemoved( Tomahawk::source_ptr ) ) );
+    connect( SourceList::instance(), SIGNAL( sourceAdded( Tomahawk::source_ptr ) ), SLOT( onSourceAdded( Tomahawk::source_ptr ) ) );
+    connect( SourceList::instance(), SIGNAL( sourceRemoved( Tomahawk::source_ptr ) ), SLOT( onSourceRemoved( Tomahawk::source_ptr ) ) );
 
     connect( parent, SIGNAL( onOnline( QModelIndex ) ), SLOT( onItemOnline( QModelIndex ) ) );
     connect( parent, SIGNAL( onOffline( QModelIndex ) ), SLOT( onItemOffline( QModelIndex ) ) );
@@ -79,7 +79,7 @@ SourcesModel::data( const QModelIndex& index, int role ) const
 void
 SourcesModel::loadSources()
 {
-    QList<source_ptr> sources = APP->sourcelist().sources();
+    QList<source_ptr> sources = SourceList::instance()->sources();
 
     foreach( const source_ptr& source, sources )
         appendItem( source );

@@ -3,7 +3,7 @@
 #include <QDebug>
 #include <QListView>
 
-#include "tomahawk/query.h"
+#include "query.h"
 #include "collectionmodel.h"
 
 

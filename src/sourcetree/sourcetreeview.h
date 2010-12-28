@@ -4,7 +4,7 @@
 #include <QTreeView>
 #include <QMenu>
 
-#include "tomahawk/source.h"
+#include "source.h"
 
 class CollectionModel;
 class PlaylistModel;

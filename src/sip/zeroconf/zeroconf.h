@@ -1,7 +1,7 @@
 #ifndef ZEROCONF_H
 #define ZEROCONF_H
 
-#include "SipPlugin.h"
+#include "sip/SipPlugin.h"
 #include "tomahawkzeroconf.h"
 
 class ZeroconfPlugin : public SipPlugin
