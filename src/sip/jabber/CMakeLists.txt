@@ -4,6 +4,7 @@ include( ${QT_USE_FILE} )
 add_definitions( ${QT_DEFINITIONS} )
 add_definitions( -DQT_PLUGIN )
 add_definitions( -DQT_SHARED )
+add_definitions( -DDLLEXPORT_PRO )
 
 set( jabberSources
         jabber.cpp
