@@ -4,7 +4,9 @@
 #include "sip/SipPlugin.h"
 #include "jabber_p.h"
 
-class JabberPlugin : public SipPlugin
+#include "dllmacro.h"
+
+class DLLEXPORT JabberPlugin : public SipPlugin
 {
     Q_OBJECT
     Q_INTERFACES( SipPlugin )
