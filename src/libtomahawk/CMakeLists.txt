@@ -147,4 +147,4 @@ target_link_libraries( tomahawklib
 	qjson
 )
 
-install( TARGETS tomahawklib DESTINATION . )
+install( TARGETS tomahawklib DESTINATION lib )
