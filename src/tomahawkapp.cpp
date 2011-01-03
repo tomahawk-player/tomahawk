@@ -110,7 +110,7 @@ TomahawkApp::TomahawkApp( int& argc, char *argv[] )
 
     new Pipeline( this );
     new SourceList( this );
-    new Servent( this );
+    m_servent = new Servent( this );
 
 #ifdef TOMAHAWK_HEADLESS
     m_headless = true;
@@ -212,6 +212,7 @@ TomahawkApp::~TomahawkApp()
     qDebug() << Q_FUNC_INFO;
 
     delete m_sipHandler;
+    delete m_servent;
 
 #ifndef TOMAHAWK_HEADLESS
     delete m_mainwindow;

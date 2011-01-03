@@ -39,8 +39,10 @@ public:
     bool show( const Tomahawk::album_ptr& album );
     bool show( const Tomahawk::collection_ptr& collection );
     bool show( const Tomahawk::source_ptr& source );
-    bool showSuperCollection();
 
+    bool show( QWidget* widget );
+
+    bool showSuperCollection();
     void showCurrentTrack();
 
 signals:
@@ -71,6 +73,8 @@ public slots:
 private slots:
     void applyFilter();
 
+    void onWidgetDestroyed( QWidget* widget );
+
 private:
     void unlinkPlaylist();
     void linkPlaylist();
@@ -97,6 +101,7 @@ private:
     QHash< Tomahawk::source_ptr, SourceInfoWidget* > m_sourceViews;
 
     PlaylistInterface* m_currentInterface;
+    QList<PlaylistInterface*> m_interfaceHistory;
 
     QWidget* m_currentInfoWidget;
 

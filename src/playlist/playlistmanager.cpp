@@ -66,6 +66,8 @@ PlaylistManager::PlaylistManager( QObject* parent )
     m_currentInterface = m_superCollectionView->proxyModel();
 
     connect( &m_filterTimer, SIGNAL( timeout() ), SLOT( applyFilter() ) );
+
+    linkPlaylist();
 }
 
 
@@ -249,6 +251,27 @@ PlaylistManager::show( const Tomahawk::source_ptr& source )
 
 
 bool
+PlaylistManager::show( QWidget* widget )
+{
+    unlinkPlaylist();
+
+    connect( widget, SIGNAL( destroyed( QWidget* ) ), SLOT( onWidgetDestroyed( QWidget* ) ) );
+
+    m_stack->addWidget( widget );
+    m_stack->setCurrentWidget( widget );
+
+    m_superCollectionVisible = false;
+    m_statsAvailable = false;
+    m_modesAvailable = false;
+    m_currentInterface = 0;
+
+    linkPlaylist();
+
+    return true;
+}
+
+
+bool
 PlaylistManager::showSuperCollection()
 {
     foreach( const Tomahawk::source_ptr& source, SourceList::instance()->sources() )
@@ -414,6 +437,9 @@ PlaylistManager::linkPlaylist()
 
         connect( m_currentInterface->object(), SIGNAL( shuffleModeChanged( bool ) ),
                  this,                         SIGNAL( shuffleModeChanged( bool ) ) );
+
+        m_interfaceHistory.removeAll( m_currentInterface );
+        m_interfaceHistory << m_currentInterface;
     }
 
     applyFilter();
@@ -430,6 +456,29 @@ PlaylistManager::linkPlaylist()
 
     emit statsAvailable( m_statsAvailable );
     emit modesAvailable( m_modesAvailable );
+}
+
+
+void
+PlaylistManager::onWidgetDestroyed( QWidget* widget )
+{
+    qDebug() << "Destroyed child:" << widget;
+
+    bool resetWidget = ( m_stack->currentWidget() == widget );
+    m_stack->removeWidget( widget );
+
+    if ( resetWidget && m_interfaceHistory.count() )
+    {
+        unlinkPlaylist();
+
+        m_currentInterface = m_interfaceHistory.last();
+        qDebug() << "Last interface:" << m_currentInterface << m_currentInterface->widget();
+
+        if ( m_currentInterface->widget() )
+            m_stack->setCurrentWidget( m_currentInterface->widget() );
+
+        linkPlaylist();
+    }
 }
 
 

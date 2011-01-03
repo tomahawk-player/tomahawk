@@ -20,9 +20,7 @@ public:
 
     virtual void exec(DatabaseImpl *lib);
 
-
 signals:
-
     void results( Tomahawk::QID qid, QList<Tomahawk::result_ptr> results );
 
 public slots:

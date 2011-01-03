@@ -96,6 +96,8 @@ SET( tomahawkSourcesGui ${tomahawkSourcesGui}
 
      infowidgets/sourceinfowidget.cpp
 
+     widgets/newplaylistwidget.cpp
+
      transferview.cpp
      tomahawkwindow.cpp
      tomahawktrayicon.cpp
@@ -173,6 +175,8 @@ SET( tomahawkHeadersGui ${tomahawkHeadersGui}
 
      infowidgets/sourceinfowidget.h
 
+     widgets/newplaylistwidget.h
+
      transferview.h
      tomahawkwindow.h
      tomahawktrayicon.h
@@ -189,6 +193,7 @@ SET( tomahawkUI ${tomahawkUI}
      sourcetree/sourcetreeitemwidget.ui
      topbar/topbar.ui
      infowidgets/sourceinfowidget.ui
+     widgets/newplaylistwidget.ui
 )
 
 INCLUDE_DIRECTORIES(

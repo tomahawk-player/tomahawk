@@ -77,23 +77,14 @@ XSPFLoader::gotBody()
     xmldoc.setContent( m_body );
     QDomElement docElement( xmldoc.documentElement() );
 
-    QString origTitle, title, info, creator;
+    QString origTitle;
     origTitle = docElement.firstChildElement( "title" ).text();
-    info    = docElement.firstChildElement( "creator" ).text();
-    creator = docElement.firstChildElement( "info" ).text();
+    m_info    = docElement.firstChildElement( "creator" ).text();
+    m_creator = docElement.firstChildElement( "info" ).text();
 
-    title = origTitle;
-    if ( title.isEmpty() )
-        title = tr( "New Playlist" );
-
-    m_playlist = Playlist::create( SourceList::instance()->getLocal(),
-                                   uuid(),
-                                   title,
-                                   info,
-                                   creator,
-                                   false );
-
-    QList< plentry_ptr > entries;
+    m_title = origTitle;
+    if ( m_title.isEmpty() )
+        m_title = tr( "New Playlist" );
 
     QDomNodeList tracklist = docElement.elementsByTagName( "track" );
     for ( unsigned int i = 0; i < tracklist.length(); i++ )
@@ -113,18 +104,36 @@ XSPFLoader::gotBody()
         v.insert( "track", e.firstChildElement( "title" ).text() );
 
         p->setQuery( Tomahawk::query_ptr(new Tomahawk::Query(v)) );
-        entries << p;
+        m_entries << p;
     }
 
-    if ( origTitle.isEmpty() && entries.isEmpty() )
+    if ( origTitle.isEmpty() && m_entries.isEmpty() )
     {
-        QMessageBox::critical( APP->mainWindow(), tr( "XSPF Error" ), tr( "This is not a valid XSPF playlist." ) );
-        deleteLater();
-        return;
+        if ( m_autoCreate )
+        {
+            QMessageBox::critical( APP->mainWindow(), tr( "XSPF Error" ), tr( "This is not a valid XSPF playlist." ) );
+            deleteLater();
+            return;
+        }
+        else
+        {
+            emit failed();
+            return;
+        }
     }
 
-    m_playlist->createNewRevision( uuid(), m_playlist->currentrevision(), entries );
-    emit ok( m_playlist );
+    if ( m_autoCreate )
+    {
+        m_playlist = Playlist::create( SourceList::instance()->getLocal(),
+                                       uuid(),
+                                       m_title,
+                                       m_info,
+                                       m_creator,
+                                       false );
 
-    deleteLater();
+        m_playlist->createNewRevision( uuid(), m_playlist->currentrevision(), m_entries );
+        deleteLater();
+    }
+
+    emit ok( m_playlist );
 }

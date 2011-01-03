@@ -21,6 +21,8 @@
 
 #include "sip/SipHandler.h"
 
+#include "widgets/newplaylistwidget.h"
+
 #include "audiocontrols.h"
 #include "network/controlconnection.h"
 #include "database/database.h"
@@ -324,7 +326,9 @@ TomahawkWindow::createPlaylist()
 {
     qDebug() << Q_FUNC_INFO;
 
-    bool ok;
+    playlistManager()->show( new NewPlaylistWidget() );
+
+/*    bool ok;
     QString name = QInputDialog::getText( this, "Create New Playlist", "Name:", QLineEdit::Normal, "New Playlist", &ok );
     if ( !ok || name.isEmpty() )
         return;
@@ -333,7 +337,7 @@ TomahawkWindow::createPlaylist()
     QString id = uuid();
     QString info  = ""; // FIXME
     QString creator = "someone"; // FIXME
-    Playlist::create( author, id, name, info, creator, false /* shared */ );
+    Playlist::create( author, id, name, info, creator, false );*/
 }
 
 

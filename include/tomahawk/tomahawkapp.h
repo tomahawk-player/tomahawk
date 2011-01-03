@@ -92,6 +92,7 @@ private:
 
     AudioEngine* m_audioEngine;
     SipHandler* m_sipHandler;
+    Servent* m_servent;
     XMPPBot* m_xmppBot;
 
 #ifndef NO_LIBLASTFM

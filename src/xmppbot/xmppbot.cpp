@@ -148,10 +148,7 @@ void XMPPBot::handleMessage(const Message& msg, MessageSession* session)
         connect( q.data(), SIGNAL( resultsAdded( QList<Tomahawk::result_ptr> ) ),
                              SLOT( onResultsAdded( QList<Tomahawk::result_ptr> ) ) );
 
-        QList<Tomahawk::query_ptr> ql;
-        ql.append( q );
-
-        Tomahawk::Pipeline::instance()->add( ql );
+        Tomahawk::Pipeline::instance()->add( q );
         return;
     }
     else if ( body.startsWith( "stop" ) )
