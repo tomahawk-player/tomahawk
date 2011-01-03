@@ -17,8 +17,11 @@
 #include "albumproxymodel.h"
 #include "albummodel.h"
 #include "sourcelist.h"
+#include "tomahawksettings.h"
 
 #include "infowidgets/sourceinfowidget.h"
+
+#include "widgets/welcomewidget.h"
 
 #define FILTER_TIMEOUT 280
 
@@ -63,11 +66,10 @@ PlaylistManager::PlaylistManager( QObject* parent )
 
     m_stack->addWidget( m_superCollectionView );
     m_stack->addWidget( m_superAlbumView );
-    m_currentInterface = m_superCollectionView->proxyModel();
+
+    show( new WelcomeWidget() );
 
     connect( &m_filterTimer, SIGNAL( timeout() ), SLOT( applyFilter() ) );
-
-    linkPlaylist();
 }
 
 
@@ -115,6 +117,8 @@ PlaylistManager::show( const Tomahawk::playlist_ptr& playlist )
     m_statsAvailable = true;
     m_modesAvailable = false;
     linkPlaylist();
+
+    TomahawkSettings::instance()->appendRecentlyPlayedPlaylist( playlist );
 
     emit numSourcesChanged( SourceList::instance()->count() );
     return true;
