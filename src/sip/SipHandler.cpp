@@ -29,10 +29,7 @@ SipHandler::loadPlugins()
 {
     QDir pluginsDir( qApp->applicationDirPath() );
 
-    #if defined(Q_OS_WIN)
-    if ( pluginsDir.dirName().toLower() == "debug" || pluginsDir.dirName().toLower() == "release" )
-      pluginsDir.cdUp();
-    #elif defined(Q_OS_MAC)
+    #if defined(Q_OS_MAC)
     if ( pluginsDir.dirName() == "MacOS" )
     {
       pluginsDir.cdUp();
@@ -40,16 +37,18 @@ SipHandler::loadPlugins()
       pluginsDir.cdUp();
     }
     #endif
-    pluginsDir.cd( "plugins" );
+//    pluginsDir.cd( "plugins" );
 
     foreach ( QString fileName, pluginsDir.entryList( QDir::Files ) )
     {
+        qDebug() << "Trying to load plugin:" << pluginsDir.absoluteFilePath( fileName );
+
         QPluginLoader loader( pluginsDir.absoluteFilePath( fileName ) );
         QObject* plugin = loader.instance();
         if ( plugin )
         {
             // Connect via that plugin
-            qDebug() << "Trying to load plugin:" << loader.fileName();
+            qDebug() << "Loaded plugin:" << loader.fileName();
             loadPlugin( plugin );
         }
     }
@@ -62,8 +61,6 @@ SipHandler::loadPlugin( QObject* plugin )
     SipPlugin* sip = qobject_cast<SipPlugin*>(plugin);
     if ( sip )
     {
-        qDebug() << "Loaded plugin!";
-
         QObject::connect( sip, SIGNAL( peerOnline( QString ) ), SLOT( onPeerOnline( QString ) ) );
         QObject::connect( sip, SIGNAL( peerOffline( QString ) ), SLOT( onPeerOffline( QString ) ) );
         QObject::connect( sip, SIGNAL( msgReceived( QString, QString ) ), SLOT( onMessage( QString, QString ) ) );
