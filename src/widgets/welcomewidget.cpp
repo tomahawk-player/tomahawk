@@ -22,6 +22,10 @@ WelcomeWidget::WelcomeWidget( QWidget* parent )
     ui->setupUi( this );
     ui->playlistWidget->setItemDelegate( new PlaylistDelegate() );
 
+    m_tracksModel = new PlaylistModel( ui->tracksView );
+    ui->tracksView->setModel( m_tracksModel );
+    m_tracksModel->loadHistory( Tomahawk::source_ptr() );
+
     connect( SourceList::instance(), SIGNAL( sourceAdded( Tomahawk::source_ptr ) ), SLOT( onSourceAdded( Tomahawk::source_ptr ) ) );
 
     connect( ui->playlistWidget, SIGNAL( itemActivated( QListWidgetItem* ) ), SLOT( onPlaylistActivated( QListWidgetItem* ) ) );

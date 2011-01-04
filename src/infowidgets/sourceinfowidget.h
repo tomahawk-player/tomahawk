@@ -9,6 +9,7 @@
 
 class AlbumModel;
 class CollectionFlatModel;
+class PlaylistModel;
 
 namespace Ui
 {
@@ -30,6 +31,7 @@ private:
     Ui::SourceInfoWidget *ui;
 
     CollectionFlatModel* m_recentCollectionModel;
+    PlaylistModel* m_historyModel;
     AlbumModel* m_recentAlbumModel;
 };
 

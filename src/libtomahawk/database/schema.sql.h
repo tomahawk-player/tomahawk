@@ -1,5 +1,5 @@
 /*
-    This file was automatically generated from schema.sql on Tue Jul 13 12:23:44 CEST 2010.
+    This file was automatically generated from schema.sql on Tue Jan  4 06:55:23 CET 2011.
 */
 
 static const char * tomahawk_schema_sql = 
@@ -148,11 +148,20 @@ static const char * tomahawk_schema_sql =
 ");"
 "CREATE INDEX track_attrib_id ON track_attributes(id);"
 "CREATE INDEX track_attrib_k  ON track_attributes(k);"
+"CREATE TABLE IF NOT EXISTS playback_log ("
+"    id INTEGER PRIMARY KEY AUTOINCREMENT,"
+"    source INTEGER REFERENCES source(id) ON DELETE CASCADE ON UPDATE CASCADE DEFERRABLE INITIALLY DEFERRED,"
+"    track INTEGER REFERENCES track(id) ON DELETE CASCADE ON UPDATE CASCADE DEFERRABLE INITIALLY DEFERRED,"
+"    playtime INTEGER NOT NULL,              "
+"    secs_played INTEGER NOT NULL"
+");"
+"CREATE INDEX playback_log_source ON playback_log(source);"
+"CREATE INDEX playback_log_track ON playback_log(track);"
 "CREATE TABLE IF NOT EXISTS settings ("
 "    k TEXT NOT NULL PRIMARY KEY,"
 "    v TEXT NOT NULL DEFAULT ''"
 ");"
-"INSERT INTO settings(k,v) VALUES('schema_version', '14');"
+"INSERT INTO settings(k,v) VALUES('schema_version', '15');"
     ;
 
 const char * get_tomahawk_sql()

@@ -43,8 +43,30 @@
    <item>
     <widget class="QListWidget" name="playlistWidget"/>
    </item>
+   <item>
+    <widget class="QLabel" name="label_3">
+     <property name="font">
+      <font>
+       <pointsize>14</pointsize>
+      </font>
+     </property>
+     <property name="text">
+      <string>Recently played tracks:</string>
+     </property>
+    </widget>
+   </item>
+   <item>
+    <widget class="PlaylistView" name="tracksView"/>
+   </item>
   </layout>
  </widget>
+ <customwidgets>
+  <customwidget>
+   <class>PlaylistView</class>
+   <extends>QTreeView</extends>
+   <header>playlistview.h</header>
+  </customwidget>
+ </customwidgets>
  <resources/>
  <connections/>
 </ui>

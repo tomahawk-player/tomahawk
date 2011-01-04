@@ -7,6 +7,7 @@
 #include "playlist/playlistmanager.h"
 #include "playlist/albummodel.h"
 #include "playlist/collectionflatmodel.h"
+#include "playlist/playlistmodel.h"
 
 #include "database/databasecommand_alltracks.h"
 #include "database/databasecommand_allalbums.h"
@@ -24,8 +25,17 @@ SourceInfoWidget::SourceInfoWidget( const Tomahawk::source_ptr& source, QWidget*
     ui->recentCollectionView->setModel( m_recentCollectionModel );
     m_recentCollectionModel->addFilteredCollection( source->collection(), 250, DatabaseCommand_AllTracks::ModificationTime );
 
-//    ui->recentCollectionView->setColumnHidden( TrackModel::Bitrate, true );
-//    ui->recentCollectionView->setColumnHidden( TrackModel::Origin, true );
+    m_historyModel = new PlaylistModel( ui->historyView );
+    ui->historyView->setModel( m_historyModel );
+    m_historyModel->loadHistory( source );
+
+    ui->recentCollectionView->setColumnHidden( TrackModel::Bitrate, true );
+    ui->recentCollectionView->setColumnHidden( TrackModel::Origin, true );
+    ui->recentCollectionView->setColumnHidden( TrackModel::Filesize, true );
+
+    ui->historyView->setColumnHidden( TrackModel::Bitrate, true );
+    ui->historyView->setColumnHidden( TrackModel::Origin, true );
+    ui->historyView->setColumnHidden( TrackModel::Filesize, true );
 
     m_recentAlbumModel = new AlbumModel( ui->recentAlbumView );
     ui->recentAlbumView->setModel( m_recentAlbumModel );

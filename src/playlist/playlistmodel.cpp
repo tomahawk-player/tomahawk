@@ -6,6 +6,9 @@
 
 #include "album.h"
 
+#include "database/database.h"
+#include "database/databasecommand_playbackhistory.h"
+
 using namespace Tomahawk;
 
 
@@ -112,6 +115,29 @@ PlaylistModel::loadAlbum( const Tomahawk::album_ptr& album )
                              SLOT( onTracksAdded( QList<Tomahawk::query_ptr>, Tomahawk::collection_ptr ) ) );
 
     onTracksAdded( album->tracks(), album->collection() );
+}
+
+
+void
+PlaylistModel::loadHistory( const Tomahawk::source_ptr& source, unsigned int amount )
+{
+    if ( rowCount( QModelIndex() ) )
+    {
+        emit beginRemoveRows( QModelIndex(), 0, rowCount( QModelIndex() ) - 1 );
+        delete m_rootItem;
+        emit endRemoveRows();
+        m_rootItem = new PlItem( 0, this );
+    }
+
+    m_playlist.clear();
+    setReadOnly( true );
+
+    DatabaseCommand_PlaybackHistory* cmd = new DatabaseCommand_PlaybackHistory( source );
+
+    connect( cmd, SIGNAL( tracks( QList<Tomahawk::query_ptr> ) ),
+                    SLOT( onTracksAdded( QList<Tomahawk::query_ptr> ) ), Qt::QueuedConnection );
+
+    Database::instance()->enqueue( QSharedPointer<DatabaseCommand>( cmd ) );
 }
 
 

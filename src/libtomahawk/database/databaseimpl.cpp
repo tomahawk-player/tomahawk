@@ -10,12 +10,12 @@
 #include "databasecommand_updatesearchindex.h"
 
 /* !!!! You need to manually generate schema.sql.h when the schema changes:
-    cd src/database
+    cd src/libtomahawk/database
    ./gen_schema.h.sh ./schema.sql tomahawk > schema.sql.h
 */
 #include "schema.sql.h"
 
-#define CURRENT_SCHEMA_VERSION 14
+#define CURRENT_SCHEMA_VERSION 15
 
 
 DatabaseImpl::DatabaseImpl( const QString& dbname, Database* parent )

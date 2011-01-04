@@ -80,6 +80,8 @@ private slots:
 
 private:
     Ui::WelcomeWidget *ui;
+
+    PlaylistModel* m_tracksModel;
 };
 
 #endif // WELCOMEWIDGET_H

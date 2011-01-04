@@ -32,6 +32,7 @@ public:
 
     void loadPlaylist( const Tomahawk::playlist_ptr& playlist );
     void loadAlbum( const Tomahawk::album_ptr& album );
+    void loadHistory( const Tomahawk::source_ptr& source, unsigned int amount = 100 );
 
     void appendTrack( const Tomahawk::query_ptr& query );
 

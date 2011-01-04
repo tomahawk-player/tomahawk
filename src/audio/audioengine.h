@@ -100,6 +100,7 @@ private:
     PlaylistInterface* m_queue;
     QMutex m_mutex;
 
+    unsigned int m_timeElapsed;
     int m_i;
 };
 

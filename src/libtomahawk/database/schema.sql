@@ -97,8 +97,6 @@ CREATE TABLE IF NOT EXISTS playlist_revision (
     previous_revision TEXT REFERENCES playlist_revision(guid) DEFERRABLE INITIALLY DEFERRED
 );
 
---INSERT INTO playlist_revision(guid, playlist, entries)
---       VALUES('revisionguid-1', 'playlistguid-1', '["itemguid-2","itemguid-1","itemguid-3"]');
 
 -- the trigram search indexes
 
@@ -209,10 +207,25 @@ CREATE TABLE IF NOT EXISTS track_attributes (
 CREATE INDEX track_attrib_id ON track_attributes(id);
 CREATE INDEX track_attrib_k  ON track_attributes(k);
 
+
+-- playback history
+
+-- if source=null, file is local to this machine
+CREATE TABLE IF NOT EXISTS playback_log (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    source INTEGER REFERENCES source(id) ON DELETE CASCADE ON UPDATE CASCADE DEFERRABLE INITIALLY DEFERRED,
+    track INTEGER REFERENCES track(id) ON DELETE CASCADE ON UPDATE CASCADE DEFERRABLE INITIALLY DEFERRED,
+    playtime INTEGER NOT NULL,              -- when playback finished (timestamp)
+    secs_played INTEGER NOT NULL
+);
+CREATE INDEX playback_log_source ON playback_log(source);
+CREATE INDEX playback_log_track ON playback_log(track);
+
+
 -- Schema version, and misc tomahawk settings relating to the collection db
 
 CREATE TABLE IF NOT EXISTS settings (
     k TEXT NOT NULL PRIMARY KEY,
     v TEXT NOT NULL DEFAULT ''
 );
-INSERT INTO settings(k,v) VALUES('schema_version', '14');
+INSERT INTO settings(k,v) VALUES('schema_version', '15');
