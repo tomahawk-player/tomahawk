@@ -49,7 +49,9 @@
 # include <windows.h>
 #endif
 
-class Jabber_p :
+#include "dllmacro.h"
+
+class DLLEXPORT Jabber_p :
        public QObject,
        public gloox::ConnectionListener,
        public gloox::RosterListener,
