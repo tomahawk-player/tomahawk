@@ -133,8 +133,8 @@ INSERT INTO dynamic_playlist_controls(id, playlist, selectedType, match, input)
 CREATE TABLE IF NOT EXISTS dynamic_playlist_revision (
     guid TEXT PRIMARY KEY,
     controls TEXT, -- qlist( id, id, id )
-    plmode INTEGER REFERENCES dynamic_playlist( plmode ) ON DELETE CASCADE ON UPDATE CASCADE DEFERRABLE INITIALLY DEFERRED,
-    pltype TEXT REFERENCES dynamic_playlist( pltype ) ON DELETE CASCADE ON UPDATE CASCADE DEFERRABLE INITIALLY DEFERRED
+    plmode INTEGER,
+    pltype TEXT
 );
 
 INSERT INTO dynamic_playlist_revision(guid, controls, plmode, pltype)
@@ -257,4 +257,4 @@ CREATE TABLE IF NOT EXISTS settings (
     k TEXT NOT NULL PRIMARY KEY,
     v TEXT NOT NULL DEFAULT ''
 );
-INSERT INTO settings(k,v) VALUES('schema_version', '14');
+INSERT INTO settings(k,v) VALUES('schema_version', '15');

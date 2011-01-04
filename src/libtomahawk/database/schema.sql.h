@@ -1,5 +1,5 @@
 /*
-    This file was automatically generated from schema.sql on Sun Dec 12 21:41:41 EST 2010.
+    This file was automatically generated from schema.sql on Mon Jan  3 23:24:18 CST 2011.
 */
 
 static const char * tomahawk_schema_sql = 
@@ -103,8 +103,8 @@ static const char * tomahawk_schema_sql =
 "CREATE TABLE IF NOT EXISTS dynamic_playlist_revision ("
 "    guid TEXT PRIMARY KEY,"
 "    controls TEXT, "
-"    plmode INTEGER REFERENCES dynamic_playlist( plmode ) ON DELETE CASCADE ON UPDATE CASCADE DEFERRABLE INITIALLY DEFERRED,"
-"    pltype TEXT REFERENCES dynamic_playlist( pltype ) ON DELETE CASCADE ON UPDATE CASCADE DEFERRABLE INITIALLY DEFERRED"
+"    plmode INTEGER,"
+"    pltype TEXT"
 ");"
 "INSERT INTO dynamic_playlist_revision(guid, controls, plmode, pltype)"
 "      VALUES('revisionguid-1', '[\"controlid-1\"]', 0, \"echonest\");"
@@ -190,7 +190,7 @@ static const char * tomahawk_schema_sql =
 "    k TEXT NOT NULL PRIMARY KEY,"
 "    v TEXT NOT NULL DEFAULT ''"
 ");"
-"INSERT INTO settings(k,v) VALUES('schema_version', '14');"
+"INSERT INTO settings(k,v) VALUES('schema_version', '15');"
     ;
 
 const char * get_tomahawk_sql()
