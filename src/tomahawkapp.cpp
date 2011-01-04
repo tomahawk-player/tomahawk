@@ -6,9 +6,9 @@
 #include <QTime>
 #include <QNetworkReply>
 
-#include "tomahawk/artist.h"
-#include "tomahawk/album.h"
-#include "tomahawk/collection.h"
+#include "artist.h"
+#include "album.h"
+#include "collection.h"
 #include "tomahawk/infosystem.h"
 #include "database/database.h"
 #include "database/databasecollection.h"
@@ -21,9 +21,9 @@
 #include "xmppbot/xmppbot.h"
 #include "web/api_v1.h"
 #include "scriptresolver.h"
+#include "sourcelist.h"
 
 #include "audioengine.h"
-#include "tomahawkzeroconf.h"
 
 #ifndef TOMAHAWK_HEADLESS
     #include "tomahawkwindow.h"
@@ -104,13 +104,15 @@ using namespace Tomahawk;
 TomahawkApp::TomahawkApp( int& argc, char *argv[] )
     : TOMAHAWK_APPLICATION( argc, argv )
     , m_audioEngine( 0 )
-    , m_zeroconf( 0 )
-    , m_settings( 0 )
     , m_nam( 0 )
     , m_proxy( 0 )
     , m_infoSystem( 0 )
 {
     qsrand( QTime( 0, 0, 0 ).secsTo( QTime::currentTime() ) );
+
+    new Pipeline( this );
+    new SourceList( this );
+    new Servent( this );
 
 #ifdef TOMAHAWK_HEADLESS
     m_headless = true;
@@ -132,7 +134,7 @@ TomahawkApp::TomahawkApp( int& argc, char *argv[] )
     registerMetaTypes();
     setupLogfile();
 
-    m_settings = new TomahawkSettings( this );
+    new TomahawkSettings( this );
     m_audioEngine = new AudioEngine;
     setupDatabase();
     
@@ -158,10 +160,10 @@ TomahawkApp::TomahawkApp( int& argc, char *argv[] )
 #endif
 
     // Set up proxy
-    if( m_settings->proxyType() != QNetworkProxy::NoProxy && !m_settings->proxyHost().isEmpty() )
+    if( TomahawkSettings::instance()->proxyType() != QNetworkProxy::NoProxy && !TomahawkSettings::instance()->proxyHost().isEmpty() )
     {
         qDebug() << "Setting proxy to saved values";
-        m_proxy = new QNetworkProxy( static_cast<QNetworkProxy::ProxyType>(m_settings->proxyType()), m_settings->proxyHost(), m_settings->proxyPort(), m_settings->proxyUsername(), m_settings->proxyPassword() );
+        m_proxy = new QNetworkProxy( static_cast<QNetworkProxy::ProxyType>(TomahawkSettings::instance()->proxyType()), TomahawkSettings::instance()->proxyHost(), TomahawkSettings::instance()->proxyPort(), TomahawkSettings::instance()->proxyUsername(), TomahawkSettings::instance()->proxyPassword() );
         qDebug() << "Proxy type = " << QString::number( static_cast<int>(m_proxy->type()) );
         qDebug() << "Proxy host = " << m_proxy->hostName();
         QNetworkAccessManager* nam = TomahawkApp::instance()->nam();
@@ -173,10 +175,6 @@ TomahawkApp::TomahawkApp( int& argc, char *argv[] )
     QNetworkProxy::setApplicationProxy( *m_proxy );
 
     m_infoSystem = new Tomahawk::InfoSystem::InfoSystem( this );
-
-    boost::function<QSharedPointer<QIODevice>(result_ptr)> fac =
-        boost::bind( &TomahawkApp::httpIODeviceFactory, this, _1 );
-    this->registerIODeviceFactory( "http", fac );
 
     if( !arguments().contains("--nojabber") )
     {
@@ -199,22 +197,13 @@ TomahawkApp::TomahawkApp( int& argc, char *argv[] )
     startServent();
     //loadPlugins();
 
-    if( arguments().contains( "--http" ) || settings()->value( "network/http", true ).toBool() )
+    if( arguments().contains( "--http" ) || TomahawkSettings::instance()->value( "network/http", true ).toBool() )
         startHTTP();
-
-    if ( !arguments().contains( "--nozeroconf" ) )
-    {
-        // advertise our servent on the LAN
-        m_zeroconf = new TomahawkZeroconf( m_servent.port(), this );
-        connect( m_zeroconf, SIGNAL( tomahawkHostFound( const QString&, int, const QString&, const QString& ) ),
-                               SLOT( lanHostFound( const QString&, int, const QString&, const QString& ) ) );
-        m_zeroconf->advertise();
-    }
 
     m_sipHandler->connect();
 
 #ifndef TOMAHAWK_HEADLESS
-    if ( !m_settings->hasScannerPath() )
+    if ( !TomahawkSettings::instance()->hasScannerPath() )
     {
         m_mainwindow->showSettingsDialog();
     }
@@ -232,13 +221,6 @@ TomahawkApp::~TomahawkApp()
     delete m_mainwindow;
     delete m_audioEngine;
 #endif
-
-    delete m_zeroconf;
-    delete m_db;
-    m_db = 0;
-
-    // always last thing, incase other objects save state on exit:
-    delete m_settings;
 }
 
 
@@ -321,18 +303,8 @@ TomahawkApp::setupDatabase()
     }
 
     qDebug() << "Using database:" << dbpath;
-    m_db = new Database( dbpath, this );
-    m_pipeline.databaseReady();
-}
-
-
-void
-TomahawkApp::lanHostFound( const QString& host, int port, const QString& name, const QString& nodeid )
-{
-    qDebug() << "Found LAN host:" << host << port << nodeid;
-
-    if ( !m_servent.connectedToSession( nodeid ) )
-        m_servent.connectToPeer( host, port, "whitelist", name, nodeid );
+    new Database( dbpath, this );
+    Pipeline::instance()->databaseReady();
 }
 
 
@@ -356,8 +328,8 @@ void
 TomahawkApp::setupPipeline()
 {
     // setup resolvers for local content, and (cached) remote collection content
-    m_pipeline.addResolver( new DatabaseResolver( true,  100 ) );
-    m_pipeline.addResolver( new DatabaseResolver( false, 90 ) );
+    Pipeline::instance()->addResolver( new DatabaseResolver( true,  100 ) );
+    Pipeline::instance()->addResolver( new DatabaseResolver( false, 90 ) );
 
 //    new ScriptResolver("/home/rj/src/tomahawk-core/contrib/magnatune/magnatune-resolver.php");
 }
@@ -370,26 +342,22 @@ TomahawkApp::initLocalCollection()
     collection_ptr coll( new DatabaseCollection( src ) );
 
     src->addCollection( coll );
-    this->sourcelist().add( src );
-
-    boost::function<QSharedPointer<QIODevice>(result_ptr)> fac =
-        boost::bind( &TomahawkApp::localFileIODeviceFactory, this, _1 );
-    this->registerIODeviceFactory( "file", fac );
+    SourceList::instance()->add( src );
 
     // to make the stats signal be emitted by our local source
     // this will update the sidebar, etc.
     DatabaseCommand_CollectionStats* cmd = new DatabaseCommand_CollectionStats( src );
     connect( cmd,       SIGNAL( done( const QVariantMap& ) ),
              src.data(),  SLOT( setStats( const QVariantMap& ) ), Qt::QueuedConnection );
-    database()->enqueue( QSharedPointer<DatabaseCommand>( cmd ) );
+    Database::instance()->enqueue( QSharedPointer<DatabaseCommand>( cmd ) );
 }
 
 
 void
 TomahawkApp::startServent()
 {
-    bool upnp = !arguments().contains( "--noupnp" ) && settings()->value( "network/upnp", true ).toBool();
-    if ( !m_servent.startListening( QHostAddress( QHostAddress::Any ), upnp ) )
+    bool upnp = !arguments().contains( "--noupnp" ) && TomahawkSettings::instance()->value( "network/upnp", true ).toBool();
+    if ( !Servent::instance()->startListening( QHostAddress( QHostAddress::Any ), upnp ) )
     {
         qDebug() << "Failed to start listening with servent";
         exit( 1 );
@@ -397,11 +365,6 @@ TomahawkApp::startServent()
 
     //QString key = m_servent.createConnectionKey();
     //qDebug() << "Generated an offer key: " << key;
-
-    boost::function<QSharedPointer<QIODevice>(result_ptr)> fac =
-        boost::bind( &Servent::remoteIODeviceFactory, &m_servent, _1 );
-
-    this->registerIODeviceFactory( "servent", fac );
 }
 
 
@@ -425,7 +388,7 @@ TomahawkApp::loadPlugins()
             if ( !pluginst )
                 continue;
 
-            PluginAPI* api = new PluginAPI( this->pipeline() );
+            PluginAPI* api = new PluginAPI( Pipeline::instance() );
             TomahawkPlugin* plugin = pluginst->factory( api );
             qDebug() << "Loaded Plugin:" << plugin->name();
             qDebug() << plugin->description();
@@ -452,58 +415,3 @@ TomahawkApp::setupSIP()
 //    m_sipHandler->setProxy( m_proxy );
 }
 
-
-void
-TomahawkApp::registerIODeviceFactory( const QString &proto, boost::function<QSharedPointer<QIODevice>(Tomahawk::result_ptr)> fac )
-{
-    m_iofactories.insert( proto, fac );
-    qDebug() << "Registered IODevice Factory for" << proto;
-}
-
-
-QSharedPointer<QIODevice>
-TomahawkApp::getIODeviceForUrl( const Tomahawk::result_ptr& result )
-{
-    qDebug() << Q_FUNC_INFO << thread();
-    QSharedPointer<QIODevice> sp;
-
-    QRegExp rx( "^([a-zA-Z0-9]+)://(.+)$" );
-    if ( rx.indexIn( result->url() ) == -1 )
-        return sp;
-
-    const QString proto = rx.cap( 1 );
-    //const QString urlpart = rx.cap( 2 );
-    if ( !m_iofactories.contains( proto ) )
-        return sp;
-
-    return m_iofactories.value( proto )( result );
-}
-
-
-QSharedPointer<QIODevice>
-TomahawkApp::localFileIODeviceFactory( const Tomahawk::result_ptr& result )
-{
-    // ignore "file://" at front of url
-    QFile * io = new QFile( result->url().mid( QString( "file://" ).length() ) );
-    if ( io )
-        io->open( QIODevice::ReadOnly );
-
-    return QSharedPointer<QIODevice>( io );
-}
-
-
-QSharedPointer<QIODevice>
-TomahawkApp::httpIODeviceFactory( const Tomahawk::result_ptr& result )
-{
-    qDebug() << Q_FUNC_INFO << result->url();
-    QNetworkRequest req( result->url() );
-    QNetworkReply* reply = APP->nam()->get( req );
-    return QSharedPointer<QIODevice>( reply );
-}
-
-
-const QString&
-TomahawkApp::nodeID() const
-{
-    return m_db->dbid();
-}

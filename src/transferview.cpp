@@ -4,7 +4,7 @@
 #include <QVBoxLayout>
 
 #include "tomahawk/tomahawkapp.h"
-#include "tomahawk/artist.h"
+#include "artist.h"
 #include "network/filetransferconnection.h"
 #include "network/servent.h"
 
@@ -20,8 +20,8 @@ TransferView::TransferView( AnimatedSplitter* parent )
     layout()->setMargin( 0 );
     layout()->addWidget( m_tree );
 
-    connect( &APP->servent(), SIGNAL( fileTransferStarted( FileTransferConnection* ) ), SLOT( fileTransferRegistered( FileTransferConnection* ) ) );
-    connect( &APP->servent(), SIGNAL( fileTransferFinished( FileTransferConnection* ) ), SLOT( fileTransferFinished( FileTransferConnection* ) ) );
+    connect( Servent::instance(), SIGNAL( fileTransferStarted( FileTransferConnection* ) ), SLOT( fileTransferRegistered( FileTransferConnection* ) ) );
+    connect( Servent::instance(), SIGNAL( fileTransferFinished( FileTransferConnection* ) ), SLOT( fileTransferFinished( FileTransferConnection* ) ) );
 
     QStringList headers;
     headers << tr( "Peer" ) << tr( "Rate" ) << tr( "Track" );

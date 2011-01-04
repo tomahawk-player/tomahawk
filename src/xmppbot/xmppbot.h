@@ -1,7 +1,7 @@
 #ifndef XMPPBOT_H
 #define XMPPBOT_H
 
-#include <tomahawk/result.h>
+#include <result.h>
 #include <tomahawk/infosystem.h>
 
 #include <QtCore/QObject>

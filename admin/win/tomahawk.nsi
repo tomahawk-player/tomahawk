@@ -253,6 +253,11 @@ Section "Tomahawk Player" SEC_TOMAHAWK_PLAYER
    ;Main executable.
    File "${ROOT_PATH}\build\tomahawk.exe"
 
+   ;Plugins
+   File "${ROOT_PATH}\build\src\libtomahawk\libtomahawklib.dll"
+   File "${ROOT_PATH}\build\libsip_jabber.dll"
+   File "${ROOT_PATH}\build\libsip_zeroconf.dll"
+
    ;License & release notes.
    File "${ROOT_PATH}\LICENSE.txt"
    File /oname=NOTES.txt RELEASE_NOTES.txt

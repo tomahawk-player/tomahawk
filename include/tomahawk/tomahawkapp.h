@@ -16,21 +16,15 @@
 #include "QxtHttpServerConnector"
 #include "QxtHttpSessionManager"
 
-#include "tomahawk/functimeout.h"
-#include "tomahawk/typedefs.h"
 #include "tomahawk/tomahawkplugin.h"
-#include "tomahawk/playlist.h"
-#include "tomahawk/pipeline.h"
+#include "typedefs.h"
+#include "playlist.h"
 
 #include "utils/tomahawkutils.h"
-
-#include "sourcelist.h"
-#include "servent.h"
 
 class AudioEngine;
 class Database;
 class SipHandler;
-class TomahawkZeroconf;
 class TomahawkSettings;
 class XMPPBot;
 
@@ -67,17 +61,12 @@ public:
 
     static TomahawkApp* instance();
 
-    Tomahawk::Pipeline* pipeline() { return &m_pipeline; }
     AudioEngine* audioEngine() { return m_audioEngine; }
-    Database* database() { return m_db; }
-    SourceList& sourcelist() { return m_sources; }
-    Servent& servent() { return m_servent; }
     SipHandler* sipHandler() { return m_sipHandler; }
     QNetworkAccessManager* nam() { return m_nam; }
     QNetworkProxy* proxy() { return m_proxy; }
     Tomahawk::InfoSystem::InfoSystem* infoSystem() { return m_infoSystem; }
     XMPPBot* xmppBot() { return m_xmppBot; }
-    const QString& nodeID() const;
 
 #ifndef TOMAHAWK_HEADLESS
     AudioControls* audioControls();
@@ -85,21 +74,9 @@ public:
     TomahawkWindow* mainWindow() const { return m_mainwindow; }
 #endif
 
-    void registerIODeviceFactory( const QString &proto, boost::function<QSharedPointer<QIODevice>(Tomahawk::result_ptr)> fac );
-    QSharedPointer<QIODevice> localFileIODeviceFactory( const Tomahawk::result_ptr& result );
-    QSharedPointer<QIODevice> httpIODeviceFactory( const Tomahawk::result_ptr& result );
-
-    TomahawkSettings* settings() { return m_settings; }
-
 signals:
     void settingsChanged();
     
-public slots:
-    QSharedPointer<QIODevice> getIODeviceForUrl( const Tomahawk::result_ptr& result );
-
-private slots:
-    void lanHostFound( const QString&, int, const QString&, const QString& );
-
 private:
     void initLocalCollection();
     void loadPlugins();
@@ -113,12 +90,7 @@ private:
     QList<Tomahawk::collection_ptr> m_collections;
     QList<TomahawkPlugin*> m_plugins;
 
-    Tomahawk::Pipeline m_pipeline;
     AudioEngine* m_audioEngine;
-    Database* m_db;
-    Servent m_servent;
-    SourceList m_sources;
-    TomahawkZeroconf* m_zeroconf;
     SipHandler* m_sipHandler;
     XMPPBot* m_xmppBot;
 
@@ -130,10 +102,7 @@ private:
     TomahawkWindow* m_mainwindow;
 #endif    
 
-    QMap< QString,boost::function<QSharedPointer<QIODevice>(Tomahawk::result_ptr)> > m_iofactories;
-
     bool m_headless;
-    TomahawkSettings* m_settings;
 
     QNetworkAccessManager* m_nam;
     QNetworkProxy* m_proxy;

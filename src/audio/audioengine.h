@@ -5,8 +5,8 @@
 #include <QMutex>
 #include <QBuffer>
 
-#include "tomahawk/result.h"
-#include "tomahawk/typedefs.h"
+#include "result.h"
+#include "typedefs.h"
 
 #include "rtaudiooutput.h"
 #include "alsaplayback.h"

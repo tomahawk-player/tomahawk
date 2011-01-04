@@ -12,8 +12,8 @@
 #include <QNetworkReply>
 #include <QNetworkRequest>
 
-#include "tomahawk/playlist.h"
-#include "tomahawk/typedefs.h"
+#include "playlist.h"
+#include "typedefs.h"
 
 class XSPFLoader : public QObject
 {

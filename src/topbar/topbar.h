@@ -5,7 +5,7 @@
 #include <QList>
 #include <QLabel>
 
-#include "tomahawk/sourcelist.h"
+#include "sourcelist.h"
 
 namespace Ui
 {

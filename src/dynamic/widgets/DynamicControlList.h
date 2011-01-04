@@ -18,7 +18,7 @@
 #define DYNAMIC_CONTROL_LIST_H
 
 #include "animatedsplitter.h"
-#include "tomahawk/typedefs.h"
+#include "typedefs.h"
 #include "dynamic/DynamicPlaylist.h"
 
 class QVBoxLayout;

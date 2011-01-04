@@ -22,7 +22,7 @@
 #include <QPainter>
 
 #include "DynamicControlWidget.h"
-#include "GeneratorInterface.h"
+#include "dynamic/GeneratorInterface.h"
 
 using namespace Tomahawk;
 

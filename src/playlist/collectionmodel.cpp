@@ -4,6 +4,9 @@
 #include <QMimeData>
 #include <QTreeView>
 
+#include "sourcelist.h"
+#include "utils/tomahawkutils.h"
+
 using namespace Tomahawk;
 
 
@@ -13,7 +16,7 @@ CollectionModel::CollectionModel( QObject* parent )
 {
     qDebug() << Q_FUNC_INFO;
 
-    connect( &APP->sourcelist(), SIGNAL( sourceRemoved( Tomahawk::source_ptr ) ), SLOT( onSourceOffline( Tomahawk::source_ptr ) ) );
+    connect( SourceList::instance(), SIGNAL( sourceRemoved( Tomahawk::source_ptr ) ), SLOT( onSourceOffline( Tomahawk::source_ptr ) ) );
 }
 
 

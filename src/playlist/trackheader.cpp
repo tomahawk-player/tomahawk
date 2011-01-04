@@ -83,8 +83,7 @@ TrackHeader::onResized()
 void
 TrackHeader::restoreColumnsState()
 {
-    TomahawkSettings* s = APP->settings();
-    QList<QVariant> list = s->playlistColumnSizes();
+    QList<QVariant> list = TomahawkSettings::instance()->playlistColumnSizes();
 
     if ( list.count() != count() ) // FIXME: const
     {
@@ -101,13 +100,12 @@ TrackHeader::restoreColumnsState()
 void
 TrackHeader::saveColumnsState()
 {
-    TomahawkSettings *s = APP->settings();
     QList<QVariant> wlist;
 
     foreach( double w, m_columnWeights )
         wlist << QVariant( w );
 
-    s->setPlaylistColumnSizes( wlist );
+    TomahawkSettings::instance()->setPlaylistColumnSizes( wlist );
 }
 
 

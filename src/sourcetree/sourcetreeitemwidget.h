@@ -3,7 +3,7 @@
 
 #include <QWidget>
 
-#include "tomahawk/source.h"
+#include "source.h"
 
 namespace Ui
 {

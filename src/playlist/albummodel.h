@@ -4,9 +4,9 @@
 #include <QAbstractItemModel>
 #include <QPixmap>
 
-#include "tomahawk/album.h"
-#include "tomahawk/collection.h"
-#include "tomahawk/playlistinterface.h"
+#include "album.h"
+#include "collection.h"
+#include "playlistinterface.h"
 #include "database/databasecommand_allalbums.h"
 
 #include "albumitem.h"

@@ -1,7 +1,8 @@
 #include "jabber.h"
 
-#include "tomahawk/tomahawkapp.h"
 #include "tomahawksettings.h"
+
+#include <QtPlugin>
 
 
 void
@@ -14,13 +15,13 @@ JabberPlugin::setProxy( QNetworkProxy* proxy )
 bool
 JabberPlugin::connect()
 {
-    if ( !APP->settings()->value( "jabber/autoconnect", true ).toBool() )
+    if ( !TomahawkSettings::instance()->value( "jabber/autoconnect", true ).toBool() )
         return false;
 
-    QString jid       = APP->settings()->value( "jabber/username"   ).toString();
-    QString server    = APP->settings()->value( "jabber/server"     ).toString();
-    QString password  = APP->settings()->value( "jabber/password"   ).toString();
-    unsigned int port = APP->settings()->value( "jabber/port", 5222 ).toUInt();
+    QString jid       = TomahawkSettings::instance()->value( "jabber/username"   ).toString();
+    QString server    = TomahawkSettings::instance()->value( "jabber/server"     ).toString();
+    QString password  = TomahawkSettings::instance()->value( "jabber/password"   ).toString();
+    unsigned int port = TomahawkSettings::instance()->value( "jabber/port", 5222 ).toUInt();
 
     // gtalk check
     if( server.isEmpty() && ( jid.contains( "@gmail.com" ) || jid.contains( "@googlemail.com" ) ) )

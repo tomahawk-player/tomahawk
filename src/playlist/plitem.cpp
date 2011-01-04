@@ -1,8 +1,8 @@
 #include "plitem.h"
 
 #include "utils/tomahawkutils.h"
-#include "tomahawk/playlist.h"
-#include "tomahawk/query.h"
+#include "playlist.h"
+#include "query.h"
 
 #include <QDebug>
 

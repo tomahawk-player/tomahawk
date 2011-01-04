@@ -3,7 +3,7 @@
 #include <QWheelEvent>
 
 #include "tomahawk/tomahawkapp.h"
-#include "tomahawk/artist.h"
+#include "artist.h"
 
 #include "audio/audioengine.h"
 #include "tomahawkwindow.h"

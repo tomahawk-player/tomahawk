@@ -4,7 +4,7 @@
 #include <QNetworkReply>
 
 #include "tomahawk/tomahawkapp.h"
-#include "tomahawk/album.h"
+#include "album.h"
 #include "utils/tomahawkutils.h"
 
 #include "audioengine.h"

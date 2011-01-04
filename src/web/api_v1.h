@@ -3,8 +3,8 @@
 
 // See: http://doc.libqxt.org/tip/qxtweb.html
 
-#include "tomahawk/tomahawkapp.h"
-#include "tomahawk/query.h"
+#include "query.h"
+#include "pipeline.h"
 
 #include "QxtHttpServerConnector"
 #include "QxtHttpSessionManager"
@@ -17,6 +17,8 @@
 
 #include <QFile>
 #include <QSharedPointer>
+
+#include "network/servent.h"
 
 class Api_v1 : public QxtWebSlotService
 {
@@ -55,12 +57,12 @@ public slots:
         using namespace Tomahawk;
         RID rid = event->url.path().mid(5);
         qDebug() << "Request for sid " << rid;
-        result_ptr rp = APP->pipeline()->result( rid );
+        result_ptr rp = Pipeline::instance()->result( rid );
         if( rp.isNull() )
         {
             return send404( event );
         }
-        QSharedPointer<QIODevice> iodev = APP->getIODeviceForUrl( rp );
+        QSharedPointer<QIODevice> iodev = Servent::instance()->getIODeviceForUrl( rp );
         if( iodev.isNull() )
         {
             return send404( event ); // 503?
@@ -111,7 +113,7 @@ public slots:
         m.insert( "qid", qid );
 
         Tomahawk::query_ptr qry( new Tomahawk::Query( m ) );
-        APP->pipeline()->add( qry );
+        Tomahawk::Pipeline::instance()->add( qry );
 
         QVariantMap r;
         r.insert( "qid", qid );
@@ -127,7 +129,7 @@ public slots:
         }
 
         using namespace Tomahawk;
-        query_ptr qry = APP->pipeline()->query( event->url.queryItemValue("qid") );
+        query_ptr qry = Pipeline::instance()->query( event->url.queryItemValue("qid") );
         if( qry.isNull() )
         {
             send404( event );

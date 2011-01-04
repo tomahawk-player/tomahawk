@@ -4,7 +4,7 @@
 #include <QObject>
 #include <QStandardItem>
 
-#include "tomahawk/typedefs.h"
+#include "typedefs.h"
 #include "sourcetreeitemwidget.h"
 #include "dynamic/DynamicPlaylist.h"
 

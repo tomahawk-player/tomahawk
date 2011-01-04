@@ -19,7 +19,7 @@
 
 #include <QWidget>
 
-#include "tomahawk/typedefs.h"
+#include "typedefs.h"
 
 class QStackedLayout;
 class QEvent;

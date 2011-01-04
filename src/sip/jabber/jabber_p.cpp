@@ -247,6 +247,7 @@ Jabber_p::onDisconnect( ConnectionError e )
 {
     qDebug() << "Jabber Disconnected";
     QString error;
+    bool triggeredDisconnect = false;
 
     switch( e )
     {
@@ -330,14 +331,17 @@ Jabber_p::onDisconnect( ConnectionError e )
 
     default :
         error = "UNKNOWN ERROR";
+        triggeredDisconnect = true;
     }
 
     qDebug() << "Connection error msg:" << error;
 
-    emit authError( e, error );
+    // Assume that an unknown error is due to a disconnect triggered by the user
+    if( !triggeredDisconnect )
+        emit authError( e, error ); // trigger reconnect
     emit disconnected();
 
-    // trigger reconnect
+
 }
 
 

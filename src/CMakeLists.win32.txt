@@ -1,6 +1,7 @@
 ADD_DEFINITIONS( /DNOMINMAX )
 ADD_DEFINITIONS( /DWIN32_LEAN_AND_MEAN )
 ADD_DEFINITIONS( -static-libgcc )
+
 #ADD_DEFINITIONS( /DNO_LIBLASTFM )
 #ADD_DEFINITIONS( -DNO_OGG )
 
@@ -17,18 +18,23 @@ INCLUDE_DIRECTORIES(
 	../../taglib-1.6.3/taglib/toolkit
 )
 
+
+SET( GLOOX_LIBS
+	${GLOOX_LIBS}
+	gloox
+)
+
 SET( OS_SPECIFIC_LINK_LIBRARIES 
         ${LIBLASTFM_LIBRARY}
-        gloox
+	${GLOOX_LIBS}
 )
 
 SET( OS_SPECIFIC_LINK_LIBRARIES 
 	${OS_SPECIFIC_LINK_LIBRARIES}
 	"secur32.dll"
 	"crypt32.dll"
-	"ws2_32.dll"
-	"dnsapi.dll"
 	"${CMAKE_CURRENT_SOURCE_DIR}/../qxt/qxtweb-standalone/libqxtweb-standalone.dll"
+        "${CMAKE_CURRENT_SOURCE_DIR}/../build/src/libtomahawk/libtomahawklib.dll"
 )
 
 SET( tomahawkSourcesGui ${tomahawkSourcesGui} audio/rtaudiooutput.cpp )
@@ -45,4 +51,3 @@ SET( OS_SPECIFIC_LINK_LIBRARIES
         "FLAC++"
 	"${CMAKE_CURRENT_SOURCE_DIR}/../rtaudio/librtaudio.dll"
 )
-

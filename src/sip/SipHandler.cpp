@@ -1,17 +1,20 @@
 #include "SipHandler.h"
 #include "sip/SipPlugin.h"
 
+#include <QCoreApplication>
 #include <QDir>
 #include <QPluginLoader>
 #include <QMessageBox>
 
-#include "tomahawk/tomahawkapp.h"
-#include "controlconnection.h"
+#include "database/database.h"
+#include "network/controlconnection.h"
+#include "sourcelist.h"
 
 
 SipHandler::SipHandler( QObject* parent )
     : QObject( parent )
 {
+    m_connected = false;
     loadPlugins();
 }
 
@@ -24,9 +27,20 @@ SipHandler::~SipHandler()
 void
 SipHandler::loadPlugins()
 {
-    qDebug() << TomahawkApp::instance();
-    qDebug() << TomahawkApp::instance()->applicationDirPath();
-    QDir pluginsDir( TomahawkApp::instance()->applicationDirPath() );
+    QDir pluginsDir( qApp->applicationDirPath() );
+
+    #if defined(Q_OS_WIN)
+    if ( pluginsDir.dirName().toLower() == "debug" || pluginsDir.dirName().toLower() == "release" )
+      pluginsDir.cdUp();
+    #elif defined(Q_OS_MAC)
+    if ( pluginsDir.dirName() == "MacOS" )
+    {
+      pluginsDir.cdUp();
+      pluginsDir.cdUp();
+      pluginsDir.cdUp();
+    }
+    #endif
+    pluginsDir.cd( "plugins" );
 
     foreach ( QString fileName, pluginsDir.entryList( QDir::Files ) )
     {
@@ -68,6 +82,7 @@ SipHandler::connect()
 {
     foreach( SipPlugin* sip, m_plugins )
         sip->connect();
+    m_connected = true;
 }
 
 
@@ -76,6 +91,17 @@ SipHandler::disconnect()
 {
     foreach( SipPlugin* sip, m_plugins )
         sip->disconnect();
+    SourceList::instance()->removeAllRemote();
+    m_connected = false;
+}
+
+void
+SipHandler::toggleConnect()
+{
+    if( m_connected )
+        disconnect();
+    else
+        connect();
 }
 
 
@@ -88,27 +114,19 @@ SipHandler::onPeerOnline( const QString& jid )
     SipPlugin* sip = qobject_cast<SipPlugin*>(sender());
 
     QVariantMap m;
-    if( APP->servent().visibleExternally() )
+    if( Servent::instance()->visibleExternally() )
     {
         QString key = uuid();
-        ControlConnection* conn = new ControlConnection( &APP->servent() );
+        ControlConnection* conn = new ControlConnection( Servent::instance() );
 
-        const QString& nodeid = APP->nodeID();
+        const QString& nodeid = Database::instance()->dbid();
         conn->setName( jid.left( jid.indexOf( "/" ) ) );
         conn->setId( nodeid );
 
-        // FIXME strip /resource, but we should use a UID per database install
-        //QString uniqname = jid.left( jid.indexOf("/") );
-        //conn->setName( uniqname ); //FIXME
-
-        // FIXME:
-        //QString ouruniqname = m_settings->value( "jabber/username" ).toString()
-        //                      .left( m_settings->value( "jabber/username" ).toString().indexOf("/") );
-
-        APP->servent().registerOffer( key, conn );
+        Servent::instance()->registerOffer( key, conn );
         m["visible"] = true;
-        m["ip"] = APP->servent().externalAddress().toString();
-        m["port"] = APP->servent().externalPort();
+        m["ip"] = Servent::instance()->externalAddress().toString();
+        m["port"] = Servent::instance()->externalPort();
         m["key"] = key;
         m["uniqname"] = nodeid;
 
@@ -158,15 +176,15 @@ SipHandler::onMessage( const QString& from, const QString& msg )
      */
     if ( m.value( "visible" ).toBool() )
     {
-        if( !APP->servent().visibleExternally() ||
-            APP->servent().externalAddress().toString() <= m.value( "ip" ).toString() )
+        if( !Servent::instance()->visibleExternally() ||
+            Servent::instance()->externalAddress().toString() <= m.value( "ip" ).toString() )
         {
             qDebug() << "Initiate connection to" << from;
-            APP->servent().connectToPeer( m.value( "ip"   ).toString(),
-                                     m.value( "port" ).toInt(),
-                                     m.value( "key"  ).toString(),
-                                     from,
-                                     m.value( "uniqname" ).toString() );
+            Servent::instance()->connectToPeer( m.value( "ip" ).toString(),
+                                          m.value( "port" ).toInt(),
+                                          m.value( "key" ).toString(),
+                                          from,
+                                          m.value( "uniqname" ).toString() );
         }
         else
         {
@@ -176,8 +194,6 @@ SipHandler::onMessage( const QString& from, const QString& msg )
     else
     {
         qDebug() << Q_FUNC_INFO << "They are not visible, doing nothing atm";
-//        if ( m_servent.visibleExternally() )
-//            jabberPeerOnline( from ); // HACK FIXME
     }
 }
 

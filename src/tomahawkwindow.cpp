@@ -13,10 +13,9 @@
 #include <QToolBar>
 
 #include "tomahawk/tomahawkapp.h"
-#include "tomahawk/functimeout.h"
-#include "tomahawk/playlist.h"
-#include "tomahawk/query.h"
-#include "tomahawk/artist.h"
+#include "playlist.h"
+#include "query.h"
+#include "artist.h"
 
 #include "database/databasecommand_collectionstats.h"
 #include "topbar/topbar.h"
@@ -24,8 +23,8 @@
 #include "sip/SipHandler.h"
 
 #include "audiocontrols.h"
-#include "controlconnection.h"
-#include "database.h"
+#include "network/controlconnection.h"
+#include "database/database.h"
 #include "musicscanner.h"
 #include "playlistmanager.h"
 #include "proxystyle.h"
@@ -99,7 +98,7 @@ TomahawkWindow::~TomahawkWindow()
 void
 TomahawkWindow::loadSettings()
 {
-    TomahawkSettings* s = APP->settings();
+    TomahawkSettings* s = TomahawkSettings::instance();
 
     if ( !s->mainWindowGeometry().isEmpty() )
         restoreGeometry( s->mainWindowGeometry() );
@@ -111,7 +110,7 @@ TomahawkWindow::loadSettings()
 void
 TomahawkWindow::saveSettings()
 {
-    TomahawkSettings* s = APP->settings();
+    TomahawkSettings* s = TomahawkSettings::instance();
     s->setMainWindowGeometry( saveGeometry() );
     s->setMainWindowState( saveState() );
 }
@@ -172,6 +171,7 @@ TomahawkWindow::setupSignals()
     connect( ui->actionCreateDynamicPlaylist, SIGNAL( triggered() ), SLOT( createDynamicPlaylist() ));
     connect( ui->actionAboutTomahawk, SIGNAL( triggered() ), SLOT( showAboutTomahawk() ) );
     connect( ui->actionExit, SIGNAL( triggered() ), APP, SLOT( quit() ) );
+    connect( ui->statusButton, SIGNAL( clicked() ), APP->sipHandler(), SLOT( toggleConnect() ) );
 
     // <SipHandler>
     connect( APP->sipHandler(), SIGNAL( connected() ), SLOT( onSipConnected() ) );
@@ -236,7 +236,7 @@ TomahawkWindow::showSettingsDialog()
 void
 TomahawkWindow::rescanCollectionManually()
 {
-    TomahawkSettings* s = APP->settings();
+    TomahawkSettings* s = TomahawkSettings::instance();
     bool ok;
     QString path = QInputDialog::getText( this, tr( "Enter path to music dir:" ),
                                                 tr( "Path pls" ), QLineEdit::Normal,
@@ -263,7 +263,7 @@ TomahawkWindow::scanFinished()
 void
 TomahawkWindow::addPeerManually()
 {
-    TomahawkSettings* s = APP->settings();
+    TomahawkSettings* s = TomahawkSettings::instance();
     bool ok;
     QString addr = QInputDialog::getText( this, tr( "Connect To Peer" ),
                                                 tr( "Enter peer address:" ), QLineEdit::Normal,
@@ -287,7 +287,7 @@ TomahawkWindow::addPeerManually()
         return;
 
     qDebug() << "Attempting to connect to" << addr;
-    APP->servent().connectToPeer( addr, port, key );
+    Servent::instance()->connectToPeer( addr, port, key );
 }
 
 
@@ -337,7 +337,7 @@ TomahawkWindow::createPlaylist( bool dynamic )
     if ( !ok || name.isEmpty() )
         return;
 
-    source_ptr author = APP->sourcelist().getLocal();
+    source_ptr author = SourceList::instance()->getLocal();
     QString id = uuid();
     QString info  = ""; // FIXME
     QString creator = "someone"; // FIXME
@@ -400,5 +400,5 @@ TomahawkWindow::setWindowTitle( const QString& title )
 void
 TomahawkWindow::showAboutTomahawk()
 {
-    QMessageBox::about( this, "About Tomahawk", "Copyright 2010 Christian Muehlhaeuser <muesli@gmail.com>\n\nThanks to: Leo Franchi, Jeff Mitchell, Dominik Schmidt and Steve Robertson" );
+    QMessageBox::about( this, "About Tomahawk", "Copyright 2010 Christian Muehlhaeuser <muesli@gmail.com>\n\nThanks to: Leo Franchi, Jeff Mitchell, Dominik Schmidt, Alejandro Wainzinger and Steve Robertson" );
 }

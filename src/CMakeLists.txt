@@ -27,16 +27,6 @@ SET( TOMAHAWK_INC_DIR "${CMAKE_CURRENT_SOURCE_DIR}/../include/" )
 #ENDFOREACH( moddir )
 
 SET( tomahawkSources ${tomahawkSources}
-     artist.cpp
-     album.cpp
-     pipeline.cpp
-     playlist.cpp
-     pluginapi.cpp
-     query.cpp
-     result.cpp
-     source.cpp
-     sourcelist.cpp
-
      audio/madtranscode.cpp
      audio/vorbistranscode.cpp
      audio/flactranscode.cpp
@@ -45,70 +35,18 @@ SET( tomahawkSources ${tomahawkSources}
      utils/tomahawkutils.cpp
 
      sip/SipHandler.cpp
-     sip/SipPlugin.cpp
 
      infosystem/infosystem.cpp
      infosystem/infoplugins/echonestplugin.cpp
      infosystem/infoplugins/musixmatchplugin.cpp
 
-     collection.cpp
      musicscanner.cpp
      scriptresolver.cpp
-
-     network/bufferiodevice.cpp
-     network/msgprocessor.cpp
-     network/connection.cpp
-     network/controlconnection.cpp
-     network/filetransferconnection.cpp
-     network/dbsyncconnection.cpp
-     network/remotecollection.cpp
-     network/servent.cpp
-
-     database/fuzzyindex.cpp
-     database/database.cpp
-     database/databaseworker.cpp
-     database/databaseimpl.cpp
-     database/databaseresolver.cpp
-     database/databasecommand.cpp
-     database/databasecommandloggable.cpp
-     database/databasecommand_resolve.cpp
-     database/databasecommand_allalbums.cpp
-     database/databasecommand_alltracks.cpp
-     database/databasecommand_addfiles.cpp
-     database/databasecommand_dirmtimes.cpp
-     database/databasecommand_loadfile.cpp
-     database/databasecommand_addsource.cpp
-     database/databasecommand_sourceoffline.cpp
-     database/databasecommand_collectionstats.cpp
-     database/databasecommand_loadplaylistentries.cpp
-     database/databasecommand_modifyplaylist.cpp
-     database/databasecommand_setplaylistrevision.cpp
-     database/databasecommand_loadallplaylists.cpp
-     database/databasecommand_createplaylist.cpp
-     database/databasecommand_deleteplaylist.cpp
-     database/databasecommand_renameplaylist.cpp
-     database/databasecommand_loadops.cpp
-     database/databasecommand_updatesearchindex.cpp
-     database/databasecommand_loadallplaylists.cpp
-     database/databasecommand_setdynamicplaylistrevision.cpp
-     database/databasecommand_createdynamicplaylist.cpp
-     database/databasecommand_loaddynamicplaylist.cpp
-     database/databasecommand_loadalldynamicplaylists.cpp
-     database/databasecommand_deletedynamicplaylist.cpp
-     database/databasecollection.cpp
-
-     dynamic/DynamicPlaylist.cpp
-     dynamic/DynamicControl.cpp
-     dynamic/GeneratorFactory.cpp
-     dynamic/GeneratorInterface.cpp
-     dynamic/echonest/EchonestGenerator.cpp
-     dynamic/echonest/EchonestControl.cpp
 
      scrobbler.cpp
      xmppbot/xmppbot.cpp
      web/api_v1.cpp
 
-     tomahawksettings.cpp
      tomahawkapp.cpp
      main.cpp
 )
@@ -150,11 +88,6 @@ SET( tomahawkSourcesGui ${tomahawkSourcesGui}
      sourcetree/sourcetreeitemwidget.cpp
      sourcetree/sourcetreeview.cpp
 
-     dynamic/widgets/DynamicWidget.cpp
-     dynamic/widgets/DynamicControlWidget.cpp
-     dynamic/widgets/DynamicControlList.cpp
-     dynamic/DynamicPlaylistModel.cpp
-
      topbar/topbar.cpp
      topbar/clearbutton.cpp  
      topbar/searchlineedit.cpp  
@@ -163,6 +96,10 @@ SET( tomahawkSourcesGui ${tomahawkSourcesGui}
 
      infowidgets/sourceinfowidget.cpp
 
+     dynamic/widgets/DynamicWidget.cpp
+     dynamic/widgets/DynamicControlWidget.cpp
+     dynamic/widgets/DynamicControlList.cpp
+     dynamic/DynamicPlaylistModel.cpp
 
      transferview.cpp
      tomahawkwindow.cpp
@@ -174,24 +111,7 @@ SET( tomahawkSourcesGui ${tomahawkSourcesGui}
 SET( tomahawkHeaders ${tomahawkHeaders}
      "${TOMAHAWK_INC_DIR}/tomahawk/tomahawkapp.h"
 
-     "${TOMAHAWK_INC_DIR}/tomahawk/collection.h"
-     "${TOMAHAWK_INC_DIR}/tomahawk/pipeline.h"
-     "${TOMAHAWK_INC_DIR}/tomahawk/pluginapi.h"
-     "${TOMAHAWK_INC_DIR}/tomahawk/query.h"
-     "${TOMAHAWK_INC_DIR}/tomahawk/resolver.h"
-     "${TOMAHAWK_INC_DIR}/tomahawk/result.h"
-     "${TOMAHAWK_INC_DIR}/tomahawk/source.h"
-     "${TOMAHAWK_INC_DIR}/tomahawk/sourcelist.h"
-
-     "${TOMAHAWK_INC_DIR}/tomahawk/artist.h"
-     "${TOMAHAWK_INC_DIR}/tomahawk/album.h"
-     "${TOMAHAWK_INC_DIR}/tomahawk/track.h"
-     "${TOMAHAWK_INC_DIR}/tomahawk/playlist.h"
-
      "${TOMAHAWK_INC_DIR}/tomahawk/infosystem.h"
-
-     "${TOMAHAWK_INC_DIR}/tomahawk/functimeout.h"
-#     "${TOMAHAWK_INC_DIR}/tomahawk/tomahawkplugin.h"
 
      audio/transcodeinterface.h
      audio/madtranscode.h
@@ -199,64 +119,13 @@ SET( tomahawkHeaders ${tomahawkHeaders}
      audio/flactranscode.h
      audio/audioengine.h
 
-     database/fuzzyindex.h
-     database/database.h
-     database/databaseworker.h
-     database/databaseimpl.h
-     database/databaseresolver.h
-     database/databasecommand.h
-     database/databasecommandloggable.h
-     database/databasecommand_resolve.h
-     database/databasecommand_allalbums.h
-     database/databasecommand_alltracks.h
-     database/databasecommand_addfiles.h
-     database/databasecommand_dirmtimes.h
-     database/databasecommand_loadfile.h
-     database/databasecommand_addsource.h
-     database/databasecommand_sourceoffline.h
-     database/databasecommand_collectionstats.h
-     database/databasecommand_loadplaylistentries.h
-     database/databasecommand_modifyplaylist.h
-     database/databasecommand_setplaylistrevision.h
-     database/databasecommand_loadallplaylists.h
-     database/databasecommand_createplaylist.h
-     database/databasecommand_deleteplaylist.h
-     database/databasecommand_setdynamicplaylistrevision.h
-     database/databasecommand_createdynamicplaylist.h
-     database/databasecommand_loaddynamicplaylist.h
-     database/databasecommand_deletedynamicplaylist.h
-     database/databasecommand_loadalldynamicplaylists.h
-     database/databasecommand_renameplaylist.h
-     database/databasecommand_loadops.h
-     database/databasecommand_updatesearchindex.h
-     database/databasecollection.h
-
      sip/SipHandler.h
-     sip/SipPlugin.h
 
      infosystem/infoplugins/echonestplugin.h
      infosystem/infoplugins/musixmatchplugin.h
 
-     network/bufferiodevice.h
-     network/msgprocessor.h
-     network/remotecollection.h
-     network/servent.h
-     network/connection.h
-     network/controlconnection.h
-     network/filetransferconnection.h
-     network/dbsyncconnection.h
-
-     dynamic/DynamicPlaylist.h
-     dynamic/DynamicControl.h
-     dynamic/GeneratorFactory.h
-     dynamic/GeneratorInterface.h
-     dynamic/echonest/EchonestGenerator.h
-     dynamic/echonest/EchonestControl.h
-
      musicscanner.h
      scriptresolver.h
-     tomahawksettings.h
-     tomahawkzeroconf.h 
 
      scrobbler.h
      xmppbot/xmppbot.h
@@ -345,10 +214,10 @@ INCLUDE_DIRECTORIES(
     topbar
     utils
     dynamic
+    libtomahawk
 
     ../rtaudio
     ../alsa-playback
-    ../libportfwd/include
     ../qxt/qxtweb-standalone/qxtweb
 
     /usr/include/taglib
@@ -369,6 +238,7 @@ IF( UNIX )
 ENDIF( UNIX )
 
 ADD_SUBDIRECTORY( sip/jabber )
+ADD_SUBDIRECTORY( sip/zeroconf )
 
 kde4_add_app_icon( tomahawkSources "${CMAKE_CURRENT_SOURCE_DIR}/../data/icons/tomahawk-icon-*.png" )
 qt4_add_resources( RC_SRCS "../resources.qrc" )
@@ -398,9 +268,9 @@ MESSAGE( STATUS "OS_SPECIFIC_LINK_LIBRARIES: ${OS_SPECIFIC_LINK_LIBRARIES}" )
 TARGET_LINK_LIBRARIES( tomahawk
     ${QT_LIBRARIES}
     ${MAC_EXTRA_LIBS}
-    portfwd
     ${OS_SPECIFIC_LINK_LIBRARIES}
     ${LIBECHONEST_LIBRARY}
+
     qjson
     tag
 )

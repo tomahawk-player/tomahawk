@@ -38,7 +38,7 @@ ADD_LIBRARY(portfwd STATIC
 )
 
 IF(WIN32)
-	TARGET_LINK_LIBRARIES( portfwd "ws2_32.dll" )
+	TARGET_LINK_LIBRARIES( portfwd "ws2_32.dll" "iphlpapi.a" )
 ENDIF()
 
 #ADD_EXECUTABLE(portfwd-demo
@@ -46,6 +46,6 @@ ENDIF()
 #              )
 #TARGET_LINK_LIBRARIES(portfwd-demo portfwd)
 
-#INSTALL(TARGETS portfwd ARCHIVE DESTINATION lib)
+INSTALL(TARGETS portfwd ARCHIVE DESTINATION lib)
 #INSTALL(TARGETS portfwd-demo RUNTIME DESTINATION bin)
 #INSTALL(DIRECTORY include/portfwd DESTINATION include PATTERN "*~" EXCLUDE)

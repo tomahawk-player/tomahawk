@@ -16,7 +16,7 @@
 #ifndef DYNAMIC_PLAYLIST_MODEL_H
 #define DYNAMIC_PLAYLIST_MODEL_H
 
-#include "tomahawk/typedefs.h"
+#include "typedefs.h"
 #include "playlist/playlistmodel.h"
     
 /**

@@ -3,10 +3,10 @@
 #include "ui_sourcetreeitemwidget.h"
 
 #include "tomahawk/tomahawkapp.h"
-#include "tomahawk/album.h"
-#include "database.h"
-#include "databasecommand_collectionstats.h"
-#include "dbsyncconnection.h"
+#include "album.h"
+#include "database/database.h"
+#include "database/databasecommand_collectionstats.h"
+#include "network/dbsyncconnection.h"
 #include "playlistmanager.h"
 
 using namespace Tomahawk;

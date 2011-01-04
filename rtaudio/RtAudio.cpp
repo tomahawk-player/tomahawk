@@ -558,7 +558,14 @@ RtAudio::DeviceInfo RtApiCore :: getDeviceInfo( unsigned int device )
     return info;
   }
 
-  const char *mname = CFStringGetCStringPtr( cfname, CFStringGetSystemEncoding() );
+  CFIndex numbytes_cfname = CFStringGetMaximumSizeOfFileSystemRepresentation( cfname );
+  if( numbytes_cfname == 0 )
+    numbytes_cfname=256;
+  char mname[numbytes_cfname];
+
+  if(! CFStringGetCString( cfname, mname,numbytes_cfname,CFStringGetSystemEncoding() ) )
+    strcpy(mname,"");
+
   info.name.append( (const char *)mname, strlen(mname) );
   info.name.append( ": " );
   CFRelease( cfname );
@@ -572,7 +579,13 @@ RtAudio::DeviceInfo RtApiCore :: getDeviceInfo( unsigned int device )
     return info;
   }
 
-  const char *name = CFStringGetCStringPtr( cfname, CFStringGetSystemEncoding() );
+  numbytes_cfname = CFStringGetMaximumSizeOfFileSystemRepresentation( cfname );
+  if( numbytes_cfname == 0 )
+    numbytes_cfname=256;
+  char name[numbytes_cfname];
+  if(! CFStringGetCString( cfname, name,numbytes_cfname,CFStringGetSystemEncoding() ) )
+    strcpy(mname,"");
+
   info.name.append( (const char *)name, strlen(name) );
   CFRelease( cfname );
 

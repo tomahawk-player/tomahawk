@@ -1,11 +1,12 @@
 #include "sourcetreeview.h"
 
-#include "tomahawk/tomahawkapp.h"
-#include "tomahawk/playlist.h"
+#include "playlist.h"
 #include "collectionmodel.h"
 #include "playlistmanager.h"
 #include "sourcetreeitem.h"
 #include "sourcesmodel.h"
+#include "sourcelist.h"
+#include "tomahawk/tomahawkapp.h"
 
 #include <QAction>
 #include <QContextMenuEvent>
@@ -70,7 +71,7 @@ SourceTreeView::SourceTreeView( QWidget* parent )
     connect( this,  SIGNAL( clicked( QModelIndex ) ), SLOT( onItemActivated( QModelIndex ) ) );
 
     connect( selectionModel(), SIGNAL( selectionChanged( const QItemSelection&, const QItemSelection& ) ), SLOT( onSelectionChanged() ) );
-    connect( &APP->sourcelist(), SIGNAL( sourceRemoved( Tomahawk::source_ptr ) ), SLOT( onSourceOffline( Tomahawk::source_ptr ) ) );
+    connect( SourceList::instance(), SIGNAL( sourceRemoved( Tomahawk::source_ptr ) ), SLOT( onSourceOffline( Tomahawk::source_ptr ) ) );
 
     m_model->appendItem( source_ptr() );
 }

@@ -18,7 +18,7 @@
 #define DYNAMIC_WIDGET_H
 
 #include <QWidget>
-#include <tomahawk/typedefs.h>
+#include <typedefs.h>
 
 class QVBoxLayout;
 class QHBoxLayout;

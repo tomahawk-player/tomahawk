@@ -3,8 +3,8 @@
 
 #include <QStandardItemModel>
 
-#include "tomahawk/source.h"
-#include "tomahawk/typedefs.h"
+#include "source.h"
+#include "typedefs.h"
 
 class SourceTreeItem;
 

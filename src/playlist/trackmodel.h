@@ -3,7 +3,7 @@
 
 #include <QAbstractItemModel>
 
-#include "tomahawk/playlistinterface.h"
+#include "playlistinterface.h"
 #include "playlist/plitem.h"
 
 class QMetaData;

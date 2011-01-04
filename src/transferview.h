@@ -4,7 +4,7 @@
 #include <QDebug>
 #include <QTreeWidget>
 
-#include "tomahawk/typedefs.h"
+#include "typedefs.h"
 #include "utils/animatedsplitter.h"
 
 class FileTransferConnection;

@@ -5,8 +5,8 @@
 #include <QHash>
 #include <QStackedWidget>
 
-#include "tomahawk/collection.h"
-#include "tomahawk/playlistinterface.h"
+#include "collection.h"
+#include "playlistinterface.h"
 
 namespace Tomahawk {
 class DynamicWidget;

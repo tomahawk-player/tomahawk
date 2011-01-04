@@ -7,8 +7,8 @@
 #include <qjson/serializer.h>
 #include <qjson/qobjecthelper.h>
 
-#include "tomahawk/resolver.h"
-#include "tomahawk/result.h"
+#include "resolver.h"
+#include "result.h"
 
 class ScriptResolver : public Tomahawk::Resolver
 {

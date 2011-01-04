@@ -49,6 +49,31 @@ Now compile Tomahawk
  $ make 
  $ ./tomahawk
 
+Quickstart on OS X
+------------------
+
+# Install homebrew
+$ ruby -e "$(curl -fsSL https://gist.github.com/raw/323731/install_homebrew.rb)"
+$ brew install qt qjson gloox libmad libvorbis flac taglib boost liblastfm
+# Install libEchnoest as per the above instructions
+
+# If liblastfm gives problems, do the below:
+$ brew edit liblastfm
+# change url to https://github.com/davidsansome/liblastfm/tarball/0.3.1
+$ brew install liblastfm
+# copy the md5 hash it gives
+$ brew edit liblastfm
+# replace the md5 hash with the new one you copied
+$ brew install liblastfm
+
+# Build Tomahawk
+$ git clone git://github.com/tomahawk-player/tomahawk.git
+$ cd tomahawk
+$ mkdir build && cd build
+$ cmake ..
+$ make
+$ open tomahawk.app
+
 
 Dependencies
 ------------

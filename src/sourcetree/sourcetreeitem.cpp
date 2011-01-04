@@ -3,8 +3,8 @@
 #include <QDebug>
 #include <QTreeView>
 
-#include "tomahawk/collection.h"
-#include "tomahawk/playlist.h"
+#include "collection.h"
+#include "playlist.h"
 #include "tomahawk/tomahawkapp.h"
 #include "sourcesmodel.h"
 

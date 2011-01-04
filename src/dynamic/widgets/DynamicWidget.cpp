@@ -18,15 +18,15 @@
 
 #include <QVBoxLayout>
 #include <QLabel>
+#include <QComboBox>
+#include <QPushButton>
 
 #include "DynamicControlList.h"
 #include "playlistview.h"
 #include "playlistmodel.h"
 #include "trackproxymodel.h"
 #include "dynamic/GeneratorInterface.h"
-#include <QComboBox>
 #include "dynamic/GeneratorFactory.h"
-#include <QPushButton>
 
 using namespace Tomahawk;
 

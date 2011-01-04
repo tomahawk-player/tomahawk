@@ -2,10 +2,11 @@
 
 #include "tomahawk/tomahawkapp.h"
 #include "tomahawk/infosystem.h"
-#include "tomahawk/album.h"
-#include "tomahawk/typedefs.h"
-#include <tomahawksettings.h>
-#include <audio/audioengine.h>
+#include "album.h"
+#include "typedefs.h"
+#include "tomahawksettings.h"
+#include "pipeline.h"
+#include "audio/audioengine.h"
 
 #include <gloox/client.h>
 #include <gloox/rostermanager.h>
@@ -24,7 +25,7 @@ XMPPBot::XMPPBot(QObject *parent)
     , m_currReturnMessage("\n")
 {
     qDebug() << Q_FUNC_INFO;
-    TomahawkSettings *settings = TomahawkApp::instance()->settings();
+    TomahawkSettings *settings = TomahawkSettings::instance();
     QString server = settings->xmppBotServer();
     QString jidstring = settings->xmppBotJid();
     QString password = settings->xmppBotPassword();
@@ -150,7 +151,7 @@ void XMPPBot::handleMessage(const Message& msg, MessageSession* session)
         QList<Tomahawk::query_ptr> ql;
         ql.append( q );
 
-        APP->pipeline()->add( ql );
+        Tomahawk::Pipeline::instance()->add( ql );
         return;
     }
     else if ( body.startsWith( "stop" ) )

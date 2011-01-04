@@ -4,11 +4,11 @@
 #include <QSettings>
 #include <QCryptographicHash>
 
-#include <tomahawk/tomahawkapp.h>
-#include "tomahawk/album.h"
-#include "tomahawk/typedefs.h"
+#include "album.h"
+#include "typedefs.h"
 #include "audio/audioengine.h"
 #include "tomahawksettings.h"
+#include "tomahawk/tomahawkapp.h"
 
 #include <lastfm/ws.h>
 #include <lastfm/XmlQuery>
@@ -30,11 +30,11 @@ Scrobbler::Scrobbler( QObject* parent )
 {
     lastfm::ws::ApiKey = "2aa1089093868876bba20b0482b9cef9";
     lastfm::ws::SharedSecret = "a7085ef81d7b46fe6ffe11c15b85902f";
-    lastfm::ws::Username = TomahawkApp::instance()->settings()->lastFmUsername();
+    lastfm::ws::Username = TomahawkSettings::instance()->lastFmUsername();
     
-    m_pw = TomahawkApp::instance()->settings()->lastFmPassword();
+    m_pw = TomahawkSettings::instance()->lastFmPassword();
     
-    if( TomahawkApp::instance()->settings()->scrobblingEnabled() && !lastfm::ws::Username.isEmpty() )
+    if( TomahawkSettings::instance()->scrobblingEnabled() && !lastfm::ws::Username.isEmpty() )
     {
         createScrobbler();
     }
@@ -141,22 +141,22 @@ Scrobbler::scrobble()
 void
 Scrobbler::settingsChanged()
 {
-    if( !m_scrobbler && TomahawkApp::instance()->settings()->scrobblingEnabled() )
+    if( !m_scrobbler && TomahawkSettings::instance()->scrobblingEnabled() )
     { // can simply create the scrobbler
-        lastfm::ws::Username = TomahawkApp::instance()->settings()->lastFmUsername();
-        m_pw = TomahawkApp::instance()->settings()->lastFmPassword();
+        lastfm::ws::Username = TomahawkSettings::instance()->lastFmUsername();
+        m_pw = TomahawkSettings::instance()->lastFmPassword();
 
         createScrobbler();
     }
-    else if( m_scrobbler && !TomahawkApp::instance()->settings()->scrobblingEnabled() )
+    else if( m_scrobbler && !TomahawkSettings::instance()->scrobblingEnabled() )
     {
         delete m_scrobbler;
         m_scrobbler = 0;
     }
-    else if( TomahawkApp::instance()->settings()->lastFmUsername() != lastfm::ws::Username ||
-               TomahawkApp::instance()->settings()->lastFmPassword() != m_pw )
+    else if( TomahawkSettings::instance()->lastFmUsername() != lastfm::ws::Username ||
+               TomahawkSettings::instance()->lastFmPassword() != m_pw )
     {
-        lastfm::ws::Username = TomahawkApp::instance()->settings()->lastFmUsername();
+        lastfm::ws::Username = TomahawkSettings::instance()->lastFmUsername();
         // credentials have changed, have to re-create scrobbler for them to take effect
         if( m_scrobbler )
             delete m_scrobbler;
@@ -182,16 +182,16 @@ Scrobbler::onAuthenticated()
         if( lfm.children( "error" ).size() > 0 )
         {
             qDebug() << "Error from authenticating with Last.fm service:" << lfm.text();
-            TomahawkApp::instance()->settings()->setLastFmSessionKey( QByteArray() );
+            TomahawkSettings::instance()->setLastFmSessionKey( QByteArray() );
             
         }
         else
         {
             lastfm::ws::SessionKey = lfm[ "session" ][ "key" ].text();
 
-            TomahawkApp::instance()->settings()->setLastFmSessionKey( lastfm::ws::SessionKey.toLatin1() );
+            TomahawkSettings::instance()->setLastFmSessionKey( lastfm::ws::SessionKey.toLatin1() );
 
-            if( TomahawkApp::instance()->settings()->scrobblingEnabled() )
+            if( TomahawkSettings::instance()->scrobblingEnabled() )
                 m_scrobbler = new lastfm::Audioscrobbler( "tst" );
         }
     }
@@ -207,7 +207,7 @@ Scrobbler::onAuthenticated()
 void
 Scrobbler::createScrobbler()
 {
-    if( TomahawkApp::instance()->settings()->lastFmSessionKey().isEmpty() ) // no session key, so get one
+    if( TomahawkSettings::instance()->lastFmSessionKey().isEmpty() ) // no session key, so get one
     {
         QString authToken = md5( ( lastfm::ws::Username.toLower() + md5( m_pw.toUtf8() ) ).toUtf8() );
         
@@ -221,7 +221,7 @@ Scrobbler::createScrobbler()
     }
     else
     {
-        lastfm::ws::SessionKey = TomahawkApp::instance()->settings()->lastFmSessionKey();
+        lastfm::ws::SessionKey = TomahawkSettings::instance()->lastFmSessionKey();
         
         m_scrobbler = new lastfm::Audioscrobbler( "tst" );
         m_scrobbler->moveToThread( thread() );
