@@ -4,9 +4,9 @@
 #include "sip/SipPlugin.h"
 #include "tomahawkzeroconf.h"
 
-#include "dllmacro.h"
+#include "../sipdllmacro.h"
 
-class DLLEXPORT ZeroconfPlugin : public SipPlugin
+class SIPDLLEXPORT ZeroconfPlugin : public SipPlugin
 {
     Q_OBJECT
     Q_INTERFACES( SipPlugin )
