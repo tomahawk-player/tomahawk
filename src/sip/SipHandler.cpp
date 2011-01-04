@@ -41,6 +41,9 @@ SipHandler::loadPlugins()
 
     foreach ( QString fileName, pluginsDir.entryList( QDir::Files ) )
     {
+        if ( !QLibrary::isLibrary( fileName ) )
+            continue;
+
         qDebug() << "Trying to load plugin:" << pluginsDir.absoluteFilePath( fileName );
 
         QPluginLoader loader( pluginsDir.absoluteFilePath( fileName ) );
@@ -50,6 +53,10 @@ SipHandler::loadPlugins()
             // Connect via that plugin
             qDebug() << "Loaded plugin:" << loader.fileName();
             loadPlugin( plugin );
+        }
+        else
+        {
+            qDebug() << "Error loading library:" << loader.errorString();
         }
     }
 }
