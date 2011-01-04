@@ -5,6 +5,7 @@
 #include "databasecommand_addfiles.h"
 #include "databasecommand_createplaylist.h"
 #include "databasecommand_deleteplaylist.h"
+#include "databasecommand_logplayback.h"
 #include "databasecommand_renameplaylist.h"
 #include "databasecommand_setplaylistrevision.h"
 
@@ -66,6 +67,13 @@ DatabaseCommand::factory( const QVariant& op, const source_ptr& source )
     else if( name == "deleteplaylist" )
     {
         DatabaseCommand_DeletePlaylist * cmd = new DatabaseCommand_DeletePlaylist;
+        cmd->setSource( source );
+        QJson::QObjectHelper::qvariant2qobject( op.toMap(), cmd );
+        return cmd;
+    }
+    else if( name == "logplayback" )
+    {
+        DatabaseCommand_LogPlayback * cmd = new DatabaseCommand_LogPlayback;
         cmd->setSource( source );
         QJson::QObjectHelper::qvariant2qobject( op.toMap(), cmd );
         return cmd;
