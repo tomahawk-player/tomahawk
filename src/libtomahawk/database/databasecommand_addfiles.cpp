@@ -38,16 +38,16 @@ DatabaseCommand_AddFiles::postCommitHook()
     // collection browser will update/fade in etc.
     Collection* coll = source()->collection().data();
 
-    connect( this, SIGNAL( notify( const QList<QVariant>&, Tomahawk::collection_ptr ) ),
-             coll, SIGNAL( setTracks( const QList<QVariant>&, Tomahawk::collection_ptr ) ),
+    connect( this, SIGNAL( notify( QList<QVariant>, Tomahawk::collection_ptr ) ),
+             coll, SIGNAL( setTracks( QList<QVariant>, Tomahawk::collection_ptr ) ),
              Qt::QueuedConnection );
     // do it like this so it gets called in the right thread:
     emit notify( m_files, source()->collection() );
 
     // also re-calc the collection stats, to updates the "X tracks" in the sidebar etc:
     DatabaseCommand_CollectionStats* cmd = new DatabaseCommand_CollectionStats( source() );
-    connect( cmd,            SIGNAL( done( const QVariantMap& ) ),
-             source().data(),  SLOT( setStats( const QVariantMap& ) ), Qt::QueuedConnection );
+    connect( cmd,            SIGNAL( done( QVariantMap ) ),
+             source().data(),  SLOT( setStats( QVariantMap ) ), Qt::QueuedConnection );
     Database::instance()->enqueue( QSharedPointer<DatabaseCommand>( cmd ) );
 
     if( source()->isLocal() )

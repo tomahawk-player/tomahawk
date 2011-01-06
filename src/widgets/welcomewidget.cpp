@@ -61,6 +61,15 @@ WelcomeWidget::onSourceAdded( const Tomahawk::source_ptr& source )
 {
     connect( source->collection().data(), SIGNAL( playlistsAdded( QList<Tomahawk::playlist_ptr> ) ), SLOT( updatePlaylists() ) );
     connect( source->collection().data(), SIGNAL( playlistsDeleted( QList<Tomahawk::playlist_ptr> ) ), SLOT( updatePlaylists() ) );
+
+    connect( source.data(), SIGNAL( playbackFinished( Tomahawk::query_ptr ) ), SLOT( onPlaybackFinished( Tomahawk::query_ptr ) ) );
+}
+
+
+void
+WelcomeWidget::onPlaybackFinished( const Tomahawk::query_ptr& query )
+{
+    m_tracksModel->insertTrack( 0, query );
 }
 
 

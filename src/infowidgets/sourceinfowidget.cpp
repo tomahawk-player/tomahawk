@@ -29,6 +29,8 @@ SourceInfoWidget::SourceInfoWidget( const Tomahawk::source_ptr& source, QWidget*
     ui->historyView->setModel( m_historyModel );
     m_historyModel->loadHistory( source );
 
+    connect( source.data(), SIGNAL( playbackFinished( Tomahawk::query_ptr ) ), SLOT( onPlaybackFinished( Tomahawk::query_ptr ) ) );
+
     ui->recentCollectionView->setColumnHidden( TrackModel::Bitrate, true );
     ui->recentCollectionView->setColumnHidden( TrackModel::Origin, true );
     ui->recentCollectionView->setColumnHidden( TrackModel::Filesize, true );
@@ -46,6 +48,13 @@ SourceInfoWidget::SourceInfoWidget( const Tomahawk::source_ptr& source, QWidget*
 SourceInfoWidget::~SourceInfoWidget()
 {
     delete ui;
+}
+
+
+void
+SourceInfoWidget::onPlaybackFinished( const Tomahawk::query_ptr& query )
+{
+    m_historyModel->insertTrack( 0, query );
 }
 
 

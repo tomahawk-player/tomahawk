@@ -77,6 +77,7 @@ public slots:
 private slots:
     void onSourceAdded( const Tomahawk::source_ptr& source );
     void onPlaylistActivated( QListWidgetItem* item );
+    void onPlaybackFinished( const Tomahawk::query_ptr& query );
 
 private:
     Ui::WelcomeWidget *ui;

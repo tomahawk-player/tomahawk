@@ -29,7 +29,7 @@ public:
     bool isLocal() const { return m_isLocal; }
     bool isOnline() const { return m_online; }
 
-    const QString& userName() const { return m_username; }
+    QString userName() const { return m_username; }
     QString friendlyName() const;
     void setFriendlyName( const QString& fname ) { m_friendlyname = fname; }
 
@@ -52,6 +52,9 @@ signals:
 
     void stats( const QVariantMap& );
     void usernameChanged( const QString& );
+
+    void playbackStarted( const Tomahawk::query_ptr& query );
+    void playbackFinished( const Tomahawk::query_ptr& query );
 
     // this signal is emitted from DBSyncConnection:
     void loadingStateChanged( DBSyncConnection::State newstate, DBSyncConnection::State oldstate, const QString& info );

@@ -97,6 +97,7 @@ AudioEngine::stop()
 
     m_audio->stopPlayback();
 
+    setCurrentTrack( Tomahawk::result_ptr() );
     emit stopped();
 }
 
@@ -157,16 +158,7 @@ AudioEngine::loadTrack( const Tomahawk::result_ptr& result )
             err = true;
         else
         {
-            m_lastTrack = m_currentTrack;
-            if ( !m_lastTrack.isNull() )
-            {
-                DatabaseCommand_LogPlayback* cmd = new DatabaseCommand_LogPlayback( m_lastTrack, m_timeElapsed );
-                Database::instance()->enqueue( QSharedPointer<DatabaseCommand>(cmd) );
-
-                emit finished( m_lastTrack );
-            }
-
-            m_currentTrack = result;
+            setCurrentTrack( result );
             io = Servent::instance()->getIODeviceForUrl( m_currentTrack );
 
             if ( !io || io.isNull() )
@@ -311,10 +303,14 @@ AudioEngine::setStreamData( long sampleRate, int channels )
 
     if ( sampleRate < 44100 )
         sampleRate = 44100;
+
     m_audio->initAudio( sampleRate, channels );
     if ( m_audio->startPlayback() )
     {
         emit started( m_currentTrack );
+
+        DatabaseCommand_LogPlayback* cmd = new DatabaseCommand_LogPlayback( m_currentTrack, DatabaseCommand_LogPlayback::Started );
+        Database::instance()->enqueue( QSharedPointer<DatabaseCommand>(cmd) );
     }
     else
     {
@@ -349,6 +345,22 @@ AudioEngine::clearBuffers()
 {
     QMutexLocker lock( &m_mutex );
     m_audio->clearBuffers();
+}
+
+
+void
+AudioEngine::setCurrentTrack( const Tomahawk::result_ptr& result )
+{
+    m_lastTrack = m_currentTrack;
+    if ( !m_lastTrack.isNull() )
+    {
+        DatabaseCommand_LogPlayback* cmd = new DatabaseCommand_LogPlayback( m_lastTrack, DatabaseCommand_LogPlayback::Finished, m_timeElapsed );
+        Database::instance()->enqueue( QSharedPointer<DatabaseCommand>(cmd) );
+
+        emit finished( m_lastTrack );
+    }
+
+    m_currentTrack = result;
 }
 
 

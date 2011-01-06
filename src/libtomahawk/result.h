@@ -23,6 +23,7 @@ public:
 
     float score() const;
     RID id() const;
+
     collection_ptr collection() const { return m_collection; }
 
     Tomahawk::artist_ptr artist() const { return m_artist; }

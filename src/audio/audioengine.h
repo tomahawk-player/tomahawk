@@ -80,6 +80,8 @@ private slots:
     void engineLoop();
     void loop();
 
+    void setCurrentTrack( const Tomahawk::result_ptr& result );
+
 private:
     void run();
     void clearBuffers();

@@ -27,6 +27,9 @@ public:
 protected:
     void changeEvent( QEvent* e );
 
+private slots:
+    void onPlaybackFinished( const Tomahawk::query_ptr& query );
+
 private:
     Ui::SourceInfoWidget *ui;
 

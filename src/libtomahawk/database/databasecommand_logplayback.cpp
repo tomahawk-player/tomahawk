@@ -5,6 +5,7 @@
 #include "collection.h"
 #include "database/database.h"
 #include "databaseimpl.h"
+#include "pipeline.h"
 #include "network/servent.h"
 
 using namespace Tomahawk;
@@ -16,6 +17,28 @@ DatabaseCommand_LogPlayback::postCommitHook()
 {
     qDebug() << Q_FUNC_INFO;
 
+    connect( this, SIGNAL( trackPlaying( Tomahawk::query_ptr ) ),
+             source().data(), SIGNAL( playbackStarted( Tomahawk::query_ptr ) ), Qt::QueuedConnection );
+    connect( this, SIGNAL( trackPlayed( Tomahawk::query_ptr ) ),
+             source().data(), SIGNAL( playbackFinished( Tomahawk::query_ptr ) ), Qt::QueuedConnection );
+
+    QVariantMap m;
+    m.insert( "track", m_track );
+    m.insert( "artist", m_artist );
+    m.insert( "qid", uuid() );
+    Tomahawk::query_ptr q( new Tomahawk::Query( m ) );
+
+    Tomahawk::Pipeline::instance()->add( q );
+
+    if ( m_action == Finished )
+    {
+        emit trackPlayed( q );
+    }
+    else if ( m_action == Started )
+    {
+        emit trackPlaying( q );
+    }
+
     if( source()->isLocal() )
         Servent::instance()->triggerDBSync();
 }
@@ -26,6 +49,9 @@ DatabaseCommand_LogPlayback::exec( DatabaseImpl* dbi )
 {
     qDebug() << Q_FUNC_INFO;
     Q_ASSERT( !source().isNull() );
+
+    if ( m_action != Finished )
+        return;
 
     TomahawkSqlQuery query = dbi->newquery();
     query.prepare( "INSERT INTO playback_log(source,track,playtime,secs_played) "

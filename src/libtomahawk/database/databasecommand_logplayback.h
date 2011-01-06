@@ -17,14 +17,21 @@ Q_PROPERTY( QString artist READ artist WRITE setArtist )
 Q_PROPERTY( QString track READ track WRITE setTrack )
 Q_PROPERTY( unsigned int playtime READ playtime WRITE setPlaytime )
 Q_PROPERTY( unsigned int secsPlayed READ secsPlayed WRITE setSecsPlayed )
+Q_PROPERTY( int action READ action WRITE setAction )
 
 public:
+    enum Action
+    {
+        Started = 1,
+        Finished = 2
+    };
+
     explicit DatabaseCommand_LogPlayback( QObject* parent = 0 )
         : DatabaseCommandLoggable( parent )
     {}
 
-    explicit DatabaseCommand_LogPlayback( const Tomahawk::result_ptr& result, unsigned int secsPlayed, QObject* parent = 0 )
-        : DatabaseCommandLoggable( parent ), m_result( result ), m_secsPlayed( secsPlayed )
+    explicit DatabaseCommand_LogPlayback( const Tomahawk::result_ptr& result, Action action, unsigned int secsPlayed = 0, QObject* parent = 0 )
+        : DatabaseCommandLoggable( parent ), m_result( result ), m_secsPlayed( secsPlayed ), m_action( action )
     {
         m_playtime = QDateTime::currentDateTimeUtc().toTime_t();
         setSource( SourceList::instance()->getLocal() );
@@ -51,6 +58,13 @@ public:
     unsigned int secsPlayed() const { return m_secsPlayed; }
     void setSecsPlayed( unsigned int i ) { m_secsPlayed = i; }
 
+    int action() const { return m_action; }
+    void setAction( int a ) { m_action = (Action)a; }
+
+signals:
+    void trackPlaying( const Tomahawk::query_ptr& query );
+    void trackPlayed( const Tomahawk::query_ptr& query );
+
 private:
     Tomahawk::result_ptr m_result;
 
@@ -58,6 +72,7 @@ private:
     QString m_track;
     unsigned int m_playtime;
     unsigned int m_secsPlayed;
+    Action m_action;
 };
 
 #endif // DATABASECOMMAND_LOGPLAYBACK_H

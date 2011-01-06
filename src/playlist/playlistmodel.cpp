@@ -155,26 +155,49 @@ PlaylistModel::appendTrack( const Tomahawk::query_ptr& query )
 
 
 void
+PlaylistModel::insertTrack( unsigned int row, const Tomahawk::query_ptr& query )
+{
+    if ( query.isNull() )
+        return;
+
+    QList< Tomahawk::query_ptr > ql;
+    ql << query;
+
+    onTracksInserted( row, ql );
+}
+
+
+void
 PlaylistModel::onTracksAdded( const QList<Tomahawk::query_ptr>& tracks, const Tomahawk::collection_ptr& collection )
+{
+    onTracksInserted( rowCount( QModelIndex() ), tracks, collection );
+}
+
+
+void
+PlaylistModel::onTracksInserted( unsigned int row, const QList<Tomahawk::query_ptr>& tracks, const Tomahawk::collection_ptr& collection )
 {
     if ( !tracks.count() )
         return;
 
-    int c = rowCount( QModelIndex() );
+    int c = row;
     QPair< int, int > crows;
     crows.first = c;
     crows.second = c + tracks.count() - 1;
 
     emit beginInsertRows( QModelIndex(), crows.first, crows.second );
 
+    int i = 0;
     PlItem* plitem;
     foreach( const query_ptr& query, tracks )
     {
         plentry_ptr entry = plentry_ptr( new PlaylistEntry() );
         entry->setQuery( query );
 
-        plitem = new PlItem( entry, m_rootItem );
-        plitem->index = createIndex( m_rootItem->children.count() - 1, 0, plitem );
+        plitem = new PlItem( entry, m_rootItem, row + i );
+        plitem->index = createIndex( row + i, 0, plitem );
+
+        i++;
 
         connect( plitem, SIGNAL( dataChanged() ), SLOT( onDataChanged() ) );
     }

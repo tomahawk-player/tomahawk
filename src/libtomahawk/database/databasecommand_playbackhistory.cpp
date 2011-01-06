@@ -20,7 +20,8 @@ DatabaseCommand_PlaybackHistory::exec( DatabaseImpl* dbi )
     QString sql = QString(
             "SELECT track, playtime, secs_played "
             "FROM playback_log "
-            "%1" ).arg( whereToken );
+            "%1 "
+            "ORDER BY playtime DESC").arg( whereToken );
 
     query.prepare( sql );
     query.exec();
