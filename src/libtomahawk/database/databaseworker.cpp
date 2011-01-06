@@ -90,15 +90,20 @@ DatabaseWorker::doWork( QSharedPointer<DatabaseCommand> cmd )
                 // Make a note of the last guid we applied for this source
                 // so we can always request just the newer ops in future.
                 //
-                qDebug() << "Setting lastop for source" << cmd->source()->id() << "to" << cmd->guid();
-                TomahawkSqlQuery query = m_dbimpl->newquery();
-                query.prepare( "UPDATE source SET lastop = ? WHERE id = ?" );
-                query.addBindValue( cmd->guid() );
-                query.addBindValue( cmd->source()->id() );
-                if( !query.exec() )
+                if ( !cmd->singletonCmd() )
                 {
-                    qDebug() << "Failed to set lastop";
-                    throw "Failed to set lastop";
+                    qDebug() << "Setting lastop for source" << cmd->source()->id() << "to" << cmd->guid();
+
+                    TomahawkSqlQuery query = m_dbimpl->newquery();
+                    query.prepare( "UPDATE source SET lastop = ? WHERE id = ?" );
+                    query.addBindValue( cmd->guid() );
+                    query.addBindValue( cmd->source()->id() );
+
+                    if( !query.exec() )
+                    {
+                        qDebug() << "Failed to set lastop";
+                        throw "Failed to set lastop";
+                    }
                 }
             }
         }
@@ -156,12 +161,8 @@ void
 DatabaseWorker::logOp( DatabaseCommandLoggable* command )
 {
     TomahawkSqlQuery oplogquery = m_dbimpl->newquery();
-    TomahawkSqlQuery oplogdelquery = m_dbimpl->newquery();
-
     oplogquery.prepare( "INSERT INTO oplog(source, guid, command, singleton, compressed, json) "
                         "VALUES(?, ?, ?, ?, ?, ?)" );
-    oplogdelquery.prepare( QString( "DELETE FROM oplog WHERE source %1 AND singleton = 'true' AND command = ?" )
-                              .arg( command->source()->isLocal() ? "IS NULL" : QString( "= %1" ).arg( command->source()->id() ) ) );
 
     QVariantMap variant = QJson::QObjectHelper::qobject2qvariant( command );
     QByteArray ba = m_serializer.serialize( variant );
@@ -183,6 +184,11 @@ DatabaseWorker::logOp( DatabaseCommandLoggable* command )
     if ( command->singletonCmd() )
     {
         qDebug() << "Singleton command, deleting previous oplog commands";
+
+        TomahawkSqlQuery oplogdelquery = m_dbimpl->newquery();
+        oplogdelquery.prepare( QString( "DELETE FROM oplog WHERE source %1 AND singleton = 'true' AND command = ?" )
+                                  .arg( command->source()->isLocal() ? "IS NULL" : QString( "= %1" ).arg( command->source()->id() ) ) );
+
         oplogdelquery.bindValue( 0, command->commandname() );
         oplogdelquery.exec();
     }
