@@ -36,7 +36,6 @@ DatabaseImpl::DatabaseImpl( const QString& dbname, Database* parent )
     }
 
     QSqlQuery qry = QSqlQuery( db );
-    TomahawkSqlQuery query = newquery();
 
     qry.exec( "SELECT v FROM settings WHERE k='schema_version'" );
     if ( qry.next() )
@@ -53,9 +52,7 @@ DatabaseImpl::DatabaseImpl( const QString& dbname, Database* parent )
             qDebug() << endl << "****************************" << endl;
 
             qry.clear();
-            query.clear();
             qry.finish();
-            query.finish();
             
             db.close();
             db.removeDatabase( "tomahawk" );
@@ -78,6 +75,7 @@ DatabaseImpl::DatabaseImpl( const QString& dbname, Database* parent )
         updateSchema( 0 );
     }
 
+    TomahawkSqlQuery query = newquery();
     query.exec( "SELECT v FROM settings WHERE k='dbid'" );
     if( query.next() )
     {
@@ -141,7 +139,7 @@ DatabaseImpl::updateSchema( int currentver )
             continue;
 
         qDebug() << "Executing:" << s;
-        TomahawkSqlQuery query;
+        TomahawkSqlQuery query = newquery();
         query.exec( s );
     }
 
