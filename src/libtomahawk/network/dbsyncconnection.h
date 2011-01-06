@@ -60,6 +60,8 @@ private:
     QVariantMap m_us, m_uscache, m_themcache;
     State m_state;
 
+    QString m_lastSentOp;
+
     QTimer m_timer;
 
 };

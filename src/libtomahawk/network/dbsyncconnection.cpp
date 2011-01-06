@@ -14,13 +14,12 @@
 
 #include <QDebug>
 
-#include "source.h"
-
 #include "database/database.h"
 #include "database/databasecommand.h"
 #include "database/databasecommand_collectionstats.h"
 #include "database/databasecommand_loadops.h"
 #include "remotecollection.h"
+#include "source.h"
 #include "sourcelist.h"
 
 // close the dbsync connection after this much inactivity.
@@ -60,7 +59,7 @@ void
 DBSyncConnection::idleTimeout()
 {
     qDebug() << Q_FUNC_INFO << "*************";
-    shutdown(true);
+    shutdown( true );
 }
 
 
@@ -155,11 +154,13 @@ void
 DBSyncConnection::gotThemCache( const QVariantMap& m )
 {
     m_themcache = m;
-    qDebug() << "Sending a FETCHOPS cmd since:" << m.value("lastop").toString();
     changeState(FETCHING);
+
+    qDebug() << "Sending a FETCHOPS cmd since:" << m_themcache.value( "lastop" ).toString();
+
     QVariantMap msg;
     msg.insert( "method", "fetchops" );
-    msg.insert( "lastop", m_themcache.value("lastop").toString() );
+    msg.insert( "lastop", m_themcache.value( "lastop" ).toString() );
     sendMsg( msg );
 }
 
@@ -190,9 +191,6 @@ DBSyncConnection::handleMsg( msg_ptr msg )
     Q_ASSERT( msg->is( Msg::JSON ) );
 
     QVariantMap m = msg->json().toMap();
-
-    //qDebug() << ">>>>" << m;
-
     if( m.empty() )
     {
         qDebug() << "Failed to parse msg in dbsync";
@@ -256,13 +254,14 @@ DBSyncConnection::sendOps()
 {
     qDebug() << Q_FUNC_INFO;
 
-    const QString sinceguid = m_uscache.value( "lastop" ).toString();
+    if ( m_lastSentOp.isEmpty() )
+        m_lastSentOp = m_uscache.value( "lastop" ).toString();
 
-    qDebug() << "Will send peer all ops since" << sinceguid;
+    qDebug() << "Will send peer all ops since" << m_lastSentOp;
 
     source_ptr src = SourceList::instance()->getLocal();
 
-    DatabaseCommand_loadOps* cmd = new DatabaseCommand_loadOps( src, sinceguid );
+    DatabaseCommand_loadOps* cmd = new DatabaseCommand_loadOps( src, m_lastSentOp );
     connect( cmd,  SIGNAL( done( QString, QList< dbop_ptr > ) ),
              this,   SLOT( sendOpsData( QString, QList< dbop_ptr > ) ) );
 
