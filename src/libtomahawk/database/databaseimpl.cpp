@@ -36,7 +36,7 @@ DatabaseImpl::DatabaseImpl( const QString& dbname, Database* parent )
     }
 
     QSqlQuery qry = QSqlQuery( db );
-    query = newquery();
+    TomahawkSqlQuery query = newquery();
 
     qry.exec( "SELECT v FROM settings WHERE k='schema_version'" );
     if ( qry.next() )
@@ -141,6 +141,7 @@ DatabaseImpl::updateSchema( int currentver )
             continue;
 
         qDebug() << "Executing:" << s;
+        TomahawkSqlQuery query;
         query.exec( s );
     }
 
@@ -153,6 +154,7 @@ QVariantMap
 DatabaseImpl::file( int fid )
 {
     QVariantMap m;
+    TomahawkSqlQuery query = newquery();
     query.exec( QString( "SELECT url, mtime, size, md5, mimetype, duration, bitrate, "
                          "file_join.artist, file_join.album, file_join.track, "
                          "(select name from artist where id = file_join.artist) as artname, "
@@ -194,6 +196,7 @@ DatabaseImpl::artistId( const QString& name_orig, bool& isnew )
     int id = 0;
     QString sortname = DatabaseImpl::sortname( name_orig );
 
+    TomahawkSqlQuery query = newquery();
     query.prepare( "SELECT id FROM artist WHERE sortname = ?" );
     query.addBindValue( sortname );
     query.exec();
@@ -234,6 +237,7 @@ DatabaseImpl::trackId( int artistid, const QString& name_orig, bool& isnew )
     QString sortname = DatabaseImpl::sortname( name_orig );
     //if( ( id = m_artistcache[sortname] ) ) return id;
 
+    TomahawkSqlQuery query = newquery();
     query.prepare( "SELECT id FROM track WHERE artist = ? AND sortname = ?" );
     query.addBindValue( artistid );
     query.addBindValue( sortname );
@@ -284,6 +288,7 @@ DatabaseImpl::albumId( int artistid, const QString& name_orig, bool& isnew )
     QString sortname = DatabaseImpl::sortname( name_orig );
     //if( ( id = m_albumcache[sortname] ) ) return id;
 
+    TomahawkSqlQuery query = newquery();
     query.prepare( "SELECT id FROM album WHERE artist = ? AND sortname = ?" );
     query.addBindValue( artistid );
     query.addBindValue( sortname );
@@ -329,6 +334,7 @@ DatabaseImpl::searchTable( const QString& table, const QString& name_orig, uint 
     QString name = sortname( name_orig );
 
     // first check for exact matches:
+    TomahawkSqlQuery query = newquery();
     query.prepare( QString( "SELECT id FROM %1 WHERE sortname = ?" ).arg( table ) );
     query.addBindValue( name );
     query.exec();
@@ -364,6 +370,8 @@ QList< int >
 DatabaseImpl::getTrackFids( int tid )
 {
     QList< int > ret;
+
+    TomahawkSqlQuery query = newquery();
     query.exec( QString( "SELECT file.id FROM file, file_join "
                          "WHERE file_join.file=file.id "
                          "AND file_join.track = %1 ").arg( tid ) );
@@ -415,7 +423,9 @@ DatabaseImpl::sortname( const QString& str )
 QVariantMap
 DatabaseImpl::artist( int id )
 {
+    TomahawkSqlQuery query = newquery();
     query.exec( QString( "SELECT id, name, sortname FROM artist WHERE id = %1" ).arg( id ) );
+
     QVariantMap m;
     if( !query.next() )
         return m;
@@ -430,7 +440,9 @@ DatabaseImpl::artist( int id )
 QVariantMap
 DatabaseImpl::track( int id )
 {
+    TomahawkSqlQuery query = newquery();
     query.exec( QString( "SELECT id, artist, name, sortname FROM track WHERE id = %1" ).arg( id ) );
+
     QVariantMap m;
     if( !query.next() )
         return m;
@@ -446,7 +458,9 @@ DatabaseImpl::track( int id )
 QVariantMap
 DatabaseImpl::album( int id )
 {
+    TomahawkSqlQuery query = newquery();
     query.exec( QString( "SELECT id, artist, name, sortname FROM album WHERE id = %1" ).arg( id ) );
+
     QVariantMap m;
     if( !query.next() )
         return m;
