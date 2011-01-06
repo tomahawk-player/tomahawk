@@ -47,7 +47,7 @@ private slots:
     void gotUs( const QVariantMap& m );
     void gotThemCache( const QVariantMap& m );
     void lastOpApplied();
-    void sendOpsData( QString sinceguid, QList< dbop_ptr > ops );
+    void sendOpsData( QString sinceguid, QString lastguid, QList< dbop_ptr > ops );
     void check();
     void idleTimeout();
 

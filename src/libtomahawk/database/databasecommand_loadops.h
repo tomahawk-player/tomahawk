@@ -21,7 +21,7 @@ public:
     virtual QString commandname() const { return "loadops"; }
 
 signals:
-    void done( QString lastguid, QList< dbop_ptr > ops );
+    void done( QString sinceguid, QString lastguid, QList< dbop_ptr > ops );
 
 private:
     QString m_since; // guid to load from

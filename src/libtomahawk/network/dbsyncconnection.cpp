@@ -262,17 +262,18 @@ DBSyncConnection::sendOps()
     source_ptr src = SourceList::instance()->getLocal();
 
     DatabaseCommand_loadOps* cmd = new DatabaseCommand_loadOps( src, m_lastSentOp );
-    connect( cmd,  SIGNAL( done( QString, QList< dbop_ptr > ) ),
-             this,   SLOT( sendOpsData( QString, QList< dbop_ptr > ) ) );
+    connect( cmd,  SIGNAL( done( QString, QString, QList< dbop_ptr > ) ),
+             this,   SLOT( sendOpsData( QString, QString, QList< dbop_ptr > ) ) );
 
     Database::instance()->enqueue( QSharedPointer<DatabaseCommand>( cmd ) );
 }
 
 
 void
-DBSyncConnection::sendOpsData( QString sinceguid, QList< dbop_ptr > ops )
+DBSyncConnection::sendOpsData( QString sinceguid, QString lastguid, QList< dbop_ptr > ops )
 {
-    qDebug() << Q_FUNC_INFO << sinceguid << "Num ops to send: " << ops.length();
+    qDebug() << Q_FUNC_INFO << sinceguid << lastguid << "Num ops to send:" << ops.length();
+    m_lastSentOp = lastguid;
 
     if( ops.length() == 0 )
     {
