@@ -15,7 +15,7 @@
 */
 #include "schema.sql.h"
 
-#define CURRENT_SCHEMA_VERSION 15
+#define CURRENT_SCHEMA_VERSION 16
 
 
 DatabaseImpl::DatabaseImpl( const QString& dbname, Database* parent )

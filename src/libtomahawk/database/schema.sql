@@ -7,6 +7,7 @@ CREATE TABLE IF NOT EXISTS oplog (
     source INTEGER REFERENCES source(id) ON DELETE CASCADE ON UPDATE CASCADE, -- DEFERRABLE INITIALLY DEFERRED,
     guid TEXT NOT NULL,
     command TEXT NOT NULL,
+    singleton BOOLEAN NOT NULL,
     compressed BOOLEAN NOT NULL,
     json TEXT NOT NULL
 );
@@ -228,4 +229,4 @@ CREATE TABLE IF NOT EXISTS settings (
     k TEXT NOT NULL PRIMARY KEY,
     v TEXT NOT NULL DEFAULT ''
 );
-INSERT INTO settings(k,v) VALUES('schema_version', '15');
+INSERT INTO settings(k,v) VALUES('schema_version', '16');

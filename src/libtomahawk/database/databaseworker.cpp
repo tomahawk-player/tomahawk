@@ -156,8 +156,12 @@ void
 DatabaseWorker::logOp( DatabaseCommandLoggable* command )
 {
     TomahawkSqlQuery oplogquery = m_dbimpl->newquery();
-    oplogquery.prepare( "INSERT INTO oplog(source, guid, command, compressed, json) "
-                        "VALUES(?, ?, ?, ?, ?) ");
+    TomahawkSqlQuery oplogdelquery = m_dbimpl->newquery();
+
+    oplogquery.prepare( "INSERT INTO oplog(source, guid, command, singleton, compressed, json) "
+                        "VALUES(?, ?, ?, ?, ?, ?)" );
+    oplogdelquery.prepare( QString( "DELETE FROM oplog WHERE source %1 AND singleton = 'true' AND command = ?" )
+                              .arg( command->source()->isLocal() ? "IS NULL" : QString( "= %1" ).arg( command->source()->id() ) ) );
 
     QVariantMap variant = QJson::QObjectHelper::qobject2qvariant( command );
     QByteArray ba = m_serializer.serialize( variant );
@@ -176,6 +180,13 @@ DatabaseWorker::logOp( DatabaseCommandLoggable* command )
         //qDebug() << "Compressed DB OP JSON size:" << ba.length();
     }
 
+    if ( command->singletonCmd() )
+    {
+        qDebug() << "Singleton command, deleting previous oplog commands";
+        oplogdelquery.bindValue( 0, command->commandname() );
+        oplogdelquery.exec();
+    }
+
     qDebug() << "Saving to oplog:" << command->commandname()
              << "bytes:" << ba.length()
              << "guid:" << command->guid();
@@ -184,8 +195,9 @@ DatabaseWorker::logOp( DatabaseCommandLoggable* command )
                           QVariant(QVariant::Int) : command->source()->id() );
     oplogquery.bindValue( 1, command->guid() );
     oplogquery.bindValue( 2, command->commandname() );
-    oplogquery.bindValue( 3, compressed );
-    oplogquery.bindValue( 4, ba );
+    oplogquery.bindValue( 3, command->singletonCmd() );
+    oplogquery.bindValue( 4, compressed );
+    oplogquery.bindValue( 5, ba );
     if( !oplogquery.exec() )
     {
         qDebug() << "Error saving to oplog";

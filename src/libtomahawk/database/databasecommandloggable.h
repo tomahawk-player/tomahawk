@@ -23,9 +23,6 @@ public:
     {}
 
     virtual bool loggable() const { return true; }
-
-    static DatabaseCommandLoggable* factory( const QVariantMap& c );
-
 };
 
 #endif // DATABASECOMMANDLOGGABLE_H

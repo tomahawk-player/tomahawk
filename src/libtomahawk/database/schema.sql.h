@@ -1,5 +1,5 @@
 /*
-    This file was automatically generated from schema.sql on Tue Jan  4 06:55:23 CET 2011.
+    This file was automatically generated from schema.sql on Thu Jan  6 09:52:57 CET 2011.
 */
 
 static const char * tomahawk_schema_sql = 
@@ -8,6 +8,7 @@ static const char * tomahawk_schema_sql =
 "    source INTEGER REFERENCES source(id) ON DELETE CASCADE ON UPDATE CASCADE, "
 "    guid TEXT NOT NULL,"
 "    command TEXT NOT NULL,"
+"    singleton BOOLEAN NOT NULL,"
 "    compressed BOOLEAN NOT NULL,"
 "    json TEXT NOT NULL"
 ");"
@@ -161,7 +162,7 @@ static const char * tomahawk_schema_sql =
 "    k TEXT NOT NULL PRIMARY KEY,"
 "    v TEXT NOT NULL DEFAULT ''"
 ");"
-"INSERT INTO settings(k,v) VALUES('schema_version', '15');"
+"INSERT INTO settings(k,v) VALUES('schema_version', '16');"
     ;
 
 const char * get_tomahawk_sql()

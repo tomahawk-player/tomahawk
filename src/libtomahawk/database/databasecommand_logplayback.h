@@ -43,8 +43,10 @@ public:
     virtual QString commandname() const { return "logplayback"; }
 
     virtual void exec( DatabaseImpl* );
-    virtual bool doesMutates() const { return true; }
     virtual void postCommitHook();
+
+    virtual bool doesMutates() const { return true; }
+    virtual bool singletonCmd() const { return ( m_action == Started ); }
 
     QString artist() const { return m_artist; }
     void setArtist( const QString& s ) { m_artist = s; }
