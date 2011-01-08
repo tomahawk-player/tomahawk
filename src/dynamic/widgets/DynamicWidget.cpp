@@ -32,7 +32,6 @@ using namespace Tomahawk;
 
 DynamicWidget::DynamicWidget( const Tomahawk::dynplaylist_ptr& playlist, QWidget* parent )
     : QWidget(parent)
-    , m_playlist( playlist )
     , m_layout( new QVBoxLayout )
     , m_headerText( 0 )
     , m_headerLayout( 0 )
@@ -51,7 +50,6 @@ DynamicWidget::DynamicWidget( const Tomahawk::dynplaylist_ptr& playlist, QWidget
     m_modeCombo = new QComboBox( this );
     m_modeCombo->addItem( "On Demand", 0 );
     m_modeCombo->addItem( "Static", 1 );
-    m_modeCombo->setCurrentIndex( static_cast<int>( playlist->mode() ) );
     m_headerLayout->addWidget( m_modeCombo );
     m_generatorCombo = new QComboBox( this );
     foreach( const QString& type, GeneratorFactory::types() )
@@ -62,10 +60,6 @@ DynamicWidget::DynamicWidget( const Tomahawk::dynplaylist_ptr& playlist, QWidget
     
     m_generateButton = new QPushButton( "Generate", this );
     m_generateButton->hide();
-    if( playlist->mode() == Static ) {
-        m_generateButton->show();
-        m_headerLayout->addWidget( m_generateButton );
-    }
     connect( m_generateButton, SIGNAL( clicked( bool ) ), this, SLOT( generate() ) );
     
     m_layout->addLayout( m_headerLayout );
@@ -86,26 +80,42 @@ DynamicWidget::DynamicWidget( const Tomahawk::dynplaylist_ptr& playlist, QWidget
     
     m_splitter->show( 0, false );
     
-    if( !m_playlist.isNull() ) {
-        m_controls->setControls( m_playlist->generator(), m_playlist->generator()->controls() );
+    loadDynamicPlaylist( playlist );
         
-        m_model->loadPlaylist( m_playlist );
-    }
-    
-    connect( m_playlist->generator().data(), SIGNAL( generated( QList<Tomahawk::query_ptr> ) ), this, SLOT( tracksGenerated( QList<Tomahawk::query_ptr> ) ) );
-    
     setLayout( m_layout );
 }
 
 DynamicWidget::~DynamicWidget()
 {
-
 }
 
-void 
-DynamicWidget::setPlaylist(const Tomahawk::dynplaylist_ptr& playlist)
+void DynamicWidget::loadDynamicPlaylist(const Tomahawk::dynplaylist_ptr& playlist)
 {
+    if( !m_playlist.isNull() ) {
+        disconnect( m_playlist->generator().data(), SIGNAL( generated( QList<Tomahawk::query_ptr> ) ), this, SLOT( tracksGenerated( QList<Tomahawk::query_ptr> ) ) );
+    }
     
+    m_playlist = playlist;
+    m_model->loadPlaylist( m_playlist );
+    if( !m_playlist.isNull() )
+        m_controls->setControls( m_playlist->generator(), m_playlist->generator()->controls() );
+    m_modeCombo->setCurrentIndex( static_cast<int>( playlist->mode() ) );
+    
+    if( playlist->mode() == Static ) {
+        m_generateButton->show();
+        m_headerLayout->addWidget( m_generateButton );
+    } else {
+        m_generateButton->hide();
+        m_headerLayout->removeWidget(m_generateButton);
+    }
+    connect( m_playlist->generator().data(), SIGNAL( generated( QList<Tomahawk::query_ptr> ) ), this, SLOT( tracksGenerated( QList<Tomahawk::query_ptr> ) ) );
+}
+
+
+void 
+DynamicWidget::setPlaylist( const Tomahawk::DynamicPlaylistRevision& rev )
+{
+    loadDynamicPlaylist( m_playlist );
 }
 
 PlaylistInterface* 
@@ -125,6 +135,5 @@ void
 DynamicWidget::tracksGenerated( const QList< query_ptr >& queries )
 {
     m_playlist->addEntries( queries, m_playlist->currentrevision() );
-//     connect( m_playlist.data(), SIGNAL( revisionLoaded( Tomahawk::PlaylistRevision) ), m_playlist.data(), SLOT( resolve() ) );
     m_playlist->resolve();
 }

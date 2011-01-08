@@ -121,6 +121,7 @@ PlaylistManager::show(const Tomahawk::dynplaylist_ptr& playlist)
     if( !m_dynamicWidgets.contains( playlist ) ) {
        m_dynamicWidgets[ playlist ] = new Tomahawk::DynamicWidget( playlist, m_stack );
        m_stack->addWidget( m_dynamicWidgets[ playlist ] );
+       playlist->resolve();
     }
     
     m_stack->setCurrentWidget( m_dynamicWidgets.value( playlist ) );

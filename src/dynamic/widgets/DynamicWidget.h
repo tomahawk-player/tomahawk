@@ -19,6 +19,7 @@
 
 #include <QWidget>
 #include <typedefs.h>
+#include <dynamic/DynamicPlaylist.h>
 
 class QVBoxLayout;
 class QHBoxLayout;
@@ -45,9 +46,12 @@ public:
     explicit DynamicWidget( const dynplaylist_ptr& playlist, QWidget* parent = 0);
     virtual ~DynamicWidget();
     
-    void setPlaylist( const dynplaylist_ptr& playlist );
+    void loadDynamicPlaylist( const dynplaylist_ptr& playlist );
     
     PlaylistInterface* playlistInterface() const;
+    
+public slots:
+    void setPlaylist( const DynamicPlaylistRevision& rev );
     
 private slots:
     void generate();

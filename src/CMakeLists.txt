@@ -99,7 +99,6 @@ SET( tomahawkSourcesGui ${tomahawkSourcesGui}
      dynamic/widgets/DynamicWidget.cpp
      dynamic/widgets/DynamicControlWidget.cpp
      dynamic/widgets/DynamicControlList.cpp
-     dynamic/DynamicPlaylistModel.cpp
 
      transferview.cpp
      tomahawkwindow.cpp
@@ -181,7 +180,6 @@ SET( tomahawkHeadersGui ${tomahawkHeadersGui}
      dynamic/widgets/DynamicWidget.h
      dynamic/widgets/DynamicControlWidget.h
      dynamic/widgets/DynamicControlList.h
-     dynamic/DynamicPlaylistModel.h
 
      transferview.h
      tomahawkwindow.h

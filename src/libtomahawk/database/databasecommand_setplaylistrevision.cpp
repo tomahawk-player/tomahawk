@@ -65,8 +65,6 @@ DatabaseCommand_SetPlaylistRevision::exec( DatabaseImpl* lib )
 {
     using namespace Tomahawk;
 
-    QString m_currentRevision;
-
     // get the current revision for this playlist
     // this also serves to check the playlist exists.
     TomahawkSqlQuery chkq = lib->newquery();
@@ -75,7 +73,7 @@ DatabaseCommand_SetPlaylistRevision::exec( DatabaseImpl* lib )
     if( chkq.exec() && chkq.next() )
     {
         m_currentRevision = chkq.value( 0 ).toString();
-        //qDebug() << Q_FUNC_INFO << "pl guid" << m_playlistguid << " curr rev" << currentrevision;
+        qDebug() << Q_FUNC_INFO << "pl guid" << m_playlistguid << " curr rev" << m_currentRevision;
     }
     else
     {

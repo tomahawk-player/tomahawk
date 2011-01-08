@@ -298,16 +298,20 @@ DynamicPlaylist::setRevision( const QString& rev,
     m_generator->setControls( controls );
     m_generator->setMode( Static );
     
-    DynamicPlaylistRevision pr = setNewRevision( rev, neworderedguids, oldorderedguids, is_newest_rev, addedmap );
-    pr.controls = controls;
-    pr.type = type;
-    pr.mode = Static;
+    PlaylistRevision pr = setNewRevision( rev, neworderedguids, oldorderedguids, is_newest_rev, addedmap );
+    pr.applied = applied;
+    
+    DynamicPlaylistRevision dpr = pr;
+    dpr.controls = controls;
+    dpr.type = type;
+    dpr.mode = Static;
     
     if( applied )
         setCurrentrevision( rev );
-    pr.applied = applied;
     
-    emit revisionLoaded( pr );    
+    // meh :-( emit both, one for PlaylistModel, the other for DynamicWidget
+    emit revisionLoaded( pr );
+    emit revisionLoaded( dpr );    
 }
 
 // ondemand version

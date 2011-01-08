@@ -95,7 +95,6 @@ Tomahawk::EchonestControl::updateWidgets()
 void 
 Tomahawk::EchonestControl::updateData()
 {
-    qDebug() << "Sender:" << sender() << qobject_cast<QLineEdit*>(sender()) << m_input << qobject_cast<QLineEdit*>(m_input.data());
     if( selectedType() == "Artist" ) {
         QComboBox* combo = qobject_cast<QComboBox*>( m_match.data() );
         if( combo ) {
