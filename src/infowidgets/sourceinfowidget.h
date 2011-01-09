@@ -9,6 +9,7 @@
 
 class AlbumModel;
 class CollectionFlatModel;
+class PlaylistModel;
 
 namespace Ui
 {
@@ -26,10 +27,14 @@ public:
 protected:
     void changeEvent( QEvent* e );
 
+private slots:
+    void onPlaybackFinished( const Tomahawk::query_ptr& query );
+
 private:
     Ui::SourceInfoWidget *ui;
 
     CollectionFlatModel* m_recentCollectionModel;
+    PlaylistModel* m_historyModel;
     AlbumModel* m_recentAlbumModel;
 };
 

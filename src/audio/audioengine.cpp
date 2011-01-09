@@ -4,6 +4,9 @@
 #include <QMutexLocker>
 
 #include "playlistinterface.h"
+
+#include "database/database.h"
+#include "database/databasecommand_logplayback.h"
 #include "network/servent.h"
 
 #include "madtranscode.h"
@@ -20,6 +23,7 @@ AudioEngine::AudioEngine()
     , m_playlist( 0 )
     , m_currentTrackPlaylist( 0 )
     , m_queue( 0 )
+    , m_timeElapsed( 0 )
     , m_i( 0 )
 {
     qDebug() << "Init AudioEngine";
@@ -93,6 +97,7 @@ AudioEngine::stop()
 
     m_audio->stopPlayback();
 
+    setCurrentTrack( Tomahawk::result_ptr() );
     emit stopped();
 }
 
@@ -153,11 +158,7 @@ AudioEngine::loadTrack( const Tomahawk::result_ptr& result )
             err = true;
         else
         {
-            m_lastTrack = m_currentTrack;
-            if ( !m_lastTrack.isNull() )
-                emit finished( m_lastTrack );
-
-            m_currentTrack = result;
+            setCurrentTrack( result );
             io = Servent::instance()->getIODeviceForUrl( m_currentTrack );
 
             if ( !io || io.isNull() )
@@ -302,10 +303,14 @@ AudioEngine::setStreamData( long sampleRate, int channels )
 
     if ( sampleRate < 44100 )
         sampleRate = 44100;
+
     m_audio->initAudio( sampleRate, channels );
     if ( m_audio->startPlayback() )
     {
         emit started( m_currentTrack );
+
+        DatabaseCommand_LogPlayback* cmd = new DatabaseCommand_LogPlayback( m_currentTrack, DatabaseCommand_LogPlayback::Started );
+        Database::instance()->enqueue( QSharedPointer<DatabaseCommand>(cmd) );
     }
     else
     {
@@ -321,6 +326,7 @@ AudioEngine::setStreamData( long sampleRate, int channels )
 void
 AudioEngine::timerTriggered( unsigned int seconds )
 {
+    m_timeElapsed = seconds;
     emit timerSeconds( seconds );
 
     if ( m_currentTrack->duration() == 0 )
@@ -339,6 +345,22 @@ AudioEngine::clearBuffers()
 {
     QMutexLocker lock( &m_mutex );
     m_audio->clearBuffers();
+}
+
+
+void
+AudioEngine::setCurrentTrack( const Tomahawk::result_ptr& result )
+{
+    m_lastTrack = m_currentTrack;
+    if ( !m_lastTrack.isNull() )
+    {
+        DatabaseCommand_LogPlayback* cmd = new DatabaseCommand_LogPlayback( m_lastTrack, DatabaseCommand_LogPlayback::Finished, m_timeElapsed );
+        Database::instance()->enqueue( QSharedPointer<DatabaseCommand>(cmd) );
+
+        emit finished( m_lastTrack );
+    }
+
+    m_currentTrack = result;
 }
 
 
@@ -407,7 +429,6 @@ AudioEngine::loop()
     // are we cleanly at the end of a track, and ready for the next one?
     if ( !m_input.isNull() &&
           m_input->atEnd() &&
-//          m_input->isOpen() &&
          !m_input->bytesAvailable() &&
          !m_audio->haveData() &&
          !m_audio->isPaused() )

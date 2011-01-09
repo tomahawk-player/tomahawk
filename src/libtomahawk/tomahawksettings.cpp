@@ -198,6 +198,35 @@ TomahawkSettings::setPlaylistColumnSizes( const QList<QVariant>& cols )
 }
 
 
+QList<Tomahawk::playlist_ptr>
+TomahawkSettings::recentlyPlayedPlaylists() const
+{
+    QStringList playlist_guids = value( "playlists/recentlyPlayed" ).toStringList();
+
+    QList<Tomahawk::playlist_ptr> playlists;
+    foreach( const QString& guid, playlist_guids )
+    {
+        Tomahawk::playlist_ptr pl = Tomahawk::Playlist::load( guid );
+        if ( !pl.isNull() )
+            playlists << pl;
+    }
+
+    return playlists;
+}
+
+
+void
+TomahawkSettings::appendRecentlyPlayedPlaylist( const Tomahawk::playlist_ptr& playlist )
+{
+    QStringList playlist_guids = value( "playlists/recentlyPlayed" ).toStringList();
+
+    playlist_guids.removeAll( playlist->guid() );
+    playlist_guids.append( playlist->guid() );
+
+    setValue( "playlists/recentlyPlayed", playlist_guids );
+}
+
+
 bool
 TomahawkSettings::jabberAutoConnect() const
 {

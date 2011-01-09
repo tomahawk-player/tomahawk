@@ -49,7 +49,9 @@
 # include <windows.h>
 #endif
 
-class Jabber_p :
+#include "../sipdllmacro.h"
+
+class SIPDLLEXPORT Jabber_p :
        public QObject,
        public gloox::ConnectionListener,
        public gloox::RosterListener,

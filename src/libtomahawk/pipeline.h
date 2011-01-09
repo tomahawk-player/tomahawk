@@ -49,12 +49,14 @@ public:
     }
 
 public slots:
-    void add( const query_ptr& q );
-    void add( const QList<query_ptr>& qlist );
+    void add( const query_ptr& q, bool prioritized = true );
+    void add( const QList<query_ptr>& qlist, bool prioritized = true );
     void databaseReady();
 
 private slots:
     void shunt( const query_ptr& q );
+    void shuntNext();
+
     void indexReady();
 
 private:

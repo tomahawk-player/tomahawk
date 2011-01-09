@@ -39,7 +39,7 @@ DatabaseCommand_CreateDynamicPlaylist::exec( DatabaseImpl* lib )
     qDebug() << "Created normal playlist, now creating additional dynamic info!";
     
     TomahawkSqlQuery cre = lib->newquery();
-    qDebug() << "open driver?" << cre.driver()->isOpen();
+
     cre.prepare( QString( "INSERT INTO dynamic_playlist( guid, pltype, plmode ) "
                  "VALUES( '%1', '%2', %3 )" ).arg( m_playlist->guid() ).arg( m_playlist->type() ).arg( m_playlist->mode() ) );
         

@@ -32,6 +32,8 @@ private slots:
     void gotStats( const QVariantMap& stats );
     void onLoadingStateChanged( DBSyncConnection::State newstate, DBSyncConnection::State oldstate, const QString& info );
 
+    void onPlaybackStarted( const Tomahawk::query_ptr& query );
+
     void onInfoButtonClicked();
 
 private:

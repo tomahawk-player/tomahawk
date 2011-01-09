@@ -20,14 +20,17 @@ class XSPFLoader : public QObject
 Q_OBJECT
 
 public:
-    explicit XSPFLoader( QObject* parent = 0 )
+    explicit XSPFLoader( bool autoCreate = true, QObject* parent = 0 )
         : QObject( parent )
+        , m_autoCreate( autoCreate )
     {}
 
     virtual ~XSPFLoader()
     {
         qDebug() << Q_FUNC_INFO;
     }
+
+    QList< Tomahawk::plentry_ptr > entries() const { return m_entries; }
 
 signals:
     void failed();
@@ -44,6 +47,10 @@ private slots:
 private:
     void reportError();
     void gotBody();
+
+    bool m_autoCreate;
+    QList< Tomahawk::plentry_ptr > m_entries;
+    QString m_title, m_info, m_creator;
 
     QByteArray m_body;
     Tomahawk::playlist_ptr m_playlist;

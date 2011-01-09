@@ -35,9 +35,9 @@ Tomahawk::GeneratorInterface::~GeneratorInterface()
 QList< Tomahawk::dyncontrol_ptr > 
 Tomahawk::GeneratorInterface::controls()
 {
-    if( m_controls.isEmpty() ) { // return a default control (so the user can add more)
-        return QList< Tomahawk::dyncontrol_ptr >() << createControl();
-    }
+//     if( m_controls.isEmpty() ) { // return a default control (so the user can add more)
+//         return QList< Tomahawk::dyncontrol_ptr >() << createControl();
+//     }
     
     return m_controls;
 }

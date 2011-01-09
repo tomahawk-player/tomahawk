@@ -5,6 +5,8 @@
 
 #include "dllmacro.h"
 
+#include "playlist.h"
+
 /**
  * Convenience wrapper around QSettings for tomahawk-specific config
  */
@@ -29,9 +31,13 @@ public:
     QByteArray mainWindowState() const;
     void setMainWindowState( const QByteArray& state );
 
+    /// Playlist stuff
     QList<QVariant> playlistColumnSizes() const;
     void setPlaylistColumnSizes( const QList<QVariant>& cols );
-    
+
+    QList<Tomahawk::playlist_ptr> recentlyPlayedPlaylists() const;
+    void appendRecentlyPlayedPlaylist( const Tomahawk::playlist_ptr& playlist );
+
     /// Jabber settings
     bool jabberAutoConnect() const; /// true by default
     void setJabberAutoConnect( bool autoconnect = false );

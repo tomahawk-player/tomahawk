@@ -80,6 +80,8 @@ private slots:
     void engineLoop();
     void loop();
 
+    void setCurrentTrack( const Tomahawk::result_ptr& result );
+
 private:
     void run();
     void clearBuffers();
@@ -100,6 +102,7 @@ private:
     PlaylistInterface* m_queue;
     QMutex m_mutex;
 
+    unsigned int m_timeElapsed;
     int m_i;
 };
 

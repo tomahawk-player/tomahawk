@@ -78,7 +78,7 @@ DynamicPlaylist::generator() const
     return m_generator;
 }
 
-GeneratorMode 
+int 
 DynamicPlaylist::mode() const
 {
     return m_generator->mode();
@@ -97,9 +97,9 @@ DynamicPlaylist::type() const
 }
 
 void 
-DynamicPlaylist::setMode(GeneratorMode mode)
+DynamicPlaylist::setMode( int mode )
 {
-    m_generator->setMode( mode );
+    m_generator->setMode( (GeneratorMode)mode );
 }
 
 
@@ -311,7 +311,7 @@ DynamicPlaylist::setRevision( const QString& rev,
     
     qDebug() << "EMITTING REVISION LOADED 1!";
     // meh :-( emit both, one for PlaylistModel, the other for DynamicWidget
-    emit revisionLoaded( pr );
+//     emit revisionLoaded( pr );
     emit dynamicRevisionLoaded( dpr );    
 }
 
@@ -351,7 +351,7 @@ DynamicPlaylist::setRevision( const QString& rev,
     dpr.mode = OnDemand;
     
     qDebug() << "EMITTING REVISION LOADED 2!";
-    emit revisionLoaded( pr );
+//     emit revisionLoaded( pr );
     emit revisionLoaded( dpr );
 }
 

@@ -1,8 +1,7 @@
 #!/bin/bash
 #
-# Usage: dist/build-relese-osx.sh [-j] [--no-clean]
+# Usage: ./admin/mac/build-release-osx.sh [--no-clean]
 #
-# Adding the -j parameter results in building a japanese version.
 ################################################################################
 
 
@@ -21,13 +20,18 @@ function die {
 ROOT=`pwd`
 
 QTDIR=`which qmake`
+LINKDIR=`readlink $QTDIR`
 QTDIR=`dirname $QTDIR`
+QTDIR=$QTDIR/`dirname $LINKDIR`
 QTDIR=`dirname $QTDIR`
 test -L "$QTDIR" && QTDIR=`readlink $QTDIR`
+
+echo "Goes here: $QTDIR"
 
 export QMAKESPEC='macx-g++'
 export QTDIR
 export VERSION
+export QTVERSION='4.7.1'
 ################################################################################
 
 
@@ -38,8 +42,8 @@ CREATEDMG='1'
 
     header addQt
     cd tomahawk.app
-#    $ROOT/admin/mac/add-Qt-to-bundle.sh \
-#                   'QtCore QtGui QtXml QtNetwork QtSql'
+    $ROOT/admin/mac/add-Qt-to-bundle.sh \
+                   'QtCore QtGui QtXml QtNetwork QtSql'
 
     header deposx
     $ROOT/admin/mac/deposx.sh

@@ -17,9 +17,12 @@
 #include "albumproxymodel.h"
 #include "albummodel.h"
 #include "sourcelist.h"
+#include "tomahawksettings.h"
 
 #include "infowidgets/sourceinfowidget.h"
 #include <widgets/DynamicWidget.h>
+
+#include "widgets/welcomewidget.h"
 
 #define FILTER_TIMEOUT 280
 
@@ -64,12 +67,15 @@ PlaylistManager::PlaylistManager( QObject* parent )
 
     m_stack->addWidget( m_superCollectionView );
     m_stack->addWidget( m_superAlbumView );
+
     m_currentInterface = m_superCollectionView->proxyModel();
     
     m_playlistView = new PlaylistView();
     m_stack->addWidget( m_playlistView );
     m_playlistModel = new PlaylistModel();
-    
+
+    show( new WelcomeWidget() );
+
     connect( &m_filterTimer, SIGNAL( timeout() ), SLOT( applyFilter() ) );
 }
 
@@ -108,7 +114,9 @@ PlaylistManager::show( const Tomahawk::playlist_ptr& playlist )
     m_statsAvailable = true;
     m_modesAvailable = false;
     linkPlaylist();
-
+    
+    TomahawkSettings::instance()->appendRecentlyPlayedPlaylist( playlist );
+    
     emit numSourcesChanged( SourceList::instance()->count() );
     return true;
 }
@@ -131,6 +139,9 @@ PlaylistManager::show(const Tomahawk::dynplaylist_ptr& playlist)
     m_statsAvailable = true;
     m_modesAvailable = false;
     linkPlaylist();
+    
+    TomahawkSettings::instance()->appendRecentlyPlayedPlaylist( playlist );
+
     emit numSourcesChanged( SourceList::instance()->count() );
 
     return true;
@@ -247,6 +258,27 @@ PlaylistManager::show( const Tomahawk::source_ptr& source )
     linkPlaylist();
 
     emit numSourcesChanged( 1 );
+    return true;
+}
+
+
+bool
+PlaylistManager::show( QWidget* widget )
+{
+    unlinkPlaylist();
+
+    connect( widget, SIGNAL( destroyed( QWidget* ) ), SLOT( onWidgetDestroyed( QWidget* ) ) );
+
+    m_stack->addWidget( widget );
+    m_stack->setCurrentWidget( widget );
+
+    m_superCollectionVisible = false;
+    m_statsAvailable = false;
+    m_modesAvailable = false;
+    m_currentInterface = 0;
+
+    linkPlaylist();
+
     return true;
 }
 
@@ -417,6 +449,9 @@ PlaylistManager::linkPlaylist()
 
         connect( m_currentInterface->object(), SIGNAL( shuffleModeChanged( bool ) ),
                  this,                         SIGNAL( shuffleModeChanged( bool ) ) );
+
+        m_interfaceHistory.removeAll( m_currentInterface );
+        m_interfaceHistory << m_currentInterface;
     }
 
     applyFilter();
@@ -433,6 +468,29 @@ PlaylistManager::linkPlaylist()
 
     emit statsAvailable( m_statsAvailable );
     emit modesAvailable( m_modesAvailable );
+}
+
+
+void
+PlaylistManager::onWidgetDestroyed( QWidget* widget )
+{
+    qDebug() << "Destroyed child:" << widget;
+
+    bool resetWidget = ( m_stack->currentWidget() == widget );
+    m_stack->removeWidget( widget );
+
+    if ( resetWidget && m_interfaceHistory.count() )
+    {
+        unlinkPlaylist();
+
+        m_currentInterface = m_interfaceHistory.last();
+        qDebug() << "Last interface:" << m_currentInterface << m_currentInterface->widget();
+
+        if ( m_currentInterface->widget() )
+            m_stack->setCurrentWidget( m_currentInterface->widget() );
+
+        linkPlaylist();
+    }
 }
 
 

@@ -59,7 +59,8 @@ class DynamicPlaylist : public Playlist
 {
     Q_OBJECT
     
-    Q_PROPERTY( GeneratorMode mode  WRITE setMode   READ mode )
+    // :-( int becuase qjson chokes on my enums
+    Q_PROPERTY( int     mode                  WRITE setMode   READ mode )
     Q_PROPERTY( QString type                  WRITE setType   READ type )
     
     friend class ::DatabaseCommand_LoadAllDynamicPlaylists;
@@ -81,7 +82,8 @@ public:
     
     virtual void loadRevision( const QString& rev = "" );
     
-    GeneratorMode mode() const;
+    // :-( int becuase qjson chokes on my enums
+    int mode() const;
     QString type() const;
     geninterface_ptr generator() const;
     
@@ -93,7 +95,7 @@ public:
     // you SHOULD NOT call them.  They are used for an alternate CTOR method from json.
     // maybe friend QObjectHelper and make them private?
     explicit DynamicPlaylist( const source_ptr& author );
-    void setMode( GeneratorMode mode );
+    void setMode( int mode );
     void setType( const QString& type )           { /** TODO */; }
     void setGenerator( const geninterface_ptr& gen_ptr );
     // </IGNORE>

@@ -27,7 +27,6 @@ public:
     float score() const;
     RID id() const;
     collection_ptr collection() const;
-
     Tomahawk::artist_ptr artist() const;
     Tomahawk::album_ptr album()   const;
     QString track()     const { return m_track; }

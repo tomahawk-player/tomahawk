@@ -112,7 +112,7 @@ TomahawkApp::TomahawkApp( int& argc, char *argv[] )
 
     new Pipeline( this );
     new SourceList( this );
-    new Servent( this );
+    m_servent = new Servent( this );
 
 #ifdef TOMAHAWK_HEADLESS
     m_headless = true;
@@ -216,6 +216,7 @@ TomahawkApp::~TomahawkApp()
     qDebug() << Q_FUNC_INFO;
 
     delete m_sipHandler;
+    delete m_servent;
 
 #ifndef TOMAHAWK_HEADLESS
     delete m_mainwindow;
@@ -270,6 +271,7 @@ TomahawkApp::registerMetaTypes()
     // Extra definition for namespaced-versions of signals/slots required
     qRegisterMetaType< Tomahawk::collection_ptr >("Tomahawk::collection_ptr");
     qRegisterMetaType< Tomahawk::result_ptr >("Tomahawk::result_ptr");
+    qRegisterMetaType< Tomahawk::query_ptr >("Tomahawk::query_ptr");
     qRegisterMetaType< Tomahawk::source_ptr >("Tomahawk::source_ptr");
     qRegisterMetaType< QList<Tomahawk::playlist_ptr> >("QList<Tomahawk::playlist_ptr>");
     qRegisterMetaType< QList<Tomahawk::dynplaylist_ptr> >("QList<Tomahawk::dynplaylist_ptr>");

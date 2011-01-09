@@ -97,6 +97,8 @@ friend class ::DatabaseCommand_CreatePlaylist;
 public:
     ~Playlist();
     
+    static Tomahawk::playlist_ptr load( const QString& guid );
+
     // one CTOR is private, only called by DatabaseCommand_LoadAllPlaylists
     static Tomahawk::playlist_ptr create( const source_ptr& author,
                                          const QString& guid,

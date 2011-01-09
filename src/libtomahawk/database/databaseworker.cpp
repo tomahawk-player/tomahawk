@@ -90,15 +90,20 @@ DatabaseWorker::doWork( QSharedPointer<DatabaseCommand> cmd )
                 // Make a note of the last guid we applied for this source
                 // so we can always request just the newer ops in future.
                 //
-                qDebug() << "Setting lastop for source" << cmd->source()->id() << "to" << cmd->guid();
-                TomahawkSqlQuery query = m_dbimpl->newquery();
-                query.prepare( "UPDATE source SET lastop = ? WHERE id = ?" );
-                query.addBindValue( cmd->guid() );
-                query.addBindValue( cmd->source()->id() );
-                if( !query.exec() )
+                if ( !cmd->singletonCmd() )
                 {
-                    qDebug() << "Failed to set lastop";
-                    throw "Failed to set lastop";
+                    qDebug() << "Setting lastop for source" << cmd->source()->id() << "to" << cmd->guid();
+
+                    TomahawkSqlQuery query = m_dbimpl->newquery();
+                    query.prepare( "UPDATE source SET lastop = ? WHERE id = ?" );
+                    query.addBindValue( cmd->guid() );
+                    query.addBindValue( cmd->source()->id() );
+
+                    if( !query.exec() )
+                    {
+                        qDebug() << "Failed to set lastop";
+                        throw "Failed to set lastop";
+                    }
                 }
             }
         }
@@ -156,13 +161,13 @@ void
 DatabaseWorker::logOp( DatabaseCommandLoggable* command )
 {
     TomahawkSqlQuery oplogquery = m_dbimpl->newquery();
-    oplogquery.prepare( "INSERT INTO oplog(source, guid, command, compressed, json) "
-                        "VALUES(?, ?, ?, ?, ?) ");
+    oplogquery.prepare( "INSERT INTO oplog(source, guid, command, singleton, compressed, json) "
+                        "VALUES(?, ?, ?, ?, ?, ?)" );
 
     QVariantMap variant = QJson::QObjectHelper::qobject2qvariant( command );
     QByteArray ba = m_serializer.serialize( variant );
 
-//     qDebug() << "OP JSON:" << ba.isNull() << ba << "from:" << variant; // debug
+    qDebug() << "OP JSON:" << ba.isNull() << ba << "from:" << variant; // debug
 
     bool compressed = false;
     if( ba.length() >= 512 )
@@ -176,6 +181,18 @@ DatabaseWorker::logOp( DatabaseCommandLoggable* command )
         //qDebug() << "Compressed DB OP JSON size:" << ba.length();
     }
 
+    if ( command->singletonCmd() )
+    {
+        qDebug() << "Singleton command, deleting previous oplog commands";
+
+        TomahawkSqlQuery oplogdelquery = m_dbimpl->newquery();
+        oplogdelquery.prepare( QString( "DELETE FROM oplog WHERE source %1 AND singleton = 'true' AND command = ?" )
+                                  .arg( command->source()->isLocal() ? "IS NULL" : QString( "= %1" ).arg( command->source()->id() ) ) );
+
+        oplogdelquery.bindValue( 0, command->commandname() );
+        oplogdelquery.exec();
+    }
+
     qDebug() << "Saving to oplog:" << command->commandname()
              << "bytes:" << ba.length()
              << "guid:" << command->guid();
@@ -184,8 +201,9 @@ DatabaseWorker::logOp( DatabaseCommandLoggable* command )
                           QVariant(QVariant::Int) : command->source()->id() );
     oplogquery.bindValue( 1, command->guid() );
     oplogquery.bindValue( 2, command->commandname() );
-    oplogquery.bindValue( 3, compressed );
-    oplogquery.bindValue( 4, ba );
+    oplogquery.bindValue( 3, command->singletonCmd() );
+    oplogquery.bindValue( 4, compressed );
+    oplogquery.bindValue( 5, ba );
     if( !oplogquery.exec() )
     {
         qDebug() << "Error saving to oplog";

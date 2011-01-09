@@ -11,7 +11,7 @@ INCLUDE( ${QT_USE_FILE} )
 
 INCLUDE( ${CMAKE_MODULE_PATH}/AddAppIconMacro.cmake )
 
-#SET( CMAKE_BUILD_TYPE "debugfull" )
+#SET( CMAKE_BUILD_TYPE "Release" )
 SET( CMAKE_VERBOSE_MAKEFILE ON )
 SET( CMAKE_RUNTIME_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}" )
 SET( CMAKE_LIBRARY_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}" )
@@ -100,6 +100,9 @@ SET( tomahawkSourcesGui ${tomahawkSourcesGui}
      dynamic/widgets/DynamicControlWidget.cpp
      dynamic/widgets/DynamicControlList.cpp
 
+     widgets/newplaylistwidget.cpp
+     widgets/welcomewidget.cpp
+
      transferview.cpp
      tomahawkwindow.cpp
      tomahawktrayicon.cpp
@@ -181,6 +184,9 @@ SET( tomahawkHeadersGui ${tomahawkHeadersGui}
      dynamic/widgets/DynamicControlWidget.h
      dynamic/widgets/DynamicControlList.h
 
+     widgets/newplaylistwidget.h
+     widgets/welcomewidget.h
+
      transferview.h
      tomahawkwindow.h
      tomahawktrayicon.h
@@ -197,6 +203,8 @@ SET( tomahawkUI ${tomahawkUI}
      sourcetree/sourcetreeitemwidget.ui
      topbar/topbar.ui
      infowidgets/sourceinfowidget.ui
+     widgets/newplaylistwidget.ui
+     widgets/welcomewidget.ui
 )
 
 INCLUDE_DIRECTORIES(

@@ -50,7 +50,7 @@ MusicScanner::startScan()
     // trigger the scan once we've loaded old mtimes for dirs below our path
     DatabaseCommand_DirMtimes* cmd = new DatabaseCommand_DirMtimes( m_dir );
     connect( cmd, SIGNAL( done( const QMap<QString, unsigned int>& ) ),
-                SLOT( setMtimes( const QMap<QString, unsigned int>& ) ), Qt::DirectConnection );
+                    SLOT( setMtimes( const QMap<QString, unsigned int>& ) ), Qt::DirectConnection );
     connect( cmd, SIGNAL( done( const QMap<QString,unsigned int>& ) ),
                     SLOT( scan() ), Qt::DirectConnection );
 
@@ -81,7 +81,7 @@ MusicScanner::scan()
 
     // queued, so will only fire after all dirs have been scanned:
     connect( lister, SIGNAL( finished( const QMap<QString, unsigned int>& ) ),
-                SLOT( listerFinished( const QMap<QString, unsigned int>& ) ), Qt::QueuedConnection );
+                       SLOT( listerFinished( const QMap<QString, unsigned int>& ) ), Qt::QueuedConnection );
 
     connect( lister, SIGNAL( finished() ), lister, SLOT( deleteLater() ) );
 

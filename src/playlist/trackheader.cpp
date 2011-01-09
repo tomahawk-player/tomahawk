@@ -24,7 +24,7 @@ TrackHeader::TrackHeader( TrackView* parent )
     setMinimumSectionSize( 60 );
     setDefaultAlignment( Qt::AlignLeft );
     setMovable( true );
-    setCascadingSectionResizes( true );
+//    setCascadingSectionResizes( true );
 
     m_menu->addAction( tr( "Resize columns to fit window" ), this, SLOT( onToggleResizeColumns() ) );
     m_menu->addSeparator();
@@ -72,7 +72,8 @@ TrackHeader::onResized()
         if ( sectionSize( x ) )
         {
             // not hidden
-            resizeSection( x, int( (double)width * m_columnWeights[x] ) );
+            double nw = (double)width * m_columnWeights[x];
+            resizeSection( x, qMax( minimumSectionSize(), int( nw ) ) );
         }
     }
 

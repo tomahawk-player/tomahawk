@@ -42,11 +42,13 @@ set( libSources
      database/databasecommand_addfiles.cpp
      database/databasecommand_dirmtimes.cpp
      database/databasecommand_loadfile.cpp
+     database/databasecommand_logplayback.cpp
      database/databasecommand_addsource.cpp
      database/databasecommand_sourceoffline.cpp
      database/databasecommand_collectionstats.cpp
      database/databasecommand_loadplaylistentries.cpp
      database/databasecommand_modifyplaylist.cpp
+     database/databasecommand_playbackhistory.cpp
      database/databasecommand_setplaylistrevision.cpp
      database/databasecommand_loadallplaylists.cpp
      database/databasecommand_createplaylist.cpp
@@ -108,11 +110,13 @@ set( libHeaders
      database/databasecommand_addfiles.h
      database/databasecommand_dirmtimes.h
      database/databasecommand_loadfile.h
+     database/databasecommand_logplayback.h
      database/databasecommand_addsource.h
      database/databasecommand_sourceoffline.h
      database/databasecommand_collectionstats.h
      database/databasecommand_loadplaylistentries.h
      database/databasecommand_modifyplaylist.h
+     database/databasecommand_playbackhistory.h
      database/databasecommand_setplaylistrevision.h
      database/databasecommand_loadallplaylists.h
      database/databasecommand_createplaylist.h

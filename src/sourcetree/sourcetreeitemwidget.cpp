@@ -39,6 +39,8 @@ SourceTreeItemWidget::SourceTreeItemWidget( const source_ptr& source, QWidget* p
 
         connect( source.data(), SIGNAL( stats( QVariantMap ) ), SLOT( gotStats( QVariantMap ) ) );
 
+        connect( source.data(), SIGNAL( playbackStarted( Tomahawk::query_ptr ) ), SLOT( onPlaybackStarted( Tomahawk::query_ptr ) ) );
+
         ui->avatarImage->setPixmap( QPixmap( RESPATH "images/user-avatar.png" ) );
 
         displayname = source->friendlyName();
@@ -52,7 +54,9 @@ SourceTreeItemWidget::SourceTreeItemWidget( const source_ptr& source, QWidget* p
     }
 
     ui->nameLabel->setText( displayname );
+    ui->activityLabel->setText( tr( "Idle" ) );
     ui->infoLabel->setForegroundRole( QPalette::Dark );
+    ui->activityLabel->setForegroundRole( QPalette::Dark );
 
     connect( ui->onOffButton, SIGNAL( clicked() ), SIGNAL( clicked() ) );
     connect( ui->infoButton, SIGNAL( clicked() ), SLOT( onInfoButtonClicked() ) );
@@ -121,6 +125,13 @@ SourceTreeItemWidget::onLoadingStateChanged( DBSyncConnection::State newstate, D
     }
 
     ui->infoLabel->setText( msg );
+}
+
+
+void
+SourceTreeItemWidget::onPlaybackStarted( const Tomahawk::query_ptr& query )
+{
+    ui->activityLabel->setText( tr( "Playing: %1 by %2" ).arg( query->track() ).arg( query->artist() ) );
 }
 
 

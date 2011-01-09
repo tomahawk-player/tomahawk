@@ -7,6 +7,7 @@ CREATE TABLE IF NOT EXISTS oplog (
     source INTEGER REFERENCES source(id) ON DELETE CASCADE ON UPDATE CASCADE, -- DEFERRABLE INITIALLY DEFERRED,
     guid TEXT NOT NULL,
     command TEXT NOT NULL,
+    singleton BOOLEAN NOT NULL,
     compressed BOOLEAN NOT NULL,
     json TEXT NOT NULL
 );
@@ -64,11 +65,11 @@ CREATE TABLE IF NOT EXISTS playlist (
     dynplaylist BOOLEAN DEFAULT false
 );
 
-INSERT INTO playlist(guid, title, info, currentrevision, dynplaylist) 
-VALUES('dynamic_playlist-guid-1','Test Dynamic Playlist Dynamic','this playlist automatically created and used for testing','revisionguid-1', 1);
+--INSERT INTO playlist(guid, title, info, currentrevision, dynplaylist) 
+--VALUES('dynamic_playlist-guid-1','Test Dynamic Playlist Dynamic','this playlist automatically created and used for testing','revisionguid-1', 1);
 
-INSERT INTO playlist(guid, title, info, currentrevision, dynplaylist) 
-VALUES('dynamic_playlist-guid-2','Test Dynamic Playlist Static','this playlist automatically created and used for testing','revisionguid-11', 1);
+--INSERT INTO playlist(guid, title, info, currentrevision, dynplaylist) 
+--VALUES('dynamic_playlist-guid-2','Test Dynamic Playlist Static','this playlist automatically created and used for testing','revisionguid-11', 1);
 
 CREATE TABLE IF NOT EXISTS playlist_item (
     guid TEXT PRIMARY KEY,
@@ -101,10 +102,10 @@ CREATE TABLE IF NOT EXISTS playlist_revision (
     previous_revision TEXT REFERENCES playlist_revision(guid) DEFERRABLE INITIALLY DEFERRED
 );
 
-INSERT INTO playlist_revision(guid, playlist, entries)
-      VALUES('revisionguid-1', 'dynamic_playlist-guid-1', '[]');
-INSERT INTO playlist_revision(guid, playlist, entries)
-      VALUES('revisionguid-11', 'dynamic_playlist-guid-2', '[]');
+--INSERT INTO playlist_revision(guid, playlist, entries)
+--      VALUES('revisionguid-1', 'dynamic_playlist-guid-1', '[]');
+--INSERT INTO playlist_revision(guid, playlist, entries)
+--      VALUES('revisionguid-11', 'dynamic_playlist-guid-2', '[]');
 
 CREATE TABLE IF NOT EXISTS dynamic_playlist (
     guid TEXT PRIMARY KEY,
@@ -112,10 +113,10 @@ CREATE TABLE IF NOT EXISTS dynamic_playlist (
     plmode INTEGER -- the mode of this playlist
 );
 
-INSERT INTO dynamic_playlist(guid, pltype, plmode)
-      VALUES('dynamic_playlist-guid-1', 'echonest', 0);
-INSERT INTO dynamic_playlist(guid, pltype, plmode)
-      VALUES('dynamic_playlist-guid-2', 'echonest', 1);
+--INSERT INTO dynamic_playlist(guid, pltype, plmode)
+--      VALUES('dynamic_playlist-guid-1', 'echonest', 0);
+--INSERT INTO dynamic_playlist(guid, pltype, plmode)
+--      VALUES('dynamic_playlist-guid-2', 'echonest', 1);
 
 -- list of controls in each playlist. each control saves a selectedType, a match, and an input
 CREATE TABLE IF NOT EXISTS dynamic_playlist_controls (
@@ -126,9 +127,12 @@ CREATE TABLE IF NOT EXISTS dynamic_playlist_controls (
     input TEXT
 );
 
-INSERT INTO dynamic_playlist_controls(id, playlist, selectedType, match, input)
-      VALUES('controlid-1', 'dynamic_playlist-guid-1', "artist", 0, "FooArtist" );
+--INSERT INTO dynamic_playlist_controls(id, playlist, selectedType, match, input)
+--      VALUES('controlid-1', 'dynamic_playlist-guid-1', "artist", 0, "FooArtist" );
+--INSERT INTO dynamic_playlist_controls(id, playlist, selectedType, match, input)
+--      VALUES('controlid-2', 'dynamic_playlist-guid-11', "artist", 0, "FooArtist" );
 
+    
     
 CREATE TABLE IF NOT EXISTS dynamic_playlist_revision (
     guid TEXT PRIMARY KEY,
@@ -137,10 +141,10 @@ CREATE TABLE IF NOT EXISTS dynamic_playlist_revision (
     pltype TEXT
 );
 
-INSERT INTO dynamic_playlist_revision(guid, controls, plmode, pltype)
-      VALUES('revisionguid-1', '["controlid-1"]', 0, "echonest");
-INSERT INTO dynamic_playlist_revision(guid, controls, plmode, pltype)
-      VALUES('revisionguid-11', '["controlid-1"]', 1, "echonest");
+--INSERT INTO dynamic_playlist_revision(guid, controls, plmode, pltype)
+--      VALUES('revisionguid-1', '["controlid-1"]', 0, "echonest");
+--INSERT INTO dynamic_playlist_revision(guid, controls, plmode, pltype)
+--      VALUES('revisionguid-11', '["controlid-2"]', 1, "echonest");
 
 -- the trigram search indexes
 
@@ -251,10 +255,26 @@ CREATE TABLE IF NOT EXISTS track_attributes (
 CREATE INDEX track_attrib_id ON track_attributes(id);
 CREATE INDEX track_attrib_k  ON track_attributes(k);
 
+
+-- playback history
+
+-- if source=null, file is local to this machine
+CREATE TABLE IF NOT EXISTS playback_log (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    source INTEGER REFERENCES source(id) ON DELETE CASCADE ON UPDATE CASCADE DEFERRABLE INITIALLY DEFERRED,
+    track INTEGER REFERENCES track(id) ON DELETE CASCADE ON UPDATE CASCADE DEFERRABLE INITIALLY DEFERRED,
+    playtime INTEGER NOT NULL,              -- when playback finished (timestamp)
+    secs_played INTEGER NOT NULL
+);
+CREATE INDEX playback_log_source ON playback_log(source);
+CREATE INDEX playback_log_track ON playback_log(track);
+
+
 -- Schema version, and misc tomahawk settings relating to the collection db
 
 CREATE TABLE IF NOT EXISTS settings (
     k TEXT NOT NULL PRIMARY KEY,
     v TEXT NOT NULL DEFAULT ''
 );
-INSERT INTO settings(k,v) VALUES('schema_version', '15');
+
+INSERT INTO settings(k,v) VALUES('schema_version', '17');

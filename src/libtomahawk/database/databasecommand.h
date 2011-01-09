@@ -54,6 +54,7 @@ public:
     const Tomahawk::source_ptr& source() const { return m_source; }
 
     virtual bool loggable() const { return false; }
+    virtual bool singletonCmd() const { return false; }
 
     QString guid() const
     {

@@ -32,8 +32,10 @@ public:
 
     void loadPlaylist( const Tomahawk::playlist_ptr& playlist );
     void loadAlbum( const Tomahawk::album_ptr& album );
+    void loadHistory( const Tomahawk::source_ptr& source, unsigned int amount = 100 );
 
     void appendTrack( const Tomahawk::query_ptr& query );
+    void insertTrack( unsigned int row, const Tomahawk::query_ptr& query );
 
     virtual void removeIndex( const QModelIndex& index, bool moreToCome = false );
 
@@ -53,6 +55,7 @@ private slots:
     void onPlaylistChanged( bool waitForUpdate = true );
 
     void onTracksAdded( const QList<Tomahawk::query_ptr>& tracks, const Tomahawk::collection_ptr& collection = Tomahawk::collection_ptr() );
+    void onTracksInserted( unsigned int row, const QList<Tomahawk::query_ptr>& tracks, const Tomahawk::collection_ptr& collection = Tomahawk::collection_ptr() );
 
 private:
     QList<Tomahawk::plentry_ptr> playlistEntries() const;

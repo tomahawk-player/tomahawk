@@ -51,7 +51,7 @@ public:
     PlaylistInterface* playlistInterface() const;
     
 public slots:
-    void onRevisionLoaded( const DynamicPlaylistRevision& rev );
+    void onRevisionLoaded( const Tomahawk::DynamicPlaylistRevision& rev );
     
 private slots:
     void generate();

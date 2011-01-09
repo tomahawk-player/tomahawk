@@ -11,6 +11,7 @@
 #include "database/databasecommand_renameplaylist.h"
 
 #include "pipeline.h"
+#include "source.h"
 #include "sourcelist.h"
 
 using namespace Tomahawk;
@@ -132,6 +133,22 @@ Playlist::create( const source_ptr& author,
     Database::instance()->enqueue( QSharedPointer<DatabaseCommand>(cmd) );
     playlist->reportCreated( playlist );
     return playlist;
+}
+
+
+playlist_ptr
+Playlist::load( const QString& guid )
+{
+    playlist_ptr p;
+
+    foreach( const Tomahawk::source_ptr& source, SourceList::instance()->sources() )
+    {
+        p = source->collection()->playlist( guid );
+        if ( !p.isNull() )
+            return p;
+    }
+
+    return p;
 }
 
 

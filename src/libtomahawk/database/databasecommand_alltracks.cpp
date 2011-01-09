@@ -74,10 +74,10 @@ DatabaseCommand_AllTracks::exec( DatabaseImpl* dbi )
         t["mtime"] = query.value( 9 ).toInt();
         t["mimetype"] = query.value( 10 ).toString();
         t["albumpos"] = query.value( 11 ).toUInt();
-        unsigned int trkid = query.value( 14 ).toInt();
+        t["trackid"] = query.value( 14 ).toUInt();
 
         attrQuery.prepare( "SELECT k, v FROM track_attributes WHERE id = ?" );
-        attrQuery.bindValue( 0, trkid );
+        attrQuery.bindValue( 0, t["trackid"] );
         attrQuery.exec();
         while ( attrQuery.next() )
         {

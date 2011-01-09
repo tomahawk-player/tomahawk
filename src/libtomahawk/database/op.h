@@ -10,6 +10,7 @@ struct DBOp
     QString command;
     QByteArray payload;
     bool compressed;
+    bool singleton;
 };
 
 typedef QSharedPointer<DBOp> dbop_ptr;

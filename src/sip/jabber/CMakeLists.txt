@@ -4,7 +4,7 @@ include( ${QT_USE_FILE} )
 add_definitions( ${QT_DEFINITIONS} )
 add_definitions( -DQT_PLUGIN )
 add_definitions( -DQT_SHARED )
-add_definitions( -DDLLEXPORT_PRO )
+add_definitions( -DSIPDLLEXPORT_PRO )
 
 set( jabberSources
         jabber.cpp
@@ -24,8 +24,15 @@ qt4_wrap_cpp( jabberMoc ${jabberHeaders} )
 add_library( sip_jabber SHARED ${jabberSources} ${jabberMoc} )
 
 IF( WIN32 )
+SET( GLOOX_LIBS
+	${GLOOX_LIBS}
+	gloox
+)
+
 SET( OS_SPECIFIC_LINK_LIBRARIES
 	${OS_SPECIFIC_LINK_LIBRARIES}
+	"secur32.dll"
+	"crypt32.dll"
         "${CMAKE_CURRENT_SOURCE_DIR}/../../../build/src/libtomahawk/libtomahawklib.dll"
 )
 ENDIF( WIN32 )

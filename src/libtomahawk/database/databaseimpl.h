@@ -65,10 +65,9 @@ signals:
 public slots:    
 
 private:
-
     bool updateSchema( int currentver );
+
     QSqlDatabase db;
-    TomahawkSqlQuery query;
 
     QString m_lastart, m_lastalb, m_lasttrk;
     int m_lastartid, m_lastalbid, m_lasttrkid;

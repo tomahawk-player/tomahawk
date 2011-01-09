@@ -151,11 +151,7 @@ DatabaseCommand_Resolve::exec( DatabaseImpl* lib )
         res << Tomahawk::result_ptr( new Tomahawk::Result( m, coll ) );
     }
 
-    // return results, if any found
-    if( res.length() > 0 )
-    {
-        emit results( qid, res );
-    }
+    emit results( qid, res );
 }
 
 

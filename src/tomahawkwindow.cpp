@@ -22,6 +22,8 @@
 
 #include "sip/SipHandler.h"
 
+#include "widgets/newplaylistwidget.h"
+
 #include "audiocontrols.h"
 #include "network/controlconnection.h"
 #include "database/database.h"
@@ -332,7 +334,23 @@ TomahawkWindow::createPlaylist( bool dynamic )
 {
     qDebug() << Q_FUNC_INFO;
 
-    bool ok;
+    if( dynamic ) 
+    {
+        bool ok;
+        QString name = QInputDialog::getText( this, "Create New Playlist", "Name:", QLineEdit::Normal, "New Playlist", &ok );
+        if ( !ok || name.isEmpty() )
+            return;
+        
+        source_ptr author = SourceList::instance()->getLocal();
+        QString id = uuid();
+        QString info  = ""; // FIXME
+        QString creator = "someone"; // FIXME
+        DynamicPlaylist::create( author, id, name, info, creator, false );
+    } else 
+    {
+        playlistManager()->show( new NewPlaylistWidget() );
+    }
+/*    bool ok;
     QString name = QInputDialog::getText( this, "Create New Playlist", "Name:", QLineEdit::Normal, "New Playlist", &ok );
     if ( !ok || name.isEmpty() )
         return;
@@ -344,7 +362,8 @@ TomahawkWindow::createPlaylist( bool dynamic )
     if( dynamic )
         DynamicPlaylist::create( author, id, name, info, creator, false );
     else
-        Playlist::create( author, id, name, info, creator, false /* shared */ );
+        Playlist::create( author, id, name, info, creator, false ); */
+
 }
 
 
