@@ -298,10 +298,8 @@ DynamicPlaylist::setRevision( const QString& rev,
     m_generator->setControls( controls );
     m_generator->setMode( Static );
     
-    PlaylistRevision pr = setNewRevision( rev, neworderedguids, oldorderedguids, is_newest_rev, addedmap );
-    pr.applied = applied;
-    
-    DynamicPlaylistRevision dpr = pr;
+    DynamicPlaylistRevision dpr = setNewRevision( rev, neworderedguids, oldorderedguids, is_newest_rev, addedmap );
+    dpr.applied = applied;
     dpr.controls = controls;
     dpr.type = type;
     dpr.mode = Static;
@@ -309,9 +307,7 @@ DynamicPlaylist::setRevision( const QString& rev,
     if( applied )
         setCurrentrevision( rev );
     
-    qDebug() << "EMITTING REVISION LOADED 1!";
-    // meh :-( emit both, one for PlaylistModel, the other for DynamicWidget
-//     emit revisionLoaded( pr );
+//     qDebug() << "EMITTING REVISION LOADED 1!";
     emit dynamicRevisionLoaded( dpr );    
 }
 
@@ -342,16 +338,14 @@ DynamicPlaylist::setRevision( const QString& rev,
     m_generator->setControls( controls );
     m_generator->setMode( OnDemand );
     
-    PlaylistRevision pr;
-    pr.oldrevisionguid = currentrevision();
-    pr.revisionguid = rev;
-    DynamicPlaylistRevision dpr = pr;
+    DynamicPlaylistRevision dpr;
+    dpr.oldrevisionguid = currentrevision();
+    dpr.revisionguid = rev;
     dpr.controls = controls;
     dpr.type = type;
     dpr.mode = OnDemand;
     
-    qDebug() << "EMITTING REVISION LOADED 2!";
-//     emit revisionLoaded( pr );
-    emit revisionLoaded( dpr );
+//     qDebug() << "EMITTING REVISION LOADED 2!";
+    emit dynamicRevisionLoaded( dpr );
 }
 

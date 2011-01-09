@@ -36,6 +36,7 @@
 #include "tomahawksettings.h"
 #include "tomahawktrayicon.h"
 #include "widgetdragfilter.h"
+#include "dynamic/GeneratorInterface.h"
 
 using namespace Tomahawk;
 
@@ -345,7 +346,11 @@ TomahawkWindow::createPlaylist( bool dynamic )
         QString id = uuid();
         QString info  = ""; // FIXME
         QString creator = "someone"; // FIXME
-        DynamicPlaylist::create( author, id, name, info, creator, false );
+        dynplaylist_ptr playlist = DynamicPlaylist::create( author, id, name, info, creator, false );
+        if( playlist->mode() == OnDemand )
+            playlist->createNewRevision( uuid(), playlist->currentrevision(), playlist->type(), playlist->generator()->controls() );
+        else
+            playlist->createNewRevision( uuid(), playlist->currentrevision(), playlist->type(), playlist->generator()->controls(), playlist->entries() );
     } else 
     {
         playlistManager()->show( new NewPlaylistWidget() );

@@ -83,10 +83,17 @@ void
 DynamicControlList::setControls( const geninterface_ptr& generator, const QList< dyncontrol_ptr >& controls)
 {
     m_generator = generator;
-    foreach( const dyncontrol_ptr& control, controls ) {
-        m_controls << new DynamicControlWidget( control, false, false, false, this );
+    if( controls.isEmpty() ) {
+        m_controls <<  new DynamicControlWidget( generator->createControl(), false, false, false, this );
         connect( m_controls.last(), SIGNAL( addNewControl() ), this, SLOT( addNewControl() ) );
         connect( m_controls.last(), SIGNAL( removeControl() ), this, SLOT( removeControl() ) );
+    } else 
+    {
+        foreach( const dyncontrol_ptr& control, controls ) {
+            m_controls << new DynamicControlWidget( control, false, false, false, this );
+            connect( m_controls.last(), SIGNAL( addNewControl() ), this, SLOT( addNewControl() ) );
+            connect( m_controls.last(), SIGNAL( removeControl() ), this, SLOT( removeControl() ) );
+        }
     }
     onShown( this );
 }

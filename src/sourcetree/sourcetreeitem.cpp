@@ -140,9 +140,9 @@ SourceTreeItem::onPlaylistLoaded( Tomahawk::PlaylistRevision revision )
         playlist_ptr* pl = reinterpret_cast<playlist_ptr*>(piptr);
         SourcesModel::SourceType type = static_cast<SourcesModel::SourceType>( pi->data( Type ).toInt() );
         
-        if ( type == SourcesModel::PlaylistSource&& ptr == qlonglong( pl->data() ) )
+        if ( type == SourcesModel::PlaylistSource && ptr == qlonglong( pl->data() ) )
         {
-            //qDebug() << "Found playlist!";
+            qDebug() << "Found normal playlist!";
             pi->setEnabled( true );
             m_current_revisions.insert( pl->data()->guid(), revision.revisionguid );
         }
@@ -161,7 +161,7 @@ void SourceTreeItem::onDynamicPlaylistsAdded( const QList< dynplaylist_ptr >& pl
                     SLOT( onDynamicPlaylistLoaded( Tomahawk::DynamicPlaylistRevision ) ),
                     Qt::QueuedConnection);
     
-        qDebug() << "Dynamic Playlist added:" << p->title() << p->creator() << p->info() << ptr;
+//         qDebug() << "Dynamic Playlist added:" << p->title() << p->creator() << p->info() << p->currentrevision() << ptr;
         
         playlistAddedInternal( ptr, p, true );
     }
@@ -196,7 +196,6 @@ void SourceTreeItem::onDynamicPlaylistsDeleted( const QList< dynplaylist_ptr >& 
 void SourceTreeItem::onDynamicPlaylistLoaded( DynamicPlaylistRevision revision )
 {
     qlonglong ptr = reinterpret_cast<qlonglong>( sender() );
-    qDebug() << "sender ptr:" << ptr;
     
     QStandardItem* item = m_columns.at( 0 );
     int rows = item->rowCount();
@@ -206,7 +205,7 @@ void SourceTreeItem::onDynamicPlaylistLoaded( DynamicPlaylistRevision revision )
         qlonglong piptr = pi->data( DynamicPlaylistPointer ).toLongLong();
         playlist_ptr* pl = reinterpret_cast<playlist_ptr*>(piptr);
         SourcesModel::SourceType type = static_cast<SourcesModel::SourceType>( pi->data( Type ).toInt() );
-        
+//         qDebug() << "found dynamic playlist:" << (*pl)->title() << type;
         if ( type == SourcesModel::DynamicPlaylistSource && ptr == qlonglong( pl->data() ) )
         {
             //qDebug() << "Found playlist!";

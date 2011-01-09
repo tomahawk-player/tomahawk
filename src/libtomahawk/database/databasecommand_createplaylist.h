@@ -39,6 +39,8 @@ public:
     }
     
 protected:
+    void createPlaylist( DatabaseImpl* lib, bool dynamic = false );
+    
     bool report() { return m_report; }
 
 private:

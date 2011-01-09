@@ -28,7 +28,7 @@ void DatabaseCommand_LoadAllDynamicPlaylists::exec( DatabaseImpl* dbi )
     TomahawkSqlQuery query = dbi->newquery();
     
     query.exec( QString( "SELECT playlist.guid as guid, title, info, creator, lastmodified, shared, currentrevision, dynamic_playlist.pltype, dynamic_playlist.plmode "
-                         "FROM playlist, dynamic_playlist WHERE source %1 AND dynplaylist AND playlist.guid = dynamic_playlist.guid" )
+                         "FROM playlist, dynamic_playlist WHERE source %1 AND dynplaylist = 'true' AND playlist.guid = dynamic_playlist.guid" )
     .arg( source()->isLocal() ? "IS NULL" :
     QString( "=%1" ).arg( source()->id() )
     ) );

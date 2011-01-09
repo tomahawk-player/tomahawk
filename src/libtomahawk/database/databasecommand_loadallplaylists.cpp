@@ -13,7 +13,7 @@ void DatabaseCommand_LoadAllPlaylists::exec( DatabaseImpl* dbi )
     TomahawkSqlQuery query = dbi->newquery();
 
     query.exec( QString( "SELECT guid, title, info, creator, lastmodified, shared, currentrevision "
-                         "FROM playlist WHERE source %1 AND NOT dynplaylist" )
+                         "FROM playlist WHERE source %1 AND dynplaylist = 'false'" )
                    .arg( source()->isLocal() ? "IS NULL" :
                          QString( "=%1" ).arg( source()->id() )
                        ) );

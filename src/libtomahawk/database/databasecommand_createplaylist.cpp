@@ -28,24 +28,7 @@ DatabaseCommand_CreatePlaylist::DatabaseCommand_CreatePlaylist( const source_ptr
 void
 DatabaseCommand_CreatePlaylist::exec( DatabaseImpl* lib )
 {
-    qDebug() << Q_FUNC_INFO;
-    Q_ASSERT( !m_playlist.isNull() );
-    Q_ASSERT( !source().isNull() );
-
-    TomahawkSqlQuery cre = lib->newquery();
-    cre.prepare( "INSERT INTO playlist( guid, source, shared, title, info, creator, lastmodified) "
-                 "VALUES( :guid, :source, :shared, :title, :info, :creator, :lastmodified )" );
-    cre.bindValue( ":guid", m_playlist->guid() );
-    cre.bindValue( ":source", source()->isLocal() ? QVariant(QVariant::Int) : source()->id() );
-    cre.bindValue( ":shared", m_playlist->shared() );
-    cre.bindValue( ":title", m_playlist->title() );
-    cre.bindValue( ":info", m_playlist->info() );
-    cre.bindValue( ":creator", m_playlist->creator() );
-    cre.bindValue( ":lastmodified", m_playlist->lastmodified() );
-
-    qDebug() << "CREATE PLAYLIST:" << cre.boundValues();
-
-    cre.exec();
+    createPlaylist(lib, false);
 }
 
 
@@ -61,4 +44,28 @@ DatabaseCommand_CreatePlaylist::postCommitHook()
 
     if( source()->isLocal() )
         Servent::instance()->triggerDBSync();
+}
+
+void 
+DatabaseCommand_CreatePlaylist::createPlaylist( DatabaseImpl* lib, bool dynamic)
+{
+    qDebug() << Q_FUNC_INFO;
+    Q_ASSERT( !m_playlist.isNull() );
+    Q_ASSERT( !source().isNull() );
+    
+    TomahawkSqlQuery cre = lib->newquery();
+    cre.prepare( "INSERT INTO playlist( guid, source, shared, title, info, creator, lastmodified, dynplaylist) "
+    "VALUES( :guid, :source, :shared, :title, :info, :creator, :lastmodified, :dynplaylist )" );
+    cre.bindValue( ":guid", m_playlist->guid() );
+    cre.bindValue( ":source", source()->isLocal() ? QVariant(QVariant::Int) : source()->id() );
+    cre.bindValue( ":shared", m_playlist->shared() );
+    cre.bindValue( ":title", m_playlist->title() );
+    cre.bindValue( ":info", m_playlist->info() );
+    cre.bindValue( ":creator", m_playlist->creator() );
+    cre.bindValue( ":lastmodified", m_playlist->lastmodified() );
+    cre.bindValue( ":dynplaylist", dynamic );
+    
+    qDebug() << "CREATE PLAYLIST:" << cre.boundValues();
+    
+    cre.exec();
 }
