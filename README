@@ -95,7 +95,7 @@ To build the app:
 -----------------
     $ mkdir build && cd build
 
- Pick one of the following two choices. If unsure pick the second one, you probably want a GUI.
+ Pick one of the following two choices. If uncertain pick the second one, you probably want a GUI.
     $ cmake -Dgui=no ..     # enables headless mode, build without GUI
     $ cmake ..              # normal build including GUI
 

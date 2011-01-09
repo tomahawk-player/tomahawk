@@ -100,7 +100,7 @@ Servent::startListening( QHostAddress ha, bool upnp, int port )
             // last.fm office firewall policy hack
             // (corp. firewall allows outgoing connections to this port,
             //  so listen on this if you want lastfmers to connect to you)
-            if( qApp->arguments().contains("--porthack") )
+            if( qApp->arguments().contains( "--porthack" ) )
             {
                 tryport = 3389;
                 pf->remove( tryport );

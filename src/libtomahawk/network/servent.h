@@ -91,7 +91,7 @@ public:
     void reverseOfferRequest( ControlConnection* orig_conn, const QString& key, const QString& theirkey );
 
     void setExternalAddress( QHostAddress ha, int port );
-    bool visibleExternally() const { return m_externalPort > 0; }
+    bool visibleExternally() const { return m_externalPort > 0 && !m_externalAddress.isNull(); }
     QHostAddress externalAddress() const { return m_externalAddress; }
     int externalPort() const { return m_externalPort; }
 

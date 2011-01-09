@@ -204,7 +204,7 @@ DBSyncConnection::handleMsg( msg_ptr msg )
         DatabaseCommand *cmd = DatabaseCommand::factory( m, m_source );
         if ( !cmd )
         {
-            qDebug() << "UNKNOWN DBOP CMD" << cmd->commandname() << cmd->guid();
+            qDebug() << "UNKNOWN DBOP CMD";
 
             if( !msg->is( Msg::FRAGMENT ) ) // last msg in this batch
                 lastOpApplied();
