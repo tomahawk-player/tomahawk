@@ -29,7 +29,7 @@ public:
     QString playlistguid() const { return m_playlistguid; }
     void setPlaylistguid( const QString& s ) { m_playlistguid = s; }
 
-private:
+protected:
     QString m_playlistguid;
 };
 

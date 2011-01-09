@@ -37,9 +37,7 @@ public:
     virtual void exec( DatabaseImpl* lib );
     virtual void postCommitHook();
     virtual bool doesMutates() const { return true; }
-    
-private:
-    QString m_playlistguid;
+   
 };
 
 #endif // DATABASECOMMAND_DELETEDYNAMICPLAYLIST_H

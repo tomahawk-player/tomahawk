@@ -89,9 +89,13 @@ SourceTreeView::setupMenus()
 
     bool readonly = true;
     SourcesModel::SourceType type = SourcesModel::indexType( m_contextMenuIndex );
-    if ( type == SourcesModel::PlaylistSource )
+    if ( type == SourcesModel::PlaylistSource || type == SourcesModel::DynamicPlaylistSource )
     {
-        playlist_ptr playlist = SourcesModel::indexToPlaylist( m_contextMenuIndex );
+        playlist_ptr playlist = SourcesModel::indexToDynamicPlaylist( m_contextMenuIndex );
+        if( playlist.isNull() ) 
+        {
+            playlist_ptr playlist = SourcesModel::indexToPlaylist( m_contextMenuIndex );
+        } 
         if ( !playlist.isNull() )
         {
             readonly = !playlist->author()->isLocal();
@@ -186,16 +190,18 @@ SourceTreeView::deletePlaylist()
         return;
 
     SourcesModel::SourceType type = SourcesModel::indexType( idx );
-    if ( type == SourcesModel::PlaylistSource || type == SourcesModel::DynamicPlaylistSource )
+    if ( type == SourcesModel::PlaylistSource )
     {
-        playlist_ptr playlist = ( type == SourcesModel::DynamicPlaylistSource )
-                                                        ? SourcesModel::indexToDynamicPlaylist( idx ).staticCast< Playlist >()
-                                                        : SourcesModel::indexToPlaylist( idx );
+        playlist_ptr playlist = SourcesModel::indexToPlaylist( idx );
         if ( !playlist.isNull() )
         {
             qDebug() << "Playlist about to be deleted:" << playlist->title();
             Playlist::remove( playlist );
         }
+    } else if( type == SourcesModel::DynamicPlaylistSource ) {
+        dynplaylist_ptr playlist = SourcesModel::indexToDynamicPlaylist( idx );       
+        if( !playlist.isNull() )
+            DynamicPlaylist::remove( playlist );
     }
 }
 

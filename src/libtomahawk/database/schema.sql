@@ -135,7 +135,7 @@ CREATE TABLE IF NOT EXISTS dynamic_playlist_controls (
     
     
 CREATE TABLE IF NOT EXISTS dynamic_playlist_revision (
-    guid TEXT PRIMARY KEY,
+    guid TEXT PRIMARY KEY NOT NULL REFERENCES playlist_revision(guid) ON DELETE CASCADE ON UPDATE CASCADE DEFERRABLE INITIALLY DEFERRED,
     controls TEXT, -- qlist( id, id, id )
     plmode INTEGER,
     pltype TEXT

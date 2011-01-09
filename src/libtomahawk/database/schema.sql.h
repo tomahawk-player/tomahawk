@@ -1,5 +1,5 @@
 /*
-    This file was automatically generated from schema.sql on Sun Jan  9 10:33:49 EST 2011.
+    This file was automatically generated from schema.sql on Sun Jan  9 13:09:56 EST 2011.
 */
 
 static const char * tomahawk_schema_sql = 
@@ -89,7 +89,7 @@ static const char * tomahawk_schema_sql =
 ""
 ""
 "CREATE TABLE IF NOT EXISTS dynamic_playlist_revision ("
-"    guid TEXT PRIMARY KEY,"
+"    guid TEXT PRIMARY KEY NOT NULL REFERENCES playlist_revision(guid) ON DELETE CASCADE ON UPDATE CASCADE DEFERRABLE INITIALLY DEFERRED,"
 "    controls TEXT, "
 "    plmode INTEGER,"
 "    pltype TEXT"

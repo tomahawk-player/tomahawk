@@ -31,6 +31,7 @@ void
 DatabaseCommand_DeleteDynamicPlaylist::exec( DatabaseImpl* lib )
 {
     qDebug() << Q_FUNC_INFO;
+    qDebug() << "deleting dynamic playlist:" << m_playlistguid;
     DatabaseCommand_DeletePlaylist::exec( lib );
     TomahawkSqlQuery cre = lib->newquery();
     
@@ -44,7 +45,7 @@ DatabaseCommand_DeleteDynamicPlaylist::exec( DatabaseImpl* lib )
 void
 DatabaseCommand_DeleteDynamicPlaylist::postCommitHook()
 {
-    qDebug() << Q_FUNC_INFO << "..reporting..";
+    qDebug() << Q_FUNC_INFO << "..reporting..:" << m_playlistguid;
     
     dynplaylist_ptr playlist = source()->collection()->dynamicPlaylist( m_playlistguid );
     Q_ASSERT( !playlist.isNull() );

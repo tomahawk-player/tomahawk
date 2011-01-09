@@ -23,6 +23,7 @@
 #include "database/databasecommand_createdynamicplaylist.h"
 #include "database/databasecommand_setdynamicplaylistrevision.h"
 #include "database/databasecommand_loaddynamicplaylist.h"
+#include "database/databasecommand_deletedynamicplaylist.h"
 
 using namespace Tomahawk;
 
@@ -221,9 +222,8 @@ DynamicPlaylist::loadRevision( const QString& rev )
 bool 
 DynamicPlaylist::remove( const Tomahawk::dynplaylist_ptr& playlist )
 {
-    // TODO
-//     DatabaseCommand_DeletePlaylist* cmd = new DatabaseCommand_DeletePlaylist( playlist->author(), playlist->guid() );
-//     APP->database()->enqueue( QSharedPointer<DatabaseCommand>(cmd) );
+    DatabaseCommand_DeletePlaylist* cmd = new DatabaseCommand_DeleteDynamicPlaylist( playlist->author(), playlist->guid() );
+    Database::instance()->enqueue( QSharedPointer<DatabaseCommand>(cmd) );
         
     return false;
 }

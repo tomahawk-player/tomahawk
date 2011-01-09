@@ -180,10 +180,10 @@ void SourceTreeItem::onDynamicPlaylistsDeleted( const QList< dynplaylist_ptr >& 
         for ( int i = rows - 1; i >= 0; i-- )
         {
             QStandardItem* pi = item->child( i );
-            qlonglong piptr = pi->data( PlaylistPointer ).toLongLong();
+            qlonglong piptr = pi->data( DynamicPlaylistPointer ).toLongLong();
             playlist_ptr* pl = reinterpret_cast<playlist_ptr*>(piptr);
             SourcesModel::SourceType type = static_cast<SourcesModel::SourceType>( pi->data( Type ).toInt() );
-            
+            qDebug() << "Deleting dynamic playlsit:" << pl->isNull();
             if ( type == SourcesModel::DynamicPlaylistSource && ptr == qlonglong( pl->data() ) )
             {
                 m_dynplaylists.removeAll( p );
