@@ -2,13 +2,13 @@
 
 
 FLACTranscode::FLACTranscode()
-    : m_FLACInit( false )
-    , m_FLACRunning( false )
+    : m_FLACRunning( false )
     , m_finished( false )
 {
     qDebug() << Q_FUNC_INFO;
 
     init();
+    set_metadata_respond_all();
 }
 
 
@@ -33,7 +33,6 @@ FLACTranscode::clearBuffers()
 {
     QMutexLocker locker( &m_mutex );
 
-    m_FLACInit = false;
     m_FLACRunning = false;
     m_finished = false;
 
@@ -52,14 +51,7 @@ FLACTranscode::processData( const QByteArray& data, bool finish )
     m_buffer.append( data );
     m_mutex.unlock();
 
-    if ( !m_FLACInit && m_buffer.size() > FLAC_BUFFER )
-    {
-        m_FLACInit = true;
-        set_metadata_respond_all();
-        process_single();
-    }
-
-    while ( m_buffer.size() > FLAC_BUFFER / 2 )
+    while ( m_buffer.size() >= FLAC_BUFFER )
     {
         process_single();
     }
@@ -79,10 +71,7 @@ FLACTranscode::read_callback( FLAC__byte buffer[], size_t *bytes )
     memcpy( buffer, (char*)m_buffer.data(), *bytes );
     m_buffer.remove( 0, *bytes );
 
-//    if ( !*bytes )
-//        return FLAC__STREAM_DECODER_READ_STATUS_ABORT;
-//    else
-        return FLAC__STREAM_DECODER_READ_STATUS_CONTINUE;
+    return FLAC__STREAM_DECODER_READ_STATUS_CONTINUE;
 }
 
 
@@ -110,10 +99,17 @@ FLACTranscode::write_callback( const ::FLAC__Frame *frame, const FLAC__int32 *co
 }
 
 
+::FLAC__StreamDecoderSeekStatus
+FLACTranscode::seek_callback(FLAC__uint64 absolute_byte_offset)
+{
+    return FLAC__STREAM_DECODER_SEEK_STATUS_UNSUPPORTED;
+}
+
+
 void
 FLACTranscode::metadata_callback( const ::FLAC__StreamMetadata *metadata )
 {
-    qDebug() << Q_FUNC_INFO;
+    qDebug() << Q_FUNC_INFO << metadata->is_last;
 
     switch ( metadata->type )
     {
