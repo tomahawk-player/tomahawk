@@ -22,18 +22,17 @@ class DLLEXPORT PlaylistEntry : public QObject
 Q_OBJECT
 Q_PROPERTY( QString guid              READ guid         WRITE setGuid )
 Q_PROPERTY( QString annotation        READ annotation   WRITE setAnnotation )
-Q_PROPERTY( QString resulthint        READ resulthint   WRITE setResulthint )
 Q_PROPERTY( unsigned int duration     READ duration     WRITE setDuration )
 Q_PROPERTY( unsigned int lastmodified READ lastmodified WRITE setLastmodified )
-Q_PROPERTY( QVariant query            READ queryvariant WRITE setQueryvariant )
+Q_PROPERTY( QVariant query            READ queryVariant WRITE setQueryVariant )
 
 public:
     void setQuery( const Tomahawk::query_ptr& q ) { m_query = q; }
     const Tomahawk::query_ptr& query() const { return m_query; }
 
     // I wish Qt did this for me once i specified the Q_PROPERTIES:
-    void setQueryvariant( const QVariant& v );
-    QVariant queryvariant() const;
+    void setQueryVariant( const QVariant& v );
+    QVariant queryVariant() const;
 
     QString guid() const { return m_guid; }
     void setGuid( const QString& s ) { m_guid = s; }
@@ -41,8 +40,8 @@ public:
     QString annotation() const { return m_annotation; }
     void setAnnotation( const QString& s ) { m_annotation = s; }
 
-    QString resulthint() const { return m_resulthint; }
-    void setResulthint( const QString& s ) { m_resulthint= s; }
+    QString resultHint() const { return m_resulthint; }
+    void setResultHint( const QString& s ) { m_resulthint= s; }
 
     unsigned int duration() const { return m_duration; }
     void setDuration( unsigned int i ) { m_duration = i; }
@@ -50,8 +49,8 @@ public:
     unsigned int lastmodified() const { return m_lastmodified; }
     void setLastmodified( unsigned int i ) { m_lastmodified = i; }
 
-    source_ptr lastsource() const { return m_lastsource; }
-    void setLastsource( source_ptr s ) { m_lastsource = s; }
+    source_ptr lastSource() const { return m_lastsource; }
+    void setLastSource( source_ptr s ) { m_lastsource = s; }
 
 private:
     QString m_guid;
@@ -159,6 +158,10 @@ public slots:
 
     void resolve();
 
+private slots:
+    void onResultsFound( const QList<Tomahawk::result_ptr>& results );
+    void onResolvingFinished();
+
 private:
     // called from loadAllPlaylists DB cmd:
     explicit Playlist( const source_ptr& src,
@@ -178,6 +181,7 @@ private:
                        const QString& creator,
                        bool shared );
 
+    void init();
     void rundb();
 
     source_ptr m_source;
@@ -187,7 +191,7 @@ private:
     bool m_shared;
 
     QList< plentry_ptr > m_entries;
-
+    bool m_locallyChanged;
 };
 
 };

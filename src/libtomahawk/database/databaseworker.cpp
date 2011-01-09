@@ -71,7 +71,7 @@ DatabaseWorker::doWork( QSharedPointer<DatabaseCommand> cmd )
     {
         cmd->_exec( m_dbimpl ); // runs actual SQL stuff
 
-        if( cmd->loggable() )
+        if( cmd->loggable() && !cmd->localOnly() )
         {
             // We only save our own ops to the oplog, since incoming ops from peers
             // are applied immediately.
@@ -110,7 +110,7 @@ DatabaseWorker::doWork( QSharedPointer<DatabaseCommand> cmd )
 
         if( cmd->doesMutates() )
         {
-            qDebug() << "Comitting" << cmd->commandname();;
+            qDebug() << "Committing" << cmd->commandname();;
             if( !m_dbimpl->database().commit() )
             {
 
@@ -152,6 +152,7 @@ DatabaseWorker::doWork( QSharedPointer<DatabaseCommand> cmd )
         Q_ASSERT( false );
         throw;
     }
+
     cmd->emitFinished();
 }
 

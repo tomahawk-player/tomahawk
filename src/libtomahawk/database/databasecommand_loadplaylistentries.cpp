@@ -51,12 +51,13 @@ DatabaseCommand_LoadPlaylistEntries::exec( DatabaseImpl* dbi )
             e->setAnnotation( query.value( 4 ).toString() );
             e->setDuration( query.value( 5 ).toUInt() );
             e->setLastmodified( 0 ); // TODO e->lastmodified = query.value(6).toInt();
-            e->setResulthint( query.value( 8 ).toString() );
+            e->setResultHint( query.value( 8 ).toString() );
 
             QVariantMap m;
             m.insert( "artist", query.value( 2 ).toString() );
             m.insert( "album", query.value( 3 ).toString() );
             m.insert( "track", query.value( 1 ).toString() );
+            m.insert( "resulthint", query.value( 8 ).toString() );
             m.insert( "qid", uuid() );
 
             Tomahawk::query_ptr q( new Tomahawk::Query( m ) );

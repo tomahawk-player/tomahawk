@@ -45,12 +45,13 @@ SourceList::add( const Tomahawk::source_ptr& s )
             Q_ASSERT( s->id() );
             m_sources_id2name.insert( s->id(), s->userName() );
         }
-        qDebug() << "SourceList::add(" << s->userName() << "), total sources now:" << m_sources.size();
         if( s->isLocal() )
         {
             Q_ASSERT( m_local.isNull() );
             m_local = s;
         }
+
+        qDebug() << "SourceList::add(" << s->userName() << "), total sources now:" << m_sources.size();
     }
 
     emit sourceAdded( s );
@@ -86,7 +87,7 @@ SourceList::remove( Tomahawk::Source* s )
 void
 SourceList::removeAllRemote()
 {
-    foreach( source_ptr s, m_sources )
+    foreach( const source_ptr& s, m_sources )
     {
         if( s != m_local )
             remove( s );

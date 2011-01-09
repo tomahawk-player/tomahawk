@@ -23,6 +23,7 @@ public:
     explicit DatabaseCommand_SetPlaylistRevision( QObject* parent = 0 )
         : DatabaseCommandLoggable( parent )
         , m_applied( false )
+        , m_localOnly( false )
     {}
 
     explicit DatabaseCommand_SetPlaylistRevision( const source_ptr& s,
@@ -30,13 +31,16 @@ public:
                                                   const QString& newrev,
                                                   const QString& oldrev,
                                                   const QStringList& orderedguids,
-                                                  const QList<Tomahawk::plentry_ptr>& addedentries );
+                                                  const QList<Tomahawk::plentry_ptr>& addedentries,
+                                                  const QList<Tomahawk::plentry_ptr>& entries );
 
     QString commandname() const { return "setplaylistrevision"; }
 
     virtual void exec( DatabaseImpl* lib );
     virtual void postCommitHook();
+
     virtual bool doesMutates() const { return true; }
+    virtual bool localOnly() const { return m_localOnly; }
 
     void setAddedentriesV( const QVariantList& vlist )
     {
@@ -76,9 +80,11 @@ private:
     QString m_newrev, m_oldrev;
     QVariantList m_orderedguids;
     QStringList m_previous_rev_orderedguids;
-    QList<Tomahawk::plentry_ptr> m_addedentries;
+    QList<Tomahawk::plentry_ptr> m_addedentries, m_entries;
     bool m_applied;
     QMap<QString, Tomahawk::plentry_ptr> m_addedmap;
+
+    bool m_localOnly;
 };
 
 #endif // DATABASECOMMAND_SETPLAYLISTREVISION_H

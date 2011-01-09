@@ -43,7 +43,7 @@ public:
     virtual QList< Tomahawk::playlist_ptr > playlists() { return m_playlists; }
     virtual QList< Tomahawk::query_ptr > tracks() { return m_tracks; }
 
-    const source_ptr& source() const { return m_source; }
+    source_ptr source() const { return m_source; }
     unsigned int lastmodified() const { return m_lastmodified; }
 
 signals:

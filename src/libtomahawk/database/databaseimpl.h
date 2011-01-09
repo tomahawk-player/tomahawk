@@ -46,6 +46,7 @@ public:
     QVariantMap album( int id );
     QVariantMap track( int id );
     QVariantMap file( int fid );
+    QVariantMap result( const QString& url );
 
     static bool scorepairSorter( const QPair<int,float>& left, const QPair<int,float>& right )
     {

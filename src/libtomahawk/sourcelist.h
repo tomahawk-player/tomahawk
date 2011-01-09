@@ -26,9 +26,10 @@ public:
     void removeAllRemote();
 
     QList<Tomahawk::source_ptr> sources() const;
+    unsigned int count() const;
+
     Tomahawk::source_ptr get( const QString& username ) const;
     Tomahawk::source_ptr get( unsigned int id ) const;
-    unsigned int count() const;
 
 signals:
     void sourceAdded( const Tomahawk::source_ptr& );

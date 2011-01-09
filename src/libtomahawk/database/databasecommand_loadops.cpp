@@ -35,6 +35,6 @@ DatabaseCommand_loadOps::exec( DatabaseImpl* dbi )
         ops << op;
     }
 
-    qDebug() << "Loaded" << ops.length() << "ops from db";
+//    qDebug() << "Loaded" << ops.length() << "ops from db";
     emit done( m_since, lastguid, ops );
 }

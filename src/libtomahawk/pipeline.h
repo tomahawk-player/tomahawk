@@ -53,6 +53,9 @@ public slots:
     void add( const QList<query_ptr>& qlist, bool prioritized = true );
     void databaseReady();
 
+signals:
+    void idle();
+
 private slots:
     void shunt( const query_ptr& q );
     void shuntNext();

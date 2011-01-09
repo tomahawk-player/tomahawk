@@ -8,25 +8,25 @@ Quickstart on Ubuntu
 
 Gloox 1.0 (XMPP library)
 ------------------------
- On Ubuntu 10.10:
+ On Ubuntu 10.10 (and higher):
     $ sudo apt-get install libgloox-dev
 
  Otherwise see: http://camaya.net/glooxdownload
- You need to build gloox 1.0 from source, Ubuntu 10.04 only packages v0.9.
+ You need to build gloox 1.0 from source, Ubuntu 10.04 only packages version 0.9.
 
-    $ # Download and unpack tarball
+ Download and unpack tarball:
     $ ./configure --without-openssl --with-gnutls --without-libidn --with-zlib --without-examples --without-tests
     $ CXXFLAGS=-fPIC make
     $ sudo make install
 
 QJson (Qt JSON library)
 -----------------------
- On Ubuntu 10.04:
+ On Ubuntu 10.04 (and higher):
     $ sudo apt-get install libqjson-dev
 
- Otherwise see: http://sourceforge.net/projects/qjson/files/ (developed using 0.7.1)
+ Otherwise see: http://sourceforge.net/projects/qjson/files/ (developed using version 0.7.1)
 
-    $ # Download and unpack tarball
+ Download and unpack tarball:
     $ ./configure && make
     $ sudo make install
 
@@ -34,47 +34,38 @@ libEchonest 0.1
 ---------------
  See: http://projects.kde.org/projects/playground/libs/libechonest/
 
-    $ git clone git://git.kde.org/libechonest.git
-    $ cd libechonest
+ Download and unpack tarball:
     $ mkdir build && cd build
     $ cmake ..
     $ make
     $ sudo make install
 
-Now compile Tomahawk
---------------------
-    $ sudo ldconfig -v | grep -Ei 'qjson|gloox|echonest'
-    $ mkdir build && cd build
-    $ cmake ..
-    $ make
-    $ ./tomahawk
-
 
 Quickstart on OS X
 ------------------
 
-# Install homebrew
+ Install homebrew
     $ ruby -e "$(curl -fsSL https://gist.github.com/raw/323731/install_homebrew.rb)"
     $ brew install qt qjson gloox libmad libvorbis flac taglib boost liblastfm
 
-# Install libEchnoest as per the above instructions
+ Install libEchnoest as per the above instructions.
 
-# If liblastfm gives problems, do the below:
+ If liblastfm gives problems, do the below:
     $ brew edit liblastfm
-# change url to https://github.com/davidsansome/liblastfm/tarball/0.3.1
+ Change the url to https://github.com/davidsansome/liblastfm/tarball/0.3.1
     $ brew install liblastfm
-# copy the md5 hash it gives
+ Copy the md5 hash it returns.
     $ brew edit liblastfm
-# replace the md5 hash with the new one you copied
+ Replace the md5 hash with the new one you copied.
     $ brew install liblastfm
 
-# Build Tomahawk
-    $ git clone git://github.com/tomahawk-player/tomahawk.git
-    $ cd tomahawk
+
+Now compile Tomahawk
+--------------------
     $ mkdir build && cd build
     $ cmake ..
     $ make
-    $ open tomahawk.app
+    $ ./tomahawk
 
 
 Dependencies
@@ -102,10 +93,9 @@ Dependencies
 
 To build the app:
 -----------------
-    $ mkdir build
-    $ cd build
+    $ mkdir build && cd build
 
- (Pick one of the following two choices. If unsure pick the second one, you probably want a GUI)
+ Pick one of the following two choices. If unsure pick the second one, you probably want a GUI.
     $ cmake -Dgui=no ..     # enables headless mode, build without GUI
     $ cmake ..              # normal build including GUI
 
@@ -113,10 +103,14 @@ To build the app:
 
 To run the app:
 ---------------
- (Only run the next two commands if you installed any of the dependencies from source on Linux)
+ Only run the next two commands if you installed any of the dependencies from source on Linux.
     $ export LD_LIBRARY_PATH=/usr/local/lib:$LD_LIBRARY_PATH
     $ sudo ldconfig -v
 
+ Start the application on Linux:
     $ ./tomahawk
+
+ Start the application on OS X:
+    $ open tomahawk.app
 
 Enjoy!

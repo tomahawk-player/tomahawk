@@ -204,7 +204,10 @@ DBSyncConnection::handleMsg( msg_ptr msg )
         DatabaseCommand *cmd = DatabaseCommand::factory( m, m_source );
         if ( !cmd )
         {
-            qDebug() << "UNKNOWN DBOP CMD!";
+            qDebug() << "UNKNOWN DBOP CMD" << cmd->commandname() << cmd->guid();
+
+            if( !msg->is( Msg::FRAGMENT ) ) // last msg in this batch
+                lastOpApplied();
             return;
         }
 
@@ -215,6 +218,7 @@ DBSyncConnection::handleMsg( msg_ptr msg )
             changeState( SAVING ); // just DB work left to complete
             connect( cmd, SIGNAL( finished() ), this, SLOT( lastOpApplied() ) );
         }
+
         Database::instance()->enqueue( QSharedPointer<DatabaseCommand>( cmd ) );
         return;
     }

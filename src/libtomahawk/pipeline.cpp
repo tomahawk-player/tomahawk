@@ -97,7 +97,7 @@ Pipeline::add( const QList<query_ptr>& qlist, bool prioritized )
         m_queries_pending.append( qlist );
     }
 
-    if ( m_index_ready )
+    if ( m_index_ready && m_queries_pending.count() )
         shuntNext();
 }
 
@@ -143,7 +143,10 @@ void
 Pipeline::shuntNext()
 {
     if ( m_queries_pending.isEmpty() )
+    {
+        emit idle();
         return;
+    }
 
     /*
         Since resolvers are async, we now dispatch to the highest weighted ones

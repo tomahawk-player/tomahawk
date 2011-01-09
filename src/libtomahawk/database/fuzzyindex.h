@@ -12,6 +12,7 @@ class DatabaseImpl;
 class FuzzyIndex : public QObject
 {
 Q_OBJECT
+
 public:
     explicit FuzzyIndex( DatabaseImpl &db );
 
@@ -21,7 +22,7 @@ signals:
 public slots:
     void loadNgramIndex();
     QMap< int, float > search( const QString& table, const QString& name );
-    void mergeIndex( const QString& table, QHash< QString, QMap<quint32, quint16> > tomerge );
+    void mergeIndex( const QString& table, const QHash< QString, QMap<quint32, quint16> >& tomerge );
 
 private:
     void loadNgramIndex_helper( QHash< QString, QMap<quint32, quint16> >& idx, const QString& table, unsigned int fromkey = 0 );

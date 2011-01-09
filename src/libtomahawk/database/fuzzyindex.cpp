@@ -4,6 +4,7 @@
 
 #include <QTime>
 
+
 FuzzyIndex::FuzzyIndex( DatabaseImpl &db )
     : QObject()
     , m_db( db )
@@ -16,10 +17,10 @@ void
 FuzzyIndex::loadNgramIndex()
 {
     // this updates the index in the DB, if needed:
-    qDebug() << "Checking catalogue is fully indexed..";
-    m_db.updateSearchIndex("artist",0);
-    m_db.updateSearchIndex("album",0);
-    m_db.updateSearchIndex("track",0);
+    qDebug() << "Checking catalogue is fully indexed...";
+    m_db.updateSearchIndex( "artist", 0 );
+    m_db.updateSearchIndex( "album", 0 );
+    m_db.updateSearchIndex( "track", 0 );
 
     // loads index from DB into memory:
     qDebug() << "Loading search index for catalogue metadata..." << thread();
@@ -36,6 +37,7 @@ FuzzyIndex::loadNgramIndex_helper( QHash< QString, QMap<quint32, quint16> >& idx
 {
     QTime t;
     t.start();
+
     TomahawkSqlQuery query = m_db.newquery();
     query.exec( QString( "SELECT ngram, id, num "
                          "FROM %1_search_index "
@@ -46,13 +48,14 @@ FuzzyIndex::loadNgramIndex_helper( QHash< QString, QMap<quint32, quint16> >& idx
     QString lastngram;
     while( query.next() )
     {
+        const QString ng = query.value( 0 ).toString();
         if( lastngram.isEmpty() )
-            lastngram = query.value(0).toString();
+            lastngram = ng;
 
-        if( query.value( 0 ).toString() != lastngram )
+        if( ng != lastngram )
         {
             idx.insert( lastngram, ngram_idx );
-            lastngram = query.value( 0 ).toString();
+            lastngram = ng;
             ngram_idx.clear();
         }
 
@@ -63,11 +66,11 @@ FuzzyIndex::loadNgramIndex_helper( QHash< QString, QMap<quint32, quint16> >& idx
     idx.insert( lastngram, ngram_idx );
     qDebug() << "Loaded" << idx.size()
              << "ngram entries for" << table
-             << "in" << t.elapsed();
+             << "in" << t.elapsed() << "ms";
 }
 
 
-void FuzzyIndex::mergeIndex( const QString& table, QHash< QString, QMap<quint32, quint16> > tomerge )
+void FuzzyIndex::mergeIndex( const QString& table, const QHash< QString, QMap<quint32, quint16> >& tomerge )
 {
     qDebug() << Q_FUNC_INFO << table << tomerge.keys().size();
 
@@ -75,9 +78,10 @@ void FuzzyIndex::mergeIndex( const QString& table, QHash< QString, QMap<quint32,
     if     ( table == "artist" ) idx = &m_artist_ngrams;
     else if( table == "album"  ) idx = &m_album_ngrams;
     else if( table == "track"  ) idx = &m_track_ngrams;
-    else Q_ASSERT(false);
+    else Q_ASSERT( false );
 
-    if( tomerge.size() == 0 ) return;
+    if( tomerge.size() == 0 )
+        return;
 
     if( idx->size() == 0 )
     {
@@ -85,12 +89,13 @@ void FuzzyIndex::mergeIndex( const QString& table, QHash< QString, QMap<quint32,
     }
     else
     {
-        foreach( const QString& ngram, tomerge.keys() )
+        QList<QString> tmk = tomerge.keys();
+        foreach( const QString& ngram, tmk )
         {
-
             if( idx->contains( ngram ) )
             {
-                foreach( quint32 id, tomerge[ngram].keys() )
+                QList<unsigned int> tmkn = tomerge[ngram].keys();
+                foreach( quint32 id, tmkn )
                 {
                     (*idx)[ ngram ][ id ] += tomerge[ngram][id];
                 }
@@ -101,6 +106,7 @@ void FuzzyIndex::mergeIndex( const QString& table, QHash< QString, QMap<quint32,
             }
         }
     }
+
     qDebug() << Q_FUNC_INFO << table << "merge complete, num items:" << tomerge.size();
 }
 
@@ -120,6 +126,7 @@ FuzzyIndex::search( const QString& table, const QString& name )
     {
         if( !idx->contains( ngram ) )
             continue;
+
         //qDebug() << name_orig << "NGRAM:" << ngram << "candidates:" << (*idx)[ngram].size();
         QMapIterator<quint32, quint16> iter( (*idx)[ngram] );
         while( iter.hasNext() )

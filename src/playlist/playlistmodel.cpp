@@ -73,7 +73,7 @@ PlaylistModel::loadPlaylist( const Tomahawk::playlist_ptr& playlist )
     {
         int c = rowCount( QModelIndex() );
 
-        qDebug() << "starting loading" << playlist->title();
+        qDebug() << "Starting loading" << playlist->title();
         emit loadingStarts();
         emit beginInsertRows( QModelIndex(), c, c + entries.count() - 1 );
 
@@ -133,6 +133,7 @@ PlaylistModel::loadHistory( const Tomahawk::source_ptr& source, unsigned int amo
     setReadOnly( true );
 
     DatabaseCommand_PlaybackHistory* cmd = new DatabaseCommand_PlaybackHistory( source );
+    cmd->setLimit( amount );
 
     connect( cmd, SIGNAL( tracks( QList<Tomahawk::query_ptr> ) ),
                     SLOT( onTracksAdded( QList<Tomahawk::query_ptr> ) ), Qt::QueuedConnection );
