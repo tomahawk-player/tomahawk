@@ -128,10 +128,10 @@ DatabaseCommand_SetDynamicPlaylistRevision::exec( DatabaseImpl* lib )
     query.exec();
     
     // delete all the old controls, replace with new onws
-    qDebug() << "Deleting controls with playlist id" << m_currentRevision;
+    qDebug() << "Deleting controls with playlist id" << m_playlistguid;
     TomahawkSqlQuery delQuery = lib->newquery();
     delQuery.prepare( "DELETE FROM dynamic_playlist_controls WHERE playlist = ?" );
-	delQuery.addBindValue( m_currentRevision );
+    delQuery.addBindValue( m_playlistguid );
     if( !delQuery.exec() )
 		qWarning() << "Failed to delete controls from dynamic playlist controls table";
     

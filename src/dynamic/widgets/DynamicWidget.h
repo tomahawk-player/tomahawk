@@ -51,7 +51,7 @@ public:
     PlaylistInterface* playlistInterface() const;
     
 public slots:
-    void setPlaylist( const DynamicPlaylistRevision& rev );
+    void onRevisionLoaded( const DynamicPlaylistRevision& rev );
     
 private slots:
     void generate();

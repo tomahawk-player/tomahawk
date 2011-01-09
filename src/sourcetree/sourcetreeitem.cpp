@@ -157,7 +157,7 @@ void SourceTreeItem::onDynamicPlaylistsAdded( const QList< dynplaylist_ptr >& pl
         m_dynplaylists.append( p );
         qlonglong ptr = reinterpret_cast<qlonglong>( &m_dynplaylists.last() );
         qDebug() << "Setting dynamic ptr to:" << ptr;
-        connect( p.data(), SIGNAL( revisionLoaded( Tomahawk::DynamicPlaylistRevision ) ),
+        connect( p.data(), SIGNAL( dynamicRevisionLoaded( Tomahawk::DynamicPlaylistRevision) ),
                     SLOT( onDynamicPlaylistLoaded( Tomahawk::DynamicPlaylistRevision ) ),
                     Qt::QueuedConnection);
     

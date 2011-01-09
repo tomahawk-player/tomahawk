@@ -100,7 +100,7 @@ public:
     
 signals:
     /// emitted when the playlist revision changes (whenever the playlist changes)
-    void revisionLoaded( Tomahawk::DynamicPlaylistRevision );
+    void dynamicRevisionLoaded( Tomahawk::DynamicPlaylistRevision );
     
 public slots:
     // want to update the playlist from the model?

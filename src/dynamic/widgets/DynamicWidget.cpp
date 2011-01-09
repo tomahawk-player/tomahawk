@@ -93,6 +93,7 @@ void DynamicWidget::loadDynamicPlaylist(const Tomahawk::dynplaylist_ptr& playlis
 {
     if( !m_playlist.isNull() ) {
         disconnect( m_playlist->generator().data(), SIGNAL( generated( QList<Tomahawk::query_ptr> ) ), this, SLOT( tracksGenerated( QList<Tomahawk::query_ptr> ) ) );
+        disconnect( m_playlist.data(), SIGNAL( dynamicRevisionLoaded( Tomahawk::DynamicPlaylistRevision) ), this, SLOT(onRevisionLoaded( Tomahawk::DynamicPlaylistRevision) ) );
     }
     
     m_playlist = playlist;
@@ -109,12 +110,15 @@ void DynamicWidget::loadDynamicPlaylist(const Tomahawk::dynplaylist_ptr& playlis
         m_headerLayout->removeWidget(m_generateButton);
     }
     connect( m_playlist->generator().data(), SIGNAL( generated( QList<Tomahawk::query_ptr> ) ), this, SLOT( tracksGenerated( QList<Tomahawk::query_ptr> ) ) );
+    connect( m_playlist.data(), SIGNAL( dynamicRevisionLoaded( Tomahawk::DynamicPlaylistRevision) ), this, SLOT(onRevisionLoaded( Tomahawk::DynamicPlaylistRevision) ) );
+    
 }
 
 
 void 
-DynamicWidget::setPlaylist( const Tomahawk::DynamicPlaylistRevision& rev )
+DynamicWidget::onRevisionLoaded( const Tomahawk::DynamicPlaylistRevision& rev )
 {
+    qDebug() << "DynamicWidget::onRevisionLoaded";
     loadDynamicPlaylist( m_playlist );
 }
 

@@ -171,6 +171,7 @@ PlaylistModel::onDataChanged()
 void
 PlaylistModel::onRevisionLoaded( Tomahawk::PlaylistRevision revision )
 {
+    qDebug() << "PLAYLIST::onRevisionLoaded";
     qDebug() << Q_FUNC_INFO;
 
     if ( m_waitForUpdate )

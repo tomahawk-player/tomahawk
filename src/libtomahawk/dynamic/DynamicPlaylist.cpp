@@ -309,9 +309,10 @@ DynamicPlaylist::setRevision( const QString& rev,
     if( applied )
         setCurrentrevision( rev );
     
+    qDebug() << "EMITTING REVISION LOADED 1!";
     // meh :-( emit both, one for PlaylistModel, the other for DynamicWidget
     emit revisionLoaded( pr );
-    emit revisionLoaded( dpr );    
+    emit dynamicRevisionLoaded( dpr );    
 }
 
 // ondemand version
@@ -341,13 +342,16 @@ DynamicPlaylist::setRevision( const QString& rev,
     m_generator->setControls( controls );
     m_generator->setMode( OnDemand );
     
-    DynamicPlaylistRevision pr;
+    PlaylistRevision pr;
     pr.oldrevisionguid = currentrevision();
     pr.revisionguid = rev;
-    pr.controls = controls;
-    pr.type = type;
-    pr.mode = OnDemand;
+    DynamicPlaylistRevision dpr = pr;
+    dpr.controls = controls;
+    dpr.type = type;
+    dpr.mode = OnDemand;
     
+    qDebug() << "EMITTING REVISION LOADED 2!";
     emit revisionLoaded( pr );
+    emit revisionLoaded( dpr );
 }
 
