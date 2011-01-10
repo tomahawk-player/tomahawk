@@ -74,8 +74,8 @@ DynamicControlWidget::DynamicControlWidget( const Tomahawk::dyncontrol_ptr& cont
     m_collapseL->setCurrentIndex( 0 );
     
     connect( m_collapseButton, SIGNAL( clicked( bool ) ), this, SIGNAL( collapse() ) );
-    
-    connect( m_typeSelector, SIGNAL( currentIndexChanged( QString ) ), SLOT( typeSelectorChanged( QString ) ) );
+    connect( m_typeSelector, SIGNAL( currentIndexChanged( QString ) ), SLOT( typeSelectorChanged( QString ) ) );    
+    connect( m_control.data(), SIGNAL( changed() ), this, SIGNAL( changed() ) );
     
     m_layout->addWidget( m_typeSelector, 0, Qt::AlignLeft );
     
@@ -149,6 +149,7 @@ DynamicControlWidget::typeSelectorChanged( QString type )
         m_control->inputField()->show();
     }
     
+    emit changed();
 }
 
 void 

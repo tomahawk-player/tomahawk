@@ -46,11 +46,16 @@ public:
     
     virtual void paintEvent(QPaintEvent* );
     
+signals:
+    void controlsChanged();
+    void controlChanged( const dyncontrol_ptr& control );
+    
 public slots:
     virtual void onHidden(QWidget* );
     virtual void onShown(QWidget* );
     void addNewControl();
     void removeControl();
+    void controlChanged();
     
 private:
     void init();

@@ -55,6 +55,7 @@ signals:
     void addNewControl();
     void collapse();
     void removeControl();
+    void changed();
     
 private slots:
     void typeSelectorChanged( QString );

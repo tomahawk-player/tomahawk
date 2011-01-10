@@ -30,12 +30,24 @@ EchonestFactory::create()
     return new EchonestGenerator();
 }
 
+dyncontrol_ptr 
+EchonestFactory::createControl( const QString& controlType )
+{
+    return dyncontrol_ptr( new EchonestControl( controlType, typeSelectors() ) );
+}
+
+QStringList 
+EchonestFactory::typeSelectors() const
+{
+    return QStringList() << "Artist" << "Variety"  << "Description" << "Tempo" << "Duration" << "Loudness" 
+                          << "Danceability" << "Energy" << "Artist Familiarity" << "Artist Hotttnesss" << "Song Familiarity" 
+                          << "Longitude" << "Latitude" <<  "Mode" << "Key" << "Sorting";
+}
+
+
 EchonestGenerator::EchonestGenerator ( QObject* parent ) 
     : GeneratorInterface ( parent )
 {
-    m_typeSelectors << "Artist" << "Variety"  << "Description" << "Tempo" << "Duration" << "Loudness" 
-                    << "Danceability" << "Energy" << "Artist Familiarity" << "Artist Hotttnesss" << "Song Familiarity" 
-                    << "Longitude" << "Latitude" <<  "Mode" << "Key" << "Sorting";
     m_type = "echonest";
     m_mode = OnDemand;
                     
@@ -49,7 +61,7 @@ EchonestGenerator::~EchonestGenerator()
 dyncontrol_ptr 
 EchonestGenerator::createControl( const QString& type )
 {
-    m_controls << dyncontrol_ptr( new EchonestControl( type, m_typeSelectors ) );
+    m_controls << dyncontrol_ptr( new EchonestControl( type, GeneratorFactory::typeSelectors( m_type ) ) );
     return m_controls.last();
 }
 

@@ -39,6 +39,7 @@ namespace Tomahawk
 class DynamicControl : public QObject 
 {
     Q_OBJECT
+    Q_PROPERTY( QString type READ type WRITE setType ) // the generator type associated with this control
     Q_PROPERTY( QString id READ id WRITE setId )
     Q_PROPERTY( QString selectedType READ selectedType WRITE setSelectedType )
     Q_PROPERTY( QString match READ match WRITE setMatch )
@@ -83,6 +84,12 @@ public:
     };
     void setId( const QString& id ) { m_id = id; }
     
+    void setType( const QString& type ) { m_type = type; }
+    QString type() const { return m_type; }
+    
+signals:
+    void changed();
+    
 public slots:
     /**
      * Sets the type to the newly specified one. Note that this will update the matchSelector
@@ -98,6 +105,7 @@ protected:
     QString m_input;
     
 private:
+    QString m_type;
     QString m_selectedType;
     QStringList m_typeSelectors;
     QString m_id;

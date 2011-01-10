@@ -29,14 +29,14 @@ signals:
     void done( QString,
                      bool,
                      QString,
-                     QList< Tomahawk::dyncontrol_ptr>,
+                     QList< QVariantMap>,
                      bool );
     // used when loading a static playlist
     void done( QString,
                QList< QString >,
                QList< QString >,
                QString,
-               QList< Tomahawk::dyncontrol_ptr>,
+               QList< QVariantMap>,
                bool,
                QMap< QString, Tomahawk::plentry_ptr >,
                bool );

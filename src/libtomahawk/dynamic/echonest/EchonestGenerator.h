@@ -32,7 +32,8 @@ public:
     EchonestFactory();
     
     virtual GeneratorInterface* create();
-    
+    virtual dyncontrol_ptr createControl( const QString& controlType = QString() );
+    virtual QStringList typeSelectors() const;
 };
     
 class EchonestGenerator : public GeneratorInterface

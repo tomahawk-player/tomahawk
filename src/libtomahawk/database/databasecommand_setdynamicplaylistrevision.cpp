@@ -73,16 +73,7 @@ DatabaseCommand_SetDynamicPlaylistRevision::postCommitHook()
         Q_ASSERT( !playlist.isNull() );
         return;
     }
-    
-    if( m_controls.isEmpty() && !m_controlsV.isEmpty() ) // we were creatd from JSON, not programmatically. construct the controls fromthe playlist now
-    {
-        foreach( const QVariant& contrl, m_controlsV ) {
-            dyncontrol_ptr  control = playlist->generator()->createControl( m_type );
-            QJson::QObjectHelper::qvariant2qobject( contrl.toMap(), control.data( ));
-            m_controls << control;
-        }
-    }
-    
+        
     if( m_mode == OnDemand )
         playlist->setRevision(  newrev(),
                                 true, // this *is* the newest revision so far
@@ -140,6 +131,7 @@ DatabaseCommand_SetDynamicPlaylistRevision::exec( DatabaseImpl* lib )
                             "VALUES( ?, ?, ?, ?, ? )" );
     foreach( const dyncontrol_ptr& control, m_controls )
     {
+        qDebug() << "inserting dynamic control:" << control->id() << m_playlistguid << control->selectedType() << control->match() << control->input();
         controlsQuery.addBindValue( control->id() );
         controlsQuery.addBindValue( m_playlistguid );
         controlsQuery.addBindValue( control->selectedType() );

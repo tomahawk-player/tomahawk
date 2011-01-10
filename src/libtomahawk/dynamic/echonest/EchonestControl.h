@@ -34,14 +34,14 @@ public:
     /// Converts this to an echonest suitable parameter
     Echonest::DynamicPlaylist::PlaylistParamData toENParam() const;
     
+    /// DO NOT USE IF YOU ARE NOT A DBCMD
+    explicit EchonestControl( const QString& type, const QStringList& typeSelectors, QObject* parent = 0 );
+    
 public slots:
     virtual void setSelectedType ( const QString& type );
         
 private slots:
     void updateData();
-    
-protected:
-    explicit EchonestControl( const QString& type, const QStringList& typeSelectors, QObject* parent = 0 );
     
 private:
     void updateWidgets();

@@ -75,9 +75,7 @@ public:
     void addControl( const dyncontrol_ptr& control );
     void clearControls();
     void setControls( const QList< dyncontrol_ptr>& controls );
-    
-    QStringList typeSelectors() const { return m_typeSelectors; }
-    
+        
 signals:
     void generated( const QList< Tomahawk::query_ptr>& queries );
     
@@ -85,7 +83,6 @@ protected:
     QString m_type;
     GeneratorMode m_mode;
     QList< dyncontrol_ptr > m_controls;
-    QStringList m_typeSelectors;
 };
 
 typedef QSharedPointer<GeneratorInterface> geninterface_ptr;

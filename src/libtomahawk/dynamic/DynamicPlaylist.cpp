@@ -125,6 +125,19 @@ DynamicPlaylist::create( const Tomahawk::source_ptr& author,
     
 }
 
+void 
+DynamicPlaylist::createNewRevision( const QString& newUuid )
+{
+    if( mode() == Static )
+    {
+        createNewRevision( newUuid.isEmpty() ? uuid() : newUuid, currentrevision(), type(), generator()->controls(), entries() );
+    } else if( mode() == OnDemand )
+    {
+        createNewRevision( newUuid.isEmpty() ? uuid() : newUuid, currentrevision(), type(), generator()->controls());
+    }
+}
+
+
 // create a new revision that will be a static playlist, as it has entries
 void 
 DynamicPlaylist::createNewRevision( const QString& newrev, 
@@ -190,19 +203,19 @@ DynamicPlaylist::loadRevision( const QString& rev )
         connect( cmd, SIGNAL( done( QString,
                                     bool,
                                     QString,
-                                    QList< Tomahawk::dyncontrol_ptr>,
+                                    QList< QVariantMap >,
                                     bool ) ),
                  SLOT( setRevision( QString,
                                     bool,
                                     QString,
-                                    QList< Tomahawk::dyncontrol_ptr>,
+                                    QList< QVariantMap >,
                                     bool) ) );
     } else if( m_generator->mode() == Static ) {
         connect( cmd, SIGNAL( done( QString,
                                     QList< QString >,
                                     QList< QString >,
                                     QString,
-                                    QList< Tomahawk::dyncontrol_ptr>,
+                                    QList< QVariantMap >,
                                     bool,
                                     QMap< QString, Tomahawk::plentry_ptr >,
                                     bool ) ),
@@ -210,7 +223,7 @@ DynamicPlaylist::loadRevision( const QString& rev )
                                     QList< QString >,
                                     QList< QString >,
                                     QString,
-                                    QList< Tomahawk::dyncontrol_ptr>,
+                                    QList< QVariantMap >,
                                     bool,
                                     QMap< QString, Tomahawk::plentry_ptr >,
                                     bool ) ) );        
@@ -264,16 +277,14 @@ void DynamicPlaylist::addEntry(const Tomahawk::query_ptr& query, const QString& 
     addEntries( queries, oldrev );
 }
 
-// static version
-void 
-DynamicPlaylist::setRevision( const QString& rev, 
-                                    const QList< QString >& neworderedguids, 
-                                    const QList< QString >& oldorderedguids, 
-                                    const QString& type, 
-                                    const QList< Tomahawk::dyncontrol_ptr>& controls, 
-                                    bool is_newest_rev, 
-                                    const QMap< QString, Tomahawk::plentry_ptr >& addedmap, 
-                                    bool applied )
+void DynamicPlaylist::setRevision( const QString& rev, 
+                                   const QList< QString >& neworderedguids, 
+                                   const QList< QString >& oldorderedguids, 
+                                   const QString& type, 
+                                   const QList< dyncontrol_ptr >& controls, 
+                                   bool is_newest_rev, 
+                                   const QMap< QString, plentry_ptr >& addedmap, 
+                                   bool applied)
 {
     // we're probably being called by a database worker thread
     if( QThread::currentThread() != thread() )
@@ -307,17 +318,46 @@ DynamicPlaylist::setRevision( const QString& rev,
     if( applied )
         setCurrentrevision( rev );
     
-//     qDebug() << "EMITTING REVISION LOADED 1!";
-    emit dynamicRevisionLoaded( dpr );    
+    //     qDebug() << "EMITTING REVISION LOADED 1!";
+        emit dynamicRevisionLoaded( dpr );    
 }
 
-// ondemand version
+
 void 
 DynamicPlaylist::setRevision( const QString& rev, 
-                                    bool is_newest_rev, 
+                                    const QList< QString >& neworderedguids, 
+                                    const QList< QString >& oldorderedguids, 
                                     const QString& type, 
-                                    const QList< Tomahawk::dyncontrol_ptr>& controls, 
+                                    const QList< QVariantMap>& controlsV, 
+                                    bool is_newest_rev, 
+                                    const QMap< QString, Tomahawk::plentry_ptr >& addedmap, 
                                     bool applied )
+{
+    if( QThread::currentThread() != thread() )
+    {
+        QMetaObject::invokeMethod( this,
+                                    "setRevision",
+                                    Qt::BlockingQueuedConnection,
+                                    Q_ARG( QString,  rev ),
+                                    Q_ARG( QList<QString> , neworderedguids ),
+                                    Q_ARG( QList<QString> , oldorderedguids ),
+                                    Q_ARG( QString , type ),
+                                    QGenericArgument( "QList< QVariantMap > " , (const void*)&controlsV ),
+                                    Q_ARG( bool, is_newest_rev ),
+                                    QGenericArgument( "QMap< QString,Tomahawk::plentry_ptr > " , (const void*)&addedmap ),
+                                    Q_ARG( bool, applied ) );
+    }
+    
+    QList<dyncontrol_ptr> controls = variantsToControl( controlsV );
+    setRevision( rev, neworderedguids, oldorderedguids, type, controls, is_newest_rev, addedmap, applied );
+    
+}
+
+void DynamicPlaylist::setRevision( const QString& rev, 
+                                   bool is_newest_rev, 
+                                   const QString& type, 
+                                   const QList< dyncontrol_ptr >& controls, 
+                                   bool applied )
 {
     if( QThread::currentThread() != thread() )
     {
@@ -334,7 +374,7 @@ DynamicPlaylist::setRevision( const QString& rev,
     if( m_generator->type() != type ) { // new generator needed
         m_generator = geninterface_ptr( GeneratorFactory::create( type ) );
     }
-
+    
     m_generator->setControls( controls );
     m_generator->setMode( OnDemand );
     
@@ -345,7 +385,43 @@ DynamicPlaylist::setRevision( const QString& rev,
     dpr.type = type;
     dpr.mode = OnDemand;
     
-//     qDebug() << "EMITTING REVISION LOADED 2!";
-    emit dynamicRevisionLoaded( dpr );
+    //     qDebug() << "EMITTING REVISION LOADED 2!";
+    emit dynamicRevisionLoaded( dpr ); 
+}
+
+
+void 
+DynamicPlaylist::setRevision( const QString& rev, 
+                                    bool is_newest_rev, 
+                                    const QString& type, 
+                                    const QList< QVariantMap>& controlsV, 
+                                    bool applied )
+{
+    if( QThread::currentThread() != thread() )
+    {
+        QMetaObject::invokeMethod( this,
+                                   "setRevision",
+                                   Qt::BlockingQueuedConnection,
+                                   Q_ARG( QString, rev ),
+                                   Q_ARG( bool, is_newest_rev ),
+                                   Q_ARG( QString, type ),
+                                   QGenericArgument( "QList< QVariantMap >" , (const void*)&controlsV ),
+                                   Q_ARG( bool, applied ) );
+        return;
+    } 
+    
+    QList<dyncontrol_ptr> controls = variantsToControl( controlsV );
+    setRevision( rev, is_newest_rev, type, controls, applied );
+}
+
+QList< dyncontrol_ptr > DynamicPlaylist::variantsToControl( const QList< QVariantMap >& controlsV )
+{
+    QList<dyncontrol_ptr> realControls;
+    foreach( QVariantMap controlV, controlsV ) {
+        dyncontrol_ptr control = GeneratorFactory::createControl( controlV.value( "type" ).toString(), controlV.value( "selectedType" ).toString() );
+        QJson::QObjectHelper::qvariant2qobject( controlV, control.data() );
+        realControls << control;
+    }
+    return realControls;
 }
 

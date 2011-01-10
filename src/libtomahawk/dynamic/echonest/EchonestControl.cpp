@@ -22,9 +22,10 @@
 #include <QLineEdit>
 
 
-Tomahawk::EchonestControl::EchonestControl( const QString& type, const QStringList& typeSelectors, QObject* parent )
-    : DynamicControl ( type.isEmpty() ? "Artist" : type, typeSelectors, parent )
+Tomahawk::EchonestControl::EchonestControl( const QString& selectedType, const QStringList& typeSelectors, QObject* parent )
+    : DynamicControl ( selectedType.isEmpty() ? "Artist" : selectedType, typeSelectors, parent )
 {
+    setType( "echonest" );
     updateWidgets();
 }
 
@@ -80,7 +81,9 @@ Tomahawk::EchonestControl::updateWidgets()
         input->setSizePolicy( QSizePolicy::Ignored, QSizePolicy::Fixed );
         
         connect( match, SIGNAL( currentIndexChanged(int) ), this, SLOT( updateData() ) );
+        connect( match, SIGNAL( currentIndexChanged(int) ), this, SIGNAL( changed() ) );
         connect( input, SIGNAL( textChanged(QString) ), this, SLOT( updateData() ) );
+        connect( input, SIGNAL( editingFinished() ), this, SIGNAL( changed() ) );
         
         match->hide();
         input->hide();

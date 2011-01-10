@@ -60,8 +60,9 @@ Tomahawk::GeneratorInterface::setControls( const QList< Tomahawk::dyncontrol_ptr
     m_controls = controls;
 }
 
-Tomahawk::dyncontrol_ptr Tomahawk::GeneratorInterface::createControl(const QString& type)
+Tomahawk::dyncontrol_ptr 
+Tomahawk::GeneratorInterface::createControl(const QString& type)
 {
+    Q_ASSERT( false );
     return dyncontrol_ptr();
 }
-

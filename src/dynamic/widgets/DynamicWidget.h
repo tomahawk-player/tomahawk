@@ -18,8 +18,10 @@
 #define DYNAMIC_WIDGET_H
 
 #include <QWidget>
-#include <typedefs.h>
-#include <dynamic/DynamicPlaylist.h>
+
+#include "typedefs.h"
+#include "dynamic/DynamicPlaylist.h"
+#include "dynamic/DynamicControl.h"
 
 class QVBoxLayout;
 class QHBoxLayout;
@@ -56,6 +58,9 @@ public slots:
 private slots:
     void generate();
     void tracksGenerated( const QList< Tomahawk::query_ptr>& queries );
+    
+    void controlsChanged();
+    void controlChanged( const dyncontrol_ptr& control );
     
 private:
     dynplaylist_ptr m_playlist;

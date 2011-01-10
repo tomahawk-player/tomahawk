@@ -5,6 +5,7 @@
 #include <QString>
 
 #include "dynamic/GeneratorInterface.h"
+#include "typedefs.h"
 
 namespace Tomahawk {
     
@@ -17,6 +18,13 @@ public:
     GeneratorFactoryInterface() {}
     
     virtual GeneratorInterface* create() = 0;
+    /**
+     * Create a control for this generator, not tied to this generator itself. Used when loading dynamic
+     *  playlists from a dbcmd.
+     */
+    virtual dyncontrol_ptr createControl( const QString& controlType = QString() ) = 0;
+    
+    virtual QStringList typeSelectors() const = 0;
 };
 
 /**
@@ -26,8 +34,12 @@ class GeneratorFactory
 {
 public:
     static geninterface_ptr create( const QString& type );
+    // only used when loading from dbcmd
+    static dyncontrol_ptr createControl( const QString& generatorType, const QString& controlType = QString() );
+    
     static void registerFactory( const QString& type, GeneratorFactoryInterface* interface );
     static QStringList types();
+    static QStringList typeSelectors( const QString& type );
     
 private:
     static QHash<QString, GeneratorFactoryInterface*> s_factories;

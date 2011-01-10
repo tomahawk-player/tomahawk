@@ -87,6 +87,10 @@ public:
     QString type() const;
     geninterface_ptr generator() const;
     
+    // Creates a new revision from the playlist in memory. Use this is you change the controls or
+    // mode of a playlist and want to save it to db/others.
+    void createNewRevision( const QString& uuid = QString() );
+    
     virtual void addEntries( const QList< query_ptr >& queries, const QString& oldrev );
     virtual void addEntry( const Tomahawk::query_ptr& query, const QString& oldrev );
     
@@ -116,21 +120,37 @@ public slots:
     void reportDeleted( const Tomahawk::dynplaylist_ptr& self );
     
     // called from setdynamicplaylistrevision db cmd
-    // static version
+    // 4 options, because dbcmds can't create qwidgets:
+    // static version,   qvariant controls
+    // static version,   dyncontrol_ptr controls
+    // ondemand version, qvariant controls
+    // ondemand version, dyncontrol_ptr controls
     void setRevision( const QString& rev,
                       const QList<QString>& neworderedguids,
                       const QList<QString>& oldorderedguids,
                       const QString& type,
-                      const QList< Tomahawk::dyncontrol_ptr>& controls,
+                      const QList< QVariantMap >& controls,
                       bool is_newest_rev,
                       const QMap< QString, Tomahawk::plentry_ptr >& addedmap,
                       bool applied );
-   
+    void setRevision( const QString& rev,
+                      const QList<QString>& neworderedguids,
+                      const QList<QString>& oldorderedguids,
+                      const QString& type,
+                      const QList< dyncontrol_ptr >& controls,
+                      bool is_newest_rev,
+                      const QMap< QString, Tomahawk::plentry_ptr >& addedmap,
+                      bool applied );   
     // ondemand version
     void setRevision( const QString& rev,
                       bool is_newest_rev,
                       const QString& type,
-                      const QList< Tomahawk::dyncontrol_ptr>& controls,
+                      const QList< QVariantMap>& controls,
+                      bool applied );
+    void setRevision( const QString& rev,
+                      bool is_newest_rev,
+                      const QString& type,
+                      const QList< dyncontrol_ptr>& controls,
                       bool applied );
 private:
     // called from loadAllPlaylists DB cmd:
@@ -155,6 +175,7 @@ private:
                        bool shared );
     
 private:
+    QList< dyncontrol_ptr > variantsToControl( const QList< QVariantMap >& controlsV );
     geninterface_ptr m_generator;
 };
 

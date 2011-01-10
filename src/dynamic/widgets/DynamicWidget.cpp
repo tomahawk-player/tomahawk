@@ -81,8 +81,11 @@ DynamicWidget::DynamicWidget( const Tomahawk::dynplaylist_ptr& playlist, QWidget
     m_splitter->show( 0, false );
     
     loadDynamicPlaylist( playlist );
-        
+    
     setLayout( m_layout );
+
+    connect( m_controls, SIGNAL( controlChanged( dyncontrol_ptr ) ), this, SLOT( controlChanged( dyncontrol_ptr ) ), Qt::QueuedConnection );
+    connect( m_controls, SIGNAL( controlsChanged() ), this, SLOT( controlsChanged() ), Qt::QueuedConnection );
 }
 
 DynamicWidget::~DynamicWidget()
@@ -141,3 +144,15 @@ DynamicWidget::tracksGenerated( const QList< query_ptr >& queries )
     m_playlist->addEntries( queries, m_playlist->currentrevision() );
     m_playlist->resolve();
 }
+
+void DynamicWidget::controlsChanged()
+{
+    // save the current playlist
+    m_playlist->createNewRevision();
+}
+
+void DynamicWidget::controlChanged(const Tomahawk::dyncontrol_ptr& control)
+{
+
+}
+
