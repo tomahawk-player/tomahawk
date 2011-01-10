@@ -5,7 +5,7 @@
 
 #include "network/servent.h"
 
-#define PROTOVER "3" // must match remote peer, or we can't talk.
+#define PROTOVER "4" // must match remote peer, or we can't talk.
 
 
 Connection::Connection( Servent* parent )
@@ -70,8 +70,8 @@ Connection::handleIncomingQueueEmpty()
     if( m_sock->bytesAvailable() == 0 && m_peer_disconnected )
     {
         qDebug() << "No more data to read, peer disconnected. shutting down connection."
-                << "bytesavail" << m_sock->bytesAvailable()
-                << "bytesrx" << m_rx_bytes;
+                 << "bytesavail" << m_sock->bytesAvailable()
+                 << "bytesrx" << m_rx_bytes;
         shutdown();
     }
 }
