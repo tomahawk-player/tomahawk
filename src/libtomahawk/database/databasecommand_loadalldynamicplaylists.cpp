@@ -36,21 +36,18 @@ void DatabaseCommand_LoadAllDynamicPlaylists::exec( DatabaseImpl* dbi )
     QList<dynplaylist_ptr> plists;
     while ( query.next() )
     {
-        dynplaylist_ptr p( new DynamicPlaylist( source(),                  //src
-                                      query.value(6).toString(), //current rev
-                                      query.value(1).toString(), //title
-                                      query.value(2).toString(), //info
-                                      query.value(3).toString(), //creator
-                                      query.value(7).toString(), // dynamic type
-                                      static_cast<GeneratorMode>(query.value(8).toInt()), // dynamic mode
-                                      query.value(5).toBool(),   //shared
-                                      query.value(4).toInt(),    //lastmod
-                                      query.value(0).toString()  //GUID
-                                             
-        ) );
-        plists.append( p );
+            QVariantList data = QVariantList()  <<      query.value(6).toString()  //current rev
+                                                <<      query.value(1).toString()  //title
+                                                <<      query.value(2).toString()  //info
+                                                <<      query.value(3).toString()  //creator
+                                                <<      query.value(7).toString()  // dynamic type
+                                                <<      static_cast<GeneratorMode>(query.value(8).toInt())  // dynamic mode
+                                                <<      query.value(5).toBool()    //shared
+                                                <<      query.value(4).toInt()     //lastmod
+                                                <<      query.value(0).toString();  //GUID
+            emit playlistLoaded( source(), data );
     }
     
-    emit done( plists );
+    emit done();
 }
 

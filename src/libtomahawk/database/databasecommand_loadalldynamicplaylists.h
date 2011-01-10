@@ -36,7 +36,8 @@ public:
     virtual QString commandname() const { return "loadalldynamicplaylists"; }
     
 signals:
-    void done( const QList<Tomahawk::dynplaylist_ptr>& playlists );
+    void playlistLoaded( const Tomahawk::source_ptr& source, const QVariantList& data );
+    void done();
 };
 
 #endif // DATABASECOMMAND_ADDFILES_H

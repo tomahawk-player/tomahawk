@@ -28,6 +28,7 @@
 class DatabaseCommand_LoadAllDynamicPlaylists;
 class DatabaseCommand_SetDynamicPlaylistRevision;
 class DatabaseCommand_CreateDynamicPlaylist;
+class DatabaseCollection;
 
 namespace Tomahawk {
     
@@ -63,9 +64,9 @@ class DynamicPlaylist : public Playlist
     Q_PROPERTY( int     mode                  WRITE setMode   READ mode )
     Q_PROPERTY( QString type                  WRITE setType   READ type )
     
-    friend class ::DatabaseCommand_LoadAllDynamicPlaylists;
     friend class ::DatabaseCommand_SetDynamicPlaylistRevision;
     friend class ::DatabaseCommand_CreateDynamicPlaylist;
+    friend class ::DatabaseCollection; /// :-(
     
 public:    
     virtual ~DynamicPlaylist();
@@ -153,7 +154,7 @@ public slots:
                       const QList< dyncontrol_ptr>& controls,
                       bool applied );
 private:
-    // called from loadAllPlaylists DB cmd:
+    // called from loadAllPlaylists DB cmd via databasecollection (in GUI thread)
     explicit DynamicPlaylist( const source_ptr& src,
                        const QString& currentrevision,
                        const QString& title,
@@ -177,6 +178,7 @@ private:
 private:
     QList< dyncontrol_ptr > variantsToControl( const QList< QVariantMap >& controlsV );
     geninterface_ptr m_generator;
+    
 };
 
 }; // namespace
