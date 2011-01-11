@@ -204,7 +204,10 @@ DBSyncConnection::handleMsg( msg_ptr msg )
         DatabaseCommand *cmd = DatabaseCommand::factory( m, m_source );
         if ( !cmd )
         {
-            qDebug() << "UNKNOWN DBOP CMD!";
+            qDebug() << "UNKNOWN DBOP CMD";
+
+            if( !msg->is( Msg::FRAGMENT ) ) // last msg in this batch
+                lastOpApplied();
             return;
         }
 
@@ -215,6 +218,7 @@ DBSyncConnection::handleMsg( msg_ptr msg )
             changeState( SAVING ); // just DB work left to complete
             connect( cmd, SIGNAL( finished() ), this, SLOT( lastOpApplied() ) );
         }
+
         Database::instance()->enqueue( QSharedPointer<DatabaseCommand>( cmd ) );
         return;
     }
@@ -253,15 +257,11 @@ void
 DBSyncConnection::sendOps()
 {
     qDebug() << Q_FUNC_INFO;
-
-    if ( m_lastSentOp.isEmpty() )
-        m_lastSentOp = m_uscache.value( "lastop" ).toString();
-
-    qDebug() << "Will send peer all ops since" << m_lastSentOp;
+    qDebug() << "Will send peer all ops since" << m_uscache.value( "lastop" ).toString();
 
     source_ptr src = SourceList::instance()->getLocal();
 
-    DatabaseCommand_loadOps* cmd = new DatabaseCommand_loadOps( src, m_lastSentOp );
+    DatabaseCommand_loadOps* cmd = new DatabaseCommand_loadOps( src, m_uscache.value( "lastop" ).toString() );
     connect( cmd,  SIGNAL( done( QString, QString, QList< dbop_ptr > ) ),
              this,   SLOT( sendOpsData( QString, QString, QList< dbop_ptr > ) ) );
 
@@ -273,8 +273,11 @@ void
 DBSyncConnection::sendOpsData( QString sinceguid, QString lastguid, QList< dbop_ptr > ops )
 {
     qDebug() << Q_FUNC_INFO << sinceguid << lastguid << "Num ops to send:" << ops.length();
-    m_lastSentOp = lastguid;
 
+    if ( m_lastSentOp == lastguid )
+        ops.clear();
+
+    m_lastSentOp = lastguid;
     if( ops.length() == 0 )
     {
         sendMsg( Msg::factory( "ok", Msg::DBOP ) );

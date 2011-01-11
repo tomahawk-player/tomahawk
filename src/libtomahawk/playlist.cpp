@@ -20,14 +20,14 @@ PlaylistEntry::PlaylistEntry() {}
 PlaylistEntry::~PlaylistEntry() {}
 
 void
-PlaylistEntry::setQueryvariant( const QVariant& v )
+PlaylistEntry::setQueryVariant( const QVariant& v )
 {
     m_query = query_ptr( new Query( v ) );
 }
 
 
 QVariant
-PlaylistEntry::queryvariant() const
+PlaylistEntry::queryVariant() const
 {
     return m_query->toVariant();
 }
@@ -46,13 +46,13 @@ PlaylistEntry::query() const
 
 
 source_ptr 
-PlaylistEntry::lastsource() const
+PlaylistEntry::lastSource() const
 {
     return m_lastsource;
 }
 
 void 
-PlaylistEntry::setLastsource( source_ptr s )
+PlaylistEntry::setLastSource( source_ptr s )
 {
     m_lastsource = s;
 }
@@ -84,6 +84,7 @@ Playlist::Playlist( const source_ptr& src,
     , m_shared( shared )
 {
     qDebug() << Q_FUNC_INFO << "1";
+    init();
 }
 
 
@@ -103,6 +104,15 @@ Playlist::Playlist( const source_ptr& author,
     , m_shared( shared )
 {
     qDebug() << Q_FUNC_INFO << "2";
+    init();
+}
+
+void
+      
+Playlist::init()     
+{
+   m_locallyChanged = false;      
+   connect( Pipeline::instance(), SIGNAL( idle() ), SLOT( onResolvingFinished() ) );  
 }
 
 Playlist::~Playlist() {}
@@ -227,7 +237,7 @@ Playlist::createNewRevision( const QString& newrev, const QString& oldrev, const
     foreach( plentry_ptr p, entries )
         orderedguids << p->guid();
 
-    // source making the change (localy user in this case)
+    // source making the change (local user in this case)
     source_ptr author = SourceList::instance()->getLocal();
     // command writes new rev to DB and calls setRevision, which emits our signal
     DatabaseCommand_SetPlaylistRevision* cmd =
@@ -236,7 +246,9 @@ Playlist::createNewRevision( const QString& newrev, const QString& oldrev, const
                                                      newrev,
                                                      oldrev,
                                                      orderedguids,
-                                                     added );
+                                                     added,
+                                                     entries
+                                                   );
     Database::instance()->enqueue( QSharedPointer<DatabaseCommand>( cmd ) );
 }
 
@@ -253,9 +265,6 @@ Playlist::setRevision( const QString& rev,
 {
     if( QThread::currentThread() != thread() )
     {
-        //qDebug() << "Calling setRevision in correct thread, instead of"
-        //         << QThread::currentThread();
-
         QMetaObject::invokeMethod( this,
                                    "setRevision",
                                    Qt::BlockingQueuedConnection,
@@ -263,7 +272,7 @@ Playlist::setRevision( const QString& rev,
                                    Q_ARG( QList<QString>, neworderedguids ),
                                    Q_ARG( QList<QString>, oldorderedguids ),
                                    Q_ARG( bool, is_newest_rev ),
-                                   QGenericArgument( "QMap< QString,Tomahawk::plentry_ptr >" , (const void*)&addedmap ),
+                                   QGenericArgument( "QMap< QString,Tomahawk::plentry_ptr >", (const void*)&addedmap ),
                                    Q_ARG( bool, applied )
                                  );
         return;
@@ -274,7 +283,13 @@ Playlist::setRevision( const QString& rev,
     if( applied )
         m_currentrevision = rev;
     pr.applied = applied;
-
+    
+    foreach( const plentry_ptr& entry, m_entries )
+    {
+        connect( entry->query().data(), SIGNAL( resultsAdded( QList<Tomahawk::result_ptr> ) ),
+                 SLOT( onResultsFound( QList<Tomahawk::result_ptr> ) ), Qt::UniqueConnection );
+        
+    }
     emit revisionLoaded( pr );
 }
 
@@ -285,22 +300,16 @@ Playlist::setNewRevision( const QString& rev,
                                  bool is_newest_rev,
                                  const QMap< QString, Tomahawk::plentry_ptr >& addedmap )
 {
-    qDebug() << Q_FUNC_INFO << (qlonglong)this
-           << rev << neworderedguids << oldorderedguids
-           << "isnewest:" << is_newest_rev << addedmap << m_entries;
-           
+
     // build up correctly ordered new list of plentry_ptrs from
     // existing ones, and the ones that have been added
     QMap<QString, plentry_ptr> entriesmap;
     foreach( const plentry_ptr& p, m_entries )
         entriesmap.insert( p->guid(), p );
     
-    //qDebug() << "Entries map:" << entriesmap;
         
         QList<plentry_ptr> entries;
-        //qDebug() << "m_entries:" << m_entries.count() << m_entries;
         
-        //qDebug() << "counters:" << neworderedguids.count() << entriesmap.count() << addedmap.count();
         foreach( const QString& id, neworderedguids )
         {
             //qDebug() << "id:" << id;
@@ -316,7 +325,8 @@ Playlist::setNewRevision( const QString& rev,
             else if( addedmap.contains( id ) )
             {
                 entries.append( addedmap.value( id ) );
-                if( is_newest_rev ) m_entries.append( addedmap.value( id ) );
+                if( is_newest_rev )
+                    m_entries.append( addedmap.value( id ) );
             }
             else
             {
@@ -343,12 +353,12 @@ Playlist::setNewRevision( const QString& rev,
                 if( is_newest_rev )
                 {
                     //qDebug() << "Removing from m_entries" << remid;
-                    for( int k = 0 ; k<m_entries.length(); ++k )
+                    for( int k = 0 ; k < m_entries.length(); ++k )
                     {
-                        if( m_entries.at(k)->guid() == remid )
+                        if( m_entries.at( k )->guid() == remid )
                         {
-                            //qDebug() << "removed at " << k;
-                            m_entries.removeAt(k);
+                            //qDebug() << "removed at" << k;
+                            m_entries.removeAt( k );
                             break;
                         }
                     }
@@ -358,10 +368,6 @@ Playlist::setNewRevision( const QString& rev,
         
         pr.added = addedmap.values();
         
-        //qDebug() << "Revision set:" << rev
-        //         << "added" << pr.added.size()
-        //         << "removed" << pr.removed.size()
-        //         << "total entries" << m_entries.size();
         
         pr.newlist = entries;
         return pr;
@@ -373,7 +379,8 @@ Playlist::author()
     return m_source; 
 }
 
-void Playlist::resolve()
+void 
+Playlist::resolve()
 {
     QList< query_ptr > qlist;
     foreach( const plentry_ptr& p, m_entries )
@@ -383,6 +390,24 @@ void Playlist::resolve()
     Pipeline::instance()->add( qlist );
 }
 
+void
+Playlist::onResultsFound( const QList<Tomahawk::result_ptr>& results )
+{
+    Query* query = qobject_cast<Query*>( sender() );
+    m_locallyChanged = true;
+}
+
+
+void
+Playlist::onResolvingFinished()
+{
+    if ( m_locallyChanged )
+    {
+        qDebug() << Q_FUNC_INFO;
+        m_locallyChanged = false;
+        createNewRevision( currentrevision(), currentrevision(), m_entries );
+    }
+}
 
 void
 Playlist::addEntry( const query_ptr& query, const QString& oldrev )
@@ -440,7 +465,7 @@ Playlist::newEntries( const QList< plentry_ptr >& entries )
     QList<plentry_ptr> added;
     foreach( plentry_ptr p, entries )
     {
-        if( !currentguids.contains(p->guid()) )
+        if( !currentguids.contains( p->guid() ) )
             added << p;
     }   
     return added;

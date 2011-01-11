@@ -131,6 +131,7 @@ SourceTreeItemWidget::onLoadingStateChanged( DBSyncConnection::State newstate, D
 void
 SourceTreeItemWidget::onPlaybackStarted( const Tomahawk::query_ptr& query )
 {
+    qDebug() << Q_FUNC_INFO << query->toString();
     ui->activityLabel->setText( tr( "Playing: %1 by %2" ).arg( query->track() ).arg( query->artist() ) );
 }
 

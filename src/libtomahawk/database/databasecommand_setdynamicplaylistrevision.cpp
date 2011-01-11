@@ -12,10 +12,11 @@ DatabaseCommand_SetDynamicPlaylistRevision::DatabaseCommand_SetDynamicPlaylistRe
                                                                                 const QString& oldrev, 
                                                                                 const QStringList& orderedguids, 
                                                                                 const QList< plentry_ptr >& addedentries, 
+                                                                                const QList<plentry_ptr>& entries,
                                                                                 const QString& type, 
                                                                                 GeneratorMode mode, 
                                                                                 const QList< dyncontrol_ptr >& controls )
-    : DatabaseCommand_SetPlaylistRevision( s, playlistguid, newrev, oldrev, orderedguids, addedentries )
+    : DatabaseCommand_SetPlaylistRevision( s, playlistguid, newrev, oldrev, orderedguids, addedentries, entries )
     , m_type( type )
     , m_mode( mode )
     , m_controls( controls )
@@ -30,7 +31,7 @@ DatabaseCommand_SetDynamicPlaylistRevision::DatabaseCommand_SetDynamicPlaylistRe
                                                                                 const QString& type, 
                                                                                 GeneratorMode mode, 
                                                                                 const QList< dyncontrol_ptr >& controls )
-    : DatabaseCommand_SetPlaylistRevision( s, playlistguid, newrev, oldrev, QStringList(), QList< plentry_ptr >() )
+    : DatabaseCommand_SetPlaylistRevision( s, playlistguid, newrev, oldrev, QStringList(), QList< plentry_ptr >(), QList< plentry_ptr >() )
     , m_type( type )
     , m_mode( mode )
     , m_controls( controls )

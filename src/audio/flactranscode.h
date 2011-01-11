@@ -15,7 +15,7 @@
 #include <QMutex>
 #include <QDebug>
 
-#define FLAC_BUFFER 32768
+#define FLAC_BUFFER 32768 * 36
 #define FLAC_BUFFER_PREFERRED 32768
 
 class FLACTranscode : public TranscodeInterface , protected FLAC::Decoder::Stream
@@ -49,13 +49,10 @@ class FLACTranscode : public TranscodeInterface , protected FLAC::Decoder::Strea
     protected:
         virtual ::FLAC__StreamDecoderReadStatus read_callback( FLAC__byte buffer[], size_t *bytes );
         virtual ::FLAC__StreamDecoderWriteStatus write_callback( const ::FLAC__Frame *frame, const FLAC__int32 *const buffer[] );
+        virtual ::FLAC__StreamDecoderSeekStatus seek_callback( FLAC__uint64 absolute_byte_offset );
         virtual bool eof_callback();
-        void metadata_callback( const ::FLAC__StreamMetadata *metadata );
+        virtual void metadata_callback( const ::FLAC__StreamMetadata *metadata );
         void error_callback( ::FLAC__StreamDecoderErrorStatus status );
-
-/*        ::FLAC__StreamDecoderSeekStatus seek_callback( FLAC__uint64 absolute_byte_offset );
-        ::FLAC__StreamDecoderTellStatus tell_callback( FLAC__uint64 *absolute_byte_offset );
-        ::FLAC__StreamDecoderLengthStatus length_callback( FLAC__uint64 *stream_length );*/
 
     private:
         QByteArray m_outBuffer;
@@ -63,7 +60,6 @@ class FLACTranscode : public TranscodeInterface , protected FLAC::Decoder::Strea
         QMutex m_mutex;
         QByteArray m_buffer;
 
-        bool m_FLACInit;
         bool m_FLACRunning;
         bool m_finished;
 };

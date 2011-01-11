@@ -35,7 +35,9 @@ DatabaseCommand_PlaybackHistory::exec( DatabaseImpl* dbi )
                 "FROM track, artist "
                 "WHERE artist.id = track.artist "
                 "AND track.id = %1 "
-                ).arg( query.value( 0 ).toUInt() );
+                "%2"
+                ).arg( query.value( 0 ).toUInt() )
+                 .arg( m_amount > 0 ? QString( "LIMIT 0, %1" ).arg( m_amount ) : QString() );
 
         query_track.prepare( sql );
         query_track.exec();

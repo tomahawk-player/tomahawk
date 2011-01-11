@@ -100,7 +100,7 @@ Servent::startListening( QHostAddress ha, bool upnp, int port )
             // last.fm office firewall policy hack
             // (corp. firewall allows outgoing connections to this port,
             //  so listen on this if you want lastfmers to connect to you)
-            if( qApp->arguments().contains("--porthack") )
+            if( qApp->arguments().contains( "--porthack" ) )
             {
                 tryport = 3389;
                 pf->remove( tryport );
@@ -603,13 +603,13 @@ Servent::claimOffer( ControlConnection* cc, const QString &key, const QHostAddre
 QSharedPointer<QIODevice>
 Servent::remoteIODeviceFactory( const result_ptr& result )
 {
-    qDebug() << Q_FUNC_INFO << thread() ;
+    qDebug() << Q_FUNC_INFO << thread();
     QSharedPointer<QIODevice> sp;
 
-    QStringList parts = result->url().mid( QString( "servent://" ).length()).split( "\t" );
-    const QString& sourceName = parts.at( 0 );
-    const QString& fileId = parts.at( 1 );
-    const source_ptr& s = SourceList::instance()->get( sourceName );
+    QStringList parts = result->url().mid( QString( "servent://" ).length() ).split( "\t" );
+    const QString sourceName = parts.at( 0 );
+    const QString fileId = parts.at( 1 );
+    source_ptr s = SourceList::instance()->get( sourceName );
     if ( s.isNull() )
         return sp;
 

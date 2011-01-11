@@ -165,6 +165,7 @@ DynamicPlaylist::createNewRevision( const QString& newrev,
                                                      oldrev,
                                                      orderedguids,
                                                      added,
+                                                     entries,
                                                      type,
                                                      Static,
                                                     controls );

@@ -28,6 +28,7 @@ public:
                                                   const QString& oldrev,
                                                   const QStringList& orderedguids,
                                                   const QList<Tomahawk::plentry_ptr>& addedentries,
+                                                  const QList<plentry_ptr>& entries,
                                                   const QString& type,
                                                   GeneratorMode mode,
                                                   const QList< dyncontrol_ptr >& controls );

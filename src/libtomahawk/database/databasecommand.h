@@ -55,6 +55,7 @@ public:
 
     virtual bool loggable() const { return false; }
     virtual bool singletonCmd() const { return false; }
+    virtual bool localOnly() const { return false; }
 
     QString guid() const
     {
