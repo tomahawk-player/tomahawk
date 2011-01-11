@@ -60,7 +60,7 @@ private slots:
     void tracksGenerated( const QList< Tomahawk::query_ptr>& queries );
     
     void controlsChanged();
-    void controlChanged( const dyncontrol_ptr& control );
+    void controlChanged( const Tomahawk::dyncontrol_ptr& control );
     
 private:
     dynplaylist_ptr m_playlist;

@@ -34,6 +34,12 @@ public:
     /// Converts this to an echonest suitable parameter
     Echonest::DynamicPlaylist::PlaylistParamData toENParam() const;
     
+    virtual QString input() const;
+    virtual QString match() const;
+    
+    virtual void setInput(const QString& input);
+    virtual void setMatch(const QString& match);
+    
     /// DO NOT USE IF YOU ARE NOT A DBCMD
     explicit EchonestControl( const QString& type, const QStringList& typeSelectors, QObject* parent = 0 );
     
@@ -45,11 +51,13 @@ private slots:
     
 private:
     void updateWidgets();
+    void updateWidgetsFromData();
     
     Echonest::DynamicPlaylist::PlaylistParam m_currentType;
     
     QWeakPointer< QWidget > m_input;
     QWeakPointer< QWidget > m_match;
+    QString m_matchString;
     
     Echonest::DynamicPlaylist::PlaylistParamData m_data;
     

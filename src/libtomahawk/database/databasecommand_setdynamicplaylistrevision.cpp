@@ -73,8 +73,7 @@ DatabaseCommand_SetDynamicPlaylistRevision::postCommitHook()
         qDebug() << playlistguid();
         Q_ASSERT( !playlist.isNull() );
         return;
-    }
-        
+    }  
     if( m_mode == OnDemand )
         playlist->setRevision(  newrev(),
                                 true, // this *is* the newest revision so far

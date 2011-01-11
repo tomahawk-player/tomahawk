@@ -66,13 +66,13 @@ public:
     virtual QWidget* inputField()  { Q_ASSERT( false ); return 0;  }
     
     /// the serializable value of the match
-    QString match() const  { return m_match; }
+    virtual QString match() const  { Q_ASSERT( false ); return QString(); }
     /// the serializable value of the input
-    QString input() const { return m_input; }
+    virtual QString input() const { Q_ASSERT( false ); return QString(); }
     
     // used by JSON serialization
-    void setMatch( const QString& match ) { m_match = match; }
-    void setInput( const QString& input ) { m_input = input; }
+    virtual void setMatch( const QString& match ) { Q_ASSERT( false ); }
+    virtual void setInput( const QString& input ) { Q_ASSERT( false ); }
     
     /// All the potential type selectors for this control
     QStringList typeSelectors() const { return m_typeSelectors; }

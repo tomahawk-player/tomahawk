@@ -65,7 +65,7 @@ DatabaseCommand_LoadDynamicPlaylist::exec( DatabaseImpl* dbi )
                 c[ "type" ] = type;
                 c[ "id" ] = controlId;
                 c[ "selectedType" ] = controlQuery.value( 0 ).toString();
-                c["match" ] = controlQuery.value( 1 ).toString();
+                c[ "match" ] = controlQuery.value( 1 ).toString();
                 c[ "input" ] = controlQuery.value( 2 ).toString();
                 controls << c;
             }

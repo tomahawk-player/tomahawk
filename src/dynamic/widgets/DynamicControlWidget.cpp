@@ -74,7 +74,7 @@ DynamicControlWidget::DynamicControlWidget( const Tomahawk::dyncontrol_ptr& cont
     m_collapseL->setCurrentIndex( 0 );
     
     connect( m_collapseButton, SIGNAL( clicked( bool ) ), this, SIGNAL( collapse() ) );
-    connect( m_typeSelector, SIGNAL( currentIndexChanged( QString ) ), SLOT( typeSelectorChanged( QString ) ) );    
+    connect( m_typeSelector, SIGNAL( activated( QString) ), SLOT( typeSelectorChanged( QString ) ) );    
     connect( m_control.data(), SIGNAL( changed() ), this, SIGNAL( changed() ) );
     
     m_layout->addWidget( m_typeSelector, 0, Qt::AlignLeft );
@@ -84,7 +84,7 @@ DynamicControlWidget::DynamicControlWidget( const Tomahawk::dyncontrol_ptr& cont
             m_typeSelector->addItem( type );
     }
     
-    typeSelectorChanged( m_control.isNull() ? "" : m_control->selectedType() );
+    typeSelectorChanged( m_control.isNull() ? "" : m_control->selectedType(), true );
        
     m_layout->addLayout( m_collapseL, 0 );
     m_layout->addLayout( m_plusL, 0 );
@@ -101,7 +101,13 @@ DynamicControlWidget::DynamicControlWidget( const Tomahawk::dyncontrol_ptr& cont
 
 DynamicControlWidget::~DynamicControlWidget()
 {
-
+    // remove the controls widgets from our layout so they are not parented
+    // we don't want to auto-delete them since the control should own them
+    // if we delete them, then the control will be holding on to null ptrs
+    m_layout->removeWidget( m_control->inputField() );
+    m_control->inputField()->setParent( 0 );
+    m_layout->removeWidget( m_control->matchSelector() );
+    m_control->matchSelector()->setParent( 0 );
 }
 
 dyncontrol_ptr DynamicControlWidget::control() const
@@ -132,13 +138,14 @@ QWidget* DynamicControlWidget::createDummy( QWidget* fromW )
 
 
 void 
-DynamicControlWidget::typeSelectorChanged( QString type )
+DynamicControlWidget::typeSelectorChanged( const QString& type, bool firstLoad )
 {
     Q_ASSERT( m_layout );
     m_layout->removeWidget( m_control->matchSelector() );
     m_layout->removeWidget( m_control->inputField() );
     
-    m_control->setSelectedType( type );
+    if( m_control->selectedType() == type && !firstLoad )
+        m_control->setSelectedType( type );
     
     if( m_control->matchSelector() ) {
         m_layout->insertWidget( 1, m_control->matchSelector(), 0 );

@@ -24,7 +24,6 @@ class DLLEXPORT PlaylistEntry : public QObject
 Q_OBJECT
 Q_PROPERTY( QString guid              READ guid         WRITE setGuid )
 Q_PROPERTY( QString annotation        READ annotation   WRITE setAnnotation )
-Q_PROPERTY( QString resulthint        READ resultHint   WRITE setResultHint )
 Q_PROPERTY( unsigned int duration     READ duration     WRITE setDuration )
 Q_PROPERTY( unsigned int lastmodified READ lastmodified WRITE setLastmodified )
 Q_PROPERTY( QVariant query            READ queryVariant WRITE setQueryVariant )

@@ -59,6 +59,31 @@ Tomahawk::EchonestControl::toENParam() const
     return m_data;
 }
 
+QString Tomahawk::EchonestControl::input() const
+{
+    return m_data.second.toString();
+}
+
+QString Tomahawk::EchonestControl::match() const
+{
+    return m_matchString;
+}
+
+void Tomahawk::EchonestControl::setInput(const QString& input)
+{
+    // TODO generate widgets
+    m_data.second = input;
+    updateWidgetsFromData();
+}
+
+void Tomahawk::EchonestControl::setMatch(const QString& match)
+{
+    // TODO generate widgets
+    m_matchString = match;
+    updateWidgetsFromData();
+}
+
+
 void 
 Tomahawk::EchonestControl::updateWidgets()
 {
@@ -101,6 +126,7 @@ Tomahawk::EchonestControl::updateData()
     if( selectedType() == "Artist" ) {
         QComboBox* combo = qobject_cast<QComboBox*>( m_match.data() );
         if( combo ) {
+            m_matchString = combo->itemData( combo->currentIndex() ).toString();
         }
         QLineEdit* edit = qobject_cast<QLineEdit*>( m_input.data() );
         if( edit && !edit->text().isEmpty() ) {
@@ -109,3 +135,17 @@ Tomahawk::EchonestControl::updateData()
         }
     }
 }
+
+// fills in the current widget with the data from json or dbcmd (m_data.second and m_matchString)
+void Tomahawk::EchonestControl::updateWidgetsFromData()
+{
+    if( selectedType() == "Artist" ) {
+        QComboBox* combo = qobject_cast<QComboBox*>( m_match.data() );
+        if( combo )
+            combo->setCurrentIndex( combo->findData( m_matchString ) );
+        QLineEdit* edit = qobject_cast<QLineEdit*>( m_input.data() );
+        if( edit )
+            edit->setText( m_data.second.toString() );
+    }
+}
+

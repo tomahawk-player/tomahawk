@@ -84,7 +84,7 @@ DynamicWidget::DynamicWidget( const Tomahawk::dynplaylist_ptr& playlist, QWidget
     
     setLayout( m_layout );
 
-    connect( m_controls, SIGNAL( controlChanged( dyncontrol_ptr ) ), this, SLOT( controlChanged( dyncontrol_ptr ) ), Qt::QueuedConnection );
+    connect( m_controls, SIGNAL( controlChanged( Tomahawk::dyncontrol_ptr ) ), this, SLOT( controlChanged( Tomahawk::dyncontrol_ptr ) ), Qt::QueuedConnection );
     connect( m_controls, SIGNAL( controlsChanged() ), this, SLOT( controlsChanged() ), Qt::QueuedConnection );
 }
 
@@ -101,6 +101,7 @@ void DynamicWidget::loadDynamicPlaylist(const Tomahawk::dynplaylist_ptr& playlis
     
     m_playlist = playlist;
     m_model->loadPlaylist( m_playlist );
+    
     if( !m_playlist.isNull() )
         m_controls->setControls( m_playlist->generator(), m_playlist->generator()->controls() );
     m_modeCombo->setCurrentIndex( static_cast<int>( playlist->mode() ) );

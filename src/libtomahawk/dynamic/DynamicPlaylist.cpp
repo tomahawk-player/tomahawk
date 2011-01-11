@@ -385,7 +385,7 @@ void DynamicPlaylist::setRevision( const QString& rev,
     dpr.controls = controls;
     dpr.type = type;
     dpr.mode = OnDemand;
-    
+
     //     qDebug() << "EMITTING REVISION LOADED 2!";
     emit dynamicRevisionLoaded( dpr ); 
 }
@@ -395,7 +395,7 @@ void
 DynamicPlaylist::setRevision( const QString& rev, 
                                     bool is_newest_rev, 
                                     const QString& type, 
-                                    const QList< QVariantMap>& controlsV, 
+                                    const QList< QVariantMap >& controlsV, 
                                     bool applied )
 {
     if( QThread::currentThread() != thread() )

@@ -58,7 +58,7 @@ signals:
     void changed();
     
 private slots:
-    void typeSelectorChanged( QString );
+    void typeSelectorChanged( const QString& selectedType, bool firstLoad = false );
     
 private:
     QToolButton* initButton();

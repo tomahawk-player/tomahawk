@@ -48,7 +48,7 @@ public:
     
 signals:
     void controlsChanged();
-    void controlChanged( const dyncontrol_ptr& control );
+    void controlChanged( const Tomahawk::dyncontrol_ptr& control );
     
 public slots:
     virtual void onHidden(QWidget* );
