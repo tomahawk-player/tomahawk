@@ -234,6 +234,8 @@ QueryLabel::setElideMode( Qt::TextElideMode mode )
 void
 QueryLabel::updateLabel()
 {
+    m_hoverArea = QRect();
+
     updateGeometry();
     update();
 }
