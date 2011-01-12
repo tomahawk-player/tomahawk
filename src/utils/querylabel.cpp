@@ -451,6 +451,7 @@ void
 QueryLabel::leaveEvent( QEvent* event )
 {
     m_hoverArea = QRect();
+    repaint();
 }
 
 
