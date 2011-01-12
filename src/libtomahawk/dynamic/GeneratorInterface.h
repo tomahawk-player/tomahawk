@@ -75,7 +75,8 @@ public:
     void addControl( const dyncontrol_ptr& control );
     void clearControls();
     void setControls( const QList< dyncontrol_ptr>& controls );
-        
+    void removeControl( const dyncontrol_ptr& control );
+    
 signals:
     void generated( const QList< Tomahawk::query_ptr>& queries );
     

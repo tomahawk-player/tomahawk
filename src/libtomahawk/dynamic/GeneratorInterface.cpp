@@ -60,6 +60,12 @@ Tomahawk::GeneratorInterface::setControls( const QList< Tomahawk::dyncontrol_ptr
     m_controls = controls;
 }
 
+void Tomahawk::GeneratorInterface::removeControl(const Tomahawk::dyncontrol_ptr& control)
+{
+    m_controls.removeAll( control );
+}
+
+
 Tomahawk::dyncontrol_ptr 
 Tomahawk::GeneratorInterface::createControl(const QString& type)
 {

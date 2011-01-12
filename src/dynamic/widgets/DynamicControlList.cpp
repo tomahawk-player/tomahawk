@@ -157,7 +157,10 @@ void DynamicControlList::removeControl()
     DynamicControlWidget* w = qobject_cast<DynamicControlWidget*>( sender() );
     m_layout->removeWidget( w );
     m_controls.removeAll( w );
+    
+    m_generator->removeControl( w->control() );
     delete w;
+    
     
     m_controls.last()->setShowCollapseButton( true );
     m_controls.last()->setShowPlusButton( true );
