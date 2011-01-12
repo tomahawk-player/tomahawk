@@ -50,7 +50,9 @@ DynamicWidget::DynamicWidget( const Tomahawk::dynplaylist_ptr& playlist, QWidget
     m_modeCombo = new QComboBox( this );
     m_modeCombo->addItem( tr( "On Demand" ), OnDemand );
     m_modeCombo->addItem( tr( "Static" ), Static );
+    connect( m_modeCombo, SIGNAL( activated( int ) ), this, SLOT( modeChanged( int ) ) );
     m_headerLayout->addWidget( m_modeCombo );
+    
     m_generatorCombo = new QComboBox( this );
     foreach( const QString& type, GeneratorFactory::types() )
         m_generatorCombo->addItem( type );
@@ -114,11 +116,7 @@ void DynamicWidget::loadDynamicPlaylist(const Tomahawk::dynplaylist_ptr& playlis
         m_controls->setControls( m_playlist->generator(), m_playlist->generator()->controls() );
     m_modeCombo->setCurrentIndex( static_cast<int>( playlist->mode() ) );
     
-    if( playlist->mode() == Static ) {
-        m_generateButton->setText( tr( "Generate" ) );
-    } else {
-        m_generateButton->setText( tr( "Play" ) );
-    }
+    applyModeChange( m_playlist->mode() );
     connect( m_playlist->generator().data(), SIGNAL( generated( QList<Tomahawk::query_ptr> ) ), this, SLOT( tracksGenerated( QList<Tomahawk::query_ptr> ) ) );
     connect( m_playlist.data(), SIGNAL( dynamicRevisionLoaded( Tomahawk::DynamicPlaylistRevision ) ), this, SLOT( onRevisionLoaded( Tomahawk::DynamicPlaylistRevision ) ) );
     
@@ -147,6 +145,28 @@ DynamicWidget::generateOrStart()
         m_playlist->generator()->generate( 15 );
     }
 }
+
+void 
+DynamicWidget::modeChanged( int mode )
+{
+    qDebug() << Q_FUNC_INFO;
+    
+    m_playlist->setMode( mode );
+    applyModeChange( mode );
+    m_playlist->createNewRevision();
+}
+
+void DynamicWidget::applyModeChange( int mode )
+{
+    if( mode == OnDemand )
+    {
+        m_generateButton->setText( tr( "Play" ) );
+    } else if( mode == Static ) {
+        m_generateButton->setText( tr( "Generate" ) );
+        
+    }
+}
+
 
 void 
 DynamicWidget::tracksGenerated( const QList< query_ptr >& queries )

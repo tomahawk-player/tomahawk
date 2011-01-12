@@ -57,12 +57,15 @@ public slots:
     
 private slots:
     void generateOrStart();
+    void modeChanged(int);
     void tracksGenerated( const QList< Tomahawk::query_ptr>& queries );
     
     void controlsChanged();
     void controlChanged( const Tomahawk::dyncontrol_ptr& control );
     
 private:
+    void applyModeChange( int mode );
+    
     dynplaylist_ptr m_playlist;
     QVBoxLayout* m_layout;
     
