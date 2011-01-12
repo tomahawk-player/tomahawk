@@ -127,7 +127,7 @@
       </widget>
      </item>
      <item>
-      <widget class="ElidedLabel" name="activityLabel">
+      <widget class="QueryLabel" name="activityLabel">
        <property name="text">
         <string>TextLabel</string>
        </property>
@@ -200,6 +200,11 @@
    <class>ElidedLabel</class>
    <extends>QLabel</extends>
    <header>elidedlabel.h</header>
+  </customwidget>
+  <customwidget>
+   <class>QueryLabel</class>
+   <extends>QLabel</extends>
+   <header>querylabel.h</header>
   </customwidget>
  </customwidgets>
  <resources/>

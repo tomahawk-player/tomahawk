@@ -5,7 +5,7 @@
 #include <QSqlQuery>
 #include <QTime>
 
-#define TOMAHAWK_QUERY_THRESHOLD 20
+#define TOMAHAWK_QUERY_THRESHOLD 60
 
 class TomahawkSqlQuery : public QSqlQuery
 {
@@ -16,7 +16,7 @@ public:
         : QSqlQuery()
     {}
 
-    TomahawkSqlQuery( QSqlDatabase db )
+    TomahawkSqlQuery( const QSqlDatabase& db )
         : QSqlQuery( db )
     {}
 

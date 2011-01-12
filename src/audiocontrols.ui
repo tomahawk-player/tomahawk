@@ -184,7 +184,7 @@
              <number>0</number>
             </property>
             <item>
-             <widget class="ElidedLabel" name="artistTrackLabel">
+             <widget class="QueryLabel" name="artistTrackLabel">
               <property name="cursor">
                <cursorShape>PointingHandCursor</cursorShape>
               </property>
@@ -194,7 +194,7 @@
              </widget>
             </item>
             <item>
-             <widget class="ElidedLabel" name="albumLabel">
+             <widget class="QueryLabel" name="albumLabel">
               <property name="cursor">
                <cursorShape>PointingHandCursor</cursorShape>
               </property>
@@ -459,9 +459,9 @@
    <header>imagebutton.h</header>
   </customwidget>
   <customwidget>
-   <class>ElidedLabel</class>
+   <class>QueryLabel</class>
    <extends>QLabel</extends>
-   <header location="global">elidedlabel.h</header>
+   <header>querylabel.h</header>
   </customwidget>
  </customwidgets>
  <resources/>

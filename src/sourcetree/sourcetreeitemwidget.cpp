@@ -21,6 +21,7 @@ SourceTreeItemWidget::SourceTreeItemWidget( const source_ptr& source, QWidget* p
 
     ui->setupUi( this );
     ui->verticalLayout->setSpacing( 3 );
+    ui->activityLabel->setType( QueryLabel::ArtistAndTrack );
 
     QString displayname;
     if ( source.isNull() )
@@ -132,7 +133,8 @@ void
 SourceTreeItemWidget::onPlaybackStarted( const Tomahawk::query_ptr& query )
 {
     qDebug() << Q_FUNC_INFO << query->toString();
-    ui->activityLabel->setText( tr( "Playing: %1 by %2" ).arg( query->track() ).arg( query->artist() ) );
+//    ui->activityLabel->setText( tr( "Playing: %1 by %2" ).arg( query->track() ).arg( query->artist() ) );
+    ui->activityLabel->setQuery( query );
 }
 
 

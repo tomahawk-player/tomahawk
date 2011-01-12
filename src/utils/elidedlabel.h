@@ -30,10 +30,10 @@ public:
     void init( const QString& txt = QString() );
     void updateLabel();
 
-public Q_SLOTS:
+public slots:
     void setText( const QString& text );
 
-Q_SIGNALS:
+signals:
     void clicked();
     void textChanged( const QString& text );
 

@@ -27,13 +27,14 @@ AudioControls::AudioControls( QWidget* parent )
 
     QFont font( ui->artistTrackLabel->font() );
     font.setPixelSize( 12 );
-/*    ui->artistTrackLabel->setMinimumSize( ui->artistTrackLabel->minimumSizeHint() );
-    ui->albumLabel->setMinimumSize( ui->albumLabel->minimumSizeHint() );*/
 
     ui->artistTrackLabel->setFont( font );
     ui->artistTrackLabel->setElideMode( Qt::ElideMiddle );
+    ui->artistTrackLabel->setType( QueryLabel::ArtistAndTrack );
 
     ui->albumLabel->setFont( font );
+    ui->albumLabel->setType( QueryLabel::Album );
+
     ui->timeLabel->setFont( font );
     ui->timeLeftLabel->setFont( font );
 
@@ -229,8 +230,8 @@ AudioControls::onPlaybackLoading( const Tomahawk::result_ptr& result )
 
     m_currentTrack = result;
 
-    ui->artistTrackLabel->setText( QString( "%1 - %2" ).arg( result->artist()->name() ).arg( result->track() ) );
-    ui->albumLabel->setText( result->album()->name() );
+    ui->artistTrackLabel->setResult( result );
+    ui->albumLabel->setResult( result );
     ui->ownerLabel->setText( result->collection()->source()->friendlyName() );
     ui->coverImage->setPixmap( m_defaultCover );
 
