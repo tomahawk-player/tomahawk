@@ -63,7 +63,7 @@ DynamicControlWidget::DynamicControlWidget( const Tomahawk::dyncontrol_ptr& cont
     m_plusL->addWidget( m_plusButton );
     m_plusL->addWidget( m_minusButton );
     m_plusL->addWidget( createDummy( m_plusButton ) ); // :-(
-    m_plusL->setCurrentIndex( 0 );
+    m_plusL->setCurrentIndex( 2 );
     
     m_collapseButton = initButton();
     m_collapseButton->setIcon( QIcon( RESPATH "images/arrow-up-double.png" ) );
@@ -71,7 +71,7 @@ DynamicControlWidget::DynamicControlWidget( const Tomahawk::dyncontrol_ptr& cont
     m_collapseL->setContentsMargins( 0, 0, 0, 0 );
     m_collapseL->addWidget( m_collapseButton );
     m_collapseL->addWidget( createDummy( m_collapseButton ) ); // :-(
-    m_collapseL->setCurrentIndex( 0 );
+    m_collapseL->setCurrentIndex( 1 );
     
     connect( m_collapseButton, SIGNAL( clicked( bool ) ), this, SIGNAL( collapse() ) );
     connect( m_typeSelector, SIGNAL( activated( QString) ), SLOT( typeSelectorChanged( QString ) ) );    
@@ -171,7 +171,7 @@ DynamicControlWidget::setShowPlusButton(bool show)
 }
 
 
-void 
+void
 DynamicControlWidget::setShowCollapseButton(bool show)
 {
     if( m_showCollapse != show ) {
@@ -181,25 +181,30 @@ DynamicControlWidget::setShowCollapseButton(bool show)
     m_showCollapse = show;
 }
 
-void DynamicControlWidget::setShowMinusButton(bool show)
+void
+DynamicControlWidget::setShowMinusButton(bool show)
 {   
     m_showMinus = show;
 }
 
-void DynamicControlWidget::enterEvent(QEvent* ev)
+void 
+DynamicControlWidget::enterEvent(QEvent* ev)
 {
     if( m_showMinus )
         m_plusL->setCurrentIndex( 1 );
     
-    QWidget::enterEvent( ev );
+    if( ev )
+        QWidget::enterEvent( ev );
 }
 
-void DynamicControlWidget::leaveEvent(QEvent* ev)
+void 
+DynamicControlWidget::leaveEvent(QEvent* ev)
 {
     if( m_showMinus )
         m_plusL->setCurrentIndex( 2 );
     
-    QWidget::leaveEvent( ev );
+    if( ev )
+        QWidget::leaveEvent( ev );
 }
 
 
