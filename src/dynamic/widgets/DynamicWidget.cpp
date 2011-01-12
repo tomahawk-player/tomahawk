@@ -33,6 +33,7 @@ using namespace Tomahawk;
 DynamicWidget::DynamicWidget( const Tomahawk::dynplaylist_ptr& playlist, QWidget* parent )
     : QWidget(parent)
     , m_layout( new QVBoxLayout )
+    , m_resolveOnNextLoad( false )
     , m_headerText( 0 )
     , m_headerLayout( 0 )
     , m_modeCombo( 0 )
@@ -66,7 +67,6 @@ DynamicWidget::DynamicWidget( const Tomahawk::dynplaylist_ptr& playlist, QWidget
     m_logo = new QLabel( this );
     if( !playlist->generator()->logo().isNull() ) {
         QPixmap p = playlist->generator()->logo().scaledToHeight( m_headerText->height(), Qt::SmoothTransformation );
-        qDebug() << "Trying to scale to:" << QSize( m_headerText->height(), m_headerText->height() ) << playlist->generator()->logo().size() << p.size();
         m_logo->setPixmap( p );
     }
     m_headerLayout->addWidget(m_logo);
@@ -128,6 +128,11 @@ DynamicWidget::onRevisionLoaded( const Tomahawk::DynamicPlaylistRevision& rev )
 {
     qDebug() << "DynamicWidget::onRevisionLoaded";
     loadDynamicPlaylist( m_playlist );
+    if( m_resolveOnNextLoad )
+    {
+        m_playlist->resolve();
+        m_resolveOnNextLoad = false;
+    }
 }
 
 PlaylistInterface* 
@@ -172,7 +177,7 @@ void
 DynamicWidget::tracksGenerated( const QList< query_ptr >& queries )
 {
     m_playlist->addEntries( queries, m_playlist->currentrevision() );
-    m_playlist->resolve();
+    m_resolveOnNextLoad = true;
 }
 
 void DynamicWidget::controlsChanged()

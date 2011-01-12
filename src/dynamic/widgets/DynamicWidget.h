@@ -68,6 +68,7 @@ private:
     
     dynplaylist_ptr m_playlist;
     QVBoxLayout* m_layout;
+    bool m_resolveOnNextLoad;
     
     QLabel* m_headerText;
     QHBoxLayout* m_headerLayout;

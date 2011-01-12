@@ -25,6 +25,7 @@ void DatabaseCommand_LoadPlaylistEntries::generateEntries( DatabaseImpl* dbi )
     query_entries.bindValue( ":guid", m_revguid );
     query_entries.exec();
     
+    qDebug() << "trying to load entries:" << m_revguid;
     QString prevrev;
     QJson::Parser parser; bool ok;
     
