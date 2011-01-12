@@ -56,7 +56,7 @@ public slots:
     void onRevisionLoaded( const Tomahawk::DynamicPlaylistRevision& rev );
     
 private slots:
-    void generate();
+    void generateOrStart();
     void tracksGenerated( const QList< Tomahawk::query_ptr>& queries );
     
     void controlsChanged();

@@ -42,6 +42,12 @@ Tomahawk::GeneratorInterface::controls()
     return m_controls;
 }
 
+QPixmap 
+Tomahawk::GeneratorInterface::logo()
+{
+    return QPixmap();
+}
+
 void 
 Tomahawk::GeneratorInterface::addControl( const Tomahawk::dyncontrol_ptr& control )
 {

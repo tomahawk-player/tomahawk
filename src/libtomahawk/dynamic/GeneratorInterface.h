@@ -54,6 +54,8 @@ public:
     ///  you ask it to create
     virtual dyncontrol_ptr createControl( const QString& type = QString() );
     
+    /// A logo to display for this generator, if it has one
+    virtual QPixmap logo();
     /**
      * Generate tracks from the controls in this playlist. If the current mode is
      *  OnDemand, then \p number is not taken into account. If this generator is in static

@@ -44,7 +44,7 @@ public:
     virtual ~EchonestGenerator();
     
     virtual dyncontrol_ptr createControl( const QString& type = QString() );
-    
+    virtual QPixmap logo();
     virtual void generate ( int number = -1 );
     
 private slots:
@@ -52,6 +52,7 @@ private slots:
     
 private:
     Echonest::DynamicPlaylist::ArtistTypeEnum determineRadioType() const;
+    QPixmap m_logo;
 };
 
 };

@@ -17,6 +17,7 @@
 #include "dynamic/echonest/EchonestGenerator.h"
 #include "dynamic/echonest/EchonestControl.h"
 #include "query.h"
+#include "tomahawk/tomahawkapp.h"
 
 using namespace Tomahawk;
 
@@ -50,7 +51,8 @@ EchonestGenerator::EchonestGenerator ( QObject* parent )
 {
     m_type = "echonest";
     m_mode = OnDemand;
-                    
+    m_logo.load( RESPATH "/images/echonest_logo.png" );
+    qDebug() << "ECHONEST:" << m_logo.size();
 }
 
 EchonestGenerator::~EchonestGenerator()
@@ -64,6 +66,12 @@ EchonestGenerator::createControl( const QString& type )
     m_controls << dyncontrol_ptr( new EchonestControl( type, GeneratorFactory::typeSelectors( m_type ) ) );
     return m_controls.last();
 }
+
+QPixmap EchonestGenerator::logo()
+{
+    return m_logo;
+}
+
 
 void 
 EchonestGenerator::generate ( int number )
