@@ -316,11 +316,11 @@ void DynamicPlaylist::setRevision( const QString& rev,
     dpr.type = type;
     dpr.mode = Static;
     
-    if( applied )
+    if( applied ) {
         setCurrentrevision( rev );
-    
+    }
     //     qDebug() << "EMITTING REVISION LOADED 1!";
-        emit dynamicRevisionLoaded( dpr );    
+     emit dynamicRevisionLoaded( dpr );    
 }
 
 
@@ -385,7 +385,10 @@ void DynamicPlaylist::setRevision( const QString& rev,
     dpr.controls = controls;
     dpr.type = type;
     dpr.mode = OnDemand;
-
+    
+    if( applied ) {
+        setCurrentrevision( rev );
+    }
     //     qDebug() << "EMITTING REVISION LOADED 2!";
     emit dynamicRevisionLoaded( dpr ); 
 }

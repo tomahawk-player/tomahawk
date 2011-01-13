@@ -141,4 +141,18 @@ DatabaseCommand_SetDynamicPlaylistRevision::exec( DatabaseImpl* lib )
         controlsQuery.exec();
     }
     
+    if( m_applied )
+    {
+        qDebug() << "updating dynamic playlist, optimistic locking okay";
+        
+        TomahawkSqlQuery query2 = lib->newquery();
+        query2.prepare( "UPDATE dynamic_playlist SET pltype = ?, plmode = ? WHERE guid = ?" );
+        query2.bindValue( 0, m_type );
+        query2.bindValue( 1, m_mode );
+        query2.bindValue( 2, m_playlistguid );
+        query2.exec();
+        
+    }
+        
+    
 }
