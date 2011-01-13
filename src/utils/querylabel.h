@@ -71,6 +71,8 @@ protected:
 
     virtual void changeEvent( QEvent* event );
     virtual void paintEvent( QPaintEvent* event );
+
+    virtual void startDrag();
     
 private:
     QString smartAppend( QString& text, const QString& appendage ) const;
@@ -85,6 +87,7 @@ private:
     Qt::TextElideMode mode;
 
     QRect m_hoverArea;
+    QPoint m_dragPos;
 };
 
 #endif // QUERYLABEL_H

@@ -6,6 +6,10 @@
 #include <QMouseEvent>
 #include <QPainter>
 
+#include "tomahawkutils.h"
+
+#define BOXMARGIN 2
+
 
 QueryLabel::QueryLabel( QWidget* parent, Qt::WindowFlags flags )
     : QFrame( parent, flags )
@@ -161,12 +165,17 @@ QueryLabel::setResult( const Tomahawk::result_ptr& result )
     if ( result.isNull() )
         return;
 
-    setContentsMargins( 2, 0, 2, 0 );
+    setContentsMargins( BOXMARGIN, 0, BOXMARGIN, 0 );
 
     if ( m_result.isNull() || m_result.data() != result.data() )
     {
         m_result = result;
-        m_query.clear();
+
+        m_query = m_result->toQuery();
+        QList<Tomahawk::result_ptr> rl;
+        rl << m_result;
+        m_query->addResults( rl );
+
         updateLabel();
 
         emit textChanged( text() );
@@ -181,7 +190,7 @@ QueryLabel::setQuery( const Tomahawk::query_ptr& query )
     if ( query.isNull() )
         return;
 
-    setContentsMargins( 2, 0, 2, 0 );
+    setContentsMargins( BOXMARGIN, 0, BOXMARGIN, 0 );
 
     if ( m_query.isNull() || m_query.data() != query.data() )
     {
@@ -388,6 +397,8 @@ void
 QueryLabel::mouseReleaseEvent( QMouseEvent* event )
 {
     QFrame::mouseReleaseEvent( event );
+
+    m_dragPos = QPoint();
     if ( time.elapsed() < qApp->doubleClickInterval() )
         emit clicked();
 }
@@ -398,6 +409,14 @@ QueryLabel::mouseMoveEvent( QMouseEvent* event )
 {
     QFrame::mouseMoveEvent( event );
     int x = event->x();
+
+    if ( event->buttons() & Qt::LeftButton &&
+       ( m_dragPos - event->pos() ).manhattanLength() >= QApplication::startDragDistance() )
+    {
+        startDrag();
+        leaveEvent( 0 );
+        return;
+    }
 
     const QFontMetrics& fm = fontMetrics();
     int dashX = fm.width( " - " );
@@ -452,6 +471,31 @@ QueryLabel::leaveEvent( QEvent* event )
 {
     m_hoverArea = QRect();
     repaint();
+}
+
+
+void
+QueryLabel::startDrag()
+{
+    if ( m_query.isNull() )
+        return;
+
+    QByteArray queryData;
+    QDataStream queryStream( &queryData, QIODevice::WriteOnly );
+    QMimeData* mimeData = new QMimeData();
+    mimeData->setText( text() );
+
+    queryStream << qlonglong( &m_query );
+
+    mimeData->setData( "application/tomahawk.query.list", queryData );
+    QDrag *drag = new QDrag( this );
+    drag->setMimeData( mimeData );
+    drag->setPixmap( TomahawkUtils::createDragPixmap() );
+
+//    QPoint hotSpot = event->pos() - child->pos();
+//    drag->setHotSpot( hotSpot );
+
+    drag->exec( Qt::CopyAction );
 }
 
 

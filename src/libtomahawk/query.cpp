@@ -4,6 +4,7 @@
 
 using namespace Tomahawk;
 
+
 Query::Query( const QVariant& v )
     : m_v( v )
     , m_solved( false )
@@ -40,7 +41,8 @@ Query::addResults( const QList< Tomahawk::result_ptr >& newresults )
         }
     }
     emit resultsAdded( newresults );
-    if( becameSolved ) emit solvedStateChanged( true );
+    if( becameSolved )
+        emit solvedStateChanged( true );
 }
 
 
@@ -97,7 +99,8 @@ Query::numResults() const
 }
 
 
-QID Query::id() const
+QID
+Query::id() const
 {
     if ( m_qid.isEmpty() )
     {
@@ -112,7 +115,8 @@ QID Query::id() const
 }
 
 
-bool Query::resultSorter( const result_ptr& left, const result_ptr& right )
+bool
+Query::resultSorter( const result_ptr& left, const result_ptr& right )
 {
     return left->score() > right->score();
 }

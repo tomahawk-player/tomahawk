@@ -56,6 +56,14 @@ Result::toString() const
 }
 
 
+Tomahawk::query_ptr
+Result::toQuery() const
+{
+    Tomahawk::query_ptr query = Tomahawk::query_ptr( new Tomahawk::Query( toVariant() ) );
+    return query;
+}
+
+
 void
 Result::updateAttributes()
 {

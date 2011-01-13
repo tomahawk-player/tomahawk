@@ -4,6 +4,7 @@
 class QDir;
 class QDateTime;
 class QString;
+class QPixmap;
 
 namespace TomahawkUtils
 {
@@ -13,6 +14,8 @@ namespace TomahawkUtils
     QString timeToString( int seconds );
     QString ageToString( const QDateTime& time );
     QString filesizeToString( unsigned int size );
+
+    QPixmap createDragPixmap( int itemCount = 1 );
 }
 
 #endif // TOMAHAWKUTILS_H

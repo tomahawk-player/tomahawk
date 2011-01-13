@@ -55,8 +55,6 @@ private slots:
     void onFilterChanged( const QString& filter );
 
 private:
-    QPixmap createDragPixmap( int itemCount ) const;
-
     TrackModel* m_model;
     TrackProxyModel* m_proxyModel;
     PlaylistItemDelegate* m_delegate;

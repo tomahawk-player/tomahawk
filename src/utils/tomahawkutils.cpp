@@ -4,6 +4,8 @@
 #include <QDateTime>
 #include <QDebug>
 #include <QDir>
+#include <QPainter>
+#include <QPixmap>
 
 #ifdef WIN32
     #include <windows.h>
@@ -208,6 +210,67 @@ filesizeToString( unsigned int size )
     }
     else
         return QString::number( size );
+}
+
+
+QPixmap
+createDragPixmap( int itemCount )
+{
+    // If more than one item is dragged, align the items inside a
+    // rectangular grid. The maximum grid size is limited to 5 x 5 items.
+    int xCount = 3;
+    int size = 32;
+
+    if ( itemCount > 16 )
+    {
+        xCount = 5;
+        size = 16;
+    } else if( itemCount > 9 )
+    {
+        xCount = 4;
+        size = 22;
+    }
+
+    if( itemCount < xCount )
+    {
+        xCount = itemCount;
+    }
+
+    int yCount = itemCount / xCount;
+    if( itemCount % xCount != 0 )
+    {
+        ++yCount;
+    }
+    if( yCount > xCount )
+    {
+        yCount = xCount;
+    }
+    // Draw the selected items into the grid cells
+    QPixmap dragPixmap( xCount * size + xCount - 1, yCount * size + yCount - 1 );
+    dragPixmap.fill( Qt::transparent );
+
+    QPainter painter( &dragPixmap );
+    painter.setRenderHint( QPainter::Antialiasing );
+    int x = 0;
+    int y = 0;
+    for( int i = 0; i < itemCount; ++i )
+    {
+        const QPixmap pixmap = QPixmap( QString( ":/data/icons/audio-x-generic-%2x%2.png" ).arg( size ) );
+        painter.drawPixmap( x, y, pixmap );
+
+        x += size + 1;
+        if ( x >= dragPixmap.width() )
+        {
+            x = 0;
+            y += size + 1;
+        }
+        if ( y >= dragPixmap.height() )
+        {
+            break;
+        }
+    }
+
+    return dragPixmap;
 }
 
 } // ns
