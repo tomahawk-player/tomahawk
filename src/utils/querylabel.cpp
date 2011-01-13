@@ -9,7 +9,7 @@
 #include "tomahawkutils.h"
 
 #define BOXMARGIN 2
-
+#define DASH "  -  "
 
 QueryLabel::QueryLabel( QWidget* parent, Qt::WindowFlags flags )
     : QFrame( parent, flags )
@@ -165,7 +165,7 @@ QueryLabel::setResult( const Tomahawk::result_ptr& result )
     if ( result.isNull() )
         return;
 
-    setContentsMargins( BOXMARGIN, 0, BOXMARGIN, 0 );
+    setContentsMargins( BOXMARGIN * 2, BOXMARGIN / 2, BOXMARGIN * 2, BOXMARGIN / 2);
 
     if ( m_result.isNull() || m_result.data() != result.data() )
     {
@@ -190,7 +190,7 @@ QueryLabel::setQuery( const Tomahawk::query_ptr& query )
     if ( query.isNull() )
         return;
 
-    setContentsMargins( BOXMARGIN, 0, BOXMARGIN, 0 );
+    setContentsMargins( BOXMARGIN * 2, BOXMARGIN / 2, BOXMARGIN * 2, BOXMARGIN / 2 );
 
     if ( m_query.isNull() || m_query.data() != query.data() )
     {
@@ -254,7 +254,7 @@ QSize
 QueryLabel::sizeHint() const
 {
     const QFontMetrics& fm = fontMetrics();
-    QSize size( fm.width( text() ) + contentsMargins().left() * 2, fm.height() );
+    QSize size( fm.width( text() ) + contentsMargins().left() * 2, fm.height() + contentsMargins().top() * 2 );
     return size;
 }
 
@@ -270,7 +270,7 @@ QueryLabel::minimumSizeHint() const
         default:
         {
             const QFontMetrics& fm = fontMetrics();
-            QSize size( fm.width( "..." ), fm.height() );
+            QSize size( fm.width( "..." ), fm.height() + contentsMargins().top() * 2  );
             return size;
         }
     }
@@ -291,7 +291,7 @@ QueryLabel::paintEvent( QPaintEvent* event )
 
     if ( elidedText == s && m_hoverArea.width() )
     {
-        p.setPen( palette().highlight().color() );
+        p.setPen( palette().shadow().color() );
         p.setBrush( palette().highlight() );
         p.drawRoundedRect( m_hoverArea, 4.0, 4.0 );
     }
@@ -305,7 +305,7 @@ QueryLabel::paintEvent( QPaintEvent* event )
     else
     {
         const QFontMetrics& fm = fontMetrics();
-        int dashX = fm.width( " - " );
+        int dashX = fm.width( DASH );
         int artistX = m_type & Artist ? fm.width( artist() ) : 0;
         int albumX = m_type & Album ? fm.width( album() ) : 0;
         int trackX = m_type & Track ? fm.width( track() ) : 0;
@@ -331,7 +331,7 @@ QueryLabel::paintEvent( QPaintEvent* event )
 
             if ( m_type & Artist )
             {
-                p.drawText( r, align, " - " );
+                p.drawText( r, align, DASH );
                 r.adjust( dashX, 0, 0, 0 );
             }
             if ( m_hoverArea.width() && m_hoverArea.left() + contentsMargins().left() == r.left() )
@@ -350,7 +350,7 @@ QueryLabel::paintEvent( QPaintEvent* event )
 
             if ( m_type & Artist || m_type & Album )
             {
-                p.drawText( r, align, " - " );
+                p.drawText( r, align, DASH );
                 r.adjust( dashX, 0, 0, 0 );
             }
             if ( m_hoverArea.width() && m_hoverArea.left()  + contentsMargins().left() == r.left() )
@@ -419,7 +419,7 @@ QueryLabel::mouseMoveEvent( QMouseEvent* event )
     }
 
     const QFontMetrics& fm = fontMetrics();
-    int dashX = fm.width( " - " );
+    int dashX = fm.width( DASH );
     int artistX = m_type & Artist ? fm.width( artist() ) : 0;
     int albumX = m_type & Album ? fm.width( album() ) : 0;
     int trackX = m_type & Track ? fm.width( track() ) : 0;
@@ -437,26 +437,26 @@ QueryLabel::mouseMoveEvent( QMouseEvent* event )
     QRect hoverArea;
     if ( m_type & Artist && x < artistX )
     {
-        hoverArea.setLeft( 0 );
-        hoverArea.setRight( artistX + contentsMargins().left() );
+        hoverArea.setLeft( 1 );
+        hoverArea.setRight( artistX + contentsMargins().left() + 2 );
     }
     else if ( m_type & Album && x < albumX )
     {
         int spacing = ( m_type & Artist ) ? dashX : 0;
-        hoverArea.setLeft( artistX + spacing );
-        hoverArea.setRight( albumX + spacing + contentsMargins().left() );
+        hoverArea.setLeft( artistX + spacing + 1 );
+        hoverArea.setRight( albumX + spacing + contentsMargins().left() + 2 );
     }
     else if ( m_type & Track && x < trackX )
     {
         int spacing = ( m_type & Album ) ? dashX : 0;
-        hoverArea.setLeft( albumX + spacing );
-        hoverArea.setRight( trackX + contentsMargins().left() );
+        hoverArea.setLeft( albumX + spacing + 1 );
+        hoverArea.setRight( trackX + contentsMargins().left() + 2 );
     }
 
     if ( hoverArea.width() )
     {
-        hoverArea.setY( 0 );
-        hoverArea.setHeight( height() - 1 );
+        hoverArea.setY( 1 );
+        hoverArea.setHeight( height() - 2 );
     }
     if ( hoverArea != m_hoverArea )
     {
@@ -504,7 +504,7 @@ QueryLabel::smartAppend( QString& text, const QString& appendage ) const
 {
     QString s;
     if ( !text.isEmpty() )
-        s = " - ";
+        s = DASH;
 
     text += s + appendage;
     return text;

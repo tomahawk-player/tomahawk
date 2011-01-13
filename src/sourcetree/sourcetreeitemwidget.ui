@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>359</width>
-    <height>58</height>
+    <height>60</height>
    </rect>
   </property>
   <property name="sizePolicy">
@@ -19,13 +19,13 @@
   <property name="minimumSize">
    <size>
     <width>0</width>
-    <height>58</height>
+    <height>60</height>
    </size>
   </property>
   <property name="maximumSize">
    <size>
     <width>16777215</width>
-    <height>58</height>
+    <height>60</height>
    </size>
   </property>
   <property name="windowTitle">
@@ -197,14 +197,14 @@
    <header>imagebutton.h</header>
   </customwidget>
   <customwidget>
-   <class>ElidedLabel</class>
-   <extends>QLabel</extends>
-   <header>elidedlabel.h</header>
-  </customwidget>
-  <customwidget>
    <class>QueryLabel</class>
    <extends>QLabel</extends>
    <header>querylabel.h</header>
+  </customwidget>
+  <customwidget>
+   <class>ElidedLabel</class>
+   <extends>QLabel</extends>
+   <header>elidedlabel.h</header>
   </customwidget>
  </customwidgets>
  <resources/>
