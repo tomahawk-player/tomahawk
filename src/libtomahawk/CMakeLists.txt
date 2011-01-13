@@ -29,6 +29,7 @@ set( libSources
      network/filetransferconnection.cpp
      network/dbsyncconnection.cpp
      network/remotecollection.cpp
+     network/portfwdthread.cpp
 
      database/fuzzyindex.cpp
      database/databaseworker.cpp
@@ -122,6 +123,7 @@ set( libHeaders
         network/servent.h
         network/connection.h
         network/controlconnection.h
+     network/portfwdthread.h
 )
 
 include_directories( . ${CMAKE_CURRENT_BINARY_DIR} .. 

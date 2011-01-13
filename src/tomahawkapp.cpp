@@ -108,10 +108,6 @@ TomahawkApp::TomahawkApp( int& argc, char *argv[] )
 {
     qsrand( QTime( 0, 0, 0 ).secsTo( QTime::currentTime() ) );
 
-    new Pipeline( this );
-    new SourceList( this );
-    m_servent = new Servent( this );
-
 #ifdef TOMAHAWK_HEADLESS
     m_headless = true;
 #else
@@ -134,6 +130,13 @@ TomahawkApp::TomahawkApp( int& argc, char *argv[] )
 
     new TomahawkSettings( this );
     m_audioEngine = new AudioEngine;
+
+    new Pipeline( this );
+    new SourceList( this );
+
+    m_servent = new Servent( this );
+    connect( m_servent, SIGNAL( ready() ), SLOT( setupSIP() ) );
+
     setupDatabase();
 
 #ifndef NO_LIBLASTFM
@@ -160,8 +163,8 @@ TomahawkApp::TomahawkApp( int& argc, char *argv[] )
     {
         qDebug() << "Setting proxy to saved values";
         m_proxy = new QNetworkProxy( static_cast<QNetworkProxy::ProxyType>(TomahawkSettings::instance()->proxyType()), TomahawkSettings::instance()->proxyHost(), TomahawkSettings::instance()->proxyPort(), TomahawkSettings::instance()->proxyUsername(), TomahawkSettings::instance()->proxyPassword() );
-        qDebug() << "Proxy type = " << QString::number( static_cast<int>(m_proxy->type()) );
-        qDebug() << "Proxy host = " << m_proxy->hostName();
+        qDebug() << "Proxy type =" << QString::number( static_cast<int>(m_proxy->type()) );
+        qDebug() << "Proxy host =" << m_proxy->hostName();
         QNetworkAccessManager* nam = TomahawkApp::instance()->nam();
         nam->setProxy( *m_proxy );
     }
@@ -170,13 +173,8 @@ TomahawkApp::TomahawkApp( int& argc, char *argv[] )
 
     QNetworkProxy::setApplicationProxy( *m_proxy );
 
+    m_sipHandler = new SipHandler( this );
     m_infoSystem = new Tomahawk::InfoSystem::InfoSystem( this );
-
-    if( !arguments().contains("--nojabber") )
-    {
-        setupSIP();
-        m_xmppBot = new XMPPBot( this );
-    }
 
 #ifndef TOMAHAWK_HEADLESS
     if ( !m_headless )
@@ -195,8 +193,6 @@ TomahawkApp::TomahawkApp( int& argc, char *argv[] )
 
     if( arguments().contains( "--http" ) || TomahawkSettings::instance()->value( "network/http", true ).toBool() )
         startHTTP();
-
-    m_sipHandler->connect();
 
 #ifndef TOMAHAWK_HEADLESS
     if ( !TomahawkSettings::instance()->hasScannerPath() )
@@ -258,6 +254,7 @@ TomahawkApp::registerMetaTypes()
     qRegisterMetaType< QTcpSocket* >("QTcpSocket*");
     qRegisterMetaType< QSharedPointer<QIODevice> >("QSharedPointer<QIODevice>");
     qRegisterMetaType< QFileInfo >("QFileInfo");
+    qRegisterMetaType< QHostAddress >("QHostAddress");
     qRegisterMetaType< QMap<QString, unsigned int> >("QMap<QString, unsigned int>");
     qRegisterMetaType< QMap< QString, plentry_ptr > >("QMap< QString, plentry_ptr >");
     qRegisterMetaType< QHash< QString, QMap<quint32, quint16> > >("QHash< QString, QMap<quint32, quint16> >");
@@ -399,8 +396,12 @@ TomahawkApp::setupSIP()
 {
     qDebug() << Q_FUNC_INFO;
 
-    m_sipHandler = new SipHandler( this );
+    if( !arguments().contains( "--nojabber" ) )
+    {
+        m_xmppBot = new XMPPBot( this );
 
-//    m_sipHandler->setProxy( m_proxy );
+        m_sipHandler->connect();
+        //    m_sipHandler->setProxy( m_proxy );
+    }
 }
 
