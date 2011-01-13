@@ -177,6 +177,9 @@ TomahawkWindow::setupSignals()
     connect( APP->sipHandler(), SIGNAL( connected() ), SLOT( onSipConnected() ) );
     connect( APP->sipHandler(), SIGNAL( disconnected() ), SLOT( onSipDisconnected() ) );
     connect( APP->sipHandler(), SIGNAL( authError() ), SLOT( onSipError() ) );
+
+    // set initial connection state
+    onSipDisconnected();
 }
 
 
