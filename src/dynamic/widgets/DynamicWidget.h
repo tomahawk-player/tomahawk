@@ -23,6 +23,7 @@
 #include "dynamic/DynamicPlaylist.h"
 #include "dynamic/DynamicControl.h"
 
+class QSpinBox;
 class QVBoxLayout;
 class QHBoxLayout;
 class QPushButton;
@@ -76,6 +77,7 @@ private:
     QComboBox* m_generatorCombo;
     QLabel* m_logo;
     QPushButton* m_generateButton;
+    QSpinBox* m_genNumber;
     
     DynamicControlList* m_controls;
     AnimatedSplitter* m_splitter;

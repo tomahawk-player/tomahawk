@@ -27,6 +27,7 @@
 #include "trackproxymodel.h"
 #include "dynamic/GeneratorInterface.h"
 #include "dynamic/GeneratorFactory.h"
+#include <QSpinBox>
 
 using namespace Tomahawk;
 
@@ -63,6 +64,11 @@ DynamicWidget::DynamicWidget( const Tomahawk::dynplaylist_ptr& playlist, QWidget
     m_headerLayout->addWidget( m_generateButton );
     
     m_headerLayout->addStretch( 1 );
+    
+    m_genNumber = new QSpinBox( this );
+    m_genNumber->setValue( 15 );
+    m_genNumber->setMinimum( 0 );
+    m_genNumber->hide();
     
     m_logo = new QLabel( this );
     if( !playlist->generator()->logo().isNull() ) {
@@ -147,7 +153,7 @@ DynamicWidget::generateOrStart()
     if( m_playlist->mode() == Static ) 
     {
         // get the items from the generator, and put them in the playlist
-        m_playlist->generator()->generate( 15 );
+        m_playlist->generator()->generate( m_genNumber->value() );
     }
 }
 
@@ -166,9 +172,11 @@ void DynamicWidget::applyModeChange( int mode )
     if( mode == OnDemand )
     {
         m_generateButton->setText( tr( "Play" ) );
+        m_genNumber->hide();
     } else if( mode == Static ) {
         m_generateButton->setText( tr( "Generate" ) );
-        
+        m_genNumber->show();
+        m_headerLayout->insertWidget( 4, m_genNumber );
     }
 }
 
