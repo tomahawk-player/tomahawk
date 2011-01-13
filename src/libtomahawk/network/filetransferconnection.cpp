@@ -10,9 +10,6 @@
 #include "database/database.h"
 #include "sourcelist.h"
 
-// Msgs are framed, this is the size each msg we send containing audio data:
-#define BLOCKSIZE 4096
-
 using namespace Tomahawk;
 
 
@@ -21,6 +18,7 @@ FileTransferConnection::FileTransferConnection( Servent* s, ControlConnection* c
     , m_cc( cc )
     , m_fid( fid )
     , m_type( RECEIVING )
+    , m_curBlock( 0 )
     , m_badded( 0 )
     , m_bsent( 0 )
     , m_allok( false )
@@ -37,7 +35,8 @@ FileTransferConnection::FileTransferConnection( Servent* s, ControlConnection* c
 
     // if the audioengine closes the iodev (skip/stop/etc) then kill the connection
     // immediately to avoid unnecessary network transfer
-    connect( m_iodev.data(), SIGNAL( aboutToClose() ), this, SLOT( shutdown() ), Qt::QueuedConnection );
+    connect( m_iodev.data(), SIGNAL( aboutToClose() ), SLOT( shutdown() ), Qt::QueuedConnection );
+    connect( m_iodev.data(), SIGNAL( blockRequest( int ) ), SLOT( onBlockRequest( int ) ) );
 
     // auto delete when connection closes:
     connect( this, SIGNAL( finished() ), SLOT( deleteLater() ), Qt::QueuedConnection );
@@ -176,21 +175,41 @@ FileTransferConnection::startSending( const Tomahawk::result_ptr& result )
 void
 FileTransferConnection::handleMsg( msg_ptr msg )
 {
-    Q_ASSERT( m_type == FileTransferConnection::RECEIVING );
     Q_ASSERT( msg->is( Msg::RAW ) );
 
-    m_badded += msg->payload().length();
-    ((BufferIODevice*)m_iodev.data())->addData( msg->payload() );
+    if ( msg->payload().startsWith( "block" ) )
+    {
+        int block = QString( msg->payload() ).mid( 5 ).toInt();
+        m_readdev->seek( block * BufferIODevice::blockSize() );
+
+        qDebug() << "Seeked to block:" << block;
+
+        QByteArray sm;
+        sm.append( QString( "doneblock%1" ).arg( block ) );
+
+        sendMsg( Msg::factory( sm, Msg::RAW | Msg::FRAGMENT ) );
+        QTimer::singleShot( 0, this, SLOT( sendSome() ) );
+    }
+    else if ( msg->payload().startsWith( "doneblock" ) )
+    {
+        int block = QString( msg->payload() ).mid( 9 ).toInt();
+        ((BufferIODevice*)m_iodev.data())->seeked( block );
+
+        m_curBlock = block;
+        qDebug() << "Next block is now:" << block;
+    }
+    else if ( msg->payload().startsWith( "data" ) )
+    {
+        m_badded += msg->payload().length() - 4;
+        ((BufferIODevice*)m_iodev.data())->addData( m_curBlock++, msg->payload().mid( 4 ) );
+    }
 
     //qDebug() << Q_FUNC_INFO << "flags" << (int) msg->flags()
     //         << "payload len" << msg->payload().length()
     //         << "written to device so far: " << m_badded;
 
-    if( !msg->is( Msg::FRAGMENT ) )
+    if ( ((BufferIODevice*)m_iodev.data())->nextEmptyBlock() < 0 )
     {
-        qDebug() << "*** Got last msg in filetransfer. added" << m_badded
-                 << "io size" << m_iodev->size();
-
         m_allok = true;
         // tell our iodev there is no more data to read, no args meaning a success:
         ((BufferIODevice*)m_iodev.data())->inputComplete();
@@ -199,26 +218,26 @@ FileTransferConnection::handleMsg( msg_ptr msg )
 }
 
 
-Connection* FileTransferConnection::clone()
+Connection*
+FileTransferConnection::clone()
 {
     Q_ASSERT( false );
     return 0;
 }
 
 
-void FileTransferConnection::sendSome()
+void
+FileTransferConnection::sendSome()
 {
     Q_ASSERT( m_type == FileTransferConnection::SENDING );
 
-    QByteArray ba = m_readdev->read( BLOCKSIZE );
-    m_bsent += ba.length();
-    //qDebug() << "Sending" << ba.length() << "bytes of audiofile";
+    QByteArray ba = "data";
+    ba.append( m_readdev->read( BufferIODevice::blockSize() ) );
+    m_bsent += ba.length() - 4;
 
     if( m_readdev->atEnd() )
     {
         sendMsg( Msg::factory( ba, Msg::RAW ) );
-        qDebug() << "Sent all. DONE." << m_bsent;
-        shutdown( true );
         return;
     }
     else
@@ -230,4 +249,19 @@ void FileTransferConnection::sendSome()
     // HINT: change the 0 to 50 to transmit at 640Kbps, for example
     //       (this is where upload throttling could be implemented)
     QTimer::singleShot( 0, this, SLOT( sendSome() ) );
+}
+
+
+void
+FileTransferConnection::onBlockRequest( int block )
+{
+    qDebug() << Q_FUNC_INFO << block;
+
+    if ( m_curBlock == block )
+        return;
+
+    QByteArray sm;
+    sm.append( QString( "block%1" ).arg( block ) );
+
+    sendMsg( Msg::factory( sm, Msg::RAW | Msg::FRAGMENT ) );
 }

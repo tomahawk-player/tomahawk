@@ -21,7 +21,9 @@ DatabaseCommand_PlaybackHistory::exec( DatabaseImpl* dbi )
             "SELECT track, playtime, secs_played "
             "FROM playback_log "
             "%1 "
-            "ORDER BY playtime DESC").arg( whereToken );
+            "ORDER BY playtime DESC "
+            "%2" ).arg( whereToken )
+                  .arg( m_amount > 0 ? QString( "LIMIT 0, %1" ).arg( m_amount ) : QString() );
 
     query.prepare( sql );
     query.exec();
@@ -34,10 +36,8 @@ DatabaseCommand_PlaybackHistory::exec( DatabaseImpl* dbi )
                 "SELECT track.name, artist.name "
                 "FROM track, artist "
                 "WHERE artist.id = track.artist "
-                "AND track.id = %1 "
-                "%2"
-                ).arg( query.value( 0 ).toUInt() )
-                 .arg( m_amount > 0 ? QString( "LIMIT 0, %1" ).arg( m_amount ) : QString() );
+                "AND track.id = %1"
+                ).arg( query.value( 0 ).toUInt() );
 
         query_track.prepare( sql );
         query_track.exec();

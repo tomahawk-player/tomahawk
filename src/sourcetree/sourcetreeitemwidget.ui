@@ -7,26 +7,14 @@
     <x>0</x>
     <y>0</y>
     <width>359</width>
-    <height>58</height>
+    <height>56</height>
    </rect>
   </property>
   <property name="sizePolicy">
-   <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
+   <sizepolicy hsizetype="Minimum" vsizetype="Minimum">
     <horstretch>0</horstretch>
     <verstretch>0</verstretch>
    </sizepolicy>
-  </property>
-  <property name="minimumSize">
-   <size>
-    <width>0</width>
-    <height>58</height>
-   </size>
-  </property>
-  <property name="maximumSize">
-   <size>
-    <width>16777215</width>
-    <height>58</height>
-   </size>
   </property>
   <property name="windowTitle">
    <string>Form</string>
@@ -92,7 +80,7 @@
      </property>
      <property name="sizeHint" stdset="0">
       <size>
-       <width>4</width>
+       <width>2</width>
        <height>20</height>
       </size>
      </property>
@@ -101,10 +89,10 @@
    <item>
     <layout class="QVBoxLayout" name="verticalLayout">
      <property name="topMargin">
-      <number>4</number>
+      <number>2</number>
      </property>
      <property name="bottomMargin">
-      <number>4</number>
+      <number>2</number>
      </property>
      <item>
       <widget class="ElidedLabel" name="nameLabel">
@@ -127,7 +115,7 @@
       </widget>
      </item>
      <item>
-      <widget class="ElidedLabel" name="activityLabel">
+      <widget class="QueryLabel" name="activityLabel">
        <property name="text">
         <string>TextLabel</string>
        </property>
@@ -195,6 +183,11 @@
    <class>ImageButton</class>
    <extends>QPushButton</extends>
    <header>imagebutton.h</header>
+  </customwidget>
+  <customwidget>
+   <class>QueryLabel</class>
+   <extends>QLabel</extends>
+   <header>querylabel.h</header>
   </customwidget>
   <customwidget>
    <class>ElidedLabel</class>

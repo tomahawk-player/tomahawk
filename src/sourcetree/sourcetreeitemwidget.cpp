@@ -21,6 +21,15 @@ SourceTreeItemWidget::SourceTreeItemWidget( const source_ptr& source, QWidget* p
 
     ui->setupUi( this );
     ui->verticalLayout->setSpacing( 3 );
+    ui->activityLabel->setType( QueryLabel::ArtistAndTrack );
+
+    QFont font = ui->nameLabel->font();
+//    font.setPointSize( font.pointSize() - 1 );
+    ui->nameLabel->setFont( font );
+
+    font.setPointSize( font.pointSize() - 1 );
+    ui->infoLabel->setFont( font );
+    ui->activityLabel->setFont( font );
 
     QString displayname;
     if ( source.isNull() )
@@ -57,6 +66,10 @@ SourceTreeItemWidget::SourceTreeItemWidget( const source_ptr& source, QWidget* p
     ui->activityLabel->setText( tr( "Idle" ) );
     ui->infoLabel->setForegroundRole( QPalette::Dark );
     ui->activityLabel->setForegroundRole( QPalette::Dark );
+
+    ui->nameLabel->setContentsMargins( 4, 0, 0, 0 );
+    ui->infoLabel->setContentsMargins( 4, 0, 0, 0 );
+    ui->activityLabel->setContentsMargins( 4, 0, 0, 0 );
 
     connect( ui->onOffButton, SIGNAL( clicked() ), SIGNAL( clicked() ) );
     connect( ui->infoButton, SIGNAL( clicked() ), SLOT( onInfoButtonClicked() ) );
@@ -132,7 +145,8 @@ void
 SourceTreeItemWidget::onPlaybackStarted( const Tomahawk::query_ptr& query )
 {
     qDebug() << Q_FUNC_INFO << query->toString();
-    ui->activityLabel->setText( tr( "Playing: %1 by %2" ).arg( query->track() ).arg( query->artist() ) );
+//    ui->activityLabel->setText( tr( "Playing: %1 by %2" ).arg( query->track() ).arg( query->artist() ) );
+    ui->activityLabel->setQuery( query );
 }
 
 

@@ -240,7 +240,9 @@ PlaylistModel::dropMimeData( const QMimeData* data, Qt::DropAction action, int r
     if ( action == Qt::IgnoreAction || isReadOnly() )
         return true;
 
-    if ( !data->hasFormat( "application/tomahawk.query.list" ) && !data->hasFormat( "application/tomahawk.plentry.list" ) )
+    if ( !data->hasFormat( "application/tomahawk.query.list" )
+        && !data->hasFormat( "application/tomahawk.plentry.list" )
+        && !data->hasFormat( "application/tomahawk.result.list" ) )
         return false;
 
     int beginRow;

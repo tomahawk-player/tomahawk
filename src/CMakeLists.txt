@@ -54,6 +54,7 @@ SET( tomahawkSources ${tomahawkSources}
 SET( tomahawkSourcesGui ${tomahawkSourcesGui}
      xspfloader.cpp
 
+     utils/querylabel.cpp
      utils/elidedlabel.cpp
      utils/imagebutton.cpp
      utils/progresstreeview.cpp
@@ -137,6 +138,7 @@ SET( tomahawkHeaders ${tomahawkHeaders}
 SET( tomahawkHeadersGui ${tomahawkHeadersGui}
      xspfloader.h
 
+     utils/querylabel.h
      utils/elidedlabel.h
      utils/animatedcounterlabel.h
      utils/imagebutton.h

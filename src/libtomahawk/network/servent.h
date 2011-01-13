@@ -33,7 +33,7 @@ class ControlConnection;
 class FileTransferConnection;
 class ProxyConnection;
 class RemoteCollectionConnection;
-class Portfwd;
+class PortFwdThread;
 
 // this is used to hold a bit of state, so when a connected signal is emitted
 // from a socket, we can associate it with a Connection object etc.
@@ -90,7 +90,6 @@ public:
     void connectToPeer( const QString& ha, int port, const QString &key, Connection* conn );
     void reverseOfferRequest( ControlConnection* orig_conn, const QString& key, const QString& theirkey );
 
-    void setExternalAddress( QHostAddress ha, int port );
     bool visibleExternally() const { return m_externalPort > 0 && !m_externalAddress.isNull(); }
     QHostAddress externalAddress() const { return m_externalAddress; }
     int externalPort() const { return m_externalPort; }
@@ -111,11 +110,14 @@ public:
 signals:
     void fileTransferStarted( FileTransferConnection* );
     void fileTransferFinished( FileTransferConnection* );
+    void ready();
 
 protected:
     void incomingConnection( int sd );
 
 public slots:
+    void setExternalAddress( QHostAddress ha, unsigned int port );
+
     void socketError( QAbstractSocket::SocketError );
     void createParallelConnection( Connection* orig_conn, Connection* new_conn, const QString& key );
 
@@ -145,9 +147,9 @@ private:
     QList< FileTransferConnection* > m_ftsessions;
     QMutex m_ftsession_mut;
 
-    Portfwd* pf;
     QMap< QString,boost::function<QSharedPointer<QIODevice>(Tomahawk::result_ptr)> > m_iofactories;
 
+    PortFwdThread* m_portfwd;
     static Servent* s_instance;
 };
 

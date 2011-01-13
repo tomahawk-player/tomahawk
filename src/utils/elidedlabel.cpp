@@ -1,6 +1,5 @@
 #include "elidedlabel.h"
 
-#include <QTime>
 #include <QEvent>
 #include <QPainter>
 #include <QFontMetrics>

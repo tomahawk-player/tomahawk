@@ -77,13 +77,15 @@ public:
 signals:
     void settingsChanged();
     
+private slots:
+    void setupSIP();
+
 private:
     void initLocalCollection();
     void loadPlugins();
     void registerMetaTypes();
     void startServent();
     void setupDatabase();
-    void setupSIP();
     void setupPipeline();
     void startHTTP();
 

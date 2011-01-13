@@ -476,6 +476,7 @@ DatabaseImpl::result( const QString& url )
 {
     TomahawkSqlQuery query = newquery();
     Tomahawk::source_ptr s;
+    QVariantMap m;
     QString fileUrl;
 
     if ( url.contains( "servent://" ) )
@@ -483,6 +484,9 @@ DatabaseImpl::result( const QString& url )
         QStringList parts = url.mid( QString( "servent://" ).length() ).split( "\t" );
         s = SourceList::instance()->get( parts.at( 0 ) );
         fileUrl = parts.at( 1 );
+
+        if ( s.isNull() )
+            return m;
     }
     else if ( url.contains( "file://" ) )
     {
@@ -517,7 +521,6 @@ DatabaseImpl::result( const QString& url )
     query.bindValue( 0, fileUrl );
     query.exec();
 
-    QVariantMap m;
     if( query.next() )
     {
         const QString url_str = query.value( 0 ).toString();

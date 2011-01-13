@@ -21,8 +21,10 @@ public:
 	Result();
     explicit Result( const QVariant& v, const collection_ptr& collection );
     virtual ~Result();
-    
+
     QVariant toVariant() const { return m_v; }
+    QString toString() const;
+    Tomahawk::query_ptr toQuery() const;
 
     float score() const;
     RID id() const;
@@ -44,9 +46,6 @@ public:
     void setAttributes( const QVariantMap& map ) { m_attributes = map; updateAttributes(); }
 
     unsigned int dbid() const { return m_id; }
-
-    // for debug output:
-    QString toString() const;
 
 signals:
     // emitted when the collection this result comes from is going offline:

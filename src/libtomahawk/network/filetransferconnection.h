@@ -55,12 +55,16 @@ private slots:
     void sendSome();
     void showStats( qint64 tx, qint64 rx );
 
+    void onBlockRequest( int pos );
+
 private:
     QSharedPointer<QIODevice> m_iodev;
     ControlConnection* m_cc;
     QString m_fid;
     Type m_type;
     QSharedPointer<QIODevice> m_readdev;
+
+    int m_curBlock;
 
     int m_badded, m_bsent;
     bool m_allok; // got last msg ok, transfer complete?

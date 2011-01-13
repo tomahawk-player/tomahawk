@@ -161,7 +161,9 @@ TrackView::dragEnterEvent( QDragEnterEvent* event )
     qDebug() << Q_FUNC_INFO;
     QTreeView::dragEnterEvent( event );
 
-    if ( event->mimeData()->hasFormat( "application/tomahawk.query.list" ) || event->mimeData()->hasFormat( "application/tomahawk.plentry.list" ) )
+    if ( event->mimeData()->hasFormat( "application/tomahawk.query.list" )
+        || event->mimeData()->hasFormat( "application/tomahawk.plentry.list" )
+        || event->mimeData()->hasFormat( "application/tomahawk.result.list" ) )
     {
         m_dragging = true;
         m_dropRect = QRect();
@@ -183,7 +185,9 @@ TrackView::dragMoveEvent( QDragMoveEvent* event )
         return;
     }
 
-    if ( event->mimeData()->hasFormat( "application/tomahawk.query.list" ) || event->mimeData()->hasFormat( "application/tomahawk.plentry.list" ) )
+    if ( event->mimeData()->hasFormat( "application/tomahawk.query.list" )
+        || event->mimeData()->hasFormat( "application/tomahawk.plentry.list" )
+        || event->mimeData()->hasFormat( "application/tomahawk.result.list" ) )
     {
         setDirtyRegion( m_dropRect );
         const QPoint pos = event->pos();
@@ -216,6 +220,7 @@ TrackView::dropEvent( QDropEvent* event )
         qDebug() << "Ignoring accepted event!";
     }
     else
+    {
         if ( event->mimeData()->hasFormat( "application/tomahawk.query.list" ) )
         {
             const QPoint pos = event->pos();
@@ -229,6 +234,7 @@ TrackView::dropEvent( QDropEvent* event )
                 model()->dropMimeData( event->mimeData(), event->proposedAction(), index.row(), 0, index.parent() );
             }
         }
+    }
 
     m_dragging = false;
 }
@@ -298,7 +304,7 @@ TrackView::startDrag( Qt::DropActions supportedActions )
 
     QDrag* drag = new QDrag( this );
     drag->setMimeData( data );
-    const QPixmap p = createDragPixmap( indexes.count() );
+    const QPixmap p = TomahawkUtils::createDragPixmap( indexes.count() );
     drag->setPixmap( p );
     drag->setHotSpot( QPoint( -20, -20 ) );
 
@@ -307,66 +313,4 @@ TrackView::startDrag( Qt::DropActions supportedActions )
     {
         m_proxyModel->removeIndexes( pindexes );
     }
-}
-
-
-// Inspired from dolphin's draganddrophelper.cpp
-QPixmap
-TrackView::createDragPixmap( int itemCount ) const
-{
-    // If more than one item is dragged, align the items inside a
-    // rectangular grid. The maximum grid size is limited to 5 x 5 items.
-    int xCount = 3;
-    int size = 32;
-
-    if ( itemCount > 16 )
-    {
-        xCount = 5;
-        size = 16;
-    } else if( itemCount > 9 )
-    {
-        xCount = 4;
-        size = 22;
-    }
-
-    if( itemCount < xCount )
-    {
-        xCount = itemCount;
-    }
-
-    int yCount = itemCount / xCount;
-    if( itemCount % xCount != 0 )
-    {
-        ++yCount;
-    }
-    if( yCount > xCount )
-    {
-        yCount = xCount;
-    }
-    // Draw the selected items into the grid cells
-    QPixmap dragPixmap( xCount * size + xCount - 1, yCount * size + yCount - 1 );
-    dragPixmap.fill( Qt::transparent );
-
-    QPainter painter( &dragPixmap );
-    painter.setRenderHint( QPainter::Antialiasing );
-    int x = 0;
-    int y = 0;
-    for( int i = 0; i < itemCount; ++i )
-    {
-        const QPixmap pixmap = QPixmap( QString( ":/data/icons/audio-x-generic-%2x%2.png" ).arg( size ) );
-        painter.drawPixmap( x, y, pixmap );
-
-        x += size + 1;
-        if ( x >= dragPixmap.width() )
-        {
-            x = 0;
-            y += size + 1;
-        }
-        if ( y >= dragPixmap.height() )
-        {
-            break;
-        }
-    }
-
-    return dragPixmap;
 }

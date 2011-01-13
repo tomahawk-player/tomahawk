@@ -37,14 +37,21 @@ DatabaseCommand_Resolve::exec( DatabaseImpl* lib )
         if ( !m.isEmpty() )
         {
             if ( m.value( "srcid" ).toUInt() > 0 )
-                coll = SourceList::instance()->get( m.value( "srcid" ).toUInt() )->collection();
+            {
+                source_ptr s = SourceList::instance()->get( m.value( "srcid" ).toUInt() );
+                if ( !s.isNull() )
+                    coll = s->collection();
+            }
             else
                 coll = SourceList::instance()->getLocal()->collection();
 
-            res << Tomahawk::result_ptr( new Tomahawk::Result( m, coll ) );
-            emit results( qid, res );
+            if ( !coll.isNull() )
+            {
+                res << Tomahawk::result_ptr( new Tomahawk::Result( m, coll ) );
+                emit results( qid, res );
 
-            return;
+                return;
+            }
         }
     }
 

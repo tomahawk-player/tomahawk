@@ -4,7 +4,6 @@
 #include <QMutexLocker>
 #include <QNetworkInterface>
 #include <QFile>
-#include <QTime>
 #include <QThread>
 #include <QNetworkRequest>
 #include <QNetworkReply>
@@ -18,7 +17,7 @@
 #include "filetransferconnection.h"
 #include "sourcelist.h"
 
-#include "portfwd/portfwd.h"
+#include "portfwdthread.h"
 
 using namespace Tomahawk;
 
@@ -36,11 +35,9 @@ Servent::Servent( QObject* parent )
     : QTcpServer( parent )
     , m_port( 0 )
     , m_externalPort( 0 )
-    , pf( new Portfwd() )
+    , m_portfwd( 0 )
 {
     s_instance = this;
-
-    qsrand( QTime( 0, 0, 0 ).secsTo( QTime::currentTime() ) );
 
     {
     boost::function<QSharedPointer<QIODevice>(result_ptr)> fac =
@@ -64,11 +61,7 @@ Servent::Servent( QObject* parent )
 
 Servent::~Servent()
 {
-    if( m_externalPort )
-    {
-        qDebug() << "Unregistering port fwd";
-        pf->remove( m_externalPort );
-    }
+    delete m_portfwd;
 }
 
 
@@ -88,52 +81,6 @@ Servent::startListening( QHostAddress ha, bool upnp, int port )
         qDebug() << "Servent listening on port" << m_port << " servent thread:" << thread();
     }
 
-    // TODO check if we have a public/internet IP on this machine directly
-    // FIXME the portfwd stuff is blocking, so we hang here for 2 secs atm
-    if( upnp )
-    {
-        // try and pick an available port:
-        if( pf->init( 2000 ) )
-        {
-            int tryport = m_port;
-
-            // last.fm office firewall policy hack
-            // (corp. firewall allows outgoing connections to this port,
-            //  so listen on this if you want lastfmers to connect to you)
-            if( qApp->arguments().contains( "--porthack" ) )
-            {
-                tryport = 3389;
-                pf->remove( tryport );
-            }
-
-            for( int r=0; r<5; ++r )
-            {
-                qDebug() << "Trying to setup portfwd on" << tryport;
-                if( pf->add( tryport, m_port ) )
-                {
-                    QString pubip = QString( pf->external_ip().c_str() );
-                    m_externalAddress = QHostAddress( pubip );
-                    m_externalPort = tryport;
-                    qDebug() << "External servent address detected as" << pubip << ":" << m_externalPort;
-                    qDebug() << "Max upstream  " << pf->max_upstream_bps() << "bps";
-                    qDebug() << "Max downstream" << pf->max_downstream_bps() << "bps";
-                    break;
-                }
-                tryport = 10000 + 50000 * (float)qrand()/RAND_MAX;
-            }
-            if( !m_externalPort )
-            {
-                qDebug() << "Could not setup fwd for port:" << m_port;
-            }
-        }
-        else qDebug() << "No UPNP Gateway device found?";
-    }
-
-    if( m_externalPort == 0 )
-    {
-        qDebug() << "No external access, LAN and outbound connections only!";
-    }
-
     // --lanhack means to advertise your LAN IP over jabber as if it were externallyVisible
     if( qApp->arguments().contains( "--lanhack" ) )
     {
@@ -149,6 +96,17 @@ Servent::startListening( QHostAddress ha, bool upnp, int port )
             break;
         }
     }
+    else if( upnp )
+    {
+        // TODO check if we have a public/internet IP on this machine directly
+        m_portfwd = new PortFwdThread( m_port );
+        connect( m_portfwd, SIGNAL( externalAddressDetected( QHostAddress, unsigned int ) ),
+                              SLOT( setExternalAddress( QHostAddress, unsigned int ) ) );
+    }
+    else
+    {
+        emit ready();
+    }
 
     return true;
 }
@@ -160,7 +118,7 @@ Servent::createConnectionKey( const QString& name )
     Q_ASSERT( this->thread() == QThread::currentThread() );
 
     QString key = uuid();
-    ControlConnection * cc = new ControlConnection( this );
+    ControlConnection* cc = new ControlConnection( this );
     cc->setName( name.isEmpty() ? QString( "KEY(%1)" ).arg( key ) : name );
     registerOffer( key, cc );
     return key;
@@ -168,10 +126,17 @@ Servent::createConnectionKey( const QString& name )
 
 
 void
-Servent::setExternalAddress( QHostAddress ha, int port )
+Servent::setExternalAddress( QHostAddress ha, unsigned int port )
 {
     m_externalAddress = ha;
     m_externalPort = port;
+
+    if( m_externalPort == 0 )
+    {
+        qDebug() << "No external access, LAN and outbound connections only!";
+    }
+
+    emit ready();
 }
 
 
@@ -217,8 +182,10 @@ void
 Servent::incomingConnection( int sd )
 {
     Q_ASSERT( this->thread() == QThread::currentThread() );
+
     QTcpSocketExtra* sock = new QTcpSocketExtra;
     qDebug() << Q_FUNC_INFO << "Accepting connection, sock" << sock;
+
     sock->moveToThread( thread() );
     sock->_disowned = false;
     sock->_outbound = false;
@@ -381,7 +348,6 @@ Servent::socketConnected()
     qDebug() << "Servent::SocketConnected" << thread() << "socket:" << sock;
 
     Connection* conn = sock->_conn;
-
     handoverSocket( conn, sock );
 }
 
@@ -421,7 +387,7 @@ Servent::socketError( QAbstractSocket::SocketError e )
 
     Connection* conn = sock->_conn;
     qDebug() << "Servent::SocketError:" << e << conn->id() << conn->name();
-    if(!sock->_disowned)
+    if( !sock->_disowned )
     {
         // connection will delete if we already transferred ownership, otherwise:
         sock->deleteLater();
@@ -749,7 +715,7 @@ QSharedPointer<QIODevice>
 Servent::localFileIODeviceFactory( const Tomahawk::result_ptr& result )
 {
     // ignore "file://" at front of url
-    QFile * io = new QFile( result->url().mid( QString( "file://" ).length() ) );
+    QFile* io = new QFile( result->url().mid( QString( "file://" ).length() ) );
     if ( io )
         io->open( QIODevice::ReadOnly );
 

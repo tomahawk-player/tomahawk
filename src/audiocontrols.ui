@@ -168,7 +168,7 @@
       <item>
        <layout class="QVBoxLayout" name="verticalLayout">
         <property name="leftMargin">
-         <number>8</number>
+         <number>4</number>
         </property>
         <property name="topMargin">
          <number>6</number>
@@ -177,14 +177,35 @@
          <number>2</number>
         </property>
         <item>
-         <layout class="QHBoxLayout" name="horizontalLayout_2">
+         <layout class="QHBoxLayout" name="horizontalLayout_2" stretch="1,0,0">
+          <property name="topMargin">
+           <number>0</number>
+          </property>
+          <property name="bottomMargin">
+           <number>0</number>
+          </property>
           <item>
            <layout class="QVBoxLayout" name="trackLabelLayout">
             <property name="topMargin">
              <number>0</number>
             </property>
+            <property name="bottomMargin">
+             <number>0</number>
+            </property>
             <item>
-             <widget class="ElidedLabel" name="artistTrackLabel">
+             <widget class="QueryLabel" name="artistTrackLabel">
+              <property name="sizePolicy">
+               <sizepolicy hsizetype="Preferred" vsizetype="Minimum">
+                <horstretch>0</horstretch>
+                <verstretch>0</verstretch>
+               </sizepolicy>
+              </property>
+              <property name="minimumSize">
+               <size>
+                <width>0</width>
+                <height>16</height>
+               </size>
+              </property>
               <property name="cursor">
                <cursorShape>PointingHandCursor</cursorShape>
               </property>
@@ -194,7 +215,19 @@
              </widget>
             </item>
             <item>
-             <widget class="ElidedLabel" name="albumLabel">
+             <widget class="QueryLabel" name="albumLabel">
+              <property name="sizePolicy">
+               <sizepolicy hsizetype="Preferred" vsizetype="Minimum">
+                <horstretch>0</horstretch>
+                <verstretch>0</verstretch>
+               </sizepolicy>
+              </property>
+              <property name="minimumSize">
+               <size>
+                <width>0</width>
+                <height>16</height>
+               </size>
+              </property>
               <property name="cursor">
                <cursorShape>PointingHandCursor</cursorShape>
               </property>
@@ -212,8 +245,8 @@
             </property>
             <property name="sizeHint" stdset="0">
              <size>
-              <width>40</width>
-              <height>20</height>
+              <width>4</width>
+              <height>8</height>
              </size>
             </property>
            </spacer>
@@ -246,13 +279,16 @@
           <property name="sizeHint" stdset="0">
            <size>
             <width>20</width>
-            <height>40</height>
+            <height>4</height>
            </size>
           </property>
          </spacer>
         </item>
         <item>
          <layout class="QHBoxLayout" name="horizontalLayout">
+          <property name="leftMargin">
+           <number>4</number>
+          </property>
           <item>
            <widget class="QLabel" name="timeLabel">
             <property name="text">
@@ -459,9 +495,9 @@
    <header>imagebutton.h</header>
   </customwidget>
   <customwidget>
-   <class>ElidedLabel</class>
+   <class>QueryLabel</class>
    <extends>QLabel</extends>
-   <header location="global">elidedlabel.h</header>
+   <header>querylabel.h</header>
   </customwidget>
  </customwidgets>
  <resources/>
