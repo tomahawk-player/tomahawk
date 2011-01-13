@@ -102,6 +102,10 @@ Servent::startListening( QHostAddress ha, bool upnp, int port )
         connect( m_portfwd, SIGNAL( externalAddressDetected( QHostAddress, unsigned int ) ),
                               SLOT( setExternalAddress( QHostAddress, unsigned int ) ) );
     }
+    else
+    {
+        emit ready();
+    }
 
     return true;
 }
