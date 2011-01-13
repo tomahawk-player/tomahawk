@@ -146,7 +146,7 @@ QueryLabel::track() const
 void
 QueryLabel::setText( const QString& text )
 {
-    setContentsMargins( 0, 0, 0, 0 );
+    setContentsMargins( m_textMargins );
 
     m_result.clear();
     m_query.clear();
@@ -164,6 +164,9 @@ QueryLabel::setResult( const Tomahawk::result_ptr& result )
 {
     if ( result.isNull() )
         return;
+
+    if ( !m_text.isEmpty() && contentsMargins().left() != 0 ) // FIXME: hacky
+        m_textMargins = contentsMargins();
 
     setContentsMargins( BOXMARGIN * 2, BOXMARGIN / 2, BOXMARGIN * 2, BOXMARGIN / 2);
 
@@ -291,7 +294,7 @@ QueryLabel::paintEvent( QPaintEvent* event )
 
     if ( elidedText == s && m_hoverArea.width() )
     {
-        p.setPen( palette().shadow().color() );
+        p.setPen( palette().mid().color() );
         p.setBrush( palette().highlight() );
         p.drawRoundedRect( m_hoverArea, 4.0, 4.0 );
     }
@@ -299,7 +302,7 @@ QueryLabel::paintEvent( QPaintEvent* event )
     if ( elidedText != s || ( m_result.isNull() && m_query.isNull() ) )
     {
         p.setBrush( palette().window() );
-        p.setPen( palette().text().color() );
+        p.setPen( palette().color( foregroundRole() ) );
         p.drawText( r, align, elidedText );
     }
     else
@@ -313,7 +316,7 @@ QueryLabel::paintEvent( QPaintEvent* event )
         if ( m_type & Artist )
         {
             p.setBrush( palette().window() );
-            p.setPen( palette().text().color() );
+            p.setPen( palette().color( foregroundRole() ) );
 
             if ( m_hoverArea.width() && m_hoverArea.left() + contentsMargins().left() == r.left() )
             {
@@ -327,7 +330,7 @@ QueryLabel::paintEvent( QPaintEvent* event )
         if ( m_type & Album )
         {
             p.setBrush( palette().window() );
-            p.setPen( palette().text().color() );
+            p.setPen( palette().color( foregroundRole() ) );
 
             if ( m_type & Artist )
             {
@@ -346,14 +349,14 @@ QueryLabel::paintEvent( QPaintEvent* event )
         if ( m_type & Track )
         {
             p.setBrush( palette().window() );
-            p.setPen( palette().text().color() );
+            p.setPen( palette().color( foregroundRole() ) );
 
             if ( m_type & Artist || m_type & Album )
             {
                 p.drawText( r, align, DASH );
                 r.adjust( dashX, 0, 0, 0 );
             }
-            if ( m_hoverArea.width() && m_hoverArea.left()  + contentsMargins().left() == r.left() )
+            if ( m_hoverArea.width() && m_hoverArea.left() + contentsMargins().left() == r.left() )
             {
                 p.setPen( palette().highlightedText().color() );
                 p.setBrush( palette().highlight() );
@@ -418,39 +421,51 @@ QueryLabel::mouseMoveEvent( QMouseEvent* event )
         return;
     }
 
+    if ( m_query.isNull() && m_result.isNull() )
+    {
+        m_hoverArea = QRect();
+        return;
+    }
+
     const QFontMetrics& fm = fontMetrics();
     int dashX = fm.width( DASH );
     int artistX = m_type & Artist ? fm.width( artist() ) : 0;
     int albumX = m_type & Album ? fm.width( album() ) : 0;
     int trackX = m_type & Track ? fm.width( track() ) : 0;
 
+    if ( m_type & Track )
+    {
+        trackX += contentsMargins().left();
+    }
     if ( m_type & Album )
     {
         trackX += albumX + dashX;
+        albumX += contentsMargins().left();
     }
     if ( m_type & Artist )
     {
         albumX += artistX + dashX;
         trackX += artistX + dashX;
+        artistX += contentsMargins().left();
     }
 
     QRect hoverArea;
     if ( m_type & Artist && x < artistX )
     {
-        hoverArea.setLeft( 1 );
-        hoverArea.setRight( artistX + contentsMargins().left() + 2 );
+        hoverArea.setLeft( 0 );
+        hoverArea.setRight( artistX + contentsMargins().left() );
     }
-    else if ( m_type & Album && x < albumX )
+    else if ( m_type & Album && x < albumX && x > artistX )
     {
         int spacing = ( m_type & Artist ) ? dashX : 0;
-        hoverArea.setLeft( artistX + spacing + 1 );
-        hoverArea.setRight( albumX + spacing + contentsMargins().left() + 2 );
+        hoverArea.setLeft( artistX + spacing );
+        hoverArea.setRight( albumX + spacing + contentsMargins().left() );
     }
-    else if ( m_type & Track && x < trackX )
+    else if ( m_type & Track && x < trackX && x > albumX )
     {
         int spacing = ( m_type & Album ) ? dashX : 0;
-        hoverArea.setLeft( albumX + spacing + 1 );
-        hoverArea.setRight( trackX + contentsMargins().left() + 2 );
+        hoverArea.setLeft( albumX + spacing );
+        hoverArea.setRight( trackX + contentsMargins().left() );
     }
 
     if ( hoverArea.width() )

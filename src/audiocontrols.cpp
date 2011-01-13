@@ -23,7 +23,6 @@ AudioControls::AudioControls( QWidget* parent )
     ui->setupUi( this );
 
     ui->buttonAreaLayout->setSpacing( 2 );
-    ui->trackLabelLayout->setSpacing( 3 );
 
     QFont font( ui->artistTrackLabel->font() );
     font.setPixelSize( 12 );

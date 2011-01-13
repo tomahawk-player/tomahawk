@@ -354,9 +354,6 @@ TomahawkApp::startServent()
         qDebug() << "Failed to start listening with servent";
         exit( 1 );
     }
-
-    //QString key = m_servent.createConnectionKey();
-    //qDebug() << "Generated an offer key: " << key;
 }
 
 

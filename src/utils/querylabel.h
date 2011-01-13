@@ -88,6 +88,7 @@ private:
 
     QRect m_hoverArea;
     QPoint m_dragPos;
+    QMargins m_textMargins;
 };
 
 #endif // QUERYLABEL_H
