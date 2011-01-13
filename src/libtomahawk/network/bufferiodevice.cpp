@@ -223,8 +223,7 @@ BufferIODevice::isBlockEmpty( int block ) const
     if ( block >= m_buffer.count() )
         return true;
 
-    if ( m_buffer.at( block ).isEmpty() )
-        return true;
+    return m_buffer.at( block ).isEmpty();
 }
 
 
