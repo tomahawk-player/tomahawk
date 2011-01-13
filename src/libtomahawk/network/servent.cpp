@@ -35,6 +35,7 @@ Servent::Servent( QObject* parent )
     : QTcpServer( parent )
     , m_port( 0 )
     , m_externalPort( 0 )
+    , m_portfwd( 0 )
 {
     s_instance = this;
 
