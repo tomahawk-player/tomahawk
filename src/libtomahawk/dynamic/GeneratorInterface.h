@@ -33,7 +33,9 @@ namespace Tomahawk {
  *      - They expose a list of controls that this generator currently is operating on
  *      - They have a mode of OnDemand or Static
  * 
- *  And they generate tracks
+ *  And they generate tracks in two ways:
+ *      - Statically (ask for X tracks, get X tracks)
+ *      - On Demand (as for next track, ask for next track again, etc) 
  */
 class GeneratorInterface : public QObject
 {
@@ -56,15 +58,23 @@ public:
     
     /// A logo to display for this generator, if it has one
     virtual QPixmap logo();
+    
     /**
-     * Generate tracks from the controls in this playlist. If the current mode is
-     *  OnDemand, then \p number is not taken into account. If this generator is in static
-     *  mode, then it will return the desired number of tracks
+     * Generate tracks from the controls in this playlist. If this generator is in static
+     *  mode, then it will return the desired number of tracks. If the generator is in OnDemand
+     *  mode, this will do nothing.
      * 
      * Connect to the generated() signal for the results.
      * 
      */
     virtual void generate( int number = -1 ) {}
+    
+    /**
+     * Starts an on demand session for this generator. Listen to the nextTrack() signal to get
+     *  the first generated track
+     */
+    virtual void startOnDemand() {}
+    
     
     /// The type of this generator
     QString type() const { return m_type; }
@@ -81,6 +91,7 @@ public:
     
 signals:
     void generated( const QList< Tomahawk::query_ptr>& queries );
+    void nextTrackGenerated( const Tomahawk::query_ptr& track );
     
 protected:
     QString m_type;

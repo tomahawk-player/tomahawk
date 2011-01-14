@@ -7,8 +7,8 @@ ENDIF()
 SET( QT_USE_QTSQL TRUE )
 SET( QT_USE_QTNETWORK TRUE )
 SET( QT_USE_QTXML TRUE )
-INCLUDE( ${QT_USE_FILE} )
 
+INCLUDE( ${QT_USE_FILE} )
 INCLUDE( ${CMAKE_MODULE_PATH}/AddAppIconMacro.cmake )
 
 #SET( CMAKE_BUILD_TYPE "Release" )
@@ -40,20 +40,18 @@ SET( tomahawkSources ${tomahawkSources}
      infosystem/infoplugins/echonestplugin.cpp
      infosystem/infoplugins/musixmatchplugin.cpp
 
-     musicscanner.cpp
-     scriptresolver.cpp
-
-     scrobbler.cpp
      xmppbot/xmppbot.cpp
      web/api_v1.cpp
+
+     musicscanner.cpp
+     scriptresolver.cpp
+     scrobbler.cpp
 
      tomahawkapp.cpp
      main.cpp
 )
 
 SET( tomahawkSourcesGui ${tomahawkSourcesGui}
-     xspfloader.cpp
-
      utils/querylabel.cpp
      utils/elidedlabel.cpp
      utils/imagebutton.cpp
@@ -104,16 +102,16 @@ SET( tomahawkSourcesGui ${tomahawkSourcesGui}
      widgets/newplaylistwidget.cpp
      widgets/welcomewidget.cpp
 
+     xspfloader.cpp
      transferview.cpp
-     tomahawkwindow.cpp
      tomahawktrayicon.cpp
      audiocontrols.cpp
      settingsdialog.cpp
+     tomahawkwindow.cpp
 )
 
 SET( tomahawkHeaders ${tomahawkHeaders}
      "${TOMAHAWK_INC_DIR}/tomahawk/tomahawkapp.h"
-
      "${TOMAHAWK_INC_DIR}/tomahawk/infosystem.h"
 
      audio/transcodeinterface.h
@@ -127,17 +125,15 @@ SET( tomahawkHeaders ${tomahawkHeaders}
      infosystem/infoplugins/echonestplugin.h
      infosystem/infoplugins/musixmatchplugin.h
 
-     musicscanner.h
-     scriptresolver.h
-
-     scrobbler.h
      xmppbot/xmppbot.h
      web/api_v1.h
+
+     musicscanner.h
+     scriptresolver.h
+     scrobbler.h
 )
 
 SET( tomahawkHeadersGui ${tomahawkHeadersGui}
-     xspfloader.h
-
      utils/querylabel.h
      utils/elidedlabel.h
      utils/animatedcounterlabel.h
@@ -189,11 +185,12 @@ SET( tomahawkHeadersGui ${tomahawkHeadersGui}
      widgets/newplaylistwidget.h
      widgets/welcomewidget.h
 
+     xspfloader.h
      transferview.h
-     tomahawkwindow.h
      tomahawktrayicon.h
      audiocontrols.h
      settingsdialog.h
+     tomahawkwindow.h
 )
 
 SET( tomahawkUI ${tomahawkUI}
@@ -204,6 +201,7 @@ SET( tomahawkUI ${tomahawkUI}
      audiocontrols.ui
      sourcetree/sourcetreeitemwidget.ui
      topbar/topbar.ui
+
      infowidgets/sourceinfowidget.ui
      widgets/newplaylistwidget.ui
      widgets/welcomewidget.ui
@@ -256,9 +254,9 @@ SET( final_src ${final_src} ${tomahawkMoc} ${tomahawkSources} ${tomahawkHeaders}
 
 IF( "${gui}" STREQUAL "no" )
 ELSE()
-	qt4_wrap_ui( tomahawkUI_H ${tomahawkUI} )
-	qt4_wrap_cpp( tomahawkMocGui ${tomahawkHeadersGui} )
-	SET( final_src ${final_src} ${tomahawkUI_H} ${tomahawkMocGui} ${tomahawkSourcesGui} ${RC_SRCS} )
+    qt4_wrap_ui( tomahawkUI_H ${tomahawkUI} )
+    qt4_wrap_cpp( tomahawkMocGui ${tomahawkHeadersGui} )
+    SET( final_src ${final_src} ${tomahawkUI_H} ${tomahawkMocGui} ${tomahawkSourcesGui} ${RC_SRCS} )
 ENDIF()
 
 IF( UNIX AND NOT APPLE )

@@ -64,7 +64,7 @@ DatabaseWorker::doWork( QSharedPointer<DatabaseCommand> cmd )
     if( cmd->doesMutates() )
     {
         bool transok = m_dbimpl->database().transaction();
-        Q_ASSERT( transok );
+//        Q_ASSERT( transok );
         Q_UNUSED( transok );
     }
     try
@@ -141,7 +141,7 @@ DatabaseWorker::doWork( QSharedPointer<DatabaseCommand> cmd )
         if( cmd->doesMutates() )
             m_dbimpl->database().rollback();
 
-        Q_ASSERT( false );
+//        Q_ASSERT( false );
     }
     catch(...)
     {

@@ -71,6 +71,9 @@ private:
     QVBoxLayout* m_layout;
     bool m_resolveOnNextLoad;
     
+    // used in OnDemand mode
+    int m_songsSinceLastResolved;
+        
     QLabel* m_headerText;
     QHBoxLayout* m_headerLayout;
     QComboBox* m_modeCombo;
