@@ -164,8 +164,12 @@ DynamicWidget::generateOrStart()
         if( m_runningOnDemand == false ) {
             m_runningOnDemand = true;
             m_playlist->generator()->startOnDemand();
+            
+            m_generateButton->setText( tr( "Stop" ) );
         } else { // stop
             m_runningOnDemand = false;
+            
+            m_generateButton->setText( tr( "Start" ) );
         }
     }
 }

@@ -94,7 +94,7 @@ SourceTreeView::setupMenus()
         playlist_ptr playlist = SourcesModel::indexToDynamicPlaylist( m_contextMenuIndex );
         if( playlist.isNull() ) 
         {
-            playlist_ptr playlist = SourcesModel::indexToPlaylist( m_contextMenuIndex );
+            playlist = SourcesModel::indexToPlaylist( m_contextMenuIndex );
         } 
         if ( !playlist.isNull() )
         {
