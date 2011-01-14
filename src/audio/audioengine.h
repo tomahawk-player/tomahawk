@@ -26,6 +26,7 @@ public:
     ~AudioEngine();
 
     unsigned int volume() const { return m_audioOutput->volume() * 100.0; } // in percent
+    bool isPlaying() const { return m_mediaObject->state() == Phonon::PlayingState; }
     bool isPaused() const { return m_mediaObject->state() == Phonon::PausedState; }
 
     /* Returns the PlaylistInterface of the currently playing track. Note: This might be different to the current playlist! */
@@ -74,6 +75,7 @@ private slots:
     void loadPreviousTrack();
     void loadNextTrack();
 
+    void onStateChanged( Phonon::State newState, Phonon::State oldState );
     void timerTriggered( qint64 time );
 
     void setCurrentTrack( const Tomahawk::result_ptr& result );
@@ -91,6 +93,7 @@ private:
     Phonon::AudioOutput* m_audioOutput;
 
     unsigned int m_timeElapsed;
+    bool m_expectStop;
 };
 
 #endif // AUDIOENGINE_H

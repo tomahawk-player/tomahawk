@@ -15,6 +15,7 @@ AudioEngine::AudioEngine()
     , m_currentTrackPlaylist( 0 )
     , m_queue( 0 )
     , m_timeElapsed( 0 )
+    , m_expectStop( false )
 {
     qDebug() << "Init AudioEngine";
 
@@ -25,6 +26,7 @@ AudioEngine::AudioEngine()
     Phonon::createPath( m_mediaObject, m_audioOutput );
 
     m_mediaObject->setTickInterval( 150 );
+    connect( m_mediaObject, SIGNAL( stateChanged( Phonon::State, Phonon::State ) ), SLOT( onStateChanged( Phonon::State, Phonon::State ) ) );
     connect( m_mediaObject, SIGNAL( tick( qint64 ) ), SLOT( timerTriggered( qint64 ) ) );
 }
 
@@ -72,6 +74,7 @@ AudioEngine::stop()
 {
     qDebug() << Q_FUNC_INFO;
 
+    m_expectStop = true;
     m_mediaObject->stop();
 
     if ( !m_input.isNull() )
@@ -234,6 +237,20 @@ AudioEngine::playItem( PlaylistInterface* playlist, const Tomahawk::result_ptr& 
     m_currentTrackPlaylist = playlist;
 
     loadTrack( result );
+}
+
+
+void
+AudioEngine::onStateChanged( Phonon::State newState, Phonon::State oldState )
+{
+    qDebug() << Q_FUNC_INFO << oldState << newState;
+    if ( oldState == Phonon::PlayingState && newState == Phonon::StoppedState )
+    {
+        if ( m_expectStop )
+            return;
+
+        loadNextTrack();
+    }
 }
 
 
