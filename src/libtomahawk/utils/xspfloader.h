@@ -15,7 +15,9 @@
 #include "playlist.h"
 #include "typedefs.h"
 
-class XSPFLoader : public QObject
+#include "dllmacro.h"
+
+class DLLEXPORT XSPFLoader : public QObject
 {
 Q_OBJECT
 

@@ -8,7 +8,9 @@
 #include <QEasingCurve>
 #include <cmath>
 
-class AnimatedCounterLabel : public QLabel
+#include "dllmacro.h"
+
+class DLLEXPORT AnimatedCounterLabel : public QLabel
 {
 Q_OBJECT
 
