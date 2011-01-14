@@ -160,6 +160,7 @@ EchonestGenerator::dynamicStarted()
         emit nextTrackGenerated( songQuery );
     } catch( const Echonest::ParseError& e ) {
         qWarning() << "libechonest threw an error parsing the start of the dynamic playlist:" << e.errorType() << e.what();
+        emit onDemandFailed();
     }
 }
 

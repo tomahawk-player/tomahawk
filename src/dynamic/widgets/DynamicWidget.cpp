@@ -29,7 +29,7 @@
 #include "dynamic/GeneratorInterface.h"
 #include "dynamic/GeneratorFactory.h"
 #include "pipeline.h"
-#include <audioengine.h>
+#include "audioengine.h"
 
 using namespace Tomahawk;
 
@@ -38,6 +38,7 @@ DynamicWidget::DynamicWidget( const Tomahawk::dynplaylist_ptr& playlist, QWidget
     , m_layout( new QVBoxLayout )
     , m_resolveOnNextLoad( false )
     , m_runningOnDemand( false )
+    , m_startOnResolved( false )
     , m_songsSinceLastResolved( 0 )
     , m_headerText( 0 )
     , m_headerLayout( 0 )
@@ -163,12 +164,13 @@ DynamicWidget::generateOrStart()
     } else if( m_playlist->mode() == OnDemand ) {
         if( m_runningOnDemand == false ) {
             m_runningOnDemand = true;
+            m_startOnResolved = true;
             m_playlist->generator()->startOnDemand();
             
             m_generateButton->setText( tr( "Stop" ) );
         } else { // stop
             m_runningOnDemand = false;
-            
+            m_startOnResolved = false;
             m_generateButton->setText( tr( "Start" ) );
         }
     }
@@ -196,7 +198,8 @@ DynamicWidget::applyModeChange( int mode )
     } else if( mode == Static ) {
         m_generateButton->setText( tr( "Generate" ) );
         m_genNumber->show();
-        m_headerLayout->insertWidget( 4, m_genNumber );
+        if( m_headerLayout->indexOf( m_generateButton ) == -1 )
+            m_headerLayout->insertWidget( 4, m_genNumber );
         
         disconnect( TomahawkApp::instance()->audioEngine(), SIGNAL( loading( Tomahawk::result_ptr ) ), this, SLOT( newTrackLoading() ) );
     }
@@ -224,6 +227,12 @@ void
 DynamicWidget::trackResolved()
 {
     m_songsSinceLastResolved = 0;
+    
+    if( m_startOnResolved ) {
+        m_startOnResolved = false;
+        TomahawkApp::instance()->audioEngine()->play();
+    }
+    
 }
 
 void 
@@ -241,6 +250,12 @@ DynamicWidget::newTrackLoading()
     if( m_runningOnDemand && m_songsSinceLastResolved == 0 ) { // if we're in dynamic mode and we're also currently idle
         m_playlist->generator()->fetchNext();
     }
+}
+
+void DynamicWidget::onDemandFailed()
+{
+    if( m_runningOnDemand )
+        generateOrStart();
 }
 
 

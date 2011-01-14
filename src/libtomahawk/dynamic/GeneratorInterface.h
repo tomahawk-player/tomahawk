@@ -94,6 +94,7 @@ public:
     void removeControl( const dyncontrol_ptr& control );
     
 signals:
+    void onDemandFailed();
     void generated( const QList< Tomahawk::query_ptr>& queries );
     void nextTrackGenerated( const Tomahawk::query_ptr& track );
     
