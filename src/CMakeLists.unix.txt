@@ -13,16 +13,17 @@ SET( OS_SPECIFIC_LINK_LIBRARIES
 )
 
 SET( OS_SPECIFIC_LINK_LIBRARIES 
-	 ${OS_SPECIFIC_LINK_LIBRARIES}
-	 mad 
-	 vorbisfile 
-	 ogg
-	 FLAC++
+    ${OS_SPECIFIC_LINK_LIBRARIES}
+    mad 
+    vorbisfile 
+    ogg
+    FLAC++
 )
 
 IF( APPLE )
-  INCLUDE( "CMakeLists.osx.txt" )
+    INCLUDE( "CMakeLists.osx.txt" )
 ENDIF( APPLE )
+
 IF( UNIX AND NOT APPLE )
-  INCLUDE( "CMakeLists.linux.txt" )
+    INCLUDE( "CMakeLists.linux.txt" )
 ENDIF( UNIX AND NOT APPLE )
