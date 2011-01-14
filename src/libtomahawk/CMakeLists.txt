@@ -234,10 +234,7 @@ SET( OS_SPECIFIC_LINK_LIBRARIES
     "dnsapi.dll"
     "dsound.dll" 
     "winmm.dll"
-    "mad"
-    "vorbisfile"
-    "ogg"
-    "FLAC++"
+
     "${CMAKE_CURRENT_SOURCE_DIR}/../../rtaudio/librtaudio.dll"
 )
 ENDIF( WIN32 )
@@ -279,6 +276,10 @@ target_link_libraries( tomahawklib
     ${OS_SPECIFIC_LINK_LIBRARIES}
     portfwd
     qjson
+    mad
+    vorbisfile
+    ogg
+    FLAC++
 )
 
 install( TARGETS tomahawklib DESTINATION lib )
