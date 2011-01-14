@@ -7,6 +7,8 @@ ENDIF()
 SET( QT_USE_QTSQL TRUE )
 SET( QT_USE_QTNETWORK TRUE )
 SET( QT_USE_QTXML TRUE )
+SET( QT_USE_PHONON TRUE )
+
 INCLUDE( ${QT_USE_FILE} )
 
 INCLUDE( ${CMAKE_MODULE_PATH}/AddAppIconMacro.cmake )
@@ -27,9 +29,6 @@ SET( TOMAHAWK_INC_DIR "${CMAKE_CURRENT_SOURCE_DIR}/../include/" )
 #ENDFOREACH( moddir )
 
 SET( tomahawkSources ${tomahawkSources}
-     audio/madtranscode.cpp
-     audio/vorbistranscode.cpp
-     audio/flactranscode.cpp
      audio/audioengine.cpp
 
      utils/tomahawkutils.cpp
@@ -113,9 +112,6 @@ SET( tomahawkHeaders ${tomahawkHeaders}
      "${TOMAHAWK_INC_DIR}/tomahawk/infosystem.h"
 
      audio/transcodeinterface.h
-     audio/madtranscode.h
-     audio/vorbistranscode.h
-     audio/flactranscode.h
      audio/audioengine.h
 
      sip/SipHandler.h
@@ -215,7 +211,6 @@ INCLUDE_DIRECTORIES(
     utils
     libtomahawk
 
-    ../rtaudio
     ../alsa-playback
     ../qxt/qxtweb-standalone/qxtweb
 
