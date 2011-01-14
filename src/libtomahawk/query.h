@@ -55,6 +55,7 @@ signals:
     void resultsRemoved( const Tomahawk::result_ptr& );
     void solvedStateChanged( bool state );
 
+    void resolveFailed();
 public slots:
     /// (indirectly) called by resolver plugins when results are found
     void addResults( const QList< Tomahawk::result_ptr >& );
