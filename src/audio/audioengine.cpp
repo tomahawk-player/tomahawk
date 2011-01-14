@@ -24,7 +24,8 @@ AudioEngine::AudioEngine()
     m_audioOutput = new Phonon::AudioOutput( Phonon::MusicCategory, this );
     Phonon::createPath( m_mediaObject, m_audioOutput );
 
-    //    connect( m_audio, SIGNAL( timeElapsed( unsigned int ) ), SLOT( timerTriggered( unsigned int ) ), Qt::DirectConnection );
+    m_mediaObject->setTickInterval( 150 );
+    connect( m_mediaObject, SIGNAL( tick( qint64 ) ), SLOT( timerTriggered( qint64 ) ) );
 }
 
 
@@ -237,19 +238,24 @@ AudioEngine::playItem( PlaylistInterface* playlist, const Tomahawk::result_ptr& 
 
 
 void
-AudioEngine::timerTriggered( unsigned int seconds )
+AudioEngine::timerTriggered( qint64 time )
 {
-    m_timeElapsed = seconds;
-    emit timerSeconds( seconds );
+    if ( m_timeElapsed != time / 1000 )
+    {
+        m_timeElapsed = time / 1000;
+        emit timerSeconds( m_timeElapsed );
 
-    if ( m_currentTrack->duration() == 0 )
-    {
-        emit timerPercentage( 0 );
+        if ( m_currentTrack->duration() == 0 )
+        {
+            emit timerPercentage( 0 );
+        }
+        else
+        {
+            emit timerPercentage( ( (double)m_timeElapsed / (double)m_currentTrack->duration() ) * 100.0 );
+        }
     }
-    else
-    {
-        emit timerPercentage( (unsigned int)( seconds / m_currentTrack->duration() ) );
-    }
+
+    emit timerMilliSeconds( time );
 }
 
 

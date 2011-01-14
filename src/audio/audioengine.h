@@ -63,6 +63,7 @@ signals:
 
     void volumeChanged( int volume /* in percent */ );
 
+    void timerMilliSeconds( qint64 msElapsed );
     void timerSeconds( unsigned int secondsElapsed );
     void timerPercentage( unsigned int percentage );
 
@@ -73,7 +74,7 @@ private slots:
     void loadPreviousTrack();
     void loadNextTrack();
 
-    void timerTriggered( unsigned int seconds );
+    void timerTriggered( qint64 time );
 
     void setCurrentTrack( const Tomahawk::result_ptr& result );
 

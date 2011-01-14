@@ -133,7 +133,7 @@ AudioControls::AudioControls( QWidget* parent )
     connect( (QObject*)APP->audioEngine(), SIGNAL( paused() ), SLOT( onPlaybackPaused() ) );
     connect( (QObject*)APP->audioEngine(), SIGNAL( resumed() ), SLOT( onPlaybackResumed() ) );
     connect( (QObject*)APP->audioEngine(), SIGNAL( stopped() ), SLOT( onPlaybackStopped() ) );
-    connect( (QObject*)APP->audioEngine(), SIGNAL( timerSeconds( unsigned int ) ), SLOT( onPlaybackTimer( unsigned int ) ) );
+    connect( (QObject*)APP->audioEngine(), SIGNAL( timerMilliSeconds( qint64 ) ), SLOT( onPlaybackTimer( qint64 ) ) );
     connect( (QObject*)APP->audioEngine(), SIGNAL( volumeChanged( int ) ), SLOT( onVolumeChanged( int ) ) );
 
     m_defaultCover = QPixmap( RESPATH "images/no-album-art-placeholder.png" )
@@ -240,7 +240,7 @@ AudioControls::onPlaybackLoading( const Tomahawk::result_ptr& result )
     if ( ui->timeLeftLabel->text().isEmpty() )
         ui->timeLeftLabel->setText( "-" + TomahawkUtils::timeToString( result->duration() ) );
 
-    ui->seekSlider->setRange( 0, m_currentTrack->duration() );
+    ui->seekSlider->setRange( 0, m_currentTrack->duration() * 1000 );
     ui->seekSlider->setVisible( true );
 
 /*    m_playAction->setEnabled( false );
@@ -303,14 +303,15 @@ AudioControls::onPlaybackStopped()
 
 
 void
-AudioControls::onPlaybackTimer( unsigned int seconds )
+AudioControls::onPlaybackTimer( qint64 msElapsed )
 {
     if ( m_currentTrack.isNull() )
         return;
 
+    const int seconds = msElapsed / 1000;
     ui->timeLabel->setText( TomahawkUtils::timeToString( seconds ) );
     ui->timeLeftLabel->setText( "-" + TomahawkUtils::timeToString( m_currentTrack->duration() - seconds ) );
-    ui->seekSlider->setValue( seconds );
+    ui->seekSlider->setValue( msElapsed );
 }
 
 
