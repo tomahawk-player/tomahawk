@@ -292,8 +292,14 @@ QueryLabel::paintEvent( QPaintEvent* event )
     p.save();
     p.setRenderHint( QPainter::Antialiasing );
 
-    if ( elidedText == s && m_hoverArea.width() )
+    if ( m_hoverArea.width() )
     {
+        if ( elidedText != s )
+        {
+            m_hoverArea.setLeft( 0 );
+            m_hoverArea.setRight( fontMetrics().width( elidedText ) + contentsMargins().left() * 2 );
+        }
+
         p.setPen( palette().mid().color() );
         p.setBrush( palette().highlight() );
         p.drawRoundedRect( m_hoverArea, 4.0, 4.0 );
