@@ -46,12 +46,20 @@ public:
     virtual dyncontrol_ptr createControl( const QString& type = QString() );
     virtual QPixmap logo();
     virtual void generate ( int number = -1 );
+    virtual void startOnDemand();
+    virtual void fetchNext( int rating = -1 );
     
 private slots:
     void staticFinished();
+    void dynamicStarted();
+    void dynamicFetched();
     
 private:
+    Echonest::DynamicPlaylist::PlaylistParams getParams() const;
+    query_ptr queryFromSong( const Echonest::Song& song );
+    
     Echonest::DynamicPlaylist::ArtistTypeEnum determineRadioType() const;
+    Echonest::DynamicPlaylist* m_dynPlaylist;
     QPixmap m_logo;
 };
 

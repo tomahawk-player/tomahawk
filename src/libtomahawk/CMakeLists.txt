@@ -11,7 +11,6 @@ add_definitions( -DQT_SHARED )
 add_definitions( -DDLLEXPORT_PRO )
 
 set( libSources
-<<<<<<< HEAD
     tomahawksettings.cpp
     sourcelist.cpp
     pipeline.cpp

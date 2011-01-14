@@ -61,6 +61,12 @@ private slots:
     void modeChanged(int);
     void tracksGenerated( const QList< Tomahawk::query_ptr>& queries );
     
+    // used by on demand mode
+    void newTrackLoading();
+    void onDemandFetched( const Tomahawk::query_ptr& track );
+    void trackResolveFailed();
+    void trackResolved();
+    
     void controlsChanged();
     void controlChanged( const Tomahawk::dyncontrol_ptr& control );
     
@@ -72,6 +78,7 @@ private:
     bool m_resolveOnNextLoad;
     
     // used in OnDemand mode
+    bool m_runningOnDemand;
     int m_songsSinceLastResolved;
         
     QLabel* m_headerText;

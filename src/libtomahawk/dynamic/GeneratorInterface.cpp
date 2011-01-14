@@ -16,12 +16,6 @@
 
 #include "dynamic/GeneratorInterface.h"
 
-// lame
-Tomahawk::GeneratorInterface::GeneratorInterface()
-{
-
-}
-
 Tomahawk::GeneratorInterface::GeneratorInterface( QObject* parent ): QObject( parent )
 {
 

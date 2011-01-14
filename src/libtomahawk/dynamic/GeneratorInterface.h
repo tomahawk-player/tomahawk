@@ -46,7 +46,6 @@ class GeneratorInterface : public QObject
     
 public:
     // can't inline constructors/destructors for forward declared shared pointer types
-    GeneratorInterface();
     explicit GeneratorInterface( QObject* parent = 0 );
     virtual ~GeneratorInterface();
     
@@ -75,6 +74,11 @@ public:
      */
     virtual void startOnDemand() {}
     
+    /**
+     * Get the next on demand track.
+     * \param rating Rating from 1-5, -1 for none
+     */
+    virtual void fetchNext( int rating = -1 ) {}
     
     /// The type of this generator
     QString type() const { return m_type; }

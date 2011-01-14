@@ -45,9 +45,9 @@ EchonestFactory::typeSelectors() const
                           << "Longitude" << "Latitude" <<  "Mode" << "Key" << "Sorting";
 }
 
-
 EchonestGenerator::EchonestGenerator ( QObject* parent ) 
     : GeneratorInterface ( parent )
+    , m_dynPlaylist( new Echonest::DynamicPlaylist() )
 {
     m_type = "echonest";
     m_mode = OnDemand;
@@ -57,7 +57,7 @@ EchonestGenerator::EchonestGenerator ( QObject* parent )
 
 EchonestGenerator::~EchonestGenerator()
 {
-
+    delete m_dynPlaylist;
 }
 
 dyncontrol_ptr 
@@ -77,20 +77,38 @@ void
 EchonestGenerator::generate ( int number )
 {
    // convert to an echonest query, and fire it off
-    if( number < 0 ) { // dynamic
-        
-    } else { // static
-        Echonest::DynamicPlaylist::PlaylistParams params;
-        foreach( const dyncontrol_ptr& control, m_controls ) {
-            params.append( control.dynamicCast<EchonestControl>()->toENParam() );
-        }
-        params.append( Echonest::DynamicPlaylist::PlaylistParamData( Echonest::DynamicPlaylist::Type, determineRadioType() ) );
-        params.append( Echonest::DynamicPlaylist::PlaylistParamData( Echonest::DynamicPlaylist::Results, number ) );
-        QNetworkReply* reply = Echonest::DynamicPlaylist::staticPlaylist( params );
-        qDebug() << "Generating a static playlist from echonest!" << reply->url().toString();
-        connect( reply, SIGNAL( finished() ), this, SLOT( staticFinished() ) );
-    }
+    Echonest::DynamicPlaylist::PlaylistParams params = getParams();
+    params.append( Echonest::DynamicPlaylist::PlaylistParamData( Echonest::DynamicPlaylist::Results, number ) );
+    QNetworkReply* reply = Echonest::DynamicPlaylist::staticPlaylist( params );
+    qDebug() << "Generating a static playlist from echonest!" << reply->url().toString();
+    connect( reply, SIGNAL( finished() ), this, SLOT( staticFinished() ) );
+
 }
+
+void 
+EchonestGenerator::startOnDemand()
+{
+    Echonest::DynamicPlaylist::PlaylistParams params = getParams();
+    
+    QNetworkReply* reply = m_dynPlaylist->start( params );
+    qDebug() << "starting a dynamic playlist from echonest!" << reply->url().toString();
+    connect( reply, SIGNAL( finished() ), this, SLOT( dynamicStarted() ) );
+}
+
+void 
+EchonestGenerator::fetchNext( int rating )
+{
+    if( m_dynPlaylist->sessionId().isEmpty() ) {
+        // we're not currently playing, oops!
+        qWarning() << Q_FUNC_INFO << "asked to fetch next dynamic song when we're not in the middle of a playlist!";
+        return;
+    }
+    
+    QNetworkReply* reply = m_dynPlaylist->fetchNextSong( rating );
+    qDebug() << "getting next song from echonest" << reply->url().toString();
+    connect( reply, SIGNAL( finished() ), this, SLOT( dynamicFetched() ) );
+}
+
 
 void 
 EchonestGenerator::staticFinished()
@@ -112,21 +130,71 @@ EchonestGenerator::staticFinished()
     QList< query_ptr > queries;
     foreach( const Echonest::Song& song, songs ) {
         qDebug() << "EchonestGenerator got song:" << song;
-        QVariantMap track;
-        track[ "artist" ] = song.artistName();
-//         track[ "album" ] = song.release(); // TODO should we include it? can be quite specific
-        track[ "track" ] = song.title();
-        queries << query_ptr( new Query( track ) );
+        queries << queryFromSong( song );
     }
     
     emit generated( queries );
 }
 
+Echonest::DynamicPlaylist::PlaylistParams EchonestGenerator::getParams() const
+{
+    Echonest::DynamicPlaylist::PlaylistParams params;
+    foreach( const dyncontrol_ptr& control, m_controls ) {
+        params.append( control.dynamicCast<EchonestControl>()->toENParam() );
+    }
+    params.append( Echonest::DynamicPlaylist::PlaylistParamData( Echonest::DynamicPlaylist::Type, determineRadioType() ) );
+    return params;
+}
+
+void 
+EchonestGenerator::dynamicStarted()
+{
+    Q_ASSERT( sender() );
+    Q_ASSERT( qobject_cast< QNetworkReply* >( sender() ) );
+    QNetworkReply* reply = qobject_cast< QNetworkReply* >( sender() );
+    
+    try 
+    {
+        Echonest::Song song = m_dynPlaylist->parseStart( reply );
+        query_ptr songQuery = queryFromSong( song );
+        emit nextTrackGenerated( songQuery );
+    } catch( const Echonest::ParseError& e ) {
+        qWarning() << "libechonest threw an error parsing the start of the dynamic playlist:" << e.errorType() << e.what();
+    }
+}
+
+void 
+EchonestGenerator::dynamicFetched()
+{
+    Q_ASSERT( sender() );
+    Q_ASSERT( qobject_cast< QNetworkReply* >( sender() ) );
+    QNetworkReply* reply = qobject_cast< QNetworkReply* >( sender() );
+    
+    try 
+    {
+        Echonest::Song song = m_dynPlaylist->parseNextSong( reply );
+        query_ptr songQuery = queryFromSong( song );
+        emit nextTrackGenerated( songQuery );
+    } catch( const Echonest::ParseError& e ) {
+        qWarning() << "libechonest threw an error parsing the next song of the dynamic playlist:" << e.errorType() << e.what();
+    }
+}
+
 
 // tries to heuristically determine what sort of radio this is based on the controls
-Echonest::DynamicPlaylist::ArtistTypeEnum EchonestGenerator::determineRadioType() const
+Echonest::DynamicPlaylist::ArtistTypeEnum 
+EchonestGenerator::determineRadioType() const
 {
     // TODO
     return Echonest::DynamicPlaylist::ArtistRadioType;
 }
 
+query_ptr 
+EchonestGenerator::queryFromSong(const Echonest::Song& song)
+{
+    QVariantMap track;
+    track[ "artist" ] = song.artistName();
+    //         track[ "album" ] = song.release(); // TODO should we include it? can be quite specific
+    track[ "track" ] = song.title();
+    return query_ptr( new Query( track ) );
+}
