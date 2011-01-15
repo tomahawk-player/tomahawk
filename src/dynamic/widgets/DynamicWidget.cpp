@@ -198,7 +198,7 @@ DynamicWidget::applyModeChange( int mode )
     } else if( mode == Static ) {
         m_generateButton->setText( tr( "Generate" ) );
         m_genNumber->show();
-        if( m_headerLayout->indexOf( m_generateButton ) == -1 )
+        if( m_headerLayout->indexOf( m_genNumber ) == -1 )
             m_headerLayout->insertWidget( 4, m_genNumber );
         
         disconnect( TomahawkApp::instance()->audioEngine(), SIGNAL( loading( Tomahawk::result_ptr ) ), this, SLOT( newTrackLoading() ) );
