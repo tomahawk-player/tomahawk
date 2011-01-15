@@ -27,10 +27,11 @@
 
 using namespace Tomahawk;
 
-DynamicPlaylist::DynamicPlaylist(const Tomahawk::source_ptr& author)
+DynamicPlaylist::DynamicPlaylist(const Tomahawk::source_ptr& author, const QString& type )
     : Playlist(author)
 {
     qDebug() << Q_FUNC_INFO << "JSON";
+    m_generator = geninterface_ptr( GeneratorFactory::create( type ) );
 }
 
 

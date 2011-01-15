@@ -99,7 +99,7 @@ public:
     // these need to exist and be public for the json serialization stuff
     // you SHOULD NOT call them.  They are used for an alternate CTOR method from json.
     // maybe friend QObjectHelper and make them private?
-    explicit DynamicPlaylist( const source_ptr& author );
+    explicit DynamicPlaylist( const source_ptr& author, const QString& type );
     void setMode( int mode );
     void setType( const QString& type )           { /** TODO */; }
     void setGenerator( const geninterface_ptr& gen_ptr );

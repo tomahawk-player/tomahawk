@@ -31,7 +31,7 @@ public:
         qDebug() << "***********" << Q_FUNC_INFO << v;
         using namespace Tomahawk;
         
-        DynamicPlaylist* p = new DynamicPlaylist( source() );
+        DynamicPlaylist* p = new DynamicPlaylist( source(), v.toMap().value( "type", QString() ).toString() );
         QJson::QObjectHelper::qvariant2qobject( v.toMap(), p );
         m_playlist = dynplaylist_ptr( p );
     }
