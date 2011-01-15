@@ -8,6 +8,9 @@
 #include "databasecommand_logplayback.h"
 #include "databasecommand_renameplaylist.h"
 #include "databasecommand_setplaylistrevision.h"
+#include "databasecommand_createdynamicplaylist.h"
+#include "databasecommand_deletedynamicplaylist.h"
+#include "databasecommand_setdynamicplaylistrevision.h"
 
 
 DatabaseCommand::DatabaseCommand( QObject* parent )
@@ -88,6 +91,26 @@ DatabaseCommand::factory( const QVariant& op, const source_ptr& source )
     else if( name == "setplaylistrevision" )
     {
         DatabaseCommand_SetPlaylistRevision * cmd = new DatabaseCommand_SetPlaylistRevision;
+        cmd->setSource( source );
+        QJson::QObjectHelper::qvariant2qobject( op.toMap(), cmd );
+        return cmd;
+    } else if( name == "createdynamicplaylist" )
+    {
+        DatabaseCommand_CreateDynamicPlaylist * cmd = new DatabaseCommand_CreateDynamicPlaylist;
+        cmd->setSource( source );
+        QJson::QObjectHelper::qvariant2qobject( op.toMap(), cmd );
+        return cmd;
+    }    
+    else if( name == "deletedynamicplaylist" )
+    {
+        DatabaseCommand_DeleteDynamicPlaylist * cmd = new DatabaseCommand_DeleteDynamicPlaylist;
+        cmd->setSource( source );
+        QJson::QObjectHelper::qvariant2qobject( op.toMap(), cmd );
+        return cmd;
+    }
+    else if( name == "setdynamicplaylistrevision" )
+    {
+        DatabaseCommand_SetDynamicPlaylistRevision * cmd = new DatabaseCommand_SetDynamicPlaylistRevision;
         cmd->setSource( source );
         QJson::QObjectHelper::qvariant2qobject( op.toMap(), cmd );
         return cmd;
