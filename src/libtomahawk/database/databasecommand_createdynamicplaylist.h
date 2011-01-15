@@ -34,6 +34,8 @@ public:
         DynamicPlaylist* p = new DynamicPlaylist( source(), v.toMap().value( "type", QString() ).toString() );
         QJson::QObjectHelper::qvariant2qobject( v.toMap(), p );
         m_playlist = dynplaylist_ptr( p );
+        
+        setPlaylist( m_playlist.staticCast<Tomahawk::Playlist>() );
     }
     
 private:

@@ -42,7 +42,8 @@ protected:
     void createPlaylist( DatabaseImpl* lib, bool dynamic = false );
     
     bool report() { return m_report; }
-
+    void setPlaylist( const Tomahawk::playlist_ptr& playlist ) { m_playlist = playlist; }
+    
 private:
     Tomahawk::playlist_ptr m_playlist;
     bool m_report; // call Playlist::reportCreated?
