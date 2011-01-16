@@ -30,6 +30,7 @@ DynamicControlList::DynamicControlList()
     : AnimatedWidget()
     , m_layout( new QVBoxLayout )
     , m_summaryWidget( 0 )
+    , m_lastControlDirty( false )
 {
     init();
 }
@@ -39,6 +40,7 @@ DynamicControlList::DynamicControlList( AnimatedSplitter* parent )
     , m_isLocal( true )
     , m_layout( new QVBoxLayout )
     , m_summaryWidget( 0 )
+    , m_lastControlDirty( false )
 {
     init();
 }
@@ -49,6 +51,7 @@ DynamicControlList::DynamicControlList( const geninterface_ptr& generator, const
     , m_isLocal( isLocal )
     , m_layout( new QVBoxLayout )
     , m_summaryWidget( 0 )
+    , m_lastControlDirty( false )
 {
     init();
     setControls(  generator, controls, m_isLocal );
@@ -175,6 +178,10 @@ void DynamicControlList::removeControl()
 void DynamicControlList::controlChanged()
 {
     Q_ASSERT( sender() && qobject_cast<DynamicControlWidget*>(sender()) );
+    DynamicControlWidget* widget = qobject_cast<DynamicControlWidget*>(sender());
+    
+    if( !widget->control()->input().isEmpty() )
+        m_lastControlDirty = true;
     
     emit controlChanged( qobject_cast<DynamicControlWidget*>(sender())->control() );
 }
@@ -183,3 +190,9 @@ void DynamicControlList::controlChanged()
 void DynamicControlList::paintEvent(QPaintEvent* )
 {
 }
+
+bool DynamicControlList::lastControlDirty() const
+{
+    return m_lastControlDirty;
+}
+

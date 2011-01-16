@@ -55,11 +55,9 @@ public:
     QVariantList controlsV();
     
     QString type() const { return m_type; }
-//     GeneratorMode mode() const { return m_mode; }
     int mode() const { return (int)m_mode; }
     
     void setType( const QString& type ) { m_type = type; }
-//     void setMode( GeneratorMode mode ) { m_mode = mode; }
     void setMode( int mode ) { m_mode = (GeneratorMode)mode; }
     
 private:

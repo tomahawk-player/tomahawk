@@ -110,6 +110,7 @@ DatabaseCommand::factory( const QVariant& op, const source_ptr& source )
     }
     else if( name == "setdynamicplaylistrevision" )
     {
+        qDebug() << "SETDYN CONTENT:" << op;
         DatabaseCommand_SetDynamicPlaylistRevision * cmd = new DatabaseCommand_SetDynamicPlaylistRevision;
         cmd->setSource( source );
         QJson::QObjectHelper::qvariant2qobject( op.toMap(), cmd );

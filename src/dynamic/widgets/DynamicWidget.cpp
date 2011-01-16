@@ -272,6 +272,8 @@ void
 DynamicWidget::controlsChanged()
 {
     // save the current playlist
+    if( m_controls->lastControlDirty() )
+        m_playlist->generator()->controls().removeLast();
     m_playlist->createNewRevision();
 }
 
