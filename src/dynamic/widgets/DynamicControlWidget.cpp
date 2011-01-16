@@ -166,7 +166,7 @@ DynamicControlWidget::typeSelectorChanged( const QString& type, bool firstLoad )
     m_typeSelector->setLabel( type );
     if( m_control->matchSelector() ) {
         m_matchSelector->setWritableWidget( m_control->matchSelector() );
-        m_matchSelector->setLabel( m_control->match() );
+        m_matchSelector->setLabel( m_control->matchString() );
         m_matchSelector->setWritable( m_isLocal );
         m_layout->insertWidget( 1, m_matchSelector, 0 );
     }

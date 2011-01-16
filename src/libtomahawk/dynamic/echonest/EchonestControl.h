@@ -36,6 +36,7 @@ public:
     
     virtual QString input() const;
     virtual QString match() const;
+    virtual QString matchString();
     
     virtual void setInput(const QString& input);
     virtual void setMatch(const QString& match);
@@ -57,6 +58,7 @@ private:
     
     QWeakPointer< QWidget > m_input;
     QWeakPointer< QWidget > m_match;
+    QString m_matchData;
     QString m_matchString;
     
     Echonest::DynamicPlaylist::PlaylistParamData m_data;

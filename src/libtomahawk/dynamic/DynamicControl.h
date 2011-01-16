@@ -65,6 +65,9 @@ public:
      */
     virtual QWidget* inputField()  { Q_ASSERT( false ); return 0;  }
     
+    /// The user-readable match value, for showing in read-only playlists
+    virtual QString matchString() { Q_ASSERT( false ); return QString(); }
+    
     /// the serializable value of the match
     virtual QString match() const  { Q_ASSERT( false ); return QString(); }
     /// the serializable value of the input

@@ -44,13 +44,15 @@ Tomahawk::EchonestControl::matchSelector()
 void 
 Tomahawk::EchonestControl::setSelectedType ( const QString& type )
 {
-    if( !m_input.isNull() )
-        delete m_input.data();
-    if( !m_match.isNull() )
-        delete m_match.data();
-    
-    Tomahawk::DynamicControl::setSelectedType ( type );
-    updateWidgets();
+    if( type != selectedType() ) {
+        if( !m_input.isNull() )
+            delete m_input.data();
+        if( !m_match.isNull() )
+            delete m_match.data();
+        
+        Tomahawk::DynamicControl::setSelectedType ( type );
+        updateWidgets();
+    }
 }
 
 Echonest::DynamicPlaylist::PlaylistParamData
@@ -66,8 +68,14 @@ QString Tomahawk::EchonestControl::input() const
 
 QString Tomahawk::EchonestControl::match() const
 {
+    return m_matchData;
+}
+
+QString Tomahawk::EchonestControl::matchString()
+{
     return m_matchString;
 }
+
 
 void Tomahawk::EchonestControl::setInput(const QString& input)
 {
@@ -79,7 +87,7 @@ void Tomahawk::EchonestControl::setInput(const QString& input)
 void Tomahawk::EchonestControl::setMatch(const QString& match)
 {
     // TODO generate widgets
-    m_matchString = match;
+    m_matchData = match;
     updateWidgetsFromData();
 }
 
@@ -101,7 +109,7 @@ Tomahawk::EchonestControl::updateWidgets()
         
         match->addItem( "Limit To", Echonest::DynamicPlaylist::ArtistType );
         match->addItem( "Similar To", Echonest::DynamicPlaylist::ArtistRadioType );
-        m_matchString = match->itemText( 0 );
+        m_matchString = match->currentText();
         
         input->setPlaceholderText( "Artist name" );
         input->setSizePolicy( QSizePolicy::Ignored, QSizePolicy::Fixed );
@@ -127,7 +135,8 @@ Tomahawk::EchonestControl::updateData()
     if( selectedType() == "Artist" ) {
         QComboBox* combo = qobject_cast<QComboBox*>( m_match.data() );
         if( combo ) {
-            m_matchString = combo->itemData( combo->currentIndex() ).toString();
+            m_matchString = combo->currentText();
+            m_matchData = combo->itemData( combo->currentIndex() ).toString();
         }
         QLineEdit* edit = qobject_cast<QLineEdit*>( m_input.data() );
         if( edit && !edit->text().isEmpty() ) {
@@ -137,13 +146,13 @@ Tomahawk::EchonestControl::updateData()
     }
 }
 
-// fills in the current widget with the data from json or dbcmd (m_data.second and m_matchString)
+// fills in the current widget with the data from json or dbcmd (m_data.second and m_matchData)
 void Tomahawk::EchonestControl::updateWidgetsFromData()
 {
     if( selectedType() == "Artist" ) {
         QComboBox* combo = qobject_cast<QComboBox*>( m_match.data() );
         if( combo )
-            combo->setCurrentIndex( combo->findData( m_matchString ) );
+            combo->setCurrentIndex( combo->findData( m_matchData ) );
         QLineEdit* edit = qobject_cast<QLineEdit*>( m_input.data() );
         if( edit )
             edit->setText( m_data.second.toString() );
