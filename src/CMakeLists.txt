@@ -98,6 +98,7 @@ SET( tomahawkSourcesGui ${tomahawkSourcesGui}
      dynamic/widgets/DynamicWidget.cpp
      dynamic/widgets/DynamicControlWidget.cpp
      dynamic/widgets/DynamicControlList.cpp
+     dynamic/widgets/ReadOrWriteWidget.cpp
 
      widgets/newplaylistwidget.cpp
      widgets/welcomewidget.cpp
@@ -181,6 +182,7 @@ SET( tomahawkHeadersGui ${tomahawkHeadersGui}
      dynamic/widgets/DynamicWidget.h
      dynamic/widgets/DynamicControlWidget.h
      dynamic/widgets/DynamicControlList.h
+     dynamic/widgets/ReadOrWriteWidget.h
 
      widgets/newplaylistwidget.h
      widgets/welcomewidget.h

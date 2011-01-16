@@ -85,7 +85,7 @@ DatabaseCommand_AllTracks::exec( DatabaseImpl* dbi )
         }
 
         Tomahawk::query_ptr query = Tomahawk::query_ptr( new Tomahawk::Query( t ) );
-        t["score"] = 1.0;
+        t.insert( "score", 1.0);
 
         Tomahawk::result_ptr result = Tomahawk::result_ptr( new Tomahawk::Result( t, m_collection ) );
         result->setAttributes( attr );

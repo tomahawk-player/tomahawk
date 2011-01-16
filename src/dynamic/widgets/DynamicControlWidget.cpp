@@ -18,6 +18,7 @@
 
 #include "tomahawk/tomahawkapp.h"
 #include "dynamic/DynamicControl.h"
+#include "dynamic/widgets/ReadOrWriteWidget.h"
 
 #include <QHBoxLayout>
 #include <QComboBox>
@@ -29,41 +30,52 @@
 
 using namespace Tomahawk;
 
-DynamicControlWidget::DynamicControlWidget( const Tomahawk::dyncontrol_ptr& control, bool showPlus, bool showMinus, bool showCollapse, QWidget* parent )
+DynamicControlWidget::DynamicControlWidget( const Tomahawk::dyncontrol_ptr& control, bool showPlus, bool showMinus, bool showCollapse, bool isLocal, QWidget* parent )
      : QWidget(parent)
      , m_showPlus( showPlus )
      , m_showMinus( showMinus )
      , m_showCollapse( showCollapse )
+     , m_isLocal( isLocal )
      , m_plusButton( 0 )
      , m_minusButton( 0 )
      , m_collapseButton( 0 )
      , m_control( control )
      , m_typeSelector( 0 )
+     , m_matchSelector( 0 )
+     , m_entryWidget( 0 )
      , m_layout( 0 )
 {
     setSizePolicy( QSizePolicy::Expanding, QSizePolicy::Fixed );
     setMouseTracking( true );
     
     m_layout = new QHBoxLayout;
-    m_typeSelector = new QComboBox( this );
+    QComboBox* typeSelector = new QComboBox( this );
+    m_typeSelector = new ReadOrWriteWidget( typeSelector, m_isLocal, this );
+    
+    m_matchSelector = new ReadOrWriteWidget( control->matchSelector(), m_isLocal, this );
+    m_entryWidget = new ReadOrWriteWidget( control->inputField(), m_isLocal, this );
     
     m_layout->setMargin( 0 );
     m_layout->setSpacing( 0 );
     setContentsMargins( 0, 0, 0, 0 );
     
-    m_minusButton = initButton();
-    m_minusButton->setIcon( QIcon( RESPATH "images/list-remove.png" ) );
-    connect( m_minusButton, SIGNAL( clicked( bool ) ), this, SIGNAL( removeControl() ) );
-    
-    m_plusButton = initButton();
-    m_plusButton->setIcon( QIcon( RESPATH "images/list-add.png" ) );
-    connect( m_plusButton, SIGNAL( clicked( bool ) ), this, SIGNAL( addNewControl() ) );
-    m_plusL = new QStackedLayout;
-    m_plusL->setContentsMargins( 0, 0, 0, 0 );
-    m_plusL->addWidget( m_plusButton );
-    m_plusL->addWidget( m_minusButton );
-    m_plusL->addWidget( createDummy( m_plusButton ) ); // :-(
-    m_plusL->setCurrentIndex( 2 );
+    if( m_isLocal )
+    {
+        m_minusButton = initButton();
+        m_minusButton->setIcon( QIcon( RESPATH "images/list-remove.png" ) );
+        connect( m_minusButton, SIGNAL( clicked( bool ) ), this, SIGNAL( removeControl() ) );
+        
+        
+        m_plusButton = initButton();
+        m_plusButton->setIcon( QIcon( RESPATH "images/list-add.png" ) );
+        connect( m_plusButton, SIGNAL( clicked( bool ) ), this, SIGNAL( addNewControl() ) );
+        m_plusL = new QStackedLayout;
+        m_plusL->setContentsMargins( 0, 0, 0, 0 );
+        m_plusL->addWidget( m_plusButton );
+        m_plusL->addWidget( m_minusButton );
+        m_plusL->addWidget( createDummy( m_plusButton ) ); // :-(
+        m_plusL->setCurrentIndex( 2 );
+    }
     
     m_collapseButton = initButton();
     m_collapseButton->setIcon( QIcon( RESPATH "images/arrow-up-double.png" ) );
@@ -74,28 +86,32 @@ DynamicControlWidget::DynamicControlWidget( const Tomahawk::dyncontrol_ptr& cont
     m_collapseL->setCurrentIndex( 1 );
     
     connect( m_collapseButton, SIGNAL( clicked( bool ) ), this, SIGNAL( collapse() ) );
-    connect( m_typeSelector, SIGNAL( activated( QString) ), SLOT( typeSelectorChanged( QString ) ) );    
+    connect( typeSelector, SIGNAL( activated( QString) ), SLOT( typeSelectorChanged( QString ) ) );    
     connect( m_control.data(), SIGNAL( changed() ), this, SIGNAL( changed() ) );
     
     m_layout->addWidget( m_typeSelector, 0, Qt::AlignLeft );
     
     if( !control.isNull() ) {
         foreach( const QString& type, control->typeSelectors() )
-            m_typeSelector->addItem( type );
+            typeSelector->addItem( type );
     }
     
     typeSelectorChanged( m_control.isNull() ? "" : m_control->selectedType(), true );
-       
+    
     m_layout->addLayout( m_collapseL, 0 );
-    m_layout->addLayout( m_plusL, 0 );
+    
+    if( m_isLocal )
+    {
+        m_layout->addLayout( m_plusL, 0 );
+        
+        if( m_showPlus )
+            m_plusL->setCurrentIndex( 0 );
+        if( m_showMinus )
+            m_plusL->setCurrentIndex( 1 );
+    }
     
     if( m_showCollapse )
         m_collapseL->setCurrentIndex( 0 );
-    if( m_showPlus )
-        m_plusL->setCurrentIndex( 0 );
-    if( m_showMinus )
-        m_plusL->setCurrentIndex( 1 );
-    
     setLayout( m_layout );
 }
 
@@ -141,19 +157,24 @@ void
 DynamicControlWidget::typeSelectorChanged( const QString& type, bool firstLoad )
 {
     Q_ASSERT( m_layout );
-    m_layout->removeWidget( m_control->matchSelector() );
-    m_layout->removeWidget( m_control->inputField() );
+    m_layout->removeWidget( m_matchSelector );
+    m_layout->removeWidget( m_entryWidget );
     
     if( m_control->selectedType() == type && !firstLoad )
         m_control->setSelectedType( type );
     
+    m_typeSelector->setLabel( type );
     if( m_control->matchSelector() ) {
-        m_layout->insertWidget( 1, m_control->matchSelector(), 0 );
-        m_control->matchSelector()->show();
+        m_matchSelector->setWritableWidget( m_control->matchSelector() );
+        m_matchSelector->setLabel( m_control->match() );
+        m_matchSelector->setWritable( m_isLocal );
+        m_layout->insertWidget( 1, m_matchSelector, 0 );
     }
     if( m_control->inputField() ) {
-        m_layout->insertWidget( 2, m_control->inputField(), 1  );
-        m_control->inputField()->show();
+        m_entryWidget->setWritableWidget( m_control->inputField() );
+        m_entryWidget->setLabel( m_control->input() );
+        m_entryWidget->setWritable( m_isLocal );
+        m_layout->insertWidget( 2, m_entryWidget, 1  );
     }
     
     emit changed();
@@ -163,7 +184,7 @@ void
 DynamicControlWidget::setShowPlusButton(bool show)
 {
     
-    if( m_showPlus != show ) {
+    if( m_showPlus != show && m_isLocal ) {
         show ? m_plusL->setCurrentIndex( 0 ) : m_plusL->setCurrentIndex( 2 );
     }
     
@@ -190,7 +211,7 @@ DynamicControlWidget::setShowMinusButton(bool show)
 void 
 DynamicControlWidget::enterEvent(QEvent* ev)
 {
-    if( m_showMinus )
+    if( m_showMinus && m_isLocal )
         m_plusL->setCurrentIndex( 1 );
     
     if( ev )
@@ -200,7 +221,7 @@ DynamicControlWidget::enterEvent(QEvent* ev)
 void 
 DynamicControlWidget::leaveEvent(QEvent* ev)
 {
-    if( m_showMinus )
+    if( m_showMinus && m_isLocal )
         m_plusL->setCurrentIndex( 2 );
     
     if( ev )

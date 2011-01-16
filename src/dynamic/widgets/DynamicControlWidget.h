@@ -21,12 +21,13 @@
 
 #include "typedefs.h"
 
+class ReadOrWriteWidget;
 class QStackedLayout;
 class QEvent;
 class QToolButton;
 class QHBoxLayout;
 class QComboBox;
-class QLabel;
+class QLabel;;
 
 namespace Tomahawk
 {
@@ -38,7 +39,7 @@ class DynamicControlWidget : public QWidget
 {
     Q_OBJECT 
 public:
-    explicit DynamicControlWidget( const dyncontrol_ptr& control, bool showPlus = false, bool showMinus = false, bool showCollapse = false, QWidget* parent = 0);
+    explicit DynamicControlWidget( const dyncontrol_ptr& control, bool showPlus = false, bool showMinus = false, bool showCollapse = false, bool isLocal = false, QWidget* parent = 0);
     virtual ~DynamicControlWidget();
     
     void setShowPlusButton( bool show );
@@ -67,6 +68,8 @@ private:
     bool m_showPlus;
     bool m_showMinus;
     bool m_showCollapse;
+    bool m_isLocal;
+    
     // i hate qlayout
     QStackedLayout* m_plusL;
     QToolButton* m_plusButton;
@@ -75,7 +78,9 @@ private:
     QToolButton* m_collapseButton;
     
     dyncontrol_ptr m_control;
-    QComboBox* m_typeSelector;
+    ReadOrWriteWidget* m_typeSelector;
+    ReadOrWriteWidget* m_matchSelector;
+    ReadOrWriteWidget* m_entryWidget;
     QHBoxLayout* m_layout;
 };
     

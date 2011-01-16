@@ -33,6 +33,7 @@ class PlaylistModel;
 class PlaylistView;
 class AnimatedSplitter;
 class QLabel;
+class ReadOrWriteWidget;
 
 namespace Tomahawk
 {
@@ -85,8 +86,8 @@ private:
         
     QLabel* m_headerText;
     QHBoxLayout* m_headerLayout;
-    QComboBox* m_modeCombo;
-    QComboBox* m_generatorCombo;
+    ReadOrWriteWidget* m_modeCombo;
+    ReadOrWriteWidget* m_generatorCombo;
     QLabel* m_logo;
     QPushButton* m_generateButton;
     QSpinBox* m_genNumber;

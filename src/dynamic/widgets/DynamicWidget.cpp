@@ -30,6 +30,7 @@
 #include "dynamic/GeneratorFactory.h"
 #include "pipeline.h"
 #include "audioengine.h"
+#include "ReadOrWriteWidget.h"
 
 using namespace Tomahawk;
 
@@ -54,16 +55,19 @@ DynamicWidget::DynamicWidget( const Tomahawk::dynplaylist_ptr& playlist, QWidget
     m_headerLayout = new QHBoxLayout;
     m_headerText = new QLabel( tr( "Type:" ), this );
     m_headerLayout->addWidget( m_headerText );
-    m_modeCombo = new QComboBox( this );
-    m_modeCombo->addItem( tr( "On Demand" ), OnDemand );
-    m_modeCombo->addItem( tr( "Static" ), Static );
-    connect( m_modeCombo, SIGNAL( activated( int ) ), this, SLOT( modeChanged( int ) ) );
+    QComboBox* mode = new QComboBox( this );
+    mode->addItem( tr( "On Demand" ), OnDemand );
+    mode->addItem( tr( "Static" ), Static );
+    connect( mode, SIGNAL( activated( int ) ), this, SLOT( modeChanged( int ) ) );
+    m_modeCombo = new ReadOrWriteWidget( mode, playlist->author()->isLocal(), this );
     m_headerLayout->addWidget( m_modeCombo );
     
-    m_generatorCombo = new QComboBox( this );
+    QComboBox* gen = new QComboBox( this );
     foreach( const QString& type, GeneratorFactory::types() )
-        m_generatorCombo->addItem( type );
+        gen->addItem( type );
+    m_generatorCombo = new ReadOrWriteWidget( gen, playlist->author()->isLocal(), this );
     m_headerLayout->addWidget( m_generatorCombo );
+    
     m_generateButton = new QPushButton( tr( "Generate" ), this );
     connect( m_generateButton, SIGNAL( clicked( bool ) ), this, SLOT( generateOrStart() ) );
     m_headerLayout->addWidget( m_generateButton );
@@ -125,9 +129,14 @@ void DynamicWidget::loadDynamicPlaylist(const Tomahawk::dynplaylist_ptr& playlis
     m_model->loadPlaylist( m_playlist );
     
     if( !m_playlist.isNull() )
-        m_controls->setControls( m_playlist->generator(), m_playlist->generator()->controls() );
-    m_modeCombo->setCurrentIndex( static_cast<int>( playlist->mode() ) );
+        m_controls->setControls( m_playlist->generator(), m_playlist->generator()->controls(), m_playlist->author()->isLocal() );
+    qobject_cast<QComboBox*>( m_modeCombo->writableWidget() )->setCurrentIndex( static_cast<int>( playlist->mode() ) );
     
+    m_generatorCombo->setWritable( playlist->author()->isLocal() );
+    m_generatorCombo->setLabel( qobject_cast< QComboBox* >( m_generatorCombo->writableWidget() )->currentText() );
+    m_modeCombo->setWritable( playlist->author()->isLocal() );
+    m_modeCombo->setLabel( qobject_cast< QComboBox* >( m_modeCombo->writableWidget() )->currentText() );
+       
     applyModeChange( m_playlist->mode() );
     connect( m_playlist->generator().data(), SIGNAL( generated( QList<Tomahawk::query_ptr> ) ), this, SLOT( tracksGenerated( QList<Tomahawk::query_ptr> ) ) );
     connect( m_playlist.data(), SIGNAL( dynamicRevisionLoaded( Tomahawk::DynamicPlaylistRevision ) ), this, SLOT( onRevisionLoaded( Tomahawk::DynamicPlaylistRevision ) ) );

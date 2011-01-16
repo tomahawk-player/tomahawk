@@ -36,20 +36,22 @@ DynamicControlList::DynamicControlList()
 
 DynamicControlList::DynamicControlList( AnimatedSplitter* parent )
     : AnimatedWidget( parent )
+    , m_isLocal( true )
     , m_layout( new QVBoxLayout )
     , m_summaryWidget( 0 )
 {
     init();
 }
 
-DynamicControlList::DynamicControlList( const geninterface_ptr& generator, const QList< dyncontrol_ptr >& controls, AnimatedSplitter* parent)
+DynamicControlList::DynamicControlList( const geninterface_ptr& generator, const QList< dyncontrol_ptr >& controls, AnimatedSplitter* parent, bool isLocal )
     : AnimatedWidget(parent)
     , m_generator( generator )
+    , m_isLocal( isLocal )
     , m_layout( new QVBoxLayout )
     , m_summaryWidget( 0 )
 {
     init();
-    setControls(  generator, controls );
+    setControls(  generator, controls, m_isLocal );
 }
 
 DynamicControlList::~DynamicControlList()
@@ -80,21 +82,22 @@ DynamicControlList::init()
 }
 
 void 
-DynamicControlList::setControls( const geninterface_ptr& generator, const QList< dyncontrol_ptr >& controls)
+DynamicControlList::setControls( const geninterface_ptr& generator, const QList< dyncontrol_ptr >& controls, bool isLocal )
 {
     if( !m_controls.isEmpty() ) {
         qDeleteAll( m_controls );
         m_controls.clear();
     }
+    m_isLocal = isLocal;
     m_generator = generator;
     if( controls.isEmpty() ) {
-        m_controls <<  new DynamicControlWidget( generator->createControl(), false, false, false, this );
+        m_controls <<  new DynamicControlWidget( generator->createControl(), false, false, false, isLocal, this );
         connect( m_controls.last(), SIGNAL( addNewControl() ), this, SLOT( addNewControl() ) );
         connect( m_controls.last(), SIGNAL( removeControl() ), this, SLOT( removeControl() ) );
     } else 
     {
         foreach( const dyncontrol_ptr& control, controls ) {
-            m_controls << new DynamicControlWidget( control, false, false, false, this );
+            m_controls << new DynamicControlWidget( control, false, false, false, isLocal, this );
             connect( m_controls.last(), SIGNAL( addNewControl() ), this, SLOT( addNewControl() ) );
             connect( m_controls.last(), SIGNAL( removeControl() ), this, SLOT( removeControl() ) );
         }
@@ -143,7 +146,7 @@ void DynamicControlList::addNewControl()
     m_controls.last()->setShowPlusButton( false );
     m_controls.last()->setShowMinusButton( true );
     dyncontrol_ptr control = m_generator->createControl();
-    m_controls.append( new DynamicControlWidget( control, true, false, true, this ) );
+    m_controls.append( new DynamicControlWidget( control, true, false, true, m_isLocal, this ) );
     m_layout->addWidget( m_controls.last() );
     connect( m_controls.last(), SIGNAL( addNewControl() ), this, SLOT( addNewControl() ) );
     connect( m_controls.last(), SIGNAL( removeControl() ), this, SLOT( removeControl() ) );
