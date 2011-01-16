@@ -192,7 +192,7 @@ DynamicWidget::modeChanged( int mode )
     
     m_playlist->setMode( mode );
     applyModeChange( mode );
-    m_playlist->createNewRevision();
+    controlsChanged();
 }
 
 void 
@@ -272,7 +272,7 @@ void
 DynamicWidget::controlsChanged()
 {
     // save the current playlist
-    if( m_controls->lastControlDirty() )
+    if( !m_controls->lastControlDirty() )
         m_playlist->generator()->controls().removeLast();
     m_playlist->createNewRevision();
 }

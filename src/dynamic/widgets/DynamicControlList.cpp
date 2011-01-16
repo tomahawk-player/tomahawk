@@ -155,6 +155,7 @@ void DynamicControlList::addNewControl()
     connect( m_controls.last(), SIGNAL( removeControl() ), this, SLOT( removeControl() ) );
     connect( m_controls.last(), SIGNAL( changed() ), this, SLOT( controlChanged() ) );
     
+    m_lastControlDirty = false;
     emit controlsChanged();
 }
 

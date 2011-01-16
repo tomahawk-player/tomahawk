@@ -74,7 +74,7 @@ DatabaseCommand_SetDynamicPlaylistRevision::postCommitHook()
         Q_ASSERT( !playlist.isNull() );
         return;
     }
-    if( !m_controlsV.isEmpty() ) {
+    if( !m_controlsV.isEmpty() && m_controls.isEmpty() ) {
         QList<QVariantMap> controlMap;
         foreach( const QVariant& v, m_controlsV )
             controlMap << v.toMap();
