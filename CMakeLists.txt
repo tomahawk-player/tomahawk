@@ -14,10 +14,6 @@ ELSE()
 ENDIF()
 
 FIND_PACKAGE( Taglib 1.6.0 REQUIRED )
-include(CheckTagLibFileName)
-check_taglib_filename(COMPLEX_TAGLIB_FILENAME)
-
-
 FIND_PACKAGE( LibLastFm REQUIRED )
 FIND_PACKAGE( LibEchonest REQUIRED )
 

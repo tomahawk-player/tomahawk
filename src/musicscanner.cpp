@@ -160,14 +160,7 @@ MusicScanner::readFile( const QFileInfo& fi )
     if( m_scanned % 100 == 0 )
         qDebug() << "SCAN" << m_scanned << fi.absoluteFilePath();
 
-    #ifdef COMPLEX_TAGLIB_FILENAME
-        const wchar_t *encodedName = reinterpret_cast< const wchar_t *>(fi.absoluteFilePath().utf16());
-    #else
-        QByteArray fileName = QFile::encodeName( fi.absoluteFilePath() );
-        const char *encodedName = fileName.constData();
-    #endif
-
-    TagLib::FileRef f( encodedName );
+    TagLib::FileRef f( fi.absoluteFilePath().toUtf8().constData() );
     if ( f.isNull() || !f.tag() )
     {
         // qDebug() << "Doesn't seem to be a valid audiofile:" << fi.absoluteFilePath();
