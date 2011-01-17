@@ -348,6 +348,7 @@ DynamicPlaylist::setRevision( const QString& rev,
                                     Q_ARG( bool, is_newest_rev ),
                                     QGenericArgument( "QMap< QString,Tomahawk::plentry_ptr > " , (const void*)&addedmap ),
                                     Q_ARG( bool, applied ) );
+        return;
     }
     
     QList<dyncontrol_ptr> controls = variantsToControl( controlsV );
