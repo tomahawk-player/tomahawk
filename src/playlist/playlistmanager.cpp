@@ -136,7 +136,7 @@ PlaylistManager::show( const Tomahawk::album_ptr& album )
         PlaylistView* view = new PlaylistView();
         PlaylistModel* model = new PlaylistModel();
         view->setModel( model );
-        model->loadAlbum( album );
+        model->appendAlbum( album );
 
         m_currentInterface = view->proxyModel();
         m_albumViews.insert( album, view );
