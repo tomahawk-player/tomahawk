@@ -10,7 +10,7 @@
 #include "playlist/playlistmodel.h"
 
 #include "pipeline.h"
-#include "xspfloader.h"
+#include "utils/xspfloader.h"
 
 #include "sourcelist.h"
 

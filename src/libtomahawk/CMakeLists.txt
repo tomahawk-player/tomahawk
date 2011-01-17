@@ -100,6 +100,7 @@ set( libSources
     utils/proxystyle.cpp
     utils/widgetdragfilter.cpp
     utils/animatedsplitter.cpp
+    utils/xspfloader.cpp
 
     widgets/newplaylistwidget.cpp
     widgets/welcomewidget.cpp
@@ -198,6 +199,7 @@ set( libHeaders
     utils/progresstreeview.h
     utils/widgetdragfilter.h
     utils/animatedsplitter.h
+    utils/xspfloader.h
 
     widgets/newplaylistwidget.h
     widgets/welcomewidget.h
@@ -241,6 +243,9 @@ SET( OS_SPECIFIC_LINK_LIBRARIES
 ENDIF( WIN32 )
 
 IF( APPLE )
+SET( libSources ${libSources} audio/rtaudiooutput.cpp )
+SET( libHeaders ${libHeaders} audio/rtaudiooutput.h )
+
 SET( OS_SPECIFIC_LINK_LIBRARIES
     ${OS_SPECIFIC_LINK_LIBRARIES}
     ${COREAUDIO_LIBRARY}

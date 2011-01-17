@@ -56,7 +56,6 @@ SET( tomahawkSourcesGui ${tomahawkSourcesGui}
      topbar/lineedit.cpp
      topbar/searchbutton.cpp
 
-     xspfloader.cpp
      transferview.cpp
      tomahawktrayicon.cpp
      audiocontrols.cpp
@@ -94,7 +93,6 @@ SET( tomahawkHeadersGui ${tomahawkHeadersGui}
      topbar/lineedit_p.h
      topbar/searchbutton.h
 
-     xspfloader.h
      transferview.h
      tomahawktrayicon.h
      audiocontrols.h
