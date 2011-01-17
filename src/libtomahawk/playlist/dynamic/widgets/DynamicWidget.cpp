@@ -97,16 +97,20 @@ DynamicWidget::DynamicWidget( const Tomahawk::dynplaylist_ptr& playlist, QWidget
     m_model = new PlaylistModel( this );
     m_view = new PlaylistView( this );
     m_view->setModel( m_model );
+    m_view->setContentsMargins( 0, 0, 0, 0 );
     
     m_splitter->addWidget( m_controls );
     m_splitter->addWidget( m_view );
     m_splitter->setGreedyWidget( 1 );
     m_splitter->setHandleWidth( 0 );
+    m_splitter->setContentsMargins( 0, 0, 0, 0 );
     
     m_splitter->show( 0, false );
     
     loadDynamicPlaylist( playlist );
     
+    m_layout->setContentsMargins( 0, 0, 0, 0 );
+    m_layout->setMargin( 0 );
     setLayout( m_layout );
 
     connect( m_controls, SIGNAL( controlChanged( Tomahawk::dyncontrol_ptr ) ), this, SLOT( controlChanged( Tomahawk::dyncontrol_ptr ) ), Qt::QueuedConnection );

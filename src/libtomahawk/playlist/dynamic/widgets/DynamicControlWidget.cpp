@@ -49,6 +49,9 @@ DynamicControlWidget::DynamicControlWidget( const Tomahawk::dyncontrol_ptr& cont
     setMouseTracking( true );
     
     m_layout = new QHBoxLayout;
+    m_layout->setMargin( 0 );
+    m_layout->setContentsMargins( 0, 0, 0, 0 );
+    
     QComboBox* typeSelector = new QComboBox( this );
     m_typeSelector = new ReadOrWriteWidget( typeSelector, m_isLocal, this );
     
@@ -71,6 +74,7 @@ DynamicControlWidget::DynamicControlWidget( const Tomahawk::dyncontrol_ptr& cont
         connect( m_plusButton, SIGNAL( clicked( bool ) ), this, SIGNAL( addNewControl() ) );
         m_plusL = new QStackedLayout;
         m_plusL->setContentsMargins( 0, 0, 0, 0 );
+        m_plusL->setMargin( 0 );
         m_plusL->addWidget( m_plusButton );
         m_plusL->addWidget( m_minusButton );
         m_plusL->addWidget( createDummy( m_plusButton ) ); // :-(
@@ -81,6 +85,7 @@ DynamicControlWidget::DynamicControlWidget( const Tomahawk::dyncontrol_ptr& cont
     m_collapseButton->setIcon( QIcon( RESPATH "images/arrow-up-double.png" ) );
     m_collapseL = new QStackedLayout;
     m_collapseL->setContentsMargins( 0, 0, 0, 0 );
+    m_collapseL->setMargin( 0 );
     m_collapseL->addWidget( m_collapseButton );
     m_collapseL->addWidget( createDummy( m_collapseButton ) ); // :-(
     m_collapseL->setCurrentIndex( 1 );
@@ -146,6 +151,7 @@ QToolButton* DynamicControlWidget::initButton()
 QWidget* DynamicControlWidget::createDummy( QWidget* fromW )
 {
     QWidget* dummy = new QWidget( this );
+    dummy->setContentsMargins( 0, 0, 0, 0 );
     dummy->setSizePolicy( QSizePolicy::Fixed, QSizePolicy::Fixed );
     dummy->setMinimumSize( fromW->size() );
     dummy->setMaximumSize( fromW->size() );

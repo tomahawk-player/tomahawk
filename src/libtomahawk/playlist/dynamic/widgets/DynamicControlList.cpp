@@ -23,6 +23,7 @@
 
 #include "DynamicControlWidget.h"
 #include "dynamic/GeneratorInterface.h"
+#include <QHBoxLayout>
 
 using namespace Tomahawk;
 
@@ -65,6 +66,7 @@ DynamicControlList::init()
     setLayout( m_layout );
     m_layout->setMargin( 0 );
     m_layout->setSpacing( 0 );
+    m_layout->setContentsMargins( 0, 0, 0, 0 );
 //     setSizePolicy( QSizePolicy::Expanding, QSizePolicy::Ignored );
     
     m_summaryWidget = new QWidget( this );
