@@ -218,8 +218,15 @@ DynamicWidget::applyModeChange( int mode )
 void 
 DynamicWidget::tracksGenerated( const QList< query_ptr >& queries )
 {
-    m_playlist->addEntries( queries, m_playlist->currentrevision() );
-    m_resolveOnNextLoad = true;
+    if( m_playlist->author()->isLocal() ) {
+        m_playlist->addEntries( queries, m_playlist->currentrevision() );
+        m_resolveOnNextLoad = true;
+    } else { // read-only, so add tracks only in the GUI, not to the playlist itself
+        foreach( const query_ptr& query, queries ) {
+            m_model->append( query );
+            Pipeline::instance()->add( query );
+        }
+    }
 }
 
 void 
