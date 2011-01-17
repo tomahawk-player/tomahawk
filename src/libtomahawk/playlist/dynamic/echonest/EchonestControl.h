@@ -20,6 +20,7 @@
 #include <echonest/Playlist.h>
 
 #include "dynamic/DynamicControl.h"
+#include <QTimer>
 
 namespace Tomahawk
 {
@@ -49,6 +50,7 @@ public slots:
         
 private slots:
     void updateData();
+    void editingFinished();
     
 private:
     void updateWidgets();
@@ -60,6 +62,8 @@ private:
     QWeakPointer< QWidget > m_match;
     QString m_matchData;
     QString m_matchString;
+    
+    QTimer m_editingTimer;
     
     Echonest::DynamicPlaylist::PlaylistParamData m_data;
     

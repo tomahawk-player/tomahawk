@@ -150,7 +150,7 @@ DynamicWidget::onRevisionLoaded( const Tomahawk::DynamicPlaylistRevision& rev )
 {
     qDebug() << "DynamicWidget::onRevisionLoaded";
     loadDynamicPlaylist( m_playlist );
-    if( m_resolveOnNextLoad )
+    if( m_resolveOnNextLoad || !m_playlist->author()->isLocal() )
     {
         m_playlist->resolve();
         m_resolveOnNextLoad = false;
@@ -279,16 +279,15 @@ void
 DynamicWidget::controlsChanged()
 {
     // save the current playlist
-//     if( !m_controls->lastControlDirty() ) {
-    if( m_controls->controls().size() == 1 && m_controls->lastControlDirty() && m_playlist->generator()->controls().at( 0 )->input() == QString() ) {
+    if( m_controls->controls().size() == 1 && m_playlist->generator()->controls().at( 0 )->input() == QString() ) { // if there is only 1 empty control, remove it as it's the default created one
         m_playlist->generator()->removeControl( m_playlist->generator()->controls().last() );
     }
     m_playlist->createNewRevision();
 }
 
 void 
-DynamicWidget::controlChanged(const Tomahawk::dyncontrol_ptr& control)
+DynamicWidget::controlChanged( const Tomahawk::dyncontrol_ptr& control )
 {
-
+    m_playlist->createNewRevision();
 }
 

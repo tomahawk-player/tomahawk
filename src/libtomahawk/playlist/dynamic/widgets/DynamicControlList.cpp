@@ -30,7 +30,6 @@ DynamicControlList::DynamicControlList()
     : AnimatedWidget()
     , m_layout( new QVBoxLayout )
     , m_summaryWidget( 0 )
-    , m_lastControlDirty( false )
 {
     init();
 }
@@ -40,7 +39,6 @@ DynamicControlList::DynamicControlList( AnimatedSplitter* parent )
     , m_layout( new QVBoxLayout )
     , m_summaryWidget( 0 )
     , m_isLocal( true )
-    , m_lastControlDirty( false )
 {
     init();
 }
@@ -51,7 +49,6 @@ DynamicControlList::DynamicControlList( const geninterface_ptr& generator, const
     , m_layout( new QVBoxLayout )
     , m_summaryWidget( 0 )
     , m_isLocal( isLocal )
-    , m_lastControlDirty( false )
 {
     init();
     setControls(  generator, controls, m_isLocal );
@@ -97,12 +94,14 @@ DynamicControlList::setControls( const geninterface_ptr& generator, const QList<
         m_controls <<  new DynamicControlWidget( generator->createControl(), false, false, false, isLocal, this );
         connect( m_controls.last(), SIGNAL( addNewControl() ), this, SLOT( addNewControl() ) );
         connect( m_controls.last(), SIGNAL( removeControl() ), this, SLOT( removeControl() ) );
+        connect( m_controls.last(), SIGNAL( changed() ), this, SLOT( controlChanged() ) );
     } else 
     {
         foreach( const dyncontrol_ptr& control, controls ) {
             m_controls << new DynamicControlWidget( control, false, false, false, isLocal, this );
             connect( m_controls.last(), SIGNAL( addNewControl() ), this, SLOT( addNewControl() ) );
             connect( m_controls.last(), SIGNAL( removeControl() ), this, SLOT( removeControl() ) );
+            connect( m_controls.last(), SIGNAL( changed() ), this, SLOT( controlChanged() ) );
         }
     }
     onShown( this );
@@ -155,7 +154,6 @@ void DynamicControlList::addNewControl()
     connect( m_controls.last(), SIGNAL( removeControl() ), this, SLOT( removeControl() ) );
     connect( m_controls.last(), SIGNAL( changed() ), this, SLOT( controlChanged() ) );
     
-    m_lastControlDirty = false;
     emit controlsChanged();
 }
 
@@ -181,19 +179,10 @@ void DynamicControlList::controlChanged()
     Q_ASSERT( sender() && qobject_cast<DynamicControlWidget*>(sender()) );
     DynamicControlWidget* widget = qobject_cast<DynamicControlWidget*>(sender());
     
-    if( !widget->control()->input().isEmpty() )
-        m_lastControlDirty = true;
-    
-    emit controlChanged( qobject_cast<DynamicControlWidget*>(sender())->control() );
+    emit controlChanged( widget->control() );
 }
 
 
 void DynamicControlList::paintEvent(QPaintEvent* )
 {
 }
-
-bool DynamicControlList::lastControlDirty() const
-{
-    return m_lastControlDirty;
-}
-

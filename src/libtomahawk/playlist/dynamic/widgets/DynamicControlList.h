@@ -47,7 +47,6 @@ public:
     
     virtual void paintEvent(QPaintEvent* );
     
-    bool lastControlDirty() const;
 signals:
     void controlsChanged();
     void controlChanged( const Tomahawk::dyncontrol_ptr& control );
@@ -68,7 +67,6 @@ private:
     QList< DynamicControlWidget* > m_controls;
     QWidget* m_summaryWidget;
     bool m_isLocal;
-    bool m_lastControlDirty;
 };
 
 };

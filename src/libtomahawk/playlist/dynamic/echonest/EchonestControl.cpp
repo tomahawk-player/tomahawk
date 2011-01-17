@@ -26,6 +26,10 @@ Tomahawk::EchonestControl::EchonestControl( const QString& selectedType, const Q
     : DynamicControl ( selectedType.isEmpty() ? "Artist" : selectedType, typeSelectors, parent )
 {
     setType( "echonest" );
+    m_editingTimer.setInterval( 3000 ); // 3 second timeout to edits
+    m_editingTimer.setSingleShot( true );
+    
+    connect( &m_editingTimer, SIGNAL( timeout() ), this, SIGNAL( changed() ) );
     updateWidgets();
 }
 
@@ -117,7 +121,8 @@ Tomahawk::EchonestControl::updateWidgets()
         connect( match, SIGNAL( currentIndexChanged(int) ), this, SLOT( updateData() ) );
         connect( match, SIGNAL( currentIndexChanged(int) ), this, SIGNAL( changed() ) );
         connect( input, SIGNAL( textChanged(QString) ), this, SLOT( updateData() ) );
-        connect( input, SIGNAL( editingFinished() ), this, SIGNAL( changed() ) );
+        connect( input, SIGNAL( editingFinished() ), this, SLOT( editingFinished() ) );
+        connect( input, SIGNAL( textEdited( QString ) ), &m_editingTimer, SLOT( stop() ) );
         
         match->hide();
         input->hide();
@@ -147,7 +152,8 @@ Tomahawk::EchonestControl::updateData()
 }
 
 // fills in the current widget with the data from json or dbcmd (m_data.second and m_matchData)
-void Tomahawk::EchonestControl::updateWidgetsFromData()
+void 
+Tomahawk::EchonestControl::updateWidgetsFromData()
 {
     if( selectedType() == "Artist" ) {
         QComboBox* combo = qobject_cast<QComboBox*>( m_match.data() );
@@ -159,3 +165,9 @@ void Tomahawk::EchonestControl::updateWidgetsFromData()
     }
 }
 
+void 
+Tomahawk::EchonestControl::editingFinished()
+{
+    qDebug() << Q_FUNC_INFO;
+    m_editingTimer.start();
+}
