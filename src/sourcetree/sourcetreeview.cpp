@@ -1,8 +1,8 @@
 #include "sourcetreeview.h"
 
 #include "playlist.h"
-#include "collectionmodel.h"
-#include "playlistmanager.h"
+#include "playlist/collectionmodel.h"
+#include "playlist/playlistmanager.h"
 #include "sourcetreeitem.h"
 #include "sourcesmodel.h"
 #include "sourcelist.h"
@@ -129,13 +129,13 @@ SourceTreeView::onItemActivated( const QModelIndex& index )
         {
             if ( item->source().isNull() )
             {
-                APP->playlistManager()->showSuperCollection();
+                PlaylistManager::instance()->showSuperCollection();
             }
             else
             {
                 qDebug() << "SourceTreeItem toggled:" << item->source()->userName();
 
-                APP->playlistManager()->show( item->source()->collection() );
+                PlaylistManager::instance()->show( item->source()->collection() );
 //                APP->playlistManager()->show( item->source() );
             }
         }
@@ -147,7 +147,7 @@ SourceTreeView::onItemActivated( const QModelIndex& index )
         {
             qDebug() << "Playlist activated:" << playlist->title();
 
-            APP->playlistManager()->show( playlist );
+            PlaylistManager::instance()->show( playlist );
         }
     }
 }

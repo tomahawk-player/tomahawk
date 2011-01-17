@@ -3,14 +3,11 @@
 
 #define APP TomahawkApp::instance()
 
-#define RESPATH ":/data/"
-
 #include "headlesscheck.h"
 
 #include <QRegExp>
 #include <QFile>
 #include <QSettings>
-#include <QNetworkAccessManager>
 #include <QDir>
 
 #include "QxtHttpServerConnector"
@@ -61,16 +58,12 @@ public:
 
     static TomahawkApp* instance();
 
-    AudioEngine* audioEngine() { return m_audioEngine; }
     SipHandler* sipHandler() { return m_sipHandler; }
-    QNetworkAccessManager* nam() { return m_nam; }
-    QNetworkProxy* proxy() { return m_proxy; }
     Tomahawk::InfoSystem::InfoSystem* infoSystem() { return m_infoSystem; }
     XMPPBot* xmppBot() { return m_xmppBot; }
 
 #ifndef TOMAHAWK_HEADLESS
     AudioControls* audioControls();
-    PlaylistManager* playlistManager();
     TomahawkWindow* mainWindow() const { return m_mainwindow; }
 #endif
 
@@ -106,9 +99,6 @@ private:
 #endif    
 
     bool m_headless;
-
-    QNetworkAccessManager* m_nam;
-    QNetworkProxy* m_proxy;
 
     Tomahawk::InfoSystem::InfoSystem* m_infoSystem;
 

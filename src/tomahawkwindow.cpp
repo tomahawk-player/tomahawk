@@ -16,26 +16,24 @@
 #include "playlist.h"
 #include "query.h"
 
+#include "audio/audioengine.h"
+#include "database/database.h"
 #include "database/databasecommand_collectionstats.h"
-#include "topbar/topbar.h"
-
+#include "network/controlconnection.h"
+#include "playlist/playlistmanager.h"
 #include "sip/SipHandler.h"
-
+#include "topbar/topbar.h"
+#include "utils/proxystyle.h"
+#include "utils/widgetdragfilter.h"
 #include "widgets/newplaylistwidget.h"
 #include "widgets/welcomewidget.h"
 
 #include "audiocontrols.h"
-#include "network/controlconnection.h"
-#include "database/database.h"
 #include "musicscanner.h"
-#include "playlistmanager.h"
-#include "proxystyle.h"
 #include "settingsdialog.h"
 #include "xspfloader.h"
-#include "proxystyle.h"
 #include "tomahawksettings.h"
 #include "tomahawktrayicon.h"
-#include "widgetdragfilter.h"
 
 using namespace Tomahawk;
 
@@ -45,7 +43,6 @@ TomahawkWindow::TomahawkWindow( QWidget* parent )
     , ui( new Ui::TomahawkWindow )
     , m_topbar( new TopBar( this ) )
     , m_audioControls( new AudioControls( this ) )
-    , m_playlistManager( new PlaylistManager( this ) )
     , m_trayIcon( new TomahawkTrayIcon( this ) )
 {
     qApp->setStyle( new ProxyStyle() );
@@ -55,10 +52,12 @@ TomahawkWindow::TomahawkWindow( QWidget* parent )
     setUnifiedTitleAndToolBarOnMac( true );
 #endif
 
+    new PlaylistManager( this );
+
     ui->setupUi( this );
 
     delete ui->playlistWidget;
-    ui->splitter->addWidget( m_playlistManager->widget() );
+    ui->splitter->addWidget( PlaylistManager::instance()->widget() );
     ui->splitter->setStretchFactor( 0, 1 );
     ui->splitter->setStretchFactor( 1, 3 );
     ui->splitter->setCollapsible( 1, false );
@@ -81,7 +80,7 @@ TomahawkWindow::TomahawkWindow( QWidget* parent )
     loadSettings();
     setupSignals();
 
-    m_playlistManager->show( new WelcomeWidget() );
+    PlaylistManager::instance()->show( new WelcomeWidget() );
 }
 
 
@@ -118,45 +117,45 @@ TomahawkWindow::setupSignals()
 {
     // <Playlist>
     connect( m_topbar,         SIGNAL( filterTextChanged( const QString& ) ),
-             playlistManager(),  SLOT( setFilter( const QString& ) ) );
+             PlaylistManager::instance(),  SLOT( setFilter( const QString& ) ) );
 
-    connect( playlistManager(), SIGNAL( numSourcesChanged( unsigned int ) ),
+    connect( PlaylistManager::instance(), SIGNAL( numSourcesChanged( unsigned int ) ),
              m_topbar,            SLOT( setNumSources( unsigned int ) ) );
 
-    connect( playlistManager(), SIGNAL( numTracksChanged( unsigned int ) ),
+    connect( PlaylistManager::instance(), SIGNAL( numTracksChanged( unsigned int ) ),
              m_topbar,            SLOT( setNumTracks( unsigned int ) ) );
 
-    connect( playlistManager(), SIGNAL( numArtistsChanged( unsigned int ) ),
+    connect( PlaylistManager::instance(), SIGNAL( numArtistsChanged( unsigned int ) ),
              m_topbar,            SLOT( setNumArtists( unsigned int ) ) );
 
-    connect( playlistManager(), SIGNAL( numShownChanged( unsigned int ) ),
+    connect( PlaylistManager::instance(), SIGNAL( numShownChanged( unsigned int ) ),
              m_topbar,            SLOT( setNumShown( unsigned int ) ) );
 
     connect( m_topbar,         SIGNAL( flatMode() ),
-             playlistManager(),  SLOT( setTableMode() ) );
+             PlaylistManager::instance(),  SLOT( setTableMode() ) );
 
     connect( m_topbar,         SIGNAL( artistMode() ),
-             playlistManager(),  SLOT( setTreeMode() ) );
+             PlaylistManager::instance(),  SLOT( setTreeMode() ) );
 
     connect( m_topbar,         SIGNAL( albumMode() ),
-             playlistManager(),  SLOT( setAlbumMode() ) );
+             PlaylistManager::instance(),  SLOT( setAlbumMode() ) );
 
-    connect( playlistManager(), SIGNAL( statsAvailable( bool ) ),
+    connect( PlaylistManager::instance(), SIGNAL( statsAvailable( bool ) ),
              m_topbar,            SLOT( setStatsVisible( bool ) ) );
 
-    connect( playlistManager(), SIGNAL( modesAvailable( bool ) ),
+    connect( PlaylistManager::instance(), SIGNAL( modesAvailable( bool ) ),
              m_topbar,            SLOT( setModesVisible( bool ) ) );
 
     // <From PlaylistManager>
-    connect( playlistManager(), SIGNAL( repeatModeChanged( PlaylistInterface::RepeatMode ) ),
+    connect( PlaylistManager::instance(), SIGNAL( repeatModeChanged( PlaylistInterface::RepeatMode ) ),
              m_audioControls,     SLOT( onRepeatModeChanged( PlaylistInterface::RepeatMode ) ) );
 
-    connect( playlistManager(), SIGNAL( shuffleModeChanged( bool ) ),
+    connect( PlaylistManager::instance(), SIGNAL( shuffleModeChanged( bool ) ),
              m_audioControls,     SLOT( onShuffleModeChanged( bool ) ) );
 
     // <From AudioEngine>
-    connect( (QObject*)APP->audioEngine(), SIGNAL( loading( const Tomahawk::result_ptr& ) ),
-                                             SLOT( onPlaybackLoading( const Tomahawk::result_ptr& ) ) );
+    connect( AudioEngine::instance(), SIGNAL( loading( const Tomahawk::result_ptr& ) ),
+                                        SLOT( onPlaybackLoading( const Tomahawk::result_ptr& ) ) );
 
     // <Menu Items>
     connect( ui->actionPreferences, SIGNAL( triggered() ), SLOT( showSettingsDialog() ) );
@@ -209,13 +208,6 @@ TomahawkWindow::closeEvent( QCloseEvent* e )
 #endif
 
     e->accept();
-}
-
-
-PlaylistManager*
-TomahawkWindow::playlistManager()
-{
-    return m_playlistManager;
 }
 
 
@@ -325,7 +317,7 @@ TomahawkWindow::createPlaylist()
 {
     qDebug() << Q_FUNC_INFO;
 
-    playlistManager()->show( new NewPlaylistWidget() );
+    PlaylistManager::instance()->show( new NewPlaylistWidget() );
 
 /*    bool ok;
     QString name = QInputDialog::getText( this, "Create New Playlist", "Name:", QLineEdit::Normal, "New Playlist", &ok );

@@ -14,7 +14,7 @@ void
 XSPFLoader::load( const QUrl& url )
 {
     QNetworkRequest request( url );
-    QNetworkReply* reply = APP->nam()->get( request );
+    QNetworkReply* reply = TomahawkUtils::nam()->get( request );
 
     // isn't there a race condition here? something could happen before we connect()
     connect( reply, SIGNAL( finished() ),

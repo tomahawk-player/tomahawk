@@ -170,7 +170,7 @@
   <customwidget>
    <class>AnimatedSplitter</class>
    <extends>QSplitter</extends>
-   <header location="global">animatedsplitter.h</header>
+   <header>utils/animatedsplitter.h</header>
    <container>1</container>
   </customwidget>
   <customwidget>
