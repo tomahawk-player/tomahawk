@@ -25,13 +25,13 @@
 #include "topbar/topbar.h"
 #include "utils/proxystyle.h"
 #include "utils/widgetdragfilter.h"
+#include "utils/xspfloader.h"
 #include "widgets/newplaylistwidget.h"
 #include "widgets/welcomewidget.h"
 
 #include "audiocontrols.h"
 #include "musicscanner.h"
 #include "settingsdialog.h"
-#include "xspfloader.h"
 #include "tomahawksettings.h"
 #include "tomahawktrayicon.h"
 
