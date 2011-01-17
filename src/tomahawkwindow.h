@@ -47,7 +47,11 @@ public slots:
     void createPlaylist( bool dynamic = false );
     void loadSpiff();
     void showSettingsDialog();
-
+    
+    // called by the playlist creation dbcmds
+    void createPlaylist( const Tomahawk::source_ptr& src, const QVariant& contents );
+    void createDynamicPlaylist( const Tomahawk::source_ptr& src, const QVariant& contents );
+    
 private slots:
     void scanFinished();
     void rescanCollectionManually();

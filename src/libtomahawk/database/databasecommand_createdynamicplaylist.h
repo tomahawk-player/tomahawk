@@ -23,19 +23,15 @@ public:
     
     QVariant playlistV() const
     {
-        return QJson::QObjectHelper::qobject2qvariant( (QObject*)m_playlist.data() );
+        if( m_v.isNull() )
+            return QJson::QObjectHelper::qobject2qvariant( (QObject*)m_playlist.data() );
+        else
+            return m_v;
     }
     
     void setPlaylistV( const QVariant& v )
     {
-        qDebug() << "***********" << Q_FUNC_INFO << v;
-        using namespace Tomahawk;
-        
-        DynamicPlaylist* p = new DynamicPlaylist( source(), v.toMap().value( "type", QString() ).toString() );
-        QJson::QObjectHelper::qvariant2qobject( v.toMap(), p );
-        m_playlist = dynplaylist_ptr( p );
-        
-        setPlaylist( m_playlist.staticCast<Tomahawk::Playlist>() );
+        m_v = v;
     }
     
 private:

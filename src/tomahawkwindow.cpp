@@ -374,6 +374,24 @@ TomahawkWindow::createPlaylist( bool dynamic )
 
 }
 
+void 
+TomahawkWindow::createPlaylist( const Tomahawk::source_ptr& src,
+                                const QVariant& contents)
+{
+    playlist_ptr p = playlist_ptr( new Playlist( src ) );
+    QJson::QObjectHelper::qvariant2qobject( contents.toMap(), p.data() );
+    p->reportCreated( p );
+}
+
+void 
+TomahawkWindow::createDynamicPlaylist( const Tomahawk::source_ptr& src,
+                                       const QVariant& contents)
+{
+    dynplaylist_ptr p = dynplaylist_ptr( new DynamicPlaylist( src, contents.toMap().value( "type", QString() ).toString()  ) );
+    QJson::QObjectHelper::qvariant2qobject( contents.toMap(), p.data() );
+    p->reportCreated( p );
+}
+
 
 void
 TomahawkWindow::onPlaybackLoading( const Tomahawk::result_ptr& result )
