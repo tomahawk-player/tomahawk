@@ -243,6 +243,10 @@ SET( OS_SPECIFIC_LINK_LIBRARIES
 ENDIF( WIN32 )
 
 IF( APPLE )
+FIND_LIBRARY( COREAUDIO_LIBRARY CoreAudio )
+FIND_LIBRARY( COREFOUNDATION_LIBRARY CoreFoundation )
+MARK_AS_ADVANCED( COREAUDIO_LIBRARY COREFOUNDATION_LIBRARY )
+
 SET( libSources ${libSources} audio/rtaudiooutput.cpp )
 SET( libHeaders ${libHeaders} audio/rtaudiooutput.h )
 
