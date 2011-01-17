@@ -272,7 +272,8 @@ void
 DynamicWidget::controlsChanged()
 {
     // save the current playlist
-    if( !m_controls->lastControlDirty() ) {
+//     if( !m_controls->lastControlDirty() ) {
+    if( m_controls->controls().size() == 1 && m_controls->lastControlDirty() && m_playlist->generator()->controls().at( 0 )->input() == QString() ) {
         m_playlist->generator()->removeControl( m_playlist->generator()->controls().last() );
     }
     m_playlist->createNewRevision();

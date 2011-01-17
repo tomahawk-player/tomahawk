@@ -37,9 +37,9 @@ DynamicControlList::DynamicControlList()
 
 DynamicControlList::DynamicControlList( AnimatedSplitter* parent )
     : AnimatedWidget( parent )
-    , m_isLocal( true )
     , m_layout( new QVBoxLayout )
     , m_summaryWidget( 0 )
+    , m_isLocal( true )
     , m_lastControlDirty( false )
 {
     init();
@@ -48,9 +48,9 @@ DynamicControlList::DynamicControlList( AnimatedSplitter* parent )
 DynamicControlList::DynamicControlList( const geninterface_ptr& generator, const QList< dyncontrol_ptr >& controls, AnimatedSplitter* parent, bool isLocal )
     : AnimatedWidget(parent)
     , m_generator( generator )
-    , m_isLocal( isLocal )
     , m_layout( new QVBoxLayout )
     , m_summaryWidget( 0 )
+    , m_isLocal( isLocal )
     , m_lastControlDirty( false )
 {
     init();

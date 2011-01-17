@@ -43,6 +43,7 @@ public:
     virtual ~DynamicControlList();
     
     void setControls( const geninterface_ptr& generator, const QList< dyncontrol_ptr >& controls, bool isLocal );
+    QList< DynamicControlWidget* > controls() const { return m_controls; }
     
     virtual void paintEvent(QPaintEvent* );
     
