@@ -52,8 +52,8 @@ Scrobbler::Scrobbler( QObject* parent )
     connect( TomahawkApp::instance(), SIGNAL( settingsChanged() ),
                                         SLOT( settingsChanged() ), Qt::QueuedConnection );
 
-    connect( TomahawkApp::instance()->audioEngine(), SIGNAL( timerSeconds( unsigned int ) ),
-                                                       SLOT( engineTick( unsigned int ) ), Qt::QueuedConnection );
+    connect( AudioEngine::instance(), SIGNAL( timerSeconds( unsigned int ) ),
+                                        SLOT( engineTick( unsigned int ) ), Qt::QueuedConnection );
 }
 
 

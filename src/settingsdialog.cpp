@@ -303,9 +303,9 @@ ProxyDialog::saveSettings()
         return;
 
     QNetworkProxy proxy( static_cast<QNetworkProxy::ProxyType>(s->proxyType()), s->proxyHost(), s->proxyPort(), s->proxyUsername(), s->proxyPassword() );
-    QNetworkAccessManager* nam = TomahawkApp::instance()->nam();
+    QNetworkAccessManager* nam = TomahawkUtils::nam();
     nam->setProxy( proxy );
-    QNetworkProxy* globalProxy = TomahawkApp::instance()->proxy();
+    QNetworkProxy* globalProxy = TomahawkUtils::proxy();
     QNetworkProxy* oldProxy = globalProxy;
     globalProxy = new QNetworkProxy( proxy );
     if( oldProxy )

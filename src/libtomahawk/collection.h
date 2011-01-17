@@ -17,7 +17,7 @@
 #include "playlist.h"
 #include "source.h"
 #include "typedefs.h"
-#include "dynamic/DynamicPlaylist.h"
+#include "playlist/dynamic/DynamicPlaylist.h"
 
 #include "dllmacro.h"
 

@@ -27,13 +27,6 @@ SET( TOMAHAWK_INC_DIR "${CMAKE_CURRENT_SOURCE_DIR}/../include/" )
 #ENDFOREACH( moddir )
 
 SET( tomahawkSources ${tomahawkSources}
-     audio/madtranscode.cpp
-     audio/vorbistranscode.cpp
-     audio/flactranscode.cpp
-     audio/audioengine.cpp
-
-     utils/tomahawkutils.cpp
-
      sip/SipHandler.cpp
 
      infosystem/infosystem.cpp
@@ -52,36 +45,6 @@ SET( tomahawkSources ${tomahawkSources}
 )
 
 SET( tomahawkSourcesGui ${tomahawkSourcesGui}
-     utils/querylabel.cpp
-     utils/elidedlabel.cpp
-     utils/imagebutton.cpp
-     utils/progresstreeview.cpp
-     utils/proxystyle.cpp
-     utils/widgetdragfilter.cpp
-     utils/animatedsplitter.cpp
-
-     playlist/collectionmodel.cpp
-     playlist/collectionproxymodel.cpp
-     playlist/collectionflatmodel.cpp
-     playlist/collectionview.cpp
-     playlist/playlistmanager.cpp
-     playlist/plitem.cpp
-     playlist/playlistmodel.cpp
-     playlist/playlistproxymodel.cpp
-     playlist/playlistview.cpp
-     playlist/playlistitemdelegate.cpp
-     playlist/queueproxymodel.cpp
-     playlist/queueview.cpp
-     playlist/trackmodel.cpp
-     playlist/trackproxymodel.cpp
-     playlist/trackview.cpp
-     playlist/trackheader.cpp
-     playlist/albumitem.cpp
-     playlist/albummodel.cpp
-     playlist/albumproxymodel.cpp
-     playlist/albumitemdelegate.cpp
-     playlist/albumview.cpp
-
      sourcetree/sourcesmodel.cpp
      sourcetree/sourcetreeitem.cpp
      sourcetree/sourcetreeitemwidget.cpp
@@ -93,17 +56,6 @@ SET( tomahawkSourcesGui ${tomahawkSourcesGui}
      topbar/lineedit.cpp
      topbar/searchbutton.cpp
 
-     infowidgets/sourceinfowidget.cpp
-
-     dynamic/widgets/DynamicWidget.cpp
-     dynamic/widgets/DynamicControlWidget.cpp
-     dynamic/widgets/DynamicControlList.cpp
-     dynamic/widgets/ReadOrWriteWidget.cpp
-
-     widgets/newplaylistwidget.cpp
-     widgets/welcomewidget.cpp
-
-     xspfloader.cpp
      transferview.cpp
      tomahawktrayicon.cpp
      audiocontrols.cpp
@@ -114,12 +66,6 @@ SET( tomahawkSourcesGui ${tomahawkSourcesGui}
 SET( tomahawkHeaders ${tomahawkHeaders}
      "${TOMAHAWK_INC_DIR}/tomahawk/tomahawkapp.h"
      "${TOMAHAWK_INC_DIR}/tomahawk/infosystem.h"
-
-     audio/transcodeinterface.h
-     audio/madtranscode.h
-     audio/vorbistranscode.h
-     audio/flactranscode.h
-     audio/audioengine.h
 
      sip/SipHandler.h
 
@@ -135,36 +81,6 @@ SET( tomahawkHeaders ${tomahawkHeaders}
 )
 
 SET( tomahawkHeadersGui ${tomahawkHeadersGui}
-     utils/querylabel.h
-     utils/elidedlabel.h
-     utils/animatedcounterlabel.h
-     utils/imagebutton.h
-     utils/progresstreeview.h
-     utils/widgetdragfilter.h
-     utils/animatedsplitter.h
-
-     playlist/collectionmodel.h
-     playlist/collectionproxymodel.h
-     playlist/collectionflatmodel.h
-     playlist/collectionview.h
-     playlist/playlistmanager.h
-     playlist/plitem.h
-     playlist/playlistmodel.h
-     playlist/playlistproxymodel.h
-     playlist/playlistview.h
-     playlist/playlistitemdelegate.h
-     playlist/queueproxymodel.h
-     playlist/queueview.h
-     playlist/trackmodel.h
-     playlist/trackproxymodel.h
-     playlist/trackview.h
-     playlist/trackheader.h
-     playlist/albumitem.h
-     playlist/albummodel.h
-     playlist/albumproxymodel.h
-     playlist/albumitemdelegate.h
-     playlist/albumview.h
-
      sourcetree/sourcesmodel.h
      sourcetree/sourcetreeitem.h
      sourcetree/sourcetreeitemwidget.h
@@ -177,17 +93,6 @@ SET( tomahawkHeadersGui ${tomahawkHeadersGui}
      topbar/lineedit_p.h
      topbar/searchbutton.h
 
-     infowidgets/sourceinfowidget.h
-
-     dynamic/widgets/DynamicWidget.h
-     dynamic/widgets/DynamicControlWidget.h
-     dynamic/widgets/DynamicControlList.h
-     dynamic/widgets/ReadOrWriteWidget.h
-
-     widgets/newplaylistwidget.h
-     widgets/welcomewidget.h
-
-     xspfloader.h
      transferview.h
      tomahawktrayicon.h
      audiocontrols.h
@@ -203,10 +108,6 @@ SET( tomahawkUI ${tomahawkUI}
      audiocontrols.ui
      sourcetree/sourcetreeitemwidget.ui
      topbar/topbar.ui
-
-     infowidgets/sourceinfowidget.ui
-     widgets/newplaylistwidget.ui
-     widgets/welcomewidget.ui
 )
 
 INCLUDE_DIRECTORIES(
@@ -221,11 +122,10 @@ INCLUDE_DIRECTORIES(
     sourcetree
     topbar
     utils
-    dynamic
     libtomahawk
 
-    ../rtaudio
     ../alsa-playback
+    ../rtaudio
     ../qxt/qxtweb-standalone/qxtweb
 
     /usr/include/taglib

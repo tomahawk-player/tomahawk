@@ -1,5 +1,6 @@
 project( tomahawklib )
 
+SET( QT_USE_QTGUI TRUE )
 SET( QT_USE_QTSQL TRUE )
 SET( QT_USE_QTNETWORK TRUE )
 SET( QT_USE_QTXML TRUE )
@@ -26,14 +27,15 @@ set( libSources
 
     sip/SipPlugin.cpp
 
-    network/bufferiodevice.cpp
-    network/msgprocessor.cpp
-    network/filetransferconnection.cpp
-    network/dbsyncconnection.cpp
-    network/remotecollection.cpp
-    network/portfwdthread.cpp
 
+    audio/madtranscode.cpp
+    audio/vorbistranscode.cpp
+    audio/flactranscode.cpp
+    audio/audioengine.cpp
+
+    database/database.cpp
     database/fuzzyindex.cpp
+    database/databasecollection.cpp
     database/databaseworker.cpp
     database/databaseimpl.cpp
     database/databaseresolver.cpp
@@ -65,19 +67,65 @@ set( libSources
     database/databasecommand_loaddynamicplaylist.cpp
     database/databasecommand_loadalldynamicplaylists.cpp
     database/databasecommand_deletedynamicplaylist.cpp
-
-    dynamic/DynamicPlaylist.cpp
-    dynamic/DynamicControl.cpp
-    dynamic/GeneratorFactory.cpp
-    dynamic/GeneratorInterface.cpp
-    dynamic/echonest/EchonestGenerator.cpp
-    dynamic/echonest/EchonestControl.cpp
-
     database/database.cpp
 
+    playlist/collectionmodel.cpp
+    playlist/collectionproxymodel.cpp
+    playlist/collectionflatmodel.cpp
+    playlist/collectionview.cpp
+    playlist/playlistmanager.cpp
+    playlist/plitem.cpp
+    playlist/playlistmodel.cpp
+    playlist/playlistproxymodel.cpp
+    playlist/playlistview.cpp
+    playlist/playlistitemdelegate.cpp
+    playlist/queueproxymodel.cpp
+    playlist/queueview.cpp
+    playlist/trackmodel.cpp
+    playlist/trackproxymodel.cpp
+    playlist/trackview.cpp
+    playlist/trackheader.cpp
+    playlist/albumitem.cpp
+    playlist/albummodel.cpp
+    playlist/albumproxymodel.cpp
+    playlist/albumitemdelegate.cpp
+    playlist/albumview.cpp
+
+    playlist/dynamic/DynamicPlaylist.cpp
+    playlist/dynamic/DynamicControl.cpp
+    playlist/dynamic/GeneratorFactory.cpp
+    playlist/dynamic/GeneratorInterface.cpp
+    playlist/dynamic/echonest/EchonestGenerator.cpp
+    playlist/dynamic/echonest/EchonestControl.cpp
+    playlist/dynamic/widgets/DynamicWidget.cpp
+    playlist/dynamic/widgets/DynamicControlWidget.cpp
+    playlist/dynamic/widgets/DynamicControlList.cpp
+    playlist/dynamic/widgets/ReadOrWriteWidget.cpp
+
+
+    network/bufferiodevice.cpp
+    network/msgprocessor.cpp
+    network/filetransferconnection.cpp
+    network/dbsyncconnection.cpp
+    network/remotecollection.cpp
+    network/portfwdthread.cpp
     network/servent.cpp
     network/connection.cpp
     network/controlconnection.cpp
+
+    utils/tomahawkutils.cpp
+    utils/querylabel.cpp
+    utils/elidedlabel.cpp
+    utils/imagebutton.cpp
+    utils/progresstreeview.cpp
+    utils/proxystyle.cpp
+    utils/widgetdragfilter.cpp
+    utils/animatedsplitter.cpp
+    utils/xspfloader.cpp
+
+    widgets/newplaylistwidget.cpp
+    widgets/welcomewidget.cpp
+    widgets/infowidgets/sourceinfowidget.cpp
 )
 
 set( libHeaders
@@ -99,6 +147,12 @@ set( libHeaders
     playlist.h
 
     sip/SipPlugin.h
+
+    audio/transcodeinterface.h
+    audio/madtranscode.h
+    audio/vorbistranscode.h
+    audio/flactranscode.h
+    audio/audioengine.h
 
     database/database.h
     database/fuzzyindex.h
@@ -134,13 +188,6 @@ set( libHeaders
     database/databasecommand_deletedynamicplaylist.h
     database/databasecommand_loadalldynamicplaylists.h
 
-    dynamic/DynamicPlaylist.h
-    dynamic/DynamicControl.h
-    dynamic/GeneratorFactory.h
-    dynamic/GeneratorInterface.h
-    dynamic/echonest/EchonestGenerator.h
-    dynamic/echonest/EchonestControl.h
-
     network/bufferiodevice.h
     network/msgprocessor.h
     network/remotecollection.h
@@ -150,6 +197,58 @@ set( libHeaders
     network/connection.h
     network/controlconnection.h
     network/portfwdthread.h
+
+    playlist/collectionmodel.h
+    playlist/collectionproxymodel.h
+    playlist/collectionflatmodel.h
+    playlist/collectionview.h
+    playlist/playlistmanager.h
+    playlist/plitem.h
+    playlist/playlistmodel.h
+    playlist/playlistproxymodel.h
+    playlist/playlistview.h
+    playlist/playlistitemdelegate.h
+    playlist/queueproxymodel.h
+    playlist/queueview.h
+    playlist/trackmodel.h
+    playlist/trackproxymodel.h
+    playlist/trackview.h
+    playlist/trackheader.h
+    playlist/albumitem.h
+    playlist/albummodel.h
+    playlist/albumproxymodel.h
+    playlist/albumitemdelegate.h
+    playlist/albumview.h
+
+    playlist/dynamic/DynamicPlaylist.h
+    playlist/dynamic/DynamicControl.h
+    playlist/dynamic/GeneratorFactory.h
+    playlist/dynamic/GeneratorInterface.h
+    playlist/dynamic/echonest/EchonestGenerator.h
+    playlist/dynamic/echonest/EchonestControl.h
+    playlist/dynamic/widgets/DynamicWidget.h
+    playlist/dynamic/widgets/DynamicControlWidget.h
+    playlist/dynamic/widgets/DynamicControlList.h
+    playlist/dynamic/widgets/ReadOrWriteWidget.h
+
+    utils/querylabel.h
+    utils/elidedlabel.h
+    utils/animatedcounterlabel.h
+    utils/imagebutton.h
+    utils/progresstreeview.h
+    utils/widgetdragfilter.h
+    utils/animatedsplitter.h
+    utils/xspfloader.h
+
+    widgets/newplaylistwidget.h
+    widgets/welcomewidget.h
+    widgets/infowidgets/sourceinfowidget.h
+)
+
+set( libUI ${libUI}
+    widgets/newplaylistwidget.ui
+    widgets/welcomewidget.ui
+    widgets/infowidgets/sourceinfowidget.ui
 )
 
 include_directories( . ${CMAKE_CURRENT_BINARY_DIR} .. 
@@ -160,19 +259,59 @@ include_directories( . ${CMAKE_CURRENT_BINARY_DIR} ..
     ../../include
     ../network
     ../../qxt/qxtweb-standalone/qxtweb
+    ../../rtaudio
+    ../../alsa-playback
+    playlist
 )
 
-qt4_wrap_cpp( libMoc ${libHeaders} )
-add_library( tomahawklib SHARED ${libSources} ${libMoc} )
 
 IF( WIN32 )
+SET( libSources ${libSources} audio/rtaudiooutput.cpp )
+SET( libHeaders ${libHeaders} audio/rtaudiooutput.h )
+
 SET( OS_SPECIFIC_LINK_LIBRARIES
     ${OS_SPECIFIC_LINK_LIBRARIES}
     "iphlpapi.a"
     "ws2_32.dll"
     "dnsapi.dll"
+    "dsound.dll" 
+    "winmm.dll"
+
+    "${CMAKE_CURRENT_SOURCE_DIR}/../../rtaudio/librtaudio.dll"
 )
 ENDIF( WIN32 )
+
+IF( APPLE )
+FIND_LIBRARY( COREAUDIO_LIBRARY CoreAudio )
+FIND_LIBRARY( COREFOUNDATION_LIBRARY CoreFoundation )
+MARK_AS_ADVANCED( COREAUDIO_LIBRARY COREFOUNDATION_LIBRARY )
+
+SET( libSources ${libSources} audio/rtaudiooutput.cpp )
+SET( libHeaders ${libHeaders} audio/rtaudiooutput.h )
+
+SET( OS_SPECIFIC_LINK_LIBRARIES
+    ${OS_SPECIFIC_LINK_LIBRARIES}
+    ${COREAUDIO_LIBRARY}
+    ${COREFOUNDATION_LIBRARY}
+    rtaudio
+)
+
+ENDIF( APPLE )
+
+IF( UNIX AND NOT APPLE )
+SET( OS_SPECIFIC_LINK_LIBRARIES 
+     ${OS_SPECIFIC_LINK_LIBRARIES}
+     alsaplayback
+)
+ENDIF( UNIX AND NOT APPLE )
+
+
+qt4_wrap_ui( libUI_H ${libUI} )
+qt4_wrap_cpp( libMoc ${libHeaders} )
+
+SET( libSources ${libSources} ${libUI_H} )
+
+add_library( tomahawklib SHARED ${libSources} ${libMoc} )
 
 target_link_libraries( tomahawklib
     ${QT_LIBRARIES}
@@ -180,6 +319,10 @@ target_link_libraries( tomahawklib
     ${LIBECHONEST_LIBRARY}
     portfwd
     qjson
+    mad
+    vorbisfile
+    ogg
+    FLAC++
 )
 
 install( TARGETS tomahawklib DESTINATION lib )

@@ -6,6 +6,7 @@
 #include "typedefs.h"
 #include "tomahawksettings.h"
 #include "pipeline.h"
+
 #include "audio/audioengine.h"
 
 #include <gloox/client.h>
@@ -45,7 +46,7 @@ XMPPBot::XMPPBot(QObject *parent)
     m_client.data()->registerMessageHandler(this);
     m_client.data()->setPresence(Presence::Available, 1, "Tomahawkbot available");
 
-    connect(TomahawkApp::instance()->audioEngine(), SIGNAL(started(const Tomahawk::result_ptr &)),
+    connect(AudioEngine::instance(), SIGNAL(started(const Tomahawk::result_ptr &)),
             SLOT(newTrackSlot(const Tomahawk::result_ptr &)));
 
     connect(TomahawkApp::instance()->infoSystem(),
@@ -139,7 +140,7 @@ void XMPPBot::handleMessage(const Message& msg, MessageSession* session)
     {
         QStringList tokens = body.right( body.length() - 5 ).split( QString( "-" ), QString::SkipEmptyParts );
         if ( tokens.count() < 2 )
-            APP->audioEngine()->play();
+            AudioEngine::instance()->play();
 
         QVariantMap qv;
         qv["artist"] = tokens.first().trimmed();
@@ -153,22 +154,22 @@ void XMPPBot::handleMessage(const Message& msg, MessageSession* session)
     }
     else if ( body.startsWith( "stop" ) )
     {
-        APP->audioEngine()->stop();
+        AudioEngine::instance()->stop();
         return;
     }
     else if ( body.startsWith( "prev" ) )
     {
-        APP->audioEngine()->previous();
+        AudioEngine::instance()->previous();
         return;
     }
     else if ( body.startsWith( "next" ) )
     {
-        APP->audioEngine()->next();
+        AudioEngine::instance()->next();
         return;
     }
     else if ( body.startsWith( "pause" ) )
     {
-        APP->audioEngine()->pause();
+        AudioEngine::instance()->pause();
         return;
     }
 
@@ -398,7 +399,7 @@ void XMPPBot::infoFinishedSlot(QString caller)
 
 void XMPPBot::onResultsAdded( const QList<Tomahawk::result_ptr>& result )
 {
-    APP->audioEngine()->playItem( 0, result.first() );
+    AudioEngine::instance()->playItem( 0, result.first() );
 }
 
 ///////////////////////////////////////////////////////////////////////////////////////

@@ -15,17 +15,20 @@
   </property>
   <widget class="QWidget" name="centralWidget">
    <layout class="QHBoxLayout" name="horizontalLayout">
+    <property name="margin">
+     <number>0</number>
+    </property>
     <item>
      <widget class="QSplitter" name="splitter">
       <property name="orientation">
        <enum>Qt::Horizontal</enum>
       </property>
-      <widget class="QWidget" name="">
+      <widget class="QWidget" name="layoutWidget">
        <layout class="QVBoxLayout" name="verticalLayout">
         <item>
          <widget class="QPushButton" name="statusButton">
           <property name="text">
-           <string></string>
+           <string/>
           </property>
          </widget>
         </item>
@@ -173,7 +176,7 @@
   <customwidget>
    <class>AnimatedSplitter</class>
    <extends>QSplitter</extends>
-   <header location="global">animatedsplitter.h</header>
+   <header>utils/animatedsplitter.h</header>
    <container>1</container>
   </customwidget>
   <customwidget>

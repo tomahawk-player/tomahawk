@@ -39,17 +39,8 @@ SET( OS_SPECIFIC_LINK_LIBRARIES
     "${CMAKE_CURRENT_SOURCE_DIR}/../build/src/libtomahawk/libtomahawklib.dll"
 )
 
-SET( tomahawkSourcesGui ${tomahawkSourcesGui} audio/rtaudiooutput.cpp )
-SET( tomahawkHeadersGui ${tomahawkHeadersGui} audio/rtaudiooutput.h )
-
 SET( OS_SPECIFIC_LINK_LIBRARIES 
     ${OS_SPECIFIC_LINK_LIBRARIES} 
-    "dsound.dll" 
-    "winmm.dll"
     "iphlpapi.a"
-    "mad"
-    "vorbisfile"
-    "ogg"
-    "FLAC++"
-    "${CMAKE_CURRENT_SOURCE_DIR}/../rtaudio/librtaudio.dll"
+
 )
