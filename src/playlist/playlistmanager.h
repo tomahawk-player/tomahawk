@@ -36,6 +36,7 @@ public:
     bool isSuperCollectionVisible() const { return true; }
 
     bool show( const Tomahawk::playlist_ptr& playlist );
+    bool show( const Tomahawk::artist_ptr& artist );
     bool show( const Tomahawk::album_ptr& album );
     bool show( const Tomahawk::collection_ptr& collection );
     bool show( const Tomahawk::source_ptr& source );
@@ -97,6 +98,7 @@ private:
     QHash< Tomahawk::collection_ptr, AlbumView* > m_collectionAlbumViews;
 
     QHash< Tomahawk::playlist_ptr, PlaylistView* > m_playlistViews;
+    QHash< Tomahawk::artist_ptr, PlaylistView* > m_artistViews;
     QHash< Tomahawk::album_ptr, PlaylistView* > m_albumViews;
     QHash< Tomahawk::source_ptr, SourceInfoWidget* > m_sourceViews;
 

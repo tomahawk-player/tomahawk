@@ -141,7 +141,7 @@ TrackView::addItemsToQueue()
         PlItem* item = model()->itemFromIndex( proxyModel()->mapToSource( idx ) );
         if ( item && item->query()->numResults() )
         {
-            APP->playlistManager()->queue()->model()->appendTrack( item->query() );
+            APP->playlistManager()->queue()->model()->append( item->query() );
             APP->playlistManager()->showQueue();
         }
     }

@@ -22,6 +22,7 @@
 #include "sip/SipHandler.h"
 
 #include "widgets/newplaylistwidget.h"
+#include "widgets/welcomewidget.h"
 
 #include "audiocontrols.h"
 #include "network/controlconnection.h"
@@ -56,13 +57,6 @@ TomahawkWindow::TomahawkWindow( QWidget* parent )
 
     ui->setupUi( this );
 
-#ifndef Q_WS_MAC
-    ui->centralWidget->layout()->setContentsMargins( 4, 4, 4, 2 );
-#else
-//     ui->playlistView->setAttribute( Qt::WA_MacShowFocusRect, 0 );
-    ui->sourceTreeView->setAttribute( Qt::WA_MacShowFocusRect, 0 );
-#endif
-
     delete ui->playlistWidget;
     ui->splitter->addWidget( m_playlistManager->widget() );
     ui->splitter->setStretchFactor( 0, 1 );
@@ -86,6 +80,8 @@ TomahawkWindow::TomahawkWindow( QWidget* parent )
 
     loadSettings();
     setupSignals();
+
+    m_playlistManager->show( new WelcomeWidget() );
 }
 
 

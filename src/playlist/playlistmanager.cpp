@@ -21,8 +21,6 @@
 
 #include "infowidgets/sourceinfowidget.h"
 
-#include "widgets/welcomewidget.h"
-
 #define FILTER_TIMEOUT 280
 
 
@@ -67,7 +65,10 @@ PlaylistManager::PlaylistManager( QObject* parent )
     m_stack->addWidget( m_superCollectionView );
     m_stack->addWidget( m_superAlbumView );
 
-    show( new WelcomeWidget() );
+    m_stack->setContentsMargins( 0, 0, 0, 0 );
+    m_widget->setContentsMargins( 0, 0, 0, 0 );
+    m_widget->layout()->setContentsMargins( 0, 0, 0, 0 );
+    m_widget->layout()->setMargin( 0 );
 
     connect( &m_filterTimer, SIGNAL( timeout() ), SLOT( applyFilter() ) );
 }
@@ -126,6 +127,42 @@ PlaylistManager::show( const Tomahawk::playlist_ptr& playlist )
 
 
 bool
+PlaylistManager::show( const Tomahawk::artist_ptr& artist )
+{
+    qDebug() << Q_FUNC_INFO << &artist << artist.data();
+    unlinkPlaylist();
+
+    if ( !m_artistViews.contains( artist ) )
+    {
+        PlaylistView* view = new PlaylistView();
+        PlaylistModel* model = new PlaylistModel();
+        view->setModel( model );
+        model->append( artist );
+
+        m_currentInterface = view->proxyModel();
+        m_artistViews.insert( artist, view );
+
+        m_stack->addWidget( view );
+        m_stack->setCurrentWidget( view );
+    }
+    else
+    {
+        PlaylistView* view = m_artistViews.value( artist );
+        m_stack->setCurrentWidget( view );
+        m_currentInterface = view->proxyModel();
+    }
+
+    m_superCollectionVisible = false;
+    m_statsAvailable = false;
+    m_modesAvailable = false;
+    linkPlaylist();
+
+    emit numSourcesChanged( 1 );
+    return true;
+}
+
+
+bool
 PlaylistManager::show( const Tomahawk::album_ptr& album )
 {
     qDebug() << Q_FUNC_INFO << &album << album.data();
@@ -136,7 +173,7 @@ PlaylistManager::show( const Tomahawk::album_ptr& album )
         PlaylistView* view = new PlaylistView();
         PlaylistModel* model = new PlaylistModel();
         view->setModel( model );
-        model->appendAlbum( album );
+        model->append( album );
 
         m_currentInterface = view->proxyModel();
         m_albumViews.insert( album, view );

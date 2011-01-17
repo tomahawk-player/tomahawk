@@ -69,7 +69,7 @@ WelcomeWidget::onSourceAdded( const Tomahawk::source_ptr& source )
 void
 WelcomeWidget::onPlaybackFinished( const Tomahawk::query_ptr& query )
 {
-    m_tracksModel->insertTrack( 0, query );
+    m_tracksModel->insert( 0, query );
 }
 
 

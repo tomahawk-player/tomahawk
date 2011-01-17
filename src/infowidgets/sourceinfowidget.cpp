@@ -54,7 +54,7 @@ SourceInfoWidget::~SourceInfoWidget()
 void
 SourceInfoWidget::onPlaybackFinished( const Tomahawk::query_ptr& query )
 {
-    m_historyModel->insertTrack( 0, query );
+    m_historyModel->insert( 0, query );
 }
 
 

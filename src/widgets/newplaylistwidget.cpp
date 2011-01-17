@@ -100,7 +100,7 @@ NewPlaylistWidget::suggestionsFound()
     QList<Tomahawk::query_ptr> ql;
     foreach( const Tomahawk::plentry_ptr& entry, m_entries )
     {
-        m_suggestionsModel->appendTrack( entry->query() );
+        m_suggestionsModel->append( entry->query() );
         ql.append( entry->query() );
     }
 

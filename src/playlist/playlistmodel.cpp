@@ -95,32 +95,6 @@ PlaylistModel::loadPlaylist( const Tomahawk::playlist_ptr& playlist )
 
 
 void
-PlaylistModel::appendAlbum( const Tomahawk::album_ptr& album )
-{
-    if ( album.isNull() )
-        return;
-
-    connect( album.data(), SIGNAL( tracksAdded( QList<Tomahawk::query_ptr>, Tomahawk::collection_ptr ) ),
-                             SLOT( onTracksAdded( QList<Tomahawk::query_ptr>, Tomahawk::collection_ptr ) ) );
-
-    onTracksAdded( album->tracks(), album->collection() );
-}
-
-
-void
-PlaylistModel::appendArtist( const Tomahawk::artist_ptr& artist )
-{
-    if ( artist.isNull() )
-        return;
-
-    connect( artist.data(), SIGNAL( tracksAdded( QList<Tomahawk::query_ptr>, Tomahawk::collection_ptr ) ),
-                              SLOT( onTracksAdded( QList<Tomahawk::query_ptr>, Tomahawk::collection_ptr ) ) );
-
-    onTracksAdded( artist->tracks(), artist->collection() );
-}
-
-
-void
 PlaylistModel::loadHistory( const Tomahawk::source_ptr& source, unsigned int amount )
 {
     if ( rowCount( QModelIndex() ) )
@@ -145,7 +119,7 @@ PlaylistModel::loadHistory( const Tomahawk::source_ptr& source, unsigned int amo
 
 
 void
-PlaylistModel::appendTrack( const Tomahawk::query_ptr& query )
+PlaylistModel::append( const Tomahawk::query_ptr& query )
 {
     if ( query.isNull() )
         return;
@@ -158,7 +132,33 @@ PlaylistModel::appendTrack( const Tomahawk::query_ptr& query )
 
 
 void
-PlaylistModel::insertTrack( unsigned int row, const Tomahawk::query_ptr& query )
+PlaylistModel::append( const Tomahawk::album_ptr& album )
+{
+    if ( album.isNull() )
+        return;
+
+    connect( album.data(), SIGNAL( tracksAdded( QList<Tomahawk::query_ptr>, Tomahawk::collection_ptr ) ),
+                             SLOT( onTracksAdded( QList<Tomahawk::query_ptr>, Tomahawk::collection_ptr ) ) );
+
+    onTracksAdded( album->tracks(), album->collection() );
+}
+
+
+void
+PlaylistModel::append( const Tomahawk::artist_ptr& artist )
+{
+    if ( artist.isNull() )
+        return;
+
+    connect( artist.data(), SIGNAL( tracksAdded( QList<Tomahawk::query_ptr>, Tomahawk::collection_ptr ) ),
+                              SLOT( onTracksAdded( QList<Tomahawk::query_ptr>, Tomahawk::collection_ptr ) ) );
+
+    onTracksAdded( artist->tracks(), artist->collection() );
+}
+
+
+void
+PlaylistModel::insert( unsigned int row, const Tomahawk::query_ptr& query )
 {
     if ( query.isNull() )
         return;
