@@ -6,7 +6,7 @@
 
 #include "album.h"
 #include "result.h"
-#include "playlist/playlistinterface.h"
+#include "playlistinterface.h"
 
 #include "dllmacro.h"
 
