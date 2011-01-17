@@ -13,7 +13,7 @@ class DLLEXPORT PlaylistInterface
 public:
     enum RepeatMode { NoRepeat, RepeatOne, RepeatAll };
 
-    PlaylistInterface( QObject* parent ) : m_widget( 0 ), m_object( parent ) {}
+    PlaylistInterface( QObject* parent = 0 ) : m_widget( 0 ), m_object( parent ) {}
     virtual ~PlaylistInterface() {}
 
     virtual int unfilteredTrackCount() const = 0;

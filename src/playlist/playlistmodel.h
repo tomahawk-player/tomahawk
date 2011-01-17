@@ -31,10 +31,12 @@ public:
     virtual bool dropMimeData( const QMimeData* data, Qt::DropAction action, int row, int column, const QModelIndex& parent );
 
     void loadPlaylist( const Tomahawk::playlist_ptr& playlist );
-    void loadAlbum( const Tomahawk::album_ptr& album );
     void loadHistory( const Tomahawk::source_ptr& source, unsigned int amount = 100 );
 
     void appendTrack( const Tomahawk::query_ptr& query );
+    void appendAlbum( const Tomahawk::album_ptr& album );
+    void appendArtist( const Tomahawk::artist_ptr& artist );
+
     void insertTrack( unsigned int row, const Tomahawk::query_ptr& query );
 
     virtual void removeIndex( const QModelIndex& index, bool moreToCome = false );

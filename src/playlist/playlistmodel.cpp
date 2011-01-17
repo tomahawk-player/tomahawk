@@ -95,26 +95,28 @@ PlaylistModel::loadPlaylist( const Tomahawk::playlist_ptr& playlist )
 
 
 void
-PlaylistModel::loadAlbum( const Tomahawk::album_ptr& album )
+PlaylistModel::appendAlbum( const Tomahawk::album_ptr& album )
 {
     if ( album.isNull() )
         return;
-    
-    if ( rowCount( QModelIndex() ) )
-    {
-        emit beginRemoveRows( QModelIndex(), 0, rowCount( QModelIndex() ) - 1 );
-        delete m_rootItem;
-        emit endRemoveRows();
-        m_rootItem = new PlItem( 0, this );
-    }
-
-    m_playlist.clear();
-    setReadOnly( false );
 
     connect( album.data(), SIGNAL( tracksAdded( QList<Tomahawk::query_ptr>, Tomahawk::collection_ptr ) ),
                              SLOT( onTracksAdded( QList<Tomahawk::query_ptr>, Tomahawk::collection_ptr ) ) );
 
     onTracksAdded( album->tracks(), album->collection() );
+}
+
+
+void
+PlaylistModel::appendArtist( const Tomahawk::artist_ptr& artist )
+{
+    if ( artist.isNull() )
+        return;
+
+    connect( artist.data(), SIGNAL( tracksAdded( QList<Tomahawk::query_ptr>, Tomahawk::collection_ptr ) ),
+                              SLOT( onTracksAdded( QList<Tomahawk::query_ptr>, Tomahawk::collection_ptr ) ) );
+
+    onTracksAdded( artist->tracks(), artist->collection() );
 }
 
 

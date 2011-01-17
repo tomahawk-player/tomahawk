@@ -154,11 +154,12 @@ PlaylistManager::show( const Tomahawk::album_ptr& album )
     qDebug() << Q_FUNC_INFO << &album << album.data();
     unlinkPlaylist();
 
-    m_playlistModel->loadAlbum( album );
+    m_playlistModel->appendAlbum( album );
     m_stack->setCurrentWidget( m_playlistView );
     
     m_currentInterface = m_playlistView->proxyModel();
-    
+
+
     m_superCollectionVisible = false;
     m_statsAvailable = false;
     m_modesAvailable = false;

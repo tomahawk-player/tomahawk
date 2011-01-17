@@ -30,8 +30,9 @@ public:
     Tomahawk::collection_ptr collection() const { return m_collection; }
     QList<Tomahawk::query_ptr> tracks();
 
-    virtual int unfilteredTrackCount() const { return m_queries.count(); }
     virtual int trackCount() const { return m_queries.count(); }
+    virtual int unfilteredTrackCount() const { return m_queries.count(); }
+
     virtual Tomahawk::result_ptr siblingItem( int itemsAway );
 
     virtual PlaylistInterface::RepeatMode repeatMode() const { return PlaylistInterface::NoRepeat; }
