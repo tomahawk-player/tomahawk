@@ -9,6 +9,7 @@
 
 #include "network/servent.h"
 #include "tomahawk/tomahawkapp.h"
+#include "playlist/playlistmanager.h"
 
 using namespace Tomahawk;
 
@@ -84,7 +85,7 @@ DatabaseCommand_CreateDynamicPlaylist::postCommitHook()
     qDebug() << Q_FUNC_INFO << "..reporting..";
     if( m_playlist.isNull() ) {
         source_ptr src = source();
-        QMetaObject::invokeMethod( TomahawkApp::instance()->mainWindow(),
+        QMetaObject::invokeMethod( PlaylistManager::instance(),
                                    "createDynamicPlaylist",
                                    Qt::BlockingQueuedConnection,
                                    QGenericArgument( "Tomahawk::source_ptr", (const void*)&src ),
