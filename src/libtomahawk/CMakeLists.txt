@@ -220,19 +220,23 @@ include_directories( . ${CMAKE_CURRENT_BINARY_DIR} ..
     ../../alsa-playback
 )
 
-qt4_wrap_ui( libUI_H ${libUI} )
-qt4_wrap_cpp( libMoc ${libHeaders} )
-
-SET( libSources ${libSources} ${libUI_H} )
-
-add_library( tomahawklib SHARED ${libSources} ${libMoc} )
 
 IF( WIN32 )
+SET( libSources ${libSources} audio/rtaudiooutput.cpp )
+SET( libHeaders ${libHeaders} audio/rtaudiooutput.h )
+
 SET( OS_SPECIFIC_LINK_LIBRARIES
     ${OS_SPECIFIC_LINK_LIBRARIES}
     "iphlpapi.a"
     "ws2_32.dll"
     "dnsapi.dll"
+    "dsound.dll" 
+    "winmm.dll"
+    "mad"
+    "vorbisfile"
+    "ogg"
+    "FLAC++"
+    "${CMAKE_CURRENT_SOURCE_DIR}/../../rtaudio/librtaudio.dll"
 )
 ENDIF( WIN32 )
 
@@ -253,6 +257,13 @@ SET( OS_SPECIFIC_LINK_LIBRARIES
 )
 ENDIF( UNIX AND NOT APPLE )
 
+
+qt4_wrap_ui( libUI_H ${libUI} )
+qt4_wrap_cpp( libMoc ${libHeaders} )
+
+SET( libSources ${libSources} ${libUI_H} )
+
+add_library( tomahawklib SHARED ${libSources} ${libMoc} )
 
 target_link_libraries( tomahawklib
     ${QT_LIBRARIES}
