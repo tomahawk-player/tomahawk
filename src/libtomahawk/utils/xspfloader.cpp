@@ -1,9 +1,11 @@
 #include "xspfloader.h"
 
+#include <QApplication>
 #include <QDomDocument>
 #include <QMessageBox>
 
-#include "tomahawk/tomahawkapp.h"
+#include "utils/tomahawkutils.h"
+
 #include "sourcelist.h"
 #include "playlist.h"
 
@@ -111,7 +113,7 @@ XSPFLoader::gotBody()
     {
         if ( m_autoCreate )
         {
-            QMessageBox::critical( APP->mainWindow(), tr( "XSPF Error" ), tr( "This is not a valid XSPF playlist." ) );
+            QMessageBox::critical( 0, tr( "XSPF Error" ), tr( "This is not a valid XSPF playlist." ) );
             deleteLater();
             return;
         }
