@@ -345,7 +345,7 @@ void TomahawkWindow::createStation()
     QString creator = "someone"; // FIXME
     dynplaylist_ptr playlist = DynamicPlaylist::create( author, id, name, info, creator, false );
     playlist->setMode( OnDemand );
-    playlist->createNewRevision( uuid(), playlist->currentrevision(), playlist->type(), playlist->generator()->controls(), playlist->entries() );
+    playlist->createNewRevision( uuid(), playlist->currentrevision(), playlist->type(), playlist->generator()->controls() );
 }
 
 void
