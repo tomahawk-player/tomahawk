@@ -43,7 +43,6 @@ DynamicWidget::DynamicWidget( const Tomahawk::dynplaylist_ptr& playlist, QWidget
     , m_songsSinceLastResolved( 0 )
     , m_headerText( 0 )
     , m_headerLayout( 0 )
-    , m_modeCombo( 0 )
     , m_generatorCombo( 0 )
     , m_logo( 0 )
     , m_generateButton( 0 )
@@ -55,13 +54,7 @@ DynamicWidget::DynamicWidget( const Tomahawk::dynplaylist_ptr& playlist, QWidget
     m_headerLayout = new QHBoxLayout;
     m_headerText = new QLabel( tr( "Type:" ), this );
     m_headerLayout->addWidget( m_headerText );
-    QComboBox* mode = new QComboBox( this );
-    mode->addItem( tr( "On Demand" ), OnDemand );
-    mode->addItem( tr( "Static" ), Static );
-    connect( mode, SIGNAL( activated( int ) ), this, SLOT( modeChanged( int ) ) );
-    m_modeCombo = new ReadOrWriteWidget( mode, playlist->author()->isLocal(), this );
-    m_headerLayout->addWidget( m_modeCombo );
-    
+
     QComboBox* gen = new QComboBox( this );
     foreach( const QString& type, GeneratorFactory::types() )
         gen->addItem( type );
@@ -134,13 +127,10 @@ void DynamicWidget::loadDynamicPlaylist(const Tomahawk::dynplaylist_ptr& playlis
     
     if( !m_playlist.isNull() )
         m_controls->setControls( m_playlist->generator(), m_playlist->generator()->controls(), m_playlist->author()->isLocal() );
-    qobject_cast<QComboBox*>( m_modeCombo->writableWidget() )->setCurrentIndex( static_cast<int>( playlist->mode() ) );
     
     m_generatorCombo->setWritable( playlist->author()->isLocal() );
     m_generatorCombo->setLabel( qobject_cast< QComboBox* >( m_generatorCombo->writableWidget() )->currentText() );
-    m_modeCombo->setWritable( playlist->author()->isLocal() );
-    m_modeCombo->setLabel( qobject_cast< QComboBox* >( m_modeCombo->writableWidget() )->currentText() );
-       
+
     applyModeChange( m_playlist->mode() );
     connect( m_playlist->generator().data(), SIGNAL( generated( QList<Tomahawk::query_ptr> ) ), this, SLOT( tracksGenerated( QList<Tomahawk::query_ptr> ) ) );
     connect( m_playlist.data(), SIGNAL( dynamicRevisionLoaded( Tomahawk::DynamicPlaylistRevision ) ), this, SLOT( onRevisionLoaded( Tomahawk::DynamicPlaylistRevision ) ) );
@@ -187,16 +177,6 @@ DynamicWidget::generateOrStart()
             m_generateButton->setText( tr( "Start" ) );
         }
     }
-}
-
-void 
-DynamicWidget::modeChanged( int mode )
-{
-    qDebug() << Q_FUNC_INFO;
-    
-    m_playlist->setMode( mode );
-    applyModeChange( mode );
-    controlsChanged();
 }
 
 void 

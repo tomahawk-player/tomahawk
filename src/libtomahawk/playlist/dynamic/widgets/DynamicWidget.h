@@ -59,7 +59,6 @@ public slots:
     
 private slots:
     void generateOrStart();
-    void modeChanged(int);
     void tracksGenerated( const QList< Tomahawk::query_ptr>& queries );
     
     // used by on demand mode
@@ -86,7 +85,6 @@ private:
         
     QLabel* m_headerText;
     QHBoxLayout* m_headerLayout;
-    ReadOrWriteWidget* m_modeCombo;
     ReadOrWriteWidget* m_generatorCombo;
     QLabel* m_logo;
     QPushButton* m_generateButton;

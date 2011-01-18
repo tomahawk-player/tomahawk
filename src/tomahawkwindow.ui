@@ -84,7 +84,8 @@
      <string>&amp;Playlist</string>
     </property>
     <addaction name="actionCreatePlaylist"/>
-    <addaction name="actionCreateDynamicPlaylist"/>
+    <addaction name="actionCreateAutomaticPlaylist"/>
+    <addaction name="actionCreate_New_Station"/>
     <addaction name="separator"/>
     <addaction name="actionLoadXSPF"/>
    </widget>
@@ -160,9 +161,14 @@
     <enum>QAction::AboutRole</enum>
    </property>
   </action>
-  <action name="actionCreateDynamicPlaylist">
+  <action name="actionCreateAutomaticPlaylist">
    <property name="text">
-    <string>Create New &amp;Dynamic Playlist</string>
+    <string>Create New &amp;Automatic Playlist</string>
+   </property>
+  </action>
+  <action name="actionCreate_New_Station">
+   <property name="text">
+    <string>Create New &amp;Station</string>
    </property>
   </action>
  </widget>

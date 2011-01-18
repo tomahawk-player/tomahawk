@@ -41,8 +41,9 @@ protected:
     void closeEvent( QCloseEvent* e );
 
 public slots:
-    void createDynamicPlaylist();
-    void createPlaylist( bool dynamic = false );
+    void createAutomaticPlaylist();
+    void createStation();
+    void createPlaylist();
     void loadSpiff();
     void showSettingsDialog();
     

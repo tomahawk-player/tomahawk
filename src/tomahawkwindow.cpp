@@ -166,7 +166,8 @@ TomahawkWindow::setupSignals()
     connect( ui->actionRescanCollection, SIGNAL( triggered() ), SLOT( rescanCollectionManually() ) );
     connect( ui->actionLoadXSPF, SIGNAL( triggered() ), SLOT( loadSpiff() ));
     connect( ui->actionCreatePlaylist, SIGNAL( triggered() ), SLOT( createPlaylist() ));
-    connect( ui->actionCreateDynamicPlaylist, SIGNAL( triggered() ), SLOT( createDynamicPlaylist() ));
+    connect( ui->actionCreateAutomaticPlaylist, SIGNAL( triggered() ), SLOT( createAutomaticPlaylist() ));
+    connect( ui->actionCreate_New_Station, SIGNAL( triggered() ), SLOT( createStation() ));
     connect( ui->actionAboutTomahawk, SIGNAL( triggered() ), SLOT( showAboutTomahawk() ) );
     connect( ui->actionExit, SIGNAL( triggered() ), APP, SLOT( quit() ) );
     connect( ui->statusButton, SIGNAL( clicked() ), APP->sipHandler(), SLOT( toggleConnect() ) );
@@ -315,37 +316,43 @@ TomahawkWindow::loadSpiff()
 }
 
 void 
-TomahawkWindow::createDynamicPlaylist()
+TomahawkWindow::createAutomaticPlaylist()
 {
-    createPlaylist( true );
+    bool ok;
+    QString name = QInputDialog::getText( this, "Create New Automatic Playlist", "Name:", QLineEdit::Normal, "New Automatic Playlist", &ok );
+    if ( !ok || name.isEmpty() )
+        return;
+    
+    source_ptr author = SourceList::instance()->getLocal();
+    QString id = uuid();
+    QString info  = ""; // FIXME
+    QString creator = "someone"; // FIXME
+    dynplaylist_ptr playlist = DynamicPlaylist::create( author, id, name, info, creator, false );
+    playlist->setMode( Static );
+    playlist->createNewRevision( uuid(), playlist->currentrevision(), playlist->type(), playlist->generator()->controls(), playlist->entries() );
 }
 
+void TomahawkWindow::createStation()
+{
+    bool ok;
+    QString name = QInputDialog::getText( this, "Create New Station", "Name:", QLineEdit::Normal, "New Station", &ok );
+    if ( !ok || name.isEmpty() )
+        return;
+    
+    source_ptr author = SourceList::instance()->getLocal();
+    QString id = uuid();
+    QString info  = ""; // FIXME
+    QString creator = "someone"; // FIXME
+    dynplaylist_ptr playlist = DynamicPlaylist::create( author, id, name, info, creator, false );
+    playlist->setMode( OnDemand );
+    playlist->createNewRevision( uuid(), playlist->currentrevision(), playlist->type(), playlist->generator()->controls(), playlist->entries() );
+}
 
 void
-TomahawkWindow::createPlaylist( bool dynamic )
+TomahawkWindow::createPlaylist()
 {
-    qDebug() << Q_FUNC_INFO;
 
-    if( dynamic ) 
-    {
-        bool ok;
-        QString name = QInputDialog::getText( this, "Create New Playlist", "Name:", QLineEdit::Normal, "New Playlist", &ok );
-        if ( !ok || name.isEmpty() )
-            return;
-        
-        source_ptr author = SourceList::instance()->getLocal();
-        QString id = uuid();
-        QString info  = ""; // FIXME
-        QString creator = "someone"; // FIXME
-        dynplaylist_ptr playlist = DynamicPlaylist::create( author, id, name, info, creator, false );
-        if( playlist->mode() == OnDemand )
-            playlist->createNewRevision( uuid(), playlist->currentrevision(), playlist->type(), playlist->generator()->controls() );
-        else
-            playlist->createNewRevision( uuid(), playlist->currentrevision(), playlist->type(), playlist->generator()->controls(), playlist->entries() );
-    } else 
-    {
-        PlaylistManager::instance()->show( new NewPlaylistWidget() );
-    }
+    PlaylistManager::instance()->show( new NewPlaylistWidget() );
 
 /*    bool ok;
     QString name = QInputDialog::getText( this, "Create New Playlist", "Name:", QLineEdit::Normal, "New Playlist", &ok );
