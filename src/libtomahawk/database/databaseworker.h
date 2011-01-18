@@ -24,13 +24,17 @@ Q_OBJECT
 public:
     DatabaseWorker( DatabaseImpl*, Database*, bool mutates );
     ~DatabaseWorker();
-    //void enqueue( QSharedPointer<DatabaseCommand> );
+
+    void enqueue( const QSharedPointer<DatabaseCommand>& );
+
+    bool busy() const { return m_outstanding > 0; }
+    unsigned int outstandingJobs() const { return m_outstanding; }
 
 protected:
     void run();
 
-public slots:
-    void doWork( QSharedPointer<DatabaseCommand> );
+private slots:
+    void doWork();
 
 private:
     void logOp( DatabaseCommandLoggable* command );
@@ -38,8 +42,10 @@ private:
     QMutex m_mut;
     DatabaseImpl* m_dbimpl;
     QList< QSharedPointer<DatabaseCommand> > m_commands;
+
     bool m_abort;
     int m_outstanding;
+
     QJson::Serializer m_serializer;
 };
 
