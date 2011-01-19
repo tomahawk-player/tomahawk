@@ -124,8 +124,9 @@ AudioControls::AudioControls( QWidget* parent )
     connect( ui->repeatButton,     SIGNAL( clicked() ), SLOT( onRepeatClicked() ) );
     connect( ui->shuffleButton,    SIGNAL( clicked() ), SLOT( onShuffleClicked() ) );
 
-    connect( ui->artistTrackLabel, SIGNAL( clicked() ), SLOT( onTrackClicked() ) );
-    connect( ui->albumLabel,       SIGNAL( clicked() ), SLOT( onAlbumClicked() ) );
+    connect( ui->artistTrackLabel, SIGNAL( clickedArtist() ), SLOT( onArtistClicked() ) );
+    connect( ui->artistTrackLabel, SIGNAL( clickedTrack() ), SLOT( onTrackClicked() ) );
+    connect( ui->albumLabel,       SIGNAL( clickedAlbum() ), SLOT( onAlbumClicked() ) );
 
     // <From AudioEngine>
     connect( AudioEngine::instance(), SIGNAL( loading( Tomahawk::result_ptr ) ), SLOT( onPlaybackLoading( Tomahawk::result_ptr ) ) );
@@ -413,9 +414,9 @@ AudioControls::onShuffleClicked()
 
 
 void
-AudioControls::onTrackClicked()
+AudioControls::onArtistClicked()
 {
-    PlaylistManager::instance()->showCurrentTrack();
+    PlaylistManager::instance()->show( m_currentTrack->artist() );
 }
 
 
@@ -423,4 +424,11 @@ void
 AudioControls::onAlbumClicked()
 {
     PlaylistManager::instance()->show( m_currentTrack->album() );
+}
+
+
+void
+AudioControls::onTrackClicked()
+{
+    PlaylistManager::instance()->showCurrentTrack();
 }

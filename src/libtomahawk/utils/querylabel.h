@@ -16,6 +16,7 @@ Q_OBJECT
 public:
     enum DisplayType
     {
+        None = 0,
         Artist = 1,
         Album = 2,
         Track = 4,
@@ -61,6 +62,9 @@ public slots:
 
 signals:
     void clicked();
+    void clickedArtist();
+    void clickedAlbum();
+    void clickedTrack();
 
     void textChanged( const QString& text );
     void resultChanged( const Tomahawk::result_ptr& result );
@@ -89,6 +93,7 @@ private:
     Qt::Alignment align;
     Qt::TextElideMode mode;
 
+    DisplayType m_hoverType;
     QRect m_hoverArea;
     QPoint m_dragPos;
     QMargins m_textMargins;
