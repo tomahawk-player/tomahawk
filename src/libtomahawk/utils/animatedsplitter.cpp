@@ -195,6 +195,21 @@ AnimatedSplitter::onAnimationFinished()
     m_animateIndex = -1;
 }
 
+void 
+AnimatedSplitter::setGreedyWidget(int index)
+{
+    m_greedyIndex = index;
+    if( !widget( index ) )
+        return;
+    QSizePolicy policy = widget( m_greedyIndex )->sizePolicy();
+    if( orientation() == Qt::Horizontal )
+        policy.setHorizontalStretch( 1 );
+    else
+        policy.setVerticalStretch( 1 );
+    widget( m_greedyIndex )->setSizePolicy( policy );
+    
+}
+
 
 void
 AnimatedSplitter::onHiddenSizeChanged()

@@ -100,7 +100,6 @@ DynamicControlList::init()
     m_collapseLayout->addWidget( m_addControl );
     m_collapse->setSizePolicy( QSizePolicy::Expanding, QSizePolicy::Fixed );
     
-    m_layout->addLayout( m_collapseLayout );
 //     connect( m_collapse, SIGNAL( clicked() ), this,  );
     connect( m_addControl, SIGNAL( clicked() ), this, SLOT( addNewControl() ) );
     
@@ -155,18 +154,19 @@ DynamicControlList::onShown( QWidget* w )
     if( w != this )
         return;
     
-    AnimatedWidget::onShown( w );
     
     m_layout->removeWidget( m_summaryWidget );
     m_layout->removeItem( m_collapseLayout );
+    
     m_summaryWidget->hide();
     foreach( DynamicControlWidget* control, m_controls ) {
         m_layout->addWidget( control );
-        control->show();
     }
     
     m_layout->addLayout( m_collapseLayout );
     m_layout->setStretchFactor( m_collapseLayout, 1 );
+    
+    AnimatedWidget::onShown( w );
 }
 
 void DynamicControlList::addNewControl()

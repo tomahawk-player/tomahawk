@@ -19,7 +19,7 @@ public:
     void show( int index, bool animate = true );
     void hide( int index, bool animate = true );
 
-    void setGreedyWidget( int index ) { m_greedyIndex = index; }
+    void setGreedyWidget( int index );
 
     void addWidget( QWidget* widget );
     void addWidget( AnimatedWidget* widget );
