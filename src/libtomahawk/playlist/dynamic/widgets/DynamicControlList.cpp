@@ -19,10 +19,13 @@
 #include <QLayout>
 #include <QLabel>
 #include <QPaintEvent>
+#include <QPushButton>
+#include <QToolButton>
 #include <QPainter>
 
 #include "DynamicControlWidget.h"
 #include "dynamic/GeneratorInterface.h"
+#include "tomahawk/tomahawkapp.h"
 #include <QHBoxLayout>
 
 using namespace Tomahawk;
@@ -67,7 +70,10 @@ DynamicControlList::init()
     m_layout->setMargin( 0 );
     m_layout->setSpacing( 0 );
     m_layout->setContentsMargins( 0, 0, 0, 0 );
+    m_layout->setSizeConstraint( QLayout::SetMinimumSize );
 //     setSizePolicy( QSizePolicy::Expanding, QSizePolicy::Ignored );
+    splitter()->setStretchFactor( 0, 0 );
+    splitter()->setStretchFactor( 1,1 );
     
     m_summaryWidget = new QWidget( this );
     // TODO replace
@@ -78,8 +84,28 @@ DynamicControlList::init()
     m_summaryWidget->layout()->setMargin( 0 );
     m_summaryWidget->layout()->addWidget( new QLabel( "replace me plz", m_summaryWidget ) );
     
-    setHiddenSize( m_summaryWidget->size() );
+    m_collapseLayout = new QHBoxLayout( this );
+    m_collapseLayout->setContentsMargins( 0, 0, 0, 0 );
+    m_collapseLayout->setMargin( 0 );
+    m_collapseLayout->setSpacing( 0 );
+    m_collapse = new QPushButton( tr( "Click to collapse" ), this );
+    m_collapseLayout->addWidget( m_collapse );
+    m_addControl = new QToolButton( this );
+    m_addControl->setIcon( QIcon( RESPATH "images/list-add.png" ) );
+    m_addControl->setSizePolicy( QSizePolicy::Fixed, QSizePolicy::Fixed );
+    m_addControl->setIconSize( QSize( 16, 16 ) );
+    m_addControl->setToolButtonStyle( Qt::ToolButtonIconOnly );
+    m_addControl->setAutoRaise( true );
+    m_addControl->setContentsMargins( 0, 0, 0, 0 );
+    m_collapseLayout->addWidget( m_addControl );
+    m_collapse->setSizePolicy( QSizePolicy::Expanding, QSizePolicy::Fixed );
     
+    m_layout->addLayout( m_collapseLayout );
+//     connect( m_collapse, SIGNAL( clicked() ), this,  );
+    connect( m_addControl, SIGNAL( clicked() ), this, SLOT( addNewControl() ) );
+    
+    setHiddenSize( m_summaryWidget->size() );
+    setSizePolicy( QSizePolicy::Expanding, QSizePolicy::Fixed );
     emit showWidget();
 }
 
@@ -93,15 +119,13 @@ DynamicControlList::setControls( const geninterface_ptr& generator, const QList<
     m_isLocal = isLocal;
     m_generator = generator;
     if( controls.isEmpty() ) {
-        m_controls <<  new DynamicControlWidget( generator->createControl(), false, false, false, isLocal, this );
-        connect( m_controls.last(), SIGNAL( addNewControl() ), this, SLOT( addNewControl() ) );
+        m_controls <<  new DynamicControlWidget( generator->createControl(), isLocal, this );
         connect( m_controls.last(), SIGNAL( removeControl() ), this, SLOT( removeControl() ) );
         connect( m_controls.last(), SIGNAL( changed() ), this, SLOT( controlChanged() ) );
     } else 
     {
         foreach( const dyncontrol_ptr& control, controls ) {
-            m_controls << new DynamicControlWidget( control, false, false, false, isLocal, this );
-            connect( m_controls.last(), SIGNAL( addNewControl() ), this, SLOT( addNewControl() ) );
+            m_controls << new DynamicControlWidget( control, isLocal, this );
             connect( m_controls.last(), SIGNAL( removeControl() ), this, SLOT( removeControl() ) );
             connect( m_controls.last(), SIGNAL( changed() ), this, SLOT( controlChanged() ) );
         }
@@ -134,23 +158,21 @@ DynamicControlList::onShown( QWidget* w )
     AnimatedWidget::onShown( w );
     
     m_layout->removeWidget( m_summaryWidget );
+    m_layout->removeItem( m_collapseLayout );
     m_summaryWidget->hide();
     foreach( DynamicControlWidget* control, m_controls ) {
         m_layout->addWidget( control );
         control->show();
-        control->setShowMinusButton( control != m_controls.last() );
-        control->setShowPlusButton( control == m_controls.last() );
-        control->setShowCollapseButton( control == m_controls.last() );
     }
+    
+    m_layout->addLayout( m_collapseLayout );
+    m_layout->setStretchFactor( m_collapseLayout, 1 );
 }
 
 void DynamicControlList::addNewControl()
 {
-    m_controls.last()->setShowCollapseButton( false );
-    m_controls.last()->setShowPlusButton( false );
-    m_controls.last()->setShowMinusButton( true );
     dyncontrol_ptr control = m_generator->createControl();
-    m_controls.append( new DynamicControlWidget( control, true, false, true, m_isLocal, this ) );
+    m_controls.append( new DynamicControlWidget( control, m_isLocal, this ) );
     m_layout->addWidget( m_controls.last() );
     connect( m_controls.last(), SIGNAL( addNewControl() ), this, SLOT( addNewControl() ) );
     connect( m_controls.last(), SIGNAL( removeControl() ), this, SLOT( removeControl() ) );
@@ -167,11 +189,6 @@ void DynamicControlList::removeControl()
     
     m_generator->removeControl( w->control() );
     delete w;
-    
-    
-    m_controls.last()->setShowCollapseButton( true );
-    m_controls.last()->setShowPlusButton( true );
-    m_controls.last()->setShowMinusButton( false );
     
     emit controlsChanged();
 }

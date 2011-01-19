@@ -21,7 +21,11 @@
 #include "typedefs.h"
 #include "dynamic/DynamicPlaylist.h"
 
+class QPushButton;
+class QHBoxLayout;
 class QVBoxLayout;
+class QToolButton;
+
 namespace Tomahawk
 {
 
@@ -66,6 +70,11 @@ private:
     QVBoxLayout* m_layout;
     QList< DynamicControlWidget* > m_controls;
     QWidget* m_summaryWidget;
+    
+    QHBoxLayout* m_collapseLayout;
+    QPushButton* m_collapse;
+    QToolButton* m_addControl;
+    
     bool m_isLocal;
 };
 

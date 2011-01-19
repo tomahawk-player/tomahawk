@@ -30,15 +30,11 @@
 
 using namespace Tomahawk;
 
-DynamicControlWidget::DynamicControlWidget( const Tomahawk::dyncontrol_ptr& control, bool showPlus, bool showMinus, bool showCollapse, bool isLocal, QWidget* parent )
+DynamicControlWidget::DynamicControlWidget( const Tomahawk::dyncontrol_ptr& control, bool isLocal, QWidget* parent )
      : QWidget(parent)
-     , m_showPlus( showPlus )
-     , m_showMinus( showMinus )
-     , m_showCollapse( showCollapse )
      , m_isLocal( isLocal )
-     , m_plusButton( 0 )
+     , m_mouseOver( false )
      , m_minusButton( 0 )
-     , m_collapseButton( 0 )
      , m_control( control )
      , m_typeSelector( 0 )
      , m_matchSelector( 0 )
@@ -69,28 +65,13 @@ DynamicControlWidget::DynamicControlWidget( const Tomahawk::dyncontrol_ptr& cont
         connect( m_minusButton, SIGNAL( clicked( bool ) ), this, SIGNAL( removeControl() ) );
         
         
-        m_plusButton = initButton();
-        m_plusButton->setIcon( QIcon( RESPATH "images/list-add.png" ) );
-        connect( m_plusButton, SIGNAL( clicked( bool ) ), this, SIGNAL( addNewControl() ) );
         m_plusL = new QStackedLayout;
         m_plusL->setContentsMargins( 0, 0, 0, 0 );
         m_plusL->setMargin( 0 );
-        m_plusL->addWidget( m_plusButton );
         m_plusL->addWidget( m_minusButton );
-        m_plusL->addWidget( createDummy( m_plusButton ) ); // :-(
-        m_plusL->setCurrentIndex( 2 );
+        m_plusL->addWidget( createDummy( m_minusButton ) ); // :-(
     }
     
-    m_collapseButton = initButton();
-    m_collapseButton->setIcon( QIcon( RESPATH "images/arrow-up-double.png" ) );
-    m_collapseL = new QStackedLayout;
-    m_collapseL->setContentsMargins( 0, 0, 0, 0 );
-    m_collapseL->setMargin( 0 );
-    m_collapseL->addWidget( m_collapseButton );
-    m_collapseL->addWidget( createDummy( m_collapseButton ) ); // :-(
-    m_collapseL->setCurrentIndex( 1 );
-    
-    connect( m_collapseButton, SIGNAL( clicked( bool ) ), this, SIGNAL( collapse() ) );
     connect( typeSelector, SIGNAL( activated( QString) ), SLOT( typeSelectorChanged( QString ) ) );    
     connect( m_control.data(), SIGNAL( changed() ), this, SIGNAL( changed() ) );
     
@@ -103,20 +84,13 @@ DynamicControlWidget::DynamicControlWidget( const Tomahawk::dyncontrol_ptr& cont
     
     typeSelectorChanged( m_control.isNull() ? "" : m_control->selectedType(), true );
     
-    m_layout->addLayout( m_collapseL, 0 );
-    
     if( m_isLocal )
     {
         m_layout->addLayout( m_plusL, 0 );
-        
-        if( m_showPlus )
-            m_plusL->setCurrentIndex( 0 );
-        if( m_showMinus )
-            m_plusL->setCurrentIndex( 1 );
+        m_plusL->setCurrentIndex( 1 );
     }
     
-    if( m_showCollapse )
-        m_collapseL->setCurrentIndex( 0 );
+    setMouseTracking( true );
     setLayout( m_layout );
 }
 
@@ -187,38 +161,11 @@ DynamicControlWidget::typeSelectorChanged( const QString& type, bool firstLoad )
 }
 
 void 
-DynamicControlWidget::setShowPlusButton(bool show)
-{
-    
-    if( m_showPlus != show && m_isLocal ) {
-        show ? m_plusL->setCurrentIndex( 0 ) : m_plusL->setCurrentIndex( 2 );
-    }
-    
-    m_showPlus = show;
-}
-
-
-void
-DynamicControlWidget::setShowCollapseButton(bool show)
-{
-    if( m_showCollapse != show ) {
-        show ? m_collapseL->setCurrentIndex( 0 ) : m_collapseL->setCurrentIndex( 1 );
-    }
-    
-    m_showCollapse = show;
-}
-
-void
-DynamicControlWidget::setShowMinusButton(bool show)
-{   
-    m_showMinus = show;
-}
-
-void 
 DynamicControlWidget::enterEvent(QEvent* ev)
 {
-    if( m_showMinus && m_isLocal )
-        m_plusL->setCurrentIndex( 1 );
+    m_mouseOver = true;
+    if( m_isLocal )
+        m_plusL->setCurrentIndex( 0 );
     
     if( ev )
         QWidget::enterEvent( ev );
@@ -227,11 +174,20 @@ DynamicControlWidget::enterEvent(QEvent* ev)
 void 
 DynamicControlWidget::leaveEvent(QEvent* ev)
 {
-    if( m_showMinus && m_isLocal )
-        m_plusL->setCurrentIndex( 2 );
+    m_mouseOver = true;
+    if( m_isLocal )
+        m_plusL->setCurrentIndex( 1 );
     
     if( ev )
         QWidget::leaveEvent( ev );
+}
+
+void 
+DynamicControlWidget::mouseMoveEvent(QMouseEvent* ev)
+{
+    m_mouseOver = true;
+    setMouseTracking( false );
+    enterEvent( ev );
 }
 
 

@@ -67,7 +67,10 @@ signals:
     void hideWidget();
 
     void hiddenSizeChanged();
-
+protected:
+    
+    AnimatedSplitter* splitter() { return m_parent; }
+    
 private:
     AnimatedSplitter* m_parent;
     QSize m_hiddenSize;

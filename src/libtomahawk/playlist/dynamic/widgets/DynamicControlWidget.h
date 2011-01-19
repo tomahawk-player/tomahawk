@@ -39,21 +39,17 @@ class DynamicControlWidget : public QWidget
 {
     Q_OBJECT 
 public:
-    explicit DynamicControlWidget( const dyncontrol_ptr& control, bool showPlus = false, bool showMinus = false, bool showCollapse = false, bool isLocal = false, QWidget* parent = 0);
+    explicit DynamicControlWidget( const dyncontrol_ptr& control, bool isLocal = false, QWidget* parent = 0);
     virtual ~DynamicControlWidget();
-    
-    void setShowPlusButton( bool show );
-    void setShowMinusButton( bool show );
-    void setShowCollapseButton( bool show );
-       
+           
     virtual void paintEvent(QPaintEvent* );
     virtual void enterEvent(QEvent* );
     virtual void leaveEvent(QEvent* );
+    virtual void mouseMoveEvent(QMouseEvent* );
     
     dyncontrol_ptr control() const;
     
 signals:
-    void addNewControl();
     void collapse();
     void removeControl();
     void changed();
@@ -65,17 +61,11 @@ private:
     QToolButton* initButton();
     QWidget* createDummy( QWidget* fromW );
     
-    bool m_showPlus;
-    bool m_showMinus;
-    bool m_showCollapse;
-    bool m_isLocal;
+    bool m_isLocal, m_mouseOver;
     
     // i hate qlayout
     QStackedLayout* m_plusL;
-    QToolButton* m_plusButton;
     QToolButton* m_minusButton;
-    QStackedLayout* m_collapseL;
-    QToolButton* m_collapseButton;
     
     dyncontrol_ptr m_control;
     ReadOrWriteWidget* m_typeSelector;
@@ -89,3 +79,5 @@ private:
 #endif
 
 class QPaintEvent;
+
+class QMouseEvent;
