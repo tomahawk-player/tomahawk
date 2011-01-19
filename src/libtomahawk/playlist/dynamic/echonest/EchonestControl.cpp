@@ -114,6 +114,7 @@ Tomahawk::EchonestControl::updateWidgets()
         match->addItem( "Limit To", Echonest::DynamicPlaylist::ArtistType );
         match->addItem( "Similar To", Echonest::DynamicPlaylist::ArtistRadioType );
         m_matchString = match->currentText();
+        m_matchData = match->itemData( match->currentIndex() ).toString();
         
         input->setPlaceholderText( "Artist name" );
         input->setSizePolicy( QSizePolicy::Ignored, QSizePolicy::Fixed );

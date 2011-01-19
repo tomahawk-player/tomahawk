@@ -163,7 +163,7 @@ DynamicControlList::onShown( QWidget* w )
         m_layout->addWidget( control );
     }
     
-    m_layout->addLayout( m_collapseLayout );
+    m_layout->addItem( m_collapseLayout );
     m_layout->setStretchFactor( m_collapseLayout, 1 );
     
     AnimatedWidget::onShown( w );
@@ -174,7 +174,6 @@ void DynamicControlList::addNewControl()
     dyncontrol_ptr control = m_generator->createControl();
     m_controls.append( new DynamicControlWidget( control, m_isLocal, this ) );
     m_layout->addWidget( m_controls.last() );
-    connect( m_controls.last(), SIGNAL( addNewControl() ), this, SLOT( addNewControl() ) );
     connect( m_controls.last(), SIGNAL( removeControl() ), this, SLOT( removeControl() ) );
     connect( m_controls.last(), SIGNAL( changed() ), this, SLOT( controlChanged() ) );
     

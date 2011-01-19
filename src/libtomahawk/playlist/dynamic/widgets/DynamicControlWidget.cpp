@@ -190,7 +190,6 @@ DynamicControlWidget::mouseMoveEvent(QMouseEvent* ev)
     enterEvent( ev );
 }
 
-
 void 
 DynamicControlWidget::paintEvent(QPaintEvent* )
 {
