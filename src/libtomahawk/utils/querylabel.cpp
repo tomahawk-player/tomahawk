@@ -307,8 +307,16 @@ QueryLabel::paintEvent( QPaintEvent* event )
 
     if ( elidedText != s || ( m_result.isNull() && m_query.isNull() ) )
     {
-        p.setBrush( palette().window() );
-        p.setPen( palette().color( foregroundRole() ) );
+        if ( m_hoverArea.width() )
+        {
+            p.setPen( palette().highlightedText().color() );
+            p.setBrush( palette().highlight() );
+        }
+        else
+        {
+            p.setBrush( palette().window() );
+            p.setPen( palette().color( foregroundRole() ) );
+        }
         p.drawText( r, align, elidedText );
     }
     else
