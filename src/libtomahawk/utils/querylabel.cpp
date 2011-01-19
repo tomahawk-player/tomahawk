@@ -53,6 +53,7 @@ QueryLabel::~QueryLabel()
 void
 QueryLabel::init()
 {
+    m_hoverType = None;
     setContentsMargins( 0, 0, 0, 0 );
     setMouseTracking( true );
 
@@ -247,6 +248,7 @@ void
 QueryLabel::updateLabel()
 {
     m_hoverArea = QRect();
+    m_hoverType = None;
 
     updateGeometry();
     update();
@@ -298,6 +300,7 @@ QueryLabel::paintEvent( QPaintEvent* event )
         {
             m_hoverArea.setLeft( 0 );
             m_hoverArea.setRight( fontMetrics().width( elidedText ) + contentsMargins().left() * 2 );
+            m_hoverType = Track;
         }
 
         p.setPen( palette().mid().color() );
@@ -332,7 +335,7 @@ QueryLabel::paintEvent( QPaintEvent* event )
             p.setBrush( palette().window() );
             p.setPen( palette().color( foregroundRole() ) );
 
-            if ( m_hoverArea.width() && m_hoverArea.left() + contentsMargins().left() == r.left() )
+            if ( m_hoverType == Artist )
             {
                 p.setPen( palette().highlightedText().color() );
                 p.setBrush( palette().highlight() );
@@ -351,7 +354,7 @@ QueryLabel::paintEvent( QPaintEvent* event )
                 p.drawText( r, align, DASH );
                 r.adjust( dashX, 0, 0, 0 );
             }
-            if ( m_hoverArea.width() && m_hoverArea.left() + contentsMargins().left() == r.left() )
+            if ( m_hoverType == Album )
             {
                 p.setPen( palette().highlightedText().color() );
                 p.setBrush( palette().highlight() );
@@ -370,7 +373,7 @@ QueryLabel::paintEvent( QPaintEvent* event )
                 p.drawText( r, align, DASH );
                 r.adjust( dashX, 0, 0, 0 );
             }
-            if ( m_hoverArea.width() && m_hoverArea.left() + contentsMargins().left() == r.left() )
+            if ( m_hoverType == Track )
             {
                 p.setPen( palette().highlightedText().color() );
                 p.setBrush( palette().highlight() );
@@ -417,7 +420,23 @@ QueryLabel::mouseReleaseEvent( QMouseEvent* event )
 
     m_dragPos = QPoint();
     if ( time.elapsed() < qApp->doubleClickInterval() )
-        emit clicked();
+    {
+        switch( m_hoverType )
+        {
+            case Artist:
+                emit clickedArtist();
+                break;
+            case Album:
+                emit clickedAlbum();
+                break;
+            case Track:
+                emit clickedTrack();
+                break;
+
+            default:
+                emit clicked();
+        }
+    }
 }
 
 
@@ -438,6 +457,7 @@ QueryLabel::mouseMoveEvent( QMouseEvent* event )
     if ( m_query.isNull() && m_result.isNull() )
     {
         m_hoverArea = QRect();
+        m_hoverType = None;
         return;
     }
 
@@ -464,19 +484,23 @@ QueryLabel::mouseMoveEvent( QMouseEvent* event )
     }
 
     QRect hoverArea;
+    m_hoverType = None;
     if ( m_type & Artist && x < artistX )
     {
+        m_hoverType = Artist;
         hoverArea.setLeft( 0 );
         hoverArea.setRight( artistX + contentsMargins().left() );
     }
     else if ( m_type & Album && x < albumX && x > artistX )
     {
+        m_hoverType = Album;
         int spacing = ( m_type & Artist ) ? dashX : 0;
         hoverArea.setLeft( artistX + spacing );
         hoverArea.setRight( albumX + spacing + contentsMargins().left() );
     }
     else if ( m_type & Track && x < trackX && x > albumX )
     {
+        m_hoverType = Track;
         int spacing = ( m_type & Album ) ? dashX : 0;
         hoverArea.setLeft( albumX + spacing );
         hoverArea.setRight( trackX + contentsMargins().left() );
@@ -499,6 +523,7 @@ void
 QueryLabel::leaveEvent( QEvent* event )
 {
     m_hoverArea = QRect();
+    m_hoverType = None;
     repaint();
 }
 
