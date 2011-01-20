@@ -27,7 +27,8 @@ private slots:
 
     void loadPlaylist();
     void deletePlaylist();
-
+    void renamePlaylist();
+    
     void onCustomContextMenu( const QPoint& pos );
     void onSourceOffline( Tomahawk::source_ptr );
 

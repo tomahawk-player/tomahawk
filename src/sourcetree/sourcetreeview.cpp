@@ -103,6 +103,7 @@ SourceTreeView::setupMenus()
         m_deletePlaylistAction->setEnabled( !readonly );
     }
 
+    connect( m_renamePlaylistAction, SIGNAL( triggered() ), SLOT( renamePlaylist() ) );
     connect( m_loadPlaylistAction,   SIGNAL( triggered() ), SLOT( loadPlaylist() ) );
     connect( m_deletePlaylistAction, SIGNAL( triggered() ), SLOT( deletePlaylist() ) );
 }
@@ -185,6 +186,11 @@ SourceTreeView::deletePlaylist()
             Playlist::remove( playlist );
         }
     }
+}
+
+void SourceTreeView::renamePlaylist()
+{
+    edit( m_contextMenuIndex );
 }
 
 
