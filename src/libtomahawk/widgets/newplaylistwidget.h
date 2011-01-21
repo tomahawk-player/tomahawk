@@ -10,6 +10,7 @@
 
 #include "dllmacro.h"
 
+class QPushButton;
 class PlaylistModel;
 
 namespace Ui
@@ -32,7 +33,9 @@ signals:
     void destroyed( QWidget* widget );
 
 private slots:
-    void tagChanged();
+    void onTitleChanged( const QString& title );
+    void onTagChanged();
+
     void updateSuggestions();
     void suggestionsFound();
 
@@ -47,6 +50,7 @@ private:
 
     QTimer m_filterTimer;
     QString m_tag;
+    QPushButton* m_saveButton;
 };
 
 #endif // NEWPLAYLISTWIDGET_H
