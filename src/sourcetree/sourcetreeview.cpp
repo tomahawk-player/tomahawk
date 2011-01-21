@@ -104,8 +104,8 @@ SourceTreeView::setupMenus()
         m_renamePlaylistAction->setEnabled( !readonly );
     }
 
-    connect( m_renamePlaylistAction, SIGNAL( triggered() ), SLOT( renamePlaylist() ) );
     connect( m_loadPlaylistAction,   SIGNAL( triggered() ), SLOT( loadPlaylist() ) );
+    connect( m_renamePlaylistAction, SIGNAL( triggered() ), SLOT( renamePlaylist() ) );
     connect( m_deletePlaylistAction, SIGNAL( triggered() ), SLOT( deletePlaylist() ) );
 }
 
@@ -138,7 +138,6 @@ SourceTreeView::onItemActivated( const QModelIndex& index )
                 qDebug() << "SourceTreeItem toggled:" << item->source()->userName();
 
                 PlaylistManager::instance()->show( item->source()->collection() );
-//                APP->playlistManager()->show( item->source() );
             }
         }
     }
