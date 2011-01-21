@@ -40,7 +40,7 @@ QStringList
 EchonestFactory::typeSelectors() const
 {
     return QStringList() << "Artist" << "Variety" << "Tempo" << "Duration" << "Loudness" 
-                          << "Danceability" << "Energy" << "Artist Familiarity" << "Artist Hotttnesss" << "Song Familiarity" 
+                          << "Danceability" << "Energy" << "Artist Familiarity" << "Artist Hotttnesss" << "Song Hotttnesss" 
                           << "Longitude" << "Latitude" <<  "Mode" << "Key" << "Sorting";
 }
 
