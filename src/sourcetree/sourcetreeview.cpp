@@ -101,6 +101,7 @@ SourceTreeView::setupMenus()
     if ( readonly )
     {
         m_deletePlaylistAction->setEnabled( !readonly );
+        m_renamePlaylistAction->setEnabled( !readonly );
     }
 
     connect( m_renamePlaylistAction, SIGNAL( triggered() ), SLOT( renamePlaylist() ) );
