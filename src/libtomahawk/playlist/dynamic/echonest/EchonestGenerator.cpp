@@ -198,7 +198,9 @@ EchonestGenerator::determineRadioType() const throw( std::runtime_error )
     /**
      * so we try to match the best type of echonest playlist, based on the controls
      * the types are artist, artist-radio, artist-description, catalog, catalog-radio, song-radio. we don't care about the catalog ones.
-    */
+     * 
+     * Fallback is artist-radio
+     */
     
     /// 1. artist: If all the artist controls are Limit-To. If some were but not all, error out.
     bool artistOnly = true;

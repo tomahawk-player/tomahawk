@@ -16,10 +16,13 @@
 
 #include "dynamic/echonest/EchonestControl.h"
 
+#include "dynamic/widgets/MiscControlWidgets.h"
+
 #include <echonest/Playlist.h>
 
 #include <QComboBox>
 #include <QLineEdit>
+#include <QLabel>
 
 
 Tomahawk::EchonestControl::EchonestControl( const QString& selectedType, const QStringList& typeSelectors, QObject* parent )
@@ -136,6 +139,27 @@ Tomahawk::EchonestControl::updateWidgets()
         input->hide();
         m_match = QWeakPointer< QWidget >( match );
         m_input = QWeakPointer< QWidget >( input );
+    } else if( selectedType() == "Variety" ) {
+        m_currentType = Echonest::DynamicPlaylist::Variety;
+        
+        QLabel* match = new QLabel( tr( "is" ) );
+        LabeledSlider* input = new LabeledSlider( tr( "Less" ), tr( "More" ) );
+        input->slider()->setRange( 0, 10000 );
+        input->slider()->setTickInterval( 1 );
+        input->slider()->setTracking( false );
+
+        m_matchString = match->text();
+        m_matchData = match->text();
+        
+        
+        connect( input->slider(), SIGNAL( valueChanged( int ) ), this, SLOT( updateData() ) );
+        connect( input->slider(), SIGNAL( sliderMoved( int ) ), this, SLOT( editingFinished() ) );
+        connect( input->slider(), SIGNAL( sliderMoved( int ) ), &m_editingTimer, SLOT( stop() ) );
+        
+        match->hide();
+        input->hide();
+        m_match = QWeakPointer< QWidget >( match );
+        m_input = QWeakPointer< QWidget >( input );
     } else {
         m_match = QWeakPointer<QWidget>( new QWidget );
         m_input = QWeakPointer<QWidget>( new QWidget );
@@ -160,6 +184,12 @@ Tomahawk::EchonestControl::updateData()
             m_data.first = m_currentType;
             m_data.second = edit->text();
         }
+    } else if( selectedType() == "Variety" ) {
+        LabeledSlider* s = qobject_cast<LabeledSlider*>( m_input.data() );
+        if( s ) {
+            m_data.first = m_currentType;
+            m_data.second = (qreal)s->slider()->value() / 10000.0;
+        }
     }
 }
 
@@ -174,6 +204,10 @@ Tomahawk::EchonestControl::updateWidgetsFromData()
         QLineEdit* edit = qobject_cast<QLineEdit*>( m_input.data() );
         if( edit )
             edit->setText( m_data.second.toString() );
+    } else if( selectedType() == "Variety" ) {
+        LabeledSlider* s = qobject_cast<LabeledSlider*>( m_input.data() );
+        if( s )
+            s->slider()->setValue( m_data.second.toDouble() * 10000 );
     }
 }
 

@@ -101,6 +101,7 @@ set( libSources
     playlist/dynamic/widgets/DynamicControlWidget.cpp
     playlist/dynamic/widgets/DynamicControlList.cpp
     playlist/dynamic/widgets/ReadOrWriteWidget.cpp
+    playlist/dynamic/widgets/MiscControlWidgets.cpp
 
 
     network/bufferiodevice.cpp
@@ -230,6 +231,7 @@ set( libHeaders
     playlist/dynamic/widgets/DynamicControlWidget.h
     playlist/dynamic/widgets/DynamicControlList.h
     playlist/dynamic/widgets/ReadOrWriteWidget.h
+    playlist/dynamic/widgets/MiscControlWidgets.h
 
     utils/querylabel.h
     utils/elidedlabel.h
