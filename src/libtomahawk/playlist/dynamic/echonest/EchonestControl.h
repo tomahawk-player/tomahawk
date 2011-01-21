@@ -56,6 +56,11 @@ private:
     void updateWidgets();
     void updateWidgetsFromData();
     
+    // utility
+    void setupMinMaxWidgets( Echonest::DynamicPlaylist::PlaylistParam min, Echonest::DynamicPlaylist::PlaylistParam max, const QString& leftL, const QString& rightL, int maxRange );
+    void updateFromComboAndSlider();
+    void updateToComboAndSlider();
+    
     Echonest::DynamicPlaylist::PlaylistParam m_currentType;
     int m_overrideType;
     

@@ -39,7 +39,7 @@ EchonestFactory::createControl( const QString& controlType )
 QStringList 
 EchonestFactory::typeSelectors() const
 {
-    return QStringList() << "Artist" << "Variety"  << "Description" << "Tempo" << "Duration" << "Loudness" 
+    return QStringList() << "Artist" << "Variety" << "Tempo" << "Duration" << "Loudness" 
                           << "Danceability" << "Energy" << "Artist Familiarity" << "Artist Hotttnesss" << "Song Familiarity" 
                           << "Longitude" << "Latitude" <<  "Mode" << "Key" << "Sorting";
 }
