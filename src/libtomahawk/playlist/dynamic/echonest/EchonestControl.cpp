@@ -172,7 +172,7 @@ Tomahawk::EchonestControl::updateWidgets()
         m_currentType = Echonest::DynamicPlaylist::MinLoudness;
         
         setupMinMaxWidgets( Echonest::DynamicPlaylist::MinLoudness, Echonest::DynamicPlaylist::MaxLoudness, tr( "-100 dB" ), tr( "100 dB" ), 100 );
-        qobject_cast< LabeledSlider* >( m_input )->slider()->setMinimum( -100 );
+        qobject_cast< LabeledSlider* >( m_input.data() )->slider()->setMinimum( -100 );
     } else if( selectedType() == "Danceability" ) {
         m_currentType = Echonest::DynamicPlaylist::MinDanceability;
         
@@ -195,14 +195,14 @@ Tomahawk::EchonestControl::updateWidgets()
         setupMinMaxWidgets( Echonest::DynamicPlaylist::SongMinHotttnesss, Echonest::DynamicPlaylist::SongMaxHotttnesss, QString(), QString(), 10000 );
     } else if( selectedType() == "Latitude" ) {
         m_currentType = Echonest::DynamicPlaylist::ArtistMinLatitude;
-        
-        setupMinMaxWidgets( Echonest::DynamicPlaylist::ArtistMinLatitude, Echonest::DynamicPlaylist::ArtistMaxLatitude, QString( "-180 \302\260" ), QString( "180 \302\260" ), 180 );
-        qobject_cast< LabeledSlider* >( m_input )->slider()->setMinimum( -180 );
-    } else if( selectedType() == "Latitude" ) {
+        QString deg = QString( QChar( 0x00B0 ) );
+        setupMinMaxWidgets( Echonest::DynamicPlaylist::ArtistMinLatitude, Echonest::DynamicPlaylist::ArtistMaxLatitude, QString( "-180%1" ).arg( deg ), QString( "180%1" ).arg( deg ), 180 );
+        qobject_cast< LabeledSlider* >( m_input.data() )->slider()->setMinimum( -180 );
+    } else if( selectedType() == "Longitude" ) {
         m_currentType = Echonest::DynamicPlaylist::ArtistMinLongitude;
-        
-        setupMinMaxWidgets( Echonest::DynamicPlaylist::ArtistMinLongitude, Echonest::DynamicPlaylist::ArtistMaxLongitude, QString( "-180 \302\260" ), QString( "180 \302\260" ), 180 );
-        qobject_cast< LabeledSlider* >( m_input )->slider()->setMinimum( -180 );
+        QString deg = QString( QChar( 0x00B0 ) );
+        setupMinMaxWidgets( Echonest::DynamicPlaylist::ArtistMinLongitude, Echonest::DynamicPlaylist::ArtistMaxLongitude, QString( "-180%1" ).arg( deg ), QString( "180%1" ).arg( deg ), 180 );
+        qobject_cast< LabeledSlider* >( m_input.data() )->slider()->setMinimum( -180 );
     } else if( selectedType() == "Mode" ) {
         m_currentType = Echonest::DynamicPlaylist::Mode;
         
@@ -310,7 +310,8 @@ Tomahawk::EchonestControl::setupMinMaxWidgets( Echonest::DynamicPlaylist::Playli
     m_matchString = match->currentText();
     m_matchData = match->itemData( match->currentIndex() ).toString();
     
-    
+    connect( match, SIGNAL( currentIndexChanged( int ) ), this, SLOT( updateData() ) );
+    connect( match, SIGNAL( currentIndexChanged( int ) ), this, SLOT( editingFinished() ) );
     connect( input->slider(), SIGNAL( valueChanged( int ) ), this, SLOT( updateData() ) );
     connect( input->slider(), SIGNAL( valueChanged( int ) ), this, SLOT( editingFinished() ) );
     connect( input->slider(), SIGNAL( sliderMoved( int ) ), &m_editingTimer, SLOT( stop() ) );

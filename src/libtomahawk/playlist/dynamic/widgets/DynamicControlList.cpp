@@ -173,7 +173,7 @@ void DynamicControlList::addNewControl()
 {
     dyncontrol_ptr control = m_generator->createControl();
     m_controls.append( new DynamicControlWidget( control, m_isLocal, this ) );
-    m_layout->insertWidget( m_layout->count() - 2, m_controls.last() );
+    m_layout->insertWidget( m_layout->count() - 1, m_controls.last() );
     connect( m_controls.last(), SIGNAL( removeControl() ), this, SLOT( removeControl() ) );
     connect( m_controls.last(), SIGNAL( changed() ), this, SLOT( controlChanged() ) );
     
