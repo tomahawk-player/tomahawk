@@ -17,6 +17,7 @@
 #ifndef ECHONEST_GENERATOR_H
 #define ECHONEST_GENERATOR_H
 
+#include <stdexcept>
 #include <echonest/Playlist.h>
 
 #include "playlist/dynamic/GeneratorInterface.h"
@@ -55,10 +56,10 @@ private slots:
     void dynamicFetched();
     
 private:
-    Echonest::DynamicPlaylist::PlaylistParams getParams() const;
+    Echonest::DynamicPlaylist::PlaylistParams getParams() const throw( std::runtime_error );
     query_ptr queryFromSong( const Echonest::Song& song );
+    Echonest::DynamicPlaylist::ArtistTypeEnum determineRadioType() const throw( std::runtime_error );
     
-    Echonest::DynamicPlaylist::ArtistTypeEnum determineRadioType() const;
     Echonest::DynamicPlaylist* m_dynPlaylist;
     QPixmap m_logo;
 };

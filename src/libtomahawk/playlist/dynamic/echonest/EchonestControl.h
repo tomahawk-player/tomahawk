@@ -41,7 +41,7 @@ public:
     
     virtual void setInput(const QString& input);
     virtual void setMatch(const QString& match);
-    
+        
     /// DO NOT USE IF YOU ARE NOT A DBCMD
     explicit EchonestControl( const QString& type, const QStringList& typeSelectors, QObject* parent = 0 );
     
@@ -57,6 +57,7 @@ private:
     void updateWidgetsFromData();
     
     Echonest::DynamicPlaylist::PlaylistParam m_currentType;
+    int m_overrideType;
     
     QWeakPointer< QWidget > m_input;
     QWeakPointer< QWidget > m_match;
@@ -69,8 +70,6 @@ private:
     
     friend class EchonestGenerator;
 };
-
-typedef QSharedPointer<EchonestControl> encontrol_ptr;
 
 };
 

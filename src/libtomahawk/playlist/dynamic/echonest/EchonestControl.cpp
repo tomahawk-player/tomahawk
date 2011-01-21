@@ -31,6 +31,7 @@ Tomahawk::EchonestControl::EchonestControl( const QString& selectedType, const Q
     
     connect( &m_editingTimer, SIGNAL( timeout() ), this, SIGNAL( changed() ) );
     updateWidgets();
+    updateData();
 }
 
 QWidget*
@@ -62,6 +63,11 @@ Tomahawk::EchonestControl::setSelectedType ( const QString& type )
 Echonest::DynamicPlaylist::PlaylistParamData
 Tomahawk::EchonestControl::toENParam() const
 {
+    if( m_overrideType != -1 ) {
+        Echonest::DynamicPlaylist::PlaylistParamData newData = m_data;
+        newData.first = static_cast<Echonest::DynamicPlaylist::PlaylistParam>( m_overrideType );
+        return newData;
+    }
     return m_data;
 }
 
@@ -95,7 +101,6 @@ void Tomahawk::EchonestControl::setMatch(const QString& match)
     updateWidgetsFromData();
 }
 
-
 void 
 Tomahawk::EchonestControl::updateWidgets()
 {
@@ -103,6 +108,7 @@ Tomahawk::EchonestControl::updateWidgets()
         delete m_input.data();
     if( !m_match.isNull() )
         delete m_match.data();
+    m_overrideType = -1;
     
     // make sure the widgets are the proper kind for the selected type, and hook up to their slots
     if( selectedType() == "Artist" ) {
@@ -113,6 +119,7 @@ Tomahawk::EchonestControl::updateWidgets()
         
         match->addItem( "Limit To", Echonest::DynamicPlaylist::ArtistType );
         match->addItem( "Similar To", Echonest::DynamicPlaylist::ArtistRadioType );
+        match->addItem( "Description", Echonest::DynamicPlaylist::ArtistDescriptionType );
         m_matchString = match->currentText();
         m_matchData = match->itemData( match->currentIndex() ).toString();
         
@@ -143,6 +150,10 @@ Tomahawk::EchonestControl::updateData()
         if( combo ) {
             m_matchString = combo->currentText();
             m_matchData = combo->itemData( combo->currentIndex() ).toString();
+            
+            // EN HACK: artist-description radio needs description= fields not artist= fields
+            if( m_matchData.toInt() == Echonest::DynamicPlaylist::ArtistDescriptionType )
+                m_overrideType = Echonest::DynamicPlaylist::Description;
         }
         QLineEdit* edit = qobject_cast<QLineEdit*>( m_input.data() );
         if( edit && !edit->text().isEmpty() ) {

@@ -21,7 +21,6 @@
 
 using namespace Tomahawk;
 
-
 EchonestFactory::EchonestFactory()
 {}
 
@@ -77,22 +76,32 @@ void
 EchonestGenerator::generate ( int number )
 {
    // convert to an echonest query, and fire it off
-    Echonest::DynamicPlaylist::PlaylistParams params = getParams();
-    params.append( Echonest::DynamicPlaylist::PlaylistParamData( Echonest::DynamicPlaylist::Results, number ) );
-    QNetworkReply* reply = Echonest::DynamicPlaylist::staticPlaylist( params );
-    qDebug() << "Generating a static playlist from echonest!" << reply->url().toString();
-    connect( reply, SIGNAL( finished() ), this, SLOT( staticFinished() ) );
-
+    try {
+        Echonest::DynamicPlaylist::PlaylistParams params = getParams();
+        
+        params.append( Echonest::DynamicPlaylist::PlaylistParamData( Echonest::DynamicPlaylist::Results, number ) );
+        QNetworkReply* reply = Echonest::DynamicPlaylist::staticPlaylist( params );
+        qDebug() << "Generating a static playlist from echonest!" << reply->url().toString();
+        connect( reply, SIGNAL( finished() ), this, SLOT( staticFinished() ) );
+    } catch( std::runtime_error& e ) {
+        qWarning() << "Got invalid controls!" << e.what();
+        emit controlsInvalid( "Controls were not valid", QString::fromLatin1( e.what() ) );
+    }
 }
 
 void 
 EchonestGenerator::startOnDemand()
 {
-    Echonest::DynamicPlaylist::PlaylistParams params = getParams();
-    
-    QNetworkReply* reply = m_dynPlaylist->start( params );
-    qDebug() << "starting a dynamic playlist from echonest!" << reply->url().toString();
-    connect( reply, SIGNAL( finished() ), this, SLOT( dynamicStarted() ) );
+    try {
+        Echonest::DynamicPlaylist::PlaylistParams params = getParams();
+        
+        QNetworkReply* reply = m_dynPlaylist->start( params );
+        qDebug() << "starting a dynamic playlist from echonest!" << reply->url().toString();
+        connect( reply, SIGNAL( finished() ), this, SLOT( dynamicStarted() ) );
+    } catch( std::runtime_error& e ) {
+        qWarning() << "Got invalid controls!" << e.what();
+        emit controlsInvalid( "Controls were not valid", QString::fromLatin1( e.what() ) );
+    }
 }
 
 void 
@@ -136,7 +145,8 @@ EchonestGenerator::staticFinished()
     emit generated( queries );
 }
 
-Echonest::DynamicPlaylist::PlaylistParams EchonestGenerator::getParams() const
+Echonest::DynamicPlaylist::PlaylistParams 
+EchonestGenerator::getParams() const throw( std::runtime_error )
 {
     Echonest::DynamicPlaylist::PlaylistParams params;
     foreach( const dyncontrol_ptr& control, m_controls ) {
@@ -182,11 +192,46 @@ EchonestGenerator::dynamicFetched()
 }
 
 
-// tries to heuristically determine what sort of radio this is based on the controls
 Echonest::DynamicPlaylist::ArtistTypeEnum 
-EchonestGenerator::determineRadioType() const
+EchonestGenerator::determineRadioType() const throw( std::runtime_error )
 {
-    // TODO
+    /**
+     * so we try to match the best type of echonest playlist, based on the controls
+     * the types are artist, artist-radio, artist-description, catalog, catalog-radio, song-radio. we don't care about the catalog ones.
+    */
+    
+    /// 1. artist: If all the artist controls are Limit-To. If some were but not all, error out.
+    bool artistOnly = true;
+    bool someArtist = false;
+    foreach( const dyncontrol_ptr& control, m_controls ) {
+        if( control->selectedType() == "Artist" && static_cast<Echonest::DynamicPlaylist::ArtistTypeEnum>( control->match().toInt() ) != Echonest::DynamicPlaylist::ArtistType ) {
+            artistOnly = false;
+        } else if( control->selectedType() == "Artist" && static_cast<Echonest::DynamicPlaylist::ArtistTypeEnum>( control->match().toInt() ) == Echonest::DynamicPlaylist::ArtistType ) {
+            someArtist = true;
+         }
+    }
+    if( someArtist && artistOnly ) {
+        return Echonest::DynamicPlaylist::ArtistType;
+    } else if( someArtist && !artistOnly ) {
+        throw std::runtime_error( "All artist match types must be the same" );
+    }
+    
+    /// 2. artist-description: If all the artist entries are Description. If some were but not all, error out.
+    bool artistDescOnly = true;
+    bool someArtistDescFound = false;
+    
+    foreach( const dyncontrol_ptr& control, m_controls ) {
+        if( control->selectedType() == "Artist" && static_cast<Echonest::DynamicPlaylist::ArtistTypeEnum>( control->match().toInt() ) == Echonest::DynamicPlaylist::ArtistDescriptionType ) {
+            someArtistDescFound = true;
+        } else if( control->selectedType() == "Artist" && static_cast<Echonest::DynamicPlaylist::ArtistTypeEnum>( control->match().toInt() ) != Echonest::DynamicPlaylist::ArtistDescriptionType ) {
+            artistDescOnly = false;
+        }
+    }
+    if( someArtistDescFound && artistDescOnly ) {
+        return Echonest::DynamicPlaylist::ArtistDescriptionType;
+    } else if( someArtistDescFound && !artistDescOnly ) // fail, must be all artist desc
+        throw std::runtime_error( "All artist match types must be the same" );
+    
     return Echonest::DynamicPlaylist::ArtistRadioType;
 }
 
