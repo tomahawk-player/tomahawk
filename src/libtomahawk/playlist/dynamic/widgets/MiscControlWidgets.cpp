@@ -26,6 +26,7 @@ LabeledSlider::LabeledSlider( const QString& leftT, const QString& rightT, QWidg
     : QWidget( parent )
 {
     setLayout( new QHBoxLayout );
+    layout()->setMargin( 0 );
     
     m_leftLabel = new QLabel( leftT, this );
     layout()->addWidget( m_leftLabel );

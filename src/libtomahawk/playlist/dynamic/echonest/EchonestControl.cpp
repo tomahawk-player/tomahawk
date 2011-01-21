@@ -160,11 +160,24 @@ Tomahawk::EchonestControl::updateWidgets()
         input->hide();
         m_match = QWeakPointer< QWidget >( match );
         m_input = QWeakPointer< QWidget >( input );
-    }  else if( selectedType() == "Tempo" ) {
+    } else if( selectedType() == "Tempo" ) {
         m_currentType = Echonest::DynamicPlaylist::MinTempo;
         
         setupMinMaxWidgets( Echonest::DynamicPlaylist::MinTempo, Echonest::DynamicPlaylist::MaxTempo, tr( "0 BPM" ), tr( "500 BPM" ), 500 );
-    } else {
+    } else if( selectedType() == "Duration" ) {
+        m_currentType = Echonest::DynamicPlaylist::MinDuration;
+        
+        setupMinMaxWidgets( Echonest::DynamicPlaylist::MinDuration, Echonest::DynamicPlaylist::MaxDuration, tr( "0 secs" ), tr( "3600 secs" ), 3600 );
+    } else if( selectedType() == "Loudness" ) {
+        m_currentType = Echonest::DynamicPlaylist::MinLoudness;
+        
+        setupMinMaxWidgets( Echonest::DynamicPlaylist::MinLoudness, Echonest::DynamicPlaylist::MaxLoudness, tr( "-100 dB" ), tr( "100 dB" ), 100 );
+        qobject_cast< LabeledSlider* >( m_input )->slider()->setMinimum( -100 );
+    } else if( selectedType() == "Danceability" ) {
+        m_currentType = Echonest::DynamicPlaylist::MinDanceability;
+        
+        setupMinMaxWidgets( Echonest::DynamicPlaylist::MinDanceability, Echonest::DynamicPlaylist::MaxDanceability, QString(), QString(), 10000 );
+    }  else {
         m_match = QWeakPointer<QWidget>( new QWidget );
         m_input = QWeakPointer<QWidget>( new QWidget );
     }
@@ -181,7 +194,6 @@ Tomahawk::EchonestControl::setupMinMaxWidgets( Echonest::DynamicPlaylist::Playli
     input->slider()->setRange( 0, maxRange );
     input->slider()->setTickInterval( 1 );
     input->slider()->setTracking( false );
-    input->slider()->setTickPosition( QSlider::TicksBelow );
     
     m_matchString = match->currentText();
     m_matchData = match->itemData( match->currentIndex() ).toString();
@@ -222,13 +234,15 @@ Tomahawk::EchonestControl::updateData()
             m_data.first = m_currentType;
             m_data.second = (qreal)s->slider()->value() / 10000.0;
         }
-    } else if( selectedType() == "Tempo" ) {
+    } else if( selectedType() == "Tempo" || selectedType() == "Duration" || selectedType() == "Loudness" ) {
         updateFromComboAndSlider();
+    } else if( selectedType() == "Danceability" ) {
+        updateFromComboAndSlider( true );
     }
 }
 
 void 
-Tomahawk::EchonestControl::updateFromComboAndSlider()
+Tomahawk::EchonestControl::updateFromComboAndSlider( bool smooth )
 {
     QComboBox* combo = qobject_cast<QComboBox*>( m_match.data() );
     if( combo ) {
@@ -238,7 +252,7 @@ Tomahawk::EchonestControl::updateFromComboAndSlider()
     LabeledSlider* ls = qobject_cast<LabeledSlider*>( m_input.data() );
     if( ls && ls->slider() ) {
         m_data.first = static_cast< Echonest::DynamicPlaylist::PlaylistParam >( combo->itemData( combo->currentIndex() ).toInt() );
-        m_data.second = ls->slider()->value();
+        m_data.second = ls->slider()->value() / ( smooth ? 10000. : 1.0 );
     }
 }
 
@@ -258,20 +272,22 @@ Tomahawk::EchonestControl::updateWidgetsFromData()
         LabeledSlider* s = qobject_cast<LabeledSlider*>( m_input.data() );
         if( s )
             s->slider()->setValue( m_data.second.toDouble() * 10000 );
-    } else if( selectedType() == "Tempo" ) {
-        updateToComboAndSlider();
+    } else if( selectedType() == "Tempo" || selectedType() == "Duration" || selectedType() == "Loudness" ) {
+        updateToComboAndSlider();   
+    } else if( selectedType() == "Danceability" ) {
+        updateToComboAndSlider( true );
     }
 }
 
 void 
-Tomahawk::EchonestControl::updateToComboAndSlider()
+Tomahawk::EchonestControl::updateToComboAndSlider( bool smooth )
 {
     QComboBox* combo = qobject_cast<QComboBox*>( m_match.data() );
     if( combo )
         combo->setCurrentIndex( combo->findData( m_matchData ) );
     LabeledSlider* ls = qobject_cast<LabeledSlider*>( m_input.data() );
     if( ls )
-        ls->slider()->setValue( m_data.second.toDouble() );
+        ls->slider()->setValue( m_data.second.toDouble() * ( smooth ? 10000. : 1 ) );
 }
 
 
