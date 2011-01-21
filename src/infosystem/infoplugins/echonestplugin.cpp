@@ -13,7 +13,6 @@ EchoNestPlugin::EchoNestPlugin(QObject *parent)
     : InfoPlugin(parent)
 {
     qDebug() << Q_FUNC_INFO;
-    Config::instance()->setAPIKey("JGJCRKWLXLBZIFAZB");
     QSet< InfoType > supportedTypes;
     supportedTypes << Tomahawk::InfoSystem::InfoArtistBiography << Tomahawk::InfoSystem::InfoArtistFamiliarity << Tomahawk::InfoSystem::InfoArtistHotttness << Tomahawk::InfoSystem::InfoArtistTerms << Tomahawk::InfoSystem::InfoMiscTopTerms;
     qobject_cast< InfoSystem* >(parent)->registerInfoTypes(this, supportedTypes);

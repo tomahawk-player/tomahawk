@@ -127,7 +127,9 @@ TomahawkApp::TomahawkApp( int& argc, char *argv[] )
     setApplicationVersion( "1.0" ); // FIXME: last.fm "tst" auth requires 1.0 version according to docs, will change when we get our own identifier
     registerMetaTypes();
     setupLogfile();
-
+    
+    Echonest::Config::instance()->setAPIKey("JRIHWEP6GPOER2QQ6");
+    
     new TomahawkSettings( this );
     m_audioEngine = new AudioEngine;
 
