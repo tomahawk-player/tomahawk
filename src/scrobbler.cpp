@@ -32,6 +32,10 @@ Scrobbler::Scrobbler( QObject* parent )
       Your API Key is 7194b85b6d1f424fe1668173a78c0c4a
       Your secret is ba80f1df6d27ae63e9cb1d33ccf2052f
 */
+
+    // Flush session key cache
+    TomahawkSettings::instance()->setLastFmSessionKey( QByteArray() );
+
     lastfm::ws::ApiKey = "7194b85b6d1f424fe1668173a78c0c4a";
     lastfm::ws::SharedSecret = "ba80f1df6d27ae63e9cb1d33ccf2052f";
     lastfm::ws::Username = TomahawkSettings::instance()->lastFmUsername();
@@ -196,7 +200,7 @@ Scrobbler::onAuthenticated()
             TomahawkSettings::instance()->setLastFmSessionKey( lastfm::ws::SessionKey.toLatin1() );
 
             if( TomahawkSettings::instance()->scrobblingEnabled() )
-                m_scrobbler = new lastfm::Audioscrobbler( "tst" );
+                m_scrobbler = new lastfm::Audioscrobbler( "thk" );
         }
     }
     else
@@ -227,7 +231,7 @@ Scrobbler::createScrobbler()
     {
         lastfm::ws::SessionKey = TomahawkSettings::instance()->lastFmSessionKey();
         
-        m_scrobbler = new lastfm::Audioscrobbler( "tst" );
+        m_scrobbler = new lastfm::Audioscrobbler( "thk" );
         m_scrobbler->moveToThread( thread() );
     }
 }
