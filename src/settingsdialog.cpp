@@ -201,9 +201,9 @@ SettingsDialog::testLastFmLogin()
 {
 #ifndef NO_LIBLASTFM
     ui->pushButtonTestLastfmLogin->setEnabled( false );
-    ui->pushButtonTestLastfmLogin->setText(  "Testing..." );
+    ui->pushButtonTestLastfmLogin->setText( "Testing..." );
 
-    QString authToken =  md5( ( ui->lineEditLastfmUsername->text() + md5( ui->lineEditLastfmPassword->text().toUtf8() ) ).toUtf8() );
+    QString authToken = md5( ( ui->lineEditLastfmUsername->text() + md5( ui->lineEditLastfmPassword->text().toUtf8() ) ).toUtf8() );
 
     // now authenticate w/ last.fm and get our session key
     QMap<QString, QString> query;

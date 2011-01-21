@@ -328,14 +328,14 @@ TomahawkSettings::setLastFmPassword( const QString& password )
 QByteArray
 TomahawkSettings::lastFmSessionKey() const
 {
-    return value( "lastfm/sessionkey" ).toByteArray();
+    return value( "lastfm/session" ).toByteArray();
 }
 
 
 void
 TomahawkSettings::setLastFmSessionKey( const QByteArray& key )
 {
-    setValue( "lastfm/sessionkey", key );
+    setValue( "lastfm/session", key );
 }
 
 
