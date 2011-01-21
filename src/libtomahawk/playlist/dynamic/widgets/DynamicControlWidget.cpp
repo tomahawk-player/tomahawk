@@ -42,7 +42,6 @@ DynamicControlWidget::DynamicControlWidget( const Tomahawk::dyncontrol_ptr& cont
      , m_layout( 0 )
 {
     setSizePolicy( QSizePolicy::Expanding, QSizePolicy::Fixed );
-    setMouseTracking( true );
     
     m_layout = new QHBoxLayout;
     m_layout->setMargin( 0 );
@@ -140,10 +139,18 @@ DynamicControlWidget::typeSelectorChanged( const QString& type, bool firstLoad )
     m_layout->removeWidget( m_matchSelector );
     m_layout->removeWidget( m_entryWidget );
     
-    if( m_control->selectedType() == type && !firstLoad )
+    if( m_control->selectedType() != type && !firstLoad )
         m_control->setSelectedType( type );
     
     m_typeSelector->setLabel( type );
+    
+    QComboBox* typeSel = qobject_cast<QComboBox*>(m_typeSelector->writableWidget());
+    if( m_typeSelector->writable() && m_typeSelector->writableWidget() && typeSel ) {
+        int idx = typeSel->findText( type );
+        if( idx > -1 )
+            typeSel->setCurrentIndex( idx );
+    }
+    
     if( m_control->matchSelector() ) {
         m_matchSelector->setWritableWidget( m_control->matchSelector() );
         m_matchSelector->setLabel( m_control->matchString() );

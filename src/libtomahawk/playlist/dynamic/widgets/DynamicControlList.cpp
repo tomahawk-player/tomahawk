@@ -197,6 +197,9 @@ void DynamicControlList::controlChanged()
     Q_ASSERT( sender() && qobject_cast<DynamicControlWidget*>(sender()) );
     DynamicControlWidget* widget = qobject_cast<DynamicControlWidget*>(sender());
     
+    qDebug() << "control changed!";
+    foreach( DynamicControlWidget* c, m_controls )
+        qDebug() << c->control()->id() << c->control()->selectedType() << c->control()->match() << c->control()->input();
     emit controlChanged( widget->control() );
 }
 
