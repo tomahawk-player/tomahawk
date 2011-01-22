@@ -39,7 +39,7 @@ SettingsDialog::SettingsDialog( QWidget *parent )
     TomahawkSettings* s = TomahawkSettings::instance();
 
     ui->checkBoxHttp->setChecked( s->httpEnabled() );
-    ui->checkBoxUpnp->setChecked( s->upnpEnabled() );
+    ui->checkBoxUpnp->setChecked( s->externalAddressMode() == TomahawkSettings::Upnp );
 
     // JABBER
     ui->checkBoxJabberAutoConnect->setChecked( s->jabberAutoConnect() );
@@ -99,7 +99,7 @@ SettingsDialog::~SettingsDialog()
         }
 
         s->setHttpEnabled(                                  ui->checkBoxHttp->checkState() == Qt::Checked );
-        s->setUPnPEnabled(                                  ui->checkBoxUpnp->checkState() == Qt::Checked );
+        s->setExternalAddressMode(ui->checkBoxUpnp->checkState() == Qt::Checked ? TomahawkSettings::Upnp : TomahawkSettings::Lan);
 
         s->setJabberAutoConnect(                            ui->checkBoxJabberAutoConnect->checkState() == Qt::Checked );
         s->setJabberUsername(                               ui->jabberUsername->text() );

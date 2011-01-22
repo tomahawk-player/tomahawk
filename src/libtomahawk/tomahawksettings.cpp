@@ -297,17 +297,41 @@ TomahawkSettings::setJabberPassword( const QString& pw )
 }
 
 
-bool
-TomahawkSettings::upnpEnabled() const
+TomahawkSettings::ExternalAddressMode
+TomahawkSettings::externalAddressMode() const
 {
-    return value( "network/upnp", true ).toBool();
+    return (TomahawkSettings::ExternalAddressMode) value( "network/external-address-mode", TomahawkSettings::Upnp ).toInt();
 }
 
 
 void
-TomahawkSettings::setUPnPEnabled( bool enable )
+TomahawkSettings::setExternalAddressMode( ExternalAddressMode externalAddressMode )
 {
-    setValue( "network/upnp", enable );
+    setValue( "network/external-address-mode", externalAddressMode );
+}
+
+QString
+TomahawkSettings::externalHostname() const
+{
+    return value( "network/external-hostname" ).toString();
+}
+
+void
+TomahawkSettings::setExternalHostname(const QString& externalHostname)
+{
+    setValue( "network/external-hostname", externalHostname );
+}
+
+int
+TomahawkSettings::externalPort() const
+{
+    return value( "network/external-port" ).toInt();
+}
+
+void
+TomahawkSettings::setExternalPort(int externalPort)
+{
+    setValue( "network/external-port", externalPort);
 }
 
 

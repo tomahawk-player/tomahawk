@@ -90,8 +90,8 @@ public:
     void connectToPeer( const QString& ha, int port, const QString &key, Connection* conn );
     void reverseOfferRequest( ControlConnection* orig_conn, const QString& key, const QString& theirkey );
 
-    bool visibleExternally() const { return m_externalPort > 0 && !m_externalAddress.isNull(); }
-    QHostAddress externalAddress() const { return m_externalAddress; }
+    bool visibleExternally() const { return !m_externalHostname.isNull() || (m_externalPort > 0 && !m_externalAddress.isNull()); }
+    QString externalAddress() const { return !m_externalHostname.isNull() ? m_externalHostname : m_externalAddress.toString(); }
     int externalPort() const { return m_externalPort; }
 
     QSharedPointer<QIODevice> remoteIODeviceFactory( const Tomahawk::result_ptr& );
@@ -142,6 +142,7 @@ private:
     QMap< QString, QPointer<Connection> > m_offers;
     int m_port, m_externalPort;
     QHostAddress m_externalAddress;
+    QString m_externalHostname;
 
     // currently active file transfers:
     QList< FileTransferConnection* > m_ftsessions;

@@ -129,7 +129,7 @@ SipHandler::onPeerOnline( const QString& jid )
 
         Servent::instance()->registerOffer( key, conn );
         m["visible"] = true;
-        m["ip"] = Servent::instance()->externalAddress().toString();
+        m["ip"] = Servent::instance()->externalAddress();
         m["port"] = Servent::instance()->externalPort();
         m["key"] = key;
         m["uniqname"] = nodeid;
@@ -181,7 +181,7 @@ SipHandler::onMessage( const QString& from, const QString& msg )
     if ( m.value( "visible" ).toBool() )
     {
         if( !Servent::instance()->visibleExternally() ||
-            Servent::instance()->externalAddress().toString() <= m.value( "ip" ).toString() )
+            Servent::instance()->externalAddress() <= m.value( "ip" ).toString() )
         {
             qDebug() << "Initiate connection to" << from;
             Servent::instance()->connectToPeer( m.value( "ip" ).toString(),
