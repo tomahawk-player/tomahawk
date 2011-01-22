@@ -1,5 +1,5 @@
 /****************************************************************************************
- * Copyright (c) 2010 Leo Franchi <lfranchi@kde.org>                                    *
+ * Copyright (c) 2010-2011 Leo Franchi <lfranchi@kde.org>                               *
  *                                                                                      *
  * This program is free software; you can redistribute it and/or modify it under        *
  * the terms of the GNU General Public License as published by the Free Software        *
@@ -14,67 +14,46 @@
  * this program.  If not, see <http://www.gnu.org/licenses/>.                           *
  ****************************************************************************************/
 
-#ifndef DYNAMIC_CONTROL_LIST_H
-#define DYNAMIC_CONTROL_LIST_H
+#ifndef COLLAPSIBLE_CONTROLS_H
+#define COLLAPSIBLE_CONTROLS_H
 
 #include "typedefs.h"
-#include "dynamic/DynamicPlaylist.h"
 
-#include <QStackedWidget>
+#include <QWidget>
 
-class QGridLayout;
-class QPushButton;
-class QHBoxLayout;
-class QVBoxLayout;
-class QToolButton;
-
+class QStackedLayout;
 namespace Tomahawk
 {
 
 class DynamicControlWrapper;
+class DynamicControlList;
 
-  
-/**
- * This widget encapsulates the list of dynamic controls. It can hide or show the controls.
- */
-
-class DynamicControlList : public QWidget
+class CollapsibleControls : public QWidget
 {
-    Q_OBJECT    
+    Q_OBJECT
 public:
-    DynamicControlList( QWidget* parent = 0 );
-    explicit DynamicControlList( const geninterface_ptr& generator, const QList< dyncontrol_ptr >& controls, bool isLocal, QWidget* parent = 0 );
-    virtual ~DynamicControlList();
+    CollapsibleControls( QWidget* parent );
+    CollapsibleControls( const geninterface_ptr& generator, const QList< dyncontrol_ptr >& controls, bool isLocal, QWidget* parent = 0 );
+    virtual ~CollapsibleControls();
     
     void setControls( const geninterface_ptr& generator, const QList< dyncontrol_ptr >& controls, bool isLocal );
-    QList< DynamicControlWrapper* > controls() const { return m_controls; }
-        
+    QList< DynamicControlWrapper* > controls() const;
+    
 signals:
     void controlsChanged();
     void controlChanged( const Tomahawk::dyncontrol_ptr& control );
-    void toggleCollapse();
     
-public slots:
-    void addNewControl();
-    void removeControl();
-    void controlChanged();
+private slots:
+    void toggleCollapse();
     
 private:
     void init();
-        
-    geninterface_ptr m_generator;
     
-    QGridLayout* m_layout;
-    QList< DynamicControlWrapper* > m_controls;
+    QStackedLayout* m_layout;
+    DynamicControlList* m_controls;
     QWidget* m_summaryWidget;
     
-    QHBoxLayout* m_collapseLayout;
-    QPushButton* m_collapse;
-    QToolButton* m_addControl;
-    
-    bool m_isLocal;
 };
 
-};
-
+}
 #endif

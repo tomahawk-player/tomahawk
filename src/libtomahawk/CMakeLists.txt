@@ -98,10 +98,11 @@ set( libSources
     playlist/dynamic/echonest/EchonestGenerator.cpp
     playlist/dynamic/echonest/EchonestControl.cpp
     playlist/dynamic/widgets/DynamicWidget.cpp
-    playlist/dynamic/widgets/DynamicControlWidget.cpp
+    playlist/dynamic/widgets/DynamicControlWrapper.cpp
     playlist/dynamic/widgets/DynamicControlList.cpp
     playlist/dynamic/widgets/ReadOrWriteWidget.cpp
     playlist/dynamic/widgets/MiscControlWidgets.cpp
+    playlist/dynamic/widgets/CollapsibleControls.cpp
 
 
     network/bufferiodevice.cpp
@@ -228,10 +229,11 @@ set( libHeaders
     playlist/dynamic/echonest/EchonestGenerator.h
     playlist/dynamic/echonest/EchonestControl.h
     playlist/dynamic/widgets/DynamicWidget.h
-    playlist/dynamic/widgets/DynamicControlWidget.h
+    playlist/dynamic/widgets/DynamicControlWrapper.h
     playlist/dynamic/widgets/DynamicControlList.h
     playlist/dynamic/widgets/ReadOrWriteWidget.h
     playlist/dynamic/widgets/MiscControlWidgets.h
+    playlist/dynamic/widgets/CollapsibleControls.h
 
     utils/querylabel.h
     utils/elidedlabel.h

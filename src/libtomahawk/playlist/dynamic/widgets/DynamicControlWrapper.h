@@ -1,5 +1,5 @@
 /****************************************************************************************
- * Copyright (c) 2010 Leo Franchi <lfranchi@kde.org>                                    *
+ * Copyright (c) 2010-2011 Leo Franchi <lfranchi@kde.org>                               *
  *                                                                                      *
  * This program is free software; you can redistribute it and/or modify it under        *
  * the terms of the GNU General Public License as published by the Free Software        *
@@ -14,13 +14,14 @@
  * this program.  If not, see <http://www.gnu.org/licenses/>.                           *
  ****************************************************************************************/
 
-#ifndef DYNAMIC_CONTROL_WIDGET_H
-#define DYNAMIC_CONTROL_WIDGET_H
+#ifndef DYNAMIC_CONTROL_WRAPPER_H
+#define DYNAMIC_CONTROL_WRAPPER_H
 
 #include <QWidget>
 
 #include "typedefs.h"
 
+class QGridLayout;
 class ReadOrWriteWidget;
 class QStackedLayout;
 class QEvent;
@@ -33,22 +34,21 @@ namespace Tomahawk
 {
 
 /**
-* This widget holds one horizontal control attached to a dynamic playlist. It's a container more than anything.
+* This abstraction object manages the widgets for 1 dynamic playlist control, laid out in the desired layout
 */
-class DynamicControlWidget : public QWidget
+class DynamicControlWrapper : public QObject
 {
     Q_OBJECT 
 public:
-    explicit DynamicControlWidget( const dyncontrol_ptr& control, bool isLocal = false, QWidget* parent = 0);
-    virtual ~DynamicControlWidget();
+    explicit DynamicControlWrapper( const dyncontrol_ptr& control, QGridLayout* layout, int row, bool isLocal = false, QWidget* parent = 0 );
+    virtual ~DynamicControlWrapper();
            
-    virtual void paintEvent(QPaintEvent* );
-    virtual void enterEvent(QEvent* );
-    virtual void leaveEvent(QEvent* );
-    virtual void mouseMoveEvent(QMouseEvent* );
+//     virtual void enterEvent(QEvent* );
+//     virtual void leaveEvent(QEvent* );
     
     dyncontrol_ptr control() const;
     
+    void removeFromLayout();
 signals:
     void collapse();
     void removeControl();
@@ -63,7 +63,8 @@ private:
     
     bool m_isLocal, m_mouseOver;
     
-    // i hate qlayout
+    QWidget* m_parent;
+    int m_row;
     QStackedLayout* m_plusL;
     QToolButton* m_minusButton;
     
@@ -71,7 +72,7 @@ private:
     ReadOrWriteWidget* m_typeSelector;
     ReadOrWriteWidget* m_matchSelector;
     ReadOrWriteWidget* m_entryWidget;
-    QHBoxLayout* m_layout;
+    QGridLayout* m_layout;
 };
     
 };

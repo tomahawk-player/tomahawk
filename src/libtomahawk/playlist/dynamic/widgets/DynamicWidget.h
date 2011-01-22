@@ -38,7 +38,8 @@ class ReadOrWriteWidget;
 namespace Tomahawk
 {
 
-class DynamicControlList;
+class CollapsibleControls;
+
 
 /**
  * This class contains the dynamic playlist config and the playlist view itself
@@ -90,8 +91,7 @@ private:
     QPushButton* m_generateButton;
     QSpinBox* m_genNumber;
     
-    DynamicControlList* m_controls;
-    AnimatedSplitter* m_splitter;
+    CollapsibleControls* m_controls;
     
     PlaylistView* m_view;
     PlaylistModel* m_model;

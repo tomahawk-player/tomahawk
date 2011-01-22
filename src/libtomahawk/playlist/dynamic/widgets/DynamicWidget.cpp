@@ -31,6 +31,7 @@
 #include "pipeline.h"
 #include "audio/audioengine.h"
 #include "ReadOrWriteWidget.h"
+#include "CollapsibleControls.h"
 
 using namespace Tomahawk;
 
@@ -47,7 +48,6 @@ DynamicWidget::DynamicWidget( const Tomahawk::dynplaylist_ptr& playlist, QWidget
     , m_logo( 0 )
     , m_generateButton( 0 )
     , m_controls( 0 )
-    , m_splitter( 0 )
     , m_view( 0 )
     , m_model()
 {   
@@ -81,25 +81,16 @@ DynamicWidget::DynamicWidget( const Tomahawk::dynplaylist_ptr& playlist, QWidget
     
     m_layout->addLayout( m_headerLayout );
     
-    m_splitter = new AnimatedSplitter( this );
-    m_splitter->setOrientation( Qt::Vertical );
-    m_splitter->setChildrenCollapsible( false );
+    m_controls = new CollapsibleControls( this );
+    m_layout->addWidget( m_controls );
     
-    m_layout->addWidget( m_splitter );
-    m_controls = new DynamicControlList( m_splitter );
     m_model = new PlaylistModel( this );
     m_view = new PlaylistView( this );
     m_view->setModel( m_model );
     m_view->setContentsMargins( 0, 0, 0, 0 );
+    m_layout->addWidget( m_view );
     
-    m_splitter->addWidget( m_controls );
-    m_splitter->addWidget( m_view );
-    m_splitter->setGreedyWidget( 1 );
-    m_splitter->setHandleWidth( 0 );
-    m_splitter->setContentsMargins( 0, 0, 0, 0 );
-    
-    m_splitter->show( 0, false );
-    
+        
     loadDynamicPlaylist( playlist );
     
     m_layout->setContentsMargins( 0, 0, 0, 0 );

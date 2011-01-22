@@ -1,5 +1,5 @@
 /****************************************************************************************
- * Copyright (c) 2010 Leo Franchi <lfranchi@kde.org>                                    *
+ * Copyright (c) 2010-2011 Leo Franchi <lfranchi@kde.org>                               *
  *                                                                                      *
  * This program is free software; you can redistribute it and/or modify it under        *
  * the terms of the GNU General Public License as published by the Free Software        *
@@ -14,7 +14,7 @@
  * this program.  If not, see <http://www.gnu.org/licenses/>.                           *
  ****************************************************************************************/
 
-#include "DynamicControlWidget.h"
+#include "DynamicControlWrapper.h"
 
 #include "tomahawk/tomahawkapp.h"
 #include "dynamic/DynamicControl.h"
@@ -30,33 +30,28 @@
 
 using namespace Tomahawk;
 
-DynamicControlWidget::DynamicControlWidget( const Tomahawk::dyncontrol_ptr& control, bool isLocal, QWidget* parent )
-     : QWidget(parent)
+DynamicControlWrapper::DynamicControlWrapper( const Tomahawk::dyncontrol_ptr& control, QGridLayout* layout, int row, bool isLocal, QWidget* parent )
+     : QObject( parent )
      , m_isLocal( isLocal )
      , m_mouseOver( false )
+     , m_parent( parent )
+     , m_row( row )
      , m_minusButton( 0 )
      , m_control( control )
      , m_typeSelector( 0 )
      , m_matchSelector( 0 )
      , m_entryWidget( 0 )
-     , m_layout( 0 )
+     , m_layout( layout )
 {
-    setSizePolicy( QSizePolicy::Expanding, QSizePolicy::Fixed );
     
-    m_layout = new QHBoxLayout;
-    m_layout->setMargin( 0 );
-    m_layout->setContentsMargins( 0, 0, 0, 0 );
+    qDebug() << "CREATING DYNAMIC CONTROL WRAPPER WITH ROW:" << row << layout;
     
-    QComboBox* typeSelector = new QComboBox( this );
-    m_typeSelector = new ReadOrWriteWidget( typeSelector, m_isLocal, this );
+    QComboBox* typeSelector = new QComboBox( parent );
+    m_typeSelector = new ReadOrWriteWidget( typeSelector, m_isLocal, m_parent );
     
-    m_matchSelector = new ReadOrWriteWidget( control->matchSelector(), m_isLocal, this );
-    m_entryWidget = new ReadOrWriteWidget( control->inputField(), m_isLocal, this );
-    
-    m_layout->setMargin( 0 );
-    m_layout->setSpacing( 0 );
-    setContentsMargins( 0, 0, 0, 0 );
-    
+    m_matchSelector = new ReadOrWriteWidget( control->matchSelector(), m_isLocal, m_parent );
+    m_entryWidget = new ReadOrWriteWidget( control->inputField(), m_isLocal, m_parent );
+        
     if( m_isLocal )
     {
         m_minusButton = initButton();
@@ -74,7 +69,7 @@ DynamicControlWidget::DynamicControlWidget( const Tomahawk::dyncontrol_ptr& cont
     connect( typeSelector, SIGNAL( activated( QString) ), SLOT( typeSelectorChanged( QString ) ) );    
     connect( m_control.data(), SIGNAL( changed() ), this, SIGNAL( changed() ) );
     
-    m_layout->addWidget( m_typeSelector, 0, Qt::AlignLeft );
+    m_layout->addWidget( m_typeSelector, row, 0, Qt::AlignLeft );
     
     if( !control.isNull() ) {
         foreach( const QString& type, control->typeSelectors() )
@@ -85,34 +80,45 @@ DynamicControlWidget::DynamicControlWidget( const Tomahawk::dyncontrol_ptr& cont
     
     if( m_isLocal )
     {
-        m_layout->addLayout( m_plusL, 0 );
+        m_layout->addLayout( m_plusL, m_row, 3, Qt::AlignCenter );
         m_plusL->setCurrentIndex( 1 );
     }
     
-    setMouseTracking( true );
-    setLayout( m_layout );
 }
 
-DynamicControlWidget::~DynamicControlWidget()
+DynamicControlWrapper::~DynamicControlWrapper()
 {
     // remove the controls widgets from our layout so they are not parented
     // we don't want to auto-delete them since the control should own them
     // if we delete them, then the control will be holding on to null ptrs
-    m_layout->removeWidget( m_control->inputField() );
+    removeFromLayout();
     m_control->inputField()->setParent( 0 );
-    m_layout->removeWidget( m_control->matchSelector() );
     m_control->matchSelector()->setParent( 0 );
+    
+    delete m_typeSelector;
+    delete m_matchSelector;
+    delete m_entryWidget;
 }
 
-dyncontrol_ptr DynamicControlWidget::control() const
+dyncontrol_ptr 
+DynamicControlWrapper::control() const
 {
     return m_control;
 }
 
-
-QToolButton* DynamicControlWidget::initButton()
+void 
+DynamicControlWrapper::removeFromLayout()
 {
-    QToolButton* btn = new QToolButton( this );
+    m_layout->removeWidget( m_typeSelector );
+    m_layout->removeWidget( m_matchSelector );
+    m_layout->removeWidget( m_entryWidget );
+    m_layout->removeItem( m_plusL );
+}
+
+
+QToolButton* DynamicControlWrapper::initButton()
+{
+    QToolButton* btn = new QToolButton( m_parent );
     btn->setSizePolicy( QSizePolicy::Fixed, QSizePolicy::Fixed );
     btn->setIconSize( QSize( 16, 16 ) );
     btn->setToolButtonStyle( Qt::ToolButtonIconOnly );
@@ -121,9 +127,9 @@ QToolButton* DynamicControlWidget::initButton()
     return btn;
 }
 
-QWidget* DynamicControlWidget::createDummy( QWidget* fromW )
+QWidget* DynamicControlWrapper::createDummy( QWidget* fromW )
 {
-    QWidget* dummy = new QWidget( this );
+    QWidget* dummy = new QWidget( m_parent );
     dummy->setContentsMargins( 0, 0, 0, 0 );
     dummy->setSizePolicy( QSizePolicy::Fixed, QSizePolicy::Fixed );
     dummy->setMinimumSize( fromW->size() );
@@ -133,7 +139,7 @@ QWidget* DynamicControlWidget::createDummy( QWidget* fromW )
 
 
 void 
-DynamicControlWidget::typeSelectorChanged( const QString& type, bool firstLoad )
+DynamicControlWrapper::typeSelectorChanged( const QString& type, bool firstLoad )
 {
     Q_ASSERT( m_layout );
     m_layout->removeWidget( m_matchSelector );
@@ -155,31 +161,32 @@ DynamicControlWidget::typeSelectorChanged( const QString& type, bool firstLoad )
         m_matchSelector->setWritableWidget( m_control->matchSelector() );
         m_matchSelector->setLabel( m_control->matchString() );
         m_matchSelector->setWritable( m_isLocal );
-        m_layout->insertWidget( 1, m_matchSelector, 0 );
+        m_layout->addWidget( m_matchSelector, m_row, 1, Qt::AlignCenter );
     }
     if( m_control->inputField() ) {
         m_entryWidget->setWritableWidget( m_control->inputField() );
         m_entryWidget->setLabel( m_control->input() );
         m_entryWidget->setWritable( m_isLocal );
-        m_layout->insertWidget( 2, m_entryWidget, 1  );
+        m_layout->addWidget( m_entryWidget, m_row, 2 );
+        
     }
     
     emit changed();
 }
-
+/*
 void 
-DynamicControlWidget::enterEvent(QEvent* ev)
+DynamicControlWrapper::enterEvent(QEvent* ev)
 {
     m_mouseOver = true;
     if( m_isLocal )
         m_plusL->setCurrentIndex( 0 );
     
     if( ev )
-        QWidget::enterEvent( ev );
+        QObject::enterEvent( ev );
 }
 
 void 
-DynamicControlWidget::leaveEvent(QEvent* ev)
+DynamicControlWrapper::leaveEvent(QEvent* ev)
 {
     m_mouseOver = true;
     if( m_isLocal )
@@ -188,17 +195,5 @@ DynamicControlWidget::leaveEvent(QEvent* ev)
     if( ev )
         QWidget::leaveEvent( ev );
 }
-
-void 
-DynamicControlWidget::mouseMoveEvent(QMouseEvent* ev)
-{
-    m_mouseOver = true;
-    setMouseTracking( false );
-    enterEvent( ev );
-}
-
-void 
-DynamicControlWidget::paintEvent(QPaintEvent* )
-{
-}
+*/
 
