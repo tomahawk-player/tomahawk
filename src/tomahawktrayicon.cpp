@@ -28,14 +28,14 @@ TomahawkTrayIcon::TomahawkTrayIcon( QObject* parent )
     m_contextMenu->addSeparator();
     m_quitAction = m_contextMenu->addAction( tr( "Quit" ) );
     
-    connect( (QObject*)APP->audioEngine(), SIGNAL( loading( Tomahawk::result_ptr ) ), SLOT( setResult( Tomahawk::result_ptr ) ) );
+    connect( AudioEngine::instance(), SIGNAL( loading( Tomahawk::result_ptr ) ), SLOT( setResult( Tomahawk::result_ptr ) ) );
 
-    connect( m_playAction, SIGNAL( triggered() ), (QObject*)APP->audioEngine(), SLOT( play() ) );
-    connect( m_pauseAction, SIGNAL( triggered() ), (QObject*)APP->audioEngine(), SLOT( pause() ) );
-    connect( m_stopAction, SIGNAL( triggered() ), (QObject*)APP->audioEngine(), SLOT( stop() ) );
-    connect( m_prevAction, SIGNAL( triggered() ), (QObject*)APP->audioEngine(), SLOT( previous() ) );
-    connect( m_nextAction, SIGNAL( triggered() ), (QObject*)APP->audioEngine(), SLOT( next() ) );
-    connect( m_quitAction, SIGNAL( triggered() ), (QObject*)APP, SLOT( quit() ) );
+    connect( m_playAction,  SIGNAL( triggered() ), AudioEngine::instance(), SLOT( play() ) );
+    connect( m_pauseAction, SIGNAL( triggered() ), AudioEngine::instance(), SLOT( pause() ) );
+    connect( m_stopAction,  SIGNAL( triggered() ), AudioEngine::instance(), SLOT( stop() ) );
+    connect( m_prevAction,  SIGNAL( triggered() ), AudioEngine::instance(), SLOT( previous() ) );
+    connect( m_nextAction,  SIGNAL( triggered() ), AudioEngine::instance(), SLOT( next() ) );
+    connect( m_quitAction,  SIGNAL( triggered() ), (QObject*)APP, SLOT( quit() ) );
     
     connect( &m_animationTimer, SIGNAL( timeout() ), SLOT( onAnimationTimer() ) );
     connect( this, SIGNAL( activated( QSystemTrayIcon::ActivationReason ) ), SLOT( onActivated( QSystemTrayIcon::ActivationReason ) ) );
@@ -142,11 +142,11 @@ TomahawkTrayIcon::event( QEvent* e )
     {
         if ( ((QWheelEvent*)e)->delta() > 0 )
         {
-            APP->audioEngine()->raiseVolume();
+            AudioEngine::instance()->raiseVolume();
         }
         else
         {
-            APP->audioEngine()->lowerVolume();
+            AudioEngine::instance()->lowerVolume();
         }
 
         return true;

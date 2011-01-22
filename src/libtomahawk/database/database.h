@@ -45,7 +45,8 @@ public slots:
 
 private:
     DatabaseImpl* m_impl;
-    DatabaseWorker *m_workerRO, *m_workerRW;
+    DatabaseWorker* m_workerRW;
+    QList<DatabaseWorker*> m_workersRO;
     bool m_indexReady;
 
     static Database* s_instance;

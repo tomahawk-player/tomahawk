@@ -15,18 +15,6 @@ DatabaseWorker::DatabaseWorker( DatabaseImpl* lib, Database* db, bool mutates )
     , m_outstanding( 0 )
 {
     moveToThread( this );
-    if( mutates )
-    {
-        connect( db, SIGNAL( newJobRW(QSharedPointer<DatabaseCommand>) ),
-                       SLOT( doWork(QSharedPointer<DatabaseCommand>) ),
-                 Qt::QueuedConnection );
-    }
-    else
-    {
-        connect( db, SIGNAL( newJobRO(QSharedPointer<DatabaseCommand>) ),
-                       SLOT( doWork(QSharedPointer<DatabaseCommand>) ),
-                 Qt::QueuedConnection );
-    }
 
     qDebug() << "CTOR DatabaseWorker" << this->thread();
 }
@@ -50,7 +38,19 @@ DatabaseWorker::run()
 
 
 void
-DatabaseWorker::doWork( QSharedPointer<DatabaseCommand> cmd )
+DatabaseWorker::enqueue( const QSharedPointer<DatabaseCommand>& cmd )
+{
+    QMutexLocker lock( &m_mut );
+    m_commands << cmd;
+    m_outstanding++;
+
+    if ( m_outstanding == 1 )
+        QTimer::singleShot( 0, this, SLOT( doWork() ) );
+}
+
+
+void
+DatabaseWorker::doWork()
 {
     /*
         Run the dbcmd. Only inside a transaction if the cmd does mutates.
@@ -59,12 +59,20 @@ DatabaseWorker::doWork( QSharedPointer<DatabaseCommand> cmd )
         log to the database oplog for replication to peers.
 
      */
+
     QTime timer;
     timer.start();
+
+    QSharedPointer<DatabaseCommand> cmd;
+    {
+        QMutexLocker lock( &m_mut );
+        cmd = m_commands.takeFirst();
+    }
+
     if( cmd->doesMutates() )
     {
         bool transok = m_dbimpl->database().transaction();
-        Q_ASSERT( transok );
+//        Q_ASSERT( transok );
         Q_UNUSED( transok );
     }
     try
@@ -141,7 +149,7 @@ DatabaseWorker::doWork( QSharedPointer<DatabaseCommand> cmd )
         if( cmd->doesMutates() )
             m_dbimpl->database().rollback();
 
-        Q_ASSERT( false );
+//        Q_ASSERT( false );
     }
     catch(...)
     {
@@ -154,6 +162,14 @@ DatabaseWorker::doWork( QSharedPointer<DatabaseCommand> cmd )
     }
 
     cmd->emitFinished();
+
+    {
+        QMutexLocker lock( &m_mut );
+        m_outstanding--;
+    }
+
+    if ( m_outstanding > 0 )
+        doWork();
 }
 
 

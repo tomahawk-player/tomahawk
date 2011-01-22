@@ -12,7 +12,6 @@
 class QAction;
 
 class AudioControls;
-class PlaylistManager;
 class TopBar;
 class TomahawkTrayIcon;
 
@@ -29,7 +28,6 @@ public:
     TomahawkWindow( QWidget* parent = 0 );
     ~TomahawkWindow();
 
-    PlaylistManager* playlistManager();
     AudioControls* audioControls() { return m_audioControls; }
     QStackedWidget* playlistStack();
 
@@ -70,7 +68,6 @@ private:
     Ui::TomahawkWindow* ui;
     TopBar* m_topbar;
     AudioControls* m_audioControls;
-    PlaylistManager* m_playlistManager;
     TomahawkTrayIcon* m_trayIcon;
     QNetworkAccessManager m_nam;
 

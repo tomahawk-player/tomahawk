@@ -44,7 +44,7 @@ void MusixMatchPlugin::getInfo(const QString &caller, const InfoType type, const
     url.addQueryItem("apikey", m_apiKey);
     url.addQueryItem("q_artist", artist);
     url.addQueryItem("q_track", track);
-    QNetworkReply* reply = TomahawkApp::instance()->nam()->get(QNetworkRequest(url));
+    QNetworkReply* reply = TomahawkUtils::nam()->get(QNetworkRequest(url));
     reply->setProperty("customData", QVariant::fromValue<Tomahawk::InfoSystem::InfoCustomDataHash>(customData));
     reply->setProperty("origData", data);
     reply->setProperty("caller", caller);
@@ -104,7 +104,7 @@ void MusixMatchPlugin::trackSearchSlot()
     QUrl url(requestString);
     url.addQueryItem("apikey", m_apiKey);
     url.addQueryItem("track_id", track_id);
-    QNetworkReply* newReply = TomahawkApp::instance()->nam()->get(QNetworkRequest(url));
+    QNetworkReply* newReply = TomahawkUtils::nam()->get(QNetworkRequest(url));
     newReply->setProperty("origData", oldReply->property("origData"));
     newReply->setProperty("customData", oldReply->property("customData"));
     newReply->setProperty("caller", oldReply->property("caller"));

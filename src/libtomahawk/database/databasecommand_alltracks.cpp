@@ -18,6 +18,10 @@ DatabaseCommand_AllTracks::exec( DatabaseImpl* dbi )
         case 0:
             break;
 
+        case Album:
+            m_orderToken = "album.name, file_join.albumpos";
+            break;
+
         case ModificationTime:
             m_orderToken = "file.mtime";
             break;
@@ -37,9 +41,10 @@ DatabaseCommand_AllTracks::exec( DatabaseImpl* dbi )
             "AND file_join.artist = artist.id "
             "AND file_join.track = track.id "
             "AND file.source %1 "
-            "%2 "
-            "%3 %4 %5"
+            "%2 %3 "
+            "%4 %5 %6"
             ).arg( m_collection->source()->isLocal() ? "IS NULL" : QString( "= %1" ).arg( m_collection->source()->id() ) )
+             .arg( !m_artist ? QString() : QString( "AND artist.id = %1" ).arg( m_artist->id() ) )
              .arg( !m_album ? QString() : QString( "AND album.id = %1" ).arg( m_album->id() ) )
              .arg( m_sortOrder > 0 ? QString( "ORDER BY %1" ).arg( m_orderToken ) : QString() )
              .arg( m_sortDescending ? "DESC" : QString() )

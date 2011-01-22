@@ -7,7 +7,7 @@
 #include "database/database.h"
 #include "database/databasecommand_collectionstats.h"
 #include "network/dbsyncconnection.h"
-#include "playlistmanager.h"
+#include "playlist/playlistmanager.h"
 
 using namespace Tomahawk;
 
@@ -173,5 +173,5 @@ SourceTreeItemWidget::onOffline()
 void
 SourceTreeItemWidget::onInfoButtonClicked()
 {
-    APP->playlistManager()->show( m_source );
+    PlaylistManager::instance()->show( m_source );
 }

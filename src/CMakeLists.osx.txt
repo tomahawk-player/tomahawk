@@ -1,14 +1,7 @@
-SET( tomahawkSourcesGui ${tomahawkSourcesGui} audio/rtaudiooutput.cpp )
-SET( tomahawkHeadersGui ${tomahawkHeadersGui} audio/rtaudiooutput.h )
-
-FIND_LIBRARY( COREAUDIO_LIBRARY CoreAudio )
-FIND_LIBRARY( COREFOUNDATION_LIBRARY CoreFoundation )
-MARK_AS_ADVANCED( COREAUDIO_LIBRARY COREFOUNDATION_LIBRARY )
-
-SET( OS_SPECIFIC_LINK_LIBRARIES 
-	${OS_SPECIFIC_LINK_LIBRARIES}
-	${COREAUDIO_LIBRARY} 
-	${COREFOUNDATION_LIBRARY}
-	rtaudio 
-	tomahawklib
+SET( OS_SPECIFIC_LINK_LIBRARIES
+    ${OS_SPECIFIC_LINK_LIBRARIES}
+    ${COREAUDIO_LIBRARY}
+    ${COREFOUNDATION_LIBRARY}
+    rtaudio
+    tomahawklib
 )

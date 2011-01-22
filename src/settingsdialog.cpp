@@ -39,7 +39,7 @@ SettingsDialog::SettingsDialog( QWidget *parent )
     TomahawkSettings* s = TomahawkSettings::instance();
 
     ui->checkBoxHttp->setChecked( s->httpEnabled() );
-    ui->checkBoxUpnp->setChecked( s->upnpEnabled() );
+    ui->checkBoxUpnp->setChecked( s->externalAddressMode() == TomahawkSettings::Upnp );
 
     // JABBER
     ui->checkBoxJabberAutoConnect->setChecked( s->jabberAutoConnect() );
@@ -99,7 +99,7 @@ SettingsDialog::~SettingsDialog()
         }
 
         s->setHttpEnabled(                                  ui->checkBoxHttp->checkState() == Qt::Checked );
-        s->setUPnPEnabled(                                  ui->checkBoxUpnp->checkState() == Qt::Checked );
+        s->setExternalAddressMode(ui->checkBoxUpnp->checkState() == Qt::Checked ? TomahawkSettings::Upnp : TomahawkSettings::Lan);
 
         s->setJabberAutoConnect(                            ui->checkBoxJabberAutoConnect->checkState() == Qt::Checked );
         s->setJabberUsername(                               ui->jabberUsername->text() );
@@ -201,9 +201,9 @@ SettingsDialog::testLastFmLogin()
 {
 #ifndef NO_LIBLASTFM
     ui->pushButtonTestLastfmLogin->setEnabled( false );
-    ui->pushButtonTestLastfmLogin->setText(  "Testing..." );
+    ui->pushButtonTestLastfmLogin->setText( "Testing..." );
 
-    QString authToken =  md5( ( ui->lineEditLastfmUsername->text() + md5( ui->lineEditLastfmPassword->text().toUtf8() ) ).toUtf8() );
+    QString authToken = md5( ( ui->lineEditLastfmUsername->text() + md5( ui->lineEditLastfmPassword->text().toUtf8() ) ).toUtf8() );
 
     // now authenticate w/ last.fm and get our session key
     QMap<QString, QString> query;
@@ -303,9 +303,9 @@ ProxyDialog::saveSettings()
         return;
 
     QNetworkProxy proxy( static_cast<QNetworkProxy::ProxyType>(s->proxyType()), s->proxyHost(), s->proxyPort(), s->proxyUsername(), s->proxyPassword() );
-    QNetworkAccessManager* nam = TomahawkApp::instance()->nam();
+    QNetworkAccessManager* nam = TomahawkUtils::nam();
     nam->setProxy( proxy );
-    QNetworkProxy* globalProxy = TomahawkApp::instance()->proxy();
+    QNetworkProxy* globalProxy = TomahawkUtils::proxy();
     QNetworkProxy* oldProxy = globalProxy;
     globalProxy = new QNetworkProxy( proxy );
     if( oldProxy )

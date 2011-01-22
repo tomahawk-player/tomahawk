@@ -492,12 +492,12 @@
   <customwidget>
    <class>ImageButton</class>
    <extends>QPushButton</extends>
-   <header>imagebutton.h</header>
+   <header>utils/imagebutton.h</header>
   </customwidget>
   <customwidget>
    <class>QueryLabel</class>
    <extends>QLabel</extends>
-   <header>querylabel.h</header>
+   <header>utils/querylabel.h</header>
   </customwidget>
  </customwidgets>
  <resources/>

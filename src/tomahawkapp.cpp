@@ -21,7 +21,7 @@
 #include "scriptresolver.h"
 #include "sourcelist.h"
 
-#include "audioengine.h"
+#include "audio/audioengine.h"
 
 #ifndef TOMAHAWK_HEADLESS
     #include "tomahawkwindow.h"
@@ -102,8 +102,6 @@ using namespace Tomahawk;
 TomahawkApp::TomahawkApp( int& argc, char *argv[] )
     : TOMAHAWK_APPLICATION( argc, argv )
     , m_audioEngine( 0 )
-    , m_nam( 0 )
-    , m_proxy( 0 )
     , m_infoSystem( 0 )
 {
     qsrand( QTime( 0, 0, 0 ).secsTo( QTime::currentTime() ) );
@@ -141,7 +139,7 @@ TomahawkApp::TomahawkApp( int& argc, char *argv[] )
 
 #ifndef NO_LIBLASTFM
         m_scrobbler = new Scrobbler( this );
-        m_nam = new lastfm::NetworkAccessManager( this );
+        TomahawkUtils::setNam( new lastfm::NetworkAccessManager( this ) );
 
         connect( m_audioEngine, SIGNAL( started( const Tomahawk::result_ptr& ) ),
                  m_scrobbler,     SLOT( trackStarted( const Tomahawk::result_ptr& ) ), Qt::QueuedConnection );
@@ -155,23 +153,22 @@ TomahawkApp::TomahawkApp( int& argc, char *argv[] )
         connect( m_audioEngine, SIGNAL( stopped() ),
                  m_scrobbler,     SLOT( trackStopped() ), Qt::QueuedConnection );
 #else
-        m_nam = new QNetworkAccessManager;
+        TomahawkUtils::setNam( new QNetworkAccessManager );
 #endif
 
     // Set up proxy
     if( TomahawkSettings::instance()->proxyType() != QNetworkProxy::NoProxy && !TomahawkSettings::instance()->proxyHost().isEmpty() )
     {
         qDebug() << "Setting proxy to saved values";
-        m_proxy = new QNetworkProxy( static_cast<QNetworkProxy::ProxyType>(TomahawkSettings::instance()->proxyType()), TomahawkSettings::instance()->proxyHost(), TomahawkSettings::instance()->proxyPort(), TomahawkSettings::instance()->proxyUsername(), TomahawkSettings::instance()->proxyPassword() );
-        qDebug() << "Proxy type =" << QString::number( static_cast<int>(m_proxy->type()) );
-        qDebug() << "Proxy host =" << m_proxy->hostName();
-        QNetworkAccessManager* nam = TomahawkApp::instance()->nam();
-        nam->setProxy( *m_proxy );
+        TomahawkUtils::setProxy( new QNetworkProxy( static_cast<QNetworkProxy::ProxyType>(TomahawkSettings::instance()->proxyType()), TomahawkSettings::instance()->proxyHost(), TomahawkSettings::instance()->proxyPort(), TomahawkSettings::instance()->proxyUsername(), TomahawkSettings::instance()->proxyPassword() ) );
+        qDebug() << "Proxy type =" << QString::number( static_cast<int>(TomahawkUtils::proxy()->type()) );
+        qDebug() << "Proxy host =" << TomahawkUtils::proxy()->hostName();
+        TomahawkUtils::nam()->setProxy( *TomahawkUtils::proxy() );
     }
     else
-        m_proxy = new QNetworkProxy( QNetworkProxy::NoProxy );
+        TomahawkUtils::setProxy( new QNetworkProxy( QNetworkProxy::NoProxy ) );
 
-    QNetworkProxy::setApplicationProxy( *m_proxy );
+    QNetworkProxy::setApplicationProxy( *TomahawkUtils::proxy() );
 
     m_sipHandler = new SipHandler( this );
     m_infoSystem = new Tomahawk::InfoSystem::InfoSystem( this );
@@ -229,13 +226,6 @@ AudioControls*
 TomahawkApp::audioControls()
 {
     return m_mainwindow->audioControls();
-}
-
-
-PlaylistManager*
-TomahawkApp::playlistManager()
-{
-    return m_mainwindow->playlistManager();
 }
 #endif
 

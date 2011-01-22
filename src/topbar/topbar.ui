@@ -311,7 +311,7 @@
   <customwidget>
    <class>AnimatedCounterLabel</class>
    <extends>QLabel</extends>
-   <header>animatedcounterlabel.h</header>
+   <header>utils/animatedcounterlabel.h</header>
   </customwidget>
   <customwidget>
    <class>SearchLineEdit</class>

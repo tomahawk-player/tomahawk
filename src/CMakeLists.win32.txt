@@ -9,47 +9,38 @@ ADD_DEFINITIONS( -static-libgcc )
 
 # Add manual locations to stuff:
 INCLUDE_DIRECTORIES(
-	../../libmad-0.15.1b
-	../../boost_1_43_0
-	../../gloox-1.0
-	../../qjson
-	../../liblastfm/_include
-	../../taglib-1.6.3/
-	../../taglib-1.6.3/build
-	../../taglib-1.6.3/taglib
-	../../taglib-1.6.3/taglib/toolkit
+    ../../libmad-0.15.1b
+    ../../boost_1_43_0
+    ../../gloox-1.0
+    ../../qjson
+    ../../liblastfm/_include
+    ../../taglib-1.6.3/
+    ../../taglib-1.6.3/build
+    ../../taglib-1.6.3/taglib
+    ../../taglib-1.6.3/taglib/toolkit
 )
 
 
 SET( GLOOX_LIBS
-	${GLOOX_LIBS}
-	gloox
+    ${GLOOX_LIBS}
+    gloox
 )
 
 SET( OS_SPECIFIC_LINK_LIBRARIES 
-        ${LIBLASTFM_LIBRARY}
-	${GLOOX_LIBS}
+    ${LIBLASTFM_LIBRARY}
+    ${GLOOX_LIBS}
 )
 
 SET( OS_SPECIFIC_LINK_LIBRARIES 
-	${OS_SPECIFIC_LINK_LIBRARIES}
-	"secur32.dll"
-	"crypt32.dll"
-	"${CMAKE_CURRENT_SOURCE_DIR}/../qxt/qxtweb-standalone/libqxtweb-standalone.dll"
-        "${CMAKE_CURRENT_SOURCE_DIR}/../build/src/libtomahawk/libtomahawklib.dll"
+    ${OS_SPECIFIC_LINK_LIBRARIES}
+    "secur32.dll"
+    "crypt32.dll"
+    "${CMAKE_CURRENT_SOURCE_DIR}/../qxt/qxtweb-standalone/libqxtweb-standalone.dll"
+    "${CMAKE_CURRENT_SOURCE_DIR}/../build/src/libtomahawk/libtomahawklib.dll"
 )
 
-SET( tomahawkSourcesGui ${tomahawkSourcesGui} audio/rtaudiooutput.cpp )
-SET( tomahawkHeadersGui ${tomahawkHeadersGui} audio/rtaudiooutput.h )
-	
 SET( OS_SPECIFIC_LINK_LIBRARIES 
-	${OS_SPECIFIC_LINK_LIBRARIES} 
-	"dsound.dll" 
-	"winmm.dll"
-        "iphlpapi.a"
-        "mad"
-	"vorbisfile"
-	"ogg"
-        "FLAC++"
-	"${CMAKE_CURRENT_SOURCE_DIR}/../rtaudio/librtaudio.dll"
+    ${OS_SPECIFIC_LINK_LIBRARIES} 
+    "iphlpapi.a"
+
 )

@@ -9,7 +9,7 @@
 #include "query.h"
 #include "sourcelist.h"
 #include "sourcetreeitem.h"
-#include "imagebutton.h"
+#include "utils/imagebutton.h"
 
 using namespace Tomahawk;
 

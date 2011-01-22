@@ -10,7 +10,6 @@ SET( QT_USE_QTXML TRUE )
 SET( QT_USE_PHONON TRUE )
 
 INCLUDE( ${QT_USE_FILE} )
-
 INCLUDE( ${CMAKE_MODULE_PATH}/AddAppIconMacro.cmake )
 
 #SET( CMAKE_BUILD_TYPE "Release" )
@@ -29,60 +28,24 @@ SET( TOMAHAWK_INC_DIR "${CMAKE_CURRENT_SOURCE_DIR}/../include/" )
 #ENDFOREACH( moddir )
 
 SET( tomahawkSources ${tomahawkSources}
-     audio/audioengine.cpp
-
-     utils/tomahawkutils.cpp
-
      sip/SipHandler.cpp
 
      infosystem/infosystem.cpp
      infosystem/infoplugins/echonestplugin.cpp
      infosystem/infoplugins/musixmatchplugin.cpp
 
-     musicscanner.cpp
-     scriptresolver.cpp
-
-     scrobbler.cpp
      xmppbot/xmppbot.cpp
      web/api_v1.cpp
+
+     musicscanner.cpp
+     scriptresolver.cpp
+     scrobbler.cpp
 
      tomahawkapp.cpp
      main.cpp
 )
 
 SET( tomahawkSourcesGui ${tomahawkSourcesGui}
-     xspfloader.cpp
-
-     utils/querylabel.cpp
-     utils/elidedlabel.cpp
-     utils/imagebutton.cpp
-     utils/progresstreeview.cpp
-     utils/proxystyle.cpp
-     utils/widgetdragfilter.cpp
-     utils/animatedsplitter.cpp
-
-     playlist/collectionmodel.cpp
-     playlist/collectionproxymodel.cpp
-     playlist/collectionflatmodel.cpp
-     playlist/collectionview.cpp
-     playlist/playlistmanager.cpp
-     playlist/plitem.cpp
-     playlist/playlistmodel.cpp
-     playlist/playlistproxymodel.cpp
-     playlist/playlistview.cpp
-     playlist/playlistitemdelegate.cpp
-     playlist/queueproxymodel.cpp
-     playlist/queueview.cpp
-     playlist/trackmodel.cpp
-     playlist/trackproxymodel.cpp
-     playlist/trackview.cpp
-     playlist/trackheader.cpp
-     playlist/albumitem.cpp
-     playlist/albummodel.cpp
-     playlist/albumproxymodel.cpp
-     playlist/albumitemdelegate.cpp
-     playlist/albumview.cpp
-
      sourcetree/sourcesmodel.cpp
      sourcetree/sourcetreeitem.cpp
      sourcetree/sourcetreeitemwidget.cpp
@@ -94,72 +57,31 @@ SET( tomahawkSourcesGui ${tomahawkSourcesGui}
      topbar/lineedit.cpp
      topbar/searchbutton.cpp
 
-     infowidgets/sourceinfowidget.cpp
-
-     widgets/newplaylistwidget.cpp
-     widgets/welcomewidget.cpp
-
      transferview.cpp
-     tomahawkwindow.cpp
      tomahawktrayicon.cpp
      audiocontrols.cpp
      settingsdialog.cpp
+     tomahawkwindow.cpp
 )
 
 SET( tomahawkHeaders ${tomahawkHeaders}
      "${TOMAHAWK_INC_DIR}/tomahawk/tomahawkapp.h"
-
      "${TOMAHAWK_INC_DIR}/tomahawk/infosystem.h"
-
-     audio/transcodeinterface.h
-     audio/audioengine.h
 
      sip/SipHandler.h
 
      infosystem/infoplugins/echonestplugin.h
      infosystem/infoplugins/musixmatchplugin.h
 
-     musicscanner.h
-     scriptresolver.h
-
-     scrobbler.h
      xmppbot/xmppbot.h
      web/api_v1.h
+
+     musicscanner.h
+     scriptresolver.h
+     scrobbler.h
 )
 
 SET( tomahawkHeadersGui ${tomahawkHeadersGui}
-     xspfloader.h
-
-     utils/querylabel.h
-     utils/elidedlabel.h
-     utils/animatedcounterlabel.h
-     utils/imagebutton.h
-     utils/progresstreeview.h
-     utils/widgetdragfilter.h
-     utils/animatedsplitter.h
-
-     playlist/collectionmodel.h
-     playlist/collectionproxymodel.h
-     playlist/collectionflatmodel.h
-     playlist/collectionview.h
-     playlist/playlistmanager.h
-     playlist/plitem.h
-     playlist/playlistmodel.h
-     playlist/playlistproxymodel.h
-     playlist/playlistview.h
-     playlist/playlistitemdelegate.h
-     playlist/queueproxymodel.h
-     playlist/queueview.h
-     playlist/trackmodel.h
-     playlist/trackproxymodel.h
-     playlist/trackview.h
-     playlist/trackheader.h
-     playlist/albumitem.h
-     playlist/albummodel.h
-     playlist/albumproxymodel.h
-     playlist/albumitemdelegate.h
-     playlist/albumview.h
-
      sourcetree/sourcesmodel.h
      sourcetree/sourcetreeitem.h
      sourcetree/sourcetreeitemwidget.h
@@ -172,16 +94,11 @@ SET( tomahawkHeadersGui ${tomahawkHeadersGui}
      topbar/lineedit_p.h
      topbar/searchbutton.h
 
-     infowidgets/sourceinfowidget.h
-
-     widgets/newplaylistwidget.h
-     widgets/welcomewidget.h
-
      transferview.h
-     tomahawkwindow.h
      tomahawktrayicon.h
      audiocontrols.h
      settingsdialog.h
+     tomahawkwindow.h
 )
 
 SET( tomahawkUI ${tomahawkUI}
@@ -192,9 +109,6 @@ SET( tomahawkUI ${tomahawkUI}
      audiocontrols.ui
      sourcetree/sourcetreeitemwidget.ui
      topbar/topbar.ui
-     infowidgets/sourceinfowidget.ui
-     widgets/newplaylistwidget.ui
-     widgets/welcomewidget.ui
 )
 
 INCLUDE_DIRECTORIES(
@@ -212,6 +126,7 @@ INCLUDE_DIRECTORIES(
     libtomahawk
 
     ../alsa-playback
+    ../rtaudio
     ../qxt/qxtweb-standalone/qxtweb
 
     /usr/include/taglib
@@ -242,9 +157,9 @@ SET( final_src ${final_src} ${tomahawkMoc} ${tomahawkSources} ${tomahawkHeaders}
 
 IF( "${gui}" STREQUAL "no" )
 ELSE()
-	qt4_wrap_ui( tomahawkUI_H ${tomahawkUI} )
-	qt4_wrap_cpp( tomahawkMocGui ${tomahawkHeadersGui} )
-	SET( final_src ${final_src} ${tomahawkUI_H} ${tomahawkMocGui} ${tomahawkSourcesGui} ${RC_SRCS} )
+    qt4_wrap_ui( tomahawkUI_H ${tomahawkUI} )
+    qt4_wrap_cpp( tomahawkMocGui ${tomahawkHeadersGui} )
+    SET( final_src ${final_src} ${tomahawkUI_H} ${tomahawkMocGui} ${tomahawkSourcesGui} ${RC_SRCS} )
 ENDIF()
 
 IF( UNIX AND NOT APPLE )
