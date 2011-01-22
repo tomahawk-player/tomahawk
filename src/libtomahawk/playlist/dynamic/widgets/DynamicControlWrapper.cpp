@@ -59,7 +59,7 @@ DynamicControlWrapper::DynamicControlWrapper( const Tomahawk::dyncontrol_ptr& co
         connect( m_minusButton, SIGNAL( clicked( bool ) ), this, SIGNAL( removeControl() ) );
         
         
-        m_plusL = new QStackedLayout;
+        m_plusL = new QStackedLayout();
         m_plusL->setContentsMargins( 0, 0, 0, 0 );
         m_plusL->setMargin( 0 );
         m_plusL->addWidget( m_minusButton );
@@ -81,7 +81,7 @@ DynamicControlWrapper::DynamicControlWrapper( const Tomahawk::dyncontrol_ptr& co
     if( m_isLocal )
     {
         m_layout->addLayout( m_plusL, m_row, 3, Qt::AlignCenter );
-        m_plusL->setCurrentIndex( 1 );
+        m_plusL->setCurrentIndex( 0 );
     }
     
 }
@@ -98,6 +98,8 @@ DynamicControlWrapper::~DynamicControlWrapper()
     delete m_typeSelector;
     delete m_matchSelector;
     delete m_entryWidget;
+    delete m_minusButton;
+    delete m_plusL;
 }
 
 dyncontrol_ptr 

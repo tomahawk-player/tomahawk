@@ -92,11 +92,23 @@ DynamicControlList::init()
 void 
 DynamicControlList::setControls( const geninterface_ptr& generator, const QList< dyncontrol_ptr >& controls, bool isLocal )
 {
+    if( m_controls.size() == controls.size() ) { // check if we're setting the same controls we already have, and exit if we are
+        bool different = false;
+        for( int i = 0; i < m_controls.size(); i++ ) {
+            if( m_controls.value( i )->control().data() != controls.value( i ).data() ) {
+                different = true;
+                break;
+            }
+        }
+        if( !different ) { // no work to do
+            return;
+        }
+    }
+    
     if( !m_controls.isEmpty() ) {
         qDeleteAll( m_controls );
         m_controls.clear();
     }
-    
     
     m_layout->removeItem( m_collapseLayout );
     
@@ -124,11 +136,14 @@ DynamicControlList::setControls( const geninterface_ptr& generator, const QList<
 
 void DynamicControlList::addNewControl()
 {
+    m_layout->removeItem( m_collapseLayout );
+    
     dyncontrol_ptr control = m_generator->createControl();
     m_controls.append( new DynamicControlWrapper( control, m_layout, m_controls.size(), m_isLocal, this ) );
     connect( m_controls.last(), SIGNAL( removeControl() ), this, SLOT( removeControl() ) );
     connect( m_controls.last(), SIGNAL( changed() ), this, SLOT( controlChanged() ) );
     
+    m_layout->addItem( m_collapseLayout, m_layout->rowCount(), 0, 1, 4, Qt::AlignCenter );
     emit controlsChanged();
 }
 

@@ -38,6 +38,9 @@ ReadOrWriteWidget::ReadOrWriteWidget( QWidget* writableWidget, bool writable, QW
     setWritable( m_writable );
     
     setSizePolicy( QSizePolicy::Expanding, QSizePolicy::Fixed );
+    setContentsMargins( 0, 0, 0, 0 );
+    m_layout->setContentsMargins( 0, 0, 0, 0 );
+    m_layout->setSpacing( 0 );
 }
 
 void 

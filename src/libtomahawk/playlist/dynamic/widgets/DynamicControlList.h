@@ -22,6 +22,7 @@
 
 #include <QStackedWidget>
 
+class QEvent;
 class QGridLayout;
 class QPushButton;
 class QHBoxLayout;
@@ -48,7 +49,7 @@ public:
     
     void setControls( const geninterface_ptr& generator, const QList< dyncontrol_ptr >& controls, bool isLocal );
     QList< DynamicControlWrapper* > controls() const { return m_controls; }
-        
+    
 signals:
     void controlsChanged();
     void controlChanged( const Tomahawk::dyncontrol_ptr& control );

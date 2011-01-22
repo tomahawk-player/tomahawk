@@ -105,8 +105,18 @@ DynamicWidget::~DynamicWidget()
 {
 }
 
-void DynamicWidget::loadDynamicPlaylist(const Tomahawk::dynplaylist_ptr& playlist)
+void 
+DynamicWidget::loadDynamicPlaylist( const Tomahawk::dynplaylist_ptr& playlist )
 {
+    // if we're being told to load the same dynamic playlist over again, only do it if the controls have a different number
+    if( !m_playlist.isNull() && ( m_playlist.data() == playlist.data() ) // same playlist pointer
+        && m_playlist->generator()->controls().size() == playlist->generator()->controls().size() ) {
+        // we can skip our work. just let the dynamiccontrollist show the difference
+        m_controls->setControls( m_playlist->generator(), m_playlist->generator()->controls(), m_playlist->author()->isLocal() );
+    
+        return;
+    }
+    
     if( !m_playlist.isNull() ) {
         disconnect( m_playlist->generator().data(), SIGNAL( generated( QList<Tomahawk::query_ptr> ) ), this, SLOT( tracksGenerated( QList<Tomahawk::query_ptr> ) ) );
         disconnect( m_playlist.data(), SIGNAL( dynamicRevisionLoaded( Tomahawk::DynamicPlaylistRevision) ), this, SLOT(onRevisionLoaded( Tomahawk::DynamicPlaylistRevision) ) );
