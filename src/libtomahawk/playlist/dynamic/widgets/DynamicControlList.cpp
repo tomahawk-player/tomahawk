@@ -67,7 +67,7 @@ DynamicControlList::init()
     m_layout->setContentsMargins( 0, 0, 0, 0 );
     m_layout->setSizeConstraint( QLayout::SetMinimumSize );
     
-    m_collapseLayout = new QHBoxLayout( this );
+    m_collapseLayout = new QHBoxLayout();
     m_collapseLayout->setContentsMargins( 0, 0, 0, 0 );
     m_collapseLayout->setMargin( 0 );
     m_collapseLayout->setSpacing( 0 );
@@ -92,7 +92,7 @@ DynamicControlList::init()
 void 
 DynamicControlList::setControls( const geninterface_ptr& generator, const QList< dyncontrol_ptr >& controls, bool isLocal )
 {
-    if( m_controls.size() == controls.size() ) { // check if we're setting the same controls we already have, and exit if we are
+    if( m_controls.size() == controls.size() && controls.size() > 0 ) { // check if we're setting the same controls we already have, and exit if we are
         bool different = false;
         for( int i = 0; i < m_controls.size(); i++ ) {
             if( m_controls.value( i )->control().data() != controls.value( i ).data() ) {
