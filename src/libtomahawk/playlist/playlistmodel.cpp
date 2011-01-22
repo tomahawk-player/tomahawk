@@ -8,6 +8,7 @@
 
 #include "database/database.h"
 #include "database/databasecommand_playbackhistory.h"
+#include "dynamic/GeneratorInterface.h"
 
 using namespace Tomahawk;
 
@@ -337,7 +338,14 @@ PlaylistModel::onPlaylistChanged( bool waitForUpdate )
 
     m_waitForUpdate = waitForUpdate;
     QString newrev = uuid();
-    m_playlist->createNewRevision( newrev, m_playlist->currentrevision(), l );
+    if( dynplaylist_ptr dynplaylist = m_playlist.dynamicCast<Tomahawk::DynamicPlaylist>() ) {
+        if( dynplaylist->mode() == OnDemand )
+            dynplaylist->createNewRevision( newrev );
+        else if( dynplaylist->mode() == Static )
+            dynplaylist->createNewRevision( newrev, dynplaylist->currentrevision(), dynplaylist->type(), dynplaylist->generator()->controls(), l );
+    } else {
+        m_playlist->createNewRevision( newrev, m_playlist->currentrevision(), l );
+    }
 }
 
 
