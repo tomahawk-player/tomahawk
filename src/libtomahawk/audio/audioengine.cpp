@@ -45,12 +45,10 @@ AudioEngine::~AudioEngine()
 {
     qDebug() << Q_FUNC_INFO << "waiting for event loop to finish...";
 
-    m_mediaObject->stop();
+    stop();
 
     delete m_audioOutput;
     delete m_mediaObject;
-
-    m_input.clear();
 }
 
 
