@@ -114,6 +114,9 @@ DynamicWidget::loadDynamicPlaylist( const Tomahawk::dynplaylist_ptr& playlist )
         // we can skip our work. just let the dynamiccontrollist show the difference
         m_controls->setControls( m_playlist->generator(), m_playlist->generator()->controls(), m_playlist->author()->isLocal() );
     
+        m_playlist = playlist;
+        m_model->loadPlaylist( m_playlist );
+    
         return;
     }
     
