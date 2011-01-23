@@ -9,6 +9,8 @@
 #include "playlist/playlistmanager.h"
 #include "playlist/playlistmodel.h"
 
+#include "widgets/overlaywidget.h"
+
 #include "pipeline.h"
 #include "utils/xspfloader.h"
 
@@ -36,6 +38,7 @@ NewPlaylistWidget::NewPlaylistWidget( QWidget* parent )
 
     m_suggestionsModel = new PlaylistModel( ui->suggestionsView );
     ui->suggestionsView->setModel( m_suggestionsModel );
+    ui->suggestionsView->overlay()->setEnabled( false );
 
     connect( &m_filterTimer, SIGNAL( timeout() ), SLOT( updateSuggestions() ) );
 }

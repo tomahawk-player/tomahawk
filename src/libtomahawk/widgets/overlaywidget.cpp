@@ -46,6 +46,9 @@ OverlayWidget::pixmap()
 void
 OverlayWidget::paint( QPainter* painter )
 {
+    if ( !isEnabled() )
+        return;
+
     pixmap(); // cache the image
 
     QRect center( QPoint( ( painter->viewport().width() - m_pixmap.width() ) / 2,
