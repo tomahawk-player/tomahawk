@@ -40,8 +40,6 @@ namespace Tomahawk
 
 #ifndef TOMAHAWK_HEADLESS
 class TomahawkWindow;
-class PlaylistManager;
-#include <QStackedWidget>
 #endif
 
 
@@ -85,6 +83,7 @@ private:
     QList<Tomahawk::collection_ptr> m_collections;
     QList<TomahawkPlugin*> m_plugins;
 
+    Database* m_database;
     AudioEngine* m_audioEngine;
     SipHandler* m_sipHandler;
     Servent* m_servent;

@@ -114,15 +114,11 @@ TomahawkApp::TomahawkApp( int& argc, char *argv[] )
     setWindowIcon( QIcon( RESPATH "icons/tomahawk-icon-128x128.png" ) );
 #endif
 
-#ifndef NO_LIBLASTFM
-    m_scrobbler = 0;
-#endif
-
     qDebug() << "TomahawkApp thread:" << this->thread();
     setOrganizationName( "Tomahawk" );
     setOrganizationDomain( "tomahawk.org" );
     setApplicationName( "Player" );
-    setApplicationVersion( "1.0" ); // FIXME: last.fm "tst" auth requires 1.0 version according to docs, will change when we get our own identifier
+    setApplicationVersion( "0.0.0" );
     registerMetaTypes();
     setupLogfile();
 
@@ -157,7 +153,8 @@ TomahawkApp::TomahawkApp( int& argc, char *argv[] )
 #endif
 
     // Set up proxy
-    if( TomahawkSettings::instance()->proxyType() != QNetworkProxy::NoProxy && !TomahawkSettings::instance()->proxyHost().isEmpty() )
+    if( TomahawkSettings::instance()->proxyType() != QNetworkProxy::NoProxy &&
+        !TomahawkSettings::instance()->proxyHost().isEmpty() )
     {
         qDebug() << "Setting proxy to saved values";
         TomahawkUtils::setProxy( new QNetworkProxy( static_cast<QNetworkProxy::ProxyType>(TomahawkSettings::instance()->proxyType()), TomahawkSettings::instance()->proxyHost(), TomahawkSettings::instance()->proxyPort(), TomahawkSettings::instance()->proxyUsername(), TomahawkSettings::instance()->proxyPassword() ) );
@@ -211,6 +208,8 @@ TomahawkApp::~TomahawkApp()
     delete m_mainwindow;
     delete m_audioEngine;
 #endif
+
+    delete m_database;
 }
 
 
@@ -282,7 +281,7 @@ TomahawkApp::setupDatabase()
     }
 
     qDebug() << "Using database:" << dbpath;
-    new Database( dbpath, this );
+    m_database = new Database( dbpath, this );
     Pipeline::instance()->databaseReady();
 }
 
@@ -391,7 +390,7 @@ TomahawkApp::setupSIP()
         m_xmppBot = new XMPPBot( this );
 
         m_sipHandler->connect();
-        //    m_sipHandler->setProxy( m_proxy );
+//        m_sipHandler->setProxy( *TomahawkUtils::proxy() );
     }
 }
 
