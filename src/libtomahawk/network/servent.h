@@ -4,7 +4,7 @@
 // port for servent to listen on
 #define DEFAULT_LISTEN_PORT 50210
 // time before new connection terminates if no auth received
-#define AUTH_TIMEOUT 15000
+#define AUTH_TIMEOUT 180000
 
 #include <QObject>
 #include <QTcpServer>
