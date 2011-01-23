@@ -15,8 +15,11 @@
  ****************************************************************************************/
 
 #include "DynamicView.h"
+
+#include "widgets/overlaywidget.h"
+#include "trackmodel.h"
+
 #include <QPainter>
-#include <widgets/overlaywidget.h>
 
 using namespace Tomahawk;
 
@@ -30,6 +33,7 @@ DynamicView::DynamicView( QWidget* parent )
     m_fadeOut = new QPropertyAnimation( overlay(), "opacity" );
     m_fadeOut->setDuration( 500 );
     m_fadeOut->setEndValue( 0 );
+    m_fadeOut->setEasingCurve( QEasingCurve::InOutQuad );
     
     connect( &m_showTimer, SIGNAL( timeout() ), m_fadeOut, SLOT( start() ) ); 
     
@@ -51,10 +55,13 @@ DynamicView::showMessageTimeout( const QString& title, const QString& body )
 void 
 DynamicView::paintEvent( QPaintEvent* event )
 {
+    QPainter painter( viewport() );
     if ( m_showTimer.isActive() || m_fadeOut->state() == QPropertyAnimation::Running )
     {
-        QPainter painter( viewport() );
-        overlay()->setText( QString( "%1\n%2" ).arg( m_title, m_body ) );
+        overlay()->setText( QString( "%1:\n\n%2" ).arg( m_title, m_body ) );
+        overlay()->paint( &painter );
+    } else if( !model()->trackCount() ) {
+        overlay()->setText( tr( "Add some filters above, and press Generate to get started!" ) );
         overlay()->paint( &painter );
     } else {
         PlaylistView::paintEvent( event );
