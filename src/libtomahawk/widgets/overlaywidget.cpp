@@ -28,7 +28,7 @@ void
 OverlayWidget::setOpacity( qreal opacity )
 {
     m_opacity = opacity;
-    m_parent->reset();
+    m_parent->viewport()->update();
 }
 
 

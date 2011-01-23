@@ -50,6 +50,7 @@ DynamicView::showMessageTimeout( const QString& title, const QString& body )
     m_title = title;
     m_body = body;
     m_showTimer.start();
+    viewport()->update();
 }
 
 void 
