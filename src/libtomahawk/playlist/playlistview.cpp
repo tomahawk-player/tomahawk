@@ -2,8 +2,10 @@
 
 #include <QDebug>
 #include <QKeyEvent>
+#include <QPainter>
 
 #include "playlist/playlistproxymodel.h"
+#include "widgets/overlaywidget.h"
 
 using namespace Tomahawk;
 
@@ -104,4 +106,18 @@ void
 PlaylistView::deleteItems()
 {
     proxyModel()->removeIndexes( selectedIndexes() );
+}
+
+
+void
+PlaylistView::paintEvent( QPaintEvent* event )
+{
+    TrackView::paintEvent( event );
+    QPainter painter( viewport() );
+
+    if ( !model()->trackCount() )
+    {
+        overlay()->setText( tr( "This playlist is currently empty. Add some tracks to it and enjoy the music!" ) );
+        overlay()->paint( &painter );
+    }
 }

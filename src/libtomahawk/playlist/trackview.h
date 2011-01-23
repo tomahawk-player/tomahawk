@@ -12,6 +12,7 @@ class PlaylistInterface;
 class TrackHeader;
 class TrackModel;
 class TrackProxyModel;
+class OverlayWidget;
 
 class DLLEXPORT TrackView : public QTreeView
 {
@@ -23,10 +24,11 @@ public:
 
     void setProxyModel( TrackProxyModel* model );
 
-    TrackModel* model() { return m_model; }
-    TrackProxyModel* proxyModel() { return m_proxyModel; }
-    PlaylistItemDelegate* delegate() { return m_delegate; }
-    TrackHeader* header() { return m_header; }
+    TrackModel* model() const { return m_model; }
+    TrackProxyModel* proxyModel() const { return m_proxyModel; }
+    PlaylistItemDelegate* delegate() const { return m_delegate; }
+    TrackHeader* header() const { return m_header; }
+    OverlayWidget* overlay() const { return m_overlay; }
 
     void setModel( TrackModel* model );
 
@@ -61,6 +63,7 @@ private:
     TrackProxyModel* m_proxyModel;
     PlaylistItemDelegate* m_delegate;
     TrackHeader* m_header;
+    OverlayWidget* m_overlay;
 
     bool m_resizing;
     bool m_dragging;
