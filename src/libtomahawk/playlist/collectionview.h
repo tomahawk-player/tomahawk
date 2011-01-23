@@ -20,6 +20,7 @@ private slots:
 
 protected:
     virtual void dragEnterEvent( QDragEnterEvent* event );
+    void paintEvent( QPaintEvent* event );
 
 private:
     void setupMenus();

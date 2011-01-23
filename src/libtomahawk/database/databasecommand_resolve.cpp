@@ -69,8 +69,6 @@ DatabaseCommand_Resolve::exec( DatabaseImpl* lib )
     QList< int > tracks  = lib->searchTable( "track", trackname, 10 );
     QList< int > albums  = lib->searchTable( "album", albumname, 10 );
 
-    //qDebug() << "searchTable calls duration:" << timer.elapsed() << "ms";
-
     if( artists.length() == 0 || tracks.length() == 0 )
     {
         //qDebug() << "No candidates found in first pass, aborting resolve" << artistname << trackname;
@@ -145,7 +143,7 @@ DatabaseCommand_Resolve::exec( DatabaseImpl* lib )
             {
                 //qDebug() << "Skipping result for offline sourceid:" << files_query.value( 13 ).toUInt();
                 // will happen for valid sources which are offline (and thus not in the sourcelist)
-                return;
+                continue;
             }
 
             m.insert( "url", QString( "servent://%1\t%2" ).arg( s->userName() ).arg( url_str ) );

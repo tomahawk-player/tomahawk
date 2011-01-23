@@ -55,11 +55,18 @@ public:
     void setJabberPort( int port );
     
     /// Network settings
+    enum ExternalAddressMode { Lan, DynDns, Upnp };
+    ExternalAddressMode externalAddressMode() const;
+    void setExternalAddressMode(ExternalAddressMode externalAddressMode);
+
     bool httpEnabled() const; /// true by default
     void setHttpEnabled( bool enable );
-    
-    bool upnpEnabled() const; /// true by default
-    void setUPnPEnabled( bool enable );
+
+    QString externalHostname() const;
+    void setExternalHostname( const QString& externalHostname );
+
+    int externalPort() const;
+    void setExternalPort( int externalPort );
 
     QString proxyHost() const;
     void setProxyHost( const QString &host );

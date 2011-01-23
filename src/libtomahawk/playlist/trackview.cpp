@@ -7,6 +7,7 @@
 
 #include "audio/audioengine.h"
 #include "utils/tomahawkutils.h"
+#include "widgets/overlaywidget.h"
 
 #include "trackheader.h"
 #include "playlistmanager.h"
@@ -23,6 +24,7 @@ TrackView::TrackView( QWidget* parent )
     , m_proxyModel( 0 )
     , m_delegate( 0 )
     , m_header( new TrackHeader( this ) )
+    , m_overlay( new OverlayWidget( this ) )
     , m_resizing( false )
 {
     setSortingEnabled( false );
@@ -54,6 +56,8 @@ TrackView::TrackView( QWidget* parent )
 TrackView::~TrackView()
 {
     qDebug() << Q_FUNC_INFO;
+
+    delete m_overlay;
 }
 
 
@@ -245,11 +249,18 @@ void
 TrackView::paintEvent( QPaintEvent* event )
 {
     QTreeView::paintEvent( event );
+    QPainter painter( viewport() );
+
+    if ( !proxyModel()->filter().isEmpty() && !proxyModel()->trackCount() &&
+         model()->trackCount() )
+    {
+        m_overlay->setText( tr( "Sorry, your filter '%1' did not match any results." ).arg( proxyModel()->filter() ) );
+        m_overlay->paint( &painter );
+    }
 
     if ( m_dragging )
     {
         // draw drop indicator
-        QPainter painter( viewport() );
         {
             // draw indicator for inserting items
             QBrush blendedBrush = viewOptions().palette.brush( QPalette::Normal, QPalette::Highlight );

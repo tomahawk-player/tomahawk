@@ -18,6 +18,7 @@
 #include "sourcelist.h"
 
 #include "portfwdthread.h"
+#include "tomahawksettings.h"
 
 using namespace Tomahawk;
 
@@ -82,30 +83,38 @@ Servent::startListening( QHostAddress ha, bool upnp, int port )
     }
 
     // --lanhack means to advertise your LAN IP over jabber as if it were externallyVisible
-    if( qApp->arguments().contains( "--lanhack" ) )
+    switch( TomahawkSettings::instance()->externalAddressMode() )
     {
-        QList<QHostAddress> ifs = QNetworkInterface::allAddresses();
-        foreach( QHostAddress ha, ifs )
-        {
-            if( ha.toString() == "127.0.0.1" ) continue;
-            if( ha.toString().contains( ":" ) ) continue; //ipv6
+        case TomahawkSettings::Lan:
+            foreach( QHostAddress ha, QNetworkInterface::allAddresses() )
+            {
+                if( ha.toString() == "127.0.0.1" ) continue;
+                if( ha.toString().contains( ":" ) ) continue; //ipv6
 
-            m_externalAddress = ha;
-            m_externalPort = m_port;
-            qDebug() << "LANHACK: set external address to lan address" << ha.toString();
+                m_externalAddress = ha;
+                m_externalPort = m_port;
+                qDebug() << "LANHACK: set external address to lan address" << ha.toString();
+                break;
+            }
             break;
-        }
-    }
-    else if( upnp )
-    {
-        // TODO check if we have a public/internet IP on this machine directly
-        m_portfwd = new PortFwdThread( m_port );
-        connect( m_portfwd, SIGNAL( externalAddressDetected( QHostAddress, unsigned int ) ),
-                              SLOT( setExternalAddress( QHostAddress, unsigned int ) ) );
-    }
-    else
-    {
-        emit ready();
+
+        case TomahawkSettings::DynDns:
+            qDebug() << "External address mode set to dyndns...";
+            m_externalHostname = TomahawkSettings::instance()->externalHostname();
+            m_externalPort = TomahawkSettings::instance()->externalPort();
+            qDebug() << m_externalHostname << m_externalPort;
+            break;
+
+        case TomahawkSettings::Upnp:
+            // TODO check if we have a public/internet IP on this machine directly
+            qDebug() << "External address mode set to upnp....";
+            m_portfwd = new PortFwdThread( m_port );
+            connect( m_portfwd, SIGNAL( externalAddressDetected( QHostAddress, unsigned int ) ),
+                                SLOT( setExternalAddress( QHostAddress, unsigned int ) ) );
+            break;
+
+        default:
+            emit ready();
     }
 
     return true;

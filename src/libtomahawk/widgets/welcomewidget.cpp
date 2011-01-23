@@ -6,6 +6,8 @@
 #include "playlist/playlistmanager.h"
 #include "playlist/playlistmodel.h"
 
+#include "widgets/overlaywidget.h"
+
 #include "sourcelist.h"
 #include "tomahawksettings.h"
 
@@ -19,7 +21,9 @@ WelcomeWidget::WelcomeWidget( QWidget* parent )
     , ui( new Ui::WelcomeWidget )
 {
     ui->setupUi( this );
+
     ui->playlistWidget->setItemDelegate( new PlaylistDelegate() );
+    ui->tracksView->overlay()->setEnabled( false );
 
     m_tracksModel = new PlaylistModel( ui->tracksView );
     ui->tracksView->setModel( m_tracksModel );

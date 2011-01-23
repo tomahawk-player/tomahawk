@@ -30,6 +30,7 @@ public:
 
     virtual Tomahawk::result_ptr siblingItem( int itemsAway );
 
+    virtual QString filter() const { return filterRegExp().pattern(); }
     virtual void setFilter( const QString& pattern );
 
     virtual PlaylistInterface::RepeatMode repeatMode() const { return m_repeatMode; }

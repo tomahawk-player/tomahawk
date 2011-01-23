@@ -2,8 +2,10 @@
 
 #include <QDebug>
 #include <QDragEnterEvent>
+#include <QPainter>
 
 #include "playlist/collectionproxymodel.h"
+#include "widgets/overlaywidget.h"
 
 using namespace Tomahawk;
 
@@ -68,4 +70,18 @@ CollectionView::onCustomContextMenu( const QPoint& pos )
         return;
 
     m_itemMenu.exec( mapToGlobal( pos ) );
+}
+
+
+void
+CollectionView::paintEvent( QPaintEvent* event )
+{
+    TrackView::paintEvent( event );
+    QPainter painter( viewport() );
+
+    if ( !model()->trackCount() )
+    {
+        overlay()->setText( tr( "This collection is empty." ) );
+        overlay()->paint( &painter );
+    }
 }

@@ -9,6 +9,8 @@
 #include "playlist/playlistmanager.h"
 #include "playlist/playlistmodel.h"
 
+#include "widgets/overlaywidget.h"
+
 #include "pipeline.h"
 #include "utils/xspfloader.h"
 
@@ -23,17 +25,20 @@ NewPlaylistWidget::NewPlaylistWidget( QWidget* parent )
 {
     ui->setupUi( this );
 
-    QPushButton* saveButton = new QPushButton( tr( "&Create Playlist" ) );
-    saveButton->setDefault( true );
+    m_saveButton = new QPushButton( tr( "&Create Playlist" ) );
+    m_saveButton->setDefault( true );
+    m_saveButton->setEnabled( false );
 
-    ui->buttonBox->addButton( saveButton, QDialogButtonBox::AcceptRole );
+    ui->buttonBox->addButton( m_saveButton, QDialogButtonBox::AcceptRole );
 
-    connect( ui->tagEdit, SIGNAL( textChanged( QString ) ), SLOT( tagChanged() ) );
+    connect( ui->titleEdit, SIGNAL( textChanged( QString ) ), SLOT( onTitleChanged( QString ) ) );
+    connect( ui->tagEdit, SIGNAL( textChanged( QString ) ), SLOT( onTagChanged() ) );
     connect( ui->buttonBox, SIGNAL( accepted() ), SLOT( savePlaylist() ) );
     connect( ui->buttonBox, SIGNAL( rejected() ), SLOT( cancel() ) );
 
     m_suggestionsModel = new PlaylistModel( ui->suggestionsView );
     ui->suggestionsView->setModel( m_suggestionsModel );
+    ui->suggestionsView->overlay()->setEnabled( false );
 
     connect( &m_filterTimer, SIGNAL( timeout() ), SLOT( updateSuggestions() ) );
 }
@@ -62,7 +67,14 @@ NewPlaylistWidget::changeEvent( QEvent* e )
 
 
 void
-NewPlaylistWidget::tagChanged()
+NewPlaylistWidget::onTitleChanged( const QString& title )
+{
+    m_saveButton->setEnabled( !title.isEmpty() );
+}
+
+
+void
+NewPlaylistWidget::onTagChanged()
 {
     m_tag = ui->tagEdit->text();
 

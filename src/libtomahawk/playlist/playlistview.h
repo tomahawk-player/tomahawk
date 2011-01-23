@@ -19,6 +19,7 @@ public:
 
 protected:
     void keyPressEvent( QKeyEvent* event );
+    void paintEvent( QPaintEvent* event );
 
 private slots:
     void onCustomContextMenu( const QPoint& pos );

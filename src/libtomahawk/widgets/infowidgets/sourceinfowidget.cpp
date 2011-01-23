@@ -11,6 +11,8 @@
 #include "database/databasecommand_alltracks.h"
 #include "database/databasecommand_allalbums.h"
 
+#include "widgets/overlaywidget.h"
+
 
 SourceInfoWidget::SourceInfoWidget( const Tomahawk::source_ptr& source, QWidget* parent )
     : QWidget( parent )
@@ -19,6 +21,7 @@ SourceInfoWidget::SourceInfoWidget( const Tomahawk::source_ptr& source, QWidget*
     ui->setupUi( this );
 
     ui->sourceLabel->setText( source->friendlyName() );
+    ui->historyView->overlay()->setEnabled( false );
 
     m_recentCollectionModel = new CollectionFlatModel( ui->recentCollectionView );
     ui->recentCollectionView->setModel( m_recentCollectionModel );
