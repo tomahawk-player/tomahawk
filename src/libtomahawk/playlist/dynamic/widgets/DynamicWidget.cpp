@@ -32,6 +32,7 @@
 #include "audio/audioengine.h"
 #include "ReadOrWriteWidget.h"
 #include "CollapsibleControls.h"
+#include "DynamicControlWrapper.h"
 
 using namespace Tomahawk;
 
@@ -266,10 +267,6 @@ void DynamicWidget::onDemandFailed()
 void 
 DynamicWidget::controlsChanged()
 {
-    // save the current playlist
-    if( m_controls->controls().size() == 1 && m_playlist->generator()->controls().at( 0 )->input() == QString() ) { // if there is only 1 empty control, remove it as it's the default created one
-        m_playlist->generator()->removeControl( m_playlist->generator()->controls().last() );
-    }
     m_playlist->createNewRevision();
 }
 
