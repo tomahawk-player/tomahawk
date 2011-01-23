@@ -38,6 +38,9 @@ class ReadOrWriteWidget;
 namespace Tomahawk
 {
 
+class DynamicView;
+
+
 class CollapsibleControls;
 
 
@@ -93,7 +96,7 @@ private:
     
     CollapsibleControls* m_controls;
     
-    PlaylistView* m_view;
+    DynamicView* m_view;
     PlaylistModel* m_model;
 };
 

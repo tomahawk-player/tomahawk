@@ -85,7 +85,7 @@ EchonestGenerator::generate ( int number )
         connect( reply, SIGNAL( finished() ), this, SLOT( staticFinished() ) );
     } catch( std::runtime_error& e ) {
         qWarning() << "Got invalid controls!" << e.what();
-        emit controlsInvalid( "Controls were not valid", QString::fromLatin1( e.what() ) );
+        emit error( "Filters are not valid", e.what() );
     }
 }
 
@@ -100,7 +100,7 @@ EchonestGenerator::startOnDemand()
         connect( reply, SIGNAL( finished() ), this, SLOT( dynamicStarted() ) );
     } catch( std::runtime_error& e ) {
         qWarning() << "Got invalid controls!" << e.what();
-        emit controlsInvalid( "Controls were not valid", QString::fromLatin1( e.what() ) );
+        emit error( "Filters are not valid", e.what() );
     }
 }
 
@@ -131,8 +131,9 @@ EchonestGenerator::staticFinished()
     try {
         songs = Echonest::DynamicPlaylist::parseStaticPlaylist( reply );
     } catch( const Echonest::ParseError& e ) {
-        qWarning() << "libechonest threw an error trying to parse the static playlist!" << e.errorType() << e.what();
+        qWarning() << "libechonest threw an error trying to parse the static playlist! code" << e.errorType() << "error desc:" << e.what();
         
+        emit error( "The Echo Nest returned an error creating the playlist", e.what() );
         return;
     }
     
@@ -170,7 +171,7 @@ EchonestGenerator::dynamicStarted()
         emit nextTrackGenerated( songQuery );
     } catch( const Echonest::ParseError& e ) {
         qWarning() << "libechonest threw an error parsing the start of the dynamic playlist:" << e.errorType() << e.what();
-        emit onDemandFailed();
+        emit error( "The Echo Nest returned an error starting the station", e.what() );
     }
 }
 
@@ -188,6 +189,7 @@ EchonestGenerator::dynamicFetched()
         emit nextTrackGenerated( songQuery );
     } catch( const Echonest::ParseError& e ) {
         qWarning() << "libechonest threw an error parsing the next song of the dynamic playlist:" << e.errorType() << e.what();
+        emit error( "The Echo Nest returned an error getting the next song", e.what() );
     }
 }
 

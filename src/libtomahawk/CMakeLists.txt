@@ -95,6 +95,7 @@ set( libSources
     playlist/dynamic/DynamicControl.cpp
     playlist/dynamic/GeneratorFactory.cpp
     playlist/dynamic/GeneratorInterface.cpp
+    playlist/dynamic/DynamicView.cpp
     playlist/dynamic/echonest/EchonestGenerator.cpp
     playlist/dynamic/echonest/EchonestControl.cpp
     playlist/dynamic/widgets/DynamicWidget.cpp
@@ -227,6 +228,7 @@ set( libHeaders
     playlist/dynamic/DynamicControl.h
     playlist/dynamic/GeneratorFactory.h
     playlist/dynamic/GeneratorInterface.h
+    playlist/dynamic/DynamicView.h
     playlist/dynamic/echonest/EchonestGenerator.h
     playlist/dynamic/echonest/EchonestControl.h
     playlist/dynamic/widgets/DynamicWidget.h

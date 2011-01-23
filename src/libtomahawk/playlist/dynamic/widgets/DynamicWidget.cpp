@@ -33,6 +33,7 @@
 #include "ReadOrWriteWidget.h"
 #include "CollapsibleControls.h"
 #include "DynamicControlWrapper.h"
+#include "dynamic/DynamicView.h"
 
 using namespace Tomahawk;
 
@@ -86,7 +87,7 @@ DynamicWidget::DynamicWidget( const Tomahawk::dynplaylist_ptr& playlist, QWidget
     m_layout->addWidget( m_controls );
     
     m_model = new PlaylistModel( this );
-    m_view = new PlaylistView( this );
+    m_view = new DynamicView( this );
     m_view->setModel( m_model );
     m_view->setContentsMargins( 0, 0, 0, 0 );
     m_layout->addWidget( m_view );
@@ -125,6 +126,7 @@ DynamicWidget::loadDynamicPlaylist( const Tomahawk::dynplaylist_ptr& playlist )
         disconnect( m_playlist->generator().data(), SIGNAL( generated( QList<Tomahawk::query_ptr> ) ), this, SLOT( tracksGenerated( QList<Tomahawk::query_ptr> ) ) );
         disconnect( m_playlist.data(), SIGNAL( dynamicRevisionLoaded( Tomahawk::DynamicPlaylistRevision) ), this, SLOT(onRevisionLoaded( Tomahawk::DynamicPlaylistRevision) ) );
         disconnect( m_playlist->generator().data(), SIGNAL( nextTrackGenerated( Tomahawk::query_ptr ) ), this, SLOT( onDemandFetched( Tomahawk::query_ptr ) ) );
+        disconnect( m_playlist->generator().data(), SIGNAL( error( QString, QString ) ), m_view, SLOT( showMessageTimeout( QString, QString ) ) );
     }
     
     m_playlist = playlist;
@@ -140,6 +142,7 @@ DynamicWidget::loadDynamicPlaylist( const Tomahawk::dynplaylist_ptr& playlist )
     connect( m_playlist->generator().data(), SIGNAL( generated( QList<Tomahawk::query_ptr> ) ), this, SLOT( tracksGenerated( QList<Tomahawk::query_ptr> ) ) );
     connect( m_playlist.data(), SIGNAL( dynamicRevisionLoaded( Tomahawk::DynamicPlaylistRevision ) ), this, SLOT( onRevisionLoaded( Tomahawk::DynamicPlaylistRevision ) ) );
     connect( m_playlist->generator().data(), SIGNAL( nextTrackGenerated( Tomahawk::query_ptr ) ), this, SLOT( onDemandFetched( Tomahawk::query_ptr ) ) );
+    connect( m_playlist->generator().data(), SIGNAL( error( QString, QString ) ), m_view, SLOT( showMessageTimeout( QString, QString ) ) );
     
 }
 

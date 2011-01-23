@@ -94,8 +94,7 @@ public:
     void removeControl( const dyncontrol_ptr& control );
     
 signals:
-    void controlsInvalid( const QString& shortTitle, const QString& message );
-    void onDemandFailed();
+    void error( const QString& title, const QString& body);
     void generated( const QList< Tomahawk::query_ptr>& queries );
     void nextTrackGenerated( const Tomahawk::query_ptr& track );
     
