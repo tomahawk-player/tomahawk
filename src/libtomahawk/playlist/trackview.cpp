@@ -24,7 +24,7 @@ TrackView::TrackView( QWidget* parent )
     , m_proxyModel( 0 )
     , m_delegate( 0 )
     , m_header( new TrackHeader( this ) )
-    , m_overlay( new OverlayWidget() )
+    , m_overlay( new OverlayWidget( this ) )
     , m_resizing( false )
 {
     setSortingEnabled( false );
@@ -289,8 +289,6 @@ TrackView::onFilterChanged( const QString& )
 {
     if ( selectedIndexes().count() )
         scrollTo( selectedIndexes().at( 0 ), QAbstractItemView::PositionAtCenter );
-
-    reset();
 }
 
 
