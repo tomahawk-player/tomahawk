@@ -61,7 +61,6 @@ OverlayWidget::paintEvent( QPaintEvent* event )
     QPainter p( this );
     QRect r = contentsRect();
 
-    p.save();
     p.setBackgroundMode( Qt::TransparentMode );
     p.setRenderHint( QPainter::Antialiasing );
 
@@ -81,6 +80,4 @@ OverlayWidget::paintEvent( QPaintEvent* event )
     p.setFont( f );
     p.setPen( palette().light().color() );
     p.drawText( r.adjusted( 16, 16, -16, -16 ), text(), to );
-
-    p.restore();
 }
