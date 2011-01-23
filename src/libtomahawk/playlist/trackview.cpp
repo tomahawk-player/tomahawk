@@ -289,6 +289,8 @@ TrackView::onFilterChanged( const QString& )
 {
     if ( selectedIndexes().count() )
         scrollTo( selectedIndexes().at( 0 ), QAbstractItemView::PositionAtCenter );
+
+    reset();
 }
 
 

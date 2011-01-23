@@ -4,7 +4,7 @@
 #include <QPainter>
 #include <QPropertyAnimation>
 
-#define CORNER_ROUNDNESS 32.0
+#define CORNER_ROUNDNESS 16.0
 #define FADEIN_DURATION 500
 #define FONT_SIZE 18
 #define OPACITY 0.80
@@ -97,8 +97,9 @@ OverlayWidget::paintEvent( QPaintEvent* event )
     p.setBackgroundMode( Qt::TransparentMode );
     p.setRenderHint( QPainter::Antialiasing );
 
-    p.setPen( palette().shadow().color() );
-    p.setBrush( palette().shadow() );
+    QPen pen( palette().dark().color(), .5 );
+    p.setPen( pen );
+    p.setBrush( palette().highlight() );
 
     p.drawRoundedRect( r, CORNER_ROUNDNESS, CORNER_ROUNDNESS );
 
@@ -110,6 +111,6 @@ OverlayWidget::paintEvent( QPaintEvent* event )
     f.setBold( true );
 
     p.setFont( f );
-    p.setPen( palette().light().color() );
+    p.setPen( palette().highlightedText().color() );
     p.drawText( r.adjusted( 16, 16, -16, -16 ), text(), to );
 }
