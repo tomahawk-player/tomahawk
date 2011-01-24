@@ -251,13 +251,6 @@ TrackView::paintEvent( QPaintEvent* event )
     QTreeView::paintEvent( event );
     QPainter painter( viewport() );
 
-    if ( !proxyModel()->filter().isEmpty() && !proxyModel()->trackCount() &&
-         model()->trackCount() )
-    {
-        m_overlay->setText( tr( "Sorry, your filter '%1' did not match any results." ).arg( proxyModel()->filter() ) );
-        m_overlay->paint( &painter );
-    }
-
     if ( m_dragging )
     {
         // draw drop indicator
@@ -290,7 +283,15 @@ TrackView::onFilterChanged( const QString& )
     if ( selectedIndexes().count() )
         scrollTo( selectedIndexes().at( 0 ), QAbstractItemView::PositionAtCenter );
 
-    reset();
+    if ( !proxyModel()->filter().isEmpty() && !proxyModel()->trackCount() &&
+         model()->trackCount() )
+    {
+        m_overlay->setText( tr( "Sorry, your filter '%1' did not match any results." ).arg( proxyModel()->filter() ) );
+        m_overlay->show();
+    }
+    else
+        if ( model()->trackCount() )
+            m_overlay->hide();
 }
 
 

@@ -12,10 +12,8 @@ Q_OBJECT
 Q_PROPERTY( qreal opacity READ opacity WRITE setOpacity )
 
 public:
-    OverlayWidget( QAbstractItemView* parent );
+    OverlayWidget( QWidget* parent );
     ~OverlayWidget();
-
-    QPixmap pixmap();
 
     qreal opacity() const { return m_opacity; }
     void setOpacity( qreal opacity );
@@ -23,7 +21,9 @@ public:
     QString text() const { return m_text; }
     void setText( const QString& text );
 
-    void paint( QPainter* painter );
+public slots:
+    void show();
+    void hide();
 
 protected:
 //    void changeEvent( QEvent* e );
@@ -31,10 +31,9 @@ protected:
 
 private:
     QString m_text;
-    QPixmap m_pixmap;
     qreal m_opacity;
 
-    QAbstractItemView* m_parent;
+    QWidget* m_parent;
 };
 
-#endif // WELCOMEWIDGET_H
+#endif // OVERLAYWIDGET_H
