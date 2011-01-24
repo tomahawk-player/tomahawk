@@ -6,13 +6,14 @@
 #include "dllmacro.h"
 
 class TrackProxyModel;
+class TrackView;
 
 class DLLEXPORT PlaylistItemDelegate : public QStyledItemDelegate
 {
 Q_OBJECT
 
 public:
-    PlaylistItemDelegate( QAbstractItemView* parent = 0, TrackProxyModel* proxy = 0 );
+    PlaylistItemDelegate( TrackView* parent = 0, TrackProxyModel* proxy = 0 );
 
     void updateRowSize( const QModelIndex& index );
 
@@ -27,7 +28,7 @@ protected:
 
 private:
     unsigned int m_removalProgress;
-    QAbstractItemView* m_view;
+    TrackView* m_view;
     TrackProxyModel* m_model;
 };
 

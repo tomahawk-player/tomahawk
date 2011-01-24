@@ -9,11 +9,15 @@
 
 #include "playlist/plitem.h"
 #include "playlist/trackproxymodel.h"
+#include "playlist/trackview.h"
+#include "playlist/trackheader.h"
 
-#include "audio/audioengine.h"
+#include "utils/tomahawkutils.h"
+
+#define PLAYING_ICON QString( RESPATH "images/now-playing-speaker.png" )
 
 
-PlaylistItemDelegate::PlaylistItemDelegate( QAbstractItemView* parent, TrackProxyModel* proxy )
+PlaylistItemDelegate::PlaylistItemDelegate( TrackView* parent, TrackProxyModel* proxy )
     : QStyledItemDelegate( (QObject*)parent )
     , m_view( parent )
     , m_model( proxy )
@@ -37,7 +41,7 @@ PlaylistItemDelegate::sizeHint( const QStyleOptionViewItem& option, const QModel
 
 
 QWidget*
-PlaylistItemDelegate::createEditor ( QWidget* parent, const QStyleOptionViewItem& option, const QModelIndex& index ) const
+PlaylistItemDelegate::createEditor( QWidget* parent, const QStyleOptionViewItem& option, const QModelIndex& index ) const
 {
     return 0;
 }
@@ -48,9 +52,7 @@ PlaylistItemDelegate::paint( QPainter* painter, const QStyleOptionViewItem& opti
 {
     PlItem* item = m_model->itemFromIndex( m_model->mapToSource( index ) );
     if ( !item || item->query().isNull() )
-    {
         return;
-    }
 
     if ( item->query()->results().count() )
         painter->setOpacity( item->query()->results().at( 0 )->score() );
@@ -64,9 +66,9 @@ PlaylistItemDelegate::paint( QPainter* painter, const QStyleOptionViewItem& opti
 
         {
             QRect r = option.rect.adjusted( 3, 0, 0, -3 );
-            if ( index.column() == 0 )
+            if ( m_view->header()->visualIndex( index.column() ) == 0 )
             {
-                painter->drawPixmap( r.adjusted( 3, 3, 18 - r.width(), 0 ), QPixmap( index.data( Qt::DecorationRole ).toString() ) );
+                painter->drawPixmap( r.adjusted( 3, 3, 18 - r.width(), 0 ), QPixmap( PLAYING_ICON ) );
                 r = r.adjusted( 22, 0, 0, 0 );
             }
 
@@ -74,7 +76,7 @@ PlaylistItemDelegate::paint( QPainter* painter, const QStyleOptionViewItem& opti
             painter->drawText( r.adjusted( 0, 2, 0, 0 ), index.data().toString() );
         }
 
-        if ( index.column() == index.model()->columnCount() - 1 )
+        if ( m_view->header()->visualIndex( index.column() ) == m_view->header()->visibleSectionCount()  - 1 )
         {
             QRect r = QRect( 3, option.rect.y() + 1, m_view->viewport()->width() - 6, option.rect.height() - 2 );
             painter->setPen( option.palette.highlight().color() );

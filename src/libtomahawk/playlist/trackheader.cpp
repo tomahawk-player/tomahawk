@@ -39,6 +39,13 @@ TrackHeader::~TrackHeader()
 }
 
 
+int
+TrackHeader::visibleSectionCount() const
+{
+    return count() - hiddenSectionCount();
+}
+
+
 void
 TrackHeader::onSectionResized( int logicalidx, int oldSize, int newSize )
 {
