@@ -31,6 +31,16 @@ void
 OverlayWidget::setOpacity( qreal opacity )
 {
     m_opacity = opacity;
+
+    if ( m_opacity == 0.00 && !isHidden() )
+    {
+        QWidget::hide();
+    }
+    else if ( m_opacity > 0.00 && isHidden() )
+    {
+        QWidget::show();
+    }
+
     repaint();
 }
 
