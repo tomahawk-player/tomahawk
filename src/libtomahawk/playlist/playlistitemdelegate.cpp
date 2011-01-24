@@ -2,7 +2,6 @@
 
 #include <QDebug>
 #include <QPainter>
-#include <QAbstractItemView>
 
 #include "query.h"
 #include "result.h"
@@ -22,6 +21,7 @@ PlaylistItemDelegate::PlaylistItemDelegate( TrackView* parent, TrackProxyModel* 
     , m_view( parent )
     , m_model( proxy )
 {
+    m_nowPlayingIcon = QPixmap( PLAYING_ICON );
 }
 
 
@@ -65,18 +65,21 @@ PlaylistItemDelegate::paint( QPainter* painter, const QStyleOptionViewItem& opti
         painter->setRenderHint( QPainter::Antialiasing );
 
         {
-            QRect r = option.rect.adjusted( 3, 0, 0, -3 );
+            QRect r = option.rect.adjusted( 3, 0, 0, 0 );
             if ( m_view->header()->visualIndex( index.column() ) == 0 )
             {
-                painter->drawPixmap( r.adjusted( 3, 3, 18 - r.width(), 0 ), QPixmap( PLAYING_ICON ) );
-                r = r.adjusted( 22, 0, 0, 0 );
+                r.adjust( 0, 0, 0, -3 );
+                painter->drawPixmap( r.adjusted( 3, 3, 18 - r.width(), 0 ), m_nowPlayingIcon );
+                r.adjust( 22, 0, 0, 3 );
             }
 
+            QTextOption to( Qt::AlignVCenter );
+
             painter->setPen( option.palette.text().color() );
-            painter->drawText( r.adjusted( 0, 2, 0, 0 ), index.data().toString() );
+            painter->drawText( r.adjusted( 0, 1, 0, 0 ), index.data().toString(), to );
         }
 
-        if ( m_view->header()->visualIndex( index.column() ) == m_view->header()->visibleSectionCount()  - 1 )
+        if ( m_view->header()->visualIndex( index.column() ) == m_view->header()->visibleSectionCount() - 1 )
         {
             QRect r = QRect( 3, option.rect.y() + 1, m_view->viewport()->width() - 6, option.rect.height() - 2 );
             painter->setPen( option.palette.highlight().color() );

@@ -28,6 +28,8 @@ protected:
 
 private:
     unsigned int m_removalProgress;
+    QPixmap m_nowPlayingIcon;
+
     TrackView* m_view;
     TrackProxyModel* m_model;
 };
