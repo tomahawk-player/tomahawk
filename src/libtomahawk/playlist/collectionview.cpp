@@ -13,6 +13,7 @@ using namespace Tomahawk;
 CollectionView::CollectionView( QWidget* parent )
     : TrackView( parent )
 {
+    setGuid( "collectionview" );
     setProxyModel( new CollectionProxyModel( this ) );
 
     setSortingEnabled( true );
