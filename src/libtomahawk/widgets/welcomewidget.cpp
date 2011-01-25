@@ -90,7 +90,10 @@ WelcomeWidget::onPlaylistActivated( QListWidgetItem* item )
     qDebug() << Q_FUNC_INFO;
 
     PlaylistWidgetItem* pwi = dynamic_cast<PlaylistWidgetItem*>(item);
-    PlaylistManager::instance()->show( pwi->playlist() );
+    if( Tomahawk::dynplaylist_ptr dynplaylist = pwi->playlist().dynamicCast< Tomahawk::DynamicPlaylist >() )
+        PlaylistManager::instance()->show( dynplaylist );
+    else
+        PlaylistManager::instance()->show( pwi->playlist() );
 }
 
 
