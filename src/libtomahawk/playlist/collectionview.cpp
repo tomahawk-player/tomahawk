@@ -33,6 +33,15 @@ CollectionView::~CollectionView()
 
 
 void
+CollectionView::setModel( TrackModel* model )
+{
+    TrackView::setModel( model );
+
+    connect( model, SIGNAL( trackCountChanged( unsigned int ) ), SLOT( onTrackCountChanged( unsigned int ) ) );
+}
+
+
+void
 CollectionView::dragEnterEvent( QDragEnterEvent* event )
 {
     qDebug() << Q_FUNC_INFO;
@@ -74,14 +83,13 @@ CollectionView::onCustomContextMenu( const QPoint& pos )
 
 
 void
-CollectionView::paintEvent( QPaintEvent* event )
+CollectionView::onTrackCountChanged( unsigned int tracks )
 {
-    TrackView::paintEvent( event );
-    QPainter painter( viewport() );
-
-    if ( !model()->trackCount() )
+    if ( tracks == 0 )
     {
         overlay()->setText( tr( "This collection is empty." ) );
-        overlay()->paint( &painter );
+        overlay()->show();
     }
+    else
+        overlay()->hide();
 }

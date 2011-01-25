@@ -90,8 +90,8 @@ PlaylistModel::loadPlaylist( const Tomahawk::playlist_ptr& playlist )
         emit endInsertRows();
     }
 
-    qDebug() << rowCount( QModelIndex() );
     emit loadingFinished();
+    emit trackCountChanged( rowCount( QModelIndex() ) );
 }
 
 
@@ -194,7 +194,10 @@ void
 PlaylistModel::onTracksInserted( unsigned int row, const QList<Tomahawk::query_ptr>& tracks, const Tomahawk::collection_ptr& collection )
 {
     if ( !tracks.count() )
+    {
+        emit trackCountChanged( rowCount( QModelIndex() ) );
         return;
+    }
 
     int c = row;
     QPair< int, int > crows;
@@ -220,7 +223,6 @@ PlaylistModel::onTracksInserted( unsigned int row, const QList<Tomahawk::query_p
 
     emit endInsertRows();
     emit trackCountChanged( rowCount( QModelIndex() ) );
-    qDebug() << rowCount( QModelIndex() );
 }
 
 

@@ -15,14 +15,14 @@ public:
     explicit PlaylistView( QWidget* parent = 0 );
     ~PlaylistView();
 
-    void setModel( TrackModel* model );
+    virtual void setModel( TrackModel* model );
 
 protected:
     void keyPressEvent( QKeyEvent* event );
-    void paintEvent( QPaintEvent* event );
 
 private slots:
     void onCustomContextMenu( const QPoint& pos );
+    void onTrackCountChanged( unsigned int tracks );
 
     void addItemsToPlaylist();
     void deleteItems();

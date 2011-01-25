@@ -30,7 +30,7 @@ public:
     TrackHeader* header() const { return m_header; }
     OverlayWidget* overlay() const { return m_overlay; }
 
-    void setModel( TrackModel* model );
+    virtual void setModel( TrackModel* model );
 
     QModelIndex contextMenuIndex() const { return m_contextMenuIndex; }
     void setContextMenuIndex( const QModelIndex& idx ) { m_contextMenuIndex = idx; }

@@ -140,6 +140,9 @@ Scrobbler::scrobble()
 {
     Q_ASSERT( QThread::currentThread() == thread() );
 
+    if ( !m_scrobbler || m_track.isNull() )
+        return;
+
     qDebug() << Q_FUNC_INFO << m_track.toString();
     m_scrobbler->cache( m_track );
     m_scrobbler->submit();

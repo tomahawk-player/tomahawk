@@ -56,6 +56,14 @@ WelcomeWidget::updatePlaylists()
         ui->playlistWidget->addItem( item );
         item->setData( Qt::DisplayRole, playlist->title() );
     }
+
+    if ( !playlists.count() )
+    {
+        ui->playlistWidget->overlay()->setText( tr( "You have not played any playlists yet." ) );
+        ui->playlistWidget->overlay()->show();
+    }
+    else
+        ui->playlistWidget->overlay()->hide();
 }
 
 
@@ -177,4 +185,11 @@ PlaylistDelegate::paint( QPainter* painter, const QStyleOptionViewItem& option, 
     painter->drawText( option.rect.adjusted( 56, 6, -100, -option.rect.height() + 20 ), index.data().toString() );
 
     painter->restore();
+}
+
+
+PlaylistWidget::PlaylistWidget( QWidget* parent )
+    : QListWidget( parent )
+{
+    m_overlay = new OverlayWidget( this );
 }

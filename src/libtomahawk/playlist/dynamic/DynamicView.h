@@ -21,6 +21,7 @@
 #include <QTimer>
 #include <QPropertyAnimation>
 
+class TrackModel;
 namespace Tomahawk
 {
     
@@ -31,11 +32,13 @@ public:
     explicit DynamicView( QWidget* parent = 0 );
     virtual ~DynamicView();
     
+    virtual void setModel( TrackModel* model );
+    
 public slots:
     void showMessageTimeout( const QString& title, const QString& body );
     
-protected:
-    virtual void paintEvent( QPaintEvent* event );
+private slots:
+    void onTrackCountChanged( unsigned int );
     
 private:
     QTimer m_showTimer;

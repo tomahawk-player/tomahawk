@@ -30,8 +30,9 @@ void
 PlaylistView::setModel( TrackModel* model )
 {
     TrackView::setModel( model );
-
     setColumnHidden( 5, true ); // Hide age column per default
+
+    connect( model, SIGNAL( trackCountChanged( unsigned int ) ), SLOT( onTrackCountChanged( unsigned int ) ) );
 }
 
 
@@ -110,14 +111,13 @@ PlaylistView::deleteItems()
 
 
 void
-PlaylistView::paintEvent( QPaintEvent* event )
+PlaylistView::onTrackCountChanged( unsigned int tracks )
 {
-    TrackView::paintEvent( event );
-    QPainter painter( viewport() );
-
-    if ( !model()->trackCount() )
+    if ( tracks == 0 )
     {
         overlay()->setText( tr( "This playlist is currently empty. Add some tracks to it and enjoy the music!" ) );
-        overlay()->paint( &painter );
+        overlay()->show();
     }
+    else
+        overlay()->hide();
 }

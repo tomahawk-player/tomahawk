@@ -20,22 +20,12 @@
 #include "trackmodel.h"
 
 #include <QPainter>
-
 using namespace Tomahawk;
 
 
 DynamicView::DynamicView( QWidget* parent )
     : PlaylistView( parent )
 {
-    m_showTimer.setInterval( 5000 );
-    m_showTimer.setSingleShot( true );
-    
-    m_fadeOut = new QPropertyAnimation( overlay(), "opacity" );
-    m_fadeOut->setDuration( 500 );
-    m_fadeOut->setEndValue( 0 );
-    m_fadeOut->setEasingCurve( QEasingCurve::InOutQuad );
-    
-    connect( &m_showTimer, SIGNAL( timeout() ), m_fadeOut, SLOT( start() ) ); 
     
 }
 
@@ -45,26 +35,32 @@ DynamicView::~DynamicView()
 }
 
 void 
+DynamicView::setModel( TrackModel* model)
+{
+    PlaylistView::setModel( model );
+    
+    connect( model, SIGNAL( trackCountChanged( unsigned int ) ), SLOT( onTrackCountChanged( unsigned int ) ) );
+}
+
+
+void 
 DynamicView::showMessageTimeout( const QString& title, const QString& body )
 {
     m_title = title;
     m_body = body;
-    m_showTimer.start();
-    viewport()->update();
+    
+    overlay()->setText( QString( "%1:\n\n%2" ).arg( m_title, m_body ) );
+    overlay()->show( 5 );
 }
 
 void 
-DynamicView::paintEvent( QPaintEvent* event )
+DynamicView::onTrackCountChanged( unsigned int tracks )
 {
-    QPainter painter( viewport() );
-    if ( m_showTimer.isActive() || m_fadeOut->state() == QPropertyAnimation::Running )
+    if ( tracks == 0 )
     {
-        overlay()->setText( QString( "%1:\n\n%2" ).arg( m_title, m_body ) );
-        overlay()->paint( &painter );
-    } else if( !model()->trackCount() ) {
         overlay()->setText( tr( "Add some filters above, and press Generate to get started!" ) );
-        overlay()->paint( &painter );
-    } else {
-        PlaylistView::paintEvent( event );
+        overlay()->show();
     }
+    else
+        overlay()->hide();
 }
