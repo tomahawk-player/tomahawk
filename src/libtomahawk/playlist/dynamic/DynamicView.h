@@ -21,6 +21,7 @@
 #include <QTimer>
 #include <QPropertyAnimation>
 
+class PlaylistModel;
 class TrackModel;
 namespace Tomahawk
 {
@@ -32,7 +33,7 @@ public:
     explicit DynamicView( QWidget* parent = 0 );
     virtual ~DynamicView();
     
-    virtual void setModel( TrackModel* model );
+    virtual void setModel( PlaylistModel* model );
     
 public slots:
     void showMessageTimeout( const QString& title, const QString& body );

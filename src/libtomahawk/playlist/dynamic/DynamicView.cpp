@@ -17,7 +17,7 @@
 #include "DynamicView.h"
 
 #include "widgets/overlaywidget.h"
-#include "trackmodel.h"
+#include "playlistmodel.h"
 
 #include <QPainter>
 using namespace Tomahawk;
@@ -35,7 +35,7 @@ DynamicView::~DynamicView()
 }
 
 void 
-DynamicView::setModel( TrackModel* model)
+DynamicView::setModel( PlaylistModel* model)
 {
     PlaylistView::setModel( model );
     
