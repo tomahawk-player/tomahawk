@@ -16,6 +16,8 @@ public:
     explicit TrackHeader( TrackView* parent = 0 );
     ~TrackHeader();
 
+    int visibleSectionCount() const;
+
 public slots:
     void onResized();
     void toggleVisibility( int index );

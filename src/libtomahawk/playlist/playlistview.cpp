@@ -4,6 +4,7 @@
 #include <QKeyEvent>
 #include <QPainter>
 
+#include "playlist/playlistmodel.h"
 #include "playlist/playlistproxymodel.h"
 #include "widgets/overlaywidget.h"
 
@@ -13,6 +14,7 @@ using namespace Tomahawk;
 PlaylistView::PlaylistView( QWidget* parent )
     : TrackView( parent )
 {
+    setGuid( "playlistview" );
     setProxyModel( new PlaylistProxyModel( this ) );
 
     setContextMenuPolicy( Qt::CustomContextMenu );
@@ -27,8 +29,13 @@ PlaylistView::~PlaylistView()
 
 
 void
-PlaylistView::setModel( TrackModel* model )
+PlaylistView::setModel( PlaylistModel* model )
 {
+    if ( !model->playlist().isNull() )
+        setGuid( QString( "playlistview/%1" ).arg( model->playlist()->guid() ) );
+
+    m_model = model;
+
     TrackView::setModel( model );
     setColumnHidden( 5, true ); // Hide age column per default
 

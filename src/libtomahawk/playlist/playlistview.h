@@ -7,6 +7,8 @@
 
 #include "dllmacro.h"
 
+class PlaylistModel;
+
 class DLLEXPORT PlaylistView : public TrackView
 {
 Q_OBJECT
@@ -15,7 +17,8 @@ public:
     explicit PlaylistView( QWidget* parent = 0 );
     ~PlaylistView();
 
-    virtual void setModel( TrackModel* model );
+    PlaylistModel* playlistModel() const { return m_model; }
+    virtual void setModel( PlaylistModel* model );
 
 protected:
     void keyPressEvent( QKeyEvent* event );
@@ -29,6 +32,8 @@ private slots:
 
 private:
     void setupMenus();
+
+    PlaylistModel* m_model;
 
     QMenu m_itemMenu;
 

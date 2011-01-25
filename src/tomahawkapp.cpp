@@ -399,7 +399,7 @@ TomahawkApp::setupSIP()
 {
     qDebug() << Q_FUNC_INFO;
 
-    if( !arguments().contains( "--nojabber" ) )
+    if( !arguments().contains( "--nosip" ) )
     {
         m_xmppBot = new XMPPBot( this );
 

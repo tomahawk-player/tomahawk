@@ -95,9 +95,6 @@ TrackModel::data( const QModelIndex& index, int role ) const
 
     if ( role == Qt::DecorationRole )
     {
-        if ( index.column() == 0 && entry->isPlaying() )
-            return QString( RESPATH "images/now-playing-speaker.png" );
-
         return QVariant();
     }
 

@@ -18,15 +18,15 @@ TrackHeader::TrackHeader( TrackView* parent )
     , m_hiddenPct( 0.0 )
     , m_init( false )
 {
-    setStretchLastSection( false );
+    setStretchLastSection( true );
     setResizeMode( QHeaderView::Interactive );
     setMinimumSectionSize( 60 );
     setDefaultAlignment( Qt::AlignLeft );
     setMovable( true );
 //    setCascadingSectionResizes( true );
 
-    m_menu->addAction( tr( "Resize columns to fit window" ), this, SLOT( onToggleResizeColumns() ) );
-    m_menu->addSeparator();
+//    m_menu->addAction( tr( "Resize columns to fit window" ), this, SLOT( onToggleResizeColumns() ) );
+//    m_menu->addSeparator();
 
     connect( this, SIGNAL( sectionResized( int, int, int ) ), SLOT( onSectionResized( int, int, int ) ) );
     connect( m_sigmap, SIGNAL( mapped( int ) ), SLOT( toggleVisibility( int ) ) );
@@ -36,6 +36,13 @@ TrackHeader::TrackHeader( TrackView* parent )
 TrackHeader::~TrackHeader()
 {
     saveColumnsState();
+}
+
+
+int
+TrackHeader::visibleSectionCount() const
+{
+    return count() - hiddenSectionCount();
 }
 
 
@@ -83,7 +90,7 @@ TrackHeader::onResized()
 void
 TrackHeader::restoreColumnsState()
 {
-    QList<QVariant> list = TomahawkSettings::instance()->playlistColumnSizes();
+    QList<QVariant> list = TomahawkSettings::instance()->playlistColumnSizes( m_parent->guid() );
 
     if ( list.count() != count() ) // FIXME: const
     {
@@ -105,7 +112,7 @@ TrackHeader::saveColumnsState()
     foreach( double w, m_columnWeights )
         wlist << QVariant( w );
 
-    TomahawkSettings::instance()->setPlaylistColumnSizes( wlist );
+    TomahawkSettings::instance()->setPlaylistColumnSizes( m_parent->guid(), wlist );
 }
 
 

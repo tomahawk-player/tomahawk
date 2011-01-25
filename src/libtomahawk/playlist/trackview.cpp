@@ -57,7 +57,7 @@ TrackView::~TrackView()
 {
     qDebug() << Q_FUNC_INFO;
 
-    delete m_overlay;
+    delete m_header;
 }
 
 

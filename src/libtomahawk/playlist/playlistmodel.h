@@ -31,6 +31,8 @@ public:
 
     virtual bool dropMimeData( const QMimeData* data, Qt::DropAction action, int row, int column, const QModelIndex& parent );
 
+    Tomahawk::playlist_ptr playlist() const { return m_playlist; }
+
     void loadPlaylist( const Tomahawk::playlist_ptr& playlist );
     void loadHistory( const Tomahawk::source_ptr& source, unsigned int amount = 100 );
 
