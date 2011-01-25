@@ -63,7 +63,7 @@ DynamicControlList::init()
     setLayout( m_layout );
     m_layout->setColumnStretch( 2, 1 );
     m_layout->setMargin( 0 );
-    m_layout->setSpacing( 0 );
+    m_layout->setVerticalSpacing( 0 );
     m_layout->setContentsMargins( 0, 0, 0, 0 );
     m_layout->setSizeConstraint( QLayout::SetMinimumSize );
     

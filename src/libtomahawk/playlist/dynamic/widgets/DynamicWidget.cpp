@@ -114,6 +114,10 @@ DynamicWidget::loadDynamicPlaylist( const Tomahawk::dynplaylist_ptr& playlist )
     if( !m_playlist.isNull() && ( m_playlist.data() == playlist.data() ) // same playlist pointer
         && m_playlist->generator()->controls().size() == playlist->generator()->controls().size() ) {
         // we can skip our work. just let the dynamiccontrollist show the difference
+        qDebug() << "SKIPPING SETTING:" << playlist->generator()->controls().size();
+        foreach( const dyncontrol_ptr& control, playlist->generator()->controls() ) {
+            qDebug() << "CONTROL:" << control->selectedType() << control->match() << control->input();
+        }
         m_controls->setControls( m_playlist->generator(), m_playlist->generator()->controls(), m_playlist->author()->isLocal() );
     
         m_playlist = playlist;

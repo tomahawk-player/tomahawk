@@ -58,7 +58,8 @@ private slots:
 private:
     Echonest::DynamicPlaylist::PlaylistParams getParams() const throw( std::runtime_error );
     query_ptr queryFromSong( const Echonest::Song& song );
-    Echonest::DynamicPlaylist::ArtistTypeEnum determineRadioType() const throw( std::runtime_error );
+    void appendRadioType( Echonest::DynamicPlaylist::PlaylistParams& params ) const throw( std::runtime_error );
+    bool onlyThisArtistType( Echonest::DynamicPlaylist::ArtistTypeEnum type ) const throw( std::runtime_error );
     
     Echonest::DynamicPlaylist* m_dynPlaylist;
     QPixmap m_logo;

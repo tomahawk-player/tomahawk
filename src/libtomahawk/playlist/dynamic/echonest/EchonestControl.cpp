@@ -60,6 +60,8 @@ Tomahawk::EchonestControl::setSelectedType ( const QString& type )
         
         Tomahawk::DynamicControl::setSelectedType ( type );
         updateWidgets();
+        updateData();
+        qDebug() << "Setting new type, set data to:" << m_data.first << m_data.second;
     }
 }
 

@@ -76,6 +76,11 @@ void
 EchonestGenerator::generate ( int number )
 {
    // convert to an echonest query, and fire it off
+   qDebug() << Q_FUNC_INFO;
+   qDebug() << "Generating playlist with " << m_controls.size();
+   foreach( const dyncontrol_ptr& ctrl, m_controls )
+       qDebug() << ctrl->selectedType() << ctrl->match() << ctrl->input();
+   
     try {
         Echonest::DynamicPlaylist::PlaylistParams params = getParams();
         
@@ -153,7 +158,7 @@ EchonestGenerator::getParams() const throw( std::runtime_error )
     foreach( const dyncontrol_ptr& control, m_controls ) {
         params.append( control.dynamicCast<EchonestControl>()->toENParam() );
     }
-    params.append( Echonest::DynamicPlaylist::PlaylistParamData( Echonest::DynamicPlaylist::Type, determineRadioType() ) );
+    appendRadioType( params );
     return params;
 }
 
@@ -193,50 +198,46 @@ EchonestGenerator::dynamicFetched()
     }
 }
 
+bool 
+EchonestGenerator::onlyThisArtistType( Echonest::DynamicPlaylist::ArtistTypeEnum type ) const throw( std::runtime_error )
+{
+    bool only = true;
+    bool some = false;
+    
+    foreach( const dyncontrol_ptr& control, m_controls ) {
+        if( control->selectedType() == "Artist" && static_cast<Echonest::DynamicPlaylist::ArtistTypeEnum>( control->match().toInt() ) != type ) {
+            only = false;
+        } else if( control->selectedType() == "Artist" && static_cast<Echonest::DynamicPlaylist::ArtistTypeEnum>( control->match().toInt() ) == type ) {
+            some = true;
+        }
+    }
+    if( some && only ) {
+        return true;
+    } else if( some && !only ) {
+        throw std::runtime_error( "All artist match types must be the same" );
+    }
+    
+    return false;
+}
 
-Echonest::DynamicPlaylist::ArtistTypeEnum 
-EchonestGenerator::determineRadioType() const throw( std::runtime_error )
+void 
+EchonestGenerator::appendRadioType( Echonest::DynamicPlaylist::PlaylistParams& params ) const throw( std::runtime_error )
 {
     /**
      * so we try to match the best type of echonest playlist, based on the controls
      * the types are artist, artist-radio, artist-description, catalog, catalog-radio, song-radio. we don't care about the catalog ones.
      * 
-     * Fallback is artist-radio
      */
     
     /// 1. artist: If all the artist controls are Limit-To. If some were but not all, error out.
-    bool artistOnly = true;
-    bool someArtist = false;
-    foreach( const dyncontrol_ptr& control, m_controls ) {
-        if( control->selectedType() == "Artist" && static_cast<Echonest::DynamicPlaylist::ArtistTypeEnum>( control->match().toInt() ) != Echonest::DynamicPlaylist::ArtistType ) {
-            artistOnly = false;
-        } else if( control->selectedType() == "Artist" && static_cast<Echonest::DynamicPlaylist::ArtistTypeEnum>( control->match().toInt() ) == Echonest::DynamicPlaylist::ArtistType ) {
-            someArtist = true;
-         }
-    }
-    if( someArtist && artistOnly ) {
-        return Echonest::DynamicPlaylist::ArtistType;
-    } else if( someArtist && !artistOnly ) {
-        throw std::runtime_error( "All artist match types must be the same" );
-    }
-    
     /// 2. artist-description: If all the artist entries are Description. If some were but not all, error out.
-    bool artistDescOnly = true;
-    bool someArtistDescFound = false;
-    
-    foreach( const dyncontrol_ptr& control, m_controls ) {
-        if( control->selectedType() == "Artist" && static_cast<Echonest::DynamicPlaylist::ArtistTypeEnum>( control->match().toInt() ) == Echonest::DynamicPlaylist::ArtistDescriptionType ) {
-            someArtistDescFound = true;
-        } else if( control->selectedType() == "Artist" && static_cast<Echonest::DynamicPlaylist::ArtistTypeEnum>( control->match().toInt() ) != Echonest::DynamicPlaylist::ArtistDescriptionType ) {
-            artistDescOnly = false;
-        }
-    }
-    if( someArtistDescFound && artistDescOnly ) {
-        return Echonest::DynamicPlaylist::ArtistDescriptionType;
-    } else if( someArtistDescFound && !artistDescOnly ) // fail, must be all artist desc
-        throw std::runtime_error( "All artist match types must be the same" );
-    
-    return Echonest::DynamicPlaylist::ArtistRadioType;
+    /// 3. Artist-Radio: If all the artist entries are Similar To. If some were but not all, error out.
+    if( onlyThisArtistType( Echonest::DynamicPlaylist::ArtistType ) )
+        params.append( Echonest::DynamicPlaylist::PlaylistParamData( Echonest::DynamicPlaylist::Type, Echonest::DynamicPlaylist::ArtistType ) );
+    else if( onlyThisArtistType( Echonest::DynamicPlaylist::ArtistDescriptionType ) )
+        params.append( Echonest::DynamicPlaylist::PlaylistParamData( Echonest::DynamicPlaylist::Type, Echonest::DynamicPlaylist::ArtistDescriptionType ) );
+    else if( onlyThisArtistType( Echonest::DynamicPlaylist::ArtistRadioType ) )
+        params.append( Echonest::DynamicPlaylist::PlaylistParamData( Echonest::DynamicPlaylist::Type, Echonest::DynamicPlaylist::ArtistRadioType ) );
 }
 
 query_ptr 
