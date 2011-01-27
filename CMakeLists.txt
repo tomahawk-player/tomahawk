@@ -23,6 +23,7 @@ ELSE()
     ADD_SUBDIRECTORY( rtaudio )
 ENDIF( UNIX AND NOT APPLE )
 
+ADD_SUBDIRECTORY( thirdparty )
 ADD_SUBDIRECTORY( libportfwd )
 ADD_SUBDIRECTORY( qxt )
 ADD_SUBDIRECTORY( src/libtomahawk )

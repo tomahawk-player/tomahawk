@@ -236,6 +236,7 @@ SET( OS_SPECIFIC_LINK_LIBRARIES
     "dnsapi.dll"
     "dsound.dll" 
     "winmm.dll"
+    "advapi32.dll"
 
     "${CMAKE_CURRENT_SOURCE_DIR}/../../rtaudio/librtaudio.dll"
 )
@@ -282,6 +283,7 @@ target_link_libraries( tomahawklib
     vorbisfile
     ogg
     FLAC++
+    jdns
 )
 
 install( TARGETS tomahawklib DESTINATION lib )
