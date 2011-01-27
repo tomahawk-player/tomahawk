@@ -35,6 +35,7 @@ public:
     
     virtual void setModel( PlaylistModel* model );
     
+    void setOnDemand( bool onDemand );
 public slots:
     void showMessageTimeout( const QString& title, const QString& body );
     
@@ -47,6 +48,8 @@ private:
     
     QString m_title;
     QString m_body;
+    
+    bool m_onDemand;
 };
     
 };

@@ -121,6 +121,7 @@ DynamicWidget::loadDynamicPlaylist( const Tomahawk::dynplaylist_ptr& playlist )
         m_controls->setControls( m_playlist->generator(), m_playlist->generator()->controls(), m_playlist->author()->isLocal() );
     
         m_playlist = playlist;
+        m_view->setOnDemand( m_playlist->mode() == OnDemand );
         m_model->loadPlaylist( m_playlist );
     
         return;
@@ -134,6 +135,7 @@ DynamicWidget::loadDynamicPlaylist( const Tomahawk::dynplaylist_ptr& playlist )
     }
     
     m_playlist = playlist;
+    m_view->setOnDemand( m_playlist->mode() == OnDemand );
     m_model->loadPlaylist( m_playlist );
     
     if( !m_playlist.isNull() )

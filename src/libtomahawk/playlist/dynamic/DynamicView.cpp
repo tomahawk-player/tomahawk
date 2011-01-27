@@ -24,7 +24,8 @@ using namespace Tomahawk;
 
 
 DynamicView::DynamicView( QWidget* parent )
-    : PlaylistView( parent )
+        : PlaylistView( parent )
+        , m_onDemand( false )
 {
     
 }
@@ -42,6 +43,11 @@ DynamicView::setModel( PlaylistModel* model)
     connect( model, SIGNAL( trackCountChanged( unsigned int ) ), SLOT( onTrackCountChanged( unsigned int ) ) );
 }
 
+void
+DynamicView::setOnDemand( bool onDemand )
+{
+    m_onDemand = onDemand;
+}
 
 void 
 DynamicView::showMessageTimeout( const QString& title, const QString& body )
@@ -58,7 +64,10 @@ DynamicView::onTrackCountChanged( unsigned int tracks )
 {
     if ( tracks == 0 )
     {
-        overlay()->setText( tr( "Add some filters above, and press Generate to get started!" ) );
+        if( m_onDemand )
+            overlay()->setText( tr( "Add some filters above, and press Start to begin listening to this custom station!" ) );
+        else
+            overlay()->setText( tr( "Add some filters above, and press Generate to get started!" ) );
         overlay()->show();
     }
     else
