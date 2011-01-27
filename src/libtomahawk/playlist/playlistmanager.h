@@ -23,6 +23,7 @@ class TrackProxyModel;
 class TrackModel;
 class TrackView;
 class SourceInfoWidget;
+class TopBar;
 
 class DLLEXPORT PlaylistManager : public QObject
 {
@@ -85,6 +86,7 @@ private:
     void linkPlaylist();
 
     QWidget* m_widget;
+    TopBar* m_topbar;
     QStackedWidget* m_stack;
     AnimatedSplitter* m_splitter;
 

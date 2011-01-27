@@ -12,7 +12,6 @@
 class QAction;
 
 class AudioControls;
-class TopBar;
 class TomahawkTrayIcon;
 
 namespace Ui
@@ -66,7 +65,6 @@ private:
     void setupSignals();
     
     Ui::TomahawkWindow* ui;
-    TopBar* m_topbar;
     AudioControls* m_audioControls;
     TomahawkTrayIcon* m_trayIcon;
     QNetworkAccessManager m_nam;

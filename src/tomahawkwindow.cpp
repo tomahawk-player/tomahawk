@@ -22,7 +22,6 @@
 #include "network/controlconnection.h"
 #include "playlist/playlistmanager.h"
 #include "sip/SipHandler.h"
-#include "topbar/topbar.h"
 #include "utils/proxystyle.h"
 #include "utils/widgetdragfilter.h"
 #include "utils/xspfloader.h"
@@ -41,7 +40,6 @@ using namespace Tomahawk;
 TomahawkWindow::TomahawkWindow( QWidget* parent )
     : QMainWindow( parent )
     , ui( new Ui::TomahawkWindow )
-    , m_topbar( new TopBar( this ) )
     , m_audioControls( new AudioControls( this ) )
     , m_trayIcon( new TomahawkTrayIcon( this ) )
 {
@@ -68,12 +66,12 @@ TomahawkWindow::TomahawkWindow( QWidget* parent )
     ui->sidebarSplitter->setStretchFactor( 1, 1 );
     ui->sidebarSplitter->hide( 1, false );
 
-    QToolBar* toolbar = addToolBar( "TomahawkToolbar" );
+/*    QToolBar* toolbar = addToolBar( "TomahawkToolbar" );
     toolbar->setObjectName( "TomahawkToolbar" );
     toolbar->addWidget( m_topbar );
     toolbar->setMovable( false );
     toolbar->setFloatable( false );
-    toolbar->installEventFilter( new WidgetDragFilter( toolbar ) );
+    toolbar->installEventFilter( new WidgetDragFilter( toolbar ) );*/
 
     statusBar()->addPermanentWidget( m_audioControls, 1 );
 
@@ -115,37 +113,6 @@ TomahawkWindow::saveSettings()
 void
 TomahawkWindow::setupSignals()
 {
-    // <Playlist>
-    connect( m_topbar,         SIGNAL( filterTextChanged( const QString& ) ),
-             PlaylistManager::instance(),  SLOT( setFilter( const QString& ) ) );
-
-    connect( PlaylistManager::instance(), SIGNAL( numSourcesChanged( unsigned int ) ),
-             m_topbar,            SLOT( setNumSources( unsigned int ) ) );
-
-    connect( PlaylistManager::instance(), SIGNAL( numTracksChanged( unsigned int ) ),
-             m_topbar,            SLOT( setNumTracks( unsigned int ) ) );
-
-    connect( PlaylistManager::instance(), SIGNAL( numArtistsChanged( unsigned int ) ),
-             m_topbar,            SLOT( setNumArtists( unsigned int ) ) );
-
-    connect( PlaylistManager::instance(), SIGNAL( numShownChanged( unsigned int ) ),
-             m_topbar,            SLOT( setNumShown( unsigned int ) ) );
-
-    connect( m_topbar,         SIGNAL( flatMode() ),
-             PlaylistManager::instance(),  SLOT( setTableMode() ) );
-
-    connect( m_topbar,         SIGNAL( artistMode() ),
-             PlaylistManager::instance(),  SLOT( setTreeMode() ) );
-
-    connect( m_topbar,         SIGNAL( albumMode() ),
-             PlaylistManager::instance(),  SLOT( setAlbumMode() ) );
-
-    connect( PlaylistManager::instance(), SIGNAL( statsAvailable( bool ) ),
-             m_topbar,            SLOT( setStatsVisible( bool ) ) );
-
-    connect( PlaylistManager::instance(), SIGNAL( modesAvailable( bool ) ),
-             m_topbar,            SLOT( setModesVisible( bool ) ) );
-
     // <From PlaylistManager>
     connect( PlaylistManager::instance(), SIGNAL( repeatModeChanged( PlaylistInterface::RepeatMode ) ),
              m_audioControls,     SLOT( onRepeatModeChanged( PlaylistInterface::RepeatMode ) ) );
