@@ -30,7 +30,7 @@ QJson (Qt JSON library)
     $ ./configure && make
     $ sudo make install
 
-libEchonest 0.1
+libEchonest 1.1.1
 ---------------
  See: http://projects.kde.org/projects/playground/libs/libechonest/
 
@@ -83,7 +83,7 @@ Dependencies
   libogg 1.1.4 http://xiph.org/ogg/
   libflac++ 1.2.0 http://flac.sourceforge.net/
   liblastfm 0.3.3 http://github.com/mxcl/liblastfm/
-  libechonest 0.1.2 http://projects.kde.org/projects/playground/libs/libechonest/
+  libechonest 1.1.1 http://projects.kde.org/projects/playground/libs/libechonest/
 
  Third party libraries that we ship with our source:
 
