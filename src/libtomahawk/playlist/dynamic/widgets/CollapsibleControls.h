@@ -21,6 +21,7 @@
 
 #include <QWidget>
 
+class QTimeLine;
 class QToolButton;
 class QLabel;
 class QStackedLayout;
@@ -41,12 +42,15 @@ public:
     void setControls( const dynplaylist_ptr& playlist, bool isLocal );
     QList< DynamicControlWrapper* > controls() const;
     
+    virtual QSize sizeHint() const;
 signals:
     void controlsChanged();
     void controlChanged( const Tomahawk::dyncontrol_ptr& control );
     
 private slots:
     void toggleCollapse();
+    void onAnimationStep( int );
+    void onAnimationFinished();
     
 private:
     void init();
@@ -58,6 +62,10 @@ private:
     QWidget* m_summaryWidget;
     QLabel* m_summary;
     QToolButton* m_summaryExpand;
+    
+    // animations!
+    QTimeLine* m_timeline;
+    int m_animHeight;
 };
 
 }

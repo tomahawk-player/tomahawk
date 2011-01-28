@@ -90,7 +90,7 @@ DynamicWidget::DynamicWidget( const Tomahawk::dynplaylist_ptr& playlist, QWidget
     m_view = new DynamicView( this );
     m_view->setModel( m_model );
     m_view->setContentsMargins( 0, 0, 0, 0 );
-    m_layout->addWidget( m_view );
+    m_layout->addWidget( m_view, 1 );
     
         
     loadDynamicPlaylist( playlist );
