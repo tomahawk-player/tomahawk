@@ -118,7 +118,7 @@ DynamicWidget::loadDynamicPlaylist( const Tomahawk::dynplaylist_ptr& playlist )
         foreach( const dyncontrol_ptr& control, playlist->generator()->controls() ) {
             qDebug() << "CONTROL:" << control->selectedType() << control->match() << control->input();
         }
-        m_controls->setControls( m_playlist->generator(), m_playlist->generator()->controls(), m_playlist->author()->isLocal() );
+        m_controls->setControls( m_playlist, m_playlist->author()->isLocal() );
     
         m_playlist = playlist;
         m_view->setOnDemand( m_playlist->mode() == OnDemand );
@@ -139,7 +139,7 @@ DynamicWidget::loadDynamicPlaylist( const Tomahawk::dynplaylist_ptr& playlist )
     m_model->loadPlaylist( m_playlist );
     
     if( !m_playlist.isNull() )
-        m_controls->setControls( m_playlist->generator(), m_playlist->generator()->controls(), m_playlist->author()->isLocal() );
+        m_controls->setControls( m_playlist, m_playlist->author()->isLocal() );
     
     m_generatorCombo->setWritable( playlist->author()->isLocal() );
     m_generatorCombo->setLabel( qobject_cast< QComboBox* >( m_generatorCombo->writableWidget() )->currentText() );

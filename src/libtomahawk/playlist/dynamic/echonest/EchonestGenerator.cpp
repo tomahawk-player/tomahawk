@@ -224,14 +224,16 @@ void
 EchonestGenerator::appendRadioType( Echonest::DynamicPlaylist::PlaylistParams& params ) const throw( std::runtime_error )
 {
     /**
-     * so we try to match the best type of echonest playlist, based on the controls
-     * the types are artist, artist-radio, artist-description, catalog, catalog-radio, song-radio. we don't care about the catalog ones.
+     * So we try to match the best type of echonest playlist, based on the controls
+     * the types are artist, artist-radio, artist-description, catalog, catalog-radio, song-radio. we don't care about the catalog ones, and
+     * we can't use the song ones since for the moment EN only accepts Song IDs, not names, and we don't want to insert an extra song.search
+     * call first.
      * 
      */
     
     /// 1. artist: If all the artist controls are Limit-To. If some were but not all, error out.
     /// 2. artist-description: If all the artist entries are Description. If some were but not all, error out.
-    /// 3. Artist-Radio: If all the artist entries are Similar To. If some were but not all, error out.
+    /// 3. artist-radio: If all the artist entries are Similar To. If some were but not all, error out.
     if( onlyThisArtistType( Echonest::DynamicPlaylist::ArtistType ) )
         params.append( Echonest::DynamicPlaylist::PlaylistParamData( Echonest::DynamicPlaylist::Type, Echonest::DynamicPlaylist::ArtistType ) );
     else if( onlyThisArtistType( Echonest::DynamicPlaylist::ArtistDescriptionType ) )
@@ -249,3 +251,80 @@ EchonestGenerator::queryFromSong(const Echonest::Song& song)
     track[ "track" ] = song.title();
     return query_ptr( new Query( track ) );
 }
+
+QString 
+EchonestGenerator::sentenceSummary()
+{
+    /**
+     * The idea is we generate an english sentence from the individual phrases of the controls. We have to follow a few rules, but othewise it's quite straightforward.
+     * 
+     * Rules:
+     *   - Sentence starts with "Songs "
+     *   - Artists always go first
+     *   - Separate phrases by comma, and before last phrase
+     *   - sorting always at end
+     *   - collapse artists. "Like X, like Y, like Z, ..." -> "Like X, Y, and Z"
+     * 
+     *  NOTE / TODO: In order for the sentence to be grammatically correct, we must follow the EN API rules. That means we can't have multiple of some types of filters,
+     *        and all Artist types must be the same. The filters aren't checked at the moment until Generate / Play is pressed. Consider doing a check on hide as well.
+     */
+    QList< dyncontrol_ptr > allcontrols = m_controls;
+    QString sentence = "Songs ";
+    
+    /// 1. Collect all artist filters
+    /// 2. Get the sorted by filter if it exists.
+    QList< dyncontrol_ptr > artists;    
+    dyncontrol_ptr sorting;
+    foreach( const dyncontrol_ptr& control, allcontrols ) {
+        if( control->selectedType() == "Artist" )
+            artists << control;
+        else if( control->selectedType() == "Sorting" )
+            sorting = control;
+    }
+    if( !sorting.isNull() )
+        allcontrols.removeAll( sorting );
+        
+    /// Do the assembling. Start with the artists if there are any, then do all the rest.    
+    for( int i = 0; i < artists.size(); i++ ) {
+        dyncontrol_ptr artist = artists.value( i );
+        allcontrols.removeAll( artist ); // remove from pool while we're here
+        
+        /// Collapse artist lists
+        QString center, suffix;
+        QString summary = artist.dynamicCast< EchonestControl >()->summary();
+        if( i == 0 ) { // if it's the first and only one
+            center = summary.remove( "~" );
+            if( artists.size() == 2 ) // special case for 2, no comma. ( X and Y )
+                suffix = " and ";
+            else
+                suffix = ", ";
+        } else {
+            center = summary.mid( summary.indexOf( "~" ) + 1 );
+            suffix = ", ";
+            if( i != artists.size() - 1 ) // if there are more, add an " and "
+                suffix += "and ";
+        }
+        sentence += center + suffix;
+    }
+    qDebug() << "Got artists:" << sentence;
+    for( int i = 0; i < allcontrols.size(); i++ ) {
+        // end case: if this is the last AND there is not a sorting filter (so this is the real last one)
+        const bool last = ( i == allcontrols.size() - 1 && sorting.isNull() );
+        QString prefix, suffix;
+        if( last ) {
+            prefix = "and ";
+            suffix = ".";
+        } else
+            suffix = ", ";
+        sentence += prefix + allcontrols.value( i ).dynamicCast< EchonestControl >()->summary() + suffix;
+    }
+    qDebug() << "Got artists and contents:" << sentence;
+    
+    if( !sorting.isNull() ) {
+        sentence += "and " + sorting.dynamicCast< EchonestControl >()->summary() + ".";
+    }
+    qDebug() << "Got full summary:" << sentence;
+    
+    return sentence;
+}
+

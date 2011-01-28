@@ -16,6 +16,7 @@
 
 #include "CollapsibleControls.h"
 
+#include "tomahawk/tomahawkapp.h"
 #include "DynamicControlList.h"
 #include "DynamicControlWrapper.h"
 #include "dynamic/GeneratorInterface.h"
@@ -23,6 +24,8 @@
 
 #include <QLabel>
 #include <QStackedLayout>
+#include <QToolButton>
+#include <QAction>
 
 using namespace Tomahawk;
 
@@ -32,11 +35,12 @@ CollapsibleControls::CollapsibleControls( QWidget* parent )
     init();
 }
 
-CollapsibleControls::CollapsibleControls( const geninterface_ptr& generator, const QList< dyncontrol_ptr >& controls, bool isLocal, QWidget* parent )
+CollapsibleControls::CollapsibleControls( const dynplaylist_ptr& playlist, bool isLocal, QWidget* parent )
     : QWidget( parent )
+    , m_dynplaylist( playlist )
 {
     init();
-    setControls( generator, controls, isLocal );
+    setControls( m_dynplaylist, isLocal );
 }
 
 Tomahawk::CollapsibleControls::~CollapsibleControls()
@@ -54,16 +58,28 @@ CollapsibleControls::init()
     
     m_controls = new Tomahawk::DynamicControlList( this );
     m_layout->addWidget( m_controls );
+    connect( m_controls, SIGNAL( toggleCollapse() ), this, SLOT( toggleCollapse() ) );
     
     m_summaryWidget = new QWidget( this );
     // TODO replace
     //     m_summaryWidget->setMinimumHeight( 24 );
     //     m_summaryWidget->setMaximumHeight( 24 );
     m_summaryWidget->setSizePolicy( QSizePolicy::Expanding, QSizePolicy::Fixed );
-    m_summaryWidget->setLayout( new QVBoxLayout );
+    QHBoxLayout* summaryLayout = new QHBoxLayout;
+    m_summaryWidget->setLayout( summaryLayout );
     m_summaryWidget->layout()->setMargin( 0 );
-    m_summaryWidget->layout()->addWidget( new QLabel( "replace me plz", m_summaryWidget ) );
+    
+    m_summary = new QLabel( m_summaryWidget );
+    summaryLayout->addWidget( m_summary, 1 );
+    m_summaryExpand = new QToolButton( m_summary );
+    m_summaryExpand->setIconSize( QSize( 16, 16 ) );
+    m_summaryExpand->setIcon( QIcon( RESPATH "images/arrow-down-double.png" ) );
+    m_summaryExpand->setToolButtonStyle( Qt::ToolButtonIconOnly );
+    m_summaryExpand->setAutoRaise( true );
+    m_summaryExpand->setContentsMargins( 0, 0, 0, 0 );
+    summaryLayout->addWidget( m_summaryExpand );
     m_layout->addWidget( m_summaryWidget );
+    connect( m_summaryExpand, SIGNAL( clicked( bool ) ), this, SLOT( toggleCollapse() ) );
     
     m_layout->setCurrentIndex( 0 );
     connect( m_controls, SIGNAL( controlChanged( Tomahawk::dyncontrol_ptr ) ), SIGNAL( controlChanged( Tomahawk::dyncontrol_ptr ) ) );
@@ -82,13 +98,19 @@ Tomahawk::CollapsibleControls::controls() const
 }
 
 void 
-CollapsibleControls::setControls( const geninterface_ptr& generator, const QList< dyncontrol_ptr >& controls, bool isLocal )
+CollapsibleControls::setControls( const dynplaylist_ptr& playlist, bool isLocal )
 {
-    m_controls->setControls( generator, controls, isLocal );
+    m_dynplaylist = playlist;
+    m_controls->setControls( m_dynplaylist->generator(), m_dynplaylist->generator()->controls(), isLocal );
 }
 
 void 
 CollapsibleControls::toggleCollapse()
 {
-
+    if( m_layout->currentWidget() == m_controls ) {
+        m_summary->setText( m_dynplaylist->generator()->sentenceSummary() );
+        m_layout->setCurrentWidget( m_summaryWidget );
+    } else {
+        m_layout->setCurrentWidget( m_controls );
+    }
 }

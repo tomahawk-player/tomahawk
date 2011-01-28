@@ -37,11 +37,12 @@ public:
     
     virtual QString input() const;
     virtual QString match() const;
-    virtual QString matchString();
+    virtual QString matchString() const;
+    virtual QString summary() const;
     
     virtual void setInput(const QString& input);
     virtual void setMatch(const QString& match);
-        
+    
     /// DO NOT USE IF YOU ARE NOT A DBCMD
     explicit EchonestControl( const QString& type, const QStringList& typeSelectors, QObject* parent = 0 );
     
@@ -64,6 +65,8 @@ private:
     void updateToComboAndSlider( bool smooth = false );
     void updateToLabelAndCombo();
     
+    void calculateSummary();
+    
     Echonest::DynamicPlaylist::PlaylistParam m_currentType;
     int m_overrideType;
     
@@ -71,6 +74,7 @@ private:
     QWeakPointer< QWidget > m_match;
     QString m_matchData;
     QString m_matchString;
+    QString m_summary;
     
     QTimer m_editingTimer;
     

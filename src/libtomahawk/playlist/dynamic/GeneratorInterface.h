@@ -80,6 +80,11 @@ public:
      */
     virtual void fetchNext( int rating = -1 ) {}
     
+    /**
+     * Return a sentence that describes this generator's controls. TODO english only ATM
+     */
+    virtual QString sentenceSummary() {}
+    
     /// The type of this generator
     QString type() const { return m_type; }
     

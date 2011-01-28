@@ -76,30 +76,40 @@ Tomahawk::EchonestControl::toENParam() const
     return m_data;
 }
 
-QString Tomahawk::EchonestControl::input() const
+QString 
+Tomahawk::EchonestControl::input() const
 {
     return m_data.second.toString();
 }
 
-QString Tomahawk::EchonestControl::match() const
+QString 
+Tomahawk::EchonestControl::match() const
 {
     return m_matchData;
 }
 
-QString Tomahawk::EchonestControl::matchString()
+QString 
+Tomahawk::EchonestControl::matchString() const
 {
     return m_matchString;
 }
 
+QString 
+Tomahawk::EchonestControl::summary() const
+{   
+    return m_summary;
+}
 
-void Tomahawk::EchonestControl::setInput(const QString& input)
+void 
+Tomahawk::EchonestControl::setInput(const QString& input)
 {
     // TODO generate widgets
     m_data.second = input;
     updateWidgetsFromData();
 }
 
-void Tomahawk::EchonestControl::setMatch(const QString& match)
+void 
+Tomahawk::EchonestControl::setMatch(const QString& match)
 {
     // TODO generate widgets
     m_matchData = match;
@@ -295,6 +305,8 @@ Tomahawk::EchonestControl::updateWidgets()
         m_match = QWeakPointer<QWidget>( new QWidget );
         m_input = QWeakPointer<QWidget>( new QWidget );
     }
+    
+    calculateSummary();
 }
 
 void 
@@ -368,6 +380,8 @@ Tomahawk::EchonestControl::updateData()
             m_data.second = enumVal;
         }
     }
+    
+    calculateSummary();
 }
 
 void 
@@ -428,6 +442,7 @@ Tomahawk::EchonestControl::updateWidgetsFromData()
             input->setCurrentIndex( val );
         }
     }
+    calculateSummary();
 }
 
 void 
@@ -449,10 +464,69 @@ void Tomahawk::EchonestControl::updateToLabelAndCombo()
     }
 }
 
-
 void 
 Tomahawk::EchonestControl::editingFinished()
 {
     qDebug() << Q_FUNC_INFO;
     m_editingTimer.start();
+}
+
+void 
+Tomahawk::EchonestControl::calculateSummary()
+{
+    // turns the current control into an english phrase suitable for embedding into a sentence summary
+    QString summary;
+    if( selectedType() == "Artist" ) {
+        // magic char is used by EchonestGenerator to split the prefix from the artist name
+        if( static_cast< Echonest::DynamicPlaylist::ArtistTypeEnum >( m_matchData.toInt() ) == Echonest::DynamicPlaylist::ArtistType )
+            summary = QString( "only by ~%1" ).arg( m_data.second.toString() );
+        else if( static_cast< Echonest::DynamicPlaylist::ArtistTypeEnum >( m_matchData.toInt() ) == Echonest::DynamicPlaylist::ArtistRadioType )
+            summary = QString( "similar to ~%1" ).arg( m_data.second.toString() );
+        else if( static_cast< Echonest::DynamicPlaylist::ArtistTypeEnum >( m_matchData.toInt() ) == Echonest::DynamicPlaylist::ArtistDescriptionType )
+            summary = QString( "like ~%1" ).arg( m_data.second.toString() );
+    } else if( selectedType() == "Variety" || selectedType() == "Danceability" || selectedType() == "Artist Hotttnesss" || selectedType() == "Energy" || selectedType() == "Artist Familiarity" || selectedType() == "Song Hotttnesss" ) {
+        QString modifier;
+        qreal sliderVal = m_data.second.toReal();
+        // divide into avpproximate chunks
+        if( 0.0 <= sliderVal && sliderVal < 0.2 )
+            modifier = "very low";
+        else if( 0.2 <= sliderVal && sliderVal < 0.4 )
+            modifier = "low";
+        else if( 0.4 <= sliderVal && sliderVal < 0.6 )
+            modifier = "moderate";
+        else if( 0.6 <= sliderVal && sliderVal < 0.8 )
+            modifier = "high";
+        else if( 0.8 <= sliderVal && sliderVal <= 1 )
+            modifier = "very high";
+        summary = QString( "with %1 %2" ).arg( modifier ).arg( selectedType().toLower() );
+    } else if( selectedType() == "Tempo" ) {
+        summary = QString( "about %1 BPM" ).arg( m_data.second.toString() );
+    } else if( selectedType() == "Duration" ) {
+        summary = QString( "about %1 minutes long" ).arg( m_data.second.toString() );
+    } else if( selectedType() == "Loudness" ) {
+        summary = QString( "about %1 dB" ).arg( m_data.second.toString() );
+    } else if( selectedType() == "Latitude" || selectedType() == "Longitude"  ) {
+        summary = QString( "at around %1%2 %3" ).arg( m_data.second.toString() ).arg( QString( QChar( 0x00B0 ) ) ).arg( selectedType().toLower() );
+    } else if( selectedType() == "Key" ) {
+        Q_ASSERT( !m_input.isNull() );
+        Q_ASSERT( qobject_cast< QComboBox* >( m_input.data() ) );
+        QString keyName = qobject_cast< QComboBox* >( m_input.data() )->currentText().toLower();
+        summary = QString( "in %1" ).arg( keyName );
+    } else if( selectedType() == "Mode" ) {
+        Q_ASSERT( !m_input.isNull() );
+        Q_ASSERT( qobject_cast< QComboBox* >( m_input.data() ) );
+        QString modeName = qobject_cast< QComboBox* >( m_input.data() )->currentText().toLower();
+        summary = QString( "in a %1 key" ).arg( modeName );
+    } else if( selectedType() == "Sorting" ) {
+        Q_ASSERT( !m_input.isNull() );
+        Q_ASSERT( qobject_cast< QComboBox* >( m_input.data() ) );
+        QString sortType = qobject_cast< QComboBox* >( m_input.data() )->currentText().toLower();
+        
+        Q_ASSERT( !m_match.isNull() );
+        Q_ASSERT( qobject_cast< QComboBox* >( m_match.data() ) );
+        QString ascdesc = qobject_cast< QComboBox* >( m_match.data() )->currentText().toLower();
+        
+        summary = QString( "sorted in %1 %2 order" ).arg( ascdesc ).arg( sortType );
+    }
+    m_summary = summary;
 }

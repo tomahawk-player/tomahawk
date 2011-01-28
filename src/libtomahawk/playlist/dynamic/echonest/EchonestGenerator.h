@@ -49,6 +49,7 @@ public:
     virtual void generate ( int number = -1 );
     virtual void startOnDemand();
     virtual void fetchNext( int rating = -1 );
+    virtual QString sentenceSummary();
     
 private slots:
     void staticFinished();

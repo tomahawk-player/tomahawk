@@ -44,6 +44,7 @@ class DynamicControl : public QObject
     Q_PROPERTY( QString selectedType READ selectedType WRITE setSelectedType )
     Q_PROPERTY( QString match READ match WRITE setMatch )
     Q_PROPERTY( QString input READ input WRITE setInput )
+    Q_PROPERTY( QString summary READ summary ) // a summary of the control in phrase form
     
 public:
     DynamicControl( const QStringList& typeSelectors = QStringList() );
@@ -66,17 +67,18 @@ public:
     virtual QWidget* inputField()  { Q_ASSERT( false ); return 0;  }
     
     /// The user-readable match value, for showing in read-only playlists
-    virtual QString matchString() { Q_ASSERT( false ); return QString(); }
+    virtual QString matchString() const { Q_ASSERT( false ); return QString(); }
     
     /// the serializable value of the match
     virtual QString match() const  { Q_ASSERT( false ); return QString(); }
     /// the serializable value of the input
     virtual QString input() const { Q_ASSERT( false ); return QString(); }
+    /// the user-readable summary phrase
+    virtual QString summary() const { Q_ASSERT( false ); return QString(); }
     
     // used by JSON serialization
     virtual void setMatch( const QString& match ) { Q_ASSERT( false ); }
     virtual void setInput( const QString& input ) { Q_ASSERT( false ); }
-    
     /// All the potential type selectors for this control
     QStringList typeSelectors() const { return m_typeSelectors; }
     
@@ -103,9 +105,6 @@ public slots:
 protected:
     // Private constructor, you can't make one. Get it from your Generator.
     explicit DynamicControl( const QString& selectedType, const QStringList& typeSelectors, QObject* parent = 0 );
-    
-    QString m_match;
-    QString m_input;
     
 private:
     QString m_type;

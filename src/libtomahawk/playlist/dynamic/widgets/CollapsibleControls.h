@@ -21,6 +21,8 @@
 
 #include <QWidget>
 
+class QToolButton;
+class QLabel;
 class QStackedLayout;
 namespace Tomahawk
 {
@@ -33,10 +35,10 @@ class CollapsibleControls : public QWidget
     Q_OBJECT
 public:
     CollapsibleControls( QWidget* parent );
-    CollapsibleControls( const geninterface_ptr& generator, const QList< dyncontrol_ptr >& controls, bool isLocal, QWidget* parent = 0 );
+    CollapsibleControls( const dynplaylist_ptr& playlist, bool isLocal, QWidget* parent = 0 );
     virtual ~CollapsibleControls();
     
-    void setControls( const geninterface_ptr& generator, const QList< dyncontrol_ptr >& controls, bool isLocal );
+    void setControls( const dynplaylist_ptr& playlist, bool isLocal );
     QList< DynamicControlWrapper* > controls() const;
     
 signals:
@@ -49,10 +51,13 @@ private slots:
 private:
     void init();
     
+    dynplaylist_ptr m_dynplaylist;
     QStackedLayout* m_layout;
     DynamicControlList* m_controls;
-    QWidget* m_summaryWidget;
     
+    QWidget* m_summaryWidget;
+    QLabel* m_summary;
+    QToolButton* m_summaryExpand;
 };
 
 }
