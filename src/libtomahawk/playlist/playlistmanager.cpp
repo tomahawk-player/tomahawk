@@ -4,6 +4,8 @@
 
 #include "audio/audioengine.h"
 #include "utils/animatedsplitter.h"
+#include "topbar/topbar.h"
+#include "widgets/infowidgets/sourceinfowidget.h"
 
 #include "collectionmodel.h"
 #include "collectionflatmodel.h"
@@ -46,9 +48,11 @@ PlaylistManager::PlaylistManager( QObject* parent )
     , m_modesAvailable( false )
 {
     s_instance = this;
-    m_stack = new QStackedWidget();
 
     m_widget->setLayout( new QVBoxLayout() );
+
+    m_topbar = new TopBar();
+    m_stack = new QStackedWidget();
 
     m_splitter = new AnimatedSplitter();
     m_splitter->setOrientation( Qt::Vertical );
@@ -65,6 +69,7 @@ PlaylistManager::PlaylistManager( QObject* parent )
     m_splitter->hide( 1, false );
 
     m_widget->layout()->setMargin( 0 );
+    m_widget->layout()->addWidget( m_topbar );
     m_widget->layout()->addWidget( m_splitter );
 
     m_superCollectionView = new CollectionView();
@@ -92,6 +97,36 @@ PlaylistManager::PlaylistManager( QObject* parent )
     m_widget->layout()->setMargin( 0 );
 
     connect( &m_filterTimer, SIGNAL( timeout() ), SLOT( applyFilter() ) );
+
+    connect( m_topbar, SIGNAL( filterTextChanged( QString ) ),
+             this,       SLOT( setFilter( QString ) ) );
+
+    connect( this,     SIGNAL( numSourcesChanged( unsigned int ) ),
+             m_topbar,   SLOT( setNumSources( unsigned int ) ) );
+
+    connect( this,     SIGNAL( numTracksChanged( unsigned int ) ),
+             m_topbar,   SLOT( setNumTracks( unsigned int ) ) );
+
+    connect( this,     SIGNAL( numArtistsChanged( unsigned int ) ),
+             m_topbar,   SLOT( setNumArtists( unsigned int ) ) );
+
+    connect( this,     SIGNAL( numShownChanged( unsigned int ) ),
+             m_topbar,   SLOT( setNumShown( unsigned int ) ) );
+
+    connect( m_topbar, SIGNAL( flatMode() ),
+             this,       SLOT( setTableMode() ) );
+
+    connect( m_topbar, SIGNAL( artistMode() ),
+             this,       SLOT( setTreeMode() ) );
+
+    connect( m_topbar, SIGNAL( albumMode() ),
+             this,       SLOT( setAlbumMode() ) );
+
+    connect( this,     SIGNAL( statsAvailable( bool ) ),
+             m_topbar,   SLOT( setStatsVisible( bool ) ) );
+
+    connect( this,     SIGNAL( modesAvailable( bool ) ),
+             m_topbar,   SLOT( setModesVisible( bool ) ) );
 }
 
 
@@ -506,7 +541,7 @@ PlaylistManager::linkPlaylist()
         m_interfaceHistory << m_currentInterface;
     }
 
-    applyFilter();
+//    applyFilter();
     AudioEngine::instance()->setPlaylist( m_currentInterface );
 
     if ( m_currentInterface && m_statsAvailable )

@@ -169,7 +169,7 @@ DatabaseWorker::doWork()
     }
 
     if ( m_outstanding > 0 )
-        doWork();
+        QTimer::singleShot( 0, this, SLOT( doWork() ) );
 }
 
 

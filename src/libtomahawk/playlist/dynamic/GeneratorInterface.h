@@ -83,7 +83,7 @@ public:
     /**
      * Return a sentence that describes this generator's controls. TODO english only ATM
      */
-    virtual QString sentenceSummary() {}
+    virtual QString sentenceSummary() { return QString(); }
     
     /// The type of this generator
     QString type() const { return m_type; }

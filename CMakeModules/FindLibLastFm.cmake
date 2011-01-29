@@ -10,8 +10,8 @@ find_path(LIBLASTFM_INCLUDE_DIR NAMES Audioscrobbler
    HINTS
    ~/usr/include
    /opt/local/include
-   /usr/include
    /usr/local/include
+   /usr/include
    /opt/kde4/include
    ${KDE4_INCLUDE_DIR}
    PATH_SUFFIXES lastfm
@@ -21,9 +21,9 @@ find_library( LIBLASTFM_LIBRARY NAMES lastfm
     PATHS
     ~/usr/lib
    /opt/local/lib
+   /usr/local/lib
    /usr/lib
    /usr/lib64
-   /usr/local/lib
    /opt/kde4/lib
    ${KDE4_LIB_DIR}
 )
