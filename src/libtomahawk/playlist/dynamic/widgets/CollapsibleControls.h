@@ -60,6 +60,7 @@ private:
     dynplaylist_ptr m_dynplaylist;
     QStackedLayout* m_layout;
     DynamicControlList* m_controls;
+    bool m_isLocal;
     
     QWidget* m_summaryWidget;
     QLabel* m_summary;

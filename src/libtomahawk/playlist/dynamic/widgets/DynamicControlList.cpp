@@ -39,15 +39,14 @@ DynamicControlList::DynamicControlList( QWidget* parent )
     init();
 }
 
-DynamicControlList::DynamicControlList( const geninterface_ptr& generator, const QList< dyncontrol_ptr >& controls, bool isLocal, QWidget* parent )
+DynamicControlList::DynamicControlList( const geninterface_ptr& generator, const QList< dyncontrol_ptr >& controls, QWidget* parent )
     : QWidget( parent )
     , m_generator( generator )
     , m_layout( new QGridLayout )
     , m_summaryWidget( 0 )
-    , m_isLocal( isLocal )
 {
     init();
-    setControls(  generator, controls, m_isLocal );
+    setControls(  generator, controls );
 }
 
 DynamicControlList::~DynamicControlList()
@@ -90,7 +89,7 @@ DynamicControlList::init()
 }
 
 void 
-DynamicControlList::setControls( const geninterface_ptr& generator, const QList< dyncontrol_ptr >& controls, bool isLocal )
+DynamicControlList::setControls( const geninterface_ptr& generator, const QList< dyncontrol_ptr >& controls )
 {
     if( m_controls.size() == controls.size() && controls.size() > 0 ) { // check if we're setting the same controls we already have, and exit if we are
         bool different = false;
@@ -112,18 +111,17 @@ DynamicControlList::setControls( const geninterface_ptr& generator, const QList<
     
     m_layout->removeItem( m_collapseLayout );
     
-    m_isLocal = isLocal;
     m_generator = generator;
     if( controls.isEmpty() ) {
         qDebug() << "CREATING DEFAULT CONTROL";
-        DynamicControlWrapper* ctrlW = new DynamicControlWrapper( generator->createControl(), m_layout, m_controls.size(), isLocal, this );
+        DynamicControlWrapper* ctrlW = new DynamicControlWrapper( generator->createControl(), m_layout, m_controls.size(), this );
         connect( ctrlW, SIGNAL( removeControl() ), this, SLOT( removeControl() ) );
         connect( ctrlW, SIGNAL( changed() ), this, SLOT( controlChanged() ) );
         m_controls << ctrlW;
     } else 
     {
         foreach( const dyncontrol_ptr& control, controls ) {
-            DynamicControlWrapper* ctrlW = new DynamicControlWrapper( control, m_layout, m_controls.size(), isLocal, this );
+            DynamicControlWrapper* ctrlW = new DynamicControlWrapper( control, m_layout, m_controls.size(), this );
             connect( ctrlW, SIGNAL( removeControl() ), this, SLOT( removeControl() ) );
             connect( ctrlW, SIGNAL( changed() ), this, SLOT( controlChanged() ) );
             
@@ -139,7 +137,7 @@ void DynamicControlList::addNewControl()
     m_layout->removeItem( m_collapseLayout );
     
     dyncontrol_ptr control = m_generator->createControl();
-    m_controls.append( new DynamicControlWrapper( control, m_layout, m_controls.size(), m_isLocal, this ) );
+    m_controls.append( new DynamicControlWrapper( control, m_layout, m_controls.size(), this ) );
     connect( m_controls.last(), SIGNAL( removeControl() ), this, SLOT( removeControl() ) );
     connect( m_controls.last(), SIGNAL( changed() ), this, SLOT( controlChanged() ) );
     

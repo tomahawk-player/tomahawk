@@ -44,10 +44,10 @@ class DynamicControlList : public QWidget
     Q_OBJECT    
 public:
     DynamicControlList( QWidget* parent = 0 );
-    explicit DynamicControlList( const geninterface_ptr& generator, const QList< dyncontrol_ptr >& controls, bool isLocal, QWidget* parent = 0 );
+    explicit DynamicControlList( const geninterface_ptr& generator, const QList< dyncontrol_ptr >& controls, QWidget* parent = 0 );
     virtual ~DynamicControlList();
     
-    void setControls( const geninterface_ptr& generator, const QList< dyncontrol_ptr >& controls, bool isLocal );
+    void setControls( const geninterface_ptr& generator, const QList< dyncontrol_ptr >& controls );
     QList< DynamicControlWrapper* > controls() const { return m_controls; }
     
 signals:
@@ -73,7 +73,6 @@ private:
     QPushButton* m_collapse;
     QToolButton* m_addControl;
     
-    bool m_isLocal;
 };
 
 };

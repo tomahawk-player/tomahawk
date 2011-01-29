@@ -33,6 +33,7 @@ using namespace Tomahawk;
 
 CollapsibleControls::CollapsibleControls( QWidget* parent )
     : QWidget( parent )
+    , m_isLocal( true )
 {
     init();
 }
@@ -40,9 +41,10 @@ CollapsibleControls::CollapsibleControls( QWidget* parent )
 CollapsibleControls::CollapsibleControls( const dynplaylist_ptr& playlist, bool isLocal, QWidget* parent )
     : QWidget( parent )
     , m_dynplaylist( playlist )
+    , m_isLocal( isLocal )
 {
     init();
-    setControls( m_dynplaylist, isLocal );
+    setControls( m_dynplaylist, m_isLocal );
 }
 
 Tomahawk::CollapsibleControls::~CollapsibleControls()
@@ -87,11 +89,16 @@ CollapsibleControls::init()
     m_summaryExpand->setToolButtonStyle( Qt::ToolButtonIconOnly );
     m_summaryExpand->setAutoRaise( true );
     m_summaryExpand->setContentsMargins( 0, 0, 0, 0 );
-    summaryLayout->addWidget( m_summaryExpand );
+    if( m_isLocal )
+        summaryLayout->addWidget( m_summaryExpand );
     m_layout->addWidget( m_summaryWidget );
     connect( m_summaryExpand, SIGNAL( clicked( bool ) ), this, SLOT( toggleCollapse() ) );
     
-    m_layout->setCurrentIndex( 0 );
+    if( m_isLocal )
+        m_layout->setCurrentWidget( m_controls );
+    else
+        m_layout->setCurrentWidget( m_summary );
+    
     connect( m_controls, SIGNAL( controlChanged( Tomahawk::dyncontrol_ptr ) ), SIGNAL( controlChanged( Tomahawk::dyncontrol_ptr ) ) );
     connect( m_controls, SIGNAL( controlsChanged() ), SIGNAL( controlsChanged() ) );
     
@@ -111,7 +118,8 @@ void
 CollapsibleControls::setControls( const dynplaylist_ptr& playlist, bool isLocal )
 {
     m_dynplaylist = playlist;
-    m_controls->setControls( m_dynplaylist->generator(), m_dynplaylist->generator()->controls(), isLocal );
+    m_isLocal = isLocal;
+    m_controls->setControls( m_dynplaylist->generator(), m_dynplaylist->generator()->controls() );
 }
 
 void 

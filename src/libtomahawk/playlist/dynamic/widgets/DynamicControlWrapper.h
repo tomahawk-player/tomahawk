@@ -22,7 +22,6 @@
 #include "typedefs.h"
 
 class QGridLayout;
-class ReadOrWriteWidget;
 class QStackedLayout;
 class QEvent;
 class QToolButton;
@@ -40,7 +39,7 @@ class DynamicControlWrapper : public QObject
 {
     Q_OBJECT 
 public:
-    explicit DynamicControlWrapper( const dyncontrol_ptr& control, QGridLayout* layout, int row, bool isLocal = false, QWidget* parent = 0 );
+    explicit DynamicControlWrapper( const dyncontrol_ptr& control, QGridLayout* layout, int row, QWidget* parent = 0 );
     virtual ~DynamicControlWrapper();
            
 //     virtual void enterEvent(QEvent* );
@@ -61,17 +60,15 @@ private:
     QToolButton* initButton();
     QWidget* createDummy( QWidget* fromW );
     
-    bool m_isLocal, m_mouseOver;
-    
     QWidget* m_parent;
     int m_row;
     QStackedLayout* m_plusL;
     QToolButton* m_minusButton;
     
     dyncontrol_ptr m_control;
-    ReadOrWriteWidget* m_typeSelector;
-    ReadOrWriteWidget* m_matchSelector;
-    ReadOrWriteWidget* m_entryWidget;
+    QComboBox* m_typeSelector;
+    QWidget* m_matchSelector;
+    QWidget* m_entryWidget;
     QGridLayout* m_layout;
 };
     

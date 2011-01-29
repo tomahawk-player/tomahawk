@@ -18,7 +18,6 @@
 
 #include "tomahawk/tomahawkapp.h"
 #include "dynamic/DynamicControl.h"
-#include "dynamic/widgets/ReadOrWriteWidget.h"
 
 #include <QHBoxLayout>
 #include <QComboBox>
@@ -30,10 +29,8 @@
 
 using namespace Tomahawk;
 
-DynamicControlWrapper::DynamicControlWrapper( const Tomahawk::dyncontrol_ptr& control, QGridLayout* layout, int row, bool isLocal, QWidget* parent )
+DynamicControlWrapper::DynamicControlWrapper( const Tomahawk::dyncontrol_ptr& control, QGridLayout* layout, int row, QWidget* parent )
      : QObject( parent )
-     , m_isLocal( isLocal )
-     , m_mouseOver( false )
      , m_parent( parent )
      , m_row( row )
      , m_minusButton( 0 )
@@ -46,43 +43,37 @@ DynamicControlWrapper::DynamicControlWrapper( const Tomahawk::dyncontrol_ptr& co
     
     qDebug() << "CREATING DYNAMIC CONTROL WRAPPER WITH ROW:" << row << layout;
     
-    QComboBox* typeSelector = new QComboBox( parent );
-    m_typeSelector = new ReadOrWriteWidget( typeSelector, m_isLocal, m_parent );
+    m_typeSelector = new QComboBox( m_parent );
     
-    m_matchSelector = new ReadOrWriteWidget( control->matchSelector(), m_isLocal, m_parent );
-    m_entryWidget = new ReadOrWriteWidget( control->inputField(), m_isLocal, m_parent );
-        
-    if( m_isLocal )
-    {
-        m_minusButton = initButton();
-        m_minusButton->setIcon( QIcon( RESPATH "images/list-remove.png" ) );
-        connect( m_minusButton, SIGNAL( clicked( bool ) ), this, SIGNAL( removeControl() ) );
-        
-        
-        m_plusL = new QStackedLayout();
-        m_plusL->setContentsMargins( 0, 0, 0, 0 );
-        m_plusL->setMargin( 0 );
-        m_plusL->addWidget( m_minusButton );
-        m_plusL->addWidget( createDummy( m_minusButton ) ); // :-(
-    }
+    m_matchSelector = control->matchSelector();
+    m_entryWidget = control->inputField();
     
-    connect( typeSelector, SIGNAL( activated( QString) ), SLOT( typeSelectorChanged( QString ) ) );    
+    m_minusButton = initButton();
+    m_minusButton->setIcon( QIcon( RESPATH "images/list-remove.png" ) );
+    connect( m_minusButton, SIGNAL( clicked( bool ) ), this, SIGNAL( removeControl() ) );
+    
+    
+    m_plusL = new QStackedLayout();
+    m_plusL->setContentsMargins( 0, 0, 0, 0 );
+    m_plusL->setMargin( 0 );
+    m_plusL->addWidget( m_minusButton );
+    m_plusL->addWidget( createDummy( m_minusButton ) ); // :-(
+    
+        connect( m_typeSelector, SIGNAL( activated( QString) ), SLOT( typeSelectorChanged( QString ) ) );    
     connect( m_control.data(), SIGNAL( changed() ), this, SIGNAL( changed() ) );
     
     m_layout->addWidget( m_typeSelector, row, 0, Qt::AlignLeft );
     
     if( !control.isNull() ) {
         foreach( const QString& type, control->typeSelectors() )
-            typeSelector->addItem( type );
+            m_typeSelector->addItem( type );
     }
     
     typeSelectorChanged( m_control.isNull() ? "" : m_control->selectedType(), true );
     
-    if( m_isLocal )
-    {
-        m_layout->addLayout( m_plusL, m_row, 3, Qt::AlignCenter );
-        m_plusL->setCurrentIndex( 0 );
-    }
+    m_layout->addLayout( m_plusL, m_row, 3, Qt::AlignCenter );
+    m_plusL->setCurrentIndex( 0 );
+
     
 }
 
@@ -96,8 +87,6 @@ DynamicControlWrapper::~DynamicControlWrapper()
     m_control->matchSelector()->setParent( 0 );
     
     delete m_typeSelector;
-    delete m_matchSelector;
-    delete m_entryWidget;
     delete m_minusButton;
     delete m_plusL;
 }
@@ -150,27 +139,21 @@ DynamicControlWrapper::typeSelectorChanged( const QString& type, bool firstLoad 
     if( m_control->selectedType() != type && !firstLoad )
         m_control->setSelectedType( type );
     
-    m_typeSelector->setLabel( type );
     
-    QComboBox* typeSel = qobject_cast<QComboBox*>(m_typeSelector->writableWidget());
-    if( m_typeSelector->writable() && m_typeSelector->writableWidget() && typeSel ) {
-        int idx = typeSel->findText( type );
-        if( idx > -1 )
-            typeSel->setCurrentIndex( idx );
-    }
+    int idx = m_typeSelector->findText( type );
+    if( idx > -1 )
+        m_typeSelector->setCurrentIndex( idx );
+
     
     if( m_control->matchSelector() ) {
-        m_matchSelector->setWritableWidget( m_control->matchSelector() );
-        m_matchSelector->setLabel( m_control->matchString() );
-        m_matchSelector->setWritable( m_isLocal );
+        m_matchSelector = m_control->matchSelector();
         m_layout->addWidget( m_matchSelector, m_row, 1, Qt::AlignCenter );
+        m_matchSelector->show();
     }
     if( m_control->inputField() ) {
-        m_entryWidget->setWritableWidget( m_control->inputField() );
-        m_entryWidget->setLabel( m_control->input() );
-        m_entryWidget->setWritable( m_isLocal );
+        m_entryWidget = m_control->inputField();
         m_layout->addWidget( m_entryWidget, m_row, 2 );
-        
+        m_entryWidget->show();
     }
     
     emit changed();
