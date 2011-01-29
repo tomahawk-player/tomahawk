@@ -81,12 +81,14 @@ private:
     dynplaylist_ptr m_playlist;
     QVBoxLayout* m_layout;
     bool m_resolveOnNextLoad;
+    int m_seqRevLaunched; // if we shoot off multiple createRevision calls, we don'y want to set one of the middle ones
     
     // used in OnDemand mode
     bool m_runningOnDemand;
     bool m_startOnResolved;
     int m_songsSinceLastResolved;
         
+    // layout and stuff
     QLabel* m_headerText;
     QHBoxLayout* m_headerLayout;
     ReadOrWriteWidget* m_generatorCombo;

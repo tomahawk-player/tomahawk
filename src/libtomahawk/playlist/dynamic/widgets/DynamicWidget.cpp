@@ -41,6 +41,7 @@ DynamicWidget::DynamicWidget( const Tomahawk::dynplaylist_ptr& playlist, QWidget
     : QWidget(parent)
     , m_layout( new QVBoxLayout )
     , m_resolveOnNextLoad( false )
+    , m_seqRevLaunched( 0 )
     , m_runningOnDemand( false )
     , m_startOnResolved( false )
     , m_songsSinceLastResolved( 0 )
@@ -110,6 +111,14 @@ DynamicWidget::~DynamicWidget()
 void 
 DynamicWidget::loadDynamicPlaylist( const Tomahawk::dynplaylist_ptr& playlist )
 {
+    // special case: if we have launched multiple setRevision calls, and the number of controls is different, it means that we're getting an intermediate setRevision
+    //  called after the user has already created more revisions. ignore in that case.
+    if( m_playlist.data() == playlist.data() && m_seqRevLaunched > 0
+        && m_controls->controls().size() != playlist->generator()->controls().size() // different number of controls
+        && qAbs( m_playlist->generator()->controls().size() - playlist->generator()->controls().size() ) < m_seqRevLaunched ) { // difference in controls has to be less than how many revisions we launched
+        return;
+    }
+    m_seqRevLaunched = 0;
     // if we're being told to load the same dynamic playlist over again, only do it if the controls have a different number
     if( !m_playlist.isNull() && ( m_playlist.data() == playlist.data() ) // same playlist pointer
         && m_playlist->generator()->controls().size() == playlist->generator()->controls().size() ) {
@@ -277,11 +286,13 @@ void
 DynamicWidget::controlsChanged()
 {
     m_playlist->createNewRevision();
+    m_seqRevLaunched++;
 }
 
 void 
 DynamicWidget::controlChanged( const Tomahawk::dyncontrol_ptr& control )
 {
     m_playlist->createNewRevision();
+    m_seqRevLaunched++;
 }
 
