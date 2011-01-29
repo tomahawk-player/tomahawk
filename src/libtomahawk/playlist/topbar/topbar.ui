@@ -316,7 +316,7 @@
   <customwidget>
    <class>SearchLineEdit</class>
    <extends>QLineEdit</extends>
-   <header>topbar/searchlineedit.h</header>
+   <header>playlist/topbar/searchlineedit.h</header>
   </customwidget>
  </customwidgets>
  <resources/>
