@@ -21,6 +21,7 @@
 
 #include <QWidget>
 
+class QHBoxLayout;
 class QTimeLine;
 class QToolButton;
 class QLabel;
@@ -63,7 +64,9 @@ private:
     bool m_isLocal;
     
     QWidget* m_summaryWidget;
+    QHBoxLayout* m_summaryLayout;
     QLabel* m_summary;
+    QStackedLayout* m_expandL;
     QToolButton* m_summaryExpand;
     
     // animations!

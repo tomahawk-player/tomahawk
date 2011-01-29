@@ -48,6 +48,10 @@ public:
     dyncontrol_ptr control() const;
     
     void removeFromLayout();
+    
+    
+    static QToolButton* initButton( QWidget* parent );
+    static QWidget* createDummy( QWidget* fromW, QWidget* parent );
 signals:
     void collapse();
     void removeControl();
@@ -57,9 +61,6 @@ private slots:
     void typeSelectorChanged( const QString& selectedType, bool firstLoad = false );
     
 private:
-    QToolButton* initButton();
-    QWidget* createDummy( QWidget* fromW );
-    
     QWidget* m_parent;
     int m_row;
     QStackedLayout* m_plusL;

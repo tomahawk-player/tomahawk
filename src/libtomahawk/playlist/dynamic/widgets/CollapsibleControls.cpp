@@ -55,8 +55,8 @@ Tomahawk::CollapsibleControls::~CollapsibleControls()
 void 
 CollapsibleControls::init()
 {
-    m_timeline = new QTimeLine( 300, this );
-    m_timeline->setUpdateInterval( 8 );
+    m_timeline = new QTimeLine( 250, this );
+    m_timeline->setUpdateInterval( 5 );
     m_animHeight = -1;
     m_collapseAnimation = false;
     
@@ -77,20 +77,25 @@ CollapsibleControls::init()
     m_summaryWidget->setMinimumHeight( 24 );
     m_summaryWidget->setMaximumHeight( 24 );
     m_summaryWidget->setSizePolicy( QSizePolicy::Expanding, QSizePolicy::Fixed );
-    QHBoxLayout* summaryLayout = new QHBoxLayout;
-    m_summaryWidget->setLayout( summaryLayout );
-    m_summaryWidget->layout()->setMargin( 0 );
+    m_summaryLayout = new QHBoxLayout;
+    m_summaryWidget->setLayout( m_summaryLayout );
+    m_summaryLayout->setMargin( 0 );
     
     m_summary = new QLabel( m_summaryWidget );
-    summaryLayout->addWidget( m_summary, 1 );
-    m_summaryExpand = new QToolButton( m_summary );
-    m_summaryExpand->setIconSize( QSize( 16, 16 ) );
+    m_summaryLayout->addWidget( m_summary, 1 );
+    m_summaryExpand = DynamicControlWrapper::initButton( this );
     m_summaryExpand->setIcon( QIcon( RESPATH "images/arrow-down-double.png" ) );
-    m_summaryExpand->setToolButtonStyle( Qt::ToolButtonIconOnly );
-    m_summaryExpand->setAutoRaise( true );
-    m_summaryExpand->setContentsMargins( 0, 0, 0, 0 );
+    m_expandL = new QStackedLayout;
+    m_expandL->setContentsMargins( 0, 0, 0, 0 );
+    m_expandL->setMargin( 0 );
+    m_expandL->addWidget( m_summaryExpand );
+    m_expandL->addWidget( DynamicControlWrapper::createDummy( m_summaryExpand, this ) );
+    m_summaryLayout->addLayout( m_expandL );
     if( m_isLocal )
-        summaryLayout->addWidget( m_summaryExpand );
+        m_expandL->setCurrentIndex( 0 );
+    else
+        m_expandL->setCurrentIndex( 1 );
+    
     m_layout->addWidget( m_summaryWidget );
     connect( m_summaryExpand, SIGNAL( clicked( bool ) ), this, SLOT( toggleCollapse() ) );
     
@@ -120,6 +125,15 @@ CollapsibleControls::setControls( const dynplaylist_ptr& playlist, bool isLocal 
     m_dynplaylist = playlist;
     m_isLocal = isLocal;
     m_controls->setControls( m_dynplaylist->generator(), m_dynplaylist->generator()->controls() );
+    
+    if( !m_isLocal ) {
+        m_expandL->setCurrentIndex( 1 );
+        m_summary->setText( m_dynplaylist->generator()->sentenceSummary() );
+        m_layout->setCurrentWidget( m_summaryWidget );
+        setMaximumHeight( m_summaryWidget->sizeHint().height() );
+    } else {
+        m_expandL->setCurrentIndex( 0  );
+    }
 }
 
 void 
@@ -128,7 +142,6 @@ CollapsibleControls::toggleCollapse()
 //     qDebug() << "TOGGLING SIZEHINTS:" << m_controls->height() << m_summaryWidget->sizeHint();
     m_timeline->setEasingCurve( QEasingCurve::OutBack );
     m_timeline->setFrameRange( m_summaryWidget->sizeHint().height(), m_controls->height() );
-    m_collapseAnimation = true;
     if( m_layout->currentWidget() == m_controls ) {
         m_summary->setText( m_dynplaylist->generator()->sentenceSummary() );
         m_controls->setSizePolicy( QSizePolicy::Ignored, QSizePolicy::Ignored );
@@ -136,6 +149,7 @@ CollapsibleControls::toggleCollapse()
         m_timeline->setDirection( QTimeLine::Backward );
         m_timeline->start();
         
+        m_collapseAnimation = true;
     } else {
         m_summaryWidget->setSizePolicy( QSizePolicy::Ignored, QSizePolicy::Ignored );
         m_layout->setCurrentWidget( m_controls );
@@ -143,6 +157,7 @@ CollapsibleControls::toggleCollapse()
         m_timeline->setDirection( QTimeLine::Forward );
         m_timeline->start();
         
+        m_collapseAnimation = false;
     }
 }
 
@@ -162,7 +177,7 @@ CollapsibleControls::onAnimationFinished()
     setMaximumHeight( m_animHeight );
     m_animHeight = -1;
     
-    if( m_collapseAnimation && m_layout->currentWidget() == m_controls && m_timeline->direction() == QTimeLine::Backward ) {
+    if( m_collapseAnimation ) {
         m_layout->setCurrentWidget( m_summaryWidget );
     } else {
         setMaximumHeight( QWIDGETSIZE_MAX );

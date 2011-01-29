@@ -48,7 +48,7 @@ DynamicControlWrapper::DynamicControlWrapper( const Tomahawk::dyncontrol_ptr& co
     m_matchSelector = control->matchSelector();
     m_entryWidget = control->inputField();
     
-    m_minusButton = initButton();
+    m_minusButton = initButton( m_parent );
     m_minusButton->setIcon( QIcon( RESPATH "images/list-remove.png" ) );
     connect( m_minusButton, SIGNAL( clicked( bool ) ), this, SIGNAL( removeControl() ) );
     
@@ -57,7 +57,7 @@ DynamicControlWrapper::DynamicControlWrapper( const Tomahawk::dyncontrol_ptr& co
     m_plusL->setContentsMargins( 0, 0, 0, 0 );
     m_plusL->setMargin( 0 );
     m_plusL->addWidget( m_minusButton );
-    m_plusL->addWidget( createDummy( m_minusButton ) ); // :-(
+    m_plusL->addWidget( createDummy( m_minusButton, m_parent ) ); // :-(
     
         connect( m_typeSelector, SIGNAL( activated( QString) ), SLOT( typeSelectorChanged( QString ) ) );    
     connect( m_control.data(), SIGNAL( changed() ), this, SIGNAL( changed() ) );
@@ -107,9 +107,9 @@ DynamicControlWrapper::removeFromLayout()
 }
 
 
-QToolButton* DynamicControlWrapper::initButton()
+QToolButton* DynamicControlWrapper::initButton( QWidget* parent )
 {
-    QToolButton* btn = new QToolButton( m_parent );
+    QToolButton* btn = new QToolButton( parent );
     btn->setSizePolicy( QSizePolicy::Fixed, QSizePolicy::Fixed );
     btn->setIconSize( QSize( 16, 16 ) );
     btn->setToolButtonStyle( Qt::ToolButtonIconOnly );
@@ -118,9 +118,9 @@ QToolButton* DynamicControlWrapper::initButton()
     return btn;
 }
 
-QWidget* DynamicControlWrapper::createDummy( QWidget* fromW )
+QWidget* DynamicControlWrapper::createDummy( QWidget* fromW, QWidget* parent )
 {
-    QWidget* dummy = new QWidget( m_parent );
+    QWidget* dummy = new QWidget( parent );
     dummy->setContentsMargins( 0, 0, 0, 0 );
     dummy->setSizePolicy( QSizePolicy::Fixed, QSizePolicy::Fixed );
     dummy->setMinimumSize( fromW->size() );
