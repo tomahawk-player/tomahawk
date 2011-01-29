@@ -78,6 +78,13 @@ OverlayWidget::hide()
     animation->start();
 }
 
+bool 
+OverlayWidget::shown() const
+{
+    return m_opacity == OPACITY;
+}
+
+
 
 void
 OverlayWidget::paintEvent( QPaintEvent* event )

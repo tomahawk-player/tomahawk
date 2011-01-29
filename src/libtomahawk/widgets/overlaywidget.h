@@ -22,6 +22,7 @@ public:
     QString text() const { return m_text; }
     void setText( const QString& text );
 
+    bool shown() const;
 public slots:
     void show( int timeoutSecs = 0 );
     void hide();

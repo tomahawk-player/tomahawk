@@ -68,7 +68,8 @@ DynamicView::onTrackCountChanged( unsigned int tracks )
             overlay()->setText( tr( "Add some filters above, and press Start to begin listening to this custom station!" ) );
         else
             overlay()->setText( tr( "Add some filters above, and press Generate to get started!" ) );
-        overlay()->show();
+        if( !overlay()->shown() )
+            overlay()->show();
     }
     else
         overlay()->hide();
