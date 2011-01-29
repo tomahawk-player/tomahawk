@@ -316,11 +316,17 @@ EchonestGenerator::sentenceSummary()
                 suffix = " and ";
             else if( artists.size() > 2 )
                 suffix = ", ";
+            else
+                suffix = ".";
         } else {
             center = summary.mid( summary.indexOf( "~" ) + 1 );
-            suffix = ", ";
-            if( i != artists.size() - 1 ) // if there are more, add an " and "
-                suffix += "and ";
+            if( i == artists.size() - 1 ) { // if there are more, add an " and "
+                if( !allcontrols.isEmpty() )
+                    suffix = ", ";
+                else
+                    suffix = ".";
+            } else
+                suffix += ", and ";
         }
         sentence += center + suffix;
     }
