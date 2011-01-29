@@ -117,7 +117,7 @@ CollapsibleControls::setControls( const dynplaylist_ptr& playlist, bool isLocal 
 void 
 CollapsibleControls::toggleCollapse()
 {
-    qDebug() << "TOGGLING SIZEHINTS:" << m_controls->height() << m_summaryWidget->sizeHint();
+//     qDebug() << "TOGGLING SIZEHINTS:" << m_controls->height() << m_summaryWidget->sizeHint();
     m_timeline->setEasingCurve( QEasingCurve::OutBack );
     m_timeline->setFrameRange( m_summaryWidget->sizeHint().height(), m_controls->height() );
     m_collapseAnimation = true;
@@ -141,7 +141,7 @@ CollapsibleControls::toggleCollapse()
 void 
 CollapsibleControls::onAnimationStep( int step )
 {
-    qDebug() << "ANIMATION STEP:" << step;
+//     qDebug() << "ANIMATION STEP:" << step;
     resize( width(), step );
     m_animHeight = step;
     setMaximumHeight( m_animHeight );
@@ -150,7 +150,7 @@ CollapsibleControls::onAnimationStep( int step )
 void 
 CollapsibleControls::onAnimationFinished()
 {
-    qDebug() << "ANIMATION DONE:" << m_animHeight;
+//     qDebug() << "ANIMATION DONE:" << m_animHeight;
     setMaximumHeight( m_animHeight );
     m_animHeight = -1;
     
