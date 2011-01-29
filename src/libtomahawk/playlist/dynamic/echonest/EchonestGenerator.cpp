@@ -297,6 +297,10 @@ EchonestGenerator::sentenceSummary()
         allcontrols.removeAll( toremove );
     }
     
+    /// If there are no artists and no filters, show some help text
+    if( artists.isEmpty() && allcontrols.isEmpty() )
+        sentence = "No configured filters!";
+    
     /// Do the assembling. Start with the artists if there are any, then do all the rest.    
     for( int i = 0; i < artists.size(); i++ ) {
         dyncontrol_ptr artist = artists.value( i );
