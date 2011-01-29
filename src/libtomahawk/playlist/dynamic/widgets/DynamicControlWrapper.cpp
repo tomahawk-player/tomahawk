@@ -123,8 +123,8 @@ QWidget* DynamicControlWrapper::createDummy( QWidget* fromW, QWidget* parent )
     QWidget* dummy = new QWidget( parent );
     dummy->setContentsMargins( 0, 0, 0, 0 );
     dummy->setSizePolicy( QSizePolicy::Fixed, QSizePolicy::Fixed );
-    dummy->setMinimumSize( fromW->size() );
-    dummy->setMaximumSize( fromW->size() );
+    dummy->setMinimumSize( fromW->sizeHint() );
+    dummy->setMaximumSize( fromW->sizeHint() );
     return dummy;
 }
 

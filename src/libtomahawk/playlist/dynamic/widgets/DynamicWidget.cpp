@@ -77,7 +77,7 @@ DynamicWidget::DynamicWidget( const Tomahawk::dynplaylist_ptr& playlist, QWidget
     
     m_logo = new QLabel( this );
     if( !playlist->generator()->logo().isNull() ) {
-        QPixmap p = playlist->generator()->logo().scaledToHeight( m_headerText->height(), Qt::SmoothTransformation );
+        QPixmap p = playlist->generator()->logo().scaledToHeight( 16, Qt::SmoothTransformation );
         m_logo->setPixmap( p );
     }
     m_headerLayout->addWidget(m_logo);

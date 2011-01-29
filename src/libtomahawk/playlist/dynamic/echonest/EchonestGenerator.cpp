@@ -310,7 +310,7 @@ EchonestGenerator::sentenceSummary()
         QString center, suffix;
         QString summary = artist.dynamicCast< EchonestControl >()->summary();
         
-        if( i == 0 ) { // if it's the first.. special case
+        if( i == 0 ) { // if it's the first.. special casez
             center = summary.remove( "~" );
             if( artists.size() == 2 ) // special case for 2, no comma. ( X and Y )
                 suffix = " and ";
@@ -332,9 +332,9 @@ EchonestGenerator::sentenceSummary()
         }
         sentence += center + suffix;
     }
-    qDebug() << "Got artists:" << sentence;
+    /// Add each filter individually
     for( int i = 0; i < allcontrols.size(); i++ ) {
-        // end case: if this is the last AND there is not a sorting filter (so this is the real last one)
+        /// end case: if this is the last AND there is not a sorting filter (so this is the real last one)
         const bool last = ( i == allcontrols.size() - 1 && sorting.isNull() );
         QString prefix, suffix;
         if( last ) {
