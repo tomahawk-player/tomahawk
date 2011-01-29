@@ -29,8 +29,9 @@
 #ifndef LINEEDIT_H
 #define LINEEDIT_H
 
-#include <qlineedit.h>
+#include <QLineEdit>
 
+#include "dllmacro.h"
 class QHBoxLayout;
 
 /*
@@ -44,7 +45,7 @@ class QHBoxLayout;
     into the center of the widget.
 */
 class SideWidget;
-class LineEdit : public QLineEdit
+class DLLEXPORT LineEdit : public QLineEdit
 {
     Q_OBJECT
     Q_PROPERTY(QString inactiveText READ inactiveText WRITE setInactiveText)

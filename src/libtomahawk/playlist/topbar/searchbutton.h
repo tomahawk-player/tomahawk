@@ -22,8 +22,10 @@
 
 #include <qabstractbutton.h>
 
+#include "dllmacro.h"
+
 class QCompleter;
-class SearchButton : public QAbstractButton
+class DLLEXPORT SearchButton : public QAbstractButton
 {
     Q_OBJECT
 

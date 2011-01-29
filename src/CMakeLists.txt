@@ -50,12 +50,6 @@ SET( tomahawkSourcesGui ${tomahawkSourcesGui}
      sourcetree/sourcetreeitemwidget.cpp
      sourcetree/sourcetreeview.cpp
 
-     topbar/topbar.cpp
-     topbar/clearbutton.cpp  
-     topbar/searchlineedit.cpp  
-     topbar/lineedit.cpp
-     topbar/searchbutton.cpp
-
      transferview.cpp
      tomahawktrayicon.cpp
      audiocontrols.cpp
@@ -86,13 +80,6 @@ SET( tomahawkHeadersGui ${tomahawkHeadersGui}
      sourcetree/sourcetreeitemwidget.h
      sourcetree/sourcetreeview.h
 
-     topbar/topbar.h
-     topbar/clearbutton.h 
-     topbar/searchlineedit.h 
-     topbar/lineedit.h
-     topbar/lineedit_p.h
-     topbar/searchbutton.h
-
      transferview.h
      tomahawktrayicon.h
      audiocontrols.h
@@ -107,7 +94,6 @@ SET( tomahawkUI ${tomahawkUI}
 
      audiocontrols.ui
      sourcetree/sourcetreeitemwidget.ui
-     topbar/topbar.ui
 )
 
 INCLUDE_DIRECTORIES(

@@ -90,6 +90,11 @@ set( libSources
     playlist/albumproxymodel.cpp
     playlist/albumitemdelegate.cpp
     playlist/albumview.cpp
+    playlist/topbar/topbar.cpp
+    playlist/topbar/clearbutton.cpp  
+    playlist/topbar/searchlineedit.cpp  
+    playlist/topbar/lineedit.cpp
+    playlist/topbar/searchbutton.cpp
 
     playlist/dynamic/DynamicPlaylist.cpp
     playlist/dynamic/DynamicControl.cpp
@@ -223,6 +228,12 @@ set( libHeaders
     playlist/albumproxymodel.h
     playlist/albumitemdelegate.h
     playlist/albumview.h
+    playlist/topbar/topbar.h
+    playlist/topbar/clearbutton.h
+    playlist/topbar/searchlineedit.h  
+    playlist/topbar/lineedit.h
+    playlist/topbar/lineedit_p.h
+    playlist/topbar/searchbutton.h
 
     playlist/dynamic/DynamicPlaylist.h
     playlist/dynamic/DynamicControl.h
@@ -257,6 +268,7 @@ set( libUI ${libUI}
     widgets/newplaylistwidget.ui
     widgets/welcomewidget.ui
     widgets/infowidgets/sourceinfowidget.ui
+    playlist/topbar/topbar.ui
 )
 
 include_directories( . ${CMAKE_CURRENT_BINARY_DIR} .. 

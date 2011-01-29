@@ -12,7 +12,7 @@ namespace Ui
     class TopBar;
 }
 
-class TopBar : public QWidget
+class DLLEXPORT TopBar : public QWidget
 {
 Q_OBJECT
 
