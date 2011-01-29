@@ -310,7 +310,7 @@ EchonestGenerator::sentenceSummary()
             center = summary.remove( "~" );
             if( artists.size() == 2 ) // special case for 2, no comma. ( X and Y )
                 suffix = " and ";
-            else
+            else if( artists.size() > 2 )
                 suffix = ", ";
         } else {
             center = summary.mid( summary.indexOf( "~" ) + 1 );
