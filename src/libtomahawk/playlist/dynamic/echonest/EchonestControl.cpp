@@ -97,6 +97,9 @@ Tomahawk::EchonestControl::matchString() const
 QString 
 Tomahawk::EchonestControl::summary() const
 {   
+    if( m_summary.isEmpty() )
+        const_cast< EchonestControl* >( this )->calculateSummary();
+    
     return m_summary;
 }
 

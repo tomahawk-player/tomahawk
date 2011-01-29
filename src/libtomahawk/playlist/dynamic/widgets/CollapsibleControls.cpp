@@ -156,6 +156,8 @@ CollapsibleControls::onAnimationFinished()
     
     if( m_collapseAnimation && m_layout->currentWidget() == m_controls && m_timeline->direction() == QTimeLine::Backward ) {
         m_layout->setCurrentWidget( m_summaryWidget );
+    } else {
+        setMaximumHeight( QWIDGETSIZE_MAX );
     }
 }
 

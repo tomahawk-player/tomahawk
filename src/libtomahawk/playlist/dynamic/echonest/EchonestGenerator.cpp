@@ -264,6 +264,7 @@ EchonestGenerator::sentenceSummary()
      *   - Separate phrases by comma, and before last phrase
      *   - sorting always at end
      *   - collapse artists. "Like X, like Y, like Z, ..." -> "Like X, Y, and Z"
+     *   - skip empty artist entries
      * 
      *  NOTE / TODO: In order for the sentence to be grammatically correct, we must follow the EN API rules. That means we can't have multiple of some types of filters,
      *        and all Artist types must be the same. The filters aren't checked at the moment until Generate / Play is pressed. Consider doing a check on hide as well.
@@ -283,7 +284,19 @@ EchonestGenerator::sentenceSummary()
     }
     if( !sorting.isNull() )
         allcontrols.removeAll( sorting );
-        
+    
+    /// Skip empty artists
+    QList< dyncontrol_ptr > empty;
+    foreach( const dyncontrol_ptr& artist, artists ) {
+        QString summary = artist.dynamicCast< EchonestControl >()->summary();
+        if( summary.lastIndexOf( "~" ) == summary.length() - 1 )
+            empty << artist;
+    }
+    foreach( const dyncontrol_ptr& toremove, empty ) {
+        artists.removeAll( toremove );
+        allcontrols.removeAll( toremove );
+    }
+    
     /// Do the assembling. Start with the artists if there are any, then do all the rest.    
     for( int i = 0; i < artists.size(); i++ ) {
         dyncontrol_ptr artist = artists.value( i );
@@ -292,6 +305,7 @@ EchonestGenerator::sentenceSummary()
         /// Collapse artist lists
         QString center, suffix;
         QString summary = artist.dynamicCast< EchonestControl >()->summary();
+        
         if( i == 0 ) { // if it's the first and only one
             center = summary.remove( "~" );
             if( artists.size() == 2 ) // special case for 2, no comma. ( X and Y )
