@@ -55,8 +55,8 @@ CollapsibleControls::init()
 {
     m_timeline = new QTimeLine( 300, this );
     m_timeline->setUpdateInterval( 8 );
-    m_timeline->setEasingCurve( QEasingCurve::OutBack );
     m_animHeight = -1;
+    m_collapseAnimation = false;
     
     connect( m_timeline, SIGNAL( frameChanged( int ) ), this, SLOT( onAnimationStep( int ) ) );
     connect( m_timeline, SIGNAL( finished() ), this, SLOT( onAnimationFinished() ) );
@@ -118,7 +118,9 @@ void
 CollapsibleControls::toggleCollapse()
 {
     qDebug() << "TOGGLING SIZEHINTS:" << m_controls->height() << m_summaryWidget->sizeHint();
+    m_timeline->setEasingCurve( QEasingCurve::OutBack );
     m_timeline->setFrameRange( m_summaryWidget->sizeHint().height(), m_controls->height() );
+    m_collapseAnimation = true;
     if( m_layout->currentWidget() == m_controls ) {
         m_summary->setText( m_dynplaylist->generator()->sentenceSummary() );
         m_controls->setSizePolicy( QSizePolicy::Ignored, QSizePolicy::Ignored );
@@ -139,6 +141,7 @@ CollapsibleControls::toggleCollapse()
 void 
 CollapsibleControls::onAnimationStep( int step )
 {
+    qDebug() << "ANIMATION STEP:" << step;
     resize( width(), step );
     m_animHeight = step;
     setMaximumHeight( m_animHeight );
@@ -147,10 +150,11 @@ CollapsibleControls::onAnimationStep( int step )
 void 
 CollapsibleControls::onAnimationFinished()
 {
+    qDebug() << "ANIMATION DONE:" << m_animHeight;
     setMaximumHeight( m_animHeight );
     m_animHeight = -1;
     
-    if( m_layout->currentWidget() == m_controls && m_timeline->direction() == QTimeLine::Backward ) {
+    if( m_collapseAnimation && m_layout->currentWidget() == m_controls && m_timeline->direction() == QTimeLine::Backward ) {
         m_layout->setCurrentWidget( m_summaryWidget );
     }
 }

@@ -188,23 +188,23 @@ Tomahawk::EchonestControl::updateWidgets()
     } else if( selectedType() == "Danceability" ) {
         m_currentType = Echonest::DynamicPlaylist::MinDanceability;
         
-        setupMinMaxWidgets( Echonest::DynamicPlaylist::MinDanceability, Echonest::DynamicPlaylist::MaxDanceability, QString(), QString(), 10000 );
+        setupMinMaxWidgets( Echonest::DynamicPlaylist::MinDanceability, Echonest::DynamicPlaylist::MaxDanceability, tr( "Less" ), tr( "More" ), 10000 );
     } else if( selectedType() == "Energy" ) {
         m_currentType = Echonest::DynamicPlaylist::MinEnergy;
         
-        setupMinMaxWidgets( Echonest::DynamicPlaylist::MinEnergy, Echonest::DynamicPlaylist::MaxEnergy, QString(), QString(), 10000 );
+        setupMinMaxWidgets( Echonest::DynamicPlaylist::MinEnergy, Echonest::DynamicPlaylist::MaxEnergy, tr( "Less" ), tr( "More" ), 10000 );
     } else if( selectedType() == "Artist Familiarity" ) {
         m_currentType = Echonest::DynamicPlaylist::ArtistMinFamiliarity;
         
-        setupMinMaxWidgets( Echonest::DynamicPlaylist::ArtistMinFamiliarity, Echonest::DynamicPlaylist::ArtistMaxFamiliarity, QString(), QString(), 10000 );
+        setupMinMaxWidgets( Echonest::DynamicPlaylist::ArtistMinFamiliarity, Echonest::DynamicPlaylist::ArtistMaxFamiliarity, tr( "Less" ), tr( "More" ), 10000 );
     } else if( selectedType() == "Artist Hotttnesss" ) {
         m_currentType = Echonest::DynamicPlaylist::ArtistMinHotttnesss;
         
-        setupMinMaxWidgets( Echonest::DynamicPlaylist::ArtistMinHotttnesss, Echonest::DynamicPlaylist::ArtistMaxHotttnesss, QString(), QString(), 10000 );
+        setupMinMaxWidgets( Echonest::DynamicPlaylist::ArtistMinHotttnesss, Echonest::DynamicPlaylist::ArtistMaxHotttnesss, tr( "Less" ), tr( "More" ), 10000 );
     } else if( selectedType() == "Song Hotttnesss" ) {
         m_currentType = Echonest::DynamicPlaylist::SongMinHotttnesss;
         
-        setupMinMaxWidgets( Echonest::DynamicPlaylist::SongMinHotttnesss, Echonest::DynamicPlaylist::SongMaxHotttnesss, QString(), QString(), 10000 );
+        setupMinMaxWidgets( Echonest::DynamicPlaylist::SongMinHotttnesss, Echonest::DynamicPlaylist::SongMaxHotttnesss, tr( "Less" ), tr( "More" ), 10000 );
     } else if( selectedType() == "Latitude" ) {
         m_currentType = Echonest::DynamicPlaylist::ArtistMinLatitude;
         QString deg = QString( QChar( 0x00B0 ) );
@@ -234,8 +234,6 @@ Tomahawk::EchonestControl::updateWidgets()
         combo->hide();
         m_match = QWeakPointer< QWidget >( match );
         m_input = QWeakPointer< QWidget >( combo );
-        
-        updateData();
     } else if( selectedType() == "Key" ) {
         m_currentType = Echonest::DynamicPlaylist::Key;
         
@@ -265,8 +263,6 @@ Tomahawk::EchonestControl::updateWidgets()
         combo->hide();
         m_match = QWeakPointer< QWidget >( match );
         m_input = QWeakPointer< QWidget >( combo );
-        
-        updateData();
     } else if( selectedType() == "Sorting" ) {
         m_currentType = Echonest::DynamicPlaylist::Key;
         
@@ -299,13 +295,11 @@ Tomahawk::EchonestControl::updateWidgets()
         combo->hide();
         m_match = QWeakPointer< QWidget >( match );
         m_input = QWeakPointer< QWidget >( combo );
-        
-        updateData();
     } else {
         m_match = QWeakPointer<QWidget>( new QWidget );
         m_input = QWeakPointer<QWidget>( new QWidget );
     }
-    
+    updateData();
     calculateSummary();
 }
 

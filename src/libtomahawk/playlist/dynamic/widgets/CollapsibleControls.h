@@ -43,12 +43,14 @@ public:
     QList< DynamicControlWrapper* > controls() const;
     
     virtual QSize sizeHint() const;
+    
 signals:
     void controlsChanged();
     void controlChanged( const Tomahawk::dyncontrol_ptr& control );
     
 private slots:
     void toggleCollapse();
+    
     void onAnimationStep( int );
     void onAnimationFinished();
     
@@ -66,6 +68,7 @@ private:
     // animations!
     QTimeLine* m_timeline;
     int m_animHeight;
+    bool m_collapseAnimation;
 };
 
 }
