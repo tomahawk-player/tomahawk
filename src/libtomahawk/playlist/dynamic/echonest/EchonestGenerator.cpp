@@ -310,14 +310,16 @@ EchonestGenerator::sentenceSummary()
         QString center, suffix;
         QString summary = artist.dynamicCast< EchonestControl >()->summary();
         
-        if( i == 0 ) { // if it's the first and only one
+        if( i == 0 ) { // if it's the first.. special case
             center = summary.remove( "~" );
             if( artists.size() == 2 ) // special case for 2, no comma. ( X and Y )
                 suffix = " and ";
-            else if( artists.size() > 2 )
+            else if( artists.size() > 2 ) // in a list with more after
                 suffix = ", ";
-            else
+            else if( allcontrols.isEmpty() ) // the last one, and no more controls, so put a period
                 suffix = ".";
+            else
+                suffix = " ";
         } else {
             center = summary.mid( summary.indexOf( "~" ) + 1 );
             if( i == artists.size() - 1 ) { // if there are more, add an " and "
