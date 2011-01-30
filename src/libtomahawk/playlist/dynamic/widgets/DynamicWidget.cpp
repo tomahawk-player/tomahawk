@@ -180,6 +180,13 @@ DynamicWidget::playlistInterface() const
     return m_view->proxyModel();
 }
 
+QSize
+DynamicWidget::sizeHint() const
+{
+    // We want to take up as much room as the animated splitter containing us and the queue editor will allow. So we return a bogus huge sizehint
+    //  to avoid having to calculate it which is slow
+    return QSize( 5000, 5000 );
+}
 void 
 DynamicWidget::generateOrStart()
 {

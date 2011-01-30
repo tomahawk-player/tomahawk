@@ -58,6 +58,7 @@ public:
     
     PlaylistInterface* playlistInterface() const;
     
+    virtual QSize sizeHint() const;
 public slots:
     void onRevisionLoaded( const Tomahawk::DynamicPlaylistRevision& rev );
     
