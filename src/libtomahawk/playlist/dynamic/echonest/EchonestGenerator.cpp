@@ -316,14 +316,14 @@ EchonestGenerator::sentenceSummary()
                 suffix = " and ";
             else if( artists.size() > 2 ) // in a list with more after
                 suffix = ", ";
-            else if( allcontrols.isEmpty() ) // the last one, and no more controls, so put a period
+            else if( allcontrols.isEmpty() && sorting.isNull() ) // the last one, and no more controls, so put a period
                 suffix = ".";
             else
                 suffix = " ";
         } else {
             center = summary.mid( summary.indexOf( "~" ) + 1 );
             if( i == artists.size() - 1 ) { // if there are more, add an " and "
-                if( !allcontrols.isEmpty() )
+                if( !( allcontrols.isEmpty() && sorting.isNull() ) )
                     suffix = ", ";
                 else
                     suffix = ".";
