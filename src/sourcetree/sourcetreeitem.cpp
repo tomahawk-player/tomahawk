@@ -156,7 +156,7 @@ void SourceTreeItem::onDynamicPlaylistsAdded( const QList< dynplaylist_ptr >& pl
     {
         m_dynplaylists.append( p );
         qlonglong ptr = reinterpret_cast<qlonglong>( &m_dynplaylists.last() );
-        qDebug() << "Setting dynamic ptr to:" << ptr;
+//         qDebug() << "Setting dynamic ptr to:" << ptr;
         connect( p.data(), SIGNAL( dynamicRevisionLoaded( Tomahawk::DynamicPlaylistRevision) ),
                     SLOT( onDynamicPlaylistLoaded( Tomahawk::DynamicPlaylistRevision ) ),
                     Qt::QueuedConnection);
@@ -173,7 +173,7 @@ void SourceTreeItem::onDynamicPlaylistsDeleted( const QList< dynplaylist_ptr >& 
     foreach( const dynplaylist_ptr& p, playlists )
     {
         qlonglong ptr = qlonglong( p.data() );
-        qDebug() << "dynamic playlist removed:" << p->title() << p->creator() << p->info() << ptr;
+//         qDebug() << "dynamic playlist removed:" << p->title() << p->creator() << p->info() << ptr;
         
         QStandardItem* item = m_columns.at( 0 );
         int rows = item->rowCount();
@@ -181,7 +181,7 @@ void SourceTreeItem::onDynamicPlaylistsDeleted( const QList< dynplaylist_ptr >& 
         {
             QStandardItem* pi = item->child( i );
             qlonglong piptr = pi->data( DynamicPlaylistPointer ).toLongLong();
-            playlist_ptr* pl = reinterpret_cast<playlist_ptr*>(piptr);
+            dynplaylist_ptr* pl = reinterpret_cast<dynplaylist_ptr*>(piptr);
             SourcesModel::SourceType type = static_cast<SourcesModel::SourceType>( pi->data( Type ).toInt() );
             qDebug() << "Deleting dynamic playlsit:" << pl->isNull();
             if ( type == SourcesModel::DynamicPlaylistSource && ptr == qlonglong( pl->data() ) )
