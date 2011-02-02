@@ -36,17 +36,15 @@ DynamicControlWrapper::DynamicControlWrapper( const Tomahawk::dyncontrol_ptr& co
      , m_minusButton( 0 )
      , m_control( control )
      , m_typeSelector( 0 )
-     , m_matchSelector( 0 )
-     , m_entryWidget( 0 )
-     , m_layout( layout )
+     , m_layout( QWeakPointer< QGridLayout >( layout ) )
 {
     
     qDebug() << "CREATING DYNAMIC CONTROL WRAPPER WITH ROW:" << row << layout;
     
     m_typeSelector = new QComboBox( m_parent );
     
-    m_matchSelector = control->matchSelector();
-    m_entryWidget = control->inputField();
+    m_matchSelector = QWeakPointer<QWidget>( control->matchSelector() );
+    m_entryWidget = QWeakPointer<QWidget>( control->inputField() );
     
     m_minusButton = initButton( m_parent );
     m_minusButton->setIcon( QIcon( RESPATH "images/list-remove.png" ) );
@@ -59,10 +57,10 @@ DynamicControlWrapper::DynamicControlWrapper( const Tomahawk::dyncontrol_ptr& co
     m_plusL->addWidget( m_minusButton );
     m_plusL->addWidget( createDummy( m_minusButton, m_parent ) ); // :-(
     
-        connect( m_typeSelector, SIGNAL( activated( QString) ), SLOT( typeSelectorChanged( QString ) ) );    
+    connect( m_typeSelector, SIGNAL( activated( QString) ), SLOT( typeSelectorChanged( QString ) ) );    
     connect( m_control.data(), SIGNAL( changed() ), this, SIGNAL( changed() ) );
     
-    m_layout->addWidget( m_typeSelector, row, 0, Qt::AlignLeft );
+    m_layout.data()->addWidget( m_typeSelector, row, 0, Qt::AlignLeft );
     
     if( !control.isNull() ) {
         foreach( const QString& type, control->typeSelectors() )
@@ -71,7 +69,7 @@ DynamicControlWrapper::DynamicControlWrapper( const Tomahawk::dyncontrol_ptr& co
     
     typeSelectorChanged( m_control.isNull() ? "" : m_control->selectedType(), true );
     
-    m_layout->addLayout( m_plusL, m_row, 3, Qt::AlignCenter );
+    m_layout.data()->addLayout( m_plusL, m_row, 3, Qt::AlignCenter );
     m_plusL->setCurrentIndex( 0 );
 
     
@@ -83,12 +81,14 @@ DynamicControlWrapper::~DynamicControlWrapper()
     // we don't want to auto-delete them since the control should own them
     // if we delete them, then the control will be holding on to null ptrs
     removeFromLayout();
-    m_control->inputField()->setParent( 0 );
-    m_control->matchSelector()->setParent( 0 );
+    
+    if( !m_entryWidget.isNull() )
+        m_control->inputField()->setParent( 0 );
+    if( !m_matchSelector.isNull() )
+        m_control->matchSelector()->setParent( 0 );
     
     delete m_typeSelector;
     delete m_minusButton;
-    delete m_plusL;
 }
 
 dyncontrol_ptr 
@@ -100,10 +100,15 @@ DynamicControlWrapper::control() const
 void 
 DynamicControlWrapper::removeFromLayout()
 {
-    m_layout->removeWidget( m_typeSelector );
-    m_layout->removeWidget( m_matchSelector );
-    m_layout->removeWidget( m_entryWidget );
-    m_layout->removeItem( m_plusL );
+    if( m_layout.isNull() )
+        return;
+    
+    if( !m_matchSelector.isNull() )
+        m_layout.data()->removeWidget( m_matchSelector.data() );
+    if( !m_entryWidget.isNull() )
+        m_layout.data()->removeWidget( m_entryWidget.data() );
+    m_layout.data()->removeWidget( m_typeSelector );
+    m_layout.data()->removeItem( m_plusL );
 }
 
 
@@ -132,9 +137,9 @@ QWidget* DynamicControlWrapper::createDummy( QWidget* fromW, QWidget* parent )
 void 
 DynamicControlWrapper::typeSelectorChanged( const QString& type, bool firstLoad )
 {
-    Q_ASSERT( m_layout );
-    m_layout->removeWidget( m_matchSelector );
-    m_layout->removeWidget( m_entryWidget );
+    Q_ASSERT( !m_layout.isNull() );
+    m_layout.data()->removeWidget( m_matchSelector.data() );
+    m_layout.data()->removeWidget( m_entryWidget.data() );
     
     if( m_control->selectedType() != type && !firstLoad )
         m_control->setSelectedType( type );
@@ -146,14 +151,14 @@ DynamicControlWrapper::typeSelectorChanged( const QString& type, bool firstLoad 
 
     
     if( m_control->matchSelector() ) {
-        m_matchSelector = m_control->matchSelector();
-        m_layout->addWidget( m_matchSelector, m_row, 1, Qt::AlignCenter );
-        m_matchSelector->show();
+        m_matchSelector = QWeakPointer<QWidget>( m_control->matchSelector() );
+        m_layout.data()->addWidget( m_matchSelector.data(), m_row, 1, Qt::AlignCenter );
+        m_matchSelector.data()->show();
     }
     if( m_control->inputField() ) {
-        m_entryWidget = m_control->inputField();
-        m_layout->addWidget( m_entryWidget, m_row, 2 );
-        m_entryWidget->show();
+        m_entryWidget = QWeakPointer<QWidget>( m_control->inputField() );
+        m_layout.data()->addWidget( m_entryWidget.data(), m_row, 2 );
+        m_entryWidget.data()->show();
     }
     
     emit changed();

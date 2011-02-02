@@ -68,9 +68,9 @@ private:
     
     dyncontrol_ptr m_control;
     QComboBox* m_typeSelector;
-    QWidget* m_matchSelector;
-    QWidget* m_entryWidget;
-    QGridLayout* m_layout;
+    QWeakPointer<QWidget> m_matchSelector;
+    QWeakPointer<QWidget> m_entryWidget;
+    QWeakPointer<QGridLayout> m_layout;
 };
     
 };
