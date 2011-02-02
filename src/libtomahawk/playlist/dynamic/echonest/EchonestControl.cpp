@@ -346,6 +346,8 @@ Tomahawk::EchonestControl::updateData()
             // EN HACK: artist-description radio needs description= fields not artist= fields
             if( m_matchData.toInt() == Echonest::DynamicPlaylist::ArtistDescriptionType )
                 m_overrideType = Echonest::DynamicPlaylist::Description;
+            else
+                m_overrideType = -1;
         }
         QLineEdit* edit = qobject_cast<QLineEdit*>( m_input.data() );
         if( edit && !edit->text().isEmpty() ) {
