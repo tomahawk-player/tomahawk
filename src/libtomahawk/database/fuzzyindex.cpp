@@ -44,6 +44,7 @@ void
 FuzzyIndex::endIndexing()
 {
     m_mutex.unlock();
+    emit indexReady();
 }
 
 
