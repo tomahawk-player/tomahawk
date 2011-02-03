@@ -112,8 +112,7 @@ public slots:
         m.insert( "track", event->url.queryItemValue("track") );
         m.insert( "qid", qid );
 
-        Tomahawk::query_ptr qry( new Tomahawk::Query( m ) );
-        Tomahawk::Pipeline::instance()->add( qry );
+        Tomahawk::query_ptr qry = Tomahawk::Query::get( m );
 
         QVariantMap r;
         r.insert( "qid", qid );

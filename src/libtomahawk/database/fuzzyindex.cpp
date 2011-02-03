@@ -1,139 +1,146 @@
 #include "fuzzyindex.h"
 
 #include "databaseimpl.h"
+#include "utils/tomahawkutils.h"
 
+#include <QDir>
 #include <QTime>
 
+#include <CLucene.h>
 
-FuzzyIndex::FuzzyIndex( DatabaseImpl &db )
+
+FuzzyIndex::FuzzyIndex( DatabaseImpl& db )
     : QObject()
     , m_db( db )
-    , m_loaded( false )
+    , m_luceneReader( 0 )
+    , m_luceneSearcher( 0 )
 {
+    QString lucenePath = TomahawkUtils::appDataDir().absoluteFilePath( "tomahawk.lucene" );
+    bool create = !lucene::index::IndexReader::indexExists( lucenePath.toStdString().c_str() );
+    m_luceneDir = lucene::store::FSDirectory::getDirectory( lucenePath.toStdString().c_str(), create );
+
+    m_analyzer = new lucene::analysis::SimpleAnalyzer();
+}
+
+
+FuzzyIndex::~FuzzyIndex()
+{
+    delete m_luceneSearcher;
+    delete m_luceneReader;
+    delete m_analyzer;
+    delete m_luceneDir;
 }
 
 
 void
-FuzzyIndex::loadNgramIndex()
+FuzzyIndex::beginIndexing()
 {
-    // this updates the index in the DB, if needed:
-    qDebug() << "Checking catalogue is fully indexed...";
-    m_db.updateSearchIndex( "artist", 0 );
-    m_db.updateSearchIndex( "album", 0 );
-    m_db.updateSearchIndex( "track", 0 );
+    lucene::index::IndexWriter luceneWriter = lucene::index::IndexWriter( m_luceneDir, m_analyzer, true );
+    m_mutex.lock();
+}
 
-    // loads index from DB into memory:
-    qDebug() << "Loading search index for catalogue metadata..." << thread();
-    loadNgramIndex_helper( m_artist_ngrams, "artist" );
-    loadNgramIndex_helper( m_album_ngrams, "album" );
-    loadNgramIndex_helper( m_track_ngrams, "track" );
-    m_loaded = true;
+
+void
+FuzzyIndex::endIndexing()
+{
+    m_mutex.unlock();
+}
+
+
+void
+FuzzyIndex::appendFields( const QString& table, const QMap< unsigned int, QString >& fields )
+{
+    delete m_luceneSearcher;
+    delete m_luceneReader;
+    m_luceneSearcher = 0;
+    m_luceneReader = 0;
+    
+    bool create = !lucene::index::IndexReader::indexExists( TomahawkUtils::appDataDir().absoluteFilePath( "tomahawk.lucene" ).toStdString().c_str() );
+    lucene::index::IndexWriter luceneWriter = lucene::index::IndexWriter( m_luceneDir, m_analyzer, create );
+    lucene::document::Document doc;
+    
+    QMapIterator< unsigned int, QString > it( fields );
+    while ( it.hasNext() )
+    {
+        it.next();
+        unsigned int id = it.key();
+        QString name = it.value();
+
+        {
+            lucene::document::Field* field = new lucene::document::Field( table.toStdWString().c_str(), name.toStdWString().c_str(),
+                                                                          lucene::document::Field::STORE_YES | lucene::document::Field::INDEX_UNTOKENIZED );
+            doc.add( *field );
+        }
+        
+        {
+            lucene::document::Field* field = new lucene::document::Field( _T( "id" ), QString::number( id ).toStdWString().c_str(),
+            lucene::document::Field::STORE_YES | lucene::document::Field::INDEX_NO );
+            doc.add( *field );
+        }
+        
+        luceneWriter.addDocument( &doc );
+        doc.clear();
+    }
+    
+    luceneWriter.close();
+}
+
+
+void
+FuzzyIndex::loadLuceneIndex()
+{
     emit indexReady();
-}
-
-
-void
-FuzzyIndex::loadNgramIndex_helper( QHash< QString, QMap<quint32, quint16> >& idx, const QString& table, unsigned int fromkey )
-{
-    QTime t;
-    t.start();
-
-    TomahawkSqlQuery query = m_db.newquery();
-    query.exec( QString( "SELECT ngram, id, num "
-                         "FROM %1_search_index "
-                         "WHERE id >= %2 "
-                         "ORDER BY ngram" ).arg( table ).arg( fromkey ) );
-
-    QMap<quint32, quint16> ngram_idx;
-    QString lastngram;
-    while( query.next() )
-    {
-        const QString ng = query.value( 0 ).toString();
-        if( lastngram.isEmpty() )
-            lastngram = ng;
-
-        if( ng != lastngram )
-        {
-            idx.insert( lastngram, ngram_idx );
-            lastngram = ng;
-            ngram_idx.clear();
-        }
-
-        ngram_idx.insert( query.value( 1 ).toUInt(),
-                          query.value( 2 ).toUInt() );
-    }
-
-    idx.insert( lastngram, ngram_idx );
-    qDebug() << "Loaded" << idx.size()
-             << "ngram entries for" << table
-             << "in" << t.elapsed() << "ms";
-}
-
-
-void FuzzyIndex::mergeIndex( const QString& table, const QHash< QString, QMap<quint32, quint16> >& tomerge )
-{
-    qDebug() << Q_FUNC_INFO << table << tomerge.keys().size();
-
-    QHash< QString, QMap<quint32, quint16> >* idx;
-    if     ( table == "artist" ) idx = &m_artist_ngrams;
-    else if( table == "album"  ) idx = &m_album_ngrams;
-    else if( table == "track"  ) idx = &m_track_ngrams;
-    else Q_ASSERT( false );
-
-    if( tomerge.size() == 0 )
-        return;
-
-    if( idx->size() == 0 )
-    {
-        *idx = tomerge;
-    }
-    else
-    {
-        QList<QString> tmk = tomerge.keys();
-        foreach( const QString& ngram, tmk )
-        {
-            if( idx->contains( ngram ) )
-            {
-                QList<unsigned int> tmkn = tomerge[ngram].keys();
-                foreach( quint32 id, tmkn )
-                {
-                    (*idx)[ ngram ][ id ] += tomerge[ngram][id];
-                }
-            }
-            else
-            {
-                idx->insert( ngram, tomerge[ngram] );
-            }
-        }
-    }
-
-    qDebug() << Q_FUNC_INFO << table << "merge complete, num items:" << tomerge.size();
 }
 
 
 QMap< int, float >
 FuzzyIndex::search( const QString& table, const QString& name )
 {
+    QMutexLocker lock( &m_mutex );
+
     QMap< int, float > resultsmap;
-
-    QHash< QString, QMap<quint32, quint16> >* idx;
-    if( table == "artist" ) idx = &m_artist_ngrams;
-    else if( table == "album" ) idx = &m_album_ngrams;
-    else if( table == "track" ) idx = &m_track_ngrams;
-
-    QMap<QString,int> ngramsmap = DatabaseImpl::ngrams( name );
-    foreach( const QString& ngram, ngramsmap.keys() )
+    if ( !m_luceneReader )
     {
-        if( !idx->contains( ngram ) )
-            continue;
-
-        //qDebug() << name_orig << "NGRAM:" << ngram << "candidates:" << (*idx)[ngram].size();
-        QMapIterator<quint32, quint16> iter( (*idx)[ngram] );
-        while( iter.hasNext() )
+        if ( !lucene::index::IndexReader::indexExists( TomahawkUtils::appDataDir().absoluteFilePath( "tomahawk.lucene" ).toStdString().c_str() ) )
         {
-            iter.next();
-            resultsmap[ (int) iter.key() ] += (float) iter.value();
+            qDebug() << Q_FUNC_INFO << "index didn't exist.";
+            return resultsmap;
+        }
+
+        m_luceneReader = lucene::index::IndexReader::open( m_luceneDir );
+        m_luceneSearcher = new lucene::search::IndexSearcher( m_luceneReader );
+    }
+
+    if ( name.isEmpty() )
+        return resultsmap;
+
+    lucene::analysis::SimpleAnalyzer analyzer;
+    lucene::queryParser::QueryParser parser( table.toStdWString().c_str(), m_analyzer );
+    lucene::search::Hits* hits = 0;
+
+    lucene::search::FuzzyQuery* qry = new lucene::search::FuzzyQuery( new lucene::index::Term( table.toStdWString().c_str(),
+                                                                                               name.toStdWString().c_str() ) );
+    hits = m_luceneSearcher->search( qry );
+
+    for ( unsigned int i = 0; i < hits->length(); i++ )
+    {
+        lucene::document::Document* d = &hits->doc( i );
+
+        float score = hits->score( i );
+        int id = QString::fromWCharArray( d->get( _T( "id" ) ) ).toInt();
+        QString result = QString::fromWCharArray( d->get( table.toStdWString().c_str() ) );
+
+        if ( result.toLower() == name.toLower() )
+            score = 1.0;
+        else
+            score = qMin( score, (float)0.99 );
+
+        if ( score > 0.05 )
+        {
+            resultsmap.insert( id, score );
+//            qDebug() << "Hitres:" << result << id << score << table << name;
         }
     }
+
     return resultsmap;
 }

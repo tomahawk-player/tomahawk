@@ -228,6 +228,8 @@ set( libUI ${libUI}
 
 include_directories( . ${CMAKE_CURRENT_BINARY_DIR} .. 
     ${QT_INCLUDE_DIR}
+    ${CLUCENE_INCLUDE_DIR}
+    ${CLUCENE_LIBRARY_DIR}
     ../../libportfwd/include
     ../../include
     ../network
@@ -296,6 +298,7 @@ target_link_libraries( tomahawklib
     ogg
     FLAC++
     jdns
+    clucene
 )
 
 install( TARGETS tomahawklib DESTINATION lib )

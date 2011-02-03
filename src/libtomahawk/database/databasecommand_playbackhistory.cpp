@@ -3,7 +3,7 @@
 #include <QSqlQuery>
 
 #include "databaseimpl.h"
-#include "pipeline.h"
+
 
 void
 DatabaseCommand_PlaybackHistory::exec( DatabaseImpl* dbi )
@@ -49,7 +49,7 @@ DatabaseCommand_PlaybackHistory::exec( DatabaseImpl* dbi )
             m.insert( "artist", query_track.value( 1 ).toString() );
             m.insert( "qid", uuid() );
 
-            Tomahawk::query_ptr q( new Tomahawk::Query( m ) );
+            Tomahawk::query_ptr q = Tomahawk::Query::get( m );
             ql << q;
         }
     }
@@ -57,8 +57,5 @@ DatabaseCommand_PlaybackHistory::exec( DatabaseImpl* dbi )
     qDebug() << Q_FUNC_INFO << ql.length();
 
     if ( ql.count() )
-    {
-        Tomahawk::Pipeline::instance()->add( ql );
         emit tracks( ql );
-    }
 }

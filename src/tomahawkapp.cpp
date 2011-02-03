@@ -306,8 +306,7 @@ void
 TomahawkApp::setupPipeline()
 {
     // setup resolvers for local content, and (cached) remote collection content
-    Pipeline::instance()->addResolver( new DatabaseResolver( true,  100 ) );
-    Pipeline::instance()->addResolver( new DatabaseResolver( false, 90 ) );
+    Pipeline::instance()->addResolver( new DatabaseResolver( 100 ) );
 
 //    new ScriptResolver("/home/rj/src/tomahawk-core/contrib/magnatune/magnatune-resolver.php");
 }

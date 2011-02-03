@@ -105,7 +105,7 @@ XSPFLoader::gotBody()
         v.insert( "album", e.firstChildElement( "album" ).text() );
         v.insert( "track", e.firstChildElement( "title" ).text() );
 
-        p->setQuery( Tomahawk::query_ptr(new Tomahawk::Query(v)) );
+        p->setQuery( Tomahawk::Query::get( v ) );
         m_entries << p;
     }
 

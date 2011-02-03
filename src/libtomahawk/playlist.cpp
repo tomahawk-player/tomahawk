@@ -20,7 +20,7 @@ using namespace Tomahawk;
 void
 PlaylistEntry::setQueryVariant( const QVariant& v )
 {
-    m_query = query_ptr( new Query( v ) );
+    m_query = Tomahawk::Query::get( v, false );
 }
 
 
@@ -342,7 +342,8 @@ Playlist::resolve()
     {
         qlist << p->query();
     }
-    Pipeline::instance()->add( qlist );
+
+    Pipeline::instance()->resolve( qlist );
 }
 
 

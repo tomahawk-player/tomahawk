@@ -2,14 +2,28 @@
 
 #include <QtAlgorithms>
 
+#include "database/database.h"
+#include "pipeline.h"
+#include "sourcelist.h"
+
 using namespace Tomahawk;
+
+
+query_ptr
+Query::get( const QVariant& v, bool autoResolve )
+{
+    query_ptr q = query_ptr( new Query( v ) );
+
+    if ( autoResolve )
+        Pipeline::instance()->resolve( q );
+    return q;
+}
 
 
 Query::Query( const QVariant& v )
     : m_v( v )
     , m_solved( false )
 {
-    // ensure a QID is present:
     QVariantMap m = m_v.toMap();
 
     m_artist = m.value( "artist" ).toString();
@@ -17,6 +31,9 @@ Query::Query( const QVariant& v )
     m_track = m.value( "track" ).toString();
 
     m_qid = m.value( "qid" ).toString();
+
+    connect( SourceList::instance(), SIGNAL( sourceAdded( Tomahawk::source_ptr ) ), SLOT( refreshResults() ), Qt::QueuedConnection );
+    connect( Database::instance(), SIGNAL( indexReady() ), SLOT( refreshResults() ), Qt::QueuedConnection );
 }
 
 
@@ -43,6 +60,13 @@ Query::addResults( const QList< Tomahawk::result_ptr >& newresults )
     emit resultsAdded( newresults );
     if( becameSolved )
         emit solvedStateChanged( true );
+}
+
+
+void
+Query::refreshResults()
+{
+    Pipeline::instance()->resolve( id() );
 }
 
 
@@ -80,6 +104,14 @@ Query::removeResult( const Tomahawk::result_ptr& result )
 
     if ( m_results.isEmpty() )  // FIXME proper score checking
         emit solvedStateChanged( false );
+}
+
+
+void
+Query::onResolvingFinished()
+{
+//    qDebug() << Q_FUNC_INFO << "Finished resolving." << toString();
+    emit resolvingFinished( !m_results.isEmpty() );
 }
 
 
