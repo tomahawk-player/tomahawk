@@ -1,5 +1,5 @@
 /*
-    This file was automatically generated from schema.sql on Sun Jan  9 13:09:56 EST 2011.
+    This file was automatically generated from schema.sql on Thu Feb  3 08:21:21 EST 2011.
 */
 
 static const char * tomahawk_schema_sql = 
@@ -94,24 +94,6 @@ static const char * tomahawk_schema_sql =
 "    plmode INTEGER,"
 "    pltype TEXT"
 ");"
-"CREATE TABLE IF NOT EXISTS artist_search_index ("
-"    ngram TEXT NOT NULL,"
-"    id INTEGER NOT NULL REFERENCES artist(id) ON DELETE CASCADE ON UPDATE CASCADE DEFERRABLE INITIALLY DEFERRED,"
-"    num INTEGER NOT NULL DEFAULT 1,"
-"    PRIMARY KEY(ngram, id)"
-");"
-"CREATE TABLE IF NOT EXISTS album_search_index ("
-"    ngram TEXT NOT NULL,"
-"    id INTEGER NOT NULL REFERENCES album(id) ON DELETE CASCADE ON UPDATE CASCADE DEFERRABLE INITIALLY DEFERRED,"
-"    num INTEGER NOT NULL DEFAULT 1,"
-"    PRIMARY KEY(ngram, id)"
-");"
-"CREATE TABLE IF NOT EXISTS track_search_index ("
-"    ngram TEXT NOT NULL,"
-"    id INTEGER NOT NULL REFERENCES track(id) ON DELETE CASCADE ON UPDATE CASCADE DEFERRABLE INITIALLY DEFERRED,"
-"    num INTEGER NOT NULL DEFAULT 1,"
-"    PRIMARY KEY(ngram, id)"
-");"
 "CREATE TABLE IF NOT EXISTS file ("
 "    id INTEGER PRIMARY KEY AUTOINCREMENT,"
 "    source INTEGER REFERENCES source(id) ON DELETE CASCADE ON UPDATE CASCADE DEFERRABLE INITIALLY DEFERRED,"
@@ -183,7 +165,7 @@ static const char * tomahawk_schema_sql =
 "    k TEXT NOT NULL PRIMARY KEY,"
 "    v TEXT NOT NULL DEFAULT ''"
 ");"
-"INSERT INTO settings(k,v) VALUES('schema_version', '17');"
+"INSERT INTO settings(k,v) VALUES('schema_version', '19');"
     ;
 
 const char * get_tomahawk_sql()

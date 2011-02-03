@@ -19,6 +19,7 @@ class DLLEXPORT Query : public QObject
 Q_OBJECT
 
 public:
+    static query_ptr get( const QVariant& v, bool autoResolve = true );
     explicit Query( const QVariant& v );
 
     QVariant toVariant() const { return m_v; }
@@ -38,7 +39,7 @@ public:
     bool solved() const { return m_solved; }
 
     unsigned int lastPipelineWeight() const { return m_lastpipelineweight; }
-    void setLastPipelineWeight( unsigned int w ) { m_lastpipelineweight = w;}
+    void setLastPipelineWeight( unsigned int w ) { m_lastpipelineweight = w; }
 
     /// for debug output:
     QString toString() const
@@ -53,16 +54,20 @@ public:
 signals:
     void resultsAdded( const QList<Tomahawk::result_ptr>& );
     void resultsRemoved( const Tomahawk::result_ptr& );
-    void solvedStateChanged( bool state );
 
-    void resolveFailed();
+    void solvedStateChanged( bool state );
+    void resolvingFinished( bool hasResults );
+    
 public slots:
     /// (indirectly) called by resolver plugins when results are found
     void addResults( const QList< Tomahawk::result_ptr >& );
     void removeResult( const Tomahawk::result_ptr& );
 
+    void onResolvingFinished();
+
 private slots:
     void resultUnavailable();
+    void refreshResults();
 
 private:
     mutable QMutex m_mut;

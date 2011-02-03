@@ -7,6 +7,7 @@
 #include "typedefs.h"
 
 #include "dllmacro.h"
+#include "result.h"
 
 class DLLEXPORT PlaylistInterface
 {

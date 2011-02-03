@@ -16,10 +16,9 @@
 
     HOWEVER, we're using the command pattern to serialize access to the database
     and provide an async api. You create a DatabaseCommand object, and add it to
-    the queue of work. There is a single thread responsible for exec'ing all
-    the commands, so sqlite only does one thing at a time.
-
-    Update: 1 thread for mutates, one for readonly queries.
+    the queue of work. There is a threadpool responsible for exec'ing all
+    the non-mutating (readonly) commands and one separate thread for mutating ones,
+    so sqlite doesn't write to the Database from multiple threads.
 */
 class DLLEXPORT Database : public QObject
 {

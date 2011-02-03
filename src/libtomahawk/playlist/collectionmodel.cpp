@@ -195,7 +195,7 @@ CollectionModel::onTracksAdded( const QList<QVariant>& tracks, const collection_
     PlItem* plitem;
     foreach( const QVariant& v, tracks )
     {
-        Tomahawk::query_ptr query = query_ptr( new Query( v ) );
+        Tomahawk::query_ptr query = Tomahawk::Query::get( v, false );
 
         // FIXME: needs merging
         // Manually add a result, since it's coming from the local collection

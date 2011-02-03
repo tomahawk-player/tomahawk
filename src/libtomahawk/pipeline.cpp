@@ -29,7 +29,7 @@ Pipeline::Pipeline( QObject* parent )
 void
 Pipeline::databaseReady()
 {
-    connect( Database::instance(), SIGNAL(indexReady()), this, SLOT(indexReady()), Qt::QueuedConnection );
+    connect( Database::instance(), SIGNAL( indexReady() ), this, SLOT( indexReady() ), Qt::QueuedConnection );
     Database::instance()->loadIndex();
 }
 
@@ -73,7 +73,7 @@ Pipeline::addResolver( Resolver* r, bool sort )
 
 
 void
-Pipeline::add( const QList<query_ptr>& qlist, bool prioritized )
+Pipeline::resolve( const QList<query_ptr>& qlist, bool prioritized )
 {
     {
         QMutexLocker lock( &m_mut );
@@ -103,12 +103,21 @@ Pipeline::add( const QList<query_ptr>& qlist, bool prioritized )
 
 
 void
-Pipeline::add( const query_ptr& q, bool prioritized )
+Pipeline::resolve( const query_ptr& q, bool prioritized )
 {
-    //qDebug() << Q_FUNC_INFO << (qlonglong)q.data() << q->toString();
+    if ( q.isNull() )
+        return;
+    
     QList< query_ptr > qlist;
     qlist << q;
-    add( qlist, prioritized );
+    resolve( qlist, prioritized );
+}
+
+
+void
+Pipeline::resolve( QID qid, bool prioritized )
+{
+    resolve( query( qid ), prioritized );
 }
 
 
@@ -117,12 +126,22 @@ Pipeline::reportResults( QID qid, const QList< result_ptr >& results )
 {
     QMutexLocker lock( &m_mut );
 
-    if( !m_qids.contains( qid ) )
+    if ( !m_qids.contains( qid ) )
     {
         qDebug() << "reportResults called for unknown QID";
         return;
     }
 
+    unsigned int state = m_qidsState.value( qid ) - 1;
+    m_qidsState.insert( qid, state );
+
+    if ( state == 0 )
+    {
+        // All resolvers have reported back their results for this query now
+        const query_ptr& q = m_qids.value( qid );
+        q->onResolvingFinished();
+    }
+    
     if ( !results.isEmpty() )
     {
         //qDebug() << Q_FUNC_INFO << qid;
@@ -189,6 +208,9 @@ Pipeline::shunt( const query_ptr& q )
 
             // resolvers aren't allowed to block in this call:
             //qDebug() << "Dispaching to resolver" << r->name();
+
+            unsigned int state = m_qidsState.value( q->id() );
+            m_qidsState.insert( q->id(), state + 1 );
             r->resolve( q->toVariant() );
         }
         else

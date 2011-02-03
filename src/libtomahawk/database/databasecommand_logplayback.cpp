@@ -5,7 +5,6 @@
 #include "collection.h"
 #include "database/database.h"
 #include "databaseimpl.h"
-#include "pipeline.h"
 #include "network/servent.h"
 
 using namespace Tomahawk;
@@ -26,9 +25,7 @@ DatabaseCommand_LogPlayback::postCommitHook()
     m.insert( "track", m_track );
     m.insert( "artist", m_artist );
     m.insert( "qid", uuid() );
-    Tomahawk::query_ptr q( new Tomahawk::Query( m ) );
-
-    Tomahawk::Pipeline::instance()->add( q );
+    Tomahawk::query_ptr q = Tomahawk::Query::get( m );
 
     if ( m_action == Finished )
     {

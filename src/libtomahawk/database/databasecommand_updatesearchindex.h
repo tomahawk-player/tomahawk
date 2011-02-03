@@ -10,21 +10,19 @@ class DLLEXPORT DatabaseCommand_UpdateSearchIndex : public DatabaseCommand
 {
 Q_OBJECT
 public:
-    explicit DatabaseCommand_UpdateSearchIndex(const QString& table, int pkey);
+    explicit DatabaseCommand_UpdateSearchIndex();
 
     virtual QString commandname() const { return "updatesearchindex"; }
     virtual bool doesMutates() const { return true; }
-    virtual void exec(DatabaseImpl* db);
+    virtual void exec( DatabaseImpl* db );
 
 signals:
     void indexUpdated();
 
-public slots:
-
 private:
+    void indexTable( DatabaseImpl* db, const QString& table );
+    
     QString table;
-    int pkey;
-
 };
 
 #endif // DATABASECOMMAND_UPDATESEARCHINDEX_H

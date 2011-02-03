@@ -276,7 +276,7 @@ EchonestGenerator::queryFromSong(const Echonest::Song& song)
     track[ "artist" ] = song.artistName();
     //         track[ "album" ] = song.release(); // TODO should we include it? can be quite specific
     track[ "track" ] = song.title();
-    return query_ptr( new Query( track ) );
+    return Query::get( track );
 }
 
 QWidget* 

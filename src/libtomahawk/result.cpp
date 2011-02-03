@@ -80,7 +80,7 @@ Result::toString() const
 Tomahawk::query_ptr
 Result::toQuery() const
 {
-    Tomahawk::query_ptr query = Tomahawk::query_ptr( new Tomahawk::Query( toVariant() ) );
+    Tomahawk::query_ptr query = Tomahawk::Query::get( toVariant(), false );
     return query;
 }
 

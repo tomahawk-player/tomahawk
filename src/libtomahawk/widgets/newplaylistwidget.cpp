@@ -11,7 +11,6 @@
 
 #include "widgets/overlaywidget.h"
 
-#include "pipeline.h"
 #include "utils/xspfloader.h"
 
 #include "sourcelist.h"
@@ -114,8 +113,6 @@ NewPlaylistWidget::suggestionsFound()
         m_suggestionsModel->append( entry->query() );
         ql.append( entry->query() );
     }
-
-    Tomahawk::Pipeline::instance()->add( ql );
 
     loader->deleteLater();
 }

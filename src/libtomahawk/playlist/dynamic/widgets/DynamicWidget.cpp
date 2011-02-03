@@ -268,7 +268,6 @@ DynamicWidget::tracksGenerated( const QList< query_ptr >& queries )
     } else { // read-only, so add tracks only in the GUI, not to the playlist itself
         foreach( const query_ptr& query, queries ) {
             m_model->append( query );
-            Pipeline::instance()->add( query );
         }
     }
 }
@@ -280,7 +279,6 @@ DynamicWidget::onDemandFetched( const Tomahawk::query_ptr& track )
     connect( track.data(), SIGNAL( resultsAdded( QList<Tomahawk::result_ptr> ) ), this, SLOT( trackResolved() ) );
     
     m_model->append( track );
-    Pipeline::instance()->add( track );
 }
 
 void

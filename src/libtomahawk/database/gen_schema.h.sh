@@ -1,4 +1,8 @@
 #!/bin/bash
+
+# !!!! You need to manually generate schema.sql.h when the schema changes:
+# ./gen_schema.h.sh ./schema.sql tomahawk > schema.sql.h
+
 schema=$1
 name=$2
 

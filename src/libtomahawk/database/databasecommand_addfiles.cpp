@@ -16,7 +16,7 @@ QVariantList
 DatabaseCommand_AddFiles::files() const
 {
     QVariantList list;
-    foreach( const QVariant& v, m_files )
+    foreach ( const QVariant& v, m_files )
     {
         // replace url with the id, we don't leak file paths over the network.
         QVariantMap m = v.toMap();
@@ -73,11 +73,7 @@ DatabaseCommand_AddFiles::exec( DatabaseImpl* dbi )
     query_trackattr.prepare( "INSERT INTO track_attributes(id, k, v) "
                              "VALUES (?,?,?)" );
     query_file_del.prepare( QString( "DELETE FROM file WHERE source %1 AND url = ?" )
-                               .arg( source()->isLocal() ? "IS NULL" : QString( "= %1" ).arg( source()->id() )
-                          ) );
-
-    int maxart, maxalb, maxtrk; // store max id, so we can index new ones after
-    maxart = maxalb = maxtrk = 0;
+                               .arg( source()->isLocal() ? "IS NULL" : QString( "= %1" ).arg( source()->id() ) ) );
 
     int added = 0;
     QVariant srcid = source()->isLocal() ?
@@ -126,29 +122,28 @@ DatabaseCommand_AddFiles::exec( DatabaseImpl* dbi )
         }
         else
         {
-            if( added % 100 == 0 ) qDebug() << "Inserted" << added;
+            if( added % 100 == 0 )
+                qDebug() << "Inserted" << added;
         }
         // get internal IDs for art/alb/trk
         fileid = query_file.lastInsertId().toInt();
 
         // insert the new fileid, set the url for our use:
         m.insert( "id", fileid );
-        if( !source()->isLocal() ) m["url"] = QString( "servent://%1\t%2" )
-                                                 .arg( source()->userName() )
-                                                 .arg( fileid );
+        if( !source()->isLocal() )
+            m["url"] = QString( "servent://%1\t%2" )
+                          .arg( source()->userName() )
+                          .arg( fileid );
         v = m;
 
         bool isnew;
         int artid = dbi->artistId( artist, isnew );
         if( artid < 1 ) continue;
-        if( isnew && maxart == 0 ) maxart = artid;
 
         int trkid = dbi->trackId( artid, track, isnew );
         if( trkid < 1 ) continue;
-        if( isnew && maxtrk == 0 ) maxtrk = trkid;
 
         int albid = dbi->albumId( artid, album, isnew );
-        if( albid > 0 && isnew && maxalb == 0 ) maxalb = albid;
 
         // Now add the association
         query_filejoin.bindValue( 0, fileid );
@@ -172,11 +167,8 @@ DatabaseCommand_AddFiles::exec( DatabaseImpl* dbi )
     qDebug() << "Inserted" << added;
 
     // TODO building the index could be a separate job, outside this transaction
-    if(maxart) dbi->updateSearchIndex( "artist", maxart );
-    if(maxalb) dbi->updateSearchIndex( "album", maxalb );
-    if(maxtrk) dbi->updateSearchIndex( "track", maxtrk );
+    dbi->updateSearchIndex();
 
     qDebug() << "Committing" << added << "tracks...";
-    qDebug() << "Done.";
     emit done( m_files, source()->collection() );
 }

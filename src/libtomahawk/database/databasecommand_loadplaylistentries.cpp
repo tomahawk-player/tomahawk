@@ -62,8 +62,8 @@ void DatabaseCommand_LoadPlaylistEntries::generateEntries( DatabaseImpl* dbi )
             m.insert( "track", query.value( 1 ).toString() );
             m.insert( "resulthint", query.value( 8 ).toString() );
             m.insert( "qid", uuid() );
-            
-            Tomahawk::query_ptr q( new Tomahawk::Query( m ) );
+
+            Tomahawk::query_ptr q = Tomahawk::Query::get( m, false );
             e->setQuery( q );
             
             m_entrymap.insert( e->guid(), e );

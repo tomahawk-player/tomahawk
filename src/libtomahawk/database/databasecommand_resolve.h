@@ -13,7 +13,7 @@ class DLLEXPORT DatabaseCommand_Resolve : public DatabaseCommand
 {
 Q_OBJECT
 public:
-    explicit DatabaseCommand_Resolve( const QVariant& v, bool searchlocal );
+    explicit DatabaseCommand_Resolve( const QVariant& v );
 
     virtual QString commandname() const { return "dbresolve"; }
     virtual bool doesMutates() const { return false; }
@@ -27,7 +27,6 @@ public slots:
 
 private:
     QVariant m_v;
-    bool m_searchlocal;
 
     float how_similar( const QVariantMap& q, const QVariantMap& r );
     static int levenshtein( const QString& source, const QString& target );
