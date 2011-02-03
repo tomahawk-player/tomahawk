@@ -35,8 +35,8 @@ FuzzyIndex::~FuzzyIndex()
 void
 FuzzyIndex::beginIndexing()
 {
-    lucene::index::IndexWriter luceneWriter = lucene::index::IndexWriter( m_luceneDir, m_analyzer, true );
     m_mutex.lock();
+    lucene::index::IndexWriter luceneWriter = lucene::index::IndexWriter( m_luceneDir, m_analyzer, true );
 }
 
 
