@@ -216,7 +216,6 @@ DynamicWidget::generateOrStart()
             
             m_generateButton->setText( tr( "Stop" ) );
             
-            
             // show the steering controls
             if( m_playlist->generator()->onDemandSteerable() ) {
                 // position it horizontally centered, above the botton.
@@ -275,7 +274,7 @@ DynamicWidget::tracksGenerated( const QList< query_ptr >& queries )
 void 
 DynamicWidget::onDemandFetched( const Tomahawk::query_ptr& track )
 {
-    connect( track.data(), SIGNAL( resolveFailed() ), this, SLOT( trackResolveFailed() ) );
+    connect( track.data(), SIGNAL( resolvingFinished( bool ) ), this, SLOT( trackResolveFinished( bool ) ) );
     connect( track.data(), SIGNAL( resultsAdded( QList<Tomahawk::result_ptr> ) ), this, SLOT( trackResolved() ) );
     
     m_model->append( track );
@@ -294,11 +293,13 @@ DynamicWidget::trackResolved()
 }
 
 void 
-DynamicWidget::trackResolveFailed()
+DynamicWidget::trackResolveFinished( bool success )
 {
-    m_songsSinceLastResolved++;
-    if( m_songsSinceLastResolved < 100 ) {
-        m_playlist->generator()->fetchNext();
+    if( !success ) { // if it was successful, we've already gotten a trackResolved() signal
+        m_songsSinceLastResolved++;
+        if( m_songsSinceLastResolved < 100 ) {
+            m_playlist->generator()->fetchNext();
+        }
     }
 }
 

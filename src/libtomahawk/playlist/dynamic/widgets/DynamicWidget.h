@@ -72,7 +72,7 @@ private slots:
     void onDemandFailed();
     void newTrackLoading();
     void onDemandFetched( const Tomahawk::query_ptr& track );
-    void trackResolveFailed();
+    void trackResolveFinished( bool );
     void trackResolved();
     
     void controlsChanged();

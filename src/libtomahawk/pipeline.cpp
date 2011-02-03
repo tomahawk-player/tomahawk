@@ -135,13 +135,6 @@ Pipeline::reportResults( QID qid, const QList< result_ptr >& results )
     unsigned int state = m_qidsState.value( qid ) - 1;
     m_qidsState.insert( qid, state );
 
-    if ( state == 0 )
-    {
-        // All resolvers have reported back their results for this query now
-        const query_ptr& q = m_qids.value( qid );
-        q->onResolvingFinished();
-    }
-    
     if ( !results.isEmpty() )
     {
         //qDebug() << Q_FUNC_INFO << qid;
@@ -155,6 +148,14 @@ Pipeline::reportResults( QID qid, const QList< result_ptr >& results )
             m_rids.insert( r->id(), r );
         }
     }
+    
+    if ( state == 0 )
+    {
+        // All resolvers have reported back their results for this query now
+        const query_ptr& q = m_qids.value( qid );
+        q->onResolvingFinished();
+    }
+    
 }
 
 
