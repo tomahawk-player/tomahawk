@@ -45,6 +45,7 @@ DynamicWidget::DynamicWidget( const Tomahawk::dynplaylist_ptr& playlist, QWidget
     , m_runningOnDemand( false )
     , m_startOnResolved( false )
     , m_songsSinceLastResolved( 0 )
+    , m_steering( 0 )
     , m_headerText( 0 )
     , m_headerLayout( 0 )
     , m_generatorCombo( 0 )
@@ -152,7 +153,7 @@ DynamicWidget::loadDynamicPlaylist( const Tomahawk::dynplaylist_ptr& playlist )
     
     m_generatorCombo->setWritable( playlist->author()->isLocal() );
     m_generatorCombo->setLabel( qobject_cast< QComboBox* >( m_generatorCombo->writableWidget() )->currentText() );
-
+    
     applyModeChange( m_playlist->mode() );
     connect( m_playlist->generator().data(), SIGNAL( generated( QList<Tomahawk::query_ptr> ) ), this, SLOT( tracksGenerated( QList<Tomahawk::query_ptr> ) ) );
     connect( m_playlist.data(), SIGNAL( dynamicRevisionLoaded( Tomahawk::DynamicPlaylistRevision ) ), this, SLOT( onRevisionLoaded( Tomahawk::DynamicPlaylistRevision ) ) );
@@ -187,6 +188,19 @@ DynamicWidget::sizeHint() const
     //  to avoid having to calculate it which is slow
     return QSize( 5000, 5000 );
 }
+
+void 
+DynamicWidget::resizeEvent(QResizeEvent* )
+{
+    if( m_runningOnDemand && m_steering ) {
+        int x = ( width() / 2 ) - ( m_steering->size().width() / 2 );
+        int y = height() - m_steering->size().height() - 40; // padding
+        
+        m_steering->move( x, y );
+    }
+}
+
+
 void 
 DynamicWidget::generateOrStart()
 {
@@ -201,9 +215,25 @@ DynamicWidget::generateOrStart()
             m_playlist->generator()->startOnDemand();
             
             m_generateButton->setText( tr( "Stop" ) );
+            
+            
+            // show the steering controls
+            if( m_playlist->generator()->onDemandSteerable() ) {
+                // position it horizontally centered, above the botton.
+                m_steering = m_playlist->generator()->steeringWidget();
+                Q_ASSERT( m_steering );
+                
+                int x = ( width() / 2 ) - ( m_steering->size().width() / 2 );
+                int y = height() - m_steering->size().height() - 40; // padding
+                
+                m_steering->setParent( this );
+                m_steering->move( x, y );
+                m_steering->show();
+            }
         } else { // stop
             m_runningOnDemand = false;
             m_startOnResolved = false;
+            m_steering = 0;
             m_generateButton->setText( tr( "Start" ) );
         }
     }

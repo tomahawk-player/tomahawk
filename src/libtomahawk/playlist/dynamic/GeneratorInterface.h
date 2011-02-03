@@ -1,5 +1,5 @@
 /****************************************************************************************
- * Copyright (c) 2010 Leo Franchi <lfranchi@kde.org>                                    *
+ * Copyright (c) 2010-2011 Leo Franchi <lfranchi@kde.org>                               *
  *                                                                                      *
  * This program is free software; you can redistribute it and/or modify it under        *
  * the terms of the GNU General Public License as published by the Free Software        *
@@ -84,6 +84,21 @@ public:
      * Return a sentence that describes this generator's controls. TODO english only ATM
      */
     virtual QString sentenceSummary() { return QString(); }
+    
+    /**
+     * If an OnDemand playlist can be steered, this returns true.
+     * If so, the generator should also provide a steering widget
+     *  in steeringWidget()
+     */
+    virtual bool onDemandSteerable() const { return false; }
+    
+    /**
+     * Returns a widget used to steer the OnDemand dynamic playlist.
+     *  If this generator doesn't support this (and returns false for
+     * \c onDemandSteerable) this will be null. The generator is responsible
+     *  for reacting to changes in the widget.
+     */
+    virtual QWidget* steeringWidget() { return 0; }
     
     /// The type of this generator
     QString type() const { return m_type; }

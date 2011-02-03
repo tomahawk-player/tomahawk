@@ -59,6 +59,8 @@ public:
     PlaylistInterface* playlistInterface() const;
     
     virtual QSize sizeHint() const;
+    virtual void resizeEvent( QResizeEvent* );
+    
 public slots:
     void onRevisionLoaded( const Tomahawk::DynamicPlaylistRevision& rev );
     
@@ -88,6 +90,7 @@ private:
     bool m_runningOnDemand;
     bool m_startOnResolved;
     int m_songsSinceLastResolved;
+    QWidget* m_steering;
         
     // layout and stuff
     QLabel* m_headerText;

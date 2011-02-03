@@ -1,5 +1,5 @@
 /****************************************************************************************
- * Copyright (c) 2010 Leo Franchi <lfranchi@kde.org>                                    *
+ * Copyright (c) 2010-2011 Leo Franchi <lfranchi@kde.org>                               *
  *                                                                                      *
  * This program is free software; you can redistribute it and/or modify it under        *
  * the terms of the GNU General Public License as published by the Free Software        *
@@ -16,6 +16,7 @@
 
 #include "dynamic/echonest/EchonestGenerator.h"
 #include "dynamic/echonest/EchonestControl.h"
+#include "dynamic/echonest/EchonestSteerer.h"
 #include "query.h"
 #include "tomahawk/tomahawkapp.h"
 
@@ -47,6 +48,8 @@ EchonestFactory::typeSelectors() const
 EchonestGenerator::EchonestGenerator ( QObject* parent ) 
     : GeneratorInterface ( parent )
     , m_dynPlaylist( new Echonest::DynamicPlaylist() )
+    , m_steerer( 0 )
+    , m_steeredSinceLastTrack( false )
 {
     m_type = "echonest";
     m_mode = OnDemand;
@@ -118,7 +121,14 @@ EchonestGenerator::fetchNext( int rating )
         return;
     }
     
-    QNetworkReply* reply = m_dynPlaylist->fetchNextSong( rating );
+    QNetworkReply* reply;
+    if( m_steeredSinceLastTrack ) {
+        qDebug() << "Steering dynamic playlist!" << m_steerData.first << m_steerData.second;
+        reply = m_dynPlaylist->fetchNextSong( Echonest::DynamicPlaylist::DynamicControls() << m_steerData );
+        m_steeredSinceLastTrack = false;
+    } else {
+        reply = m_dynPlaylist->fetchNextSong( rating );
+    }
     qDebug() << "getting next song from echonest" << reply->url().toString();
     connect( reply, SIGNAL( finished() ), this, SLOT( dynamicFetched() ) );
 }
@@ -198,6 +208,23 @@ EchonestGenerator::dynamicFetched()
     }
 }
 
+void 
+EchonestGenerator::steerDescription( const QString& desc )
+{
+    m_steeredSinceLastTrack = true;
+    m_steerData.first = Echonest::DynamicPlaylist::SteerDescription;
+    m_steerData.second = desc;
+}
+
+void 
+EchonestGenerator::steerField( const QString& field )
+{
+    m_steeredSinceLastTrack = true;
+    m_steerData.first = Echonest::DynamicPlaylist::Steer;
+    m_steerData.second = field;
+}
+
+
 bool 
 EchonestGenerator::onlyThisArtistType( Echonest::DynamicPlaylist::ArtistTypeEnum type ) const throw( std::runtime_error )
 {
@@ -251,6 +278,16 @@ EchonestGenerator::queryFromSong(const Echonest::Song& song)
     track[ "track" ] = song.title();
     return query_ptr( new Query( track ) );
 }
+
+QWidget* 
+EchonestGenerator::steeringWidget()
+{
+    if( !m_steerer )
+        m_steerer = new EchonestSteerer();
+    
+    return m_steerer;
+}
+
 
 QString 
 EchonestGenerator::sentenceSummary()

@@ -1,5 +1,5 @@
 /****************************************************************************************
- * Copyright (c) 2010 Leo Franchi <lfranchi@kde.org>                                    *
+ * Copyright (c) 2010-2011 Leo Franchi <lfranchi@kde.org>                               *
  *                                                                                      *
  * This program is free software; you can redistribute it and/or modify it under        *
  * the terms of the GNU General Public License as published by the Free Software        *
@@ -27,6 +27,8 @@
 namespace Tomahawk 
 {
 
+class EchonestSteerer;
+
 class EchonestFactory : public GeneratorFactoryInterface
 {
 public:
@@ -50,11 +52,17 @@ public:
     virtual void startOnDemand();
     virtual void fetchNext( int rating = -1 );
     virtual QString sentenceSummary();
+    virtual bool onDemandSteerable() const { return true; }
+    virtual QWidget* steeringWidget();
     
 private slots:
     void staticFinished();
     void dynamicStarted();
     void dynamicFetched();
+    
+    // steering controls
+    void steerField( const QString& field );
+    void steerDescription( const QString& desc );
     
 private:
     Echonest::DynamicPlaylist::PlaylistParams getParams() const throw( std::runtime_error );
@@ -64,6 +72,10 @@ private:
     
     Echonest::DynamicPlaylist* m_dynPlaylist;
     QPixmap m_logo;
+    
+    EchonestSteerer* m_steerer;
+    bool m_steeredSinceLastTrack;
+    Echonest::DynamicPlaylist::DynamicControl m_steerData;
 };
 
 };
