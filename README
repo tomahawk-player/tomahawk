@@ -1,9 +1,9 @@
 Quickstart on Ubuntu
 --------------------
 
-    $ sudo apt-get install build-essential cmake libtag1c2a libtag1-dev liblastfm-dev \
-                           libqt4-dev libqt4-sql-sqlite libvorbis-dev libmad0-dev libflac++-dev \
-                           libasound2-dev libboost-dev zlib1g-dev libgnutls-dev pkg-config
+    $ sudo apt-get install build-essential cmake libtag1c2a libtag1-dev liblastfm-dev libqt4-dev \
+                           libqt4-sql-sqlite libvorbis-dev libmad0-dev libflac++-dev libasound2-dev \
+                           libboost-dev zlib1g-dev libgnutls-dev libclucene-dev pkg-config
 
 
 Gloox 1.0 (XMPP library)
@@ -46,7 +46,7 @@ Quickstart on OS X
 
  Install homebrew
     $ ruby -e "$(curl -fsSL https://gist.github.com/raw/323731/install_homebrew.rb)"
-    $ brew install qt qjson gloox libmad libvorbis flac taglib boost liblastfm
+    $ brew install qt qjson gloox libmad libvorbis flac taglib boost liblastfm clucene
 
  Install libEchnoest as per the above instructions.
 
@@ -78,6 +78,7 @@ Dependencies
   SQLite 3.6.22 http://www.sqlite.org/
   TagLib 1.6.2 http://developer.kde.org/~wheeler/taglib.html
   Boost 1.3x http://www.boost.org/
+  CLucene 0.9.21 http://clucene.sourceforge.net/
   libmad 0.15.1b http://www.underbit.com/products/mad/
   libvorbis 1.2.3 http://xiph.org/vorbis/
   libogg 1.1.4 http://xiph.org/ogg/
