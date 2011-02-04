@@ -26,8 +26,10 @@ DynamicModel::DynamicModel( QObject* parent )
     , m_startOnResolved( false )
     , m_onDemandRunning( false )
     , m_currentAttempts( 0 )
+    , m_lastResolvedRow( 0 )
 {
-
+    
+    connect( AudioEngine::instance(), SIGNAL( loading( Tomahawk::result_ptr ) ), this, SLOT( newTrackLoading() ) );
 }
 
 DynamicModel::~DynamicModel()
@@ -38,6 +40,9 @@ DynamicModel::~DynamicModel()
 void 
 DynamicModel::loadPlaylist( const Tomahawk::dynplaylist_ptr& playlist )
 {
+    if( !m_playlist.isNull() ) {
+        disconnect( m_playlist->generator().data(), SIGNAL( nextTrackGenerated( Tomahawk::query_ptr ) ), this, SLOT( newTrackGenerated( Tomahawk::query_ptr ) ) );
+    }
     m_playlist = playlist;
     
     
@@ -50,7 +55,6 @@ DynamicModel::startOnDemand()
 {
     m_playlist->generator()->startOnDemand();
     
-    connect( AudioEngine::instance(), SIGNAL( loading( Tomahawk::result_ptr ) ), this, SLOT( newTrackLoading() ) );
     m_onDemandRunning = true;
     m_startOnResolved = true;
 }
@@ -79,21 +83,31 @@ DynamicModel::stopOnDemand()
 void 
 DynamicModel::trackResolved()
 {   
-    m_currentAttempts = 0;
-    
+    Query* q = qobject_cast<Query*>(sender());
+    qDebug() << "Got successful resolved track:" << q->track() << q->artist() << m_lastResolvedRow << m_currentAttempts;
     if( m_startOnResolved ) { // on first start
         m_startOnResolved = false;
         AudioEngine::instance()->play();
     }
+    
+    if( m_currentAttempts > 0 ) {
+        qDebug() << "EMITTING AN ASK FOR COLLAPSE:" << m_lastResolvedRow << m_currentAttempts;
+        emit collapseFromTo( m_lastResolvedRow, m_currentAttempts );
+    }
+    m_currentAttempts = 0;
 }
 
 void 
 DynamicModel::trackResolveFinished( bool success )
 {
     if( !success ) { // if it was successful, we've already gotten a trackResolved() signal
+        Query* q = qobject_cast<Query*>(sender());
+        qDebug() << "Got not resolved track:" << q->track() << q->artist() << m_lastResolvedRow << m_currentAttempts;
         m_currentAttempts++;
-        if( m_currentAttempts < 100 ) {
+        if( m_currentAttempts < 30 ) {
             m_playlist->generator()->fetchNext();
+        } else {
+            // TODO handle failure
         }
     }
 }
@@ -103,6 +117,21 @@ void
 DynamicModel::newTrackLoading()
 {
     if( m_onDemandRunning && m_currentAttempts == 0 ) { // if we're in dynamic mode and we're also currently idle
+        m_lastResolvedRow = rowCount( QModelIndex() );
         m_playlist->generator()->fetchNext();
     }
+}
+
+void 
+DynamicModel::removeIndex(const QModelIndex& index, bool moreToCome)
+{
+    if ( isReadOnly() )
+        return;
+    
+    if( m_playlist->mode() == OnDemand )
+        TrackModel::removeIndex( index );
+    // don't call onPlaylistChanged.
+        
+    if( !moreToCome )
+        m_lastResolvedRow = rowCount( QModelIndex() );
 }

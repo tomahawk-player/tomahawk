@@ -20,6 +20,7 @@
 #include "playlist/playlistview.h"
 #include <QTimer>
 #include <QPropertyAnimation>
+#include <QTimeLine>
 
 class PlaylistModel;
 class TrackModel;
@@ -36,20 +37,33 @@ public:
     virtual void setModel( PlaylistModel* model );
     
     void setOnDemand( bool onDemand );
+    
+    virtual void paintEvent(QPaintEvent* event);
+    
 public slots:
     void showMessageTimeout( const QString& title, const QString& body );
+    
+    // collapse and animate the transition
+    // there MUST be a row *after* startRow + num. that is, you can't collapse
+    // entries unless there is at least one entry after the last collapsed row
+    void collapseEntries( int startRow, int num );
     
 private slots:
     void onTrackCountChanged( unsigned int );
     
 private:
-    QTimer m_showTimer;
-    QPropertyAnimation* m_fadeOut;
-    
     QString m_title;
     QString m_body;
     
     bool m_onDemand;
+    
+    // for collapsing animation
+    QPoint m_fadingPointAnchor;
+    QPoint m_bottomAnchor;
+    QPixmap m_fadingIndexes;
+    QPixmap m_slidingIndex;
+    QTimeLine m_fadeOutAnim;
+    QTimeLine m_slideAnim;
 };
     
 };

@@ -40,7 +40,11 @@ public:
     void stopOnDemand();
     
     void loadPlaylist( const dynplaylist_ptr& playlist );
-        
+    
+    virtual void removeIndex( const QModelIndex& index, bool moreToCome = false );
+signals:
+    void collapseFromTo( int startRow, int num );
+    
 private slots:    
     void newTrackGenerated( const Tomahawk::query_ptr& query );
     
@@ -53,6 +57,7 @@ private:
     bool m_startOnResolved;
     bool m_onDemandRunning;
     int m_currentAttempts;
+    int m_lastResolvedRow;
 };
     
 };

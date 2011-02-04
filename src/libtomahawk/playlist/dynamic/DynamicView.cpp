@@ -18,16 +18,35 @@
 
 #include "widgets/overlaywidget.h"
 #include "playlistmodel.h"
+#include "trackproxymodel.h"
 
 #include <QPainter>
+#include <QPaintEvent>
+#include <QtGui/qpaintengine.h>
 using namespace Tomahawk;
 
+#define FADE_LENGTH 800
+#define SLIDE_LENGTH 300
+#define SLIDE_OFFSET 500
+#define LONG_MULT 0.4 // to avoid superfast slides when the length is long, make it longer incrementally
 
 DynamicView::DynamicView( QWidget* parent )
         : PlaylistView( parent )
         , m_onDemand( false )
 {
+    m_fadeOutAnim.setDuration( FADE_LENGTH );
+    m_fadeOutAnim.setCurveShape( QTimeLine::LinearCurve );
+    m_fadeOutAnim.setFrameRange( 100, 0 );
+    m_fadeOutAnim.setUpdateInterval( 10 );
     
+    QEasingCurve curve( QEasingCurve::OutBounce );
+    curve.setAmplitude( .2 );
+    m_slideAnim.setEasingCurve( curve );
+    m_slideAnim.setDirection( QTimeLine::Forward );
+    m_fadeOutAnim.setUpdateInterval( 10 );
+    
+    
+    connect( &m_fadeOutAnim, SIGNAL( frameChanged( int ) ), viewport(), SLOT( update() ) );
 }
 
 DynamicView::~DynamicView()
@@ -74,3 +93,77 @@ DynamicView::onTrackCountChanged( unsigned int tracks )
     else
         overlay()->hide();
 }
+
+void 
+DynamicView::collapseEntries( int startRow, int num )
+{
+    if( m_fadeOutAnim.state() == QTimeLine::Running )
+        qDebug() << "COLLAPSING TWICE!";
+    // we capture the image of the rows we're going to collapse
+    // then we capture the image of the target row we're going to animate downwards
+    // then we fade the first image out while sliding the second image up.
+    QModelIndex topLeft = proxyModel()->index( startRow, 0, QModelIndex() );
+    QModelIndex bottomRight = proxyModel()->index( startRow + num - 1, proxyModel()->columnCount( QModelIndex() ) - 1, QModelIndex() );
+    QItemSelection sel( topLeft, bottomRight );
+    QRect fadingRect = visualRegionForSelection( sel ).boundingRect();
+    
+    m_fadingIndexes = QPixmap::grabWidget( viewport(), fadingRect );
+    m_fadingPointAnchor = fadingRect.topLeft();
+    
+    qDebug() << "Grabbed fading indexes from rect:" << fadingRect << m_fadingIndexes.size();
+    
+    topLeft = proxyModel()->index( startRow + num, 0, QModelIndex() );
+    bottomRight = proxyModel()->index( startRow + num, proxyModel()->columnCount( QModelIndex() ) - 1, QModelIndex() );
+    QRect slidingRect = visualRegionForSelection( QItemSelection( topLeft, bottomRight ) ).boundingRect();
+    
+    m_slidingIndex = QPixmap::grabWidget( viewport(), slidingRect );
+    m_bottomAnchor = slidingRect.topLeft();
+    qDebug() << "Grabbed sliding index from rect:" << slidingRect << m_slidingIndex.size();
+    
+    // slide from the current position to the new one
+    int frameRange = fadingRect.topLeft().y() - slidingRect.topLeft().y();
+    m_slideAnim.setDuration( SLIDE_LENGTH + frameRange * LONG_MULT );
+    m_slideAnim.setFrameRange( slidingRect.topLeft().y(), fadingRect.topLeft().y() );
+    
+    m_fadeOutAnim.start();
+    QTimer::singleShot( SLIDE_OFFSET, &m_slideAnim, SLOT( start() ) );
+    
+    QModelIndexList todel;
+    for( int i = 0; i < num; i++ ) {
+        for( int k = 0; k < proxyModel()->columnCount( QModelIndex() ); k++ ) {
+            todel << proxyModel()->index( startRow + i, k );
+        }
+    }
+    proxyModel()->removeIndexes( todel );
+}
+
+void 
+DynamicView::paintEvent( QPaintEvent* event )
+{
+    TrackView::paintEvent(event);
+    
+    QPainter p( viewport() );
+    if( m_fadeOutAnim.state() == QTimeLine::Running ) { // both run together
+        p.save();
+        QRect bg = m_fadingIndexes.rect();
+        bg.moveTo( m_fadingPointAnchor ); // cover up the background
+        p.fillRect( bg, Qt::white );
+        
+//         qDebug() << "FAST SETOPACITY:" << p.paintEngine()->hasFeature(QPaintEngine::ConstantOpacity);
+        p.setOpacity( m_fadeOutAnim.currentFrame() );
+        p.drawPixmap( m_fadingPointAnchor, m_fadingIndexes );
+        
+        p.restore();   
+        
+        if( m_slideAnim.state() == QTimeLine::Running ) {
+            // draw the collapsing entry
+            QRect bg = m_slidingIndex.rect();
+            bg.moveTo( m_bottomAnchor );
+            p.fillRect( bg, Qt::white );
+            p.drawPixmap( 0, m_slideAnim.currentFrame(), m_slidingIndex );
+        } else if( m_fadeOutAnim.state() == QTimeLine::Running ) {
+            p.drawPixmap( m_bottomAnchor, m_slidingIndex );
+        }
+    }
+}
+
