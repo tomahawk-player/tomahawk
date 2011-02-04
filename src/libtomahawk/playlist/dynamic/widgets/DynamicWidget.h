@@ -38,6 +38,9 @@ class ReadOrWriteWidget;
 namespace Tomahawk
 {
 
+class DynamicModel;
+
+
 class DynamicView;
 
 
@@ -68,13 +71,6 @@ private slots:
     void generateOrStart();
     void tracksGenerated( const QList< Tomahawk::query_ptr>& queries );
     
-    // used by on demand mode
-    void onDemandFailed();
-    void newTrackLoading();
-    void onDemandFetched( const Tomahawk::query_ptr& track );
-    void trackResolveFinished( bool );
-    void trackResolved();
-    
     void controlsChanged();
     void controlChanged( const Tomahawk::dyncontrol_ptr& control );
     
@@ -88,8 +84,6 @@ private:
     
     // used in OnDemand mode
     bool m_runningOnDemand;
-    bool m_startOnResolved;
-    int m_songsSinceLastResolved;
     QWidget* m_steering;
         
     // layout and stuff
@@ -103,7 +97,7 @@ private:
     CollapsibleControls* m_controls;
     
     DynamicView* m_view;
-    PlaylistModel* m_model;
+    DynamicModel* m_model;
 };
 
 };

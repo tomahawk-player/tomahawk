@@ -23,8 +23,7 @@
 #include <QSpinBox>
 
 #include "DynamicControlList.h"
-#include "playlistview.h"
-#include "playlistmodel.h"
+#include "dynamic/DynamicModel.h"
 #include "trackproxymodel.h"
 #include "dynamic/GeneratorInterface.h"
 #include "dynamic/GeneratorFactory.h"
@@ -43,8 +42,6 @@ DynamicWidget::DynamicWidget( const Tomahawk::dynplaylist_ptr& playlist, QWidget
     , m_resolveOnNextLoad( false )
     , m_seqRevLaunched( 0 )
     , m_runningOnDemand( false )
-    , m_startOnResolved( false )
-    , m_songsSinceLastResolved( 0 )
     , m_steering( 0 )
     , m_headerText( 0 )
     , m_headerLayout( 0 )
@@ -88,7 +85,7 @@ DynamicWidget::DynamicWidget( const Tomahawk::dynplaylist_ptr& playlist, QWidget
     m_controls = new CollapsibleControls( this );
     m_layout->addWidget( m_controls );
     
-    m_model = new PlaylistModel( this );
+    m_model = new DynamicModel( this );
     m_view = new DynamicView( this );
     m_view->setModel( m_model );
     m_view->setContentsMargins( 0, 0, 0, 0 );
@@ -140,7 +137,6 @@ DynamicWidget::loadDynamicPlaylist( const Tomahawk::dynplaylist_ptr& playlist )
     if( !m_playlist.isNull() ) {
         disconnect( m_playlist->generator().data(), SIGNAL( generated( QList<Tomahawk::query_ptr> ) ), this, SLOT( tracksGenerated( QList<Tomahawk::query_ptr> ) ) );
         disconnect( m_playlist.data(), SIGNAL( dynamicRevisionLoaded( Tomahawk::DynamicPlaylistRevision) ), this, SLOT(onRevisionLoaded( Tomahawk::DynamicPlaylistRevision) ) );
-        disconnect( m_playlist->generator().data(), SIGNAL( nextTrackGenerated( Tomahawk::query_ptr ) ), this, SLOT( onDemandFetched( Tomahawk::query_ptr ) ) );
         disconnect( m_playlist->generator().data(), SIGNAL( error( QString, QString ) ), m_view, SLOT( showMessageTimeout( QString, QString ) ) );
     }
     
@@ -157,7 +153,6 @@ DynamicWidget::loadDynamicPlaylist( const Tomahawk::dynplaylist_ptr& playlist )
     applyModeChange( m_playlist->mode() );
     connect( m_playlist->generator().data(), SIGNAL( generated( QList<Tomahawk::query_ptr> ) ), this, SLOT( tracksGenerated( QList<Tomahawk::query_ptr> ) ) );
     connect( m_playlist.data(), SIGNAL( dynamicRevisionLoaded( Tomahawk::DynamicPlaylistRevision ) ), this, SLOT( onRevisionLoaded( Tomahawk::DynamicPlaylistRevision ) ) );
-    connect( m_playlist->generator().data(), SIGNAL( nextTrackGenerated( Tomahawk::query_ptr ) ), this, SLOT( onDemandFetched( Tomahawk::query_ptr ) ) );
     connect( m_playlist->generator().data(), SIGNAL( error( QString, QString ) ), m_view, SLOT( showMessageTimeout( QString, QString ) ) );
     
 }
@@ -211,10 +206,10 @@ DynamicWidget::generateOrStart()
     } else if( m_playlist->mode() == OnDemand ) {
         if( m_runningOnDemand == false ) {
             m_runningOnDemand = true;
-            m_startOnResolved = true;
-            m_playlist->generator()->startOnDemand();
+            m_model->startOnDemand();
             
             m_generateButton->setText( tr( "Stop" ) );
+            
             
             // show the steering controls
             if( m_playlist->generator()->onDemandSteerable() ) {
@@ -230,8 +225,8 @@ DynamicWidget::generateOrStart()
                 m_steering->show();
             }
         } else { // stop
+            m_model->stopOnDemand();
             m_runningOnDemand = false;
-            m_startOnResolved = false;
             m_steering = 0;
             m_generateButton->setText( tr( "Start" ) );
         }
@@ -269,52 +264,6 @@ DynamicWidget::tracksGenerated( const QList< query_ptr >& queries )
             m_model->append( query );
         }
     }
-}
-
-void 
-DynamicWidget::onDemandFetched( const Tomahawk::query_ptr& track )
-{
-    connect( track.data(), SIGNAL( resolvingFinished( bool ) ), this, SLOT( trackResolveFinished( bool ) ) );
-    connect( track.data(), SIGNAL( resultsAdded( QList<Tomahawk::result_ptr> ) ), this, SLOT( trackResolved() ) );
-    
-    m_model->append( track );
-}
-
-void
-DynamicWidget::trackResolved()
-{
-    m_songsSinceLastResolved = 0;
-    
-    if( m_startOnResolved ) {
-        m_startOnResolved = false;
-        AudioEngine::instance()->play();
-    }
-    
-}
-
-void 
-DynamicWidget::trackResolveFinished( bool success )
-{
-    if( !success ) { // if it was successful, we've already gotten a trackResolved() signal
-        m_songsSinceLastResolved++;
-        if( m_songsSinceLastResolved < 100 ) {
-            m_playlist->generator()->fetchNext();
-        }
-    }
-}
-
-void 
-DynamicWidget::newTrackLoading()
-{
-    if( m_runningOnDemand && m_songsSinceLastResolved == 0 ) { // if we're in dynamic mode and we're also currently idle
-        m_playlist->generator()->fetchNext();
-    }
-}
-
-void DynamicWidget::onDemandFailed()
-{
-    if( m_runningOnDemand )
-        generateOrStart();
 }
 
 
