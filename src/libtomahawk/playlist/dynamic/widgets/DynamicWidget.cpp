@@ -240,15 +240,11 @@ DynamicWidget::applyModeChange( int mode )
     {
         m_generateButton->setText( tr( "Play" ) );
         m_genNumber->hide();
-        
-        connect( AudioEngine::instance(), SIGNAL( loading( Tomahawk::result_ptr ) ), this, SLOT( newTrackLoading() ) );
     } else if( mode == Static ) {
         m_generateButton->setText( tr( "Generate" ) );
         m_genNumber->show();
         if( m_headerLayout->indexOf( m_genNumber ) == -1 )
             m_headerLayout->insertWidget( 4, m_genNumber );
-        
-        disconnect( AudioEngine::instance(), SIGNAL( loading( Tomahawk::result_ptr ) ), this, SLOT( newTrackLoading() ) );
     }
 }
 

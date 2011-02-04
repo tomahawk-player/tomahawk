@@ -50,6 +50,7 @@ DynamicModel::startOnDemand()
 {
     m_playlist->generator()->startOnDemand();
     
+    connect( AudioEngine::instance(), SIGNAL( loading( Tomahawk::result_ptr ) ), this, SLOT( newTrackLoading() ) );
     m_onDemandRunning = true;
     m_startOnResolved = true;
 }
@@ -70,6 +71,8 @@ DynamicModel::stopOnDemand()
 {
     m_onDemandRunning = false;
     AudioEngine::instance()->stop();
+    
+    disconnect( AudioEngine::instance(), SIGNAL( loading( Tomahawk::result_ptr ) ), this, SLOT( newTrackLoading() ) );
 }
 
 
