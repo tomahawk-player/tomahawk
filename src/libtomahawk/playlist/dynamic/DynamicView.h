@@ -60,6 +60,7 @@ private:
     // for collapsing animation
     QPoint m_fadingPointAnchor;
     QPoint m_bottomAnchor;
+    QPoint m_bottomOfAnim;
     QPixmap m_fadingIndexes;
     QPixmap m_slidingIndex;
     QTimeLine m_fadeOutAnim;

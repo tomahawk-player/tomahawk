@@ -28,7 +28,7 @@ using namespace Tomahawk;
 #define FADE_LENGTH 800
 #define SLIDE_LENGTH 300
 #define SLIDE_OFFSET 500
-#define LONG_MULT 0.4 // to avoid superfast slides when the length is long, make it longer incrementally
+#define LONG_MULT 0 // to avoid superfast slides when the length is long, make it longer incrementally
 
 DynamicView::DynamicView( QWidget* parent )
         : PlaylistView( parent )
@@ -37,13 +37,13 @@ DynamicView::DynamicView( QWidget* parent )
     m_fadeOutAnim.setDuration( FADE_LENGTH );
     m_fadeOutAnim.setCurveShape( QTimeLine::LinearCurve );
     m_fadeOutAnim.setFrameRange( 100, 0 );
-    m_fadeOutAnim.setUpdateInterval( 10 );
+    m_fadeOutAnim.setUpdateInterval( 5 );
     
     QEasingCurve curve( QEasingCurve::OutBounce );
-    curve.setAmplitude( .2 );
+    curve.setAmplitude( .25 );
     m_slideAnim.setEasingCurve( curve );
     m_slideAnim.setDirection( QTimeLine::Forward );
-    m_fadeOutAnim.setUpdateInterval( 10 );
+    m_fadeOutAnim.setUpdateInterval( 5 );
     
     
     connect( &m_fadeOutAnim, SIGNAL( frameChanged( int ) ), viewport(), SLOT( update() ) );
@@ -118,6 +118,7 @@ DynamicView::collapseEntries( int startRow, int num )
     
     m_slidingIndex = QPixmap::grabWidget( viewport(), slidingRect );
     m_bottomAnchor = slidingRect.topLeft();
+    m_bottomOfAnim = slidingRect.bottomLeft();
     qDebug() << "Grabbed sliding index from rect:" << slidingRect << m_slidingIndex.size();
     
     // slide from the current position to the new one
@@ -150,7 +151,7 @@ DynamicView::paintEvent( QPaintEvent* event )
         p.fillRect( bg, Qt::white );
         
 //         qDebug() << "FAST SETOPACITY:" << p.paintEngine()->hasFeature(QPaintEngine::ConstantOpacity);
-        p.setOpacity( m_fadeOutAnim.currentFrame() );
+        p.setOpacity( 1 - m_fadeOutAnim.currentValue() );
         p.drawPixmap( m_fadingPointAnchor, m_fadingIndexes );
         
         p.restore();   
@@ -159,6 +160,7 @@ DynamicView::paintEvent( QPaintEvent* event )
             // draw the collapsing entry
             QRect bg = m_slidingIndex.rect();
             bg.moveTo( m_bottomAnchor );
+            bg.setBottom( m_bottomOfAnim.y() );
             p.fillRect( bg, Qt::white );
             p.drawPixmap( 0, m_slideAnim.currentFrame(), m_slidingIndex );
         } else if( m_fadeOutAnim.state() == QTimeLine::Running ) {
