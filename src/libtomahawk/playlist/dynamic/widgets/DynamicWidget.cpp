@@ -187,6 +187,12 @@ DynamicWidget::sizeHint() const
 void 
 DynamicWidget::resizeEvent(QResizeEvent* )
 {
+    layoutSteerer();
+}
+
+void 
+DynamicWidget::layoutSteerer()
+{
     if( m_runningOnDemand && m_steering ) {
         int x = ( width() / 2 ) - ( m_steering->size().width() / 2 );
         int y = height() - m_steering->size().height() - 40; // padding
@@ -223,6 +229,8 @@ DynamicWidget::generateOrStart()
                 m_steering->setParent( this );
                 m_steering->move( x, y );
                 m_steering->show();
+                
+                connect( m_steering, SIGNAL( resized() ), this, SLOT( layoutSteerer() ) );
             }
         } else { // stop
             m_model->stopOnDemand();

@@ -18,6 +18,7 @@
 #define ECHONEST_STEERER_H
 
 #include <QWidget>
+#include <QTimeLine>
 
 class QLabel;
 class QComboBox;
@@ -40,8 +41,12 @@ signals:
     void steerField( const QString& field );
     void steerDescription( const QString& desc );
     
+    void resized();
 private slots:
     void changed();
+    
+    void resizeFrame( int );
+    void resizeFinished();
     
 private:
     QHBoxLayout* m_layout;
@@ -55,6 +60,9 @@ private:
     
     QVBoxLayout* m_textL;
     
+    // animations
+    QTimeLine m_resizeAnim;
+    bool m_expanding;
 };
     
 };

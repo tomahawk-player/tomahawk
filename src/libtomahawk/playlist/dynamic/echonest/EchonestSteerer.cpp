@@ -25,6 +25,8 @@
 
 using namespace Tomahawk;
 
+#define ANIM_DURATION 300
+
 EchonestSteerer::EchonestSteerer( QWidget* parent )
     : QWidget( parent )
     , m_layout( new QHBoxLayout )
@@ -34,6 +36,7 @@ EchonestSteerer::EchonestSteerer( QWidget* parent )
     , m_field( 0 )
     , m_description( 0 )
     , m_textL( new QVBoxLayout )
+    , m_expanding( true )
     
 {
     m_layout->setContentsMargins( 8, 8, 8, 8 );
@@ -73,10 +76,19 @@ EchonestSteerer::EchonestSteerer( QWidget* parent )
     connect( m_field, SIGNAL( currentIndexChanged( int ) ), this, SLOT( changed() ) );
     
     m_description = new QLineEdit( this );
+    m_description->setPlaceholderText( tr( "Enter a description" ) );
     m_description->hide();
     
     setLayout( m_layout );
     setSizePolicy( QSizePolicy::Fixed, QSizePolicy::Fixed );
+    
+    m_resizeAnim.setDuration( ANIM_DURATION );
+    m_resizeAnim.setEasingCurve( QEasingCurve::InOutQuad );
+    m_resizeAnim.setDirection( QTimeLine::Forward );
+    m_resizeAnim.setUpdateInterval( 8 );
+    
+    connect( &m_resizeAnim, SIGNAL( frameChanged( int ) ), this, SLOT( resizeFrame( int ) ) );
+    connect( &m_resizeAnim, SIGNAL( finished() ), this, SLOT( resizeFinished() ) );
     
     resize( sizeHint() );
 }
@@ -109,7 +121,52 @@ EchonestSteerer::changed()
     if( m_field->itemData( m_field->currentIndex() ).toString() != "desc" ) {
         QString steer = m_field->itemData( m_field->currentIndex() ).toString() + m_amplifier->itemData( m_amplifier->currentIndex() ).toString();
         emit steerField( steer );
-    } else {
         
+        // if description was shown, animate to shrink
+        if( m_layout->indexOf( m_description ) > 0 ) {
+            m_expanding = false;
+            int start = width();
+            int end = start - m_layout->spacing() - m_description->sizeHint().width();;
+            
+            m_layout->removeWidget( m_description );
+            m_description->hide();
+            m_layout->setStretchFactor(  m_textL, 1 );
+            
+            m_resizeAnim.setFrameRange( start, end );
+            m_resizeAnim.start();
+            
+            qDebug() << "COLLAPSING FROM" << start << "TO" << end;
+        }
+    } else { // description, so put in the description field
+        // animate to expand
+        m_layout->addWidget( m_description, 1 );
+        m_layout->setStretchFactor( m_textL, 0 );
+        m_description->show();
+        
+        m_expanding = true;
+        int start = width();
+        int end = start + m_layout->spacing() + m_description->sizeHint().width();
+        m_resizeAnim.setFrameRange( start, end );
+        m_resizeAnim.start();
+        
+        qDebug() << "EXPANDING FROM" << start << "TO" << end;
     }
 }
+
+void 
+EchonestSteerer::resizeFrame( int width )
+{
+    qDebug() << "RESIZING TO:" << width;
+    resize( width, sizeHint().height() );
+    update();
+    
+    emit resized();
+}
+
+void 
+EchonestSteerer::resizeFinished()
+{
+//     resize( m_layout->sizeHint() );
+//     update();
+}
+

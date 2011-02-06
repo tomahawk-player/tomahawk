@@ -74,6 +74,7 @@ private slots:
     void controlsChanged();
     void controlChanged( const Tomahawk::dyncontrol_ptr& control );
     
+    void layoutSteerer();
 private:
     void applyModeChange( int mode );
     
