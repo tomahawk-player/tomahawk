@@ -19,7 +19,7 @@ FuzzyIndex::FuzzyIndex( DatabaseImpl& db )
     bool create = !lucene::index::IndexReader::indexExists( lucenePath.toStdString().c_str() );
     m_luceneDir = lucene::store::FSDirectory::getDirectory( lucenePath.toStdString().c_str(), create );
 
-    m_analyzer = new lucene::analysis::SimpleAnalyzer();
+    m_analyzer = _CLNEW lucene::analysis::SimpleAnalyzer();
 }
 
 
@@ -68,13 +68,13 @@ FuzzyIndex::appendFields( const QString& table, const QMap< unsigned int, QStrin
         QString name = it.value();
 
         {
-            lucene::document::Field* field = new lucene::document::Field( table.toStdWString().c_str(), name.toStdWString().c_str(),
+            lucene::document::Field* field = _CLNEW lucene::document::Field( table.toStdWString().c_str(), name.toStdWString().c_str(),
                                                                           lucene::document::Field::STORE_YES | lucene::document::Field::INDEX_UNTOKENIZED );
             doc.add( *field );
         }
         
         {
-            lucene::document::Field* field = new lucene::document::Field( _T( "id" ), QString::number( id ).toStdWString().c_str(),
+            lucene::document::Field* field = _CLNEW lucene::document::Field( _T( "id" ), QString::number( id ).toStdWString().c_str(),
             lucene::document::Field::STORE_YES | lucene::document::Field::INDEX_NO );
             doc.add( *field );
         }
@@ -109,7 +109,7 @@ FuzzyIndex::search( const QString& table, const QString& name )
         }
 
         m_luceneReader = lucene::index::IndexReader::open( m_luceneDir );
-        m_luceneSearcher = new lucene::search::IndexSearcher( m_luceneReader );
+        m_luceneSearcher = _CLNEW lucene::search::IndexSearcher( m_luceneReader );
     }
 
     if ( name.isEmpty() )
@@ -119,8 +119,7 @@ FuzzyIndex::search( const QString& table, const QString& name )
     lucene::queryParser::QueryParser parser( table.toStdWString().c_str(), m_analyzer );
     lucene::search::Hits* hits = 0;
 
-    lucene::search::FuzzyQuery* qry = new lucene::search::FuzzyQuery( new lucene::index::Term( table.toStdWString().c_str(),
-                                                                                               name.toStdWString().c_str() ) );
+    lucene::search::FuzzyQuery* qry = _CLNEW lucene::search::FuzzyQuery( _CLNEW lucene::index::Term( table.toStdWString().c_str(), name.toStdWString().c_str() ) );
     hits = m_luceneSearcher->search( qry );
 
     for ( unsigned int i = 0; i < hits->length(); i++ )
