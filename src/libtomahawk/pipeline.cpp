@@ -85,16 +85,16 @@ Pipeline::resolve( const QList<query_ptr>& qlist, bool prioritized )
                 m_qids.insert( q->id(), q );
             }
         }
-    }
 
-    if ( prioritized )
-    {
-        for( int i = qlist.count() - 1; i >= 0; i-- )
-            m_queries_pending.insert( 0, qlist.at( i ) );
-    }
-    else
-    {
-        m_queries_pending.append( qlist );
+        if ( prioritized )
+        {
+            for( int i = qlist.count() - 1; i >= 0; i-- )
+                m_queries_pending.insert( 0, qlist.at( i ) );
+        }
+        else
+        {
+            m_queries_pending.append( qlist );
+        }
     }
 
     if ( m_index_ready && m_queries_pending.count() )
@@ -161,19 +161,25 @@ Pipeline::reportResults( QID qid, const QList< result_ptr >& results )
 void
 Pipeline::shuntNext()
 {
-    if ( m_queries_pending.isEmpty() )
+    query_ptr q;
+
     {
-        emit idle();
-        return;
+        QMutexLocker lock( &m_mut );
+        
+        if ( m_queries_pending.isEmpty() )
+        {
+            emit idle();
+            return;
+        }
+
+        /*
+            Since resolvers are async, we now dispatch to the highest weighted ones
+            and after timeout, dispatch to next highest etc, aborting when solved
+        */
+        q = m_queries_pending.takeFirst();
+        q->setLastPipelineWeight( 101 );
     }
-
-    /*
-        Since resolvers are async, we now dispatch to the highest weighted ones
-        and after timeout, dispatch to next highest etc, aborting when solved
-     */
-
-    query_ptr q = m_queries_pending.takeFirst();
-    q->setLastPipelineWeight( 101 );
+    
     shunt( q ); // bump into next stage of pipeline (highest weights are 100)
 }
 

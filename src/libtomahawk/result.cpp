@@ -6,7 +6,8 @@ using namespace Tomahawk;
 
 
 Result::Result( const QVariant& v, const collection_ptr& collection )
-    : m_v( v )
+    : QObject()
+    , m_v( v )
     , m_collection( collection )
 {
     QVariantMap m = m_v.toMap();
