@@ -29,7 +29,6 @@ DynamicModel::DynamicModel( QObject* parent )
     , m_lastResolvedRow( 0 )
 {
     
-    connect( AudioEngine::instance(), SIGNAL( loading( Tomahawk::result_ptr ) ), this, SLOT( newTrackLoading() ) );
 }
 
 DynamicModel::~DynamicModel()
@@ -53,10 +52,14 @@ DynamicModel::loadPlaylist( const Tomahawk::dynplaylist_ptr& playlist )
 void 
 DynamicModel::startOnDemand()
 {
+    connect( AudioEngine::instance(), SIGNAL( loading( Tomahawk::result_ptr ) ), this, SLOT( newTrackLoading() ) );
+    
     m_playlist->generator()->startOnDemand();
     
     m_onDemandRunning = true;
     m_startOnResolved = true;
+    m_currentAttempts = 0;
+    m_lastResolvedRow = 0;
 }
 
 void 
