@@ -76,6 +76,8 @@ DynamicModel::stopOnDemand()
     m_onDemandRunning = false;
     AudioEngine::instance()->stop();
     
+    // delete all the tracks
+    clear();
     disconnect( AudioEngine::instance(), SIGNAL( loading( Tomahawk::result_ptr ) ), this, SLOT( newTrackLoading() ) );
 }
 
