@@ -20,6 +20,7 @@
 #include <QWidget>
 #include <QTimeLine>
 
+class QToolButton;
 class QLabel;
 class QComboBox;
 class QVBoxLayout;
@@ -32,10 +33,14 @@ namespace Tomahawk
 class EchonestSteerer : public QWidget
 {
     Q_OBJECT
+    
 public:
     EchonestSteerer( QWidget*  parent = 0 );
     
     virtual void paintEvent(QPaintEvent* );
+    
+public slots:
+    void resetSteering( bool automatic = false );
     
 signals:
     void steerField( const QString& field );
@@ -46,20 +51,25 @@ private slots:
     void changed();
     
     void resizeFrame( int );
-    void resizeFinished();
     
 private:
+    QToolButton* initButton( QWidget* parent );
+    
     QHBoxLayout* m_layout;
-    QLabel* m_steerTop;
-    QLabel* m_steerBottom;
     
     QComboBox* m_amplifier;
     QComboBox* m_field;
     
     QLineEdit* m_description;
     
+    // text on the left
     QVBoxLayout* m_textL;
+    QLabel* m_steerTop;
+    QLabel* m_steerBottom;
     
+    // icons on the right
+    QToolButton* m_reset;
+   
     // animations
     QTimeLine m_resizeAnim;
     bool m_expanding;

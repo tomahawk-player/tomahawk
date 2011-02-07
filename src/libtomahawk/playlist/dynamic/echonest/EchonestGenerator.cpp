@@ -197,6 +197,13 @@ EchonestGenerator::dynamicFetched()
     Q_ASSERT( qobject_cast< QNetworkReply* >( sender() ) );
     QNetworkReply* reply = qobject_cast< QNetworkReply* >( sender() );
     
+    m_steeredSinceLastTrack = false;
+    m_steerData.first = Echonest::DynamicPlaylist::Steer;
+    m_steerData.second = QString();
+    
+    if( m_steerer )
+        m_steerer->resetSteering( true );
+    
     try 
     {
         Echonest::Song song = m_dynPlaylist->parseNextSong( reply );
@@ -282,8 +289,12 @@ EchonestGenerator::queryFromSong(const Echonest::Song& song)
 QWidget* 
 EchonestGenerator::steeringWidget()
 {
-    if( !m_steerer )
+    if( !m_steerer ) {
         m_steerer = new EchonestSteerer();
+        
+        connect( m_steerer, SIGNAL( steerField( QString ) ), this, SLOT( steerField( QString ) ) );
+        connect( m_steerer, SIGNAL( steerDescription( QString ) ), this, SLOT( steerDescription( QString ) ) );
+    }
     
     return m_steerer;
 }
