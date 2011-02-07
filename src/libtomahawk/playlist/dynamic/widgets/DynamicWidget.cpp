@@ -139,7 +139,7 @@ DynamicWidget::loadDynamicPlaylist( const Tomahawk::dynplaylist_ptr& playlist )
     if( !m_playlist.isNull() ) {
         disconnect( m_playlist->generator().data(), SIGNAL( generated( QList<Tomahawk::query_ptr> ) ), this, SLOT( tracksGenerated( QList<Tomahawk::query_ptr> ) ) );
         disconnect( m_playlist.data(), SIGNAL( dynamicRevisionLoaded( Tomahawk::DynamicPlaylistRevision) ), this, SLOT(onRevisionLoaded( Tomahawk::DynamicPlaylistRevision) ) );
-        disconnect( m_playlist->generator().data(), SIGNAL( error( QString, QString ) ), m_view, SLOT( showMessageTimeout( QString, QString ) ) );
+        disconnect( m_playlist->generator().data(), SIGNAL( error( QString, QString ) ), this, SLOT( generatorError( QString, QString ) ) );
     }
     
     m_playlist = playlist;
@@ -155,7 +155,7 @@ DynamicWidget::loadDynamicPlaylist( const Tomahawk::dynplaylist_ptr& playlist )
     applyModeChange( m_playlist->mode() );
     connect( m_playlist->generator().data(), SIGNAL( generated( QList<Tomahawk::query_ptr> ) ), this, SLOT( tracksGenerated( QList<Tomahawk::query_ptr> ) ) );
     connect( m_playlist.data(), SIGNAL( dynamicRevisionLoaded( Tomahawk::DynamicPlaylistRevision ) ), this, SLOT( onRevisionLoaded( Tomahawk::DynamicPlaylistRevision ) ) );
-    connect( m_playlist->generator().data(), SIGNAL( error( QString, QString ) ), m_view, SLOT( showMessageTimeout( QString, QString ) ) );
+    connect( m_playlist->generator().data(), SIGNAL( error( QString, QString ) ), this, SLOT( generatorError( QString, QString ) ) );
     
 }
 
@@ -294,5 +294,14 @@ DynamicWidget::controlChanged( const Tomahawk::dyncontrol_ptr& control )
         
     m_playlist->createNewRevision();
     m_seqRevLaunched++;
+}
+
+void 
+DynamicWidget::generatorError( const QString& title, const QString& content )
+{
+    m_view->showMessageTimeout( title, content );
+    
+    if( m_runningOnDemand )
+        generateOrStart();
 }
 

@@ -176,7 +176,7 @@ EchonestSteerer::changed()
 void 
 EchonestSteerer::resizeFrame( int width )
 {
-    qDebug() << "RESIZING TO:" << width;
+//     qDebug() << "RESIZING TO:" << width;
     resize( width, sizeHint().height() );
     update();
     

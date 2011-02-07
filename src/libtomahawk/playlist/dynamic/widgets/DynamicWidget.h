@@ -70,6 +70,7 @@ public slots:
 private slots:
     void generateOrStart();
     void tracksGenerated( const QList< Tomahawk::query_ptr>& queries );
+    void generatorError( const QString& title, const QString& content );
     
     void controlsChanged();
     void controlChanged( const Tomahawk::dyncontrol_ptr& control );
