@@ -16,7 +16,6 @@
 
 #include "playlist/dynamic/DynamicModel.h"
 #include "GeneratorInterface.h"
-#include "StationModelItem.h"
 #include "audio/audioengine.h"
 
 using namespace Tomahawk;
