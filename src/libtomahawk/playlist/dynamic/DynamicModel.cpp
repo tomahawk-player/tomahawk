@@ -130,7 +130,7 @@ DynamicModel::newTrackLoading()
 void 
 DynamicModel::removeIndex(const QModelIndex& index, bool moreToCome)
 {
-    if ( isReadOnly() )
+    if ( m_playlist->mode() == Static && isReadOnly() )
         return;
     
     if( m_playlist->mode() == OnDemand )
