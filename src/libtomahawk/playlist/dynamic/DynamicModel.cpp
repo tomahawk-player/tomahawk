@@ -45,7 +45,7 @@ DynamicModel::loadPlaylist( const Tomahawk::dynplaylist_ptr& playlist )
     
     
     connect( m_playlist->generator().data(), SIGNAL( nextTrackGenerated( Tomahawk::query_ptr ) ), this, SLOT( newTrackGenerated( Tomahawk::query_ptr ) ) );
-    PlaylistModel::loadPlaylist( m_playlist, m_onDemandRunning );
+    PlaylistModel::loadPlaylist( m_playlist, !m_onDemandRunning );
 }
 
 void 
