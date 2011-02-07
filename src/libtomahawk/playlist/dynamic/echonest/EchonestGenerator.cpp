@@ -48,7 +48,6 @@ EchonestFactory::typeSelectors() const
 EchonestGenerator::EchonestGenerator ( QObject* parent ) 
     : GeneratorInterface ( parent )
     , m_dynPlaylist( new Echonest::DynamicPlaylist() )
-    , m_steerer( 0 )
     , m_steeredSinceLastTrack( false )
 {
     m_type = "echonest";
@@ -201,8 +200,8 @@ EchonestGenerator::dynamicFetched()
     m_steerData.first = Echonest::DynamicPlaylist::Steer;
     m_steerData.second = QString();
     
-    if( m_steerer )
-        m_steerer->resetSteering( true );
+    if( !m_steerer.isNull() )
+        m_steerer.data()->resetSteering( true );
     
     try 
     {
@@ -289,14 +288,14 @@ EchonestGenerator::queryFromSong(const Echonest::Song& song)
 QWidget* 
 EchonestGenerator::steeringWidget()
 {
-    if( !m_steerer ) {
-        m_steerer = new EchonestSteerer();
+    if( m_steerer.isNull() ) {
+        m_steerer = QWeakPointer< EchonestSteerer >( new EchonestSteerer );
         
-        connect( m_steerer, SIGNAL( steerField( QString ) ), this, SLOT( steerField( QString ) ) );
-        connect( m_steerer, SIGNAL( steerDescription( QString ) ), this, SLOT( steerDescription( QString ) ) );
+        connect( m_steerer.data(), SIGNAL( steerField( QString ) ), this, SLOT( steerField( QString ) ) );
+        connect( m_steerer.data(), SIGNAL( steerDescription( QString ) ), this, SLOT( steerDescription( QString ) ) );
     }
     
-    return m_steerer;
+    return m_steerer.data();
 }
 
 

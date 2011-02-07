@@ -118,11 +118,12 @@ DynamicWidget::loadDynamicPlaylist( const Tomahawk::dynplaylist_ptr& playlist )
         return;
     }
     m_seqRevLaunched = 0;
+    
     // if we're being told to load the same dynamic playlist over again, only do it if the controls have a different number
     if( !m_playlist.isNull() && ( m_playlist.data() == playlist.data() ) // same playlist pointer
         && m_playlist->generator()->controls().size() == playlist->generator()->controls().size() ) {
         // we can skip our work. just let the dynamiccontrollist show the difference
-        qDebug() << "SKIPPING SETTING:" << playlist->generator()->controls().size();
+//         qDebug() << "SKIPPING SETTING:" << playlist->generator()->controls().size();
         foreach( const dyncontrol_ptr& control, playlist->generator()->controls() ) {
             qDebug() << "CONTROL:" << control->selectedType() << control->match() << control->input();
         }
@@ -236,6 +237,7 @@ DynamicWidget::generateOrStart()
         } else { // stop
             m_model->stopOnDemand();
             m_runningOnDemand = false;
+            delete m_steering;
             m_steering = 0;
             m_generateButton->setText( tr( "Start" ) );
         }
@@ -275,6 +277,10 @@ DynamicWidget::tracksGenerated( const QList< query_ptr >& queries )
 void 
 DynamicWidget::controlsChanged()
 {
+    // if we're playing a station, stop it in either case
+    if( m_runningOnDemand )
+        generateOrStart(); // as if the stop button were pressed
+        
     m_playlist->createNewRevision();
     m_seqRevLaunched++;
 }
@@ -282,6 +288,10 @@ DynamicWidget::controlsChanged()
 void 
 DynamicWidget::controlChanged( const Tomahawk::dyncontrol_ptr& control )
 {
+    // if we're playing a station, stop it in either case
+    if( m_runningOnDemand )
+        generateOrStart(); // as if the stop button were pressed
+        
     m_playlist->createNewRevision();
     m_seqRevLaunched++;
 }

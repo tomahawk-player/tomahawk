@@ -46,13 +46,16 @@ DynamicModel::loadPlaylist( const Tomahawk::dynplaylist_ptr& playlist )
     
     
     connect( m_playlist->generator().data(), SIGNAL( nextTrackGenerated( Tomahawk::query_ptr ) ), this, SLOT( newTrackGenerated( Tomahawk::query_ptr ) ) );
-    PlaylistModel::loadPlaylist( m_playlist );
+    PlaylistModel::loadPlaylist( m_playlist, m_onDemandRunning );
 }
 
 void 
 DynamicModel::startOnDemand()
 {
     connect( AudioEngine::instance(), SIGNAL( loading( Tomahawk::result_ptr ) ), this, SLOT( newTrackLoading() ) );
+    
+    // delete all the tracks
+    clear();
     
     m_playlist->generator()->startOnDemand();
     
@@ -79,8 +82,6 @@ DynamicModel::stopOnDemand()
     m_onDemandRunning = false;
     AudioEngine::instance()->stop();
     
-    // delete all the tracks
-    clear();
     disconnect( AudioEngine::instance(), SIGNAL( loading( Tomahawk::result_ptr ) ), this, SLOT( newTrackLoading() ) );
 }
 
@@ -112,7 +113,7 @@ DynamicModel::trackResolveFinished( bool success )
         if( m_currentAttempts < 30 ) {
             m_playlist->generator()->fetchNext();
         } else {
-            emit trackGenerationFailure( tr( "Could not find a playable track.\n\nPlease change the filters and try again." ) );
+            emit trackGenerationFailure( tr( "Could not find a playable track.\n\nPlease change the filters or try again." ) );
         }
     }
 }

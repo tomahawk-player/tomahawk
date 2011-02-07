@@ -50,12 +50,12 @@ PlaylistModel::headerData( int section, Qt::Orientation orientation, int role ) 
 
 
 void
-PlaylistModel::loadPlaylist( const Tomahawk::playlist_ptr& playlist )
+PlaylistModel::loadPlaylist( const Tomahawk::playlist_ptr& playlist, bool loadEntries )
 {
     if ( !m_playlist.isNull() )
         disconnect( m_playlist.data(), SIGNAL( revisionLoaded( Tomahawk::PlaylistRevision ) ), this, SLOT( onRevisionLoaded( Tomahawk::PlaylistRevision ) ) );
 
-    if ( rowCount( QModelIndex() ) )
+    if ( rowCount( QModelIndex() ) && loadEntries )
     {
         emit beginRemoveRows( QModelIndex(), 0, rowCount( QModelIndex() ) - 1 );
         delete m_rootItem;
@@ -68,6 +68,9 @@ PlaylistModel::loadPlaylist( const Tomahawk::playlist_ptr& playlist )
 
     setReadOnly( !m_playlist->author()->isLocal() );
 
+    if( !loadEntries )
+        return;
+    
     PlItem* plitem;
     QList<plentry_ptr> entries = playlist->entries();
     if ( entries.count() )

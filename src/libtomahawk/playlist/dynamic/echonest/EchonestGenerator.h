@@ -73,7 +73,7 @@ private:
     Echonest::DynamicPlaylist* m_dynPlaylist;
     QPixmap m_logo;
     
-    EchonestSteerer* m_steerer;
+    QWeakPointer<EchonestSteerer> m_steerer;
     bool m_steeredSinceLastTrack;
     Echonest::DynamicPlaylist::DynamicControl m_steerData;
 };
