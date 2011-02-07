@@ -384,8 +384,9 @@ EchonestGenerator::sentenceSummary()
         /// end case: if this is the last AND there is not a sorting filter (so this is the real last one)
         const bool last = ( i == allcontrols.size() - 1 && sorting.isNull() );
         QString prefix, suffix;
-        if( last ) {
-            prefix = "and ";
+        if( last ) { // only if there is not just 1
+            if( !( artists.isEmpty() && allcontrols.size() == 1 ) )
+                prefix = "and ";
             suffix = ".";
         } else
             suffix = ", ";
