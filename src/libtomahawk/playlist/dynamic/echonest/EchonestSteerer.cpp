@@ -156,7 +156,7 @@ EchonestSteerer::changed()
             emit steerDescription( steer );
         }
         
-        if( !m_layout->indexOf( m_description ) > 0 ) {
+        if( m_layout->indexOf( m_description ) == -1 ) {
             // animate to expand
             m_layout->insertWidget( m_layout->count() - 1, m_description, 1 );
             m_layout->setStretchFactor( m_textL, 0 );
