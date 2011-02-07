@@ -27,7 +27,7 @@ class StationModelItem;
 
     
 /**
- * Extends PlaylistModel with support for handling StationModelItems
+ * Extends PlaylistModel with support for handling stations
  */
 class DynamicModel : public PlaylistModel
 {
@@ -44,6 +44,8 @@ public:
     virtual void removeIndex( const QModelIndex& index, bool moreToCome = false );
 signals:
     void collapseFromTo( int startRow, int num );
+    
+    void trackGenerationFailure( const QString& msg );
     
 private slots:    
     void newTrackGenerated( const Tomahawk::query_ptr& query );

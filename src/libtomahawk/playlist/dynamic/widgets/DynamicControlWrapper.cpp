@@ -112,7 +112,8 @@ DynamicControlWrapper::removeFromLayout()
 }
 
 
-QToolButton* DynamicControlWrapper::initButton( QWidget* parent )
+QToolButton* 
+DynamicControlWrapper::initButton( QWidget* parent )
 {
     QToolButton* btn = new QToolButton( parent );
     btn->setSizePolicy( QSizePolicy::Fixed, QSizePolicy::Fixed );
@@ -123,7 +124,8 @@ QToolButton* DynamicControlWrapper::initButton( QWidget* parent )
     return btn;
 }
 
-QWidget* DynamicControlWrapper::createDummy( QWidget* fromW, QWidget* parent )
+QWidget* 
+DynamicControlWrapper::createDummy( QWidget* fromW, QWidget* parent )
 {
     QWidget* dummy = new QWidget( parent );
     dummy->setContentsMargins( 0, 0, 0, 0 );

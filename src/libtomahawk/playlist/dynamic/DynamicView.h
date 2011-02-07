@@ -42,6 +42,7 @@ public:
     
 public slots:
     void showMessageTimeout( const QString& title, const QString& body );
+    void showMessage( const QString& message );
     
     // collapse and animate the transition
     // there MUST be a row *after* startRow + num. that is, you can't collapse

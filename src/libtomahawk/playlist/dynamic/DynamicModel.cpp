@@ -112,7 +112,7 @@ DynamicModel::trackResolveFinished( bool success )
         if( m_currentAttempts < 30 ) {
             m_playlist->generator()->fetchNext();
         } else {
-            // TODO handle failure
+            emit trackGenerationFailure( tr( "Could not find a playable track.\n\nPlease change the filters and try again." ) );
         }
     }
 }

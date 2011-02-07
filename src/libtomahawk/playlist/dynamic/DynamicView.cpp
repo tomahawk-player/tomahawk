@@ -79,6 +79,14 @@ DynamicView::showMessageTimeout( const QString& title, const QString& body )
 }
 
 void 
+DynamicView::showMessage(const QString& message)
+{
+    overlay()->setText( message );
+    overlay()->show();
+}
+
+
+void 
 DynamicView::onTrackCountChanged( unsigned int tracks )
 {
     if ( tracks == 0 )
