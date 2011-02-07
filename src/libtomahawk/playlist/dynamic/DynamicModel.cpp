@@ -135,6 +135,8 @@ DynamicModel::removeIndex(const QModelIndex& index, bool moreToCome)
     
     if( m_playlist->mode() == OnDemand )
         TrackModel::removeIndex( index );
+    else
+        PlaylistModel::removeIndex( index, moreToCome );
     // don't call onPlaylistChanged.
         
     if( !moreToCome )
