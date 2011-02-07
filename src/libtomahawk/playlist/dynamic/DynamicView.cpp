@@ -19,10 +19,13 @@
 #include "widgets/overlaywidget.h"
 #include "playlistmodel.h"
 #include "trackproxymodel.h"
+#include "trackheader.h"
 
 #include <QPainter>
 #include <QPaintEvent>
 #include <QtGui/qpaintengine.h>
+#include <QScrollBar>
+
 using namespace Tomahawk;
 
 #define FADE_LENGTH 800
@@ -100,6 +103,9 @@ DynamicView::onTrackCountChanged( unsigned int tracks )
     }
     else
         overlay()->hide();
+    
+    // make sure we can see all our tracks
+    scrollTo( proxyModel()->index( proxyModel()->rowCount() - 1, 0, QModelIndex() ), EnsureVisible );
 }
 
 void 
@@ -107,36 +113,45 @@ DynamicView::collapseEntries( int startRow, int num )
 {
     if( m_fadeOutAnim.state() == QTimeLine::Running )
         qDebug() << "COLLAPSING TWICE!";
-    // we capture the image of the rows we're going to collapse
-    // then we capture the image of the target row we're going to animate downwards
-    // then we fade the first image out while sliding the second image up.
-    QModelIndex topLeft = proxyModel()->index( startRow, 0, QModelIndex() );
-    QModelIndex bottomRight = proxyModel()->index( startRow + num - 1, proxyModel()->columnCount( QModelIndex() ) - 1, QModelIndex() );
-    QItemSelection sel( topLeft, bottomRight );
-    QRect fadingRect = visualRegionForSelection( sel ).boundingRect();
-    
-    m_fadingIndexes = QPixmap::grabWidget( viewport(), fadingRect );
-    m_fadingPointAnchor = fadingRect.topLeft();
-    
-    qDebug() << "Grabbed fading indexes from rect:" << fadingRect << m_fadingIndexes.size();
-    
-    topLeft = proxyModel()->index( startRow + num, 0, QModelIndex() );
-    bottomRight = proxyModel()->index( startRow + num, proxyModel()->columnCount( QModelIndex() ) - 1, QModelIndex() );
-    QRect slidingRect = visualRegionForSelection( QItemSelection( topLeft, bottomRight ) ).boundingRect();
-    
-    m_slidingIndex = QPixmap::grabWidget( viewport(), slidingRect );
-    m_bottomAnchor = slidingRect.topLeft();
-    m_bottomOfAnim = slidingRect.bottomLeft();
-    qDebug() << "Grabbed sliding index from rect:" << slidingRect << m_slidingIndex.size();
-    
-    // slide from the current position to the new one
-    int frameRange = fadingRect.topLeft().y() - slidingRect.topLeft().y();
-    m_slideAnim.setDuration( SLIDE_LENGTH + frameRange * LONG_MULT );
-    m_slideAnim.setFrameRange( slidingRect.topLeft().y(), fadingRect.topLeft().y() );
-    
-    m_fadeOutAnim.start();
-    QTimer::singleShot( SLIDE_OFFSET, &m_slideAnim, SLOT( start() ) );
-    
+    // TODO if we are scrolled, we can't animate this way. 
+    //      we have to animate the top coming down, which i haven't implemented yet..
+    if( verticalScrollBar()->sliderPosition() == 0 ) {
+        // we capture the image of the rows we're going to collapse
+        // then we capture the image of the target row we're going to animate downwards
+        // then we fade the first image out while sliding the second image up.
+        QModelIndex topLeft = proxyModel()->index( startRow, 0, QModelIndex() );
+        QModelIndex bottomRight = proxyModel()->index( startRow + num - 1, proxyModel()->columnCount( QModelIndex() ) - 1, QModelIndex() );
+        QItemSelection sel( topLeft, bottomRight );
+        QRect fadingRect = visualRegionForSelection( sel ).boundingRect();
+        QRect fadingRectViewport = fadingRect; // all values that we use in paintEvent() have to be in viewport coords
+        fadingRect.moveTo( viewport()->mapTo( this, fadingRect.topLeft() ) );
+        
+        m_fadingIndexes = QPixmap::grabWidget( this, fadingRect ); // but all values we use to grab the widgetr have to be in scrollarea coords :(
+        m_fadingPointAnchor = QPoint( 0, fadingRectViewport.topLeft().y() );
+        
+        qDebug() << "Grabbed fading indexes from rect:" << fadingRect << m_fadingIndexes.size();
+        
+        topLeft = proxyModel()->index( startRow + num, 0, QModelIndex() );
+        bottomRight = proxyModel()->index( startRow + num, proxyModel()->columnCount( QModelIndex() ) - 1, QModelIndex() );
+        QRect slidingRect = visualRegionForSelection( QItemSelection( topLeft, bottomRight ) ).boundingRect();
+        QRect slidingRectViewport = slidingRect;
+        // map internal view cord to external qscrollarea
+        slidingRect.moveTo( viewport()->mapTo( this, slidingRect.topLeft() ) );
+        
+        m_slidingIndex = QPixmap::grabWidget( this, slidingRect );
+        m_bottomAnchor = QPoint( 0, slidingRectViewport.topLeft().y() );
+        m_bottomOfAnim = QPoint( 0, slidingRectViewport.bottomLeft().y() );
+        qDebug() << "Grabbed sliding index from rect:" << slidingRect << m_slidingIndex.size();
+        
+        // slide from the current position to the new one
+        int frameRange = fadingRect.topLeft().y() - slidingRect.topLeft().y();
+        m_slideAnim.setDuration( SLIDE_LENGTH + frameRange * LONG_MULT );
+        m_slideAnim.setFrameRange( slidingRectViewport.topLeft().y(), fadingRectViewport.topLeft().y() );
+        
+        m_fadeOutAnim.start();
+        QTimer::singleShot( SLIDE_OFFSET, &m_slideAnim, SLOT( start() ) );
+    }
+    // delete the actual indices
     QModelIndexList todel;
     for( int i = 0; i < num; i++ ) {
         for( int k = 0; k < proxyModel()->columnCount( QModelIndex() ); k++ ) {
@@ -172,7 +187,7 @@ DynamicView::paintEvent( QPaintEvent* event )
             p.fillRect( bg, Qt::white );
             p.drawPixmap( 0, m_slideAnim.currentFrame(), m_slidingIndex );
         } else if( m_fadeOutAnim.state() == QTimeLine::Running ) {
-            p.drawPixmap( m_bottomAnchor, m_slidingIndex );
+            p.drawPixmap( 0, m_bottomAnchor.y(), m_slidingIndex );
         }
     }
 }

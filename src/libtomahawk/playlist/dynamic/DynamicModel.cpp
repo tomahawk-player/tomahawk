@@ -110,7 +110,7 @@ DynamicModel::trackResolveFinished( bool success )
         Query* q = qobject_cast<Query*>(sender());
         qDebug() << "Got not resolved track:" << q->track() << q->artist() << m_lastResolvedRow << m_currentAttempts;
         m_currentAttempts++;
-        if( m_currentAttempts < 30 ) {
+        if( m_currentAttempts < 20 ) {
             m_playlist->generator()->fetchNext();
         } else {
             emit trackGenerationFailure( tr( "Could not find a playable track.\n\nPlease change the filters or try again." ) );
