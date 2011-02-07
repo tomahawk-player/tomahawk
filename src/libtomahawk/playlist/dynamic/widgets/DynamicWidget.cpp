@@ -280,18 +280,22 @@ DynamicWidget::controlsChanged()
     // if we're playing a station, stop it in either case
     if( m_runningOnDemand )
         generateOrStart(); // as if the stop button were pressed
-        
+    
+    if( !m_playlist->author()->isLocal() )
+        return;
     m_playlist->createNewRevision();
     m_seqRevLaunched++;
 }
 
 void 
 DynamicWidget::controlChanged( const Tomahawk::dyncontrol_ptr& control )
-{
+{   
     // if we're playing a station, stop it in either case
     if( m_runningOnDemand )
         generateOrStart(); // as if the stop button were pressed
-        
+ 
+    if( !m_playlist->author()->isLocal() )
+        return;       
     m_playlist->createNewRevision();
     m_seqRevLaunched++;
 }
