@@ -25,6 +25,8 @@ TopBar::TopBar( QWidget* parent )
 {
     ui->setupUi( this );
 
+    setAutoFillBackground( true );
+
     ui->statsLabelNumTracks->setFormat( "%L1 " + tr( "Tracks" ) );
     ui->statsLabelNumArtists->setFormat( "%L1 " + tr( "Artists" ) );
     connect( ui->filterEdit, SIGNAL( textChanged( QString ) ), SIGNAL( filterTextChanged( QString ) ) );
@@ -91,6 +93,23 @@ TopBar::changeEvent( QEvent *e )
         default:
             break;
     }
+}
+
+
+void
+TopBar::resizeEvent(QResizeEvent* e )
+{
+    QWidget::resizeEvent( e );
+
+    QLinearGradient gradient = QLinearGradient( contentsRect().topLeft(), contentsRect().bottomRight() );
+    gradient.setColorAt( 0.0, QColor( 80, 80, 80 ) );
+    gradient.setColorAt( 1.0, QColor( 43, 43, 43 ) );
+
+    QPalette p = palette();
+    p.setBrush( QPalette::Background, QBrush( gradient ) );
+    p.setBrush( QPalette::Window, QBrush( gradient ) );
+    p.setBrush( QPalette::Base, QBrush( gradient ) );
+    setPalette( p );
 }
 
 

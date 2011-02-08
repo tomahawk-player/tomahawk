@@ -26,13 +26,6 @@
       <widget class="QWidget" name="layoutWidget">
        <layout class="QVBoxLayout" name="verticalLayout">
         <item>
-         <widget class="QPushButton" name="statusButton">
-          <property name="text">
-           <string/>
-          </property>
-         </widget>
-        </item>
-        <item>
          <widget class="AnimatedSplitter" name="sidebarSplitter">
           <property name="orientation">
            <enum>Qt::Vertical</enum>
@@ -47,6 +40,13 @@
           </widget>
           <widget class="TransferView" name="treeWidget">
           </widget>
+         </widget>
+        </item>
+        <item>
+         <widget class="QPushButton" name="statusButton">
+          <property name="text">
+           <string/>
+          </property>
          </widget>
         </item>
        </layout>

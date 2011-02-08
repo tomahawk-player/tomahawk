@@ -54,6 +54,11 @@ PlaylistManager::PlaylistManager( QObject* parent )
     m_topbar = new TopBar();
     m_stack = new QStackedWidget();
 
+    QFrame* line = new QFrame();
+    line->setFrameStyle( QFrame::HLine );
+    line->setStyleSheet( "border: 1px solid gray;" );
+    line->setMaximumHeight( 1 );
+
     m_splitter = new AnimatedSplitter();
     m_splitter->setOrientation( Qt::Vertical );
     m_splitter->setChildrenCollapsible( false );
@@ -70,6 +75,7 @@ PlaylistManager::PlaylistManager( QObject* parent )
 
     m_widget->layout()->setMargin( 0 );
     m_widget->layout()->addWidget( m_topbar );
+    m_widget->layout()->addWidget( line );
     m_widget->layout()->addWidget( m_splitter );
 
     m_superCollectionView = new CollectionView();
@@ -267,6 +273,7 @@ PlaylistManager::show( const Tomahawk::collection_ptr& collection )
             CollectionView* view = new CollectionView();
             CollectionFlatModel* model = new CollectionFlatModel();
             view->setModel( model );
+            view->setFrameShape( QFrame::NoFrame );
             model->addCollection( collection );
 
             m_currentInterface = view->proxyModel();

@@ -43,6 +43,9 @@ SourceTreeView::SourceTreeView( QWidget* parent )
     , m_collectionModel( new CollectionModel( this ) )
     , m_dragging( false )
 {
+    setFrameShape( QFrame::NoFrame );
+    setContentsMargins( 0, 0, 0, 0 );
+
     setHeaderHidden( true );
     setRootIsDecorated( false );
     setExpandsOnDoubleClick( false );
