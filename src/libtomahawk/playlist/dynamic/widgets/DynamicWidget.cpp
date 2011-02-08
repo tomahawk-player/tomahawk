@@ -42,6 +42,7 @@ DynamicWidget::DynamicWidget( const Tomahawk::dynplaylist_ptr& playlist, QWidget
     , m_resolveOnNextLoad( false )
     , m_seqRevLaunched( 0 )
     , m_runningOnDemand( false )
+    , m_controlsChanged( false )
     , m_steering( 0 )
     , m_headerText( 0 )
     , m_headerLayout( 0 )
@@ -123,16 +124,17 @@ DynamicWidget::loadDynamicPlaylist( const Tomahawk::dynplaylist_ptr& playlist )
     if( !m_playlist.isNull() && ( m_playlist.data() == playlist.data() ) // same playlist pointer
         && m_playlist->generator()->controls().size() == playlist->generator()->controls().size() ) {
         // we can skip our work. just let the dynamiccontrollist show the difference
-//         qDebug() << "SKIPPING SETTING:" << playlist->generator()->controls().size();
-        foreach( const dyncontrol_ptr& control, playlist->generator()->controls() ) {
-            qDebug() << "CONTROL:" << control->selectedType() << control->match() << control->input();
-        }
         m_controls->setControls( m_playlist, m_playlist->author()->isLocal() );
     
         m_playlist = playlist;
-        m_view->setOnDemand( m_playlist->mode() == OnDemand );
-        m_model->loadPlaylist( m_playlist );
-    
+        
+        if( !m_runningOnDemand ) {
+            m_model->loadPlaylist( m_playlist );
+        } else if( !m_controlsChanged ) { // if the controls changed, we already dealt with that and don't want to change station yet
+            m_model->changeStation();
+        }
+        m_controlsChanged = false;
+        
         return;
     }
     
@@ -145,6 +147,7 @@ DynamicWidget::loadDynamicPlaylist( const Tomahawk::dynplaylist_ptr& playlist )
     m_playlist = playlist;
     m_view->setOnDemand( m_playlist->mode() == OnDemand );
     m_model->loadPlaylist( m_playlist );
+    m_controlsChanged = false;
     
     if( !m_playlist.isNull() )
         m_controls->setControls( m_playlist, m_playlist->author()->isLocal() );
@@ -277,9 +280,12 @@ DynamicWidget::tracksGenerated( const QList< query_ptr >& queries )
 void 
 DynamicWidget::controlsChanged()
 {
-    // if we're playing a station, stop it in either case
-    if( m_runningOnDemand )
-        generateOrStart(); // as if the stop button were pressed
+    // controlsChanged() is emitted when a control is added or removed
+    // in the case of addition, it's blank by default... so to avoid an error
+    // when playing a station just ignore it till we're ready and get a controlChanged()
+/*    if( m_runningOnDemand )
+        m_model->changeStation();*/
+    m_controlsChanged = true;
     
     if( !m_playlist->author()->isLocal() )
         return;
@@ -290,10 +296,6 @@ DynamicWidget::controlsChanged()
 void 
 DynamicWidget::controlChanged( const Tomahawk::dyncontrol_ptr& control )
 {   
-    // if we're playing a station, stop it in either case
-    if( m_runningOnDemand )
-        generateOrStart(); // as if the stop button were pressed
- 
     if( !m_playlist->author()->isLocal() )
         return;       
     m_playlist->createNewRevision();

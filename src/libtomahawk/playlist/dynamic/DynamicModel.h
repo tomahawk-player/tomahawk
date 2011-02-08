@@ -38,6 +38,7 @@ public:
    
     void startOnDemand();
     void stopOnDemand();
+    void changeStation();
     
     void loadPlaylist( const dynplaylist_ptr& playlist );
     
@@ -58,6 +59,7 @@ private:
     dynplaylist_ptr m_playlist;
     bool m_startOnResolved;
     bool m_onDemandRunning;
+    bool m_changeOnNext;
     int m_currentAttempts;
     int m_lastResolvedRow;
 };

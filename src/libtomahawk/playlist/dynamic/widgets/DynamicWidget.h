@@ -86,6 +86,7 @@ private:
     
     // used in OnDemand mode
     bool m_runningOnDemand;
+    bool m_controlsChanged;
     QWidget* m_steering;
         
     // layout and stuff

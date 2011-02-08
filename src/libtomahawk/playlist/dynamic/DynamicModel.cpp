@@ -24,6 +24,7 @@ DynamicModel::DynamicModel( QObject* parent )
     : PlaylistModel( parent )
     , m_startOnResolved( false )
     , m_onDemandRunning( false )
+    , m_changeOnNext( false )
     , m_currentAttempts( 0 )
     , m_lastResolvedRow( 0 )
 {
@@ -84,6 +85,15 @@ DynamicModel::stopOnDemand()
     disconnect( AudioEngine::instance(), SIGNAL( loading( Tomahawk::result_ptr ) ), this, SLOT( newTrackLoading() ) );
 }
 
+void 
+DynamicModel::changeStation()
+{
+    if( m_onDemandRunning )
+        m_changeOnNext = true;
+    else // if we're not running, just start
+        m_playlist->generator()->startOnDemand();
+}
+
 
 void 
 DynamicModel::trackResolved()
@@ -121,7 +131,10 @@ DynamicModel::trackResolveFinished( bool success )
 void 
 DynamicModel::newTrackLoading()
 {
-    if( m_onDemandRunning && m_currentAttempts == 0 ) { // if we're in dynamic mode and we're also currently idle
+    if( m_changeOnNext ) { // reset instead of getting the next one
+        m_lastResolvedRow = rowCount( QModelIndex() );
+        m_playlist->generator()->startOnDemand();
+    } else if( m_onDemandRunning && m_currentAttempts == 0 ) { // if we're in dynamic mode and we're also currently idle
         m_lastResolvedRow = rowCount( QModelIndex() );
         m_playlist->generator()->fetchNext();
     }
