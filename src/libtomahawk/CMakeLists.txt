@@ -267,6 +267,9 @@ set( libHeaders
     widgets/infowidgets/sourceinfowidget.h
 )
 
+set( libHeaders_NoMOC 
+		playlist/dynamic/GeneratorInterface.h 
+)
 set( libUI ${libUI}
     widgets/newplaylistwidget.ui
     widgets/welcomewidget.ui
@@ -335,7 +338,7 @@ ENDIF( UNIX AND NOT APPLE )
 qt4_wrap_ui( libUI_H ${libUI} )
 qt4_wrap_cpp( libMoc ${libHeaders} )
 
-SET( libSources ${libSources} ${libUI_H} )
+SET( libSources ${libSources} ${libUI_H} ${libHeaders_NoMOC} )
 
 add_library( tomahawklib SHARED ${libSources} ${libMoc} )
 

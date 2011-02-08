@@ -739,4 +739,5 @@ Servent::httpIODeviceFactory( const Tomahawk::result_ptr& result )
     QNetworkRequest req( result->url() );
     QNetworkReply* reply = APP->nam()->get( req );
     return QSharedPointer<QIODevice>( reply );*/
+    return QSharedPointer<QIODevice>();
 }

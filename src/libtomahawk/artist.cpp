@@ -33,8 +33,8 @@ Artist::Artist( unsigned int id, const QString& name, const Tomahawk::collection
     : PlaylistInterface( this )
     , m_id( id )
     , m_name( name )
-    , m_collection( collection )
     , m_currentTrack( 0 )
+    , m_collection( collection )
 {
 }
 

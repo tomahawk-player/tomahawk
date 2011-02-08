@@ -394,7 +394,6 @@ Playlist::resolve()
 void
 Playlist::onResultsFound( const QList<Tomahawk::result_ptr>& results )
 {
-    Query* query = qobject_cast<Query*>( sender() );
     m_locallyChanged = true;
 }
 

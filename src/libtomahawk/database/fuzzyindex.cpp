@@ -122,7 +122,7 @@ FuzzyIndex::search( const QString& table, const QString& name )
     lucene::search::FuzzyQuery* qry = _CLNEW lucene::search::FuzzyQuery( _CLNEW lucene::index::Term( table.toStdWString().c_str(), name.toStdWString().c_str() ) );
     hits = m_luceneSearcher->search( qry );
 
-    for ( unsigned int i = 0; i < hits->length(); i++ )
+    for ( int i = 0; i < hits->length(); i++ )
     {
         lucene::document::Document* d = &hits->doc( i );
 
