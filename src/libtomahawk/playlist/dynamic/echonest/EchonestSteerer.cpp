@@ -61,11 +61,14 @@ EchonestSteerer::EchonestSteerer( QWidget* parent )
     m_layout->addLayout( m_textL, 1 );
     
     m_amplifier = new QComboBox( this );
-    m_amplifier->addItem( tr( "Much less" ), "^.5" );
-    m_amplifier->addItem( tr( "Less" ), "^.75" );
-    m_amplifier->addItem( tr( "More" ), "^1.25" );
-    m_amplifier->addItem( tr( "Much more" ), "^1.5" );
-    m_amplifier->addItem( tr( "Much more" ), "^1.5" );
+    m_amplifier->addItem( tr( "Much less" ), "^.1" );
+    m_amplifier->addItem( tr( "Less" ), "^.5" );
+    m_amplifier->addItem( tr( "A bit less" ), "^.75" );
+    m_amplifier->addItem( tr( "Keep at current", "" ) );
+    m_amplifier->addItem( tr( "A bit more" ), "^1.25" );
+    m_amplifier->addItem( tr( "More" ), "^1.5" );
+    m_amplifier->addItem( tr( "Much more" ), "^2" );
+    m_amplifier->setCurrentIndex( 3 );
     m_field = new QComboBox( this );
     m_field->addItem( tr( "Tempo" ), "tempo");
     m_field->addItem( tr( "Loudness" ), "loudness");
@@ -85,12 +88,14 @@ EchonestSteerer::EchonestSteerer( QWidget* parent )
     m_description->setPlaceholderText( tr( "Enter a description" ) );
     m_description->hide();
     
+    connect( m_description, SIGNAL( textChanged( QString ) ), this, SLOT( changed() ) );
+    
     m_reset = initButton( this );
     m_reset->setIcon( QIcon( RESPATH "images/view-refresh.png" ) );
     m_reset->setToolTip( tr( "Reset all steering commands" ) );
     m_layout->addWidget( m_reset );
         
-    connect( m_reset, SIGNAL( clicked( bool )), this, SLOT(resetSteering(bool)));
+    connect( m_reset, SIGNAL( clicked( bool ) ), this, SLOT( resetSteering( bool ) ) );
     
     setLayout( m_layout );
     setSizePolicy( QSizePolicy::Fixed, QSizePolicy::Fixed );
@@ -130,10 +135,18 @@ EchonestSteerer::paintEvent( QPaintEvent* )
 void 
 EchonestSteerer::changed()
 {
-    if( m_field->itemData( m_field->currentIndex() ).toString() != "desc" ) {
+    bool keep = false;
+    if( m_amplifier->itemData( m_amplifier->currentIndex() ).toString().isEmpty() ) { // Keep Current
+        keep = true;
         
-        QString steer = m_field->itemData( m_field->currentIndex() ).toString() + m_amplifier->itemData( m_amplifier->currentIndex() ).toString();
-        emit steerField( steer );
+        emit reset();
+    }
+    
+    if( m_field->itemData( m_field->currentIndex() ).toString() != "desc" ) {
+        if( !keep ) {
+            QString steer = m_field->itemData( m_field->currentIndex() ).toString() + m_amplifier->itemData( m_amplifier->currentIndex() ).toString();
+            emit steerField( steer );
+        }
         
         // if description was shown, animate to shrink
         if( m_layout->indexOf( m_description ) > 0 ) {
@@ -151,7 +164,7 @@ EchonestSteerer::changed()
             qDebug() << "COLLAPSING FROM" << start << "TO" << end;
         }
     } else { // description, so put in the description field
-        if( !m_description->text().isEmpty() ) {
+        if( !m_description->text().isEmpty() && !keep ) {
             QString steer = m_description->text() + m_amplifier->itemData( m_amplifier->currentIndex() ).toString();
             emit steerDescription( steer );
         }
@@ -186,11 +199,13 @@ EchonestSteerer::resizeFrame( int width )
 void 
 EchonestSteerer::resetSteering( bool automatic )
 {
-    m_field->setCurrentIndex( 0 );
-    m_amplifier->setCurrentIndex( 0 );
+    m_amplifier->setCurrentIndex( 3 );
     
-    if( !automatic )
-        changed();
+    if( !automatic ) {
+        m_description->clear();
+        m_field->setCurrentIndex( 0 );
+        emit reset();
+    }
 }
 
 

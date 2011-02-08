@@ -45,6 +45,7 @@ public slots:
 signals:
     void steerField( const QString& field );
     void steerDescription( const QString& desc );
+    void reset();
     
     void resized();
 private slots:

@@ -196,9 +196,7 @@ EchonestGenerator::dynamicFetched()
     Q_ASSERT( qobject_cast< QNetworkReply* >( sender() ) );
     QNetworkReply* reply = qobject_cast< QNetworkReply* >( sender() );
     
-    m_steeredSinceLastTrack = false;
-    m_steerData.first = Echonest::DynamicPlaylist::Steer;
-    m_steerData.second = QString();
+    resetSteering(); 
     
     if( !m_steerer.isNull() )
         m_steerer.data()->resetSteering( true );
@@ -228,6 +226,14 @@ EchonestGenerator::steerField( const QString& field )
     m_steeredSinceLastTrack = true;
     m_steerData.first = Echonest::DynamicPlaylist::Steer;
     m_steerData.second = field;
+}
+
+void 
+EchonestGenerator::resetSteering()
+{
+    m_steeredSinceLastTrack = false;
+    m_steerData.first = Echonest::DynamicPlaylist::Steer;
+    m_steerData.second = QString();
 }
 
 
@@ -293,6 +299,7 @@ EchonestGenerator::steeringWidget()
         
         connect( m_steerer.data(), SIGNAL( steerField( QString ) ), this, SLOT( steerField( QString ) ) );
         connect( m_steerer.data(), SIGNAL( steerDescription( QString ) ), this, SLOT( steerDescription( QString ) ) );
+        connect( m_steerer.data(), SIGNAL( reset() ), this, SLOT( resetSteering() ) );
     }
     
     return m_steerer.data();

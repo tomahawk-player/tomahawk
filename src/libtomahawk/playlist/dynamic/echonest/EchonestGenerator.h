@@ -63,6 +63,7 @@ private slots:
     // steering controls
     void steerField( const QString& field );
     void steerDescription( const QString& desc );
+    void resetSteering();
     
 private:
     Echonest::DynamicPlaylist::PlaylistParams getParams() const throw( std::runtime_error );
