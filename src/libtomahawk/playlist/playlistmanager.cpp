@@ -155,6 +155,7 @@ PlaylistManager::show( const Tomahawk::playlist_ptr& playlist )
     
     m_playlistModel->loadPlaylist( playlist );
     m_playlistView->setModel( m_playlistModel );
+    m_playlistView->setFrameShape( QFrame::NoFrame );
     
     if ( !m_loadedPlaylists.contains( playlist ) )
     {
@@ -214,6 +215,7 @@ PlaylistManager::show( const Tomahawk::artist_ptr& artist )
         PlaylistView* view = new PlaylistView();
         PlaylistModel* model = new PlaylistModel();
         view->setModel( model );
+        view->setFrameShape( QFrame::NoFrame );
         model->append( artist );
 
         m_currentInterface = view->proxyModel();
@@ -298,6 +300,7 @@ PlaylistManager::show( const Tomahawk::collection_ptr& collection )
             AlbumView* aview = new AlbumView();
             AlbumModel* amodel = new AlbumModel( aview );
             aview->setModel( amodel );
+            aview->setFrameShape( QFrame::NoFrame );
             amodel->addCollection( collection );
 
             m_currentInterface = aview->proxyModel();
