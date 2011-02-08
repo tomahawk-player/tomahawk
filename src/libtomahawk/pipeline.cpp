@@ -2,6 +2,7 @@
 
 #include <QDebug>
 #include <QMutexLocker>
+#include <QTimer>
 
 #include "functimeout.h"
 #include "database/database.h"
@@ -180,8 +181,9 @@ Pipeline::shuntNext()
         q = m_queries_pending.takeFirst();
         q->setLastPipelineWeight( 101 );
     }
-    
-    shunt( q ); // bump into next stage of pipeline (highest weights are 100)
+
+    if ( !q.isNull() )
+        shunt( q ); // bump into next stage of pipeline (highest weights are 100)
 }
 
 
@@ -192,8 +194,11 @@ Pipeline::shunt( const query_ptr& q )
     {
         qDebug() << "Query solved, pipeline aborted:" << q->toString()
                  << "numresults:" << q->results().length();
+
+        shuntNext();
         return;
     }
+
     unsigned int lastweight = 0;
     unsigned int lasttimeout = 0;
     foreach( Resolver* r, m_resolvers )

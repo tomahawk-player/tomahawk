@@ -55,7 +55,7 @@ public:
     // indexes entries from "table" where id >= pkey
     void updateSearchIndex();
 
-    const QString& dbid() const { return m_dbid; }
+    QString dbid() const { return m_dbid; }
 
     void loadIndex();
 

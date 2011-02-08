@@ -29,7 +29,7 @@ public:
     explicit Database( const QString& dbname, QObject* parent = 0 );
     ~Database();
 
-    const QString& dbid() const;
+    QString dbid() const;
     const bool indexReady() const { return m_indexReady; }
 
     void loadIndex();
@@ -45,7 +45,7 @@ public slots:
 private:
     DatabaseImpl* m_impl;
     DatabaseWorker* m_workerRW;
-    QList<DatabaseWorker*> m_workersRO;
+    QHash< QString, DatabaseWorker* > m_workers;
     bool m_indexReady;
 
     static Database* s_instance;
