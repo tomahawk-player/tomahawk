@@ -92,10 +92,6 @@ PlaylistManager::PlaylistManager( QObject* parent )
 
     m_currentInterface = m_superCollectionView->proxyModel();
     
-    m_playlistView = new PlaylistView();
-    m_stack->addWidget( m_playlistView );
-    m_playlistModel = new PlaylistModel();
-
     m_stack->setContentsMargins( 0, 0, 0, 0 );
     m_widget->setContentsMargins( 0, 0, 0, 0 );
     m_widget->layout()->setContentsMargins( 0, 0, 0, 0 );
@@ -152,37 +148,48 @@ bool
 PlaylistManager::show( const Tomahawk::playlist_ptr& playlist )
 {
     unlinkPlaylist();
-    
-    m_playlistModel->loadPlaylist( playlist );
-    m_playlistView->setModel( m_playlistModel );
-    m_playlistView->setFrameShape( QFrame::NoFrame );
-    
-    if ( !m_loadedPlaylists.contains( playlist ) )
+
+    if ( !m_playlistViews.contains( playlist ) )
     {
+        PlaylistView* view = new PlaylistView();
+        PlaylistModel* model = new PlaylistModel();
+        view->setModel( model );
+        view->setFrameShape( QFrame::NoFrame );
+        model->loadPlaylist( playlist );
         playlist->resolve();
-        m_loadedPlaylists << playlist;
+
+        m_currentInterface = view->proxyModel();
+        m_playlistViews.insert( playlist, view );
+
+        m_stack->addWidget( view );
+        m_stack->setCurrentWidget( view );
     }
-    
-    m_currentInterface = m_playlistView->proxyModel();
-    m_stack->setCurrentWidget( m_playlistView );
-    
+    else
+    {
+        PlaylistView* view = m_playlistViews.value( playlist );
+        m_stack->setCurrentWidget( view );
+        m_currentInterface = view->proxyModel();
+    }
+
     m_superCollectionVisible = false;
     m_statsAvailable = true;
     m_modesAvailable = false;
     linkPlaylist();
-    
+
     TomahawkSettings::instance()->appendRecentlyPlayedPlaylist( playlist );
-    
+
     emit numSourcesChanged( SourceList::instance()->count() );
     return true;
 }
 
+
 bool 
-PlaylistManager::show(const Tomahawk::dynplaylist_ptr& playlist)
+PlaylistManager::show( const Tomahawk::dynplaylist_ptr& playlist )
 {
     unlinkPlaylist();
     
-    if( !m_dynamicWidgets.contains( playlist ) ) {
+    if( !m_dynamicWidgets.contains( playlist ) )
+    {
        m_dynamicWidgets[ playlist ] = new Tomahawk::DynamicWidget( playlist, m_stack );
        m_stack->addWidget( m_dynamicWidgets[ playlist ] );
        playlist->resolve();
@@ -246,12 +253,27 @@ PlaylistManager::show( const Tomahawk::album_ptr& album )
 {
     qDebug() << Q_FUNC_INFO << &album << album.data();
     unlinkPlaylist();
-
-    m_playlistModel->clear();
-    m_playlistModel->append( album );
-    m_stack->setCurrentWidget( m_playlistView );
     
-    m_currentInterface = m_playlistView->proxyModel();
+    if ( !m_albumViews.contains( album ) )
+    {
+        PlaylistView* view = new PlaylistView();
+        PlaylistModel* model = new PlaylistModel();
+        view->setModel( model );
+        view->setFrameShape( QFrame::NoFrame );
+        model->append( album );
+
+        m_currentInterface = view->proxyModel();
+        m_albumViews.insert( album, view );
+
+        m_stack->addWidget( view );
+        m_stack->setCurrentWidget( view );
+    }
+    else
+    {
+        PlaylistView* view = m_albumViews.value( album );
+        m_stack->setCurrentWidget( view );
+        m_currentInterface = view->proxyModel();
+    }
 
     m_superCollectionVisible = false;
     m_statsAvailable = false;

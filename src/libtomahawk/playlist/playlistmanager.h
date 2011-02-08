@@ -105,16 +105,15 @@ private:
     AlbumView* m_superAlbumView;
     CollectionFlatModel* m_superCollectionFlatModel;
     CollectionView* m_superCollectionView;    
-    PlaylistView* m_playlistView;
     
-    QList<Tomahawk::playlist_ptr> m_loadedPlaylists;
     QList< Tomahawk::collection_ptr > m_superCollections;
-    PlaylistModel* m_playlistModel;
 
     QHash< Tomahawk::dynplaylist_ptr, Tomahawk::DynamicWidget* > m_dynamicWidgets;
     QHash< Tomahawk::collection_ptr, CollectionView* > m_collectionViews;
     QHash< Tomahawk::collection_ptr, AlbumView* > m_collectionAlbumViews;
     QHash< Tomahawk::artist_ptr, PlaylistView* > m_artistViews;
+    QHash< Tomahawk::album_ptr, PlaylistView* > m_albumViews;
+    QHash< Tomahawk::playlist_ptr, PlaylistView* > m_playlistViews;
     QHash< Tomahawk::source_ptr, SourceInfoWidget* > m_sourceViews;
 
     PlaylistInterface* m_currentInterface;
