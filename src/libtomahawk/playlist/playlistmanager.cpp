@@ -74,6 +74,7 @@ PlaylistManager::PlaylistManager( QObject* parent )
     m_splitter->hide( 1, false );
 
     m_widget->layout()->setMargin( 0 );
+    m_widget->layout()->setSpacing( 0 );
     m_widget->layout()->addWidget( m_topbar );
     m_widget->layout()->addWidget( line );
     m_widget->layout()->addWidget( m_splitter );
