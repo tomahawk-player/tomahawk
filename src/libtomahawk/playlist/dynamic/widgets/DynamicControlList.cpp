@@ -71,8 +71,10 @@ DynamicControlList::init()
     m_collapseLayout->setMargin( 0 );
     m_collapseLayout->setSpacing( 0 );
     m_collapse = new QPushButton( tr( "Click to collapse" ), this );
+    m_collapse->setAttribute( Qt::WA_LayoutUsesWidgetRect );
     m_collapseLayout->addWidget( m_collapse );
     m_addControl = new QToolButton( this );
+    m_addControl->setAttribute( Qt::WA_LayoutUsesWidgetRect );
     m_addControl->setIcon( QIcon( RESPATH "images/list-add.png" ) );
     m_addControl->setSizePolicy( QSizePolicy::Fixed, QSizePolicy::Fixed );
     m_addControl->setIconSize( QSize( 16, 16 ) );

@@ -28,6 +28,8 @@
 #include <QAction>
 #include <QEasingCurve>
 #include <QTimeLine>
+#include <QPaintEvent>
+#include <QPainter>
 
 using namespace Tomahawk;
 
@@ -73,7 +75,6 @@ CollapsibleControls::init()
     connect( m_controls, SIGNAL( toggleCollapse() ), this, SLOT( toggleCollapse() ) );
     
     m_summaryWidget = new QWidget( this );
-    // TODO replace
     m_summaryWidget->setMinimumHeight( 24 );
     m_summaryWidget->setMaximumHeight( 24 );
     m_summaryWidget->setSizePolicy( QSizePolicy::Expanding, QSizePolicy::Fixed );

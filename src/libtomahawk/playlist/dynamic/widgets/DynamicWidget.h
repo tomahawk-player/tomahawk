@@ -63,7 +63,6 @@ public:
     
     virtual QSize sizeHint() const;
     virtual void resizeEvent( QResizeEvent* );
-    
 public slots:
     void onRevisionLoaded( const Tomahawk::DynamicPlaylistRevision& rev );
     

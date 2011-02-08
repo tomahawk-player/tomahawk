@@ -21,6 +21,7 @@
 
 #include <QWidget>
 
+class QPaintEvent;
 class QHBoxLayout;
 class QTimeLine;
 class QToolButton;
@@ -44,7 +45,6 @@ public:
     QList< DynamicControlWrapper* > controls() const;
     
     virtual QSize sizeHint() const;
-    
 signals:
     void controlsChanged();
     void controlChanged( const Tomahawk::dyncontrol_ptr& control );

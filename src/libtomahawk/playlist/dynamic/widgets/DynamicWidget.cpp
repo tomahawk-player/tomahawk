@@ -64,6 +64,7 @@ DynamicWidget::DynamicWidget( const Tomahawk::dynplaylist_ptr& playlist, QWidget
     m_headerLayout->addWidget( m_generatorCombo );
     
     m_generateButton = new QPushButton( tr( "Generate" ), this );
+    m_generateButton->setAttribute( Qt::WA_LayoutUsesWidgetRect );
     connect( m_generateButton, SIGNAL( clicked( bool ) ), this, SLOT( generateOrStart() ) );
     m_headerLayout->addWidget( m_generateButton );
     
@@ -98,6 +99,7 @@ DynamicWidget::DynamicWidget( const Tomahawk::dynplaylist_ptr& playlist, QWidget
     
     m_layout->setContentsMargins( 0, 0, 0, 0 );
     m_layout->setMargin( 0 );
+    m_layout->setSpacing( 0 );
     setLayout( m_layout );
 
     connect( m_controls, SIGNAL( controlChanged( Tomahawk::dyncontrol_ptr ) ), this, SLOT( controlChanged( Tomahawk::dyncontrol_ptr ) ), Qt::QueuedConnection );
@@ -310,4 +312,3 @@ DynamicWidget::generatorError( const QString& title, const QString& content )
     if( m_runningOnDemand )
         generateOrStart();
 }
-

@@ -116,6 +116,7 @@ QToolButton*
 DynamicControlWrapper::initButton( QWidget* parent )
 {
     QToolButton* btn = new QToolButton( parent );
+    btn->setAttribute( Qt::WA_LayoutUsesWidgetRect );
     btn->setSizePolicy( QSizePolicy::Fixed, QSizePolicy::Fixed );
     btn->setIconSize( QSize( 16, 16 ) );
     btn->setToolButtonStyle( Qt::ToolButtonIconOnly );
@@ -128,6 +129,7 @@ QWidget*
 DynamicControlWrapper::createDummy( QWidget* fromW, QWidget* parent )
 {
     QWidget* dummy = new QWidget( parent );
+    dummy->setAttribute( Qt::WA_LayoutUsesWidgetRect );
     dummy->setContentsMargins( 0, 0, 0, 0 );
     dummy->setSizePolicy( QSizePolicy::Fixed, QSizePolicy::Fixed );
     dummy->setMinimumSize( fromW->sizeHint() );
