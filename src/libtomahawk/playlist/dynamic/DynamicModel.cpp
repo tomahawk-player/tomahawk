@@ -141,15 +141,18 @@ DynamicModel::newTrackLoading()
 }
 
 void 
-DynamicModel::removeIndex(const QModelIndex& index, bool moreToCome)
+DynamicModel::removeIndex(const QModelIndex& idx, bool moreToCome)
 {
     if ( m_playlist->mode() == Static && isReadOnly() )
         return;
     
-    if( m_playlist->mode() == OnDemand )
-        TrackModel::removeIndex( index );
-    else
-        PlaylistModel::removeIndex( index, moreToCome );
+    if( m_playlist->mode() == OnDemand ) {
+        if( !moreToCome && idx == index( rowCount( QModelIndex() ) - 1, 0, QModelIndex() ) ) { // if the user is manually removing the last one, re-add as we're a station
+            newTrackLoading();
+        }
+        TrackModel::removeIndex( idx );
+    } else
+        PlaylistModel::removeIndex( idx, moreToCome );
     // don't call onPlaylistChanged.
         
     if( !moreToCome )
