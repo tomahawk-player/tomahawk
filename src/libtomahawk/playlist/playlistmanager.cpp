@@ -89,8 +89,6 @@ PlaylistManager::PlaylistManager( QObject* parent )
     m_stack->addWidget( m_playlistView );
     m_playlistModel = new PlaylistModel();
 
-    show( new WelcomeWidget() );
-    
     m_stack->setContentsMargins( 0, 0, 0, 0 );
     m_widget->setContentsMargins( 0, 0, 0, 0 );
     m_widget->layout()->setContentsMargins( 0, 0, 0, 0 );

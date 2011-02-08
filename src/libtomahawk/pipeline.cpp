@@ -7,6 +7,8 @@
 #include "functimeout.h"
 #include "database/database.h"
 
+#define CONCURRENT_QUERIES 8
+
 using namespace Tomahawk;
 
 Pipeline* Pipeline::s_instance = 0;
@@ -85,6 +87,11 @@ Pipeline::resolve( const QList<query_ptr>& qlist, bool prioritized )
             {
                 m_qids.insert( q->id(), q );
             }
+            else
+            {
+                qDebug() << "Already queued for resolving:" << q->toString();
+                return;
+            }
         }
 
         if ( prioritized )
@@ -98,8 +105,7 @@ Pipeline::resolve( const QList<query_ptr>& qlist, bool prioritized )
         }
     }
 
-    if ( m_index_ready && m_queries_pending.count() )
-        shuntNext();
+    shuntNext();
 }
 
 
@@ -125,28 +131,43 @@ Pipeline::resolve( QID qid, bool prioritized )
 void
 Pipeline::reportResults( QID qid, const QList< result_ptr >& results )
 {
-    QMutexLocker lock( &m_mut );
-
-    if ( !m_qids.contains( qid ) )
+    unsigned int state = 0;
     {
-        qDebug() << "reportResults called for unknown QID";
-        return;
-    }
+        QMutexLocker lock( &m_mut );
 
-    unsigned int state = m_qidsState.value( qid ) - 1;
-    m_qidsState.insert( qid, state );
-
-    if ( !results.isEmpty() )
-    {
-        //qDebug() << Q_FUNC_INFO << qid;
-        //qDebug() << "solved query:" << (qlonglong)q.data() << q->toString();
-
-        const query_ptr& q = m_qids.value( qid );
-        q->addResults( results );
-
-        foreach( const result_ptr& r, q->results() )
+        if ( !m_qids.contains( qid ) )
         {
-            m_rids.insert( r->id(), r );
+            qDebug() << "reportResults called for unknown QID";
+            Q_ASSERT( false );
+            return;
+        }
+
+        if ( !m_qidsState.contains( qid ) )
+        {
+            qDebug() << "reportResults called for unknown QID-state";
+            Q_ASSERT( false );
+            return;
+        }
+
+        state = m_qidsState.value( qid ) - 1;
+
+        if ( state )
+            m_qidsState.insert( qid, state );
+        else
+            m_qidsState.remove( qid );
+
+        if ( !results.isEmpty() )
+        {
+            //qDebug() << Q_FUNC_INFO << qid;
+            //qDebug() << "solved query:" << (qlonglong)q.data() << q->toString();
+
+            const query_ptr& q = m_qids.value( qid );
+            q->addResults( results );
+
+            foreach( const result_ptr& r, q->results() )
+            {
+                m_rids.insert( r->id(), r );
+            }
         }
     }
     
@@ -154,17 +175,21 @@ Pipeline::reportResults( QID qid, const QList< result_ptr >& results )
     {
         // All resolvers have reported back their results for this query now
         const query_ptr& q = m_qids.value( qid );
+        qDebug() << "Finished resolving:" << q->toString();
         q->onResolvingFinished();
+
+        shuntNext();
     }
-    
 }
 
 
 void
 Pipeline::shuntNext()
 {
-    query_ptr q;
+    if ( !m_index_ready )
+        return;
 
+    query_ptr q;
     {
         QMutexLocker lock( &m_mut );
         
@@ -173,6 +198,10 @@ Pipeline::shuntNext()
             emit idle();
             return;
         }
+
+        // Check if we are ready to dispatch more queries
+        if ( m_qidsState.count() >= CONCURRENT_QUERIES )
+            return;
 
         /*
             Since resolvers are async, we now dispatch to the highest weighted ones
