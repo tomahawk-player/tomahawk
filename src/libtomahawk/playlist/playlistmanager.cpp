@@ -4,6 +4,7 @@
 
 #include "audio/audioengine.h"
 #include "utils/animatedsplitter.h"
+#include "infobar/infobar.h"
 #include "topbar/topbar.h"
 #include "widgets/infowidgets/sourceinfowidget.h"
 
@@ -52,6 +53,7 @@ PlaylistManager::PlaylistManager( QObject* parent )
     m_widget->setLayout( new QVBoxLayout() );
 
     m_topbar = new TopBar();
+    m_infobar = new InfoBar();
     m_stack = new QStackedWidget();
 
     QFrame* line = new QFrame();
@@ -75,6 +77,7 @@ PlaylistManager::PlaylistManager( QObject* parent )
 
     m_widget->layout()->setMargin( 0 );
     m_widget->layout()->setSpacing( 0 );
+    m_widget->layout()->addWidget( m_infobar );
     m_widget->layout()->addWidget( m_topbar );
     m_widget->layout()->addWidget( line );
     m_widget->layout()->addWidget( m_splitter );
@@ -382,7 +385,7 @@ PlaylistManager::show( const Tomahawk::source_ptr& source )
 
 
 bool
-PlaylistManager::show( QWidget* widget )
+PlaylistManager::show( QWidget* widget, const QString& title, const QString& desc, const QPixmap& pixmap )
 {
     unlinkPlaylist();
 
@@ -390,6 +393,10 @@ PlaylistManager::show( QWidget* widget )
 
     m_stack->addWidget( widget );
     m_stack->setCurrentWidget( widget );
+
+    m_infobar->setCaption( title );
+    m_infobar->setDescription( desc );
+    m_infobar->setPixmap( pixmap );
 
     m_superCollectionVisible = false;
     m_statsAvailable = false;

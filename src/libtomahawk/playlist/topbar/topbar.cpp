@@ -1,12 +1,11 @@
 #include "topbar.h"
 #include "ui_topbar.h"
 
-#include <QLabel>
 #include <QPropertyAnimation>
 #include <QRadioButton>
 #include <QFile>
 
-#include "tomahawk/tomahawkapp.h"
+#include "utils/tomahawkutils.h"
 
 #define MAXDUDES 3
 #define DUDEWIDTH 10
@@ -24,8 +23,6 @@ TopBar::TopBar( QWidget* parent )
     , m_shown( 0 )
 {
     ui->setupUi( this );
-
-    setAutoFillBackground( true );
 
     ui->statsLabelNumTracks->setFormat( "%L1 " + tr( "Tracks" ) );
     ui->statsLabelNumArtists->setFormat( "%L1 " + tr( "Artists" ) );
@@ -81,7 +78,7 @@ TopBar::~TopBar()
 
 
 void
-TopBar::changeEvent( QEvent *e )
+TopBar::changeEvent( QEvent* e )
 {
     QWidget::changeEvent( e );
     switch ( e->type() )
@@ -97,17 +94,9 @@ TopBar::changeEvent( QEvent *e )
 
 
 void
-TopBar::resizeEvent(QResizeEvent* e )
+TopBar::resizeEvent( QResizeEvent* e )
 {
     QWidget::resizeEvent( e );
-
-    QLinearGradient gradient = QLinearGradient( contentsRect().topLeft(), contentsRect().bottomRight() );
-    gradient.setColorAt( 0.0, QColor( 100, 100, 100 ) );
-    gradient.setColorAt( 1.0, QColor( 63, 63, 63 ) );
-
-    QPalette p = palette();
-    p.setBrush( QPalette::Window, QBrush( gradient ) );
-    setPalette( p );
 }
 
 

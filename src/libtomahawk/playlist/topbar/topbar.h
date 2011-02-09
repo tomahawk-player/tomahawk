@@ -2,10 +2,11 @@
 #define TOPBAR_H
 
 #include <QWidget>
-#include <QList>
 #include <QLabel>
+#include <QList>
 
 #include "sourcelist.h"
+#include "dllmacro.h"
 
 namespace Ui
 {

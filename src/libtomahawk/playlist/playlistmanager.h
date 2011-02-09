@@ -23,6 +23,7 @@ class TrackProxyModel;
 class TrackModel;
 class TrackView;
 class SourceInfoWidget;
+class InfoBar;
 class TopBar;
 
 namespace Tomahawk {
@@ -51,7 +52,7 @@ public:
     bool show( const Tomahawk::collection_ptr& collection );
     bool show( const Tomahawk::source_ptr& source );
 
-    bool show( QWidget* widget );
+    bool show( QWidget* widget, const QString& title = QString(), const QString& desc = QString(), const QPixmap& pixmap = QPixmap() );
 
     bool showSuperCollection();
     void showCurrentTrack();
@@ -94,6 +95,7 @@ private:
     void linkPlaylist();
 
     QWidget* m_widget;
+    InfoBar* m_infobar;
     TopBar* m_topbar;
     QStackedWidget* m_stack;
     AnimatedSplitter* m_splitter;

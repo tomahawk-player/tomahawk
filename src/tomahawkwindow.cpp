@@ -83,7 +83,7 @@ TomahawkWindow::TomahawkWindow( QWidget* parent )
     loadSettings();
     setupSignals();
 
-    PlaylistManager::instance()->show( new WelcomeWidget() );
+    PlaylistManager::instance()->show( new WelcomeWidget(), tr( "Welcome to Tomahawk!" ), QString(), QPixmap( RESPATH "icons/tomahawk-icon-128x128.png" ) );
 }
 
 
