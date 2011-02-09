@@ -72,6 +72,17 @@ SettingsDialog::SettingsDialog( QWidget *parent )
     ui->lineEditLastfmPassword->setText(s->lastFmPassword() );
     connect( ui->pushButtonTestLastfmLogin, SIGNAL( clicked( bool) ), this, SLOT( testLastFmLogin() ) );
     
+    // SCRIPT RESOLVER
+    ui->removeScript->setEnabled( false );
+    foreach( const QString& resolver, s->scriptResolvers() ) {
+        QFileInfo info( resolver );
+        ui->scriptList->addTopLevelItem( new QTreeWidgetItem( QStringList() << info.baseName() << resolver ) );
+        
+    }
+    connect( ui->scriptList, SIGNAL( itemClicked( QTreeWidgetItem*, int ) ), this, SLOT( scriptSelectionChanged() ) );
+    connect( ui->addScript, SIGNAL( clicked( bool ) ), this, SLOT( addScriptResolver() ) );
+    connect( ui->removeScript, SIGNAL( clicked( bool ) ), this, SLOT( removeScriptResolver() ) );
+    
     connect( ui->buttonBrowse, SIGNAL( clicked() ),  SLOT( showPathSelector() ) );
     connect( ui->proxyButton,  SIGNAL( clicked() ),  SLOT( showProxySettings() ) );
     connect( this,             SIGNAL( rejected() ), SLOT( onRejected() ) );
@@ -113,6 +124,12 @@ SettingsDialog::~SettingsDialog()
         s->setLastFmUsername(                               ui->lineEditLastfmUsername->text() );
         s->setLastFmPassword(                               ui->lineEditLastfmPassword->text() );
 
+        QStringList resolvers;
+        for( int i = 0; i < ui->scriptList->topLevelItemCount(); i++ ) {
+            resolvers << ui->scriptList->topLevelItem( i )->data( 1, Qt::DisplayRole ).toString();
+        }
+        s->setScriptResolvers( resolvers );
+        
         if( rescan )
         {
             MusicScanner* scanner = new MusicScanner(s->scannerPath() );
@@ -312,4 +329,35 @@ ProxyDialog::saveSettings()
         delete oldProxy;
 
     QNetworkProxy::setApplicationProxy( proxy );
+}
+
+void 
+SettingsDialog::addScriptResolver()
+{
+    QString resolver = QFileDialog::getOpenFileName( this, tr( "Load script resolver file" ), qApp->applicationDirPath() );
+    if( !resolver.isEmpty() ) {
+        QFileInfo info( resolver );
+        ui->scriptList->addTopLevelItem( new QTreeWidgetItem(  QStringList() << info.baseName() << resolver ) );
+        
+        TomahawkApp::instance()->addScriptResolver( resolver );
+    }
+}
+
+void 
+SettingsDialog::removeScriptResolver()
+{
+    // only one selection
+    if( !ui->scriptList->selectedItems().isEmpty() ) {
+        delete ui->scriptList->takeTopLevelItem( ui->scriptList->indexOfTopLevelItem( ui->scriptList->selectedItems().first() ) );
+    }
+}
+
+void 
+SettingsDialog::scriptSelectionChanged()
+{
+    if( !ui->scriptList->selectedItems().isEmpty() ) {
+        ui->removeScript->setEnabled( true );
+    } else {
+        ui->removeScript->setEnabled( false );
+    }
 }

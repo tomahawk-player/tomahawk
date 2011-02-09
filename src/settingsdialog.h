@@ -51,6 +51,10 @@ private slots:
     void testLastFmLogin();
     void onLastFmFinished();
 
+    void addScriptResolver();
+    void scriptSelectionChanged();
+    void removeScriptResolver();
+    
 private:
     Ui::SettingsDialog *ui;
 

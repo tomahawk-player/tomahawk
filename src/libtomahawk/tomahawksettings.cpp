@@ -445,3 +445,21 @@ TomahawkSettings::setXmppBotPort( const int port )
 {
     setValue( "xmppBot/port", -1 );
 }
+
+void 
+TomahawkSettings::addScriptResolver(const QString& resolver)
+{
+    setValue( "script/resolvers", scriptResolvers() << resolver );
+}
+
+QStringList 
+TomahawkSettings::scriptResolvers() const
+{
+    return value( "script/resolvers" ).toStringList();
+}
+
+void 
+TomahawkSettings::setScriptResolvers( const QStringList& resolver )
+{
+    setValue( "script/resolvers", resolver );
+}

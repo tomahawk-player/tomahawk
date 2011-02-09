@@ -109,6 +109,12 @@ public:
     int xmppBotPort() const;
     void setXmppBotPort( const int port );
     
+    /// Script resolver settings
+    
+    QStringList scriptResolvers() const;
+    void setScriptResolvers( const QStringList& resolver );
+    void addScriptResolver( const QString& resolver );
+    
 private:
     static TomahawkSettings* s_instance;
 };

@@ -128,6 +128,7 @@ void ScriptResolver::resolve( const QVariant& v )
     QVariantMap m = v.toMap();
     m.insert( "_msgtype", "rq" );
     const QByteArray msg = m_serializer.serialize( m );
+    qDebug() << "ASKING SCRIPT RESOLVER TO RESOLVE:" << msg;
     sendMsg( msg );
 }
 

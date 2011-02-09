@@ -19,6 +19,7 @@
 
 #include "utils/tomahawkutils.h"
 
+class ScriptResolver;
 class AudioEngine;
 class Database;
 class SipHandler;
@@ -65,6 +66,8 @@ public:
     TomahawkWindow* mainWindow() const { return m_mainwindow; }
 #endif
 
+    void addScriptResolver( const QString& scriptPath );
+    
 signals:
     void settingsChanged();
     
@@ -82,7 +85,8 @@ private:
 
     QList<Tomahawk::collection_ptr> m_collections;
     QList<TomahawkPlugin*> m_plugins;
-
+    QList<ScriptResolver*> m_scriptResolvers;
+    
     Database* m_database;
     AudioEngine* m_audioEngine;
     SipHandler* m_sipHandler;

@@ -321,10 +321,17 @@ TomahawkApp::setupPipeline()
 {
     // setup resolvers for local content, and (cached) remote collection content
     Pipeline::instance()->addResolver( new DatabaseResolver( 100 ) );
-
-//    new ScriptResolver("/home/rj/src/tomahawk-core/contrib/magnatune/magnatune-resolver.php");
+    
+    // load script resolvers
+    foreach( QString resolver,TomahawkSettings::instance()->scriptResolvers() )
+        addScriptResolver( resolver );
 }
 
+void
+TomahawkApp::addScriptResolver( const QString& path )
+{
+    m_scriptResolvers << new ScriptResolver( path );
+}
 
 void
 TomahawkApp::initLocalCollection()

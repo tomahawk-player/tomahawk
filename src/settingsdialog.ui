@@ -23,7 +23,7 @@
    <item>
     <widget class="QTabWidget" name="tabWidget">
      <property name="currentIndex">
-      <number>0</number>
+      <number>3</number>
      </property>
      <widget class="QWidget" name="tabJabber">
       <attribute name="title">
@@ -456,6 +456,110 @@
        </item>
       </layout>
      </widget>
+     <widget class="QWidget" name="tabScriptResolvers">
+      <attribute name="title">
+       <string>Script Resolvers</string>
+      </attribute>
+      <layout class="QVBoxLayout" name="verticalLayout_8">
+       <item>
+        <widget class="QLabel" name="scriptLabel">
+         <property name="text">
+          <string>Loaded script resolvers:</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <layout class="QHBoxLayout" name="horizontalLayout_4">
+         <item>
+          <widget class="QTreeWidget" name="scriptList">
+           <property name="alternatingRowColors">
+            <bool>true</bool>
+           </property>
+           <property name="selectionMode">
+            <enum>QAbstractItemView::SingleSelection</enum>
+           </property>
+           <property name="rootIsDecorated">
+            <bool>false</bool>
+           </property>
+           <property name="itemsExpandable">
+            <bool>false</bool>
+           </property>
+           <property name="animated">
+            <bool>true</bool>
+           </property>
+           <property name="columnCount">
+            <number>2</number>
+           </property>
+           <attribute name="headerVisible">
+            <bool>false</bool>
+           </attribute>
+           <attribute name="headerCascadingSectionResizes">
+            <bool>true</bool>
+           </attribute>
+           <attribute name="headerDefaultSectionSize">
+            <number>150</number>
+           </attribute>
+           <attribute name="headerHighlightSections">
+            <bool>true</bool>
+           </attribute>
+           <attribute name="headerStretchLastSection">
+            <bool>true</bool>
+           </attribute>
+           <column>
+            <property name="text">
+             <string notr="true">1</string>
+            </property>
+           </column>
+           <column>
+            <property name="text">
+             <string notr="true">2</string>
+            </property>
+           </column>
+          </widget>
+         </item>
+         <item>
+          <layout class="QVBoxLayout" name="verticalLayout_7">
+           <item>
+            <widget class="QToolButton" name="addScript">
+             <property name="text">
+              <string/>
+             </property>
+             <property name="icon">
+              <iconset resource="../resources.qrc">
+               <normaloff>:/data/images/list-add.png</normaloff>:/data/images/list-add.png</iconset>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="QToolButton" name="removeScript">
+             <property name="text">
+              <string/>
+             </property>
+             <property name="icon">
+              <iconset resource="../resources.qrc">
+               <normaloff>:/data/images/list-remove.png</normaloff>:/data/images/list-remove.png</iconset>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <spacer name="verticalSpacer_4">
+             <property name="orientation">
+              <enum>Qt::Vertical</enum>
+             </property>
+             <property name="sizeHint" stdset="0">
+              <size>
+               <width>20</width>
+               <height>40</height>
+              </size>
+             </property>
+            </spacer>
+           </item>
+          </layout>
+         </item>
+        </layout>
+       </item>
+      </layout>
+     </widget>
     </widget>
    </item>
    <item>
@@ -470,7 +574,9 @@
    </item>
   </layout>
  </widget>
- <resources/>
+ <resources>
+  <include location="../resources.qrc"/>
+ </resources>
  <connections>
   <connection>
    <sender>buttonBox</sender>
@@ -479,8 +585,8 @@
    <slot>accept()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>398</x>
-     <y>374</y>
+     <x>402</x>
+     <y>348</y>
     </hint>
     <hint type="destinationlabel">
      <x>157</x>
@@ -495,8 +601,8 @@
    <slot>reject()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>466</x>
-     <y>380</y>
+     <x>470</x>
+     <y>348</y>
     </hint>
     <hint type="destinationlabel">
      <x>286</x>
@@ -511,12 +617,12 @@
    <slot>setVisible(bool)</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>480</x>
-     <y>124</y>
+     <x>489</x>
+     <y>117</y>
     </hint>
     <hint type="destinationlabel">
-     <x>496</x>
-     <y>154</y>
+     <x>595</x>
+     <y>145</y>
     </hint>
    </hints>
   </connection>
@@ -527,12 +633,12 @@
    <slot>setVisible(bool)</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>483</x>
-     <y>124</y>
+     <x>492</x>
+     <y>117</y>
     </hint>
     <hint type="destinationlabel">
-     <x>114</x>
-     <y>154</y>
+     <x>123</x>
+     <y>145</y>
     </hint>
    </hints>
   </connection>
@@ -543,12 +649,12 @@
    <slot>setVisible(bool)</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>461</x>
-     <y>124</y>
+     <x>470</x>
+     <y>117</y>
     </hint>
     <hint type="destinationlabel">
-     <x>114</x>
-     <y>182</y>
+     <x>123</x>
+     <y>173</y>
     </hint>
    </hints>
   </connection>
@@ -563,8 +669,8 @@
      <y>112</y>
     </hint>
     <hint type="destinationlabel">
-     <x>439</x>
-     <y>163</y>
+     <x>594</x>
+     <y>172</y>
     </hint>
    </hints>
   </connection>
