@@ -348,7 +348,10 @@ SettingsDialog::removeScriptResolver()
 {
     // only one selection
     if( !ui->scriptList->selectedItems().isEmpty() ) {
+        QString resolver = ui->scriptList->selectedItems().first()->data( 1, Qt::DisplayRole ).toString();
         delete ui->scriptList->takeTopLevelItem( ui->scriptList->indexOfTopLevelItem( ui->scriptList->selectedItems().first() ) );
+        
+        TomahawkApp::instance()->removeScriptResolver( resolver );
     }
 }
 

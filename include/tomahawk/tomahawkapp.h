@@ -67,6 +67,7 @@ public:
 #endif
 
     void addScriptResolver( const QString& scriptPath );
+    void removeScriptResolver( const QString& scriptPath );
     
 signals:
     void settingsChanged();

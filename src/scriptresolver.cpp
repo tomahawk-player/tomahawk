@@ -21,6 +21,11 @@ ScriptResolver::ScriptResolver(const QString& exe) :
     m_proc.start( m_cmd );
 }
 
+ScriptResolver::~ScriptResolver()
+{
+    Tomahawk::Pipeline::instance()->removeResolver( this );
+}
+
 
 void ScriptResolver::readStderr()
 {

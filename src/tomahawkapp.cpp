@@ -334,6 +334,19 @@ TomahawkApp::addScriptResolver( const QString& path )
 }
 
 void
+TomahawkApp::removeScriptResolver( const QString& path )
+{
+    foreach( ScriptResolver* r, m_scriptResolvers ) {
+        if( r->exe() == path ) {
+            m_scriptResolvers.removeAll( r );
+            
+            delete r;
+            return;
+        }
+    }
+}
+
+void
 TomahawkApp::initLocalCollection()
 {
     source_ptr src( new Source( "My Collection" ) );
