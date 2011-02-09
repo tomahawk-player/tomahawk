@@ -27,6 +27,7 @@ SET(TRIAL_LIBRARY_PATHS
   /usr/lib${LIB_SUFFIX}
   /sw/lib${LIB_SUFFIX}
   /usr/pkg/lib${LIB_SUFFIX}
+  /usr/lib64
   )
 SET(TRIAL_INCLUDE_PATHS
   $ENV{CLUCENE_HOME}/include

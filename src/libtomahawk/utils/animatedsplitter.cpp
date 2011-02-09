@@ -8,6 +8,8 @@ AnimatedSplitter::AnimatedSplitter( QWidget* parent )
     , m_animateIndex( -1 )
     , m_greedyIndex( 0 )
 {
+    setHandleWidth( 1 );
+    
     m_timeLine = new QTimeLine( ANIMATION_TIME, this );
     m_timeLine->setUpdateInterval( 5 );
     m_timeLine->setEasingCurve( QEasingCurve::OutBack );

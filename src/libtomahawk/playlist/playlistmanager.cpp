@@ -82,6 +82,7 @@ PlaylistManager::PlaylistManager( QObject* parent )
     m_superCollectionView = new CollectionView();
     m_superCollectionFlatModel = new CollectionFlatModel( m_superCollectionView );
     m_superCollectionView->setModel( m_superCollectionFlatModel );
+    m_superCollectionView->setFrameShape( QFrame::NoFrame );
 
     m_superAlbumView = new AlbumView();
     m_superAlbumModel = new AlbumModel( m_superAlbumView );

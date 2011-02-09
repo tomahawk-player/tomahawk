@@ -106,9 +106,7 @@ TopBar::resizeEvent(QResizeEvent* e )
     gradient.setColorAt( 1.0, QColor( 63, 63, 63 ) );
 
     QPalette p = palette();
-    p.setBrush( QPalette::Background, QBrush( gradient ) );
     p.setBrush( QPalette::Window, QBrush( gradient ) );
-    p.setBrush( QPalette::Base, QBrush( gradient ) );
     setPalette( p );
 }
 
