@@ -78,7 +78,7 @@ DynamicView::showMessageTimeout( const QString& title, const QString& body )
     m_body = body;
     
     overlay()->setText( QString( "%1:\n\n%2" ).arg( m_title, m_body ) );
-    overlay()->show( 5 );
+    overlay()->show( 10 );
 }
 
 void 
