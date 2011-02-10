@@ -7,12 +7,14 @@
 #include "playlist/dynamic/GeneratorInterface.h"
 #include "typedefs.h"
 
+#include "dllmacro.h"
+
 namespace Tomahawk {
     
 /**
   * Generators should subclass this and have it create the custom Generator
   */
-class GeneratorFactoryInterface
+class DLLEXPORT GeneratorFactoryInterface
 {
 public:
     GeneratorFactoryInterface() {}
@@ -30,7 +32,7 @@ public:
 /**
  * Simple factory that generates Generators from string type descriptors
  */
-class GeneratorFactory
+class DLLEXPORT GeneratorFactory
 {
 public:
     static geninterface_ptr create( const QString& type );

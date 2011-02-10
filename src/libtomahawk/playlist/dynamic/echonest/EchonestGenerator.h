@@ -24,12 +24,14 @@
 #include "playlist/dynamic/GeneratorFactory.h"
 #include "playlist/dynamic/DynamicControl.h"
 
+#include "dllmacro.h"
+
 namespace Tomahawk 
 {
 
 class EchonestSteerer;
 
-class EchonestFactory : public GeneratorFactoryInterface
+class DLLEXPORT EchonestFactory : public GeneratorFactoryInterface
 {
 public:
     EchonestFactory();
