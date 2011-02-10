@@ -301,6 +301,8 @@ Section "Tomahawk Player" SEC_TOMAHAWK_PLAYER
    File "${MING_DLL_PATH}\libechonest.dll"
    File "${MING_DLL_PATH}\liblastfm.dll"
 
+   File "${MING_LIB}\libclucene-core.dll"
+
    File "${QXTWEB_DLL_PATH}\libqxtweb-standalone.dll"
 SectionEnd
 

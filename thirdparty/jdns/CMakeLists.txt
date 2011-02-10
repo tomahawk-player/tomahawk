@@ -31,11 +31,7 @@ include_directories(
 
 qt4_wrap_cpp( JDNS_MOC ${JDNS_HEADERS} )
 
-if(WIN32)
-    ADD_LIBRARY(jdns SHARED ${JDNS_SOURCES} ${JDNS_MOC})
-else()
-    ADD_LIBRARY(jdns STATIC ${JDNS_SOURCES} ${JDNS_MOC})
-endif()
+ADD_LIBRARY(jdns STATIC ${JDNS_SOURCES} ${JDNS_MOC})
 
 target_link_libraries(jdns
     ${QT_LIBRARIES}

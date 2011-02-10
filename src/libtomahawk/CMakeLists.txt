@@ -360,7 +360,7 @@ target_link_libraries( tomahawklib
     ogg
     FLAC++
     jdns
-    clucene
+    ${CLUCENE_LIBRARY}
 )
 
 install( TARGETS tomahawklib DESTINATION lib )
