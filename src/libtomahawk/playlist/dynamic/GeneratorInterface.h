@@ -25,6 +25,8 @@
 #include "query.h"
 #include "playlist/dynamic/DynamicControl.h"
 
+#include "dllmacro.h"
+
 namespace Tomahawk {
    
 /**
@@ -37,7 +39,7 @@ namespace Tomahawk {
  *      - Statically (ask for X tracks, get X tracks)
  *      - On Demand (as for next track, ask for next track again, etc) 
  */
-class GeneratorInterface : public QObject
+class DLLEXPORT GeneratorInterface : public QObject
 {
     Q_OBJECT
     Q_PROPERTY( QString         type READ type )
