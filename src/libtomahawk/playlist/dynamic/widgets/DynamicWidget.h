@@ -23,6 +23,7 @@
 #include "dynamic/DynamicPlaylist.h"
 #include "dynamic/DynamicControl.h"
 
+class QHideEvent;
 class QSpinBox;
 class QVBoxLayout;
 class QHBoxLayout;
@@ -63,6 +64,7 @@ public:
     
     virtual QSize sizeHint() const;
     virtual void resizeEvent( QResizeEvent* );
+    virtual void hideEvent(QHideEvent* );
 public slots:
     void onRevisionLoaded( const Tomahawk::DynamicPlaylistRevision& rev );
     

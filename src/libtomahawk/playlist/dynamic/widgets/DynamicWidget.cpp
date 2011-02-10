@@ -33,6 +33,7 @@
 #include "CollapsibleControls.h"
 #include "DynamicControlWrapper.h"
 #include "dynamic/DynamicView.h"
+#include <qevent.h>
 
 using namespace Tomahawk;
 
@@ -207,6 +208,15 @@ DynamicWidget::layoutSteerer()
         
         m_steering->move( x, y );
     }
+}
+
+void 
+DynamicWidget::hideEvent( QHideEvent* ev )
+{
+    if( m_runningOnDemand ) {
+        generateOrStart();
+    }
+    QWidget::hideEvent( ev );
 }
 
 
