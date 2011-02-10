@@ -45,7 +45,11 @@ SipHandler::findPlugins()
     libDir.cdUp();
     libDir.cd( "lib" );
 
-    pluginDirs << appDir << libDir << QDir( qApp->applicationDirPath() );
+    QDir lib64Dir( appDir );
+    lib64Dir.cdUp();
+    lib64Dir.cd( "lib64" );
+    
+    pluginDirs << appDir << libDir << lib64Dir << QDir( qApp->applicationDirPath() );
     foreach ( const QDir& pluginDir, pluginDirs )
     {
         qDebug() << "Checking directory for plugins:" << pluginDir;
