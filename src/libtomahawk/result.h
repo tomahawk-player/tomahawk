@@ -1,6 +1,6 @@
-
 #ifndef RESULT_H
 #define RESULT_H
+
 #include <qvariant.h>
 
 #include <QObject>
@@ -18,7 +18,7 @@ class DLLEXPORT Result : public QObject
 Q_OBJECT
 
 public:
-	Result();
+    Result();
     explicit Result( const QVariant& v, const collection_ptr& collection );
     virtual ~Result();
 
