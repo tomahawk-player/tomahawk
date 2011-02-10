@@ -13,7 +13,9 @@ album_ptr
 Album::get( unsigned int id, const QString& name, const Tomahawk::artist_ptr& artist, const Tomahawk::collection_ptr& collection )
 {
     static QHash< unsigned int, album_ptr > s_albums;
+    static QMutex s_mutex;
 
+    QMutexLocker lock( &s_mutex );
     if ( s_albums.contains( id ) )
     {
         return s_albums.value( id );

@@ -16,7 +16,9 @@ artist_ptr
 Artist::get( unsigned int id, const QString& name, const Tomahawk::collection_ptr& collection )
 {
     static QHash< unsigned int, artist_ptr > s_artists;
+    static QMutex s_mutex;
 
+    QMutexLocker lock( &s_mutex );
     if ( s_artists.contains( id ) )
     {
         return s_artists.value( id );

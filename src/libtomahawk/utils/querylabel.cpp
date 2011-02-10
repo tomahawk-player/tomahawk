@@ -493,21 +493,21 @@ QueryLabel::mouseMoveEvent( QMouseEvent* event )
     {
         m_hoverType = Artist;
         hoverArea.setLeft( 0 );
-        hoverArea.setRight( artistX + contentsMargins().left() );
+        hoverArea.setRight( artistX + contentsMargins().left() - 1 );
     }
     else if ( m_type & Album && x < albumX && x > artistX )
     {
         m_hoverType = Album;
         int spacing = ( m_type & Artist ) ? dashX : 0;
         hoverArea.setLeft( artistX + spacing );
-        hoverArea.setRight( albumX + spacing + contentsMargins().left() );
+        hoverArea.setRight( albumX + spacing + contentsMargins().left() - 1 );
     }
     else if ( m_type & Track && x < trackX && x > albumX )
     {
         m_hoverType = Track;
         int spacing = ( m_type & Album ) ? dashX : 0;
         hoverArea.setLeft( albumX + spacing );
-        hoverArea.setRight( trackX + contentsMargins().left() );
+        hoverArea.setRight( trackX + contentsMargins().left() - 1 );
     }
 
     if ( hoverArea.width() )
