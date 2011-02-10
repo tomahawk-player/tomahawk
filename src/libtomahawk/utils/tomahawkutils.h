@@ -2,6 +2,7 @@
 #define TOMAHAWKUTILS_H
 
 #include "dllmacro.h"
+#include <QObject>
 
 #define RESPATH ":/data/"
 
@@ -12,8 +13,31 @@ class QPixmap;
 class QNetworkAccessManager;
 class QNetworkProxy;
 
+class JDnsShared;
+class JDnsSharedRequest;
+
 namespace TomahawkUtils
 {
+    class DLLEXPORT DNSResolver : public QObject
+    {
+        Q_OBJECT
+    public:
+        explicit DNSResolver();
+        ~DNSResolver() {}
+        
+        void resolve( QString &host, QString &type );
+        
+    signals:
+        void result( QString &result );
+        
+    public slots:
+        void resultsReady();
+        
+    private:
+        JDnsShared* m_dnsShared;
+        JDnsSharedRequest* m_dnsSharedRequest;
+    };   
+    
     DLLEXPORT QDir appConfigDir();
     DLLEXPORT QDir appDataDir();
 
@@ -28,6 +52,8 @@ namespace TomahawkUtils
 
     DLLEXPORT void setNam( QNetworkAccessManager* nam );
     DLLEXPORT void setProxy( QNetworkProxy* proxy );
+
+    DLLEXPORT DNSResolver* dnsResolver();
 }
 
 #endif // TOMAHAWKUTILS_H

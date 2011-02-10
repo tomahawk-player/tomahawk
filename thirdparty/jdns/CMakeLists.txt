@@ -6,39 +6,46 @@ SET(CMAKE_VERBOSE_MAKEFILE ON)
 SET( QT_USE_QTNETWORK TRUE )
 INCLUDE( ${QT_USE_FILE} )
 
+add_definitions( ${QT_DEFINITIONS} )
+add_definitions( -DQT_SHARED )
+
 if(WIN32)
-    SET(PLATFORM_SPECIFIC_LIBS "ws2_32.dll" "advapi32.dll" )
+    set(PLATFORM_SPECIFIC_LIBS "ws2_32.dll" "advapi32.dll" )
 endif(WIN32)
 
-set(JDNS_SOURCES
-    jdns_util.c
-    jdns_packet.c
-    jdns_mdnsd.c
-    jdns_sys.c
-    jdns.c
-    qjdns_sock.cpp
-    qjdns.cpp
+set(TOMAHAWK_JDNS_SOURCES
+    jdns/jdns_util.c
+    jdns/jdns_packet.c
+    jdns/jdns_mdnsd.c
+    jdns/jdns_sys.c
+    jdns/jdns.c
+    jdns/qjdns_sock.cpp
+    jdns/qjdns.cpp
+    jdnsshared/jdnsshared.cpp
 )
 
-set(JDNS_HEADERS
-    qjdns.h
+set(TOMAHAWK_JDNS_HEADERS
+    jdns/qjdns.h
+    jdns/qjdns_helpers.h
+    jdnsshared/jdnsshared.h
+    jdnsshared/jdnsshared_helpers.h
 )
 
 include_directories(
+    .
     ${QT_INCLUDE_DIR}
     ${QT_INCLUDES}
+    jdns
 )
 
-qt4_wrap_cpp( JDNS_MOC ${JDNS_HEADERS} )
+qt4_wrap_cpp( TOMAHAWK_JDNS_MOC ${TOMAHAWK_JDNS_HEADERS} )
 
-if(WIN32)
-    ADD_LIBRARY(jdns SHARED ${JDNS_SOURCES} ${JDNS_MOC})
-else()
-    ADD_LIBRARY(jdns STATIC ${JDNS_SOURCES} ${JDNS_MOC})
-endif()
+ADD_LIBRARY(tomahawk_jdns SHARED ${TOMAHAWK_JDNS_SOURCES} ${TOMAHAWK_JDNS_MOC})
 
-target_link_libraries(jdns
+target_link_libraries(tomahawk_jdns
     ${QT_LIBRARIES}
 )
 
-INSTALL(TARGETS jdns ARCHIVE DESTINATION lib)
+SET_TARGET_PROPERTIES( tomahawk_jdns PROPERTIES DEFINE_SYMBOL  MAKE_JDNS_LIB )
+
+INSTALL(TARGETS tomahawk_jdns DESTINATION lib)

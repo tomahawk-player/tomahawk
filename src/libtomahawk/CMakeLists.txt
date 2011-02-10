@@ -258,6 +258,7 @@ set( libHeaders
     playlist/dynamic/widgets/MiscControlWidgets.h
     playlist/dynamic/widgets/CollapsibleControls.h
 
+    utils/tomahawkutils.h
     utils/querylabel.h
     utils/elidedlabel.h
     utils/animatedcounterlabel.h
@@ -296,6 +297,9 @@ include_directories( . ${CMAKE_CURRENT_BINARY_DIR} ..
     ../../qxt/qxtweb-standalone/qxtweb
     ../../rtaudio
     ../../alsa-playback
+    ../../thirdparty/jdns
+    ../../thirdparty/jdns/jdns
+    ../../thirdparty/jdns/jdnsshared
     playlist
 )
 
@@ -359,7 +363,7 @@ target_link_libraries( tomahawklib
     vorbisfile
     ogg
     FLAC++
-    jdns
+    tomahawk_jdns
     clucene
 )
 

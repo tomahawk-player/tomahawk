@@ -73,7 +73,7 @@ public:
 	/**
 	   \brief Destroys the object
 	*/
-	~JDnsSharedDebug();
+	virtual ~JDnsSharedDebug();
 
 	/**
 	   \brief Read the available debug information

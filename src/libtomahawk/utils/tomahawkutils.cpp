@@ -16,8 +16,11 @@
 #ifdef Q_WS_MAC
     #include <Carbon/Carbon.h>
     #include <sys/sysctl.h>
+#include <thirdparty/jdns/qjdns.h>
 #endif
 
+#include <qjdns.h>
+#include <jdnsshared.h>
 
 namespace TomahawkUtils
 {
@@ -303,6 +306,64 @@ void
 setProxy( QNetworkProxy* proxy )
 {
     s_proxy = proxy;
+}
+
+
+///////////////// DNSResolver /////////////////
+
+static DNSResolver* s_dnsResolver = 0;
+
+DNSResolver*
+dnsResolver()
+{
+    if( !s_dnsResolver )
+        s_dnsResolver = new DNSResolver();
+    
+    return s_dnsResolver;
+}
+
+DNSResolver::DNSResolver()
+{
+    m_dnsShared = new JDnsShared(JDnsShared::UnicastInternet);
+    m_dnsShared->addInterface(QHostAddress::Any);
+    m_dnsShared->addInterface(QHostAddress::AnyIPv6);
+    m_dnsSharedRequest = new JDnsSharedRequest(m_dnsShared);
+}
+
+void
+DNSResolver::resolve( QString &host, QString &type )
+{
+    connect(m_dnsSharedRequest, SIGNAL(resultsReady()), SLOT(resultsReady()));
+    if( type == "SRV" )
+    {
+        // For the moment, assume we are looking for XMPP...
+        m_dnsSharedRequest->query( "_xmpp-client._tcp." + host.toUtf8(), QJDns::Srv );
+    }
+    else
+    {
+        QString badResult( "NONE" );
+        emit result( badResult );
+    }
+}
+
+void
+DNSResolver::resultsReady()
+{
+    if( m_dnsSharedRequest->success() )
+    {
+        QList<QJDns::Record> results = m_dnsSharedRequest->results();
+        foreach( QJDns::Record r, results )
+        {
+            if( r.type == QJDns::Srv )
+            {
+                QString foundResult( r.name );
+                emit result( foundResult );
+                return;
+            }
+        }
+    }
+    QString badResult( "NONE" );
+    emit result( badResult );
 }
 
 } // ns
