@@ -15,7 +15,7 @@ SipHandler::SipHandler( QObject* parent )
     : QObject( parent )
 {
     m_connected = false;
-    loadPlugins();
+    loadPlugins( findPlugins() );
 }
 
 
@@ -24,29 +24,57 @@ SipHandler::~SipHandler()
 }
 
 
-void
-SipHandler::loadPlugins()
+QStringList
+SipHandler::findPlugins()
 {
-    QDir pluginsDir( qApp->applicationDirPath() );
+    QStringList paths;
+    QList< QDir > pluginDirs;
 
-    #if defined(Q_OS_MAC)
-    if ( pluginsDir.dirName() == "MacOS" )
+    QDir appDir( qApp->applicationDirPath() );
+    #ifdef Q_OS_MAC
+    if ( appDir.dirName() == "MacOS" )
     {
-      pluginsDir.cdUp();
-      pluginsDir.cdUp();
-      pluginsDir.cdUp();
+        // Development convenience-hack
+        appDir.cdUp();
+        appDir.cdUp();
+        appDir.cdUp();
     }
     #endif
-//    pluginsDir.cd( "plugins" );
 
-    foreach ( QString fileName, pluginsDir.entryList( QDir::Files ) )
+    QDir libDir( appDir );
+    libDir.cdUp();
+    libDir.cd( "lib" );
+
+    pluginDirs << appDir << libDir << QDir( qApp->applicationDirPath() );
+    foreach ( const QDir& pluginDir, pluginDirs )
+    {
+        qDebug() << "Checking directory for plugins:" << pluginDir;
+        foreach ( QString fileName, pluginDir.entryList( QDir::Files ) )
+        {
+            if ( fileName.startsWith( "libsip_" ) )
+            {
+                const QString path = pluginDir.absoluteFilePath( fileName );
+                if ( !paths.contains( path ) )
+                    paths << path;
+            }
+        }
+    }
+
+    return paths;
+}
+
+
+void
+SipHandler::loadPlugins( const QStringList& paths )
+{
+    foreach ( QString fileName, paths )
     {
         if ( !QLibrary::isLibrary( fileName ) )
             continue;
 
-        qDebug() << "Trying to load plugin:" << pluginsDir.absoluteFilePath( fileName );
+        qDebug() << "Trying to load plugin:" << fileName;
 
-        QPluginLoader loader( pluginsDir.absoluteFilePath( fileName ) );
+        QPluginLoader loader( fileName );
         QObject* plugin = loader.instance();
         if ( plugin )
         {

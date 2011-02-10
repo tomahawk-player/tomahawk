@@ -35,7 +35,8 @@ private slots:
     void onError( int code, const QString& msg );
 
 private:
-    void loadPlugins();
+    QStringList findPlugins();
+    void loadPlugins( const QStringList& paths );
     void loadPlugin( QObject* plugin );
 
     QList< SipPlugin* > m_plugins;
