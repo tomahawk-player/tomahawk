@@ -331,7 +331,7 @@ DNSResolver::DNSResolver()
 }
 
 void
-DNSResolver::resolve( QString &host, QString &type )
+DNSResolver::resolve( QString &host, QString type )
 {
     connect(m_dnsSharedRequest, SIGNAL(resultsReady()), SLOT(resultsReady()));
     if( type == "SRV" )
@@ -367,6 +367,7 @@ DNSResolver::resultsReady()
             }
         }
     }
+    qDebug() << "DNS resolve request was NOT successful! Error: " << (int)(m_dnsSharedRequest->error());
     QString badResult( "NONE" );
     emit result( badResult );
 }

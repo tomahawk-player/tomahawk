@@ -5,6 +5,7 @@
 #include <QTimer>
 #include <QString>
 #include <QRegExp>
+#include <utils/tomahawkutils.h>
 
 using namespace gloox;
 using namespace std;
@@ -12,6 +13,7 @@ using namespace std;
 
 Jabber_p::Jabber_p( const QString& jid, const QString& password, const QString& server, const int port )
     : QObject()
+    , m_server()
 {
     qDebug() << Q_FUNC_INFO;
     qsrand( QTime( 0, 0, 0 ).secsTo( QTime::currentTime() ) );
@@ -49,8 +51,7 @@ Jabber_p::Jabber_p( const QString& jid, const QString& password, const QString& 
     }
 
     m_client = QSharedPointer<gloox::Client>( new gloox::Client( m_jid, password.toStdString(), port ) );
-    if( !server.isEmpty() )
-        m_client->setServer( server.toStdString() );
+    m_server = server;
 }
 
 
@@ -65,6 +66,19 @@ Jabber_p::~Jabber_p()
     }
 }
 
+void
+Jabber_p::resolveHostSRV()
+{
+    if( m_server.isEmpty() )
+    {
+        qDebug() << "No server found!";
+        return;
+    }
+    TomahawkUtils::DNSResolver *resolver = TomahawkUtils::dnsResolver();
+    connect( resolver, SIGNAL(result(QString &)), SLOT(resolveResult(QString &)) );
+    qDebug() << "Resolving SRV record of " << m_server;
+    resolver->resolve( m_server, "SRV" );
+}
 
 void
 Jabber_p::setProxy( QNetworkProxy* proxy )
@@ -98,10 +112,25 @@ Jabber_p::setProxy( QNetworkProxy* proxy )
     }
 }
 
+void
+Jabber_p::resolveResult( QString& result )
+{
+    if ( result != "NONE" )
+        m_server = result;
+    qDebug() << "Final host name for XMPP server set to " << m_server;
+    QMetaObject::invokeMethod( this, "go", Qt::QueuedConnection );
+}
 
 void
 Jabber_p::go()
 {
+    if( !m_server.isEmpty() )
+        m_client->setServer( m_server.toStdString() );
+    else
+    {
+        qDebug() << "No server found!";
+        return;
+    }
     m_client->registerConnectionListener( this );
     m_client->rosterManager()->registerRosterListener( this );    
     m_client->logInstance().registerLogHandler( LogLevelWarning, LogAreaAll, this );
@@ -121,7 +150,7 @@ Jabber_p::go()
 
     // Handle proxy
     
-    if ( m_client->connect( false ) )
+    if( m_client->connect( false ) )
     {
         emit connected();
         QTimer::singleShot( 0, this, SLOT( doJabberRecv() ) );

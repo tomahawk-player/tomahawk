@@ -408,7 +408,7 @@ TomahawkApp::setupSIP()
     if( !arguments().contains( "--nosip" ) )
     {
         m_xmppBot = new XMPPBot( this );
-
+        qDebug() << "Connecting SIP classes";
         m_sipHandler->connect( true );
 //        m_sipHandler->setProxy( *TomahawkUtils::proxy() );
     }

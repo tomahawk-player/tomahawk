@@ -5,6 +5,7 @@
 #include <QNetworkInterface>
 #include <QFile>
 #include <QThread>
+#include <QNetworkProxy>
 #include <QNetworkRequest>
 #include <QNetworkReply>
 
@@ -40,6 +41,8 @@ Servent::Servent( QObject* parent )
 {
     s_instance = this;
 
+    setProxy( QNetworkProxy::NoProxy );
+    
     {
     boost::function<QSharedPointer<QIODevice>(result_ptr)> fac =
         boost::bind( &Servent::localFileIODeviceFactory, this, _1 );
@@ -75,6 +78,7 @@ Servent::startListening( QHostAddress ha, bool upnp, int port )
     if( !listen( ha, m_port ) && !listen( ha, ++m_port ) )
     {
         qDebug() << "Failed to listen on port" << m_port;
+        qDebug() << "Error string is " << errorString();
         return false;
     }
     else
@@ -83,6 +87,7 @@ Servent::startListening( QHostAddress ha, bool upnp, int port )
     }
 
     // --lanhack means to advertise your LAN IP over jabber as if it were externallyVisible
+    qDebug() << "Address mode = " << (int)(TomahawkSettings::instance()->externalAddressMode());
     switch( TomahawkSettings::instance()->externalAddressMode() )
     {
         case TomahawkSettings::Lan:
@@ -90,9 +95,7 @@ Servent::startListening( QHostAddress ha, bool upnp, int port )
             {
                 if( ha.toString() == "127.0.0.1" ) continue;
                 if( ha.toString().contains( ":" ) ) continue; //ipv6
-
-                m_externalAddress = ha;
-                m_externalPort = m_port;
+                QMetaObject::invokeMethod( this, "setExternalAddress", Qt::QueuedConnection, Q_ARG( QHostAddress, ha ), Q_ARG( unsigned int, m_port ) );
                 qDebug() << "LANHACK: set external address to lan address" << ha.toString();
                 break;
             }
@@ -100,6 +103,7 @@ Servent::startListening( QHostAddress ha, bool upnp, int port )
 
         case TomahawkSettings::DynDns:
             qDebug() << "External address mode set to dyndns...";
+            //FIXME: ready() is never emitted here, so it will not continue...
             m_externalHostname = TomahawkSettings::instance()->externalHostname();
             m_externalPort = TomahawkSettings::instance()->externalPort();
             qDebug() << m_externalHostname << m_externalPort;
@@ -112,9 +116,6 @@ Servent::startListening( QHostAddress ha, bool upnp, int port )
             connect( m_portfwd, SIGNAL( externalAddressDetected( QHostAddress, unsigned int ) ),
                                 SLOT( setExternalAddress( QHostAddress, unsigned int ) ) );
             break;
-
-        default:
-            emit ready();
     }
 
     return true;

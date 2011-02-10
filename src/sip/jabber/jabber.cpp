@@ -3,6 +3,7 @@
 #include "tomahawksettings.h"
 
 #include <QtPlugin>
+#include <QStringList>
 
 
 void
@@ -15,6 +16,7 @@ JabberPlugin::setProxy( QNetworkProxy* proxy )
 bool
 JabberPlugin::connect( bool startup )
 {
+    qDebug() << "JabberPlugin::connect";
     if ( startup && !TomahawkSettings::instance()->jabberAutoConnect() )
         return false;
 
@@ -23,12 +25,23 @@ JabberPlugin::connect( bool startup )
     QString password  = TomahawkSettings::instance()->jabberPassword();
     unsigned int port = TomahawkSettings::instance()->jabberPort();
 
+    QStringList splitJid = jid.split( '@', QString::SkipEmptyParts );
+    if ( splitJid.size() < 2 )
+    {
+        qDebug() << "JID did not have an @ in it, could not find a server part";
+        return false;
+    }
+    
     // gtalk check
-    if( server.isEmpty() && ( jid.contains( "@gmail.com" ) || jid.contains( "@googlemail.com" ) ) )
+    //FIXME: Can remove this once the SRV lookups work
+    if ( server.isEmpty() && ( splitJid[1] == "gmail.com" || splitJid[1]  == "googlemail.com" ) )
     {
         qDebug() << "Setting jabber server to talk.google.com";
         server = "talk.google.com";
     }
+
+    if ( server.isEmpty() )
+        server = splitJid[1];
 
     if ( port < 1 || port > 65535 || jid.isEmpty() || password.isEmpty() )
     {
@@ -47,8 +60,8 @@ JabberPlugin::connect( bool startup )
     QObject::connect( p, SIGNAL( disconnected() ), SIGNAL( disconnected() ) );
     QObject::connect( p, SIGNAL( authError( int, QString ) ), SLOT( onAuthError( int, QString ) ) );
 
-    p->go();
-
+    p->resolveHostSRV();
+    
     return true;
 }
 

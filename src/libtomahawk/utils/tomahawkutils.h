@@ -30,7 +30,7 @@ namespace TomahawkUtils
         explicit DNSResolver();
         ~DNSResolver() {}
         
-        void resolve( QString &host, QString &type );
+        void resolve( QString &host, QString type );
         
     signals:
         void result( QString &result );

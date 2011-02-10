@@ -68,6 +68,8 @@ public:
 
     void setProxy( QNetworkProxy* proxy );
 
+    void resolveHostSRV();
+    
     /// GLOOX IMPLEMENTATION STUFF FOLLOWS
     virtual void onConnect();
     virtual void onDisconnect( gloox::ConnectionError e );
@@ -120,6 +122,7 @@ signals:
     void authError( int, const QString& );
 
 public slots:
+    void resolveResult( QString & );
     void go();
     void sendMsg( const QString& to, const QString& msg );
     void broadcastMsg( const QString& msg );
@@ -137,6 +140,7 @@ private:
     QMap<gloox::Presence::PresenceType, QString> m_presences;
     QMap<QString, gloox::Presence::PresenceType> m_peers;
     QSharedPointer<gloox::VCardManager> m_vcardManager;
+    QString m_server;
 };
 
 #endif // JABBER_H
