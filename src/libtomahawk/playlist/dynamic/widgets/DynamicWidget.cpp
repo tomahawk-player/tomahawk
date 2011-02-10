@@ -148,6 +148,7 @@ DynamicWidget::loadDynamicPlaylist( const Tomahawk::dynplaylist_ptr& playlist )
     
     m_playlist = playlist;
     m_view->setOnDemand( m_playlist->mode() == OnDemand );
+    m_view->setReadOnly( !m_playlist->author()->isLocal() );
     m_model->loadPlaylist( m_playlist );
     m_controlsChanged = false;
     

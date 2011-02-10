@@ -25,6 +25,7 @@
 #include <QPaintEvent>
 #include <QtGui/qpaintengine.h>
 #include <QScrollBar>
+#include "DynamicModel.h"
 
 using namespace Tomahawk;
 
@@ -58,7 +59,7 @@ DynamicView::~DynamicView()
 }
 
 void 
-DynamicView::setModel( PlaylistModel* model)
+DynamicView::setModel( DynamicModel* model)
 {
     PlaylistView::setModel( model );
     
@@ -69,6 +70,12 @@ void
 DynamicView::setOnDemand( bool onDemand )
 {
     m_onDemand = onDemand;
+}
+
+void 
+DynamicView::setReadOnly( bool readOnly )
+{
+    m_readOnly = readOnly;
 }
 
 void 
@@ -94,10 +101,16 @@ DynamicView::onTrackCountChanged( unsigned int tracks )
 {
     if ( tracks == 0 )
     {
-        if( m_onDemand )
-            overlay()->setText( tr( "Add some filters above, and press Start to begin listening to this custom station!" ) );
-        else
-            overlay()->setText( tr( "Add some filters above, and press Generate to get started!" ) );
+        if( m_onDemand ) {
+            if( m_readOnly )
+                overlay()->setText( tr( "Press Start to begin listening to this custom station!" ) );
+            else
+                overlay()->setText( tr( "Add some filters above, and press Start to begin listening to this custom station!" ) );
+        } else
+            if( m_readOnly )
+                overlay()->setText( tr( "Press Generate to get started!" ) );
+            else
+                overlay()->setText( tr( "Add some filters above, and press Generate to get started!" ) );
         if( !overlay()->shown() )
             overlay()->show();
     }

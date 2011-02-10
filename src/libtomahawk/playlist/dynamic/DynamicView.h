@@ -26,6 +26,9 @@ class PlaylistModel;
 class TrackModel;
 namespace Tomahawk
 {
+
+class DynamicModel;
+
     
 class DynamicView : public PlaylistView
 {
@@ -34,9 +37,10 @@ public:
     explicit DynamicView( QWidget* parent = 0 );
     virtual ~DynamicView();
     
-    virtual void setModel( PlaylistModel* model );
+    virtual void setModel( DynamicModel* model );
     
     void setOnDemand( bool onDemand );
+    void setReadOnly( bool readOnly );
     
     virtual void paintEvent(QPaintEvent* event);
     
@@ -57,6 +61,7 @@ private:
     QString m_body;
     
     bool m_onDemand;
+    bool m_readOnly;
     
     // for collapsing animation
     QPoint m_fadingPointAnchor;
