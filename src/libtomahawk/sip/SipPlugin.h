@@ -16,7 +16,7 @@ public:
     virtual ~SipPlugin() {}
 
 public slots:
-    virtual bool connect() = 0;
+    virtual bool connect( bool startup = false ) = 0;
     virtual void disconnect() = 0;
 
     virtual void addContact( const QString &jid, const QString& msg = QString() ) = 0;

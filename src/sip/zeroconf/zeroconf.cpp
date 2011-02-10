@@ -4,7 +4,7 @@
 
 
 bool
-ZeroconfPlugin::connect()
+ZeroconfPlugin::connect( bool /*startup*/ )
 {
     delete m_zeroconf;
     m_zeroconf = new TomahawkZeroconf( Servent::instance()->port(), this );

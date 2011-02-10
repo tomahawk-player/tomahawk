@@ -337,7 +337,11 @@ DNSResolver::resolve( QString &host, QString &type )
     if( type == "SRV" )
     {
         // For the moment, assume we are looking for XMPP...
-        m_dnsSharedRequest->query( "_xmpp-client._tcp." + host.toUtf8(), QJDns::Srv );
+        QString fullHost( "_xmpp-client._tcp." + host );
+        
+        qDebug() << "Looking up SRV record for " << fullHost.toUtf8();
+
+        m_dnsSharedRequest->query( fullHost.toUtf8(), QJDns::Srv );
     }
     else
     {
@@ -354,6 +358,7 @@ DNSResolver::resultsReady()
         QList<QJDns::Record> results = m_dnsSharedRequest->results();
         foreach( QJDns::Record r, results )
         {
+	    qDebug() << "Found result (of some type): " << QString( r.name );
             if( r.type == QJDns::Srv )
             {
                 QString foundResult( r.name );

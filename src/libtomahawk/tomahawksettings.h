@@ -51,7 +51,7 @@ public:
     QString jabberServer() const;
     void setJabberServer( const QString& server );
     
-    int jabberPort() const; // default is 5222
+    unsigned int jabberPort() const; // default is 5222
     void setJabberPort( int port );
     
     /// Network settings

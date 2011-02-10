@@ -18,6 +18,11 @@ class JDnsSharedRequest;
 
 namespace TomahawkUtils
 {
+    //NOTE: The JDnsShared system is supposed to allow you to make multiple requests
+    //at once, but either I'm a dumbass, or it's a broken paradigm, or both,
+    //because there's no way that I can see to tell what result is for what query.
+    //Be aware of this if ever we want to do parallel connections/lookups; turn it into
+    //a non-static non-singleton normal utility class then.
     class DLLEXPORT DNSResolver : public QObject
     {
         Q_OBJECT

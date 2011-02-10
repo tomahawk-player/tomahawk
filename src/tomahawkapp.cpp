@@ -409,7 +409,7 @@ TomahawkApp::setupSIP()
     {
         m_xmppBot = new XMPPBot( this );
 
-        m_sipHandler->connect();
+        m_sipHandler->connect( true );
 //        m_sipHandler->setProxy( *TomahawkUtils::proxy() );
     }
 }

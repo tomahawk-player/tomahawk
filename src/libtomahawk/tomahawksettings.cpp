@@ -241,16 +241,18 @@ TomahawkSettings::setJabberAutoConnect( bool autoconnect )
 }
 
 
-int
+unsigned int
 TomahawkSettings::jabberPort() const
 {
-    return value( "jabber/port", 5222 ).toInt();
+    return value( "jabber/port", 5222 ).toUInt();
 }
 
 
 void
 TomahawkSettings::setJabberPort( int port )
 {
+    if ( port < 0 )
+      return;
     setValue( "jabber/port", port );
 }
 

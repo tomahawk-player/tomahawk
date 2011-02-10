@@ -19,7 +19,7 @@ public:
     virtual ~ZeroconfPlugin() {}
 
 public slots:
-    virtual bool connect();
+    virtual bool connect( bool startup );
 
     void disconnect()
     {

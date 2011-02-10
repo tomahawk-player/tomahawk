@@ -19,7 +19,7 @@ public:
 public slots:
     void addContact( const QString& id ) { qDebug() << Q_FUNC_INFO << id; }
 
-    void connect();
+    void connect( bool startup = false );
     void disconnect();
     void toggleConnect();
 

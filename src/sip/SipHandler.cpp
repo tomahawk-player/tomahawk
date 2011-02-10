@@ -114,10 +114,10 @@ SipHandler::loadPlugin( QObject* plugin )
 
 
 void
-SipHandler::connect()
+SipHandler::connect( bool startup )
 {
     foreach( SipPlugin* sip, m_plugins )
-        sip->connect();
+        sip->connect( startup );
     m_connected = true;
 }
 
