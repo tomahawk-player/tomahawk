@@ -14,6 +14,9 @@ ELSE()
 ENDIF()
 
 FIND_PACKAGE( Taglib 1.6.0 REQUIRED )
+include( CheckTagLibFileName )
+check_taglib_filename( COMPLEX_TAGLIB_FILENAME )
+
 FIND_PACKAGE( LibLastFm 0.3.3 REQUIRED )
 FIND_PACKAGE( LibEchonest 1.1.1 REQUIRED )
 FIND_PACKAGE( CLucene REQUIRED )
@@ -29,4 +32,3 @@ ADD_SUBDIRECTORY( libportfwd )
 ADD_SUBDIRECTORY( qxt )
 ADD_SUBDIRECTORY( src/libtomahawk )
 ADD_SUBDIRECTORY( src )
-

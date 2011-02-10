@@ -9,10 +9,12 @@
 #include "network/connection.h"
 #include "result.h"
 
+#include "dllmacro.h"
+
 class ControlConnection;
 class BufferIODevice;
 
-class FileTransferConnection : public Connection
+class DLLEXPORT FileTransferConnection : public Connection
 {
 Q_OBJECT
 

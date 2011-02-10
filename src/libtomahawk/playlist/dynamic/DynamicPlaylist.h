@@ -25,6 +25,8 @@
 #include "typedefs.h"
 #include "playlist/dynamic/DynamicControl.h"
 
+#include "dllmacro.h"
+
 class DatabaseCommand_LoadAllDynamicPlaylists;
 class DatabaseCommand_SetDynamicPlaylistRevision;
 class DatabaseCommand_CreateDynamicPlaylist;
@@ -37,7 +39,7 @@ namespace Tomahawk {
  *  It uses normal PlaylistEntries but also has a mode, a generator, and a list of controls
 */
 
-struct DynamicPlaylistRevision : PlaylistRevision
+struct DLLEXPORT DynamicPlaylistRevision : PlaylistRevision
 {
     QList< dyncontrol_ptr > controls;
     Tomahawk::GeneratorMode mode;
@@ -56,7 +58,7 @@ struct DynamicPlaylistRevision : PlaylistRevision
     DynamicPlaylistRevision() {}
 };
 
-class DynamicPlaylist : public Playlist
+class DLLEXPORT DynamicPlaylist : public Playlist
 {
     Q_OBJECT
     

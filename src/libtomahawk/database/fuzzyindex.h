@@ -7,26 +7,34 @@
 #include <QString>
 #include <QMutex>
 
+#ifndef WIN32
 namespace lucene
 {
     namespace analysis
     {
-        class SimpleAnalyzer;
+      class SimpleAnalyzer;
     }
     namespace store
     {
-        class Directory;
+      class Directory;
     }
     namespace index
     {
-        class IndexReader;
-        class IndexWriter;
+      class IndexReader;
+      class IndexWriter;
     }
     namespace search
     {
-        class IndexSearcher;
+      class IndexSearcher;
     }
 }
+#else
+class SimpleAnalyzer;
+class Directory;
+class IndexReader;
+class IndexWriter;
+class IndexSearcher;
+#endif
 
 class DatabaseImpl;
 
@@ -54,10 +62,17 @@ private:
     DatabaseImpl& m_db;
     QMutex m_mutex;
 
+    #ifndef WIN32
     lucene::analysis::SimpleAnalyzer* m_analyzer;
     lucene::store::Directory* m_luceneDir;
     lucene::index::IndexReader* m_luceneReader;
     lucene::search::IndexSearcher* m_luceneSearcher;
+    #else
+    SimpleAnalyzer* m_analyzer;
+    Directory* m_luceneDir;
+    IndexReader* m_luceneReader;
+    IndexSearcher* m_luceneSearcher;
+    #endif
 };
 
 #endif // FUZZYINDEX_H
