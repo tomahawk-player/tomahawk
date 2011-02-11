@@ -39,6 +39,9 @@ class ReadOrWriteWidget;
 namespace Tomahawk
 {
 
+class DynamicSetupWidget;
+
+
 class DynamicModel;
 
 
@@ -65,18 +68,24 @@ public:
     virtual QSize sizeHint() const;
     virtual void resizeEvent( QResizeEvent* );
     virtual void hideEvent(QHideEvent* );
+    
+    static void paintRoundedFilledRect( QPainter& p, QPalette& pal, QRect& r, qreal opacity = .95 );
 public slots:
     void onRevisionLoaded( const Tomahawk::DynamicPlaylistRevision& rev );
+    void playlistTypeChanged(QString);
+    
+    void startStation();
+    void stopStation();
     
 private slots:
-    void generateOrStart();
+    void generate( int = -1 );
     void tracksGenerated( const QList< Tomahawk::query_ptr>& queries );
     void generatorError( const QString& title, const QString& content );
     
     void controlsChanged();
     void controlChanged( const Tomahawk::dyncontrol_ptr& control );
     
-    void layoutSteerer();
+    void layoutFloatingWidgets();
 private:
     void applyModeChange( int mode );
     
@@ -84,6 +93,9 @@ private:
     QVBoxLayout* m_layout;
     bool m_resolveOnNextLoad;
     int m_seqRevLaunched; // if we shoot off multiple createRevision calls, we don'y want to set one of the middle ones
+    
+    // setup controls
+    DynamicSetupWidget* m_setup;
     
     // used in OnDemand mode
     bool m_runningOnDemand;

@@ -34,6 +34,8 @@
 #include "DynamicControlWrapper.h"
 #include "dynamic/DynamicView.h"
 #include <qevent.h>
+#include "DynamicSetupWidget.h"
+#include <QPainter>
 
 using namespace Tomahawk;
 
@@ -42,6 +44,7 @@ DynamicWidget::DynamicWidget( const Tomahawk::dynplaylist_ptr& playlist, QWidget
     , m_layout( new QVBoxLayout )
     , m_resolveOnNextLoad( false )
     , m_seqRevLaunched( 0 )
+    , m_setup( 0 )
     , m_runningOnDemand( false )
     , m_controlsChanged( false )
     , m_steering( 0 )
@@ -66,7 +69,7 @@ DynamicWidget::DynamicWidget( const Tomahawk::dynplaylist_ptr& playlist, QWidget
     
     m_generateButton = new QPushButton( tr( "Generate" ), this );
     m_generateButton->setAttribute( Qt::WA_LayoutUsesWidgetRect );
-    connect( m_generateButton, SIGNAL( clicked( bool ) ), this, SLOT( generateOrStart() ) );
+    connect( m_generateButton, SIGNAL( clicked( bool ) ), this, SLOT( generate() ) );
     m_headerLayout->addWidget( m_generateButton );
     
     m_headerLayout->addStretch( 1 );
@@ -83,8 +86,6 @@ DynamicWidget::DynamicWidget( const Tomahawk::dynplaylist_ptr& playlist, QWidget
     }
     m_headerLayout->addWidget(m_logo);
     
-    m_layout->addLayout( m_headerLayout );
-    
     m_controls = new CollapsibleControls( this );
     m_layout->addWidget( m_controls );
     
@@ -96,6 +97,25 @@ DynamicWidget::DynamicWidget( const Tomahawk::dynplaylist_ptr& playlist, QWidget
     
     connect( m_model, SIGNAL( collapseFromTo( int, int ) ), m_view, SLOT( collapseEntries( int, int ) ), Qt::QueuedConnection );
     connect( m_model, SIGNAL( trackGenerationFailure( QString ) ), m_view, SLOT( showMessage( QString ) ) );    
+    
+    
+    m_setup = new DynamicSetupWidget( playlist, this );
+    if( playlist->mode() == Static ) {
+        m_setup->hide();
+        
+        m_layout->addLayout( m_headerLayout );
+    } else {
+        m_setup->fadeIn();
+        
+        // hide the widgets, removing them from layout
+        // TODO HACK these need to go away, need a good UI design
+        m_headerText->hide();
+        m_generatorCombo->hide();
+        m_generateButton->hide();
+        m_genNumber->hide();
+        m_logo->hide();
+    }
+    
     loadDynamicPlaylist( playlist );
     
     m_layout->setContentsMargins( 0, 0, 0, 0 );
@@ -103,6 +123,12 @@ DynamicWidget::DynamicWidget( const Tomahawk::dynplaylist_ptr& playlist, QWidget
     m_layout->setSpacing( 0 );
     setLayout( m_layout );
 
+    
+    connect( m_setup, SIGNAL( generatePressed( int ) ), this, SLOT( generate( int ) ) );
+    connect( m_setup, SIGNAL( typeChanged( QString ) ), this, SLOT( playlistTypeChanged( QString ) ) );
+    
+    layoutFloatingWidgets();
+    
     connect( m_controls, SIGNAL( controlChanged( Tomahawk::dyncontrol_ptr ) ), this, SLOT( controlChanged( Tomahawk::dyncontrol_ptr ) ), Qt::QueuedConnection );
     connect( m_controls, SIGNAL( controlsChanged() ), this, SLOT( controlsChanged() ), Qt::QueuedConnection );
 }
@@ -147,14 +173,35 @@ DynamicWidget::loadDynamicPlaylist( const Tomahawk::dynplaylist_ptr& playlist )
         disconnect( m_playlist->generator().data(), SIGNAL( error( QString, QString ) ), this, SLOT( generatorError( QString, QString ) ) );
     }
     
+    if( m_playlist.isNull() || m_playlist->mode() != playlist->mode() ) { // update our ui with the appropriate controls
+            if( playlist->mode() == Static ) {
+                m_setup->hide();
+                
+                m_layout->insertLayout( 0, m_headerLayout );
+            } else {
+                m_setup->fadeIn();
+
+                // hide the widgets, removing them from layout
+                // TODO HACK these need to go away, need a good UI design
+                m_headerText->hide();
+                m_generatorCombo->hide();
+                m_generateButton->hide();
+                m_genNumber->hide();
+                m_logo->hide();
+                m_layout->removeItem( m_headerLayout );
+            }
+    }
+    
     m_playlist = playlist;
     m_view->setOnDemand( m_playlist->mode() == OnDemand );
     m_view->setReadOnly( !m_playlist->author()->isLocal() );
     m_model->loadPlaylist( m_playlist );
     m_controlsChanged = false;
+    m_setup->setPlaylist( m_playlist );
     
     if( !m_playlist.isNull() )
         m_controls->setControls( m_playlist, m_playlist->author()->isLocal() );
+    
     
     m_generatorCombo->setWritable( playlist->author()->isLocal() );
     m_generatorCombo->setLabel( qobject_cast< QComboBox* >( m_generatorCombo->writableWidget() )->currentText() );
@@ -196,13 +243,18 @@ DynamicWidget::sizeHint() const
 void 
 DynamicWidget::resizeEvent(QResizeEvent* )
 {
-    layoutSteerer();
+    layoutFloatingWidgets();
 }
 
 void 
-DynamicWidget::layoutSteerer()
+DynamicWidget::layoutFloatingWidgets()
 {
-    if( m_runningOnDemand && m_steering ) {
+    if( m_playlist->mode() == OnDemand && !m_runningOnDemand ) {
+        int x = ( width() / 2 ) - ( m_setup->size().width() / 2 );
+        int y = height() - m_setup->size().height() - 40; // padding
+        
+        m_setup->move( x, y );
+    } else if( m_runningOnDemand && m_steering ) {
         int x = ( width() / 2 ) - ( m_steering->size().width() / 2 );
         int y = height() - m_steering->size().height() - 40; // padding
         
@@ -214,50 +266,68 @@ void
 DynamicWidget::hideEvent( QHideEvent* ev )
 {
     if( m_runningOnDemand ) {
-        generateOrStart();
+        stopStation();
     }
     QWidget::hideEvent( ev );
 }
 
 
 void 
-DynamicWidget::generateOrStart()
+DynamicWidget::generate( int num )
 {
     if( m_playlist->mode() == Static ) 
     {
         // get the items from the generator, and put them in the playlist
-        m_playlist->generator()->generate( m_genNumber->value() );
+        m_playlist->generator()->generate( num == -1 ? m_genNumber->value() : num ); // HACK while in transition
     } else if( m_playlist->mode() == OnDemand ) {
-        if( m_runningOnDemand == false ) {
-            m_runningOnDemand = true;
-            m_model->startOnDemand();
-            
-            m_generateButton->setText( tr( "Stop" ) );
-            
-            
-            // show the steering controls
-            if( m_playlist->generator()->onDemandSteerable() ) {
-                // position it horizontally centered, above the botton.
-                m_steering = m_playlist->generator()->steeringWidget();
-                Q_ASSERT( m_steering );
-                
-                int x = ( width() / 2 ) - ( m_steering->size().width() / 2 );
-                int y = height() - m_steering->size().height() - 40; // padding
-                
-                m_steering->setParent( this );
-                m_steering->move( x, y );
-                m_steering->show();
-                
-                connect( m_steering, SIGNAL( resized() ), this, SLOT( layoutSteerer() ) );
-            }
-        } else { // stop
-            m_model->stopOnDemand();
-            m_runningOnDemand = false;
-            delete m_steering;
-            m_steering = 0;
-            m_generateButton->setText( tr( "Start" ) );
-        }
+
     }
+}
+
+void 
+DynamicWidget::stopStation()
+{
+    m_model->stopOnDemand();
+    m_runningOnDemand = false;
+    
+    // TODO until i add a qwidget interface
+    QMetaObject::invokeMethod( m_steering, SLOT( fadeOut() ), Qt::DirectConnection );
+    
+    m_generateButton->setText( tr( "Start" ) );
+}
+
+void 
+DynamicWidget::startStation()
+{
+    m_runningOnDemand = true;
+    m_model->startOnDemand();
+    
+    m_generateButton->setText( tr( "Stop" ) );
+    
+    m_setup->fadeOut();
+    // show the steering controls
+    if( m_playlist->generator()->onDemandSteerable() ) {
+        // position it horizontally centered, above the botton.
+        m_steering = m_playlist->generator()->steeringWidget();
+        Q_ASSERT( m_steering );
+        
+        int x = ( width() / 2 ) - ( m_steering->size().width() / 2 );
+        int y = height() - m_steering->size().height() - 40; // padding
+        
+        m_steering->setParent( this );
+        m_steering->move( x, y );
+        
+        // TODO until i add a qwidget interface
+        QMetaObject::invokeMethod( m_steering, SLOT( fadeIn() ), Qt::DirectConnection );
+        
+        connect( m_steering, SIGNAL( resized() ), this, SLOT( layoutFloatingWidgets() ) );
+    }
+}
+
+void 
+DynamicWidget::playlistTypeChanged( QString )
+{
+    // TODO
 }
 
 void 
@@ -321,5 +391,24 @@ DynamicWidget::generatorError( const QString& title, const QString& content )
     m_view->showMessageTimeout( title, content );
     
     if( m_runningOnDemand )
-        generateOrStart();
+        stopStation();
+}
+
+void
+DynamicWidget::paintRoundedFilledRect( QPainter& p, QPalette& pal, QRect& r, qreal opacity )
+{   
+    p.setBackgroundMode( Qt::TransparentMode );
+    p.setRenderHint( QPainter::Antialiasing );
+    p.setOpacity( 0.7 );
+    
+    QPen pen( pal.dark().color(), .5 );
+    p.setPen( pen );
+    p.setBrush( pal.highlight() );
+    
+    p.drawRoundedRect( r, 10, 10 );
+    
+    p.setOpacity( opacity );
+    p.setBrush( QBrush() );
+    p.setPen( pen );
+    p.drawRoundedRect( r, 10, 10 );
 }

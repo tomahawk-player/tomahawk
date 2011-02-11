@@ -26,6 +26,8 @@
 #include <Playlist.h>
 #include <QPainter>
 #include <QToolButton>
+#include <dynamic/widgets/DynamicWidget.h>
+#include <QPropertyAnimation>
 
 using namespace Tomahawk;
 
@@ -107,6 +109,11 @@ EchonestSteerer::EchonestSteerer( QWidget* parent )
     
     connect( &m_resizeAnim, SIGNAL( frameChanged( int ) ), this, SLOT( resizeFrame( int ) ) );
     
+    
+    m_fadeAnim = new QPropertyAnimation( this, "opacity", this );
+    m_fadeAnim->setDuration( ANIM_DURATION );
+    m_fadeAnim->setStartValue( 0 );
+    m_fadeAnim->setStartValue( 100 );
     resize( sizeHint() );
 }
 
@@ -115,22 +122,36 @@ EchonestSteerer::paintEvent( QPaintEvent* )
 {
     QPainter p( this );
     QRect r = contentsRect();
+    QPalette pal = palette();
     
-    p.setBackgroundMode( Qt::TransparentMode );
-    p.setRenderHint( QPainter::Antialiasing );
-    p.setOpacity( 0.7 );
-    
-    QPen pen( palette().dark().color(), .5 );
-    p.setPen( pen );
-    p.setBrush( palette().highlight() );
-    
-    p.drawRoundedRect( r, 10, 10 );
-    
-    p.setOpacity( .95 );
-    p.setBrush( QBrush() );
-    p.setPen( pen );
-    p.drawRoundedRect( r, 10, 10 );
+    DynamicWidget::paintRoundedFilledRect( p, pal, r, m_opacity );
 }
+
+void 
+EchonestSteerer::setOpacity( qreal opacity )
+{
+    m_opacity = opacity / 100.0;
+    if( m_opacity == 1 )
+        show();
+    else if( m_opacity == 0 )
+        hide();
+    repaint();
+}
+
+void 
+EchonestSteerer::fadeIn()
+{
+    m_fadeAnim->setDirection( QAbstractAnimation::Forward );
+    m_fadeAnim->start();
+}
+
+void 
+EchonestSteerer::fadeOut()
+{
+    m_fadeAnim->setDirection( QAbstractAnimation::Backward );
+    m_fadeAnim->start();
+}
+
 
 void 
 EchonestSteerer::changed()
@@ -191,7 +212,7 @@ EchonestSteerer::resizeFrame( int width )
 {
 //     qDebug() << "RESIZING TO:" << width;
     resize( width, sizeHint().height() );
-    update();
+    repaint();
     
     emit resized();
 }

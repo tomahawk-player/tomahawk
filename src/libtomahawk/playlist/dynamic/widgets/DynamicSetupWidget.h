@@ -1,5 +1,5 @@
 /****************************************************************************************
- * Copyright (c) 2011 Leo Franchi <lfranchi@kde.org>                                    *
+ * Copyright (c) 2010-2011 Leo Franchi <lfranchi@kde.org>                               *
  *                                                                                      *
  * This program is free software; you can redistribute it and/or modify it under        *
  * the terms of the GNU General Public License as published by the Free Software        *
@@ -14,72 +14,60 @@
  * this program.  If not, see <http://www.gnu.org/licenses/>.                           *
  ****************************************************************************************/
 
-#ifndef ECHONEST_STEERER_H
-#define ECHONEST_STEERER_H
+#ifndef DYNAMIC_SETUP_WIDGET_H
+#define DYNAMIC_SETUP_WIDGET_H
 
 #include <QWidget>
-#include <QTimeLine>
+#include <typedefs.h>
 
 class QPropertyAnimation;
-class QToolButton;
-class QLabel;
-class QComboBox;
-class QVBoxLayout;
-class QLineEdit;
+class QPaintEvent;
 class QHBoxLayout;
+class QSpinBox;
+class QPushButton;
+class QLabel;
+class ReadOrWriteWidget;
+class QLabel;
 
-namespace Tomahawk 
+namespace Tomahawk
 {
-    
-class EchonestSteerer : public QWidget
+
+/**
+ * Widget used to choose a type of dynamic playlist, and to set the number/generate if it's a static one.
+ */
+class DynamicSetupWidget : public QWidget
 {
     Q_OBJECT
     Q_PROPERTY( qreal opacity READ opacity WRITE setOpacity )
-    
 public:
-    EchonestSteerer( QWidget*  parent = 0 );
+    DynamicSetupWidget( const Tomahawk::dynplaylist_ptr& playlist, QWidget* parent = 0 );
+    virtual ~DynamicSetupWidget();
     
-    virtual void paintEvent(QPaintEvent* );
-    
-public slots:
-    void resetSteering( bool automatic = false );
+    void setPlaylist( const dynplaylist_ptr& playlist );
     
     void fadeIn();
     void fadeOut();
+    
     qreal opacity() const { return m_opacity; }
     void setOpacity( qreal opacity );
+    
+    virtual void paintEvent( QPaintEvent* );
 signals:
-    void steerField( const QString& field );
-    void steerDescription( const QString& desc );
-    void reset();
+    void generatePressed( int num );
+    void typeChanged( const QString& playlistType );
     
-    void resized();
 private slots:
-    void changed();
-    
-    void resizeFrame( int );
+    void generatePressed( bool );
     
 private:
-    QToolButton* initButton( QWidget* parent );
+    dynplaylist_ptr m_playlist;
     
+    QLabel* m_headerText;
     QHBoxLayout* m_layout;
-    
-    QComboBox* m_amplifier;
-    QComboBox* m_field;
-    
-    QLineEdit* m_description;
-    
-    // text on the left
-    QVBoxLayout* m_textL;
-    QLabel* m_steerTop;
-    QLabel* m_steerBottom;
-    
-    // icons on the right
-    QToolButton* m_reset;
-   
-    // animations
-    QTimeLine m_resizeAnim;
-    bool m_expanding;
+    ReadOrWriteWidget* m_generatorCombo;
+    QLabel* m_logo;
+    QPushButton* m_generateButton;
+    QSpinBox* m_genNumber;
     
     QPropertyAnimation* m_fadeAnim;
     qreal m_opacity;
