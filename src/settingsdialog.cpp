@@ -47,20 +47,19 @@ SettingsDialog::SettingsDialog( QWidget *parent )
     ui->jabberPassword->setText( s->jabberPassword() );
     ui->jabberServer->setText( s->jabberServer() );
     ui->jabberPort->setValue( s->jabberPort() );
+    ui->staticHostName->setText( s->externalHostname() );
     ui->proxyButton->setVisible( false );
 
     if ( ui->jabberPort->text().toInt() != 5222 || !ui->jabberServer->text().isEmpty() )
     {
-        ui->checkBoxJabberAdvanced->setChecked( true );
+        ui->checkBoxAdvanced->setChecked( true );
     }
     else
     {
         // hide advanved settings
-        ui->checkBoxJabberAdvanced->setChecked( false );
-        ui->jabberServer->setVisible( false );
-        ui->jabberPort->setVisible( false );
-        ui->labelJabberServer->setVisible( false );
-        ui->labelJabberPort->setVisible( false );
+        ui->checkBoxAdvanced->setChecked( false );
+        ui->groupBoxJabberAdvanced->setVisible( false );
+        ui->groupBoxNetworkAdvanced->setVisible( false );
     }
 
     // MUSIC SCANNER
@@ -117,6 +116,8 @@ SettingsDialog::~SettingsDialog()
         s->setJabberPassword(                               ui->jabberPassword->text() );
         s->setJabberServer(                                 ui->jabberServer->text() );
         s->setJabberPort(                                   ui->jabberPort->value() );
+        
+        s->setExternalHostname(                             ui->staticHostName->text() );
 
         s->setScannerPath(                                  ui->lineEditMusicPath->text() );
         
