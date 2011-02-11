@@ -32,14 +32,6 @@ JabberPlugin::connect( bool startup )
         return false;
     }
     
-    // gtalk check
-    //FIXME: Can remove this once the SRV lookups work
-    if ( server.isEmpty() && ( splitJid[1] == "gmail.com" || splitJid[1]  == "googlemail.com" ) )
-    {
-        qDebug() << "Setting jabber server to talk.google.com";
-        server = "talk.google.com";
-    }
-
     if ( server.isEmpty() )
         server = splitJid[1];
 
