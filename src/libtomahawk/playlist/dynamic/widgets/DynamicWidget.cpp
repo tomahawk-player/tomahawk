@@ -37,6 +37,10 @@
 #include "DynamicSetupWidget.h"
 #include <QPainter>
 
+#include "tomahawk/tomahawkapp.h"
+#include "tomahawkwindow.h"
+#include "audiocontrols.h"
+
 using namespace Tomahawk;
 
 DynamicWidget::DynamicWidget( const Tomahawk::dynplaylist_ptr& playlist, QWidget* parent )
@@ -48,44 +52,10 @@ DynamicWidget::DynamicWidget( const Tomahawk::dynplaylist_ptr& playlist, QWidget
     , m_runningOnDemand( false )
     , m_controlsChanged( false )
     , m_steering( 0 )
-    , m_headerText( 0 )
-    , m_headerLayout( 0 )
-    , m_generatorCombo( 0 )
-    , m_logo( 0 )
-    , m_generateButton( 0 )
     , m_controls( 0 )
     , m_view( 0 )
     , m_model()
 {   
-    m_headerLayout = new QHBoxLayout;
-    m_headerText = new QLabel( tr( "Type:" ), this );
-    m_headerLayout->addWidget( m_headerText );
-
-    QComboBox* gen = new QComboBox( this );
-    foreach( const QString& type, GeneratorFactory::types() )
-        gen->addItem( type );
-    m_generatorCombo = new ReadOrWriteWidget( gen, playlist->author()->isLocal(), this );
-    m_headerLayout->addWidget( m_generatorCombo );
-    
-    m_generateButton = new QPushButton( tr( "Generate" ), this );
-    m_generateButton->setAttribute( Qt::WA_LayoutUsesWidgetRect );
-    connect( m_generateButton, SIGNAL( clicked( bool ) ), this, SLOT( generate() ) );
-    m_headerLayout->addWidget( m_generateButton );
-    
-    m_headerLayout->addStretch( 1 );
-    
-    m_genNumber = new QSpinBox( this );
-    m_genNumber->setValue( 15 );
-    m_genNumber->setMinimum( 0 );
-    m_genNumber->hide();
-    
-    m_logo = new QLabel( this );
-    if( !playlist->generator()->logo().isNull() ) {
-        QPixmap p = playlist->generator()->logo().scaledToHeight( 16, Qt::SmoothTransformation );
-        m_logo->setPixmap( p );
-    }
-    m_headerLayout->addWidget(m_logo);
-    
     m_controls = new CollapsibleControls( this );
     m_layout->addWidget( m_controls );
     
@@ -100,21 +70,7 @@ DynamicWidget::DynamicWidget( const Tomahawk::dynplaylist_ptr& playlist, QWidget
     
     
     m_setup = new DynamicSetupWidget( playlist, this );
-    if( playlist->mode() == Static ) {
-        m_setup->hide();
-        
-        m_layout->addLayout( m_headerLayout );
-    } else {
-        m_setup->fadeIn();
-        
-        // hide the widgets, removing them from layout
-        // TODO HACK these need to go away, need a good UI design
-        m_headerText->hide();
-        m_generatorCombo->hide();
-        m_generateButton->hide();
-        m_genNumber->hide();
-        m_logo->hide();
-    }
+    m_setup->fadeIn();
     
     loadDynamicPlaylist( playlist );
     
@@ -131,6 +87,10 @@ DynamicWidget::DynamicWidget( const Tomahawk::dynplaylist_ptr& playlist, QWidget
     
     connect( m_controls, SIGNAL( controlChanged( Tomahawk::dyncontrol_ptr ) ), this, SLOT( controlChanged( Tomahawk::dyncontrol_ptr ) ), Qt::QueuedConnection );
     connect( m_controls, SIGNAL( controlsChanged() ), this, SLOT( controlsChanged() ), Qt::QueuedConnection );
+    
+    
+    connect( TomahawkApp::instance()->mainWindow()->audioControls(), SIGNAL( playPressed() ), this, SLOT( playPressed() ) );
+    connect( TomahawkApp::instance()->mainWindow()->audioControls(), SIGNAL( pausePressed() ), this, SLOT( pausePressed() ) );
 }
 
 DynamicWidget::~DynamicWidget()
@@ -173,24 +133,6 @@ DynamicWidget::loadDynamicPlaylist( const Tomahawk::dynplaylist_ptr& playlist )
         disconnect( m_playlist->generator().data(), SIGNAL( error( QString, QString ) ), this, SLOT( generatorError( QString, QString ) ) );
     }
     
-    if( m_playlist.isNull() || m_playlist->mode() != playlist->mode() ) { // update our ui with the appropriate controls
-            if( playlist->mode() == Static ) {
-                m_setup->hide();
-                
-                m_layout->insertLayout( 0, m_headerLayout );
-            } else {
-                m_setup->fadeIn();
-
-                // hide the widgets, removing them from layout
-                // TODO HACK these need to go away, need a good UI design
-                m_headerText->hide();
-                m_generatorCombo->hide();
-                m_generateButton->hide();
-                m_genNumber->hide();
-                m_logo->hide();
-                m_layout->removeItem( m_headerLayout );
-            }
-    }
     
     m_playlist = playlist;
     m_view->setOnDemand( m_playlist->mode() == OnDemand );
@@ -202,15 +144,9 @@ DynamicWidget::loadDynamicPlaylist( const Tomahawk::dynplaylist_ptr& playlist )
     if( !m_playlist.isNull() )
         m_controls->setControls( m_playlist, m_playlist->author()->isLocal() );
     
-    
-    m_generatorCombo->setWritable( playlist->author()->isLocal() );
-    m_generatorCombo->setLabel( qobject_cast< QComboBox* >( m_generatorCombo->writableWidget() )->currentText() );
-    
-    applyModeChange( m_playlist->mode() );
     connect( m_playlist->generator().data(), SIGNAL( generated( QList<Tomahawk::query_ptr> ) ), this, SLOT( tracksGenerated( QList<Tomahawk::query_ptr> ) ) );
     connect( m_playlist.data(), SIGNAL( dynamicRevisionLoaded( Tomahawk::DynamicPlaylistRevision ) ), this, SLOT( onRevisionLoaded( Tomahawk::DynamicPlaylistRevision ) ) );
     connect( m_playlist->generator().data(), SIGNAL( error( QString, QString ) ), this, SLOT( generatorError( QString, QString ) ) );
-    
 }
 
 
@@ -249,7 +185,7 @@ DynamicWidget::resizeEvent(QResizeEvent* )
 void 
 DynamicWidget::layoutFloatingWidgets()
 {
-    if( m_playlist->mode() == OnDemand && !m_runningOnDemand ) {
+    if( !m_runningOnDemand ) {
         int x = ( width() / 2 ) - ( m_setup->size().width() / 2 );
         int y = height() - m_setup->size().height() - 40; // padding
         
@@ -271,6 +207,14 @@ DynamicWidget::hideEvent( QHideEvent* ev )
     QWidget::hideEvent( ev );
 }
 
+void 
+DynamicWidget::showEvent(QShowEvent* )
+{
+    if( !m_playlist.isNull() ) {
+        m_setup->fadeIn();
+    }
+}
+
 
 void 
 DynamicWidget::generate( int num )
@@ -278,11 +222,32 @@ DynamicWidget::generate( int num )
     if( m_playlist->mode() == Static ) 
     {
         // get the items from the generator, and put them in the playlist
-        m_playlist->generator()->generate( num == -1 ? m_genNumber->value() : num ); // HACK while in transition
+        m_playlist->generator()->generate( num );
     } else if( m_playlist->mode() == OnDemand ) {
 
     }
 }
+
+void 
+DynamicWidget::pausePressed()
+{
+    // we don't handle explicit pausing right now
+    // no more track plays == no more adding. we stop when
+    // the user switches to a different playlist.
+}
+
+void 
+DynamicWidget::playPressed()
+{
+    
+    if( isVisible() && !m_playlist.isNull() &&
+        m_playlist->mode() == OnDemand && !m_runningOnDemand ) {
+        
+        startStation();
+    }
+        
+}
+
 
 void 
 DynamicWidget::stopStation()
@@ -291,9 +256,7 @@ DynamicWidget::stopStation()
     m_runningOnDemand = false;
     
     // TODO until i add a qwidget interface
-    QMetaObject::invokeMethod( m_steering, SLOT( fadeOut() ), Qt::DirectConnection );
-    
-    m_generateButton->setText( tr( "Start" ) );
+    QMetaObject::invokeMethod( m_steering, "fadeOut", Qt::DirectConnection );
 }
 
 void 
@@ -301,8 +264,6 @@ DynamicWidget::startStation()
 {
     m_runningOnDemand = true;
     m_model->startOnDemand();
-    
-    m_generateButton->setText( tr( "Stop" ) );
     
     m_setup->fadeOut();
     // show the steering controls
@@ -318,7 +279,7 @@ DynamicWidget::startStation()
         m_steering->move( x, y );
         
         // TODO until i add a qwidget interface
-        QMetaObject::invokeMethod( m_steering, SLOT( fadeIn() ), Qt::DirectConnection );
+        QMetaObject::invokeMethod( m_steering, "fadeIn", Qt::DirectConnection );
         
         connect( m_steering, SIGNAL( resized() ), this, SLOT( layoutFloatingWidgets() ) );
     }
@@ -329,22 +290,6 @@ DynamicWidget::playlistTypeChanged( QString )
 {
     // TODO
 }
-
-void 
-DynamicWidget::applyModeChange( int mode )
-{
-    if( mode == OnDemand )
-    {
-        m_generateButton->setText( tr( "Play" ) );
-        m_genNumber->hide();
-    } else if( mode == Static ) {
-        m_generateButton->setText( tr( "Generate" ) );
-        m_genNumber->show();
-        if( m_headerLayout->indexOf( m_genNumber ) == -1 )
-            m_headerLayout->insertWidget( 4, m_genNumber );
-    }
-}
-
 
 void 
 DynamicWidget::tracksGenerated( const QList< query_ptr >& queries )
@@ -399,7 +344,7 @@ DynamicWidget::paintRoundedFilledRect( QPainter& p, QPalette& pal, QRect& r, qre
 {   
     p.setBackgroundMode( Qt::TransparentMode );
     p.setRenderHint( QPainter::Antialiasing );
-    p.setOpacity( 0.7 );
+    p.setOpacity( opacity );
     
     QPen pen( pal.dark().color(), .5 );
     p.setPen( pen );
@@ -407,7 +352,7 @@ DynamicWidget::paintRoundedFilledRect( QPainter& p, QPalette& pal, QRect& r, qre
     
     p.drawRoundedRect( r, 10, 10 );
     
-    p.setOpacity( opacity );
+    p.setOpacity( opacity + .2 );
     p.setBrush( QBrush() );
     p.setPen( pen );
     p.drawRoundedRect( r, 10, 10 );

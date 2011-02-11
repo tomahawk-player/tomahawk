@@ -113,7 +113,7 @@ EchonestSteerer::EchonestSteerer( QWidget* parent )
     m_fadeAnim = new QPropertyAnimation( this, "opacity", this );
     m_fadeAnim->setDuration( ANIM_DURATION );
     m_fadeAnim->setStartValue( 0 );
-    m_fadeAnim->setStartValue( 100 );
+    m_fadeAnim->setEndValue( .86 );
     resize( sizeHint() );
 }
 
@@ -130,10 +130,8 @@ EchonestSteerer::paintEvent( QPaintEvent* )
 void 
 EchonestSteerer::setOpacity( qreal opacity )
 {
-    m_opacity = opacity / 100.0;
-    if( m_opacity == 1 )
-        show();
-    else if( m_opacity == 0 )
+    m_opacity = opacity;
+    if( m_opacity == 0 )
         hide();
     repaint();
 }
@@ -143,6 +141,8 @@ EchonestSteerer::fadeIn()
 {
     m_fadeAnim->setDirection( QAbstractAnimation::Forward );
     m_fadeAnim->start();
+    
+    show();
 }
 
 void 

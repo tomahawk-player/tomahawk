@@ -86,7 +86,7 @@ DynamicSetupWidget::DynamicSetupWidget( const Tomahawk::dynplaylist_ptr& playlis
     m_fadeAnim = new QPropertyAnimation( this, "opacity" );
     m_fadeAnim->setDuration( 500 );
     m_fadeAnim->setStartValue( 0.00 );
-    m_fadeAnim->setEndValue( 1.0 );
+    m_fadeAnim->setEndValue( .86 );
     
     setSizePolicy( QSizePolicy::Expanding, QSizePolicy::Fixed );
     resize( sizeHint() );
@@ -108,13 +108,16 @@ DynamicSetupWidget::fadeIn()
 {
     m_fadeAnim->setDirection( QAbstractAnimation::Forward );
     m_fadeAnim->start();
+    
+    show();
 }
 
 void 
 DynamicSetupWidget::fadeOut()
 {
-    m_fadeAnim->setDirection( QAbstractAnimation::Forward );    
+    m_fadeAnim->setDirection( QAbstractAnimation::Backward );    
     m_fadeAnim->start();
+    
 }
 
 void 
@@ -127,10 +130,9 @@ void
 DynamicSetupWidget::setOpacity( qreal opacity )
 {
     m_opacity = opacity;
+    
     if( m_opacity == 0 )
         hide();
-    else if( m_opacity == 1 )
-        show();
     repaint();
 }
 

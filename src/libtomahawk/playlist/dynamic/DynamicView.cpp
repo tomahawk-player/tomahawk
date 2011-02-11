@@ -103,9 +103,9 @@ DynamicView::onTrackCountChanged( unsigned int tracks )
     {
         if( m_onDemand ) {
             if( m_readOnly )
-                overlay()->setText( tr( "Press Start to begin listening to this custom station!" ) );
+                overlay()->setText( tr( "Press play to begin listening to this custom station!" ) );
             else
-                overlay()->setText( tr( "Add some filters above, and press Start to begin listening to this custom station!" ) );
+                overlay()->setText( tr( "Add some filters above, and press play to begin listening to this custom station!" ) );
         } else
             if( m_readOnly )
                 overlay()->setText( tr( "Press Generate to get started!" ) );

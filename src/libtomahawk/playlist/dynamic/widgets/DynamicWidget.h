@@ -23,6 +23,7 @@
 #include "dynamic/DynamicPlaylist.h"
 #include "dynamic/DynamicControl.h"
 
+class QShowEvent;
 class QHideEvent;
 class QSpinBox;
 class QVBoxLayout;
@@ -68,6 +69,7 @@ public:
     virtual QSize sizeHint() const;
     virtual void resizeEvent( QResizeEvent* );
     virtual void hideEvent(QHideEvent* );
+    virtual void showEvent(QShowEvent* );
     
     static void paintRoundedFilledRect( QPainter& p, QPalette& pal, QRect& r, qreal opacity = .95 );
 public slots:
@@ -76,6 +78,9 @@ public slots:
     
     void startStation();
     void stopStation();
+    
+    void playPressed();
+    void pausePressed();
     
 private slots:
     void generate( int = -1 );
@@ -86,9 +91,7 @@ private slots:
     void controlChanged( const Tomahawk::dyncontrol_ptr& control );
     
     void layoutFloatingWidgets();
-private:
-    void applyModeChange( int mode );
-    
+private:    
     dynplaylist_ptr m_playlist;
     QVBoxLayout* m_layout;
     bool m_resolveOnNextLoad;
@@ -102,14 +105,6 @@ private:
     bool m_controlsChanged;
     QWidget* m_steering;
         
-    // layout and stuff
-    QLabel* m_headerText;
-    QHBoxLayout* m_headerLayout;
-    ReadOrWriteWidget* m_generatorCombo;
-    QLabel* m_logo;
-    QPushButton* m_generateButton;
-    QSpinBox* m_genNumber;
-    
     CollapsibleControls* m_controls;
     
     DynamicView* m_view;
