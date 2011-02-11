@@ -69,6 +69,8 @@ signals:
     void statsAvailable( bool b );
     void modesAvailable( bool b );
 
+    void playClicked();
+    void pauseClicked();
 public slots:
     void setTreeMode();
     void setTableMode();
@@ -85,6 +87,11 @@ public slots:
     // called by the playlist creation dbcmds
     void createPlaylist( const Tomahawk::source_ptr& src, const QVariant& contents );
     void createDynamicPlaylist( const Tomahawk::source_ptr& src, const QVariant& contents );
+    
+    // ugh need to set up the connection in tomahawk to libtomahawk
+    void onPlayClicked();
+    void onPauseClicked();
+    
 private slots:
     void applyFilter();
 

@@ -50,7 +50,7 @@ QJDns::Record::Record()
 	haveKnown = false;
 }
 
-bool QJDns::Record::verify() const
+bool QJDns::Record::doVerify() const
 {
 	jdns_rr_t *rr = export_record(*this);
 	int ok = jdns_rr_verify(rr);

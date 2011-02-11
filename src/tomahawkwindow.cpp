@@ -53,8 +53,11 @@ TomahawkWindow::TomahawkWindow( QWidget* parent )
     setUnifiedTitleAndToolBarOnMac( true );
 #endif
 
-    new PlaylistManager( this );
-
+    PlaylistManager* pm = new PlaylistManager( this );
+    
+    connect( m_audioControls, SIGNAL( playPressed() ), pm, SLOT( onPlayClicked() ) );
+    connect( m_audioControls, SIGNAL( pausePressed() ), pm, SLOT( onPauseClicked() ) );
+    
     ui->setupUi( this );
 
     delete ui->playlistWidget;

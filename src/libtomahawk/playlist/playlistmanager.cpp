@@ -670,3 +670,13 @@ PlaylistManager::showCurrentTrack()
 /*    if ( m_currentView && m_currentProxyModel )
         m_currentView->scrollTo( m_currentProxyModel->currentItem(), QAbstractItemView::PositionAtCenter );*/
 }
+
+void
+PlaylistManager::onPlayClicked() {
+    emit playClicked();
+}
+
+void
+PlaylistManager::onPauseClicked() {
+    emit pauseClicked();
+}
