@@ -43,6 +43,8 @@ public:
     void loadPlaylist( const dynplaylist_ptr& playlist );
     
     virtual void removeIndex( const QModelIndex& index, bool moreToCome = false );
+    
+    bool searchingForNext() const { return m_searchingForNext; }
 signals:
     void collapseFromTo( int startRow, int num );
     
@@ -60,6 +62,7 @@ private:
     bool m_startOnResolved;
     bool m_onDemandRunning;
     bool m_changeOnNext;
+    bool m_searchingForNext;
     int m_currentAttempts;
     int m_lastResolvedRow;
 };
