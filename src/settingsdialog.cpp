@@ -103,7 +103,7 @@ SettingsDialog::~SettingsDialog()
         if ( ui->jabberUsername->text() != s->jabberUsername() ||
              ui->jabberPassword->text() != s->jabberPassword() ||
              ui->jabberServer->text() != s->jabberServer() ||
-             ui->jabberPort->value() != s->jabberPort()
+             (uint)(ui->jabberPort->value()) != s->jabberPort()
              )
             {
             rejabber = true;
