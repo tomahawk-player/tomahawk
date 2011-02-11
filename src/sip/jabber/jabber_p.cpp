@@ -150,11 +150,16 @@ Jabber_p::go()
 
     // Handle proxy
     
+    qDebug() << "Connecting to the XMPP server...";
+    //FIXME: This call blocks and locks up the whole GUI if the network is down
     if( m_client->connect( false ) )
     {
+        qDebug() << "Connected to the XMPP server";
         emit connected();
         QTimer::singleShot( 0, this, SLOT( doJabberRecv() ) );
     }
+    else
+        qDebug() << "Could not connect to the XMPP server!";
 }
 
 
