@@ -103,10 +103,10 @@ Servent::startListening( QHostAddress ha, bool upnp, int port )
 
         case TomahawkSettings::DynDns:
             qDebug() << "External address mode set to dyndns...";
-            //FIXME: ready() is never emitted here, so it will not continue...
             m_externalHostname = TomahawkSettings::instance()->externalHostname();
             m_externalPort = TomahawkSettings::instance()->externalPort();
             qDebug() << m_externalHostname << m_externalPort;
+            emit ready();
             break;
 
         case TomahawkSettings::Upnp:
