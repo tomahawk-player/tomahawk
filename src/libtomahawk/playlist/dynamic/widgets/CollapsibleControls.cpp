@@ -81,6 +81,7 @@ CollapsibleControls::init()
     m_summaryLayout = new QHBoxLayout;
     m_summaryWidget->setLayout( m_summaryLayout );
     m_summaryLayout->setMargin( 0 );
+    m_summaryWidget->setContentsMargins( 3, 0, 0, 0 );
     
     m_summary = new QLabel( m_summaryWidget );
     m_summaryLayout->addWidget( m_summary, 1 );

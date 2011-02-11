@@ -16,7 +16,6 @@
 #ifdef Q_WS_MAC
     #include <Carbon/Carbon.h>
     #include <sys/sysctl.h>
-#include <thirdparty/jdns/qjdns.h>
 #endif
 
 #include <qjdns.h>

@@ -111,7 +111,7 @@ public:
 		QByteArray os;           // for Hinfo
 
 		Record();
-		bool verify() const;
+		bool doVerify() const;
 	};
 
 	class Response

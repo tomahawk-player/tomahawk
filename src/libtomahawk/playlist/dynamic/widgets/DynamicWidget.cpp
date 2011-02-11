@@ -32,13 +32,12 @@
 #include "ReadOrWriteWidget.h"
 #include "CollapsibleControls.h"
 #include "DynamicControlWrapper.h"
+#include "playlistmanager.h"
 #include "dynamic/DynamicView.h"
 #include <qevent.h>
 #include "DynamicSetupWidget.h"
 #include <QPainter>
 
-#include "tomahawk/tomahawkapp.h"
-#include "tomahawkwindow.h"
 #include "audiocontrols.h"
 
 using namespace Tomahawk;
@@ -89,8 +88,8 @@ DynamicWidget::DynamicWidget( const Tomahawk::dynplaylist_ptr& playlist, QWidget
     connect( m_controls, SIGNAL( controlsChanged() ), this, SLOT( controlsChanged() ), Qt::QueuedConnection );
     
     
-    connect( TomahawkApp::instance()->mainWindow()->audioControls(), SIGNAL( playPressed() ), this, SLOT( playPressed() ) );
-    connect( TomahawkApp::instance()->mainWindow()->audioControls(), SIGNAL( pausePressed() ), this, SLOT( pausePressed() ) );
+    connect( PlaylistManager::instance(), SIGNAL( playClicked() ), this, SLOT( playPressed() ) );
+    connect( PlaylistManager::instance(), SIGNAL( pauseClicked() ), this, SLOT( pausePressed() ) );
 }
 
 DynamicWidget::~DynamicWidget()
