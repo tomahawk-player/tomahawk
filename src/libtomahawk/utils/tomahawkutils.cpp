@@ -327,12 +327,13 @@ DNSResolver::DNSResolver()
     m_dnsShared->addInterface(QHostAddress::Any);
     m_dnsShared->addInterface(QHostAddress::AnyIPv6);
     m_dnsSharedRequest = new JDnsSharedRequest(m_dnsShared);
+
+    connect(m_dnsSharedRequest, SIGNAL(resultsReady()), SLOT(resultsReady()));
 }
 
 void
 DNSResolver::resolve( QString &host, QString type )
 {
-    connect(m_dnsSharedRequest, SIGNAL(resultsReady()), SLOT(resultsReady()));
     if( type == "SRV" )
     {
         // For the moment, assume we are looking for XMPP...
