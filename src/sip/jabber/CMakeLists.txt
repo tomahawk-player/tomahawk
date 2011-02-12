@@ -44,7 +44,7 @@ target_link_libraries( sip_jabber
 )
 
 IF( APPLE )
-  SET( CMAKE_SHARED_LINKER_FLAGS ${CMAKE_SHARED_LINKER_FLAGS} "-undefined dynamic_lookup" )
+#  SET( CMAKE_SHARED_LINKER_FLAGS ${CMAKE_SHARED_LINKER_FLAGS} "-undefined dynamic_lookup" )
 ENDIF( APPLE )
 
 install( TARGETS sip_jabber DESTINATION lib )

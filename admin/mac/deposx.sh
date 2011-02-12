@@ -15,6 +15,10 @@ then
     exit 1
 fi
 
+cd ..
+ORIGROOT=`pwd`
+cd -
+
 cd Contents
 
 QTLIBS=`ls Frameworks | cut -d. -f1`
@@ -56,10 +60,10 @@ function deposx_change
 
 function deplib_change
 {
-    install_name_tool -change /usr/local/lib/liblastfm.0.dylib @executable_path/liblastfm.0.dylib $1
+    install_name_tool -change /usr/local/Cellar/liblastfm/0.3.1/lib/liblastfm.0.dylib @executable_path/liblastfm.0.dylib $1
     install_name_tool -change libqjson.0.dylib @executable_path/libqjson.0.dylib $1
-    install_name_tool -change libechonest.0.1.0.dylib @executable_path/libechonest.0.1.0.dylib $1
-    install_name_tool -change /usr/local/lib/libechonest.0.1.0.dylib @executable_path/libechonest.0.1.0.dylib $1
+    install_name_tool -change /usr/local/lib/libechonest.1.1.dylib @executable_path/libechonest.1.1.dylib $1
+    install_name_tool -change /usr/local/Cellar/clucene/0.9.21/lib/libclucene.0.dylib @executable_path/libclucene.0.dylib $1
     install_name_tool -change /usr/local/Cellar/gloox/1.0/lib/libgloox.8.dylib @executable_path/libgloox.8.dylib $1
     install_name_tool -change /usr/local/Cellar/taglib/1.6.3/lib/libtag.1.dylib @executable_path/libtag.1.dylib $1
     install_name_tool -change /usr/local/Cellar/libogg/1.2.0/lib/libogg.0.dylib @executable_path/libogg.0.dylib $1
@@ -68,6 +72,10 @@ function deplib_change
     install_name_tool -change /usr/local/Cellar/mad/0.15.1b/lib/libmad.0.dylib @executable_path/libmad.0.dylib $1
     install_name_tool -change /usr/local/Cellar/flac/1.2.1/lib/libFLAC++.6.dylib @executable_path/libFLAC++.6.dylib $1
     install_name_tool -change /usr/local/Cellar/flac/1.2.1/lib/libFLAC.8.dylib @executable_path/libFLAC.8.dylib $1
+    install_name_tool -change $ORIGROOT/src/libtomahawk/libtomahawklib.dylib @executable_path/libtomahawklib.dylib $1
+    install_name_tool -change $ORIGROOT/libsip_jabber.dylib @executable_path/libsip_jabber.dylib $1
+    install_name_tool -change $ORIGROOT/libsip_zeroconf.dylib @executable_path/libsip_zeroconf.dylib $1
+    install_name_tool -change $ORIGROOT/thirdparty/jdns/libtomahawk_jdns.dylib @executable_path/libtomahawk_jdns.dylib $1
 }
 
 ################################################################################
@@ -83,7 +91,7 @@ do
 done
 
 import_lib /usr/local/Cellar/qjson/0.7.1/lib/libqjson.0.dylib
-import_lib /usr/local/lib/liblastfm.0.dylib
+import_lib /usr/local/Cellar/liblastfm/0.3.1/lib/liblastfm.0.dylib
 import_lib /usr/local/Cellar/gloox/1.0/lib/libgloox.8.dylib
 import_lib /usr/local/Cellar/taglib/1.6.3/lib/libtag.1.dylib
 import_lib /usr/local/Cellar/libogg/1.2.0/lib/libogg.0.dylib
@@ -92,11 +100,22 @@ import_lib /usr/local/Cellar/libvorbis/1.3.1/lib/libvorbisfile.3.dylib
 import_lib /usr/local/Cellar/mad/0.15.1b/lib/libmad.0.dylib
 import_lib /usr/local/Cellar/flac/1.2.1/lib/libFLAC++.6.dylib
 import_lib /usr/local/Cellar/flac/1.2.1/lib/libFLAC.8.dylib
-import_lib /usr/local/lib/libechonest.0.1.0.dylib
+import_lib /usr/local/lib/libechonest.1.1.dylib
+import_lib /usr/local/Cellar/clucene/0.9.21/lib/libclucene.0.dylib
+
+import_lib ../../libsip_jabber.dylib
+import_lib ../../libsip_zeroconf.dylib
+import_lib ../../src/libtomahawk/libtomahawklib.dylib
+import_lib ../../thirdparty/jdns/libtomahawk_jdns.dylib
 
 deposx_change MacOS/libqjson.0.dylib
 deposx_change MacOS/liblastfm.0.dylib
-deposx_change MacOS/libechonest.0.1.0.dylib
+deposx_change MacOS/libclucene.0.dylib
+deposx_change MacOS/libechonest.1.1.dylib
+deposx_change MacOS/libsip_jabber.dylib
+deposx_change MacOS/libsip_zeroconf.dylib
+deposx_change MacOS/libtomahawklib.dylib
+deposx_change MacOS/libtomahawk_jdns.dylib
 
 # now Qt
 for x in $QTLIBS
