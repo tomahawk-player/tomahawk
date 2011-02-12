@@ -17,6 +17,8 @@ public:
     PlaylistInterface( QObject* parent = 0 ) : m_widget( 0 ), m_object( parent ) {}
     virtual ~PlaylistInterface() {}
 
+    virtual QList< Tomahawk::query_ptr > tracks() = 0;
+
     virtual int unfilteredTrackCount() const = 0;
     virtual int trackCount() const = 0;
 

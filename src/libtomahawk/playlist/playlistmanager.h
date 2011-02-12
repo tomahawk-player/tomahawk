@@ -45,6 +45,8 @@ public:
 
     bool isSuperCollectionVisible() const { return true; }
 
+    PlaylistInterface* currentPlaylistInterface() const { return m_currentInterface; }
+
     bool show( const Tomahawk::playlist_ptr& playlist );
     bool show( const Tomahawk::dynplaylist_ptr& playlist );
     bool show( const Tomahawk::artist_ptr& artist );

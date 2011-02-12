@@ -21,6 +21,8 @@ public:
     virtual QPersistentModelIndex currentItem() const { return mapFromSource( m_model->currentItem() ); }
     virtual void setCurrentItem( const QModelIndex& index ) { m_model->setCurrentItem( mapToSource( index ) ); }
 
+    virtual QList<Tomahawk::query_ptr> tracks() { Q_ASSERT( FALSE ); QList<Tomahawk::query_ptr> queries; return queries; }
+
     virtual int unfilteredTrackCount() const { return sourceModel()->rowCount( QModelIndex() ); }
     virtual int trackCount() const { return rowCount( QModelIndex() ); }
 

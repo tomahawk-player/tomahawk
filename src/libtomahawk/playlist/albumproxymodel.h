@@ -18,6 +18,8 @@ public:
     virtual AlbumModel* sourceModel() const { return m_model; }
     virtual void setSourceModel( AlbumModel* sourceModel );
 
+    virtual QList<Tomahawk::query_ptr> tracks() { Q_ASSERT( FALSE ); QList<Tomahawk::query_ptr> queries; return queries; }
+    
     virtual int unfilteredTrackCount() const { return sourceModel()->rowCount( QModelIndex() ); }
     virtual int trackCount() const { return rowCount( QModelIndex() ); }
     virtual int albumCount() const { return rowCount( QModelIndex() ); }
