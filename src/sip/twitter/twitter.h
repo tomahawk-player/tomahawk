@@ -2,21 +2,21 @@
 #define ZEROCONF_H
 
 #include "sip/SipPlugin.h"
-#include "tomahawkzeroconf.h"
+#include "tomahawkoauthtwitter.h"
 
 #include "../sipdllmacro.h"
 
-class SIPDLLEXPORT ZeroconfPlugin : public SipPlugin
+class SIPDLLEXPORT TwitterPlugin : public SipPlugin
 {
     Q_OBJECT
     Q_INTERFACES( SipPlugin )
 
 public:
-    ZeroconfPlugin()
-        : m_zeroconf( 0 )
+    TwitterPlugin()
+        : m_twitterAuth( 0 )
     {}
 
-    virtual ~ZeroconfPlugin() {}
+    virtual ~TwitterPlugin() {}
 
 public slots:
     virtual bool connect( bool startup );
@@ -41,7 +41,7 @@ private slots:
     void lanHostFound( const QString& host, int port, const QString& name, const QString& nodeid );
 
 private:
-    TomahawkZeroconf* m_zeroconf;
+    TomahawkOAuthTwitter *m_twitterAuth;
 };
 
 #endif

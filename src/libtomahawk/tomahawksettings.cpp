@@ -378,6 +378,29 @@ TomahawkSettings::setLastFmUsername( const QString& username )
     setValue( "lastfm/username", username );
 }
 
+QString
+TomahawkSettings::twitterOAuthToken() const
+{
+    return value( "twitter/oauthtoken" ).toString();
+}
+
+void
+TomahawkSettings::setTwitterOAuthToken( const QString& oauthtoken )
+{
+    setValue( "twitter/username", oauthtoken );
+}
+
+QString
+TomahawkSettings::twitterOAuthTokenSecret() const
+{
+    return value( "twitter/oauthtokensecret" ).toString();
+}
+
+void
+TomahawkSettings::setTwitterOAuthTokenSecret( const QString& oauthtokensecret )
+{
+    setValue( "twitter/oauthtokensecret", oauthtokensecret );
+}
 
 bool
 TomahawkSettings::scrobblingEnabled() const

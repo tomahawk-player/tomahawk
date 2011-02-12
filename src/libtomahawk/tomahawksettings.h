@@ -95,6 +95,13 @@ public:
     
     QByteArray lastFmSessionKey() const;
     void setLastFmSessionKey( const QByteArray& key );
+    
+    /// Twitter settings
+    QString twitterOAuthToken() const;
+    void setTwitterOAuthToken( const QString& oauthtoken );
+    
+    QString twitterOAuthTokenSecret() const;
+    void setTwitterOAuthTokenSecret( const QString& oauthtokensecret );
 
     /// XMPP Component Settings
     QString xmppBotServer() const;
