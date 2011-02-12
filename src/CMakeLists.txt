@@ -132,6 +132,7 @@ IF( UNIX )
 ENDIF( UNIX )
 
 ADD_SUBDIRECTORY( sip/jabber )
+ADD_SUBDIRECTORY( sip/twitter )
 ADD_SUBDIRECTORY( sip/zeroconf )
 
 kde4_add_app_icon( tomahawkSources "${CMAKE_CURRENT_SOURCE_DIR}/../data/icons/tomahawk-icon-*.png" )
