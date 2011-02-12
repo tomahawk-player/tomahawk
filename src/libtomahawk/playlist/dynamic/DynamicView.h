@@ -21,6 +21,7 @@
 #include <QTimer>
 #include <QPropertyAnimation>
 #include <QTimeLine>
+#include <QMutex>
 
 class PlaylistModel;
 class TrackModel;
@@ -56,7 +57,9 @@ public slots:
     
 private slots:
     void onTrackCountChanged( unsigned int );
-    
+    void checkForOverflow();
+    void animFinished();
+
 private:
     DynamicModel* m_model;
     QString m_title;
@@ -64,7 +67,8 @@ private:
     
     bool m_onDemand;
     bool m_readOnly;
-    
+    bool m_checkOnCollapse;
+
     // for collapsing animation
     QPoint m_fadingPointAnchor;
     QPoint m_bottomAnchor;

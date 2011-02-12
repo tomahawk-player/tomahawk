@@ -47,7 +47,8 @@ public:
     bool searchingForNext() const { return m_searchingForNext; }
 signals:
     void collapseFromTo( int startRow, int num );
-    
+    void checkForOverflow();
+
     void trackGenerationFailure( const QString& msg );
     
 private slots:    

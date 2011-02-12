@@ -25,7 +25,6 @@ DynamicModel::DynamicModel( QObject* parent )
     , m_startOnResolved( false )
     , m_onDemandRunning( false )
     , m_changeOnNext( false )
-    , m_searchingForNext( false )
     , m_currentAttempts( 0 )
     , m_lastResolvedRow( 0 )
 {
@@ -62,7 +61,6 @@ DynamicModel::startOnDemand()
     
     m_onDemandRunning = true;
     m_startOnResolved = true;
-    m_searchingForNext = false;
     m_currentAttempts = 0;
     m_lastResolvedRow = 0;
 }
@@ -75,7 +73,6 @@ DynamicModel::newTrackGenerated( const Tomahawk::query_ptr& query )
         connect( query.data(), SIGNAL( resultsAdded( QList<Tomahawk::result_ptr> ) ), this, SLOT( trackResolved() ) );
     
         append( query );
-        m_searchingForNext = true;
     }
 }
 
@@ -83,7 +80,6 @@ void
 DynamicModel::stopOnDemand()
 {
     m_onDemandRunning = false;
-    m_searchingForNext = false;
     AudioEngine::instance()->stop();
     
     disconnect( AudioEngine::instance(), SIGNAL( loading( Tomahawk::result_ptr ) ), this, SLOT( newTrackLoading() ) );
@@ -104,7 +100,6 @@ DynamicModel::trackResolved()
 {   
     Query* q = qobject_cast<Query*>(sender());
     qDebug() << "Got successful resolved track:" << q->track() << q->artist() << m_lastResolvedRow << m_currentAttempts;
-    m_searchingForNext = false;
     if( m_startOnResolved ) { // on first start
         m_startOnResolved = false;
         AudioEngine::instance()->play();
@@ -115,6 +110,8 @@ DynamicModel::trackResolved()
         emit collapseFromTo( m_lastResolvedRow, m_currentAttempts );
     }
     m_currentAttempts = 0;
+
+    emit checkForOverflow();
 }
 
 void 
@@ -142,7 +139,7 @@ DynamicModel::newTrackLoading()
     } else if( m_onDemandRunning && m_currentAttempts == 0 ) { // if we're in dynamic mode and we're also currently idle
         m_lastResolvedRow = rowCount( QModelIndex() );
         m_playlist->generator()->fetchNext();
-    }
+    }    
 }
 
 void 

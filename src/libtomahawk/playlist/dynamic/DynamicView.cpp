@@ -37,6 +37,7 @@ using namespace Tomahawk;
 DynamicView::DynamicView( QWidget* parent )
         : PlaylistView( parent )
         , m_onDemand( false )
+        , m_checkOnCollapse( false )
 {
     m_fadeOutAnim.setDuration( FADE_LENGTH );
     m_fadeOutAnim.setCurveShape( QTimeLine::LinearCurve );
@@ -51,6 +52,7 @@ DynamicView::DynamicView( QWidget* parent )
     
     
     connect( &m_fadeOutAnim, SIGNAL( frameChanged( int ) ), viewport(), SLOT( update() ) );
+    connect( &m_fadeOutAnim, SIGNAL( finished() ), this, SLOT( animFinished() ) );
 }
 
 DynamicView::~DynamicView()
@@ -65,6 +67,7 @@ DynamicView::setModel( DynamicModel* model)
     PlaylistView::setModel( model );
     
     connect( model, SIGNAL( trackCountChanged( unsigned int ) ), SLOT( onTrackCountChanged( unsigned int ) ) );
+    connect( model, SIGNAL( checkForOverflow() ), this, SLOT( checkForOverflow() ) );
 }
 
 void
@@ -122,10 +125,17 @@ DynamicView::onTrackCountChanged( unsigned int tracks )
     }
     else
         overlay()->hide();
-    
-    if( !m_onDemand || m_model->searchingForNext() || proxyModel()->rowCount( QModelIndex() ) == 0 )
+}
+
+void
+DynamicView::checkForOverflow()
+{
+    if( !m_onDemand || proxyModel()->rowCount( QModelIndex() ) == 0 )
         return;
-        
+
+    if( m_fadeOutAnim.state() == QTimeLine::Running )
+        m_checkOnCollapse = true;
+
     /// We don't want stations to grow forever, because we don't want the view to have to scroll
     /// So if there are too many tracks, we remove some that have already been played
     /// Our threshold is 4 rows to the end. That's when we collapse.
@@ -134,7 +144,7 @@ DynamicView::onTrackCountChanged( unsigned int tracks )
     qDebug() << "Checking viewport height of" << viewport()->height() << "and last track bottom:" << lastRect.bottomLeft().y() << "under threshold" << 4 * lastRect.height();
     if( viewport()->height() - lastRect.bottomLeft().y() <= ( 4 * lastRect.height() ) ) {
         qDebug() << "Deciding to remove some tracks from this station";
-        
+
         // figure out how many to remove. lets get rid of 1/3rd of the backlog, visually.
         int toRemove = ( viewport()->height() / 3 ) / lastRect.height();
         qDebug() << "Decided to remove" << toRemove << "rows!";
@@ -145,6 +155,7 @@ DynamicView::onTrackCountChanged( unsigned int tracks )
 void 
 DynamicView::collapseEntries( int startRow, int num, int numToKeep )
 {
+    qDebug() << "BEGINNING TO COLLAPSE FROM" << startRow << num << numToKeep;
     if( m_fadeOutAnim.state() == QTimeLine::Running )
         qDebug() << "COLLAPSING TWICE!";
 
@@ -207,6 +218,14 @@ DynamicView::collapseEntries( int startRow, int num, int numToKeep )
         }
     }
     proxyModel()->removeIndexes( todel );
+}
+
+void
+DynamicView::animFinished()
+{
+    if( m_checkOnCollapse )
+        checkForOverflow();
+    m_checkOnCollapse = false;
 }
 
 void 
