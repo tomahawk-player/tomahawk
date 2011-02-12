@@ -130,6 +130,7 @@ public:
     
 private:
     static TomahawkSettings* s_instance;
+    QMutex *m_safety;
 };
 
 #endif

@@ -20,9 +20,12 @@ TomahawkSettings::instance()
 
 TomahawkSettings::TomahawkSettings( QObject* parent )
     : QSettings( parent )
+    , m_safety()
 {
     s_instance = this;
 
+    m_safety = new QMutex();
+    QMutexLocker locker( m_safety );
     #ifndef TOMAHAWK_HEADLESS
     if( !contains( "configversion") )
     {
@@ -50,6 +53,7 @@ TomahawkSettings::~TomahawkSettings()
 QString
 TomahawkSettings::scannerPath() const
 {
+    QMutexLocker locker( m_safety );
     #ifndef TOMAHAWK_HEADLESS
     return value( "scannerpath", QDesktopServices::storageLocation( QDesktopServices::MusicLocation ) ).toString();
     #else
@@ -61,6 +65,7 @@ TomahawkSettings::scannerPath() const
 void
 TomahawkSettings::setScannerPath( const QString& path )
 {
+    QMutexLocker locker( m_safety );
     setValue( "scannerpath", path );
 }
 
@@ -68,6 +73,7 @@ TomahawkSettings::setScannerPath( const QString& path )
 bool
 TomahawkSettings::hasScannerPath() const
 {
+    QMutexLocker locker( m_safety );
     return contains( "scannerpath" );
 }
 
@@ -75,6 +81,7 @@ TomahawkSettings::hasScannerPath() const
 bool
 TomahawkSettings::httpEnabled() const
 {
+    QMutexLocker locker( m_safety );
     return value( "network/http", true ).toBool();
 }
 
@@ -82,6 +89,7 @@ TomahawkSettings::httpEnabled() const
 void
 TomahawkSettings::setHttpEnabled( bool enable )
 {
+    QMutexLocker locker( m_safety );
     setValue( "network/http", enable );
 }
 
@@ -89,6 +97,7 @@ TomahawkSettings::setHttpEnabled( bool enable )
 QString
 TomahawkSettings::proxyHost() const
 {
+    QMutexLocker locker( m_safety );
     return value( "network/proxy/host", QString() ).toString();
 }
 
@@ -96,6 +105,7 @@ TomahawkSettings::proxyHost() const
 void
 TomahawkSettings::setProxyHost( const QString& host )
 {
+    QMutexLocker locker( m_safety );
     setValue( "network/proxy/host", host );
 }
 
@@ -103,6 +113,7 @@ TomahawkSettings::setProxyHost( const QString& host )
 qulonglong
 TomahawkSettings::proxyPort() const
 {
+    QMutexLocker locker( m_safety );
     return value( "network/proxy/port", 1080 ).toULongLong();
 }
 
@@ -110,6 +121,7 @@ TomahawkSettings::proxyPort() const
 void
 TomahawkSettings::setProxyPort( const qulonglong port )
 {
+    QMutexLocker locker( m_safety );
     setValue( "network/proxy/port", port );
 }
 
@@ -117,6 +129,7 @@ TomahawkSettings::setProxyPort( const qulonglong port )
 QString
 TomahawkSettings::proxyUsername() const
 {
+    QMutexLocker locker( m_safety );
     return value( "network/proxy/username", QString() ).toString();
 }
 
@@ -124,6 +137,7 @@ TomahawkSettings::proxyUsername() const
 void
 TomahawkSettings::setProxyUsername( const QString& username )
 {
+    QMutexLocker locker( m_safety );
     setValue( "network/proxy/username", username );
 }
 
@@ -131,6 +145,7 @@ TomahawkSettings::setProxyUsername( const QString& username )
 QString
 TomahawkSettings::proxyPassword() const
 {
+    QMutexLocker locker( m_safety );
     return value( "network/proxy/password", QString() ).toString();
 }
 
@@ -138,6 +153,7 @@ TomahawkSettings::proxyPassword() const
 void
 TomahawkSettings::setProxyPassword( const QString& password )
 {
+    QMutexLocker locker( m_safety );
     setValue( "network/proxy/password", password );
 }
 
@@ -145,6 +161,7 @@ TomahawkSettings::setProxyPassword( const QString& password )
 int
 TomahawkSettings::proxyType() const
 {
+    QMutexLocker locker( m_safety );
     return value( "network/proxy/type", 0 ).toInt();
 }
 
@@ -152,6 +169,7 @@ TomahawkSettings::proxyType() const
 void
 TomahawkSettings::setProxyType( const int type )
 {
+    QMutexLocker locker( m_safety );
     setValue( "network/proxy/type", type );
 }
 
@@ -159,6 +177,7 @@ TomahawkSettings::setProxyType( const int type )
 QByteArray
 TomahawkSettings::mainWindowGeometry() const
 {
+    QMutexLocker locker( m_safety );
     return value( "ui/mainwindow/geometry" ).toByteArray();
 }
 
@@ -166,6 +185,7 @@ TomahawkSettings::mainWindowGeometry() const
 void
 TomahawkSettings::setMainWindowGeometry( const QByteArray& geom )
 {
+    QMutexLocker locker( m_safety );
     setValue( "ui/mainwindow/geometry", geom );
 }
 
@@ -173,6 +193,7 @@ TomahawkSettings::setMainWindowGeometry( const QByteArray& geom )
 QByteArray
 TomahawkSettings::mainWindowState() const
 {
+    QMutexLocker locker( m_safety );
     return value( "ui/mainwindow/state" ).toByteArray();
 }
 
@@ -180,6 +201,7 @@ TomahawkSettings::mainWindowState() const
 void
 TomahawkSettings::setMainWindowState( const QByteArray& state )
 {
+    QMutexLocker locker( m_safety );
     setValue( "ui/mainwindow/state", state );
 }
 
@@ -187,6 +209,7 @@ TomahawkSettings::setMainWindowState( const QByteArray& state )
 QList<QVariant>
 TomahawkSettings::playlistColumnSizes( const QString& playlistid ) const
 {
+    QMutexLocker locker( m_safety );
     return value( QString( "ui/playlist/%1/columnSizes" ).arg( playlistid ) ).toList();
 }
 
@@ -194,6 +217,7 @@ TomahawkSettings::playlistColumnSizes( const QString& playlistid ) const
 void
 TomahawkSettings::setPlaylistColumnSizes( const QString& playlistid, const QList<QVariant>& cols )
 {
+    QMutexLocker locker( m_safety );
     setValue( QString( "ui/playlist/%1/columnSizes" ).arg( playlistid ), cols );
 }
 
@@ -201,6 +225,7 @@ TomahawkSettings::setPlaylistColumnSizes( const QString& playlistid, const QList
 QList<Tomahawk::playlist_ptr>
 TomahawkSettings::recentlyPlayedPlaylists() const
 {
+    QMutexLocker locker( m_safety );
     QStringList playlist_guids = value( "playlists/recentlyPlayed" ).toStringList();
 
     QList<Tomahawk::playlist_ptr> playlists;
@@ -218,6 +243,7 @@ TomahawkSettings::recentlyPlayedPlaylists() const
 void
 TomahawkSettings::appendRecentlyPlayedPlaylist( const Tomahawk::playlist_ptr& playlist )
 {
+    QMutexLocker locker( m_safety );
     QStringList playlist_guids = value( "playlists/recentlyPlayed" ).toStringList();
 
     playlist_guids.removeAll( playlist->guid() );
@@ -230,6 +256,7 @@ TomahawkSettings::appendRecentlyPlayedPlaylist( const Tomahawk::playlist_ptr& pl
 bool
 TomahawkSettings::jabberAutoConnect() const
 {
+    QMutexLocker locker( m_safety );
     return value( "jabber/autoconnect", true ).toBool();
 }
 
@@ -237,6 +264,7 @@ TomahawkSettings::jabberAutoConnect() const
 void
 TomahawkSettings::setJabberAutoConnect( bool autoconnect )
 {
+    QMutexLocker locker( m_safety );
     setValue( "jabber/autoconnect", autoconnect );
 }
 
@@ -244,6 +272,7 @@ TomahawkSettings::setJabberAutoConnect( bool autoconnect )
 unsigned int
 TomahawkSettings::jabberPort() const
 {
+    QMutexLocker locker( m_safety );
     return value( "jabber/port", 5222 ).toUInt();
 }
 
@@ -251,6 +280,7 @@ TomahawkSettings::jabberPort() const
 void
 TomahawkSettings::setJabberPort( int port )
 {
+    QMutexLocker locker( m_safety );
     if ( port < 0 )
       return;
     setValue( "jabber/port", port );
@@ -260,6 +290,7 @@ TomahawkSettings::setJabberPort( int port )
 QString
 TomahawkSettings::jabberServer() const
 {
+    QMutexLocker locker( m_safety );
     return value( "jabber/server" ).toString();
 }
 
@@ -267,6 +298,7 @@ TomahawkSettings::jabberServer() const
 void
 TomahawkSettings::setJabberServer( const QString& server )
 {
+    QMutexLocker locker( m_safety );
     setValue( "jabber/server", server );
 }
 
@@ -274,6 +306,7 @@ TomahawkSettings::setJabberServer( const QString& server )
 QString
 TomahawkSettings::jabberUsername() const
 {
+    QMutexLocker locker( m_safety );
     return value( "jabber/username" ).toString();
 }
 
@@ -281,6 +314,7 @@ TomahawkSettings::jabberUsername() const
 void
 TomahawkSettings::setJabberUsername( const QString& username )
 {
+    QMutexLocker locker( m_safety );
     setValue( "jabber/username", username );
 }
 
@@ -288,6 +322,7 @@ TomahawkSettings::setJabberUsername( const QString& username )
 QString
 TomahawkSettings::jabberPassword() const
 {
+    QMutexLocker locker( m_safety );
     return value( "jabber/password" ).toString();
 }
 
@@ -295,6 +330,7 @@ TomahawkSettings::jabberPassword() const
 void
 TomahawkSettings::setJabberPassword( const QString& pw )
 {
+    QMutexLocker locker( m_safety );
     setValue( "jabber/password", pw );
 }
 
@@ -302,6 +338,7 @@ TomahawkSettings::setJabberPassword( const QString& pw )
 TomahawkSettings::ExternalAddressMode
 TomahawkSettings::externalAddressMode() const
 {
+    QMutexLocker locker( m_safety );
     return (TomahawkSettings::ExternalAddressMode) value( "network/external-address-mode", TomahawkSettings::Upnp ).toInt();
 }
 
@@ -309,30 +346,35 @@ TomahawkSettings::externalAddressMode() const
 void
 TomahawkSettings::setExternalAddressMode( ExternalAddressMode externalAddressMode )
 {
+    QMutexLocker locker( m_safety );
     setValue( "network/external-address-mode", externalAddressMode );
 }
 
 QString
 TomahawkSettings::externalHostname() const
 {
+    QMutexLocker locker( m_safety );
     return value( "network/external-hostname" ).toString();
 }
 
 void
 TomahawkSettings::setExternalHostname(const QString& externalHostname)
 {
+    QMutexLocker locker( m_safety );
     setValue( "network/external-hostname", externalHostname );
 }
 
 int
 TomahawkSettings::externalPort() const
 {
+    QMutexLocker locker( m_safety );
     return value( "network/external-port" ).toInt();
 }
 
 void
 TomahawkSettings::setExternalPort(int externalPort)
 {
+    QMutexLocker locker( m_safety );
     setValue( "network/external-port", externalPort);
 }
 
@@ -340,6 +382,7 @@ TomahawkSettings::setExternalPort(int externalPort)
 QString
 TomahawkSettings::lastFmPassword() const
 {
+    QMutexLocker locker( m_safety );
     return value( "lastfm/password" ).toString();
 }
 
@@ -347,6 +390,7 @@ TomahawkSettings::lastFmPassword() const
 void
 TomahawkSettings::setLastFmPassword( const QString& password )
 {
+    QMutexLocker locker( m_safety );
     setValue( "lastfm/password", password );
 }
 
@@ -354,6 +398,7 @@ TomahawkSettings::setLastFmPassword( const QString& password )
 QByteArray
 TomahawkSettings::lastFmSessionKey() const
 {
+    QMutexLocker locker( m_safety );
     return value( "lastfm/session" ).toByteArray();
 }
 
@@ -361,6 +406,7 @@ TomahawkSettings::lastFmSessionKey() const
 void
 TomahawkSettings::setLastFmSessionKey( const QByteArray& key )
 {
+    QMutexLocker locker( m_safety );
     setValue( "lastfm/session", key );
 }
 
@@ -368,6 +414,7 @@ TomahawkSettings::setLastFmSessionKey( const QByteArray& key )
 QString
 TomahawkSettings::lastFmUsername() const
 {
+    QMutexLocker locker( m_safety );
     return value( "lastfm/username" ).toString();
 }
 
@@ -375,60 +422,70 @@ TomahawkSettings::lastFmUsername() const
 void
 TomahawkSettings::setLastFmUsername( const QString& username )
 {
+    QMutexLocker locker( m_safety );
     setValue( "lastfm/username", username );
 }
 
 QString
 TomahawkSettings::twitterOAuthToken() const
 {
+    QMutexLocker locker( m_safety );
     return value( "twitter/oauthtoken" ).toString();
 }
 
 void
 TomahawkSettings::setTwitterOAuthToken( const QString& oauthtoken )
 {
+    QMutexLocker locker( m_safety );
     setValue( "twitter/oauthtoken", oauthtoken );
 }
 
 QString
 TomahawkSettings::twitterOAuthTokenSecret() const
 {
+    QMutexLocker locker( m_safety );
     return value( "twitter/oauthtokensecret" ).toString();
 }
 
 void
 TomahawkSettings::setTwitterOAuthTokenSecret( const QString& oauthtokensecret )
 {
+    QMutexLocker locker( m_safety );
     setValue( "twitter/oauthtokensecret", oauthtokensecret );
 }
 
 qint64
 TomahawkSettings::twitterCachedFriendsSinceId() const
 {
+    QMutexLocker locker( m_safety );
     return value( "twitter/cachedfriendssinceid", 0 ).toLongLong();
 }
 
 void
 TomahawkSettings::setTwitterCachedFriendsSinceId( qint64 cachedId )
 {
+    QMutexLocker locker( m_safety );
     setValue( "twitter/cachedfriendssinceid", cachedId );
 }
 
 qint64
 TomahawkSettings::twitterCachedMentionsSinceId() const
 {
+    QMutexLocker locker( m_safety );
     return value( "twitter/cachedmentionssinceid", 0 ).toLongLong();
 }
 
 void
 TomahawkSettings::setTwitterCachedMentionsSinceId( qint64 cachedId )
 {
+    QMutexLocker locker( m_safety );
     setValue( "twitter/cachedmentionssinceid", cachedId );
 }
 
 bool
 TomahawkSettings::scrobblingEnabled() const
 {
+    QMutexLocker locker( m_safety );
     return value( "lastfm/enablescrobbling", false ).toBool();
 }
 
@@ -436,6 +493,7 @@ TomahawkSettings::scrobblingEnabled() const
 void
 TomahawkSettings::setScrobblingEnabled( bool enable )
 {
+    QMutexLocker locker( m_safety );
     setValue( "lastfm/enablescrobbling", enable );
 }
 
@@ -443,6 +501,7 @@ TomahawkSettings::setScrobblingEnabled( bool enable )
 QString
 TomahawkSettings::xmppBotServer() const
 {
+    QMutexLocker locker( m_safety );
     return value( "xmppBot/server", QString() ).toString();
 }
 
@@ -450,6 +509,7 @@ TomahawkSettings::xmppBotServer() const
 void
 TomahawkSettings::setXmppBotServer( const QString& server )
 {
+    QMutexLocker locker( m_safety );
     setValue( "xmppBot/server", server );
 }
 
@@ -457,6 +517,7 @@ TomahawkSettings::setXmppBotServer( const QString& server )
 QString
 TomahawkSettings::xmppBotJid() const
 {
+    QMutexLocker locker( m_safety );
     return value( "xmppBot/jid", QString() ).toString();
 }
 
@@ -464,6 +525,7 @@ TomahawkSettings::xmppBotJid() const
 void
 TomahawkSettings::setXmppBotJid( const QString& component )
 {
+    QMutexLocker locker( m_safety );
     setValue( "xmppBot/jid", component );
 }
 
@@ -471,6 +533,7 @@ TomahawkSettings::setXmppBotJid( const QString& component )
 QString
 TomahawkSettings::xmppBotPassword() const
 {
+    QMutexLocker locker( m_safety );
     return value( "xmppBot/password", QString() ).toString();
 }
 
@@ -478,6 +541,7 @@ TomahawkSettings::xmppBotPassword() const
 void
 TomahawkSettings::setXmppBotPassword( const QString& password )
 {
+    QMutexLocker locker( m_safety );
     setValue( "xmppBot/password", password );
 }
 
@@ -485,6 +549,7 @@ TomahawkSettings::setXmppBotPassword( const QString& password )
 int
 TomahawkSettings::xmppBotPort() const
 {
+    QMutexLocker locker( m_safety );
     return value( "xmppBot/port", -1 ).toInt();
 }
 
@@ -492,23 +557,27 @@ TomahawkSettings::xmppBotPort() const
 void
 TomahawkSettings::setXmppBotPort( const int port )
 {
+    QMutexLocker locker( m_safety );
     setValue( "xmppBot/port", -1 );
 }
 
 void 
 TomahawkSettings::addScriptResolver(const QString& resolver)
 {
+    QMutexLocker locker( m_safety );
     setValue( "script/resolvers", scriptResolvers() << resolver );
 }
 
 QStringList 
 TomahawkSettings::scriptResolvers() const
 {
+    QMutexLocker locker( m_safety );
     return value( "script/resolvers" ).toStringList();
 }
 
 void 
 TomahawkSettings::setScriptResolvers( const QStringList& resolver )
 {
+    QMutexLocker locker( m_safety );
     setValue( "script/resolvers", resolver );
 }
