@@ -46,7 +46,7 @@ Quickstart on OS X
 
  Install homebrew
     $ ruby -e "$(curl -fsSL https://gist.github.com/raw/323731/install_homebrew.rb)"
-    $ brew install qt qjson gloox libmad libvorbis flac taglib boost liblastfm clucene
+    $ brew install cmake qt qjson gloox libmad libvorbis flac taglib boost liblastfm clucene
 
  Install libEchnoest as per the above instructions.
 
