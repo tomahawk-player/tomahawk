@@ -482,6 +482,20 @@ TomahawkSettings::setTwitterCachedMentionsSinceId( qint64 cachedId )
     setValue( "twitter/cachedmentionssinceid", cachedId );
 }
 
+QHash<QString, QVariant>
+TomahawkSettings::twitterCachedPeers() const
+{
+    QMutexLocker locker( m_safety );
+    return value( "twitter/cachedpeers", QHash<QString, QVariant>() ).toHash();
+}
+
+void
+TomahawkSettings::setTwitterCachedPeers( const QHash<QString, QVariant> &cachedPeers )
+{
+    QMutexLocker locker( m_safety );
+    setValue( "twitter/cachedpeers", cachedPeers );
+}
+
 bool
 TomahawkSettings::scrobblingEnabled() const
 {

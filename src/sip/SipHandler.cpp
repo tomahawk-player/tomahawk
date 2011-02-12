@@ -21,6 +21,7 @@ SipHandler::SipHandler( QObject* parent )
 
 SipHandler::~SipHandler()
 {
+    disconnectPlugins();
 }
 
 

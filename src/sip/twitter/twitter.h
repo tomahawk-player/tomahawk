@@ -56,10 +56,11 @@ private:
     QWeakPointer<TomahawkOAuthTwitter> m_twitterAuth;
     QWeakPointer<QTweetFriendsTimeline> m_friendsTimeline;
     QWeakPointer<QTweetMentions> m_mentions;
-    bool m_isValid;
+    bool m_isAuthed;
     QTimer m_checkTimer;
     qint64 m_cachedFriendsSinceId;
     qint64 m_cachedMentionsSinceId;
+    QHash<QString, QVariant> m_cachedPeers;
 };
 
 #endif
