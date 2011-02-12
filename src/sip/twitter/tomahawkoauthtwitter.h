@@ -11,7 +11,7 @@ class SIPDLLEXPORT TomahawkOAuthTwitter : public OAuthTwitter
     
 public:
     TomahawkOAuthTwitter( QObject *parent = 0 );
-        
+
     ~TomahawkOAuthTwitter() {}
     
 protected:

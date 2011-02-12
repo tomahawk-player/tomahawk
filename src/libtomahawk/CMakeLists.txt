@@ -302,6 +302,7 @@ include_directories( . ${CMAKE_CURRENT_BINARY_DIR} ..
     ../../thirdparty/jdns
     ../../thirdparty/jdns/jdns
     ../../thirdparty/jdns/jdnsshared
+    ../../thirdparty/qtweetlib/src
     playlist
 )
 

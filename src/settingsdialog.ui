@@ -29,7 +29,7 @@
       </sizepolicy>
      </property>
      <property name="currentIndex">
-      <number>0</number>
+      <number>2</number>
      </property>
      <widget class="QWidget" name="tabJabber">
       <attribute name="title">
@@ -463,6 +463,35 @@ When you press the button your web browser will launch and take you to Twitter.c
         </layout>
        </item>
        <item>
+        <widget class="QGroupBox" name="twitterInstructionsBox">
+         <property name="title">
+          <string>Instructions</string>
+         </property>
+         <layout class="QVBoxLayout" name="verticalLayout_12">
+          <item>
+           <layout class="QVBoxLayout" name="twitterInstructionsVLayout">
+            <item>
+             <widget class="QLabel" name="twitterInstructionsInfoLabel">
+              <property name="text">
+               <string>How it works is simple: just tweet &quot;Got Tomahawk?&quot; and be (very) patient. It can take a bit.
+
+</string>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QPushButton" name="twitterTweetGotTomahawkButton">
+              <property name="text">
+               <string>Press here if you'd like to have Tomahawk tweet this for you</string>
+              </property>
+             </widget>
+            </item>
+           </layout>
+          </item>
+         </layout>
+        </widget>
+       </item>
+       <item>
         <spacer name="twitterVertSpacer">
          <property name="orientation">
           <enum>Qt::Vertical</enum>
@@ -762,6 +791,22 @@ When you press the button your web browser will launch and take you to Twitter.c
     <hint type="sourcelabel">
      <x>459</x>
      <y>205</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>310</x>
+     <y>216</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>twitterTweetGotTomahawkButton</sender>
+   <signal>pressed()</signal>
+   <receiver>SettingsDialog</receiver>
+   <slot>startPostGotTomahawkStatus()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>310</x>
+     <y>313</y>
     </hint>
     <hint type="destinationlabel">
      <x>310</x>

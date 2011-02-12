@@ -3,6 +3,9 @@
 
 #include <QDialog>
 
+#include <qtweetstatus.h>
+#include <qtweetuser.h>
+
 class QNetworkReply;
 
 namespace Ui
@@ -52,6 +55,9 @@ private slots:
     void onLastFmFinished();
     
     void authenticateTwitter();
+    void startPostGotTomahawkStatus();
+    void postGotTomahawkStatusAuthVerifyReply( const QTweetUser &user );
+    void postGotTomahawkStatusUpdateReply( const QTweetStatus &status );
 
     void addScriptResolver();
     void scriptSelectionChanged();
