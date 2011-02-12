@@ -18,6 +18,9 @@ public:
 
     virtual ~JabberPlugin() { delete p; }
 
+    //FIXME: Make this more correct
+    virtual bool isValid() { return true; }
+
     void setProxy( QNetworkProxy* proxy );
 
 public slots:

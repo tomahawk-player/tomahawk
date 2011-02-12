@@ -349,7 +349,8 @@ SettingsDialog::postGotTomahawkStatusAuthVerifyReply( const QTweetUser &user )
     twitAuth->setOAuthTokenSecret( s->twitterOAuthTokenSecret().toLatin1() );
     QTweetStatusUpdate *statUpdate = new QTweetStatusUpdate( twitAuth, this );
     connect( statUpdate, SIGNAL( postedStatus(const QTweetStatus &) ), SLOT( postGotTomahawkStatusUpdateReply(const QTweetStatus &) ) );
-    statUpdate->post( QString( "Got Tomahawk?" ) );
+    QString uuid = QUuid::createUuid();
+    statUpdate->post( QString( "Got Tomahawk? (" ) + uuid.mid( 1, 8 ) + ")" );
 }
 
 void

@@ -17,6 +17,8 @@ public:
     {}
 
     virtual ~ZeroconfPlugin() {}
+    
+    virtual bool isValid() { return true; }
 
 public slots:
     virtual bool connect( bool startup );

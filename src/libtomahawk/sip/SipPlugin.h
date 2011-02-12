@@ -14,6 +14,8 @@ public:
     enum SipErrorCode { AuthError, ConnectionError }; // Placeholder for errors, to be defined
 
     virtual ~SipPlugin() {}
+    
+    virtual bool isValid() = 0;
 
 public slots:
     virtual bool connect( bool startup = false ) = 0;
