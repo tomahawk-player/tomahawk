@@ -110,6 +110,8 @@ DynamicModel::trackResolved()
         emit collapseFromTo( m_lastResolvedRow, m_currentAttempts );
     }
     m_currentAttempts = 0;
+
+    emit checkForOverflow();
 }
 
 void 
@@ -137,7 +139,7 @@ DynamicModel::newTrackLoading()
     } else if( m_onDemandRunning && m_currentAttempts == 0 ) { // if we're in dynamic mode and we're also currently idle
         m_lastResolvedRow = rowCount( QModelIndex() );
         m_playlist->generator()->fetchNext();
-    }
+    }    
 }
 
 void 

@@ -64,7 +64,7 @@ DynamicWidget::DynamicWidget( const Tomahawk::dynplaylist_ptr& playlist, QWidget
     m_view->setContentsMargins( 0, 0, 0, 0 );
     m_layout->addWidget( m_view, 1 );
     
-    connect( m_model, SIGNAL( collapseFromTo( int, int ) ), m_view, SLOT( collapseEntries( int, int ) ), Qt::QueuedConnection );
+    connect( m_model, SIGNAL( collapseFromTo( int, int ) ), m_view, SLOT( collapseEntries( int, int ) ) );
     connect( m_model, SIGNAL( trackGenerationFailure( QString ) ), m_view, SLOT( showMessage( QString ) ) );    
     
     

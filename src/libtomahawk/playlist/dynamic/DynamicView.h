@@ -21,6 +21,7 @@
 #include <QTimer>
 #include <QPropertyAnimation>
 #include <QTimeLine>
+#include <QMutex>
 
 class PlaylistModel;
 class TrackModel;
@@ -51,18 +52,23 @@ public slots:
     // collapse and animate the transition
     // there MUST be a row *after* startRow + num. that is, you can't collapse
     // entries unless there is at least one entry after the last collapsed row
-    void collapseEntries( int startRow, int num );
+    // optionally you can specify how  many rows are past the block of collapsed rows
+    void collapseEntries( int startRow, int num, int numToKeep = 1 );
     
 private slots:
     void onTrackCountChanged( unsigned int );
-    
+    void checkForOverflow();
+    void animFinished();
+
 private:
+    DynamicModel* m_model;
     QString m_title;
     QString m_body;
     
     bool m_onDemand;
     bool m_readOnly;
-    
+    bool m_checkOnCollapse;
+
     // for collapsing animation
     QPoint m_fadingPointAnchor;
     QPoint m_bottomAnchor;
