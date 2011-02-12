@@ -2,9 +2,14 @@
 
 #include <QtPlugin>
 
+const QString
+ZeroconfPlugin::name()
+{
+    return QString( MYNAME );
+}
 
 bool
-ZeroconfPlugin::connect( bool /*startup*/ )
+ZeroconfPlugin::connectPlugin( bool /*startup*/ )
 {
     delete m_zeroconf;
     m_zeroconf = new TomahawkZeroconf( Servent::instance()->port(), this );

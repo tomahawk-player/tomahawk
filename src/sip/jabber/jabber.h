@@ -6,6 +6,8 @@
 
 #include "../sipdllmacro.h"
 
+#define MYNAME "SIPJABBER"
+
 class SIPDLLEXPORT JabberPlugin : public SipPlugin
 {
     Q_OBJECT
@@ -20,13 +22,14 @@ public:
 
     //FIXME: Make this more correct
     virtual bool isValid() { return true; }
+    virtual const QString name();
 
     void setProxy( QNetworkProxy* proxy );
 
 public slots:
-    virtual bool connect( bool startup );
+    virtual bool connectPlugin( bool startup );
 
-    void disconnect()
+    void disconnectPlugin()
     {
         QMetaObject::invokeMethod( p,
                                    "disconnect",

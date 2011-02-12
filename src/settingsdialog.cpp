@@ -1,7 +1,3 @@
-#include "settingsdialog.h"
-#include "ui_settingsdialog.h"
-#include "ui_proxydialog.h"
-
 #include <QCryptographicHash>
 #include <QDebug>
 #include <QDesktopServices>
@@ -14,14 +10,17 @@
 #include <lastfm/XmlQuery>
 #endif
 
+#include <qtweetaccountverifycredentials.h>
+#include <qtweetstatusupdate.h>
+
+#include "settingsdialog.h"
+#include "ui_settingsdialog.h"
+#include "ui_proxydialog.h"
 #include "tomahawk/tomahawkapp.h"
 #include "musicscanner.h"
 #include "tomahawksettings.h"
 #include "sip/SipHandler.h"
 #include "sip/twitter/tomahawkoauthtwitter.h"
-#include <qtweetaccountverifycredentials.h>
-#include <qtweetstatusupdate.h>
-
 
 static QString
 md5( const QByteArray& src )
@@ -156,8 +155,8 @@ SettingsDialog::~SettingsDialog()
 
         if( rejabber )
         {
-            APP->sipHandler()->disconnect();
-            APP->sipHandler()->connect();
+            APP->sipHandler()->disconnectPlugins();
+            APP->sipHandler()->connectPlugins();
         }
     }
     else
@@ -303,6 +302,7 @@ SettingsDialog::authenticateTwitter()
         ui->twitterStatusLabel->setText("Status: Credentials saved");
         ui->twitterAuthenticateButton->setText( "Re-authenticate" );
         ui->twitterInstructionsBox->setVisible( true );
+        TomahawkApp::instance()->sipHandler()->connectPlugins( false, "SIPTWITTER" );
     }
     else
     {

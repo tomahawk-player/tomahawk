@@ -114,30 +114,39 @@ SipHandler::loadPlugin( QObject* plugin )
 
 
 void
-SipHandler::connect( bool startup )
+SipHandler::connectPlugins( bool startup, const QString &pluginName )
 {
     foreach( SipPlugin* sip, m_plugins )
-        sip->connect( startup );
+    {
+        if ( pluginName.isEmpty() || ( !pluginName.isEmpty() && sip->name() == pluginName ) )
+            sip->connectPlugin( startup );
+    }
     m_connected = true;
 }
 
 
 void
-SipHandler::disconnect()
+SipHandler::disconnectPlugins( const QString &pluginName )
 {
     foreach( SipPlugin* sip, m_plugins )
-        sip->disconnect();
-    SourceList::instance()->removeAllRemote();
-    m_connected = false;
+    {
+        if ( pluginName.isEmpty() || ( !pluginName.isEmpty() && sip->name() == pluginName ) )
+            sip->disconnectPlugin();
+    }
+    if( pluginName.isEmpty() )
+    {
+        SourceList::instance()->removeAllRemote();
+        m_connected = false;
+    }
 }
 
 void
 SipHandler::toggleConnect()
 {
     if( m_connected )
-        disconnect();
+        disconnectPlugins();
     else
-        connect();
+        connectPlugins();
 }
 
 

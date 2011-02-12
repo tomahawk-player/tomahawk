@@ -16,10 +16,11 @@ public:
     virtual ~SipPlugin() {}
     
     virtual bool isValid() = 0;
+    virtual const QString name() = 0;
 
 public slots:
-    virtual bool connect( bool startup = false ) = 0;
-    virtual void disconnect() = 0;
+    virtual bool connectPlugin( bool startup = false ) = 0;
+    virtual void disconnectPlugin() = 0;
 
     virtual void addContact( const QString &jid, const QString& msg = QString() ) = 0;
     virtual void sendMsg( const QString& to, const QString& msg ) = 0;

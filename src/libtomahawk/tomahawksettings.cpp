@@ -402,6 +402,30 @@ TomahawkSettings::setTwitterOAuthTokenSecret( const QString& oauthtokensecret )
     setValue( "twitter/oauthtokensecret", oauthtokensecret );
 }
 
+qint64
+TomahawkSettings::twitterCachedFriendsSinceId() const
+{
+    return value( "twitter/cachedfriendssinceid", 0 ).toLongLong();
+}
+
+void
+TomahawkSettings::setTwitterCachedFriendsSinceId( qint64 cachedId )
+{
+    setValue( "twitter/cachedfriendssinceid", cachedId );
+}
+
+qint64
+TomahawkSettings::twitterCachedMentionsSinceId() const
+{
+    return value( "twitter/cachedmentionssinceid", 0 ).toLongLong();
+}
+
+void
+TomahawkSettings::setTwitterCachedMentionsSinceId( qint64 cachedId )
+{
+    setValue( "twitter/cachedmentionssinceid", cachedId );
+}
+
 bool
 TomahawkSettings::scrobblingEnabled() const
 {

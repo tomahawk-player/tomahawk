@@ -103,6 +103,12 @@ public:
     QString twitterOAuthTokenSecret() const;
     void setTwitterOAuthTokenSecret( const QString& oauthtokensecret );
 
+    qint64 twitterCachedFriendsSinceId() const;
+    void setTwitterCachedFriendsSinceId( qint64 sinceid );
+    
+    qint64 twitterCachedMentionsSinceId() const;
+    void setTwitterCachedMentionsSinceId( qint64 sinceid );
+    
     /// XMPP Component Settings
     QString xmppBotServer() const;
     void setXmppBotServer( const QString &server );

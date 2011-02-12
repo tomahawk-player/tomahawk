@@ -6,6 +6,8 @@
 
 #include "../sipdllmacro.h"
 
+#define MYNAME "SIPZEROCONF"
+
 class SIPDLLEXPORT ZeroconfPlugin : public SipPlugin
 {
     Q_OBJECT
@@ -19,11 +21,12 @@ public:
     virtual ~ZeroconfPlugin() {}
     
     virtual bool isValid() { return true; }
+    virtual const QString name();
 
 public slots:
-    virtual bool connect( bool startup );
+    virtual bool connectPlugin( bool startup );
 
-    void disconnect()
+    void disconnectPlugin()
     {
     }
 

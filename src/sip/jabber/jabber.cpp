@@ -12,9 +12,14 @@ JabberPlugin::setProxy( QNetworkProxy* proxy )
     p->setProxy( proxy );
 }
 
+const QString
+JabberPlugin::name()
+{
+    return QString( MYNAME );
+}
 
 bool
-JabberPlugin::connect( bool startup )
+JabberPlugin::connectPlugin( bool startup )
 {
     qDebug() << "JabberPlugin::connect";
     if ( startup && !TomahawkSettings::instance()->jabberAutoConnect() )
