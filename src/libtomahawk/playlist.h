@@ -10,6 +10,8 @@
 #include "query.h"
 #include "typedefs.h"
 
+#include "playlistinterface.h"
+
 #include "dllmacro.h"
 
 class DatabaseCommand_LoadAllPlaylists;
@@ -79,7 +81,7 @@ struct PlaylistRevision
 };
 
 
-class DLLEXPORT Playlist : public QObject
+class DLLEXPORT Playlist : public QObject, public PlaylistInterface
 {
 Q_OBJECT
 Q_PROPERTY( QString guid            READ guid               WRITE setGuid )
@@ -137,12 +139,33 @@ public:
     void setShared( bool b )                    { m_shared = b; }
     // </IGNORE>
 
+    virtual QList<Tomahawk::query_ptr> tracks();
+
+    virtual int unfilteredTrackCount() const { return m_entries.count(); }
+    virtual int trackCount() const { return m_entries.count(); }
+
+    virtual Tomahawk::result_ptr siblingItem( int itemsAway ) { return result_ptr(); }
+
+    virtual PlaylistInterface::RepeatMode repeatMode() const { return PlaylistInterface::NoRepeat; }
+    virtual bool shuffled() const { return false; }
+    
+    virtual void setRepeatMode( PlaylistInterface::RepeatMode ) {}
+    virtual void setShuffled( bool ) {}
+    
+    virtual void setFilter( const QString& pattern ) {}
+    
 signals:
     /// emitted when the playlist revision changes (whenever the playlist changes)
     void revisionLoaded( Tomahawk::PlaylistRevision );
 
     /// watch for this to see when newly created playlist is synced to DB (if you care)
     void created();
+
+    void repeatModeChanged( PlaylistInterface::RepeatMode mode );
+    void shuffleModeChanged( bool enabled );
+
+    void trackCountChanged( unsigned int tracks );
+    void sourceTrackCountChanged( unsigned int tracks );
 
 public slots:
     // want to update the playlist from the model?

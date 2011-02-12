@@ -32,11 +32,13 @@ PlaylistEntry::queryVariant() const
     return m_query->toVariant();
 }
 
+
 void 
 PlaylistEntry::setQuery( const Tomahawk::query_ptr& q )
 {
     m_query = q;
 }
+
 
 const Tomahawk::query_ptr& 
 PlaylistEntry::query() const
@@ -51,11 +53,13 @@ PlaylistEntry::lastSource() const
     return m_lastsource;
 }
 
+
 void 
 PlaylistEntry::setLastSource( source_ptr s )
 {
     m_lastsource = s;
 }
+
 
 Playlist::Playlist( const source_ptr& author )
     : m_source( author )
@@ -63,6 +67,7 @@ Playlist::Playlist( const source_ptr& author )
 {
     qDebug() << Q_FUNC_INFO << "JSON";
 }
+
 
 // used when loading from DB:
 Playlist::Playlist( const source_ptr& src,
@@ -107,15 +112,17 @@ Playlist::Playlist( const source_ptr& author,
     init();
 }
 
+
 void
-      
 Playlist::init()     
 {
    m_locallyChanged = false;      
    connect( Pipeline::instance(), SIGNAL( idle() ), SLOT( onResolvingFinished() ) );  
 }
 
+
 Playlist::~Playlist() {}
+
 
 playlist_ptr
 Playlist::create( const source_ptr& author,
@@ -293,6 +300,7 @@ Playlist::setRevision( const QString& rev,
     emit revisionLoaded( pr );
 }
 
+
 PlaylistRevision 
 Playlist::setNewRevision( const QString& rev,
                                  const QList<QString>& neworderedguids,
@@ -373,11 +381,13 @@ Playlist::setNewRevision( const QString& rev,
         return pr;
 }
 
+
 const source_ptr&
 Playlist::author()
 { 
     return m_source; 
 }
+
 
 void 
 Playlist::resolve()
@@ -390,6 +400,7 @@ Playlist::resolve()
 
     Pipeline::instance()->resolve( qlist );
 }
+
 
 void
 Playlist::onResultsFound( const QList<Tomahawk::result_ptr>& results )
@@ -408,6 +419,7 @@ Playlist::onResolvingFinished()
         createNewRevision( currentrevision(), currentrevision(), m_entries );
     }
 }
+
 
 void
 Playlist::addEntry( const query_ptr& query, const QString& oldrev )
@@ -429,6 +441,7 @@ Playlist::addEntries( const QList<query_ptr>& queries, const QString& oldrev )
     QString newrev = uuid();
     createNewRevision( newrev, oldrev, el );
 }
+
 
 QList<plentry_ptr> 
 Playlist::addEntriesInternal( const QList<Tomahawk::query_ptr>& queries )
@@ -458,15 +471,27 @@ QList< plentry_ptr >
 Playlist::newEntries( const QList< plentry_ptr >& entries )
 {
     QSet<QString> currentguids;
-    foreach( plentry_ptr p, m_entries )
+    foreach( const plentry_ptr& p, m_entries )
         currentguids.insert( p->guid() ); // could be cached as member?
         
     // calc list of newly added entries:
     QList<plentry_ptr> added;
-    foreach( plentry_ptr p, entries )
+    foreach( const plentry_ptr& p, entries )
     {
         if( !currentguids.contains( p->guid() ) )
             added << p;
     }   
     return added;
 }
+
+
+QList<Tomahawk::query_ptr>
+Playlist::tracks()
+{
+    QList<Tomahawk::query_ptr> queries;
+    foreach( const plentry_ptr& p, m_entries )
+        queries << p->query();
+
+    return queries;
+}
+

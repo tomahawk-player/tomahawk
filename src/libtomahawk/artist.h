@@ -29,7 +29,7 @@ public:
 
 	Tomahawk::collection_ptr collection() const;
 
-    QList<Tomahawk::query_ptr> tracks();
+    virtual QList<Tomahawk::query_ptr> tracks();
 
     virtual int trackCount() const { return 0; }
     virtual int unfilteredTrackCount() const { return m_queries.count(); }
