@@ -86,6 +86,7 @@ PlaylistManager::PlaylistManager( QObject* parent )
     m_superCollectionFlatModel = new CollectionFlatModel( m_superCollectionView );
     m_superCollectionView->setModel( m_superCollectionFlatModel );
     m_superCollectionView->setFrameShape( QFrame::NoFrame );
+    m_superCollectionView->setAttribute( Qt::WA_MacShowFocusRect, 0 );
 
     m_superAlbumView = new AlbumView();
     m_superAlbumModel = new AlbumModel( m_superAlbumView );
@@ -159,6 +160,7 @@ PlaylistManager::show( const Tomahawk::playlist_ptr& playlist )
         PlaylistModel* model = new PlaylistModel();
         view->setModel( model );
         view->setFrameShape( QFrame::NoFrame );
+        view->setAttribute( Qt::WA_MacShowFocusRect, 0 );
         model->loadPlaylist( playlist );
         playlist->resolve();
 
@@ -227,6 +229,7 @@ PlaylistManager::show( const Tomahawk::artist_ptr& artist )
         PlaylistModel* model = new PlaylistModel();
         view->setModel( model );
         view->setFrameShape( QFrame::NoFrame );
+        view->setAttribute( Qt::WA_MacShowFocusRect, 0 );
         model->append( artist );
 
         m_currentInterface = view->proxyModel();
@@ -264,6 +267,7 @@ PlaylistManager::show( const Tomahawk::album_ptr& album )
         PlaylistModel* model = new PlaylistModel();
         view->setModel( model );
         view->setFrameShape( QFrame::NoFrame );
+        view->setAttribute( Qt::WA_MacShowFocusRect, 0 );
         model->append( album );
 
         m_currentInterface = view->proxyModel();
@@ -303,6 +307,7 @@ PlaylistManager::show( const Tomahawk::collection_ptr& collection )
             CollectionFlatModel* model = new CollectionFlatModel();
             view->setModel( model );
             view->setFrameShape( QFrame::NoFrame );
+            view->setAttribute( Qt::WA_MacShowFocusRect, 0 );
             model->addCollection( collection );
 
             m_currentInterface = view->proxyModel();
@@ -327,6 +332,7 @@ PlaylistManager::show( const Tomahawk::collection_ptr& collection )
             AlbumModel* amodel = new AlbumModel( aview );
             aview->setModel( amodel );
             aview->setFrameShape( QFrame::NoFrame );
+            aview->setAttribute( Qt::WA_MacShowFocusRect, 0 );
             amodel->addCollection( collection );
 
             m_currentInterface = aview->proxyModel();
