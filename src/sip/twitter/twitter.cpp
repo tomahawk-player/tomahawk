@@ -111,10 +111,12 @@ TwitterPlugin::connectAuthVerifyReply( const QTweetUser &user )
             m_mentions = QWeakPointer<QTweetMentions>( new QTweetMentions( m_twitterAuth.data(), this ) );
             m_directMessages = QWeakPointer<QTweetDirectMessages>( new QTweetDirectMessages( m_twitterAuth.data(), this ) );
             m_directMessageNew = QWeakPointer<QTweetDirectMessageNew>( new QTweetDirectMessageNew( m_twitterAuth.data(), this ) );
+            m_directMessageDestroy = QWeakPointer<QTweetDirectMessageDestroy>( new QTweetDirectMessageDestroy( m_twitterAuth.data(), this ) );
             connect( m_friendsTimeline.data(), SIGNAL( parsedStatuses(const QList< QTweetStatus > &) ), SLOT( friendsTimelineStatuses(const QList<QTweetStatus> &) ) );
             connect( m_mentions.data(), SIGNAL( parsedStatuses(const QList< QTweetStatus > &) ), SLOT( mentionsStatuses(const QList<QTweetStatus> &) ) );
             connect( m_directMessages.data(), SIGNAL( parsedStatuses(const QList< QTweetDMStatus > &) ), SLOT( directMessages(const QList<QTweetDMStatus> &) ) );
-            connect( m_directMessageNew.data(), SIGNAL( parsedStatuses(const QList< QTweetDMStatus > &) ), SLOT( directMessageNew(const QList<QTweetDMStatus> &) ) );
+            connect( m_directMessageNew.data(), SIGNAL( parsedStatuses(const QList< QTweetDMStatus > &) ), SLOT( directMessagePosted(const QTweetDMStatus &) ) );
+            connect( m_directMessageDestroy.data(), SIGNAL( parsedStatuses(const QList< QTweetDMStatus > &) ), SLOT( directMessageDestoyed(const QTweetDMStatus &) ) );
             QMetaObject::invokeMethod( this, "checkTimerFired", Qt::AutoConnection );
         }
         else
@@ -268,6 +270,8 @@ TwitterPlugin::directMessages( const QList< QTweetDMStatus > &messages )
         peersChanged = true;
         
         QMetaObject::invokeMethod( this, "registerOffer", Q_ARG( QString, status.senderScreenName() ), QGenericArgument( "QHash< QString, QVariant >", (const void*)&peerData ) );
+        if ( !m_directMessageDestroy.isNull() )
+            m_directMessageDestroy.data()->destroyMessage( status.id() );
     }
     
     TomahawkSettings::instance()->setTwitterCachedDirectMessagesSinceId( m_cachedDirectMessagesSinceId );
@@ -321,11 +325,17 @@ TwitterPlugin::sendOffer( const QString &screenName, const QHash< QString, QVari
 }
 
 void
-TwitterPlugin::directMessageNew(const QTweetDMStatus& message)
+TwitterPlugin::directMessagePosted(const QTweetDMStatus& message)
 {
     qDebug() << Q_FUNC_INFO;
-    qDebug() << "Message sent to " << message.recipientScreenName() << " containing: " << message.text();
-}
+    qDebug() << "Message sent to " << message.recipientScreenName() << " containing: " << message.text();}
 
+
+void
+TwitterPlugin::directMessageDestroyed(const QTweetDMStatus& message)
+{
+    qDebug() << Q_FUNC_INFO;
+    qDebug() << "Message " << message.text() << " destroyed";
+}
 
 Q_EXPORT_PLUGIN2( sip, TwitterPlugin )

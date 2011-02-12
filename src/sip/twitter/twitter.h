@@ -9,6 +9,7 @@
 #include <qtweetfriendstimeline.h>
 #include <qtweetdirectmessages.h>
 #include <qtweetdirectmessagenew.h>
+#include <qtweetdirectmessagedestroy.h>
 #include <qtweetmentions.h>
 #include <qtweetdmstatus.h>
 
@@ -55,7 +56,8 @@ private slots:
     void mentionsStatuses( const QList< QTweetStatus > &statuses );
     void pollDirectMessages();
     void directMessages( const QList< QTweetDMStatus > &messages );
-    void directMessageNew( const QTweetDMStatus &message );
+    void directMessagePosted( const QTweetDMStatus &message );
+    void directMessageDestroyed( const QTweetDMStatus &message );
     void registerOffer( const QString &screenName, const QHash< QString, QVariant > &peerdata );
     void sendOffer( const QString &screenName, const QHash< QString, QVariant > &peerdata );
     void makeConnection( const QString &screenName, const QHash< QString, QVariant > &peerdata );
@@ -66,6 +68,7 @@ private:
     QWeakPointer< QTweetMentions > m_mentions;
     QWeakPointer< QTweetDirectMessages > m_directMessages;
     QWeakPointer< QTweetDirectMessageNew > m_directMessageNew;
+    QWeakPointer< QTweetDirectMessageDestroy > m_directMessageDestroy;
     bool m_isAuthed;
     QTimer m_checkTimer;
     qint64 m_cachedFriendsSinceId;
