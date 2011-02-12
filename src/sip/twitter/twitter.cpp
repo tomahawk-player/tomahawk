@@ -5,7 +5,6 @@
 
 #include <qtweetaccountverifycredentials.h>
 #include <qtweetuser.h>
-#include <qtweetfriendstimeline.h>
 #include <qtweetstatus.h>
 
 #include <utils/tomahawkutils.h>
@@ -18,12 +17,15 @@ TwitterPlugin::TwitterPlugin()
     , m_checkTimer( this )
     , m_cachedFriendsSinceId( 0 )
     , m_cachedMentionsSinceId( 0 )
+    , m_cachedDirectMessagesSinceId( 0 )
     , m_cachedPeers()
+    , m_finishedFriends( false )
+    , m_finishedMentions( false )
 {
     qDebug() << Q_FUNC_INFO;
     m_checkTimer.setInterval( 60000 );
     m_checkTimer.setSingleShot( false );
-    QObject::connect( &m_checkTimer, SIGNAL( timeout() ), SLOT( checkTimerFired() ) );
+    connect( &m_checkTimer, SIGNAL( timeout() ), SLOT( checkTimerFired() ) );
     m_checkTimer.start();
 }
 
@@ -68,7 +70,7 @@ TwitterPlugin::connectPlugin( bool /*startup*/ )
     m_twitterAuth.data()->setOAuthTokenSecret( settings->twitterOAuthTokenSecret().toLatin1() );
     
     QTweetAccountVerifyCredentials *credVerifier = new QTweetAccountVerifyCredentials( m_twitterAuth.data(), this );
-    QObject::connect( credVerifier, SIGNAL( parsedUser(const QTweetUser &) ), SLOT( connectAuthVerifyReply(const QTweetUser &) ) );
+    connect( credVerifier, SIGNAL( parsedUser(const QTweetUser &) ), SLOT( connectAuthVerifyReply(const QTweetUser &) ) );
     credVerifier->verify();
     /*
     QObject::connect( m_zeroconf, SIGNAL( tomahawkHostFound( const QString&, int, const QString&, const QString& ) ),
@@ -107,9 +109,11 @@ TwitterPlugin::connectAuthVerifyReply( const QTweetUser &user )
         {
             m_friendsTimeline = QWeakPointer<QTweetFriendsTimeline>( new QTweetFriendsTimeline( m_twitterAuth.data(), this ) );
             m_mentions = QWeakPointer<QTweetMentions>( new QTweetMentions( m_twitterAuth.data(), this ) );
-            QObject::connect( m_friendsTimeline.data(), SIGNAL( parsedStatuses(const QList< QTweetStatus > &) ), SLOT( friendsTimelineStatuses(const QList<QTweetStatus> &) ) );
-            QObject::connect( m_mentions.data(), SIGNAL( parsedStatuses(const QList< QTweetStatus > &) ), SLOT( mentionsStatuses(const QList<QTweetStatus> &) ) );
-            QMetaObject::invokeMethod( this, "checkTimerFired", Qt::DirectConnection );
+            m_directMessages = QWeakPointer<QTweetDirectMessages>( new QTweetDirectMessages( m_twitterAuth.data(), this ) );
+            connect( m_friendsTimeline.data(), SIGNAL( parsedStatuses(const QList< QTweetStatus > &) ), SLOT( friendsTimelineStatuses(const QList<QTweetStatus> &) ) );
+            connect( m_mentions.data(), SIGNAL( parsedStatuses(const QList< QTweetStatus > &) ), SLOT( mentionsStatuses(const QList<QTweetStatus> &) ) );
+            connect( m_directMessages.data(), SIGNAL( parsedStatuses(const QList< QTweetDMStatus > &) ), SLOT( mentionsStatuses(const QList<QTweetDMStatus> &) ) );
+            QMetaObject::invokeMethod( this, "checkTimerFired", Qt::AutoConnection );
         }
         else
         {
@@ -122,24 +126,24 @@ TwitterPlugin::connectAuthVerifyReply( const QTweetUser &user )
 void
 TwitterPlugin::checkTimerFired()
 {
-    if ( isValid() )
-    {
-        if ( m_cachedFriendsSinceId == 0 )
-            m_cachedFriendsSinceId = TomahawkSettings::instance()->twitterCachedFriendsSinceId();
-        qDebug() << "TwitterPlugin using friend timeline id of " << m_cachedFriendsSinceId;
-        if ( !m_friendsTimeline.isNull() )
-            m_friendsTimeline.data()->fetch( m_cachedFriendsSinceId, 0, 800 );
-        
-        if ( m_cachedMentionsSinceId == 0 )
-            m_cachedMentionsSinceId = TomahawkSettings::instance()->twitterCachedMentionsSinceId();
-        qDebug() << "TwitterPlugin using mentions timeline id of " << m_cachedMentionsSinceId;
-        if ( !m_mentions.isNull() )
-            m_mentions.data()->fetch( m_cachedMentionsSinceId, 0, 800 );
-    }
+    if ( !isValid() )
+        return;
+
+    if ( m_cachedFriendsSinceId == 0 )
+        m_cachedFriendsSinceId = TomahawkSettings::instance()->twitterCachedFriendsSinceId();
+    qDebug() << "TwitterPlugin using friend timeline id of " << m_cachedFriendsSinceId;
+    if ( !m_friendsTimeline.isNull() )
+        m_friendsTimeline.data()->fetch( m_cachedFriendsSinceId, 0, 800 );
+    
+    if ( m_cachedMentionsSinceId == 0 )
+        m_cachedMentionsSinceId = TomahawkSettings::instance()->twitterCachedMentionsSinceId();
+    qDebug() << "TwitterPlugin using mentions timeline id of " << m_cachedMentionsSinceId;
+    if ( !m_mentions.isNull() )
+        m_mentions.data()->fetch( m_cachedMentionsSinceId, 0, 800 );
 }
 
 void
-TwitterPlugin::friendsTimelineStatuses( const QList< QTweetStatus >& statuses )
+TwitterPlugin::friendsTimelineStatuses( const QList< QTweetStatus > &statuses )
 {
     qDebug() << Q_FUNC_INFO;
     QRegExp regex( QString( "^(@[a-zA-Z0-9]+ )?Got Tomahawk\\?(.*)$" ) );
@@ -147,22 +151,27 @@ TwitterPlugin::friendsTimelineStatuses( const QList< QTweetStatus >& statuses )
     {
         if ( status.id() > m_cachedFriendsSinceId )
             m_cachedFriendsSinceId = status.id();
-        QString statusText = status.text();
-        if ( regex.exactMatch( statusText ) )
+        if ( regex.exactMatch( status.text() ) )
         {
             qDebug() << "TwitterPlugin found an exact tweet from friend " << status.user().screenName();
             QHash<QString, QVariant> peerData;
-            peerData["host"] = QVariant::fromValue<QString>( "somehost" );
-            peerData["port"] = QVariant::fromValue<QString>( "port" );
-            m_cachedPeers[status.user().screenName()] = QVariant::fromValue< QHash< QString, QVariant > >( peerData );
+            if ( ! m_cachedPeers.contains( status.user().screenName() ) )
+            {
+                QHash< QString, QVariant > peerData;
+                peerData["sentuid"] = QVariant::fromValue< QString >( uuid() );
+                m_cachedPeers[status.user().screenName()] = QVariant::fromValue< QHash< QString, QVariant > >( peerData );
+            }
         }
     }
     
     TomahawkSettings::instance()->setTwitterCachedFriendsSinceId( m_cachedFriendsSinceId );
+    
+    m_finishedFriends = true;
+    QMetaObject::invokeMethod( this, "pollDirectMessages", Qt::AutoConnection );
 }
 
 void
-TwitterPlugin::mentionsStatuses( const QList< QTweetStatus >& statuses )
+TwitterPlugin::mentionsStatuses( const QList< QTweetStatus > &statuses )
 {
     qDebug() << Q_FUNC_INFO;
     QRegExp regex( QString( "^(@[a-zA-Z0-9]+ )?Got Tomahawk\\?(.*)$" ) );
@@ -170,18 +179,66 @@ TwitterPlugin::mentionsStatuses( const QList< QTweetStatus >& statuses )
     {
         if ( status.id() > m_cachedMentionsSinceId )
             m_cachedMentionsSinceId = status.id();
-        QString statusText = status.text();
-        if ( regex.exactMatch( statusText ) )
+        if ( regex.exactMatch( status.text() ) )
         {
             qDebug() << "TwitterPlugin found an exact matching mention from user " << status.user().screenName();
-            QHash<QString, QVariant> peerData;
-            peerData["host"] = QVariant::fromValue<QString>( "somehost" );
-            peerData["port"] = QVariant::fromValue<QString>( "port" );
-            m_cachedPeers[status.user().screenName()] = QVariant::fromValue< QHash< QString, QVariant > >( peerData );
+            if ( ! m_cachedPeers.contains( status.user().screenName() ) )
+            {
+                QHash< QString, QVariant > peerData;
+                peerData["sentuid"] = QVariant::fromValue< QString >( uuid() );
+                m_cachedPeers[status.user().screenName()] = QVariant::fromValue< QHash< QString, QVariant > >( peerData );
+            }
         }
     }
     
     TomahawkSettings::instance()->setTwitterCachedMentionsSinceId( m_cachedMentionsSinceId );
+    
+    m_finishedMentions = true;
+    QMetaObject::invokeMethod( this, "pollDirectMessages", Qt::AutoConnection );
+}
+
+void
+TwitterPlugin::pollDirectMessages()
+{
+    if ( !m_finishedMentions || !m_finishedFriends )
+        return;
+    
+    m_finishedFriends = false;
+    m_finishedMentions = false;
+    
+    if ( !isValid() )
+        return;
+    
+    if ( m_cachedDirectMessagesSinceId == 0 )
+            m_cachedDirectMessagesSinceId = TomahawkSettings::instance()->twitterCachedDirectMessagesSinceId();
+    qDebug() << "TwitterPlugin using direct messages id of " << m_cachedDirectMessagesSinceId;
+    if ( !m_directMessages.isNull() )
+        m_directMessages.data()->fetch( m_cachedDirectMessagesSinceId, 0, 800 );
+}
+
+void
+TwitterPlugin::directMessages( const QList< QTweetDMStatus > &messages )
+{
+    qDebug() << Q_FUNC_INFO;
+    QRegExp regex( QString( "^(@[a-zA-Z0-9]+ )?Got Tomahawk\\?(.*)$" ) );
+    foreach( QTweetDMStatus status, messages )
+    {
+        if ( status.id() > m_cachedDirectMessagesSinceId )
+            m_cachedDirectMessagesSinceId = status.id();
+        if ( regex.exactMatch( status.text() ) )
+        {
+            qDebug() << "TwitterPlugin found an exact matching mention from user " << status.sender().screenName();
+            if ( ! m_cachedPeers.contains( status.sender().screenName() ) )
+            {
+                QHash< QString, QVariant > peerData;
+                peerData["sentuid"] = QVariant::fromValue< QString >( uuid() );
+                m_cachedPeers[status.sender().screenName()] = QVariant::fromValue< QHash< QString, QVariant > >( peerData );
+            }
+        }
+    }
+    
+    TomahawkSettings::instance()->setTwitterCachedDirectMessagesSinceId( m_cachedDirectMessagesSinceId );
+    
 }
 
 void

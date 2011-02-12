@@ -7,7 +7,9 @@
 #include <qtweetuser.h>
 #include <qtweetnetbase.h>
 #include <qtweetfriendstimeline.h>
+#include <qtweetdirectmessages.h>
 #include <qtweetmentions.h>
+#include <qtweetdmstatus.h>
 
 #include "../sipdllmacro.h"
 #include "sip/SipPlugin.h"
@@ -51,16 +53,22 @@ private slots:
     void checkTimerFired();
     void friendsTimelineStatuses( const QList< QTweetStatus > &statuses );
     void mentionsStatuses( const QList< QTweetStatus > &statuses );
+    void pollDirectMessages();
+    void directMessages( const QList< QTweetDMStatus > &messages );
 
 private:
-    QWeakPointer<TomahawkOAuthTwitter> m_twitterAuth;
-    QWeakPointer<QTweetFriendsTimeline> m_friendsTimeline;
-    QWeakPointer<QTweetMentions> m_mentions;
+    QWeakPointer< TomahawkOAuthTwitter > m_twitterAuth;
+    QWeakPointer< QTweetFriendsTimeline > m_friendsTimeline;
+    QWeakPointer< QTweetMentions > m_mentions;
+    QWeakPointer< QTweetDirectMessages > m_directMessages;
     bool m_isAuthed;
     QTimer m_checkTimer;
     qint64 m_cachedFriendsSinceId;
     qint64 m_cachedMentionsSinceId;
-    QHash<QString, QVariant> m_cachedPeers;
+    qint64 m_cachedDirectMessagesSinceId;
+    QHash< QString, QVariant > m_cachedPeers;
+    bool m_finishedFriends;
+    bool m_finishedMentions;
 };
 
 #endif

@@ -109,6 +109,9 @@ public:
     qint64 twitterCachedMentionsSinceId() const;
     void setTwitterCachedMentionsSinceId( qint64 sinceid );
     
+    qint64 twitterCachedDirectMessagesSinceId() const;
+    void setTwitterCachedDirectMessagesSinceId( qint64 sinceid );
+    
     QHash<QString, QVariant> twitterCachedPeers() const;
     void setTwitterCachedPeers( const QHash<QString, QVariant> &cachedPeers );
     

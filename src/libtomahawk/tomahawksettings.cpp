@@ -430,70 +430,84 @@ QString
 TomahawkSettings::twitterOAuthToken() const
 {
     QMutexLocker locker( m_safety );
-    return value( "twitter/oauthtoken" ).toString();
+    return value( "twitter/OAuthToken" ).toString();
 }
 
 void
 TomahawkSettings::setTwitterOAuthToken( const QString& oauthtoken )
 {
     QMutexLocker locker( m_safety );
-    setValue( "twitter/oauthtoken", oauthtoken );
+    setValue( "twitter/OAuthToken", oauthtoken );
 }
 
 QString
 TomahawkSettings::twitterOAuthTokenSecret() const
 {
     QMutexLocker locker( m_safety );
-    return value( "twitter/oauthtokensecret" ).toString();
+    return value( "twitter/OAuthTokenSecret" ).toString();
 }
 
 void
 TomahawkSettings::setTwitterOAuthTokenSecret( const QString& oauthtokensecret )
 {
     QMutexLocker locker( m_safety );
-    setValue( "twitter/oauthtokensecret", oauthtokensecret );
+    setValue( "twitter/OAuthTokenSecret", oauthtokensecret );
 }
 
 qint64
 TomahawkSettings::twitterCachedFriendsSinceId() const
 {
     QMutexLocker locker( m_safety );
-    return value( "twitter/cachedfriendssinceid", 0 ).toLongLong();
+    return value( "twitter/CachedFriendsSinceID", 0 ).toLongLong();
 }
 
 void
 TomahawkSettings::setTwitterCachedFriendsSinceId( qint64 cachedId )
 {
     QMutexLocker locker( m_safety );
-    setValue( "twitter/cachedfriendssinceid", cachedId );
+    setValue( "twitter/CachedFriendsSinceID", cachedId );
 }
 
 qint64
 TomahawkSettings::twitterCachedMentionsSinceId() const
 {
     QMutexLocker locker( m_safety );
-    return value( "twitter/cachedmentionssinceid", 0 ).toLongLong();
+    return value( "twitter/CachedMentionsSinceID", 0 ).toLongLong();
 }
 
 void
 TomahawkSettings::setTwitterCachedMentionsSinceId( qint64 cachedId )
 {
     QMutexLocker locker( m_safety );
-    setValue( "twitter/cachedmentionssinceid", cachedId );
+    setValue( "twitter/CachedMentionsSinceID", cachedId );
+}
+
+qint64
+TomahawkSettings::twitterCachedDirectMessagesSinceId() const
+{
+    QMutexLocker locker( m_safety );
+    return value( "twitter/CachedDirectMessagesSinceID", 0 ).toLongLong();
+}
+
+void
+TomahawkSettings::setTwitterCachedDirectMessagesSinceId( qint64 cachedId )
+{
+    QMutexLocker locker( m_safety );
+    setValue( "twitter/CachedDirectMessagesSinceID", cachedId );
 }
 
 QHash<QString, QVariant>
 TomahawkSettings::twitterCachedPeers() const
 {
     QMutexLocker locker( m_safety );
-    return value( "twitter/cachedpeers", QHash<QString, QVariant>() ).toHash();
+    return value( "twitter/CachedPeers", QHash<QString, QVariant>() ).toHash();
 }
 
 void
 TomahawkSettings::setTwitterCachedPeers( const QHash<QString, QVariant> &cachedPeers )
 {
     QMutexLocker locker( m_safety );
-    setValue( "twitter/cachedpeers", cachedPeers );
+    setValue( "twitter/CachedPeers", cachedPeers );
 }
 
 bool
