@@ -41,7 +41,7 @@ private slots:
     void lanHostFound( const QString& host, int port, const QString& name, const QString& nodeid );
 
 private:
-    TomahawkOAuthTwitter *m_twitterAuth;
+    OAuthTwitter *m_twitterAuth;
 };
 
 #endif

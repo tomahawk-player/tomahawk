@@ -3,14 +3,14 @@
 
 #include <oauthtwitter.h>
 
-class TomahawkOAuthTwitter : public OAuthTwitter
+#include "../sipdllmacro.h"
+
+class SIPDLLEXPORT TomahawkOAuthTwitter : public OAuthTwitter
 {
     Q_OBJECT
     
 public:
-    TomahawkOAuthTwitter(QObject *parent = 0)
-        : OAuthTwitter( parent )
-        {}
+    TomahawkOAuthTwitter( QObject *parent = 0 );
         
     ~TomahawkOAuthTwitter() {}
     

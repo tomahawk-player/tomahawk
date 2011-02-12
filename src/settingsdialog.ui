@@ -412,6 +412,71 @@
        </item>
       </layout>
      </widget>
+     <widget class="QWidget" name="tabTwitter">
+      <attribute name="title">
+       <string>Twitter</string>
+      </attribute>
+      <layout class="QVBoxLayout" name="verticalLayout_10">
+       <item>
+        <layout class="QVBoxLayout" name="twitterVertLayout">
+         <item>
+          <widget class="QLabel" name="twitterInfoLabel">
+           <property name="sizePolicy">
+            <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+             <horstretch>0</horstretch>
+             <verstretch>0</verstretch>
+            </sizepolicy>
+           </property>
+           <property name="text">
+            <string>Authenticating with Twitter allows you to discover and play music from your Twitter friends running Tomahawk.
+
+This feature works best when you have set a static host name in the &quot;Jabber&quot; settings tab under Advanced Settings, but may work even if you do not. Please note: this discovery uses Direct Messages and will only work when both Twitter users have followed each other. Tomahawk will attempt to &quot;clean up&quot; after itself to keep your Direct Message inbox tidy, but may miss some.
+
+When you press the button your web browser will launch and take you to Twitter.com to authenticate. You must copy and paste the PIN number into the dialog box that appears.</string>
+           </property>
+           <property name="wordWrap">
+            <bool>true</bool>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <layout class="QHBoxLayout" name="twitterHorizontalLayout">
+           <item>
+            <widget class="QLabel" name="twitterStatusLabel">
+             <property name="text">
+              <string>Status: No saved credentials</string>
+             </property>
+             <property name="textFormat">
+              <enum>Qt::AutoText</enum>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="QPushButton" name="twitterAuthenticateButton">
+             <property name="text">
+              <string>Authenticate with Twitter</string>
+             </property>
+            </widget>
+           </item>
+          </layout>
+         </item>
+        </layout>
+       </item>
+       <item>
+        <spacer name="twitterVertSpacer">
+         <property name="orientation">
+          <enum>Qt::Vertical</enum>
+         </property>
+         <property name="sizeHint" stdset="0">
+          <size>
+           <width>20</width>
+           <height>40</height>
+          </size>
+         </property>
+        </spacer>
+       </item>
+      </layout>
+     </widget>
      <widget class="QWidget" name="tabLastfm">
       <attribute name="title">
        <string>Last.fm</string>
@@ -685,6 +750,22 @@
     <hint type="destinationlabel">
      <x>310</x>
      <y>262</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>twitterAuthenticateButton</sender>
+   <signal>pressed()</signal>
+   <receiver>SettingsDialog</receiver>
+   <slot>authenticateTwitter()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>459</x>
+     <y>205</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>310</x>
+     <y>216</y>
     </hint>
    </hints>
   </connection>

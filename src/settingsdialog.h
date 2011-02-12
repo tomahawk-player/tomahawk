@@ -50,6 +50,8 @@ private slots:
 
     void testLastFmLogin();
     void onLastFmFinished();
+    
+    void authenticateTwitter();
 
     void addScriptResolver();
     void scriptSelectionChanged();

@@ -18,6 +18,7 @@
 #include "musicscanner.h"
 #include "tomahawksettings.h"
 #include "sip/SipHandler.h"
+#include "sip/twitter/tomahawkoauthtwitter.h"
 
 
 static QString
@@ -60,6 +61,17 @@ SettingsDialog::SettingsDialog( QWidget *parent )
         ui->checkBoxAdvanced->setChecked( false );
         ui->groupBoxJabberAdvanced->setVisible( false );
         ui->groupBoxNetworkAdvanced->setVisible( false );
+    }
+
+    if ( s->twitterOAuthToken().isEmpty() || s->twitterOAuthTokenSecret().isEmpty() )
+    {
+        ui->twitterStatusLabel->setText("Status: No saved credentials");
+        ui->twitterAuthenticateButton->setText( "Authenticate" );
+    }
+    else
+    {
+        ui->twitterStatusLabel->setText("Status: Credentials saved");
+        ui->twitterAuthenticateButton->setText( "Re-authenticate" );
     }
 
     // MUSIC SCANNER
@@ -273,6 +285,29 @@ SettingsDialog::onLastFmFinished()
 #endif
 }
 
+void
+SettingsDialog::authenticateTwitter()
+{
+    TomahawkOAuthTwitter *twitAuth = new TomahawkOAuthTwitter( this );
+    twitAuth->setNetworkAccessManager( TomahawkUtils::nam() );
+    twitAuth->authorizePin();
+    if ( !twitAuth->oauthToken().isEmpty() && !twitAuth->oauthTokenSecret().isEmpty() )
+    {
+        TomahawkSettings* s = TomahawkSettings::instance();
+        s->setTwitterOAuthToken( twitAuth->oauthToken() );
+        s->setTwitterOAuthTokenSecret( twitAuth->oauthTokenSecret() );
+        ui->twitterStatusLabel->setText("Status: Credentials saved");
+        ui->twitterAuthenticateButton->setText( "Re-authenticate" );
+    }
+    else
+    {
+        TomahawkSettings* s = TomahawkSettings::instance();
+        s->setTwitterOAuthToken( QString() );
+        s->setTwitterOAuthTokenSecret( QString() );
+        ui->twitterStatusLabel->setText("Status: No saved credentials");
+        ui->twitterAuthenticateButton->setText( "Authenticate" );
+    }
+}
 
 ProxyDialog::ProxyDialog( QWidget *parent )
     : QDialog( parent )

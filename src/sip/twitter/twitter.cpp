@@ -8,7 +8,7 @@ bool
 TwitterPlugin::connect( bool /*startup*/ )
 {
     delete m_twitterAuth;
-    m_twitterAuth = new TomahawkOAuthTwitter( this );
+    m_twitterAuth = new OAuthTwitter( this );
     
     TomahawkSettings *settings = TomahawkSettings::instance();
     QString oauthtoken = settings->twitterOAuthToken();

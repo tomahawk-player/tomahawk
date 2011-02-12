@@ -387,7 +387,7 @@ TomahawkSettings::twitterOAuthToken() const
 void
 TomahawkSettings::setTwitterOAuthToken( const QString& oauthtoken )
 {
-    setValue( "twitter/username", oauthtoken );
+    setValue( "twitter/oauthtoken", oauthtoken );
 }
 
 QString

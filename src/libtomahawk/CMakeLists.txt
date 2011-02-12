@@ -366,6 +366,7 @@ target_link_libraries( tomahawklib
     ogg
     FLAC++
     tomahawk_jdns
+    tomahawk_qtweetlib
     ${CLUCENE_LIBRARY}
 )
 

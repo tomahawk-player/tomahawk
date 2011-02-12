@@ -28,6 +28,7 @@ SET( TOMAHAWK_INC_DIR "${CMAKE_CURRENT_SOURCE_DIR}/../include/" )
 
 SET( tomahawkSources ${tomahawkSources}
      sip/SipHandler.cpp
+     sip/twitter/tomahawkoauthtwitter.cpp
 
      infosystem/infosystem.cpp
      infosystem/infoplugins/echonestplugin.cpp
@@ -62,6 +63,7 @@ SET( tomahawkHeaders ${tomahawkHeaders}
      "${TOMAHAWK_INC_DIR}/tomahawk/infosystem.h"
 
      sip/SipHandler.h
+     sip/twitter/tomahawkoauthtwitter.h
 
      infosystem/infoplugins/echonestplugin.h
      infosystem/infoplugins/musixmatchplugin.h
@@ -113,6 +115,7 @@ INCLUDE_DIRECTORIES(
     ../alsa-playback
     ../rtaudio
     ../qxt/qxtweb-standalone/qxtweb
+    ../thirdparty/qtweetlib/src
 
     /usr/include/taglib
     /usr/local/include/taglib
@@ -168,6 +171,7 @@ TARGET_LINK_LIBRARIES( tomahawk
 
     qjson
     tag
+    tomahawk_qtweetlib
 )
 
 INCLUDE( "CPack.txt" )

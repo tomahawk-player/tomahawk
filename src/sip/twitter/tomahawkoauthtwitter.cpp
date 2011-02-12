@@ -1,6 +1,12 @@
 #include "tomahawkoauthtwitter.h"
 #include <QInputDialog>
 
+TomahawkOAuthTwitter::TomahawkOAuthTwitter( QObject* parent )
+    : OAuthTwitter( parent )
+{
+}
+
+
 int TomahawkOAuthTwitter::authorizationWidget()
 {
     bool ok;
