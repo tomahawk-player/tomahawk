@@ -302,6 +302,8 @@ SettingsDialog::authenticateTwitter()
         ui->twitterStatusLabel->setText("Status: Credentials saved");
         ui->twitterAuthenticateButton->setText( "Re-authenticate" );
         ui->twitterInstructionsBox->setVisible( true );
+        TomahawkSettings::instance()->setTwitterCachedFriendsSinceId( 0 );
+        TomahawkSettings::instance()->setTwitterCachedMentionsSinceId( 0 );
         TomahawkApp::instance()->sipHandler()->connectPlugins( false, "SIPTWITTER" );
     }
     else

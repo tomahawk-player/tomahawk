@@ -7,6 +7,7 @@
 #include <qtweetuser.h>
 #include <qtweetnetbase.h>
 #include <qtweetfriendstimeline.h>
+#include <qtweetmentions.h>
 
 #include "../sipdllmacro.h"
 #include "sip/SipPlugin.h"
@@ -49,12 +50,16 @@ private slots:
     void connectAuthVerifyReply( const QTweetUser &user );
     void checkTimerFired();
     void friendsTimelineStatuses( const QList< QTweetStatus > &statuses );
+    void mentionsStatuses( const QList< QTweetStatus > &statuses );
 
 private:
     QWeakPointer<TomahawkOAuthTwitter> m_twitterAuth;
+    QWeakPointer<QTweetFriendsTimeline> m_friendsTimeline;
+    QWeakPointer<QTweetMentions> m_mentions;
     bool m_isValid;
     QTimer m_checkTimer;
-    QWeakPointer<QTweetFriendsTimeline> m_friendsTimeline;
+    qint64 m_cachedFriendsSinceId;
+    qint64 m_cachedMentionsSinceId;
 };
 
 #endif
