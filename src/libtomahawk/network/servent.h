@@ -78,7 +78,7 @@ public:
     int port() const { return m_port; }
 
     // creates new token that allows a controlconnection to be set up
-    QString createConnectionKey( const QString& name = "" );
+    QString createConnectionKey( const QString& name = "", const QString &nodeid = "", const QString &key = "" );
 
     void registerOffer( const QString& key, Connection* conn );
 

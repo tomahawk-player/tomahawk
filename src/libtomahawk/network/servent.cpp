@@ -123,15 +123,17 @@ Servent::startListening( QHostAddress ha, bool upnp, int port )
 
 
 QString
-Servent::createConnectionKey( const QString& name )
+Servent::createConnectionKey( const QString& name, const QString &nodeid, const QString &key )
 {
     Q_ASSERT( this->thread() == QThread::currentThread() );
 
-    QString key = uuid();
+    QString _key = ( key.isEmpty() ? uuid() : key );
     ControlConnection* cc = new ControlConnection( this );
     cc->setName( name.isEmpty() ? QString( "KEY(%1)" ).arg( key ) : name );
-    registerOffer( key, cc );
-    return key;
+    if( !nodeid.isEmpty() )
+        cc->setId( nodeid );
+    registerOffer( _key, cc );
+    return _key;
 }
 
 

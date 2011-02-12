@@ -8,6 +8,7 @@
 #include <qtweetnetbase.h>
 #include <qtweetfriendstimeline.h>
 #include <qtweetdirectmessages.h>
+#include <qtweetdirectmessagenew.h>
 #include <qtweetmentions.h>
 #include <qtweetdmstatus.h>
 
@@ -48,19 +49,23 @@ public slots:
     }
 
 private slots:
-    void lanHostFound( const QString& host, int port, const QString& name, const QString& nodeid );
     void connectAuthVerifyReply( const QTweetUser &user );
     void checkTimerFired();
     void friendsTimelineStatuses( const QList< QTweetStatus > &statuses );
     void mentionsStatuses( const QList< QTweetStatus > &statuses );
     void pollDirectMessages();
     void directMessages( const QList< QTweetDMStatus > &messages );
+    void directMessageNew( const QTweetDMStatus &message );
+    void registerOffer( const QString &screenName, const QHash< QString, QVariant > &peerdata );
+    void sendOffer( const QString &screenName, const QHash< QString, QVariant > &peerdata );
+    void makeConnection( const QString &screenName, const QHash< QString, QVariant > &peerdata );
 
 private:
     QWeakPointer< TomahawkOAuthTwitter > m_twitterAuth;
     QWeakPointer< QTweetFriendsTimeline > m_friendsTimeline;
     QWeakPointer< QTweetMentions > m_mentions;
     QWeakPointer< QTweetDirectMessages > m_directMessages;
+    QWeakPointer< QTweetDirectMessageNew > m_directMessageNew;
     bool m_isAuthed;
     QTimer m_checkTimer;
     qint64 m_cachedFriendsSinceId;
