@@ -13,6 +13,8 @@ InfoBar::InfoBar( QWidget* parent )
     , ui( new Ui::InfoBar )
 {
     ui->setupUi( this );
+    layout()->setSpacing( 0 );
+    layout()->setContentsMargins( 0, 0, 0, 0 );
 
     QFont boldFont = ui->captionLabel->font();
     boldFont.setPixelSize( 18 );

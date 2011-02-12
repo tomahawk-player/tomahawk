@@ -42,11 +42,11 @@ CREATEDMG='1'
 
     header addQt
     cd tomahawk.app
-    $ROOT/admin/mac/add-Qt-to-bundle.sh \
+    $ROOT/../admin/mac/add-Qt-to-bundle.sh \
                    'QtCore QtGui QtXml QtNetwork QtSql'
 
     header deposx
-    $ROOT/admin/mac/deposx.sh
+    $ROOT/../admin/mac/deposx.sh
     
     header Done!
 

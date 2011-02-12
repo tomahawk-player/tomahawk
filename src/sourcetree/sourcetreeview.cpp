@@ -44,6 +44,7 @@ SourceTreeView::SourceTreeView( QWidget* parent )
     , m_dragging( false )
 {
     setFrameShape( QFrame::NoFrame );
+    setAttribute( Qt::WA_MacShowFocusRect, 0 );
     setContentsMargins( 0, 0, 0, 0 );
 
     setHeaderHidden( true );
