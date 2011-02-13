@@ -23,6 +23,8 @@
 #include "network/controlconnection.h"
 #include "playlist/playlistmanager.h"
 #include "sip/SipHandler.h"
+#include "sourcetree/sourcetreeview.h"
+#include "utils/animatedsplitter.h"
 #include "utils/proxystyle.h"
 #include "utils/widgetdragfilter.h"
 #include "utils/xspfloader.h"
@@ -34,6 +36,7 @@
 #include "settingsdialog.h"
 #include "tomahawksettings.h"
 #include "sourcelist.h"
+#include "transferview.h"
 #include "tomahawktrayicon.h"
 #include "playlist/dynamic/GeneratorInterface.h"
 
@@ -60,19 +63,34 @@ TomahawkWindow::TomahawkWindow( QWidget* parent )
     
     ui->setupUi( this );
 
+    delete ui->sidebarWidget;
     delete ui->playlistWidget;
+
+    ui->centralWidget->setContentsMargins( 0, 0, 0, 0 );
+    ui->centralWidget->layout()->setContentsMargins( 0, 0, 0, 0 );
+    ui->centralWidget->layout()->setMargin( 0 );
+    
+    AnimatedSplitter* sidebar = new AnimatedSplitter( this );
+    sidebar->setOrientation( Qt::Vertical );
+    sidebar->setChildrenCollapsible( false );
+    sidebar->setGreedyWidget( 0 );
+    sidebar->setStretchFactor( 0, 3 );
+    sidebar->setStretchFactor( 1, 1 );
+    
+    SourceTreeView* stv = new SourceTreeView();
+    TransferView* transferView = new TransferView();
+    
+    sidebar->addWidget( stv );
+    sidebar->addWidget( transferView );
+    sidebar->hide( 1, false );
+    
+    ui->splitter->addWidget( sidebar );
+    
     ui->splitter->addWidget( PlaylistManager::instance()->widget() );
     ui->splitter->setStretchFactor( 0, 1 );
     ui->splitter->setStretchFactor( 1, 3 );
     ui->splitter->setCollapsible( 1, false );
     ui->splitter->setHandleWidth( 1 );
-
-    ui->sidebarSplitter->setChildrenCollapsible( false );
-    ui->sidebarSplitter->setGreedyWidget( 0 );
-    ui->sidebarSplitter->setStretchFactor( 0, 3 );
-    ui->sidebarSplitter->setStretchFactor( 1, 1 );
-    ui->sidebarSplitter->hide( 1, false );
-    ui->sidebarSplitter->setHandleWidth( 1 );
 
 /*    QToolBar* toolbar = addToolBar( "TomahawkToolbar" );
     toolbar->setObjectName( "TomahawkToolbar" );
@@ -143,7 +161,7 @@ TomahawkWindow::setupSignals()
     connect( ui->actionCreate_New_Station, SIGNAL( triggered() ), SLOT( createStation() ));
     connect( ui->actionAboutTomahawk, SIGNAL( triggered() ), SLOT( showAboutTomahawk() ) );
     connect( ui->actionExit, SIGNAL( triggered() ), APP, SLOT( quit() ) );
-    connect( ui->statusButton, SIGNAL( clicked() ), APP->sipHandler(), SLOT( toggleConnect() ) );
+//    connect( ui->statusButton, SIGNAL( clicked() ), APP->sipHandler(), SLOT( toggleConnect() ) );
 
     // <SipHandler>
     connect( APP->sipHandler(), SIGNAL( connected() ), SLOT( onSipConnected() ) );
@@ -354,14 +372,14 @@ TomahawkWindow::onPlaybackLoading( const Tomahawk::result_ptr& result )
 void
 TomahawkWindow::onSipConnected()
 {
-    ui->statusButton->setText( tr( "Online" ) );
+//    ui->statusButton->setText( tr( "Online" ) );
 }
 
 
 void
 TomahawkWindow::onSipDisconnected()
 {
-    ui->statusButton->setText( tr( "Offline" ) );
+//    ui->statusButton->setText( tr( "Offline" ) );
 }
 
 

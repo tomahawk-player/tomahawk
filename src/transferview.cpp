@@ -35,6 +35,9 @@ TransferView::TransferView( AnimatedSplitter* parent )
 
     m_tree->header()->setStretchLastSection( true );
     m_tree->setRootIsDecorated( false );
+
+    m_tree->setFrameShape( QFrame::NoFrame );
+    m_tree->setAttribute( Qt::WA_MacShowFocusRect, 0 );
 }
 
 

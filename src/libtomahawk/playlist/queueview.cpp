@@ -23,7 +23,9 @@ QueueView::QueueView( AnimatedSplitter* parent )
     m_queue = new PlaylistView( this );
     m_queue->setProxyModel( new QueueProxyModel( this ) );
     m_queue->setSizePolicy( QSizePolicy::Preferred, QSizePolicy::Ignored );
-
+    m_queue->setFrameShape( QFrame::NoFrame );
+    m_queue->setAttribute( Qt::WA_MacShowFocusRect, 0 );
+    
     m_button = new QPushButton();
     m_button->setSizePolicy( QSizePolicy::Preferred, QSizePolicy::Fixed );
     m_button->setText( tr( "Click to show queue" ) );
