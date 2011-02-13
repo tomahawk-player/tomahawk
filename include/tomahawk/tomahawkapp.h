@@ -74,6 +74,7 @@ signals:
     
 private slots:
     void setupSIP();
+    void messageReceived( const QString& );
 
 private:
     void initLocalCollection();

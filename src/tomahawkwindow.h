@@ -4,6 +4,7 @@
 #include <QMainWindow>
 #include <QVariantMap>
 #include <QNetworkAccessManager>
+#include <QPushButton>
 #include <QString>
 #include <QStackedWidget>
 
@@ -70,6 +71,7 @@ private:
     AudioControls* m_audioControls;
     TomahawkTrayIcon* m_trayIcon;
     QNetworkAccessManager m_nam;
+    QPushButton* m_statusButton;
 
     Tomahawk::result_ptr m_currentTrack;
     QString m_windowTitle;

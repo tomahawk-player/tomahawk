@@ -62,7 +62,7 @@ PlaylistItemDelegate::paint( QPainter* painter, const QStyleOptionViewItem& opti
     if ( item->isPlaying() )
     {
         painter->save();
-        painter->setRenderHint( QPainter::Antialiasing );
+//        painter->setRenderHint( QPainter::Antialiasing );
 
         {
             QRect r = option.rect.adjusted( 3, 0, 0, 0 );
@@ -73,13 +73,14 @@ PlaylistItemDelegate::paint( QPainter* painter, const QStyleOptionViewItem& opti
                 r.adjust( 22, 0, 0, 3 );
             }
 
-            QTextOption to( Qt::AlignVCenter );
-
             painter->setPen( option.palette.text().color() );
-            painter->drawText( r.adjusted( 0, 1, 0, 0 ), index.data().toString(), to );
+
+            QTextOption to( Qt::AlignVCenter );
+            QString text = painter->fontMetrics().elidedText( index.data().toString(), Qt::ElideRight, r.width() - 3 );
+            painter->drawText( r.adjusted( 0, 1, 0, 0 ), text, to );
         }
 
-        if ( m_view->header()->visualIndex( index.column() ) == m_view->header()->visibleSectionCount() - 1 )
+//        if ( m_view->header()->visualIndex( index.column() ) == m_view->header()->visibleSectionCount() - 1 )
         {
             QRect r = QRect( 3, option.rect.y() + 1, m_view->viewport()->width() - 6, option.rect.height() - 2 );
             painter->setPen( option.palette.highlight().color() );

@@ -37,6 +37,7 @@
 #define LOGFILE TomahawkUtils::appDataDir().filePath( "tomahawk.log" ).toLocal8Bit()
 #define LOGFILE_SIZE 1024 * 512
 #include "tomahawksettings.h"
+#include <utils/xspfloader.h>
 
 using namespace std;
 ofstream logfile;
@@ -103,11 +104,23 @@ using namespace Tomahawk;
 
 TomahawkApp::TomahawkApp( int& argc, char *argv[] )
     : TOMAHAWK_APPLICATION( argc, argv )
+    , m_database( 0 )
     , m_audioEngine( 0 )
+    , m_sipHandler( 0 )
+    , m_servent( 0 )
+    , m_mainwindow( 0 )
     , m_infoSystem( 0 )
 {
     qsrand( QTime( 0, 0, 0 ).secsTo( QTime::currentTime() ) );
-
+    
+    // send the first arg to an already running instance, but don't open twice no matter what
+    if( ( argc > 1 && sendMessage( argv[ 1 ] ) ) || sendMessage( "" ) ) {
+        qDebug() << "Sent message, already exists";
+        throw runtime_error( "Already Running" );
+    }
+    
+    connect( this, SIGNAL( messageReceived( QString ) ), this, SLOT( messageReceived( QString ) ) );
+    
 #ifdef TOMAHAWK_HEADLESS
     m_headless = true;
 #else
@@ -135,12 +148,16 @@ TomahawkApp::TomahawkApp( int& argc, char *argv[] )
     m_servent = new Servent( this );
     connect( m_servent, SIGNAL( ready() ), SLOT( setupSIP() ) );
 
+    qDebug() << "Init Database.";
     setupDatabase();
     
+    qDebug() << "Init Echonest Factory.";
     GeneratorFactory::registerFactory( "echonest", new EchonestFactory );
     
 #ifndef NO_LIBLASTFM
+        qDebug() << "Init Scrobbler.";
         m_scrobbler = new Scrobbler( this );
+        qDebug() << "Setting NAM.";
         TomahawkUtils::setNam( new lastfm::NetworkAccessManager( this ) );
 
         connect( m_audioEngine, SIGNAL( started( const Tomahawk::result_ptr& ) ),
@@ -155,6 +172,7 @@ TomahawkApp::TomahawkApp( int& argc, char *argv[] )
         connect( m_audioEngine, SIGNAL( stopped() ),
                  m_scrobbler,     SLOT( trackStopped() ), Qt::QueuedConnection );
 #else
+        qDebug() << "Setting NAM.";
         TomahawkUtils::setNam( new QNetworkAccessManager );
 #endif
 
@@ -173,12 +191,15 @@ TomahawkApp::TomahawkApp( int& argc, char *argv[] )
 
     QNetworkProxy::setApplicationProxy( *TomahawkUtils::proxy() );
 
+    qDebug() << "Init SIP system.";
     m_sipHandler = new SipHandler( this );
+    qDebug() << "Init InfoSystem.";
     m_infoSystem = new Tomahawk::InfoSystem::InfoSystem( this );
 
-#ifndef TOMAHAWK_HEADLESS
+    #ifndef TOMAHAWK_HEADLESS
     if ( !m_headless )
     {
+        qDebug() << "Init MainWindow.";
         m_mainwindow = new TomahawkWindow();
         m_mainwindow->setWindowTitle( "Tomahawk" );
         m_mainwindow->show();
@@ -186,13 +207,19 @@ TomahawkApp::TomahawkApp( int& argc, char *argv[] )
     }
 #endif
 
+    qDebug() << "Init Pipeline.";
     setupPipeline();
+    qDebug() << "Init Local Collection.";
     initLocalCollection();
+    qDebug() << "Init Servent.";
     startServent();
     //loadPlugins();
 
     if( arguments().contains( "--http" ) || TomahawkSettings::instance()->value( "network/http", true ).toBool() )
+    {
+        qDebug() << "Init HTTP Server.";
         startHTTP();
+    }
 
 #ifndef TOMAHAWK_HEADLESS
     if ( !TomahawkSettings::instance()->hasScannerPath() )
@@ -426,5 +453,29 @@ TomahawkApp::setupSIP()
         m_sipHandler->connectPlugins( true );
 //        m_sipHandler->setProxy( *TomahawkUtils::proxy() );
     }
+}
+
+void 
+TomahawkApp::messageReceived( const QString& msg ) 
+{
+    qDebug() << "MESSAGE RECEIVED" << msg;
+    if( msg.isEmpty() ) {
+        return;
+    }
+    
+    if( msg.contains( "tomahawk://" ) ) {
+        QString cmd = msg.mid( 11 );
+        qDebug() << "tomahawk!s" << cmd;
+        if( cmd.startsWith( "load/" ) ) {
+            cmd = cmd.mid( 5 );
+            qDebug() << "loading.." << cmd;
+            if( cmd.startsWith( "xspf=" ) ) {
+                XSPFLoader* l = new XSPFLoader( true, this );
+                qDebug() << "Loading spiff:" << cmd.mid( 5 );
+                l->load( QUrl( cmd.mid( 5 ) ) );
+            }
+        }
+       
+   }
 }
 
