@@ -13,8 +13,8 @@
 
 SipHandler::SipHandler( QObject* parent )
     : QObject( parent )
+    , m_connected( false )
 {
-    m_connected = false;
     loadPlugins( findPlugins() );
 }
 

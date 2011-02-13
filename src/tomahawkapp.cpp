@@ -418,7 +418,8 @@ TomahawkApp::setupSIP()
 {
     qDebug() << Q_FUNC_INFO;
 
-    if( !arguments().contains( "--nosip" ) )
+    //FIXME: jabber autoconnect is really more, now that there is sip -- should be renamed and/or split out of jabber-specific settings
+    if( !arguments().contains( "--nosip" ) && TomahawkSettings::instance()->jabberAutoConnect() )
     {
         m_xmppBot = new XMPPBot( this );
         qDebug() << "Connecting SIP classes";
