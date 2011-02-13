@@ -349,7 +349,6 @@ Servent::createParallelConnection( Connection* orig_conn, Connection* new_conn, 
 }
 
 
-/// for outbound connections. DRY out the socket handover code from readyread too?
 void
 Servent::socketConnected()
 {

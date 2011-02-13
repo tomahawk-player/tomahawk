@@ -135,12 +135,16 @@ TomahawkApp::TomahawkApp( int& argc, char *argv[] )
     m_servent = new Servent( this );
     connect( m_servent, SIGNAL( ready() ), SLOT( setupSIP() ) );
 
+    qDebug() << "Init Database.";
     setupDatabase();
     
+    qDebug() << "Init Echonest Factory.";
     GeneratorFactory::registerFactory( "echonest", new EchonestFactory );
     
 #ifndef NO_LIBLASTFM
+        qDebug() << "Init Scrobbler.";
         m_scrobbler = new Scrobbler( this );
+        qDebug() << "Setting NAM.";
         TomahawkUtils::setNam( new lastfm::NetworkAccessManager( this ) );
 
         connect( m_audioEngine, SIGNAL( started( const Tomahawk::result_ptr& ) ),
@@ -155,6 +159,7 @@ TomahawkApp::TomahawkApp( int& argc, char *argv[] )
         connect( m_audioEngine, SIGNAL( stopped() ),
                  m_scrobbler,     SLOT( trackStopped() ), Qt::QueuedConnection );
 #else
+        qDebug() << "Setting NAM.";
         TomahawkUtils::setNam( new QNetworkAccessManager );
 #endif
 
@@ -173,12 +178,15 @@ TomahawkApp::TomahawkApp( int& argc, char *argv[] )
 
     QNetworkProxy::setApplicationProxy( *TomahawkUtils::proxy() );
 
+    qDebug() << "Init SIP system.";
     m_sipHandler = new SipHandler( this );
+    qDebug() << "Init InfoSystem.";
     m_infoSystem = new Tomahawk::InfoSystem::InfoSystem( this );
 
-#ifndef TOMAHAWK_HEADLESS
+    #ifndef TOMAHAWK_HEADLESS
     if ( !m_headless )
     {
+        qDebug() << "Init MainWindow.";
         m_mainwindow = new TomahawkWindow();
         m_mainwindow->setWindowTitle( "Tomahawk" );
         m_mainwindow->show();
@@ -186,13 +194,19 @@ TomahawkApp::TomahawkApp( int& argc, char *argv[] )
     }
 #endif
 
+    qDebug() << "Init Pipeline.";
     setupPipeline();
+    qDebug() << "Init Local Collection.";
     initLocalCollection();
+    qDebug() << "Init Servent.";
     startServent();
     //loadPlugins();
 
     if( arguments().contains( "--http" ) || TomahawkSettings::instance()->value( "network/http", true ).toBool() )
+    {
+        qDebug() << "Init HTTP Server.";
         startHTTP();
+    }
 
 #ifndef TOMAHAWK_HEADLESS
     if ( !TomahawkSettings::instance()->hasScannerPath() )
