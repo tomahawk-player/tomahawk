@@ -297,9 +297,13 @@ TwitterPlugin::directMessages( const QList< QTweetDMStatus > &messages )
     
     foreach( QTweetDMStatus status, messages )
     {
+        qDebug() << "TwitterPlugin checking direct message from " << status.senderScreenName() << " with content " << status.text();
         if ( status.id() > m_cachedDirectMessagesSinceId )
             m_cachedDirectMessagesSinceId = status.id();
         QStringList splitList = status.text().split(':');
+        qDebug() << "TwitterPlugin found " << splitList.length() << " parts to the message; the parts are:";
+        foreach( QString part, splitList )
+            qDebug() << part;
         if ( splitList.length() < 5 )
             continue;
         if ( splitList[0] != "TOMAHAWKPEERSTART" )
