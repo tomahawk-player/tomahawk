@@ -65,7 +65,7 @@ DynamicWidget::DynamicWidget( const Tomahawk::dynplaylist_ptr& playlist, QWidget
     m_layout->addWidget( m_view, 1 );
     
     connect( m_model, SIGNAL( collapseFromTo( int, int ) ), m_view, SLOT( collapseEntries( int, int ) ) );
-    connect( m_model, SIGNAL( trackGenerationFailure( QString ) ), m_view, SLOT( showMessage( QString ) ) );    
+    connect( m_model, SIGNAL( trackGenerationFailure( QString ) ), this, SLOT( stationFailed( QString ) ) );    
     
     
     m_setup = new DynamicSetupWidget( playlist, this );
@@ -228,6 +228,17 @@ DynamicWidget::generate( int num )
 }
 
 void 
+DynamicWidget::stationFailed( const QString& msg )
+{
+    m_view->showMessage( msg );
+    
+    if( m_runningOnDemand ) {
+        stopStation();
+    }
+}
+
+
+void 
 DynamicWidget::pausePressed()
 {
     // we don't handle explicit pausing right now
@@ -256,6 +267,7 @@ DynamicWidget::stopStation()
     
     // TODO until i add a qwidget interface
     QMetaObject::invokeMethod( m_steering, "fadeOut", Qt::DirectConnection );
+    m_setup->fadeIn();
 }
 
 void 

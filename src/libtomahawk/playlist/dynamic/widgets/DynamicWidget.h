@@ -81,6 +81,7 @@ public slots:
     
     void playPressed();
     void pausePressed();
+    void stationFailed( const QString& );
     
 private slots:
     void generate( int = -1 );
