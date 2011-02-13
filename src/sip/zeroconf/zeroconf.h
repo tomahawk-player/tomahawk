@@ -16,6 +16,8 @@ class SIPDLLEXPORT ZeroconfPlugin : public SipPlugin
 public:
     ZeroconfPlugin()
         : m_zeroconf( 0 )
+        , m_isOnline( false )
+        , m_cachedNodes()
     {}
 
     virtual ~ZeroconfPlugin() {}
@@ -26,9 +28,7 @@ public:
 public slots:
     virtual bool connectPlugin( bool startup );
 
-    void disconnectPlugin()
-    {
-    }
+    void disconnectPlugin();
 
     void sendMsg( const QString& to, const QString& msg )
     {
@@ -47,6 +47,8 @@ private slots:
 
 private:
     TomahawkZeroconf* m_zeroconf;
+    bool m_isOnline;
+    QSet< QStringList* > m_cachedNodes;
 };
 
 #endif
