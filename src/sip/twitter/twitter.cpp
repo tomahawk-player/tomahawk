@@ -447,12 +447,15 @@ TwitterPlugin::registerOffer( const QString &screenName, const QHash< QString, Q
         
     if( needToSend && _peerData.contains( "node") )
     {
+        qDebug() << "TwitterPlugin needs to send and has node";
         _peerData["ohst"] = QVariant::fromValue< QString >( Servent::instance()->externalAddress() );
         _peerData["oprt"] = QVariant::fromValue< int >( Servent::instance()->externalPort() );
         m_cachedPeers[screenName] = QVariant::fromValue< QHash< QString, QVariant > >( _peerData );
         peersChanged = true;
         if( !Servent::instance()->externalAddress().isEmpty() && !Servent::instance()->externalPort() == 0 )
             QMetaObject::invokeMethod( this, "sendOffer", Q_ARG( QString, screenName ), QGenericArgument( "QHash< QString, QVariant >", (const void*)&_peerData ) );
+        else
+            qDebug() << "TwitterPlugin did not send offer because external address is " << Servent::instance()->externalAddress() << " and external port is " << Servent::instance()->externalPort();
     }
 
     if ( m_isOnline && _peerData.contains( "host" ) && _peerData.contains( "port" ) && _peerData.contains( "pkey" ) )
