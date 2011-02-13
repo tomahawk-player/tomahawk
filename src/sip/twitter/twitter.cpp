@@ -362,7 +362,10 @@ TwitterPlugin::registerOffer( const QString &screenName, const QHash< QString, Q
     qDebug() << Q_FUNC_INFO;
     if ( !peerData.contains( "node" ) || !peerData.contains( "okey" ) )
     {
-        qDebug() << "TwitterPlugin could not find node and/or okey for peer " << screenName;
+        if ( !peerData.contains( "okey" ) )
+            qDebug() << "TwitterPlugin could not find okey to register offer for peer " << screenName;
+        if ( !peerData.contains( "node" ) )
+            qDebug() << "TwitterPlugin could not find node to register offer for peer " << screenName;
         return;
     }
     qDebug() << "TwitterPlugin registering offer to " << QString( '@' + screenName ) << " with node " << peerData["node"].toString() << " and offeredkey " << peerData["okey"].toString();
