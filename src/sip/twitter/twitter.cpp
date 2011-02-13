@@ -184,7 +184,7 @@ void
 TwitterPlugin::friendsTimelineStatuses( const QList< QTweetStatus > &statuses )
 {
     qDebug() << Q_FUNC_INFO;
-    QRegExp regex( QString( "^(@[a-zA-Z0-9]+ )?Got Tomahawk\\?(.*)$", Qt::CaseSensitive, QRegExp::RegExp2 ) );
+    QRegExp regex( QString( "^(@[a-zA-Z0-9]+ )?Got Tomahawk\\?(.*)$" ), Qt::CaseSensitive, QRegExp::RegExp2 );
     QString myScreenName = TomahawkSettings::instance()->twitterScreenName();
     
     QHash< QString, QTweetStatus > latestHash;
@@ -234,7 +234,7 @@ void
 TwitterPlugin::mentionsStatuses( const QList< QTweetStatus > &statuses )
 {
     qDebug() << Q_FUNC_INFO;
-    QRegExp regex( QString( "^(@[a-zA-Z0-9]+ )?Got Tomahawk\\?(.*)$", Qt::CaseSensitive, QRegExp::RegExp2 ) );
+    QRegExp regex( QString( "^(@[a-zA-Z0-9]+ )?Got Tomahawk\\?(.*)$" ), Qt::CaseSensitive, QRegExp::RegExp2 );
     QString myScreenName = TomahawkSettings::instance()->twitterScreenName();
     
     QHash< QString, QTweetStatus > latestHash;
