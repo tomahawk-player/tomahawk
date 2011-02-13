@@ -57,10 +57,10 @@ TomahawkWindow::TomahawkWindow( QWidget* parent )
 #endif
 
     PlaylistManager* pm = new PlaylistManager( this );
-    
+
     connect( m_audioControls, SIGNAL( playPressed() ), pm, SLOT( onPlayClicked() ) );
     connect( m_audioControls, SIGNAL( pausePressed() ), pm, SLOT( onPauseClicked() ) );
-    
+
     ui->setupUi( this );
 
     delete ui->sidebarWidget;
@@ -69,24 +69,35 @@ TomahawkWindow::TomahawkWindow( QWidget* parent )
     ui->centralWidget->setContentsMargins( 0, 0, 0, 0 );
     ui->centralWidget->layout()->setContentsMargins( 0, 0, 0, 0 );
     ui->centralWidget->layout()->setMargin( 0 );
-    
-    AnimatedSplitter* sidebar = new AnimatedSplitter( this );
+
+    QWidget* sidebarWidget = new QWidget();
+    sidebarWidget->setLayout( new QVBoxLayout() );
+    sidebarWidget->setContentsMargins( 0, 0, 0, 0 );
+    sidebarWidget->layout()->setContentsMargins( 0, 0, 0, 0 );
+    sidebarWidget->layout()->setMargin( 0 );
+    sidebarWidget->layout()->setSpacing( 0 );
+
+    AnimatedSplitter* sidebar = new AnimatedSplitter();
     sidebar->setOrientation( Qt::Vertical );
     sidebar->setChildrenCollapsible( false );
     sidebar->setGreedyWidget( 0 );
     sidebar->setStretchFactor( 0, 3 );
     sidebar->setStretchFactor( 1, 1 );
-    
+
     SourceTreeView* stv = new SourceTreeView();
     TransferView* transferView = new TransferView();
-    
+
     sidebar->addWidget( stv );
     sidebar->addWidget( transferView );
     sidebar->hide( 1, false );
-    
-    ui->splitter->addWidget( sidebar );
-    
+
+    m_statusButton = new QPushButton();
+    sidebarWidget->layout()->addWidget( sidebar );
+    sidebarWidget->layout()->addWidget( m_statusButton );
+
+    ui->splitter->addWidget( sidebarWidget );
     ui->splitter->addWidget( PlaylistManager::instance()->widget() );
+
     ui->splitter->setStretchFactor( 0, 1 );
     ui->splitter->setStretchFactor( 1, 3 );
     ui->splitter->setCollapsible( 1, false );
@@ -161,7 +172,7 @@ TomahawkWindow::setupSignals()
     connect( ui->actionCreate_New_Station, SIGNAL( triggered() ), SLOT( createStation() ));
     connect( ui->actionAboutTomahawk, SIGNAL( triggered() ), SLOT( showAboutTomahawk() ) );
     connect( ui->actionExit, SIGNAL( triggered() ), APP, SLOT( quit() ) );
-//    connect( ui->statusButton, SIGNAL( clicked() ), APP->sipHandler(), SLOT( toggleConnect() ) );
+    connect( m_statusButton, SIGNAL( clicked() ), APP->sipHandler(), SLOT( toggleConnect() ) );
 
     // <SipHandler>
     connect( APP->sipHandler(), SIGNAL( connected() ), SLOT( onSipConnected() ) );
@@ -372,14 +383,14 @@ TomahawkWindow::onPlaybackLoading( const Tomahawk::result_ptr& result )
 void
 TomahawkWindow::onSipConnected()
 {
-//    ui->statusButton->setText( tr( "Online" ) );
+    m_statusButton->setText( tr( "Online" ) );
 }
 
 
 void
 TomahawkWindow::onSipDisconnected()
 {
-//    ui->statusButton->setText( tr( "Offline" ) );
+    m_statusButton->setText( tr( "Offline" ) );
 }
 
 

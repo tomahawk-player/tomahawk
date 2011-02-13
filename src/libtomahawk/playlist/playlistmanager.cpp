@@ -75,8 +75,6 @@ PlaylistManager::PlaylistManager( QObject* parent )
     m_splitter->addWidget( m_queueView );
     m_splitter->hide( 1, false );
 
-    m_widget->layout()->setMargin( 0 );
-    m_widget->layout()->setSpacing( 0 );
     m_widget->layout()->addWidget( m_infobar );
     m_widget->layout()->addWidget( m_topbar );
     m_widget->layout()->addWidget( line );
@@ -101,7 +99,8 @@ PlaylistManager::PlaylistManager( QObject* parent )
     m_widget->setContentsMargins( 0, 0, 0, 0 );
     m_widget->layout()->setContentsMargins( 0, 0, 0, 0 );
     m_widget->layout()->setMargin( 0 );
-
+    m_widget->layout()->setSpacing( 0 );
+    
     connect( &m_filterTimer, SIGNAL( timeout() ), SLOT( applyFilter() ) );
 
     connect( m_topbar, SIGNAL( filterTextChanged( QString ) ),
