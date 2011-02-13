@@ -66,6 +66,8 @@ TwitterPlugin::connectPlugin( bool /*startup*/ )
     foreach( QString screenName, peerlist )
     {
         QHash< QString, QVariant > cachedPeer = m_cachedPeers[screenName].toHash();
+        foreach( QString prop, cachedPeer.keys() )
+            qDebug() << "TwitterPlugin : " << screenName << ", key " << prop << ", value " << ( cachedPeer[prop].canConvert< QString >() ? cachedPeer[prop].toString() : QString::number( cachedPeer[prop].toInt() ) );
         QMetaObject::invokeMethod( this, "registerOffer", Q_ARG( QString, screenName ), QGenericArgument( "QHash< QString, QVariant >", (const void*)&cachedPeer ) );
     }
     
@@ -97,7 +99,6 @@ TwitterPlugin::disconnectPlugin()
     if( !m_twitterAuth.isNull() )
         m_twitterAuth.data()->deleteLater();
     
-    TomahawkSettings::instance()->setTwitterCachedPeers( m_cachedPeers );
     m_cachedPeers.empty();
     delete m_twitterAuth.data();
     m_isOnline = false;
@@ -185,7 +186,20 @@ TwitterPlugin::friendsTimelineStatuses( const QList< QTweetStatus > &statuses )
     qDebug() << Q_FUNC_INFO;
     QRegExp regex( QString( "^(@[a-zA-Z0-9]+ )?Got Tomahawk\\?(.*)$" ) );
     QString myScreenName = TomahawkSettings::instance()->twitterScreenName();
-    foreach( QTweetStatus status, statuses )
+    
+    QHash< QString, QTweetStatus > latestHash;
+    foreach ( QTweetStatus status, statuses )
+    {
+        if ( !latestHash.contains( status.user().screenName() ) )
+            latestHash[status.user().screenName()] = status;
+        else
+        {
+            if ( status.id() > latestHash[status.user().screenName()].id() )
+                latestHash[status.user().screenName()] = status;
+        }
+    }
+    
+    foreach( QTweetStatus status, latestHash.values() )
     {
         if ( status.id() > m_cachedFriendsSinceId )
             m_cachedFriendsSinceId = status.id();
@@ -194,11 +208,14 @@ TwitterPlugin::friendsTimelineStatuses( const QList< QTweetStatus > &statuses )
         if ( regex.exactMatch( status.text() ) )
         {
             qDebug() << "TwitterPlugin found an exact tweet from friend " << status.user().screenName();
-            if ( !m_cachedPeers.contains( status.user().screenName() ) )
+            QHash< QString, QVariant > peerData;
+            if( m_cachedPeers.contains( status.user().screenName() ) )
             {
-                QHash< QString, QVariant > peerData;
-                QMetaObject::invokeMethod( this, "registerOffer", Q_ARG( QString, status.user().screenName() ), QGenericArgument( "QHash< QString, QVariant >", (const void*)&peerData ) );
+                peerData = m_cachedPeers[status.user().screenName()].toHash();
+                //force a re-send of info but no need to re-register
+                peerData["oprt"] = Servent::instance()->externalPort() + 1;
             }
+            QMetaObject::invokeMethod( this, "registerOffer", Q_ARG( QString, status.user().screenName() ), QGenericArgument( "QHash< QString, QVariant >", (const void*)&peerData ) );
         }
     }
     
@@ -214,7 +231,20 @@ TwitterPlugin::mentionsStatuses( const QList< QTweetStatus > &statuses )
     qDebug() << Q_FUNC_INFO;
     QRegExp regex( QString( "^(@[a-zA-Z0-9]+ )?Got Tomahawk\\?(.*)$" ) );
     QString myScreenName = TomahawkSettings::instance()->twitterScreenName();
-    foreach( QTweetStatus status, statuses )
+    
+    QHash< QString, QTweetStatus > latestHash;
+    foreach ( QTweetStatus status, statuses )
+    {
+        if ( !latestHash.contains( status.user().screenName() ) )
+            latestHash[status.user().screenName()] = status;
+        else
+        {
+            if ( status.id() > latestHash[status.user().screenName()].id() )
+                latestHash[status.user().screenName()] = status;
+        }
+    }
+    
+    foreach( QTweetStatus status, latestHash.values() )
     {
         if ( status.id() > m_cachedMentionsSinceId )
             m_cachedMentionsSinceId = status.id();
@@ -223,11 +253,14 @@ TwitterPlugin::mentionsStatuses( const QList< QTweetStatus > &statuses )
         if ( regex.exactMatch( status.text() ) )
         {
             qDebug() << "TwitterPlugin found an exact matching mention from user " << status.user().screenName();
-            if ( !m_cachedPeers.contains( status.user().screenName() ) )
+            QHash< QString, QVariant > peerData;
+            if( m_cachedPeers.contains( status.user().screenName() ) )
             {
-                QHash< QString, QVariant > peerData;
-                QMetaObject::invokeMethod( this, "registerOffer", Q_ARG( QString, status.user().screenName() ), QGenericArgument( "QHash< QString, QVariant >", (const void*)&peerData ) );
+                peerData = m_cachedPeers[status.user().screenName()].toHash();
+                //force a re-send of info but no need to re-register
+                peerData["oprt"] = Servent::instance()->externalPort() + 1;
             }
+            QMetaObject::invokeMethod( this, "registerOffer", Q_ARG( QString, status.user().screenName() ), QGenericArgument( "QHash< QString, QVariant >", (const void*)&peerData ) );
         }
     }
     
@@ -261,10 +294,7 @@ TwitterPlugin::directMessages( const QList< QTweetDMStatus > &messages )
 {
     qDebug() << Q_FUNC_INFO;
     
-    bool peersChanged = false;
-
     QHash< QString, QTweetDMStatus > latestHash;
-    
     foreach ( QTweetDMStatus status, messages )
     {
         if ( !latestHash.contains( status.senderScreenName() ) )
@@ -305,18 +335,13 @@ TwitterPlugin::directMessages( const QList< QTweetDMStatus > &messages )
         peerData["host"] = QVariant::fromValue< QString >( host );
         peerData["port"] = QVariant::fromValue< int >( port );
         peerData["pkey"] = QVariant::fromValue< QString >( pkey );
+        peerData["dirty"] = QVariant::fromValue< bool >( true );
 
-        m_cachedPeers[status.senderScreenName()] = QVariant::fromValue< QHash< QString, QVariant > >( peerData );
-        peersChanged = true;
-        
         QMetaObject::invokeMethod( this, "registerOffer", Q_ARG( QString, status.senderScreenName() ), QGenericArgument( "QHash< QString, QVariant >", (const void*)&peerData ) );
         
         if ( !m_directMessageDestroy.isNull() )
             m_directMessageDestroy.data()->destroyMessage( status.id() );
     }
-
-    if ( peersChanged )
-        TomahawkSettings::instance()->setTwitterCachedPeers( m_cachedPeers );
 
     TomahawkSettings::instance()->setTwitterCachedDirectMessagesSinceId( m_cachedDirectMessagesSinceId );
 }
@@ -327,10 +352,16 @@ TwitterPlugin::registerOffer( const QString &screenName, const QHash< QString, Q
     qDebug() << Q_FUNC_INFO;
     QString node = QString( '@' + screenName );
     bool peersChanged = false;
-    QHash< QString, QVariant > _peerData = peerData;
+    QHash< QString, QVariant > _peerData( peerData );
     
     bool needToSend = false;
     bool needToAddToCache = false;
+    
+    if ( _peerData.contains( "dirty" ) )
+    {
+        peersChanged = true;
+        _peerData.remove( "dirty" );
+    }
     
     if ( !_peerData.contains( "okey" ) )
     {
