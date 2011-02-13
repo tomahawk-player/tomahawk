@@ -132,6 +132,7 @@ TwitterPlugin::connectAuthVerifyReply( const QTweetUser &user )
             connect( m_directMessageDestroy.data(), SIGNAL( parsedDirectMessage(const QTweetDMStatus &) ), SLOT( directMessageDestroyed(const QTweetDMStatus &) ) );
             m_isOnline = true;
             QMetaObject::invokeMethod( this, "checkTimerFired", Qt::AutoConnection );
+            QTimer::singleShot( 20000, this, SLOT( connectTimerFired() ) );
         }
         else
         {
