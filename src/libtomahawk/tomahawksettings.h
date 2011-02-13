@@ -97,6 +97,9 @@ public:
     void setLastFmSessionKey( const QByteArray& key );
     
     /// Twitter settings
+    QString twitterScreenName() const;
+    void setTwitterScreenName( const QString& screenName );
+    
     QString twitterOAuthToken() const;
     void setTwitterOAuthToken( const QString& oauthtoken );
     

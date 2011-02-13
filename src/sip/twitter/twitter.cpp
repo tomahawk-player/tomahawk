@@ -113,6 +113,7 @@ TwitterPlugin::connectAuthVerifyReply( const QTweetUser &user )
         m_isAuthed = true;
         if ( !m_twitterAuth.isNull() )
         {
+            TomahawkSettings::instance()->setTwitterScreenName( user.screenName() );
             m_friendsTimeline = QWeakPointer<QTweetFriendsTimeline>( new QTweetFriendsTimeline( m_twitterAuth.data(), this ) );
             m_mentions = QWeakPointer<QTweetMentions>( new QTweetMentions( m_twitterAuth.data(), this ) );
             m_directMessages = QWeakPointer<QTweetDirectMessages>( new QTweetDirectMessages( m_twitterAuth.data(), this ) );
@@ -160,11 +161,13 @@ TwitterPlugin::connectTimerFired()
         return;
     
     bool peersChanged = false;
+    QString myScreenName = TomahawkSettings::instance()->twitterScreenName();
     QList<QString> peerlist = m_cachedPeers.keys();
     qStableSort( peerlist.begin(), peerlist.end() );
     foreach( QString screenName, peerlist )
     {
         QHash< QString, QVariant > peerData = m_cachedPeers[screenName].toHash();
+        
         if ( !peerData.contains( "node" ) || !peerData.contains( "host" ) || !peerData.contains( "port" ) || !peerData.contains( "pkey" ) )
             continue;
         
@@ -194,10 +197,13 @@ TwitterPlugin::friendsTimelineStatuses( const QList< QTweetStatus > &statuses )
     qDebug() << Q_FUNC_INFO;
     QRegExp regex( QString( "^(@[a-zA-Z0-9]+ )?Got Tomahawk\\?(.*)$" ) );
     bool peersChanged = false;
+    QString myScreenName = TomahawkSettings::instance()->twitterScreenName();
     foreach( QTweetStatus status, statuses )
     {
         if ( status.id() > m_cachedFriendsSinceId )
             m_cachedFriendsSinceId = status.id();
+        if ( status.user().screenName() == myScreenName )
+            continue;
         if ( regex.exactMatch( status.text() ) )
         {
             qDebug() << "TwitterPlugin found an exact tweet from friend " << status.user().screenName();
@@ -230,10 +236,13 @@ TwitterPlugin::mentionsStatuses( const QList< QTweetStatus > &statuses )
     qDebug() << Q_FUNC_INFO;
     QRegExp regex( QString( "^(@[a-zA-Z0-9]+ )?Got Tomahawk\\?(.*)$" ) );
     bool peersChanged = false;
+    QString myScreenName = TomahawkSettings::instance()->twitterScreenName();
     foreach( QTweetStatus status, statuses )
     {
         if ( status.id() > m_cachedMentionsSinceId )
             m_cachedMentionsSinceId = status.id();
+        if ( status.user().screenName() == myScreenName )
+            continue;
         if ( regex.exactMatch( status.text() ) )
         {
             qDebug() << "TwitterPlugin found an exact matching mention from user " << status.user().screenName();

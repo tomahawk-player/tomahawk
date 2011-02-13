@@ -427,6 +427,20 @@ TomahawkSettings::setLastFmUsername( const QString& username )
 }
 
 QString
+TomahawkSettings::twitterScreenName() const
+{
+    QMutexLocker locker( m_safety );
+    return value( "twitter/ScreenName" ).toString();
+}
+
+void
+TomahawkSettings::setTwitterScreenName( const QString& screenName )
+{
+    QMutexLocker locker( m_safety );
+    setValue( "twitter/ScreenName", screenName );
+}
+    
+QString
 TomahawkSettings::twitterOAuthToken() const
 {
     QMutexLocker locker( m_safety );

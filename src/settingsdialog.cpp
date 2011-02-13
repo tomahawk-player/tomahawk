@@ -345,6 +345,7 @@ SettingsDialog::postGotTomahawkStatusAuthVerifyReply( const QTweetUser &user )
         return;
     }
     TomahawkSettings* s = TomahawkSettings::instance();
+    s->setTwitterScreenName( user.screenName() );
     TomahawkOAuthTwitter *twitAuth = new TomahawkOAuthTwitter( this );
     twitAuth->setNetworkAccessManager( TomahawkUtils::nam() );
     twitAuth->setOAuthToken( s->twitterOAuthToken().toLatin1() );
