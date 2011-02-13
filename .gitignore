@@ -9,4 +9,4 @@ Makefile*
 moc_*
 *~
 /tomahawk
-WARNING-twitter-api-keys
+thirdparty/qtweetlib/WARNING-twitter-api-keys
