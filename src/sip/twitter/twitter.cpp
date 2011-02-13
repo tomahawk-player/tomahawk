@@ -184,7 +184,7 @@ void
 TwitterPlugin::friendsTimelineStatuses( const QList< QTweetStatus > &statuses )
 {
     qDebug() << Q_FUNC_INFO;
-    QRegExp regex( QString( "^(@[a-zA-Z0-9]+ )?Got Tomahawk\\?(.*)$" ) );
+    QRegExp regex( QString( "^(@[a-zA-Z0-9]+ )?Got Tomahawk\\?(.*)$", Qt::CaseSensitive, QRegExp::RegExp2 ) );
     QString myScreenName = TomahawkSettings::instance()->twitterScreenName();
     
     QHash< QString, QTweetStatus > latestHash;
@@ -208,6 +208,11 @@ TwitterPlugin::friendsTimelineStatuses( const QList< QTweetStatus > &statuses )
         if ( regex.exactMatch( status.text() ) )
         {
             qDebug() << "TwitterPlugin found an exact tweet from friend " << status.user().screenName();
+            if ( status.text().startsWith( '@' ) && regex.captureCount() >= 2 && regex.cap( 1 ) != QString( '@' + myScreenName ) )
+            {
+                qDebug() << "TwitterPlugin skipping tweet because it's directed @someone that isn't us";
+                continue;
+            }
             QHash< QString, QVariant > peerData;
             if( m_cachedPeers.contains( status.user().screenName() ) )
             {
@@ -229,7 +234,7 @@ void
 TwitterPlugin::mentionsStatuses( const QList< QTweetStatus > &statuses )
 {
     qDebug() << Q_FUNC_INFO;
-    QRegExp regex( QString( "^(@[a-zA-Z0-9]+ )?Got Tomahawk\\?(.*)$" ) );
+    QRegExp regex( QString( "^(@[a-zA-Z0-9]+ )?Got Tomahawk\\?(.*)$", Qt::CaseSensitive, QRegExp::RegExp2 ) );
     QString myScreenName = TomahawkSettings::instance()->twitterScreenName();
     
     QHash< QString, QTweetStatus > latestHash;
@@ -253,6 +258,11 @@ TwitterPlugin::mentionsStatuses( const QList< QTweetStatus > &statuses )
         if ( regex.exactMatch( status.text() ) )
         {
             qDebug() << "TwitterPlugin found an exact matching mention from user " << status.user().screenName();
+            if ( status.text().startsWith( '@' ) && regex.captureCount() >= 2 && regex.cap( 1 ) != QString( '@' + myScreenName ) )
+            {
+                qDebug() << "TwitterPlugin skipping mention because it's directed @someone that isn't us";
+                continue;
+            }
             QHash< QString, QVariant > peerData;
             if( m_cachedPeers.contains( status.user().screenName() ) )
             {
