@@ -73,6 +73,7 @@ private:
     QWeakPointer< QTweetDirectMessageNew > m_directMessageNew;
     QWeakPointer< QTweetDirectMessageDestroy > m_directMessageDestroy;
     bool m_isAuthed;
+    bool m_isOnline;
     QTimer m_checkTimer;
     QTimer m_connectTimer;
     qint64 m_cachedFriendsSinceId;

@@ -17,6 +17,7 @@
 TwitterPlugin::TwitterPlugin()
     : SipPlugin()
     , m_isAuthed( false )
+    , m_isOnline( false )
     , m_checkTimer( this )
     , m_connectTimer( this )
     , m_cachedFriendsSinceId( 0 )
@@ -83,7 +84,7 @@ TwitterPlugin::connectPlugin( bool /*startup*/ )
     QTweetAccountVerifyCredentials *credVerifier = new QTweetAccountVerifyCredentials( m_twitterAuth.data(), this );
     connect( credVerifier, SIGNAL( parsedUser(const QTweetUser &) ), SLOT( connectAuthVerifyReply(const QTweetUser &) ) );
     credVerifier->verify();
-
+    
     return true;
 }
 
@@ -98,6 +99,8 @@ TwitterPlugin::disconnectPlugin()
     
     TomahawkSettings::instance()->setTwitterCachedPeers( m_cachedPeers );
     m_cachedPeers.empty();
+    delete m_twitterAuth.data();
+    m_isOnline = false;
 }
 
 void
@@ -126,6 +129,7 @@ TwitterPlugin::connectAuthVerifyReply( const QTweetUser &user )
             connect( m_directMessageNew.data(), SIGNAL( parsedDirectMessage(const QTweetDMStatus &)), SLOT( directMessagePosted(const QTweetDMStatus &) ) );
             connect( m_directMessageNew.data(), SIGNAL( error(QTweetNetBase::ErrorCode, const QString &) ), SLOT( directMessagePostError(QTweetNetBase::ErrorCode, const QString &) ) );
             connect( m_directMessageDestroy.data(), SIGNAL( parsedDirectMessage(const QTweetDMStatus &) ), SLOT( directMessageDestroyed(const QTweetDMStatus &) ) );
+            m_isOnline = true;
             QMetaObject::invokeMethod( this, "checkTimerFired", Qt::AutoConnection );
         }
         else
@@ -362,7 +366,7 @@ TwitterPlugin::registerOffer( const QString &screenName, const QHash< QString, Q
         QMetaObject::invokeMethod( this, "sendOffer", Q_ARG( QString, screenName ), QGenericArgument( "QHash< QString, QVariant >", (const void*)&_peerData ) );
     }
 
-    if ( _peerData.contains( "host" ) && _peerData.contains( "port" ) && _peerData.contains( "pkey" ) )
+    if ( m_isOnline && _peerData.contains( "host" ) && _peerData.contains( "port" ) && _peerData.contains( "pkey" ) )
         QMetaObject::invokeMethod( this, "makeConnection", Q_ARG( QString, screenName ), QGenericArgument( "QHash< QString, QVariant >", (const void*)&_peerData ) );
     
     if ( peersChanged )
