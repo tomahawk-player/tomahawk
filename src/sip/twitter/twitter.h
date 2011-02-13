@@ -3,6 +3,7 @@
 
 #include <QTimer>
 #include <QWeakPointer>
+#include <QSet>
 
 #include <qtweetuser.h>
 #include <qtweetnetbase.h>
@@ -60,7 +61,7 @@ private slots:
     void directMessagePosted( const QTweetDMStatus &message );
     void directMessagePostError( QTweetNetBase::ErrorCode errorCode, const QString &message );
     void directMessageDestroyed( const QTweetDMStatus &message );
-    void registerOffer( const QString &screenName, const QHash< QString, QVariant > &peerdata, bool sendOffer );
+    void registerOffer( const QString &screenName, const QHash< QString, QVariant > &peerdata );
     void sendOffer( const QString &screenName, const QHash< QString, QVariant > &peerdata );
     void makeConnection( const QString &screenName, const QHash< QString, QVariant > &peerdata );
 
@@ -78,6 +79,7 @@ private:
     qint64 m_cachedMentionsSinceId;
     qint64 m_cachedDirectMessagesSinceId;
     QHash< QString, QVariant > m_cachedPeers;
+    QSet<QString> m_keyCache;
     bool m_finishedFriends;
     bool m_finishedMentions;
 };
