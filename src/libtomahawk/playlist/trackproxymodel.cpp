@@ -49,6 +49,22 @@ TrackProxyModel::setFilter( const QString& pattern )
 }
 
 
+QList< Tomahawk::query_ptr >
+TrackProxyModel::tracks()
+{
+    QList<Tomahawk::query_ptr> queries;
+
+    for ( int i = 0; i < rowCount( QModelIndex() ); i++ )
+    {
+        PlItem* item = itemFromIndex( mapToSource( index( i, 0 ) ) );
+        if ( item )
+            queries << item->query();
+    }
+
+    return queries;
+}
+
+
 Tomahawk::result_ptr
 TrackProxyModel::siblingItem( int itemsAway )
 {
