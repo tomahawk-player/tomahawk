@@ -168,7 +168,7 @@ TwitterPlugin::connectTimerFired()
     {
         QHash< QString, QVariant > peerData = m_cachedPeers[screenName].toHash();
         
-        if ( !peerData.contains( "node" ) || !peerData.contains( "host" ) || !peerData.contains( "port" ) || !peerData.contains( "pkey" ) )
+        if ( !peerData.contains( "host" ) || !peerData.contains( "port" ) || !peerData.contains( "pkey" ) )
             continue;
         
         if ( !peerData.contains( "ohst" ) || !peerData.contains( "oprt" ) ||
@@ -304,19 +304,18 @@ TwitterPlugin::directMessages( const QList< QTweetDMStatus > &messages )
         qDebug() << "TwitterPlugin found " << splitList.length() << " parts to the message; the parts are:";
         foreach( QString part, splitList )
             qDebug() << part;
-        if ( splitList.length() < 5 )
+        if ( splitList.length() != 4 )
             continue;
         if ( splitList[0] != "TOMAHAWKPEER" )
             continue;
-        if ( !splitList[1].startsWith( "Host=" ) || !splitList[2].startsWith( "Port=" ) || !splitList[3].startsWith( "Node=" ) || !splitList[4].startsWith( "PKey=" ) )
+        if ( !splitList[1].startsWith( "Host=" ) || !splitList[2].startsWith( "Port=" ) || !splitList[3].startsWith( "PKey=" ) )
             continue;
         int port = splitList[2].mid( 5 ).toInt();
         if ( port == 0 )
             continue;
         QString host = splitList[1].mid( 5 );
-        QString node = splitList[3].mid( 5 );
-        QString pkey = splitList[4].mid( 5 );
-        qDebug() << "TwitterPlugin found a peerstart message from " << status.senderScreenName() << " with host " << host << " and port " << port << " and node " << node << " and pkey " << pkey;
+        QString pkey = splitList[3].mid( 5 );
+        qDebug() << "TwitterPlugin found a peerstart message from " << status.senderScreenName() << " with host " << host << " and port " << port << " and pkey " << pkey;
         
         QHash< QString, QVariant > peerData;
         if ( m_cachedPeers.contains( status.senderScreenName() ) )
@@ -324,7 +323,6 @@ TwitterPlugin::directMessages( const QList< QTweetDMStatus > &messages )
         
         peerData["host"] = QVariant::fromValue< QString >( host );
         peerData["port"] = QVariant::fromValue< int >( port );
-        peerData["node"] = QVariant::fromValue< QString >( node );
         peerData["pkey"] = QVariant::fromValue< QString >( pkey );
         m_cachedPeers[status.senderScreenName()] = QVariant::fromValue< QHash< QString, QVariant > >( peerData );
         peersChanged = true;
@@ -343,36 +341,36 @@ void
 TwitterPlugin::makeConnection( const QString &screenName, const QHash< QString, QVariant > &peerData )
 {
     qDebug() << Q_FUNC_INFO;
-    if ( !peerData.contains( "node" ) || !peerData.contains( "host" ) || !peerData.contains( "port" ) || !peerData.contains( "pkey" ) )
+    if ( !peerData.contains( "host" ) || !peerData.contains( "port" ) || !peerData.contains( "pkey" ) )
     {
-        qDebug() << "TwitterPlugin could not find node and/or host and/or port and/or pkey for peer " << screenName;
+        qDebug() << "TwitterPlugin could not find host and/or port and/or pkey for peer " << screenName;
         return;
     }
-    if ( !Servent::instance()->connectedToSession( peerData["node"].toString() ) )
+    QString node = QString( '@' + screenName );
+    if ( !Servent::instance()->connectedToSession( node ) )
         Servent::instance()->connectToPeer( peerData["host"].toString(),
                                             peerData["port"].toString().toInt(),
                                             peerData["pkey"].toString(),
-                                            QString( '@' + peerData["screenname"].toString() ),
-                                            peerData["node"].toString() );
+                                            node,
+                                            node );
 }
 
 void
 TwitterPlugin::registerOffer( const QString &screenName, const QHash< QString, QVariant > &peerData, bool sendOffer )
 {
     qDebug() << Q_FUNC_INFO;
-    if ( !peerData.contains( "node" ) || !peerData.contains( "okey" ) )
+    QString node = QString( '@' + screenName );
+    if ( !peerData.contains( "okey" ) )
     {
         if ( !peerData.contains( "okey" ) )
             qDebug() << "TwitterPlugin could not find okey to register offer for peer " << screenName;
-        if ( !peerData.contains( "node" ) )
-            qDebug() << "TwitterPlugin could not find node to register offer for peer " << screenName;
         return;
     }
-    qDebug() << "TwitterPlugin registering offer to " << QString( '@' + screenName ) << " with node " << peerData["node"].toString() << " and offeredkey " << peerData["okey"].toString();
-    Servent::instance()->createConnectionKey( QString( '@' + screenName ), peerData["node"].toString(), peerData["okey"].toString() );
+    qDebug() << "TwitterPlugin registering offer to " << node << " with node " << node << " and offeredkey " << peerData["okey"].toString();
+    Servent::instance()->createConnectionKey( node, node, peerData["okey"].toString() );
     if ( sendOffer )
         QMetaObject::invokeMethod( this, "sendOffer", Q_ARG( QString, screenName ), QGenericArgument( "QHash< QString, QVariant >", (const void*)&peerData ) );
-    if ( peerData.contains( "node" ) && peerData.contains( "host" ) && peerData.contains( "port" ) && peerData.contains( "pkey" ) )
+    if ( peerData.contains( "host" ) && peerData.contains( "port" ) && peerData.contains( "pkey" ) )
         QMetaObject::invokeMethod( this, "makeConnection", Q_ARG( QString, screenName ), QGenericArgument( "QHash< QString, QVariant >", (const void*)&peerData ) );
 }
 
@@ -380,9 +378,8 @@ void
 TwitterPlugin::sendOffer( const QString &screenName, const QHash< QString, QVariant > &peerData )
 {
     qDebug() << Q_FUNC_INFO;
-    QString offerString = QString( "TOMAHAWKPEER:Host=%1:Port=%2:Node=%3:PKey=%4" ).arg( peerData["ohst"].toString() )
+    QString offerString = QString( "TOMAHAWKPEER:Host=%1:Port=%2:PKey=%3" ).arg( peerData["ohst"].toString() )
                                                                                    .arg( peerData["oprt"].toString() )
-                                                                                   .arg( Database::instance()->dbid() )
                                                                                    .arg( peerData["okey"].toString() );
     qDebug() << "TwitterPlugin sending message to " << screenName << ": " << offerString;
     if( !m_directMessageNew.isNull() )
