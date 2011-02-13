@@ -21,6 +21,7 @@
 #include "tomahawksettings.h"
 #include "sip/SipHandler.h"
 #include "sip/twitter/tomahawkoauthtwitter.h"
+#include <database/database.h>
 
 static QString
 md5( const QByteArray& src )
@@ -314,6 +315,7 @@ SettingsDialog::authenticateTwitter()
         ui->twitterStatusLabel->setText("Status: No saved credentials");
         ui->twitterAuthenticateButton->setText( "Authenticate" );
         ui->twitterInstructionsBox->setVisible( false );
+        QMessageBox::critical( 0, QString("Tweetin' Error"), QString("There was an error validating your authentication") );
     }
 }
 
@@ -352,8 +354,9 @@ SettingsDialog::postGotTomahawkStatusAuthVerifyReply( const QTweetUser &user )
     twitAuth->setOAuthTokenSecret( s->twitterOAuthTokenSecret().toLatin1() );
     QTweetStatusUpdate *statUpdate = new QTweetStatusUpdate( twitAuth, this );
     connect( statUpdate, SIGNAL( postedStatus(const QTweetStatus &) ), SLOT( postGotTomahawkStatusUpdateReply(const QTweetStatus &) ) );
+    connect( statUpdate, SIGNAL( error(QTweetNetBase::ErrorCode, const QString&) ), SLOT( postGotTomahawkStatusUpdateError(QTweetNetBase::ErrorCode, const QString &) ) );
     QString uuid = QUuid::createUuid();
-    statUpdate->post( QString( "Got Tomahawk? (" ) + uuid.mid( 1, 8 ) + ")" );
+    statUpdate->post( QString( "Got Tomahawk? {" ) + Database::instance()->dbid() + QString( "} (" ) + uuid.mid( 1, 8 ) + QString( ")" ) );
 }
 
 void
@@ -363,6 +366,13 @@ SettingsDialog::postGotTomahawkStatusUpdateReply( const QTweetStatus& status )
         QMessageBox::critical( 0, QString("Tweetin' Error"), QString("There was an error posting your status -- sorry!") );
     else
         QMessageBox::information( 0, QString("Tweeted!"), QString("Your tweet has been posted!") );
+}
+void
+SettingsDialog::postGotTomahawkStatusUpdateError( QTweetNetBase::ErrorCode code, const QString& errorMsg )
+{
+    qDebug() << Q_FUNC_INFO;
+    qDebug() << "Error posting Got Tomahawk message, error code is " << code << ", error message is " << errorMsg;
+    QMessageBox::critical( 0, QString("Tweetin' Error"), QString("There was an error posting your status -- sorry!") );
 }
 
 ProxyDialog::ProxyDialog( QWidget *parent )

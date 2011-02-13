@@ -473,16 +473,20 @@ When you press the button your web browser will launch and take you to Twitter.c
             <item>
              <widget class="QLabel" name="twitterInstructionsInfoLabel">
               <property name="text">
-               <string>How it works is simple: just tweet &quot;Got Tomahawk?&quot; and be (very) patient. It can take a bit.
+               <string>How it works is simple: just press the button below to tweet &quot;Got Tomahawk?&quot; and some necessary information.  Then be (very) patient. Twitter is an asynchronous protocol so it can take a bit!
 
+If connections to peers seem to have been lost, just press the button again to re-post a tweet for resynchronization.
 </string>
+              </property>
+              <property name="wordWrap">
+               <bool>true</bool>
               </property>
              </widget>
             </item>
             <item>
              <widget class="QPushButton" name="twitterTweetGotTomahawkButton">
               <property name="text">
-               <string>Press here if you'd like to have Tomahawk tweet this for you</string>
+               <string>Press here to have Tomahawk post a tweet</string>
               </property>
              </widget>
             </item>

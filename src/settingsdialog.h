@@ -5,6 +5,7 @@
 
 #include <qtweetstatus.h>
 #include <qtweetuser.h>
+#include <qtweetnetbase.h>
 
 class QNetworkReply;
 
@@ -58,7 +59,8 @@ private slots:
     void startPostGotTomahawkStatus();
     void postGotTomahawkStatusAuthVerifyReply( const QTweetUser &user );
     void postGotTomahawkStatusUpdateReply( const QTweetStatus &status );
-
+    void postGotTomahawkStatusUpdateError( QTweetNetBase::ErrorCode, const QString &errorMsg );
+    
     void addScriptResolver();
     void scriptSelectionChanged();
     void removeScriptResolver();
