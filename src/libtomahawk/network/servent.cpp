@@ -267,6 +267,8 @@ Servent::readyRead()
 
     if( !nodeid.isEmpty() && cc != 0 ) // only control connections send nodeid
     {
+        cc->setId( nodeid );
+
         foreach( ControlConnection* con, m_controlconnections )
         {
             qDebug() << con->socket() << sock;
