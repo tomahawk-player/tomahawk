@@ -321,7 +321,7 @@ TwitterPlugin::makeConnection( const QString &screenName, const QHash< QString, 
     qDebug() << Q_FUNC_INFO;
     if ( !peerData.contains( "node" ) || !peerData.contains( "host" ) || !peerData.contains( "port" ) || !peerData.contains( "pkey" ) )
     {
-        qDebug() << "Could not find node and/or host and/or port and/or pkey for peer " << screenName;
+        qDebug() << "TwitterPlugin could not find node and/or host and/or port and/or pkey for peer " << screenName;
         return;
     }
     if ( !Servent::instance()->connectedToSession( peerData["node"].toString() ) )
@@ -338,7 +338,7 @@ TwitterPlugin::registerOffer( const QString &screenName, const QHash< QString, Q
     qDebug() << Q_FUNC_INFO;
     if ( !peerData.contains( "node" ) || !peerData.contains( "okey" ) )
     {
-        qDebug() << "Could not find node and/or okey for peer " << screenName;
+        qDebug() << "TwitterPlugin could not find node and/or okey for peer " << screenName;
         return;
     }
     qDebug() << "TwitterPlugin registering offer to " << QString( '@' + screenName ) << " with node " << peerData["node"].toString() << " and offeredkey " << peerData["okey"].toString();
@@ -355,7 +355,7 @@ TwitterPlugin::sendOffer( const QString &screenName, const QHash< QString, QVari
                                                                                    .arg( Servent::instance()->externalPort() )
                                                                                    .arg( Database::instance()->dbid() )
                                                                                    .arg( peerData["okey"].toString() );
-    qDebug() << "Sending message to " << screenName << ": " << offerString;
+    qDebug() << "TwitterPlugin sending message to " << screenName << ": " << offerString;
     if( !m_directMessageNew.isNull() )
         m_directMessageNew.data()->post( screenName, offerString );
 }
@@ -364,7 +364,7 @@ void
 TwitterPlugin::directMessagePosted( const QTweetDMStatus& message )
 {
     qDebug() << Q_FUNC_INFO;
-    qDebug() << "Message sent to " << message.recipientScreenName() << " containing: " << message.text();
+    qDebug() << "TwitterPlugin sent message to " << message.recipientScreenName() << " containing: " << message.text();
     
 }
 
@@ -372,14 +372,14 @@ void
 TwitterPlugin::directMessagePostError( QTweetNetBase::ErrorCode errorCode, const QString &message )
 {
     qDebug() << Q_FUNC_INFO;
-    qDebug() << "Received an error posting direct message: " << m_directMessageNew.data()->lastErrorMessage();
+    qDebug() << "TwitterPlugin received an error posting direct message: " << m_directMessageNew.data()->lastErrorMessage();
 }
 
 void
 TwitterPlugin::directMessageDestroyed(const QTweetDMStatus& message)
 {
     qDebug() << Q_FUNC_INFO;
-    qDebug() << "Message " << message.text() << " destroyed";
+    qDebug() << "TwitterPlugin destroyed message " << message.text();
 }
 
 Q_EXPORT_PLUGIN2( sip, TwitterPlugin )
