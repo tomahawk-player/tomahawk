@@ -350,7 +350,7 @@ TwitterPlugin::registerOffer( const QString &screenName, const QHash< QString, Q
     if( needToAddToCache )
     {
         qDebug() << "TwitterPlugin registering offer to " << node << " with node " << node << " and offeredkey " << _peerData["okey"].toString();
-        m_keyCache << Servent::instance()->createConnectionKey( node, node, _peerData["okey"].toString() );
+        m_keyCache << Servent::instance()->createConnectionKey( node, node, _peerData["okey"].toString(), false );
     }
         
     if( needToSend )
