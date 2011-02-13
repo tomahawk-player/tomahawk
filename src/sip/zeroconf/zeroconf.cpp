@@ -43,6 +43,7 @@ ZeroconfPlugin::lanHostFound( const QString& host, int port, const QString& name
 {
     qDebug() << "Found LAN host:" << host << port << nodeid;
     
+    //FIXME: This doesn't work...why? I never see Found LAN host in debug either, but somehow nodes are being connected...
     if ( !m_isOnline )
     {
         qDebug() << "Not online, so not connecting";
