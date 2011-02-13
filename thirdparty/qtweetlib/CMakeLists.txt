@@ -6,6 +6,7 @@ SET(CMAKE_VERBOSE_MAKEFILE ON)
 SET( QT_USE_QTNETWORK TRUE )
 INCLUDE( ${QT_USE_FILE} )
 
+
 add_definitions( ${QT_DEFINITIONS} )
 add_definitions( -DQT_SHARED )
 
@@ -171,6 +172,7 @@ target_link_libraries(tomahawk_qtweetlib
 )
 
 SET_TARGET_PROPERTIES( tomahawk_qtweetlib PROPERTIES DEFINE_SYMBOL  MAKE_QTWEETLIB_LIB )
+include ( ${CMAKE_CURRENT_SOURCE_DIR}/WARNING-twitter-api-keys )
 
 INSTALL(TARGETS tomahawk_qtweetlib DESTINATION lib)
 
