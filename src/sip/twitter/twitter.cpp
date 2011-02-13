@@ -159,6 +159,7 @@ TwitterPlugin::connectTimerFired()
     if ( !isValid() || m_cachedPeers.isEmpty() )
         return;
     
+    bool peersChanged = false;
     QList<QString> peerlist = m_cachedPeers.keys();
     qStableSort( peerlist.begin(), peerlist.end() );
     foreach( QString screenName, peerlist )
@@ -171,10 +172,20 @@ TwitterPlugin::connectTimerFired()
               peerData["ohst"].toString() != Servent::instance()->externalAddress() ||
               peerData["oprt"].toInt() != Servent::instance()->externalPort()
            )
-            QMetaObject::invokeMethod( this, "sendOffer", Q_ARG( QString, screenName ), QGenericArgument( "QHash< QString, QVariant >", (const void*)&peerData ) );
+        {
+                peerData["ohst"] = QVariant::fromValue< QString >( Servent::instance()->externalAddress() );
+                peerData["oprt"] = QVariant::fromValue< int >( Servent::instance()->externalPort() );
+                QMetaObject::invokeMethod( this, "sendOffer", Q_ARG( QString, screenName ), QGenericArgument( "QHash< QString, QVariant >", (const void*)&peerData ) );
+                m_cachedPeers[screenName] = QVariant::fromValue< QHash< QString, QVariant > >( peerData );
+                peersChanged = true;
+                
+        }
         else
             QMetaObject::invokeMethod( this, "makeConnection", Q_ARG( QString, screenName ), QGenericArgument( "QHash< QString, QVariant >", (const void*)&peerData ) );
     }
+    
+    if ( peersChanged )
+        TomahawkSettings::instance()->setTwitterCachedPeers( m_cachedPeers );
 }
 
 void
