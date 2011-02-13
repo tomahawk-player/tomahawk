@@ -233,7 +233,7 @@ DynamicWidget::stationFailed( const QString& msg )
     m_view->showMessage( msg );
     
     if( m_runningOnDemand ) {
-        stopStation();
+        stopStation( false );
     }
 }
 
@@ -260,9 +260,9 @@ DynamicWidget::playPressed()
 
 
 void 
-DynamicWidget::stopStation()
+DynamicWidget::stopStation( bool stopPlaying )
 {
-    m_model->stopOnDemand();
+    m_model->stopOnDemand( stopPlaying );
     m_runningOnDemand = false;
     
     // TODO until i add a qwidget interface
@@ -345,9 +345,6 @@ void
 DynamicWidget::generatorError( const QString& title, const QString& content )
 {
     m_view->showMessageTimeout( title, content );
-    
-    if( m_runningOnDemand )
-        stopStation();
 }
 
 void

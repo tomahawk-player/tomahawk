@@ -37,7 +37,7 @@ public:
     virtual ~DynamicModel();
    
     void startOnDemand();
-    void stopOnDemand();
+    void stopOnDemand( bool stopPlaying = true );
     void changeStation();
     
     void loadPlaylist( const dynplaylist_ptr& playlist );

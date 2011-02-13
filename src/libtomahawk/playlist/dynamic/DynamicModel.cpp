@@ -77,10 +77,11 @@ DynamicModel::newTrackGenerated( const Tomahawk::query_ptr& query )
 }
 
 void 
-DynamicModel::stopOnDemand()
+DynamicModel::stopOnDemand( bool stopPlaying )
 {
     m_onDemandRunning = false;
-    AudioEngine::instance()->stop();
+    if( stopPlaying )
+        AudioEngine::instance()->stop();
     
     disconnect( AudioEngine::instance(), SIGNAL( loading( Tomahawk::result_ptr ) ), this, SLOT( newTrackLoading() ) );
 }
