@@ -64,7 +64,7 @@ TwitterPlugin::connectPlugin( bool /*startup*/ )
     foreach( QString screenName, peerlist )
     {
         QHash< QString, QVariant > cachedPeer = m_cachedPeers[screenName].toHash();
-        QMetaObject::invokeMethod( this, "registerOffer", Q_ARG( QString, screenName ), QGenericArgument( "QHash< QString, QVariant >", (const void*)&cachedPeer ) );
+        QMetaObject::invokeMethod( this, "registerOffer", Q_ARG( QString, screenName ), QGenericArgument( "QHash< QString, QVariant >", (const void*)&cachedPeer ), Q_ARG( bool, false ) );
     }
     
     if ( settings->twitterOAuthToken().isEmpty() || settings->twitterOAuthTokenSecret().isEmpty() )
@@ -178,7 +178,7 @@ TwitterPlugin::connectTimerFired()
         {
                 peerData["ohst"] = QVariant::fromValue< QString >( Servent::instance()->externalAddress() );
                 peerData["oprt"] = QVariant::fromValue< int >( Servent::instance()->externalPort() );
-                QMetaObject::invokeMethod( this, "sendOffer", Q_ARG( QString, screenName ), QGenericArgument( "QHash< QString, QVariant >", (const void*)&peerData ) );
+                QMetaObject::invokeMethod( this, "registerOffer", Q_ARG( QString, screenName ), QGenericArgument( "QHash< QString, QVariant >", (const void*)&peerData ), Q_ARG( bool, true )  );
                 m_cachedPeers[screenName] = QVariant::fromValue< QHash< QString, QVariant > >( peerData );
                 peersChanged = true;
                 
@@ -215,7 +215,7 @@ TwitterPlugin::friendsTimelineStatuses( const QList< QTweetStatus > &statuses )
                 peerData["okey"] = QVariant::fromValue< QString >( okey );
                 peerData["ohst"] = QVariant::fromValue< QString >( Servent::instance()->externalAddress() );
                 peerData["oprt"] = QVariant::fromValue< int >( Servent::instance()->externalPort() );
-                QMetaObject::invokeMethod( this, "sendOffer", Q_ARG( QString, status.user().screenName() ), QGenericArgument( "QHash< QString, QVariant >", (const void*)&peerData ) );
+                QMetaObject::invokeMethod( this, "registerOffer", Q_ARG( QString, status.user().screenName() ), QGenericArgument( "QHash< QString, QVariant >", (const void*)&peerData ), Q_ARG( bool, true )  );
                 m_cachedPeers[status.user().screenName()] = QVariant::fromValue< QHash< QString, QVariant > >( peerData );
                 peersChanged = true;
             }
@@ -254,7 +254,7 @@ TwitterPlugin::mentionsStatuses( const QList< QTweetStatus > &statuses )
                 peerData["okey"] = QVariant::fromValue< QString >( okey );
                 peerData["ohst"] = QVariant::fromValue< QString >( Servent::instance()->externalAddress() );
                 peerData["oprt"] = QVariant::fromValue< int >( Servent::instance()->externalPort() );
-                QMetaObject::invokeMethod( this, "sendOffer", Q_ARG( QString, status.user().screenName() ), QGenericArgument( "QHash< QString, QVariant >", (const void*)&peerData ) );
+                QMetaObject::invokeMethod( this, "registerOffer", Q_ARG( QString, status.user().screenName() ), QGenericArgument( "QHash< QString, QVariant >", (const void*)&peerData ), Q_ARG( bool, true )  );
                 m_cachedPeers[status.user().screenName()] = QVariant::fromValue< QHash< QString, QVariant > >( peerData );
                 peersChanged = true;
             }
@@ -329,7 +329,7 @@ TwitterPlugin::directMessages( const QList< QTweetDMStatus > &messages )
         m_cachedPeers[status.senderScreenName()] = QVariant::fromValue< QHash< QString, QVariant > >( peerData );
         peersChanged = true;
         
-        QMetaObject::invokeMethod( this, "registerOffer", Q_ARG( QString, status.senderScreenName() ), QGenericArgument( "QHash< QString, QVariant >", (const void*)&peerData ) );
+        QMetaObject::invokeMethod( this, "registerOffer", Q_ARG( QString, status.senderScreenName() ), QGenericArgument( "QHash< QString, QVariant >", (const void*)&peerData ), Q_ARG( bool, true ) );
         if ( !m_directMessageDestroy.isNull() )
             m_directMessageDestroy.data()->destroyMessage( status.id() );
     }
@@ -357,7 +357,7 @@ TwitterPlugin::makeConnection( const QString &screenName, const QHash< QString, 
 }
 
 void
-TwitterPlugin::registerOffer( const QString &screenName, const QHash< QString, QVariant > &peerData )
+TwitterPlugin::registerOffer( const QString &screenName, const QHash< QString, QVariant > &peerData, bool sendOffer )
 {
     qDebug() << Q_FUNC_INFO;
     if ( !peerData.contains( "node" ) || !peerData.contains( "okey" ) )
@@ -367,6 +367,8 @@ TwitterPlugin::registerOffer( const QString &screenName, const QHash< QString, Q
     }
     qDebug() << "TwitterPlugin registering offer to " << QString( '@' + screenName ) << " with node " << peerData["node"].toString() << " and offeredkey " << peerData["okey"].toString();
     Servent::instance()->createConnectionKey( QString( '@' + screenName ), peerData["node"].toString(), peerData["okey"].toString() );
+    if ( sendOffer )
+        QMetaObject::invokeMethod( this, "sendOffer", Q_ARG( QString, screenName ), QGenericArgument( "QHash< QString, QVariant >", (const void*)&peerData ) );
     if ( peerData.contains( "node" ) && peerData.contains( "host" ) && peerData.contains( "port" ) && peerData.contains( "pkey" ) )
         QMetaObject::invokeMethod( this, "makeConnection", Q_ARG( QString, screenName ), QGenericArgument( "QHash< QString, QVariant >", (const void*)&peerData ) );
 }
@@ -375,8 +377,8 @@ void
 TwitterPlugin::sendOffer( const QString &screenName, const QHash< QString, QVariant > &peerData )
 {
     qDebug() << Q_FUNC_INFO;
-    QString offerString = QString( "TOMAHAWKPEER:Host=%1:Port=%2:Node=%3:PKey=%4" ).arg( Servent::instance()->externalAddress() )
-                                                                                   .arg( Servent::instance()->externalPort() )
+    QString offerString = QString( "TOMAHAWKPEER:Host=%1:Port=%2:Node=%3:PKey=%4" ).arg( peerData["ohst"].toString() )
+                                                                                   .arg( peerData["oprt"].toString() )
                                                                                    .arg( Database::instance()->dbid() )
                                                                                    .arg( peerData["okey"].toString() );
     qDebug() << "TwitterPlugin sending message to " << screenName << ": " << offerString;

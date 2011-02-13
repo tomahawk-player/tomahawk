@@ -60,7 +60,7 @@ private slots:
     void directMessagePosted( const QTweetDMStatus &message );
     void directMessagePostError( QTweetNetBase::ErrorCode errorCode, const QString &message );
     void directMessageDestroyed( const QTweetDMStatus &message );
-    void registerOffer( const QString &screenName, const QHash< QString, QVariant > &peerdata );
+    void registerOffer( const QString &screenName, const QHash< QString, QVariant > &peerdata, bool sendOffer );
     void sendOffer( const QString &screenName, const QHash< QString, QVariant > &peerdata );
     void makeConnection( const QString &screenName, const QHash< QString, QVariant > &peerdata );
 
