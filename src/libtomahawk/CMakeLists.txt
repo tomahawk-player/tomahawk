@@ -346,11 +346,12 @@ SET( OS_SPECIFIC_LINK_LIBRARIES
 
 ENDIF( APPLE )
 
+IF( UNIX AND NOT APPLE )
 SET( OS_SPECIFIC_LINK_LIBRARIES 
      ${OS_SPECIFIC_LINK_LIBRARIES}
      alsaplayback
 )
-
+ENDIF( UNIX AND NOT APPLE )
 
 qt4_wrap_ui( libUI_H ${libUI} )
 qt4_wrap_cpp( libMoc ${libHeaders} )
