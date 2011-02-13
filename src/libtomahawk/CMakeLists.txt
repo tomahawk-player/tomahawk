@@ -140,6 +140,9 @@ set( libSources
     widgets/welcomewidget.cpp
     widgets/overlaywidget.cpp
     widgets/infowidgets/sourceinfowidget.cpp
+
+    qtsingleapp/qtlocalpeer.cpp
+    qtsingleapp/qtsingleapplication.cpp
 )
 
 set( libHeaders
@@ -274,6 +277,9 @@ set( libHeaders
     widgets/welcomewidget.h
     widgets/overlaywidget.h
     widgets/infowidgets/sourceinfowidget.h
+
+    qtsingleapp/qtlocalpeer.h
+    qtsingleapp/qtsingleapplication.h
 )
 
 set( libHeaders_NoMOC 
@@ -340,12 +346,10 @@ SET( OS_SPECIFIC_LINK_LIBRARIES
 
 ENDIF( APPLE )
 
-IF( UNIX AND NOT APPLE )
 SET( OS_SPECIFIC_LINK_LIBRARIES 
      ${OS_SPECIFIC_LINK_LIBRARIES}
      alsaplayback
 )
-ENDIF( UNIX AND NOT APPLE )
 
 
 qt4_wrap_ui( libUI_H ${libUI} )

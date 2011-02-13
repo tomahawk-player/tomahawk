@@ -37,6 +37,7 @@
 #define LOGFILE TomahawkUtils::appDataDir().filePath( "tomahawk.log" ).toLocal8Bit()
 #define LOGFILE_SIZE 1024 * 512
 #include "tomahawksettings.h"
+#include <utils/xspfloader.h>
 
 using namespace std;
 ofstream logfile;
@@ -103,11 +104,23 @@ using namespace Tomahawk;
 
 TomahawkApp::TomahawkApp( int& argc, char *argv[] )
     : TOMAHAWK_APPLICATION( argc, argv )
+    , m_database( 0 )
     , m_audioEngine( 0 )
+    , m_sipHandler( 0 )
+    , m_servent( 0 )
+    , m_mainwindow( 0 )
     , m_infoSystem( 0 )
 {
     qsrand( QTime( 0, 0, 0 ).secsTo( QTime::currentTime() ) );
-
+    
+    // send the first arg to an already running instance, but don't open twice no matter what
+    if( ( argc > 1 && sendMessage( argv[ 1 ] ) ) || sendMessage( "" ) ) {
+        qDebug() << "Sent message, already exists";
+        throw runtime_error( "Already Running" );
+    }
+    
+    connect( this, SIGNAL( messageReceived( QString ) ), this, SLOT( messageReceived( QString ) ) );
+    
 #ifdef TOMAHAWK_HEADLESS
     m_headless = true;
 #else
@@ -439,5 +452,29 @@ TomahawkApp::setupSIP()
         m_sipHandler->connect( true );
 //        m_sipHandler->setProxy( *TomahawkUtils::proxy() );
     }
+}
+
+void 
+TomahawkApp::messageReceived( const QString& msg ) 
+{
+    qDebug() << "MESSAGE RECEIVED" << msg;
+    if( msg.isEmpty() ) {
+        return;
+    }
+    
+    if( msg.contains( "tomahawk://" ) ) {
+        QString cmd = msg.mid( 11 );
+        qDebug() << "tomahawk!s" << cmd;
+        if( cmd.startsWith( "load/" ) ) {
+            cmd = cmd.mid( 5 );
+            qDebug() << "loading.." << cmd;
+            if( cmd.startsWith( "xspf=" ) ) {
+                XSPFLoader* l = new XSPFLoader( true, this );
+                qDebug() << "Loading spiff:" << cmd.mid( 5 );
+                l->load( QUrl( cmd.mid( 5 ) ) );
+            }
+        }
+       
+   }
 }
 
