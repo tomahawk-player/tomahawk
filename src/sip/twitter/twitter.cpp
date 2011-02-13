@@ -306,7 +306,7 @@ TwitterPlugin::directMessages( const QList< QTweetDMStatus > &messages )
             qDebug() << part;
         if ( splitList.length() < 5 )
             continue;
-        if ( splitList[0] != "TOMAHAWKPEERSTART" )
+        if ( splitList[0] != "TOMAHAWKPEER" )
             continue;
         if ( !splitList[1].startsWith( "Host=" ) || !splitList[2].startsWith( "Port=" ) || !splitList[3].startsWith( "Node=" ) || !splitList[4].startsWith( "PKey=" ) )
             continue;
