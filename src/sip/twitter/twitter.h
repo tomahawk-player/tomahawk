@@ -52,11 +52,13 @@ public slots:
 private slots:
     void connectAuthVerifyReply( const QTweetUser &user );
     void checkTimerFired();
+    void connectTimerFired();
     void friendsTimelineStatuses( const QList< QTweetStatus > &statuses );
     void mentionsStatuses( const QList< QTweetStatus > &statuses );
     void pollDirectMessages();
     void directMessages( const QList< QTweetDMStatus > &messages );
     void directMessagePosted( const QTweetDMStatus &message );
+    void directMessagePostError( QTweetNetBase::ErrorCode errorCode, const QString &message );
     void directMessageDestroyed( const QTweetDMStatus &message );
     void registerOffer( const QString &screenName, const QHash< QString, QVariant > &peerdata );
     void sendOffer( const QString &screenName, const QHash< QString, QVariant > &peerdata );
@@ -71,6 +73,7 @@ private:
     QWeakPointer< QTweetDirectMessageDestroy > m_directMessageDestroy;
     bool m_isAuthed;
     QTimer m_checkTimer;
+    QTimer m_connectTimer;
     qint64 m_cachedFriendsSinceId;
     qint64 m_cachedMentionsSinceId;
     qint64 m_cachedDirectMessagesSinceId;

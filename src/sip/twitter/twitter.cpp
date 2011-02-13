@@ -18,6 +18,7 @@ TwitterPlugin::TwitterPlugin()
     : SipPlugin()
     , m_isAuthed( false )
     , m_checkTimer( this )
+    , m_connectTimer( this )
     , m_cachedFriendsSinceId( 0 )
     , m_cachedMentionsSinceId( 0 )
     , m_cachedDirectMessagesSinceId( 0 )
@@ -30,6 +31,11 @@ TwitterPlugin::TwitterPlugin()
     m_checkTimer.setSingleShot( false );
     connect( &m_checkTimer, SIGNAL( timeout() ), SLOT( checkTimerFired() ) );
     m_checkTimer.start();
+    
+    m_connectTimer.setInterval( 60000 );
+    m_connectTimer.setSingleShot( false );
+    connect( &m_connectTimer, SIGNAL( timeout() ), SLOT( connectTimerFired() ) );
+    m_connectTimer.start();
 }
 
 bool
@@ -116,6 +122,7 @@ TwitterPlugin::connectAuthVerifyReply( const QTweetUser &user )
             connect( m_mentions.data(), SIGNAL( parsedStatuses(const QList< QTweetStatus > &) ), SLOT( mentionsStatuses(const QList<QTweetStatus> &) ) );
             connect( m_directMessages.data(), SIGNAL( parsedStatuses(const QList< QTweetDMStatus > &) ), SLOT( directMessages(const QList<QTweetDMStatus> &) ) );
             connect( m_directMessageNew.data(), SIGNAL( parsedStatuses(const QList< QTweetDMStatus > &) ), SLOT( directMessagePosted(const QTweetDMStatus &) ) );
+            connect( m_directMessageNew.data(), SIGNAL( error(QTweetNetBase::ErrorCode, const QString &) ), SLOT( directMessagePostError(QTweetNetBase::ErrorCode, const QString &) ) );
             connect( m_directMessageDestroy.data(), SIGNAL( parsedStatuses(const QList< QTweetDMStatus > &) ), SLOT( directMessageDestoyed(const QTweetDMStatus &) ) );
             QMetaObject::invokeMethod( this, "checkTimerFired", Qt::AutoConnection );
         }
@@ -144,6 +151,30 @@ TwitterPlugin::checkTimerFired()
     qDebug() << "TwitterPlugin using mentions timeline id of " << m_cachedMentionsSinceId;
     if ( !m_mentions.isNull() )
         m_mentions.data()->fetch( m_cachedMentionsSinceId, 0, 800 );
+}
+
+void
+TwitterPlugin::connectTimerFired()
+{
+    if ( !isValid() || m_cachedPeers.isEmpty() )
+        return;
+    
+    QList<QString> peerlist = m_cachedPeers.keys();
+    qStableSort( peerlist.begin(), peerlist.end() );
+    foreach( QString screenName, peerlist )
+    {
+        QHash< QString, QVariant > peerData = m_cachedPeers[screenName].toHash();
+        if ( !peerData.contains( "node" ) || !peerData.contains( "host" ) || !peerData.contains( "port" ) || !peerData.contains( "pkey" ) )
+            continue;
+        
+        if ( !peerData.contains( "ohst" ) || !peerData.contains( "oprt" ) ||
+              peerData["ohst"].toString() != Servent::instance()->externalAddress() ||
+              peerData["oprt"].toInt() != Servent::instance()->externalPort()
+           )
+            QMetaObject::invokeMethod( this, "sendOffer", Q_ARG( QString, screenName ), QGenericArgument( "QHash< QString, QVariant >", (const void*)&peerData ) );
+        else
+            QMetaObject::invokeMethod( this, "makeConnection", Q_ARG( QString, screenName ), QGenericArgument( "QHash< QString, QVariant >", (const void*)&peerData ) );
+    }
 }
 
 void
@@ -330,11 +361,19 @@ TwitterPlugin::sendOffer( const QString &screenName, const QHash< QString, QVari
 }
 
 void
-TwitterPlugin::directMessagePosted(const QTweetDMStatus& message)
+TwitterPlugin::directMessagePosted( const QTweetDMStatus& message )
 {
     qDebug() << Q_FUNC_INFO;
-    qDebug() << "Message sent to " << message.recipientScreenName() << " containing: " << message.text();}
+    qDebug() << "Message sent to " << message.recipientScreenName() << " containing: " << message.text();
+    
+}
 
+void
+TwitterPlugin::directMessagePostError( QTweetNetBase::ErrorCode errorCode, const QString &message )
+{
+    qDebug() << Q_FUNC_INFO;
+    qDebug() << "Received an error posting direct message: " << m_directMessageNew.data()->lastErrorMessage();
+}
 
 void
 TwitterPlugin::directMessageDestroyed(const QTweetDMStatus& message)
