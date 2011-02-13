@@ -4,6 +4,7 @@
 #define APP TomahawkApp::instance()
 
 #include "headlesscheck.h"
+#include "tomahawkapp_mac.h" // for PlatforInterface
 
 #include <QRegExp>
 #include <QFile>
@@ -47,7 +48,7 @@ class TomahawkWindow;
 // this also acts as a a container for important top-level objects
 // that other parts of the app need to find
 // (eg, library, pipeline, friends list)
-class TomahawkApp : public TOMAHAWK_APPLICATION
+class TomahawkApp : public TOMAHAWK_APPLICATION, public Tomahawk::PlatformInterface
 {
 Q_OBJECT
 
@@ -69,6 +70,10 @@ public:
     void addScriptResolver( const QString& scriptPath );
     void removeScriptResolver( const QString& scriptPath );
     
+    // PlatformInterface
+    virtual void activate();
+    virtual bool loadUrl( const QString& url );
+
 signals:
     void settingsChanged();
     

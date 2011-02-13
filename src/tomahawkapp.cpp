@@ -5,6 +5,8 @@
 #include <QMetaType>
 #include <QTime>
 #include <QNetworkReply>
+#include <QFile>
+#include <QFileInfo>
 
 #include "artist.h"
 #include "album.h"
@@ -29,6 +31,10 @@
     #include "tomahawkwindow.h"
     #include "settingsdialog.h"
     #include <QMessageBox>
+#endif
+
+#ifdef Q_WS_MAC
+    #include "tomahawkapp_mac.h"
 #endif
 
 #include <iostream>
@@ -174,6 +180,10 @@ TomahawkApp::TomahawkApp( int& argc, char *argv[] )
 #else
         qDebug() << "Setting NAM.";
         TomahawkUtils::setNam( new QNetworkAccessManager );
+#endif
+
+#ifdef Q_WS_MAC
+        Tomahawk::setApplicationHandler( this );
 #endif
 
     // Set up proxy
@@ -454,16 +464,20 @@ TomahawkApp::setupSIP()
     }
 }
 
-void 
-TomahawkApp::messageReceived( const QString& msg ) 
+
+void
+TomahawkApp::activate()
 {
-    qDebug() << "MESSAGE RECEIVED" << msg;
-    if( msg.isEmpty() ) {
-        return;
-    }
-    
-    if( msg.contains( "tomahawk://" ) ) {
-        QString cmd = msg.mid( 11 );
+#ifndef TOMAHAWK_HEADLESS
+    mainWindow()->show();
+#endif
+}
+
+bool
+TomahawkApp::loadUrl( const QString& url )
+{
+    if( url.contains( "tomahawk://" ) ) {
+        QString cmd = url.mid( 11 );
         qDebug() << "tomahawk!s" << cmd;
         if( cmd.startsWith( "load/" ) ) {
             cmd = cmd.mid( 5 );
@@ -474,7 +488,26 @@ TomahawkApp::messageReceived( const QString& msg )
                 l->load( QUrl( cmd.mid( 5 ) ) );
             }
         }
-       
-   }
+    } else {
+        QFile f( url );
+        QFileInfo info( f );
+        if( f.exists() && info.suffix() == "xspf" ) {
+            XSPFLoader* l = new XSPFLoader( true, this );
+            qDebug() << "Loading spiff:" << url;
+            l->load( QUrl( url ) );
+        }
+    }
+    return true;
+}
+
+void 
+TomahawkApp::messageReceived( const QString& msg ) 
+{
+    qDebug() << "MESSAGE RECEIVED" << msg;
+    if( msg.isEmpty() ) {
+        return;
+    }
+    
+    loadUrl( msg );
 }
 

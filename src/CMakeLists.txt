@@ -57,6 +57,12 @@ SET( tomahawkSourcesGui ${tomahawkSourcesGui}
      tomahawkwindow.cpp
 )
 
+
+IF( APPLE )
+    SET( tomahawkHeaders ${tomahawkHeaders} tomahawkapp_mac.h )
+    SET( tomahawkSources ${tomahawkSources} tomahawkapp_mac.mm )
+ENDIF( APPLE )
+
 SET( tomahawkHeaders ${tomahawkHeaders}
      "${TOMAHAWK_INC_DIR}/tomahawk/tomahawkapp.h"
      "${TOMAHAWK_INC_DIR}/tomahawk/infosystem.h"
@@ -138,6 +144,9 @@ kde4_add_app_icon( tomahawkSources "${CMAKE_CURRENT_SOURCE_DIR}/../data/icons/to
 qt4_add_resources( RC_SRCS "../resources.qrc" )
 qt4_wrap_cpp( tomahawkMoc ${tomahawkHeaders} )
 
+configure_file(${CMAKE_CURRENT_SOURCE_DIR}/config.h.in
+               ${CMAKE_CURRENT_BINARY_DIR}/config.h)
+
 SET( final_src ${final_src} ${tomahawkMoc} ${tomahawkSources} ${tomahawkHeaders} )
 
 IF( "${gui}" STREQUAL "no" )
@@ -152,6 +161,8 @@ IF( UNIX AND NOT APPLE )
 ENDIF( UNIX AND NOT APPLE )
 IF( APPLE )
     ADD_EXECUTABLE( tomahawk MACOSX_BUNDLE ${final_src} )
+    SET_TARGET_PROPERTIES(tomahawk PROPERTIES MACOSX_BUNDLE_INFO_PLIST "../admin/mac/Info.plist"
+)
 ENDIF( APPLE )
 IF( WIN32 )
     ADD_EXECUTABLE( tomahawk ${final_src} )

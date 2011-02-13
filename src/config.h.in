@@ -1,0 +1,10 @@
+#ifndef CONFIG_H_IN
+#define CONFIG_H_IN
+
+#define CMAKE_INSTALL_PREFIX "${CMAKE_INSTALL_PREFIX}"
+
+#cmakedefine SNOW_LEOPARD
+#cmakedefine LEOPARD
+#cmakedefine HAVE_SPARKLE
+
+#endif // CONFIG_H_IN
