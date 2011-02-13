@@ -258,8 +258,21 @@ TwitterPlugin::directMessages( const QList< QTweetDMStatus > &messages )
     qDebug() << Q_FUNC_INFO;
     
     bool peersChanged = false;
+
+    QHash< QString, QTweetDMStatus > latestHash;
     
-    foreach( QTweetDMStatus status, messages )
+    foreach ( QTweetDMStatus status, messages )
+    {
+        if ( !latestHash.contains( status.senderScreenName() ) )
+            latestHash[status.senderScreenName()] = status;
+        else
+        {
+            if ( status.id() > latestHash[status.senderScreenName()].id() )
+                latestHash[status.senderScreenName()] = status;
+        }
+    }
+    
+    foreach( QTweetDMStatus status, latestHash.values() )
     {
         qDebug() << "TwitterPlugin checking direct message from " << status.senderScreenName() << " with content " << status.text();
         if ( status.id() > m_cachedDirectMessagesSinceId )
