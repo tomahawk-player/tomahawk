@@ -125,6 +125,7 @@ Servent::startListening( QHostAddress ha, bool upnp, int port )
 QString
 Servent::createConnectionKey( const QString& name, const QString &nodeid, const QString &key )
 {
+    qDebug() << Q_FUNC_INFO;
     Q_ASSERT( this->thread() == QThread::currentThread() );
 
     QString _key = ( key.isEmpty() ? uuid() : key );
@@ -132,6 +133,7 @@ Servent::createConnectionKey( const QString& name, const QString &nodeid, const 
     cc->setName( name.isEmpty() ? QString( "KEY(%1)" ).arg( key ) : name );
     if( !nodeid.isEmpty() )
         cc->setId( nodeid );
+    qDebug() << "Creating connection key with name of " << cc->name() << " and id of " << cc->id() << " and key of " << _key;
     registerOffer( _key, cc );
     return _key;
 }
