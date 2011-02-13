@@ -163,6 +163,7 @@ TwitterPlugin::checkTimerFired()
 void
 TwitterPlugin::connectTimerFired()
 {
+    qDebug() << Q_FUNC_INFO;
     if ( !isValid() || m_cachedPeers.isEmpty() )
         return;
     
@@ -174,7 +175,10 @@ TwitterPlugin::connectTimerFired()
         QHash< QString, QVariant > peerData = m_cachedPeers[screenName].toHash();
         
         if ( !peerData.contains( "host" ) || !peerData.contains( "port" ) || !peerData.contains( "pkey" ) )
+        {
+            qDebug() << "TwitterPlugin does not have host, port and/or pkey values for " << screenName;
             continue;
+        }
         
         QMetaObject::invokeMethod( this, "registerOffer", Q_ARG( QString, screenName ), QGenericArgument( "QHash< QString, QVariant >", (const void*)&peerData ) );
     }
@@ -450,7 +454,6 @@ TwitterPlugin::registerOffer( const QString &screenName, const QHash< QString, Q
         qDebug() << "TwitterPlugin needs to send and has node";
         _peerData["ohst"] = QVariant::fromValue< QString >( Servent::instance()->externalAddress() );
         _peerData["oprt"] = QVariant::fromValue< int >( Servent::instance()->externalPort() );
-        m_cachedPeers[screenName] = QVariant::fromValue< QHash< QString, QVariant > >( _peerData );
         peersChanged = true;
         if( !Servent::instance()->externalAddress().isEmpty() && !Servent::instance()->externalPort() == 0 )
             QMetaObject::invokeMethod( this, "sendOffer", Q_ARG( QString, screenName ), QGenericArgument( "QHash< QString, QVariant >", (const void*)&_peerData ) );
@@ -462,7 +465,10 @@ TwitterPlugin::registerOffer( const QString &screenName, const QHash< QString, Q
         QMetaObject::invokeMethod( this, "makeConnection", Q_ARG( QString, screenName ), QGenericArgument( "QHash< QString, QVariant >", (const void*)&_peerData ) );
     
     if ( peersChanged )
+    {
+        m_cachedPeers[screenName] = QVariant::fromValue< QHash< QString, QVariant > >( _peerData );
         TomahawkSettings::instance()->setTwitterCachedPeers( m_cachedPeers );
+    }
 }
 
 void
