@@ -89,7 +89,7 @@ signals:
      *                   In that case check response.
      *  @remarks DOESN'T emit finished signal
      */
-    void error(ErrorCode code, const QString& errorMsg);
+    void error(QTweetNetBase::ErrorCode code, const QString& errorMsg);
 
 protected slots:
     virtual void parsingJsonFinished(const QVariant& json, bool ok, const QString& errorMsg) = 0;

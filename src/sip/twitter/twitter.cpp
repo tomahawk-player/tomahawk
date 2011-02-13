@@ -120,10 +120,10 @@ TwitterPlugin::connectAuthVerifyReply( const QTweetUser &user )
             m_directMessageDestroy = QWeakPointer<QTweetDirectMessageDestroy>( new QTweetDirectMessageDestroy( m_twitterAuth.data(), this ) );
             connect( m_friendsTimeline.data(), SIGNAL( parsedStatuses(const QList< QTweetStatus > &) ), SLOT( friendsTimelineStatuses(const QList<QTweetStatus> &) ) );
             connect( m_mentions.data(), SIGNAL( parsedStatuses(const QList< QTweetStatus > &) ), SLOT( mentionsStatuses(const QList<QTweetStatus> &) ) );
-            connect( m_directMessages.data(), SIGNAL( parsedStatuses(const QList< QTweetDMStatus > &) ), SLOT( directMessages(const QList<QTweetDMStatus> &) ) );
-            connect( m_directMessageNew.data(), SIGNAL( parsedStatuses(const QList< QTweetDMStatus > &) ), SLOT( directMessagePosted(const QTweetDMStatus &) ) );
+            connect( m_directMessages.data(), SIGNAL( parsedDirectMessages(const QList<QTweetDMStatus> &)), SLOT( directMessages(const QList<QTweetDMStatus> &) ) );
+            connect( m_directMessageNew.data(), SIGNAL( parsedDirectMessage(const QTweetDMStatus &)), SLOT( directMessagePosted(const QTweetDMStatus &) ) );
             connect( m_directMessageNew.data(), SIGNAL( error(QTweetNetBase::ErrorCode, const QString &) ), SLOT( directMessagePostError(QTweetNetBase::ErrorCode, const QString &) ) );
-            connect( m_directMessageDestroy.data(), SIGNAL( parsedStatuses(const QList< QTweetDMStatus > &) ), SLOT( directMessageDestoyed(const QTweetDMStatus &) ) );
+            connect( m_directMessageDestroy.data(), SIGNAL( parsedDirectMessage(const QTweetDMStatus &) ), SLOT( directMessageDestroyed(const QTweetDMStatus &) ) );
             QMetaObject::invokeMethod( this, "checkTimerFired", Qt::AutoConnection );
         }
         else
@@ -376,7 +376,7 @@ TwitterPlugin::directMessagePostError( QTweetNetBase::ErrorCode errorCode, const
 }
 
 void
-TwitterPlugin::directMessageDestroyed(const QTweetDMStatus& message)
+TwitterPlugin::directMessageDestroyed( const QTweetDMStatus& message )
 {
     qDebug() << Q_FUNC_INFO;
     qDebug() << "TwitterPlugin destroyed message " << message.text();
