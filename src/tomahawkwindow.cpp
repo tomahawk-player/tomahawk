@@ -72,10 +72,6 @@ TomahawkWindow::TomahawkWindow( QWidget* parent )
 
     QWidget* sidebarWidget = new QWidget();
     sidebarWidget->setLayout( new QVBoxLayout() );
-    sidebarWidget->setContentsMargins( 0, 0, 0, 0 );
-    sidebarWidget->layout()->setContentsMargins( 0, 0, 0, 0 );
-    sidebarWidget->layout()->setMargin( 0 );
-    sidebarWidget->layout()->setSpacing( 0 );
 
     AnimatedSplitter* sidebar = new AnimatedSplitter();
     sidebar->setOrientation( Qt::Vertical );
@@ -91,9 +87,22 @@ TomahawkWindow::TomahawkWindow( QWidget* parent )
     sidebar->addWidget( transferView );
     sidebar->hide( 1, false );
 
+    QWidget* buttonWidget = new QWidget();
+    buttonWidget->setLayout( new QVBoxLayout() );
     m_statusButton = new QPushButton();
+    buttonWidget->layout()->addWidget( m_statusButton );
+
     sidebarWidget->layout()->addWidget( sidebar );
-    sidebarWidget->layout()->addWidget( m_statusButton );
+    sidebarWidget->layout()->addWidget( buttonWidget );
+
+    sidebarWidget->setContentsMargins( 0, 0, 0, 0 );
+    sidebarWidget->layout()->setContentsMargins( 0, 0, 0, 0 );
+    sidebarWidget->layout()->setMargin( 0 );
+    sidebarWidget->layout()->setSpacing( 0 );
+    buttonWidget->setContentsMargins( 0, 0, 0, 0 );
+    buttonWidget->layout()->setContentsMargins( 0, 0, 0, 0 );
+    buttonWidget->layout()->setMargin( 0 );
+    buttonWidget->layout()->setSpacing( 0 );
 
     ui->splitter->addWidget( sidebarWidget );
     ui->splitter->addWidget( PlaylistManager::instance()->widget() );
