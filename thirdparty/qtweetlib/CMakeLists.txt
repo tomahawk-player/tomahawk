@@ -175,6 +175,8 @@ SET_TARGET_PROPERTIES( tomahawk_qtweetlib PROPERTIES DEFINE_SYMBOL  MAKE_QTWEETL
 
 IF( EXISTS ${CMAKE_CURRENT_SOURCE_DIR}/WARNING-twitter-api-keys )
   INCLUDE( ${CMAKE_CURRENT_SOURCE_DIR}/WARNING-twitter-api-keys )
+ELSE()
+  MESSAGE( WARNING "Twitter Consumer Key/Secret OAuth keys not found; Twitter SIP support will not be available" )
 ENDIF()
 
 INSTALL(TARGETS tomahawk_qtweetlib DESTINATION lib)
