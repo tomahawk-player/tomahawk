@@ -50,6 +50,7 @@ set( libSources
     database/databasecommand_logplayback.cpp
     database/databasecommand_addsource.cpp
     database/databasecommand_sourceoffline.cpp
+    database/databasecommand_collectionstats.cpp
     database/databasecommand_loadplaylistentries.cpp
     database/databasecommand_modifyplaylist.cpp
     database/databasecommand_playbackhistory.cpp
@@ -307,7 +308,7 @@ include_directories( . ${CMAKE_CURRENT_BINARY_DIR} ..
     ../../thirdparty/jdns
     ../../thirdparty/jdns/jdns
     ../../thirdparty/jdns/jdnsshared
-    ../../thirdparty/qtweetlib/src
+    ../../thirdparty/qtweetlib/qtweetlib/src
     playlist
 )
 
