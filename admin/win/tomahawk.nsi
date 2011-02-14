@@ -304,6 +304,7 @@ Section "Tomahawk Player" SEC_TOMAHAWK_PLAYER
    File "${MING_LIB}\libclucene-core.dll"
 
    File "${QXTWEB_DLL_PATH}\libqxtweb-standalone.dll"
+   File "${ROOT_PATH}\build\thirdparty\jdns\libtomahawk_jdns.dll"
 SectionEnd
 
 SectionGroup "Shortcuts"
