@@ -4,43 +4,26 @@ ADD_DEFINITIONS( /DNOMINMAX )
 ADD_DEFINITIONS( /DWIN32_LEAN_AND_MEAN )
 ADD_DEFINITIONS( -static-libgcc )
 
-#ADD_DEFINITIONS( /DNO_LIBLASTFM )
-#ADD_DEFINITIONS( -DNO_OGG )
 
-# Add manual locations to stuff:
-INCLUDE_DIRECTORIES(
-    ../../libmad-0.15.1b
-    ../../boost_1_43_0
-    ../../gloox-1.0
-    ../../qjson
-    ../../liblastfm/_include
-    ../../taglib-1.6.3/
-    ../../taglib-1.6.3/build
-    ../../taglib-1.6.3/taglib
-    ../../taglib-1.6.3/taglib/toolkit
-)
+SET( OS_SPECIFIC_LINK_LIBRARIES
+    ${OS_SPECIFIC_LINK_LIBRARIES}
 
-
-SET( GLOOX_LIBS
-    ${GLOOX_LIBS}
-    gloox
-)
-
-SET( OS_SPECIFIC_LINK_LIBRARIES 
+# normal deps
     ${LIBLASTFM_LIBRARY}
     ${GLOOX_LIBS}
-)
 
-SET( OS_SPECIFIC_LINK_LIBRARIES 
-    ${OS_SPECIFIC_LINK_LIBRARIES}
+# third party shipped with tomahawk
+    ${CMAKE_BINARY_DIR}/src/libtomahawk/libtomahawklib.dll
+    ${CMAKE_SOURCE_DIR}/rtaudio/librtaudio.dll
+    ${CMAKE_SOURCE_DIR}/qxt/qxtweb-standalone/libqxtweb-standalone.dll
+
+# system libs
     "secur32.dll"
     "crypt32.dll"
-    "${CMAKE_CURRENT_SOURCE_DIR}/../qxt/qxtweb-standalone/libqxtweb-standalone.dll"
-    "${CMAKE_CURRENT_SOURCE_DIR}/../build/src/libtomahawk/libtomahawklib.dll"
-)
-
-SET( OS_SPECIFIC_LINK_LIBRARIES 
-    ${OS_SPECIFIC_LINK_LIBRARIES} 
     "iphlpapi.a"
-
+    "ws2_32.dll"
+    "dnsapi.dll"
+    "dsound.dll"
+    "winmm.dll"
+    "advapi32.dll"
 )

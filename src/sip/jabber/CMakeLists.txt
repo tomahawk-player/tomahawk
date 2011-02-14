@@ -33,7 +33,7 @@ SET( OS_SPECIFIC_LINK_LIBRARIES
 	${OS_SPECIFIC_LINK_LIBRARIES}
 	"secur32.dll"
 	"crypt32.dll"
-        "${CMAKE_CURRENT_SOURCE_DIR}/../../../build/src/libtomahawk/libtomahawklib.dll"
+        ${CMAKE_BINARY_DIR}/src/libtomahawk/libtomahawklib.dll
 )
 ENDIF( WIN32 )
 

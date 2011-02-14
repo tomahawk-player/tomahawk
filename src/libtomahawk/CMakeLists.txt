@@ -325,7 +325,7 @@ SET( OS_SPECIFIC_LINK_LIBRARIES
     "winmm.dll"
     "advapi32.dll"
 
-    "${CMAKE_CURRENT_SOURCE_DIR}/../../rtaudio/librtaudio.dll"
+    ${CMAKE_SOURCE_DIR}/rtaudio/librtaudio.dll
 )
 ENDIF( WIN32 )
 
