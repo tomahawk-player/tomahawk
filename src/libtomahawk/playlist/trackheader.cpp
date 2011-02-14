@@ -26,14 +26,22 @@ TrackHeader::TrackHeader( TrackView* parent )
 //    m_menu->addAction( tr( "Resize columns to fit window" ), this, SLOT( onToggleResizeColumns() ) );
 //    m_menu->addSeparator();
 
-//    connect( this, SIGNAL( sectionResized( int, int, int ) ), SLOT( onSectionResized( int ) ) );
+    connect( this, SIGNAL( sectionResized( int, int, int ) ), SLOT( onSectionResized() ) );
     connect( m_sigmap, SIGNAL( mapped( int ) ), SLOT( toggleVisibility( int ) ) );
 }
 
 
 TrackHeader::~TrackHeader()
 {
-    qDebug() << "Storing for:" << m_parent->guid();
+}
+
+
+void
+TrackHeader::onSectionResized()
+{
+    if ( !m_init )
+        return;
+
     TomahawkSettings::instance()->setPlaylistColumnSizes( m_parent->guid(), saveState() );
 }
 
@@ -51,10 +59,7 @@ TrackHeader::checkState()
     if ( !count() || m_init )
         return;
 
-    qDebug() << "Restoring for:" << m_parent->guid();
-    m_init = true;
     QByteArray state = TomahawkSettings::instance()->playlistColumnSizes( m_parent->guid() );
-
     if ( !state.isEmpty() )
         restoreState( state );
     else
@@ -72,6 +77,8 @@ TrackHeader::checkState()
             resizeSection( i, qMax( minimumSectionSize(), int( nw - 0.5 ) ) );
         }
     }
+
+    m_init = true;
 }
 
 

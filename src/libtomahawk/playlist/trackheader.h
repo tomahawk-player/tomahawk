@@ -26,7 +26,7 @@ protected:
     void contextMenuEvent( QContextMenuEvent* e );
 
 private slots:
-//    void onSectionResized( int index );
+    void onSectionResized();
     void onToggleResizeColumns();
 
 private:
