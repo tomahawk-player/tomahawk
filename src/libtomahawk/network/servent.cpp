@@ -146,9 +146,18 @@ Servent::setExternalAddress( QHostAddress ha, unsigned int port )
     m_externalAddress = ha;
     m_externalPort = port;
 
-    if( m_externalPort == 0 )
+    if( m_externalPort == 0 || m_externalAddress.toString().isEmpty() )
     {
-        qDebug() << "No external access, LAN and outbound connections only!";
+        if( !TomahawkSettings::instance()->externalHostname().isEmpty() &&
+            !TomahawkSettings::instance()->externalPort() == 0 )
+        {
+            qDebug() << "UPnP failed, have external address/port -- falling back";
+            m_externalHostname = TomahawkSettings::instance()->externalHostname();
+            m_externalPort = TomahawkSettings::instance()->externalPort();
+            qDebug() << m_externalHostname << m_externalPort;
+        }
+        else
+            qDebug() << "No external access, LAN and outbound connections only!";
     }
 
     emit ready();
