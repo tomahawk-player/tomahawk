@@ -124,7 +124,7 @@ INCLUDE_DIRECTORIES(
     ../alsa-playback
     ../rtaudio
     ../qxt/qxtweb-standalone/qxtweb
-    ../thirdparty/qtweetlib/src
+    ../thirdparty/qtweetlib/qtweetlib/src
 
     /usr/include/taglib
     /usr/local/include/taglib
