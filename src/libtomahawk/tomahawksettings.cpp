@@ -368,14 +368,17 @@ int
 TomahawkSettings::externalPort() const
 {
     QMutexLocker locker( m_safety );
-    return value( "network/external-port" ).toInt();
+    return value( "network/external-port", 50210 ).toInt();
 }
 
 void
 TomahawkSettings::setExternalPort(int externalPort)
 {
     QMutexLocker locker( m_safety );
-    setValue( "network/external-port", externalPort);
+    if ( externalPort == 0 )
+        setValue( "network/external-port", 50210);
+    else
+        setValue( "network/external-port", externalPort);
 }
 
 

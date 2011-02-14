@@ -40,36 +40,30 @@
         <number>16</number>
        </property>
        <item>
-        <layout class="QGridLayout" name="gridLayout">
-         <property name="horizontalSpacing">
-          <number>16</number>
-         </property>
-         <item row="2" column="0">
+        <layout class="QHBoxLayout" name="horizontalLayout_7">
+         <item>
           <widget class="QLabel" name="label">
            <property name="sizePolicy">
-            <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+            <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
              <horstretch>0</horstretch>
              <verstretch>0</verstretch>
             </sizepolicy>
            </property>
            <property name="minimumSize">
             <size>
-             <width>100</width>
+             <width>0</width>
              <height>0</height>
             </size>
            </property>
            <property name="text">
             <string>Jabber ID:</string>
            </property>
-           <property name="alignment">
-            <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-           </property>
            <property name="buddy">
             <cstring>jabberUsername</cstring>
            </property>
           </widget>
          </item>
-         <item row="2" column="1">
+         <item>
           <widget class="QLineEdit" name="jabberUsername">
            <property name="sizePolicy">
             <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
@@ -79,20 +73,23 @@
            </property>
           </widget>
          </item>
-         <item row="3" column="0">
+         <item>
           <widget class="QLabel" name="label_2">
+           <property name="sizePolicy">
+            <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+             <horstretch>0</horstretch>
+             <verstretch>0</verstretch>
+            </sizepolicy>
+           </property>
            <property name="text">
             <string>Password:</string>
-           </property>
-           <property name="alignment">
-            <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
            </property>
            <property name="buddy">
             <cstring>jabberPassword</cstring>
            </property>
           </widget>
          </item>
-         <item row="3" column="1">
+         <item>
           <widget class="QLineEdit" name="jabberPassword">
            <property name="sizePolicy">
             <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
@@ -105,22 +102,6 @@
            </property>
            <property name="echoMode">
             <enum>QLineEdit::Password</enum>
-           </property>
-          </widget>
-         </item>
-         <item row="4" column="0" colspan="2">
-          <widget class="QCheckBox" name="checkBoxAdvanced">
-           <property name="sizePolicy">
-            <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
-             <horstretch>0</horstretch>
-             <verstretch>0</verstretch>
-            </sizepolicy>
-           </property>
-           <property name="layoutDirection">
-            <enum>Qt::RightToLeft</enum>
-           </property>
-           <property name="text">
-            <string>Show Advanced Settings</string>
            </property>
           </widget>
          </item>
@@ -228,72 +209,6 @@
         </widget>
        </item>
        <item>
-        <widget class="QGroupBox" name="groupBoxNetworkAdvanced">
-         <property name="sizePolicy">
-          <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
-           <horstretch>0</horstretch>
-           <verstretch>0</verstretch>
-          </sizepolicy>
-         </property>
-         <property name="title">
-          <string>Advanced Network Settings</string>
-         </property>
-         <layout class="QVBoxLayout" name="verticalLayout_9">
-          <item>
-           <layout class="QHBoxLayout" name="staticHostNameHLayout">
-            <item>
-             <widget class="QLabel" name="staticHostNameLabel">
-              <property name="text">
-               <string>Static Host Name:</string>
-              </property>
-             </widget>
-            </item>
-            <item>
-             <widget class="QLineEdit" name="staticHostName"/>
-            </item>
-           </layout>
-          </item>
-          <item>
-           <layout class="QHBoxLayout" name="proxySettingsHLayout">
-            <item>
-             <spacer name="horizontalSpacer_4">
-              <property name="orientation">
-               <enum>Qt::Horizontal</enum>
-              </property>
-              <property name="sizeHint" stdset="0">
-               <size>
-                <width>40</width>
-                <height>20</height>
-               </size>
-              </property>
-             </spacer>
-            </item>
-            <item>
-             <widget class="QPushButton" name="proxyButton">
-              <property name="text">
-               <string>Proxy Settings...</string>
-              </property>
-             </widget>
-            </item>
-            <item>
-             <spacer name="horizontalSpacer_3">
-              <property name="orientation">
-               <enum>Qt::Horizontal</enum>
-              </property>
-              <property name="sizeHint" stdset="0">
-               <size>
-                <width>40</width>
-                <height>20</height>
-               </size>
-              </property>
-             </spacer>
-            </item>
-           </layout>
-          </item>
-         </layout>
-        </widget>
-       </item>
-       <item>
         <spacer name="verticalSpacer_2">
          <property name="orientation">
           <enum>Qt::Vertical</enum>
@@ -306,50 +221,189 @@
          </property>
         </spacer>
        </item>
-       <item>
-        <widget class="QCheckBox" name="checkBoxHttp">
-         <property name="layoutDirection">
-          <enum>Qt::RightToLeft</enum>
-         </property>
-         <property name="text">
-          <string>Playdar HTTP API - NO AUTH</string>
-         </property>
-         <property name="checked">
-          <bool>false</bool>
-         </property>
-        </widget>
-       </item>
-       <item>
-        <widget class="QCheckBox" name="checkBoxUpnp">
-         <property name="layoutDirection">
-          <enum>Qt::RightToLeft</enum>
-         </property>
-         <property name="text">
-          <string>Use UPnP to establish port forward</string>
-         </property>
-         <property name="checked">
-          <bool>true</bool>
-         </property>
-        </widget>
-       </item>
-       <item>
-        <widget class="QCheckBox" name="checkBoxJabberAutoConnect">
-         <property name="layoutDirection">
-          <enum>Qt::RightToLeft</enum>
-         </property>
-         <property name="text">
-          <string>Connect automatically when Tomahawk starts</string>
-         </property>
-         <property name="checked">
-          <bool>true</bool>
-         </property>
-        </widget>
-       </item>
       </layout>
+     </widget>
+     <widget class="QWidget" name="tabNetwork">
+      <attribute name="title">
+       <string>Network</string>
+      </attribute>
+      <widget class="QGroupBox" name="groupBoxNetworkAdvanced">
+       <property name="geometry">
+        <rect>
+         <x>20</x>
+         <y>10</y>
+         <width>551</width>
+         <height>341</height>
+        </rect>
+       </property>
+       <property name="sizePolicy">
+        <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+         <horstretch>0</horstretch>
+         <verstretch>0</verstretch>
+        </sizepolicy>
+       </property>
+       <property name="title">
+        <string>Advanced Network Settings</string>
+       </property>
+       <layout class="QVBoxLayout" name="verticalLayout_13">
+        <item>
+         <layout class="QVBoxLayout" name="verticalLayout_9">
+          <item>
+           <widget class="QLabel" name="label_6">
+            <property name="sizePolicy">
+             <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+              <horstretch>0</horstretch>
+              <verstretch>0</verstretch>
+             </sizepolicy>
+            </property>
+            <property name="text">
+             <string>If you're having difficulty connecting to peers, try setting this to your external IP address/host name and a port number (default 50210). Make sure to forward that port to this machine!</string>
+            </property>
+            <property name="wordWrap">
+             <bool>true</bool>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <layout class="QHBoxLayout" name="horizontalLayout_6">
+            <item>
+             <widget class="QLabel" name="staticHostNameLabel">
+              <property name="sizePolicy">
+               <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+                <horstretch>0</horstretch>
+                <verstretch>0</verstretch>
+               </sizepolicy>
+              </property>
+              <property name="text">
+               <string>Static Host Name:</string>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QLineEdit" name="staticHostName"/>
+            </item>
+            <item>
+             <widget class="QLabel" name="staticPortLabel">
+              <property name="sizePolicy">
+               <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+                <horstretch>0</horstretch>
+                <verstretch>0</verstretch>
+               </sizepolicy>
+              </property>
+              <property name="text">
+               <string>Static Port:</string>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QSpinBox" name="staticPort">
+              <property name="maximum">
+               <number>65535</number>
+              </property>
+              <property name="value">
+               <number>50210</number>
+              </property>
+             </widget>
+            </item>
+           </layout>
+          </item>
+         </layout>
+        </item>
+        <item>
+         <layout class="QHBoxLayout" name="proxySettingsHLayout">
+          <item>
+           <spacer name="proxySettingsLeftSpacer">
+            <property name="orientation">
+             <enum>Qt::Horizontal</enum>
+            </property>
+            <property name="sizeHint" stdset="0">
+             <size>
+              <width>40</width>
+              <height>20</height>
+             </size>
+            </property>
+           </spacer>
+          </item>
+          <item>
+           <widget class="QPushButton" name="proxyButton">
+            <property name="text">
+             <string>Proxy Settings...</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <spacer name="proxySettingsRightSpacer">
+            <property name="orientation">
+             <enum>Qt::Horizontal</enum>
+            </property>
+            <property name="sizeHint" stdset="0">
+             <size>
+              <width>40</width>
+              <height>20</height>
+             </size>
+            </property>
+           </spacer>
+          </item>
+         </layout>
+        </item>
+        <item>
+         <spacer name="verticalSpacer_5">
+          <property name="orientation">
+           <enum>Qt::Vertical</enum>
+          </property>
+          <property name="sizeHint" stdset="0">
+           <size>
+            <width>20</width>
+            <height>40</height>
+           </size>
+          </property>
+         </spacer>
+        </item>
+        <item>
+         <widget class="QCheckBox" name="checkBoxHttp">
+          <property name="layoutDirection">
+           <enum>Qt::RightToLeft</enum>
+          </property>
+          <property name="text">
+           <string>Playdar HTTP API - NO AUTH</string>
+          </property>
+          <property name="checked">
+           <bool>false</bool>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QCheckBox" name="checkBoxJabberAutoConnect">
+          <property name="layoutDirection">
+           <enum>Qt::RightToLeft</enum>
+          </property>
+          <property name="text">
+           <string>Connect automatically when Tomahawk starts</string>
+          </property>
+          <property name="checked">
+           <bool>true</bool>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QCheckBox" name="checkBoxUpnp">
+          <property name="layoutDirection">
+           <enum>Qt::RightToLeft</enum>
+          </property>
+          <property name="text">
+           <string>Use UPnP to establish port forward</string>
+          </property>
+          <property name="checked">
+           <bool>true</bool>
+          </property>
+         </widget>
+        </item>
+       </layout>
+      </widget>
      </widget>
      <widget class="QWidget" name="tabMusic">
       <attribute name="title">
-       <string>Music</string>
+       <string>Local Music</string>
       </attribute>
       <layout class="QVBoxLayout" name="verticalLayout_5">
        <property name="margin">
@@ -430,7 +484,7 @@
            <property name="text">
             <string>Authenticating with Twitter allows you to discover and play music from your Twitter friends running Tomahawk.
 
-This feature works best when you have set a static host name in the &quot;Jabber&quot; settings tab under Advanced Settings, but may work even if you do not. Please note: this discovery uses Direct Messages and will only work when both Twitter users have followed each other. Tomahawk will attempt to &quot;clean up&quot; after itself to keep your Direct Message inbox tidy, but may miss some.
+This feature works best when you have set a static host name in the &quot;Network&quot; settings tab under Advanced Settings, but may work even if you do not. Please note: this discovery uses Direct Messages and will only work when both Twitter users have followed each other. Tomahawk will attempt to &quot;clean up&quot; after itself to keep your Direct Message inbox tidy, but may miss some.
 
 When you press the button your web browser will launch and take you to Twitter.com to authenticate. You must copy and paste the PIN number into the dialog box that appears.</string>
            </property>
@@ -735,54 +789,6 @@ If connections to peers seem to have been lost, just press the button again to r
     <hint type="destinationlabel">
      <x>286</x>
      <y>274</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>checkBoxAdvanced</sender>
-   <signal>toggled(bool)</signal>
-   <receiver>proxyButton</receiver>
-   <slot>setVisible(bool)</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>310</x>
-     <y>110</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>368</x>
-     <y>194</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>checkBoxAdvanced</sender>
-   <signal>toggled(bool)</signal>
-   <receiver>groupBoxJabberAdvanced</receiver>
-   <slot>setVisible(bool)</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>310</x>
-     <y>115</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>310</x>
-     <y>174</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>checkBoxAdvanced</sender>
-   <signal>toggled(bool)</signal>
-   <receiver>groupBoxNetworkAdvanced</receiver>
-   <slot>setVisible(bool)</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>310</x>
-     <y>115</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>310</x>
-     <y>262</y>
     </hint>
    </hints>
   </connection>

@@ -51,19 +51,7 @@ SettingsDialog::SettingsDialog( QWidget *parent )
     ui->jabberServer->setText( s->jabberServer() );
     ui->jabberPort->setValue( s->jabberPort() );
     ui->staticHostName->setText( s->externalHostname() );
-    ui->proxyButton->setVisible( false );
-
-    if ( ui->jabberPort->text().toInt() != 5222 || !ui->jabberServer->text().isEmpty() )
-    {
-        ui->checkBoxAdvanced->setChecked( true );
-    }
-    else
-    {
-        // hide advanved settings
-        ui->checkBoxAdvanced->setChecked( false );
-        ui->groupBoxJabberAdvanced->setVisible( false );
-        ui->groupBoxNetworkAdvanced->setVisible( false );
-    }
+    ui->staticPort->setValue( s->externalPort() );
 
     if ( s->twitterOAuthToken().isEmpty() || s->twitterOAuthTokenSecret().isEmpty() )
     {
@@ -134,6 +122,7 @@ SettingsDialog::~SettingsDialog()
         s->setJabberPort(                                   ui->jabberPort->value() );
         
         s->setExternalHostname(                             ui->staticHostName->text() );
+        s->setExternalPort(                                 ui->staticPort->value() );
 
         s->setScannerPath(                                  ui->lineEditMusicPath->text() );
         
