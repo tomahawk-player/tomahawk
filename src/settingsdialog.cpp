@@ -50,9 +50,12 @@ SettingsDialog::SettingsDialog( QWidget *parent )
     ui->jabberPassword->setText( s->jabberPassword() );
     ui->jabberServer->setText( s->jabberServer() );
     ui->jabberPort->setValue( s->jabberPort() );
+    
     ui->staticHostName->setText( s->externalHostname() );
     ui->staticPort->setValue( s->externalPort() );
 
+    ui->proxyButton->setVisible( false );
+    
     if ( s->twitterOAuthToken().isEmpty() || s->twitterOAuthTokenSecret().isEmpty() )
     {
         ui->twitterStatusLabel->setText("Status: No saved credentials");
