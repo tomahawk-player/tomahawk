@@ -364,13 +364,13 @@ target_link_libraries( tomahawklib
     ${QT_LIBRARIES}
     ${OS_SPECIFIC_LINK_LIBRARIES}
     ${LIBECHONEST_LIBRARY}
+    tomahawk_jdns
     portfwd
     qjson
     mad
     vorbisfile
     ogg
     FLAC++
-    tomahawk_jdns
     ${CLUCENE_LIBRARY}
 )
 
