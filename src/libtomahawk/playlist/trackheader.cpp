@@ -62,7 +62,7 @@ TrackHeader::checkState()
         QList< double > m_columnWeights;
         m_columnWeights << 0.21 << 0.22 << 0.20 << 0.05 << 0.05 << 0.05 << 0.05 << 0.05; // << 0.12;
 
-        for ( int i = 0; i < count(); i++ )
+        for ( int i = 0; i < count() - 1; i++ )
         {
             if ( isSectionHidden( i ) )
                 continue;
