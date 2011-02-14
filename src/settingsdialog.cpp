@@ -42,7 +42,9 @@ SettingsDialog::SettingsDialog( QWidget *parent )
     TomahawkSettings* s = TomahawkSettings::instance();
 
     ui->checkBoxHttp->setChecked( s->httpEnabled() );
+    ui->checkBoxStaticPreferred->setChecked( s->preferStaticHostPort() );
     ui->checkBoxUpnp->setChecked( s->externalAddressMode() == TomahawkSettings::Upnp );
+    ui->checkBoxUpnp->setEnabled( !s->preferStaticHostPort() );
 
     // JABBER
     ui->checkBoxJabberAutoConnect->setChecked( s->jabberAutoConnect() );
@@ -91,6 +93,7 @@ SettingsDialog::SettingsDialog( QWidget *parent )
     
     connect( ui->buttonBrowse, SIGNAL( clicked() ),  SLOT( showPathSelector() ) );
     connect( ui->proxyButton,  SIGNAL( clicked() ),  SLOT( showProxySettings() ) );
+    connect( ui->checkBoxStaticPreferred, SIGNAL( toggled(bool) ), SLOT( toggleUpnp(bool) ) );
     connect( this,             SIGNAL( rejected() ), SLOT( onRejected() ) );
 }
 
@@ -116,7 +119,9 @@ SettingsDialog::~SettingsDialog()
         }
 
         s->setHttpEnabled(                                  ui->checkBoxHttp->checkState() == Qt::Checked );
-        s->setExternalAddressMode(ui->checkBoxUpnp->checkState() == Qt::Checked ? TomahawkSettings::Upnp : TomahawkSettings::Lan);
+
+        s->setPreferStaticHostPort( ui->checkBoxStaticPreferred->checkState() == Qt::Checked );
+        s->setExternalAddressMode( ui->checkBoxUpnp->checkState() == Qt::Checked ? TomahawkSettings::Upnp : TomahawkSettings::Lan );
 
         s->setJabberAutoConnect(                            ui->checkBoxJabberAutoConnect->checkState() == Qt::Checked );
         s->setJabberUsername(                               ui->jabberUsername->text() );
@@ -219,6 +224,16 @@ SettingsDialog::showProxySettings()
     m_proxySettings.exec();
     if ( m_proxySettings.result() == QDialog::Accepted )
         m_proxySettings.saveSettings();
+}
+
+
+void
+SettingsDialog::toggleUpnp( bool preferStaticEnabled )
+{
+    if ( preferStaticEnabled )
+        ui->checkBoxUpnp->setEnabled( false );
+    else
+        ui->checkBoxUpnp->setEnabled( true );
 }
 
 

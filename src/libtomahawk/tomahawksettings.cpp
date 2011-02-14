@@ -312,6 +312,16 @@ TomahawkSettings::setExternalAddressMode( ExternalAddressMode externalAddressMod
     setValue( "network/external-address-mode", externalAddressMode );
 }
 
+bool TomahawkSettings::preferStaticHostPort() const
+{
+    return value( "network/prefer-static-host-and-port" ).toBool();
+}
+
+void TomahawkSettings::setPreferStaticHostPort( bool prefer )
+{
+    setValue( "network/prefer-static-host-and-port", prefer );
+}
+
 QString
 TomahawkSettings::externalHostname() const
 {

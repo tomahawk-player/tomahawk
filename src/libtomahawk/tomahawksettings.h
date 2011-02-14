@@ -55,9 +55,12 @@ public:
     void setJabberPort( int port );
     
     /// Network settings
-    enum ExternalAddressMode { Lan, DynDns, Upnp };
+    enum ExternalAddressMode { Lan, Upnp };
     ExternalAddressMode externalAddressMode() const;
     void setExternalAddressMode(ExternalAddressMode externalAddressMode);
+    
+    bool preferStaticHostPort() const;
+    void setPreferStaticHostPort( bool prefer );
 
     bool httpEnabled() const; /// true by default
     void setHttpEnabled( bool enable );

@@ -88,6 +88,18 @@ Servent::startListening( QHostAddress ha, bool upnp, int port )
 
     // --lanhack means to advertise your LAN IP over jabber as if it were externallyVisible
     qDebug() << "Address mode = " << (int)(TomahawkSettings::instance()->externalAddressMode());
+    qDebug() << "Static host/port preferred ? = " << ( TomahawkSettings::instance()->preferStaticHostPort() ? "true" : "false" );
+    
+    if( TomahawkSettings::instance()->preferStaticHostPort() )
+    {
+        qDebug() << "Forcing static preferred host and port";
+        m_externalHostname = TomahawkSettings::instance()->externalHostname();
+        m_externalPort = TomahawkSettings::instance()->externalPort();
+        qDebug() << m_externalHostname << m_externalPort;
+        emit ready();
+        return true;
+    }
+    
     switch( TomahawkSettings::instance()->externalAddressMode() )
     {
         case TomahawkSettings::Lan:
@@ -99,14 +111,6 @@ Servent::startListening( QHostAddress ha, bool upnp, int port )
                 qDebug() << "LANHACK: set external address to lan address" << ha.toString();
                 break;
             }
-            break;
-
-        case TomahawkSettings::DynDns:
-            qDebug() << "External address mode set to dyndns...";
-            m_externalHostname = TomahawkSettings::instance()->externalHostname();
-            m_externalPort = TomahawkSettings::instance()->externalPort();
-            qDebug() << m_externalHostname << m_externalPort;
-            emit ready();
             break;
 
         case TomahawkSettings::Upnp:

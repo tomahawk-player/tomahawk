@@ -50,6 +50,8 @@ private slots:
     void showPathSelector();
     void doScan();
     
+    void toggleUpnp( bool preferStaticEnabled );
+    
     void showProxySettings();
 
     void testLastFmLogin();

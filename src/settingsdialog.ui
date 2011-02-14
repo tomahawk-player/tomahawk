@@ -235,9 +235,12 @@
          </property>
          <layout class="QVBoxLayout" name="verticalLayout_13">
           <item>
-           <layout class="QVBoxLayout" name="verticalLayout_9">
+           <layout class="QVBoxLayout" name="staticSettingsLayout">
             <item>
-             <widget class="QLabel" name="label_6">
+             <layout class="QHBoxLayout" name="staticPreferredLayout"/>
+            </item>
+            <item>
+             <widget class="QLabel" name="staticHostNamePortLabel">
               <property name="sizePolicy">
                <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
                 <horstretch>0</horstretch>
@@ -253,7 +256,7 @@
              </widget>
             </item>
             <item>
-             <layout class="QHBoxLayout" name="horizontalLayout_6">
+             <layout class="QHBoxLayout" name="staticHostNamePortLayout">
               <item>
                <widget class="QLabel" name="staticHostNameLabel">
                 <property name="sizePolicy">
@@ -294,6 +297,16 @@
                </widget>
               </item>
              </layout>
+            </item>
+            <item>
+             <widget class="QCheckBox" name="checkBoxStaticPreferred">
+              <property name="layoutDirection">
+               <enum>Qt::RightToLeft</enum>
+              </property>
+              <property name="text">
+               <string>Always use static host name/port? (Overrides UPnP discovery/port forwarding)</string>
+              </property>
+             </widget>
             </item>
            </layout>
           </item>
