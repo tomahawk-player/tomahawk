@@ -150,13 +150,18 @@ TwitterPlugin::checkTimerFired()
 
     if ( m_cachedFriendsSinceId == 0 )
         m_cachedFriendsSinceId = TomahawkSettings::instance()->twitterCachedFriendsSinceId();
-    qDebug() << "TwitterPlugin using friend timeline id of " << m_cachedFriendsSinceId;
+    
+    qDebug() << "TwitterPlugin looking at friends timeline since id " << m_cachedFriendsSinceId;
+    
     if ( !m_friendsTimeline.isNull() )
         m_friendsTimeline.data()->fetch( m_cachedFriendsSinceId, 0, 800 );
     
+    
     if ( m_cachedMentionsSinceId == 0 )
         m_cachedMentionsSinceId = TomahawkSettings::instance()->twitterCachedMentionsSinceId();
-    qDebug() << "TwitterPlugin using mentions timeline id of " << m_cachedMentionsSinceId;
+    
+    qDebug() << "TwitterPlugin looking at mentions timeline since id " << m_cachedMentionsSinceId;
+    
     if ( !m_mentions.isNull() )
         m_mentions.data()->fetch( m_cachedMentionsSinceId, 0, 800 );
 }
@@ -208,8 +213,7 @@ TwitterPlugin::friendsTimelineStatuses( const QList< QTweetStatus > &statuses )
     {
         if ( status.id() > m_cachedFriendsSinceId )
             m_cachedFriendsSinceId = status.id();
-        if ( status.user().screenName() == myScreenName )
-            continue;
+
         if ( regex.exactMatch( status.text() ) )
         {
             qDebug() << "TwitterPlugin found an exact tweet from friend " << status.user().screenName();
@@ -236,6 +240,9 @@ TwitterPlugin::friendsTimelineStatuses( const QList< QTweetStatus > &statuses )
             }
             else
                 qDebug() << "TwitterPlugin parsed node " << node << " out of the tweet";
+        
+            if ( status.user().screenName() == myScreenName && node == Database::instance()->dbid() )
+                continue;
             
             QHash< QString, QVariant > peerData;
             if( m_cachedPeers.contains( status.user().screenName() ) )
@@ -278,8 +285,7 @@ TwitterPlugin::mentionsStatuses( const QList< QTweetStatus > &statuses )
     {
         if ( status.id() > m_cachedMentionsSinceId )
             m_cachedMentionsSinceId = status.id();
-        if ( status.user().screenName() == myScreenName )
-            continue;
+
         if ( regex.exactMatch( status.text() ) )
         {
             qDebug() << "TwitterPlugin found an exact matching mention from user " << status.user().screenName();
@@ -306,7 +312,10 @@ TwitterPlugin::mentionsStatuses( const QList< QTweetStatus > &statuses )
             }
             else
                 qDebug() << "TwitterPlugin parsed node " << node << " out of the tweet";
-                
+            
+            if ( status.user().screenName() == myScreenName && node == Database::instance()->dbid() )
+                continue;
+            
             QHash< QString, QVariant > peerData;
             if( m_cachedPeers.contains( status.user().screenName() ) )
             {
@@ -339,7 +348,9 @@ TwitterPlugin::pollDirectMessages()
     
     if ( m_cachedDirectMessagesSinceId == 0 )
             m_cachedDirectMessagesSinceId = TomahawkSettings::instance()->twitterCachedDirectMessagesSinceId();
-    qDebug() << "TwitterPlugin using direct messages id of " << m_cachedDirectMessagesSinceId;
+    
+    qDebug() << "TwitterPlugin looking for direct messages since id " << m_cachedDirectMessagesSinceId;
+    
     if ( !m_directMessages.isNull() )
         m_directMessages.data()->fetch( m_cachedDirectMessagesSinceId, 0, 800 );
 }
@@ -405,26 +416,28 @@ void
 TwitterPlugin::registerOffer( const QString &screenName, const QHash< QString, QVariant > &peerData )
 {
     qDebug() << Q_FUNC_INFO;
-    QString friendlyName = QString( '@' + screenName );
+
     bool peersChanged = false;
-    QHash< QString, QVariant > _peerData( peerData );
-    
     bool needToSend = false;
     bool needToAddToCache = false;
-    
+
+    QString friendlyName = QString( '@' + screenName );
+
+    QHash< QString, QVariant > _peerData( peerData );
+
     if ( _peerData.contains( "dirty" ) )
     {
         peersChanged = true;
         _peerData.remove( "dirty" );
     }
-    
+
     if ( _peerData.contains( "resend" ) )
     {
         needToSend = true;
         peersChanged = true;
         _peerData.remove( "resend" );
     }
-    
+
     if ( !_peerData.contains( "okey" ) )
     {
         QString okey = QUuid::createUuid().toString().split( '-' ).last();
@@ -443,7 +456,7 @@ TwitterPlugin::registerOffer( const QString &screenName, const QHash< QString, Q
             _peerData["oprt"].toInt() != Servent::instance()->externalPort()
         )
         needToSend = true;
-    
+
     if( needToAddToCache && _peerData.contains( "node" ) )
     {
         qDebug() << "TwitterPlugin registering offer to " << friendlyName << " with node " << _peerData["node"].toString() << " and offeredkey " << _peerData["okey"].toString();
