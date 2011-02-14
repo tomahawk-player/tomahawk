@@ -24,8 +24,11 @@
 #include "web/api_v1.h"
 #include "scriptresolver.h"
 #include "sourcelist.h"
+#include "shortcuthandler.h"
+#include "tomahawksettings.h"
 
 #include "audio/audioengine.h"
+#include "utils/xspfloader.h"
 
 #ifndef TOMAHAWK_HEADLESS
     #include "tomahawkwindow.h"
@@ -34,7 +37,7 @@
 #endif
 
 #ifdef Q_WS_MAC
-    #include "tomahawkapp_mac.h"
+#include "mac/macshortcuthandler.h"
 #endif
 
 #include <iostream>
@@ -42,8 +45,6 @@
 
 #define LOGFILE TomahawkUtils::appDataDir().filePath( "tomahawk.log" ).toLocal8Bit()
 #define LOGFILE_SIZE 1024 * 512
-#include "tomahawksettings.h"
-#include <utils/xspfloader.h>
 
 using namespace std;
 ofstream logfile;
@@ -114,6 +115,7 @@ TomahawkApp::TomahawkApp( int& argc, char *argv[] )
     , m_audioEngine( 0 )
     , m_sipHandler( 0 )
     , m_servent( 0 )
+    , m_shortcutHandler( 0 )
     , m_mainwindow( 0 )
     , m_infoSystem( 0 )
 {
@@ -160,35 +162,49 @@ TomahawkApp::TomahawkApp( int& argc, char *argv[] )
     qDebug() << "Init Echonest Factory.";
     GeneratorFactory::registerFactory( "echonest", new EchonestFactory );
     
-#ifndef NO_LIBLASTFM
-        qDebug() << "Init Scrobbler.";
-        m_scrobbler = new Scrobbler( this );
-        qDebug() << "Setting NAM.";
-        TomahawkUtils::setNam( new lastfm::NetworkAccessManager( this ) );
+    // Register shortcut handler for this platform
+#ifdef Q_WS_MAC
+    m_shortcutHandler = new MacShortcutHandler( this );
+    Tomahawk::setShortcutHandler( static_cast<MacShortcutHandler*>( m_shortcutHandler) );
 
-        connect( m_audioEngine, SIGNAL( started( const Tomahawk::result_ptr& ) ),
-                 m_scrobbler,     SLOT( trackStarted( const Tomahawk::result_ptr& ) ), Qt::QueuedConnection );
-
-        connect( m_audioEngine, SIGNAL( paused() ),
-                 m_scrobbler,     SLOT( trackPaused() ), Qt::QueuedConnection );
-
-        connect( m_audioEngine, SIGNAL( resumed() ),
-                 m_scrobbler,     SLOT( trackResumed() ), Qt::QueuedConnection );
-
-        connect( m_audioEngine, SIGNAL( stopped() ),
-                 m_scrobbler,     SLOT( trackStopped() ), Qt::QueuedConnection );
-#else
-        qDebug() << "Setting NAM.";
-        TomahawkUtils::setNam( new QNetworkAccessManager );
+    Tomahawk::setApplicationHandler( this );
 #endif
 
-#ifdef Q_WS_MAC
-        Tomahawk::setApplicationHandler( this );
+    // Connect up shortcuts
+    connect( m_shortcutHandler, SIGNAL( playPause() ), m_audioEngine, SLOT( playPause() ) );
+    connect( m_shortcutHandler, SIGNAL( pause() ), m_audioEngine, SLOT( pause() ) );
+    connect( m_shortcutHandler, SIGNAL( stop() ), m_audioEngine, SLOT( stop() ) );
+    connect( m_shortcutHandler, SIGNAL( previous() ), m_audioEngine, SLOT( previous() ) );
+    connect( m_shortcutHandler, SIGNAL( next() ), m_audioEngine, SLOT( next() ) );
+    connect( m_shortcutHandler, SIGNAL( volumeUp() ), m_audioEngine, SLOT( raiseVolume() ) );
+    connect( m_shortcutHandler, SIGNAL( volumeDown() ), m_audioEngine, SLOT( lowerVolume() ) );
+    connect( m_shortcutHandler, SIGNAL( mute() ), m_audioEngine, SLOT( mute() ) );
+
+#ifndef NO_LIBLASTFM
+    qDebug() << "Init Scrobbler.";
+    m_scrobbler = new Scrobbler( this );
+    qDebug() << "Setting NAM.";
+    TomahawkUtils::setNam( new lastfm::NetworkAccessManager( this ) );
+
+    connect( m_audioEngine, SIGNAL( started( const Tomahawk::result_ptr& ) ),
+            m_scrobbler,     SLOT( trackStarted( const Tomahawk::result_ptr& ) ), Qt::QueuedConnection );
+
+    connect( m_audioEngine, SIGNAL( paused() ),
+            m_scrobbler,     SLOT( trackPaused() ), Qt::QueuedConnection );
+
+    connect( m_audioEngine, SIGNAL( resumed() ),
+            m_scrobbler,     SLOT( trackResumed() ), Qt::QueuedConnection );
+
+    connect( m_audioEngine, SIGNAL( stopped() ),
+            m_scrobbler,     SLOT( trackStopped() ), Qt::QueuedConnection );
+#else
+    qDebug() << "Setting NAM.";
+    TomahawkUtils::setNam( new QNetworkAccessManager );
 #endif
 
     // Set up proxy
     if( TomahawkSettings::instance()->proxyType() != QNetworkProxy::NoProxy &&
-        !TomahawkSettings::instance()->proxyHost().isEmpty() )
+            !TomahawkSettings::instance()->proxyHost().isEmpty() )
     {
         qDebug() << "Setting proxy to saved values";
         TomahawkUtils::setProxy( new QNetworkProxy( static_cast<QNetworkProxy::ProxyType>(TomahawkSettings::instance()->proxyType()), TomahawkSettings::instance()->proxyHost(), TomahawkSettings::instance()->proxyPort(), TomahawkSettings::instance()->proxyUsername(), TomahawkSettings::instance()->proxyPassword() ) );

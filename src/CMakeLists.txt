@@ -39,6 +39,7 @@ SET( tomahawkSources ${tomahawkSources}
      musicscanner.cpp
      scriptresolver.cpp
      scrobbler.cpp
+     shortcuthandler.cpp
 
      tomahawkapp.cpp
      main.cpp
@@ -59,8 +60,8 @@ SET( tomahawkSourcesGui ${tomahawkSourcesGui}
 
 
 IF( APPLE )
-    SET( tomahawkHeaders ${tomahawkHeaders} tomahawkapp_mac.h )
-    SET( tomahawkSources ${tomahawkSources} tomahawkapp_mac.mm )
+    SET( tomahawkHeaders ${tomahawkHeaders} mac/tomahawkapp_mac.h mac/macshortcuthandler.h )
+    SET( tomahawkSources ${tomahawkSources} mac/tomahawkapp_mac.mm  mac/macshortcuthandler.cpp )
 ENDIF( APPLE )
 
 SET( tomahawkHeaders ${tomahawkHeaders}
@@ -78,6 +79,7 @@ SET( tomahawkHeaders ${tomahawkHeaders}
      musicscanner.h
      scriptresolver.h
      scrobbler.h
+     shortcuthandler.h
 )
 
 SET( tomahawkHeadersGui ${tomahawkHeadersGui}
@@ -115,6 +117,7 @@ INCLUDE_DIRECTORIES(
     topbar
     utils
     libtomahawk
+    mac
 
     ../alsa-playback
     ../rtaudio

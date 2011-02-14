@@ -8,6 +8,8 @@ class QString;
 
 namespace Tomahawk {
 
+class MacShortcutHandler;
+
 /// Interface between cocoa and tomahawk
 class PlatformInterface {
  public:
@@ -19,7 +21,7 @@ class PlatformInterface {
 };
 
 void macMain();
-//void setShortcutHandler(GlobalShortcuts* handler);
+void setShortcutHandler(Tomahawk::MacShortcutHandler* engine);
 // used for opening files with tomahawk
 void setApplicationHandler(PlatformInterface* handler);
 

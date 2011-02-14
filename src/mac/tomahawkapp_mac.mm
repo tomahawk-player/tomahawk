@@ -1,5 +1,6 @@
 #include "tomahawkapp_mac.h"
 #include "tomahawkapp_macdelegate.h"
+#include "macshortcuthandler.h"
 #include <QDebug>
 
 #import <AppKit/NSApplication.h>
@@ -19,17 +20,17 @@
 // See: http://www.rogueamoeba.com/utm/2007/09/29/apple-keyboard-media-key-event-handling/
 
 @interface MacApplication :NSApplication {
- // MacGlobalShortcutBackend* shortcut_handler_;
+    Tomahawk::MacShortcutHandler* shortcut_handler_;
     Tomahawk::PlatformInterface* application_handler_;
 }
 
-//- (MacGlobalShortcutBackend*) shortcut_handler;
-//- (void) SetShortcutHandler: (MacGlobalShortcutBackend*)handler;
+- (Tomahawk::MacShortcutHandler*) shortcutHandler;
+- (void) setShortcutHandler: (Tomahawk::MacShortcutHandler*)handler;
 
 - (Tomahawk::PlatformInterface*) application_handler;
-- (void) SetApplicationHandler: (Tomahawk::PlatformInterface*)handler;
-- (void)getUrl:(NSAppleEventDescriptor *)event  withReplyEvent:(NSAppleEventDescriptor *)replyEvent;
-//- (void) mediaKeyEvent: (int)key state: (BOOL)state repeat: (BOOL)repeat;
+- (void) setApplicationHandler: (Tomahawk::PlatformInterface*)handler;
+- (void) getUrl:(NSAppleEventDescriptor *)event  withReplyEvent:(NSAppleEventDescriptor *)replyEvent;
+- (void) mediaKeyEvent: (int)key state: (BOOL)state repeat: (BOOL)repeat;
 @end
 
 
@@ -78,40 +79,26 @@
 
 - (id) init {
   if ((self = [super init])) {
-//    [self SetShortcutHandler:nil];
-      [self SetApplicationHandler:nil];
-
-      NSAppleEventManager *em = [NSAppleEventManager sharedAppleEventManager];
-      [em
-        setEventHandler:self
-        andSelector:@selector(getUrl:withReplyEvent:)
-        forEventClass:kInternetEventClass
-        andEventID:kAEGetURL];
-      [em
-        setEventHandler:self
-        andSelector:@selector(getUrl:withReplyEvent:)
-        forEventClass:'WWW!'
-        andEventID:'OURL'];
-      NSString *bundleID = [[NSBundle mainBundle] bundleIdentifier];
-      OSStatus httpResult = LSSetDefaultHandlerForURLScheme((CFStringRef)@"tomahawk", (CFStringRef)bundleID);
-      //TODO: Check httpResult and httpsResult for errors
+      [self setShortcutHandler:nil];
+      [self setApplicationHandler:nil];
   }
   return self;
 }
-/*
-- (MacGlobalShortcutBackend*) shortcut_handler {
-  return shortcut_handler_;
+
+- (Tomahawk::MacShortcutHandler*) shortcutHandler {
+    return shortcut_handler_;
 }
 
-- (void) SetShortcutHandler: (MacGlobalShortcutBackend*)handler {
+- (void) setShortcutHandler: (Tomahawk::MacShortcutHandler*)handler {
+    qDebug() << "Setting shortcut handler of MacAPp";
   shortcut_handler_ = handler;
 }
-*/
+
 - (Tomahawk::PlatformInterface*) application_handler {
   return application_handler_;
 }
 
-- (void) SetApplicationHandler: (Tomahawk::PlatformInterface*)handler {
+- (void) setApplicationHandler: (Tomahawk::PlatformInterface*)handler {
   AppDelegate* delegate = [[AppDelegate alloc] initWithHandler:handler];
   [self setDelegate:delegate];
 }
@@ -123,30 +110,19 @@
     int keystate = (((keyflags & 0xFF00) >> 8)) == 0xA;
     int keyrepeat = (keyflags & 0x1);
 
-    //[self mediaKeyEvent: keycode state: keystate repeat: keyrepeat];
+    [self mediaKeyEvent: keycode state: keystate repeat: keyrepeat];
   }
 
   [super sendEvent: event];
 }
-/*
+
 -(void) mediaKeyEvent: (int)key state: (BOOL)state repeat: (BOOL)repeat {
   if (!shortcut_handler_) {
     return;
   }
   if (state == 0) {
-    shortcut_handler_->MacMediaKeyPressed(key);
+    shortcut_handler_->macMediaKeyPressed(key);
   }
-} */
-
-- (void)getUrl:(NSAppleEventDescriptor *)event
-    withReplyEvent:(NSAppleEventDescriptor *)replyEvent
-{
-  // Get the URL
-  NSString *urlStr = [[event paramDescriptorForKeyword:keyDirectObject]
-    stringValue];
-  qDebug() << "Wants to open:" << [urlStr UTF8String];
-
-  //TODO: Your custom URL handling code here
 }
 
 @end
@@ -161,13 +137,13 @@ void Tomahawk::macMain() {
   #endif
 }
 
-/*
-void setShortcutHandler(MacGlobalShortcutBackend* handler) {
-  [NSApp SetShortcutHandler: handler];
+
+void Tomahawk::setShortcutHandler(Tomahawk::MacShortcutHandler* handler) {
+  [NSApp setShortcutHandler: handler];
 }
-*/
+
 void Tomahawk::setApplicationHandler(Tomahawk::PlatformInterface* handler) {
-  [NSApp SetApplicationHandler: handler];
+  [NSApp setApplicationHandler: handler];
 }
 
 void CheckForUpdates() {

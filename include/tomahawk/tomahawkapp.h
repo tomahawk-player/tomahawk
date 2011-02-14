@@ -4,7 +4,7 @@
 #define APP TomahawkApp::instance()
 
 #include "headlesscheck.h"
-#include "tomahawkapp_mac.h" // for PlatforInterface
+#include "mac/tomahawkapp_mac.h" // for PlatforInterface
 
 #include <QRegExp>
 #include <QFile>
@@ -29,6 +29,7 @@ class XMPPBot;
 
 namespace Tomahawk
 {
+    class ShortcutHandler;
     namespace InfoSystem
     {
         class InfoSystem;
@@ -99,6 +100,7 @@ private:
     SipHandler* m_sipHandler;
     Servent* m_servent;
     XMPPBot* m_xmppBot;
+    Tomahawk::ShortcutHandler* m_shortcutHandler;
 
 #ifndef NO_LIBLASTFM
     Scrobbler* m_scrobbler;
