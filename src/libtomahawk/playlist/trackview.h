@@ -23,7 +23,7 @@ public:
     ~TrackView();
 
     virtual QString guid() const { return m_guid; }
-    virtual void setGuid( const QString& guid ) { m_guid = guid; }
+    virtual void setGuid( const QString& guid );
 
     virtual void setModel( TrackModel* model );
     void setProxyModel( TrackProxyModel* model );

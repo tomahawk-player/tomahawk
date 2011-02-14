@@ -32,8 +32,8 @@ public:
     void setMainWindowState( const QByteArray& state );
 
     /// Playlist stuff
-    QList<QVariant> playlistColumnSizes( const QString& playlistid ) const;
-    void setPlaylistColumnSizes( const QString& playlistid, const QList<QVariant>& cols );
+    QByteArray playlistColumnSizes( const QString& playlistid ) const;
+    void setPlaylistColumnSizes( const QString& playlistid, const QByteArray& state );
 
     QList<Tomahawk::playlist_ptr> recentlyPlayedPlaylists() const;
     void appendRecentlyPlayedPlaylist( const Tomahawk::playlist_ptr& playlist );

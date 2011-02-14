@@ -184,17 +184,17 @@ TomahawkSettings::setMainWindowState( const QByteArray& state )
 }
 
 
-QList<QVariant>
+QByteArray
 TomahawkSettings::playlistColumnSizes( const QString& playlistid ) const
 {
-    return value( QString( "ui/playlist/%1/columnSizes" ).arg( playlistid ) ).toList();
+    return value( QString( "ui/playlist/%1/columnSizes" ).arg( playlistid ) ).toByteArray();
 }
 
 
 void
-TomahawkSettings::setPlaylistColumnSizes( const QString& playlistid, const QList<QVariant>& cols )
+TomahawkSettings::setPlaylistColumnSizes( const QString& playlistid, const QByteArray& state )
 {
-    setValue( QString( "ui/playlist/%1/columnSizes" ).arg( playlistid ), cols );
+    setValue( QString( "ui/playlist/%1/columnSizes" ).arg( playlistid ), state );
 }
 
 

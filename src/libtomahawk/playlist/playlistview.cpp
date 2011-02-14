@@ -14,7 +14,6 @@ using namespace Tomahawk;
 PlaylistView::PlaylistView( QWidget* parent )
     : TrackView( parent )
 {
-    setGuid( "playlistview" );
     setProxyModel( new PlaylistProxyModel( this ) );
 
     setContextMenuPolicy( Qt::CustomContextMenu );
@@ -31,13 +30,15 @@ PlaylistView::~PlaylistView()
 void
 PlaylistView::setModel( PlaylistModel* model )
 {
-    if ( !model->playlist().isNull() )
-        setGuid( QString( "playlistview/%1" ).arg( model->playlist()->guid() ) );
-
     m_model = model;
 
     TrackView::setModel( model );
     setColumnHidden( 5, true ); // Hide age column per default
+
+    if ( !model->playlist().isNull() )
+        setGuid( QString( "playlistview/%1" ).arg( model->playlist()->guid() ) );
+    else
+        setGuid( "playlistview" );
 
     connect( model, SIGNAL( trackCountChanged( unsigned int ) ), SLOT( onTrackCountChanged( unsigned int ) ) );
 }

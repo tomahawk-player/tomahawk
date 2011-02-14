@@ -40,6 +40,7 @@ TrackView::TrackView( QWidget* parent )
     setRootIsDecorated( false );
     setUniformRowHeights( true );
     setMinimumWidth( 300 );
+    setVerticalScrollBarPolicy( Qt::ScrollBarAlwaysOn );
 
     setHeader( m_header );
 
@@ -58,6 +59,13 @@ TrackView::~TrackView()
     qDebug() << Q_FUNC_INFO;
 
     delete m_header;
+}
+
+
+void
+TrackView::setGuid( const QString& guid )
+{
+    m_guid = guid;
 }
 
 
@@ -156,7 +164,7 @@ TrackView::addItemsToQueue()
 void
 TrackView::resizeEvent( QResizeEvent* event )
 {
-    m_header->onResized();
+    m_header->checkState();
 }
 
 

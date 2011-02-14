@@ -13,7 +13,6 @@ using namespace Tomahawk;
 CollectionView::CollectionView( QWidget* parent )
     : TrackView( parent )
 {
-    setGuid( "collectionview" );
     setProxyModel( new CollectionProxyModel( this ) );
 
     setSortingEnabled( true );
@@ -37,6 +36,7 @@ void
 CollectionView::setModel( TrackModel* model )
 {
     TrackView::setModel( model );
+    setGuid( "collectionview" );
 
     connect( model, SIGNAL( trackCountChanged( unsigned int ) ), SLOT( onTrackCountChanged( unsigned int ) ) );
 }

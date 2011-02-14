@@ -2,6 +2,7 @@
 
 #include <QDebug>
 #include <QPainter>
+#include <QSplitter>
 #include <QStyleOption>
 #include <QWidget>
 
@@ -19,8 +20,12 @@ ProxyStyle::drawControl( ControlElement ce, const QStyleOption* opt, QPainter* p
 {
     if ( ce == CE_Splitter )
     {
-        p->setPen( QColor( 0x8c, 0x8c, 0x8c ) );
-        p->drawLine( opt->rect.topLeft(), opt->rect.bottomRight() );
+        const QSplitter* splitter = qobject_cast< const QSplitter* >( w );
+        if ( !splitter->sizes().contains( 0 ) )
+        {
+            p->setPen( QColor( 0x8c, 0x8c, 0x8c ) );
+            p->drawLine( opt->rect.topLeft(), opt->rect.bottomRight() );
+        }
     }
     else
         QProxyStyle::drawControl( ce, opt, p, w );
