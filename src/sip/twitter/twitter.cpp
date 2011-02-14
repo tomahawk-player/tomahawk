@@ -381,18 +381,25 @@ TwitterPlugin::directMessages( const QList< QTweetDMStatus > &messages )
         qDebug() << "TwitterPlugin found " << splitList.length() << " parts to the message; the parts are:";
         foreach( QString part, splitList )
             qDebug() << part;
-        if ( splitList.length() != 4 )
+        if ( splitList.length() != 5 )
             continue;
         if ( splitList[0] != "TOMAHAWKPEER" )
             continue;
-        if ( !splitList[1].startsWith( "Host=" ) || !splitList[2].startsWith( "Port=" ) || !splitList[3].startsWith( "PKey=" ) )
+        if ( !splitList[1].startsWith( "Host=" ) || !splitList[2].startsWith( "Port=" ) || !splitList[3].startsWith( "Node=" ) || !splitList[4].startsWith( "PKey=" ) )
             continue;
         int port = splitList[2].mid( 5 ).toInt();
         if ( port == 0 )
             continue;
         QString host = splitList[1].mid( 5 );
-        QString pkey = splitList[3].mid( 5 );
-        qDebug() << "TwitterPlugin found a peerstart message from " << status.senderScreenName() << " with host " << host << " and port " << port << " and pkey " << pkey;
+        QString node = splitList[3].mid( 5 );
+        QString pkey = splitList[4].mid( 5 );
+        qDebug() << "TwitterPlugin found a peerstart message from " << status.senderScreenName() << " with host " << host << " and port " << port << " and pkey " << pkey << " destined for node " << node;
+        
+        if ( node != Database::instance()->dbid() )
+        {
+            qDebug() << "Not destined for this node; leaving it alone and not answering";
+            continue;
+        }
         
         QHash< QString, QVariant > peerData = ( m_cachedPeers.contains( status.senderScreenName() ) ) ?
                                                     m_cachedPeers[status.senderScreenName()].toHash() :
@@ -489,8 +496,9 @@ void
 TwitterPlugin::sendOffer( const QString &screenName, const QHash< QString, QVariant > &peerData )
 {
     qDebug() << Q_FUNC_INFO;
-    QString offerString = QString( "TOMAHAWKPEER:Host=%1:Port=%2:PKey=%3" ).arg( peerData["ohst"].toString() )
+    QString offerString = QString( "TOMAHAWKPEER:Host=%1:Port=%2:Node=%3:PKey=%4" ).arg( peerData["ohst"].toString() )
                                                                                    .arg( peerData["oprt"].toString() )
+                                                                                   .arg( peerData["node"].toString() )
                                                                                    .arg( peerData["okey"].toString() );
     qDebug() << "TwitterPlugin sending message to " << screenName << ": " << offerString;
     if( !m_directMessageNew.isNull() )
