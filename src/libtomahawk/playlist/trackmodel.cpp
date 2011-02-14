@@ -190,7 +190,7 @@ TrackModel::headerData( int section, Qt::Orientation orientation, int role ) con
 {
     QStringList headers;
     headers << tr( "Artist" ) << tr( "Track" ) << tr( "Album" ) << tr( "Duration" ) << tr( "Bitrate" ) << tr( "Age" ) << tr( "Year" ) << tr( "Size" ) << tr( "Origin" );
-    if ( orientation == Qt::Horizontal && role == Qt::DisplayRole && section >= 0 )
+    if ( role == Qt::DisplayRole && section >= 0 )
     {
         return headers.at( section );
     }

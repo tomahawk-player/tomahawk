@@ -2,6 +2,31 @@ SET( OS_SPECIFIC_LINK_LIBRARIES
     ${OS_SPECIFIC_LINK_LIBRARIES}
     ${COREAUDIO_LIBRARY}
     ${COREFOUNDATION_LIBRARY}
+
+    /System/Library/Frameworks/AppKit.framework
+    /System/Library/Frameworks/Carbon.framework
+    /System/Library/Frameworks/DiskArbitration.framework
+    /System/Library/Frameworks/Foundation.framework
+    /System/Library/Frameworks/IOKit.framework
+
     rtaudio
     tomahawklib
 )
+
+if (APPLE)
+#  find_library(GROWL Growl)
+#  option(ENABLE_SPARKLE "Sparkle updating" ON)
+#  find_library(SPARKLE Sparkle)
+#  if (ENABLE_SPARKLE AND SPARKLE)
+#    set(HAVE_SPARKLE ON)
+#  endif (ENABLE_SPARKLE AND SPARKLE)
+  # Uses Darwin kernel version.
+  # 9.8.0  -> 10.5/Leopard
+  # 10.4.0 -> 10.6/Snow Leopard
+  string(REGEX MATCH "[0-9]+" DARWIN_VERSION ${CMAKE_HOST_SYSTEM_VERSION})
+  if (DARWIN_VERSION GREATER 9)
+    SET(SNOW_LEOPARD 1)
+  elseif (DARWIN_VERSION GREATER 8)
+    SET(LEOPARD 1)
+  endif (DARWIN_VERSION GREATER 9)
+endif (APPLE)

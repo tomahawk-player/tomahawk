@@ -23,6 +23,7 @@ DatabaseCommand_UpdateSearchIndex::indexTable( DatabaseImpl* db, const QString& 
     }
     
     db->m_fuzzyIndex->appendFields( table, fields );
+    qDebug() << "Building index for" << table << "finished.";
 }
 
 

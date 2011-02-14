@@ -50,7 +50,6 @@ set( libSources
     database/databasecommand_logplayback.cpp
     database/databasecommand_addsource.cpp
     database/databasecommand_sourceoffline.cpp
-    database/databasecommand_collectionstats.cpp
     database/databasecommand_loadplaylistentries.cpp
     database/databasecommand_modifyplaylist.cpp
     database/databasecommand_playbackhistory.cpp
@@ -365,13 +364,13 @@ target_link_libraries( tomahawklib
     ${QT_LIBRARIES}
     ${OS_SPECIFIC_LINK_LIBRARIES}
     ${LIBECHONEST_LIBRARY}
+    tomahawk_jdns
     portfwd
     qjson
     mad
     vorbisfile
     ogg
     FLAC++
-    tomahawk_jdns
     tomahawk_qtweetlib
     ${CLUCENE_LIBRARY}
 )

@@ -45,7 +45,21 @@ void
 FuzzyIndex::beginIndexing()
 {
     m_mutex.lock();
-    IndexWriter luceneWriter = IndexWriter( m_luceneDir, m_analyzer, true );
+
+    delete m_luceneSearcher;
+    delete m_luceneReader;
+    m_luceneSearcher = 0;
+    m_luceneReader = 0;
+
+    try
+    {
+        IndexWriter luceneWriter = IndexWriter( m_luceneDir, m_analyzer, true );
+    }
+    catch( CLuceneError& error )
+    {
+        qDebug() << "Caught CLucene error:" << error.what();
+        Q_ASSERT( false );
+    }
 }
 
 
@@ -60,39 +74,42 @@ FuzzyIndex::endIndexing()
 void
 FuzzyIndex::appendFields( const QString& table, const QMap< unsigned int, QString >& fields )
 {
-    delete m_luceneSearcher;
-    delete m_luceneReader;
-    m_luceneSearcher = 0;
-    m_luceneReader = 0;
-    
-    bool create = !IndexReader::indexExists( TomahawkUtils::appDataDir().absoluteFilePath( "tomahawk.lucene" ).toStdString().c_str() );
-    IndexWriter luceneWriter = IndexWriter( m_luceneDir, m_analyzer, create );
-    Document doc;
-    
-    QMapIterator< unsigned int, QString > it( fields );
-    while ( it.hasNext() )
+    try
     {
-        it.next();
-        unsigned int id = it.key();
-        QString name = it.value();
+        bool create = !IndexReader::indexExists( TomahawkUtils::appDataDir().absoluteFilePath( "tomahawk.lucene" ).toStdString().c_str() );
+        IndexWriter luceneWriter = IndexWriter( m_luceneDir, m_analyzer, create );
+        Document doc;
 
+        QMapIterator< unsigned int, QString > it( fields );
+        while ( it.hasNext() )
         {
-            Field* field = _CLNEW Field( table.toStdWString().c_str(), name.toStdWString().c_str(),
-                                         Field::STORE_YES | Field::INDEX_UNTOKENIZED );
-            doc.add( *field );
+            it.next();
+            unsigned int id = it.key();
+            QString name = it.value();
+
+            {
+                Field* field = _CLNEW Field( table.toStdWString().c_str(), name.toStdWString().c_str(),
+                                            Field::STORE_YES | Field::INDEX_UNTOKENIZED );
+                doc.add( *field );
+            }
+
+            {
+                Field* field = _CLNEW Field( _T( "id" ), QString::number( id ).toStdWString().c_str(),
+                Field::STORE_YES | Field::INDEX_NO );
+                doc.add( *field );
+            }
+
+            luceneWriter.addDocument( &doc );
+            doc.clear();
         }
-        
-        {
-            Field* field = _CLNEW Field( _T( "id" ), QString::number( id ).toStdWString().c_str(),
-            Field::STORE_YES | Field::INDEX_NO );
-            doc.add( *field );
-        }
-        
-        luceneWriter.addDocument( &doc );
-        doc.clear();
+
+        luceneWriter.close();
     }
-    
-    luceneWriter.close();
+    catch( CLuceneError& error )
+    {
+        qDebug() << "Caught CLucene error:" << error.what();
+        Q_ASSERT( false );
+    }
 }
 
 
@@ -109,46 +126,54 @@ FuzzyIndex::search( const QString& table, const QString& name )
     QMutexLocker lock( &m_mutex );
 
     QMap< int, float > resultsmap;
-    if ( !m_luceneReader )
+    try
     {
-        if ( !IndexReader::indexExists( TomahawkUtils::appDataDir().absoluteFilePath( "tomahawk.lucene" ).toStdString().c_str() ) )
+        if ( !m_luceneReader )
         {
-            qDebug() << Q_FUNC_INFO << "index didn't exist.";
+            if ( !IndexReader::indexExists( TomahawkUtils::appDataDir().absoluteFilePath( "tomahawk.lucene" ).toStdString().c_str() ) )
+            {
+                qDebug() << Q_FUNC_INFO << "index didn't exist.";
+                return resultsmap;
+            }
+
+            m_luceneReader = IndexReader::open( m_luceneDir );
+            m_luceneSearcher = _CLNEW IndexSearcher( m_luceneReader );
+        }
+
+        if ( name.isEmpty() )
             return resultsmap;
-        }
 
-        m_luceneReader = IndexReader::open( m_luceneDir );
-        m_luceneSearcher = _CLNEW IndexSearcher( m_luceneReader );
-    }
+        SimpleAnalyzer analyzer;
+        QueryParser parser( table.toStdWString().c_str(), m_analyzer );
+        Hits* hits = 0;
 
-    if ( name.isEmpty() )
-        return resultsmap;
+        FuzzyQuery* qry = _CLNEW FuzzyQuery( _CLNEW Term( table.toStdWString().c_str(), name.toStdWString().c_str() ) );
+        hits = m_luceneSearcher->search( qry );
 
-    SimpleAnalyzer analyzer;
-    QueryParser parser( table.toStdWString().c_str(), m_analyzer );
-    Hits* hits = 0;
-
-    FuzzyQuery* qry = _CLNEW FuzzyQuery( _CLNEW Term( table.toStdWString().c_str(), name.toStdWString().c_str() ) );
-    hits = m_luceneSearcher->search( qry );
-
-    for ( int i = 0; i < hits->length(); i++ )
-    {
-        Document* d = &hits->doc( i );
-
-        float score = hits->score( i );
-        int id = QString::fromWCharArray( d->get( _T( "id" ) ) ).toInt();
-        QString result = QString::fromWCharArray( d->get( table.toStdWString().c_str() ) );
-
-        if ( result.toLower() == name.toLower() )
-            score = 1.0;
-        else
-            score = qMin( score, (float)0.99 );
-
-        if ( score > 0.05 )
+        for ( int i = 0; i < hits->length(); i++ )
         {
-            resultsmap.insert( id, score );
-//            qDebug() << "Hitres:" << result << id << score << table << name;
+            Document* d = &hits->doc( i );
+
+            float score = hits->score( i );
+            int id = QString::fromWCharArray( d->get( _T( "id" ) ) ).toInt();
+            QString result = QString::fromWCharArray( d->get( table.toStdWString().c_str() ) );
+
+            if ( result.toLower() == name.toLower() )
+                score = 1.0;
+            else
+                score = qMin( score, (float)0.99 );
+
+            if ( score > 0.05 )
+            {
+                resultsmap.insert( id, score );
+    //            qDebug() << "Hitres:" << result << id << score << table << name;
+            }
         }
+    }
+    catch( CLuceneError& error )
+    {
+        qDebug() << "Caught CLucene error:" << error.what();
+        Q_ASSERT( false );
     }
 
     return resultsmap;

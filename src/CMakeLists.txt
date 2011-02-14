@@ -40,6 +40,7 @@ SET( tomahawkSources ${tomahawkSources}
      musicscanner.cpp
      scriptresolver.cpp
      scrobbler.cpp
+     shortcuthandler.cpp
 
      tomahawkapp.cpp
      main.cpp
@@ -58,6 +59,12 @@ SET( tomahawkSourcesGui ${tomahawkSourcesGui}
      tomahawkwindow.cpp
 )
 
+
+IF( APPLE )
+    SET( tomahawkHeaders ${tomahawkHeaders} mac/tomahawkapp_mac.h mac/macshortcuthandler.h )
+    SET( tomahawkSources ${tomahawkSources} mac/tomahawkapp_mac.mm  mac/macshortcuthandler.cpp )
+ENDIF( APPLE )
+
 SET( tomahawkHeaders ${tomahawkHeaders}
      "${TOMAHAWK_INC_DIR}/tomahawk/tomahawkapp.h"
      "${TOMAHAWK_INC_DIR}/tomahawk/infosystem.h"
@@ -74,6 +81,7 @@ SET( tomahawkHeaders ${tomahawkHeaders}
      musicscanner.h
      scriptresolver.h
      scrobbler.h
+     shortcuthandler.h
 )
 
 SET( tomahawkHeadersGui ${tomahawkHeadersGui}
@@ -111,6 +119,7 @@ INCLUDE_DIRECTORIES(
     topbar
     utils
     libtomahawk
+    mac
 
     ../alsa-playback
     ../rtaudio
@@ -142,6 +151,9 @@ kde4_add_app_icon( tomahawkSources "${CMAKE_CURRENT_SOURCE_DIR}/../data/icons/to
 qt4_add_resources( RC_SRCS "../resources.qrc" )
 qt4_wrap_cpp( tomahawkMoc ${tomahawkHeaders} )
 
+configure_file(${CMAKE_CURRENT_SOURCE_DIR}/config.h.in
+               ${CMAKE_CURRENT_BINARY_DIR}/config.h)
+
 SET( final_src ${final_src} ${tomahawkMoc} ${tomahawkSources} ${tomahawkHeaders} )
 
 IF( "${gui}" STREQUAL "no" )
@@ -156,6 +168,8 @@ IF( UNIX AND NOT APPLE )
 ENDIF( UNIX AND NOT APPLE )
 IF( APPLE )
     ADD_EXECUTABLE( tomahawk MACOSX_BUNDLE ${final_src} )
+    SET_TARGET_PROPERTIES(tomahawk PROPERTIES MACOSX_BUNDLE_INFO_PLIST "../admin/mac/Info.plist"
+)
 ENDIF( APPLE )
 IF( WIN32 )
     ADD_EXECUTABLE( tomahawk ${final_src} )

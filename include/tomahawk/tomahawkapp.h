@@ -4,6 +4,7 @@
 #define APP TomahawkApp::instance()
 
 #include "headlesscheck.h"
+#include "mac/tomahawkapp_mac.h" // for PlatforInterface
 
 #include <QRegExp>
 #include <QFile>
@@ -28,6 +29,7 @@ class XMPPBot;
 
 namespace Tomahawk
 {
+    class ShortcutHandler;
     namespace InfoSystem
     {
         class InfoSystem;
@@ -47,7 +49,7 @@ class TomahawkWindow;
 // this also acts as a a container for important top-level objects
 // that other parts of the app need to find
 // (eg, library, pipeline, friends list)
-class TomahawkApp : public TOMAHAWK_APPLICATION
+class TomahawkApp : public TOMAHAWK_APPLICATION, public Tomahawk::PlatformInterface
 {
 Q_OBJECT
 
@@ -69,6 +71,10 @@ public:
     void addScriptResolver( const QString& scriptPath );
     void removeScriptResolver( const QString& scriptPath );
     
+    // PlatformInterface
+    virtual void activate();
+    virtual bool loadUrl( const QString& url );
+
 signals:
     void settingsChanged();
     
@@ -94,6 +100,7 @@ private:
     SipHandler* m_sipHandler;
     Servent* m_servent;
     XMPPBot* m_xmppBot;
+    Tomahawk::ShortcutHandler* m_shortcutHandler;
 
 #ifndef NO_LIBLASTFM
     Scrobbler* m_scrobbler;

@@ -40,6 +40,7 @@ public:
     PlaylistInterface* playlist() const { return m_playlist; }
 
 public slots:
+    void playPause();
     void play();
     void pause();
     void stop();
@@ -51,6 +52,7 @@ public slots:
     void lowerVolume() { setVolume( volume() - AUDIO_VOLUME_STEP ); }
     void raiseVolume() { setVolume( volume() + AUDIO_VOLUME_STEP ); }
     void onVolumeChanged( float volume ) { emit volumeChanged( volume * 100 ); }
+    void mute();
 
     void playItem( PlaylistInterface* playlist, const Tomahawk::result_ptr& result );
     void setPlaylist( PlaylistInterface* playlist ) { m_playlist = playlist; }

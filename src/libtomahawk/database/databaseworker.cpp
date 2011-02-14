@@ -40,6 +40,13 @@ DatabaseWorker::run()
 void
 DatabaseWorker::enqueue( const QSharedPointer<DatabaseCommand>& cmd )
 {
+    if ( QThread::currentThread() != thread() )
+    {
+//        qDebug() << Q_FUNC_INFO << "Reinvoking in correct thread.";
+        QMetaObject::invokeMethod( this, "enqueue", Qt::QueuedConnection, Q_ARG( QSharedPointer<DatabaseCommand>, cmd ) );
+        return;
+    }
+
     m_outstanding++;
 
     QMutexLocker lock( &m_mut );

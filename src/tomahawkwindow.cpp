@@ -87,22 +87,22 @@ TomahawkWindow::TomahawkWindow( QWidget* parent )
     sidebar->addWidget( transferView );
     sidebar->hide( 1, false );
 
-    QWidget* buttonWidget = new QWidget();
+/*    QWidget* buttonWidget = new QWidget();
     buttonWidget->setLayout( new QVBoxLayout() );
     m_statusButton = new QPushButton();
-    buttonWidget->layout()->addWidget( m_statusButton );
+    buttonWidget->layout()->addWidget( m_statusButton );*/
 
     sidebarWidget->layout()->addWidget( sidebar );
-    sidebarWidget->layout()->addWidget( buttonWidget );
+//    sidebarWidget->layout()->addWidget( buttonWidget );
 
     sidebarWidget->setContentsMargins( 0, 0, 0, 0 );
     sidebarWidget->layout()->setContentsMargins( 0, 0, 0, 0 );
     sidebarWidget->layout()->setMargin( 0 );
     sidebarWidget->layout()->setSpacing( 0 );
-    buttonWidget->setContentsMargins( 0, 0, 0, 0 );
+/*    buttonWidget->setContentsMargins( 0, 0, 0, 0 );
     buttonWidget->layout()->setContentsMargins( 0, 0, 0, 0 );
     buttonWidget->layout()->setMargin( 0 );
-    buttonWidget->layout()->setSpacing( 0 );
+    buttonWidget->layout()->setSpacing( 0 );*/
 
     ui->splitter->addWidget( sidebarWidget );
     ui->splitter->addWidget( PlaylistManager::instance()->widget() );
@@ -181,7 +181,7 @@ TomahawkWindow::setupSignals()
     connect( ui->actionCreate_New_Station, SIGNAL( triggered() ), SLOT( createStation() ));
     connect( ui->actionAboutTomahawk, SIGNAL( triggered() ), SLOT( showAboutTomahawk() ) );
     connect( ui->actionExit, SIGNAL( triggered() ), APP, SLOT( quit() ) );
-    connect( m_statusButton, SIGNAL( clicked() ), APP->sipHandler(), SLOT( toggleConnect() ) );
+//    connect( m_statusButton, SIGNAL( clicked() ), APP->sipHandler(), SLOT( toggleConnect() ) );
 
     // <SipHandler>
     connect( APP->sipHandler(), SIGNAL( connected() ), SLOT( onSipConnected() ) );
@@ -392,14 +392,14 @@ TomahawkWindow::onPlaybackLoading( const Tomahawk::result_ptr& result )
 void
 TomahawkWindow::onSipConnected()
 {
-    m_statusButton->setText( tr( "Online" ) );
+//    m_statusButton->setText( tr( "Online" ) );
 }
 
 
 void
 TomahawkWindow::onSipDisconnected()
 {
-    m_statusButton->setText( tr( "Offline" ) );
+//    m_statusButton->setText( tr( "Offline" ) );
 }
 
 

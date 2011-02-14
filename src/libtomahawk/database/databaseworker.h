@@ -25,11 +25,12 @@ public:
     DatabaseWorker( DatabaseImpl*, Database*, bool mutates );
     ~DatabaseWorker();
 
-    void enqueue( const QSharedPointer<DatabaseCommand>& );
-
     bool busy() const { return m_outstanding > 0; }
     unsigned int outstandingJobs() const { return m_outstanding; }
 
+public slots:
+    void enqueue( const QSharedPointer<DatabaseCommand>& );
+    
 protected:
     void run();
 

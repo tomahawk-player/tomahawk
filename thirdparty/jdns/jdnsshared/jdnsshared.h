@@ -23,6 +23,8 @@
 
 #include "qjdns.h"
 
+#include "../jdns_export.h"
+
 class JDnsShared;
 class JDnsSharedPrivate;
 class JDnsSharedRequestPrivate;
@@ -194,7 +196,7 @@ pub->publish(QJDns::Unique, rec);
 
    \sa JDnsShared
 */
-class JDnsSharedRequest : public QObject
+class JDNS_EXPORT JDnsSharedRequest : public QObject
 {
 	Q_OBJECT
 public:
@@ -401,7 +403,7 @@ dns->addInterface(addr);
 
    \sa JDnsSharedRequest
 */
-class JDnsShared : public QObject
+class JDNS_EXPORT JDnsShared : public QObject
 {
 	Q_OBJECT
 public:
