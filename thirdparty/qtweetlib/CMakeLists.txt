@@ -172,7 +172,10 @@ target_link_libraries(tomahawk_qtweetlib
 )
 
 SET_TARGET_PROPERTIES( tomahawk_qtweetlib PROPERTIES DEFINE_SYMBOL  MAKE_QTWEETLIB_LIB )
-include ( ${CMAKE_CURRENT_SOURCE_DIR}/WARNING-twitter-api-keys )
+
+IF( EXISTS ${CMAKE_CURRENT_SOURCE_DIR}/WARNING-twitter-api-keys )
+  INCLUDE( ${CMAKE_CURRENT_SOURCE_DIR}/WARNING-twitter-api-keys )
+ENDIF()
 
 INSTALL(TARGETS tomahawk_qtweetlib DESTINATION lib)
 
