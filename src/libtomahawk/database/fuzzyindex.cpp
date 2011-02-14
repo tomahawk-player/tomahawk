@@ -46,6 +46,11 @@ FuzzyIndex::beginIndexing()
 {
     m_mutex.lock();
 
+    delete m_luceneSearcher;
+    delete m_luceneReader;
+    m_luceneSearcher = 0;
+    m_luceneReader = 0;
+
     try
     {
         IndexWriter luceneWriter = IndexWriter( m_luceneDir, m_analyzer, true );
@@ -71,11 +76,6 @@ FuzzyIndex::appendFields( const QString& table, const QMap< unsigned int, QStrin
 {
     try
     {
-        delete m_luceneSearcher;
-        delete m_luceneReader;
-        m_luceneSearcher = 0;
-        m_luceneReader = 0;
-
         bool create = !IndexReader::indexExists( TomahawkUtils::appDataDir().absoluteFilePath( "tomahawk.lucene" ).toStdString().c_str() );
         IndexWriter luceneWriter = IndexWriter( m_luceneDir, m_analyzer, create );
         Document doc;

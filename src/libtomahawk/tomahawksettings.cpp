@@ -327,13 +327,16 @@ TomahawkSettings::setExternalHostname(const QString& externalHostname)
 int
 TomahawkSettings::externalPort() const
 {
-    return value( "network/external-port" ).toInt();
+    return value( "network/external-port", 50210 ).toInt();
 }
 
 void
 TomahawkSettings::setExternalPort(int externalPort)
 {
-    setValue( "network/external-port", externalPort);
+    if ( externalPort == 0 )
+        setValue( "network/external-port", 50210);
+    else
+        setValue( "network/external-port", externalPort);
 }
 
 
@@ -378,6 +381,89 @@ TomahawkSettings::setLastFmUsername( const QString& username )
     setValue( "lastfm/username", username );
 }
 
+QString
+TomahawkSettings::twitterScreenName() const
+{
+    return value( "twitter/ScreenName" ).toString();
+}
+
+void
+TomahawkSettings::setTwitterScreenName( const QString& screenName )
+{
+    setValue( "twitter/ScreenName", screenName );
+}
+    
+QString
+TomahawkSettings::twitterOAuthToken() const
+{
+    return value( "twitter/OAuthToken" ).toString();
+}
+
+void
+TomahawkSettings::setTwitterOAuthToken( const QString& oauthtoken )
+{
+    setValue( "twitter/OAuthToken", oauthtoken );
+}
+
+QString
+TomahawkSettings::twitterOAuthTokenSecret() const
+{
+    return value( "twitter/OAuthTokenSecret" ).toString();
+}
+
+void
+TomahawkSettings::setTwitterOAuthTokenSecret( const QString& oauthtokensecret )
+{
+    setValue( "twitter/OAuthTokenSecret", oauthtokensecret );
+}
+
+qint64
+TomahawkSettings::twitterCachedFriendsSinceId() const
+{
+    return value( "twitter/CachedFriendsSinceID", 0 ).toLongLong();
+}
+
+void
+TomahawkSettings::setTwitterCachedFriendsSinceId( qint64 cachedId )
+{
+    setValue( "twitter/CachedFriendsSinceID", cachedId );
+}
+
+qint64
+TomahawkSettings::twitterCachedMentionsSinceId() const
+{
+    return value( "twitter/CachedMentionsSinceID", 0 ).toLongLong();
+}
+
+void
+TomahawkSettings::setTwitterCachedMentionsSinceId( qint64 cachedId )
+{
+    setValue( "twitter/CachedMentionsSinceID", cachedId );
+}
+
+qint64
+TomahawkSettings::twitterCachedDirectMessagesSinceId() const
+{
+    return value( "twitter/CachedDirectMessagesSinceID", 0 ).toLongLong();
+}
+
+void
+TomahawkSettings::setTwitterCachedDirectMessagesSinceId( qint64 cachedId )
+{
+    setValue( "twitter/CachedDirectMessagesSinceID", cachedId );
+}
+
+QHash<QString, QVariant>
+TomahawkSettings::twitterCachedPeers() const
+{
+    return value( "twitter/CachedPeers", QHash<QString, QVariant>() ).toHash();
+}
+
+void
+TomahawkSettings::setTwitterCachedPeers( const QHash<QString, QVariant> &cachedPeers )
+{
+    setValue( "twitter/CachedPeers", cachedPeers );
+}
 
 bool
 TomahawkSettings::scrobblingEnabled() const

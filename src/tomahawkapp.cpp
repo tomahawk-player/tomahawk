@@ -5,6 +5,8 @@
 #include <QMetaType>
 #include <QTime>
 #include <QNetworkReply>
+#include <QFile>
+#include <QFileInfo>
 
 #include "artist.h"
 #include "album.h"
@@ -22,8 +24,11 @@
 #include "web/api_v1.h"
 #include "scriptresolver.h"
 #include "sourcelist.h"
+#include "shortcuthandler.h"
+#include "tomahawksettings.h"
 
 #include "audio/audioengine.h"
+#include "utils/xspfloader.h"
 
 #ifndef TOMAHAWK_HEADLESS
     #include "tomahawkwindow.h"
@@ -31,13 +36,15 @@
     #include <QMessageBox>
 #endif
 
+#ifdef Q_WS_MAC
+#include "mac/macshortcuthandler.h"
+#endif
+
 #include <iostream>
 #include <fstream>
 
 #define LOGFILE TomahawkUtils::appDataDir().filePath( "tomahawk.log" ).toLocal8Bit()
 #define LOGFILE_SIZE 1024 * 512
-#include "tomahawksettings.h"
-#include <utils/xspfloader.h>
 
 using namespace std;
 ofstream logfile;
@@ -108,6 +115,7 @@ TomahawkApp::TomahawkApp( int& argc, char *argv[] )
     , m_audioEngine( 0 )
     , m_sipHandler( 0 )
     , m_servent( 0 )
+    , m_shortcutHandler( 0 )
     , m_mainwindow( 0 )
     , m_infoSystem( 0 )
 {
@@ -154,31 +162,49 @@ TomahawkApp::TomahawkApp( int& argc, char *argv[] )
     qDebug() << "Init Echonest Factory.";
     GeneratorFactory::registerFactory( "echonest", new EchonestFactory );
     
+    // Register shortcut handler for this platform
+#ifdef Q_WS_MAC
+    m_shortcutHandler = new MacShortcutHandler( this );
+    Tomahawk::setShortcutHandler( static_cast<MacShortcutHandler*>( m_shortcutHandler) );
+
+    Tomahawk::setApplicationHandler( this );
+#endif
+
+    // Connect up shortcuts
+    connect( m_shortcutHandler, SIGNAL( playPause() ), m_audioEngine, SLOT( playPause() ) );
+    connect( m_shortcutHandler, SIGNAL( pause() ), m_audioEngine, SLOT( pause() ) );
+    connect( m_shortcutHandler, SIGNAL( stop() ), m_audioEngine, SLOT( stop() ) );
+    connect( m_shortcutHandler, SIGNAL( previous() ), m_audioEngine, SLOT( previous() ) );
+    connect( m_shortcutHandler, SIGNAL( next() ), m_audioEngine, SLOT( next() ) );
+    connect( m_shortcutHandler, SIGNAL( volumeUp() ), m_audioEngine, SLOT( raiseVolume() ) );
+    connect( m_shortcutHandler, SIGNAL( volumeDown() ), m_audioEngine, SLOT( lowerVolume() ) );
+    connect( m_shortcutHandler, SIGNAL( mute() ), m_audioEngine, SLOT( mute() ) );
+
 #ifndef NO_LIBLASTFM
-        qDebug() << "Init Scrobbler.";
-        m_scrobbler = new Scrobbler( this );
-        qDebug() << "Setting NAM.";
-        TomahawkUtils::setNam( new lastfm::NetworkAccessManager( this ) );
+    qDebug() << "Init Scrobbler.";
+    m_scrobbler = new Scrobbler( this );
+    qDebug() << "Setting NAM.";
+    TomahawkUtils::setNam( new lastfm::NetworkAccessManager( this ) );
 
-        connect( m_audioEngine, SIGNAL( started( const Tomahawk::result_ptr& ) ),
-                 m_scrobbler,     SLOT( trackStarted( const Tomahawk::result_ptr& ) ), Qt::QueuedConnection );
+    connect( m_audioEngine, SIGNAL( started( const Tomahawk::result_ptr& ) ),
+            m_scrobbler,     SLOT( trackStarted( const Tomahawk::result_ptr& ) ), Qt::QueuedConnection );
 
-        connect( m_audioEngine, SIGNAL( paused() ),
-                 m_scrobbler,     SLOT( trackPaused() ), Qt::QueuedConnection );
+    connect( m_audioEngine, SIGNAL( paused() ),
+            m_scrobbler,     SLOT( trackPaused() ), Qt::QueuedConnection );
 
-        connect( m_audioEngine, SIGNAL( resumed() ),
-                 m_scrobbler,     SLOT( trackResumed() ), Qt::QueuedConnection );
+    connect( m_audioEngine, SIGNAL( resumed() ),
+            m_scrobbler,     SLOT( trackResumed() ), Qt::QueuedConnection );
 
-        connect( m_audioEngine, SIGNAL( stopped() ),
-                 m_scrobbler,     SLOT( trackStopped() ), Qt::QueuedConnection );
+    connect( m_audioEngine, SIGNAL( stopped() ),
+            m_scrobbler,     SLOT( trackStopped() ), Qt::QueuedConnection );
 #else
-        qDebug() << "Setting NAM.";
-        TomahawkUtils::setNam( new QNetworkAccessManager );
+    qDebug() << "Setting NAM.";
+    TomahawkUtils::setNam( new QNetworkAccessManager );
 #endif
 
     // Set up proxy
     if( TomahawkSettings::instance()->proxyType() != QNetworkProxy::NoProxy &&
-        !TomahawkSettings::instance()->proxyHost().isEmpty() )
+            !TomahawkSettings::instance()->proxyHost().isEmpty() )
     {
         qDebug() << "Setting proxy to saved values";
         TomahawkUtils::setProxy( new QNetworkProxy( static_cast<QNetworkProxy::ProxyType>(TomahawkSettings::instance()->proxyType()), TomahawkSettings::instance()->proxyHost(), TomahawkSettings::instance()->proxyPort(), TomahawkSettings::instance()->proxyUsername(), TomahawkSettings::instance()->proxyPassword() ) );
@@ -445,25 +471,30 @@ TomahawkApp::setupSIP()
 {
     qDebug() << Q_FUNC_INFO;
 
-    if( !arguments().contains( "--nosip" ) )
+    //FIXME: jabber autoconnect is really more, now that there is sip -- should be renamed and/or split out of jabber-specific settings
+    if( !arguments().contains( "--nosip" ) && TomahawkSettings::instance()->jabberAutoConnect() )
     {
         m_xmppBot = new XMPPBot( this );
         qDebug() << "Connecting SIP classes";
-        m_sipHandler->connect( true );
+        m_sipHandler->connectPlugins( true );
 //        m_sipHandler->setProxy( *TomahawkUtils::proxy() );
     }
 }
 
-void 
-TomahawkApp::messageReceived( const QString& msg ) 
+
+void
+TomahawkApp::activate()
 {
-    qDebug() << "MESSAGE RECEIVED" << msg;
-    if( msg.isEmpty() ) {
-        return;
-    }
-    
-    if( msg.contains( "tomahawk://" ) ) {
-        QString cmd = msg.mid( 11 );
+#ifndef TOMAHAWK_HEADLESS
+    mainWindow()->show();
+#endif
+}
+
+bool
+TomahawkApp::loadUrl( const QString& url )
+{
+    if( url.contains( "tomahawk://" ) ) {
+        QString cmd = url.mid( 11 );
         qDebug() << "tomahawk!s" << cmd;
         if( cmd.startsWith( "load/" ) ) {
             cmd = cmd.mid( 5 );
@@ -474,7 +505,26 @@ TomahawkApp::messageReceived( const QString& msg )
                 l->load( QUrl( cmd.mid( 5 ) ) );
             }
         }
-       
-   }
+    } else {
+        QFile f( url );
+        QFileInfo info( f );
+        if( f.exists() && info.suffix() == "xspf" ) {
+            XSPFLoader* l = new XSPFLoader( true, this );
+            qDebug() << "Loading spiff:" << url;
+            l->load( QUrl( url ) );
+        }
+    }
+    return true;
+}
+
+void 
+TomahawkApp::messageReceived( const QString& msg ) 
+{
+    qDebug() << "MESSAGE RECEIVED" << msg;
+    if( msg.isEmpty() ) {
+        return;
+    }
+    
+    loadUrl( msg );
 }
 

@@ -62,6 +62,15 @@ AudioEngine::~AudioEngine()
     delete m_audio;
 }
 
+void
+AudioEngine::playPause()
+{
+    if( m_audio->isPlaying() )
+        pause();
+    else
+        play();
+
+}
 
 void
 AudioEngine::play()
@@ -141,6 +150,11 @@ AudioEngine::setVolume( int percentage )
     emit volumeChanged( percentage );
 }
 
+void
+AudioEngine::mute()
+{
+    setVolume( 0 );
+}
 
 void
 AudioEngine::onTrackAboutToClose()

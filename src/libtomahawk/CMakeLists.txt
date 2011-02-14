@@ -308,6 +308,7 @@ include_directories( . ${CMAKE_CURRENT_BINARY_DIR} ..
     ../../thirdparty/jdns
     ../../thirdparty/jdns/jdns
     ../../thirdparty/jdns/jdnsshared
+    ../../thirdparty/qtweetlib/qtweetlib/src
     playlist
 )
 
@@ -371,6 +372,7 @@ target_link_libraries( tomahawklib
     vorbisfile
     ogg
     FLAC++
+    tomahawk_qtweetlib
     ${CLUCENE_LIBRARY}
 )
 

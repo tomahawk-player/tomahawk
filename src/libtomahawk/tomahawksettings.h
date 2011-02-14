@@ -95,7 +95,29 @@ public:
     
     QByteArray lastFmSessionKey() const;
     void setLastFmSessionKey( const QByteArray& key );
+    
+    /// Twitter settings
+    QString twitterScreenName() const;
+    void setTwitterScreenName( const QString& screenName );
+    
+    QString twitterOAuthToken() const;
+    void setTwitterOAuthToken( const QString& oauthtoken );
+    
+    QString twitterOAuthTokenSecret() const;
+    void setTwitterOAuthTokenSecret( const QString& oauthtokensecret );
 
+    qint64 twitterCachedFriendsSinceId() const;
+    void setTwitterCachedFriendsSinceId( qint64 sinceid );
+    
+    qint64 twitterCachedMentionsSinceId() const;
+    void setTwitterCachedMentionsSinceId( qint64 sinceid );
+    
+    qint64 twitterCachedDirectMessagesSinceId() const;
+    void setTwitterCachedDirectMessagesSinceId( qint64 sinceid );
+    
+    QHash<QString, QVariant> twitterCachedPeers() const;
+    void setTwitterCachedPeers( const QHash<QString, QVariant> &cachedPeers );
+    
     /// XMPP Component Settings
     QString xmppBotServer() const;
     void setXmppBotServer( const QString &server );
