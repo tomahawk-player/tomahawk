@@ -107,8 +107,14 @@ Servent::startListening( QHostAddress ha, bool upnp, int port )
             {
                 if( ha.toString() == "127.0.0.1" ) continue;
                 if( ha.toString().contains( ":" ) ) continue; //ipv6
-                QMetaObject::invokeMethod( this, "setExternalAddress", Qt::QueuedConnection, Q_ARG( QHostAddress, ha ), Q_ARG( unsigned int, m_port ) );
-                qDebug() << "LANHACK: set external address to lan address" << ha.toString();
+
+                if ( qApp->arguments().contains( "--lanhack" ) )
+                {
+                    qDebug() << "LANHACK: set external address to lan address" << ha.toString();
+                    QMetaObject::invokeMethod( this, "setExternalAddress", Qt::QueuedConnection, Q_ARG( QHostAddress, ha ), Q_ARG( unsigned int, m_port ) );
+                }
+                else
+                    emit ready();
                 break;
             }
             break;
@@ -118,7 +124,7 @@ Servent::startListening( QHostAddress ha, bool upnp, int port )
             qDebug() << "External address mode set to upnp....";
             m_portfwd = new PortFwdThread( m_port );
             connect( m_portfwd, SIGNAL( externalAddressDetected( QHostAddress, unsigned int ) ),
-                                SLOT( setExternalAddress( QHostAddress, unsigned int ) ) );
+                                  SLOT( setExternalAddress( QHostAddress, unsigned int ) ) );
             break;
     }
 
