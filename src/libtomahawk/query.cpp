@@ -81,7 +81,7 @@ Query::resultUnavailable()
     {
         if ( m_results.value( i ).data() == result )
         {
-            result_ptr r  = m_results.value( i );
+            result_ptr r = m_results.value( i );
             m_results.removeAt( i );
 
             emit resultsRemoved( r );
@@ -90,7 +90,10 @@ Query::resultUnavailable()
     }
 
     if ( m_results.isEmpty() )  // FIXME proper score checking
+    {
+        m_solved = false;
         emit solvedStateChanged( false );
+    }
 }
 
 

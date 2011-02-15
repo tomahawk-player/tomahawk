@@ -221,7 +221,7 @@ Pipeline::shuntNext()
 void
 Pipeline::shunt( const query_ptr& q )
 {
-    if( q->solved() )
+    if ( q->solved() )
     {
         qDebug() << "Query solved, pipeline aborted:" << q->toString()
                  << "numresults:" << q->results().length();
