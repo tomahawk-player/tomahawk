@@ -59,7 +59,6 @@ ScanManager::runManualScan( const QString& path )
         m_scanner = new MusicScanner( path );
         m_scanner->moveToThread( m_musicScannerThreadController );
         connect( m_scanner, SIGNAL( finished() ), SLOT( scannerFinished() ) );
-        connect( m_scanner, SIGNAL( destroyed( QObject* ) ), SLOT( scannerDestroyed( QObject* ) ) );
         m_musicScannerThreadController->start( QThread::IdlePriority );
         QMetaObject::invokeMethod( m_scanner, "startScan" );
     }
@@ -71,17 +70,17 @@ void
 ScanManager::scannerFinished()
 {
     qDebug() << Q_FUNC_INFO;
-    if( m_musicScannerThreadController->isRunning() )
-    {
-        qDebug() << "Scan thread still running, not deleting yet";
-        m_musicScannerThreadController->quit();
-        QMetaObject::invokeMethod( this, "scannerFinished" );
-    }
-    else
-    {
-        m_scanner->deleteLater();
-        m_scanner = 0;
-    }
+    connect( m_musicScannerThreadController, SIGNAL( finished() ), SLOT( scannerQuit() ) );
+    m_musicScannerThreadController->quit();
+}
+
+void
+ScanManager::scannerQuit()
+{
+    qDebug() << Q_FUNC_INFO;
+    connect( m_scanner, SIGNAL( destroyed( QObject* ) ), SLOT( scannerDestroyed( QObject* ) ) );
+    delete m_scanner;
+    m_scanner = 0;
 }
 
 void
@@ -90,5 +89,6 @@ ScanManager::scannerDestroyed( QObject* scanner )
     qDebug() << Q_FUNC_INFO;
     m_musicScannerThreadController->deleteLater();
     m_musicScannerThreadController = 0;
+    emit finished();
 }
 

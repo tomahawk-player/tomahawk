@@ -20,7 +20,11 @@ public:
     
     void runManualScan( const QString& path );
 
+signals:
+    void finished();
+    
 private slots:
+    void scannerQuit();
     void scannerFinished();
     void scannerDestroyed( QObject* scanner );
 

@@ -123,7 +123,7 @@ MusicScanner::listerQuit()
 {
     qDebug() << Q_FUNC_INFO;
     connect( m_dirLister, SIGNAL( destroyed( QObject* ) ), SLOT( listerDestroyed( QObject* ) ) );
-    m_dirLister->deleteLater();
+    delete m_dirLister;
     m_dirLister = 0;
 }
 
