@@ -80,28 +80,30 @@ Pipeline::resolve( const QList<query_ptr>& qlist, bool prioritized )
 {
     {
         QMutexLocker lock( &m_mut );
+
+        int i = 0;
         foreach( const query_ptr& q, qlist )
         {
             qDebug() << Q_FUNC_INFO << (qlonglong)q.data() << q->toString();
-            if( !m_qids.contains( q->id() ) )
+            if ( !m_qids.contains( q->id() ) )
             {
                 m_qids.insert( q->id(), q );
             }
-            else
+
+            if ( m_queries_pending.contains( q ) )
             {
                 qDebug() << "Already queued for resolving:" << q->toString();
-                return;
+                continue;
             }
-        }
 
-        if ( prioritized )
-        {
-            for( int i = qlist.count() - 1; i >= 0; i-- )
-                m_queries_pending.insert( 0, qlist.at( i ) );
-        }
-        else
-        {
-            m_queries_pending.append( qlist );
+            if ( prioritized )
+            {
+                m_queries_pending.insert( i++, q );
+            }
+            else
+            {
+                m_queries_pending.append( q );
+            }
         }
     }
 
