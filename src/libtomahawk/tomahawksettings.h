@@ -34,6 +34,9 @@ public:
     QByteArray mainWindowState() const;
     void setMainWindowState( const QByteArray& state );
 
+    QByteArray mainWindowSplitterState() const;
+    void setMainWindowSplitterState( const QByteArray& state );
+
     /// Playlist stuff
     QByteArray playlistColumnSizes( const QString& playlistid ) const;
     void setPlaylistColumnSizes( const QString& playlistid, const QByteArray& state );

@@ -185,6 +185,20 @@ TomahawkSettings::setMainWindowState( const QByteArray& state )
 
 
 QByteArray
+TomahawkSettings::mainWindowSplitterState() const
+{
+    return value( "ui/mainwindow/splitterState" ).toByteArray();
+}
+
+
+void
+TomahawkSettings::setMainWindowSplitterState( const QByteArray& state )
+{
+    setValue( "ui/mainwindow/splitterState", state );
+}
+
+
+QByteArray
 TomahawkSettings::playlistColumnSizes( const QString& playlistid ) const
 {
     return value( QString( "ui/playlist/%1/columnSizes" ).arg( playlistid ) ).toByteArray();

@@ -144,6 +144,8 @@ TomahawkWindow::loadSettings()
         restoreGeometry( s->mainWindowGeometry() );
     if ( !s->mainWindowState().isEmpty() )
         restoreState( s->mainWindowState() );
+    if ( !s->mainWindowSplitterState().isEmpty() )
+        ui->splitter->restoreState( s->mainWindowSplitterState() );
 }
 
 
@@ -153,6 +155,7 @@ TomahawkWindow::saveSettings()
     TomahawkSettings* s = TomahawkSettings::instance();
     s->setMainWindowGeometry( saveGeometry() );
     s->setMainWindowState( saveState() );
+    s->setMainWindowSplitterState( ui->splitter->saveState() );
 }
 
 
