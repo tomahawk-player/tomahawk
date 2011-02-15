@@ -82,7 +82,8 @@ SourceList::remove( Tomahawk::Source* s )
         m_sources.remove( s->userName() );
         qDebug() << "SourceList::remove(" << s->userName() << "), total sources now:" << m_sources.size();
 
-        src->controlConnection()->shutdown( true );
+        if ( src->controlConnection() )
+            src->controlConnection()->shutdown( true );
     }
 
     emit sourceRemoved( src );
