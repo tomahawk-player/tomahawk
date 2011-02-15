@@ -79,7 +79,7 @@ ScanManager::scannerFinished()
     }
     else
     {
-        delete m_scanner;
+        m_scanner->deleteLater();
         m_scanner = 0;
     }
 }

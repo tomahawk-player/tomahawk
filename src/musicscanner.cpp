@@ -31,6 +31,10 @@ MusicScanner::MusicScanner( const QString& dir, quint32 bs )
    // m_ext2mime.insert( "mp4",  "audio/mp4" );
 }
 
+MusicScanner::~MusicScanner()
+{
+    qDebug() << Q_FUNC_INFO;
+}
 
 void
 MusicScanner::startScan()
@@ -76,8 +80,6 @@ MusicScanner::scan()
     // queued, so will only fire after all dirs have been scanned:
     connect( m_dirLister, SIGNAL( finished( const QMap<QString, unsigned int>& ) ),
                             SLOT( listerFinished( const QMap<QString, unsigned int>& ) ), Qt::QueuedConnection );
-
-    connect( m_dirLister, SIGNAL( destroyed( QObject* ) ), SLOT( listerDestroyed( QObject* ) ) );
     
     m_dirListerThreadController->start();
     QMetaObject::invokeMethod( m_dirLister, "go" );
@@ -97,7 +99,7 @@ MusicScanner::listerFinished( const QMap<QString, unsigned int>& newmtimes )
 
     // save mtimes, then quit thread
     DatabaseCommand_DirMtimes* cmd = new DatabaseCommand_DirMtimes( newmtimes );
-    connect( cmd, SIGNAL( finished() ), SLOT( deleteLater() ) );
+    connect( cmd, SIGNAL( finished() ), SLOT( deleteLister() ) );
     Database::instance()->enqueue( QSharedPointer<DatabaseCommand>(cmd) );
 
     qDebug() << "Scanning complete, saving to database. "
@@ -106,26 +108,23 @@ MusicScanner::listerFinished( const QMap<QString, unsigned int>& newmtimes )
     qDebug() << "Skipped the following files (no tags / no valid audio):";
     foreach( const QString& s, m_skippedFiles )
         qDebug() << s;
-
-    QMetaObject::invokeMethod( this, "quitLister" );
 }
 
 void
-MusicScanner::quitLister()
+MusicScanner::deleteLister()
 {
     qDebug() << Q_FUNC_INFO;
-    if( m_dirListerThreadController->isRunning() )
-    {
-        qDebug() << "Scan thread still running, not deleting yet";
-        m_dirListerThreadController->quit();
-        QMetaObject::invokeMethod( this, "quitLister" );
-    }
-    else
-    {
-        qDebug() << "deleting dir lister";
-        m_dirLister->deleteLater();
-        m_dirLister = 0;
-    }
+    connect( m_dirListerThreadController, SIGNAL( finished() ), SLOT( listerQuit() ) );
+    m_dirListerThreadController->quit();
+}
+
+void
+MusicScanner::listerQuit()
+{
+    qDebug() << Q_FUNC_INFO;
+    connect( m_dirLister, SIGNAL( destroyed( QObject* ) ), SLOT( listerDestroyed( QObject* ) ) );
+    m_dirLister->deleteLater();
+    m_dirLister = 0;
 }
 
 void

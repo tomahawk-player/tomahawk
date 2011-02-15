@@ -86,6 +86,7 @@ Q_OBJECT
 
 public:
     MusicScanner( const QString& dir, quint32 bs = 0 );
+    ~MusicScanner();
 
 signals:
     //void fileScanned( QVariantMap );
@@ -97,7 +98,8 @@ private:
 
 private slots:
     void listerFinished( const QMap<QString, unsigned int>& newmtimes );
-    void quitLister();
+    void deleteLister();
+    void listerQuit();
     void listerDestroyed( QObject* dirLister );
     void scanFile( const QFileInfo& fi );
     void startScan();
