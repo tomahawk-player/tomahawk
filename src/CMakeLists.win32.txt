@@ -17,10 +17,8 @@ SET( OS_SPECIFIC_LINK_LIBRARIES
 
 # third party shipped with tomahawk
     ${CMAKE_BINARY_DIR}/thirdparty/qtweetlib/libtomahawk_qtweetlib.dll
-
-    # fix them, they should be in ${CMAKE_BINARY_DIR} as well
-    ${CMAKE_SOURCE_DIR}/rtaudio/librtaudio.dll
-    ${CMAKE_SOURCE_DIR}/qxt/qxtweb-standalone/libqxtweb-standalone.dll
+    ${CMAKE_BINARY_DIR}/rtaudio/librtaudio.dll
+    ${CMAKE_BINARY_DIR}/qxt/qxtweb-standalone/libqxtweb-standalone.dll
 
 # system libs
     "secur32.dll"
