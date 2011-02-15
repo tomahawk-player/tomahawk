@@ -8,12 +8,18 @@ ADD_DEFINITIONS( -static-libgcc )
 SET( OS_SPECIFIC_LINK_LIBRARIES
     ${OS_SPECIFIC_LINK_LIBRARIES}
 
+#internal deps
+    sip_twitter
+    ${CMAKE_BINARY_DIR}/src/libtomahawk/libtomahawklib.dll
+
 # normal deps
     ${LIBLASTFM_LIBRARY}
     ${GLOOX_LIBS}
 
 # third party shipped with tomahawk
-    ${CMAKE_BINARY_DIR}/src/libtomahawk/libtomahawklib.dll
+    ${CMAKE_BINARY_DIR}/thirdparty/qtweetlib/libtomahawk_qtweetlib.dll
+
+    # fix them, they should be in ${CMAKE_BINARY_DIR} as well
     ${CMAKE_SOURCE_DIR}/rtaudio/librtaudio.dll
     ${CMAKE_SOURCE_DIR}/qxt/qxtweb-standalone/libqxtweb-standalone.dll
 
