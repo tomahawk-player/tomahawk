@@ -21,6 +21,7 @@ public:
     void runManualScan( const QString& path );
 
 private slots:
+    void scannerFinished();
     void scannerDestroyed( QObject* scanner );
 
     void onSettingsChanged();

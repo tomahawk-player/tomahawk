@@ -29,9 +29,13 @@ ScanManager::ScanManager( QObject* parent )
 
 ScanManager::~ScanManager()
 {
+    qDebug() << Q_FUNC_INFO;
     s_instance = 0;
-    m_musicScannerThreadController->quit();
-    m_musicScannerThreadController->deleteLater();
+    if( m_musicScannerThreadController )
+    {
+        m_musicScannerThreadController->quit();
+        m_musicScannerThreadController->deleteLater();
+    }
     m_musicScannerThreadController = 0;
     m_scanner = 0;    
 }
@@ -52,22 +56,39 @@ ScanManager::runManualScan( const QString& path )
     if ( !m_musicScannerThreadController && !m_scanner ) //still running if these are not zero
     {
         m_musicScannerThreadController = new QThread( this );
-        MusicScanner* m_scanner = new MusicScanner( path );
+        m_scanner = new MusicScanner( path );
         m_scanner->moveToThread( m_musicScannerThreadController );
-        connect( m_scanner, SIGNAL( destroyed( QObject* ) ), this, SLOT( scannerDestroyed( QObject* ) ) );
+        connect( m_scanner, SIGNAL( finished() ), SLOT( scannerFinished() ) );
+        connect( m_scanner, SIGNAL( destroyed( QObject* ) ), SLOT( scannerDestroyed( QObject* ) ) );
         m_musicScannerThreadController->start( QThread::IdlePriority );
         QMetaObject::invokeMethod( m_scanner, "startScan" );
     }
+    else
+        qDebug() << "Could not run manual scan, old scan still running";
 }
 
+void
+ScanManager::scannerFinished()
+{
+    qDebug() << Q_FUNC_INFO;
+    if( m_musicScannerThreadController->isRunning() )
+    {
+        qDebug() << "Scan thread still running, not deleting yet";
+        m_musicScannerThreadController->quit();
+        QMetaObject::invokeMethod( this, "scannerFinished" );
+    }
+    else
+    {
+        delete m_scanner;
+        m_scanner = 0;
+    }
+}
 
 void
 ScanManager::scannerDestroyed( QObject* scanner )
 {
     qDebug() << Q_FUNC_INFO;
-    m_musicScannerThreadController->quit();
     m_musicScannerThreadController->deleteLater();
     m_musicScannerThreadController = 0;
-    m_scanner = 0;
 }
 

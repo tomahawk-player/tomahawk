@@ -89,7 +89,7 @@ public:
 
 signals:
     //void fileScanned( QVariantMap );
-    void finished( int, int );
+    void finished();
     void batchReady( const QVariantList& );
 
 private:
@@ -97,6 +97,7 @@ private:
 
 private slots:
     void listerFinished( const QMap<QString, unsigned int>& newmtimes );
+    void quitLister();
     void listerDestroyed( QObject* dirLister );
     void scanFile( const QFileInfo& fi );
     void startScan();

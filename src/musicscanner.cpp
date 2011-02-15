@@ -106,21 +106,36 @@ MusicScanner::listerFinished( const QMap<QString, unsigned int>& newmtimes )
     qDebug() << "Skipped the following files (no tags / no valid audio):";
     foreach( const QString& s, m_skippedFiles )
         qDebug() << s;
-    
-    m_dirListerThreadController->quit();
-    m_dirLister->deleteLater();
+
+    QMetaObject::invokeMethod( this, "quitLister" );
 }
 
+void
+MusicScanner::quitLister()
+{
+    qDebug() << Q_FUNC_INFO;
+    if( m_dirListerThreadController->isRunning() )
+    {
+        qDebug() << "Scan thread still running, not deleting yet";
+        m_dirListerThreadController->quit();
+        QMetaObject::invokeMethod( this, "quitLister" );
+    }
+    else
+    {
+        qDebug() << "deleting dir lister";
+        m_dirLister->deleteLater();
+        m_dirLister = 0;
+    }
+}
 
 void
 MusicScanner::listerDestroyed( QObject* dirLister )
 {
     qDebug() << Q_FUNC_INFO;
-    m_dirLister = 0;
     m_dirListerThreadController->deleteLater();
     m_dirListerThreadController = 0;
+    emit finished();
 }
-
 
 void
 MusicScanner::commitBatch( const QVariantList& tracks )
