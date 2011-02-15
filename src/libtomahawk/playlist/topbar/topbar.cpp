@@ -60,8 +60,6 @@ TopBar::TopBar( QWidget* parent )
     connect( ui->radioDetailed, SIGNAL( clicked() ), SIGNAL( artistMode() ) );
     connect( ui->radioCloud, SIGNAL( clicked() ), SIGNAL( albumMode() ) );
 
-//    ui->widgetRadio->hide(); // FIXME
-
     setNumSources( 0 );
     setNumTracks( 0 );
     setNumArtists( 0 );

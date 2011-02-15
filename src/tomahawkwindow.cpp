@@ -175,6 +175,7 @@ TomahawkWindow::setupSignals()
 
     // <Menu Items>
     connect( ui->actionPreferences, SIGNAL( triggered() ), SLOT( showSettingsDialog() ) );
+    connect( ui->actionToggleConnect, SIGNAL( triggered() ), APP->sipHandler(), SLOT( toggleConnect() ) );
     connect( ui->actionAddPeerManually, SIGNAL( triggered() ), SLOT( addPeerManually() ) );
     connect( ui->actionAddFriendManually, SIGNAL( triggered() ), SLOT( addFriendManually() ) );
     connect( ui->actionRescanCollection, SIGNAL( triggered() ), SLOT( rescanCollectionManually() ) );
@@ -184,7 +185,6 @@ TomahawkWindow::setupSignals()
     connect( ui->actionCreate_New_Station, SIGNAL( triggered() ), SLOT( createStation() ));
     connect( ui->actionAboutTomahawk, SIGNAL( triggered() ), SLOT( showAboutTomahawk() ) );
     connect( ui->actionExit, SIGNAL( triggered() ), APP, SLOT( quit() ) );
-//    connect( m_statusButton, SIGNAL( clicked() ), APP->sipHandler(), SLOT( toggleConnect() ) );
 
     // <SipHandler>
     connect( APP->sipHandler(), SIGNAL( connected() ), SLOT( onSipConnected() ) );
@@ -383,14 +383,14 @@ TomahawkWindow::onPlaybackLoading( const Tomahawk::result_ptr& result )
 void
 TomahawkWindow::onSipConnected()
 {
-//    m_statusButton->setText( tr( "Online" ) );
+    ui->actionToggleConnect->setText( tr( "Go &offline" ) );
 }
 
 
 void
 TomahawkWindow::onSipDisconnected()
 {
-//    m_statusButton->setText( tr( "Offline" ) );
+    ui->actionToggleConnect->setText( tr( "Go &online" ) );
 }
 
 

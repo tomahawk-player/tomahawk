@@ -66,6 +66,8 @@
     <property name="title">
      <string>&amp;Network</string>
     </property>
+    <addaction name="actionToggleConnect"/>
+    <addaction name="separator"/>
     <addaction name="actionAddPeerManually"/>
     <addaction name="actionAddFriendManually"/>
    </widget>
@@ -91,6 +93,11 @@
    </property>
    <property name="menuRole">
     <enum>QAction::QuitRole</enum>
+   </property>
+  </action>
+  <action name="actionToggleConnect">
+   <property name="text">
+    <string>Go &amp;online</string>
    </property>
   </action>
   <action name="actionAddPeerManually">
