@@ -12,13 +12,16 @@
  */
 class DLLEXPORT TomahawkSettings : public QSettings
 {
-    Q_OBJECT
+Q_OBJECT
+
 public:
     static TomahawkSettings* instance();
 
     explicit TomahawkSettings( QObject* parent = 0 );
     virtual ~TomahawkSettings();
-    
+
+    void applyChanges() { emit changed(); }
+
     /// General settings
     QString scannerPath() const; /// QDesktopServices::MusicLocation by default
     void setScannerPath( const QString& path );
@@ -57,7 +60,7 @@ public:
     /// Network settings
     enum ExternalAddressMode { Lan, Upnp };
     ExternalAddressMode externalAddressMode() const;
-    void setExternalAddressMode(ExternalAddressMode externalAddressMode);
+    void setExternalAddressMode( ExternalAddressMode externalAddressMode );
     
     bool preferStaticHostPort() const;
     void setPreferStaticHostPort( bool prefer );
@@ -135,11 +138,13 @@ public:
     void setXmppBotPort( const int port );
     
     /// Script resolver settings
-    
     QStringList scriptResolvers() const;
     void setScriptResolvers( const QStringList& resolver );
     void addScriptResolver( const QString& resolver );
-    
+
+signals:
+    void changed();
+
 private:
     static TomahawkSettings* s_instance;
 };

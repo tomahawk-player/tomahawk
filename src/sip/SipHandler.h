@@ -34,6 +34,8 @@ private slots:
     void onPeerOnline( const QString& );
     void onError( int code, const QString& msg );
 
+    void onSettingsChanged();
+
 private:
     QStringList findPlugins();
     void loadPlugins( const QStringList& paths );

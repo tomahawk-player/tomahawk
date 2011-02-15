@@ -8,6 +8,7 @@
 
 using namespace Tomahawk;
 
+
 MusicScanner::MusicScanner( const QString& dir, quint32 bs )
     : QObject()
     , m_dir( dir )
@@ -29,6 +30,7 @@ MusicScanner::MusicScanner( const QString& dir, quint32 bs )
    // m_ext2mime.insert( "m4a",  "audio/mp4" );
    // m_ext2mime.insert( "mp4",  "audio/mp4" );
 }
+
 
 void
 MusicScanner::startScan()
@@ -69,13 +71,13 @@ MusicScanner::scan()
     m_dirLister->moveToThread( m_dirListerThreadController );
 
     connect( m_dirLister, SIGNAL( fileToScan( QFileInfo ) ),
-                       SLOT( scanFile( QFileInfo ) ), Qt::QueuedConnection );
+                            SLOT( scanFile( QFileInfo ) ), Qt::QueuedConnection );
 
     // queued, so will only fire after all dirs have been scanned:
     connect( m_dirLister, SIGNAL( finished( const QMap<QString, unsigned int>& ) ),
-                       SLOT( listerFinished( const QMap<QString, unsigned int>& ) ), Qt::QueuedConnection );
+                            SLOT( listerFinished( const QMap<QString, unsigned int>& ) ), Qt::QueuedConnection );
 
-    connect( m_dirLister, SIGNAL( destroyed(QObject*) ), this, SLOT( listerDestroyed(QObject*) ) );
+    connect( m_dirLister, SIGNAL( destroyed( QObject* ) ), SLOT( listerDestroyed( QObject* ) ) );
     
     m_dirListerThreadController->start();
     QMetaObject::invokeMethod( m_dirLister, "go" );
@@ -106,6 +108,7 @@ MusicScanner::listerFinished( const QMap<QString, unsigned int>& newmtimes )
         qDebug() << s;
     
     m_dirLister->deleteLater();
+    deleteLater();
 }
 
 
@@ -117,6 +120,7 @@ MusicScanner::listerDestroyed( QObject* dirLister )
     m_dirListerThreadController->deleteLater();
     m_dirListerThreadController = 0;
 }
+
 
 void
 MusicScanner::commitBatch( const QVariantList& tracks )

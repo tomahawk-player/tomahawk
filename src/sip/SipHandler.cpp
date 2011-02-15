@@ -9,6 +9,7 @@
 #include "database/database.h"
 #include "network/controlconnection.h"
 #include "sourcelist.h"
+#include "tomahawksettings.h"
 
 
 SipHandler::SipHandler( QObject* parent )
@@ -16,12 +17,22 @@ SipHandler::SipHandler( QObject* parent )
     , m_connected( false )
 {
     loadPlugins( findPlugins() );
+
+    connect( TomahawkSettings::instance(), SIGNAL( changed() ), SLOT( onSettingsChanged() ) );
 }
 
 
 SipHandler::~SipHandler()
 {
     disconnectPlugins();
+}
+
+
+void
+SipHandler::onSettingsChanged()
+{
+    disconnectPlugins();
+    connectPlugins();
 }
 
 
@@ -122,7 +133,11 @@ SipHandler::connectPlugins( bool startup, const QString &pluginName )
         if ( pluginName.isEmpty() || ( !pluginName.isEmpty() && sip->name() == pluginName ) )
             sip->connectPlugin( startup );
     }
-    m_connected = true;
+
+    if ( pluginName.isEmpty() )
+    {
+        m_connected = true;
+    }
 }
 
 
@@ -134,12 +149,14 @@ SipHandler::disconnectPlugins( const QString &pluginName )
         if ( pluginName.isEmpty() || ( !pluginName.isEmpty() && sip->name() == pluginName ) )
             sip->disconnectPlugin();
     }
-    if( pluginName.isEmpty() )
+
+    if ( pluginName.isEmpty() )
     {
         SourceList::instance()->removeAllRemote();
         m_connected = false;
     }
 }
+
 
 void
 SipHandler::toggleConnect()

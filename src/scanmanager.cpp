@@ -1,8 +1,10 @@
 #include "scanmanager.h"
-#include "musicscanner.h"
 
 #include <QDebug>
 #include <QThread>
+
+#include "musicscanner.h"
+#include "tomahawksettings.h"
 
 ScanManager* ScanManager::s_instance = 0;
 
@@ -20,6 +22,8 @@ ScanManager::ScanManager( QObject* parent )
     , m_musicScannerThreadController( 0 )
 {
     s_instance = this;
+
+    connect( TomahawkSettings::instance(), SIGNAL( changed() ), SLOT( onSettingsChanged() ) );
 }
 
 
@@ -32,8 +36,17 @@ ScanManager::~ScanManager()
     m_scanner = 0;    
 }
 
+
 void
-ScanManager::runManualScan( const QString &path )
+ScanManager::onSettingsChanged()
+{
+    if ( TomahawkSettings::instance()->hasScannerPath() )
+        runManualScan( TomahawkSettings::instance()->scannerPath() );
+}
+
+
+void
+ScanManager::runManualScan( const QString& path )
 {
     qDebug() << Q_FUNC_INFO;
     if ( !m_musicScannerThreadController && !m_scanner ) //still running if these are not zero
@@ -41,12 +54,12 @@ ScanManager::runManualScan( const QString &path )
         m_musicScannerThreadController = new QThread( this );
         MusicScanner* m_scanner = new MusicScanner( path );
         m_scanner->moveToThread( m_musicScannerThreadController );
-        connect( m_scanner, SIGNAL( finished() ), m_scanner, SLOT( deleteLater() ) );
-        connect( m_scanner, SIGNAL( destroyed(QObject*) ), this, SLOT( scanDestroyed(QObject*) ) );
+        connect( m_scanner, SIGNAL( destroyed( QObject* ) ), this, SLOT( scannerDestroyed( QObject* ) ) );
         m_musicScannerThreadController->start( QThread::IdlePriority );
         QMetaObject::invokeMethod( m_scanner, "startScan" );
     }
 }
+
 
 void
 ScanManager::scannerDestroyed( QObject* scanner )
@@ -56,3 +69,4 @@ ScanManager::scannerDestroyed( QObject* scanner )
     m_musicScannerThreadController->deleteLater();
     m_musicScannerThreadController = 0;
 }
+

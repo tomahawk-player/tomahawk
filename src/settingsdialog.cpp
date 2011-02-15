@@ -107,52 +107,33 @@ SettingsDialog::~SettingsDialog()
     {
         TomahawkSettings* s = TomahawkSettings::instance();
 
-        // if jabber or scan dir changed, reconnect/rescan
-        bool rescan = ui->lineEditMusicPath->text() != s->scannerPath();
-        bool rejabber = false;
-        if ( ui->jabberUsername->text() != s->jabberUsername() ||
-             ui->jabberPassword->text() != s->jabberPassword() ||
-             ui->jabberServer->text() != s->jabberServer() ||
-             (uint)(ui->jabberPort->value()) != s->jabberPort()
-             )
-            {
-            rejabber = true;
-        }
-
-        s->setHttpEnabled(                                  ui->checkBoxHttp->checkState() == Qt::Checked );
-
+        s->setHttpEnabled( ui->checkBoxHttp->checkState() == Qt::Checked );
         s->setPreferStaticHostPort( ui->checkBoxStaticPreferred->checkState() == Qt::Checked );
         s->setExternalAddressMode( ui->checkBoxUpnp->checkState() == Qt::Checked ? TomahawkSettings::Upnp : TomahawkSettings::Lan );
 
-        s->setJabberAutoConnect(                            ui->checkBoxJabberAutoConnect->checkState() == Qt::Checked );
-        s->setJabberUsername(                               ui->jabberUsername->text() );
-        s->setJabberPassword(                               ui->jabberPassword->text() );
-        s->setJabberServer(                                 ui->jabberServer->text() );
-        s->setJabberPort(                                   ui->jabberPort->value() );
+        s->setJabberAutoConnect( ui->checkBoxJabberAutoConnect->checkState() == Qt::Checked );
+        s->setJabberUsername( ui->jabberUsername->text() );
+        s->setJabberPassword( ui->jabberPassword->text() );
+        s->setJabberServer( ui->jabberServer->text() );
+        s->setJabberPort( ui->jabberPort->value() );
         
-        s->setExternalHostname(                             ui->staticHostName->text() );
-        s->setExternalPort(                                 ui->staticPort->value() );
+        s->setExternalHostname( ui->staticHostName->text() );
+        s->setExternalPort( ui->staticPort->value() );
 
-        s->setScannerPath(                                  ui->lineEditMusicPath->text() );
+        s->setScannerPath( ui->lineEditMusicPath->text() );
         
-        s->setScrobblingEnabled(                            ui->checkBoxEnableLastfm->isChecked() );
-        s->setLastFmUsername(                               ui->lineEditLastfmUsername->text() );
-        s->setLastFmPassword(                               ui->lineEditLastfmPassword->text() );
+        s->setScrobblingEnabled( ui->checkBoxEnableLastfm->isChecked() );
+        s->setLastFmUsername( ui->lineEditLastfmUsername->text() );
+        s->setLastFmPassword( ui->lineEditLastfmPassword->text() );
 
         QStringList resolvers;
-        for( int i = 0; i < ui->scriptList->topLevelItemCount(); i++ ) {
+        for( int i = 0; i < ui->scriptList->topLevelItemCount(); i++ )
+        {
             resolvers << ui->scriptList->topLevelItem( i )->data( 1, Qt::DisplayRole ).toString();
         }
         s->setScriptResolvers( resolvers );
-        
-        if( rescan )
-            ScanManager::instance()->runManualScan( s->scannerPath() );
 
-        if( rejabber )
-        {
-            APP->sipHandler()->disconnectPlugins();
-            APP->sipHandler()->connectPlugins();
-        }
+        s->applyChanges();
     }
     else
         qDebug() << "Settings dialog cancelled, NOT saving prefs.";
@@ -255,8 +236,8 @@ SettingsDialog::onLastFmFinished()
                  qDebug() << "ERROR from last.fm:" << lfm.text();
                  ui->pushButtonTestLastfmLogin->setText( tr( "Failed" ) );
                  ui->pushButtonTestLastfmLogin->setEnabled( true );
-
-             } else
+             }
+             else
              {
                  ui->pushButtonTestLastfmLogin->setText( tr( "Success" ) );
                  ui->pushButtonTestLastfmLogin->setEnabled( false );
@@ -277,6 +258,7 @@ SettingsDialog::onLastFmFinished()
     }
 #endif
 }
+
 
 void
 SettingsDialog::authenticateTwitter()
@@ -308,6 +290,7 @@ SettingsDialog::authenticateTwitter()
     }
 }
 
+
 void
 SettingsDialog::startPostGotTomahawkStatus()
 {
@@ -326,6 +309,7 @@ SettingsDialog::startPostGotTomahawkStatus()
     connect( credVerifier, SIGNAL( parsedUser(const QTweetUser &) ), SLOT( postGotTomahawkStatusAuthVerifyReply(const QTweetUser &) ) );
     credVerifier->verify();
 }
+
 
 void
 SettingsDialog::postGotTomahawkStatusAuthVerifyReply( const QTweetUser &user )
@@ -348,6 +332,7 @@ SettingsDialog::postGotTomahawkStatusAuthVerifyReply( const QTweetUser &user )
     statUpdate->post( QString( "Got Tomahawk? {" ) + Database::instance()->dbid() + QString( "} (" ) + uuid.mid( 1, 8 ) + QString( ")" ) );
 }
 
+
 void
 SettingsDialog::postGotTomahawkStatusUpdateReply( const QTweetStatus& status )
 {
@@ -356,6 +341,8 @@ SettingsDialog::postGotTomahawkStatusUpdateReply( const QTweetStatus& status )
     else
         QMessageBox::information( 0, QString("Tweeted!"), QString("Your tweet has been posted!") );
 }
+
+
 void
 SettingsDialog::postGotTomahawkStatusUpdateError( QTweetNetBase::ErrorCode code, const QString& errorMsg )
 {
@@ -363,6 +350,7 @@ SettingsDialog::postGotTomahawkStatusUpdateError( QTweetNetBase::ErrorCode code,
     qDebug() << "Error posting Got Tomahawk message, error code is " << code << ", error message is " << errorMsg;
     QMessageBox::critical( 0, QString("Tweetin' Error"), QString("There was an error posting your status -- sorry!") );
 }
+
 
 ProxyDialog::ProxyDialog( QWidget *parent )
     : QDialog( parent )
@@ -422,6 +410,7 @@ ProxyDialog::saveSettings()
     QNetworkProxy::setApplicationProxy( proxy );
 }
 
+
 void 
 SettingsDialog::addScriptResolver()
 {
@@ -434,6 +423,7 @@ SettingsDialog::addScriptResolver()
     }
 }
 
+
 void 
 SettingsDialog::removeScriptResolver()
 {
@@ -445,6 +435,7 @@ SettingsDialog::removeScriptResolver()
         TomahawkApp::instance()->removeScriptResolver( resolver );
     }
 }
+
 
 void 
 SettingsDialog::scriptSelectionChanged()

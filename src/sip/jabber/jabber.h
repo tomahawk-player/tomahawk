@@ -31,39 +31,26 @@ public slots:
 
     void disconnectPlugin()
     {
-        QMetaObject::invokeMethod( p,
-                                   "disconnect",
-                                   Qt::QueuedConnection
-                                 );
+        if ( p )
+            p->disconnect();
     }
 
     void sendMsg( const QString& to, const QString& msg )
     {
-        QMetaObject::invokeMethod( p,
-                                   "sendMsg",
-                                   Qt::QueuedConnection,
-                                   Q_ARG(const QString, to),
-                                   Q_ARG(const QString, msg)
-                                 );
+        if ( p )
+            p->sendMsg( to, msg );
     }
 
     void broadcastMsg( const QString &msg )
     {
-        QMetaObject::invokeMethod( p,
-                                   "broadcastMsg",
-                                   Qt::QueuedConnection,
-                                   Q_ARG(const QString, msg)
-                                 );
+        if ( p )
+            p->broadcastMsg( msg );
     }
 
     void addContact( const QString &jid, const QString& msg = QString() )
     {
-        QMetaObject::invokeMethod( p,
-                                   "addContact",
-                                   Qt::QueuedConnection,
-                                   Q_ARG(const QString, jid),
-                                   Q_ARG(const QString, msg)
-                                 );
+        if ( p )
+            p->addContact( jid, msg );
     }
 
 private slots:

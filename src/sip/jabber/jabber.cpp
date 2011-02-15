@@ -12,11 +12,13 @@ JabberPlugin::setProxy( QNetworkProxy* proxy )
     p->setProxy( proxy );
 }
 
+
 const QString
 JabberPlugin::name()
 {
     return QString( MYNAME );
 }
+
 
 bool
 JabberPlugin::connectPlugin( bool startup )

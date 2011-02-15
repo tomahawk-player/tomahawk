@@ -232,9 +232,6 @@ TomahawkWindow::showSettingsDialog()
     qDebug() << Q_FUNC_INFO;
     SettingsDialog win;
     win.exec();
-
-    // settings are written in SettingsDialog destructor, bleh
-    QTimer::singleShot( 0, this, SIGNAL( settingsChanged() ) );
 }
 
 

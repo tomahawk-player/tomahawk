@@ -34,9 +34,6 @@ public:
 
     void setWindowTitle( const QString& title );
 
-signals:
-    void settingsChanged();
-    
 protected:
     void changeEvent( QEvent* e );
     void closeEvent( QCloseEvent* e );
