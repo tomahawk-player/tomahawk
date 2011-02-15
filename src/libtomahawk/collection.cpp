@@ -31,11 +31,13 @@ Collection::name() const
     return m_name;
 }
 
+
 const 
 source_ptr& Collection::source() const
 {
     return m_source;
 }
+
 
 void
 Collection::addPlaylist( const Tomahawk::playlist_ptr& p )
@@ -50,6 +52,7 @@ Collection::addPlaylist( const Tomahawk::playlist_ptr& p )
                             << "numplaylists:" << m_playlists.length();
     emit playlistsAdded( toadd );
 }
+
 
 void
 Collection::addDynamicPlaylist( const Tomahawk::dynplaylist_ptr& p )
@@ -79,6 +82,7 @@ Collection::deletePlaylist( const Tomahawk::playlist_ptr& p )
                             << "numplaylists:" << m_playlists.length();
     emit playlistsDeleted( todelete );
 }
+
 
 void
 Collection::deleteDynamicPlaylist( const Tomahawk::dynplaylist_ptr& p )
@@ -137,6 +141,7 @@ Collection::setPlaylists( const QList<Tomahawk::playlist_ptr>& plists )
     emit playlistsAdded( plists );
 }
 
+
 void
 Collection::setDynamicPlaylists( const QList< Tomahawk::dynplaylist_ptr >& plists )
 {
@@ -145,6 +150,7 @@ Collection::setDynamicPlaylists( const QList< Tomahawk::dynplaylist_ptr >& plist
     m_dynplaylists.append( plists );
     emit dynamicPlaylistsAdded( plists );
 }
+
 
 void
 Collection::setTracks( const QList<Tomahawk::query_ptr>& tracks, Tomahawk::collection_ptr collection )

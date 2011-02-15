@@ -234,7 +234,6 @@ TomahawkApp::TomahawkApp( int& argc, char *argv[] )
         m_mainwindow = new TomahawkWindow();
         m_mainwindow->setWindowTitle( "Tomahawk" );
         m_mainwindow->show();
-        connect( m_mainwindow, SIGNAL( settingsChanged() ), SIGNAL( settingsChanged() ) );
     }
 #endif
 

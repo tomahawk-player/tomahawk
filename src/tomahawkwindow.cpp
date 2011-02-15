@@ -178,7 +178,7 @@ TomahawkWindow::setupSignals()
     connect( ui->actionToggleConnect, SIGNAL( triggered() ), APP->sipHandler(), SLOT( toggleConnect() ) );
     connect( ui->actionAddPeerManually, SIGNAL( triggered() ), SLOT( addPeerManually() ) );
     connect( ui->actionAddFriendManually, SIGNAL( triggered() ), SLOT( addFriendManually() ) );
-    connect( ui->actionRescanCollection, SIGNAL( triggered() ), SLOT( rescanCollectionManually() ) );
+    connect( ui->actionRescanCollection, SIGNAL( triggered() ), SLOT( updateCollectionManually() ) );
     connect( ui->actionLoadXSPF, SIGNAL( triggered() ), SLOT( loadSpiff() ));
     connect( ui->actionCreatePlaylist, SIGNAL( triggered() ), SLOT( createPlaylist() ));
     connect( ui->actionCreateAutomaticPlaylist, SIGNAL( triggered() ), SLOT( createAutomaticPlaylist() ));
@@ -238,18 +238,11 @@ TomahawkWindow::showSettingsDialog()
 }
 
 
-/// scan stuff
 void
-TomahawkWindow::rescanCollectionManually()
+TomahawkWindow::updateCollectionManually()
 {
-    TomahawkSettings* s = TomahawkSettings::instance();
-    bool ok;
-    QString path = QInputDialog::getText( this, tr( "Enter path to music dir:" ),
-                                                tr( "Path pls" ), QLineEdit::Normal,
-                                                s->scannerPath(), &ok );
-    s->setValue( "scannerpath", path );
-    if ( ok && !path.isEmpty() )
-        ScanManager::instance()->runManualScan( path );
+    if ( TomahawkSettings::instance()->hasScannerPath() )
+        ScanManager::instance()->runManualScan( TomahawkSettings::instance()->scannerPath() );
 }
 
 

@@ -72,6 +72,7 @@ public slots:
     void setPlaylists( const QList<Tomahawk::playlist_ptr>& plists );
     void setDynamicPlaylists( const QList< Tomahawk::dynplaylist_ptr >& dynplists );
     void setTracks( const QList<Tomahawk::query_ptr>& tracks, Tomahawk::collection_ptr collection );
+
 protected:
     QString m_name;
     unsigned int m_lastmodified; // unix time of last change to collection

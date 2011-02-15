@@ -51,8 +51,8 @@ DatabaseCommand_LogPlayback::exec( DatabaseImpl* dbi )
         return;
 
     TomahawkSqlQuery query = dbi->newquery();
-    query.prepare( "INSERT INTO playback_log(source,track,playtime,secs_played) "
-                        "VALUES (?, ?, ?, ?)" );
+    query.prepare( "INSERT INTO playback_log(source, track, playtime, secs_played) "
+                   "VALUES (?, ?, ?, ?)" );
 
     QVariant srcid = source()->isLocal() ? QVariant( QVariant::Int ) : source()->id();
 

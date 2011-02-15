@@ -184,7 +184,7 @@ CollectionFlatModel::onTracksAdded( const QList<Tomahawk::query_ptr>& tracks, co
     emit endInsertRows();
 
     emit trackCountChanged( rowCount( QModelIndex() ) );
-    qDebug() << rowCount( QModelIndex() );
+    qDebug() << Q_FUNC_INFO << rowCount( QModelIndex() );
 }
 
 

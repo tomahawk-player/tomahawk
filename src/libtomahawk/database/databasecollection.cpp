@@ -27,6 +27,7 @@ DatabaseCollection::loadPlaylists()
     Database::instance()->enqueue( QSharedPointer<DatabaseCommand>( cmd ) );
 }
 
+
 void
 DatabaseCollection::loadDynamicPlaylists()
 {
@@ -34,11 +35,10 @@ DatabaseCollection::loadDynamicPlaylists()
     DatabaseCommand_LoadAllDynamicPlaylists* cmd = new DatabaseCommand_LoadAllDynamicPlaylists( source() );
     
     connect( cmd, SIGNAL( playlistLoaded( Tomahawk::source_ptr, QVariantList ) ),
-             this, SLOT( dynamicPlaylistCreated( const Tomahawk::source_ptr&, const QVariantList& ) ) );
+                    SLOT( dynamicPlaylistCreated( const Tomahawk::source_ptr&, const QVariantList& ) ) );
     
     Database::instance()->enqueue( QSharedPointer<DatabaseCommand>( cmd ) );
 }
-
 
 
 void
@@ -47,10 +47,8 @@ DatabaseCollection::loadTracks()
     qDebug() << Q_FUNC_INFO << source()->userName();
     DatabaseCommand_AllTracks* cmd = new DatabaseCommand_AllTracks( source()->collection() );
 
-    connect( cmd,  SIGNAL( tracks( QList<Tomahawk::query_ptr>, Tomahawk::collection_ptr ) ),
-                     SLOT( setTracks( QList<Tomahawk::query_ptr>, Tomahawk::collection_ptr ) ) );
-/*    connect( cmd,  SIGNAL( done( Tomahawk::collection_ptr ) ),
-                   SIGNAL( tracksFinished( Tomahawk::collection_ptr ) ) );*/
+    connect( cmd, SIGNAL( tracks( QList<Tomahawk::query_ptr>, Tomahawk::collection_ptr ) ),
+                    SLOT( setTracks( QList<Tomahawk::query_ptr>, Tomahawk::collection_ptr ) ) );
 
     Database::instance()->enqueue( QSharedPointer<DatabaseCommand>( cmd ) );
 }
@@ -90,6 +88,7 @@ DatabaseCollection::playlists()
     return Collection::playlists();
 }
 
+
 QList< dynplaylist_ptr > DatabaseCollection::dynamicPlaylists()
 {
     qDebug() << Q_FUNC_INFO;
@@ -101,7 +100,6 @@ QList< dynplaylist_ptr > DatabaseCollection::dynamicPlaylists()
     
     return Collection::dynamicPlaylists();
 }
-
 
 
 QList< Tomahawk::query_ptr >
@@ -116,6 +114,7 @@ DatabaseCollection::tracks()
 
     return Collection::tracks();
 }
+
 
 void DatabaseCollection::dynamicPlaylistCreated( const source_ptr& source, const QVariantList& data )
 {

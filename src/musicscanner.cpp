@@ -42,9 +42,9 @@ MusicScanner::startScan()
     // trigger the scan once we've loaded old mtimes for dirs below our path
     DatabaseCommand_DirMtimes* cmd = new DatabaseCommand_DirMtimes( m_dir );
     connect( cmd, SIGNAL( done( const QMap<QString, unsigned int>& ) ),
-                    SLOT( setMtimes( const QMap<QString, unsigned int>& ) ), Qt::DirectConnection );
+                    SLOT( setMtimes( const QMap<QString, unsigned int>& ) ) );
     connect( cmd, SIGNAL( done( const QMap<QString,unsigned int>& ) ),
-                    SLOT( scan() ), Qt::DirectConnection );
+                    SLOT( scan() ) );
 
     Database::instance()->enqueue( QSharedPointer<DatabaseCommand>(cmd) );
 }
@@ -97,7 +97,7 @@ MusicScanner::listerFinished( const QMap<QString, unsigned int>& newmtimes )
 
     // save mtimes, then quit thread
     DatabaseCommand_DirMtimes* cmd = new DatabaseCommand_DirMtimes( newmtimes );
-    connect( cmd, SIGNAL( finished() ), SLOT( quit() ) );
+    connect( cmd, SIGNAL( finished() ), SLOT( deleteLater() ) );
     Database::instance()->enqueue( QSharedPointer<DatabaseCommand>(cmd) );
 
     qDebug() << "Scanning complete, saving to database. "
@@ -108,7 +108,6 @@ MusicScanner::listerFinished( const QMap<QString, unsigned int>& newmtimes )
         qDebug() << s;
     
     m_dirLister->deleteLater();
-    deleteLater();
 }
 
 
@@ -212,7 +211,7 @@ MusicScanner::readFile( const QFileInfo& fi )
 
     QVariantMap m;
     m["url"]          = url.arg( fi.absoluteFilePath() );
-    m["lastmodified"] = fi.lastModified().toUTC().toTime_t();
+    m["mtime"]        = fi.lastModified().toUTC().toTime_t();
     m["size"]         = (unsigned int)fi.size();
     m["hash"]         = ""; // TODO
     m["mimetype"]     = mimetype;

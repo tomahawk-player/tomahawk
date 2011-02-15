@@ -75,9 +75,6 @@ public:
     virtual void activate();
     virtual bool loadUrl( const QString& url );
 
-signals:
-    void settingsChanged();
-    
 private slots:
     void setupSIP();
     void messageReceived( const QString& );

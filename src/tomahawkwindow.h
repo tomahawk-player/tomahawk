@@ -44,7 +44,7 @@ public slots:
     void createPlaylist();
     void loadSpiff();
     void showSettingsDialog();
-    void rescanCollectionManually();
+    void updateCollectionManually();
     
 private slots:
     void onSipConnected();

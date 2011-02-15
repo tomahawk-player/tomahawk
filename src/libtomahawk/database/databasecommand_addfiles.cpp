@@ -38,11 +38,11 @@ DatabaseCommand_AddFiles::postCommitHook()
     // collection browser will update/fade in etc.
     Collection* coll = source()->collection().data();
 
-    connect( this, SIGNAL( notify( QList<QVariant>, Tomahawk::collection_ptr ) ),
-             coll, SIGNAL( setTracks( QList<QVariant>, Tomahawk::collection_ptr ) ),
+    connect( this, SIGNAL( notify( QList<Tomahawk::query_ptr>, Tomahawk::collection_ptr ) ),
+             coll, SLOT( setTracks( QList<Tomahawk::query_ptr>, Tomahawk::collection_ptr ) ),
              Qt::QueuedConnection );
-    // do it like this so it gets called in the right thread:
-    emit notify( m_files, source()->collection() );
+
+    emit notify( m_queries, source()->collection() );
 
     // also re-calc the collection stats, to updates the "X tracks" in the sidebar etc:
     DatabaseCommand_CollectionStats* cmd = new DatabaseCommand_CollectionStats( source() );
@@ -68,7 +68,7 @@ DatabaseCommand_AddFiles::exec( DatabaseImpl* dbi )
 
     query_file.prepare( "INSERT INTO file(source, url, size, mtime, md5, mimetype, duration, bitrate) "
                         "VALUES (?, ?, ?, ?, ?, ?, ?, ?)" );
-    query_filejoin.prepare( "INSERT INTO file_join(file, artist ,album, track, albumpos) "
+    query_filejoin.prepare( "INSERT INTO file_join(file, artist, album, track, albumpos) "
                             "VALUES (?,?,?,?,?)" );
     query_trackattr.prepare( "INSERT INTO track_attributes(id, k, v) "
                              "VALUES (?,?,?)" );
@@ -88,7 +88,7 @@ DatabaseCommand_AddFiles::exec( DatabaseImpl* dbi )
         QVariantMap m = v.toMap();
 
         QString url         = m.value( "url" ).toString();
-        int mtime           = m.value( "lastmodified" ).toInt();
+        int mtime           = m.value( "mtime" ).toInt();
         int size            = m.value( "size" ).toInt();
         QString hash        = m.value( "hash" ).toString();
         QString mimetype    = m.value( "mimetype" ).toString();
@@ -137,19 +137,19 @@ DatabaseCommand_AddFiles::exec( DatabaseImpl* dbi )
         v = m;
 
         bool isnew;
-        int artid = dbi->artistId( artist, isnew );
-        if( artid < 1 ) continue;
+        m["artistid"] = dbi->artistId( artist, isnew );
+        if( m["artistid"].toInt() < 1 ) continue;
 
-        int trkid = dbi->trackId( artid, track, isnew );
-        if( trkid < 1 ) continue;
+        m["trackid"] = dbi->trackId( m["artistid"].toInt(), track, isnew );
+        if( m["trackid"].toInt() < 1 ) continue;
 
-        int albid = dbi->albumId( artid, album, isnew );
+        m["albumid"] = dbi->albumId( m["artistid"].toInt(), album, isnew );
 
         // Now add the association
         query_filejoin.bindValue( 0, fileid );
-        query_filejoin.bindValue( 1, artid );
-        query_filejoin.bindValue( 2, albid > 0 ? albid : QVariant( QVariant::Int ) );
-        query_filejoin.bindValue( 3, trkid );
+        query_filejoin.bindValue( 1, m["artistid"].toInt() );
+        query_filejoin.bindValue( 2, m["albumid"].toInt() > 0 ? m["albumid"].toInt() : QVariant( QVariant::Int ) );
+        query_filejoin.bindValue( 3, m["trackid"].toInt() );
         query_filejoin.bindValue( 4, albumpos );
         if( !query_filejoin.exec() )
         {
@@ -157,10 +157,24 @@ DatabaseCommand_AddFiles::exec( DatabaseImpl* dbi )
             continue;
         }
 
-        query_trackattr.bindValue( 0, trkid );
+        query_trackattr.bindValue( 0, m["trackid"].toInt() );
         query_trackattr.bindValue( 1, "releaseyear" );
         query_trackattr.bindValue( 2, year );
         query_trackattr.exec();
+
+        QVariantMap attr;
+        Tomahawk::query_ptr query = Tomahawk::Query::get( m, false );
+        m["score"] = 1.0;
+        attr["releaseyear"] = m.value( "year" );
+
+        Tomahawk::result_ptr result = Tomahawk::result_ptr( new Tomahawk::Result( m, source()->collection() ) );
+        result->setAttributes( attr );
+
+        QList<Tomahawk::result_ptr> results;
+        results << result;
+        query->addResults( results );
+
+        m_queries << query;
 
         added++;
     }

@@ -57,8 +57,8 @@ Scrobbler::Scrobbler( QObject* parent )
         ldir.mkpath( lpath );
     }
     
-    connect( TomahawkApp::instance(), SIGNAL( settingsChanged() ),
-                                        SLOT( settingsChanged() ), Qt::QueuedConnection );
+    connect( TomahawkSettings::instance(), SIGNAL( settingsChanged() ),
+                                             SLOT( settingsChanged() ), Qt::QueuedConnection );
 
     connect( AudioEngine::instance(), SIGNAL( timerSeconds( unsigned int ) ),
                                         SLOT( engineTick( unsigned int ) ), Qt::QueuedConnection );
