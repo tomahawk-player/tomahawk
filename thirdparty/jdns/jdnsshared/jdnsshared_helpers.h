@@ -36,6 +36,11 @@
 #include "jdnsshared.h"
 #include "jdns_export.h"
 
+#include <QTimer>
+#include <QMutex>
+#include <QWaitCondition>
+#include <QThread>
+#include <QStringList>
 // safeobj stuff, from qca
 
 class JDNS_EXPORT JDnsSharedSafeTimer : public QObject

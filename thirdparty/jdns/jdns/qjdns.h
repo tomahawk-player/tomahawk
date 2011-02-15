@@ -26,7 +26,9 @@
 #ifndef QJDNS_H
 #define QJDNS_H
 
-#include <QtCore>
+#include <QObject>
+#include <QHostAddress>
+#include <QTime>
 #include <QtNetwork>
 
 class QJDns : public QObject

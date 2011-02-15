@@ -25,6 +25,12 @@
 #include "qjdns_sock.h"
 #include "jdns.h"
 
+#include <QTimer>
+#include <QUdpSocket>
+#include <QPointer>
+#include <QStringList>
+#include <QMetaEnum>
+
 #include <time.h>
 
 // safeobj stuff, from qca

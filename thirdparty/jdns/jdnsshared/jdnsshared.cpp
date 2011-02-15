@@ -37,6 +37,7 @@
 #include "jdns_export.h"
 #include "jdnsshared_helpers.h"
 
+
 // safeobj stuff, from qca
 
 Q_GLOBAL_STATIC(QMutex, jdnsshared_mutex)
