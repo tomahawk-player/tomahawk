@@ -13,7 +13,7 @@ SET( OS_SPECIFIC_LINK_LIBRARIES
 
 # normal deps
     ${LIBLASTFM_LIBRARY}
-    ${GLOOX_LIBS}
+    ${GLOOX_LIBRARIES}
 
 # third party shipped with tomahawk
     ${CMAKE_BINARY_DIR}/thirdparty/qtweetlib/libtomahawk_qtweetlib.dll
