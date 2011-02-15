@@ -9,7 +9,6 @@ SET( OS_SPECIFIC_LINK_LIBRARIES
     ${OS_SPECIFIC_LINK_LIBRARIES}
 
 #internal deps
-    sip_twitter
     ${CMAKE_BINARY_DIR}/src/libtomahawk/libtomahawklib.dll
 
 # normal deps

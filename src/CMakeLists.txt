@@ -186,6 +186,7 @@ TARGET_LINK_LIBRARIES( tomahawk
     qjson
     tag
     tomahawk_qtweetlib
+    sip_twitter
 )
 
 INCLUDE( "CPack.txt" )
