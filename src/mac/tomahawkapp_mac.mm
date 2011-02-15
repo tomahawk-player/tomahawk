@@ -29,7 +29,6 @@
 
 - (Tomahawk::PlatformInterface*) application_handler;
 - (void) setApplicationHandler: (Tomahawk::PlatformInterface*)handler;
-- (void) getUrl:(NSAppleEventDescriptor *)event  withReplyEvent:(NSAppleEventDescriptor *)replyEvent;
 - (void) mediaKeyEvent: (int)key state: (BOOL)state repeat: (BOOL)repeat;
 @end
 
@@ -81,6 +80,22 @@
   if ((self = [super init])) {
       [self setShortcutHandler:nil];
       [self setApplicationHandler:nil];
+
+      NSAppleEventManager *em = [NSAppleEventManager sharedAppleEventManager];
+      [em
+        setEventHandler:self
+        andSelector:@selector(getUrl:withReplyEvent:)
+        forEventClass:kInternetEventClass
+        andEventID:kAEGetURL];
+      [em
+        setEventHandler:self
+        andSelector:@selector(getUrl:withReplyEvent:)
+        forEventClass:'WWW!'
+        andEventID:'OURL'];
+      NSString *bundleID = [[NSBundle mainBundle] bundleIdentifier];
+      OSStatus httpResult = LSSetDefaultHandlerForURLScheme((CFStringRef)@"tomahawk", (CFStringRef)bundleID);
+
+      //TODO: Check httpResult and httpsResult for errors
   }
   return self;
 }
