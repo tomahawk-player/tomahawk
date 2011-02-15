@@ -40,8 +40,11 @@ class QTWEETLIBSHARED_EXPORT OAuth : public QObject
 public:
 	OAuth(QObject *parent = 0);
     OAuth(const QByteArray& consumerKey, const QByteArray& consumerSecret, QObject *parent = 0);
-	
-	enum HttpMethod {GET, POST, PUT, DELETE};
+#undef GET
+#undef POST
+#undef PUT
+#undef DELETE
+    enum HttpMethod {GET, POST, PUT, DELETE};
 
 	void parseTokens(const QByteArray& response);
 	QByteArray generateAuthorizationHeader(const QUrl& url, HttpMethod method);

@@ -8,7 +8,7 @@
 class MusicScanner;
 class QThread;
 
-class DLLEXPORT ScanManager : public QObject
+class ScanManager : public QObject
 {
     Q_OBJECT
 public:

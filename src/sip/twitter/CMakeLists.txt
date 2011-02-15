@@ -13,7 +13,7 @@ set( twitterSources
 
 set( twitterHeaders
     twitter.h
-	tomahawkoauthtwitter.h
+    tomahawkoauthtwitter.h
 )
 
 include_directories( . ${CMAKE_CURRENT_BINARY_DIR} .. 
@@ -26,16 +26,17 @@ add_library( sip_twitter SHARED ${twitterSources} ${twitterMoc} )
 
 IF( WIN32 )
 SET( OS_SPECIFIC_LINK_LIBRARIES
-	${OS_SPECIFIC_LINK_LIBRARIES}
-	"winmm.dll"
+        ${OS_SPECIFIC_LINK_LIBRARIES}
+        "winmm.dll"
         "iphlpapi.a"
-        "${CMAKE_CURRENT_SOURCE_DIR}/../../../build/src/libtomahawk/libtomahawklib.dll"
+        "${CMAKE_BINARY_DIR}/thirdparty/qtweetlib/libtomahawk_qtweetlib.dll"
+        "${CMAKE_BINARY_DIR}/src/libtomahawk/libtomahawklib.dll"
 )
 ENDIF( WIN32 )
 
 target_link_libraries( sip_twitter
-	${QT_LIBRARIES}
-	${OS_SPECIFIC_LINK_LIBRARIES}
+        ${QT_LIBRARIES}
+        ${OS_SPECIFIC_LINK_LIBRARIES}
 )
 
 IF( APPLE )

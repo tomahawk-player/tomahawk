@@ -28,7 +28,6 @@ SET( TOMAHAWK_INC_DIR "${CMAKE_CURRENT_SOURCE_DIR}/../include/" )
 
 SET( tomahawkSources ${tomahawkSources}
      sip/SipHandler.cpp
-     sip/twitter/tomahawkoauthtwitter.cpp
 
      infosystem/infosystem.cpp
      infosystem/infoplugins/echonestplugin.cpp
@@ -71,7 +70,6 @@ SET( tomahawkHeaders ${tomahawkHeaders}
      "${TOMAHAWK_INC_DIR}/tomahawk/infosystem.h"
 
      sip/SipHandler.h
-     sip/twitter/tomahawkoauthtwitter.h
 
      infosystem/infoplugins/echonestplugin.h
      infosystem/infoplugins/musixmatchplugin.h
