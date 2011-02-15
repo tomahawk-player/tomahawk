@@ -33,6 +33,7 @@ Source::Source( const QString &username )
     , m_id( 0 )
     , m_cc( 0 )
 {
+    qDebug() << Q_FUNC_INFO;
 }
 
 

@@ -2,6 +2,8 @@
 
 #include <QDebug>
 
+#include "network/controlconnection.h"
+
 using namespace Tomahawk;
 
 SourceList* SourceList::s_instance = 0;
@@ -79,6 +81,8 @@ SourceList::remove( Tomahawk::Source* s )
         m_sources_id2name.remove( src->id() );
         m_sources.remove( s->userName() );
         qDebug() << "SourceList::remove(" << s->userName() << "), total sources now:" << m_sources.size();
+
+        src->controlConnection()->shutdown( true );
     }
 
     emit sourceRemoved( src );

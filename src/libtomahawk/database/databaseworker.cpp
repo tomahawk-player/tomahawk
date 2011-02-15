@@ -22,7 +22,9 @@ DatabaseWorker::DatabaseWorker( DatabaseImpl* lib, Database* db, bool mutates )
 
 DatabaseWorker::~DatabaseWorker()
 {
-    qDebug() << Q_FUNC_INFO;
+    qDebug() << Q_FUNC_INFO << m_outstanding;
+
+    qDebug () << m_commands;
 
     quit();
     wait( 5000 );
