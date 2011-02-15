@@ -173,14 +173,17 @@ TomahawkApp::TomahawkApp( int& argc, char *argv[] )
 #endif
 
     // Connect up shortcuts
-    connect( m_shortcutHandler, SIGNAL( playPause() ), m_audioEngine, SLOT( playPause() ) );
-    connect( m_shortcutHandler, SIGNAL( pause() ), m_audioEngine, SLOT( pause() ) );
-    connect( m_shortcutHandler, SIGNAL( stop() ), m_audioEngine, SLOT( stop() ) );
-    connect( m_shortcutHandler, SIGNAL( previous() ), m_audioEngine, SLOT( previous() ) );
-    connect( m_shortcutHandler, SIGNAL( next() ), m_audioEngine, SLOT( next() ) );
-    connect( m_shortcutHandler, SIGNAL( volumeUp() ), m_audioEngine, SLOT( raiseVolume() ) );
-    connect( m_shortcutHandler, SIGNAL( volumeDown() ), m_audioEngine, SLOT( lowerVolume() ) );
-    connect( m_shortcutHandler, SIGNAL( mute() ), m_audioEngine, SLOT( mute() ) );
+    if ( m_shortcutHandler )
+    {
+        connect( m_shortcutHandler, SIGNAL( playPause() ), m_audioEngine, SLOT( playPause() ) );
+        connect( m_shortcutHandler, SIGNAL( pause() ), m_audioEngine, SLOT( pause() ) );
+        connect( m_shortcutHandler, SIGNAL( stop() ), m_audioEngine, SLOT( stop() ) );
+        connect( m_shortcutHandler, SIGNAL( previous() ), m_audioEngine, SLOT( previous() ) );
+        connect( m_shortcutHandler, SIGNAL( next() ), m_audioEngine, SLOT( next() ) );
+        connect( m_shortcutHandler, SIGNAL( volumeUp() ), m_audioEngine, SLOT( raiseVolume() ) );
+        connect( m_shortcutHandler, SIGNAL( volumeDown() ), m_audioEngine, SLOT( lowerVolume() ) );
+        connect( m_shortcutHandler, SIGNAL( mute() ), m_audioEngine, SLOT( mute() ) );
+    }
 
 #ifndef NO_LIBLASTFM
     qDebug() << "Init Scrobbler.";
@@ -189,16 +192,16 @@ TomahawkApp::TomahawkApp( int& argc, char *argv[] )
     TomahawkUtils::setNam( new lastfm::NetworkAccessManager( this ) );
 
     connect( m_audioEngine, SIGNAL( started( const Tomahawk::result_ptr& ) ),
-            m_scrobbler,     SLOT( trackStarted( const Tomahawk::result_ptr& ) ), Qt::QueuedConnection );
+             m_scrobbler,     SLOT( trackStarted( const Tomahawk::result_ptr& ) ), Qt::QueuedConnection );
 
     connect( m_audioEngine, SIGNAL( paused() ),
-            m_scrobbler,     SLOT( trackPaused() ), Qt::QueuedConnection );
+             m_scrobbler,     SLOT( trackPaused() ), Qt::QueuedConnection );
 
     connect( m_audioEngine, SIGNAL( resumed() ),
-            m_scrobbler,     SLOT( trackResumed() ), Qt::QueuedConnection );
+             m_scrobbler,     SLOT( trackResumed() ), Qt::QueuedConnection );
 
     connect( m_audioEngine, SIGNAL( stopped() ),
-            m_scrobbler,     SLOT( trackStopped() ), Qt::QueuedConnection );
+             m_scrobbler,     SLOT( trackStopped() ), Qt::QueuedConnection );
 #else
     qDebug() << "Setting NAM.";
     TomahawkUtils::setNam( new QNetworkAccessManager );
@@ -206,7 +209,7 @@ TomahawkApp::TomahawkApp( int& argc, char *argv[] )
 
     // Set up proxy
     if( TomahawkSettings::instance()->proxyType() != QNetworkProxy::NoProxy &&
-            !TomahawkSettings::instance()->proxyHost().isEmpty() )
+        !TomahawkSettings::instance()->proxyHost().isEmpty() )
     {
         qDebug() << "Setting proxy to saved values";
         TomahawkUtils::setProxy( new QNetworkProxy( static_cast<QNetworkProxy::ProxyType>(TomahawkSettings::instance()->proxyType()), TomahawkSettings::instance()->proxyHost(), TomahawkSettings::instance()->proxyPort(), TomahawkSettings::instance()->proxyUsername(), TomahawkSettings::instance()->proxyPassword() ) );

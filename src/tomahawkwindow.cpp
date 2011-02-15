@@ -252,6 +252,7 @@ TomahawkWindow::rescanCollectionManually()
         ScanManager::instance()->runManualScan( path );
 }
 
+
 void
 TomahawkWindow::addPeerManually()
 {
@@ -312,6 +313,7 @@ TomahawkWindow::loadSpiff()
     loader->load( url );
 }
 
+
 void 
 TomahawkWindow::createAutomaticPlaylist()
 {
@@ -329,6 +331,7 @@ TomahawkWindow::createAutomaticPlaylist()
     playlist->createNewRevision( uuid(), playlist->currentrevision(), playlist->type(), playlist->generator()->controls(), playlist->entries() );
 }
 
+
 void TomahawkWindow::createStation()
 {
     bool ok;
@@ -344,6 +347,7 @@ void TomahawkWindow::createStation()
     playlist->setMode( OnDemand );
     playlist->createNewRevision( uuid(), playlist->currentrevision(), playlist->type(), playlist->generator()->controls() );
 }
+
 
 void
 TomahawkWindow::createPlaylist()
@@ -366,6 +370,7 @@ TomahawkWindow::createPlaylist()
         Playlist::create( author, id, name, info, creator, false ); */
 
 }
+
 
 void
 TomahawkWindow::onPlaybackLoading( const Tomahawk::result_ptr& result )

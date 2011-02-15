@@ -34,8 +34,6 @@ class SettingsDialog : public QDialog
 Q_OBJECT
 
 public:
-    static const unsigned int VERSION = 1; // config version
-
     explicit SettingsDialog( QWidget *parent = 0 );
     ~SettingsDialog();
 

@@ -8,6 +8,8 @@
 #include <QDir>
 #include <QDebug>
 
+#define VERSION 1
+
 TomahawkSettings* TomahawkSettings::s_instance = 0;
 
 
@@ -23,21 +25,19 @@ TomahawkSettings::TomahawkSettings( QObject* parent )
 {
     s_instance = this;
 
-    #ifndef TOMAHAWK_HEADLESS
     if( !contains( "configversion") )
     {
-        setValue( "configversion", SettingsDialog::VERSION );
+        setValue( "configversion", VERSION );
     }
-    else if( value( "configversion" ).toUInt() != SettingsDialog::VERSION )
+    else if( value( "configversion" ).toUInt() != VERSION )
     {
         qDebug() << "Config version outdated, old:" << value( "configversion" ).toUInt()
-                 << "new:" << SettingsDialog::VERSION
+                 << "new:" << VERSION
                  << "Doing upgrade, if any...";
         
         // insert upgrade code here as required
-        setValue( "configversion", SettingsDialog::VERSION );
+        setValue( "configversion", VERSION );
     }
-    #endif
 }
 
 
