@@ -305,6 +305,7 @@ Section "Tomahawk Player" SEC_TOMAHAWK_PLAYER
 
    File "${QXTWEB_DLL_PATH}\libqxtweb-standalone.dll"
    File "${ROOT_PATH}\build\thirdparty\jdns\libtomahawk_jdns.dll"
+   File "${ROOT_PATH}\build\thirdparty\qtweetlib\libtomahawk_qtweetlib.dll"
 SectionEnd
 
 SectionGroup "Shortcuts"
