@@ -30,9 +30,9 @@ ScanManager::ScanManager( QObject* parent )
 ScanManager::~ScanManager()
 {
     s_instance = 0;
+    m_musicScannerThreadController->quit();
     m_musicScannerThreadController->deleteLater();
     m_musicScannerThreadController = 0;
-    m_scanner->deleteLater();
     m_scanner = 0;    
 }
 
@@ -65,8 +65,9 @@ void
 ScanManager::scannerDestroyed( QObject* scanner )
 {
     qDebug() << Q_FUNC_INFO;
-    m_scanner = 0;
+    m_musicScannerThreadController->quit();
     m_musicScannerThreadController->deleteLater();
     m_musicScannerThreadController = 0;
+    m_scanner = 0;
 }
 

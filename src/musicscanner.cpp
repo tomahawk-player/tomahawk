@@ -107,6 +107,7 @@ MusicScanner::listerFinished( const QMap<QString, unsigned int>& newmtimes )
     foreach( const QString& s, m_skippedFiles )
         qDebug() << s;
     
+    m_dirListerThreadController->quit();
     m_dirLister->deleteLater();
 }
 
