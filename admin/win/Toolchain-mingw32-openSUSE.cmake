@@ -14,5 +14,3 @@ set(WINDRES_EXECUTABLE /usr/bin/i686-pc-mingw32-windres)
 
 # libs with broken find modules
 set(TAGLIB_FOUND true)
-set(GLOOX_LIBS  ${CMAKE_FIND_ROOT_PATH}/lib/libgloox.dll.a)
-
