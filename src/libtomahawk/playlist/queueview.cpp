@@ -4,6 +4,7 @@
 #include <QVBoxLayout>
 
 #include "playlist/queueproxymodel.h"
+#include "widgets/overlaywidget.h"
 
 #ifdef Q_WS_MAC
 #define MINIMUM_HEIGHT 38
@@ -25,6 +26,7 @@ QueueView::QueueView( AnimatedSplitter* parent )
     m_queue->setSizePolicy( QSizePolicy::Preferred, QSizePolicy::Ignored );
     m_queue->setFrameShape( QFrame::NoFrame );
     m_queue->setAttribute( Qt::WA_MacShowFocusRect, 0 );
+    m_queue->overlay()->setEnabled( false );
     
     m_button = new QPushButton();
     m_button->setSizePolicy( QSizePolicy::Preferred, QSizePolicy::Fixed );
@@ -49,7 +51,7 @@ QueueView::onShown( QWidget* widget )
     qDebug() << Q_FUNC_INFO << widget;
     if ( widget != this )
         return;
-    
+
     AnimatedWidget::onShown( widget );
 
     m_button->setText( tr( "Click to hide queue" ) );

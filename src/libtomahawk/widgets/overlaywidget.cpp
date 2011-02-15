@@ -15,7 +15,7 @@ OverlayWidget::OverlayWidget( QWidget* parent )
     , m_opacity( 0.00 )
     , m_parent( parent )
 {
-    resize( 380, 220 );
+    resize( 380, 128 );
     setAttribute( Qt::WA_TranslucentBackground, true );
 
     setOpacity( m_opacity );
@@ -58,6 +58,9 @@ OverlayWidget::setText( const QString& text )
 void
 OverlayWidget::show( int timeoutSecs )
 {
+    if ( !isEnabled() )
+        return;
+
     QPropertyAnimation* animation = new QPropertyAnimation( this, "opacity" );
     animation->setDuration( FADING_DURATION );
     animation->setStartValue( 0.00 );
@@ -72,18 +75,24 @@ OverlayWidget::show( int timeoutSecs )
 void
 OverlayWidget::hide()
 {
+    if ( !isEnabled() )
+        return;
+
     QPropertyAnimation* animation = new QPropertyAnimation( this, "opacity" );
     animation->setDuration( FADING_DURATION );
     animation->setEndValue( 0.00 );
     animation->start();
 }
 
+
 bool 
 OverlayWidget::shown() const
 {
+    if ( !isEnabled() )
+        return false;
+
     return m_opacity == OPACITY;
 }
-
 
 
 void
