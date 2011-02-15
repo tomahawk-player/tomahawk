@@ -495,6 +495,7 @@ TomahawkApp::activate()
 #endif
 }
 
+
 bool
 TomahawkApp::loadUrl( const QString& url )
 {
@@ -521,6 +522,7 @@ TomahawkApp::loadUrl( const QString& url )
     }
     return true;
 }
+
 
 void 
 TomahawkApp::messageReceived( const QString& msg ) 
