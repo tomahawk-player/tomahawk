@@ -25,6 +25,7 @@
 #include "scriptresolver.h"
 #include "sourcelist.h"
 #include "shortcuthandler.h"
+#include "scanmanager.h"
 #include "tomahawksettings.h"
 
 #include "audio/audioengine.h"
@@ -149,10 +150,11 @@ TomahawkApp::TomahawkApp( int& argc, char *argv[] )
     
     new TomahawkSettings( this );
     m_audioEngine = new AudioEngine;
-
+    new ScanManager( this );
+    
     new Pipeline( this );
     new SourceList( this );
-
+    
     m_servent = new Servent( this );
     connect( m_servent, SIGNAL( ready() ), SLOT( setupSIP() ) );
 

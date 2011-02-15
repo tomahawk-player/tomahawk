@@ -42,6 +42,7 @@ SET( tomahawkSources ${tomahawkSources}
      scrobbler.cpp
      shortcuthandler.cpp
 
+     scanmanager.cpp
      tomahawkapp.cpp
      main.cpp
 )
@@ -81,6 +82,7 @@ SET( tomahawkHeaders ${tomahawkHeaders}
      musicscanner.h
      scriptresolver.h
      scrobbler.h
+     scanmanager.h
      shortcuthandler.h
 )
 

@@ -12,6 +12,7 @@
 
 class QAction;
 
+class MusicScanner;
 class AudioControls;
 class TomahawkTrayIcon;
 
@@ -46,11 +47,9 @@ public slots:
     void createPlaylist();
     void loadSpiff();
     void showSettingsDialog();
+    void rescanCollectionManually();
     
 private slots:
-    void scanFinished();
-    void rescanCollectionManually();
-
     void onSipConnected();
     void onSipDisconnected();
     void onSipError();

@@ -10,7 +10,6 @@
 #include <QSharedPointer>
 #include <QMap>
 #include <QNetworkProxy>
-#include <QThread>
 
 #include <string>
 

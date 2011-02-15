@@ -8,14 +8,13 @@
 
 using namespace Tomahawk;
 
-
 MusicScanner::MusicScanner( const QString& dir, quint32 bs )
-    : QThread()
+    : QObject()
     , m_dir( dir )
     , m_batchsize( bs )
+    , m_dirLister( 0 )
+    , m_dirListerThreadController( 0 )
 {
-    moveToThread( this );
-
     m_ext2mime.insert( "mp3",  "audio/mpeg" );
 
 #ifndef NO_OGG
@@ -30,15 +29,6 @@ MusicScanner::MusicScanner( const QString& dir, quint32 bs )
    // m_ext2mime.insert( "m4a",  "audio/mp4" );
    // m_ext2mime.insert( "mp4",  "audio/mp4" );
 }
-
-
-void
-MusicScanner::run()
-{
-    QTimer::singleShot( 0, this, SLOT( startScan() ) );
-    exec(); 
-}
-
 
 void
 MusicScanner::startScan()
@@ -74,18 +64,21 @@ MusicScanner::scan()
     connect( this, SIGNAL( batchReady( QVariantList ) ),
                      SLOT( commitBatch( QVariantList ) ), Qt::DirectConnection );
 
-    DirLister* lister = new DirLister( QDir( m_dir, 0 ), m_dirmtimes );
+    m_dirListerThreadController = new QThread( this );
+    m_dirLister = new DirLister( QDir( m_dir, 0 ), m_dirmtimes );
+    m_dirLister->moveToThread( m_dirListerThreadController );
 
-    connect( lister, SIGNAL( fileToScan( QFileInfo ) ),
+    connect( m_dirLister, SIGNAL( fileToScan( QFileInfo ) ),
                        SLOT( scanFile( QFileInfo ) ), Qt::QueuedConnection );
 
     // queued, so will only fire after all dirs have been scanned:
-    connect( lister, SIGNAL( finished( const QMap<QString, unsigned int>& ) ),
+    connect( m_dirLister, SIGNAL( finished( const QMap<QString, unsigned int>& ) ),
                        SLOT( listerFinished( const QMap<QString, unsigned int>& ) ), Qt::QueuedConnection );
 
-    connect( lister, SIGNAL( finished() ), lister, SLOT( deleteLater() ) );
-
-    lister->start();
+    connect( m_dirLister, SIGNAL( destroyed(QObject*) ), this, SLOT( listerDestroyed(QObject*) ) );
+    
+    m_dirListerThreadController->start();
+    QMetaObject::invokeMethod( m_dirLister, "go" );
 }
 
 
@@ -111,8 +104,19 @@ MusicScanner::listerFinished( const QMap<QString, unsigned int>& newmtimes )
     qDebug() << "Skipped the following files (no tags / no valid audio):";
     foreach( const QString& s, m_skippedFiles )
         qDebug() << s;
+    
+    m_dirLister->deleteLater();
 }
 
+
+void
+MusicScanner::listerDestroyed( QObject* dirLister )
+{
+    qDebug() << Q_FUNC_INFO;
+    m_dirLister = 0;
+    m_dirListerThreadController->deleteLater();
+    m_dirListerThreadController = 0;
+}
 
 void
 MusicScanner::commitBatch( const QVariantList& tracks )

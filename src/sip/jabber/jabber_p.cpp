@@ -5,6 +5,7 @@
 #include <QTimer>
 #include <QString>
 #include <QRegExp>
+#include <QThread>
 #include <utils/tomahawkutils.h>
 
 using namespace gloox;

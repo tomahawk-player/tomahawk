@@ -32,13 +32,13 @@
 #include "widgets/welcomewidget.h"
 
 #include "audiocontrols.h"
-#include "musicscanner.h"
 #include "settingsdialog.h"
 #include "tomahawksettings.h"
 #include "sourcelist.h"
 #include "transferview.h"
 #include "tomahawktrayicon.h"
 #include "playlist/dynamic/GeneratorInterface.h"
+#include "scanmanager.h"
 
 using namespace Tomahawk;
 
@@ -249,22 +249,8 @@ TomahawkWindow::rescanCollectionManually()
                                                 s->scannerPath(), &ok );
     s->setValue( "scannerpath", path );
     if ( ok && !path.isEmpty() )
-    {
-        MusicScanner* scanner = new MusicScanner( path );
-        connect( scanner, SIGNAL( finished() ), this, SLOT( scanFinished() ) );
-        scanner->start();
-    }
+        ScanManager::instance()->runManualScan( path );
 }
-
-
-void
-TomahawkWindow::scanFinished()
-{
-    qDebug() << Q_FUNC_INFO;
-    MusicScanner* scanner = (MusicScanner*) sender();
-    scanner->deleteLater();
-}
-
 
 void
 TomahawkWindow::addPeerManually()

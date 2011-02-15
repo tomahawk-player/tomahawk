@@ -22,6 +22,7 @@
 #include "sip/SipHandler.h"
 #include "sip/twitter/tomahawkoauthtwitter.h"
 #include <database/database.h>
+#include "scanmanager.h"
 
 static QString
 md5( const QByteArray& src )
@@ -145,11 +146,7 @@ SettingsDialog::~SettingsDialog()
         s->setScriptResolvers( resolvers );
         
         if( rescan )
-        {
-            MusicScanner* scanner = new MusicScanner(s->scannerPath() );
-            connect( scanner, SIGNAL( finished() ), scanner, SLOT( deleteLater() ) );
-            scanner->start();
-        }
+            ScanManager::instance()->runManualScan( s->scannerPath() );
 
         if( rejabber )
         {
@@ -177,21 +174,6 @@ SettingsDialog::showPathSelector()
         return;
 
     ui->lineEditMusicPath->setText( path );
-}
-
-
-void
-SettingsDialog::doScan()
-{
-    // TODO this doesnt really belong here..
-    QString path = ui->lineEditMusicPath->text();
-    MusicScanner* scanner = new MusicScanner( path );
-    connect( scanner, SIGNAL( finished() ), scanner, SLOT( deleteLater() ) );
-    scanner->start();
-
-    QMessageBox::information( this, tr( "Scanning Started" ),
-                                    tr( "Scanning now, check console output. TODO." ),
-                                    QMessageBox::Ok );
 }
 
 
