@@ -57,6 +57,7 @@ FuzzyIndex::beginIndexing()
             m_luceneReader->unlock( m_luceneDir );
             delete m_luceneSearcher;
             delete m_luceneReader;
+            delete m_luceneDir;
             m_luceneSearcher = 0;
             m_luceneReader = 0;
 
