@@ -87,64 +87,67 @@ DatabaseWorker::doWork()
     }
     try
     {
-        cmd->_exec( m_dbimpl ); // runs actual SQL stuff
-
-        if( cmd->loggable() && !cmd->localOnly() )
+        if ( !cmd->source().isNull() && !cmd->source()->collection().isNull() )
         {
-            // We only save our own ops to the oplog, since incoming ops from peers
-            // are applied immediately.
-            //
-            // Crazy idea: if peers had keypairs and could sign ops/msgs, in theory it
-            // would be safe to sync ops for friend A from friend B's cache, if he saved them,
-            // which would mean you could get updates even if a peer was offline.
-            if( cmd->source()->isLocal() )
+            cmd->_exec( m_dbimpl ); // runs actual SQL stuff
+
+            if( cmd->loggable() && !cmd->localOnly() )
             {
-                // save to op-log
-                DatabaseCommandLoggable* command = (DatabaseCommandLoggable*)cmd.data();
-                logOp( command );
-            }
-            else
-            {
-                // Make a note of the last guid we applied for this source
-                // so we can always request just the newer ops in future.
+                // We only save our own ops to the oplog, since incoming ops from peers
+                // are applied immediately.
                 //
-                if ( !cmd->singletonCmd() )
+                // Crazy idea: if peers had keypairs and could sign ops/msgs, in theory it
+                // would be safe to sync ops for friend A from friend B's cache, if he saved them,
+                // which would mean you could get updates even if a peer was offline.
+                if( cmd->source()->isLocal() )
                 {
-                    qDebug() << "Setting lastop for source" << cmd->source()->id() << "to" << cmd->guid();
-
-                    TomahawkSqlQuery query = m_dbimpl->newquery();
-                    query.prepare( "UPDATE source SET lastop = ? WHERE id = ?" );
-                    query.addBindValue( cmd->guid() );
-                    query.addBindValue( cmd->source()->id() );
-
-                    if( !query.exec() )
+                    // save to op-log
+                    DatabaseCommandLoggable* command = (DatabaseCommandLoggable*)cmd.data();
+                    logOp( command );
+                }
+                else
+                {
+                    // Make a note of the last guid we applied for this source
+                    // so we can always request just the newer ops in future.
+                    //
+                    if ( !cmd->singletonCmd() )
                     {
-                        qDebug() << "Failed to set lastop";
-                        throw "Failed to set lastop";
+                        qDebug() << "Setting lastop for source" << cmd->source()->id() << "to" << cmd->guid();
+
+                        TomahawkSqlQuery query = m_dbimpl->newquery();
+                        query.prepare( "UPDATE source SET lastop = ? WHERE id = ?" );
+                        query.addBindValue( cmd->guid() );
+                        query.addBindValue( cmd->source()->id() );
+
+                        if( !query.exec() )
+                        {
+                            qDebug() << "Failed to set lastop";
+                            throw "Failed to set lastop";
+                        }
                     }
                 }
             }
-        }
 
-        if( cmd->doesMutates() )
-        {
-            qDebug() << "Committing" << cmd->commandname();;
-            if( !m_dbimpl->database().commit() )
+            if( cmd->doesMutates() )
             {
+                qDebug() << "Committing" << cmd->commandname();;
+                if( !m_dbimpl->database().commit() )
+                {
 
-                qDebug() << "*FAILED TO COMMIT TRANSACTION*";
-                throw "commit failed";
+                    qDebug() << "*FAILED TO COMMIT TRANSACTION*";
+                    throw "commit failed";
+                }
+                else
+                {
+                    qDebug() << "Committed" << cmd->commandname();
+                }
             }
-            else
-            {
-                qDebug() << "Committed" << cmd->commandname();
-            }
+
+            //uint duration = timer.elapsed();
+            //qDebug() << "DBCmd Duration:" << duration << "ms, now running postcommit for" << cmd->commandname();
+            cmd->postCommit();
+            //qDebug() << "Post commit finished for"<<  cmd->commandname();
         }
-
-        //uint duration = timer.elapsed();
-        //qDebug() << "DBCmd Duration:" << duration << "ms, now running postcommit for" << cmd->commandname();
-        cmd->postCommit();
-        //qDebug() << "Post commit finished for"<<  cmd->commandname();
     }
     catch( const char * msg )
     {

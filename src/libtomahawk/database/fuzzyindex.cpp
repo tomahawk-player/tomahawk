@@ -48,6 +48,7 @@ FuzzyIndex::beginIndexing()
 
     try
     {
+        qDebug() << Q_FUNC_INFO << "Starting indexing.";
         if ( m_luceneReader != 0 )
         {
             qDebug() << "Deleting old lucene stuff.";
