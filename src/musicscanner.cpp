@@ -64,7 +64,6 @@ MusicScanner::setMtimes( const QMap<QString, unsigned int>& m )
 void
 MusicScanner::scan()
 {
-    SourceList::instance()->getLocal()->scanningProgress( 0 );
     qDebug() << "Scanning, num saved mtimes from last scan:" << m_dirmtimes.size();
 
     connect( this, SIGNAL( batchReady( QVariantList ) ),
@@ -177,8 +176,9 @@ MusicScanner::readFile( const QFileInfo& fi )
         return QVariantMap(); // invalid extension
     }
 
-    if( m_scanned % 3 == 0 )
-        SourceList::instance()->getLocal()->scanningProgress( m_scanned );
+    if ( m_scanned )
+        if( m_scanned % 3 == 0 )
+            SourceList::instance()->getLocal()->scanningProgress( m_scanned );
     if( m_scanned % 100 == 0 )
         qDebug() << "SCAN" << m_scanned << fi.absoluteFilePath();
 
