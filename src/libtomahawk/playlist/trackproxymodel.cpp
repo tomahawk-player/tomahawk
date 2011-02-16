@@ -42,6 +42,7 @@ void
 TrackProxyModel::setFilter( const QString& pattern )
 {
     qDebug() << Q_FUNC_INFO;
+    PlaylistInterface::setFilter( pattern );
     setFilterRegExp( pattern );
 
     emit filterChanged( pattern );

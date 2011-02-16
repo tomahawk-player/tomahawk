@@ -40,6 +40,8 @@ public slots:
     void addSource();
     void removeSource();
 
+    void setFilter( const QString& filter );
+
 protected:
     void changeEvent( QEvent* e );
     void resizeEvent( QResizeEvent* e );

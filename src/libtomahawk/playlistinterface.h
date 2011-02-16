@@ -29,7 +29,8 @@ public:
     virtual PlaylistInterface::RepeatMode repeatMode() const = 0;
     virtual bool shuffled() const = 0;
 
-    virtual void setFilter( const QString& pattern ) = 0;
+    virtual QString filter() const { return m_filter; }
+    virtual void setFilter( const QString& pattern ) { m_filter = pattern; }
 
     QWidget* widget() const { return m_widget; }
     void setWidget( QWidget* widget ) { m_widget = widget; }
@@ -49,6 +50,8 @@ signals:
 private:
     QWidget* m_widget;
     QObject* m_object;
+
+    QString m_filter;
 };
 
 #endif // PLAYLISTINTERFACE_H

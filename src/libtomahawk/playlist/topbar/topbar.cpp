@@ -231,3 +231,10 @@ TopBar::setModesVisible( bool b )
 {
     ui->widgetRadio->setVisible( b );
 }
+
+
+void
+TopBar::setFilter( const QString& filter )
+{
+    ui->filterEdit->setText( filter );
+}

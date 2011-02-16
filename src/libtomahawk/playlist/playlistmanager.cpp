@@ -539,7 +539,7 @@ PlaylistManager::applyFilter()
 {
     qDebug() << Q_FUNC_INFO;
 
-    if ( m_currentInterface )
+    if ( m_currentInterface && m_currentInterface->filter() != m_filter )
         m_currentInterface->setFilter( m_filter );
 }
 
@@ -585,11 +585,12 @@ PlaylistManager::linkPlaylist()
         m_interfaceHistory << m_currentInterface;
     }
 
-//    applyFilter();
     AudioEngine::instance()->setPlaylist( m_currentInterface );
 
     if ( m_currentInterface && m_statsAvailable )
     {
+        m_topbar->setFilter( m_currentInterface->filter() );
+
         emit numTracksChanged( m_currentInterface->unfilteredTrackCount() );
         emit numShownChanged( m_currentInterface->trackCount() );
         emit repeatModeChanged( m_currentInterface->repeatMode() );
@@ -643,16 +644,17 @@ PlaylistManager::setShuffled( bool enabled )
 
 void 
 PlaylistManager::createPlaylist( const Tomahawk::source_ptr& src,
-                                 const QVariant& contents)
+                                 const QVariant& contents )
 {
     Tomahawk::playlist_ptr p = Tomahawk::playlist_ptr( new Tomahawk::Playlist( src ) );
     QJson::QObjectHelper::qvariant2qobject( contents.toMap(), p.data() );
     p->reportCreated( p );
 }
 
+
 void 
 PlaylistManager::createDynamicPlaylist( const Tomahawk::source_ptr& src,
-                                        const QVariant& contents)
+                                        const QVariant& contents )
 {
     Tomahawk::dynplaylist_ptr p = Tomahawk::dynplaylist_ptr( new Tomahawk::DynamicPlaylist( src, contents.toMap().value( "type", QString() ).toString()  ) );
     QJson::QObjectHelper::qvariant2qobject( contents.toMap(), p.data() );
@@ -676,12 +678,16 @@ PlaylistManager::showCurrentTrack()
         m_currentView->scrollTo( m_currentProxyModel->currentItem(), QAbstractItemView::PositionAtCenter );*/
 }
 
+
 void
-PlaylistManager::onPlayClicked() {
+PlaylistManager::onPlayClicked()
+{
     emit playClicked();
 }
 
+
 void
-PlaylistManager::onPauseClicked() {
+PlaylistManager::onPauseClicked()
+{
     emit pauseClicked();
 }
