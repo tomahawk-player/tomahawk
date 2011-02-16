@@ -57,12 +57,12 @@ CollectionView::setupMenus()
 
     m_playItemAction = m_itemMenu.addAction( tr( "&Play" ) );
     m_addItemsToQueueAction = m_itemMenu.addAction( tr( "Add to &Queue" ) );
-    m_itemMenu.addSeparator();
-    m_addItemsToPlaylistAction = m_itemMenu.addAction( tr( "&Add to Playlist" ) );
+//    m_itemMenu.addSeparator();
+//    m_addItemsToPlaylistAction = m_itemMenu.addAction( tr( "&Add to Playlist" ) );
 
     connect( m_playItemAction,           SIGNAL( triggered() ), SLOT( playItem() ) );
     connect( m_addItemsToQueueAction,    SIGNAL( triggered() ), SLOT( addItemsToQueue() ) );
-    connect( m_addItemsToPlaylistAction, SIGNAL( triggered() ), SLOT( addItemsToPlaylist() ) );
+//    connect( m_addItemsToPlaylistAction, SIGNAL( triggered() ), SLOT( addItemsToPlaylist() ) );
 }
 
 
