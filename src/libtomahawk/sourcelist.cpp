@@ -61,9 +61,13 @@ SourceList::add( const Tomahawk::source_ptr& s )
 
 
 void
-SourceList::remove( const Tomahawk::source_ptr& s )
+SourceList::remove( Tomahawk::source_ptr& s )
 {
+    if ( s.isNull() )
+        return;
+
     remove( s.data() );
+    s.clear();
 }
 
 
@@ -87,13 +91,12 @@ SourceList::remove( Tomahawk::Source* s )
     }
 
     emit sourceRemoved( src );
-    src.clear();
 }
 
 void
 SourceList::removeAllRemote()
 {
-    foreach( const source_ptr& s, m_sources )
+    foreach( source_ptr s, m_sources )
     {
         if( s != m_local )
             remove( s );

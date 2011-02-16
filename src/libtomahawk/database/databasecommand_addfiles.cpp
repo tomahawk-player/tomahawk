@@ -186,7 +186,8 @@ DatabaseCommand_AddFiles::exec( DatabaseImpl* dbi )
     qDebug() << "Inserted" << added;
 
     // TODO building the index could be a separate job, outside this transaction
-    dbi->updateSearchIndex();
+    if ( added )
+        dbi->updateSearchIndex();
 
     qDebug() << "Committing" << added << "tracks...";
     emit done( m_files, source()->collection() );
