@@ -19,11 +19,10 @@
 !define MING_BIN "${MING_PATH}/bin"
 !define MING_DLL_PATH "${MING_BIN}"
 !define MING_LIB "${MING_PATH}/lib"
-!define ROOT_PATH "..\..\.." ; assuming the script is in ROOT/admin/win/
+!define ROOT_PATH "..\..\.." ; assuming the script is in ROOT/admin/win/nsi
+!define BUILD_PATH "${ROOT_PATH}\build"
 !define QT_DLL_PATH "${MING_BIN}"
 !define SQLITE_DLL_PATH "${MING_LIB}/qt4/plugins/sqldrivers"
-!define RTAUDIO_DLL_PATH "../../../rtaudio/"
-!define QXTWEB_DLL_PATH "../../../qxt/qxtweb-standalone/"
 
 ;-----------------------------------------------------------------------------
 ; Increment installer revision number as part of this script.
@@ -251,13 +250,13 @@ Section "Tomahawk Player" SEC_TOMAHAWK_PLAYER
    SetOutPath "$INSTDIR"
 
    ;Main executable.
-   File "${ROOT_PATH}\build\tomahawk.exe"
+   File "${BUILD_PATH}\tomahawk.exe"
 
    ;Plugins
-   File "${ROOT_PATH}\build\src\libtomahawk\libtomahawklib.dll"
-   File "${ROOT_PATH}\build\libsip_jabber.dll"
-   File "${ROOT_PATH}\build\libsip_twitter.dll"
-   File "${ROOT_PATH}\build\libsip_zeroconf.dll"
+   File "${BUILD_PATH}\src\libtomahawk\libtomahawklib.dll"
+   File "${BUILD_PATH}\libsip_jabber.dll"
+   File "${BUILD_PATH}\libsip_twitter.dll"
+   File "${BUILD_PATH}\libsip_zeroconf.dll"
 
    ;License & release notes.
    File "${ROOT_PATH}\LICENSE.txt"
@@ -285,7 +284,7 @@ Section "Tomahawk Player" SEC_TOMAHAWK_PLAYER
    ;Audio stuff
    ;File "${MING_DLL_PATH}\libmad.dll"
    ;File "${MING_DLL_PATH}\librtaudio.dll"
-   File "${RTAUDIO_DLL_PATH}\librtaudio.dll"
+   File "${BUILD_PATH}\rtaudio\librtaudio.dll"
    File "${MING_DLL_PATH}\libogg-0.dll"
    File "${MING_DLL_PATH}\libvorbisfile-3.dll"
    File "${MING_DLL_PATH}\libvorbis-0.dll"
@@ -304,9 +303,9 @@ Section "Tomahawk Player" SEC_TOMAHAWK_PLAYER
 
    File "${MING_LIB}\libclucene-core.dll"
 
-   File "${QXTWEB_DLL_PATH}\libqxtweb-standalone.dll"
-   File "${ROOT_PATH}\build\thirdparty\jdns\libtomahawk_jdns.dll"
-   File "${ROOT_PATH}\build\thirdparty\qtweetlib\libtomahawk_qtweetlib.dll"
+   File "${BUILD_PATH}\qxt\qxtweb-standalone\libqxtweb-standalone.dll"
+   File "${BUILD_PATH}\thirdparty\jdns\libtomahawk_jdns.dll"
+   File "${BUILD_PATH}\thirdparty\qtweetlib\libtomahawk_qtweetlib.dll"
 SectionEnd
 
 SectionGroup "Shortcuts"
