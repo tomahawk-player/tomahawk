@@ -102,7 +102,7 @@ void
 JabberPlugin::showAddFriendDialog()
 {
     bool ok;
-    QString id = QInputDialog::getText( TomahawkApp::instance()->mainWindow(), tr( "Add Friend" ),
+    QString id = QInputDialog::getText( 0, tr( "Add Friend" ),
                                               tr( "Enter Jabber ID:" ), QLineEdit::Normal,
                                               "", &ok );
     if ( !ok )
