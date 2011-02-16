@@ -15,7 +15,12 @@ void
 DatabaseCommand_LogPlayback::postCommitHook()
 {
     qDebug() << Q_FUNC_INFO;
-
+    if ( source().isNull() || source()->collection().isNull() )
+    {
+        qDebug() << "Source has gone offline, not emitting to GUI.";
+        return;
+    }
+    
     connect( this, SIGNAL( trackPlaying( Tomahawk::query_ptr ) ),
              source().data(), SIGNAL( playbackStarted( Tomahawk::query_ptr ) ), Qt::QueuedConnection );
     connect( this, SIGNAL( trackPlayed( Tomahawk::query_ptr ) ),

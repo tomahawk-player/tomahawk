@@ -87,7 +87,6 @@ DatabaseWorker::doWork()
     }
     try
     {
-        if ( !cmd->source().isNull() && !cmd->source()->collection().isNull() )
         {
             cmd->_exec( m_dbimpl ); // runs actual SQL stuff
 

@@ -60,6 +60,11 @@ void
 DatabaseCommand_SetDynamicPlaylistRevision::postCommitHook()
 {
     qDebug() << Q_FUNC_INFO;
+    if ( source().isNull() || source()->collection().isNull() )
+    {
+        qDebug() << "Source has gone offline, not emitting to GUI.";
+        return;
+    }
     
     QStringList orderedentriesguids;
     foreach( const QVariant& v, orderedguids() )

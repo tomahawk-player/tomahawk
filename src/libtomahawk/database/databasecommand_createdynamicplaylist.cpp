@@ -79,6 +79,12 @@ void
 DatabaseCommand_CreateDynamicPlaylist::postCommitHook()
 {
     qDebug() << Q_FUNC_INFO;
+    if ( source().isNull() || source()->collection().isNull() )
+    {
+        qDebug() << "Source has gone offline, not emitting to GUI.";
+        return;
+    }
+    
     if( report() == false )
         return;
     

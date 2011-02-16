@@ -33,6 +33,11 @@ void
 DatabaseCommand_AddFiles::postCommitHook()
 {
     qDebug() << Q_FUNC_INFO;
+    if ( source().isNull() || source()->collection().isNull() )
+    {
+        qDebug() << "Source has gone offline, not emitting to GUI.";
+        return;
+    }
 
     // make the collection object emit its tracksAdded signal, so the
     // collection browser will update/fade in etc.

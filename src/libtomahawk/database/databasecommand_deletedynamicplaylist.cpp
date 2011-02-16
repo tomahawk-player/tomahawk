@@ -46,6 +46,11 @@ void
 DatabaseCommand_DeleteDynamicPlaylist::postCommitHook()
 {
     qDebug() << Q_FUNC_INFO << "..reporting..:" << m_playlistguid;
+    if ( source().isNull() || source()->collection().isNull() )
+    {
+        qDebug() << "Source has gone offline, not emitting to GUI.";
+        return;
+    }
     
     dynplaylist_ptr playlist = source()->collection()->dynamicPlaylist( m_playlistguid );
     Q_ASSERT( !playlist.isNull() );

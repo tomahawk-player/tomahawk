@@ -37,7 +37,12 @@ void
 DatabaseCommand_RenamePlaylist::postCommitHook()
 {
     qDebug() << Q_FUNC_INFO << "..reporting..";
-
+    if ( source().isNull() || source()->collection().isNull() )
+    {
+        qDebug() << "Source has gone offline, not emitting to GUI.";
+        return;
+    }
+    
     playlist_ptr playlist = source()->collection()->playlist( m_playlistguid );
     Q_ASSERT( !playlist.isNull() );
 
