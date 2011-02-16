@@ -218,7 +218,15 @@ DynamicView::collapseEntries( int startRow, int num, int numToKeep )
     if( !justFade ) {
     /// sanity checks. make sure we have all the rows we need
         int firstSlider = startRow + realNum;
-        Q_ASSERT( firstSlider + numToKeep - 1 <= proxyModel()->rowCount() );
+        qDebug() << "Sliding from" << firstSlider << "number:" << numToKeep - 1 << "rowcount is:" << proxyModel()->rowCount();
+        // we may have removed some rows since we first started counting, so adjust
+        //Q_ASSERT( firstSlider + numToKeep - 1 <= proxyModel()->rowCount() );
+        if( firstSlider + numToKeep - 1 >= proxyModel()->rowCount() ) {
+            if( numToKeep == 1 ) { // we just want the last row
+                firstSlider = proxyModel()->rowCount();
+            }
+        }
+        
      
         topLeft = proxyModel()->index( startRow + realNum, 0, QModelIndex() );
         bottomRight = proxyModel()->index( startRow + realNum + numToKeep - 1, proxyModel()->columnCount( QModelIndex() ) - 1, QModelIndex() );
