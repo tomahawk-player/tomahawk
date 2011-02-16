@@ -14,6 +14,12 @@ ZeroconfPlugin::accountName()
     return QString();
 }
 
+const QString
+ZeroconfPlugin::friendlyName()
+{
+    return QString( "Zeroconf" );
+}
+
 bool
 ZeroconfPlugin::connectPlugin( bool /*startup*/ )
 {

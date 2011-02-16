@@ -21,7 +21,7 @@ public:
     //FIXME: Make this more correct
     virtual bool isValid() { return true; }
     virtual const QString name();
-
+    virtual const QString friendlyName();
     virtual const QString accountName();
     virtual QMenu* menu();
 

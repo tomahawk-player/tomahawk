@@ -10,9 +10,6 @@
 #include <lastfm/XmlQuery>
 #endif
 
-#include <qtweetaccountverifycredentials.h>
-#include <qtweetstatusupdate.h>
-
 #include "settingsdialog.h"
 #include "ui_settingsdialog.h"
 #include "ui_proxydialog.h"
@@ -20,7 +17,6 @@
 #include "musicscanner.h"
 #include "tomahawksettings.h"
 #include "sip/SipHandler.h"
-#include "tomahawkoauthtwitter.h"
 #include <database/database.h>
 #include "scanmanager.h"
 
@@ -53,23 +49,20 @@ SettingsDialog::SettingsDialog( QWidget *parent )
     ui->jabberPassword->setText( s->jabberPassword() );
     ui->jabberServer->setText( s->jabberServer() );
     ui->jabberPort->setValue( s->jabberPort() );
-    
+
     ui->staticHostName->setText( s->externalHostname() );
     ui->staticPort->setValue( s->externalPort() );
 
     ui->proxyButton->setVisible( false );
-    
-    if ( s->twitterOAuthToken().isEmpty() || s->twitterOAuthTokenSecret().isEmpty() )
+
+    // SIP PLUGINS
+    foreach(SipPlugin *plugin, APP->sipHandler()->plugins())
     {
-        ui->twitterStatusLabel->setText("Status: No saved credentials");
-        ui->twitterAuthenticateButton->setText( "Authenticate" );
-        ui->twitterInstructionsBox->setVisible( false );
-    }
-    else
-    {
-        ui->twitterStatusLabel->setText("Status: Credentials saved");
-        ui->twitterAuthenticateButton->setText( "Re-authenticate" );
-        ui->twitterInstructionsBox->setVisible( true );
+        if(plugin->configWidget())
+        {
+            qDebug() << "Adding configWidget for " << plugin->name();
+            ui->tabWidget->addTab(plugin->configWidget(), plugin->friendlyName());
+        }
     }
 
     // MUSIC SCANNER
@@ -257,98 +250,6 @@ SettingsDialog::onLastFmFinished()
             return;
     }
 #endif
-}
-
-
-void
-SettingsDialog::authenticateTwitter()
-{
-    TomahawkOAuthTwitter *twitAuth = new TomahawkOAuthTwitter( this );
-    twitAuth->setNetworkAccessManager( TomahawkUtils::nam() );
-    twitAuth->authorizePin();
-    if ( !twitAuth->oauthToken().isEmpty() && !twitAuth->oauthTokenSecret().isEmpty() )
-    {
-        TomahawkSettings* s = TomahawkSettings::instance();
-        s->setTwitterOAuthToken( twitAuth->oauthToken() );
-        s->setTwitterOAuthTokenSecret( twitAuth->oauthTokenSecret() );
-        ui->twitterStatusLabel->setText("Status: Credentials saved");
-        ui->twitterAuthenticateButton->setText( "Re-authenticate" );
-        ui->twitterInstructionsBox->setVisible( true );
-        TomahawkSettings::instance()->setTwitterCachedFriendsSinceId( 0 );
-        TomahawkSettings::instance()->setTwitterCachedMentionsSinceId( 0 );
-        TomahawkApp::instance()->sipHandler()->connectPlugins( false, "SIPTWITTER" );
-    }
-    else
-    {
-        TomahawkSettings* s = TomahawkSettings::instance();
-        s->setTwitterOAuthToken( QString() );
-        s->setTwitterOAuthTokenSecret( QString() );
-        ui->twitterStatusLabel->setText("Status: No saved credentials");
-        ui->twitterAuthenticateButton->setText( "Authenticate" );
-        ui->twitterInstructionsBox->setVisible( false );
-        QMessageBox::critical( 0, QString("Tweetin' Error"), QString("There was an error validating your authentication") );
-    }
-}
-
-
-void
-SettingsDialog::startPostGotTomahawkStatus()
-{
-    qDebug() << "Posting Got Tomahawk status";
-    TomahawkSettings* s = TomahawkSettings::instance();
-    if ( s->twitterOAuthToken().isEmpty() || s->twitterOAuthTokenSecret().isEmpty() )
-    {
-        QMessageBox::critical( 0, QString("Tweetin' Error"), QString("Your saved credentials could not be loaded.\nYou may wish to try re-authenticating.") );
-        return;
-    }
-    TomahawkOAuthTwitter *twitAuth = new TomahawkOAuthTwitter( this );
-    twitAuth->setNetworkAccessManager( TomahawkUtils::nam() );
-    twitAuth->setOAuthToken( s->twitterOAuthToken().toLatin1() );
-    twitAuth->setOAuthTokenSecret( s->twitterOAuthTokenSecret().toLatin1() );
-    QTweetAccountVerifyCredentials *credVerifier = new QTweetAccountVerifyCredentials( twitAuth, this );
-    connect( credVerifier, SIGNAL( parsedUser(const QTweetUser &) ), SLOT( postGotTomahawkStatusAuthVerifyReply(const QTweetUser &) ) );
-    credVerifier->verify();
-}
-
-
-void
-SettingsDialog::postGotTomahawkStatusAuthVerifyReply( const QTweetUser &user )
-{
-    if ( user.id() == 0 )
-    {
-        QMessageBox::critical( 0, QString("Tweetin' Error"), QString("Your saved credentials could not be verified.\nYou may wish to try re-authenticating.") );
-        return;
-    }
-    TomahawkSettings* s = TomahawkSettings::instance();
-    s->setTwitterScreenName( user.screenName() );
-    TomahawkOAuthTwitter *twitAuth = new TomahawkOAuthTwitter( this );
-    twitAuth->setNetworkAccessManager( TomahawkUtils::nam() );
-    twitAuth->setOAuthToken( s->twitterOAuthToken().toLatin1() );
-    twitAuth->setOAuthTokenSecret( s->twitterOAuthTokenSecret().toLatin1() );
-    QTweetStatusUpdate *statUpdate = new QTweetStatusUpdate( twitAuth, this );
-    connect( statUpdate, SIGNAL( postedStatus(const QTweetStatus &) ), SLOT( postGotTomahawkStatusUpdateReply(const QTweetStatus &) ) );
-    connect( statUpdate, SIGNAL( error(QTweetNetBase::ErrorCode, const QString&) ), SLOT( postGotTomahawkStatusUpdateError(QTweetNetBase::ErrorCode, const QString &) ) );
-    QString uuid = QUuid::createUuid();
-    statUpdate->post( QString( "Got Tomahawk? {" ) + Database::instance()->dbid() + QString( "} (" ) + uuid.mid( 1, 8 ) + QString( ")" ) );
-}
-
-
-void
-SettingsDialog::postGotTomahawkStatusUpdateReply( const QTweetStatus& status )
-{
-    if ( status.id() == 0 )
-        QMessageBox::critical( 0, QString("Tweetin' Error"), QString("There was an error posting your status -- sorry!") );
-    else
-        QMessageBox::information( 0, QString("Tweeted!"), QString("Your tweet has been posted!") );
-}
-
-
-void
-SettingsDialog::postGotTomahawkStatusUpdateError( QTweetNetBase::ErrorCode code, const QString& errorMsg )
-{
-    qDebug() << Q_FUNC_INFO;
-    qDebug() << "Error posting Got Tomahawk message, error code is " << code << ", error message is " << errorMsg;
-    QMessageBox::critical( 0, QString("Tweetin' Error"), QString("There was an error posting your status -- sorry!") );
 }
 
 

@@ -144,9 +144,7 @@ IF( UNIX )
   INCLUDE( "CMakeLists.unix.txt" )
 ENDIF( UNIX )
 
-ADD_SUBDIRECTORY( sip/jabber )
-ADD_SUBDIRECTORY( sip/twitter )
-ADD_SUBDIRECTORY( sip/zeroconf )
+ADD_SUBDIRECTORY( sip )
 
 kde4_add_app_icon( tomahawkSources "${CMAKE_CURRENT_SOURCE_DIR}/../data/icons/tomahawk-icon-*.png" )
 qt4_add_resources( RC_SRCS "../resources.qrc" )
@@ -187,7 +185,6 @@ TARGET_LINK_LIBRARIES( tomahawk
     qjson
     tag
     tomahawk_qtweetlib
-    sip_twitter
 )
 
 INCLUDE( "CPack.txt" )

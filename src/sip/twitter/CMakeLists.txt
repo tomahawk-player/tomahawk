@@ -8,20 +8,27 @@ add_definitions( -DSIPDLLEXPORT_PRO )
 
 set( twitterSources
     twitter.cpp
+    twitterconfigwidget.cpp
 )
 
 set( twitterHeaders
     twitter.h
+    twitterconfigwidget.h
 )
 
-include_directories( . ${CMAKE_CURRENT_BINARY_DIR} .. 
+set( twitterUI
+    twitterconfigwidget.ui
+)
+
+include_directories( . ${CMAKE_CURRENT_BINARY_DIR} ..
    ${QT_INCLUDE_DIR}
    ${CMAKE_SOURCE_DIR}/thirdparty/qtweetlib/qtweetlib/src
    ${CMAKE_SOURCE_DIR}/thirdparty/qtweetlib/tomahawk-custom
 )
 
 qt4_wrap_cpp( twitterMoc ${twitterHeaders} )
-add_library( sip_twitter SHARED ${twitterSources} ${twitterMoc} )
+qt4_wrap_ui( twitterUI_H ${twitterUI} )
+add_library( sip_twitter SHARED ${twitterUI_H} ${twitterSources} ${twitterMoc} )
 
 IF( WIN32 )
 SET( OS_SPECIFIC_LINK_LIBRARIES

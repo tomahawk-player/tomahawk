@@ -15,11 +15,13 @@ public:
     enum SipErrorCode { AuthError, ConnectionError }; // Placeholder for errors, to be defined
 
     virtual ~SipPlugin() {}
-    
+
     virtual bool isValid() = 0;
     virtual const QString name() = 0;
+    virtual const QString friendlyName() = 0;
     virtual const QString accountName() = 0;
-    virtual QMenu *menu();
+    virtual QMenu* menu();
+    virtual QWidget* configWidget();
 
 public slots:
     virtual bool connectPlugin( bool startup = false ) = 0;

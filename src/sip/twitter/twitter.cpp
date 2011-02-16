@@ -1,5 +1,7 @@
 #include "twitter.h"
 
+#include "twitterconfigwidget.h"
+
 #include <QtPlugin>
 #include <QRegExp>
 #include <QStringList>

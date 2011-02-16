@@ -5,3 +5,9 @@ SipPlugin::menu()
 {
     return 0;
 }
+
+QWidget*
+SipPlugin::configWidget()
+{
+    return 0;
+}

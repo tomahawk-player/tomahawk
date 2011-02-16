@@ -33,6 +33,9 @@ public:
     virtual bool isValid();
     virtual const QString name();
     virtual const QString accountName();
+    virtual const QString friendlyName();
+
+    virtual QWidget* configWidget();
 
 public slots:
     virtual bool connectPlugin( bool startup );

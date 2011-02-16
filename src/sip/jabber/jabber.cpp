@@ -2,8 +2,6 @@
 
 #include "tomahawksettings.h"
 
-#include "tomahawk/tomahawkapp.h"
-
 #include <QtPlugin>
 #include <QStringList>
 #include <QInputDialog>
@@ -30,6 +28,12 @@ const QString
 JabberPlugin::name()
 {
     return QString( MYNAME );
+}
+
+const QString
+JabberPlugin::friendlyName()
+{
+    return QString( "Jabber" );
 }
 
 const QString
@@ -62,7 +66,7 @@ JabberPlugin::connectPlugin( bool startup )
         qDebug() << "JID did not have an @ in it, could not find a server part";
         return false;
     }
-    
+
     if ( server.isEmpty() )
         server = splitJid[1];
 
