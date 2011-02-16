@@ -183,7 +183,7 @@ void SourceTreeItem::onDynamicPlaylistsDeleted( const QList< dynplaylist_ptr >& 
             qlonglong piptr = pi->data( DynamicPlaylistPointer ).toLongLong();
             dynplaylist_ptr* pl = reinterpret_cast<dynplaylist_ptr*>(piptr);
             SourcesModel::SourceType type = static_cast<SourcesModel::SourceType>( pi->data( Type ).toInt() );
-            qDebug() << "Deleting dynamic playlsit:" << pl->isNull();
+            //qDebug() << "Deleting dynamic playlsit:" << pl->isNull();
             if ( type == SourcesModel::DynamicPlaylistSource && ptr == qlonglong( pl->data() ) )
             {
                 m_dynplaylists.removeAll( p );
