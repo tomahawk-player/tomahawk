@@ -19,11 +19,11 @@
 !define MING_BIN "${MING_PATH}/bin"
 !define MING_DLL_PATH "${MING_BIN}"
 !define MING_LIB "${MING_PATH}/lib"
-!define ROOT_PATH "..\.." ; assuming the script is in ROOT/admin/win/
+!define ROOT_PATH "..\..\.." ; assuming the script is in ROOT/admin/win/
 !define QT_DLL_PATH "${MING_BIN}"
 !define SQLITE_DLL_PATH "${MING_LIB}/qt4/plugins/sqldrivers"
-!define RTAUDIO_DLL_PATH "../../rtaudio/"
-!define QXTWEB_DLL_PATH "../../qxt/qxtweb-standalone/"
+!define RTAUDIO_DLL_PATH "../../../rtaudio/"
+!define QXTWEB_DLL_PATH "../../../qxt/qxtweb-standalone/"
 
 ;-----------------------------------------------------------------------------
 ; Increment installer revision number as part of this script.
@@ -256,6 +256,7 @@ Section "Tomahawk Player" SEC_TOMAHAWK_PLAYER
    ;Plugins
    File "${ROOT_PATH}\build\src\libtomahawk\libtomahawklib.dll"
    File "${ROOT_PATH}\build\libsip_jabber.dll"
+   File "${ROOT_PATH}\build\libsip_twitter.dll"
    File "${ROOT_PATH}\build\libsip_zeroconf.dll"
 
    ;License & release notes.
