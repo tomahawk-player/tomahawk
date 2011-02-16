@@ -85,6 +85,7 @@ Source::remove()
     emit offline();
     m_collections.clear();
     SourceList::instance()->remove( this );
+    deleteLater();
 }
 
 
