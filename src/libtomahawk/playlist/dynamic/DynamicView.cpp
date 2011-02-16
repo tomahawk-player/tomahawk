@@ -40,6 +40,7 @@ DynamicView::DynamicView( QWidget* parent )
         : PlaylistView( parent )
         , m_onDemand( false )
         , m_checkOnCollapse( false )
+        , m_fadebg( false )
 {
     m_fadeOutAnim.setDuration( FADE_LENGTH );
     m_fadeOutAnim.setCurveShape( QTimeLine::LinearCurve );
@@ -192,6 +193,7 @@ DynamicView::collapseEntries( int startRow, int num, int numToKeep )
     QStyleOptionViewItemV4 opt = viewOptions();
     // code taken from QTreeViewPrivate::paintAlternatingRowColors
     if( alternatingRowColors() ) {
+        m_fadebg = !style()->styleHint( QStyle::SH_ItemView_PaintAlternatingRowColorsForEmptyArea, &opt );
         qDebug() << "PAINTING ALTERNATING ROW BG!: " << fadingRectViewport;
         int rowHeight = itemDelegate()->sizeHint( opt, QModelIndex() ).height();
         int y = m_fadingIndexes.rect().topLeft().y();
@@ -266,8 +268,16 @@ DynamicView::paintEvent( QPaintEvent* event )
         p.save();
         QRect bg = m_fadingIndexes.rect();
         bg.moveTo( m_fadingPointAnchor ); // cover up the background
+        if( m_fadebg ) {
+            p.save();
+            p.fillRect( bg, Qt::white );
+            
+            p.setOpacity( 1 - m_fadeOutAnim.currentValue() );
+        }
         p.drawPixmap( bg, m_bg );
-        
+        if( m_fadebg ) {
+            p.restore();
+        }
         
 //         qDebug() << "FAST SETOPACITY:" << p.paintEngine()->hasFeature(QPaintEngine::ConstantOpacity);
         p.setOpacity( 1 - m_fadeOutAnim.currentValue() );

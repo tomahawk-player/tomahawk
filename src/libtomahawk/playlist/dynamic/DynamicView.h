@@ -76,6 +76,7 @@ private:
     QPixmap m_fadingIndexes;
     QPixmap m_slidingIndex;
     QPixmap m_bg;
+    bool m_fadebg;
     QTimeLine m_fadeOutAnim;
     QTimeLine m_slideAnim;
 };
