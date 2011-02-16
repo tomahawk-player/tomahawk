@@ -1,6 +1,8 @@
 #ifndef TWITTER_H
 #define TWITTER_H
 
+#include "twitterconfigwidget.h"
+
 #include <QTimer>
 #include <QWeakPointer>
 #include <QSet>
@@ -87,6 +89,8 @@ private:
     QSet<QString> m_keyCache;
     bool m_finishedFriends;
     bool m_finishedMentions;
+
+    TwitterConfigWidget *m_configWidget;
 };
 
 #endif

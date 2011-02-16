@@ -1,0 +1,3 @@
+ADD_SUBDIRECTORY( jabber )
+ADD_SUBDIRECTORY( twitter )
+ADD_SUBDIRECTORY( zeroconf )

@@ -29,13 +29,14 @@ TwitterPlugin::TwitterPlugin()
     , m_keyCache()
     , m_finishedFriends( false )
     , m_finishedMentions( false )
+    , m_configWidget( 0 )
 {
     qDebug() << Q_FUNC_INFO;
     m_checkTimer.setInterval( 60000 );
     m_checkTimer.setSingleShot( false );
     connect( &m_checkTimer, SIGNAL( timeout() ), SLOT( checkTimerFired() ) );
     m_checkTimer.start();
-    
+
     m_connectTimer.setInterval( 60000 );
     m_connectTimer.setSingleShot( false );
     connect( &m_connectTimer, SIGNAL( timeout() ), SLOT( connectTimerFired() ) );
@@ -56,18 +57,36 @@ TwitterPlugin::name()
 }
 
 const QString
+TwitterPlugin::friendlyName()
+{
+    return QString("Twitter");
+}
+
+const QString
 TwitterPlugin::accountName()
 {
     return QString( TomahawkSettings::instance()->twitterScreenName() );
 }
 
+QWidget* TwitterPlugin::configWidget()
+{
+    if( m_configWidget )
+        return m_configWidget;
+
+    m_configWidget = new TwitterConfigWidget( this );
+
+    return m_configWidget;
+}
+
+
+
 bool
 TwitterPlugin::connectPlugin( bool /*startup*/ )
 {
     qDebug() << Q_FUNC_INFO;
-    
+
     TomahawkSettings *settings = TomahawkSettings::instance();
-    
+
     m_cachedPeers = settings->twitterCachedPeers();
     QList<QString> peerlist = m_cachedPeers.keys();
     qStableSort( peerlist.begin(), peerlist.end() );
