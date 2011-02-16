@@ -57,15 +57,8 @@ FuzzyIndex::beginIndexing()
             m_luceneReader->unlock( m_luceneDir );
             delete m_luceneSearcher;
             delete m_luceneReader;
-            delete m_luceneDir;
-            delete m_analyzer;
             m_luceneSearcher = 0;
             m_luceneReader = 0;
-
-            qDebug() << "Creating new lucene directory.";
-            QString lucenePath = TomahawkUtils::appDataDir().absoluteFilePath( "tomahawk.lucene" );
-            m_luceneDir = FSDirectory::getDirectory( lucenePath.toStdString().c_str(), true );
-            m_analyzer = _CLNEW SimpleAnalyzer();
         }
 
         qDebug() << "Creating new index writer.";
