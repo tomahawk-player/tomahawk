@@ -8,6 +8,12 @@ ZeroconfPlugin::name()
     return QString( MYNAME );
 }
 
+const QString
+ZeroconfPlugin::accountName()
+{
+    return QString();
+}
+
 bool
 ZeroconfPlugin::connectPlugin( bool /*startup*/ )
 {

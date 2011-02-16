@@ -24,6 +24,7 @@ public:
     
     virtual bool isValid() { return true; }
     virtual const QString name();
+    virtual const QString accountName();
 
 public slots:
     virtual bool connectPlugin( bool startup );

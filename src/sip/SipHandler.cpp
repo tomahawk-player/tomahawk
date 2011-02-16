@@ -27,6 +27,12 @@ SipHandler::~SipHandler()
     disconnectPlugins();
 }
 
+QList< SipPlugin* >
+SipHandler::plugins() const
+{
+    return m_plugins;
+}
+
 
 void
 SipHandler::onSettingsChanged()

@@ -3,6 +3,7 @@
 
 #include <QObject>
 #include <QString>
+#include <QMenu>
 
 #include "dllmacro.h"
 
@@ -17,6 +18,8 @@ public:
     
     virtual bool isValid() = 0;
     virtual const QString name() = 0;
+    virtual const QString accountName() = 0;
+    virtual QMenu *menu();
 
 public slots:
     virtual bool connectPlugin( bool startup = false ) = 0;

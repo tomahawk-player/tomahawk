@@ -52,7 +52,6 @@ private slots:
     void onSipError();
 
     void addPeerManually();
-    void addFriendManually();
 
     void onPlaybackLoading( const Tomahawk::result_ptr& result );
 

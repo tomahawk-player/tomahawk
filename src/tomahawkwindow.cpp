@@ -121,6 +121,15 @@ TomahawkWindow::TomahawkWindow( QWidget* parent )
 
     statusBar()->addPermanentWidget( m_audioControls, 1 );
 
+    // propagate sip menu
+    foreach(SipPlugin *plugin, APP->sipHandler()->plugins())
+    {
+        if(plugin->menu())
+        {
+            ui->menuNetwork->addMenu(plugin->menu());
+        }
+    }
+
     loadSettings();
     setupSignals();
 
@@ -177,7 +186,6 @@ TomahawkWindow::setupSignals()
     connect( ui->actionPreferences, SIGNAL( triggered() ), SLOT( showSettingsDialog() ) );
     connect( ui->actionToggleConnect, SIGNAL( triggered() ), APP->sipHandler(), SLOT( toggleConnect() ) );
     connect( ui->actionAddPeerManually, SIGNAL( triggered() ), SLOT( addPeerManually() ) );
-    connect( ui->actionAddFriendManually, SIGNAL( triggered() ), SLOT( addFriendManually() ) );
     connect( ui->actionRescanCollection, SIGNAL( triggered() ), SLOT( updateCollectionManually() ) );
     connect( ui->actionLoadXSPF, SIGNAL( triggered() ), SLOT( loadSpiff() ));
     connect( ui->actionCreatePlaylist, SIGNAL( triggered() ), SLOT( createPlaylist() ));
@@ -274,21 +282,6 @@ TomahawkWindow::addPeerManually()
 
     qDebug() << "Attempting to connect to" << addr;
     Servent::instance()->connectToPeer( addr, port, key );
-}
-
-
-void
-TomahawkWindow::addFriendManually()
-{
-    bool ok;
-    QString id = QInputDialog::getText( this, tr( "Add Friend" ),
-                                              tr( "Enter Jabber ID:" ), QLineEdit::Normal,
-                                              "", &ok );
-    if ( !ok )
-        return;
-
-    qDebug() << "Attempting to add jabber contact to roster:" << id;
-    APP->sipHandler()->addContact( id );
 }
 
 

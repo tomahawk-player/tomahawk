@@ -14,15 +14,16 @@ class SIPDLLEXPORT JabberPlugin : public SipPlugin
     Q_INTERFACES( SipPlugin )
 
 public:
-    JabberPlugin()
-        : p( 0 )
-    {}
+    JabberPlugin();
 
     virtual ~JabberPlugin() { delete p; }
 
     //FIXME: Make this more correct
     virtual bool isValid() { return true; }
     virtual const QString name();
+
+    virtual const QString accountName();
+    virtual QMenu* menu();
 
     void setProxy( QNetworkProxy* proxy );
 
@@ -58,9 +59,12 @@ public slots:
 
 private slots:
     void onAuthError( int, const QString& );
+    void showAddFriendDialog();
 
 private:
     Jabber_p* p;
+    QMenu* m_menu;
+    QAction* m_addFriendAction;
 };
 
 #endif

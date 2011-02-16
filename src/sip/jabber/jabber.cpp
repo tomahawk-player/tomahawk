@@ -2,9 +2,22 @@
 
 #include "tomahawksettings.h"
 
+#include "tomahawk/tomahawkapp.h"
+
 #include <QtPlugin>
 #include <QStringList>
+#include <QInputDialog>
+#include <QLineEdit>
 
+JabberPlugin::JabberPlugin()
+    : p( 0 )
+{
+    m_menu = new QMenu(QString("Jabber (").append(accountName()).append(")"));
+    m_addFriendAction = m_menu->addAction("Add Friend...");
+
+    connect(m_addFriendAction, SIGNAL(triggered()),
+            this,              SLOT(showAddFriendDialog()));
+}
 
 void
 JabberPlugin::setProxy( QNetworkProxy* proxy )
@@ -19,6 +32,17 @@ JabberPlugin::name()
     return QString( MYNAME );
 }
 
+const QString
+JabberPlugin::accountName()
+{
+    return TomahawkSettings::instance()->jabberUsername();
+}
+
+QMenu*
+JabberPlugin::menu()
+{
+    return m_menu;
+}
 
 bool
 JabberPlugin::connectPlugin( bool startup )
@@ -72,6 +96,20 @@ JabberPlugin::onAuthError( int code, const QString& message )
         emit error( SipPlugin::AuthError, message );
     else
         emit error( SipPlugin::ConnectionError, message );
+}
+
+void
+JabberPlugin::showAddFriendDialog()
+{
+    bool ok;
+    QString id = QInputDialog::getText( TomahawkApp::instance()->mainWindow(), tr( "Add Friend" ),
+                                              tr( "Enter Jabber ID:" ), QLineEdit::Normal,
+                                              "", &ok );
+    if ( !ok )
+        return;
+
+    qDebug() << "Attempting to add jabber contact to roster:" << id;
+    addContact( id );
 }
 
 Q_EXPORT_PLUGIN2( sip, JabberPlugin )

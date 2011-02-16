@@ -1,10 +1,10 @@
 #ifndef SIPHANDLER_H
 #define SIPHANDLER_H
 
+#include "sip/SipPlugin.h"
+
 #include <QDebug>
 #include <QObject>
-
-class SipPlugin;
 
 class SipHandler : public QObject
 {
@@ -15,6 +15,8 @@ public:
 
     SipHandler( QObject* parent );
     ~SipHandler();
+
+    QList< SipPlugin* > plugins() const;
 
 public slots:
     void addContact( const QString& id ) { qDebug() << Q_FUNC_INFO << id; }

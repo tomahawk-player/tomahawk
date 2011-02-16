@@ -53,6 +53,12 @@ TwitterPlugin::name()
     return QString( MYNAME );
 }
 
+const QString
+TwitterPlugin::accountName()
+{
+    return QString( TomahawkSettings::instance()->twitterScreenName() );
+}
+
 bool
 TwitterPlugin::connectPlugin( bool /*startup*/ )
 {

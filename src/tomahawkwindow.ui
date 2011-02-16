@@ -69,7 +69,6 @@
     <addaction name="actionToggleConnect"/>
     <addaction name="separator"/>
     <addaction name="actionAddPeerManually"/>
-    <addaction name="actionAddFriendManually"/>
    </widget>
    <widget class="QMenu" name="menu_Help">
     <property name="title">
