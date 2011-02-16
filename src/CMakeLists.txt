@@ -125,6 +125,7 @@ INCLUDE_DIRECTORIES(
     ../rtaudio
     ../qxt/qxtweb-standalone/qxtweb
     ../thirdparty/qtweetlib/qtweetlib/src
+    ../thirdparty/qtweetlib/tomahawk-custom
 
     /usr/include/taglib
     /usr/local/include/taglib

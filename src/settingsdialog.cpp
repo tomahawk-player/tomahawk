@@ -20,7 +20,7 @@
 #include "musicscanner.h"
 #include "tomahawksettings.h"
 #include "sip/SipHandler.h"
-#include "sip/twitter/tomahawkoauthtwitter.h"
+#include "tomahawkoauthtwitter.h"
 #include <database/database.h>
 #include "scanmanager.h"
 

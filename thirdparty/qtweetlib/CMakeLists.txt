@@ -83,6 +83,8 @@ set(TOMAHAWK_QTWEETLIB_SOURCES
     qtweetlib/src/qtweetentityurl.cpp
     qtweetlib/src/qtweetentityhashtag.cpp
     qtweetlib/src/qtweetentityusermentions.cpp
+
+    tomahawk-custom/tomahawkoauthtwitter.cpp
 )
 
 set(TOMAHAWK_QTWEETLIB_HEADERS
@@ -154,6 +156,8 @@ set(TOMAHAWK_QTWEETLIB_HEADERS
     qtweetlib/src/qtweetentityurl.h
     qtweetlib/src/qtweetentityhashtag.h
     qtweetlib/src/qtweetentityusermentions.h
+
+    tomahawk-custom/tomahawkoauthtwitter.h
 )
 
 include_directories(
@@ -172,7 +176,7 @@ target_link_libraries(tomahawk_qtweetlib
     qjson
 )
 
-SET_TARGET_PROPERTIES( tomahawk_qtweetlib PROPERTIES DEFINE_SYMBOL  MAKE_QTWEETLIB_LIB )
+#SET_TARGET_PROPERTIES( tomahawk_qtweetlib PROPERTIES DEFINE_SYMBOL  MAKE_QTWEETLIB_LIB )
 
 INCLUDE( ${CMAKE_CURRENT_SOURCE_DIR}/twitter-api-keys )
 

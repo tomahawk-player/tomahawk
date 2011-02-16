@@ -8,17 +8,16 @@ add_definitions( -DSIPDLLEXPORT_PRO )
 
 set( twitterSources
     twitter.cpp
-    tomahawkoauthtwitter.cpp
 )
 
 set( twitterHeaders
     twitter.h
-    tomahawkoauthtwitter.h
 )
 
 include_directories( . ${CMAKE_CURRENT_BINARY_DIR} .. 
    ${QT_INCLUDE_DIR}
-   ${CMAKE_SOURCE_DIR}/thirdparty/qtweetlib/src
+   ${CMAKE_SOURCE_DIR}/thirdparty/qtweetlib/qtweetlib/src
+   ${CMAKE_SOURCE_DIR}/thirdparty/qtweetlib/tomahawk-custom
 )
 
 qt4_wrap_cpp( twitterMoc ${twitterHeaders} )

@@ -3,9 +3,9 @@
 
 #include <oauthtwitter.h>
 
-#include "../sipdllmacro.h"
+#include "qtweetlib_global.h"
 
-class SIPDLLEXPORT TomahawkOAuthTwitter : public OAuthTwitter
+class QTWEETLIBSHARED_EXPORT TomahawkOAuthTwitter : public OAuthTwitter
 {
     Q_OBJECT
     
