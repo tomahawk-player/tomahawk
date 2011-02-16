@@ -156,8 +156,10 @@ void
 DynamicView::collapseEntries( int startRow, int num, int numToKeep )
 {
     qDebug() << "BEGINNING TO COLLAPSE FROM" << startRow << num << numToKeep;
-    if( m_fadeOutAnim.state() == QTimeLine::Running )
-        qDebug() << "COLLAPSING TWICE!";
+    if( m_fadeOutAnim.state() == QTimeLine::Running ) {
+        qDebug() << "COLLAPSING TWICE, aborting!";
+        return;
+    }
 
     /// Two options: Either we are overflowing our view, or we're not. If we are, it's because the search for a playable track
     /// went past the limit of the view. Just fade out from the beginning to the end in that case. otherwise, animate a slide
