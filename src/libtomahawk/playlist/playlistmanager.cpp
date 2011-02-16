@@ -291,7 +291,7 @@ PlaylistManager::show( const Tomahawk::album_ptr& album )
         m_currentInterface = view->proxyModel();
     }
 
-    m_infobar->setCaption( tr( "All tracks on %1 by %2" ).arg( album->artist()->name() ).arg( album->name() ) );
+    m_infobar->setCaption( tr( "All tracks on %1 by %2" ).arg( album->name() ).arg( album->artist()->name() ) );
     m_infobar->setDescription( "" );
 
     m_superCollectionVisible = false;
