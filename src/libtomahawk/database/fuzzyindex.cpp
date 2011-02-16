@@ -50,6 +50,7 @@ FuzzyIndex::beginIndexing()
     {
         if ( m_luceneReader != 0 )
         {
+            qDebug() << "Deleting old lucene stuff.";
             m_luceneSearcher->close();
             m_luceneReader->close();
             m_luceneReader->unlock( m_luceneDir );
@@ -57,8 +58,13 @@ FuzzyIndex::beginIndexing()
             delete m_luceneReader;
             m_luceneSearcher = 0;
             m_luceneReader = 0;
+
+            qDebug() << "Creating new lucene directory.";
+            QString lucenePath = TomahawkUtils::appDataDir().absoluteFilePath( "tomahawk.lucene" );
+            m_luceneDir = FSDirectory::getDirectory( lucenePath.toStdString().c_str(), true );
         }
 
+        qDebug() << "Creating new index writer.";
         IndexWriter luceneWriter = IndexWriter( m_luceneDir, m_analyzer, true );
     }
     catch( CLuceneError& error )
