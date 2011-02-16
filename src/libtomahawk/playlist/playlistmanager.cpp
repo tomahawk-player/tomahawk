@@ -176,6 +176,9 @@ PlaylistManager::show( const Tomahawk::playlist_ptr& playlist )
         m_currentInterface = view->proxyModel();
     }
 
+    m_infobar->setCaption( playlist->title() );
+    m_infobar->setDescription( tr( "A playlist by %1" ).arg( playlist->author()->isLocal() ? tr( "you" ) : playlist->author()->friendlyName() ) );
+
     m_superCollectionVisible = false;
     m_statsAvailable = true;
     m_modesAvailable = false;
@@ -202,6 +205,9 @@ PlaylistManager::show( const Tomahawk::dynplaylist_ptr& playlist )
     
     m_stack->setCurrentWidget( m_dynamicWidgets.value( playlist ) );
     m_currentInterface = m_dynamicWidgets.value( playlist )->playlistInterface();
+
+    m_infobar->setCaption( playlist->title() );
+    m_infobar->setDescription( tr( "A playlist by %1" ).arg( playlist->author()->isLocal() ? tr( "you" ) : playlist->author()->friendlyName() ) );
     
     m_superCollectionVisible = false;
     m_statsAvailable = true;
@@ -244,6 +250,9 @@ PlaylistManager::show( const Tomahawk::artist_ptr& artist )
         m_currentInterface = view->proxyModel();
     }
 
+    m_infobar->setCaption( tr( "All tracks by %1" ).arg( artist->name() ) );
+    m_infobar->setDescription( "" );
+
     m_superCollectionVisible = false;
     m_statsAvailable = false;
     m_modesAvailable = false;
@@ -281,6 +290,9 @@ PlaylistManager::show( const Tomahawk::album_ptr& album )
         m_stack->setCurrentWidget( view );
         m_currentInterface = view->proxyModel();
     }
+
+    m_infobar->setCaption( tr( "All tracks on %1 by %2" ).arg( album->artist()->name() ).arg( album->name() ) );
+    m_infobar->setDescription( "" );
 
     m_superCollectionVisible = false;
     m_statsAvailable = false;
@@ -348,6 +360,12 @@ PlaylistManager::show( const Tomahawk::collection_ptr& collection )
         }
     }
 
+    m_infobar->setDescription( "" );
+    if ( collection->source()->isLocal()  )
+        m_infobar->setCaption( tr( "Your Collection" ) );
+    else
+        m_infobar->setCaption( tr( "Collection of %1" ).arg( collection->source()->friendlyName() ) );
+
     m_superCollectionVisible = false;
     m_statsAvailable = ( m_currentMode == 0 );
     m_modesAvailable = true;
@@ -376,6 +394,9 @@ PlaylistManager::show( const Tomahawk::source_ptr& source )
     {
         m_currentInfoWidget = m_sourceViews.value( source );
     }
+
+    m_infobar->setCaption( tr( "Info about %1" ).arg( source->isLocal() ? tr( "Your Collection" ) : source->friendlyName() ) );
+    m_infobar->setDescription( "" );
 
     m_stack->setCurrentWidget( m_currentInfoWidget );
     m_superCollectionVisible = false;
@@ -438,6 +459,9 @@ PlaylistManager::showSuperCollection()
         m_currentInterface = m_superAlbumView->proxyModel();
     }
 
+    m_infobar->setCaption( tr( "Super Collection" ) );
+    m_infobar->setDescription( tr( "All available tracks" ) );
+    
     m_superCollectionVisible = true;
     m_statsAvailable = ( m_currentMode == 0 );
     m_modesAvailable = true;

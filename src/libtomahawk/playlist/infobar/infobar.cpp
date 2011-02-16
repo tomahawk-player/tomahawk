@@ -19,8 +19,11 @@ InfoBar::InfoBar( QWidget* parent )
     QFont boldFont = ui->captionLabel->font();
     boldFont.setPixelSize( 18 );
     boldFont.setBold( true );
-
     ui->captionLabel->setFont( boldFont );
+
+    boldFont.setPixelSize( 12 );
+    ui->descriptionLabel->setFont( boldFont );
+    ui->descriptionLabel->setMargin( 2 );
 
     QPalette whitePal = ui->captionLabel->palette();
     whitePal.setColor( QPalette::Foreground, Qt::white );

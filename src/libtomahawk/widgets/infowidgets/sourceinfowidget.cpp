@@ -20,7 +20,6 @@ SourceInfoWidget::SourceInfoWidget( const Tomahawk::source_ptr& source, QWidget*
 {
     ui->setupUi( this );
 
-    ui->sourceLabel->setText( source->friendlyName() );
     ui->historyView->overlay()->setEnabled( false );
 
     m_recentCollectionModel = new CollectionFlatModel( ui->recentCollectionView );
