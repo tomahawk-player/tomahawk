@@ -41,8 +41,8 @@ Source::~Source()
 {
     qDebug() << Q_FUNC_INFO << friendlyName();
 
-    DatabaseCommand_SourceOffline* cmd = new DatabaseCommand_SourceOffline( id() );
-    Database::instance()->enqueue( QSharedPointer<DatabaseCommand>(cmd) );
+/*    DatabaseCommand_SourceOffline* cmd = new DatabaseCommand_SourceOffline( id() );
+    Database::instance()->enqueue( QSharedPointer<DatabaseCommand>(cmd) );*/
 }
 
 
@@ -85,7 +85,6 @@ Source::remove()
     emit offline();
     m_collections.clear();
     SourceList::instance()->remove( this );
-    deleteLater();
 }
 
 
