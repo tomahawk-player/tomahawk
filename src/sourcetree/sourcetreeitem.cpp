@@ -208,7 +208,7 @@ void SourceTreeItem::onDynamicPlaylistLoaded( DynamicPlaylistRevision revision )
 //         qDebug() << "found dynamic playlist:" << (*pl)->title() << type;
         if ( type == SourcesModel::DynamicPlaylistSource && ptr == qlonglong( pl->data() ) )
         {
-            //qDebug() << "Found playlist!";
+            //qDebug() << "Found dynamicplaylist!";
             pi->setEnabled( true );
             m_current_dynamic_revisions.insert( pl->data()->guid(), revision.revisionguid );
         }

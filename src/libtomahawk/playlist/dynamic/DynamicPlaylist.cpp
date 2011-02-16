@@ -248,7 +248,11 @@ DynamicPlaylist::reportCreated( const Tomahawk::dynplaylist_ptr& self )
 {
     qDebug() << Q_FUNC_INFO;
     Q_ASSERT( self.data() == this );
+    Q_ASSERT( !author().isNull() );
+    Q_ASSERT( !author()->collection().isNull() );
     // will emit Collection::playlistCreated(...)
+    qDebug() << "Creating dynplaylist belonging to:" << author().data() << author().isNull();
+    qDebug() << "REPORTING DYNAMIC PLAYLIST CREATED:" << this << author()->friendlyName();
     author()->collection()->addDynamicPlaylist( self );    
 }
 

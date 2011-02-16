@@ -65,6 +65,9 @@ DatabaseCommand_SetDynamicPlaylistRevision::postCommitHook()
     foreach( const QVariant& v, orderedguids() )
         orderedentriesguids << v.toString();
     
+    Q_ASSERT( !source().isNull() );
+    Q_ASSERT( !source()->collection().isNull() );
+    qDebug() << "Postcommitting this playlist:" << playlistguid() << source().isNull() << source().data();
     // private, but we are a friend. will recall itself in its own thread:
     dynplaylist_ptr playlist = source()->collection()->dynamicPlaylist( playlistguid() );
     

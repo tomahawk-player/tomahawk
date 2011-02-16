@@ -113,7 +113,7 @@ public:
 
     virtual void loadRevision( const QString& rev = "" );
 
-    const source_ptr& author();
+    source_ptr author();
     const QString& currentrevision()    { return m_currentrevision; }
     const QString& title()              { return m_title; }
     const QString& info()               { return m_info; }
