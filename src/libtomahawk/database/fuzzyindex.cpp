@@ -48,10 +48,17 @@ FuzzyIndex::beginIndexing()
 
     try
     {
-        delete m_luceneSearcher;
-        delete m_luceneReader;
-        m_luceneSearcher = 0;
-        m_luceneReader = 0;
+        if ( m_luceneReader != 0 )
+        {
+            m_luceneSearcher->close();
+            m_luceneReader->close();
+            m_luceneReader->unlock( m_luceneDir );
+            delete m_luceneSearcher;
+            delete m_luceneReader;
+            m_luceneSearcher = 0;
+            m_luceneReader = 0;
+        }
+
         IndexWriter luceneWriter = IndexWriter( m_luceneDir, m_analyzer, true );
     }
     catch( CLuceneError& error )
