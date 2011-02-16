@@ -25,7 +25,9 @@
 #include <QPaintEvent>
 #include <QtGui/qpaintengine.h>
 #include <QScrollBar>
+
 #include "DynamicModel.h"
+#include <QApplication>
 
 using namespace Tomahawk;
 
@@ -183,6 +185,30 @@ DynamicView::collapseEntries( int startRow, int num, int numToKeep )
     m_fadingIndexes = QPixmap::grabWidget( this, fadingRect ); // but all values we use to grab the widgetr have to be in scrollarea coords :(
     m_fadingPointAnchor = QPoint( 0, fadingRectViewport.topLeft().y() );
     
+    // get the background
+    m_bg = QPixmap( m_fadingIndexes.size() );
+    m_bg.fill( Qt::white );
+    QPainter p( &m_bg );
+    QStyleOptionViewItemV4 opt = viewOptions();
+    // code taken from QTreeViewPrivate::paintAlternatingRowColors
+    if( alternatingRowColors() ) {
+        qDebug() << "PAINTING ALTERNATING ROW BG!: " << fadingRectViewport;
+        int rowHeight = itemDelegate()->sizeHint( opt, QModelIndex() ).height();
+        int y = m_fadingIndexes.rect().topLeft().y();
+        int current = startRow;
+        while( y <= m_fadingIndexes.rect().bottomLeft().y() ) {
+            opt.rect.setRect(0, y, viewport()->width(), rowHeight);
+            qDebug() << "Painting a row from " << y << "to" << y + rowHeight << ":" << opt.rect;
+            if( current & 1 ) {
+                opt.features |= QStyleOptionViewItemV2::Alternate;
+            } else {
+                opt.features &= ~QStyleOptionViewItemV2::Alternate;
+            }
+            ++current;
+            style()->drawPrimitive( QStyle::PE_PanelItemViewRow, &opt, &p );
+            y += rowHeight;
+        }
+    }
     m_fadeOutAnim.start();
     
     qDebug() << "Grabbed fading indexes from rect:" << fadingRect << m_fadingIndexes.size();
@@ -240,7 +266,8 @@ DynamicView::paintEvent( QPaintEvent* event )
         p.save();
         QRect bg = m_fadingIndexes.rect();
         bg.moveTo( m_fadingPointAnchor ); // cover up the background
-        p.fillRect( bg, Qt::white );
+        p.drawPixmap( bg, m_bg );
+        
         
 //         qDebug() << "FAST SETOPACITY:" << p.paintEngine()->hasFeature(QPaintEngine::ConstantOpacity);
         p.setOpacity( 1 - m_fadeOutAnim.currentValue() );
