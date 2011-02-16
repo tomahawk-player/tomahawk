@@ -33,6 +33,9 @@ public slots:
     {
         if ( p )
             p->disconnect();
+
+        delete p;
+        p = 0;
     }
 
     void sendMsg( const QString& to, const QString& msg )

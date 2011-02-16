@@ -34,7 +34,7 @@ public:
     Tomahawk::playlist_ptr playlist() const { return m_playlist; }
 
     void loadPlaylist( const Tomahawk::playlist_ptr& playlist, bool loadEntries = true );
-    void loadHistory( const Tomahawk::source_ptr& source, unsigned int amount = 100 );
+    void loadHistory( const Tomahawk::source_ptr& source, unsigned int amount = 50 );
 
     void clear();
     

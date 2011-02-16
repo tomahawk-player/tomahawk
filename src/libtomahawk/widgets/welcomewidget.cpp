@@ -27,7 +27,7 @@ WelcomeWidget::WelcomeWidget( QWidget* parent )
 
     m_tracksModel = new PlaylistModel( ui->tracksView );
     ui->tracksView->setModel( m_tracksModel );
-    m_tracksModel->loadHistory( Tomahawk::source_ptr(), 50 );
+    m_tracksModel->loadHistory( Tomahawk::source_ptr() );
 
     connect( SourceList::instance(), SIGNAL( sourceAdded( Tomahawk::source_ptr ) ), SLOT( onSourceAdded( Tomahawk::source_ptr ) ) );
 

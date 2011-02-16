@@ -87,6 +87,7 @@ SourceList::remove( Tomahawk::Source* s )
     }
 
     emit sourceRemoved( src );
+    src.clear();
 }
 
 void

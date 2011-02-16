@@ -36,6 +36,8 @@ void
 ZeroconfPlugin::disconnectPlugin()
 {
     m_isOnline = false;
+    delete m_zeroconf;
+    m_zeroconf = 0;
 }
 
 void
