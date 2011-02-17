@@ -34,6 +34,25 @@ MusicScanner::MusicScanner( const QString& dir, quint32 bs )
 MusicScanner::~MusicScanner()
 {
     qDebug() << Q_FUNC_INFO;
+    if( m_dirListerThreadController )
+    {
+        m_dirListerThreadController->quit();
+    
+        while( !m_dirListerThreadController->isFinished() )
+        {
+            QCoreApplication::processEvents( QEventLoop::AllEvents, 200 );
+            TomahawkUtils::Sleep::msleep(100);
+        }
+        
+        if( m_dirLister )
+        {
+            delete m_dirLister;
+            m_dirLister = 0;
+        }
+        
+        delete m_dirListerThreadController;
+        m_dirListerThreadController = 0;
+    }
 }
 
 void

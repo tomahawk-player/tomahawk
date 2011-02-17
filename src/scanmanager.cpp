@@ -2,9 +2,11 @@
 
 #include <QDebug>
 #include <QThread>
+#include <QCoreApplication>
 
 #include "musicscanner.h"
 #include "tomahawksettings.h"
+#include "tomahawkutils.h"
 
 ScanManager* ScanManager::s_instance = 0;
 
@@ -30,14 +32,26 @@ ScanManager::ScanManager( QObject* parent )
 ScanManager::~ScanManager()
 {
     qDebug() << Q_FUNC_INFO;
-    s_instance = 0;
+    
     if( m_musicScannerThreadController )
     {
         m_musicScannerThreadController->quit();
-        m_musicScannerThreadController->deleteLater();
+    
+        while( !m_musicScannerThreadController->isFinished() )
+        {
+            QCoreApplication::processEvents( QEventLoop::AllEvents, 200 );
+            TomahawkUtils::Sleep::msleep(100);
+        }
+        
+        if( m_scanner )
+        {
+            delete m_scanner;
+            m_scanner = 0;
+        }
+        
+        delete m_musicScannerThreadController;
+        m_musicScannerThreadController = 0;
     }
-    m_musicScannerThreadController = 0;
-    m_scanner = 0;    
 }
 
 

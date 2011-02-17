@@ -119,6 +119,7 @@ INCLUDE_DIRECTORIES(
     topbar
     utils
     libtomahawk
+    libtomahawk/utils
     mac
 
     ../alsa-playback

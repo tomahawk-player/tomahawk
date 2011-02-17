@@ -3,6 +3,7 @@
 
 #include "dllmacro.h"
 #include <QObject>
+#include <QThread>
 
 #define RESPATH ":/data/"
 
@@ -41,7 +42,24 @@ namespace TomahawkUtils
     private:
         JDnsShared* m_dnsShared;
         JDnsSharedRequest* m_dnsSharedRequest;
-    };   
+    };
+    
+    class DLLEXPORT Sleep : public QThread
+    {
+    public:
+        static void sleep(unsigned long secs)
+        {
+            QThread::sleep(secs);
+        }
+        static void msleep(unsigned long msecs) 
+        {
+            QThread::msleep(msecs);
+        }
+        static void usleep(unsigned long usecs) 
+        {
+            QThread::usleep(usecs);
+        }
+    };
     
     DLLEXPORT QDir appConfigDir();
     DLLEXPORT QDir appDataDir();
