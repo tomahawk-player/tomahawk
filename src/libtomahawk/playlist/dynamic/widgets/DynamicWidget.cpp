@@ -57,7 +57,8 @@ DynamicWidget::DynamicWidget( const Tomahawk::dynplaylist_ptr& playlist, QWidget
 {   
     m_controls = new CollapsibleControls( this );
     m_layout->addWidget( m_controls );
-    
+    setContentsMargins( 0, 0, 0, 1 ); // to align the bottom with the bottom of the sourcelist
+   
     m_model = new DynamicModel( this );
     m_view = new DynamicView( this );
     m_view->setModel( m_model );

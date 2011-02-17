@@ -42,6 +42,9 @@ DynamicView::DynamicView( QWidget* parent )
         , m_checkOnCollapse( false )
         , m_fadebg( false )
 {
+    setContentsMargins( 0, 0, 0, 0 );
+    setFrameShape( QFrame::NoFrame );
+    
     m_fadeOutAnim.setDuration( FADE_LENGTH );
     m_fadeOutAnim.setCurveShape( QTimeLine::LinearCurve );
     m_fadeOutAnim.setFrameRange( 100, 0 );

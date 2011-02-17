@@ -175,7 +175,8 @@ PlaylistManager::show( const Tomahawk::playlist_ptr& playlist )
         m_stack->setCurrentWidget( view );
         m_currentInterface = view->proxyModel();
     }
-
+    
+    m_queueView->show();
     m_infobar->setCaption( playlist->title() );
     m_infobar->setDescription( tr( "A playlist by %1" ).arg( playlist->author()->isLocal() ? tr( "you" ) : playlist->author()->friendlyName() ) );
 
@@ -208,6 +209,10 @@ PlaylistManager::show( const Tomahawk::dynplaylist_ptr& playlist )
 
     m_infobar->setCaption( playlist->title() );
     m_infobar->setDescription( tr( "A playlist by %1" ).arg( playlist->author()->isLocal() ? tr( "you" ) : playlist->author()->friendlyName() ) );
+    
+    if( playlist->mode() == Tomahawk::OnDemand )
+        m_queueView->hide();
+    
     
     m_superCollectionVisible = false;
     m_statsAvailable = true;
@@ -249,7 +254,8 @@ PlaylistManager::show( const Tomahawk::artist_ptr& artist )
         m_stack->setCurrentWidget( view );
         m_currentInterface = view->proxyModel();
     }
-
+    
+    m_queueView->show();
     m_infobar->setCaption( tr( "All tracks by %1" ).arg( artist->name() ) );
     m_infobar->setDescription( "" );
 
@@ -290,7 +296,8 @@ PlaylistManager::show( const Tomahawk::album_ptr& album )
         m_stack->setCurrentWidget( view );
         m_currentInterface = view->proxyModel();
     }
-
+    
+    m_queueView->show();
     m_infobar->setCaption( tr( "All tracks on %1 by %2" ).arg( album->name() ).arg( album->artist()->name() ) );
     m_infobar->setDescription( "" );
 
@@ -365,7 +372,8 @@ PlaylistManager::show( const Tomahawk::collection_ptr& collection )
         m_infobar->setCaption( tr( "Your Collection" ) );
     else
         m_infobar->setCaption( tr( "Collection of %1" ).arg( collection->source()->friendlyName() ) );
-
+    
+    m_queueView->show();
     m_superCollectionVisible = false;
     m_statsAvailable = ( m_currentMode == 0 );
     m_modesAvailable = true;
@@ -397,7 +405,8 @@ PlaylistManager::show( const Tomahawk::source_ptr& source )
 
     m_infobar->setCaption( tr( "Info about %1" ).arg( source->isLocal() ? tr( "Your Collection" ) : source->friendlyName() ) );
     m_infobar->setDescription( "" );
-
+    
+    m_queueView->show();
     m_stack->setCurrentWidget( m_currentInfoWidget );
     m_superCollectionVisible = false;
     m_statsAvailable = false;
@@ -423,7 +432,8 @@ PlaylistManager::show( QWidget* widget, const QString& title, const QString& des
     m_infobar->setCaption( title );
     m_infobar->setDescription( desc );
     m_infobar->setPixmap( pixmap );
-
+    
+    m_queueView->show();
     m_superCollectionVisible = false;
     m_statsAvailable = false;
     m_modesAvailable = false;
@@ -462,6 +472,7 @@ PlaylistManager::showSuperCollection()
     m_infobar->setCaption( tr( "Super Collection" ) );
     m_infobar->setDescription( tr( "All available tracks" ) );
     
+    m_queueView->show();
     m_superCollectionVisible = true;
     m_statsAvailable = ( m_currentMode == 0 );
     m_modesAvailable = true;
