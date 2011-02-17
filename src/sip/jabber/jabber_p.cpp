@@ -587,6 +587,7 @@ Jabber_p::handleSubscription( const JID& jid, const std::string& /*msg*/ )
     qDebug() << Q_FUNC_INFO << jid.bare().c_str();
 
     StringList groups;
+    groups.push_back( "Tomahawk" );
     m_client->rosterManager()->subscribe( jid, "", groups, "" );
     return true;
 }
@@ -597,6 +598,7 @@ Jabber_p::handleSubscriptionRequest( const JID& jid, const std::string& /*msg*/ 
 {
     qDebug() << Q_FUNC_INFO << jid.bare().c_str();
     StringList groups;
+    groups.push_back( "Tomahawk" );
     m_client->rosterManager()->subscribe( jid, "", groups, "" );
     return true;
 }
