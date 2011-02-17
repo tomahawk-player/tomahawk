@@ -70,9 +70,6 @@ TwitterPlugin::accountName()
 
 QWidget* TwitterPlugin::configWidget()
 {
-    if( m_configWidget )
-        return m_configWidget;
-
     m_configWidget = new TwitterConfigWidget( this );
 
     return m_configWidget;
