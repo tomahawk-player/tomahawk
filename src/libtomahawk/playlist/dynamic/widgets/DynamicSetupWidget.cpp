@@ -53,6 +53,8 @@ DynamicSetupWidget::DynamicSetupWidget( const Tomahawk::dynplaylist_ptr& playlis
     foreach( const QString& type, GeneratorFactory::types() )
         genCombo->addItem( type );
     m_generatorCombo = new ReadOrWriteWidget( genCombo, m_playlist->author()->isLocal(), this );
+    m_generatorCombo->setLabel( playlist->generator()->type() );
+    
     m_layout->addWidget( m_generatorCombo );
     
     m_generateButton = new QPushButton( tr( "Generate" ), this );
