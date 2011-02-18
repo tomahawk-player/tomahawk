@@ -40,7 +40,7 @@ EchonestFactory::createControl( const QString& controlType )
 QStringList 
 EchonestFactory::typeSelectors() const
 {
-    return QStringList() << "Artist" << "Variety" << "Tempo" << "Duration" << "Loudness" 
+    return QStringList() << "Artist" << "Artist Description" << "Variety" << "Tempo" << "Duration" << "Loudness" 
                           << "Danceability" << "Energy" << "Artist Familiarity" << "Artist Hotttnesss" << "Song Hotttnesss" 
                           << "Longitude" << "Latitude" <<  "Mode" << "Key" << "Sorting";
 }
@@ -244,9 +244,9 @@ EchonestGenerator::onlyThisArtistType( Echonest::DynamicPlaylist::ArtistTypeEnum
     bool some = false;
     
     foreach( const dyncontrol_ptr& control, m_controls ) {
-        if( control->selectedType() == "Artist" && static_cast<Echonest::DynamicPlaylist::ArtistTypeEnum>( control->match().toInt() ) != type ) {
+        if( control->selectedType() == "Artist" || control->selectedType() == "Artist Description" && static_cast<Echonest::DynamicPlaylist::ArtistTypeEnum>( control->match().toInt() ) != type ) {
             only = false;
-        } else if( control->selectedType() == "Artist" && static_cast<Echonest::DynamicPlaylist::ArtistTypeEnum>( control->match().toInt() ) == type ) {
+        } else if( control->selectedType() == "Artist" || control->selectedType() == "Artist Description" && static_cast<Echonest::DynamicPlaylist::ArtistTypeEnum>( control->match().toInt() ) == type ) {
             some = true;
         }
     }
@@ -331,7 +331,7 @@ EchonestGenerator::sentenceSummary()
     QList< dyncontrol_ptr > artists;    
     dyncontrol_ptr sorting;
     foreach( const dyncontrol_ptr& control, allcontrols ) {
-        if( control->selectedType() == "Artist" )
+        if( control->selectedType() == "Artist" || control->selectedType() == "Artist Description" )
             artists << control;
         else if( control->selectedType() == "Sorting" )
             sorting = control;

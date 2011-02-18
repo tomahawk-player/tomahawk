@@ -137,7 +137,6 @@ Tomahawk::EchonestControl::updateWidgets()
         
         match->addItem( "Limit To", Echonest::DynamicPlaylist::ArtistType );
         match->addItem( "Similar To", Echonest::DynamicPlaylist::ArtistRadioType );
-        match->addItem( "Description", Echonest::DynamicPlaylist::ArtistDescriptionType );
         m_matchString = match->currentText();
         m_matchData = match->itemData( match->currentIndex() ).toString();
         
@@ -146,6 +145,23 @@ Tomahawk::EchonestControl::updateWidgets()
         
         connect( match, SIGNAL( currentIndexChanged(int) ), this, SLOT( updateData() ) );
         connect( match, SIGNAL( currentIndexChanged(int) ), this, SIGNAL( changed() ) );
+        connect( input, SIGNAL( textChanged(QString) ), this, SLOT( updateData() ) );
+        connect( input, SIGNAL( editingFinished() ), this, SLOT( editingFinished() ) );
+        connect( input, SIGNAL( textEdited( QString ) ), &m_editingTimer, SLOT( stop() ) );
+        
+        match->hide();
+        input->hide();
+        m_match = QWeakPointer< QWidget >( match );
+        m_input = QWeakPointer< QWidget >( input );
+    } else if( selectedType() == "Artist Description" ) {
+        m_currentType = Echonest::DynamicPlaylist::Description;
+        
+        QLabel* match = new QLabel( tr( "is" ) );
+        QLineEdit* input =  new QLineEdit();
+        
+        m_matchString = QString();
+        m_matchData = QString::number( (int)Echonest::DynamicPlaylist::ArtistDescriptionType );
+        
         connect( input, SIGNAL( textChanged(QString) ), this, SLOT( updateData() ) );
         connect( input, SIGNAL( editingFinished() ), this, SLOT( editingFinished() ) );
         connect( input, SIGNAL( textEdited( QString ) ), &m_editingTimer, SLOT( stop() ) );
@@ -342,13 +358,13 @@ Tomahawk::EchonestControl::updateData()
         if( combo ) {
             m_matchString = combo->currentText();
             m_matchData = combo->itemData( combo->currentIndex() ).toString();
-            
-            // EN HACK: artist-description radio needs description= fields not artist= fields
-            if( m_matchData.toInt() == Echonest::DynamicPlaylist::ArtistDescriptionType )
-                m_overrideType = Echonest::DynamicPlaylist::Description;
-            else
-                m_overrideType = -1;
         }
+        QLineEdit* edit = qobject_cast<QLineEdit*>( m_input.data() );
+        if( edit && !edit->text().isEmpty() ) {
+            m_data.first = m_currentType;
+            m_data.second = edit->text();
+        }
+    } else if( selectedType() == "Artist Description" ) {
         QLineEdit* edit = qobject_cast<QLineEdit*>( m_input.data() );
         if( edit && !edit->text().isEmpty() ) {
             m_data.first = m_currentType;
@@ -420,6 +436,10 @@ Tomahawk::EchonestControl::updateWidgetsFromData()
         QLineEdit* edit = qobject_cast<QLineEdit*>( m_input.data() );
         if( edit )
             edit->setText( m_data.second.toString() );
+    } else if( selectedType() == "Artist Description" ) {
+        QLineEdit* edit = qobject_cast<QLineEdit*>( m_input.data() );
+        if( edit )
+            edit->setText( m_data.second.toString() );
     } else if( selectedType() == "Variety" ) {
         LabeledSlider* s = qobject_cast<LabeledSlider*>( m_input.data() );
         if( s )
@@ -481,8 +501,8 @@ Tomahawk::EchonestControl::calculateSummary()
             summary = QString( "only by ~%1" ).arg( m_data.second.toString() );
         else if( static_cast< Echonest::DynamicPlaylist::ArtistTypeEnum >( m_matchData.toInt() ) == Echonest::DynamicPlaylist::ArtistRadioType )
             summary = QString( "similar to ~%1" ).arg( m_data.second.toString() );
-        else if( static_cast< Echonest::DynamicPlaylist::ArtistTypeEnum >( m_matchData.toInt() ) == Echonest::DynamicPlaylist::ArtistDescriptionType )
-            summary = QString( "like ~%1" ).arg( m_data.second.toString() );
+    } else if( selectedType() == "Artist Description" ) {
+        summary = QString( "with genre ~%1" ).arg( m_data.second.toString() );     
     } else if( selectedType() == "Variety" || selectedType() == "Danceability" || selectedType() == "Artist Hotttnesss" || selectedType() == "Energy" || selectedType() == "Artist Familiarity" || selectedType() == "Song Hotttnesss" ) {
         QString modifier;
         qreal sliderVal = m_data.second.toReal();
