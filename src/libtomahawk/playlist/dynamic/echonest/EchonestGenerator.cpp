@@ -244,9 +244,9 @@ EchonestGenerator::onlyThisArtistType( Echonest::DynamicPlaylist::ArtistTypeEnum
     bool some = false;
     
     foreach( const dyncontrol_ptr& control, m_controls ) {
-        if( control->selectedType() == "Artist" || control->selectedType() == "Artist Description" && static_cast<Echonest::DynamicPlaylist::ArtistTypeEnum>( control->match().toInt() ) != type ) {
+        if( ( control->selectedType() == "Artist" || control->selectedType() == "Artist Description" ) && static_cast<Echonest::DynamicPlaylist::ArtistTypeEnum>( control->match().toInt() ) != type ) {
             only = false;
-        } else if( control->selectedType() == "Artist" || control->selectedType() == "Artist Description" && static_cast<Echonest::DynamicPlaylist::ArtistTypeEnum>( control->match().toInt() ) == type ) {
+        } else if( ( control->selectedType() == "Artist" || control->selectedType() == "Artist Description" ) && static_cast<Echonest::DynamicPlaylist::ArtistTypeEnum>( control->match().toInt() ) == type ) {
             some = true;
         }
     }

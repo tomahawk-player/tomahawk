@@ -233,9 +233,7 @@ DynamicWidget::stationFailed( const QString& msg )
 {
     m_view->showMessage( msg );
     
-    if( m_runningOnDemand ) {
-        stopStation( false );
-    }
+    stopStation( false );
 }
 
 
