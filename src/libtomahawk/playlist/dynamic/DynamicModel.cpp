@@ -25,6 +25,7 @@ DynamicModel::DynamicModel( QObject* parent )
     , m_startOnResolved( false )
     , m_onDemandRunning( false )
     , m_changeOnNext( false )
+    , m_firstTrackGenerated( false )
     , m_currentAttempts( 0 )
     , m_lastResolvedRow( 0 )
 {
@@ -69,6 +70,10 @@ void
 DynamicModel::newTrackGenerated( const Tomahawk::query_ptr& query )
 {
     if( m_onDemandRunning ) {
+        if( !m_firstTrackGenerated ) {
+            emit firstTrackGenerated();
+            m_firstTrackGenerated = false;
+        }
         connect( query.data(), SIGNAL( resolvingFinished( bool ) ), this, SLOT( trackResolveFinished( bool ) ) );
         connect( query.data(), SIGNAL( resultsAdded( QList<Tomahawk::result_ptr> ) ), this, SLOT( trackResolved() ) );
     
@@ -80,6 +85,7 @@ void
 DynamicModel::stopOnDemand( bool stopPlaying )
 {
     m_onDemandRunning = false;
+    m_firstTrackGenerated = false;
     if( stopPlaying )
         AudioEngine::instance()->stop();
     

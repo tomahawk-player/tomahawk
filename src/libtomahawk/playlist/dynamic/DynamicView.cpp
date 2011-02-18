@@ -40,6 +40,7 @@ DynamicView::DynamicView( QWidget* parent )
         : PlaylistView( parent )
         , m_onDemand( false )
         , m_checkOnCollapse( false )
+        , m_working( false )
         , m_fadebg( false )
 {
     setContentsMargins( 0, 0, 0, 0 );
@@ -110,11 +111,21 @@ DynamicView::showMessage(const QString& message)
     overlay()->show();
 }
 
+void 
+DynamicView::setDynamicWorking(bool working)
+{
+    m_working = working;
+    if( working )
+        overlay()->hide();
+    else
+        onTrackCountChanged( proxyModel()->rowCount() );
+}
+
 
 void 
 DynamicView::onTrackCountChanged( unsigned int tracks )
 {
-    if ( tracks == 0 )
+    if ( tracks == 0 && !m_working )
     {
         if( m_onDemand ) {
             if( m_readOnly )
@@ -129,8 +140,10 @@ DynamicView::onTrackCountChanged( unsigned int tracks )
         if( !overlay()->shown() )
             overlay()->show();
     }
-    else
+    else {
+        m_working = false;
         overlay()->hide();
+    }
 }
 
 void

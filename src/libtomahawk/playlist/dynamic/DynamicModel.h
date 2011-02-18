@@ -49,6 +49,7 @@ signals:
     void collapseFromTo( int startRow, int num );
     void checkForOverflow();
 
+    void firstTrackGenerated();
     void trackGenerationFailure( const QString& msg );
     
 private slots:    
@@ -64,6 +65,7 @@ private:
     bool m_onDemandRunning;
     bool m_changeOnNext;
     bool m_searchingForNext;
+    bool m_firstTrackGenerated;
     int m_currentAttempts;
     int m_lastResolvedRow;
 };

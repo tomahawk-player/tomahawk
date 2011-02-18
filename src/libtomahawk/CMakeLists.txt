@@ -115,6 +115,7 @@ set( libSources
     playlist/dynamic/widgets/MiscControlWidgets.cpp
     playlist/dynamic/widgets/CollapsibleControls.cpp
     playlist/dynamic/widgets/DynamicSetupWidget.cpp
+    playlist/dynamic/widgets/LoadingSpinner.cpp
 
     network/bufferiodevice.cpp
     network/msgprocessor.cpp
@@ -262,6 +263,7 @@ set( libHeaders
     playlist/dynamic/widgets/MiscControlWidgets.h
     playlist/dynamic/widgets/CollapsibleControls.h
     playlist/dynamic/widgets/DynamicSetupWidget.h
+    playlist/dynamic/widgets/LoadingSpinner.h
 
     utils/tomahawkutils.h
     utils/querylabel.h

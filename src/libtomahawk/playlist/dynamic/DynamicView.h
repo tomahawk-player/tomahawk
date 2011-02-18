@@ -43,6 +43,8 @@ public:
     void setOnDemand( bool onDemand );
     void setReadOnly( bool readOnly );
     
+    void setDynamicWorking( bool working );
+    
     virtual void paintEvent(QPaintEvent* event);
     
 public slots:
@@ -68,6 +70,7 @@ private:
     bool m_onDemand;
     bool m_readOnly;
     bool m_checkOnCollapse;
+    bool m_working;
 
     // for collapsing animation
     QPoint m_fadingPointAnchor;

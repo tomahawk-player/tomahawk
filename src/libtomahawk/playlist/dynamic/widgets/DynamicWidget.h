@@ -23,6 +23,7 @@
 #include "dynamic/DynamicPlaylist.h"
 #include "dynamic/DynamicControl.h"
 
+class LoadingSpinner;
 class QShowEvent;
 class QHideEvent;
 class QSpinBox;
@@ -87,6 +88,7 @@ private slots:
     void generate( int = -1 );
     void tracksGenerated( const QList< Tomahawk::query_ptr>& queries );
     void generatorError( const QString& title, const QString& content );
+    void firstStationTrackGenerated();
     
     void controlsChanged();
     void controlChanged( const Tomahawk::dyncontrol_ptr& control );
@@ -97,6 +99,9 @@ private:
     QVBoxLayout* m_layout;
     bool m_resolveOnNextLoad;
     int m_seqRevLaunched; // if we shoot off multiple createRevision calls, we don'y want to set one of the middle ones
+
+    // loading animation
+    LoadingSpinner* m_loading;
     
     // setup controls
     DynamicSetupWidget* m_setup;

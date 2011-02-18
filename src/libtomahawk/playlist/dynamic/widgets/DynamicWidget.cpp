@@ -39,6 +39,7 @@
 #include <QPainter>
 
 #include "audiocontrols.h"
+#include "LoadingSpinner.h"
 
 using namespace Tomahawk;
 
@@ -58,7 +59,7 @@ DynamicWidget::DynamicWidget( const Tomahawk::dynplaylist_ptr& playlist, QWidget
     m_controls = new CollapsibleControls( this );
     m_layout->addWidget( m_controls );
     setContentsMargins( 0, 0, 0, 1 ); // to align the bottom with the bottom of the sourcelist
-   
+    
     m_model = new DynamicModel( this );
     m_view = new DynamicView( this );
     m_view->setModel( m_model );
@@ -67,7 +68,9 @@ DynamicWidget::DynamicWidget( const Tomahawk::dynplaylist_ptr& playlist, QWidget
     
     connect( m_model, SIGNAL( collapseFromTo( int, int ) ), m_view, SLOT( collapseEntries( int, int ) ) );
     connect( m_model, SIGNAL( trackGenerationFailure( QString ) ), this, SLOT( stationFailed( QString ) ) );    
+    connect( m_model, SIGNAL( firstTrackGenerated() ), this, SLOT( firstStationTrackGenerated() ) );
     
+    m_loading = new LoadingSpinner( m_view ); 
     
     m_setup = new DynamicSetupWidget( playlist, this );
     m_setup->fadeIn();
@@ -140,7 +143,7 @@ DynamicWidget::loadDynamicPlaylist( const Tomahawk::dynplaylist_ptr& playlist )
     m_model->loadPlaylist( m_playlist );
     m_controlsChanged = false;
     m_setup->setPlaylist( m_playlist );
-    
+        
     if( !m_playlist.isNull() )
         m_controls->setControls( m_playlist, m_playlist->author()->isLocal() );
     
@@ -222,6 +225,8 @@ DynamicWidget::generate( int num )
     if( m_playlist->mode() == Static ) 
     {
         // get the items from the generator, and put them in the playlist
+        m_view->setDynamicWorking( true );
+        m_loading->fadeIn();
         m_playlist->generator()->generate( num );
     } else if( m_playlist->mode() == OnDemand ) {
 
@@ -232,6 +237,8 @@ void
 DynamicWidget::stationFailed( const QString& msg )
 {
     m_view->showMessage( msg );
+    m_view->setDynamicWorking( false );
+    m_loading->fadeOut();
     
     stopStation( false );
 }
@@ -252,9 +259,17 @@ DynamicWidget::playPressed()
     if( isVisible() && !m_playlist.isNull() &&
         m_playlist->mode() == OnDemand && !m_runningOnDemand ) {
         
+        m_view->setDynamicWorking( true );
         startStation();
     }
         
+}
+
+void 
+DynamicWidget::firstStationTrackGenerated()
+{
+    m_view->setDynamicWorking( false );
+    m_loading->fadeOut();
 }
 
 
@@ -304,6 +319,8 @@ DynamicWidget::playlistTypeChanged( QString )
 void 
 DynamicWidget::tracksGenerated( const QList< query_ptr >& queries )
 {
+    m_loading->fadeOut();
+    
     if( m_playlist->author()->isLocal() ) {
         m_playlist->addEntries( queries, m_playlist->currentrevision() );
         m_resolveOnNextLoad = true;
@@ -343,6 +360,11 @@ DynamicWidget::controlChanged( const Tomahawk::dyncontrol_ptr& control )
 void 
 DynamicWidget::generatorError( const QString& title, const QString& content )
 {
+    if( m_runningOnDemand ) {
+        stopStation( false );
+    }
+    m_view->setDynamicWorking( false );
+    m_loading->fadeOut();
     m_view->showMessageTimeout( title, content );
 }
 
