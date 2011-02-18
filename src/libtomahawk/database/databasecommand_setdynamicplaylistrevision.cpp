@@ -55,7 +55,6 @@ QVariantList DatabaseCommand_SetDynamicPlaylistRevision::controlsV()
     
 }
 
-
 void
 DatabaseCommand_SetDynamicPlaylistRevision::postCommitHook()
 {
@@ -78,7 +77,7 @@ DatabaseCommand_SetDynamicPlaylistRevision::postCommitHook()
     
     if ( playlist.isNull() )
     {
-        qDebug() << playlistguid();
+        qDebug() <<"Got null playlist with guid:" << playlistguid() << "from source and collection:" << source()->friendlyName() << source()->collection()->name();
         Q_ASSERT( !playlist.isNull() );
         return;
     }
