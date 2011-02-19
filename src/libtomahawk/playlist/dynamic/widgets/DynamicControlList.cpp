@@ -34,7 +34,6 @@ using namespace Tomahawk;
 DynamicControlList::DynamicControlList( QWidget* parent )
     : QWidget( parent )
     , m_layout( new QGridLayout )
-    , m_summaryWidget( 0 )
 {
     init();
 }
@@ -43,7 +42,6 @@ DynamicControlList::DynamicControlList( const geninterface_ptr& generator, const
     : QWidget( parent )
     , m_generator( generator )
     , m_layout( new QGridLayout )
-    , m_summaryWidget( 0 )
 {
     init();
     setControls(  generator, controls );

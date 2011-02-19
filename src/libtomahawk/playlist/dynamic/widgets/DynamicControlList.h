@@ -67,7 +67,6 @@ private:
     
     QGridLayout* m_layout;
     QList< DynamicControlWrapper* > m_controls;
-    QWidget* m_summaryWidget;
     
     QHBoxLayout* m_collapseLayout;
     QPushButton* m_collapse;
