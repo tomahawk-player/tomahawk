@@ -193,7 +193,6 @@ TwitterPlugin::checkTimerFired()
 void
 TwitterPlugin::connectTimerFired()
 {
-    qDebug() << Q_FUNC_INFO;
     if ( !isValid() || m_cachedPeers.isEmpty() )
         return;
     
