@@ -205,7 +205,7 @@ void
 DynamicWidget::hideEvent( QHideEvent* ev )
 {
     if( m_runningOnDemand ) {
-        stopStation();
+        stopStation( false );
     }
     QWidget::hideEvent( ev );
 }
