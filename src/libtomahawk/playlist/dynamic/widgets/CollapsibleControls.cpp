@@ -84,6 +84,10 @@ CollapsibleControls::init()
     m_summaryWidget->setContentsMargins( 3, 0, 0, 0 );
     
     m_summary = new QLabel( m_summaryWidget );
+    QFont f = m_summary->font();
+    f.setPointSize( f.pointSize() + 1 );
+    f.setBold( true );
+    m_summary->setFont( f );
     m_summaryLayout->addWidget( m_summary, 1 );
     m_summaryExpand = DynamicControlWrapper::initButton( this );
     m_summaryExpand->setIcon( QIcon( RESPATH "images/arrow-down-double.png" ) );

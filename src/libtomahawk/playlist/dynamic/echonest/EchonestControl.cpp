@@ -34,7 +34,6 @@ Tomahawk::EchonestControl::EchonestControl( const QString& selectedType, const Q
     
     connect( &m_editingTimer, SIGNAL( timeout() ), this, SIGNAL( changed() ) );
     updateWidgets();
-    updateData();
 }
 
 QWidget*
@@ -393,6 +392,7 @@ Tomahawk::EchonestControl::updateData()
             int enumVal = input->itemData( input->currentIndex() ).toInt() + m_matchData.toInt();
             m_data.first = Echonest::DynamicPlaylist::Sort;
             m_data.second = enumVal;
+            qDebug() << "SAVING" << input->currentIndex() << "AS" << enumVal;
         }
     }
     
@@ -459,6 +459,7 @@ Tomahawk::EchonestControl::updateWidgetsFromData()
             // HACK alert. if it's odd, subtract 1
             int val = m_data.second.toInt() - ( m_data.second.toInt() % 2 );
             input->setCurrentIndex( val );
+            qDebug() << "LOADING" << m_data.second.toInt() << "AS" <<val;
         }
     }
     calculateSummary();
@@ -521,7 +522,7 @@ Tomahawk::EchonestControl::calculateSummary()
     } else if( selectedType() == "Tempo" ) {
         summary = QString( "about %1 BPM" ).arg( m_data.second.toString() );
     } else if( selectedType() == "Duration" ) {
-        summary = QString( "about %1 minutes long" ).arg( m_data.second / 60 );
+        summary = QString( "about %1 minutes long" ).arg( m_data.second.toInt() / 60 );
     } else if( selectedType() == "Loudness" ) {
         summary = QString( "about %1 dB" ).arg( m_data.second.toString() );
     } else if( selectedType() == "Latitude" || selectedType() == "Longitude"  ) {
