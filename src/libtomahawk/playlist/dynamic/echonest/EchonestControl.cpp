@@ -521,7 +521,7 @@ Tomahawk::EchonestControl::calculateSummary()
     } else if( selectedType() == "Tempo" ) {
         summary = QString( "about %1 BPM" ).arg( m_data.second.toString() );
     } else if( selectedType() == "Duration" ) {
-        summary = QString( "about %1 minutes long" ).arg( m_data.second.toString() );
+        summary = QString( "about %1 minutes long" ).arg( m_data.second / 60 );
     } else if( selectedType() == "Loudness" ) {
         summary = QString( "about %1 dB" ).arg( m_data.second.toString() );
     } else if( selectedType() == "Latitude" || selectedType() == "Longitude"  ) {
