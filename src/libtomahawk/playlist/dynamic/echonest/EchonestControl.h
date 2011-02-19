@@ -44,7 +44,7 @@ public:
     virtual void setMatch(const QString& match);
     
     /// DO NOT USE IF YOU ARE NOT A DBCMD
-    explicit EchonestControl( const QString& type, const QStringList& typeSelectors, QObject* parent = 0 );
+    EchonestControl( const QString& type, const QStringList& typeSelectors, QObject* parent = 0 );
     
 public slots:
     virtual void setSelectedType ( const QString& type );

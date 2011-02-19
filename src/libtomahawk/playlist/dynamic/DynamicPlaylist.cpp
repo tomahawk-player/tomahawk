@@ -429,6 +429,7 @@ QList< dyncontrol_ptr > DynamicPlaylist::variantsToControl( const QList< QVarian
     QList<dyncontrol_ptr> realControls;
     foreach( QVariantMap controlV, controlsV ) {
         dyncontrol_ptr control = GeneratorFactory::createControl( controlV.value( "type" ).toString(), controlV.value( "selectedType" ).toString() );
+        qDebug() << "CReating control with data:" << controlV;
         QJson::QObjectHelper::qvariant2qobject( controlV, control.data() );
         realControls << control;
     }

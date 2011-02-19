@@ -29,7 +29,7 @@ Tomahawk::EchonestControl::EchonestControl( const QString& selectedType, const Q
     : DynamicControl ( selectedType.isEmpty() ? "Artist" : selectedType, typeSelectors, parent )
 {
     setType( "echonest" );
-    m_editingTimer.setInterval( 3000 ); // 3 second timeout to edits
+    m_editingTimer.setInterval( 2000 ); // 2 second timeout to edits
     m_editingTimer.setSingleShot( true );
     
     connect( &m_editingTimer, SIGNAL( timeout() ), this, SIGNAL( changed() ) );
@@ -245,8 +245,8 @@ Tomahawk::EchonestControl::updateWidgets()
         m_matchData = match->text();
         
         
-        connect( combo, SIGNAL( currentIndexChanged( int ) ), this, SLOT( updateData() ) );
-        connect( combo, SIGNAL( currentIndexChanged( int ) ), this, SLOT( editingFinished() ) );
+        connect( combo, SIGNAL( activated( int ) ), this, SLOT( updateData() ) );
+        connect( combo, SIGNAL( activated( int ) ), this, SLOT( editingFinished() ) );
         
         match->hide();
         combo->hide();
@@ -274,8 +274,8 @@ Tomahawk::EchonestControl::updateWidgets()
         m_matchData = match->text();
         
         
-        connect( combo, SIGNAL( currentIndexChanged( int ) ), this, SLOT( updateData() ) );
-        connect( combo, SIGNAL( currentIndexChanged( int ) ), this, SLOT( editingFinished() ) );
+        connect( combo, SIGNAL( activated( int ) ), this, SLOT( updateData() ) );
+        connect( combo, SIGNAL( activated( int ) ), this, SLOT( editingFinished() ) );
         
         match->hide();
         combo->hide();
@@ -291,8 +291,9 @@ Tomahawk::EchonestControl::updateWidgets()
         QComboBox* combo = new QComboBox;
         combo->addItem( tr( "Tempo" ), QString::number( Echonest::DynamicPlaylist::SortTempoAscending ) );
         combo->addItem( tr( "Duration" ), QString::number( Echonest::DynamicPlaylist::SortDurationAscending ) );
-        combo->addItem( tr( "Loudness" ), QString::number( Echonest::DynamicPlaylist::SortLoudnessAscending ) ); /// TODO only in trunk libechonest
+        combo->addItem( tr( "Loudness" ), QString::number( Echonest::DynamicPlaylist::SortLoudnessAscending ) );
         combo->addItem( tr( "Artist Familiarity" ), QString::number( Echonest::DynamicPlaylist::SortArtistFamiliarityAscending ) );
+        combo->addItem( tr( "Artist Hotttnesss" ), QString::number( Echonest::DynamicPlaylist::SortArtistHotttnessAscending ) );
         combo->addItem( tr( "Song Hotttnesss" ), QString::number( Echonest::DynamicPlaylist::SortSongHotttnesssAscending ) );
         combo->addItem( tr( "Latitude" ), QString::number( Echonest::DynamicPlaylist::SortLatitudeAscending ) );
         combo->addItem( tr( "Longitude" ), QString::number( Echonest::DynamicPlaylist::SortLongitudeAscending ) );
@@ -304,10 +305,10 @@ Tomahawk::EchonestControl::updateWidgets()
         m_matchString = "Ascending"; // default
         m_matchData = Echonest::DynamicPlaylist::SortTempoAscending;
         
-        connect( match, SIGNAL( currentIndexChanged( int ) ), this, SLOT( updateData() ) );
-        connect( match, SIGNAL( currentIndexChanged( int ) ), this, SLOT( editingFinished() ) );
-        connect( combo, SIGNAL( currentIndexChanged( int ) ), this, SLOT( updateData() ) );
-        connect( combo, SIGNAL( currentIndexChanged( int ) ), this, SLOT( editingFinished() ) );
+        connect( match, SIGNAL( activated( int ) ), this, SLOT( updateData() ) );
+        connect( match, SIGNAL( activated( int ) ), this, SLOT( editingFinished() ) );
+        connect( combo, SIGNAL( activated( int ) ), this, SLOT( updateData() ) );
+        connect( combo, SIGNAL( activated( int ) ), this, SLOT( editingFinished() ) );
         
         match->hide();
         combo->hide();
@@ -336,8 +337,8 @@ Tomahawk::EchonestControl::setupMinMaxWidgets( Echonest::DynamicPlaylist::Playli
     m_matchString = match->currentText();
     m_matchData = match->itemData( match->currentIndex() ).toString();
     
-    connect( match, SIGNAL( currentIndexChanged( int ) ), this, SLOT( updateData() ) );
-    connect( match, SIGNAL( currentIndexChanged( int ) ), this, SLOT( editingFinished() ) );
+    connect( match, SIGNAL( activated( int ) ), this, SLOT( updateData() ) );
+    connect( match, SIGNAL( activated( int ) ), this, SLOT( editingFinished() ) );
     connect( input->slider(), SIGNAL( valueChanged( int ) ), this, SLOT( updateData() ) );
     connect( input->slider(), SIGNAL( valueChanged( int ) ), this, SLOT( editingFinished() ) );
     connect( input->slider(), SIGNAL( sliderMoved( int ) ), &m_editingTimer, SLOT( stop() ) );
@@ -392,7 +393,7 @@ Tomahawk::EchonestControl::updateData()
             int enumVal = input->itemData( input->currentIndex() ).toInt() + m_matchData.toInt();
             m_data.first = Echonest::DynamicPlaylist::Sort;
             m_data.second = enumVal;
-            qDebug() << "SAVING" << input->currentIndex() << "AS" << enumVal;
+//             qDebug() << "SAVING" << input->currentIndex() << "AS" << enumVal << "(" << input->itemData( input->currentIndex() ).toInt() << "+" << m_matchData.toInt() << ")";
         }
     }
     
@@ -457,9 +458,9 @@ Tomahawk::EchonestControl::updateWidgetsFromData()
             match->setCurrentIndex( match->findData( m_matchData ));
             
             // HACK alert. if it's odd, subtract 1
-            int val = m_data.second.toInt() - ( m_data.second.toInt() % 2 );
+            int val = ( m_data.second.toInt() - ( m_data.second.toInt() % 2 ) ) / 2;
             input->setCurrentIndex( val );
-            qDebug() << "LOADING" << m_data.second.toInt() << "AS" <<val;
+//             qDebug() << "LOADING" << m_data.second.toInt() << "AS" << val;
         }
     }
     calculateSummary();
