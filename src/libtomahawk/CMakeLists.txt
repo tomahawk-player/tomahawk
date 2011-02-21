@@ -295,23 +295,25 @@ set( libUI ${libUI}
     playlist/infobar/infobar.ui
 )
 
-include_directories( . ${CMAKE_CURRENT_BINARY_DIR} .. 
+include_directories( . ${CMAKE_CURRENT_BINARY_DIR} ..
     ${QT_INCLUDE_DIR}
     ${LIBECHONEST_INCLUDE_DIR}
     ${LIBECHONEST_INCLUDE_DIR}/..
     ${CLUCENE_INCLUDE_DIR}
     ${CLUCENE_LIBRARY_DIR}
-    ../../libportfwd/include
+
     ../../include
     ../network
-    ../../qxt/qxtweb-standalone/qxtweb
-    ../../rtaudio
-    ../../alsa-playback
-    ../../thirdparty/jdns
-    ../../thirdparty/jdns/jdns
-    ../../thirdparty/jdns/jdnsshared
-    ../../thirdparty/qtweetlib/qtweetlib/src
     playlist
+
+    ${THIRDPARTY_DIR}/libportfwd/include
+    ${THIRDPARTY_DIR}/qxt/qxtweb-standalone/qxtweb
+    ${THIRDPARTY_DIR}/rtaudio
+    ${THIRDPARTY_DIR}/alsa-playback
+    ${THIRDPARTY_DIR}/jdns
+    ${THIRDPARTY_DIR}/jdns/jdns
+    ${THIRDPARTY_DIR}/jdns/jdnsshared
+    ${THIRDPARTY_DIR}/qtweetlib/qtweetlib/src
 )
 
 

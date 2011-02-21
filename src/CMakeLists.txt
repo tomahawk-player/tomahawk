@@ -122,11 +122,11 @@ INCLUDE_DIRECTORIES(
     libtomahawk/utils
     mac
 
-    ../alsa-playback
-    ../rtaudio
-    ../qxt/qxtweb-standalone/qxtweb
-    ../thirdparty/qtweetlib/qtweetlib/src
-    ../thirdparty/qtweetlib/tomahawk-custom
+    ${THIRDPARTY_DIR}/alsa-playback
+    ${THIRDPARTY_DIR}/rtaudio
+    ${THIRDPARTY_DIR}/qxt/qxtweb-standalone/qxtweb/
+    ${THIRDPARTY_DIR}/qtweetlib/qtweetlib/src
+    ${THIRDPARTY_DIR}/qtweetlib/tomahawk-custom
 
     /usr/include/taglib
     /usr/local/include/taglib

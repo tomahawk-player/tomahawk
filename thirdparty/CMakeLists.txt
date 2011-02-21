@@ -1,2 +1,10 @@
 add_subdirectory( jdns )
 add_subdirectory( qtweetlib )
+ADD_SUBDIRECTORY( libportfwd )
+ADD_SUBDIRECTORY( qxt )
+
+IF( UNIX AND NOT APPLE )
+    ADD_SUBDIRECTORY( alsa-playback )
+ELSE()
+    ADD_SUBDIRECTORY( rtaudio )
+ENDIF( UNIX AND NOT APPLE )
