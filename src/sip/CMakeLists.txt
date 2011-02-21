@@ -1,3 +1,7 @@
-ADD_SUBDIRECTORY( jabber )
+
+IF(Gloox_FOUND)
+    ADD_SUBDIRECTORY( jabber )
+ENDIF(Gloox_FOUND)
+
 ADD_SUBDIRECTORY( twitter )
 ADD_SUBDIRECTORY( zeroconf )

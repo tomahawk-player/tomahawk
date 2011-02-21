@@ -33,7 +33,6 @@ SET( tomahawkSources ${tomahawkSources}
      infosystem/infoplugins/echonestplugin.cpp
      infosystem/infoplugins/musixmatchplugin.cpp
 
-     xmppbot/xmppbot.cpp
      web/api_v1.cpp
 
      musicscanner.cpp
@@ -74,7 +73,7 @@ SET( tomahawkHeaders ${tomahawkHeaders}
      infosystem/infoplugins/echonestplugin.h
      infosystem/infoplugins/musixmatchplugin.h
 
-     xmppbot/xmppbot.h
+
      web/api_v1.h
 
      musicscanner.h
@@ -83,6 +82,7 @@ SET( tomahawkHeaders ${tomahawkHeaders}
      scanmanager.h
      shortcuthandler.h
 )
+
 
 SET( tomahawkHeadersGui ${tomahawkHeadersGui}
      sourcetree/sourcesmodel.h
@@ -142,6 +142,10 @@ IF( UNIX )
   INCLUDE( "CMakeLists.unix.txt" )
 ENDIF( UNIX )
 
+
+IF(Gloox_FOUND)
+    ADD_SUBDIRECTORY( xmppbot )
+ENDIF(Gloox_FOUND)
 ADD_SUBDIRECTORY( sip )
 
 kde4_add_app_icon( tomahawkSources "${CMAKE_SOURCE_DIR}/data/icons/tomahawk-icon-*.png" )
@@ -181,7 +185,6 @@ TARGET_LINK_LIBRARIES( tomahawk
     ${OS_SPECIFIC_LINK_LIBRARIES}
     ${LIBECHONEST_LIBRARY}
     ${LIBLASTFM_LIBRARY}
-    ${GLOOX_LIBRARIES}
     ${QXTWEB_LIBRARIES}
     ${QTWEETLIB_LIBRARIES}
     ${QJSON_LIBRARIES}

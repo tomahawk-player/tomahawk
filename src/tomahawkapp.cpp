@@ -20,7 +20,6 @@
 #include "playlist/dynamic/GeneratorFactory.h"
 #include "playlist/dynamic/echonest/EchonestGenerator.h"
 #include "utils/tomahawkutils.h"
-#include "xmppbot/xmppbot.h"
 #include "web/api_v1.h"
 #include "scriptresolver.h"
 #include "sourcelist.h"
@@ -35,6 +34,11 @@
     #include "tomahawkwindow.h"
     #include "settingsdialog.h"
     #include <QMessageBox>
+#endif
+
+// should go to a plugin actually
+#ifdef Gloox_FOUND
+    #include "xmppbot/xmppbot.h"
 #endif
 
 #ifdef Q_WS_MAC
@@ -475,6 +479,7 @@ TomahawkApp::setupSIP()
 {
     qDebug() << Q_FUNC_INFO;
 
+#ifdef Gloox_FOUND
     //FIXME: jabber autoconnect is really more, now that there is sip -- should be renamed and/or split out of jabber-specific settings
     if( !arguments().contains( "--nosip" ) && TomahawkSettings::instance()->jabberAutoConnect() )
     {
@@ -483,6 +488,7 @@ TomahawkApp::setupSIP()
         m_sipHandler->connectPlugins( true );
 //        m_sipHandler->setProxy( *TomahawkUtils::proxy() );
     }
+#endif
 }
 
 
