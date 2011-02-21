@@ -318,44 +318,47 @@ include_directories( . ${CMAKE_CURRENT_BINARY_DIR} ..
 
 
 IF( WIN32 )
-SET( libSources ${libSources} audio/rtaudiooutput.cpp )
-SET( libHeaders ${libHeaders} audio/rtaudiooutput.h )
+    SET( libSources ${libSources} audio/rtaudiooutput.cpp )
+    SET( libHeaders ${libHeaders} audio/rtaudiooutput.h )
 
-SET( OS_SPECIFIC_LINK_LIBRARIES
-    ${OS_SPECIFIC_LINK_LIBRARIES}
-    "iphlpapi.a"
-    "ws2_32.dll"
-    "dnsapi.dll"
-    "dsound.dll" 
-    "winmm.dll"
-    "advapi32.dll"
-
-    ${CMAKE_BINARY_DIR}/rtaudio/librtaudio.dll
-)
+    SET( OS_SPECIFIC_LINK_LIBRARIES
+        ${OS_SPECIFIC_LINK_LIBRARIES}
+    # Thirdparty
+        ${CMAKE_BINARY_DIR}/rtaudio/librtaudio.dll
+    # System
+        "iphlpapi.a"
+        "ws2_32.dll"
+        "dnsapi.dll"
+        "dsound.dll"
+        "winmm.dll"
+        "advapi32.dll"
+    )
 ENDIF( WIN32 )
 
 IF( APPLE )
-FIND_LIBRARY( COREAUDIO_LIBRARY CoreAudio )
-FIND_LIBRARY( COREFOUNDATION_LIBRARY CoreFoundation )
-MARK_AS_ADVANCED( COREAUDIO_LIBRARY COREFOUNDATION_LIBRARY )
+    FIND_LIBRARY( COREAUDIO_LIBRARY CoreAudio )
+    FIND_LIBRARY( COREFOUNDATION_LIBRARY CoreFoundation )
+    MARK_AS_ADVANCED( COREAUDIO_LIBRARY COREFOUNDATION_LIBRARY )
 
-SET( libSources ${libSources} audio/rtaudiooutput.cpp )
-SET( libHeaders ${libHeaders} audio/rtaudiooutput.h )
+    SET( libSources ${libSources} audio/rtaudiooutput.cpp )
+    SET( libHeaders ${libHeaders} audio/rtaudiooutput.h )
 
-SET( OS_SPECIFIC_LINK_LIBRARIES
-    ${OS_SPECIFIC_LINK_LIBRARIES}
-    ${COREAUDIO_LIBRARY}
-    ${COREFOUNDATION_LIBRARY}
-    rtaudio
-)
-
+    SET( OS_SPECIFIC_LINK_LIBRARIES
+        ${OS_SPECIFIC_LINK_LIBRARIES}
+        # Thirdparty
+        rtaudio
+        # System
+        ${COREAUDIO_LIBRARY}
+        ${COREFOUNDATION_LIBRARY}
+    )
 ENDIF( APPLE )
 
 IF( UNIX AND NOT APPLE )
-SET( OS_SPECIFIC_LINK_LIBRARIES 
-     ${OS_SPECIFIC_LINK_LIBRARIES}
-     alsaplayback
-)
+    SET( OS_SPECIFIC_LINK_LIBRARIES
+        ${OS_SPECIFIC_LINK_LIBRARIES}
+        # Thirdparty
+        alsaplayback
+    )
 ENDIF( UNIX AND NOT APPLE )
 
 qt4_wrap_ui( libUI_H ${libUI} )
@@ -366,18 +369,25 @@ SET( libSources ${libSources} ${libUI_H} ${libHeaders_NoMOC} )
 add_library( tomahawklib SHARED ${libSources} ${libMoc} )
 
 target_link_libraries( tomahawklib
+    # Internal
+    tomahawk_jdns
+    tomahawk_qtweetlib
+
+    # Thirdparty shipped with tomahawk
+    portfwd
+
+    # soon to be removed by phonon-dependency
+    FLAC++
+    ogg
+    vorbisfile
+    mad
+
+    # External deps
+    ${QJSON_LIBRARIES}
+    ${CLUCENE_LIBRARY}
+    ${LIBECHONEST_LIBRARY}
     ${QT_LIBRARIES}
     ${OS_SPECIFIC_LINK_LIBRARIES}
-    ${LIBECHONEST_LIBRARY}
-    tomahawk_jdns
-    portfwd
-    qjson
-    mad
-    vorbisfile
-    ogg
-    FLAC++
-    tomahawk_qtweetlib
-    ${CLUCENE_LIBRARY}
 )
 
 install( TARGETS tomahawklib DESTINATION lib )
