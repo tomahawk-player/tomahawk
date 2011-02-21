@@ -16,7 +16,7 @@ SET( CMAKE_VERBOSE_MAKEFILE ON )
 SET( CMAKE_RUNTIME_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}" )
 SET( CMAKE_LIBRARY_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}" )
 SET( CMAKE_ARCHIVE_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}" )
-SET( TOMAHAWK_INC_DIR "${CMAKE_CURRENT_SOURCE_DIR}/../include/" )
+SET( TOMAHAWK_INC_DIR "${CMAKE_SOURCE_DIR}/include/" )
 
 # build plugins
 # use glob, but hardcoded list for now:
@@ -128,12 +128,9 @@ INCLUDE_DIRECTORIES(
     ${THIRDPARTY_DIR}/qtweetlib/qtweetlib/src
     ${THIRDPARTY_DIR}/qtweetlib/tomahawk-custom
 
-    /usr/include/taglib
-    /usr/local/include/taglib
-    /usr/local/include
 
+    ${TAGLIB_INCLUDES}
     ${LIBECHONEST_INCLUDE_DIR}
-    ${LIBECHONEST_INCLUDE_DIR}/..
 )
 
 SET( OS_SPECIFIC_LINK_LIBRARIES "" )
@@ -147,7 +144,7 @@ ENDIF( UNIX )
 
 ADD_SUBDIRECTORY( sip )
 
-kde4_add_app_icon( tomahawkSources "${CMAKE_CURRENT_SOURCE_DIR}/../data/icons/tomahawk-icon-*.png" )
+kde4_add_app_icon( tomahawkSources "${CMAKE_SOURCE_DIR}/data/icons/tomahawk-icon-*.png" )
 qt4_add_resources( RC_SRCS "../resources.qrc" )
 qt4_wrap_cpp( tomahawkMoc ${tomahawkHeaders} )
 
@@ -178,14 +175,18 @@ ENDIF( WIN32 )
 MESSAGE( STATUS "OS_SPECIFIC_LINK_LIBRARIES: ${OS_SPECIFIC_LINK_LIBRARIES}" )
 
 TARGET_LINK_LIBRARIES( tomahawk
+    ${TOMAHAWK_LIBRARIES}
     ${QT_LIBRARIES}
     ${MAC_EXTRA_LIBS}
     ${OS_SPECIFIC_LINK_LIBRARIES}
     ${LIBECHONEST_LIBRARY}
-
-    qjson
-    tag
-    tomahawk_qtweetlib
+    ${LIBLASTFM_LIBRARY}
+    ${GLOOX_LIBRARIES}
+    ${QXTWEB_LIBRARIES}
+    ${QTWEETLIB_LIBRARIES}
+    ${QJSON_LIBRARIES}
+    ${TAGLIB_LIBRARIES}
+    ${QTWEETLIB_LIBRARIES}
 )
 
 INCLUDE( "CPack.txt" )

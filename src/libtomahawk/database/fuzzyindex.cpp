@@ -8,14 +8,12 @@
 
 #include <CLucene.h>
 
-#ifndef WIN32
 using namespace lucene::analysis;
 using namespace lucene::document;
 using namespace lucene::store;
 using namespace lucene::index;
 using namespace lucene::queryParser;
 using namespace lucene::search;
-#endif
 
 
 FuzzyIndex::FuzzyIndex( DatabaseImpl& db )

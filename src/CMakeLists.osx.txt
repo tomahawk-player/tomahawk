@@ -1,3 +1,5 @@
+SET( TOMAHAWK_LIBRARIES  tomahawklib )
+
 SET( OS_SPECIFIC_LINK_LIBRARIES
     ${OS_SPECIFIC_LINK_LIBRARIES}
     ${COREAUDIO_LIBRARY}
@@ -10,7 +12,6 @@ SET( OS_SPECIFIC_LINK_LIBRARIES
     /System/Library/Frameworks/IOKit.framework
 
     rtaudio
-    tomahawklib
 )
 
 if (APPLE)

@@ -324,7 +324,7 @@ IF( WIN32 )
     SET( OS_SPECIFIC_LINK_LIBRARIES
         ${OS_SPECIFIC_LINK_LIBRARIES}
     # Thirdparty
-        ${CMAKE_BINARY_DIR}/rtaudio/librtaudio.dll
+        ${CMAKE_BINARY_DIR}/thirdparty/rtaudio/librtaudio.dll
     # System
         "iphlpapi.a"
         "ws2_32.dll"
@@ -383,6 +383,7 @@ target_link_libraries( tomahawklib
     mad
 
     # External deps
+    ${TAGLIB_LIBRARIES}
     ${QJSON_LIBRARIES}
     ${CLUCENE_LIBRARY}
     ${LIBECHONEST_LIBRARY}

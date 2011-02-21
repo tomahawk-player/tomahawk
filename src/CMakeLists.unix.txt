@@ -4,19 +4,7 @@ ADD_DEFINITIONS( -g )
 ADD_DEFINITIONS( -fno-operator-names )
 ADD_DEFINITIONS( -fPIC )
 
-SET( OS_SPECIFIC_LINK_LIBRARIES
-        ${LIBLASTFM_LIBRARY}
-        ${GLOOX_LIBRARIES}
-        qxtweb-standalone
-)
-
-SET( OS_SPECIFIC_LINK_LIBRARIES 
-    ${OS_SPECIFIC_LINK_LIBRARIES}
-    mad 
-    vorbisfile 
-    ogg
-    FLAC++
-)
+SET( QXTWEB_LIBRARIES  qxtweb-standalone )
 
 IF( APPLE )
     INCLUDE( "CMakeLists.osx.txt" )
