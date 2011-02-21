@@ -29,7 +29,7 @@ FIND_PACKAGE( QJSON REQUIRED )
 INCLUDE( MacroOptionalFindPackage )
 INCLUDE( MacroLogFeature )
 macro_optional_find_package(Gloox 1.0)
-macro_log_feature(Gloox_FOUND "Gloox" "A portable high-level Jabber/XMPP library for C++" "http://camaya.net/gloox" FALSE "" "Gloox is needed for the Jabber SIP plugin and the XMPP-Bot")
+macro_log_feature(GLOOX_FOUND "Gloox" "A portable high-level Jabber/XMPP library for C++" "http://camaya.net/gloox" FALSE "" "Gloox is needed for the Jabber SIP plugin and the XMPP-Bot")
 
 macro_display_feature_log()
 

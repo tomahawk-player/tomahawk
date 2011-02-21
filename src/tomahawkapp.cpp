@@ -37,7 +37,7 @@
 #endif
 
 // should go to a plugin actually
-#ifdef Gloox_FOUND
+#ifdef GLOOX_FOUND
     #include "xmppbot/xmppbot.h"
 #endif
 
@@ -479,7 +479,7 @@ TomahawkApp::setupSIP()
 {
     qDebug() << Q_FUNC_INFO;
 
-#ifdef Gloox_FOUND
+#ifdef GLOOX_FOUND
     //FIXME: jabber autoconnect is really more, now that there is sip -- should be renamed and/or split out of jabber-specific settings
     if( !arguments().contains( "--nosip" ) && TomahawkSettings::instance()->jabberAutoConnect() )
     {

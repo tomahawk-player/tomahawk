@@ -143,9 +143,9 @@ IF( UNIX )
 ENDIF( UNIX )
 
 
-IF(Gloox_FOUND)
+IF(GLOOX_FOUND)
     ADD_SUBDIRECTORY( xmppbot )
-ENDIF(Gloox_FOUND)
+ENDIF(GLOOX_FOUND)
 ADD_SUBDIRECTORY( sip )
 
 kde4_add_app_icon( tomahawkSources "${CMAKE_SOURCE_DIR}/data/icons/tomahawk-icon-*.png" )
