@@ -7,6 +7,7 @@
 #include <QNetworkReply>
 #include <QFile>
 #include <QFileInfo>
+#include <QNetworkProxy>
 
 #include "artist.h"
 #include "album.h"
@@ -189,7 +190,7 @@ TomahawkApp::TomahawkApp( int& argc, char *argv[] )
         connect( m_shortcutHandler, SIGNAL( mute() ), m_audioEngine, SLOT( mute() ) );
     }
 
-#ifndef NO_LIBLASTFM
+#ifdef LIBLASTFM_FOUND
     qDebug() << "Init Scrobbler.";
     m_scrobbler = new Scrobbler( this );
     qDebug() << "Setting NAM.";

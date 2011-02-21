@@ -36,7 +36,7 @@ namespace Tomahawk
     }
 }
 
-#ifndef NO_LIBLASTFM
+#ifdef LIBLASTFM_FOUND
 #include <lastfm/NetworkAccessManager>
 #include "scrobbler.h"
 #endif
@@ -70,7 +70,7 @@ public:
 
     void addScriptResolver( const QString& scriptPath );
     void removeScriptResolver( const QString& scriptPath );
-    
+
     // PlatformInterface
     virtual void activate();
     virtual bool loadUrl( const QString& url );
@@ -91,7 +91,7 @@ private:
     QList<Tomahawk::collection_ptr> m_collections;
     QList<TomahawkPlugin*> m_plugins;
     QList<ScriptResolver*> m_scriptResolvers;
-    
+
     Database* m_database;
     AudioEngine* m_audioEngine;
     SipHandler* m_sipHandler;
@@ -99,7 +99,7 @@ private:
     XMPPBot* m_xmppBot;
     Tomahawk::ShortcutHandler* m_shortcutHandler;
 
-#ifndef NO_LIBLASTFM
+#ifdef LIBLASTFM_FOUND
     Scrobbler* m_scrobbler;
 #endif
 

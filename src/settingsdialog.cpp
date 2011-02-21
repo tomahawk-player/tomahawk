@@ -5,7 +5,7 @@
 #include <QMessageBox>
 #include <QNetworkProxy>
 
-#ifndef NO_LIBLASTFM
+#ifdef LIBLASTFM_FOUND
 #include <lastfm/ws.h>
 #include <lastfm/XmlQuery>
 #endif
@@ -196,7 +196,7 @@ SettingsDialog::toggleUpnp( bool preferStaticEnabled )
 void
 SettingsDialog::testLastFmLogin()
 {
-#ifndef NO_LIBLASTFM
+#ifdef LIBLASTFM_FOUND
     ui->pushButtonTestLastfmLogin->setEnabled( false );
     ui->pushButtonTestLastfmLogin->setText( "Testing..." );
 
@@ -217,7 +217,7 @@ SettingsDialog::testLastFmLogin()
 void
 SettingsDialog::onLastFmFinished()
 {
-#ifndef NO_LIBLASTFM
+#ifdef LIBLASTFM_FOUND
     lastfm::XmlQuery lfm = lastfm::XmlQuery( m_testLastFmQuery->readAll() );
 
     switch( m_testLastFmQuery->error() )

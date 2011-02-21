@@ -37,13 +37,18 @@ SET( tomahawkSources ${tomahawkSources}
 
      musicscanner.cpp
      scriptresolver.cpp
-     scrobbler.cpp
      shortcuthandler.cpp
 
      scanmanager.cpp
      tomahawkapp.cpp
      main.cpp
 )
+
+IF(LIBLASTFM_FOUND)
+    SET(tomahawkSources ${tomahawkSources}
+        scrobbler.cpp
+    )
+ENDIF(LIBLASTFM_FOUND)
 
 SET( tomahawkSourcesGui ${tomahawkSourcesGui}
      sourcetree/sourcesmodel.cpp
@@ -78,10 +83,15 @@ SET( tomahawkHeaders ${tomahawkHeaders}
 
      musicscanner.h
      scriptresolver.h
-     scrobbler.h
      scanmanager.h
      shortcuthandler.h
 )
+
+IF(LIBLASTFM_FOUND)
+    SET(tomahawkHeaders ${tomahawkHeaders}
+        scrobbler.h
+    )
+ENDIF(LIBLASTFM_FOUND)
 
 
 SET( tomahawkHeadersGui ${tomahawkHeadersGui}
@@ -178,13 +188,22 @@ ENDIF( WIN32 )
 
 MESSAGE( STATUS "OS_SPECIFIC_LINK_LIBRARIES: ${OS_SPECIFIC_LINK_LIBRARIES}" )
 
+SET(LINK_LIBRARIES  "")
+IF(LIBLASTFM_FOUND)
+    SET(LINK_LIBRARIES
+        ${LINK_LIBRARIES}
+        ${LIBLASTFM_LIBRARY}
+    )
+ENDIF(LIBLASTFM_FOUND)
+
+
 TARGET_LINK_LIBRARIES( tomahawk
+    ${LINK_LIBRARIES}
     ${TOMAHAWK_LIBRARIES}
     ${QT_LIBRARIES}
     ${MAC_EXTRA_LIBS}
     ${OS_SPECIFIC_LINK_LIBRARIES}
     ${LIBECHONEST_LIBRARY}
-    ${LIBLASTFM_LIBRARY}
     ${QXTWEB_LIBRARIES}
     ${QTWEETLIB_LIBRARIES}
     ${QJSON_LIBRARIES}
