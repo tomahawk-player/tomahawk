@@ -88,9 +88,9 @@ SourceList::add( const source_ptr& source )
 {
     Q_ASSERT( source->id() );
 
-    connect( source.data(), SIGNAL( syncedWithDatabase() ), SLOT( sourceSynced() ) );
     m_sources.insert( source->userName(), source );
     m_sources_id2name.insert( source->id(), source->userName() );
+    connect( source.data(), SIGNAL( syncedWithDatabase() ), SLOT( sourceSynced() ) );
     
     collection_ptr coll( new RemoteCollection( source ) );
     source->addCollection( coll );
