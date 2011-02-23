@@ -201,36 +201,14 @@ DynamicView::collapseEntries( int startRow, int num, int numToKeep )
 
     m_fadingIndexes = QPixmap::grabWidget( this, fadingRect ); // but all values we use to grab the widgetr have to be in scrollarea coords :(
     m_fadingPointAnchor = QPoint( 0, fadingRectViewport.topLeft().y() );
-    
+
     // get the background
-    m_bg = QPixmap( m_fadingIndexes.size() );
-    m_bg.fill( Qt::white );
-    QPainter p( &m_bg );
-    QStyleOptionViewItemV4 opt = viewOptions();
-    // code taken from QTreeViewPrivate::paintAlternatingRowColors
-    if( alternatingRowColors() ) {
-        m_fadebg = !style()->styleHint( QStyle::SH_ItemView_PaintAlternatingRowColorsForEmptyArea, &opt );
-        qDebug() << "PAINTING ALTERNATING ROW BG!: " << fadingRectViewport;
-        int rowHeight = itemDelegate()->sizeHint( opt, QModelIndex() ).height();
-        int y = m_fadingIndexes.rect().topLeft().y();
-        int current = startRow;
-        while( y <= m_fadingIndexes.rect().bottomLeft().y() ) {
-            opt.rect.setRect(0, y, viewport()->width(), rowHeight);
-            qDebug() << "Painting a row from " << y << "to" << y + rowHeight << ":" << opt.rect;
-            if( current & 1 ) {
-                opt.features |= QStyleOptionViewItemV2::Alternate;
-            } else {
-                opt.features &= ~QStyleOptionViewItemV2::Alternate;
-            }
-            ++current;
-            style()->drawPrimitive( QStyle::PE_PanelItemViewRow, &opt, &p );
-            y += rowHeight;
-        }
-    }
+    m_bg =  backgroundBetween( m_fadingIndexes.rect(), startRow );
+
     m_fadeOutAnim.start();
     
     qDebug() << "Grabbed fading indexes from rect:" << fadingRect << m_fadingIndexes.size();
-    
+
     if( !justFade ) {
     /// sanity checks. make sure we have all the rows we need
         int firstSlider = startRow + realNum;
@@ -242,8 +220,7 @@ DynamicView::collapseEntries( int startRow, int num, int numToKeep )
                 firstSlider = proxyModel()->rowCount();
             }
         }
-        
-     
+
         topLeft = proxyModel()->index( startRow + realNum, 0, QModelIndex() );
         bottomRight = proxyModel()->index( startRow + realNum + numToKeep - 1, proxyModel()->columnCount( QModelIndex() ) - 1, QModelIndex() );
         QRect slidingRect = visualRegionForSelection( QItemSelection( topLeft, bottomRight ) ).boundingRect();
@@ -255,12 +232,12 @@ DynamicView::collapseEntries( int startRow, int num, int numToKeep )
         m_bottomAnchor = QPoint( 0, slidingRectViewport.topLeft().y() );
         m_bottomOfAnim = QPoint( 0, slidingRectViewport.bottomLeft().y() );
         qDebug() << "Grabbed sliding index from rect:" << slidingRect << m_slidingIndex.size();
-    
+
         // slide from the current position to the new one
         int frameRange = fadingRect.topLeft().y() - slidingRect.topLeft().y();
         m_slideAnim.setDuration( SLIDE_LENGTH + frameRange * LONG_MULT );
         m_slideAnim.setFrameRange( slidingRectViewport.topLeft().y(), fadingRectViewport.topLeft().y() );
-        
+
         QTimer::singleShot( SLIDE_OFFSET, &m_slideAnim, SLOT( start() ) );
     }
     
@@ -272,6 +249,35 @@ DynamicView::collapseEntries( int startRow, int num, int numToKeep )
         }
     }
     proxyModel()->removeIndexes( todel );
+}
+
+QPixmap
+DynamicView::backgroundBetween( QRect rect, int rowStart )
+{
+    QPixmap bg = QPixmap( rect.size() );
+    bg.fill( Qt::white );
+    QPainter p( &bg );
+    QStyleOptionViewItemV4 opt = viewOptions();
+    // code taken from QTreeViewPrivate::paintAlternatingRowColors
+    m_fadebg = !style()->styleHint( QStyle::SH_ItemView_PaintAlternatingRowColorsForEmptyArea, &opt );
+    //  qDebug() << "PAINTING ALTERNATING ROW BG!: " << fadingRectViewport;
+    int rowHeight = itemDelegate()->sizeHint( opt, QModelIndex() ).height() + 1;
+    int y = 0;
+    int current = rowStart;
+    while( y <= rect.bottomLeft().y() ) {
+        opt.rect.setRect(0, y, viewport()->width(), rowHeight);
+        //  qDebug() << "PAINTING BG ROW IN RECT" << y << "to" << y + rowHeight << ":" << opt.rect;
+        if( current & 1 ) {
+            opt.features |= QStyleOptionViewItemV2::Alternate;
+        } else {
+            opt.features &= ~QStyleOptionViewItemV2::Alternate;
+        }
+        ++current;
+        style()->drawPrimitive( QStyle::PE_PanelItemViewRow, &opt, &p );
+        y += rowHeight;
+    }
+
+    return bg;
 }
 
 void
@@ -294,7 +300,6 @@ DynamicView::paintEvent( QPaintEvent* event )
         bg.moveTo( m_fadingPointAnchor ); // cover up the background
         if( m_fadebg ) {
             p.save();
-            p.fillRect( bg, Qt::white );
             
             p.setOpacity( 1 - m_fadeOutAnim.currentValue() );
         }
@@ -302,19 +307,13 @@ DynamicView::paintEvent( QPaintEvent* event )
         if( m_fadebg ) {
             p.restore();
         }
-        
-//         qDebug() << "FAST SETOPACITY:" << p.paintEngine()->hasFeature(QPaintEngine::ConstantOpacity);
+        //         qDebug() << "FAST SETOPACITY:" << p.paintEngine()->hasFeature(QPaintEngine::ConstantOpacity);
         p.setOpacity( 1 - m_fadeOutAnim.currentValue() );
         p.drawPixmap( m_fadingPointAnchor, m_fadingIndexes );
-        
         p.restore();   
         
         if( m_slideAnim.state() == QTimeLine::Running ) {
             // draw the collapsing entry
-            QRect bg = m_slidingIndex.rect();
-            bg.moveTo( m_bottomAnchor );
-            bg.setBottom( m_bottomOfAnim.y() );
-            p.fillRect( bg, Qt::white );
             p.drawPixmap( 0, m_slideAnim.currentFrame(), m_slidingIndex );
         } else if( m_fadeOutAnim.state() == QTimeLine::Running ) {
             p.drawPixmap( 0, m_bottomAnchor.y(), m_slidingIndex );

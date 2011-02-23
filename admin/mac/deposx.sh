@@ -74,8 +74,10 @@ function deplib_change
     install_name_tool -change /usr/local/Cellar/flac/1.2.1/lib/libFLAC.8.dylib @executable_path/libFLAC.8.dylib $1
     install_name_tool -change $ORIGROOT/src/libtomahawk/libtomahawklib.dylib @executable_path/libtomahawklib.dylib $1
     install_name_tool -change $ORIGROOT/libsip_jabber.dylib @executable_path/libsip_jabber.dylib $1
+    install_name_tool -change $ORIGROOT/libsip_twitter.dylib @executable_path/libsip_twitter.dylib $1
     install_name_tool -change $ORIGROOT/libsip_zeroconf.dylib @executable_path/libsip_zeroconf.dylib $1
     install_name_tool -change $ORIGROOT/thirdparty/jdns/libtomahawk_jdns.dylib @executable_path/libtomahawk_jdns.dylib $1
+    install_name_tool -change $ORIGROOT/thirdparty/qtweetlib/libtomahawk_qtweetlib.dylib @executable_path/libtomahawk_qtweetlib.dylib $1
 }
 
 ################################################################################
@@ -104,18 +106,22 @@ import_lib /usr/local/lib/libechonest.1.1.dylib
 import_lib /usr/local/Cellar/clucene/0.9.21/lib/libclucene.0.dylib
 
 import_lib ../../libsip_jabber.dylib
+import_lib ../../libsip_twitter.dylib
 import_lib ../../libsip_zeroconf.dylib
 import_lib ../../src/libtomahawk/libtomahawklib.dylib
 import_lib ../../thirdparty/jdns/libtomahawk_jdns.dylib
+import_lib ../../thirdparty/qtweetlib/libtomahawk_qtweetlib.dylib
 
 deposx_change MacOS/libqjson.0.dylib
 deposx_change MacOS/liblastfm.0.dylib
 deposx_change MacOS/libclucene.0.dylib
 deposx_change MacOS/libechonest.1.1.dylib
 deposx_change MacOS/libsip_jabber.dylib
+deposx_change MacOS/libsip_twitter.dylib
 deposx_change MacOS/libsip_zeroconf.dylib
 deposx_change MacOS/libtomahawklib.dylib
 deposx_change MacOS/libtomahawk_jdns.dylib
+deposx_change MacOS/libtomahawk_qtweetlib.dylib
 
 # now Qt
 for x in $QTLIBS
