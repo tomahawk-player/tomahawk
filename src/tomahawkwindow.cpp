@@ -83,6 +83,9 @@ TomahawkWindow::TomahawkWindow( QWidget* parent )
     SourceTreeView* stv = new SourceTreeView();
     TransferView* transferView = new TransferView();
 
+    connect( ui->actionHideOfflineSources, SIGNAL( triggered() ), stv, SLOT( hideOfflineSources() ) );
+    connect( ui->actionShowOfflineSources, SIGNAL( triggered() ), stv, SLOT( showOfflineSources() ) );
+    
     sidebar->addWidget( stv );
     sidebar->addWidget( transferView );
     sidebar->hide( 1, false );
@@ -122,11 +125,11 @@ TomahawkWindow::TomahawkWindow( QWidget* parent )
     statusBar()->addPermanentWidget( m_audioControls, 1 );
 
     // propagate sip menu
-    foreach(SipPlugin *plugin, APP->sipHandler()->plugins())
+    foreach( SipPlugin *plugin, APP->sipHandler()->plugins() )
     {
-        if(plugin->menu())
+        if ( plugin->menu() )
         {
-            ui->menuNetwork->addMenu(plugin->menu());
+            ui->menuNetwork->addMenu( plugin->menu() );
         }
     }
 

@@ -1,5 +1,5 @@
-#ifndef DATABASECOMMAND_IMPORTALLPLAYLIST_H
-#define DATABASECOMMAND_IMPORTALLPLAYLIST_H
+#ifndef DATABASECOMMAND_LOADALLPLAYLIST_H
+#define DATABASECOMMAND_LOADALLPLAYLIST_H
 
 #include <QObject>
 #include <QVariantMap>
@@ -26,4 +26,4 @@ signals:
     void done( const QList<Tomahawk::playlist_ptr>& playlists );
 };
 
-#endif // DATABASECOMMAND_ADDFILES_H
+#endif // DATABASECOMMAND_LOADALLPLAYLIST_H

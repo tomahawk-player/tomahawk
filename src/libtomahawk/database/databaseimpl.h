@@ -74,7 +74,6 @@ private:
 
     QString m_dbid;
 
-    QThread m_indexThread;
     FuzzyIndex* m_fuzzyIndex;
 };
 

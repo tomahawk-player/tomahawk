@@ -1,5 +1,7 @@
 #include "tomahawk/tomahawkapp.h"
 
+#include "config.h"
+
 #include <QPluginLoader>
 #include <QDir>
 #include <QMetaType>
@@ -151,20 +153,21 @@ TomahawkApp::TomahawkApp( int& argc, char *argv[] )
     registerMetaTypes();
     setupLogfile();
     
-    Echonest::Config::instance()->setAPIKey("JRIHWEP6GPOER2QQ6");
+    Echonest::Config::instance()->setAPIKey( "JRIHWEP6GPOER2QQ6" );
     
     new TomahawkSettings( this );
     m_audioEngine = new AudioEngine;
     new ScanManager( this );
     
     new Pipeline( this );
-    new SourceList( this );
     
     m_servent = new Servent( this );
     connect( m_servent, SIGNAL( ready() ), SLOT( setupSIP() ) );
 
     qDebug() << "Init Database.";
     setupDatabase();
+
+    new SourceList( this );
     
     qDebug() << "Init Echonest Factory.";
     GeneratorFactory::registerFactory( "echonest", new EchonestFactory );
@@ -319,6 +322,7 @@ TomahawkApp::registerMetaTypes()
     qRegisterMetaType< GeneratorMode>("GeneratorMode");
     qRegisterMetaType<Tomahawk::GeneratorMode>("Tomahawk::GeneratorMode");
     // Extra definition for namespaced-versions of signals/slots required
+    qRegisterMetaType< Tomahawk::source_ptr >("Tomahawk::source_ptr");
     qRegisterMetaType< Tomahawk::collection_ptr >("Tomahawk::collection_ptr");
     qRegisterMetaType< Tomahawk::result_ptr >("Tomahawk::result_ptr");
     qRegisterMetaType< Tomahawk::query_ptr >("Tomahawk::query_ptr");
@@ -334,6 +338,7 @@ TomahawkApp::registerMetaTypes()
     qRegisterMetaType< QList<Tomahawk::result_ptr> >("QList<Tomahawk::result_ptr>");
     qRegisterMetaType< QList<Tomahawk::artist_ptr> >("QList<Tomahawk::artist_ptr>");
     qRegisterMetaType< QList<Tomahawk::album_ptr> >("QList<Tomahawk::album_ptr>");
+    qRegisterMetaType< QList<Tomahawk::source_ptr> >("QList<Tomahawk::source_ptr>");
     qRegisterMetaType< QMap< QString, Tomahawk::plentry_ptr > >("QMap< QString, Tomahawk::plentry_ptr >");
     qRegisterMetaType< Tomahawk::PlaylistRevision >("Tomahawk::PlaylistRevision");
     qRegisterMetaType< Tomahawk::DynamicPlaylistRevision >("Tomahawk::DynamicPlaylistRevision");
@@ -411,11 +416,11 @@ TomahawkApp::removeScriptResolver( const QString& path )
 void
 TomahawkApp::initLocalCollection()
 {
-    source_ptr src( new Source( "My Collection" ) );
+    source_ptr src( new Source( 0, "My Collection" ) );
     collection_ptr coll( new DatabaseCollection( src ) );
 
     src->addCollection( coll );
-    SourceList::instance()->add( src );
+    SourceList::instance()->setLocal( src );
 
     // to make the stats signal be emitted by our local source
     // this will update the sidebar, etc.
@@ -480,16 +485,17 @@ TomahawkApp::setupSIP()
 {
     qDebug() << Q_FUNC_INFO;
 
-#ifdef GLOOX_FOUND
     //FIXME: jabber autoconnect is really more, now that there is sip -- should be renamed and/or split out of jabber-specific settings
     if( !arguments().contains( "--nosip" ) && TomahawkSettings::instance()->jabberAutoConnect() )
     {
+        #ifdef GLOOX_FOUND
         m_xmppBot = new XMPPBot( this );
+        #endif
+
         qDebug() << "Connecting SIP classes";
         m_sipHandler->connectPlugins( true );
 //        m_sipHandler->setProxy( *TomahawkUtils::proxy() );
     }
-#endif
 }
 
 

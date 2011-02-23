@@ -16,7 +16,8 @@
 */
 #include "schema.sql.h"
 
-#define CURRENT_SCHEMA_VERSION 19
+#define CURRENT_SCHEMA_VERSION 20
+
 
 DatabaseImpl::DatabaseImpl( const QString& dbname, Database* parent )
     : QObject( (QObject*) parent )
@@ -36,6 +37,7 @@ DatabaseImpl::DatabaseImpl( const QString& dbname, Database* parent )
 
     QSqlQuery qry = QSqlQuery( db );
 
+    bool schemaUpdated = false;
     qry.exec( "SELECT v FROM settings WHERE k='schema_version'" );
     if ( qry.next() )
     {
@@ -60,18 +62,24 @@ DatabaseImpl::DatabaseImpl( const QString& dbname, Database* parent )
             {
                 db = QSqlDatabase::addDatabase( "QSQLITE", "tomahawk" );
                 db.setDatabaseName( dbname );
-                if( !db.open() ) throw "db moving failed";
-                updateSchema( v );
+                if( !db.open() )
+                    throw "db moving failed";
+
+                TomahawkSqlQuery query = newquery();
+                query.exec( "PRAGMA auto_vacuum = FULL" );
+                schemaUpdated = updateSchema( v );
             }
             else
             {
-                Q_ASSERT(0);
+                Q_ASSERT( false );
                 QTimer::singleShot( 0, qApp, SLOT( quit() ) );
                 return;
             }
         }
-    } else {
-        updateSchema( 0 );
+    }
+    else
+    {
+        schemaUpdated = updateSchema( 0 );
     }
 
     TomahawkSqlQuery query = newquery();
@@ -95,15 +103,12 @@ DatabaseImpl::DatabaseImpl( const QString& dbname, Database* parent )
     // in case of unclean shutdown last time:
     query.exec( "UPDATE source SET isonline = 'false'" );
 
-    m_fuzzyIndex = new FuzzyIndex( *this );
+    m_fuzzyIndex = new FuzzyIndex( *this, schemaUpdated );
 }
 
 
 DatabaseImpl::~DatabaseImpl()
 {
-    m_indexThread.quit();
-    m_indexThread.wait( 5000 );
-
     delete m_fuzzyIndex;
 }
 
@@ -111,11 +116,8 @@ DatabaseImpl::~DatabaseImpl()
 void
 DatabaseImpl::loadIndex()
 {
-    // load ngram index in the background
-    m_fuzzyIndex->moveToThread( &m_indexThread );
-    connect( &m_indexThread, SIGNAL( started() ), m_fuzzyIndex, SLOT( loadLuceneIndex() ) );
-    connect( m_fuzzyIndex, SIGNAL( indexReady() ), this, SIGNAL( indexReady() ) );
-    m_indexThread.start();
+    connect( m_fuzzyIndex, SIGNAL( indexReady() ), SIGNAL( indexReady() ) );
+    m_fuzzyIndex->loadLuceneIndex();
 }
 
 
@@ -346,6 +348,7 @@ DatabaseImpl::searchTable( const QString& table, const QString& name, uint limit
         results << resultslist.at( k ).first;
     }
 
+//    qDebug() << "Returning" << results.count() << "results";
     return results;
 }
 

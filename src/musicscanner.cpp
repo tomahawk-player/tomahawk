@@ -111,7 +111,7 @@ MusicScanner::listerFinished( const QMap<QString, unsigned int>& newmtimes )
     // any remaining stuff that wasnt emitted as a batch:
     if( m_scannedfiles.length() )
     {
-        SourceList::instance()->getLocal()->scanningProgress( m_scanned );
+        SourceList::instance()->getLocal()->scanningFinished( m_scanned );
         commitBatch( m_scannedfiles );
     }
 

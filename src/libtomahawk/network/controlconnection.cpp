@@ -1,6 +1,5 @@
 #include "controlconnection.h"
 
-#include "remotecollection.h"
 #include "filetransferconnection.h"
 #include "database/database.h"
 #include "database/databasecommand_collectionstats.h"
@@ -33,6 +32,9 @@ ControlConnection::~ControlConnection()
 {
     qDebug() << "DTOR controlconnection";
 
+    if ( !m_source.isNull() )
+        m_source->setOffline();
+    
     delete m_pingtimer;
     m_servent->unregisterControlConnection(this);
     if( m_dbsyncconn ) m_dbsyncconn->deleteLater();
@@ -53,29 +55,28 @@ void
 ControlConnection::setup()
 {
     qDebug() << Q_FUNC_INFO << id() << name();
-    // setup source and remote collection for this peer
-    m_source = source_ptr( new Source( id(), this ) );
 
-    if( Servent::isIPWhitelisted( m_sock->peerAddress() ) )
+    QString friendlyName;
+    if ( Servent::isIPWhitelisted( m_sock->peerAddress() ) )
     {
         // FIXME TODO blocking DNS lookup if LAN, slow/fails on windows?
         QHostInfo i = QHostInfo::fromName( m_sock->peerAddress().toString() );
         if( i.hostName().length() )
-        {
-            m_source->setFriendlyName( i.hostName() );
-        }
+            friendlyName = i.hostName();
     }
     else
-    {
-        m_source->setFriendlyName( QString( "%1" ).arg( name() ) );
-    }
+        friendlyName = name();
+    
+    // setup source and remote collection for this peer
+    m_source = SourceList::instance()->get( id(), friendlyName );
+    m_source->setControlConnection( this );
 
     // delay setting up collection/etc until source is synced.
     // we need it DB synced so it has an ID + exists in DB.
     connect( m_source.data(), SIGNAL( syncedWithDatabase() ),
                                 SLOT( registerSource() ), Qt::QueuedConnection );
 
-    m_source->doDBSync();
+    m_source->setOnline();
 
     m_pingtimer = new QTimer;
     m_pingtimer->setInterval( 5000 );
@@ -93,10 +94,6 @@ ControlConnection::registerSource()
     Source* source = (Source*) sender();
     Q_ASSERT( source == m_source.data() );
     // .. but we'll use the shared pointer we've already made:
-
-    collection_ptr coll( new RemoteCollection( m_source ) );
-    m_source->addCollection( coll );
-    SourceList::instance()->add( m_source );
 
     m_registered = true;
     setupDbSyncConnection();
@@ -234,7 +231,7 @@ ControlConnection::onPingTimer()
     if ( m_pingtimer_mark.elapsed() >= TCP_TIMEOUT * 1000 )
     {
         qDebug() << "Timeout reached! Shutting down connection to" << m_source->friendlyName();
-        shutdown( false );
+        shutdown( true );
     }
 
     sendMsg( Msg::factory( QByteArray(), Msg::PING ) );

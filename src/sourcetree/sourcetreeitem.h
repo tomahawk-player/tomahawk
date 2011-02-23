@@ -19,8 +19,7 @@ public:
         PlaylistPointer = Qt::UserRole + 3,  /// Value is the playlist_ptr.data()
         DynamicPlaylistPointer = Qt::UserRole + 4 /// Value is the dynplaylist_ptr.data()
     };
-    
-    
+
     explicit SourceTreeItem( const Tomahawk::source_ptr& source, QObject* parent );
     virtual ~SourceTreeItem();
 

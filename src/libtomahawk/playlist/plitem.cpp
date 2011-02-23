@@ -104,28 +104,18 @@ PlItem::setupItem( const Tomahawk::query_ptr& query, PlItem* parent, int row )
     toberemoved = false;
     m_query = query;
     if ( query->numResults() )
-        onResultsAdded( query->results() );
+    {
+        emit dataChanged();
+    }
     else
     {
         connect( query.data(), SIGNAL( resultsAdded( QList<Tomahawk::result_ptr> ) ),
-                                 SLOT( onResultsAdded( QList<Tomahawk::result_ptr> ) ), Qt::DirectConnection );
+                               SIGNAL( dataChanged() ) );
 
         connect( query.data(), SIGNAL( resultsRemoved( Tomahawk::result_ptr ) ),
-                                 SLOT( onResultsRemoved( Tomahawk::result_ptr ) ), Qt::DirectConnection );
+                               SIGNAL( dataChanged() ) );
+        
+        connect( query.data(), SIGNAL( resultsChanged() ),
+                               SIGNAL( dataChanged() ) );
     }
-}
-
-
-void
-PlItem::onResultsAdded( const QList<Tomahawk::result_ptr>& results )
-{
-//    qDebug() << "Found results for playlist item:" << this;
-    emit dataChanged();
-}
-
-
-void
-PlItem::onResultsRemoved( const Tomahawk::result_ptr& result )
-{
-    emit dataChanged();
 }

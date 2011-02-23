@@ -30,7 +30,7 @@ public:
     RID id() const;
     collection_ptr collection() const;
     Tomahawk::artist_ptr artist() const;
-    Tomahawk::album_ptr album()   const;
+    Tomahawk::album_ptr album() const;
     QString track()     const { return m_track; }
     QString url()       const { return m_url; }
     QString mimetype()  const { return m_mimetype; }
@@ -48,8 +48,12 @@ public:
     unsigned int dbid() const { return m_id; }
 
 signals:
-    // emitted when the collection this result comes from is going offline:
-    void becomingUnavailable();
+    // emitted when the collection this result comes from is going offline/online:
+    void statusChanged();
+    
+private slots:
+    void onOffline();
+    void onOnline();
 
 private:
     void updateAttributes();
@@ -70,6 +74,7 @@ private:
     unsigned int m_albumpos;
     unsigned int m_modtime;
     int m_year;
+    float m_score;
 
     QVariantMap m_attributes;
 

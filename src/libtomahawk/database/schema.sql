@@ -250,4 +250,4 @@ CREATE TABLE IF NOT EXISTS settings (
     v TEXT NOT NULL DEFAULT ''
 );
 
-INSERT INTO settings(k,v) VALUES('schema_version', '19');
+INSERT INTO settings(k,v) VALUES('schema_version', '20');

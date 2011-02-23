@@ -4,6 +4,8 @@
 #define APP TomahawkApp::instance()
 
 #include "headlesscheck.h"
+#include "config.h"
+
 #include "mac/tomahawkapp_mac.h" // for PlatforInterface
 
 #include <QRegExp>

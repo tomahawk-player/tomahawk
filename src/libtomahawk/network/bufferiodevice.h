@@ -11,7 +11,7 @@ class BufferIODevice : public QIODevice
 Q_OBJECT
 
 public:
-    explicit BufferIODevice( unsigned int size = 0, QObject *parent = 0 );
+    explicit BufferIODevice( unsigned int size = 0, QObject* parent = 0 );
 
     virtual bool open( OpenMode mode );
     virtual void close();

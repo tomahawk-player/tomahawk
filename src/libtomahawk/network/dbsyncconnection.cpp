@@ -34,10 +34,9 @@ DBSyncConnection::DBSyncConnection( Servent* s, source_ptr src )
     , m_source( src )
     , m_state( UNKNOWN )
 {
-    qDebug() << Q_FUNC_INFO << thread();
-    connect( this, SIGNAL( stateChanged( DBSyncConnection::State, DBSyncConnection::State, QString ) ),
-             m_source.data(), SIGNAL( loadingStateChanged(DBSyncConnection::State, DBSyncConnection::State, QString ) )
-            );
+    qDebug() << Q_FUNC_INFO << src->id() << thread();
+    connect( this,            SIGNAL( stateChanged( DBSyncConnection::State, DBSyncConnection::State, QString ) ),
+             m_source.data(),   SLOT( onStateChanged( DBSyncConnection::State, DBSyncConnection::State, QString ) ) );
 
     m_timer.setInterval( IDLE_TIMEOUT );
     connect( &m_timer, SIGNAL( timeout() ), SLOT( idleTimeout() ) );
@@ -71,7 +70,7 @@ DBSyncConnection::changeState( State newstate )
     qDebug() << "DBSYNC State changed from" << s << "to" << newstate;
     emit stateChanged( newstate, s, "" );
 
-    if( newstate == SYNCED )
+    if ( newstate == SYNCED )
     {
         qDebug() << "Synced :)";
     }
@@ -82,7 +81,7 @@ void
 DBSyncConnection::setup()
 {
     qDebug() << Q_FUNC_INFO;
-    setId( QString("DBSyncConnection/%1").arg(socket()->peerAddress().toString()) );
+    setId( QString( "DBSyncConnection/%1" ).arg( socket()->peerAddress().toString() ) );
     check();
 }
 
@@ -93,7 +92,8 @@ DBSyncConnection::trigger()
     qDebug() << Q_FUNC_INFO;
 
     // if we're still setting up the connection, do nothing - we sync on first connect anyway:
-    if( !this->isRunning() ) return;
+    if ( !this->isRunning() )
+        return;
 
     QMetaObject::invokeMethod( this, "sendMsg", Qt::QueuedConnection,
                                Q_ARG( msg_ptr,
@@ -105,8 +105,8 @@ DBSyncConnection::trigger()
 void
 DBSyncConnection::check()
 {
-    qDebug() << Q_FUNC_INFO;
-    if( m_state != UNKNOWN && m_state != SYNCED )
+    qDebug() << Q_FUNC_INFO << m_source->id();
+    if ( m_state != UNKNOWN && m_state != SYNCED )
     {
         qDebug() << "Syncing in progress already.";
         return;
@@ -115,20 +115,20 @@ DBSyncConnection::check()
     m_themcache.clear();
     m_us.clear();
 
-    changeState(CHECKING);
+    changeState( CHECKING );
 
     // load last-modified etc data for our collection and theirs from our DB:
-    DatabaseCommand_CollectionStats * cmd_us =
+    DatabaseCommand_CollectionStats* cmd_us =
             new DatabaseCommand_CollectionStats( SourceList::instance()->getLocal() );
 
-    DatabaseCommand_CollectionStats * cmd_them =
+    DatabaseCommand_CollectionStats* cmd_them =
             new DatabaseCommand_CollectionStats( m_source );
 
-    connect( cmd_us, SIGNAL( done(const QVariantMap&) ),
-             this,     SLOT( gotUs(const QVariantMap&) ) );
+    connect( cmd_us, SIGNAL( done( QVariantMap ) ),
+                       SLOT( gotUs( QVariantMap ) ) );
 
-    connect( cmd_them, SIGNAL( done(const QVariantMap&) ),
-             this,       SLOT( gotThemCache(const QVariantMap&) ) );
+    connect( cmd_them, SIGNAL( done( QVariantMap ) ),
+                         SLOT( gotThemCache( QVariantMap ) ) );
 
 
     Database::instance()->enqueue( QSharedPointer<DatabaseCommand>(cmd_us) );
@@ -145,7 +145,8 @@ void
 DBSyncConnection::gotUs( const QVariantMap& m )
 {
     m_us = m;
-    if( !m_uscache.empty() ) sendOps();
+    if ( !m_uscache.empty() )
+        sendOps();
 }
 
 
@@ -154,7 +155,7 @@ void
 DBSyncConnection::gotThemCache( const QVariantMap& m )
 {
     m_themcache = m;
-    changeState(FETCHING);
+    changeState( FETCHING );
 
     qDebug() << "Sending a FETCHOPS cmd since:" << m_themcache.value( "lastop" ).toString();
 
@@ -170,20 +171,21 @@ DBSyncConnection::handleMsg( msg_ptr msg )
 {
     Q_ASSERT( !msg->is( Msg::COMPRESSED ) );
 
-    if( m_state == FETCHING ) changeState(PARSING);
+    if ( m_state == FETCHING )
+        changeState( PARSING );
 
     // "everything is synced" indicated by non-json msg containing "ok":
-    if( !msg->is( Msg::JSON ) &&
-        msg->is( Msg::DBOP ) &&
-        msg->payload() == "ok" )
+    if ( !msg->is( Msg::JSON ) &&
+         msg->is( Msg::DBOP ) &&
+         msg->payload() == "ok" )
     {
         qDebug() << "No ops to apply, we are synced.";
         changeState( SYNCED );
         // calc the collection stats, to updates the "X tracks" in the sidebar etc
         // this is done automatically if you run a dbcmd to add files.
         DatabaseCommand_CollectionStats* cmd = new DatabaseCommand_CollectionStats( m_source );
-        connect( cmd,       SIGNAL( done( const QVariantMap & ) ),
-                 m_source.data(),  SLOT( setStats( const QVariantMap& ) ), Qt::QueuedConnection );
+        connect( cmd,           SIGNAL( done( const QVariantMap & ) ),
+                 m_source.data(), SLOT( setStats( const QVariantMap& ) ), Qt::QueuedConnection );
         Database::instance()->enqueue( QSharedPointer<DatabaseCommand>(cmd) );
         return;
     }
@@ -191,7 +193,7 @@ DBSyncConnection::handleMsg( msg_ptr msg )
     Q_ASSERT( msg->is( Msg::JSON ) );
 
     QVariantMap m = msg->json().toMap();
-    if( m.empty() )
+    if ( m.empty() )
     {
         qDebug() << "Failed to parse msg in dbsync";
         Q_ASSERT( false );
@@ -199,45 +201,49 @@ DBSyncConnection::handleMsg( msg_ptr msg )
     }
 
     // a db sync op msg
-    if( msg->is( Msg::DBOP ) )
+    if ( msg->is( Msg::DBOP ) )
     {
-        DatabaseCommand *cmd = DatabaseCommand::factory( m, m_source );
+        DatabaseCommand* cmd = DatabaseCommand::factory( m, m_source );
         if ( !cmd )
         {
             qDebug() << "UNKNOWN DBOP CMD";
 
-            if( !msg->is( Msg::FRAGMENT ) ) // last msg in this batch
+            if ( !msg->is( Msg::FRAGMENT ) ) // last msg in this batch
                 lastOpApplied();
             return;
         }
 
         qDebug() << "APPLYING CMD" << cmd->commandname() << cmd->guid();
 
-        if( !msg->is( Msg::FRAGMENT ) ) // last msg in this batch
+        if ( !msg->is( Msg::FRAGMENT ) ) // last msg in this batch
         {
             changeState( SAVING ); // just DB work left to complete
-            connect( cmd, SIGNAL( finished() ), this, SLOT( lastOpApplied() ) );
+            connect( cmd, SIGNAL( finished() ), SLOT( lastOpApplied() ) );
         }
+
+        if ( !cmd->singletonCmd() )
+            m_source->setLastOpGuid( cmd->guid() );
 
         Database::instance()->enqueue( QSharedPointer<DatabaseCommand>( cmd ) );
         return;
     }
 
-    if( m.value( "method" ).toString() == "fetchops" )
+    if ( m.value( "method" ).toString() == "fetchops" )
     {
         m_uscache = m;
-        if( !m_us.empty() ) sendOps();
+        if ( !m_us.empty() )
+            sendOps();
         return;
     }
 
-    if( m.value( "method" ).toString() == "trigger" )
+    if ( m.value( "method" ).toString() == "trigger" )
     {
         qDebug() << "Got trigger msg on dbsyncconnection, checking for new stuff.";
         check();
         return;
     }
 
-    qDebug() << Q_FUNC_INFO << "Unhandled msg: " << msg->payload();
+    qDebug() << Q_FUNC_INFO << "Unhandled msg:" << msg->payload();
     Q_ASSERT( false );
 }
 
@@ -246,8 +252,8 @@ void
 DBSyncConnection::lastOpApplied()
 {
     qDebug() << Q_FUNC_INFO;
-    changeState(SYNCED);
-    // check again, until peer reponds we have no new ops to process
+    changeState( SYNCED );
+    // check again, until peer responds we have no new ops to process
     check();
 }
 
@@ -263,7 +269,7 @@ DBSyncConnection::sendOps()
 
     DatabaseCommand_loadOps* cmd = new DatabaseCommand_loadOps( src, m_uscache.value( "lastop" ).toString() );
     connect( cmd,  SIGNAL( done( QString, QString, QList< dbop_ptr > ) ),
-             this,   SLOT( sendOpsData( QString, QString, QList< dbop_ptr > ) ) );
+                     SLOT( sendOpsData( QString, QString, QList< dbop_ptr > ) ) );
 
     Database::instance()->enqueue( QSharedPointer<DatabaseCommand>( cmd ) );
 }
@@ -272,13 +278,12 @@ DBSyncConnection::sendOps()
 void
 DBSyncConnection::sendOpsData( QString sinceguid, QString lastguid, QList< dbop_ptr > ops )
 {
-    qDebug() << Q_FUNC_INFO << sinceguid << lastguid << "Num ops to send:" << ops.length();
-
     if ( m_lastSentOp == lastguid )
         ops.clear();
 
+    qDebug() << Q_FUNC_INFO << sinceguid << lastguid << "Num ops to send:" << ops.length();
     m_lastSentOp = lastguid;
-    if( ops.length() == 0 )
+    if ( ops.length() == 0 )
     {
         sendMsg( Msg::factory( "ok", Msg::DBOP ) );
         return;
@@ -289,12 +294,12 @@ DBSyncConnection::sendOpsData( QString sinceguid, QString lastguid, QList< dbop_
     {
         quint8 flags = Msg::JSON | Msg::DBOP;
 
-        if( ops.at(i)->compressed )
+        if ( ops.at( i )->compressed )
             flags |= Msg::COMPRESSED;
-        if( i != ops.length()-1 )
+        if ( i != ops.length() - 1 )
             flags |= Msg::FRAGMENT;
 
-        sendMsg( Msg::factory( ops.at(i)->payload, flags ) );
+        sendMsg( Msg::factory( ops.at( i )->payload, flags ) );
     }
 }
 

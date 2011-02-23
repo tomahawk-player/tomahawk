@@ -53,6 +53,7 @@ ENDIF(LIBLASTFM_FOUND)
 
 SET( tomahawkSourcesGui ${tomahawkSourcesGui}
      sourcetree/sourcesmodel.cpp
+     sourcetree/sourcesproxymodel.cpp
      sourcetree/sourcetreeitem.cpp
      sourcetree/sourcetreeitemwidget.cpp
      sourcetree/sourcetreeview.cpp
@@ -97,6 +98,7 @@ ENDIF(LIBLASTFM_FOUND)
 
 SET( tomahawkHeadersGui ${tomahawkHeadersGui}
      sourcetree/sourcesmodel.h
+     sourcetree/sourcesproxymodel.h
      sourcetree/sourcetreeitem.h
      sourcetree/sourcetreeitemwidget.h
      sourcetree/sourcetreeview.h
@@ -155,7 +157,8 @@ ENDIF( UNIX )
 
 
 IF(GLOOX_FOUND)
-    ADD_SUBDIRECTORY( xmppbot )
+  SET( tomahawkHeaders ${tomahawkHeaders} xmppbot/xmppbot.h )
+  SET( tomahawkSources ${tomahawkSources} xmppbot/xmppbot.cpp )
 ENDIF(GLOOX_FOUND)
 ADD_SUBDIRECTORY( sip )
 
@@ -191,12 +194,11 @@ MESSAGE( STATUS "OS_SPECIFIC_LINK_LIBRARIES: ${OS_SPECIFIC_LINK_LIBRARIES}" )
 
 SET(LINK_LIBRARIES  "")
 IF(LIBLASTFM_FOUND)
-    SET(LINK_LIBRARIES
-        ${LINK_LIBRARIES}
-        ${LIBLASTFM_LIBRARY}
-    )
+    SET(LINK_LIBRARIES ${LINK_LIBRARIES} ${LIBLASTFM_LIBRARY} )
 ENDIF(LIBLASTFM_FOUND)
-
+IF(GLOOX_FOUND)
+    SET(LINK_LIBRARIES ${LINK_LIBRARIES} ${GLOOX_LIBRARIES} )
+ENDIF(GLOOX_FOUND)
 
 TARGET_LINK_LIBRARIES( tomahawk
     ${LINK_LIBRARIES}

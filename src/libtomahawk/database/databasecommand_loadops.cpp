@@ -16,10 +16,7 @@ DatabaseCommand_loadOps::exec( DatabaseImpl* dbi )
                    ).arg( source()->isLocal() ? "IS NULL" : QString( "= %1" ).arg( source()->id() ) )
                   );
     query.addBindValue( m_since );
-    if( !query.exec() )
-    {
-        Q_ASSERT(0);
-    }
+    query.exec();
 
     QString lastguid = m_since;
     while( query.next() )

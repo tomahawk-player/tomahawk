@@ -49,7 +49,8 @@ SourceTreeItemWidget::SourceTreeItemWidget( const source_ptr& source, QWidget* p
         connect( source.data(), SIGNAL( stats( QVariantMap ) ), SLOT( gotStats( QVariantMap ) ) );
 
         connect( source.data(), SIGNAL( playbackStarted( Tomahawk::query_ptr ) ), SLOT( onPlaybackStarted( Tomahawk::query_ptr ) ) );
-
+        connect( source.data(), SIGNAL( offline() ), SLOT( onOffline() ) );
+        
         ui->avatarImage->setPixmap( QPixmap( RESPATH "images/user-avatar.png" ) );
 
         displayname = source->friendlyName();
@@ -62,8 +63,12 @@ SourceTreeItemWidget::SourceTreeItemWidget( const source_ptr& source, QWidget* p
         ui->infoButton->setPixmap( QPixmap( RESPATH "images/source-info.png" ) .scaledToHeight( 32, Qt::SmoothTransformation ) );
     }
 
+    if ( source.isNull() || source->isLocal() )
+        ui->activityLabel->setText( tr( "Idle" ) );
+    else
+        onOffline();
+
     ui->nameLabel->setText( displayname );
-    ui->activityLabel->setText( tr( "Idle" ) );
     ui->infoLabel->setForegroundRole( QPalette::Dark );
     ui->activityLabel->setForegroundRole( QPalette::Dark );
 
@@ -73,8 +78,6 @@ SourceTreeItemWidget::SourceTreeItemWidget( const source_ptr& source, QWidget* p
 
     connect( ui->onOffButton, SIGNAL( clicked() ), SIGNAL( clicked() ) );
     connect( ui->infoButton, SIGNAL( clicked() ), SLOT( onInfoButtonClicked() ) );
-
-    onOffline();
 }
 
 
@@ -145,7 +148,6 @@ void
 SourceTreeItemWidget::onPlaybackStarted( const Tomahawk::query_ptr& query )
 {
     qDebug() << Q_FUNC_INFO << query->toString();
-//    ui->activityLabel->setText( tr( "Playing: %1 by %2" ).arg( query->track() ).arg( query->artist() ) );
     ui->activityLabel->setQuery( query );
 }
 
@@ -154,19 +156,14 @@ void
 SourceTreeItemWidget::onOnline()
 {
     return;
-
-    if ( !m_source.isNull() )
-        ui->onOffButton->setPixmap( RESPATH "images/source-on-rest.png" );
 }
 
 
 void
 SourceTreeItemWidget::onOffline()
 {
+    ui->activityLabel->setText( tr( "Offline" ) );
     return;
-
-    if ( !m_source.isNull() )
-        ui->onOffButton->setPixmap( RESPATH "images/source-off-rest.png" );
 }
 
 

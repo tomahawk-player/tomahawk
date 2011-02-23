@@ -9,16 +9,19 @@
 #include "query.h"
 #include "sourcelist.h"
 #include "sourcetreeitem.h"
+#include "sourcetreeview.h"
 #include "utils/imagebutton.h"
 
 using namespace Tomahawk;
 
 
-SourcesModel::SourcesModel( QObject* parent )
+SourcesModel::SourcesModel( SourceTreeView* parent )
     : QStandardItemModel( parent )
+    , m_parent( parent )
 {
     setColumnCount( 1 );
 
+    onSourceAdded( SourceList::instance()->sources() );
     connect( SourceList::instance(), SIGNAL( sourceAdded( Tomahawk::source_ptr ) ), SLOT( onSourceAdded( Tomahawk::source_ptr ) ) );
     connect( SourceList::instance(), SIGNAL( sourceRemoved( Tomahawk::source_ptr ) ), SLOT( onSourceRemoved( Tomahawk::source_ptr ) ) );
 
@@ -92,6 +95,14 @@ SourcesModel::loadSources()
 
 
 void
+SourcesModel::onSourceAdded( const QList<source_ptr>& sources )
+{
+    foreach( const source_ptr& source, sources )
+        appendItem( source );
+}
+
+
+void
 SourcesModel::onSourceAdded( const source_ptr& source )
 {
     appendItem( source );
@@ -113,8 +124,14 @@ SourcesModel::appendItem( const source_ptr& source )
 
 //    qDebug() << "Appending source item:" << item->source()->username();
     invisibleRootItem()->appendRow( item->columns() );
+//    m_parent->setIndexWidget( m_parent->model()->index( rowCount() - 1, 0 ), item->widget() );
 
-    ((QTreeView*)parent())->setIndexWidget( index( rowCount() - 1, 0 ), item->widget() );
+    connect( source.data(), SIGNAL( offline() ), SLOT( onSourceChanged() ) );
+    connect( source.data(), SIGNAL( online() ), SLOT( onSourceChanged() ) );
+    connect( source.data(), SIGNAL( stats( QVariantMap ) ), SLOT( onSourceChanged() ) );
+    connect( source.data(), SIGNAL( playbackStarted( Tomahawk::query_ptr ) ), SLOT( onSourceChanged() ) );
+    connect( source.data(), SIGNAL( stateChanged() ), SLOT( onSourceChanged() ) );
+    
     return true; // FIXME
 }
 
@@ -201,7 +218,9 @@ SourcesModel::indexToPlaylist( const QModelIndex& index )
     return res;
 }
 
-dynplaylist_ptr SourcesModel::indexToDynamicPlaylist(const QModelIndex& index)
+
+dynplaylist_ptr
+SourcesModel::indexToDynamicPlaylist( const QModelIndex& index )
 {
     dynplaylist_ptr res;
     if ( !index.isValid() )
@@ -252,7 +271,9 @@ SourcesModel::setData( const QModelIndex& index, const QVariant& value, int role
     if ( indexType( index ) == PlaylistSource )
     {
         playlist = indexToPlaylist( index );
-    } else if ( indexType( index ) == DynamicPlaylistSource ) {
+    }
+    else if ( indexType( index ) == DynamicPlaylistSource )
+    {
         playlist = indexToDynamicPlaylist( index ).staticCast< Playlist >();
     }
     
@@ -264,4 +285,28 @@ SourcesModel::setData( const QModelIndex& index, const QVariant& value, int role
     }
 
     return false;
+}
+
+
+void
+SourcesModel::onSourceChanged()
+{
+    Source* src = qobject_cast< Source* >( sender() );
+    
+    for ( int i = 0; i < rowCount(); i++ )
+    {
+        QModelIndex idx = index( i, 0 );
+
+        if ( indexType( idx ) == CollectionSource )
+        {
+            SourceTreeItem* sti = indexToTreeItem( idx );
+            if ( sti )
+            {
+                if ( sti->source().data() == src )
+                {
+                    emit dataChanged( idx, idx );
+                }
+            }
+        }
+    }
 }

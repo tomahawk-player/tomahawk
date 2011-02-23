@@ -9,6 +9,7 @@
 class CollectionModel;
 class PlaylistModel;
 class SourcesModel;
+class SourcesProxyModel;
 
 class SourceTreeView : public QTreeView
 {
@@ -17,6 +18,10 @@ Q_OBJECT
 public:
     explicit SourceTreeView( QWidget* parent = 0 );
 
+public slots:
+    void showOfflineSources();
+    void hideOfflineSources();
+    
 signals:
     void onOnline( const QModelIndex& index );
     void onOffline( const QModelIndex& index );
@@ -33,7 +38,7 @@ private slots:
     void onSourceOffline( Tomahawk::source_ptr );
 
 protected:
-    void drawBranches( QPainter* painter, const QRect& rect, const QModelIndex& index ) const {}
+//    void drawBranches( QPainter* painter, const QRect& rect, const QModelIndex& index ) const {}
     void drawRow( QPainter* painter, const QStyleOptionViewItem& option, const QModelIndex& index ) const;
 
     virtual void paintEvent( QPaintEvent* event );
@@ -48,6 +53,7 @@ private:
 
     CollectionModel* m_collectionModel;
     SourcesModel* m_model;
+    SourcesProxyModel* m_proxyModel;
     QModelIndex m_contextMenuIndex;
 
     QMenu m_playlistMenu;
