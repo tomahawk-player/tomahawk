@@ -1,9 +1,9 @@
 Quickstart on Ubuntu
 --------------------
 
-    $ sudo apt-get install build-essential cmake libtag1c2a libtag1-dev liblastfm-dev \
-                           libqt4-dev libqt4-sql-sqlite libvorbis-dev libmad0-dev libflac++-dev \
-                           libasound2-dev libboost-dev zlib1g-dev libgnutls-dev pkg-config
+    $ sudo apt-get install build-essential cmake libtag1c2a libtag1-dev liblastfm-dev libqt4-dev \
+                           libqt4-sql-sqlite libvorbis-dev libmad0-dev libflac++-dev libasound2-dev \
+                           libboost-dev zlib1g-dev libgnutls-dev libclucene-dev pkg-config
 
 
 Gloox 1.0 (XMPP library)
@@ -30,7 +30,7 @@ QJson (Qt JSON library)
     $ ./configure && make
     $ sudo make install
 
-libEchonest 0.1
+libEchonest 1.1.1
 ---------------
  See: http://projects.kde.org/projects/playground/libs/libechonest/
 
@@ -46,7 +46,7 @@ Quickstart on OS X
 
  Install homebrew
     $ ruby -e "$(curl -fsSL https://gist.github.com/raw/323731/install_homebrew.rb)"
-    $ brew install qt qjson gloox libmad libvorbis flac taglib boost liblastfm
+    $ brew install cmake qt qjson gloox libmad libvorbis flac taglib boost liblastfm clucene
 
  Install libEchnoest as per the above instructions.
 
@@ -78,12 +78,13 @@ Dependencies
   SQLite 3.6.22 http://www.sqlite.org/
   TagLib 1.6.2 http://developer.kde.org/~wheeler/taglib.html
   Boost 1.3x http://www.boost.org/
+  CLucene 0.9.21 http://clucene.sourceforge.net/
   libmad 0.15.1b http://www.underbit.com/products/mad/
   libvorbis 1.2.3 http://xiph.org/vorbis/
   libogg 1.1.4 http://xiph.org/ogg/
   libflac++ 1.2.0 http://flac.sourceforge.net/
   liblastfm 0.3.3 http://github.com/mxcl/liblastfm/
-  libechonest 0.1.2 http://projects.kde.org/projects/playground/libs/libechonest/
+  libechonest 1.1.1 http://projects.kde.org/projects/playground/libs/libechonest/
 
  Third party libraries that we ship with our source:
 
@@ -93,6 +94,11 @@ Dependencies
 
 To build the app:
 -----------------
+
+ For SIP-over-Twitter support, you must first register an application with Twitter and copy the file
+ examples/twitter-api-keys.example to thirdparty/qtweetlib/WARNING-twitter-api-keys, substituting in
+ your particular consumer key and secret.
+
     $ mkdir build && cd build
 
  Pick one of the following two choices. If uncertain pick the second one, you probably want a GUI.

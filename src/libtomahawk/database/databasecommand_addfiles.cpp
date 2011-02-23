@@ -16,7 +16,7 @@ QVariantList
 DatabaseCommand_AddFiles::files() const
 {
     QVariantList list;
-    foreach( const QVariant& v, m_files )
+    foreach ( const QVariant& v, m_files )
     {
         // replace url with the id, we don't leak file paths over the network.
         QVariantMap m = v.toMap();
@@ -33,16 +33,21 @@ void
 DatabaseCommand_AddFiles::postCommitHook()
 {
     qDebug() << Q_FUNC_INFO;
+    if ( source().isNull() || source()->collection().isNull() )
+    {
+        qDebug() << "Source has gone offline, not emitting to GUI.";
+        return;
+    }
 
     // make the collection object emit its tracksAdded signal, so the
     // collection browser will update/fade in etc.
     Collection* coll = source()->collection().data();
 
-    connect( this, SIGNAL( notify( QList<QVariant>, Tomahawk::collection_ptr ) ),
-             coll, SIGNAL( setTracks( QList<QVariant>, Tomahawk::collection_ptr ) ),
+    connect( this, SIGNAL( notify( QList<Tomahawk::query_ptr>, Tomahawk::collection_ptr ) ),
+             coll, SLOT( setTracks( QList<Tomahawk::query_ptr>, Tomahawk::collection_ptr ) ),
              Qt::QueuedConnection );
-    // do it like this so it gets called in the right thread:
-    emit notify( m_files, source()->collection() );
+
+    emit notify( m_queries, source()->collection() );
 
     // also re-calc the collection stats, to updates the "X tracks" in the sidebar etc:
     DatabaseCommand_CollectionStats* cmd = new DatabaseCommand_CollectionStats( source() );
@@ -68,16 +73,12 @@ DatabaseCommand_AddFiles::exec( DatabaseImpl* dbi )
 
     query_file.prepare( "INSERT INTO file(source, url, size, mtime, md5, mimetype, duration, bitrate) "
                         "VALUES (?, ?, ?, ?, ?, ?, ?, ?)" );
-    query_filejoin.prepare( "INSERT INTO file_join(file, artist ,album, track, albumpos) "
+    query_filejoin.prepare( "INSERT INTO file_join(file, artist, album, track, albumpos) "
                             "VALUES (?,?,?,?,?)" );
     query_trackattr.prepare( "INSERT INTO track_attributes(id, k, v) "
                              "VALUES (?,?,?)" );
     query_file_del.prepare( QString( "DELETE FROM file WHERE source %1 AND url = ?" )
-                               .arg( source()->isLocal() ? "IS NULL" : QString( "= %1" ).arg( source()->id() )
-                          ) );
-
-    int maxart, maxalb, maxtrk; // store max id, so we can index new ones after
-    maxart = maxalb = maxtrk = 0;
+                               .arg( source()->isLocal() ? "IS NULL" : QString( "= %1" ).arg( source()->id() ) ) );
 
     int added = 0;
     QVariant srcid = source()->isLocal() ?
@@ -92,7 +93,7 @@ DatabaseCommand_AddFiles::exec( DatabaseImpl* dbi )
         QVariantMap m = v.toMap();
 
         QString url         = m.value( "url" ).toString();
-        int mtime           = m.value( "lastmodified" ).toInt();
+        int mtime           = m.value( "mtime" ).toInt();
         int size            = m.value( "size" ).toInt();
         QString hash        = m.value( "hash" ).toString();
         QString mimetype    = m.value( "mimetype" ).toString();
@@ -126,35 +127,34 @@ DatabaseCommand_AddFiles::exec( DatabaseImpl* dbi )
         }
         else
         {
-            if( added % 100 == 0 ) qDebug() << "Inserted" << added;
+            if( added % 100 == 0 )
+                qDebug() << "Inserted" << added;
         }
         // get internal IDs for art/alb/trk
         fileid = query_file.lastInsertId().toInt();
 
         // insert the new fileid, set the url for our use:
         m.insert( "id", fileid );
-        if( !source()->isLocal() ) m["url"] = QString( "servent://%1\t%2" )
-                                                 .arg( source()->userName() )
-                                                 .arg( fileid );
+        if( !source()->isLocal() )
+            m["url"] = QString( "servent://%1\t%2" )
+                          .arg( source()->userName() )
+                          .arg( fileid );
         v = m;
 
         bool isnew;
-        int artid = dbi->artistId( artist, isnew );
-        if( artid < 1 ) continue;
-        if( isnew && maxart == 0 ) maxart = artid;
+        m["artistid"] = dbi->artistId( artist, isnew );
+        if( m["artistid"].toInt() < 1 ) continue;
 
-        int trkid = dbi->trackId( artid, track, isnew );
-        if( trkid < 1 ) continue;
-        if( isnew && maxtrk == 0 ) maxtrk = trkid;
+        m["trackid"] = dbi->trackId( m["artistid"].toInt(), track, isnew );
+        if( m["trackid"].toInt() < 1 ) continue;
 
-        int albid = dbi->albumId( artid, album, isnew );
-        if( albid > 0 && isnew && maxalb == 0 ) maxalb = albid;
+        m["albumid"] = dbi->albumId( m["artistid"].toInt(), album, isnew );
 
         // Now add the association
         query_filejoin.bindValue( 0, fileid );
-        query_filejoin.bindValue( 1, artid );
-        query_filejoin.bindValue( 2, albid > 0 ? albid : QVariant( QVariant::Int ) );
-        query_filejoin.bindValue( 3, trkid );
+        query_filejoin.bindValue( 1, m["artistid"].toInt() );
+        query_filejoin.bindValue( 2, m["albumid"].toInt() > 0 ? m["albumid"].toInt() : QVariant( QVariant::Int ) );
+        query_filejoin.bindValue( 3, m["trackid"].toInt() );
         query_filejoin.bindValue( 4, albumpos );
         if( !query_filejoin.exec() )
         {
@@ -162,21 +162,33 @@ DatabaseCommand_AddFiles::exec( DatabaseImpl* dbi )
             continue;
         }
 
-        query_trackattr.bindValue( 0, trkid );
+        query_trackattr.bindValue( 0, m["trackid"].toInt() );
         query_trackattr.bindValue( 1, "releaseyear" );
         query_trackattr.bindValue( 2, year );
         query_trackattr.exec();
+
+        QVariantMap attr;
+        Tomahawk::query_ptr query = Tomahawk::Query::get( m, false );
+        m["score"] = 1.0;
+        attr["releaseyear"] = m.value( "year" );
+
+        Tomahawk::result_ptr result = Tomahawk::result_ptr( new Tomahawk::Result( m, source()->collection() ) );
+        result->setAttributes( attr );
+
+        QList<Tomahawk::result_ptr> results;
+        results << result;
+        query->addResults( results );
+
+        m_queries << query;
 
         added++;
     }
     qDebug() << "Inserted" << added;
 
     // TODO building the index could be a separate job, outside this transaction
-    if(maxart) dbi->updateSearchIndex( "artist", maxart );
-    if(maxalb) dbi->updateSearchIndex( "album", maxalb );
-    if(maxtrk) dbi->updateSearchIndex( "track", maxtrk );
+    if ( added )
+        dbi->updateSearchIndex();
 
     qDebug() << "Committing" << added << "tracks...";
-    qDebug() << "Done.";
     emit done( m_files, source()->collection() );
 }

@@ -1,12 +1,15 @@
 #include "result.h"
 
 #include "album.h"
+#include "collection.h"
 
 using namespace Tomahawk;
 
+Result::Result() {}
 
 Result::Result( const QVariant& v, const collection_ptr& collection )
-    : m_v( v )
+    : QObject()
+    , m_v( v )
     , m_collection( collection )
 {
     QVariantMap m = m_v.toMap();
@@ -30,6 +33,25 @@ Result::Result( const QVariant& v, const collection_ptr& collection )
         connect( m_collection->source().data(), SIGNAL( offline() ), SIGNAL( becomingUnavailable() ), Qt::QueuedConnection );
 }
 
+Result::~Result() {}
+
+artist_ptr 
+Result::artist() const
+{
+    return m_artist;
+}
+
+album_ptr 
+Result::album() const
+{
+    return m_album;
+}
+
+collection_ptr 
+Result::collection() const
+{
+    return m_collection;
+}
 
 float
 Result::score() const
@@ -59,7 +81,7 @@ Result::toString() const
 Tomahawk::query_ptr
 Result::toQuery() const
 {
-    Tomahawk::query_ptr query = Tomahawk::query_ptr( new Tomahawk::Query( toVariant() ) );
+    Tomahawk::query_ptr query = Tomahawk::Query::get( toVariant(), false );
     return query;
 }
 

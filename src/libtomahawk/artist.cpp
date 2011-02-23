@@ -8,12 +8,17 @@
 
 using namespace Tomahawk;
 
+Artist::Artist() {}
+
+Artist::~Artist() {}
 
 artist_ptr
 Artist::get( unsigned int id, const QString& name, const Tomahawk::collection_ptr& collection )
 {
     static QHash< unsigned int, artist_ptr > s_artists;
+    static QMutex s_mutex;
 
+    QMutexLocker lock( &s_mutex );
     if ( s_artists.contains( id ) )
     {
         return s_artists.value( id );
@@ -30,11 +35,17 @@ Artist::Artist( unsigned int id, const QString& name, const Tomahawk::collection
     : PlaylistInterface( this )
     , m_id( id )
     , m_name( name )
-    , m_collection( collection )
     , m_currentTrack( 0 )
+    , m_collection( collection )
 {
 }
 
+
+Tomahawk::collection_ptr 
+Artist::collection() const
+{
+	return m_collection;
+}
 
 void
 Artist::onTracksAdded( const QList<Tomahawk::query_ptr>& tracks, const Tomahawk::collection_ptr& collection )

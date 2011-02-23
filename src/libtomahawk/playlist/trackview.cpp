@@ -7,6 +7,7 @@
 
 #include "audio/audioengine.h"
 #include "utils/tomahawkutils.h"
+#include "widgets/overlaywidget.h"
 
 #include "trackheader.h"
 #include "playlistmanager.h"
@@ -23,6 +24,7 @@ TrackView::TrackView( QWidget* parent )
     , m_proxyModel( 0 )
     , m_delegate( 0 )
     , m_header( new TrackHeader( this ) )
+    , m_overlay( new OverlayWidget( this ) )
     , m_resizing( false )
 {
     setSortingEnabled( false );
@@ -38,6 +40,7 @@ TrackView::TrackView( QWidget* parent )
     setRootIsDecorated( false );
     setUniformRowHeights( true );
     setMinimumWidth( 300 );
+//    setVerticalScrollBarPolicy( Qt::ScrollBarAlwaysOn );
 
     setHeader( m_header );
 
@@ -54,6 +57,15 @@ TrackView::TrackView( QWidget* parent )
 TrackView::~TrackView()
 {
     qDebug() << Q_FUNC_INFO;
+
+    delete m_header;
+}
+
+
+void
+TrackView::setGuid( const QString& guid )
+{
+    m_guid = guid;
 }
 
 
@@ -152,7 +164,8 @@ TrackView::addItemsToQueue()
 void
 TrackView::resizeEvent( QResizeEvent* event )
 {
-    m_header->onResized();
+    QTreeView::resizeEvent( event );
+    m_header->checkState();
 }
 
 
@@ -245,11 +258,11 @@ void
 TrackView::paintEvent( QPaintEvent* event )
 {
     QTreeView::paintEvent( event );
+    QPainter painter( viewport() );
 
     if ( m_dragging )
     {
         // draw drop indicator
-        QPainter painter( viewport() );
         {
             // draw indicator for inserting items
             QBrush blendedBrush = viewOptions().palette.brush( QPalette::Normal, QPalette::Highlight );
@@ -278,6 +291,16 @@ TrackView::onFilterChanged( const QString& )
 {
     if ( selectedIndexes().count() )
         scrollTo( selectedIndexes().at( 0 ), QAbstractItemView::PositionAtCenter );
+
+    if ( !proxyModel()->filter().isEmpty() && !proxyModel()->trackCount() &&
+         model()->trackCount() )
+    {
+        m_overlay->setText( tr( "Sorry, your filter '%1' did not match any results." ).arg( proxyModel()->filter() ) );
+        m_overlay->show();
+    }
+    else
+        if ( model()->trackCount() )
+            m_overlay->hide();
 }
 
 

@@ -16,33 +16,27 @@ public:
     explicit TrackHeader( TrackView* parent = 0 );
     ~TrackHeader();
 
+    int visibleSectionCount() const;
+
 public slots:
-    void onResized();
     void toggleVisibility( int index );
+    void checkState();
 
 protected:
     void contextMenuEvent( QContextMenuEvent* e );
 
 private slots:
-    void onSectionResized( int logicalIndex, int oldSize, int newSize );
-
+    void onSectionResized();
     void onToggleResizeColumns();
 
 private:
     void addColumnToMenu( int index );
-
-    void restoreColumnsState();
-    void saveColumnsState();
 
     TrackView* m_parent;
 
     QMenu* m_menu;
     QSignalMapper* m_sigmap;
     QList<QAction*> m_visActions;
-
-    QList<double> m_columnWeights;
-    int m_hiddenWidth;
-    double m_hiddenPct;
     bool m_init;
 };
 

@@ -4,6 +4,9 @@
 
 #include "audio/audioengine.h"
 #include "utils/animatedsplitter.h"
+#include "infobar/infobar.h"
+#include "topbar/topbar.h"
+#include "widgets/infowidgets/sourceinfowidget.h"
 
 #include "collectionmodel.h"
 #include "collectionflatmodel.h"
@@ -19,6 +22,9 @@
 #include "sourcelist.h"
 #include "tomahawksettings.h"
 
+#include "dynamic/widgets/DynamicWidget.h"
+
+#include "widgets/welcomewidget.h"
 #include "widgets/infowidgets/sourceinfowidget.h"
 
 #define FILTER_TIMEOUT 280
@@ -43,9 +49,17 @@ PlaylistManager::PlaylistManager( QObject* parent )
     , m_modesAvailable( false )
 {
     s_instance = this;
-    m_stack = new QStackedWidget();
 
     m_widget->setLayout( new QVBoxLayout() );
+
+    m_topbar = new TopBar();
+    m_infobar = new InfoBar();
+    m_stack = new QStackedWidget();
+
+    QFrame* line = new QFrame();
+    line->setFrameStyle( QFrame::HLine );
+    line->setStyleSheet( "border: 1px solid gray;" );
+    line->setMaximumHeight( 1 );
 
     m_splitter = new AnimatedSplitter();
     m_splitter->setOrientation( Qt::Vertical );
@@ -61,12 +75,16 @@ PlaylistManager::PlaylistManager( QObject* parent )
     m_splitter->addWidget( m_queueView );
     m_splitter->hide( 1, false );
 
-    m_widget->layout()->setMargin( 0 );
+    m_widget->layout()->addWidget( m_infobar );
+    m_widget->layout()->addWidget( m_topbar );
+    m_widget->layout()->addWidget( line );
     m_widget->layout()->addWidget( m_splitter );
 
     m_superCollectionView = new CollectionView();
     m_superCollectionFlatModel = new CollectionFlatModel( m_superCollectionView );
     m_superCollectionView->setModel( m_superCollectionFlatModel );
+    m_superCollectionView->setFrameShape( QFrame::NoFrame );
+    m_superCollectionView->setAttribute( Qt::WA_MacShowFocusRect, 0 );
 
     m_superAlbumView = new AlbumView();
     m_superAlbumModel = new AlbumModel( m_superAlbumView );
@@ -75,12 +93,45 @@ PlaylistManager::PlaylistManager( QObject* parent )
     m_stack->addWidget( m_superCollectionView );
     m_stack->addWidget( m_superAlbumView );
 
+    m_currentInterface = m_superCollectionView->proxyModel();
+    
     m_stack->setContentsMargins( 0, 0, 0, 0 );
     m_widget->setContentsMargins( 0, 0, 0, 0 );
     m_widget->layout()->setContentsMargins( 0, 0, 0, 0 );
     m_widget->layout()->setMargin( 0 );
-
+    m_widget->layout()->setSpacing( 0 );
+    
     connect( &m_filterTimer, SIGNAL( timeout() ), SLOT( applyFilter() ) );
+
+    connect( m_topbar, SIGNAL( filterTextChanged( QString ) ),
+             this,       SLOT( setFilter( QString ) ) );
+
+    connect( this,     SIGNAL( numSourcesChanged( unsigned int ) ),
+             m_topbar,   SLOT( setNumSources( unsigned int ) ) );
+
+    connect( this,     SIGNAL( numTracksChanged( unsigned int ) ),
+             m_topbar,   SLOT( setNumTracks( unsigned int ) ) );
+
+    connect( this,     SIGNAL( numArtistsChanged( unsigned int ) ),
+             m_topbar,   SLOT( setNumArtists( unsigned int ) ) );
+
+    connect( this,     SIGNAL( numShownChanged( unsigned int ) ),
+             m_topbar,   SLOT( setNumShown( unsigned int ) ) );
+
+    connect( m_topbar, SIGNAL( flatMode() ),
+             this,       SLOT( setTableMode() ) );
+
+    connect( m_topbar, SIGNAL( artistMode() ),
+             this,       SLOT( setTreeMode() ) );
+
+    connect( m_topbar, SIGNAL( albumMode() ),
+             this,       SLOT( setAlbumMode() ) );
+
+    connect( this,     SIGNAL( statsAvailable( bool ) ),
+             m_topbar,   SLOT( setStatsVisible( bool ) ) );
+
+    connect( this,     SIGNAL( modesAvailable( bool ) ),
+             m_topbar,   SLOT( setModesVisible( bool ) ) );
 }
 
 
@@ -107,7 +158,8 @@ PlaylistManager::show( const Tomahawk::playlist_ptr& playlist )
         PlaylistView* view = new PlaylistView();
         PlaylistModel* model = new PlaylistModel();
         view->setModel( model );
-
+        view->setFrameShape( QFrame::NoFrame );
+        view->setAttribute( Qt::WA_MacShowFocusRect, 0 );
         model->loadPlaylist( playlist );
         playlist->resolve();
 
@@ -123,6 +175,10 @@ PlaylistManager::show( const Tomahawk::playlist_ptr& playlist )
         m_stack->setCurrentWidget( view );
         m_currentInterface = view->proxyModel();
     }
+    
+    m_queueView->show();
+    m_infobar->setCaption( playlist->title() );
+    m_infobar->setDescription( tr( "A playlist by %1" ).arg( playlist->author()->isLocal() ? tr( "you" ) : playlist->author()->friendlyName() ) );
 
     m_superCollectionVisible = false;
     m_statsAvailable = true;
@@ -132,6 +188,41 @@ PlaylistManager::show( const Tomahawk::playlist_ptr& playlist )
     TomahawkSettings::instance()->appendRecentlyPlayedPlaylist( playlist );
 
     emit numSourcesChanged( SourceList::instance()->count() );
+    return true;
+}
+
+
+bool 
+PlaylistManager::show( const Tomahawk::dynplaylist_ptr& playlist )
+{
+    unlinkPlaylist();
+    
+    if( !m_dynamicWidgets.contains( playlist ) )
+    {
+       m_dynamicWidgets[ playlist ] = new Tomahawk::DynamicWidget( playlist, m_stack );
+       m_stack->addWidget( m_dynamicWidgets[ playlist ] );
+       playlist->resolve();
+    }
+    
+    m_stack->setCurrentWidget( m_dynamicWidgets.value( playlist ) );
+    m_currentInterface = m_dynamicWidgets.value( playlist )->playlistInterface();
+
+    m_infobar->setCaption( playlist->title() );
+    m_infobar->setDescription( tr( "A playlist by %1" ).arg( playlist->author()->isLocal() ? tr( "you" ) : playlist->author()->friendlyName() ) );
+    
+    if( playlist->mode() == Tomahawk::OnDemand )
+        m_queueView->hide();
+    
+    
+    m_superCollectionVisible = false;
+    m_statsAvailable = true;
+    m_modesAvailable = false;
+    linkPlaylist();
+    
+    TomahawkSettings::instance()->appendRecentlyPlayedPlaylist( playlist );
+
+    emit numSourcesChanged( SourceList::instance()->count() );
+
     return true;
 }
 
@@ -147,6 +238,8 @@ PlaylistManager::show( const Tomahawk::artist_ptr& artist )
         PlaylistView* view = new PlaylistView();
         PlaylistModel* model = new PlaylistModel();
         view->setModel( model );
+        view->setFrameShape( QFrame::NoFrame );
+        view->setAttribute( Qt::WA_MacShowFocusRect, 0 );
         model->append( artist );
 
         m_currentInterface = view->proxyModel();
@@ -161,6 +254,10 @@ PlaylistManager::show( const Tomahawk::artist_ptr& artist )
         m_stack->setCurrentWidget( view );
         m_currentInterface = view->proxyModel();
     }
+    
+    m_queueView->show();
+    m_infobar->setCaption( tr( "All tracks by %1" ).arg( artist->name() ) );
+    m_infobar->setDescription( "" );
 
     m_superCollectionVisible = false;
     m_statsAvailable = false;
@@ -177,12 +274,14 @@ PlaylistManager::show( const Tomahawk::album_ptr& album )
 {
     qDebug() << Q_FUNC_INFO << &album << album.data();
     unlinkPlaylist();
-
+    
     if ( !m_albumViews.contains( album ) )
     {
         PlaylistView* view = new PlaylistView();
         PlaylistModel* model = new PlaylistModel();
         view->setModel( model );
+        view->setFrameShape( QFrame::NoFrame );
+        view->setAttribute( Qt::WA_MacShowFocusRect, 0 );
         model->append( album );
 
         m_currentInterface = view->proxyModel();
@@ -197,6 +296,10 @@ PlaylistManager::show( const Tomahawk::album_ptr& album )
         m_stack->setCurrentWidget( view );
         m_currentInterface = view->proxyModel();
     }
+    
+    m_queueView->show();
+    m_infobar->setCaption( tr( "All tracks on %1 by %2" ).arg( album->name() ).arg( album->artist()->name() ) );
+    m_infobar->setDescription( "" );
 
     m_superCollectionVisible = false;
     m_statsAvailable = false;
@@ -221,6 +324,8 @@ PlaylistManager::show( const Tomahawk::collection_ptr& collection )
             CollectionView* view = new CollectionView();
             CollectionFlatModel* model = new CollectionFlatModel();
             view->setModel( model );
+            view->setFrameShape( QFrame::NoFrame );
+            view->setAttribute( Qt::WA_MacShowFocusRect, 0 );
             model->addCollection( collection );
 
             m_currentInterface = view->proxyModel();
@@ -244,6 +349,8 @@ PlaylistManager::show( const Tomahawk::collection_ptr& collection )
             AlbumView* aview = new AlbumView();
             AlbumModel* amodel = new AlbumModel( aview );
             aview->setModel( amodel );
+            aview->setFrameShape( QFrame::NoFrame );
+            aview->setAttribute( Qt::WA_MacShowFocusRect, 0 );
             amodel->addCollection( collection );
 
             m_currentInterface = aview->proxyModel();
@@ -260,6 +367,13 @@ PlaylistManager::show( const Tomahawk::collection_ptr& collection )
         }
     }
 
+    m_infobar->setDescription( "" );
+    if ( collection->source()->isLocal()  )
+        m_infobar->setCaption( tr( "Your Collection" ) );
+    else
+        m_infobar->setCaption( tr( "Collection of %1" ).arg( collection->source()->friendlyName() ) );
+    
+    m_queueView->show();
     m_superCollectionVisible = false;
     m_statsAvailable = ( m_currentMode == 0 );
     m_modesAvailable = true;
@@ -289,6 +403,10 @@ PlaylistManager::show( const Tomahawk::source_ptr& source )
         m_currentInfoWidget = m_sourceViews.value( source );
     }
 
+    m_infobar->setCaption( tr( "Info about %1" ).arg( source->isLocal() ? tr( "Your Collection" ) : source->friendlyName() ) );
+    m_infobar->setDescription( "" );
+    
+    m_queueView->show();
     m_stack->setCurrentWidget( m_currentInfoWidget );
     m_superCollectionVisible = false;
     m_statsAvailable = false;
@@ -302,7 +420,7 @@ PlaylistManager::show( const Tomahawk::source_ptr& source )
 
 
 bool
-PlaylistManager::show( QWidget* widget )
+PlaylistManager::show( QWidget* widget, const QString& title, const QString& desc, const QPixmap& pixmap )
 {
     unlinkPlaylist();
 
@@ -311,6 +429,11 @@ PlaylistManager::show( QWidget* widget )
     m_stack->addWidget( widget );
     m_stack->setCurrentWidget( widget );
 
+    m_infobar->setCaption( title );
+    m_infobar->setDescription( desc );
+    m_infobar->setPixmap( pixmap );
+    
+    m_queueView->show();
     m_superCollectionVisible = false;
     m_statsAvailable = false;
     m_modesAvailable = false;
@@ -346,6 +469,10 @@ PlaylistManager::showSuperCollection()
         m_currentInterface = m_superAlbumView->proxyModel();
     }
 
+    m_infobar->setCaption( tr( "Super Collection" ) );
+    m_infobar->setDescription( tr( "All available tracks" ) );
+    
+    m_queueView->show();
     m_superCollectionVisible = true;
     m_statsAvailable = ( m_currentMode == 0 );
     m_modesAvailable = true;
@@ -447,7 +574,7 @@ PlaylistManager::applyFilter()
 {
     qDebug() << Q_FUNC_INFO;
 
-    if ( m_currentInterface )
+    if ( m_currentInterface && m_currentInterface->filter() != m_filter )
         m_currentInterface->setFilter( m_filter );
 }
 
@@ -493,11 +620,12 @@ PlaylistManager::linkPlaylist()
         m_interfaceHistory << m_currentInterface;
     }
 
-    applyFilter();
     AudioEngine::instance()->setPlaylist( m_currentInterface );
 
     if ( m_currentInterface && m_statsAvailable )
     {
+        m_topbar->setFilter( m_currentInterface->filter() );
+
         emit numTracksChanged( m_currentInterface->unfilteredTrackCount() );
         emit numShownChanged( m_currentInterface->trackCount() );
         emit repeatModeChanged( m_currentInterface->repeatMode() );
@@ -549,6 +677,26 @@ PlaylistManager::setShuffled( bool enabled )
 }
 
 
+void 
+PlaylistManager::createPlaylist( const Tomahawk::source_ptr& src,
+                                 const QVariant& contents )
+{
+    Tomahawk::playlist_ptr p = Tomahawk::playlist_ptr( new Tomahawk::Playlist( src ) );
+    QJson::QObjectHelper::qvariant2qobject( contents.toMap(), p.data() );
+    p->reportCreated( p );
+}
+
+
+void 
+PlaylistManager::createDynamicPlaylist( const Tomahawk::source_ptr& src,
+                                        const QVariant& contents )
+{
+    Tomahawk::dynplaylist_ptr p = Tomahawk::dynplaylist_ptr( new Tomahawk::DynamicPlaylist( src, contents.toMap().value( "type", QString() ).toString()  ) );
+    QJson::QObjectHelper::qvariant2qobject( contents.toMap(), p.data() );
+    p->reportCreated( p );
+}
+
+
 void
 PlaylistManager::showCurrentTrack()
 {
@@ -563,4 +711,18 @@ PlaylistManager::showCurrentTrack()
 
 /*    if ( m_currentView && m_currentProxyModel )
         m_currentView->scrollTo( m_currentProxyModel->currentItem(), QAbstractItemView::PositionAtCenter );*/
+}
+
+
+void
+PlaylistManager::onPlayClicked()
+{
+    emit playClicked();
+}
+
+
+void
+PlaylistManager::onPauseClicked()
+{
+    emit pauseClicked();
 }

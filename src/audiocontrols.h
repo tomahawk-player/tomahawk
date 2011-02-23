@@ -19,6 +19,10 @@ public:
     AudioControls( QWidget* parent = 0 );
     ~AudioControls();
 
+signals:
+    void playPressed();
+    void pausePressed();
+    
 public slots:
     void onRepeatModeChanged( PlaylistInterface::RepeatMode mode );
     void onShuffleModeChanged( bool enabled );

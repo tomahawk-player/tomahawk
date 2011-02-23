@@ -23,6 +23,12 @@ class TrackProxyModel;
 class TrackModel;
 class TrackView;
 class SourceInfoWidget;
+class InfoBar;
+class TopBar;
+
+namespace Tomahawk {
+    class DynamicWidget;
+}
 
 class DLLEXPORT PlaylistManager : public QObject
 {
@@ -39,13 +45,16 @@ public:
 
     bool isSuperCollectionVisible() const { return true; }
 
+    PlaylistInterface* currentPlaylistInterface() const { return m_currentInterface; }
+
     bool show( const Tomahawk::playlist_ptr& playlist );
+    bool show( const Tomahawk::dynplaylist_ptr& playlist );
     bool show( const Tomahawk::artist_ptr& artist );
     bool show( const Tomahawk::album_ptr& album );
     bool show( const Tomahawk::collection_ptr& collection );
     bool show( const Tomahawk::source_ptr& source );
 
-    bool show( QWidget* widget );
+    bool show( QWidget* widget, const QString& title = QString(), const QString& desc = QString(), const QPixmap& pixmap = QPixmap() );
 
     bool showSuperCollection();
     void showCurrentTrack();
@@ -62,6 +71,8 @@ signals:
     void statsAvailable( bool b );
     void modesAvailable( bool b );
 
+    void playClicked();
+    void pauseClicked();
 public slots:
     void setTreeMode();
     void setTableMode();
@@ -74,7 +85,15 @@ public slots:
 
     void setRepeatMode( PlaylistInterface::RepeatMode mode );
     void setShuffled( bool enabled );
-
+    
+    // called by the playlist creation dbcmds
+    void createPlaylist( const Tomahawk::source_ptr& src, const QVariant& contents );
+    void createDynamicPlaylist( const Tomahawk::source_ptr& src, const QVariant& contents );
+    
+    // ugh need to set up the connection in tomahawk to libtomahawk
+    void onPlayClicked();
+    void onPauseClicked();
+    
 private slots:
     void applyFilter();
 
@@ -85,6 +104,8 @@ private:
     void linkPlaylist();
 
     QWidget* m_widget;
+    InfoBar* m_infobar;
+    TopBar* m_topbar;
     QStackedWidget* m_stack;
     AnimatedSplitter* m_splitter;
 
@@ -94,16 +115,16 @@ private:
     AlbumModel* m_superAlbumModel;
     AlbumView* m_superAlbumView;
     CollectionFlatModel* m_superCollectionFlatModel;
-    CollectionView* m_superCollectionView;
-
+    CollectionView* m_superCollectionView;    
+    
     QList< Tomahawk::collection_ptr > m_superCollections;
 
+    QHash< Tomahawk::dynplaylist_ptr, Tomahawk::DynamicWidget* > m_dynamicWidgets;
     QHash< Tomahawk::collection_ptr, CollectionView* > m_collectionViews;
     QHash< Tomahawk::collection_ptr, AlbumView* > m_collectionAlbumViews;
-
-    QHash< Tomahawk::playlist_ptr, PlaylistView* > m_playlistViews;
     QHash< Tomahawk::artist_ptr, PlaylistView* > m_artistViews;
     QHash< Tomahawk::album_ptr, PlaylistView* > m_albumViews;
+    QHash< Tomahawk::playlist_ptr, PlaylistView* > m_playlistViews;
     QHash< Tomahawk::source_ptr, SourceInfoWidget* > m_sourceViews;
 
     PlaylistInterface* m_currentInterface;

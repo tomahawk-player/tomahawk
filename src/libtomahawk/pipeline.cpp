@@ -2,9 +2,12 @@
 
 #include <QDebug>
 #include <QMutexLocker>
+#include <QTimer>
 
 #include "functimeout.h"
 #include "database/database.h"
+
+#define CONCURRENT_QUERIES 8
 
 using namespace Tomahawk;
 
@@ -29,7 +32,7 @@ Pipeline::Pipeline( QObject* parent )
 void
 Pipeline::databaseReady()
 {
-    connect( Database::instance(), SIGNAL(indexReady()), this, SLOT(indexReady()), Qt::QueuedConnection );
+    connect( Database::instance(), SIGNAL( indexReady() ), this, SLOT( indexReady() ), Qt::QueuedConnection );
     Database::instance()->loadIndex();
 }
 
@@ -73,68 +76,111 @@ Pipeline::addResolver( Resolver* r, bool sort )
 
 
 void
-Pipeline::add( const QList<query_ptr>& qlist, bool prioritized )
+Pipeline::resolve( const QList<query_ptr>& qlist, bool prioritized )
 {
     {
         QMutexLocker lock( &m_mut );
+
+        int i = 0;
         foreach( const query_ptr& q, qlist )
         {
             qDebug() << Q_FUNC_INFO << (qlonglong)q.data() << q->toString();
-            if( !m_qids.contains( q->id() ) )
+            if ( !m_qids.contains( q->id() ) )
             {
                 m_qids.insert( q->id(), q );
+            }
+
+            if ( m_queries_pending.contains( q ) )
+            {
+                qDebug() << "Already queued for resolving:" << q->toString();
+                continue;
+            }
+
+            if ( prioritized )
+            {
+                m_queries_pending.insert( i++, q );
+            }
+            else
+            {
+                m_queries_pending.append( q );
             }
         }
     }
 
-    if ( prioritized )
-    {
-        for( int i = qlist.count() - 1; i >= 0; i-- )
-            m_queries_pending.insert( 0, qlist.at( i ) );
-    }
-    else
-    {
-        m_queries_pending.append( qlist );
-    }
-
-    if ( m_index_ready && m_queries_pending.count() )
-        shuntNext();
+    shuntNext();
 }
 
 
 void
-Pipeline::add( const query_ptr& q, bool prioritized )
+Pipeline::resolve( const query_ptr& q, bool prioritized )
 {
-    //qDebug() << Q_FUNC_INFO << (qlonglong)q.data() << q->toString();
+    if ( q.isNull() )
+        return;
+    
     QList< query_ptr > qlist;
     qlist << q;
-    add( qlist, prioritized );
+    resolve( qlist, prioritized );
+}
+
+
+void
+Pipeline::resolve( QID qid, bool prioritized )
+{
+    resolve( query( qid ), prioritized );
 }
 
 
 void
 Pipeline::reportResults( QID qid, const QList< result_ptr >& results )
 {
-    QMutexLocker lock( &m_mut );
-
-    if( !m_qids.contains( qid ) )
+    unsigned int state = 0;
     {
-        qDebug() << "reportResults called for unknown QID";
-        return;
-    }
+        QMutexLocker lock( &m_mut );
 
-    if ( !results.isEmpty() )
-    {
-        //qDebug() << Q_FUNC_INFO << qid;
-        //qDebug() << "solved query:" << (qlonglong)q.data() << q->toString();
-
-        const query_ptr& q = m_qids.value( qid );
-        q->addResults( results );
-
-        foreach( const result_ptr& r, q->results() )
+        if ( !m_qids.contains( qid ) )
         {
-            m_rids.insert( r->id(), r );
+            qDebug() << "reportResults called for unknown QID";
+            Q_ASSERT( false );
+            return;
         }
+
+        if ( !m_qidsState.contains( qid ) )
+        {
+            qDebug() << "reportResults called for unknown QID-state";
+            Q_ASSERT( false );
+            return;
+        }
+
+        state = m_qidsState.value( qid ) - 1;
+
+        if ( state )
+            m_qidsState.insert( qid, state );
+        else
+            m_qidsState.remove( qid );
+
+        if ( !results.isEmpty() )
+        {
+            //qDebug() << Q_FUNC_INFO << qid;
+            //qDebug() << "solved query:" << (qlonglong)q.data() << q->toString();
+
+            const query_ptr& q = m_qids.value( qid );
+            q->addResults( results );
+
+            foreach( const result_ptr& r, q->results() )
+            {
+                m_rids.insert( r->id(), r );
+            }
+        }
+    }
+    
+    if ( state == 0 )
+    {
+        // All resolvers have reported back their results for this query now
+        const query_ptr& q = m_qids.value( qid );
+        qDebug() << "Finished resolving:" << q->toString();
+        q->onResolvingFinished();
+
+        shuntNext();
     }
 }
 
@@ -142,32 +188,48 @@ Pipeline::reportResults( QID qid, const QList< result_ptr >& results )
 void
 Pipeline::shuntNext()
 {
-    if ( m_queries_pending.isEmpty() )
-    {
-        emit idle();
+    if ( !m_index_ready )
         return;
+
+    query_ptr q;
+    {
+        QMutexLocker lock( &m_mut );
+        
+        if ( m_queries_pending.isEmpty() )
+        {
+            emit idle();
+            return;
+        }
+
+        // Check if we are ready to dispatch more queries
+        if ( m_qidsState.count() >= CONCURRENT_QUERIES )
+            return;
+
+        /*
+            Since resolvers are async, we now dispatch to the highest weighted ones
+            and after timeout, dispatch to next highest etc, aborting when solved
+        */
+        q = m_queries_pending.takeFirst();
+        q->setLastPipelineWeight( 101 );
     }
 
-    /*
-        Since resolvers are async, we now dispatch to the highest weighted ones
-        and after timeout, dispatch to next highest etc, aborting when solved
-     */
-
-    query_ptr q = m_queries_pending.takeFirst();
-    q->setLastPipelineWeight( 101 );
-    shunt( q ); // bump into next stage of pipeline (highest weights are 100)
+    if ( !q.isNull() )
+        shunt( q ); // bump into next stage of pipeline (highest weights are 100)
 }
 
 
 void
 Pipeline::shunt( const query_ptr& q )
 {
-    if( q->solved() )
+    if ( q->solved() )
     {
         qDebug() << "Query solved, pipeline aborted:" << q->toString()
                  << "numresults:" << q->results().length();
+
+        shuntNext();
         return;
     }
+
     unsigned int lastweight = 0;
     unsigned int lasttimeout = 0;
     foreach( Resolver* r, m_resolvers )
@@ -189,6 +251,9 @@ Pipeline::shunt( const query_ptr& q )
 
             // resolvers aren't allowed to block in this call:
             //qDebug() << "Dispaching to resolver" << r->name();
+
+            unsigned int state = m_qidsState.value( q->id() );
+            m_qidsState.insert( q->id(), state + 1 );
             r->resolve( q->toVariant() );
         }
         else

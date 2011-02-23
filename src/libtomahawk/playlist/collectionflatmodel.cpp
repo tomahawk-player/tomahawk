@@ -159,7 +159,10 @@ void
 CollectionFlatModel::onTracksAdded( const QList<Tomahawk::query_ptr>& tracks, const Tomahawk::collection_ptr& collection )
 {
     if ( !tracks.count() )
+    {
+        emit trackCountChanged( rowCount( QModelIndex() ) );
         return;
+    }
 
     int c = rowCount( QModelIndex() );
     QPair< int, int > crows;
@@ -181,7 +184,7 @@ CollectionFlatModel::onTracksAdded( const QList<Tomahawk::query_ptr>& tracks, co
     emit endInsertRows();
 
     emit trackCountChanged( rowCount( QModelIndex() ) );
-    qDebug() << rowCount( QModelIndex() );
+    qDebug() << Q_FUNC_INFO << rowCount( QModelIndex() );
 }
 
 

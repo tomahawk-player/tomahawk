@@ -10,12 +10,12 @@ using namespace Tomahawk;
 
 
 MusicScanner::MusicScanner( const QString& dir, quint32 bs )
-    : QThread()
+    : QObject()
     , m_dir( dir )
     , m_batchsize( bs )
+    , m_dirLister( 0 )
+    , m_dirListerThreadController( 0 )
 {
-    moveToThread( this );
-
     m_ext2mime.insert( "mp3",  "audio/mpeg" );
 
 #ifndef NO_OGG
@@ -31,14 +31,29 @@ MusicScanner::MusicScanner( const QString& dir, quint32 bs )
    // m_ext2mime.insert( "mp4",  "audio/mp4" );
 }
 
-
-void
-MusicScanner::run()
+MusicScanner::~MusicScanner()
 {
-    QTimer::singleShot( 0, this, SLOT( startScan() ) );
-    exec(); 
+    qDebug() << Q_FUNC_INFO;
+    if( m_dirListerThreadController )
+    {
+        m_dirListerThreadController->quit();
+    
+        while( !m_dirListerThreadController->isFinished() )
+        {
+            QCoreApplication::processEvents( QEventLoop::AllEvents, 200 );
+            TomahawkUtils::Sleep::msleep(100);
+        }
+        
+        if( m_dirLister )
+        {
+            delete m_dirLister;
+            m_dirLister = 0;
+        }
+        
+        delete m_dirListerThreadController;
+        m_dirListerThreadController = 0;
+    }
 }
-
 
 void
 MusicScanner::startScan()
@@ -50,9 +65,9 @@ MusicScanner::startScan()
     // trigger the scan once we've loaded old mtimes for dirs below our path
     DatabaseCommand_DirMtimes* cmd = new DatabaseCommand_DirMtimes( m_dir );
     connect( cmd, SIGNAL( done( const QMap<QString, unsigned int>& ) ),
-                    SLOT( setMtimes( const QMap<QString, unsigned int>& ) ), Qt::DirectConnection );
+                    SLOT( setMtimes( const QMap<QString, unsigned int>& ) ) );
     connect( cmd, SIGNAL( done( const QMap<QString,unsigned int>& ) ),
-                    SLOT( scan() ), Qt::DirectConnection );
+                    SLOT( scan() ) );
 
     Database::instance()->enqueue( QSharedPointer<DatabaseCommand>(cmd) );
 }
@@ -68,24 +83,24 @@ MusicScanner::setMtimes( const QMap<QString, unsigned int>& m )
 void
 MusicScanner::scan()
 {
-    SourceList::instance()->getLocal()->scanningProgress( 0 );
     qDebug() << "Scanning, num saved mtimes from last scan:" << m_dirmtimes.size();
 
     connect( this, SIGNAL( batchReady( QVariantList ) ),
                      SLOT( commitBatch( QVariantList ) ), Qt::DirectConnection );
 
-    DirLister* lister = new DirLister( QDir( m_dir, 0 ), m_dirmtimes );
+    m_dirListerThreadController = new QThread( this );
+    m_dirLister = new DirLister( QDir( m_dir, 0 ), m_dirmtimes );
+    m_dirLister->moveToThread( m_dirListerThreadController );
 
-    connect( lister, SIGNAL( fileToScan( QFileInfo ) ),
-                       SLOT( scanFile( QFileInfo ) ), Qt::QueuedConnection );
+    connect( m_dirLister, SIGNAL( fileToScan( QFileInfo ) ),
+                            SLOT( scanFile( QFileInfo ) ), Qt::QueuedConnection );
 
     // queued, so will only fire after all dirs have been scanned:
-    connect( lister, SIGNAL( finished( const QMap<QString, unsigned int>& ) ),
-                       SLOT( listerFinished( const QMap<QString, unsigned int>& ) ), Qt::QueuedConnection );
-
-    connect( lister, SIGNAL( finished() ), lister, SLOT( deleteLater() ) );
-
-    lister->start();
+    connect( m_dirLister, SIGNAL( finished( const QMap<QString, unsigned int>& ) ),
+                            SLOT( listerFinished( const QMap<QString, unsigned int>& ) ), Qt::QueuedConnection );
+    
+    m_dirListerThreadController->start();
+    QMetaObject::invokeMethod( m_dirLister, "go" );
 }
 
 
@@ -102,7 +117,7 @@ MusicScanner::listerFinished( const QMap<QString, unsigned int>& newmtimes )
 
     // save mtimes, then quit thread
     DatabaseCommand_DirMtimes* cmd = new DatabaseCommand_DirMtimes( newmtimes );
-    connect( cmd, SIGNAL( finished() ), SLOT( quit() ) );
+    connect( cmd, SIGNAL( finished() ), SLOT( deleteLister() ) );
     Database::instance()->enqueue( QSharedPointer<DatabaseCommand>(cmd) );
 
     qDebug() << "Scanning complete, saving to database. "
@@ -113,6 +128,31 @@ MusicScanner::listerFinished( const QMap<QString, unsigned int>& newmtimes )
         qDebug() << s;
 }
 
+void
+MusicScanner::deleteLister()
+{
+    qDebug() << Q_FUNC_INFO;
+    connect( m_dirListerThreadController, SIGNAL( finished() ), SLOT( listerQuit() ) );
+    m_dirListerThreadController->quit();
+}
+
+void
+MusicScanner::listerQuit()
+{
+    qDebug() << Q_FUNC_INFO;
+    connect( m_dirLister, SIGNAL( destroyed( QObject* ) ), SLOT( listerDestroyed( QObject* ) ) );
+    delete m_dirLister;
+    m_dirLister = 0;
+}
+
+void
+MusicScanner::listerDestroyed( QObject* dirLister )
+{
+    qDebug() << Q_FUNC_INFO;
+    m_dirListerThreadController->deleteLater();
+    m_dirListerThreadController = 0;
+    emit finished();
+}
 
 void
 MusicScanner::commitBatch( const QVariantList& tracks )
@@ -155,12 +195,20 @@ MusicScanner::readFile( const QFileInfo& fi )
         return QVariantMap(); // invalid extension
     }
 
-    if( m_scanned % 3 == 0 )
-        SourceList::instance()->getLocal()->scanningProgress( m_scanned );
+    if ( m_scanned )
+        if( m_scanned % 3 == 0 )
+            SourceList::instance()->getLocal()->scanningProgress( m_scanned );
     if( m_scanned % 100 == 0 )
         qDebug() << "SCAN" << m_scanned << fi.absoluteFilePath();
 
-    TagLib::FileRef f( fi.absoluteFilePath().toUtf8().constData() );
+    #ifdef COMPLEX_TAGLIB_FILENAME
+        const wchar_t *encodedName = reinterpret_cast< const wchar_t *>(fi.absoluteFilePath().utf16());
+    #else
+        QByteArray fileName = QFile::encodeName( fi.absoluteFilePath() );
+        const char *encodedName = fileName.constData();
+    #endif
+
+    TagLib::FileRef f( encodedName );
     if ( f.isNull() || !f.tag() )
     {
         // qDebug() << "Doesn't seem to be a valid audiofile:" << fi.absoluteFilePath();
@@ -197,7 +245,7 @@ MusicScanner::readFile( const QFileInfo& fi )
 
     QVariantMap m;
     m["url"]          = url.arg( fi.absoluteFilePath() );
-    m["lastmodified"] = fi.lastModified().toUTC().toTime_t();
+    m["mtime"]        = fi.lastModified().toUTC().toTime_t();
     m["size"]         = (unsigned int)fi.size();
     m["hash"]         = ""; // TODO
     m["mimetype"]     = mimetype;

@@ -6,6 +6,7 @@
 
 #include "database/databasecommandloggable.h"
 #include "typedefs.h"
+#include "query.h"
 
 #include "dllmacro.h"
 
@@ -36,10 +37,11 @@ public:
 
 signals:
     void done( const QList<QVariant>&, Tomahawk::collection_ptr );
-    void notify( const QList<QVariant>&, Tomahawk::collection_ptr );
+    void notify( const QList<Tomahawk::query_ptr>&, Tomahawk::collection_ptr );
 
 private:
     QVariantList m_files;
+    QList<Tomahawk::query_ptr> m_queries;
 };
 
 #endif // DATABASECOMMAND_ADDFILES_H

@@ -6,65 +6,65 @@
 
 #include "../sipdllmacro.h"
 
+#define MYNAME "SIPJABBER"
+
 class SIPDLLEXPORT JabberPlugin : public SipPlugin
 {
     Q_OBJECT
     Q_INTERFACES( SipPlugin )
 
 public:
-    JabberPlugin()
-        : p( 0 )
-    {}
+    JabberPlugin();
 
     virtual ~JabberPlugin() { delete p; }
+
+    //FIXME: Make this more correct
+    virtual bool isValid() { return true; }
+    virtual const QString name();
+    virtual const QString friendlyName();
+    virtual const QString accountName();
+    virtual QMenu* menu();
 
     void setProxy( QNetworkProxy* proxy );
 
 public slots:
-    virtual bool connect();
+    virtual bool connectPlugin( bool startup );
 
-    void disconnect()
+    void disconnectPlugin()
     {
-        QMetaObject::invokeMethod( p,
-                                   "disconnect",
-                                   Qt::QueuedConnection
-                                 );
+        if ( p )
+            p->disconnect();
+
+        delete p;
+        p = 0;
     }
 
     void sendMsg( const QString& to, const QString& msg )
     {
-        QMetaObject::invokeMethod( p,
-                                   "sendMsg",
-                                   Qt::QueuedConnection,
-                                   Q_ARG(const QString, to),
-                                   Q_ARG(const QString, msg)
-                                 );
+        if ( p )
+            p->sendMsg( to, msg );
     }
 
     void broadcastMsg( const QString &msg )
     {
-        QMetaObject::invokeMethod( p,
-                                   "broadcastMsg",
-                                   Qt::QueuedConnection,
-                                   Q_ARG(const QString, msg)
-                                 );
+        if ( p )
+            p->broadcastMsg( msg );
     }
 
     void addContact( const QString &jid, const QString& msg = QString() )
     {
-        QMetaObject::invokeMethod( p,
-                                   "addContact",
-                                   Qt::QueuedConnection,
-                                   Q_ARG(const QString, jid),
-                                   Q_ARG(const QString, msg)
-                                 );
+        if ( p )
+            p->addContact( jid, msg );
     }
 
 private slots:
     void onAuthError( int, const QString& );
+    void showAddFriendDialog();
 
 private:
     Jabber_p* p;
+    QMenu* m_menu;
+    QAction* m_addFriendAction;
 };
 
 #endif

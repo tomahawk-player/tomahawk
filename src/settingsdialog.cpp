@@ -1,7 +1,3 @@
-#include "settingsdialog.h"
-#include "ui_settingsdialog.h"
-#include "ui_proxydialog.h"
-
 #include <QCryptographicHash>
 #include <QDebug>
 #include <QDesktopServices>
@@ -9,16 +5,20 @@
 #include <QMessageBox>
 #include <QNetworkProxy>
 
-#ifndef NO_LIBLASTFM
+#ifdef LIBLASTFM_FOUND
 #include <lastfm/ws.h>
 #include <lastfm/XmlQuery>
 #endif
 
+#include "settingsdialog.h"
+#include "ui_settingsdialog.h"
+#include "ui_proxydialog.h"
 #include "tomahawk/tomahawkapp.h"
 #include "musicscanner.h"
 #include "tomahawksettings.h"
 #include "sip/SipHandler.h"
-
+#include <database/database.h>
+#include "scanmanager.h"
 
 static QString
 md5( const QByteArray& src )
@@ -39,7 +39,9 @@ SettingsDialog::SettingsDialog( QWidget *parent )
     TomahawkSettings* s = TomahawkSettings::instance();
 
     ui->checkBoxHttp->setChecked( s->httpEnabled() );
+    ui->checkBoxStaticPreferred->setChecked( s->preferStaticHostPort() );
     ui->checkBoxUpnp->setChecked( s->externalAddressMode() == TomahawkSettings::Upnp );
+    ui->checkBoxUpnp->setEnabled( !s->preferStaticHostPort() );
 
     // JABBER
     ui->checkBoxJabberAutoConnect->setChecked( s->jabberAutoConnect() );
@@ -47,20 +49,20 @@ SettingsDialog::SettingsDialog( QWidget *parent )
     ui->jabberPassword->setText( s->jabberPassword() );
     ui->jabberServer->setText( s->jabberServer() );
     ui->jabberPort->setValue( s->jabberPort() );
+
+    ui->staticHostName->setText( s->externalHostname() );
+    ui->staticPort->setValue( s->externalPort() );
+
     ui->proxyButton->setVisible( false );
 
-    if ( ui->jabberPort->text().toInt() != 5222 || !ui->jabberServer->text().isEmpty() )
+    // SIP PLUGINS
+    foreach(SipPlugin *plugin, APP->sipHandler()->plugins())
     {
-        ui->checkBoxJabberAdvanced->setChecked( true );
-    }
-    else
-    {
-        // hide advanved settings
-        ui->checkBoxJabberAdvanced->setChecked( false );
-        ui->jabberServer->setVisible( false );
-        ui->jabberPort->setVisible( false );
-        ui->labelJabberServer->setVisible( false );
-        ui->labelJabberPort->setVisible( false );
+        if(plugin->configWidget())
+        {
+            qDebug() << "Adding configWidget for " << plugin->name();
+            ui->tabWidget->addTab(plugin->configWidget(), plugin->friendlyName());
+        }
     }
 
     // MUSIC SCANNER
@@ -72,8 +74,20 @@ SettingsDialog::SettingsDialog( QWidget *parent )
     ui->lineEditLastfmPassword->setText(s->lastFmPassword() );
     connect( ui->pushButtonTestLastfmLogin, SIGNAL( clicked( bool) ), this, SLOT( testLastFmLogin() ) );
     
+    // SCRIPT RESOLVER
+    ui->removeScript->setEnabled( false );
+    foreach( const QString& resolver, s->scriptResolvers() ) {
+        QFileInfo info( resolver );
+        ui->scriptList->addTopLevelItem( new QTreeWidgetItem( QStringList() << info.baseName() << resolver ) );
+        
+    }
+    connect( ui->scriptList, SIGNAL( itemClicked( QTreeWidgetItem*, int ) ), this, SLOT( scriptSelectionChanged() ) );
+    connect( ui->addScript, SIGNAL( clicked( bool ) ), this, SLOT( addScriptResolver() ) );
+    connect( ui->removeScript, SIGNAL( clicked( bool ) ), this, SLOT( removeScriptResolver() ) );
+    
     connect( ui->buttonBrowse, SIGNAL( clicked() ),  SLOT( showPathSelector() ) );
     connect( ui->proxyButton,  SIGNAL( clicked() ),  SLOT( showProxySettings() ) );
+    connect( ui->checkBoxStaticPreferred, SIGNAL( toggled(bool) ), SLOT( toggleUpnp(bool) ) );
     connect( this,             SIGNAL( rejected() ), SLOT( onRejected() ) );
 }
 
@@ -86,45 +100,33 @@ SettingsDialog::~SettingsDialog()
     {
         TomahawkSettings* s = TomahawkSettings::instance();
 
-        // if jabber or scan dir changed, reconnect/rescan
-        bool rescan = ui->lineEditMusicPath->text() != s->scannerPath();
-        bool rejabber = false;
-        if ( ui->jabberUsername->text() != s->jabberUsername() ||
-             ui->jabberPassword->text() != s->jabberPassword() ||
-             ui->jabberServer->text() != s->jabberServer() ||
-             ui->jabberPort->value() != s->jabberPort()
-             )
-            {
-            rejabber = true;
-        }
+        s->setHttpEnabled( ui->checkBoxHttp->checkState() == Qt::Checked );
+        s->setPreferStaticHostPort( ui->checkBoxStaticPreferred->checkState() == Qt::Checked );
+        s->setExternalAddressMode( ui->checkBoxUpnp->checkState() == Qt::Checked ? TomahawkSettings::Upnp : TomahawkSettings::Lan );
 
-        s->setHttpEnabled(                                  ui->checkBoxHttp->checkState() == Qt::Checked );
-        s->setExternalAddressMode(ui->checkBoxUpnp->checkState() == Qt::Checked ? TomahawkSettings::Upnp : TomahawkSettings::Lan);
-
-        s->setJabberAutoConnect(                            ui->checkBoxJabberAutoConnect->checkState() == Qt::Checked );
-        s->setJabberUsername(                               ui->jabberUsername->text() );
-        s->setJabberPassword(                               ui->jabberPassword->text() );
-        s->setJabberServer(                                 ui->jabberServer->text() );
-        s->setJabberPort(                                   ui->jabberPort->value() );
-
-        s->setScannerPath(                                  ui->lineEditMusicPath->text() );
+        s->setJabberAutoConnect( ui->checkBoxJabberAutoConnect->checkState() == Qt::Checked );
+        s->setJabberUsername( ui->jabberUsername->text() );
+        s->setJabberPassword( ui->jabberPassword->text() );
+        s->setJabberServer( ui->jabberServer->text() );
+        s->setJabberPort( ui->jabberPort->value() );
         
-        s->setScrobblingEnabled(                            ui->checkBoxEnableLastfm->isChecked() );
-        s->setLastFmUsername(                               ui->lineEditLastfmUsername->text() );
-        s->setLastFmPassword(                               ui->lineEditLastfmPassword->text() );
+        s->setExternalHostname( ui->staticHostName->text() );
+        s->setExternalPort( ui->staticPort->value() );
 
-        if( rescan )
-        {
-            MusicScanner* scanner = new MusicScanner(s->scannerPath() );
-            connect( scanner, SIGNAL( finished() ), scanner, SLOT( deleteLater() ) );
-            scanner->start();
-        }
+        s->setScannerPath( ui->lineEditMusicPath->text() );
+        
+        s->setScrobblingEnabled( ui->checkBoxEnableLastfm->isChecked() );
+        s->setLastFmUsername( ui->lineEditLastfmUsername->text() );
+        s->setLastFmPassword( ui->lineEditLastfmPassword->text() );
 
-        if( rejabber )
+        QStringList resolvers;
+        for( int i = 0; i < ui->scriptList->topLevelItemCount(); i++ )
         {
-            APP->sipHandler()->disconnect();
-            APP->sipHandler()->connect();
+            resolvers << ui->scriptList->topLevelItem( i )->data( 1, Qt::DisplayRole ).toString();
         }
+        s->setScriptResolvers( resolvers );
+
+        s->applyChanges();
     }
     else
         qDebug() << "Settings dialog cancelled, NOT saving prefs.";
@@ -146,21 +148,6 @@ SettingsDialog::showPathSelector()
         return;
 
     ui->lineEditMusicPath->setText( path );
-}
-
-
-void
-SettingsDialog::doScan()
-{
-    // TODO this doesnt really belong here..
-    QString path = ui->lineEditMusicPath->text();
-    MusicScanner* scanner = new MusicScanner( path );
-    connect( scanner, SIGNAL( finished() ), scanner, SLOT( deleteLater() ) );
-    scanner->start();
-
-    QMessageBox::information( this, tr( "Scanning Started" ),
-                                    tr( "Scanning now, check console output. TODO." ),
-                                    QMessageBox::Ok );
 }
 
 
@@ -197,9 +184,19 @@ SettingsDialog::showProxySettings()
 
 
 void
+SettingsDialog::toggleUpnp( bool preferStaticEnabled )
+{
+    if ( preferStaticEnabled )
+        ui->checkBoxUpnp->setEnabled( false );
+    else
+        ui->checkBoxUpnp->setEnabled( true );
+}
+
+
+void
 SettingsDialog::testLastFmLogin()
 {
-#ifndef NO_LIBLASTFM
+#ifdef LIBLASTFM_FOUND
     ui->pushButtonTestLastfmLogin->setEnabled( false );
     ui->pushButtonTestLastfmLogin->setText( "Testing..." );
 
@@ -220,7 +217,7 @@ SettingsDialog::testLastFmLogin()
 void
 SettingsDialog::onLastFmFinished()
 {
-#ifndef NO_LIBLASTFM
+#ifdef LIBLASTFM_FOUND
     lastfm::XmlQuery lfm = lastfm::XmlQuery( m_testLastFmQuery->readAll() );
 
     switch( m_testLastFmQuery->error() )
@@ -232,8 +229,8 @@ SettingsDialog::onLastFmFinished()
                  qDebug() << "ERROR from last.fm:" << lfm.text();
                  ui->pushButtonTestLastfmLogin->setText( tr( "Failed" ) );
                  ui->pushButtonTestLastfmLogin->setEnabled( true );
-
-             } else
+             }
+             else
              {
                  ui->pushButtonTestLastfmLogin->setText( tr( "Success" ) );
                  ui->pushButtonTestLastfmLogin->setEnabled( false );
@@ -312,4 +309,41 @@ ProxyDialog::saveSettings()
         delete oldProxy;
 
     QNetworkProxy::setApplicationProxy( proxy );
+}
+
+
+void 
+SettingsDialog::addScriptResolver()
+{
+    QString resolver = QFileDialog::getOpenFileName( this, tr( "Load script resolver file" ), qApp->applicationDirPath() );
+    if( !resolver.isEmpty() ) {
+        QFileInfo info( resolver );
+        ui->scriptList->addTopLevelItem( new QTreeWidgetItem(  QStringList() << info.baseName() << resolver ) );
+        
+        TomahawkApp::instance()->addScriptResolver( resolver );
+    }
+}
+
+
+void 
+SettingsDialog::removeScriptResolver()
+{
+    // only one selection
+    if( !ui->scriptList->selectedItems().isEmpty() ) {
+        QString resolver = ui->scriptList->selectedItems().first()->data( 1, Qt::DisplayRole ).toString();
+        delete ui->scriptList->takeTopLevelItem( ui->scriptList->indexOfTopLevelItem( ui->scriptList->selectedItems().first() ) );
+        
+        TomahawkApp::instance()->removeScriptResolver( resolver );
+    }
+}
+
+
+void 
+SettingsDialog::scriptSelectionChanged()
+{
+    if( !ui->scriptList->selectedItems().isEmpty() ) {
+        ui->removeScript->setEnabled( true );
+    } else {
+        ui->removeScript->setEnabled( false );
+    }
 }

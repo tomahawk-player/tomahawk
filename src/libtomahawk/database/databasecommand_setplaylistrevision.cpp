@@ -14,12 +14,12 @@ DatabaseCommand_SetPlaylistRevision::DatabaseCommand_SetPlaylistRevision(
                       const QStringList& orderedguids,
                       const QList<plentry_ptr>& addedentries,
                       const QList<plentry_ptr>& entries )
-    : DatabaseCommandLoggable( s )
+: DatabaseCommandLoggable( s )
+    , m_applied( false )
     , m_newrev( newrev )
     , m_oldrev( oldrev )
     , m_addedentries( addedentries )
     , m_entries( entries )
-    , m_applied( false )
 {
     m_localOnly = ( newrev == oldrev );
 
@@ -37,7 +37,12 @@ void
 DatabaseCommand_SetPlaylistRevision::postCommitHook()
 {
     qDebug() << Q_FUNC_INFO;
-
+    if ( source().isNull() || source()->collection().isNull() )
+    {
+        qDebug() << "Source has gone offline, not emitting to GUI.";
+        return;
+    }
+    
     if ( m_localOnly )
         return;
 
@@ -72,8 +77,6 @@ DatabaseCommand_SetPlaylistRevision::exec( DatabaseImpl* lib )
 {
     using namespace Tomahawk;
 
-    QString currentrevision;
-
     // get the current revision for this playlist
     // this also serves to check the playlist exists.
     TomahawkSqlQuery chkq = lib->newquery();
@@ -81,8 +84,8 @@ DatabaseCommand_SetPlaylistRevision::exec( DatabaseImpl* lib )
     chkq.addBindValue( m_playlistguid );
     if( chkq.exec() && chkq.next() )
     {
-        currentrevision = chkq.value( 0 ).toString();
-        //qDebug() << Q_FUNC_INFO << "pl guid" << m_playlistguid << " curr rev" << currentrevision;
+        m_currentRevision = chkq.value( 0 ).toString();
+        qDebug() << Q_FUNC_INFO << "pl guid" << m_playlistguid << " curr rev" << m_currentRevision;
     }
     else
     {
@@ -157,9 +160,9 @@ DatabaseCommand_SetPlaylistRevision::exec( DatabaseImpl* lib )
     query.addBindValue( m_oldrev.isEmpty() ? QVariant(QVariant::String) : m_oldrev );
     query.exec();
 
-    qDebug() << "Currentrevision:" << currentrevision << "oldrev:" << m_oldrev;
+    qDebug() << "Currentrevision:" << m_currentRevision << "oldrev:" << m_oldrev;
     // if optimistic locking is ok, update current revision to this new one
-    if( currentrevision == m_oldrev )
+    if( m_currentRevision == m_oldrev )
     {
         qDebug() << "updating current revision, optimistic locking ok";
 

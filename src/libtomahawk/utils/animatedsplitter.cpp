@@ -1,6 +1,6 @@
 #include "animatedsplitter.h"
 
-#define ANIMATION_TIME 500
+#define ANIMATION_TIME 400
 
 
 AnimatedSplitter::AnimatedSplitter( QWidget* parent )
@@ -8,6 +8,8 @@ AnimatedSplitter::AnimatedSplitter( QWidget* parent )
     , m_animateIndex( -1 )
     , m_greedyIndex( 0 )
 {
+    setHandleWidth( 1 );
+    
     m_timeLine = new QTimeLine( ANIMATION_TIME, this );
     m_timeLine->setUpdateInterval( 5 );
     m_timeLine->setEasingCurve( QEasingCurve::OutBack );
@@ -195,6 +197,21 @@ AnimatedSplitter::onAnimationFinished()
     m_animateIndex = -1;
 }
 
+void 
+AnimatedSplitter::setGreedyWidget(int index)
+{
+    m_greedyIndex = index;
+    if( !widget( index ) )
+        return;
+    QSizePolicy policy = widget( m_greedyIndex )->sizePolicy();
+    if( orientation() == Qt::Horizontal )
+        policy.setHorizontalStretch( 1 );
+    else
+        policy.setVerticalStretch( 1 );
+    widget( m_greedyIndex )->setSizePolicy( policy );
+    
+}
+
 
 void
 AnimatedSplitter::onHiddenSizeChanged()
@@ -213,6 +230,10 @@ AnimatedWidget::AnimatedWidget( AnimatedSplitter* parent )
     qDebug() << Q_FUNC_INFO;
 }
 
+AnimatedWidget::~AnimatedWidget()
+{
+
+}
 
 void
 AnimatedWidget::onShown( QWidget* )

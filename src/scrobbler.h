@@ -33,7 +33,7 @@ public slots:
     void onAuthenticated();
     
 private:
-    void scrobble( );
+    void scrobble();
     void createScrobbler();
     
     lastfm::MutableTrack m_track;

@@ -8,10 +8,9 @@
 using namespace Tomahawk;
 
 
-DatabaseCommand_Resolve::DatabaseCommand_Resolve( const QVariant& v, bool searchlocal )
+DatabaseCommand_Resolve::DatabaseCommand_Resolve( const QVariant& v )
     : DatabaseCommand()
     , m_v( v )
-    , m_searchlocal( searchlocal )
 {
 }
 
@@ -72,6 +71,7 @@ DatabaseCommand_Resolve::exec( DatabaseImpl* lib )
     if( artists.length() == 0 || tracks.length() == 0 )
     {
         //qDebug() << "No candidates found in first pass, aborting resolve" << artistname << trackname;
+        emit results( qid, res );
         return;
     }
 
@@ -98,11 +98,9 @@ DatabaseCommand_Resolve::exec( DatabaseImpl* lib )
                             "WHERE "
                             "artist.id = file_join.artist AND "
                             "track.id = file_join.track AND "
-                            "file.source %1 AND "
                             "file.id = file_join.file AND "
-                            "file_join.artist IN (%2) AND "
-                            "file_join.track IN (%3)"
-        ).arg( m_searchlocal ? "IS NULL" : " > 0 " )
+                            "file_join.artist IN (%1) AND "
+                            "file_join.track IN (%2)" )
          .arg( artsl.join( "," ) )
          .arg( trksl.join( "," ) );
 
@@ -130,7 +128,7 @@ DatabaseCommand_Resolve::exec( DatabaseImpl* lib )
 
         source_ptr s;
         const QString url_str = files_query.value( 0 ).toString();
-        if( m_searchlocal )
+        if( files_query.value( 13 ).toUInt() == 0 )
         {
             s = SourceList::instance()->getLocal();
             m["url"] = url_str;

@@ -5,6 +5,7 @@
 #include <QNetworkInterface>
 #include <QFile>
 #include <QThread>
+#include <QNetworkProxy>
 #include <QNetworkRequest>
 #include <QNetworkReply>
 
@@ -40,6 +41,8 @@ Servent::Servent( QObject* parent )
 {
     s_instance = this;
 
+    setProxy( QNetworkProxy::NoProxy );
+    
     {
     boost::function<QSharedPointer<QIODevice>(result_ptr)> fac =
         boost::bind( &Servent::localFileIODeviceFactory, this, _1 );
@@ -75,6 +78,7 @@ Servent::startListening( QHostAddress ha, bool upnp, int port )
     if( !listen( ha, m_port ) && !listen( ha, ++m_port ) )
     {
         qDebug() << "Failed to listen on port" << m_port;
+        qDebug() << "Error string is " << errorString();
         return false;
     }
     else
@@ -83,6 +87,19 @@ Servent::startListening( QHostAddress ha, bool upnp, int port )
     }
 
     // --lanhack means to advertise your LAN IP over jabber as if it were externallyVisible
+    qDebug() << "Address mode = " << (int)(TomahawkSettings::instance()->externalAddressMode());
+    qDebug() << "Static host/port preferred ? = " << ( TomahawkSettings::instance()->preferStaticHostPort() ? "true" : "false" );
+    
+    if( TomahawkSettings::instance()->preferStaticHostPort() )
+    {
+        qDebug() << "Forcing static preferred host and port";
+        m_externalHostname = TomahawkSettings::instance()->externalHostname();
+        m_externalPort = TomahawkSettings::instance()->externalPort();
+        qDebug() << m_externalHostname << m_externalPort;
+        emit ready();
+        return true;
+    }
+    
     switch( TomahawkSettings::instance()->externalAddressMode() )
     {
         case TomahawkSettings::Lan:
@@ -91,18 +108,15 @@ Servent::startListening( QHostAddress ha, bool upnp, int port )
                 if( ha.toString() == "127.0.0.1" ) continue;
                 if( ha.toString().contains( ":" ) ) continue; //ipv6
 
-                m_externalAddress = ha;
-                m_externalPort = m_port;
-                qDebug() << "LANHACK: set external address to lan address" << ha.toString();
+                if ( qApp->arguments().contains( "--lanhack" ) )
+                {
+                    qDebug() << "LANHACK: set external address to lan address" << ha.toString();
+                    QMetaObject::invokeMethod( this, "setExternalAddress", Qt::QueuedConnection, Q_ARG( QHostAddress, ha ), Q_ARG( unsigned int, m_port ) );
+                }
+                else
+                    emit ready();
                 break;
             }
-            break;
-
-        case TomahawkSettings::DynDns:
-            qDebug() << "External address mode set to dyndns...";
-            m_externalHostname = TomahawkSettings::instance()->externalHostname();
-            m_externalPort = TomahawkSettings::instance()->externalPort();
-            qDebug() << m_externalHostname << m_externalPort;
             break;
 
         case TomahawkSettings::Upnp:
@@ -110,11 +124,8 @@ Servent::startListening( QHostAddress ha, bool upnp, int port )
             qDebug() << "External address mode set to upnp....";
             m_portfwd = new PortFwdThread( m_port );
             connect( m_portfwd, SIGNAL( externalAddressDetected( QHostAddress, unsigned int ) ),
-                                SLOT( setExternalAddress( QHostAddress, unsigned int ) ) );
+                                  SLOT( setExternalAddress( QHostAddress, unsigned int ) ) );
             break;
-
-        default:
-            emit ready();
     }
 
     return true;
@@ -122,15 +133,20 @@ Servent::startListening( QHostAddress ha, bool upnp, int port )
 
 
 QString
-Servent::createConnectionKey( const QString& name )
+Servent::createConnectionKey( const QString& name, const QString &nodeid, const QString &key, bool onceOnly )
 {
+    qDebug() << Q_FUNC_INFO;
     Q_ASSERT( this->thread() == QThread::currentThread() );
 
-    QString key = uuid();
+    QString _key = ( key.isEmpty() ? uuid() : key );
     ControlConnection* cc = new ControlConnection( this );
     cc->setName( name.isEmpty() ? QString( "KEY(%1)" ).arg( key ) : name );
-    registerOffer( key, cc );
-    return key;
+    if( !nodeid.isEmpty() )
+        cc->setId( nodeid );
+    cc->setOnceOnly( onceOnly );
+    qDebug() << "Creating connection key with name of " << cc->name() << " and id of " << cc->id() << " and key of " << _key << "; key is once only? : " << (onceOnly ? "true" : "false");
+    registerOffer( _key, cc );
+    return _key;
 }
 
 
@@ -140,9 +156,18 @@ Servent::setExternalAddress( QHostAddress ha, unsigned int port )
     m_externalAddress = ha;
     m_externalPort = port;
 
-    if( m_externalPort == 0 )
+    if( m_externalPort == 0 || m_externalAddress.toString().isEmpty() )
     {
-        qDebug() << "No external access, LAN and outbound connections only!";
+        if( !TomahawkSettings::instance()->externalHostname().isEmpty() &&
+            !TomahawkSettings::instance()->externalPort() == 0 )
+        {
+            qDebug() << "UPnP failed, have external address/port -- falling back";
+            m_externalHostname = TomahawkSettings::instance()->externalHostname();
+            m_externalPort = TomahawkSettings::instance()->externalPort();
+            qDebug() << m_externalHostname << m_externalPort;
+        }
+        else
+            qDebug() << "No external access, LAN and outbound connections only!";
     }
 
     emit ready();
@@ -259,7 +284,7 @@ Servent::readyRead()
 
     qDebug() << m;
 
-    if( !nodeid.isEmpty() && cc != 0 ) // only control connections send nodeid
+    if( !nodeid.isEmpty() ) // only control connections send nodeid
     {
         foreach( ControlConnection* con, m_controlconnections )
         {
@@ -348,7 +373,6 @@ Servent::createParallelConnection( Connection* orig_conn, Connection* new_conn, 
 }
 
 
-/// for outbound connections. DRY out the socket handover code from readyread too?
 void
 Servent::socketConnected()
 {
@@ -739,4 +763,5 @@ Servent::httpIODeviceFactory( const Tomahawk::result_ptr& result )
     QNetworkRequest req( result->url() );
     QNetworkReply* reply = APP->nam()->get( req );
     return QSharedPointer<QIODevice>( reply );*/
+    return QSharedPointer<QIODevice>();
 }

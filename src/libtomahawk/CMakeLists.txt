@@ -16,6 +16,7 @@ set( libSources
     tomahawksettings.cpp
     sourcelist.cpp
     pipeline.cpp
+
     artist.cpp
     album.cpp
     collection.cpp
@@ -27,12 +28,14 @@ set( libSources
 
     sip/SipPlugin.cpp
 
+
     audio/madtranscode.cpp
     audio/vorbistranscode.cpp
     audio/flactranscode.cpp
     audio/audioengine.cpp
 
     database/database.cpp
+    database/fuzzyindex.cpp
     database/databasecollection.cpp
     database/databaseworker.cpp
     database/databaseimpl.cpp
@@ -59,7 +62,13 @@ set( libSources
     database/databasecommand_renameplaylist.cpp
     database/databasecommand_loadops.cpp
     database/databasecommand_updatesearchindex.cpp
-    database/fuzzyindex.cpp
+    database/databasecollection.cpp
+    database/databasecommand_setdynamicplaylistrevision.cpp
+    database/databasecommand_createdynamicplaylist.cpp
+    database/databasecommand_loaddynamicplaylist.cpp
+    database/databasecommand_loadalldynamicplaylists.cpp
+    database/databasecommand_deletedynamicplaylist.cpp
+    database/database.cpp
 
     playlist/collectionmodel.cpp
     playlist/collectionproxymodel.cpp
@@ -83,6 +92,32 @@ set( libSources
     playlist/albumitemdelegate.cpp
     playlist/albumview.cpp
 
+    playlist/topbar/topbar.cpp
+    playlist/topbar/clearbutton.cpp  
+    playlist/topbar/searchlineedit.cpp  
+    playlist/topbar/lineedit.cpp
+    playlist/topbar/searchbutton.cpp
+
+    playlist/infobar/infobar.cpp
+
+    playlist/dynamic/DynamicPlaylist.cpp
+    playlist/dynamic/DynamicControl.cpp
+    playlist/dynamic/GeneratorFactory.cpp
+    playlist/dynamic/GeneratorInterface.cpp
+    playlist/dynamic/DynamicView.cpp
+    playlist/dynamic/DynamicModel.cpp
+    playlist/dynamic/echonest/EchonestGenerator.cpp
+    playlist/dynamic/echonest/EchonestControl.cpp
+    playlist/dynamic/echonest/EchonestSteerer.cpp
+    playlist/dynamic/widgets/DynamicWidget.cpp
+    playlist/dynamic/widgets/DynamicControlWrapper.cpp
+    playlist/dynamic/widgets/DynamicControlList.cpp
+    playlist/dynamic/widgets/ReadOrWriteWidget.cpp
+    playlist/dynamic/widgets/MiscControlWidgets.cpp
+    playlist/dynamic/widgets/CollapsibleControls.cpp
+    playlist/dynamic/widgets/DynamicSetupWidget.cpp
+    playlist/dynamic/widgets/LoadingSpinner.cpp
+
     network/bufferiodevice.cpp
     network/msgprocessor.cpp
     network/filetransferconnection.cpp
@@ -105,7 +140,11 @@ set( libSources
 
     widgets/newplaylistwidget.cpp
     widgets/welcomewidget.cpp
+    widgets/overlaywidget.cpp
     widgets/infowidgets/sourceinfowidget.cpp
+
+    qtsingleapp/qtlocalpeer.cpp
+    qtsingleapp/qtsingleapplication.cpp
 )
 
 set( libHeaders
@@ -113,12 +152,14 @@ set( libHeaders
     sourcelist.h
     pipeline.h
     functimeout.h
+
     collection.h
     pluginapi.h
     query.h
     resolver.h
     result.h
     source.h
+
     artist.h
     album.h
     track.h
@@ -133,7 +174,7 @@ set( libHeaders
     audio/audioengine.h
 
     database/database.h
-    database/databasecollection.h
+    database/fuzzyindex.h
     database/databaseworker.h
     database/databaseimpl.h
     database/databaseresolver.h
@@ -159,7 +200,12 @@ set( libHeaders
     database/databasecommand_renameplaylist.h
     database/databasecommand_loadops.h
     database/databasecommand_updatesearchindex.h
-    database/fuzzyindex.h
+    database/databasecollection.h
+    database/databasecommand_setdynamicplaylistrevision.h
+    database/databasecommand_createdynamicplaylist.h
+    database/databasecommand_loaddynamicplaylist.h
+    database/databasecommand_deletedynamicplaylist.h
+    database/databasecommand_loadalldynamicplaylists.h
 
     network/bufferiodevice.h
     network/msgprocessor.h
@@ -193,6 +239,34 @@ set( libHeaders
     playlist/albumitemdelegate.h
     playlist/albumview.h
 
+    playlist/topbar/topbar.h
+    playlist/topbar/clearbutton.h
+    playlist/topbar/searchlineedit.h  
+    playlist/topbar/lineedit.h
+    playlist/topbar/lineedit_p.h
+    playlist/topbar/searchbutton.h
+
+    playlist/infobar/infobar.h
+
+    playlist/dynamic/DynamicPlaylist.h
+    playlist/dynamic/DynamicControl.h
+    playlist/dynamic/GeneratorFactory.h
+    playlist/dynamic/GeneratorInterface.h
+    playlist/dynamic/DynamicView.h
+    playlist/dynamic/DynamicModel.h
+    playlist/dynamic/echonest/EchonestGenerator.h
+    playlist/dynamic/echonest/EchonestControl.h
+    playlist/dynamic/echonest/EchonestSteerer.h
+    playlist/dynamic/widgets/DynamicWidget.h
+    playlist/dynamic/widgets/DynamicControlWrapper.h
+    playlist/dynamic/widgets/DynamicControlList.h
+    playlist/dynamic/widgets/ReadOrWriteWidget.h
+    playlist/dynamic/widgets/MiscControlWidgets.h
+    playlist/dynamic/widgets/CollapsibleControls.h
+    playlist/dynamic/widgets/DynamicSetupWidget.h
+    playlist/dynamic/widgets/LoadingSpinner.h
+
+    utils/tomahawkutils.h
     utils/querylabel.h
     utils/elidedlabel.h
     utils/animatedcounterlabel.h
@@ -204,83 +278,118 @@ set( libHeaders
 
     widgets/newplaylistwidget.h
     widgets/welcomewidget.h
+    widgets/overlaywidget.h
     widgets/infowidgets/sourceinfowidget.h
+
+    qtsingleapp/qtlocalpeer.h
+    qtsingleapp/qtsingleapplication.h
 )
 
+set( libHeaders_NoMOC 
+		playlist/dynamic/GeneratorInterface.h 
+)
 set( libUI ${libUI}
     widgets/newplaylistwidget.ui
     widgets/welcomewidget.ui
     widgets/infowidgets/sourceinfowidget.ui
+    playlist/topbar/topbar.ui
+    playlist/infobar/infobar.ui
 )
 
-include_directories( . ${CMAKE_CURRENT_BINARY_DIR} .. 
+include_directories( . ${CMAKE_CURRENT_BINARY_DIR} ..
     ${QT_INCLUDE_DIR}
-    ../../libportfwd/include
+    ${LIBECHONEST_INCLUDE_DIR}
+    ${LIBECHONEST_INCLUDE_DIR}/..
+    ${CLUCENE_INCLUDE_DIR}
+    ${CLUCENE_LIBRARY_DIR}
+
     ../../include
     ../network
-    ../../qxt/qxtweb-standalone/qxtweb
-    ../../rtaudio
-    ../../alsa-playback
+    playlist
+
+    ${THIRDPARTY_DIR}/libportfwd/include
+    ${THIRDPARTY_DIR}/qxt/qxtweb-standalone/qxtweb
+    ${THIRDPARTY_DIR}/rtaudio
+    ${THIRDPARTY_DIR}/alsa-playback
+    ${THIRDPARTY_DIR}/jdns
+    ${THIRDPARTY_DIR}/jdns/jdns
+    ${THIRDPARTY_DIR}/jdns/jdnsshared
+    ${THIRDPARTY_DIR}/qtweetlib/qtweetlib/src
 )
 
 
 IF( WIN32 )
-SET( libSources ${libSources} audio/rtaudiooutput.cpp )
-SET( libHeaders ${libHeaders} audio/rtaudiooutput.h )
+    SET( libSources ${libSources} audio/rtaudiooutput.cpp )
+    SET( libHeaders ${libHeaders} audio/rtaudiooutput.h )
 
-SET( OS_SPECIFIC_LINK_LIBRARIES
-    ${OS_SPECIFIC_LINK_LIBRARIES}
-    "iphlpapi.a"
-    "ws2_32.dll"
-    "dnsapi.dll"
-    "dsound.dll" 
-    "winmm.dll"
-
-    "${CMAKE_CURRENT_SOURCE_DIR}/../../rtaudio/librtaudio.dll"
-)
+    SET( OS_SPECIFIC_LINK_LIBRARIES
+        ${OS_SPECIFIC_LINK_LIBRARIES}
+    # Thirdparty
+        ${CMAKE_BINARY_DIR}/thirdparty/rtaudio/librtaudio.dll
+    # System
+        "iphlpapi.a"
+        "ws2_32.dll"
+        "dnsapi.dll"
+        "dsound.dll"
+        "winmm.dll"
+        "advapi32.dll"
+    )
 ENDIF( WIN32 )
 
 IF( APPLE )
-FIND_LIBRARY( COREAUDIO_LIBRARY CoreAudio )
-FIND_LIBRARY( COREFOUNDATION_LIBRARY CoreFoundation )
-MARK_AS_ADVANCED( COREAUDIO_LIBRARY COREFOUNDATION_LIBRARY )
+    FIND_LIBRARY( COREAUDIO_LIBRARY CoreAudio )
+    FIND_LIBRARY( COREFOUNDATION_LIBRARY CoreFoundation )
+    MARK_AS_ADVANCED( COREAUDIO_LIBRARY COREFOUNDATION_LIBRARY )
 
-SET( libSources ${libSources} audio/rtaudiooutput.cpp )
-SET( libHeaders ${libHeaders} audio/rtaudiooutput.h )
+    SET( libSources ${libSources} audio/rtaudiooutput.cpp )
+    SET( libHeaders ${libHeaders} audio/rtaudiooutput.h )
 
-SET( OS_SPECIFIC_LINK_LIBRARIES
-    ${OS_SPECIFIC_LINK_LIBRARIES}
-    ${COREAUDIO_LIBRARY}
-    ${COREFOUNDATION_LIBRARY}
-    rtaudio
-)
-
+    SET( OS_SPECIFIC_LINK_LIBRARIES
+        ${OS_SPECIFIC_LINK_LIBRARIES}
+        # Thirdparty
+        rtaudio
+        # System
+        ${COREAUDIO_LIBRARY}
+        ${COREFOUNDATION_LIBRARY}
+    )
 ENDIF( APPLE )
 
 IF( UNIX AND NOT APPLE )
-SET( OS_SPECIFIC_LINK_LIBRARIES 
-     ${OS_SPECIFIC_LINK_LIBRARIES}
-     alsaplayback
-)
+    SET( OS_SPECIFIC_LINK_LIBRARIES
+        ${OS_SPECIFIC_LINK_LIBRARIES}
+        # Thirdparty
+        alsaplayback
+    )
 ENDIF( UNIX AND NOT APPLE )
-
 
 qt4_wrap_ui( libUI_H ${libUI} )
 qt4_wrap_cpp( libMoc ${libHeaders} )
 
-SET( libSources ${libSources} ${libUI_H} )
+SET( libSources ${libSources} ${libUI_H} ${libHeaders_NoMOC} )
 
 add_library( tomahawklib SHARED ${libSources} ${libMoc} )
 
 target_link_libraries( tomahawklib
+    # Internal
+    tomahawk_jdns
+    tomahawk_qtweetlib
+
+    # Thirdparty shipped with tomahawk
+    portfwd
+
+    # soon to be removed by phonon-dependency
+    FLAC++
+    ogg
+    vorbisfile
+    mad
+
+    # External deps
+    ${TAGLIB_LIBRARIES}
+    ${QJSON_LIBRARIES}
+    ${CLUCENE_LIBRARY}
+    ${LIBECHONEST_LIBRARY}
     ${QT_LIBRARIES}
     ${OS_SPECIFIC_LINK_LIBRARIES}
-    portfwd
-    qjson
-    mad
-    vorbisfile
-    ogg
-    FLAC++
 )
 
 install( TARGETS tomahawklib DESTINATION lib )

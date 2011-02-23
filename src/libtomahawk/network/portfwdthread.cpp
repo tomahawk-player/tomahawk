@@ -23,7 +23,7 @@ PortFwdThread::~PortFwdThread()
 {
     qDebug() << Q_FUNC_INFO << "waiting for event loop to finish...";
     quit();
-    wait( 2500 );
+    wait( 10000 );
 
     delete m_portfwd;
 }
@@ -49,7 +49,7 @@ PortFwdThread::work()
             m_portfwd->remove( tryport );
         }
 
-        for( int r = 0; r < 5; ++r )
+        for( int r = 0; r < 3; ++r )
         {
             qDebug() << "Trying to setup portfwd on" << tryport;
             if( m_portfwd->add( tryport, m_port ) )

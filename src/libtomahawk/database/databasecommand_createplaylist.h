@@ -25,19 +25,24 @@ public:
 
     QVariant playlistV() const
     {
-        return QJson::QObjectHelper::qobject2qvariant( (QObject*)m_playlist.data() );
+        if( m_v.isNull() )
+            return QJson::QObjectHelper::qobject2qvariant( (QObject*)m_playlist.data() );
+        else
+            return m_v;
     }
 
     void setPlaylistV( const QVariant& v )
     {
-        qDebug() << "***********" << Q_FUNC_INFO << v;
-        using namespace Tomahawk;
-
-        Playlist* p = new Playlist( source() );
-        QJson::QObjectHelper::qvariant2qobject( v.toMap(), p );
-        m_playlist = playlist_ptr( p );
+        m_v = v;
     }
-
+    
+protected:
+    void createPlaylist( DatabaseImpl* lib, bool dynamic = false );
+    
+    bool report() { return m_report; }
+    void setPlaylist( const Tomahawk::playlist_ptr& playlist ) { m_playlist = playlist; }
+    
+    QVariant m_v;
 private:
     Tomahawk::playlist_ptr m_playlist;
     bool m_report; // call Playlist::reportCreated?

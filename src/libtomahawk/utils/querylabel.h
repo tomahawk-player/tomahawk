@@ -5,7 +5,8 @@
 #include <QTime>
 
 #include "result.h"
-
+#include "query.h"
+#include "typedefs.h"
 #include "dllmacro.h"
 
 class DLLEXPORT QueryLabel : public QFrame

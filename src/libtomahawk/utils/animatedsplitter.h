@@ -19,7 +19,7 @@ public:
     void show( int index, bool animate = true );
     void hide( int index, bool animate = true );
 
-    void setGreedyWidget( int index ) { m_greedyIndex = index; }
+    void setGreedyWidget( int index );
 
     void addWidget( QWidget* widget );
     void addWidget( AnimatedWidget* widget );
@@ -50,8 +50,9 @@ class DLLEXPORT AnimatedWidget : public QWidget
 {
 Q_OBJECT
 public:
-    explicit AnimatedWidget( AnimatedSplitter* parent );
-
+    explicit AnimatedWidget( AnimatedSplitter* parent = 0 );
+    virtual ~AnimatedWidget();
+    
     QSize hiddenSize() const { return m_hiddenSize; }
     void setHiddenSize( const QSize& size ) { m_hiddenSize = size; emit hiddenSizeChanged(); }
 
@@ -66,7 +67,10 @@ signals:
     void hideWidget();
 
     void hiddenSizeChanged();
-
+protected:
+    
+    AnimatedSplitter* splitter() { return m_parent; }
+    
 private:
     AnimatedSplitter* m_parent;
     QSize m_hiddenSize;

@@ -5,33 +5,59 @@
 #include <QMap>
 #include <QHash>
 #include <QString>
+#include <QMutex>
+
+namespace lucene
+{
+    namespace analysis
+    {
+      class SimpleAnalyzer;
+    }
+    namespace store
+    {
+      class Directory;
+    }
+    namespace index
+    {
+      class IndexReader;
+      class IndexWriter;
+    }
+    namespace search
+    {
+      class IndexSearcher;
+    }
+}
 
 class DatabaseImpl;
-
 
 class FuzzyIndex : public QObject
 {
 Q_OBJECT
 
 public:
-    explicit FuzzyIndex( DatabaseImpl &db );
+    explicit FuzzyIndex( DatabaseImpl& db );
+    ~FuzzyIndex();
 
+    void beginIndexing();
+    void endIndexing();
+    void appendFields( const QString& table, const QMap< unsigned int, QString >& fields );
+    
 signals:
     void indexReady();
 
 public slots:
-    void loadNgramIndex();
+    void loadLuceneIndex();
+
     QMap< int, float > search( const QString& table, const QString& name );
-    void mergeIndex( const QString& table, const QHash< QString, QMap<quint32, quint16> >& tomerge );
 
 private:
-    void loadNgramIndex_helper( QHash< QString, QMap<quint32, quint16> >& idx, const QString& table, unsigned int fromkey = 0 );
+    DatabaseImpl& m_db;
+    QMutex m_mutex;
 
-    // maps an ngram to {track id, num occurences}
-    QHash< QString, QMap<quint32, quint16> > m_artist_ngrams, m_album_ngrams, m_track_ngrams;
-
-    DatabaseImpl & m_db;
-    bool m_loaded;
+    lucene::analysis::SimpleAnalyzer* m_analyzer;
+    lucene::store::Directory* m_luceneDir;
+    lucene::index::IndexReader* m_luceneReader;
+    lucene::search::IndexSearcher* m_luceneSearcher;
 };
 
 #endif // FUZZYINDEX_H

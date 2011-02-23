@@ -90,6 +90,12 @@ FileTransferConnection::id() const
 }
 
 
+Tomahawk::source_ptr 
+FileTransferConnection::source() const
+{
+	return m_source;
+}
+
 void
 FileTransferConnection::showStats( qint64 tx, qint64 rx )
 {

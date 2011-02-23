@@ -6,6 +6,8 @@
 #include "playlist/playlistmanager.h"
 #include "playlist/playlistmodel.h"
 
+#include "widgets/overlaywidget.h"
+
 #include "sourcelist.h"
 #include "tomahawksettings.h"
 
@@ -19,7 +21,9 @@ WelcomeWidget::WelcomeWidget( QWidget* parent )
     , ui( new Ui::WelcomeWidget )
 {
     ui->setupUi( this );
+
     ui->playlistWidget->setItemDelegate( new PlaylistDelegate() );
+    ui->tracksView->overlay()->setEnabled( false );
 
     m_tracksModel = new PlaylistModel( ui->tracksView );
     ui->tracksView->setModel( m_tracksModel );
@@ -52,6 +56,14 @@ WelcomeWidget::updatePlaylists()
         ui->playlistWidget->addItem( item );
         item->setData( Qt::DisplayRole, playlist->title() );
     }
+
+    if ( !playlists.count() )
+    {
+        ui->playlistWidget->overlay()->setText( tr( "You have not played any playlists yet." ) );
+        ui->playlistWidget->overlay()->show();
+    }
+    else
+        ui->playlistWidget->overlay()->hide();
 }
 
 
@@ -78,7 +90,10 @@ WelcomeWidget::onPlaylistActivated( QListWidgetItem* item )
     qDebug() << Q_FUNC_INFO;
 
     PlaylistWidgetItem* pwi = dynamic_cast<PlaylistWidgetItem*>(item);
-    PlaylistManager::instance()->show( pwi->playlist() );
+    if( Tomahawk::dynplaylist_ptr dynplaylist = pwi->playlist().dynamicCast< Tomahawk::DynamicPlaylist >() )
+        PlaylistManager::instance()->show( dynplaylist );
+    else
+        PlaylistManager::instance()->show( pwi->playlist() );
 }
 
 
@@ -173,4 +188,11 @@ PlaylistDelegate::paint( QPainter* painter, const QStyleOptionViewItem& option, 
     painter->drawText( option.rect.adjusted( 56, 6, -100, -option.rect.height() + 20 ), index.data().toString() );
 
     painter->restore();
+}
+
+
+PlaylistWidget::PlaylistWidget( QWidget* parent )
+    : QListWidget( parent )
+{
+    m_overlay = new OverlayWidget( this );
 }

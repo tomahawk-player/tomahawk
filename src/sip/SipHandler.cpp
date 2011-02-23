@@ -9,44 +9,94 @@
 #include "database/database.h"
 #include "network/controlconnection.h"
 #include "sourcelist.h"
+#include "tomahawksettings.h"
 
 
 SipHandler::SipHandler( QObject* parent )
     : QObject( parent )
+    , m_connected( false )
 {
-    m_connected = false;
-    loadPlugins();
+    loadPlugins( findPlugins() );
+
+    connect( TomahawkSettings::instance(), SIGNAL( changed() ), SLOT( onSettingsChanged() ) );
 }
 
 
 SipHandler::~SipHandler()
 {
+    disconnectPlugins();
+}
+
+QList< SipPlugin* >
+SipHandler::plugins() const
+{
+    return m_plugins;
 }
 
 
 void
-SipHandler::loadPlugins()
+SipHandler::onSettingsChanged()
 {
-    QDir pluginsDir( qApp->applicationDirPath() );
+    disconnectPlugins();
+    connectPlugins();
+}
 
-    #if defined(Q_OS_MAC)
-    if ( pluginsDir.dirName() == "MacOS" )
+
+QStringList
+SipHandler::findPlugins()
+{
+    QStringList paths;
+    QList< QDir > pluginDirs;
+
+    QDir appDir( qApp->applicationDirPath() );
+    #ifdef Q_OS_MAC
+    if ( appDir.dirName() == "MacOS" )
     {
-      pluginsDir.cdUp();
-      pluginsDir.cdUp();
-      pluginsDir.cdUp();
+        // Development convenience-hack
+        appDir.cdUp();
+        appDir.cdUp();
+        appDir.cdUp();
     }
     #endif
-//    pluginsDir.cd( "plugins" );
 
-    foreach ( QString fileName, pluginsDir.entryList( QDir::Files ) )
+    QDir libDir( appDir );
+    libDir.cdUp();
+    libDir.cd( "lib" );
+
+    QDir lib64Dir( appDir );
+    lib64Dir.cdUp();
+    lib64Dir.cd( "lib64" );
+    
+    pluginDirs << appDir << libDir << lib64Dir << QDir( qApp->applicationDirPath() );
+    foreach ( const QDir& pluginDir, pluginDirs )
+    {
+        qDebug() << "Checking directory for plugins:" << pluginDir;
+        foreach ( QString fileName, pluginDir.entryList( QDir::Files ) )
+        {
+            if ( fileName.startsWith( "libsip_" ) )
+            {
+                const QString path = pluginDir.absoluteFilePath( fileName );
+                if ( !paths.contains( path ) )
+                    paths << path;
+            }
+        }
+    }
+
+    return paths;
+}
+
+
+void
+SipHandler::loadPlugins( const QStringList& paths )
+{
+    foreach ( QString fileName, paths )
     {
         if ( !QLibrary::isLibrary( fileName ) )
             continue;
 
-        qDebug() << "Trying to load plugin:" << pluginsDir.absoluteFilePath( fileName );
+        qDebug() << "Trying to load plugin:" << fileName;
 
-        QPluginLoader loader( pluginsDir.absoluteFilePath( fileName ) );
+        QPluginLoader loader( fileName );
         QObject* plugin = loader.instance();
         if ( plugin )
         {
@@ -82,30 +132,45 @@ SipHandler::loadPlugin( QObject* plugin )
 
 
 void
-SipHandler::connect()
+SipHandler::connectPlugins( bool startup, const QString &pluginName )
 {
     foreach( SipPlugin* sip, m_plugins )
-        sip->connect();
-    m_connected = true;
+    {
+        if ( pluginName.isEmpty() || ( !pluginName.isEmpty() && sip->name() == pluginName ) )
+            sip->connectPlugin( startup );
+    }
+
+    if ( pluginName.isEmpty() )
+    {
+        m_connected = true;
+    }
 }
 
 
 void
-SipHandler::disconnect()
+SipHandler::disconnectPlugins( const QString &pluginName )
 {
     foreach( SipPlugin* sip, m_plugins )
-        sip->disconnect();
-    SourceList::instance()->removeAllRemote();
-    m_connected = false;
+    {
+        if ( pluginName.isEmpty() || ( !pluginName.isEmpty() && sip->name() == pluginName ) )
+            sip->disconnectPlugin();
+    }
+
+    if ( pluginName.isEmpty() )
+    {
+        SourceList::instance()->removeAllRemote();
+        m_connected = false;
+    }
 }
+
 
 void
 SipHandler::toggleConnect()
 {
     if( m_connected )
-        disconnect();
+        disconnectPlugins();
     else
-        connect();
+        connectPlugins();
 }
 
 

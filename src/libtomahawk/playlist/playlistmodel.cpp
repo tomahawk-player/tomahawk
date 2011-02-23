@@ -8,6 +8,7 @@
 
 #include "database/database.h"
 #include "database/databasecommand_playbackhistory.h"
+#include "dynamic/GeneratorInterface.h"
 
 using namespace Tomahawk;
 
@@ -49,12 +50,12 @@ PlaylistModel::headerData( int section, Qt::Orientation orientation, int role ) 
 
 
 void
-PlaylistModel::loadPlaylist( const Tomahawk::playlist_ptr& playlist )
+PlaylistModel::loadPlaylist( const Tomahawk::playlist_ptr& playlist, bool loadEntries )
 {
     if ( !m_playlist.isNull() )
         disconnect( m_playlist.data(), SIGNAL( revisionLoaded( Tomahawk::PlaylistRevision ) ), this, SLOT( onRevisionLoaded( Tomahawk::PlaylistRevision ) ) );
 
-    if ( rowCount( QModelIndex() ) )
+    if ( rowCount( QModelIndex() ) && loadEntries )
     {
         emit beginRemoveRows( QModelIndex(), 0, rowCount( QModelIndex() ) - 1 );
         delete m_rootItem;
@@ -67,6 +68,9 @@ PlaylistModel::loadPlaylist( const Tomahawk::playlist_ptr& playlist )
 
     setReadOnly( !m_playlist->author()->isLocal() );
 
+    if( !loadEntries )
+        return;
+    
     PlItem* plitem;
     QList<plentry_ptr> entries = playlist->entries();
     if ( entries.count() )
@@ -89,8 +93,8 @@ PlaylistModel::loadPlaylist( const Tomahawk::playlist_ptr& playlist )
         emit endInsertRows();
     }
 
-    qDebug() << rowCount( QModelIndex() );
     emit loadingFinished();
+    emit trackCountChanged( rowCount( QModelIndex() ) );
 }
 
 
@@ -115,6 +119,18 @@ PlaylistModel::loadHistory( const Tomahawk::source_ptr& source, unsigned int amo
                     SLOT( onTracksAdded( QList<Tomahawk::query_ptr> ) ), Qt::QueuedConnection );
 
     Database::instance()->enqueue( QSharedPointer<DatabaseCommand>( cmd ) );
+}
+
+void 
+PlaylistModel::clear()
+{
+    if ( rowCount( QModelIndex() ) )
+    {
+        emit beginRemoveRows( QModelIndex(), 0, rowCount( QModelIndex() ) - 1 );
+        delete m_rootItem;
+        emit endRemoveRows();
+        m_rootItem = new PlItem( 0, this );
+    }
 }
 
 
@@ -181,7 +197,10 @@ void
 PlaylistModel::onTracksInserted( unsigned int row, const QList<Tomahawk::query_ptr>& tracks, const Tomahawk::collection_ptr& collection )
 {
     if ( !tracks.count() )
+    {
+        emit trackCountChanged( rowCount( QModelIndex() ) );
         return;
+    }
 
     int c = row;
     QPair< int, int > crows;
@@ -207,7 +226,6 @@ PlaylistModel::onTracksInserted( unsigned int row, const QList<Tomahawk::query_p
 
     emit endInsertRows();
     emit trackCountChanged( rowCount( QModelIndex() ) );
-    qDebug() << rowCount( QModelIndex() );
 }
 
 
@@ -223,6 +241,7 @@ PlaylistModel::onDataChanged()
 void
 PlaylistModel::onRevisionLoaded( Tomahawk::PlaylistRevision revision )
 {
+    qDebug() << "PLAYLIST::onRevisionLoaded";
     qDebug() << Q_FUNC_INFO;
 
     if ( m_waitForUpdate )
@@ -324,7 +343,14 @@ PlaylistModel::onPlaylistChanged( bool waitForUpdate )
 
     m_waitForUpdate = waitForUpdate;
     QString newrev = uuid();
-    m_playlist->createNewRevision( newrev, m_playlist->currentrevision(), l );
+    if( dynplaylist_ptr dynplaylist = m_playlist.dynamicCast<Tomahawk::DynamicPlaylist>() ) {
+        if( dynplaylist->mode() == OnDemand )
+            dynplaylist->createNewRevision( newrev );
+        else if( dynplaylist->mode() == Static )
+            dynplaylist->createNewRevision( newrev, dynplaylist->currentrevision(), dynplaylist->type(), dynplaylist->generator()->controls(), l );
+    } else {
+        m_playlist->createNewRevision( newrev, m_playlist->currentrevision(), l );
+    }
 }
 
 

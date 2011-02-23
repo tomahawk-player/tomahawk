@@ -3,6 +3,7 @@
 // subclass QSqlQuery so that it prints the error msg if a query fails
 
 #include <QSqlQuery>
+#include <QSqlError>
 #include <QTime>
 
 #define TOMAHAWK_QUERY_THRESHOLD 60

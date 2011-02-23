@@ -9,7 +9,8 @@
 #include "playlist/playlistmanager.h"
 #include "playlist/playlistmodel.h"
 
-#include "pipeline.h"
+#include "widgets/overlaywidget.h"
+
 #include "utils/xspfloader.h"
 
 #include "sourcelist.h"
@@ -36,6 +37,7 @@ NewPlaylistWidget::NewPlaylistWidget( QWidget* parent )
 
     m_suggestionsModel = new PlaylistModel( ui->suggestionsView );
     ui->suggestionsView->setModel( m_suggestionsModel );
+    ui->suggestionsView->overlay()->setEnabled( false );
 
     connect( &m_filterTimer, SIGNAL( timeout() ), SLOT( updateSuggestions() ) );
 }
@@ -111,8 +113,6 @@ NewPlaylistWidget::suggestionsFound()
         m_suggestionsModel->append( entry->query() );
         ql.append( entry->query() );
     }
-
-    Tomahawk::Pipeline::instance()->add( ql );
 
     loader->deleteLater();
 }

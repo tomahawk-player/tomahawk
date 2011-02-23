@@ -6,9 +6,18 @@
 #include "collection.h"
 #include "playlist.h"
 #include "tomahawk/tomahawkapp.h"
+#include "sourcesmodel.h"
 
 using namespace Tomahawk;
 
+static inline QList< playlist_ptr > dynListToPlaylists( const QList< Tomahawk::dynplaylist_ptr >& list )
+{
+    QList< playlist_ptr > newptrs;
+    foreach( const dynplaylist_ptr& pl, list ) {
+        newptrs << pl.staticCast<Playlist>();
+    }
+    return newptrs;
+}
 
 SourceTreeItem::SourceTreeItem( const source_ptr& source, QObject* parent )
     : QObject( parent )
@@ -16,19 +25,25 @@ SourceTreeItem::SourceTreeItem( const source_ptr& source, QObject* parent )
 {
     QStandardItem* item = new QStandardItem( "" );
     item->setEditable( false );
-    item->setData( 0, Qt::UserRole + 1 );
-    item->setData( (qlonglong)this, Qt::UserRole + 2 );
+    item->setData( SourcesModel::CollectionSource, Type );
+    item->setData( (qlonglong)this, SourceItemPointer );
     m_columns << item;
 
     if ( !source.isNull() )
     {
         onPlaylistsAdded( source->collection()->playlists() );
+        onDynamicPlaylistsAdded( source->collection()->dynamicPlaylists() );
 
         connect( source->collection().data(), SIGNAL( playlistsAdded( QList<Tomahawk::playlist_ptr> ) ),
                                                 SLOT( onPlaylistsAdded( QList<Tomahawk::playlist_ptr> ) ) );
 
         connect( source->collection().data(), SIGNAL( playlistsDeleted( QList<Tomahawk::playlist_ptr> ) ),
                                                 SLOT( onPlaylistsDeleted( QList<Tomahawk::playlist_ptr> ) ) );
+        
+        connect( source->collection().data(), SIGNAL( dynamicPlaylistsAdded( QList<Tomahawk::dynplaylist_ptr> ) ),
+                                                SLOT( onDynamicPlaylistsAdded( QList<Tomahawk::dynplaylist_ptr> ) ) );
+        connect( source->collection().data(), SIGNAL( dynamicPlaylistsDeleted( QList<Tomahawk::dynplaylist_ptr> ) ),
+                                                SLOT( onDynamicPlaylistsDeleted( QList<Tomahawk::dynplaylist_ptr> ) ) );
     }
 
     m_widget = new SourceTreeItemWidget( source );
@@ -68,30 +83,20 @@ SourceTreeItem::onPlaylistsAdded( const QList<playlist_ptr>& playlists )
 {
     // const-ness is important for getting the right pointer!
     foreach( const playlist_ptr& p, playlists )
-    {
+    { 
         m_playlists.append( p );
-        qlonglong ptr = qlonglong( &m_playlists.last() );
-        qDebug() << "Playlist added:" << p->title() << p->creator() << p->info() << ptr;
-
+        qlonglong ptr = reinterpret_cast<qlonglong>( &m_playlists.last() );
+        qDebug() << "Setting playlist ptr to:" << ptr;
+        
         connect( p.data(), SIGNAL( revisionLoaded( Tomahawk::PlaylistRevision ) ),
-                             SLOT( onPlaylistLoaded( Tomahawk::PlaylistRevision ) ),
-                 Qt::QueuedConnection);
-
-        QStandardItem* subitem = new QStandardItem( p->title() );
-        subitem->setIcon( QIcon( RESPATH "images/playlist-icon.png" ) );
-        subitem->setEditable( false );
-        subitem->setEnabled( false );
-        subitem->setData( ptr, Qt::UserRole + 3 );
-        subitem->setData( 1, Qt::UserRole + 1 );
-        subitem->setData( (qlonglong)this, Qt::UserRole + 2 );
-
-        m_columns.at( 0 )->appendRow( subitem );
-        ((QTreeView*)parent()->parent())->expandAll();
-
-        p->loadRevision();
+                    SLOT( onPlaylistLoaded( Tomahawk::PlaylistRevision ) ),
+                    Qt::QueuedConnection);
+        
+        qDebug() << "Playlist added:" << p->title() << p->creator() << p->info() << ptr;
+        
+        playlistAddedInternal( ptr, p, false );
     }
 }
-
 
 void
 SourceTreeItem::onPlaylistsDeleted( const QList<playlist_ptr>& playlists )
@@ -101,17 +106,17 @@ SourceTreeItem::onPlaylistsDeleted( const QList<playlist_ptr>& playlists )
     {
         qlonglong ptr = qlonglong( p.data() );
         qDebug() << "Playlist removed:" << p->title() << p->creator() << p->info() << ptr;
-
+        
         QStandardItem* item = m_columns.at( 0 );
         int rows = item->rowCount();
         for ( int i = rows - 1; i >= 0; i-- )
         {
             QStandardItem* pi = item->child( i );
-            qlonglong piptr = pi->data( Qt::UserRole + 3 ).toLongLong();
+            qlonglong piptr = pi->data( PlaylistPointer ).toLongLong();
             playlist_ptr* pl = reinterpret_cast<playlist_ptr*>(piptr);
-            int type = pi->data( Qt::UserRole + 1 ).toInt();
-
-            if ( type == 1 && ptr == qlonglong( pl->data() ) )
+            SourcesModel::SourceType type = static_cast<SourcesModel::SourceType>( pi->data( Type ).toInt() );
+            
+            if ( type == SourcesModel::PlaylistSource && ptr == qlonglong( pl->data() ) )
             {
                 m_playlists.removeAll( p );
                 item->removeRow( i );
@@ -120,27 +125,110 @@ SourceTreeItem::onPlaylistsDeleted( const QList<playlist_ptr>& playlists )
     }
 }
 
-
 void
 SourceTreeItem::onPlaylistLoaded( Tomahawk::PlaylistRevision revision )
 {
-    qlonglong ptr = qlonglong( sender() );
-    //qDebug() << "sender ptr:" << ptr;
-
+    qlonglong ptr = reinterpret_cast<qlonglong>( sender() );
+    qDebug() << "sender ptr:" << ptr;
+    
     QStandardItem* item = m_columns.at( 0 );
     int rows = item->rowCount();
     for ( int i = 0; i < rows; i++ )
     {
         QStandardItem* pi = item->child( i );
-        qlonglong piptr = pi->data( Qt::UserRole + 3 ).toLongLong();
+        qlonglong piptr = pi->data( PlaylistPointer ).toLongLong();
         playlist_ptr* pl = reinterpret_cast<playlist_ptr*>(piptr);
-        int type = pi->data( Qt::UserRole + 1 ).toInt();
-
-        if ( type == 1 && ptr == qlonglong( pl->data() ) )
+        SourcesModel::SourceType type = static_cast<SourcesModel::SourceType>( pi->data( Type ).toInt() );
+        
+        if ( type == SourcesModel::PlaylistSource && ptr == qlonglong( pl->data() ) )
         {
-            //qDebug() << "Found playlist!";
+            qDebug() << "Found normal playlist!";
             pi->setEnabled( true );
             m_current_revisions.insert( pl->data()->guid(), revision.revisionguid );
         }
     }
+}
+
+void SourceTreeItem::onDynamicPlaylistsAdded( const QList< dynplaylist_ptr >& playlists )
+{
+    // const-ness is important for getting the right pointer!
+    foreach( const dynplaylist_ptr& p, playlists )
+    {
+        m_dynplaylists.append( p );
+        qlonglong ptr = reinterpret_cast<qlonglong>( &m_dynplaylists.last() );
+//         qDebug() << "Setting dynamic ptr to:" << ptr;
+        connect( p.data(), SIGNAL( dynamicRevisionLoaded( Tomahawk::DynamicPlaylistRevision) ),
+                    SLOT( onDynamicPlaylistLoaded( Tomahawk::DynamicPlaylistRevision ) ),
+                    Qt::QueuedConnection);
+    
+//         qDebug() << "Dynamic Playlist added:" << p->title() << p->creator() << p->info() << p->currentrevision() << ptr;
+        
+        playlistAddedInternal( ptr, p, true );
+    }
+}
+
+void SourceTreeItem::onDynamicPlaylistsDeleted( const QList< dynplaylist_ptr >& playlists )
+{
+    // const-ness is important for getting the right pointer!
+    foreach( const dynplaylist_ptr& p, playlists )
+    {
+        qlonglong ptr = qlonglong( p.data() );
+//         qDebug() << "dynamic playlist removed:" << p->title() << p->creator() << p->info() << ptr;
+        
+        QStandardItem* item = m_columns.at( 0 );
+        int rows = item->rowCount();
+        for ( int i = rows - 1; i >= 0; i-- )
+        {
+            QStandardItem* pi = item->child( i );
+            qlonglong piptr = pi->data( DynamicPlaylistPointer ).toLongLong();
+            dynplaylist_ptr* pl = reinterpret_cast<dynplaylist_ptr*>(piptr);
+            SourcesModel::SourceType type = static_cast<SourcesModel::SourceType>( pi->data( Type ).toInt() );
+            //qDebug() << "Deleting dynamic playlsit:" << pl->isNull();
+            if ( type == SourcesModel::DynamicPlaylistSource && ptr == qlonglong( pl->data() ) )
+            {
+                m_dynplaylists.removeAll( p );
+                item->removeRow( i );
+            }
+        }
+    }
+}
+
+void SourceTreeItem::onDynamicPlaylistLoaded( DynamicPlaylistRevision revision )
+{
+    qlonglong ptr = reinterpret_cast<qlonglong>( sender() );
+    
+    QStandardItem* item = m_columns.at( 0 );
+    int rows = item->rowCount();
+    for ( int i = 0; i < rows; i++ )
+    {
+        QStandardItem* pi = item->child( i );
+        qlonglong piptr = pi->data( DynamicPlaylistPointer ).toLongLong();
+        playlist_ptr* pl = reinterpret_cast<playlist_ptr*>(piptr);
+        SourcesModel::SourceType type = static_cast<SourcesModel::SourceType>( pi->data( Type ).toInt() );
+//         qDebug() << "found dynamic playlist:" << (*pl)->title() << type;
+        if ( type == SourcesModel::DynamicPlaylistSource && ptr == qlonglong( pl->data() ) )
+        {
+            //qDebug() << "Found dynamicplaylist!";
+            pi->setEnabled( true );
+            m_current_dynamic_revisions.insert( pl->data()->guid(), revision.revisionguid );
+        }
+    }
+}
+
+
+void SourceTreeItem::playlistAddedInternal( qlonglong ptr, const Tomahawk::playlist_ptr& p, bool dynamic )
+{
+    QStandardItem* subitem = new QStandardItem( p->title() );
+    subitem->setIcon( QIcon( RESPATH "images/playlist-icon.png" ) );
+    subitem->setEditable( false );
+    subitem->setEnabled( false );
+    subitem->setData( ptr, dynamic ? DynamicPlaylistPointer : PlaylistPointer );
+    subitem->setData( dynamic ? SourcesModel::DynamicPlaylistSource : SourcesModel::PlaylistSource, Type );
+    subitem->setData( (qlonglong)this, SourceItemPointer );
+    
+    m_columns.at( 0 )->appendRow( subitem );
+    Q_ASSERT( qobject_cast<QTreeView*>((parent()->parent()) ) );
+    qobject_cast<QTreeView*>((parent()->parent()))->expandAll();
+    
+    p->loadRevision();
 }

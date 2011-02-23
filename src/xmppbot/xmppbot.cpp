@@ -5,7 +5,6 @@
 #include "album.h"
 #include "typedefs.h"
 #include "tomahawksettings.h"
-#include "pipeline.h"
 
 #include "audio/audioengine.h"
 
@@ -145,11 +144,10 @@ void XMPPBot::handleMessage(const Message& msg, MessageSession* session)
         QVariantMap qv;
         qv["artist"] = tokens.first().trimmed();
         qv["track"] = tokens.last().trimmed();
-        Tomahawk::query_ptr q( new Tomahawk::Query( qv ) );
+        Tomahawk::query_ptr q = Tomahawk::Query::get( qv );
         connect( q.data(), SIGNAL( resultsAdded( QList<Tomahawk::result_ptr> ) ),
                              SLOT( onResultsAdded( QList<Tomahawk::result_ptr> ) ) );
 
-        Tomahawk::Pipeline::instance()->add( q );
         return;
     }
     else if ( body.startsWith( "stop" ) )

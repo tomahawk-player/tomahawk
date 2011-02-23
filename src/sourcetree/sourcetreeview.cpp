@@ -27,7 +27,7 @@ protected:
     void paint( QPainter* painter, const QStyleOptionViewItem& option, const QModelIndex& index ) const;
     void updateEditorGeometry( QWidget* editor, const QStyleOptionViewItem& option, const QModelIndex& index ) const
     {
-        if ( SourcesModel::indexType( index ) == 1 )
+        if ( SourcesModel::indexType( index ) == SourcesModel::PlaylistSource || SourcesModel::indexType( index ) == SourcesModel::DynamicPlaylistSource )
             editor->setGeometry( option.rect.adjusted( 32, 0, 0, 0 ) );
         else
             QStyledItemDelegate::updateEditorGeometry( editor, option, index );
@@ -43,6 +43,11 @@ SourceTreeView::SourceTreeView( QWidget* parent )
     , m_collectionModel( new CollectionModel( this ) )
     , m_dragging( false )
 {
+    setFrameShape( QFrame::NoFrame );
+    setAttribute( Qt::WA_MacShowFocusRect, 0 );
+    setContentsMargins( 0, 0, 0, 0 );
+    setMinimumWidth( 220 );
+
     setHeaderHidden( true );
     setRootIsDecorated( false );
     setExpandsOnDoubleClick( false );
@@ -88,10 +93,14 @@ SourceTreeView::setupMenus()
     m_deletePlaylistAction = m_playlistMenu.addAction( tr( "&Delete Playlist" ) );
 
     bool readonly = true;
-    int type = SourcesModel::indexType( m_contextMenuIndex );
-    if ( type == 1 )
+    SourcesModel::SourceType type = SourcesModel::indexType( m_contextMenuIndex );
+    if ( type == SourcesModel::PlaylistSource || type == SourcesModel::DynamicPlaylistSource )
     {
-        playlist_ptr playlist = SourcesModel::indexToPlaylist( m_contextMenuIndex );
+        playlist_ptr playlist = SourcesModel::indexToDynamicPlaylist( m_contextMenuIndex );
+        if( playlist.isNull() ) 
+        {
+            playlist = SourcesModel::indexToPlaylist( m_contextMenuIndex );
+        } 
         if ( !playlist.isNull() )
         {
             readonly = !playlist->author()->isLocal();
@@ -123,8 +132,8 @@ SourceTreeView::onItemActivated( const QModelIndex& index )
     if ( !index.isValid() )
         return;
 
-    int type = SourcesModel::indexType( index );
-    if ( type == 0 )
+    SourcesModel::SourceType type = SourcesModel::indexType( index );
+    if ( type == SourcesModel::CollectionSource )
     {
         SourceTreeItem* item = SourcesModel::indexToTreeItem( index );
         if ( item )
@@ -141,13 +150,23 @@ SourceTreeView::onItemActivated( const QModelIndex& index )
             }
         }
     }
-    else if ( type == 1 )
+    else if ( type == SourcesModel::PlaylistSource )
     {
         playlist_ptr playlist = SourcesModel::indexToPlaylist( index );
         if ( !playlist.isNull() )
         {
             qDebug() << "Playlist activated:" << playlist->title();
 
+            PlaylistManager::instance()->show( playlist );
+        }
+    }
+    else if ( type == SourcesModel::DynamicPlaylistSource  )
+    {
+        dynplaylist_ptr playlist = SourcesModel::indexToDynamicPlaylist( index );
+        if ( !playlist.isNull() )
+        {
+            qDebug() << "Dynamic Playlist activated:" << playlist->title();
+            
             PlaylistManager::instance()->show( playlist );
         }
     }
@@ -176,8 +195,8 @@ SourceTreeView::deletePlaylist()
     if ( !idx.isValid() )
         return;
 
-    int type = SourcesModel::indexType( idx );
-    if ( type == 1 )
+    SourcesModel::SourceType type = SourcesModel::indexType( idx );
+    if ( type == SourcesModel::PlaylistSource )
     {
         playlist_ptr playlist = SourcesModel::indexToPlaylist( idx );
         if ( !playlist.isNull() )
@@ -185,6 +204,10 @@ SourceTreeView::deletePlaylist()
             qDebug() << "Playlist about to be deleted:" << playlist->title();
             Playlist::remove( playlist );
         }
+    } else if( type == SourcesModel::DynamicPlaylistSource ) {
+        dynplaylist_ptr playlist = SourcesModel::indexToDynamicPlaylist( idx );       
+        if( !playlist.isNull() )
+            DynamicPlaylist::remove( playlist );
     }
 }
 
@@ -247,7 +270,7 @@ SourceTreeView::dragMoveEvent( QDragMoveEvent* event )
             const QRect rect = visualRect( index );
             m_dropRect = rect;
 
-            if ( SourcesModel::indexType( index ) == 1 )
+            if ( SourcesModel::indexType( index ) == SourcesModel::PlaylistSource )
             {
                 playlist_ptr playlist = SourcesModel::indexToPlaylist( index );
                 if ( !playlist.isNull() && playlist->author()->isLocal() )
@@ -284,7 +307,7 @@ SourceTreeView::dropEvent( QDropEvent* event )
 
         if ( index.isValid() )
         {
-            if ( SourcesModel::indexType( index ) == 1 )
+            if ( SourcesModel::indexType( index ) == SourcesModel::PlaylistSource )
             {
                 playlist_ptr playlist = SourcesModel::indexToPlaylist( index );
                 if ( !playlist.isNull() && playlist->author()->isLocal() )
@@ -371,7 +394,7 @@ SourceDelegate::paint( QPainter* painter, const QStyleOptionViewItem& option, co
     {
         o.state = QStyle::State_Enabled;
 
-        if ( SourcesModel::indexType( index ) == 1 &&
+        if ( ( SourcesModel::indexType( index ) == SourcesModel::PlaylistSource || SourcesModel::indexType( index ) == SourcesModel::DynamicPlaylistSource ) &&
            ( option.state & QStyle::State_Selected ) == QStyle::State_Selected )
         {
             o.palette.setColor( QPalette::Text, o.palette.color( QPalette::HighlightedText ) );

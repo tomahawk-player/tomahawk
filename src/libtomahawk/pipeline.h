@@ -27,9 +27,6 @@ public:
 
     explicit Pipeline( QObject* parent = 0 );
 
-//    const query_ptr& query( QID qid ) const;
-//    result_ptr result( RID rid ) const;
-
     void reportResults( QID qid, const QList< result_ptr >& results );
 
     /// sorter to rank resolver priority
@@ -49,8 +46,9 @@ public:
     }
 
 public slots:
-    void add( const query_ptr& q, bool prioritized = true );
-    void add( const QList<query_ptr>& qlist, bool prioritized = true );
+    void resolve( const query_ptr& q, bool prioritized = false );
+    void resolve( const QList<query_ptr>& qlist, bool prioritized = false );
+    void resolve( QID qid, bool prioritized = false );
     void databaseReady();
 
 signals:
@@ -64,6 +62,8 @@ private slots:
 
 private:
     QList< Resolver* > m_resolvers;
+
+    QMap< QID, unsigned int > m_qidsState;
     QMap< QID, query_ptr > m_qids;
     QMap< RID, result_ptr > m_rids;
 

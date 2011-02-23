@@ -50,9 +50,14 @@ SourcesModel::flags( const QModelIndex& index ) const
 
     if ( index.isValid() )
     {
-        if ( indexType( index ) == 1 )
+        if ( indexType( index ) == PlaylistSource )
         {
             playlist_ptr playlist = indexToPlaylist( index );
+            if ( !playlist.isNull() && playlist->author()->isLocal() )
+                defaultFlags |= Qt::ItemIsEditable;
+        } else if ( indexType( index ) == DynamicPlaylistSource )
+        {
+            dynplaylist_ptr playlist = indexToDynamicPlaylist( index );
             if ( !playlist.isNull() && playlist->author()->isLocal() )
                 defaultFlags |= Qt::ItemIsEditable;
         }
@@ -166,14 +171,14 @@ SourcesModel::onItemOffline( const QModelIndex& idx )
 }
 
 
-int
+SourcesModel::SourceType
 SourcesModel::indexType( const QModelIndex& index )
 {
     if ( !index.isValid() )
-        return -1;
+        return Invalid;
 
     QModelIndex idx = index.model()->index( index.row(), 0, index.parent() );
-    return idx.data( Qt::UserRole + 1 ).toInt();
+    return static_cast<SourcesModel::SourceType>( idx.data( SourceTreeItem::Type ).toInt() );
 }
 
 
@@ -184,15 +189,33 @@ SourcesModel::indexToPlaylist( const QModelIndex& index )
     if ( !index.isValid() )
         return res;
 
-    if ( indexType( index ) == 1 )
+    if ( indexType( index ) == PlaylistSource )
     {
         QModelIndex idx = index.model()->index( index.row(), 0, index.parent() );
-        qlonglong pptr = idx.data( Qt::UserRole + 3 ).toLongLong();
+        qlonglong pptr = idx.data( SourceTreeItem::PlaylistPointer ).toLongLong();
         playlist_ptr* playlist = reinterpret_cast<playlist_ptr*>(pptr);
         if ( playlist )
             return *playlist;
     }
 
+    return res;
+}
+
+dynplaylist_ptr SourcesModel::indexToDynamicPlaylist(const QModelIndex& index)
+{
+    dynplaylist_ptr res;
+    if ( !index.isValid() )
+        return res;
+    
+    if ( indexType( index ) == DynamicPlaylistSource )
+    {
+        QModelIndex idx = index.model()->index( index.row(), 0, index.parent() );
+        qlonglong pptr = idx.data( SourceTreeItem::DynamicPlaylistPointer ).toLongLong();
+        dynplaylist_ptr* playlist = reinterpret_cast<dynplaylist_ptr*>(pptr);
+        if ( playlist )
+            return *playlist;
+    }
+    
     return res;
 }
 
@@ -204,10 +227,10 @@ SourcesModel::indexToTreeItem( const QModelIndex& index )
         return 0;
 
     int type = indexType( index );
-    if ( type == 0 || type == 1 )
+    if ( type == CollectionSource || type == PlaylistSource || type == DynamicPlaylistSource )
     {
         QModelIndex idx = index.model()->index( index.row(), 0, index.parent() );
-        qlonglong pptr = idx.data( Qt::UserRole + 2 ).toLongLong();
+        qlonglong pptr = idx.data( SourceTreeItem::SourceItemPointer ).toLongLong();
         SourceTreeItem* item = reinterpret_cast<SourceTreeItem*>(pptr);
         if ( item )
             return item;
@@ -225,15 +248,18 @@ SourcesModel::setData( const QModelIndex& index, const QVariant& value, int role
     if ( !index.isValid() )
         return false;
 
-    if ( indexType( index ) == 1 )
+    playlist_ptr playlist;
+    if ( indexType( index ) == PlaylistSource )
     {
-        playlist_ptr playlist = indexToPlaylist( index );
-        if ( !playlist.isNull() )
-        {
-            playlist->rename( value.toString() );
-            QStandardItemModel::setData( index, value, Qt::DisplayRole );
-        }
-
+        playlist = indexToPlaylist( index );
+    } else if ( indexType( index ) == DynamicPlaylistSource ) {
+        playlist = indexToDynamicPlaylist( index ).staticCast< Playlist >();
+    }
+    
+    if ( !playlist.isNull() )
+    {
+        playlist->rename( value.toString() );
+        QStandardItemModel::setData( index, value, Qt::DisplayRole );   
         return true;
     }
 

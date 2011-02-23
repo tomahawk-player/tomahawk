@@ -15,6 +15,7 @@
 #include "dllmacro.h"
 
 class PlaylistModel;
+class OverlayWidget;
 
 namespace Ui
 {
@@ -57,6 +58,18 @@ private:
     Tomahawk::playlist_ptr m_playlist;
 
     mutable QString m_artists;
+};
+
+
+class DLLEXPORT PlaylistWidget : public QListWidget
+{
+public:
+    PlaylistWidget( QWidget* parent = 0 );
+
+    OverlayWidget* overlay() const { return m_overlay; }
+
+private:
+    OverlayWidget* m_overlay;
 };
 
 

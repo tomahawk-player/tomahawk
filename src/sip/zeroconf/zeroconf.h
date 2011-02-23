@@ -6,6 +6,8 @@
 
 #include "../sipdllmacro.h"
 
+#define MYNAME "SIPZEROCONF"
+
 class SIPDLLEXPORT ZeroconfPlugin : public SipPlugin
 {
     Q_OBJECT
@@ -14,16 +16,21 @@ class SIPDLLEXPORT ZeroconfPlugin : public SipPlugin
 public:
     ZeroconfPlugin()
         : m_zeroconf( 0 )
+        , m_isOnline( false )
+        , m_cachedNodes()
     {}
 
     virtual ~ZeroconfPlugin() {}
+    
+    virtual bool isValid() { return true; }
+    virtual const QString name();
+    virtual const QString friendlyName();
+    virtual const QString accountName();
 
 public slots:
-    virtual bool connect();
+    virtual bool connectPlugin( bool startup );
 
-    void disconnect()
-    {
-    }
+    void disconnectPlugin();
 
     void sendMsg( const QString& to, const QString& msg )
     {
@@ -42,6 +49,8 @@ private slots:
 
 private:
     TomahawkZeroconf* m_zeroconf;
+    bool m_isOnline;
+    QSet< QStringList* > m_cachedNodes;
 };
 
 #endif

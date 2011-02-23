@@ -95,9 +95,6 @@ TrackModel::data( const QModelIndex& index, int role ) const
 
     if ( role == Qt::DecorationRole )
     {
-        if ( index.column() == 0 && entry->isPlaying() )
-            return QString( RESPATH "images/now-playing-speaker.png" );
-
         return QVariant();
     }
 
@@ -193,7 +190,7 @@ TrackModel::headerData( int section, Qt::Orientation orientation, int role ) con
 {
     QStringList headers;
     headers << tr( "Artist" ) << tr( "Track" ) << tr( "Album" ) << tr( "Duration" ) << tr( "Bitrate" ) << tr( "Age" ) << tr( "Year" ) << tr( "Size" ) << tr( "Origin" );
-    if ( orientation == Qt::Horizontal && role == Qt::DisplayRole && section >= 0 )
+    if ( role == Qt::DisplayRole && section >= 0 )
     {
         return headers.at( section );
     }

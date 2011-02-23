@@ -5,7 +5,6 @@
 #include "collection.h"
 #include "database/database.h"
 #include "databaseimpl.h"
-#include "pipeline.h"
 #include "network/servent.h"
 
 using namespace Tomahawk;
@@ -16,7 +15,12 @@ void
 DatabaseCommand_LogPlayback::postCommitHook()
 {
     qDebug() << Q_FUNC_INFO;
-
+    if ( source().isNull() || source()->collection().isNull() )
+    {
+        qDebug() << "Source has gone offline, not emitting to GUI.";
+        return;
+    }
+    
     connect( this, SIGNAL( trackPlaying( Tomahawk::query_ptr ) ),
              source().data(), SIGNAL( playbackStarted( Tomahawk::query_ptr ) ), Qt::QueuedConnection );
     connect( this, SIGNAL( trackPlayed( Tomahawk::query_ptr ) ),
@@ -26,9 +30,7 @@ DatabaseCommand_LogPlayback::postCommitHook()
     m.insert( "track", m_track );
     m.insert( "artist", m_artist );
     m.insert( "qid", uuid() );
-    Tomahawk::query_ptr q( new Tomahawk::Query( m ) );
-
-    Tomahawk::Pipeline::instance()->add( q );
+    Tomahawk::query_ptr q = Tomahawk::Query::get( m );
 
     if ( m_action == Finished )
     {
@@ -54,8 +56,8 @@ DatabaseCommand_LogPlayback::exec( DatabaseImpl* dbi )
         return;
 
     TomahawkSqlQuery query = dbi->newquery();
-    query.prepare( "INSERT INTO playback_log(source,track,playtime,secs_played) "
-                        "VALUES (?, ?, ?, ?)" );
+    query.prepare( "INSERT INTO playback_log(source, track, playtime, secs_played) "
+                   "VALUES (?, ?, ?, ?)" );
 
     QVariant srcid = source()->isLocal() ? QVariant( QVariant::Int ) : source()->id();
 

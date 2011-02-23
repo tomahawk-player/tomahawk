@@ -23,7 +23,7 @@ Q_OBJECT
 
 public:
     explicit Source( const QString& username, ControlConnection* cc );
-    explicit Source( const QString& username );
+    explicit Source( const QString& username = QString() );
     virtual ~Source();
 
     bool isLocal() const { return m_isLocal; }

@@ -27,7 +27,7 @@ SET( OS_SPECIFIC_LINK_LIBRARIES
 	${OS_SPECIFIC_LINK_LIBRARIES}
 	"winmm.dll"
         "iphlpapi.a"
-        "${CMAKE_CURRENT_SOURCE_DIR}/../../../build/src/libtomahawk/libtomahawklib.dll"
+        ${CMAKE_BINARY_DIR}/src/libtomahawk/libtomahawklib.dll
 )
 ENDIF( WIN32 )
 
@@ -37,7 +37,7 @@ target_link_libraries( sip_zeroconf
 )
 
 IF( APPLE )
-  SET( CMAKE_SHARED_LINKER_FLAGS ${CMAKE_SHARED_LINKER_FLAGS} "-undefined dynamic_lookup" )
+#  SET( CMAKE_SHARED_LINKER_FLAGS ${CMAKE_SHARED_LINKER_FLAGS} "-undefined dynamic_lookup" )
 ENDIF( APPLE )
 
 install( TARGETS sip_zeroconf DESTINATION lib )

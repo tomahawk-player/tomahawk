@@ -17,7 +17,7 @@ SET( CMAKE_VERBOSE_MAKEFILE ON )
 SET( CMAKE_RUNTIME_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}" )
 SET( CMAKE_LIBRARY_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}" )
 SET( CMAKE_ARCHIVE_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}" )
-SET( TOMAHAWK_INC_DIR "${CMAKE_CURRENT_SOURCE_DIR}/../include/" )
+SET( TOMAHAWK_INC_DIR "${CMAKE_SOURCE_DIR}/include/" )
 
 # build plugins
 # use glob, but hardcoded list for now:
@@ -34,16 +34,22 @@ SET( tomahawkSources ${tomahawkSources}
      infosystem/infoplugins/echonestplugin.cpp
      infosystem/infoplugins/musixmatchplugin.cpp
 
-     xmppbot/xmppbot.cpp
      web/api_v1.cpp
 
      musicscanner.cpp
      scriptresolver.cpp
-     scrobbler.cpp
+     shortcuthandler.cpp
 
+     scanmanager.cpp
      tomahawkapp.cpp
      main.cpp
 )
+
+IF(LIBLASTFM_FOUND)
+    SET(tomahawkSources ${tomahawkSources}
+        scrobbler.cpp
+    )
+ENDIF(LIBLASTFM_FOUND)
 
 SET( tomahawkSourcesGui ${tomahawkSourcesGui}
      sourcetree/sourcesmodel.cpp
@@ -51,18 +57,18 @@ SET( tomahawkSourcesGui ${tomahawkSourcesGui}
      sourcetree/sourcetreeitemwidget.cpp
      sourcetree/sourcetreeview.cpp
 
-     topbar/topbar.cpp
-     topbar/clearbutton.cpp  
-     topbar/searchlineedit.cpp  
-     topbar/lineedit.cpp
-     topbar/searchbutton.cpp
-
      transferview.cpp
      tomahawktrayicon.cpp
      audiocontrols.cpp
      settingsdialog.cpp
      tomahawkwindow.cpp
 )
+
+
+IF( APPLE )
+    SET( tomahawkHeaders ${tomahawkHeaders} mac/tomahawkapp_mac.h mac/macshortcuthandler.h )
+    SET( tomahawkSources ${tomahawkSources} mac/tomahawkapp_mac.mm  mac/macshortcuthandler.cpp )
+ENDIF( APPLE )
 
 SET( tomahawkHeaders ${tomahawkHeaders}
      "${TOMAHAWK_INC_DIR}/tomahawk/tomahawkapp.h"
@@ -73,26 +79,27 @@ SET( tomahawkHeaders ${tomahawkHeaders}
      infosystem/infoplugins/echonestplugin.h
      infosystem/infoplugins/musixmatchplugin.h
 
-     xmppbot/xmppbot.h
+
      web/api_v1.h
 
      musicscanner.h
      scriptresolver.h
-     scrobbler.h
+     scanmanager.h
+     shortcuthandler.h
 )
+
+IF(LIBLASTFM_FOUND)
+    SET(tomahawkHeaders ${tomahawkHeaders}
+        scrobbler.h
+    )
+ENDIF(LIBLASTFM_FOUND)
+
 
 SET( tomahawkHeadersGui ${tomahawkHeadersGui}
      sourcetree/sourcesmodel.h
      sourcetree/sourcetreeitem.h
      sourcetree/sourcetreeitemwidget.h
      sourcetree/sourcetreeview.h
-
-     topbar/topbar.h
-     topbar/clearbutton.h 
-     topbar/searchlineedit.h 
-     topbar/lineedit.h
-     topbar/lineedit_p.h
-     topbar/searchbutton.h
 
      transferview.h
      tomahawktrayicon.h
@@ -108,7 +115,6 @@ SET( tomahawkUI ${tomahawkUI}
 
      audiocontrols.ui
      sourcetree/sourcetreeitemwidget.ui
-     topbar/topbar.ui
 )
 
 INCLUDE_DIRECTORIES(
@@ -124,17 +130,18 @@ INCLUDE_DIRECTORIES(
     topbar
     utils
     libtomahawk
+    libtomahawk/utils
+    mac
 
-    ../alsa-playback
-    ../rtaudio
-    ../qxt/qxtweb-standalone/qxtweb
+    ${THIRDPARTY_DIR}/alsa-playback
+    ${THIRDPARTY_DIR}/rtaudio
+    ${THIRDPARTY_DIR}/qxt/qxtweb-standalone/qxtweb/
+    ${THIRDPARTY_DIR}/qtweetlib/qtweetlib/src
+    ${THIRDPARTY_DIR}/qtweetlib/tomahawk-custom
 
-    /usr/include/taglib
-    /usr/local/include/taglib
-    /usr/local/include
 
+    ${TAGLIB_INCLUDES}
     ${LIBECHONEST_INCLUDE_DIR}
-    ${LIBECHONEST_INCLUDE_DIR}/..
 )
 
 SET( OS_SPECIFIC_LINK_LIBRARIES "" )
@@ -146,12 +153,18 @@ IF( UNIX )
   INCLUDE( "CMakeLists.unix.txt" )
 ENDIF( UNIX )
 
-ADD_SUBDIRECTORY( sip/jabber )
-ADD_SUBDIRECTORY( sip/zeroconf )
 
-kde4_add_app_icon( tomahawkSources "${CMAKE_CURRENT_SOURCE_DIR}/../data/icons/tomahawk-icon-*.png" )
+IF(GLOOX_FOUND)
+    ADD_SUBDIRECTORY( xmppbot )
+ENDIF(GLOOX_FOUND)
+ADD_SUBDIRECTORY( sip )
+
+kde4_add_app_icon( tomahawkSources "${CMAKE_SOURCE_DIR}/data/icons/tomahawk-icon-*.png" )
 qt4_add_resources( RC_SRCS "../resources.qrc" )
 qt4_wrap_cpp( tomahawkMoc ${tomahawkHeaders} )
+
+configure_file(${CMAKE_CURRENT_SOURCE_DIR}/config.h.in
+               ${CMAKE_CURRENT_BINARY_DIR}/config.h)
 
 SET( final_src ${final_src} ${tomahawkMoc} ${tomahawkSources} ${tomahawkHeaders} )
 
@@ -167,6 +180,8 @@ IF( UNIX AND NOT APPLE )
 ENDIF( UNIX AND NOT APPLE )
 IF( APPLE )
     ADD_EXECUTABLE( tomahawk MACOSX_BUNDLE ${final_src} )
+    SET_TARGET_PROPERTIES(tomahawk PROPERTIES MACOSX_BUNDLE_INFO_PLIST "../admin/mac/Info.plist"
+)
 ENDIF( APPLE )
 IF( WIN32 )
     ADD_EXECUTABLE( tomahawk ${final_src} )
@@ -174,14 +189,27 @@ ENDIF( WIN32 )
 
 MESSAGE( STATUS "OS_SPECIFIC_LINK_LIBRARIES: ${OS_SPECIFIC_LINK_LIBRARIES}" )
 
+SET(LINK_LIBRARIES  "")
+IF(LIBLASTFM_FOUND)
+    SET(LINK_LIBRARIES
+        ${LINK_LIBRARIES}
+        ${LIBLASTFM_LIBRARY}
+    )
+ENDIF(LIBLASTFM_FOUND)
+
+
 TARGET_LINK_LIBRARIES( tomahawk
+    ${LINK_LIBRARIES}
+    ${TOMAHAWK_LIBRARIES}
     ${QT_LIBRARIES}
     ${MAC_EXTRA_LIBS}
     ${OS_SPECIFIC_LINK_LIBRARIES}
     ${LIBECHONEST_LIBRARY}
-
-    qjson
-    tag
+    ${QXTWEB_LIBRARIES}
+    ${QTWEETLIB_LIBRARIES}
+    ${QJSON_LIBRARIES}
+    ${TAGLIB_LIBRARIES}
+    ${QTWEETLIB_LIBRARIES}
 )
 
 INCLUDE( "CPack.txt" )

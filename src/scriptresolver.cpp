@@ -21,6 +21,11 @@ ScriptResolver::ScriptResolver(const QString& exe) :
     m_proc.start( m_cmd );
 }
 
+ScriptResolver::~ScriptResolver()
+{
+    Tomahawk::Pipeline::instance()->removeResolver( this );
+}
+
 
 void ScriptResolver::readStderr()
 {
@@ -128,6 +133,7 @@ void ScriptResolver::resolve( const QVariant& v )
     QVariantMap m = v.toMap();
     m.insert( "_msgtype", "rq" );
     const QByteArray msg = m_serializer.serialize( m );
+    qDebug() << "ASKING SCRIPT RESOLVER TO RESOLVE:" << msg;
     sendMsg( msg );
 }
 

@@ -23,6 +23,36 @@
 	<key>CFBundleName</key>
 	<string>Tomahawk</string>
 	<key>LSMinimumSystemVersion</key>
-        <string>10.5.0</string>
+    <string>10.5.0</string>
+    <key>CFBundleURLTypes</key>
+    	<array>
+    		<dict>
+    			<key>CFBundleURLName</key>
+    			<string>Tomahawk URL</string>
+    			<key>CFBundleURLSchemes</key>
+    			<array>
+    				<string>tomahawk</string>
+    			</array>
+    		</dict>
+    	</array>
+    <key>CFBundleDocumentTypes</key>
+      <array>
+        <dict>
+          <key>CFBundleTypeExtensions</key>
+          <array>
+            <string>xspf</string>
+          </array>
+          <key>CFBundleTypeIconFile</key>
+          <string>Generic.icns</string>
+          <key>CFBundleTypeMIMETypes</key>
+          <array>
+            <string>application/xspf+xml</string>
+          </array>
+          <key>CFBundleTypeName</key>
+          <string>XSPF Playlist</string>
+          <key>CFBundleTypeRole</key>
+          <string>Viewer</string>
+        </dict>
+      </array>        
 </dict>
 </plist>

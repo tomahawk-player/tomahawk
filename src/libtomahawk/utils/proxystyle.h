@@ -12,6 +12,7 @@ public:
     ProxyStyle() {}
 
     virtual void drawPrimitive( PrimitiveElement pe, const QStyleOption *opt, QPainter *p, const QWidget *w = 0 ) const;
+    virtual void drawControl( ControlElement ce, const QStyleOption *opt, QPainter *p, const QWidget *w = 0 ) const;
 };
 
 #endif // PROXYSTYLE_H

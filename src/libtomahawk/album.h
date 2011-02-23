@@ -7,7 +7,6 @@
 #include "typedefs.h"
 #include "artist.h"
 #include "collection.h"
-
 #include "playlistinterface.h"
 
 #include "dllmacro.h"

@@ -10,7 +10,6 @@
 
 using namespace Tomahawk;
 
-
 Source::Source( const QString &username, ControlConnection* cc )
     : QObject()
     , m_isLocal( false )
@@ -34,6 +33,7 @@ Source::Source( const QString &username )
     , m_id( 0 )
     , m_cc( 0 )
 {
+    qDebug() << Q_FUNC_INFO;
 }
 
 
@@ -41,10 +41,8 @@ Source::~Source()
 {
     qDebug() << Q_FUNC_INFO << friendlyName();
 
-    return;
-    // TODO mark source as offline in database
-    DatabaseCommand_SourceOffline* cmd = new DatabaseCommand_SourceOffline( id() );
-    Database::instance()->enqueue( QSharedPointer<DatabaseCommand>(cmd) );
+/*    DatabaseCommand_SourceOffline* cmd = new DatabaseCommand_SourceOffline( id() );
+    Database::instance()->enqueue( QSharedPointer<DatabaseCommand>(cmd) );*/
 }
 
 
@@ -85,8 +83,8 @@ Source::remove()
 
     m_cc = 0;
     emit offline();
-    SourceList::instance()->remove( this );
     m_collections.clear();
+    SourceList::instance()->remove( this );
 }
 
 

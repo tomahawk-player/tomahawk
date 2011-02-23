@@ -21,6 +21,8 @@ public:
     virtual QPersistentModelIndex currentItem() const { return mapFromSource( m_model->currentItem() ); }
     virtual void setCurrentItem( const QModelIndex& index ) { m_model->setCurrentItem( mapToSource( index ) ); }
 
+    virtual QList<Tomahawk::query_ptr> tracks();
+
     virtual int unfilteredTrackCount() const { return sourceModel()->rowCount( QModelIndex() ); }
     virtual int trackCount() const { return rowCount( QModelIndex() ); }
 
@@ -30,6 +32,7 @@ public:
 
     virtual Tomahawk::result_ptr siblingItem( int itemsAway );
 
+    virtual QString filter() const { return filterRegExp().pattern(); }
     virtual void setFilter( const QString& pattern );
 
     virtual PlaylistInterface::RepeatMode repeatMode() const { return m_repeatMode; }

@@ -3,7 +3,19 @@
 #include "tomahawksettings.h"
 
 #include <QtPlugin>
+#include <QStringList>
+#include <QInputDialog>
+#include <QLineEdit>
 
+JabberPlugin::JabberPlugin()
+    : p( 0 )
+{
+    m_menu = new QMenu(QString("Jabber (").append(accountName()).append(")"));
+    m_addFriendAction = m_menu->addAction("Add Friend...");
+
+    connect(m_addFriendAction, SIGNAL(triggered()),
+            this,              SLOT(showAddFriendDialog()));
+}
 
 void
 JabberPlugin::setProxy( QNetworkProxy* proxy )
@@ -12,23 +24,51 @@ JabberPlugin::setProxy( QNetworkProxy* proxy )
 }
 
 
-bool
-JabberPlugin::connect()
+const QString
+JabberPlugin::name()
 {
-    if ( !TomahawkSettings::instance()->value( "jabber/autoconnect", true ).toBool() )
+    return QString( MYNAME );
+}
+
+const QString
+JabberPlugin::friendlyName()
+{
+    return QString( "Jabber" );
+}
+
+const QString
+JabberPlugin::accountName()
+{
+    return TomahawkSettings::instance()->jabberUsername();
+}
+
+QMenu*
+JabberPlugin::menu()
+{
+    return m_menu;
+}
+
+bool
+JabberPlugin::connectPlugin( bool startup )
+{
+    qDebug() << "JabberPlugin::connect";
+    if ( startup && !TomahawkSettings::instance()->jabberAutoConnect() )
         return false;
 
-    QString jid       = TomahawkSettings::instance()->value( "jabber/username"   ).toString();
-    QString server    = TomahawkSettings::instance()->value( "jabber/server"     ).toString();
-    QString password  = TomahawkSettings::instance()->value( "jabber/password"   ).toString();
-    unsigned int port = TomahawkSettings::instance()->value( "jabber/port", 5222 ).toUInt();
+    QString jid       = TomahawkSettings::instance()->jabberUsername();
+    QString server    = TomahawkSettings::instance()->jabberServer();
+    QString password  = TomahawkSettings::instance()->jabberPassword();
+    unsigned int port = TomahawkSettings::instance()->jabberPort();
 
-    // gtalk check
-    if( server.isEmpty() && ( jid.contains( "@gmail.com" ) || jid.contains( "@googlemail.com" ) ) )
+    QStringList splitJid = jid.split( '@', QString::SkipEmptyParts );
+    if ( splitJid.size() < 2 )
     {
-        qDebug() << "Setting jabber server to talk.google.com";
-        server = "talk.google.com";
+        qDebug() << "JID did not have an @ in it, could not find a server part";
+        return false;
     }
+
+    if ( server.isEmpty() )
+        server = splitJid[1];
 
     if ( port < 1 || port > 65535 || jid.isEmpty() || password.isEmpty() )
     {
@@ -47,8 +87,8 @@ JabberPlugin::connect()
     QObject::connect( p, SIGNAL( disconnected() ), SIGNAL( disconnected() ) );
     QObject::connect( p, SIGNAL( authError( int, QString ) ), SLOT( onAuthError( int, QString ) ) );
 
-    p->go();
-
+    p->resolveHostSRV();
+    
     return true;
 }
 
@@ -60,6 +100,20 @@ JabberPlugin::onAuthError( int code, const QString& message )
         emit error( SipPlugin::AuthError, message );
     else
         emit error( SipPlugin::ConnectionError, message );
+}
+
+void
+JabberPlugin::showAddFriendDialog()
+{
+    bool ok;
+    QString id = QInputDialog::getText( 0, tr( "Add Friend" ),
+                                              tr( "Enter Jabber ID:" ), QLineEdit::Normal,
+                                              "", &ok );
+    if ( !ok )
+        return;
+
+    qDebug() << "Attempting to add jabber contact to roster:" << id;
+    addContact( id );
 }
 
 Q_EXPORT_PLUGIN2( sip, JabberPlugin )

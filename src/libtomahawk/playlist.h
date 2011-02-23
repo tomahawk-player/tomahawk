@@ -3,10 +3,14 @@
 
 #include <QObject>
 #include <QList>
+#include <QDebug>
+#include <QVariant>
 #include <QSharedPointer>
 
 #include "query.h"
 #include "typedefs.h"
+
+#include "playlistinterface.h"
 
 #include "dllmacro.h"
 
@@ -27,9 +31,12 @@ Q_PROPERTY( unsigned int lastmodified READ lastmodified WRITE setLastmodified )
 Q_PROPERTY( QVariant query            READ queryVariant WRITE setQueryVariant )
 
 public:
-    void setQuery( const Tomahawk::query_ptr& q ) { m_query = q; }
-    const Tomahawk::query_ptr& query() const { return m_query; }
-
+    PlaylistEntry();
+    virtual ~PlaylistEntry();
+    
+    void setQuery( const Tomahawk::query_ptr& q );
+    const Tomahawk::query_ptr& query() const;
+    
     // I wish Qt did this for me once i specified the Q_PROPERTIES:
     void setQueryVariant( const QVariant& v );
     QVariant queryVariant() const;
@@ -49,10 +56,10 @@ public:
     unsigned int lastmodified() const { return m_lastmodified; }
     void setLastmodified( unsigned int i ) { m_lastmodified = i; }
 
-    source_ptr lastSource() const { return m_lastsource; }
-    void setLastSource( source_ptr s ) { m_lastsource = s; }
+    source_ptr lastSource() const;
+    void setLastSource( source_ptr s );
 
-private:
+private:    
     QString m_guid;
     Tomahawk::query_ptr m_query;
     QString m_annotation;
@@ -74,7 +81,7 @@ struct PlaylistRevision
 };
 
 
-class DLLEXPORT Playlist : public QObject
+class DLLEXPORT Playlist : public QObject, public PlaylistInterface
 {
 Q_OBJECT
 Q_PROPERTY( QString guid            READ guid               WRITE setGuid )
@@ -89,6 +96,8 @@ friend class ::DatabaseCommand_SetPlaylistRevision;
 friend class ::DatabaseCommand_CreatePlaylist;
 
 public:
+    ~Playlist();
+    
     static Tomahawk::playlist_ptr load( const QString& guid );
 
     // one CTOR is private, only called by DatabaseCommand_LoadAllPlaylists
@@ -104,7 +113,7 @@ public:
 
     virtual void loadRevision( const QString& rev = "" );
 
-    const source_ptr& author()          { return m_source; }
+    source_ptr author();
     const QString& currentrevision()    { return m_currentrevision; }
     const QString& title()              { return m_title; }
     const QString& info()               { return m_info; }
@@ -114,19 +123,14 @@ public:
     bool shared() const                 { return m_shared; }
 
     const QList< plentry_ptr >& entries() { return m_entries; }
-    void addEntry( const Tomahawk::query_ptr& query, const QString& oldrev );
-    void addEntries( const QList<Tomahawk::query_ptr>& queries, const QString& oldrev );
+    virtual void addEntry( const Tomahawk::query_ptr& query, const QString& oldrev );
+    virtual void addEntries( const QList<Tomahawk::query_ptr>& queries, const QString& oldrev );
 
     // <IGNORE hack="true">
     // these need to exist and be public for the json serialization stuff
     // you SHOULD NOT call them.  They are used for an alternate CTOR method from json.
     // maybe friend QObjectHelper and make them private?
-    Playlist( const source_ptr& author )
-        : m_source( author )
-        , m_lastmodified( 0 )
-    {
-        qDebug() << Q_FUNC_INFO << "JSON";
-    }
+    explicit Playlist( const source_ptr& author );
     void setCurrentrevision( const QString& s ) { m_currentrevision = s; }
     void setTitle( const QString& s )           { m_title = s; }
     void setInfo( const QString& s )            { m_info = s; }
@@ -135,12 +139,33 @@ public:
     void setShared( bool b )                    { m_shared = b; }
     // </IGNORE>
 
+    virtual QList<Tomahawk::query_ptr> tracks();
+
+    virtual int unfilteredTrackCount() const { return m_entries.count(); }
+    virtual int trackCount() const { return m_entries.count(); }
+
+    virtual Tomahawk::result_ptr siblingItem( int itemsAway ) { return result_ptr(); }
+
+    virtual PlaylistInterface::RepeatMode repeatMode() const { return PlaylistInterface::NoRepeat; }
+    virtual bool shuffled() const { return false; }
+    
+    virtual void setRepeatMode( PlaylistInterface::RepeatMode ) {}
+    virtual void setShuffled( bool ) {}
+    
+    virtual void setFilter( const QString& pattern ) {}
+    
 signals:
     /// emitted when the playlist revision changes (whenever the playlist changes)
     void revisionLoaded( Tomahawk::PlaylistRevision );
 
     /// watch for this to see when newly created playlist is synced to DB (if you care)
     void created();
+
+    void repeatModeChanged( PlaylistInterface::RepeatMode mode );
+    void shuffleModeChanged( bool enabled );
+
+    void trackCountChanged( unsigned int tracks );
+    void sourceTrackCountChanged( unsigned int tracks );
 
 public slots:
     // want to update the playlist from the model?
@@ -158,11 +183,7 @@ public slots:
 
     void resolve();
 
-private slots:
-    void onResultsFound( const QList<Tomahawk::result_ptr>& results );
-    void onResolvingFinished();
-
-private:
+protected:
     // called from loadAllPlaylists DB cmd:
     explicit Playlist( const source_ptr& src,
                        const QString& currentrevision,
@@ -180,10 +201,24 @@ private:
                        const QString& info,
                        const QString& creator,
                        bool shared );
-
+    
+    QList< plentry_ptr > newEntries( const QList< plentry_ptr >& entries );
+    PlaylistRevision setNewRevision( const QString& rev,
+                                     const QList<QString>& neworderedguids,
+                                     const QList<QString>& oldorderedguids,
+                                     bool is_newest_rev,
+                                     const QMap< QString, Tomahawk::plentry_ptr >& addedmap );
+    
+    QList<plentry_ptr> addEntriesInternal( const QList<Tomahawk::query_ptr>& queries );
+    
+private slots:
+    void onResultsFound( const QList<Tomahawk::result_ptr>& results );
+    void onResolvingFinished();
+    
+private:
+    Playlist();
     void init();
-    void rundb();
-
+    
     source_ptr m_source;
     QString m_currentrevision;
     QString m_guid, m_title, m_info, m_creator;
@@ -192,6 +227,7 @@ private:
 
     QList< plentry_ptr > m_entries;
     bool m_locallyChanged;
+
 };
 
 };

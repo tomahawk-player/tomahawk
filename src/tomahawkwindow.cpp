@@ -15,6 +15,7 @@
 #include "tomahawk/tomahawkapp.h"
 #include "playlist.h"
 #include "query.h"
+#include "artist.h"
 
 #include "audio/audioengine.h"
 #include "database/database.h"
@@ -22,7 +23,8 @@
 #include "network/controlconnection.h"
 #include "playlist/playlistmanager.h"
 #include "sip/SipHandler.h"
-#include "topbar/topbar.h"
+#include "sourcetree/sourcetreeview.h"
+#include "utils/animatedsplitter.h"
 #include "utils/proxystyle.h"
 #include "utils/widgetdragfilter.h"
 #include "utils/xspfloader.h"
@@ -30,10 +32,13 @@
 #include "widgets/welcomewidget.h"
 
 #include "audiocontrols.h"
-#include "musicscanner.h"
 #include "settingsdialog.h"
 #include "tomahawksettings.h"
+#include "sourcelist.h"
+#include "transferview.h"
 #include "tomahawktrayicon.h"
+#include "playlist/dynamic/GeneratorInterface.h"
+#include "scanmanager.h"
 
 using namespace Tomahawk;
 
@@ -41,7 +46,6 @@ using namespace Tomahawk;
 TomahawkWindow::TomahawkWindow( QWidget* parent )
     : QMainWindow( parent )
     , ui( new Ui::TomahawkWindow )
-    , m_topbar( new TopBar( this ) )
     , m_audioControls( new AudioControls( this ) )
     , m_trayIcon( new TomahawkTrayIcon( this ) )
 {
@@ -52,35 +56,84 @@ TomahawkWindow::TomahawkWindow( QWidget* parent )
     setUnifiedTitleAndToolBarOnMac( true );
 #endif
 
-    new PlaylistManager( this );
+    PlaylistManager* pm = new PlaylistManager( this );
+
+    connect( m_audioControls, SIGNAL( playPressed() ), pm, SLOT( onPlayClicked() ) );
+    connect( m_audioControls, SIGNAL( pausePressed() ), pm, SLOT( onPauseClicked() ) );
 
     ui->setupUi( this );
 
+    delete ui->sidebarWidget;
     delete ui->playlistWidget;
+
+    ui->centralWidget->setContentsMargins( 0, 0, 0, 0 );
+    ui->centralWidget->layout()->setContentsMargins( 0, 0, 0, 0 );
+    ui->centralWidget->layout()->setMargin( 0 );
+
+    QWidget* sidebarWidget = new QWidget();
+    sidebarWidget->setLayout( new QVBoxLayout() );
+
+    AnimatedSplitter* sidebar = new AnimatedSplitter();
+    sidebar->setOrientation( Qt::Vertical );
+    sidebar->setChildrenCollapsible( false );
+    sidebar->setGreedyWidget( 0 );
+    sidebar->setStretchFactor( 0, 3 );
+    sidebar->setStretchFactor( 1, 1 );
+
+    SourceTreeView* stv = new SourceTreeView();
+    TransferView* transferView = new TransferView();
+
+    sidebar->addWidget( stv );
+    sidebar->addWidget( transferView );
+    sidebar->hide( 1, false );
+
+/*    QWidget* buttonWidget = new QWidget();
+    buttonWidget->setLayout( new QVBoxLayout() );
+    m_statusButton = new QPushButton();
+    buttonWidget->layout()->addWidget( m_statusButton );*/
+
+    sidebarWidget->layout()->addWidget( sidebar );
+//    sidebarWidget->layout()->addWidget( buttonWidget );
+
+    sidebarWidget->setContentsMargins( 0, 0, 0, 0 );
+    sidebarWidget->layout()->setContentsMargins( 0, 0, 0, 0 );
+    sidebarWidget->layout()->setMargin( 0 );
+    sidebarWidget->layout()->setSpacing( 0 );
+/*    buttonWidget->setContentsMargins( 0, 0, 0, 0 );
+    buttonWidget->layout()->setContentsMargins( 0, 0, 0, 0 );
+    buttonWidget->layout()->setMargin( 0 );
+    buttonWidget->layout()->setSpacing( 0 );*/
+
+    ui->splitter->addWidget( sidebarWidget );
     ui->splitter->addWidget( PlaylistManager::instance()->widget() );
+
     ui->splitter->setStretchFactor( 0, 1 );
     ui->splitter->setStretchFactor( 1, 3 );
     ui->splitter->setCollapsible( 1, false );
+    ui->splitter->setHandleWidth( 1 );
 
-    ui->sidebarSplitter->setChildrenCollapsible( false );
-    ui->sidebarSplitter->setGreedyWidget( 0 );
-    ui->sidebarSplitter->setStretchFactor( 0, 3 );
-    ui->sidebarSplitter->setStretchFactor( 1, 1 );
-    ui->sidebarSplitter->hide( 1, false );
-
-    QToolBar* toolbar = addToolBar( "TomahawkToolbar" );
+/*    QToolBar* toolbar = addToolBar( "TomahawkToolbar" );
     toolbar->setObjectName( "TomahawkToolbar" );
     toolbar->addWidget( m_topbar );
     toolbar->setMovable( false );
     toolbar->setFloatable( false );
-    toolbar->installEventFilter( new WidgetDragFilter( toolbar ) );
+    toolbar->installEventFilter( new WidgetDragFilter( toolbar ) );*/
 
     statusBar()->addPermanentWidget( m_audioControls, 1 );
+
+    // propagate sip menu
+    foreach(SipPlugin *plugin, APP->sipHandler()->plugins())
+    {
+        if(plugin->menu())
+        {
+            ui->menuNetwork->addMenu(plugin->menu());
+        }
+    }
 
     loadSettings();
     setupSignals();
 
-    PlaylistManager::instance()->show( new WelcomeWidget() );
+    PlaylistManager::instance()->show( new WelcomeWidget(), tr( "Welcome to Tomahawk!" ), QString(), QPixmap( RESPATH "icons/tomahawk-icon-128x128.png" ) );
 }
 
 
@@ -100,6 +153,8 @@ TomahawkWindow::loadSettings()
         restoreGeometry( s->mainWindowGeometry() );
     if ( !s->mainWindowState().isEmpty() )
         restoreState( s->mainWindowState() );
+    if ( !s->mainWindowSplitterState().isEmpty() )
+        ui->splitter->restoreState( s->mainWindowSplitterState() );
 }
 
 
@@ -109,43 +164,13 @@ TomahawkWindow::saveSettings()
     TomahawkSettings* s = TomahawkSettings::instance();
     s->setMainWindowGeometry( saveGeometry() );
     s->setMainWindowState( saveState() );
+    s->setMainWindowSplitterState( ui->splitter->saveState() );
 }
 
 
 void
 TomahawkWindow::setupSignals()
 {
-    // <Playlist>
-    connect( m_topbar,         SIGNAL( filterTextChanged( const QString& ) ),
-             PlaylistManager::instance(),  SLOT( setFilter( const QString& ) ) );
-
-    connect( PlaylistManager::instance(), SIGNAL( numSourcesChanged( unsigned int ) ),
-             m_topbar,            SLOT( setNumSources( unsigned int ) ) );
-
-    connect( PlaylistManager::instance(), SIGNAL( numTracksChanged( unsigned int ) ),
-             m_topbar,            SLOT( setNumTracks( unsigned int ) ) );
-
-    connect( PlaylistManager::instance(), SIGNAL( numArtistsChanged( unsigned int ) ),
-             m_topbar,            SLOT( setNumArtists( unsigned int ) ) );
-
-    connect( PlaylistManager::instance(), SIGNAL( numShownChanged( unsigned int ) ),
-             m_topbar,            SLOT( setNumShown( unsigned int ) ) );
-
-    connect( m_topbar,         SIGNAL( flatMode() ),
-             PlaylistManager::instance(),  SLOT( setTableMode() ) );
-
-    connect( m_topbar,         SIGNAL( artistMode() ),
-             PlaylistManager::instance(),  SLOT( setTreeMode() ) );
-
-    connect( m_topbar,         SIGNAL( albumMode() ),
-             PlaylistManager::instance(),  SLOT( setAlbumMode() ) );
-
-    connect( PlaylistManager::instance(), SIGNAL( statsAvailable( bool ) ),
-             m_topbar,            SLOT( setStatsVisible( bool ) ) );
-
-    connect( PlaylistManager::instance(), SIGNAL( modesAvailable( bool ) ),
-             m_topbar,            SLOT( setModesVisible( bool ) ) );
-
     // <From PlaylistManager>
     connect( PlaylistManager::instance(), SIGNAL( repeatModeChanged( PlaylistInterface::RepeatMode ) ),
              m_audioControls,     SLOT( onRepeatModeChanged( PlaylistInterface::RepeatMode ) ) );
@@ -159,14 +184,15 @@ TomahawkWindow::setupSignals()
 
     // <Menu Items>
     connect( ui->actionPreferences, SIGNAL( triggered() ), SLOT( showSettingsDialog() ) );
+    connect( ui->actionToggleConnect, SIGNAL( triggered() ), APP->sipHandler(), SLOT( toggleConnect() ) );
     connect( ui->actionAddPeerManually, SIGNAL( triggered() ), SLOT( addPeerManually() ) );
-    connect( ui->actionAddFriendManually, SIGNAL( triggered() ), SLOT( addFriendManually() ) );
-    connect( ui->actionRescanCollection, SIGNAL( triggered() ), SLOT( rescanCollectionManually() ) );
+    connect( ui->actionRescanCollection, SIGNAL( triggered() ), SLOT( updateCollectionManually() ) );
     connect( ui->actionLoadXSPF, SIGNAL( triggered() ), SLOT( loadSpiff() ));
     connect( ui->actionCreatePlaylist, SIGNAL( triggered() ), SLOT( createPlaylist() ));
+    connect( ui->actionCreateAutomaticPlaylist, SIGNAL( triggered() ), SLOT( createAutomaticPlaylist() ));
+    connect( ui->actionCreate_New_Station, SIGNAL( triggered() ), SLOT( createStation() ));
     connect( ui->actionAboutTomahawk, SIGNAL( triggered() ), SLOT( showAboutTomahawk() ) );
     connect( ui->actionExit, SIGNAL( triggered() ), APP, SLOT( quit() ) );
-    connect( ui->statusButton, SIGNAL( clicked() ), APP->sipHandler(), SLOT( toggleConnect() ) );
 
     // <SipHandler>
     connect( APP->sipHandler(), SIGNAL( connected() ), SLOT( onSipConnected() ) );
@@ -217,37 +243,14 @@ TomahawkWindow::showSettingsDialog()
     qDebug() << Q_FUNC_INFO;
     SettingsDialog win;
     win.exec();
-
-    // settings are written in SettingsDialog destructor, bleh
-    QTimer::singleShot( 0, this, SIGNAL( settingsChanged() ) );
-}
-
-
-/// scan stuff
-void
-TomahawkWindow::rescanCollectionManually()
-{
-    TomahawkSettings* s = TomahawkSettings::instance();
-    bool ok;
-    QString path = QInputDialog::getText( this, tr( "Enter path to music dir:" ),
-                                                tr( "Path pls" ), QLineEdit::Normal,
-                                                s->scannerPath(), &ok );
-    s->setValue( "scannerpath", path );
-    if ( ok && !path.isEmpty() )
-    {
-        MusicScanner* scanner = new MusicScanner( path );
-        connect( scanner, SIGNAL( finished() ), this, SLOT( scanFinished() ) );
-        scanner->start();
-    }
 }
 
 
 void
-TomahawkWindow::scanFinished()
+TomahawkWindow::updateCollectionManually()
 {
-    qDebug() << Q_FUNC_INFO;
-    MusicScanner* scanner = (MusicScanner*) sender();
-    scanner->deleteLater();
+    if ( TomahawkSettings::instance()->hasScannerPath() )
+        ScanManager::instance()->runManualScan( TomahawkSettings::instance()->scannerPath() );
 }
 
 
@@ -283,21 +286,6 @@ TomahawkWindow::addPeerManually()
 
 
 void
-TomahawkWindow::addFriendManually()
-{
-    bool ok;
-    QString id = QInputDialog::getText( this, tr( "Add Friend" ),
-                                              tr( "Enter Jabber ID:" ), QLineEdit::Normal,
-                                              "", &ok );
-    if ( !ok )
-        return;
-
-    qDebug() << "Attempting to add jabber contact to roster:" << id;
-    APP->sipHandler()->addContact( id );
-}
-
-
-void
 TomahawkWindow::loadSpiff()
 {
     bool ok;
@@ -312,10 +300,44 @@ TomahawkWindow::loadSpiff()
 }
 
 
+void 
+TomahawkWindow::createAutomaticPlaylist()
+{
+    bool ok;
+    QString name = QInputDialog::getText( this, "Create New Automatic Playlist", "Name:", QLineEdit::Normal, "New Automatic Playlist", &ok );
+    if ( !ok || name.isEmpty() )
+        return;
+    
+    source_ptr author = SourceList::instance()->getLocal();
+    QString id = uuid();
+    QString info  = ""; // FIXME
+    QString creator = "someone"; // FIXME
+    dynplaylist_ptr playlist = DynamicPlaylist::create( author, id, name, info, creator, false );
+    playlist->setMode( Static );
+    playlist->createNewRevision( uuid(), playlist->currentrevision(), playlist->type(), playlist->generator()->controls(), playlist->entries() );
+}
+
+
+void TomahawkWindow::createStation()
+{
+    bool ok;
+    QString name = QInputDialog::getText( this, "Create New Station", "Name:", QLineEdit::Normal, "New Station", &ok );
+    if ( !ok || name.isEmpty() )
+        return;
+    
+    source_ptr author = SourceList::instance()->getLocal();
+    QString id = uuid();
+    QString info  = ""; // FIXME
+    QString creator = "someone"; // FIXME
+    dynplaylist_ptr playlist = DynamicPlaylist::create( author, id, name, info, creator, false );
+    playlist->setMode( OnDemand );
+    playlist->createNewRevision( uuid(), playlist->currentrevision(), playlist->type(), playlist->generator()->controls() );
+}
+
+
 void
 TomahawkWindow::createPlaylist()
 {
-    qDebug() << Q_FUNC_INFO;
 
     PlaylistManager::instance()->show( new NewPlaylistWidget() );
 
@@ -328,7 +350,11 @@ TomahawkWindow::createPlaylist()
     QString id = uuid();
     QString info  = ""; // FIXME
     QString creator = "someone"; // FIXME
-    Playlist::create( author, id, name, info, creator, false );*/
+    if( dynamic )
+        DynamicPlaylist::create( author, id, name, info, creator, false );
+    else
+        Playlist::create( author, id, name, info, creator, false ); */
+
 }
 
 
@@ -343,14 +369,14 @@ TomahawkWindow::onPlaybackLoading( const Tomahawk::result_ptr& result )
 void
 TomahawkWindow::onSipConnected()
 {
-    ui->statusButton->setText( tr( "Online" ) );
+    ui->actionToggleConnect->setText( tr( "Go &offline" ) );
 }
 
 
 void
 TomahawkWindow::onSipDisconnected()
 {
-    ui->statusButton->setText( tr( "Offline" ) );
+    ui->actionToggleConnect->setText( tr( "Go &online" ) );
 }
 
 
@@ -384,5 +410,7 @@ TomahawkWindow::setWindowTitle( const QString& title )
 void
 TomahawkWindow::showAboutTomahawk()
 {
-    QMessageBox::about( this, "About Tomahawk", "Copyright 2010 Christian Muehlhaeuser <muesli@gmail.com>\n\nThanks to: Leo Franchi, Jeff Mitchell, Dominik Schmidt, Alejandro Wainzinger and Steve Robertson" );
+    QMessageBox::about( this, "About Tomahawk",
+                        tr( "<h2><b>Tomahawk %1</h2>Copyright 2010, 2011 Christian Muehlhaeuser <muesli@gmail.com><br/><br/>Thanks to: Leo Franchi, Jeff Mitchell, Dominik Schmidt, Alejandro Wainzinger and Steve Robertson" )
+                        .arg( qApp->applicationVersion() ) );
 }

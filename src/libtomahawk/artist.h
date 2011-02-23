@@ -5,7 +5,6 @@
 #include <QSharedPointer>
 
 #include "typedefs.h"
-#include "collection.h"
 
 #include "playlistinterface.h"
 
@@ -20,15 +19,17 @@ Q_OBJECT
 
 public:
     static artist_ptr get( unsigned int id, const QString& name, const Tomahawk::collection_ptr& collection );
-
     Artist( unsigned int id, const QString& name, const Tomahawk::collection_ptr& collection );
 
+    Artist();
+    virtual ~Artist();
+    
     unsigned int id() const { return m_id; }
     QString name() const { return m_name; }
 
-    Tomahawk::collection_ptr collection() const { return m_collection; }
+	Tomahawk::collection_ptr collection() const;
 
-    QList<Tomahawk::query_ptr> tracks();
+    virtual QList<Tomahawk::query_ptr> tracks();
 
     virtual int trackCount() const { return 0; }
     virtual int unfilteredTrackCount() const { return m_queries.count(); }

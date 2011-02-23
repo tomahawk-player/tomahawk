@@ -36,10 +36,9 @@ public:
     int trackId( int artistid, const QString& name_orig, bool& isnew );
     int albumId( int artistid, const QString& name_orig, bool& isnew );
 
-    QList< int > searchTable( const QString& table, const QString& name_orig, uint limit = 10 );
+    QList< int > searchTable( const QString& table, const QString& name, uint limit = 10 );
     QList< int > getTrackFids( int tid );
 
-    static QMap<QString,int> ngrams( const QString& str_orig );
     static QString sortname( const QString& str );
 
     QVariantMap artist( int id );
@@ -54,9 +53,9 @@ public:
     }
 
     // indexes entries from "table" where id >= pkey
-    void updateSearchIndex( const QString& table, int pkey );
+    void updateSearchIndex();
 
-    const QString& dbid() const { return m_dbid; }
+    QString dbid() const { return m_dbid; }
 
     void loadIndex();
 
@@ -76,7 +75,7 @@ private:
     QString m_dbid;
 
     QThread m_indexThread;
-    FuzzyIndex m_fuzzyIndex;
+    FuzzyIndex* m_fuzzyIndex;
 };
 
 #endif // DATABASEIMPL_H

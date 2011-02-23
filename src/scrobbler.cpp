@@ -57,8 +57,8 @@ Scrobbler::Scrobbler( QObject* parent )
         ldir.mkpath( lpath );
     }
     
-    connect( TomahawkApp::instance(), SIGNAL( settingsChanged() ),
-                                        SLOT( settingsChanged() ), Qt::QueuedConnection );
+    connect( TomahawkSettings::instance(), SIGNAL( changed() ),
+                                             SLOT( settingsChanged() ), Qt::QueuedConnection );
 
     connect( AudioEngine::instance(), SIGNAL( timerSeconds( unsigned int ) ),
                                         SLOT( engineTick( unsigned int ) ), Qt::QueuedConnection );
@@ -139,6 +139,9 @@ void
 Scrobbler::scrobble()
 {
     Q_ASSERT( QThread::currentThread() == thread() );
+
+    if ( !m_scrobbler || m_track.isNull() )
+        return;
 
     qDebug() << Q_FUNC_INFO << m_track.toString();
     m_scrobbler->cache( m_track );

@@ -75,14 +75,17 @@ public:
     void setOrderedguids( const QVariantList& l ) { m_orderedguids = l; }
     QVariantList orderedguids() const { return m_orderedguids; }
 
-private:
+protected:
+    bool m_applied;
+    QStringList m_previous_rev_orderedguids;
     QString m_playlistguid;
     QString m_newrev, m_oldrev;
-    QVariantList m_orderedguids;
-    QStringList m_previous_rev_orderedguids;
-    QList<Tomahawk::plentry_ptr> m_addedentries, m_entries;
-    bool m_applied;
     QMap<QString, Tomahawk::plentry_ptr> m_addedmap;
+    
+    QString m_currentRevision;
+private:
+    QVariantList m_orderedguids;
+    QList<Tomahawk::plentry_ptr> m_addedentries, m_entries;
 
     bool m_localOnly;
 };

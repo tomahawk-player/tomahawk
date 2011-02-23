@@ -1,6 +1,9 @@
 #ifndef ECHONESTPLUGIN_H
 #define ECHONESTPLUGIN_H
+
 #include "tomahawk/infosystem.h"
+
+#include <QObject>
 
 class QNetworkReply;
 namespace Echonest {

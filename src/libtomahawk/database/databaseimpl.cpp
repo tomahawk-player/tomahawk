@@ -16,17 +16,15 @@
 */
 #include "schema.sql.h"
 
-#define CURRENT_SCHEMA_VERSION 16
-
+#define CURRENT_SCHEMA_VERSION 19
 
 DatabaseImpl::DatabaseImpl( const QString& dbname, Database* parent )
     : QObject( (QObject*) parent )
     , m_lastartid( 0 )
     , m_lastalbid( 0 )
     , m_lasttrkid( 0 )
-    , m_fuzzyIndex( *this )
 {
-    connect( this, SIGNAL(indexReady()), parent, SIGNAL(indexReady()) );
+    connect( this, SIGNAL( indexReady() ), parent, SIGNAL( indexReady() ) );
 
     db = QSqlDatabase::addDatabase( "QSQLITE", "tomahawk" );
     db.setDatabaseName( dbname );
@@ -96,6 +94,8 @@ DatabaseImpl::DatabaseImpl( const QString& dbname, Database* parent )
 
     // in case of unclean shutdown last time:
     query.exec( "UPDATE source SET isonline = 'false'" );
+
+    m_fuzzyIndex = new FuzzyIndex( *this );
 }
 
 
@@ -103,6 +103,8 @@ DatabaseImpl::~DatabaseImpl()
 {
     m_indexThread.quit();
     m_indexThread.wait( 5000 );
+
+    delete m_fuzzyIndex;
 }
 
 
@@ -110,17 +112,17 @@ void
 DatabaseImpl::loadIndex()
 {
     // load ngram index in the background
-    m_fuzzyIndex.moveToThread( &m_indexThread );
-    connect( &m_indexThread, SIGNAL(started()), &m_fuzzyIndex, SLOT(loadNgramIndex()) );
-    connect( &m_fuzzyIndex, SIGNAL(indexReady()), this, SIGNAL(indexReady()) );
+    m_fuzzyIndex->moveToThread( &m_indexThread );
+    connect( &m_indexThread, SIGNAL( started() ), m_fuzzyIndex, SLOT( loadLuceneIndex() ) );
+    connect( m_fuzzyIndex, SIGNAL( indexReady() ), this, SIGNAL( indexReady() ) );
     m_indexThread.start();
 }
 
 
 void
-DatabaseImpl::updateSearchIndex( const QString& table, int pkey )
+DatabaseImpl::updateSearchIndex()
 {
-    DatabaseCommand* cmd = new DatabaseCommand_UpdateSearchIndex(table, pkey);
+    DatabaseCommand* cmd = new DatabaseCommand_UpdateSearchIndex();
     Database::instance()->enqueue( QSharedPointer<DatabaseCommand>( cmd ) );
 }
 
@@ -324,41 +326,24 @@ DatabaseImpl::albumId( int artistid, const QString& name_orig, bool& isnew )
 
 
 QList< int >
-DatabaseImpl::searchTable( const QString& table, const QString& name_orig, uint limit )
+DatabaseImpl::searchTable( const QString& table, const QString& name, uint limit )
 {
     QList< int > results;
     if( table != "artist" && table != "track" && table != "album" )
         return results;
 
-    QString name = sortname( name_orig );
+    QMap< int, float > resultsmap = m_fuzzyIndex->search( table, name );
 
-    // first check for exact matches:
-    TomahawkSqlQuery query = newquery();
-    query.prepare( QString( "SELECT id FROM %1 WHERE sortname = ?" ).arg( table ) );
-    query.addBindValue( name );
-    query.exec();
-
-    while( query.next() )
-        results.append( query.value( 0 ).toInt() );
-
-    // ngram stuff only works on tracks over a certain length atm:
-    if( name_orig.length() > 3 )
+    QList< QPair<int, float> > resultslist;
+    foreach( int i, resultsmap.keys() )
     {
-        // consult ngram index to find candidates:        
-        QMap< int, float > resultsmap = m_fuzzyIndex.search( table, name );
+        resultslist << QPair<int, float>( i, (float)resultsmap.value( i ) );
+    }
+    qSort( resultslist.begin(), resultslist.end(), DatabaseImpl::scorepairSorter );
 
-        //qDebug() << "results map for" << table << resultsmap.size();
-        QList< QPair<int,float> > resultslist;
-        foreach( int i, resultsmap.keys() )
-        {
-            resultslist << QPair<int,float>( i, (float)resultsmap.value( i ) );
-        }
-        qSort( resultslist.begin(), resultslist.end(), DatabaseImpl::scorepairSorter );
-
-        for( int k = 0; k < resultslist.size() && k < (int)limit; ++k )
-        {
-            results << resultslist.at( k ).first;
-        }
+    for( int k = 0; k < resultslist.count(); k++ )
+    {
+        results << resultslist.at( k ).first;
     }
 
     return results;
@@ -379,35 +364,6 @@ DatabaseImpl::getTrackFids( int tid )
     while( query.next() )
         ret.append( query.value( 0 ).toInt() );
 
-    return ret;
-}
-
-
-QMap< QString, int >
-DatabaseImpl::ngrams( const QString& str_orig )
-{
-    static QMap< QString, QMap<QString, int> > memo;
-    if( memo.contains( str_orig ) )
-        return memo.value( str_orig );
-
-    int n = 3;
-    QMap<QString, int> ret;
-    QString str( " " + DatabaseImpl::sortname( str_orig ) + " " );
-    int num = str.length();
-    QString ngram;
-
-    for( int j = 0; j < num - ( n - 1 ); j++ )
-    {
-         ngram = str.mid( j, n );
-         Q_ASSERT( ngram.length() == n );
-
-         if( ret.contains( ngram ) )
-             ret[ngram]++;
-         else
-             ret[ngram] = 1;
-    }
-
-    memo.insert( str_orig, ret );
     return ret;
 }
 

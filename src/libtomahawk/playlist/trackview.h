@@ -12,6 +12,7 @@ class PlaylistInterface;
 class TrackHeader;
 class TrackModel;
 class TrackProxyModel;
+class OverlayWidget;
 
 class DLLEXPORT TrackView : public QTreeView
 {
@@ -21,14 +22,17 @@ public:
     explicit TrackView( QWidget* parent = 0 );
     ~TrackView();
 
+    virtual QString guid() const { return m_guid; }
+    virtual void setGuid( const QString& guid );
+
+    virtual void setModel( TrackModel* model );
     void setProxyModel( TrackProxyModel* model );
 
-    TrackModel* model() { return m_model; }
-    TrackProxyModel* proxyModel() { return m_proxyModel; }
-    PlaylistItemDelegate* delegate() { return m_delegate; }
-    TrackHeader* header() { return m_header; }
-
-    void setModel( TrackModel* model );
+    virtual TrackModel* model() const { return m_model; }
+    TrackProxyModel* proxyModel() const { return m_proxyModel; }
+    PlaylistItemDelegate* delegate() const { return m_delegate; }
+    TrackHeader* header() const { return m_header; }
+    OverlayWidget* overlay() const { return m_overlay; }
 
     QModelIndex contextMenuIndex() const { return m_contextMenuIndex; }
     void setContextMenuIndex( const QModelIndex& idx ) { m_contextMenuIndex = idx; }
@@ -57,10 +61,12 @@ private slots:
     void onFilterChanged( const QString& filter );
 
 private:
+    QString m_guid;
     TrackModel* m_model;
     TrackProxyModel* m_proxyModel;
     PlaylistItemDelegate* m_delegate;
     TrackHeader* m_header;
+    OverlayWidget* m_overlay;
 
     bool m_resizing;
     bool m_dragging;

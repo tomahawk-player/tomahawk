@@ -2,6 +2,8 @@
 
 #include <QDebug>
 
+#include "network/controlconnection.h"
+
 using namespace Tomahawk;
 
 SourceList* SourceList::s_instance = 0;
@@ -59,8 +61,11 @@ SourceList::add( const Tomahawk::source_ptr& s )
 
 
 void
-SourceList::remove( const Tomahawk::source_ptr& s )
+SourceList::remove( Tomahawk::source_ptr& s )
 {
+    if ( s.isNull() )
+        return;
+
     remove( s.data() );
 }
 
@@ -79,15 +84,19 @@ SourceList::remove( Tomahawk::Source* s )
         m_sources_id2name.remove( src->id() );
         m_sources.remove( s->userName() );
         qDebug() << "SourceList::remove(" << s->userName() << "), total sources now:" << m_sources.size();
+
+        if ( src->controlConnection() )
+            src->controlConnection()->shutdown( true );
     }
 
     emit sourceRemoved( src );
+    src.clear();
 }
 
 void
 SourceList::removeAllRemote()
 {
-    foreach( const source_ptr& s, m_sources )
+    foreach( source_ptr s, m_sources )
     {
         if( s != m_local )
             remove( s );

@@ -15,7 +15,8 @@ class ScriptResolver : public Tomahawk::Resolver
 Q_OBJECT
 public:
     explicit ScriptResolver(const QString& exe);
-
+    virtual ~ScriptResolver();
+    
     virtual QString name() const            { return m_name; }
     virtual unsigned int weight() const     { return m_weight; }
     virtual unsigned int preference() const { return m_preference; }
@@ -23,6 +24,7 @@ public:
 
     virtual void resolve( const QVariant& v );
 
+    QString exe() const { return m_cmd; }
 signals:
 
 public slots:

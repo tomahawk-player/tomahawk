@@ -7,14 +7,17 @@
 #include "typedefs.h"
 
 #include "dllmacro.h"
+#include "result.h"
 
 class DLLEXPORT PlaylistInterface
 {
 public:
     enum RepeatMode { NoRepeat, RepeatOne, RepeatAll };
 
-    PlaylistInterface( QObject* parent ) : m_widget( 0 ), m_object( parent ) {}
+    PlaylistInterface( QObject* parent = 0 ) : m_widget( 0 ), m_object( parent ) {}
     virtual ~PlaylistInterface() {}
+
+    virtual QList< Tomahawk::query_ptr > tracks() = 0;
 
     virtual int unfilteredTrackCount() const = 0;
     virtual int trackCount() const = 0;
@@ -26,7 +29,8 @@ public:
     virtual PlaylistInterface::RepeatMode repeatMode() const = 0;
     virtual bool shuffled() const = 0;
 
-    virtual void setFilter( const QString& pattern ) = 0;
+    virtual QString filter() const { return m_filter; }
+    virtual void setFilter( const QString& pattern ) { m_filter = pattern; }
 
     QWidget* widget() const { return m_widget; }
     void setWidget( QWidget* widget ) { m_widget = widget; }
@@ -46,6 +50,8 @@ signals:
 private:
     QWidget* m_widget;
     QObject* m_object;
+
+    QString m_filter;
 };
 
 #endif // PLAYLISTINTERFACE_H

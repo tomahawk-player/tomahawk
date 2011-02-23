@@ -12,7 +12,15 @@ class SourcesModel : public QStandardItemModel
 {
 Q_OBJECT
 
-public:
+public:    
+    enum SourceType {
+        Invalid = -1,
+        
+        CollectionSource = 0,
+        PlaylistSource = 1,
+        DynamicPlaylistSource = 2
+    };
+    
     explicit SourcesModel( QObject* parent = 0 );
 
     virtual QStringList mimeTypes() const;
@@ -23,8 +31,9 @@ public:
     bool appendItem( const Tomahawk::source_ptr& source );
     bool removeItem( const Tomahawk::source_ptr& source );
 
-    static int indexType( const QModelIndex& index );
+    static SourceType indexType( const QModelIndex& index );
     static Tomahawk::playlist_ptr indexToPlaylist( const QModelIndex& index );
+    static Tomahawk::dynplaylist_ptr indexToDynamicPlaylist( const QModelIndex& index );
     static SourceTreeItem* indexToTreeItem( const QModelIndex& index );
 
 signals:

@@ -13,7 +13,7 @@ class DLLEXPORT DatabaseResolver : public Tomahawk::Resolver
 Q_OBJECT
 
 public:
-    explicit DatabaseResolver( bool searchlocal, int weight );
+    explicit DatabaseResolver( int weight );
 
     virtual QString name() const;
     virtual unsigned int weight() const { return m_weight; }
@@ -26,7 +26,6 @@ private slots:
     void gotResults( const Tomahawk::QID qid, QList< Tomahawk::result_ptr> results );
 
 private:
-    bool m_searchlocal;
     int m_weight;
 };
 

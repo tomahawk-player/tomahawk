@@ -2,6 +2,7 @@
 #define DATABASECOLLECTION_H
 
 #include "collection.h"
+#include "source.h"
 #include "typedefs.h"
 
 #include "dllmacro.h"
@@ -19,13 +20,18 @@ public:
 
     virtual void loadTracks();
     virtual void loadPlaylists();
+    virtual void loadDynamicPlaylists();
 
     virtual QList< Tomahawk::playlist_ptr > playlists();
     virtual QList< Tomahawk::query_ptr > tracks();
+    virtual QList< Tomahawk::dynplaylist_ptr > dynamicPlaylists();
 
 public slots:
     virtual void addTracks( const QList<QVariant> &newitems );
     virtual void removeTracks( const QList<QVariant> &olditems );
+    
+private slots:
+    void dynamicPlaylistCreated( const Tomahawk::source_ptr& source, const QVariantList& data );
 };
 
 #endif // DATABASECOLLECTION_H

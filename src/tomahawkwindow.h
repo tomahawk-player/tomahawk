@@ -4,6 +4,7 @@
 #include <QMainWindow>
 #include <QVariantMap>
 #include <QNetworkAccessManager>
+#include <QPushButton>
 #include <QString>
 #include <QStackedWidget>
 
@@ -11,8 +12,8 @@
 
 class QAction;
 
+class MusicScanner;
 class AudioControls;
-class TopBar;
 class TomahawkTrayIcon;
 
 namespace Ui
@@ -33,28 +34,24 @@ public:
 
     void setWindowTitle( const QString& title );
 
-signals:
-    void settingsChanged();
-    
 protected:
     void changeEvent( QEvent* e );
     void closeEvent( QCloseEvent* e );
 
 public slots:
+    void createAutomaticPlaylist();
+    void createStation();
     void createPlaylist();
     void loadSpiff();
     void showSettingsDialog();
-
+    void updateCollectionManually();
+    
 private slots:
-    void scanFinished();
-    void rescanCollectionManually();
-
     void onSipConnected();
     void onSipDisconnected();
     void onSipError();
 
     void addPeerManually();
-    void addFriendManually();
 
     void onPlaybackLoading( const Tomahawk::result_ptr& result );
 
@@ -66,10 +63,10 @@ private:
     void setupSignals();
     
     Ui::TomahawkWindow* ui;
-    TopBar* m_topbar;
     AudioControls* m_audioControls;
     TomahawkTrayIcon* m_trayIcon;
     QNetworkAccessManager m_nam;
+    QPushButton* m_statusButton;
 
     Tomahawk::result_ptr m_currentTrack;
     QString m_windowTitle;

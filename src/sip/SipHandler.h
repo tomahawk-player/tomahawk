@@ -1,10 +1,10 @@
 #ifndef SIPHANDLER_H
 #define SIPHANDLER_H
 
+#include "sip/SipPlugin.h"
+
 #include <QDebug>
 #include <QObject>
-
-class SipPlugin;
 
 class SipHandler : public QObject
 {
@@ -16,11 +16,13 @@ public:
     SipHandler( QObject* parent );
     ~SipHandler();
 
+    QList< SipPlugin* > plugins() const;
+
 public slots:
     void addContact( const QString& id ) { qDebug() << Q_FUNC_INFO << id; }
 
-    void connect();
-    void disconnect();
+    void connectPlugins( bool startup = false, const QString &pluginName = QString() );
+    void disconnectPlugins( const QString &pluginName = QString() );
     void toggleConnect();
 
 signals:
@@ -34,8 +36,11 @@ private slots:
     void onPeerOnline( const QString& );
     void onError( int code, const QString& msg );
 
+    void onSettingsChanged();
+
 private:
-    void loadPlugins();
+    QStringList findPlugins();
+    void loadPlugins( const QStringList& paths );
     void loadPlugin( QObject* plugin );
 
     QList< SipPlugin* > m_plugins;

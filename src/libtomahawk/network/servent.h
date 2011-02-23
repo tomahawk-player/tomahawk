@@ -4,7 +4,7 @@
 // port for servent to listen on
 #define DEFAULT_LISTEN_PORT 50210
 // time before new connection terminates if no auth received
-#define AUTH_TIMEOUT 15000
+#define AUTH_TIMEOUT 180000
 
 #include <QObject>
 #include <QTcpServer>
@@ -78,7 +78,7 @@ public:
     int port() const { return m_port; }
 
     // creates new token that allows a controlconnection to be set up
-    QString createConnectionKey( const QString& name = "" );
+    QString createConnectionKey( const QString& name = "", const QString &nodeid = "", const QString &key = "", bool onceOnly = true );
 
     void registerOffer( const QString& key, Connection* conn );
 

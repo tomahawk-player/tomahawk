@@ -1,3 +1,4 @@
+
 #ifndef FILETRANSFERCONNECTION_H
 #define FILETRANSFERCONNECTION_H
 
@@ -8,10 +9,12 @@
 #include "network/connection.h"
 #include "result.h"
 
+#include "dllmacro.h"
+
 class ControlConnection;
 class BufferIODevice;
 
-class FileTransferConnection : public Connection
+class DLLEXPORT FileTransferConnection : public Connection
 {
 Q_OBJECT
 
@@ -36,7 +39,7 @@ public:
     const QSharedPointer<QIODevice>& iodevice() { return m_iodev; }
     ControlConnection* controlConnection() const { return m_cc; }
 
-    Tomahawk::source_ptr source() const { return m_source; }
+	Tomahawk::source_ptr source() const;
     Tomahawk::result_ptr track() const { return m_result; }
     qint64 transferRate() const { return m_transferRate; }
 

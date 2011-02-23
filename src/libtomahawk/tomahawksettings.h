@@ -12,13 +12,16 @@
  */
 class DLLEXPORT TomahawkSettings : public QSettings
 {
-    Q_OBJECT
+Q_OBJECT
+
 public:
     static TomahawkSettings* instance();
 
     explicit TomahawkSettings( QObject* parent = 0 );
     virtual ~TomahawkSettings();
-    
+
+    void applyChanges() { emit changed(); }
+
     /// General settings
     QString scannerPath() const; /// QDesktopServices::MusicLocation by default
     void setScannerPath( const QString& path );
@@ -31,9 +34,12 @@ public:
     QByteArray mainWindowState() const;
     void setMainWindowState( const QByteArray& state );
 
+    QByteArray mainWindowSplitterState() const;
+    void setMainWindowSplitterState( const QByteArray& state );
+
     /// Playlist stuff
-    QList<QVariant> playlistColumnSizes() const;
-    void setPlaylistColumnSizes( const QList<QVariant>& cols );
+    QByteArray playlistColumnSizes( const QString& playlistid ) const;
+    void setPlaylistColumnSizes( const QString& playlistid, const QByteArray& state );
 
     QList<Tomahawk::playlist_ptr> recentlyPlayedPlaylists() const;
     void appendRecentlyPlayedPlaylist( const Tomahawk::playlist_ptr& playlist );
@@ -51,13 +57,16 @@ public:
     QString jabberServer() const;
     void setJabberServer( const QString& server );
     
-    int jabberPort() const; // default is 5222
+    unsigned int jabberPort() const; // default is 5222
     void setJabberPort( int port );
     
     /// Network settings
-    enum ExternalAddressMode { Lan, DynDns, Upnp };
+    enum ExternalAddressMode { Lan, Upnp };
     ExternalAddressMode externalAddressMode() const;
-    void setExternalAddressMode(ExternalAddressMode externalAddressMode);
+    void setExternalAddressMode( ExternalAddressMode externalAddressMode );
+    
+    bool preferStaticHostPort() const;
+    void setPreferStaticHostPort( bool prefer );
 
     bool httpEnabled() const; /// true by default
     void setHttpEnabled( bool enable );
@@ -95,7 +104,29 @@ public:
     
     QByteArray lastFmSessionKey() const;
     void setLastFmSessionKey( const QByteArray& key );
+    
+    /// Twitter settings
+    QString twitterScreenName() const;
+    void setTwitterScreenName( const QString& screenName );
+    
+    QString twitterOAuthToken() const;
+    void setTwitterOAuthToken( const QString& oauthtoken );
+    
+    QString twitterOAuthTokenSecret() const;
+    void setTwitterOAuthTokenSecret( const QString& oauthtokensecret );
 
+    qint64 twitterCachedFriendsSinceId() const;
+    void setTwitterCachedFriendsSinceId( qint64 sinceid );
+    
+    qint64 twitterCachedMentionsSinceId() const;
+    void setTwitterCachedMentionsSinceId( qint64 sinceid );
+    
+    qint64 twitterCachedDirectMessagesSinceId() const;
+    void setTwitterCachedDirectMessagesSinceId( qint64 sinceid );
+    
+    QHash<QString, QVariant> twitterCachedPeers() const;
+    void setTwitterCachedPeers( const QHash<QString, QVariant> &cachedPeers );
+    
     /// XMPP Component Settings
     QString xmppBotServer() const;
     void setXmppBotServer( const QString &server );
@@ -109,6 +140,14 @@ public:
     int xmppBotPort() const;
     void setXmppBotPort( const int port );
     
+    /// Script resolver settings
+    QStringList scriptResolvers() const;
+    void setScriptResolvers( const QStringList& resolver );
+    void addScriptResolver( const QString& resolver );
+
+signals:
+    void changed();
+
 private:
     static TomahawkSettings* s_instance;
 };

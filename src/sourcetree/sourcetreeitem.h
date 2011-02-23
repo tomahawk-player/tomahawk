@@ -6,12 +6,21 @@
 
 #include "typedefs.h"
 #include "sourcetreeitemwidget.h"
+#include "playlist/dynamic/DynamicPlaylist.h"
 
 class SourceTreeItem : public QObject
 {
 Q_OBJECT
-
 public:
+    
+    enum PlaylistItemType {
+        Type = Qt::UserRole + 1, /// Value is SourcesModel::SourceType
+        SourceItemPointer = Qt::UserRole + 2, /// value is the sourcetreeritem of the collection itself.
+        PlaylistPointer = Qt::UserRole + 3,  /// Value is the playlist_ptr.data()
+        DynamicPlaylistPointer = Qt::UserRole + 4 /// Value is the dynplaylist_ptr.data()
+    };
+    
+    
     explicit SourceTreeItem( const Tomahawk::source_ptr& source, QObject* parent );
     virtual ~SourceTreeItem();
 
@@ -39,15 +48,22 @@ private slots:
     void onPlaylistsAdded( const QList<Tomahawk::playlist_ptr>& playlists );
     void onPlaylistsDeleted( const QList<Tomahawk::playlist_ptr>& playlists );
     void onPlaylistLoaded( Tomahawk::PlaylistRevision revision );
-
+    
+    void onDynamicPlaylistsAdded( const QList<Tomahawk::dynplaylist_ptr>& playlists );
+    void onDynamicPlaylistsDeleted( const QList<Tomahawk::dynplaylist_ptr>& playlists );
+    void onDynamicPlaylistLoaded( Tomahawk::DynamicPlaylistRevision revision );
 private:
+    void playlistAddedInternal( qlonglong ptr, const Tomahawk::playlist_ptr& pl, bool dynamic );
+    
     QList<QStandardItem*> m_columns;
     Tomahawk::source_ptr m_source;
     SourceTreeItemWidget* m_widget;
     QList<Tomahawk::playlist_ptr> m_playlists;
+    QList<Tomahawk::dynplaylist_ptr> m_dynplaylists;
 
     // playist->guid() -> currently loaded revision
     QMap<QString,QString> m_current_revisions;
+    QMap<QString,QString> m_current_dynamic_revisions;
 };
 
 #endif // SOURCETREEITEM_H

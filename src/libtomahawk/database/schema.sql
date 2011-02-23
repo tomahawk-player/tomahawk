@@ -14,6 +14,8 @@ CREATE TABLE IF NOT EXISTS oplog (
 CREATE UNIQUE INDEX oplog_guid ON oplog(guid);
 CREATE INDEX oplog_source ON oplog(source);
 
+
+
 -- the basic 3 catalogue tables:
 
 CREATE TABLE IF NOT EXISTS artist (
@@ -39,6 +41,8 @@ CREATE TABLE IF NOT EXISTS album (
 );
 CREATE UNIQUE INDEX album_artist_sortname ON album(artist,sortname);
 
+
+
 -- Source, typically a remote peer.
 
 CREATE TABLE IF NOT EXISTS source (
@@ -51,6 +55,7 @@ CREATE TABLE IF NOT EXISTS source (
 CREATE UNIQUE INDEX source_name ON source(name);
 
 
+
 -- playlists
 
 CREATE TABLE IF NOT EXISTS playlist (
@@ -61,11 +66,15 @@ CREATE TABLE IF NOT EXISTS playlist (
     info TEXT,
     creator TEXT,
     lastmodified INTEGER NOT NULL DEFAULT 0,
-    currentrevision TEXT REFERENCES playlist_revision(guid) DEFERRABLE INITIALLY DEFERRED
+    currentrevision TEXT REFERENCES playlist_revision(guid) DEFERRABLE INITIALLY DEFERRED,
+    dynplaylist BOOLEAN DEFAULT false
 );
 
---INSERT INTO playlist(guid, title, info, currentrevision) 
--- VALUES('playlistguid-1','Test Playlist','this playlist automatically created and used for testing','revisionguid-1');
+--INSERT INTO playlist(guid, title, info, currentrevision, dynplaylist) 
+--VALUES('dynamic_playlist-guid-1','Test Dynamic Playlist Dynamic','this playlist automatically created and used for testing','revisionguid-1', 1);
+
+--INSERT INTO playlist(guid, title, info, currentrevision, dynplaylist) 
+--VALUES('dynamic_playlist-guid-2','Test Dynamic Playlist Static','this playlist automatically created and used for testing','revisionguid-11', 1);
 
 CREATE TABLE IF NOT EXISTS playlist_item (
     guid TEXT PRIMARY KEY,
@@ -79,16 +88,8 @@ CREATE TABLE IF NOT EXISTS playlist_item (
     addedby INTEGER REFERENCES source(id) ON DELETE CASCADE ON UPDATE CASCADE DEFERRABLE INITIALLY DEFERRED, -- who added this to the playlist
     result_hint TEXT        -- hint as to a result, to avoid using the resolver
 );
-
 CREATE INDEX playlist_item_playlist ON playlist_item(playlist);
 
---INSERT INTO playlist_item(guid, playlist, trackname, artistname) 
---       VALUES('itemguid-1','playlistguid-1','track name 01','artist name 01');
---INSERT INTO playlist_item(guid, playlist, trackname, artistname) 
---       VALUES('itemguid-2','playlistguid-1','track name 02','artist name 02');
---INSERT INTO playlist_item(guid, playlist, trackname, artistname) 
---       VALUES('itemguid-3','playlistguid-1','track name 03','artist name 03');
---
 CREATE TABLE IF NOT EXISTS playlist_revision (
     guid TEXT PRIMARY KEY,
     playlist TEXT NOT NULL REFERENCES playlist(guid) ON DELETE CASCADE ON UPDATE CASCADE DEFERRABLE INITIALLY DEFERRED,
@@ -98,32 +99,50 @@ CREATE TABLE IF NOT EXISTS playlist_revision (
     previous_revision TEXT REFERENCES playlist_revision(guid) DEFERRABLE INITIALLY DEFERRED
 );
 
+--INSERT INTO playlist_revision(guid, playlist, entries)
+--      VALUES('revisionguid-1', 'dynamic_playlist-guid-1', '[]');
+--INSERT INTO playlist_revision(guid, playlist, entries)
+--      VALUES('revisionguid-11', 'dynamic_playlist-guid-2', '[]');
 
--- the trigram search indexes
-
-CREATE TABLE IF NOT EXISTS artist_search_index (
-    ngram TEXT NOT NULL,
-    id INTEGER NOT NULL REFERENCES artist(id) ON DELETE CASCADE ON UPDATE CASCADE DEFERRABLE INITIALLY DEFERRED,
-    num INTEGER NOT NULL DEFAULT 1,
-    PRIMARY KEY(ngram, id)
+CREATE TABLE IF NOT EXISTS dynamic_playlist (
+    guid TEXT PRIMARY KEY,
+    pltype TEXT, -- the generator type
+    plmode INTEGER -- the mode of this playlist
 );
--- CREATE INDEX artist_search_index_ngram ON artist_search_index(ngram);
 
-CREATE TABLE IF NOT EXISTS album_search_index (
-    ngram TEXT NOT NULL,
-    id INTEGER NOT NULL REFERENCES album(id) ON DELETE CASCADE ON UPDATE CASCADE DEFERRABLE INITIALLY DEFERRED,
-    num INTEGER NOT NULL DEFAULT 1,
-    PRIMARY KEY(ngram, id)
+--INSERT INTO dynamic_playlist(guid, pltype, plmode)
+--      VALUES('dynamic_playlist-guid-1', 'echonest', 0);
+--INSERT INTO dynamic_playlist(guid, pltype, plmode)
+--      VALUES('dynamic_playlist-guid-2', 'echonest', 1);
+
+-- list of controls in each playlist. each control saves a selectedType, a match, and an input
+CREATE TABLE IF NOT EXISTS dynamic_playlist_controls (
+    id TEXT PRIMARY KEY,
+    playlist TEXT NOT NULL REFERENCES playlist(guid) ON DELETE CASCADE ON UPDATE CASCADE DEFERRABLE INITIALLY DEFERRED,
+    selectedType TEXT,
+    match TEXT,
+    input TEXT
 );
--- CREATE INDEX album_search_index_ngram ON album_search_index(ngram);
 
-CREATE TABLE IF NOT EXISTS track_search_index (
-    ngram TEXT NOT NULL,
-    id INTEGER NOT NULL REFERENCES track(id) ON DELETE CASCADE ON UPDATE CASCADE DEFERRABLE INITIALLY DEFERRED,
-    num INTEGER NOT NULL DEFAULT 1,
-    PRIMARY KEY(ngram, id)
-); 
--- CREATE INDEX track_search_index_ngram ON track_search_index(ngram);
+--INSERT INTO dynamic_playlist_controls(id, playlist, selectedType, match, input)
+--      VALUES('controlid-1', 'dynamic_playlist-guid-1', "artist", 0, "FooArtist" );
+--INSERT INTO dynamic_playlist_controls(id, playlist, selectedType, match, input)
+--      VALUES('controlid-2', 'dynamic_playlist-guid-11', "artist", 0, "FooArtist" );
+
+    
+    
+CREATE TABLE IF NOT EXISTS dynamic_playlist_revision (
+    guid TEXT PRIMARY KEY NOT NULL REFERENCES playlist_revision(guid) ON DELETE CASCADE ON UPDATE CASCADE DEFERRABLE INITIALLY DEFERRED,
+    controls TEXT, -- qlist( id, id, id )
+    plmode INTEGER,
+    pltype TEXT
+);
+
+--INSERT INTO dynamic_playlist_revision(guid, controls, plmode, pltype)
+--      VALUES('revisionguid-1', '["controlid-1"]', 0, "echonest");
+--INSERT INTO dynamic_playlist_revision(guid, controls, plmode, pltype)
+--      VALUES('revisionguid-11', '["controlid-2"]', 1, "echonest");
+
 
 -- files on disk and joinage with catalogue. physical properties of files only:
 
@@ -149,7 +168,6 @@ CREATE TABLE IF NOT EXISTS dirs_scanned (
     mtime INTEGER NOT NULL
 );
 
-
 CREATE TABLE IF NOT EXISTS file_join (
     file INTEGER PRIMARY KEY REFERENCES file(id) ON DELETE CASCADE ON UPDATE CASCADE DEFERRABLE INITIALLY DEFERRED,
     artist INTEGER NOT NULL REFERENCES artist(id) ON DELETE CASCADE ON UPDATE CASCADE DEFERRABLE INITIALLY DEFERRED,
@@ -164,9 +182,9 @@ CREATE INDEX file_join_album  ON file_join(album);
 
 
 -- tags, weighted and by source (rock, jazz etc)
+
 -- weight is always 1.0 if tag provided by our user.
 -- may be less from aggregate sources like lastfm global tags
-
 CREATE TABLE IF NOT EXISTS track_tags (
     id INTEGER PRIMARY KEY,   -- track id
     source INTEGER REFERENCES source(id) ON DELETE CASCADE ON UPDATE CASCADE DEFERRABLE INITIALLY DEFERRED,
@@ -209,6 +227,7 @@ CREATE INDEX track_attrib_id ON track_attributes(id);
 CREATE INDEX track_attrib_k  ON track_attributes(k);
 
 
+
 -- playback history
 
 -- if source=null, file is local to this machine
@@ -223,10 +242,12 @@ CREATE INDEX playback_log_source ON playback_log(source);
 CREATE INDEX playback_log_track ON playback_log(track);
 
 
+
 -- Schema version, and misc tomahawk settings relating to the collection db
 
 CREATE TABLE IF NOT EXISTS settings (
     k TEXT NOT NULL PRIMARY KEY,
     v TEXT NOT NULL DEFAULT ''
 );
-INSERT INTO settings(k,v) VALUES('schema_version', '16');
+
+INSERT INTO settings(k,v) VALUES('schema_version', '19');

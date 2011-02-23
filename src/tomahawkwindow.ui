@@ -6,51 +6,24 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>800</width>
-    <height>480</height>
+    <width>1000</width>
+    <height>660</height>
    </rect>
   </property>
   <property name="windowTitle">
    <string>Tomahawk</string>
   </property>
   <widget class="QWidget" name="centralWidget">
-   <layout class="QHBoxLayout" name="horizontalLayout">
-    <property name="margin">
-     <number>0</number>
-    </property>
+   <layout class="QVBoxLayout" name="verticalLayout">
     <item>
      <widget class="QSplitter" name="splitter">
       <property name="orientation">
        <enum>Qt::Horizontal</enum>
       </property>
-      <widget class="QWidget" name="layoutWidget">
-       <layout class="QVBoxLayout" name="verticalLayout">
-        <item>
-         <widget class="QPushButton" name="statusButton">
-          <property name="text">
-           <string/>
-          </property>
-         </widget>
-        </item>
-        <item>
-         <widget class="AnimatedSplitter" name="sidebarSplitter">
-          <property name="orientation">
-           <enum>Qt::Vertical</enum>
-          </property>
-          <widget class="SourceTreeView" name="sourceTreeView">
-           <property name="minimumSize">
-            <size>
-             <width>250</width>
-             <height>0</height>
-            </size>
-           </property>
-          </widget>
-          <widget class="TransferView" name="treeWidget">
-          </widget>
-         </widget>
-        </item>
-       </layout>
-      </widget>
+      <property name="handleWidth">
+       <number>1</number>
+      </property>
+      <widget class="QWidget" name="sidebarWidget" native="true"/>
       <widget class="QWidget" name="playlistWidget" native="true"/>
      </widget>
     </item>
@@ -61,7 +34,7 @@
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>800</width>
+     <width>1000</width>
      <height>20</height>
     </rect>
    </property>
@@ -84,6 +57,8 @@
      <string>&amp;Playlist</string>
     </property>
     <addaction name="actionCreatePlaylist"/>
+    <addaction name="actionCreateAutomaticPlaylist"/>
+    <addaction name="actionCreate_New_Station"/>
     <addaction name="separator"/>
     <addaction name="actionLoadXSPF"/>
    </widget>
@@ -91,8 +66,9 @@
     <property name="title">
      <string>&amp;Network</string>
     </property>
+    <addaction name="actionToggleConnect"/>
+    <addaction name="separator"/>
     <addaction name="actionAddPeerManually"/>
-    <addaction name="actionAddFriendManually"/>
    </widget>
    <widget class="QMenu" name="menu_Help">
     <property name="title">
@@ -116,6 +92,11 @@
    </property>
    <property name="menuRole">
     <enum>QAction::QuitRole</enum>
+   </property>
+  </action>
+  <action name="actionToggleConnect">
+   <property name="text">
+    <string>Go &amp;online</string>
    </property>
   </action>
   <action name="actionAddPeerManually">
@@ -159,26 +140,18 @@
     <enum>QAction::AboutRole</enum>
    </property>
   </action>
+  <action name="actionCreateAutomaticPlaylist">
+   <property name="text">
+    <string>Create New &amp;Automatic Playlist</string>
+   </property>
+  </action>
+  <action name="actionCreate_New_Station">
+   <property name="text">
+    <string>Create New &amp;Station</string>
+   </property>
+  </action>
  </widget>
  <layoutdefault spacing="6" margin="11"/>
- <customwidgets>
-  <customwidget>
-   <class>SourceTreeView</class>
-   <extends>QTreeView</extends>
-   <header>sourcetreeview.h</header>
-  </customwidget>
-  <customwidget>
-   <class>AnimatedSplitter</class>
-   <extends>QSplitter</extends>
-   <header>utils/animatedsplitter.h</header>
-   <container>1</container>
-  </customwidget>
-  <customwidget>
-   <class>TransferView</class>
-   <extends>QTreeWidget</extends>
-   <header>transferview.h</header>
-  </customwidget>
- </customwidgets>
  <resources/>
  <connections/>
  <slots>

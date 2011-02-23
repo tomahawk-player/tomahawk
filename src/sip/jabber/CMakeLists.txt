@@ -24,27 +24,22 @@ qt4_wrap_cpp( jabberMoc ${jabberHeaders} )
 add_library( sip_jabber SHARED ${jabberSources} ${jabberMoc} )
 
 IF( WIN32 )
-SET( GLOOX_LIBS
-	${GLOOX_LIBS}
-	gloox
-)
-
 SET( OS_SPECIFIC_LINK_LIBRARIES
 	${OS_SPECIFIC_LINK_LIBRARIES}
 	"secur32.dll"
 	"crypt32.dll"
-        "${CMAKE_CURRENT_SOURCE_DIR}/../../../build/src/libtomahawk/libtomahawklib.dll"
+        ${CMAKE_BINARY_DIR}/src/libtomahawk/libtomahawklib.dll
 )
 ENDIF( WIN32 )
 
 target_link_libraries( sip_jabber
 	${QT_LIBRARIES}
-        ${GLOOX_LIBS}
+        ${GLOOX_LIBRARIES}
 	${OS_SPECIFIC_LINK_LIBRARIES}
 )
 
 IF( APPLE )
-  SET( CMAKE_SHARED_LINKER_FLAGS ${CMAKE_SHARED_LINKER_FLAGS} "-undefined dynamic_lookup" )
+#  SET( CMAKE_SHARED_LINKER_FLAGS ${CMAKE_SHARED_LINKER_FLAGS} "-undefined dynamic_lookup" )
 ENDIF( APPLE )
 
 install( TARGETS sip_jabber DESTINATION lib )

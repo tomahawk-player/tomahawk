@@ -2,6 +2,7 @@
 #define PLITEM_H
 
 #include <QHash>
+#include <QVector>
 #include <QPersistentModelIndex>
 #include <QAbstractItemModel>
 
@@ -15,15 +16,15 @@ class DLLEXPORT PlItem : public QObject
 Q_OBJECT
 
 public:
-    ~PlItem();
+    virtual ~PlItem();
 
     explicit PlItem( PlItem* parent = 0, QAbstractItemModel* model = 0 );
     explicit PlItem( const QString& caption, PlItem* parent = 0 );
     explicit PlItem( const Tomahawk::query_ptr& query, PlItem* parent = 0, int row = -1 );
     explicit PlItem( const Tomahawk::plentry_ptr& entry, PlItem* parent = 0, int row = -1 );
 
-    const Tomahawk::plentry_ptr& entry() const { return m_entry; };
-    const Tomahawk::query_ptr& query() const { if ( !m_entry.isNull() ) return m_entry->query(); else return m_query; };
+    const Tomahawk::plentry_ptr& entry() const;
+    const Tomahawk::query_ptr& query() const;
 
     bool isPlaying() { return m_isPlaying; }
     void setIsPlaying( bool b ) { m_isPlaying = b; emit dataChanged(); }

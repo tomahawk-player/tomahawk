@@ -42,10 +42,27 @@ void
 TrackProxyModel::setFilter( const QString& pattern )
 {
     qDebug() << Q_FUNC_INFO;
+    PlaylistInterface::setFilter( pattern );
     setFilterRegExp( pattern );
 
     emit filterChanged( pattern );
     emit trackCountChanged( trackCount() );
+}
+
+
+QList< Tomahawk::query_ptr >
+TrackProxyModel::tracks()
+{
+    QList<Tomahawk::query_ptr> queries;
+
+    for ( int i = 0; i < rowCount( QModelIndex() ); i++ )
+    {
+        PlItem* item = itemFromIndex( mapToSource( index( i, 0 ) ) );
+        if ( item )
+            queries << item->query();
+    }
+
+    return queries;
 }
 
 

@@ -1,12 +1,12 @@
 #ifndef RESULT_H
 #define RESULT_H
 
+#include <qvariant.h>
+
 #include <QObject>
+#include <QVariant>
 
 #include "typedefs.h"
-#include "collection.h"
-#include "artist.h"
-#include "album.h"
 
 #include "dllmacro.h"
 
@@ -18,7 +18,9 @@ class DLLEXPORT Result : public QObject
 Q_OBJECT
 
 public:
+    Result();
     explicit Result( const QVariant& v, const collection_ptr& collection );
+    virtual ~Result();
 
     QVariant toVariant() const { return m_v; }
     QString toString() const;
@@ -26,11 +28,9 @@ public:
 
     float score() const;
     RID id() const;
-
-    collection_ptr collection() const { return m_collection; }
-
-    Tomahawk::artist_ptr artist() const { return m_artist; }
-    Tomahawk::album_ptr album()   const { return m_album; }
+    collection_ptr collection() const;
+    Tomahawk::artist_ptr artist() const;
+    Tomahawk::album_ptr album()   const;
     QString track()     const { return m_track; }
     QString url()       const { return m_url; }
     QString mimetype()  const { return m_mimetype; }

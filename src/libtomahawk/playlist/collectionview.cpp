@@ -2,8 +2,10 @@
 
 #include <QDebug>
 #include <QDragEnterEvent>
+#include <QPainter>
 
 #include "playlist/collectionproxymodel.h"
+#include "widgets/overlaywidget.h"
 
 using namespace Tomahawk;
 
@@ -31,6 +33,16 @@ CollectionView::~CollectionView()
 
 
 void
+CollectionView::setModel( TrackModel* model )
+{
+    TrackView::setModel( model );
+    setGuid( "collectionview" );
+
+    connect( model, SIGNAL( trackCountChanged( unsigned int ) ), SLOT( onTrackCountChanged( unsigned int ) ) );
+}
+
+
+void
 CollectionView::dragEnterEvent( QDragEnterEvent* event )
 {
     qDebug() << Q_FUNC_INFO;
@@ -45,12 +57,12 @@ CollectionView::setupMenus()
 
     m_playItemAction = m_itemMenu.addAction( tr( "&Play" ) );
     m_addItemsToQueueAction = m_itemMenu.addAction( tr( "Add to &Queue" ) );
-    m_itemMenu.addSeparator();
-    m_addItemsToPlaylistAction = m_itemMenu.addAction( tr( "&Add to Playlist" ) );
+//    m_itemMenu.addSeparator();
+//    m_addItemsToPlaylistAction = m_itemMenu.addAction( tr( "&Add to Playlist" ) );
 
     connect( m_playItemAction,           SIGNAL( triggered() ), SLOT( playItem() ) );
     connect( m_addItemsToQueueAction,    SIGNAL( triggered() ), SLOT( addItemsToQueue() ) );
-    connect( m_addItemsToPlaylistAction, SIGNAL( triggered() ), SLOT( addItemsToPlaylist() ) );
+//    connect( m_addItemsToPlaylistAction, SIGNAL( triggered() ), SLOT( addItemsToPlaylist() ) );
 }
 
 
@@ -68,4 +80,17 @@ CollectionView::onCustomContextMenu( const QPoint& pos )
         return;
 
     m_itemMenu.exec( mapToGlobal( pos ) );
+}
+
+
+void
+CollectionView::onTrackCountChanged( unsigned int tracks )
+{
+    if ( tracks == 0 )
+    {
+        overlay()->setText( tr( "This collection is empty." ) );
+        overlay()->show();
+    }
+    else
+        overlay()->hide();
 }

@@ -8,6 +8,8 @@
 #include <QDir>
 #include <QDebug>
 
+#define VERSION 1
+
 TomahawkSettings* TomahawkSettings::s_instance = 0;
 
 
@@ -23,21 +25,19 @@ TomahawkSettings::TomahawkSettings( QObject* parent )
 {
     s_instance = this;
 
-    #ifndef TOMAHAWK_HEADLESS
     if( !contains( "configversion") )
     {
-        setValue( "configversion", SettingsDialog::VERSION );
+        setValue( "configversion", VERSION );
     }
-    else if( value( "configversion" ).toUInt() != SettingsDialog::VERSION )
+    else if( value( "configversion" ).toUInt() != VERSION )
     {
         qDebug() << "Config version outdated, old:" << value( "configversion" ).toUInt()
-                 << "new:" << SettingsDialog::VERSION
+                 << "new:" << VERSION
                  << "Doing upgrade, if any...";
         
         // insert upgrade code here as required
-        setValue( "configversion", SettingsDialog::VERSION );
+        setValue( "configversion", VERSION );
     }
-    #endif
 }
 
 
@@ -184,17 +184,31 @@ TomahawkSettings::setMainWindowState( const QByteArray& state )
 }
 
 
-QList<QVariant>
-TomahawkSettings::playlistColumnSizes() const
+QByteArray
+TomahawkSettings::mainWindowSplitterState() const
 {
-    return value( "ui/playlist/columnSize" ).toList();
+    return value( "ui/mainwindow/splitterState" ).toByteArray();
 }
 
 
 void
-TomahawkSettings::setPlaylistColumnSizes( const QList<QVariant>& cols )
+TomahawkSettings::setMainWindowSplitterState( const QByteArray& state )
 {
-    setValue( "ui/playlist/columnSize", cols );
+    setValue( "ui/mainwindow/splitterState", state );
+}
+
+
+QByteArray
+TomahawkSettings::playlistColumnSizes( const QString& playlistid ) const
+{
+    return value( QString( "ui/playlist/%1/columnSizes" ).arg( playlistid ) ).toByteArray();
+}
+
+
+void
+TomahawkSettings::setPlaylistColumnSizes( const QString& playlistid, const QByteArray& state )
+{
+    setValue( QString( "ui/playlist/%1/columnSizes" ).arg( playlistid ), state );
 }
 
 
@@ -241,16 +255,18 @@ TomahawkSettings::setJabberAutoConnect( bool autoconnect )
 }
 
 
-int
+unsigned int
 TomahawkSettings::jabberPort() const
 {
-    return value( "jabber/port", 5222 ).toInt();
+    return value( "jabber/port", 5222 ).toUInt();
 }
 
 
 void
 TomahawkSettings::setJabberPort( int port )
 {
+    if ( port < 0 )
+      return;
     setValue( "jabber/port", port );
 }
 
@@ -310,6 +326,16 @@ TomahawkSettings::setExternalAddressMode( ExternalAddressMode externalAddressMod
     setValue( "network/external-address-mode", externalAddressMode );
 }
 
+bool TomahawkSettings::preferStaticHostPort() const
+{
+    return value( "network/prefer-static-host-and-port" ).toBool();
+}
+
+void TomahawkSettings::setPreferStaticHostPort( bool prefer )
+{
+    setValue( "network/prefer-static-host-and-port", prefer );
+}
+
 QString
 TomahawkSettings::externalHostname() const
 {
@@ -325,13 +351,16 @@ TomahawkSettings::setExternalHostname(const QString& externalHostname)
 int
 TomahawkSettings::externalPort() const
 {
-    return value( "network/external-port" ).toInt();
+    return value( "network/external-port", 50210 ).toInt();
 }
 
 void
 TomahawkSettings::setExternalPort(int externalPort)
 {
-    setValue( "network/external-port", externalPort);
+    if ( externalPort == 0 )
+        setValue( "network/external-port", 50210);
+    else
+        setValue( "network/external-port", externalPort);
 }
 
 
@@ -376,6 +405,89 @@ TomahawkSettings::setLastFmUsername( const QString& username )
     setValue( "lastfm/username", username );
 }
 
+QString
+TomahawkSettings::twitterScreenName() const
+{
+    return value( "twitter/ScreenName" ).toString();
+}
+
+void
+TomahawkSettings::setTwitterScreenName( const QString& screenName )
+{
+    setValue( "twitter/ScreenName", screenName );
+}
+    
+QString
+TomahawkSettings::twitterOAuthToken() const
+{
+    return value( "twitter/OAuthToken" ).toString();
+}
+
+void
+TomahawkSettings::setTwitterOAuthToken( const QString& oauthtoken )
+{
+    setValue( "twitter/OAuthToken", oauthtoken );
+}
+
+QString
+TomahawkSettings::twitterOAuthTokenSecret() const
+{
+    return value( "twitter/OAuthTokenSecret" ).toString();
+}
+
+void
+TomahawkSettings::setTwitterOAuthTokenSecret( const QString& oauthtokensecret )
+{
+    setValue( "twitter/OAuthTokenSecret", oauthtokensecret );
+}
+
+qint64
+TomahawkSettings::twitterCachedFriendsSinceId() const
+{
+    return value( "twitter/CachedFriendsSinceID", 0 ).toLongLong();
+}
+
+void
+TomahawkSettings::setTwitterCachedFriendsSinceId( qint64 cachedId )
+{
+    setValue( "twitter/CachedFriendsSinceID", cachedId );
+}
+
+qint64
+TomahawkSettings::twitterCachedMentionsSinceId() const
+{
+    return value( "twitter/CachedMentionsSinceID", 0 ).toLongLong();
+}
+
+void
+TomahawkSettings::setTwitterCachedMentionsSinceId( qint64 cachedId )
+{
+    setValue( "twitter/CachedMentionsSinceID", cachedId );
+}
+
+qint64
+TomahawkSettings::twitterCachedDirectMessagesSinceId() const
+{
+    return value( "twitter/CachedDirectMessagesSinceID", 0 ).toLongLong();
+}
+
+void
+TomahawkSettings::setTwitterCachedDirectMessagesSinceId( qint64 cachedId )
+{
+    setValue( "twitter/CachedDirectMessagesSinceID", cachedId );
+}
+
+QHash<QString, QVariant>
+TomahawkSettings::twitterCachedPeers() const
+{
+    return value( "twitter/CachedPeers", QHash<QString, QVariant>() ).toHash();
+}
+
+void
+TomahawkSettings::setTwitterCachedPeers( const QHash<QString, QVariant> &cachedPeers )
+{
+    setValue( "twitter/CachedPeers", cachedPeers );
+}
 
 bool
 TomahawkSettings::scrobblingEnabled() const
@@ -444,4 +556,22 @@ void
 TomahawkSettings::setXmppBotPort( const int port )
 {
     setValue( "xmppBot/port", -1 );
+}
+
+void 
+TomahawkSettings::addScriptResolver(const QString& resolver)
+{
+    setValue( "script/resolvers", scriptResolvers() << resolver );
+}
+
+QStringList 
+TomahawkSettings::scriptResolvers() const
+{
+    return value( "script/resolvers" ).toStringList();
+}
+
+void 
+TomahawkSettings::setScriptResolvers( const QStringList& resolver )
+{
+    setValue( "script/resolvers", resolver );
 }

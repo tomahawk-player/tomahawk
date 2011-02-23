@@ -121,6 +121,10 @@ AudioControls::AudioControls( QWidget* parent )
     connect( ui->volumeLowButton,  SIGNAL( clicked() ), AudioEngine::instance(), SLOT( lowerVolume() ) );
     connect( ui->volumeHighButton, SIGNAL( clicked() ), AudioEngine::instance(), SLOT( raiseVolume() ) );
 
+    
+    connect( ui->playPauseButton,  SIGNAL( clicked() ), this, SIGNAL( playPressed() ) );
+    connect( ui->pauseButton,  SIGNAL( clicked() ), this,     SIGNAL( pausePressed() ) );
+    
     connect( ui->repeatButton,     SIGNAL( clicked() ), SLOT( onRepeatClicked() ) );
     connect( ui->shuffleButton,    SIGNAL( clicked() ), SLOT( onShuffleClicked() ) );
 

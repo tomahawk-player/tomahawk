@@ -2,8 +2,11 @@
 
 #include <QDebug>
 #include <QKeyEvent>
+#include <QPainter>
 
+#include "playlist/playlistmodel.h"
 #include "playlist/playlistproxymodel.h"
+#include "widgets/overlaywidget.h"
 
 using namespace Tomahawk;
 
@@ -25,11 +28,19 @@ PlaylistView::~PlaylistView()
 
 
 void
-PlaylistView::setModel( TrackModel* model )
+PlaylistView::setModel( PlaylistModel* model )
 {
-    TrackView::setModel( model );
+    m_model = model;
 
+    TrackView::setModel( model );
     setColumnHidden( 5, true ); // Hide age column per default
+
+    if ( !model->playlist().isNull() )
+        setGuid( QString( "playlistview/%1" ).arg( model->playlist()->guid() ) );
+    else
+        setGuid( "playlistview" );
+
+    connect( model, SIGNAL( trackCountChanged( unsigned int ) ), SLOT( onTrackCountChanged( unsigned int ) ) );
 }
 
 
@@ -46,8 +57,8 @@ PlaylistView::setupMenus()
     m_playItemAction = m_itemMenu.addAction( tr( "&Play" ) );
     m_addItemsToQueueAction = m_itemMenu.addAction( tr( "Add to &Queue" ) );
     m_itemMenu.addSeparator();
-    m_addItemsToPlaylistAction = m_itemMenu.addAction( tr( "&Add to Playlist" ) );
-    m_itemMenu.addSeparator();
+//    m_addItemsToPlaylistAction = m_itemMenu.addAction( tr( "&Add to Playlist" ) );
+//    m_itemMenu.addSeparator();
     m_deleteItemsAction = m_itemMenu.addAction( i > 1 ? tr( "&Delete Items" ) : tr( "&Delete Item" ) );
 
     if ( model() )
@@ -55,7 +66,7 @@ PlaylistView::setupMenus()
 
     connect( m_playItemAction,           SIGNAL( triggered() ), SLOT( playItem() ) );
     connect( m_addItemsToQueueAction,    SIGNAL( triggered() ), SLOT( addItemsToQueue() ) );
-    connect( m_addItemsToPlaylistAction, SIGNAL( triggered() ), SLOT( addItemsToPlaylist() ) );
+//    connect( m_addItemsToPlaylistAction, SIGNAL( triggered() ), SLOT( addItemsToPlaylist() ) );
     connect( m_deleteItemsAction,        SIGNAL( triggered() ), SLOT( deleteItems() ) );
 }
 
@@ -104,4 +115,17 @@ void
 PlaylistView::deleteItems()
 {
     proxyModel()->removeIndexes( selectedIndexes() );
+}
+
+
+void
+PlaylistView::onTrackCountChanged( unsigned int tracks )
+{
+    if ( tracks == 0 )
+    {
+        overlay()->setText( tr( "This playlist is currently empty. Add some tracks to it and enjoy the music!" ) );
+        overlay()->show();
+    }
+    else
+        overlay()->hide();
 }

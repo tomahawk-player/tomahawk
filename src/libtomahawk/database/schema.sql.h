@@ -1,5 +1,5 @@
 /*
-    This file was automatically generated from schema.sql on Thu Jan  6 09:52:57 CET 2011.
+    This file was automatically generated from schema.sql on Thu Feb  3 08:21:21 EST 2011.
 */
 
 static const char * tomahawk_schema_sql = 
@@ -50,7 +50,8 @@ static const char * tomahawk_schema_sql =
 "    info TEXT,"
 "    creator TEXT,"
 "    lastmodified INTEGER NOT NULL DEFAULT 0,"
-"    currentrevision TEXT REFERENCES playlist_revision(guid) DEFERRABLE INITIALLY DEFERRED"
+"    currentrevision TEXT REFERENCES playlist_revision(guid) DEFERRABLE INITIALLY DEFERRED,"
+"    dynplaylist BOOLEAN DEFAULT false"
 ");"
 "CREATE TABLE IF NOT EXISTS playlist_item ("
 "    guid TEXT PRIMARY KEY,"
@@ -73,23 +74,25 @@ static const char * tomahawk_schema_sql =
 "    timestamp INTEGER NOT NULL DEFAULT 0,"
 "    previous_revision TEXT REFERENCES playlist_revision(guid) DEFERRABLE INITIALLY DEFERRED"
 ");"
-"CREATE TABLE IF NOT EXISTS artist_search_index ("
-"    ngram TEXT NOT NULL,"
-"    id INTEGER NOT NULL REFERENCES artist(id) ON DELETE CASCADE ON UPDATE CASCADE DEFERRABLE INITIALLY DEFERRED,"
-"    num INTEGER NOT NULL DEFAULT 1,"
-"    PRIMARY KEY(ngram, id)"
+"CREATE TABLE IF NOT EXISTS dynamic_playlist ("
+"    guid TEXT PRIMARY KEY,"
+"    pltype TEXT, "
+"    plmode INTEGER "
 ");"
-"CREATE TABLE IF NOT EXISTS album_search_index ("
-"    ngram TEXT NOT NULL,"
-"    id INTEGER NOT NULL REFERENCES album(id) ON DELETE CASCADE ON UPDATE CASCADE DEFERRABLE INITIALLY DEFERRED,"
-"    num INTEGER NOT NULL DEFAULT 1,"
-"    PRIMARY KEY(ngram, id)"
+"CREATE TABLE IF NOT EXISTS dynamic_playlist_controls ("
+"    id TEXT PRIMARY KEY,"
+"    playlist TEXT NOT NULL REFERENCES playlist(guid) ON DELETE CASCADE ON UPDATE CASCADE DEFERRABLE INITIALLY DEFERRED,"
+"    selectedType TEXT,"
+"    match TEXT,"
+"    input TEXT"
 ");"
-"CREATE TABLE IF NOT EXISTS track_search_index ("
-"    ngram TEXT NOT NULL,"
-"    id INTEGER NOT NULL REFERENCES track(id) ON DELETE CASCADE ON UPDATE CASCADE DEFERRABLE INITIALLY DEFERRED,"
-"    num INTEGER NOT NULL DEFAULT 1,"
-"    PRIMARY KEY(ngram, id)"
+""
+""
+"CREATE TABLE IF NOT EXISTS dynamic_playlist_revision ("
+"    guid TEXT PRIMARY KEY NOT NULL REFERENCES playlist_revision(guid) ON DELETE CASCADE ON UPDATE CASCADE DEFERRABLE INITIALLY DEFERRED,"
+"    controls TEXT, "
+"    plmode INTEGER,"
+"    pltype TEXT"
 ");"
 "CREATE TABLE IF NOT EXISTS file ("
 "    id INTEGER PRIMARY KEY AUTOINCREMENT,"
@@ -162,7 +165,7 @@ static const char * tomahawk_schema_sql =
 "    k TEXT NOT NULL PRIMARY KEY,"
 "    v TEXT NOT NULL DEFAULT ''"
 ");"
-"INSERT INTO settings(k,v) VALUES('schema_version', '16');"
+"INSERT INTO settings(k,v) VALUES('schema_version', '19');"
     ;
 
 const char * get_tomahawk_sql()

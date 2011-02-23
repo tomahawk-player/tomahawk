@@ -21,7 +21,7 @@ public:
 
     const Tomahawk::source_ptr& getLocal();
     void add( const Tomahawk::source_ptr& s );
-    void remove( const Tomahawk::source_ptr& s );
+    void remove( Tomahawk::source_ptr& s );
     void remove( Tomahawk::Source* s );
     void removeAllRemote();
 
