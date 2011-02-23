@@ -36,6 +36,7 @@ target_link_libraries( sip_jabber
 	${QT_LIBRARIES}
         ${GLOOX_LIBRARIES}
 	${OS_SPECIFIC_LINK_LIBRARIES}
+	tomahawklib
 )
 
 IF( APPLE )

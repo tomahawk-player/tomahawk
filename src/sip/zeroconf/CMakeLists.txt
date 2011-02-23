@@ -34,6 +34,7 @@ ENDIF( WIN32 )
 target_link_libraries( sip_zeroconf
 	${QT_LIBRARIES}
 	${OS_SPECIFIC_LINK_LIBRARIES}
+	tomahawklib
 )
 
 IF( APPLE )
