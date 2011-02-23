@@ -1,3 +1,5 @@
+#include "config.h"
+
 #include <QCryptographicHash>
 #include <QDebug>
 #include <QDesktopServices>

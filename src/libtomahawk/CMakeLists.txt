@@ -297,7 +297,7 @@ set( libUI ${libUI}
     playlist/infobar/infobar.ui
 )
 
-include_directories( . ${CMAKE_CURRENT_BINARY_DIR} ..
+include_directories( . ${CMAKE_CURRENT_BINARY_DIR} ${CMAKE_CURRENT_BINARY_DIR}/.. ..
     ${QT_INCLUDE_DIR}
     ${LIBECHONEST_INCLUDE_DIR}
     ${LIBECHONEST_INCLUDE_DIR}/..

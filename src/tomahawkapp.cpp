@@ -1,5 +1,7 @@
 #include "tomahawk/tomahawkapp.h"
 
+#include "config.h"
+
 #include <QPluginLoader>
 #include <QDir>
 #include <QMetaType>
