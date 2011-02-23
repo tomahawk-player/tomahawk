@@ -47,7 +47,8 @@ public:
     void setControlConnection( ControlConnection* cc );
 
     void scanningProgress( unsigned int files );
-
+    void scanningFinished( unsigned int files );
+    
     void setOffline();
     void setOnline();
 

@@ -157,6 +157,14 @@ Source::scanningProgress( unsigned int files )
 
 
 void
+Source::scanningFinished( unsigned int files )
+{
+    m_textStatus = tr( "Online" );
+    emit stateChanged();
+}
+
+
+void
 Source::onStateChanged( DBSyncConnection::State newstate, DBSyncConnection::State oldstate, const QString& info )
 {
     QString msg;

@@ -483,16 +483,17 @@ TomahawkApp::setupSIP()
 {
     qDebug() << Q_FUNC_INFO;
 
-#ifdef GLOOX_FOUND
     //FIXME: jabber autoconnect is really more, now that there is sip -- should be renamed and/or split out of jabber-specific settings
     if( !arguments().contains( "--nosip" ) && TomahawkSettings::instance()->jabberAutoConnect() )
     {
+        #ifdef GLOOX_FOUND
         m_xmppBot = new XMPPBot( this );
+        #endif
+
         qDebug() << "Connecting SIP classes";
         m_sipHandler->connectPlugins( true );
 //        m_sipHandler->setProxy( *TomahawkUtils::proxy() );
     }
-#endif
 }
 
 
