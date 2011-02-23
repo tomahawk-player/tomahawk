@@ -16,8 +16,7 @@
 */
 #include "schema.sql.h"
 
-#define CURRENT_SCHEMA_VERSION 20
-
+#define CURRENT_SCHEMA_VERSION 21
 
 DatabaseImpl::DatabaseImpl( const QString& dbname, Database* parent )
     : QObject( (QObject*) parent )
