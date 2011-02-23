@@ -7,6 +7,7 @@
 #include "typedefs.h"
 
 class SourceTreeItem;
+class SourceTreeView;
 
 class SourcesModel : public QStandardItemModel
 {
@@ -21,7 +22,7 @@ public:
         DynamicPlaylistSource = 2
     };
     
-    explicit SourcesModel( QObject* parent = 0 );
+    explicit SourcesModel( SourceTreeView* parent = 0 );
 
     virtual QStringList mimeTypes() const;
     virtual Qt::DropActions supportedDropActions() const;
@@ -43,14 +44,20 @@ protected:
     bool setData( const QModelIndex& index, const QVariant& value, int role = Qt::EditRole );
 
 private slots:
+    void onSourceAdded( const QList<Tomahawk::source_ptr>& sources );
     void onSourceAdded( const Tomahawk::source_ptr& source );
     void onSourceRemoved( const Tomahawk::source_ptr& source );
+
+    void onSourceChanged();
 
     void onItemOnline( const QModelIndex& idx );
     void onItemOffline( const QModelIndex& idx );
 
 public slots:
     void loadSources();
+
+private:
+    SourceTreeView* m_parent;
 };
 
 #endif // SOURCESMODEL_H

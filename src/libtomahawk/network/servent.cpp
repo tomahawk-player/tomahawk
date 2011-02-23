@@ -711,7 +711,8 @@ Servent::triggerDBSync()
         if( src.isNull() || src->isLocal() )
             continue;
 
-        src->controlConnection()->dbSyncConnection()->trigger();
+        if ( src->controlConnection() ) // source online?
+            src->controlConnection()->dbSyncConnection()->trigger();
     }
 }
 

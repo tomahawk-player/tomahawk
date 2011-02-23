@@ -1,5 +1,5 @@
 /*
-    This file was automatically generated from schema.sql on Thu Feb  3 08:21:21 EST 2011.
+    This file was automatically generated from ./schema.sql on Wed Feb 23 12:39:07 CET 2011.
 */
 
 static const char * tomahawk_schema_sql = 
@@ -165,7 +165,7 @@ static const char * tomahawk_schema_sql =
 "    k TEXT NOT NULL PRIMARY KEY,"
 "    v TEXT NOT NULL DEFAULT ''"
 ");"
-"INSERT INTO settings(k,v) VALUES('schema_version', '19');"
+"INSERT INTO settings(k,v) VALUES('schema_version', '20');"
     ;
 
 const char * get_tomahawk_sql()

@@ -16,17 +16,21 @@ using namespace lucene::queryParser;
 using namespace lucene::search;
 
 
-FuzzyIndex::FuzzyIndex( DatabaseImpl& db )
+FuzzyIndex::FuzzyIndex( DatabaseImpl& db, bool wipeIndex )
     : QObject()
     , m_db( db )
     , m_luceneReader( 0 )
     , m_luceneSearcher( 0 )
 {
-    QString lucenePath = TomahawkUtils::appDataDir().absoluteFilePath( "tomahawk.lucene" );
-    bool create = !IndexReader::indexExists( lucenePath.toStdString().c_str() );
-    m_luceneDir = FSDirectory::getDirectory( lucenePath.toStdString().c_str(), create );
-
+    QString m_lucenePath = TomahawkUtils::appDataDir().absoluteFilePath( "tomahawk.lucene" );
+    m_luceneDir = FSDirectory::getDirectory( m_lucenePath.toStdString().c_str() );
     m_analyzer = _CLNEW SimpleAnalyzer();
+
+    if ( wipeIndex )
+    {
+        beginIndexing();
+        endIndexing();
+    }
 }
 
 
@@ -52,7 +56,6 @@ FuzzyIndex::beginIndexing()
             qDebug() << "Deleting old lucene stuff.";
             m_luceneSearcher->close();
             m_luceneReader->close();
-            m_luceneReader->unlock( m_luceneDir );
             delete m_luceneSearcher;
             delete m_luceneReader;
             m_luceneSearcher = 0;
@@ -83,6 +86,7 @@ FuzzyIndex::appendFields( const QString& table, const QMap< unsigned int, QStrin
 {
     try
     {
+        qDebug() << "Appending to index:" << fields.count();
         bool create = !IndexReader::indexExists( TomahawkUtils::appDataDir().absoluteFilePath( "tomahawk.lucene" ).toStdString().c_str() );
         IndexWriter luceneWriter = IndexWriter( m_luceneDir, m_analyzer, create );
         Document doc;
@@ -173,9 +177,12 @@ FuzzyIndex::search( const QString& table, const QString& name )
             if ( score > 0.05 )
             {
                 resultsmap.insert( id, score );
-    //            qDebug() << "Hitres:" << result << id << score << table << name;
+//                qDebug() << "Hitres:" << result << id << score << table << name;
             }
         }
+
+        delete hits;
+        delete qry;
     }
     catch( CLuceneError& error )
     {

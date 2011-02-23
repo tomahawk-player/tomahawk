@@ -46,6 +46,7 @@ Database::enqueue( QSharedPointer<DatabaseCommand> lc )
     if( lc->doesMutates() )
     {
         //qDebug() << Q_FUNC_INFO << "RW" << lc->commandname();
+        qDebug() << "Enqueueing command to rw thread:" << lc->commandname();
         m_workerRW->enqueue( lc );
     }
     else

@@ -6,10 +6,45 @@
 #include <QStyleOption>
 #include <QWidget>
 
+#define ARROW_WIDTH 8
+#define ARROW_HEIGHT 8
+
 
 void
 ProxyStyle::drawPrimitive( PrimitiveElement pe, const QStyleOption* opt, QPainter* p, const QWidget* w ) const
 {
+    if ( pe == PE_IndicatorBranch )
+    {
+        if ( opt->state & QStyle::State_Children )
+        {
+            QRect r = opt->rect;
+
+            int hd = ( opt->rect.height() - ARROW_HEIGHT ) / 2;
+            int wd = ( opt->rect.width() - ARROW_WIDTH ) / 2;
+            r.adjust( wd, hd, 0, 0 );
+
+            QPointF pointsOpened[3] = { QPointF( r.x(), r.y() ), QPointF( r.x() + ARROW_WIDTH, r.y() ), QPointF( r.x() + ARROW_WIDTH / 2, r.y() + ARROW_HEIGHT ) };
+            QPointF pointsClosed[3] = { QPointF( r.x(), r.y() ), QPointF( r.x() + ARROW_WIDTH, r.y() + ARROW_HEIGHT / 2 ), QPointF( r.x(), r.y() + ARROW_HEIGHT ) };
+
+            p->save();
+            p->setRenderHint( QPainter::Antialiasing );
+
+            p->setPen( opt->palette.dark().color() );
+            p->setBrush( opt->palette.dark().color() );
+            if ( !( opt->state & QStyle::State_Open ) )
+            {
+                p->drawPolygon( pointsClosed, 3 );
+            }
+            else
+            {
+                p->drawPolygon( pointsOpened, 3 );
+            }
+
+            p->restore();
+        }
+        return;
+    }
+
     if ( pe != PE_FrameStatusBar )
         QProxyStyle::drawPrimitive( pe, opt, p, w );
 }

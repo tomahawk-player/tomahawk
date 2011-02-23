@@ -10,6 +10,7 @@
 
 using namespace Tomahawk;
 
+
 static inline QList< playlist_ptr > dynListToPlaylists( const QList< Tomahawk::dynplaylist_ptr >& list )
 {
     QList< playlist_ptr > newptrs;
@@ -19,11 +20,13 @@ static inline QList< playlist_ptr > dynListToPlaylists( const QList< Tomahawk::d
     return newptrs;
 }
 
+
 SourceTreeItem::SourceTreeItem( const source_ptr& source, QObject* parent )
     : QObject( parent )
     , m_source( source )
 {
-    QStandardItem* item = new QStandardItem( "" );
+    QStandardItem* item = new QStandardItem( source.isNull() ? "Super Collection" : source->friendlyName() );
+    item->setIcon( QIcon( RESPATH "images/user-avatar.png" ) );
     item->setEditable( false );
     item->setData( SourcesModel::CollectionSource, Type );
     item->setData( (qlonglong)this, SourceItemPointer );
@@ -36,7 +39,6 @@ SourceTreeItem::SourceTreeItem( const source_ptr& source, QObject* parent )
 
         connect( source->collection().data(), SIGNAL( playlistsAdded( QList<Tomahawk::playlist_ptr> ) ),
                                                 SLOT( onPlaylistsAdded( QList<Tomahawk::playlist_ptr> ) ) );
-
         connect( source->collection().data(), SIGNAL( playlistsDeleted( QList<Tomahawk::playlist_ptr> ) ),
                                                 SLOT( onPlaylistsDeleted( QList<Tomahawk::playlist_ptr> ) ) );
         
@@ -46,8 +48,8 @@ SourceTreeItem::SourceTreeItem( const source_ptr& source, QObject* parent )
                                                 SLOT( onDynamicPlaylistsDeleted( QList<Tomahawk::dynplaylist_ptr> ) ) );
     }
 
-    m_widget = new SourceTreeItemWidget( source );
-    connect( m_widget, SIGNAL( clicked() ), SLOT( onClicked() ) );
+/*    m_widget = new SourceTreeItemWidget( source );
+    connect( m_widget, SIGNAL( clicked() ), SLOT( onClicked() ) );*/
 }
 
 
@@ -98,6 +100,7 @@ SourceTreeItem::onPlaylistsAdded( const QList<playlist_ptr>& playlists )
     }
 }
 
+
 void
 SourceTreeItem::onPlaylistsDeleted( const QList<playlist_ptr>& playlists )
 {
@@ -125,6 +128,7 @@ SourceTreeItem::onPlaylistsDeleted( const QList<playlist_ptr>& playlists )
     }
 }
 
+
 void
 SourceTreeItem::onPlaylistLoaded( Tomahawk::PlaylistRevision revision )
 {
@@ -149,7 +153,9 @@ SourceTreeItem::onPlaylistLoaded( Tomahawk::PlaylistRevision revision )
     }
 }
 
-void SourceTreeItem::onDynamicPlaylistsAdded( const QList< dynplaylist_ptr >& playlists )
+
+void
+SourceTreeItem::onDynamicPlaylistsAdded( const QList< dynplaylist_ptr >& playlists )
 {
     // const-ness is important for getting the right pointer!
     foreach( const dynplaylist_ptr& p, playlists )
@@ -167,7 +173,9 @@ void SourceTreeItem::onDynamicPlaylistsAdded( const QList< dynplaylist_ptr >& pl
     }
 }
 
-void SourceTreeItem::onDynamicPlaylistsDeleted( const QList< dynplaylist_ptr >& playlists )
+
+void
+SourceTreeItem::onDynamicPlaylistsDeleted( const QList< dynplaylist_ptr >& playlists )
 {
     // const-ness is important for getting the right pointer!
     foreach( const dynplaylist_ptr& p, playlists )
@@ -193,7 +201,9 @@ void SourceTreeItem::onDynamicPlaylistsDeleted( const QList< dynplaylist_ptr >& 
     }
 }
 
-void SourceTreeItem::onDynamicPlaylistLoaded( DynamicPlaylistRevision revision )
+
+void
+SourceTreeItem::onDynamicPlaylistLoaded( DynamicPlaylistRevision revision )
 {
     qlonglong ptr = reinterpret_cast<qlonglong>( sender() );
     

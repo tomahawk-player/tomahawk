@@ -8,7 +8,7 @@
 #define BLOCKSIZE 4096
 
 
-BufferIODevice::BufferIODevice( unsigned int size, QObject *parent )
+BufferIODevice::BufferIODevice( unsigned int size, QObject* parent )
     : QIODevice( parent )
     , m_size( size )
     , m_received( 0 )
@@ -125,7 +125,8 @@ BufferIODevice::readData( char* data, qint64 maxSize )
 }
 
 
-qint64 BufferIODevice::writeData( const char* data, qint64 maxSize )
+qint64
+BufferIODevice::writeData( const char* data, qint64 maxSize )
 {
     // call addData instead
     Q_ASSERT( false );
@@ -133,14 +134,16 @@ qint64 BufferIODevice::writeData( const char* data, qint64 maxSize )
 }
 
 
-qint64 BufferIODevice::size() const
+qint64
+BufferIODevice::size() const
 {
     qDebug() << Q_FUNC_INFO << m_size;
     return m_size;
 }
 
 
-bool BufferIODevice::atEnd() const
+bool
+BufferIODevice::atEnd() const
 {
 //    qDebug() << Q_FUNC_INFO << ( m_size <= m_pos );
     return ( m_size <= m_pos );

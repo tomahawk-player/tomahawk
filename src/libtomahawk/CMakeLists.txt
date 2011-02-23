@@ -56,6 +56,7 @@ set( libSources
     database/databasecommand_playbackhistory.cpp
     database/databasecommand_setplaylistrevision.cpp
     database/databasecommand_loadallplaylists.cpp
+    database/databasecommand_loadallsources.cpp
     database/databasecommand_createplaylist.cpp
     database/databasecommand_deleteplaylist.cpp
     database/databasecommand_renameplaylist.cpp
@@ -194,6 +195,7 @@ set( libHeaders
     database/databasecommand_playbackhistory.h
     database/databasecommand_setplaylistrevision.h
     database/databasecommand_loadallplaylists.h
+    database/databasecommand_loadallsources.h
     database/databasecommand_createplaylist.h
     database/databasecommand_deleteplaylist.h
     database/databasecommand_renameplaylist.h

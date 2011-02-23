@@ -139,14 +139,14 @@ Pipeline::reportResults( QID qid, const QList< result_ptr >& results )
 
         if ( !m_qids.contains( qid ) )
         {
-            qDebug() << "reportResults called for unknown QID";
+            qDebug() << "reportResults called for unknown QID" << qid;
             Q_ASSERT( false );
             return;
         }
 
         if ( !m_qidsState.contains( qid ) )
         {
-            qDebug() << "reportResults called for unknown QID-state";
+            qDebug() << "reportResults called for unknown QID-state" << qid;
             Q_ASSERT( false );
             return;
         }

@@ -29,7 +29,7 @@ DatabaseResolver::resolve( const QVariant& v )
 void
 DatabaseResolver::gotResults( const Tomahawk::QID qid, QList< Tomahawk::result_ptr> results )
 {
-//    qDebug() << Q_FUNC_INFO << qid << results.length();
+    qDebug() << Q_FUNC_INFO << qid << results.length();
 
     Tomahawk::Pipeline::instance()->reportResults( qid, results );
 }

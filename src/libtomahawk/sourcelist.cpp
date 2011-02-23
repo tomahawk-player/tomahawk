@@ -2,6 +2,9 @@
 
 #include <QDebug>
 
+#include "database/database.h"
+#include "database/databasecommand_loadallsources.h"
+#include "network/remotecollection.h"
 #include "network/controlconnection.h"
 
 using namespace Tomahawk;
@@ -20,9 +23,11 @@ SourceList::instance()
     return s_instance;
 }
 
+
 SourceList::SourceList( QObject* parent )
     : QObject( parent )
 {
+    loadSources();
 }
 
 
@@ -34,64 +39,65 @@ SourceList::getLocal()
 
 
 void
-SourceList::add( const Tomahawk::source_ptr& s )
-{
-    {
-        QMutexLocker lock( &m_mut );
-        if ( m_sources.contains( s->userName() ) )
-            return;
-
-        m_sources.insert( s->userName(), s );
-        if( !s->isLocal() )
-        {
-            Q_ASSERT( s->id() );
-            m_sources_id2name.insert( s->id(), s->userName() );
-        }
-        if( s->isLocal() )
-        {
-            Q_ASSERT( m_local.isNull() );
-            m_local = s;
-        }
-
-        qDebug() << "SourceList::add(" << s->userName() << "), total sources now:" << m_sources.size();
-    }
-
-    emit sourceAdded( s );
-}
-
-
-void
-SourceList::remove( Tomahawk::source_ptr& s )
-{
-    if ( s.isNull() )
-        return;
-
-    remove( s.data() );
-}
-
-
-void
-SourceList::remove( Tomahawk::Source* s )
+SourceList::loadSources()
 {
     qDebug() << Q_FUNC_INFO;
-    source_ptr src;
+    DatabaseCommand_LoadAllSources* cmd = new DatabaseCommand_LoadAllSources();
+    
+    connect( cmd, SIGNAL( done( const QList<Tomahawk::source_ptr>& ) ),
+                    SLOT( setSources( const QList<Tomahawk::source_ptr>& ) ) );
+    
+    Database::instance()->enqueue( QSharedPointer<DatabaseCommand>( cmd ) );
+}
+
+
+void
+SourceList::setSources( const QList<Tomahawk::source_ptr>& sources )
+{
+    QMutexLocker lock( &m_mut );
+
+    foreach( const source_ptr& src, sources )
     {
-        QMutexLocker lock( &m_mut );
-        if ( !m_sources.contains( s->userName() ) )
-            return;
-
-        src = m_sources.value( s->userName() );
-        m_sources_id2name.remove( src->id() );
-        m_sources.remove( s->userName() );
-        qDebug() << "SourceList::remove(" << s->userName() << "), total sources now:" << m_sources.size();
-
-        if ( src->controlConnection() )
-            src->controlConnection()->shutdown( true );
+        add( src );
     }
 
-    emit sourceRemoved( src );
-    src.clear();
+    qDebug() << Q_FUNC_INFO << "- Total sources now:" << m_sources.size();
 }
+
+
+void
+SourceList::setLocal( const Tomahawk::source_ptr& localSrc )
+{
+    Q_ASSERT( localSrc->isLocal() );
+    Q_ASSERT( m_local.isNull() );
+    
+    {
+        QMutexLocker lock( &m_mut );
+        m_sources.insert( localSrc->userName(), localSrc );
+        m_local = localSrc;
+
+        qDebug() << Q_FUNC_INFO << localSrc->userName();
+    }
+
+    emit sourceAdded( localSrc );
+}
+
+
+void
+SourceList::add( const source_ptr& source )
+{
+    Q_ASSERT( source->id() );
+
+    connect( source.data(), SIGNAL( syncedWithDatabase() ), SLOT( sourceSynced() ) );
+    m_sources.insert( source->userName(), source );
+    m_sources_id2name.insert( source->id(), source->userName() );
+    
+    collection_ptr coll( new RemoteCollection( source ) );
+    source->addCollection( coll );
+    
+    emit sourceAdded( source );
+}
+
 
 void
 SourceList::removeAllRemote()
@@ -99,16 +105,29 @@ SourceList::removeAllRemote()
     foreach( source_ptr s, m_sources )
     {
         if( s != m_local )
-            remove( s );
+        {
+            if ( s->controlConnection() )
+            {
+                s->controlConnection()->shutdown( true );
+            }
+        }
     }
 }
 
 
 QList<source_ptr>
-SourceList::sources() const
+SourceList::sources( bool onlyOnline ) const
 {
     QMutexLocker lock( &m_mut );
-    return m_sources.values();
+
+    QList< source_ptr > sources;
+    foreach( const source_ptr& src, m_sources )
+    {
+        if ( !onlyOnline || src->controlConnection() )
+            sources << src;
+    }
+
+    return sources;
 }
 
 
@@ -121,10 +140,32 @@ SourceList::get( unsigned int id ) const
 
 
 source_ptr
-SourceList::get( const QString& username ) const
+SourceList::get( const QString& username, const QString& friendlyName )
 {
     QMutexLocker lock( &m_mut );
-    return m_sources.value( username );
+
+    source_ptr source;
+    if ( !m_sources.contains( username ) )
+    {
+        source = source_ptr( new Source( -1, username ) );
+        source->setFriendlyName( friendlyName );
+        add( source );
+    }
+    else
+        source = m_sources.value( username );
+
+    return source;
+}
+
+
+void
+SourceList::sourceSynced()
+{
+    Source* src = qobject_cast< Source* >( sender() );
+
+    Q_ASSERT( m_sources_id2name.values().contains( src->userName() ) );
+    m_sources_id2name.remove( m_sources_id2name.key( src->userName() ) );
+    m_sources_id2name.insert( src->id(), src->userName() );
 }
 
 

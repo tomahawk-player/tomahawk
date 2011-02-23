@@ -17,7 +17,8 @@ DatabaseCommand_CollectionStats::exec( DatabaseImpl* dbi )
     Q_ASSERT( source()->isLocal() || source()->id() >= 1 );
     TomahawkSqlQuery query = dbi->newquery();
 
-    if( source()->isLocal() )
+    QVariantMap m;
+    if ( source()->isLocal() )
     {
         query.exec( "SELECT count(*), max(mtime), (SELECT guid FROM oplog WHERE source IS NULL ORDER BY id DESC LIMIT 1) "
                     "FROM file "
@@ -30,16 +31,18 @@ DatabaseCommand_CollectionStats::exec( DatabaseImpl* dbi )
                        "WHERE source = ?" );
         query.addBindValue( source()->id() );
         query.addBindValue( source()->id() );
+        query.exec();
     }
 
-    query.exec();
-
-    QVariantMap m;
-    if( query.next() )
+    if ( query.next() )
     {
         m.insert( "numfiles", query.value( 0 ).toInt() );
         m.insert( "lastmodified", query.value( 1 ).toInt() );
-        m.insert( "lastop", query.value( 2 ).toString() );
+
+        if ( !source()->isLocal() && !source()->lastOpGuid().isEmpty() )
+            m.insert( "lastop", source()->lastOpGuid() );
+        else
+            m.insert( "lastop", query.value( 2 ).toString() );
     }
 
     emit done( m );

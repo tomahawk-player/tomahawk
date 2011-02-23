@@ -57,6 +57,9 @@ PlaylistItemDelegate::paint( QPainter* painter, const QStyleOptionViewItem& opti
     if ( item->query()->results().count() )
         painter->setOpacity( item->query()->results().at( 0 )->score() );
     else
+        painter->setOpacity( 0.0 );
+
+    if ( painter->opacity() < 0.3 )
         painter->setOpacity( 0.3 );
 
     if ( item->isPlaying() )

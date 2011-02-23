@@ -13,7 +13,7 @@ using namespace Tomahawk;
 query_ptr
 Query::get( const QVariant& v, bool autoResolve )
 {
-    query_ptr q = query_ptr( new Query( v ) );
+    query_ptr q = query_ptr( new Query( v, autoResolve ) );
 
     if ( autoResolve )
         Pipeline::instance()->resolve( q );
@@ -21,7 +21,7 @@ Query::get( const QVariant& v, bool autoResolve )
 }
 
 
-Query::Query( const QVariant& v )
+Query::Query( const QVariant& v, bool autoResolve )
     : m_v( v )
     , m_solved( false )
 {
@@ -33,8 +33,8 @@ Query::Query( const QVariant& v )
 
     m_qid = m.value( "qid" ).toString();
 
-    connect( SourceList::instance(), SIGNAL( sourceAdded( Tomahawk::source_ptr ) ), SLOT( refreshResults() ), Qt::QueuedConnection );
-    connect( Database::instance(), SIGNAL( indexReady() ), SLOT( refreshResults() ), Qt::QueuedConnection );
+    if ( autoResolve )
+        connect( Database::instance(), SIGNAL( indexReady() ), SLOT( refreshResults() ), Qt::QueuedConnection );
 }
 
 
@@ -50,17 +50,12 @@ Query::addResults( const QList< Tomahawk::result_ptr >& newresults )
         // hook up signals, and check solved status
         foreach( const result_ptr& rp, newresults )
         {
-            connect( rp.data(), SIGNAL( becomingUnavailable() ), SLOT( resultUnavailable() ) );
-            if( !m_solved && rp->score() > 0.99 )
-            {
-                m_solved = true;
-                becameSolved = true;
-            }
+            connect( rp.data(), SIGNAL( statusChanged() ), SLOT( onResultStatusChanged() ) );
         }
     }
+
     emit resultsAdded( newresults );
-    if( becameSolved )
-        emit solvedStateChanged( true );
+    checkResults();
 }
 
 
@@ -72,28 +67,12 @@ Query::refreshResults()
 
 
 void
-Query::resultUnavailable()
+Query::onResultStatusChanged()
 {
-    Result* result = (Result*) sender();
-    Q_ASSERT( result );
+    qStableSort( m_results.begin(), m_results.end(), Query::resultSorter );
+    checkResults();
 
-    for ( int i = 0; i < m_results.length(); ++i )
-    {
-        if ( m_results.value( i ).data() == result )
-        {
-            result_ptr r = m_results.value( i );
-            m_results.removeAt( i );
-
-            emit resultsRemoved( r );
-            break;
-        }
-    }
-
-    if ( m_results.isEmpty() )  // FIXME proper score checking
-    {
-        m_solved = false;
-        emit solvedStateChanged( false );
-    }
+    emit resultsChanged();
 }
 
 
@@ -104,10 +83,9 @@ Query::removeResult( const Tomahawk::result_ptr& result )
         QMutexLocker lock( &m_mut );
         m_results.removeAll( result );
     }
-    emit resultsRemoved( result );
 
-    if ( m_results.isEmpty() )  // FIXME proper score checking
-        emit solvedStateChanged( false );
+    emit resultsRemoved( result );
+    checkResults();
 }
 
 
@@ -157,3 +135,43 @@ Query::resultSorter( const result_ptr& left, const result_ptr& right )
     return left->score() > right->score();
 }
 
+
+void
+Query::clearResults()
+{
+    foreach( const result_ptr& rp, m_results )
+    {
+        removeResult( rp );
+    }
+}
+
+
+void
+Query::checkResults()
+{
+    bool becameSolved = false;
+    bool becameUnsolved = true;
+    
+    // hook up signals, and check solved status
+    foreach( const result_ptr& rp, m_results )
+    {
+        if ( !m_solved && rp->score() > 0.99 )
+        {
+            m_solved = true;
+            becameSolved = true;
+        }
+        if ( rp->score() > 0.99 )
+        {
+            becameUnsolved = false;
+        }
+    }
+
+    if ( m_solved && becameUnsolved )
+    {
+        m_solved = false;
+        emit solvedStateChanged( true );
+    }
+
+    if( becameSolved )
+        emit solvedStateChanged( true );
+}

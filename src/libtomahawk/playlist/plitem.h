@@ -41,10 +41,6 @@ public:
 signals:
     void dataChanged();
 
-private slots:
-    void onResultsAdded( const QList<Tomahawk::result_ptr>& result );
-    void onResultsRemoved( const Tomahawk::result_ptr& result );
-
 private:
     void setupItem( const Tomahawk::query_ptr& query, PlItem* parent, int row = -1 );
 

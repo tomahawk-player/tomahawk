@@ -25,15 +25,23 @@ Result::Result( const QVariant& v, const collection_ptr& collection )
     m_size = m.value( "size" ).toUInt();
     m_albumpos = m.value( "albumpos" ).toUInt();
     m_modtime = m.value( "mtime" ).toUInt();
+    m_score = m.value( "score" ).toFloat();
     m_year = 0;
 
     m_id = m.value( "id" ).toUInt();
 
     if ( !m_collection.isNull() )
-        connect( m_collection->source().data(), SIGNAL( offline() ), SIGNAL( becomingUnavailable() ), Qt::QueuedConnection );
+    {
+        connect( m_collection->source().data(), SIGNAL( online() ), SLOT( onOnline() ), Qt::QueuedConnection );
+        connect( m_collection->source().data(), SIGNAL( offline() ), SLOT( onOffline() ), Qt::QueuedConnection );
+    }
 }
 
-Result::~Result() {}
+
+Result::~Result()
+{
+}
+
 
 artist_ptr 
 Result::artist() const
@@ -41,11 +49,13 @@ Result::artist() const
     return m_artist;
 }
 
+
 album_ptr 
 Result::album() const
 {
     return m_album;
 }
+
 
 collection_ptr 
 Result::collection() const
@@ -53,10 +63,16 @@ Result::collection() const
     return m_collection;
 }
 
+
 float
 Result::score() const
 {
-    return m_v.toMap().value( "score", 0.0 ).toFloat();
+    if ( collection()->source()->isOnline() )
+    {
+        return m_score;
+    }
+    else
+        return 0.0;
 }
 
 
@@ -68,7 +84,7 @@ Result::id() const
         m_rid = m_v.toMap().value( "sid" ).toString();
     }
     return m_rid;
-};
+}
 
 
 QString
@@ -93,4 +109,20 @@ Result::updateAttributes()
     {
         m_year = m_attributes.value( "releaseyear" ).toInt();
     }
+}
+
+
+void
+Result::onOnline()
+{
+//    qDebug() << Q_FUNC_INFO << toString();
+    emit statusChanged();
+}
+
+
+void
+Result::onOffline()
+{
+//    qDebug() << Q_FUNC_INFO << toString();
+    emit statusChanged();
 }

@@ -6,43 +6,42 @@
 #include "network/controlconnection.h"
 #include "database/databasecommand_addsource.h"
 #include "database/databasecommand_sourceoffline.h"
+#include "database/databasecommand_logplayback.h"
 #include "database/database.h"
 
 using namespace Tomahawk;
 
-Source::Source( const QString &username, ControlConnection* cc )
+
+Source::Source( int id, const QString &username )
     : QObject()
     , m_isLocal( false )
     , m_online( false )
     , m_username( username )
-    , m_id( 0 )
-    , m_cc( cc )
-    , m_ftc( 0 )
-{
-    // source for local machine doesn't have a controlconnection. this is normal.
-    if ( cc )
-        connect( cc, SIGNAL( finished() ), SLOT( remove() ), Qt::QueuedConnection );
-}
-
-
-Source::Source( const QString &username )
-    : QObject()
-    , m_isLocal( true )
-    , m_online( false )
-    , m_username( username )
-    , m_id( 0 )
+    , m_id( id )
     , m_cc( 0 )
 {
     qDebug() << Q_FUNC_INFO;
+
+    if ( id == 0 )
+    {
+        m_isLocal = true;
+        m_online = true;
+    }
 }
 
 
 Source::~Source()
 {
     qDebug() << Q_FUNC_INFO << friendlyName();
+}
 
-/*    DatabaseCommand_SourceOffline* cmd = new DatabaseCommand_SourceOffline( id() );
-    Database::instance()->enqueue( QSharedPointer<DatabaseCommand>(cmd) );*/
+
+void
+Source::setControlConnection( ControlConnection* cc )
+{
+    m_cc = cc;
+    if ( cc )
+        connect( cc, SIGNAL( finished() ), SLOT( remove() ), Qt::QueuedConnection );
 }
 
 
@@ -54,17 +53,6 @@ Source::collection() const
 
     collection_ptr tmp;
     return tmp;
-}
-
-
-void
-Source::doDBSync()
-{
-    // ensure username is in the database
-    DatabaseCommand_addSource* cmd = new DatabaseCommand_addSource( m_username, m_friendlyname );
-    connect( cmd, SIGNAL( done( unsigned int, QString ) ),
-                    SLOT( dbLoaded( unsigned int, const QString& ) ) );
-    Database::instance()->enqueue( QSharedPointer<DatabaseCommand>(cmd) );
 }
 
 
@@ -81,10 +69,7 @@ Source::remove()
 {
     qDebug() << Q_FUNC_INFO;
 
-    m_cc = 0;
-    emit offline();
-    m_collections.clear();
-    SourceList::instance()->remove( this );
+    setOffline();
 }
 
 
@@ -102,7 +87,7 @@ Source::friendlyName() const
 
 
 void
-Source::addCollection( collection_ptr c )
+Source::addCollection( const collection_ptr& c )
 {
     Q_ASSERT( m_collections.length() == 0 ); // only 1 source supported atm
     m_collections.append( c );
@@ -111,7 +96,7 @@ Source::addCollection( collection_ptr c )
 
 
 void
-Source::removeCollection( collection_ptr c )
+Source::removeCollection( const collection_ptr& c )
 {
     Q_ASSERT( m_collections.length() == 1 && m_collections.first() == c ); // only 1 source supported atm
     m_collections.removeAll( c );
@@ -127,6 +112,10 @@ Source::setOffline()
 
     m_online = false;
     emit offline();
+
+    m_cc = 0;
+    DatabaseCommand_SourceOffline* cmd = new DatabaseCommand_SourceOffline( id() );
+    Database::instance()->enqueue( QSharedPointer<DatabaseCommand>(cmd) );
 }
 
 
@@ -135,6 +124,12 @@ Source::setOnline()
 {
     if ( m_online )
         return;
+
+    // ensure username is in the database
+    DatabaseCommand_addSource* cmd = new DatabaseCommand_addSource( m_username, m_friendlyname );
+    connect( cmd, SIGNAL( done( unsigned int, QString ) ),
+                    SLOT( dbLoaded( unsigned int, const QString& ) ) );
+    Database::instance()->enqueue( QSharedPointer<DatabaseCommand>(cmd) );
 
     m_online = true;
     emit online();
@@ -145,7 +140,68 @@ void
 Source::dbLoaded( unsigned int id, const QString& fname )
 {
     qDebug() << Q_FUNC_INFO << id << fname;
+
     m_id = id;
     m_friendlyname = fname;
+
     emit syncedWithDatabase();
+}
+
+
+void
+Source::scanningProgress( unsigned int files )
+{
+    m_textStatus = tr( "Scanning (%L1 tracks)" ).arg( files );
+    emit stateChanged();
+}
+
+
+void
+Source::onStateChanged( DBSyncConnection::State newstate, DBSyncConnection::State oldstate, const QString& info )
+{
+    QString msg;
+    switch( newstate )
+    {
+        case DBSyncConnection::CHECKING:
+            msg = tr( "Checking" );
+            break;
+        case DBSyncConnection::FETCHING:
+            msg = tr( "Fetching" );
+            break;
+        case DBSyncConnection::PARSING:
+            msg = tr( "Parsing" );
+            break;
+        case DBSyncConnection::SAVING:
+            msg = tr( "Saving" );
+            break;
+        case DBSyncConnection::SYNCED:
+            msg = tr( "Online" );
+            break;
+        case DBSyncConnection::SCANNING:
+            msg = tr( "Scanning (%L1 tracks)" ).arg( info );
+            break;
+
+        default:
+            msg = "???";
+    }
+
+    m_textStatus = msg;
+    emit stateChanged();
+}
+
+
+void
+Source::onPlaybackStarted( const Tomahawk::query_ptr& query )
+{
+    qDebug() << Q_FUNC_INFO << query->toString();
+    m_currentTrack = query;
+    emit playbackStarted( query );
+}
+
+
+void
+Source::onPlaybackFinished( const Tomahawk::query_ptr& query )
+{
+    qDebug() << Q_FUNC_INFO << query->toString();
+    emit playbackFinished( query );
 }

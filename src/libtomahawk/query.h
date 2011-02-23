@@ -20,7 +20,7 @@ Q_OBJECT
 
 public:
     static query_ptr get( const QVariant& v, bool autoResolve = true );
-    explicit Query( const QVariant& v );
+    explicit Query( const QVariant& v, bool autoResolve );
 
     QVariant toVariant() const { return m_v; }
 
@@ -55,6 +55,7 @@ signals:
     void resultsAdded( const QList<Tomahawk::result_ptr>& );
     void resultsRemoved( const Tomahawk::result_ptr& );
 
+    void resultsChanged();
     void solvedStateChanged( bool state );
     void resolvingFinished( bool hasResults );
     
@@ -66,10 +67,13 @@ public slots:
     void onResolvingFinished();
 
 private slots:
-    void resultUnavailable();
+    void onResultStatusChanged();
     void refreshResults();
 
 private:
+    void clearResults();
+    void checkResults();
+    
     mutable QMutex m_mut;
     mutable QVariant m_v;
     QList< Tomahawk::result_ptr > m_results;

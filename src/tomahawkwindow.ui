@@ -50,6 +50,9 @@
     </property>
     <addaction name="actionRescanCollection"/>
     <addaction name="separator"/>
+    <addaction name="actionShowOfflineSources"/>
+    <addaction name="actionHideOfflineSources"/>
+    <addaction name="separator"/>
     <addaction name="actionExit"/>
    </widget>
    <widget class="QMenu" name="menuPlaylist">
@@ -148,6 +151,16 @@
   <action name="actionCreate_New_Station">
    <property name="text">
     <string>Create New &amp;Station</string>
+   </property>
+  </action>
+  <action name="actionShowOfflineSources">
+   <property name="text">
+    <string>Show Offline Sources</string>
+   </property>
+  </action>
+  <action name="actionHideOfflineSources">
+   <property name="text">
+    <string>Hide Offline Sources</string>
    </property>
   </action>
  </widget>

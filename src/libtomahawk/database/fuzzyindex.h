@@ -35,7 +35,7 @@ class FuzzyIndex : public QObject
 Q_OBJECT
 
 public:
-    explicit FuzzyIndex( DatabaseImpl& db );
+    explicit FuzzyIndex( DatabaseImpl& db, bool wipeIndex = false );
     ~FuzzyIndex();
 
     void beginIndexing();
@@ -53,6 +53,7 @@ public slots:
 private:
     DatabaseImpl& m_db;
     QMutex m_mutex;
+    QString m_lucenePath;
 
     lucene::analysis::SimpleAnalyzer* m_analyzer;
     lucene::store::Directory* m_luceneDir;

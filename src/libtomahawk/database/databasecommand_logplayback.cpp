@@ -22,9 +22,9 @@ DatabaseCommand_LogPlayback::postCommitHook()
     }
     
     connect( this, SIGNAL( trackPlaying( Tomahawk::query_ptr ) ),
-             source().data(), SIGNAL( playbackStarted( Tomahawk::query_ptr ) ), Qt::QueuedConnection );
+             source().data(), SLOT( onPlaybackStarted( Tomahawk::query_ptr ) ), Qt::QueuedConnection );
     connect( this, SIGNAL( trackPlayed( Tomahawk::query_ptr ) ),
-             source().data(), SIGNAL( playbackFinished( Tomahawk::query_ptr ) ), Qt::QueuedConnection );
+             source().data(), SLOT( onPlaybackFinished( Tomahawk::query_ptr ) ), Qt::QueuedConnection );
 
     QVariantMap m;
     m.insert( "track", m_track );

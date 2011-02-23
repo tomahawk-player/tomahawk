@@ -139,7 +139,7 @@ DatabaseCommand_Resolve::exec( DatabaseImpl* lib )
             s = SourceList::instance()->get( files_query.value( 13 ).toUInt() );
             if( s.isNull() )
             {
-                //qDebug() << "Skipping result for offline sourceid:" << files_query.value( 13 ).toUInt();
+                qDebug() << "Skipping result for offline sourceid:" << files_query.value( 13 ).toUInt();
                 // will happen for valid sources which are offline (and thus not in the sourcelist)
                 continue;
             }

@@ -24,10 +24,11 @@ DatabaseWorker::~DatabaseWorker()
 {
     qDebug() << Q_FUNC_INFO << m_outstanding;
 
-    qDebug () << m_commands;
+    if ( m_commands.count() )
+        qDebug() << m_commands;
 
     quit();
-    wait( 5000 );
+    wait( 60000 );
 }
 
 

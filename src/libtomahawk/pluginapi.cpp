@@ -28,14 +28,14 @@ PluginAPI::reportResults( const QString& qid, const QList<QVariantMap>& vresults
 void
 PluginAPI::addSource( source_ptr s )
 {
-    SourceList::instance()->add( s );
+//    SourceList::instance()->add( s );
 }
 
 
 void
 PluginAPI::removeSource( source_ptr s )
 {
-    SourceList::instance()->remove( s );
+//    SourceList::instance()->remove( s );
 }
 
 

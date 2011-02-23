@@ -52,6 +52,7 @@ ENDIF(LIBLASTFM_FOUND)
 
 SET( tomahawkSourcesGui ${tomahawkSourcesGui}
      sourcetree/sourcesmodel.cpp
+     sourcetree/sourcesproxymodel.cpp
      sourcetree/sourcetreeitem.cpp
      sourcetree/sourcetreeitemwidget.cpp
      sourcetree/sourcetreeview.cpp
@@ -96,6 +97,7 @@ ENDIF(LIBLASTFM_FOUND)
 
 SET( tomahawkHeadersGui ${tomahawkHeadersGui}
      sourcetree/sourcesmodel.h
+     sourcetree/sourcesproxymodel.h
      sourcetree/sourcetreeitem.h
      sourcetree/sourcetreeitemwidget.h
      sourcetree/sourcetreeview.h
