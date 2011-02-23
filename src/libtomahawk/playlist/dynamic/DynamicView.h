@@ -63,6 +63,8 @@ private slots:
     void animFinished();
 
 private:
+    QPixmap backgroundBetween( QRect rect, int rowStart );
+
     DynamicModel* m_model;
     QString m_title;
     QString m_body;
