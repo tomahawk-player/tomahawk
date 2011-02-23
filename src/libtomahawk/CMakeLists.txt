@@ -28,10 +28,6 @@ set( libSources
 
     sip/SipPlugin.cpp
 
-
-    audio/madtranscode.cpp
-    audio/vorbistranscode.cpp
-    audio/flactranscode.cpp
     audio/audioengine.cpp
 
     database/database.cpp
@@ -168,10 +164,6 @@ set( libHeaders
 
     sip/SipPlugin.h
 
-    audio/transcodeinterface.h
-    audio/madtranscode.h
-    audio/vorbistranscode.h
-    audio/flactranscode.h
     audio/audioengine.h
 
     database/database.h
@@ -311,8 +303,6 @@ include_directories( . ${CMAKE_CURRENT_BINARY_DIR} ${CMAKE_CURRENT_BINARY_DIR}/.
 
     ${THIRDPARTY_DIR}/libportfwd/include
     ${THIRDPARTY_DIR}/qxt/qxtweb-standalone/qxtweb
-    ${THIRDPARTY_DIR}/rtaudio
-    ${THIRDPARTY_DIR}/alsa-playback
     ${THIRDPARTY_DIR}/jdns
     ${THIRDPARTY_DIR}/jdns/jdns
     ${THIRDPARTY_DIR}/jdns/jdnsshared
@@ -321,13 +311,9 @@ include_directories( . ${CMAKE_CURRENT_BINARY_DIR} ${CMAKE_CURRENT_BINARY_DIR}/.
 
 
 IF( WIN32 )
-    SET( libSources ${libSources} audio/rtaudiooutput.cpp )
-    SET( libHeaders ${libHeaders} audio/rtaudiooutput.h )
-
     SET( OS_SPECIFIC_LINK_LIBRARIES
         ${OS_SPECIFIC_LINK_LIBRARIES}
     # Thirdparty
-        ${CMAKE_BINARY_DIR}/thirdparty/rtaudio/librtaudio.dll
     # System
         "iphlpapi.a"
         "ws2_32.dll"
@@ -343,13 +329,9 @@ IF( APPLE )
     FIND_LIBRARY( COREFOUNDATION_LIBRARY CoreFoundation )
     MARK_AS_ADVANCED( COREAUDIO_LIBRARY COREFOUNDATION_LIBRARY )
 
-    SET( libSources ${libSources} audio/rtaudiooutput.cpp )
-    SET( libHeaders ${libHeaders} audio/rtaudiooutput.h )
-
     SET( OS_SPECIFIC_LINK_LIBRARIES
         ${OS_SPECIFIC_LINK_LIBRARIES}
         # Thirdparty
-        rtaudio
         # System
         ${COREAUDIO_LIBRARY}
         ${COREFOUNDATION_LIBRARY}
@@ -360,7 +342,6 @@ IF( UNIX AND NOT APPLE )
     SET( OS_SPECIFIC_LINK_LIBRARIES
         ${OS_SPECIFIC_LINK_LIBRARIES}
         # Thirdparty
-        alsaplayback
     )
 ENDIF( UNIX AND NOT APPLE )
 
@@ -378,12 +359,6 @@ target_link_libraries( tomahawklib
 
     # Thirdparty shipped with tomahawk
     portfwd
-
-    # soon to be removed by phonon-dependency
-    FLAC++
-    ogg
-    vorbisfile
-    mad
 
     # External deps
     ${TAGLIB_LIBRARIES}

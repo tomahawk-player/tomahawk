@@ -1,6 +1,5 @@
 SET( OS_SPECIFIC_LINK_LIBRARIES 
      ${OS_SPECIFIC_LINK_LIBRARIES}
-     alsaplayback
      tomahawklib
 )
 

@@ -9,8 +9,6 @@
 #include "result.h"
 #include "typedefs.h"
 
-#include "transcodeinterface.h"
-
 #include "dllmacro.h"
 
 #define AUDIO_VOLUME_STEP 5
