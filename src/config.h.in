@@ -6,6 +6,8 @@
 #cmakedefine SNOW_LEOPARD
 #cmakedefine LEOPARD
 #cmakedefine HAVE_SPARKLE
+
 #cmakedefine LIBLASTFM_FOUND
+#cmakedefine GLOOX_FOUND
 
 #endif // CONFIG_H_IN
