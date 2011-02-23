@@ -282,9 +282,8 @@ Section "Tomahawk Player" SEC_TOMAHAWK_PLAYER
    File "${MING_DLL_PATH}\libstdc++-6.dll"
    
    ;Audio stuff
+   File "${BUILD_PATH}\thirdparty\rtaudio\librtaudio.dll"
    ;File "${MING_DLL_PATH}\libmad.dll"
-   ;File "${MING_DLL_PATH}\librtaudio.dll"
-   File "${BUILD_PATH}\rtaudio\librtaudio.dll"
    File "${MING_DLL_PATH}\libogg-0.dll"
    File "${MING_DLL_PATH}\libvorbisfile-3.dll"
    File "${MING_DLL_PATH}\libvorbis-0.dll"
@@ -295,15 +294,16 @@ Section "Tomahawk Player" SEC_TOMAHAWK_PLAYER
    File "${MING_DLL_PATH}\libqjson.dll"
    File "${MING_DLL_PATH}\libtag.dll"
    File "${MING_DLL_PATH}\libgloox-8.dll"
-   File "${MING_DLL_PATH}\libpng14-14.dll"
+   File "${MING_DLL_PATH}\libpng15-15.dll"
    File "${MING_DLL_PATH}\zlib1.dll"
 
    File "${MING_DLL_PATH}\libechonest.dll"
    File "${MING_DLL_PATH}\liblastfm.dll"
 
    File "${MING_LIB}\libclucene-core.dll"
+   File "${MING_LIB}\libclucene-shared.dll"
 
-   File "${BUILD_PATH}\qxt\qxtweb-standalone\libqxtweb-standalone.dll"
+   File "${BUILD_PATH}\thirdparty\qxt\qxtweb-standalone\libqxtweb-standalone.dll"
    File "${BUILD_PATH}\thirdparty\jdns\libtomahawk_jdns.dll"
    File "${BUILD_PATH}\thirdparty\qtweetlib\libtomahawk_qtweetlib.dll"
 SectionEnd
