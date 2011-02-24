@@ -56,7 +56,7 @@ public slots:
     void setPlaylist( PlaylistInterface* playlist ) { m_playlist = playlist; }
     void setQueue( PlaylistInterface* queue ) { m_queue = queue; }
 
-    void onTrackAboutToClose();
+    void onTrackAboutToFinish();
 
 signals:
     void loading( const Tomahawk::result_ptr& track );

@@ -43,7 +43,7 @@ AudioEngine::AudioEngine()
 
 AudioEngine::~AudioEngine()
 {
-    qDebug() << Q_FUNC_INFO << "waiting for event loop to finish...";
+    qDebug() << Q_FUNC_INFO;
 
     stop();
 
@@ -51,15 +51,16 @@ AudioEngine::~AudioEngine()
     delete m_mediaObject;
 }
 
+
 void
 AudioEngine::playPause()
 {
-    if( isPlaying() )
+    if ( isPlaying() )
         pause();
     else
         play();
-
 }
+
 
 void
 AudioEngine::play()
@@ -127,10 +128,10 @@ AudioEngine::setVolume( int percentage )
     //qDebug() << Q_FUNC_INFO;
 
     percentage = qBound( 0, percentage, 100 );
-
     m_audioOutput->setVolume( (qreal)percentage / 100.0 );
     emit volumeChanged( percentage );
 }
+
 
 void
 AudioEngine::mute()
@@ -138,14 +139,11 @@ AudioEngine::mute()
     setVolume( 0 );
 }
 
+
 void
-AudioEngine::onTrackAboutToClose()
+AudioEngine::onTrackAboutToFinish()
 {
     qDebug() << Q_FUNC_INFO;
-    // the only way the iodev we are reading from closes itself, is if
-    // there was a failure, usually network went away.
-    // but we might as well play the remaining data we received
-    // stop();
 }
 
 
@@ -170,8 +168,6 @@ AudioEngine::loadTrack( const Tomahawk::result_ptr& result )
                 qDebug() << "Error getting iodevice for item";
                 err = true;
             }
-            else
-                connect( io.data(), SIGNAL( aboutToClose() ), SLOT( onTrackAboutToClose() ), Qt::DirectConnection );
         }
 
         if ( !err )
@@ -181,13 +177,14 @@ AudioEngine::loadTrack( const Tomahawk::result_ptr& result )
 
             if ( !m_input.isNull() )
             {
+                m_expectStop = true;
                 m_input->close();
                 m_input.clear();
             }
 
             m_input = io;
 
-            m_mediaObject->setCurrentSource( io.data() ) ;
+            m_mediaObject->setCurrentSource( io.data() );
             m_mediaObject->play();
 
             emit started( m_currentTrack );
@@ -268,11 +265,14 @@ AudioEngine::onStateChanged( Phonon::State newState, Phonon::State oldState )
     qDebug() << Q_FUNC_INFO << oldState << newState;
     if ( oldState == Phonon::PlayingState && newState == Phonon::StoppedState )
     {
-        if ( m_expectStop )
-            return;
-
-        loadNextTrack();
+        if ( !m_expectStop )
+        {
+            m_expectStop = false;
+            loadNextTrack();
+        }
     }
+
+    m_expectStop = false;
 }
 
 
