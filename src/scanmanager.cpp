@@ -40,7 +40,7 @@ ScanManager::~ScanManager()
         while( !m_musicScannerThreadController->isFinished() )
         {
             QCoreApplication::processEvents( QEventLoop::AllEvents, 200 );
-            TomahawkUtils::Sleep::msleep(100);
+            TomahawkUtils::Sleep::msleep( 100 );
         }
         
         if( m_scanner )
@@ -80,6 +80,7 @@ ScanManager::runManualScan( const QString& path )
         qDebug() << "Could not run manual scan, old scan still running";
 }
 
+
 void
 ScanManager::scannerFinished()
 {
@@ -87,6 +88,7 @@ ScanManager::scannerFinished()
     connect( m_musicScannerThreadController, SIGNAL( finished() ), SLOT( scannerQuit() ) );
     m_musicScannerThreadController->quit();
 }
+
 
 void
 ScanManager::scannerQuit()
@@ -96,6 +98,7 @@ ScanManager::scannerQuit()
     delete m_scanner;
     m_scanner = 0;
 }
+
 
 void
 ScanManager::scannerDestroyed( QObject* scanner )

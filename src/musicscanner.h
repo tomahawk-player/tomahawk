@@ -10,8 +10,6 @@
 #include <QString>
 #include <QDebug>
 #include <QDateTime>
-
-
 #include <QTimer>
 
 // descend dir tree comparing dir mtimes to last known mtime
@@ -19,7 +17,8 @@
 // finally, emit the list of new mtimes we observed.
 class DirLister : public QObject
 {
-    Q_OBJECT
+Q_OBJECT
+
 public:
     DirLister( QDir d, QMap<QString, unsigned int>& mtimes )
         : QObject(), m_dir( d ), m_dirmtimes( mtimes )
@@ -43,36 +42,7 @@ private slots:
         emit finished( m_newdirmtimes );
     }
 
-    void scanDir( QDir dir, int depth )
-    {
-        QFileInfoList dirs;
-        const uint mtime = QFileInfo( dir.absolutePath() ).lastModified().toUTC().toTime_t();
-        m_newdirmtimes.insert( dir.absolutePath(), mtime );
-
-        if ( m_dirmtimes.contains( dir.absolutePath() ) &&
-             mtime == m_dirmtimes.value( dir.absolutePath() )
-           )
-        {
-            // dont scan this dir, unchanged since last time.
-        }
-        else
-        {
-            dir.setFilter( QDir::Files | QDir::Readable | QDir::NoDotAndDotDot );
-            dir.setSorting( QDir::Name );
-            dirs = dir.entryInfoList();
-            foreach( QFileInfo di, dirs )
-            {
-                emit fileToScan( di );
-            }
-        }
-        dir.setFilter( QDir::Dirs | QDir::Readable | QDir::NoDotAndDotDot );
-        dirs = dir.entryInfoList();
-
-        foreach( QFileInfo di, dirs )
-        {
-            scanDir( di.absoluteFilePath(), depth + 1 );
-        }
-    }
+    void scanDir( QDir dir, int depth );
 
 private:
     QDir m_dir;
