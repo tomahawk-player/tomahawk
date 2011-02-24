@@ -32,6 +32,7 @@ function import_lib
     cp -R -L $1 MacOS/`basename $1`
     chmod u+rw MacOS/`basename $1`
     deplib_change MacOS/`basename $1`
+    deposx_change MacOS/`basename $1`
 }
 
 function deposx_change 
@@ -63,7 +64,8 @@ function deplib_change
     install_name_tool -change /usr/local/Cellar/liblastfm/0.3.1/lib/liblastfm.0.dylib @executable_path/liblastfm.0.dylib $1
     install_name_tool -change libqjson.0.dylib @executable_path/libqjson.0.dylib $1
     install_name_tool -change /usr/local/lib/libechonest.1.1.dylib @executable_path/libechonest.1.1.dylib $1
-    install_name_tool -change /usr/local/Cellar/clucene/0.9.21/lib/libclucene.0.dylib @executable_path/libclucene.0.dylib $1
+    install_name_tool -change /usr/local/lib/libclucene-core.0.9.23.dylib @executable_path/libclucene-core.0.9.23.dylib $1
+    install_name_tool -change /usr/local/lib/libclucene-shared.0.9.23.dylib @executable_path/libclucene-shared.0.9.23.dylib $1
     install_name_tool -change /usr/local/Cellar/gloox/1.0/lib/libgloox.8.dylib @executable_path/libgloox.8.dylib $1
     install_name_tool -change /usr/local/Cellar/taglib/1.6.3/lib/libtag.1.dylib @executable_path/libtag.1.dylib $1
     install_name_tool -change /usr/local/Cellar/libogg/1.2.0/lib/libogg.0.dylib @executable_path/libogg.0.dylib $1
@@ -103,7 +105,8 @@ import_lib /usr/local/Cellar/mad/0.15.1b/lib/libmad.0.dylib
 import_lib /usr/local/Cellar/flac/1.2.1/lib/libFLAC++.6.dylib
 import_lib /usr/local/Cellar/flac/1.2.1/lib/libFLAC.8.dylib
 import_lib /usr/local/lib/libechonest.1.1.dylib
-import_lib /usr/local/Cellar/clucene/0.9.21/lib/libclucene.0.dylib
+import_lib /usr/local/lib/libclucene-core.0.9.23.dylib
+import_lib /usr/local/lib/libclucene-shared.0.9.23.dylib
 
 import_lib ../../libsip_jabber.dylib
 import_lib ../../libsip_twitter.dylib
@@ -111,17 +114,6 @@ import_lib ../../libsip_zeroconf.dylib
 import_lib ../../src/libtomahawk/libtomahawklib.dylib
 import_lib ../../thirdparty/jdns/libtomahawk_jdns.dylib
 import_lib ../../thirdparty/qtweetlib/libtomahawk_qtweetlib.dylib
-
-deposx_change MacOS/libqjson.0.dylib
-deposx_change MacOS/liblastfm.0.dylib
-deposx_change MacOS/libclucene.0.dylib
-deposx_change MacOS/libechonest.1.1.dylib
-deposx_change MacOS/libsip_jabber.dylib
-deposx_change MacOS/libsip_twitter.dylib
-deposx_change MacOS/libsip_zeroconf.dylib
-deposx_change MacOS/libtomahawklib.dylib
-deposx_change MacOS/libtomahawk_jdns.dylib
-deposx_change MacOS/libtomahawk_qtweetlib.dylib
 
 # now Qt
 for x in $QTLIBS

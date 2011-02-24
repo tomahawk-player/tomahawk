@@ -344,7 +344,7 @@ closeconnection:
 void
 Servent::createParallelConnection( Connection* orig_conn, Connection* new_conn, const QString& key )
 {
-    qDebug() << "Servent::createParallelConnection, key:" << key << thread();
+    qDebug() << "Servent::createParallelConnection, key:" << key << thread() << orig_conn;
     // if we can connect to them directly:
     if( orig_conn->outbound() )
     {
