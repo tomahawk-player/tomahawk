@@ -86,8 +86,7 @@ SourceList::setLocal( const Tomahawk::source_ptr& localSrc )
 void
 SourceList::add( const source_ptr& source )
 {
-    Q_ASSERT( source->id() );
-
+    qDebug() << "Adding to sources:" << source->userName() << source->id();
     m_sources.insert( source->userName(), source );
     m_sources_id2name.insert( source->id(), source->userName() );
     connect( source.data(), SIGNAL( syncedWithDatabase() ), SLOT( sourceSynced() ) );
@@ -163,6 +162,10 @@ SourceList::sourceSynced()
 {
     Source* src = qobject_cast< Source* >( sender() );
 
+    qDebug() << "Finding in sources:" << src->userName() << src->id();
+    qDebug() << "Current sources values:" << m_sources_id2name.values();
+    qDebug() << "Current sources keys:" << m_sources_id2name.keys();
+    
     Q_ASSERT( m_sources_id2name.values().contains( src->userName() ) );
     m_sources_id2name.remove( m_sources_id2name.key( src->userName() ) );
     m_sources_id2name.insert( src->id(), src->userName() );
