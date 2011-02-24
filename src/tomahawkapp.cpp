@@ -158,7 +158,6 @@ TomahawkApp::TomahawkApp( int& argc, char *argv[] )
     new TomahawkSettings( this );
     m_audioEngine = new AudioEngine;
     new ScanManager( this );
-    
     new Pipeline( this );
     
     m_servent = new Servent( this );
@@ -167,8 +166,6 @@ TomahawkApp::TomahawkApp( int& argc, char *argv[] )
     qDebug() << "Init Database.";
     setupDatabase();
 
-    new SourceList( this );
-    
     qDebug() << "Init Echonest Factory.";
     GeneratorFactory::registerFactory( "echonest", new EchonestFactory );
     
