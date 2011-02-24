@@ -17,18 +17,13 @@ MusicScanner::MusicScanner( const QString& dir, quint32 bs )
     , m_dirListerThreadController( 0 )
 {
     m_ext2mime.insert( "mp3",  "audio/mpeg" );
-
-#ifndef NO_OGG
-   m_ext2mime.insert( "ogg",  "application/ogg" );
-#endif
-
-#ifndef NO_FLAC
-   m_ext2mime.insert( "flac", "audio/flac" );
-#endif
-
-   // m_ext2mime.insert( "aac",  "audio/mp4" );
-   // m_ext2mime.insert( "m4a",  "audio/mp4" );
-   // m_ext2mime.insert( "mp4",  "audio/mp4" );
+    m_ext2mime.insert( "ogg",  "application/ogg" );
+    m_ext2mime.insert( "flac", "audio/flac" );
+    m_ext2mime.insert( "mpc",  "audio/x-musepack" );
+    m_ext2mime.insert( "wma",  "audio/x-ms-wma" );
+    m_ext2mime.insert( "aac",  "audio/mp4" );
+    m_ext2mime.insert( "m4a",  "audio/mp4" );
+    m_ext2mime.insert( "mp4",  "audio/mp4" );
 }
 
 MusicScanner::~MusicScanner()
