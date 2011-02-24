@@ -131,7 +131,7 @@ SourceList::sources( bool onlyOnline ) const
 
 
 source_ptr
-SourceList::get( unsigned int id ) const
+SourceList::get( int id ) const
 {
     QMutexLocker lock( &m_mut );
     return m_sources.value( m_sources_id2name.value( id ) );
