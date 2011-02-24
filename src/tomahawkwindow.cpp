@@ -321,7 +321,8 @@ TomahawkWindow::createAutomaticPlaylist()
 }
 
 
-void TomahawkWindow::createStation()
+void
+TomahawkWindow::createStation()
 {
     bool ok;
     QString name = QInputDialog::getText( this, "Create New Station", "Name:", QLineEdit::Normal, "New Station", &ok );
@@ -341,23 +342,7 @@ void TomahawkWindow::createStation()
 void
 TomahawkWindow::createPlaylist()
 {
-
     PlaylistManager::instance()->show( new NewPlaylistWidget() );
-
-/*    bool ok;
-    QString name = QInputDialog::getText( this, "Create New Playlist", "Name:", QLineEdit::Normal, "New Playlist", &ok );
-    if ( !ok || name.isEmpty() )
-        return;
-
-    source_ptr author = SourceList::instance()->getLocal();
-    QString id = uuid();
-    QString info  = ""; // FIXME
-    QString creator = "someone"; // FIXME
-    if( dynamic )
-        DynamicPlaylist::create( author, id, name, info, creator, false );
-    else
-        Playlist::create( author, id, name, info, creator, false ); */
-
 }
 
 
