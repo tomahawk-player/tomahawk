@@ -106,10 +106,6 @@ Dependencies
 To build the app:
 -----------------
 
- For SIP-over-Twitter support, you must first register an application with Twitter and copy the file
- examples/twitter-api-keys.example to thirdparty/qtweetlib/WARNING-twitter-api-keys, substituting in
- your particular consumer key and secret.
-
     $ mkdir build && cd build
 
  Pick one of the following two choices. If uncertain pick the second one, you probably want a GUI.
