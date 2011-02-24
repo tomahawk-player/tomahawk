@@ -111,7 +111,7 @@ AlbumModel::data( const QModelIndex& index, int role ) const
     switch( index.column() )
     {
         case 0:
-            return album->name() + "<br/>Test\nTest2";
+            return album->name();
             break;
 
     }
@@ -268,11 +268,11 @@ AlbumModel::onAlbumsAdded( const QList<Tomahawk::album_ptr>& albums, const Tomah
         albumitem->cover = m_defaultCover;
         albumitem->index = createIndex( m_rootItem->children.count() - 1, 0, albumitem );
 
-        QString imgurl = "http://ws.audioscrobbler.com/2.0/?method=album.imageredirect&artist=%1&album=%2&size=large&api_key=7a90f6672a04b809ee309af169f34b8b";
+/*        QString imgurl = "http://ws.audioscrobbler.com/2.0/?method=album.imageredirect&artist=%1&album=%2&size=large&api_key=7a90f6672a04b809ee309af169f34b8b";
         QNetworkRequest req( imgurl.arg( album->artist()->name() ).arg( album->name() ) );
         req.setAttribute( QNetworkRequest::User, (qlonglong)albumitem );
         QNetworkReply* reply = TomahawkUtils::nam()->get( req );
-        connect( reply, SIGNAL( finished() ), SLOT( onCoverArtDownloaded() ) );
+        connect( reply, SIGNAL( finished() ), SLOT( onCoverArtDownloaded() ) );*/
 
         connect( albumitem, SIGNAL( dataChanged() ), SLOT( onDataChanged() ) );
     }
