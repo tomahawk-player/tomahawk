@@ -88,7 +88,9 @@ SourceList::add( const source_ptr& source )
 {
     qDebug() << "Adding to sources:" << source->userName() << source->id();
     m_sources.insert( source->userName(), source );
-    m_sources_id2name.insert( source->id(), source->userName() );
+
+    if ( source->id() > 0 )
+        m_sources_id2name.insert( source->id(), source->userName() );
     connect( source.data(), SIGNAL( syncedWithDatabase() ), SLOT( sourceSynced() ) );
     
     collection_ptr coll( new RemoteCollection( source ) );
@@ -101,14 +103,11 @@ SourceList::add( const source_ptr& source )
 void
 SourceList::removeAllRemote()
 {
-    foreach( source_ptr s, m_sources )
+    foreach( const source_ptr& s, m_sources )
     {
-        if( s != m_local )
+        if ( !s->isLocal() && s->controlConnection() )
         {
-            if ( s->controlConnection() )
-            {
-                s->controlConnection()->shutdown( true );
-            }
+            s->controlConnection()->shutdown( true );
         }
     }
 }
@@ -162,12 +161,6 @@ SourceList::sourceSynced()
 {
     Source* src = qobject_cast< Source* >( sender() );
 
-    qDebug() << "Finding in sources:" << src->userName() << src->id();
-    qDebug() << "Current sources values:" << m_sources_id2name.values();
-    qDebug() << "Current sources keys:" << m_sources_id2name.keys();
-    
-    Q_ASSERT( m_sources_id2name.values().contains( src->userName() ) );
-    m_sources_id2name.remove( m_sources_id2name.key( src->userName() ) );
     m_sources_id2name.insert( src->id(), src->userName() );
 }
 
