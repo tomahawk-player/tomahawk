@@ -124,13 +124,15 @@ SourcesModel::appendItem( const source_ptr& source )
 
 //    qDebug() << "Appending source item:" << item->source()->username();
     invisibleRootItem()->appendRow( item->columns() );
-//    m_parent->setIndexWidget( m_parent->model()->index( rowCount() - 1, 0 ), item->widget() );
 
-    connect( source.data(), SIGNAL( offline() ), SLOT( onSourceChanged() ) );
-    connect( source.data(), SIGNAL( online() ), SLOT( onSourceChanged() ) );
-    connect( source.data(), SIGNAL( stats( QVariantMap ) ), SLOT( onSourceChanged() ) );
-    connect( source.data(), SIGNAL( playbackStarted( Tomahawk::query_ptr ) ), SLOT( onSourceChanged() ) );
-    connect( source.data(), SIGNAL( stateChanged() ), SLOT( onSourceChanged() ) );
+    if ( !source.isNull() )
+    {
+        connect( source.data(), SIGNAL( offline() ), SLOT( onSourceChanged() ) );
+        connect( source.data(), SIGNAL( online() ), SLOT( onSourceChanged() ) );
+        connect( source.data(), SIGNAL( stats( QVariantMap ) ), SLOT( onSourceChanged() ) );
+        connect( source.data(), SIGNAL( playbackStarted( Tomahawk::query_ptr ) ), SLOT( onSourceChanged() ) );
+        connect( source.data(), SIGNAL( stateChanged() ), SLOT( onSourceChanged() ) );
+    }
     
     return true; // FIXME
 }

@@ -159,7 +159,7 @@ Source::scanningProgress( unsigned int files )
 void
 Source::scanningFinished( unsigned int files )
 {
-    m_textStatus = tr( "Online" );
+    m_textStatus = QString();
     emit stateChanged();
 }
 
@@ -183,14 +183,14 @@ Source::onStateChanged( DBSyncConnection::State newstate, DBSyncConnection::Stat
             msg = tr( "Saving" );
             break;
         case DBSyncConnection::SYNCED:
-            msg = tr( "Online" );
+            msg = QString();
             break;
         case DBSyncConnection::SCANNING:
             msg = tr( "Scanning (%L1 tracks)" ).arg( info );
             break;
 
         default:
-            msg = "???";
+            msg = QString();
     }
 
     m_textStatus = msg;
