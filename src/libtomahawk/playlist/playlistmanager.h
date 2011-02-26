@@ -25,6 +25,7 @@ class TrackView;
 class SourceInfoWidget;
 class InfoBar;
 class TopBar;
+class WelcomeWidget;
 
 namespace Tomahawk {
     class DynamicWidget;
@@ -56,9 +57,6 @@ public:
 
     bool show( QWidget* widget, const QString& title = QString(), const QString& desc = QString(), const QPixmap& pixmap = QPixmap() );
 
-    bool showSuperCollection();
-    void showCurrentTrack();
-
 signals:
     void numSourcesChanged( unsigned int sources );
     void numTracksChanged( unsigned int tracks );
@@ -73,7 +71,12 @@ signals:
 
     void playClicked();
     void pauseClicked();
+
 public slots:
+    bool showSuperCollection();
+    void showWelcomePage();
+    void showCurrentTrack();
+    
     void setTreeMode();
     void setTableMode();
     void setAlbumMode();
@@ -115,7 +118,8 @@ private:
     AlbumModel* m_superAlbumModel;
     AlbumView* m_superAlbumView;
     CollectionFlatModel* m_superCollectionFlatModel;
-    CollectionView* m_superCollectionView;    
+    CollectionView* m_superCollectionView;
+    WelcomeWidget* m_welcomeWidget;
     
     QList< Tomahawk::collection_ptr > m_superCollections;
 

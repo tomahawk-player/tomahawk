@@ -92,7 +92,7 @@ DBSyncConnection::trigger()
     qDebug() << Q_FUNC_INFO;
 
     // if we're still setting up the connection, do nothing - we sync on first connect anyway:
-    if ( !this->isRunning() )
+    if ( !isRunning() )
         return;
 
     QMetaObject::invokeMethod( this, "sendMsg", Qt::QueuedConnection,

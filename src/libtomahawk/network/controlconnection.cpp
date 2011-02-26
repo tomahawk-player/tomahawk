@@ -104,7 +104,7 @@ ControlConnection::registerSource()
 void
 ControlConnection::setupDbSyncConnection( bool ondemand )
 {
-    if( m_dbsyncconn != NULL || ! m_registered )
+    if( m_dbsyncconn != NULL || !m_registered )
         return;
 
     qDebug() << Q_FUNC_INFO << ondemand << m_source->id();
@@ -115,12 +115,6 @@ ControlConnection::setupDbSyncConnection( bool ondemand )
         qDebug() << "Connecting to DBSync offer from peer...";
         m_dbsyncconn = new DBSyncConnection( m_servent, m_source );
 
-        connect( m_dbsyncconn, SIGNAL( finished() ),
-                 m_dbsyncconn,   SLOT( deleteLater() ) );
-
-        connect( m_dbsyncconn, SIGNAL( destroyed( QObject* ) ),
-                                 SLOT( dbSyncConnFinished( QObject* ) ), Qt::DirectConnection );
-
         m_servent->createParallelConnection( this, m_dbsyncconn, m_dbconnkey );
         m_dbconnkey.clear();
     }
@@ -129,12 +123,6 @@ ControlConnection::setupDbSyncConnection( bool ondemand )
         qDebug() << "Offering a DBSync key to peer...";
         m_dbsyncconn = new DBSyncConnection( m_servent, m_source );
 
-        connect( m_dbsyncconn, SIGNAL( finished() ),
-                 m_dbsyncconn,   SLOT( deleteLater()) );
-
-        connect( m_dbsyncconn, SIGNAL( destroyed(QObject* ) ),
-                                 SLOT( dbSyncConnFinished( QObject* ) ), Qt::DirectConnection );
-
         QString key = uuid();
         m_servent->registerOffer( key, m_dbsyncconn );
         QVariantMap m;
@@ -142,6 +130,12 @@ ControlConnection::setupDbSyncConnection( bool ondemand )
         m.insert( "key", key );
         sendMsg( m );
     }
+
+    connect( m_dbsyncconn, SIGNAL( finished() ),
+             m_dbsyncconn,   SLOT( deleteLater() ) );
+
+    connect( m_dbsyncconn, SIGNAL( destroyed( QObject* ) ),
+                             SLOT( dbSyncConnFinished( QObject* ) ), Qt::DirectConnection );
 }
 
 

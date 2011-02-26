@@ -29,7 +29,6 @@
 #include "utils/widgetdragfilter.h"
 #include "utils/xspfloader.h"
 #include "widgets/newplaylistwidget.h"
-#include "widgets/welcomewidget.h"
 
 #include "audiocontrols.h"
 #include "settingsdialog.h"
@@ -115,12 +114,15 @@ TomahawkWindow::TomahawkWindow( QWidget* parent )
     ui->splitter->setCollapsible( 1, false );
     ui->splitter->setHandleWidth( 1 );
 
-/*    QToolBar* toolbar = addToolBar( "TomahawkToolbar" );
+    QToolBar* toolbar = addToolBar( "TomahawkToolbar" );
     toolbar->setObjectName( "TomahawkToolbar" );
-    toolbar->addWidget( m_topbar );
     toolbar->setMovable( false );
     toolbar->setFloatable( false );
-    toolbar->installEventFilter( new WidgetDragFilter( toolbar ) );*/
+    toolbar->setIconSize( QSize( 32, 32 ) );
+    toolbar->setToolButtonStyle( Qt::ToolButtonTextUnderIcon );
+    toolbar->installEventFilter( new WidgetDragFilter( toolbar ) );
+
+    toolbar->addAction( QIcon( RESPATH "images/home.png" ), tr( "Home" ), PlaylistManager::instance(), SLOT( showWelcomePage() ) );
 
     statusBar()->addPermanentWidget( m_audioControls, 1 );
 
@@ -135,8 +137,7 @@ TomahawkWindow::TomahawkWindow( QWidget* parent )
 
     loadSettings();
     setupSignals();
-
-    PlaylistManager::instance()->show( new WelcomeWidget(), tr( "Welcome to Tomahawk!" ), QString(), QPixmap( RESPATH "icons/tomahawk-icon-128x128.png" ) );
+    PlaylistManager::instance()->showWelcomePage();
 }
 
 

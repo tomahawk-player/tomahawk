@@ -7,6 +7,7 @@
 #include "infobar/infobar.h"
 #include "topbar/topbar.h"
 #include "widgets/infowidgets/sourceinfowidget.h"
+#include "widgets/welcomewidget.h"
 
 #include "collectionmodel.h"
 #include "collectionflatmodel.h"
@@ -42,6 +43,7 @@ PlaylistManager::instance()
 PlaylistManager::PlaylistManager( QObject* parent )
     : QObject( parent )
     , m_widget( new QWidget() )
+    , m_welcomeWidget( new WelcomeWidget() )
     , m_currentInterface( 0 )
     , m_currentMode( 0 )
     , m_superCollectionVisible( true )
@@ -100,7 +102,7 @@ PlaylistManager::PlaylistManager( QObject* parent )
     m_widget->layout()->setContentsMargins( 0, 0, 0, 0 );
     m_widget->layout()->setMargin( 0 );
     m_widget->layout()->setSpacing( 0 );
-    
+
     connect( &m_filterTimer, SIGNAL( timeout() ), SLOT( applyFilter() ) );
 
     connect( m_topbar, SIGNAL( filterTextChanged( QString ) ),
@@ -424,14 +426,16 @@ PlaylistManager::show( QWidget* widget, const QString& title, const QString& des
 {
     unlinkPlaylist();
 
-    connect( widget, SIGNAL( destroyed( QWidget* ) ), SLOT( onWidgetDestroyed( QWidget* ) ) );
+    if ( m_stack->indexOf( widget ) < 0 )
+    {
+        connect( widget, SIGNAL( destroyed( QWidget* ) ), SLOT( onWidgetDestroyed( QWidget* ) ) );
+        m_stack->addWidget( widget );
+    }
 
-    m_stack->addWidget( widget );
     m_stack->setCurrentWidget( widget );
-
     m_infobar->setCaption( title );
     m_infobar->setDescription( desc );
-    m_infobar->setPixmap( pixmap );
+    m_infobar->setPixmap( pixmap.isNull() ? QPixmap( RESPATH "icons/tomahawk-icon-128x128.png" ) : pixmap );
     
     m_queueView->show();
     m_superCollectionVisible = false;
@@ -480,6 +484,14 @@ PlaylistManager::showSuperCollection()
 
     emit numSourcesChanged( m_superCollections.count() );
     return true;
+}
+
+
+void
+PlaylistManager::showWelcomePage()
+{
+    qDebug() << Q_FUNC_INFO;
+    show( m_welcomeWidget, tr( "Welcome to Tomahawk!" ) );
 }
 
 
