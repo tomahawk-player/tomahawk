@@ -300,7 +300,7 @@ DynamicView::paintEvent( QPaintEvent* event )
         bg.moveTo( m_fadingPointAnchor ); // cover up the background
         if( m_fadebg ) {
             p.save();
-            
+            p.fillRect( bg, Qt::white );
             p.setOpacity( 1 - m_fadeOutAnim.currentValue() );
         }
         p.drawPixmap( bg, m_bg );
