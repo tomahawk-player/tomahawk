@@ -30,7 +30,7 @@ public:
     unsigned int volume() const { return m_audioOutput->volume() * 100.0; } // in percent
     bool isPlaying() const { return m_mediaObject->state() == Phonon::PlayingState; }
     bool isPaused() const { return m_mediaObject->state() == Phonon::PausedState; }
-
+    
     /* Returns the PlaylistInterface of the currently playing track. Note: This might be different to the current playlist! */
     PlaylistInterface* currentTrackPlaylist() const { return m_currentTrackPlaylist; }
 

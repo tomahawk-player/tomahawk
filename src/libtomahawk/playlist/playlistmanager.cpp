@@ -47,7 +47,6 @@ PlaylistManager::PlaylistManager( QObject* parent )
     , m_widget( new QWidget() )
     , m_welcomeWidget( new WelcomeWidget() )
     , m_currentMode( 0 )
-    , m_superCollectionVisible( true )
 {
     s_instance = this;
 
@@ -151,11 +150,9 @@ PlaylistManager::show( const Tomahawk::playlist_ptr& playlist )
     }
     
     setPage( view );
-    m_superCollectionVisible = false;
-
     TomahawkSettings::instance()->appendRecentlyPlayedPlaylist( playlist );
-
     emit numSourcesChanged( SourceList::instance()->count() );
+
     return true;
 }
 
@@ -177,11 +174,9 @@ PlaylistManager::show( const Tomahawk::dynplaylist_ptr& playlist )
     else
         m_queueView->show();
     
-    m_superCollectionVisible = false;
-    
     TomahawkSettings::instance()->appendRecentlyPlayedPlaylist( playlist );
-
     emit numSourcesChanged( SourceList::instance()->count() );
+
     return true;
 }
 
@@ -208,9 +203,8 @@ PlaylistManager::show( const Tomahawk::artist_ptr& artist )
     }
     
     setPage( view );
-    m_superCollectionVisible = false;
-
     emit numSourcesChanged( 1 );
+
     return true;
 }
 
@@ -236,9 +230,8 @@ PlaylistManager::show( const Tomahawk::album_ptr& album )
     }
     
     setPage( view );
-    m_superCollectionVisible = false;
-
     emit numSourcesChanged( 1 );
+
     return true;
 }
 
@@ -291,9 +284,8 @@ PlaylistManager::show( const Tomahawk::collection_ptr& collection )
         setPage( aview );
     }
 
-    m_superCollectionVisible = false;
-
     emit numSourcesChanged( 1 );
+
     return true;
 }
 
@@ -313,9 +305,8 @@ PlaylistManager::show( const Tomahawk::source_ptr& source )
     }
 
     setPage( swidget );
-    m_superCollectionVisible = false;
-
     emit numSourcesChanged( 1 );
+
     return true;
 }
 
@@ -329,7 +320,6 @@ PlaylistManager::show( ViewPage* page )
     }
 
     setPage( page );
-    m_superCollectionVisible = false;
 
     return true;
 }
@@ -360,9 +350,8 @@ PlaylistManager::showSuperCollection()
         setPage( m_superAlbumView );
     }
 
-    m_superCollectionVisible = true;
-
     emit numSourcesChanged( m_superCollections.count() );
+
     return true;
 }
 
@@ -381,7 +370,7 @@ PlaylistManager::setTableMode()
 
     m_currentMode = 0;
 
-    if ( m_superCollectionVisible )
+    if ( isSuperCollectionVisible() )
         showSuperCollection();
     else
         show( m_currentCollection );
@@ -397,7 +386,7 @@ PlaylistManager::setTreeMode()
 
     m_currentMode = 1;
 
-    if ( m_superCollectionVisible )
+    if ( isSuperCollectionVisible() )
         showSuperCollection();
     else
         show( m_currentCollection );
@@ -411,7 +400,7 @@ PlaylistManager::setAlbumMode()
 
     m_currentMode = 2;
 
-    if ( m_superCollectionVisible )
+    if ( isSuperCollectionVisible() )
         showSuperCollection();
     else
         show( m_currentCollection );
@@ -531,10 +520,12 @@ PlaylistManager::setPage( ViewPage* page, bool trackHistory )
         emit dynamicPlaylistActivated( dynamicPlaylistForInterface( currentPlaylistInterface() ) );
     if ( collectionForInterface( currentPlaylistInterface() ) )
         emit collectionActivated( collectionForInterface( currentPlaylistInterface() ) );
+    if ( isSuperCollectionVisible() )
+        emit superCollectionActivated();
     if ( !currentPlaylistInterface() )
         emit tempPageActivated();
 
-    if ( !AudioEngine::instance()->playlist() )
+    if ( !AudioEngine::instance()->isPlaying() )
         AudioEngine::instance()->setPlaylist( currentPlaylistInterface() );
 
     m_stack->setCurrentWidget( page->widget() );
@@ -778,6 +769,15 @@ PlaylistManager::collectionForInterface( PlaylistInterface* interface ) const
     }
     
     return collection_ptr();
+}
+
+
+bool
+PlaylistManager::isSuperCollectionVisible() const
+{
+    return ( m_pageHistory.count() &&
+           ( currentPage()->playlistInterface() == m_superCollectionView->playlistInterface() ||
+             currentPage()->playlistInterface() == m_superAlbumView->playlistInterface() ) );
 }
 
 
