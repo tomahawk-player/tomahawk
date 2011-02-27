@@ -234,8 +234,8 @@ DynamicWidget::generate( int num )
 void 
 DynamicWidget::stationFailed( const QString& msg )
 {
-    m_view->showMessage( msg );
     m_view->setDynamicWorking( false );
+    m_view->showMessage( msg );
     m_loading->fadeOut();
     
     stopStation( false );
