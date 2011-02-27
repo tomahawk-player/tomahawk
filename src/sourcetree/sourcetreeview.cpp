@@ -67,7 +67,7 @@ SourceTreeView::SourceTreeView( QWidget* parent )
     setItemDelegate( new SourceDelegate( this ) );
 
     setContextMenuPolicy( Qt::CustomContextMenu );
-    connect( this, SIGNAL( customContextMenuRequested( const QPoint& ) ), SLOT( onCustomContextMenu( const QPoint& ) ) );
+    connect( this, SIGNAL( customContextMenuRequested( QPoint ) ), SLOT( onCustomContextMenu( QPoint ) ) );
 
     m_model = new SourcesModel( this );
     m_proxyModel = new SourcesProxyModel( m_model, this );
@@ -77,14 +77,25 @@ SourceTreeView::SourceTreeView( QWidget* parent )
     header()->setResizeMode( 0, QHeaderView::Stretch );
 
     connect( m_model, SIGNAL( clicked( QModelIndex ) ), SIGNAL( clicked( QModelIndex ) ) );
-    connect( this,  SIGNAL( clicked( QModelIndex ) ), SLOT( onItemActivated( QModelIndex ) ) );
+    connect( this, SIGNAL( clicked( QModelIndex ) ), SLOT( onItemActivated( QModelIndex ) ) );
 
-    connect( selectionModel(), SIGNAL( selectionChanged( const QItemSelection&, const QItemSelection& ) ), SLOT( onSelectionChanged() ) );
+    connect( selectionModel(), SIGNAL( selectionChanged( QItemSelection, QItemSelection ) ), SLOT( onSelectionChanged() ) );
     connect( SourceList::instance(), SIGNAL( sourceRemoved( Tomahawk::source_ptr ) ), SLOT( onSourceOffline( Tomahawk::source_ptr ) ) );
 
     m_model->appendItem( source_ptr() );
 
     hideOfflineSources();
+
+    connect( PlaylistManager::instance(), SIGNAL( playlistActivated( Tomahawk::playlist_ptr ) ),
+                                            SLOT( onPlaylistActivated( Tomahawk::playlist_ptr ) ) );
+    connect( PlaylistManager::instance(), SIGNAL( dynamicPlaylistActivated( Tomahawk::dynplaylist_ptr ) ),
+                                            SLOT( onDynamicPlaylistActivated( Tomahawk::dynplaylist_ptr ) ) );
+    connect( PlaylistManager::instance(), SIGNAL( collectionActivated( Tomahawk::collection_ptr ) ),
+                                            SLOT( onCollectionActivated( Tomahawk::collection_ptr ) ) );
+    connect( PlaylistManager::instance(), SIGNAL( superCollectionActivated() ),
+                                            SLOT( onSuperCollectionActivated() ) );
+    connect( PlaylistManager::instance(), SIGNAL( tempPageActivated() ),
+                                            SLOT( onTempPageActivated() ) );
 }
 
 
@@ -140,6 +151,57 @@ void
 SourceTreeView::onSourceOffline( Tomahawk::source_ptr src )
 {
     qDebug() << Q_FUNC_INFO;
+}
+
+
+void
+SourceTreeView::onPlaylistActivated( const Tomahawk::playlist_ptr& playlist )
+{
+    QModelIndex idx = m_proxyModel->mapFromSource( m_model->playlistToIndex( playlist ) );
+    if ( idx.isValid() )
+    {
+        setCurrentIndex( idx );
+    }
+}
+
+
+void
+SourceTreeView::onDynamicPlaylistActivated( const Tomahawk::dynplaylist_ptr& playlist )
+{
+    QModelIndex idx = m_proxyModel->mapFromSource( m_model->dynamicPlaylistToIndex( playlist ) );
+    if ( idx.isValid() )
+    {
+        setCurrentIndex( idx );
+    }
+}
+
+
+void
+SourceTreeView::onCollectionActivated( const Tomahawk::collection_ptr& collection )
+{
+    QModelIndex idx = m_proxyModel->mapFromSource( m_model->collectionToIndex( collection ) );
+    if ( idx.isValid() )
+    {
+        setCurrentIndex( idx );
+    }
+}
+
+
+void
+SourceTreeView::onSuperCollectionActivated()
+{
+    QModelIndex idx = m_proxyModel->index( 0, 0 );
+    if ( idx.isValid() )
+    {
+        setCurrentIndex( idx );
+    }
+}
+
+
+void
+SourceTreeView::onTempPageActivated()
+{
+    clearSelection();
 }
 
 

@@ -24,9 +24,9 @@ set( libSources
     query.cpp
     result.cpp
     source.cpp
+    viewpage.cpp
 
     sip/SipPlugin.cpp
-
 
     audio/madtranscode.cpp
     audio/vorbistranscode.cpp
@@ -161,6 +161,7 @@ set( libHeaders
     resolver.h
     result.h
     source.h
+    viewpage.h
 
     artist.h
     album.h

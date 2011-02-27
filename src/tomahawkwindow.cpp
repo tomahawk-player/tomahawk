@@ -56,6 +56,8 @@ TomahawkWindow::TomahawkWindow( QWidget* parent )
 #endif
 
     PlaylistManager* pm = new PlaylistManager( this );
+    connect( pm, SIGNAL( historyBackAvailable( bool ) ), SLOT( onHistoryBackAvailable( bool ) ) );
+    connect( pm, SIGNAL( historyForwardAvailable( bool ) ), SLOT( onHistoryForwardAvailable( bool ) ) );
 
     connect( m_audioControls, SIGNAL( playPressed() ), pm, SLOT( onPlayClicked() ) );
     connect( m_audioControls, SIGNAL( pausePressed() ), pm, SLOT( onPauseClicked() ) );
@@ -119,9 +121,11 @@ TomahawkWindow::TomahawkWindow( QWidget* parent )
     toolbar->setMovable( false );
     toolbar->setFloatable( false );
     toolbar->setIconSize( QSize( 32, 32 ) );
-    toolbar->setToolButtonStyle( Qt::ToolButtonTextUnderIcon );
+    toolbar->setToolButtonStyle( Qt::ToolButtonFollowStyle );
     toolbar->installEventFilter( new WidgetDragFilter( toolbar ) );
 
+    m_backAvailable = toolbar->addAction( QIcon( RESPATH "images/back.png" ), tr( "Back" ), PlaylistManager::instance(), SLOT( historyBack() ) );
+    m_forwardAvailable = toolbar->addAction( QIcon( RESPATH "images/forward.png" ), tr( "Forward" ), PlaylistManager::instance(), SLOT( historyForward() ) );
     toolbar->addAction( QIcon( RESPATH "images/home.png" ), tr( "Home" ), PlaylistManager::instance(), SLOT( showWelcomePage() ) );
 
     statusBar()->addPermanentWidget( m_audioControls, 1 );
@@ -352,6 +356,20 @@ TomahawkWindow::onPlaybackLoading( const Tomahawk::result_ptr& result )
 {
     m_currentTrack = result;
     setWindowTitle( m_windowTitle );
+}
+
+
+void
+TomahawkWindow::onHistoryBackAvailable( bool avail )
+{
+    m_backAvailable->setEnabled( avail );
+}
+
+
+void
+TomahawkWindow::onHistoryForwardAvailable( bool avail )
+{
+    m_forwardAvailable->setEnabled( avail );
 }
 
 

@@ -33,7 +33,8 @@ public:
 
     virtual PlaylistInterface::RepeatMode repeatMode() const { return m_repeatMode; }
     virtual bool shuffled() const { return m_shuffled; }
-
+    virtual PlaylistInterface::ViewMode viewMode() const { return PlaylistInterface::Album; }
+    
 signals:
     void repeatModeChanged( PlaylistInterface::RepeatMode mode );
     void shuffleModeChanged( bool enabled );

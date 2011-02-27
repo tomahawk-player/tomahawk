@@ -67,8 +67,10 @@ PlaylistModel::loadPlaylist( const Tomahawk::playlist_ptr& playlist, bool loadEn
     connect( playlist.data(), SIGNAL( revisionLoaded( Tomahawk::PlaylistRevision ) ), SLOT( onRevisionLoaded( Tomahawk::PlaylistRevision ) ) );
 
     setReadOnly( !m_playlist->author()->isLocal() );
+    setTitle( playlist->title() );
+    setDescription( tr( "A playlist by %1" ).arg( playlist->author()->isLocal() ? tr( "you" ) : playlist->author()->friendlyName() ) );
 
-    if( !loadEntries )
+    if ( !loadEntries )
         return;
     
     PlItem* plitem;

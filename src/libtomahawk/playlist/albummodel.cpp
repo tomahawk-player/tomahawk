@@ -225,6 +225,8 @@ AlbumModel::addCollection( const collection_ptr& collection )
                     SLOT( onAlbumsAdded( QList<Tomahawk::album_ptr>, Tomahawk::collection_ptr ) ) );
 
     Database::instance()->enqueue( QSharedPointer<DatabaseCommand>( cmd ) );
+
+    m_title = tr( "All albums from %1" ).arg( collection->source()->friendlyName() );
 }
 
 
@@ -245,6 +247,8 @@ AlbumModel::addFilteredCollection( const collection_ptr& collection, unsigned in
                     SLOT( onAlbumsAdded( QList<Tomahawk::album_ptr>, Tomahawk::collection_ptr ) ) );
 
     Database::instance()->enqueue( QSharedPointer<DatabaseCommand>( cmd ) );
+
+    m_title = tr( "All albums by %1" ).arg( collection->source()->friendlyName() );
 }
 
 

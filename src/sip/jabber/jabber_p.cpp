@@ -526,7 +526,7 @@ Jabber_p::handleRosterPresence( const RosterItem& item, const std::string& resou
     // convert to QString to get proper regex support
     QString res( jid.resource().c_str() );
     QRegExp regex( "tomahawk\\d+" );
-    if( res != "tomahawk-tomahawk" && !res.contains( regex ) )
+    if( res != "tomahawk-tomahawk" && !res.startsWith( "tomahawk" ) )
     {
         //qDebug() << "not considering resource of" << res;
         // Disco them to check if they are tomahawk-capable

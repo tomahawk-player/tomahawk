@@ -3,11 +3,14 @@
 
 #include <QMenu>
 
+#include "trackproxymodel.h"
+#include "trackmodel.h"
 #include "trackview.h"
+#include "viewpage.h"
 
 #include "dllmacro.h"
 
-class DLLEXPORT CollectionView : public TrackView
+class DLLEXPORT CollectionView : public TrackView, public Tomahawk::ViewPage
 {
 Q_OBJECT
 
@@ -16,6 +19,16 @@ public:
     ~CollectionView();
 
     virtual void setModel( TrackModel* model );
+
+    virtual QWidget* widget() { return this; }
+    virtual PlaylistInterface* playlistInterface() const { return proxyModel(); }
+
+    virtual QString title() const { return model()->title(); }
+    virtual QString description() const { return model()->description(); }
+
+    virtual bool showModes() const { return true; }
+
+    virtual bool jumpToCurrentTrack();
 
 private slots:
     void onCustomContextMenu( const QPoint& pos );

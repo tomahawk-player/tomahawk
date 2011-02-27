@@ -9,6 +9,7 @@
 
 #include "playlist.h"
 #include "result.h"
+#include "viewpage.h"
 
 #include "utils/tomahawkutils.h"
 
@@ -73,13 +74,23 @@ private:
 };
 
 
-class DLLEXPORT WelcomeWidget : public QWidget
+class DLLEXPORT WelcomeWidget : public QWidget, public Tomahawk::ViewPage
 {
 Q_OBJECT
 
 public:
     WelcomeWidget( QWidget* parent = 0 );
     ~WelcomeWidget();
+
+    virtual QWidget* widget() { return this; }
+    virtual PlaylistInterface* playlistInterface() const { return 0; }
+
+    virtual QString title() const { return tr( "Welcome to Tomahawk" ); }
+    virtual QString description() const { return QString(); }
+
+    virtual bool showStatsBar() const { return false; }
+
+    virtual bool jumpToCurrentTrack() { return false; }
 
 protected:
     void changeEvent( QEvent* e );

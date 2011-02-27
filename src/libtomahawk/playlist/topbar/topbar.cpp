@@ -65,7 +65,28 @@ TopBar::TopBar( QWidget* parent )
     setNumArtists( 0 );
     setNumShown( 0 );
 
-    ui->radioNormal->setChecked( true );
+    onFlatMode();
+
+    connect( PlaylistManager::instance(), SIGNAL( numSourcesChanged( unsigned int ) ),
+                                            SLOT( setNumSources( unsigned int ) ) );
+    
+    connect( PlaylistManager::instance(), SIGNAL( numTracksChanged( unsigned int ) ),
+                                            SLOT( setNumTracks( unsigned int ) ) );
+    
+    connect( PlaylistManager::instance(), SIGNAL( numArtistsChanged( unsigned int ) ),
+                                            SLOT( setNumArtists( unsigned int ) ) );
+    
+    connect( PlaylistManager::instance(), SIGNAL( numShownChanged( unsigned int ) ),
+                                            SLOT( setNumShown( unsigned int ) ) );
+    
+    connect( PlaylistManager::instance(), SIGNAL( statsAvailable( bool ) ),
+                                            SLOT( setStatsVisible( bool ) ) );
+    
+    connect( PlaylistManager::instance(), SIGNAL( modesAvailable( bool ) ),
+                                            SLOT( setModesVisible( bool ) ) );
+
+    connect( PlaylistManager::instance(), SIGNAL( modeChanged( PlaylistInterface::ViewMode ) ),
+                                            SLOT( onModeChanged( PlaylistInterface::ViewMode ) ) );
 }
 
 
@@ -237,4 +258,49 @@ void
 TopBar::setFilter( const QString& filter )
 {
     ui->filterEdit->setText( filter );
+}
+
+
+void
+TopBar::onModeChanged( PlaylistInterface::ViewMode mode )
+{
+    qDebug() << Q_FUNC_INFO << mode;
+    switch ( mode )
+    {
+        case PlaylistInterface::Flat:
+            onFlatMode();
+            break;
+
+        case PlaylistInterface::Tree:
+            onArtistMode();
+            break;
+
+        case PlaylistInterface::Album:
+            onAlbumMode();
+            break;
+
+        default:
+            break;
+    }
+}
+
+
+void
+TopBar::onFlatMode()
+{
+    ui->radioNormal->setChecked( true );
+}
+
+
+void
+TopBar::onArtistMode()
+{
+    ui->radioDetailed->setChecked( true );
+}
+
+
+void
+TopBar::onAlbumMode()
+{
+    ui->radioCloud->setChecked( true );
 }

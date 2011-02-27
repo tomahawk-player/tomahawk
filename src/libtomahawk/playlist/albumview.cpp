@@ -10,8 +10,6 @@
 
 #include "tomahawksettings.h"
 #include "albumitemdelegate.h"
-#include "albummodel.h"
-#include "albumproxymodel.h"
 #include "playlistmanager.h"
 
 using namespace Tomahawk;

@@ -13,8 +13,9 @@ class DLLEXPORT PlaylistInterface
 {
 public:
     enum RepeatMode { NoRepeat, RepeatOne, RepeatAll };
-
-    PlaylistInterface( QObject* parent = 0 ) : m_widget( 0 ), m_object( parent ) {}
+    enum ViewMode { Unknown, Flat, Tree, Album };
+    
+    PlaylistInterface( QObject* parent = 0 ) : m_object( parent ) {}
     virtual ~PlaylistInterface() {}
 
     virtual QList< Tomahawk::query_ptr > tracks() = 0;
@@ -28,12 +29,10 @@ public:
 
     virtual PlaylistInterface::RepeatMode repeatMode() const = 0;
     virtual bool shuffled() const = 0;
+    virtual PlaylistInterface::ViewMode viewMode() const { return Unknown; }
 
     virtual QString filter() const { return m_filter; }
     virtual void setFilter( const QString& pattern ) { m_filter = pattern; }
-
-    QWidget* widget() const { return m_widget; }
-    void setWidget( QWidget* widget ) { m_widget = widget; }
 
     QObject* object() const { return m_object; }
 
@@ -48,7 +47,6 @@ signals:
     virtual void sourceTrackCountChanged( unsigned int tracks ) = 0;
 
 private:
-    QWidget* m_widget;
     QObject* m_object;
 
     QString m_filter;

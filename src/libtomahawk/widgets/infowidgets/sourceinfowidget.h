@@ -6,6 +6,7 @@
 #include "album.h"
 #include "result.h"
 #include "playlistinterface.h"
+#include "viewpage.h"
 
 #include "dllmacro.h"
 
@@ -18,7 +19,7 @@ namespace Ui
     class SourceInfoWidget;
 }
 
-class DLLEXPORT SourceInfoWidget : public QWidget
+class DLLEXPORT SourceInfoWidget : public QWidget, public Tomahawk::ViewPage
 {
 Q_OBJECT
 
@@ -26,6 +27,16 @@ public:
     SourceInfoWidget( const Tomahawk::source_ptr& source, QWidget* parent = 0 );
     ~SourceInfoWidget();
 
+    virtual QWidget* widget() { return this; }
+    virtual PlaylistInterface* playlistInterface() const { return 0; }
+    
+    virtual QString title() const { return m_title; }
+    virtual QString description() const { return m_description; }
+
+    virtual bool showStatsBar() const { return false; }
+
+    virtual bool jumpToCurrentTrack() { return false; }
+    
 protected:
     void changeEvent( QEvent* e );
 
@@ -38,6 +49,9 @@ private:
     CollectionFlatModel* m_recentCollectionModel;
     PlaylistModel* m_historyModel;
     AlbumModel* m_recentAlbumModel;
+
+    QString m_title;
+    QString m_description;
 };
 
 #endif // SOURCEINFOWIDGET_H
