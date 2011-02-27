@@ -609,7 +609,7 @@ Servent::remoteIODeviceFactory( const result_ptr& result )
     const QString sourceName = parts.at( 0 );
     const QString fileId = parts.at( 1 );
     source_ptr s = SourceList::instance()->get( sourceName );
-    if ( s.isNull() )
+    if ( s.isNull() || !s->controlConnection() )
         return sp;
 
     ControlConnection* cc = s->controlConnection();
