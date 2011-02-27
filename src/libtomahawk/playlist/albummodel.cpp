@@ -248,7 +248,7 @@ AlbumModel::addFilteredCollection( const collection_ptr& collection, unsigned in
 
     Database::instance()->enqueue( QSharedPointer<DatabaseCommand>( cmd ) );
 
-    m_title = tr( "All albums by %1" ).arg( collection->source()->friendlyName() );
+    m_title = tr( "All albums from %1" ).arg( collection->source()->friendlyName() );
 }
 
 

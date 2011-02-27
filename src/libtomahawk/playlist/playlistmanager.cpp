@@ -786,6 +786,7 @@ PlaylistManager::showCurrentTrack()
 {
     ViewPage* page = pageForInterface( AudioEngine::instance()->currentTrackPlaylist() );
     setPage( page );
+    page->jumpToCurrentTrack();
 }
 
 
