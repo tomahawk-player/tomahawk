@@ -142,6 +142,13 @@ DynamicWidget::loadDynamicPlaylist( const Tomahawk::dynplaylist_ptr& playlist )
     m_controlsChanged = false;
     m_setup->setPlaylist( m_playlist );
         
+    
+    if( !m_playlist->author()->isLocal() ) { // hide controls, as we show the description in the summary
+            m_layout->removeWidget( m_controls );
+    } else if( m_layout->indexOf( m_controls ) == -1 ) {
+        m_layout->insertWidget( 0, m_controls );
+    } 
+    
     if( !m_playlist.isNull() )
         m_controls->setControls( m_playlist, m_playlist->author()->isLocal() );
     

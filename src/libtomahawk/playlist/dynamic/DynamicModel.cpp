@@ -50,6 +50,13 @@ DynamicModel::loadPlaylist( const Tomahawk::dynplaylist_ptr& playlist )
     PlaylistModel::loadPlaylist( m_playlist, !m_onDemandRunning );
 }
 
+QString 
+DynamicModel::description() const
+{
+    return m_playlist->generator()->sentenceSummary();
+}
+
+
 void 
 DynamicModel::startOnDemand()
 {
