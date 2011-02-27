@@ -82,16 +82,14 @@ DynamicWidget::DynamicWidget( const Tomahawk::dynplaylist_ptr& playlist, QWidget
     m_layout->setSpacing( 0 );
     setLayout( m_layout );
 
-    
     connect( m_setup, SIGNAL( generatePressed( int ) ), this, SLOT( generate( int ) ) );
     connect( m_setup, SIGNAL( typeChanged( QString ) ), this, SLOT( playlistTypeChanged( QString ) ) );
-    
+
     layoutFloatingWidgets();
-    
+
     connect( m_controls, SIGNAL( controlChanged( Tomahawk::dyncontrol_ptr ) ), this, SLOT( controlChanged( Tomahawk::dyncontrol_ptr ) ), Qt::QueuedConnection );
     connect( m_controls, SIGNAL( controlsChanged() ), this, SLOT( controlsChanged() ), Qt::QueuedConnection );
-    
-    
+
     connect( PlaylistManager::instance(), SIGNAL( playClicked() ), this, SLOT( playPressed() ) );
     connect( PlaylistManager::instance(), SIGNAL( pauseClicked() ), this, SLOT( pausePressed() ) );
 }

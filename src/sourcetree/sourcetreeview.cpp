@@ -492,9 +492,13 @@ SourceDelegate::paint( QPainter* painter, const QStyleOptionViewItem& option, co
             o.palette.setColor( QPalette::Text, o.palette.color( QPalette::HighlightedText ) );
         }
     }
-
-    QStyledItemDelegate::paint( painter, o2, QModelIndex() );
-
+    
+    QStyleOptionViewItemV4 o3 = option;
+    if ( index.data( SourceTreeItem::Type ) != SourcesModel::CollectionSource )
+        o3.rect.setX( 0 );
+    
+    QApplication::style()->drawControl( QStyle::CE_ItemViewItem, &o3, painter );
+    
     if ( index.data( SourceTreeItem::Type ) == SourcesModel::CollectionSource )
     {
         painter->save();
