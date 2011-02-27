@@ -525,7 +525,7 @@ PlaylistManager::setPage( ViewPage* page, bool trackHistory )
     if ( !currentPlaylistInterface() )
         emit tempPageActivated();
 
-    if ( !AudioEngine::instance()->playlist() )
+    if ( !AudioEngine::instance()->isPlaying() )
         AudioEngine::instance()->setPlaylist( currentPlaylistInterface() );
 
     m_stack->setCurrentWidget( page->widget() );

@@ -103,8 +103,6 @@ public slots:
     void showQueue();
     void hideQueue();
 
-    void setFilter( const QString& filter );
-
     void setRepeatMode( PlaylistInterface::RepeatMode mode );
     void setShuffled( bool enabled );
     
@@ -117,6 +115,7 @@ public slots:
     void onPauseClicked();
     
 private slots:
+    void setFilter( const QString& filter );
     void applyFilter();
     void onWidgetDestroyed( QWidget* widget );
 

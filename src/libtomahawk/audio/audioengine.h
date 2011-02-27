@@ -32,7 +32,8 @@ public:
 
     unsigned int volume() const { if ( m_audio ) return m_audio->volume() * 100.0; else return 0; }; // in percent
     bool isPaused() const { return m_audio->isPaused(); }
-
+    bool isPlaying() const { return m_audio->isPlaying(); }
+    
     /* Returns the PlaylistInterface of the currently playing track. Note: This might be different to the current playlist! */
     PlaylistInterface* currentTrackPlaylist() const { return m_currentTrackPlaylist; }
 
