@@ -95,6 +95,7 @@ BufferIODevice::addData( int block, const QByteArray& ba )
         }
     }
 
+    m_received += ba.count();
     emit bytesWritten( ba.count() );
     emit readyRead();
 }
