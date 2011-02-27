@@ -533,7 +533,10 @@ PlaylistManager::setPage( ViewPage* page, bool trackHistory )
         emit collectionActivated( collectionForInterface( currentPlaylistInterface() ) );
     if ( !currentPlaylistInterface() )
         emit tempPageActivated();
-    
+
+    if ( !AudioEngine::instance()->playlist() )
+        AudioEngine::instance()->setPlaylist( currentPlaylistInterface() );
+
     m_stack->setCurrentWidget( page->widget() );
     updateView();
 }
