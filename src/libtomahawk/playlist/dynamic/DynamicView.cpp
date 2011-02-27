@@ -45,6 +45,7 @@ DynamicView::DynamicView( QWidget* parent )
 {
     setContentsMargins( 0, 0, 0, 0 );
     setFrameShape( QFrame::NoFrame );
+    setAttribute( Qt::WA_MacShowFocusRect, 0 );
     
     m_fadeOutAnim.setDuration( FADE_LENGTH );
     m_fadeOutAnim.setCurveShape( QTimeLine::LinearCurve );
@@ -56,7 +57,6 @@ DynamicView::DynamicView( QWidget* parent )
     m_slideAnim.setEasingCurve( curve );
     m_slideAnim.setDirection( QTimeLine::Forward );
     m_fadeOutAnim.setUpdateInterval( 5 );
-    
     
     connect( &m_fadeOutAnim, SIGNAL( frameChanged( int ) ), viewport(), SLOT( update() ) );
     connect( &m_fadeOutAnim, SIGNAL( finished() ), this, SLOT( animFinished() ) );
