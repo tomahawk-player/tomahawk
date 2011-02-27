@@ -7,6 +7,7 @@
 #include "infobar/infobar.h"
 #include "topbar/topbar.h"
 #include "widgets/infowidgets/sourceinfowidget.h"
+#include "widgets/welcomewidget.h"
 
 #include "collectionmodel.h"
 #include "collectionflatmodel.h"
@@ -29,6 +30,8 @@
 
 #define FILTER_TIMEOUT 280
 
+using namespace Tomahawk;
+
 PlaylistManager* PlaylistManager::s_instance = 0;
 
 
@@ -42,14 +45,13 @@ PlaylistManager::instance()
 PlaylistManager::PlaylistManager( QObject* parent )
     : QObject( parent )
     , m_widget( new QWidget() )
-    , m_currentInterface( 0 )
+    , m_welcomeWidget( new WelcomeWidget() )
     , m_currentMode( 0 )
     , m_superCollectionVisible( true )
-    , m_statsAvailable( false )
-    , m_modesAvailable( false )
 {
     s_instance = this;
 
+    setHistoryPosition( -1 );
     m_widget->setLayout( new QVBoxLayout() );
 
     m_topbar = new TopBar();
@@ -89,49 +91,28 @@ PlaylistManager::PlaylistManager( QObject* parent )
     m_superAlbumView = new AlbumView();
     m_superAlbumModel = new AlbumModel( m_superAlbumView );
     m_superAlbumView->setModel( m_superAlbumModel );
-
-    m_stack->addWidget( m_superCollectionView );
-    m_stack->addWidget( m_superAlbumView );
-
-    m_currentInterface = m_superCollectionView->proxyModel();
+    m_superAlbumView->setFrameShape( QFrame::NoFrame );
+    m_superAlbumView->setAttribute( Qt::WA_MacShowFocusRect, 0 );
     
     m_stack->setContentsMargins( 0, 0, 0, 0 );
     m_widget->setContentsMargins( 0, 0, 0, 0 );
     m_widget->layout()->setContentsMargins( 0, 0, 0, 0 );
     m_widget->layout()->setMargin( 0 );
     m_widget->layout()->setSpacing( 0 );
-    
+
     connect( &m_filterTimer, SIGNAL( timeout() ), SLOT( applyFilter() ) );
 
     connect( m_topbar, SIGNAL( filterTextChanged( QString ) ),
-             this,       SLOT( setFilter( QString ) ) );
-
-    connect( this,     SIGNAL( numSourcesChanged( unsigned int ) ),
-             m_topbar,   SLOT( setNumSources( unsigned int ) ) );
-
-    connect( this,     SIGNAL( numTracksChanged( unsigned int ) ),
-             m_topbar,   SLOT( setNumTracks( unsigned int ) ) );
-
-    connect( this,     SIGNAL( numArtistsChanged( unsigned int ) ),
-             m_topbar,   SLOT( setNumArtists( unsigned int ) ) );
-
-    connect( this,     SIGNAL( numShownChanged( unsigned int ) ),
-             m_topbar,   SLOT( setNumShown( unsigned int ) ) );
+                         SLOT( setFilter( QString ) ) );
 
     connect( m_topbar, SIGNAL( flatMode() ),
-             this,       SLOT( setTableMode() ) );
-
+                         SLOT( setTableMode() ) );
+    
     connect( m_topbar, SIGNAL( artistMode() ),
-             this,       SLOT( setTreeMode() ) );
-
+                         SLOT( setTreeMode() ) );
+    
     connect( m_topbar, SIGNAL( albumMode() ),
-             this,       SLOT( setAlbumMode() ) );
-
-    connect( this,     SIGNAL( statsAvailable( bool ) ),
-             m_topbar,   SLOT( setStatsVisible( bool ) ) );
-
-    connect( this,     SIGNAL( modesAvailable( bool ) ),
-             m_topbar,   SLOT( setModesVisible( bool ) ) );
+                         SLOT( setAlbumMode() ) );
 }
 
 
@@ -151,11 +132,10 @@ PlaylistManager::queue() const
 bool
 PlaylistManager::show( const Tomahawk::playlist_ptr& playlist )
 {
-    unlinkPlaylist();
-
+    PlaylistView* view;
     if ( !m_playlistViews.contains( playlist ) )
     {
-        PlaylistView* view = new PlaylistView();
+        view = new PlaylistView();
         PlaylistModel* model = new PlaylistModel();
         view->setModel( model );
         view->setFrameShape( QFrame::NoFrame );
@@ -163,27 +143,15 @@ PlaylistManager::show( const Tomahawk::playlist_ptr& playlist )
         model->loadPlaylist( playlist );
         playlist->resolve();
 
-        m_currentInterface = view->proxyModel();
         m_playlistViews.insert( playlist, view );
-
-        m_stack->addWidget( view );
-        m_stack->setCurrentWidget( view );
     }
     else
     {
-        PlaylistView* view = m_playlistViews.value( playlist );
-        m_stack->setCurrentWidget( view );
-        m_currentInterface = view->proxyModel();
+        view = m_playlistViews.value( playlist );
     }
     
-    m_queueView->show();
-    m_infobar->setCaption( playlist->title() );
-    m_infobar->setDescription( tr( "A playlist by %1" ).arg( playlist->author()->isLocal() ? tr( "you" ) : playlist->author()->friendlyName() ) );
-
+    setPage( view );
     m_superCollectionVisible = false;
-    m_statsAvailable = true;
-    m_modesAvailable = false;
-    linkPlaylist();
 
     TomahawkSettings::instance()->appendRecentlyPlayedPlaylist( playlist );
 
@@ -195,34 +163,25 @@ PlaylistManager::show( const Tomahawk::playlist_ptr& playlist )
 bool 
 PlaylistManager::show( const Tomahawk::dynplaylist_ptr& playlist )
 {
-    unlinkPlaylist();
-    
-    if( !m_dynamicWidgets.contains( playlist ) )
+    if ( !m_dynamicWidgets.contains( playlist ) )
     {
        m_dynamicWidgets[ playlist ] = new Tomahawk::DynamicWidget( playlist, m_stack );
-       m_stack->addWidget( m_dynamicWidgets[ playlist ] );
+
        playlist->resolve();
     }
     
-    m_stack->setCurrentWidget( m_dynamicWidgets.value( playlist ) );
-    m_currentInterface = m_dynamicWidgets.value( playlist )->playlistInterface();
+    setPage( m_dynamicWidgets.value( playlist ) );
 
-    m_infobar->setCaption( playlist->title() );
-    m_infobar->setDescription( tr( "A playlist by %1" ).arg( playlist->author()->isLocal() ? tr( "you" ) : playlist->author()->friendlyName() ) );
-    
-    if( playlist->mode() == Tomahawk::OnDemand )
+    if ( playlist->mode() == Tomahawk::OnDemand )
         m_queueView->hide();
-    
+    else
+        m_queueView->show();
     
     m_superCollectionVisible = false;
-    m_statsAvailable = true;
-    m_modesAvailable = false;
-    linkPlaylist();
     
     TomahawkSettings::instance()->appendRecentlyPlayedPlaylist( playlist );
 
     emit numSourcesChanged( SourceList::instance()->count() );
-
     return true;
 }
 
@@ -230,39 +189,26 @@ PlaylistManager::show( const Tomahawk::dynplaylist_ptr& playlist )
 bool
 PlaylistManager::show( const Tomahawk::artist_ptr& artist )
 {
-    qDebug() << Q_FUNC_INFO << &artist << artist.data();
-    unlinkPlaylist();
+    PlaylistView* view;
 
     if ( !m_artistViews.contains( artist ) )
     {
-        PlaylistView* view = new PlaylistView();
+        view = new PlaylistView();
         PlaylistModel* model = new PlaylistModel();
         view->setModel( model );
         view->setFrameShape( QFrame::NoFrame );
         view->setAttribute( Qt::WA_MacShowFocusRect, 0 );
         model->append( artist );
 
-        m_currentInterface = view->proxyModel();
         m_artistViews.insert( artist, view );
-
-        m_stack->addWidget( view );
-        m_stack->setCurrentWidget( view );
     }
     else
     {
-        PlaylistView* view = m_artistViews.value( artist );
-        m_stack->setCurrentWidget( view );
-        m_currentInterface = view->proxyModel();
+        view = m_artistViews.value( artist );
     }
     
-    m_queueView->show();
-    m_infobar->setCaption( tr( "All tracks by %1" ).arg( artist->name() ) );
-    m_infobar->setDescription( "" );
-
+    setPage( view );
     m_superCollectionVisible = false;
-    m_statsAvailable = false;
-    m_modesAvailable = false;
-    linkPlaylist();
 
     emit numSourcesChanged( 1 );
     return true;
@@ -272,39 +218,25 @@ PlaylistManager::show( const Tomahawk::artist_ptr& artist )
 bool
 PlaylistManager::show( const Tomahawk::album_ptr& album )
 {
-    qDebug() << Q_FUNC_INFO << &album << album.data();
-    unlinkPlaylist();
-    
+    PlaylistView* view;
     if ( !m_albumViews.contains( album ) )
     {
-        PlaylistView* view = new PlaylistView();
+        view = new PlaylistView();
         PlaylistModel* model = new PlaylistModel();
         view->setModel( model );
         view->setFrameShape( QFrame::NoFrame );
         view->setAttribute( Qt::WA_MacShowFocusRect, 0 );
         model->append( album );
 
-        m_currentInterface = view->proxyModel();
         m_albumViews.insert( album, view );
-
-        m_stack->addWidget( view );
-        m_stack->setCurrentWidget( view );
     }
     else
     {
-        PlaylistView* view = m_albumViews.value( album );
-        m_stack->setCurrentWidget( view );
-        m_currentInterface = view->proxyModel();
+        view = m_albumViews.value( album );
     }
     
-    m_queueView->show();
-    m_infobar->setCaption( tr( "All tracks on %1 by %2" ).arg( album->name() ).arg( album->artist()->name() ) );
-    m_infobar->setDescription( "" );
-
+    setPage( view );
     m_superCollectionVisible = false;
-    m_statsAvailable = false;
-    m_modesAvailable = false;
-    linkPlaylist();
 
     emit numSourcesChanged( 1 );
     return true;
@@ -314,70 +246,52 @@ PlaylistManager::show( const Tomahawk::album_ptr& album )
 bool
 PlaylistManager::show( const Tomahawk::collection_ptr& collection )
 {
-    unlinkPlaylist();
-
     m_currentCollection = collection;
     if ( m_currentMode == 0 )
     {
+        CollectionView* view;
         if ( !m_collectionViews.contains( collection ) )
         {
-            CollectionView* view = new CollectionView();
+            view = new CollectionView();
             CollectionFlatModel* model = new CollectionFlatModel();
             view->setModel( model );
             view->setFrameShape( QFrame::NoFrame );
             view->setAttribute( Qt::WA_MacShowFocusRect, 0 );
             model->addCollection( collection );
 
-            m_currentInterface = view->proxyModel();
             m_collectionViews.insert( collection, view );
-
-            m_stack->addWidget( view );
-            m_stack->setCurrentWidget( view );
         }
         else
         {
-            CollectionView* view = m_collectionViews.value( collection );
-            m_stack->setCurrentWidget( view );
-            m_currentInterface = view->proxyModel();
+            view = m_collectionViews.value( collection );
         }
+
+        setPage( view );
     }
 
     if ( m_currentMode == 2 )
     {
+        AlbumView* aview;
         if ( !m_collectionAlbumViews.contains( collection ) )
         {
-            AlbumView* aview = new AlbumView();
+            aview = new AlbumView();
             AlbumModel* amodel = new AlbumModel( aview );
             aview->setModel( amodel );
             aview->setFrameShape( QFrame::NoFrame );
             aview->setAttribute( Qt::WA_MacShowFocusRect, 0 );
             amodel->addCollection( collection );
 
-            m_currentInterface = aview->proxyModel();
             m_collectionAlbumViews.insert( collection, aview );
-
-            m_stack->addWidget( aview );
-            m_stack->setCurrentWidget( aview );
         }
         else
         {
-            AlbumView* view = m_collectionAlbumViews.value( collection );
-            m_stack->setCurrentWidget( view );
-            m_currentInterface = view->proxyModel();
+            aview = m_collectionAlbumViews.value( collection );
         }
+
+        setPage( aview );
     }
 
-    m_infobar->setDescription( "" );
-    if ( collection->source()->isLocal()  )
-        m_infobar->setCaption( tr( "Your Collection" ) );
-    else
-        m_infobar->setCaption( tr( "Collection of %1" ).arg( collection->source()->friendlyName() ) );
-    
-    m_queueView->show();
     m_superCollectionVisible = false;
-    m_statsAvailable = ( m_currentMode == 0 );
-    m_modesAvailable = true;
-    linkPlaylist();
 
     emit numSourcesChanged( 1 );
     return true;
@@ -387,32 +301,19 @@ PlaylistManager::show( const Tomahawk::collection_ptr& collection )
 bool
 PlaylistManager::show( const Tomahawk::source_ptr& source )
 {
-    unlinkPlaylist();
-
-    m_currentInterface = 0;
-
+    SourceInfoWidget* swidget;
     if ( !m_sourceViews.contains( source ) )
     {
-        SourceInfoWidget* swidget = new SourceInfoWidget( source );
-        m_currentInfoWidget = swidget;
-        m_stack->addWidget( m_currentInfoWidget );
+        swidget = new SourceInfoWidget( source );
         m_sourceViews.insert( source, swidget );
     }
     else
     {
-        m_currentInfoWidget = m_sourceViews.value( source );
+        swidget = m_sourceViews.value( source );
     }
 
-    m_infobar->setCaption( tr( "Info about %1" ).arg( source->isLocal() ? tr( "Your Collection" ) : source->friendlyName() ) );
-    m_infobar->setDescription( "" );
-    
-    m_queueView->show();
-    m_stack->setCurrentWidget( m_currentInfoWidget );
+    setPage( swidget );
     m_superCollectionVisible = false;
-    m_statsAvailable = false;
-    m_modesAvailable = false;
-
-    linkPlaylist();
 
     emit numSourcesChanged( 1 );
     return true;
@@ -420,26 +321,15 @@ PlaylistManager::show( const Tomahawk::source_ptr& source )
 
 
 bool
-PlaylistManager::show( QWidget* widget, const QString& title, const QString& desc, const QPixmap& pixmap )
+PlaylistManager::show( ViewPage* page )
 {
-    unlinkPlaylist();
+    if ( m_stack->indexOf( page->widget() ) < 0 )
+    {
+        connect( page->widget(), SIGNAL( destroyed( QWidget* ) ), SLOT( onWidgetDestroyed( QWidget* ) ) );
+    }
 
-    connect( widget, SIGNAL( destroyed( QWidget* ) ), SLOT( onWidgetDestroyed( QWidget* ) ) );
-
-    m_stack->addWidget( widget );
-    m_stack->setCurrentWidget( widget );
-
-    m_infobar->setCaption( title );
-    m_infobar->setDescription( desc );
-    m_infobar->setPixmap( pixmap );
-    
-    m_queueView->show();
+    setPage( page );
     m_superCollectionVisible = false;
-    m_statsAvailable = false;
-    m_modesAvailable = false;
-    m_currentInterface = 0;
-
-    linkPlaylist();
 
     return true;
 }
@@ -456,30 +346,31 @@ PlaylistManager::showSuperCollection()
             m_superCollectionFlatModel->addCollection( source->collection() );
             m_superAlbumModel->addCollection( source->collection() );
         }
+
+        m_superCollectionFlatModel->setTitle( tr( "All available tracks" ) );
+        m_superAlbumModel->setTitle( tr( "All available albums" ) );
     }
 
     if ( m_currentMode == 0 )
     {
-        m_stack->setCurrentWidget( m_superCollectionView );
-        m_currentInterface = m_superCollectionView->proxyModel();
+        setPage( m_superCollectionView );
     }
     else if ( m_currentMode == 2 )
     {
-        m_stack->setCurrentWidget( m_superAlbumView );
-        m_currentInterface = m_superAlbumView->proxyModel();
+        setPage( m_superAlbumView );
     }
 
-    m_infobar->setCaption( tr( "Super Collection" ) );
-    m_infobar->setDescription( tr( "All available tracks" ) );
-    
-    m_queueView->show();
     m_superCollectionVisible = true;
-    m_statsAvailable = ( m_currentMode == 0 );
-    m_modesAvailable = true;
-    linkPlaylist();
 
     emit numSourcesChanged( m_superCollections.count() );
     return true;
+}
+
+
+void
+PlaylistManager::showWelcomePage()
+{
+    show( m_welcomeWidget );
 }
 
 
@@ -533,8 +424,7 @@ PlaylistManager::showQueue()
     if ( QThread::currentThread() != thread() )
     {
         qDebug() << "Reinvoking in correct thread:" << Q_FUNC_INFO;
-        QMetaObject::invokeMethod( this, "showQueue",
-                                   Qt::QueuedConnection );
+        QMetaObject::invokeMethod( this, "showQueue", Qt::QueuedConnection );
         return;
     }
 
@@ -548,12 +438,47 @@ PlaylistManager::hideQueue()
     if ( QThread::currentThread() != thread() )
     {
         qDebug() << "Reinvoking in correct thread:" << Q_FUNC_INFO;
-        QMetaObject::invokeMethod( this, "hideQueue",
-                                   Qt::QueuedConnection );
+        QMetaObject::invokeMethod( this, "hideQueue", Qt::QueuedConnection );
         return;
     }
 
     m_splitter->hide( 1 );
+}
+
+
+void
+PlaylistManager::historyBack()
+{
+    if ( m_historyPosition < 1 )
+        return;
+
+    showHistory( m_historyPosition - 1 );
+}
+
+
+void
+PlaylistManager::historyForward()
+{
+    if ( m_historyPosition >= m_pageHistory.count() - 1 )
+        return;
+    
+    showHistory( m_historyPosition + 1 );
+}
+
+
+void
+PlaylistManager::showHistory( int historyPosition )
+{
+    if ( historyPosition < 0 || historyPosition >= m_pageHistory.count() )
+    {
+        qDebug() << "History position out of bounds!" << historyPosition << m_pageHistory.count();
+        Q_ASSERT( false );
+        return;
+    }
+
+    setHistoryPosition( historyPosition );
+    ViewPage* page = m_pageHistory.at( historyPosition );
+    setPage( page, false );
 }
 
 
@@ -574,67 +499,114 @@ PlaylistManager::applyFilter()
 {
     qDebug() << Q_FUNC_INFO;
 
-    if ( m_currentInterface && m_currentInterface->filter() != m_filter )
-        m_currentInterface->setFilter( m_filter );
+    if ( currentPlaylistInterface() && currentPlaylistInterface()->filter() != m_filter )
+        currentPlaylistInterface()->setFilter( m_filter );
+}
+
+
+void
+PlaylistManager::setPage( ViewPage* page, bool trackHistory )
+{
+    unlinkPlaylist();
+
+    if ( !m_pageHistory.contains( page ) )
+    {
+        m_stack->addWidget( page->widget() );
+    }
+    else
+    {
+        if ( trackHistory )
+            m_pageHistory.removeAll( page );
+    }
+
+    if ( trackHistory )
+    {
+        m_pageHistory << page;
+        setHistoryPosition( m_pageHistory.count() - 1 );
+    }
+
+    if ( playlistForInterface( currentPlaylistInterface() ) )
+        emit playlistActivated( playlistForInterface( currentPlaylistInterface() ) );
+    if ( dynamicPlaylistForInterface( currentPlaylistInterface() ) )
+        emit dynamicPlaylistActivated( dynamicPlaylistForInterface( currentPlaylistInterface() ) );
+    if ( collectionForInterface( currentPlaylistInterface() ) )
+        emit collectionActivated( collectionForInterface( currentPlaylistInterface() ) );
+    if ( !currentPlaylistInterface() )
+        emit tempPageActivated();
+
+    if ( !AudioEngine::instance()->playlist() )
+        AudioEngine::instance()->setPlaylist( currentPlaylistInterface() );
+
+    m_stack->setCurrentWidget( page->widget() );
+    updateView();
 }
 
 
 void
 PlaylistManager::unlinkPlaylist()
 {
-    if ( m_currentInterface )
+    if ( currentPlaylistInterface() )
     {
-        disconnect( m_currentInterface->object(), SIGNAL( sourceTrackCountChanged( unsigned int ) ),
-                    this,                         SIGNAL( numTracksChanged( unsigned int ) ) );
+        disconnect( currentPlaylistInterface()->object(), SIGNAL( sourceTrackCountChanged( unsigned int ) ),
+                    this,                                 SIGNAL( numTracksChanged( unsigned int ) ) );
 
-        disconnect( m_currentInterface->object(), SIGNAL( trackCountChanged( unsigned int ) ),
-                    this,                         SIGNAL( numShownChanged( unsigned int ) ) );
+        disconnect( currentPlaylistInterface()->object(), SIGNAL( trackCountChanged( unsigned int ) ),
+                    this,                                 SIGNAL( numShownChanged( unsigned int ) ) );
 
-        disconnect( m_currentInterface->object(), SIGNAL( repeatModeChanged( PlaylistInterface::RepeatMode ) ),
-                    this,                         SIGNAL( repeatModeChanged( PlaylistInterface::RepeatMode ) ) );
+        disconnect( currentPlaylistInterface()->object(), SIGNAL( repeatModeChanged( PlaylistInterface::RepeatMode ) ),
+                    this,                                 SIGNAL( repeatModeChanged( PlaylistInterface::RepeatMode ) ) );
 
-        disconnect( m_currentInterface->object(), SIGNAL( shuffleModeChanged( bool ) ),
-                    this,                         SIGNAL( shuffleModeChanged( bool ) ) );
+        disconnect( currentPlaylistInterface()->object(), SIGNAL( shuffleModeChanged( bool ) ),
+                    this,                                 SIGNAL( shuffleModeChanged( bool ) ) );
     }
 }
 
 
 void
-PlaylistManager::linkPlaylist()
+PlaylistManager::updateView()
 {
-    if ( m_currentInterface )
+    if ( currentPlaylistInterface() )
     {
-        connect( m_currentInterface->object(), SIGNAL( sourceTrackCountChanged( unsigned int ) ),
-                 this,                         SIGNAL( numTracksChanged( unsigned int ) ) );
+        connect( currentPlaylistInterface()->object(), SIGNAL( sourceTrackCountChanged( unsigned int ) ),
+                                                       SIGNAL( numTracksChanged( unsigned int ) ) );
 
-        connect( m_currentInterface->object(), SIGNAL( trackCountChanged( unsigned int ) ),
-                 this,                         SIGNAL( numShownChanged( unsigned int ) ) );
+        connect( currentPlaylistInterface()->object(), SIGNAL( trackCountChanged( unsigned int ) ),
+                                                       SIGNAL( numShownChanged( unsigned int ) ) );
 
-        connect( m_currentInterface->object(), SIGNAL( repeatModeChanged( PlaylistInterface::RepeatMode ) ),
-                 this,                         SIGNAL( repeatModeChanged( PlaylistInterface::RepeatMode ) ) );
+        connect( currentPlaylistInterface()->object(), SIGNAL( repeatModeChanged( PlaylistInterface::RepeatMode ) ),
+                                                       SIGNAL( repeatModeChanged( PlaylistInterface::RepeatMode ) ) );
 
-        connect( m_currentInterface->object(), SIGNAL( shuffleModeChanged( bool ) ),
-                 this,                         SIGNAL( shuffleModeChanged( bool ) ) );
+        connect( currentPlaylistInterface()->object(), SIGNAL( shuffleModeChanged( bool ) ),
+                                                       SIGNAL( shuffleModeChanged( bool ) ) );
 
-        m_interfaceHistory.removeAll( m_currentInterface );
-        m_interfaceHistory << m_currentInterface;
+        m_topbar->setFilter( currentPlaylistInterface()->filter() );
     }
 
-    AudioEngine::instance()->setPlaylist( m_currentInterface );
-
-    if ( m_currentInterface && m_statsAvailable )
+    if ( currentPage()->showStatsBar() && currentPlaylistInterface() )
     {
-        m_topbar->setFilter( m_currentInterface->filter() );
-
-        emit numTracksChanged( m_currentInterface->unfilteredTrackCount() );
-        emit numShownChanged( m_currentInterface->trackCount() );
-        emit repeatModeChanged( m_currentInterface->repeatMode() );
-        emit shuffleModeChanged( m_currentInterface->shuffled() );
-
+        emit numTracksChanged( currentPlaylistInterface()->unfilteredTrackCount() );
+        emit numShownChanged( currentPlaylistInterface()->trackCount() );
+        emit repeatModeChanged( currentPlaylistInterface()->repeatMode() );
+        emit shuffleModeChanged( currentPlaylistInterface()->shuffled() );
+        emit modeChanged( currentPlaylistInterface()->viewMode() );
     }
 
-    emit statsAvailable( m_statsAvailable );
-    emit modesAvailable( m_modesAvailable );
+    if ( currentPage()->queueVisible() ) 
+        m_queueView->show();
+    else
+        m_queueView->hide();
+    
+    emit statsAvailable( currentPage()->showStatsBar() );
+    emit modesAvailable( currentPage()->showModes() );
+
+    if ( !currentPage()->showStatsBar() && !currentPage()->showModes() )
+        m_topbar->setVisible( false );
+    else
+        m_topbar->setVisible( true );
+
+    m_infobar->setCaption( currentPage()->title() );
+    m_infobar->setDescription( currentPage()->description() );
+    m_infobar->setPixmap( currentPage()->pixmap() );
 }
 
 
@@ -646,17 +618,20 @@ PlaylistManager::onWidgetDestroyed( QWidget* widget )
     bool resetWidget = ( m_stack->currentWidget() == widget );
     m_stack->removeWidget( widget );
 
-    if ( resetWidget && m_interfaceHistory.count() )
+    for ( int i = 0; i < m_pageHistory.count(); i++ )
     {
-        unlinkPlaylist();
+        ViewPage* page = m_pageHistory.at( i );
+        if ( page->widget() == widget )
+        {
+            m_pageHistory.removeAt( i );
+            break;
+        }
+    }
 
-        m_currentInterface = m_interfaceHistory.last();
-        qDebug() << "Last interface:" << m_currentInterface << m_currentInterface->widget();
-
-        if ( m_currentInterface->widget() )
-            m_stack->setCurrentWidget( m_currentInterface->widget() );
-
-        linkPlaylist();
+    if ( resetWidget )
+    {
+        if ( m_pageHistory.count() )
+            showHistory( m_pageHistory.count() - 1 );
     }
 }
 
@@ -664,16 +639,16 @@ PlaylistManager::onWidgetDestroyed( QWidget* widget )
 void
 PlaylistManager::setRepeatMode( PlaylistInterface::RepeatMode mode )
 {
-    if ( m_currentInterface )
-        m_currentInterface->setRepeatMode( mode );
+    if ( currentPlaylistInterface() )
+        currentPlaylistInterface()->setRepeatMode( mode );
 }
 
 
 void
 PlaylistManager::setShuffled( bool enabled )
 {
-    if ( m_currentInterface )
-        m_currentInterface->setShuffled( enabled );
+    if ( currentPlaylistInterface() )
+        currentPlaylistInterface()->setShuffled( enabled );
 }
 
 
@@ -697,20 +672,121 @@ PlaylistManager::createDynamicPlaylist( const Tomahawk::source_ptr& src,
 }
 
 
+ViewPage*
+PlaylistManager::pageForInterface( PlaylistInterface* interface ) const
+{
+    for ( int i = 0; i < m_pageHistory.count(); i++ )
+    {
+        ViewPage* page = m_pageHistory.at( i );
+        if ( page->playlistInterface() == interface )
+            return page;
+    }
+
+    return 0;
+}
+
+
+int
+PlaylistManager::positionInHistory( ViewPage* page ) const
+{
+    for ( int i = 0; i < m_pageHistory.count(); i++ )
+    {
+        if ( page == m_pageHistory.at( i ) )
+            return i;
+    }
+    
+    return -1;
+}
+
+
+PlaylistInterface*
+PlaylistManager::currentPlaylistInterface() const
+{
+    if ( currentPage() )
+        return currentPage()->playlistInterface();
+    else
+        return 0;
+}
+
+
+Tomahawk::ViewPage*
+PlaylistManager::currentPage() const
+{
+    if ( m_historyPosition >= 0 )
+        return m_pageHistory.at( m_historyPosition );
+    else
+        return 0;
+}
+
+
+void
+PlaylistManager::setHistoryPosition( int position )
+{
+    m_historyPosition = position;
+
+    emit historyBackAvailable( m_historyPosition > 0 );
+    emit historyForwardAvailable( m_historyPosition < m_pageHistory.count() - 1 );
+}
+
+
+Tomahawk::playlist_ptr
+PlaylistManager::playlistForInterface( PlaylistInterface* interface ) const
+{
+    foreach ( PlaylistView* view, m_playlistViews.values() )
+    {
+        if ( view->playlistInterface() == interface )
+        {
+            return m_playlistViews.key( view );
+        }
+    }
+
+    return playlist_ptr();
+}
+
+
+Tomahawk::dynplaylist_ptr
+PlaylistManager::dynamicPlaylistForInterface( PlaylistInterface* interface ) const
+{
+    foreach ( DynamicWidget* view, m_dynamicWidgets.values() )
+    {
+        if ( view->playlistInterface() == interface )
+        {
+            return m_dynamicWidgets.key( view );
+        }
+    }
+    
+    return dynplaylist_ptr();
+}
+
+
+Tomahawk::collection_ptr
+PlaylistManager::collectionForInterface( PlaylistInterface* interface ) const
+{
+    foreach ( CollectionView* view, m_collectionViews.values() )
+    {
+        if ( view->playlistInterface() == interface )
+        {
+            return m_collectionViews.key( view );
+        }
+    }
+    foreach ( AlbumView* view, m_collectionAlbumViews.values() )
+    {
+        if ( view->playlistInterface() == interface )
+        {
+            return m_collectionAlbumViews.key( view );
+        }
+    }
+    
+    return collection_ptr();
+}
+
+
 void
 PlaylistManager::showCurrentTrack()
 {
-    unlinkPlaylist();
-
-    m_currentInterface = AudioEngine::instance()->currentTrackPlaylist();
-
-    if ( m_currentInterface->widget() )
-        m_stack->setCurrentWidget( m_currentInterface->widget() );
-
-    linkPlaylist();
-
-/*    if ( m_currentView && m_currentProxyModel )
-        m_currentView->scrollTo( m_currentProxyModel->currentItem(), QAbstractItemView::PositionAtCenter );*/
+    ViewPage* page = pageForInterface( AudioEngine::instance()->currentTrackPlaylist() );
+    setPage( page );
+    page->jumpToCurrentTrack();
 }
 
 

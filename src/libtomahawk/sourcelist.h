@@ -28,7 +28,7 @@ public:
     unsigned int count() const;
 
     Tomahawk::source_ptr get( const QString& username, const QString& friendlyName = QString() );
-    Tomahawk::source_ptr get( unsigned int id ) const;
+    Tomahawk::source_ptr get( int id ) const;
 
 signals:
     void ready();
@@ -45,7 +45,7 @@ private:
     void add( const Tomahawk::source_ptr& source );
 
     QMap< QString, Tomahawk::source_ptr > m_sources;
-    QMap< unsigned int, QString > m_sources_id2name;
+    QMap< int, QString > m_sources_id2name;
 
     Tomahawk::source_ptr m_local;
     mutable QMutex m_mut; // mutable so const methods can use a lock

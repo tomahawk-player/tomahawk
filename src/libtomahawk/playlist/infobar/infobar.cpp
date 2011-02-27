@@ -7,6 +7,8 @@
 
 #include "utils/tomahawkutils.h"
 
+#define IMAGE_HEIGHT 64
+
 
 InfoBar::InfoBar( QWidget* parent )
     : QWidget( parent )
@@ -58,7 +60,7 @@ InfoBar::setDescription( const QString& s )
 void
 InfoBar::setPixmap( const QPixmap& p )
 {
-    ui->imageLabel->setPixmap( p.scaledToHeight( ui->imageLabel->height(), Qt::SmoothTransformation ) );
+    ui->imageLabel->setPixmap( p.scaledToHeight( IMAGE_HEIGHT, Qt::SmoothTransformation ) );
 }
 
 

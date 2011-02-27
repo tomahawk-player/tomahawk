@@ -4,7 +4,6 @@
 #include <QKeyEvent>
 #include <QPainter>
 
-#include "playlist/playlistmodel.h"
 #include "playlist/playlistproxymodel.h"
 #include "widgets/overlaywidget.h"
 
@@ -128,4 +127,11 @@ PlaylistView::onTrackCountChanged( unsigned int tracks )
     }
     else
         overlay()->hide();
+}
+
+
+bool
+PlaylistView::jumpToCurrentTrack()
+{
+    scrollTo( proxyModel()->currentItem(), QAbstractItemView::PositionAtCenter );
 }

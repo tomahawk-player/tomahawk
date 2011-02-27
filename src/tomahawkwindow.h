@@ -54,7 +54,9 @@ private slots:
     void addPeerManually();
 
     void onPlaybackLoading( const Tomahawk::result_ptr& result );
-
+    void onHistoryBackAvailable( bool avail );
+    void onHistoryForwardAvailable( bool avail );
+    
     void showAboutTomahawk();
 
 private:
@@ -68,6 +70,9 @@ private:
     QNetworkAccessManager m_nam;
     QPushButton* m_statusButton;
 
+    QAction* m_backAvailable;
+    QAction* m_forwardAvailable;
+    
     Tomahawk::result_ptr m_currentTrack;
     QString m_windowTitle;
 };

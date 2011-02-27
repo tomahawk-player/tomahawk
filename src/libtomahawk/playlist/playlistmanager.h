@@ -7,6 +7,7 @@
 
 #include "collection.h"
 #include "playlistinterface.h"
+#include "viewpage.h"
 
 #include "dllmacro.h"
 
@@ -25,8 +26,10 @@ class TrackView;
 class SourceInfoWidget;
 class InfoBar;
 class TopBar;
+class WelcomeWidget;
 
-namespace Tomahawk {
+namespace Tomahawk
+{
     class DynamicWidget;
 }
 
@@ -45,7 +48,10 @@ public:
 
     bool isSuperCollectionVisible() const { return true; }
 
-    PlaylistInterface* currentPlaylistInterface() const { return m_currentInterface; }
+    PlaylistInterface* currentPlaylistInterface() const;
+    Tomahawk::ViewPage* currentPage() const;
+    Tomahawk::ViewPage* pageForInterface( PlaylistInterface* interface ) const;
+    int positionInHistory( Tomahawk::ViewPage* page ) const;
 
     bool show( const Tomahawk::playlist_ptr& playlist );
     bool show( const Tomahawk::dynplaylist_ptr& playlist );
@@ -54,10 +60,7 @@ public:
     bool show( const Tomahawk::collection_ptr& collection );
     bool show( const Tomahawk::source_ptr& source );
 
-    bool show( QWidget* widget, const QString& title = QString(), const QString& desc = QString(), const QPixmap& pixmap = QPixmap() );
-
-    bool showSuperCollection();
-    void showCurrentTrack();
+    bool show( Tomahawk::ViewPage* page );
 
 signals:
     void numSourcesChanged( unsigned int sources );
@@ -70,10 +73,29 @@ signals:
 
     void statsAvailable( bool b );
     void modesAvailable( bool b );
+    void modeChanged( PlaylistInterface::ViewMode mode );
 
     void playClicked();
     void pauseClicked();
+
+    void historyBackAvailable( bool avail );
+    void historyForwardAvailable( bool avail );
+
+    void tempPageActivated();
+    void superCollectionActivated();
+    void collectionActivated( const Tomahawk::collection_ptr& collection );
+    void playlistActivated( const Tomahawk::playlist_ptr& playlist );
+    void dynamicPlaylistActivated( const Tomahawk::dynplaylist_ptr& playlist );
+    
 public slots:
+    bool showSuperCollection();
+    void showWelcomePage();
+    void showCurrentTrack();
+
+    void historyBack();
+    void historyForward();
+    void showHistory( int historyPosition );
+
     void setTreeMode();
     void setTableMode();
     void setAlbumMode();
@@ -100,9 +122,15 @@ private slots:
     void onWidgetDestroyed( QWidget* widget );
 
 private:
+    void setHistoryPosition( int position );
+    void setPage( Tomahawk::ViewPage* page, bool trackHistory = true );
+    void updateView();
     void unlinkPlaylist();
-    void linkPlaylist();
 
+    Tomahawk::playlist_ptr playlistForInterface( PlaylistInterface* interface ) const;
+    Tomahawk::dynplaylist_ptr dynamicPlaylistForInterface( PlaylistInterface* interface ) const;
+    Tomahawk::collection_ptr collectionForInterface( PlaylistInterface* interface ) const;
+    
     QWidget* m_widget;
     InfoBar* m_infobar;
     TopBar* m_topbar;
@@ -115,7 +143,8 @@ private:
     AlbumModel* m_superAlbumModel;
     AlbumView* m_superAlbumView;
     CollectionFlatModel* m_superCollectionFlatModel;
-    CollectionView* m_superCollectionView;    
+    CollectionView* m_superCollectionView;
+    WelcomeWidget* m_welcomeWidget;
     
     QList< Tomahawk::collection_ptr > m_superCollections;
 
@@ -126,19 +155,15 @@ private:
     QHash< Tomahawk::album_ptr, PlaylistView* > m_albumViews;
     QHash< Tomahawk::playlist_ptr, PlaylistView* > m_playlistViews;
     QHash< Tomahawk::source_ptr, SourceInfoWidget* > m_sourceViews;
-
-    PlaylistInterface* m_currentInterface;
-    QList<PlaylistInterface*> m_interfaceHistory;
-
-    QWidget* m_currentInfoWidget;
+    
+    QList<Tomahawk::ViewPage*> m_pageHistory;
+    int m_historyPosition;
 
     Tomahawk::collection_ptr m_currentCollection;
 
     int m_currentMode;
     bool m_superCollectionVisible;
-    bool m_statsAvailable;
-    bool m_modesAvailable;
-
+    
     QTimer m_filterTimer;
     QString m_filter;
 

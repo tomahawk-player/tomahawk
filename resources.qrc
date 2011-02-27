@@ -70,6 +70,9 @@
 <file>./data/images/volume-slider-level.png</file>
 <file>./data/images/echonest_logo.png</file>
 <file>./data/images/loading-animation.gif</file>
+<file>./data/images/home.png</file>
+<file>./data/images/back.png</file>
+<file>./data/images/forward.png</file>
 <file>./data/topbar-radiobuttons.css</file>
 <file>./data/icons/tomahawk-icon-16x16.png</file>
 <file>./data/icons/tomahawk-icon-32x32.png</file>
@@ -80,5 +83,7 @@
 <file>./data/icons/audio-x-generic-22x22.png</file>
 <file>./data/icons/audio-x-generic-32x32.png</file>
 <file>./data/icons/audio-x-generic-16x16.png</file>
+<file>./data/www/auth.html</file>
+<file>./data/www/auth.na.html</file>
 </qresource>
 </RCC>

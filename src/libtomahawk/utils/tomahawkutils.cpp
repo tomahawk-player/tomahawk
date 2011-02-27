@@ -205,7 +205,7 @@ filesizeToString( unsigned int size )
 
     if ( mb )
     {
-        return QString( "%1.%2 Mb" ).arg( mb ).arg( int( ( kb % 1024 ) / 100 ) );
+        return QString( "%1.%2 Mb" ).arg( mb ).arg( int( ( kb % 1024 ) / 102.4 ) );
     }
     else if ( kb )
     {

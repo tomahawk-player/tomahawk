@@ -73,7 +73,6 @@ void
 TrackView::setProxyModel( TrackProxyModel* model )
 {
     m_proxyModel = model;
-    m_proxyModel->setWidget( this );
 
     m_delegate = new PlaylistItemDelegate( this, m_proxyModel );
     setItemDelegate( m_delegate );

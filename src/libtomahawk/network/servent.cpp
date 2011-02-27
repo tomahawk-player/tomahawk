@@ -707,8 +707,8 @@ Servent::triggerDBSync()
     QList<source_ptr> sources = SourceList::instance()->sources();
     foreach( const source_ptr& src, sources )
     {
-        // local src doesnt have a control connection, skip it:
-        if( src.isNull() || src->isLocal() )
+        // skip local source
+        if ( src.isNull() || src->isLocal() )
             continue;
 
         if ( src->controlConnection() ) // source online?

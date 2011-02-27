@@ -20,8 +20,11 @@
 #include <QWidget>
 
 #include "typedefs.h"
+#include "viewpage.h"
+
 #include "dynamic/DynamicPlaylist.h"
 #include "dynamic/DynamicControl.h"
+#include "dynamic/DynamicModel.h"
 
 class LoadingSpinner;
 class QShowEvent;
@@ -43,12 +46,7 @@ namespace Tomahawk
 
 class DynamicSetupWidget;
 
-
-class DynamicModel;
-
-
 class DynamicView;
-
 
 class CollapsibleControls;
 
@@ -56,7 +54,7 @@ class CollapsibleControls;
 /**
  * This class contains the dynamic playlist config and the playlist view itself
  */
-class DynamicWidget : public QWidget
+class DynamicWidget : public QWidget, public Tomahawk::ViewPage
 {
 Q_OBJECT 
 public:
@@ -65,7 +63,7 @@ public:
     
     void loadDynamicPlaylist( const dynplaylist_ptr& playlist );
     
-    PlaylistInterface* playlistInterface() const;
+    virtual PlaylistInterface* playlistInterface() const;
     
     virtual QSize sizeHint() const;
     virtual void resizeEvent( QResizeEvent* );
@@ -73,6 +71,14 @@ public:
     virtual void showEvent(QShowEvent* );
     
     static void paintRoundedFilledRect( QPainter& p, QPalette& pal, QRect& r, qreal opacity = .95 );
+
+    virtual QWidget* widget() { return this; }
+    
+    virtual QString title() const { return m_model->title(); }
+    virtual QString description() const { return m_model->description(); }
+    
+    virtual bool jumpToCurrentTrack();
+    
 public slots:
     void onRevisionLoaded( const Tomahawk::DynamicPlaylistRevision& rev );
     void playlistTypeChanged(QString);
@@ -94,6 +100,7 @@ private slots:
     void controlChanged( const Tomahawk::dyncontrol_ptr& control );
     
     void layoutFloatingWidgets();
+
 private:    
     dynplaylist_ptr m_playlist;
     QVBoxLayout* m_layout;

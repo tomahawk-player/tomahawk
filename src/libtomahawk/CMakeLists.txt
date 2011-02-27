@@ -25,6 +25,7 @@ set( libSources
     query.cpp
     result.cpp
     source.cpp
+    viewpage.cpp
 
     sip/SipPlugin.cpp
 
@@ -65,6 +66,8 @@ set( libSources
     database/databasecommand_loaddynamicplaylist.cpp
     database/databasecommand_loadalldynamicplaylists.cpp
     database/databasecommand_deletedynamicplaylist.cpp
+    database/databasecommand_addclientauth.cpp
+    database/databasecommand_clientauthvalid.cpp
     database/database.cpp
 
     playlist/collectionmodel.cpp
@@ -156,6 +159,7 @@ set( libHeaders
     resolver.h
     result.h
     source.h
+    viewpage.h
 
     artist.h
     album.h
@@ -200,6 +204,8 @@ set( libHeaders
     database/databasecommand_loaddynamicplaylist.h
     database/databasecommand_deletedynamicplaylist.h
     database/databasecommand_loadalldynamicplaylists.h
+    database/databasecommand_addclientauth.h
+    database/databasecommand_clientauthvalid.h
 
     network/bufferiodevice.h
     network/msgprocessor.h

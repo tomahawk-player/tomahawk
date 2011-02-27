@@ -29,7 +29,6 @@
 #include "utils/widgetdragfilter.h"
 #include "utils/xspfloader.h"
 #include "widgets/newplaylistwidget.h"
-#include "widgets/welcomewidget.h"
 
 #include "audiocontrols.h"
 #include "settingsdialog.h"
@@ -57,6 +56,8 @@ TomahawkWindow::TomahawkWindow( QWidget* parent )
 #endif
 
     PlaylistManager* pm = new PlaylistManager( this );
+    connect( pm, SIGNAL( historyBackAvailable( bool ) ), SLOT( onHistoryBackAvailable( bool ) ) );
+    connect( pm, SIGNAL( historyForwardAvailable( bool ) ), SLOT( onHistoryForwardAvailable( bool ) ) );
 
     connect( m_audioControls, SIGNAL( playPressed() ), pm, SLOT( onPlayClicked() ) );
     connect( m_audioControls, SIGNAL( pausePressed() ), pm, SLOT( onPauseClicked() ) );
@@ -115,12 +116,17 @@ TomahawkWindow::TomahawkWindow( QWidget* parent )
     ui->splitter->setCollapsible( 1, false );
     ui->splitter->setHandleWidth( 1 );
 
-/*    QToolBar* toolbar = addToolBar( "TomahawkToolbar" );
+    QToolBar* toolbar = addToolBar( "TomahawkToolbar" );
     toolbar->setObjectName( "TomahawkToolbar" );
-    toolbar->addWidget( m_topbar );
     toolbar->setMovable( false );
     toolbar->setFloatable( false );
-    toolbar->installEventFilter( new WidgetDragFilter( toolbar ) );*/
+    toolbar->setIconSize( QSize( 32, 32 ) );
+    toolbar->setToolButtonStyle( Qt::ToolButtonFollowStyle );
+    toolbar->installEventFilter( new WidgetDragFilter( toolbar ) );
+
+    m_backAvailable = toolbar->addAction( QIcon( RESPATH "images/back.png" ), tr( "Back" ), PlaylistManager::instance(), SLOT( historyBack() ) );
+    m_forwardAvailable = toolbar->addAction( QIcon( RESPATH "images/forward.png" ), tr( "Forward" ), PlaylistManager::instance(), SLOT( historyForward() ) );
+    toolbar->addAction( QIcon( RESPATH "images/home.png" ), tr( "Home" ), PlaylistManager::instance(), SLOT( showWelcomePage() ) );
 
     statusBar()->addPermanentWidget( m_audioControls, 1 );
 
@@ -135,8 +141,7 @@ TomahawkWindow::TomahawkWindow( QWidget* parent )
 
     loadSettings();
     setupSignals();
-
-    PlaylistManager::instance()->show( new WelcomeWidget(), tr( "Welcome to Tomahawk!" ), QString(), QPixmap( RESPATH "icons/tomahawk-icon-128x128.png" ) );
+    PlaylistManager::instance()->showWelcomePage();
 }
 
 
@@ -351,6 +356,20 @@ TomahawkWindow::onPlaybackLoading( const Tomahawk::result_ptr& result )
 {
     m_currentTrack = result;
     setWindowTitle( m_windowTitle );
+}
+
+
+void
+TomahawkWindow::onHistoryBackAvailable( bool avail )
+{
+    m_backAvailable->setEnabled( avail );
+}
+
+
+void
+TomahawkWindow::onHistoryForwardAvailable( bool avail )
+{
+    m_forwardAvailable->setEnabled( avail );
 }
 
 

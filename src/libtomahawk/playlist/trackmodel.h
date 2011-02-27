@@ -35,6 +35,11 @@ public:
 
     virtual bool isReadOnly() const { return m_readOnly; }
 
+    virtual QString title() const { return m_title; }
+    virtual void setTitle( const QString& title ) { m_title = title; }
+    virtual QString description() const { return m_description; }
+    virtual void setDescription( const QString& description ) { m_description = description; }
+    
     virtual int trackCount() const { return rowCount( QModelIndex() ); }
 
     virtual int rowCount( const QModelIndex& parent ) const;
@@ -84,6 +89,9 @@ private slots:
 private:
     QPersistentModelIndex m_currentIndex;
     bool m_readOnly;
+
+    QString m_title;
+    QString m_description;
 };
 
 #endif // TRACKMODEL_H

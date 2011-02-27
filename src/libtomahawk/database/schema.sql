@@ -241,6 +241,16 @@ CREATE TABLE IF NOT EXISTS playback_log (
 CREATE INDEX playback_log_source ON playback_log(source);
 CREATE INDEX playback_log_track ON playback_log(track);
 
+-- auth information for http clients
+
+CREATE TABLE IF NOT EXISTS http_client_auth (
+    token TEXT NOT NULL PRIMARY KEY,
+    website TEXT NOT NULL,
+    name TEXT NOT NULL,
+    ua TEXT,
+    mtime INTEGER,
+    permissions TEXT NOT NULL
+);
 
 
 -- Schema version, and misc tomahawk settings relating to the collection db
@@ -250,4 +260,4 @@ CREATE TABLE IF NOT EXISTS settings (
     v TEXT NOT NULL DEFAULT ''
 );
 
-INSERT INTO settings(k,v) VALUES('schema_version', '20');
+INSERT INTO settings(k,v) VALUES('schema_version', '21');

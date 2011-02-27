@@ -92,7 +92,7 @@ DBSyncConnection::trigger()
     qDebug() << Q_FUNC_INFO;
 
     // if we're still setting up the connection, do nothing - we sync on first connect anyway:
-    if ( !this->isRunning() )
+    if ( !isRunning() )
         return;
 
     QMetaObject::invokeMethod( this, "sendMsg", Qt::QueuedConnection,
@@ -195,7 +195,7 @@ DBSyncConnection::handleMsg( msg_ptr msg )
     QVariantMap m = msg->json().toMap();
     if ( m.empty() )
     {
-        qDebug() << "Failed to parse msg in dbsync";
+        qDebug() << "Failed to parse msg in dbsync" << m_source->id() << m_source->friendlyName();
         Q_ASSERT( false );
         return;
     }

@@ -3,13 +3,16 @@
 
 #include <QMenu>
 
+#include "playlist/trackproxymodel.h"
+#include "playlist/playlistmodel.h"
 #include "trackview.h"
+#include "viewpage.h"
 
 #include "dllmacro.h"
 
 class PlaylistModel;
 
-class DLLEXPORT PlaylistView : public TrackView
+class DLLEXPORT PlaylistView : public TrackView, public Tomahawk::ViewPage
 {
 Q_OBJECT
 
@@ -19,6 +22,14 @@ public:
 
     PlaylistModel* playlistModel() const { return m_model; }
     virtual void setModel( PlaylistModel* model );
+
+    virtual QWidget* widget() { return this; }
+    virtual PlaylistInterface* playlistInterface() const { return proxyModel(); }
+    
+    virtual QString title() const { return playlistModel()->title(); }
+    virtual QString description() const { return m_model->description(); }
+
+    virtual bool jumpToCurrentTrack();
 
 protected:
     void keyPressEvent( QKeyEvent* event );

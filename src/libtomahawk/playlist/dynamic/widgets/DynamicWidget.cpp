@@ -386,3 +386,9 @@ DynamicWidget::paintRoundedFilledRect( QPainter& p, QPalette& pal, QRect& r, qre
     p.setPen( pen );
     p.drawRoundedRect( r, 10, 10 );
 }
+
+bool
+DynamicWidget::jumpToCurrentTrack()
+{
+    m_view->scrollTo( m_view->proxyModel()->currentItem(), QAbstractItemView::PositionAtCenter );
+}

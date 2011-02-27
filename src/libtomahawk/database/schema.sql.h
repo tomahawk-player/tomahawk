@@ -1,5 +1,5 @@
 /*
-    This file was automatically generated from ./schema.sql on Wed Feb 23 12:39:07 CET 2011.
+    This file was automatically generated from schema.sql on Thu Feb 24 19:05:46 EST 2011.
 */
 
 static const char * tomahawk_schema_sql = 
@@ -161,11 +161,19 @@ static const char * tomahawk_schema_sql =
 ");"
 "CREATE INDEX playback_log_source ON playback_log(source);"
 "CREATE INDEX playback_log_track ON playback_log(track);"
+"CREATE TABLE IF NOT EXISTS http_client_auth ("
+"    token TEXT NOT NULL PRIMARY KEY,"
+"    website TEXT NOT NULL,"
+"    name TEXT NOT NULL,"
+"    ua TEXT,"
+"    mtime INTEGER,"
+"    permissions TEXT NOT NULL"
+");"
 "CREATE TABLE IF NOT EXISTS settings ("
 "    k TEXT NOT NULL PRIMARY KEY,"
 "    v TEXT NOT NULL DEFAULT ''"
 ");"
-"INSERT INTO settings(k,v) VALUES('schema_version', '20');"
+"INSERT INTO settings(k,v) VALUES('schema_version', '21');"
     ;
 
 const char * get_tomahawk_sql()

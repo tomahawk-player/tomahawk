@@ -45,7 +45,7 @@ public:
     
     void setDynamicWorking( bool working );
     
-    virtual void paintEvent(QPaintEvent* event);
+    virtual void paintEvent( QPaintEvent* event );
     
 public slots:
     void showMessageTimeout( const QString& title, const QString& body );

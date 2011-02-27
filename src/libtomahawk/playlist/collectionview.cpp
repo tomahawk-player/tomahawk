@@ -45,7 +45,6 @@ CollectionView::setModel( TrackModel* model )
 void
 CollectionView::dragEnterEvent( QDragEnterEvent* event )
 {
-    qDebug() << Q_FUNC_INFO;
     event->ignore();
 }
 
@@ -93,4 +92,11 @@ CollectionView::onTrackCountChanged( unsigned int tracks )
     }
     else
         overlay()->hide();
+}
+
+
+bool
+CollectionView::jumpToCurrentTrack()
+{
+    scrollTo( proxyModel()->currentItem(), QAbstractItemView::PositionAtCenter );
 }

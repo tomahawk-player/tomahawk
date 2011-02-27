@@ -5,6 +5,7 @@
 #include <QLabel>
 #include <QList>
 
+#include "playlist/playlistmanager.h"
 #include "sourcelist.h"
 #include "dllmacro.h"
 
@@ -42,6 +43,12 @@ public slots:
 
     void setFilter( const QString& filter );
 
+private slots:
+    void onModeChanged( PlaylistInterface::ViewMode mode );
+    void onFlatMode();
+    void onArtistMode();
+    void onAlbumMode();
+    
 protected:
     void changeEvent( QEvent* e );
     void resizeEvent( QResizeEvent* e );

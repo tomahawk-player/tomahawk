@@ -1,0 +1,44 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <title>Allow Tomahawk Access</title>
+    <style>
+    body {
+        margin: 0;
+        padding: 0;
+        font: normal 12px 'Verdana', sans-serif;
+    }
+    a img,
+    img {
+        border: 0;
+    }
+    a {
+        color: #598d0c;
+    }
+    a#head {
+        display: block;
+        width: 100%;
+        height: 68px;
+        background: #cbdab1;
+    }
+    div#content {
+        margin: 30px;
+        text-align: center;
+    }
+    div#content p {
+        margin: 0 0 25px 0;
+    }
+    </style>
+</head>
+<body>
+    <a href="http://www.playdar.org/" title="Tomahawk - Powered by Playdar" id="head">
+        <img alt="Tomahawk - Powered by Playdar" src="/static/playdar_auth_logo.gif" width="233" height="68"/>
+    </a>
+    
+    <div id="content">
+        <p>You have allowed access to Tomahawk from <a href="<%WEBSITE%>"><%NAME%></a></p>
+        <p>Copy and paste this authentication <strong>token</strong> into the status bar then close this window.</p>
+        <p>Token: <input type="text" value="<%AUTHCODE%>" size="35" onclick="this.focus(); this.select();" />
+</body>
+</html>

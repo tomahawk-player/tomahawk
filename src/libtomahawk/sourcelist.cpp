@@ -86,10 +86,11 @@ SourceList::setLocal( const Tomahawk::source_ptr& localSrc )
 void
 SourceList::add( const source_ptr& source )
 {
-    Q_ASSERT( source->id() );
-
+    qDebug() << "Adding to sources:" << source->userName() << source->id();
     m_sources.insert( source->userName(), source );
-    m_sources_id2name.insert( source->id(), source->userName() );
+
+    if ( source->id() > 0 )
+        m_sources_id2name.insert( source->id(), source->userName() );
     connect( source.data(), SIGNAL( syncedWithDatabase() ), SLOT( sourceSynced() ) );
     
     collection_ptr coll( new RemoteCollection( source ) );
@@ -102,14 +103,11 @@ SourceList::add( const source_ptr& source )
 void
 SourceList::removeAllRemote()
 {
-    foreach( source_ptr s, m_sources )
+    foreach( const source_ptr& s, m_sources )
     {
-        if( s != m_local )
+        if ( !s->isLocal() && s->controlConnection() )
         {
-            if ( s->controlConnection() )
-            {
-                s->controlConnection()->shutdown( true );
-            }
+            s->controlConnection()->shutdown( true );
         }
     }
 }
@@ -132,7 +130,7 @@ SourceList::sources( bool onlyOnline ) const
 
 
 source_ptr
-SourceList::get( unsigned int id ) const
+SourceList::get( int id ) const
 {
     QMutexLocker lock( &m_mut );
     return m_sources.value( m_sources_id2name.value( id ) );
@@ -163,8 +161,6 @@ SourceList::sourceSynced()
 {
     Source* src = qobject_cast< Source* >( sender() );
 
-    Q_ASSERT( m_sources_id2name.values().contains( src->userName() ) );
-    m_sources_id2name.remove( m_sources_id2name.key( src->userName() ) );
     m_sources_id2name.insert( src->id(), src->userName() );
 }
 

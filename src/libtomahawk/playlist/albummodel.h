@@ -40,9 +40,6 @@ public:
     virtual void removeIndex( const QModelIndex& index );
     virtual void removeIndexes( const QList<QModelIndex>& indexes );
 
-    virtual PlaylistInterface::RepeatMode repeatMode() const { return PlaylistInterface::NoRepeat; }
-    virtual bool shuffled() const { return false; }
-
     virtual QMimeData* mimeData( const QModelIndexList& indexes ) const;
     virtual QStringList mimeTypes() const;
     virtual Qt::ItemFlags flags( const QModelIndex& index ) const;
@@ -50,6 +47,11 @@ public:
     void addCollection( const Tomahawk::collection_ptr& collection );
     void addFilteredCollection( const Tomahawk::collection_ptr& collection, unsigned int amount, DatabaseCommand_AllAlbums::SortOrder order );
 
+    virtual QString title() const { return m_title; }
+    virtual QString description() const { return m_description; }
+    virtual void setTitle( const QString& title ) { m_title = title; }
+    virtual void setDescription( const QString& description ) { m_description = description; }
+    
     AlbumItem* itemFromIndex( const QModelIndex& index ) const
     {
         if ( index.isValid() )
@@ -81,6 +83,9 @@ private:
     QPersistentModelIndex m_currentIndex;
     AlbumItem* m_rootItem;
     QPixmap m_defaultCover;
+
+    QString m_title;
+    QString m_description;
 };
 
 #endif // ALBUMMODEL_H

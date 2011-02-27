@@ -37,6 +37,10 @@ public:
     static Tomahawk::dynplaylist_ptr indexToDynamicPlaylist( const QModelIndex& index );
     static SourceTreeItem* indexToTreeItem( const QModelIndex& index );
 
+    QModelIndex playlistToIndex( const Tomahawk::playlist_ptr& playlist );
+    QModelIndex dynamicPlaylistToIndex( const Tomahawk::dynplaylist_ptr& playlist );
+    QModelIndex collectionToIndex( const Tomahawk::collection_ptr& collection );
+    
 signals:
     void clicked( const QModelIndex& );
 

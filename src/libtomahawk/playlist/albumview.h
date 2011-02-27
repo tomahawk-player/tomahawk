@@ -4,12 +4,13 @@
 #include <QListView>
 #include <QSortFilterProxyModel>
 
+#include "albummodel.h"
+#include "albumproxymodel.h"
+#include "viewpage.h"
+
 #include "dllmacro.h"
 
-class AlbumModel;
-class AlbumProxyModel;
-
-class DLLEXPORT AlbumView : public QListView
+class DLLEXPORT AlbumView : public QListView, public Tomahawk::ViewPage
 {
 Q_OBJECT
 
@@ -19,11 +20,21 @@ public:
 
     void setProxyModel( AlbumProxyModel* model );
 
-    AlbumModel* model() { return m_model; }
-    AlbumProxyModel* proxyModel() { return m_proxyModel; }
+    AlbumModel* model() const { return m_model; }
+    AlbumProxyModel* proxyModel() const { return m_proxyModel; }
 //    PlaylistItemDelegate* delegate() { return m_delegate; }
 
     void setModel( AlbumModel* model );
+
+    virtual QWidget* widget() { return this; }
+    virtual PlaylistInterface* playlistInterface() const { return proxyModel(); }
+
+    virtual QString title() const { return m_model->title(); }
+    virtual QString description() const { return m_model->description(); }
+
+    virtual bool showModes() const { return true; }
+
+    virtual bool jumpToCurrentTrack() { return false; }
 
 public slots:
     void onItemActivated( const QModelIndex& index );

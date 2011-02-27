@@ -42,7 +42,7 @@ public:
     void addCollection( const Tomahawk::collection_ptr& c );
     void removeCollection( const Tomahawk::collection_ptr& c );
 
-    unsigned int id() const { return m_id; }
+    int id() const { return m_id; }
     ControlConnection* controlConnection() const { return m_cc; }
     void setControlConnection( ControlConnection* cc );
 
@@ -90,7 +90,7 @@ private:
     bool m_isLocal;
     bool m_online;
     QString m_username, m_friendlyname;
-    unsigned int m_id;
+    int m_id;
     QList< QSharedPointer<Collection> > m_collections;
     QVariantMap m_stats;
     QString m_lastOpGuid;

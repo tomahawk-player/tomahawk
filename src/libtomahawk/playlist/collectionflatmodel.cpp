@@ -60,6 +60,11 @@ CollectionFlatModel::addCollection( const collection_ptr& collection )
              SLOT( onTracksAdded( QList<Tomahawk::query_ptr>, Tomahawk::collection_ptr ) ) );
     connect( collection.data(), SIGNAL( tracksFinished( Tomahawk::collection_ptr ) ),
              SLOT( onTracksAddingFinished( Tomahawk::collection_ptr ) ) );
+
+    if ( collection->source()->isLocal() )
+        setTitle( tr( "Your Collection" ) );
+    else
+        setTitle( tr( "Collection of %1" ).arg( collection->source()->friendlyName() ) );
 }
 
 
