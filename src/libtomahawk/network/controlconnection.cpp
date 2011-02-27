@@ -110,7 +110,7 @@ ControlConnection::setupDbSyncConnection( bool ondemand )
     qDebug() << Q_FUNC_INFO << ondemand << m_source->id();
     Q_ASSERT( m_source->id() > 0 );
 
-    if( ! m_dbconnkey.isEmpty() )
+    if( !m_dbconnkey.isEmpty() )
     {
         qDebug() << "Connecting to DBSync offer from peer...";
         m_dbsyncconn = new DBSyncConnection( m_servent, m_source );
