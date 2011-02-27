@@ -346,7 +346,7 @@ Servent::createParallelConnection( Connection* orig_conn, Connection* new_conn, 
 {
     qDebug() << "Servent::createParallelConnection, key:" << key << thread() << orig_conn;
     // if we can connect to them directly:
-    if( orig_conn->outbound() )
+    if( orig_conn && orig_conn->outbound() )
     {
         qDebug() << "Connecting directly";
         connectToPeer( orig_conn->socket()->peerAddress().toString(),
