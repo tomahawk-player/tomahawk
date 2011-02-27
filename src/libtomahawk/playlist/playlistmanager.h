@@ -46,7 +46,7 @@ public:
     QWidget* widget() const { return m_widget; }
     PlaylistView* queue() const;
 
-    bool isSuperCollectionVisible() const { return true; }
+    bool isSuperCollectionVisible() const;
 
     PlaylistInterface* currentPlaylistInterface() const;
     Tomahawk::ViewPage* currentPage() const;
@@ -118,7 +118,6 @@ public slots:
     
 private slots:
     void applyFilter();
-
     void onWidgetDestroyed( QWidget* widget );
 
 private:
@@ -160,9 +159,7 @@ private:
     int m_historyPosition;
 
     Tomahawk::collection_ptr m_currentCollection;
-
     int m_currentMode;
-    bool m_superCollectionVisible;
     
     QTimer m_filterTimer;
     QString m_filter;
