@@ -203,7 +203,7 @@ DynamicView::collapseEntries( int startRow, int num, int numToKeep )
     m_fadingPointAnchor = QPoint( 0, fadingRectViewport.topLeft().y() );
 
     // get the background
-    m_bg =  backgroundBetween( m_fadingIndexes.rect(), startRow );
+    m_bg = backgroundBetween( m_fadingIndexes.rect(), startRow );
 
     m_fadeOutAnim.start();
     
