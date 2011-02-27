@@ -69,7 +69,7 @@ BufferIODevice::inputComplete( const QString& errmsg )
 {
     qDebug() << Q_FUNC_INFO;
     setErrorString( errmsg );
-    m_size = m_pos;
+    m_size = m_received;
     emit readChannelFinished();
 }
 
