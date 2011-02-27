@@ -42,6 +42,7 @@ DynamicView::DynamicView( QWidget* parent )
         , m_checkOnCollapse( false )
         , m_working( false )
         , m_fadebg( false )
+        , m_fadeOnly( false )
 {
     setContentsMargins( 0, 0, 0, 0 );
     setFrameShape( QFrame::NoFrame );
@@ -182,23 +183,27 @@ DynamicView::collapseEntries( int startRow, int num, int numToKeep )
 
     /// Two options: Either we are overflowing our view, or we're not. If we are, it's because the search for a playable track
     /// went past the limit of the view. Just fade out from the beginning to the end in that case. otherwise, animate a slide
-    bool justFade = false;
     int realNum = num;
     QModelIndex last = indexAt( QPoint( 3, viewport()->height() - 3 ) );
     if( last.isValid() && last.row() < startRow + num ) {
-        justFade = true;
-        realNum = last.row();
+        m_fadeOnly = true;
+        realNum = last.row() - startRow;
+    } else {
+        m_fadeOnly = false;
     }
+    
      // we capture the image of the rows we're going to collapse
     // then we capture the image of the target row we're going to animate downwards
     // then we fade the first image out while sliding the second image up.
     QModelIndex topLeft = proxyModel()->index( startRow, 0, QModelIndex() );
     QModelIndex bottomRight = proxyModel()->index( startRow + realNum - 1, proxyModel()->columnCount( QModelIndex() ) - 1, QModelIndex() );
     QItemSelection sel( topLeft, bottomRight );
+    qDebug() << "Created selection from:" << startRow << "to" << startRow + realNum - 1;
     QRect fadingRect = visualRegionForSelection( sel ).boundingRect();
     QRect fadingRectViewport = fadingRect; // all values that we use in paintEvent() have to be in viewport coords
     fadingRect.moveTo( viewport()->mapTo( this, fadingRect.topLeft() ) );
-
+    //fadingRect.setBottom( qMin( fadingRect.bottom(), viewport()->mapTo( this, viewport()->rect().bottomLeft() ).y() ) ); // limit what we capture to the viewport rect, if the last item is partially obscured
+    
     m_fadingIndexes = QPixmap::grabWidget( this, fadingRect ); // but all values we use to grab the widgetr have to be in scrollarea coords :(
     m_fadingPointAnchor = QPoint( 0, fadingRectViewport.topLeft().y() );
 
@@ -207,9 +212,9 @@ DynamicView::collapseEntries( int startRow, int num, int numToKeep )
 
     m_fadeOutAnim.start();
     
-    qDebug() << "Grabbed fading indexes from rect:" << fadingRect << m_fadingIndexes.size();
+    qDebug() << "Grabbed fading indexes from rect:" << fadingRect << m_fadingIndexes.size() << "ANCHORED:" << m_fadingPointAnchor;
 
-    if( !justFade ) {
+    if( !m_fadeOnly ) {
     /// sanity checks. make sure we have all the rows we need
         int firstSlider = startRow + realNum;
         qDebug() << "Sliding from" << firstSlider << "number:" << numToKeep - 1 << "rowcount is:" << proxyModel()->rowCount();
@@ -298,9 +303,9 @@ DynamicView::paintEvent( QPaintEvent* event )
         p.save();
         QRect bg = m_fadingIndexes.rect();
         bg.moveTo( m_fadingPointAnchor ); // cover up the background
+        p.fillRect( bg, Qt::white );
         if( m_fadebg ) {
             p.save();
-            p.fillRect( bg, Qt::white );
             p.setOpacity( 1 - m_fadeOutAnim.currentValue() );
         }
         p.drawPixmap( bg, m_bg );
@@ -315,7 +320,7 @@ DynamicView::paintEvent( QPaintEvent* event )
         if( m_slideAnim.state() == QTimeLine::Running ) {
             // draw the collapsing entry
             p.drawPixmap( 0, m_slideAnim.currentFrame(), m_slidingIndex );
-        } else if( m_fadeOutAnim.state() == QTimeLine::Running ) {
+        } else if( m_fadeOutAnim.state() == QTimeLine::Running && !m_fadeOnly ) {
             p.drawPixmap( 0, m_bottomAnchor.y(), m_slidingIndex );
         }
     }
