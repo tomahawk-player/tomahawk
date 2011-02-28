@@ -131,11 +131,14 @@ ControlConnection::setupDbSyncConnection( bool ondemand )
         sendMsg( m );
     }
 
-    connect( m_dbsyncconn, SIGNAL( finished() ),
-             m_dbsyncconn,   SLOT( deleteLater() ) );
+    if ( m_dbsyncconn )
+    {
+        connect( m_dbsyncconn, SIGNAL( finished() ),
+                m_dbsyncconn,   SLOT( deleteLater() ) );
 
-    connect( m_dbsyncconn, SIGNAL( destroyed( QObject* ) ),
-                             SLOT( dbSyncConnFinished( QObject* ) ), Qt::DirectConnection );
+        connect( m_dbsyncconn, SIGNAL( destroyed( QObject* ) ),
+                                SLOT( dbSyncConnFinished( QObject* ) ), Qt::DirectConnection );
+    }
 }
 
 

@@ -41,18 +41,6 @@ Jabber_p::Jabber_p( const QString& jid, const QString& password, const QString& 
 
     qDebug() << "Our JID set to:" << m_jid.full().c_str();
 
-    // the google hack, because they filter disco features they don't know.
-    if( m_jid.server().find( "googlemail." ) != string::npos
-        || m_jid.server().find( "gmail." ) != string::npos
-        || m_jid.server().find( "gtalk." ) != string::npos )
-    {
-        if( m_jid.resource().find( "tomahawk" ) == string::npos )
-        {
-            qDebug() << "Forcing your /resource to contain 'tomahawk' (the google workaround)";
-            m_jid.setResource( "tomahawk-tomahawk" );
-        }
-    }
-
     m_client = QSharedPointer<gloox::Client>( new gloox::Client( m_jid, password.toStdString(), port ) );
     m_server = server;
 }
@@ -134,6 +122,8 @@ Jabber_p::go()
         qDebug() << "No server found!";
         return;
     }
+
+    m_client->registerPresenceHandler( this );
     m_client->registerConnectionListener( this );
     m_client->logInstance().registerLogHandler( LogLevelWarning, LogAreaAll, this );
     m_client->registerMessageHandler( this );
@@ -513,9 +503,7 @@ Jabber_p::handleRosterError( const IQ& /*iq*/ )
 void
 Jabber_p::handlePresence( const gloox::Presence& presence )
 {
-    //JID jid( item.jid() );
     JID jid = presence.from();
-    //jid.setResource( resource );
     QString fulljid( jid.full().c_str() );
 
     qDebug() << "* handleRosterPresence" << fulljid << presence.subtype();
@@ -525,11 +513,13 @@ Jabber_p::handlePresence( const gloox::Presence& presence )
 
     // ignore anyone not running tomahawk:
     // convert to QString to get proper regex support
-    const gloox::Capabilities *caps = presence.findExtension<gloox::Capabilities>(gloox::ExtCaps);
-    QString node = QString::fromAscii( caps->node().c_str() );
-    if( QString::fromAscii( jid.resource().c_str() ).startsWith(QLatin1String("tomahawk"))
-        ||  node == TOMAHAWK_CAP_NODE_NAME
-    )
+    QString node;
+    const gloox::Capabilities *caps = presence.findExtension<gloox::Capabilities>( gloox::ExtCaps );
+    if( caps )
+        QString node = QString::fromAscii( caps->node().c_str() );
+
+    if( !QString::fromAscii( jid.resource().c_str() ).startsWith( QLatin1String( "tomahawk" ) )
+        && !( node == TOMAHAWK_CAP_NODE_NAME ) )
     {
         //qDebug() << "not considering resource of" << res;
         // Disco them to check if they are tomahawk-capable
@@ -548,9 +538,7 @@ Jabber_p::handlePresence( const gloox::Presence& presence )
     // "going offline" event
     if ( !presenceMeansOnline( presence.subtype() ) &&
          ( !m_peers.contains( fulljid ) ||
-           presenceMeansOnline( m_peers.value( fulljid ) )
-         )
-       )
+           presenceMeansOnline( m_peers.value( fulljid ) ) ) )
     {
         m_peers[ fulljid ] = presence.subtype();
         qDebug() << "* Peer goes offline:" << fulljid;
@@ -559,11 +547,9 @@ Jabber_p::handlePresence( const gloox::Presence& presence )
     }
 
     // "coming online" event
-    if( presenceMeansOnline( presence.subtype() ) &&
-        ( !m_peers.contains( fulljid ) ||
-          !presenceMeansOnline( m_peers.value( fulljid ) )
-        )
-       )
+    if ( presenceMeansOnline( presence.subtype() ) &&
+         ( !m_peers.contains( fulljid ) ||
+           !presenceMeansOnline( m_peers.value( fulljid ) ) ) )
     {
         m_peers[ fulljid ] = presence.subtype();
         qDebug() << "* Peer goes online:" << fulljid;
