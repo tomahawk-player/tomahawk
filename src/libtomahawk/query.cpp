@@ -26,6 +26,7 @@ Query::get( const QString& artist, const QString& track, const QString& album, c
 
 Query::Query( const QString& artist, const QString& track, const QString& album, const QID& qid )
     : m_solved( false )
+    , m_qid( qid )
     , m_artist( artist )
     , m_album( album )
     , m_track( track )
@@ -170,4 +171,25 @@ Query::checkResults()
 
     if( becameSolved )
         emit solvedStateChanged( true );
+}
+
+
+QVariant
+Query::toVariant() const
+{
+    QVariantMap m;
+    m.insert( "artist", artist() );
+    m.insert( "album", album() );
+    m.insert( "track", track() );
+    m.insert( "duration", duration() );
+    m.insert( "qid", id() );
+    
+    return m;
+}
+
+
+QString
+Query::toString() const
+{
+    return QString( "Query(%1, %2 - %3)" ).arg( id() ).arg( artist() ).arg( track() );
 }

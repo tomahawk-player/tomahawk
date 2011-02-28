@@ -16,6 +16,7 @@
 
 using namespace Tomahawk;
 
+
 PlaylistEntry::PlaylistEntry() {}
 PlaylistEntry::~PlaylistEntry() {}
 
@@ -34,13 +35,7 @@ PlaylistEntry::setQueryVariant( const QVariant& v )
 QVariant
 PlaylistEntry::queryVariant() const
 {
-    QVariantMap m;
-
-    m[ "artist" ] = m_query->artist();
-    m[ "album" ] = m_query->album();
-    m[ "track" ] = m_query->track();
-    
-    return m;
+    return m_query->toVariant();
 }
 
 
