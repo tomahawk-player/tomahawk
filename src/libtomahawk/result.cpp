@@ -58,11 +58,27 @@ Result::score() const
 RID
 Result::id() const
 {
-    if ( m_rid.isEmpty() )
-    {
-        m_rid = m_v.toMap().value( "sid" ).toString();
-    }
+    Q_ASSERT( !m_rid.isEmpty() );
     return m_rid;
+}
+
+
+QVariant
+Result::toVariant() const
+{
+    QVariantMap m;
+    m.insert( "artist", artist()->name() );
+    m.insert( "album", album()->name() );
+    m.insert( "track", track() );
+    m.insert( "source", collection()->source()->friendlyName() );
+    m.insert( "mimetype", mimetype() );
+    m.insert( "size", size() );
+    m.insert( "bitrate", bitrate() );
+    m.insert( "duration", duration() );
+    m.insert( "score", score() );
+    m.insert( "sid", id() );
+
+    return m;
 }
 
 

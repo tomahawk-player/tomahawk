@@ -52,19 +52,15 @@ public:
     void setTrack( const QString& track ) { m_track = track; }
     void setResultHint( const QString& resultHint ) { m_resultHint = resultHint; }
     void setDuration( int duration ) { m_duration = duration; }
-//    void setQID( const QString& qid ) { m_qid = qid; }
-    
-    /// for debug output:
-    QString toString() const
-    {
-        return QString( "Query(%1, %2 - %3)" ).arg( id() ).arg( artist() ).arg( track() );
-    }
+
+    QVariant toVariant() const;
+    QString toString() const;
 
     QString resultHint() const { return m_resultHint; }
     QString artist() const { return m_artist; }
-    QString album()  const { return m_album; }
-    QString track()  const { return m_track; }
-    int duration()   const { return m_duration; }
+    QString album() const { return m_album; }
+    QString track() const { return m_track; }
+    int duration() const { return m_duration; }
     
 signals:
     void resultsAdded( const QList<Tomahawk::result_ptr>& );
@@ -95,12 +91,10 @@ private:
     mutable QID m_qid;
     unsigned int m_lastpipelineweight;
 
-    int m_duration;
-
     QString m_artist;
     QString m_album;
     QString m_track;
-
+    int m_duration;
     QString m_resultHint;
 };
 

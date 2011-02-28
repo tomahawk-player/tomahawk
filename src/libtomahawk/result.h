@@ -31,7 +31,7 @@ public:
     explicit Result();
     virtual ~Result();
 
-    QVariant toVariant() const { return m_v; }
+    QVariant toVariant() const;
     QString toString() const;
     Tomahawk::query_ptr toQuery() const;
 
@@ -40,9 +40,9 @@ public:
     collection_ptr collection() const;
     Tomahawk::artist_ptr artist() const;
     Tomahawk::album_ptr album() const;
-    QString track()     const { return m_track; }
-    QString url()       const { return m_url; }
-    QString mimetype()  const { return m_mimetype; }
+    QString track() const { return m_track; }
+    QString url() const { return m_url; }
+    QString mimetype() const { return m_mimetype; }
 
     unsigned int duration() const { return m_duration; }
     unsigned int bitrate() const { return m_bitrate; }
@@ -82,7 +82,6 @@ private slots:
 private:
     void updateAttributes();
 
-    QVariant m_v;
     mutable RID m_rid;
     collection_ptr m_collection;
 
