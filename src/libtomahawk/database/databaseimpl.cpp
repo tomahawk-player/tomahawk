@@ -512,6 +512,7 @@ DatabaseImpl::result( const QString& url )
         if ( query.value( 13 ).toUInt() == 0 )
         {
             s = SourceList::instance()->getLocal();
+            res->setUrl( url_str );
         }
         else
         {
