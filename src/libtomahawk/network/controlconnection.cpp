@@ -37,7 +37,8 @@ ControlConnection::~ControlConnection()
     
     delete m_pingtimer;
     m_servent->unregisterControlConnection(this);
-    if( m_dbsyncconn ) m_dbsyncconn->deleteLater();
+    if( m_dbsyncconn )
+        m_dbsyncconn->deleteLater();
 }
 
 
@@ -96,15 +97,15 @@ ControlConnection::registerSource()
     // .. but we'll use the shared pointer we've already made:
 
     m_registered = true;
-    setupDbSyncConnection();
     m_servent->registerControlConnection( this );
+    setupDbSyncConnection();
 }
 
 
 void
 ControlConnection::setupDbSyncConnection( bool ondemand )
 {
-    if( m_dbsyncconn != NULL || !m_registered )
+    if ( m_dbsyncconn || !m_registered )
         return;
 
     qDebug() << Q_FUNC_INFO << ondemand << m_source->id();
@@ -159,7 +160,7 @@ ControlConnection::dbSyncConnFinished( QObject* c )
 DBSyncConnection*
 ControlConnection::dbSyncConnection()
 {
-    qDebug() << Q_FUNC_INFO;
+    qDebug() << Q_FUNC_INFO << m_source->id();
     if ( !m_dbsyncconn )
     {
         setupDbSyncConnection( true );

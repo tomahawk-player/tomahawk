@@ -422,6 +422,7 @@ TomahawkApp::initLocalCollection()
 
     src->addCollection( coll );
     SourceList::instance()->setLocal( src );
+    src->collection()->tracks();
 
     // to make the stats signal be emitted by our local source
     // this will update the sidebar, etc.
