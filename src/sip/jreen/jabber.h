@@ -34,7 +34,6 @@ public slots:
     void addContact( const QString &jid, const QString& msg = QString() );
 
 private slots:
-    void onAuthError( int, const QString& );
     void showAddFriendDialog();
 
 private:

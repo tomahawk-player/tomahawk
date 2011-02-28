@@ -12,7 +12,7 @@
 using namespace gloox;
 using namespace std;
 
-#define TOMAHAWK_CAP_NODE_NAME QLatin1String("http://tomahawk-player.org/")
+#define TOMAHAWK_CAP_NODE_NAME QString::fromAscii("http://tomahawk-player.org/")
 
 Jabber_p::Jabber_p( const QString& jid, const QString& password, const QString& server, const int port )
     : QObject()
@@ -42,6 +42,11 @@ Jabber_p::Jabber_p( const QString& jid, const QString& password, const QString& 
     qDebug() << "Our JID set to:" << m_jid.full().c_str();
 
     m_client = QSharedPointer<gloox::Client>( new gloox::Client( m_jid, password.toStdString(), port ) );
+    const Capabilities *caps = m_client->presence().capabilities();
+    if( caps )
+    {
+        const_cast<Capabilities*>(caps)->setNode(TOMAHAWK_CAP_NODE_NAME.toStdString());
+    }
     m_server = server;
 }
 

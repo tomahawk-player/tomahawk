@@ -60,7 +60,6 @@ public slots:
 
     void onDisconnect(jreen::Client::DisconnectReason reason);
     void onConnect();
-    void onDestroy();
 
 private slots:
     virtual void onNewPresence( const jreen::Presence& presence );
