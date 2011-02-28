@@ -501,9 +501,7 @@ Jabber_p::handleRosterError( const IQ& /*iq*/ )
 void
 Jabber_p::handlePresence( const gloox::Presence& presence )
 {
-    //JID jid( item.jid() );
     JID jid = presence.from();
-    //jid.setResource( resource );
     QString fulljid( jid.full().c_str() );
 
     qDebug() << "* handleRosterPresence" << fulljid << presence.subtype();
@@ -535,9 +533,7 @@ Jabber_p::handlePresence( const gloox::Presence& presence )
     // "going offline" event
     if ( !presenceMeansOnline( presence.subtype() ) &&
          ( !m_peers.contains( fulljid ) ||
-           presenceMeansOnline( m_peers.value( fulljid ) )
-         )
-       )
+           presenceMeansOnline( m_peers.value( fulljid ) ) ) )
     {
         m_peers[ fulljid ] = presence.subtype();
         qDebug() << "* Peer goes offline:" << fulljid;
@@ -546,11 +542,9 @@ Jabber_p::handlePresence( const gloox::Presence& presence )
     }
 
     // "coming online" event
-    if( presenceMeansOnline( presence.subtype() ) &&
-        ( !m_peers.contains( fulljid ) ||
-          !presenceMeansOnline( m_peers.value( fulljid ) )
-        )
-       )
+    if ( presenceMeansOnline( presence.subtype() ) &&
+         ( !m_peers.contains( fulljid ) ||
+           !presenceMeansOnline( m_peers.value( fulljid ) ) ) )
     {
         m_peers[ fulljid ] = presence.subtype();
         qDebug() << "* Peer goes online:" << fulljid;
