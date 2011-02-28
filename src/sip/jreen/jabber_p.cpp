@@ -177,6 +177,17 @@ Jabber_p::onConnect()
     m_client->setPingInterval(60000);
     jreen::AbstractRoster *roster = new jreen::AbstractRoster( m_client );
     roster->load();
+
+    // join MUC with bare jid as nickname
+    //TODO: make the room a list of rooms and make that configurable
+    QString bare(m_jid.bare());
+    m_room = new jreen::MUCRoom(m_client, jreen::JID(QString("tomahawk@conference.qutim.org/").append(bare.replace("@", "-"))));
+    m_room->setHistorySeconds(0);
+    m_room->join();
+
+    // treat muc participiants like contacts
+    connect(m_room, SIGNAL(messageReceived(jreen::Message, bool)), this, SLOT(onNewMessage(jreen::Message)));
+    connect(m_room, SIGNAL(presenceReceived(jreen::Presence,jreen::MUCRoom::Participant*)), this, SLOT(onNewPresence(jreen::Presence)));
 }
 
 
