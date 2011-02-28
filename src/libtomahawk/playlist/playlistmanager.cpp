@@ -615,6 +615,8 @@ PlaylistManager::onWidgetDestroyed( QWidget* widget )
         if ( page->widget() == widget )
         {
             m_pageHistory.removeAt( i );
+            if ( m_historyPosition > i )
+                m_historyPosition--;
             break;
         }
     }
