@@ -7,10 +7,12 @@
 #include <QRegExp>
 #include <QThread>
 #include <utils/tomahawkutils.h>
+#include <gloox/capabilities.h>
 
 using namespace gloox;
 using namespace std;
 
+#define TOMAHAWK_CAP_NODE_NAME QLatin1String("http://tomahawk-player.org/")
 
 Jabber_p::Jabber_p( const QString& jid, const QString& password, const QString& server, const int port )
     : QObject()
@@ -133,7 +135,6 @@ Jabber_p::go()
         return;
     }
     m_client->registerConnectionListener( this );
-    m_client->rosterManager()->registerRosterListener( this );    
     m_client->logInstance().registerLogHandler( LogLevelWarning, LogAreaAll, this );
     m_client->registerMessageHandler( this );
 
@@ -510,23 +511,25 @@ Jabber_p::handleRosterError( const IQ& /*iq*/ )
 
 
 void
-Jabber_p::handleRosterPresence( const RosterItem& item, const std::string& resource,
-        Presence::PresenceType presence, const std::string& /*msg*/ )
-{        
-    JID jid( item.jid() );
-    jid.setResource( resource );
+Jabber_p::handlePresence( const gloox::Presence& presence )
+{
+    //JID jid( item.jid() );
+    JID jid = presence.from();
+    //jid.setResource( resource );
     QString fulljid( jid.full().c_str() );
 
-    qDebug() << "* handleRosterPresence" << fulljid << presence;
+    qDebug() << "* handleRosterPresence" << fulljid << presence.subtype();
 
     if( jid == m_jid )
         return;
 
     // ignore anyone not running tomahawk:
     // convert to QString to get proper regex support
-    QString res( jid.resource().c_str() );
-    QRegExp regex( "tomahawk\\d+" );
-    if( res != "tomahawk-tomahawk" && !res.startsWith( "tomahawk" ) )
+    const gloox::Capabilities *caps = presence.findExtension<gloox::Capabilities>(gloox::ExtCaps);
+    QString node = QString::fromAscii( caps->node().c_str() );
+    if( QString::fromAscii( jid.resource().c_str() ).startsWith(QLatin1String("tomahawk"))
+        ||  node == TOMAHAWK_CAP_NODE_NAME
+    )
     {
         //qDebug() << "not considering resource of" << res;
         // Disco them to check if they are tomahawk-capable
@@ -543,41 +546,33 @@ Jabber_p::handleRosterPresence( const RosterItem& item, const std::string& resou
     //        << " presencetype" << presence;
 
     // "going offline" event
-    if ( !presenceMeansOnline( presence ) &&
+    if ( !presenceMeansOnline( presence.subtype() ) &&
          ( !m_peers.contains( fulljid ) ||
            presenceMeansOnline( m_peers.value( fulljid ) )
          )
        )
     {
-        m_peers[ fulljid ] = presence;
+        m_peers[ fulljid ] = presence.subtype();
         qDebug() << "* Peer goes offline:" << fulljid;
         emit peerOffline( fulljid );
         return;
     }
 
     // "coming online" event
-    if( presenceMeansOnline( presence ) &&
+    if( presenceMeansOnline( presence.subtype() ) &&
         ( !m_peers.contains( fulljid ) ||
           !presenceMeansOnline( m_peers.value( fulljid ) )
         )
        )
     {
-        m_peers[ fulljid ] = presence;
+        m_peers[ fulljid ] = presence.subtype();
         qDebug() << "* Peer goes online:" << fulljid;
         emit peerOnline( fulljid );
         return;
     }
 
     //qDebug() << "Updating presence data for" << fulljid;
-    m_peers[ fulljid ] = presence;
-}
-
-
-void
-Jabber_p::handleSelfPresence( const RosterItem& item, const std::string& resource,
-                            Presence::PresenceType presence, const std::string& msg )
-{
-    handleRosterPresence( item, resource, presence, msg );
+    m_peers[ fulljid ] = presence.subtype();
 }
 
 

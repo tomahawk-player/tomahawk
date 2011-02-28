@@ -40,9 +40,24 @@ include( CheckTagLibFileName )
 check_taglib_filename( COMPLEX_TAGLIB_FILENAME )
 
 # optional
-macro_optional_find_package(Gloox 1.0)
-macro_log_feature(GLOOX_FOUND "Gloox" "A portable high-level Jabber/XMPP library for C++" "http://camaya.net/gloox" FALSE "" "Gloox is needed for the Jabber SIP plugin and the XMPP-Bot")
+macro_optional_find_package(Jreen)
+IF( ENABLE_JREEN AND NOT LIBJREEN_FOUND )
+    ADD_SUBDIRECTORY( thirdparty/jreen )
+    SET( LIBJREEN_INCLUDE_DIR  ${CMAKE_CURRENT_BINARY_DIR}/thirdparty/jreen/include )
+    IF( UNIX AND NOT APPLE )
+        SET( LIBJREEN_LIBRARY ${CMAKE_CURRENT_BINARY_DIR}/thirdparty/jreen/libjreen.so )
+    ENDIF( UNIX AND NOT APPLE )
+    SET( LIBJREEN_FOUND  true )
+    MESSAGE(STATUS "Internal libjreen: ${LIBJREEN_INCLUDE_DIR}, ${LIBJREEN_LIBRARY}")
+ENDIF( ENABLE_JREEN AND NOT LIBJREEN_FOUND )
 
+macro_log_feature(JREEN_FOUND "Jreen" "Qt XMPP library" "http://gitorious.org/jreen" FALSE "" "Jreen is needed for the alternative/new Jabber SIP plugin. Built automatically inside Tomahawk, if not installed systemwide and ENABLE_JREEN is true")
+
+macro_optional_find_package(Gloox 1.0)
+IF( ENABLE_JREEN )
+    set( GLOOX_FOUND  false )
+ENDIF( ENABLE_JREEN)
+macro_log_feature(GLOOX_FOUND "Gloox" "A portable high-level Jabber/XMPP library for C++" "http://camaya.net/gloox" FALSE "" "Gloox is needed for the Jabber SIP plugin and the XMPP-Bot")
 #show dep log
 macro_display_feature_log()
 MESSAGE("WARNING!")

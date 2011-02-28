@@ -53,9 +53,9 @@
 class SIPDLLEXPORT Jabber_p :
        public QObject,
        public gloox::ConnectionListener,
-       public gloox::RosterListener,
        public gloox::MessageHandler,
        public gloox::VCardHandler,
+       public gloox::PresenceHandler,
        gloox::LogHandler
        //public gloox::DiscoHandler,
 {
@@ -89,10 +89,7 @@ public:
 
     virtual void handleRoster( const gloox::Roster& roster );
     virtual void handleRosterError( const gloox::IQ& /*iq*/ );
-    virtual void handleRosterPresence( const gloox::RosterItem& item, const std::string& resource,
-                                       gloox::Presence::PresenceType presence, const std::string& /*msg*/ );
-    virtual void handleSelfPresence( const gloox::RosterItem& item, const std::string& resource,
-                                       gloox::Presence::PresenceType presence, const std::string& msg );
+    virtual void handlePresence( const gloox::Presence& presence );
     virtual bool handleSubscription( const gloox::JID& jid, const std::string& /*msg*/ );
     virtual bool handleSubscriptionRequest( const gloox::JID& jid, const std::string& /*msg*/ );
     virtual bool handleUnsubscriptionRequest( const gloox::JID& jid, const std::string& /*msg*/ );
