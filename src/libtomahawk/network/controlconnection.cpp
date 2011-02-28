@@ -134,10 +134,10 @@ ControlConnection::setupDbSyncConnection( bool ondemand )
     if ( m_dbsyncconn )
     {
         connect( m_dbsyncconn, SIGNAL( finished() ),
-                m_dbsyncconn,   SLOT( deleteLater() ) );
+                 m_dbsyncconn,   SLOT( deleteLater() ) );
 
         connect( m_dbsyncconn, SIGNAL( destroyed( QObject* ) ),
-                                SLOT( dbSyncConnFinished( QObject* ) ), Qt::DirectConnection );
+                                 SLOT( dbSyncConnFinished( QObject* ) ), Qt::DirectConnection );
     }
 }
 
@@ -151,6 +151,8 @@ ControlConnection::dbSyncConnFinished( QObject* c )
         //qDebug() << "Setting m_dbsyncconn to NULL";
         m_dbsyncconn = NULL;
     }
+    else
+        qDebug() << "Old DbSyncConn destroyed?!";
 }
 
 
@@ -158,8 +160,11 @@ DBSyncConnection*
 ControlConnection::dbSyncConnection()
 {
     qDebug() << Q_FUNC_INFO;
-    if( m_dbsyncconn == NULL )
+    if ( !m_dbsyncconn )
+    {
         setupDbSyncConnection( true );
+        Q_ASSERT( m_dbsyncconn );
+    }
 
     return m_dbsyncconn;
 }
