@@ -37,7 +37,8 @@ ControlConnection::~ControlConnection()
     
     delete m_pingtimer;
     m_servent->unregisterControlConnection(this);
-    if( m_dbsyncconn ) m_dbsyncconn->deleteLater();
+    if( m_dbsyncconn )
+        m_dbsyncconn->deleteLater();
 }
 
 
@@ -96,15 +97,15 @@ ControlConnection::registerSource()
     // .. but we'll use the shared pointer we've already made:
 
     m_registered = true;
-    setupDbSyncConnection();
     m_servent->registerControlConnection( this );
+    setupDbSyncConnection();
 }
 
 
 void
 ControlConnection::setupDbSyncConnection( bool ondemand )
 {
-    if( m_dbsyncconn != NULL || !m_registered )
+    if ( m_dbsyncconn || !m_registered )
         return;
 
     qDebug() << Q_FUNC_INFO << ondemand << m_source->id();
@@ -134,10 +135,10 @@ ControlConnection::setupDbSyncConnection( bool ondemand )
     if ( m_dbsyncconn )
     {
         connect( m_dbsyncconn, SIGNAL( finished() ),
-                m_dbsyncconn,   SLOT( deleteLater() ) );
+                 m_dbsyncconn,   SLOT( deleteLater() ) );
 
         connect( m_dbsyncconn, SIGNAL( destroyed( QObject* ) ),
-                                SLOT( dbSyncConnFinished( QObject* ) ), Qt::DirectConnection );
+                                 SLOT( dbSyncConnFinished( QObject* ) ), Qt::DirectConnection );
     }
 }
 
@@ -151,15 +152,20 @@ ControlConnection::dbSyncConnFinished( QObject* c )
         //qDebug() << "Setting m_dbsyncconn to NULL";
         m_dbsyncconn = NULL;
     }
+    else
+        qDebug() << "Old DbSyncConn destroyed?!";
 }
 
 
 DBSyncConnection*
 ControlConnection::dbSyncConnection()
 {
-    qDebug() << Q_FUNC_INFO;
-    if( m_dbsyncconn == NULL )
+    qDebug() << Q_FUNC_INFO << m_source->id();
+    if ( !m_dbsyncconn )
+    {
         setupDbSyncConnection( true );
+        Q_ASSERT( m_dbsyncconn );
+    }
 
     return m_dbsyncconn;
 }

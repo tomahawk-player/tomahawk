@@ -459,7 +459,7 @@ DatabaseImpl::result( const QString& url )
 {
     TomahawkSqlQuery query = newquery();
     Tomahawk::source_ptr s;
-    Tomahawk::result_ptr res;
+    Tomahawk::result_ptr res = Tomahawk::result_ptr( new Tomahawk::Result() );
     QString fileUrl;
 
     if ( url.contains( "servent://" ) )
@@ -539,6 +539,7 @@ DatabaseImpl::result( const QString& url )
         res->setAlbumPos( query.value( 14 ).toUInt() );
         res->setRID( uuid() );
         res->setId( query.value( 9 ).toUInt() );
+        res->setCollection( s->collection() );
     }
 
     return res;

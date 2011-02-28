@@ -32,6 +32,9 @@ public slots:
     
 private slots:
     void dynamicPlaylistCreated( const Tomahawk::source_ptr& source, const QVariantList& data );
+
+private:
+    bool m_loadedTracks;
 };
 
 #endif // DATABASECOLLECTION_H
