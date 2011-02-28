@@ -418,6 +418,7 @@ void
 TomahawkWindow::showAboutTomahawk()
 {
     QMessageBox::about( this, "About Tomahawk",
-                        tr( "<h2><b>Tomahawk %1</h2>Copyright 2010, 2011 Christian Muehlhaeuser <muesli@gmail.com><br/><br/>Thanks to: Leo Franchi, Jeff Mitchell, Dominik Schmidt, Alejandro Wainzinger and Steve Robertson" )
+                        tr( "<h2><b>Tomahawk %1</h2>Copyright 2010, 2011<br/>Christian Muehlhaeuser &lt;muesli@tomahawk-player.org&gt;<br/><br/>"
+                            "Thanks to: Leo Franchi, Jeff Mitchell, Dominik Schmidt, Alejandro Wainzinger, Harald Sitter and Steve Robertson" )
                         .arg( qApp->applicationVersion() ) );
 }
