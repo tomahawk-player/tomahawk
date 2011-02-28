@@ -189,7 +189,13 @@ SipHandler::onPeerOnline( const QString& jid )
         ControlConnection* conn = new ControlConnection( Servent::instance() );
 
         const QString& nodeid = Database::instance()->dbid();
-        conn->setName( jid ); //.left( jid.indexOf( "/" ) )
+
+        //TODO: this is a terrible assumption, help me clean this up, mighty muesli!
+        if ( jid.contains( "@conference.") )
+            conn->setName( jid );
+        else
+            conn->setName( jid.left( jid.indexOf( "/" ) ) );
+
         conn->setId( nodeid );
 
         Servent::instance()->registerOffer( key, conn );
