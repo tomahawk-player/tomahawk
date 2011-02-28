@@ -99,13 +99,13 @@ XSPFLoader::gotBody()
         p->setLastmodified( 0 );
         p->setAnnotation( e.firstChildElement( "annotation" ).text() );
 
-        QVariantMap v;
-        v.insert( "duration", e.firstChildElement( "duration" ).text().toInt() / 1000 );
-        v.insert( "artist", e.firstChildElement( "creator" ).text() );
-        v.insert( "album", e.firstChildElement( "album" ).text() );
-        v.insert( "track", e.firstChildElement( "title" ).text() );
+        QString artist, album, track;
+        artist = e.firstChildElement( "creator" ).text();
+        album = e.firstChildElement( "album" ).text();
+        track = e.firstChildElement( "title" ).text();
 
-        p->setQuery( Tomahawk::Query::get( v ) );
+        p->setQuery( Tomahawk::Query::get( artist, track, album ) );
+        p->query()->setDuration( e.firstChildElement( "duration" ).text().toInt() / 1000 );
         m_entries << p;
     }
 

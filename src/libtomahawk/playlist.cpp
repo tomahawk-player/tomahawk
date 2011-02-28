@@ -22,14 +22,25 @@ PlaylistEntry::~PlaylistEntry() {}
 void
 PlaylistEntry::setQueryVariant( const QVariant& v )
 {
-    m_query = Tomahawk::Query::get( v, false );
+    QVariantMap m = v.toMap();
+
+    QString artist = m.value( "artist" ).toString();
+    QString album = m.value( "album" ).toString();
+    QString track = m.value( "track" ).toString();
+    m_query = Tomahawk::Query::get( artist, track, album, false );
 }
 
 
 QVariant
 PlaylistEntry::queryVariant() const
 {
-    return m_query->toVariant();
+    QVariantMap m;
+
+    m[ "artist" ] = m_query->artist();
+    m[ "album" ] = m_query->album();
+    m[ "track" ] = m_query->track();
+    
+    return m;
 }
 
 

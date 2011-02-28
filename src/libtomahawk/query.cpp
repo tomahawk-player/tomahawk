@@ -4,6 +4,9 @@
 #include <QtAlgorithms>
 
 #include "database/database.h"
+#include "database/databasecommand_logplayback.h"
+#include "database/databasecommand_playbackhistory.h"
+#include "database/databasecommand_loadplaylistentries.h"
 #include "pipeline.h"
 #include "sourcelist.h"
 
@@ -11,30 +14,27 @@ using namespace Tomahawk;
 
 
 query_ptr
-Query::get( const QVariant& v, bool autoResolve )
+Query::get( const QString& artist, const QString& track, const QString& album, const QID& qid )
 {
-    query_ptr q = query_ptr( new Query( v, autoResolve ) );
+    query_ptr q = query_ptr( new Query( artist, track, album, qid ) );
 
-    if ( autoResolve )
+    if ( !qid.isEmpty() )
         Pipeline::instance()->resolve( q );
     return q;
 }
 
 
-Query::Query( const QVariant& v, bool autoResolve )
-    : m_v( v )
-    , m_solved( false )
+Query::Query( const QString& artist, const QString& track, const QString& album, const QID& qid )
+    : m_solved( false )
+    , m_artist( artist )
+    , m_album( album )
+    , m_track( track )
+    , m_duration( -1 )
 {
-    QVariantMap m = m_v.toMap();
-
-    m_artist = m.value( "artist" ).toString();
-    m_album = m.value( "album" ).toString();
-    m_track = m.value( "track" ).toString();
-
-    m_qid = m.value( "qid" ).toString();
-
-    if ( autoResolve )
+    if ( !qid.isEmpty() )
+    {
         connect( Database::instance(), SIGNAL( indexReady() ), SLOT( refreshResults() ), Qt::QueuedConnection );
+    }
 }
 
 
@@ -119,12 +119,8 @@ Query::id() const
     if ( m_qid.isEmpty() )
     {
         m_qid = uuid();
-
-        QVariantMap m = m_v.toMap();
-        m.insert( "qid", m_qid );
-
-        m_v = m;
     }
+
     return m_qid;
 }
 

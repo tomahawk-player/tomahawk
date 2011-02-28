@@ -2,39 +2,18 @@
 
 #include "album.h"
 #include "collection.h"
+#include "database/databasecommand_resolve.h"
+#include "database/databasecommand_alltracks.h"
+#include "database/databasecommand_addfiles.h"
+#include "database/databasecommand_loadfile.h"
 
 using namespace Tomahawk;
 
-Result::Result() {}
 
-Result::Result( const QVariant& v, const collection_ptr& collection )
+Result::Result()
     : QObject()
-    , m_v( v )
-    , m_collection( collection )
+    , m_year( 0 )
 {
-    QVariantMap m = m_v.toMap();
-
-    m_artist = Artist::get( m.value( "artistid" ).toUInt(), m.value( "artist" ).toString(), collection );
-    m_album = Album::get( m.value( "albumid" ).toUInt(), m.value( "album" ).toString(), m_artist, collection );
-    m_track = m.value( "track" ).toString();
-    m_url = m.value( "url" ).toString();
-    m_mimetype = m.value( "mimetype" ).toString();
-
-    m_duration = m.value( "duration" ).toUInt();
-    m_bitrate = m.value( "bitrate" ).toUInt();
-    m_size = m.value( "size" ).toUInt();
-    m_albumpos = m.value( "albumpos" ).toUInt();
-    m_modtime = m.value( "mtime" ).toUInt();
-    m_score = m.value( "score" ).toFloat();
-    m_year = 0;
-
-    m_id = m.value( "id" ).toUInt();
-
-    if ( !m_collection.isNull() )
-    {
-        connect( m_collection->source().data(), SIGNAL( online() ), SLOT( onOnline() ), Qt::QueuedConnection );
-        connect( m_collection->source().data(), SIGNAL( offline() ), SLOT( onOffline() ), Qt::QueuedConnection );
-    }
 }
 
 
@@ -97,7 +76,7 @@ Result::toString() const
 Tomahawk::query_ptr
 Result::toQuery() const
 {
-    Tomahawk::query_ptr query = Tomahawk::Query::get( toVariant(), false );
+    Tomahawk::query_ptr query = Tomahawk::Query::get( artist()->name(), track(), album()->name() );
     return query;
 }
 
@@ -125,4 +104,27 @@ Result::onOffline()
 {
 //    qDebug() << Q_FUNC_INFO << toString();
     emit statusChanged();
+}
+
+
+void
+Result::setArtist( const Tomahawk::artist_ptr& artist )
+{
+    m_artist = artist;
+}
+
+
+void
+Result::setAlbum( const Tomahawk::album_ptr& album )
+{
+    m_album = album;
+}
+
+
+void
+Result::setCollection( const Tomahawk::collection_ptr& collection )
+{
+    m_collection = collection;
+    connect( m_collection->source().data(), SIGNAL( online() ), SLOT( onOnline() ), Qt::QueuedConnection );
+    connect( m_collection->source().data(), SIGNAL( offline() ), SLOT( onOffline() ), Qt::QueuedConnection );
 }

@@ -8,6 +8,7 @@
 #include <qjson/qobjecthelper.h>
 
 #include "resolver.h"
+#include "query.h"
 #include "result.h"
 
 class ScriptResolver : public Tomahawk::Resolver
@@ -22,7 +23,7 @@ public:
     virtual unsigned int preference() const { return m_preference; }
     virtual unsigned int timeout() const    { return m_timeout; }
 
-    virtual void resolve( const QVariant& v );
+    virtual void resolve( const Tomahawk::query_ptr& query );
 
     QString exe() const { return m_cmd; }
 signals:

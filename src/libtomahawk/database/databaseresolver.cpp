@@ -4,6 +4,7 @@
 #include "database/database.h"
 #include "database/databasecommand_resolve.h"
 
+
 DatabaseResolver::DatabaseResolver( int weight )
     : Resolver()
     , m_weight( weight )
@@ -12,14 +13,12 @@ DatabaseResolver::DatabaseResolver( int weight )
 
 
 void
-DatabaseResolver::resolve( const QVariant& v )
+DatabaseResolver::resolve( const Tomahawk::query_ptr& query )
 {
-    //qDebug() << Q_FUNC_INFO << v;
+    DatabaseCommand_Resolve* cmd = new DatabaseCommand_Resolve( query );
 
-    DatabaseCommand_Resolve* cmd = new DatabaseCommand_Resolve( v );
-
-    connect( cmd, SIGNAL( results( Tomahawk::QID, QList< Tomahawk::result_ptr> ) ),
-                    SLOT( gotResults( Tomahawk::QID, QList< Tomahawk::result_ptr> ) ), Qt::QueuedConnection );
+    connect( cmd, SIGNAL( results( Tomahawk::QID, QList< Tomahawk::result_ptr > ) ),
+                    SLOT( gotResults( Tomahawk::QID, QList< Tomahawk::result_ptr > ) ), Qt::QueuedConnection );
 
     Database::instance()->enqueue( QSharedPointer<DatabaseCommand>( cmd ) );
 

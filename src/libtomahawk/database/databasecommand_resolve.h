@@ -13,7 +13,7 @@ class DLLEXPORT DatabaseCommand_Resolve : public DatabaseCommand
 {
 Q_OBJECT
 public:
-    explicit DatabaseCommand_Resolve( const QVariant& v );
+    explicit DatabaseCommand_Resolve( const Tomahawk::query_ptr& query );
 
     virtual QString commandname() const { return "dbresolve"; }
     virtual bool doesMutates() const { return false; }
@@ -26,9 +26,9 @@ signals:
 public slots:
 
 private:
-    QVariant m_v;
+    Tomahawk::query_ptr m_query;
 
-    float how_similar( const QVariantMap& q, const QVariantMap& r );
+    float how_similar( const Tomahawk::query_ptr& q, const Tomahawk::result_ptr& r );
     static int levenshtein( const QString& source, const QString& target );
 };
 

@@ -141,10 +141,7 @@ void XMPPBot::handleMessage(const Message& msg, MessageSession* session)
         if ( tokens.count() < 2 )
             AudioEngine::instance()->play();
 
-        QVariantMap qv;
-        qv["artist"] = tokens.first().trimmed();
-        qv["track"] = tokens.last().trimmed();
-        Tomahawk::query_ptr q = Tomahawk::Query::get( qv );
+        Tomahawk::query_ptr q = Tomahawk::Query::get( tokens.first().trimmed(), tokens.last().trimmed(), QString() );
         connect( q.data(), SIGNAL( resultsAdded( QList<Tomahawk::result_ptr> ) ),
                              SLOT( onResultsAdded( QList<Tomahawk::result_ptr> ) ) );
 

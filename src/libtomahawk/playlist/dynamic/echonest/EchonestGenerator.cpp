@@ -284,11 +284,8 @@ EchonestGenerator::appendRadioType( Echonest::DynamicPlaylist::PlaylistParams& p
 query_ptr 
 EchonestGenerator::queryFromSong(const Echonest::Song& song)
 {
-    QVariantMap track;
-    track[ "artist" ] = song.artistName();
     //         track[ "album" ] = song.release(); // TODO should we include it? can be quite specific
-    track[ "track" ] = song.title();
-    return Query::get( track );
+    return Query::get( song.artistName(), song.title(), QString() );
 }
 
 QWidget* 

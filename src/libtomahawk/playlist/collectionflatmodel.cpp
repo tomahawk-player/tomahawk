@@ -57,9 +57,9 @@ CollectionFlatModel::addCollection( const collection_ptr& collection )
     onTracksAdded( collection->tracks(), collection );
 
     connect( collection.data(), SIGNAL( tracksAdded( QList<Tomahawk::query_ptr>, Tomahawk::collection_ptr ) ),
-             SLOT( onTracksAdded( QList<Tomahawk::query_ptr>, Tomahawk::collection_ptr ) ) );
+                                  SLOT( onTracksAdded( QList<Tomahawk::query_ptr>, Tomahawk::collection_ptr ) ) );
     connect( collection.data(), SIGNAL( tracksFinished( Tomahawk::collection_ptr ) ),
-             SLOT( onTracksAddingFinished( Tomahawk::collection_ptr ) ) );
+                                  SLOT( onTracksAddingFinished( Tomahawk::collection_ptr ) ) );
 
     if ( collection->source()->isLocal() )
         setTitle( tr( "Your Collection" ) );

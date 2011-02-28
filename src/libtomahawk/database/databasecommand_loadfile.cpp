@@ -14,7 +14,7 @@ DatabaseCommand_LoadFile::DatabaseCommand_LoadFile( const QString& id, QObject* 
 void
 DatabaseCommand_LoadFile::exec( DatabaseImpl* dbi )
 {
-    QVariantMap r;
+    Tomahawk::result_ptr r;
     // file ids internally are really ints, at least for now:
     bool ok;
     do
@@ -26,5 +26,5 @@ DatabaseCommand_LoadFile::exec( DatabaseImpl* dbi )
         r = dbi->file( fid );
     } while( false );
 
-    emit result( Tomahawk::result_ptr( new Tomahawk::Result( r, Tomahawk::collection_ptr() ) ) );
+    emit result( r );
 }
