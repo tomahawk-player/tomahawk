@@ -51,7 +51,7 @@
 #include <iostream>
 #include <fstream>
 
-#define LOGFILE TomahawkUtils::appDataDir().filePath( "tomahawk.log" ).toLocal8Bit()
+#define LOGFILE TomahawkUtils::appLogDir().filePath( "Tomahawk.log" ).toLocal8Bit()
 #define LOGFILE_SIZE 1024 * 512
 
 using namespace std;

@@ -26,15 +26,16 @@ namespace TomahawkUtils
     //a non-static non-singleton normal utility class then.
     class DLLEXPORT DNSResolver : public QObject
     {
-        Q_OBJECT
+    Q_OBJECT
+
     public:
         explicit DNSResolver();
         ~DNSResolver() {}
         
-        void resolve( QString &host, QString type );
+        void resolve( QString& host, QString type );
         
     signals:
-        void result( QString &result );
+        void result( QString& result );
         
     public slots:
         void resultsReady();
@@ -47,23 +48,24 @@ namespace TomahawkUtils
     class DLLEXPORT Sleep : public QThread
     {
     public:
-        static void sleep(unsigned long secs)
+        static void sleep( unsigned long secs )
         {
-            QThread::sleep(secs);
+            QThread::sleep( secs );
         }
-        static void msleep(unsigned long msecs) 
+        static void msleep( unsigned long msecs ) 
         {
-            QThread::msleep(msecs);
+            QThread::msleep( msecs );
         }
-        static void usleep(unsigned long usecs) 
+        static void usleep( unsigned long usecs ) 
         {
-            QThread::usleep(usecs);
+            QThread::usleep( usecs );
         }
     };
     
     DLLEXPORT QDir appConfigDir();
     DLLEXPORT QDir appDataDir();
-
+    DLLEXPORT QDir appLogDir();
+    
     DLLEXPORT QString timeToString( int seconds );
     DLLEXPORT QString ageToString( const QDateTime& time );
     DLLEXPORT QString filesizeToString( unsigned int size );
