@@ -44,12 +44,7 @@ DatabaseCommand_PlaybackHistory::exec( DatabaseImpl* dbi )
 
         if ( query_track.next() )
         {
-            QVariantMap m;
-            m.insert( "track", query_track.value( 0 ).toString() );
-            m.insert( "artist", query_track.value( 1 ).toString() );
-            m.insert( "qid", uuid() );
-
-            Tomahawk::query_ptr q = Tomahawk::Query::get( m );
+            Tomahawk::query_ptr q = Tomahawk::Query::get( query_track.value( 1 ).toString(), query_track.value( 0 ).toString(), QString(), uuid() );
             ql << q;
         }
     }

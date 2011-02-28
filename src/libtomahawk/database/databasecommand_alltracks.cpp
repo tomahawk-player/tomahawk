@@ -3,6 +3,9 @@
 #include <QSqlQuery>
 
 #include "databaseimpl.h"
+#include "artist.h"
+#include "album.h"
+
 
 void
 DatabaseCommand_AllTracks::exec( DatabaseImpl* dbi )
@@ -56,52 +59,54 @@ DatabaseCommand_AllTracks::exec( DatabaseImpl* dbi )
     int i = 0;
     while( query.next() )
     {
-        QVariantMap t;
+        Tomahawk::result_ptr result = Tomahawk::result_ptr( new Tomahawk::Result() );
         QVariantMap attr;
-        QString url;
         TomahawkSqlQuery attrQuery = dbi->newquery();
 
-        url = query.value( 7 ).toString();
         if( m_collection->source()->isLocal() )
-            t["url"] = url;
+            result->setUrl( query.value( 7 ).toString() );
         else
-            t["url"] = QString( "servent://%1\t%2" ).arg( m_collection->source()->userName() ).arg( url );
+            result->setUrl( QString( "servent://%1\t%2" ).arg( m_collection->source()->userName() ).arg( query.value( 7 ).toString() ) );
 
-        t["id"] = QString( "%1" ).arg( query.value( 0 ).toInt() );
-        t["artist"] = query.value( 1 ).toString();
-        t["artistid"] = query.value( 12 ).toUInt();
-        t["album"] = query.value( 2 ).toString();
-        t["albumid"] = query.value( 13 ).toUInt();
-        t["track"] = query.value( 3 ).toString();
-        t["size"] = query.value( 4 ).toInt();
-        t["duration"] = query.value( 5 ).toInt();
-        t["bitrate"] = query.value( 6 ).toInt();
-        t["mtime"] = query.value( 9 ).toInt();
-        t["mimetype"] = query.value( 10 ).toString();
-        t["albumpos"] = query.value( 11 ).toUInt();
-        t["trackid"] = query.value( 14 ).toUInt();
+        QString artist, track, album;
+        artist = query.value( 1 ).toString();
+        album = query.value( 2 ).toString();
+        track = query.value( 3 ).toString();
 
+        Tomahawk::query_ptr qry = Tomahawk::Query::get( artist, track, album );
+        Tomahawk::artist_ptr artistptr = Tomahawk::Artist::get( query.value( 12 ).toUInt(), artist, m_collection );
+        Tomahawk::album_ptr albumptr = Tomahawk::Album::get( query.value( 13 ).toUInt(), album, artistptr, m_collection );
+
+        result->setId( query.value( 14 ).toUInt() );
+        result->setArtist( artistptr );
+        result->setAlbum( albumptr );
+        result->setTrack( query.value( 3 ).toString() );
+        result->setSize( query.value( 4 ).toUInt() );
+        result->setDuration( query.value( 5 ).toUInt() );
+        result->setBitrate( query.value( 6 ).toUInt() );
+        result->setModificationTime( query.value( 9 ).toUInt() );
+        result->setMimetype( query.value( 10 ).toString() );
+        result->setAlbumPos( query.value( 11 ).toUInt() );
+        result->setScore( 1.0 );
+        result->setCollection( m_collection );
+        
         attrQuery.prepare( "SELECT k, v FROM track_attributes WHERE id = ?" );
-        attrQuery.bindValue( 0, t["trackid"] );
+        attrQuery.bindValue( 0, result->dbid() );
         attrQuery.exec();
         while ( attrQuery.next() )
         {
             attr[ attrQuery.value( 0 ).toString() ] = attrQuery.value( 1 ).toString();
         }
 
-        Tomahawk::query_ptr query = Tomahawk::Query::get( t, false );
-        t["score"] = 1.0;
-
-        Tomahawk::result_ptr result = Tomahawk::result_ptr( new Tomahawk::Result( t, m_collection ) );
         result->setAttributes( attr );
 
         QList<Tomahawk::result_ptr> results;
         results << result;
-        query->addResults( results );
+        qry->addResults( results );
 
-        ql << query;
+        ql << qry;
 
-        if ( ++i % 1000 == 0 )
+        if ( ++i % 5000 == 0 )
         {
             emit tracks( ql, m_collection );
             ql.clear();

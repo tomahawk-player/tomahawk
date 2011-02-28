@@ -15,6 +15,7 @@
 
 #include "tomahawksqlquery.h"
 #include "fuzzyindex.h"
+#include "typedefs.h"
 
 class Database;
 
@@ -44,8 +45,8 @@ public:
     QVariantMap artist( int id );
     QVariantMap album( int id );
     QVariantMap track( int id );
-    QVariantMap file( int fid );
-    QVariantMap result( const QString& url );
+    Tomahawk::result_ptr file( int fid );
+    Tomahawk::result_ptr result( const QString& url );
 
     static bool scorepairSorter( const QPair<int,float>& left, const QPair<int,float>& right )
     {

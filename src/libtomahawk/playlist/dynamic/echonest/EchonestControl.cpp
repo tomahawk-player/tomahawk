@@ -183,8 +183,7 @@ Tomahawk::EchonestControl::updateWidgets()
         
         
         connect( input->slider(), SIGNAL( valueChanged( int ) ), this, SLOT( updateData() ) );
-        connect( input->slider(), SIGNAL( sliderMoved( int ) ), this, SLOT( editingFinished() ) );
-        connect( input->slider(), SIGNAL( sliderMoved( int ) ), &m_editingTimer, SLOT( stop() ) );
+        connect( input->slider(), SIGNAL( valueChanged( int ) ), this, SLOT( editingFinished() ) );
         
         match->hide();
         input->hide();

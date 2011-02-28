@@ -9,6 +9,9 @@
 #include "database/database.h"
 #include "databasecommand_updatesearchindex.h"
 #include "sourcelist.h"
+#include "result.h"
+#include "artist.h"
+#include "album.h"
 
 /* !!!! You need to manually generate schema.sql.h when the schema changes:
     cd src/libtomahawk/database
@@ -17,6 +20,7 @@
 #include "schema.sql.h"
 
 #define CURRENT_SCHEMA_VERSION 21
+
 
 DatabaseImpl::DatabaseImpl( const QString& dbname, Database* parent )
     : QObject( (QObject*) parent )
@@ -152,39 +156,59 @@ DatabaseImpl::updateSchema( int currentver )
 }
 
 
-QVariantMap
+Tomahawk::result_ptr
 DatabaseImpl::file( int fid )
 {
-    QVariantMap m;
+    Tomahawk::result_ptr r = Tomahawk::result_ptr( new Tomahawk::Result() );
     TomahawkSqlQuery query = newquery();
     query.exec( QString( "SELECT url, mtime, size, md5, mimetype, duration, bitrate, "
                          "file_join.artist, file_join.album, file_join.track, "
                          "(select name from artist where id = file_join.artist) as artname, "
                          "(select name from album  where id = file_join.album)  as albname, "
-                         "(select name from track  where id = file_join.track)  as trkname "
+                         "(select name from track  where id = file_join.track)  as trkname, "
+                         "source "
                          "FROM file, file_join "
                          "WHERE file.id = file_join.file AND file.id = %1" )
                 .arg( fid ) );
 
     if( query.next() )
     {
-        m["url"]      = query.value( 0 ).toString();
-        m["mtime"]    = query.value( 1 ).toString();
-        m["size"]     = query.value( 2 ).toInt();
-        m["hash"]     = query.value( 3 ).toString();
-        m["mimetype"] = query.value( 4 ).toString();
-        m["duration"] = query.value( 5 ).toInt();
-        m["bitrate"]  = query.value( 6 ).toInt();
-        m["artistid"] = query.value( 7 ).toInt();
-        m["albumid"]  = query.value( 8 ).toInt();
-        m["trackid"]  = query.value( 9 ).toInt();
-        m["artist"]   = query.value( 10 ).toString();
-        m["album"]    = query.value( 11 ).toString();
-        m["track"]    = query.value( 12 ).toString();
+        Tomahawk::source_ptr s;
+
+        const QString url_str = query.value( 0 ).toString();
+        if ( query.value( 13 ).toUInt() == 0 )
+        {
+            s = SourceList::instance()->getLocal();
+        }
+        else
+        {
+            s = SourceList::instance()->get( query.value( 13 ).toUInt() );
+            if ( s.isNull() )
+            {
+                return r;
+            }
+            
+            r->setUrl( QString( "servent://%1\t%2" ).arg( s->userName() ).arg( url_str ) );
+        }
+
+        Tomahawk::artist_ptr artist = Tomahawk::Artist::get( query.value( 7 ).toUInt(), query.value( 10 ).toString(), s->collection() );
+        Tomahawk::album_ptr album = Tomahawk::Album::get( query.value( 8 ).toUInt(), query.value( 11 ).toString(), artist, s->collection() );
+
+        r->setUrl( query.value( 0 ).toString() );
+        r->setModificationTime( query.value( 1 ).toUInt() );
+        r->setSize( query.value( 2 ).toUInt() );
+        r->setMimetype( query.value( 4 ).toString() );
+        r->setDuration( query.value( 5 ).toUInt() );
+        r->setBitrate( query.value( 6 ).toUInt() );
+        r->setArtist( artist );
+        r->setAlbum( album );
+        r->setTrack( query.value( 12 ).toString() );
+        r->setId( query.value( 9 ).toUInt() );
+        r->setCollection( s->collection() );
+        r->setScore( 1.0 );
     }
 
-    //qDebug() << m;
-    return m;
+    return r;
 }
 
 
@@ -430,12 +454,12 @@ DatabaseImpl::album( int id )
 }
 
 
-QVariantMap
+Tomahawk::result_ptr
 DatabaseImpl::result( const QString& url )
 {
     TomahawkSqlQuery query = newquery();
     Tomahawk::source_ptr s;
-    QVariantMap m;
+    Tomahawk::result_ptr res;
     QString fileUrl;
 
     if ( url.contains( "servent://" ) )
@@ -445,7 +469,7 @@ DatabaseImpl::result( const QString& url )
         fileUrl = parts.at( 1 );
 
         if ( s.isNull() )
-            return m;
+            return res;
     }
     else if ( url.contains( "file://" ) )
     {
@@ -482,43 +506,40 @@ DatabaseImpl::result( const QString& url )
 
     if( query.next() )
     {
+        Tomahawk::source_ptr s;
+        
         const QString url_str = query.value( 0 ).toString();
-        if( searchlocal )
+        if ( query.value( 13 ).toUInt() == 0 )
         {
-            m["url"] = url_str;
-            m["source"] = "Local Database"; // TODO
+            s = SourceList::instance()->getLocal();
         }
         else
         {
-            Tomahawk::source_ptr s;
             s = SourceList::instance()->get( query.value( 13 ).toUInt() );
-            if( s.isNull() )
+            if ( s.isNull() )
             {
-                //qDebug() << "Skipping result for offline sourceid:" << files_query.value( 13 ).toUInt();
-                // will happen for valid sources which are offline (and thus not in the sourcelist)
-                return m;
+                return res;
             }
-
-            m.insert( "url", QString( "servent://%1\t%2" ).arg( s->userName() ).arg( url_str ) );
-            m.insert( "source", s->friendlyName() );
+            
+            res->setUrl( QString( "servent://%1\t%2" ).arg( s->userName() ).arg( url_str ) );
         }
-
-        m["mtime"]    = query.value( 1 ).toString();
-        m["size"]     = query.value( 2 ).toInt();
-        m["hash"]     = query.value( 3 ).toString();
-        m["mimetype"] = query.value( 4 ).toString();
-        m["duration"] = query.value( 5 ).toInt();
-        m["bitrate"]  = query.value( 6 ).toInt();
-        m["artist"]   = query.value( 10 ).toString();
-        m["artistid"] = query.value( 15 ).toUInt();
-        m["album"]    = query.value( 11 ).toString();
-        m["albumid"]  = query.value( 16 ).toUInt();
-        m["track"]    = query.value( 12 ).toString();
-        m["srcid"]    = query.value( 13 ).toInt();
-        m["albumpos"] = query.value( 14 ).toUInt();
-        m["sid"]      = uuid();
-        m["score"]    = 1.0;
+        
+        Tomahawk::artist_ptr artist = Tomahawk::Artist::get( query.value( 15 ).toUInt(), query.value( 10 ).toString(), s->collection() );
+        Tomahawk::album_ptr album = Tomahawk::Album::get( query.value( 16 ).toUInt(), query.value( 11 ).toString(), artist, s->collection() );
+        
+        res->setModificationTime( query.value( 1 ).toUInt() );
+        res->setSize( query.value( 2 ).toUInt() );
+        res->setMimetype( query.value( 4 ).toString() );
+        res->setDuration( query.value( 5 ).toInt() );
+        res->setBitrate( query.value( 6 ).toInt() );
+        res->setArtist( artist );
+        res->setAlbum( album );
+        res->setScore( 1.0 );
+        res->setTrack( query.value( 12 ).toString() );
+        res->setAlbumPos( query.value( 14 ).toUInt() );
+        res->setRID( uuid() );
+        res->setId( query.value( 9 ).toUInt() );
     }
 
-    return m;
+    return res;
 }

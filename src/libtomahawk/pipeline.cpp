@@ -133,7 +133,7 @@ Pipeline::resolve( QID qid, bool prioritized )
 void
 Pipeline::reportResults( QID qid, const QList< result_ptr >& results )
 {
-    unsigned int state = 0;
+    int state = 0;
     {
         QMutexLocker lock( &m_mut );
 
@@ -154,9 +154,15 @@ Pipeline::reportResults( QID qid, const QList< result_ptr >& results )
         state = m_qidsState.value( qid ) - 1;
 
         if ( state )
+        {
+            qDebug() << Q_FUNC_INFO << "replacing" << qid << state;
             m_qidsState.insert( qid, state );
+        }
         else
+        {
+            qDebug() << Q_FUNC_INFO << "removing" << qid << state;
             m_qidsState.remove( qid );
+        }
 
         if ( !results.isEmpty() )
         {
@@ -252,9 +258,21 @@ Pipeline::shunt( const query_ptr& q )
             // resolvers aren't allowed to block in this call:
             //qDebug() << "Dispaching to resolver" << r->name();
 
-            unsigned int state = m_qidsState.value( q->id() );
-            m_qidsState.insert( q->id(), state + 1 );
-            r->resolve( q->toVariant() );
+            {
+                QMutexLocker lock( &m_mut );
+                int state = 0;
+                qDebug() << "Checking qidsstate:" << q->id();
+
+                if ( m_qidsState.contains( q->id() ) )
+                {
+                    state = m_qidsState.value( q->id() );
+                }
+
+                qDebug() << Q_FUNC_INFO << "inserting to qidsstate:" << q->id() << state + 1;
+                m_qidsState.insert( q->id(), state + 1 );
+            }
+
+            r->resolve( q );
         }
         else
             break;

@@ -95,6 +95,7 @@ SourceList::add( const source_ptr& source )
     
     collection_ptr coll( new RemoteCollection( source ) );
     source->addCollection( coll );
+    source->collection()->tracks();
     
     emit sourceAdded( source );
 }

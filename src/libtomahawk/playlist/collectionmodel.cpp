@@ -166,18 +166,18 @@ CollectionModel::addCollection( const collection_ptr& collection )
 
     emit loadingStarts();
 
-    connect( collection.data(), SIGNAL( tracksAdded( QList<QVariant>, Tomahawk::collection_ptr ) ),
-             SLOT( onTracksAdded( QList<QVariant>, Tomahawk::collection_ptr ) ) );
+    connect( collection.data(), SIGNAL( tracksAdded( QList<Tomahawk::query_ptr>, Tomahawk::collection_ptr ) ),
+                                  SLOT( onTracksAdded( QList<Tomahawk::query_ptr>, Tomahawk::collection_ptr ) ) );
     connect( collection.data(), SIGNAL( tracksFinished( Tomahawk::collection_ptr ) ),
-             SLOT( onTracksAddingFinished( Tomahawk::collection_ptr ) ) );
+                                  SLOT( onTracksAddingFinished( Tomahawk::collection_ptr ) ) );
 }
 
 
 void
 CollectionModel::removeCollection( const collection_ptr& collection )
 {
-    disconnect( collection.data(), SIGNAL( tracksAdded( QList<QVariant>, Tomahawk::collection_ptr ) ),
-                this, SLOT( onTracksAdded( QList<QVariant>, Tomahawk::collection_ptr ) ) );
+    disconnect( collection.data(), SIGNAL( tracksAdded( QList<Tomahawk::query_ptr>, Tomahawk::collection_ptr ) ),
+                this, SLOT( onTracksAdded( QList<Tomahawk::query_ptr>, Tomahawk::collection_ptr ) ) );
     disconnect( collection.data(), SIGNAL( tracksFinished( Tomahawk::collection_ptr ) ),
                 this, SLOT( onTracksAddingFinished( Tomahawk::collection_ptr ) ) );
 
@@ -188,24 +188,13 @@ CollectionModel::removeCollection( const collection_ptr& collection )
 
 
 void
-CollectionModel::onTracksAdded( const QList<QVariant>& tracks, const collection_ptr& collection )
+CollectionModel::onTracksAdded( const QList<Tomahawk::query_ptr>& tracks, const collection_ptr& collection )
 {
 //    int c = rowCount( QModelIndex() );
 
     PlItem* plitem;
-    foreach( const QVariant& v, tracks )
+    foreach( const Tomahawk::query_ptr& query, tracks )
     {
-        Tomahawk::query_ptr query = Tomahawk::Query::get( v, false );
-
-        // FIXME: needs merging
-        // Manually add a result, since it's coming from the local collection
-        QVariantMap t = query->toVariant().toMap();
-        t["score"] = 1.0;
-        QList<result_ptr> results;
-        result_ptr result = result_ptr( new Result( t, collection ) );
-        results << result;
-        query->addResults( results );
-
         PlItem* parent = m_rootItem;
         if ( parent->hash.contains( query->artist() ) )
         {

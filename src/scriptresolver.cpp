@@ -101,7 +101,8 @@ void ScriptResolver::handleMsg( const QByteArray& msg )
         foreach( const QVariant& rv, reslist )
         {
             qDebug() << "RES" << rv;
-            Tomahawk::result_ptr rp( new Tomahawk::Result( rv, coll ) );
+            Tomahawk::result_ptr rp( new Tomahawk::Result() );
+            rp->setCollection( coll );
             results << rp;
         }
         Tomahawk::Pipeline::instance()->reportResults( qid, results );
@@ -128,13 +129,12 @@ void ScriptResolver::cmdExited(int code, QProcess::ExitStatus status)
 }
 
 
-void ScriptResolver::resolve( const QVariant& v )
+void ScriptResolver::resolve( const Tomahawk::query_ptr& query )
 {
-    QVariantMap m = v.toMap();
-    m.insert( "_msgtype", "rq" );
+/*    m.insert( "_msgtype", "rq" );
     const QByteArray msg = m_serializer.serialize( m );
     qDebug() << "ASKING SCRIPT RESOLVER TO RESOLVE:" << msg;
-    sendMsg( msg );
+    sendMsg( msg );*/
 }
 
 

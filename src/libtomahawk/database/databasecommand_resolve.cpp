@@ -8,9 +8,9 @@
 using namespace Tomahawk;
 
 
-DatabaseCommand_Resolve::DatabaseCommand_Resolve( const QVariant& v )
+DatabaseCommand_Resolve::DatabaseCommand_Resolve( const query_ptr& query )
     : DatabaseCommand()
-    , m_v( v )
+    , m_query( query )
 {
 }
 
@@ -18,39 +18,16 @@ DatabaseCommand_Resolve::DatabaseCommand_Resolve( const QVariant& v )
 void
 DatabaseCommand_Resolve::exec( DatabaseImpl* lib )
 {
-    const QMap<QString, QVariant> map = m_v.toMap();
-
-    const Tomahawk::QID qid = map.value( "qid" ).toString();
-    const QString artistname = map.value( "artist" ).toString();
-    const QString albumname  = map.value( "album" ).toString();
-    const QString trackname  = map.value( "track" ).toString();
-    const QString resulthint = map.value( "resulthint" ).toString();
-
-    collection_ptr coll;
     QList<Tomahawk::result_ptr> res;
-    if ( !resulthint.isEmpty() )
+    if ( !m_query->resultHint().isEmpty() )
     {
-        qDebug() << "Using result-hint to speed up resolving:" << resulthint;
+        qDebug() << "Using result-hint to speed up resolving:" << m_query->resultHint();
 
-        QVariantMap m = lib->result( resulthint );
-        if ( !m.isEmpty() )
+        Tomahawk::result_ptr result = lib->result( m_query->resultHint() );
+        if ( !result.isNull() )
         {
-            if ( m.value( "srcid" ).toUInt() > 0 )
-            {
-                source_ptr s = SourceList::instance()->get( m.value( "srcid" ).toUInt() );
-                if ( !s.isNull() )
-                    coll = s->collection();
-            }
-            else
-                coll = SourceList::instance()->getLocal()->collection();
-
-            if ( !coll.isNull() )
-            {
-                res << Tomahawk::result_ptr( new Tomahawk::Result( m, coll ) );
-                emit results( qid, res );
-
-                return;
-            }
+            emit results( m_query->id(), res );
+            return;
         }
     }
 
@@ -64,14 +41,14 @@ DatabaseCommand_Resolve::exec( DatabaseImpl* lib )
     typedef QPair<int, float> scorepair_t;
 
     // STEP 1
-    QList< int > artists = lib->searchTable( "artist", artistname, 10 );
-    QList< int > tracks  = lib->searchTable( "track", trackname, 10 );
-    QList< int > albums  = lib->searchTable( "album", albumname, 10 );
+    QList< int > artists = lib->searchTable( "artist", m_query->artist(), 10 );
+    QList< int > tracks  = lib->searchTable( "track", m_query->track(), 10 );
+    QList< int > albums  = lib->searchTable( "album", m_query->album(), 10 );
 
     if( artists.length() == 0 || tracks.length() == 0 )
     {
-        //qDebug() << "No candidates found in first pass, aborting resolve" << artistname << trackname;
-        emit results( qid, res );
+        qDebug() << "No candidates found in first pass, aborting resolve" << m_query->artist() << m_query->track();
+        emit results( m_query->id(), res );
         return;
     }
 
@@ -109,73 +86,68 @@ DatabaseCommand_Resolve::exec( DatabaseImpl* lib )
 
     while( files_query.next() )
     {
-        QVariantMap m;
-
-        m["mtime"]    = files_query.value( 1 ).toString();
-        m["size"]     = files_query.value( 2 ).toInt();
-        m["hash"]     = files_query.value( 3 ).toString();
-        m["mimetype"] = files_query.value( 4 ).toString();
-        m["duration"] = files_query.value( 5 ).toInt();
-        m["bitrate"]  = files_query.value( 6 ).toInt();
-        m["artist"]   = files_query.value( 10 ).toString();
-        m["artistid"] = files_query.value( 15 ).toUInt();
-        m["album"]    = files_query.value( 11 ).toString();
-        m["albumid"]  = files_query.value( 16 ).toUInt();
-        m["track"]    = files_query.value( 12 ).toString();
-        m["srcid"]    = files_query.value( 13 ).toInt();
-        m["albumpos"] = files_query.value( 14 ).toUInt();
-        m["sid"]      = uuid();
-
+        Tomahawk::result_ptr result( new Tomahawk::Result() );
         source_ptr s;
+
         const QString url_str = files_query.value( 0 ).toString();
         if( files_query.value( 13 ).toUInt() == 0 )
         {
             s = SourceList::instance()->getLocal();
-            m["url"] = url_str;
-            m["source"] = "Local Database"; // TODO
+            result->setUrl( url_str );
         }
         else
         {
             s = SourceList::instance()->get( files_query.value( 13 ).toUInt() );
             if( s.isNull() )
             {
-                qDebug() << "Skipping result for offline sourceid:" << files_query.value( 13 ).toUInt();
-                // will happen for valid sources which are offline (and thus not in the sourcelist)
+                Q_ASSERT( false );
                 continue;
             }
 
-            m.insert( "url", QString( "servent://%1\t%2" ).arg( s->userName() ).arg( url_str ) );
-            m.insert( "source", s->friendlyName() );
+            result->setUrl( QString( "servent://%1\t%2" ).arg( s->userName() ).arg( url_str ) );
         }
 
-        float score = how_similar( m_v.toMap(), m );
-        //qDebug() << "Score calc:" << timer.elapsed() << "ms";
+        Tomahawk::artist_ptr artist = Tomahawk::Artist::get( files_query.value( 15 ).toUInt(), files_query.value( 10 ).toString(), s->collection() );
+        Tomahawk::album_ptr album = Tomahawk::Album::get( files_query.value( 16 ).toUInt(), files_query.value( 11 ).toString(), artist, s->collection() );
 
-        m["score"] = score;
+        result->setModificationTime( files_query.value( 1 ).toUInt() );
+        result->setSize( files_query.value( 2 ).toUInt() );
+        result->setMimetype( files_query.value( 4 ).toString() );
+        result->setDuration( files_query.value( 5 ).toUInt() );
+        result->setBitrate( files_query.value( 6 ).toUInt() );
+        result->setArtist( artist );
+        result->setAlbum( album );
+        result->setTrack( files_query.value( 12 ).toString() );
+        result->setRID( uuid() );
+        result->setAlbumPos( files_query.value( 14 ).toUInt() );
+        result->setId( files_query.value( 9 ).toUInt() );
+
+        float score = how_similar( m_query, result );
+        result->setScore( score );
         if( score < MINSCORE )
             continue;
 
-        coll = s->collection();
-        res << Tomahawk::result_ptr( new Tomahawk::Result( m, coll ) );
+        result->setCollection( s->collection() );
+        res << result;
     }
 
-    emit results( qid, res );
+    emit results( m_query->id(), res );
 }
 
 
 // TODO make clever (ft. featuring live (stuff) etc)
 float
-DatabaseCommand_Resolve::how_similar( const QVariantMap& q, const QVariantMap& r )
+DatabaseCommand_Resolve::how_similar( const Tomahawk::query_ptr& q, const Tomahawk::result_ptr& r )
 {
     // query values
-    const QString qArtistname = DatabaseImpl::sortname( q.value( "artist" ).toString() );
-    const QString qAlbumname  = DatabaseImpl::sortname( q.value( "album" ).toString() );
-    const QString qTrackname  = DatabaseImpl::sortname( q.value( "track" ).toString() );
+    const QString qArtistname = DatabaseImpl::sortname( q->artist() );
+    const QString qAlbumname  = DatabaseImpl::sortname( q->album() );
+    const QString qTrackname  = DatabaseImpl::sortname( q->track() );
 
     // result values
-    const QString rArtistname = DatabaseImpl::sortname( r.value( "artist" ).toString() );
-    const QString rAlbumname  = DatabaseImpl::sortname( r.value( "album" ).toString() );
-    const QString rTrackname  = DatabaseImpl::sortname( r.value( "track" ).toString() );
+    const QString rArtistname = DatabaseImpl::sortname( r->artist()->name() );
+    const QString rAlbumname  = DatabaseImpl::sortname( r->album()->name() );
+    const QString rTrackname  = DatabaseImpl::sortname( r->track() );
 
     // normal edit distance
     int artdist = levenshtein( qArtistname, rArtistname );

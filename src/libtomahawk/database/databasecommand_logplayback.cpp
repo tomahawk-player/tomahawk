@@ -26,11 +26,7 @@ DatabaseCommand_LogPlayback::postCommitHook()
     connect( this, SIGNAL( trackPlayed( Tomahawk::query_ptr ) ),
              source().data(), SLOT( onPlaybackFinished( Tomahawk::query_ptr ) ), Qt::QueuedConnection );
 
-    QVariantMap m;
-    m.insert( "track", m_track );
-    m.insert( "artist", m_artist );
-    m.insert( "qid", uuid() );
-    Tomahawk::query_ptr q = Tomahawk::Query::get( m );
+    Tomahawk::query_ptr q = Tomahawk::Query::get( m_artist, m_track, QString(), uuid() );
 
     if ( m_action == Finished )
     {

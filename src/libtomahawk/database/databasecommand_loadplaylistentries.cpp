@@ -56,14 +56,8 @@ void DatabaseCommand_LoadPlaylistEntries::generateEntries( DatabaseImpl* dbi )
             e->setLastmodified( 0 ); // TODO e->lastmodified = query.value(6).toInt();
             e->setResultHint( query.value( 8 ).toString() );
             
-            QVariantMap m;
-            m.insert( "artist", query.value( 2 ).toString() );
-            m.insert( "album", query.value( 3 ).toString() );
-            m.insert( "track", query.value( 1 ).toString() );
-            m.insert( "resulthint", query.value( 8 ).toString() );
-            m.insert( "qid", uuid() );
-
-            Tomahawk::query_ptr q = Tomahawk::Query::get( m, false );
+            Tomahawk::query_ptr q = Tomahawk::Query::get( query.value( 2 ).toString(), query.value( 1 ).toString(), query.value( 3 ).toString(), false );
+            q->setResultHint( query.value( 8 ).toString() );
             e->setQuery( q );
             
             m_entrymap.insert( e->guid(), e );

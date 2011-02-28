@@ -2,6 +2,8 @@
 
 #include <QSqlQuery>
 
+#include "artist.h"
+#include "album.h"
 #include "collection.h"
 #include "database/database.h"
 #include "databasecommand_collectionstats.h"
@@ -105,7 +107,7 @@ DatabaseCommand_AddFiles::exec( DatabaseImpl* dbi )
         int albumpos        = m.value( "albumpos" ).toInt();
         int year            = m.value( "year" ).toInt();
 
-        int fileid = 0;
+        int fileid = 0, artistid = 0, albumid = 0, trackid = 0;
         query_file_del.bindValue( 0, url );
         query_file_del.exec();
 
@@ -127,53 +129,67 @@ DatabaseCommand_AddFiles::exec( DatabaseImpl* dbi )
         }
         else
         {
-            if( added % 100 == 0 )
+            if( added % 1000 == 0 )
                 qDebug() << "Inserted" << added;
         }
         // get internal IDs for art/alb/trk
         fileid = query_file.lastInsertId().toInt();
-
-        // insert the new fileid, set the url for our use:
         m.insert( "id", fileid );
-        if( !source()->isLocal() )
-            m["url"] = QString( "servent://%1\t%2" )
-                          .arg( source()->userName() )
-                          .arg( fileid );
+        // this is the qvariant(map) the remote will get
         v = m;
 
+        if( !source()->isLocal() )
+            url = QString( "servent://%1\t%2" )
+                     .arg( source()->userName() )
+                     .arg( url );
+
         bool isnew;
-        m["artistid"] = dbi->artistId( artist, isnew );
-        if( m["artistid"].toInt() < 1 ) continue;
-
-        m["trackid"] = dbi->trackId( m["artistid"].toInt(), track, isnew );
-        if( m["trackid"].toInt() < 1 ) continue;
-
-        m["albumid"] = dbi->albumId( m["artistid"].toInt(), album, isnew );
+        artistid = dbi->artistId( artist, isnew );
+        if ( artistid < 1 )
+            continue;
+        trackid = dbi->trackId( artistid, track, isnew );
+        if ( trackid < 1 )
+            continue;
+        albumid = dbi->albumId( artistid, album, isnew );
 
         // Now add the association
         query_filejoin.bindValue( 0, fileid );
-        query_filejoin.bindValue( 1, m["artistid"].toInt() );
-        query_filejoin.bindValue( 2, m["albumid"].toInt() > 0 ? m["albumid"].toInt() : QVariant( QVariant::Int ) );
-        query_filejoin.bindValue( 3, m["trackid"].toInt() );
+        query_filejoin.bindValue( 1, artistid );
+        query_filejoin.bindValue( 2, albumid > 0 ? albumid : QVariant( QVariant::Int ) );
+        query_filejoin.bindValue( 3, trackid );
         query_filejoin.bindValue( 4, albumpos );
-        if( !query_filejoin.exec() )
+        if ( !query_filejoin.exec() )
         {
             qDebug() << "Error inserting into file_join table";
             continue;
         }
 
-        query_trackattr.bindValue( 0, m["trackid"].toInt() );
+        query_trackattr.bindValue( 0, trackid );
         query_trackattr.bindValue( 1, "releaseyear" );
         query_trackattr.bindValue( 2, year );
         query_trackattr.exec();
 
         QVariantMap attr;
-        Tomahawk::query_ptr query = Tomahawk::Query::get( m, false );
-        m["score"] = 1.0;
+        Tomahawk::query_ptr query = Tomahawk::Query::get( artist, track, album );
         attr["releaseyear"] = m.value( "year" );
 
-        Tomahawk::result_ptr result = Tomahawk::result_ptr( new Tomahawk::Result( m, source()->collection() ) );
+        Tomahawk::artist_ptr artistptr = Tomahawk::Artist::get( artistid, artist, source()->collection() );
+        Tomahawk::album_ptr albumptr = Tomahawk::Album::get( albumid, album, artistptr, source()->collection() );
+        Tomahawk::result_ptr result = Tomahawk::result_ptr( new Tomahawk::Result() );
+        result->setModificationTime( mtime );
+        result->setSize( size );
+        result->setMimetype( mimetype );
+        result->setDuration( duration );
+        result->setBitrate( bitrate );
+        result->setArtist( artistptr );
+        result->setAlbum( albumptr );
+        result->setTrack( track );
+        result->setAlbumPos( albumpos );
         result->setAttributes( attr );
+        result->setCollection( source()->collection() );
+        result->setScore( 1.0 );
+        result->setUrl( url );
+        result->setId( trackid );
 
         QList<Tomahawk::result_ptr> results;
         results << result;

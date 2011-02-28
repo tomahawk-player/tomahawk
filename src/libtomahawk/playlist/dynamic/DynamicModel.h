@@ -40,6 +40,8 @@ public:
     void stopOnDemand( bool stopPlaying = true );
     void changeStation();
     
+    virtual QString description() const;
+    
     void loadPlaylist( const dynplaylist_ptr& playlist );
     
     virtual void removeIndex( const QModelIndex& index, bool moreToCome = false );
