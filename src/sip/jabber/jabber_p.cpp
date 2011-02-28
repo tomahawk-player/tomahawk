@@ -122,6 +122,8 @@ Jabber_p::go()
         qDebug() << "No server found!";
         return;
     }
+
+    m_client->registerPresenceHandler( this );
     m_client->registerConnectionListener( this );
     m_client->logInstance().registerLogHandler( LogLevelWarning, LogAreaAll, this );
     m_client->registerMessageHandler( this );
@@ -511,8 +513,11 @@ Jabber_p::handlePresence( const gloox::Presence& presence )
 
     // ignore anyone not running tomahawk:
     // convert to QString to get proper regex support
+    QString node;
     const gloox::Capabilities *caps = presence.findExtension<gloox::Capabilities>( gloox::ExtCaps );
-    QString node = QString::fromAscii( caps->node().c_str() );
+    if( caps )
+        QString node = QString::fromAscii( caps->node().c_str() );
+
     if( !QString::fromAscii( jid.resource().c_str() ).startsWith( QLatin1String( "tomahawk" ) )
         && !( node == TOMAHAWK_CAP_NODE_NAME ) )
     {
