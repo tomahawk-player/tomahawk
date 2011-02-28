@@ -189,7 +189,7 @@ SipHandler::onPeerOnline( const QString& jid )
         ControlConnection* conn = new ControlConnection( Servent::instance() );
 
         const QString& nodeid = Database::instance()->dbid();
-        conn->setName( jid.left( jid.indexOf( "/" ) ) );
+        conn->setName( jid ); //.left( jid.indexOf( "/" ) )
         conn->setId( nodeid );
 
         Servent::instance()->registerOffer( key, conn );
