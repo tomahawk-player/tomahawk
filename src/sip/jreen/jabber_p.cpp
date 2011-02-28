@@ -187,7 +187,7 @@ Jabber_p::onConnect()
 
     // treat muc participiants like contacts
     connect(m_room, SIGNAL(messageReceived(jreen::Message, bool)), this, SLOT(onNewMessage(jreen::Message)));
-    connect(m_room, SIGNAL(presenceReceived(jreen::Presence,jreen::MUCRoom::Participant*)), this, SLOT(onNewPresence(jreen::Presence)));
+    connect(m_room, SIGNAL(presenceReceived(jreen::Presence,const jreen::MUCRoom::Participant*)), this, SLOT(onNewPresence(jreen::Presence)));
 }
 
 
