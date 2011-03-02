@@ -27,6 +27,7 @@ SipHandler::~SipHandler()
     disconnectPlugins();
 }
 
+
 QList< SipPlugin* >
 SipHandler::plugins() const
 {

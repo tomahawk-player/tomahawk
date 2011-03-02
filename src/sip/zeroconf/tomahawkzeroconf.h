@@ -61,8 +61,14 @@ public:
     TomahawkZeroconf( int port, QObject* parent = 0 )
         : QObject( parent ), m_sock( this ), m_port( port )
     {
+        qDebug() << Q_FUNC_INFO;
         m_sock.bind( ZCONF_PORT, QUdpSocket::ShareAddress );
         connect( &m_sock, SIGNAL( readyRead() ), this, SLOT( readPacket() ) );
+    }
+
+    virtual ~TomahawkZeroconf()
+    {
+        qDebug() << Q_FUNC_INFO;
     }
 
 public slots:
@@ -107,8 +113,8 @@ private slots:
                 {
                     qDebug() << "ADVERT received:" << sender << port;
                     Node *n = new Node( sender.toString(), parts.at( 2 ), port );
-                    connect( n,    SIGNAL( tomahawkHostFound( const QString&, int, const QString&, const QString& ) ),
-                             this, SIGNAL( tomahawkHostFound( const QString&, int, const QString&, const QString& ) ) );
+                    connect( n,    SIGNAL( tomahawkHostFound( QString, int, QString, QString ) ),
+                             this, SIGNAL( tomahawkHostFound( QString, int, QString, QString ) ) );
                     n->resolve();
                 }
             }
