@@ -313,7 +313,7 @@ AudioEngine::playItem( PlaylistInterface* playlist, const Tomahawk::result_ptr& 
 
     clearBuffers();
 
-    m_playlist = playlist;
+    setPlaylist( playlist );
     m_currentTrackPlaylist = playlist;
 
     loadTrack( result );
@@ -369,6 +369,14 @@ AudioEngine::clearBuffers()
 {
     QMutexLocker lock( &m_mutex );
     m_audio->clearBuffers();
+}
+
+
+void
+AudioEngine::setPlaylist( PlaylistInterface* playlist )
+{
+    m_playlist = playlist;
+    emit playlistChanged( playlist );
 }
 
 
