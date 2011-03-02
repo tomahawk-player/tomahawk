@@ -23,7 +23,7 @@
    <item>
     <widget class="QTabWidget" name="tabWidget">
      <property name="currentIndex">
-      <number>0</number>
+      <number>1</number>
      </property>
      <widget class="QWidget" name="tabJabber">
       <attribute name="title">
@@ -382,10 +382,10 @@
              <enum>Qt::RightToLeft</enum>
             </property>
             <property name="text">
-             <string>Playdar HTTP API - NO AUTH</string>
+             <string>Playdar HTTP API</string>
             </property>
             <property name="checked">
-             <bool>false</bool>
+             <bool>true</bool>
             </property>
            </widget>
           </item>
