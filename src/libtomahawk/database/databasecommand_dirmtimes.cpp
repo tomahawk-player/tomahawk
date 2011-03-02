@@ -26,7 +26,7 @@ DatabaseCommand_DirMtimes::execSelect( DatabaseImpl* dbi )
     {
         query.prepare( QString( "SELECT name, mtime "
                                 "FROM dirs_scanned "
-                                "WHERE name LIKE '%1%'" ).arg(m_prefix.replace( '\'',"''" ) ) );
+                                "WHERE name LIKE '%1%'" ).arg( m_prefix.replace( '\'',"''" ) ) );
         query.exec();
     }
     while( query.next() )
@@ -44,7 +44,7 @@ DatabaseCommand_DirMtimes::execUpdate( DatabaseImpl* dbi )
     qDebug() << "Saving mtimes...";
     TomahawkSqlQuery query = dbi->newquery();
     query.exec( "DELETE FROM dirs_scanned" );
-    query.prepare( "INSERT INTO dirs_scanned(name, mtime) VALUES(?,?)" );
+    query.prepare( "INSERT INTO dirs_scanned(name, mtime) VALUES(?, ?)" );
 
     foreach( const QString& k, m_tosave.keys() )
     {

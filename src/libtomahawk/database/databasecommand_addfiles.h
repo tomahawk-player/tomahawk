@@ -36,8 +36,8 @@ public:
     void setFiles( const QVariantList& f ) { m_files = f; }
 
 signals:
-    void done( const QList<QVariant>&, Tomahawk::collection_ptr );
-    void notify( const QList<Tomahawk::query_ptr>&, Tomahawk::collection_ptr );
+    void done( const QList<QVariant>&, const Tomahawk::collection_ptr& );
+    void notify( const QList<Tomahawk::query_ptr>&, const Tomahawk::collection_ptr& );
 
 private:
     QVariantList m_files;

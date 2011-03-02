@@ -108,7 +108,7 @@ ControlConnection::setupDbSyncConnection( bool ondemand )
     if ( m_dbsyncconn || !m_registered )
         return;
 
-    qDebug() << Q_FUNC_INFO << ondemand << m_source->id();
+    qDebug() << Q_FUNC_INFO << ondemand << m_source->id() << ondemand << m_dbconnkey;
     Q_ASSERT( m_source->id() > 0 );
 
     if( !m_dbconnkey.isEmpty() )

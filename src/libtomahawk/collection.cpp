@@ -153,10 +153,40 @@ Collection::setDynamicPlaylists( const QList< Tomahawk::dynplaylist_ptr >& plist
 
 
 void
-Collection::setTracks( const QList<Tomahawk::query_ptr>& tracks, Tomahawk::collection_ptr collection )
+Collection::setTracks( const QList<Tomahawk::query_ptr>& tracks, const Tomahawk::collection_ptr& collection )
 {
     qDebug() << Q_FUNC_INFO << tracks.count() << collection->name();
 
     m_tracks << tracks;
     emit tracksAdded( tracks, collection );
+}
+
+
+void
+Collection::delTracks( const QStringList& files, const Tomahawk::collection_ptr& collection )
+{
+    qDebug() << Q_FUNC_INFO << files.count() << collection->name();
+
+    QList<Tomahawk::query_ptr> tracks;
+
+    int i = 0;
+    foreach ( const query_ptr& query, m_tracks )
+    {
+        foreach ( QString file, files )
+        {
+            foreach ( const result_ptr& result, query->results() )
+            {
+                if ( file == result->url() )
+                {
+                    qDebug() << Q_FUNC_INFO << "Found deleted result:" << file;
+                    tracks << query;
+                    m_tracks.removeAt( i );
+                }
+            }
+        }
+
+        i++;
+    }
+
+    emit tracksRemoved( tracks, collection );
 }

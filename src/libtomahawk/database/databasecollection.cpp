@@ -3,6 +3,7 @@
 #include "database/database.h"
 #include "databasecommand_alltracks.h"
 #include "databasecommand_addfiles.h"
+#include "databasecommand_deletefiles.h"
 #include "databasecommand_loadallplaylists.h"
 #include "databasecommand_loadalldynamicplaylists.h"
 
@@ -58,7 +59,7 @@ DatabaseCollection::loadTracks()
 
 
 void
-DatabaseCollection::addTracks( const QList<QVariant> &newitems )
+DatabaseCollection::addTracks( const QList<QVariant>& newitems )
 {
     qDebug() << Q_FUNC_INFO << newitems.length();
     DatabaseCommand_AddFiles* cmd = new DatabaseCommand_AddFiles( newitems, source() );
@@ -68,13 +69,12 @@ DatabaseCollection::addTracks( const QList<QVariant> &newitems )
 
 
 void
-DatabaseCollection::removeTracks( const QList<QVariant> &olditems )
+DatabaseCollection::removeTracks( const QDir& dir )
 {
-    // FIXME
-    Q_ASSERT( false );
-
-    // TODO RemoveTracks cmd, probably builds a temp table of all the URLs in
-    // olditems, then joins on that to batch-delete.
+    qDebug() << Q_FUNC_INFO << dir;
+    DatabaseCommand_DeleteFiles* cmd = new DatabaseCommand_DeleteFiles( dir, source() );
+    
+    Database::instance()->enqueue( QSharedPointer<DatabaseCommand>( cmd ) );
 }
 
 

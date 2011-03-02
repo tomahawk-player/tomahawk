@@ -18,9 +18,14 @@ public:
         : m_zeroconf( 0 )
         , m_isOnline( false )
         , m_cachedNodes()
-    {}
+    {
+        qDebug() << Q_FUNC_INFO;
+    }
 
-    virtual ~ZeroconfPlugin() {}
+    virtual ~ZeroconfPlugin()
+    {
+        qDebug() << Q_FUNC_INFO;
+    }
     
     virtual bool isValid() { return true; }
     virtual const QString name();

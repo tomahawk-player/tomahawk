@@ -20,8 +20,8 @@ public:
     }
 
 public slots:
-    virtual void addTracks( const QList<QVariant> &newitems );
-    virtual void removeTracks( const QList<QVariant> &olditems );
+    virtual void addTracks( const QList<QVariant>& newitems );
+    virtual void removeTracks( const QDir& dir );
 };
 
 #endif // REMOTECOLLECTION_H

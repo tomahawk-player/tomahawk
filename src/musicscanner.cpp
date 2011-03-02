@@ -5,8 +5,17 @@
 #include "database/database.h"
 #include "database/databasecommand_dirmtimes.h"
 #include "database/databasecommand_addfiles.h"
+#include "database/databasecommand_deletefiles.h"
 
 using namespace Tomahawk;
+
+
+void
+DirLister::go()
+{
+    scanDir( m_dir, 0 );
+    emit finished( m_newdirmtimes );
+}
 
 
 void
@@ -16,13 +25,15 @@ DirLister::scanDir( QDir dir, int depth )
     const uint mtime = QFileInfo( dir.absolutePath() ).lastModified().toUTC().toTime_t();
     m_newdirmtimes.insert( dir.absolutePath(), mtime );
     
-    if ( m_dirmtimes.contains( dir.absolutePath() ) &&
-         mtime == m_dirmtimes.value( dir.absolutePath() ) )
+    if ( m_dirmtimes.contains( dir.absolutePath() ) && mtime == m_dirmtimes.value( dir.absolutePath() ) )
     {
         // dont scan this dir, unchanged since last time.
     }
     else
     {
+        if ( m_dirmtimes.contains( dir.absolutePath() ) )
+            Database::instance()->enqueue( QSharedPointer<DatabaseCommand>( new DatabaseCommand_DeleteFiles( dir, SourceList::instance()->getLocal() ) ) );
+        
         dir.setFilter( QDir::Files | QDir::Readable | QDir::NoDotAndDotDot );
         dir.setSorting( QDir::Name );
         dirs = dir.entryInfoList();
@@ -143,11 +154,22 @@ void
 MusicScanner::listerFinished( const QMap<QString, unsigned int>& newmtimes )
 {
     qDebug() << Q_FUNC_INFO;
+
     // any remaining stuff that wasnt emitted as a batch:
     if( m_scannedfiles.length() )
     {
         SourceList::instance()->getLocal()->scanningFinished( m_scanned );
         commitBatch( m_scannedfiles );
+    }
+
+    // remove obsolete / stale files
+    foreach ( const QString& path, m_dirmtimes.keys() )
+    {
+        if ( !newmtimes.keys().contains( path ) )
+        {
+            qDebug() << "Removing stale dir:" << path;
+            Database::instance()->enqueue( QSharedPointer<DatabaseCommand>( new DatabaseCommand_DeleteFiles( path, SourceList::instance()->getLocal() ) ) );
+        }
     }
 
     // save mtimes, then quit thread
@@ -156,7 +178,7 @@ MusicScanner::listerFinished( const QMap<QString, unsigned int>& newmtimes )
     Database::instance()->enqueue( QSharedPointer<DatabaseCommand>(cmd) );
 
     qDebug() << "Scanning complete, saving to database. "
-                "(scanned" << m_scanned << "skipped" << m_skipped << ")";
+                "( scanned" << m_scanned << "skipped" << m_skipped << ")";
 
     qDebug() << "Skipped the following files (no tags / no valid audio):";
     foreach( const QString& s, m_skippedFiles )
@@ -227,7 +249,9 @@ MusicScanner::scanFile( const QFileInfo& fi )
 QVariant
 MusicScanner::readFile( const QFileInfo& fi )
 {
-    if ( ! m_ext2mime.contains( fi.suffix().toLower() ) )
+    const QString suffix = fi.suffix().toLower();
+
+    if ( ! m_ext2mime.contains( suffix ) )
     {
         m_skipped++;
         return QVariantMap(); // invalid extension
@@ -240,7 +264,7 @@ MusicScanner::readFile( const QFileInfo& fi )
         qDebug() << "SCAN" << m_scanned << fi.absoluteFilePath();
 
     #ifdef COMPLEX_TAGLIB_FILENAME
-        const wchar_t *encodedName = reinterpret_cast< const wchar_t *>(fi.absoluteFilePath().utf16());
+        const wchar_t *encodedName = reinterpret_cast< const wchar_t * >( fi.absoluteFilePath().utf16() );
     #else
         QByteArray fileName = QFile::encodeName( fi.absoluteFilePath() );
         const char *encodedName = fileName.constData();
@@ -277,14 +301,13 @@ MusicScanner::readFile( const QFileInfo& fi )
         return QVariantMap();
     }
 
-    QString mimetype = m_ext2mime.value( fi.suffix().toLower() );
+    QString mimetype = m_ext2mime.value( suffix );
     QString url( "file://%1" );
 
     QVariantMap m;
     m["url"]          = url.arg( fi.absoluteFilePath() );
     m["mtime"]        = fi.lastModified().toUTC().toTime_t();
     m["size"]         = (unsigned int)fi.size();
-    m["hash"]         = ""; // TODO
     m["mimetype"]     = mimetype;
     m["duration"]     = duration;
     m["bitrate"]      = bitrate;
@@ -293,7 +316,8 @@ MusicScanner::readFile( const QFileInfo& fi )
     m["track"]        = track;
     m["albumpos"]     = tag->track();
     m["year"]         = tag->year();
-
+    m["hash"]         = ""; // TODO
+    
     m_scanned++;
     return m;
 }

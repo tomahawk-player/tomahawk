@@ -39,7 +39,7 @@ ZeroconfPlugin::connectPlugin( bool /*startup*/ )
             Servent::instance()->connectToPeer( nodeSet[0], nodeSet[1].toInt(), "whitelist", nodeSet[2], nodeSet[3] );
         delete currNode;
     }
-    m_cachedNodes.empty();
+    m_cachedNodes.clear();
 
     return true;
 }
@@ -48,6 +48,9 @@ void
 ZeroconfPlugin::disconnectPlugin()
 {
     m_isOnline = false;
+
+    
+
     delete m_zeroconf;
     m_zeroconf = 0;
 }

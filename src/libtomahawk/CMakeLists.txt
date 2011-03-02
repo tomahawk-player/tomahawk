@@ -45,6 +45,7 @@ set( libSources
     database/databasecommand_allalbums.cpp
     database/databasecommand_alltracks.cpp
     database/databasecommand_addfiles.cpp
+    database/databasecommand_deletefiles.cpp
     database/databasecommand_dirmtimes.cpp
     database/databasecommand_loadfile.cpp
     database/databasecommand_logplayback.cpp
@@ -187,6 +188,7 @@ set( libHeaders
     database/databasecommand_allalbums.h
     database/databasecommand_alltracks.h
     database/databasecommand_addfiles.h
+    database/databasecommand_deletefiles.h
     database/databasecommand_dirmtimes.h
     database/databasecommand_loadfile.h
     database/databasecommand_logplayback.h

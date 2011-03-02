@@ -19,7 +19,7 @@
 */
 #include "schema.sql.h"
 
-#define CURRENT_SCHEMA_VERSION 21
+#define CURRENT_SCHEMA_VERSION 22
 
 
 DatabaseImpl::DatabaseImpl( const QString& dbname, Database* parent )

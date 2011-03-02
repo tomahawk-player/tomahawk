@@ -1,6 +1,8 @@
 #ifndef DATABASECOLLECTION_H
 #define DATABASECOLLECTION_H
 
+#include <QDir>
+
 #include "collection.h"
 #include "source.h"
 #include "typedefs.h"
@@ -27,8 +29,8 @@ public:
     virtual QList< Tomahawk::dynplaylist_ptr > dynamicPlaylists();
 
 public slots:
-    virtual void addTracks( const QList<QVariant> &newitems );
-    virtual void removeTracks( const QList<QVariant> &olditems );
+    virtual void addTracks( const QList<QVariant>& newitems );
+    virtual void removeTracks( const QDir& dir );
     
 private slots:
     void dynamicPlaylistCreated( const Tomahawk::source_ptr& source, const QVariantList& data );

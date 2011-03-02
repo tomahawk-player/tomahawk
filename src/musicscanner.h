@@ -36,12 +36,7 @@ signals:
     void finished( const QMap<QString, unsigned int>& );
 
 private slots:
-    void go()
-    {
-        scanDir( m_dir, 0 );
-        emit finished( m_newdirmtimes );
-    }
-
+    void go();
     void scanDir( QDir dir, int depth );
 
 private:
@@ -87,7 +82,7 @@ private:
 
     QMap<QString, unsigned int> m_dirmtimes;
     QMap<QString, unsigned int> m_newdirmtimes;
-
+    
     QList<QVariant> m_scannedfiles;
     quint32 m_batchsize;
     

@@ -73,19 +73,14 @@ DatabaseCommand_AddFiles::exec( DatabaseImpl* dbi )
     TomahawkSqlQuery query_trackattr = dbi->newquery();
     TomahawkSqlQuery query_file_del = dbi->newquery();
 
-    query_file.prepare( "INSERT INTO file(source, url, size, mtime, md5, mimetype, duration, bitrate) "
-                        "VALUES (?, ?, ?, ?, ?, ?, ?, ?)" );
-    query_filejoin.prepare( "INSERT INTO file_join(file, artist, album, track, albumpos) "
-                            "VALUES (?,?,?,?,?)" );
-    query_trackattr.prepare( "INSERT INTO track_attributes(id, k, v) "
-                             "VALUES (?,?,?)" );
+    query_file.prepare( "INSERT INTO file(source, url, size, mtime, md5, mimetype, duration, bitrate) VALUES (?, ?, ?, ?, ?, ?, ?, ?)" );
+    query_filejoin.prepare( "INSERT INTO file_join(file, artist, album, track, albumpos) VALUES (?, ?, ?, ?, ?)" );
+    query_trackattr.prepare( "INSERT INTO track_attributes(id, k, v) VALUES (?, ?, ?)" );
     query_file_del.prepare( QString( "DELETE FROM file WHERE source %1 AND url = ?" )
                                .arg( source()->isLocal() ? "IS NULL" : QString( "= %1" ).arg( source()->id() ) ) );
 
     int added = 0;
-    QVariant srcid = source()->isLocal() ?
-                     QVariant( QVariant::Int ) : source()->id();
-
+    QVariant srcid = source()->isLocal() ? QVariant( QVariant::Int ) : source()->id();
     qDebug() << "Adding" << m_files.length() << "files to db for source" << srcid;
 
     QList<QVariant>::iterator it;
@@ -94,18 +89,18 @@ DatabaseCommand_AddFiles::exec( DatabaseImpl* dbi )
         QVariant& v = *it;
         QVariantMap m = v.toMap();
 
-        QString url         = m.value( "url" ).toString();
-        int mtime           = m.value( "mtime" ).toInt();
-        int size            = m.value( "size" ).toInt();
-        QString hash        = m.value( "hash" ).toString();
-        QString mimetype    = m.value( "mimetype" ).toString();
-        int duration        = m.value( "duration" ).toInt();
-        int bitrate         = m.value( "bitrate" ).toInt();
-        QString artist      = m.value( "artist" ).toString();
-        QString album       = m.value( "album" ).toString();
-        QString track       = m.value( "track" ).toString();
-        int albumpos        = m.value( "albumpos" ).toInt();
-        int year            = m.value( "year" ).toInt();
+        QString url      = m.value( "url" ).toString();
+        int mtime        = m.value( "mtime" ).toInt();
+        uint size        = m.value( "size" ).toUInt();
+        QString hash     = m.value( "hash" ).toString();
+        QString mimetype = m.value( "mimetype" ).toString();
+        uint duration    = m.value( "duration" ).toUInt();
+        uint bitrate     = m.value( "bitrate" ).toUInt();
+        QString artist   = m.value( "artist" ).toString();
+        QString album    = m.value( "album" ).toString();
+        QString track    = m.value( "track" ).toString();
+        uint albumpos    = m.value( "albumpos" ).toUInt();
+        int year         = m.value( "year" ).toInt();
 
         int fileid = 0, artistid = 0, albumid = 0, trackid = 0;
         query_file_del.bindValue( 0, url );
@@ -139,9 +134,7 @@ DatabaseCommand_AddFiles::exec( DatabaseImpl* dbi )
         v = m;
 
         if( !source()->isLocal() )
-            url = QString( "servent://%1\t%2" )
-                     .arg( source()->userName() )
-                     .arg( url );
+            url = QString( "servent://%1\t%2" ).arg( source()->userName() ).arg( url );
 
         bool isnew;
         artistid = dbi->artistId( artist, isnew );
