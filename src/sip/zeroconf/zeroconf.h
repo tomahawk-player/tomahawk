@@ -17,7 +17,6 @@ public:
     ZeroconfPlugin()
         : m_zeroconf( 0 )
         , m_isOnline( false )
-        , m_cachedNodes()
     {
         qDebug() << Q_FUNC_INFO;
     }
@@ -55,7 +54,6 @@ private slots:
 private:
     TomahawkZeroconf* m_zeroconf;
     bool m_isOnline;
-    QSet< QStringList* > m_cachedNodes;
 };
 
 #endif

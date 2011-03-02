@@ -212,7 +212,7 @@ void
 CollectionFlatModel::onTracksRemoved( const QList<Tomahawk::query_ptr>& tracks, const Tomahawk::collection_ptr& collection )
 {
     QList<Tomahawk::query_ptr> t = tracks;
-    for ( int i = rowCount( QModelIndex() ); i > 0 && t.count(); i-- )
+    for ( int i = rowCount( QModelIndex() ); i >= 0 && t.count(); i-- )
     {
         PlItem* item = itemFromIndex( index( i, 0, QModelIndex() ) );
         if ( !item )
