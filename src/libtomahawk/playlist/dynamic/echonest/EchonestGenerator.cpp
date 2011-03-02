@@ -18,7 +18,7 @@
 #include "dynamic/echonest/EchonestControl.h"
 #include "dynamic/echonest/EchonestSteerer.h"
 #include "query.h"
-#include "tomahawk/tomahawkapp.h"
+#include "utils/tomahawkutils.h"
 
 using namespace Tomahawk;
 
