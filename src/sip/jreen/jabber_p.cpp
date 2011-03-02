@@ -194,37 +194,58 @@ Jabber_p::onConnect()
 void
 Jabber_p::onDisconnect( jreen::Client::DisconnectReason reason )
 {
-    qDebug() << Q_FUNC_INFO << reason;
-
     QString error;
+    bool reconnect = false;
+    int reconnectInSeconds = 0;
 
     switch( reason )
     {
         case jreen::Client::User:
+            error = "User Interaction";
             break;
         case jreen::Client::HostUnknown:
+            error = "Host is unknown";
             break;
         case jreen::Client::ItemNotFound:
+            error = "Item not found";
             break;
         case jreen::Client::AuthorizationError:
+            error = "Authorization Error";
             break;
         case jreen::Client::RemoteStreamError:
+            error = "Remote Stream Error";
+            reconnect = true;
             break;
         case jreen::Client::RemoteConnectionFailed:
+            error = "Remote Connection failed";
             break;
         case jreen::Client::InternalServerError:
+            error = "Internal Server Error";
+            reconnect = true;
             break;
         case jreen::Client::SystemShutdown:
+            error = "System shutdown";
+            reconnect = true;
+            reconnectInSeconds = 60;
             break;
         case jreen::Client::Conflict:
+            error = "Conflict";
             break;
 
         case jreen::Client::Unknown:
+            error = "Unknown";
+            break;
+
         default:
+            qDebug() << "Not all Client::DisconnectReasons checked";
+            Q_ASSERT(false);
             break;
     }
 
-    qDebug() << "Connection error msg:" << error;
+    qDebug() << "Disconnected from server:" << error;
+
+    if(reconnect)
+        QTimer::singleShot(reconnectInSeconds*1000, m_client, SLOT(connectToServer()));
 
     emit disconnected();
 }
