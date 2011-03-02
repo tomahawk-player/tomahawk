@@ -146,10 +146,10 @@ TomahawkApp::TomahawkApp( int& argc, char *argv[] )
 #endif
 
     qDebug() << "TomahawkApp thread:" << this->thread();
-    setOrganizationName( "Tomahawk" );
-    setOrganizationDomain( "tomahawk.org" );
-    setApplicationName( "Player" );
-    setApplicationVersion( "0.0.0" );
+    setOrganizationName( QLatin1String( ORGANIZATION_NAME ) );
+    setOrganizationDomain( QLatin1String( ORGANIZATION_DOMAIN ) );
+    setApplicationName( QLatin1String( APPLICATION_NAME ) );
+    setApplicationVersion( QLatin1String( VERSION ) );
     registerMetaTypes();
     setupLogfile();
     

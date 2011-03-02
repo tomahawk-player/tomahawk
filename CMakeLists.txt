@@ -1,6 +1,16 @@
 PROJECT( tomahawk )
 CMAKE_MINIMUM_REQUIRED( VERSION 2.8 )
 
+###
+### Tomahawk application info
+###
+SET( ORGANIZATION_NAME "Tomahawk" )
+SET( ORGANIZATION_DOMAIN "tomahawk-player.org" )
+SET( APPLICATION_NAME  "Player" )
+SET( VERSION  "0.0.0" )
+
+
+# set paths
 SET( CMAKE_MODULE_PATH "${CMAKE_MODULE_PATH}" "${CMAKE_SOURCE_DIR}/CMakeModules" )
 SET( THIRDPARTY_DIR  ${CMAKE_SOURCE_DIR}/thirdparty )
 
