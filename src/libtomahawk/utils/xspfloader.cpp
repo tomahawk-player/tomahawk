@@ -104,7 +104,7 @@ XSPFLoader::gotBody()
         album = e.firstChildElement( "album" ).text();
         track = e.firstChildElement( "title" ).text();
 
-        p->setQuery( Tomahawk::Query::get( artist, track, album ) );
+        p->setQuery( Tomahawk::Query::get( artist, track, album, uuid() ) );
         p->query()->setDuration( e.firstChildElement( "duration" ).text().toInt() / 1000 );
         m_entries << p;
     }
