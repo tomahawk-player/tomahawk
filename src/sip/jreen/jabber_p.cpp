@@ -150,8 +150,9 @@ Jabber_p::addContact( const QString& jid, const QString& msg )
         return;
     }
 
-    //FIXME: implement it when I dont suck that much :-)
-    //handleSubscription(Subscription());
+    // Add contact to the Tomahawk group on the roster
+    m_roster->add( jid, jid, QStringList() << "Tomahawk" );
+
     return;
 }
 
@@ -175,8 +176,8 @@ Jabber_p::onConnect()
     m_client->setPresence(jreen::Presence::Available, "Tomahawk-JREEN available", 1);
     m_client->disco()->setSoftwareVersion( "Tomahawk JREEN", "0.0.0.0", "Foobar" );
     m_client->setPingInterval(60000);
-    jreen::AbstractRoster *roster = new jreen::AbstractRoster( m_client );
-    roster->load();
+    m_roster = new jreen::SimpleRoster( m_client );
+    m_roster->load();
 
     // join MUC with bare jid as nickname
     //TODO: make the room a list of rooms and make that configurable
