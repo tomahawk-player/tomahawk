@@ -92,6 +92,7 @@ DynamicWidget::DynamicWidget( const Tomahawk::dynplaylist_ptr& playlist, QWidget
 
     connect( PlaylistManager::instance(), SIGNAL( playClicked() ), this, SLOT( playPressed() ) );
     connect( PlaylistManager::instance(), SIGNAL( pauseClicked() ), this, SLOT( pausePressed() ) );
+    connect( AudioEngine::instance(), SIGNAL( playlistChanged( PlaylistInterface* ) ), this, SLOT( playlistStopped( PlaylistInterface* ) ) );
 }
 
 DynamicWidget::~DynamicWidget()
@@ -207,18 +208,22 @@ DynamicWidget::layoutFloatingWidgets()
 }
 
 void 
-DynamicWidget::hideEvent( QHideEvent* ev )
+DynamicWidget::playlistStopped( PlaylistInterface* pl )
 {
+    if( pl == static_cast< PlaylistInterface* >( m_view->proxyModel() ) ) // same playlist, so don't stop
+        return;
+    
+    // user started playing something somewhere else, so give it a rest
     if( m_runningOnDemand ) {
         stopStation( false );
+        m_model->clear();
     }
-    QWidget::hideEvent( ev );
 }
 
 void 
 DynamicWidget::showEvent(QShowEvent* )
 {
-    if( !m_playlist.isNull() ) {
+    if( !m_playlist.isNull() && !m_runningOnDemand ) {
         m_setup->fadeIn();
     }
 }

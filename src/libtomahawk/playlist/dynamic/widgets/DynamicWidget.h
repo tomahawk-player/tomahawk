@@ -67,7 +67,6 @@ public:
     
     virtual QSize sizeHint() const;
     virtual void resizeEvent( QResizeEvent* );
-    virtual void hideEvent(QHideEvent* );
     virtual void showEvent(QShowEvent* );
     
     static void paintRoundedFilledRect( QPainter& p, QPalette& pal, QRect& r, qreal opacity = .95 );
@@ -89,6 +88,8 @@ public slots:
     void playPressed();
     void pausePressed();
     void stationFailed( const QString& );
+    
+    void playlistStopped( PlaylistInterface* );
     
 private slots:
     void generate( int = -1 );
