@@ -152,7 +152,6 @@ Pipeline::reportResults( QID qid, const QList< result_ptr >& results )
         }
 
         state = m_qidsState.value( qid ) - 1;
-
         if ( state )
         {
             qDebug() << Q_FUNC_INFO << "replacing" << qid << state;

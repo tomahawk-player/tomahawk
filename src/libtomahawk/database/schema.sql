@@ -219,7 +219,7 @@ CREATE INDEX artist_tags_tag ON artist_tags(tag);
 --     so that we can always do range queries.
 
 CREATE TABLE IF NOT EXISTS track_attributes (
-    id INTEGER NOT NULL,   -- track id
+    id INTEGER REFERENCES track(id) ON DELETE CASCADE ON UPDATE CASCADE DEFERRABLE INITIALLY DEFERRED,   -- track id
     k TEXT NOT NULL,
     v TEXT NOT NULL
 );
@@ -241,6 +241,8 @@ CREATE TABLE IF NOT EXISTS playback_log (
 CREATE INDEX playback_log_source ON playback_log(source);
 CREATE INDEX playback_log_track ON playback_log(track);
 
+
+
 -- auth information for http clients
 
 CREATE TABLE IF NOT EXISTS http_client_auth (
@@ -253,6 +255,7 @@ CREATE TABLE IF NOT EXISTS http_client_auth (
 );
 
 
+
 -- Schema version, and misc tomahawk settings relating to the collection db
 
 CREATE TABLE IF NOT EXISTS settings (
@@ -260,4 +263,4 @@ CREATE TABLE IF NOT EXISTS settings (
     v TEXT NOT NULL DEFAULT ''
 );
 
-INSERT INTO settings(k,v) VALUES('schema_version', '21');
+INSERT INTO settings(k,v) VALUES('schema_version', '22');

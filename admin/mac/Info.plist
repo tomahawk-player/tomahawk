@@ -7,7 +7,7 @@
 	<key>CFBundleExecutable</key>
 	<string>tomahawk</string>
 	<key>CFBundleIdentifier</key>
-	<string>org.tomahawk.Tomahawk</string>
+	<string>org.tomahawk-player.org.Tomahawk</string>
 	<key>CFBundleInfoDictionaryVersion</key>
 	<string>6.0</string>
 	<key>CFBundlePackageType</key>

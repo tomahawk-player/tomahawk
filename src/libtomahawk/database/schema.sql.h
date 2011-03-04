@@ -1,5 +1,5 @@
 /*
-    This file was automatically generated from schema.sql on Thu Feb 24 19:05:46 EST 2011.
+    This file was automatically generated from ./schema.sql on Wed Mar  2 01:40:39 CET 2011.
 */
 
 static const char * tomahawk_schema_sql = 
@@ -146,7 +146,7 @@ static const char * tomahawk_schema_sql =
 ");"
 "CREATE INDEX artist_tags_tag ON artist_tags(tag);"
 "CREATE TABLE IF NOT EXISTS track_attributes ("
-"    id INTEGER NOT NULL,   "
+"    id INTEGER REFERENCES track(id) ON DELETE CASCADE ON UPDATE CASCADE DEFERRABLE INITIALLY DEFERRED,   "
 "    k TEXT NOT NULL,"
 "    v TEXT NOT NULL"
 ");"
@@ -173,7 +173,7 @@ static const char * tomahawk_schema_sql =
 "    k TEXT NOT NULL PRIMARY KEY,"
 "    v TEXT NOT NULL DEFAULT ''"
 ");"
-"INSERT INTO settings(k,v) VALUES('schema_version', '21');"
+"INSERT INTO settings(k,v) VALUES('schema_version', '22');"
     ;
 
 const char * get_tomahawk_sql()

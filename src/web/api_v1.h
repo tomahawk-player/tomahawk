@@ -53,7 +53,7 @@ public slots:
     void stat( QxtWebRequestEvent* event );
     void statResult( const QString& clientToken, const QString& name, bool valid );
     void resolve( QxtWebRequestEvent* event );
-    void staticdata( QxtWebRequestEvent* event );
+    void staticdata( QxtWebRequestEvent* event,const QString& );
     void get_results( QxtWebRequestEvent* event );
     void sendJSON( const QVariantMap& m, QxtWebRequestEvent* event );
 

@@ -31,6 +31,7 @@
 
 #include "../sipdllmacro.h"
 #include <jreen/connection.h>
+#include <jreen/mucroom.h>
 
 class SIPDLLEXPORT Jabber_p :
        public QObject
@@ -72,6 +73,8 @@ private slots:
 private:
     bool presenceMeansOnline( jreen::Presence::Type p );
     jreen::Client *m_client;
+    jreen::MUCRoom *m_room;
+    jreen::SimpleRoster *m_roster;
     jreen::JID m_jid;
     QMap<jreen::Presence::Type, QString> m_presences;
     QMap<QString, jreen::Presence::Type> m_peers;

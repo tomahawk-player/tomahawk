@@ -60,7 +60,9 @@ CollectionFlatModel::addCollection( const collection_ptr& collection )
                                   SLOT( onTracksAdded( QList<Tomahawk::query_ptr>, Tomahawk::collection_ptr ) ) );
     connect( collection.data(), SIGNAL( tracksFinished( Tomahawk::collection_ptr ) ),
                                   SLOT( onTracksAddingFinished( Tomahawk::collection_ptr ) ) );
-
+    connect( collection.data(), SIGNAL( tracksRemoved( QList<Tomahawk::query_ptr>, Tomahawk::collection_ptr ) ),
+                                  SLOT( onTracksRemoved( QList<Tomahawk::query_ptr>, Tomahawk::collection_ptr ) ) );
+    
     if ( collection->source()->isLocal() )
         setTitle( tr( "Your Collection" ) );
     else
@@ -93,6 +95,8 @@ CollectionFlatModel::addFilteredCollection( const collection_ptr& collection, un
 void
 CollectionFlatModel::removeCollection( const collection_ptr& collection )
 {
+    return; // FIXME
+
     disconnect( collection.data(), SIGNAL( tracksAdded( QList<Tomahawk::query_ptr>, Tomahawk::collection_ptr ) ),
                 this, SLOT( onTracksAdded( QList<Tomahawk::query_ptr>, Tomahawk::collection_ptr ) ) );
     disconnect( collection.data(), SIGNAL( tracksFinished( Tomahawk::collection_ptr ) ),
@@ -163,6 +167,8 @@ CollectionFlatModel::removeCollection( const collection_ptr& collection )
 void
 CollectionFlatModel::onTracksAdded( const QList<Tomahawk::query_ptr>& tracks, const Tomahawk::collection_ptr& collection )
 {
+    qDebug() << Q_FUNC_INFO;
+
     if ( !tracks.count() )
     {
         emit trackCountChanged( rowCount( QModelIndex() ) );
@@ -199,6 +205,39 @@ CollectionFlatModel::onTracksAddingFinished( const Tomahawk::collection_ptr& col
     qDebug() << "Finished loading tracks" << collection->source()->friendlyName();
 
     emit loadingFinished();
+}
+
+
+void
+CollectionFlatModel::onTracksRemoved( const QList<Tomahawk::query_ptr>& tracks, const Tomahawk::collection_ptr& collection )
+{
+    QList<Tomahawk::query_ptr> t = tracks;
+    for ( int i = rowCount( QModelIndex() ); i >= 0 && t.count(); i-- )
+    {
+        PlItem* item = itemFromIndex( index( i, 0, QModelIndex() ) );
+        if ( !item )
+            continue;
+
+        int j = 0;
+        foreach ( const query_ptr& query, t )
+        {
+            if ( item->query().data() == query.data() )
+            {
+                qDebug() << "Removing row:" << i << query->toString();
+                emit beginRemoveRows( QModelIndex(), i, i );
+                delete item;
+                emit endRemoveRows();
+
+                t.removeAt( j );
+                break;
+            }
+
+            j++;
+        }
+    }
+    
+    emit trackCountChanged( rowCount( QModelIndex() ) );
+    qDebug() << Q_FUNC_INFO << rowCount( QModelIndex() );
 }
 
 

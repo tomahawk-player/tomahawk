@@ -79,6 +79,10 @@ Source::friendlyName() const
     if ( m_friendlyname.isEmpty() )
         return m_username;
 
+    //TODO: this is a terrible assumption, help me clean this up, mighty muesli!
+    if ( m_friendlyname.contains( "@conference.") )
+        return QString(m_friendlyname).remove( 0, m_friendlyname.lastIndexOf( "/" )+1 ).append(" via MUC");
+
     if ( m_friendlyname.contains( "/tomahawk" ) )
         return m_friendlyname.left( m_friendlyname.indexOf( "/tomahawk" ) );
 

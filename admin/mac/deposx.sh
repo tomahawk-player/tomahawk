@@ -62,7 +62,7 @@ function deposx_change
 function deplib_change
 {
     install_name_tool -change /usr/local/Cellar/liblastfm/0.3.1/lib/liblastfm.0.dylib @executable_path/liblastfm.0.dylib $1
-    install_name_tool -change libqjson.0.dylib @executable_path/libqjson.0.dylib $1
+    install_name_tool -change /usr/local/Cellar/qjson/0.7.1/lib/libqjson.0.dylib @executable_path/libqjson.0.dylib $1
     install_name_tool -change /usr/local/lib/libechonest.1.1.dylib @executable_path/libechonest.1.1.dylib $1
     install_name_tool -change /usr/local/lib/libclucene-core.0.9.23.dylib @executable_path/libclucene-core.0.9.23.dylib $1
     install_name_tool -change /usr/local/lib/libclucene-shared.0.9.23.dylib @executable_path/libclucene-shared.0.9.23.dylib $1
@@ -80,6 +80,11 @@ function deplib_change
     install_name_tool -change $ORIGROOT/libsip_zeroconf.dylib @executable_path/libsip_zeroconf.dylib $1
     install_name_tool -change $ORIGROOT/thirdparty/jdns/libtomahawk_jdns.dylib @executable_path/libtomahawk_jdns.dylib $1
     install_name_tool -change $ORIGROOT/thirdparty/qtweetlib/libtomahawk_qtweetlib.dylib @executable_path/libtomahawk_qtweetlib.dylib $1
+
+    install_name_tool -change libqjson.0.dylib @executable_path/libqjson.0.dylib $1
+    install_name_tool -change libechonest.1.1.dylib @executable_path/libechonest.1.1.dylib $1
+    install_name_tool -change libclucene-core.0.9.23.dylib @executable_path/libclucene-core.0.9.23.dylib $1
+    install_name_tool -change libclucene-shared.0.9.23.dylib @executable_path/libclucene-shared.0.9.23.dylib $1
 }
 
 ################################################################################

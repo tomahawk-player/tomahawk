@@ -56,7 +56,7 @@ void DatabaseCommand_LoadPlaylistEntries::generateEntries( DatabaseImpl* dbi )
             e->setLastmodified( 0 ); // TODO e->lastmodified = query.value(6).toInt();
             e->setResultHint( query.value( 8 ).toString() );
             
-            Tomahawk::query_ptr q = Tomahawk::Query::get( query.value( 2 ).toString(), query.value( 1 ).toString(), query.value( 3 ).toString(), false );
+            Tomahawk::query_ptr q = Tomahawk::Query::get( query.value( 2 ).toString(), query.value( 1 ).toString(), query.value( 3 ).toString() );
             q->setResultHint( query.value( 8 ).toString() );
             e->setQuery( q );
             

@@ -53,7 +53,7 @@ public slots:
     void mute();
 
     void playItem( PlaylistInterface* playlist, const Tomahawk::result_ptr& result );
-    void setPlaylist( PlaylistInterface* playlist ) { m_playlist = playlist; }
+    void setPlaylist( PlaylistInterface* playlist );
     void setQueue( PlaylistInterface* queue ) { m_queue = queue; }
 
     void onTrackAboutToFinish();
@@ -71,6 +71,8 @@ signals:
     void timerMilliSeconds( qint64 msElapsed );
     void timerSeconds( unsigned int secondsElapsed );
     void timerPercentage( unsigned int percentage );
+
+    void playlistChanged( PlaylistInterface* playlist );
 
     void error( AudioErrorCode errorCode );
 

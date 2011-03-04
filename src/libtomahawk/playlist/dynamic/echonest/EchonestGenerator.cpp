@@ -18,7 +18,7 @@
 #include "dynamic/echonest/EchonestControl.h"
 #include "dynamic/echonest/EchonestSteerer.h"
 #include "query.h"
-#include "tomahawk/tomahawkapp.h"
+#include "utils/tomahawkutils.h"
 
 using namespace Tomahawk;
 
@@ -285,7 +285,7 @@ query_ptr
 EchonestGenerator::queryFromSong(const Echonest::Song& song)
 {
     //         track[ "album" ] = song.release(); // TODO should we include it? can be quite specific
-    return Query::get( song.artistName(), song.title(), QString() );
+    return Query::get( song.artistName(), song.title(), QString(), uuid() );
 }
 
 QWidget* 

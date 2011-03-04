@@ -9,6 +9,7 @@
 #define TOMAHAWK_COLLECTION_H
 
 #include <QHash>
+#include <QDir>
 #include <QList>
 #include <QSharedPointer>
 #include <QDebug>
@@ -56,7 +57,7 @@ public:
 
 signals:
     void tracksAdded( const QList<Tomahawk::query_ptr>& tracks, const Tomahawk::collection_ptr& );
-    void tracksRemoved( const QList<QVariant>&, const Tomahawk::collection_ptr& );
+    void tracksRemoved( const QList<Tomahawk::query_ptr>& tracks, const Tomahawk::collection_ptr& );
     void tracksFinished( const Tomahawk::collection_ptr& );
 
     void playlistsAdded( const QList<Tomahawk::playlist_ptr>& );
@@ -66,12 +67,14 @@ signals:
     void dynamicPlaylistsDeleted( const QList<Tomahawk::dynplaylist_ptr>& );
 
 public slots:
-    virtual void addTracks( const QList<QVariant> &newitems ) = 0;
-    virtual void removeTracks( const QList<QVariant> &olditems ) = 0;
+    virtual void addTracks( const QList<QVariant>& newitems ) = 0;
+    virtual void removeTracks( const QDir& dir ) = 0;
 
     void setPlaylists( const QList<Tomahawk::playlist_ptr>& plists );
     void setDynamicPlaylists( const QList< Tomahawk::dynplaylist_ptr >& dynplists );
-    void setTracks( const QList<Tomahawk::query_ptr>& tracks, Tomahawk::collection_ptr collection );
+    void setTracks( const QList<Tomahawk::query_ptr>& tracks, const Tomahawk::collection_ptr& collection );
+
+    void delTracks( const QStringList& files, const Tomahawk::collection_ptr& collection );
 
 protected:
     QString m_name;
@@ -79,8 +82,8 @@ protected:
 
 private:
     source_ptr m_source;
-    QList< Tomahawk::playlist_ptr > m_playlists;
     QList< Tomahawk::query_ptr > m_tracks;
+    QList< Tomahawk::playlist_ptr > m_playlists;
     QList< Tomahawk::dynplaylist_ptr > m_dynplaylists;
 };
 

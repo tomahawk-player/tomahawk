@@ -1,13 +1,14 @@
 #include "tomahawk/tomahawkapp.h"
 
 #ifdef Q_WS_MAC
-#include "tomahawkapp_mac.h"
-#include </System/Library/Frameworks/CoreServices.framework/Versions/A/Frameworks/AE.framework/Versions/A/Headers/AppleEvents.h>
-static pascal OSErr appleEventHandler( const AppleEvent*, AppleEvent*, long );
+    #include "tomahawkapp_mac.h"
+    #include </System/Library/Frameworks/CoreServices.framework/Versions/A/Frameworks/AE.framework/Versions/A/Headers/AppleEvents.h>
+    static pascal OSErr appleEventHandler( const AppleEvent*, AppleEvent*, long );
 #endif
 
 #include <exception>
-int main( int argc, char *argv[] )
+int
+main( int argc, char *argv[] )
 {
 #ifdef Q_WS_MAC
       // Do Mac specific startup to get media keys working.
@@ -19,21 +20,25 @@ int main( int argc, char *argv[] )
       AEInstallEventHandler( 'GURL', 'GURL', h, 0, false );
 
 #endif
-    try {
+    try
+    {
         TomahawkApp a( argc, argv );
         return a.exec();
-    } catch( const std::runtime_error& e ) {
+    }
+    catch( const std::runtime_error& e )
+    {
         return 0;
     }
 }
 
 #ifdef Q_WS_MAC
-static pascal OSErr appleEventHandler( const AppleEvent* e, AppleEvent*, long )
+static pascal OSErr
+appleEventHandler( const AppleEvent* e, AppleEvent*, long )
 {
     OSType id = typeWildCard;
-    AEGetAttributePtr( e, keyEventIDAttr, typeType, 0, &id, sizeof(id), 0 );
+    AEGetAttributePtr( e, keyEventIDAttr, typeType, 0, &id, sizeof( id ), 0 );
 
-    switch (id)
+    switch ( id )
     {
         case 'GURL':
         {

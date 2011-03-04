@@ -28,7 +28,7 @@ PlaylistEntry::setQueryVariant( const QVariant& v )
     QString artist = m.value( "artist" ).toString();
     QString album = m.value( "album" ).toString();
     QString track = m.value( "track" ).toString();
-    m_query = Tomahawk::Query::get( artist, track, album, false );
+    m_query = Tomahawk::Query::get( artist, track, album );
 }
 
 

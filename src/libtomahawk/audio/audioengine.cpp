@@ -252,7 +252,7 @@ AudioEngine::playItem( PlaylistInterface* playlist, const Tomahawk::result_ptr& 
 {
     qDebug() << Q_FUNC_INFO;
 
-    m_playlist = playlist;
+    setPlaylist( playlist );
     m_currentTrackPlaylist = playlist;
 
     loadTrack( result );
@@ -295,6 +295,14 @@ AudioEngine::timerTriggered( qint64 time )
     }
 
     emit timerMilliSeconds( time );
+}
+
+
+void
+AudioEngine::setPlaylist( PlaylistInterface* playlist )
+{
+    m_playlist = playlist;
+    emit playlistChanged( playlist );
 }
 
 

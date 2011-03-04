@@ -165,7 +165,7 @@ Api_v1::stat( QxtWebRequestEvent* event )
     if( event->url.hasQueryItem( "auth" ) )
     {
         // check for auth status
-        DatabaseCommand_ClientAuthValid* dbcmd = new DatabaseCommand_ClientAuthValid( event->url.queryItemValue( "auth" ), this );
+        DatabaseCommand_ClientAuthValid* dbcmd = new DatabaseCommand_ClientAuthValid( event->url.queryItemValue( "auth" ) );
         connect( dbcmd, SIGNAL( authValid( QString, QString, bool ) ), this, SLOT( statResult( QString, QString, bool ) ) );
         Database::instance()->enqueue( QSharedPointer<DatabaseCommand>(dbcmd) );
     }
@@ -215,11 +215,17 @@ Api_v1::resolve( QxtWebRequestEvent* event )
 
 
 void
-Api_v1::staticdata( QxtWebRequestEvent* event )
+Api_v1::staticdata( QxtWebRequestEvent* event, const QString& str )
 {
-    if( event->url.path().contains( "playdar_auth_logo.gif" ) )
+    qDebug() << "STATIC request:" << event << str;
+    if( str.contains( "tomahawk_auth_logo.png" ) )
     {
-        // TODO handle
+        QFile f( RESPATH "www/tomahawk_banner_small.png" );
+        f.open( QIODevice::ReadOnly );
+        QByteArray data = f.readAll();
+        QxtWebPageEvent * e = new QxtWebPageEvent( event->sessionID, event->requestID, data );
+        e->contentType = "image/png";
+        postEvent( e );
     }
 }
 

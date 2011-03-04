@@ -91,7 +91,7 @@ ControlConnection::setup()
 void
 ControlConnection::registerSource()
 {
-    qDebug() << Q_FUNC_INFO;
+    qDebug() << Q_FUNC_INFO << m_source->id();
     Source* source = (Source*) sender();
     Q_ASSERT( source == m_source.data() );
     // .. but we'll use the shared pointer we've already made:
@@ -105,10 +105,11 @@ ControlConnection::registerSource()
 void
 ControlConnection::setupDbSyncConnection( bool ondemand )
 {
+    qDebug() << Q_FUNC_INFO << ondemand << m_source->id() << ondemand << m_dbconnkey << m_dbsyncconn << m_registered;
+
     if ( m_dbsyncconn || !m_registered )
         return;
 
-    qDebug() << Q_FUNC_INFO << ondemand << m_source->id();
     Q_ASSERT( m_source->id() > 0 );
 
     if( !m_dbconnkey.isEmpty() )

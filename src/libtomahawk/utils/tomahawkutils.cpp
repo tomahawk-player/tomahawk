@@ -116,6 +116,17 @@ appDataDir()
 }
 
 
+QDir
+appLogDir()
+{
+#ifndef Q_WS_MAC
+    return appDataDir();
+#else
+    return QDir( QDir::homePath() + "/Library/Logs" );
+#endif
+}
+
+
 QString
 timeToString( int seconds )
 {
