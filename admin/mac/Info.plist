@@ -24,17 +24,21 @@
 	<string>Tomahawk</string>
 	<key>LSMinimumSystemVersion</key>
     <string>10.5.0</string>
+    <key>SUFeedURL</key>
+    <string>http://download.tomahawk-player.org/sparkle</string>
+    <key>SUPublicDSAKeyFile</key>
+    <string>sparkle_pub.pem</string>
     <key>CFBundleURLTypes</key>
-    	<array>
-    		<dict>
-    			<key>CFBundleURLName</key>
-    			<string>Tomahawk URL</string>
-    			<key>CFBundleURLSchemes</key>
-    			<array>
-    				<string>tomahawk</string>
-    			</array>
-    		</dict>
-    	</array>
+        <array>
+            <dict>
+                <key>CFBundleURLName</key>
+                <string>Tomahawk URL</string>
+                <key>CFBundleURLSchemes</key>
+                <array>
+                    <string>tomahawk</string>
+                </array>
+            </dict>
+        </array>
     <key>CFBundleDocumentTypes</key>
       <array>
         <dict>

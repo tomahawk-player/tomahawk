@@ -124,6 +124,12 @@ TomahawkWindow::TomahawkWindow( QWidget* parent )
     toolbar->setToolButtonStyle( Qt::ToolButtonFollowStyle );
     toolbar->installEventFilter( new WidgetDragFilter( toolbar ) );
 
+#if defined( Q_OS_DARWIN ) && defined( HAVE_SPARKLE )
+      QAction* checkForUpdates = ui->menu_Help->addAction( tr( "Check for updates...") );
+      checkForUpdates->setMenuRole( QAction::ApplicationSpecificRole );
+      connect(checkForUpdates, SIGNAL( triggered( bool ) ), SLOT( checkForUpdates() ) );
+#endif
+
     m_backAvailable = toolbar->addAction( QIcon( RESPATH "images/back.png" ), tr( "Back" ), PlaylistManager::instance(), SLOT( historyBack() ) );
     m_forwardAvailable = toolbar->addAction( QIcon( RESPATH "images/forward.png" ), tr( "Forward" ), PlaylistManager::instance(), SLOT( historyForward() ) );
     toolbar->addAction( QIcon( RESPATH "images/home.png" ), tr( "Home" ), PlaylistManager::instance(), SLOT( showWelcomePage() ) );
@@ -421,4 +427,12 @@ TomahawkWindow::showAboutTomahawk()
                         tr( "<h2><b>Tomahawk %1</h2>Copyright 2010, 2011<br/>Christian Muehlhaeuser &lt;muesli@tomahawk-player.org&gt;<br/><br/>"
                             "Thanks to: Leo Franchi, Jeff Mitchell, Dominik Schmidt, Alejandro Wainzinger, Harald Sitter and Steve Robertson" )
                         .arg( qApp->applicationVersion() ) );
+}
+
+void
+TomahawkWindow::checkForUpdates()
+{
+#ifdef Q_WS_MAC
+    Tomahawk::checkForUpdates();
+#endif
 }

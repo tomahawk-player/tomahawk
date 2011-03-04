@@ -16,6 +16,10 @@
 #import <AppKit/NSEvent.h>
 #import <AppKit/NSNibDeclarations.h>
 
+#ifdef HAVE_SPARKLE
+#import <Sparkle/SUUpdater.h>
+#endif
+
 // Capture global media keys on Mac (Cocoa only!)
 // See: http://www.rogueamoeba.com/utm/2007/09/29/apple-keyboard-media-key-event-handling/
 
@@ -146,10 +150,10 @@ void Tomahawk::macMain() {
   [[NSAutoreleasePool alloc] init];
   // Creates and sets the magic global variable so QApplication will find it.
   [MacApplication sharedApplication];
-  #ifdef HAVE_SPARKLE
+#ifdef HAVE_SPARKLE
     // Creates and sets the magic global variable for Sparkle.
     [[SUUpdater sharedUpdater] setDelegate: NSApp];
-  #endif
+#endif
 }
 
 
@@ -161,8 +165,8 @@ void Tomahawk::setApplicationHandler(Tomahawk::PlatformInterface* handler) {
   [NSApp setApplicationHandler: handler];
 }
 
-void CheckForUpdates() {
-  #ifdef HAVE_SPARKLE
+void Tomahawk::checkForUpdates() {
+#ifdef HAVE_SPARKLE
   [[SUUpdater sharedUpdater] checkForUpdates: NSApp];
-  #endif
+#endif
 }

@@ -64,12 +64,6 @@ SET( tomahawkSourcesGui ${tomahawkSourcesGui}
      tomahawkwindow.cpp
 )
 
-
-IF( APPLE )
-    SET( tomahawkHeaders ${tomahawkHeaders} mac/tomahawkapp_mac.h mac/macshortcuthandler.h )
-    SET( tomahawkSources ${tomahawkSources} mac/tomahawkapp_mac.mm  mac/macshortcuthandler.cpp )
-ENDIF( APPLE )
-
 SET( tomahawkHeaders ${tomahawkHeaders}
      "${TOMAHAWK_INC_DIR}/tomahawk/tomahawkapp.h"
      "${TOMAHAWK_INC_DIR}/tomahawk/infosystem.h"
@@ -155,6 +149,15 @@ IF( UNIX )
   INCLUDE( "CMakeLists.unix.txt" )
 ENDIF( UNIX )
 
+IF( APPLE )
+    SET( tomahawkHeaders ${tomahawkHeaders} mac/tomahawkapp_mac.h mac/macshortcuthandler.h  )
+    SET( tomahawkSources ${tomahawkSources} mac/tomahawkapp_mac.mm  mac/macshortcuthandler.cpp )
+
+    IF(HAVE_SPARKLE)
+    SET( tomahawkHeaders ${tomahawkHeaders} ${SPARKLE}/Headers )
+    ENDIF(HAVE_SPARKLE)
+
+ENDIF( APPLE )
 
 IF(GLOOX_FOUND)
   SET( tomahawkHeaders ${tomahawkHeaders} xmppbot/xmppbot.h )
@@ -213,5 +216,14 @@ TARGET_LINK_LIBRARIES( tomahawk
     ${TAGLIB_LIBRARIES}
     ${QTWEETLIB_LIBRARIES}
 )
+
+
+IF( APPLE )
+  IF(HAVE_SPARKLE)
+    MESSAGE("Sparkle Found, installing framekwork in bundle")
+    INSTALL(DIRECTORY "${SPARKLE}/Versions/Current/Resources" DESTINATION "${CMAKE_BINARY_DIR}/tomahawk.app/Contents/Frameworks/Sparkle.framework")
+    INSTALL(FILES "${CMAKE_SOURCE_DIR}/admin/mac/sparkle_pub.pem" DESTINATION "${CMAKE_BINARY_DIR}/tomahawk.app/Contents/Resources")
+  ENDIF(HAVE_SPARKLE)
+ENDIF( APPLE )
 
 INCLUDE( "CPack.txt" )
