@@ -104,7 +104,7 @@ LoadingSpinner::paintEvent( QPaintEvent* ev )
 {
     QPainter p( this );
     
-    qDebug() << "FADING" << ( m_showHide->state() == QTimeLine::Running ) << "at frame:" << m_showHide->currentValue();
+//     qDebug() << "FADING" << ( m_showHide->state() == QTimeLine::Running ) << "at frame:" << m_showHide->currentValue();
     if( m_showHide->state() == QTimeLine::Running ) { // showing or hiding
         p.setOpacity( (qreal)m_showHide->currentValue() );
     }

@@ -45,13 +45,15 @@ public:
     
     void setPlaylist( const dynplaylist_ptr& playlist );
     
-    void fadeIn();
-    void fadeOut();
-    
     qreal opacity() const { return m_opacity; }
     void setOpacity( qreal opacity );
     
     virtual void paintEvent( QPaintEvent* );
+    
+public slots:        
+    void fadeIn();
+    void fadeOut();
+    
 signals:
     void generatePressed( int num );
     void typeChanged( const QString& playlistType );

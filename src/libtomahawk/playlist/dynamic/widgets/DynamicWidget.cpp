@@ -68,12 +68,14 @@ DynamicWidget::DynamicWidget( const Tomahawk::dynplaylist_ptr& playlist, QWidget
     
     connect( m_model, SIGNAL( collapseFromTo( int, int ) ), m_view, SLOT( collapseEntries( int, int ) ) );
     connect( m_model, SIGNAL( trackGenerationFailure( QString ) ), this, SLOT( stationFailed( QString ) ) );    
-    connect( m_model, SIGNAL( firstTrackGenerated() ), this, SLOT( firstStationTrackGenerated() ) );
     
     m_loading = new LoadingSpinner( m_view ); 
+    connect( m_model, SIGNAL( tracksAdded() ), m_loading, SLOT( fadeOut() ) );
     
     m_setup = new DynamicSetupWidget( playlist, this );
     m_setup->fadeIn();
+    
+    connect( m_model, SIGNAL( tracksAdded() ), m_setup, SLOT( fadeOut() ) );
     
     loadDynamicPlaylist( playlist );
     
@@ -90,8 +92,7 @@ DynamicWidget::DynamicWidget( const Tomahawk::dynplaylist_ptr& playlist, QWidget
     connect( m_controls, SIGNAL( controlChanged( Tomahawk::dyncontrol_ptr ) ), this, SLOT( controlChanged( Tomahawk::dyncontrol_ptr ) ), Qt::QueuedConnection );
     connect( m_controls, SIGNAL( controlsChanged() ), this, SLOT( controlsChanged() ), Qt::QueuedConnection );
 
-    connect( PlaylistManager::instance(), SIGNAL( playClicked() ), this, SLOT( playPressed() ) );
-    connect( PlaylistManager::instance(), SIGNAL( pauseClicked() ), this, SLOT( pausePressed() ) );
+    connect( AudioEngine::instance(), SIGNAL( started( Tomahawk::result_ptr ) ), this, SLOT( trackStarted() ) );
     connect( AudioEngine::instance(), SIGNAL( playlistChanged( PlaylistInterface* ) ), this, SLOT( playlistStopped( PlaylistInterface* ) ) );
 }
 
@@ -152,6 +153,9 @@ DynamicWidget::loadDynamicPlaylist( const Tomahawk::dynplaylist_ptr& playlist )
     
     if( !m_playlist.isNull() )
         m_controls->setControls( m_playlist, m_playlist->author()->isLocal() );
+    
+    if( m_playlist->mode() == OnDemand )
+        showPreview();
     
     connect( m_playlist->generator().data(), SIGNAL( generated( QList<Tomahawk::query_ptr> ) ), this, SLOT( tracksGenerated( QList<Tomahawk::query_ptr> ) ) );
     connect( m_playlist.data(), SIGNAL( dynamicRevisionLoaded( Tomahawk::DynamicPlaylistRevision ) ), this, SLOT( onRevisionLoaded( Tomahawk::DynamicPlaylistRevision ) ) );
@@ -232,15 +236,10 @@ DynamicWidget::showEvent(QShowEvent* )
 void 
 DynamicWidget::generate( int num )
 {
-    if( m_playlist->mode() == Static ) 
-    {
-        // get the items from the generator, and put them in the playlist
-        m_view->setDynamicWorking( true );
-        m_loading->fadeIn();
-        m_playlist->generator()->generate( num );
-    } else if( m_playlist->mode() == OnDemand ) {
-
-    }
+    // get the items from the generator, and put them in the playlist
+    m_view->setDynamicWorking( true );
+    m_loading->fadeIn();
+    m_playlist->generator()->generate( num );
 }
 
 void 
@@ -253,35 +252,15 @@ DynamicWidget::stationFailed( const QString& msg )
     stopStation( false );
 }
 
-
 void 
-DynamicWidget::pausePressed()
-{
-    // we don't handle explicit pausing right now
-    // no more track plays == no more adding. we stop when
-    // the user switches to a different playlist.
-}
-
-void 
-DynamicWidget::playPressed()
-{
-    
+DynamicWidget::trackStarted()
+{    
     if( isVisible() && !m_playlist.isNull() &&
         m_playlist->mode() == OnDemand && !m_runningOnDemand ) {
         
-        m_view->setDynamicWorking( true );
         startStation();
     }
-        
 }
-
-void 
-DynamicWidget::firstStationTrackGenerated()
-{
-    m_view->setDynamicWorking( false );
-    m_loading->fadeOut();
-}
-
 
 void 
 DynamicWidget::stopStation( bool stopPlaying )
@@ -328,17 +307,16 @@ DynamicWidget::playlistTypeChanged( QString )
 
 void 
 DynamicWidget::tracksGenerated( const QList< query_ptr >& queries )
-{
-    m_loading->fadeOut();
-    
-    if( m_playlist->author()->isLocal() ) {
-        m_playlist->addEntries( queries, m_playlist->currentrevision() );
+{   
+    int limit = -1; // only limit the "preview" of a station
+    if( m_playlist->author()->isLocal() && m_playlist->mode() == Static ) {
         m_resolveOnNextLoad = true;
-    } else { // read-only, so add tracks only in the GUI, not to the playlist itself
-        foreach( const query_ptr& query, queries ) {
-            m_model->append( query );
-        }
-    }
+    } else if( m_playlist->mode() == OnDemand )
+        limit = 5;
+    
+    if( m_playlist->mode() != OnDemand )
+        m_loading->fadeOut();
+    m_model->tracksGenerated( queries, limit );
 }
 
 
@@ -348,8 +326,6 @@ DynamicWidget::controlsChanged()
     // controlsChanged() is emitted when a control is added or removed
     // in the case of addition, it's blank by default... so to avoid an error
     // when playing a station just ignore it till we're ready and get a controlChanged()
-/*    if( m_runningOnDemand )
-        m_model->changeStation();*/
     m_controlsChanged = true;
     
     if( !m_playlist->author()->isLocal() )
@@ -365,7 +341,18 @@ DynamicWidget::controlChanged( const Tomahawk::dyncontrol_ptr& control )
         return;       
     m_playlist->createNewRevision();
     m_seqRevLaunched++;
+    
+    showPreview();
 }
+
+void 
+DynamicWidget::showPreview()
+{
+    if( m_playlist->mode() == OnDemand && !m_runningOnDemand ) { // if this is a not running station, preview matching tracks
+        generate( 40 ); // ask for more, we'll filter how many we actually want
+}
+}
+
 
 void 
 DynamicWidget::generatorError( const QString& title, const QString& content )

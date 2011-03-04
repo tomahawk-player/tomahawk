@@ -29,10 +29,10 @@ Tomahawk::EchonestControl::EchonestControl( const QString& selectedType, const Q
     : DynamicControl ( selectedType.isEmpty() ? "Artist" : selectedType, typeSelectors, parent )
 {
     setType( "echonest" );
-    m_editingTimer.setInterval( 2000 ); // 2 second timeout to edits
+    m_editingTimer.setInterval( 500 ); //timeout to edits
     m_editingTimer.setSingleShot( true );
     
-    connect( &m_editingTimer, SIGNAL( timeout() ), this, SIGNAL( changed() ) );
+    connect( &m_editingTimer, SIGNAL( timeout() ), this, SLOT( editTimerFired() ) );
     updateWidgets();
 }
 
@@ -340,7 +340,6 @@ Tomahawk::EchonestControl::setupMinMaxWidgets( Echonest::DynamicPlaylist::Playli
     connect( match, SIGNAL( activated( int ) ), this, SLOT( editingFinished() ) );
     connect( input->slider(), SIGNAL( valueChanged( int ) ), this, SLOT( updateData() ) );
     connect( input->slider(), SIGNAL( valueChanged( int ) ), this, SLOT( editingFinished() ) );
-    connect( input->slider(), SIGNAL( sliderMoved( int ) ), &m_editingTimer, SLOT( stop() ) );
     
     match->hide();
     input->hide();
@@ -490,6 +489,18 @@ Tomahawk::EchonestControl::editingFinished()
     qDebug() << Q_FUNC_INFO;
     m_editingTimer.start();
 }
+
+void 
+Tomahawk::EchonestControl::editTimerFired()
+{
+    // make sure it's really changed
+    if( m_cacheData != m_data.second ) { // new, so emit changed
+        emit changed();
+    }
+    
+    m_cacheData = m_data.second;
+}
+
 
 void 
 Tomahawk::EchonestControl::calculateSummary()

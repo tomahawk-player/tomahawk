@@ -17,6 +17,7 @@
 #include "playlist/dynamic/DynamicModel.h"
 #include "GeneratorInterface.h"
 #include "audio/audioengine.h"
+#include <pipeline.h>
 
 using namespace Tomahawk;
 
@@ -25,7 +26,7 @@ DynamicModel::DynamicModel( QObject* parent )
     , m_startOnResolved( false )
     , m_onDemandRunning( false )
     , m_changeOnNext( false )
-    , m_firstTrackGenerated( false )
+    , m_filterUnresolvable( true )
     , m_currentAttempts( 0 )
     , m_lastResolvedRow( 0 )
 {
@@ -45,9 +46,11 @@ DynamicModel::loadPlaylist( const Tomahawk::dynplaylist_ptr& playlist )
     }
     m_playlist = playlist;
     
+    if( m_playlist->mode() == OnDemand )
+        setFilterUnresolvable( true );
     
     connect( m_playlist->generator().data(), SIGNAL( nextTrackGenerated( Tomahawk::query_ptr ) ), this, SLOT( newTrackGenerated( Tomahawk::query_ptr ) ) );
-    PlaylistModel::loadPlaylist( m_playlist, !m_onDemandRunning );
+    PlaylistModel::loadPlaylist( m_playlist, m_playlist->mode() == Static );
 }
 
 QString 
@@ -62,25 +65,18 @@ DynamicModel::startOnDemand()
 {
     connect( AudioEngine::instance(), SIGNAL( loading( Tomahawk::result_ptr ) ), this, SLOT( newTrackLoading() ) );
     
-    // delete all the tracks
-    clear();
-    
     m_playlist->generator()->startOnDemand();
     
     m_onDemandRunning = true;
-    m_startOnResolved = true;
+    m_startOnResolved = false; // not anymore---user clicks a track to start it
     m_currentAttempts = 0;
-    m_lastResolvedRow = 0;
+    m_lastResolvedRow = rowCount( QModelIndex() );
 }
 
 void 
 DynamicModel::newTrackGenerated( const Tomahawk::query_ptr& query )
 {
     if( m_onDemandRunning ) {
-        if( !m_firstTrackGenerated ) {
-            emit firstTrackGenerated();
-            m_firstTrackGenerated = false;
-        }
         connect( query.data(), SIGNAL( resolvingFinished( bool ) ), this, SLOT( trackResolveFinished( bool ) ) );
         connect( query.data(), SIGNAL( resultsAdded( QList<Tomahawk::result_ptr> ) ), this, SLOT( trackResolved() ) );
     
@@ -92,7 +88,6 @@ void
 DynamicModel::stopOnDemand( bool stopPlaying )
 {
     m_onDemandRunning = false;
-    m_firstTrackGenerated = false;
     if( stopPlaying )
         AudioEngine::instance()->stop();
     
@@ -155,6 +150,79 @@ DynamicModel::newTrackLoading()
         m_playlist->generator()->fetchNext();
     }    
 }
+
+void 
+DynamicModel::tracksGenerated( const QList< query_ptr > entries, int limitResolvedTo )
+{
+    if( m_filterUnresolvable ) { // wait till we get them resolved
+        m_limitResolvedTo = limitResolvedTo;
+        filterUnresolved( entries );
+    } else {
+        addToPlaylist( entries, m_playlist->mode() == OnDemand ); // if ondemand, we're previewing, so clear old
+    }
+}
+
+void 
+DynamicModel::filterUnresolved( const QList< query_ptr >& entries )
+{
+    m_toResolveList = entries;
+    
+    foreach( const query_ptr& q, entries ) {
+        connect( q.data(), SIGNAL( resolvingFinished( bool ) ), this, SLOT( filteringTrackResolved( bool ) ) );
+        Pipeline::instance()->resolve( q );
+    }    
+}
+
+void 
+DynamicModel::filteringTrackResolved( bool successful )
+{    
+    // arg, we don't have the query_ptr, just the Query
+    Query* q = qobject_cast< Query* >( sender() );
+    Q_ASSERT( q );
+    
+    query_ptr realptr;
+    foreach( const query_ptr& qptr, m_toResolveList ) {
+        if( qptr.data() == q ) {
+            realptr = qptr;
+            break;
+        }
+    }
+    if( realptr.isNull() ) // we already finished
+        return;
+    
+    m_toResolveList.removeAll( realptr );
+    
+    if( successful )
+        m_resolvedList << realptr;
+    
+    if( m_toResolveList.isEmpty() || m_resolvedList.size() == m_limitResolvedTo ) { // done, add to playlist
+        if( m_limitResolvedTo < m_resolvedList.count() ) // limit to how many we were asked for
+            m_resolvedList = m_resolvedList.mid( 0, m_limitResolvedTo );
+        
+        addToPlaylist( m_resolvedList, true );
+        m_toResolveList.clear();
+        m_resolvedList.clear();
+    }       
+}
+
+
+void 
+DynamicModel::addToPlaylist( const QList< query_ptr >& entries, bool clearFirst )
+{
+    if( clearFirst )
+        clear();
+    
+    if( m_playlist->author()->isLocal() && m_playlist->mode() == Static ) {
+        m_playlist->addEntries( entries, m_playlist->currentrevision() );
+    } else { // read-only, so add tracks only in the GUI, not to the playlist itself
+        foreach( const query_ptr& query, entries ) {
+            append( query );
+        }
+    }    
+    
+    emit tracksAdded();
+}
+
 
 void 
 DynamicModel::removeIndex(const QModelIndex& idx, bool moreToCome)
