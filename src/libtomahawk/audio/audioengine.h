@@ -3,8 +3,8 @@
 
 #include <QObject>
 
-#include <Phonon/MediaObject>
-#include <Phonon/AudioOutput>
+#include <MediaObject>
+#include <AudioOutput>
 
 #include "result.h"
 #include "typedefs.h"
