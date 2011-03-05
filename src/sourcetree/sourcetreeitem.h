@@ -47,13 +47,15 @@ private slots:
     void onPlaylistsAdded( const QList<Tomahawk::playlist_ptr>& playlists );
     void onPlaylistsDeleted( const QList<Tomahawk::playlist_ptr>& playlists );
     void onPlaylistLoaded( Tomahawk::PlaylistRevision revision );
-    
+    void onPlaylistChanged();
+
     void onDynamicPlaylistsAdded( const QList<Tomahawk::dynplaylist_ptr>& playlists );
     void onDynamicPlaylistsDeleted( const QList<Tomahawk::dynplaylist_ptr>& playlists );
     void onDynamicPlaylistLoaded( Tomahawk::DynamicPlaylistRevision revision );
+
 private:
     void playlistAddedInternal( qlonglong ptr, const Tomahawk::playlist_ptr& pl, bool dynamic );
-    
+
     QList<QStandardItem*> m_columns;
     Tomahawk::source_ptr m_source;
     SourceTreeItemWidget* m_widget;

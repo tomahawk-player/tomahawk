@@ -33,10 +33,10 @@ Q_PROPERTY( QVariant query            READ queryVariant WRITE setQueryVariant )
 public:
     PlaylistEntry();
     virtual ~PlaylistEntry();
-    
+
     void setQuery( const Tomahawk::query_ptr& q );
     const Tomahawk::query_ptr& query() const;
-    
+
     // I wish Qt did this for me once i specified the Q_PROPERTIES:
     void setQueryVariant( const QVariant& v );
     QVariant queryVariant() const;
@@ -59,7 +59,7 @@ public:
     source_ptr lastSource() const;
     void setLastSource( source_ptr s );
 
-private:    
+private:
     QString m_guid;
     Tomahawk::query_ptr m_query;
     QString m_annotation;
@@ -97,7 +97,7 @@ friend class ::DatabaseCommand_CreatePlaylist;
 
 public:
     ~Playlist();
-    
+
     static Tomahawk::playlist_ptr load( const QString& guid );
 
     // one CTOR is private, only called by DatabaseCommand_LoadAllPlaylists
@@ -113,14 +113,14 @@ public:
 
     virtual void loadRevision( const QString& rev = "" );
 
-    source_ptr author();
-    const QString& currentrevision()    { return m_currentrevision; }
-    const QString& title()              { return m_title; }
-    const QString& info()               { return m_info; }
-    const QString& creator()            { return m_creator; }
-    unsigned int lastmodified()         { return m_lastmodified; }
-    const QString& guid()               { return m_guid; }
-    bool shared() const                 { return m_shared; }
+    source_ptr author() const;
+    QString currentrevision() const   { return m_currentrevision; }
+    QString title() const             { return m_title; }
+    QString info() const              { return m_info; }
+    QString creator() const           { return m_creator; }
+    QString guid() const              { return m_guid; }
+    bool shared() const               { return m_shared; }
+    unsigned int lastmodified() const { return m_lastmodified; }
 
     const QList< plentry_ptr >& entries() { return m_entries; }
     virtual void addEntry( const Tomahawk::query_ptr& query, const QString& oldrev );
@@ -132,7 +132,7 @@ public:
     // maybe friend QObjectHelper and make them private?
     explicit Playlist( const source_ptr& author );
     void setCurrentrevision( const QString& s ) { m_currentrevision = s; }
-    void setTitle( const QString& s )           { m_title = s; }
+    void setTitle( const QString& s )           { m_title = s; emit changed(); }
     void setInfo( const QString& s )            { m_info = s; }
     void setCreator( const QString& s )         { m_creator = s; }
     void setGuid( const QString& s )            { m_guid = s; }
@@ -148,18 +148,21 @@ public:
 
     virtual PlaylistInterface::RepeatMode repeatMode() const { return PlaylistInterface::NoRepeat; }
     virtual bool shuffled() const { return false; }
-    
+
     virtual void setRepeatMode( PlaylistInterface::RepeatMode ) {}
     virtual void setShuffled( bool ) {}
-    
+
     virtual void setFilter( const QString& pattern ) {}
-    
+
 signals:
     /// emitted when the playlist revision changes (whenever the playlist changes)
     void revisionLoaded( Tomahawk::PlaylistRevision );
 
     /// watch for this to see when newly created playlist is synced to DB (if you care)
     void created();
+
+    /// renamed etc.
+    void changed();
 
     void repeatModeChanged( PlaylistInterface::RepeatMode mode );
     void shuffleModeChanged( bool enabled );
@@ -201,24 +204,24 @@ protected:
                        const QString& info,
                        const QString& creator,
                        bool shared );
-    
+
     QList< plentry_ptr > newEntries( const QList< plentry_ptr >& entries );
     PlaylistRevision setNewRevision( const QString& rev,
                                      const QList<QString>& neworderedguids,
                                      const QList<QString>& oldorderedguids,
                                      bool is_newest_rev,
                                      const QMap< QString, Tomahawk::plentry_ptr >& addedmap );
-    
+
     QList<plentry_ptr> addEntriesInternal( const QList<Tomahawk::query_ptr>& queries );
-    
+
 private slots:
     void onResultsFound( const QList<Tomahawk::result_ptr>& results );
     void onResolvingFinished();
-    
+
 private:
     Playlist();
     void init();
-    
+
     source_ptr m_source;
     QString m_currentrevision;
     QString m_guid, m_title, m_info, m_creator;
