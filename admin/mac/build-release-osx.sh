@@ -47,6 +47,7 @@ CREATEDMG='1'
 
     header deposx
     $ROOT/../admin/mac/deposx.sh
-    
+    header "Copying Sparkle pubkey"
+    cp $ROOT/../admin/mac/sparkle_pub.pem Contents/Resources
     header Done!
 

@@ -85,8 +85,7 @@ public slots:
     void startStation();
     void stopStation( bool stopPlaying = true );
     
-    void playPressed();
-    void pausePressed();
+    void trackStarted();
     void stationFailed( const QString& );
     
     void playlistStopped( PlaylistInterface* );
@@ -95,10 +94,10 @@ private slots:
     void generate( int = -1 );
     void tracksGenerated( const QList< Tomahawk::query_ptr>& queries );
     void generatorError( const QString& title, const QString& content );
-    void firstStationTrackGenerated();
     
     void controlsChanged();
     void controlChanged( const Tomahawk::dyncontrol_ptr& control );
+    void showPreview();
     
     void layoutFloatingWidgets();
 

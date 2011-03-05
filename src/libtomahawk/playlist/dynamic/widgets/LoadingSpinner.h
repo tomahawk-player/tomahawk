@@ -34,6 +34,7 @@ public:
     virtual void paintEvent( QPaintEvent* );
     virtual void resizeEvent( QResizeEvent* );
     
+public slots:        
     void fadeIn();
     void fadeOut();
     

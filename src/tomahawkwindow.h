@@ -58,6 +58,7 @@ private slots:
     void onHistoryForwardAvailable( bool avail );
     
     void showAboutTomahawk();
+    void checkForUpdates();
 
 private:
     void loadSettings();

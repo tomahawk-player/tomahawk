@@ -52,6 +52,7 @@ public slots:
 private slots:
     void updateData();
     void editingFinished();
+    void editTimerFired();
     
 private:
     void updateWidgets();
@@ -79,6 +80,7 @@ private:
     QTimer m_editingTimer;
     
     Echonest::DynamicPlaylist::PlaylistParamData m_data;
+    QVariant m_cacheData;
     
     friend class EchonestGenerator;
 };
