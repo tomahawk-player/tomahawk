@@ -2,7 +2,7 @@
 
 
 void
-Api_v1::auth_1( QxtWebRequestEvent* event )
+Api_v1::auth_1( QxtWebRequestEvent* event, QString arg )
 {
     qDebug() << "AUTH_1 HTTP" << event->url.toString();
 
@@ -38,7 +38,7 @@ Api_v1::auth_1( QxtWebRequestEvent* event )
 
 
 void
-Api_v1::auth_2( QxtWebRequestEvent* event )
+Api_v1::auth_2( QxtWebRequestEvent* event, QString arg )
 {
     qDebug() << "AUTH_2 HTTP" << event->url.toString();
     QUrl url = event->url;
