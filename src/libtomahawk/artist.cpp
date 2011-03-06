@@ -44,8 +44,9 @@ Artist::Artist( unsigned int id, const QString& name, const Tomahawk::collection
 Tomahawk::collection_ptr 
 Artist::collection() const
 {
-	return m_collection;
+    return m_collection;
 }
+
 
 void
 Artist::onTracksAdded( const QList<Tomahawk::query_ptr>& tracks, const Tomahawk::collection_ptr& collection )

@@ -407,7 +407,7 @@ TomahawkApp::removeScriptResolver( const QString& path )
     foreach( ScriptResolver* r, m_scriptResolvers ) {
         if( r->exe() == path ) {
             m_scriptResolvers.removeAll( r );
-            
+
             delete r;
             return;
         }
@@ -422,7 +422,7 @@ TomahawkApp::initLocalCollection()
 
     src->addCollection( coll );
     SourceList::instance()->setLocal( src );
-    src->collection()->tracks();
+//    src->collection()->tracks();
 
     // to make the stats signal be emitted by our local source
     // this will update the sidebar, etc.

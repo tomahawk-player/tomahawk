@@ -23,11 +23,11 @@ public:
 
     Artist();
     virtual ~Artist();
-    
+
     unsigned int id() const { return m_id; }
     QString name() const { return m_name; }
 
-	Tomahawk::collection_ptr collection() const;
+    Tomahawk::collection_ptr collection() const;
 
     virtual QList<Tomahawk::query_ptr> tracks();
 

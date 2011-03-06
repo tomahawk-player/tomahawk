@@ -19,7 +19,7 @@ SourceList::instance()
     {
         s_instance = new SourceList();
     }
-    
+
     return s_instance;
 }
 
@@ -43,10 +43,10 @@ SourceList::loadSources()
 {
     qDebug() << Q_FUNC_INFO;
     DatabaseCommand_LoadAllSources* cmd = new DatabaseCommand_LoadAllSources();
-    
-    connect( cmd, SIGNAL( done( const QList<Tomahawk::source_ptr>& ) ),
-                    SLOT( setSources( const QList<Tomahawk::source_ptr>& ) ) );
-    
+
+    connect( cmd, SIGNAL( done( QList<Tomahawk::source_ptr> ) ),
+                    SLOT( setSources( QList<Tomahawk::source_ptr> ) ) );
+
     Database::instance()->enqueue( QSharedPointer<DatabaseCommand>( cmd ) );
 }
 
@@ -70,7 +70,7 @@ SourceList::setLocal( const Tomahawk::source_ptr& localSrc )
 {
     Q_ASSERT( localSrc->isLocal() );
     Q_ASSERT( m_local.isNull() );
-    
+
     {
         QMutexLocker lock( &m_mut );
         m_sources.insert( localSrc->userName(), localSrc );
@@ -92,11 +92,11 @@ SourceList::add( const source_ptr& source )
     if ( source->id() > 0 )
         m_sources_id2name.insert( source->id(), source->userName() );
     connect( source.data(), SIGNAL( syncedWithDatabase() ), SLOT( sourceSynced() ) );
-    
+
     collection_ptr coll( new RemoteCollection( source ) );
     source->addCollection( coll );
-    source->collection()->tracks();
-    
+//    source->collection()->tracks();
+
     emit sourceAdded( source );
 }
 
