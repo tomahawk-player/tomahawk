@@ -1,10 +1,11 @@
 #include "api_v1.h"
 
+#include <QHash>
 
 void
 Api_v1::auth_1( QxtWebRequestEvent* event, QString arg )
 {
-    qDebug() << "AUTH_1 HTTP" << event->url.toString();
+    qDebug() << "AUTH_1 HTTP" << event->url.toString() << arg;
 
     if ( !event->url.hasQueryItem( "website" ) || !event->url.hasQueryItem( "name" ) )
     {
@@ -40,27 +41,35 @@ Api_v1::auth_1( QxtWebRequestEvent* event, QString arg )
 void
 Api_v1::auth_2( QxtWebRequestEvent* event, QString arg )
 {
-    qDebug() << "AUTH_2 HTTP" << event->url.toString();
-    QUrl url = event->url;
-    url.setEncodedQuery( event->content->readAll() );
-
-    if( !url.hasQueryItem( "website" ) || !url.hasQueryItem( "name" ) || !url.hasQueryItem( "formtoken" ) )
+    qDebug() << "AUTH_2 HTTP" << event->url.toString() << arg;
+    QString params = QUrl::fromPercentEncoding( event->content->readAll() );
+    params = params.mid( params.indexOf( '?' ) );
+    QStringList pieces = params.split( '&' );
+    QHash< QString, QString > queryItems;
+    foreach( const QString& part, pieces ) {
+        QStringList keyval = part.split( '=' );
+        if( keyval.size() == 2 )
+            queryItems.insert( keyval.first(), keyval.last() );
+        else
+            qDebug() << "Failed parsing url parameters: " << part;
+    }
+    
+    qDebug() << "has query items:" << pieces;
+    if( !params.contains( "website" ) || !params.contains( "name" ) || !params.contains( "formtoken" ) )
     {
         qDebug() << "Malformed HTTP resolve request";
-        qDebug() << url.hasQueryItem( "website" )  << url.hasQueryItem( "name" )  << url.hasQueryItem( "formtoken" );
         send404( event );
         return;
     }
 
-    QString website = QUrl::fromPercentEncoding( url.queryItemValue( "website" ).toUtf8() );
-    QString name  = QUrl::fromPercentEncoding( url.queryItemValue( "name" ).toUtf8() );
+    QString website = queryItems[ "website" ];
+    QString name  = queryItems[ "name" ];
     QByteArray authtoken = uuid().toLatin1();
     qDebug() << "HEADERS:" << event->headers;
-    if( !url.hasQueryItem( "receiverurl" ) && url.queryItemValue( "receiverurl" ).isEmpty() )
+    if( !queryItems.contains( "receiverurl" ) || queryItems.value( "receiverurl" ).isEmpty() )
     {
         //no receiver url, so do it ourselves
-        QString receiverUrl = QUrl::fromPercentEncoding( url.queryItemValue( "receiverurl" ).toUtf8() );
-        if( url.hasQueryItem( "json" ) )
+        if( queryItems.contains( "json" ) )
         {
             QVariantMap m;
             m[ "authtoken" ] = authtoken;
@@ -71,16 +80,16 @@ Api_v1::auth_2( QxtWebRequestEvent* event, QString arg )
         {
             QString authPage = RESPATH "www/auth.na.html";
             QHash< QString, QString > args;
-            args[ "authcode" ] = authPage;
-            args[ "website" ] = QUrl::fromPercentEncoding( url.queryItemValue( "website" ).toUtf8() );
-            args[ "name" ] = QUrl::fromPercentEncoding( url.queryItemValue( "name" ).toUtf8() );
+            args[ "authcode" ] = authtoken;
+            args[ "website" ] = website;
+            args[ "name" ] = name;
             sendWebpageWithArgs( event, authPage, args );
         }
     }
     else
     {
         // do what the client wants
-        QUrl receiverurl = QUrl( url.queryItemValue( "receiverurl" ).toUtf8(), QUrl::TolerantMode );
+        QUrl receiverurl = QUrl( queryItems.value( "receiverurl" ), QUrl::TolerantMode );
         receiverurl.addEncodedQueryItem( "authtoken", "#" + authtoken );
         qDebug() << "Got receiver url:" << receiverurl.toString();
 
@@ -308,6 +317,10 @@ Api_v1::sendWebpageWithArgs( QxtWebRequestEvent* event, const QString& filenameS
     {
         html.replace( QString( "<%%1%>" ).arg( param.toUpper() ), args.value( param ).toUtf8() );
     }
+    // workaround for receiverurl
+    if( !args.keys().contains( "URL" ) )
+        html.replace( QString( "<%URL%>" ).toLatin1(), QByteArray() );
+        
 
     QxtWebPageEvent* e = new QxtWebPageEvent( event->sessionID, event->requestID, html );
     postEvent( e );
