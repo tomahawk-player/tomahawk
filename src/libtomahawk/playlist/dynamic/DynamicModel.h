@@ -64,7 +64,7 @@ private slots:
     void newTrackGenerated( const Tomahawk::query_ptr& query );
     
     void trackResolveFinished( bool );
-    void trackResolved();
+    void trackResolved( bool );
     void newTrackLoading();
     
     void filteringTrackResolved( bool successful );
