@@ -94,7 +94,7 @@ void
 Query::onResolvingFinished()
 {
 //    qDebug() << Q_FUNC_INFO << "Finished resolving." << toString();
-    emit resolvingFinished( !m_results.isEmpty() );
+    emit resolvingFinished( m_solved );
 }
 
 
