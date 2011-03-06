@@ -329,6 +329,7 @@ TomahawkWindow::createAutomaticPlaylist()
     dynplaylist_ptr playlist = DynamicPlaylist::create( author, id, name, info, creator, false );
     playlist->setMode( Static );
     playlist->createNewRevision( uuid(), playlist->currentrevision(), playlist->type(), playlist->generator()->controls(), playlist->entries() );
+    PlaylistManager::instance()->show( playlist );
 }
 
 
@@ -347,6 +348,7 @@ TomahawkWindow::createStation()
     dynplaylist_ptr playlist = DynamicPlaylist::create( author, id, name, info, creator, false );
     playlist->setMode( OnDemand );
     playlist->createNewRevision( uuid(), playlist->currentrevision(), playlist->type(), playlist->generator()->controls() );
+    PlaylistManager::instance()->show( playlist );
 }
 
 
