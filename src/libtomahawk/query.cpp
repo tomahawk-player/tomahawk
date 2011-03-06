@@ -44,7 +44,7 @@ Query::addResults( const QList< Tomahawk::result_ptr >& newresults )
 {
     bool becameSolved = false;
     {
-        QMutexLocker lock( &m_mut );
+//        QMutexLocker lock( &m_mut );
         m_results.append( newresults );
         qStableSort( m_results.begin(), m_results.end(), Query::resultSorter );
 
@@ -81,7 +81,7 @@ void
 Query::removeResult( const Tomahawk::result_ptr& result )
 {
     {
-        QMutexLocker lock( &m_mut );
+//        QMutexLocker lock( &m_mut );
         m_results.removeAll( result );
     }
 
@@ -101,7 +101,7 @@ Query::onResolvingFinished()
 QList< result_ptr >
 Query::results() const
 {
-    QMutexLocker lock( &m_mut );
+//    QMutexLocker lock( &m_mut );
     return m_results;
 }
 
@@ -109,7 +109,7 @@ Query::results() const
 unsigned int
 Query::numResults() const
 {
-    QMutexLocker lock( &m_mut );
+//    QMutexLocker lock( &m_mut );
     return m_results.length();
 }
 
@@ -148,16 +148,16 @@ Query::checkResults()
 {
     bool becameSolved = false;
     bool becameUnsolved = true;
-    
+
     // hook up signals, and check solved status
     foreach( const result_ptr& rp, m_results )
     {
-        if ( !m_solved && rp->score() > 0.99 )
+        if ( !m_solved && rp->score() > 0.99 && rp->collection()->source()->isOnline() )
         {
             m_solved = true;
             becameSolved = true;
         }
-        if ( rp->score() > 0.99 )
+        if ( rp->score() > 0.99 && rp->collection()->source()->isOnline() )
         {
             becameUnsolved = false;
         }
@@ -166,7 +166,7 @@ Query::checkResults()
     if ( m_solved && becameUnsolved )
     {
         m_solved = false;
-        emit solvedStateChanged( true );
+        emit solvedStateChanged( false );
     }
 
     if( becameSolved )
