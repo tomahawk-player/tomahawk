@@ -41,8 +41,8 @@ public:
 public slots:
     // authenticating uses /auth_1
     // we redirect to /auth_2 for the callback
-    void auth_1( QxtWebRequestEvent* event );
-    void auth_2( QxtWebRequestEvent* event );
+    void auth_1( QxtWebRequestEvent* event, QString unused = QString() );
+    void auth_2( QxtWebRequestEvent* event, QString unused = QString() );
 
     // all v1 api calls go to /api/
     void api( QxtWebRequestEvent* event );
