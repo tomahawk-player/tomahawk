@@ -70,8 +70,6 @@ DynamicModel::startOnDemand()
     
     m_onDemandRunning = true;
     m_startOnResolved = false; // not anymore---user clicks a track to start it
-    m_currentAttempts = 0;
-    m_lastResolvedRow = rowCount( QModelIndex() );
 }
 
 void 

@@ -348,7 +348,7 @@ DynamicWidget::controlChanged( const Tomahawk::dyncontrol_ptr& control )
 void 
 DynamicWidget::showPreview()
 {
-    if( m_playlist->mode() == OnDemand && !m_runningOnDemand ) { // if this is a not running station, preview matching tracks
+    if( m_playlist->mode() == OnDemand && !m_runningOnDemand && m_model->rowCount( QModelIndex() ) == 0 ) { // if this is a not running station, preview matching tracks
         generate( 40 ); // ask for more, we'll filter how many we actually want
 }
 }

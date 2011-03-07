@@ -39,6 +39,10 @@
 #include "playlist/dynamic/GeneratorInterface.h"
 #include "scanmanager.h"
 
+#ifdef Q_OS_WIN32
+#include <qtsparkle/Updater>
+#endif
+
 using namespace Tomahawk;
 
 
@@ -128,6 +132,14 @@ TomahawkWindow::TomahawkWindow( QWidget* parent )
       QAction* checkForUpdates = ui->menu_Help->addAction( tr( "Check for updates...") );
       checkForUpdates->setMenuRole( QAction::ApplicationSpecificRole );
       connect(checkForUpdates, SIGNAL( triggered( bool ) ), SLOT( checkForUpdates() ) );
+#elif defined( WIN32 )
+      qtsparkle::Updater* updater = new qtsparkle::Updater( QUrl( "http://download.tomahawk-player.org/sparklewin" ), this );
+      updater->SetNetworkAccessManager( TomahawkUtils::nam() );
+      updater->SetVersion( VERSION );
+      
+      QAction* checkForUpdates = ui->menu_Help->addAction( tr( "Check for updates...") );
+      checkForUpdates->setMenuRole( QAction::ApplicationSpecificRole );
+      connect( checkForUpdates, SIGNAL( triggered() ), updater, SLOT( CheckNow() ) );
 #endif
 
     m_backAvailable = toolbar->addAction( QIcon( RESPATH "images/back.png" ), tr( "Back" ), PlaylistManager::instance(), SLOT( historyBack() ) );

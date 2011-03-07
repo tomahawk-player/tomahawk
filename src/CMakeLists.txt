@@ -154,7 +154,7 @@ IF( APPLE )
     SET( tomahawkSources ${tomahawkSources} mac/tomahawkapp_mac.mm  mac/macshortcuthandler.cpp )
 
     IF(HAVE_SPARKLE)
-    SET( tomahawkHeaders ${tomahawkHeaders} ${SPARKLE}/Headers )
+        SET( tomahawkHeaders ${tomahawkHeaders} ${SPARKLE}/Headers )
     ENDIF(HAVE_SPARKLE)
 
 ENDIF( APPLE )
@@ -206,9 +206,9 @@ ENDIF(GLOOX_FOUND)
 TARGET_LINK_LIBRARIES( tomahawk
     ${LINK_LIBRARIES}
     ${TOMAHAWK_LIBRARIES}
+    ${OS_SPECIFIC_LINK_LIBRARIES}
     ${QT_LIBRARIES}
     ${MAC_EXTRA_LIBS}
-    ${OS_SPECIFIC_LINK_LIBRARIES}
     ${LIBECHONEST_LIBRARY}
     ${QXTWEB_LIBRARIES}
     ${QTWEETLIB_LIBRARIES}

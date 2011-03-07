@@ -64,6 +64,10 @@ IF( ENABLE_JREEN AND NOT LIBJREEN_FOUND )
     MESSAGE(STATUS "Internal libjreen: ${LIBJREEN_INCLUDE_DIR}, ${LIBJREEN_LIBRARY}")
 ENDIF( ENABLE_JREEN AND NOT LIBJREEN_FOUND )
 
+IF( WIN32 )
+  find_library(QTSPARKLE_LIBRARIES qtsparkle)
+ENDIF( WIN32 )
+
 macro_log_feature(JREEN_FOUND "Jreen" "Qt XMPP library" "http://gitorious.org/jreen" FALSE "" "Jreen is needed for the alternative/new Jabber SIP plugin. Built automatically inside Tomahawk, if not installed systemwide and ENABLE_JREEN is true")
 
 macro_optional_find_package(Gloox 1.0)
