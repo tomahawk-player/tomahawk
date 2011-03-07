@@ -84,13 +84,13 @@ XSPFLoader::gotBody()
     QDomNodeList tracklist;
     QDomElement n = docElement.firstChildElement();
     for ( ; !n.isNull(); n = n.nextSiblingElement() ) {
-        if (n.namespaceURI() == NS && n.localName() == "title") {
+        if (n.namespaceURI() == m_NS && n.localName() == "title") {
             origTitle = n.text();
-        } else if (n.namespaceURI() == NS && n.localName() == "creator") {
+        } else if (n.namespaceURI() == m_NS && n.localName() == "creator") {
             m_creator = n.text();
-        } else if (n.namespaceURI() == NS && n.localName() == "info") {
+        } else if (n.namespaceURI() == m_NS && n.localName() == "info") {
             m_info = n.text();
-        } else if (n.namespaceURI() == NS && n.localName() == "trackList") {
+        } else if (n.namespaceURI() == m_NS && n.localName() == "trackList") {
             tracklist = n.childNodes();
         }
     }
@@ -106,15 +106,15 @@ XSPFLoader::gotBody()
         QString artist, album, track, duration, annotation;
         QDomElement n = e.firstChildElement();
         for ( ; !n.isNull(); n = n.nextSiblingElement() ) {
-            if (n.namespaceURI() == NS && n.localName() == "duration") {
+            if (n.namespaceURI() == m_NS && n.localName() == "duration") {
                 duration = n.text();
-            } else if (n.namespaceURI() == NS && n.localName() == "annotation") {
+            } else if (n.namespaceURI() == m_NS && n.localName() == "annotation") {
                 annotation = n.text();
-            } else if (n.namespaceURI() == NS && n.localName() == "creator") {
+            } else if (n.namespaceURI() == m_NS && n.localName() == "creator") {
                 artist = n.text();
-            } else if (n.namespaceURI() == NS && n.localName() == "album") {
+            } else if (n.namespaceURI() == m_NS && n.localName() == "album") {
                 album = n.text();
-            } else if (n.namespaceURI() == NS && n.localName() == "title") {
+            } else if (n.namespaceURI() == m_NS && n.localName() == "title") {
                 track = n.text();
             }
         }
