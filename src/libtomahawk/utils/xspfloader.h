@@ -25,6 +25,7 @@ public:
     explicit XSPFLoader( bool autoCreate = true, QObject* parent = 0 )
         : QObject( parent )
         , m_autoCreate( autoCreate )
+        , NS("http://xspf.org/ns/0/")
     {}
 
     virtual ~XSPFLoader()
@@ -47,6 +48,7 @@ private slots:
     void networkError( QNetworkReply::NetworkError e );
 
 private:
+    QString NS;
     void reportError();
     void gotBody();
 
