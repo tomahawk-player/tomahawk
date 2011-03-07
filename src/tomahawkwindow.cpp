@@ -163,12 +163,33 @@ TomahawkWindow::loadSettings()
 {
     TomahawkSettings* s = TomahawkSettings::instance();
 
+    // Workaround for broken window geometry restoring on Qt Cocoa when setUnifiedTitleAndToolBarOnMac is true.
+    // See http://bugreports.qt.nokia.com/browse/QTBUG-3116 and
+    // http://lists.qt.nokia.com/pipermail/qt-interest/2009-August/011491.html
+    // for the 'fix'
+#ifdef QT_MAC_USE_COCOA
+     bool workaround = !isVisible();
+     if( workaround ) {
+       // make "invisible"
+       setWindowOpacity( 0 );
+       // let Qt update its frameStruts
+       show();
+     }
+#endif
+
     if ( !s->mainWindowGeometry().isEmpty() )
         restoreGeometry( s->mainWindowGeometry() );
     if ( !s->mainWindowState().isEmpty() )
         restoreState( s->mainWindowState() );
     if ( !s->mainWindowSplitterState().isEmpty() )
         ui->splitter->restoreState( s->mainWindowSplitterState() );
+
+#ifdef QT_MAC_USE_COCOA
+     if( workaround ) {
+       // Make it visible again
+       setWindowOpacity( 1 );
+     }
+#endif
 }
 
 
