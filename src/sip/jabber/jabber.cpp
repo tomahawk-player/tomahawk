@@ -8,9 +8,12 @@
 #include <QLineEdit>
 
 JabberPlugin::JabberPlugin()
-    : p( 0 )
+    : p( 0 ),
+    m_menu ( 0 )
 {
-    m_menu = new QMenu(QString("Jabber (").append(accountName()).append(")"));
+    if( !accountName().isEmpty() )
+        m_menu = new QMenu(QString("Jabber (").append(accountName()).append(")"));
+
     m_addFriendAction = m_menu->addAction("Add Friend...");
 
     connect(m_addFriendAction, SIGNAL(triggered()),
