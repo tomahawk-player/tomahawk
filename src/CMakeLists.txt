@@ -222,7 +222,7 @@ IF( APPLE )
   IF(HAVE_SPARKLE)
     MESSAGE("Sparkle Found, installing framekwork in bundle")
     INSTALL(DIRECTORY "${SPARKLE}/Versions/Current/Resources" DESTINATION "${CMAKE_BINARY_DIR}/tomahawk.app/Contents/Frameworks/Sparkle.framework")
-    INSTALL(FILES "${CMAKE_SOURCE_DIR}/admin/mac/sparkle_pub.pem" DESTINATION "${CMAKE_BINARY_DIR}/tomahawk.app/Contents/Resources")
+
   ENDIF(HAVE_SPARKLE)
 ENDIF( APPLE )
 
