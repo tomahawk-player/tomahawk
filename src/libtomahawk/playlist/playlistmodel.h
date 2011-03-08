@@ -37,7 +37,7 @@ public:
     void loadHistory( const Tomahawk::source_ptr& source, unsigned int amount = 50 );
 
     void clear();
-    
+
     void append( const Tomahawk::query_ptr& query );
     void append( const Tomahawk::album_ptr& album );
     void append( const Tomahawk::artist_ptr& artist );
@@ -61,8 +61,8 @@ private slots:
     void onRevisionLoaded( Tomahawk::PlaylistRevision revision );
     void onPlaylistChanged( bool waitForUpdate = true );
 
-    void onTracksAdded( const QList<Tomahawk::query_ptr>& tracks, const Tomahawk::collection_ptr& collection = Tomahawk::collection_ptr() );
-    void onTracksInserted( unsigned int row, const QList<Tomahawk::query_ptr>& tracks, const Tomahawk::collection_ptr& collection = Tomahawk::collection_ptr() );
+    void onTracksAdded( const QList<Tomahawk::query_ptr>& tracks );
+    void onTracksInserted( unsigned int row, const QList<Tomahawk::query_ptr>& tracks );
 
 private:
     QList<Tomahawk::plentry_ptr> playlistEntries() const;

@@ -137,9 +137,6 @@ TrackProxyModel::siblingItem( int itemsAway )
 bool
 TrackProxyModel::filterAcceptsRow( int sourceRow, const QModelIndex& sourceParent ) const
 {
-    if ( filterRegExp().isEmpty() )
-        return true;
-
     PlItem* pi = itemFromIndex( sourceModel()->index( sourceRow, 0, sourceParent ) );
     if ( !pi )
         return false;
@@ -147,34 +144,39 @@ TrackProxyModel::filterAcceptsRow( int sourceRow, const QModelIndex& sourceParen
     const Tomahawk::query_ptr& q = pi->query();
     Tomahawk::result_ptr r;
     if ( q->numResults() )
-        r = q->results().at( 0 );
+        r = q->results().first();
+
+//    if ( !r.isNull() && !r->collection()->source()->isOnline() )
+//        return false;
+
+    if ( filterRegExp().isEmpty() )
+        return true;
 
     QStringList sl = filterRegExp().pattern().split( " ", QString::SkipEmptyParts );
-    bool found = true;
-
-    foreach( const QString& s, sl )
+    foreach( QString s, sl )
     {
+        s = s.toLower();
         if ( !r.isNull() )
         {
-            if ( !r->artist()->name().contains( s, Qt::CaseInsensitive ) &&
-                 !r->album()->name().contains( s, Qt::CaseInsensitive ) &&
-                 !r->track() .contains( s, Qt::CaseInsensitive ) )
+            if ( !r->artist()->name().toLower().contains( s ) &&
+                 !r->album()->name().toLower().contains( s ) &&
+                 !r->track().toLower().contains( s ) )
             {
-                found = false;
+                return false;
             }
         }
         else
         {
-            if ( !q->artist().contains( s, Qt::CaseInsensitive ) &&
-                 !q->album() .contains( s, Qt::CaseInsensitive ) &&
-                 !q->track() .contains( s, Qt::CaseInsensitive ) )
+            if ( !q->artist().toLower().contains( s ) &&
+                 !q->album().toLower().contains( s ) &&
+                 !q->track().toLower().contains( s ) )
             {
-                found = false;
+                return false;
             }
         }
     }
 
-    return found;
+    return true;
 }
 
 

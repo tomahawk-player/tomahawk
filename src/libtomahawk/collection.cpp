@@ -13,9 +13,10 @@ Collection::Collection( const source_ptr& source, const QString& name, QObject* 
     : QObject( parent )
     , m_name( name )
     , m_lastmodified( 0 )
+    , m_isLoaded( false )
     , m_source( source )
 {
-//    qDebug() << Q_FUNC_INFO;
+    qDebug() << Q_FUNC_INFO << name << source->friendlyName();
 }
 
 
@@ -127,7 +128,7 @@ Collection::dynamicPlaylist( const QString& guid )
         if( pp->guid() == guid )
             return pp;
     }
-    
+
     return dynplaylist_ptr();
 }
 
@@ -146,26 +147,27 @@ void
 Collection::setDynamicPlaylists( const QList< Tomahawk::dynplaylist_ptr >& plists )
 {
     qDebug() << Q_FUNC_INFO << plists.count();
-    
+
     m_dynplaylists.append( plists );
     emit dynamicPlaylistsAdded( plists );
 }
 
 
 void
-Collection::setTracks( const QList<Tomahawk::query_ptr>& tracks, const Tomahawk::collection_ptr& collection )
+Collection::setTracks( const QList<Tomahawk::query_ptr>& tracks )
 {
-    qDebug() << Q_FUNC_INFO << tracks.count() << collection->name();
+    qDebug() << Q_FUNC_INFO << tracks.count() << name();
 
+    m_isLoaded = true;
     m_tracks << tracks;
-    emit tracksAdded( tracks, collection );
+    emit tracksAdded( tracks );
 }
 
 
 void
-Collection::delTracks( const QStringList& files, const Tomahawk::collection_ptr& collection )
+Collection::delTracks( const QStringList& files )
 {
-    qDebug() << Q_FUNC_INFO << files.count() << collection->name();
+    qDebug() << Q_FUNC_INFO << files.count() << name();
 
     QList<Tomahawk::query_ptr> tracks;
 
@@ -188,5 +190,5 @@ Collection::delTracks( const QStringList& files, const Tomahawk::collection_ptr&
         i++;
     }
 
-    emit tracksRemoved( tracks, collection );
+    emit tracksRemoved( tracks );
 }

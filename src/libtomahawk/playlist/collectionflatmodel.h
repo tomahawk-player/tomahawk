@@ -29,6 +29,8 @@ public:
 
     int columnCount( const QModelIndex& parent = QModelIndex() ) const;
 
+    virtual int trackCount() const { return rowCount( QModelIndex() ) + m_tracksToAdd.count(); }
+
     QVariant data( const QModelIndex& index, int role ) const;
     QVariant headerData( int section, Qt::Orientation orientation, int role ) const;
 
@@ -45,21 +47,19 @@ signals:
 
     void itemSizeChanged( const QModelIndex& index );
 
-    void loadingStarts();
-    void loadingFinished();
-
 private slots:
     void onDataChanged();
 
-    void onTracksAdded( const QList<Tomahawk::query_ptr>& tracks, const Tomahawk::collection_ptr& collection );
-    void onTracksAddingFinished( const Tomahawk::collection_ptr& collection );
+    void onTracksAdded( const QList<Tomahawk::query_ptr>& tracks );
+    void onTracksRemoved( const QList<Tomahawk::query_ptr>& tracks );
 
-    void onTracksRemoved( const QList<Tomahawk::query_ptr>& tracks, const Tomahawk::collection_ptr& collection );
-    
     void onSourceOffline( const Tomahawk::source_ptr& src );
+
+    void processTracksToAdd();
 
 private:
     QMap< Tomahawk::collection_ptr, QPair< int, int > > m_collectionRows;
+    QList<Tomahawk::query_ptr> m_tracksToAdd;
 };
 
 #endif // COLLECTIONFLATMODEL_H

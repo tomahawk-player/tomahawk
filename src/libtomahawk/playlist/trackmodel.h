@@ -39,7 +39,7 @@ public:
     virtual void setTitle( const QString& title ) { m_title = title; }
     virtual QString description() const { return m_description; }
     virtual void setDescription( const QString& description ) { m_description = description; }
-    
+
     virtual int trackCount() const { return rowCount( QModelIndex() ); }
 
     virtual int rowCount( const QModelIndex& parent ) const;

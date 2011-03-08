@@ -70,7 +70,8 @@ Query::refreshResults()
 void
 Query::onResultStatusChanged()
 {
-    qStableSort( m_results.begin(), m_results.end(), Query::resultSorter );
+    if ( m_results.count() )
+        qStableSort( m_results.begin(), m_results.end(), Query::resultSorter );
     checkResults();
 
     emit resultsChanged();
