@@ -167,6 +167,10 @@ DynamicModel::tracksGenerated( const QList< query_ptr > entries, int limitResolv
         filterUnresolved( entries );
     } else {
         addToPlaylist( entries, m_playlist->mode() == OnDemand ); // if ondemand, we're previewing, so clear old
+        
+        if( m_playlist->mode() == OnDemand ) {
+            m_lastResolvedRow = rowCount( QModelIndex() );
+        }
     }
 }
 
@@ -210,6 +214,10 @@ DynamicModel::filteringTrackResolved( bool successful )
         addToPlaylist( m_resolvedList, true );
         m_toResolveList.clear();
         m_resolvedList.clear();
+        
+        if( m_playlist->mode() == OnDemand ) {
+            m_lastResolvedRow = rowCount( QModelIndex() );
+        }
     }       
 }
 
