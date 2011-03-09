@@ -25,9 +25,12 @@ public:
 
     virtual void resolve( const Tomahawk::query_ptr& query );
 
+    void stop();
+    
     QString exe() const { return m_cmd; }
 signals:
-
+    void finished();
+    
 public slots:
 
 private slots:
@@ -47,7 +50,7 @@ private:
     quint32 m_msgsize;
     QByteArray m_msg;
 
-    bool m_ready;
+    bool m_ready, m_stopped;
 
     QJson::Parser m_parser;
     QJson::Serializer m_serializer;

@@ -407,8 +407,8 @@ TomahawkApp::removeScriptResolver( const QString& path )
     foreach( ScriptResolver* r, m_scriptResolvers ) {
         if( r->exe() == path ) {
             m_scriptResolvers.removeAll( r );
-
-            delete r;
+            connect( r, SIGNAL( finished() ), r, SLOT( deleteLater() ) );
+            r->stop();
             return;
         }
     }
