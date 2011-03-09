@@ -8,10 +8,10 @@
          <item>
             <title>Version 0.0.1 (Tomahawk Player - It Lives!)</title>
 						<sparkle:releaseNotesLink>
-                        <!--	http://you.com/app/2.0.html -->
+						https://github.com/tomahawk-player/tomahawk/raw/master/ChangeLog
 						</sparkle:releaseNotesLink>
             <pubDate>Fri, 04 Mar 2011 16:05:15 -0500</pubDate>
-            <enclosure url="http://download.tomahawk-player.org/sparkle/updates/tomahawk0.1.tar.bz2" sparkle:version="0.0.1" length="10627176" type="application/octet-stream" sparkle:dsaSignature="MC0CFAyYNZq58X7hPC7Qn+DtotVgym7pAhUA5hkLGllYxjOwwCf7i2LxUsvGyps=" />
+            <enclosure url="http://download.tomahawk-player.org/sparkle-debug/updates/tomahawk0.0.1.tar.bz2" sparkle:version="0.0.1" length="10627176" type="application/octet-stream" sparkle:dsaSignature="MC0CFAyYNZq58X7hPC7Qn+DtotVgym7pAhUA5hkLGllYxjOwwCf7i2LxUsvGyps=" />
          </item>
    </channel>
 </rss>
