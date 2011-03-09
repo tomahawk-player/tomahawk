@@ -17,6 +17,10 @@ SET( CMAKE_RUNTIME_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}" )
 SET( CMAKE_LIBRARY_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}" )
 SET( CMAKE_ARCHIVE_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}" )
 SET( TOMAHAWK_INC_DIR "${CMAKE_SOURCE_DIR}/include/" )
+IF( NOT CMAKE_BUILD_TYPE STREQUAL "Release" )
+    MESSAGE( "Building in debug mode, enabling all debug updates" )
+    SET( DEBUG_BUILD ON )
+ENDIF()
 
 # build plugins
 # use glob, but hardcoded list for now:

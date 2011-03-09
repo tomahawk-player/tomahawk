@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<rss version="2.0" xmlns:sparkle="http://www.andymatuschak.org/xml-namespaces/sparkle"  xmlns:dc="http://purl.org/dc/elements/1.1/">
+   <channel>
+      <title>Tomahawk Player Changelog</title>
+      <link>http://download.tomahawk-player.org/sparkle</link>
+      <description>Most recent changes with links to updates.</description>
+      <language>en</language>
+         <item>
+            <title>Version 0.0.1 (Tomahawk Player - It Lives!)</title>
+						<sparkle:releaseNotesLink>
+                        <!--	http://you.com/app/2.0.html -->
+						</sparkle:releaseNotesLink>
+            <pubDate>Fri, 04 Mar 2011 16:05:15 -0500</pubDate>
+            <enclosure url="http://download.tomahawk-player.org/sparkle/updates/tomahawk0.1.tar.bz2" sparkle:version="0.0.1" length="10627176" type="application/octet-stream" sparkle:dsaSignature="MC0CFAyYNZq58X7hPC7Qn+DtotVgym7pAhUA5hkLGllYxjOwwCf7i2LxUsvGyps=" />
+         </item>
+   </channel>
+</rss>

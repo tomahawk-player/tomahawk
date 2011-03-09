@@ -6,6 +6,7 @@
 #cmakedefine APPLICATION_NAME "${APPLICATION_NAME}"
 #cmakedefine VERSION "${VERSION}"
 
+#cmakedefine DEBUG_BUILD
 
 #define CMAKE_INSTALL_PREFIX "${CMAKE_INSTALL_PREFIX}"
 
