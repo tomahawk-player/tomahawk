@@ -23,11 +23,11 @@ using namespace Tomahawk;
 
 DynamicModel::DynamicModel( QObject* parent )
     : PlaylistModel( parent )
-    , m_startOnResolved( false )
     , m_onDemandRunning( false )
     , m_changeOnNext( false )
     , m_searchingForNext( false )
     , m_filterUnresolvable( true )
+    , m_startingAfterFailed( false )
     , m_currentAttempts( 0 )
     , m_lastResolvedRow( 0 )
 {
@@ -69,7 +69,6 @@ DynamicModel::startOnDemand()
     m_playlist->generator()->startOnDemand();
     
     m_onDemandRunning = true;
-    m_startOnResolved = false; // not anymore---user clicks a track to start it
 }
 
 void 
@@ -111,10 +110,6 @@ DynamicModel::trackResolved( bool resolved )
     
     Query* q = qobject_cast<Query*>(sender());
     qDebug() << "Got successful resolved track:" << q->track() << q->artist() << m_lastResolvedRow << m_currentAttempts;
-    if( m_startOnResolved ) { // on first start
-        m_startOnResolved = false;
-        AudioEngine::instance()->play();
-    }
     
     if( m_currentAttempts > 0 ) {
         qDebug() << "EMITTING AN ASK FOR COLLAPSE:" << m_lastResolvedRow << m_currentAttempts;
@@ -133,7 +128,9 @@ DynamicModel::trackResolveFinished( bool success )
         Query* q = qobject_cast<Query*>(sender());
         qDebug() << "Got not resolved track:" << q->track() << q->artist() << m_lastResolvedRow << m_currentAttempts;
         m_currentAttempts++;
-        if( m_currentAttempts < 20 ) {
+        
+        int curAttempts = m_startingAfterFailed ? m_currentAttempts - 20 : m_currentAttempts; // if we just failed, m_currentAttempts includes those failures
+        if( curAttempts < 20 ) {
             qDebug() << "FETCHING MORE!";
             m_playlist->generator()->fetchNext();
         } else {

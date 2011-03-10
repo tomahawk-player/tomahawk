@@ -78,12 +78,12 @@ private:
     QList< query_ptr > m_toResolveList;
     QList< query_ptr > m_resolvedList;
     
-    bool m_startOnResolved;
     bool m_onDemandRunning;
     bool m_changeOnNext;
     bool m_searchingForNext;
     bool m_firstTrackGenerated;
     bool m_filterUnresolvable;
+    bool m_startingAfterFailed;
     int m_currentAttempts;
     int m_lastResolvedRow;
 };
