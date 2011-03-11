@@ -44,6 +44,8 @@ macro_log_feature(QJSON_FOUND "QJson" "Qt library that maps JSON data to QVarian
 macro_optional_find_package(Taglib 1.6.0)
 macro_log_feature(TAGLIB_FOUND "TagLib" "Audio Meta-Data Library" "http://developer.kde.org/~wheeler/taglib.html" TRUE "" "taglib is needed for reading meta data from audio files")
 
+# we need pthreads too
+find_package(Threads)
 
 FIND_PACKAGE( Taglib 1.6.0 REQUIRED )
 include( CheckTagLibFileName )
@@ -82,6 +84,9 @@ MESSAGE("Phonon is going to replace our own audio abstraction layer soon so we d
 MESSAGE("add checks for libmad, libvorbis and libflac. Make sure they are installed!")
 MESSAGE("")
 MESSAGE("-----------------------------------------------------------------------------")
+
+# Make linking as strict on linux as it is on osx. Then we don't break linking on mac so often
+SET( CMAKE_CXX_FLAGS "${CMAKE_CXX_LINK_FLAGS} -Wl,--no-undefined" )
 
 ADD_SUBDIRECTORY( thirdparty )
 ADD_SUBDIRECTORY( src/libtomahawk )

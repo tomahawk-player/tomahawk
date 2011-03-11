@@ -398,6 +398,7 @@ target_link_libraries( tomahawklib
     ${LIBECHONEST_LIBRARY}
     ${QT_LIBRARIES}
     ${OS_SPECIFIC_LINK_LIBRARIES}
+    ${CMAKE_THREAD_LIBS_INIT}
 )
 
 install( TARGETS tomahawklib DESTINATION lib )
