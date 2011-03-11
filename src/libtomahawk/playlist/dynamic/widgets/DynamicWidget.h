@@ -89,6 +89,7 @@ public slots:
     void stationFailed( const QString& );
     
     void playlistStopped( PlaylistInterface* );
+    void tracksAdded();
     
 private slots:
     void generate( int = -1 );

@@ -160,7 +160,7 @@ DynamicModel::newTrackLoading()
 void 
 DynamicModel::tracksGenerated( const QList< query_ptr > entries, int limitResolvedTo )
 {
-    if( m_filterUnresolvable ) { // wait till we get them resolved
+    if( m_filterUnresolvable && m_playlist->mode() == OnDemand ) { // wait till we get them resolved (for previewing stations)
         m_limitResolvedTo = limitResolvedTo;
         filterUnresolved( entries );
     } else {
