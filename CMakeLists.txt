@@ -87,7 +87,7 @@ MESSAGE("-----------------------------------------------------------------------
 
 IF( NOT APPLE )
     # Make linking as strict on linux as it is on osx. Then we don't break linking on mac so often
-    SET( CMAKE_CXX_FLAGS "${CMAKE_CXX_LINK_FLAGS} -Wl,--no-undefined" )
+    SET( CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wl,--no-undefined" )
 ENDIF( NOT APPLE )
 
 ADD_SUBDIRECTORY( thirdparty )
