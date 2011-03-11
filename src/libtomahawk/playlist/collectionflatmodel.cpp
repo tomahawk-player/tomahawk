@@ -177,27 +177,31 @@ CollectionFlatModel::onTracksAdded( const QList<Tomahawk::query_ptr>& tracks )
 void
 CollectionFlatModel::processTracksToAdd()
 {
-    int chunkSize = 5000;
+    int chunkSize = 500000;
     int maxc = qMin( chunkSize, m_tracksToAdd.count() );
     int c = rowCount( QModelIndex() );
 
-    emit beginInsertRows( QModelIndex(), c, c + maxc - 1 );
+    //emit beginInsertRows( QModelIndex(), c, c + maxc - 1 );
+    beginResetModel();
 
-    int i = 0;
     PlItem* plitem;
-    foreach( const query_ptr& query, m_tracksToAdd )
+    QList< Tomahawk::query_ptr >::iterator iter = m_tracksToAdd.begin();
+
+    for( int i = 0; i < maxc; ++i )
     {
-        plitem = new PlItem( query, m_rootItem );
+
+        plitem = new PlItem( *iter, m_rootItem );
         plitem->index = createIndex( m_rootItem->children.count() - 1, 0, plitem );
 
         connect( plitem, SIGNAL( dataChanged() ), SLOT( onDataChanged() ) );
 
-        m_tracksToAdd.removeFirst();
-        if ( ++i % chunkSize == 0 )
-            break;
+        ++iter;
     }
 
-    emit endInsertRows();
+    m_tracksToAdd.erase( m_tracksToAdd.begin(), iter );
+
+    endResetModel();
+    //emit endInsertRows();
     qDebug() << Q_FUNC_INFO << rowCount( QModelIndex() );
 
     if ( m_tracksToAdd.count() )
