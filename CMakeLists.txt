@@ -85,8 +85,10 @@ MESSAGE("add checks for libmad, libvorbis and libflac. Make sure they are instal
 MESSAGE("")
 MESSAGE("-----------------------------------------------------------------------------")
 
-# Make linking as strict on linux as it is on osx. Then we don't break linking on mac so often
-SET( CMAKE_CXX_FLAGS "${CMAKE_CXX_LINK_FLAGS} -Wl,--no-undefined" )
+IF( NOT APPLE )
+    # Make linking as strict on linux as it is on osx. Then we don't break linking on mac so often
+    SET( CMAKE_CXX_FLAGS "${CMAKE_CXX_LINK_FLAGS} -Wl,--no-undefined" )
+ENDIF( NOT APPLE )
 
 ADD_SUBDIRECTORY( thirdparty )
 ADD_SUBDIRECTORY( src/libtomahawk )
