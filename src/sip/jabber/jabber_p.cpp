@@ -148,12 +148,11 @@ Jabber_p::go()
     // Handle proxy
     
     qDebug() << "Connecting to the XMPP server...";
-    //FIXME: This call blocks and locks up the whole GUI if the network is down
     if( m_client->connect( false ) )
     {
-        qDebug() << "Connected to the XMPP server";
-        emit connected();
-        QTimer::singleShot( 0, this, SLOT( doJabberRecv() ) );
+        int sock = static_cast<ConnectionTCPClient*>( m_client->connectionImpl() )->socket();
+        notifier_.reset( new QSocketNotifier( sock, QSocketNotifier::Read ) );
+        connect( notifier_.data(), SIGNAL(activated(int)), SLOT(doJabberRecv()));
     }
     else
         qDebug() << "Could not connect to the XMPP server!";
@@ -170,10 +169,6 @@ Jabber_p::doJabberRecv()
     if ( ce != ConnNoError )
     {
         qDebug() << "Jabber_p::Recv failed, disconnected";
-    }
-    else
-    {
-        QTimer::singleShot( 100, this, SLOT( doJabberRecv() ) );
     }
 }
 
@@ -260,6 +255,7 @@ Jabber_p::addContact( const QString& jid, const QString& msg )
 void
 Jabber_p::onConnect()
 {
+    qDebug() << "Connected to the XMPP server";
     // update jid resource, servers like gtalk use resource binding and may
     // have changed our requested /resource
     if ( m_client->resource() != m_jid.resource() )
@@ -270,6 +266,7 @@ Jabber_p::onConnect()
     }
 
     qDebug() << "Connected as:" << m_jid.full().c_str();
+    emit connected();
 }
 
 
