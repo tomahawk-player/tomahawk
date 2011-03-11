@@ -151,8 +151,8 @@ Jabber_p::go()
     if( m_client->connect( false ) )
     {
         int sock = static_cast<ConnectionTCPClient*>( m_client->connectionImpl() )->socket();
-        notifier_.reset( new QSocketNotifier( sock, QSocketNotifier::Read ) );
-        connect( notifier_.data(), SIGNAL(activated(int)), SLOT(doJabberRecv()));
+        m_notifier.reset( new QSocketNotifier( sock, QSocketNotifier::Read ) );
+        connect( m_notifier.data(), SIGNAL( activated(int) ), SLOT( doJabberRecv() ));
     }
     else
         qDebug() << "Could not connect to the XMPP server!";

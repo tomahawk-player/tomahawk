@@ -139,7 +139,7 @@ private:
     QMap<QString, gloox::Presence::PresenceType> m_peers;
     QSharedPointer<gloox::VCardManager> m_vcardManager;
     QString m_server;
-    QScopedPointer<QSocketNotifier> notifier_;
+    QScopedPointer<QSocketNotifier> m_notifier;
 };
 
 #endif // JABBER_H
