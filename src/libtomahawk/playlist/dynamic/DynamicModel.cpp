@@ -134,6 +134,7 @@ DynamicModel::trackResolveFinished( bool success )
             qDebug() << "FETCHING MORE!";
             m_playlist->generator()->fetchNext();
         } else {
+            m_startingAfterFailed = true;
             emit trackGenerationFailure( tr( "Could not find a playable track.\n\nPlease change the filters or try again." ) );
         }
     }
