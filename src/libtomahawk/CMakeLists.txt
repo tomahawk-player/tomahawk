@@ -394,7 +394,7 @@ target_link_libraries( tomahawklib
     # External deps
     ${TAGLIB_LIBRARIES}
     ${QJSON_LIBRARIES}
-    ${CLUCENE_LIBRARY}
+    ${CLUCENE_LIBRARIES}
     ${LIBECHONEST_LIBRARY}
     ${QT_LIBRARIES}
     ${OS_SPECIFIC_LINK_LIBRARIES}
