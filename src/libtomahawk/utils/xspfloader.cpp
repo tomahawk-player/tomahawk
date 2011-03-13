@@ -99,6 +99,7 @@ XSPFLoader::gotBody()
     if ( m_title.isEmpty() )
         m_title = tr( "New Playlist" );
 
+    bool shownError = false;
     for ( unsigned int i = 0; i < tracklist.length(); i++ )
     {
         QDomNode e = tracklist.at( i );
@@ -117,6 +118,14 @@ XSPFLoader::gotBody()
             } else if (n.namespaceURI() == m_NS && n.localName() == "title") {
                 track = n.text();
             }
+        }
+        
+        if( artist.isEmpty() || track.isEmpty() ) {
+            if( !shownError ) {
+                QMessageBox::warning( 0, tr( "Failed to save tracks" ), tr( "Some tracks in the playlist do not contain an artist and a title. They will be ignored." ), QMessageBox::Ok );
+                shownError = true;
+            }
+            continue;
         }
 
         plentry_ptr p( new PlaylistEntry );
