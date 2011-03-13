@@ -61,7 +61,7 @@ function deposx_change
 
 function deplib_change
 {
-    install_name_tool -change /usr/local/Cellar/liblastfm/0.3.1/lib/liblastfm.0.dylib @executable_path/liblastfm.0.dylib $1
+    install_name_tool -change /usr/local/Cellar/liblastfm/0.3.3/lib/liblastfm.0.dylib @executable_path/liblastfm.0.dylib $1
     install_name_tool -change /usr/local/Cellar/qjson/0.7.1/lib/libqjson.0.dylib @executable_path/libqjson.0.dylib $1
     install_name_tool -change /usr/local/lib/libechonest.1.1.dylib @executable_path/libechonest.1.1.dylib $1
     install_name_tool -change /usr/local/lib/libclucene-core.0.9.23.dylib @executable_path/libclucene-core.0.9.23.dylib $1
@@ -100,7 +100,7 @@ do
 done
 
 import_lib /usr/local/Cellar/qjson/0.7.1/lib/libqjson.0.dylib
-import_lib /usr/local/Cellar/liblastfm/0.3.1/lib/liblastfm.0.dylib
+import_lib /usr/local/Cellar/liblastfm/0.3.3/lib/liblastfm.0.dylib
 import_lib /usr/local/Cellar/gloox/1.0/lib/libgloox.8.dylib
 import_lib /usr/local/Cellar/taglib/1.6.3/lib/libtag.1.dylib
 import_lib /usr/local/Cellar/libogg/1.2.0/lib/libogg.0.dylib

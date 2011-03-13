@@ -155,10 +155,10 @@ PlaylistModel::append( const Tomahawk::album_ptr& album )
     if ( album.isNull() )
         return;
 
-    connect( album.data(), SIGNAL( tracksAdded( QList<Tomahawk::query_ptr>, Tomahawk::collection_ptr ) ),
-                             SLOT( onTracksAdded( QList<Tomahawk::query_ptr>, Tomahawk::collection_ptr ) ) );
+    connect( album.data(), SIGNAL( tracksAdded( QList<Tomahawk::query_ptr> ) ),
+                             SLOT( onTracksAdded( QList<Tomahawk::query_ptr> ) ) );
 
-    onTracksAdded( album->tracks(), album->collection() );
+    onTracksAdded( album->tracks() );
 }
 
 
@@ -168,10 +168,10 @@ PlaylistModel::append( const Tomahawk::artist_ptr& artist )
     if ( artist.isNull() )
         return;
 
-    connect( artist.data(), SIGNAL( tracksAdded( QList<Tomahawk::query_ptr>, Tomahawk::collection_ptr ) ),
-                              SLOT( onTracksAdded( QList<Tomahawk::query_ptr>, Tomahawk::collection_ptr ) ) );
+    connect( artist.data(), SIGNAL( tracksAdded( QList<Tomahawk::query_ptr> ) ),
+                              SLOT( onTracksAdded( QList<Tomahawk::query_ptr> ) ) );
 
-    onTracksAdded( artist->tracks(), artist->collection() );
+    onTracksAdded( artist->tracks() );
 }
 
 
@@ -189,14 +189,14 @@ PlaylistModel::insert( unsigned int row, const Tomahawk::query_ptr& query )
 
 
 void
-PlaylistModel::onTracksAdded( const QList<Tomahawk::query_ptr>& tracks, const Tomahawk::collection_ptr& collection )
+PlaylistModel::onTracksAdded( const QList<Tomahawk::query_ptr>& tracks )
 {
-    onTracksInserted( rowCount( QModelIndex() ), tracks, collection );
+    onTracksInserted( rowCount( QModelIndex() ), tracks );
 }
 
 
 void
-PlaylistModel::onTracksInserted( unsigned int row, const QList<Tomahawk::query_ptr>& tracks, const Tomahawk::collection_ptr& collection )
+PlaylistModel::onTracksInserted( unsigned int row, const QList<Tomahawk::query_ptr>& tracks )
 {
     if ( !tracks.count() )
     {

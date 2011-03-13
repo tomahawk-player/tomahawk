@@ -23,11 +23,11 @@ public:
 
     Artist();
     virtual ~Artist();
-    
+
     unsigned int id() const { return m_id; }
     QString name() const { return m_name; }
 
-	Tomahawk::collection_ptr collection() const;
+    Tomahawk::collection_ptr collection() const;
 
     virtual QList<Tomahawk::query_ptr> tracks();
 
@@ -48,12 +48,12 @@ signals:
     void repeatModeChanged( PlaylistInterface::RepeatMode mode );
     void shuffleModeChanged( bool enabled );
 
-    void tracksAdded( const QList<Tomahawk::query_ptr>& tracks, const Tomahawk::collection_ptr& );
+    void tracksAdded( const QList<Tomahawk::query_ptr>& tracks );
     void trackCountChanged( unsigned int tracks );
     void sourceTrackCountChanged( unsigned int tracks );
 
 private slots:
-    void onTracksAdded( const QList<Tomahawk::query_ptr>& tracks, const Tomahawk::collection_ptr& collection );
+    void onTracksAdded( const QList<Tomahawk::query_ptr>& tracks );
 
 private:
     unsigned int m_id;

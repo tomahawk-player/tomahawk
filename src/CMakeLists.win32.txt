@@ -12,6 +12,8 @@ SET( QXTWEB_LIBRARIES  ${CMAKE_BINARY_DIR}/thirdparty/qxt/qxtweb-standalone/libq
 SET( OS_SPECIFIC_LINK_LIBRARIES
     ${OS_SPECIFIC_LINK_LIBRARIES}
 
+    ${QTSPARKLE_LIBRARIES}
+
 # third party shipped with tomahawk
 
 # system libs

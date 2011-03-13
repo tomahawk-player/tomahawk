@@ -45,7 +45,7 @@ public:
     void setSortDescending( bool descending ) { m_sortDescending = descending; }
 
 signals:
-    void tracks( const QList<Tomahawk::query_ptr>&, const Tomahawk::collection_ptr& );
+    void tracks( const QList<Tomahawk::query_ptr>& );
     void done( const Tomahawk::collection_ptr& );
 
 private:

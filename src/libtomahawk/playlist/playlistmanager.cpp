@@ -22,6 +22,7 @@
 #include "albummodel.h"
 #include "sourcelist.h"
 #include "tomahawksettings.h"
+#include "utils/widgetdragfilter.h"
 
 #include "dynamic/widgets/DynamicWidget.h"
 
@@ -56,6 +57,8 @@ PlaylistManager::PlaylistManager( QObject* parent )
     m_topbar = new TopBar();
     m_infobar = new InfoBar();
     m_stack = new QStackedWidget();
+
+    m_infobar->installEventFilter( new WidgetDragFilter( m_infobar ) );
 
     QFrame* line = new QFrame();
     line->setFrameStyle( QFrame::HLine );
@@ -576,7 +579,12 @@ PlaylistManager::updateView()
     if ( currentPage()->showStatsBar() && currentPlaylistInterface() )
     {
         emit numTracksChanged( currentPlaylistInterface()->unfilteredTrackCount() );
-        emit numShownChanged( currentPlaylistInterface()->trackCount() );
+
+        if ( !currentPlaylistInterface()->filter().isEmpty() )
+            emit numShownChanged( currentPlaylistInterface()->trackCount() );
+        else
+            emit numShownChanged( currentPlaylistInterface()->unfilteredTrackCount() );
+
         emit repeatModeChanged( currentPlaylistInterface()->repeatMode() );
         emit shuffleModeChanged( currentPlaylistInterface()->shuffled() );
         emit modeChanged( currentPlaylistInterface()->viewMode() );
@@ -586,7 +594,7 @@ PlaylistManager::updateView()
         m_queueView->show();
     else
         m_queueView->hide();
-    
+
     emit statsAvailable( currentPage()->showStatsBar() );
     emit modesAvailable( currentPage()->showModes() );
 
@@ -687,7 +695,7 @@ PlaylistManager::positionInHistory( ViewPage* page ) const
         if ( page == m_pageHistory.at( i ) )
             return i;
     }
-    
+
     return -1;
 }
 
@@ -747,7 +755,7 @@ PlaylistManager::dynamicPlaylistForInterface( PlaylistInterface* interface ) con
             return m_dynamicWidgets.key( view );
         }
     }
-    
+
     return dynplaylist_ptr();
 }
 
@@ -769,7 +777,7 @@ PlaylistManager::collectionForInterface( PlaylistInterface* interface ) const
             return m_collectionAlbumViews.key( view );
         }
     }
-    
+
     return collection_ptr();
 }
 

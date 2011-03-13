@@ -84,8 +84,7 @@ private slots:
 private:
     void clearResults();
     void checkResults();
-    
-    mutable QMutex m_mut;
+
     QList< Tomahawk::result_ptr > m_results;
     bool m_solved;
     mutable QID m_qid;

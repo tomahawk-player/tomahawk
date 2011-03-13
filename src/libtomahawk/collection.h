@@ -33,6 +33,7 @@ public:
     Collection( const source_ptr& source, const QString& name, QObject* parent = 0 );
     virtual ~Collection();
 
+    virtual bool isLoaded() const { return m_isLoaded; }
     virtual QString name() const;
 
     virtual void loadPlaylists() { qDebug() << Q_FUNC_INFO; }
@@ -41,13 +42,13 @@ public:
 
     virtual Tomahawk::playlist_ptr playlist( const QString& guid );
     virtual Tomahawk::dynplaylist_ptr dynamicPlaylist( const QString& guid );
-    
+
     virtual void addPlaylist( const Tomahawk::playlist_ptr& p );
     virtual void deletePlaylist( const Tomahawk::playlist_ptr& p );
-    
+
     virtual void addDynamicPlaylist( const Tomahawk::dynplaylist_ptr& p );
     virtual void deleteDynamicPlaylist( const Tomahawk::dynplaylist_ptr& p );
-    
+
     virtual QList< Tomahawk::playlist_ptr > playlists() { return m_playlists; }
     virtual QList< Tomahawk::dynplaylist_ptr > dynamicPlaylists() { return m_dynplaylists; }
     virtual QList< Tomahawk::query_ptr > tracks() { return m_tracks; }
@@ -56,13 +57,12 @@ public:
     unsigned int lastmodified() const { return m_lastmodified; }
 
 signals:
-    void tracksAdded( const QList<Tomahawk::query_ptr>& tracks, const Tomahawk::collection_ptr& );
-    void tracksRemoved( const QList<Tomahawk::query_ptr>& tracks, const Tomahawk::collection_ptr& );
-    void tracksFinished( const Tomahawk::collection_ptr& );
+    void tracksAdded( const QList<Tomahawk::query_ptr>& tracks );
+    void tracksRemoved( const QList<Tomahawk::query_ptr>& tracks );
 
     void playlistsAdded( const QList<Tomahawk::playlist_ptr>& );
     void playlistsDeleted( const QList<Tomahawk::playlist_ptr>& );
-    
+
     void dynamicPlaylistsAdded( const QList<Tomahawk::dynplaylist_ptr>& );
     void dynamicPlaylistsDeleted( const QList<Tomahawk::dynplaylist_ptr>& );
 
@@ -72,15 +72,17 @@ public slots:
 
     void setPlaylists( const QList<Tomahawk::playlist_ptr>& plists );
     void setDynamicPlaylists( const QList< Tomahawk::dynplaylist_ptr >& dynplists );
-    void setTracks( const QList<Tomahawk::query_ptr>& tracks, const Tomahawk::collection_ptr& collection );
+    void setTracks( const QList<Tomahawk::query_ptr>& tracks );
 
-    void delTracks( const QStringList& files, const Tomahawk::collection_ptr& collection );
+    void delTracks( const QStringList& files );
 
 protected:
     QString m_name;
     unsigned int m_lastmodified; // unix time of last change to collection
 
 private:
+    bool m_isLoaded;
+
     source_ptr m_source;
     QList< Tomahawk::query_ptr > m_tracks;
     QList< Tomahawk::playlist_ptr > m_playlists;

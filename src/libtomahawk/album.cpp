@@ -40,12 +40,12 @@ Album::Album( unsigned int id, const QString& name, const Tomahawk::artist_ptr& 
 
 
 void
-Album::onTracksAdded( const QList<Tomahawk::query_ptr>& tracks, const Tomahawk::collection_ptr& collection )
+Album::onTracksAdded( const QList<Tomahawk::query_ptr>& tracks )
 {
     qDebug() << Q_FUNC_INFO;
 
     m_queries << tracks;
-    emit tracksAdded( tracks, collection );
+    emit tracksAdded( tracks );
 }
 
 
@@ -75,8 +75,8 @@ Album::tracks()
         cmd->setAlbum( this );
         cmd->setSortOrder( DatabaseCommand_AllTracks::AlbumPosition );
 
-        connect( cmd, SIGNAL( tracks( QList<Tomahawk::query_ptr>, Tomahawk::collection_ptr ) ),
-                        SLOT( onTracksAdded( QList<Tomahawk::query_ptr>, Tomahawk::collection_ptr ) ) );
+        connect( cmd, SIGNAL( tracks( QList<Tomahawk::query_ptr> ) ),
+                        SLOT( onTracksAdded( QList<Tomahawk::query_ptr> ) ) );
 
         Database::instance()->enqueue( QSharedPointer<DatabaseCommand>( cmd ) );
     }

@@ -39,6 +39,10 @@
 #include "playlist/dynamic/GeneratorInterface.h"
 #include "scanmanager.h"
 
+#ifdef Q_OS_WIN32
+#include <qtsparkle/Updater>
+#endif
+
 using namespace Tomahawk;
 
 
@@ -123,11 +127,25 @@ TomahawkWindow::TomahawkWindow( QWidget* parent )
     toolbar->setIconSize( QSize( 32, 32 ) );
     toolbar->setToolButtonStyle( Qt::ToolButtonFollowStyle );
     toolbar->installEventFilter( new WidgetDragFilter( toolbar ) );
-
+    
 #if defined( Q_OS_DARWIN ) && defined( HAVE_SPARKLE )
-      QAction* checkForUpdates = ui->menu_Help->addAction( tr( "Check for updates...") );
-      checkForUpdates->setMenuRole( QAction::ApplicationSpecificRole );
-      connect(checkForUpdates, SIGNAL( triggered( bool ) ), SLOT( checkForUpdates() ) );
+    QAction* checkForUpdates = ui->menu_Help->addAction( tr( "Check for updates...") );
+    checkForUpdates->setMenuRole( QAction::ApplicationSpecificRole );
+    connect(checkForUpdates, SIGNAL( triggered( bool ) ), SLOT( checkForUpdates() ) );
+#elif defined( WIN32 )
+    QUrl updaterUrl;
+    #ifdef DEBUG_BUILD
+        updaterUrl.setUrl( "http://download.tomahawk-player.org/sparklewin-debug" );
+    #else
+        updaterUrl.setUrl( "http://download.tomahawk-player.org/sparklewin" );
+    #endif
+    qtsparkle::Updater* updater = new qtsparkle::Updater( updaterUrl, this );
+    updater->SetNetworkAccessManager( TomahawkUtils::nam() );
+    updater->SetVersion( VERSION );
+    
+    ui->menu_Help->addSeparator();
+    QAction* checkForUpdates = ui->menu_Help->addAction( tr( "Check for updates...") );
+    connect( checkForUpdates, SIGNAL( triggered() ), updater, SLOT( CheckNow() ) );
 #endif
 
     m_backAvailable = toolbar->addAction( QIcon( RESPATH "images/back.png" ), tr( "Back" ), PlaylistManager::instance(), SLOT( historyBack() ) );
@@ -163,12 +181,33 @@ TomahawkWindow::loadSettings()
 {
     TomahawkSettings* s = TomahawkSettings::instance();
 
+    // Workaround for broken window geometry restoring on Qt Cocoa when setUnifiedTitleAndToolBarOnMac is true.
+    // See http://bugreports.qt.nokia.com/browse/QTBUG-3116 and
+    // http://lists.qt.nokia.com/pipermail/qt-interest/2009-August/011491.html
+    // for the 'fix'
+#ifdef QT_MAC_USE_COCOA
+     bool workaround = !isVisible();
+     if( workaround ) {
+       // make "invisible"
+       setWindowOpacity( 0 );
+       // let Qt update its frameStruts
+       show();
+     }
+#endif
+
     if ( !s->mainWindowGeometry().isEmpty() )
         restoreGeometry( s->mainWindowGeometry() );
     if ( !s->mainWindowState().isEmpty() )
         restoreState( s->mainWindowState() );
     if ( !s->mainWindowSplitterState().isEmpty() )
         ui->splitter->restoreState( s->mainWindowSplitterState() );
+
+#ifdef QT_MAC_USE_COCOA
+     if( workaround ) {
+       // Make it visible again
+       setWindowOpacity( 1 );
+     }
+#endif
 }
 
 
@@ -329,6 +368,7 @@ TomahawkWindow::createAutomaticPlaylist()
     dynplaylist_ptr playlist = DynamicPlaylist::create( author, id, name, info, creator, false );
     playlist->setMode( Static );
     playlist->createNewRevision( uuid(), playlist->currentrevision(), playlist->type(), playlist->generator()->controls(), playlist->entries() );
+    PlaylistManager::instance()->show( playlist );
 }
 
 
@@ -347,6 +387,7 @@ TomahawkWindow::createStation()
     dynplaylist_ptr playlist = DynamicPlaylist::create( author, id, name, info, creator, false );
     playlist->setMode( OnDemand );
     playlist->createNewRevision( uuid(), playlist->currentrevision(), playlist->type(), playlist->generator()->controls() );
+    PlaylistManager::instance()->show( playlist );
 }
 
 
@@ -425,7 +466,7 @@ TomahawkWindow::showAboutTomahawk()
 {
     QMessageBox::about( this, "About Tomahawk",
                         tr( "<h2><b>Tomahawk %1</h2>Copyright 2010, 2011<br/>Christian Muehlhaeuser &lt;muesli@tomahawk-player.org&gt;<br/><br/>"
-                            "Thanks to: Leo Franchi, Jeff Mitchell, Dominik Schmidt, Alejandro Wainzinger, Harald Sitter and Steve Robertson" )
+                            "Thanks to: Leo Franchi, Jeff Mitchell, Dominik Schmidt, Jason Herskowitz, Alejandro Wainzinger, Harald Sitter and Steve Robertson" )
                         .arg( qApp->applicationVersion() ) );
 }
 

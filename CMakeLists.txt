@@ -44,6 +44,8 @@ macro_log_feature(QJSON_FOUND "QJson" "Qt library that maps JSON data to QVarian
 macro_optional_find_package(Taglib 1.6.0)
 macro_log_feature(TAGLIB_FOUND "TagLib" "Audio Meta-Data Library" "http://developer.kde.org/~wheeler/taglib.html" TRUE "" "taglib is needed for reading meta data from audio files")
 
+# we need pthreads too
+find_package(Threads)
 
 FIND_PACKAGE( Taglib 1.6.0 REQUIRED )
 include( CheckTagLibFileName )
@@ -64,6 +66,10 @@ IF( ENABLE_JREEN AND NOT LIBJREEN_FOUND )
     MESSAGE(STATUS "Internal libjreen: ${LIBJREEN_INCLUDE_DIR}, ${LIBJREEN_LIBRARY}")
 ENDIF( ENABLE_JREEN AND NOT LIBJREEN_FOUND )
 
+IF( WIN32 )
+  find_library(QTSPARKLE_LIBRARIES qtsparkle)
+ENDIF( WIN32 )
+
 macro_log_feature(JREEN_FOUND "Jreen" "Qt XMPP library" "http://gitorious.org/jreen" FALSE "" "Jreen is needed for the alternative/new Jabber SIP plugin. Built automatically inside Tomahawk, if not installed systemwide and ENABLE_JREEN is true")
 
 macro_optional_find_package(Gloox 1.0)
@@ -78,6 +84,11 @@ MESSAGE("Phonon is going to replace our own audio abstraction layer soon so we d
 MESSAGE("add checks for libmad, libvorbis and libflac. Make sure they are installed!")
 MESSAGE("")
 MESSAGE("-----------------------------------------------------------------------------")
+
+IF( NOT APPLE )
+    # Make linking as strict on linux as it is on osx. Then we don't break linking on mac so often
+    SET( CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wl,--no-undefined" )
+ENDIF( NOT APPLE )
 
 ADD_SUBDIRECTORY( thirdparty )
 ADD_SUBDIRECTORY( src/libtomahawk )

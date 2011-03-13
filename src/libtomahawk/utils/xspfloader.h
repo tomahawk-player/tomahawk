@@ -25,6 +25,7 @@ public:
     explicit XSPFLoader( bool autoCreate = true, QObject* parent = 0 )
         : QObject( parent )
         , m_autoCreate( autoCreate )
+        , m_NS("http://xspf.org/ns/0/")
     {}
 
     virtual ~XSPFLoader()
@@ -51,6 +52,7 @@ private:
     void gotBody();
 
     bool m_autoCreate;
+    QString m_NS;
     QList< Tomahawk::plentry_ptr > m_entries;
     QString m_title, m_info, m_creator;
 

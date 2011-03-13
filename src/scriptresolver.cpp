@@ -12,6 +12,7 @@ ScriptResolver::ScriptResolver(const QString& exe) :
     , m_num_restarts( 0 )
     , m_msgsize( 0 )
     , m_ready( false )
+    , m_stopped( false )
 {
     qDebug() << Q_FUNC_INFO << exe;
     connect( &m_proc, SIGNAL(readyReadStandardError()), SLOT(readStderr()) );
@@ -116,6 +117,14 @@ void ScriptResolver::cmdExited(int code, QProcess::ExitStatus status)
     qDebug() << Q_FUNC_INFO << "SCRIPT EXITED, code" << code << "status" << status << m_cmd;
     Tomahawk::Pipeline::instance()->removeResolver( this );
 
+    if( m_stopped ) 
+    {
+        qDebug() << "*** Script resolver stopped ";
+        emit finished();
+        
+        return;
+    }
+    
     if( m_num_restarts < 10 )
     {
         m_num_restarts++;
@@ -154,3 +163,11 @@ void ScriptResolver::doSetup( const QVariantMap& m )
     m_ready = true;
     Tomahawk::Pipeline::instance()->addResolver( this );
 }
+
+void 
+ScriptResolver::stop()
+{
+    m_stopped = true;
+    m_proc.kill();
+}
+

@@ -29,6 +29,8 @@ DatabaseCommand_RenamePlaylist::exec( DatabaseImpl* lib )
     cre.bindValue( ":id", m_playlistguid );
     cre.bindValue( ":title", m_playlistTitle );
 
+    qDebug() << Q_FUNC_INFO << m_playlistTitle << m_playlistguid;
+
     cre.exec();
 }
 
@@ -46,6 +48,7 @@ DatabaseCommand_RenamePlaylist::postCommitHook()
     playlist_ptr playlist = source()->collection()->playlist( m_playlistguid );
     Q_ASSERT( !playlist.isNull() );
 
+    qDebug() << "Renaming old playlist" << playlist->title() << "to" << m_playlistTitle << m_playlistguid;
     playlist->setTitle( m_playlistTitle );
 
     if( source()->isLocal() )

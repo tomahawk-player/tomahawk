@@ -76,36 +76,66 @@ XSPFLoader::gotBody()
     qDebug() << Q_FUNC_INFO;
 
     QDomDocument xmldoc;
-    xmldoc.setContent( m_body );
+    bool namespaceProcessing = true;
+    xmldoc.setContent( m_body, namespaceProcessing );
     QDomElement docElement( xmldoc.documentElement() );
 
     QString origTitle;
-    origTitle = docElement.firstChildElement( "title" ).text();
-    m_info    = docElement.firstChildElement( "creator" ).text();
-    m_creator = docElement.firstChildElement( "info" ).text();
+    QDomNodeList tracklist;
+    QDomElement n = docElement.firstChildElement();
+    for ( ; !n.isNull(); n = n.nextSiblingElement() ) {
+        if (n.namespaceURI() == m_NS && n.localName() == "title") {
+            origTitle = n.text();
+        } else if (n.namespaceURI() == m_NS && n.localName() == "creator") {
+            m_creator = n.text();
+        } else if (n.namespaceURI() == m_NS && n.localName() == "info") {
+            m_info = n.text();
+        } else if (n.namespaceURI() == m_NS && n.localName() == "trackList") {
+            tracklist = n.childNodes();
+        }
+    }
 
     m_title = origTitle;
     if ( m_title.isEmpty() )
         m_title = tr( "New Playlist" );
 
-    QDomNodeList tracklist = docElement.elementsByTagName( "track" );
+    bool shownError = false;
     for ( unsigned int i = 0; i < tracklist.length(); i++ )
     {
         QDomNode e = tracklist.at( i );
 
+        QString artist, album, track, duration, annotation;
+        QDomElement n = e.firstChildElement();
+        for ( ; !n.isNull(); n = n.nextSiblingElement() ) {
+            if (n.namespaceURI() == m_NS && n.localName() == "duration") {
+                duration = n.text();
+            } else if (n.namespaceURI() == m_NS && n.localName() == "annotation") {
+                annotation = n.text();
+            } else if (n.namespaceURI() == m_NS && n.localName() == "creator") {
+                artist = n.text();
+            } else if (n.namespaceURI() == m_NS && n.localName() == "album") {
+                album = n.text();
+            } else if (n.namespaceURI() == m_NS && n.localName() == "title") {
+                track = n.text();
+            }
+        }
+        
+        if( artist.isEmpty() || track.isEmpty() ) {
+            if( !shownError ) {
+                QMessageBox::warning( 0, tr( "Failed to save tracks" ), tr( "Some tracks in the playlist do not contain an artist and a title. They will be ignored." ), QMessageBox::Ok );
+                shownError = true;
+            }
+            continue;
+        }
+
         plentry_ptr p( new PlaylistEntry );
         p->setGuid( uuid() );
-        p->setDuration( e.firstChildElement( "duration" ).text().toInt() / 1000 );
+        p->setDuration( duration.toInt() / 1000 );
         p->setLastmodified( 0 );
-        p->setAnnotation( e.firstChildElement( "annotation" ).text() );
-
-        QString artist, album, track;
-        artist = e.firstChildElement( "creator" ).text();
-        album = e.firstChildElement( "album" ).text();
-        track = e.firstChildElement( "title" ).text();
+        p->setAnnotation( annotation );
 
         p->setQuery( Tomahawk::Query::get( artist, track, album, uuid() ) );
-        p->query()->setDuration( e.firstChildElement( "duration" ).text().toInt() / 1000 );
+        p->query()->setDuration( duration.toInt() / 1000 );
         m_entries << p;
     }
 

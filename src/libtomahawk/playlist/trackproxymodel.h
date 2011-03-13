@@ -23,7 +23,7 @@ public:
 
     virtual QList<Tomahawk::query_ptr> tracks();
 
-    virtual int unfilteredTrackCount() const { return sourceModel()->rowCount( QModelIndex() ); }
+    virtual int unfilteredTrackCount() const { return sourceModel()->trackCount(); }
     virtual int trackCount() const { return rowCount( QModelIndex() ); }
 
     virtual void removeIndex( const QModelIndex& index );

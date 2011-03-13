@@ -7,7 +7,9 @@
 #define JABBER_P_H
 
 #include <QObject>
+#include <QScopedPointer>
 #include <QSharedPointer>
+#include <QSocketNotifier>
 #include <QMap>
 #include <QNetworkProxy>
 
@@ -137,6 +139,7 @@ private:
     QMap<QString, gloox::Presence::PresenceType> m_peers;
     QSharedPointer<gloox::VCardManager> m_vcardManager;
     QString m_server;
+    QScopedPointer<QSocketNotifier> m_notifier;
 };
 
 #endif // JABBER_H

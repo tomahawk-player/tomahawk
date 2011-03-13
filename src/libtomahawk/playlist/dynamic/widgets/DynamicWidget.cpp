@@ -75,7 +75,7 @@ DynamicWidget::DynamicWidget( const Tomahawk::dynplaylist_ptr& playlist, QWidget
     m_setup = new DynamicSetupWidget( playlist, this );
     m_setup->fadeIn();
     
-    connect( m_model, SIGNAL( tracksAdded() ), m_setup, SLOT( fadeOut() ) );
+    connect( m_model, SIGNAL( tracksAdded() ), this, SLOT( tracksAdded() ) );
     
     loadDynamicPlaylist( playlist );
     
@@ -263,6 +263,14 @@ DynamicWidget::trackStarted()
 }
 
 void 
+DynamicWidget::tracksAdded()
+{
+    if( m_playlist->mode() == OnDemand && m_runningOnDemand && m_setup->isVisible() )
+        m_setup->fadeOut();
+}
+
+
+void 
 DynamicWidget::stopStation( bool stopPlaying )
 {
     m_model->stopOnDemand( stopPlaying );
@@ -348,8 +356,8 @@ DynamicWidget::controlChanged( const Tomahawk::dyncontrol_ptr& control )
 void 
 DynamicWidget::showPreview()
 {
-    if( m_playlist->mode() == OnDemand && !m_runningOnDemand ) { // if this is a not running station, preview matching tracks
-        generate( 40 ); // ask for more, we'll filter how many we actually want
+    if( m_playlist->mode() == OnDemand && !m_runningOnDemand && m_model->rowCount( QModelIndex() ) == 0 ) { // if this is a not running station, preview matching tracks
+        generate( 20 ); // ask for more, we'll filter how many we actually want
 }
 }
 

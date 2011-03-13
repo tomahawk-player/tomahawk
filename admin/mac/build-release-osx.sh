@@ -47,7 +47,9 @@ CREATEDMG='1'
 
     header deposx
     $ROOT/../admin/mac/deposx.sh
-    header "Copying Sparkle pubkey"
+    header "Copying Sparkle pubkey and framework, and qt.conf"
     cp $ROOT/../admin/mac/sparkle_pub.pem Contents/Resources
+    cp -R /Library/Frameworks/Sparkle.framework Contents/Frameworks
+    cp $ROOT/../admin/mac/qt.conf Contents/Resources
     header Done!
 

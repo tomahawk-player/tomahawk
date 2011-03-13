@@ -51,8 +51,8 @@ DatabaseCollection::loadTracks()
     m_loadedTracks = true;
     DatabaseCommand_AllTracks* cmd = new DatabaseCommand_AllTracks( source()->collection() );
 
-    connect( cmd, SIGNAL( tracks( QList<Tomahawk::query_ptr>, Tomahawk::collection_ptr ) ),
-                    SLOT( setTracks( QList<Tomahawk::query_ptr>, Tomahawk::collection_ptr ) ) );
+    connect( cmd, SIGNAL( tracks( QList<Tomahawk::query_ptr> ) ),
+                    SLOT( setTracks( QList<Tomahawk::query_ptr> ) ) );
 
     Database::instance()->enqueue( QSharedPointer<DatabaseCommand>( cmd ) );
 }
@@ -73,7 +73,7 @@ DatabaseCollection::removeTracks( const QDir& dir )
 {
     qDebug() << Q_FUNC_INFO << dir;
     DatabaseCommand_DeleteFiles* cmd = new DatabaseCommand_DeleteFiles( dir, source() );
-    
+
     Database::instance()->enqueue( QSharedPointer<DatabaseCommand>( cmd ) );
 }
 

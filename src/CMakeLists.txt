@@ -18,6 +18,10 @@ SET( CMAKE_RUNTIME_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}" )
 SET( CMAKE_LIBRARY_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}" )
 SET( CMAKE_ARCHIVE_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}" )
 SET( TOMAHAWK_INC_DIR "${CMAKE_SOURCE_DIR}/include/" )
+IF( NOT CMAKE_BUILD_TYPE STREQUAL "Release" )
+    MESSAGE( "Building in debug mode, enabling all debug updates" )
+    SET( DEBUG_BUILD ON )
+ENDIF()
 
 # build plugins
 # use glob, but hardcoded list for now:
@@ -152,7 +156,7 @@ IF( APPLE )
     SET( tomahawkSources ${tomahawkSources} mac/tomahawkapp_mac.mm  mac/macshortcuthandler.cpp )
 
     IF(HAVE_SPARKLE)
-    SET( tomahawkHeaders ${tomahawkHeaders} ${SPARKLE}/Headers )
+        SET( tomahawkHeaders ${tomahawkHeaders} ${SPARKLE}/Headers )
     ENDIF(HAVE_SPARKLE)
 
 ENDIF( APPLE )
@@ -184,7 +188,7 @@ IF( UNIX AND NOT APPLE )
 ENDIF( UNIX AND NOT APPLE )
 IF( APPLE )
     ADD_EXECUTABLE( tomahawk MACOSX_BUNDLE ${final_src} )
-    SET_TARGET_PROPERTIES(tomahawk PROPERTIES MACOSX_BUNDLE_INFO_PLIST "../admin/mac/Info.plist"
+    SET_TARGET_PROPERTIES(tomahawk PROPERTIES MACOSX_BUNDLE_INFO_PLIST "${CMAKE_BINARY_DIR}/Info.plist"
 )
 ENDIF( APPLE )
 IF( WIN32 )
@@ -204,15 +208,16 @@ ENDIF(GLOOX_FOUND)
 TARGET_LINK_LIBRARIES( tomahawk
     ${LINK_LIBRARIES}
     ${TOMAHAWK_LIBRARIES}
+    ${OS_SPECIFIC_LINK_LIBRARIES}
     ${QT_LIBRARIES}
     ${MAC_EXTRA_LIBS}
-    ${OS_SPECIFIC_LINK_LIBRARIES}
     ${LIBECHONEST_LIBRARY}
     ${QXTWEB_LIBRARIES}
     ${QTWEETLIB_LIBRARIES}
     ${QJSON_LIBRARIES}
     ${TAGLIB_LIBRARIES}
     ${QTWEETLIB_LIBRARIES}
+    ${CLUCENE_LIBRARIES}
 )
 
 
@@ -220,7 +225,7 @@ IF( APPLE )
   IF(HAVE_SPARKLE)
     MESSAGE("Sparkle Found, installing framekwork in bundle")
     INSTALL(DIRECTORY "${SPARKLE}/Versions/Current/Resources" DESTINATION "${CMAKE_BINARY_DIR}/tomahawk.app/Contents/Frameworks/Sparkle.framework")
-    INSTALL(FILES "${CMAKE_SOURCE_DIR}/admin/mac/sparkle_pub.pem" DESTINATION "${CMAKE_BINARY_DIR}/tomahawk.app/Contents/Resources")
+
   ENDIF(HAVE_SPARKLE)
 ENDIF( APPLE )
 

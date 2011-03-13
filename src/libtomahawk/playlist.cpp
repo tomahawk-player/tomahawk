@@ -389,7 +389,7 @@ Playlist::setNewRevision( const QString& rev,
 
 
 source_ptr
-Playlist::author()
+Playlist::author() const
 { 
     return m_source; 
 }
