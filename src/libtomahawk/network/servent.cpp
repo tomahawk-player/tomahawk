@@ -20,6 +20,7 @@
 
 #include "portfwdthread.h"
 #include "tomahawksettings.h"
+#include "utils/tomahawkutils.h"
 
 using namespace Tomahawk;
 
@@ -42,7 +43,7 @@ Servent::Servent( QObject* parent )
     s_instance = this;
 
     setProxy( QNetworkProxy::NoProxy );
-    
+
     {
     boost::function<QSharedPointer<QIODevice>(result_ptr)> fac =
         boost::bind( &Servent::localFileIODeviceFactory, this, _1 );
@@ -760,9 +761,8 @@ Servent::localFileIODeviceFactory( const Tomahawk::result_ptr& result )
 QSharedPointer<QIODevice>
 Servent::httpIODeviceFactory( const Tomahawk::result_ptr& result )
 {
-/*    qDebug() << Q_FUNC_INFO << result->url();
+    qDebug() << Q_FUNC_INFO << result->url();
     QNetworkRequest req( result->url() );
-    QNetworkReply* reply = APP->nam()->get( req );
-    return QSharedPointer<QIODevice>( reply );*/
-    return QSharedPointer<QIODevice>();
+    QNetworkReply* reply = TomahawkUtils::nam()->get( req );
+    return QSharedPointer<QIODevice>( reply );
 }

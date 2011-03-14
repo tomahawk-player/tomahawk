@@ -199,7 +199,7 @@ Pipeline::shuntNext()
     query_ptr q;
     {
         QMutexLocker lock( &m_mut );
-        
+
         if ( m_queries_pending.isEmpty() )
         {
             emit idle();
@@ -255,7 +255,7 @@ Pipeline::shunt( const query_ptr& q )
                 lasttimeout = r->timeout();
 
             // resolvers aren't allowed to block in this call:
-            //qDebug() << "Dispaching to resolver" << r->name();
+            qDebug() << "Dispatching to resolver" << r->name();
 
             {
                 QMutexLocker lock( &m_mut );
@@ -267,7 +267,7 @@ Pipeline::shunt( const query_ptr& q )
                     state = m_qidsState.value( q->id() );
                 }
 
-                qDebug() << Q_FUNC_INFO << "inserting to qidsstate:" << q->id() << state + 1;
+//                qDebug() << Q_FUNC_INFO << "inserting to qidsstate:" << q->id() << state + 1;
                 m_qidsState.insert( q->id(), state + 1 );
             }
 
