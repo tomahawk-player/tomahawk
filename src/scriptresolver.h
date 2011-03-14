@@ -14,10 +14,11 @@
 class ScriptResolver : public Tomahawk::Resolver
 {
 Q_OBJECT
+
 public:
-    explicit ScriptResolver(const QString& exe);
+    explicit ScriptResolver( const QString& exe );
     virtual ~ScriptResolver();
-    
+
     virtual QString name() const            { return m_name; }
     virtual unsigned int weight() const     { return m_weight; }
     virtual unsigned int preference() const { return m_preference; }
@@ -26,17 +27,18 @@ public:
     virtual void resolve( const Tomahawk::query_ptr& query );
 
     void stop();
-    
+
     QString exe() const { return m_cmd; }
+
 signals:
     void finished();
-    
+
 public slots:
 
 private slots:
     void readStderr();
     void readStdout();
-    void cmdExited(int code, QProcess::ExitStatus status);
+    void cmdExited( int code, QProcess::ExitStatus status );
 
 private:
     void handleMsg( const QByteArray& msg );
@@ -54,7 +56,6 @@ private:
 
     QJson::Parser m_parser;
     QJson::Serializer m_serializer;
-
 };
 
 #endif // SCRIPTRESOLVER_H
