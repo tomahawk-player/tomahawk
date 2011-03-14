@@ -45,6 +45,8 @@ public slots:
     void loadSpiff();
     void showSettingsDialog();
     void updateCollectionManually();
+    void pluginMenuAdded(QMenu*);
+    void pluginMenuRemoved(QMenu*);
     
 private slots:
     void onSipConnected();

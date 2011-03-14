@@ -35,6 +35,8 @@ public slots:
 
 private slots:
     void showAddFriendDialog();
+    void onConnected();
+    void onDisconnected();
 
 private:
     Jabber_p* p;
