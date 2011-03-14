@@ -1,53 +1,134 @@
-/* === This file is part of Tomahawk Player - <http://tomahawk-player.org> ===
- *
- *   Copyright 2010-2011, Christian Muehlhaeuser <muesli@tomahawk-player.org>
- *
- *   Tomahawk is free software: you can redistribute it and/or modify
- *   it under the terms of the GNU General Public License as published by
- *   the Free Software Foundation, either version 3 of the License, or
- *   (at your option) any later version.
- *
- *   Tomahawk is distributed in the hope that it will be useful,
- *   but WITHOUT ANY WARRANTY; without even the implied warranty of
- *   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
- *   GNU General Public License for more details.
- *
- *   You should have received a copy of the GNU General Public License
- *   along with Tomahawk. If not, see <http://www.gnu.org/licenses/>.
- */
 
-#include "sourcesmodel.h"
+/*
+    This program is free software; you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation; either version 2 of the License, or
+    (at your option) any later version.
+
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License along
+    with this program; if not, write to the Free Software Foundation, Inc.,
+    51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
+*/
+
+
+#include "sourcetree/sourcesmodel.h"
+
+#include "sourcetree/sourcetreeitem.h"
+#include "sourcelist.h"
+#include "playlist.h"
+#include "collection.h"
+#include "source.h"
 
 #include <QMimeData>
-#include <QTimer>
-#include <QTreeView>
-#include <QStandardItemModel>
-
-#include "tomahawk/tomahawkapp.h"
-#include "query.h"
-#include "sourcelist.h"
-#include "sourcetreeitem.h"
-#include "sourcetreeview.h"
-#include "utils/imagebutton.h"
+#include <QSize>
 
 using namespace Tomahawk;
 
-
-SourcesModel::SourcesModel( SourceTreeView* parent )
-    : QStandardItemModel( parent )
-    , m_parent( parent )
+SourcesModel::SourcesModel( QObject* parent )
+    : QAbstractItemModel( parent )
 {
-    setColumnCount( 1 );
-    setSortRole( SortRole );
+    m_rootItem = new SourceTreeItem( this, 0, Invalid );
 
-    onSourceAdded( SourceList::instance()->sources() );
+    onSourcesAdded( SourceList::instance()->sources() );
+
     connect( SourceList::instance(), SIGNAL( sourceAdded( Tomahawk::source_ptr ) ), SLOT( onSourceAdded( Tomahawk::source_ptr ) ) );
     connect( SourceList::instance(), SIGNAL( sourceRemoved( Tomahawk::source_ptr ) ), SLOT( onSourceRemoved( Tomahawk::source_ptr ) ) );
-
-    connect( parent, SIGNAL( onOnline( QModelIndex ) ), SLOT( onItemOnline( QModelIndex ) ) );
-    connect( parent, SIGNAL( onOffline( QModelIndex ) ), SLOT( onItemOffline( QModelIndex ) ) );
 }
 
+SourcesModel::~SourcesModel()
+{
+    delete m_rootItem;
+}
+
+
+QVariant
+SourcesModel::data( const QModelIndex& index, int role ) const
+{
+    if( !index.isValid() )
+        return QVariant();
+
+    switch( role )
+    {
+    case Qt::SizeHintRole:
+        return QSize( 0, 18 );
+    case SourceTreeItemRole:
+        return QVariant::fromValue< SourceTreeItem* >( itemFromIndex( index ) );
+    case SourceTreeItemTypeRole:
+        return itemFromIndex( index )->type();
+    case Qt::DisplayRole:
+        return itemFromIndex( index )->text();
+    }
+    return QVariant();
+}
+
+int
+SourcesModel::columnCount( const QModelIndex& parent ) const
+{
+    return 1;
+}
+
+int
+SourcesModel::rowCount( const QModelIndex& parent ) const
+{
+    if( !parent.isValid() ) {
+        return m_rootItem->children().count();
+    }
+//     qDebug() << "ASKING FOR AND RETURNING ROWCOUNT:" << parent.row() << parent.column() << parent.internalPointer() << itemFromIndex( parent )->children().count() << itemFromIndex( parent )->text();
+    return itemFromIndex( parent )->children().count();
+}
+
+bool
+SourcesModel::hasChildren( const QModelIndex& parent ) const
+{
+    return rowCount( parent ) > 0;
+}
+
+
+QModelIndex
+SourcesModel::parent( const QModelIndex& child ) const
+{
+//     qDebug() << Q_FUNC_INFO << child;
+    if( !child.isValid() ) {
+        return QModelIndex();
+    }
+
+    SourceTreeItem* node = itemFromIndex( child );
+    SourceTreeItem* parent = node->parent();
+    if( parent == m_rootItem )
+        return QModelIndex();
+
+    return createIndex( rowForItem( node ), 0, parent );
+}
+
+QModelIndex
+SourcesModel::index( int row, int column, const QModelIndex& parent ) const
+{
+//     qDebug() << "INDEX:" << row << column << parent;
+    if( row < 0 || column < 0 )
+        return QModelIndex();
+
+    if( hasIndex( row, column, parent ) ) {
+        SourceTreeItem *parentNode = itemFromIndex( parent );
+        SourceTreeItem *childNode = parentNode->children().at( row );
+//         qDebug() << "Making index with parent:" << parentNode->text() << "and index:" << childNode->text();
+        return createIndex( row, column, childNode );
+    }
+
+    return QModelIndex();
+
+}
+
+bool
+SourcesModel::setData( const QModelIndex& index, const QVariant& value, int role )
+{
+    // TODO
+    return false;
+}
 
 QStringList
 SourcesModel::mimeTypes() const
@@ -57,6 +138,19 @@ SourcesModel::mimeTypes() const
     return types;
 }
 
+QMimeData*
+SourcesModel::mimeData( const QModelIndexList& indexes ) const
+{
+    // TODO
+    return new QMimeData();
+}
+
+bool
+SourcesModel::dropMimeData( const QMimeData* data, Qt::DropAction action, int row, int column, const QModelIndex& parent )
+{
+    // TODO
+    return false;
+}
 
 Qt::DropActions
 SourcesModel::supportedDropActions() const
@@ -64,71 +158,89 @@ SourcesModel::supportedDropActions() const
     return Qt::CopyAction;
 }
 
-
 Qt::ItemFlags
 SourcesModel::flags( const QModelIndex& index ) const
 {
-    Qt::ItemFlags defaultFlags = QStandardItemModel::flags( index );
-
-    if ( index.isValid() )
-    {
-        if ( indexType( index ) == PlaylistSource )
-        {
-            playlist_ptr playlist = indexToPlaylist( index );
-            if ( !playlist.isNull() && playlist->author()->isLocal() )
-                defaultFlags |= Qt::ItemIsEditable;
-        }
-        else if ( indexType( index ) == DynamicPlaylistSource )
-        {
-            dynplaylist_ptr playlist = indexToDynamicPlaylist( index );
-            if ( !playlist.isNull() && playlist->author()->isLocal() )
-                defaultFlags |= Qt::ItemIsEditable;
-        }
-
-        return Qt::ItemIsDragEnabled | Qt::ItemIsDropEnabled | defaultFlags;
+    if ( index.isValid() ) {
+        return itemFromIndex( index )->flags();
+    } else {
+        return 0;
     }
-    else
-        return defaultFlags;
 }
 
 
-QVariant
-SourcesModel::data( const QModelIndex& index, int role ) const
+void
+SourcesModel::appendItem( const Tomahawk::source_ptr& source )
 {
-    if ( role == Qt::SizeHintRole )
+
+    beginInsertRows( QModelIndex(), rowCount(), rowCount() );
+    // append to end
+    CollectionItem* item = new CollectionItem( this, m_rootItem, source );
+    connect( item, SIGNAL( updated() ), this, SLOT( collectionUpdated() ) );
+
+    m_rootItem->appendChild( item );
+    endInsertRows();
+
+    qDebug() << "Appending source item:" << item->source()->friendlyName();
+
+    if ( !source.isNull() )
     {
-        return QSize( 0, 18 );
-    } else if ( role == SortRole )
+        connect( source.data(), SIGNAL( stats( QVariantMap ) ), SLOT( onSourceChanged() ) );
+        connect( source.data(), SIGNAL( playbackStarted( Tomahawk::query_ptr ) ), SLOT( onSourceChanged() ) );
+        connect( source.data(), SIGNAL( stateChanged() ), SLOT( onSourceChanged() ) );
+
+    }
+}
+
+bool
+SourcesModel::removeItem( const Tomahawk::source_ptr& source )
+{
+    qDebug() << "Removing source item from SourceTree:" << source->friendlyName();
+
+    QModelIndex idx;
+    int rows = rowCount();
+    for ( int row = 0; row < rows; row++ )
     {
-        if ( indexType( index ) == PlaylistSource )
+        QModelIndex idx = index( row, 0, QModelIndex() );
+        CollectionItem* item = static_cast< CollectionItem* >( idx.internalPointer() );
+        if ( item && item->source() == source )
         {
-            playlist_ptr playlist = indexToPlaylist( index );
-            if ( !playlist.isNull() )
-                return playlist->createdOn();
-        } else if ( indexType( index ) == DynamicPlaylistSource )
-        {
-            dynplaylist_ptr playlist = indexToDynamicPlaylist( index );
-            if ( !playlist.isNull() )
-                return playlist->createdOn();
-        } else if( indexType( index ) == CollectionSource )
-        {
-            source_ptr source = indexToTreeItem( index )->source();
-            if( source.isNull() )
-                return 0; // Super Collection is first
-            else if( source->isLocal() )
-                return 1; // Then Local collection
-            else // then all the rest
-                return 5;
-        } else
-        {
-            qDebug() << "RETURNING NULL SORT DATA!";
-            return QVariant();
+            qDebug() << "Found removed source item:" << item->source()->userName();
+            beginRemoveRows( QModelIndex(), row, row );
+            m_rootItem->removeChild( item );
+            endRemoveRows();
+
+//             onItemOffline( idx );
+
+            delete item;
+            return true;
         }
     }
 
-    return QStandardItemModel::data( index, role );
+    return false;
 }
 
+void
+SourcesModel::onSourceChanged() {
+
+    Source* src = qobject_cast< Source* >( sender() );
+    Q_ASSERT( src );
+
+    qDebug() << "Searching for source item:" << src->friendlyName();
+
+    for( int i = 0; i < rowCount(); i++ )
+    {
+        QModelIndex idx = index( i, 0 , QModelIndex() );
+
+        if( idx.isValid() && itemFromIndex( idx ) && itemFromIndex( idx )->type() == Collection && // this is a source
+            static_cast< CollectionItem* >( itemFromIndex( idx ) )->source().data() == src )       // and it is the one we want
+        {
+            qDebug() << "Found changed source, emitting dataChanged:" << src->friendlyName();
+            emit dataChanged( idx, idx );
+            return;
+        }
+    }
+}
 
 void
 SourcesModel::loadSources()
@@ -141,7 +253,7 @@ SourcesModel::loadSources()
 
 
 void
-SourcesModel::onSourceAdded( const QList<source_ptr>& sources )
+SourcesModel::onSourcesAdded( const QList<source_ptr>& sources )
 {
     foreach( const source_ptr& source, sources )
         appendItem( source );
@@ -161,270 +273,118 @@ SourcesModel::onSourceRemoved( const source_ptr& source )
     removeItem( source );
 }
 
-
-bool
-SourcesModel::appendItem( const source_ptr& source )
+void
+SourcesModel::collectionUpdated()
 {
-    SourceTreeItem* item = new SourceTreeItem( source, this );
-    connect( item, SIGNAL( clicked( QModelIndex ) ), this, SIGNAL( clicked( QModelIndex ) ) );
 
-//    qDebug() << "Appending source item:" << item->source()->username();
-    invisibleRootItem()->appendRow( item->columns() );
-
-    if ( !source.isNull() )
-    {
-        connect( source.data(), SIGNAL( offline() ), SLOT( onSourceChanged() ) );
-        connect( source.data(), SIGNAL( online() ), SLOT( onSourceChanged() ) );
-        connect( source.data(), SIGNAL( stats( QVariantMap ) ), SLOT( onSourceChanged() ) );
-        connect( source.data(), SIGNAL( playbackStarted( Tomahawk::query_ptr ) ), SLOT( onSourceChanged() ) );
-        connect( source.data(), SIGNAL( stateChanged() ), SLOT( onSourceChanged() ) );
-    }
-
-    return true; // FIXME
 }
 
-
-bool
-SourcesModel::removeItem( const source_ptr& source )
+void
+SourcesModel::onItemRowsAddedBegin( int first, int last )
 {
-//    qDebug() << "Removing source item from SourceTree:" << source->username();
 
+    Q_ASSERT( qobject_cast< SourceTreeItem* >( sender() ) );
+    SourceTreeItem* item = qobject_cast< SourceTreeItem* >( sender() );
+
+    if( !item )
+        return;
+
+    QModelIndex idx = indexFromItem( item );
+    beginInsertRows( idx, first, last );
+}
+
+void
+SourcesModel::onItemRowsAddedDone()
+{
+    Q_ASSERT( qobject_cast< SourceTreeItem* >( sender() ) );
+
+    endInsertRows();
+}
+
+void
+SourcesModel::onItemRowsRemovedBegin( int first, int last )
+{
+    Q_ASSERT( qobject_cast< SourceTreeItem* >( sender() ) );
+    SourceTreeItem* item = qobject_cast< SourceTreeItem* >( sender() );
+
+    if( !item )
+        return;
+
+    QModelIndex idx = indexFromItem( item );
+    beginRemoveRows( idx, first, last );
+}
+
+void
+SourcesModel::onItemRowsRemovedDone()
+{
+    Q_ASSERT( qobject_cast< SourceTreeItem* >( sender() ) );
+
+    endRemoveRows();
+}
+
+SourceTreeItem*
+SourcesModel::itemFromIndex( const QModelIndex& idx ) const
+{
+    if( !idx.isValid() )
+        return m_rootItem;
+
+    Q_ASSERT( idx.internalPointer() );
+
+    return reinterpret_cast< SourceTreeItem* >( idx.internalPointer() );
+}
+
+QModelIndex
+SourcesModel::indexFromItem( SourceTreeItem* item ) const
+{
+    if( !item || !item->parent() ) // should never happen..
+        return QModelIndex();
+
+    // reconstructs a modelindex from a sourcetreeitem that is somewhere in the tree
+    // traverses the item to the root node, then rebuilds the qmodeindices from there back down
+    // each int is the row of that item in the parent.
+    /**
+     * In this diagram, if the \param item is G, childIndexList will contain [0, 2, 0]
+     *
+     *    A
+     *      D
+     *      E
+     *      F
+     *        G
+     *        H
+     *    B
+     *    C
+     *
+     **/
+    QList< int > childIndexList;
+    SourceTreeItem* curItem = item;
+    while( curItem != m_rootItem ) {
+        childIndexList << rowForItem( curItem );
+
+        curItem = curItem->parent();
+    }
+    qDebug() << "build child index list:" << childIndexList;
+    // now rebuild the qmodelindex we need
     QModelIndex idx;
-    int rows = rowCount();
-    for ( int row = 0; row < rows; row++ )
-    {
-        QModelIndex idx = index( row, 0 );
-        SourceTreeItem* item = indexToTreeItem( idx );
-        if ( item )
-        {
-            if ( item->source() == source )
-            {
-                qDebug() << "Found removed source item:" << item->source()->userName();
-                invisibleRootItem()->removeRow( row );
-
-                onItemOffline( idx );
-
-                delete item;
-                return true;
-            }
-        }
+    for( int i = childIndexList.size() - 1; i >= 0 ; i-- ) {
+        idx = index( childIndexList[ i ], 0, idx );
     }
+    qDebug() << "Got index from item:" << idx << idx.data( Qt::DisplayRole ).toString();
 
-    return false;
-}
-
-
-void
-SourcesModel::onItemOnline( const QModelIndex& idx )
-{
-    qDebug() << Q_FUNC_INFO;
-
-    SourceTreeItem* item = indexToTreeItem( idx );
-    if ( item )
-        item->onOnline();
-}
-
-
-void
-SourcesModel::onItemOffline( const QModelIndex& idx )
-{
-    qDebug() << Q_FUNC_INFO;
-
-    SourceTreeItem* item = indexToTreeItem( idx );
-    if ( item )
-        item->onOffline();
-}
-
-
-SourcesModel::SourceType
-SourcesModel::indexType( const QModelIndex& index )
-{
-    if ( !index.isValid() )
-        return Invalid;
-
-    QModelIndex idx = index.model()->index( index.row(), 0, index.parent() );
-    return static_cast<SourcesModel::SourceType>( idx.data( SourceTreeItem::Type ).toInt() );
+    return idx;
 }
 
 
 playlist_ptr
-SourcesModel::indexToPlaylist( const QModelIndex& index )
+SourcesModel::playlistFromItem( SourceTreeItem* item ) const
 {
-    playlist_ptr res;
-    if ( !index.isValid() )
-        return res;
+    Q_ASSERT( item );
+    Q_ASSERT( item->type() == StaticPlaylist );
 
-    if ( indexType( index ) == PlaylistSource )
-    {
-        QModelIndex idx = index.model()->index( index.row(), 0, index.parent() );
-        qlonglong pptr = idx.data( SourceTreeItem::PlaylistPointer ).toLongLong();
-        playlist_ptr* playlist = reinterpret_cast<playlist_ptr*>(pptr);
-        if ( playlist )
-            return *playlist;
-    }
-
-    return res;
+    return dynamic_cast< PlaylistItem* >( item )->playlist();
 }
 
-
-dynplaylist_ptr
-SourcesModel::indexToDynamicPlaylist( const QModelIndex& index )
+int
+SourcesModel::rowForItem( SourceTreeItem* item ) const
 {
-    dynplaylist_ptr res;
-    if ( !index.isValid() )
-        return res;
-
-    if ( indexType( index ) == DynamicPlaylistSource )
-    {
-        QModelIndex idx = index.model()->index( index.row(), 0, index.parent() );
-        qlonglong pptr = idx.data( SourceTreeItem::DynamicPlaylistPointer ).toLongLong();
-        dynplaylist_ptr* playlist = reinterpret_cast<dynplaylist_ptr*>(pptr);
-        if ( playlist )
-            return *playlist;
-    }
-
-    return res;
-}
-
-
-SourceTreeItem*
-SourcesModel::indexToTreeItem( const QModelIndex& index )
-{
-    if ( !index.isValid() )
-        return 0;
-
-    int type = indexType( index );
-    if ( type == CollectionSource || type == PlaylistSource || type == DynamicPlaylistSource )
-    {
-        QModelIndex idx = index.model()->index( index.row(), 0, index.parent() );
-        qlonglong pptr = idx.data( SourceTreeItem::SourceItemPointer ).toLongLong();
-        SourceTreeItem* item = reinterpret_cast<SourceTreeItem*>(pptr);
-        if ( item )
-            return item;
-    }
-
-    return 0;
-}
-
-
-QModelIndex
-SourcesModel::playlistToIndex( const Tomahawk::playlist_ptr& playlist )
-{
-    for ( int i = 0; i < rowCount(); i++ )
-    {
-        QModelIndex pidx = index( i, 0 );
-
-        for ( int j = 0; j < rowCount( pidx ); j++ )
-        {
-            QModelIndex idx = index( j, 0, pidx );
-            SourcesModel::SourceType type = SourcesModel::indexType( idx );
-
-            if ( type == SourcesModel::PlaylistSource )
-            {
-                playlist_ptr p = SourcesModel::indexToPlaylist( idx );
-                if ( playlist.data() == p.data() )
-                    return idx;
-            }
-        }
-    }
-
-    return QModelIndex();
-}
-
-
-QModelIndex
-SourcesModel::dynamicPlaylistToIndex( const Tomahawk::dynplaylist_ptr& playlist )
-{
-    for ( int i = 0; i < rowCount(); i++ )
-    {
-        QModelIndex pidx = index( i, 0 );
-
-        for ( int j = 0; j < rowCount( pidx ); j++ )
-        {
-            QModelIndex idx = index( j, 0, pidx );
-            SourcesModel::SourceType type = SourcesModel::indexType( idx );
-
-            if ( type == SourcesModel::DynamicPlaylistSource )
-            {
-                playlist_ptr p = SourcesModel::indexToDynamicPlaylist( idx );
-                if ( playlist.data() == p.data() )
-                    return idx;
-            }
-        }
-    }
-
-    return QModelIndex();
-}
-
-
-QModelIndex
-SourcesModel::collectionToIndex( const Tomahawk::collection_ptr& collection )
-{
-    for ( int i = 0; i < rowCount(); i++ )
-    {
-        QModelIndex idx = index( i, 0 );
-        SourcesModel::SourceType type = SourcesModel::indexType( idx );
-        if ( type == SourcesModel::CollectionSource )
-        {
-            SourceTreeItem* sti = SourcesModel::indexToTreeItem( idx );
-            if ( sti && !sti->source().isNull() && sti->source()->collection().data() == collection.data() )
-                return idx;
-        }
-    }
-
-    return QModelIndex();
-}
-
-
-bool
-SourcesModel::setData( const QModelIndex& index, const QVariant& value, int role )
-{
-    Q_UNUSED( role );
-    qDebug() << Q_FUNC_INFO;
-
-    if ( !index.isValid() )
-        return false;
-
-    playlist_ptr playlist;
-    if ( indexType( index ) == PlaylistSource )
-    {
-        playlist = indexToPlaylist( index );
-    }
-    else if ( indexType( index ) == DynamicPlaylistSource )
-    {
-        playlist = indexToDynamicPlaylist( index ).staticCast< Playlist >();
-    }
-
-    if ( !playlist.isNull() )
-    {
-        playlist->rename( value.toString() );
-        QStandardItemModel::setData( index, value, Qt::DisplayRole );
-        return true;
-    }
-
-    return false;
-}
-
-
-void
-SourcesModel::onSourceChanged()
-{
-    Source* src = qobject_cast< Source* >( sender() );
-
-    for ( int i = 0; i < rowCount(); i++ )
-    {
-        QModelIndex idx = index( i, 0 );
-
-        if ( indexType( idx ) == CollectionSource )
-        {
-            SourceTreeItem* sti = indexToTreeItem( idx );
-            if ( sti )
-            {
-                if ( sti->source().data() == src )
-                {
-                    emit dataChanged( idx, idx );
-                }
-            }
-        }
-    }
+    return item->parent()->children().indexOf( item );
 }

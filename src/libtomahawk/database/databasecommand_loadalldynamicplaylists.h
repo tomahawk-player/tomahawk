@@ -39,7 +39,8 @@ public:
     virtual QString commandname() const { return "loadalldynamicplaylists"; }
     
 signals:
-    void playlistLoaded( const Tomahawk::source_ptr& source, const QVariantList& data );
+    void autoPlaylistLoaded( const Tomahawk::source_ptr& source, const QVariantList& data );
+    void stationLoaded( const Tomahawk::source_ptr& source, const QVariantList& data );
     void done();
 };
 

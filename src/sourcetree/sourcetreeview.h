@@ -23,6 +23,7 @@
 #include <QMenu>
 
 #include "source.h"
+#include "sourcetree/sourcesmodel.h"
 
 class CollectionModel;
 class PlaylistModel;
@@ -45,22 +46,19 @@ signals:
     void onOffline( const QModelIndex& index );
 
 private slots:
-    void onPlaylistActivated( const Tomahawk::playlist_ptr& playlist );
-    void onDynamicPlaylistActivated( const Tomahawk::dynplaylist_ptr& playlist );
-    void onCollectionActivated( const Tomahawk::collection_ptr& collection );
-    void onSuperCollectionActivated();
-    void onTempPageActivated();
+//     void onPlaylistActivated( const Tomahawk::playlist_ptr& playlist );
+//     void onDynamicPlaylistActivated( const Tomahawk::dynplaylist_ptr& playlist );
+//     void onCollectionActivated( const Tomahawk::collection_ptr& collection );
+//     void onSuperCollectionActivated();
+//     void onTempPageActivated();
 
     void onItemActivated( const QModelIndex& index );
-    void onSelectionChanged();
 
     void loadPlaylist();
     void deletePlaylist();
     void renamePlaylist();
 
     void onCustomContextMenu( const QPoint& pos );
-    void onSourceOffline( Tomahawk::source_ptr );
-
 protected:
 //    void drawBranches( QPainter* painter, const QRect& rect, const QModelIndex& index ) const {}
     void drawRow( QPainter* painter, const QStyleOptionViewItem& option, const QModelIndex& index ) const;
@@ -74,6 +72,9 @@ protected:
 
 private:
     void setupMenus();
+
+    template< typename T >
+    T* itemFromIndex( const QModelIndex& index ) const;
 
     SourcesModel* m_model;
     SourcesProxyModel* m_proxyModel;
