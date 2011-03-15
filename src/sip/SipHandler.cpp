@@ -286,6 +286,6 @@ SipHandler::onError( int code, const QString& msg )
     else
     {
         SipPlugin* sip = qobject_cast<SipPlugin*>(sender());
-        QTimer::singleShot( 10000, sip, SLOT( connect() ) );
+        QTimer::singleShot( 10000, sip, SLOT( connectPlugin() ) );
     }
 }

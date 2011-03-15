@@ -9,15 +9,9 @@
 
 JabberPlugin::JabberPlugin()
     : p( 0 ),
-    m_menu ( 0 )
+    m_menu ( 0 ),
+    m_addFriendAction( 0 )
 {
-    if( !accountName().isEmpty() )
-        m_menu = new QMenu(QString("Jabber (").append(accountName()).append(")"));
-
-    m_addFriendAction = m_menu->addAction("Add Friend...");
-
-    connect(m_addFriendAction, SIGNAL(triggered()),
-            this,              SLOT(showAddFriendDialog()));
 }
 
 void
@@ -86,14 +80,46 @@ JabberPlugin::connectPlugin( bool startup )
     QObject::connect( p, SIGNAL( peerOffline( QString ) ), SIGNAL( peerOffline( QString ) ) );
     QObject::connect( p, SIGNAL( msgReceived( QString, QString ) ), SIGNAL( msgReceived( QString, QString ) ) );
 
-    QObject::connect( p, SIGNAL( connected() ), SIGNAL( connected() ) );
-    QObject::connect( p, SIGNAL( disconnected() ), SIGNAL( disconnected() ) );
+    QObject::connect( p, SIGNAL( connected() ), SLOT( onConnected() ) );
+    QObject::connect( p, SIGNAL( disconnected() ), SIGNAL( onDisconnected() ) );
     QObject::connect( p, SIGNAL( authError( int, QString ) ), SLOT( onAuthError( int, QString ) ) );
 
     p->resolveHostSRV();
     
     return true;
 }
+
+void 
+JabberPlugin::onConnected()
+{
+    if( !m_menu ) {
+        m_menu = new QMenu( QString( "Jabber (").append( accountName() ).append( ")" ) );
+        
+        m_addFriendAction = m_menu->addAction( "Add Friend..." );
+        
+        connect( m_addFriendAction, SIGNAL( triggered() ),
+                this,               SLOT( showAddFriendDialog() ) ) ;
+                
+        emit addMenu( m_menu );
+    }
+    
+    emit connected();
+}
+
+void 
+JabberPlugin::onDisconnected()
+{
+    if( m_menu && m_addFriendAction ) {
+        emit removeMenu( m_menu );
+        
+        delete m_menu;
+        m_menu = 0;
+        m_addFriendAction = 0;
+    }
+    
+    emit disconnected();
+}
+
 
 
 void

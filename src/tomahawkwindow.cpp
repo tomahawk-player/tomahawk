@@ -157,10 +157,8 @@ TomahawkWindow::TomahawkWindow( QWidget* parent )
     // propagate sip menu
     foreach( SipPlugin *plugin, APP->sipHandler()->plugins() )
     {
-        if ( plugin->menu() )
-        {
-            ui->menuNetwork->addMenu( plugin->menu() );
-        }
+        connect( plugin, SIGNAL( addMenu( QMenu* ) ), this, SLOT( pluginMenuAdded( QMenu* ) ) );
+        connect( plugin, SIGNAL( removeMenu( QMenu* ) ), this, SLOT( pluginMenuRemoved( QMenu* ) ) );
     }
 
     loadSettings();
@@ -335,6 +333,25 @@ TomahawkWindow::addPeerManually()
 
     qDebug() << "Attempting to connect to" << addr;
     Servent::instance()->connectToPeer( addr, port, key );
+}
+
+void 
+TomahawkWindow::pluginMenuAdded( QMenu* menu )
+{
+    ui->menuNetwork->addMenu( menu );
+}
+
+void 
+TomahawkWindow::pluginMenuRemoved( QMenu* menu )
+{
+    foreach( QAction* action, ui->menuNetwork->actions() )
+    {
+        if( action->menu() == menu )
+        {
+            ui->menuNetwork->removeAction( action );
+            return;
+        }
+    }
 }
 
 

@@ -10,14 +10,9 @@
 
 JabberPlugin::JabberPlugin()
     : p( 0 )
+    , m_menu( 0 )
+    , m_addFriendAction( 0 )
 {
-    m_menu = new QMenu(QString("JREEN (").append(accountName()).append(")"));
-    m_addFriendAction = m_menu->addAction("Add Friend...");
-    QAction *connectAction = m_menu->addAction("Connect");
-
-    connect(m_addFriendAction, SIGNAL(triggered()),
-            this,              SLOT(showAddFriendDialog()));
-    connect(connectAction, SIGNAL(triggered()), SLOT(connectPlugin()));
 }
 
 JabberPlugin::~JabberPlugin()
@@ -92,8 +87,8 @@ JabberPlugin::connectPlugin( bool startup )
     QObject::connect( p, SIGNAL( peerOffline( QString ) ), SIGNAL( peerOffline( QString ) ) );
     QObject::connect( p, SIGNAL( msgReceived( QString, QString ) ), SIGNAL( msgReceived( QString, QString ) ) );
 
-    QObject::connect( p, SIGNAL( connected() ), SIGNAL( connected() ) );
-    QObject::connect( p, SIGNAL( disconnected() ), SIGNAL( disconnected() ) );
+    QObject::connect( p, SIGNAL( connected() ), SIGNAL( onConnected() ) );
+    QObject::connect( p, SIGNAL( disconnected() ), SIGNAL( onDisconnected() ) );
 
     return true;
 }
@@ -101,11 +96,45 @@ JabberPlugin::connectPlugin( bool startup )
 void
 JabberPlugin::disconnectPlugin()
 {
+    onDisconnected();
+    
     if ( p )
         p->disconnect();
 
     delete p;
     p = 0;
+}
+
+void 
+JabberPlugin::onConnected()
+{
+    if( !m_menu ) {
+        m_menu = new QMenu( QString( "JREEN (" ).append( accountName() ).append(")" ) );
+        m_addFriendAction = m_menu->addAction( "Add Friend..." );
+        QAction *connectAction = m_menu->addAction( "Connect" );
+        
+        connect( m_addFriendAction, SIGNAL(triggered() ),
+                this,              SLOT( showAddFriendDialog() ) );
+        connect( connectAction, SIGNAL( triggered() ), SLOT( connectPlugin() ) );
+        
+        emit addMenu( m_menu );
+    }
+    
+    emit connected();
+}
+
+void 
+JabberPlugin::onDisconnected()
+{
+    if( m_menu && m_addFriendAction ) {
+        emit removeMenu( m_menu );
+        
+        delete m_menu;
+        m_menu = 0;
+        m_addFriendAction = 0; // deleted by menu
+    }
+    
+    emit disconnected();
 }
 
 void

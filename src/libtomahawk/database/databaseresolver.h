@@ -18,7 +18,7 @@ public:
     virtual QString name() const;
     virtual unsigned int weight() const { return m_weight; }
     virtual unsigned int preference() const { return 100; }
-    virtual unsigned int timeout() const { return 1000; }
+    virtual unsigned int timeout() const { return 2500; }
 
     virtual void resolve( const Tomahawk::query_ptr& query );
 
