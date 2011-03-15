@@ -25,7 +25,9 @@ Artist::get( unsigned int id, const QString& name, const Tomahawk::collection_pt
     }
 
     artist_ptr a = artist_ptr( new Artist( id, name, collection ) );
-    s_artists.insert( id, a );
+
+    if ( id > 0 )
+        s_artists.insert( id, a );
 
     return a;
 }

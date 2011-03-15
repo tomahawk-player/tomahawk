@@ -195,7 +195,7 @@ ScriptResolver::doSetup( const QVariantMap& m )
     qDebug() << Q_FUNC_INFO << m;
     m_name       = m.value( "name" ).toString();
     m_weight     = m.value( "weight", 0 ).toUInt();
-    m_timeout    = m.value( "timeout", 5000 ).toUInt();
+    m_timeout    = m.value( "timeout", 25 ).toUInt() * 1000;
     m_preference = m.value( "preference", 0 ).toUInt();
     qDebug() << "SCRIPT" << m_cmd << "READY," << endl
              << "name" << m_name << endl
