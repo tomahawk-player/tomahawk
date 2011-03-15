@@ -6,6 +6,7 @@
 #include "album.h"
 #include "pipeline.h"
 #include "sourcelist.h"
+#include "functimeout.h"
 
 
 ScriptResolver::ScriptResolver( const QString& exe )
@@ -104,10 +105,19 @@ ScriptResolver::handleMsg( const QByteArray& msg )
 
     if( msgtype == "results" )
     {
-        QList< Tomahawk::result_ptr > results;
         const QString qid = m.value( "qid" ).toString();
+        if ( !m_queryState.contains( qid ) )
+        {
+            //FIXME: We should always accept results, even if they arrive too late. Needs some work in Pipeline.
+            qDebug() << "Ignoring results for" << qid << "- arrived after timeout.";
+            return;
+        }
+        m_queryState.remove( qid );
+
+        QList< Tomahawk::result_ptr > results;
         const QVariantList reslist = m.value( "results" ).toList();
         Tomahawk::collection_ptr coll = SourceList::instance()->getLocal()->collection();
+
         foreach( const QVariant& rv, reslist )
         {
             QVariantMap m = rv.toMap();
@@ -127,6 +137,7 @@ ScriptResolver::handleMsg( const QByteArray& msg )
             rp->setCollection( coll );
             results << rp;
         }
+
         Tomahawk::Pipeline::instance()->reportResults( qid, results );
     }
 }
@@ -172,6 +183,9 @@ ScriptResolver::resolve( const Tomahawk::query_ptr& query )
     const QByteArray msg = m_serializer.serialize( QVariant( m ) );
     qDebug() << "ASKING SCRIPT RESOLVER TO RESOLVE:" << msg;
     sendMsg( msg );
+
+    m_queryState.insert( query->id(), 1 );
+    new Tomahawk::FuncTimeout( m_timeout, boost::bind( &ScriptResolver::onTimeout, this, query ) );
 }
 
 
@@ -201,3 +215,16 @@ ScriptResolver::stop()
     m_proc.kill();
 }
 
+
+void
+ScriptResolver::onTimeout( const Tomahawk::query_ptr& query )
+{
+    // check if this query has already been processed
+    if ( !m_queryState.contains( query->id() ) )
+        return;
+
+    // if not, it's time to emit an empty result list
+    m_queryState.remove( query->id() );
+    QList< Tomahawk::result_ptr > results;
+    Tomahawk::Pipeline::instance()->reportResults( query->id(), results );
+}
