@@ -268,6 +268,7 @@ Section "Tomahawk Player" SEC_TOMAHAWK_PLAYER
    File "${QT_DLL_PATH}\QtNetwork4.dll"
    File "${QT_DLL_PATH}\QtSql4.dll"
    File "${QT_DLL_PATH}\QtXml4.dll"
+   File "${QT_DLL_PATH}\QtWebKit4.dll"
 
    ;SQLite driver
    SetOutPath "$INSTDIR\sqldrivers"
