@@ -46,12 +46,18 @@ Result::collection() const
 float
 Result::score() const
 {
-    if ( collection()->source()->isOnline() )
+    if ( !collection().isNull() && collection()->source()->isOnline() )
     {
         return m_score;
     }
     else
-        return 0.0;
+    {
+        // check if this a valid collection-less result (e.g. from youtube, but ignore offline sources still)
+        if ( collection().isNull() )
+            return m_score;
+        else
+            return 0.0;
+    }
 }
 
 
@@ -143,4 +149,16 @@ Result::setCollection( const Tomahawk::collection_ptr& collection )
     m_collection = collection;
     connect( m_collection->source().data(), SIGNAL( online() ), SLOT( onOnline() ), Qt::QueuedConnection );
     connect( m_collection->source().data(), SIGNAL( offline() ), SLOT( onOffline() ), Qt::QueuedConnection );
+}
+
+
+QString
+Result::friendlySource() const
+{
+    if ( collection().isNull() )
+    {
+        return m_friendlySource;
+    }
+    else
+        return collection()->source()->friendlyName();
 }

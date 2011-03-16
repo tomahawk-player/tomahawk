@@ -43,6 +43,7 @@ public:
     QString track() const { return m_track; }
     QString url() const { return m_url; }
     QString mimetype() const { return m_mimetype; }
+    QString friendlySource() const;
 
     unsigned int duration() const { return m_duration; }
     unsigned int bitrate() const { return m_bitrate; }
@@ -55,6 +56,7 @@ public:
     void setId( unsigned int id ) { m_id = id; }
     void setRID( RID id ) { m_rid = id; }
     void setCollection( const Tomahawk::collection_ptr& collection );
+    void setFriendlySource( const QString& s ) { m_friendlySource = s; }
     void setArtist( const Tomahawk::artist_ptr& artist );
     void setAlbum( const Tomahawk::album_ptr& album );
     void setTrack( const QString& track ) { m_track = track; }
@@ -65,7 +67,7 @@ public:
     void setSize( unsigned int size ) { m_size = size; }
     void setAlbumPos( unsigned int albumpos ) { m_albumpos = albumpos; }
     void setModificationTime( unsigned int modtime ) { m_modtime = modtime; }
-    
+
     QVariantMap attributes() const { return m_attributes; }
     void setAttributes( const QVariantMap& map ) { m_attributes = map; updateAttributes(); }
 
@@ -74,7 +76,7 @@ public:
 signals:
     // emitted when the collection this result comes from is going offline/online:
     void statusChanged();
-    
+
 private slots:
     void onOffline();
     void onOnline();
@@ -90,6 +92,7 @@ private:
     QString m_track;
     QString m_url;
     QString m_mimetype;
+    QString m_friendlySource;
 
     unsigned int m_duration;
     unsigned int m_bitrate;

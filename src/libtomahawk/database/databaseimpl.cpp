@@ -459,7 +459,7 @@ DatabaseImpl::result( const QString& url )
 {
     TomahawkSqlQuery query = newquery();
     Tomahawk::source_ptr s;
-    Tomahawk::result_ptr res = Tomahawk::result_ptr( new Tomahawk::Result() );
+    Tomahawk::result_ptr res;
     QString fileUrl;
 
     if ( url.contains( "servent://" ) )
@@ -477,8 +477,13 @@ DatabaseImpl::result( const QString& url )
         fileUrl = url;
     }
     else
-        Q_ASSERT( false );
+    {
+//        Q_ASSERT( false );
+        qDebug() << "We don't support non-servent / non-file result-hints yet.";
+        return res;
+    }
 
+    res = Tomahawk::result_ptr( new Tomahawk::Result() );
     bool searchlocal = s->isLocal();
 
     QString sql = QString( "SELECT "

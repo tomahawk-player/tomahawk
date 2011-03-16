@@ -236,7 +236,7 @@ AudioControls::onPlaybackLoading( const Tomahawk::result_ptr& result )
 
     ui->artistTrackLabel->setResult( result );
     ui->albumLabel->setResult( result );
-    ui->ownerLabel->setText( result->collection()->source()->friendlyName() );
+    ui->ownerLabel->setText( result->friendlySource() );
     ui->coverImage->setPixmap( m_defaultCover );
 
     if ( ui->timeLabel->text().isEmpty() )
