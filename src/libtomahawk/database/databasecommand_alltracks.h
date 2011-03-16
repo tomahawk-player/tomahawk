@@ -22,7 +22,7 @@ public:
         AlbumPosition = 3
     };
 
-    explicit DatabaseCommand_AllTracks( const Tomahawk::collection_ptr& collection, QObject* parent = 0 )
+    explicit DatabaseCommand_AllTracks( const Tomahawk::collection_ptr& collection = Tomahawk::collection_ptr(), QObject* parent = 0 )
         : DatabaseCommand( parent )
         , m_collection( collection )
         , m_artist( 0 )

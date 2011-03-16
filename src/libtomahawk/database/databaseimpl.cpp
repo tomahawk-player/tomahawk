@@ -187,12 +187,12 @@ DatabaseImpl::file( int fid )
             {
                 return r;
             }
-            
+
             r->setUrl( QString( "servent://%1\t%2" ).arg( s->userName() ).arg( url_str ) );
         }
 
-        Tomahawk::artist_ptr artist = Tomahawk::Artist::get( query.value( 7 ).toUInt(), query.value( 10 ).toString(), s->collection() );
-        Tomahawk::album_ptr album = Tomahawk::Album::get( query.value( 8 ).toUInt(), query.value( 11 ).toString(), artist, s->collection() );
+        Tomahawk::artist_ptr artist = Tomahawk::Artist::get( query.value( 7 ).toUInt(), query.value( 10 ).toString() );
+        Tomahawk::album_ptr album = Tomahawk::Album::get( query.value( 8 ).toUInt(), query.value( 11 ).toString(), artist );
 
         r->setUrl( query.value( 0 ).toString() );
         r->setModificationTime( query.value( 1 ).toUInt() );
@@ -512,7 +512,7 @@ DatabaseImpl::result( const QString& url )
     if( query.next() )
     {
         Tomahawk::source_ptr s;
-        
+
         const QString url_str = query.value( 0 ).toString();
         if ( query.value( 13 ).toUInt() == 0 )
         {
@@ -526,13 +526,13 @@ DatabaseImpl::result( const QString& url )
             {
                 return res;
             }
-            
+
             res->setUrl( QString( "servent://%1\t%2" ).arg( s->userName() ).arg( url_str ) );
         }
-        
-        Tomahawk::artist_ptr artist = Tomahawk::Artist::get( query.value( 15 ).toUInt(), query.value( 10 ).toString(), s->collection() );
-        Tomahawk::album_ptr album = Tomahawk::Album::get( query.value( 16 ).toUInt(), query.value( 11 ).toString(), artist, s->collection() );
-        
+
+        Tomahawk::artist_ptr artist = Tomahawk::Artist::get( query.value( 15 ).toUInt(), query.value( 10 ).toString() );
+        Tomahawk::album_ptr album = Tomahawk::Album::get( query.value( 16 ).toUInt(), query.value( 11 ).toString(), artist );
+
         res->setModificationTime( query.value( 1 ).toUInt() );
         res->setSize( query.value( 2 ).toUInt() );
         res->setMimetype( query.value( 4 ).toString() );

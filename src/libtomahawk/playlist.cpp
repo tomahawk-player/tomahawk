@@ -120,9 +120,9 @@ Playlist::Playlist( const source_ptr& author,
 
 
 void
-Playlist::init()     
+Playlist::init()
 {
-   m_locallyChanged = false;      
+   m_locallyChanged = false;
    connect( Pipeline::instance(), SIGNAL( idle() ), SLOT( onResolvingFinished() ) );  
 }
 
@@ -217,7 +217,7 @@ Playlist::reportDeleted( const Tomahawk::playlist_ptr& self )
 void
 Playlist::loadRevision( const QString& rev )
 {
-    qDebug() << Q_FUNC_INFO;
+    qDebug() << Q_FUNC_INFO << currentrevision() << rev << m_title;
 
     DatabaseCommand_LoadPlaylistEntries* cmd =
             new DatabaseCommand_LoadPlaylistEntries( rev.isEmpty() ? currentrevision() : rev );
@@ -314,7 +314,7 @@ Playlist::setNewRevision( const QString& rev,
                                  bool is_newest_rev,
                                  const QMap< QString, Tomahawk::plentry_ptr >& addedmap )
 {
-
+    qDebug() << Q_FUNC_INFO << rev << is_newest_rev << m_title << addedmap.count() << neworderedguids.count() << oldorderedguids.count();
     // build up correctly ordered new list of plentry_ptrs from
     // existing ones, and the ones that have been added
     QMap<QString, plentry_ptr> entriesmap;

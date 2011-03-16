@@ -117,7 +117,6 @@ ScriptResolver::handleMsg( const QByteArray& msg )
 
         QList< Tomahawk::result_ptr > results;
         const QVariantList reslist = m.value( "results" ).toList();
-        Tomahawk::collection_ptr coll = SourceList::instance()->getLocal()->collection();
 
         foreach( const QVariant& rv, reslist )
         {
@@ -125,9 +124,9 @@ ScriptResolver::handleMsg( const QByteArray& msg )
             qDebug() << "RES" << m;
 
             Tomahawk::result_ptr rp( new Tomahawk::Result() );
-            Tomahawk::artist_ptr ap = Tomahawk::Artist::get( 0, m.value( "artist" ).toString(), coll );
+            Tomahawk::artist_ptr ap = Tomahawk::Artist::get( 0, m.value( "artist" ).toString() );
             rp->setArtist( ap );
-            rp->setAlbum( Tomahawk::Album::get( 0, m.value( "album" ).toString(), ap, coll ) );
+            rp->setAlbum( Tomahawk::Album::get( 0, m.value( "album" ).toString(), ap ) );
             rp->setTrack( m.value( "track" ).toString() );
             rp->setDuration( m.value( "duration" ).toUInt() );
             rp->setBitrate( m.value( "bitrate" ).toUInt() );

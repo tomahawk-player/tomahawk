@@ -72,7 +72,7 @@ PlaylistModel::loadPlaylist( const Tomahawk::playlist_ptr& playlist, bool loadEn
 
     if ( !loadEntries )
         return;
-    
+
     PlItem* plitem;
     QList<plentry_ptr> entries = playlist->entries();
     if ( entries.count() )
@@ -94,6 +94,8 @@ PlaylistModel::loadPlaylist( const Tomahawk::playlist_ptr& playlist, bool loadEn
 
         emit endInsertRows();
     }
+    else
+        qDebug() << "Playlist seems empty:" << playlist->title();
 
     emit loadingFinished();
     emit trackCountChanged( rowCount( QModelIndex() ) );
