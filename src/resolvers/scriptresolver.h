@@ -24,13 +24,12 @@ public:
     virtual unsigned int preference() const { return m_preference; }
     virtual unsigned int timeout() const    { return m_timeout; }
 
-    virtual void resolve( const Tomahawk::query_ptr& query );
-
 signals:
     void finished();
 
 public slots:
     virtual void stop();
+    virtual void resolve( const Tomahawk::query_ptr& query );
 
 private slots:
     void readStderr();

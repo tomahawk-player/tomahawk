@@ -20,6 +20,7 @@ public:
     virtual unsigned int preference() const { return 100; }
     virtual unsigned int timeout() const { return 2500; }
 
+public slots:
     virtual void resolve( const Tomahawk::query_ptr& query );
 
 private slots:

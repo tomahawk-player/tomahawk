@@ -30,12 +30,14 @@ public:
     virtual unsigned int weight() const = 0;
     virtual unsigned int preference() const { return 100; };
     virtual unsigned int timeout() const = 0;
-    virtual void resolve( const Tomahawk::query_ptr& query ) = 0;
 
     //virtual QWidget * configUI() { return 0; };
     //etc
 
     PluginAPI * api() const { return m_api; }
+
+public slots:
+    virtual void resolve( const Tomahawk::query_ptr& query ) = 0;
 
 private:
     PluginAPI * m_api;
