@@ -63,7 +63,7 @@ public:
 signals:
     void indexReady();
 
-public slots:    
+public slots:
 
 private:
     bool updateSchema( int currentver );
