@@ -11,8 +11,7 @@
 
 
 ScriptResolver::ScriptResolver( const QString& exe )
-    : Tomahawk::Resolver()
-    , m_cmd( exe )
+    : Tomahawk::ExternalResolver( exe )
     , m_num_restarts( 0 )
     , m_msgsize( 0 )
     , m_ready( false )
@@ -23,7 +22,7 @@ ScriptResolver::ScriptResolver( const QString& exe )
     connect( &m_proc, SIGNAL( readyReadStandardOutput() ), SLOT( readStdout() ) );
     connect( &m_proc, SIGNAL( finished( int, QProcess::ExitStatus ) ), SLOT( cmdExited( int, QProcess::ExitStatus ) ) );
 
-    m_proc.start( m_cmd );
+    m_proc.start( filePath() );
 }
 
 
@@ -36,7 +35,7 @@ ScriptResolver::~ScriptResolver()
 void
 ScriptResolver::readStderr()
 {
-    qDebug() << "SCRIPT_STDERR" << m_cmd << m_proc.readAllStandardError();
+    qDebug() << "SCRIPT_STDERR" << filePath() << m_proc.readAllStandardError();
 }
 
 
@@ -155,7 +154,7 @@ void
 ScriptResolver::cmdExited( int code, QProcess::ExitStatus status )
 {
     m_ready = false;
-    qDebug() << Q_FUNC_INFO << "SCRIPT EXITED, code" << code << "status" << status << m_cmd;
+    qDebug() << Q_FUNC_INFO << "SCRIPT EXITED, code" << code << "status" << status << filePath();
     Tomahawk::Pipeline::instance()->removeResolver( this );
 
     if( m_stopped ) 
@@ -170,7 +169,7 @@ ScriptResolver::cmdExited( int code, QProcess::ExitStatus status )
     {
         m_num_restarts++;
         qDebug() << "*** Restart num" << m_num_restarts;
-        m_proc.start( m_cmd );
+        m_proc.start( filePath() );
     }
     else
     {
@@ -205,7 +204,7 @@ ScriptResolver::doSetup( const QVariantMap& m )
     m_weight     = m.value( "weight", 0 ).toUInt();
     m_timeout    = m.value( "timeout", 25 ).toUInt() * 1000;
     m_preference = m.value( "preference", 0 ).toUInt();
-    qDebug() << "SCRIPT" << m_cmd << "READY," << endl
+    qDebug() << "SCRIPT" << filePath() << "READY," << endl
              << "name" << m_name << endl
              << "weight" << m_weight << endl
              << "timeout" << m_timeout << endl

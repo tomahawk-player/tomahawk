@@ -19,10 +19,10 @@
 #include "tomahawk/tomahawkplugin.h"
 #include "typedefs.h"
 #include "playlist.h"
+#include "resolver.h"
 
 #include "utils/tomahawkutils.h"
 
-class ScriptResolver;
 class AudioEngine;
 class Database;
 class SipHandler;
@@ -92,7 +92,7 @@ private:
 
     QList<Tomahawk::collection_ptr> m_collections;
     QList<TomahawkPlugin*> m_plugins;
-    QList<ScriptResolver*> m_scriptResolvers;
+    QList<Tomahawk::ExternalResolver*> m_scriptResolvers;
 
     Database* m_database;
     AudioEngine* m_audioEngine;

@@ -191,7 +191,7 @@ AudioEngine::loadTrack( const Tomahawk::result_ptr& result )
             else
             {
                 QUrl furl = QUrl( m_currentTrack->url().left( m_currentTrack->url().indexOf( '?' ) ) );
-                furl.setEncodedQuery( QString( m_currentTrack->url().mid( m_currentTrack->url().indexOf( '?' ) + 1 ) + "&format=xml" ).toLocal8Bit() );
+                furl.setEncodedQuery( QString( m_currentTrack->url().mid( m_currentTrack->url().indexOf( '?' ) + 1 ) ).toLocal8Bit() );
                 qDebug() << Q_FUNC_INFO << furl;
                 m_mediaObject->setCurrentSource( furl );
             }

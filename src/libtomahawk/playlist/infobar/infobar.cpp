@@ -71,7 +71,7 @@ InfoBar::changeEvent( QEvent* e )
     switch ( e->type() )
     {
         case QEvent::LanguageChange:
-            ui->retranslateUi( this );
+//            ui->retranslateUi( this );
             break;
 
         default:
