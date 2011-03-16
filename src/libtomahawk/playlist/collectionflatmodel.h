@@ -34,6 +34,8 @@ public:
     QVariant data( const QModelIndex& index, int role ) const;
     QVariant headerData( int section, Qt::Orientation orientation, int role ) const;
 
+    void addCollections( const QList< Tomahawk::collection_ptr >& collections );
+    
     void addCollection( const Tomahawk::collection_ptr& collection );
     void removeCollection( const Tomahawk::collection_ptr& collection );
 
@@ -47,6 +49,7 @@ signals:
 
     void itemSizeChanged( const QModelIndex& index );
 
+    void doneLoadingCollections();
 private slots:
     void onDataChanged();
 
@@ -60,6 +63,8 @@ private slots:
 private:
     QMap< Tomahawk::collection_ptr, QPair< int, int > > m_collectionRows;
     QList<Tomahawk::query_ptr> m_tracksToAdd;
+    // just to keep track of what we are waiting to be loaded
+    QList<Tomahawk::Collection*> m_loadingCollections;
 };
 
 #endif // COLLECTIONFLATMODEL_H
