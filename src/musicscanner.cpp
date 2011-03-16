@@ -24,7 +24,7 @@ DirLister::scanDir( QDir dir, int depth )
     QFileInfoList dirs;
     const uint mtime = QFileInfo( dir.absolutePath() ).lastModified().toUTC().toTime_t();
     m_newdirmtimes.insert( dir.absolutePath(), mtime );
-    
+
     if ( m_dirmtimes.contains( dir.absolutePath() ) && mtime == m_dirmtimes.value( dir.absolutePath() ) )
     {
         // dont scan this dir, unchanged since last time.
@@ -33,7 +33,7 @@ DirLister::scanDir( QDir dir, int depth )
     {
         if ( m_dirmtimes.contains( dir.absolutePath() ) )
             Database::instance()->enqueue( QSharedPointer<DatabaseCommand>( new DatabaseCommand_DeleteFiles( dir, SourceList::instance()->getLocal() ) ) );
-        
+
         dir.setFilter( QDir::Files | QDir::Readable | QDir::NoDotAndDotDot );
         dir.setSorting( QDir::Name );
         dirs = dir.entryInfoList();
@@ -44,7 +44,7 @@ DirLister::scanDir( QDir dir, int depth )
     }
     dir.setFilter( QDir::Dirs | QDir::Readable | QDir::NoDotAndDotDot );
     dirs = dir.entryInfoList();
-    
+
     foreach( const QFileInfo& di, dirs )
     {
         scanDir( di.absoluteFilePath(), depth + 1 );
@@ -59,19 +59,14 @@ MusicScanner::MusicScanner( const QString& dir, quint32 bs )
     , m_dirLister( 0 )
     , m_dirListerThreadController( 0 )
 {
-    m_ext2mime.insert( "mp3",  "audio/mpeg" );
+    m_ext2mime.insert( "mp3", TomahawkUtils::extensionToMimetype( "mp3" ) );
 
 #ifndef NO_OGG
-   m_ext2mime.insert( "ogg",  "application/ogg" );
+    m_ext2mime.insert( "ogg", TomahawkUtils::extensionToMimetype( "ogg" ) );
 #endif
-
 #ifndef NO_FLAC
-   m_ext2mime.insert( "flac", "audio/flac" );
+    m_ext2mime.insert( "flac", TomahawkUtils::extensionToMimetype( "flac" ) );
 #endif
-
-   // m_ext2mime.insert( "aac",  "audio/mp4" );
-   // m_ext2mime.insert( "m4a",  "audio/mp4" );
-   // m_ext2mime.insert( "mp4",  "audio/mp4" );
 }
 
 
@@ -82,13 +77,13 @@ MusicScanner::~MusicScanner()
     if( m_dirListerThreadController )
     {
         m_dirListerThreadController->quit();
-    
+
         while( !m_dirListerThreadController->isFinished() )
         {
             QCoreApplication::processEvents( QEventLoop::AllEvents, 200 );
             TomahawkUtils::Sleep::msleep( 100 );
         }
-        
+
         if( m_dirLister )
         {
             delete m_dirLister;

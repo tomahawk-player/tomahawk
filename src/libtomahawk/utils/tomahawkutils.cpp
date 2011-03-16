@@ -227,6 +227,26 @@ filesizeToString( unsigned int size )
 }
 
 
+QString
+extensionToMimetype( const QString& extension )
+{
+    static QMap<QString, QString> s_ext2mime;
+    if ( s_ext2mime.isEmpty() )
+    {
+        s_ext2mime.insert( "mp3",  "audio/mpeg" );
+        s_ext2mime.insert( "ogg",  "application/ogg" );
+        s_ext2mime.insert( "flac", "audio/flac" );
+        s_ext2mime.insert( "mpc",  "audio/x-musepack" );
+        s_ext2mime.insert( "wma",  "audio/x-ms-wma" );
+        s_ext2mime.insert( "aac",  "audio/mp4" );
+        s_ext2mime.insert( "m4a",  "audio/mp4" );
+        s_ext2mime.insert( "mp4",  "audio/mp4" );
+    }
+
+    return s_ext2mime.value( extension, "unknown" );
+}
+
+
 QPixmap
 createDragPixmap( int itemCount )
 {

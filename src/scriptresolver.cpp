@@ -7,6 +7,7 @@
 #include "pipeline.h"
 #include "sourcelist.h"
 #include "functimeout.h"
+#include "utils/tomahawkutils.h"
 
 
 ScriptResolver::ScriptResolver( const QString& exe )
@@ -132,10 +133,17 @@ ScriptResolver::handleMsg( const QByteArray& msg )
             rp->setBitrate( m.value( "bitrate" ).toUInt() );
             rp->setUrl( m.value( "url" ).toString() );
             rp->setSize( m.value( "size" ).toUInt() );
-            rp->setMimetype( m.value( "mimetype" ).toString() );
             rp->setScore( m.value( "score" ).toFloat() * ( (float)weight() / 100.0 ) );
             rp->setRID( uuid() );
             rp->setFriendlySource( m_name );
+
+            rp->setMimetype( m.value( "mimetype" ).toString() );
+            if ( rp->mimetype().isEmpty() )
+            {
+                rp->setMimetype( TomahawkUtils::extensionToMimetype( m.value( "extension" ).toString() ) );
+                Q_ASSERT( !rp->mimetype().isEmpty() );
+            }
+
             results << rp;
         }
 

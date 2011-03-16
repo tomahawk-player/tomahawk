@@ -74,7 +74,7 @@ private slots:
 
 private:
     QString m_dir;
-    QMap<QString,QString> m_ext2mime; // eg: mp3 -> audio/mpeg
+    QMap<QString, QString> m_ext2mime; // eg: mp3 -> audio/mpeg
     unsigned int m_scanned;
     unsigned int m_skipped;
 
@@ -82,10 +82,10 @@ private:
 
     QMap<QString, unsigned int> m_dirmtimes;
     QMap<QString, unsigned int> m_newdirmtimes;
-    
+
     QList<QVariant> m_scannedfiles;
     quint32 m_batchsize;
-    
+
     DirLister* m_dirLister;
     QThread* m_dirListerThreadController;
 };
