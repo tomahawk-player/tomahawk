@@ -57,9 +57,11 @@ PlaylistManager::PlaylistManager( QObject* parent )
     m_topbar = new TopBar();
     m_infobar = new InfoBar();
     m_stack = new QStackedWidget();
-
+    
+#ifndef Q_WS_MAC
     m_infobar->installEventFilter( new WidgetDragFilter( m_infobar ) );
-
+#endif
+    
     QFrame* line = new QFrame();
     line->setFrameStyle( QFrame::HLine );
     line->setStyleSheet( "border: 1px solid gray;" );
