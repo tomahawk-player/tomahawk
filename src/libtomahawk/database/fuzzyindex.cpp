@@ -99,7 +99,7 @@ FuzzyIndex::appendFields( const QString& table, const QMap< unsigned int, QStrin
             QString name = it.value();
 
             {
-                Field* field = _CLNEW Field( table.toStdWString().c_str(), name.toStdWString().c_str(),
+                Field* field = _CLNEW Field( table.toStdWString().c_str(), DatabaseImpl::sortname( name ).toStdWString().c_str(),
                                             Field::STORE_YES | Field::INDEX_UNTOKENIZED );
                 doc.add( *field );
             }
@@ -158,7 +158,7 @@ FuzzyIndex::search( const QString& table, const QString& name )
         QueryParser parser( table.toStdWString().c_str(), m_analyzer );
         Hits* hits = 0;
 
-        FuzzyQuery* qry = _CLNEW FuzzyQuery( _CLNEW Term( table.toStdWString().c_str(), name.toStdWString().c_str() ) );
+        FuzzyQuery* qry = _CLNEW FuzzyQuery( _CLNEW Term( table.toStdWString().c_str(), DatabaseImpl::sortname( name ).toStdWString().c_str() ) );
         hits = m_luceneSearcher->search( qry );
 
         for ( int i = 0; i < hits->length(); i++ )
@@ -169,7 +169,7 @@ FuzzyIndex::search( const QString& table, const QString& name )
             int id = QString::fromWCharArray( d->get( _T( "id" ) ) ).toInt();
             QString result = QString::fromWCharArray( d->get( table.toStdWString().c_str() ) );
 
-            if ( result.toLower() == name.toLower() )
+            if ( DatabaseImpl::sortname( result ) == DatabaseImpl::sortname( name ) )
                 score = 1.0;
             else
                 score = qMin( score, (float)0.99 );
