@@ -8,6 +8,8 @@
 #include "boost/function.hpp"
 #include "boost/bind.hpp"
 
+#include "dllmacro.h"
+
 /*
     I want to do:
         QTimer::singleShot(1000, this, SLOT(doSomething(x)));
@@ -18,7 +20,7 @@
 namespace Tomahawk
 {
 
-class FuncTimeout : public QObject
+class DLLEXPORT FuncTimeout : public QObject
 {
 Q_OBJECT
 
