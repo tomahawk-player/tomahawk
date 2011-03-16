@@ -10,10 +10,14 @@
 QtScriptResolver::QtScriptResolver( const QString& scriptPath )
     : Tomahawk::ExternalResolver( scriptPath )
     , m_engine( new ScriptEngine( this ) )
+    , m_thread( new QThread( this ) )
     , m_ready( false )
     , m_stopped( false )
 {
     qDebug() << Q_FUNC_INFO << scriptPath;
+
+    m_engine->moveToThread( m_thread );
+    m_thread->start();
 
     QFile scriptFile( scriptPath );
     scriptFile.open( QIODevice::ReadOnly );
@@ -47,13 +51,13 @@ QtScriptResolver::~QtScriptResolver()
 void
 QtScriptResolver::resolve( const Tomahawk::query_ptr& query )
 {
-    if ( QThread::currentThread() != thread() )
-    {
-        qDebug() << "Reinvoking in correct thread:" << Q_FUNC_INFO;
-        QMetaObject::invokeMethod( this, "resolve", Qt::QueuedConnection, Q_ARG( Tomahawk::query_ptr, query ) );
-        return;
-    }
+    QMetaObject::invokeMethod( m_engine, "resolve", Qt::QueuedConnection, Q_ARG( Tomahawk::query_ptr, query ) );
+}
 
+
+void
+ScriptEngine::resolve( const Tomahawk::query_ptr& query )
+{
     qDebug() << Q_FUNC_INFO << query->toString();
     QString eval = QString( "resolve( '%1', '%2', '%3', '%4' );" )
                       .arg( query->id().replace( "'", "\\'" ) )
@@ -63,7 +67,7 @@ QtScriptResolver::resolve( const Tomahawk::query_ptr& query )
 
     QList< Tomahawk::result_ptr > results;
 
-    QVariantMap m = m_engine->mainFrame()->evaluateJavaScript( eval ).toMap();
+    QVariantMap m = mainFrame()->evaluateJavaScript( eval ).toMap();
     qDebug() << "JavaScript Result:" << m;
 
     const QString qid = m.value( "qid" ).toString();
@@ -83,9 +87,9 @@ QtScriptResolver::resolve( const Tomahawk::query_ptr& query )
         rp->setBitrate( m.value( "bitrate" ).toUInt() );
         rp->setUrl( m.value( "url" ).toString() );
         rp->setSize( m.value( "size" ).toUInt() );
-        rp->setScore( m.value( "score" ).toFloat() * ( (float)weight() / 100.0 ) );
+        rp->setScore( m.value( "score" ).toFloat() * ( (float)m_parent->weight() / 100.0 ) );
         rp->setRID( uuid() );
-        rp->setFriendlySource( m_name );
+        rp->setFriendlySource( m_parent->name() );
 
         rp->setMimetype( m.value( "mimetype" ).toString() );
         if ( rp->mimetype().isEmpty() )

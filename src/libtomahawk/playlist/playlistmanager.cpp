@@ -501,6 +501,9 @@ PlaylistManager::applyFilter()
 void
 PlaylistManager::setPage( ViewPage* page, bool trackHistory )
 {
+    if ( !page )
+        return;
+
     unlinkPlaylist();
 
     if ( !m_pageHistory.contains( page ) )
@@ -797,8 +800,12 @@ void
 PlaylistManager::showCurrentTrack()
 {
     ViewPage* page = pageForInterface( AudioEngine::instance()->currentTrackPlaylist() );
-    setPage( page );
-    page->jumpToCurrentTrack();
+
+    if ( page )
+    {
+        setPage( page );
+        page->jumpToCurrentTrack();
+    }
 }
 
 

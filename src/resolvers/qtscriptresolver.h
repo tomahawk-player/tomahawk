@@ -11,25 +11,32 @@
 #include <QtWebKit/QWebPage>
 #include <QtWebKit/QWebFrame>
 
+class QtScriptResolver;
+
 class ScriptEngine : public QWebPage
 {
 Q_OBJECT
 
 public:
-    explicit ScriptEngine( QObject* parent )
-        : QWebPage( parent )
+    explicit ScriptEngine( QtScriptResolver* parent )
+        : QWebPage( (QObject*)parent )
+        , m_parent( parent )
     {}
 
 public slots:
+    void resolve( const Tomahawk::query_ptr& query );
+
     bool shouldInterruptJavaScript()
     {
-        QApplication::processEvents( QEventLoop::AllEvents, 42 );
         return false;
     }
 
 protected:
     virtual void javaScriptConsoleMessage( const QString & message, int lineNumber, const QString & sourceID )
     { qDebug() << "JAVASCRIPT ERROR:" << message << lineNumber << sourceID; }
+
+private:
+    QtScriptResolver* m_parent;
 };
 
 class QtScriptResolver : public Tomahawk::ExternalResolver
@@ -53,6 +60,7 @@ private slots:
 
 private:
     ScriptEngine* m_engine;
+    QThread* m_thread;
 
     QString m_name;
     unsigned int m_weight, m_preference, m_timeout;
