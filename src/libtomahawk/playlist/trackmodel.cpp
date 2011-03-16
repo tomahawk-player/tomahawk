@@ -176,7 +176,7 @@ TrackModel::data( const QModelIndex& index, int role ) const
                 break;
 
             case Origin:
-                return query->results().first()->collection()->source()->friendlyName();
+                return query->results().first()->friendlySource();
                 break;
         }
     }

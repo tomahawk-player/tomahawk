@@ -134,7 +134,7 @@ ScriptResolver::handleMsg( const QByteArray& msg )
             rp->setSize( m.value( "size" ).toUInt() );
             rp->setScore( m.value( "score" ).toFloat() * ( (float)weight() / 100.0 ) );
             rp->setRID( uuid() );
-            rp->setCollection( coll );
+            rp->setFriendlySource( m_name );
             results << rp;
         }
 
