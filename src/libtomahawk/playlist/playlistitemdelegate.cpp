@@ -54,6 +54,7 @@ PlaylistItemDelegate::paint( QPainter* painter, const QStyleOptionViewItem& opti
     if ( !item || item->query().isNull() )
         return;
 
+    painter->save();
     if ( item->query()->results().count() )
         painter->setOpacity( item->query()->results().at( 0 )->score() );
     else
@@ -64,7 +65,6 @@ PlaylistItemDelegate::paint( QPainter* painter, const QStyleOptionViewItem& opti
 
     if ( item->isPlaying() )
     {
-        painter->save();
 //        painter->setRenderHint( QPainter::Antialiasing );
 
         {
@@ -92,11 +92,11 @@ PlaylistItemDelegate::paint( QPainter* painter, const QStyleOptionViewItem& opti
             painter->setPen( pen );
             painter->drawRoundedRect( r, 3.0, 3.0 );
         }
-
-        painter->restore();
     }
     else
     {
         QStyledItemDelegate::paint( painter, option, index );
     }
+
+    painter->restore();
 }
