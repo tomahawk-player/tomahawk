@@ -71,7 +71,7 @@ ENDIF(WIN32)
 SET(CLUCENE_GOOD_VERSION TRUE)
 
 FIND_PATH(CLUCENE_LIBRARY_DIR
-	NAMES CLuceneConfig.cmake/CLuceneConfig.cmake
+	NAMES CLuceneConfig.cmake/CLuceneConfig.cmake CLucene/CLuceneConfig.cmake
        	PATHS ${TRIAL_LIBRARY_PATHS} ${TRIAL_INCLUDE_PATHS} NO_DEFAULT_PATH)
 IF (CLUCENE_LIBRARY_DIR)
   MESSAGE(STATUS "Found CLucene library dir: ${CLUCENE_LIBRARY_DIR}")
