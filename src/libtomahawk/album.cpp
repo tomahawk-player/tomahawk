@@ -10,7 +10,7 @@ using namespace Tomahawk;
 
 
 album_ptr
-Album::get( unsigned int id, const QString& name, const Tomahawk::artist_ptr& artist, const Tomahawk::collection_ptr& collection )
+Album::get( unsigned int id, const QString& name, const Tomahawk::artist_ptr& artist )
 {
     static QHash< unsigned int, album_ptr > s_albums;
     static QMutex s_mutex;
@@ -21,19 +21,18 @@ Album::get( unsigned int id, const QString& name, const Tomahawk::artist_ptr& ar
         return s_albums.value( id );
     }
 
-    album_ptr a = album_ptr( new Album( id, name, artist, collection ) );
+    album_ptr a = album_ptr( new Album( id, name, artist ) );
     s_albums.insert( id, a );
 
     return a;
 }
 
 
-Album::Album( unsigned int id, const QString& name, const Tomahawk::artist_ptr& artist, const Tomahawk::collection_ptr& collection )
+Album::Album( unsigned int id, const QString& name, const Tomahawk::artist_ptr& artist )
     : PlaylistInterface( this )
     , m_id( id )
     , m_name( name )
     , m_artist( artist )
-    , m_collection( collection )
     , m_currentTrack( 0 )
 {
 }
@@ -71,7 +70,7 @@ Album::tracks()
 {
     if ( m_queries.isEmpty() )
     {
-        DatabaseCommand_AllTracks* cmd = new DatabaseCommand_AllTracks( m_collection );
+        DatabaseCommand_AllTracks* cmd = new DatabaseCommand_AllTracks();
         cmd->setAlbum( this );
         cmd->setSortOrder( DatabaseCommand_AllTracks::AlbumPosition );
 

@@ -50,9 +50,8 @@ DatabaseWorker::enqueue( const QSharedPointer<DatabaseCommand>& cmd )
         return;
     }
 
-    m_outstanding++;
-
     QMutexLocker lock( &m_mut );
+    m_outstanding++;
     m_commands << cmd;
 
     if ( m_outstanding == 1 )
@@ -176,6 +175,7 @@ DatabaseWorker::doWork()
 
     cmd->emitFinished();
 
+    QMutexLocker lock( &m_mut );
     m_outstanding--;
     if ( m_outstanding > 0 )
         QTimer::singleShot( 0, this, SLOT( doWork() ) );

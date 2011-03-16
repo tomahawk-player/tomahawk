@@ -166,8 +166,8 @@ DatabaseCommand_AddFiles::exec( DatabaseImpl* dbi )
         Tomahawk::query_ptr query = Tomahawk::Query::get( artist, track, album );
         attr["releaseyear"] = m.value( "year" );
 
-        Tomahawk::artist_ptr artistptr = Tomahawk::Artist::get( artistid, artist, source()->collection() );
-        Tomahawk::album_ptr albumptr = Tomahawk::Album::get( albumid, album, artistptr, source()->collection() );
+        Tomahawk::artist_ptr artistptr = Tomahawk::Artist::get( artistid, artist );
+        Tomahawk::album_ptr albumptr = Tomahawk::Album::get( albumid, album, artistptr );
         Tomahawk::result_ptr result = Tomahawk::result_ptr( new Tomahawk::Result() );
         result->setModificationTime( mtime );
         result->setSize( size );

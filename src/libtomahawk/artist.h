@@ -18,16 +18,14 @@ class DLLEXPORT Artist : public QObject, public PlaylistInterface
 Q_OBJECT
 
 public:
-    static artist_ptr get( unsigned int id, const QString& name, const Tomahawk::collection_ptr& collection );
-    Artist( unsigned int id, const QString& name, const Tomahawk::collection_ptr& collection );
+    static artist_ptr get( unsigned int id, const QString& name );
+    Artist( unsigned int id, const QString& name );
 
     Artist();
     virtual ~Artist();
 
     unsigned int id() const { return m_id; }
     QString name() const { return m_name; }
-
-    Tomahawk::collection_ptr collection() const;
 
     virtual QList<Tomahawk::query_ptr> tracks();
 
@@ -61,7 +59,6 @@ private:
 
     QList<Tomahawk::query_ptr> m_queries;
     unsigned int m_currentTrack;
-    Tomahawk::collection_ptr m_collection;
 };
 
 }; // ns

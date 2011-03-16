@@ -16,7 +16,9 @@ DatabaseCommand_LoadPlaylistEntries::exec( DatabaseImpl* dbi )
     emit done( m_revguid, m_guids, m_oldentries, m_islatest, m_entrymap, true );
 }
 
-void DatabaseCommand_LoadPlaylistEntries::generateEntries( DatabaseImpl* dbi )
+
+void
+DatabaseCommand_LoadPlaylistEntries::generateEntries( DatabaseImpl* dbi )
 {
     TomahawkSqlQuery query_entries = dbi->newquery();
     query_entries.prepare("SELECT entries, playlist, author, timestamp, previous_revision "

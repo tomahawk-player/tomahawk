@@ -108,8 +108,8 @@ DatabaseCommand_Resolve::exec( DatabaseImpl* lib )
             result->setUrl( QString( "servent://%1\t%2" ).arg( s->userName() ).arg( url_str ) );
         }
 
-        Tomahawk::artist_ptr artist = Tomahawk::Artist::get( files_query.value( 15 ).toUInt(), files_query.value( 10 ).toString(), s->collection() );
-        Tomahawk::album_ptr album = Tomahawk::Album::get( files_query.value( 16 ).toUInt(), files_query.value( 11 ).toString(), artist, s->collection() );
+        Tomahawk::artist_ptr artist = Tomahawk::Artist::get( files_query.value( 15 ).toUInt(), files_query.value( 10 ).toString() );
+        Tomahawk::album_ptr album = Tomahawk::Album::get( files_query.value( 16 ).toUInt(), files_query.value( 11 ).toString(), artist );
 
         result->setModificationTime( files_query.value( 1 ).toUInt() );
         result->setSize( files_query.value( 2 ).toUInt() );

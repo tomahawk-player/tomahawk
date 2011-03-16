@@ -13,7 +13,7 @@ Artist::Artist() {}
 Artist::~Artist() {}
 
 artist_ptr
-Artist::get( unsigned int id, const QString& name, const Tomahawk::collection_ptr& collection )
+Artist::get( unsigned int id, const QString& name )
 {
     static QHash< unsigned int, artist_ptr > s_artists;
     static QMutex s_mutex;
@@ -24,7 +24,7 @@ Artist::get( unsigned int id, const QString& name, const Tomahawk::collection_pt
         return s_artists.value( id );
     }
 
-    artist_ptr a = artist_ptr( new Artist( id, name, collection ) );
+    artist_ptr a = artist_ptr( new Artist( id, name ) );
 
     if ( id > 0 )
         s_artists.insert( id, a );
@@ -33,20 +33,12 @@ Artist::get( unsigned int id, const QString& name, const Tomahawk::collection_pt
 }
 
 
-Artist::Artist( unsigned int id, const QString& name, const Tomahawk::collection_ptr& collection )
+Artist::Artist( unsigned int id, const QString& name )
     : PlaylistInterface( this )
     , m_id( id )
     , m_name( name )
     , m_currentTrack( 0 )
-    , m_collection( collection )
 {
-}
-
-
-Tomahawk::collection_ptr 
-Artist::collection() const
-{
-    return m_collection;
 }
 
 
@@ -82,7 +74,7 @@ Artist::tracks()
 {
     if ( m_queries.isEmpty() )
     {
-        DatabaseCommand_AllTracks* cmd = new DatabaseCommand_AllTracks( m_collection );
+        DatabaseCommand_AllTracks* cmd = new DatabaseCommand_AllTracks();
         cmd->setArtist( this );
         cmd->setSortOrder( DatabaseCommand_AllTracks::Album );
 
