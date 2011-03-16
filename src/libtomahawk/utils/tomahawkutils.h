@@ -31,20 +31,20 @@ namespace TomahawkUtils
     public:
         explicit DNSResolver();
         ~DNSResolver() {}
-        
+
         void resolve( QString& host, QString type );
-        
+
     signals:
         void result( QString& result );
-        
+
     public slots:
         void resultsReady();
-        
+
     private:
         JDnsShared* m_dnsShared;
         JDnsSharedRequest* m_dnsSharedRequest;
     };
-    
+
     class DLLEXPORT Sleep : public QThread
     {
     public:
@@ -61,14 +61,15 @@ namespace TomahawkUtils
             QThread::usleep( usecs );
         }
     };
-    
+
     DLLEXPORT QDir appConfigDir();
     DLLEXPORT QDir appDataDir();
     DLLEXPORT QDir appLogDir();
-    
+
     DLLEXPORT QString timeToString( int seconds );
     DLLEXPORT QString ageToString( const QDateTime& time );
     DLLEXPORT QString filesizeToString( unsigned int size );
+    DLLEXPORT QString extensionToMimetype( const QString& extension );
 
     DLLEXPORT QPixmap createDragPixmap( int itemCount = 1 );
 
