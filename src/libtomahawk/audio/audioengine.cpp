@@ -185,7 +185,9 @@ AudioEngine::loadTrack( const Tomahawk::result_ptr& result )
             m_input = io;
 
             if ( !m_currentTrack->url().startsWith( "http://" ) )
+            {
                 m_mediaObject->setCurrentSource( io.data() );
+            }
             else
             {
                 QUrl furl = QUrl( m_currentTrack->url().left( m_currentTrack->url().indexOf( '?' ) ) );
@@ -193,6 +195,7 @@ AudioEngine::loadTrack( const Tomahawk::result_ptr& result )
                 qDebug() << Q_FUNC_INFO << furl;
                 m_mediaObject->setCurrentSource( furl );
             }
+            m_mediaObject->currentSource().setAutoDelete( true );
             m_mediaObject->play();
 
             emit started( m_currentTrack );
