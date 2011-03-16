@@ -24,7 +24,8 @@
 #include "playlist/dynamic/echonest/EchonestGenerator.h"
 #include "utils/tomahawkutils.h"
 #include "web/api_v1.h"
-#include "scriptresolver.h"
+#include "resolvers/scriptresolver.h"
+#include "resolvers/qtscriptresolver.h"
 #include "sourcelist.h"
 #include "shortcuthandler.h"
 #include "scanmanager.h"
@@ -246,10 +247,10 @@ TomahawkApp::TomahawkApp( int& argc, char *argv[] )
     }
 #endif
 
-    qDebug() << "Init Pipeline.";
-    setupPipeline();
     qDebug() << "Init Local Collection.";
     initLocalCollection();
+    qDebug() << "Init Pipeline.";
+    setupPipeline();
     qDebug() << "Init Servent.";
     startServent();
     //loadPlugins();
@@ -389,23 +390,31 @@ TomahawkApp::setupPipeline()
 {
     // setup resolvers for local content, and (cached) remote collection content
     Pipeline::instance()->addResolver( new DatabaseResolver( 100 ) );
-    
+
     // load script resolvers
-    foreach( QString resolver,TomahawkSettings::instance()->scriptResolvers() )
+    foreach( QString resolver, TomahawkSettings::instance()->scriptResolvers() )
         addScriptResolver( resolver );
 }
+
 
 void
 TomahawkApp::addScriptResolver( const QString& path )
 {
-    m_scriptResolvers << new ScriptResolver( path );
+    const QFileInfo fi( path );
+    if ( fi.suffix() == "js" || fi.suffix() == "script" )
+        m_scriptResolvers << new QtScriptResolver( path );
+    else
+        m_scriptResolvers << new ScriptResolver( path );
 }
+
 
 void
 TomahawkApp::removeScriptResolver( const QString& path )
 {
-    foreach( ScriptResolver* r, m_scriptResolvers ) {
-        if( r->exe() == path ) {
+    foreach( Tomahawk::ExternalResolver* r, m_scriptResolvers )
+    {
+        if( r->filePath() == path )
+        {
             m_scriptResolvers.removeAll( r );
             connect( r, SIGNAL( finished() ), r, SLOT( deleteLater() ) );
             r->stop();
@@ -413,6 +422,7 @@ TomahawkApp::removeScriptResolver( const QString& path )
         }
     }
 }
+
 
 void
 TomahawkApp::initLocalCollection()

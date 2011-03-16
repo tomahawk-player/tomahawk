@@ -11,7 +11,7 @@
 #include "query.h"
 #include "result.h"
 
-class ScriptResolver : public Tomahawk::Resolver
+class ScriptResolver : public Tomahawk::ExternalResolver
 {
 Q_OBJECT
 
@@ -26,14 +26,11 @@ public:
 
     virtual void resolve( const Tomahawk::query_ptr& query );
 
-    void stop();
-
-    QString exe() const { return m_cmd; }
-
 signals:
     void finished();
 
 public slots:
+    virtual void stop();
 
 private slots:
     void readStderr();
@@ -48,7 +45,7 @@ private:
     void doSetup( const QVariantMap& m );
 
     QProcess m_proc;
-    QString m_name, m_cmd;
+    QString m_name;
     unsigned int m_weight, m_preference, m_timeout, m_num_restarts;
 
     quint32 m_msgsize;

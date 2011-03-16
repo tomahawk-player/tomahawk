@@ -7,6 +7,7 @@ ENDIF()
 SET( QT_USE_QTSQL TRUE )
 SET( QT_USE_QTNETWORK TRUE )
 SET( QT_USE_QTXML TRUE )
+SET( QT_USE_QTWEBKIT TRUE )
 
 INCLUDE( ${QT_USE_FILE} )
 INCLUDE( ${CMAKE_MODULE_PATH}/AddAppIconMacro.cmake )
@@ -39,10 +40,11 @@ SET( tomahawkSources ${tomahawkSources}
 
      web/api_v1.cpp
 
-     musicscanner.cpp
-     scriptresolver.cpp
-     shortcuthandler.cpp
+     resolvers/scriptresolver.cpp
+     resolvers/qtscriptresolver.cpp
 
+     musicscanner.cpp
+     shortcuthandler.cpp
      scanmanager.cpp
      tomahawkapp.cpp
      main.cpp
@@ -77,11 +79,12 @@ SET( tomahawkHeaders ${tomahawkHeaders}
      infosystem/infoplugins/echonestplugin.h
      infosystem/infoplugins/musixmatchplugin.h
 
-
      web/api_v1.h
 
+     resolvers/scriptresolver.h
+     resolvers/qtscriptresolver.h
+
      musicscanner.h
-     scriptresolver.h
      scanmanager.h
      shortcuthandler.h
 )

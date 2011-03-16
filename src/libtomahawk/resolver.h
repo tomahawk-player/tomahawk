@@ -24,7 +24,7 @@ class DLLEXPORT Resolver : public QObject
 Q_OBJECT
 
 public:
-    Resolver() {};
+    Resolver() {}
 
     virtual QString name() const = 0;
     virtual unsigned int weight() const = 0;
@@ -39,6 +39,22 @@ public:
 
 private:
     PluginAPI * m_api;
+};
+
+class DLLEXPORT ExternalResolver : public Resolver
+{
+Q_OBJECT
+
+public:
+    ExternalResolver( const QString& filePath ) { m_filePath = filePath; }
+
+    virtual QString filePath() const { return m_filePath; }
+
+public slots:
+    virtual void stop() = 0;
+
+private:
+    QString m_filePath;
 };
 
 }; //ns
