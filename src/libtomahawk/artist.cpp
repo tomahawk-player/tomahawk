@@ -25,7 +25,6 @@ Artist::get( unsigned int id, const QString& name )
     }
 
     artist_ptr a = artist_ptr( new Artist( id, name ) );
-
     if ( id > 0 )
         s_artists.insert( id, a );
 

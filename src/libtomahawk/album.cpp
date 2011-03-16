@@ -22,7 +22,8 @@ Album::get( unsigned int id, const QString& name, const Tomahawk::artist_ptr& ar
     }
 
     album_ptr a = album_ptr( new Album( id, name, artist ) );
-    s_albums.insert( id, a );
+    if ( id > 0 )
+        s_albums.insert( id, a );
 
     return a;
 }
