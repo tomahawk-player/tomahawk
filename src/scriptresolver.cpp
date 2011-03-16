@@ -132,6 +132,7 @@ ScriptResolver::handleMsg( const QByteArray& msg )
             rp->setBitrate( m.value( "bitrate" ).toUInt() );
             rp->setUrl( m.value( "url" ).toString() );
             rp->setSize( m.value( "size" ).toUInt() );
+            rp->setMimetype( m.value( "mimetype" ).toString() );
             rp->setScore( m.value( "score" ).toFloat() * ( (float)weight() / 100.0 ) );
             rp->setRID( uuid() );
             rp->setFriendlySource( m_name );
