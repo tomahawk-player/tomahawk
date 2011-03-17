@@ -22,12 +22,12 @@
 #include "albummodel.h"
 #include "sourcelist.h"
 #include "tomahawksettings.h"
-#include "utils/widgetdragfilter.h"
 
 #include "dynamic/widgets/DynamicWidget.h"
 
 #include "widgets/welcomewidget.h"
 #include "widgets/infowidgets/sourceinfowidget.h"
+#include "dynamic/widgets/LoadingSpinner.h"
 
 #define FILTER_TIMEOUT 280
 
@@ -48,6 +48,7 @@ PlaylistManager::PlaylistManager( QObject* parent )
     , m_widget( new QWidget() )
     , m_welcomeWidget( new WelcomeWidget() )
     , m_currentMode( 0 )
+    , m_loadingSpinner( 0 )
 {
     s_instance = this;
 
@@ -57,10 +58,6 @@ PlaylistManager::PlaylistManager( QObject* parent )
     m_topbar = new TopBar();
     m_infobar = new InfoBar();
     m_stack = new QStackedWidget();
-    
-#ifndef Q_WS_MAC
-    m_infobar->installEventFilter( new WidgetDragFilter( m_infobar ) );
-#endif
     
     QFrame* line = new QFrame();
     line->setFrameStyle( QFrame::HLine );
@@ -104,6 +101,9 @@ PlaylistManager::PlaylistManager( QObject* parent )
     m_widget->layout()->setMargin( 0 );
     m_widget->layout()->setSpacing( 0 );
 
+    m_loadingSpinner = new LoadingSpinner( m_widget );
+    connect( m_superCollectionFlatModel, SIGNAL( doneLoadingCollections() ), m_loadingSpinner, SLOT( fadeOut() ) );
+    
     connect( &m_filterTimer, SIGNAL( timeout() ), SLOT( applyFilter() ) );
 
     connect( m_topbar, SIGNAL( filterTextChanged( QString ) ),
@@ -256,6 +256,9 @@ PlaylistManager::show( const Tomahawk::collection_ptr& collection )
             view->setFrameShape( QFrame::NoFrame );
             view->setAttribute( Qt::WA_MacShowFocusRect, 0 );
             model->addCollection( collection );
+            
+            m_loadingSpinner->fadeIn();
+            connect( model, SIGNAL( doneLoadingCollections() ), m_loadingSpinner, SLOT( fadeOut() ) );
 
             m_collectionViews.insert( collection, view );
         }
@@ -333,19 +336,21 @@ PlaylistManager::show( ViewPage* page )
 bool
 PlaylistManager::showSuperCollection()
 {
+    QList< collection_ptr > toAdd;
     foreach( const Tomahawk::source_ptr& source, SourceList::instance()->sources() )
     {
         if ( !m_superCollections.contains( source->collection() ) )
         {
             m_superCollections.append( source->collection() );
-            m_superCollectionFlatModel->addCollection( source->collection() );
+            toAdd << source->collection();
             m_superAlbumModel->addCollection( source->collection() );
         }
 
         m_superCollectionFlatModel->setTitle( tr( "All available tracks" ) );
         m_superAlbumModel->setTitle( tr( "All available albums" ) );
     }
-
+    m_superCollectionFlatModel->addCollections( toAdd );
+    
     if ( m_currentMode == 0 )
     {
         setPage( m_superCollectionView );
@@ -354,7 +359,9 @@ PlaylistManager::showSuperCollection()
     {
         setPage( m_superAlbumView );
     }
-
+    
+    m_loadingSpinner->fadeIn();
+    
     emit numSourcesChanged( m_superCollections.count() );
 
     return true;

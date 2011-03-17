@@ -44,6 +44,22 @@ CollectionFlatModel::headerData( int section, Qt::Orientation orientation, int r
     return TrackModel::headerData( section, orientation, role );
 }
 
+void 
+CollectionFlatModel::addCollections( const QList< collection_ptr >& collections )
+{
+    qDebug() << Q_FUNC_INFO << "Adding collections!";
+    foreach( const collection_ptr& col, collections ) 
+    {
+        if( !col->isLoaded() )
+            m_loadingCollections << col.data();
+        
+        addCollection( col );
+    }
+    
+    if( m_loadingCollections.isEmpty() )
+        emit doneLoadingCollections();
+}
+
 
 void
 CollectionFlatModel::addCollection( const collection_ptr& collection )
@@ -60,8 +76,12 @@ CollectionFlatModel::addCollection( const collection_ptr& collection )
     if ( collection->isLoaded() )
         onTracksAdded( collection->tracks() );
     else
+    {
         collection->tracks(); // data will arrive via signals
-
+        
+        m_loadingCollections << collection.data();
+    }
+    
     if ( collection->source()->isLocal() )
         setTitle( tr( "Your Collection" ) );
     else
@@ -164,6 +184,13 @@ CollectionFlatModel::onTracksAdded( const QList<Tomahawk::query_ptr>& tracks )
 {
     qDebug() << Q_FUNC_INFO << tracks.count() << rowCount( QModelIndex() );
 
+    if( !m_loadingCollections.isEmpty() && sender() && qobject_cast< Collection* >( sender() ) ) { // we are keeping track and are called as a slot
+        m_loadingCollections.removeAll( qobject_cast< Collection* >( sender() ) );
+        
+        if( m_loadingCollections.isEmpty() )
+            emit doneLoadingCollections();
+    }
+    
     bool kickOff = m_tracksToAdd.isEmpty();
     m_tracksToAdd << tracks;
 

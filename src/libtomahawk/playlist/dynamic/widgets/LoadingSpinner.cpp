@@ -41,6 +41,7 @@ LoadingSpinner::LoadingSpinner( QWidget* parent )
     
     connect( m_anim, SIGNAL( frameChanged( int ) ), this, SLOT( update() ) );
     
+    setSizePolicy( QSizePolicy::Fixed, QSizePolicy::Fixed );
     hide();
 }
 
@@ -96,6 +97,7 @@ LoadingSpinner::reposition()
     int x = ( parentWidget()->width() / 2 ) - ( width() / 2 );
     int y = ( parentWidget()->height() / 2 ) - ( height() / 2 );
     move( x, y );
+    resize( 64, 64 );
 }
 
 

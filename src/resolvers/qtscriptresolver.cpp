@@ -16,7 +16,6 @@ QtScriptResolver::QtScriptResolver( const QString& scriptPath )
 {
     qDebug() << Q_FUNC_INFO << scriptPath;
 
-    m_engine->moveToThread( m_thread );
     m_thread->start();
 
     QFile scriptFile( scriptPath );
@@ -37,6 +36,7 @@ QtScriptResolver::QtScriptResolver( const QString& scriptPath )
     << "timeout" << m_timeout << endl
     << "preference" << m_preference;
 
+    m_engine->moveToThread( m_thread );
     m_ready = true;
     Tomahawk::Pipeline::instance()->addResolver( this );
 }
