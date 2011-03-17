@@ -27,7 +27,6 @@
 
 #include "widgets/welcomewidget.h"
 #include "widgets/infowidgets/sourceinfowidget.h"
-#include "dynamic/widgets/LoadingSpinner.h"
 
 #define FILTER_TIMEOUT 280
 
@@ -48,7 +47,6 @@ PlaylistManager::PlaylistManager( QObject* parent )
     , m_widget( new QWidget() )
     , m_welcomeWidget( new WelcomeWidget() )
     , m_currentMode( 0 )
-    , m_loadingSpinner( 0 )
 {
     s_instance = this;
 
@@ -101,9 +99,6 @@ PlaylistManager::PlaylistManager( QObject* parent )
     m_widget->layout()->setMargin( 0 );
     m_widget->layout()->setSpacing( 0 );
 
-    m_loadingSpinner = new LoadingSpinner( m_widget );
-    connect( m_superCollectionFlatModel, SIGNAL( doneLoadingCollections() ), m_loadingSpinner, SLOT( fadeOut() ) );
-    
     connect( &m_filterTimer, SIGNAL( timeout() ), SLOT( applyFilter() ) );
 
     connect( m_topbar, SIGNAL( filterTextChanged( QString ) ),
@@ -256,8 +251,6 @@ PlaylistManager::show( const Tomahawk::collection_ptr& collection )
             view->setFrameShape( QFrame::NoFrame );
             view->setAttribute( Qt::WA_MacShowFocusRect, 0 );
 
-            m_loadingSpinner->fadeIn();
-            connect( model, SIGNAL( doneLoadingCollections() ), m_loadingSpinner, SLOT( fadeOut() ) );
             model->addCollection( collection );
 
             m_collectionViews.insert( collection, view );
@@ -339,17 +332,12 @@ PlaylistManager::showSuperCollection()
     QList< collection_ptr > toAdd;
     foreach( const Tomahawk::source_ptr& source, SourceList::instance()->sources() )
     {
-        bool addedStuff = false;
         if ( !m_superCollections.contains( source->collection() ) )
         {
             m_superCollections.append( source->collection() );
             toAdd << source->collection();
             m_superAlbumModel->addCollection( source->collection() );
-            addedStuff = true;
         }
-
-        if ( addedStuff )
-            m_loadingSpinner->fadeIn();
 
         m_superCollectionFlatModel->setTitle( tr( "All available tracks" ) );
         m_superAlbumModel->setTitle( tr( "All available albums" ) );

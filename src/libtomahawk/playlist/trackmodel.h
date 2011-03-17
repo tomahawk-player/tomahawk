@@ -70,6 +70,8 @@ signals:
 
     void trackCountChanged( unsigned int tracks );
 
+    void loadingStarted();
+    void loadingFinished();
 public slots:
     virtual void setCurrentItem( const QModelIndex& index );
 

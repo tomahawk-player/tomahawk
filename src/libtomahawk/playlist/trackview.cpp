@@ -8,6 +8,7 @@
 #include "audio/audioengine.h"
 #include "utils/tomahawkutils.h"
 #include "widgets/overlaywidget.h"
+#include "dynamic/widgets/LoadingSpinner.h"
 
 #include "trackheader.h"
 #include "playlistmanager.h"
@@ -25,6 +26,7 @@ TrackView::TrackView( QWidget* parent )
     , m_delegate( 0 )
     , m_header( new TrackHeader( this ) )
     , m_overlay( new OverlayWidget( this ) )
+    , m_loadingSpinner( new LoadingSpinner( this ) )
     , m_resizing( false )
 {
     setSortingEnabled( false );
@@ -92,6 +94,9 @@ TrackView::setModel( TrackModel* model )
     }
 
     connect( m_model, SIGNAL( itemSizeChanged( QModelIndex ) ), SLOT( onItemResized( QModelIndex ) ) );
+    connect( m_model, SIGNAL( loadingStarted() ), m_loadingSpinner, SLOT( fadeIn() ) );
+    connect( m_model, SIGNAL( loadingFinished() ), m_loadingSpinner, SLOT( fadeOut() ) );
+    
     connect( m_proxyModel, SIGNAL( filterChanged( QString ) ), SLOT( onFilterChanged( QString ) ) );
 
     setAcceptDrops( true );

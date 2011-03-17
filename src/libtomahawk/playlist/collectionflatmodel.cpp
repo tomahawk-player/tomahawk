@@ -51,19 +51,17 @@ CollectionFlatModel::addCollections( const QList< collection_ptr >& collections 
     qDebug() << Q_FUNC_INFO << "Adding collections!";
     foreach( const collection_ptr& col, collections ) 
     {
-        if( !col->isLoaded() )
-            m_loadingCollections << col.data();
-        
         addCollection( col );
     }
     
-    if( m_loadingCollections.isEmpty() )
-        emit doneLoadingCollections();
+    // we are waiting for some to load
+    if( !m_loadingCollections.isEmpty() )
+        emit loadingStarted();
 }
 
 
 void
-CollectionFlatModel::addCollection( const collection_ptr& collection )
+CollectionFlatModel::addCollection( const collection_ptr& collection, bool sendNotifications )
 {
     qDebug() << Q_FUNC_INFO << collection->name()
                             << collection->source()->id()
@@ -81,6 +79,8 @@ CollectionFlatModel::addCollection( const collection_ptr& collection )
         collection->tracks(); // data will arrive via signals
         
         m_loadingCollections << collection.data();
+        if( sendNotifications )
+            emit loadingStarted();
     }
     
     if ( collection->source()->isLocal() )
@@ -191,7 +191,7 @@ CollectionFlatModel::onTracksAdded( const QList<Tomahawk::query_ptr>& tracks )
         m_loadingCollections.removeAll( qobject_cast< Collection* >( sender() ) );
     }
     if( m_loadingCollections.isEmpty() )
-        emit doneLoadingCollections();
+        emit loadingFinished();
 
     bool kickOff = m_tracksToAdd.isEmpty();
     m_tracksToAdd << tracks;

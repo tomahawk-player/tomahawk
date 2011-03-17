@@ -8,6 +8,7 @@
 
 #include "dllmacro.h"
 
+class LoadingSpinner;
 class PlaylistInterface;
 class TrackHeader;
 class TrackModel;
@@ -67,6 +68,7 @@ private:
     PlaylistItemDelegate* m_delegate;
     TrackHeader* m_header;
     OverlayWidget* m_overlay;
+    LoadingSpinner* m_loadingSpinner;
 
     bool m_resizing;
     bool m_dragging;

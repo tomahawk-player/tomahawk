@@ -11,7 +11,6 @@
 
 #include "dllmacro.h"
 
-class LoadingSpinner;
 class AnimatedSplitter;
 class AlbumModel;
 class AlbumView;
@@ -144,7 +143,6 @@ private:
     CollectionFlatModel* m_superCollectionFlatModel;
     CollectionView* m_superCollectionView;
     WelcomeWidget* m_welcomeWidget;
-    LoadingSpinner* m_loadingSpinner;
     
     QList< Tomahawk::collection_ptr > m_superCollections;
 

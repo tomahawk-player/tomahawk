@@ -36,7 +36,7 @@ public:
 
     void addCollections( const QList< Tomahawk::collection_ptr >& collections );
 
-    void addCollection( const Tomahawk::collection_ptr& collection );
+    void addCollection( const Tomahawk::collection_ptr& collection, bool sendNotifications = true );
     void removeCollection( const Tomahawk::collection_ptr& collection );
 
     void addFilteredCollection( const Tomahawk::collection_ptr& collection, unsigned int amount, DatabaseCommand_AllTracks::SortOrder order );
@@ -48,8 +48,6 @@ signals:
     void shuffleModeChanged( bool enabled );
 
     void itemSizeChanged( const QModelIndex& index );
-
-    void doneLoadingCollections();
 
 private slots:
     void onDataChanged();
