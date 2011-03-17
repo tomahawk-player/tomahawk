@@ -35,7 +35,7 @@ public:
     QVariant headerData( int section, Qt::Orientation orientation, int role ) const;
 
     void addCollections( const QList< Tomahawk::collection_ptr >& collections );
-    
+
     void addCollection( const Tomahawk::collection_ptr& collection );
     void removeCollection( const Tomahawk::collection_ptr& collection );
 
@@ -50,6 +50,7 @@ signals:
     void itemSizeChanged( const QModelIndex& index );
 
     void doneLoadingCollections();
+
 private slots:
     void onDataChanged();
 

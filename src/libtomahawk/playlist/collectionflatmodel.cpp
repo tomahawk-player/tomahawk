@@ -44,6 +44,7 @@ CollectionFlatModel::headerData( int section, Qt::Orientation orientation, int r
     return TrackModel::headerData( section, orientation, role );
 }
 
+
 void 
 CollectionFlatModel::addCollections( const QList< collection_ptr >& collections )
 {
@@ -184,13 +185,14 @@ CollectionFlatModel::onTracksAdded( const QList<Tomahawk::query_ptr>& tracks )
 {
     qDebug() << Q_FUNC_INFO << tracks.count() << rowCount( QModelIndex() );
 
-    if( !m_loadingCollections.isEmpty() && sender() && qobject_cast< Collection* >( sender() ) ) { // we are keeping track and are called as a slot
+    if( !m_loadingCollections.isEmpty() && sender() && qobject_cast< Collection* >( sender() ) )
+    {
+        // we are keeping track and are called as a slot
         m_loadingCollections.removeAll( qobject_cast< Collection* >( sender() ) );
-        
-        if( m_loadingCollections.isEmpty() )
-            emit doneLoadingCollections();
     }
-    
+    if( m_loadingCollections.isEmpty() )
+        emit doneLoadingCollections();
+
     bool kickOff = m_tracksToAdd.isEmpty();
     m_tracksToAdd << tracks;
 

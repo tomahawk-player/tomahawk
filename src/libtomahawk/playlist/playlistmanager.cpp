@@ -255,10 +255,10 @@ PlaylistManager::show( const Tomahawk::collection_ptr& collection )
             view->setModel( model );
             view->setFrameShape( QFrame::NoFrame );
             view->setAttribute( Qt::WA_MacShowFocusRect, 0 );
-            model->addCollection( collection );
-            
+
             m_loadingSpinner->fadeIn();
             connect( model, SIGNAL( doneLoadingCollections() ), m_loadingSpinner, SLOT( fadeOut() ) );
+            model->addCollection( collection );
 
             m_collectionViews.insert( collection, view );
         }
@@ -339,18 +339,23 @@ PlaylistManager::showSuperCollection()
     QList< collection_ptr > toAdd;
     foreach( const Tomahawk::source_ptr& source, SourceList::instance()->sources() )
     {
+        bool addedStuff = false;
         if ( !m_superCollections.contains( source->collection() ) )
         {
             m_superCollections.append( source->collection() );
             toAdd << source->collection();
             m_superAlbumModel->addCollection( source->collection() );
+            addedStuff = true;
         }
+
+        if ( addedStuff )
+            m_loadingSpinner->fadeIn();
 
         m_superCollectionFlatModel->setTitle( tr( "All available tracks" ) );
         m_superAlbumModel->setTitle( tr( "All available albums" ) );
     }
     m_superCollectionFlatModel->addCollections( toAdd );
-    
+
     if ( m_currentMode == 0 )
     {
         setPage( m_superCollectionView );
@@ -359,9 +364,7 @@ PlaylistManager::showSuperCollection()
     {
         setPage( m_superAlbumView );
     }
-    
-    m_loadingSpinner->fadeIn();
-    
+
     emit numSourcesChanged( m_superCollections.count() );
 
     return true;
