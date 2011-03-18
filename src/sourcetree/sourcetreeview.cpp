@@ -81,7 +81,13 @@ SourceTreeView::SourceTreeView( QWidget* parent )
     setUniformRowHeights( false );
     setIndentation( 16 );
     setAnimated( true );
-
+    
+#ifdef Q_WS_MAC
+    QFont f( font() );
+    f.setPointSize( f.pointSize() - 2 );
+    setFont( f );
+#endif
+    
     setItemDelegate( new SourceDelegate( this ) );
 
     setContextMenuPolicy( Qt::CustomContextMenu );

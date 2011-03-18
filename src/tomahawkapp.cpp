@@ -196,10 +196,6 @@ TomahawkApp::TomahawkApp( int& argc, char *argv[] )
     Tomahawk::setShortcutHandler( static_cast<MacShortcutHandler*>( m_shortcutHandler) );
 
     Tomahawk::setApplicationHandler( this );
-
-    QFont f( QApplication::font() );
-    f.setPointSize( f.pointSize() - 2 );
-    QApplication::setFont( f );
 #endif
 
     // Connect up shortcuts
