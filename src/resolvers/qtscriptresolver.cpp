@@ -39,12 +39,15 @@ QtScriptResolver::QtScriptResolver( const QString& scriptPath )
     m_engine->moveToThread( m_thread );
     m_ready = true;
     Tomahawk::Pipeline::instance()->addResolver( this );
+    
+    connect( this, SIGNAL( destroyed( QObject* ) ), m_thread, SLOT( deleteLater() ) );
 }
 
 
 QtScriptResolver::~QtScriptResolver()
 {
     Tomahawk::Pipeline::instance()->removeResolver( this );
+    delete m_engine;
 }
 
 
@@ -109,4 +112,5 @@ void
 QtScriptResolver::stop()
 {
     m_stopped = true;
+    emit finished();
 }

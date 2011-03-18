@@ -56,6 +56,9 @@ public slots:
     virtual void resolve( const Tomahawk::query_ptr& query );
     virtual void stop();
 
+signals:
+    void finished();
+    
 private slots:
 
 private:
