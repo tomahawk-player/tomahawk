@@ -28,7 +28,7 @@ include_directories( . ${CMAKE_CURRENT_BINARY_DIR} ..
 
 qt4_wrap_cpp( twitterMoc ${twitterHeaders} )
 qt4_wrap_ui( twitterUI_H ${twitterUI} )
-add_library( sip_twitter SHARED ${twitterUI_H} ${twitterSources} ${twitterMoc} )
+add_library( tomahawk_siptwitter SHARED ${twitterUI_H} ${twitterSources} ${twitterMoc} )
 
 IF( WIN32 )
 SET( OS_SPECIFIC_LINK_LIBRARIES
@@ -40,7 +40,7 @@ SET( OS_SPECIFIC_LINK_LIBRARIES
 )
 ENDIF( WIN32 )
 
-target_link_libraries( sip_twitter
+target_link_libraries( tomahawk_siptwitter
         ${QT_LIBRARIES}
         ${OS_SPECIFIC_LINK_LIBRARIES}
 	tomahawklib
@@ -50,4 +50,4 @@ IF( APPLE )
   SET( CMAKE_SHARED_LINKER_FLAGS ${CMAKE_SHARED_LINKER_FLAGS} "-undefined dynamic_lookup" )
 ENDIF( APPLE )
 
-install( TARGETS sip_twitter DESTINATION lib )
+install( TARGETS tomahawk_siptwitter LIBRARY DESTINATION lib )

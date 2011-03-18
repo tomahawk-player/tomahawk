@@ -85,6 +85,18 @@ MESSAGE("add checks for libmad, libvorbis and libflac. Make sure they are instal
 MESSAGE("")
 MESSAGE("-----------------------------------------------------------------------------")
 
+SET( INSTALL_PREFIX "${CMAKE_INSTALL_PREFIX}" )
+
+# make uninstall support
+CONFIGURE_FILE(
+  "${CMAKE_CURRENT_SOURCE_DIR}/cmake_uninstall.cmake.in"
+  "${CMAKE_CURRENT_BINARY_DIR}/cmake_uninstall.cmake"
+  IMMEDIATE @ONLY)
+
+ADD_CUSTOM_TARGET(uninstall
+  "${CMAKE_COMMAND}" -P "${CMAKE_CURRENT_BINARY_DIR}/cmake_uninstall.cmake")
+
+
 IF( NOT APPLE )
     # Make linking as strict on linux as it is on osx. Then we don't break linking on mac so often
     SET( CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wl,--no-undefined" )

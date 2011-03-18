@@ -11,6 +11,7 @@
 #include "sourcelist.h"
 #include "tomahawksettings.h"
 
+#include "config.h"
 
 SipHandler::SipHandler( QObject* parent )
     : QObject( parent )
@@ -60,10 +61,8 @@ SipHandler::findPlugins()
     }
     #endif
 
-    QDir libDir( appDir );
-    libDir.cdUp();
-    libDir.cd( "lib" );
-
+    QDir libDir( CMAKE_INSTALL_PREFIX "/lib" );
+    
     QDir lib64Dir( appDir );
     lib64Dir.cdUp();
     lib64Dir.cd( "lib64" );
@@ -72,9 +71,9 @@ SipHandler::findPlugins()
     foreach ( const QDir& pluginDir, pluginDirs )
     {
         qDebug() << "Checking directory for plugins:" << pluginDir;
-        foreach ( QString fileName, pluginDir.entryList( QDir::Files ) )
+        foreach ( QString fileName, pluginDir.entryList( QStringList() << "*tomahawk_sip*.so" << "*tomahawk_sip*.dylib" << "*tomahawk_sip*.dll", QDir::Files ) )
         {
-            if ( fileName.startsWith( "libsip_" ) )
+            if ( fileName.startsWith( "libtomahawk_sip" ) )
             {
                 const QString path = pluginDir.absoluteFilePath( fileName );
                 if ( !paths.contains( path ) )

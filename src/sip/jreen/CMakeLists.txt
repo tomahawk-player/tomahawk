@@ -22,7 +22,7 @@ include_directories( . ${CMAKE_CURRENT_BINARY_DIR} ..
 )
 
 qt4_wrap_cpp( jabberMoc ${jabberHeaders} )
-add_library( sip_jreen SHARED ${jabberSources} ${jabberMoc} )
+add_library( tomahawk_sipjreen SHARED ${jabberSources} ${jabberMoc} )
 
 IF( WIN32 )
 SET( OS_SPECIFIC_LINK_LIBRARIES
@@ -33,7 +33,7 @@ SET( OS_SPECIFIC_LINK_LIBRARIES
 )
 ENDIF( WIN32 )
 
-target_link_libraries( sip_jreen
+target_link_libraries( tomahawk_sipjreen
     ${QT_LIBRARIES}
     ${LIBJREEN_LIBRARY}
     ${OS_SPECIFIC_LINK_LIBRARIES}
@@ -43,4 +43,4 @@ IF( APPLE )
 #  SET( CMAKE_SHARED_LINKER_FLAGS ${CMAKE_SHARED_LINKER_FLAGS} "-undefined dynamic_lookup" )
 ENDIF( APPLE )
 
-install( TARGETS sip_jreen DESTINATION lib )
+install( TARGETS tomahawk_sipjreen LIBRARY DESTINATION lib )

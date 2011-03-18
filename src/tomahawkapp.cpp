@@ -34,6 +34,8 @@
 #include "audio/audioengine.h"
 #include "utils/xspfloader.h"
 
+#include "config.h"
+
 #ifndef TOMAHAWK_HEADLESS
     #include "tomahawkwindow.h"
     #include "settingsdialog.h"
@@ -253,7 +255,6 @@ TomahawkApp::TomahawkApp( int& argc, char *argv[] )
     setupPipeline();
     qDebug() << "Init Servent.";
     startServent();
-    //loadPlugins();
 
     if( arguments().contains( "--http" ) || TomahawkSettings::instance()->value( "network/http", true ).toBool() )
     {
@@ -453,44 +454,6 @@ TomahawkApp::startServent()
         exit( 1 );
     }
 }
-
-
-void
-TomahawkApp::loadPlugins()
-{
-    // look in same dir as executable for plugins
-    QDir dir( TomahawkApp::instance()->applicationDirPath() );
-    QStringList filters;
-    filters << "*.so" << "*.dll" << "*.dylib";
-
-    QStringList files = dir.entryList( filters );
-    foreach( const QString& filename, files )
-    {
-        qDebug() << "Attempting to load" << QString( "%1/%2" ).arg( dir.absolutePath() ).arg( filename );
-
-        QPluginLoader loader( dir.absoluteFilePath( filename ) );
-        if ( QObject* inst = loader.instance() )
-        {
-            TomahawkPlugin* pluginst = qobject_cast<TomahawkPlugin *>(inst);
-            if ( !pluginst )
-                continue;
-
-            PluginAPI* api = new PluginAPI( Pipeline::instance() );
-            TomahawkPlugin* plugin = pluginst->factory( api );
-            qDebug() << "Loaded Plugin:" << plugin->name();
-            qDebug() << plugin->description();
-            m_plugins.append( plugin );
-
-            // plugins responsibility to register itself as a resolver/collection
-            // all we need to do is create an instance of it.
-        }
-        else
-        {
-            qDebug() << "PluginLoader failed to create instance:" << filename << " Err:" << loader.errorString();
-        }
-    }
-}
-
 
 void
 TomahawkApp::setupSIP()
