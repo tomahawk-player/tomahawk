@@ -46,9 +46,7 @@ AudioControls::AudioControls( QWidget* parent )
     font.setPixelSize( 12 );
     
 #ifdef Q_WS_MAC
-    QFont f( font() );
-    f.setPointSize( f.pointSize() - 2 );
-    setFont( f );
+    font.setPointSize( font.pointSize() - 2 );
 #endif
     
     ui->artistTrackLabel->setFont( font );
