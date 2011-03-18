@@ -56,7 +56,7 @@ PlaylistManager::PlaylistManager( QObject* parent )
     m_topbar = new TopBar();
     m_infobar = new InfoBar();
     m_stack = new QStackedWidget();
-    
+
     QFrame* line = new QFrame();
     line->setFrameStyle( QFrame::HLine );
     line->setStyleSheet( "border: 1px solid gray;" );
@@ -86,13 +86,14 @@ PlaylistManager::PlaylistManager( QObject* parent )
     m_superCollectionView->setModel( m_superCollectionFlatModel );
     m_superCollectionView->setFrameShape( QFrame::NoFrame );
     m_superCollectionView->setAttribute( Qt::WA_MacShowFocusRect, 0 );
+    m_superCollectionView->proxyModel()->setShowOfflineResults( false );
 
     m_superAlbumView = new AlbumView();
     m_superAlbumModel = new AlbumModel( m_superAlbumView );
     m_superAlbumView->setModel( m_superAlbumModel );
     m_superAlbumView->setFrameShape( QFrame::NoFrame );
     m_superAlbumView->setAttribute( Qt::WA_MacShowFocusRect, 0 );
-    
+
     m_stack->setContentsMargins( 0, 0, 0, 0 );
     m_widget->setContentsMargins( 0, 0, 0, 0 );
     m_widget->layout()->setContentsMargins( 0, 0, 0, 0 );
@@ -106,10 +107,10 @@ PlaylistManager::PlaylistManager( QObject* parent )
 
     connect( m_topbar, SIGNAL( flatMode() ),
                          SLOT( setTableMode() ) );
-    
+
     connect( m_topbar, SIGNAL( artistMode() ),
                          SLOT( setTreeMode() ) );
-    
+
     connect( m_topbar, SIGNAL( albumMode() ),
                          SLOT( setAlbumMode() ) );
 }

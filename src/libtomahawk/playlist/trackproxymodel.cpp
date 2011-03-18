@@ -14,6 +14,7 @@ TrackProxyModel::TrackProxyModel( QObject* parent )
     , m_model( 0 )
     , m_repeatMode( PlaylistInterface::NoRepeat )
     , m_shuffled( false )
+    , m_showOfflineResults( true )
 {
     qsrand( QTime( 0, 0, 0 ).secsTo( QTime::currentTime() ) );
 
@@ -146,8 +147,8 @@ TrackProxyModel::filterAcceptsRow( int sourceRow, const QModelIndex& sourceParen
     if ( q->numResults() )
         r = q->results().first();
 
-//    if ( !r.isNull() && !r->collection()->source()->isOnline() )
-//        return false;
+    if ( !m_showOfflineResults && !r.isNull() && !r->collection()->source()->isOnline() )
+        return false;
 
     if ( filterRegExp().isEmpty() )
         return true;

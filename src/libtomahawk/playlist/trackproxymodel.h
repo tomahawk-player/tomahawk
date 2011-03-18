@@ -38,6 +38,9 @@ public:
     virtual PlaylistInterface::RepeatMode repeatMode() const { return m_repeatMode; }
     virtual bool shuffled() const { return m_shuffled; }
 
+    bool showOfflineResults() const { return m_showOfflineResults; }
+    void setShowOfflineResults( bool b ) { m_showOfflineResults = b; }
+
     PlItem* itemFromIndex( const QModelIndex& index ) const { return sourceModel()->itemFromIndex( index ); }
 
 signals:
@@ -60,6 +63,7 @@ private:
     TrackModel* m_model;
     RepeatMode m_repeatMode;
     bool m_shuffled;
+    bool m_showOfflineResults;
 };
 
 #endif // TRACKPROXYMODEL_H

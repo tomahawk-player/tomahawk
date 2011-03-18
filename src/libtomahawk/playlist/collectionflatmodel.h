@@ -27,12 +27,7 @@ public:
     explicit CollectionFlatModel( QObject* parent = 0 );
     ~CollectionFlatModel();
 
-    int columnCount( const QModelIndex& parent = QModelIndex() ) const;
-
     virtual int trackCount() const { return rowCount( QModelIndex() ) + m_tracksToAdd.count(); }
-
-    QVariant data( const QModelIndex& index, int role ) const;
-    QVariant headerData( int section, Qt::Orientation orientation, int role ) const;
 
     void addCollections( const QList< Tomahawk::collection_ptr >& collections );
 

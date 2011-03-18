@@ -72,6 +72,7 @@ signals:
 
     void loadingStarted();
     void loadingFinished();
+
 public slots:
     virtual void setCurrentItem( const QModelIndex& index );
 
