@@ -71,7 +71,6 @@ TrackView::TrackView( QWidget* parent )
 #endif
     
 #ifdef Q_WS_MAC
-    QFont f( font() );
     f.setPointSize( f.pointSize() - 2 );
     setFont( f );
 #endif
