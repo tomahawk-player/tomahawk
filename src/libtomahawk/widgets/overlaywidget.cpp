@@ -19,7 +19,7 @@ OverlayWidget::OverlayWidget( QWidget* parent )
     setAttribute( Qt::WA_TranslucentBackground, true );
 
     setOpacity( m_opacity );
-    
+
     m_timer.setSingleShot( true );
     connect( &m_timer, SIGNAL( timeout() ), this, SLOT( hide() ) );
 }
@@ -63,10 +63,9 @@ OverlayWidget::show( int timeoutSecs )
 
     QPropertyAnimation* animation = new QPropertyAnimation( this, "opacity" );
     animation->setDuration( FADING_DURATION );
-    animation->setStartValue( 0.00 );
     animation->setEndValue( OPACITY );
     animation->start();
-    
+
     if( timeoutSecs > 0 )
         m_timer.start( timeoutSecs * 1000 );
 }
