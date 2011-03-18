@@ -26,7 +26,6 @@
 #include "dynamic/GeneratorInterface.h"
 
 #include "network/servent.h"
-#include "tomahawk/tomahawkapp.h"
 #include "playlist/playlistmanager.h"
 
 using namespace Tomahawk;

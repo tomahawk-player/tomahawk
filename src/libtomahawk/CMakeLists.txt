@@ -20,7 +20,6 @@ set( libSources
     album.cpp
     collection.cpp
     playlist.cpp
-    pluginapi.cpp
     query.cpp
     result.cpp
     source.cpp
@@ -157,7 +156,6 @@ set( libHeaders
     functimeout.h
 
     collection.h
-    pluginapi.h
     query.h
     resolver.h
     result.h

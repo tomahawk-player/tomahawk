@@ -23,6 +23,7 @@
 
 #include "tomahawk/tomahawkapp.h"
 #include "artist.h"
+#include "source.h"
 #include "network/filetransferconnection.h"
 #include "network/servent.h"
 

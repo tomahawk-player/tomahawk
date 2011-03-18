@@ -34,10 +34,10 @@
 #include "QxtHttpServerConnector"
 #include "QxtHttpSessionManager"
 
-#include "tomahawk/tomahawkplugin.h"
 #include "typedefs.h"
 #include "playlist.h"
 #include "resolver.h"
+#include "network/servent.h"
 
 #include "utils/tomahawkutils.h"
 
@@ -109,7 +109,6 @@ private:
     void startHTTP();
 
     QList<Tomahawk::collection_ptr> m_collections;
-    QList<TomahawkPlugin*> m_plugins;
     QList<Tomahawk::ExternalResolver*> m_scriptResolvers;
 
     Database* m_database;

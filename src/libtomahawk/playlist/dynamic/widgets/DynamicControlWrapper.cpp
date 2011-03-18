@@ -18,9 +18,10 @@
 
 #include "DynamicControlWrapper.h"
 
-#include "tomahawk/tomahawkapp.h"
 #include "dynamic/DynamicControl.h"
+#include "utils/tomahawkutils.h"
 
+#include <QDebug>
 #include <QHBoxLayout>
 #include <QComboBox>
 #include <QLayout>

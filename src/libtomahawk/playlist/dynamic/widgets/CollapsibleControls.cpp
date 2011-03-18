@@ -18,11 +18,11 @@
 
 #include "CollapsibleControls.h"
 
-#include "tomahawk/tomahawkapp.h"
 #include "DynamicControlList.h"
 #include "DynamicControlWrapper.h"
 #include "dynamic/GeneratorInterface.h"
 #include "dynamic/DynamicControl.h"
+#include "utils/tomahawkutils.h"
 
 #include <QLabel>
 #include <QStackedLayout>

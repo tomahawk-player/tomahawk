@@ -25,11 +25,11 @@
 #include <QToolButton>
 #include <QPainter>
 #include <QGridLayout>
+#include <QHBoxLayout>
 
 #include "DynamicControlWrapper.h"
 #include "dynamic/GeneratorInterface.h"
-#include "tomahawk/tomahawkapp.h"
-#include <QHBoxLayout>
+#include "utils/tomahawkutils.h"
 
 using namespace Tomahawk;
 

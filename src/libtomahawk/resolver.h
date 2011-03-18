@@ -21,7 +21,7 @@
 
 #include <QObject>
 
-#include "pluginapi.h"
+#include "query.h"
 
 #include "dllmacro.h"
 
@@ -35,7 +35,6 @@
 */
 namespace Tomahawk
 {
-class PluginAPI;
 
 class DLLEXPORT Resolver : public QObject
 {
@@ -52,13 +51,8 @@ public:
     //virtual QWidget * configUI() { return 0; };
     //etc
 
-    PluginAPI * api() const { return m_api; }
-
 public slots:
     virtual void resolve( const Tomahawk::query_ptr& query ) = 0;
-
-private:
-    PluginAPI * m_api;
 };
 
 class DLLEXPORT ExternalResolver : public Resolver

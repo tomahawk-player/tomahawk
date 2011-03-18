@@ -18,13 +18,13 @@
 
 #include "LoadingSpinner.h"
 
-#include "tomahawk/tomahawkapp.h"
-
 #include <QTimeLine>
 #include <QPaintEvent>
 #include <QPainter>
 #include <qmovie.h>
 #include <QLabel>
+
+#include "utils/tomahawkutils.h"
 
 #define ANIM_LENGTH 300
 
