@@ -83,6 +83,8 @@ private slots:
     void loadPreviousTrack();
     void loadNextTrack();
 
+    void onDownloadProgress( qint64 recv, qint64 total );
+
     void setStreamData( long sampleRate, int channels );
     void timerTriggered( unsigned int seconds );
 
@@ -111,6 +113,7 @@ private:
     PlaylistInterface* m_queue;
     QMutex m_mutex;
 
+    bool m_readReady;
     unsigned int m_timeElapsed;
     int m_i;
 

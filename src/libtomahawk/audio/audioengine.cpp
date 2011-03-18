@@ -62,6 +62,7 @@ AudioEngine::~AudioEngine()
     delete m_audio;
 }
 
+
 void
 AudioEngine::playPause()
 {
@@ -71,6 +72,7 @@ AudioEngine::playPause()
         play();
 
 }
+
 
 void
 AudioEngine::play()
@@ -150,11 +152,13 @@ AudioEngine::setVolume( int percentage )
     emit volumeChanged( percentage );
 }
 
+
 void
 AudioEngine::mute()
 {
     setVolume( 0 );
 }
+
 
 void
 AudioEngine::onTrackAboutToClose()
@@ -184,6 +188,13 @@ AudioEngine::loadTrack( const Tomahawk::result_ptr& result )
         {
             setCurrentTrack( result );
             io = Servent::instance()->getIODeviceForUrl( m_currentTrack );
+            if ( m_currentTrack->url().startsWith( "http://" ) )
+            {
+                m_readReady = false;
+                connect( io.data(), SIGNAL( downloadProgress( qint64, qint64 ) ), SLOT( onDownloadProgress( qint64, qint64 ) ) );
+            }
+            else
+                m_readReady = true;
 
             if ( !io || io.isNull() )
             {
@@ -397,6 +408,14 @@ AudioEngine::setCurrentTrack( const Tomahawk::result_ptr& result )
 
 
 void
+AudioEngine::onDownloadProgress( qint64 recv, qint64 total )
+{
+    if ( ( recv > 1024 * 32 ) || recv > total ) 
+        m_readReady = true;
+}
+
+
+void
 AudioEngine::run()
 {
     QTimer::singleShot( 0, this, SLOT( engineLoop() ) );
@@ -461,6 +480,7 @@ AudioEngine::loop()
     // are we cleanly at the end of a track, and ready for the next one?
     if ( !m_input.isNull() &&
           m_input->atEnd() &&
+          m_readReady && 
          !m_input->bytesAvailable() &&
          !m_audio->haveData() &&
          !m_audio->isPaused() )
