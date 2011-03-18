@@ -17,5 +17,4 @@
 #cmakedefine LIBLASTFM_FOUND
 #cmakedefine GLOOX_FOUND
 
-#cmakedefine INSTALL_PREFIX
 #endif // CONFIG_H_IN
