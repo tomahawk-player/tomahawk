@@ -40,6 +40,12 @@ OverlayWidget::OverlayWidget( QWidget* parent )
 
     m_timer.setSingleShot( true );
     connect( &m_timer, SIGNAL( timeout() ), this, SLOT( hide() ) );
+
+#ifdef Q_WS_MAC
+    QFont f( font() );
+    f.setPointSize( f.pointSize() - 2 );
+    setFont( f );
+#endif
 }
 
 
@@ -134,11 +140,26 @@ OverlayWidget::paintEvent( QPaintEvent* event )
     QTextOption to( Qt::AlignCenter );
     to.setWrapMode( QTextOption::WrapAtWordBoundaryOrAnywhere );
 
+    // shrink to fit if needed
     QFont f( font() );
-    f.setPixelSize( FONT_SIZE );
+    f.setPointSize( FONT_SIZE );
     f.setBold( true );
 
+    QRectF textRect = r.adjusted( 8, 8, -8, -8 );
+    qreal availHeight = textRect.height();
+
+    QFontMetricsF fm( f );
+    qreal textHeight = fm.boundingRect( textRect, Qt::AlignCenter | Qt::TextWordWrap, text() ).height();
+    while( textHeight > availHeight )
+    {
+        if( f.pointSize() <= 4 ) // don't try harder
+            break;
+
+        f.setPointSize( f.pointSize() - 1 );
+        fm = QFontMetricsF( f );
+        textHeight = fm.boundingRect( textRect, Qt::AlignCenter | Qt::TextWordWrap, text() ).height();
+    }
     p.setFont( f );
     p.setPen( palette().highlightedText().color() );
-    p.drawText( r.adjusted( 16, 16, -16, -16 ), text(), to );
+    p.drawText( r.adjusted( 8, 8, -8, -8 ), text(), to );
 }
