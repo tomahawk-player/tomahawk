@@ -31,6 +31,7 @@
 
 #include "config.h"
 
+
 SipHandler::SipHandler( QObject* parent )
     : QObject( parent )
     , m_connected( false )
@@ -80,11 +81,11 @@ SipHandler::findPlugins()
     #endif
 
     QDir libDir( CMAKE_INSTALL_PREFIX "/lib" );
-    
+
     QDir lib64Dir( appDir );
     lib64Dir.cdUp();
     lib64Dir.cd( "lib64" );
-    
+
     pluginDirs << appDir << libDir << lib64Dir << QDir( qApp->applicationDirPath() );
     foreach ( const QDir& pluginDir, pluginDirs )
     {
@@ -113,29 +114,31 @@ SipHandler::loadPlugins( const QStringList& paths )
             continue;
 
         qDebug() << "Trying to load plugin:" << fileName;
-
-        QPluginLoader loader( fileName );
-        QObject* plugin = loader.instance();
-        if ( plugin )
-        {
-            // Connect via that plugin
-            qDebug() << "Loaded plugin:" << loader.fileName();
-            loadPlugin( plugin );
-        }
-        else
-        {
-            qDebug() << "Error loading library:" << loader.errorString();
-        }
+        loadPlugin( fileName );
     }
 }
 
 
 void
-SipHandler::loadPlugin( QObject* plugin )
+SipHandler::loadPlugin( const QString& path )
 {
+    QPluginLoader loader( path );
+    QObject* plugin = loader.instance();
+    if ( !plugin )
+    {
+        qDebug() << "Error loading plugin:" << loader.errorString();
+    }
+
     SipPlugin* sip = qobject_cast<SipPlugin*>(plugin);
     if ( sip )
     {
+        if ( pluginLoaded( sip->name() ) )
+        {
+            qDebug() << "Plugin" << sip->name() << "already loaded! Not loading:" << loader.fileName();
+            return;
+        }
+        qDebug() << "Loaded plugin:" << loader.fileName();
+
         QObject::connect( sip, SIGNAL( peerOnline( QString ) ), SLOT( onPeerOnline( QString ) ) );
         QObject::connect( sip, SIGNAL( peerOffline( QString ) ), SLOT( onPeerOffline( QString ) ) );
         QObject::connect( sip, SIGNAL( msgReceived( QString, QString ) ), SLOT( onMessage( QString, QString ) ) );
@@ -146,6 +149,19 @@ SipHandler::loadPlugin( QObject* plugin )
 
         m_plugins << sip;
     }
+}
+
+
+bool
+SipHandler::pluginLoaded( const QString& name ) const
+{
+    foreach( SipPlugin* plugin, m_plugins )
+    {
+        if ( plugin->name() == name )
+            return true;
+    }
+
+    return false;
 }
 
 

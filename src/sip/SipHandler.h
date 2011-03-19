@@ -58,8 +58,10 @@ private slots:
 
 private:
     QStringList findPlugins();
+    bool pluginLoaded( const QString& name ) const;
+
     void loadPlugins( const QStringList& paths );
-    void loadPlugin( QObject* plugin );
+    void loadPlugin( const QString& path );
 
     QList< SipPlugin* > m_plugins;
     bool m_connected;

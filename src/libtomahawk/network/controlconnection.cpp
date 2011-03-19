@@ -123,7 +123,7 @@ ControlConnection::registerSource()
 void
 ControlConnection::setupDbSyncConnection( bool ondemand )
 {
-    qDebug() << Q_FUNC_INFO << ondemand << m_source->id() << ondemand << m_dbconnkey << m_dbsyncconn << m_registered;
+    qDebug() << Q_FUNC_INFO << ondemand << m_source->id() << m_dbconnkey << m_dbsyncconn << m_registered;
 
     if ( m_dbsyncconn || !m_registered )
         return;

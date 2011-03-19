@@ -70,7 +70,6 @@ TwitterPlugin::isValid()
 const QString
 TwitterPlugin::name()
 {
-    qDebug() << "TwitterPlugin returning plugin name " << QString( MYNAME );
     return QString( MYNAME );
 }
 
