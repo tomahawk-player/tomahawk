@@ -51,6 +51,7 @@ public:
     Collection( const source_ptr& source, const QString& name, QObject* parent = 0 );
     virtual ~Collection();
 
+    virtual void setLoaded() { m_isLoaded = true; }
     virtual bool isLoaded() const { return m_isLoaded; }
     virtual QString name() const;
 
@@ -90,9 +91,10 @@ public slots:
 
     void setPlaylists( const QList<Tomahawk::playlist_ptr>& plists );
     void setDynamicPlaylists( const QList< Tomahawk::dynplaylist_ptr >& dynplists );
-    void setTracks( const QList<Tomahawk::query_ptr>& tracks );
 
+    void setTracks( const QList<Tomahawk::query_ptr>& tracks );
     void delTracks( const QStringList& files );
+    void resetTrackCache() { m_tracks.clear(); m_isLoaded = false; }
 
 protected:
     QString m_name;

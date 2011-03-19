@@ -63,11 +63,11 @@ DatabaseCommand_AddFiles::postCommitHook()
     // collection browser will update/fade in etc.
     Collection* coll = source()->collection().data();
 
-    connect( this, SIGNAL( notify( QList<Tomahawk::query_ptr>, Tomahawk::collection_ptr ) ),
-             coll, SLOT( setTracks( QList<Tomahawk::query_ptr>, Tomahawk::collection_ptr ) ),
+    connect( this, SIGNAL( notify( QList<Tomahawk::query_ptr> ) ),
+             coll, SLOT( setTracks( QList<Tomahawk::query_ptr> ) ),
              Qt::QueuedConnection );
 
-    emit notify( m_queries, source()->collection() );
+    emit notify( m_queries );
 
     // also re-calc the collection stats, to updates the "X tracks" in the sidebar etc:
     DatabaseCommand_CollectionStats* cmd = new DatabaseCommand_CollectionStats( source() );

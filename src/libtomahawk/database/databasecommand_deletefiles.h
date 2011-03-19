@@ -59,7 +59,7 @@ public:
 
 signals:
     void done( const QStringList&, const Tomahawk::collection_ptr& );
-    void notify( const QStringList&, const Tomahawk::collection_ptr& );
+    void notify( const QStringList& );
 
 private:
     QDir m_dir;

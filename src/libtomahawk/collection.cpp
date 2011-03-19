@@ -176,7 +176,6 @@ Collection::setTracks( const QList<Tomahawk::query_ptr>& tracks )
 {
     qDebug() << Q_FUNC_INFO << tracks.count() << name();
 
-    m_isLoaded = true;
     m_tracks << tracks;
     emit tracksAdded( tracks );
 }

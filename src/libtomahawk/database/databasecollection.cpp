@@ -30,7 +30,6 @@ using namespace Tomahawk;
 
 DatabaseCollection::DatabaseCollection( const source_ptr& src, QObject* parent )
     : Collection( src, QString( "dbcollection:%1" ).arg( src->userName() ), parent )
-    , m_loadedTracks( false )
 {
 }
 
@@ -66,7 +65,7 @@ DatabaseCollection::loadTracks()
 {
     qDebug() << Q_FUNC_INFO << source()->userName();
 
-    m_loadedTracks = true;
+    setLoaded();
     DatabaseCommand_AllTracks* cmd = new DatabaseCommand_AllTracks( source()->collection() );
 
     connect( cmd, SIGNAL( tracks( QList<Tomahawk::query_ptr> ) ),
@@ -128,7 +127,7 @@ DatabaseCollection::tracks()
 {
     qDebug() << Q_FUNC_INFO;
 
-    if ( !m_loadedTracks )
+    if ( !isLoaded() )
     {
         loadTracks();
     }

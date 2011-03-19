@@ -105,7 +105,6 @@ Dependencies
 
 To build the app:
 -----------------
-
     $ mkdir build && cd build
 
  Pick one of the following two choices. If uncertain pick the second one, you probably want a GUI.

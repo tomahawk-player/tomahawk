@@ -41,10 +41,10 @@ DatabaseCommand_DeleteFiles::postCommitHook()
     // collection browser will update/fade in etc.
     Collection* coll = source()->collection().data();
 
-    connect( this, SIGNAL( notify( QStringList, Tomahawk::collection_ptr ) ),
-             coll,   SLOT( delTracks( QStringList, Tomahawk::collection_ptr ) ), Qt::QueuedConnection );
+    connect( this, SIGNAL( notify( QStringList ) ),
+             coll,   SLOT( delTracks( QStringList ) ), Qt::QueuedConnection );
 
-    emit notify( m_files, source()->collection() );
+    emit notify( m_files );
 
     // also re-calc the collection stats, to updates the "X tracks" in the sidebar etc:
     DatabaseCommand_CollectionStats* cmd = new DatabaseCommand_CollectionStats( source() );
@@ -66,6 +66,7 @@ DatabaseCommand_DeleteFiles::exec( DatabaseImpl* dbi )
     int deleted = 0;
     QVariant srcid = source()->isLocal() ? QVariant( QVariant::Int ) : source()->id();
     TomahawkSqlQuery delquery = dbi->newquery();
+    QString lastPath;
 
     if ( !m_dir.path().isEmpty() && source()->isLocal() )
     {
@@ -85,7 +86,10 @@ DatabaseCommand_DeleteFiles::exec( DatabaseImpl* dbi )
             QFileInfo fi( dirquery.value( 1 ).toString().mid( 7 ) ); // remove file://
             if ( fi.absolutePath() != m_dir.absolutePath() )
             {
-                qDebug() << "Skipping subdir:" << fi.absolutePath();
+                if ( lastPath != fi.absolutePath() )
+                    qDebug() << "Skipping subdir:" << fi.absolutePath();
+
+                lastPath = fi.absolutePath();
                 continue;
             }
 

@@ -55,7 +55,7 @@ public:
 
 signals:
     void done( const QList<QVariant>&, const Tomahawk::collection_ptr& );
-    void notify( const QList<Tomahawk::query_ptr>&, const Tomahawk::collection_ptr& );
+    void notify( const QList<Tomahawk::query_ptr>& );
 
 private:
     QVariantList m_files;
