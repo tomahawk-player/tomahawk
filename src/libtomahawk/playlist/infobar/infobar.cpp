@@ -50,7 +50,11 @@ InfoBar::InfoBar( QWidget* parent )
 
     ui->captionLabel->setPalette( whitePal );
     ui->descriptionLabel->setPalette( whitePal );
-    
+
+    ui->captionLabel->setText( QString() );
+    ui->descriptionLabel->setText( QString() );
+    ui->imageLabel->setText( QString() );
+
     setAutoFillBackground( true );
 }
 
