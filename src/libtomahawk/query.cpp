@@ -173,18 +173,19 @@ Query::checkResults()
     // hook up signals, and check solved status
     foreach( const result_ptr& rp, m_results )
     {
-        if ( rp->collection()->source()->isOnline() )
+        if ( !rp->collection().isNull() && rp->collection()->source()->isOnline() )
         {
             m_playable = true;
 
-            if ( !m_solved && rp->score() > 0.99 )
-            {
-                m_solved = true;
-                becameSolved = true;
-            }
             if ( rp->score() > 0.99 )
             {
                 becameUnsolved = false;
+
+                if ( !m_solved )
+                {
+                    m_solved = true;
+                    becameSolved = true;
+                }
             }
         }
     }
