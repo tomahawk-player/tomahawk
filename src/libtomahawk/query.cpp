@@ -173,6 +173,10 @@ Query::checkResults()
     // hook up signals, and check solved status
     foreach( const result_ptr& rp, m_results )
     {
+        if ( rp->score() > 0.0 && rp->collection().isNull() )
+        {
+            m_playable = true;
+        }
         if ( !rp->collection().isNull() && rp->collection()->source()->isOnline() )
         {
             m_playable = true;
