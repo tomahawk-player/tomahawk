@@ -99,7 +99,7 @@ JabberPlugin::connectPlugin( bool startup )
     QObject::connect( p, SIGNAL( msgReceived( QString, QString ) ), SIGNAL( msgReceived( QString, QString ) ) );
 
     QObject::connect( p, SIGNAL( connected() ), SLOT( onConnected() ) );
-    QObject::connect( p, SIGNAL( disconnected() ), SIGNAL( onDisconnected() ) );
+    QObject::connect( p, SIGNAL( disconnected() ), SLOT( onDisconnected() ) );
     QObject::connect( p, SIGNAL( authError( int, QString ) ), SLOT( onAuthError( int, QString ) ) );
 
     p->resolveHostSRV();
