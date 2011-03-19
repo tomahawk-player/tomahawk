@@ -75,7 +75,14 @@ FIND_PATH(CLUCENE_LIBRARY_DIR
        	PATHS ${TRIAL_LIBRARY_PATHS} ${TRIAL_INCLUDE_PATHS} NO_DEFAULT_PATH)
 IF (CLUCENE_LIBRARY_DIR)
   MESSAGE(STATUS "Found CLucene library dir: ${CLUCENE_LIBRARY_DIR}")
-  INCLUDE(${CLUCENE_LIBRARY_DIR}/CLuceneConfig.cmake/CLuceneConfig.cmake)
+  # include CLuceneConfig/CLuceneConfig.cmake
+  IF(EXISTS ${CLUCENE_LIBRARY_DIR}/CLuceneConfig.cmake/CLuceneConfig.cmake)
+        INCLUDE(${CLUCENE_LIBRARY_DIR}/CLuceneConfig.cmake/CLuceneConfig.cmake)
+  ENDIF(EXISTS ${CLUCENE_LIBRARY_DIR}/CLuceneConfig.cmake/CLuceneConfig.cmake)
+  # include CLucene/CLuceneConfig.cmake
+  IF(EXISTS ${CLUCENE_LIBRARY_DIR}/CLucene/CLuceneConfig.cmake)
+        INCLUDE(${CLUCENE_LIBRARY_DIR}/CLucene/CLuceneConfig.cmake)
+  ENDIF(EXISTS ${CLUCENE_LIBRARY_DIR}/CLucene/CLuceneConfig.cmake)
   IF (CLUCENE_VERSION STRLESS "${CLUCENE_MIN_VERSION}")
     MESSAGE(ERROR " CLucene version ${CLUCENE_VERSION} is less than the required minimum ${CLUCENE_MIN_VERSION}")
     SET(CLUCENE_GOOD_VERSION FALSE)
