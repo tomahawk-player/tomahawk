@@ -47,7 +47,6 @@ macro_log_feature(TAGLIB_FOUND "TagLib" "Audio Meta-Data Library" "http://develo
 # we need pthreads too
 find_package(Threads)
 
-FIND_PACKAGE( Taglib 1.6.0 REQUIRED )
 include( CheckTagLibFileName )
 check_taglib_filename( COMPLEX_TAGLIB_FILENAME )
 
