@@ -218,7 +218,9 @@ DynamicModel::filteringTrackResolved( bool successful )
         if( m_playlist->mode() == OnDemand ) {
             m_lastResolvedRow = rowCount( QModelIndex() );
         }
-    }       
+    }
+    if( m_toResolveList.isEmpty() && rowCount( QModelIndex() ) == 0 ) // we failed
+        emit trackGenerationFailure( tr( "Could not find a playable track.\n\nPlease change the filters or try again." ) );
 }
 
 
