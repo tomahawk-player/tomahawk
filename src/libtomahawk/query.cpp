@@ -44,6 +44,7 @@ Query::get( const QString& artist, const QString& track, const QString& album, c
 
 Query::Query( const QString& artist, const QString& track, const QString& album, const QID& qid )
     : m_solved( false )
+    , m_playable( false )
     , m_qid( qid )
     , m_artist( artist )
     , m_album( album )
@@ -167,6 +168,7 @@ Query::checkResults()
 {
     bool becameSolved = false;
     bool becameUnsolved = true;
+    m_playable = m_results.count() > 0;
 
     // hook up signals, and check solved status
     foreach( const result_ptr& rp, m_results )

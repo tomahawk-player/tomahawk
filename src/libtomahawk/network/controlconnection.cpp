@@ -183,7 +183,7 @@ ControlConnection::dbSyncConnection()
     if ( !m_dbsyncconn )
     {
         setupDbSyncConnection( true );
-        Q_ASSERT( m_dbsyncconn );
+//        Q_ASSERT( m_dbsyncconn );
     }
 
     return m_dbsyncconn;

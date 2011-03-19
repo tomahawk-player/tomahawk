@@ -59,8 +59,10 @@ public:
     /// sorter for list of results
     static bool resultSorter( const result_ptr &left, const result_ptr& right );
 
-    /// solved=true when a perfect result has been found (score of 1.0)
+    /// true when a perfect result has been found (score of 1.0)
     bool solved() const { return m_solved; }
+    /// true when any result has been found (score may be less than 1.0)
+    bool playable() const { return m_playable; }
 
     unsigned int lastPipelineWeight() const { return m_lastpipelineweight; }
     void setLastPipelineWeight( unsigned int w ) { m_lastpipelineweight = w; }
@@ -79,7 +81,7 @@ public:
     QString album() const { return m_album; }
     QString track() const { return m_track; }
     int duration() const { return m_duration; }
-    
+
 signals:
     void resultsAdded( const QList<Tomahawk::result_ptr>& );
     void resultsRemoved( const Tomahawk::result_ptr& );
@@ -105,6 +107,7 @@ private:
 
     QList< Tomahawk::result_ptr > m_results;
     bool m_solved;
+    bool m_playable;
     mutable QID m_qid;
     unsigned int m_lastpipelineweight;
 
