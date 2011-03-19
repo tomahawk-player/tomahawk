@@ -25,12 +25,14 @@
 #include <QInputDialog>
 #include <QLineEdit>
 
+
 JabberPlugin::JabberPlugin()
     : p( 0 ),
     m_menu ( 0 ),
     m_addFriendAction( 0 )
 {
 }
+
 
 void
 JabberPlugin::setProxy( QNetworkProxy* proxy )
@@ -45,11 +47,13 @@ JabberPlugin::name()
     return QString( MYNAME );
 }
 
+
 const QString
 JabberPlugin::friendlyName()
 {
     return QString( "Jabber" );
 }
+
 
 const QString
 JabberPlugin::accountName()
@@ -57,11 +61,13 @@ JabberPlugin::accountName()
     return TomahawkSettings::instance()->jabberUsername();
 }
 
+
 QMenu*
 JabberPlugin::menu()
 {
     return m_menu;
 }
+
 
 bool
 JabberPlugin::connectPlugin( bool startup )
@@ -103,59 +109,64 @@ JabberPlugin::connectPlugin( bool startup )
     QObject::connect( p, SIGNAL( authError( int, QString ) ), SLOT( onAuthError( int, QString ) ) );
 
     p->resolveHostSRV();
-    
+
     return true;
 }
 
-void 
+
+void
 JabberPlugin::onConnected()
 {
-    if( !m_menu ) {
-        m_menu = new QMenu( QString( "Jabber (").append( accountName() ).append( ")" ) );
-        
-        m_addFriendAction = m_menu->addAction( "Add Friend..." );
-        
-        connect( m_addFriendAction, SIGNAL( triggered() ),
-                this,               SLOT( showAddFriendDialog() ) ) ;
-                
+    if ( !m_menu )
+    {
+        m_menu = new QMenu( QString( "Jabber (" ).append( accountName() ).append( ")" ) );
+        m_addFriendAction = m_menu->addAction( tr( "Add Friend..." ) );
+
+        connect( m_addFriendAction, SIGNAL( triggered() ), SLOT( showAddFriendDialog() ) ) ;
+
         emit addMenu( m_menu );
     }
-    
+
     emit connected();
 }
 
-void 
+
+void
 JabberPlugin::onDisconnected()
 {
-    if( m_menu && m_addFriendAction ) {
+    if ( m_menu && m_addFriendAction )
+    {
         emit removeMenu( m_menu );
-        
+
         delete m_menu;
         m_menu = 0;
         m_addFriendAction = 0;
     }
-    
+
     emit disconnected();
 }
-
 
 
 void
 JabberPlugin::onAuthError( int code, const QString& message )
 {
     if ( code == gloox::ConnAuthenticationFailed )
+    {
         emit error( SipPlugin::AuthError, message );
+    }
     else
+    {
         emit error( SipPlugin::ConnectionError, message );
+    }
 }
+
 
 void
 JabberPlugin::showAddFriendDialog()
 {
     bool ok;
     QString id = QInputDialog::getText( 0, tr( "Add Friend" ),
-                                              tr( "Enter Jabber ID:" ), QLineEdit::Normal,
-                                              "", &ok );
+                                           tr( "Enter Jabber ID:" ), QLineEdit::Normal, "", &ok );
     if ( !ok )
         return;
 
