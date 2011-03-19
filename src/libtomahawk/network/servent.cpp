@@ -481,6 +481,13 @@ Servent::connectToPeer( const QString& ha, int port, const QString &key, Connect
     qDebug() << "Servent::connectToPeer:" << ha << ":" << port
              << thread() << QThread::currentThread();
 
+    if ( ( ha == m_externalAddress.toString() || ha == m_externalHostname ) &&
+         ( port == m_externalPort ) )
+    {
+        qDebug() << "ERROR: Tomahawk won't try to connect to" << ha << ":" << port << ": identified as ourselves.";
+        return;
+    }
+
     if( key.length() && conn->firstMessage().isNull() )
     {
         QVariantMap m;
