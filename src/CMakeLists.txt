@@ -232,8 +232,8 @@ IF( APPLE )
     INSTALL(DIRECTORY "${SPARKLE}/Versions/Current/Resources" DESTINATION "${CMAKE_BINARY_DIR}/tomahawk.app/Contents/Frameworks/Sparkle.framework")
 
   ENDIF(HAVE_SPARKLE)
-ELSEIF( APPLE )
-  INSTALL( TARGETS tomahawk RUNTIME DESTINATION bin )
 ENDIF( APPLE )
+
+INSTALL( TARGETS tomahawk RUNTIME DESTINATION bin )
 
 #INCLUDE( "CPack.txt" )
