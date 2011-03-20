@@ -284,7 +284,7 @@ Section "Tomahawk Player" SEC_TOMAHAWK_PLAYER
    
    ;Audio stuff
    File "${BUILD_PATH}\thirdparty\rtaudio\librtaudio.dll"
-   ;File "${MING_DLL_PATH}\libmad.dll"
+   File "${MING_DLL_PATH}\libmad-0.dll"
    File "${MING_DLL_PATH}\libogg-0.dll"
    File "${MING_DLL_PATH}\libvorbisfile-3.dll"
    File "${MING_DLL_PATH}\libvorbis-0.dll"
@@ -303,6 +303,8 @@ Section "Tomahawk Player" SEC_TOMAHAWK_PLAYER
 
    File "${MING_LIB}\libclucene-core.dll"
    File "${MING_LIB}\libclucene-shared.dll"
+
+   File "${MING_BIN}\libqtsparkle.dll"
 
    File "${BUILD_PATH}\thirdparty\qxt\qxtweb-standalone\libqxtweb-standalone.dll"
    File "${BUILD_PATH}\thirdparty\jdns\libtomahawk_jdns.dll"
