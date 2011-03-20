@@ -82,12 +82,6 @@ SourceTreeView::SourceTreeView( QWidget* parent )
     setIndentation( 16 );
     setAnimated( true );
     
-#ifdef Q_WS_MAC
-    QFont f( font() );
-    f.setPointSize( f.pointSize() - 2 );
-    setFont( f );
-#endif
-    
     setItemDelegate( new SourceDelegate( this ) );
 
     setContextMenuPolicy( Qt::CustomContextMenu );
@@ -507,6 +501,13 @@ SourceDelegate::paint( QPainter* painter, const QStyleOptionViewItem& option, co
     o2.rect.setX( 0 );
     o2.state = option.state;
 
+#ifdef Q_WS_MAC
+    QFont savedFont = painter->font();
+    QFont smaller = savedFont;
+    smaller.setPointSize( smaller.pointSize() - 1 );
+    painter->setFont( smaller );
+#endif
+    
     if ( ( option.state & QStyle::State_Enabled ) == QStyle::State_Enabled )
     {
         o.state = QStyle::State_Enabled;
@@ -609,4 +610,8 @@ SourceDelegate::paint( QPainter* painter, const QStyleOptionViewItem& option, co
     {
         QStyledItemDelegate::paint( painter, o, index );
     }
+    
+#ifdef Q_WS_MAC
+    painter->setFont( savedFont );
+#endif    
 }
