@@ -497,15 +497,13 @@ void
 SourceDelegate::paint( QPainter* painter, const QStyleOptionViewItem& option, const QModelIndex& index ) const
 {
     QStyleOptionViewItem o = option;
-    QStyleOptionViewItem o2 = option;
-    o2.rect.setX( 0 );
-    o2.state = option.state;
 
 #ifdef Q_WS_MAC
     QFont savedFont = painter->font();
     QFont smaller = savedFont;
-    smaller.setPointSize( smaller.pointSize() - 1 );
+    smaller.setPointSize( smaller.pointSize() - 2 );
     painter->setFont( smaller );
+    o.font = smaller;
 #endif
     
     if ( ( option.state & QStyle::State_Enabled ) == QStyle::State_Enabled )
