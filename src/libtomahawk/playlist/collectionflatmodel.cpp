@@ -197,6 +197,8 @@ CollectionFlatModel::onTracksAdded( const QList<Tomahawk::query_ptr>& tracks )
 
     if ( m_tracksToAdd.count() && kickOff )
         processTracksToAdd();
+    else if ( m_tracksToAdd.isEmpty() && m_loadingCollections.isEmpty() )
+        emit loadingFinished();
 }
 
 
