@@ -47,13 +47,15 @@ TwitterConfigWidget::TwitterConfigWidget(SipPlugin* plugin, QWidget *parent) :
     {
         ui->twitterStatusLabel->setText("Status: No saved credentials");
         ui->twitterAuthenticateButton->setText( "Authenticate" );
-        ui->twitterInstructionsBox->setVisible( false );
+        ui->twitterInstructionsInfoLabel->setVisible( false );
+        ui->twitterTweetGotTomahawkButton->setVisible( false );
     }
     else
     {
         ui->twitterStatusLabel->setText("Status: Credentials saved");
         ui->twitterAuthenticateButton->setText( "Re-authenticate" );
-        ui->twitterInstructionsBox->setVisible( true );
+        ui->twitterInstructionsInfoLabel->setVisible( true );
+        ui->twitterTweetGotTomahawkButton->setVisible( true );
     }
 
 }
@@ -77,7 +79,10 @@ TwitterConfigWidget::authenticateTwitter()
         s->setTwitterOAuthTokenSecret( twitAuth->oauthTokenSecret() );
         ui->twitterStatusLabel->setText("Status: Credentials saved");
         ui->twitterAuthenticateButton->setText( "Re-authenticate" );
-        ui->twitterInstructionsBox->setVisible( true );
+
+        ui->twitterInstructionsInfoLabel->setVisible( true );
+        ui->twitterTweetGotTomahawkButton->setVisible( true );
+
         TomahawkSettings::instance()->setTwitterCachedFriendsSinceId( 0 );
         TomahawkSettings::instance()->setTwitterCachedMentionsSinceId( 0 );
         m_plugin->connectPlugin( false );
@@ -90,7 +95,10 @@ TwitterConfigWidget::authenticateTwitter()
         s->setTwitterOAuthTokenSecret( QString() );
         ui->twitterStatusLabel->setText("Status: No saved credentials");
         ui->twitterAuthenticateButton->setText( "Authenticate" );
-        ui->twitterInstructionsBox->setVisible( false );
+
+        ui->twitterInstructionsInfoLabel->setVisible( false );
+        ui->twitterTweetGotTomahawkButton->setVisible( false );
+
         QMessageBox::critical( 0, QString("Tweetin' Error"), QString("There was an error validating your authentication") );
     }
 }
