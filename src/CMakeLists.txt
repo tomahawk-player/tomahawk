@@ -236,4 +236,4 @@ ELSEIF( APPLE )
   install( TARGETS tomahawk RUNTIME DESTINATION bin )
 ENDIF( APPLE )
 
-INCLUDE( "CPack.txt" )
+#INCLUDE( "CPack.txt" )

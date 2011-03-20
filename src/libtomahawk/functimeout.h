@@ -47,7 +47,7 @@ public:
         : m_func( func )
     {
         //qDebug() << Q_FUNC_INFO;
-        QTimer::singleShot( ms, this, SLOT(exec() ) );
+        QTimer::singleShot( ms, this, SLOT( exec() ) );
     };
 
     ~FuncTimeout()
