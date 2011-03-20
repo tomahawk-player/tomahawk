@@ -39,5 +39,5 @@ target_link_libraries( rtaudio
 )
 
 IF(WIN32)
-INSTALL( TARGETS rtaudio DESTINATION lib )
+INSTALL( TARGETS rtaudio DESTINATION lib${LIB_SUFFIX} )
 ENDIF()

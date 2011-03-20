@@ -41,4 +41,4 @@ IF( APPLE )
 #  SET( CMAKE_SHARED_LINKER_FLAGS ${CMAKE_SHARED_LINKER_FLAGS} "-undefined dynamic_lookup" )
 ENDIF( APPLE )
 
-install( TARGETS tomahawk_sipzeroconf DESTINATION lib )
+install( TARGETS tomahawk_sipzeroconf DESTINATION lib${LIB_SUFFIX} )

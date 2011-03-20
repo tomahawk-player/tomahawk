@@ -41,4 +41,4 @@ target_link_libraries( alsaplayback
 	${AUDIO_LIBS}
 )
 
-#INSTALL(TARGETS alsaplayback ARCHIVE DESTINATION lib)
+#INSTALL(TARGETS alsaplayback ARCHIVE DESTINATION lib${LIB_SUFFIX})

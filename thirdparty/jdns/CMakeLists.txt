@@ -49,4 +49,4 @@ target_link_libraries(tomahawk_jdns
 
 SET_TARGET_PROPERTIES( tomahawk_jdns PROPERTIES DEFINE_SYMBOL  MAKE_JDNS_LIB )
 
-INSTALL(TARGETS tomahawk_jdns DESTINATION lib)
+INSTALL(TARGETS tomahawk_jdns DESTINATION lib${LIB_SUFFIX})
