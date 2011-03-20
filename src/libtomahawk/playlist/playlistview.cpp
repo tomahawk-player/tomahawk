@@ -152,4 +152,5 @@ bool
 PlaylistView::jumpToCurrentTrack()
 {
     scrollTo( proxyModel()->currentItem(), QAbstractItemView::PositionAtCenter );
+    return true;
 }

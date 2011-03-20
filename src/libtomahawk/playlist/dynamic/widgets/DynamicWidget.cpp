@@ -398,4 +398,5 @@ bool
 DynamicWidget::jumpToCurrentTrack()
 {
     m_view->scrollTo( m_view->proxyModel()->currentItem(), QAbstractItemView::PositionAtCenter );
+    return true;
 }

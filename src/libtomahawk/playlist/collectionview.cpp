@@ -117,4 +117,5 @@ bool
 CollectionView::jumpToCurrentTrack()
 {
     scrollTo( proxyModel()->currentItem(), QAbstractItemView::PositionAtCenter );
+    return true;
 }
