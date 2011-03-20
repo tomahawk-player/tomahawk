@@ -15,7 +15,7 @@
 ;-----------------------------------------------------------------------------
 ; Some paths.
 ;-----------------------------------------------------------------------------
-!define MING_PATH "/usr/i686-pc-mingw32/sys-root/mingw"
+!define MING_PATH "/usr/i686-w64-mingw32/sys-root/mingw"
 !define MING_BIN "${MING_PATH}/bin"
 !define MING_DLL_PATH "${MING_BIN}"
 !define MING_LIB "${MING_PATH}/lib"
@@ -254,9 +254,9 @@ Section "Tomahawk Player" SEC_TOMAHAWK_PLAYER
 
    ;Plugins
    File "${BUILD_PATH}\src\libtomahawk\libtomahawklib.dll"
-   File "${BUILD_PATH}\libsip_jabber.dll"
-   File "${BUILD_PATH}\libsip_twitter.dll"
-   File "${BUILD_PATH}\libsip_zeroconf.dll"
+   File "${BUILD_PATH}\libtomahawk_sipjabber.dll"
+   File "${BUILD_PATH}\libtomahawk_siptwitter.dll"
+   File "${BUILD_PATH}\libtomahawk_sipzeroconf.dll"
 
    ;License & release notes.
    File "${ROOT_PATH}\LICENSE.txt"
