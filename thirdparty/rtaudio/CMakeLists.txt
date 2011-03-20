@@ -38,6 +38,6 @@ target_link_libraries( rtaudio
 	${AUDIO_LIBS}
 )
 
-IF(WIN32)
+IF(WIN32 OR APPLE)
 INSTALL(TARGETS rtaudio ARCHIVE DESTINATION lib)
 ENDIF()

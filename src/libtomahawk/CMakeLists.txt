@@ -400,4 +400,4 @@ target_link_libraries( tomahawklib
     ${CMAKE_THREAD_LIBS_INIT}
 )
 
-install( TARGETS tomahawklib DESTINATION lib )
+INSTALL( TARGETS tomahawklib DESTINATION lib )
