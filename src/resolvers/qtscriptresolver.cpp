@@ -37,7 +37,13 @@ QtScriptResolver::QtScriptResolver( const QString& scriptPath )
     m_thread->start();
 
     QFile scriptFile( scriptPath );
-    scriptFile.open( QIODevice::ReadOnly );
+    if ( !scriptFile.open( QIODevice::ReadOnly ) )
+    {
+        qDebug() << Q_FUNC_INFO << "Failed loading JavaScript resolver:" << scriptPath;
+        deleteLater();
+        return;
+    }
+
     m_engine->mainFrame()->setHtml( "<html><body></body></html>" );
     m_engine->mainFrame()->evaluateJavaScript( scriptFile.readAll() );
     scriptFile.close();
