@@ -26,6 +26,7 @@
 #include "database/databasecommand_sourceoffline.h"
 #include "database/databasecommand_logplayback.h"
 #include "database/database.h"
+#include <QApplication>
 
 using namespace Tomahawk;
 
@@ -94,17 +95,21 @@ Source::remove()
 QString
 Source::friendlyName() const
 {
+    QString friendly;
     if ( m_friendlyname.isEmpty() )
-        return m_username;
+        friendly = m_username;
 
     //TODO: this is a terrible assumption, help me clean this up, mighty muesli!
     if ( m_friendlyname.contains( "@conference.") )
-        return QString(m_friendlyname).remove( 0, m_friendlyname.lastIndexOf( "/" )+1 ).append(" via MUC");
+        friendly = QString(m_friendlyname).remove( 0, m_friendlyname.lastIndexOf( "/" )+1 ).append(" via MUC");
 
     if ( m_friendlyname.contains( "/tomahawk" ) )
-        return m_friendlyname.left( m_friendlyname.indexOf( "/tomahawk" ) );
+        friendly = m_friendlyname.left( m_friendlyname.indexOf( "/tomahawk" ) );
 
-    return m_friendlyname;
+    if( qApp->arguments().contains( "--demo" ) && friendly.contains( '@' ) )
+        friendly = friendly.left( friendly.indexOf( '@' ) );
+    
+    return friendly;
 }
 
 
