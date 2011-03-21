@@ -43,7 +43,8 @@ public:
 
     virtual QString title() const { return model()->title(); }
     virtual QString description() const { return model()->description(); }
-
+    virtual QPixmap pixmap() const { return QPixmap( RESPATH "images/music-icon.png" ); }
+    
     virtual bool showModes() const { return true; }
 
     virtual bool jumpToCurrentTrack();
