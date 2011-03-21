@@ -91,7 +91,7 @@ ScriptEngine::resolve( const Tomahawk::query_ptr& query )
     QVariantMap m = mainFrame()->evaluateJavaScript( eval ).toMap();
     qDebug() << "JavaScript Result:" << m;
 
-    const QString qid = m.value( "qid" ).toString();
+    const QString qid = query->id();
     const QVariantList reslist = m.value( "results" ).toList();
 
     foreach( const QVariant& rv, reslist )
