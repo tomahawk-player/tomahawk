@@ -104,13 +104,19 @@ ScriptEngine::resolve( const Tomahawk::query_ptr& query )
         rp->setArtist( ap );
         rp->setAlbum( Tomahawk::Album::get( 0, m.value( "album" ).toString(), ap ) );
         rp->setTrack( m.value( "track" ).toString() );
-        rp->setDuration( m.value( "duration" ).toUInt() );
         rp->setBitrate( m.value( "bitrate" ).toUInt() );
         rp->setUrl( m.value( "url" ).toString() );
         rp->setSize( m.value( "size" ).toUInt() );
         rp->setScore( m.value( "score" ).toFloat() * ( (float)m_parent->weight() / 100.0 ) );
         rp->setRID( uuid() );
         rp->setFriendlySource( m_parent->name() );
+
+        rp->setDuration( m.value( "duration", 0 ).toUInt() );
+        if ( rp->duration() <= 0 && m.contains( "durationString" ) )
+        {
+            QTime time = QTime::fromString( m.value( "durationString" ).toString(), "hh:mm:ss" );
+            rp->setDuration( time.secsTo( QTime( 0, 0 ) ) * -1 );
+        }
 
         rp->setMimetype( m.value( "mimetype" ).toString() );
         if ( rp->mimetype().isEmpty() )
