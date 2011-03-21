@@ -249,14 +249,32 @@ Section "Tomahawk Player" SEC_TOMAHAWK_PLAYER
    SetDetailsPrint listonly
    SetOutPath "$INSTDIR"
 
-   ;Main executable.
-   File "${BUILD_PATH}\tomahawk.exe"
+   !ifdef INSTALL_PATH
+        ;Main executable.
+        File "${INSTALL_PATH}\bin\tomahawk.exe"
 
-   ;Plugins
-   File "${BUILD_PATH}\src\libtomahawk\libtomahawklib.dll"
-   File "${BUILD_PATH}\libtomahawk_sipjabber.dll"
-   File "${BUILD_PATH}\libtomahawk_siptwitter.dll"
-   File "${BUILD_PATH}\libtomahawk_sipzeroconf.dll"
+        File "${INSTALL_PATH}\lib\librtaudio.dll"
+        File "${INSTALL_PATH}\lib\libqxtweb-standalone.dll"
+        File "${INSTALL_PATH}\lib\libtomahawk_jdns.dll"
+        File "${INSTALL_PATH}\lib\libtomahawk_qtweetlib.dll"
+        File "${INSTALL_PATH}\lib\libtomahawklib.dll"
+        File "${INSTALL_PATH}\lib\libtomahawk_sipjabber.dll"
+        File "${INSTALL_PATH}\lib\libtomahawk_siptwitter.dll"
+        File "${INSTALL_PATH}\lib\libtomahawk_sipzeroconf.dll"
+   !endif
+   !ifndef INSTALL_PATH
+        ;Main executable.
+        File "${BUILD_PATH}\tomahawk.exe"
+
+        File "${BUILD_PATH}\thirdparty\rtaudio\librtaudio.dll"
+        File "${BUILD_PATH}\thirdparty\qxt\qxtweb-standalone\libqxtweb-standalone.dll"
+        File "${BUILD_PATH}\thirdparty\jdns\libtomahawk_jdns.dll"
+        File "${BUILD_PATH}\thirdparty\qtweetlib\libtomahawk_qtweetlib.dll"
+        File "${BUILD_PATH}\src\libtomahawk\libtomahawklib.dll"
+        File "${BUILD_PATH}\libtomahawk_sipjabber.dll"
+        File "${BUILD_PATH}\libtomahawk_siptwitter.dll"
+        File "${BUILD_PATH}\libtomahawk_sipzeroconf.dll"
+   !endif
 
    ;License & release notes.
    File "${ROOT_PATH}\LICENSE.txt"
@@ -283,7 +301,6 @@ Section "Tomahawk Player" SEC_TOMAHAWK_PLAYER
    File "${MING_DLL_PATH}\libstdc++-6.dll"
    
    ;Audio stuff
-   File "${BUILD_PATH}\thirdparty\rtaudio\librtaudio.dll"
    File "${MING_DLL_PATH}\libmad-0.dll"
    File "${MING_DLL_PATH}\libogg-0.dll"
    File "${MING_DLL_PATH}\libvorbisfile-3.dll"
@@ -305,10 +322,6 @@ Section "Tomahawk Player" SEC_TOMAHAWK_PLAYER
    File "${MING_LIB}\libclucene-shared.dll"
 
    File "${MING_BIN}\libqtsparkle.dll"
-
-   File "${BUILD_PATH}\thirdparty\qxt\qxtweb-standalone\libqxtweb-standalone.dll"
-   File "${BUILD_PATH}\thirdparty\jdns\libtomahawk_jdns.dll"
-   File "${BUILD_PATH}\thirdparty\qtweetlib\libtomahawk_qtweetlib.dll"
 SectionEnd
 
 SectionGroup "Shortcuts"
