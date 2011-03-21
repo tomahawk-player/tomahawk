@@ -75,9 +75,9 @@ PlaylistModel::loadPlaylist( const Tomahawk::playlist_ptr& playlist, bool loadEn
 
     if ( rowCount( QModelIndex() ) && loadEntries )
     {
-        emit beginRemoveRows( QModelIndex(), 0, rowCount( QModelIndex() ) - 1 );
+        emit beginResetModel();
         delete m_rootItem;
-        emit endRemoveRows();
+        emit endResetModel();
         m_rootItem = new PlItem( 0, this );
     }
 
@@ -142,6 +142,7 @@ PlaylistModel::loadHistory( const Tomahawk::source_ptr& source, unsigned int amo
 
     Database::instance()->enqueue( QSharedPointer<DatabaseCommand>( cmd ) );
 }
+
 
 void 
 PlaylistModel::clear()
@@ -263,7 +264,6 @@ PlaylistModel::onDataChanged()
 void
 PlaylistModel::onRevisionLoaded( Tomahawk::PlaylistRevision revision )
 {
-    qDebug() << "PLAYLIST::onRevisionLoaded";
     qDebug() << Q_FUNC_INFO;
 
     if ( m_waitForUpdate )
@@ -365,12 +365,18 @@ PlaylistModel::onPlaylistChanged( bool waitForUpdate )
 
     m_waitForUpdate = waitForUpdate;
     QString newrev = uuid();
-    if( dynplaylist_ptr dynplaylist = m_playlist.dynamicCast<Tomahawk::DynamicPlaylist>() ) {
+    if( dynplaylist_ptr dynplaylist = m_playlist.dynamicCast<Tomahawk::DynamicPlaylist>() )
+    {
         if( dynplaylist->mode() == OnDemand )
+        {
             dynplaylist->createNewRevision( newrev );
+        }
         else if( dynplaylist->mode() == Static )
+        {
             dynplaylist->createNewRevision( newrev, dynplaylist->currentrevision(), dynplaylist->type(), dynplaylist->generator()->controls(), l );
-    } else {
+        }
+    } else
+    {
         m_playlist->createNewRevision( newrev, m_playlist->currentrevision(), l );
     }
 }
