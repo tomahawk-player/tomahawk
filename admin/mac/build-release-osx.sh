@@ -31,7 +31,7 @@ echo "Goes here: $QTDIR"
 export QMAKESPEC='macx-g++'
 export QTDIR
 export VERSION
-export QTVERSION='4.7.1'
+export QTVERSION='4.7.2'
 ################################################################################
 
 
@@ -43,7 +43,7 @@ CREATEDMG='1'
     header addQt
     cd tomahawk.app
     $ROOT/../admin/mac/add-Qt-to-bundle.sh \
-                   'QtCore QtGui QtXml QtNetwork QtSql'
+                   'QtCore QtGui QtXml QtNetwork QtSql QtXmlPatterns QtWebKit phonon'
 
     header deposx
     $ROOT/../admin/mac/deposx.sh
