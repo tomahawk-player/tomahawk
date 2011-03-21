@@ -94,7 +94,12 @@ Result::toVariant() const
     m.insert( "artist", artist()->name() );
     m.insert( "album", album()->name() );
     m.insert( "track", track() );
-    m.insert( "source", collection()->source()->friendlyName() );
+
+    if ( !collection().isNull() )
+        m.insert( "source", collection()->source()->friendlyName() );
+    else
+        m.insert( "source", friendlySource() );
+
     m.insert( "mimetype", mimetype() );
     m.insert( "size", size() );
     m.insert( "bitrate", bitrate() );
