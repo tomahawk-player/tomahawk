@@ -195,7 +195,7 @@ PlaylistDelegate::paint( QPainter* painter, const QStyleOptionViewItem& option, 
     QFont boldFont = opt.font;
     boldFont.setBold( true );
 
-    painter->drawPixmap( option.rect.adjusted( 10, 12, -option.rect.width() + 42, -12 ), m_playlistIcon );
+    painter->drawPixmap( option.rect.adjusted( 10, 13, -option.rect.width() + 48, -13 ), m_playlistIcon );
 
     painter->drawText( option.rect.adjusted( 56, 26, -100, -8 ), index.data( PlaylistWidgetItem::ArtistRole ).toString() );
 
