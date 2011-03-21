@@ -48,16 +48,19 @@ CREATEDMG='1'
     header "Running install_name_tool"
     $ROOT/../admin/mac/deposx.sh
 
-    header "Renaming icon"
-    mv Contents/Resources/tomahawkSources.icns Contents/Resources/tomahawk.icns
+    header "Renaming icon & copying Info.plist"
+    mv Contents/Resources/tomahawkSources.icns Contents/Resources/Tomahawk.icns
+    cp $ROOT/../admin/mac/Info.plist Contents/Info.plist
 
     header "Copying Sparkle pubkey & framework, and qt.conf"
     cp $ROOT/../admin/mac/sparkle_pub.pem Contents/Resources
     cp -R /Library/Frameworks/Sparkle.framework Contents/Frameworks
     cp $ROOT/../admin/mac/qt.conf Contents/Resources
 
-    header "Renaming app bundle"
+    header "Creating DMG"
     cd ..
     mv tomahawk.app Tomahawk.app
+    $ROOT/../admin/mac/create-dmg.sh Tomahawk.app
+    mv Tomahawk.app tomahawk.app
 
     header "Done!"

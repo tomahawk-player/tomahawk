@@ -43,11 +43,17 @@ ln -s /Applications "$TMP/Applications"
 cp -R "$IN" "$TMP"
 
 # create
-hdiutil create -srcfolder "$TMP" \
-               -format UDZO -imagekey zlib-level=9 \
-               -scrub \
-               "$OUT" \
-               || die "Error creating DMG :("
+hdiutil makehybrid -hfs -hfs-volume-name Tomahawk -hfs-openfolder "$TMP" "$TMP" -o tmp.dmg
+hdiutil convert -format UDZO -imagekey zlib-level=9 tmp.dmg -o "$OUT"
+
+# cleanup
+rm tmp.dmg
+
+#hdiutil create -srcfolder "$TMP" \
+#               -format UDZO -imagekey zlib-level=9 \
+#               -scrub \
+#               "$OUT" \
+#               || die "Error creating DMG :("
 
 # done !
 echo 'DMG size:' `du -hs "$OUT" | awk '{print $1}'`

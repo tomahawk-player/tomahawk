@@ -19,7 +19,7 @@
 	<key>CFBundleSignature</key>
 	<string>tomahawk</string>
 	<key>CFBundleIconFile</key>
-	<string>tomahawk.icns</string>
+	<string>Tomahawk.icns</string>
 	<key>CFBundleName</key>
 	<string>Tomahawk</string>
 	<key>LSMinimumSystemVersion</key>
