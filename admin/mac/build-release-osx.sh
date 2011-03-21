@@ -48,10 +48,10 @@ CREATEDMG='1'
     header "Running install_name_tool"
     $ROOT/../admin/mac/deposx.sh
 
-    header "Renaming files & copying Info.plist"
+    header "Renaming files"
     mv Contents/Resources/tomahawkSources.icns Contents/Resources/Tomahawk.icns
     mv Contents/MacOS/tomahawk Contents/MacOS/Tomahawk
-    cp $ROOT/../admin/mac/Info.plist Contents/Info.plist
+#    cp $ROOT/../admin/mac/Info.plist Contents/Info.plist
 
     header "Copying Sparkle pubkey & framework, and qt.conf"
     cp $ROOT/../admin/mac/sparkle_pub.pem Contents/Resources
