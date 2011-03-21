@@ -75,10 +75,7 @@ PlaylistModel::loadPlaylist( const Tomahawk::playlist_ptr& playlist, bool loadEn
 
     if ( rowCount( QModelIndex() ) && loadEntries )
     {
-        emit beginResetModel();
-        delete m_rootItem;
-        emit endResetModel();
-        m_rootItem = new PlItem( 0, this );
+        clear();
     }
 
     m_playlist = playlist;
@@ -125,10 +122,7 @@ PlaylistModel::loadHistory( const Tomahawk::source_ptr& source, unsigned int amo
 {
     if ( rowCount( QModelIndex() ) )
     {
-        emit beginRemoveRows( QModelIndex(), 0, rowCount( QModelIndex() ) - 1 );
-        delete m_rootItem;
-        emit endRemoveRows();
-        m_rootItem = new PlItem( 0, this );
+        clear();
     }
 
     m_playlist.clear();
@@ -149,9 +143,9 @@ PlaylistModel::clear()
 {
     if ( rowCount( QModelIndex() ) )
     {
-        emit beginRemoveRows( QModelIndex(), 0, rowCount( QModelIndex() ) - 1 );
+        emit beginResetModel();
         delete m_rootItem;
-        emit endRemoveRows();
+        emit endResetModel();
         m_rootItem = new PlItem( 0, this );
     }
 }

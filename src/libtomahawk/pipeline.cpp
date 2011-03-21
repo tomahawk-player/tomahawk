@@ -220,7 +220,8 @@ Pipeline::shuntNext()
 
         if ( m_queries_pending.isEmpty() )
         {
-            emit idle();
+            if ( m_qidsState.isEmpty() )
+                emit idle();
             return;
         }
 
