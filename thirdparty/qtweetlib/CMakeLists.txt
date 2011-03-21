@@ -180,6 +180,6 @@ target_link_libraries(tomahawk_qtweetlib
 
 INCLUDE( ${CMAKE_CURRENT_SOURCE_DIR}/twitter-api-keys )
 
-INSTALL(TARGETS tomahawk_qtweetlib DESTINATION lib)
+INSTALL(TARGETS tomahawk_qtweetlib DESTINATION lib${LIB_SUFFIX})
 
 
