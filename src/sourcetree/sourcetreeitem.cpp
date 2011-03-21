@@ -141,6 +141,7 @@ SourceTreeItem::onPlaylistsDeleted( const QList<playlist_ptr>& playlists )
             {
                 item->removeRow( i );
                 m_playlists.removeAll( p );
+                break;
             }
         }
     }
@@ -165,6 +166,7 @@ SourceTreeItem::onPlaylistLoaded( Tomahawk::PlaylistRevision revision )
         {
             pi->setEnabled( true );
             m_current_revisions.insert( pl->data()->guid(), revision.revisionguid );
+            break;
         }
     }
 }
@@ -188,7 +190,10 @@ SourceTreeItem::onPlaylistChanged()
             playlist_ptr* pl = reinterpret_cast<playlist_ptr*>(piptr);
 
             if ( ptr == qlonglong( pl->data() ) )
+            {
                 pi->setText( pl->data()->title() );
+                break;
+            }
         }
         if ( type == SourcesModel::DynamicPlaylistSource )
         {
@@ -196,7 +201,10 @@ SourceTreeItem::onPlaylistChanged()
             dynplaylist_ptr* pl = reinterpret_cast<dynplaylist_ptr*>(piptr);
 
             if ( ptr == qlonglong( pl->data() ) )
+            {
                 pi->setText( pl->data()->title() );
+                break;
+            }
         }
     }
 }
@@ -246,6 +254,7 @@ SourceTreeItem::onDynamicPlaylistsDeleted( const QList< dynplaylist_ptr >& playl
             {
                 item->removeRow( i );
                 m_dynplaylists.removeAll( p );
+                break;
             }
         }
     }
@@ -270,6 +279,7 @@ SourceTreeItem::onDynamicPlaylistLoaded( DynamicPlaylistRevision revision )
         {
             pi->setEnabled( true );
             m_current_dynamic_revisions.insert( pl->data()->guid(), revision.revisionguid );
+            break;
         }
     }
 }
