@@ -5,9 +5,9 @@
 	<key>CFBundleDevelopmentRegion</key>
 	<string>English</string>
 	<key>CFBundleExecutable</key>
-	<string>tomahawk</string>
+	<string>Tomahawk</string>
 	<key>CFBundleIdentifier</key>
-	<string>org.tomahawk-player.org.Tomahawk</string>
+	<string>org.tomahawk-player.Tomahawk</string>
 	<key>CFBundleInfoDictionaryVersion</key>
 	<string>6.0</string>
 	<key>CFBundlePackageType</key>
