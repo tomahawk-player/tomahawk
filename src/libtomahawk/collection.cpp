@@ -110,10 +110,10 @@ Collection::deleteDynamicPlaylist( const Tomahawk::dynplaylist_ptr& p )
     QList<dynplaylist_ptr> todelete;
     todelete << p;
     m_dynplaylists.removeAll( p );
-    
+
     qDebug() << Q_FUNC_INFO << "Collection name" << name()
-    << "from source id" << source()->id()
-    << "numplaylists:" << m_playlists.length();
+                            << "from source id" << source()->id()
+                            << "numplaylists:" << m_playlists.length();
     emit dynamicPlaylistsDeleted( todelete );
 }
 

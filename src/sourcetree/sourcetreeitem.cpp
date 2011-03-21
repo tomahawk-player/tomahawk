@@ -139,8 +139,8 @@ SourceTreeItem::onPlaylistsDeleted( const QList<playlist_ptr>& playlists )
 
             if ( type == SourcesModel::PlaylistSource && ptr == qlonglong( pl->data() ) )
             {
-                m_playlists.removeAll( p );
                 item->removeRow( i );
+                m_playlists.removeAll( p );
             }
         }
     }
@@ -244,8 +244,8 @@ SourceTreeItem::onDynamicPlaylistsDeleted( const QList< dynplaylist_ptr >& playl
             //qDebug() << "Deleting dynamic playlist:" << pl->isNull();
             if ( type == SourcesModel::DynamicPlaylistSource && ptr == qlonglong( pl->data() ) )
             {
-                m_dynplaylists.removeAll( p );
                 item->removeRow( i );
+                m_dynplaylists.removeAll( p );
             }
         }
     }
