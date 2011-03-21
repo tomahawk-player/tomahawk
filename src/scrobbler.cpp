@@ -68,13 +68,15 @@ Scrobbler::Scrobbler( QObject* parent )
     //HACK work around a bug in liblastfm---it doesn't create its config dir, so when it
     // tries to write the track cache, it fails silently. until we have a fixed version, do this
     // code taken from Amarok (src/services/lastfm/ScrobblerAdapter.cpp)
+#ifdef Q_WS_X11
     QString lpath = QDir::home().filePath( ".local/share/Last.fm" );
     QDir ldir = QDir( lpath );
     if( !ldir.exists() )
     {
         ldir.mkpath( lpath );
     }
-    
+#endif
+
     connect( TomahawkSettings::instance(), SIGNAL( changed() ),
                                              SLOT( settingsChanged() ), Qt::QueuedConnection );
 
