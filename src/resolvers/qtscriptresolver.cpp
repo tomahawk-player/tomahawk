@@ -111,6 +111,13 @@ ScriptEngine::resolve( const Tomahawk::query_ptr& query )
         rp->setRID( uuid() );
         rp->setFriendlySource( m_parent->name() );
 
+        if ( m.contains( "year" ) )
+        {
+            QVariantMap attr;
+            attr[ "releaseyear" ] = m.value( "year" );
+            rp->setAttributes( attr );
+        }
+
         rp->setDuration( m.value( "duration", 0 ).toUInt() );
         if ( rp->duration() <= 0 && m.contains( "durationString" ) )
         {
