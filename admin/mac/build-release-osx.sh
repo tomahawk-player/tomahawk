@@ -40,16 +40,24 @@ BUILD='1'
 NOTQUICK='1'
 CREATEDMG='1'
 
-    header addQt
+    header "Adding Qt to app bundle"
     cd tomahawk.app
     $ROOT/../admin/mac/add-Qt-to-bundle.sh \
                    'QtCore QtGui QtXml QtNetwork QtSql QtXmlPatterns QtWebKit phonon'
 
-    header deposx
+    header "Running install_name_tool"
     $ROOT/../admin/mac/deposx.sh
-    header "Copying Sparkle pubkey and framework, and qt.conf"
+
+    header "Renaming icon"
+    mv Contents/Resources/tomahawkSources.icns Contents/Resources/tomahawk.icns
+
+    header "Copying Sparkle pubkey & framework, and qt.conf"
     cp $ROOT/../admin/mac/sparkle_pub.pem Contents/Resources
     cp -R /Library/Frameworks/Sparkle.framework Contents/Frameworks
     cp $ROOT/../admin/mac/qt.conf Contents/Resources
-    header Done!
 
+    header "Renaming app bundle"
+    cd ..
+    mv tomahawk.app Tomahawk.app
+
+    header "Done!"
