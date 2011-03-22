@@ -145,6 +145,7 @@ PlaylistModel::clear()
     {
         emit beginResetModel();
         delete m_rootItem;
+        m_rootItem = 0;
         emit endResetModel();
         m_rootItem = new PlItem( 0, this );
     }
