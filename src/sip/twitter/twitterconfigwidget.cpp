@@ -37,25 +37,29 @@ TwitterConfigWidget::TwitterConfigWidget(SipPlugin* plugin, QWidget *parent) :
     ui->setupUi(this);
 
     connect(ui->twitterAuthenticateButton, SIGNAL(pressed()),
-            this,   SLOT(authenticateTwitter()));
+            this,   SLOT(authDeauthTwitter()));
     connect(ui->twitterTweetGotTomahawkButton, SIGNAL(pressed()),
             this,   SLOT(startPostGotTomahawkStatus()));
 
 
     TomahawkSettings* s = TomahawkSettings::instance();
-    if ( s->twitterOAuthToken().isEmpty() || s->twitterOAuthTokenSecret().isEmpty() )
+    if ( s->twitterOAuthToken().isEmpty() || s->twitterOAuthTokenSecret().isEmpty() || s->twitterScreenName().isEmpty() )
     {
         ui->twitterStatusLabel->setText("Status: No saved credentials");
         ui->twitterAuthenticateButton->setText( "Authenticate" );
         ui->twitterInstructionsInfoLabel->setVisible( false );
         ui->twitterTweetGotTomahawkButton->setVisible( false );
+
+        emit twitterAuthed( false );
     }
     else
     {
         ui->twitterStatusLabel->setText("Status: Credentials saved");
-        ui->twitterAuthenticateButton->setText( "Re-authenticate" );
+        ui->twitterAuthenticateButton->setText( "De-authenticate" );
         ui->twitterInstructionsInfoLabel->setVisible( true );
         ui->twitterTweetGotTomahawkButton->setVisible( true );
+
+        emit twitterAuthed( true );
     }
 
 }
@@ -66,52 +70,95 @@ TwitterConfigWidget::~TwitterConfigWidget()
 }
 
 void
+TwitterConfigWidget::authDeauthTwitter()
+{
+    if ( ui->twitterAuthenticateButton->text() == "Authenticate" )
+        authenticateTwitter();
+    else
+        deauthenticateTwitter();
+}
+
+void
 TwitterConfigWidget::authenticateTwitter()
 {
     qDebug() << Q_FUNC_INFO;
     TomahawkOAuthTwitter *twitAuth = new TomahawkOAuthTwitter( this );
     twitAuth->setNetworkAccessManager( TomahawkUtils::nam() );
     twitAuth->authorizePin();
-    if ( !twitAuth->oauthToken().isEmpty() && !twitAuth->oauthTokenSecret().isEmpty() )
-    {
-        TomahawkSettings* s = TomahawkSettings::instance();
-        s->setTwitterOAuthToken( twitAuth->oauthToken() );
-        s->setTwitterOAuthTokenSecret( twitAuth->oauthTokenSecret() );
-        ui->twitterStatusLabel->setText("Status: Credentials saved");
-        ui->twitterAuthenticateButton->setText( "Re-authenticate" );
-
-        ui->twitterInstructionsInfoLabel->setVisible( true );
-        ui->twitterTweetGotTomahawkButton->setVisible( true );
-
-        TomahawkSettings::instance()->setTwitterCachedFriendsSinceId( 0 );
-        TomahawkSettings::instance()->setTwitterCachedMentionsSinceId( 0 );
-        m_plugin->connectPlugin( false );
-
-    }
-    else
-    {
-        TomahawkSettings* s = TomahawkSettings::instance();
-        s->setTwitterOAuthToken( QString() );
-        s->setTwitterOAuthTokenSecret( QString() );
-        ui->twitterStatusLabel->setText("Status: No saved credentials");
-        ui->twitterAuthenticateButton->setText( "Authenticate" );
-
-        ui->twitterInstructionsInfoLabel->setVisible( false );
-        ui->twitterTweetGotTomahawkButton->setVisible( false );
-
-        QMessageBox::critical( 0, QString("Tweetin' Error"), QString("There was an error validating your authentication") );
-    }
+    
+    TomahawkSettings* s = TomahawkSettings::instance();
+    s->setTwitterOAuthToken( twitAuth->oauthToken() );
+    s->setTwitterOAuthTokenSecret( twitAuth->oauthTokenSecret() );
+    
+    QTweetAccountVerifyCredentials *credVerifier = new QTweetAccountVerifyCredentials( twitAuth, this );
+    connect( credVerifier, SIGNAL( parsedUser( const QTweetUser & ) ), SLOT( authenticateVerifyReply( const QTweetUser & ) ) );
+    connect( credVerifier, SIGNAL( error( QTweetNetBase::ErrorCode, QString ) ), SLOT( authenticateVerifyError( QTweetNetBase::ErrorCode, QString ) ) );
+    credVerifier->verify();
 }
 
+void
+TwitterConfigWidget::authenticateVerifyReply( const QTweetUser &user )
+{
+    qDebug() << Q_FUNC_INFO;
+    if ( user.id() == 0 )
+    {
+        QMessageBox::critical( 0, QString("Tweetin' Error"), QString("The credentials could not be verified.\nYou may wish to try re-authenticating.") );
+        emit twitterAuthed( false );
+        return;
+    }
+
+    TomahawkSettings* s = TomahawkSettings::instance();
+    s->setTwitterScreenName( user.screenName() );
+    s->setTwitterCachedFriendsSinceId( 0 );
+    s->setTwitterCachedMentionsSinceId( 0 );
+    
+    ui->twitterStatusLabel->setText("Status: Credentials saved");
+    ui->twitterAuthenticateButton->setText( "De-authenticate" );
+    ui->twitterInstructionsInfoLabel->setVisible( true );
+    ui->twitterTweetGotTomahawkButton->setVisible( true );
+
+    m_plugin->connectPlugin( false );
+    
+    emit twitterAuthed( true );
+}
+
+void
+TwitterConfigWidget::authenticateVerifyError( QTweetNetBase::ErrorCode code, const QString &errorMsg )
+{
+    qDebug() << Q_FUNC_INFO;
+    qDebug() << "Error validating credentials, error code is " << code << ", error message is " << errorMsg;
+    ui->twitterStatusLabel->setText("Status: Error validating credentials");
+    emit twitterAuthed( false );
+    return;
+}
+
+
+void
+TwitterConfigWidget::deauthenticateTwitter()
+{
+    qDebug() << Q_FUNC_INFO;
+    TomahawkSettings* s = TomahawkSettings::instance();
+    s->setTwitterOAuthToken( QString() );
+    s->setTwitterOAuthTokenSecret( QString() );
+    s->setTwitterScreenName( QString() );
+    
+    ui->twitterStatusLabel->setText("Status: No saved credentials");
+    ui->twitterAuthenticateButton->setText( "Authenticate" );
+    ui->twitterInstructionsInfoLabel->setVisible( false );
+    ui->twitterTweetGotTomahawkButton->setVisible( false );
+    
+    emit twitterAuthed( false );
+}
 
 void
 TwitterConfigWidget::startPostGotTomahawkStatus()
 {
     qDebug() << "Posting Got Tomahawk status";
     TomahawkSettings* s = TomahawkSettings::instance();
-    if ( s->twitterOAuthToken().isEmpty() || s->twitterOAuthTokenSecret().isEmpty() )
+    if ( s->twitterOAuthToken().isEmpty() || s->twitterOAuthTokenSecret().isEmpty() || s->twitterScreenName().isEmpty() )
     {
         QMessageBox::critical( 0, QString("Tweetin' Error"), QString("Your saved credentials could not be loaded.\nYou may wish to try re-authenticating.") );
+        emit twitterAuthed( false );
         return;
     }
     TomahawkOAuthTwitter *twitAuth = new TomahawkOAuthTwitter( this );
@@ -130,6 +177,7 @@ TwitterConfigWidget::postGotTomahawkStatusAuthVerifyReply( const QTweetUser &use
     if ( user.id() == 0 )
     {
         QMessageBox::critical( 0, QString("Tweetin' Error"), QString("Your saved credentials could not be verified.\nYou may wish to try re-authenticating.") );
+        emit twitterAuthed( false );
         return;
     }
     TomahawkSettings* s = TomahawkSettings::instance();

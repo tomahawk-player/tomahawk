@@ -75,6 +75,7 @@ public slots:
     }
 
 private slots:
+    void configDialogAuthedSignalSlot( bool authed );
     void connectAuthVerifyReply( const QTweetUser &user );
     void checkTimerFired();
     void connectTimerFired();

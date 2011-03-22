@@ -40,14 +40,22 @@ public:
     explicit TwitterConfigWidget(SipPlugin* plugin = 0, QWidget *parent = 0);
     ~TwitterConfigWidget();
 
+signals:
+    void twitterAuthed( bool authed );
+    
 private slots:
-    void authenticateTwitter();
+    void authDeauthTwitter();
     void startPostGotTomahawkStatus();
+    void authenticateVerifyReply( const QTweetUser &user );
+    void authenticateVerifyError( QTweetNetBase::ErrorCode code, const QString &errorMsg );
     void postGotTomahawkStatusAuthVerifyReply( const QTweetUser &user );
     void postGotTomahawkStatusUpdateReply( const QTweetStatus &status );
     void postGotTomahawkStatusUpdateError( QTweetNetBase::ErrorCode, const QString &errorMsg );
 
 private:
+    void authenticateTwitter();
+    void deauthenticateTwitter();
+
     Ui::TwitterConfigWidget *ui;
     SipPlugin *m_plugin;
 };

@@ -61,10 +61,22 @@ TwitterPlugin::TwitterPlugin()
     m_connectTimer.start();
 }
 
+void
+TwitterPlugin::configDialogAuthedSignalSlot( bool authed )
+{
+    m_isAuthed = authed;
+    if ( !authed )
+    {
+        TomahawkSettings::instance()->setTwitterScreenName( QString() );
+        TomahawkSettings::instance()->setTwitterOAuthToken( QString() );
+        TomahawkSettings::instance()->setTwitterOAuthTokenSecret( QString() );
+    }
+}
+
 bool
 TwitterPlugin::isValid()
 {
-    return m_isAuthed || !m_cachedPeers.isEmpty();
+    return m_isAuthed;
 }
 
 const QString
@@ -89,10 +101,10 @@ QWidget* TwitterPlugin::configWidget()
 {
     m_configWidget = new TwitterConfigWidget( this );
 
+    connect( m_configWidget, SIGNAL( twitterAuthed(bool) ), SLOT( configDialogAuthedSignalSlot(bool) ) );
+    
     return m_configWidget;
 }
-
-
 
 bool
 TwitterPlugin::connectPlugin( bool /*startup*/ )
@@ -282,7 +294,10 @@ TwitterPlugin::friendsTimelineStatuses( const QList< QTweetStatus > &statuses )
                 qDebug() << "TwitterPlugin parsed node " << node << " out of the tweet";
         
             if ( status.user().screenName() == myScreenName && node == Database::instance()->dbid() )
+            {
+                qDebug() << "My screen name and my dbid found; ignoring";
                 continue;
+            }
             
             QHash< QString, QVariant > peerData;
             if( m_cachedPeers.contains( status.user().screenName() ) )
@@ -354,7 +369,10 @@ TwitterPlugin::mentionsStatuses( const QList< QTweetStatus > &statuses )
                 qDebug() << "TwitterPlugin parsed node " << node << " out of the tweet";
             
             if ( status.user().screenName() == myScreenName && node == Database::instance()->dbid() )
+            {
+                qDebug() << "My screen name and my dbid found; ignoring";
                 continue;
+            }
             
             QHash< QString, QVariant > peerData;
             if( m_cachedPeers.contains( status.user().screenName() ) )
