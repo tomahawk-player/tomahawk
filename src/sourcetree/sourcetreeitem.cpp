@@ -43,7 +43,18 @@ SourceTreeItem::SourceTreeItem( const source_ptr& source, QObject* parent )
     : QObject( parent )
     , m_source( source )
 {
-    QStandardItem* item = new QStandardItem( source.isNull() ? "Super Collection" : source->friendlyName() );
+    QString name;
+    if( source.isNull() )
+        name = tr( "Super Collection" );
+    else 
+    {
+        if( TomahawkApp::instance()->scrubFriendlyName() && source->friendlyName().contains( '@' ) )
+            name = source->friendlyName().left( source->friendlyName().indexOf( '@' ) );
+        else
+            name = source->friendlyName();
+    }
+    
+    QStandardItem* item = new QStandardItem( name );
     item->setIcon( QIcon( RESPATH "images/user-avatar.png" ) );
     item->setEditable( false );
     item->setData( SourcesModel::CollectionSource, Type );

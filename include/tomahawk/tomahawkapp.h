@@ -95,6 +95,9 @@ public:
     virtual void activate();
     virtual bool loadUrl( const QString& url );
 
+    // because QApplication::arguments() is expensive
+    bool scrubFriendlyName() const { return m_scrubFriendlyName; }
+    
 private slots:
     void setupSIP();
     void messageReceived( const QString& );
@@ -117,7 +120,8 @@ private:
     Servent* m_servent;
     XMPPBot* m_xmppBot;
     Tomahawk::ShortcutHandler* m_shortcutHandler;
-
+    bool m_scrubFriendlyName;
+    
 #ifdef LIBLASTFM_FOUND
     Scrobbler* m_scrobbler;
 #endif
