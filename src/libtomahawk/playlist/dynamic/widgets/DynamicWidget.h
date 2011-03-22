@@ -77,6 +77,7 @@ public:
     
     virtual QString title() const { return m_model->title(); }
     virtual QString description() const { return m_model->description(); }
+    virtual QPixmap pixmap() const { return QPixmap( RESPATH "images/playlist-icon.png" ); }
     
     virtual bool jumpToCurrentTrack();
     
