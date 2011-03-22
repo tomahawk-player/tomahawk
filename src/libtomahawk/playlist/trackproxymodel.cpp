@@ -161,6 +161,9 @@ TrackProxyModel::filterAcceptsRow( int sourceRow, const QModelIndex& sourceParen
         return false;
 
     const Tomahawk::query_ptr& q = pi->query();
+    if( q.isNull() ) // uh oh? filter out invalid queries i guess
+        return false;
+    
     Tomahawk::result_ptr r;
     if ( q->numResults() )
         r = q->results().first();
