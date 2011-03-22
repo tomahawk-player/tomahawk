@@ -25,6 +25,10 @@
 #include <QNetworkReply>
 #include "qtweetlib_global.h"
 
+#ifdef STREAM_LOGGER
+    #include <QFile>
+#endif
+
 class QNetworkAccessManager;
 class QNetworkReply;
 class OAuthTwitter;
@@ -49,7 +53,6 @@ signals:
      *   Emits stream elements
      */
     void stream(const QByteArray& );
-
     /**
      *   Emits tweets (parsed) elements from stream
      */
@@ -68,14 +71,24 @@ signals:
      *   Emits deletion of status in the stream
      */
     void deleteStatusStream(qint64 id, qint64 userid);
+    /**
+     *  Emited when user stream is reconnected after failure
+     *  Usefull when user stream connection fails to fetch missed tweets with REST API
+     */
+    void reconnected();
+    /**
+     * Emited when user stream doesn't connect and backoff timer reaches maximum value (300 seconds)
+     * Usefull when users stream fails to revert to REST API
+     */
+    void failureConnect();
 
 public slots:
     void startFetching();
 
 private slots:
-    void replyError(QNetworkReply::NetworkError code);
     void replyFinished();
     void replyReadyRead();
+    void replyTimeout();
     void parsingFinished(const QVariant& json, bool ok, const QString& errorMsg);
 
 private:
@@ -84,10 +97,16 @@ private:
     void parseDirectMessage(const QVariantMap& streamObject);
     void parseDeleteStatus(const QVariantMap& streamObject);
 
+    QByteArray m_cachedResponse;
     OAuthTwitter *m_oauthTwitter;
     QNetworkReply *m_reply;
     QTimer *m_backofftimer;
-    QByteArray m_cashedResponse;
+    QTimer *m_timeoutTimer;
+    bool m_streamTryingReconnect;
+
+#ifdef STREAM_LOGGER
+    QFile m_streamLog;
+#endif
 };
 
 #endif // QTWEETUSERSTREAM_H
