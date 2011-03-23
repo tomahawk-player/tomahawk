@@ -457,6 +457,12 @@ Section -post
    WriteRegDWORD HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\Tomahawk" "NoModify" "1"
    WriteRegDWORD HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\Tomahawk" "NoRepair" "1"
 
+   ; Register tomahawk:// protocol handler
+   WriteRegStr HKCR "tomahawk" "" "URL: Tomahawk Protocol"
+   WriteRegStr HKCR "tomahawk\DefaultIcon" "" $INSTDIR\tomahawk.exe,1
+   WriteRegStr HKCR "tomahawk\shell" "" "open"
+   WriteRegStr HKCR "tomahawk\shell\open\command" "" '"$INSTDIR\tomahawk.exe" "%1"'
+
    SetDetailsPrint textonly
    DetailPrint "Finsihed."
 SectionEnd
@@ -515,6 +521,8 @@ Section Uninstall
    DeleteRegValue HKLM "Software\Tomahawk" "VersionRevision"
    DeleteRegValue HKLM "Software\Tomahawk" ""
    DeleteRegKey HKLM "Software\Tomahawk"
+
+   DeleteRegKey HKCR "tomahawk"
 
    ;Start menu shortcuts.
    !ifdef OPTION_SECTION_SC_START_MENU
