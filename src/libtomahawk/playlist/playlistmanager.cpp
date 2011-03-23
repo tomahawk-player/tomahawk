@@ -357,12 +357,12 @@ PlaylistManager::showSuperCollection()
             toAdd << source->collection();
             m_superAlbumModel->addCollection( source->collection() );
         }
-
-        m_superCollectionFlatModel->setTitle( tr( "All available tracks" ) );
-        m_superAlbumModel->setTitle( tr( "All available albums" ) );
     }
     m_superCollectionFlatModel->addCollections( toAdd );
-
+    
+    m_superCollectionFlatModel->setTitle( tr( "All available tracks" ) );
+    m_superAlbumModel->setTitle( tr( "All available albums" ) );
+    
     if ( m_currentMode == 0 )
     {
         setPage( m_superCollectionView );
