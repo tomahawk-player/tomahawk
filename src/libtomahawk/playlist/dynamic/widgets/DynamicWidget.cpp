@@ -153,11 +153,11 @@ DynamicWidget::loadDynamicPlaylist( const Tomahawk::dynplaylist_ptr& playlist )
         m_layout->insertWidget( 0, m_controls );
     } 
     
+    if( m_playlist->mode() == OnDemand && !m_playlist->generator()->controls().isEmpty() )
+        showPreview();
+    
     if( !m_playlist.isNull() )
         m_controls->setControls( m_playlist, m_playlist->author()->isLocal() );
-    
-    if( m_playlist->mode() == OnDemand )
-        showPreview();
     
     connect( m_playlist->generator().data(), SIGNAL( generated( QList<Tomahawk::query_ptr> ) ), this, SLOT( tracksGenerated( QList<Tomahawk::query_ptr> ) ) );
     connect( m_playlist.data(), SIGNAL( dynamicRevisionLoaded( Tomahawk::DynamicPlaylistRevision ) ), this, SLOT( onRevisionLoaded( Tomahawk::DynamicPlaylistRevision ) ) );
@@ -360,7 +360,7 @@ DynamicWidget::showPreview()
 {
     if( m_playlist->mode() == OnDemand && !m_runningOnDemand && m_model->rowCount( QModelIndex() ) == 0 ) { // if this is a not running station, preview matching tracks
         generate( 20 ); // ask for more, we'll filter how many we actually want
-}
+    }
 }
 
 

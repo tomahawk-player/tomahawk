@@ -131,10 +131,10 @@ DynamicView::onTrackCountChanged( unsigned int tracks )
     if ( tracks == 0 && !m_working )
     {
         if( m_onDemand ) {
-            if( m_readOnly )
-                overlay()->setText( tr( "Press play to begin listening to this custom station!" ) );
+            if( !m_readOnly )
+                overlay()->setText( tr( "Add some filters above to seed this station!" ) );
             else
-                overlay()->setText( tr( "Add some filters above, and press play to begin listening to this custom station!" ) );
+                return; // when viewing a read-only station, don't show anything
         } else
             if( m_readOnly )
                 overlay()->setText( tr( "Press Generate to get started!" ) );

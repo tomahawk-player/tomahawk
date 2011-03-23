@@ -54,6 +54,9 @@ DynamicModel::loadPlaylist( const Tomahawk::dynplaylist_ptr& playlist )
     
     connect( m_playlist->generator().data(), SIGNAL( nextTrackGenerated( Tomahawk::query_ptr ) ), this, SLOT( newTrackGenerated( Tomahawk::query_ptr ) ) );
     PlaylistModel::loadPlaylist( m_playlist, m_playlist->mode() == Static );
+    
+    if( m_playlist->mode() == OnDemand )
+        emit trackCountChanged( rowCount( QModelIndex() ) );
 }
 
 QString 
