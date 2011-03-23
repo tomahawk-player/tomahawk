@@ -505,8 +505,8 @@ TomahawkApp::loadUrl( const QString& url )
     if( url.contains( "tomahawk://" ) ) {
         QString cmd = url.mid( 11 );
         qDebug() << "tomahawk!s" << cmd;
-        if( cmd.startsWith( "load/" ) ) {
-            cmd = cmd.mid( 5 );
+        if( cmd.startsWith( "load/?" ) ) {
+            cmd = cmd.mid( 6 );
             qDebug() << "loading.." << cmd;
             if( cmd.startsWith( "xspf=" ) ) {
                 XSPFLoader* l = new XSPFLoader( true, this );
