@@ -254,7 +254,7 @@ TomahawkWindow::setupSignals()
     // <Menu Items>
     connect( ui->actionPreferences, SIGNAL( triggered() ), SLOT( showSettingsDialog() ) );
     connect( ui->actionToggleConnect, SIGNAL( triggered() ), APP->sipHandler(), SLOT( toggleConnect() ) );
-    connect( ui->actionAddPeerManually, SIGNAL( triggered() ), SLOT( addPeerManually() ) );
+//    connect( ui->actionAddPeerManually, SIGNAL( triggered() ), SLOT( addPeerManually() ) );
     connect( ui->actionRescanCollection, SIGNAL( triggered() ), SLOT( updateCollectionManually() ) );
     connect( ui->actionLoadXSPF, SIGNAL( triggered() ), SLOT( loadSpiff() ));
     connect( ui->actionCreatePlaylist, SIGNAL( triggered() ), SLOT( createPlaylist() ));
@@ -353,11 +353,13 @@ TomahawkWindow::addPeerManually()
     Servent::instance()->connectToPeer( addr, port, key );
 }
 
+
 void 
 TomahawkWindow::pluginMenuAdded( QMenu* menu )
 {
     ui->menuNetwork->addMenu( menu );
 }
+
 
 void 
 TomahawkWindow::pluginMenuRemoved( QMenu* menu )
