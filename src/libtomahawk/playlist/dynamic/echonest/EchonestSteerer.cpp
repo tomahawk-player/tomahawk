@@ -25,7 +25,7 @@
 #include <QLineEdit>
 #include <QComboBox>
 #include <QLabel>
-#include <Playlist.h>
+#include <echonest/Playlist.h>
 #include <QPainter>
 #include <QToolButton>
 #include <dynamic/widgets/DynamicWidget.h>

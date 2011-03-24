@@ -19,8 +19,9 @@
 #ifndef MUSICSCANNER_H
 #define MUSICSCANNER_H
 
-#include <taglib/fileref.h>
-#include <taglib/tag.h>
+/* taglib */
+#include <fileref.h>
+#include <tag.h>
 
 #include <QVariantMap>
 #include <QDir>

@@ -164,6 +164,7 @@ include_directories(
     .
     ${QT_INCLUDE_DIR}
     ${QT_INCLUDES}
+    ${QJSON_INCLUDE_DIR}
     qtweetlib/src
 )
 
@@ -173,7 +174,7 @@ ADD_LIBRARY(tomahawk_qtweetlib SHARED ${TOMAHAWK_QTWEETLIB_SOURCES} ${TOMAHAWK_Q
 
 target_link_libraries(tomahawk_qtweetlib
     ${QT_LIBRARIES}
-    qjson
+    ${QJSON_LIBRARIES}
 )
 
 INCLUDE( ${CMAKE_CURRENT_SOURCE_DIR}/twitter-api-keys )
