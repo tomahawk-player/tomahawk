@@ -451,7 +451,7 @@ TwitterPlugin::directMessages( const QList< QTweetDMStatus > &messages )
         QString host = splitList[1].mid( 5 );
         QString node = splitList[3].mid( 5 );
         QString pkey = splitList[4].mid( 5 );
-        QStringList splitNode = node.split(';');
+        QStringList splitNode = node.split('*');
         if ( splitNode.length() != 2 )
         {
             qDebug() << "Old-style node info found, ignoring";
@@ -561,7 +561,7 @@ void
 TwitterPlugin::sendOffer( const QString &screenName, const QHash< QString, QVariant > &peerData )
 {
     qDebug() << Q_FUNC_INFO;
-    QString offerString = QString( "TOMAHAWKPEER:Host=%1:Port=%2:Node=%3;%4:PKey=%5" ).arg( peerData["ohst"].toString() )
+    QString offerString = QString( "TOMAHAWKPEER:Host=%1:Port=%2:Node=%3*%4:PKey=%5" ).arg( peerData["ohst"].toString() )
                                                                                       .arg( peerData["oprt"].toString() )
                                                                                       .arg( Database::instance()->dbid() )
                                                                                       .arg( peerData["node"].toString().left( 8 ) )
