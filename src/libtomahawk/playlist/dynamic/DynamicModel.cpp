@@ -81,7 +81,6 @@ DynamicModel::newTrackGenerated( const Tomahawk::query_ptr& query )
 {
     if( m_onDemandRunning ) {
         connect( query.data(), SIGNAL( resolvingFinished( bool ) ), this, SLOT( trackResolveFinished( bool ) ) );
-        connect( query.data(), SIGNAL( solvedStateChanged( bool ) ), this, SLOT( trackResolved( bool ) ) );
     
         append( query );
     }
@@ -106,31 +105,12 @@ DynamicModel::changeStation()
         m_playlist->generator()->startOnDemand();
 }
 
-
-void 
-DynamicModel::trackResolved( bool resolved )
-{   
-    if( !resolved )
-        return;
-    
-    Query* q = qobject_cast<Query*>(sender());
-    qDebug() << "Got successful resolved track:" << q->track() << q->artist() << m_lastResolvedRow << m_currentAttempts;
-    
-    if( m_currentAttempts > 0 ) {
-        qDebug() << "EMITTING AN ASK FOR COLLAPSE:" << m_lastResolvedRow << m_currentAttempts;
-        emit collapseFromTo( m_lastResolvedRow, m_currentAttempts );
-    }
-    m_currentAttempts = 0;
-    m_searchingForNext = false;
-
-    emit checkForOverflow();
-}
-
 void 
 DynamicModel::trackResolveFinished( bool success )
 {
-    if( !success ) { // if it was successful, we've already gotten a trackResolved() signal
-        Query* q = qobject_cast<Query*>(sender());
+    Query* q = qobject_cast<Query*>(sender());
+
+    if( !q->playable() ) {
         qDebug() << "Got not resolved track:" << q->track() << q->artist() << m_lastResolvedRow << m_currentAttempts;
         m_currentAttempts++;
         
@@ -142,6 +122,18 @@ DynamicModel::trackResolveFinished( bool success )
             m_startingAfterFailed = true;
             emit trackGenerationFailure( tr( "Could not find a playable track.\n\nPlease change the filters or try again." ) );
         }
+    }
+    else {
+        qDebug() << "Got successful resolved track:" << q->track() << q->artist() << m_lastResolvedRow << m_currentAttempts;
+        
+        if( m_currentAttempts > 0 ) {
+            qDebug() << "EMITTING AN ASK FOR COLLAPSE:" << m_lastResolvedRow << m_currentAttempts;
+            emit collapseFromTo( m_lastResolvedRow, m_currentAttempts );
+        }
+        m_currentAttempts = 0;
+        m_searchingForNext = false;
+        
+        emit checkForOverflow();
     }
 }
 
