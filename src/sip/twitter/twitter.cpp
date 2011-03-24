@@ -451,14 +451,15 @@ TwitterPlugin::directMessages( const QList< QTweetDMStatus > &messages )
         QString host = splitList[1].mid( 5 );
         QString node = splitList[3].mid( 5 );
         QString pkey = splitList[4].mid( 5 );
-        qDebug() << "TwitterPlugin found a peerstart message from " << status.senderScreenName() << " with host " << host << " and port " << port << " and pkey " << pkey << " destined for node " << node;
-        
-        if ( node != Database::instance()->dbid() )
+        QStringList splitNode = node.split(';');
+        if ( splitNode.length() != 2 )
         {
-            qDebug() << "Not destined for this node; leaving it alone and not answering";
+            qDebug() << "Old-style node info found, ignoring";
             continue;
         }
+        qDebug() << "TwitterPlugin found a peerstart message from " << status.senderScreenName() << " with host " << host << " and port " << port << " and pkey " << pkey << " and node " << splitNode[0] << " destined for node " << splitNode[1];
         
+       
         QHash< QString, QVariant > peerData = ( m_cachedPeers.contains( status.senderScreenName() ) ) ?
                                                     m_cachedPeers[status.senderScreenName()].toHash() :
                                                     QHash< QString, QVariant >();
@@ -466,12 +467,18 @@ TwitterPlugin::directMessages( const QList< QTweetDMStatus > &messages )
         peerData["host"] = QVariant::fromValue< QString >( host );
         peerData["port"] = QVariant::fromValue< int >( port );
         peerData["pkey"] = QVariant::fromValue< QString >( pkey );
+        peerData["node"] = QVariant::fromValue< QString >( splitNode[0] );
         peerData["dirty"] = QVariant::fromValue< bool >( true );
 
         QMetaObject::invokeMethod( this, "registerOffer", Q_ARG( QString, status.senderScreenName() ), QGenericArgument( "QHash< QString, QVariant >", (const void*)&peerData ) );
+
+        if ( Database::instance()->dbid().startsWith( splitNode[1] ) )
+        {
+            qDebug() << "TwitterPlugin found message destined for this node; destroying it";
+            if ( !m_directMessageDestroy.isNull() )
+                m_directMessageDestroy.data()->destroyMessage( status.id() );
+        }
         
-        if ( !m_directMessageDestroy.isNull() )
-            m_directMessageDestroy.data()->destroyMessage( status.id() );
     }
 
     TomahawkSettings::instance()->setTwitterCachedDirectMessagesSinceId( m_cachedDirectMessagesSinceId );
@@ -554,10 +561,11 @@ void
 TwitterPlugin::sendOffer( const QString &screenName, const QHash< QString, QVariant > &peerData )
 {
     qDebug() << Q_FUNC_INFO;
-    QString offerString = QString( "TOMAHAWKPEER:Host=%1:Port=%2:Node=%3:PKey=%4" ).arg( peerData["ohst"].toString() )
-                                                                                   .arg( peerData["oprt"].toString() )
-                                                                                   .arg( peerData["node"].toString() )
-                                                                                   .arg( peerData["okey"].toString() );
+    QString offerString = QString( "TOMAHAWKPEER:Host=%1:Port=%2:Node=%3;%4:PKey=%5" ).arg( peerData["ohst"].toString() )
+                                                                                      .arg( peerData["oprt"].toString() )
+                                                                                      .arg( Database::instance()->dbid() )
+                                                                                      .arg( peerData["node"].toString().left( 8 ) )
+                                                                                      .arg( peerData["okey"].toString() );
     qDebug() << "TwitterPlugin sending message to " << screenName << ": " << offerString;
     if( !m_directMessageNew.isNull() )
         m_directMessageNew.data()->post( screenName, offerString );
