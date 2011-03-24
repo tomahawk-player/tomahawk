@@ -19,14 +19,14 @@
 #ifndef DLLMACRO_H
 #define DLLMACRO_H
 
-#ifdef WIN32
-  #ifdef DLLEXPORT_PRO
-      #define DLLEXPORT __declspec(dllexport)
-  #else
-      #define DLLEXPORT __declspec(dllimport)
-  #endif
-#else
-  #define DLLEXPORT
+#include <QtCore/qglobal.h>
+
+#ifndef DLLEXPORT
+# if defined (DLLEXPORT_PRO)
+#  define DLLEXPORT Q_DECL_EXPORT
+# else
+#  define DLLEXPORT Q_DECL_IMPORT
+# endif
 #endif
 
 #endif

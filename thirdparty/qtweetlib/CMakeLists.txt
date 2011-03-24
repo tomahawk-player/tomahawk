@@ -9,10 +9,10 @@ INCLUDE( ${QT_USE_FILE} )
 
 add_definitions( ${QT_DEFINITIONS} )
 add_definitions( -DQT_SHARED )
+add_definitions( -DQTWEETLIB_MAKEDLL )
 
 if(WIN32)
     set(PLATFORM_SPECIFIC_LIBS "ws2_32.dll" "advapi32.dll" )
-    add_definitions( -DQTWEETLIB_MAKEDLL )
 endif(WIN32)
 
 set(TOMAHAWK_QTWEETLIB_SOURCES
@@ -175,8 +175,6 @@ target_link_libraries(tomahawk_qtweetlib
     ${QT_LIBRARIES}
     qjson
 )
-
-#SET_TARGET_PROPERTIES( tomahawk_qtweetlib PROPERTIES DEFINE_SYMBOL  MAKE_QTWEETLIB_LIB )
 
 INCLUDE( ${CMAKE_CURRENT_SOURCE_DIR}/twitter-api-keys )
 
