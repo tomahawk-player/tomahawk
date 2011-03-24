@@ -333,6 +333,7 @@ IF( WIN32 )
         ${OS_SPECIFIC_LINK_LIBRARIES}
     # Thirdparty
         ${CMAKE_BINARY_DIR}/thirdparty/rtaudio/librtaudio.dll
+	${QJSON_LDFLAGS}
     # System
         "iphlpapi.a"
         "ws2_32.dll"
@@ -354,6 +355,7 @@ IF( APPLE )
     SET( OS_SPECIFIC_LINK_LIBRARIES
         ${OS_SPECIFIC_LINK_LIBRARIES}
         # Thirdparty
+	${QJSON_LIBRARIES}
         rtaudio
         # System
         ${COREAUDIO_LIBRARY}
@@ -366,6 +368,7 @@ IF( UNIX AND NOT APPLE )
         ${OS_SPECIFIC_LINK_LIBRARIES}
         # Thirdparty
         alsaplayback
+	${QJSON_LDFLAGS}
     )
 ENDIF( UNIX AND NOT APPLE )
 
@@ -392,8 +395,6 @@ target_link_libraries( tomahawklib
 
     # External deps
     ${TAGLIB_LIBRARIES}
-    ${QJSON_LDFLAGS}
-    ${QJSON_LIBRARIES}
     ${CLUCENE_LIBRARIES}
     ${LIBECHONEST_LIBRARY}
     ${QT_LIBRARIES}
