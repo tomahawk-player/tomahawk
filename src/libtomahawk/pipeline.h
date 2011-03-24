@@ -79,6 +79,9 @@ private slots:
     void indexReady();
 
 private:
+    int incQIDState( const Tomahawk::query_ptr& query );
+    int decQIDState( const Tomahawk::query_ptr& query );
+
     QList< Resolver* > m_resolvers;
 
     QMap< QID, unsigned int > m_qidsState;

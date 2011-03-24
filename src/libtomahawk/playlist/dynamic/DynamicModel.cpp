@@ -184,8 +184,8 @@ DynamicModel::filterUnresolved( const QList< query_ptr >& entries )
     
     foreach( const query_ptr& q, entries ) {
         connect( q.data(), SIGNAL( resolvingFinished( bool ) ), this, SLOT( filteringTrackResolved( bool ) ) );
-        Pipeline::instance()->resolve( q );
-    }    
+    }
+    Pipeline::instance()->resolve( entries, true );
 }
 
 void 
