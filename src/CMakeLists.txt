@@ -137,10 +137,9 @@ INCLUDE_DIRECTORIES(
 
     ${THIRDPARTY_DIR}/alsa-playback
     ${THIRDPARTY_DIR}/rtaudio
-    ${THIRDPARTY_DIR}/qxt/qxtweb-standalone/qxtweb/
+    ${THIRDPARTY_DIR}/qxt/qxtweb-standalone/qxtweb
     ${THIRDPARTY_DIR}/qtweetlib/qtweetlib/src
     ${THIRDPARTY_DIR}/qtweetlib/tomahawk-custom
-
 
     ${TAGLIB_INCLUDES}
     ${QJSON_INCLUDE_DIR}
