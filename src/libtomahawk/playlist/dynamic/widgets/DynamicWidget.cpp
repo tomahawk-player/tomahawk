@@ -50,6 +50,7 @@ DynamicWidget::DynamicWidget( const Tomahawk::dynplaylist_ptr& playlist, QWidget
     , m_layout( new QVBoxLayout )
     , m_resolveOnNextLoad( false )
     , m_seqRevLaunched( 0 )
+    , m_activePlaylist( false )
     , m_setup( 0 )
     , m_runningOnDemand( false )
     , m_controlsChanged( false )
@@ -95,7 +96,7 @@ DynamicWidget::DynamicWidget( const Tomahawk::dynplaylist_ptr& playlist, QWidget
     connect( m_controls, SIGNAL( controlsChanged() ), this, SLOT( controlsChanged() ), Qt::QueuedConnection );
 
     connect( AudioEngine::instance(), SIGNAL( started( Tomahawk::result_ptr ) ), this, SLOT( trackStarted() ) );
-    connect( AudioEngine::instance(), SIGNAL( playlistChanged( PlaylistInterface* ) ), this, SLOT( playlistStopped( PlaylistInterface* ) ) );
+    connect( AudioEngine::instance(), SIGNAL( playlistChanged( PlaylistInterface* ) ), this, SLOT( playlistChanged( PlaylistInterface* ) ) );
 }
 
 DynamicWidget::~DynamicWidget()
@@ -214,15 +215,17 @@ DynamicWidget::layoutFloatingWidgets()
 }
 
 void 
-DynamicWidget::playlistStopped( PlaylistInterface* pl )
+DynamicWidget::playlistChanged( PlaylistInterface* pl )
 {
-    if( pl == static_cast< PlaylistInterface* >( m_view->proxyModel() ) ) // same playlist, so don't stop
-        return;
-    
-    // user started playing something somewhere else, so give it a rest
-    if( m_runningOnDemand ) {
-        stopStation( false );
-        m_model->clear();
+    if( pl == static_cast< PlaylistInterface* >( m_view->proxyModel() ) ) { // same playlist
+        m_activePlaylist = true;
+    } else {
+        m_activePlaylist = false;
+        
+        // user started playing something somewhere else, so give it a rest
+        if( m_runningOnDemand ) {
+            stopStation( false );
+        }
     }
 }
 
@@ -257,7 +260,7 @@ DynamicWidget::stationFailed( const QString& msg )
 void 
 DynamicWidget::trackStarted()
 {    
-    if( isVisible() && !m_playlist.isNull() &&
+    if( m_activePlaylist && !m_playlist.isNull() &&
         m_playlist->mode() == OnDemand && !m_runningOnDemand ) {
         
         startStation();

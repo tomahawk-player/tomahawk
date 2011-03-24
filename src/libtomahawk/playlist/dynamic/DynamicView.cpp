@@ -144,7 +144,6 @@ DynamicView::onTrackCountChanged( unsigned int tracks )
             overlay()->show();
     }
     else {
-        m_working = false;
         overlay()->hide();
     }
 }

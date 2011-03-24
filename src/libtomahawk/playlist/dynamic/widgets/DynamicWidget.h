@@ -91,7 +91,7 @@ public slots:
     void trackStarted();
     void stationFailed( const QString& );
     
-    void playlistStopped( PlaylistInterface* );
+    void playlistChanged( PlaylistInterface* );
     void tracksAdded();
     
 private slots:
@@ -110,6 +110,7 @@ private:
     QVBoxLayout* m_layout;
     bool m_resolveOnNextLoad;
     int m_seqRevLaunched; // if we shoot off multiple createRevision calls, we don'y want to set one of the middle ones
+    bool m_activePlaylist;
 
     // loading animation
     LoadingSpinner* m_loading;
