@@ -168,6 +168,7 @@ IF( APPLE )
 ENDIF( APPLE )
 
 IF(GLOOX_FOUND)
+  INCLUDE_DIRECTORIES( ${GLOOX_INCLUDE_DIR} )
   SET( tomahawkHeaders ${tomahawkHeaders} xmppbot/xmppbot.h )
   SET( tomahawkSources ${tomahawkSources} xmppbot/xmppbot.cpp )
 ENDIF(GLOOX_FOUND)
