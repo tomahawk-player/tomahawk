@@ -16,6 +16,11 @@ function die {
 }
 ################################################################################
 
+if [ -z $1 ]
+then
+    echo This script expects the version number as a parameter, e.g. 1.0.0
+    exit 1
+fi
 
 ROOT=`pwd`
 
@@ -39,6 +44,7 @@ CLEAN='1'
 BUILD='1'
 NOTQUICK='1'
 CREATEDMG='1'
+VERSION=$1
 
     header "Adding Qt to app bundle"
     cd tomahawk.app
@@ -62,6 +68,10 @@ CREATEDMG='1'
     cd ..
     mv tomahawk.app Tomahawk.app
     $ROOT/../admin/mac/create-dmg.sh Tomahawk.app
+    mv Tomahawk.dmg Tomahawk-$VERSION.dmg
+    
+    header "Creating signed Sparkle update"
+    $ROOT/../admin/mac/sign_bundle.rb $VERSION ~/tomahawk_sparkle_privkey.pem
     mv Tomahawk.app tomahawk.app
 
     header "Done!"
