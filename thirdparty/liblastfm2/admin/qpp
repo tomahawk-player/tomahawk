@@ -1,0 +1,79 @@
+#!/usr/bin/ruby
+# Usage examples:
+#   qpp foo.pro         => ./_file.qmake
+#   qpp foo/bar/        => ./_file.qmake
+#
+cwd = File.dirname( __FILE__ )
+require 'find'
+require 'ftools'
+require "#{cwd}/platform.rb"
+
+def find_sources()
+  Find.find( '.' ) do |path|
+    if File.directory?( path )
+      excludes = ['.svn', 'tests', '_build', 'contrib']
+      case Platform::IMPL
+        when :macosx then excludes << 'win' << 'linux'
+        when :mswin, :cygwin then excludes << 'mac' << 'linux'
+        when :linux, :freebsd then excludes << 'win' << 'mac'
+        else excludes << 'win' << 'mac' << 'linux'
+      end
+      Find.prune if excludes.include?( File.basename( path ) ) or (path != "." and not Dir["#{path}/*.pro"].empty? )
+    elsif File.file?( path )
+      case Platform::IMPL
+        when :macosx then next if /_(linux|win)\.(cpp|h)$/.match( path )
+        when :mswin, :cygwin then next if /_(mac|linux)\.(cpp|h)$/.match( path )
+        when :linux, :freebsd then next if /_(mac|win)\.(cpp|h)$/.match( path )
+      end
+      yield( path, File.extname( path ) ) unless File.basename(path) == 'EXAMPLE.cpp' 
+    end
+  end
+end
+
+########################################################################### impl
+sources = Array.new
+headers = Array.new
+forms = Array.new
+resources = Array.new
+
+abort "usage: qpp file.pro.in" unless File.file? ARGV[0]
+
+File.open( ARGV[0] ).each_line do |line|
+  line.chomp!
+
+  matches = /^\s*TEMPLATE += (.*)$/.match( line )
+  if !matches.nil?
+    exit if matches[1].downcase == 'subdirs'
+  end
+
+  matches = /^\s*VERSION += +((\d\.){0,2}\d)/.match( line )
+  if !matches.nil? && !File.file?( "_version.h" )
+    File.open( "_version.h", 'w' ) { |f| f.write( "#define VERSION \"#{matches[1]}\"\n" ) }
+  end
+end
+
+Dir.chdir File.dirname(ARGV[0]) do
+  find_sources do |path, ext|
+    path.sub!( /^.\//, '' )
+    case ext
+      when ".h"   then headers   << path
+      when ".ui"  then forms     << path
+      when ".qrc" then resources << path
+      when ".cpp" then sources   << path
+      when ".mm"  then sources   << path if Platform::IMPL == :macosx
+      when ".m"   then sources   << path if Platform::IMPL == :macosx
+    end
+  end
+end
+
+def write_section( section, array )
+  return if array.empty?
+  print "#{section} +="
+  array.each { |path| print " \\\n\t#{path}" }
+  puts
+end
+
+write_section( "SOURCES", sources )
+write_section( "HEADERS", headers )
+write_section( "FORMS", forms )
+write_section( "RESOURCES", resources )

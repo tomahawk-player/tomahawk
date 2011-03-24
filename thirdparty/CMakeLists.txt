@@ -2,6 +2,7 @@ add_subdirectory( jdns )
 add_subdirectory( qtweetlib )
 ADD_SUBDIRECTORY( libportfwd )
 ADD_SUBDIRECTORY( qxt )
+ADD_SUBDIRECTORY( liblastfm2 )
 
 IF( UNIX AND NOT APPLE )
     ADD_SUBDIRECTORY( alsa-playback )
