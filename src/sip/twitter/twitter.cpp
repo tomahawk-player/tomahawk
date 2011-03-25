@@ -130,16 +130,30 @@ TwitterPlugin::connectPlugin( bool /*startup*/ )
         return m_cachedPeers.isEmpty();
     }
  
-    delete m_twitterAuth.data();
+    if ( refreshTwitterAuth() )
+    {
+      QTweetAccountVerifyCredentials *credVerifier = new QTweetAccountVerifyCredentials( m_twitterAuth.data(), this );
+      connect( credVerifier, SIGNAL( parsedUser(const QTweetUser &) ), SLOT( connectAuthVerifyReply(const QTweetUser &) ) );
+      credVerifier->verify();
+    }
+    
+    return true;
+}
+
+bool
+TwitterPlugin::refreshTwitterAuth()
+{
     m_twitterAuth = QWeakPointer<TomahawkOAuthTwitter>( new TomahawkOAuthTwitter( this ) );
+
+    TomahawkSettings *settings = TomahawkSettings::instance();
+
+    if ( m_twitterAuth.isNull() )
+      return false;
+
     m_twitterAuth.data()->setNetworkAccessManager( TomahawkUtils::nam() );
     m_twitterAuth.data()->setOAuthToken( settings->twitterOAuthToken().toLatin1() );
     m_twitterAuth.data()->setOAuthTokenSecret( settings->twitterOAuthTokenSecret().toLatin1() );
-    
-    QTweetAccountVerifyCredentials *credVerifier = new QTweetAccountVerifyCredentials( m_twitterAuth.data(), this );
-    connect( credVerifier, SIGNAL( parsedUser(const QTweetUser &) ), SLOT( connectAuthVerifyReply(const QTweetUser &) ) );
-    credVerifier->verify();
-    
+
     return true;
 }
 
@@ -189,8 +203,17 @@ TwitterPlugin::connectAuthVerifyReply( const QTweetUser &user )
         }
         else
         {
-            qDebug() << "TwitterPlugin auth pointer was null!";
-            m_isAuthed = false;
+            if ( refreshTwitterAuth() )
+            {
+                QTweetAccountVerifyCredentials *credVerifier = new QTweetAccountVerifyCredentials( m_twitterAuth.data(), this );
+                connect( credVerifier, SIGNAL( parsedUser(const QTweetUser &) ), SLOT( connectAuthVerifyReply(const QTweetUser &) ) );
+                credVerifier->verify();
+            }
+            else
+            {
+                qDebug() << "TwitterPlugin auth pointer was null!";
+                m_isAuthed = false;
+            }
         }
     }
 }
@@ -200,6 +223,21 @@ TwitterPlugin::checkTimerFired()
 {
     if ( !isValid() )
         return;
+
+    if ( m_twitterAuth.isNull() )
+    {
+        if ( refreshTwitterAuth() )
+        {
+            QTweetAccountVerifyCredentials *credVerifier = new QTweetAccountVerifyCredentials( m_twitterAuth.data(), this );
+            connect( credVerifier, SIGNAL( parsedUser(const QTweetUser &) ), SLOT( connectAuthVerifyReply(const QTweetUser &) ) );
+            credVerifier->verify();
+        }
+        else
+        {
+          qDebug() << "TwitterPlugin auth went null somehow and could not refresh";
+          return;
+        }
+    }
 
     if ( m_cachedFriendsSinceId == 0 )
         m_cachedFriendsSinceId = TomahawkSettings::instance()->twitterCachedFriendsSinceId();
@@ -224,6 +262,21 @@ TwitterPlugin::connectTimerFired()
 {
     if ( !isValid() || m_cachedPeers.isEmpty() )
         return;
+
+    if ( m_twitterAuth.isNull() )
+    {
+        if ( refreshTwitterAuth() )
+        {
+            QTweetAccountVerifyCredentials *credVerifier = new QTweetAccountVerifyCredentials( m_twitterAuth.data(), this );
+            connect( credVerifier, SIGNAL( parsedUser(const QTweetUser &) ), SLOT( connectAuthVerifyReply(const QTweetUser &) ) );
+            credVerifier->verify();
+        }
+        else
+        {
+          qDebug() << "TwitterPlugin auth went null somehow and could not refresh";
+          return;
+        }
+    }
     
     QString myScreenName = TomahawkSettings::instance()->twitterScreenName();
     QList<QString> peerlist = m_cachedPeers.keys();
