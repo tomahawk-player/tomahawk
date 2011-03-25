@@ -59,6 +59,7 @@ void InfoSystem::getInfo(const QString &caller, const InfoType type, const QVari
     if (providers.isEmpty())
     {
         emit info(QString(), Tomahawk::InfoSystem::InfoNoInfo, QVariant(), QVariant(), customData);
+        emit finished(caller);
         return;
     }
     
@@ -66,6 +67,7 @@ void InfoSystem::getInfo(const QString &caller, const InfoType type, const QVari
     if (!ptr)
     {
         emit info(QString(), Tomahawk::InfoSystem::InfoNoInfo, QVariant(), QVariant(), customData);
+        emit finished(caller);
         return;
     }
     
