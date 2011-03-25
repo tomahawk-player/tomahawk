@@ -38,8 +38,8 @@ main( int argc, char *argv[] )
       // used for url handler
       AEEventHandlerUPP h = AEEventHandlerUPP( appleEventHandler );
       AEInstallEventHandler( 'GURL', 'GURL', h, 0, false );
-
 #endif
+
     TomahawkApp a( argc, argv );
     KDSingleApplicationGuard guard( &a, KDSingleApplicationGuard::AutoKillOtherInstances );
     QObject::connect( &guard, SIGNAL( instanceStarted( KDSingleApplicationGuard::Instance ) ), &a, SLOT( instanceStarted( KDSingleApplicationGuard::Instance )  ) );
