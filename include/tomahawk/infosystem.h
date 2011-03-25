@@ -78,6 +78,8 @@ enum InfoType {
     InfoAlbumDate,
     InfoAlbumGenre,
     InfoAlbumComposer,
+    InfoAlbumCoverArt,
+
     InfoMiscTopHotttness,
     InfoMiscTopTerms,
     

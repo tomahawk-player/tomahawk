@@ -1,0 +1,127 @@
+#!/usr/bin/ruby
+if ARGV.include? '--help'
+  puts "usage: ./configure [--prefix <dir>] [--release] [--no-strip] [--skip-checks]"
+  exit
+end
+
+cwd = File.dirname( __FILE__ )
+require "#{cwd}/admin/platform.rb"
+require "#{cwd}/admin/which_qmake.rb"
+require "#{cwd}/admin/utils.rb"
+
+begin
+  IO.read("#{cwd}/src/global.h") =~ /LASTFM_VERSION_STRING\s+"((\d\.)*\d)"/
+  abort "Couldn't determine our version!" if $1.nil?
+  LFM_VERSION=$1
+  ENV['LFM_VERSION']=LFM_VERSION
+
+  h1 "Configuring liblastfm-#{LFM_VERSION}..."
+
+  unless ARGV.include? '--skip-checks'
+    $qmake=which_qmake
+    pkgconfig 'samplerate', 'libsamplerate'
+    pkgconfig 'fftw3f', 'fftw'
+    puts 'Using '+`which #{$qmake}` unless Platform::IMPL == :mswin
+  else
+    $qmake='qmake'
+  end
+
+  h2 'Determining installation prefix' do
+    if ARGV.include? '--prefix'
+      n=ARGV.index '--prefix'
+      ENV['LFM_PREFIX'] = ARGV[n+1]
+    end
+    ENV['LFM_PREFIX'] = '/usr/local' if ENV['LFM_PREFIX'].nil?
+    if File.exists? ENV['LFM_PREFIX'] and !File.directory? ENV['LFM_PREFIX']
+      abort "Installation prefix exists but isn't a directory: "+ENV['LFM_PREFIX']
+    end
+    puts "Will install to: "+ENV['LFM_PREFIX']
+  end
+
+  h1 'Generating Build System'
+
+  h2 'Generating .qmake.env' do
+    f = File.new("#{cwd}/.qmake.env", 'w')
+    f.write qmake_env('CC', 'QMAKE_CC')
+    f.write qmake_env('CXX', 'QMAKE_CXX')
+    f.write qmake_env('LDFLAGS', 'QMAKE_LFLAGS_RELEASE')
+    f.write qmake_env(['CFLAGS', 'CPPFLAGS'], 'QMAKE_CFLAGS_RELEASE')
+    f.write qmake_env(['CXXFLAGS', 'CPPFLAGS'], 'QMAKE_CXXFLAGS_RELEASE')
+    f.close
+  end unless Platform::IMPL == :mswin
+
+  h2 "Running qpp..." do
+    ['src/lastfm.pro','src/fingerprint/fingerprint.pro'].each do |p|
+      d="#{cwd}/#{File.dirname p}"
+      f=File.new "#{d}/_files.qmake", 'w'
+      f.write `ruby admin/qpp #{p}`
+      # on Windows VERSION produces lastfm0.dll, the 0 breaks the build
+      f.puts "VERSION = #{LFM_VERSION}" unless Platform::OS == :win32
+    end
+  end
+
+  h2 "Configuring qmake..." do
+    args=Array.new
+    args << '-spec macx-g++' if Platform::IMPL == :macosx
+    if ARGV.include? '--release'
+      args << '-config release'
+      args << '"CONFIG += app_bundle"' if Platform::IMPL == :macosx and ARGV.include? '--bundle'
+    else
+      args << '-config debug'
+    end
+    if ARGV.include? '--no-strip'
+      args << '"CONFIG += nostrip"'
+    end
+    ENV['LFM_QMAKE'] = "#{$qmake} #{args.join(' ')}"
+  end
+
+  h2 "Generating Makefile..." do
+    hs = Array.new
+    hs << 'global.h'
+    hs << 'core/UrlBuilder.h' << 'core/XmlQuery.h' << 'core/misc.h'
+    hs << 'fingerprint/Fingerprint.h' << 'fingerprint/FingerprintableSource.h'
+    hs << 'radio/RadioStation.h' << 'radio/RadioTuner.h'
+    hs << 'scrobble/Audioscrobbler.h' << 'scrobble/ScrobblePoint.h' << 'scrobble/ScrobbleCache.h'
+    hs << 'types/AbstractType.h' << 'types/Track.h' << 'types/Mbid.h' << 'types/Artist.h' << 'types/Album.h' << 'types/FingerprintId.h' << 'types/Playlist.h' << 'types/Tag.h' << 'types/User.h' << 'types/Xspf.h'
+    hs << 'ws/ws.h' << 'ws/InternetConnectionMonitor.h' << 'ws/NetworkAccessManager.h'
+    
+    File.new("#{cwd}/Makefile", 'w').write `ruby admin/Makefile.rb #{hs.join(' ')}`
+  end
+
+  case Platform::IMPL
+    when :mswin then make='nmake all'
+    else make='make' # NOTE only tested with GNU make, sorry :(
+  end
+
+  puts
+  puts "Good, your configure is finished! Now type: #{make}"
+  
+rescue QMakeTooOld
+	puts <<-sput
+
+  Your version of Qt seems to be too old, we require Qt 4.4 or above.
+
+  It is possible you have Qt3 and Qt4 both installed. Locate your Qt4
+  installation and ensure it is placed first in the path, eg:
+
+  	PATH=/opt/qt4/bin:\$PATH ./configure
+
+  sput
+	exit 1
+rescue QMakeNotFound
+  puts "Sorry, qmake was not found, is Qt4 installed?"
+  exit 2
+rescue PkgNotFound => e
+  puts <<-sput
+
+  Sorry, we couldn't find #{e}.
+  You can try to compile anyway by forcing configure to finish:
+
+  	./configure --skip-checks
+
+  sput
+  exit 3
+rescue PkgConfigNotFound
+  puts "Sorry, pkg-config could not be found. You should install it!"
+  exit 4
+end

@@ -29,8 +29,10 @@ INCLUDE( MacroOptionalFindPackage )
 INCLUDE( MacroLogFeature )
 
 # required
-macro_optional_find_package(LibLastFm 0.3.3)
-macro_log_feature(LIBLASTFM_FOUND "LastFm" "Qt library for the Last.fm webservices" "https://github.com/mxcl/liblastfm" FALSE "" "liblastfm is needed for scrobbling tracks to Last.fm and fetching cover artwork")
+#While we distribute our own liblastfm2, don't need to look for it
+#macro_optional_find_package(LibLastFm 0.3.3)
+#macro_log_feature(LIBLASTFM_FOUND "LastFm" "Qt library for the Last.fm webservices" "https://github.com/mxcl/liblastfm" FALSE "" "liblastfm is needed for scrobbling tracks to Last.fm and fetching cover artwork")
+set(LIBLASTFM_FOUND true)
 
 macro_optional_find_package(LibEchonest 1.1.1)
 macro_log_feature(LIBECHONEST_FOUND "Echonest" "Qt library for communicating with The Echo Nest" "http://projects.kde.org/libechonest" TRUE "" "libechonest is needed for dynamic playlists and the infosystem")
