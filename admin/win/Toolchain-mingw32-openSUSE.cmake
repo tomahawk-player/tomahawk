@@ -17,3 +17,4 @@ SET(WINDRES_EXECUTABLE /usr/bin/i686-w64-mingw32-windres)
 # libs with broken find modules
 SET(TAGLIB_FOUND true)
 SET(TAGLIB_LIBRARIES  ${CMAKE_FIND_ROOT_PATH}/lib/libtag.dll.a)
+SET(TAGLIB_INCLUDES   ${CMAKE_FIND_ROOT_PATH}/include/taglib)

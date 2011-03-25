@@ -23,6 +23,7 @@
 !define BUILD_PATH "${ROOT_PATH}\build"
 !define QT_DLL_PATH "${MING_BIN}"
 !define SQLITE_DLL_PATH "${MING_LIB}/qt4/plugins/sqldrivers"
+!define IMAGEFORMATS_DLL_PATH "${MING_LIB}/qt4/plugins/imageformats"
 
 ;-----------------------------------------------------------------------------
 ; Increment installer revision number as part of this script.
@@ -292,6 +293,12 @@ Section "Tomahawk Player" SEC_TOMAHAWK_PLAYER
    SetOutPath "$INSTDIR\sqldrivers"
    File "${SQLITE_DLL_PATH}\qsqlite4.dll"
    SetOutPath "$INSTDIR"
+
+   ;Image plugins
+   SetOutPath "$INSTDIR\imageformats"
+   File "${IMAGEFORMATS_DLL_PATH}\qgif4.dll"
+   File "${IMAGEFORMATS_DLL_PATH}\qjpeg4.dll"
+   SetOutPath "$INSTDIR"
     
    ;Cygwin/c++ stuff
    ;File "${MING_DLL_PATH}\cygmad-0.dll"
@@ -313,6 +320,7 @@ Section "Tomahawk Player" SEC_TOMAHAWK_PLAYER
    File "${MING_DLL_PATH}\libtag.dll"
    File "${MING_DLL_PATH}\libgloox-8.dll"
    File "${MING_DLL_PATH}\libpng15-15.dll"
+   File "${MING_DLL_PATH}\libjpeg-8.dll"
    File "${MING_DLL_PATH}\zlib1.dll"
 
    File "${MING_DLL_PATH}\libechonest.dll"

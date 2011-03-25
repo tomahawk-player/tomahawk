@@ -138,10 +138,9 @@ INCLUDE_DIRECTORIES(
 
     ${THIRDPARTY_DIR}/alsa-playback
     ${THIRDPARTY_DIR}/rtaudio
-    ${THIRDPARTY_DIR}/qxt/qxtweb-standalone/qxtweb/
+    ${THIRDPARTY_DIR}/qxt/qxtweb-standalone/qxtweb
     ${THIRDPARTY_DIR}/qtweetlib/qtweetlib/src
     ${THIRDPARTY_DIR}/qtweetlib/tomahawk-custom
-
 
     ${TAGLIB_INCLUDES}
     ${QJSON_INCLUDE_DIR}
@@ -169,6 +168,7 @@ IF( APPLE )
 ENDIF( APPLE )
 
 IF(GLOOX_FOUND)
+  INCLUDE_DIRECTORIES( ${GLOOX_INCLUDE_DIR} )
   SET( tomahawkHeaders ${tomahawkHeaders} xmppbot/xmppbot.h )
   SET( tomahawkSources ${tomahawkSources} xmppbot/xmppbot.cpp )
 ENDIF(GLOOX_FOUND)

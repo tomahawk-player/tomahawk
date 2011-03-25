@@ -41,6 +41,7 @@ WelcomeWidget::WelcomeWidget( QWidget* parent )
     ui->setupUi( this );
 
     ui->playlistWidget->setItemDelegate( new PlaylistDelegate() );
+    ui->playlistWidget->overlay()->resize( 380, 86 );
     ui->tracksView->overlay()->setEnabled( false );
 
     m_tracksModel = new PlaylistModel( ui->tracksView );

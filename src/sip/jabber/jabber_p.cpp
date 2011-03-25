@@ -158,7 +158,7 @@ Jabber_p::go()
     m_client->disco()->addFeature( "tomahawk:player" );
     */
     
-    m_client->setPresence( Presence::Available, 1, "Tomahawk available" );
+    m_client->setPresence( Presence::XA, -127, "Tomahawk available" );
 
     // m_client->connect();
     // return;

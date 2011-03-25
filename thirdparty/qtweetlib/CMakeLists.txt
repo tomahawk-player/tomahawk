@@ -181,6 +181,7 @@ endif(APPLE)
 target_link_libraries(tomahawk_qtweetlib
     ${QT_LIBRARIES}
     ${QJSON_FLAGS}
+    ${QJSON_LIBRARIES}
 )   
 
 INCLUDE( ${CMAKE_CURRENT_SOURCE_DIR}/twitter-api-keys )
