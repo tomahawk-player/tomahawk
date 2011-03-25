@@ -23,6 +23,7 @@
 #include "dynamic/GeneratorInterface.h"
 #include "dynamic/DynamicControl.h"
 #include "utils/tomahawkutils.h"
+#include "utils/elidedlabel.h"
 
 #include <QLabel>
 #include <QStackedLayout>
@@ -85,7 +86,7 @@ CollapsibleControls::init()
     m_summaryLayout->setMargin( 0 );
     m_summaryWidget->setContentsMargins( 3, 0, 0, 0 );
     
-    m_summary = new QLabel( m_summaryWidget );
+    m_summary = new ElidedLabel( m_summaryWidget );
     QFont f = m_summary->font();
     f.setPointSize( f.pointSize() + 1 );
     f.setBold( true );

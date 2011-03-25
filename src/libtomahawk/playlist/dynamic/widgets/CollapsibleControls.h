@@ -27,7 +27,7 @@ class QPaintEvent;
 class QHBoxLayout;
 class QTimeLine;
 class QToolButton;
-class QLabel;
+class ElidedLabel;
 class QStackedLayout;
 namespace Tomahawk
 {
@@ -67,7 +67,7 @@ private:
     
     QWidget* m_summaryWidget;
     QHBoxLayout* m_summaryLayout;
-    QLabel* m_summary;
+    ElidedLabel* m_summary;
     QStackedLayout* m_expandL;
     QToolButton* m_summaryExpand;
     

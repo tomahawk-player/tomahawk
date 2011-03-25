@@ -44,6 +44,9 @@ public:
     Qt::TextElideMode elideMode() const;
     void setElideMode( Qt::TextElideMode mode );
 
+    void setMargin( int margin );
+    int margin() const;
+    
     virtual QSize sizeHint() const;
     virtual QSize minimumSizeHint() const;
 
@@ -64,10 +67,11 @@ protected:
     virtual void paintEvent( QPaintEvent* event );
     
 private:
-    QTime time;
+    QTime m_time;
     QString m_text;
-    Qt::Alignment align;
-    Qt::TextElideMode mode;
+    Qt::Alignment m_align;
+    Qt::TextElideMode m_mode;
+    int m_margin;
 };
 
 #endif // ELIDEDLABEL_H
