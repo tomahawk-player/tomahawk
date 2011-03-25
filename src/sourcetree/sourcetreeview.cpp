@@ -504,8 +504,6 @@ SourceDelegate::paint( QPainter* painter, const QStyleOptionViewItem& option, co
     smaller.setPointSize( smaller.pointSize() - 2 );
     painter->setFont( smaller );
     o.font = smaller;
-#else
-    o.font = painter->font();
 #endif
     
     if ( ( option.state & QStyle::State_Enabled ) == QStyle::State_Enabled )
