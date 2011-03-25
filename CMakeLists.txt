@@ -7,7 +7,7 @@ CMAKE_MINIMUM_REQUIRED( VERSION 2.8 )
 SET( ORGANIZATION_NAME "Tomahawk" )
 SET( ORGANIZATION_DOMAIN "tomahawk-player.org" )
 SET( APPLICATION_NAME  "Tomahawk" )
-SET( VERSION "0.0.2" )
+SET( VERSION "0.0.3" )
 
 
 # set paths
