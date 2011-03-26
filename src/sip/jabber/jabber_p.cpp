@@ -24,8 +24,10 @@
 #include <QString>
 #include <QRegExp>
 #include <QThread>
+#include <QVariant>
 #include <utils/tomahawkutils.h>
 #include <gloox/capabilities.h>
+#include <qjson/parser.h>
 
 using namespace gloox;
 using namespace std;
@@ -428,6 +430,15 @@ Jabber_p::handleMessage( const Message& m, MessageSession * /*session*/ )
 
     //sendMsg( from, QString("You said %1").arg(msg) );
 
+    QJson::Parser parser;
+    bool ok;
+    QVariant v = parser.parse( msg.toAscii(), &ok );
+    if ( !ok  || v.type() != QVariant::Map )
+    {
+        sendMsg( from, QString( "I'm sorry -- I'm just an automatic presence used by Tomahawk Player (http://gettomahawk.com). If you are getting this message, the person you are trying to reach is probably not signed on, so please try again later!" ) );
+        return;
+    }
+    
     emit msgReceived( from, msg );
 }
 
