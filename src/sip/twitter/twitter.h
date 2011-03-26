@@ -91,6 +91,8 @@ private slots:
     void makeConnection( const QString &screenName, const QHash< QString, QVariant > &peerdata );
 
 private:
+    bool refreshTwitterAuth();
+
     QWeakPointer< TomahawkOAuthTwitter > m_twitterAuth;
     QWeakPointer< QTweetFriendsTimeline > m_friendsTimeline;
     QWeakPointer< QTweetMentions > m_mentions;

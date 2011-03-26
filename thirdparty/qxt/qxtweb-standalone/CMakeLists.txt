@@ -102,5 +102,3 @@ target_link_libraries( qxtweb-standalone
 #    ${QT_LIBRARIES}
 #    "${CMAKE_CURRENT_SOURCE_DIR}/libqxtweb-standalone.a"
 #    )
-
-INSTALL( TARGETS qxtweb-standalone DESTINATION lib${LIB_SUFFIX} )

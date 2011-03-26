@@ -43,7 +43,7 @@ InfoBar::InfoBar( QWidget* parent )
 
     boldFont.setPixelSize( 12 );
     ui->descriptionLabel->setFont( boldFont );
-    ui->descriptionLabel->setMargin( 2 );
+    ui->descriptionLabel->setMargin( 10 );
 
     QPalette whitePal = ui->captionLabel->palette();
     whitePal.setColor( QPalette::Foreground, Qt::white );
@@ -52,6 +52,8 @@ InfoBar::InfoBar( QWidget* parent )
     ui->descriptionLabel->setPalette( whitePal );
 
     ui->captionLabel->setText( QString() );
+    ui->captionLabel->setMargin( 6 );
+    
     ui->descriptionLabel->setText( QString() );
     ui->imageLabel->setText( QString() );
 
