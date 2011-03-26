@@ -92,6 +92,7 @@ private slots:
 
 private:
     bool refreshTwitterAuth();
+    void parseGotTomahawk( const QRegExp &regex, const QString &screenName, const QString &text );
 
     QWeakPointer< TomahawkOAuthTwitter > m_twitterAuth;
     QWeakPointer< QTweetFriendsTimeline > m_friendsTimeline;

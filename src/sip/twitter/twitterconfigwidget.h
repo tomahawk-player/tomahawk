@@ -22,6 +22,7 @@
 #include "sip/SipPlugin.h"
 
 #include <qtweetstatus.h>
+#include <qtweetdmstatus.h>
 #include <qtweetuser.h>
 #include <qtweetnetbase.h>
 
@@ -45,19 +46,24 @@ signals:
     
 private slots:
     void authDeauthTwitter();
+    void startPostGlobalGotTomahawkStatus();
+    void startPostUserGotTomahawkStatus();
+    void startPostDirectGotTomahawkStatus();
     void startPostGotTomahawkStatus();
     void authenticateVerifyReply( const QTweetUser &user );
     void authenticateVerifyError( QTweetNetBase::ErrorCode code, const QString &errorMsg );
     void postGotTomahawkStatusAuthVerifyReply( const QTweetUser &user );
     void postGotTomahawkStatusUpdateReply( const QTweetStatus &status );
+    void postGotTomahawkDirectMessageReply( const QTweetDMStatus &status );
     void postGotTomahawkStatusUpdateError( QTweetNetBase::ErrorCode, const QString &errorMsg );
 
 private:
     void authenticateTwitter();
     void deauthenticateTwitter();
-
+    
     Ui::TwitterConfigWidget *ui;
     SipPlugin *m_plugin;
+    QString m_postGTtype;
 };
 
 #endif // TWITTERCONFIGWIDGET_H
