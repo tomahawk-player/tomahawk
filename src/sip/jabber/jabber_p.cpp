@@ -28,6 +28,7 @@
 #include <utils/tomahawkutils.h>
 #include <gloox/capabilities.h>
 #include <qjson/parser.h>
+#include <QMessageBox>
 
 using namespace gloox;
 using namespace std;
@@ -150,6 +151,7 @@ Jabber_p::go()
 
     m_client->registerPresenceHandler( this );
     m_client->registerConnectionListener( this );
+    m_client->rosterManager()->registerRosterListener( this );
     m_client->logInstance().registerLogHandler( LogLevelWarning, LogAreaAll, this );
     m_client->registerMessageHandler( this );
 
@@ -609,10 +611,24 @@ bool
 Jabber_p::handleSubscriptionRequest( const JID& jid, const std::string& /*msg*/ )
 {
     qDebug() << Q_FUNC_INFO << jid.bare().c_str();
-    StringList groups;
-    groups.push_back( "Tomahawk" );
-    m_client->rosterManager()->subscribe( jid, "", groups, "" );
-    return true;
+
+    QMessageBox::StandardButton allowSubscription;
+    allowSubscription = QMessageBox::question( 0,
+                                               tr("Friend Request in Jabber"),
+                                               QString(tr("Do you want to be friends with <b>%1</b>?")).arg(QLatin1String(jid.bare().c_str())),
+                                               QMessageBox::Ok | QMessageBox::Cancel
+                                     );
+
+    if(allowSubscription == QMessageBox::Ok)
+    {
+        StringList groups;
+        groups.push_back( "Tomahawk" );
+        m_client->rosterManager()->subscribe( jid, "", groups, "" );
+
+        return true;
+    }
+
+    return false;
 }
 
 
