@@ -48,8 +48,10 @@ public:
 public slots:
     void settingsChanged();
     void onAuthenticated();
+    void coverArtReturned();
     
 private:
+    void fetchCoverArt( const QString &caller, const InfoType type, const QVariant& data, Tomahawk::InfoSystem::InfoCustomDataHash &customData );
     void scrobble( const QString &caller, const InfoType type, const QVariant& data, InfoCustomDataHash &customData );
     void createScrobbler();
     void nowPlaying( const QString &caller, const InfoType type, const QVariant& data, InfoCustomDataHash &customData );

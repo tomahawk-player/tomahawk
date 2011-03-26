@@ -31,6 +31,7 @@
 
 #define LASTFM_DEFAULT_COVER "http://cdn.last.fm/flatness/catalogue/noimage"
 
+static QString s_infoIdentifier = QString("AUDIOCONTROLS");
 
 AudioControls::AudioControls( QWidget* parent )
     : QWidget( parent )
@@ -166,6 +167,12 @@ AudioControls::AudioControls( QWidget* parent )
     m_defaultCover = QPixmap( RESPATH "images/no-album-art-placeholder.png" )
                      .scaled( ui->coverImage->size(), Qt::IgnoreAspectRatio, Qt::SmoothTransformation );
 
+    connect( TomahawkApp::instance()->infoSystem(),
+        SIGNAL( info( QString, Tomahawk::InfoSystem::InfoType, QVariant, QVariant, Tomahawk::InfoSystem::InfoCustomDataHash ) ),
+        SLOT( infoSystemInfo( QString, Tomahawk::InfoSystem::InfoType, QVariant, QVariant, Tomahawk::InfoSystem::InfoCustomDataHash ) ) );
+    
+    connect( TomahawkApp::instance()->infoSystem(), SIGNAL( finished( QString ) ), SLOT( infoSystemFinished( QString ) ) );
+
     onPlaybackStopped(); // initial state
 }
 
@@ -242,12 +249,59 @@ AudioControls::onPlaybackStarted( const Tomahawk::result_ptr& result )
 
     onPlaybackLoading( result );
 
-    QString imgurl = "http://ws.audioscrobbler.com/2.0/?method=album.imageredirect&artist=%1&album=%2&size=medium&api_key=7a90f6672a04b809ee309af169f34b8b";
-    QNetworkRequest req( imgurl.arg( result->artist()->name() ).arg( result->album()->name() ) );
-    QNetworkReply* reply = TomahawkUtils::nam()->get( req );
-    connect( reply, SIGNAL( finished() ), SLOT( onCoverArtDownloaded() ) );
+    QString artistName = result->artist()->name();
+    QString albumName = result->album()->name();
+    
+    Tomahawk::InfoSystem::InfoCustomDataHash trackInfo;
+    
+    trackInfo["artist"] = QVariant::fromValue< QString >( result->artist()->name() );
+    trackInfo["album"] = QVariant::fromValue< QString >( result->album()->name() );
+    TomahawkApp::instance()->infoSystem()->getInfo(
+        s_infoIdentifier, Tomahawk::InfoSystem::InfoAlbumCoverArt,
+        QVariant::fromValue< Tomahawk::InfoSystem::InfoCustomDataHash >( trackInfo ), Tomahawk::InfoSystem::InfoCustomDataHash() );
 }
 
+void
+AudioControls::infoSystemInfo( QString caller, Tomahawk::InfoSystem::InfoType type, QVariant input, QVariant output, Tomahawk::InfoSystem::InfoCustomDataHash customData )
+{
+    qDebug() << Q_FUNC_INFO;
+    if ( caller != s_infoIdentifier || type != Tomahawk::InfoSystem::InfoAlbumCoverArt )
+    {
+        qDebug() << "info of wrong type or not with our identifier";
+        return;
+    }
+    
+    if ( m_currentTrack.isNull() )
+    {
+        qDebug() << "Current track is null when trying to apply fetched cover art";
+        return;
+    }
+
+    if ( !output.canConvert< Tomahawk::InfoSystem::InfoCustomDataHash >() )
+    {
+        qDebug() << "Cannot convert fetched art from a QByteArray";
+        return;
+    }   
+
+    Tomahawk::InfoSystem::InfoCustomDataHash returnedData = output.value< Tomahawk::InfoSystem::InfoCustomDataHash >();
+    const QByteArray ba = returnedData["imgbytes"].toByteArray();
+    if ( ba.length() )
+    {
+        QPixmap pm;
+        pm.loadFromData( ba );
+
+        if ( pm.isNull() || returnedData["url"].toString().startsWith( LASTFM_DEFAULT_COVER ) )
+            ui->coverImage->setPixmap( m_defaultCover );
+        else
+            ui->coverImage->setPixmap( pm.scaled( ui->coverImage->size(), Qt::IgnoreAspectRatio, Qt::SmoothTransformation ) );
+    }
+}
+   
+void
+AudioControls::infoSystemFinished( QString target )
+{
+    qDebug() << Q_FUNC_INFO;
+}
 
 void
 AudioControls::onPlaybackLoading( const Tomahawk::result_ptr& result )
