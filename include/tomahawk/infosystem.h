@@ -83,6 +83,9 @@ enum InfoType {
     InfoMiscTopHotttness,
     InfoMiscTopTerms,
     
+    InfoMiscSubmitNowPlaying,
+    InfoMiscSubmitScrobble,
+    
     InfoNoInfo
 };
 

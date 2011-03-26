@@ -36,6 +36,7 @@ SET( tomahawkSources ${tomahawkSources}
 
      infosystem/infosystem.cpp
      infosystem/infoplugins/echonestplugin.cpp
+     infosystem/infoplugins/lastfmplugin.cpp
      infosystem/infoplugins/musixmatchplugin.cpp
 
      web/api_v1.cpp
@@ -77,6 +78,7 @@ SET( tomahawkHeaders ${tomahawkHeaders}
      sip/SipHandler.h
 
      infosystem/infoplugins/echonestplugin.h
+     infosystem/infoplugins/lastfmplugin.h
      infosystem/infoplugins/musixmatchplugin.h
 
      web/api_v1.h

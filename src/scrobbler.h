@@ -21,13 +21,12 @@
 
 #include "result.h"
 
-#include <lastfm/Track>
-#include <lastfm/Audioscrobbler>
-#include <lastfm/ScrobblePoint>
+#include "lastfm/ScrobblePoint"
+
+#include "tomahawk/infosystem.h"
 
 #include <QObject>
 
-class QNetworkReply;
 /**
  * Simple class that listens to signals from AudioEngine and scrobbles
  *  what it is playing.
@@ -46,20 +45,14 @@ public slots:
     void trackStopped();
     void engineTick( unsigned int secondsElapsed );
     
-    void settingsChanged();
-    void onAuthenticated();
+    void infoSystemInfo( QString caller, Tomahawk::InfoSystem::InfoType type, QVariant input, QVariant output, Tomahawk::InfoSystem::InfoCustomDataHash customData );
+    void infoSystemFinished( QString target );
     
 private:
     void scrobble();
-    void createScrobbler();
     
-    lastfm::MutableTrack m_track;
-    lastfm::Audioscrobbler* m_scrobbler;
-    QString m_pw;
     bool m_reachedScrobblePoint;
     ScrobblePoint m_scrobblePoint;
-    
-    QNetworkReply* m_authJob;
 };
 
 

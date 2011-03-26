@@ -213,6 +213,9 @@ TomahawkApp::TomahawkApp( int& argc, char *argv[] )
         connect( m_shortcutHandler, SIGNAL( mute() ), m_audioEngine, SLOT( mute() ) );
     }
 
+    qDebug() << "Init InfoSystem.";
+    m_infoSystem = new Tomahawk::InfoSystem::InfoSystem( this );
+
 #ifdef LIBLASTFM_FOUND
     qDebug() << "Init Scrobbler.";
     m_scrobbler = new Scrobbler( this );
@@ -236,6 +239,7 @@ TomahawkApp::TomahawkApp( int& argc, char *argv[] )
 #endif
 
     // Set up proxy
+    //FIXME: This overrides the lastfm proxy above?
     if( TomahawkSettings::instance()->proxyType() != QNetworkProxy::NoProxy &&
         !TomahawkSettings::instance()->proxyHost().isEmpty() )
     {
@@ -252,8 +256,6 @@ TomahawkApp::TomahawkApp( int& argc, char *argv[] )
 
     qDebug() << "Init SIP system.";
     m_sipHandler = new SipHandler( this );
-    qDebug() << "Init InfoSystem.";
-    m_infoSystem = new Tomahawk::InfoSystem::InfoSystem( this );
 
     #ifndef TOMAHAWK_HEADLESS
     if ( !m_headless )

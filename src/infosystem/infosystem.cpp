@@ -19,6 +19,7 @@
 #include "tomahawk/infosystem.h"
 #include "infoplugins/echonestplugin.h"
 #include "infoplugins/musixmatchplugin.h"
+#include "infoplugins/lastfmplugin.h"
 
 using namespace Tomahawk::InfoSystem;
 
@@ -33,6 +34,8 @@ InfoSystem::InfoSystem(QObject *parent)
     m_plugins.append(enptr);
     InfoPluginPtr mmptr(new MusixMatchPlugin(this));
     m_plugins.append(mmptr);
+    InfoPluginPtr lfmptr(new LastFmPlugin(this));
+    m_plugins.append(lfmptr);
 }
 
 void InfoSystem::registerInfoTypes(const InfoPluginPtr &plugin, const QSet< InfoType >& types)
