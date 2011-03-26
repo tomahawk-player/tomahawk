@@ -1,9 +1,9 @@
 Quickstart on Ubuntu
 --------------------
 
-    $ sudo apt-get install build-essential cmake libtag1c2a libtag1-dev liblastfm-dev libqt4-dev \
-                           libqt4-sql-sqlite libvorbis-dev libmad0-dev libflac++-dev libasound2-dev \
-                           libboost-dev zlib1g-dev libgnutls-dev pkg-config
+    $ sudo apt-get install build-essential cmake libtag1c2a libtag1-dev libqt4-dev libqt4-sql-sqlite \
+                           libvorbis-dev libmad0-dev libflac++-dev libasound2-dev libboost-dev zlib1g-dev \
+                           libgnutls-dev pkg-config
 
 
 Gloox 1.0 (XMPP library)
@@ -30,7 +30,7 @@ QJson (Qt JSON library)
     $ ./configure && make
     $ sudo make install
 
-libEchonest 1.1.1
+libEchonest 1.1.4
 ---------------
  See: http://projects.kde.org/projects/playground/libs/libechonest/
 
@@ -57,7 +57,7 @@ Quickstart on OS X
 
  Install homebrew
     $ ruby -e "$(curl -fsSL https://gist.github.com/raw/323731/install_homebrew.rb)"
-    $ brew install cmake qt qjson gloox libmad libvorbis flac taglib boost liblastfm
+    $ brew install cmake qt qjson gloox libmad libvorbis flac taglib boost
 
  Install libEchnoest & CLucene as per the above instructions.
 
@@ -94,23 +94,19 @@ Dependencies
   libvorbis 1.2.3 http://xiph.org/vorbis/
   libogg 1.1.4 http://xiph.org/ogg/
   libflac++ 1.2.0 http://flac.sourceforge.net/
-  liblastfm 0.3.3 http://github.com/mxcl/liblastfm/
-  libechonest 1.1.1 http://projects.kde.org/projects/playground/libs/libechonest/
+  libechonest 1.1.4 http://projects.kde.org/projects/playground/libs/libechonest/
 
  Third party libraries that we ship with our source:
 
   RtAudio 4.0.7 http://www.music.mcgill.ca/~gary/rtaudio/
   MiniUPnP http://miniupnp.free.fr/
+  liblastfm 0.4.0 http://github.com/jonocole/liblastfm/
 
 
 To build the app:
 -----------------
     $ mkdir build && cd build
-
- Pick one of the following two choices. If uncertain pick the second one, you probably want a GUI.
-    $ cmake -Dgui=no ..     # enables headless mode, build without GUI
-    $ cmake ..              # normal build including GUI
-
+    $ cmake ..
     $ make
 
 To run the app:
