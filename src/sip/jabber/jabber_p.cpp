@@ -601,6 +601,17 @@ Jabber_p::handleSubscriptionRequest( const JID& jid, const std::string& /*msg*/ 
 {
     qDebug() << Q_FUNC_INFO << jid.bare().c_str();
 
+    // check if the requester is already on the roster
+    RosterItem *item = m_client->rosterManager()->getRosterItem(jid);
+    if(item)
+    {
+        qDebug() << Q_FUNC_INFO << "Already on the roster so we assume ack'ing subscription request is okay...";
+        return true;
+    }
+
+
+
+    // ask whether to accept subscription request or not
     QMessageBox::StandardButton allowSubscription;
     allowSubscription = QMessageBox::question( 0,
                                                tr("Friend Request in Jabber"),
