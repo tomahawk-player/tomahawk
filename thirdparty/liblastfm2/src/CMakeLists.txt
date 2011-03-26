@@ -7,10 +7,6 @@ macro(copy_header from to)
     ${CMAKE_CURRENT_BINARY_DIR}/lastfm/${to}
     COPY_ONLY
   )
-  install(
-    FILES ${CMAKE_CURRENT_BINARY_DIR}/lastfm/${to}
-    DESTINATION include/lastfm/
-  )
 endmacro(copy_header)
 
 # Copy headers
