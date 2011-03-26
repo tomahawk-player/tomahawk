@@ -60,38 +60,7 @@ static QDir dataDotDot()
     return QDir::home();
 
 #elif defined(Q_WS_MAC)
-
-    #define EIT( x ) { OSErr err = x; if (err != noErr) throw 1; }
-    try
-    {
-        short vRefNum = 0;
-        long dirId;
-        EIT( ::FindFolder( kOnAppropriateDisk, 
-                           kApplicationSupportFolderType,
-                           kDontCreateFolder, 
-                           &vRefNum, 
-                           &dirId ) );
-
-        // Now we have a vRefNum and a dirID - but *not* an Unix-Path as string.
-        // Lets make one based from this:
-        FSSpec fsspec;
-        EIT( ::FSMakeFSSpec( vRefNum, dirId, NULL, &fsspec ) );
-
-        // ...and build an FSRef based on thes FSSpec.
-        FSRef fsref;
-        EIT( ::FSpMakeFSRef( &fsspec, &fsref ) );
-
-        // ...then extract the Unix Path as a C-String from the FSRef
-        unsigned char path[512];
-        EIT( ::FSRefMakePath( &fsref, path, 512 ) );
-
-        return QDir::homePath() + QString::fromUtf8( (char*)path );
-    }
-    catch (int)
-    {
-        return QDir::home().filePath( "Library/Application Support" );
-    }
-
+    return QDir::home().filePath( "Library/Application Support" );
 #elif defined(Q_WS_X11)
     return QDir::home().filePath( ".local/share" );
 
