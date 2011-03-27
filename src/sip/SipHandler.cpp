@@ -28,6 +28,7 @@
 #include "network/controlconnection.h"
 #include "sourcelist.h"
 #include "tomahawksettings.h"
+#include "tomahawk/tomahawkapp.h"
 
 #include "config.h"
 
@@ -168,6 +169,20 @@ SipHandler::pluginLoaded( const QString& name ) const
 void
 SipHandler::connectPlugins( bool startup, const QString &pluginName )
 {
+#ifndef TOMAHAWK_HEADLESS
+    if ( !TomahawkSettings::instance()->acceptedLegalWarning() )
+    {
+        int result = QMessageBox::question(
+            TomahawkApp::instance()->mainWindow(), "Legal Warning",
+            "By pressing OK below, you agree that your use of Tomahawk will be in accordance with any applicable laws, including copyright and intellectual property laws, in effect in your country of residence, and indemify the Tomahawk developers and project from liability should you choose to break those laws.\n\nFor more information, please see http://gettomahawk.com/legal",
+            "I Do Not Agree", "I Agree"
+        );
+        if ( result != 1 )
+            return;
+        else
+            TomahawkSettings::instance()->setAcceptedLegalWarning( true );
+    }
+#endif
     foreach( SipPlugin* sip, m_plugins )
     {
         if ( pluginName.isEmpty() || ( !pluginName.isEmpty() && sip->name() == pluginName ) )
