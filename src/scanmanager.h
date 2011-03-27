@@ -53,6 +53,7 @@ private:
     
     MusicScanner* m_scanner;
     QThread* m_musicScannerThreadController;
+    QString m_currScannerPath;
 };
 
 #endif

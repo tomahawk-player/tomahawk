@@ -1,4 +1,6 @@
 Version 0.0.2:
+    * Don't run a rescan of the local collection if the settings dialog is
+      closed successfully but the path hasn't changed.
     * Don't attempt to connect to unavailable Twitter peers over and over.
     * Find Twitter peers if the peer's Got Tomahawk? tweet is not their latest
       tweet.

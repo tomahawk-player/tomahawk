@@ -44,6 +44,9 @@ ScanManager::ScanManager( QObject* parent )
     s_instance = this;
 
     connect( TomahawkSettings::instance(), SIGNAL( changed() ), SLOT( onSettingsChanged() ) );
+    
+    if ( TomahawkSettings::instance()->hasScannerPath() )
+        m_currScannerPath = TomahawkSettings::instance()->scannerPath();
 }
 
 
@@ -76,8 +79,12 @@ ScanManager::~ScanManager()
 void
 ScanManager::onSettingsChanged()
 {
-    if ( TomahawkSettings::instance()->hasScannerPath() )
-        runManualScan( TomahawkSettings::instance()->scannerPath() );
+    if ( TomahawkSettings::instance()->hasScannerPath() &&
+         m_currScannerPath != TomahawkSettings::instance()->scannerPath() )
+    {
+        m_currScannerPath = TomahawkSettings::instance()->scannerPath();
+        runManualScan( m_currScannerPath );
+    }
 }
 
 
