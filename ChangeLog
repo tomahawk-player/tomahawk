@@ -1,2 +1,5 @@
+Version 0.0.2:
+        * Don't let long playlist or summary names force a large Tomahawk window.
+
 Version 0.0.1:
 	* First public release.
