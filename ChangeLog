@@ -1,5 +1,6 @@
 Version 0.0.2:
         * Don't let long playlist or summary names force a large Tomahawk window.
+	* Fixed Jabber auth: Freshly added contacts never showed up.
 
 Version 0.0.1:
 	* First public release.
