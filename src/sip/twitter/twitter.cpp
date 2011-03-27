@@ -33,6 +33,7 @@
 #include <database/database.h>
 #include <network/servent.h>
 
+static QString s_gotTomahawkRegex = QString( "^(@[a-zA-Z0-9]+ )?(Got Tomahawk\\?) (\\{[a-fA-F0-9\\-]+\\}) (.*)$" );
 
 TwitterPlugin::TwitterPlugin()
     : SipPlugin()
@@ -296,81 +297,6 @@ TwitterPlugin::connectTimerFired()
 }
 
 void
-TwitterPlugin::friendsTimelineStatuses( const QList< QTweetStatus > &statuses )
-{
-    qDebug() << Q_FUNC_INFO;
-    QRegExp regex( QString( "^(@[a-zA-Z0-9]+ )?(Got Tomahawk\\?) (\\{[a-fA-F0-9\\-]+\\}) (.*)$" ), Qt::CaseSensitive, QRegExp::RegExp2 );
-    QString myScreenName = TomahawkSettings::instance()->twitterScreenName();
-    
-    QHash< QString, QTweetStatus > latestHash;
-    foreach ( QTweetStatus status, statuses )
-    {
-        if ( !latestHash.contains( status.user().screenName() ) )
-            latestHash[status.user().screenName()] = status;
-        else
-        {
-            if ( status.id() > latestHash[status.user().screenName()].id() )
-                latestHash[status.user().screenName()] = status;
-        }
-    }
-    
-    foreach( QTweetStatus status, latestHash.values() )
-    {
-        if ( status.id() > m_cachedFriendsSinceId )
-            m_cachedFriendsSinceId = status.id();
-
-        if ( regex.exactMatch( status.text() ) )
-        {
-            qDebug() << "TwitterPlugin found an exact tweet from friend " << status.user().screenName();
-            if ( status.text().startsWith( '@' ) && regex.captureCount() >= 2 && regex.cap( 1 ) != QString( '@' + myScreenName ) )
-            {
-                qDebug() << "TwitterPlugin skipping tweet because it's directed @someone that isn't us";
-                continue;
-            }
-            
-            QString node;
-            for ( int i = 0; i < regex.captureCount(); ++i )
-            {
-                if ( regex.cap( i ) == QString( "Got Tomahawk?" ) )
-                {
-                    QString nodeCap = regex.cap( i + 1 );
-                    nodeCap.chop( 1 );
-                    node = nodeCap.mid( 1 );
-                }
-            }
-            if ( node.isEmpty() )
-            {
-                qDebug() << "TwitterPlugin could not parse node out of the tweet";
-                continue;
-            }
-            else
-                qDebug() << "TwitterPlugin parsed node " << node << " out of the tweet";
-        
-            if ( status.user().screenName() == myScreenName && node == Database::instance()->dbid() )
-            {
-                qDebug() << "My screen name and my dbid found; ignoring";
-                continue;
-            }
-            
-            QHash< QString, QVariant > peerData;
-            if( m_cachedPeers.contains( status.user().screenName() ) )
-            {
-                peerData = m_cachedPeers[status.user().screenName()].toHash();
-                //force a re-send of info but no need to re-register
-                peerData["resend"] = QVariant::fromValue< bool >( true );
-            }
-            peerData["node"] = QVariant::fromValue< QString >( node );
-            QMetaObject::invokeMethod( this, "registerOffer", Q_ARG( QString, status.user().screenName() ), QGenericArgument( "QHash< QString, QVariant >", (const void*)&peerData ) );
-        }
-    }
-    
-    TomahawkSettings::instance()->setTwitterCachedFriendsSinceId( m_cachedFriendsSinceId );
-    
-    m_finishedFriends = true;
-    QMetaObject::invokeMethod( this, "pollDirectMessages", Qt::AutoConnection );
-}
-
-void
 TwitterPlugin::parseGotTomahawk( const QRegExp &regex, const QString &screenName, const QString &text )
 {
     QString myScreenName = TomahawkSettings::instance()->twitterScreenName();
@@ -417,14 +343,53 @@ TwitterPlugin::parseGotTomahawk( const QRegExp &regex, const QString &screenName
 }
 
 void
-TwitterPlugin::mentionsStatuses( const QList< QTweetStatus > &statuses )
+TwitterPlugin::friendsTimelineStatuses( const QList< QTweetStatus > &statuses )
 {
     qDebug() << Q_FUNC_INFO;
-    QRegExp regex( QString( "^(@[a-zA-Z0-9]+ )?(Got Tomahawk\\?) (\\{[a-fA-F0-9\\-]+\\}) (.*)$" ), Qt::CaseSensitive, QRegExp::RegExp2 );
+    QRegExp regex( s_gotTomahawkRegex, Qt::CaseSensitive, QRegExp::RegExp2 );
+    QString myScreenName = TomahawkSettings::instance()->twitterScreenName();
     
     QHash< QString, QTweetStatus > latestHash;
     foreach ( QTweetStatus status, statuses )
     {
+        if ( !regex.exactMatch( status.text() ) )
+            continue;
+        
+        if ( !latestHash.contains( status.user().screenName() ) )
+            latestHash[status.user().screenName()] = status;
+        else
+        {
+            if ( status.id() > latestHash[status.user().screenName()].id() )
+                latestHash[status.user().screenName()] = status;
+        }
+    }
+    
+    foreach( QTweetStatus status, latestHash.values() )
+    {
+        if ( status.id() > m_cachedFriendsSinceId )
+            m_cachedFriendsSinceId = status.id();
+
+        parseGotTomahawk( regex, status.user().screenName(), status.text() );
+    }
+    
+    TomahawkSettings::instance()->setTwitterCachedFriendsSinceId( m_cachedFriendsSinceId );
+    
+    m_finishedFriends = true;
+    QMetaObject::invokeMethod( this, "pollDirectMessages", Qt::AutoConnection );
+}
+
+void
+TwitterPlugin::mentionsStatuses( const QList< QTweetStatus > &statuses )
+{
+    qDebug() << Q_FUNC_INFO;
+    QRegExp regex( s_gotTomahawkRegex, Qt::CaseSensitive, QRegExp::RegExp2 );
+    
+    QHash< QString, QTweetStatus > latestHash;
+    foreach ( QTweetStatus status, statuses )
+    {
+        if ( !regex.exactMatch( status.text() ) )
+            continue;
+        
         if ( !latestHash.contains( status.user().screenName() ) )
             latestHash[status.user().screenName()] = status;
         else
@@ -439,8 +404,7 @@ TwitterPlugin::mentionsStatuses( const QList< QTweetStatus > &statuses )
         if ( status.id() > m_cachedMentionsSinceId )
             m_cachedMentionsSinceId = status.id();
         
-        if ( regex.exactMatch( status.text() ) )
-            parseGotTomahawk( regex, status.user().screenName(), status.text() );
+        parseGotTomahawk( regex, status.user().screenName(), status.text() );
     }
     
     TomahawkSettings::instance()->setTwitterCachedMentionsSinceId( m_cachedMentionsSinceId );
@@ -475,12 +439,26 @@ TwitterPlugin::directMessages( const QList< QTweetDMStatus > &messages )
 {
     qDebug() << Q_FUNC_INFO;
     
-    QRegExp regex( QString( "^(@[a-zA-Z0-9]+ )?(Got Tomahawk\\?) (\\{[a-fA-F0-9\\-]+\\}) (.*)$" ), Qt::CaseSensitive, QRegExp::RegExp2 );
+    QRegExp regex( s_gotTomahawkRegex, Qt::CaseSensitive, QRegExp::RegExp2 );
     QString myScreenName = TomahawkSettings::instance()->twitterScreenName();
     
     QHash< QString, QTweetDMStatus > latestHash;
     foreach ( QTweetDMStatus status, messages )
     {
+        if ( !regex.exactMatch( status.text() ) )
+        {
+            QStringList splitList = status.text().split(':');
+            if ( splitList.length() != 5 )
+                continue;
+            if ( splitList[0] != "TOMAHAWKPEER" )
+                continue;
+            if ( !splitList[1].startsWith( "Host=" ) || !splitList[2].startsWith( "Port=" ) || !splitList[3].startsWith( "Node=" ) || !splitList[4].startsWith( "PKey=" ) )
+                continue;
+            int port = splitList[2].mid( 5 ).toInt();
+            if ( port == 0 )
+                continue;
+        }
+        
         if ( !latestHash.contains( status.senderScreenName() ) )
             latestHash[status.senderScreenName()] = status;
         else
@@ -504,15 +482,8 @@ TwitterPlugin::directMessages( const QList< QTweetDMStatus > &messages )
             qDebug() << "TwitterPlugin found " << splitList.length() << " parts to the message; the parts are:";
             foreach( QString part, splitList )
                 qDebug() << part;
-            if ( splitList.length() != 5 )
-                continue;
-            if ( splitList[0] != "TOMAHAWKPEER" )
-                continue;
-            if ( !splitList[1].startsWith( "Host=" ) || !splitList[2].startsWith( "Port=" ) || !splitList[3].startsWith( "Node=" ) || !splitList[4].startsWith( "PKey=" ) )
-                continue;
+            //validity is checked above
             int port = splitList[2].mid( 5 ).toInt();
-            if ( port == 0 )
-                continue;
             QString host = splitList[1].mid( 5 );
             QString node = splitList[3].mid( 5 );
             QString pkey = splitList[4].mid( 5 );
