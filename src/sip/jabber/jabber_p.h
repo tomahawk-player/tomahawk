@@ -30,6 +30,7 @@
 #include <QSocketNotifier>
 #include <QMap>
 #include <QNetworkProxy>
+#include <QMessageBox>
 
 #include <string>
 
@@ -153,6 +154,7 @@ public slots:
 
 private slots:
     void doJabberRecv();
+    void onSubscriptionRequestConfirmed(int result);
 
 private:
     bool presenceMeansOnline( gloox::Presence::PresenceType p );
@@ -164,6 +166,7 @@ private:
     QSharedPointer<gloox::VCardManager> m_vcardManager;
     QString m_server;
     QScopedPointer<QSocketNotifier> m_notifier;
+    QHash<gloox::JID, QWeakPointer<QMessageBox> > m_subscriptionConfirmBoxes;
 };
 
 #endif // JABBER_H

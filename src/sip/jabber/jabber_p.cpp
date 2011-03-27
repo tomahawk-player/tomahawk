@@ -151,7 +151,7 @@ Jabber_p::go()
 
     m_client->registerPresenceHandler( this );
     m_client->registerConnectionListener( this );
-    m_client->rosterManager()->registerRosterListener( this );
+    m_client->rosterManager()->registerRosterListener( this, false ); // false means async
     m_client->logInstance().registerLogHandler( LogLevelWarning, LogAreaAll, this );
     m_client->registerMessageHandler( this );
 
@@ -612,25 +612,85 @@ Jabber_p::handleSubscriptionRequest( const JID& jid, const std::string& /*msg*/ 
 {
     qDebug() << Q_FUNC_INFO << jid.bare().c_str();
 
-    QMessageBox::StandardButton allowSubscription;
-    allowSubscription = QMessageBox::question( 0,
-                                               tr("Friend Request in Jabber"),
-                                               QString(tr("Do you want to be friends with <b>%1</b>?")).arg(QLatin1String(jid.bare().c_str())),
-                                               QMessageBox::Ok | QMessageBox::Cancel
-                                     );
+    // check if the requester is already on the roster
+    RosterItem *item = m_client->rosterManager()->getRosterItem(jid);
+    if(item) qDebug() << "subscription status:" << static_cast<int>( item->subscription() );
 
-    if(allowSubscription == QMessageBox::Ok)
+    if(item &&
+        (
+            item->subscription() == gloox::S10nNoneOut ||    // Contact and user are not subscribed to each other, and user has sent contact a subscription request but contact has not replied yet.
+            item->subscription() == gloox::S10nTo ||         // User is subscribed to contact (one-way).
+            item->subscription() == gloox::S10nToIn          // User is subscribed to contact, and contact has sent user a subscription request but user has not replied yet.
+        )
+    )
     {
-        StringList groups;
-        groups.push_back( "Tomahawk" );
-        m_client->rosterManager()->subscribe( jid, "", groups, "" );
+        qDebug() << Q_FUNC_INFO << jid.bare().c_str() << "Already on the roster so we assume ack'ing subscription request is okay...";
 
-        return true;
+        m_client->rosterManager()->ackSubscriptionRequest( jid, true );
+        return false;
     }
+
+    if( !m_subscriptionConfirmBoxes.value(jid).isNull() )
+    {
+        qDebug() << Q_FUNC_INFO << jid.bare().c_str() << " confirmBox already open" ;
+
+        // the user decides with the already open box, so we can return false here
+        m_client->rosterManager()->ackSubscriptionRequest( jid, false );
+        return false;
+    }
+
+    // preparing the confirm box for the user
+    QWeakPointer<QMessageBox> confirmBox = QWeakPointer<QMessageBox>( new QMessageBox(
+                                QMessageBox::Question,
+                                tr("Friend Request in Jabber"),
+                                QString(tr("Do you want to be friends with <b>%1</b>?")).arg(QLatin1String(jid.bare().c_str())),
+                                QMessageBox::Ok | QMessageBox::Cancel,
+                                0) );
+
+    // add confirmBox to m_subscriptionConfirmBoxes
+    m_subscriptionConfirmBoxes.insert( jid, confirmBox );
+
+    // display the box and wait for the answer
+    confirmBox.data()->open( this, SLOT( onSubscriptionRequestConfirmed( int ) ) );
 
     return false;
 }
 
+void
+Jabber_p::onSubscriptionRequestConfirmed(int result)
+{
+    qDebug() << Q_FUNC_INFO;
+
+    QList< QWeakPointer<QMessageBox> > confirmBoxes = m_subscriptionConfirmBoxes.values();
+    JID jid;
+    foreach(QWeakPointer<QMessageBox> currentBox, confirmBoxes)
+    {
+        if( !currentBox.isNull() && currentBox.data() == sender() )
+        {
+            jid = m_subscriptionConfirmBoxes.key( currentBox );
+        }
+    }
+
+    // we got an answer, deleting the box
+    sender()->deleteLater();
+
+    QMessageBox::StandardButton allowSubscription =  static_cast<QMessageBox::StandardButton>( result );
+
+    if(allowSubscription == QMessageBox::Ok)
+    {
+        qDebug() << Q_FUNC_INFO << jid.bare().c_str() << "accepted by user, adding to roster";
+        StringList groups;
+        groups.push_back( "Tomahawk" );
+        m_client->rosterManager()->subscribe( jid, "", groups, "" );
+
+        m_client->rosterManager()->ackSubscriptionRequest( jid, true );
+        return;
+    }
+
+    qDebug() << Q_FUNC_INFO << jid.bare().c_str() << "declined by user";
+    m_client->rosterManager()->ackSubscriptionRequest( jid, false );
+    return;
+}
 
 bool
 Jabber_p::handleUnsubscriptionRequest( const JID& jid, const std::string& /*msg*/ )
