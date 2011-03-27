@@ -45,6 +45,9 @@ public:
     void setScannerPath( const QString& path );
     bool hasScannerPath() const;
     
+    bool acceptedLegalWarning() const;
+    void setAcceptedLegalWarning( bool accept );
+    
     /// UI settings
     QByteArray mainWindowGeometry() const;
     void setMainWindowGeometry( const QByteArray& geom );

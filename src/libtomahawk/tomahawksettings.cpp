@@ -89,6 +89,17 @@ TomahawkSettings::hasScannerPath() const
     return contains( "scannerpath" );
 }
 
+void
+TomahawkSettings::setAcceptedLegalWarning( bool accept )
+{
+    setValue( "acceptedLegalWarning", accept );
+}
+
+bool
+TomahawkSettings::acceptedLegalWarning() const
+{
+    return value( "acceptedLegalWarning", false ).toBool();
+}
 
 bool
 TomahawkSettings::httpEnabled() const
