@@ -38,7 +38,7 @@ class TwitterConfigWidget : public QWidget
     Q_OBJECT
 
 public:
-    explicit TwitterConfigWidget(SipPlugin* plugin = 0, QWidget *parent = 0);
+    explicit TwitterConfigWidget( SipPlugin* plugin = 0, QWidget *parent = 0 );
     ~TwitterConfigWidget();
 
 signals:
@@ -46,9 +46,6 @@ signals:
     
 private slots:
     void authDeauthTwitter();
-    void startPostGlobalGotTomahawkStatus();
-    void startPostUserGotTomahawkStatus();
-    void startPostDirectGotTomahawkStatus();
     void startPostGotTomahawkStatus();
     void authenticateVerifyReply( const QTweetUser &user );
     void authenticateVerifyError( QTweetNetBase::ErrorCode code, const QString &errorMsg );
@@ -56,6 +53,7 @@ private slots:
     void postGotTomahawkStatusUpdateReply( const QTweetStatus &status );
     void postGotTomahawkDirectMessageReply( const QTweetDMStatus &status );
     void postGotTomahawkStatusUpdateError( QTweetNetBase::ErrorCode, const QString &errorMsg );
+    void tweetComboBoxIndexChanged( int index );
 
 private:
     void authenticateTwitter();

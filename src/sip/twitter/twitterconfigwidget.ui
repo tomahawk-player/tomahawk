@@ -101,133 +101,68 @@ If connections to peers seem to have been lost, just press the appropriate butto
         </sizepolicy>
        </property>
        <property name="text">
-        <string>Use this button to send a normal, public tweet:</string>
+        <string>Select the kind of tweet you would like, then press the button to post it:</string>
        </property>
       </widget>
      </item>
      <item>
       <layout class="QHBoxLayout" name="twitterGlobalTweetHLayout">
        <item>
-        <layout class="QVBoxLayout" name="verticalLayout_3">
+        <widget class="QComboBox" name="twitterTweetComboBox">
+         <property name="sizePolicy">
+          <sizepolicy hsizetype="MinimumExpanding" vsizetype="Fixed">
+           <horstretch>0</horstretch>
+           <verstretch>0</verstretch>
+          </sizepolicy>
+         </property>
          <item>
-          <layout class="QHBoxLayout" name="horizontalLayout_2"/>
+          <property name="text">
+           <string>Global Tweet</string>
+          </property>
          </item>
          <item>
-          <widget class="QPushButton" name="twitterTweetGotTomahawkButton">
-           <property name="sizePolicy">
-            <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
-             <horstretch>0</horstretch>
-             <verstretch>0</verstretch>
-            </sizepolicy>
-           </property>
-           <property name="text">
-            <string>Press here to post a public tweet</string>
-           </property>
-          </widget>
+          <property name="text">
+           <string>@Mention</string>
+          </property>
          </item>
-        </layout>
+         <item>
+          <property name="text">
+           <string>Direct Message</string>
+          </property>
+         </item>
+        </widget>
        </item>
-      </layout>
-     </item>
-     <item>
-      <widget class="QLabel" name="twitterUserTweetLabel">
-       <property name="text">
-        <string>Use this button to send a public @mention to the user you enter:</string>
-       </property>
-      </widget>
-     </item>
-     <item>
-      <layout class="QHBoxLayout" name="twitterUserTweetHLayout">
        <item>
-        <layout class="QVBoxLayout" name="verticalLayout_2">
-         <item>
-          <layout class="QHBoxLayout" name="horizontalLayout">
-           <item>
-            <widget class="QLineEdit" name="twitterUserTweetLineEdit">
-             <property name="sizePolicy">
-              <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
-               <horstretch>0</horstretch>
-               <verstretch>0</verstretch>
-              </sizepolicy>
-             </property>
-             <property name="minimumSize">
-              <size>
-               <width>250</width>
-               <height>0</height>
-              </size>
-             </property>
-             <property name="placeholderText">
-              <string>e.g. @tomahawkplayer</string>
-             </property>
-            </widget>
-           </item>
-           <item>
-            <widget class="QPushButton" name="twitterUserTweetButton">
-             <property name="sizePolicy">
-              <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
-               <horstretch>0</horstretch>
-               <verstretch>0</verstretch>
-              </sizepolicy>
-             </property>
-             <property name="text">
-              <string>Press here to post a public @mention</string>
-             </property>
-            </widget>
-           </item>
-          </layout>
-         </item>
-        </layout>
+        <widget class="QLineEdit" name="twitterUserTweetLineEdit">
+         <property name="sizePolicy">
+          <sizepolicy hsizetype="MinimumExpanding" vsizetype="Fixed">
+           <horstretch>0</horstretch>
+           <verstretch>0</verstretch>
+          </sizepolicy>
+         </property>
+         <property name="minimumSize">
+          <size>
+           <width>250</width>
+           <height>0</height>
+          </size>
+         </property>
+         <property name="placeholderText">
+          <string>e.g. @tomahawkplayer</string>
+         </property>
+        </widget>
        </item>
-      </layout>
-     </item>
-     <item>
-      <widget class="QLabel" name="twitterDirectTweetLabel">
-       <property name="text">
-        <string>Use this button to send a private, direct message to the user you enter:</string>
-       </property>
-      </widget>
-     </item>
-     <item>
-      <layout class="QHBoxLayout" name="twitterDirectTweetHLayout">
        <item>
-        <layout class="QVBoxLayout" name="verticalLayout_4">
-         <item>
-          <layout class="QHBoxLayout" name="horizontalLayout_3">
-           <item>
-            <widget class="QLineEdit" name="twitterDirectTweetLineEdit">
-             <property name="sizePolicy">
-              <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
-               <horstretch>0</horstretch>
-               <verstretch>0</verstretch>
-              </sizepolicy>
-             </property>
-             <property name="minimumSize">
-              <size>
-               <width>250</width>
-               <height>0</height>
-              </size>
-             </property>
-             <property name="placeholderText">
-              <string>e.g. tomahawkplayer</string>
-             </property>
-            </widget>
-           </item>
-           <item>
-            <widget class="QPushButton" name="twitterDirectTweetButton">
-             <property name="sizePolicy">
-              <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
-               <horstretch>0</horstretch>
-               <verstretch>0</verstretch>
-              </sizepolicy>
-             </property>
-             <property name="text">
-              <string>Press here to post a private message</string>
-             </property>
-            </widget>
-           </item>
-          </layout>
-         </item>
-        </layout>
+        <widget class="QPushButton" name="twitterTweetGotTomahawkButton">
+         <property name="sizePolicy">
+          <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+           <horstretch>0</horstretch>
+           <verstretch>0</verstretch>
+          </sizepolicy>
+         </property>
+         <property name="text">
+          <string>Tweet!</string>
+         </property>
+        </widget>
        </item>
       </layout>
      </item>

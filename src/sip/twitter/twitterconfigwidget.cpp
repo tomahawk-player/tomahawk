@@ -30,22 +30,24 @@
 
 #include <QMessageBox>
 
-TwitterConfigWidget::TwitterConfigWidget(SipPlugin* plugin, QWidget *parent) :
-    QWidget(parent),
-    ui(new Ui::TwitterConfigWidget),
-    m_plugin(plugin)
+TwitterConfigWidget::TwitterConfigWidget( SipPlugin* plugin, QWidget *parent ) :
+    QWidget( parent ),
+    ui( new Ui::TwitterConfigWidget ),
+    m_plugin( plugin )
 {
-    ui->setupUi(this);
+    ui->setupUi( this );
 
-    connect(ui->twitterAuthenticateButton, SIGNAL(pressed()),
-            this,   SLOT(authDeauthTwitter()));
-    connect(ui->twitterTweetGotTomahawkButton, SIGNAL(pressed()),
-            this,   SLOT(startPostGlobalGotTomahawkStatus()));
-    connect(ui->twitterUserTweetButton, SIGNAL(pressed()),
-            this,   SLOT(startPostUserGotTomahawkStatus()));
-    connect(ui->twitterDirectTweetButton, SIGNAL(pressed()),
-            this,   SLOT(startPostDirectGotTomahawkStatus()));
+    connect( ui->twitterAuthenticateButton, SIGNAL( pressed() ),
+            this, SLOT( authDeauthTwitter() ) );
+    connect( ui->twitterTweetGotTomahawkButton, SIGNAL( pressed() ),
+            this, SLOT( startPostGotTomahawkStatus() ) );
+    connect( ui->twitterTweetComboBox, SIGNAL( currentIndexChanged( int ) ),
+            this, SLOT( tweetComboBoxIndexChanged( int ) ) );
 
+    ui->twitterTweetComboBox->setCurrentIndex( 0 );
+    ui->twitterUserTweetLineEdit->setReadOnly( true );
+    ui->twitterUserTweetLineEdit->setEnabled( false );
+    
     TomahawkSettings* s = TomahawkSettings::instance();
     if ( s->twitterOAuthToken().isEmpty() || s->twitterOAuthTokenSecret().isEmpty() || s->twitterScreenName().isEmpty() )
     {
@@ -53,29 +55,21 @@ TwitterConfigWidget::TwitterConfigWidget(SipPlugin* plugin, QWidget *parent) :
         ui->twitterAuthenticateButton->setText( "Authenticate" );
         ui->twitterInstructionsInfoLabel->setVisible( false );
         ui->twitterGlobalTweetLabel->setVisible( false );
-        ui->twitterUserTweetLabel->setVisible( false );
-        ui->twitterDirectTweetLabel->setVisible( false );
         ui->twitterTweetGotTomahawkButton->setVisible( false );
-        ui->twitterUserTweetButton->setVisible( false );
         ui->twitterUserTweetLineEdit->setVisible( false );
-        ui->twitterDirectTweetButton->setVisible( false );
-        ui->twitterDirectTweetLineEdit->setVisible( false );
-
+        ui->twitterTweetComboBox->setVisible( false );
+        
         emit twitterAuthed( false );
     }
     else
     {
-        ui->twitterStatusLabel->setText("Status: Credentials saved");
+        ui->twitterStatusLabel->setText("Status: Credentials saved for " + s->twitterScreenName() );
         ui->twitterAuthenticateButton->setText( "De-authenticate" );
         ui->twitterInstructionsInfoLabel->setVisible( true );
         ui->twitterGlobalTweetLabel->setVisible( true );
-        ui->twitterUserTweetLabel->setVisible( true );
-        ui->twitterDirectTweetLabel->setVisible( true );
         ui->twitterTweetGotTomahawkButton->setVisible( true );
-        ui->twitterUserTweetButton->setVisible( true );
         ui->twitterUserTweetLineEdit->setVisible( true );
-        ui->twitterDirectTweetButton->setVisible( true );
-        ui->twitterDirectTweetLineEdit->setVisible( true );
+        ui->twitterTweetComboBox->setVisible( true );
 
         emit twitterAuthed( true );
     }
@@ -130,17 +124,13 @@ TwitterConfigWidget::authenticateVerifyReply( const QTweetUser &user )
     s->setTwitterCachedFriendsSinceId( 0 );
     s->setTwitterCachedMentionsSinceId( 0 );
     
-    ui->twitterStatusLabel->setText("Status: Credentials saved");
+    ui->twitterStatusLabel->setText("Status: Credentials saved for " + s->twitterScreenName() );
     ui->twitterAuthenticateButton->setText( "De-authenticate" );
     ui->twitterInstructionsInfoLabel->setVisible( true );
     ui->twitterGlobalTweetLabel->setVisible( true );
-    ui->twitterUserTweetLabel->setVisible( true );
-    ui->twitterDirectTweetLabel->setVisible( true );
     ui->twitterTweetGotTomahawkButton->setVisible( true );
-    ui->twitterUserTweetButton->setVisible( true );
     ui->twitterUserTweetLineEdit->setVisible( true );
-    ui->twitterDirectTweetButton->setVisible( true );
-    ui->twitterDirectTweetLineEdit->setVisible( true );
+    ui->twitterTweetComboBox->setVisible( true );
 
     m_plugin->connectPlugin( false );
     
@@ -170,51 +160,44 @@ TwitterConfigWidget::deauthenticateTwitter()
     ui->twitterAuthenticateButton->setText( "Authenticate" );
     ui->twitterInstructionsInfoLabel->setVisible( false );
     ui->twitterGlobalTweetLabel->setVisible( false );
-    ui->twitterUserTweetLabel->setVisible( false );
-    ui->twitterDirectTweetLabel->setVisible( false );
     ui->twitterTweetGotTomahawkButton->setVisible( false );
-    ui->twitterUserTweetButton->setVisible( false );
     ui->twitterUserTweetLineEdit->setVisible( false );
-    ui->twitterDirectTweetButton->setVisible( false );
-    ui->twitterDirectTweetLineEdit->setVisible( false );
+    ui->twitterTweetComboBox->setVisible( false );
     
     emit twitterAuthed( false );
 }
 
 void
-TwitterConfigWidget::startPostGlobalGotTomahawkStatus()
+TwitterConfigWidget::tweetComboBoxIndexChanged( int index )
 {
-    m_postGTtype = "global";
-    startPostGotTomahawkStatus();
-}
-
-void
-TwitterConfigWidget::startPostUserGotTomahawkStatus()
-{
-    if ( ui->twitterUserTweetLineEdit->text().isEmpty() || ui->twitterUserTweetLineEdit->text() == "@" )
+    if( ui->twitterTweetComboBox->currentText() == "Global Tweet" )
     {
-        QMessageBox::critical( 0, QString("Tweetin' Error"), QString("You cannot leave the user name empty when sending a mention.") );
-        return;
+        ui->twitterUserTweetLineEdit->setReadOnly( true );
+        ui->twitterUserTweetLineEdit->setEnabled( false );
     }
-    m_postGTtype = "user";
-    startPostGotTomahawkStatus();
-}
-
-void
-TwitterConfigWidget::startPostDirectGotTomahawkStatus()
-{
-    if ( ui->twitterDirectTweetLineEdit->text().isEmpty() || ui->twitterDirectTweetLineEdit->text() == "@" )
+    else
     {
-        QMessageBox::critical( 0, QString("Tweetin' Error"), QString("You cannot leave the user name empty when sending a direct message.") );
-        return;
+        ui->twitterUserTweetLineEdit->setReadOnly( false );
+        ui->twitterUserTweetLineEdit->setEnabled( true );
     }
-    m_postGTtype = "direct";
-    startPostGotTomahawkStatus();
+    
+    if( ui->twitterTweetComboBox->currentText() == "Direct Message" )
+        ui->twitterTweetGotTomahawkButton->setText( "Send Message!" );
+    else
+        ui->twitterTweetGotTomahawkButton->setText( "Tweet!" );
 }
 
 void
 TwitterConfigWidget::startPostGotTomahawkStatus()
 {
+    m_postGTtype = ui->twitterTweetComboBox->currentText();
+    
+    if ( m_postGTtype != "Global Tweet" && ( ui->twitterUserTweetLineEdit->text().isEmpty() || ui->twitterUserTweetLineEdit->text() == "@" ) )
+    {
+        QMessageBox::critical( 0, QString("Tweetin' Error"), QString("You must enter a user name for this type of tweet.") );
+        return;
+    }
+    
     qDebug() << "Posting Got Tomahawk status";
     TomahawkSettings* s = TomahawkSettings::instance();
     if ( s->twitterOAuthToken().isEmpty() || s->twitterOAuthTokenSecret().isEmpty() || s->twitterScreenName().isEmpty() )
@@ -247,14 +230,14 @@ TwitterConfigWidget::postGotTomahawkStatusAuthVerifyReply( const QTweetUser &use
     twitAuth->setNetworkAccessManager( TomahawkUtils::nam() );
     twitAuth->setOAuthToken( s->twitterOAuthToken().toLatin1() );
     twitAuth->setOAuthTokenSecret( s->twitterOAuthTokenSecret().toLatin1() );
-    if ( m_postGTtype != "direct" )
+    if ( m_postGTtype != "Direct Message" )
     {
         QTweetStatusUpdate *statUpdate = new QTweetStatusUpdate( twitAuth, this );
         connect( statUpdate, SIGNAL( postedStatus(const QTweetStatus &) ), SLOT( postGotTomahawkStatusUpdateReply(const QTweetStatus &) ) );
         connect( statUpdate, SIGNAL( error(QTweetNetBase::ErrorCode, const QString&) ), SLOT( postGotTomahawkStatusUpdateError(QTweetNetBase::ErrorCode, const QString &) ) );
         QString uuid = QUuid::createUuid();
         QString message = QString( "Got Tomahawk? {" ) + Database::instance()->dbid() + QString( "} (" ) + uuid.mid( 1, 8 ) + QString( ")" ) + QString( " http://gettomahawk.com" );
-        if ( m_postGTtype == "user" )
+        if ( m_postGTtype == "@Mention" )
         {
             QString user = ui->twitterUserTweetLineEdit->text();
             if ( user.startsWith( "@" ) )
@@ -270,7 +253,7 @@ TwitterConfigWidget::postGotTomahawkStatusAuthVerifyReply( const QTweetUser &use
         connect( statUpdate, SIGNAL( error(QTweetNetBase::ErrorCode, const QString&) ), SLOT( postGotTomahawkStatusUpdateError(QTweetNetBase::ErrorCode, const QString &) ) );
         QString uuid = QUuid::createUuid();
         QString message = QString( "Got Tomahawk? {" ) + Database::instance()->dbid() + QString( "} (" ) + uuid.mid( 1, 8 ) + QString( ")" ) + QString( " http://gettomahawk.com" );
-        QString user = ui->twitterDirectTweetLineEdit->text();
+        QString user = ui->twitterUserTweetLineEdit->text();
         if ( user.startsWith( "@" ) )
             user.remove( 0, 1 );
         statUpdate->post( user, message );
