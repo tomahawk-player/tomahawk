@@ -166,7 +166,7 @@ private:
     QSharedPointer<gloox::VCardManager> m_vcardManager;
     QString m_server;
     QScopedPointer<QSocketNotifier> m_notifier;
-    QHash<gloox::JID, QWeakPointer<QMessageBox> > m_subscriptionConfirmBoxes;
+    QHash<gloox::JID, QMessageBox*> m_subscriptionConfirmBoxes;
 };
 
 #endif // JABBER_H
