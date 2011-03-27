@@ -1,6 +1,16 @@
 Version 0.0.2:
-        * Don't let long playlist or summary names force a large Tomahawk window.
-	* Fixed Jabber auth: Freshly added contacts never showed up.
+    * Don't attempt to connect to unavailable Twitter peers over and over.
+    * Find Twitter peers if the peer's Got Tomahawk? tweet is not their latest
+      tweet.
+    * Got Tomahawk? tweets can now be sent directly to specific users or in
+      private direct messages.
+    * Display a helpful message when someone sends a normal instant message to
+      the Tomahawk XMPP presence.
+    * Incompatible change: Twitter SIP protocol has changed slightly. 0.0.1
+      clients will not be able to talk to newer clients.
+    * Hopefully fix crashes during Twitter authentication.
+    * Don't let long playlist or summary names force a large Tomahawk window.
+    * Fixed Jabber auth: Freshly added contacts never showed up.
 
 Version 0.0.1:
-	* First public release.
+    * First public release.
