@@ -13,7 +13,7 @@ INCLUDE(CheckSymbolExists)
 INCLUDE(FindLibraryWithDebug)
 
 if(NOT CLUCENE_MIN_VERSION)
-  set(CLUCENE_MIN_VERSION "0.9.19")
+  set(CLUCENE_MIN_VERSION "0.9.23")
 endif(NOT CLUCENE_MIN_VERSION)
 
 IF(EXISTS ${PROJECT_CMAKE}/CLuceneConfig.cmake)
