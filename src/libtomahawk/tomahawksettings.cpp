@@ -378,6 +378,12 @@ TomahawkSettings::setExternalHostname(const QString& externalHostname)
 }
 
 int
+TomahawkSettings::defaultPort() const
+{
+    return 50210;
+}    
+
+int
 TomahawkSettings::externalPort() const
 {
     return value( "network/external-port", 50210 ).toInt();

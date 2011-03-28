@@ -16,10 +16,10 @@
          <item>
             <title>Version 0.0.2 (Tomahawk Player - It Lives!)</title>
 						<sparkle:releaseNotesLink>
-						https://github.com/tomahawk-player/tomahawk/raw/stable/ChangeLog
+						https://github.com/tomahawk-player/tomahawk/raw/0.0.2/ChangeLog
 						</sparkle:releaseNotesLink>
             <pubDate>Mon, 28 Mar 2011 06:13:01 +0100</pubDate>
-            <enclosure url="http://download.tomahawk-player.org/sparkle/updates/tomahawk-0.0.2.tar.bz2" sparkle:version="0.0.2" length="19835237" type="application/octet-stream" sparkle:dsaSignature="MCwCFGb6yhKUO3+lH3eNaURvwtctLVMUAhQM8mp8yEwcU3ZoaJMTqb387dYccA==" />
+            <enclosure url="http://download.tomahawk-player.org/sparkle/updates/tomahawk-0.0.2.tar.bz2" sparkle:version="0.0.2" length="19831287" type="application/octet-stream" sparkle:dsaSignature="MC0CFC0Hwq9x9BWMF/8sA+c5KfzKoBzFAhUAk9r0IJlxQf9qEJk4IL6bbTWTiuI=" />
          </item>
    </channel>
 </rss>

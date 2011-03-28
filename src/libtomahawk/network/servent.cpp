@@ -92,17 +92,30 @@ bool
 Servent::startListening( QHostAddress ha, bool upnp, int port )
 {
     m_port = port;
-    // try listening on one port higher as well, to aid debugging
-    // and let you run 2 instances easily
-    if( !listen( ha, m_port ) && !listen( ha, ++m_port ) )
+    int defPort = TomahawkSettings::instance()->defaultPort();
+    // Listen on both the selected port and, if not the same, the default port -- the latter sometimes necessary for zeroconf
+    // TODO: only listen on both when zeroconf sip is enabled
+    // TODO: use a real zeroconf system instead of a simple UDP broadcast?
+    if( !listen( ha, m_port ) )
     {
-        qDebug() << "Failed to listen on port" << m_port;
-        qDebug() << "Error string is " << errorString();
-        return false;
+        bool defPortAlso = false;
+        if( m_port != defPort )
+            defPortAlso = listen( ha, defPort );
+        if( !defPortAlso )
+        {
+            qDebug() << "Failed to listen on both port " << m_port << " and port " << defPort;
+            qDebug() << "Error string is " << errorString();
+            return false;
+        }
+        else
+            qDebug() << "Servent listening on port " << defPort << " servent thread:" << thread();
     }
     else
     {
-        qDebug() << "Servent listening on port" << m_port << " servent thread:" << thread();
+        bool defPortAlso = listen( ha, defPort );
+        qDebug() << "Servent listening on port " << m_port << " servent thread:" << thread();
+        if( defPortAlso )
+            qDebug() << "Servent also listening on port " << defPort << " servent thread:" << thread();
     }
 
     // --lanhack means to advertise your LAN IP over jabber as if it were externallyVisible

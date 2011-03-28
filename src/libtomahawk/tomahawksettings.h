@@ -95,6 +95,7 @@ public:
     QString externalHostname() const;
     void setExternalHostname( const QString& externalHostname );
 
+    int defaultPort() const;
     int externalPort() const;
     void setExternalPort( int externalPort );
 
