@@ -1,1 +1,1 @@
-TO DO
+See http://github.com/tomahawk-player/tomahawk/blob/stable/ChangeLog

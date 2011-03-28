@@ -152,11 +152,12 @@ TomahawkWindow::TomahawkWindow( QWidget* parent )
     connect(checkForUpdates, SIGNAL( triggered( bool ) ), SLOT( checkForUpdates() ) );
 #elif defined( WIN32 )
     QUrl updaterUrl;
-    #ifdef DEBUG_BUILD
+
+    if ( qApp->arguments().contains( "--debug" ) )
         updaterUrl.setUrl( "http://download.tomahawk-player.org/sparklewin-debug" );
-    #else
+    else
         updaterUrl.setUrl( "http://download.tomahawk-player.org/sparklewin" );
-    #endif
+
     qtsparkle::Updater* updater = new qtsparkle::Updater( updaterUrl, this );
     updater->SetNetworkAccessManager( TomahawkUtils::nam() );
     updater->SetVersion( VERSION );
