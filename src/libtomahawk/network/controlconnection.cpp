@@ -18,7 +18,7 @@
 
 #include "controlconnection.h"
 
-#include "filetransferconnection.h"
+#include "streamconnection.h"
 #include "database/database.h"
 #include "database/databasecommand_collectionstats.h"
 #include "dbsyncconnection.h"

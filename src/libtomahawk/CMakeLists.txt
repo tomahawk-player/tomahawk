@@ -123,7 +123,7 @@ set( libSources
 
     network/bufferiodevice.cpp
     network/msgprocessor.cpp
-    network/filetransferconnection.cpp
+    network/streamconnection.cpp
     network/dbsyncconnection.cpp
     network/remotecollection.cpp
     network/portfwdthread.cpp
@@ -218,7 +218,7 @@ set( libHeaders
     network/bufferiodevice.h
     network/msgprocessor.h
     network/remotecollection.h
-    network/filetransferconnection.h
+    network/streamconnection.h
     network/dbsyncconnection.h
     network/servent.h
     network/connection.h

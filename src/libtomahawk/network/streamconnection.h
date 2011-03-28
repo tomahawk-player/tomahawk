@@ -16,8 +16,8 @@
  *   along with Tomahawk. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef FILETRANSFERCONNECTION_H
-#define FILETRANSFERCONNECTION_H
+#ifndef STREAMCONNECTION_H
+#define STREAMCONNECTION_H
 
 #include <QObject>
 #include <QSharedPointer>
@@ -31,7 +31,7 @@
 class ControlConnection;
 class BufferIODevice;
 
-class DLLEXPORT FileTransferConnection : public Connection
+class DLLEXPORT StreamConnection : public Connection
 {
 Q_OBJECT
 
@@ -43,11 +43,11 @@ public:
     };
 
     // RX:
-    explicit FileTransferConnection( Servent* s, ControlConnection* cc, QString fid, const Tomahawk::result_ptr& result );
+    explicit StreamConnection( Servent* s, ControlConnection* cc, QString fid, const Tomahawk::result_ptr& result );
     // TX:
-    explicit FileTransferConnection( Servent* s, ControlConnection* cc, QString fid );
+    explicit StreamConnection( Servent* s, ControlConnection* cc, QString fid );
 
-    virtual ~FileTransferConnection();
+    virtual ~StreamConnection();
 
     QString id() const;
     void setup();
@@ -93,4 +93,4 @@ private:
     qint64 m_transferRate;
 };
 
-#endif // FILETRANSFERCONNECTION_H
+#endif // STREAMCONNECTION_H

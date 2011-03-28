@@ -16,7 +16,7 @@
  *   along with Tomahawk. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include "filetransferconnection.h"
+#include "streamconnection.h"
 
 #include <QFile>
 
@@ -31,7 +31,7 @@
 using namespace Tomahawk;
 
 
-FileTransferConnection::FileTransferConnection( Servent* s, ControlConnection* cc, QString fid, const Tomahawk::result_ptr& result )
+StreamConnection::StreamConnection( Servent* s, ControlConnection* cc, QString fid, const Tomahawk::result_ptr& result )
     : Connection( s )
     , m_cc( cc )
     , m_fid( fid )
@@ -49,7 +49,7 @@ FileTransferConnection::FileTransferConnection( Servent* s, ControlConnection* c
     m_iodev = QSharedPointer<QIODevice>( bio ); // device audio data gets written to
     m_iodev->open( QIODevice::ReadWrite );
 
-    Servent::instance()->registerFileTransferConnection( this );
+    Servent::instance()->registerStreamConnection( this );
 
     // if the audioengine closes the iodev (skip/stop/etc) then kill the connection
     // immediately to avoid unnecessary network transfer
@@ -65,7 +65,7 @@ FileTransferConnection::FileTransferConnection( Servent* s, ControlConnection* c
 }
 
 
-FileTransferConnection::FileTransferConnection( Servent* s, ControlConnection* cc, QString fid )
+StreamConnection::StreamConnection( Servent* s, ControlConnection* cc, QString fid )
     : Connection( s )
     , m_cc( cc )
     , m_fid( fid )
@@ -75,13 +75,13 @@ FileTransferConnection::FileTransferConnection( Servent* s, ControlConnection* c
     , m_allok( false )
     , m_transferRate( 0 )
 {
-    Servent::instance()->registerFileTransferConnection( this );
+    Servent::instance()->registerStreamConnection( this );
     // auto delete when connection closes:
     connect( this, SIGNAL( finished() ), SLOT( deleteLater() ), Qt::QueuedConnection );
 }
 
 
-FileTransferConnection::~FileTransferConnection()
+StreamConnection::~StreamConnection()
 {
     qDebug() << Q_FUNC_INFO << "TX/RX:" << bytesSent() << bytesReceived();
     if( m_type == RECEIVING && !m_allok )
@@ -95,12 +95,12 @@ FileTransferConnection::~FileTransferConnection()
         ((BufferIODevice*)m_iodev.data())->inputComplete();
     }
 
-    Servent::instance()->onFileTransferFinished( this );
+    Servent::instance()->onStreamFinished( this );
 }
 
 
 QString
-FileTransferConnection::id() const
+StreamConnection::id() const
 {
     return QString( "FTC[%1 %2]" )
               .arg( m_type == SENDING ? "TX" : "RX" )
@@ -109,13 +109,13 @@ FileTransferConnection::id() const
 
 
 Tomahawk::source_ptr 
-FileTransferConnection::source() const
+StreamConnection::source() const
 {
 	return m_source;
 }
 
 void
-FileTransferConnection::showStats( qint64 tx, qint64 rx )
+StreamConnection::showStats( qint64 tx, qint64 rx )
 {
     if( tx > 0 || rx > 0 )
     {
@@ -130,7 +130,7 @@ FileTransferConnection::showStats( qint64 tx, qint64 rx )
 
 
 void
-FileTransferConnection::setup()
+StreamConnection::setup()
 {
     QList<source_ptr> sources = SourceList::instance()->sources();
     foreach( const source_ptr& src, sources )
@@ -163,7 +163,7 @@ FileTransferConnection::setup()
 
 
 void
-FileTransferConnection::startSending( const Tomahawk::result_ptr& result )
+StreamConnection::startSending( const Tomahawk::result_ptr& result )
 {
     if ( result.isNull() )
     {
@@ -191,7 +191,7 @@ FileTransferConnection::startSending( const Tomahawk::result_ptr& result )
 
 
 void
-FileTransferConnection::handleMsg( msg_ptr msg )
+StreamConnection::handleMsg( msg_ptr msg )
 {
     Q_ASSERT( msg->is( Msg::RAW ) );
 
@@ -237,7 +237,7 @@ FileTransferConnection::handleMsg( msg_ptr msg )
 
 
 Connection*
-FileTransferConnection::clone()
+StreamConnection::clone()
 {
     Q_ASSERT( false );
     return 0;
@@ -245,9 +245,9 @@ FileTransferConnection::clone()
 
 
 void
-FileTransferConnection::sendSome()
+StreamConnection::sendSome()
 {
-    Q_ASSERT( m_type == FileTransferConnection::SENDING );
+    Q_ASSERT( m_type == StreamConnection::SENDING );
 
     QByteArray ba = "data";
     ba.append( m_readdev->read( BufferIODevice::blockSize() ) );
@@ -271,7 +271,7 @@ FileTransferConnection::sendSome()
 
 
 void
-FileTransferConnection::onBlockRequest( int block )
+StreamConnection::onBlockRequest( int block )
 {
     qDebug() << Q_FUNC_INFO << block;
 

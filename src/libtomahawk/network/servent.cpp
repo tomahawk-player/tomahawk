@@ -33,7 +33,7 @@
 #include "connection.h"
 #include "controlconnection.h"
 #include "database/database.h"
-#include "filetransferconnection.h"
+#include "streamconnection.h"
 #include "sourcelist.h"
 
 #include "portfwdthread.h"
@@ -581,8 +581,8 @@ Servent::claimOffer( ControlConnection* cc, const QString &key, const QHostAddre
         }
 
         QString fid = key.right( key.length() - 17 );
-        FileTransferConnection* ftc = new FileTransferConnection( this, cc, fid );
-        return ftc;
+        StreamConnection* sc = new StreamConnection( this, cc, fid );
+        return sc;
     }
 
     if( key == "whitelist" ) // LAN IP address, check source IP
@@ -606,7 +606,7 @@ Servent::claimOffer( ControlConnection* cc, const QString &key, const QHostAddre
         QPointer<Connection> conn = m_offers.value( key );
         if( conn.isNull() )
         {
-            // This can happen if it's a filetransferconnection, but the audioengine has
+            // This can happen if it's a streamconnection, but the audioengine has
             // already closed the iodevice, causing the connection to be deleted before
             // the peer connects and provides the first byte
             qDebug() << Q_FUNC_INFO << "invalid/expired offer:" << key;
@@ -652,37 +652,37 @@ Servent::remoteIODeviceFactory( const result_ptr& result )
         return sp;
 
     ControlConnection* cc = s->controlConnection();
-    FileTransferConnection* ftc = new FileTransferConnection( this, cc, fileId, result );
-    createParallelConnection( cc, ftc, QString( "FILE_REQUEST_KEY:%1" ).arg( fileId ) );
-    return ftc->iodevice();
+    StreamConnection* sc = new StreamConnection( this, cc, fileId, result );
+    createParallelConnection( cc, sc, QString( "FILE_REQUEST_KEY:%1" ).arg( fileId ) );
+    return sc->iodevice();
 }
 
 
 void
-Servent::registerFileTransferConnection( FileTransferConnection* ftc )
+Servent::registerStreamConnection( StreamConnection* sc )
 {
-    Q_ASSERT( !m_ftsessions.contains( ftc ) );
-    qDebug() << "Registering FileTransfer" << m_ftsessions.length() + 1;
+    Q_ASSERT( !m_scsessions.contains( sc ) );
+    qDebug() << "Registering Stream" << m_scsessions.length() + 1;
 
     QMutexLocker lock( &m_ftsession_mut );
-    m_ftsessions.append( ftc );
+    m_scsessions.append( sc );
 
     printCurrentTransfers();
-    emit fileTransferStarted( ftc );
+    emit streamStarted( sc );
 }
 
 
 void
-Servent::onFileTransferFinished( FileTransferConnection* ftc )
+Servent::onStreamFinished( StreamConnection* sc )
 {
-    Q_ASSERT( ftc );
-    qDebug() << "FileTransfer Finished, unregistering" << ftc->id();
+    Q_ASSERT( sc );
+    qDebug() << "Stream Finished, unregistering" << sc->id();
 
     QMutexLocker lock( &m_ftsession_mut );
-    m_ftsessions.removeAll( ftc );
+    m_scsessions.removeAll( sc );
 
     printCurrentTransfers();
-    emit fileTransferFinished( ftc );
+    emit streamFinished( sc );
 }
 
 
@@ -691,8 +691,8 @@ void
 Servent::printCurrentTransfers()
 {
     int k = 1;
-    qDebug() << "~~~ Active file transfer connections:" << m_ftsessions.length();
-    foreach( FileTransferConnection* i, m_ftsessions )
+    qDebug() << "~~~ Active file transfer connections:" << m_scsessions.length();
+    foreach( StreamConnection* i, m_scsessions )
     {
         qDebug() << k << ") " << i->id();
     }

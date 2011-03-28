@@ -33,8 +33,6 @@
 
 #include "dllmacro.h"
 
-class FileTransferSession;
-
 class DLLEXPORT ControlConnection : public Connection
 {
 Q_OBJECT

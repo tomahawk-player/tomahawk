@@ -46,7 +46,7 @@
 class Connection;
 class Connector;
 class ControlConnection;
-class FileTransferConnection;
+class StreamConnection;
 class ProxyConnection;
 class RemoteCollectionConnection;
 class PortFwdThread;
@@ -116,7 +116,7 @@ public:
     bool connectedToSession( const QString& session );
     unsigned int numConnectedPeers() const { return m_controlconnections.length(); }
 
-    QList< FileTransferConnection* > fileTransfers() const { return m_ftsessions; }
+    QList< StreamConnection* > streams() const { return m_scsessions; }
 
     QSharedPointer<QIODevice> getIODeviceForUrl( const Tomahawk::result_ptr& result );
     void registerIODeviceFactory( const QString &proto, boost::function<QSharedPointer<QIODevice>(Tomahawk::result_ptr)> fac );
@@ -124,8 +124,8 @@ public:
     QSharedPointer<QIODevice> httpIODeviceFactory( const Tomahawk::result_ptr& result );
 
 signals:
-    void fileTransferStarted( FileTransferConnection* );
-    void fileTransferFinished( FileTransferConnection* );
+    void streamStarted( StreamConnection* );
+    void streamFinished( StreamConnection* );
     void ready();
 
 protected:
@@ -137,8 +137,8 @@ public slots:
     void socketError( QAbstractSocket::SocketError );
     void createParallelConnection( Connection* orig_conn, Connection* new_conn, const QString& key );
 
-    void registerFileTransferConnection( FileTransferConnection* );
-    void onFileTransferFinished( FileTransferConnection* ftc );
+    void registerStreamConnection( StreamConnection* );
+    void onStreamFinished( StreamConnection* sc );
 
     void socketConnected();
     void triggerDBSync();
@@ -161,7 +161,7 @@ private:
     QString m_externalHostname;
 
     // currently active file transfers:
-    QList< FileTransferConnection* > m_ftsessions;
+    QList< StreamConnection* > m_scsessions;
     QMutex m_ftsession_mut;
 
     QMap< QString,boost::function<QSharedPointer<QIODevice>(Tomahawk::result_ptr)> > m_iofactories;

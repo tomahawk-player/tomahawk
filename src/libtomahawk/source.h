@@ -31,7 +31,6 @@
 
 class DatabaseCommand_LogPlayback;
 class ControlConnection;
-class FileTransferConnection;
 
 namespace Tomahawk
 {
@@ -117,7 +116,6 @@ private:
     QString m_textStatus;
 
     ControlConnection* m_cc;
-    FileTransferConnection* m_ftc;
 };
 
 };

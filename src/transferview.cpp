@@ -24,7 +24,7 @@
 #include "tomahawk/tomahawkapp.h"
 #include "artist.h"
 #include "source.h"
-#include "network/filetransferconnection.h"
+#include "network/streamconnection.h"
 #include "network/servent.h"
 
 
@@ -39,8 +39,8 @@ TransferView::TransferView( AnimatedSplitter* parent )
     layout()->setMargin( 0 );
     layout()->addWidget( m_tree );
 
-    connect( Servent::instance(), SIGNAL( fileTransferStarted( FileTransferConnection* ) ), SLOT( fileTransferRegistered( FileTransferConnection* ) ) );
-    connect( Servent::instance(), SIGNAL( fileTransferFinished( FileTransferConnection* ) ), SLOT( fileTransferFinished( FileTransferConnection* ) ) );
+    connect( Servent::instance(), SIGNAL( streamStarted( StreamConnection* ) ), SLOT( streamRegistered( StreamConnection* ) ) );
+    connect( Servent::instance(), SIGNAL( streamFinished( StreamConnection* ) ), SLOT( streamFinished( StreamConnection* ) ) );
 
     QStringList headers;
     headers << tr( "Peer" ) << tr( "Rate" ) << tr( "Track" );
@@ -61,20 +61,20 @@ TransferView::TransferView( AnimatedSplitter* parent )
 
 
 void
-TransferView::fileTransferRegistered( FileTransferConnection* ftc )
+TransferView::streamRegistered( StreamConnection* sc )
 {
     qDebug() << Q_FUNC_INFO;
-    connect( ftc, SIGNAL( updated() ), SLOT( onTransferUpdate() ) );
+    connect( sc, SIGNAL( updated() ), SLOT( onTransferUpdate() ) );
 }
 
 
 void
-TransferView::fileTransferFinished( FileTransferConnection* ftc )
+TransferView::streamFinished( StreamConnection* sc )
 {
-    if ( !m_index.contains( ftc ) )
+    if ( !m_index.contains( sc ) )
         return;
 
-    QPersistentModelIndex i = m_index.take( ftc );
+    QPersistentModelIndex i = m_index.take( sc );
     delete m_tree->invisibleRootItem()->takeChild( i.row() );
 
     if ( m_tree->invisibleRootItem()->childCount() > 0 )
@@ -82,9 +82,9 @@ TransferView::fileTransferFinished( FileTransferConnection* ftc )
     else
         emit hideWidget();
 
-/*    if ( m_index.contains( ftc ) )
+/*    if ( m_index.contains( sc ) )
     {
-        int i = m_index.value( ftc );
+        int i = m_index.value( sc );
         m_tree->invisibleRootItem()->child( i )->setText( 1, tr( "Finished" ) );
     }*/
 }
@@ -93,32 +93,32 @@ TransferView::fileTransferFinished( FileTransferConnection* ftc )
 void
 TransferView::onTransferUpdate()
 {
-    FileTransferConnection* ftc = (FileTransferConnection*)sender();
-//    qDebug() << Q_FUNC_INFO << ftc->track().isNull() << ftc->source().isNull();
+    StreamConnection* sc = (StreamConnection*)sender();
+//    qDebug() << Q_FUNC_INFO << sc->track().isNull() << sc->source().isNull();
 
-    if ( ftc->track().isNull() || ftc->source().isNull() )
+    if ( sc->track().isNull() || sc->source().isNull() )
         return;
 
     QTreeWidgetItem* ti = 0;
 
-    if ( m_index.contains( ftc ) )
+    if ( m_index.contains( sc ) )
     {
-        QPersistentModelIndex i = m_index.value( ftc );
+        QPersistentModelIndex i = m_index.value( sc );
         ti = m_tree->invisibleRootItem()->child( i.row() );
     }
     else
     {
         ti = new QTreeWidgetItem( m_tree );
-        m_index.insert( ftc, QPersistentModelIndex( m_tree->model()->index( m_tree->invisibleRootItem()->childCount() - 1, 0 ) ) );
+        m_index.insert( sc, QPersistentModelIndex( m_tree->model()->index( m_tree->invisibleRootItem()->childCount() - 1, 0 ) ) );
         emit showWidget();
     }
 
     if ( !ti )
         return;
 
-    ti->setText( 0, ftc->source()->friendlyName() );
-    ti->setText( 1, QString( "%1 kb/s" ).arg( ftc->transferRate() / 1024 ) );
-    ti->setText( 2, QString( "%1 - %2" ).arg( ftc->track()->artist()->name() ).arg( ftc->track()->track() ) );
+    ti->setText( 0, sc->source()->friendlyName() );
+    ti->setText( 1, QString( "%1 kb/s" ).arg( sc->transferRate() / 1024 ) );
+    ti->setText( 2, QString( "%1 - %2" ).arg( sc->track()->artist()->name() ).arg( sc->track()->track() ) );
 
     if ( isHidden() )
         emit showWidget();

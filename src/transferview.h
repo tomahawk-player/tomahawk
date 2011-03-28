@@ -25,7 +25,7 @@
 #include "typedefs.h"
 #include "utils/animatedsplitter.h"
 
-class FileTransferConnection;
+class StreamConnection;
 
 class TransferView : public AnimatedWidget
 {
@@ -43,13 +43,13 @@ public:
 signals:
 
 private slots:
-    void fileTransferRegistered( FileTransferConnection* ftc );
-    void fileTransferFinished( FileTransferConnection* ftc );
+    void streamRegistered( StreamConnection* sc );
+    void streamFinished( StreamConnection* sc );
 
     void onTransferUpdate();
 
 private:
-    QHash< FileTransferConnection*, QPersistentModelIndex > m_index;
+    QHash< StreamConnection*, QPersistentModelIndex > m_index;
     QTreeWidget* m_tree;
     AnimatedSplitter* m_parent;
 };
