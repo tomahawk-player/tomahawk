@@ -44,6 +44,7 @@ public:
 public slots:
     virtual bool connectPlugin( bool startup = false ) = 0;
     virtual void disconnectPlugin() = 0;
+    virtual void checkSettings() = 0;
 
     virtual void addContact( const QString &jid, const QString& msg = QString() ) = 0;
     virtual void sendMsg( const QString& to, const QString& msg ) = 0;
