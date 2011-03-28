@@ -638,9 +638,9 @@ Jabber_p::handleSubscriptionRequest( const JID& jid, const std::string& /*msg*/ 
     // preparing the confirm box for the user
     QMessageBox *confirmBox = new QMessageBox(
                                 QMessageBox::Question,
-                                tr("Friend Request in Jabber"),
-                                QString(tr("Do you want to be friends with <b>%1</b>?")).arg(QLatin1String(jid.bare().c_str())),
-                                QMessageBox::Ok | QMessageBox::Cancel,
+                                tr( "Authorize User" ),
+                                QString( tr( "Do you want to grant <b>%1</b> access to your Collection?" ) ).arg( QLatin1String( jid.bare().c_str() ) ),
+                                QMessageBox::Yes | QMessageBox::No,
                                 0
                               );
 
@@ -653,14 +653,16 @@ Jabber_p::handleSubscriptionRequest( const JID& jid, const std::string& /*msg*/ 
     return false;
 }
 
+
 void
-Jabber_p::onSubscriptionRequestConfirmed(int result)
+Jabber_p::onSubscriptionRequestConfirmed( int result )
 {
     qDebug() << Q_FUNC_INFO << result;
 
     QList< QMessageBox* > confirmBoxes = m_subscriptionConfirmBoxes.values();
     JID jid;
-    foreach(QMessageBox* currentBox, confirmBoxes)
+
+    foreach( QMessageBox* currentBox, confirmBoxes )
     {
         if( currentBox == sender() )
         {
@@ -674,26 +676,23 @@ Jabber_p::onSubscriptionRequestConfirmed(int result)
     m_subscriptionConfirmBoxes.remove( jid );
     sender()->deleteLater();
 
-    QMessageBox::StandardButton allowSubscription =  static_cast<QMessageBox::StandardButton>( result );
+    QMessageBox::StandardButton allowSubscription = static_cast<QMessageBox::StandardButton>( result );
 
-    if(allowSubscription == QMessageBox::Ok)
+    if ( allowSubscription == QMessageBox::Yes )
     {
         qDebug() << Q_FUNC_INFO << jid.bare().c_str() << "accepted by user, adding to roster";
         StringList groups;
         groups.push_back( "Tomahawk" );
         m_client->rosterManager()->subscribe( jid, "", groups, "" );
-
-        // ack the request
-        m_client->rosterManager()->ackSubscriptionRequest( jid, true );
     }
     else
     {
         qDebug() << Q_FUNC_INFO << jid.bare().c_str() << "declined by user";
-
-        // decl the request
-        m_client->rosterManager()->ackSubscriptionRequest( jid, false );
     }
+
+    m_client->rosterManager()->ackSubscriptionRequest( jid, allowSubscription == QMessageBox::Yes );
 }
+
 
 bool
 Jabber_p::handleUnsubscriptionRequest( const JID& jid, const std::string& /*msg*/ )

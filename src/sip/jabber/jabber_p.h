@@ -154,7 +154,7 @@ public slots:
 
 private slots:
     void doJabberRecv();
-    void onSubscriptionRequestConfirmed(int result);
+    void onSubscriptionRequestConfirmed( int result );
 
 private:
     bool presenceMeansOnline( gloox::Presence::PresenceType p );
