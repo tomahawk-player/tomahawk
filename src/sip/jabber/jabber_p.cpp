@@ -30,9 +30,6 @@
 #include <QMessageBox>
 #include <qjson/parser.h>
 
-using namespace gloox;
-using namespace std;
-
 #define TOMAHAWK_CAP_NODE_NAME QString::fromAscii("http://tomahawk-player.org/")
 
 Jabber_p::Jabber_p( const QString& jid, const QString& password, const QString& server, const int port )
@@ -42,17 +39,17 @@ Jabber_p::Jabber_p( const QString& jid, const QString& password, const QString& 
     qDebug() << Q_FUNC_INFO;
     qsrand( QTime( 0, 0, 0 ).secsTo( QTime::currentTime() ) );
 
-    m_presences[Presence::Available] = "available";
-    m_presences[Presence::Chat] = "chat";
-    m_presences[Presence::Away] = "away";
-    m_presences[Presence::DND] = "dnd";
-    m_presences[Presence::XA] = "xa";
-    m_presences[Presence::Unavailable] = "unavailable";
-    m_presences[Presence::Probe] = "probe";
-    m_presences[Presence::Error] = "error";
-    m_presences[Presence::Invalid] = "invalid";
+    m_presences[gloox::Presence::Available] = "available";
+    m_presences[gloox::Presence::Chat] = "chat";
+    m_presences[gloox::Presence::Away] = "away";
+    m_presences[gloox::Presence::DND] = "dnd";
+    m_presences[gloox::Presence::XA] = "xa";
+    m_presences[gloox::Presence::Unavailable] = "unavailable";
+    m_presences[gloox::Presence::Probe] = "probe";
+    m_presences[gloox::Presence::Error] = "error";
+    m_presences[gloox::Presence::Invalid] = "invalid";
 
-    m_jid = JID( jid.toStdString() );
+    m_jid = gloox::JID( jid.toStdString() );
 
     if( m_jid.resource().find( "tomahawk" ) == std::string::npos )
     {
@@ -63,10 +60,10 @@ Jabber_p::Jabber_p( const QString& jid, const QString& password, const QString& 
     qDebug() << "Our JID set to:" << m_jid.full().c_str();
 
     m_client = QSharedPointer<gloox::Client>( new gloox::Client( m_jid, password.toStdString(), port ) );
-    const Capabilities *caps = m_client->presence().capabilities();
+    const gloox::Capabilities *caps = m_client->presence().capabilities();
     if( caps )
     {
-        const_cast<Capabilities*>(caps)->setNode(TOMAHAWK_CAP_NODE_NAME.toStdString());
+        const_cast<gloox::Capabilities*>(caps)->setNode(TOMAHAWK_CAP_NODE_NAME.toStdString());
     }
     m_server = server;
 }
@@ -152,7 +149,7 @@ Jabber_p::go()
     m_client->registerPresenceHandler( this );
     m_client->registerConnectionListener( this );
     m_client->rosterManager()->registerRosterListener( this, false ); // false means async
-    m_client->logInstance().registerLogHandler( LogLevelWarning, LogAreaAll, this );
+    m_client->logInstance().registerLogHandler( gloox::LogLevelWarning, gloox::LogAreaAll, this );
     m_client->registerMessageHandler( this );
 
     /*
@@ -162,7 +159,7 @@ Jabber_p::go()
     m_client->disco()->addFeature( "tomahawk:player" );
     */
     
-    m_client->setPresence( Presence::XA, -127, "Tomahawk available" );
+    m_client->setPresence( gloox::Presence::XA, -127, "Tomahawk available" );
 
     // m_client->connect();
     // return;
@@ -172,7 +169,7 @@ Jabber_p::go()
     qDebug() << "Connecting to the XMPP server...";
     if( m_client->connect( false ) )
     {
-        int sock = static_cast<ConnectionTCPClient*>( m_client->connectionImpl() )->socket();
+        int sock = static_cast<gloox::ConnectionTCPClient*>( m_client->connectionImpl() )->socket();
         m_notifier.reset( new QSocketNotifier( sock, QSocketNotifier::Read ) );
         connect( m_notifier.data(), SIGNAL( activated(int) ), SLOT( doJabberRecv() ));
     }
@@ -187,8 +184,8 @@ Jabber_p::doJabberRecv()
     if ( m_client.isNull() )
         return;
 
-    ConnectionError ce = m_client->recv( 100 );
-    if ( ce != ConnNoError )
+    gloox::ConnectionError ce = m_client->recv( 100 );
+    if ( ce != gloox::ConnNoError )
     {
         qDebug() << "Jabber_p::Recv failed, disconnected";
     }
@@ -225,7 +222,7 @@ Jabber_p::sendMsg( const QString& to, const QString& msg )
         return;
 
     qDebug() << Q_FUNC_INFO << to << msg;
-    Message m( Message::Chat, JID(to.toStdString()), msg.toStdString(), "" );
+    gloox::Message m( gloox::Message::Chat, gloox::JID(to.toStdString()), msg.toStdString(), "" );
 
     m_client->send( m ); // assuming this is threadsafe
 }
@@ -249,7 +246,7 @@ Jabber_p::broadcastMsg( const QString &msg )
     std::string msg_s = msg.toStdString();
     foreach( const QString& jidstr, m_peers.keys() )
     {
-        Message m(Message::Chat, JID(jidstr.toStdString()), msg_s, "");
+        gloox::Message m(gloox::Message::Chat, gloox::JID(jidstr.toStdString()), msg_s, "");
         m_client->send( m );
     }
 }
@@ -268,7 +265,7 @@ Jabber_p::addContact( const QString& jid, const QString& msg )
         return;
     }
 
-    handleSubscription(JID(jid.toStdString()), msg.toStdString());
+    handleSubscription(gloox::JID(jid.toStdString()), msg.toStdString());
     return;
 }
 
@@ -293,7 +290,7 @@ Jabber_p::onConnect()
 
 
 void
-Jabber_p::onDisconnect( ConnectionError e )
+Jabber_p::onDisconnect( gloox::ConnectionError e )
 {
     qDebug() << "Jabber Disconnected";
     QString error;
@@ -301,16 +298,16 @@ Jabber_p::onDisconnect( ConnectionError e )
 
     switch( e )
     {
-    case AuthErrorUndefined:
+    case gloox::AuthErrorUndefined:
         error = " No error occurred, or error condition is unknown";
         break;
 
-    case SaslAborted:
+    case gloox::SaslAborted:
         error = "The receiving entity acknowledges an &lt;abort/&gt; element sent "
                 "by the initiating entity; sent in reply to the &lt;abort/&gt; element.";
         break;
 
-    case SaslIncorrectEncoding:
+    case gloox::SaslIncorrectEncoding:
         error = "The data provided by the initiating entity could not be processed "
                 "because the [BASE64] encoding is incorrect (e.g., because the encoding "
                 "does not adhere to the definition in Section 3 of [BASE64]); sent in "
@@ -318,7 +315,7 @@ Jabber_p::onDisconnect( ConnectionError e )
                 "initial response data.";
         break;
 
-    case SaslInvalidAuthzid:
+    case gloox::SaslInvalidAuthzid:
         error = "The authzid provided by the initiating entity is invalid, either "
                 "because it is incorrectly formatted or because the initiating entity "
                 "does not have permissions to authorize that ID; sent in reply to a "
@@ -326,56 +323,56 @@ Jabber_p::onDisconnect( ConnectionError e )
                 "response data.";
         break;
 
-    case SaslInvalidMechanism:
+    case gloox::SaslInvalidMechanism:
         error = "The initiating entity did not provide a mechanism or requested a "
                 "mechanism that is not supported by the receiving entity; sent in reply "
                 "to an &lt;auth/&gt; element.";
         break;
 
-    case SaslMalformedRequest:
+    case gloox::SaslMalformedRequest:
         error = "The request is malformed (e.g., the &lt;auth/&gt; element includes "
                 "an initial response but the mechanism does not allow that); sent in "
                 "reply to an &lt;abort/&gt;, &lt;auth/&gt;, &lt;challenge/&gt;, or "
                 "&lt;response/&gt; element.";
         break;
 
-    case SaslMechanismTooWeak:
+    case gloox::SaslMechanismTooWeak:
         error = "The mechanism requested by the initiating entity is weaker than "
                 "server policy permits for that initiating entity; sent in reply to a "
                 "&lt;response/&gt; element or an &lt;auth/&gt; element with initial "
                 "response data.";
         break;
 
-    case SaslNotAuthorized:
+    case gloox::SaslNotAuthorized:
         error = "The authentication failed because the initiating entity did not "
                 "provide valid credentials (this includes but is not limited to the "
                 "case of an unknown username); sent in reply to a &lt;response/&gt; "
                 "element or an &lt;auth/&gt; element with initial response data. ";
         break;
 
-    case SaslTemporaryAuthFailure:
+    case gloox::SaslTemporaryAuthFailure:
         error = "The authentication failed because of a temporary error condition "
                 "within the receiving entity; sent in reply to an &lt;auth/&gt; element "
                 "or &lt;response/&gt; element.";
         break;
 
-    case NonSaslConflict:
+    case gloox::NonSaslConflict:
         error = "XEP-0078: Resource Conflict";
         break;
 
-    case NonSaslNotAcceptable:
+    case gloox::NonSaslNotAcceptable:
         error = "XEP-0078: Required Information Not Provided";
         break;
 
-    case NonSaslNotAuthorized:
+    case gloox::NonSaslNotAuthorized:
         error = "XEP-0078: Incorrect Credentials";
         break;
 
-    case ConnAuthenticationFailed:
+    case gloox::ConnAuthenticationFailed:
         error = "Authentication failed";
         break;
 
-    case ConnNoSupportedAuth:
+    case gloox::ConnNoSupportedAuth:
         error = "No supported auth mechanism";
         break;
 
@@ -396,7 +393,7 @@ Jabber_p::onDisconnect( ConnectionError e )
 
 
 bool
-Jabber_p::onTLSConnect( const CertInfo& info )
+Jabber_p::onTLSConnect( const gloox::CertInfo& info )
 {
     qDebug()    << Q_FUNC_INFO
                 << "Status" << info.status
@@ -406,8 +403,8 @@ Jabber_p::onTLSConnect( const CertInfo& info )
                 << "mac"    << info.mac.c_str()
                 << "cipher" << info.cipher.c_str()
                 << "compression" << info.compression.c_str()
-                << "from"   << ctime( (const time_t*)&info.date_from )
-                << "to"     << ctime( (const time_t*)&info.date_to )
+                << "from"   << std::ctime( (const time_t*)&info.date_from )
+                << "to"     << std::ctime( (const time_t*)&info.date_to )
                 ;
 
     //onConnect();
@@ -416,7 +413,7 @@ Jabber_p::onTLSConnect( const CertInfo& info )
 
 
 void
-Jabber_p::handleMessage( const Message& m, MessageSession * /*session*/ )
+Jabber_p::handleMessage( const gloox::Message& m, gloox::MessageSession * /*session*/ )
 {
     QString from = QString::fromStdString( m.from().full() );
     QString msg = QString::fromStdString( m.body() );
@@ -446,7 +443,7 @@ Jabber_p::handleMessage( const Message& m, MessageSession * /*session*/ )
 
 
 void
-Jabber_p::handleLog( LogLevel level, LogArea area, const std::string& message )
+Jabber_p::handleLog( gloox::LogLevel level, gloox::LogArea area, const std::string& message )
 {
     qDebug() << Q_FUNC_INFO
              << "level:" << level
@@ -458,49 +455,49 @@ Jabber_p::handleLog( LogLevel level, LogArea area, const std::string& message )
 /// ROSTER STUFF
 // {{{
 void
-Jabber_p::onResourceBindError( ResourceBindError error )
+Jabber_p::onResourceBindError( gloox::ResourceBindError error )
 {
     qDebug() << Q_FUNC_INFO;
 }
 
 
 void
-Jabber_p::onSessionCreateError( SessionCreateError error )
+Jabber_p::onSessionCreateError( gloox::SessionCreateError error )
 {
     qDebug() << Q_FUNC_INFO;
 }
 
 
 void
-Jabber_p::handleItemSubscribed( const JID& jid )
+Jabber_p::handleItemSubscribed( const gloox::JID& jid )
 {
     qDebug() << Q_FUNC_INFO << jid.full().c_str();
 }
 
 
 void
-Jabber_p::handleItemAdded( const JID& jid )
+Jabber_p::handleItemAdded( const gloox::JID& jid )
 {
     qDebug() << Q_FUNC_INFO << jid.full().c_str();
 }
 
 
 void
-Jabber_p::handleItemUnsubscribed( const JID& jid )
+Jabber_p::handleItemUnsubscribed( const gloox::JID& jid )
 {
     qDebug() << Q_FUNC_INFO << jid.full().c_str();
 }
 
 
 void
-Jabber_p::handleItemRemoved( const JID& jid )
+Jabber_p::handleItemRemoved( const gloox::JID& jid )
 {
     qDebug() << Q_FUNC_INFO << jid.full().c_str();
 }
 
 
 void
-Jabber_p::handleItemUpdated( const JID& jid )
+Jabber_p::handleItemUpdated( const gloox::JID& jid )
 {
     qDebug() << Q_FUNC_INFO << jid.full().c_str();
 }
@@ -508,14 +505,14 @@ Jabber_p::handleItemUpdated( const JID& jid )
 
 
 void
-Jabber_p::handleRoster( const Roster& roster )
+Jabber_p::handleRoster( const gloox::Roster& roster )
 {
 //    qDebug() << Q_FUNC_INFO;
 
-    Roster::const_iterator it = roster.begin();
+gloox::Roster::const_iterator it = roster.begin();
     for ( ; it != roster.end(); ++it )
     {
-        if ( (*it).second->subscription() != S10nBoth ) continue;
+        if ( (*it).second->subscription() != gloox::S10nBoth ) continue;
         qDebug() << (*it).second->jid().c_str() << (*it).second->name().c_str();
         //printf("JID: %s\n", (*it).second->jid().c_str());
     }
@@ -527,7 +524,7 @@ Jabber_p::handleRoster( const Roster& roster )
 
 
 void
-Jabber_p::handleRosterError( const IQ& /*iq*/ )
+Jabber_p::handleRosterError( const gloox::IQ& /*iq*/ )
 {
     qDebug() << Q_FUNC_INFO;
 }
@@ -536,7 +533,7 @@ Jabber_p::handleRosterError( const IQ& /*iq*/ )
 void
 Jabber_p::handlePresence( const gloox::Presence& presence )
 {
-    JID jid = presence.from();
+    gloox::JID jid = presence.from();
     QString fulljid( jid.full().c_str() );
 
     qDebug() << "* handleRosterPresence" << fulljid << presence.subtype();
@@ -596,11 +593,11 @@ Jabber_p::handlePresence( const gloox::Presence& presence )
 
 
 bool
-Jabber_p::handleSubscription( const JID& jid, const std::string& /*msg*/ )
+Jabber_p::handleSubscription( const gloox::JID& jid, const std::string& /*msg*/ )
 {
     qDebug() << Q_FUNC_INFO << jid.bare().c_str();
 
-    StringList groups;
+    gloox::StringList groups;
     groups.push_back( "Tomahawk" );
     m_client->rosterManager()->subscribe( jid, "", groups, "" );
     return true;
@@ -608,12 +605,12 @@ Jabber_p::handleSubscription( const JID& jid, const std::string& /*msg*/ )
 
 
 bool
-Jabber_p::handleSubscriptionRequest( const JID& jid, const std::string& /*msg*/ )
+Jabber_p::handleSubscriptionRequest( const gloox::JID& jid, const std::string& /*msg*/ )
 {
     qDebug() << Q_FUNC_INFO << jid.bare().c_str();
 
     // check if the requester is already on the roster
-    RosterItem *item = m_client->rosterManager()->getRosterItem(jid);
+    gloox::RosterItem *item = m_client->rosterManager()->getRosterItem(jid);
     if(item) qDebug() << Q_FUNC_INFO << jid.bare().c_str() << "subscription status:" << static_cast<int>( item->subscription() );
     if(item &&
         (
@@ -660,7 +657,7 @@ Jabber_p::onSubscriptionRequestConfirmed( int result )
     qDebug() << Q_FUNC_INFO << result;
 
     QList< QMessageBox* > confirmBoxes = m_subscriptionConfirmBoxes.values();
-    JID jid;
+    gloox::JID jid;
 
     foreach( QMessageBox* currentBox, confirmBoxes )
     {
@@ -681,7 +678,7 @@ Jabber_p::onSubscriptionRequestConfirmed( int result )
     if ( allowSubscription == QMessageBox::Yes )
     {
         qDebug() << Q_FUNC_INFO << jid.bare().c_str() << "accepted by user, adding to roster";
-        StringList groups;
+        gloox::StringList groups;
         groups.push_back( "Tomahawk" );
         m_client->rosterManager()->subscribe( jid, "", groups, "" );
     }
@@ -695,7 +692,7 @@ Jabber_p::onSubscriptionRequestConfirmed( int result )
 
 
 bool
-Jabber_p::handleUnsubscriptionRequest( const JID& jid, const std::string& /*msg*/ )
+Jabber_p::handleUnsubscriptionRequest( const gloox::JID& jid, const std::string& /*msg*/ )
 {
     qDebug() << Q_FUNC_INFO << jid.bare().c_str();
     return true;
@@ -703,7 +700,7 @@ Jabber_p::handleUnsubscriptionRequest( const JID& jid, const std::string& /*msg*
 
 
 void
-Jabber_p::handleNonrosterPresence( const Presence& presence )
+Jabber_p::handleNonrosterPresence( const gloox::Presence& presence )
 {
     qDebug() << Q_FUNC_INFO << presence.from().full().c_str();
 }
@@ -711,14 +708,14 @@ Jabber_p::handleNonrosterPresence( const Presence& presence )
 
 
 void
-Jabber_p::handleVCard( const JID& jid, const VCard* vcard )
+Jabber_p::handleVCard( const gloox::JID& jid, const gloox::VCard* vcard )
 {
     qDebug() << "VCARD RECEIVED!" << jid.bare().c_str();
 }
 
 
 void
-Jabber_p::handleVCardResult( VCardContext context, const JID& jid, StanzaError se )
+Jabber_p::handleVCardResult( gloox::VCardHandler::VCardContext context, const gloox::JID& jid, gloox::StanzaError se )
 {
     qDebug() << "VCARD RESULT RECEIVED!" << jid.bare().c_str();
 }
@@ -726,14 +723,14 @@ Jabber_p::handleVCardResult( VCardContext context, const JID& jid, StanzaError s
 
 /// DISCO STUFF
 void
-Jabber_p::handleDiscoInfo( const JID& from, const Disco::Info& info, int context)
+Jabber_p::handleDiscoInfo( const gloox::JID& from, const gloox::Disco::Info& info, int context )
 {
     QString jidstr( from.full().c_str() );
     //qDebug() << "DISCOinfo" << jidstr;
     if ( info.hasFeature("tomahawk:player") )
     {
         qDebug() << "Peer online and DISCOed ok:" << jidstr;
-        m_peers.insert( jidstr, Presence::XA );
+        m_peers.insert( jidstr, gloox::Presence::XA );
         emit peerOnline( jidstr );
     }
     else
@@ -744,14 +741,14 @@ Jabber_p::handleDiscoInfo( const JID& from, const Disco::Info& info, int context
 
 
 void
-Jabber_p::handleDiscoItems( const JID& /*iq*/, const Disco::Items&, int /*context*/ )
+Jabber_p::handleDiscoItems( const gloox::JID& /*iq*/, const gloox::Disco::Items&, int /*context*/ )
 {
     qDebug() << Q_FUNC_INFO;
 }
 
 
 void
-Jabber_p::handleDiscoError( const JID& j, const Error* e, int /*context*/ )
+Jabber_p::handleDiscoError( const gloox::JID& j, const gloox::Error* e, int /*context*/ )
 {
     qDebug() << Q_FUNC_INFO << j.full().c_str() << e->text().c_str() << e->type();
 }
@@ -759,13 +756,13 @@ Jabber_p::handleDiscoError( const JID& j, const Error* e, int /*context*/ )
 
 
 bool
-Jabber_p::presenceMeansOnline( Presence::PresenceType p )
+Jabber_p::presenceMeansOnline( gloox::Presence::PresenceType p )
 {
     switch(p)
     {
-        case Presence::Invalid:
-        case Presence::Unavailable:
-        case Presence::Error:
+        case gloox::Presence::Invalid:
+        case gloox::Presence::Unavailable:
+        case gloox::Presence::Error:
             return false;
             break;
         default:
