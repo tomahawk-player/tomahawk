@@ -8,10 +8,18 @@
          <item>
             <title>Version 0.0.1 (Tomahawk Player Beta - It Lives?)</title>
 						<sparkle:releaseNotesLink>
-						https://github.com/tomahawk-player/tomahawk/raw/stable/ChangeLog
+						https://github.com/tomahawk-player/tomahawk/raw/0.0.1/ChangeLog
 						</sparkle:releaseNotesLink>
             <pubDate>Fri, 25 Mar 2011 00:00:01 +0100</pubDate>
-            <enclosure url="http://download.tomahawk-player.org/sparkle/updates/tomahawk-beta-0.0.1.tar.bz2" sparkle:version="0.0.1" length="10627176" type="application/octet-stream" sparkle:dsaSignature="MC0CFAyYNZq58X7hPC7Qn+DtotVgym7pAhUA5hkLGllYxjOwwCf7i2LxUsvGyps=" />
+            <enclosure url="http://download.tomahawk-player.org/sparkle-debug/updates/tomahawk-0.0.1.tar.bz2" sparkle:version="0.0.1" length="10627176" type="application/octet-stream" sparkle:dsaSignature="MC0CFAyYNZq58X7hPC7Qn+DtotVgym7pAhUA5hkLGllYxjOwwCf7i2LxUsvGyps=" />
+         </item>
+         <item>
+            <title>Version 0.0.2 (Tomahawk Player Beta - It Lives?)</title>
+						<sparkle:releaseNotesLink>
+						https://github.com/tomahawk-player/tomahawk/raw/stable/ChangeLog
+						</sparkle:releaseNotesLink>
+            <pubDate>Mon, 28 Mar 2011 06:13:01 +0100</pubDate>
+            <enclosure url="http://download.tomahawk-player.org/sparkle/updates/tomahawk-0.0.2.tar.bz2" sparkle:version="0.0.2" length="19835237" type="application/octet-stream" sparkle:dsaSignature="MCwCFGb6yhKUO3+lH3eNaURvwtctLVMUAhQM8mp8yEwcU3ZoaJMTqb387dYccA==" />
          </item>
    </channel>
 </rss>
