@@ -19,8 +19,6 @@
 #ifndef SERVENT_H
 #define SERVENT_H
 
-// port for servent to listen on
-#define DEFAULT_LISTEN_PORT 50210
 // time before new connection terminates if no auth received
 #define AUTH_TIMEOUT 180000
 
@@ -91,7 +89,7 @@ public:
     explicit Servent( QObject* parent = 0 );
     virtual ~Servent();
 
-    bool startListening( QHostAddress ha, bool upnp = false, int port = DEFAULT_LISTEN_PORT );
+    bool startListening( QHostAddress ha, bool upnp, int port );
 
     int port() const { return m_port; }
 
