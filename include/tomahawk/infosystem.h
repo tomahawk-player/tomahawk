@@ -101,9 +101,10 @@ class InfoPlugin : public QObject
 public:
     InfoPlugin(QObject *parent)
         :QObject(parent)
-        {
-            qDebug() << Q_FUNC_INFO;
-        }
+    {
+        qDebug() << Q_FUNC_INFO;
+    }
+
     ~InfoPlugin()
     {
         qDebug() << Q_FUNC_INFO;
