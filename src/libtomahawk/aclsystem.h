@@ -30,9 +30,10 @@ class DLLEXPORT ACLSystem : public QObject
 {
     Q_OBJECT
 
-    enum ACLType {
+    enum ACL {
         Allow,
-        Deny
+        Deny,
+        NotFound
     };
 
 public:
@@ -40,14 +41,17 @@ public:
     ACLSystem( QObject *parent = 0 );
     ~ACLSystem();
     
-    bool isAuthorized( const QString &dbid, const QString &path );
-    void authorize( const QString &dbid, const QString &path, ACLType type );
+    ACL isAuthorizedUser( const QString &dbid ) const;
+    void authorizeUser( const QString &dbid, ACL globalType );
+    
+    ACL isAuthorizedPath( const QString &dbid, const QString &path ) const;
+    void authorizePath( const QString &dbid, const QString &path, ACL type );
     
 private slots:
     void saveTimerFired();
 
 private:
-    QHash< QString, QHash< QString, ACLType> > m_cache;
+    QHash< QString, QHash< QString, ACL> > m_cache;
     QTimer m_saveTimer;
 };
 

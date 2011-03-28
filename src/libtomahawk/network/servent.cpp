@@ -558,7 +558,7 @@ Servent::claimOffer( ControlConnection* cc, const QString &key, const QHostAddre
 {
     bool noauth = qApp->arguments().contains( "--noauth" );
 
-    // magic key for file transfers:
+    // magic key for stream connections:
     if( key.startsWith( "FILE_REQUEST_KEY:" ) )
     {
         // check if the source IP matches an existing, authenticated connection

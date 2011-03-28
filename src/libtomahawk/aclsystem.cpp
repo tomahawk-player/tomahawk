@@ -30,39 +30,73 @@ ACLSystem::ACLSystem( QObject* parent )
     m_saveTimer.setSingleShot( false );
     m_saveTimer.setInterval( 60000 );
     connect( &m_saveTimer, SIGNAL( timeout() ), this, SLOT( saveTimerFired() ) );
+    m_saveTimer.start();
 }
 
 ACLSystem::~ACLSystem()
 {
+    m_saveTimer.stop();
     //TODO: save from cache into settings file
 }
 
+ACLSystem::ACL
+ACLSystem::isAuthorizedUser(const QString& dbid) const
+{
+    if( !m_cache.contains( dbid ) )
+        return ACLSystem::NotFound;
+    else
+    {
+        QHash< QString, ACL > peerHash = m_cache[dbid];
+        if( peerHash.contains( "global" ) )
+            return peerHash["global"];
+        return ACLSystem::NotFound;
+    }
+}
+
 void
-ACLSystem::authorize( const QString& dbid, const QString& path, ACLType type )
+ACLSystem::authorizeUser( const QString& dbid, ACLSystem::ACL globalType )
+{
+    if( globalType == ACLSystem::NotFound )
+        return;
+    
+    QHash< QString, ACL > peerHash;
+    if( m_cache.contains( dbid ) )
+        peerHash = m_cache[dbid];
+    
+    peerHash["global"] = globalType;
+}
+
+ACLSystem::ACL
+ACLSystem::isAuthorizedPath( const QString& dbid, const QString& path ) const
+{
+    if( !m_cache.contains( dbid ) )
+        return ACLSystem::NotFound;
+    
+    QHash< QString, ACL > peerHash = m_cache[dbid];
+    if( !peerHash.contains( path ) )
+    {
+        if( peerHash.contains( "global" ) )
+            return peerHash["global"];
+        else
+            return ACLSystem::Deny;
+    }
+    return peerHash[path];
+}
+
+void
+ACLSystem::authorizePath( const QString& dbid, const QString& path, ACLSystem::ACL type )
 {
     TomahawkSettings *s = TomahawkSettings::instance();
-    if ( !s->scannerPath().contains( path ) )
+    if( !s->scannerPath().contains( path ) )
     {
         qDebug() << "path selected is not in our scanner path!";
         return;
     }
-    QHash< QString, ACLType > peerHash;
-    if ( m_cache.contains( "dbid" ) )
-        peerHash = m_cache["dbid"];
+    QHash< QString, ACLSystem::ACL > peerHash;
+    if ( m_cache.contains( dbid ) )
+        peerHash = m_cache[dbid];
     peerHash[path] = type;
-}
-
-bool
-ACLSystem::isAuthorized( const QString& dbid, const QString& path )
-{
-    if ( !m_cache.contains( "dbid" ) )
-        return false;
-    
-    QHash< QString, ACLType > peerHash = m_cache["dbid"];
-    if ( !peerHash.contains( path ) )
-        return false;
-    
-    return peerHash[path] == ACLSystem::Allow;
+    m_cache[dbid] = peerHash;
 }
 
 void
