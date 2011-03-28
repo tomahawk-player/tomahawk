@@ -1,0 +1,20 @@
+#ifndef CONFIG_H_IN
+#define CONFIG_H_IN
+
+#cmakedefine ORGANIZATION_NAME "${ORGANIZATION_NAME}"
+#cmakedefine ORGANIZATION_DOMAIN "${ORGANIZATION_DOMAIN}"
+#cmakedefine APPLICATION_NAME "${APPLICATION_NAME}"
+#cmakedefine VERSION "${VERSION}"
+
+#cmakedefine DEBUG_BUILD
+
+#define CMAKE_INSTALL_PREFIX "${CMAKE_INSTALL_PREFIX}"
+
+#cmakedefine SNOW_LEOPARD
+#cmakedefine LEOPARD
+#cmakedefine HAVE_SPARKLE
+
+#cmakedefine LIBLASTFM_FOUND
+#cmakedefine GLOOX_FOUND
+
+#endif // CONFIG_H_IN

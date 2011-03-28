@@ -1,0 +1,64 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <title>Allow Tomahawk Access</title>
+    <style>
+    body {
+        margin: 0;
+        padding: 0;
+        font: normal 12px 'Verdana', sans-serif;
+    }
+    a img,
+    img {
+        border: 0;
+    }
+    a {
+        color: #598d0c;
+    }
+    a#head {
+        display: block;
+        width: 100%;
+        height: 68px;
+        background: #cbdab1;
+    }
+    div#content {
+        margin: 30px;
+        text-align: center;
+    }
+    div#content p {
+        margin: 0 0 25px 0;
+    }
+    input.button {
+        border: 1px solid #999;
+        padding: 4px 10px;
+        border-color: #999 #555 #555 #999;
+        background: #ddd;
+    }
+    input.confirm {
+        background: #81bd0e;
+        color: #fff;
+        border-color: #6ba318 #426c0b #426c0b #6ba318;
+    }
+    </style>
+</head>
+<body>
+    <a href="http://www.playdar.org/" title="Tomahawk - Powered by Playdar" id="head">
+        <img alt="Tomahawk - Powered by Playdar" src="/staticdata/tomahawk_auth_logo.png" width="196" height="45"/>
+    </a>
+    
+    <div id="content">
+        <form method="post" action="/auth_2/" id="auth">
+            <p>Allow access to Tomahawk from <a href="<%WEBSITE%>"><%NAME%></a></p>
+            <p class="buttons">
+                <input type="button" value="Deny" class="button" onclick="window.close();" />
+                <input type="submit" value="Allow" class="confirm button" />
+            </p>
+            <input type="hidden" name="formtoken" value="<%FORMTOKEN%>" />
+            <input type="hidden" name="receiverurl" value="<%URL%>" />
+            <input type="hidden" name="website" value="<%WEBSITE%>" />
+            <input type="hidden" name="name" value="<%NAME%>" />
+        </form>
+    </div>
+</body>
+</html>

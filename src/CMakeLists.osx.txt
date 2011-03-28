@@ -1,13 +1,49 @@
-SET( tomahawkSourcesGui ${tomahawkSourcesGui} audio/rtaudiooutput.cpp )
-SET( tomahawkHeadersGui ${tomahawkHeadersGui} audio/rtaudiooutput.h )
+SET( TOMAHAWK_LIBRARIES  tomahawklib )
 
-FIND_LIBRARY( COREAUDIO_LIBRARY CoreAudio )
-FIND_LIBRARY( COREFOUNDATION_LIBRARY CoreFoundation )
-MARK_AS_ADVANCED( COREAUDIO_LIBRARY COREFOUNDATION_LIBRARY )
+SET( OS_SPECIFIC_LINK_LIBRARIES
+    ${OS_SPECIFIC_LINK_LIBRARIES}
+    ${COREAUDIO_LIBRARY}
+    ${COREFOUNDATION_LIBRARY}
 
-SET( OS_SPECIFIC_LINK_LIBRARIES 
-	${OS_SPECIFIC_LINK_LIBRARIES}
-	${COREAUDIO_LIBRARY} 
-	${COREFOUNDATION_LIBRARY}
-	rtaudio 
+    /System/Library/Frameworks/AppKit.framework
+    /System/Library/Frameworks/Carbon.framework
+    /System/Library/Frameworks/DiskArbitration.framework
+    /System/Library/Frameworks/Foundation.framework
+    /System/Library/Frameworks/IOKit.framework
+
+    rtaudio
 )
+
+
+if (APPLE)
+#  find_library(GROWL Growl)
+  option(ENABLE_SPARKLE "Sparkle updating" ON)
+  find_library(SPARKLE Sparkle)
+  if (ENABLE_SPARKLE AND SPARKLE)
+    set(HAVE_SPARKLE ON)
+    set( OS_SPECIFIC_LINK_LIBRARIES ${OS_SPECIFIC_LINK_LIBRARIES} ${SPARKLE} )
+  endif(ENABLE_SPARKLE AND SPARKLE)
+  # Uses Darwin kernel version.
+  # 9.8.0  -> 10.5/Leopard
+  # 10.4.0 -> 10.6/Snow Leopard
+  string(REGEX MATCH "[0-9]+" DARWIN_VERSION ${CMAKE_HOST_SYSTEM_VERSION})
+  if (DARWIN_VERSION GREATER 9)
+    SET(SNOW_LEOPARD 1)
+  elseif (DARWIN_VERSION GREATER 8)
+    SET(LEOPARD 1)
+  endif (DARWIN_VERSION GREATER 9)
+
+# Use two different sparkle update tracks for debug and release
+# We have to change the URL in the Info.plist file :-/
+  IF( NOT CMAKE_BUILD_TYPE STREQUAL "Release" )
+    FILE(READ ${CMAKE_SOURCE_DIR}/admin/mac/Info.plist plist)
+    STRING( REPLACE "http://download.tomahawk-player.org/sparkle" # match this
+              "http://download.tomahawk-player.org/sparkle-debug"  #replace with debug url
+              edited_plist # save in this variable
+              "${plist}" # from the contents of this var
+          )
+   FILE( WRITE ${CMAKE_BINARY_DIR}/Info.plist "${edited_plist}" )
+  ELSE() # Just copy the release one
+    FILE( COPY ${CMAKE_SOURCE_DIR}/admin/mac/Info.plist DESTINATION ${CMAKE_BINARY_DIR} )
+  ENDIF()
+endif (APPLE)

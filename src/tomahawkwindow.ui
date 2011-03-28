@@ -6,28 +6,24 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>800</width>
-    <height>480</height>
+    <width>1000</width>
+    <height>660</height>
    </rect>
   </property>
   <property name="windowTitle">
    <string>Tomahawk</string>
   </property>
   <widget class="QWidget" name="centralWidget">
-   <layout class="QHBoxLayout" name="horizontalLayout">
+   <layout class="QVBoxLayout" name="verticalLayout">
     <item>
      <widget class="QSplitter" name="splitter">
       <property name="orientation">
        <enum>Qt::Horizontal</enum>
       </property>
-      <widget class="SourceTreeView" name="sourceTreeView">
-       <property name="minimumSize">
-        <size>
-         <width>250</width>
-         <height>0</height>
-        </size>
-       </property>
-      </widget>
+      <property name="handleWidth">
+       <number>1</number>
+      </property>
+      <widget class="QWidget" name="sidebarWidget" native="true"/>
       <widget class="QWidget" name="playlistWidget" native="true"/>
      </widget>
     </item>
@@ -38,7 +34,7 @@
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>800</width>
+     <width>1000</width>
      <height>20</height>
     </rect>
    </property>
@@ -50,9 +46,12 @@
    </widget>
    <widget class="QMenu" name="menuApp">
     <property name="title">
-     <string>Music &amp;Player</string>
+     <string>&amp;Music Player</string>
     </property>
     <addaction name="actionRescanCollection"/>
+    <addaction name="separator"/>
+    <addaction name="actionShowOfflineSources"/>
+    <addaction name="actionHideOfflineSources"/>
     <addaction name="separator"/>
     <addaction name="actionExit"/>
    </widget>
@@ -61,20 +60,23 @@
      <string>&amp;Playlist</string>
     </property>
     <addaction name="actionCreatePlaylist"/>
+    <addaction name="actionCreateAutomaticPlaylist"/>
+    <addaction name="actionCreate_New_Station"/>
     <addaction name="separator"/>
     <addaction name="actionLoadXSPF"/>
    </widget>
    <widget class="QMenu" name="menuNetwork">
     <property name="title">
-     <string>Network</string>
+     <string>&amp;Network</string>
     </property>
-    <addaction name="actionAddPeerManually"/>
+    <addaction name="actionToggleConnect"/>
+    <addaction name="separator"/>
    </widget>
    <widget class="QMenu" name="menu_Help">
     <property name="title">
      <string>&amp;Help</string>
     </property>
-    <addaction name="actionAbout_Tomahawk"/>
+    <addaction name="actionAboutTomahawk"/>
    </widget>
    <addaction name="menuApp"/>
    <addaction name="menuPlaylist"/>
@@ -94,14 +96,19 @@
     <enum>QAction::QuitRole</enum>
    </property>
   </action>
-  <action name="actionAddPeerManually">
+  <action name="actionToggleConnect">
    <property name="text">
-    <string>&amp;Add Peer Manually</string>
+    <string>Go &amp;online</string>
+   </property>
+  </action>
+  <action name="actionAddFriendManually">
+   <property name="text">
+    <string>Add &amp;Friend...</string>
    </property>
   </action>
   <action name="actionRescanCollection">
    <property name="text">
-    <string>Re&amp;scan Collection</string>
+    <string>Re&amp;scan Collection...</string>
    </property>
   </action>
   <action name="actionPreferences">
@@ -114,7 +121,7 @@
   </action>
   <action name="actionLoadXSPF">
    <property name="text">
-    <string>Load &amp;XSPF</string>
+    <string>Load &amp;XSPF...</string>
    </property>
   </action>
   <action name="actionCreatePlaylist">
@@ -122,20 +129,36 @@
     <string>Create &amp;New Playlist...</string>
    </property>
   </action>
-  <action name="actionAbout_Tomahawk">
+  <action name="actionAboutTomahawk">
    <property name="text">
-    <string>About &amp;Tomahawk</string>
+    <string>About &amp;Tomahawk...</string>
+   </property>
+   <property name="menuRole">
+    <enum>QAction::AboutRole</enum>
+   </property>
+  </action>
+  <action name="actionCreateAutomaticPlaylist">
+   <property name="text">
+    <string>Create New &amp;Automatic Playlist</string>
+   </property>
+  </action>
+  <action name="actionCreate_New_Station">
+   <property name="text">
+    <string>Create New &amp;Station</string>
+   </property>
+  </action>
+  <action name="actionShowOfflineSources">
+   <property name="text">
+    <string>Show Offline Sources</string>
+   </property>
+  </action>
+  <action name="actionHideOfflineSources">
+   <property name="text">
+    <string>Hide Offline Sources</string>
    </property>
   </action>
  </widget>
  <layoutdefault spacing="6" margin="11"/>
- <customwidgets>
-  <customwidget>
-   <class>SourceTreeView</class>
-   <extends>QTreeView</extends>
-   <header>sourcetreeview.h</header>
-  </customwidget>
- </customwidgets>
  <resources/>
  <connections/>
  <slots>

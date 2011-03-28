@@ -7,16 +7,21 @@ ENDIF()
 SET( QT_USE_QTSQL TRUE )
 SET( QT_USE_QTNETWORK TRUE )
 SET( QT_USE_QTXML TRUE )
-INCLUDE( ${QT_USE_FILE} )
+SET( QT_USE_QTWEBKIT TRUE )
 
+INCLUDE( ${QT_USE_FILE} )
 INCLUDE( ${CMAKE_MODULE_PATH}/AddAppIconMacro.cmake )
 
-SET( CMAKE_BUILD_TYPE "debugfull" )
+#SET( CMAKE_BUILD_TYPE "Release" )
 SET( CMAKE_VERBOSE_MAKEFILE ON )
 SET( CMAKE_RUNTIME_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}" )
 SET( CMAKE_LIBRARY_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}" )
 SET( CMAKE_ARCHIVE_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}" )
-SET( TOMAHAWK_INC_DIR "${CMAKE_CURRENT_SOURCE_DIR}/../include/" )
+SET( TOMAHAWK_INC_DIR "${CMAKE_SOURCE_DIR}/include/" )
+IF( NOT CMAKE_BUILD_TYPE STREQUAL "Release" )
+    MESSAGE( "Building in debug mode, enabling all debug updates" )
+    SET( DEBUG_BUILD ON )
+ENDIF()
 
 # build plugins
 # use glob, but hardcoded list for now:
@@ -27,245 +32,86 @@ SET( TOMAHAWK_INC_DIR "${CMAKE_CURRENT_SOURCE_DIR}/../include/" )
 #ENDFOREACH( moddir )
 
 SET( tomahawkSources ${tomahawkSources}
-     album.cpp
-     pipeline.cpp
-     playlist.cpp
-     pluginapi.cpp
-     query.cpp
-     result.cpp
-     source.cpp
-     sourcelist.cpp
+     sip/SipHandler.cpp
 
-     audio/madtranscode.cpp
-     audio/vorbistranscode.cpp
-     audio/audioengine.cpp
-
-     utils/tomahawkutils.cpp
-     jabber/jabber_p.cpp
-
+     infosystem/infosystemcache.cpp
      infosystem/infosystem.cpp
      infosystem/infoplugins/echonestplugin.cpp
+     infosystem/infoplugins/lastfmplugin.cpp
      infosystem/infoplugins/musixmatchplugin.cpp
 
-     bufferiodevice.cpp
-     msgprocessor.cpp
-     collection.cpp
-     musicscanner.cpp
-     scriptresolver.cpp
-
-     network/connection.cpp
-     network/controlconnection.cpp
-     network/filetransferconnection.cpp
-     network/dbsyncconnection.cpp
-     network/remotecollection.cpp
-     network/servent.cpp
-
-     database/fuzzyindex.cpp
-     database/database.cpp
-     database/databaseworker.cpp
-     database/databaseimpl.cpp
-     database/databaseresolver.cpp
-     database/databasecommand.cpp
-     database/databasecommandloggable.cpp
-     database/databasecommand_resolve.cpp
-     database/databasecommand_allalbums.cpp
-     database/databasecommand_alltracks.cpp
-     database/databasecommand_addfiles.cpp
-     database/databasecommand_dirmtimes.cpp
-     database/databasecommand_loadfile.cpp
-     database/databasecommand_addsource.cpp
-     database/databasecommand_sourceoffline.cpp
-     database/databasecommand_collectionstats.cpp
-     database/databasecommand_loadplaylistentries.cpp
-     database/databasecommand_modifyplaylist.cpp
-     database/databasecommand_setplaylistrevision.cpp
-     database/databasecommand_loadallplaylists.cpp
-     database/databasecommand_createplaylist.cpp
-     database/databasecommand_deleteplaylist.cpp
-     database/databasecommand_renameplaylist.cpp
-     database/databasecommand_loadops.cpp
-     database/databasecommand_updatesearchindex.cpp
-     database/databasecollection.cpp
-
-     scrobbler.cpp
-
-     xmppbot/xmppbot.cpp
      web/api_v1.cpp
 
-     tomahawksettings.cpp
+     resolvers/scriptresolver.cpp
+     resolvers/qtscriptresolver.cpp
+
+     musicscanner.cpp
+     shortcuthandler.cpp
+     scanmanager.cpp
      tomahawkapp.cpp
      main.cpp
 )
 
+IF(LIBLASTFM_FOUND)
+    SET(tomahawkSources ${tomahawkSources}
+        scrobbler.cpp
+    )
+ENDIF(LIBLASTFM_FOUND)
+
 SET( tomahawkSourcesGui ${tomahawkSourcesGui}
-     xspfloader.cpp
-
-     utils/elidedlabel.cpp
-     utils/imagebutton.cpp
-     utils/progresstreeview.cpp
-     utils/proxystyle.cpp
-     utils/widgetdragfilter.cpp
-
-     playlist/collectionmodel.cpp
-     playlist/collectionproxymodel.cpp
-     playlist/collectionflatmodel.cpp
-     playlist/collectionview.cpp
-     playlist/playlistmanager.cpp
-     playlist/plitem.cpp
-     playlist/playlistmodel.cpp
-     playlist/playlistproxymodel.cpp
-     playlist/playlistview.cpp
-     playlist/playlistitemdelegate.cpp
-     playlist/trackmodel.cpp
-     playlist/trackproxymodel.cpp
-     playlist/trackview.cpp
-     playlist/albumitem.cpp
-     playlist/albummodel.cpp
-     playlist/albumproxymodel.cpp
-     playlist/albumview.cpp
-
      sourcetree/sourcesmodel.cpp
+     sourcetree/sourcesproxymodel.cpp
      sourcetree/sourcetreeitem.cpp
      sourcetree/sourcetreeitemwidget.cpp
      sourcetree/sourcetreeview.cpp
 
-     topbar/topbar.cpp
-     topbar/clearbutton.cpp  
-     topbar/searchlineedit.cpp  
-     topbar/lineedit.cpp
-     topbar/searchbutton.cpp
-
-     infowidgets/sourceinfowidget.cpp
-
-     tomahawkwindow.cpp
+     transferview.cpp
+     tomahawktrayicon.cpp
      audiocontrols.cpp
      settingsdialog.cpp
+     tomahawkwindow.cpp
 )
 
 SET( tomahawkHeaders ${tomahawkHeaders}
      "${TOMAHAWK_INC_DIR}/tomahawk/tomahawkapp.h"
-
-     "${TOMAHAWK_INC_DIR}/tomahawk/collection.h"
-     "${TOMAHAWK_INC_DIR}/tomahawk/pipeline.h"
-     "${TOMAHAWK_INC_DIR}/tomahawk/pluginapi.h"
-     "${TOMAHAWK_INC_DIR}/tomahawk/query.h"
-     "${TOMAHAWK_INC_DIR}/tomahawk/resolver.h"
-     "${TOMAHAWK_INC_DIR}/tomahawk/result.h"
-     "${TOMAHAWK_INC_DIR}/tomahawk/source.h"
-     "${TOMAHAWK_INC_DIR}/tomahawk/sourcelist.h"
-
-     "${TOMAHAWK_INC_DIR}/tomahawk/artist.h"
-     "${TOMAHAWK_INC_DIR}/tomahawk/album.h"
-     "${TOMAHAWK_INC_DIR}/tomahawk/track.h"
-     "${TOMAHAWK_INC_DIR}/tomahawk/playlist.h"
-
      "${TOMAHAWK_INC_DIR}/tomahawk/infosystem.h"
 
-     "${TOMAHAWK_INC_DIR}/tomahawk/functimeout.h"
-#     "${TOMAHAWK_INC_DIR}/tomahawk/tomahawkplugin.h"
+     sip/SipHandler.h
 
-     audio/transcodeinterface.h
-     audio/madtranscode.h
-     audio/vorbistranscode.h
-     audio/audioengine.h
-
-     database/fuzzyindex.h
-     database/database.h
-     database/databaseworker.h
-     database/databaseimpl.h
-     database/databaseresolver.h
-     database/databasecommand.h
-     database/databasecommandloggable.h
-     database/databasecommand_resolve.h
-     database/databasecommand_allalbums.h
-     database/databasecommand_alltracks.h
-     database/databasecommand_addfiles.h
-     database/databasecommand_dirmtimes.h
-     database/databasecommand_loadfile.h
-     database/databasecommand_addsource.h
-     database/databasecommand_sourceoffline.h
-     database/databasecommand_collectionstats.h
-     database/databasecommand_loadplaylistentries.h
-     database/databasecommand_modifyplaylist.h
-     database/databasecommand_setplaylistrevision.h
-     database/databasecommand_loadallplaylists.h
-     database/databasecommand_createplaylist.h
-     database/databasecommand_deleteplaylist.h
-     database/databasecommand_renameplaylist.h
-     database/databasecommand_loadops.h
-     database/databasecommand_updatesearchindex.h
-     database/databasecollection.h
-
-     jabber/jabber.h
-     jabber/jabber_p.h
-
+     infosystem/infosystemcache.h
      infosystem/infoplugins/echonestplugin.h
+     infosystem/infoplugins/lastfmplugin.h
      infosystem/infoplugins/musixmatchplugin.h
 
-     bufferiodevice.h
-     msgprocessor.h
-     musicscanner.h
-     scriptresolver.h
-     tomahawksettings.h
-     tomahawkzeroconf.h 
-
-     network/remotecollection.h
-     network/servent.h
-     network/connection.h
-     network/controlconnection.h
-     network/filetransferconnection.h
-     network/dbsyncconnection.h
-
-     scrobbler.h
-
-     xmppbot/xmppbot.h
      web/api_v1.h
+
+     resolvers/scriptresolver.h
+     resolvers/qtscriptresolver.h
+
+     musicscanner.h
+     scanmanager.h
+     shortcuthandler.h
 )
 
+IF(LIBLASTFM_FOUND)
+    SET(tomahawkHeaders ${tomahawkHeaders}
+        scrobbler.h
+    )
+ENDIF(LIBLASTFM_FOUND)
+
+
 SET( tomahawkHeadersGui ${tomahawkHeadersGui}
-     xspfloader.h
-
-     utils/elidedlabel.h
-     utils/animatedcounterlabel.h
-     utils/imagebutton.h
-     utils/progresstreeview.h
-     utils/widgetdragfilter.h
-
-     playlist/collectionmodel.h
-     playlist/collectionproxymodel.h
-     playlist/collectionflatmodel.h
-     playlist/collectionview.h
-     playlist/playlistmanager.h
-     playlist/plitem.h
-     playlist/playlistmodel.h
-     playlist/playlistproxymodel.h
-     playlist/playlistview.h
-     playlist/playlistitemdelegate.h
-     playlist/trackmodel.h
-     playlist/trackproxymodel.h
-     playlist/trackview.h
-     playlist/albumitem.h
-     playlist/albummodel.h
-     playlist/albumproxymodel.h
-     playlist/albumview.h
-
      sourcetree/sourcesmodel.h
+     sourcetree/sourcesproxymodel.h
      sourcetree/sourcetreeitem.h
      sourcetree/sourcetreeitemwidget.h
      sourcetree/sourcetreeview.h
 
-     topbar/topbar.h
-     topbar/clearbutton.h 
-     topbar/searchlineedit.h 
-     topbar/lineedit.h
-     topbar/lineedit_p.h
-     topbar/searchbutton.h
-
-     infowidgets/sourceinfowidget.h
-
-     tomahawkwindow.h
+     transferview.h
+     tomahawktrayicon.h
      audiocontrols.h
      settingsdialog.h
+     tomahawkwindow.h
 )
 
 SET( tomahawkUI ${tomahawkUI}
@@ -275,14 +121,13 @@ SET( tomahawkUI ${tomahawkUI}
 
      audiocontrols.ui
      sourcetree/sourcetreeitemwidget.ui
-     topbar/topbar.ui
-     infowidgets/sourceinfowidget.ui
 )
 
 INCLUDE_DIRECTORIES(
     . 
     ${TOMAHAWK_INC_DIR}
     ${CMAKE_CURRENT_BINARY_DIR}
+    ${CMAKE_BINARY_DIR}/thirdparty/liblastfm2/src
 
     audio
     database
@@ -291,17 +136,21 @@ INCLUDE_DIRECTORIES(
     sourcetree
     topbar
     utils
+    libtomahawk
+    libtomahawk/utils
+    infosystem
+    mac
 
-    ../rtaudio
-    ../alsa-playback
-    ../libportfwd/include
-    ../qxt/qxtweb-standalone/qxtweb
+    ${THIRDPARTY_DIR}/alsa-playback
+    ${THIRDPARTY_DIR}/rtaudio
+    ${THIRDPARTY_DIR}/qxt/qxtweb-standalone/qxtweb
+    ${THIRDPARTY_DIR}/qtweetlib/qtweetlib/src
+    ${THIRDPARTY_DIR}/qtweetlib/tomahawk-custom
 
-    /usr/include/taglib
-    /usr/local/include/taglib
-    /usr/include/echonest
-    /usr/local/include/echonest
-    /usr/local/include
+    ${TAGLIB_INCLUDES}
+    ${QJSON_INCLUDE_DIR}
+    ${LIBECHONEST_INCLUDE_DIR}
+    ${LIBECHONEST_INCLUDE_DIR}/..
 )
 
 SET( OS_SPECIFIC_LINK_LIBRARIES "" )
@@ -312,24 +161,38 @@ ENDIF( WIN32 )
 IF( UNIX )
   INCLUDE( "CMakeLists.unix.txt" )
 ENDIF( UNIX )
-IF( APPLE )
-  INCLUDE( "CMakeLists.osx.txt" )
-ENDIF( APPLE )
-IF( UNIX AND NOT APPLE )
-  INCLUDE( "CMakeLists.linux.txt" )
-ENDIF( UNIX AND NOT APPLE )
 
-kde4_add_app_icon( tomahawkSources "${CMAKE_CURRENT_SOURCE_DIR}/../data/icons/tomahawk-icon-*.png" )
+IF( APPLE )
+    SET( tomahawkHeaders ${tomahawkHeaders} mac/tomahawkapp_mac.h mac/macshortcuthandler.h  )
+    SET( tomahawkSources ${tomahawkSources} mac/tomahawkapp_mac.mm  mac/macshortcuthandler.cpp )
+
+    IF(HAVE_SPARKLE)
+        SET( tomahawkHeaders ${tomahawkHeaders} ${SPARKLE}/Headers )
+    ENDIF(HAVE_SPARKLE)
+
+ENDIF( APPLE )
+
+IF(GLOOX_FOUND)
+  INCLUDE_DIRECTORIES( ${GLOOX_INCLUDE_DIR} )
+  SET( tomahawkHeaders ${tomahawkHeaders} xmppbot/xmppbot.h )
+  SET( tomahawkSources ${tomahawkSources} xmppbot/xmppbot.cpp )
+ENDIF(GLOOX_FOUND)
+ADD_SUBDIRECTORY( sip )
+
+kde4_add_app_icon( tomahawkSources "${CMAKE_SOURCE_DIR}/data/icons/tomahawk-icon-*.png" )
 qt4_add_resources( RC_SRCS "../resources.qrc" )
 qt4_wrap_cpp( tomahawkMoc ${tomahawkHeaders} )
+
+configure_file(${CMAKE_CURRENT_SOURCE_DIR}/config.h.in
+               ${CMAKE_CURRENT_BINARY_DIR}/config.h)
 
 SET( final_src ${final_src} ${tomahawkMoc} ${tomahawkSources} ${tomahawkHeaders} )
 
 IF( "${gui}" STREQUAL "no" )
 ELSE()
-	qt4_wrap_ui( tomahawkUI_H ${tomahawkUI} )
-	qt4_wrap_cpp( tomahawkMocGui ${tomahawkHeadersGui} )
-	SET( final_src ${final_src} ${tomahawkUI_H} ${tomahawkMocGui} ${tomahawkSourcesGui} ${RC_SRCS} )
+    qt4_wrap_ui( tomahawkUI_H ${tomahawkUI} )
+    qt4_wrap_cpp( tomahawkMocGui ${tomahawkHeadersGui} )
+    SET( final_src ${final_src} ${tomahawkUI_H} ${tomahawkMocGui} ${tomahawkSourcesGui} ${RC_SRCS} )
 ENDIF()
 
 IF( UNIX AND NOT APPLE )
@@ -337,21 +200,47 @@ IF( UNIX AND NOT APPLE )
 ENDIF( UNIX AND NOT APPLE )
 IF( APPLE )
     ADD_EXECUTABLE( tomahawk MACOSX_BUNDLE ${final_src} )
+    SET_TARGET_PROPERTIES(tomahawk PROPERTIES MACOSX_BUNDLE_INFO_PLIST "${CMAKE_BINARY_DIR}/Info.plist"
+)
 ENDIF( APPLE )
 IF( WIN32 )
-    ADD_EXECUTABLE( tomahawk ${final_src} )
+    ADD_EXECUTABLE( tomahawk WIN32 ${final_src} )
 ENDIF( WIN32 )
 
 MESSAGE( STATUS "OS_SPECIFIC_LINK_LIBRARIES: ${OS_SPECIFIC_LINK_LIBRARIES}" )
 
+SET(LINK_LIBRARIES  "")
+IF(LIBLASTFM_FOUND)
+    SET(LINK_LIBRARIES ${LINK_LIBRARIES} tomahawk_lastfm2 )
+ENDIF(LIBLASTFM_FOUND)
+IF(GLOOX_FOUND)
+    SET(LINK_LIBRARIES ${LINK_LIBRARIES} ${GLOOX_LIBRARIES} )
+ENDIF(GLOOX_FOUND)
+
 TARGET_LINK_LIBRARIES( tomahawk
+    ${LINK_LIBRARIES}
+    ${TOMAHAWK_LIBRARIES}
+    ${OS_SPECIFIC_LINK_LIBRARIES}
     ${QT_LIBRARIES}
     ${MAC_EXTRA_LIBS}
-    portfwd
-    ${OS_SPECIFIC_LINK_LIBRARIES}
-    echonest
-    qjson
-    tag
+    ${LIBECHONEST_LIBRARY}
+    ${QXTWEB_LIBRARIES}
+    ${QTWEETLIB_LIBRARIES}
+    ${QJSON_LIBRARIES}
+    ${TAGLIB_LIBRARIES}
+    ${QTWEETLIB_LIBRARIES}
+    ${CLUCENE_LIBRARIES}
 )
 
-INCLUDE( "CPack.txt" )
+
+IF( APPLE )
+  IF(HAVE_SPARKLE)
+    MESSAGE("Sparkle Found, installing framekwork in bundle")
+    INSTALL(DIRECTORY "${SPARKLE}/Versions/Current/Resources" DESTINATION "${CMAKE_BINARY_DIR}/tomahawk.app/Contents/Frameworks/Sparkle.framework")
+
+  ENDIF(HAVE_SPARKLE)
+ENDIF( APPLE )
+
+INSTALL( TARGETS tomahawk BUNDLE DESTINATION . RUNTIME DESTINATION bin )
+
+#INCLUDE( "CPack.txt" )

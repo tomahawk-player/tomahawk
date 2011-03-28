@@ -1,20 +1,94 @@
+/* === This file is part of Tomahawk Player - <http://tomahawk-player.org> ===
+ * 
+ *   Copyright 2010-2011, Christian Muehlhaeuser <muesli@tomahawk-player.org>
+ *
+ *   Tomahawk is free software: you can redistribute it and/or modify
+ *   it under the terms of the GNU General Public License as published by
+ *   the Free Software Foundation, either version 3 of the License, or
+ *   (at your option) any later version.
+ *
+ *   Tomahawk is distributed in the hope that it will be useful,
+ *   but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ *   GNU General Public License for more details.
+ *
+ *   You should have received a copy of the GNU General Public License
+ *   along with Tomahawk. If not, see <http://www.gnu.org/licenses/>.
+ */
+
+#include <QCoreApplication>
+
 #include "tomahawk/infosystem.h"
+#include "tomahawkutils.h"
+#include "infosystemcache.h"
 #include "infoplugins/echonestplugin.h"
 #include "infoplugins/musixmatchplugin.h"
+#include "infoplugins/lastfmplugin.h"
 
 using namespace Tomahawk::InfoSystem;
 
+InfoPlugin::InfoPlugin(QObject *parent)
+        :QObject( parent )
+    {
+        qDebug() << Q_FUNC_INFO;
+        InfoSystem *system = qobject_cast< InfoSystem* >( parent );
+        if( system )
+                QObject::connect( system->getCache(),
+                    SIGNAL( notInCache( QString, Tomahawk::InfoSystem::InfoType, QVariant, QVariant, Tomahawk::InfoSystem::InfoCustomDataHash ) ),
+                    this,
+                    SLOT( notInCacheSlot( QString, Tomahawk::InfoSystem::InfoType, QVariant, QVariant, Tomahawk::InfoSystem::InfoCustomDataHash ) )
+                );
+    }
+
+
 InfoSystem::InfoSystem(QObject *parent)
-    : QObject( parent )
+    : QObject(parent)
 {
     qDebug() << Q_FUNC_INFO;
     qRegisterMetaType<QMap< QString, QMap< QString, QString > > >("Tomahawk::InfoSystem::InfoGenericMap");
     qRegisterMetaType<QHash<QString, QVariant > >("Tomahawk::InfoSystem::InfoCustomDataHash");
-    qRegisterMetaType<QHash<QString, QString > >("Tomahawk::InfoSystem::MusixMatchHash");
+    
+    m_infoSystemCacheThreadController = new QThread( this );
+    m_cache = new Tomahawk::InfoSystem::InfoSystemCache();
+    m_cache->moveToThread( m_infoSystemCacheThreadController );
+    m_infoSystemCacheThreadController->start( QThread::IdlePriority );
+    
     InfoPluginPtr enptr(new EchoNestPlugin(this));
     m_plugins.append(enptr);
     InfoPluginPtr mmptr(new MusixMatchPlugin(this));
     m_plugins.append(mmptr);
+    InfoPluginPtr lfmptr(new LastFmPlugin(this));
+    m_plugins.append(lfmptr);
+}
+
+InfoSystem::~InfoSystem()
+{
+    qDebug() << Q_FUNC_INFO;
+    Q_FOREACH( InfoPluginPtr plugin, m_plugins )
+    {
+        if( plugin )
+            delete plugin.data();
+    }
+
+    if( m_infoSystemCacheThreadController )
+    {
+        m_infoSystemCacheThreadController->quit();
+    
+        while( !m_infoSystemCacheThreadController->isFinished() )
+        {
+            QCoreApplication::processEvents( QEventLoop::AllEvents, 200 );
+            TomahawkUtils::Sleep::msleep( 100 );
+        }
+        
+        if( m_cache )
+        {
+            delete m_cache;
+            m_cache = 0;
+        }
+        
+        delete m_infoSystemCacheThreadController;
+        m_infoSystemCacheThreadController = 0;
+    }
 }
 
 void InfoSystem::registerInfoTypes(const InfoPluginPtr &plugin, const QSet< InfoType >& types)
@@ -41,6 +115,7 @@ void InfoSystem::getInfo(const QString &caller, const InfoType type, const QVari
     if (providers.isEmpty())
     {
         emit info(QString(), Tomahawk::InfoSystem::InfoNoInfo, QVariant(), QVariant(), customData);
+        emit finished(caller);
         return;
     }
     
@@ -48,6 +123,7 @@ void InfoSystem::getInfo(const QString &caller, const InfoType type, const QVari
     if (!ptr)
     {
         emit info(QString(), Tomahawk::InfoSystem::InfoNoInfo, QVariant(), QVariant(), customData);
+        emit finished(caller);
         return;
     }
     

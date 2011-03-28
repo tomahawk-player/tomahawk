@@ -4,17 +4,12 @@ ADD_DEFINITIONS( -g )
 ADD_DEFINITIONS( -fno-operator-names )
 ADD_DEFINITIONS( -fPIC )
 
-SET( GLOOX_LIBS ${GLOOX_LIBS} resolv gloox )
+SET( QXTWEB_LIBRARIES  qxtweb-standalone )
 
-SET( OS_SPECIFIC_LINK_LIBRARIES 
-        ${LIBLASTFM_LIBRARY}
-        ${GLOOX_LIBS}
-        qxtweb-standalone
-)
+IF( APPLE )
+    INCLUDE( "CMakeLists.osx.txt" )
+ENDIF( APPLE )
 
-SET( OS_SPECIFIC_LINK_LIBRARIES 
-	 ${OS_SPECIFIC_LINK_LIBRARIES}
-	 mad 
-	 vorbisfile 
-	 ogg
-)
+IF( UNIX AND NOT APPLE )
+    INCLUDE( "CMakeLists.linux.txt" )
+ENDIF( UNIX AND NOT APPLE )

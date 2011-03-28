@@ -1,0 +1,6 @@
+<RCC>
+    <qresource prefix="/">
+        <file>FollowerDelegate.qml</file>
+        <file>FollowersList.qml</file>
+    </qresource>
+</RCC>

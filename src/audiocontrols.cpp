@@ -1,18 +1,37 @@
+/* === This file is part of Tomahawk Player - <http://tomahawk-player.org> ===
+ *
+ *   Copyright 2010-2011, Christian Muehlhaeuser <muesli@tomahawk-player.org>
+ *
+ *   Tomahawk is free software: you can redistribute it and/or modify
+ *   it under the terms of the GNU General Public License as published by
+ *   the Free Software Foundation, either version 3 of the License, or
+ *   (at your option) any later version.
+ *
+ *   Tomahawk is distributed in the hope that it will be useful,
+ *   but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ *   GNU General Public License for more details.
+ *
+ *   You should have received a copy of the GNU General Public License
+ *   along with Tomahawk. If not, see <http://www.gnu.org/licenses/>.
+ */
+
 #include "audiocontrols.h"
 #include "ui_audiocontrols.h"
 
 #include <QNetworkReply>
 
 #include "tomahawk/tomahawkapp.h"
-#include "tomahawk/album.h"
+#include "audio/audioengine.h"
+#include "playlist/playlistmanager.h"
+#include "utils/imagebutton.h"
 #include "utils/tomahawkutils.h"
 
-#include "audioengine.h"
-#include "imagebutton.h"
-#include "playlist/playlistmanager.h"
+#include "album.h"
 
 #define LASTFM_DEFAULT_COVER "http://cdn.last.fm/flatness/catalogue/noimage"
 
+static QString s_infoIdentifier = QString("AUDIOCONTROLS");
 
 AudioControls::AudioControls( QWidget* parent )
     : QWidget( parent )
@@ -23,17 +42,21 @@ AudioControls::AudioControls( QWidget* parent )
     ui->setupUi( this );
 
     ui->buttonAreaLayout->setSpacing( 2 );
-    ui->trackLabelLayout->setSpacing( 3 );
 
     QFont font( ui->artistTrackLabel->font() );
     font.setPixelSize( 12 );
-    ui->artistTrackLabel->setMinimumSize( ui->artistTrackLabel->minimumSizeHint() );
-    ui->albumLabel->setMinimumSize( ui->albumLabel->minimumSizeHint() );
-
+    
+#ifdef Q_WS_MAC
+    font.setPointSize( font.pointSize() - 2 );
+#endif
+    
     ui->artistTrackLabel->setFont( font );
     ui->artistTrackLabel->setElideMode( Qt::ElideMiddle );
+    ui->artistTrackLabel->setType( QueryLabel::ArtistAndTrack );
 
     ui->albumLabel->setFont( font );
+    ui->albumLabel->setType( QueryLabel::Album );
+
     ui->timeLabel->setFont( font );
     ui->timeLeftLabel->setFont( font );
 
@@ -56,7 +79,7 @@ AudioControls::AudioControls( QWidget* parent )
     ui->volumeHighButton->setPixmap( RESPATH "images/volume-icon-full.png" );
 
     ui->ownerLabel->setForegroundRole( QPalette::Dark );
-    ui->metadataArea->setStyleSheet( "QWidget#metadataArea {\nborder-width: 4px;\nborder-image: url(" RESPATH "images/now-playing-panel.png) 4 4 4 4 stretch stretch; }" );
+    ui->metaDataArea->setStyleSheet( "QWidget#metaDataArea {\nborder-width: 4px;\nborder-image: url(" RESPATH "images/now-playing-panel.png) 4 4 4 4 stretch stretch; }" );
 
     ui->seekSlider->setFixedHeight( 20 );
     ui->seekSlider->setEnabled( false );
@@ -83,7 +106,7 @@ AudioControls::AudioControls( QWidget* parent )
 
     ui->volumeSlider->setFixedHeight( 20 );
     ui->volumeSlider->setRange( 0, 100 );
-    ui->volumeSlider->setValue( APP->audioEngine()->volume() );
+    ui->volumeSlider->setValue( AudioEngine::instance()->volume() );
     ui->volumeSlider->setStyleSheet( "QSlider::groove::horizontal {"
                                      "margin: 5px; border-width: 3px;"
                                      "border-image: url(" RESPATH "images/volume-slider-bkg.png) 3 3 3 3 stretch stretch;"
@@ -108,36 +131,47 @@ AudioControls::AudioControls( QWidget* parent )
     m_prevAction  = new QAction( this );
     m_nextAction  = new QAction( this );
 
-    connect( m_playAction,  SIGNAL( triggered() ), (QObject*)TomahawkApp::instance()->audioEngine(), SLOT( play() ) );
-    connect( m_pauseAction, SIGNAL( triggered() ), (QObject*)TomahawkApp::instance()->audioEngine(), SLOT( pause() ) );
-    connect( m_prevAction,  SIGNAL( triggered() ), (QObject*)TomahawkApp::instance()->audioEngine(), SLOT( previous() ) );
-    connect( m_nextAction,  SIGNAL( triggered() ), (QObject*)TomahawkApp::instance()->audioEngine(), SLOT( next() ) ); */
+    connect( m_playAction,  SIGNAL( triggered() ), (QObject*)APP->audioEngine(), SLOT( play() ) );
+    connect( m_pauseAction, SIGNAL( triggered() ), (QObject*)APP->audioEngine(), SLOT( pause() ) );
+    connect( m_prevAction,  SIGNAL( triggered() ), (QObject*)APP->audioEngine(), SLOT( previous() ) );
+    connect( m_nextAction,  SIGNAL( triggered() ), (QObject*)APP->audioEngine(), SLOT( next() ) ); */
 
-    connect( ui->volumeSlider,     SIGNAL( valueChanged( int ) ), (QObject*)TomahawkApp::instance()->audioEngine(), SLOT( setVolume( int ) ) );
-    connect( ui->prevButton,       SIGNAL( clicked() ), (QObject*)TomahawkApp::instance()->audioEngine(), SLOT( previous() ) );
-    connect( ui->playPauseButton,  SIGNAL( clicked() ), (QObject*)TomahawkApp::instance()->audioEngine(), SLOT( play() ) );
-    connect( ui->pauseButton,      SIGNAL( clicked() ), (QObject*)TomahawkApp::instance()->audioEngine(), SLOT( pause() ) );
-    connect( ui->nextButton,       SIGNAL( clicked() ), (QObject*)TomahawkApp::instance()->audioEngine(), SLOT( next() ) );
-    connect( ui->volumeLowButton,  SIGNAL( clicked() ), (QObject*)TomahawkApp::instance()->audioEngine(), SLOT( lowerVolume() ) );
-    connect( ui->volumeHighButton, SIGNAL( clicked() ), (QObject*)TomahawkApp::instance()->audioEngine(), SLOT( raiseVolume() ) );
+    connect( ui->volumeSlider,     SIGNAL( valueChanged( int ) ), AudioEngine::instance(), SLOT( setVolume( int ) ) );
+    connect( ui->prevButton,       SIGNAL( clicked() ), AudioEngine::instance(), SLOT( previous() ) );
+    connect( ui->playPauseButton,  SIGNAL( clicked() ), AudioEngine::instance(), SLOT( play() ) );
+    connect( ui->pauseButton,      SIGNAL( clicked() ), AudioEngine::instance(), SLOT( pause() ) );
+    connect( ui->nextButton,       SIGNAL( clicked() ), AudioEngine::instance(), SLOT( next() ) );
+    connect( ui->volumeLowButton,  SIGNAL( clicked() ), AudioEngine::instance(), SLOT( lowerVolume() ) );
+    connect( ui->volumeHighButton, SIGNAL( clicked() ), AudioEngine::instance(), SLOT( raiseVolume() ) );
 
+    
+    connect( ui->playPauseButton,  SIGNAL( clicked() ), this, SIGNAL( playPressed() ) );
+    connect( ui->pauseButton,  SIGNAL( clicked() ), this,     SIGNAL( pausePressed() ) );
+    
     connect( ui->repeatButton,     SIGNAL( clicked() ), SLOT( onRepeatClicked() ) );
     connect( ui->shuffleButton,    SIGNAL( clicked() ), SLOT( onShuffleClicked() ) );
 
-    connect( ui->artistTrackLabel, SIGNAL( clicked() ), SLOT( onTrackClicked() ) );
-    connect( ui->albumLabel,       SIGNAL( clicked() ), SLOT( onAlbumClicked() ) );
+    connect( ui->artistTrackLabel, SIGNAL( clickedArtist() ), SLOT( onArtistClicked() ) );
+    connect( ui->artistTrackLabel, SIGNAL( clickedTrack() ), SLOT( onTrackClicked() ) );
+    connect( ui->albumLabel,       SIGNAL( clickedAlbum() ), SLOT( onAlbumClicked() ) );
 
     // <From AudioEngine>
-    connect( (QObject*)TomahawkApp::instance()->audioEngine(), SIGNAL( loading( const Tomahawk::result_ptr& ) ), SLOT( onPlaybackLoading( const Tomahawk::result_ptr& ) ) );
-    connect( (QObject*)TomahawkApp::instance()->audioEngine(), SIGNAL( started( const Tomahawk::result_ptr& ) ), SLOT( onPlaybackStarted( const Tomahawk::result_ptr& ) ) );
-    connect( (QObject*)TomahawkApp::instance()->audioEngine(), SIGNAL( paused() ), SLOT( onPlaybackPaused() ) );
-    connect( (QObject*)TomahawkApp::instance()->audioEngine(), SIGNAL( resumed() ), SLOT( onPlaybackResumed() ) );
-    connect( (QObject*)TomahawkApp::instance()->audioEngine(), SIGNAL( stopped() ), SLOT( onPlaybackStopped() ) );
-    connect( (QObject*)TomahawkApp::instance()->audioEngine(), SIGNAL( timerSeconds( unsigned int ) ), SLOT( onPlaybackTimer( unsigned int ) ) );
-    connect( (QObject*)TomahawkApp::instance()->audioEngine(), SIGNAL( volumeChanged( int ) ), SLOT( onVolumeChanged( int ) ) );
+    connect( AudioEngine::instance(), SIGNAL( loading( Tomahawk::result_ptr ) ), SLOT( onPlaybackLoading( Tomahawk::result_ptr ) ) );
+    connect( AudioEngine::instance(), SIGNAL( started( Tomahawk::result_ptr ) ), SLOT( onPlaybackStarted( Tomahawk::result_ptr ) ) );
+    connect( AudioEngine::instance(), SIGNAL( paused() ), SLOT( onPlaybackPaused() ) );
+    connect( AudioEngine::instance(), SIGNAL( resumed() ), SLOT( onPlaybackResumed() ) );
+    connect( AudioEngine::instance(), SIGNAL( stopped() ), SLOT( onPlaybackStopped() ) );
+    connect( AudioEngine::instance(), SIGNAL( timerSeconds( unsigned int ) ), SLOT( onPlaybackTimer( unsigned int ) ) );
+    connect( AudioEngine::instance(), SIGNAL( volumeChanged( int ) ), SLOT( onVolumeChanged( int ) ) );
 
     m_defaultCover = QPixmap( RESPATH "images/no-album-art-placeholder.png" )
                      .scaled( ui->coverImage->size(), Qt::IgnoreAspectRatio, Qt::SmoothTransformation );
+
+    connect( TomahawkApp::instance()->infoSystem(),
+        SIGNAL( info( QString, Tomahawk::InfoSystem::InfoType, QVariant, QVariant, Tomahawk::InfoSystem::InfoCustomDataHash ) ),
+        SLOT( infoSystemInfo( QString, Tomahawk::InfoSystem::InfoType, QVariant, QVariant, Tomahawk::InfoSystem::InfoCustomDataHash ) ) );
+    
+    connect( TomahawkApp::instance()->infoSystem(), SIGNAL( finished( QString ) ), SLOT( infoSystemFinished( QString ) ) );
 
     onPlaybackStopped(); // initial state
 }
@@ -200,7 +234,7 @@ AudioControls::onCoverArtDownloaded()
     {
         // Follow HTTP redirect
         QNetworkRequest req( redir );
-        QNetworkReply* reply = APP->nam()->get( req );
+        QNetworkReply* reply = TomahawkUtils::nam()->get( req );
         connect( reply, SIGNAL( finished() ), SLOT( onCoverArtDownloaded() ) );
     }
 
@@ -215,12 +249,59 @@ AudioControls::onPlaybackStarted( const Tomahawk::result_ptr& result )
 
     onPlaybackLoading( result );
 
-    QString imgurl = "http://ws.audioscrobbler.com/2.0/?method=album.imageredirect&artist=%1&album=%2&size=medium&api_key=7a90f6672a04b809ee309af169f34b8b";
-    QNetworkRequest req( imgurl.arg( result->artist()->name() ).arg( result->album()->name() ) );
-    QNetworkReply* reply = APP->nam()->get( req );
-    connect( reply, SIGNAL( finished() ), SLOT( onCoverArtDownloaded() ) );
+    QString artistName = result->artist()->name();
+    QString albumName = result->album()->name();
+    
+    Tomahawk::InfoSystem::InfoCustomDataHash trackInfo;
+    
+    trackInfo["artist"] = QVariant::fromValue< QString >( result->artist()->name() );
+    trackInfo["album"] = QVariant::fromValue< QString >( result->album()->name() );
+    TomahawkApp::instance()->infoSystem()->getInfo(
+        s_infoIdentifier, Tomahawk::InfoSystem::InfoAlbumCoverArt,
+        QVariant::fromValue< Tomahawk::InfoSystem::InfoCustomDataHash >( trackInfo ), Tomahawk::InfoSystem::InfoCustomDataHash() );
 }
 
+void
+AudioControls::infoSystemInfo( QString caller, Tomahawk::InfoSystem::InfoType type, QVariant input, QVariant output, Tomahawk::InfoSystem::InfoCustomDataHash customData )
+{
+    qDebug() << Q_FUNC_INFO;
+    if ( caller != s_infoIdentifier || type != Tomahawk::InfoSystem::InfoAlbumCoverArt )
+    {
+        qDebug() << "info of wrong type or not with our identifier";
+        return;
+    }
+    
+    if ( m_currentTrack.isNull() )
+    {
+        qDebug() << "Current track is null when trying to apply fetched cover art";
+        return;
+    }
+
+    if ( !output.canConvert< Tomahawk::InfoSystem::InfoCustomDataHash >() )
+    {
+        qDebug() << "Cannot convert fetched art from a QByteArray";
+        return;
+    }   
+
+    Tomahawk::InfoSystem::InfoCustomDataHash returnedData = output.value< Tomahawk::InfoSystem::InfoCustomDataHash >();
+    const QByteArray ba = returnedData["imgbytes"].toByteArray();
+    if ( ba.length() )
+    {
+        QPixmap pm;
+        pm.loadFromData( ba );
+
+        if ( pm.isNull() || returnedData["url"].toString().startsWith( LASTFM_DEFAULT_COVER ) )
+            ui->coverImage->setPixmap( m_defaultCover );
+        else
+            ui->coverImage->setPixmap( pm.scaled( ui->coverImage->size(), Qt::IgnoreAspectRatio, Qt::SmoothTransformation ) );
+    }
+}
+   
+void
+AudioControls::infoSystemFinished( QString target )
+{
+    qDebug() << Q_FUNC_INFO;
+}
 
 void
 AudioControls::onPlaybackLoading( const Tomahawk::result_ptr& result )
@@ -229,9 +310,9 @@ AudioControls::onPlaybackLoading( const Tomahawk::result_ptr& result )
 
     m_currentTrack = result;
 
-    ui->artistTrackLabel->setText( QString( "%1 - %2" ).arg( result->artist()->name() ).arg( result->track() ) );
-    ui->albumLabel->setText( result->album()->name() );
-    ui->ownerLabel->setText( result->collection()->source()->friendlyName() );
+    ui->artistTrackLabel->setResult( result );
+    ui->albumLabel->setResult( result );
+    ui->ownerLabel->setText( result->friendlySource() );
     ui->coverImage->setPixmap( m_defaultCover );
 
     if ( ui->timeLabel->text().isEmpty() )
@@ -359,21 +440,21 @@ AudioControls::onRepeatClicked()
         case PlaylistInterface::NoRepeat:
         {
             // switch to RepeatOne
-            APP->playlistManager()->setRepeatMode( PlaylistInterface::RepeatOne );
+            PlaylistManager::instance()->setRepeatMode( PlaylistInterface::RepeatOne );
         }
         break;
 
         case PlaylistInterface::RepeatOne:
         {
             // switch to RepeatAll
-            APP->playlistManager()->setRepeatMode( PlaylistInterface::RepeatAll );
+            PlaylistManager::instance()->setRepeatMode( PlaylistInterface::RepeatAll );
         }
         break;
 
         case PlaylistInterface::RepeatAll:
         {
             // switch to NoRepeat
-            APP->playlistManager()->setRepeatMode( PlaylistInterface::NoRepeat );
+            PlaylistManager::instance()->setRepeatMode( PlaylistInterface::NoRepeat );
         }
         break;
 
@@ -408,19 +489,26 @@ AudioControls::onShuffleModeChanged( bool enabled )
 void
 AudioControls::onShuffleClicked()
 {
-    APP->playlistManager()->setShuffled( m_shuffled ^ true );
+    PlaylistManager::instance()->setShuffled( m_shuffled ^ true );
 }
 
 
 void
-AudioControls::onTrackClicked()
+AudioControls::onArtistClicked()
 {
-    APP->playlistManager()->showCurrentTrack();
+    PlaylistManager::instance()->show( m_currentTrack->artist() );
 }
 
 
 void
 AudioControls::onAlbumClicked()
 {
-    APP->playlistManager()->show( m_currentTrack->album() );
+    PlaylistManager::instance()->show( m_currentTrack->album() );
+}
+
+
+void
+AudioControls::onTrackClicked()
+{
+    PlaylistManager::instance()->showCurrentTrack();
 }

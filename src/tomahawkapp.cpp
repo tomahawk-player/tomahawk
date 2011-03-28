@@ -1,28 +1,58 @@
+/* === This file is part of Tomahawk Player - <http://tomahawk-player.org> ===
+ *
+ *   Copyright 2010-2011, Christian Muehlhaeuser <muesli@tomahawk-player.org>
+ *
+ *   Tomahawk is free software: you can redistribute it and/or modify
+ *   it under the terms of the GNU General Public License as published by
+ *   the Free Software Foundation, either version 3 of the License, or
+ *   (at your option) any later version.
+ *
+ *   Tomahawk is distributed in the hope that it will be useful,
+ *   but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *   GNU General Public License for more details.
+ *
+ *   You should have received a copy of the GNU General Public License
+ *   along with Tomahawk. If not, see <http://www.gnu.org/licenses/>.
+ */
+
 #include "tomahawk/tomahawkapp.h"
+
+#include "config.h"
 
 #include <QPluginLoader>
 #include <QDir>
 #include <QMetaType>
 #include <QTime>
 #include <QNetworkReply>
+#include <QFile>
+#include <QFileInfo>
+#include <QNetworkProxy>
 
-#include "tomahawk/artist.h"
-#include "tomahawk/album.h"
-#include "tomahawk/collection.h"
+#include "artist.h"
+#include "album.h"
+#include "collection.h"
 #include "tomahawk/infosystem.h"
 #include "database/database.h"
 #include "database/databasecollection.h"
 #include "database/databasecommand_collectionstats.h"
 #include "database/databaseresolver.h"
-#include "jabber/jabber.h"
+#include "sip/SipHandler.h"
+#include "playlist/dynamic/GeneratorFactory.h"
+#include "playlist/dynamic/echonest/EchonestGenerator.h"
 #include "utils/tomahawkutils.h"
-#include "xmppbot/xmppbot.h"
 #include "web/api_v1.h"
-#include "scriptresolver.h"
+#include "resolvers/scriptresolver.h"
+#include "resolvers/qtscriptresolver.h"
+#include "sourcelist.h"
+#include "shortcuthandler.h"
+#include "scanmanager.h"
+#include "tomahawksettings.h"
 
-#include "audioengine.h"
-#include "controlconnection.h"
-#include "tomahawkzeroconf.h"
+#include "audio/audioengine.h"
+#include "utils/xspfloader.h"
+
+#include "config.h"
 
 #ifndef TOMAHAWK_HEADLESS
     #include "tomahawkwindow.h"
@@ -30,12 +60,20 @@
     #include <QMessageBox>
 #endif
 
+// should go to a plugin actually
+#ifdef GLOOX_FOUND
+    #include "xmppbot/xmppbot.h"
+#endif
+
+#ifdef Q_WS_MAC
+#include "mac/macshortcuthandler.h"
+#endif
+
 #include <iostream>
 #include <fstream>
 
-#define LOGFILE TomahawkUtils::appDataDir().filePath( "tomahawk.log" ).toLocal8Bit()
+#define LOGFILE TomahawkUtils::appLogDir().filePath( "Tomahawk.log" ).toLocal8Bit()
 #define LOGFILE_SIZE 1024 * 512
-#include "tomahawksettings.h"
 
 using namespace std;
 ofstream logfile;
@@ -102,15 +140,25 @@ using namespace Tomahawk;
 
 TomahawkApp::TomahawkApp( int& argc, char *argv[] )
     : TOMAHAWK_APPLICATION( argc, argv )
+    , m_database( 0 )
     , m_audioEngine( 0 )
-    , m_zeroconf( 0 )
-    , m_settings( 0 )
-    , m_nam( 0 )
-    , m_proxy( 0 )
+    , m_sipHandler( 0 )
+    , m_servent( 0 )
+    , m_shortcutHandler( 0 )
+    , m_scrubFriendlyName( false )
+    , m_mainwindow( 0 )
     , m_infoSystem( 0 )
 {
     qsrand( QTime( 0, 0, 0 ).secsTo( QTime::currentTime() ) );
-
+    
+    // send the first arg to an already running instance, but don't open twice no matter what
+    if( ( argc > 1 && sendMessage( argv[ 1 ] ) ) || sendMessage( "" ) ) {
+        qDebug() << "Sent message, already exists";
+        throw runtime_error( "Already Running" );
+    }
+    
+    connect( this, SIGNAL( messageReceived( QString ) ), this, SLOT( messageReceived( QString ) ) );
+    
 #ifdef TOMAHAWK_HEADLESS
     m_headless = true;
 #else
@@ -119,98 +167,125 @@ TomahawkApp::TomahawkApp( int& argc, char *argv[] )
     setWindowIcon( QIcon( RESPATH "icons/tomahawk-icon-128x128.png" ) );
 #endif
 
-#ifndef NO_LIBLASTFM
-    m_scrobbler = 0;
-#endif
-
     qDebug() << "TomahawkApp thread:" << this->thread();
-    setOrganizationName( "Tomahawk" );
-    setOrganizationDomain( "tomahawk.org" );
-    setApplicationName( "Player" );
-    setApplicationVersion( "1.0" ); // FIXME: last.fm "tst" auth requires 1.0 version according to docs, will change when we get our own identifier
+    setOrganizationName( QLatin1String( ORGANIZATION_NAME ) );
+    setOrganizationDomain( QLatin1String( ORGANIZATION_DOMAIN ) );
+    setApplicationName( QLatin1String( APPLICATION_NAME ) );
+    setApplicationVersion( QLatin1String( VERSION ) );
     registerMetaTypes();
     setupLogfile();
-
-    m_settings = new TomahawkSettings( this );
+    
+    Echonest::Config::instance()->setAPIKey( "JRIHWEP6GPOER2QQ6" );
+    
+    new TomahawkSettings( this );
     m_audioEngine = new AudioEngine;
+    new ScanManager( this );
+    new Pipeline( this );
+    
+    m_servent = new Servent( this );
+    connect( m_servent, SIGNAL( ready() ), SLOT( setupSIP() ) );
+
+    qDebug() << "Init Database.";
     setupDatabase();
 
-#ifndef NO_LIBLASTFM
-        m_scrobbler = new Scrobbler( this );
-        m_nam = new lastfm::NetworkAccessManager( this );
+    qDebug() << "Init Echonest Factory.";
+    GeneratorFactory::registerFactory( "echonest", new EchonestFactory );
+    
+    m_scrubFriendlyName = arguments().contains( "--demo" );
+    // Register shortcut handler for this platform
+#ifdef Q_WS_MAC
+    m_shortcutHandler = new MacShortcutHandler( this );
+    Tomahawk::setShortcutHandler( static_cast<MacShortcutHandler*>( m_shortcutHandler) );
 
-        connect( m_audioEngine, SIGNAL( started( const Tomahawk::result_ptr& ) ),
-                 m_scrobbler,     SLOT( trackStarted( const Tomahawk::result_ptr& ) ), Qt::QueuedConnection );
-
-        connect( m_audioEngine, SIGNAL( paused() ),
-                 m_scrobbler,     SLOT( trackPaused() ), Qt::QueuedConnection );
-
-        connect( m_audioEngine, SIGNAL( resumed() ),
-                 m_scrobbler,     SLOT( trackResumed() ), Qt::QueuedConnection );
-
-        connect( m_audioEngine, SIGNAL( stopped() ),
-                 m_scrobbler,     SLOT( trackStopped() ), Qt::QueuedConnection );
-#else
-        m_nam = new QNetworkAccessManager;
+    Tomahawk::setApplicationHandler( this );
 #endif
 
-#ifndef TOMAHAWK_HEADLESS
-    if ( !m_headless )
+    // Connect up shortcuts
+    if ( m_shortcutHandler )
     {
-
-        m_mainwindow = new TomahawkWindow();
-        m_mainwindow->show();
-        connect( m_mainwindow, SIGNAL( settingsChanged() ), SIGNAL( settingsChanged() ) );
+        connect( m_shortcutHandler, SIGNAL( playPause() ), m_audioEngine, SLOT( playPause() ) );
+        connect( m_shortcutHandler, SIGNAL( pause() ), m_audioEngine, SLOT( pause() ) );
+        connect( m_shortcutHandler, SIGNAL( stop() ), m_audioEngine, SLOT( stop() ) );
+        connect( m_shortcutHandler, SIGNAL( previous() ), m_audioEngine, SLOT( previous() ) );
+        connect( m_shortcutHandler, SIGNAL( next() ), m_audioEngine, SLOT( next() ) );
+        connect( m_shortcutHandler, SIGNAL( volumeUp() ), m_audioEngine, SLOT( raiseVolume() ) );
+        connect( m_shortcutHandler, SIGNAL( volumeDown() ), m_audioEngine, SLOT( lowerVolume() ) );
+        connect( m_shortcutHandler, SIGNAL( mute() ), m_audioEngine, SLOT( mute() ) );
     }
+
+    qDebug() << "Init InfoSystem.";
+    m_infoSystem = new Tomahawk::InfoSystem::InfoSystem( this );
+
+#ifdef LIBLASTFM_FOUND
+    qDebug() << "Init Scrobbler.";
+    m_scrobbler = new Scrobbler( this );
+    qDebug() << "Setting NAM.";
+    TomahawkUtils::setNam( new lastfm::NetworkAccessManager( this ) );
+
+    connect( m_audioEngine, SIGNAL( started( const Tomahawk::result_ptr& ) ),
+             m_scrobbler,     SLOT( trackStarted( const Tomahawk::result_ptr& ) ), Qt::QueuedConnection );
+
+    connect( m_audioEngine, SIGNAL( paused() ),
+             m_scrobbler,     SLOT( trackPaused() ), Qt::QueuedConnection );
+
+    connect( m_audioEngine, SIGNAL( resumed() ),
+             m_scrobbler,     SLOT( trackResumed() ), Qt::QueuedConnection );
+
+    connect( m_audioEngine, SIGNAL( stopped() ),
+             m_scrobbler,     SLOT( trackStopped() ), Qt::QueuedConnection );
+#else
+    qDebug() << "Setting NAM.";
+    TomahawkUtils::setNam( new QNetworkAccessManager );
 #endif
 
     // Set up proxy
-    if( m_settings->proxyType() != QNetworkProxy::NoProxy && !m_settings->proxyHost().isEmpty() )
+    //FIXME: This overrides the lastfm proxy above?
+    if( TomahawkSettings::instance()->proxyType() != QNetworkProxy::NoProxy &&
+        !TomahawkSettings::instance()->proxyHost().isEmpty() )
     {
         qDebug() << "Setting proxy to saved values";
-        m_proxy = new QNetworkProxy( static_cast<QNetworkProxy::ProxyType>(m_settings->proxyType()), m_settings->proxyHost(), m_settings->proxyPort(), m_settings->proxyUsername(), m_settings->proxyPassword() );
-        qDebug() << "Proxy type = " << QString::number( static_cast<int>(m_proxy->type()) );
-        qDebug() << "Proxy host = " << m_proxy->hostName();
-        QNetworkAccessManager* nam = TomahawkApp::instance()->nam();
-        nam->setProxy( *m_proxy );
+        TomahawkUtils::setProxy( new QNetworkProxy( static_cast<QNetworkProxy::ProxyType>(TomahawkSettings::instance()->proxyType()), TomahawkSettings::instance()->proxyHost(), TomahawkSettings::instance()->proxyPort(), TomahawkSettings::instance()->proxyUsername(), TomahawkSettings::instance()->proxyPassword() ) );
+        qDebug() << "Proxy type =" << QString::number( static_cast<int>(TomahawkUtils::proxy()->type()) );
+        qDebug() << "Proxy host =" << TomahawkUtils::proxy()->hostName();
+        TomahawkUtils::nam()->setProxy( *TomahawkUtils::proxy() );
     }
     else
-        m_proxy = new QNetworkProxy( QNetworkProxy::NoProxy );
+        TomahawkUtils::setProxy( new QNetworkProxy( QNetworkProxy::NoProxy ) );
 
-    QNetworkProxy::setApplicationProxy( *m_proxy );
+    QNetworkProxy::setApplicationProxy( *TomahawkUtils::proxy() );
 
-    m_infoSystem = new Tomahawk::InfoSystem::InfoSystem( this );
-
-    boost::function<QSharedPointer<QIODevice>(result_ptr)> fac =
-        boost::bind( &TomahawkApp::httpIODeviceFactory, this, _1 );
-    this->registerIODeviceFactory( "http", fac );
-
-    setupPipeline();
-    initLocalCollection();
-    startServent();
-    //loadPlugins();
-
-    if( arguments().contains( "--http" ) || settings()->value( "network/http", true ).toBool() )
-        startHTTP();
-
-    if( !arguments().contains("--nojabber") ) setupJabber();
-    m_xmppBot = new XMPPBot( this );
-
-    if ( !arguments().contains( "--nozeroconf" ) )
-    {
-        // advertise our servent on the LAN
-        m_zeroconf = new TomahawkZeroconf( m_servent.port(), this );
-        connect( m_zeroconf, SIGNAL( tomahawkHostFound( const QString&, int, const QString&, const QString& ) ),
-                               SLOT( lanHostFound( const QString&, int, const QString&, const QString& ) ) );
-        m_zeroconf->advertise();
-    }
+    qDebug() << "Init SIP system.";
+    m_sipHandler = new SipHandler( this );
 
     #ifndef TOMAHAWK_HEADLESS
-    if ( !m_settings->hasScannerPath() )
+    if ( !m_headless )
+    {
+        qDebug() << "Init MainWindow.";
+        m_mainwindow = new TomahawkWindow();
+        m_mainwindow->setWindowTitle( "Tomahawk" );
+        m_mainwindow->show();
+    }
+#endif
+
+    qDebug() << "Init Local Collection.";
+    initLocalCollection();
+    qDebug() << "Init Pipeline.";
+    setupPipeline();
+    qDebug() << "Init Servent.";
+    startServent();
+
+    if( arguments().contains( "--http" ) || TomahawkSettings::instance()->value( "network/http", true ).toBool() )
+    {
+        qDebug() << "Init HTTP Server.";
+        startHTTP();
+    }
+
+#ifndef TOMAHAWK_HEADLESS
+    if ( !TomahawkSettings::instance()->hasScannerPath() )
     {
         m_mainwindow->showSettingsDialog();
     }
-    #endif
+#endif
 }
 
 
@@ -218,21 +293,15 @@ TomahawkApp::~TomahawkApp()
 {
     qDebug() << Q_FUNC_INFO;
 
-    if ( !m_jabber.isNull() )
-    {
-        m_jabber.clear();
-    }
+    delete m_sipHandler;
+    delete m_servent;
 
 #ifndef TOMAHAWK_HEADLESS
     delete m_mainwindow;
     delete m_audioEngine;
 #endif
 
-    delete m_zeroconf;
-    delete m_db;
-
-    // always last thing, incase other objects save state on exit:
-    delete m_settings;
+    delete m_database;
 }
 
 
@@ -249,13 +318,6 @@ TomahawkApp::audioControls()
 {
     return m_mainwindow->audioControls();
 }
-
-
-PlaylistManager*
-TomahawkApp::playlistManager()
-{
-    return m_mainwindow->playlistManager();
-}
 #endif
 
 
@@ -270,30 +332,40 @@ TomahawkApp::registerMetaTypes()
     qRegisterMetaType< QList<QString> >("QList<QString>");
     qRegisterMetaType< Connection* >("Connection*");
     qRegisterMetaType< QAbstractSocket::SocketError >("QAbstractSocket::SocketError");
+    qRegisterMetaType< QTcpSocket* >("QTcpSocket*");
     qRegisterMetaType< QSharedPointer<QIODevice> >("QSharedPointer<QIODevice>");
     qRegisterMetaType< QFileInfo >("QFileInfo");
+    qRegisterMetaType< QHostAddress >("QHostAddress");
     qRegisterMetaType< QMap<QString, unsigned int> >("QMap<QString, unsigned int>");
     qRegisterMetaType< QMap< QString, plentry_ptr > >("QMap< QString, plentry_ptr >");
     qRegisterMetaType< QHash< QString, QMap<quint32, quint16> > >("QHash< QString, QMap<quint32, quint16> >");
-
+    
+    qRegisterMetaType< GeneratorMode>("GeneratorMode");
+    qRegisterMetaType<Tomahawk::GeneratorMode>("Tomahawk::GeneratorMode");
     // Extra definition for namespaced-versions of signals/slots required
+    qRegisterMetaType< Tomahawk::source_ptr >("Tomahawk::source_ptr");
     qRegisterMetaType< Tomahawk::collection_ptr >("Tomahawk::collection_ptr");
     qRegisterMetaType< Tomahawk::result_ptr >("Tomahawk::result_ptr");
+    qRegisterMetaType< Tomahawk::query_ptr >("Tomahawk::query_ptr");
     qRegisterMetaType< Tomahawk::source_ptr >("Tomahawk::source_ptr");
+    qRegisterMetaType< Tomahawk::dyncontrol_ptr >("Tomahawk::dyncontrol_ptr");
+    qRegisterMetaType< Tomahawk::geninterface_ptr >("Tomahawk::geninterface_ptr");
     qRegisterMetaType< QList<Tomahawk::playlist_ptr> >("QList<Tomahawk::playlist_ptr>");
+    qRegisterMetaType< QList<Tomahawk::dynplaylist_ptr> >("QList<Tomahawk::dynplaylist_ptr>");
+    qRegisterMetaType< QList<Tomahawk::dyncontrol_ptr> >("QList<Tomahawk::dyncontrol_ptr>");
+    qRegisterMetaType< QList<Tomahawk::geninterface_ptr> >("QList<Tomahawk::geninterface_ptr>");
     qRegisterMetaType< QList<Tomahawk::plentry_ptr> >("QList<Tomahawk::plentry_ptr>");
     qRegisterMetaType< QList<Tomahawk::query_ptr> >("QList<Tomahawk::query_ptr>");
     qRegisterMetaType< QList<Tomahawk::result_ptr> >("QList<Tomahawk::result_ptr>");
     qRegisterMetaType< QList<Tomahawk::artist_ptr> >("QList<Tomahawk::artist_ptr>");
     qRegisterMetaType< QList<Tomahawk::album_ptr> >("QList<Tomahawk::album_ptr>");
+    qRegisterMetaType< QList<Tomahawk::source_ptr> >("QList<Tomahawk::source_ptr>");
     qRegisterMetaType< QMap< QString, Tomahawk::plentry_ptr > >("QMap< QString, Tomahawk::plentry_ptr >");
     qRegisterMetaType< Tomahawk::PlaylistRevision >("Tomahawk::PlaylistRevision");
+    qRegisterMetaType< Tomahawk::DynamicPlaylistRevision >("Tomahawk::DynamicPlaylistRevision");
     qRegisterMetaType< Tomahawk::QID >("Tomahawk::QID");
-    qRegisterMetaType< QTcpSocket* >("QTcpSocket*");
 
-    #ifndef TOMAHAWK_HEADLESS
     qRegisterMetaType< AudioErrorCode >("AudioErrorCode");
-    #endif
 }
 
 
@@ -311,18 +383,8 @@ TomahawkApp::setupDatabase()
     }
 
     qDebug() << "Using database:" << dbpath;
-    m_db = new Database( dbpath, this );
-    m_pipeline.databaseReady();
-}
-
-
-void
-TomahawkApp::lanHostFound( const QString& host, int port, const QString& name, const QString& nodeid )
-{
-    qDebug() << "Found LAN host:" << host << port << nodeid;
-
-    if ( !m_servent.connectedToSession( nodeid ) )
-        m_servent.connectToPeer( host, port, "whitelist", name, nodeid );
+    m_database = new Database( dbpath, this );
+    Pipeline::instance()->databaseReady();
 }
 
 
@@ -346,352 +408,136 @@ void
 TomahawkApp::setupPipeline()
 {
     // setup resolvers for local content, and (cached) remote collection content
-    m_pipeline.addResolver( new DatabaseResolver( true,  100 ) );
-    m_pipeline.addResolver( new DatabaseResolver( false, 90 ) );
+    Pipeline::instance()->addResolver( new DatabaseResolver( 100 ) );
 
-//    new ScriptResolver("/home/rj/src/tomahawk-core/contrib/magnatune/magnatune-resolver.php");
+    // load script resolvers
+    foreach( QString resolver, TomahawkSettings::instance()->scriptResolvers() )
+        addScriptResolver( resolver );
+}
+
+
+void
+TomahawkApp::addScriptResolver( const QString& path )
+{
+    const QFileInfo fi( path );
+    if ( fi.suffix() == "js" || fi.suffix() == "script" )
+        m_scriptResolvers << new QtScriptResolver( path );
+    else
+        m_scriptResolvers << new ScriptResolver( path );
+}
+
+
+void
+TomahawkApp::removeScriptResolver( const QString& path )
+{
+    foreach( Tomahawk::ExternalResolver* r, m_scriptResolvers )
+    {
+        if( r->filePath() == path )
+        {
+            m_scriptResolvers.removeAll( r );
+            connect( r, SIGNAL( finished() ), r, SLOT( deleteLater() ) );
+            r->stop();
+            return;
+        }
+    }
 }
 
 
 void
 TomahawkApp::initLocalCollection()
 {
-    source_ptr src( new Source( "My Collection" ) );
+    source_ptr src( new Source( 0, "My Collection" ) );
     collection_ptr coll( new DatabaseCollection( src ) );
 
     src->addCollection( coll );
-    this->sourcelist().add( src );
-
-    boost::function<QSharedPointer<QIODevice>(result_ptr)> fac =
-        boost::bind( &TomahawkApp::localFileIODeviceFactory, this, _1 );
-    this->registerIODeviceFactory( "file", fac );
+    SourceList::instance()->setLocal( src );
+//    src->collection()->tracks();
 
     // to make the stats signal be emitted by our local source
     // this will update the sidebar, etc.
     DatabaseCommand_CollectionStats* cmd = new DatabaseCommand_CollectionStats( src );
     connect( cmd,       SIGNAL( done( const QVariantMap& ) ),
              src.data(),  SLOT( setStats( const QVariantMap& ) ), Qt::QueuedConnection );
-    database()->enqueue( QSharedPointer<DatabaseCommand>( cmd ) );
+    Database::instance()->enqueue( QSharedPointer<DatabaseCommand>( cmd ) );
 }
 
 
 void
 TomahawkApp::startServent()
 {
-    bool upnp = arguments().contains( "--upnp" ) || settings()->value( "network/upnp", true ).toBool();
-    if ( !m_servent.startListening( QHostAddress( QHostAddress::Any ), upnp ) )
+    bool upnp = !arguments().contains( "--noupnp" ) && TomahawkSettings::instance()->value( "network/upnp", true ).toBool() && !TomahawkSettings::instance()->preferStaticHostPort();
+    int port = TomahawkSettings::instance()->externalPort();
+    if ( !Servent::instance()->startListening( QHostAddress( QHostAddress::Any ), upnp, port ) )
     {
         qDebug() << "Failed to start listening with servent";
         exit( 1 );
     }
-
-    //QString key = m_servent.createConnectionKey();
-    //qDebug() << "Generated an offer key: " << key;
-
-    boost::function<QSharedPointer<QIODevice>(result_ptr)> fac =
-        boost::bind( &Servent::remoteIODeviceFactory, &m_servent, _1 );
-
-    this->registerIODeviceFactory( "servent", fac );
 }
 
-
 void
-TomahawkApp::loadPlugins()
-{
-    // look in same dir as executable for plugins
-    QDir dir( TomahawkApp::instance()->applicationDirPath() );
-    QStringList filters;
-    filters << "*.so" << "*.dll" << "*.dylib";
-
-    QStringList files = dir.entryList( filters );
-    foreach( const QString& filename, files )
-    {
-        qDebug() << "Attempting to load" << QString( "%1/%2" ).arg( dir.absolutePath() ).arg( filename );
-
-        QPluginLoader loader( dir.absoluteFilePath( filename ) );
-        if ( QObject* inst = loader.instance() )
-        {
-            TomahawkPlugin* pluginst = qobject_cast<TomahawkPlugin *>(inst);
-            if ( !pluginst )
-                continue;
-
-            PluginAPI* api = new PluginAPI( this->pipeline() );
-            TomahawkPlugin* plugin = pluginst->factory( api );
-            qDebug() << "Loaded Plugin:" << plugin->name();
-            qDebug() << plugin->description();
-            m_plugins.append( plugin );
-
-            // plugins responsibility to register itself as a resolver/collection
-            // all we need to do is create an instance of it.
-        }
-        else
-        {
-            qDebug() << "PluginLoader failed to create instance:" << filename << " Err:" << loader.errorString();
-        }
-    }
-}
-
-
-void
-TomahawkApp::setupJabber()
-{
-    qDebug() << Q_FUNC_INFO;
-    if ( !m_jabber.isNull() )
-        return;
-    if ( !m_settings->value( "jabber/autoconnect", true ).toBool() )
-        return;
-
-    QString jid       = m_settings->value( "jabber/username"   ).toString();
-    QString server    = m_settings->value( "jabber/server"     ).toString();
-    QString password  = m_settings->value( "jabber/password"   ).toString();
-    unsigned int port = m_settings->value( "jabber/port", 5222 ).toUInt();
-
-    // gtalk check
-    if( server.isEmpty() && ( jid.contains("@gmail.com") || jid.contains("@googlemail.com") ) )
-    {
-        qDebug() << "Setting jabber server to talk.google.com";
-        server = "talk.google.com";
-    }
-
-    if ( port < 1 || port > 65535 || jid.isEmpty() || password.isEmpty() )
-    {
-        qDebug() << "Jabber credentials look wrong, not connecting";
-        return;
-    }
-
-    m_jabber = QSharedPointer<Jabber>( new Jabber( jid, password, server, port ) );
-
-    connect( m_jabber.data(), SIGNAL( peerOnline( QString ) ), SLOT( jabberPeerOnline( QString ) ) );
-    connect( m_jabber.data(), SIGNAL( peerOffline( QString ) ), SLOT( jabberPeerOffline( QString ) ) );
-    connect( m_jabber.data(), SIGNAL( msgReceived( QString, QString ) ), SLOT( jabberMessage( QString, QString ) ) );
-
-    connect( m_jabber.data(), SIGNAL( connected() ), SLOT( jabberConnected() ) );
-    connect( m_jabber.data(), SIGNAL( disconnected() ),  SLOT( jabberDisconnected() ) );
-    connect( m_jabber.data(), SIGNAL( authError( int, QString ) ), SLOT( jabberAuthError( int, QString ) ) );
-
-    m_jabber->setProxy( m_proxy );
-    m_jabber->start();
-}
-
-
-void
-TomahawkApp::reconnectJabber()
-{
-    m_jabber.clear();
-    setupJabber();
-}
-
-
-void
-TomahawkApp::jabberAuthError( int code, const QString& msg )
-{
-    qWarning() << "Failed to connect to jabber" << code << msg;
-
-#ifndef TOMAHAWK_HEADLESS
-    if( m_mainwindow )
-    {
-        m_mainwindow->setWindowTitle( QString("Tomahawk [jabber: %1, portfwd: %2]")
-                                      .arg( "AUTH_ERROR" )
-                                      .arg( (servent().externalPort() > 0) ? QString( "YES:%1" ).arg(servent().externalPort()) :"NO" ) );
-
-        if ( code == gloox::ConnAuthenticationFailed )
-        {
-            QMessageBox::warning( m_mainwindow,
-                                  "Jabber Auth Error",
-                                  QString("Error connecting to Jabber (%1) %2").arg(code).arg(msg),
-                                  QMessageBox::Ok );
-        }
-    }
-#endif
-
-    if ( code != gloox::ConnAuthenticationFailed )
-        QTimer::singleShot( 10000, this, SLOT( reconnectJabber() ) );
-}
-
-
-void
-TomahawkApp::jabberConnected()
+TomahawkApp::setupSIP()
 {
     qDebug() << Q_FUNC_INFO;
 
-#ifndef TOMAHAWK_HEADLESS
-    if( m_mainwindow )
+    //FIXME: jabber autoconnect is really more, now that there is sip -- should be renamed and/or split out of jabber-specific settings
+    if( !arguments().contains( "--nosip" ) && TomahawkSettings::instance()->jabberAutoConnect() )
     {
-        m_mainwindow->setWindowTitle( QString("Tomahawk [jabber: %1, portfwd: %2]")
-                                      .arg( "CONNECTED" )
-                                      .arg( (servent().externalPort() > 0) ? QString( "YES:%1" ).arg(servent().externalPort()):"NO" ) );
+        #ifdef GLOOX_FOUND
+        m_xmppBot = new XMPPBot( this );
+        #endif
+
+        qDebug() << "Connecting SIP classes";
+        m_sipHandler->connectPlugins( true );
+//        m_sipHandler->setProxy( *TomahawkUtils::proxy() );
     }
+}
+
+
+void
+TomahawkApp::activate()
+{
+#ifndef TOMAHAWK_HEADLESS
+    mainWindow()->show();
 #endif
 }
 
 
-void
-TomahawkApp::jabberDisconnected()
+bool
+TomahawkApp::loadUrl( const QString& url )
 {
-    qDebug() << Q_FUNC_INFO;
-
-#ifndef TOMAHAWK_HEADLESS
-    if( m_mainwindow )
-    {
-        m_mainwindow->setWindowTitle( QString("Tomahawk [jabber: %1, portfwd: %2]")
-                                      .arg( "DISCONNECTED" )
-                                      .arg( (servent().externalPort() > 0) ? QString( "YES:%1" ).arg(servent().externalPort()):"NO" ) );
+    if( url.contains( "tomahawk://" ) ) {
+        QString cmd = url.mid( 11 );
+        qDebug() << "tomahawk!s" << cmd;
+        if( cmd.startsWith( "load/?" ) ) {
+            cmd = cmd.mid( 6 );
+            qDebug() << "loading.." << cmd;
+            if( cmd.startsWith( "xspf=" ) ) {
+                XSPFLoader* l = new XSPFLoader( true, this );
+                qDebug() << "Loading spiff:" << cmd.mid( 5 );
+                l->load( QUrl( cmd.mid( 5 ) ) );
+            }
+        }
+    } else {
+        QFile f( url );
+        QFileInfo info( f );
+        if( f.exists() && info.suffix() == "xspf" ) {
+            XSPFLoader* l = new XSPFLoader( true, this );
+            qDebug() << "Loading spiff:" << url;
+            l->load( QUrl( url ) );
+        }
     }
-#endif
+    return true;
 }
 
 
-void
-TomahawkApp::jabberPeerOnline( const QString& jid )
+void 
+TomahawkApp::messageReceived( const QString& msg ) 
 {
-//    qDebug() << Q_FUNC_INFO;
-//    qDebug() << "Jabber Peer online:" << jid;
-
-    QVariantMap m;
-    if( m_servent.visibleExternally() )
-    {
-        QString key = uuid();
-        ControlConnection* conn = new ControlConnection( &m_servent );
-
-        const QString& nodeid = APP->nodeID();
-        conn->setName( jid.left( jid.indexOf( "/" ) ) );
-        conn->setId( nodeid );
-
-        // FIXME strip /resource, but we should use a UID per database install
-        //QString uniqname = jid.left( jid.indexOf("/") );
-        //conn->setName( uniqname ); //FIXME
-
-        // FIXME:
-        //QString ouruniqname = m_settings->value( "jabber/username" ).toString()
-        //                      .left( m_settings->value( "jabber/username" ).toString().indexOf("/") );
-
-        m_servent.registerOffer( key, conn );
-        m["visible"] = true;
-        m["ip"] = m_servent.externalAddress().toString();
-        m["port"] = m_servent.externalPort();
-        m["key"] = key;
-        m["uniqname"] = nodeid;
-
-        qDebug() << "Asking them to connect to us:" << m;
-    }
-    else
-    {
-        m["visible"] = false;
-        qDebug() << "We are not visible externally:" << m;
-    }
-
-    QJson::Serializer ser;
-    QByteArray ba = ser.serialize( m );
-    m_jabber->sendMsg( jid, QString::fromAscii( ba ) );
-}
-
-
-void
-TomahawkApp::jabberPeerOffline( const QString& jid )
-{
-//    qDebug() << Q_FUNC_INFO;
-//    qDebug() << "Jabber Peer offline:" << jid;
-}
-
-
-void
-TomahawkApp::jabberMessage( const QString& from, const QString& msg )
-{
-    qDebug() << Q_FUNC_INFO;
-    qDebug() << "Jabber Message:" << from << msg;
-
-    QJson::Parser parser;
-    bool ok;
-    QVariant v = parser.parse( msg.toAscii(), &ok );
-    if ( !ok  || v.type() != QVariant::Map )
-    {
-        qDebug() << "Invalid JSON in XMPP msg";
+    qDebug() << "MESSAGE RECEIVED" << msg;
+    if( msg.isEmpty() ) {
         return;
     }
-
-    QVariantMap m = v.toMap();
-    /*
-      If only one party is externally visible, connection is obvious
-      If both are, peer with lowest IP address initiates the connection.
-      This avoids dupe connections.
-     */
-    if ( m.value( "visible" ).toBool() )
-    {
-        if( !m_servent.visibleExternally() ||
-            m_servent.externalAddress().toString() <= m.value( "ip" ).toString() )
-        {
-            qDebug() << "Initiate connection to" << from;
-            m_servent.connectToPeer( m.value( "ip"   ).toString(),
-                                     m.value( "port" ).toInt(),
-                                     m.value( "key"  ).toString(),
-                                     from,
-                                     m.value( "uniqname" ).toString() );
-        }
-        else
-        {
-            qDebug() << Q_FUNC_INFO << "They should be conecting to us...";
-        }
-    }
-    else
-    {
-        qDebug() << Q_FUNC_INFO << "They are not visible, doing nothing atm";
-        if ( m_servent.visibleExternally() )
-            jabberPeerOnline( from ); // HACK FIXME
-    }
+    
+    loadUrl( msg );
 }
 
-
-void
-TomahawkApp::registerIODeviceFactory( const QString &proto, boost::function<QSharedPointer<QIODevice>(Tomahawk::result_ptr)> fac )
-{
-    m_iofactories.insert( proto, fac );
-    qDebug() << "Registered IODevice Factory for" << proto;
-}
-
-
-QSharedPointer<QIODevice>
-TomahawkApp::getIODeviceForUrl( const Tomahawk::result_ptr& result )
-{
-    qDebug() << Q_FUNC_INFO << thread();
-    QSharedPointer<QIODevice> sp;
-
-    QRegExp rx( "^([a-zA-Z0-9]+)://(.+)$" );
-    if ( rx.indexIn( result->url() ) == -1 )
-        return sp;
-
-    const QString proto = rx.cap( 1 );
-    //const QString urlpart = rx.cap( 2 );
-    if ( !m_iofactories.contains( proto ) )
-        return sp;
-
-    return m_iofactories.value( proto )( result );
-}
-
-
-QSharedPointer<QIODevice>
-TomahawkApp::localFileIODeviceFactory( const Tomahawk::result_ptr& result )
-{
-    // ignore "file://" at front of url
-    QFile * io = new QFile( result->url().mid( QString( "file://" ).length() ) );
-    if ( io )
-        io->open( QIODevice::ReadOnly );
-
-    return QSharedPointer<QIODevice>( io );
-}
-
-
-QSharedPointer<QIODevice>
-TomahawkApp::httpIODeviceFactory( const Tomahawk::result_ptr& result )
-{
-    qDebug() << Q_FUNC_INFO << result->url();
-    QNetworkRequest req( result->url() );
-    QNetworkReply* reply = APP->nam()->get( req );
-    return QSharedPointer<QIODevice>( reply );
-}
-
-
-const QString&
-TomahawkApp::nodeID() const
-{
-    return m_db->dbid();
-}

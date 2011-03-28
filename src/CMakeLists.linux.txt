@@ -1,6 +1,7 @@
 SET( OS_SPECIFIC_LINK_LIBRARIES 
      ${OS_SPECIFIC_LINK_LIBRARIES}
      alsaplayback
+     tomahawklib
 )
 
 IF( "${gui}" STREQUAL "no" )
@@ -10,5 +11,3 @@ ELSE()
          gnutls
        )
 ENDIF()
-
-#include( "CPack.txt" )

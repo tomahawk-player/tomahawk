@@ -1,11 +1,31 @@
+/* === This file is part of Tomahawk Player - <http://tomahawk-player.org> ===
+ * 
+ *   Copyright 2010-2011, Christian Muehlhaeuser <muesli@tomahawk-player.org>
+ *
+ *   Tomahawk is free software: you can redistribute it and/or modify
+ *   it under the terms of the GNU General Public License as published by
+ *   the Free Software Foundation, either version 3 of the License, or
+ *   (at your option) any later version.
+ *
+ *   Tomahawk is distributed in the hope that it will be useful,
+ *   but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ *   GNU General Public License for more details.
+ *
+ *   You should have received a copy of the GNU General Public License
+ *   along with Tomahawk. If not, see <http://www.gnu.org/licenses/>.
+ */
+
 #include "sourcetreeview.h"
 
-#include "tomahawk/tomahawkapp.h"
-#include "tomahawk/playlist.h"
-#include "collectionmodel.h"
-#include "playlistmanager.h"
+#include "playlist.h"
+#include "playlist/collectionmodel.h"
+#include "playlist/playlistmanager.h"
 #include "sourcetreeitem.h"
 #include "sourcesmodel.h"
+#include "sourcesproxymodel.h"
+#include "sourcelist.h"
+#include "tomahawk/tomahawkapp.h"
 
 #include <QAction>
 #include <QContextMenuEvent>
@@ -13,6 +33,7 @@
 #include <QHeaderView>
 #include <QPainter>
 #include <QStyledItemDelegate>
+#include <QSize>
 
 using namespace Tomahawk;
 
@@ -23,11 +44,12 @@ public:
     SourceDelegate( QAbstractItemView* parent = 0 ) : QStyledItemDelegate( parent ), m_parent( parent ) {}
 
 protected:
-    void paint( QPainter* painter, const QStyleOptionViewItem& option, const QModelIndex& index ) const;
-    void updateEditorGeometry( QWidget* editor, const QStyleOptionViewItem& option, const QModelIndex& index ) const
+    virtual QSize sizeHint( const QStyleOptionViewItem& option, const QModelIndex& index ) const;
+    virtual void paint( QPainter* painter, const QStyleOptionViewItem& option, const QModelIndex& index ) const;
+    virtual void updateEditorGeometry( QWidget* editor, const QStyleOptionViewItem& option, const QModelIndex& index ) const
     {
-        if ( SourcesModel::indexType( index ) == 1 )
-            editor->setGeometry( option.rect.adjusted( 32, 0, 0, 0 ) );
+        if ( SourcesModel::indexType( index ) == SourcesModel::PlaylistSource || SourcesModel::indexType( index ) == SourcesModel::DynamicPlaylistSource )
+            editor->setGeometry( option.rect.adjusted( 20, 0, 0, 0 ) );
         else
             QStyledItemDelegate::updateEditorGeometry( editor, option, index );
     }
@@ -42,8 +64,13 @@ SourceTreeView::SourceTreeView( QWidget* parent )
     , m_collectionModel( new CollectionModel( this ) )
     , m_dragging( false )
 {
+    setFrameShape( QFrame::NoFrame );
+    setAttribute( Qt::WA_MacShowFocusRect, 0 );
+    setContentsMargins( 0, 0, 0, 0 );
+    setMinimumWidth( 220 );
+
     setHeaderHidden( true );
-    setRootIsDecorated( false );
+    setRootIsDecorated( true );
     setExpandsOnDoubleClick( false );
 
     setSelectionBehavior( QAbstractItemView::SelectRows );
@@ -52,27 +79,41 @@ SourceTreeView::SourceTreeView( QWidget* parent )
     setDropIndicatorShown( false );
     setAllColumnsShowFocus( true );
     setUniformRowHeights( false );
-    setIndentation( 0 );
-    setAnimated( false );
-
+    setIndentation( 16 );
+    setAnimated( true );
+    
     setItemDelegate( new SourceDelegate( this ) );
 
     setContextMenuPolicy( Qt::CustomContextMenu );
-    connect( this, SIGNAL( customContextMenuRequested( const QPoint& ) ), SLOT( onCustomContextMenu( const QPoint& ) ) );
+    connect( this, SIGNAL( customContextMenuRequested( QPoint ) ), SLOT( onCustomContextMenu( QPoint ) ) );
 
     m_model = new SourcesModel( this );
-    setModel( m_model );
+    m_proxyModel = new SourcesProxyModel( m_model, this );
+    setModel( m_proxyModel );
 
     header()->setStretchLastSection( false );
     header()->setResizeMode( 0, QHeaderView::Stretch );
 
     connect( m_model, SIGNAL( clicked( QModelIndex ) ), SIGNAL( clicked( QModelIndex ) ) );
-    connect( this,  SIGNAL( clicked( QModelIndex ) ), SLOT( onItemActivated( QModelIndex ) ) );
+    connect( this, SIGNAL( clicked( QModelIndex ) ), SLOT( onItemActivated( QModelIndex ) ) );
 
-    connect( selectionModel(), SIGNAL( selectionChanged( const QItemSelection&, const QItemSelection& ) ), SLOT( onSelectionChanged() ) );
-    connect( &APP->sourcelist(), SIGNAL( sourceRemoved( Tomahawk::source_ptr ) ), SLOT( onSourceOffline( Tomahawk::source_ptr ) ) );
+    connect( selectionModel(), SIGNAL( selectionChanged( QItemSelection, QItemSelection ) ), SLOT( onSelectionChanged() ) );
+    connect( SourceList::instance(), SIGNAL( sourceRemoved( Tomahawk::source_ptr ) ), SLOT( onSourceOffline( Tomahawk::source_ptr ) ) );
 
     m_model->appendItem( source_ptr() );
+
+    hideOfflineSources();
+
+    connect( PlaylistManager::instance(), SIGNAL( playlistActivated( Tomahawk::playlist_ptr ) ),
+                                            SLOT( onPlaylistActivated( Tomahawk::playlist_ptr ) ) );
+    connect( PlaylistManager::instance(), SIGNAL( dynamicPlaylistActivated( Tomahawk::dynplaylist_ptr ) ),
+                                            SLOT( onDynamicPlaylistActivated( Tomahawk::dynplaylist_ptr ) ) );
+    connect( PlaylistManager::instance(), SIGNAL( collectionActivated( Tomahawk::collection_ptr ) ),
+                                            SLOT( onCollectionActivated( Tomahawk::collection_ptr ) ) );
+    connect( PlaylistManager::instance(), SIGNAL( superCollectionActivated() ),
+                                            SLOT( onSuperCollectionActivated() ) );
+    connect( PlaylistManager::instance(), SIGNAL( tempPageActivated() ),
+                                            SLOT( onTempPageActivated() ) );
 }
 
 
@@ -87,23 +128,40 @@ SourceTreeView::setupMenus()
     m_deletePlaylistAction = m_playlistMenu.addAction( tr( "&Delete Playlist" ) );
 
     bool readonly = true;
-    int type = SourcesModel::indexType( m_contextMenuIndex );
-    if ( type == 1 )
+    SourcesModel::SourceType type = SourcesModel::indexType( m_contextMenuIndex );
+    if ( type == SourcesModel::PlaylistSource || type == SourcesModel::DynamicPlaylistSource )
     {
-        playlist_ptr playlist = SourcesModel::indexToPlaylist( m_contextMenuIndex );
+        playlist_ptr playlist = SourcesModel::indexToDynamicPlaylist( m_contextMenuIndex );
+        if( playlist.isNull() ) 
+        {
+            playlist = SourcesModel::indexToPlaylist( m_contextMenuIndex );
+        } 
         if ( !playlist.isNull() )
         {
             readonly = !playlist->author()->isLocal();
         }
     }
 
-    if ( readonly )
-    {
-        m_deletePlaylistAction->setEnabled( !readonly );
-    }
+    m_deletePlaylistAction->setEnabled( !readonly );
+    m_renamePlaylistAction->setEnabled( !readonly );
 
     connect( m_loadPlaylistAction,   SIGNAL( triggered() ), SLOT( loadPlaylist() ) );
+    connect( m_renamePlaylistAction, SIGNAL( triggered() ), SLOT( renamePlaylist() ) );
     connect( m_deletePlaylistAction, SIGNAL( triggered() ), SLOT( deletePlaylist() ) );
+}
+
+
+void
+SourceTreeView::showOfflineSources()
+{
+    m_proxyModel->showOfflineSources();
+}
+
+
+void
+SourceTreeView::hideOfflineSources()
+{
+    m_proxyModel->hideOfflineSources();
 }
 
 
@@ -115,38 +173,98 @@ SourceTreeView::onSourceOffline( Tomahawk::source_ptr src )
 
 
 void
+SourceTreeView::onPlaylistActivated( const Tomahawk::playlist_ptr& playlist )
+{
+    QModelIndex idx = m_proxyModel->mapFromSource( m_model->playlistToIndex( playlist ) );
+    if ( idx.isValid() )
+    {
+        setCurrentIndex( idx );
+    }
+}
+
+
+void
+SourceTreeView::onDynamicPlaylistActivated( const Tomahawk::dynplaylist_ptr& playlist )
+{
+    QModelIndex idx = m_proxyModel->mapFromSource( m_model->dynamicPlaylistToIndex( playlist ) );
+    if ( idx.isValid() )
+    {
+        setCurrentIndex( idx );
+    }
+}
+
+
+void
+SourceTreeView::onCollectionActivated( const Tomahawk::collection_ptr& collection )
+{
+    QModelIndex idx = m_proxyModel->mapFromSource( m_model->collectionToIndex( collection ) );
+    if ( idx.isValid() )
+    {
+        setCurrentIndex( idx );
+    }
+}
+
+
+void
+SourceTreeView::onSuperCollectionActivated()
+{
+    QModelIndex idx = m_proxyModel->index( 0, 0 );
+    if ( idx.isValid() )
+    {
+        setCurrentIndex( idx );
+    }
+}
+
+
+void
+SourceTreeView::onTempPageActivated()
+{
+    clearSelection();
+}
+
+
+void
 SourceTreeView::onItemActivated( const QModelIndex& index )
 {
     if ( !index.isValid() )
         return;
 
-    int type = SourcesModel::indexType( index );
-    if ( type == 0 )
+    SourcesModel::SourceType type = SourcesModel::indexType( index );
+    if ( type == SourcesModel::CollectionSource )
     {
         SourceTreeItem* item = SourcesModel::indexToTreeItem( index );
         if ( item )
         {
             if ( item->source().isNull() )
             {
-                APP->playlistManager()->showSuperCollection();
+                PlaylistManager::instance()->showSuperCollection();
             }
             else
             {
                 qDebug() << "SourceTreeItem toggled:" << item->source()->userName();
 
-                APP->playlistManager()->show( item->source()->collection() );
-//                APP->playlistManager()->show( item->source() );
+                PlaylistManager::instance()->show( item->source()->collection() );
             }
         }
     }
-    else if ( type == 1 )
+    else if ( type == SourcesModel::PlaylistSource )
     {
         playlist_ptr playlist = SourcesModel::indexToPlaylist( index );
         if ( !playlist.isNull() )
         {
             qDebug() << "Playlist activated:" << playlist->title();
 
-            APP->playlistManager()->show( playlist );
+            PlaylistManager::instance()->show( playlist );
+        }
+    }
+    else if ( type == SourcesModel::DynamicPlaylistSource )
+    {
+        dynplaylist_ptr playlist = SourcesModel::indexToDynamicPlaylist( index );
+        if ( !playlist.isNull() )
+        {
+            qDebug() << "Dynamic Playlist activated:" << playlist->title();
+            
+            PlaylistManager::instance()->show( playlist );
         }
     }
 }
@@ -174,8 +292,8 @@ SourceTreeView::deletePlaylist()
     if ( !idx.isValid() )
         return;
 
-    int type = SourcesModel::indexType( idx );
-    if ( type == 1 )
+    SourcesModel::SourceType type = SourcesModel::indexType( idx );
+    if ( type == SourcesModel::PlaylistSource )
     {
         playlist_ptr playlist = SourcesModel::indexToPlaylist( idx );
         if ( !playlist.isNull() )
@@ -183,7 +301,18 @@ SourceTreeView::deletePlaylist()
             qDebug() << "Playlist about to be deleted:" << playlist->title();
             Playlist::remove( playlist );
         }
+    } else if( type == SourcesModel::DynamicPlaylistSource ) {
+        dynplaylist_ptr playlist = SourcesModel::indexToDynamicPlaylist( idx );       
+        if( !playlist.isNull() )
+            DynamicPlaylist::remove( playlist );
     }
+}
+
+
+void
+SourceTreeView::renamePlaylist()
+{
+    edit( m_contextMenuIndex );
 }
 
 
@@ -240,7 +369,7 @@ SourceTreeView::dragMoveEvent( QDragMoveEvent* event )
             const QRect rect = visualRect( index );
             m_dropRect = rect;
 
-            if ( SourcesModel::indexType( index ) == 1 )
+            if ( SourcesModel::indexType( index ) == SourcesModel::PlaylistSource )
             {
                 playlist_ptr playlist = SourcesModel::indexToPlaylist( index );
                 if ( !playlist.isNull() && playlist->author()->isLocal() )
@@ -277,7 +406,7 @@ SourceTreeView::dropEvent( QDropEvent* event )
 
         if ( index.isValid() )
         {
-            if ( SourcesModel::indexType( index ) == 1 )
+            if ( SourcesModel::indexType( index ) == SourcesModel::PlaylistSource )
             {
                 playlist_ptr playlist = SourcesModel::indexToPlaylist( index );
                 if ( !playlist.isNull() && playlist->author()->isLocal() )
@@ -354,23 +483,133 @@ SourceTreeView::drawRow( QPainter* painter, const QStyleOptionViewItem& option, 
 }
 
 
+QSize
+SourceDelegate::sizeHint( const QStyleOptionViewItem& option, const QModelIndex& index ) const
+{
+    if ( index.data( SourceTreeItem::Type ) == SourcesModel::CollectionSource )
+        return QSize( option.rect.width(), 44 );
+    else
+        return QStyledItemDelegate::sizeHint( option, index );
+}
+
+
 void
 SourceDelegate::paint( QPainter* painter, const QStyleOptionViewItem& option, const QModelIndex& index ) const
 {
     QStyleOptionViewItem o = option;
-    o.rect.adjust( 12, 0, 0, 0 );
 
+#ifdef Q_WS_MAC
+    QFont savedFont = painter->font();
+    QFont smaller = savedFont;
+    smaller.setPointSize( smaller.pointSize() - 2 );
+    painter->setFont( smaller );
+    o.font = smaller;
+#endif
+    
     if ( ( option.state & QStyle::State_Enabled ) == QStyle::State_Enabled )
     {
         o.state = QStyle::State_Enabled;
 
-        if ( SourcesModel::indexType( index ) == 1 &&
-           ( option.state & QStyle::State_Selected ) == QStyle::State_Selected )
+        if ( ( option.state & QStyle::State_Selected ) == QStyle::State_Selected )
         {
             o.palette.setColor( QPalette::Text, o.palette.color( QPalette::HighlightedText ) );
         }
     }
+    
+    QStyleOptionViewItemV4 o3 = option;
+    if ( index.data( SourceTreeItem::Type ) != SourcesModel::CollectionSource )
+        o3.rect.setX( 0 );
+    
+    QApplication::style()->drawControl( QStyle::CE_ItemViewItem, &o3, painter );
+    
+    if ( index.data( SourceTreeItem::Type ) == SourcesModel::CollectionSource )
+    {
+        painter->save();
 
-    QStyledItemDelegate::paint( painter, option, index.model()->index( 0, 0 ) );
-    QStyledItemDelegate::paint( painter, o, index );
+        QFont normal = painter->font();
+        QFont bold = painter->font();
+        bold.setBold( true );
+        
+        SourceTreeItem* sti = SourcesModel::indexToTreeItem( index );
+        bool status = !( !sti || sti->source().isNull() || !sti->source()->isOnline() );
+        QString tracks;
+        int figWidth = 0;
+
+        if ( status )
+        {
+            tracks = QString::number( sti->source()->trackCount() );
+            figWidth = painter->fontMetrics().width( tracks );
+        }
+
+        QRect iconRect = option.rect.adjusted( 4, 6, -option.rect.width() + option.rect.height() - 12 + 4, -6 );
+        painter->drawPixmap( iconRect, QPixmap( RESPATH "images/user-avatar.png" ).scaledToHeight( iconRect.height(), Qt::SmoothTransformation ) );
+
+        if ( ( option.state & QStyle::State_Selected ) == QStyle::State_Selected )
+        {
+            painter->setPen( o.palette.color( QPalette::HighlightedText ) );
+        }
+        
+        QRect textRect = option.rect.adjusted( iconRect.width() + 8, 6, -figWidth - 24, 0 );
+        if ( status || sti->source().isNull() )
+            painter->setFont( bold );
+        QString text = painter->fontMetrics().elidedText( index.data().toString(), Qt::ElideRight, textRect.width() );
+        painter->drawText( textRect, text );
+
+        QString desc = status ? sti->source()->textStatus() : tr( "Offline" );
+        if ( sti->source().isNull() )
+            desc = tr( "All available tracks" );
+        if ( status && desc.isEmpty() && !sti->source()->currentTrack().isNull() )
+            desc = sti->source()->currentTrack()->artist() + " - " + sti->source()->currentTrack()->track();
+        if ( desc.isEmpty() )
+            desc = tr( "Online" );
+
+        textRect = option.rect.adjusted( iconRect.width() + 8, painter->fontMetrics().height() + 10, -figWidth - 24, 0 );
+        painter->setFont( normal );
+        text = painter->fontMetrics().elidedText( desc, Qt::ElideRight, textRect.width() );
+        painter->drawText( textRect, text );
+
+        if ( status )
+        {
+            painter->setRenderHint( QPainter::Antialiasing );
+
+            QRect figRect = o.rect.adjusted( o.rect.width() - figWidth - 18, 0, -10, -o.rect.height() + 16 );
+            int hd = ( option.rect.height() - figRect.height() ) / 2;
+            figRect.adjust( 0, hd, 0, hd );
+
+            QColor figColor( 167, 183, 211 );
+            painter->setPen( figColor );
+            painter->setBrush( figColor );
+
+            QPen origpen = painter->pen();
+            QPen pen = origpen;
+            pen.setWidth( 1.0 );
+            painter->setPen( pen );
+            painter->drawRect( figRect );
+
+            QPainterPath ppath;
+            ppath.moveTo( QPoint( figRect.x(), figRect.y() ) );
+            ppath.quadTo( QPoint( figRect.x() - 8, figRect.y() + figRect.height() / 2 ), QPoint( figRect.x(), figRect.y() + figRect.height() ) );
+            painter->drawPath( ppath );
+            ppath.moveTo( QPoint( figRect.x() + figRect.width(), figRect.y() ) );
+            ppath.quadTo( QPoint( figRect.x() + figRect.width() + 8, figRect.y() + figRect.height() / 2 ), QPoint( figRect.x() + figRect.width(), figRect.y() + figRect.height() ) );
+            painter->drawPath( ppath );
+
+            painter->setPen( origpen );
+
+            QTextOption to( Qt::AlignCenter );
+            painter->setFont( bold );
+            painter->setPen( Qt::white );
+            painter->drawText( figRect, tracks, to );
+        }
+
+        painter->restore();
+    }
+    else
+    {
+        QStyledItemDelegate::paint( painter, o, index );
+    }
+    
+#ifdef Q_WS_MAC
+    painter->setFont( savedFont );
+#endif    
 }

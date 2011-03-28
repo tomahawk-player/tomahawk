@@ -1,3 +1,21 @@
+/* === This file is part of Tomahawk Player - <http://tomahawk-player.org> ===
+ * 
+ *   Copyright 2010-2011, Christian Muehlhaeuser <muesli@tomahawk-player.org>
+ *
+ *   Tomahawk is free software: you can redistribute it and/or modify
+ *   it under the terms of the GNU General Public License as published by
+ *   the Free Software Foundation, either version 3 of the License, or
+ *   (at your option) any later version.
+ *
+ *   Tomahawk is distributed in the hope that it will be useful,
+ *   but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ *   GNU General Public License for more details.
+ *
+ *   You should have received a copy of the GNU General Public License
+ *   along with Tomahawk. If not, see <http://www.gnu.org/licenses/>.
+ */
+
 #include "tomahawk/infosystem.h"
 #include "tomahawk/tomahawkapp.h"
 #include "musixmatchplugin.h"
@@ -27,11 +45,11 @@ MusixMatchPlugin::~MusixMatchPlugin()
 void MusixMatchPlugin::getInfo(const QString &caller, const InfoType type, const QVariant& data, Tomahawk::InfoSystem::InfoCustomDataHash customData)
 {
     qDebug() << Q_FUNC_INFO;
-    if( !isValidTrackData(caller, data, customData) || !data.canConvert<Tomahawk::InfoSystem::MusixMatchHash>())
+    if( !isValidTrackData(caller, data, customData) || !data.canConvert<Tomahawk::InfoSystem::InfoCustomDataHash>())
         return;
-    Tomahawk::InfoSystem::MusixMatchHash hash = data.value<Tomahawk::InfoSystem::MusixMatchHash>();
-    QString artist = hash["artistName"];
-    QString track = hash["trackName"];
+    Tomahawk::InfoSystem::InfoCustomDataHash hash = data.value<Tomahawk::InfoSystem::InfoCustomDataHash>();
+    QString artist = hash["artistName"].toString();
+    QString track = hash["trackName"].toString();
     if( artist.isEmpty() || track.isEmpty() )
     {
         emit info(caller, Tomahawk::InfoSystem::InfoTrackLyrics, data, QVariant(), customData);
@@ -44,7 +62,7 @@ void MusixMatchPlugin::getInfo(const QString &caller, const InfoType type, const
     url.addQueryItem("apikey", m_apiKey);
     url.addQueryItem("q_artist", artist);
     url.addQueryItem("q_track", track);
-    QNetworkReply* reply = TomahawkApp::instance()->nam()->get(QNetworkRequest(url));
+    QNetworkReply* reply = TomahawkUtils::nam()->get(QNetworkRequest(url));
     reply->setProperty("customData", QVariant::fromValue<Tomahawk::InfoSystem::InfoCustomDataHash>(customData));
     reply->setProperty("origData", data);
     reply->setProperty("caller", caller);
@@ -55,22 +73,22 @@ void MusixMatchPlugin::getInfo(const QString &caller, const InfoType type, const
 bool MusixMatchPlugin::isValidTrackData(const QString &caller, const QVariant& data, Tomahawk::InfoSystem::InfoCustomDataHash &customData)
 {
     qDebug() << Q_FUNC_INFO;
-    if (data.isNull() || !data.isValid() || !data.canConvert<Tomahawk::InfoSystem::MusixMatchHash>())
+    if (data.isNull() || !data.isValid() || !data.canConvert<Tomahawk::InfoSystem::InfoCustomDataHash>())
     {
         emit info(caller, Tomahawk::InfoSystem::InfoTrackLyrics, data, QVariant(), customData);
         emit finished(caller, Tomahawk::InfoSystem::InfoTrackLyrics);
         qDebug() << "MusixMatchPlugin::isValidTrackData: Data null, invalid, or can't convert";
         return false;
     }
-    MusixMatchHash hash = data.value<Tomahawk::InfoSystem::MusixMatchHash>();
-    if (hash["trackName"].isEmpty() )
+    InfoCustomDataHash hash = data.value<Tomahawk::InfoSystem::InfoCustomDataHash>();
+    if (hash["trackName"].toString().isEmpty() )
     {
         emit info(caller, Tomahawk::InfoSystem::InfoTrackLyrics, data, QVariant(), customData);
         emit finished(caller, Tomahawk::InfoSystem::InfoTrackLyrics);
         qDebug() << "MusixMatchPlugin::isValidTrackData: Track name is empty";
         return false;
     }
-    if (hash["artistName"].isEmpty() )
+    if (hash["artistName"].toString().isEmpty() )
     {
         emit info(caller, Tomahawk::InfoSystem::InfoTrackLyrics, data, QVariant(), customData);
         emit finished(caller, Tomahawk::InfoSystem::InfoTrackLyrics);
@@ -104,7 +122,7 @@ void MusixMatchPlugin::trackSearchSlot()
     QUrl url(requestString);
     url.addQueryItem("apikey", m_apiKey);
     url.addQueryItem("track_id", track_id);
-    QNetworkReply* newReply = TomahawkApp::instance()->nam()->get(QNetworkRequest(url));
+    QNetworkReply* newReply = TomahawkUtils::nam()->get(QNetworkRequest(url));
     newReply->setProperty("origData", oldReply->property("origData"));
     newReply->setProperty("customData", oldReply->property("customData"));
     newReply->setProperty("caller", oldReply->property("caller"));

@@ -1,0 +1,9 @@
+set_property(
+    TARGET tomahawk_qtweetlib
+    APPEND PROPERTY COMPILE_DEFINITIONS CONSUMER_KEY="C4v4Wfa21rfIDck4HMR3A"
+)
+
+set_property(
+    TARGET tomahawk_qtweetlib
+    APPEND PROPERTY COMPILE_DEFINITIONS CONSUMER_SECRET="zXSjU6bjrvg6UVMJX4JufqHyjj3iextY14SR9uBEAo"
+)

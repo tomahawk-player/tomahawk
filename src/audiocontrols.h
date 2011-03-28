@@ -1,10 +1,29 @@
+/* === This file is part of Tomahawk Player - <http://tomahawk-player.org> ===
+ *
+ *   Copyright 2010-2011, Christian Muehlhaeuser <muesli@tomahawk-player.org>
+ *
+ *   Tomahawk is free software: you can redistribute it and/or modify
+ *   it under the terms of the GNU General Public License as published by
+ *   the Free Software Foundation, either version 3 of the License, or
+ *   (at your option) any later version.
+ *
+ *   Tomahawk is distributed in the hope that it will be useful,
+ *   but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ *   GNU General Public License for more details.
+ *
+ *   You should have received a copy of the GNU General Public License
+ *   along with Tomahawk. If not, see <http://www.gnu.org/licenses/>.
+ */
+
 #ifndef AUDIOCONTROLS_H
 #define AUDIOCONTROLS_H
 
 #include <QWidget>
 
-#include "tomahawk/result.h"
-#include "tomahawk/playlistinterface.h"
+#include "result.h"
+#include "playlistinterface.h"
+#include "tomahawk/infosystem.h"
 
 namespace Ui
 {
@@ -19,9 +38,15 @@ public:
     AudioControls( QWidget* parent = 0 );
     ~AudioControls();
 
+signals:
+    void playPressed();
+    void pausePressed();
+    
 public slots:
     void onRepeatModeChanged( PlaylistInterface::RepeatMode mode );
     void onShuffleModeChanged( bool enabled );
+    void infoSystemInfo( QString caller, Tomahawk::InfoSystem::InfoType type, QVariant input, QVariant output, Tomahawk::InfoSystem::InfoCustomDataHash customData );
+    void infoSystemFinished( QString target );
 
 protected:
     void changeEvent( QEvent* e );
@@ -38,8 +63,10 @@ private slots:
 
     void onRepeatClicked();
     void onShuffleClicked();
-    void onTrackClicked();
+
+    void onArtistClicked();
     void onAlbumClicked();
+    void onTrackClicked();
 
     void onCoverArtDownloaded();
 

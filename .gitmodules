@@ -1,0 +1,3 @@
+[submodule "thirdparty/jreen"]
+	path = thirdparty/jreen
+	url = git://gitorious.org/jreen/jreen.git

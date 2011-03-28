@@ -9,6 +9,8 @@
 #                             sqldrivers/libsqlite.dylib
 ################################################################################
 
+QT_FRAMEWORKS_DIR="$QTDIR/lib"
+QT_PLUGINS_DIR="$QTDIR/plugins"
 
 if [[ ! -d "$QTDIR/lib/QtCore.framework" ]]
 then
@@ -18,11 +20,9 @@ then
         QT_FRAMEWORKS_DIR=/Library/Frameworks
         QT_PLUGINS_DIR=/Developer/Applications/Qt/plugins
     fi
-elif [[ $QTDIR ]]
-then
-    QT_FRAMEWORKS_DIR="$QTDIR/lib"
-    QT_PLUGINS_DIR="$QTDIR/plugins"
 fi
+
+echo "Plugins go to: $QT_PLUGINS_DIR"
 
 if [ -z $QTDIR ]
 then
@@ -38,26 +38,18 @@ for x in $1
 do
     echo "C $x"
     cp -R $QT_FRAMEWORKS_DIR/$x.framework Contents/Frameworks/
+    chmod -R u+rw Contents/Frameworks/
 done
 
 #plugins
 shift
 mkdir -p Contents/MacOS
-while (( "$#" ))
-do
-    echo "C $1"
+mkdir -p Contents/MacOS/sqldrivers
+mkdir -p Contents/MacOS/imageformats
 
-    if [[ -d $QT_PLUGINS_DIR/$1 ]]
-    then
-        cp -R $QT_PLUGINS_DIR/$1 Contents/MacOS
-    else
-        dir=$(basename $(dirname $1))
-        mkdir Contents/MacOS/$dir
-        cp $QT_PLUGINS_DIR/$1 Contents/MacOS/$dir
-    fi
-    
-    shift
-done
+cp -R $QT_PLUGINS_DIR/sqldrivers/libqsqlite.dylib Contents/MacOS/sqldrivers/
+cp -R $QT_PLUGINS_DIR/imageformats/libqgif.dylib Contents/MacOS/imageformats/
+cp -R $QT_PLUGINS_DIR/imageformats/libqjpeg.dylib Contents/MacOS/imageformats/
 
 #cleanup
 find Contents/Frameworks -name Headers -o -name \*.prl -o -name \*_debug | xargs rm -rf

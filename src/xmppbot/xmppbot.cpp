@@ -1,11 +1,30 @@
+/* === This file is part of Tomahawk Player - <http://tomahawk-player.org> ===
+ * 
+ *   Copyright 2010-2011, Christian Muehlhaeuser <muesli@tomahawk-player.org>
+ *
+ *   Tomahawk is free software: you can redistribute it and/or modify
+ *   it under the terms of the GNU General Public License as published by
+ *   the Free Software Foundation, either version 3 of the License, or
+ *   (at your option) any later version.
+ *
+ *   Tomahawk is distributed in the hope that it will be useful,
+ *   but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ *   GNU General Public License for more details.
+ *
+ *   You should have received a copy of the GNU General Public License
+ *   along with Tomahawk. If not, see <http://www.gnu.org/licenses/>.
+ */
+
 #include "xmppbot.h"
 
 #include "tomahawk/tomahawkapp.h"
 #include "tomahawk/infosystem.h"
-#include "tomahawk/album.h"
-#include "tomahawk/typedefs.h"
-#include <tomahawksettings.h>
-#include <audio/audioengine.h>
+#include "album.h"
+#include "typedefs.h"
+#include "tomahawksettings.h"
+
+#include "audio/audioengine.h"
 
 #include <gloox/client.h>
 #include <gloox/rostermanager.h>
@@ -24,7 +43,7 @@ XMPPBot::XMPPBot(QObject *parent)
     , m_currReturnMessage("\n")
 {
     qDebug() << Q_FUNC_INFO;
-    TomahawkSettings *settings = TomahawkApp::instance()->settings();
+    TomahawkSettings *settings = TomahawkSettings::instance();
     QString server = settings->xmppBotServer();
     QString jidstring = settings->xmppBotJid();
     QString password = settings->xmppBotPassword();
@@ -44,7 +63,7 @@ XMPPBot::XMPPBot(QObject *parent)
     m_client.data()->registerMessageHandler(this);
     m_client.data()->setPresence(Presence::Available, 1, "Tomahawkbot available");
 
-    connect(TomahawkApp::instance()->audioEngine(), SIGNAL(started(const Tomahawk::result_ptr &)),
+    connect(AudioEngine::instance(), SIGNAL(started(const Tomahawk::result_ptr &)),
             SLOT(newTrackSlot(const Tomahawk::result_ptr &)));
 
     connect(TomahawkApp::instance()->infoSystem(),
@@ -138,39 +157,32 @@ void XMPPBot::handleMessage(const Message& msg, MessageSession* session)
     {
         QStringList tokens = body.right( body.length() - 5 ).split( QString( "-" ), QString::SkipEmptyParts );
         if ( tokens.count() < 2 )
-            APP->audioEngine()->play();
+            AudioEngine::instance()->play();
 
-        QVariantMap qv;
-        qv["artist"] = tokens.first().trimmed();
-        qv["track"] = tokens.last().trimmed();
-        Tomahawk::query_ptr q( new Tomahawk::Query( qv ) );
+        Tomahawk::query_ptr q = Tomahawk::Query::get( tokens.first().trimmed(), tokens.last().trimmed(), QString() );
         connect( q.data(), SIGNAL( resultsAdded( QList<Tomahawk::result_ptr> ) ),
                              SLOT( onResultsAdded( QList<Tomahawk::result_ptr> ) ) );
 
-        QList<Tomahawk::query_ptr> ql;
-        ql.append( q );
-
-        APP->pipeline()->add( ql );
         return;
     }
     else if ( body.startsWith( "stop" ) )
     {
-        APP->audioEngine()->stop();
+        AudioEngine::instance()->stop();
         return;
     }
     else if ( body.startsWith( "prev" ) )
     {
-        APP->audioEngine()->previous();
+        AudioEngine::instance()->previous();
         return;
     }
     else if ( body.startsWith( "next" ) )
     {
-        APP->audioEngine()->next();
+        AudioEngine::instance()->next();
         return;
     }
     else if ( body.startsWith( "pause" ) )
     {
-        APP->audioEngine()->pause();
+        AudioEngine::instance()->pause();
         return;
     }
 
@@ -203,10 +215,10 @@ void XMPPBot::handleMessage(const Message& msg, MessageSession* session)
             infoMap[InfoArtistFamiliarity] = m_currTrack.data()->artist()->name();
         if (token == "lyrics")
         {
-            MusixMatchHash myhash;
-            myhash["trackName"] = m_currTrack.data()->track();
-            myhash["artistName"] = m_currTrack.data()->artist()->name();
-            infoMap[InfoTrackLyrics] = QVariant::fromValue<Tomahawk::InfoSystem::MusixMatchHash>(myhash);
+            InfoCustomDataHash myhash;
+            myhash["trackName"] = QVariant::fromValue<QString>(m_currTrack.data()->track());
+            myhash["artistName"] = QVariant::fromValue<QString>(m_currTrack.data()->artist()->name());
+            infoMap[InfoTrackLyrics] = QVariant::fromValue<Tomahawk::InfoSystem::InfoCustomDataHash>(myhash);
         }
     }
     
@@ -352,15 +364,15 @@ void XMPPBot::infoReturnedSlot(QString caller, Tomahawk::InfoSystem::InfoType ty
         {
             qDebug() << "Lyrics requested";
             if (!output.canConvert<QString>() ||
-                !input.canConvert<Tomahawk::InfoSystem::MusixMatchHash>()
+                !input.canConvert<Tomahawk::InfoSystem::InfoCustomDataHash>()
                )
             {
                 qDebug() << "Variants failed to be valid";
                 break;
             }
-            MusixMatchHash inHash = input.value<MusixMatchHash>();
-            QString artist = inHash["artistName"];
-            QString track = inHash["trackName"];
+            InfoCustomDataHash inHash = input.value<InfoCustomDataHash>();
+            QString artist = inHash["artistName"].toString();
+            QString track = inHash["trackName"].toString();
             QString lyrics = output.toString();
             qDebug() << "lyrics = " << lyrics;
             m_currReturnMessage += QString("\nLyrics for \"%1\" by %2:\n\n%3\n").arg(track).arg(artist).arg(lyrics);
@@ -400,7 +412,7 @@ void XMPPBot::infoFinishedSlot(QString caller)
 
 void XMPPBot::onResultsAdded( const QList<Tomahawk::result_ptr>& result )
 {
-    APP->audioEngine()->playItem( 0, result.first() );
+    AudioEngine::instance()->playItem( 0, result.first() );
 }
 
 ///////////////////////////////////////////////////////////////////////////////////////

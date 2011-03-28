@@ -5,24 +5,58 @@
 	<key>CFBundleDevelopmentRegion</key>
 	<string>English</string>
 	<key>CFBundleExecutable</key>
-	<string>tomahawk</string>
+	<string>Tomahawk</string>
 	<key>CFBundleIdentifier</key>
-	<string>org.tomahawk.Tomahawk</string>
+	<string>org.tomahawk-player.Tomahawk</string>
 	<key>CFBundleInfoDictionaryVersion</key>
 	<string>6.0</string>
 	<key>CFBundlePackageType</key>
 	<string>APPL</string>
 	<key>CFBundleVersion</key>
-	<string>0.0.1.0</string>
+	<string>0.0.2.0</string>
 	<key>CFBundleShortVersionString</key>
-	<string>0.0.1</string>
+	<string>0.0.2</string>
 	<key>CFBundleSignature</key>
 	<string>tomahawk</string>
 	<key>CFBundleIconFile</key>
-	<string>tomahawk.icns</string>
+	<string>Tomahawk.icns</string>
 	<key>CFBundleName</key>
 	<string>Tomahawk</string>
 	<key>LSMinimumSystemVersion</key>
-        <string>10.5.0</string>
+    <string>10.5.0</string>
+    <key>SUFeedURL</key>
+    <string>http://download.tomahawk-player.org/sparkle</string>
+    <key>SUPublicDSAKeyFile</key>
+    <string>sparkle_pub.pem</string>
+    <key>CFBundleURLTypes</key>
+        <array>
+            <dict>
+                <key>CFBundleURLName</key>
+                <string>Tomahawk URL</string>
+                <key>CFBundleURLSchemes</key>
+                <array>
+                    <string>tomahawk</string>
+                </array>
+            </dict>
+        </array>
+    <key>CFBundleDocumentTypes</key>
+      <array>
+        <dict>
+          <key>CFBundleTypeExtensions</key>
+          <array>
+            <string>xspf</string>
+          </array>
+          <key>CFBundleTypeIconFile</key>
+          <string>Generic.icns</string>
+          <key>CFBundleTypeMIMETypes</key>
+          <array>
+            <string>application/xspf+xml</string>
+          </array>
+          <key>CFBundleTypeName</key>
+          <string>XSPF Playlist</string>
+          <key>CFBundleTypeRole</key>
+          <string>Viewer</string>
+        </dict>
+      </array>        
 </dict>
 </plist>

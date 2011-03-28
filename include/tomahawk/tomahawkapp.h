@@ -1,63 +1,75 @@
+/* === This file is part of Tomahawk Player - <http://tomahawk-player.org> ===
+ * 
+ *   Copyright 2010-2011, Christian Muehlhaeuser <muesli@tomahawk-player.org>
+ *
+ *   Tomahawk is free software: you can redistribute it and/or modify
+ *   it under the terms of the GNU General Public License as published by
+ *   the Free Software Foundation, either version 3 of the License, or
+ *   (at your option) any later version.
+ *
+ *   Tomahawk is distributed in the hope that it will be useful,
+ *   but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ *   GNU General Public License for more details.
+ *
+ *   You should have received a copy of the GNU General Public License
+ *   along with Tomahawk. If not, see <http://www.gnu.org/licenses/>.
+ */
+
 #ifndef TOMAHAWKAPP_H
 #define TOMAHAWKAPP_H
 
 #define APP TomahawkApp::instance()
 
-#define RESPATH ":/data/"
-
 #include "headlesscheck.h"
+#include "config.h"
+
+#include "mac/tomahawkapp_mac.h" // for PlatforInterface
 
 #include <QRegExp>
 #include <QFile>
 #include <QSettings>
-#include <QNetworkAccessManager>
 #include <QDir>
 
 #include "QxtHttpServerConnector"
 #include "QxtHttpSessionManager"
 
-#include "tomahawk/functimeout.h"
-#include "tomahawk/typedefs.h"
-#include "tomahawk/tomahawkplugin.h"
-#include "tomahawk/playlist.h"
-#include "tomahawk/pipeline.h"
+#include "typedefs.h"
+#include "playlist.h"
+#include "resolver.h"
+#include "network/servent.h"
 
 #include "utils/tomahawkutils.h"
 
-#include "sourcelist.h"
-#include "servent.h"
-
 class AudioEngine;
 class Database;
-class Jabber;
-class XMPPBot;
-class TomahawkZeroconf;
+class SipHandler;
 class TomahawkSettings;
+class XMPPBot;
 
 namespace Tomahawk
 {
+    class ShortcutHandler;
     namespace InfoSystem
     {
         class InfoSystem;
     }
 }
 
-#ifndef NO_LIBLASTFM
+#ifdef LIBLASTFM_FOUND
 #include <lastfm/NetworkAccessManager>
 #include "scrobbler.h"
 #endif
 
 #ifndef TOMAHAWK_HEADLESS
 class TomahawkWindow;
-class PlaylistManager;
-#include <QStackedWidget>
 #endif
 
 
 // this also acts as a a container for important top-level objects
 // that other parts of the app need to find
 // (eg, library, pipeline, friends list)
-class TomahawkApp : public TOMAHAWK_APPLICATION
+class TomahawkApp : public TOMAHAWK_APPLICATION, public Tomahawk::PlatformInterface
 {
 Q_OBJECT
 
@@ -67,45 +79,28 @@ public:
 
     static TomahawkApp* instance();
 
-    Tomahawk::Pipeline* pipeline() { return &m_pipeline; }
-    AudioEngine* audioEngine() { return m_audioEngine; }
-    Database* database() { return m_db; }
-    SourceList& sourcelist() { return m_sources; }
-    Servent& servent() { return m_servent; }
-    QNetworkAccessManager* nam() { return m_nam; }
-    QNetworkProxy* proxy() { return m_proxy; }
+    SipHandler* sipHandler() { return m_sipHandler; }
     Tomahawk::InfoSystem::InfoSystem* infoSystem() { return m_infoSystem; }
     XMPPBot* xmppBot() { return m_xmppBot; }
-    const QString& nodeID() const;
-
 
 #ifndef TOMAHAWK_HEADLESS
     AudioControls* audioControls();
-    PlaylistManager* playlistManager();
+    TomahawkWindow* mainWindow() const { return m_mainwindow; }
 #endif
 
-    void registerIODeviceFactory( const QString &proto, boost::function<QSharedPointer<QIODevice>(Tomahawk::result_ptr)> fac );
-    QSharedPointer<QIODevice> localFileIODeviceFactory( const Tomahawk::result_ptr& result );
-    QSharedPointer<QIODevice> httpIODeviceFactory( const Tomahawk::result_ptr& result );
+    void addScriptResolver( const QString& scriptPath );
+    void removeScriptResolver( const QString& scriptPath );
 
-    TomahawkSettings* settings() { return m_settings; }
+    // PlatformInterface
+    virtual void activate();
+    virtual bool loadUrl( const QString& url );
 
-signals:
-    void settingsChanged();
+    // because QApplication::arguments() is expensive
+    bool scrubFriendlyName() const { return m_scrubFriendlyName; }
     
-public slots:
-    QSharedPointer<QIODevice> getIODeviceForUrl( const Tomahawk::result_ptr& result );
-    void reconnectJabber();
-
 private slots:
-    void jabberMessage( const QString&, const QString& );
-    void jabberPeerOffline( const QString& );
-    void jabberPeerOnline( const QString& );
-    void jabberAuthError( int code, const QString& msg );
-    void jabberDisconnected();
-    void jabberConnected();
-
-    void lanHostFound( const QString&, int, const QString&, const QString& );
+    void setupSIP();
+    void messageReceived( const QString& );
 
 private:
     void initLocalCollection();
@@ -113,23 +108,21 @@ private:
     void registerMetaTypes();
     void startServent();
     void setupDatabase();
-    void setupJabber();
     void setupPipeline();
     void startHTTP();
 
     QList<Tomahawk::collection_ptr> m_collections;
-    QList<TomahawkPlugin*> m_plugins;
+    QList<Tomahawk::ExternalResolver*> m_scriptResolvers;
 
-    Tomahawk::Pipeline m_pipeline;
+    Database* m_database;
     AudioEngine* m_audioEngine;
-    Database* m_db;
-    Servent m_servent;
-    SourceList m_sources;
-    TomahawkZeroconf* m_zeroconf;
-    QSharedPointer<Jabber> m_jabber;
+    SipHandler* m_sipHandler;
+    Servent* m_servent;
     XMPPBot* m_xmppBot;
-
-#ifndef NO_LIBLASTFM
+    Tomahawk::ShortcutHandler* m_shortcutHandler;
+    bool m_scrubFriendlyName;
+    
+#ifdef LIBLASTFM_FOUND
     Scrobbler* m_scrobbler;
 #endif
 
@@ -137,13 +130,7 @@ private:
     TomahawkWindow* m_mainwindow;
 #endif    
 
-    QMap< QString,boost::function<QSharedPointer<QIODevice>(Tomahawk::result_ptr)> > m_iofactories;
-
     bool m_headless;
-    TomahawkSettings* m_settings;
-
-    QNetworkAccessManager* m_nam;
-    QNetworkProxy* m_proxy;
 
     Tomahawk::InfoSystem::InfoSystem* m_infoSystem;
 

@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<rss version="2.0" xmlns:sparkle="http://www.andymatuschak.org/xml-namespaces/sparkle"  xmlns:dc="http://purl.org/dc/elements/1.1/">
+    <channel>
+        <title>Tomahawk Player</title>
+        <link>http://www.gettomahawk.com</link>
+        <description>Tomahawk Player Beta</description>
+        <language>en</language>
+        <item>
+            <title>Version 0.0.1 (Tomahawk Player Beta - It Lives?)</title>
+            <sparkle:releaseNotesLink>
+                https://github.com/tomahawk-player/tomahawk/raw/stable/ChangeLog
+            </sparkle:releaseNotesLink>
+            <pubDate>Fri, 25 Mar 2011 00:00:01 +0100</pubDate>
+            <enclosure url="http://download.tomahawk-player.org/tomahawk-beta-0.0.1.exe" sparkle:version="0.0.1" />
+        </item>
+    </channel>
+</rss>
