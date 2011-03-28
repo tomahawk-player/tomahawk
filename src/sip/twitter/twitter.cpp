@@ -168,6 +168,7 @@ TwitterPlugin::disconnectPlugin()
         m_twitterAuth.data()->deleteLater();
     
     m_cachedPeers.empty();
+    m_attemptedConnects.empty();
     delete m_twitterAuth.data();
     m_isOnline = false;
 }
@@ -583,14 +584,16 @@ TwitterPlugin::registerOffer( const QString &screenName, const QHash< QString, Q
             qDebug() << "TwitterPlugin did not send offer because external address is " << Servent::instance()->externalAddress() << " and external port is " << Servent::instance()->externalPort();
     }
 
-    if ( m_isOnline && _peerData.contains( "host" ) && _peerData.contains( "port" ) && _peerData.contains( "pkey" ) )
-        QMetaObject::invokeMethod( this, "makeConnection", Q_ARG( QString, screenName ), QGenericArgument( "QHash< QString, QVariant >", (const void*)&_peerData ) );
-    
     if ( peersChanged )
     {
         m_cachedPeers[screenName] = QVariant::fromValue< QHash< QString, QVariant > >( _peerData );
         TomahawkSettings::instance()->setTwitterCachedPeers( m_cachedPeers );
+        m_attemptedConnects[screenName] = false;
     }
+
+    if ( m_isOnline && _peerData.contains( "host" ) && _peerData.contains( "port" ) && _peerData.contains( "pkey" ) )
+        QMetaObject::invokeMethod( this, "makeConnection", Q_ARG( QString, screenName ), QGenericArgument( "QHash< QString, QVariant >", (const void*)&_peerData ) );
+    
 }
 
 void
@@ -611,6 +614,11 @@ void
 TwitterPlugin::makeConnection( const QString &screenName, const QHash< QString, QVariant > &peerData )
 {
     qDebug() << Q_FUNC_INFO;
+    if ( m_attemptedConnects.contains( screenName ) && m_attemptedConnects[screenName] )
+    {
+        qDebug() << "Already attempted to connect to this peer with no change in their status, not trying again for now";
+        return;
+    }
     if ( !peerData.contains( "host" ) || !peerData.contains( "port" ) || !peerData.contains( "pkey" ) || !peerData.contains( "node" ) )
     {
         qDebug() << "TwitterPlugin could not find host and/or port and/or pkey for peer " << screenName;
@@ -623,6 +631,7 @@ TwitterPlugin::makeConnection( const QString &screenName, const QHash< QString, 
                                             peerData["pkey"].toString(),
                                             friendlyName,
                                             peerData["node"].toString() );
+    m_attemptedConnects[screenName] = true;
 }
 
 void
@@ -630,6 +639,7 @@ TwitterPlugin::directMessagePosted( const QTweetDMStatus& message )
 {
     qDebug() << Q_FUNC_INFO;
     qDebug() << "TwitterPlugin sent message to " << message.recipientScreenName() << " containing: " << message.text();
+    
 }
 
 void

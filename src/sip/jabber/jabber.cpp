@@ -77,10 +77,9 @@ JabberPlugin::connectPlugin( bool startup )
         return false;
 
     m_currentUsername = TomahawkSettings::instance()->jabberUsername();
-    m_currentPassword = TomahawkSettings::instance()->jabberPassword();
     m_currentServer = TomahawkSettings::instance()->jabberServer();
+    m_currentPassword = TomahawkSettings::instance()->jabberPassword();
     m_currentPort = TomahawkSettings::instance()->jabberPort();
-
     QString server = m_currentServer;
 
     QStringList splitJid = m_currentUsername.split( '@', QString::SkipEmptyParts );
@@ -181,7 +180,6 @@ void
 JabberPlugin::checkSettings()
 {
     bool reconnect = false;
-
     if ( m_currentUsername != TomahawkSettings::instance()->jabberUsername() )
         reconnect = true;
     if ( m_currentPassword != TomahawkSettings::instance()->jabberPassword() )

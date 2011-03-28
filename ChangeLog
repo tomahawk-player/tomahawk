@@ -1,4 +1,6 @@
 Version 0.0.2:
+    * Don't reconnect to Jabber if the settings dialog is closed successfully
+      but the Jabber settings haven't changed.
     * Don't run a rescan of the local collection if the settings dialog is
       closed successfully but the path hasn't changed.
     * Don't attempt to connect to unavailable Twitter peers over and over.
@@ -10,9 +12,9 @@ Version 0.0.2:
       the Tomahawk XMPP presence.
     * Incompatible change: Twitter SIP protocol has changed slightly. 0.0.1
       clients will not be able to talk to newer clients.
-    * Hopefully fix crashes during Twitter authentication.
+    * Hopefully fixed crashes during Twitter authentication.
     * Don't let long playlist or summary names force a large Tomahawk window.
-    * Fixed Jabber auth: Freshly added contacts never showed up.
+    * Tomahawk now asks you to authorize new contacts.
 
 Version 0.0.1:
     * First public release.
