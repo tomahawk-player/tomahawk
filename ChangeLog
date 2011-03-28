@@ -1,3 +1,7 @@
+Version 0.0.3:
+    * Properly honor the chosen port number if a static host and port are
+      marked as preferred.
+
 Version 0.0.2:
     * Don't reconnect to Jabber if the settings dialog is closed successfully
       but the Jabber settings haven't changed.
