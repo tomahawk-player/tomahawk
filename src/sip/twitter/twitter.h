@@ -59,8 +59,8 @@ public:
 
 public slots:
     virtual bool connectPlugin( bool startup );
-
     void disconnectPlugin();
+    void checkSettings();
 
     void sendMsg( const QString& to, const QString& msg )
     {
@@ -108,7 +108,6 @@ private:
     qint64 m_cachedMentionsSinceId;
     qint64 m_cachedDirectMessagesSinceId;
     QHash< QString, QVariant > m_cachedPeers;
-    QHash< QString, bool > m_attemptedConnects;
     QSet<QString> m_keyCache;
     bool m_finishedFriends;
     bool m_finishedMentions;
