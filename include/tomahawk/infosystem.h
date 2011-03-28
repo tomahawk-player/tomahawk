@@ -94,7 +94,6 @@ enum InfoType {
 typedef QMap< InfoType, QVariant > InfoMap;
 typedef QMap< QString, QMap< QString, QString > > InfoGenericMap;
 typedef QHash< QString, QVariant > InfoCustomDataHash;
-typedef QHash< QString, QString > MusixMatchHash;
 
 class InfoPlugin : public QObject
 {
@@ -168,6 +167,5 @@ private:
 
 Q_DECLARE_METATYPE( Tomahawk::InfoSystem::InfoGenericMap )
 Q_DECLARE_METATYPE( Tomahawk::InfoSystem::InfoCustomDataHash );
-Q_DECLARE_METATYPE( Tomahawk::InfoSystem::MusixMatchHash )
 
 #endif // TOMAHAWK_INFOSYSTEM_H

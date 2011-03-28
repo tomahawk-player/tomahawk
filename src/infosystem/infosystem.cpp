@@ -47,7 +47,6 @@ InfoSystem::InfoSystem(QObject *parent)
     qDebug() << Q_FUNC_INFO;
     qRegisterMetaType<QMap< QString, QMap< QString, QString > > >("Tomahawk::InfoSystem::InfoGenericMap");
     qRegisterMetaType<QHash<QString, QVariant > >("Tomahawk::InfoSystem::InfoCustomDataHash");
-    qRegisterMetaType<QHash<QString, QString > >("Tomahawk::InfoSystem::MusixMatchHash");
     
     m_infoSystemCacheThreadController = new QThread( this );
     m_cache = new Tomahawk::InfoSystem::InfoSystemCache();

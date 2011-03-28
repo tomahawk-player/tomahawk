@@ -215,10 +215,10 @@ void XMPPBot::handleMessage(const Message& msg, MessageSession* session)
             infoMap[InfoArtistFamiliarity] = m_currTrack.data()->artist()->name();
         if (token == "lyrics")
         {
-            MusixMatchHash myhash;
-            myhash["trackName"] = m_currTrack.data()->track();
-            myhash["artistName"] = m_currTrack.data()->artist()->name();
-            infoMap[InfoTrackLyrics] = QVariant::fromValue<Tomahawk::InfoSystem::MusixMatchHash>(myhash);
+            InfoCustomDataHash myhash;
+            myhash["trackName"] = QVariant::fromValue<QString>(m_currTrack.data()->track());
+            myhash["artistName"] = QVariant::fromValue<QString>(m_currTrack.data()->artist()->name());
+            infoMap[InfoTrackLyrics] = QVariant::fromValue<Tomahawk::InfoSystem::InfoCustomDataHash>(myhash);
         }
     }
     
@@ -364,15 +364,15 @@ void XMPPBot::infoReturnedSlot(QString caller, Tomahawk::InfoSystem::InfoType ty
         {
             qDebug() << "Lyrics requested";
             if (!output.canConvert<QString>() ||
-                !input.canConvert<Tomahawk::InfoSystem::MusixMatchHash>()
+                !input.canConvert<Tomahawk::InfoSystem::InfoCustomDataHash>()
                )
             {
                 qDebug() << "Variants failed to be valid";
                 break;
             }
-            MusixMatchHash inHash = input.value<MusixMatchHash>();
-            QString artist = inHash["artistName"];
-            QString track = inHash["trackName"];
+            InfoCustomDataHash inHash = input.value<InfoCustomDataHash>();
+            QString artist = inHash["artistName"].toString();
+            QString track = inHash["trackName"].toString();
             QString lyrics = output.toString();
             qDebug() << "lyrics = " << lyrics;
             m_currReturnMessage += QString("\nLyrics for \"%1\" by %2:\n\n%3\n").arg(track).arg(artist).arg(lyrics);

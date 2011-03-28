@@ -45,11 +45,11 @@ MusixMatchPlugin::~MusixMatchPlugin()
 void MusixMatchPlugin::getInfo(const QString &caller, const InfoType type, const QVariant& data, Tomahawk::InfoSystem::InfoCustomDataHash customData)
 {
     qDebug() << Q_FUNC_INFO;
-    if( !isValidTrackData(caller, data, customData) || !data.canConvert<Tomahawk::InfoSystem::MusixMatchHash>())
+    if( !isValidTrackData(caller, data, customData) || !data.canConvert<Tomahawk::InfoSystem::InfoCustomDataHash>())
         return;
-    Tomahawk::InfoSystem::MusixMatchHash hash = data.value<Tomahawk::InfoSystem::MusixMatchHash>();
-    QString artist = hash["artistName"];
-    QString track = hash["trackName"];
+    Tomahawk::InfoSystem::InfoCustomDataHash hash = data.value<Tomahawk::InfoSystem::InfoCustomDataHash>();
+    QString artist = hash["artistName"].toString();
+    QString track = hash["trackName"].toString();
     if( artist.isEmpty() || track.isEmpty() )
     {
         emit info(caller, Tomahawk::InfoSystem::InfoTrackLyrics, data, QVariant(), customData);
@@ -73,22 +73,22 @@ void MusixMatchPlugin::getInfo(const QString &caller, const InfoType type, const
 bool MusixMatchPlugin::isValidTrackData(const QString &caller, const QVariant& data, Tomahawk::InfoSystem::InfoCustomDataHash &customData)
 {
     qDebug() << Q_FUNC_INFO;
-    if (data.isNull() || !data.isValid() || !data.canConvert<Tomahawk::InfoSystem::MusixMatchHash>())
+    if (data.isNull() || !data.isValid() || !data.canConvert<Tomahawk::InfoSystem::InfoCustomDataHash>())
     {
         emit info(caller, Tomahawk::InfoSystem::InfoTrackLyrics, data, QVariant(), customData);
         emit finished(caller, Tomahawk::InfoSystem::InfoTrackLyrics);
         qDebug() << "MusixMatchPlugin::isValidTrackData: Data null, invalid, or can't convert";
         return false;
     }
-    MusixMatchHash hash = data.value<Tomahawk::InfoSystem::MusixMatchHash>();
-    if (hash["trackName"].isEmpty() )
+    InfoCustomDataHash hash = data.value<Tomahawk::InfoSystem::InfoCustomDataHash>();
+    if (hash["trackName"].toString().isEmpty() )
     {
         emit info(caller, Tomahawk::InfoSystem::InfoTrackLyrics, data, QVariant(), customData);
         emit finished(caller, Tomahawk::InfoSystem::InfoTrackLyrics);
         qDebug() << "MusixMatchPlugin::isValidTrackData: Track name is empty";
         return false;
     }
-    if (hash["artistName"].isEmpty() )
+    if (hash["artistName"].toString().isEmpty() )
     {
         emit info(caller, Tomahawk::InfoSystem::InfoTrackLyrics, data, QVariant(), customData);
         emit finished(caller, Tomahawk::InfoSystem::InfoTrackLyrics);
