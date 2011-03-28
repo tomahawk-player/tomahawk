@@ -16,45 +16,39 @@
  *   along with Tomahawk. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef SCANMANAGER_H
-#define SCANMANAGER_H
+#ifndef TOMAHAWK_ACLSYSTEM_H
+#define TOMAHAWK_ACLSYSTEM_H
 
 #include <QObject>
-#include <QStringList>
+#include <QString>
+#include <QHash>
+#include <QTimer>
 
 #include "dllmacro.h"
 
-class MusicScanner;
-class QThread;
-
-class ScanManager : public QObject
+class DLLEXPORT ACLSystem : public QObject
 {
-Q_OBJECT
+    Q_OBJECT
+
+    enum ACLType {
+        Allow,
+        Deny
+    };
 
 public:
-    static ScanManager* instance();
-
-    explicit ScanManager( QObject* parent = 0 );
-    virtual ~ScanManager();
+        
+    ACLSystem( QObject *parent = 0 );
+    ~ACLSystem();
     
-    void runManualScan( const QStringList& path );
-
-signals:
-    void finished();
+    bool isAuthorized( const QString &dbid, const QString &path );
+    void authorize( const QString &dbid, const QString &path, ACLType type );
     
 private slots:
-    void scannerQuit();
-    void scannerFinished();
-    void scannerDestroyed( QObject* scanner );
+    void saveTimerFired();
 
-    void onSettingsChanged();
-    
 private:
-    static ScanManager* s_instance;
-    
-    MusicScanner* m_scanner;
-    QThread* m_musicScannerThreadController;
-    QStringList m_currScannerPath;
+    QHash< QString, QHash< QString, ACLType> > m_cache;
+    QTimer m_saveTimer;
 };
 
-#endif
+#endif // TOMAHAWK_ACLSYSTEM_H

@@ -165,7 +165,7 @@ private:
 
 }
 
-Q_DECLARE_METATYPE( Tomahawk::InfoSystem::InfoGenericMap )
+Q_DECLARE_METATYPE( Tomahawk::InfoSystem::InfoGenericMap );
 Q_DECLARE_METATYPE( Tomahawk::InfoSystem::InfoCustomDataHash );
 
 #endif // TOMAHAWK_INFOSYSTEM_H

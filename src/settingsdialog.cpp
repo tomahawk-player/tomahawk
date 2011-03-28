@@ -86,7 +86,8 @@ SettingsDialog::SettingsDialog( QWidget *parent )
     }
 
     // MUSIC SCANNER
-    ui->lineEditMusicPath->setText( s->scannerPath() );
+    //FIXME: MULTIPLECOLLECTIONDIRS
+    ui->lineEditMusicPath->setText( s->scannerPath().first() );
 
     // LAST FM
     ui->checkBoxEnableLastfm->setChecked( s->scrobblingEnabled() );
@@ -133,7 +134,7 @@ SettingsDialog::~SettingsDialog()
         s->setExternalHostname( ui->staticHostName->text() );
         s->setExternalPort( ui->staticPort->value() );
 
-        s->setScannerPath( ui->lineEditMusicPath->text() );
+        s->setScannerPath( QStringList( ui->lineEditMusicPath->text() ) );
         
         s->setScrobblingEnabled( ui->checkBoxEnableLastfm->isChecked() );
         s->setLastFmUsername( ui->lineEditLastfmUsername->text() );

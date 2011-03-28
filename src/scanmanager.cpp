@@ -89,9 +89,10 @@ ScanManager::onSettingsChanged()
 
 
 void
-ScanManager::runManualScan( const QString& path )
+ScanManager::runManualScan( const QStringList& path )
 {
     qDebug() << Q_FUNC_INFO;
+    
     if ( !m_musicScannerThreadController && !m_scanner ) //still running if these are not zero
     {
         m_musicScannerThreadController = new QThread( this );

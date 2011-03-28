@@ -65,19 +65,19 @@ TomahawkSettings::~TomahawkSettings()
 }
 
 
-QString
+QStringList
 TomahawkSettings::scannerPath() const
 {
     #ifndef TOMAHAWK_HEADLESS
-    return value( "scannerpath", QDesktopServices::storageLocation( QDesktopServices::MusicLocation ) ).toString();
+    return value( "scannerpath", QDesktopServices::storageLocation( QDesktopServices::MusicLocation ) ).toStringList();
     #else
-    return value( "scannerpath", "" ).toString();
+    return value( "scannerpath", "" ).toStringList();
     #endif
 }
 
 
 void
-TomahawkSettings::setScannerPath( const QString& path )
+TomahawkSettings::setScannerPath( const QStringList& path )
 {
     setValue( "scannerpath", path );
 }

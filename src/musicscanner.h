@@ -69,7 +69,7 @@ class MusicScanner : public QObject
 Q_OBJECT
 
 public:
-    MusicScanner( const QString& dir, quint32 bs = 0 );
+    MusicScanner( const QStringList& dirs, quint32 bs = 0 );
     ~MusicScanner();
 
 signals:
@@ -92,7 +92,7 @@ private slots:
     void commitBatch( const QVariantList& );
 
 private:
-    QString m_dir;
+    QStringList m_dirs;
     QMap<QString, QString> m_ext2mime; // eg: mp3 -> audio/mpeg
     unsigned int m_scanned;
     unsigned int m_skipped;

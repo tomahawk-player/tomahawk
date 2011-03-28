@@ -41,8 +41,8 @@ public:
     void applyChanges() { emit changed(); }
 
     /// General settings
-    QString scannerPath() const; /// QDesktopServices::MusicLocation by default
-    void setScannerPath( const QString& path );
+    QStringList scannerPath() const; /// QDesktopServices::MusicLocation by default
+    void setScannerPath( const QStringList& path );
     bool hasScannerPath() const;
     
     bool acceptedLegalWarning() const;

@@ -70,9 +70,9 @@ DirLister::scanDir( QDir dir, int depth )
 }
 
 
-MusicScanner::MusicScanner( const QString& dir, quint32 bs )
+MusicScanner::MusicScanner( const QStringList& dirs, quint32 bs )
     : QObject()
-    , m_dir( dir )
+    , m_dirs( dirs )
     , m_batchsize( bs )
     , m_dirLister( 0 )
     , m_dirListerThreadController( 0 )
@@ -122,7 +122,8 @@ MusicScanner::startScan()
     m_skippedFiles.clear();
 
     // trigger the scan once we've loaded old mtimes for dirs below our path
-    DatabaseCommand_DirMtimes* cmd = new DatabaseCommand_DirMtimes( m_dir );
+    //FIXME: MULTIPLECOLLECTIONDIRS
+    DatabaseCommand_DirMtimes* cmd = new DatabaseCommand_DirMtimes( m_dirs.first() );
     connect( cmd, SIGNAL( done( QMap<QString, unsigned int> ) ),
                     SLOT( setMtimes( QMap<QString, unsigned int> ) ) );
     connect( cmd, SIGNAL( done( QMap<QString, unsigned int> ) ),
@@ -148,7 +149,9 @@ MusicScanner::scan()
                      SLOT( commitBatch( QVariantList ) ), Qt::DirectConnection );
 
     m_dirListerThreadController = new QThread( this );
-    m_dirLister = new DirLister( QDir( m_dir, 0 ), m_dirmtimes );
+    
+    //FIXME: MULTIPLECOLLECTIONDIRS
+    m_dirLister = new DirLister( QDir( m_dirs.first(), 0 ), m_dirmtimes );
     m_dirLister->moveToThread( m_dirListerThreadController );
 
     connect( m_dirLister, SIGNAL( fileToScan( QFileInfo ) ),

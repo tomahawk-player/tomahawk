@@ -16,6 +16,7 @@ set( libSources
     sourcelist.cpp
     pipeline.cpp
 
+    aclsystem.cpp
     artist.cpp
     album.cpp
     collection.cpp
@@ -155,6 +156,7 @@ set( libHeaders
     pipeline.h
     functimeout.h
 
+    aclsystem.h
     collection.h
     query.h
     resolver.h
