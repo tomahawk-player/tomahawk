@@ -52,8 +52,8 @@ public:
 
 public slots:
     virtual bool connectPlugin( bool startup );
-
     void disconnectPlugin();
+    void checkSettings() {}
 
     void sendMsg( const QString& to, const QString& msg )
     {
