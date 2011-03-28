@@ -65,6 +65,9 @@
              <verstretch>0</verstretch>
             </sizepolicy>
            </property>
+           <property name="placeholderText">
+               <string>e.g. user@example.com</string>
+           </property>
           </widget>
          </item>
          <item>
