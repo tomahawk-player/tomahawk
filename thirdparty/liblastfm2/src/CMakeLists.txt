@@ -84,10 +84,18 @@ endif(WIN32)
 
 qt4_wrap_cpp(MOC_SOURCES ${MOC_HEADERS})
 
-add_library(tomahawk_lastfm2 SHARED
-  ${SOURCES}
-  ${MOC_SOURCES}
-)
+IF( WIN32 )
+    add_library(tomahawk_lastfm2 SHARED
+    ${SOURCES}
+    ${MOC_SOURCES}
+    )
+ELSE()
+    add_definitions(-fPIC)
+    add_library(tomahawk_lastfm2 STATIC
+    ${SOURCES}
+    ${MOC_SOURCES}
+    )
+ENDIF()
 
 target_link_libraries(tomahawk_lastfm2
   ${QT_LIBRARIES}
@@ -103,8 +111,11 @@ if(APPLE)
   )
 endif(APPLE)
 
-install(TARGETS tomahawk_lastfm2
-  RUNTIME DESTINATION bin
-  LIBRARY DESTINATION lib${LIB_SUFFIX}
-  ARCHIVE DESTINATION lib${LIB_SUFFIX}
-)
+
+IF( WIN32 )
+    install(TARGETS tomahawk_lastfm2
+    RUNTIME DESTINATION bin
+    LIBRARY DESTINATION lib${LIB_SUFFIX}
+    ARCHIVE DESTINATION lib${LIB_SUFFIX}
+    )
+ENDIF()

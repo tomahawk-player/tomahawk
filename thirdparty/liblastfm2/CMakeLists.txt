@@ -17,7 +17,7 @@ include(${QT_USE_FILE})
 add_subdirectory(src)
 
 # Optionally build the fingerprint library
-option(BUILD_FINGERPRINT "Build the lastfm-fingerprint library" ON)
+option(BUILD_FINGERPRINT "Build the lastfm-fingerprint library" OFF)
 find_package(LibSamplerate)
 find_package(LibFFTW3)
 
