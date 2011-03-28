@@ -39,7 +39,6 @@ public:
 public slots:
     void addContact( const QString& id ) { qDebug() << Q_FUNC_INFO << id; }
 
-    void checkSettings();
     void connectPlugins( bool startup = false, const QString &pluginName = QString() );
     void disconnectPlugins( const QString &pluginName = QString() );
     void toggleConnect();

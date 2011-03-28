@@ -27,8 +27,8 @@
 #include <QVariant>
 #include <utils/tomahawkutils.h>
 #include <gloox/capabilities.h>
-#include <qjson/parser.h>
 #include <QMessageBox>
+#include <qjson/parser.h>
 
 using namespace gloox;
 using namespace std;

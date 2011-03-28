@@ -51,15 +51,13 @@ public slots:
     void disconnectPlugin()
     {
         onDisconnected();
-
+        
         if ( p )
             p->disconnect();
 
         delete p;
         p = 0;
     }
-
-    void checkSettings();
 
     void sendMsg( const QString& to, const QString& msg )
     {
@@ -84,16 +82,11 @@ private slots:
     void showAddFriendDialog();
     void onConnected();
     void onDisconnected();
-
+    
 private:
     Jabber_p* p;
     QMenu* m_menu;
     QAction* m_addFriendAction;
-
-    QString m_currentServer;
-    QString m_currentUsername;
-    QString m_currentPassword;
-    unsigned int m_currentPort;
 };
 
 #endif
