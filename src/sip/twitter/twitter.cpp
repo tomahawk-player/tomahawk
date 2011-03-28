@@ -656,4 +656,11 @@ TwitterPlugin::directMessageDestroyed( const QTweetDMStatus& message )
     qDebug() << "TwitterPlugin destroyed message " << message.text();
 }
 
+void
+TwitterPlugin::checkSettings()
+{
+    disconnectPlugin();
+    connectPlugin( false );
+}
+
 Q_EXPORT_PLUGIN2( sip, TwitterPlugin )

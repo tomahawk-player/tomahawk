@@ -59,8 +59,7 @@ SipHandler::plugins() const
 void
 SipHandler::onSettingsChanged()
 {
-    disconnectPlugins();
-    connectPlugins();
+    checkSettings();
 }
 
 
@@ -163,6 +162,16 @@ SipHandler::pluginLoaded( const QString& name ) const
     }
 
     return false;
+}
+
+
+void
+SipHandler::checkSettings()
+{
+    foreach( SipPlugin* sip, m_plugins )
+    {
+        sip->checkSettings();
+    }
 }
 
 

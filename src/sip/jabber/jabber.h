@@ -59,6 +59,8 @@ public slots:
         p = 0;
     }
 
+    void checkSettings();
+
     void sendMsg( const QString& to, const QString& msg )
     {
         if ( p )
@@ -87,6 +89,11 @@ private:
     Jabber_p* p;
     QMenu* m_menu;
     QAction* m_addFriendAction;
+
+    QString m_currentUsername;
+    QString m_currentPassword;
+    QString m_currentServer;
+    unsigned int m_currentPort;
 };
 
 #endif

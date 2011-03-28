@@ -76,12 +76,13 @@ JabberPlugin::connectPlugin( bool startup )
     if ( startup && !TomahawkSettings::instance()->jabberAutoConnect() )
         return false;
 
-    QString jid       = TomahawkSettings::instance()->jabberUsername();
-    QString server    = TomahawkSettings::instance()->jabberServer();
-    QString password  = TomahawkSettings::instance()->jabberPassword();
-    unsigned int port = TomahawkSettings::instance()->jabberPort();
+    m_currentUsername = TomahawkSettings::instance()->jabberUsername();
+    m_currentServer = TomahawkSettings::instance()->jabberServer();
+    m_currentPassword = TomahawkSettings::instance()->jabberPassword();
+    m_currentPort = TomahawkSettings::instance()->jabberPort();
+    QString server = m_currentServer;
 
-    QStringList splitJid = jid.split( '@', QString::SkipEmptyParts );
+    QStringList splitJid = m_currentUsername.split( '@', QString::SkipEmptyParts );
     if ( splitJid.size() < 2 )
     {
         qDebug() << "JID did not have an @ in it, could not find a server part";
@@ -91,14 +92,14 @@ JabberPlugin::connectPlugin( bool startup )
     if ( server.isEmpty() )
         server = splitJid[1];
 
-    if ( port < 1 || port > 65535 || jid.isEmpty() || password.isEmpty() )
+    if ( m_currentPort < 1 || m_currentPort > 65535 || m_currentUsername.isEmpty() || m_currentPassword.isEmpty() )
     {
         qDebug() << "Jabber credentials look wrong, not connecting";
         return false;
     }
 
     delete p;
-    p = new Jabber_p( jid, password, server, port );
+    p = new Jabber_p( m_currentUsername, m_currentPassword, server, m_currentPort );
 
     QObject::connect( p, SIGNAL( peerOnline( QString ) ), SIGNAL( peerOnline( QString ) ) );
     QObject::connect( p, SIGNAL( peerOffline( QString ) ), SIGNAL( peerOffline( QString ) ) );
@@ -172,6 +173,32 @@ JabberPlugin::showAddFriendDialog()
 
     qDebug() << "Attempting to add jabber contact to roster:" << id;
     addContact( id );
+}
+
+
+void
+JabberPlugin::checkSettings()
+{
+    bool reconnect = false;
+    if ( m_currentUsername != TomahawkSettings::instance()->jabberUsername() )
+        reconnect = true;
+    if ( m_currentPassword != TomahawkSettings::instance()->jabberPassword() )
+        reconnect = true;
+    if ( m_currentServer != TomahawkSettings::instance()->jabberServer() )
+        reconnect = true;
+    if ( m_currentPort != TomahawkSettings::instance()->jabberPort() )
+        reconnect = true;
+
+    m_currentUsername = TomahawkSettings::instance()->jabberUsername();
+    m_currentPassword = TomahawkSettings::instance()->jabberPassword();
+    m_currentServer = TomahawkSettings::instance()->jabberServer();
+    m_currentPort = TomahawkSettings::instance()->jabberPort();
+
+    if ( reconnect && ( p || TomahawkSettings::instance()->jabberAutoConnect() ) )
+    {
+        disconnectPlugin();
+        connectPlugin( false );
+    }
 }
 
 Q_EXPORT_PLUGIN2( sip, JabberPlugin )
