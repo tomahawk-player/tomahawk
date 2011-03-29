@@ -316,10 +316,10 @@ ProxyDialog::saveSettings()
     s->setProxyPassword( ui->passwordLineEdit->text() );
     s->setProxyType( ui->typeBox->itemData( ui->typeBox->currentIndex() ).toInt() );
 
-    // Now, if a proxy is defined, set QNAM
-    if( s->proxyType() == QNetworkProxy::NoProxy || s->proxyHost().isEmpty() )
+    if( s->proxyHost().isEmpty() )
         return;
 
+    // Now, set QNAM
     QNetworkProxy proxy( static_cast<QNetworkProxy::ProxyType>(s->proxyType()), s->proxyHost(), s->proxyPort(), s->proxyUsername(), s->proxyPassword() );
     QNetworkAccessManager* nam = TomahawkUtils::nam();
     nam->setProxy( proxy );

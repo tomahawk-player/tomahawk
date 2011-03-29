@@ -29,6 +29,7 @@
 #include <gloox/capabilities.h>
 #include <QMessageBox>
 #include <qjson/parser.h>
+#include <tomahawksettings.h>
 
 #define TOMAHAWK_CAP_NODE_NAME QString::fromAscii("http://tomahawk-player.org/")
 
@@ -66,6 +67,10 @@ Jabber_p::Jabber_p( const QString& jid, const QString& password, const QString& 
         const_cast<gloox::Capabilities*>(caps)->setNode(TOMAHAWK_CAP_NODE_NAME.toStdString());
     }
     m_server = server;
+    
+    qDebug() << "proxy type is " << TomahawkUtils::proxy()->type();
+    
+    setProxy( TomahawkUtils::proxy() );
 }
 
 
@@ -83,11 +88,26 @@ Jabber_p::~Jabber_p()
 void
 Jabber_p::resolveHostSRV()
 {
+    qDebug() << Q_FUNC_INFO;
     if( m_server.isEmpty() )
     {
         qDebug() << "No server found!";
         return;
     }
+    if( TomahawkUtils::proxy()->type() == QNetworkProxy::Socks5Proxy ||
+        ( TomahawkUtils::proxy()->type() == QNetworkProxy::DefaultProxy &&
+          QNetworkProxy::applicationProxy().type() == QNetworkProxy::Socks5Proxy ) )
+    {
+        if( TomahawkSettings::instance()->jabberServer().isEmpty() )
+        {
+           qDebug() << "Right now, you must explicitly set your jabber server if you are using a proxy, due to a bug in the DNS lookup library";
+           m_server = QString();
+        }
+        QMetaObject::invokeMethod( this, "go", Qt::QueuedConnection );
+        return;
+    }
+            
+            
     TomahawkUtils::DNSResolver *resolver = TomahawkUtils::dnsResolver();
     connect( resolver, SIGNAL(result(QString &)), SLOT(resolveResult(QString &)) );
     qDebug() << "Resolving SRV record of " << m_server;
@@ -99,7 +119,7 @@ Jabber_p::setProxy( QNetworkProxy* proxy )
 {
     qDebug() << Q_FUNC_INFO;
 
-    if( !m_client.isNull() || !proxy )
+    if( m_client.isNull() || !proxy )
     {
         qDebug() << "No client or no proxy";
         return;
@@ -116,6 +136,8 @@ Jabber_p::setProxy( QNetworkProxy* proxy )
     else if( proxy->type() == QNetworkProxy::Socks5Proxy )
     {
         qDebug() << "Setting proxy to SOCKS5";
+        qDebug() << "proxy host = " << proxy->hostName();
+        qDebug() << "proxy port = " << proxy->port();
         m_client->setConnectionImpl( new gloox::ConnectionSOCKS5Proxy( m_client.data(),
                                      new gloox::ConnectionTCPClient( m_client->logInstance(), proxy->hostName().toStdString(), proxy->port() ),
                                      m_client->logInstance(), m_client->server(), m_client->port() ) );
@@ -138,6 +160,7 @@ Jabber_p::resolveResult( QString& result )
 void
 Jabber_p::go()
 {
+    qDebug() << Q_FUNC_INFO;
     if( !m_server.isEmpty() )
         m_client->setServer( m_server.toStdString() );
     else

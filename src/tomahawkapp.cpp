@@ -52,6 +52,7 @@
 #include "audio/audioengine.h"
 #include "utils/xspfloader.h"
 
+#include <lastfm/ws.h>
 #include "config.h"
 
 #ifndef TOMAHAWK_HEADLESS
@@ -175,8 +176,6 @@ TomahawkApp::TomahawkApp( int& argc, char *argv[] )
     registerMetaTypes();
     setupLogfile();
     
-    Echonest::Config::instance()->setAPIKey( "JRIHWEP6GPOER2QQ6" );
-    
     new TomahawkSettings( this );
     m_audioEngine = new AudioEngine;
     new ScanManager( this );
@@ -248,10 +247,15 @@ TomahawkApp::TomahawkApp( int& argc, char *argv[] )
         qDebug() << "Proxy type =" << QString::number( static_cast<int>(TomahawkUtils::proxy()->type()) );
         qDebug() << "Proxy host =" << TomahawkUtils::proxy()->hostName();
         TomahawkUtils::nam()->setProxy( *TomahawkUtils::proxy() );
+        lastfm::nam()->setProxy( *TomahawkUtils::proxy() );
     }
     else
         TomahawkUtils::setProxy( new QNetworkProxy( QNetworkProxy::NoProxy ) );
 
+    
+    Echonest::Config::instance()->setAPIKey( "JRIHWEP6GPOER2QQ6" );
+    Echonest::Config::instance()->setNetworkAccessManager( TomahawkUtils::nam() );
+        
     QNetworkProxy::setApplicationProxy( *TomahawkUtils::proxy() );
 
     qDebug() << "Init SIP system.";

@@ -21,7 +21,6 @@
 
 #include <QMainWindow>
 #include <QVariantMap>
-#include <QNetworkAccessManager>
 #include <QPushButton>
 #include <QString>
 #include <QStackedWidget>
@@ -88,7 +87,6 @@ private:
     Ui::TomahawkWindow* ui;
     AudioControls* m_audioControls;
     TomahawkTrayIcon* m_trayIcon;
-    QNetworkAccessManager m_nam;
     QPushButton* m_statusButton;
 
     QAction* m_backAvailable;

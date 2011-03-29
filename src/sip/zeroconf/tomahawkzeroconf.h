@@ -25,6 +25,7 @@
 #include <QList>
 #include <QHostAddress>
 #include <QHostInfo>
+#include <QNetworkProxy>
 #include <QUdpSocket>
 #include <QTimer>
 
@@ -80,6 +81,7 @@ public:
         : QObject( parent ), m_sock( this ), m_port( port )
     {
         qDebug() << Q_FUNC_INFO;
+        m_sock.setProxy( QNetworkProxy::NoProxy );
         m_sock.bind( ZCONF_PORT, QUdpSocket::ShareAddress );
         connect( &m_sock, SIGNAL( readyRead() ), this, SLOT( readPacket() ) );
     }
