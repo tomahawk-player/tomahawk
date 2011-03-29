@@ -282,6 +282,7 @@ TwitterPlugin::parseGotTomahawk( const QRegExp &regex, const QString &screenName
 {
     QString myScreenName = TomahawkSettings::instance()->twitterScreenName();
     qDebug() << "TwitterPlugin found an exact matching Got Tomahawk? mention or direct message from user " << screenName;
+    regex.exactMatch( text );
     if ( text.startsWith( '@' ) && regex.captureCount() >= 2 && regex.cap( 1 ) != QString( '@' + myScreenName ) )
     {
         qDebug() << "TwitterPlugin skipping mention because it's directed @someone that isn't us";
