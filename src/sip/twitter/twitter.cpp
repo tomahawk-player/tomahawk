@@ -54,12 +54,10 @@ TwitterPlugin::TwitterPlugin()
     m_checkTimer.setInterval( 60000 );
     m_checkTimer.setSingleShot( false );
     connect( &m_checkTimer, SIGNAL( timeout() ), SLOT( checkTimerFired() ) );
-    m_checkTimer.start();
 
     m_connectTimer.setInterval( 60000 );
     m_connectTimer.setSingleShot( false );
     connect( &m_connectTimer, SIGNAL( timeout() ), SLOT( connectTimerFired() ) );
-    m_connectTimer.start();
 }
 
 void
@@ -144,12 +142,14 @@ TwitterPlugin::connectPlugin( bool /*startup*/ )
 bool
 TwitterPlugin::refreshTwitterAuth()
 {
+    if( !m_twitterAuth.isNull() )
+        delete m_twitterAuth.data();
     m_twitterAuth = QWeakPointer<TomahawkOAuthTwitter>( new TomahawkOAuthTwitter( this ) );
-
-    TomahawkSettings *settings = TomahawkSettings::instance();
-
-    if ( m_twitterAuth.isNull() )
+    
+    if( m_twitterAuth.isNull() )
       return false;
+    
+    TomahawkSettings *settings = TomahawkSettings::instance();
 
     m_twitterAuth.data()->setNetworkAccessManager( TomahawkUtils::nam() );
     m_twitterAuth.data()->setOAuthToken( settings->twitterOAuthToken().toLatin1() );
@@ -162,14 +162,23 @@ void
 TwitterPlugin::disconnectPlugin()
 {
     qDebug() << Q_FUNC_INFO;
+    m_checkTimer.stop();
+    m_connectTimer.stop();
     if( !m_friendsTimeline.isNull() )
-        m_friendsTimeline.data()->deleteLater();
+        delete m_friendsTimeline.data();
+    if( !m_mentions.isNull() )
+        delete m_mentions.data();
+    if( !m_directMessages.isNull() )
+        delete m_directMessages.data();
+    if( !m_directMessageNew.isNull() )
+        delete m_directMessageNew.data();
+    if( !m_directMessageDestroy.isNull() )
+        delete m_directMessageDestroy.data();
     if( !m_twitterAuth.isNull() )
-        m_twitterAuth.data()->deleteLater();
-    
+        delete m_twitterAuth.data();
+
     m_cachedPeers.empty();
     m_attemptedConnects.empty();
-    delete m_twitterAuth.data();
     m_isOnline = false;
 }
 
@@ -200,6 +209,8 @@ TwitterPlugin::connectAuthVerifyReply( const QTweetUser &user )
             connect( m_directMessageNew.data(), SIGNAL( error(QTweetNetBase::ErrorCode, const QString &) ), SLOT( directMessagePostError(QTweetNetBase::ErrorCode, const QString &) ) );
             connect( m_directMessageDestroy.data(), SIGNAL( parsedDirectMessage(const QTweetDMStatus &) ), SLOT( directMessageDestroyed(const QTweetDMStatus &) ) );
             m_isOnline = true;
+            m_connectTimer.start();
+            m_checkTimer.start();
             QMetaObject::invokeMethod( this, "checkTimerFired", Qt::AutoConnection );
             QTimer::singleShot( 20000, this, SLOT( connectTimerFired() ) );
         }
@@ -223,23 +234,8 @@ TwitterPlugin::connectAuthVerifyReply( const QTweetUser &user )
 void
 TwitterPlugin::checkTimerFired()
 {
-    if ( !isValid() )
+    if ( !isValid() || m_twitterAuth.isNull() )
         return;
-
-    if ( m_twitterAuth.isNull() )
-    {
-        if ( refreshTwitterAuth() )
-        {
-            QTweetAccountVerifyCredentials *credVerifier = new QTweetAccountVerifyCredentials( m_twitterAuth.data(), this );
-            connect( credVerifier, SIGNAL( parsedUser(const QTweetUser &) ), SLOT( connectAuthVerifyReply(const QTweetUser &) ) );
-            credVerifier->verify();
-        }
-        else
-        {
-          qDebug() << "TwitterPlugin auth went null somehow and could not refresh";
-          return;
-        }
-    }
 
     if ( m_cachedFriendsSinceId == 0 )
         m_cachedFriendsSinceId = TomahawkSettings::instance()->twitterCachedFriendsSinceId();
@@ -247,8 +243,7 @@ TwitterPlugin::checkTimerFired()
     qDebug() << "TwitterPlugin looking at friends timeline since id " << m_cachedFriendsSinceId;
     
     if ( !m_friendsTimeline.isNull() )
-        m_friendsTimeline.data()->fetch( m_cachedFriendsSinceId, 0, 800 );
-    
+        m_friendsTimeline.data()->fetch( m_cachedFriendsSinceId, 0, 800 );    
     
     if ( m_cachedMentionsSinceId == 0 )
         m_cachedMentionsSinceId = TomahawkSettings::instance()->twitterCachedMentionsSinceId();
@@ -262,24 +257,9 @@ TwitterPlugin::checkTimerFired()
 void
 TwitterPlugin::connectTimerFired()
 {
-    if ( !isValid() || m_cachedPeers.isEmpty() )
+    if ( !isValid() || m_cachedPeers.isEmpty() || m_twitterAuth.isNull() )
         return;
 
-    if ( m_twitterAuth.isNull() )
-    {
-        if ( refreshTwitterAuth() )
-        {
-            QTweetAccountVerifyCredentials *credVerifier = new QTweetAccountVerifyCredentials( m_twitterAuth.data(), this );
-            connect( credVerifier, SIGNAL( parsedUser(const QTweetUser &) ), SLOT( connectAuthVerifyReply(const QTweetUser &) ) );
-            credVerifier->verify();
-        }
-        else
-        {
-          qDebug() << "TwitterPlugin auth went null somehow and could not refresh";
-          return;
-        }
-    }
-    
     QString myScreenName = TomahawkSettings::instance()->twitterScreenName();
     QList<QString> peerlist = m_cachedPeers.keys();
     qStableSort( peerlist.begin(), peerlist.end() );
