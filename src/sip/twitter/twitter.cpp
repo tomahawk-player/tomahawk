@@ -291,6 +291,7 @@ TwitterPlugin::parseGotTomahawk( const QRegExp &regex, const QString &screenName
     QString node;
     for ( int i = 0; i < regex.captureCount(); ++i )
     {
+        qDebug() << "Parsing regex captures, current cap = " << regex.cap( i );
         if ( regex.cap( i ) == QString( "Got Tomahawk?" ) )
         {
             QString nodeCap = regex.cap( i + 1 );
@@ -350,6 +351,7 @@ TwitterPlugin::friendsTimelineStatuses( const QList< QTweetStatus > &statuses )
         if ( status.id() > m_cachedFriendsSinceId )
             m_cachedFriendsSinceId = status.id();
 
+        qDebug() << "TwitterPlugin checking mention from " << status.user().screenName() << " with content " << status.text();
         parseGotTomahawk( regex, status.user().screenName(), status.text() );
     }
     
@@ -385,6 +387,7 @@ TwitterPlugin::mentionsStatuses( const QList< QTweetStatus > &statuses )
         if ( status.id() > m_cachedMentionsSinceId )
             m_cachedMentionsSinceId = status.id();
         
+        qDebug() << "TwitterPlugin checking mention from " << status.user().screenName() << " with content " << status.text();
         parseGotTomahawk( regex, status.user().screenName(), status.text() );
     }
     
