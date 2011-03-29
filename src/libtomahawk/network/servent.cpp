@@ -666,6 +666,8 @@ Servent::checkACL( const Connection* conn, const QString &nodeid, bool showDialo
         return false;
 
 #ifndef TOMAHAWK_HEADLESS
+    //FIXME: Actually enable it when it makes sense
+    return true;
     if( peerStatus == ACLSystem::NotFound )
     {
         if( !showDialog )
