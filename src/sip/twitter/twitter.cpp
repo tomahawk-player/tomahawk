@@ -269,7 +269,7 @@ TwitterPlugin::connectTimerFired()
         
         if ( !peerData.contains( "host" ) || !peerData.contains( "port" ) || !peerData.contains( "pkey" ) )
         {
-            qDebug() << "TwitterPlugin does not have host, port and/or pkey values for " << screenName;
+            qDebug() << "TwitterPlugin does not have host, port and/or pkey values for " << screenName << " (this is usually *not* a bug or problem but a normal part of the process)";
             continue;
         }
         
@@ -281,7 +281,7 @@ void
 TwitterPlugin::parseGotTomahawk( const QRegExp &regex, const QString &screenName, const QString &text )
 {
     QString myScreenName = TomahawkSettings::instance()->twitterScreenName();
-    qDebug() << "TwitterPlugin found an exact matching Got Tomahawk? mention or direct message from user " << screenName;
+    qDebug() << "TwitterPlugin found an exact matching Got Tomahawk? mention or direct message from user " << screenName << ", now parsing";
     regex.exactMatch( text );
     if ( text.startsWith( '@' ) && regex.captureCount() >= 2 && regex.cap( 1 ) != QString( '@' + myScreenName ) )
     {
@@ -292,7 +292,6 @@ TwitterPlugin::parseGotTomahawk( const QRegExp &regex, const QString &screenName
     QString node;
     for ( int i = 0; i < regex.captureCount(); ++i )
     {
-        qDebug() << "Parsing regex captures, current cap = " << regex.cap( i );
         if ( regex.cap( i ) == QString( "Got Tomahawk?" ) )
         {
             QString nodeCap = regex.cap( i + 1 );
