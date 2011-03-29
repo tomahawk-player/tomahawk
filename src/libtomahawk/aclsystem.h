@@ -23,6 +23,7 @@
 #include <QString>
 #include <QHash>
 #include <QTimer>
+#include <QMutex>
 
 #include "dllmacro.h"
 
@@ -30,29 +31,34 @@ class DLLEXPORT ACLSystem : public QObject
 {
     Q_OBJECT
 
-    enum ACL {
-        Allow,
-        Deny,
-        NotFound
-    };
-
 public:
-        
+
+    static ACLSystem* instance();
+
+    enum ACL {
+        Allow = 0,
+        Deny = 1,
+        NotFound = 2
+    };
+    
     ACLSystem( QObject *parent = 0 );
     ~ACLSystem();
     
-    ACL isAuthorizedUser( const QString &dbid ) const;
+    ACL isAuthorizedUser( const QString &dbid );
     void authorizeUser( const QString &dbid, ACL globalType );
     
-    ACL isAuthorizedPath( const QString &dbid, const QString &path ) const;
+    ACL isAuthorizedPath( const QString &dbid, const QString &path );
     void authorizePath( const QString &dbid, const QString &path, ACL type );
     
 private slots:
     void saveTimerFired();
 
 private:
-    QHash< QString, QHash< QString, ACL> > m_cache;
+    QHash< QString, QHash< QString, ACL > > m_cache;
     QTimer m_saveTimer;
+    QMutex m_cacheMutex;
+    
+    static ACLSystem* s_instance;
 };
 
 #endif // TOMAHAWK_ACLSYSTEM_H

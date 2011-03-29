@@ -114,6 +114,10 @@ public:
     int proxyType() const;
     void setProxyType( const int type );
 
+    /// ACL settings
+    QStringList aclEntries() const;
+    void setAclEntries( const QStringList &entries );
+    
     /// Last.fm settings
     bool scrobblingEnabled() const; /// false by default
     void setScrobblingEnabled( bool enable );

@@ -26,6 +26,7 @@
 #include <QNetworkProxy>
 #include <QNetworkRequest>
 #include <QNetworkReply>
+#include <QMessageBox>
 
 #include "result.h"
 #include "source.h"
@@ -39,6 +40,8 @@
 #include "portfwdthread.h"
 #include "tomahawksettings.h"
 #include "utils/tomahawkutils.h"
+#include <aclsystem.h>
+#include <tomahawk/tomahawkapp.h>
 
 using namespace Tomahawk;
 
@@ -59,6 +62,8 @@ Servent::Servent( QObject* parent )
     , m_portfwd( 0 )
 {
     s_instance = this;
+    
+    new ACLSystem( this );
 
     setProxy( QNetworkProxy::NoProxy );
 
@@ -313,8 +318,8 @@ Servent::readyRead()
     pport     = m.value( "port" ).toInt();
     nodeid    = m.value( "nodeid" ).toString();
     controlid = m.value( "controlid" ).toString();
-
-    qDebug() << m;
+    
+    qDebug() << "Incoming connection details: " << m;
 
     if( !nodeid.isEmpty() ) // only control connections send nodeid
     {
@@ -344,7 +349,7 @@ Servent::readyRead()
     if( conntype == "accept-offer" || "push-offer" )
     {
         sock->_msg.clear();
-        Connection* conn = claimOffer( cc, key, sock->peerAddress() );
+        Connection* conn = claimOffer( cc, nodeid, key, sock->peerAddress() );
         if( !conn )
         {
             qDebug() << "claimOffer FAILED, key:" << key;
@@ -529,12 +534,12 @@ Servent::connectToPeer( const QString& ha, int port, const QString &key, Connect
 
 
 void
-Servent::reverseOfferRequest( ControlConnection* orig_conn, const QString& key, const QString& theirkey )
+Servent::reverseOfferRequest( ControlConnection* orig_conn, const QString &theirdbid, const QString& key, const QString& theirkey )
 {
     Q_ASSERT( this->thread() == QThread::currentThread() );
 
     qDebug() << "Servent::reverseOfferRequest received for" << key;
-    Connection* new_conn = claimOffer( orig_conn, key );
+    Connection* new_conn = claimOffer( orig_conn, theirdbid, key );
     if ( !new_conn )
     {
         qDebug() << "claimOffer failed, killing requesting connection out of spite";
@@ -554,8 +559,10 @@ Servent::reverseOfferRequest( ControlConnection* orig_conn, const QString& key, 
 
 // return the appropriate connection for a given offer key, or NULL if invalid
 Connection*
-Servent::claimOffer( ControlConnection* cc, const QString &key, const QHostAddress peer )
+Servent::claimOffer( ControlConnection* cc, const QString &nodeid, const QString &key, const QHostAddress peer )
 {
+    qDebug() << Q_FUNC_INFO;
+    
     bool noauth = qApp->arguments().contains( "--noauth" );
 
     // magic key for stream connections:
@@ -613,6 +620,18 @@ Servent::claimOffer( ControlConnection* cc, const QString &key, const QHostAddre
             return NULL;
         }
 
+        if( !nodeid.isEmpty() )
+        {
+            // If there isn't a nodeid it's not the first connection and will already have been stopped
+            if( !checkACL( conn, nodeid, true ) )
+            {
+                qDebug() << "Connection not allowed due to ACL";
+                return NULL;
+            }
+        }
+        
+        qDebug() << "ACL has allowed the connection";
+        
         if( conn->onceOnly() )
         {
             m_offers.remove( key );
@@ -637,6 +656,50 @@ Servent::claimOffer( ControlConnection* cc, const QString &key, const QHostAddre
     }
 }
 
+bool
+Servent::checkACL( const Connection* conn, const QString &nodeid, bool showDialog ) const
+{
+    qDebug() << "Checking ACLs";
+    ACLSystem* aclSystem = ACLSystem::instance();
+    ACLSystem::ACL peerStatus = aclSystem->isAuthorizedUser( nodeid );
+    if( peerStatus == ACLSystem::Deny )
+        return false;
+
+#ifndef TOMAHAWK_HEADLESS
+    if( peerStatus == ACLSystem::NotFound )
+    {
+        if( !showDialog )
+            return false;
+        
+        qDebug() << "ACL for this node not found";
+        QMessageBox msgBox;
+        msgBox.setIcon( QMessageBox::Question );
+        msgBox.setText( "Incoming Connection Attempt" );
+        msgBox.setInformativeText( QString( "Another Tomahawk instance is attempting to connect to you. Select whether to allow or deny this connection.\n\nPeer name: %1\nPeer ID: %2\n\nRemember: Only allow peers to connect if you have the legal right for them to stream music from you.").arg( conn->name(), nodeid ) );
+        QPushButton *denyButton = msgBox.addButton( "Deny", QMessageBox::HelpRole );
+        QPushButton *alwaysDenyButton = msgBox.addButton( "Always Deny", QMessageBox::YesRole );
+        QPushButton *allowButton = msgBox.addButton( "Allow", QMessageBox::NoRole );
+        QPushButton *alwaysAllowButton = msgBox.addButton( "Always Allow", QMessageBox::ActionRole );
+        
+        msgBox.setDefaultButton( denyButton );
+        msgBox.setEscapeButton( denyButton );
+
+        msgBox.exec();
+
+        if( msgBox.clickedButton() == denyButton )
+            return false;
+        else if( msgBox.clickedButton() == alwaysDenyButton )
+        {
+            aclSystem->authorizeUser( nodeid, ACLSystem::Deny );
+            return false;
+        }
+        else if( msgBox.clickedButton() == alwaysAllowButton )
+            aclSystem->authorizeUser( nodeid, ACLSystem::Allow );
+    }
+#endif
+
+    return true;
+}       
 
 QSharedPointer<QIODevice>
 Servent::remoteIODeviceFactory( const result_ptr& result )

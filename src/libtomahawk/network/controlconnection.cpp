@@ -221,7 +221,8 @@ ControlConnection::handleMsg( msg_ptr msg )
         {
             QString theirkey = m["key"].toString();
             QString ourkey   = m["offer"].toString();
-            servent()->reverseOfferRequest( this, ourkey, theirkey );
+            QString theirdbid = m["controlid"].toString();
+            servent()->reverseOfferRequest( this, theirdbid, ourkey, theirkey );
         }
         else if( m.value( "method" ).toString() == "dbsync-offer" )
         {

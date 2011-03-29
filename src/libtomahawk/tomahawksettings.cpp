@@ -185,6 +185,19 @@ TomahawkSettings::setProxyType( const int type )
 }
 
 
+QStringList
+TomahawkSettings::aclEntries() const
+{
+    return value( "acl/entries", QStringList() ).toStringList();
+}
+
+void
+TomahawkSettings::setAclEntries( const QStringList &entries )
+{
+    setValue( "acl/entries", entries );
+}
+
+
 QByteArray
 TomahawkSettings::mainWindowGeometry() const
 {

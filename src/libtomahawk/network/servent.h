@@ -104,7 +104,7 @@ public:
 
     void connectToPeer( const QString& ha, int port, const QString &key, const QString& name = "", const QString& id = "" );
     void connectToPeer( const QString& ha, int port, const QString &key, Connection* conn );
-    void reverseOfferRequest( ControlConnection* orig_conn, const QString& key, const QString& theirkey );
+    void reverseOfferRequest( ControlConnection* orig_conn, const QString &theirdbid, const QString& key, const QString& theirkey );
 
     bool visibleExternally() const { return !m_externalHostname.isNull() || (m_externalPort > 0 && !m_externalAddress.isNull()); }
     QString externalAddress() const { return !m_externalHostname.isNull() ? m_externalHostname : m_externalAddress.toString(); }
@@ -146,11 +146,11 @@ public slots:
 private slots:
     void readyRead();
 
-    Connection* claimOffer( ControlConnection* cc, const QString &key, const QHostAddress peer = QHostAddress::Any );
+    Connection* claimOffer( ControlConnection* cc, const QString &nodeid, const QString &key, const QHostAddress peer = QHostAddress::Any );
 
 private:
     void handoverSocket( Connection* conn, QTcpSocketExtra* sock );
-
+    bool checkACL( const Connection* conn, const QString &nodeid, bool showDialog ) const;
     void printCurrentTransfers();
 
     QJson::Parser parser;
