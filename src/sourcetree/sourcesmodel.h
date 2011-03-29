@@ -80,9 +80,8 @@ public:
     virtual bool dropMimeData(const QMimeData* data, Qt::DropAction action, int row, int column, const QModelIndex& parent);
     virtual Qt::DropActions supportedDropActions() const;
     virtual Qt::ItemFlags flags(const QModelIndex& index) const;
-    virtual bool hasChildren( const QModelIndex& parent = QModelIndex() ) const;
 
-    void appendItem( const Tomahawk::source_ptr& source );
+        void appendItem( const Tomahawk::source_ptr& source );
     bool removeItem( const Tomahawk::source_ptr& source );
 
 signals:

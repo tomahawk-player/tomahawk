@@ -33,7 +33,12 @@ SourcesModel::SourcesModel( QObject* parent )
     : QAbstractItemModel( parent )
 {
     m_rootItem = new SourceTreeItem( this, 0, Invalid );
+<<<<<<< HEAD
 
+=======
+    appendItem( source_ptr() );
+
+>>>>>>> add supercollection back
     onSourcesAdded( SourceList::instance()->sources() );
 
     connect( SourceList::instance(), SIGNAL( sourceAdded( Tomahawk::source_ptr ) ), SLOT( onSourceAdded( Tomahawk::source_ptr ) ) );
@@ -82,6 +87,7 @@ SourcesModel::rowCount( const QModelIndex& parent ) const
     return itemFromIndex( parent )->children().count();
 }
 
+<<<<<<< HEAD
 bool
 SourcesModel::hasChildren( const QModelIndex& parent ) const
 {
@@ -90,6 +96,9 @@ SourcesModel::hasChildren( const QModelIndex& parent ) const
 
 
 QModelIndex
+=======
+QModelIndex
+>>>>>>> add supercollection back
 SourcesModel::parent( const QModelIndex& child ) const
 {
 //     qDebug() << Q_FUNC_INFO << child;
@@ -101,8 +110,13 @@ SourcesModel::parent( const QModelIndex& child ) const
     SourceTreeItem* parent = node->parent();
     if( parent == m_rootItem )
         return QModelIndex();
+<<<<<<< HEAD
 
     return createIndex( rowForItem( node ), 0, parent );
+=======
+
+    return createIndex( rowForItem( parent ), 0, parent );
+>>>>>>> add supercollection back
 }
 
 QModelIndex
@@ -180,11 +194,18 @@ SourcesModel::appendItem( const Tomahawk::source_ptr& source )
 
     m_rootItem->appendChild( item );
     endInsertRows();
+<<<<<<< HEAD
 
     qDebug() << "Appending source item:" << item->source()->friendlyName();
 
+=======
+
+
+>>>>>>> add supercollection back
     if ( !source.isNull() )
     {
+        qDebug() << "Appending source item:" << item->source()->friendlyName();
+
         connect( source.data(), SIGNAL( stats( QVariantMap ) ), SLOT( onSourceChanged() ) );
         connect( source.data(), SIGNAL( playbackStarted( Tomahawk::query_ptr ) ), SLOT( onSourceChanged() ) );
         connect( source.data(), SIGNAL( stateChanged() ), SLOT( onSourceChanged() ) );
@@ -369,7 +390,7 @@ SourcesModel::indexFromItem( SourceTreeItem* item ) const
         idx = index( childIndexList[ i ], 0, idx );
     }
     qDebug() << "Got index from item:" << idx << idx.data( Qt::DisplayRole ).toString();
-
+    qDebug() << "parent:" << idx.parent();
     return idx;
 }
 

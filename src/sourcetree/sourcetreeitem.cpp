@@ -172,6 +172,9 @@ CollectionItem::CollectionItem(  SourcesModel* mdl, SourceTreeItem* parent, cons
     : SourceTreeItem( mdl, parent, SourcesModel::Collection )
     , m_source( source )
 {
+    if( m_source.isNull() ) { // super collection
+        return;
+    }
     // create category item
     m_playlists = new CategoryItem( model(), this, SourcesModel::PlaylistsCategory );
     appendChild( m_playlists );
@@ -237,14 +240,15 @@ CollectionItem::onPlaylistsAdded( const QList< playlist_ptr >& playlists )
 void 
 CollectionItem::onPlaylistsDeleted( const QList< playlist_ptr >& playlists )
 {
-    int curCount = m_playlists->children().count();
     foreach( const playlist_ptr& playlist, playlists ) {
+        int curCount = m_playlists->children().count();
         for( int i = 0; i < curCount; i++ ) {
             PlaylistItem* pl = qobject_cast< PlaylistItem* >( m_playlists->children().at( i ) );
             if( pl && pl->playlist() == playlist ) {
                 m_playlists->beginRowsRemoved( i, i );
-                m_playlists->children().removeAt( i );
+                m_playlists->removeChild( pl );
                 m_playlists->endRowsRemoved();
+                break;
             }
         }
     }

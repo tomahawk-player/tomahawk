@@ -85,6 +85,7 @@ public:
         return QString();
     }
     virtual void activate();
+    virtual Qt::ItemFlags flags() { return Qt::ItemIsEnabled; }
     
     SourcesModel::CategoryType categoryType() { return m_category; }
     

@@ -51,7 +51,7 @@ public slots:
     virtual void removeTracks( const QDir& dir );
 
 private slots:
-    void dynamicPlaylistCreated( const Tomahawk::source_ptr& source, const QVariantList& data );
+//     void dynamicPlaylistCreated( const Tomahawk::source_ptr& source, const QVariantList& data );
 };
 
 #endif // DATABASECOLLECTION_H

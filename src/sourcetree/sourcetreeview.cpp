@@ -94,12 +94,10 @@ SourceTreeView::SourceTreeView( QWidget* parent )
     header()->setStretchLastSection( false );
     header()->setResizeMode( 0, QHeaderView::Stretch );
 
-    connect( m_model, SIGNAL( clicked( QModelIndex ) ), SIGNAL( clicked( QModelIndex ) ) );
+    connect( m_proxyModel, SIGNAL( clicked( QModelIndex ) ), SIGNAL( clicked( QModelIndex ) ) );
     connect( this, SIGNAL( clicked( QModelIndex ) ), SLOT( onItemActivated( QModelIndex ) ) );
 
     connect( selectionModel(), SIGNAL( selectionChanged( QItemSelection, QItemSelection ) ), SLOT( onSelectionChanged() ) );
-
-//     m_model->appendItem( source_ptr() );
 
     hideOfflineSources();
 
@@ -488,7 +486,7 @@ SourceDelegate::paint( QPainter* painter, const QStyleOptionViewItem& option, co
     Q_ASSERT( item );
 
     QStyleOptionViewItemV4 o3 = option;
-    if ( type != SourcesModel::Collection )
+    if ( type != SourcesModel::Collection && type != SourcesModel::Category )
         o3.rect.setX( 0 );
 
     QApplication::style()->drawControl( QStyle::CE_ItemViewItem, &o3, painter );
