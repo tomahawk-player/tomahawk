@@ -1,4 +1,5 @@
 Version 0.0.3:
+    * Fix crashes in Twitter authentication. For reals now.
     * Properly honor the chosen port number if a static host and port are
       marked as preferred.
 
