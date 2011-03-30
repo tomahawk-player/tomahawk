@@ -71,8 +71,6 @@ signals:
 
     void itemSizeChanged( const QModelIndex& index );
 
-    void playlistDeleted();
-
 private slots:
     void onDataChanged();
 

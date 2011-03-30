@@ -60,7 +60,9 @@ signals:
     void repeatModeChanged( PlaylistInterface::RepeatMode mode );
     void shuffleModeChanged( bool enabled );
 
-    void itemSizeChanged( const QModelIndex& index );
+    void loadingStarted();
+    void loadingFinished();
+    void trackCountChanged( unsigned int tracks );
 
 private slots:
     void onDataChanged();
