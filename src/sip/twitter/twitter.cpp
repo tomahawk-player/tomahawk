@@ -87,7 +87,7 @@ TwitterPlugin::name()
 const QString
 TwitterPlugin::friendlyName()
 {
-    return QString("Twitter");
+    return tr("Twitter");
 }
 
 const QString

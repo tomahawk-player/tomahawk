@@ -306,9 +306,9 @@ void XMPPBot::infoReturnedSlot(QString caller, Tomahawk::InfoSystem::InfoType ty
             }
             InfoGenericMap tmap = output.value<Tomahawk::InfoSystem::InfoGenericMap>();
             QString artist = input.toString();
-            m_currReturnMessage += QString("\nTerms for %1:\n").arg(artist);
+            m_currReturnMessage += tr("\nTerms for %1:\n").arg(artist);
             if (tmap.isEmpty())
-                m_currReturnMessage += QString("No terms found, sorry.");
+                m_currReturnMessage += tr("No terms found, sorry.");
             else
             {
                 bool first = true;
@@ -341,7 +341,7 @@ void XMPPBot::infoReturnedSlot(QString caller, Tomahawk::InfoSystem::InfoType ty
             QString artist = input.toString();
             qreal retVal = output.toReal();
             QString retValString = (retVal == 0.0 ? "(none)" : QString::number(retVal));
-            m_currReturnMessage += QString("\nHotttness for %1: %2\n").arg(artist).arg(retValString);
+            m_currReturnMessage += tr("\nHotttness for %1: %2\n").arg(artist, retValString);
             break;
         }
         case InfoArtistFamiliarity:
@@ -357,7 +357,7 @@ void XMPPBot::infoReturnedSlot(QString caller, Tomahawk::InfoSystem::InfoType ty
             QString artist = input.toString();
             qreal retVal = output.toReal();
             QString retValString = (retVal == 0.0 ? "(none)" : QString::number(retVal));
-            m_currReturnMessage += QString("\nFamiliartiy for %1: %2\n").arg(artist).arg(retValString);
+            m_currReturnMessage += tr("\nFamiliarity for %1: %2\n").arg(artist, retValString);
             break;
         }
         case InfoTrackLyrics:
@@ -375,7 +375,7 @@ void XMPPBot::infoReturnedSlot(QString caller, Tomahawk::InfoSystem::InfoType ty
             QString track = inHash["trackName"].toString();
             QString lyrics = output.toString();
             qDebug() << "lyrics = " << lyrics;
-            m_currReturnMessage += QString("\nLyrics for \"%1\" by %2:\n\n%3\n").arg(track).arg(artist).arg(lyrics);
+            m_currReturnMessage += tr("\nLyrics for \"%1\" by %2:\n\n%3\n").arg(track, artist, lyrics);
             break;
         }
         default:

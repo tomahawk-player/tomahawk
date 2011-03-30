@@ -676,12 +676,12 @@ Servent::checkACL( const Connection* conn, const QString &nodeid, bool showDialo
         qDebug() << "ACL for this node not found";
         QMessageBox msgBox;
         msgBox.setIcon( QMessageBox::Question );
-        msgBox.setText( "Incoming Connection Attempt" );
-        msgBox.setInformativeText( QString( "Another Tomahawk instance is attempting to connect to you. Select whether to allow or deny this connection.\n\nPeer name: %1\nPeer ID: %2\n\nRemember: Only allow peers to connect if you have the legal right for them to stream music from you.").arg( conn->name(), nodeid ) );
-        QPushButton *denyButton = msgBox.addButton( "Deny", QMessageBox::HelpRole );
-        QPushButton *alwaysDenyButton = msgBox.addButton( "Always Deny", QMessageBox::YesRole );
-        QPushButton *allowButton = msgBox.addButton( "Allow", QMessageBox::NoRole );
-        QPushButton *alwaysAllowButton = msgBox.addButton( "Always Allow", QMessageBox::ActionRole );
+        msgBox.setText( tr( "Incoming Connection Attempt" ) );
+        msgBox.setInformativeText( tr( "Another Tomahawk instance is attempting to connect to you. Select whether to allow or deny this connection.\n\nPeer name: %1\nPeer ID: %2\n\nRemember: Only allow peers to connect if you have the legal right for them to stream music from you.").arg( conn->name(), nodeid ) );
+        QPushButton *denyButton = msgBox.addButton( tr( "Deny" ), QMessageBox::HelpRole );
+        QPushButton *alwaysDenyButton = msgBox.addButton( tr( "Always Deny" ), QMessageBox::YesRole );
+        QPushButton *allowButton = msgBox.addButton( tr( "Allow" ), QMessageBox::NoRole );
+        QPushButton *alwaysAllowButton = msgBox.addButton( tr( "Always Allow" ), QMessageBox::ActionRole );
         
         msgBox.setDefaultButton( denyButton );
         msgBox.setEscapeButton( denyButton );
