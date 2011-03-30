@@ -114,7 +114,7 @@ TwitterConfigWidget::authenticateVerifyReply( const QTweetUser &user )
     qDebug() << Q_FUNC_INFO;
     if ( user.id() == 0 )
     {
-        QMessageBox::critical( 0, tr("Tweetin' Error"), tr("The credentials could not be verified.\nYou may wish to try re-authenticating.") );
+        QMessageBox::critical( this, tr("Tweetin' Error"), tr("The credentials could not be verified.\nYou may wish to try re-authenticating.") );
         emit twitterAuthed( false );
         return;
     }
@@ -194,7 +194,7 @@ TwitterConfigWidget::startPostGotTomahawkStatus()
     
     if ( m_postGTtype != "Global Tweet" && ( ui->twitterUserTweetLineEdit->text().isEmpty() || ui->twitterUserTweetLineEdit->text() == "@" ) )
     {
-        QMessageBox::critical( 0, tr("Tweetin' Error"), tr("You must enter a user name for this type of tweet.") );
+        QMessageBox::critical( this, tr("Tweetin' Error"), tr("You must enter a user name for this type of tweet.") );
         return;
     }
     
@@ -220,7 +220,7 @@ TwitterConfigWidget::postGotTomahawkStatusAuthVerifyReply( const QTweetUser &use
 {
     if ( user.id() == 0 )
     {
-        QMessageBox::critical( 0, tr("Tweetin' Error"), tr("Your saved credentials could not be verified.\nYou may wish to try re-authenticating.") );
+        QMessageBox::critical( this, tr("Tweetin' Error"), tr("Your saved credentials could not be verified.\nYou may wish to try re-authenticating.") );
         emit twitterAuthed( false );
         return;
     }
@@ -264,18 +264,18 @@ void
 TwitterConfigWidget::postGotTomahawkStatusUpdateReply( const QTweetStatus& status )
 {
     if ( status.id() == 0 )
-        QMessageBox::critical( 0, tr("Tweetin' Error"), tr("There was an error posting your status -- sorry!") );
+        QMessageBox::critical( this, tr("Tweetin' Error"), tr("There was an error posting your status -- sorry!") );
     else
-        QMessageBox::information( 0, tr("Tweeted!"), tr("Your tweet has been posted!") );
+        QMessageBox::information( this, tr("Tweeted!"), tr("Your tweet has been posted!") );
 }
 
 void
 TwitterConfigWidget::postGotTomahawkDirectMessageReply( const QTweetDMStatus& status )
 {
     if ( status.id() == 0 )
-        QMessageBox::critical( 0, tr("Tweetin' Error"), tr("There was an error posting your direct message -- sorry!") );
+        QMessageBox::critical( this, tr("Tweetin' Error"), tr("There was an error posting your direct message -- sorry!") );
     else
-        QMessageBox::information( 0, tr("Tweeted!"), tr("Your message has been posted!") );
+        QMessageBox::information( this, tr("Tweeted!"), tr("Your message has been posted!") );
 }
 
 void
@@ -283,5 +283,5 @@ TwitterConfigWidget::postGotTomahawkStatusUpdateError( QTweetNetBase::ErrorCode 
 {
     qDebug() << Q_FUNC_INFO;
     qDebug() << "Error posting Got Tomahawk message, error code is " << code << ", error message is " << errorMsg;
-    QMessageBox::critical( 0, tr("Tweetin' Error"), tr("There was an error posting your status -- sorry!") );
+    QMessageBox::critical( this, tr("Tweetin' Error"), tr("There was an error posting your status -- sorry!") );
 }
