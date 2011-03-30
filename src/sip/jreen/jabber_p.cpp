@@ -60,6 +60,10 @@ Jabber_p::Jabber_p( const QString& jid, const QString& password, const QString& 
     m_jid = Jreen::JID( jid );
 
     m_client = new Jreen::Client( jid, password );
+    m_client->disco()->setSoftwareVersion( "Tomahawk JREEN", "0.0.0.0", "Foobar" );
+
+    m_client->disco()->addIdentity( Jreen::Disco::Identity( "client", "type", "tomahawk", "en" ) );
+    m_client->disco()->addFeature( "tomahawk" );
     m_client->setResource( QString( "tomahawk%1" ).arg( "DOMME" ) );
 
     Jreen::Capabilities::Ptr caps = m_client->presence().findExtension<Jreen::Capabilities>();
@@ -194,11 +198,6 @@ Jabber_p::onConnect()
     qDebug() << "Connected as:" << m_jid.full();
 
     m_client->setPresence(Jreen::Presence::Available, "Tomahawk-JREEN available", 1);
-    m_client->disco()->setSoftwareVersion( "Tomahawk JREEN", "0.0.0.0", "Foobar" );
-
-    m_client->disco()->addIdentity( Jreen::Disco::Identity( "client", "type", "tomahawk", "en" ) );
-
-    m_client->disco()->addFeature( "tomahawk" );
 
     qDebug() << "DISCOFEATURES connected:" << m_client->disco()->features();
     m_client->setPingInterval(60000);
