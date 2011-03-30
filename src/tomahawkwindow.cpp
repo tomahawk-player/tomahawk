@@ -147,7 +147,7 @@ TomahawkWindow::TomahawkWindow( QWidget* parent )
     toolbar->installEventFilter( new WidgetDragFilter( toolbar ) );
     
 #if defined( Q_OS_DARWIN ) && defined( HAVE_SPARKLE )
-    QAction* checkForUpdates = ui->menu_Help->addAction( tr( "Check for updates...") );
+    QAction* checkForUpdates = ui->menu_Help->addAction( tr( "Check For Updates...") );
     checkForUpdates->setMenuRole( QAction::ApplicationSpecificRole );
     connect(checkForUpdates, SIGNAL( triggered( bool ) ), SLOT( checkForUpdates() ) );
 #elif defined( WIN32 )
@@ -163,7 +163,7 @@ TomahawkWindow::TomahawkWindow( QWidget* parent )
     updater->SetVersion( VERSION );
     
     ui->menu_Help->addSeparator();
-    QAction* checkForUpdates = ui->menu_Help->addAction( tr( "Check for updates...") );
+    QAction* checkForUpdates = ui->menu_Help->addAction( tr( "Check For Updates...") );
     connect( checkForUpdates, SIGNAL( triggered() ), updater, SLOT( CheckNow() ) );
 #endif
 
