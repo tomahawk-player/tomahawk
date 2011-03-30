@@ -49,10 +49,12 @@ void DatabaseCommand_LoadAllDynamicPlaylists::exec( DatabaseImpl* dbi )
                                                 <<      query.value(6).toBool()    //shared
                                                 <<      query.value(5).toInt()     //lastmod
                                                 <<      query.value(0).toString();  //GUID
+            emit dynamicPlaylistLoaded( source(), data );
+            /*
             if( static_cast<GeneratorMode>( query.value(8).toInt() ) == Static )
                 emit autoPlaylistLoaded( source(), data );
             else
-                emit stationLoaded( source(), data );
+                emit stationLoaded( source(), data );*/
     }
 
     emit done();

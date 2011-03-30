@@ -23,7 +23,9 @@
 #include "playlist.h"
 #include "playlist/dynamic/DynamicPlaylist.h"
 #include "source.h"
+#include <QIcon>
 
+class QMimeData;
 class SourceTreeItem : public QObject 
 {
     Q_OBJECT
@@ -39,12 +41,16 @@ public:
 
     QList< SourceTreeItem* > children() const { return m_children; }
     void appendChild( SourceTreeItem* item ) { m_children.append( item ); }
+    void insertChild( int index, SourceTreeItem* item ) { m_children.insert( index, item ); }
     void removeChild( SourceTreeItem* item ) { m_children.removeAll( item ); }
     
     // varies depending on the type of the item
     virtual QString text() const { return QString(); }
-    virtual Qt::ItemFlags flags() { return Qt::ItemIsSelectable | Qt::ItemIsEnabled; }
+    virtual Qt::ItemFlags flags() const { return Qt::ItemIsSelectable | Qt::ItemIsEnabled; }
     virtual void activate() {}
+    virtual QIcon icon() const { return QIcon(); }
+    virtual bool willAcceptDrag( const QMimeData* data ) const { return false; }
+    virtual bool dropMimeData( const QMimeData* data, Qt::DropAction action ) { return false; }
     
     /// don't call me unless you are a sourcetreeitem. i prefer this to making everyone a friend
     void beginRowsAdded( int from, int num ) { emit beginChildRowsAdded( from, num ); }
@@ -53,6 +59,7 @@ public:
     void endRowsRemoved() { emit childRowsRemoved(); }
 signals:
     void updated();
+    void selectRequest();
     
     void beginChildRowsAdded( int fromRow, int num );
     void childRowsAdded();
@@ -67,12 +74,27 @@ private:
     SourcesModel* m_model;
 };
 
+class CategoryAddItem : public SourceTreeItem
+{
+    Q_OBJECT
+public:
+    CategoryAddItem( SourcesModel* model, SourceTreeItem* parent, SourcesModel::CategoryType type );
+    ~CategoryAddItem();
+    
+    virtual Qt::ItemFlags flags() const;
+    virtual QString text() const;
+    virtual void activate();
+    virtual QIcon icon() const;
+    
+private:
+    SourcesModel::CategoryType m_categoryType;
+};
 
 class CategoryItem : public SourceTreeItem
 {
     Q_OBJECT
 public:
-    CategoryItem( SourcesModel* model, SourceTreeItem* parent, SourcesModel::CategoryType category ) : SourceTreeItem( model, parent, SourcesModel::Category ), m_category( category ) {}
+    CategoryItem( SourcesModel* model, SourceTreeItem* parent, SourcesModel::CategoryType category, bool showAddItem );
     
     virtual QString text() const { 
         switch( m_category )
@@ -85,14 +107,19 @@ public:
         return QString();
     }
     virtual void activate();
-    virtual Qt::ItemFlags flags() { return Qt::ItemIsEnabled; }
+    virtual Qt::ItemFlags flags() const { return Qt::ItemIsEnabled; }
+    
+    // inserts an item at the end, but before the category add item
+    void insertItem( SourceTreeItem* item );
+    void insertItems( QList< SourceTreeItem* > item );
     
     SourcesModel::CategoryType categoryType() { return m_category; }
     
 private:
     SourcesModel::CategoryType m_category;
+    CategoryAddItem* m_addItem;
+    bool m_showAdd;
 };
-
 
 class CollectionItem : public SourceTreeItem
 {
@@ -101,8 +128,9 @@ public:
     CollectionItem( SourcesModel* model, SourceTreeItem* parent, const Tomahawk::source_ptr& source );
     
     virtual QString text() const;
-    Tomahawk::source_ptr source() const;
     virtual void activate();
+    
+    Tomahawk::source_ptr source() const;
     
 private slots:
     void onPlaylistsAdded( const QList<Tomahawk::playlist_ptr>& playlists );
@@ -114,6 +142,7 @@ private:
     CategoryItem* m_playlists;
     CategoryItem* m_stations;
 };
+
 class PlaylistItem : public SourceTreeItem
 {
     Q_OBJECT
@@ -122,8 +151,10 @@ public:
     
     virtual QString text() const;
     virtual Tomahawk::playlist_ptr playlist() const;
-    virtual Qt::ItemFlags flags();
+    virtual Qt::ItemFlags flags() const;
     virtual void activate();
+    virtual bool willAcceptDrag( const QMimeData* data ) const;
+    virtual bool dropMimeData( const QMimeData* data, Qt::DropAction action );
     
 protected:
     void setLoaded( bool loaded );

@@ -47,6 +47,7 @@
 
 #include "widgets/welcomewidget.h"
 #include "widgets/infowidgets/sourceinfowidget.h"
+#include <widgets/newplaylistwidget.h>
 
 #define FILTER_TIMEOUT 280
 
@@ -567,13 +568,16 @@ PlaylistManager::setPage( ViewPage* page, bool trackHistory )
 
     if ( !playlistForInterface( currentPlaylistInterface() ).isNull() )
         emit playlistActivated( playlistForInterface( currentPlaylistInterface() ) );
-    if ( !dynamicPlaylistForInterface( currentPlaylistInterface() ).isNull() )
+
+    else if ( dynamicPlaylistForInterface( currentPlaylistInterface() ) )
         emit dynamicPlaylistActivated( dynamicPlaylistForInterface( currentPlaylistInterface() ) );
-    if ( !collectionForInterface( currentPlaylistInterface() ).isNull() )
+    else if ( collectionForInterface( currentPlaylistInterface() ) )
         emit collectionActivated( collectionForInterface( currentPlaylistInterface() ) );
-    if ( isSuperCollectionVisible() )
+    else if ( isSuperCollectionVisible() )
         emit superCollectionActivated();
-    if ( !currentPlaylistInterface() )
+    else if( isNewPlaylistPageVisible() )
+        emit newPlaylistActivated();
+    else if ( !currentPlaylistInterface() )
         emit tempPageActivated();
 
     if ( !AudioEngine::instance()->isPlaying() )
@@ -595,6 +599,12 @@ PlaylistManager::setPage( ViewPage* page, bool trackHistory )
 
     m_stack->setCurrentWidget( page->widget() );
     updateView();
+}
+
+bool
+PlaylistManager::isNewPlaylistPageVisible() const
+{
+    return dynamic_cast< NewPlaylistWidget* >( currentPage() ) != 0;
 }
 
 

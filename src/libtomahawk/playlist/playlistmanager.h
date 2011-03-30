@@ -68,6 +68,7 @@ public:
     PlaylistView* queue() const;
 
     bool isSuperCollectionVisible() const;
+    bool isNewPlaylistPageVisible() const;
 
     PlaylistInterface* currentPlaylistInterface() const;
     Tomahawk::ViewPage* currentPage() const;
@@ -107,6 +108,8 @@ signals:
     void collectionActivated( const Tomahawk::collection_ptr& collection );
     void playlistActivated( const Tomahawk::playlist_ptr& playlist );
     void dynamicPlaylistActivated( const Tomahawk::dynplaylist_ptr& playlist );
+
+    void newPlaylistActivated();
 
 public slots:
     bool showSuperCollection();

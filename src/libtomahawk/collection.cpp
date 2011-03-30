@@ -84,7 +84,7 @@ Collection::addDynamicPlaylist( const Tomahawk::dynplaylist_ptr& p )
     qDebug() << Q_FUNC_INFO << "Collection name" << name()
     << "from source id" << source()->id()
     << "numplaylists:" << m_playlists.length();
-//     emit dynamicPlaylistsAdded( toadd );
+    emit dynamicPlaylistsAdded( toadd );
 }
 
 
@@ -114,7 +114,7 @@ Collection::deleteDynamicPlaylist( const Tomahawk::dynplaylist_ptr& p )
     qDebug() << Q_FUNC_INFO << "Collection name" << name()
                             << "from source id" << source()->id()
                             << "numplaylists:" << m_playlists.length();
-//     emit dynamicPlaylistsDeleted( todelete );
+    emit dynamicPlaylistsDeleted( todelete );
 }
 
 

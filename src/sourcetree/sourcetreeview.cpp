@@ -94,23 +94,25 @@ SourceTreeView::SourceTreeView( QWidget* parent )
     header()->setStretchLastSection( false );
     header()->setResizeMode( 0, QHeaderView::Stretch );
 
-    connect( m_proxyModel, SIGNAL( clicked( QModelIndex ) ), SIGNAL( clicked( QModelIndex ) ) );
+    connect( m_model, SIGNAL( clicked( QModelIndex ) ), SIGNAL( clicked( QModelIndex ) ) );
     connect( this, SIGNAL( clicked( QModelIndex ) ), SLOT( onItemActivated( QModelIndex ) ) );
-
-    connect( selectionModel(), SIGNAL( selectionChanged( QItemSelection, QItemSelection ) ), SLOT( onSelectionChanged() ) );
+    connect( this, SIGNAL( expanded( QModelIndex ) ), this, SLOT( onItemExpanded( QModelIndex ) ) );
+//     connect( selectionModel(), SIGNAL( selectionChanged( QItemSelection, QItemSelection ) ), SLOT( onSelectionChanged() ) );
 
     hideOfflineSources();
 
-//     connect( PlaylistManager::instance(), SIGNAL( playlistActivated( Tomahawk::playlist_ptr ) ),
-//                                             SLOT( onPlaylistActivated( Tomahawk::playlist_ptr ) ) );
+    connect( PlaylistManager::instance(), SIGNAL( playlistActivated( Tomahawk::playlist_ptr ) ),
+                                            SLOT( onPlaylistActivated( Tomahawk::playlist_ptr ) ) );
 //     connect( PlaylistManager::instance(), SIGNAL( dynamicPlaylistActivated( Tomahawk::dynplaylist_ptr ) ),
 //                                             SLOT( onDynamicPlaylistActivated( Tomahawk::dynplaylist_ptr ) ) );
-//     connect( PlaylistManager::instance(), SIGNAL( collectionActivated( Tomahawk::collection_ptr ) ),
-//                                             SLOT( onCollectionActivated( Tomahawk::collection_ptr ) ) );
-//     connect( PlaylistManager::instance(), SIGNAL( superCollectionActivated() ),
-//                                             SLOT( onSuperCollectionActivated() ) );
-//     connect( PlaylistManager::instance(), SIGNAL( tempPageActivated() ),
-//                                             SLOT( onTempPageActivated() ) );
+    connect( PlaylistManager::instance(), SIGNAL( collectionActivated( Tomahawk::collection_ptr ) ),
+                                            SLOT( onCollectionActivated( Tomahawk::collection_ptr ) ) );
+    connect( PlaylistManager::instance(), SIGNAL( superCollectionActivated() ),
+                                            SLOT( onSuperCollectionActivated() ) );
+    connect( PlaylistManager::instance(), SIGNAL( tempPageActivated() ),
+                                            SLOT( onTempPageActivated() ) );
+    connect( PlaylistManager::instance(), SIGNAL( newPlaylistActivated() ),
+                                            SLOT( onNewPlaylistPageActivated() ) );
 }
 
 
@@ -159,18 +161,19 @@ SourceTreeView::hideOfflineSources()
     m_proxyModel->hideOfflineSources();
 }
 
-/*
+
 void
 SourceTreeView::onPlaylistActivated( const Tomahawk::playlist_ptr& playlist )
 {
-    QModelIndex idx = m_proxyModel->mapFromSource( m_model->playlistToIndex( playlist ) );
+    QModelIndex idx = m_proxyModel->mapFromSource( m_model->indexFromPlaylist( playlist ) );
     if ( idx.isValid() )
     {
-        setCurrentIndex( idx );
+        selectionModel()->select( idx, QItemSelectionModel::ClearAndSelect | QItemSelectionModel::Current );
+//         setCurrentIndex( idx );
     }
 }
 
-
+/*
 void
 SourceTreeView::onDynamicPlaylistActivated( const Tomahawk::dynplaylist_ptr& playlist )
 {
@@ -179,28 +182,28 @@ SourceTreeView::onDynamicPlaylistActivated( const Tomahawk::dynplaylist_ptr& pla
     {
         setCurrentIndex( idx );
     }
-}
+}*/
 
 
 void
 SourceTreeView::onCollectionActivated( const Tomahawk::collection_ptr& collection )
 {
-    QModelIndex idx = m_proxyModel->mapFromSource( m_model->collectionToIndex( collection ) );
-    if ( idx.isValid() )
-    {
-        setCurrentIndex( idx );
-    }
+//     QModelIndex idx = m_proxyModel->mapFromSource( m_model->collectionToIndex( collection ) );
+//     if ( idx.isValid() )
+//     {
+//         setCurrentIndex( idx );
+//     }
 }
 
 
 void
 SourceTreeView::onSuperCollectionActivated()
 {
-    QModelIndex idx = m_proxyModel->index( 0, 0 );
-    if ( idx.isValid() )
-    {
-        setCurrentIndex( idx );
-    }
+//     QModelIndex idx = m_proxyModel->index( 0, 0 );
+//     if ( idx.isValid() )
+//     {
+//         setCurrentIndex( idx );
+//     }
 }
 
 
@@ -208,7 +211,13 @@ void
 SourceTreeView::onTempPageActivated()
 {
     clearSelection();
-} */
+}
+
+void
+SourceTreeView::onNewPlaylistPageActivated()
+{
+    // nothing atm
+}
 
 
 void
@@ -219,6 +228,18 @@ SourceTreeView::onItemActivated( const QModelIndex& index )
 
     SourceTreeItem* item = itemFromIndex< SourceTreeItem >( index );
     item->activate();
+}
+
+
+void
+SourceTreeView::onItemExpanded( const QModelIndex& idx )
+{
+    // make sure to expand children nodes for collections
+    if( idx.data( SourcesModel::SourceTreeItemTypeRole ) == SourcesModel::Collection ) {
+       for( int i = 0; i < model()->rowCount( idx ); i++ ) {
+           expand( model()->index( i, 0, idx ) );
+       }
+    }
 }
 
 
@@ -322,14 +343,9 @@ SourceTreeView::dragMoveEvent( QDragMoveEvent* event )
             const QRect rect = visualRect( index );
             m_dropRect = rect;
 
-
-            if ( model()->data( index, SourcesModel::SourceTreeItemTypeRole ) == SourcesModel::StaticPlaylist )
-            {
-                PlaylistItem* item = itemFromIndex< PlaylistItem >( index );
-                playlist_ptr playlist = item->playlist();
-                if ( !playlist.isNull() && playlist->author()->isLocal() )
-                    accept = true;
-            }
+            const SourceTreeItem* item = itemFromIndex< SourceTreeItem >( index );
+            if( item->willAcceptDrag( event->mimeData() ) )
+                accept = true;
         } else {
             m_dropRect = QRect();
         }
@@ -350,59 +366,6 @@ SourceTreeView::dragMoveEvent( QDragMoveEvent* event )
 void
 SourceTreeView::dropEvent( QDropEvent* event )
 {
-    bool accept = false;
-    const QPoint pos = event->pos();
-    const QModelIndex index = indexAt( pos );
-
-    if ( event->mimeData()->hasFormat( "application/tomahawk.query.list" ) )
-    {
-        const QPoint pos = event->pos();
-        const QModelIndex index = indexAt( pos );
-
-        if ( index.isValid() )
-        {
-            if ( model()->data( index, SourcesModel::SourceTreeItemTypeRole ) == SourcesModel::StaticPlaylist )
-            {
-                PlaylistItem* item = itemFromIndex< PlaylistItem >( index );
-                playlist_ptr playlist = item->playlist();
-                if ( !playlist.isNull() && playlist->author()->isLocal() )
-                {
-                    accept = true;
-                    QByteArray itemData = event->mimeData()->data( "application/tomahawk.query.list" );
-                    QDataStream stream( &itemData, QIODevice::ReadOnly );
-                    QList<Tomahawk::query_ptr> queries;
-
-                    while ( !stream.atEnd() )
-                    {
-                        qlonglong qptr;
-                        stream >> qptr;
-
-                        Tomahawk::query_ptr* query = reinterpret_cast<Tomahawk::query_ptr*>(qptr);
-                        if ( query && !query->isNull() )
-                        {
-                            qDebug() << "Dropped query item:" << query->data()->artist() << "-" << query->data()->track();
-                            queries << *query;
-                        }
-                    }
-
-                    qDebug() << "on playlist:" << playlist->title() << playlist->guid();
-
-                    // TODO do we need to use this in the refactor?
-//                     QString rev = item->currentlyLoadedPlaylistRevision( playlist->guid() );
-                    playlist->addEntries( queries, playlist->currentrevision() );
-                }
-            }
-        }
-
-        if ( accept )
-        {
-            event->setDropAction( Qt::CopyAction );
-            event->accept();
-        }
-        else
-            event->ignore();
-    }
-
     QTreeView::dropEvent( event );
     m_dragging = false;
 }

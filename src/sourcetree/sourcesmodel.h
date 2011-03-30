@@ -44,14 +44,13 @@ public:
 
         Category = 1,
 
-        StaticPlaylist = 2,
-        NewStaticPlaylist = 3,
+        CategoryAdd = 2,
+
+        StaticPlaylist = 3,
 
         AutomaticPlaylist = 4,
 
         Stations = 5,
-        NewStation = 6
-
     };
 
     enum CategoryType {
@@ -81,8 +80,13 @@ public:
     virtual Qt::DropActions supportedDropActions() const;
     virtual Qt::ItemFlags flags(const QModelIndex& index) const;
 
-        void appendItem( const Tomahawk::source_ptr& source );
+    void appendItem( const Tomahawk::source_ptr& source );
     bool removeItem( const Tomahawk::source_ptr& source );
+
+    // HACK i don't like this
+    // SLOW DON'T USE IF YOU CAN AVOID IT
+    QModelIndex indexFromPlaylist( const Tomahawk::playlist_ptr& playlist );
+    QModelIndex indexFromItem( SourceTreeItem* item ) const;
 
 signals:
     void clicked( const QModelIndex& );
@@ -104,8 +108,6 @@ public slots:
     void onItemRowsRemovedDone();
 private:
     SourceTreeItem* itemFromIndex( const QModelIndex& idx ) const;
-    QModelIndex indexFromItem( SourceTreeItem* item ) const;
-
     Tomahawk::playlist_ptr playlistFromItem( SourceTreeItem* item ) const;
     int rowForItem( SourceTreeItem* item ) const;
 //     QModelIndex indexForSource( Tomahawk::Source* source ) const;

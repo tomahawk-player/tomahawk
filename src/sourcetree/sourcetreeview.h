@@ -37,7 +37,6 @@ Q_OBJECT
 public:
     explicit SourceTreeView( QWidget* parent = 0 );
 
-public slots:
     void showOfflineSources();
     void hideOfflineSources();
 
@@ -46,11 +45,15 @@ signals:
     void onOffline( const QModelIndex& index );
 
 private slots:
-//     void onPlaylistActivated( const Tomahawk::playlist_ptr& playlist );
+    void onPlaylistActivated( const Tomahawk::playlist_ptr& playlist );
 //     void onDynamicPlaylistActivated( const Tomahawk::dynplaylist_ptr& playlist );
-//     void onCollectionActivated( const Tomahawk::collection_ptr& collection );
-//     void onSuperCollectionActivated();
-//     void onTempPageActivated();
+
+    void onCollectionActivated( const Tomahawk::collection_ptr& collection );
+    void onSuperCollectionActivated();
+    void onTempPageActivated();
+    void onNewPlaylistPageActivated();
+
+    void onItemExpanded( const QModelIndex& idx );
 
     void onItemActivated( const QModelIndex& index );
 
