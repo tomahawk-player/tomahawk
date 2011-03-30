@@ -186,7 +186,9 @@ qt4_wrap_cpp( tomahawkMoc ${tomahawkHeaders} )
 configure_file(${CMAKE_CURRENT_SOURCE_DIR}/config.h.in
                ${CMAKE_CURRENT_BINARY_DIR}/config.h)
 
-SET( final_src ${final_src} ${tomahawkMoc} ${tomahawkSources} ${tomahawkHeaders} )
+include( ${CMAKE_SOURCE_DIR}/lang/translations.cmake )
+
+SET( final_src ${final_src} ${tomahawkMoc} ${tomahawkSources} ${tomahawkHeaders} ${trans_outfile})
 
 IF( "${gui}" STREQUAL "no" )
 ELSE()
