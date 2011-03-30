@@ -1,5 +1,5 @@
 /* === This file is part of Tomahawk Player - <http://tomahawk-player.org> ===
- * 
+ *
  *   Copyright 2010-2011, Christian Muehlhaeuser <muesli@tomahawk-player.org>
  *
  *   Tomahawk is free software: you can redistribute it and/or modify
@@ -87,6 +87,7 @@ private slots:
     {
         qDebug() << e;
     }
+    virtual void onIQ( const Jreen::IQ &iq, int context );
 
 private:
     bool presenceMeansOnline( Jreen::Presence::Type p );
@@ -97,6 +98,8 @@ private:
     QMap<Jreen::Presence::Type, QString> m_presences;
     QMap<QString, Jreen::Presence::Type> m_peers;
     QString m_server;
+
+    enum m_iqContext { RequestDisco };
 };
 
 #endif // JABBER_H

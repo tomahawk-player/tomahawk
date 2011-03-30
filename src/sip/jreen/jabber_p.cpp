@@ -1,5 +1,5 @@
 /* === This file is part of Tomahawk Player - <http://tomahawk-player.org> ===
- * 
+ *
  *   Copyright 2010-2011, Christian Muehlhaeuser <muesli@tomahawk-player.org>
  *
  *   Tomahawk is free software: you can redistribute it and/or modify
@@ -76,6 +76,8 @@ Jabber_p::Jabber_p( const QString& jid, const QString& password, const QString& 
     connect(m_client, SIGNAL(newMessage(Jreen::Message)), SLOT(onNewMessage(Jreen::Message)));
     connect(m_client, SIGNAL(newPresence(Jreen::Presence)), SLOT(onNewPresence(Jreen::Presence)));
 
+
+    qDebug() << "DISCOFEATURES:" << m_client->disco()->features();
     qDebug() << "Connecting to the XMPP server...";
     m_client->connectToServer();
 }
@@ -193,7 +195,14 @@ Jabber_p::onConnect()
 
     m_client->setPresence(Jreen::Presence::Available, "Tomahawk-JREEN available", 1);
     m_client->disco()->setSoftwareVersion( "Tomahawk JREEN", "0.0.0.0", "Foobar" );
+
+    m_client->disco()->addIdentity( Jreen::Disco::Identity( "client", "type", "tomahawk", "en" ) );
+
+    m_client->disco()->addFeature( "tomahawk" );
+
+    qDebug() << "DISCOFEATURES connected:" << m_client->disco()->features();
     m_client->setPingInterval(60000);
+
     m_roster = new Jreen::SimpleRoster( m_client );
     m_roster->load();
 
@@ -291,6 +300,16 @@ void Jabber_p::onNewPresence( const Jreen::Presence& presence)
 
     qDebug() << Q_FUNC_INFO << "handle presence" << fulljid << presence.subtype();
 
+    Jreen::IQ iq(Jreen::IQ::Get,jid);
+
+    Jreen::Capabilities::Ptr caps = presence.findExtension<Jreen::Capabilities>();
+    if(caps)
+    {
+        QString node = caps->node() + '#' + caps->ver();
+        iq.addExtension(new Jreen::Disco::Info(node));
+        m_client->send(iq,this,SLOT(onIQ(Jreen::IQ,int)),RequestDisco);
+    }
+
     if( jid == m_jid )
         return;
 
@@ -300,7 +319,7 @@ void Jabber_p::onNewPresence( const Jreen::Presence& presence)
     }
 
     // ignore anyone not running tomahawk:
-    Jreen::Capabilities::Ptr caps = presence.findExtension<Jreen::Capabilities>();
+    //Jreen::Capabilities::Ptr caps = presence.findExtension<Jreen::Capabilities>();
     if ( caps && (caps->node() == TOMAHAWK_CAP_NODE_NAME ))
     {
         qDebug() << Q_FUNC_INFO << presence.from().full() << "tomahawk detected by caps";
@@ -353,6 +372,25 @@ void Jabber_p::onNewPresence( const Jreen::Presence& presence)
     //qDebug() << "Updating presence data for" << fulljid;
     m_peers[ fulljid ] = presence.subtype();
 
+}
+
+void
+Jabber_p::onIQ( const Jreen::IQ &iq, int context )
+{
+    if(context == RequestDisco) {
+        Jreen::Disco::Info *discoInfo = iq.findExtension<Jreen::Disco::Info>().data();
+        if(!discoInfo)
+            return;
+        iq.accept();
+
+
+        QString jid = iq.from().full();
+        Jreen::DataForm::Ptr form = discoInfo->form();
+
+        qDebug() << jid << "NODE" << discoInfo->node();
+        qDebug() << "jid:" << jid << "FEATURES" << discoInfo->features();
+        qDebug() << jid << "DATA" << form;
+    }
 }
 
 bool
