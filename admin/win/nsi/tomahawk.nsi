@@ -554,6 +554,13 @@ Function .onInit
    StrCmp $R0 0 +3
       MessageBox MB_OK|MB_ICONEXCLAMATION "The installer is already running."
       Abort
+
+   ;Use available InstallLocation when possible. This is useful in the uninstaller
+   ;via re-install, which would otherwise use a default location - a bug.
+   ReadRegStr $R0 HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\Tomahawk" "InstallLocation"
+   StrCmp $R0 "" SkipSetInstDir
+   StrCpy $INSTDIR $R0
+   SkipSetInstDir:
 FunctionEnd
 
 Function .onInstSuccess
