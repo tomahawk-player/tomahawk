@@ -47,22 +47,22 @@ Jabber_p::Jabber_p( const QString& jid, const QString& password, const QString& 
     //qsrand( QTime( 0, 0, 0 ).secsTo( QTime::currentTime() ) );
     qsrand(QDateTime::currentDateTime().toTime_t());
 
-    m_presences[jreen::Presence::Available] = "available";
-    m_presences[jreen::Presence::Chat] = "chat";
-    m_presences[jreen::Presence::Away] = "away";
-    m_presences[jreen::Presence::DND] = "dnd";
-    m_presences[jreen::Presence::XA] = "xa";
-    m_presences[jreen::Presence::Unavailable] = "unavailable";
-    m_presences[jreen::Presence::Probe] = "probe";
-    m_presences[jreen::Presence::Error] = "error";
-    m_presences[jreen::Presence::Invalid] = "invalid";
+    m_presences[Jreen::Presence::Available] = "available";
+    m_presences[Jreen::Presence::Chat] = "chat";
+    m_presences[Jreen::Presence::Away] = "away";
+    m_presences[Jreen::Presence::DND] = "dnd";
+    m_presences[Jreen::Presence::XA] = "xa";
+    m_presences[Jreen::Presence::Unavailable] = "unavailable";
+    m_presences[Jreen::Presence::Probe] = "probe";
+    m_presences[Jreen::Presence::Error] = "error";
+    m_presences[Jreen::Presence::Invalid] = "invalid";
 
-    m_jid = jreen::JID( jid );
+    m_jid = Jreen::JID( jid );
 
-    m_client = new jreen::Client( jid, password );
+    m_client = new Jreen::Client( jid, password );
     m_client->setResource( QString( "tomahawk%1" ).arg( "DOMME" ) );
 
-    jreen::Capabilities::Ptr caps = m_client->presence().findExtension<jreen::Capabilities>();
+    Jreen::Capabilities::Ptr caps = m_client->presence().findExtension<Jreen::Capabilities>();
     caps->setNode(TOMAHAWK_CAP_NODE_NAME);
 
     qDebug() << "Our JID set to:" << m_client->jid().full();
@@ -71,10 +71,10 @@ Jabber_p::Jabber_p( const QString& jid, const QString& password, const QString& 
 
     connect(m_client->connection(), SIGNAL(error(SocketError)), SLOT(onError(SocketError)));
     connect(m_client, SIGNAL(serverFeaturesReceived(QSet<QString>)), SLOT(onConnect()));
-    connect(m_client, SIGNAL(disconnected(jreen::Client::DisconnectReason)), SLOT(onDisconnect(jreen::Client::DisconnectReason)));
+    connect(m_client, SIGNAL(disconnected(Jreen::Client::DisconnectReason)), SLOT(onDisconnect(Jreen::Client::DisconnectReason)));
     connect(m_client, SIGNAL(destroyed(QObject*)), this, SLOT(onDestroy()));
-    connect(m_client, SIGNAL(newMessage(jreen::Message)), SLOT(onNewMessage(jreen::Message)));
-    connect(m_client, SIGNAL(newPresence(jreen::Presence)), SLOT(onNewPresence(jreen::Presence)));
+    connect(m_client, SIGNAL(newMessage(Jreen::Message)), SLOT(onNewMessage(Jreen::Message)));
+    connect(m_client, SIGNAL(newPresence(Jreen::Presence)), SLOT(onNewPresence(Jreen::Presence)));
 
     qDebug() << "Connecting to the XMPP server...";
     m_client->connectToServer();
@@ -124,7 +124,7 @@ Jabber_p::sendMsg( const QString& to, const QString& msg )
     }
 
     qDebug() << Q_FUNC_INFO << to << msg;
-    jreen::Message m( jreen::Message::Chat, jreen::JID(to), msg);
+    Jreen::Message m( Jreen::Message::Chat, Jreen::JID(to), msg);
 
     m_client->send( m ); // assuming this is threadsafe
 }
@@ -149,7 +149,7 @@ Jabber_p::broadcastMsg( const QString &msg )
     foreach( const QString& jidstr, m_peers.keys() )
     {
         qDebug() << "Broadcasting to" << jidstr <<"...";
-        jreen::Message m(jreen::Message::Chat, jreen::JID(jidstr), msg, "");
+        Jreen::Message m(Jreen::Message::Chat, Jreen::JID(jidstr), msg, "");
         m_client->send( m );
     }
 }
@@ -191,27 +191,27 @@ Jabber_p::onConnect()
     emit connected();
     qDebug() << "Connected as:" << m_jid.full();
 
-    m_client->setPresence(jreen::Presence::Available, "Tomahawk-JREEN available", 1);
+    m_client->setPresence(Jreen::Presence::Available, "Tomahawk-JREEN available", 1);
     m_client->disco()->setSoftwareVersion( "Tomahawk JREEN", "0.0.0.0", "Foobar" );
     m_client->setPingInterval(60000);
-    m_roster = new jreen::SimpleRoster( m_client );
+    m_roster = new Jreen::SimpleRoster( m_client );
     m_roster->load();
 
     // join MUC with bare jid as nickname
     //TODO: make the room a list of rooms and make that configurable
     QString bare(m_jid.bare());
-    m_room = new jreen::MUCRoom(m_client, jreen::JID(QString("tomahawk@conference.qutim.org/").append(bare.replace("@", "-"))));
-    m_room->setHistorySeconds(0);
-    m_room->join();
+    m_room = new Jreen::MUCRoom(m_client, Jreen::JID(QString("tomahawk@conference.qutim.org/").append(bare.replace("@", "-"))));
+    //m_room->setHistorySeconds(0);
+    //m_room->join();
 
     // treat muc participiants like contacts
-    connect(m_room, SIGNAL(messageReceived(jreen::Message, bool)), this, SLOT(onNewMessage(jreen::Message)));
-    connect(m_room, SIGNAL(presenceReceived(jreen::Presence,const jreen::MUCRoom::Participant*)), this, SLOT(onNewPresence(jreen::Presence)));
+    connect(m_room, SIGNAL(messageReceived(Jreen::Message, bool)), this, SLOT(onNewMessage(Jreen::Message)));
+    connect(m_room, SIGNAL(presenceReceived(Jreen::Presence,const Jreen::MUCRoom::Participant*)), this, SLOT(onNewPresence(Jreen::Presence)));
 }
 
 
 void
-Jabber_p::onDisconnect( jreen::Client::DisconnectReason reason )
+Jabber_p::onDisconnect( Jreen::Client::DisconnectReason reason )
 {
     QString error;
     bool reconnect = false;
@@ -219,39 +219,39 @@ Jabber_p::onDisconnect( jreen::Client::DisconnectReason reason )
 
     switch( reason )
     {
-        case jreen::Client::User:
+        case Jreen::Client::User:
             error = "User Interaction";
             break;
-        case jreen::Client::HostUnknown:
+        case Jreen::Client::HostUnknown:
             error = "Host is unknown";
             break;
-        case jreen::Client::ItemNotFound:
+        case Jreen::Client::ItemNotFound:
             error = "Item not found";
             break;
-        case jreen::Client::AuthorizationError:
+        case Jreen::Client::AuthorizationError:
             error = "Authorization Error";
             break;
-        case jreen::Client::RemoteStreamError:
+        case Jreen::Client::RemoteStreamError:
             error = "Remote Stream Error";
             reconnect = true;
             break;
-        case jreen::Client::RemoteConnectionFailed:
+        case Jreen::Client::RemoteConnectionFailed:
             error = "Remote Connection failed";
             break;
-        case jreen::Client::InternalServerError:
+        case Jreen::Client::InternalServerError:
             error = "Internal Server Error";
             reconnect = true;
             break;
-        case jreen::Client::SystemShutdown:
+        case Jreen::Client::SystemShutdown:
             error = "System shutdown";
             reconnect = true;
             reconnectInSeconds = 60;
             break;
-        case jreen::Client::Conflict:
+        case Jreen::Client::Conflict:
             error = "Conflict";
             break;
 
-        case jreen::Client::Unknown:
+        case Jreen::Client::Unknown:
             error = "Unknown";
             break;
 
@@ -270,7 +270,7 @@ Jabber_p::onDisconnect( jreen::Client::DisconnectReason reason )
 }
 
 void
-Jabber_p::onNewMessage( const jreen::Message& m )
+Jabber_p::onNewMessage( const Jreen::Message& m )
 {
     QString from = m.from().full();
     QString msg = m.body();
@@ -283,10 +283,10 @@ Jabber_p::onNewMessage( const jreen::Message& m )
 }
 
 
-void Jabber_p::onNewPresence( const jreen::Presence& presence)
+void Jabber_p::onNewPresence( const Jreen::Presence& presence)
 {
 
-    jreen::JID jid = presence.from();
+    Jreen::JID jid = presence.from();
     QString fulljid( jid.full() );
 
     qDebug() << Q_FUNC_INFO << "handle presence" << fulljid << presence.subtype();
@@ -300,7 +300,7 @@ void Jabber_p::onNewPresence( const jreen::Presence& presence)
     }
 
     // ignore anyone not running tomahawk:
-    jreen::Capabilities::Ptr caps = presence.findExtension<jreen::Capabilities>();
+    Jreen::Capabilities::Ptr caps = presence.findExtension<Jreen::Capabilities>();
     if ( caps && (caps->node() == TOMAHAWK_CAP_NODE_NAME ))
     {
         qDebug() << Q_FUNC_INFO << presence.from().full() << "tomahawk detected by caps";
@@ -356,13 +356,13 @@ void Jabber_p::onNewPresence( const jreen::Presence& presence)
 }
 
 bool
-Jabber_p::presenceMeansOnline( jreen::Presence::Type p )
+Jabber_p::presenceMeansOnline( Jreen::Presence::Type p )
 {
     switch(p)
     {
-        case jreen::Presence::Invalid:
-        case jreen::Presence::Unavailable:
-        case jreen::Presence::Error:
+        case Jreen::Presence::Invalid:
+        case Jreen::Presence::Unavailable:
+        case Jreen::Presence::Error:
             return false;
             break;
         default:

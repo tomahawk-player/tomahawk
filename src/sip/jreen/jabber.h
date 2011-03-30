@@ -47,6 +47,7 @@ public:
 public slots:
     virtual bool connectPlugin( bool startup );
     void disconnectPlugin();
+    void checkSettings();
     void sendMsg( const QString& to, const QString& msg );
     void broadcastMsg( const QString &msg );
     void addContact( const QString &jid, const QString& msg = QString() );
@@ -60,6 +61,11 @@ private:
     Jabber_p* p;
     QMenu* m_menu;
     QAction* m_addFriendAction;
+
+    QString m_currentUsername;
+    QString m_currentPassword;
+    QString m_currentServer;
+    unsigned int m_currentPort;
 };
 
 #endif

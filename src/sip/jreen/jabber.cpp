@@ -77,10 +77,10 @@ JabberPlugin::connectPlugin( bool startup )
     if ( startup && !TomahawkSettings::instance()->jabberAutoConnect() )
         return false;
 
-    QString jid       = TomahawkSettings::instance()->jabberUsername();
-    QString server    = TomahawkSettings::instance()->jabberServer();
-    QString password  = TomahawkSettings::instance()->jabberPassword();
-    unsigned int port = TomahawkSettings::instance()->jabberPort();
+    QString jid       = m_currentUsername = TomahawkSettings::instance()->jabberUsername();
+    QString server    = m_currentServer = TomahawkSettings::instance()->jabberServer();
+    QString password  = m_currentPassword = TomahawkSettings::instance()->jabberPassword();
+    unsigned int port = m_currentPort = TomahawkSettings::instance()->jabberPort();
 
     QStringList splitJid = jid.split( '@', QString::SkipEmptyParts );
     if ( splitJid.size() < 2 )
@@ -115,7 +115,7 @@ void
 JabberPlugin::disconnectPlugin()
 {
     onDisconnected();
-    
+
     if ( p )
         p->disconnect();
 
@@ -123,35 +123,35 @@ JabberPlugin::disconnectPlugin()
     p = 0;
 }
 
-void 
+void
 JabberPlugin::onConnected()
 {
     if( !m_menu ) {
         m_menu = new QMenu( QString( "JREEN (" ).append( accountName() ).append(")" ) );
         m_addFriendAction = m_menu->addAction( "Add Friend..." );
         QAction *connectAction = m_menu->addAction( "Connect" );
-        
+
         connect( m_addFriendAction, SIGNAL(triggered() ),
                 this,              SLOT( showAddFriendDialog() ) );
         connect( connectAction, SIGNAL( triggered() ), SLOT( connectPlugin() ) );
-        
+
         emit addMenu( m_menu );
     }
-    
+
     emit connected();
 }
 
-void 
+void
 JabberPlugin::onDisconnected()
 {
     if( m_menu && m_addFriendAction ) {
         emit removeMenu( m_menu );
-        
+
         delete m_menu;
         m_menu = 0;
         m_addFriendAction = 0; // deleted by menu
     }
-    
+
     emit disconnected();
 }
 
@@ -188,6 +188,31 @@ JabberPlugin::showAddFriendDialog()
 
     qDebug() << "Attempting to add jabber contact to roster:" << id;
     addContact( id );
+}
+
+void
+JabberPlugin::checkSettings()
+{
+    bool reconnect = false;
+    if ( m_currentUsername != TomahawkSettings::instance()->jabberUsername() )
+        reconnect = true;
+    if ( m_currentPassword != TomahawkSettings::instance()->jabberPassword() )
+        reconnect = true;
+    if ( m_currentServer != TomahawkSettings::instance()->jabberServer() )
+        reconnect = true;
+    if ( m_currentPort != TomahawkSettings::instance()->jabberPort() )
+        reconnect = true;
+
+    m_currentUsername = TomahawkSettings::instance()->jabberUsername();
+    m_currentPassword = TomahawkSettings::instance()->jabberPassword();
+    m_currentServer = TomahawkSettings::instance()->jabberServer();
+    m_currentPort = TomahawkSettings::instance()->jabberPort();
+
+    if ( reconnect && ( p || TomahawkSettings::instance()->jabberAutoConnect() ) )
+    {
+        disconnectPlugin();
+        connectPlugin( false );
+    }
 }
 
 Q_EXPORT_PLUGIN2( sip, JabberPlugin )
