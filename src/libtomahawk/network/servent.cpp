@@ -792,8 +792,11 @@ Servent::isIPWhitelisted( QHostAddress ip )
 bool
 Servent::connectedToSession( const QString& session )
 {
+    qDebug() << Q_FUNC_INFO;
+    qDebug() << "Checking against " << session;
     foreach( ControlConnection* cc, m_controlconnections )
     {
+        qDebug() << "Checking session " << cc->id();
         if( cc->id() == session )
             return true;
     }
