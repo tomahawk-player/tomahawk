@@ -161,6 +161,45 @@ FunctionEnd
 
 ##############################################################################
 #                                                                            #
+#   PROCESS HANDLING FUNCTIONS AND MACROS                                    #
+#                                                                            #
+##############################################################################
+
+!macro CheckForProcess processName gotoWhenFound gotoWhenNotFound
+   Processes::FindProcess ${processName}
+   StrCmp $R0 "0" ${gotoWhenNotFound} ${gotoWhenFound}
+!macroend
+
+!macro ConfirmEndProcess processName
+   MessageBox MB_YESNO|MB_ICONEXCLAMATION \
+     "Found ${processName} process(s) which need to be stopped.$\nDo you want the installer to stop these for you?" \
+     IDYES process_${processName}_kill IDNO process_${processName}_ended
+   process_${processName}_kill:
+      DetailPrint "Killing ${processName} processes."
+      Processes::KillProcess ${processName}
+      Sleep 1500
+      StrCmp $R0 "1" process_${processName}_ended
+      DetailPrint "Process to kill not found!"
+   process_${processName}_ended:
+!macroend
+
+!macro CheckAndConfirmEndProcess processName
+   !insertmacro CheckForProcess ${processName} 0 no_process_${processName}_to_end
+   !insertmacro ConfirmEndProcess ${processName}
+   no_process_${processName}_to_end:
+!macroend
+
+!macro EnsureTomahawkShutdown un
+   Function ${un}EnsureTomahawkShutdown
+      !insertmacro CheckAndConfirmEndProcess "tomahawk.exe"
+   FunctionEnd
+!macroend
+
+!insertmacro EnsureTomahawkShutdown ""
+!insertmacro EnsureTomahawkShutdown "un."
+
+##############################################################################
+#                                                                            #
 #   RE-INSTALLER FUNCTIONS                                                   #
 #                                                                            #
 ##############################################################################
@@ -554,6 +593,16 @@ Function .onInit
    StrCmp $R0 0 +3
       MessageBox MB_OK|MB_ICONEXCLAMATION "The installer is already running."
       Abort
+
+   ;Use available InstallLocation when possible. This is useful in the uninstaller
+   ;via re-install, which would otherwise use a default location - a bug.
+   ReadRegStr $R0 HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\Tomahawk" "InstallLocation"
+   StrCmp $R0 "" SkipSetInstDir
+   StrCpy $INSTDIR $R0
+   SkipSetInstDir:
+   
+   ;Shutdown Tomahawk in case Add/Remove re-installer option used.
+   Call EnsureTomahawkShutdown
 FunctionEnd
 
 Function .onInstSuccess
