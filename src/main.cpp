@@ -17,6 +17,7 @@
  */
 
 #include "tomahawk/tomahawkapp.h"
+#include <QTranslator>
 
 #ifdef Q_WS_MAC
     #include "tomahawkapp_mac.h"
@@ -41,6 +42,12 @@ main( int argc, char *argv[] )
     try
     {
         TomahawkApp a( argc, argv );
+
+        QString locale = QLocale::system().name();
+
+        QTranslator translator;
+        translator.load(QString(":/lang/tomahawk_") + locale);
+        a.installTranslator(&translator);
         return a.exec();
     }
     catch( const std::runtime_error& e )
