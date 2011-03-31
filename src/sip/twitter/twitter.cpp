@@ -599,7 +599,7 @@ TwitterPlugin::makeConnection( const QString &screenName, const QHash< QString, 
     qDebug() << Q_FUNC_INFO;
     if ( m_attemptedConnects.contains( screenName ) && m_attemptedConnects[screenName] )
     {
-        qDebug() << "Already attempted to connect to this peer with no change in their status, not trying again for now";
+        qDebug() << "Already attempted to connect to " << screenName << " with no change in their status, not trying again for now";
         return;
     }
     if ( !peerData.contains( "host" ) || !peerData.contains( "port" ) || !peerData.contains( "pkey" ) || !peerData.contains( "node" ) )
