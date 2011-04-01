@@ -33,12 +33,9 @@ SourcesModel::SourcesModel( QObject* parent )
     : QAbstractItemModel( parent )
 {
     m_rootItem = new SourceTreeItem( this, 0, Invalid );
-<<<<<<< HEAD
 
-=======
     appendItem( source_ptr() );
 
->>>>>>> add supercollection back
     onSourcesAdded( SourceList::instance()->sources() );
 
     connect( SourceList::instance(), SIGNAL( sourceAdded( Tomahawk::source_ptr ) ), SLOT( onSourceAdded( Tomahawk::source_ptr ) ) );
@@ -89,18 +86,7 @@ SourcesModel::rowCount( const QModelIndex& parent ) const
     return itemFromIndex( parent )->children().count();
 }
 
-<<<<<<< HEAD
-bool
-SourcesModel::hasChildren( const QModelIndex& parent ) const
-{
-    return rowCount( parent ) > 0;
-}
-
-
 QModelIndex
-=======
-QModelIndex
->>>>>>> add supercollection back
 SourcesModel::parent( const QModelIndex& child ) const
 {
 //     qDebug() << Q_FUNC_INFO << child;
@@ -112,13 +98,8 @@ SourcesModel::parent( const QModelIndex& child ) const
     SourceTreeItem* parent = node->parent();
     if( parent == m_rootItem )
         return QModelIndex();
-<<<<<<< HEAD
-
-    return createIndex( rowForItem( node ), 0, parent );
-=======
 
     return createIndex( rowForItem( parent ), 0, parent );
->>>>>>> add supercollection back
 }
 
 QModelIndex
@@ -169,9 +150,9 @@ SourcesModel::dropMimeData( const QMimeData* data, Qt::DropAction action, int ro
         item = itemFromIndex( parent );
     else
         item = itemFromIndex( index( row, column, parent ) );
-    
+
     Q_ASSERT( item );
-    
+
     return item->dropMimeData( data, action );
 }
 
@@ -201,16 +182,8 @@ SourcesModel::appendItem( const Tomahawk::source_ptr& source )
     CollectionItem* item = new CollectionItem( this, m_rootItem, source );
     connect( item, SIGNAL( updated() ), this, SLOT( collectionUpdated() ) );
 
-    m_rootItem->appendChild( item );
     endInsertRows();
-<<<<<<< HEAD
 
-    qDebug() << "Appending source item:" << item->source()->friendlyName();
-
-=======
-
-
->>>>>>> add supercollection back
     if ( !source.isNull() )
     {
         qDebug() << "Appending source item:" << item->source()->friendlyName();
@@ -250,7 +223,7 @@ SourcesModel::removeItem( const Tomahawk::source_ptr& source )
     return false;
 }
 
-QModelIndex 
+QModelIndex
 SourcesModel::indexFromPlaylist( const playlist_ptr& playlist )
 {
     QModelIndex idx;
@@ -260,7 +233,7 @@ SourcesModel::indexFromPlaylist( const playlist_ptr& playlist )
         CollectionItem* col = qobject_cast< CollectionItem* >( m_rootItem->children().at( i ) );
         if(  col->source().isNull() )
             continue; // skip super collection
-            
+
         // get the playlist item and look through its children
         for( int k = 0; k < col->children().count(); k++ ) {
             CategoryItem* cat = qobject_cast< CategoryItem* >( col->children().at( k ) );

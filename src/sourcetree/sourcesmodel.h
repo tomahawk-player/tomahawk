@@ -88,9 +88,6 @@ public:
     QModelIndex indexFromPlaylist( const Tomahawk::playlist_ptr& playlist );
     QModelIndex indexFromItem( SourceTreeItem* item ) const;
 
-signals:
-    void clicked( const QModelIndex& );
-
 private slots:
     void onSourcesAdded( const QList<Tomahawk::source_ptr>& sources );
     void onSourceAdded( const Tomahawk::source_ptr& source );

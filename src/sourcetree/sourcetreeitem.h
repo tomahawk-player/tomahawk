@@ -31,7 +31,7 @@ class SourceTreeItem : public QObject
     Q_OBJECT
 public:
     SourceTreeItem() : m_type( SourcesModel::Invalid ), m_parent( 0 ), m_model( 0 ) {}
-    SourceTreeItem( SourcesModel* model, SourceTreeItem* parent, SourcesModel::RowType thisType );
+    SourceTreeItem( SourcesModel* model, SourceTreeItem* parent, SourcesModel::RowType thisType, int index = -1 ); // if index is -1, append at end of parent's child list
     virtual ~SourceTreeItem();
     
     // generic info used by the tree model 
@@ -53,18 +53,17 @@ public:
     virtual bool dropMimeData( const QMimeData* data, Qt::DropAction action ) { return false; }
     
     /// don't call me unless you are a sourcetreeitem. i prefer this to making everyone a friend
-    void beginRowsAdded( int from, int num ) { emit beginChildRowsAdded( from, num ); }
+    void beginRowsAdded( int from, int to ) { emit beginChildRowsAdded( from, to ); }
     void endRowsAdded() { emit childRowsAdded(); }
-    void beginRowsRemoved( int from, int num ) { emit beginChildRowsRemoved( from, num ); }
+    void beginRowsRemoved( int from, int to ) { emit beginChildRowsRemoved( from, to ); }
     void endRowsRemoved() { emit childRowsRemoved(); }
 signals:
     void updated();
-    void selectRequest();
     
-    void beginChildRowsAdded( int fromRow, int num );
+    void beginChildRowsAdded( int fromRow, int toRow );
     void childRowsAdded();
     
-    void beginChildRowsRemoved( int fromRow, int num );
+    void beginChildRowsRemoved( int fromRow, int toRow );
     void childRowsRemoved();
 private:
     SourcesModel::RowType m_type;
@@ -147,7 +146,7 @@ class PlaylistItem : public SourceTreeItem
 {
     Q_OBJECT
 public:
-    PlaylistItem( SourcesModel* model, SourceTreeItem* parent, const Tomahawk::playlist_ptr& pl );
+    PlaylistItem( SourcesModel* model, SourceTreeItem* parent, const Tomahawk::playlist_ptr& pl, int index = -1 );
     
     virtual QString text() const;
     virtual Tomahawk::playlist_ptr playlist() const;

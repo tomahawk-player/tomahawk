@@ -37,6 +37,7 @@ Q_OBJECT
 public:
     explicit SourceTreeView( QWidget* parent = 0 );
 
+public slots:
     void showOfflineSources();
     void hideOfflineSources();
 

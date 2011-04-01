@@ -27,18 +27,25 @@
 
 using namespace Tomahawk;
 
-SourceTreeItem::SourceTreeItem( SourcesModel* model, SourceTreeItem* parent, SourcesModel::RowType thisType )
+SourceTreeItem::SourceTreeItem( SourcesModel* model, SourceTreeItem* parent, SourcesModel::RowType thisType, int index )
     : QObject()
     , m_type( thisType )
     , m_parent( parent )
     , m_model( model )
-{
-//     connect( this, SIGNAL( selectRequest() ), m_model, SLOT( onItemSelectRequest() ) );
-    
+{       
     connect( this, SIGNAL( beginChildRowsAdded( int,int ) ), m_model, SLOT( onItemRowsAddedBegin( int,int ) ) );
     connect( this, SIGNAL( beginChildRowsRemoved( int,int ) ), m_model, SLOT( onItemRowsRemovedBegin( int,int ) ) );
     connect( this, SIGNAL( childRowsAdded() ), m_model, SLOT( onItemRowsAddedDone() ) );
     connect( this, SIGNAL( childRowsRemoved() ), m_model, SLOT( onItemRowsRemovedDone() ) );
+    
+    if( !m_parent )
+        return;
+    
+    // caller must call begin/endInsertRows
+    if( index < 0 )
+        m_parent->appendChild( this );
+    else
+        m_parent->insertChild( index, this );
 }
 
 
@@ -61,8 +68,8 @@ CategoryItem::activate()
 
 /// PlaylistItem
 
-PlaylistItem::PlaylistItem( SourcesModel* mdl, SourceTreeItem* parent, const playlist_ptr& pl )
-    : SourceTreeItem( mdl, parent, SourcesModel::StaticPlaylist )
+PlaylistItem::PlaylistItem( SourcesModel* mdl, SourceTreeItem* parent, const playlist_ptr& pl, int index )
+    : SourceTreeItem( mdl, parent, SourcesModel::StaticPlaylist, index )
     , m_loaded( false )
     , m_playlist( pl )
 {
@@ -278,7 +285,6 @@ CategoryItem::CategoryItem( SourcesModel* model, SourceTreeItem* parent, Sources
 //     beginRowsAdded( 0, 0 );
     if( m_showAdd ) {
         m_addItem = new CategoryAddItem( model, this, m_category );
-        appendChild( m_addItem );
     }
 //     endRowsAdded();
 }
@@ -316,10 +322,8 @@ CollectionItem::CollectionItem(  SourcesModel* mdl, SourceTreeItem* parent, cons
     }
     // create category item
     m_playlists = new CategoryItem( model(), this, SourcesModel::PlaylistsCategory, source->isLocal() );
-    appendChild( m_playlists );
     
     m_stations = new CategoryItem( model(), this, SourcesModel::StationsCategory, source->isLocal() );
-    appendChild( m_stations );
     
     // ugh :( we're being added by the model, no need to notify for added rows now
     m_playlists->blockSignals( true );
@@ -365,14 +369,18 @@ CollectionItem::onPlaylistsAdded( const QList< playlist_ptr >& playlists )
         return;
     
     QList< SourceTreeItem* > items;
+    int addOffset = playlists.first()->author()->isLocal() ? 1 : 0;
+    
+    int from = m_playlists->children().count() - addOffset;
+    m_playlists->beginRowsAdded( from, from + playlists.count() - 1 );
     foreach( const playlist_ptr& p, playlists )
     {   
-        PlaylistItem* plItem = new PlaylistItem( model(), m_playlists, p );
+        PlaylistItem* plItem = new PlaylistItem( model(), m_playlists, p, m_playlists->children().count() - addOffset );
         qDebug() << "Playlist added:" << p->title() << p->creator() << p->info();
         p->loadRevision();
         items << plItem;
     }
-    m_playlists->insertItems( items );
+    m_playlists->endRowsAdded();
 }
 
 void 
