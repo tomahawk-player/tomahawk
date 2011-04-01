@@ -26,6 +26,7 @@
 
 class MusicScanner;
 class QThread;
+class QFileSystemWatcher;
 
 class ScanManager : public QObject
 {
@@ -42,6 +43,9 @@ public:
 signals:
     void finished();
     
+public slots:
+    void handleChangedDir( const QString &path );
+
 private slots:
     void scannerQuit();
     void scannerFinished();
@@ -55,6 +59,7 @@ private:
     MusicScanner* m_scanner;
     QThread* m_musicScannerThreadController;
     QStringList m_currScannerPath;
+    QFileSystemWatcher* m_dirWatcher;
 };
 
 #endif

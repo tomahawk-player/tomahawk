@@ -21,6 +21,7 @@
 #include <QDebug>
 #include <QThread>
 #include <QCoreApplication>
+#include <QFileSystemWatcher>
 
 #include "musicscanner.h"
 #include "tomahawksettings.h"
@@ -40,13 +41,20 @@ ScanManager::ScanManager( QObject* parent )
     : QObject( parent )
     , m_scanner( 0 )
     , m_musicScannerThreadController( 0 )
+    , m_dirWatcher( 0 )
 {
     s_instance = this;
 
+    m_dirWatcher = new QFileSystemWatcher( parent );
+    
     connect( TomahawkSettings::instance(), SIGNAL( changed() ), SLOT( onSettingsChanged() ) );
+    connect( m_dirWatcher, SIGNAL( directoryChanged( const QString & ) ), SLOT( handleChangedDir( const QString & ) ) );
     
     if ( TomahawkSettings::instance()->hasScannerPath() )
         m_currScannerPath = TomahawkSettings::instance()->scannerPath();
+    
+    m_dirWatcher->addPaths( m_currScannerPath );
+    qDebug() << "filewatcher dirs = " << m_dirWatcher->directories();
 }
 
 
@@ -83,6 +91,8 @@ ScanManager::onSettingsChanged()
          m_currScannerPath != TomahawkSettings::instance()->scannerPath() )
     {
         m_currScannerPath = TomahawkSettings::instance()->scannerPath();
+        m_dirWatcher->removePaths( m_dirWatcher->directories() );
+        m_dirWatcher->addPaths( m_currScannerPath );
         runManualScan( m_currScannerPath );
     }
 }
@@ -104,6 +114,14 @@ ScanManager::runManualScan( const QStringList& path )
     }
     else
         qDebug() << "Could not run manual scan, old scan still running";
+}
+
+
+void
+ScanManager::handleChangedDir( const QString &path )
+{
+    qDebug() << Q_FUNC_INFO;
+    qDebug() << "Dir changed: " << path;
 }
 
 
