@@ -169,7 +169,6 @@ TomahawkWindow::TomahawkWindow( QWidget* parent )
 
     m_backAvailable = toolbar->addAction( QIcon( RESPATH "images/back.png" ), tr( "Back" ), PlaylistManager::instance(), SLOT( historyBack() ) );
     m_forwardAvailable = toolbar->addAction( QIcon( RESPATH "images/forward.png" ), tr( "Forward" ), PlaylistManager::instance(), SLOT( historyForward() ) );
-    toolbar->addAction( QIcon( RESPATH "images/home.png" ), tr( "Home" ), PlaylistManager::instance(), SLOT( showWelcomePage() ) );
 
     statusBar()->addPermanentWidget( m_audioControls, 1 );
 

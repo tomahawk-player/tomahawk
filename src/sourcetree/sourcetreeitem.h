@@ -154,6 +154,7 @@ public:
     virtual void activate();
     virtual bool willAcceptDrag( const QMimeData* data ) const;
     virtual bool dropMimeData( const QMimeData* data, Qt::DropAction action );
+    virtual QIcon icon() const;
     
 protected:
     void setLoaded( bool loaded );
@@ -185,6 +186,27 @@ private slots:
 private:
     Tomahawk::dynplaylist_ptr m_dynplaylist;
 };*/
+
+// generic item that has some name, some text, and calls a certain slot when activated. badabing!
+class GenericPageItem : public SourceTreeItem
+{
+    Q_OBJECT
+public:
+    GenericPageItem( SourcesModel* model, SourceTreeItem* parent, const QString& text, const QIcon& icon );
+    virtual ~GenericPageItem();
+    
+    virtual QString text() const;
+    virtual void activate();
+    virtual bool willAcceptDrag( const QMimeData* data ) const;
+    virtual QIcon icon() const;
+    
+signals:
+    void activated();
+    
+private:
+    QIcon m_icon;
+    QString m_text;
+};
 
 Q_DECLARE_METATYPE( SourceTreeItem* );
 

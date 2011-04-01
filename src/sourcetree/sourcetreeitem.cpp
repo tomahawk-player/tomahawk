@@ -174,6 +174,12 @@ PlaylistItem::dropMimeData( const QMimeData* data, Qt::DropAction action )
     return false;
 }
 
+QIcon 
+PlaylistItem::icon() const
+{
+    return QIcon( RESPATH "images/playlist-icon.png" );
+}
+
 
 /// Dynamic Playlist Item
 /*
@@ -270,7 +276,7 @@ CategoryAddItem::flags() const
 QIcon 
 CategoryAddItem::icon() const
 {
-    return QIcon( RESPATH "images/list-add.png" );
+    return QIcon( RESPATH "images/create-playlist.png" );
 }
 
 // CategoryItem
@@ -316,19 +322,26 @@ CategoryItem::insertItems( QList< SourceTreeItem* > items )
 CollectionItem::CollectionItem(  SourcesModel* mdl, SourceTreeItem* parent, const Tomahawk::source_ptr& source ) 
     : SourceTreeItem( mdl, parent, SourcesModel::Collection )
     , m_source( source )
+    , m_playlists( 0 )
+    , m_stations( 0 )
 {
     if( m_source.isNull() ) { // super collection
         return;
     }
-    // create category item
-    m_playlists = new CategoryItem( model(), this, SourcesModel::PlaylistsCategory, source->isLocal() );
+    // create category items if there are playlists to show, or stations to show
+    QList< playlist_ptr > playlists = source->collection()->playlists();
     
-    m_stations = new CategoryItem( model(), this, SourcesModel::StationsCategory, source->isLocal() );
+    if( !playlists.isEmpty() || source->isLocal() ) {
+        m_playlists = new CategoryItem( model(), this, SourcesModel::PlaylistsCategory, source->isLocal() );    
+        // ugh :( we're being added by the model, no need to notify for added rows now
+//         m_playlists->blockSignals( true );
+        onPlaylistsAdded( source->collection()->playlists() );
+//         m_playlists->blockSignals( false );
+    }
     
-    // ugh :( we're being added by the model, no need to notify for added rows now
-    m_playlists->blockSignals( true );
-    onPlaylistsAdded( source->collection()->playlists() );
-    m_playlists->blockSignals( false );
+    // TODO always show for now, till we actually support stations
+//     m_stations = new CategoryItem( model(), this, SourcesModel::StationsCategory, source->isLocal() );
+    
     
     // HACK to load only for now
     source->collection()->dynamicPlaylists();
@@ -368,6 +381,10 @@ CollectionItem::onPlaylistsAdded( const QList< playlist_ptr >& playlists )
     if( playlists.isEmpty() )
         return;
     
+    if( !m_playlists ) { // add the category too
+        m_playlists = new CategoryItem( model(), this, SourcesModel::PlaylistsCategory, source()->isLocal() );    
+    }
+    
     QList< SourceTreeItem* > items;
     int addOffset = playlists.first()->author()->isLocal() ? 1 : 0;
     
@@ -386,6 +403,7 @@ CollectionItem::onPlaylistsAdded( const QList< playlist_ptr >& playlists )
 void 
 CollectionItem::onPlaylistsDeleted( const QList< playlist_ptr >& playlists )
 {
+    Q_ASSERT( m_playlists ); // How can we delete playlists if we have none?
     QList< SourceTreeItem* > items;
     foreach( const playlist_ptr& playlist, playlists ) {
         int curCount = m_playlists->children().count();
@@ -400,3 +418,43 @@ CollectionItem::onPlaylistsDeleted( const QList< playlist_ptr >& playlists )
         }
     }
 }
+
+/// Generic page item
+GenericPageItem::GenericPageItem( SourcesModel* model, SourceTreeItem* parent, const QString& text, const QIcon& icon )
+    : SourceTreeItem( model, parent, SourcesModel::GenericPage )
+    , m_icon( icon )
+    , m_text( text )
+{
+
+}
+
+GenericPageItem::~GenericPageItem()
+{
+
+}
+
+void 
+GenericPageItem::activate()
+{
+    emit activated();
+}
+
+QString 
+GenericPageItem::text() const
+{
+    return m_text;
+}
+
+QIcon 
+GenericPageItem::icon() const
+{
+    return m_icon;
+}
+
+
+bool 
+GenericPageItem::willAcceptDrag(const QMimeData* data) const
+{
+    return false;
+}
+

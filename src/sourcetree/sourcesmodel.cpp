@@ -23,9 +23,11 @@
 #include "playlist.h"
 #include "collection.h"
 #include "source.h"
+#include "tomahawk/tomahawkapp.h"
 
 #include <QMimeData>
 #include <QSize>
+#include <playlist/playlistmanager.h>
 
 using namespace Tomahawk;
 
@@ -35,6 +37,10 @@ SourcesModel::SourcesModel( QObject* parent )
     m_rootItem = new SourceTreeItem( this, 0, Invalid );
 
     appendItem( source_ptr() );
+
+    // add misc children of root node
+    GenericPageItem* recent = new GenericPageItem( this, m_rootItem->children().at( 0 ), tr( "Recently Played" ), QIcon( RESPATH "images/home.png" ) );
+    connect( recent, SIGNAL( activated() ), PlaylistManager::instance(), SLOT( showWelcomePage() ) );
 
     onSourcesAdded( SourceList::instance()->sources() );
 

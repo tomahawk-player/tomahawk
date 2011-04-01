@@ -577,8 +577,9 @@ PlaylistManager::setPage( ViewPage* page, bool trackHistory )
         emit superCollectionActivated();
     else if( isNewPlaylistPageVisible() )
         emit newPlaylistActivated();
+    /* TODO refactor. now we have rows in the sourcetreeview that are connected to pages, e.g. Stations, Recently Updated, etc
     else if ( !currentPlaylistInterface() )
-        emit tempPageActivated();
+        emit tempPageActivated();*/
 
     if ( !AudioEngine::instance()->isPlaying() )
         AudioEngine::instance()->setPlaylist( currentPlaylistInterface() );
