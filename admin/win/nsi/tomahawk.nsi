@@ -9,7 +9,7 @@
 !define OPTION_SECTION_SC_DESKTOP
 !define OPTION_SECTION_SC_QUICK_LAUNCH
 !define OPTION_FINISHPAGE
-!define OPTION_FINISHPAGE_LAUNCHER
+;!define OPTION_FINISHPAGE_LAUNCHER
 !define OPTION_FINISHPAGE_RELEASE_NOTES
 
 ;-----------------------------------------------------------------------------
