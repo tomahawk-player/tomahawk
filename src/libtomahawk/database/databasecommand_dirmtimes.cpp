@@ -38,21 +38,33 @@ DatabaseCommand_DirMtimes::execSelect( DatabaseImpl* dbi )
 {
     QMap<QString,unsigned int> mtimes;
     TomahawkSqlQuery query = dbi->newquery();
-    if( m_prefix.isEmpty() )
+    if( m_prefix.isEmpty() && m_prefixes.isEmpty() )
         query.exec( "SELECT name, mtime FROM dirs_scanned" );
+    else if( m_prefixes.isEmpty() )
+        execSelectPath( dbi, m_prefix, mtimes );
     else
     {
-        query.prepare( QString( "SELECT name, mtime "
-                                "FROM dirs_scanned "
-                                "WHERE name LIKE '%1%'" ).arg( m_prefix.replace( '\'',"''" ) ) );
-        query.exec();
+        if( !m_prefix.isEmpty() )
+            execSelectPath( dbi, m_prefix, mtimes );
+        foreach( QString path, m_prefixes )
+            execSelectPath( dbi, path, mtimes );
     }
+    emit done( mtimes );
+}
+
+void
+DatabaseCommand_DirMtimes::execSelectPath( DatabaseImpl *dbi, QString &path, QMap<QString, unsigned int> &mtimes )
+{
+    TomahawkSqlQuery query = dbi->newquery();
+    query.prepare( QString( "SELECT name, mtime "
+        "FROM dirs_scanned "
+        "WHERE name LIKE '%1%'" ).arg( path.replace( '\'',"''" ) ) );
+    query.exec();
+
     while( query.next() )
     {
         mtimes.insert( query.value( 0 ).toString(), query.value( 1 ).toUInt() );
     }
-
-    emit done( mtimes );
 }
 
 

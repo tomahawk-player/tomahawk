@@ -21,6 +21,7 @@
 
 #include <QObject>
 #include <QStringList>
+#include <QMap>
 
 #include "dllmacro.h"
 
@@ -44,12 +45,17 @@ signals:
     void finished();
     
 public slots:
-    void handleChangedDir( const QString &path );
+    void handleChangedDir( const QString& path );
+    void addWatchedDirs( const QStringList& paths );
+    void removeWatchedDir( const QString& path );
+    void setInitialPaths( QMap<QString, unsigned int> pathMap );
 
 private slots:
     void scannerQuit();
     void scannerFinished();
     void scannerDestroyed( QObject* scanner );
+    
+    void startupWatchPaths();
 
     void onSettingsChanged();
     

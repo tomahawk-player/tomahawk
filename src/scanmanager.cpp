@@ -22,10 +22,14 @@
 #include <QThread>
 #include <QCoreApplication>
 #include <QFileSystemWatcher>
+#include <QTimer>
 
 #include "musicscanner.h"
 #include "tomahawksettings.h"
 #include "tomahawkutils.h"
+
+#include "database/database.h"
+#include "database/databasecommand_dirmtimes.h"
 
 ScanManager* ScanManager::s_instance = 0;
 
@@ -53,8 +57,8 @@ ScanManager::ScanManager( QObject* parent )
     if ( TomahawkSettings::instance()->hasScannerPath() )
         m_currScannerPath = TomahawkSettings::instance()->scannerPath();
     
-    m_dirWatcher->addPaths( m_currScannerPath );
-    qDebug() << "filewatcher dirs = " << m_dirWatcher->directories();
+    qDebug() << "loading initial directories to watch";
+    QTimer::singleShot( 1000, this, SLOT( startupWatchPaths() ) );
 }
 
 
@@ -99,6 +103,36 @@ ScanManager::onSettingsChanged()
 
 
 void
+ScanManager::startupWatchPaths()
+{
+    qDebug() << Q_FUNC_INFO;
+    
+    if( !Database::instance() )
+    {
+        QTimer::singleShot( 1000, this, SLOT( startupWatchPaths() ) );
+        return;
+    }
+    
+    DatabaseCommand_DirMtimes* cmd = new DatabaseCommand_DirMtimes( m_currScannerPath );
+    connect( cmd, SIGNAL( done( QMap<QString, unsigned int> ) ),
+             SLOT( setInitialPaths( QMap<QString, unsigned int> ) ) );
+    Database::instance()->enqueue( QSharedPointer<DatabaseCommand>(cmd) );
+}
+
+
+void
+ScanManager::setInitialPaths( QMap<QString, unsigned int> pathMap )
+{
+    qDebug() << Q_FUNC_INFO;
+    foreach( QString path, pathMap.keys() )
+    {
+        qDebug() << "Adding " << path << " to watcher";
+        m_dirWatcher->addPath( path );
+    }
+}
+
+
+void
 ScanManager::runManualScan( const QStringList& path )
 {
     qDebug() << Q_FUNC_INFO;
@@ -109,6 +143,8 @@ ScanManager::runManualScan( const QStringList& path )
         m_scanner = new MusicScanner( path );
         m_scanner->moveToThread( m_musicScannerThreadController );
         connect( m_scanner, SIGNAL( finished() ), SLOT( scannerFinished() ) );
+        connect( m_scanner, SIGNAL( addWatchedDirs( const QStringList & ) ), SLOT( addWatchedDirs( const QStringList & ) ) );
+        connect( m_scanner, SIGNAL( removeWatchedDir( const QString & ) ), SLOT( removeWatchedDir( const QString & ) ) );
         m_musicScannerThreadController->start( QThread::IdlePriority );
         QMetaObject::invokeMethod( m_scanner, "startScan" );
     }
@@ -116,9 +152,31 @@ ScanManager::runManualScan( const QStringList& path )
         qDebug() << "Could not run manual scan, old scan still running";
 }
 
+void
+ScanManager::addWatchedDirs( const QStringList& paths )
+{
+    qDebug() << Q_FUNC_INFO;
+    QStringList currentWatchedPaths = m_dirWatcher->directories();
+    foreach( QString path, paths )
+    {
+        if( !currentWatchedPaths.contains( path ) )
+        {
+            qDebug() << "adding " << path << " to watched dirs";
+            m_dirWatcher->addPath( path );
+        }
+    }
+}
 
 void
-ScanManager::handleChangedDir( const QString &path )
+ScanManager::removeWatchedDir( const QString& path )
+{
+    qDebug() << Q_FUNC_INFO;
+    qDebug() << "removing " << path << " from watched dirs";
+    m_dirWatcher->removePath( path );
+}
+
+void
+ScanManager::handleChangedDir( const QString& path )
 {
     qDebug() << Q_FUNC_INFO;
     qDebug() << "Dir changed: " << path;

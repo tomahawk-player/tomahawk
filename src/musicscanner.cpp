@@ -185,8 +185,11 @@ MusicScanner::listerFinished( const QMap<QString, unsigned int>& newmtimes )
         {
             qDebug() << "Removing stale dir:" << path;
             Database::instance()->enqueue( QSharedPointer<DatabaseCommand>( new DatabaseCommand_DeleteFiles( path, SourceList::instance()->getLocal() ) ) );
+            emit removeWatchedDir( path );
         }
     }
+
+    emit addWatchedDirs( newmtimes.keys() );
 
     // save mtimes, then quit thread
     DatabaseCommand_DirMtimes* cmd = new DatabaseCommand_DirMtimes( newmtimes );
