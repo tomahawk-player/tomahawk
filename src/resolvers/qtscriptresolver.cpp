@@ -27,19 +27,86 @@
 
 QtScriptResolver::QtScriptResolver( const QString& scriptPath )
     : Tomahawk::ExternalResolver( scriptPath )
-    , m_engine( new ScriptEngine( this ) )
-    , m_thread( new QThread( this ) )
     , m_ready( false )
     , m_stopped( false )
 {
     qDebug() << Q_FUNC_INFO << scriptPath;
 
+    m_thread = new ScriptThread( scriptPath, this );
+    connect( m_thread, SIGNAL( engineFound( QString, unsigned int, unsigned int, unsigned int ) ),
+                         SLOT( onEngineFound( QString, unsigned int, unsigned int, unsigned int ) ) );
+
     m_thread->start();
 
-    QFile scriptFile( scriptPath );
+    connect( this, SIGNAL( destroyed( QObject* ) ), m_thread, SLOT( deleteLater() ) );
+}
+
+
+QtScriptResolver::~QtScriptResolver()
+{
+    Tomahawk::Pipeline::instance()->removeResolver( this );
+    delete m_thread;
+}
+
+
+void
+QtScriptResolver::resolve( const Tomahawk::query_ptr& query )
+{
+    m_thread->resolve( query );
+}
+
+
+void
+QtScriptResolver::onEngineFound( const QString& name, unsigned int weight, unsigned int timeout, unsigned int preference )
+{
+    m_name = name;
+    m_weight = weight;
+    m_timeout = timeout;
+    m_preference = preference;
+
+    qDebug() << "QTSCRIPT" << filePath() << "READY," << endl
+        << "name" << m_name << endl
+        << "weight" << m_weight << endl
+        << "timeout" << m_timeout << endl
+        << "preference" << m_preference;
+
+    m_ready = true;
+    Tomahawk::Pipeline::instance()->addResolver( this );
+}
+
+
+ScriptThread::ScriptThread( const QString& scriptPath, QtScriptResolver* parent )
+    : QThread()
+    , m_parent( parent )
+    , m_scriptPath( scriptPath )
+{
+    moveToThread( this );
+}
+
+
+void
+ScriptThread::resolve( const Tomahawk::query_ptr& query )
+{
+    m_engine->resolve( query );
+}
+
+
+void
+ScriptThread::run()
+{
+    QTimer::singleShot( 0, this, SLOT( initEngine() ) );
+    exec();
+}
+
+
+void
+ScriptThread::initEngine()
+{
+    m_engine = new ScriptEngine( m_parent, this );
+    QFile scriptFile( m_scriptPath );
     if ( !scriptFile.open( QIODevice::ReadOnly ) )
     {
-        qDebug() << Q_FUNC_INFO << "Failed loading JavaScript resolver:" << scriptPath;
+        qDebug() << Q_FUNC_INFO << "Failed loading JavaScript resolver:" << m_scriptPath;
         deleteLater();
         return;
     }
@@ -48,43 +115,32 @@ QtScriptResolver::QtScriptResolver( const QString& scriptPath )
     m_engine->mainFrame()->evaluateJavaScript( scriptFile.readAll() );
     scriptFile.close();
 
+    QString name;
+    unsigned int weight, preference, timeout;
     QVariantMap m = m_engine->mainFrame()->evaluateJavaScript( "getSettings();" ).toMap();
-    m_name       = m.value( "name" ).toString();
-    m_weight     = m.value( "weight", 0 ).toUInt();
-    m_timeout    = m.value( "timeout", 25 ).toUInt() * 1000;
-    m_preference = m.value( "preference", 0 ).toUInt();
+    name       = m.value( "name" ).toString();
+    weight     = m.value( "weight", 0 ).toUInt();
+    timeout    = m.value( "timeout", 25 ).toUInt() * 1000;
+    preference = m.value( "preference", 0 ).toUInt();
 
-    qDebug() << "QTSCRIPT" << filePath() << "READY," << endl
-    << "name" << m_name << endl
-    << "weight" << m_weight << endl
-    << "timeout" << m_timeout << endl
-    << "preference" << m_preference;
-
-    m_engine->moveToThread( m_thread );
-    m_ready = true;
-    Tomahawk::Pipeline::instance()->addResolver( this );
-    
-    connect( this, SIGNAL( destroyed( QObject* ) ), m_thread, SLOT( deleteLater() ) );
-}
-
-
-QtScriptResolver::~QtScriptResolver()
-{
-    Tomahawk::Pipeline::instance()->removeResolver( this );
-    delete m_engine;
-}
-
-
-void
-QtScriptResolver::resolve( const Tomahawk::query_ptr& query )
-{
-    QMetaObject::invokeMethod( m_engine, "resolve", Qt::QueuedConnection, Q_ARG( Tomahawk::query_ptr, query ) );
+    qDebug() << Q_FUNC_INFO << name << weight << timeout << preference;
+    emit engineFound( name, weight, timeout, preference );
 }
 
 
 void
 ScriptEngine::resolve( const Tomahawk::query_ptr& query )
 {
+    if ( QThread::currentThread() != thread() )
+    {
+//        qDebug() << "Reinvoking in correct thread:" << Q_FUNC_INFO;
+        QMetaObject::invokeMethod( this, "resolve",
+                                   Qt::QueuedConnection,
+                                   Q_ARG(Tomahawk::query_ptr, query)
+        );
+        return;
+    }
+
     qDebug() << Q_FUNC_INFO << query->toString();
     QString eval = QString( "resolve( '%1', '%2', '%3', '%4' );" )
                       .arg( query->id().replace( "'", "\\'" ) )
@@ -113,9 +169,9 @@ ScriptEngine::resolve( const Tomahawk::query_ptr& query )
         rp->setBitrate( m.value( "bitrate" ).toUInt() );
         rp->setUrl( m.value( "url" ).toString() );
         rp->setSize( m.value( "size" ).toUInt() );
-        rp->setScore( m.value( "score" ).toFloat() * ( (float)m_parent->weight() / 100.0 ) );
+        rp->setScore( m.value( "score" ).toFloat() * ( (float)m_resolver->weight() / 100.0 ) );
         rp->setRID( uuid() );
-        rp->setFriendlySource( m_parent->name() );
+        rp->setFriendlySource( m_resolver->name() );
 
         if ( m.contains( "year" ) )
         {

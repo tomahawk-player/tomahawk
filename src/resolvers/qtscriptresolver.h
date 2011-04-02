@@ -26,9 +26,11 @@
 #include <QApplication>
 #include <QDebug>
 #include <QFile>
+#include <QThread>
 #include <QtWebKit/QWebPage>
 #include <QtWebKit/QWebFrame>
 
+class ScriptThread;
 class QtScriptResolver;
 
 class ScriptEngine : public QWebPage
@@ -36,9 +38,10 @@ class ScriptEngine : public QWebPage
 Q_OBJECT
 
 public:
-    explicit ScriptEngine( QtScriptResolver* parent )
+    explicit ScriptEngine( QtScriptResolver* resolver, ScriptThread* parent )
         : QWebPage( (QObject*)parent )
         , m_parent( parent )
+        , m_resolver( resolver )
     {}
 
 public slots:
@@ -54,8 +57,34 @@ protected:
     { qDebug() << "JAVASCRIPT ERROR:" << message << lineNumber << sourceID; }
 
 private:
-    QtScriptResolver* m_parent;
+    ScriptThread* m_parent;
+    QtScriptResolver* m_resolver;
 };
+
+
+class ScriptThread : public QThread
+{
+Q_OBJECT
+
+public:
+    ScriptThread( const QString& scriptPath, QtScriptResolver* parent );
+
+    void run();
+
+    virtual void resolve( const Tomahawk::query_ptr& query );
+
+signals:
+    void engineFound( const QString& name, unsigned int weight, unsigned int timeout, unsigned int preference );
+
+private slots:
+    void initEngine();
+
+private:
+    ScriptEngine* m_engine;
+    QtScriptResolver* m_parent;
+    QString m_scriptPath;
+};
+
 
 class QtScriptResolver : public Tomahawk::ExternalResolver
 {
@@ -76,12 +105,12 @@ public slots:
 
 signals:
     void finished();
-    
+
 private slots:
+    void onEngineFound( const QString& name, unsigned int weight, unsigned int timeout, unsigned int preference );
 
 private:
-    ScriptEngine* m_engine;
-    QThread* m_thread;
+    ScriptThread* m_thread;
 
     QString m_name;
     unsigned int m_weight, m_preference, m_timeout;
