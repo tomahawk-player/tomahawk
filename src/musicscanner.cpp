@@ -40,7 +40,7 @@ DirLister::go()
 void
 DirLister::scanDir( QDir dir, int depth, DirLister::Mode mode )
 {
-    qDebug() << "DirLister::scanDir scanning: " << dir.absolutePath();
+    qDebug() << "DirLister::scanDir scanning: " << dir.absolutePath() << " with mode " << mode;
     QFileInfoList dirs;
     const uint mtime = QFileInfo( dir.absolutePath() ).lastModified().toUTC().toTime_t();
     m_newdirmtimes.insert( dir.absolutePath(), mtime );
@@ -49,9 +49,9 @@ DirLister::scanDir( QDir dir, int depth, DirLister::Mode mode )
     {
         // dont scan this dir, unchanged since last time.
     }
-    else
+    else if( mode != DirLister::MTimeOnly )
     {
-        if ( m_dirmtimes.contains( dir.absolutePath() ) )
+        if( m_dirmtimes.contains( dir.absolutePath() ) )
             Database::instance()->enqueue( QSharedPointer<DatabaseCommand>( new DatabaseCommand_DeleteFiles( dir, SourceList::instance()->getLocal() ) ) );
 
         dir.setFilter( QDir::Files | QDir::Readable | QDir::NoDotAndDotDot );
@@ -64,10 +64,10 @@ DirLister::scanDir( QDir dir, int depth, DirLister::Mode mode )
     }
     dir.setFilter( QDir::Dirs | QDir::Readable | QDir::NoDotAndDotDot );
     dirs = dir.entryInfoList();
-
+    
     foreach( const QFileInfo& di, dirs )
     {
-        if( mode == DirLister::Recursive || !m_dirmtimes.contains( di.absolutePath() ) )
+        if( mode == DirLister::Recursive || !m_dirmtimes.contains( di.absoluteFilePath() ) )
             scanDir( di.absoluteFilePath(), depth + 1, DirLister::Recursive );
         else //should be the non-recursive case since the second test above should only happen with a new dir
             scanDir( di.absoluteFilePath(), depth + 1, DirLister::MTimeOnly );

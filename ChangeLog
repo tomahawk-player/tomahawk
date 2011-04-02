@@ -1,7 +1,10 @@
 Version 0.1.0:
     * Watch folders for changes and automatically update your collection. This
       is on by default; you can turn it off on the Local Music tab in the
-      settings dialog.
+      settings dialog. Note that this triggers only on files or folders being 
+      added to or removed from folders; it is not watch individual files as
+      most OSes can't support enough file watches to handle a normal-sized
+      music collection.
 
 Version 0.0.3:
     * Fix crashes in Twitter authentication. For reals now.
