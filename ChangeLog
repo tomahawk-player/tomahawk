@@ -1,7 +1,9 @@
 Version 0.0.3:
-    * Fix crashes in Twitter authentication. For reals now.
+    * Fix crashes in Twitter authentication.
     * Properly honor the chosen port number if a static host and port are
       marked as preferred.
+    * Don't automatically try to resolve all incoming playback logs. This
+      speeds up importing sources a lot.
 
 Version 0.0.2:
     * Don't reconnect to Jabber if the settings dialog is closed successfully
