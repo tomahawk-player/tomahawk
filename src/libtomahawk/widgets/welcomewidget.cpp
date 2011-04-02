@@ -31,7 +31,9 @@
 
 #include <QPainter>
 
-#define FILTER_TIMEOUT 280
+#define HISTORY_TRACK_ITEMS 50
+#define HISTORY_PLAYLIST_ITEMS 10
+#define HISTORY_RESOLVING_TIMEOUT 2500
 
 
 WelcomeWidget::WelcomeWidget( QWidget* parent )
@@ -46,7 +48,10 @@ WelcomeWidget::WelcomeWidget( QWidget* parent )
 
     m_tracksModel = new PlaylistModel( ui->tracksView );
     ui->tracksView->setModel( m_tracksModel );
-    m_tracksModel->loadHistory( Tomahawk::source_ptr() );
+    m_tracksModel->loadHistory( Tomahawk::source_ptr(), HISTORY_TRACK_ITEMS );
+
+    m_timer = new QTimer( this );
+    connect( m_timer, SIGNAL( timeout() ), SLOT( checkQueries() ) );
 
     connect( SourceList::instance(), SIGNAL( sourceAdded( Tomahawk::source_ptr ) ), SLOT( onSourceAdded( Tomahawk::source_ptr ) ) );
 
@@ -97,9 +102,24 @@ WelcomeWidget::onSourceAdded( const Tomahawk::source_ptr& source )
 
 
 void
+WelcomeWidget::checkQueries()
+{
+    m_timer->stop();
+    m_tracksModel->ensureResolved();
+}
+
+
+void
 WelcomeWidget::onPlaybackFinished( const Tomahawk::query_ptr& query )
 {
     m_tracksModel->insert( 0, query );
+
+    if ( m_tracksModel->trackCount() > HISTORY_TRACK_ITEMS )
+        m_tracksModel->remove( HISTORY_TRACK_ITEMS );
+
+    if ( m_timer->isActive() )
+        m_timer->stop();
+    m_timer->start( HISTORY_RESOLVING_TIMEOUT );
 }
 
 

@@ -397,11 +397,15 @@ PlaylistModel::playlistEntries() const
 
 
 void
+PlaylistModel::remove( unsigned int row, bool moreToCome )
+{
+    removeIndex( index( row, 0, QModelIndex() ), moreToCome );
+}
+
+
+void
 PlaylistModel::removeIndex( const QModelIndex& index, bool moreToCome )
 {
-    if ( isReadOnly() )
-        return;
-
     TrackModel::removeIndex( index );
 
     if ( !moreToCome && !m_playlist.isNull() )

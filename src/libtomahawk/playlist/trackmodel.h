@@ -76,6 +76,8 @@ public:
     virtual PlaylistInterface::RepeatMode repeatMode() const { return PlaylistInterface::NoRepeat; }
     virtual bool shuffled() const { return false; }
 
+    virtual void ensureResolved();
+
     virtual void append( const Tomahawk::query_ptr& query ) = 0;
 
     PlItem* itemFromIndex( const QModelIndex& index ) const;

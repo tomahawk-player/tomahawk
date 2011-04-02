@@ -62,6 +62,7 @@ public:
 
     void insert( unsigned int row, const Tomahawk::query_ptr& query );
 
+    void remove( unsigned int row, bool moreToCome = false );
     virtual void removeIndex( const QModelIndex& index, bool moreToCome = false );
 
 signals:
