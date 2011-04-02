@@ -152,14 +152,6 @@ TomahawkApp::TomahawkApp( int& argc, char *argv[] )
 {
     qsrand( QTime( 0, 0, 0 ).secsTo( QTime::currentTime() ) );
     
-    // send the first arg to an already running instance, but don't open twice no matter what
-    if( ( argc > 1 && sendMessage( argv[ 1 ] ) ) || sendMessage( "" ) ) {
-        qDebug() << "Sent message, already exists";
-        throw runtime_error( "Already Running" );
-    }
-    
-    connect( this, SIGNAL( messageReceived( QString ) ), this, SLOT( messageReceived( QString ) ) );
-    
 #ifdef TOMAHAWK_HEADLESS
     m_headless = true;
 #else
@@ -535,13 +527,15 @@ TomahawkApp::loadUrl( const QString& url )
 
 
 void 
-TomahawkApp::messageReceived( const QString& msg ) 
+TomahawkApp::instanceStarted( KDSingleApplicationGuard::Instance instance )
 {
-    qDebug() << "MESSAGE RECEIVED" << msg;
-    if( msg.isEmpty() ) {
+    qDebug() << "INSTANCE STARTED!" << instance.pid << instance.arguments;
+    
+    if( instance.arguments.size() < 2 ) 
+    {
         return;
     }
     
-    loadUrl( msg );
+    loadUrl( instance.arguments.at( 1 ) );
 }
 

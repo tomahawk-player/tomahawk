@@ -21,14 +21,14 @@
 
 #ifdef ENABLE_HEADLESS
 
-#define TOMAHAWK_APPLICATION QtSingleCoreApplication
+#define TOMAHAWK_APPLICATION QCoreApplication
 #define TOMAHAWK_HEADLESS
-#include "qtsingleapp/qtsingleapplication.h"
+#include <QApplication>>
 
 #else
 
-#define TOMAHAWK_APPLICATION QtSingleApplication
-#include "qtsingleapp/qtsingleapplication.h"
+#define TOMAHAWK_APPLICATION QApplication
+#include <QApplication>
 #include "tomahawkwindow.h"
 
 #endif
