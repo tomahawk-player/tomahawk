@@ -146,7 +146,8 @@ ScanManager::setInitialPaths( QMap< QString, unsigned int > pathMap )
         qDebug() << "Adding " << path << " to watcher";
         m_dirWatcher->addPath( path );
     }
-    runManualScan( TomahawkSettings::instance()->scannerPaths() );
+    if( TomahawkSettings::instance()->hasScannerPaths() )
+        runManualScan( TomahawkSettings::instance()->scannerPaths() );
 }
 
 
