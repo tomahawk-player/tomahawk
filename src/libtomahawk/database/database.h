@@ -41,6 +41,7 @@
 class DLLEXPORT Database : public QObject
 {
 Q_OBJECT
+
 public:
     static Database* instance();
 
@@ -54,6 +55,8 @@ public:
 
 signals:
     void indexReady(); // search index
+    void ready();
+
     void newJobRO( QSharedPointer<DatabaseCommand> );
     void newJobRW( QSharedPointer<DatabaseCommand> );
 

@@ -46,8 +46,6 @@ DatabaseImpl::DatabaseImpl( const QString& dbname, Database* parent )
     , m_lastalbid( 0 )
     , m_lasttrkid( 0 )
 {
-    connect( this, SIGNAL( indexReady() ), parent, SIGNAL( indexReady() ) );
-
     db = QSqlDatabase::addDatabase( "QSQLITE", "tomahawk" );
     db.setDatabaseName( dbname );
     if ( !db.open() )

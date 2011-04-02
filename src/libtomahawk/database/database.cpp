@@ -37,6 +37,9 @@ Database::Database( const QString& dbname, QObject* parent )
 {
     s_instance = this;
 
+    connect( m_impl, SIGNAL( indexReady() ), SIGNAL( indexReady() ) );
+    connect( m_impl, SIGNAL( indexReady() ), SIGNAL( ready() ) );
+
     m_workerRW->start();
 }
 
