@@ -5,6 +5,7 @@
 #include <QtCore/QStringList>
 
 #include "pimpl_ptr.h"
+#include "dllmacro.h"
 
 class QCoreApplication;
 
@@ -12,7 +13,7 @@ class QCoreApplication;
 void SIGINT_handler( int sig );
 #endif
 
-class KDTOOLSCORE_EXPORT KDSingleApplicationGuard : public QObject
+class DLLEXPORT KDSingleApplicationGuard : public QObject
 {
     Q_OBJECT
 #ifndef Q_WS_WIN
