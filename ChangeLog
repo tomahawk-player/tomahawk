@@ -1,3 +1,8 @@
+Version 0.1.0:
+    * Watch folders for changes and automatically update your collection. This
+      is on by default; you can turn it off on the Local Music tab in the
+      settings dialog.
+
 Version 0.0.3:
     * Fix crashes in Twitter authentication. For reals now.
     * Properly honor the chosen port number if a static host and port are
