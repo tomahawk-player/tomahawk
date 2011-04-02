@@ -41,9 +41,12 @@ public:
     void applyChanges() { emit changed(); }
 
     /// General settings
-    QStringList scannerPath() const; /// QDesktopServices::MusicLocation by default
-    void setScannerPath( const QStringList& path );
-    bool hasScannerPath() const;
+    QStringList scannerPaths(); /// QDesktopServices::MusicLocation by default
+    void setScannerPaths( const QStringList& paths );
+    bool hasScannerPaths() const;
+
+    bool watchForChanges() const;
+    void setWatchForChanges( bool watch );
     
     bool acceptedLegalWarning() const;
     void setAcceptedLegalWarning( bool accept );

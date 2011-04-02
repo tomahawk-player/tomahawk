@@ -45,20 +45,33 @@ ScanManager::ScanManager( QObject* parent )
     : QObject( parent )
     , m_scanner( 0 )
     , m_musicScannerThreadController( 0 )
+    , m_currScannerPaths()
     , m_dirWatcher( 0 )
+    , m_queuedScanTimer( 0 )
+    , m_deferredScanTimer( 0 )
+    , m_queuedChangedDirs()
+    , m_deferredDirs()
 {
     s_instance = this;
 
-    m_dirWatcher = new QFileSystemWatcher( parent );
+    m_queuedScanTimer = new QTimer( this );
+    m_queuedScanTimer->setSingleShot( true );
+    m_deferredScanTimer = new QTimer( this );
+    m_deferredScanTimer->setSingleShot( false );
+    m_deferredScanTimer->setInterval( 1000 );
+    m_dirWatcher = new QFileSystemWatcher( this );
     
     connect( TomahawkSettings::instance(), SIGNAL( changed() ), SLOT( onSettingsChanged() ) );
+    connect( m_queuedScanTimer, SIGNAL( timeout() ), SLOT( queuedScanTimeout() ) );
+    connect( m_deferredScanTimer, SIGNAL( timeout() ), SLOT( deferredScanTimeout() ) );
     connect( m_dirWatcher, SIGNAL( directoryChanged( const QString & ) ), SLOT( handleChangedDir( const QString & ) ) );
     
-    if ( TomahawkSettings::instance()->hasScannerPath() )
-        m_currScannerPath = TomahawkSettings::instance()->scannerPath();
+    if ( TomahawkSettings::instance()->hasScannerPaths() )
+        m_currScannerPaths = TomahawkSettings::instance()->scannerPaths();
     
     qDebug() << "loading initial directories to watch";
     QTimer::singleShot( 1000, this, SLOT( startupWatchPaths() ) );
+    m_deferredScanTimer->start();
 }
 
 
@@ -91,14 +104,18 @@ ScanManager::~ScanManager()
 void
 ScanManager::onSettingsChanged()
 {
-    if ( TomahawkSettings::instance()->hasScannerPath() &&
-         m_currScannerPath != TomahawkSettings::instance()->scannerPath() )
+    if ( TomahawkSettings::instance()->hasScannerPaths() &&
+        m_currScannerPaths != TomahawkSettings::instance()->scannerPaths() )
     {
-        m_currScannerPath = TomahawkSettings::instance()->scannerPath();
+        m_currScannerPaths = TomahawkSettings::instance()->scannerPaths();
         m_dirWatcher->removePaths( m_dirWatcher->directories() );
-        m_dirWatcher->addPaths( m_currScannerPath );
-        runManualScan( m_currScannerPath );
+        m_dirWatcher->addPaths( m_currScannerPaths );
+        runManualScan( m_currScannerPaths );
     }
+    
+    if( TomahawkSettings::instance()->watchForChanges() &&
+        !m_queuedChangedDirs.isEmpty() )
+        runManualScan( m_queuedChangedDirs, false );
 }
 
 
@@ -107,21 +124,21 @@ ScanManager::startupWatchPaths()
 {
     qDebug() << Q_FUNC_INFO;
     
-    if( !Database::instance() )
+    if( !Database::instance() || ( Database::instance() && !Database::instance()->isReady() ) )
     {
         QTimer::singleShot( 1000, this, SLOT( startupWatchPaths() ) );
         return;
     }
     
-    DatabaseCommand_DirMtimes* cmd = new DatabaseCommand_DirMtimes( m_currScannerPath );
-    connect( cmd, SIGNAL( done( QMap<QString, unsigned int> ) ),
-             SLOT( setInitialPaths( QMap<QString, unsigned int> ) ) );
-    Database::instance()->enqueue( QSharedPointer<DatabaseCommand>(cmd) );
+    DatabaseCommand_DirMtimes* cmd = new DatabaseCommand_DirMtimes( m_currScannerPaths );
+    connect( cmd, SIGNAL( done( QMap< QString, unsigned int > ) ),
+             SLOT( setInitialPaths( QMap< QString, unsigned int > ) ) );
+    Database::instance()->enqueue( QSharedPointer< DatabaseCommand >( cmd ) );
 }
 
 
 void
-ScanManager::setInitialPaths( QMap<QString, unsigned int> pathMap )
+ScanManager::setInitialPaths( QMap< QString, unsigned int > pathMap )
 {
     qDebug() << Q_FUNC_INFO;
     foreach( QString path, pathMap.keys() )
@@ -129,27 +146,45 @@ ScanManager::setInitialPaths( QMap<QString, unsigned int> pathMap )
         qDebug() << "Adding " << path << " to watcher";
         m_dirWatcher->addPath( path );
     }
+    runManualScan( TomahawkSettings::instance()->scannerPaths() );
 }
 
 
 void
-ScanManager::runManualScan( const QStringList& path )
+ScanManager::runManualScan( const QStringList& paths, bool recursive )
 {
     qDebug() << Q_FUNC_INFO;
     
     if ( !m_musicScannerThreadController && !m_scanner ) //still running if these are not zero
     {
         m_musicScannerThreadController = new QThread( this );
-        m_scanner = new MusicScanner( path );
+        QStringList allPaths = paths;
+        foreach( QString path, m_deferredDirs[recursive] )
+        {
+            if( !allPaths.contains( path ) )
+                allPaths << path;
+        }
+        m_scanner = new MusicScanner( paths, recursive );
         m_scanner->moveToThread( m_musicScannerThreadController );
         connect( m_scanner, SIGNAL( finished() ), SLOT( scannerFinished() ) );
         connect( m_scanner, SIGNAL( addWatchedDirs( const QStringList & ) ), SLOT( addWatchedDirs( const QStringList & ) ) );
         connect( m_scanner, SIGNAL( removeWatchedDir( const QString & ) ), SLOT( removeWatchedDir( const QString & ) ) );
         m_musicScannerThreadController->start( QThread::IdlePriority );
         QMetaObject::invokeMethod( m_scanner, "startScan" );
+        m_deferredDirs[recursive].clear();
     }
     else
-        qDebug() << "Could not run manual scan, old scan still running";
+    {
+        qDebug() << "Could not run manual scan, old scan still running; deferring paths";
+        foreach( QString path, paths )
+        {
+            if( !m_deferredDirs[recursive].contains( path ) )
+            {
+                qDebug() << "Deferring path " << path;
+                m_deferredDirs[recursive] << path;
+            }
+        }
+    }        
 }
 
 void
@@ -180,6 +215,34 @@ ScanManager::handleChangedDir( const QString& path )
 {
     qDebug() << Q_FUNC_INFO;
     qDebug() << "Dir changed: " << path;
+    m_queuedChangedDirs << path;
+    if( TomahawkSettings::instance()->watchForChanges() )
+        m_queuedScanTimer->start( 10000 );
+}
+
+
+void
+ScanManager::queuedScanTimeout()
+{
+    qDebug() << Q_FUNC_INFO;
+    runManualScan( m_queuedChangedDirs, false );
+    m_queuedChangedDirs.clear();
+}
+
+
+void
+ScanManager::deferredScanTimeout()
+{
+    if( !m_deferredDirs[true].isEmpty() )
+    {
+        qDebug() << "Running scan for deferred recursive paths";
+        runManualScan( m_deferredDirs[true], true );
+    }
+    else if( !m_deferredDirs[false].isEmpty() )
+    {   
+        qDebug() << "Running scan for deferred non-recursive paths";
+        runManualScan( m_deferredDirs[false], false );
+    }
 }
 
 

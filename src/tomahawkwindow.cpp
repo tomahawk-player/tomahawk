@@ -319,8 +319,8 @@ TomahawkWindow::showSettingsDialog()
 void
 TomahawkWindow::updateCollectionManually()
 {
-    if ( TomahawkSettings::instance()->hasScannerPath() )
-        ScanManager::instance()->runManualScan( TomahawkSettings::instance()->scannerPath() );
+    if ( TomahawkSettings::instance()->hasScannerPaths() )
+        ScanManager::instance()->runManualScan( TomahawkSettings::instance()->scannerPaths() );
 }
 
 

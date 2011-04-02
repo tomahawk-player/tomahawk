@@ -84,6 +84,8 @@ signals:
 public slots:
 
 private:
+    bool m_ready;
+    
     bool updateSchema( int currentver );
 
     QSqlDatabase db;

@@ -66,7 +66,7 @@
             </sizepolicy>
            </property>
            <property name="placeholderText">
-               <string>e.g. user@example.com</string>
+            <string>e.g. user@example.com</string>
            </property>
           </widget>
          </item>
@@ -453,6 +453,19 @@
             </widget>
            </item>
           </layout>
+         </item>
+         <item>
+          <widget class="QCheckBox" name="checkBoxWatchForChanges">
+           <property name="sizePolicy">
+            <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+             <horstretch>0</horstretch>
+             <verstretch>0</verstretch>
+            </sizepolicy>
+           </property>
+           <property name="text">
+            <string>Watch for changes</string>
+           </property>
+          </widget>
          </item>
         </layout>
        </item>

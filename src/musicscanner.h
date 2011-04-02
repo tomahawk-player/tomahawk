@@ -39,8 +39,15 @@ class DirLister : public QObject
 Q_OBJECT
 
 public:
-    DirLister( QDir d, QMap<QString, unsigned int>& mtimes )
-        : QObject(), m_dir( d ), m_dirmtimes( mtimes )
+    
+    enum Mode {
+        NonRecursive,
+        Recursive,
+        MTimeOnly
+    };
+    
+    DirLister( QStringList dirs, QMap<QString, unsigned int>& mtimes, bool recursive )
+        : QObject(), m_dirs( dirs ), m_dirmtimes( mtimes ), m_recursive( recursive )
     {
         qDebug() << Q_FUNC_INFO;
     }
@@ -56,11 +63,13 @@ signals:
 
 private slots:
     void go();
-    void scanDir( QDir dir, int depth );
+    void scanDir( QDir dir, int depth, DirLister::Mode mode );
 
 private:
-    QDir m_dir;
+    QStringList m_dirs;
     QMap<QString, unsigned int> m_dirmtimes;
+    bool m_recursive;
+    
     QMap<QString, unsigned int> m_newdirmtimes;
 };
 
@@ -69,7 +78,7 @@ class MusicScanner : public QObject
 Q_OBJECT
 
 public:
-    MusicScanner( const QStringList& dirs, quint32 bs = 0 );
+    MusicScanner( const QStringList& dirs, bool recursive = true, quint32 bs = 0 );
     ~MusicScanner();
 
 signals:
@@ -105,6 +114,7 @@ private:
     QMap<QString, unsigned int> m_newdirmtimes;
 
     QList<QVariant> m_scannedfiles;
+    bool m_recursive;
     quint32 m_batchsize;
 
     DirLister* m_dirLister;

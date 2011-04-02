@@ -285,7 +285,7 @@ TomahawkApp::TomahawkApp( int& argc, char *argv[] )
     }
 
 #ifndef TOMAHAWK_HEADLESS
-    if ( !TomahawkSettings::instance()->hasScannerPath() )
+    if ( !TomahawkSettings::instance()->hasScannerPaths() )
     {
         m_mainwindow->showSettingsDialog();
     }

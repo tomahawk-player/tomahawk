@@ -31,14 +31,16 @@ using namespace Tomahawk;
 void
 DirLister::go()
 {
-    scanDir( m_dir, 0 );
+    foreach( QString dir, m_dirs )
+        scanDir( QDir( dir, 0 ), 0, ( m_recursive ? DirLister::Recursive : DirLister::NonRecursive ) );
     emit finished( m_newdirmtimes );
 }
 
 
 void
-DirLister::scanDir( QDir dir, int depth )
+DirLister::scanDir( QDir dir, int depth, DirLister::Mode mode )
 {
+    qDebug() << "DirLister::scanDir scanning: " << dir.absolutePath();
     QFileInfoList dirs;
     const uint mtime = QFileInfo( dir.absolutePath() ).lastModified().toUTC().toTime_t();
     m_newdirmtimes.insert( dir.absolutePath(), mtime );
@@ -65,14 +67,18 @@ DirLister::scanDir( QDir dir, int depth )
 
     foreach( const QFileInfo& di, dirs )
     {
-        scanDir( di.absoluteFilePath(), depth + 1 );
+        if( mode == DirLister::Recursive || !m_dirmtimes.contains( di.absolutePath() ) )
+            scanDir( di.absoluteFilePath(), depth + 1, DirLister::Recursive );
+        else //should be the non-recursive case since the second test above should only happen with a new dir
+            scanDir( di.absoluteFilePath(), depth + 1, DirLister::MTimeOnly );
     }
 }
 
 
-MusicScanner::MusicScanner( const QStringList& dirs, quint32 bs )
+MusicScanner::MusicScanner( const QStringList& dirs, bool recursive, quint32 bs )
     : QObject()
     , m_dirs( dirs )
+    , m_recursive( recursive )
     , m_batchsize( bs )
     , m_dirLister( 0 )
     , m_dirListerThreadController( 0 )
@@ -150,8 +156,7 @@ MusicScanner::scan()
 
     m_dirListerThreadController = new QThread( this );
     
-    //FIXME: MULTIPLECOLLECTIONDIRS
-    m_dirLister = new DirLister( QDir( m_dirs.first(), 0 ), m_dirmtimes );
+    m_dirLister = new DirLister( m_dirs, m_dirmtimes, m_recursive );
     m_dirLister->moveToThread( m_dirListerThreadController );
 
     connect( m_dirLister, SIGNAL( fileToScan( QFileInfo ) ),
