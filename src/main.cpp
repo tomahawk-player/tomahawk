@@ -39,6 +39,7 @@ main( int argc, char *argv[] )
       AEInstallEventHandler( 'GURL', 'GURL', h, 0, false );
 
 #endif
+
     try
     {
         TomahawkApp a( argc, argv );
@@ -46,8 +47,8 @@ main( int argc, char *argv[] )
         QString locale = QLocale::system().name();
 
         QTranslator translator;
-        translator.load(QString(":/lang/tomahawk_") + locale);
-        a.installTranslator(&translator);
+        translator.load( QString( ":/lang/tomahawk_" ) + locale );
+        a.installTranslator( &translator );
         return a.exec();
     }
     catch( const std::runtime_error& e )
