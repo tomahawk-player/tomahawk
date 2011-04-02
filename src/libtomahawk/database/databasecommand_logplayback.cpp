@@ -44,7 +44,8 @@ DatabaseCommand_LogPlayback::postCommitHook()
     connect( this, SIGNAL( trackPlayed( Tomahawk::query_ptr ) ),
              source().data(), SLOT( onPlaybackFinished( Tomahawk::query_ptr ) ), Qt::QueuedConnection );
 
-    Tomahawk::query_ptr q = Tomahawk::Query::get( m_artist, m_track, QString(), uuid() );
+    // do not auto resolve this track
+    Tomahawk::query_ptr q = Tomahawk::Query::get( m_artist, m_track, QString() );
 
     if ( m_action == Finished )
     {

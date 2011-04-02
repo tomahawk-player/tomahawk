@@ -124,10 +124,13 @@ private slots:
     void onPlaylistActivated( QListWidgetItem* item );
     void onPlaybackFinished( const Tomahawk::query_ptr& query );
 
+    void checkQueries();
+
 private:
     Ui::WelcomeWidget *ui;
 
     PlaylistModel* m_tracksModel;
+    QTimer* m_timer;
 };
 
 #endif // WELCOMEWIDGET_H

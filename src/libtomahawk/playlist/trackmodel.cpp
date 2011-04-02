@@ -26,6 +26,7 @@
 #include "utils/tomahawkutils.h"
 
 #include "album.h"
+#include "pipeline.h"
 
 using namespace Tomahawk;
 
@@ -368,5 +369,18 @@ TrackModel::onPlaybackStopped()
     if ( oldEntry )
     {
         oldEntry->setIsPlaying( false );
+    }
+}
+
+
+void
+TrackModel::ensureResolved()
+{
+    for( int i = 0; i < rowCount( QModelIndex() ); i++ )
+    {
+        query_ptr query = itemFromIndex( index( i, 0, QModelIndex() ) )->query();
+
+        if ( !query->numResults() )
+            Pipeline::instance()->resolve( query );
     }
 }
