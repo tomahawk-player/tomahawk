@@ -39,7 +39,7 @@ SourcesModel::SourcesModel( QObject* parent )
     appendItem( source_ptr() );
 
     // add misc children of root node
-    GenericPageItem* recent = new GenericPageItem( this, m_rootItem->children().at( 0 ), tr( "Recently Played" ), QIcon( RESPATH "images/home.png" ) );
+    GenericPageItem* recent = new GenericPageItem( this, m_rootItem->children().at( 0 ), tr( "Recently Played" ), QIcon( RESPATH "images/recently-played.png" ) );
     connect( recent, SIGNAL( activated() ), PlaylistManager::instance(), SLOT( showWelcomePage() ) );
 
     onSourcesAdded( SourceList::instance()->sources() );

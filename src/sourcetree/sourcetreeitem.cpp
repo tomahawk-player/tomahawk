@@ -276,7 +276,7 @@ CategoryAddItem::flags() const
 QIcon 
 CategoryAddItem::icon() const
 {
-    return QIcon( RESPATH "images/create-playlist.png" );
+    return QIcon( RESPATH "images/add.png" );
 }
 
 // CategoryItem
@@ -372,6 +372,15 @@ CollectionItem::activate()
     } else {
         PlaylistManager::instance()->show( source()->collection() );
     }
+}
+
+QIcon 
+CollectionItem::icon() const
+{
+    if( m_source.isNull() )
+        return QIcon( RESPATH "images/supercollection.png" );
+    else
+        return QIcon( RESPATH "images/user-avatar.png" );
 }
 
 

@@ -128,6 +128,7 @@ public:
     
     virtual QString text() const;
     virtual void activate();
+    virtual QIcon icon() const;
     
     Tomahawk::source_ptr source() const;
     

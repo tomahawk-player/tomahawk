@@ -466,7 +466,7 @@ SourceDelegate::paint( QPainter* painter, const QStyleOptionViewItem& option, co
         }
 
         QRect iconRect = option.rect.adjusted( 4, 6, -option.rect.width() + option.rect.height() - 12 + 4, -6 );
-        painter->drawPixmap( iconRect, QPixmap( RESPATH "images/user-avatar.png" ).scaledToHeight( iconRect.height(), Qt::SmoothTransformation ) );
+        painter->drawPixmap( iconRect, item->icon().pixmap( iconRect.size() ) );
 
         if ( ( option.state & QStyle::State_Selected ) == QStyle::State_Selected )
         {
