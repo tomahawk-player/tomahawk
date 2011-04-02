@@ -187,6 +187,7 @@ ScanManager::runManualScan( const QStringList& paths, bool recursive )
     }        
 }
 
+
 void
 ScanManager::addWatchedDirs( const QStringList& paths )
 {
@@ -202,6 +203,7 @@ ScanManager::addWatchedDirs( const QStringList& paths )
     }
 }
 
+
 void
 ScanManager::removeWatchedDir( const QString& path )
 {
@@ -209,6 +211,7 @@ ScanManager::removeWatchedDir( const QString& path )
     qDebug() << "removing " << path << " from watched dirs";
     m_dirWatcher->removePath( path );
 }
+
 
 void
 ScanManager::handleChangedDir( const QString& path )
