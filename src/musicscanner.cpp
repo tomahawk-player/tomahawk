@@ -67,6 +67,8 @@ DirLister::scanDir( QDir dir, int depth, DirLister::Mode mode )
     
     foreach( const QFileInfo& di, dirs )
     {
+        qDebug() << "Considering dir " << di.absoluteFilePath();
+        qDebug() << "m_dirtimes contains it? " << (m_dirmtimes.contains( di.absoluteFilePath() ) ? "true" : "false");
         if( mode == DirLister::Recursive || !m_dirmtimes.contains( di.absoluteFilePath() ) )
             scanDir( di.absoluteFilePath(), depth + 1, DirLister::Recursive );
         else //should be the non-recursive case since the second test above should only happen with a new dir

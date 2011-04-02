@@ -219,7 +219,8 @@ ScanManager::handleChangedDir( const QString& path )
 {
     qDebug() << Q_FUNC_INFO;
     qDebug() << "Dir changed: " << path;
-    m_queuedChangedDirs << path;
+    if( !m_queuedChangedDirs.contains( path ) )
+        m_queuedChangedDirs << path;
     if( TomahawkSettings::instance()->watchForChanges() )
         m_queuedScanTimer->start( 10000 );
 }
