@@ -72,14 +72,18 @@ PlaylistItemDelegate::paint( QPainter* painter, const QStyleOptionViewItem& opti
     if ( !item || item->query().isNull() )
         return;
 
+    float opacity = 0.0;
     painter->save();
     if ( item->query()->results().count() )
-        painter->setOpacity( item->query()->results().at( 0 )->score() );
-    else
-        painter->setOpacity( 0.0 );
+        opacity = item->query()->results().first()->score();
 
-    if ( painter->opacity() < 0.3 )
-        painter->setOpacity( 0.3 );
+    opacity = qMax( (float)0.3, opacity );
+    int r = 0, g = 0, b = 0;
+    r = opacity * r + ( 1 - opacity ) * 255;
+    g = opacity * g + ( 1 - opacity ) * 255;
+    b = opacity * b + ( 1 - opacity ) * 255;
+
+    QColor tc( r, g, b );
 
     if ( item->isPlaying() )
     {
@@ -113,7 +117,14 @@ PlaylistItemDelegate::paint( QPainter* painter, const QStyleOptionViewItem& opti
     }
     else
     {
-        QStyledItemDelegate::paint( painter, option, index );
+        if ( const QStyleOptionViewItem *vioption = qstyleoption_cast<const QStyleOptionViewItem *>(&option))
+        {
+            QStyleOptionViewItemV4 o( *vioption );
+            o.palette.setColor( QPalette::Text, tc );
+            QStyledItemDelegate::paint( painter, o, index );
+        }
+        else
+            QStyledItemDelegate::paint( painter, option, index );
     }
 
     painter->restore();
