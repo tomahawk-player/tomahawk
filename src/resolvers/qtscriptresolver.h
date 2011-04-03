@@ -30,7 +30,6 @@
 #include <QtWebKit/QWebPage>
 #include <QtWebKit/QWebFrame>
 
-class ScriptThread;
 class QtScriptResolver;
 
 class ScriptEngine : public QWebPage
@@ -38,18 +37,16 @@ class ScriptEngine : public QWebPage
 Q_OBJECT
 
 public:
-    explicit ScriptEngine( QtScriptResolver* resolver, ScriptThread* parent )
-        : QWebPage( (QObject*)parent )
+    explicit ScriptEngine( QtScriptResolver* parent )
+        : QWebPage( (QObject*) parent )
         , m_parent( parent )
-        , m_resolver( resolver )
-    {}
+    {
+    }
 
 public slots:
-    void resolve( const Tomahawk::query_ptr& query );
-
     bool shouldInterruptJavaScript()
     {
-        return false;
+        return true;
     }
 
 protected:
@@ -57,32 +54,7 @@ protected:
     { qDebug() << "JAVASCRIPT ERROR:" << message << lineNumber << sourceID; }
 
 private:
-    ScriptThread* m_parent;
-    QtScriptResolver* m_resolver;
-};
-
-
-class ScriptThread : public QThread
-{
-Q_OBJECT
-
-public:
-    ScriptThread( const QString& scriptPath, QtScriptResolver* parent );
-
-    void run();
-
-    virtual void resolve( const Tomahawk::query_ptr& query );
-
-signals:
-    void engineFound( const QString& name, unsigned int weight, unsigned int timeout, unsigned int preference );
-
-private slots:
-    void initEngine();
-
-private:
-    ScriptEngine* m_engine;
     QtScriptResolver* m_parent;
-    QString m_scriptPath;
 };
 
 
@@ -106,11 +78,8 @@ public slots:
 signals:
     void finished();
 
-private slots:
-    void onEngineFound( const QString& name, unsigned int weight, unsigned int timeout, unsigned int preference );
-
 private:
-    ScriptThread* m_thread;
+    ScriptEngine* m_engine;
 
     QString m_name;
     unsigned int m_weight, m_preference, m_timeout;
