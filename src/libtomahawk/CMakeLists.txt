@@ -145,8 +145,10 @@ set( libSources
     widgets/overlaywidget.cpp
     widgets/infowidgets/sourceinfowidget.cpp
 
-    qtsingleapp/qtlocalpeer.cpp
-    qtsingleapp/qtsingleapplication.cpp
+    kdsingleapplicationguard/kdsingleapplicationguard.cpp
+    kdsingleapplicationguard/kdsharedmemorylocker.cpp
+    kdsingleapplicationguard/kdtoolsglobal.cpp
+    kdsingleapplicationguard/kdlockedsharedmemorypointer.cpp
 )
 
 set( libHeaders
@@ -287,8 +289,10 @@ set( libHeaders
     widgets/overlaywidget.h
     widgets/infowidgets/sourceinfowidget.h
 
-    qtsingleapp/qtlocalpeer.h
-    qtsingleapp/qtsingleapplication.h
+    kdsingleapplicationguard/kdsingleapplicationguard.h
+    kdsingleapplicationguard/kdsharedmemorylocker.h
+    kdsingleapplicationguard/kdtoolsglobal.h
+    kdsingleapplicationguard/kdlockedsharedmemorypointer.h
 )
 
 set( libHeaders_NoMOC 

@@ -25,6 +25,8 @@
 #endif
 
 #include <exception>
+    
+#include "kdsingleapplicationguard/kdsingleapplicationguard.h"
 int
 main( int argc, char *argv[] )
 {
@@ -38,15 +40,11 @@ main( int argc, char *argv[] )
       AEInstallEventHandler( 'GURL', 'GURL', h, 0, false );
 
 #endif
-    try
-    {
-        TomahawkApp a( argc, argv );
-        return a.exec();
-    }
-    catch( const std::runtime_error& e )
-    {
-        return 0;
-    }
+    TomahawkApp a( argc, argv );
+    KDSingleApplicationGuard guard( &a, KDSingleApplicationGuard::AutoKillOtherInstances );
+    QObject::connect( &guard, SIGNAL( instanceStarted( KDSingleApplicationGuard::Instance ) ), &a, SLOT( instanceStarted( KDSingleApplicationGuard::Instance )  ) );
+    
+    return a.exec();
 }
 
 #ifdef Q_WS_MAC
