@@ -163,7 +163,6 @@ void EchoNestPlugin::getArtistBiographySlot()
         
     }
     emit info( m_callerMap[reply], Tomahawk::InfoSystem::InfoArtistBiography, reply->property( "data" ), QVariant::fromValue<Tomahawk::InfoSystem::InfoGenericMap>(biographyMap), m_replyMap[reply] );
-    emit finished( m_callerMap[reply], Tomahawk::InfoSystem::InfoArtistBiography);
     m_replyMap.remove(reply);
     m_callerMap.remove(reply);
     reply->deleteLater();
@@ -175,7 +174,6 @@ void EchoNestPlugin::getArtistFamiliaritySlot()
     Echonest::Artist artist = artistFromReply( reply );
     qreal familiarity = artist.familiarity();
     emit info( m_callerMap[reply], Tomahawk::InfoSystem::InfoArtistFamiliarity, reply->property( "data" ), familiarity, m_replyMap[reply] );
-    emit finished( m_callerMap[reply], Tomahawk::InfoSystem::InfoArtistFamiliarity);
     m_replyMap.remove(reply);
     m_callerMap.remove(reply);
     reply->deleteLater();
@@ -187,7 +185,6 @@ void EchoNestPlugin::getArtistHotttnesssSlot()
     Echonest::Artist artist = artistFromReply( reply );
     qreal hotttnesss = artist.hotttnesss();
     emit info( m_callerMap[reply], Tomahawk::InfoSystem::InfoArtistHotttness, reply->property( "data" ), hotttnesss, m_replyMap[reply] );
-    emit finished( m_callerMap[reply], Tomahawk::InfoSystem::InfoArtistHotttness);
     m_replyMap.remove(reply);
     m_callerMap.remove(reply);
     reply->deleteLater();
@@ -206,7 +203,6 @@ void EchoNestPlugin::getArtistTermsSlot()
         termsMap[ term.name() ] = termMap;
     }
     emit info( m_callerMap[reply], Tomahawk::InfoSystem::InfoArtistTerms, reply->property( "data" ), QVariant::fromValue<Tomahawk::InfoSystem::InfoGenericMap>(termsMap), m_replyMap[reply] );
-    emit finished( m_callerMap[reply], Tomahawk::InfoSystem::InfoArtistTerms);
     m_replyMap.remove(reply);
     m_callerMap.remove(reply);
     reply->deleteLater();
@@ -224,7 +220,6 @@ void EchoNestPlugin::getMiscTopSlot()
         termsMap[ term.name().toLower() ] = termMap;
     }
     emit info( m_callerMap[reply], Tomahawk::InfoSystem::InfoMiscTopTerms, QVariant(), QVariant::fromValue<Tomahawk::InfoSystem::InfoGenericMap>(termsMap), m_replyMap[reply] );
-    emit finished( m_callerMap[reply], Tomahawk::InfoSystem::InfoMiscTopTerms);
     m_replyMap.remove(reply);
     m_callerMap.remove(reply);
     reply->deleteLater();

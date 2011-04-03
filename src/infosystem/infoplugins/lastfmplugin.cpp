@@ -95,7 +95,6 @@ void
 LastFmPlugin::dataError( const QString &caller, const InfoType type, const QVariant& data, Tomahawk::InfoSystem::InfoCustomData &customData )
 {
     emit info( caller, type, data, QVariant(), customData );
-    emit finished( caller, type );
     return;
 }
 
@@ -139,7 +138,6 @@ LastFmPlugin::nowPlaying( const QString &caller, const InfoType type, const QVar
 
     m_scrobbler->nowPlaying( m_track );
     emit info( caller, type, data, QVariant(), customData );
-    emit finished( caller, type );
 }
 
 void
@@ -158,7 +156,6 @@ LastFmPlugin::scrobble( const QString &caller, const InfoType type, const QVaria
     m_scrobbler->submit();
     
     emit info( caller, type, data, QVariant(), customData );
-    emit finished( caller, type );
 }
 
 void
@@ -230,7 +227,6 @@ LastFmPlugin::coverArtReturned()
             returnedData,
             customData
         );
-        emit finished( reply->property( "caller" ).toString(), (Tomahawk::InfoSystem::InfoType)(reply->property( "type" ).toUInt()) );
         
         InfoCustomData origData = reply->property( "origData" ).value< Tomahawk::InfoSystem::InfoCustomData >();
         Tomahawk::InfoSystem::InfoCacheCriteria criteria;

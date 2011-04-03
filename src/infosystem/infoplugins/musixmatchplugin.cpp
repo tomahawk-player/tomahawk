@@ -53,7 +53,6 @@ void MusixMatchPlugin::getInfo(const QString &caller, const InfoType type, const
     if( artist.isEmpty() || track.isEmpty() )
     {
         emit info(caller, Tomahawk::InfoSystem::InfoTrackLyrics, data, QVariant(), customData);
-        emit finished(caller, Tomahawk::InfoSystem::InfoTrackLyrics);
         return;
     }
     qDebug() << "artist is " << artist << ", track is " << track;
@@ -76,7 +75,6 @@ bool MusixMatchPlugin::isValidTrackData(const QString &caller, const QVariant& d
     if (data.isNull() || !data.isValid() || !data.canConvert<Tomahawk::InfoSystem::InfoCustomData>())
     {
         emit info(caller, Tomahawk::InfoSystem::InfoTrackLyrics, data, QVariant(), customData);
-        emit finished(caller, Tomahawk::InfoSystem::InfoTrackLyrics);
         qDebug() << "MusixMatchPlugin::isValidTrackData: Data null, invalid, or can't convert";
         return false;
     }
@@ -84,14 +82,12 @@ bool MusixMatchPlugin::isValidTrackData(const QString &caller, const QVariant& d
     if (hash["trackName"].toString().isEmpty() )
     {
         emit info(caller, Tomahawk::InfoSystem::InfoTrackLyrics, data, QVariant(), customData);
-        emit finished(caller, Tomahawk::InfoSystem::InfoTrackLyrics);
         qDebug() << "MusixMatchPlugin::isValidTrackData: Track name is empty";
         return false;
     }
     if (hash["artistName"].toString().isEmpty() )
     {
         emit info(caller, Tomahawk::InfoSystem::InfoTrackLyrics, data, QVariant(), customData);
-        emit finished(caller, Tomahawk::InfoSystem::InfoTrackLyrics);
         qDebug() << "MusixMatchPlugin::isValidTrackData: No artist name found";
         return false;
     }
@@ -114,7 +110,6 @@ void MusixMatchPlugin::trackSearchSlot()
     if (domNodeList.isEmpty())
     {
         emit info(oldReply->property("caller").toString(), Tomahawk::InfoSystem::InfoTrackLyrics, oldReply->property("origData"), QVariant(), oldReply->property("customData").value<Tomahawk::InfoSystem::InfoCustomData>());
-        emit finished(oldReply->property("caller").toString(), Tomahawk::InfoSystem::InfoTrackLyrics);
         return;
     }
     QString track_id = domNodeList.at(0).toElement().text();
@@ -144,11 +139,9 @@ void MusixMatchPlugin::trackLyricsSlot()
     if (domNodeList.isEmpty())
     {
         emit info(reply->property("caller").toString(), Tomahawk::InfoSystem::InfoTrackLyrics, reply->property("origData"), QVariant(), reply->property("customData").value<Tomahawk::InfoSystem::InfoCustomData>());
-        emit finished(reply->property("caller").toString(), Tomahawk::InfoSystem::InfoTrackLyrics);
         return;
     }
     QString lyrics = domNodeList.at(0).toElement().text();
     qDebug() << "Emitting lyrics: " << lyrics;
     emit info(reply->property("caller").toString(), Tomahawk::InfoSystem::InfoTrackLyrics, reply->property("origData"), QVariant(lyrics), reply->property("customData").value<Tomahawk::InfoSystem::InfoCustomData>());
-    emit finished(reply->property("caller").toString(), Tomahawk::InfoSystem::InfoTrackLyrics);
 }

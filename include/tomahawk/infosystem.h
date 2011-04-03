@@ -19,6 +19,7 @@
 #ifndef TOMAHAWK_INFOSYSTEM_H
 #define TOMAHAWK_INFOSYSTEM_H
 
+#include <QtCore/QCryptographicHash>
 #include <QtCore/QObject>
 #include <QtCore/QtDebug>
 #include <QtCore/QMap>
@@ -150,7 +151,6 @@ signals:
     
 public slots:
     void infoSlot( QString target, Tomahawk::InfoSystem::InfoType type, QVariant input, QVariant output, Tomahawk::InfoSystem::InfoCustomData customData );
-    void finishedSlot( QString target, Tomahawk::InfoSystem::InfoType type);
     
 private:
     QLinkedList< InfoPluginPtr > determineOrderedMatches( const InfoType type ) const;
@@ -168,6 +168,24 @@ private:
 
 }
 
+}
+
+inline uint qHash( Tomahawk::InfoSystem::InfoCacheCriteria hash )
+{
+    QCryptographicHash md5( QCryptographicHash::Md5 );
+    foreach( QString key, hash.keys()  )
+        md5.addData( key.toUtf8() );
+    foreach( QString value, hash.values()  )
+        md5.addData( value.toUtf8() );
+    
+    QString hexData = md5.result();
+    
+    uint returnval = 0;
+    
+    foreach( uint val, hexData.toUcs4() )
+        returnval += val;
+    
+    return returnval;
 }
 
 Q_DECLARE_METATYPE( Tomahawk::InfoSystem::InfoGenericMap );

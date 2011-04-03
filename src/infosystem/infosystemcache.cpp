@@ -24,11 +24,22 @@ void
 Tomahawk::InfoSystem::InfoSystemCache::getCachedInfoSlot( Tomahawk::InfoSystem::InfoCacheCriteria criteria, QString caller, Tomahawk::InfoSystem::InfoType type, QVariant input, Tomahawk::InfoSystem::InfoCustomData customData )
 {
     qDebug() << Q_FUNC_INFO;
-    emit notInCache( criteria, caller, type, input, customData );
+    if( !m_memCache.contains( type ) || !m_memCache[type].contains( criteria ) )
+    {
+        emit notInCache( criteria, caller, type, input, customData );
+        return;
+    }
+    
+    emit info( caller, type, input, m_memCache[type][criteria], customData );
 }
 
 void
 Tomahawk::InfoSystem::InfoSystemCache::updateCacheSlot( Tomahawk::InfoSystem::InfoCacheCriteria criteria, Tomahawk::InfoSystem::InfoType type, QVariant output )
 {
     qDebug() << Q_FUNC_INFO;
+    QHash< InfoCacheCriteria, QVariant > typecache;
+    if( m_memCache.contains( type ) )
+        typecache = m_memCache[type];
+    typecache[criteria] = output;
+    m_memCache[type] = typecache;
 }

@@ -90,18 +90,9 @@ InfoSystem::InfoSystem(QObject *parent)
                 SLOT( infoSlot( QString, Tomahawk::InfoSystem::InfoType, QVariant, QVariant, Tomahawk::InfoSystem::InfoCustomData ) ),
                 Qt::UniqueConnection
             );
-        
-        connect(
-                plugin.data(),
-                SIGNAL( finished( QString, Tomahawk::InfoSystem::InfoType ) ),
-                this,
-                SLOT( finishedSlot( QString, Tomahawk::InfoSystem::InfoType ) ), Qt::UniqueConnection
-            );
     }
     connect( m_cache, SIGNAL( info( QString, Tomahawk::InfoSystem::InfoType, QVariant, QVariant, Tomahawk::InfoSystem::InfoCustomData ) ),
             this,       SLOT( infoSlot( QString, Tomahawk::InfoSystem::InfoType, QVariant, QVariant, Tomahawk::InfoSystem::InfoCustomData ) ), Qt::UniqueConnection );
-    connect( m_cache, SIGNAL( finished( QString, Tomahawk::InfoSystem::InfoType ) ),
-            this,       SLOT( finishedSlot( QString, Tomahawk::InfoSystem::InfoType ) ), Qt::UniqueConnection );
 }
 
 InfoSystem::~InfoSystem()
@@ -191,11 +182,7 @@ void InfoSystem::infoSlot(QString target, InfoType type, QVariant input, QVarian
         return;
     }
     emit info(target, type, input, output, customData);
-}
-
-void InfoSystem::finishedSlot(QString target, InfoType type)
-{
-    qDebug() << Q_FUNC_INFO;
+    
     m_dataTracker[target][type] = m_dataTracker[target][type] - 1;
     qDebug() << "current count in dataTracker is " << m_dataTracker[target][type];
     Q_FOREACH(InfoType testtype, m_dataTracker[target].keys())
