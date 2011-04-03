@@ -87,7 +87,8 @@ SettingsDialog::SettingsDialog( QWidget *parent )
 
     // MUSIC SCANNER
     //FIXME: MULTIPLECOLLECTIONDIRS
-    ui->lineEditMusicPath->setText( s->scannerPaths().first() );
+    if ( s->scannerPaths().count() )
+        ui->lineEditMusicPath->setText( s->scannerPaths().first() );
     ui->checkBoxWatchForChanges->setChecked( s->watchForChanges() );
 
     // LAST FM
