@@ -33,7 +33,6 @@ void
 DirLister::go()
 {
     qDebug() << Q_FUNC_INFO;
-    qDebug() << "Current mtimes: " << m_dirmtimes;
     qDebug() << "Recursive? : " << (m_recursive ? "true" : "false");
     if( !m_recursive )
     {
@@ -67,6 +66,13 @@ void
 DirLister::scanDir( QDir dir, int depth, DirLister::Mode mode )
 {
     qDebug() << "DirLister::scanDir scanning: " << dir.absolutePath() << " with mode " << mode;
+    
+    if( !dir.exists() )
+    {
+        qDebug() << "Dir no longer exists, not scanning";
+        return;
+    }
+    
     QFileInfoList dirs;
     const uint mtime = QFileInfo( dir.absolutePath() ).lastModified().toUTC().toTime_t();
     m_newdirmtimes.insert( dir.absolutePath(), mtime );
