@@ -4,6 +4,8 @@ Version 0.0.3:
       marked as preferred.
     * Don't automatically try to resolve all incoming playback logs. This
       speeds up importing sources a lot.
+    * Faster painting of playlists with lots of unresolved tracks.
+    * The tomahawk:// protocol handler works on Windows now.
 
 Version 0.0.2:
     * Don't reconnect to Jabber if the settings dialog is closed successfully
