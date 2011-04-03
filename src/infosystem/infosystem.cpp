@@ -37,12 +37,26 @@ InfoPlugin::InfoPlugin(QObject *parent)
         qDebug() << Q_FUNC_INFO;
         InfoSystem *system = qobject_cast< InfoSystem* >( parent );
         if( system )
-                QObject::connect(
-                    system->getCache(),
-                    SIGNAL( notInCache( QHash< QString, QString >, QString, Tomahawk::InfoSystem::InfoType, QVariant, QVariant, Tomahawk::InfoSystem::InfoCustomDataHash ) ),
-                    this,
-                    SLOT( notInCacheSlot( QHash< QString, QString >, QString, Tomahawk::InfoSystem::InfoType, QVariant, QVariant, Tomahawk::InfoSystem::InfoCustomDataHash ) )
-                );
+        {
+            QObject::connect(
+                this,
+                SIGNAL( getCachedInfo( Tomahawk::InfoSystem::InfoCacheCriteria, QString, Tomahawk::InfoSystem::InfoType, QVariant, Tomahawk::InfoSystem::InfoCustomData ) ),
+                system->getCache(),
+                SLOT( getCachedInfoSlot( Tomahawk::InfoSystem::InfoCacheCriteria, QString, Tomahawk::InfoSystem::InfoType, QVariant, Tomahawk::InfoSystem::InfoCustomData ) )
+            );
+            QObject::connect(
+                system->getCache(),
+                SIGNAL( notInCache( Tomahawk::InfoSystem::InfoCacheCriteria, QString, Tomahawk::InfoSystem::InfoType, QVariant, Tomahawk::InfoSystem::InfoCustomData ) ),
+                this,
+                SLOT( notInCacheSlot( Tomahawk::InfoSystem::InfoCacheCriteria, QString, Tomahawk::InfoSystem::InfoType, QVariant, Tomahawk::InfoSystem::InfoCustomData ) )
+            );
+            QObject::connect(
+                this,
+                SIGNAL( updateCache( Tomahawk::InfoSystem::InfoCacheCriteria, Tomahawk::InfoSystem::InfoType, QVariant ) ),
+                system->getCache(),
+                SLOT( updateCacheSlot( Tomahawk::InfoSystem::InfoCacheCriteria, Tomahawk::InfoSystem::InfoType, QVariant ) )
+            );
+        }
     }
 
 
@@ -50,32 +64,44 @@ InfoSystem::InfoSystem(QObject *parent)
     : QObject(parent)
 {
     qDebug() << Q_FUNC_INFO;
-    qRegisterMetaType<QMap< QString, QMap< QString, QString > > >("Tomahawk::InfoSystem::InfoGenericMap");
-    qRegisterMetaType<QHash<QString, QVariant > >("Tomahawk::InfoSystem::InfoCustomDataHash");
+    qRegisterMetaType< QMap< QString, QMap< QString, QString > > >( "Tomahawk::InfoSystem::InfoGenericMap" );
+    qRegisterMetaType< QHash< QString, QVariant > >( "Tomahawk::InfoSystem::InfoCustomData" );
+    qRegisterMetaType< QHash< QString, QString > >( "Tomahawk::InfoSystem::InfoCacheCriteria" );
+    qRegisterMetaType< Tomahawk::InfoSystem::InfoType >( "Tomahawk::InfoSystem::InfoType" );
     
     m_infoSystemCacheThreadController = new QThread( this );
     m_cache = new InfoSystemCache();
     m_cache->moveToThread( m_infoSystemCacheThreadController );
     m_infoSystemCacheThreadController->start( QThread::IdlePriority );
     
-    InfoPluginPtr enptr(new EchoNestPlugin(this));
-    m_plugins.append(enptr);
-    InfoPluginPtr mmptr(new MusixMatchPlugin(this));
-    m_plugins.append(mmptr);
-    InfoPluginPtr lfmptr(new LastFmPlugin(this));
-    m_plugins.append(lfmptr);
+    InfoPluginPtr enptr( new EchoNestPlugin( this ) );
+    m_plugins.append( enptr );
+    InfoPluginPtr mmptr( new MusixMatchPlugin( this ) );
+    m_plugins.append( mmptr );
+    InfoPluginPtr lfmptr( new LastFmPlugin( this ) );
+    m_plugins.append( lfmptr );
     
     Q_FOREACH( InfoPluginPtr plugin, m_plugins )
     {
-        connect(plugin.data(), SIGNAL(info(QString, Tomahawk::InfoSystem::InfoType, QVariant, QVariant, Tomahawk::InfoSystem::InfoCustomDataHash)),
-                this,       SLOT(infoSlot(QString, Tomahawk::InfoSystem::InfoType, QVariant, QVariant, Tomahawk::InfoSystem::InfoCustomDataHash)), Qt::UniqueConnection);
-        connect(plugin.data(), SIGNAL(finished(QString, Tomahawk::InfoSystem::InfoType)),
-                this,       SLOT(finishedSlot(QString, Tomahawk::InfoSystem::InfoType)), Qt::UniqueConnection);
+        connect(
+                plugin.data(),
+                SIGNAL( info( QString, Tomahawk::InfoSystem::InfoType, QVariant, QVariant, Tomahawk::InfoSystem::InfoCustomData ) ),
+                this,
+                SLOT( infoSlot( QString, Tomahawk::InfoSystem::InfoType, QVariant, QVariant, Tomahawk::InfoSystem::InfoCustomData ) ),
+                Qt::UniqueConnection
+            );
+        
+        connect(
+                plugin.data(),
+                SIGNAL( finished( QString, Tomahawk::InfoSystem::InfoType ) ),
+                this,
+                SLOT( finishedSlot( QString, Tomahawk::InfoSystem::InfoType ) ), Qt::UniqueConnection
+            );
     }
-    connect(m_cache, SIGNAL(info(QString, Tomahawk::InfoSystem::InfoType, QVariant, QVariant, Tomahawk::InfoSystem::InfoCustomDataHash)),
-            this,       SLOT(infoSlot(QString, Tomahawk::InfoSystem::InfoType, QVariant, QVariant, Tomahawk::InfoSystem::InfoCustomDataHash)), Qt::UniqueConnection);
-    connect(m_cache, SIGNAL(finished(QString, Tomahawk::InfoSystem::InfoType)),
-            this,       SLOT(finishedSlot(QString, Tomahawk::InfoSystem::InfoType)), Qt::UniqueConnection);
+    connect( m_cache, SIGNAL( info( QString, Tomahawk::InfoSystem::InfoType, QVariant, QVariant, Tomahawk::InfoSystem::InfoCustomData ) ),
+            this,       SLOT( infoSlot( QString, Tomahawk::InfoSystem::InfoType, QVariant, QVariant, Tomahawk::InfoSystem::InfoCustomData ) ), Qt::UniqueConnection );
+    connect( m_cache, SIGNAL( finished( QString, Tomahawk::InfoSystem::InfoType ) ),
+            this,       SLOT( finishedSlot( QString, Tomahawk::InfoSystem::InfoType ) ), Qt::UniqueConnection );
 }
 
 InfoSystem::~InfoSystem()
@@ -125,7 +151,7 @@ QLinkedList< InfoPluginPtr > InfoSystem::determineOrderedMatches(const InfoType 
     return providers;
 }
 
-void InfoSystem::getInfo(const QString &caller, const InfoType type, const QVariant& data, InfoCustomDataHash customData)
+void InfoSystem::getInfo(const QString &caller, const InfoType type, const QVariant& data, InfoCustomData customData)
 {
     qDebug() << Q_FUNC_INFO;
     QLinkedList< InfoPluginPtr > providers = determineOrderedMatches(type);
@@ -149,13 +175,13 @@ void InfoSystem::getInfo(const QString &caller, const InfoType type, const QVari
     ptr.data()->getInfo(caller, type, data, customData);
 }
 
-void InfoSystem::getInfo(const QString &caller, const InfoMap &input, InfoCustomDataHash customData)
+void InfoSystem::getInfo(const QString &caller, const InfoMap &input, InfoCustomData customData)
 {
     Q_FOREACH( InfoType type, input.keys() )
         getInfo(caller, type, input[type], customData);
 }
 
-void InfoSystem::infoSlot(QString target, InfoType type, QVariant input, QVariant output, InfoCustomDataHash customData)
+void InfoSystem::infoSlot(QString target, InfoType type, QVariant input, QVariant output, InfoCustomData customData)
 {
     qDebug() << Q_FUNC_INFO;
     qDebug() << "current count in dataTracker is " << m_dataTracker[target][type];

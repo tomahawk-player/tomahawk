@@ -45,7 +45,7 @@ signals:
 public slots:
     void onRepeatModeChanged( PlaylistInterface::RepeatMode mode );
     void onShuffleModeChanged( bool enabled );
-    void infoSystemInfo( QString caller, Tomahawk::InfoSystem::InfoType type, QVariant input, QVariant output, Tomahawk::InfoSystem::InfoCustomDataHash customData );
+    void infoSystemInfo( QString caller, Tomahawk::InfoSystem::InfoType type, QVariant input, QVariant output, Tomahawk::InfoSystem::InfoCustomData customData );
     void infoSystemFinished( QString target );
 
 protected:

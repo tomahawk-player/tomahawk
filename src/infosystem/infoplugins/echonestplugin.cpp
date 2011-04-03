@@ -41,7 +41,7 @@ EchoNestPlugin::~EchoNestPlugin()
     qDebug() << Q_FUNC_INFO;
 }
 
-void EchoNestPlugin::getInfo(const QString &caller, const InfoType type, const QVariant& data, InfoCustomDataHash customData)
+void EchoNestPlugin::getInfo(const QString &caller, const InfoType type, const QVariant& data, InfoCustomData customData)
 {
     switch (type)
     {
@@ -65,7 +65,7 @@ void EchoNestPlugin::getInfo(const QString &caller, const InfoType type, const Q
     }
 }
 
-void EchoNestPlugin::getSongProfile(const QString &caller, const QVariant& data, InfoCustomDataHash &customData, const QString &item)
+void EchoNestPlugin::getSongProfile(const QString &caller, const QVariant& data, InfoCustomData &customData, const QString &item)
 {
     //WARNING: Totally not implemented yet
     
@@ -80,7 +80,7 @@ void EchoNestPlugin::getSongProfile(const QString &caller, const QVariant& data,
 //     connect(reply, SIGNAL(finished()), SLOT(getArtistBiographySlot()));
 }
 
-void EchoNestPlugin::getArtistBiography(const QString &caller, const QVariant& data, InfoCustomDataHash &customData)
+void EchoNestPlugin::getArtistBiography(const QString &caller, const QVariant& data, InfoCustomData &customData)
 {
     if( !isValidArtistData( caller, data, customData ) )
         return;
@@ -94,7 +94,7 @@ void EchoNestPlugin::getArtistBiography(const QString &caller, const QVariant& d
     connect(reply, SIGNAL(finished()), SLOT(getArtistBiographySlot()));
 }
 
-void EchoNestPlugin::getArtistFamiliarity(const QString &caller, const QVariant& data, InfoCustomDataHash &customData)
+void EchoNestPlugin::getArtistFamiliarity(const QString &caller, const QVariant& data, InfoCustomData &customData)
 {
     if( !isValidArtistData( caller, data, customData ) )
         return;
@@ -109,7 +109,7 @@ void EchoNestPlugin::getArtistFamiliarity(const QString &caller, const QVariant&
     connect(reply, SIGNAL(finished()), SLOT(getArtistFamiliaritySlot())); 
 }
 
-void EchoNestPlugin::getArtistHotttnesss(const QString &caller, const QVariant& data, InfoCustomDataHash &customData)
+void EchoNestPlugin::getArtistHotttnesss(const QString &caller, const QVariant& data, InfoCustomData &customData)
 {
     if( !isValidArtistData( caller, data, customData ) )
         return;
@@ -123,7 +123,7 @@ void EchoNestPlugin::getArtistHotttnesss(const QString &caller, const QVariant& 
     connect(reply, SIGNAL(finished()), SLOT(getArtistHotttnesssSlot()));
 }
 
-void EchoNestPlugin::getArtistTerms(const QString &caller, const QVariant& data, InfoCustomDataHash &customData)
+void EchoNestPlugin::getArtistTerms(const QString &caller, const QVariant& data, InfoCustomData &customData)
 {
     if( !isValidArtistData( caller, data, customData ) )
         return;
@@ -137,7 +137,7 @@ void EchoNestPlugin::getArtistTerms(const QString &caller, const QVariant& data,
     connect(reply, SIGNAL(finished()), SLOT(getArtistTermsSlot()));
 }
 
-void EchoNestPlugin::getMiscTopTerms(const QString &caller, const QVariant& data, InfoCustomDataHash& customData)
+void EchoNestPlugin::getMiscTopTerms(const QString &caller, const QVariant& data, InfoCustomData& customData)
 {
     QNetworkReply* reply = Echonest::Artist::topTerms( 20 );
     m_replyMap[reply] = customData;
@@ -230,7 +230,7 @@ void EchoNestPlugin::getMiscTopSlot()
     reply->deleteLater();
 }
 
-bool EchoNestPlugin::isValidArtistData(const QString &caller, const QVariant& data, InfoCustomDataHash &customData)
+bool EchoNestPlugin::isValidArtistData(const QString &caller, const QVariant& data, InfoCustomData &customData)
 {
     if (data.isNull() || !data.isValid() || !data.canConvert<QString>())
     {
@@ -246,7 +246,7 @@ bool EchoNestPlugin::isValidArtistData(const QString &caller, const QVariant& da
     return true;
 }
 
-bool EchoNestPlugin::isValidTrackData(const QString &caller, const QVariant& data, InfoCustomDataHash &customData)
+bool EchoNestPlugin::isValidTrackData(const QString &caller, const QVariant& data, InfoCustomData &customData)
 {
     if (data.isNull() || !data.isValid() || !data.canConvert<QString>())
     {

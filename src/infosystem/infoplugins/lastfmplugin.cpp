@@ -92,7 +92,7 @@ LastFmPlugin::~LastFmPlugin()
 }
 
 void
-LastFmPlugin::dataError( const QString &caller, const InfoType type, const QVariant& data, Tomahawk::InfoSystem::InfoCustomDataHash &customData )
+LastFmPlugin::dataError( const QString &caller, const InfoType type, const QVariant& data, Tomahawk::InfoSystem::InfoCustomData &customData )
 {
     emit info( caller, type, data, QVariant(), customData );
     emit finished( caller, type );
@@ -100,7 +100,7 @@ LastFmPlugin::dataError( const QString &caller, const InfoType type, const QVari
 }
 
 void
-LastFmPlugin::getInfo( const QString &caller, const InfoType type, const QVariant& data, Tomahawk::InfoSystem::InfoCustomDataHash customData )
+LastFmPlugin::getInfo( const QString &caller, const InfoType type, const QVariant& data, Tomahawk::InfoSystem::InfoCustomData customData )
 {
     qDebug() << Q_FUNC_INFO;
     if ( type == InfoMiscSubmitNowPlaying )
@@ -114,14 +114,14 @@ LastFmPlugin::getInfo( const QString &caller, const InfoType type, const QVarian
 }
 
 void
-LastFmPlugin::nowPlaying( const QString &caller, const InfoType type, const QVariant& data, Tomahawk::InfoSystem::InfoCustomDataHash &customData )
+LastFmPlugin::nowPlaying( const QString &caller, const InfoType type, const QVariant& data, Tomahawk::InfoSystem::InfoCustomData &customData )
 {
-    if ( !data.canConvert< Tomahawk::InfoSystem::InfoCustomDataHash >() || !m_scrobbler )
+    if ( !data.canConvert< Tomahawk::InfoSystem::InfoCustomData >() || !m_scrobbler )
     {
         dataError( caller, type, data, customData );
         return;
     }
-    InfoCustomDataHash hash = data.value< Tomahawk::InfoSystem::InfoCustomDataHash >();
+    InfoCustomData hash = data.value< Tomahawk::InfoSystem::InfoCustomData >();
     if ( !hash.contains( "title" ) || !hash.contains( "artist" ) || !hash.contains( "album" ) || !hash.contains( "duration" ) )
     {
         dataError( caller, type, data, customData );
@@ -143,7 +143,7 @@ LastFmPlugin::nowPlaying( const QString &caller, const InfoType type, const QVar
 }
 
 void
-LastFmPlugin::scrobble( const QString &caller, const InfoType type, const QVariant& data, Tomahawk::InfoSystem::InfoCustomDataHash &customData )
+LastFmPlugin::scrobble( const QString &caller, const InfoType type, const QVariant& data, Tomahawk::InfoSystem::InfoCustomData &customData )
 {
     Q_ASSERT( QThread::currentThread() == thread() );
 
@@ -162,33 +162,50 @@ LastFmPlugin::scrobble( const QString &caller, const InfoType type, const QVaria
 }
 
 void
-LastFmPlugin::fetchCoverArt( const QString &caller, const InfoType type, const QVariant& data, Tomahawk::InfoSystem::InfoCustomDataHash &customData )
+LastFmPlugin::fetchCoverArt( const QString &caller, const InfoType type, const QVariant& data, Tomahawk::InfoSystem::InfoCustomData &customData )
 {
     qDebug() << Q_FUNC_INFO;
-    if ( !data.canConvert< Tomahawk::InfoSystem::InfoCustomDataHash >() )
+    if ( !data.canConvert< Tomahawk::InfoSystem::InfoCustomData >() )
     {
         dataError( caller, type, data, customData );
         return;
     }
-    InfoCustomDataHash hash = data.value< Tomahawk::InfoSystem::InfoCustomDataHash >();
+    InfoCustomData hash = data.value< Tomahawk::InfoSystem::InfoCustomData >();
     if ( !hash.contains( "artist" ) || !hash.contains( "album" ) )
     {
         dataError( caller, type, data, customData );
         return;
     }
     
-    QString artistName = hash["artist"].toString();
-    QString albumName = hash["album"].toString();
+    Tomahawk::InfoSystem::InfoCacheCriteria criteria;
+    criteria["artist"] = hash["artist"].toString();
+    criteria["album"] = hash["album"].toString();
     
-    QString imgurl = "http://ws.audioscrobbler.com/2.0/?method=album.imageredirect&artist=%1&album=%2&size=medium&api_key=7a90f6672a04b809ee309af169f34b8b";
-    QNetworkRequest req( imgurl.arg( artistName ).arg( albumName ) );
-    QNetworkReply* reply = TomahawkUtils::nam()->get( req );
-    reply->setProperty("customData", QVariant::fromValue<Tomahawk::InfoSystem::InfoCustomDataHash>(customData));
-    reply->setProperty("origData", data);
-    reply->setProperty("caller", caller);
-    reply->setProperty("type", (uint)(type) );
+    emit getCachedInfo( criteria, caller, type, data, customData );
+}
 
-    connect( reply, SIGNAL( finished() ), SLOT( coverArtReturned() ) );
+void
+LastFmPlugin::notInCacheSlot( QHash<QString, QString> criteria, QString caller, Tomahawk::InfoSystem::InfoType type, QVariant input, Tomahawk::InfoSystem::InfoCustomData customData )
+{
+    qDebug() << Q_FUNC_INFO;
+    if ( type == InfoAlbumCoverArt )
+    {
+        QString artistName = criteria["artist"];
+        QString albumName = criteria["album"];
+
+        QString imgurl = "http://ws.audioscrobbler.com/2.0/?method=album.imageredirect&artist=%1&album=%2&size=medium&api_key=7a90f6672a04b809ee309af169f34b8b";
+        QNetworkRequest req( imgurl.arg( artistName ).arg( albumName ) );
+        QNetworkReply* reply = TomahawkUtils::nam()->get( req );
+        reply->setProperty( "customData", QVariant::fromValue<Tomahawk::InfoSystem::InfoCustomData>( customData ) );
+        reply->setProperty( "origData", input );
+        reply->setProperty( "caller", caller );
+        reply->setProperty( "type", (uint)(type) );
+
+        connect( reply, SIGNAL( finished() ), SLOT( coverArtReturned() ) );
+        return;
+    }
+    else
+        qDebug() << "Couldn't figure out what to do with this type of request after cache miss";
 }
 
 void
@@ -200,17 +217,26 @@ LastFmPlugin::coverArtReturned()
     if ( redir.isEmpty() )
     {
         const QByteArray ba = reply->readAll();
-        Tomahawk::InfoSystem::InfoCustomDataHash returnedData;
+        InfoCustomData returnedData;
         returnedData["imgbytes"] = ba;
         returnedData["url"] = reply->url().toString();
+        
+        InfoCustomData customData = reply->property( "customData" ).value< Tomahawk::InfoSystem::InfoCustomData >();
+        InfoType type = (Tomahawk::InfoSystem::InfoType)(reply->property( "type" ).toUInt());
         emit info(
             reply->property( "caller" ).toString(),
-            (Tomahawk::InfoSystem::InfoType)(reply->property( "type" ).toUInt()),
+            type,
             reply->property( "origData" ),
             returnedData,
-            reply->property( "customData" ).value< Tomahawk::InfoSystem::InfoCustomDataHash >()
+            customData
         );
         emit finished( reply->property( "caller" ).toString(), (Tomahawk::InfoSystem::InfoType)(reply->property( "type" ).toUInt()) );
+        
+        InfoCustomData origData = reply->property( "origData" ).value< Tomahawk::InfoSystem::InfoCustomData >();
+        Tomahawk::InfoSystem::InfoCacheCriteria criteria;
+        criteria["artist"] = origData["artist"].toString();
+        criteria["album"] = origData["album"].toString();
+        emit updateCache( criteria, type, returnedData );
     }
     else
     {

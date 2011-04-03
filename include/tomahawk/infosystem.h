@@ -93,7 +93,8 @@ enum InfoType {
 
 typedef QMap< InfoType, QVariant > InfoMap;
 typedef QMap< QString, QMap< QString, QString > > InfoGenericMap;
-typedef QHash< QString, QVariant > InfoCustomDataHash;
+typedef QHash< QString, QVariant > InfoCustomData;
+typedef QHash< QString, QString > InfoCacheCriteria;
 
 class InfoPlugin : public QObject
 {
@@ -107,16 +108,17 @@ public:
         qDebug() << Q_FUNC_INFO;
     }
     
-    virtual void getInfo( const QString &caller, const InfoType type, const QVariant &data, InfoCustomDataHash customData ) = 0;
+    virtual void getInfo( const QString &caller, const InfoType type, const QVariant &data, InfoCustomData customData ) = 0;
     
 signals:
-    void info( QString caller, Tomahawk::InfoSystem::InfoType type, QVariant input, QVariant output, Tomahawk::InfoSystem::InfoCustomDataHash customData );
-    void getCachedInfo( QHash< QString, QString > criteria, QString caller, Tomahawk::InfoSystem::InfoType type, QVariant input, QVariant output, Tomahawk::InfoSystem::InfoCustomDataHash customData );
+    void getCachedInfo( Tomahawk::InfoSystem::InfoCacheCriteria criteria, QString caller, Tomahawk::InfoSystem::InfoType type, QVariant input, Tomahawk::InfoSystem::InfoCustomData customData );
+    void updateCache( Tomahawk::InfoSystem::InfoCacheCriteria criteria, Tomahawk::InfoSystem::InfoType type, QVariant output );
+    void info( QString caller, Tomahawk::InfoSystem::InfoType type, QVariant input, QVariant output, Tomahawk::InfoSystem::InfoCustomData customData );
     void finished( QString, Tomahawk::InfoSystem::InfoType );
     
 public slots:
     //FIXME: Make pure virtual when everything supports it
-    void notInCacheSlot( QHash<QString, QString> criteria, QString caller, Tomahawk::InfoSystem::InfoType type, QVariant input, QVariant output, Tomahawk::InfoSystem::InfoCustomDataHash customData )
+    virtual void notInCacheSlot( Tomahawk::InfoSystem::InfoCacheCriteria criteria, QString caller, Tomahawk::InfoSystem::InfoType type, QVariant input, Tomahawk::InfoSystem::InfoCustomData customData )
     {
     }
     
@@ -137,17 +139,17 @@ public:
     
     void registerInfoTypes( const InfoPluginPtr &plugin, const QSet< InfoType > &types );
     
-    void getInfo( const QString &caller, const InfoType type, const QVariant &data, InfoCustomDataHash customData );
-    void getInfo( const QString &caller, const InfoMap &input, InfoCustomDataHash customData );
+    void getInfo( const QString &caller, const InfoType type, const QVariant &data, InfoCustomData customData );
+    void getInfo( const QString &caller, const InfoMap &input, InfoCustomData customData );
     
     InfoSystemCache* getCache() { return m_cache; }
 
 signals:
-    void info( QString caller, Tomahawk::InfoSystem::InfoType, QVariant input, QVariant output, Tomahawk::InfoSystem::InfoCustomDataHash customData );
+    void info( QString caller, Tomahawk::InfoSystem::InfoType, QVariant input, QVariant output, Tomahawk::InfoSystem::InfoCustomData customData );
     void finished( QString target );
     
 public slots:
-    void infoSlot( QString target, Tomahawk::InfoSystem::InfoType type, QVariant input, QVariant output, Tomahawk::InfoSystem::InfoCustomDataHash customData );
+    void infoSlot( QString target, Tomahawk::InfoSystem::InfoType type, QVariant input, QVariant output, Tomahawk::InfoSystem::InfoCustomData customData );
     void finishedSlot( QString target, Tomahawk::InfoSystem::InfoType type);
     
 private:
@@ -169,6 +171,7 @@ private:
 }
 
 Q_DECLARE_METATYPE( Tomahawk::InfoSystem::InfoGenericMap );
-Q_DECLARE_METATYPE( Tomahawk::InfoSystem::InfoCustomDataHash );
+Q_DECLARE_METATYPE( Tomahawk::InfoSystem::InfoCustomData );
+Q_DECLARE_METATYPE( Tomahawk::InfoSystem::InfoCacheCriteria );
 
 #endif // TOMAHAWK_INFOSYSTEM_H
