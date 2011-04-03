@@ -19,6 +19,7 @@
 #include "musicscanner.h"
 
 #include "tomahawk/tomahawkapp.h"
+#include "tomahawksettings.h"
 #include "sourcelist.h"
 #include "database/database.h"
 #include "database/databasecommand_dirmtimes.h"
@@ -31,6 +32,31 @@ using namespace Tomahawk;
 void
 DirLister::go()
 {
+    qDebug() << Q_FUNC_INFO;
+    qDebug() << "Current mtimes: " << m_dirmtimes;
+    qDebug() << "Recursive? : " << (m_recursive ? "true" : "false");
+    if( !m_recursive )
+    {
+        foreach( QString dir, m_dirs )
+        {
+            if( m_dirmtimes.contains( dir ) )
+            {
+                qDebug() << "Removing " << dir << " from m_dirmtimes because it's specifically requested";
+                m_dirmtimes.remove( dir );
+            }
+            QStringList filtered = QStringList( m_dirmtimes.keys() ).filter( dir );
+            foreach( QString filteredDir, filtered )
+            {
+                if( !QDir( filteredDir ).exists() )
+                {
+                    qDebug() << "Removing " << filteredDir << " from m_dirmtimes because it does not exist";
+                    m_dirmtimes.remove( filteredDir );
+                }
+            }
+        }
+        m_newdirmtimes = m_dirmtimes;
+    }
+    
     foreach( QString dir, m_dirs )
         scanDir( QDir( dir, 0 ), 0, ( m_recursive ? DirLister::Recursive : DirLister::NonRecursive ) );
     emit finished( m_newdirmtimes );
@@ -68,11 +94,11 @@ DirLister::scanDir( QDir dir, int depth, DirLister::Mode mode )
     foreach( const QFileInfo& di, dirs )
     {
         qDebug() << "Considering dir " << di.absoluteFilePath();
-        qDebug() << "m_dirtimes contains it? " << (m_dirmtimes.contains( di.absoluteFilePath() ) ? "true" : "false");
+        qDebug() << "m_dirmtimes contains it? " << (m_dirmtimes.contains( di.absoluteFilePath() ) ? "true" : "false");
         if( mode == DirLister::Recursive || !m_dirmtimes.contains( di.absoluteFilePath() ) )
             scanDir( di.absoluteFilePath(), depth + 1, DirLister::Recursive );
-        else //should be the non-recursive case since the second test above should only happen with a new dir
-            scanDir( di.absoluteFilePath(), depth + 1, DirLister::MTimeOnly );
+        //else //should be the non-recursive case since the second test above should only happen with a new dir
+         //   scanDir( di.absoluteFilePath(), depth + 1, DirLister::MTimeOnly );
     }
 }
 
@@ -130,8 +156,7 @@ MusicScanner::startScan()
     m_skippedFiles.clear();
 
     // trigger the scan once we've loaded old mtimes for dirs below our path
-    //FIXME: MULTIPLECOLLECTIONDIRS
-    DatabaseCommand_DirMtimes* cmd = new DatabaseCommand_DirMtimes( m_dirs.first() );
+    DatabaseCommand_DirMtimes* cmd = new DatabaseCommand_DirMtimes( TomahawkSettings::instance()->scannerPaths() );
     connect( cmd, SIGNAL( done( QMap<QString, unsigned int> ) ),
                     SLOT( setMtimes( QMap<QString, unsigned int> ) ) );
     connect( cmd, SIGNAL( done( QMap<QString, unsigned int> ) ),
