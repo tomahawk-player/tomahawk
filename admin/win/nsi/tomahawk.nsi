@@ -189,14 +189,9 @@ FunctionEnd
    no_process_${processName}_to_end:
 !macroend
 
-!macro EnsureTomahawkShutdown un
-   Function ${un}EnsureTomahawkShutdown
-      !insertmacro CheckAndConfirmEndProcess "tomahawk.exe"
-   FunctionEnd
-!macroend
-
-!insertmacro EnsureTomahawkShutdown ""
-!insertmacro EnsureTomahawkShutdown "un."
+Function EnsureTomahawkShutdown
+   !insertmacro CheckAndConfirmEndProcess "tomahawk.exe"
+FunctionEnd
 
 ##############################################################################
 #                                                                            #
