@@ -22,6 +22,8 @@
 #include <QObject>
 #include <QtDebug>
 
+#include "tomahawk/infosystem.h"
+
 namespace Tomahawk
 {
     
@@ -43,6 +45,11 @@ public:
     {
         qDebug() << Q_FUNC_INFO;
     }
+
+signals:
+    void notInCache( QHash< QString, QString > criteria, QString caller, Tomahawk::InfoSystem::InfoType type, QVariant input, QVariant output, Tomahawk::InfoSystem::InfoCustomDataHash customData );
+    void info( QString caller, Tomahawk::InfoSystem::InfoType type, QVariant input, QVariant output, Tomahawk::InfoSystem::InfoCustomDataHash customData );
+    void finished( QString, Tomahawk::InfoSystem::InfoType );
 
 };
 

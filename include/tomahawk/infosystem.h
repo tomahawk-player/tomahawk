@@ -107,15 +107,18 @@ public:
         qDebug() << Q_FUNC_INFO;
     }
     
-    virtual void getInfo( const QString &caller, const InfoType type, const QVariant &data, Tomahawk::InfoSystem::InfoCustomDataHash customData ) = 0;
+    virtual void getInfo( const QString &caller, const InfoType type, const QVariant &data, InfoCustomDataHash customData ) = 0;
     
 signals:
     void info( QString caller, Tomahawk::InfoSystem::InfoType type, QVariant input, QVariant output, Tomahawk::InfoSystem::InfoCustomDataHash customData );
     void getCachedInfo( QHash< QString, QString > criteria, QString caller, Tomahawk::InfoSystem::InfoType type, QVariant input, QVariant output, Tomahawk::InfoSystem::InfoCustomDataHash customData );
     void finished( QString, Tomahawk::InfoSystem::InfoType );
     
-//public slots:
-    //void notInCacheSlot( QString caller, Tomahawk::InfoSystem::InfoType type, QVariant input, QVariant output, Tomahawk::InfoSystem::InfoCustomDataHash customData ) = 0;
+public slots:
+    //FIXME: Make pure virtual when everything supports it
+    void notInCacheSlot( QHash<QString, QString> criteria, QString caller, Tomahawk::InfoSystem::InfoType type, QVariant input, QVariant output, Tomahawk::InfoSystem::InfoCustomDataHash customData )
+    {
+    }
     
 protected:
     InfoType m_type;
@@ -145,7 +148,7 @@ signals:
     
 public slots:
     void infoSlot( QString target, Tomahawk::InfoSystem::InfoType type, QVariant input, QVariant output, Tomahawk::InfoSystem::InfoCustomDataHash customData );
-    void finishedSlot( QString target,Tomahawk::InfoSystem::InfoType type);
+    void finishedSlot( QString target, Tomahawk::InfoSystem::InfoType type);
     
 private:
     QLinkedList< InfoPluginPtr > determineOrderedMatches( const InfoType type ) const;
@@ -155,7 +158,7 @@ private:
     // For now, statically instantiate plugins; this is just somewhere to keep them
     QLinkedList< InfoPluginPtr > m_plugins;
     
-    QHash< QString, QHash< Tomahawk::InfoSystem::InfoType, int > > m_dataTracker;
+    QHash< QString, QHash< InfoType, int > > m_dataTracker;
     
     InfoSystemCache* m_cache;
     QThread* m_infoSystemCacheThreadController;

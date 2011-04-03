@@ -25,7 +25,11 @@
 #include "infoplugins/musixmatchplugin.h"
 #include "infoplugins/lastfmplugin.h"
 
-using namespace Tomahawk::InfoSystem;
+namespace Tomahawk
+{
+    
+namespace InfoSystem
+{
 
 InfoPlugin::InfoPlugin(QObject *parent)
         :QObject( parent )
@@ -33,10 +37,11 @@ InfoPlugin::InfoPlugin(QObject *parent)
         qDebug() << Q_FUNC_INFO;
         InfoSystem *system = qobject_cast< InfoSystem* >( parent );
         if( system )
-                QObject::connect( system->getCache(),
-                    SIGNAL( notInCache( QString, Tomahawk::InfoSystem::InfoType, QVariant, QVariant, Tomahawk::InfoSystem::InfoCustomDataHash ) ),
+                QObject::connect(
+                    system->getCache(),
+                    SIGNAL( notInCache( QHash< QString, QString >, QString, Tomahawk::InfoSystem::InfoType, QVariant, QVariant, Tomahawk::InfoSystem::InfoCustomDataHash ) ),
                     this,
-                    SLOT( notInCacheSlot( QString, Tomahawk::InfoSystem::InfoType, QVariant, QVariant, Tomahawk::InfoSystem::InfoCustomDataHash ) )
+                    SLOT( notInCacheSlot( QHash< QString, QString >, QString, Tomahawk::InfoSystem::InfoType, QVariant, QVariant, Tomahawk::InfoSystem::InfoCustomDataHash ) )
                 );
     }
 
@@ -49,7 +54,7 @@ InfoSystem::InfoSystem(QObject *parent)
     qRegisterMetaType<QHash<QString, QVariant > >("Tomahawk::InfoSystem::InfoCustomDataHash");
     
     m_infoSystemCacheThreadController = new QThread( this );
-    m_cache = new Tomahawk::InfoSystem::InfoSystemCache();
+    m_cache = new InfoSystemCache();
     m_cache->moveToThread( m_infoSystemCacheThreadController );
     m_infoSystemCacheThreadController->start( QThread::IdlePriority );
     
@@ -59,6 +64,18 @@ InfoSystem::InfoSystem(QObject *parent)
     m_plugins.append(mmptr);
     InfoPluginPtr lfmptr(new LastFmPlugin(this));
     m_plugins.append(lfmptr);
+    
+    Q_FOREACH( InfoPluginPtr plugin, m_plugins )
+    {
+        connect(plugin.data(), SIGNAL(info(QString, Tomahawk::InfoSystem::InfoType, QVariant, QVariant, Tomahawk::InfoSystem::InfoCustomDataHash)),
+                this,       SLOT(infoSlot(QString, Tomahawk::InfoSystem::InfoType, QVariant, QVariant, Tomahawk::InfoSystem::InfoCustomDataHash)), Qt::UniqueConnection);
+        connect(plugin.data(), SIGNAL(finished(QString, Tomahawk::InfoSystem::InfoType)),
+                this,       SLOT(finishedSlot(QString, Tomahawk::InfoSystem::InfoType)), Qt::UniqueConnection);
+    }
+    connect(m_cache, SIGNAL(info(QString, Tomahawk::InfoSystem::InfoType, QVariant, QVariant, Tomahawk::InfoSystem::InfoCustomDataHash)),
+            this,       SLOT(infoSlot(QString, Tomahawk::InfoSystem::InfoType, QVariant, QVariant, Tomahawk::InfoSystem::InfoCustomDataHash)), Qt::UniqueConnection);
+    connect(m_cache, SIGNAL(finished(QString, Tomahawk::InfoSystem::InfoType)),
+            this,       SLOT(finishedSlot(QString, Tomahawk::InfoSystem::InfoType)), Qt::UniqueConnection);
 }
 
 InfoSystem::~InfoSystem()
@@ -114,7 +131,7 @@ void InfoSystem::getInfo(const QString &caller, const InfoType type, const QVari
     QLinkedList< InfoPluginPtr > providers = determineOrderedMatches(type);
     if (providers.isEmpty())
     {
-        emit info(QString(), Tomahawk::InfoSystem::InfoNoInfo, QVariant(), QVariant(), customData);
+        emit info(QString(), InfoNoInfo, QVariant(), QVariant(), customData);
         emit finished(caller);
         return;
     }
@@ -122,17 +139,13 @@ void InfoSystem::getInfo(const QString &caller, const InfoType type, const QVari
     InfoPluginPtr ptr = providers.first();
     if (!ptr)
     {
-        emit info(QString(), Tomahawk::InfoSystem::InfoNoInfo, QVariant(), QVariant(), customData);
+        emit info(QString(), InfoNoInfo, QVariant(), QVariant(), customData);
         emit finished(caller);
         return;
     }
     
     m_dataTracker[caller][type] = m_dataTracker[caller][type] + 1;
     qDebug() << "current count in dataTracker for type" << type << "is" << m_dataTracker[caller][type];
-    connect(ptr.data(), SIGNAL(info(QString, Tomahawk::InfoSystem::InfoType, QVariant, QVariant, Tomahawk::InfoSystem::InfoCustomDataHash)),
-            this,       SLOT(infoSlot(QString, Tomahawk::InfoSystem::InfoType, QVariant, QVariant, Tomahawk::InfoSystem::InfoCustomDataHash)), Qt::UniqueConnection);
-    connect(ptr.data(), SIGNAL(finished(QString, Tomahawk::InfoSystem::InfoType)),
-            this,       SLOT(finishedSlot(QString, Tomahawk::InfoSystem::InfoType)), Qt::UniqueConnection);
     ptr.data()->getInfo(caller, type, data, customData);
 }
 
@@ -142,7 +155,7 @@ void InfoSystem::getInfo(const QString &caller, const InfoMap &input, InfoCustom
         getInfo(caller, type, input[type], customData);
 }
 
-void InfoSystem::infoSlot(QString target, Tomahawk::InfoSystem::InfoType type, QVariant input, QVariant output, Tomahawk::InfoSystem::InfoCustomDataHash customData)
+void InfoSystem::infoSlot(QString target, InfoType type, QVariant input, QVariant output, InfoCustomDataHash customData)
 {
     qDebug() << Q_FUNC_INFO;
     qDebug() << "current count in dataTracker is " << m_dataTracker[target][type];
@@ -154,12 +167,12 @@ void InfoSystem::infoSlot(QString target, Tomahawk::InfoSystem::InfoType type, Q
     emit info(target, type, input, output, customData);
 }
 
-void InfoSystem::finishedSlot(QString target, Tomahawk::InfoSystem::InfoType type)
+void InfoSystem::finishedSlot(QString target, InfoType type)
 {
     qDebug() << Q_FUNC_INFO;
     m_dataTracker[target][type] = m_dataTracker[target][type] - 1;
     qDebug() << "current count in dataTracker is " << m_dataTracker[target][type];
-    Q_FOREACH(Tomahawk::InfoSystem::InfoType testtype, m_dataTracker[target].keys())
+    Q_FOREACH(InfoType testtype, m_dataTracker[target].keys())
     {
         if (m_dataTracker[target][testtype] != 0)
         {
@@ -170,3 +183,7 @@ void InfoSystem::finishedSlot(QString target, Tomahawk::InfoSystem::InfoType typ
     qDebug() << "emitting finished with target" << target;
     emit finished(target);
 }
+
+} //namespace InfoSystem
+
+} //namespace Tomahawk
