@@ -45,6 +45,7 @@ Query::get( const QString& artist, const QString& track, const QString& album, c
 Query::Query( const QString& artist, const QString& track, const QString& album, const QID& qid )
     : m_solved( false )
     , m_playable( false )
+    , m_resolveFinished( false )
     , m_qid( qid )
     , m_artist( artist )
     , m_album( album )
@@ -114,6 +115,7 @@ void
 Query::onResolvingFinished()
 {
 //    qDebug() << Q_FUNC_INFO << "Finished resolving." << toString();
+    m_resolveFinished = true;
     emit resolvingFinished( m_solved );
 }
 

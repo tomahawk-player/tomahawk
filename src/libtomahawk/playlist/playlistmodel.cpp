@@ -95,9 +95,9 @@ PlaylistModel::loadPlaylist( const Tomahawk::playlist_ptr& playlist, bool loadEn
         int c = rowCount( QModelIndex() );
 
         qDebug() << "Starting loading" << playlist->title();
-        emit loadingStarts();
         emit beginInsertRows( QModelIndex(), c, c + entries.count() - 1 );
 
+        m_waitingForResolved.clear();
         foreach( const plentry_ptr& entry, entries )
         {
             qDebug() << entry->query()->toString();
@@ -105,6 +105,11 @@ PlaylistModel::loadPlaylist( const Tomahawk::playlist_ptr& playlist, bool loadEn
             plitem->index = createIndex( m_rootItem->children.count() - 1, 0, plitem );
 
             connect( plitem, SIGNAL( dataChanged() ), SLOT( onDataChanged() ) );
+            
+            if( !entry->query()->resolvingFinished() ) {
+                m_waitingForResolved.append( entry->query().data() );
+                connect( entry->query().data(), SIGNAL( resolvingFinished( bool ) ), this, SLOT( trackResolved( bool ) ) );
+            }
         }
 
         emit endInsertRows();
@@ -112,7 +117,9 @@ PlaylistModel::loadPlaylist( const Tomahawk::playlist_ptr& playlist, bool loadEn
     else
         qDebug() << "Playlist seems empty:" << playlist->title();
 
-    emit loadingFinished();
+    if( !m_waitingForResolved.isEmpty() )
+        emit loadingStarted();
+    
     emit trackCountChanged( rowCount( QModelIndex() ) );
 }
 
@@ -201,6 +208,18 @@ PlaylistModel::insert( unsigned int row, const Tomahawk::query_ptr& query )
     ql << query;
 
     onTracksInserted( row, ql );
+}
+
+void 
+PlaylistModel::trackResolved( bool )
+{
+    Tomahawk::Query* q = qobject_cast< Query* >( sender() );
+    Q_ASSERT( q );
+    
+    m_waitingForResolved.removeAll( q );
+    
+    if( m_waitingForResolved.isEmpty() )
+        emit loadingFinished();
 }
 
 
