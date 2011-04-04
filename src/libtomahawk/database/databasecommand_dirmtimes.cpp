@@ -53,12 +53,14 @@ DatabaseCommand_DirMtimes::execSelect( DatabaseImpl* dbi )
 }
 
 void
-DatabaseCommand_DirMtimes::execSelectPath( DatabaseImpl *dbi, QString &path, QMap<QString, unsigned int> &mtimes )
+DatabaseCommand_DirMtimes::execSelectPath( DatabaseImpl *dbi, const QDir& path, QMap<QString, unsigned int> &mtimes )
 {
     TomahawkSqlQuery query = dbi->newquery();
     query.prepare( QString( "SELECT name, mtime "
-        "FROM dirs_scanned "
-        "WHERE name LIKE '%1%'" ).arg( path.replace( '\'',"''" ) ) );
+                            "FROM dirs_scanned "
+                            "WHERE name LIKE :prefix" ) );
+
+    query.bindValue( ":prefix", path.absolutePath() + "%" );
     query.exec();
 
     while( query.next() )

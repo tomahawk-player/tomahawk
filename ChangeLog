@@ -7,6 +7,7 @@ Version 0.1.0:
       music collection.
 
 Version 0.0.3:
+    * Fixed an issue which caused duplicate items when rescanning.
     * Fix crashes in Twitter authentication.
     * Properly honor the chosen port number if a static host and port are
       marked as preferred.
@@ -14,7 +15,7 @@ Version 0.0.3:
       speeds up importing sources a lot.
     * Faster painting of playlists with lots of unresolved tracks.
     * The tomahawk:// protocol handler works on Windows now.
-    * Fixed launching Tomahawk from Installer with administrative permissions.
+    * Fixed launching Tomahawk from Windows installer with admin privileges.
     * Prefer local results when results' score is equal.
 
 Version 0.0.2:
