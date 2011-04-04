@@ -18,9 +18,15 @@
  */
 
 #include "jabber_p.h"
+#include "tomahawksipmessage.h"
 
 #include "config.h"
 #include "utils/tomahawkutils.h"
+
+#include <jreen/capabilities.h>
+
+#include <qjson/parser.h>
+#include <qjson/serializer.h>
 
 #include <QDebug>
 #include <QTime>
@@ -28,12 +34,12 @@
 #include <QString>
 #include <QRegExp>
 #include <QThread>
+#include <QVariant>
+#include <QMap>
 
+#define TOMAHAWK_FEATURE QLatin1String( "tomahawk:sip:v1" )
 
-using namespace std;
-
-
-#define TOMAHAWK_CAP_NODE_NAME QLatin1String("http://tomahawk-player.org/")
+#define TOMAHAWK_CAP_NODE_NAME QLatin1String( "http://tomahawk-player.org/" )
 
 Jabber_p::Jabber_p( const QString& jid, const QString& password, const QString& server, const int port )
     : QObject()
@@ -47,16 +53,17 @@ Jabber_p::Jabber_p( const QString& jid, const QString& password, const QString& 
 
     // general client setup
     m_client = new Jreen::Client( jid, password );
-    m_client->setResource( QString( "tomahawk%1" ).arg( qrand() ) );
+    m_client->setResource( QString( "DISABLEDtomahawk%1" ).arg( qrand() ) );
 
     // setup disco
     m_client->disco()->setSoftwareVersion( "Tomahawk Player", TOMAHAWK_VERSION, CMAKE_SYSTEM );
     m_client->disco()->addIdentity( Jreen::Disco::Identity( "client", "type", "tomahawk", "en" ) );
-    m_client->disco()->addFeature( "tomahawk:sip:v1" );
+    m_client->disco()->addFeature( TOMAHAWK_FEATURE );
 
     // setup caps node, legacy peer detection - used before 0.1
-    Jreen::Capabilities::Ptr caps = m_client->presence().findExtension<Jreen::Capabilities>();
-    caps->setNode(TOMAHAWK_CAP_NODE_NAME);
+    // disable it for testing
+    //Jreen::Capabilities::Ptr caps = m_client->presence().findExtension<Jreen::Capabilities>();
+    //caps->setNode(TOMAHAWK_CAP_NODE_NAME);
 
     // print connection parameters
     qDebug() << "Our JID set to:" << m_client->jid().full();
@@ -108,10 +115,41 @@ Jabber_p::sendMsg( const QString& to, const QString& msg )
         return;
     }
 
-    qDebug() << Q_FUNC_INFO << to << msg;
-    Jreen::Message m( Jreen::Message::Chat, Jreen::JID(to), msg);
+    /*******************************************************
+     * Obsolete this by a SipMessage class
+     */
+    QJson::Parser parser;
+    bool ok;
+    QVariant v = parser.parse( msg.toAscii(), &ok );
+    if ( !ok  || v.type() != QVariant::Map )
+    {
+        qDebug() << "Invalid JSON in XMPP msg";
+        return;
+    }
+    QVariantMap m = v.toMap();
+    /*******************************************************/
 
-    m_client->send( m );
+    TomahawkSipMessage *sipMessage;
+    if(m["visible"].toBool())
+    {
+        sipMessage = new TomahawkSipMessage(m["ip"].toString(),
+                                            m["port"].toInt(),
+                                            m["uniqname"].toString(),
+                                            m["key"].toString(),
+                                            m["visible"].toBool()
+                                            );
+    }
+    else
+    {
+        sipMessage = new TomahawkSipMessage();
+    }
+
+
+    qDebug() << "Send sip messsage to " << to;
+    Jreen::IQ iq( Jreen::IQ::Set, to );
+    iq.addExtension( sipMessage );
+
+    m_client->send( iq, this, SLOT( onNewIQ( Jreen::IQ, int ) ), SipMessageSent );
 }
 
 
@@ -267,43 +305,105 @@ void Jabber_p::onNewPresence( const Jreen::Presence& presence)
         return;
 
     if ( presence.error() ) {
-        qDebug() << Q_FUNC_INFO << "tomahawk: no" << "presence error";
+        qDebug() << Q_FUNC_INFO << fulljid << "Running tomahawk: no" << "presence error";
         return;
     }
 
-    // ignore anyone not running tomahawk:
+    // ignore anyone not Running tomahawk:
     Jreen::Capabilities::Ptr caps = presence.findExtension<Jreen::Capabilities>();
-    if ( caps && (caps->node() == TOMAHAWK_CAP_NODE_NAME ))
+    if ( caps && (caps->node() == TOMAHAWK_CAP_NODE_NAME ) && false) // disable this method to test the new one
     {
-        qDebug() << Q_FUNC_INFO << presence.from().full() << "tomahawk: yes" << "caps " << caps->node();
+        // legacy peer detection
+        qDebug() << Q_FUNC_INFO << fulljid << "Running tomahawk: yes" << "caps " << caps->node();
+        handlePeerStatus( fulljid, presence.subtype() );
     }
-    else if( presence.from().resource().startsWith( QLatin1String("tomahawk") ) )
+    else if( caps )
     {
-        // this is a hack actually as long as gloox based libsip_jabber is around
-        // remove this as soon as everyone is using jreen
-        // supported by gloox too - should be removed
-        qDebug() << Q_FUNC_INFO << presence.from().full() << "tomahawk: yes" << "resource";
-    }
-    else if( caps && caps->node() != TOMAHAWK_CAP_NODE_NAME )
-    {
-        qDebug() << Q_FUNC_INFO << presence.from().full() << "tomahawk: no" << "caps" << caps->node();
-        return;
+        qDebug() << Q_FUNC_INFO << fulljid << "Running tomahawk: maybe" << "caps " << caps->node()
+            << "requesting disco..";
+
+        // request disco features
+        QString node = caps->node() + '#' + caps->ver();
+
+        Jreen::IQ iq( Jreen::IQ::Get, jid );
+        iq.addExtension( new Jreen::Disco::Info( node ) );
+
+        m_client->send( iq, this, SLOT( onNewIQ( Jreen::IQ, int ) ), RequestDisco );
     }
     else if( !caps )
     {
-        qDebug() << Q_FUNC_INFO << "tomahawk: no" << "no indication";
-        return;
+        qDebug() << Q_FUNC_INFO << "Running tomahawk: no" << "no caps";
     }
-
-    qDebug() << Q_FUNC_INFO << fulljid << " is a tomahawk resource.";
-
-    handlePeerStatus( fulljid, presence.subtype() );
 }
 
 void
 Jabber_p::onNewIq( const Jreen::IQ &iq, int context )
 {
+    if( context == RequestDisco )
+    {
+        qDebug() << Q_FUNC_INFO << "Received disco IQ...";
+        Jreen::Disco::Info *discoInfo = iq.findExtension<Jreen::Disco::Info>().data();
+        if(!discoInfo)
+            return;
+        iq.accept();
 
+        QString fulljid = iq.from().full();
+        Jreen::DataForm::Ptr form = discoInfo->form();
+
+        if(discoInfo->features().contains( TOMAHAWK_FEATURE ))
+        {
+            qDebug() << Q_FUNC_INFO << fulljid << "Running tomahawk/feature enabled: yes";
+
+            // the actual presence doesn't matter, it just needs to be "online"
+            handlePeerStatus( fulljid, Jreen::Presence::Available );
+        }
+        else
+        {
+            qDebug() << Q_FUNC_INFO << fulljid << "Running tomahawk/feature enabled: no";
+        }
+    }
+    else if(context == RequestedDisco)
+    {
+        qDebug() << "Sent IQ(Set), what should be happening here?";
+    }
+    else
+    {
+        TomahawkSipMessage *sipMessage = iq.findExtension<TomahawkSipMessage>().data();
+        if(sipMessage)
+        {
+
+            qDebug() << Q_FUNC_INFO << "Got SipMessage ...";
+            qDebug() << "ip" << sipMessage->ip();
+            qDebug() << "port" << sipMessage->port();
+            qDebug() << "uniqname" << sipMessage->uniqname();
+            qDebug() << "key" << sipMessage->key();
+            qDebug() << "visible" << sipMessage->visible();
+
+
+            QVariantMap m;
+            if( sipMessage->visible() )
+            {
+                m["visible"] = true;
+                m["ip"] = sipMessage->ip();
+                m["port"] = sipMessage->port();
+                m["key"] = sipMessage->key();
+                m["uniqname"] = sipMessage->uniqname();
+            }
+            else
+            {
+                m["visible"] = false;
+            }
+
+
+            QJson::Serializer ser;
+            QByteArray ba = ser.serialize( m );
+            QString msg = QString::fromAscii( ba );
+
+            QString from = iq.from().full();
+            qDebug() << Q_FUNC_INFO << "From:" << from << ":" << msg;
+            emit msgReceived( from, msg );
+        }
+    }
 }
 
 bool

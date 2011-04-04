@@ -81,7 +81,7 @@ private slots:
     {
         qDebug() << e;
     }
-    virtual void onNewIq( const Jreen::IQ &iq, int context );
+    virtual void onNewIq( const Jreen::IQ &iq, int context = NoContext );
 
 private:
     bool presenceMeansOnline( Jreen::Presence::Type p );
@@ -95,7 +95,7 @@ private:
     QMap<QString, Jreen::Presence::Type> m_peers;
     QString m_server;
 
-    enum IqContext { RequestDisco };
+    enum IqContext { NoContext, RequestDisco, RequestedDisco, SipMessageSent };
 };
 
 #endif // JABBER_H
