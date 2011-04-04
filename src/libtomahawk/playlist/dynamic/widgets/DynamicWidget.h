@@ -94,6 +94,9 @@ public slots:
     void playlistChanged( PlaylistInterface* );
     void tracksAdded();
     
+signals:
+    void descriptionChanged( const QString& caption );
+    
 private slots:
     void generate( int = -1 );
     void tracksGenerated( const QList< Tomahawk::query_ptr>& queries );
