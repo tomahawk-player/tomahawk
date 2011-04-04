@@ -44,7 +44,8 @@ DatabaseCommand_DirMtimes::execSelect( DatabaseImpl* dbi )
     {
         query.prepare( QString( "SELECT name, mtime "
                                 "FROM dirs_scanned "
-                                "WHERE name LIKE '%1%'" ).arg( m_prefix.replace( '\'',"''" ) ) );
+                                "WHERE name LIKE :prefix" ) );
+        query.bindValue( ":prefix", m_prefix );
         query.exec();
     }
     while( query.next() )

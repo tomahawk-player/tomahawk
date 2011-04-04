@@ -303,7 +303,7 @@ TrackModel::removeIndex( const QModelIndex& index, bool moreToCome )
 {
     if ( QThread::currentThread() != thread() )
     {
-        qDebug() << "Reinvoking in correct thread:" << Q_FUNC_INFO;
+//        qDebug() << "Reinvoking in correct thread:" << Q_FUNC_INFO;
         QMetaObject::invokeMethod( this, "removeIndex",
                                    Qt::QueuedConnection,
                                    Q_ARG(const QModelIndex, index),
@@ -311,8 +311,6 @@ TrackModel::removeIndex( const QModelIndex& index, bool moreToCome )
                                  );
         return;
     }
-
-    qDebug() << Q_FUNC_INFO;
 
     if ( index.column() > 0 )
         return;
