@@ -45,11 +45,12 @@ DatabaseCommand_DirMtimes::execSelect( DatabaseImpl* dbi )
         query.prepare( QString( "SELECT name, mtime "
                                 "FROM dirs_scanned "
                                 "WHERE name LIKE :prefix" ) );
-        query.bindValue( ":prefix", m_prefix );
+        query.bindValue( ":prefix", m_prefix + "%" );
         query.exec();
     }
     while( query.next() )
     {
+        qDebug() << query.value( 0 ).toString();
         mtimes.insert( query.value( 0 ).toString(), query.value( 1 ).toUInt() );
     }
 
