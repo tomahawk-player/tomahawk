@@ -151,15 +151,15 @@ TomahawkApp::TomahawkApp( int& argc, char *argv[] )
     , m_infoSystem( 0 )
 {
     qsrand( QTime( 0, 0, 0 ).secsTo( QTime::currentTime() ) );
-    
+
     // send the first arg to an already running instance, but don't open twice no matter what
     if( ( argc > 1 && sendMessage( argv[ 1 ] ) ) || sendMessage( "" ) ) {
         qDebug() << "Sent message, already exists";
         throw runtime_error( "Already Running" );
     }
-    
+
     connect( this, SIGNAL( messageReceived( QString ) ), this, SLOT( messageReceived( QString ) ) );
-    
+
 #ifdef TOMAHAWK_HEADLESS
     m_headless = true;
 #else
@@ -169,18 +169,18 @@ TomahawkApp::TomahawkApp( int& argc, char *argv[] )
 #endif
 
     qDebug() << "TomahawkApp thread:" << this->thread();
-    setOrganizationName( QLatin1String( ORGANIZATION_NAME ) );
-    setOrganizationDomain( QLatin1String( ORGANIZATION_DOMAIN ) );
-    setApplicationName( QLatin1String( APPLICATION_NAME ) );
-    setApplicationVersion( QLatin1String( VERSION ) );
+    setOrganizationName( QLatin1String( TOMAHAWK_ORGANIZATION_NAME ) );
+    setOrganizationDomain( QLatin1String( TOMAHAWK_ORGANIZATION_DOMAIN ) );
+    setApplicationName( QLatin1String( TOMAHAWK_APPLICATION_NAME ) );
+    setApplicationVersion( QLatin1String( TOMAHAWK_VERSION ) );
     registerMetaTypes();
     setupLogfile();
-    
+
     new TomahawkSettings( this );
     m_audioEngine = new AudioEngine;
     new ScanManager( this );
     new Pipeline( this );
-    
+
     m_servent = new Servent( this );
     connect( m_servent, SIGNAL( ready() ), SLOT( setupSIP() ) );
 
@@ -189,7 +189,7 @@ TomahawkApp::TomahawkApp( int& argc, char *argv[] )
 
     qDebug() << "Init Echonest Factory.";
     GeneratorFactory::registerFactory( "echonest", new EchonestFactory );
-    
+
     m_scrubFriendlyName = arguments().contains( "--demo" );
     // Register shortcut handler for this platform
 #ifdef Q_WS_MAC
@@ -252,10 +252,10 @@ TomahawkApp::TomahawkApp( int& argc, char *argv[] )
     else
         TomahawkUtils::setProxy( new QNetworkProxy( QNetworkProxy::NoProxy ) );
 
-    
+
     Echonest::Config::instance()->setAPIKey( "JRIHWEP6GPOER2QQ6" );
     Echonest::Config::instance()->setNetworkAccessManager( TomahawkUtils::nam() );
-        
+
     QNetworkProxy::setApplicationProxy( *TomahawkUtils::proxy() );
 
     qDebug() << "Init SIP system.";
@@ -343,7 +343,7 @@ TomahawkApp::registerMetaTypes()
     qRegisterMetaType< QMap<QString, unsigned int> >("QMap<QString, unsigned int>");
     qRegisterMetaType< QMap< QString, plentry_ptr > >("QMap< QString, plentry_ptr >");
     qRegisterMetaType< QHash< QString, QMap<quint32, quint16> > >("QHash< QString, QMap<quint32, quint16> >");
-    
+
     qRegisterMetaType< GeneratorMode>("GeneratorMode");
     qRegisterMetaType<Tomahawk::GeneratorMode>("Tomahawk::GeneratorMode");
     // Extra definition for namespaced-versions of signals/slots required
@@ -534,14 +534,14 @@ TomahawkApp::loadUrl( const QString& url )
 }
 
 
-void 
-TomahawkApp::messageReceived( const QString& msg ) 
+void
+TomahawkApp::messageReceived( const QString& msg )
 {
     qDebug() << "MESSAGE RECEIVED" << msg;
     if( msg.isEmpty() ) {
         return;
     }
-    
+
     loadUrl( msg );
 }
 
