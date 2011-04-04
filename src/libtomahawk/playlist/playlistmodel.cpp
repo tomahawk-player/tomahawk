@@ -217,6 +217,7 @@ PlaylistModel::trackResolved( bool )
     Q_ASSERT( q );
     
     m_waitingForResolved.removeAll( q );
+    disconnect( q, SIGNAL( resolvingFinished( bool ) ), this, SLOT( trackResolved( bool ) ) );
     
     if( m_waitingForResolved.isEmpty() )
         emit loadingFinished();
