@@ -80,6 +80,9 @@ ofstream logfile;
 
 void TomahawkLogHandler( QtMsgType type, const char *msg )
 {
+    static QMutex s_mutex;
+
+    QMutexLocker locker( &s_mutex );
     switch( type )
     {
         case QtDebugMsg:
