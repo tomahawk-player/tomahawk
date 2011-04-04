@@ -64,8 +64,8 @@ Jabber_p::Jabber_p( const QString& jid, const QString& password, const QString& 
 
     // setup caps node, legacy peer detection - used before 0.1
     // disable it for testing
-    //Jreen::Capabilities::Ptr caps = m_client->presence().findExtension<Jreen::Capabilities>();
-    //caps->setNode(TOMAHAWK_CAP_NODE_NAME);
+    Jreen::Capabilities::Ptr caps = m_client->presence().findExtension<Jreen::Capabilities>();
+    caps->setNode(TOMAHAWK_CAP_NODE_NAME);
 
     // print connection parameters
     qDebug() << "Our JID set to:" << m_client->jid().full();
@@ -79,6 +79,7 @@ Jabber_p::Jabber_p( const QString& jid, const QString& password, const QString& 
     connect(m_client, SIGNAL(destroyed(QObject*)), this, SLOT(onDestroy()));
     connect(m_client, SIGNAL(newMessage(Jreen::Message)), SLOT(onNewMessage(Jreen::Message)));
     connect(m_client, SIGNAL(newPresence(Jreen::Presence)), SLOT(onNewPresence(Jreen::Presence)));
+    connect(m_client, SIGNAL(newIQ(Jreen::IQ)), SLOT(onNewIQ(Jreen::IQ)));
 
 
     // connect
@@ -344,6 +345,7 @@ void Jabber_p::onNewPresence( const Jreen::Presence& presence)
 void
 Jabber_p::onNewIq( const Jreen::IQ &iq, int context )
 {
+    qDebug() << Q_FUNC_INFO;
     if( context == RequestDisco )
     {
         qDebug() << Q_FUNC_INFO << "Received disco IQ...";
@@ -371,12 +373,16 @@ Jabber_p::onNewIq( const Jreen::IQ &iq, int context )
     {
         qDebug() << "Sent IQ(Set), what should be happening here?";
     }
+    else if(context == SipMessageSent )
+    {
+        qDebug() << "Sent SipMessage... what now?!";
+    }
     else
     {
+        qDebug() << Q_FUNC_INFO << "No context!";
         TomahawkSipMessage *sipMessage = iq.findExtension<TomahawkSipMessage>().data();
         if(sipMessage)
         {
-
             qDebug() << Q_FUNC_INFO << "Got SipMessage ...";
             qDebug() << "ip" << sipMessage->ip();
             qDebug() << "port" << sipMessage->port();
