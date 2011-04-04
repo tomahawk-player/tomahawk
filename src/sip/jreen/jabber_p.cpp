@@ -19,6 +19,7 @@
 
 #include "jabber_p.h"
 #include "tomahawksipmessage.h"
+#include "tomahawksipmessagefactory.h"
 
 #include "config.h"
 #include "utils/tomahawkutils.h"
@@ -53,6 +54,7 @@ Jabber_p::Jabber_p( const QString& jid, const QString& password, const QString& 
 
     // general client setup
     m_client = new Jreen::Client( jid, password );
+    m_client->registerStanzaExtension(new TomahawkSipMessageFactory);
     m_client->setResource( QString( "DISABLEDtomahawk%1" ).arg( qrand() ) );
 
     // setup disco
@@ -149,13 +151,16 @@ Jabber_p::sendMsg( const QString& to, const QString& msg )
     Jreen::IQ iq( Jreen::IQ::Set, to );
     iq.addExtension( sipMessage );
 
-    m_client->send( iq, this, SLOT( onNewIQ( Jreen::IQ, int ) ), SipMessageSent );
+    m_client->send( iq, this, SLOT( onNewIq( Jreen::IQ, int ) ), SipMessageSent );
 }
 
 
 void
 Jabber_p::broadcastMsg( const QString &msg )
 {
+    QString *foobar;
+    foobar->append("blabla");
+
     qDebug() << Q_FUNC_INFO;
 
     if ( !m_client )
@@ -328,7 +333,7 @@ void Jabber_p::onNewPresence( const Jreen::Presence& presence)
         Jreen::IQ iq( Jreen::IQ::Get, jid );
         iq.addExtension( new Jreen::Disco::Info( node ) );
 
-        m_client->send( iq, this, SLOT( onNewIQ( Jreen::IQ, int ) ), RequestDisco );
+        m_client->send( iq, this, SLOT( onNewIq( Jreen::IQ, int ) ), RequestDisco );
     }
     else if( !caps )
     {
