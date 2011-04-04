@@ -63,7 +63,7 @@ Query::addResults( const QList< Tomahawk::result_ptr >& newresults )
 {
     bool becameSolved = false;
     {
-//        QMutexLocker lock( &m_mut );
+        QMutexLocker lock( &m_mutex );
         m_results.append( newresults );
         qStableSort( m_results.begin(), m_results.end(), Query::resultSorter );
 
@@ -101,7 +101,7 @@ void
 Query::removeResult( const Tomahawk::result_ptr& result )
 {
     {
-//        QMutexLocker lock( &m_mut );
+        QMutexLocker lock( &m_mutex );
         m_results.removeAll( result );
     }
 
@@ -121,7 +121,7 @@ Query::onResolvingFinished()
 QList< result_ptr >
 Query::results() const
 {
-//    QMutexLocker lock( &m_mut );
+    QMutexLocker lock( &m_mutex );
     return m_results;
 }
 
@@ -129,7 +129,7 @@ Query::results() const
 unsigned int
 Query::numResults() const
 {
-//    QMutexLocker lock( &m_mut );
+    QMutexLocker lock( &m_mutex );
     return m_results.length();
 }
 
@@ -149,7 +149,18 @@ Query::id() const
 bool
 Query::resultSorter( const result_ptr& left, const result_ptr& right )
 {
-    return left->score() > right->score();
+    const float ls = left->score();
+    const float rs = right->score();
+
+    if ( ls == rs )
+    {
+        if ( !left->collection().isNull() && left->collection()->source()->isLocal() )
+            return true;
+        else
+            return false;
+    }
+
+    return ls > rs;
 }
 
 
