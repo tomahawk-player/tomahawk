@@ -6,6 +6,8 @@ Version 0.0.3:
       speeds up importing sources a lot.
     * Faster painting of playlists with lots of unresolved tracks.
     * The tomahawk:// protocol handler works on Windows now.
+    * Fixed launching Tomahawk from Installer with administrative permissions.
+    * Prefer local results when results' score is equal.
 
 Version 0.0.2:
     * Don't reconnect to Jabber if the settings dialog is closed successfully

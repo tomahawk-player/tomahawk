@@ -112,7 +112,7 @@ Playlist::Playlist( const source_ptr& src,
     , m_lastmodified( lastmod )
     , m_shared( shared )
 {
-    qDebug() << Q_FUNC_INFO << "1";
+//    qDebug() << Q_FUNC_INFO << "1";
     init();
 }
 

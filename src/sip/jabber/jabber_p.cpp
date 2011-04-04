@@ -56,7 +56,7 @@ Jabber_p::Jabber_p( const QString& jid, const QString& password, const QString& 
 
     if( m_jid.resource().find( "tomahawk" ) == std::string::npos )
     {
-        qDebug() << "!!! Setting your resource to 'tomahawk' prior to logging in to jabber";
+//        qDebug() << "!!! Setting your resource to 'tomahawk' prior to logging in to jabber";
         m_jid.setResource( QString( "tomahawk%1" ).arg( qrand() ).toStdString() );
     }
 
@@ -210,8 +210,8 @@ Jabber_p::sendMsg( const QString& to, const QString& msg )
 {
     if ( QThread::currentThread() != thread() )
     {
-        qDebug() << Q_FUNC_INFO << "invoking in correct thread, not"
-                 << QThread::currentThread();
+//        qDebug() << Q_FUNC_INFO << "invoking in correct thread, not"
+//                 << QThread::currentThread();
 
         QMetaObject::invokeMethod( this, "sendMsg",
                                    Qt::QueuedConnection,
@@ -277,7 +277,7 @@ Jabber_p::addContact( const QString& jid, const QString& msg )
 void
 Jabber_p::onConnect()
 {
-    qDebug() << "Connected to the XMPP server";
+    qDebug() << "Connected to the XMPP server" << m_jid.full().c_str();
     // update jid resource, servers like gtalk use resource binding and may
     // have changed our requested /resource
     if ( m_client->resource() != m_jid.resource() )
@@ -287,7 +287,6 @@ Jabber_p::onConnect()
         emit jidChanged( jidstr );
     }
 
-    qDebug() << "Connected as:" << m_jid.full().c_str();
     emit connected();
 }
 
@@ -516,7 +515,7 @@ Jabber_p::handleRoster( const Roster& roster )
     for ( ; it != roster.end(); ++it )
     {
         if ( (*it).second->subscription() != S10nBoth ) continue;
-        qDebug() << (*it).second->jid().c_str() << (*it).second->name().c_str();
+//        qDebug() << (*it).second->jid().c_str() << (*it).second->name().c_str();
         //printf("JID: %s\n", (*it).second->jid().c_str());
     }
 
@@ -539,8 +538,6 @@ Jabber_p::handlePresence( const gloox::Presence& presence )
     JID jid = presence.from();
     QString fulljid( jid.full().c_str() );
 
-    qDebug() << "* handleRosterPresence" << fulljid << presence.subtype();
-
     if( jid == m_jid )
         return;
 
@@ -562,6 +559,7 @@ Jabber_p::handlePresence( const gloox::Presence& presence )
         return;
     }
 
+    qDebug() << "* handleRosterPresence" << fulljid << presence.subtype();
     //qDebug() << "handling presence for resource of" << res;
 
     //qDebug() << Q_FUNC_INFO << "jid:" << QString::fromStdString(item.jid())

@@ -75,7 +75,7 @@ DBSyncConnection::~DBSyncConnection()
 void
 DBSyncConnection::idleTimeout()
 {
-    qDebug() << Q_FUNC_INFO << "*************";
+    qDebug() << Q_FUNC_INFO;
     shutdown( true );
 }
 
@@ -87,11 +87,6 @@ DBSyncConnection::changeState( State newstate )
     m_state = newstate;
     qDebug() << "DBSYNC State changed from" << s << "to" << newstate;
     emit stateChanged( newstate, s, "" );
-
-    if ( newstate == SYNCED )
-    {
-        qDebug() << "Synced :)";
-    }
 }
 
 
@@ -197,7 +192,7 @@ DBSyncConnection::handleMsg( msg_ptr msg )
          msg->is( Msg::DBOP ) &&
          msg->payload() == "ok" )
     {
-        qDebug() << "No ops to apply, we are synced.";
+//        qDebug() << "No ops to apply, we are synced.";
         changeState( SYNCED );
         // calc the collection stats, to updates the "X tracks" in the sidebar etc
         // this is done automatically if you run a dbcmd to add files.

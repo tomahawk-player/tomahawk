@@ -62,15 +62,11 @@ Connection::Connection( Servent* parent )
 
 Connection::~Connection()
 {
-    qDebug() << "DTOR connection (super)" << id() << thread();
+    qDebug() << "DTOR connection (super)" << id() << thread() << m_sock.isNull();
     if( !m_sock.isNull() )
     {
-        qDebug() << "deleteLatering sock" << m_sock;
+//        qDebug() << "deleteLatering sock" << m_sock;
         m_sock->deleteLater();
-    }
-    else
-    {
-        qDebug() << "no valid sock to delete";
     }
 
     delete m_statstimer;
@@ -118,7 +114,7 @@ Connection::setFirstMessage( msg_ptr m )
 void
 Connection::shutdown( bool waitUntilSentAll )
 {
-    qDebug() << Q_FUNC_INFO << waitUntilSentAll;
+    qDebug() << Q_FUNC_INFO << waitUntilSentAll << id();
     if ( m_do_shutdown )
     {
         //qDebug() << id() << " already shutting down";
@@ -128,7 +124,7 @@ Connection::shutdown( bool waitUntilSentAll )
     m_do_shutdown = true;
     if ( !waitUntilSentAll )
     {
-        qDebug() << "Shutting down immediately " << id();
+//        qDebug() << "Shutting down immediately " << id();
         actualShutdown();
     }
     else
@@ -146,10 +142,9 @@ Connection::shutdown( bool waitUntilSentAll )
 void
 Connection::actualShutdown()
 {
-    qDebug() << Q_FUNC_INFO;
+    qDebug() << Q_FUNC_INFO << m_actually_shutting_down << id();
     if( m_actually_shutting_down )
     {
-        qDebug() << "(already actually shutting down)";
         return;
     }
     m_actually_shutting_down = true;
@@ -159,7 +154,7 @@ Connection::actualShutdown()
         m_sock->disconnectFromHost();
     }
 
-    qDebug() << "EMITTING finished()";
+//    qDebug() << "EMITTING finished()";
     emit finished();
 }
 

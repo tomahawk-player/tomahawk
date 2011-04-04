@@ -45,7 +45,7 @@ DatabaseCommand_LoadPlaylistEntries::generateEntries( DatabaseImpl* dbi )
     query_entries.bindValue( ":guid", m_revguid );
     query_entries.exec();
     
-    qDebug() << "trying to load entries:" << m_revguid;
+//    qDebug() << "trying to load entries:" << m_revguid;
     QString prevrev;
     QJson::Parser parser; bool ok;
     
@@ -55,7 +55,6 @@ DatabaseCommand_LoadPlaylistEntries::generateEntries( DatabaseImpl* dbi )
         QVariant v = parser.parse( query_entries.value(0).toByteArray(), &ok );
         Q_ASSERT( ok && v.type() == QVariant::List ); //TODO
         m_guids = v.toStringList();
-        //        qDebug() << "Entries:" << guids;
         
         QString inclause = QString("('%1')").arg(m_guids.join("', '"));
         
@@ -115,5 +114,5 @@ DatabaseCommand_LoadPlaylistEntries::generateEntries( DatabaseImpl* dbi )
         m_islatest = query_entries_old.value( 1 ).toBool();
     }
     
-    qDebug() << Q_FUNC_INFO << "entrymap:" << m_entrymap;
+//    qDebug() << Q_FUNC_INFO << "entrymap:" << m_entrymap;
 }
