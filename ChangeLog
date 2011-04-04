@@ -8,6 +8,9 @@ Version 0.1.0:
 
 Version 0.0.3:
     * Fixed an issue which caused duplicate items when rescanning.
+    * Revert change introduced in 0.0.2 causing Twitter protocol to not try
+      to reconnect to a peer if it couldn't connect the first time the plugin
+      was connected. This caused confusing (and for most unwanted) behavior.
     * Fix crashes in Twitter authentication.
     * Properly honor the chosen port number if a static host and port are
       marked as preferred.
