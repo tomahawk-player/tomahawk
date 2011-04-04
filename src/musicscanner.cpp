@@ -163,8 +163,6 @@ MusicScanner::startScan()
     DatabaseCommand_DirMtimes* cmd = new DatabaseCommand_DirMtimes( TomahawkSettings::instance()->scannerPaths() );
     connect( cmd, SIGNAL( done( QMap<QString, unsigned int> ) ),
                     SLOT( setMtimes( QMap<QString, unsigned int> ) ) );
-    connect( cmd, SIGNAL( done( QMap<QString, unsigned int> ) ),
-                    SLOT( scan() ) );
 
     Database::instance()->enqueue( QSharedPointer<DatabaseCommand>(cmd) );
 }
@@ -173,7 +171,9 @@ MusicScanner::startScan()
 void
 MusicScanner::setMtimes( const QMap<QString, unsigned int>& m )
 {
+    qDebug() << Q_FUNC_INFO << m.count();
     m_dirmtimes = m;
+    scan();
 }
 
 

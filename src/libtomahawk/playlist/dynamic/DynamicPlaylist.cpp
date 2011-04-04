@@ -253,8 +253,8 @@ DynamicPlaylist::reportCreated( const Tomahawk::dynplaylist_ptr& self )
     Q_ASSERT( !author().isNull() );
     Q_ASSERT( !author()->collection().isNull() );
     // will emit Collection::playlistCreated(...)
-    qDebug() << "Creating dynplaylist belonging to:" << author().data() << author().isNull();
-    qDebug() << "REPORTING DYNAMIC PLAYLIST CREATED:" << this << author()->friendlyName();
+//    qDebug() << "Creating dynplaylist belonging to:" << author().data() << author().isNull();
+//    qDebug() << "REPORTING DYNAMIC PLAYLIST CREATED:" << this << author()->friendlyName();
     author()->collection()->addDynamicPlaylist( self );    
 }
 
@@ -431,7 +431,7 @@ QList< dyncontrol_ptr > DynamicPlaylist::variantsToControl( const QList< QVarian
     QList<dyncontrol_ptr> realControls;
     foreach( QVariantMap controlV, controlsV ) {
         dyncontrol_ptr control = GeneratorFactory::createControl( controlV.value( "type" ).toString(), controlV.value( "selectedType" ).toString() );
-        qDebug() << "CReating control with data:" << controlV;
+        qDebug() << "Creating control with data:" << controlV;
         QJson::QObjectHelper::qvariant2qobject( controlV, control.data() );
         realControls << control;
     }

@@ -83,7 +83,7 @@ AnimatedSplitter::hide( int index, bool animate )
 
     emit hidden( w );
     w->setMinimumHeight( minHeight );
-    qDebug() << "animating to:" << w->height() << "from" << minHeight;
+//    qDebug() << "animating to:" << w->height() << "from" << minHeight;
 
     m_animateForward = false;
     if ( animate )

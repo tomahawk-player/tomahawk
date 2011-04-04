@@ -17,6 +17,8 @@
  */
 
 #include "tomahawk/tomahawkapp.h"
+
+#include "kdsingleapplicationguard/kdsingleapplicationguard.h"
 #include <QTranslator>
 
 #ifdef Q_WS_MAC
@@ -25,9 +27,7 @@
     static pascal OSErr appleEventHandler( const AppleEvent*, AppleEvent*, long );
 #endif
 
-#include <exception>
-    
-#include "kdsingleapplicationguard/kdsingleapplicationguard.h"
+
 int
 main( int argc, char *argv[] )
 {
@@ -39,7 +39,6 @@ main( int argc, char *argv[] )
       // used for url handler
       AEEventHandlerUPP h = AEEventHandlerUPP( appleEventHandler );
       AEInstallEventHandler( 'GURL', 'GURL', h, 0, false );
-
 #endif
 
     TomahawkApp a( argc, argv );
@@ -52,8 +51,8 @@ main( int argc, char *argv[] )
     translator.load( QString( ":/lang/tomahawk_" ) + locale );
     a.installTranslator( &translator );
     return a.exec();
- 
 }
+
 
 #ifdef Q_WS_MAC
 static pascal OSErr

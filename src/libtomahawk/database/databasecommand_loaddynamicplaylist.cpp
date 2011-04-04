@@ -52,9 +52,9 @@ DatabaseCommand_LoadDynamicPlaylist::exec( DatabaseImpl* dbi )
     QList< QVariantMap > controls;
     QString playlist_guid;
     qDebug() << "Loading controls..." << revisionGuid();
-    qDebug() << "SELECT playlist_revision.playlist, controls, plmode, pltype "
-    "FROM dynamic_playlist_revision, playlist_revision "
-    "WHERE dynamic_playlist_revision.guid = "<< revisionGuid() << " AND playlist_revision.guid = dynamic_playlist_revision.guid";
+//    qDebug() << "SELECT playlist_revision.playlist, controls, plmode, pltype "
+//    "FROM dynamic_playlist_revision, playlist_revision "
+//    "WHERE dynamic_playlist_revision.guid = "<< revisionGuid() << " AND playlist_revision.guid = dynamic_playlist_revision.guid";
     if( controlsQuery.first() ) 
     {
         playlist_guid = controlsQuery.value( 0 ).toString();
