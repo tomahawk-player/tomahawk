@@ -345,6 +345,8 @@ DynamicWidget::controlsChanged()
         return;
     m_playlist->createNewRevision();
     m_seqRevLaunched++;
+    
+    emit descriptionChanged( m_playlist->generator()->sentenceSummary() );
 }
 
 void 
@@ -356,6 +358,8 @@ DynamicWidget::controlChanged( const Tomahawk::dyncontrol_ptr& control )
     m_seqRevLaunched++;
     
     showPreview();
+    
+    emit descriptionChanged( m_playlist->generator()->sentenceSummary() );
 }
 
 void 
