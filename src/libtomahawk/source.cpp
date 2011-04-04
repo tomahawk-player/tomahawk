@@ -30,7 +30,7 @@
 using namespace Tomahawk;
 
 
-Source::Source( int id, const QString &username )
+Source::Source( int id, const QString& username )
     : QObject()
     , m_isLocal( false )
     , m_online( false )
@@ -38,7 +38,7 @@ Source::Source( int id, const QString &username )
     , m_id( id )
     , m_cc( 0 )
 {
-    qDebug() << Q_FUNC_INFO;
+    qDebug() << Q_FUNC_INFO << id << username;
 
     if ( id == 0 )
     {
@@ -146,6 +146,7 @@ Source::setOnline()
 {
     if ( m_online )
         return;
+    m_online = true;
 
     // ensure username is in the database
     DatabaseCommand_addSource* cmd = new DatabaseCommand_addSource( m_username, m_friendlyname );
@@ -153,7 +154,6 @@ Source::setOnline()
                     SLOT( dbLoaded( unsigned int, const QString& ) ) );
     Database::instance()->enqueue( QSharedPointer<DatabaseCommand>(cmd) );
 
-    m_online = true;
     emit online();
 }
 
