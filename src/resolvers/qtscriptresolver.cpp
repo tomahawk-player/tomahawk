@@ -68,6 +68,13 @@ QtScriptResolver::~QtScriptResolver()
 void
 QtScriptResolver::resolve( const Tomahawk::query_ptr& query )
 {
+    if ( QThread::currentThread() != thread() )
+    {
+        qDebug() << "Reinvoking in correct thread:" << Q_FUNC_INFO;
+        QMetaObject::invokeMethod( this, "resolve", Qt::QueuedConnection, Q_ARG(Tomahawk::query_ptr, query) );
+        return;
+    }
+
     qDebug() << Q_FUNC_INFO << query->toString();
     QString eval = QString( "resolve( '%1', '%2', '%3', '%4' );" )
         .arg( query->id().replace( "'", "\\'" ) )
