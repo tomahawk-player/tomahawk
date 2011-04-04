@@ -79,7 +79,7 @@ Jabber_p::Jabber_p( const QString& jid, const QString& password, const QString& 
     connect(m_client, SIGNAL(destroyed(QObject*)), this, SLOT(onDestroy()));
     connect(m_client, SIGNAL(newMessage(Jreen::Message)), SLOT(onNewMessage(Jreen::Message)));
     connect(m_client, SIGNAL(newPresence(Jreen::Presence)), SLOT(onNewPresence(Jreen::Presence)));
-    connect(m_client, SIGNAL(newIQ(Jreen::IQ)), SLOT(onNewIQ(Jreen::IQ)));
+    connect(m_client, SIGNAL(newIQ(Jreen::IQ)), SLOT(onNewIq(Jreen::IQ)));
 
 
     // connect
