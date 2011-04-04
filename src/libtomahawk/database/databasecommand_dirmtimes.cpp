@@ -36,11 +36,12 @@ DatabaseCommand_DirMtimes::exec( DatabaseImpl* dbi )
 void
 DatabaseCommand_DirMtimes::execSelect( DatabaseImpl* dbi )
 {
-    qDebug() << Q_FUNC_INFO << m_prefix << m_update;
+    QDir dir( m_prefix );
+    qDebug() << Q_FUNC_INFO << dir.absolutePath() << m_update;
     QMap<QString,unsigned int> mtimes;
     TomahawkSqlQuery query = dbi->newquery();
 
-    if( m_prefix.isEmpty() )
+    if ( m_prefix.isEmpty() )
     {
         query.exec( "SELECT name, mtime FROM dirs_scanned" );
     }
@@ -49,15 +50,12 @@ DatabaseCommand_DirMtimes::execSelect( DatabaseImpl* dbi )
         query.prepare( QString( "SELECT name, mtime "
                                 "FROM dirs_scanned "
                                 "WHERE name LIKE :prefix" ) );
-        query.bindValue( ":prefix", m_prefix + "%" );
 
-        qDebug() << query.lastQuery();
+        query.bindValue( ":prefix", dir.absolutePath() + "%" );
         query.exec();
-        qDebug() << query.lastQuery();
     }
     while( query.next() )
     {
-        qDebug() << query.value( 0 ).toString();
         mtimes.insert( query.value( 0 ).toString(), query.value( 1 ).toUInt() );
     }
 

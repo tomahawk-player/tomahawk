@@ -34,7 +34,7 @@ class DLLEXPORT DatabaseCommand_DirMtimes : public DatabaseCommand
 Q_OBJECT
 
 public:
-    explicit DatabaseCommand_DirMtimes( const QString& prefix = "", QObject* parent = 0 )
+    explicit DatabaseCommand_DirMtimes( const QString& prefix = QString(), QObject* parent = 0 )
         : DatabaseCommand( parent ), m_prefix( prefix ), m_update( false )
     {}
 
