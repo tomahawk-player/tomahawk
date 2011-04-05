@@ -555,8 +555,9 @@ PlaylistManager::setPage( ViewPage* page, bool trackHistory )
         AudioEngine::instance()->setPlaylist( currentPlaylistInterface() );
 
     // UGH!
-    if( QObject* obj = dynamic_cast< QObject* >( currentPage() ) ) {if( obj->metaObject()->indexOfSignal( "descriptionChanged(QString)" ) > -1 ) // if the signal exists (just to hide the qobject runtime warning...)
-        connect( obj, SIGNAL( descriptionChanged( QString ) ), m_infobar, SLOT( setDescription( QString ) ) );
+    if( QObject* obj = dynamic_cast< QObject* >( currentPage() ) ) {
+        if( obj->metaObject()->indexOfSignal( "descriptionChanged(QString)" ) > -1 ) // if the signal exists (just to hide the qobject runtime warning...)
+            connect( obj, SIGNAL( descriptionChanged( QString ) ), m_infobar, SLOT( setDescription( QString ) ) );
     }
     
     m_stack->setCurrentWidget( page->widget() );
