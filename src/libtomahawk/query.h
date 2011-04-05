@@ -64,6 +64,8 @@ public:
     /// true when any result has been found (score may be less than 1.0)
     bool playable() const { return m_playable; }
 
+    bool resolvingFinished() const { return m_resolveFinished; }
+    
     unsigned int lastPipelineWeight() const { return m_lastpipelineweight; }
     void setLastPipelineWeight( unsigned int w ) { m_lastpipelineweight = w; }
 
@@ -108,6 +110,7 @@ private:
     QList< Tomahawk::result_ptr > m_results;
     bool m_solved;
     bool m_playable;
+    bool m_resolveFinished;
     mutable QID m_qid;
     unsigned int m_lastpipelineweight;
 

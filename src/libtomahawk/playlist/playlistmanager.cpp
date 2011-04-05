@@ -19,6 +19,7 @@
 #include "playlistmanager.h"
 
 #include <QVBoxLayout>
+#include <QMetaMethod>
 
 #include "audio/audioengine.h"
 #include "utils/animatedsplitter.h"
@@ -555,8 +556,7 @@ PlaylistManager::setPage( ViewPage* page, bool trackHistory )
 
     // UGH!
     if( QObject* obj = dynamic_cast< QObject* >( currentPage() ) ) {
-//         qDebug() << SIGNAL( descriptionChanged( QString ) ) << QMetaObject::normalizedSignature( SIGNAL( descriptionChanged( QString ) ) ) << obj->metaObject()->indexOfSignal( QMetaObject::normalizedSignature( SIGNAL( descriptionChanged( QString ) ) ) );
-//         if( obj->metaObject()->indexOfSignal( QMetaObject::normalizedSignature( SIGNAL( descriptionChanged( QString ) ) ) ) > -1 ) // if the signal exists (just to hide the qobject runtime warning...)
+        if( obj->metaObject()->indexOfSignal( "descriptionChanged(QString)" ) > -1 ) // if the signal exists (just to hide the qobject runtime warning...)
             connect( obj, SIGNAL( descriptionChanged( QString ) ), m_infobar, SLOT( setDescription( QString ) ) );
     }
     

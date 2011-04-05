@@ -81,7 +81,7 @@ LoadingSpinner::hideFinished()
 QSize 
 LoadingSpinner::sizeHint() const
 {
-    return QSize( 64, 64 );
+    return QSize( 31, 31 );
 }
 
 void 
@@ -99,7 +99,7 @@ LoadingSpinner::reposition()
     int x = ( parentWidget()->width() / 2 ) - ( width() / 2 );
     int y = ( parentWidget()->height() / 2 ) - ( height() / 2 );
     move( x, y );
-    resize( 64, 64 );
+    resize( 31, 31 );
 }
 
 

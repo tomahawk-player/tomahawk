@@ -70,10 +70,6 @@ signals:
     void shuffleModeChanged( bool enabled );
 
     void itemSizeChanged( const QModelIndex& index );
-
-    void loadingStarts();
-    void loadingFinished();
-
 private slots:
     void onDataChanged();
 
@@ -83,11 +79,13 @@ private slots:
     void onTracksAdded( const QList<Tomahawk::query_ptr>& tracks );
     void onTracksInserted( unsigned int row, const QList<Tomahawk::query_ptr>& tracks );
 
+    void trackResolved( bool );
 private:
     QList<Tomahawk::plentry_ptr> playlistEntries() const;
 
     Tomahawk::playlist_ptr m_playlist;
     bool m_waitForUpdate;
+    QList< Tomahawk::Query* > m_waitingForResolved;
 };
 
 #endif // PLAYLISTMODEL_H
