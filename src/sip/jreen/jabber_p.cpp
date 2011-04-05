@@ -118,6 +118,8 @@ Jabber_p::sendMsg( const QString& to, const QString& msg )
         return;
     }
 
+    qDebug() << "SEND MESSAGE:" << msg;
+
     /*******************************************************
      * Obsolete this by a SipMessage class
      */
