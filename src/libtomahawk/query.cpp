@@ -62,7 +62,6 @@ Query::Query( const QString& artist, const QString& track, const QString& album,
 void
 Query::addResults( const QList< Tomahawk::result_ptr >& newresults )
 {
-    bool becameSolved = false;
     {
         QMutexLocker lock( &m_mutex );
         m_results.append( newresults );

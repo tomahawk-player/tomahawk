@@ -74,7 +74,8 @@ public:
     void setTrack( const QString& track ) { m_track = track; }
     void setResultHint( const QString& resultHint ) { m_resultHint = resultHint; }
     void setDuration( int duration ) { m_duration = duration; }
-
+    void setResolveFinished( bool resolved ) { m_resolveFinished = resolved; }
+    
     QVariant toVariant() const;
     QString toString() const;
 
