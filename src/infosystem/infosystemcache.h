@@ -49,8 +49,8 @@ public slots:
     void updateCacheSlot( Tomahawk::InfoSystem::InfoCacheCriteria criteria, Tomahawk::InfoSystem::InfoType type, QVariant output );
     
 private:
-    void loadCache( InfoType type, const QString &cache );
-    void saveCache( InfoType type, const QString &cache );
+    void loadCache( InfoType type, const QString &cacheFile );
+    void saveCache( InfoType type, const QString &cacheDir );
     
     QHash< InfoType, QHash< InfoCacheCriteria, QVariant > > m_dataCache;
     QHash< InfoType, QHash< InfoCacheCriteria, QDateTime > > m_timeCache;

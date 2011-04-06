@@ -39,13 +39,11 @@ InfoSystemCache::InfoSystemCache( QObject* parent )
     for( int i = 0; i <= InfoNoInfo; i++ )
     {
         InfoType type = (InfoType)(i);
-        if( m_dirtySet.contains( type ) && m_dataCache.contains( type ) )
-        {
-            QString cacheDir = cacheBaseDir + QString::number( i );
-            QDir dir( cacheDir );
-            if( dir.exists() && QFile::exists( QString( cacheDir + '/' + QString::number( i ) ) ) )
-                loadCache( type, QString( cacheDir + '/' + QString::number( i ) ) );
-        }
+        QString cacheDir = cacheBaseDir + "/InfoSystemCache/" + QString::number( i );
+        QString cacheFile = cacheDir + '/' + QString::number( i );
+        QDir dir( cacheDir );
+        if( dir.exists() && QFile::exists( cacheFile ) )
+            loadCache( type, cacheFile );
     }
 }
 
@@ -60,7 +58,7 @@ InfoSystemCache::~InfoSystemCache()
         InfoType type = (InfoType)(i);
         if( m_dirtySet.contains( type ) && m_dataCache.contains( type ) )
         {
-            QString cacheDir = cacheBaseDir + QString::number( i );
+            QString cacheDir = cacheBaseDir + "/InfoSystemCache/" + QString::number( i );
             saveCache( type, cacheDir );
         }
     }
@@ -85,8 +83,8 @@ void
 InfoSystemCache::updateCacheSlot( Tomahawk::InfoSystem::InfoCacheCriteria criteria, Tomahawk::InfoSystem::InfoType type, QVariant output )
 {
     qDebug() << Q_FUNC_INFO;
-    QHash< InfoCacheCriteria, QVariant > typedatacache;
-    QHash< InfoCacheCriteria, QDateTime > typetimecache;
+    QHash< InfoCacheCriteria, QVariant > typedatacache = m_dataCache[type];
+    QHash< InfoCacheCriteria, QDateTime > typetimecache = m_timeCache[type];
     typedatacache[criteria] = output;
     typetimecache[criteria] = QDateTime::currentDateTimeUtc();
     m_dataCache[type] = typedatacache;
@@ -96,9 +94,32 @@ InfoSystemCache::updateCacheSlot( Tomahawk::InfoSystem::InfoCacheCriteria criter
 
 
 void
-InfoSystemCache::loadCache( InfoType type, const QString &cacheDir )
+InfoSystemCache::loadCache( InfoType type, const QString &cacheFile )
 {
     qDebug() << Q_FUNC_INFO;
+    QSettings cachedSettings( cacheFile, QSettings::IniFormat );
+
+    foreach( QString group, cachedSettings.childGroups() )
+    {
+        QHash< InfoCacheCriteria, QVariant > dataHash = m_dataCache[type];
+        QHash< InfoCacheCriteria, QDateTime > dateHash = m_timeCache[type];
+        InfoCacheCriteria criteria;
+        cachedSettings.beginGroup( group );
+        int numCriteria = cachedSettings.beginReadArray( "criteria" );
+        for( int i = 0; i < numCriteria; i++ )
+        {
+            cachedSettings.setArrayIndex( i );
+            QStringList criteriaValues = cachedSettings.value( QString::number( i ) ).toStringList();
+            for( int j = 0; j < criteriaValues.length(); j += 2 )
+                criteria[criteriaValues.at( j )] = criteriaValues.at( j + 1 );
+        }
+        cachedSettings.endArray();
+        dataHash[criteria] = cachedSettings.value( "data" );
+        dateHash[criteria] = cachedSettings.value( "time" ).toDateTime();
+        cachedSettings.endGroup();
+        m_dataCache[type] = dataHash;
+        m_timeCache[type] = dateHash;
+    }
 }
 
 
@@ -117,22 +138,27 @@ InfoSystemCache::saveCache( InfoType type, const QString &cacheDir )
         }
     }
 
-    QSettings cacheFile( QString( cacheDir + '/' + QString::number( (int)type ) ), QSettings::IniFormat );
-    
+    QSettings cachedSettings( QString( cacheDir + '/' + QString::number( (int)type ) ), QSettings::IniFormat );
+
+    int criteriaNumber = 0;
+
     foreach( InfoCacheCriteria criteria, m_dataCache[type].keys() )
     {
-        cacheFile.beginGroup( "type_" +  QString::number( type ) );
-        cacheFile.beginWriteArray( "criteria" );
+        cachedSettings.beginGroup( "group_" +  QString::number( criteriaNumber ) );
+        cachedSettings.beginWriteArray( "criteria" );
         QStringList keys = criteria.keys();
         for( int i = 0; i < criteria.size(); i++ )
         {
-            cacheFile.setArrayIndex( i );
-            cacheFile.setValue( keys.at( i ), criteria[keys.at( i )] );
+            cachedSettings.setArrayIndex( i );
+            QStringList critVal;
+            critVal << keys.at( i ) << criteria[keys.at( i )];
+            cachedSettings.setValue( QString::number( i ), critVal );
         }
-        cacheFile.endArray();
-        cacheFile.setValue( "data", m_dataCache[type][criteria] );
-        cacheFile.setValue( "time", m_timeCache[type][criteria] );
-        cacheFile.endGroup();
+        cachedSettings.endArray();
+        cachedSettings.setValue( "data", m_dataCache[type][criteria] );
+        cachedSettings.setValue( "time", m_timeCache[type][criteria] );
+        cachedSettings.endGroup();
+        ++criteriaNumber;
     }
 
     m_dirtySet.remove( type );
