@@ -536,11 +536,14 @@ TwitterPlugin::registerOffer( const QString &screenName, const QHash< QString, Q
         _peerData.remove( "resend" );
     }
 
-    if ( !_peerData.contains( "okey" ) )
+    if ( !_peerData.contains( "okey" ) ||
+         !_peerData.contains( "onod" ) ||
+         ( _peerData.contains( "onod" ) && _peerData["onod"] != Database::instance()->dbid() ) )
     {
         QString okey = QUuid::createUuid().toString().split( '-' ).last();
         okey.chop( 1 );
         _peerData["okey"] = QVariant::fromValue< QString >( okey );
+        _peerData["onod"] = QVariant::fromValue< QString >( Database::instance()->dbid() );
         peersChanged = true;
         needToAddToCache = true;
         needToSend = true;
