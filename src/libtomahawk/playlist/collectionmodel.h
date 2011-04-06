@@ -23,7 +23,7 @@
 #include <QList>
 #include <QHash>
 
-#include "trackmodelitem.h"
+#include "treemodelitem.h"
 #include "collection.h"
 #include "query.h"
 #include "typedefs.h"
@@ -62,7 +62,7 @@ public:
     virtual void setRepeatMode( PlaylistInterface::RepeatMode /*mode*/ ) {}
     virtual void setShuffled( bool /*shuffled*/ ) {}
 
-    TrackModelItem* itemFromIndex( const QModelIndex& index ) const;
+    TreeModelItem* itemFromIndex( const QModelIndex& index ) const;
 
 signals:
     void repeatModeChanged( PlaylistInterface::RepeatMode mode );
@@ -79,8 +79,8 @@ private slots:
     void onSourceOffline( Tomahawk::source_ptr src );
 
 private:
-    TrackModelItem* m_rootItem;
-    QMap< Tomahawk::collection_ptr, TrackModelItem* > m_collectionIndex;
+    TreeModelItem* m_rootItem;
+    QMap< Tomahawk::collection_ptr, TreeModelItem* > m_collectionIndex;
 };
 
 #endif // COLLECTIONMODEL_H

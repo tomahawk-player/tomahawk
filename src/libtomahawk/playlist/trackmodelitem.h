@@ -37,7 +37,6 @@ public:
     virtual ~TrackModelItem();
 
     explicit TrackModelItem( TrackModelItem* parent = 0, QAbstractItemModel* model = 0 );
-    explicit TrackModelItem( const QString& caption, TrackModelItem* parent = 0 );
     explicit TrackModelItem( const Tomahawk::query_ptr& query, TrackModelItem* parent = 0, int row = -1 );
     explicit TrackModelItem( const Tomahawk::plentry_ptr& entry, TrackModelItem* parent = 0, int row = -1 );
 
@@ -49,8 +48,6 @@ public:
 
     TrackModelItem* parent;
     QVector<TrackModelItem*> children;
-    QHash<QString, TrackModelItem*> hash;
-    QString caption;
     int childCount;
     QPersistentModelIndex index;
     QAbstractItemModel* model;

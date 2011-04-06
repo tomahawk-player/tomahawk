@@ -90,6 +90,7 @@ set( libSources
     playlist/trackproxymodel.cpp
     playlist/trackview.cpp
     playlist/trackheader.cpp
+    playlist/treemodelitem.cpp
     playlist/albumitem.cpp
     playlist/albummodel.cpp
     playlist/albumproxymodel.cpp
@@ -245,6 +246,7 @@ set( libHeaders
     playlist/trackproxymodel.h
     playlist/trackview.h
     playlist/trackheader.h
+    playlist/treemodelitem.h
     playlist/albumitem.h
     playlist/albummodel.h
     playlist/albumproxymodel.h

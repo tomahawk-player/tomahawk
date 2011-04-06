@@ -49,8 +49,8 @@ CollectionModel::index( int row, int column, const QModelIndex& parent ) const
     if ( !m_rootItem || row < 0 || column < 0 )
         return QModelIndex();
 
-    TrackModelItem* parentItem = itemFromIndex( parent );
-    TrackModelItem* childItem = parentItem->children.value( row );
+    TreeModelItem* parentItem = itemFromIndex( parent );
+    TreeModelItem* childItem = parentItem->children.value( row );
     if ( !childItem )
         return QModelIndex();
 
@@ -64,7 +64,7 @@ CollectionModel::rowCount( const QModelIndex& parent ) const
     if ( parent.column() > 0 )
         return 0;
 
-    TrackModelItem* parentItem = itemFromIndex( parent );
+    TreeModelItem* parentItem = itemFromIndex( parent );
     if ( !parentItem )
         return 0;
 
@@ -83,15 +83,15 @@ CollectionModel::columnCount( const QModelIndex& parent ) const
 QModelIndex
 CollectionModel::parent( const QModelIndex& child ) const
 {
-    TrackModelItem* entry = itemFromIndex( child );
+    TreeModelItem* entry = itemFromIndex( child );
     if ( !entry )
         return QModelIndex();
 
-    TrackModelItem* parentEntry = entry->parent;
+    TreeModelItem* parentEntry = entry->parent;
     if ( !parentEntry )
         return QModelIndex();
 
-    TrackModelItem* grandparentEntry = parentEntry->parent;
+    TreeModelItem* grandparentEntry = parentEntry->parent;
     if ( !grandparentEntry )
         return QModelIndex();
 
@@ -106,7 +106,7 @@ CollectionModel::data( const QModelIndex& index, int role ) const
     if ( role != Qt::DisplayRole )
         return QVariant();
 
-    TrackModelItem* entry = itemFromIndex( index );
+    TreeModelItem* entry = itemFromIndex( index );
     if ( !entry )
         return QVariant();
 
@@ -199,7 +199,7 @@ CollectionModel::removeCollection( const collection_ptr& collection )
     disconnect( collection.data(), SIGNAL( tracksFinished( Tomahawk::collection_ptr ) ),
                 this, SLOT( onTracksAddingFinished( Tomahawk::collection_ptr ) ) );
 
-    QList<TrackModelItem*> plitems = m_collectionIndex.values( collection );
+    QList<TreeModelItem*> plitems = m_collectionIndex.values( collection );
 
     m_collectionIndex.remove( collection );
 }
@@ -210,17 +210,17 @@ CollectionModel::onTracksAdded( const QList<Tomahawk::query_ptr>& tracks, const 
 {
 //    int c = rowCount( QModelIndex() );
 
-    TrackModelItem* plitem;
+    TreeModelItem* plitem;
     foreach( const Tomahawk::query_ptr& query, tracks )
     {
-        TrackModelItem* parent = m_rootItem;
+        TreeModelItem* parent = m_rootItem;
         if ( parent->hash.contains( query->artist() ) )
         {
             parent = parent->hash.value( query->artist() );
         }
         else
         {
-            parent = new TrackModelItem( query->artist(), m_rootItem );
+            parent = new TreeModelItem( query->artist(), m_rootItem );
             m_rootItem->hash.insert( query->artist(), parent );
         }
 
@@ -232,14 +232,14 @@ CollectionModel::onTracksAdded( const QList<Tomahawk::query_ptr>& tracks, const 
         }
         else
         {
-            TrackModelItem* subitem = new TrackModelItem( query->album(), parent );
+            TreeModelItem* subitem = new TreeModelItem( query->album(), parent );
             parent->hash.insert( query->album(), subitem );
             parent->childCount++;
             subitem->childCount++;
             parent = subitem;
         }
 
-        plitem = new TrackModelItem( query, parent );
+        plitem = new TreeModelItem( query, parent );
         m_collectionIndex.insertMulti( collection, plitem );
     }
 
@@ -275,11 +275,11 @@ CollectionModel::onSourceOffline( Tomahawk::source_ptr src )
 }
 
 
-TrackModelItem*
+TreeModelItem*
 CollectionModel::itemFromIndex( const QModelIndex& index ) const
 {
     if ( index.isValid() )
-        return static_cast<TrackModelItem*>( index.internalPointer() );
+        return static_cast<TreeModelItem*>( index.internalPointer() );
     else
     {
         return m_rootItem;

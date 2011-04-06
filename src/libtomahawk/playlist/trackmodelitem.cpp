@@ -56,22 +56,6 @@ TrackModelItem::TrackModelItem( TrackModelItem* parent, QAbstractItemModel* mode
 }
 
 
-TrackModelItem::TrackModelItem( const QString& caption, TrackModelItem* parent )
-{
-    this->parent = parent;
-    this->caption = caption;
-    this->model = parent->model;
-    childCount = 0;
-    m_isPlaying = false;
-    toberemoved = false;
-
-    if ( parent )
-    {
-        parent->children.append( this );
-    }
-}
-
-
 TrackModelItem::TrackModelItem( const Tomahawk::query_ptr& query, TrackModelItem* parent, int row )
     : QObject( parent )
 {
@@ -86,16 +70,21 @@ TrackModelItem::TrackModelItem( const Tomahawk::plentry_ptr& entry, TrackModelIt
     setupItem( entry->query(), parent, row );
 }
 
+
 const Tomahawk::plentry_ptr&
 TrackModelItem::entry() const
 {
     return m_entry;
 }
 
+
 const Tomahawk::query_ptr&
 TrackModelItem::query() const
 {
-    if ( !m_entry.isNull() ) return m_entry->query(); else return m_query;
+    if ( !m_entry.isNull() )
+        return m_entry->query();
+    else
+        return m_query;
 }
 
 
@@ -123,7 +112,7 @@ TrackModelItem::setupItem( const Tomahawk::query_ptr& query, TrackModelItem* par
     m_query = query;
     if ( query->numResults() )
     {
-        emit dataChanged();
+//        emit dataChanged();
     }
     else
     {

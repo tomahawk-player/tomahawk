@@ -127,21 +127,6 @@ TrackModel::data( const QModelIndex& index, int role ) const
         return QVariant();
 
     const query_ptr& query = entry->query();
-    if ( query.isNull() )
-    {
-        if ( !index.column() )
-        {
-            return entry->caption.isEmpty() ? "Unknown" : entry->caption;
-        }
-
-        if ( index.column() == 1 )
-        {
-            return entry->childCount;
-        }
-
-        return QVariant( "" );
-    }
-
     if ( !query->numResults() )
     {
         switch( index.column() )
