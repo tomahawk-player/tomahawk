@@ -145,6 +145,7 @@ using namespace Tomahawk;
 TomahawkApp::TomahawkApp( int& argc, char *argv[] )
     : TOMAHAWK_APPLICATION( argc, argv )
     , m_database( 0 )
+    , m_scanManager( 0 )
     , m_audioEngine( 0 )
     , m_sipHandler( 0 )
     , m_servent( 0 )
@@ -173,7 +174,7 @@ TomahawkApp::TomahawkApp( int& argc, char *argv[] )
     
     new TomahawkSettings( this );
     m_audioEngine = new AudioEngine;
-    new ScanManager( this );
+    m_scanManager = new ScanManager( this );
     new Pipeline( this );
     
     m_servent = new Servent( this );
@@ -294,7 +295,7 @@ TomahawkApp::~TomahawkApp()
 
     delete m_sipHandler;
     delete m_servent;
-
+    delete m_scanManager;
 #ifndef TOMAHAWK_HEADLESS
     delete m_mainwindow;
     delete m_audioEngine;

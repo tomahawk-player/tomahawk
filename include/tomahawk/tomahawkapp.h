@@ -44,6 +44,7 @@
 
 class AudioEngine;
 class Database;
+class ScanManager;
 class SipHandler;
 class TomahawkSettings;
 class XMPPBot;
@@ -118,6 +119,7 @@ private:
     QList<Tomahawk::ExternalResolver*> m_scriptResolvers;
 
     Database* m_database;
+    ScanManager *m_scanManager;
     AudioEngine* m_audioEngine;
     SipHandler* m_sipHandler;
     Servent* m_servent;

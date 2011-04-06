@@ -88,7 +88,7 @@ ScanManager::~ScanManager()
             QCoreApplication::processEvents( QEventLoop::AllEvents, 200 );
             TomahawkUtils::Sleep::msleep( 100 );
         }
-        
+
         if( m_scanner )
         {
             delete m_scanner;
