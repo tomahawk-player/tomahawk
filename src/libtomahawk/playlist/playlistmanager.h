@@ -1,5 +1,5 @@
 /* === This file is part of Tomahawk Player - <http://tomahawk-player.org> ===
- * 
+ *
  *   Copyright 2010-2011, Christian Muehlhaeuser <muesli@tomahawk-player.org>
  *
  *   Tomahawk is free software: you can redistribute it and/or modify
@@ -104,7 +104,7 @@ signals:
     void collectionActivated( const Tomahawk::collection_ptr& collection );
     void playlistActivated( const Tomahawk::playlist_ptr& playlist );
     void dynamicPlaylistActivated( const Tomahawk::dynplaylist_ptr& playlist );
-    
+
 public slots:
     bool showSuperCollection();
     void showWelcomePage();
@@ -123,18 +123,19 @@ public slots:
 
     void setRepeatMode( PlaylistInterface::RepeatMode mode );
     void setShuffled( bool enabled );
-    
+
     // called by the playlist creation dbcmds
     void createPlaylist( const Tomahawk::source_ptr& src, const QVariant& contents );
     void createDynamicPlaylist( const Tomahawk::source_ptr& src, const QVariant& contents );
-    
+
     // ugh need to set up the connection in tomahawk to libtomahawk
     void onPlayClicked();
     void onPauseClicked();
-    
+
 private slots:
     void setFilter( const QString& filter );
     void applyFilter();
+
     void onWidgetDestroyed( QWidget* widget );
 
 private:
@@ -146,7 +147,7 @@ private:
     Tomahawk::playlist_ptr playlistForInterface( PlaylistInterface* interface ) const;
     Tomahawk::dynplaylist_ptr dynamicPlaylistForInterface( PlaylistInterface* interface ) const;
     Tomahawk::collection_ptr collectionForInterface( PlaylistInterface* interface ) const;
-    
+
     QWidget* m_widget;
     InfoBar* m_infobar;
     TopBar* m_topbar;
@@ -161,7 +162,7 @@ private:
     CollectionFlatModel* m_superCollectionFlatModel;
     CollectionView* m_superCollectionView;
     WelcomeWidget* m_welcomeWidget;
-    
+
     QList< Tomahawk::collection_ptr > m_superCollections;
 
     QHash< Tomahawk::dynplaylist_ptr, Tomahawk::DynamicWidget* > m_dynamicWidgets;
@@ -171,13 +172,13 @@ private:
     QHash< Tomahawk::album_ptr, PlaylistView* > m_albumViews;
     QHash< Tomahawk::playlist_ptr, PlaylistView* > m_playlistViews;
     QHash< Tomahawk::source_ptr, SourceInfoWidget* > m_sourceViews;
-    
+
     QList<Tomahawk::ViewPage*> m_pageHistory;
     int m_historyPosition;
 
     Tomahawk::collection_ptr m_currentCollection;
     int m_currentMode;
-    
+
     QTimer m_filterTimer;
     QString m_filter;
 

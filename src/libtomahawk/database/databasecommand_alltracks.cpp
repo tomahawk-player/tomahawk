@@ -138,7 +138,8 @@ DatabaseCommand_AllTracks::exec( DatabaseImpl* dbi )
         QList<Tomahawk::result_ptr> results;
         results << result;
         qry->addResults( results );
-
+        qry->setResolveFinished( true );
+        
         ql << qry;
     }
 

@@ -1,5 +1,5 @@
 /* === This file is part of Tomahawk Player - <http://tomahawk-player.org> ===
- * 
+ *
  *   Copyright 2010-2011, Christian Muehlhaeuser <muesli@tomahawk-player.org>
  *
  *   Tomahawk is free software: you can redistribute it and/or modify
@@ -29,7 +29,7 @@
 
 namespace Tomahawk
 {
-    
+
 class DLLEXPORT ViewPage
 {
 public:
@@ -45,12 +45,18 @@ public:
     virtual bool showStatsBar() const { return true; }
     virtual bool showModes() const { return false; }
     virtual bool queueVisible() const { return true; }
-    
+
     virtual bool jumpToCurrentTrack() = 0;
 
+    /** subclasses implementing ViewPage can emit the following signals:
+     * descriptionChanged( const QString& )
+     * destroyed( QWidget* widget );
+     *
+     * See DynamicWidget for an example
+     */
 private:
 };
-    
+
 }; // ns
 
 #endif //VIEWPAGE_H

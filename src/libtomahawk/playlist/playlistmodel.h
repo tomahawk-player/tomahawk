@@ -1,5 +1,5 @@
 /* === This file is part of Tomahawk Player - <http://tomahawk-player.org> ===
- * 
+ *
  *   Copyright 2010-2011, Christian Muehlhaeuser <muesli@tomahawk-player.org>
  *
  *   Tomahawk is free software: you can redistribute it and/or modify
@@ -70,6 +70,9 @@ signals:
     void shuffleModeChanged( bool enabled );
 
     void itemSizeChanged( const QModelIndex& index );
+
+    void playlistDeleted();
+
 private slots:
     void onDataChanged();
 
@@ -80,6 +83,7 @@ private slots:
     void onTracksInserted( unsigned int row, const QList<Tomahawk::query_ptr>& tracks );
 
     void trackResolved( bool );
+
 private:
     QList<Tomahawk::plentry_ptr> playlistEntries() const;
 
