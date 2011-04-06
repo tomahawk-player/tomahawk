@@ -19,6 +19,7 @@
 #ifndef TOMAHAWK_INFOSYSTEMCACHE_H
 #define TOMAHAWK_INFOSYSTEMCACHE_H
 
+#include <QDateTime>
 #include <QObject>
 #include <QtDebug>
 
@@ -35,16 +36,9 @@ class InfoSystemCache : public QObject
 Q_OBJECT
 
 public:
-    InfoSystemCache( QObject *parent = 0 )
-        : QObject( parent )
-    {
-        qDebug() << Q_FUNC_INFO;
-    }
+    InfoSystemCache( QObject *parent = 0 );
     
-    virtual ~InfoSystemCache()
-    {
-        qDebug() << Q_FUNC_INFO;
-    }
+    virtual ~InfoSystemCache();
 
 signals:
     void notInCache( Tomahawk::InfoSystem::InfoCacheCriteria criteria, QString caller, Tomahawk::InfoSystem::InfoType type, QVariant input, Tomahawk::InfoSystem::InfoCustomData customData );
@@ -55,7 +49,12 @@ public slots:
     void updateCacheSlot( Tomahawk::InfoSystem::InfoCacheCriteria criteria, Tomahawk::InfoSystem::InfoType type, QVariant output );
     
 private:
-    QHash< InfoType, QHash< InfoCacheCriteria, QVariant > > m_memCache;
+    void loadCache( InfoType type, const QString &cache );
+    void saveCache( InfoType type, const QString &cache );
+    
+    QHash< InfoType, QHash< InfoCacheCriteria, QVariant > > m_dataCache;
+    QHash< InfoType, QHash< InfoCacheCriteria, QDateTime > > m_timeCache;
+    QSet< InfoType > m_dirtySet;
 };
 
 } //namespace InfoSystem

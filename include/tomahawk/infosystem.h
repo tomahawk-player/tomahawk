@@ -36,7 +36,7 @@ namespace InfoSystem {
 class InfoSystemCache;
     
 enum InfoType {
-    InfoTrackID,
+    InfoTrackID = 0,
     InfoTrackArtist,
     InfoTrackAlbum,
     InfoTrackGenre,

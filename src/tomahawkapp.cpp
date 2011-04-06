@@ -299,7 +299,7 @@ TomahawkApp::~TomahawkApp()
     delete m_mainwindow;
     delete m_audioEngine;
 #endif
-
+    delete m_infoSystem;
     delete m_database;
 }
 

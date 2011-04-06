@@ -17,29 +17,128 @@
  */
 
 #include <QtDebug>
+#include <QDesktopServices>
+#include <QDir>
+#include <QSettings>
 
 #include "infosystemcache.h"
 
-void
-Tomahawk::InfoSystem::InfoSystemCache::getCachedInfoSlot( Tomahawk::InfoSystem::InfoCacheCriteria criteria, QString caller, Tomahawk::InfoSystem::InfoType type, QVariant input, Tomahawk::InfoSystem::InfoCustomData customData )
+
+namespace Tomahawk
+{
+
+namespace InfoSystem
+{
+
+
+InfoSystemCache::InfoSystemCache( QObject* parent )
+    : QObject(parent)
 {
     qDebug() << Q_FUNC_INFO;
-    if( !m_memCache.contains( type ) || !m_memCache[type].contains( criteria ) )
+    QString cacheBaseDir = QDesktopServices::storageLocation( QDesktopServices::CacheLocation );
+    for( int i = 0; i <= InfoNoInfo; i++ )
+    {
+        InfoType type = (InfoType)(i);
+        if( m_dirtySet.contains( type ) && m_dataCache.contains( type ) )
+        {
+            QString cacheDir = cacheBaseDir + QString::number( i );
+            QDir dir( cacheDir );
+            if( dir.exists() && QFile::exists( QString( cacheDir + '/' + QString::number( i ) ) ) )
+                loadCache( type, QString( cacheDir + '/' + QString::number( i ) ) );
+        }
+    }
+}
+
+
+InfoSystemCache::~InfoSystemCache()
+{
+    qDebug() << Q_FUNC_INFO;
+    qDebug() << "Saving infosystemcache to disk";
+    QString cacheBaseDir = QDesktopServices::storageLocation( QDesktopServices::CacheLocation );
+    for( int i = 0; i <= InfoNoInfo; i++ )
+    {
+        InfoType type = (InfoType)(i);
+        if( m_dirtySet.contains( type ) && m_dataCache.contains( type ) )
+        {
+            QString cacheDir = cacheBaseDir + QString::number( i );
+            saveCache( type, cacheDir );
+        }
+    }
+}
+
+
+void
+InfoSystemCache::getCachedInfoSlot( Tomahawk::InfoSystem::InfoCacheCriteria criteria, QString caller, Tomahawk::InfoSystem::InfoType type, QVariant input, Tomahawk::InfoSystem::InfoCustomData customData )
+{
+    qDebug() << Q_FUNC_INFO;
+    if( !m_dataCache.contains( type ) || !m_dataCache[type].contains( criteria ) )
     {
         emit notInCache( criteria, caller, type, input, customData );
         return;
     }
     
-    emit info( caller, type, input, m_memCache[type][criteria], customData );
+    emit info( caller, type, input, m_dataCache[type][criteria], customData );
 }
 
+
 void
-Tomahawk::InfoSystem::InfoSystemCache::updateCacheSlot( Tomahawk::InfoSystem::InfoCacheCriteria criteria, Tomahawk::InfoSystem::InfoType type, QVariant output )
+InfoSystemCache::updateCacheSlot( Tomahawk::InfoSystem::InfoCacheCriteria criteria, Tomahawk::InfoSystem::InfoType type, QVariant output )
 {
     qDebug() << Q_FUNC_INFO;
-    QHash< InfoCacheCriteria, QVariant > typecache;
-    if( m_memCache.contains( type ) )
-        typecache = m_memCache[type];
-    typecache[criteria] = output;
-    m_memCache[type] = typecache;
+    QHash< InfoCacheCriteria, QVariant > typedatacache;
+    QHash< InfoCacheCriteria, QDateTime > typetimecache;
+    typedatacache[criteria] = output;
+    typetimecache[criteria] = QDateTime::currentDateTimeUtc();
+    m_dataCache[type] = typedatacache;
+    m_timeCache[type] = typetimecache;
+    m_dirtySet.insert( type );
 }
+
+
+void
+InfoSystemCache::loadCache( InfoType type, const QString &cacheDir )
+{
+    qDebug() << Q_FUNC_INFO;
+}
+
+
+void
+InfoSystemCache::saveCache( InfoType type, const QString &cacheDir )
+{
+    qDebug() << Q_FUNC_INFO;
+    QDir dir( cacheDir );
+    if( !dir.exists( cacheDir ) )
+    {
+        qDebug() << "Creating cache directory " << cacheDir;
+        if( !dir.mkpath( cacheDir ) )
+        {
+            qDebug() << "Failed to create cache dir! Bailing...";
+            return;
+        }
+    }
+
+    QSettings cacheFile( QString( cacheDir + '/' + QString::number( (int)type ) ), QSettings::IniFormat );
+    
+    foreach( InfoCacheCriteria criteria, m_dataCache[type].keys() )
+    {
+        cacheFile.beginGroup( "type_" +  QString::number( type ) );
+        cacheFile.beginWriteArray( "criteria" );
+        QStringList keys = criteria.keys();
+        for( int i = 0; i < criteria.size(); i++ )
+        {
+            cacheFile.setArrayIndex( i );
+            cacheFile.setValue( keys.at( i ), criteria[keys.at( i )] );
+        }
+        cacheFile.endArray();
+        cacheFile.setValue( "data", m_dataCache[type][criteria] );
+        cacheFile.setValue( "time", m_timeCache[type][criteria] );
+        cacheFile.endGroup();
+    }
+
+    m_dirtySet.remove( type );
+}
+
+
+} //namespace InfoSystem
+
+} //namespace Tomahawk
