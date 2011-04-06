@@ -1,5 +1,5 @@
 /* === This file is part of Tomahawk Player - <http://tomahawk-player.org> ===
- * 
+ *
  *   Copyright 2010-2011, Christian Muehlhaeuser <muesli@tomahawk-player.org>
  *
  *   Tomahawk is free software: you can redistribute it and/or modify
@@ -81,7 +81,7 @@ SourceTreeView::SourceTreeView( QWidget* parent )
     setUniformRowHeights( false );
     setIndentation( 16 );
     setAnimated( true );
-    
+
     setItemDelegate( new SourceDelegate( this ) );
 
     setContextMenuPolicy( Qt::CustomContextMenu );
@@ -132,10 +132,10 @@ SourceTreeView::setupMenus()
     if ( type == SourcesModel::PlaylistSource || type == SourcesModel::DynamicPlaylistSource )
     {
         playlist_ptr playlist = SourcesModel::indexToDynamicPlaylist( m_contextMenuIndex );
-        if( playlist.isNull() ) 
+        if ( playlist.isNull() )
         {
             playlist = SourcesModel::indexToPlaylist( m_contextMenuIndex );
-        } 
+        }
         if ( !playlist.isNull() )
         {
             readonly = !playlist->author()->isLocal();
@@ -263,7 +263,7 @@ SourceTreeView::onItemActivated( const QModelIndex& index )
         if ( !playlist.isNull() )
         {
             qDebug() << "Dynamic Playlist activated:" << playlist->title();
-            
+
             PlaylistManager::instance()->show( playlist );
         }
     }
@@ -298,13 +298,16 @@ SourceTreeView::deletePlaylist()
         playlist_ptr playlist = SourcesModel::indexToPlaylist( idx );
         if ( !playlist.isNull() )
         {
-            qDebug() << "Playlist about to be deleted:" << playlist->title();
             Playlist::remove( playlist );
         }
-    } else if( type == SourcesModel::DynamicPlaylistSource ) {
-        dynplaylist_ptr playlist = SourcesModel::indexToDynamicPlaylist( idx );       
+    }
+    else if ( type == SourcesModel::DynamicPlaylistSource )
+    {
+        dynplaylist_ptr playlist = SourcesModel::indexToDynamicPlaylist( idx );
         if( !playlist.isNull() )
+        {
             DynamicPlaylist::remove( playlist );
+        }
     }
 }
 
@@ -505,7 +508,7 @@ SourceDelegate::paint( QPainter* painter, const QStyleOptionViewItem& option, co
     painter->setFont( smaller );
     o.font = smaller;
 #endif
-    
+
     if ( ( option.state & QStyle::State_Enabled ) == QStyle::State_Enabled )
     {
         o.state = QStyle::State_Enabled;
@@ -515,13 +518,13 @@ SourceDelegate::paint( QPainter* painter, const QStyleOptionViewItem& option, co
             o.palette.setColor( QPalette::Text, o.palette.color( QPalette::HighlightedText ) );
         }
     }
-    
+
     QStyleOptionViewItemV4 o3 = option;
     if ( index.data( SourceTreeItem::Type ) != SourcesModel::CollectionSource )
         o3.rect.setX( 0 );
-    
+
     QApplication::style()->drawControl( QStyle::CE_ItemViewItem, &o3, painter );
-    
+
     if ( index.data( SourceTreeItem::Type ) == SourcesModel::CollectionSource )
     {
         painter->save();
@@ -529,7 +532,7 @@ SourceDelegate::paint( QPainter* painter, const QStyleOptionViewItem& option, co
         QFont normal = painter->font();
         QFont bold = painter->font();
         bold.setBold( true );
-        
+
         SourceTreeItem* sti = SourcesModel::indexToTreeItem( index );
         bool status = !( !sti || sti->source().isNull() || !sti->source()->isOnline() );
         QString tracks;
@@ -548,7 +551,7 @@ SourceDelegate::paint( QPainter* painter, const QStyleOptionViewItem& option, co
         {
             painter->setPen( o.palette.color( QPalette::HighlightedText ) );
         }
-        
+
         QRect textRect = option.rect.adjusted( iconRect.width() + 8, 6, -figWidth - 24, 0 );
         if ( status || sti->source().isNull() )
             painter->setFont( bold );
@@ -608,8 +611,8 @@ SourceDelegate::paint( QPainter* painter, const QStyleOptionViewItem& option, co
     {
         QStyledItemDelegate::paint( painter, o, index );
     }
-    
+
 #ifdef Q_WS_MAC
     painter->setFont( savedFont );
-#endif    
+#endif
 }

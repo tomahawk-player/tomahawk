@@ -781,7 +781,6 @@ PlaylistManager::playlistForInterface( PlaylistInterface* interface ) const
 {
     foreach ( PlaylistView* view, m_playlistViews.values() )
     {
-        qDebug() << "LAAAA:" << view;
         if ( view->playlistInterface() == interface )
         {
             return m_playlistViews.key( view );
