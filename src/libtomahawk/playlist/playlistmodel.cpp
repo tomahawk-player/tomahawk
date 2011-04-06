@@ -110,7 +110,7 @@ PlaylistModel::loadPlaylist( const Tomahawk::playlist_ptr& playlist, bool loadEn
 
             connect( plitem, SIGNAL( dataChanged() ), SLOT( onDataChanged() ) );
 
-            if( !entry->query()->resolvingFinished() && entry->query()->playable() ) {
+            if( !entry->query()->resolvingFinished() && !entry->query()->playable() ) {
                 m_waitingForResolved.append( entry->query().data() );
                 connect( entry->query().data(), SIGNAL( resolvingFinished( bool ) ), this, SLOT( trackResolved( bool ) ) );
             }
