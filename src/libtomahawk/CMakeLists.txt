@@ -78,7 +78,6 @@ set( libSources
     playlist/collectionflatmodel.cpp
     playlist/collectionview.cpp
     playlist/playlistmanager.cpp
-    playlist/plitem.cpp
     playlist/playlistmodel.cpp
     playlist/playlistproxymodel.cpp
     playlist/playlistview.cpp
@@ -86,6 +85,7 @@ set( libSources
     playlist/queueproxymodel.cpp
     playlist/queueview.cpp
     playlist/trackmodel.cpp
+    playlist/trackmodelitem.cpp
     playlist/trackproxymodel.cpp
     playlist/trackview.cpp
     playlist/trackheader.cpp
@@ -232,7 +232,6 @@ set( libHeaders
     playlist/collectionflatmodel.h
     playlist/collectionview.h
     playlist/playlistmanager.h
-    playlist/plitem.h
     playlist/playlistmodel.h
     playlist/playlistproxymodel.h
     playlist/playlistview.h
@@ -240,6 +239,7 @@ set( libHeaders
     playlist/queueproxymodel.h
     playlist/queueview.h
     playlist/trackmodel.h
+    playlist/trackmodelitem.h
     playlist/trackproxymodel.h
     playlist/trackview.h
     playlist/trackheader.h

@@ -22,7 +22,7 @@
 #include <QList>
 #include <QHash>
 
-#include "plitem.h"
+#include "trackmodelitem.h"
 #include "trackmodel.h"
 #include "collection.h"
 #include "query.h"

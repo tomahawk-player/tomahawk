@@ -1,5 +1,5 @@
 /* === This file is part of Tomahawk Player - <http://tomahawk-player.org> ===
- * 
+ *
  *   Copyright 2010-2011, Christian Muehlhaeuser <muesli@tomahawk-player.org>
  *
  *   Tomahawk is free software: you can redistribute it and/or modify
@@ -29,17 +29,17 @@
 
 #include "dllmacro.h"
 
-class DLLEXPORT PlItem : public QObject
+class DLLEXPORT TrackModelItem : public QObject
 {
 Q_OBJECT
 
 public:
-    virtual ~PlItem();
+    virtual ~TrackModelItem();
 
-    explicit PlItem( PlItem* parent = 0, QAbstractItemModel* model = 0 );
-    explicit PlItem( const QString& caption, PlItem* parent = 0 );
-    explicit PlItem( const Tomahawk::query_ptr& query, PlItem* parent = 0, int row = -1 );
-    explicit PlItem( const Tomahawk::plentry_ptr& entry, PlItem* parent = 0, int row = -1 );
+    explicit TrackModelItem( TrackModelItem* parent = 0, QAbstractItemModel* model = 0 );
+    explicit TrackModelItem( const QString& caption, TrackModelItem* parent = 0 );
+    explicit TrackModelItem( const Tomahawk::query_ptr& query, TrackModelItem* parent = 0, int row = -1 );
+    explicit TrackModelItem( const Tomahawk::plentry_ptr& entry, TrackModelItem* parent = 0, int row = -1 );
 
     const Tomahawk::plentry_ptr& entry() const;
     const Tomahawk::query_ptr& query() const;
@@ -47,9 +47,9 @@ public:
     bool isPlaying() { return m_isPlaying; }
     void setIsPlaying( bool b ) { m_isPlaying = b; emit dataChanged(); }
 
-    PlItem* parent;
-    QVector<PlItem*> children;
-    QHash<QString, PlItem*> hash;
+    TrackModelItem* parent;
+    QVector<TrackModelItem*> children;
+    QHash<QString, TrackModelItem*> hash;
     QString caption;
     int childCount;
     QPersistentModelIndex index;
@@ -60,7 +60,7 @@ signals:
     void dataChanged();
 
 private:
-    void setupItem( const Tomahawk::query_ptr& query, PlItem* parent, int row = -1 );
+    void setupItem( const Tomahawk::query_ptr& query, TrackModelItem* parent, int row = -1 );
 
     Tomahawk::plentry_ptr m_entry;
     Tomahawk::query_ptr m_query;

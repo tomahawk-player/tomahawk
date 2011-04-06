@@ -1,5 +1,5 @@
 /* === This file is part of Tomahawk Player - <http://tomahawk-player.org> ===
- * 
+ *
  *   Copyright 2010-2011, Christian Muehlhaeuser <muesli@tomahawk-player.org>
  *
  *   Tomahawk is free software: you can redistribute it and/or modify
@@ -16,7 +16,7 @@
  *   along with Tomahawk. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include "plitem.h"
+#include "trackmodelitem.h"
 
 #include "utils/tomahawkutils.h"
 #include "playlist.h"
@@ -27,7 +27,7 @@
 using namespace Tomahawk;
 
 
-PlItem::~PlItem()
+TrackModelItem::~TrackModelItem()
 {
     // Don't use qDeleteAll here! The children will remove themselves
     // from the list when they get deleted and the qDeleteAll iterator
@@ -42,7 +42,7 @@ PlItem::~PlItem()
 }
 
 
-PlItem::PlItem( PlItem* parent, QAbstractItemModel* model )
+TrackModelItem::TrackModelItem( TrackModelItem* parent, QAbstractItemModel* model )
 {
     this->parent = parent;
     this->model = model;
@@ -56,7 +56,7 @@ PlItem::PlItem( PlItem* parent, QAbstractItemModel* model )
 }
 
 
-PlItem::PlItem( const QString& caption, PlItem* parent )
+TrackModelItem::TrackModelItem( const QString& caption, TrackModelItem* parent )
 {
     this->parent = parent;
     this->caption = caption;
@@ -72,35 +72,35 @@ PlItem::PlItem( const QString& caption, PlItem* parent )
 }
 
 
-PlItem::PlItem( const Tomahawk::query_ptr& query, PlItem* parent, int row )
+TrackModelItem::TrackModelItem( const Tomahawk::query_ptr& query, TrackModelItem* parent, int row )
     : QObject( parent )
 {
     setupItem( query, parent, row );
 }
 
 
-PlItem::PlItem( const Tomahawk::plentry_ptr& entry, PlItem* parent, int row )
+TrackModelItem::TrackModelItem( const Tomahawk::plentry_ptr& entry, TrackModelItem* parent, int row )
     : QObject( parent )
     , m_entry( entry )
 {
     setupItem( entry->query(), parent, row );
 }
 
-const Tomahawk::plentry_ptr& 
-PlItem::entry() const
+const Tomahawk::plentry_ptr&
+TrackModelItem::entry() const
 {
     return m_entry;
 }
 
-const Tomahawk::query_ptr& 
-PlItem::query() const
+const Tomahawk::query_ptr&
+TrackModelItem::query() const
 {
     if ( !m_entry.isNull() ) return m_entry->query(); else return m_query;
 }
 
 
 void
-PlItem::setupItem( const Tomahawk::query_ptr& query, PlItem* parent, int row )
+TrackModelItem::setupItem( const Tomahawk::query_ptr& query, TrackModelItem* parent, int row )
 {
     this->parent = parent;
     if ( parent )
@@ -132,7 +132,7 @@ PlItem::setupItem( const Tomahawk::query_ptr& query, PlItem* parent, int row )
 
         connect( query.data(), SIGNAL( resultsRemoved( Tomahawk::result_ptr ) ),
                                SIGNAL( dataChanged() ) );
-        
+
         connect( query.data(), SIGNAL( resultsChanged() ),
                                SIGNAL( dataChanged() ) );
     }

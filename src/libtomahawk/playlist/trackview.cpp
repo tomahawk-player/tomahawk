@@ -1,5 +1,5 @@
 /* === This file is part of Tomahawk Player - <http://tomahawk-player.org> ===
- * 
+ *
  *   Copyright 2010-2011, Christian Muehlhaeuser <muesli@tomahawk-player.org>
  *
  *   Tomahawk is free software: you can redistribute it and/or modify
@@ -69,12 +69,12 @@ TrackView::TrackView( QWidget* parent )
     f.setPointSize( f.pointSize() - 1 );
     setFont( f );
 #endif
-    
+
 #ifdef Q_WS_MAC
     f.setPointSize( f.pointSize() - 2 );
     setFont( f );
 #endif
-    
+
     connect( this, SIGNAL( doubleClicked( QModelIndex ) ), SLOT( onItemActivated( QModelIndex ) ) );
 }
 
@@ -119,7 +119,7 @@ TrackView::setModel( TrackModel* model )
     connect( m_model, SIGNAL( itemSizeChanged( QModelIndex ) ), SLOT( onItemResized( QModelIndex ) ) );
     connect( m_model, SIGNAL( loadingStarted() ), m_loadingSpinner, SLOT( fadeIn() ) );
     connect( m_model, SIGNAL( loadingFinished() ), m_loadingSpinner, SLOT( fadeOut() ) );
-    
+
     connect( m_proxyModel, SIGNAL( filterChanged( QString ) ), SLOT( onFilterChanged( QString ) ) );
 
     setAcceptDrops( true );
@@ -129,7 +129,7 @@ TrackView::setModel( TrackModel* model )
 void
 TrackView::onItemActivated( const QModelIndex& index )
 {
-    PlItem* item = m_model->itemFromIndex( m_proxyModel->mapToSource( index ) );
+    TrackModelItem* item = m_model->itemFromIndex( m_proxyModel->mapToSource( index ) );
     if ( item && item->query()->numResults() )
     {
         qDebug() << "Result activated:" << item->query()->toString() << item->query()->results().first()->url();
@@ -178,7 +178,7 @@ TrackView::addItemsToQueue()
         if ( idx.column() )
             continue;
 
-        PlItem* item = model()->itemFromIndex( proxyModel()->mapToSource( idx ) );
+        TrackModelItem* item = model()->itemFromIndex( proxyModel()->mapToSource( idx ) );
         if ( item && item->query()->numResults() )
         {
             PlaylistManager::instance()->queue()->model()->append( item->query() );

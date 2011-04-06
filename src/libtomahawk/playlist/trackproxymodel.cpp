@@ -1,5 +1,5 @@
 /* === This file is part of Tomahawk Player - <http://tomahawk-player.org> ===
- * 
+ *
  *   Copyright 2010-2011, Christian Muehlhaeuser <muesli@tomahawk-player.org>
  *
  *   Tomahawk is free software: you can redistribute it and/or modify
@@ -76,7 +76,7 @@ TrackProxyModel::tracks()
 
     for ( int i = 0; i < rowCount( QModelIndex() ); i++ )
     {
-        PlItem* item = itemFromIndex( mapToSource( index( i, 0 ) ) );
+        TrackModelItem* item = itemFromIndex( mapToSource( index( i, 0 ) ) );
         if ( item )
             queries << item->query();
     }
@@ -135,7 +135,7 @@ TrackProxyModel::siblingItem( int itemsAway )
     // Try to find the next available PlaylistItem (with results)
     if ( idx.isValid() ) do
     {
-        PlItem* item = itemFromIndex( mapToSource( idx ) );
+        TrackModelItem* item = itemFromIndex( mapToSource( idx ) );
         qDebug() << item->query()->toString();
         if ( item && item->query()->playable() )
         {
@@ -156,14 +156,14 @@ TrackProxyModel::siblingItem( int itemsAway )
 bool
 TrackProxyModel::filterAcceptsRow( int sourceRow, const QModelIndex& sourceParent ) const
 {
-    PlItem* pi = itemFromIndex( sourceModel()->index( sourceRow, 0, sourceParent ) );
+    TrackModelItem* pi = itemFromIndex( sourceModel()->index( sourceRow, 0, sourceParent ) );
     if ( !pi )
         return false;
 
     const Tomahawk::query_ptr& q = pi->query();
     if( q.isNull() ) // uh oh? filter out invalid queries i guess
         return false;
-    
+
     Tomahawk::result_ptr r;
     if ( q->numResults() )
         r = q->results().first();

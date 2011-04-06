@@ -1,5 +1,5 @@
 /* === This file is part of Tomahawk Player - <http://tomahawk-player.org> ===
- * 
+ *
  *   Copyright 2010-2011, Christian Muehlhaeuser <muesli@tomahawk-player.org>
  *
  *   Tomahawk is free software: you can redistribute it and/or modify
@@ -24,10 +24,10 @@
 #include "query.h"
 #include "result.h"
 
-#include "playlist/plitem.h"
-#include "playlist/trackproxymodel.h"
-#include "playlist/trackview.h"
-#include "playlist/trackheader.h"
+#include "trackmodelitem.h"
+#include "trackproxymodel.h"
+#include "trackview.h"
+#include "trackheader.h"
 
 #include "utils/tomahawkutils.h"
 
@@ -68,7 +68,7 @@ PlaylistItemDelegate::createEditor( QWidget* parent, const QStyleOptionViewItem&
 void
 PlaylistItemDelegate::paint( QPainter* painter, const QStyleOptionViewItem& option, const QModelIndex& index ) const
 {
-    PlItem* item = m_model->itemFromIndex( m_model->mapToSource( index ) );
+    TrackModelItem* item = m_model->itemFromIndex( m_model->mapToSource( index ) );
     if ( !item || item->query().isNull() )
         return;
 
