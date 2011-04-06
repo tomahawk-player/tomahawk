@@ -42,18 +42,18 @@ public:
     EchoNestPlugin(QObject *parent);
     virtual ~EchoNestPlugin();
     
-    void getInfo( const QString &caller, const InfoType type, const QVariant &data, InfoCustomDataHash customData );
+    void getInfo( const QString &caller, const InfoType type, const QVariant &data, InfoCustomData customData );
     
 private:
-    void getSongProfile( const QString &caller, const QVariant &data, InfoCustomDataHash &customData, const QString &item = QString() );
-    void getArtistBiography ( const QString &caller, const QVariant &data, InfoCustomDataHash &customData );
-    void getArtistFamiliarity( const QString &caller, const QVariant &data, InfoCustomDataHash &customData );
-    void getArtistHotttnesss( const QString &caller, const QVariant &data, InfoCustomDataHash &customData );
-    void getArtistTerms( const QString &caller, const QVariant &data, InfoCustomDataHash &customData );
-    void getMiscTopTerms( const QString &caller, const QVariant &data, InfoCustomDataHash &customData );
+    void getSongProfile( const QString &caller, const QVariant &data, InfoCustomData &customData, const QString &item = QString() );
+    void getArtistBiography ( const QString &caller, const QVariant &data, InfoCustomData &customData );
+    void getArtistFamiliarity( const QString &caller, const QVariant &data, InfoCustomData &customData );
+    void getArtistHotttnesss( const QString &caller, const QVariant &data, InfoCustomData &customData );
+    void getArtistTerms( const QString &caller, const QVariant &data, InfoCustomData &customData );
+    void getMiscTopTerms( const QString &caller, const QVariant &data, InfoCustomData &customData );
 
-    bool isValidArtistData( const QString &caller, const QVariant& data, InfoCustomDataHash& customData );
-    bool isValidTrackData( const QString &caller, const QVariant& data, InfoCustomDataHash& customData );
+    bool isValidArtistData( const QString &caller, const QVariant& data, InfoCustomData& customData );
+    bool isValidTrackData( const QString &caller, const QVariant& data, InfoCustomData& customData );
     Echonest::Artist artistFromReply( QNetworkReply* );
     
 private slots:
@@ -64,7 +64,7 @@ private slots:
     void getMiscTopSlot();
     
 private:
-    QHash< QNetworkReply*, InfoCustomDataHash > m_replyMap;
+    QHash< QNetworkReply*, InfoCustomData > m_replyMap;
     QHash< QNetworkReply*, QString > m_callerMap;
 };
 

@@ -168,8 +168,8 @@ AudioControls::AudioControls( QWidget* parent )
                      .scaled( ui->coverImage->size(), Qt::IgnoreAspectRatio, Qt::SmoothTransformation );
 
     connect( TomahawkApp::instance()->infoSystem(),
-        SIGNAL( info( QString, Tomahawk::InfoSystem::InfoType, QVariant, QVariant, Tomahawk::InfoSystem::InfoCustomDataHash ) ),
-        SLOT( infoSystemInfo( QString, Tomahawk::InfoSystem::InfoType, QVariant, QVariant, Tomahawk::InfoSystem::InfoCustomDataHash ) ) );
+        SIGNAL( info( QString, Tomahawk::InfoSystem::InfoType, QVariant, QVariant, Tomahawk::InfoSystem::InfoCustomData ) ),
+        SLOT( infoSystemInfo( QString, Tomahawk::InfoSystem::InfoType, QVariant, QVariant, Tomahawk::InfoSystem::InfoCustomData ) ) );
     
     connect( TomahawkApp::instance()->infoSystem(), SIGNAL( finished( QString ) ), SLOT( infoSystemFinished( QString ) ) );
 
@@ -252,17 +252,17 @@ AudioControls::onPlaybackStarted( const Tomahawk::result_ptr& result )
     QString artistName = result->artist()->name();
     QString albumName = result->album()->name();
     
-    Tomahawk::InfoSystem::InfoCustomDataHash trackInfo;
+    Tomahawk::InfoSystem::InfoCustomData trackInfo;
     
     trackInfo["artist"] = QVariant::fromValue< QString >( result->artist()->name() );
     trackInfo["album"] = QVariant::fromValue< QString >( result->album()->name() );
     TomahawkApp::instance()->infoSystem()->getInfo(
         s_infoIdentifier, Tomahawk::InfoSystem::InfoAlbumCoverArt,
-        QVariant::fromValue< Tomahawk::InfoSystem::InfoCustomDataHash >( trackInfo ), Tomahawk::InfoSystem::InfoCustomDataHash() );
+        QVariant::fromValue< Tomahawk::InfoSystem::InfoCustomData >( trackInfo ), Tomahawk::InfoSystem::InfoCustomData() );
 }
 
 void
-AudioControls::infoSystemInfo( QString caller, Tomahawk::InfoSystem::InfoType type, QVariant input, QVariant output, Tomahawk::InfoSystem::InfoCustomDataHash customData )
+AudioControls::infoSystemInfo( QString caller, Tomahawk::InfoSystem::InfoType type, QVariant input, QVariant output, Tomahawk::InfoSystem::InfoCustomData customData )
 {
     qDebug() << Q_FUNC_INFO;
     if ( caller != s_infoIdentifier || type != Tomahawk::InfoSystem::InfoAlbumCoverArt )
@@ -277,13 +277,13 @@ AudioControls::infoSystemInfo( QString caller, Tomahawk::InfoSystem::InfoType ty
         return;
     }
 
-    if ( !output.canConvert< Tomahawk::InfoSystem::InfoCustomDataHash >() )
+    if ( !output.canConvert< Tomahawk::InfoSystem::InfoCustomData >() )
     {
         qDebug() << "Cannot convert fetched art from a QByteArray";
         return;
     }   
 
-    Tomahawk::InfoSystem::InfoCustomDataHash returnedData = output.value< Tomahawk::InfoSystem::InfoCustomDataHash >();
+    Tomahawk::InfoSystem::InfoCustomData returnedData = output.value< Tomahawk::InfoSystem::InfoCustomData >();
     const QByteArray ba = returnedData["imgbytes"].toByteArray();
     if ( ba.length() )
     {

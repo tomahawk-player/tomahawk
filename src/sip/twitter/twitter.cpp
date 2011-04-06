@@ -87,7 +87,7 @@ TwitterPlugin::name()
 const QString
 TwitterPlugin::friendlyName()
 {
-    return QString("Twitter");
+    return tr("Twitter");
 }
 
 const QString
@@ -178,7 +178,6 @@ TwitterPlugin::disconnectPlugin()
         delete m_twitterAuth.data();
 
     m_cachedPeers.empty();
-    m_attemptedConnects.empty();
     m_isOnline = false;
 }
 
@@ -571,7 +570,6 @@ TwitterPlugin::registerOffer( const QString &screenName, const QHash< QString, Q
     {
         m_cachedPeers[screenName] = QVariant::fromValue< QHash< QString, QVariant > >( _peerData );
         TomahawkSettings::instance()->setTwitterCachedPeers( m_cachedPeers );
-        m_attemptedConnects[screenName] = false;
     }
 
     if ( m_isOnline && _peerData.contains( "host" ) && _peerData.contains( "port" ) && _peerData.contains( "pkey" ) )
@@ -597,14 +595,9 @@ void
 TwitterPlugin::makeConnection( const QString &screenName, const QHash< QString, QVariant > &peerData )
 {
     qDebug() << Q_FUNC_INFO;
-    if ( m_attemptedConnects.contains( screenName ) && m_attemptedConnects[screenName] )
-    {
-        qDebug() << "Already attempted to connect to this peer with no change in their status, not trying again for now";
-        return;
-    }
     if ( !peerData.contains( "host" ) || !peerData.contains( "port" ) || !peerData.contains( "pkey" ) || !peerData.contains( "node" ) )
     {
-        qDebug() << "TwitterPlugin could not find host and/or port and/or pkey for peer " << screenName;
+        qDebug() << "TwitterPlugin could not find host and/or port and/or pkey and/or node for peer " << screenName;
         return;
     }
     QString friendlyName = QString( '@' + screenName );
@@ -614,7 +607,6 @@ TwitterPlugin::makeConnection( const QString &screenName, const QHash< QString, 
                                             peerData["pkey"].toString(),
                                             friendlyName,
                                             peerData["node"].toString() );
-    m_attemptedConnects[screenName] = true;
 }
 
 void

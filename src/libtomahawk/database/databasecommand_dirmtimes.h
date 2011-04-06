@@ -34,8 +34,12 @@ class DLLEXPORT DatabaseCommand_DirMtimes : public DatabaseCommand
 Q_OBJECT
 
 public:
-    explicit DatabaseCommand_DirMtimes( const QString& prefix = "", QObject* parent = 0 )
+    explicit DatabaseCommand_DirMtimes( const QString& prefix = QString(), QObject* parent = 0 )
         : DatabaseCommand( parent ), m_prefix( prefix ), m_update( false )
+    {}
+    
+    explicit DatabaseCommand_DirMtimes( const QStringList& prefixes = QStringList(), QObject* parent = 0 )
+    : DatabaseCommand( parent ), m_prefixes( prefixes ), m_update( false )
     {}
 
     explicit DatabaseCommand_DirMtimes( QMap<QString, unsigned int> tosave, QObject* parent = 0 )
@@ -52,9 +56,12 @@ signals:
 public slots:
 
 private:
+    void execSelectPath( DatabaseImpl *dbi, const QDir& path, QMap<QString, unsigned int> &mtimes );
+        
     void execSelect( DatabaseImpl* dbi );
     void execUpdate( DatabaseImpl* dbi );
     QString m_prefix;
+    QStringList m_prefixes;
     bool m_update;
     QMap<QString, unsigned int> m_tosave;
 };

@@ -81,6 +81,9 @@ ofstream logfile;
 
 void TomahawkLogHandler( QtMsgType type, const char *msg )
 {
+    static QMutex s_mutex;
+
+    QMutexLocker locker( &s_mutex );
     switch( type )
     {
         case QtDebugMsg:
@@ -151,14 +154,6 @@ TomahawkApp::TomahawkApp( int& argc, char *argv[] )
     , m_infoSystem( 0 )
 {
     qsrand( QTime( 0, 0, 0 ).secsTo( QTime::currentTime() ) );
-
-    // send the first arg to an already running instance, but don't open twice no matter what
-    if( ( argc > 1 && sendMessage( argv[ 1 ] ) ) || sendMessage( "" ) ) {
-        qDebug() << "Sent message, already exists";
-        throw runtime_error( "Already Running" );
-    }
-
-    connect( this, SIGNAL( messageReceived( QString ) ), this, SLOT( messageReceived( QString ) ) );
 
 #ifdef TOMAHAWK_HEADLESS
     m_headless = true;
@@ -285,7 +280,7 @@ TomahawkApp::TomahawkApp( int& argc, char *argv[] )
     }
 
 #ifndef TOMAHAWK_HEADLESS
-    if ( !TomahawkSettings::instance()->hasScannerPath() )
+    if ( !TomahawkSettings::instance()->hasScannerPaths() )
     {
         m_mainwindow->showSettingsDialog();
     }
@@ -535,13 +530,15 @@ TomahawkApp::loadUrl( const QString& url )
 
 
 void
-TomahawkApp::messageReceived( const QString& msg )
+TomahawkApp::instanceStarted( KDSingleApplicationGuard::Instance instance )
 {
-    qDebug() << "MESSAGE RECEIVED" << msg;
-    if( msg.isEmpty() ) {
+    qDebug() << "INSTANCE STARTED!" << instance.pid << instance.arguments;
+
+    if( instance.arguments.size() < 2 )
+    {
         return;
     }
 
-    loadUrl( msg );
+    loadUrl( instance.arguments.at( 1 ) );
 }
 

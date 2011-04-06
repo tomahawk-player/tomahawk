@@ -120,7 +120,7 @@ JabberPlugin::onConnected()
 {
     if ( !m_menu )
     {
-        m_menu = new QMenu( QString( "Jabber (" ).append( accountName() ).append( ")" ) );
+        m_menu = new QMenu( tr( "Jabber (%1)" ).arg( accountName() ) );
         m_addFriendAction = m_menu->addAction( tr( "Add Friend..." ) );
 
         connect( m_addFriendAction, SIGNAL( triggered() ), SLOT( showAddFriendDialog() ) ) ;

@@ -19,6 +19,8 @@
 #ifndef SCANMANAGER_H
 #define SCANMANAGER_H
 
+#include <QHash>
+#include <QMap>
 #include <QObject>
 #include <QStringList>
 
@@ -26,6 +28,8 @@
 
 class MusicScanner;
 class QThread;
+class QFileSystemWatcher;
+class QTimer;
 
 class ScanManager : public QObject
 {
@@ -36,16 +40,25 @@ public:
 
     explicit ScanManager( QObject* parent = 0 );
     virtual ~ScanManager();
-    
-    void runManualScan( const QStringList& path );
 
 signals:
     void finished();
     
+public slots:
+    void runManualScan( const QStringList& paths, bool recursive = true );
+    void handleChangedDir( const QString& path );
+    void addWatchedDirs( const QStringList& paths );
+    void removeWatchedDir( const QString& path );
+    void setInitialPaths( QMap< QString, unsigned int > pathMap );
+
 private slots:
     void scannerQuit();
     void scannerFinished();
     void scannerDestroyed( QObject* scanner );
+    
+    void startupWatchPaths();
+    void queuedScanTimeout();
+    void deferredScanTimeout();
 
     void onSettingsChanged();
     
@@ -54,7 +67,13 @@ private:
     
     MusicScanner* m_scanner;
     QThread* m_musicScannerThreadController;
-    QStringList m_currScannerPath;
+    QStringList m_currScannerPaths;
+    QFileSystemWatcher* m_dirWatcher;
+    
+    QTimer* m_queuedScanTimer;
+    QTimer* m_deferredScanTimer;
+    QStringList m_queuedChangedDirs;
+    QHash< bool, QStringList > m_deferredDirs;
 };
 
 #endif

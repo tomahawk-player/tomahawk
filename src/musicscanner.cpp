@@ -19,6 +19,7 @@
 #include "musicscanner.h"
 
 #include "tomahawk/tomahawkapp.h"
+#include "tomahawksettings.h"
 #include "sourcelist.h"
 #include "database/database.h"
 #include "database/databasecommand_dirmtimes.h"
@@ -31,14 +32,47 @@ using namespace Tomahawk;
 void
 DirLister::go()
 {
-    scanDir( m_dir, 0 );
+    qDebug() << Q_FUNC_INFO;
+    qDebug() << "Recursive? : " << (m_recursive ? "true" : "false");
+    if( !m_recursive )
+    {
+        foreach( QString dir, m_dirs )
+        {
+            if( m_dirmtimes.contains( dir ) )
+            {
+                qDebug() << "Removing " << dir << " from m_dirmtimes because it's specifically requested";
+                m_dirmtimes.remove( dir );
+            }
+            QStringList filtered = QStringList( m_dirmtimes.keys() ).filter( dir );
+            foreach( QString filteredDir, filtered )
+            {
+                if( !QDir( filteredDir ).exists() )
+                {
+                    qDebug() << "Removing " << filteredDir << " from m_dirmtimes because it does not exist";
+                    m_dirmtimes.remove( filteredDir );
+                }
+            }
+        }
+        m_newdirmtimes = m_dirmtimes;
+    }
+    
+    foreach( QString dir, m_dirs )
+        scanDir( QDir( dir, 0 ), 0, ( m_recursive ? DirLister::Recursive : DirLister::NonRecursive ) );
     emit finished( m_newdirmtimes );
 }
 
 
 void
-DirLister::scanDir( QDir dir, int depth )
+DirLister::scanDir( QDir dir, int depth, DirLister::Mode mode )
 {
+    qDebug() << "DirLister::scanDir scanning: " << dir.absolutePath() << " with mode " << mode;
+    
+    if( !dir.exists() )
+    {
+        qDebug() << "Dir no longer exists, not scanning";
+        return;
+    }
+    
     QFileInfoList dirs;
     const uint mtime = QFileInfo( dir.absolutePath() ).lastModified().toUTC().toTime_t();
     m_newdirmtimes.insert( dir.absolutePath(), mtime );
@@ -49,7 +83,7 @@ DirLister::scanDir( QDir dir, int depth )
     }
     else
     {
-        if ( m_dirmtimes.contains( dir.absolutePath() ) )
+        if( m_dirmtimes.contains( dir.absolutePath() ) || !m_recursive )
             Database::instance()->enqueue( QSharedPointer<DatabaseCommand>( new DatabaseCommand_DeleteFiles( dir, SourceList::instance()->getLocal() ) ) );
 
         dir.setFilter( QDir::Files | QDir::Readable | QDir::NoDotAndDotDot );
@@ -62,17 +96,21 @@ DirLister::scanDir( QDir dir, int depth )
     }
     dir.setFilter( QDir::Dirs | QDir::Readable | QDir::NoDotAndDotDot );
     dirs = dir.entryInfoList();
-
+    
     foreach( const QFileInfo& di, dirs )
     {
-        scanDir( di.absoluteFilePath(), depth + 1 );
+        qDebug() << "Considering dir " << di.absoluteFilePath();
+        qDebug() << "m_dirmtimes contains it? " << (m_dirmtimes.contains( di.absoluteFilePath() ) ? "true" : "false");
+        if( mode == DirLister::Recursive || !m_dirmtimes.contains( di.absoluteFilePath() ) )
+            scanDir( di.absoluteFilePath(), depth + 1, DirLister::Recursive );
     }
 }
 
 
-MusicScanner::MusicScanner( const QStringList& dirs, quint32 bs )
+MusicScanner::MusicScanner( const QStringList& dirs, bool recursive, quint32 bs )
     : QObject()
     , m_dirs( dirs )
+    , m_recursive( recursive )
     , m_batchsize( bs )
     , m_dirLister( 0 )
     , m_dirListerThreadController( 0 )
@@ -122,12 +160,9 @@ MusicScanner::startScan()
     m_skippedFiles.clear();
 
     // trigger the scan once we've loaded old mtimes for dirs below our path
-    //FIXME: MULTIPLECOLLECTIONDIRS
-    DatabaseCommand_DirMtimes* cmd = new DatabaseCommand_DirMtimes( m_dirs.first() );
+    DatabaseCommand_DirMtimes* cmd = new DatabaseCommand_DirMtimes( TomahawkSettings::instance()->scannerPaths() );
     connect( cmd, SIGNAL( done( QMap<QString, unsigned int> ) ),
                     SLOT( setMtimes( QMap<QString, unsigned int> ) ) );
-    connect( cmd, SIGNAL( done( QMap<QString, unsigned int> ) ),
-                    SLOT( scan() ) );
 
     Database::instance()->enqueue( QSharedPointer<DatabaseCommand>(cmd) );
 }
@@ -136,7 +171,9 @@ MusicScanner::startScan()
 void
 MusicScanner::setMtimes( const QMap<QString, unsigned int>& m )
 {
+    qDebug() << Q_FUNC_INFO << m.count();
     m_dirmtimes = m;
+    scan();
 }
 
 
@@ -150,8 +187,7 @@ MusicScanner::scan()
 
     m_dirListerThreadController = new QThread( this );
     
-    //FIXME: MULTIPLECOLLECTIONDIRS
-    m_dirLister = new DirLister( QDir( m_dirs.first(), 0 ), m_dirmtimes );
+    m_dirLister = new DirLister( m_dirs, m_dirmtimes, m_recursive );
     m_dirLister->moveToThread( m_dirListerThreadController );
 
     connect( m_dirLister, SIGNAL( fileToScan( QFileInfo ) ),
@@ -185,8 +221,11 @@ MusicScanner::listerFinished( const QMap<QString, unsigned int>& newmtimes )
         {
             qDebug() << "Removing stale dir:" << path;
             Database::instance()->enqueue( QSharedPointer<DatabaseCommand>( new DatabaseCommand_DeleteFiles( path, SourceList::instance()->getLocal() ) ) );
+            emit removeWatchedDir( path );
         }
     }
+
+    emit addWatchedDirs( newmtimes.keys() );
 
     // save mtimes, then quit thread
     DatabaseCommand_DirMtimes* cmd = new DatabaseCommand_DirMtimes( newmtimes );

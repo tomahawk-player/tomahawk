@@ -45,7 +45,7 @@ public slots:
     void trackStopped();
     void engineTick( unsigned int secondsElapsed );
     
-    void infoSystemInfo( QString caller, Tomahawk::InfoSystem::InfoType type, QVariant input, QVariant output, Tomahawk::InfoSystem::InfoCustomDataHash customData );
+    void infoSystemInfo( QString caller, Tomahawk::InfoSystem::InfoType type, QVariant input, QVariant output, Tomahawk::InfoSystem::InfoCustomData customData );
     void infoSystemFinished( QString target );
     
 private:

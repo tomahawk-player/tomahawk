@@ -26,6 +26,7 @@
 #include "utils/tomahawkutils.h"
 
 #include "album.h"
+#include "pipeline.h"
 
 using namespace Tomahawk;
 
@@ -302,7 +303,7 @@ TrackModel::removeIndex( const QModelIndex& index, bool moreToCome )
 {
     if ( QThread::currentThread() != thread() )
     {
-        qDebug() << "Reinvoking in correct thread:" << Q_FUNC_INFO;
+//        qDebug() << "Reinvoking in correct thread:" << Q_FUNC_INFO;
         QMetaObject::invokeMethod( this, "removeIndex",
                                    Qt::QueuedConnection,
                                    Q_ARG(const QModelIndex, index),
@@ -310,8 +311,6 @@ TrackModel::removeIndex( const QModelIndex& index, bool moreToCome )
                                  );
         return;
     }
-
-    qDebug() << Q_FUNC_INFO;
 
     if ( index.column() > 0 )
         return;
@@ -368,5 +367,18 @@ TrackModel::onPlaybackStopped()
     if ( oldEntry )
     {
         oldEntry->setIsPlaying( false );
+    }
+}
+
+
+void
+TrackModel::ensureResolved()
+{
+    for( int i = 0; i < rowCount( QModelIndex() ); i++ )
+    {
+        query_ptr query = itemFromIndex( index( i, 0, QModelIndex() ) )->query();
+
+        if ( !query->numResults() )
+            Pipeline::instance()->resolve( query );
     }
 }

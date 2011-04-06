@@ -66,28 +66,49 @@ TomahawkSettings::~TomahawkSettings()
 
 
 QStringList
-TomahawkSettings::scannerPath() const
+TomahawkSettings::scannerPaths()
 {
+    //FIXME: After enough time, remove this hack (and make const)
     #ifndef TOMAHAWK_HEADLESS
-    return value( "scannerpath", QDesktopServices::storageLocation( QDesktopServices::MusicLocation ) ).toStringList();
+    if( value( "scannerpaths" ).isNull() )
+        setValue( "scannerpaths", value( "scannerpath" ) );
+    return value( "scannerpaths", QDesktopServices::storageLocation( QDesktopServices::MusicLocation ) ).toStringList();
     #else
-    return value( "scannerpath", "" ).toStringList();
+    if( value( "scannerpaths" ).isNull() )
+        setValue( "scannerpaths", value( "scannerpath" ) );
+    return value( "scannerpaths", "" ).toStringList();
     #endif
 }
 
 
 void
-TomahawkSettings::setScannerPath( const QStringList& path )
+TomahawkSettings::setScannerPaths( const QStringList& paths )
 {
-    setValue( "scannerpath", path );
+    setValue( "scannerpaths", paths );
 }
 
 
 bool
-TomahawkSettings::hasScannerPath() const
+TomahawkSettings::hasScannerPaths() const
 {
-    return contains( "scannerpath" );
+    //FIXME: After enough time, remove this hack
+    return contains( "scannerpaths" ) || contains( "scannerpath" );
 }
+
+
+bool
+TomahawkSettings::watchForChanges() const
+{
+    return value( "watchForChanges", true ).toBool();
+}
+
+
+void
+TomahawkSettings::setWatchForChanges( bool watch )
+{
+    setValue( "watchForChanges", watch );
+}
+
 
 void
 TomahawkSettings::setAcceptedLegalWarning( bool accept )

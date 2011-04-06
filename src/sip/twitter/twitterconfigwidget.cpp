@@ -51,8 +51,8 @@ TwitterConfigWidget::TwitterConfigWidget( SipPlugin* plugin, QWidget *parent ) :
     TomahawkSettings* s = TomahawkSettings::instance();
     if ( s->twitterOAuthToken().isEmpty() || s->twitterOAuthTokenSecret().isEmpty() || s->twitterScreenName().isEmpty() )
     {
-        ui->twitterStatusLabel->setText("Status: No saved credentials");
-        ui->twitterAuthenticateButton->setText( "Authenticate" );
+        ui->twitterStatusLabel->setText( tr( "Status: No saved credentials" ) );
+        ui->twitterAuthenticateButton->setText( tr( "Authenticate" ) );
         ui->twitterInstructionsInfoLabel->setVisible( false );
         ui->twitterGlobalTweetLabel->setVisible( false );
         ui->twitterTweetGotTomahawkButton->setVisible( false );
@@ -63,8 +63,8 @@ TwitterConfigWidget::TwitterConfigWidget( SipPlugin* plugin, QWidget *parent ) :
     }
     else
     {
-        ui->twitterStatusLabel->setText("Status: Credentials saved for " + s->twitterScreenName() );
-        ui->twitterAuthenticateButton->setText( "De-authenticate" );
+        ui->twitterStatusLabel->setText( tr( "Status: Credentials saved for %1" ).arg( s->twitterScreenName() ) );
+        ui->twitterAuthenticateButton->setText( tr( "De-authenticate" ) );
         ui->twitterInstructionsInfoLabel->setVisible( true );
         ui->twitterGlobalTweetLabel->setVisible( true );
         ui->twitterTweetGotTomahawkButton->setVisible( true );
@@ -84,7 +84,7 @@ TwitterConfigWidget::~TwitterConfigWidget()
 void
 TwitterConfigWidget::authDeauthTwitter()
 {
-    if ( ui->twitterAuthenticateButton->text() == "Authenticate" )
+    if ( ui->twitterAuthenticateButton->text() == tr( "Authenticate" ) ) //FIXME: don't rely on UI strings here!
         authenticateTwitter();
     else
         deauthenticateTwitter();
@@ -114,7 +114,7 @@ TwitterConfigWidget::authenticateVerifyReply( const QTweetUser &user )
     qDebug() << Q_FUNC_INFO;
     if ( user.id() == 0 )
     {
-        QMessageBox::critical( 0, QString("Tweetin' Error"), QString("The credentials could not be verified.\nYou may wish to try re-authenticating.") );
+        QMessageBox::critical( this, tr("Tweetin' Error"), tr("The credentials could not be verified.\nYou may wish to try re-authenticating.") );
         emit twitterAuthed( false );
         return;
     }
@@ -124,8 +124,8 @@ TwitterConfigWidget::authenticateVerifyReply( const QTweetUser &user )
     s->setTwitterCachedFriendsSinceId( 0 );
     s->setTwitterCachedMentionsSinceId( 0 );
     
-    ui->twitterStatusLabel->setText("Status: Credentials saved for " + s->twitterScreenName() );
-    ui->twitterAuthenticateButton->setText( "De-authenticate" );
+    ui->twitterStatusLabel->setText( tr( "Status: Credentials saved for %1" ).arg( s->twitterScreenName() ) );
+    ui->twitterAuthenticateButton->setText( tr( "De-authenticate" ) );
     ui->twitterInstructionsInfoLabel->setVisible( true );
     ui->twitterGlobalTweetLabel->setVisible( true );
     ui->twitterTweetGotTomahawkButton->setVisible( true );
@@ -142,7 +142,7 @@ TwitterConfigWidget::authenticateVerifyError( QTweetNetBase::ErrorCode code, con
 {
     qDebug() << Q_FUNC_INFO;
     qDebug() << "Error validating credentials, error code is " << code << ", error message is " << errorMsg;
-    ui->twitterStatusLabel->setText("Status: Error validating credentials");
+    ui->twitterStatusLabel->setText(tr("Status: Error validating credentials"));
     emit twitterAuthed( false );
     return;
 }
@@ -156,8 +156,8 @@ TwitterConfigWidget::deauthenticateTwitter()
     s->setTwitterOAuthTokenSecret( QString() );
     s->setTwitterScreenName( QString() );
     
-    ui->twitterStatusLabel->setText("Status: No saved credentials");
-    ui->twitterAuthenticateButton->setText( "Authenticate" );
+    ui->twitterStatusLabel->setText(tr("Status: No saved credentials"));
+    ui->twitterAuthenticateButton->setText( tr( "Authenticate" ) );
     ui->twitterInstructionsInfoLabel->setVisible( false );
     ui->twitterGlobalTweetLabel->setVisible( false );
     ui->twitterTweetGotTomahawkButton->setVisible( false );
@@ -170,7 +170,7 @@ TwitterConfigWidget::deauthenticateTwitter()
 void
 TwitterConfigWidget::tweetComboBoxIndexChanged( int index )
 {
-    if( ui->twitterTweetComboBox->currentText() == "Global Tweet" )
+    if( ui->twitterTweetComboBox->currentText() == tr( "Global Tweet" ) ) //FIXME: use data!
     {
         ui->twitterUserTweetLineEdit->setReadOnly( true );
         ui->twitterUserTweetLineEdit->setEnabled( false );
@@ -181,10 +181,10 @@ TwitterConfigWidget::tweetComboBoxIndexChanged( int index )
         ui->twitterUserTweetLineEdit->setEnabled( true );
     }
     
-    if( ui->twitterTweetComboBox->currentText() == "Direct Message" )
-        ui->twitterTweetGotTomahawkButton->setText( "Send Message!" );
+    if( ui->twitterTweetComboBox->currentText() == tr( "Direct Message" ) ) //FIXME: use data!
+        ui->twitterTweetGotTomahawkButton->setText( tr( "Send Message!" ) );
     else
-        ui->twitterTweetGotTomahawkButton->setText( "Tweet!" );
+        ui->twitterTweetGotTomahawkButton->setText( tr( "Tweet!" ) );
 }
 
 void
@@ -194,7 +194,7 @@ TwitterConfigWidget::startPostGotTomahawkStatus()
     
     if ( m_postGTtype != "Global Tweet" && ( ui->twitterUserTweetLineEdit->text().isEmpty() || ui->twitterUserTweetLineEdit->text() == "@" ) )
     {
-        QMessageBox::critical( 0, QString("Tweetin' Error"), QString("You must enter a user name for this type of tweet.") );
+        QMessageBox::critical( this, tr("Tweetin' Error"), tr("You must enter a user name for this type of tweet.") );
         return;
     }
     
@@ -202,7 +202,7 @@ TwitterConfigWidget::startPostGotTomahawkStatus()
     TomahawkSettings* s = TomahawkSettings::instance();
     if ( s->twitterOAuthToken().isEmpty() || s->twitterOAuthTokenSecret().isEmpty() || s->twitterScreenName().isEmpty() )
     {
-        QMessageBox::critical( 0, QString("Tweetin' Error"), QString("Your saved credentials could not be loaded.\nYou may wish to try re-authenticating.") );
+        QMessageBox::critical( this, tr("Tweetin' Error"), tr("Your saved credentials could not be loaded.\nYou may wish to try re-authenticating.") );
         emit twitterAuthed( false );
         return;
     }
@@ -220,7 +220,7 @@ TwitterConfigWidget::postGotTomahawkStatusAuthVerifyReply( const QTweetUser &use
 {
     if ( user.id() == 0 )
     {
-        QMessageBox::critical( 0, QString("Tweetin' Error"), QString("Your saved credentials could not be verified.\nYou may wish to try re-authenticating.") );
+        QMessageBox::critical( this, tr("Tweetin' Error"), tr("Your saved credentials could not be verified.\nYou may wish to try re-authenticating.") );
         emit twitterAuthed( false );
         return;
     }
@@ -264,18 +264,18 @@ void
 TwitterConfigWidget::postGotTomahawkStatusUpdateReply( const QTweetStatus& status )
 {
     if ( status.id() == 0 )
-        QMessageBox::critical( 0, QString("Tweetin' Error"), QString("There was an error posting your status -- sorry!") );
+        QMessageBox::critical( this, tr("Tweetin' Error"), tr("There was an error posting your status -- sorry!") );
     else
-        QMessageBox::information( 0, QString("Tweeted!"), QString("Your tweet has been posted!") );
+        QMessageBox::information( this, tr("Tweeted!"), tr("Your tweet has been posted!") );
 }
 
 void
 TwitterConfigWidget::postGotTomahawkDirectMessageReply( const QTweetDMStatus& status )
 {
     if ( status.id() == 0 )
-        QMessageBox::critical( 0, QString("Tweetin' Error"), QString("There was an error posting your direct message -- sorry!") );
+        QMessageBox::critical( this, tr("Tweetin' Error"), tr("There was an error posting your direct message -- sorry!") );
     else
-        QMessageBox::information( 0, QString("Tweeted!"), QString("Your message has been posted!") );
+        QMessageBox::information( this, tr("Tweeted!"), tr("Your message has been posted!") );
 }
 
 void
@@ -283,5 +283,5 @@ TwitterConfigWidget::postGotTomahawkStatusUpdateError( QTweetNetBase::ErrorCode 
 {
     qDebug() << Q_FUNC_INFO;
     qDebug() << "Error posting Got Tomahawk message, error code is " << code << ", error message is " << errorMsg;
-    QMessageBox::critical( 0, QString("Tweetin' Error"), QString("There was an error posting your status -- sorry!") );
+    QMessageBox::critical( this, tr("Tweetin' Error"), tr("There was an error posting your status -- sorry!") );
 }

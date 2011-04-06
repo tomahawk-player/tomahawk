@@ -124,7 +124,7 @@ void
 ACLSystem::authorizePath( const QString& dbid, const QString& path, ACLSystem::ACL type )
 {
     TomahawkSettings *s = TomahawkSettings::instance();
-    if( !s->scannerPath().contains( path ) )
+    if( !s->scannerPaths().contains( path ) )
     {
         qDebug() << "path selected is not in our scanner path!";
         return;

@@ -32,10 +32,15 @@ Database::instance()
 
 Database::Database( const QString& dbname, QObject* parent )
     : QObject( parent )
+    , m_ready( false )
     , m_impl( new DatabaseImpl( dbname, this ) )
     , m_workerRW( new DatabaseWorker( m_impl, this, true ) )
 {
     s_instance = this;
+
+    connect( m_impl, SIGNAL( indexReady() ), SIGNAL( indexReady() ) );
+    connect( m_impl, SIGNAL( indexReady() ), SIGNAL( ready() ) );
+    connect( m_impl, SIGNAL( indexReady() ), SLOT( setIsReadyTrue() ) );
 
     m_workerRW->start();
 }

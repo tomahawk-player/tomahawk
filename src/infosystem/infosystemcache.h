@@ -22,6 +22,8 @@
 #include <QObject>
 #include <QtDebug>
 
+#include "tomahawk/infosystem.h"
+
 namespace Tomahawk
 {
     
@@ -44,6 +46,16 @@ public:
         qDebug() << Q_FUNC_INFO;
     }
 
+signals:
+    void notInCache( Tomahawk::InfoSystem::InfoCacheCriteria criteria, QString caller, Tomahawk::InfoSystem::InfoType type, QVariant input, Tomahawk::InfoSystem::InfoCustomData customData );
+    void info( QString caller, Tomahawk::InfoSystem::InfoType type, QVariant input, QVariant output, Tomahawk::InfoSystem::InfoCustomData customData );
+
+public slots:
+    void getCachedInfoSlot( Tomahawk::InfoSystem::InfoCacheCriteria criteria, QString caller, Tomahawk::InfoSystem::InfoType type, QVariant input, Tomahawk::InfoSystem::InfoCustomData customData );
+    void updateCacheSlot( Tomahawk::InfoSystem::InfoCacheCriteria criteria, Tomahawk::InfoSystem::InfoType type, QVariant output );
+    
+private:
+    QHash< InfoType, QHash< InfoCacheCriteria, QVariant > > m_memCache;
 };
 
 } //namespace InfoSystem

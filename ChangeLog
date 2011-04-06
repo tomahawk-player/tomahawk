@@ -1,7 +1,25 @@
+Version 0.1.0:
+    * Watch folders for changes and automatically update your collection. This
+      is on by default; you can turn it off on the Local Music tab in the
+      settings dialog. Note that this triggers only on files or folders being 
+      added to or removed from folders; it is not watch individual files as
+      most OSes can't support enough file watches to handle a normal-sized
+      music collection.
+
 Version 0.0.3:
-    * Fix crashes in Twitter authentication. For reals now.
+    * Fixed an issue which caused duplicate items when rescanning.
+    * Revert change introduced in 0.0.2 causing Twitter protocol to not try
+      to reconnect to a peer if it couldn't connect the first time the plugin
+      was connected. This caused confusing (and for most unwanted) behavior.
+    * Fix crashes in Twitter authentication.
     * Properly honor the chosen port number if a static host and port are
       marked as preferred.
+    * Don't automatically try to resolve all incoming playback logs. This
+      speeds up importing sources a lot.
+    * Faster painting of playlists with lots of unresolved tracks.
+    * The tomahawk:// protocol handler works on Windows now.
+    * Fixed launching Tomahawk from Windows installer with admin privileges.
+    * Prefer local results when results' score is equal.
 
 Version 0.0.2:
     * Don't reconnect to Jabber if the settings dialog is closed successfully

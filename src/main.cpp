@@ -18,13 +18,16 @@
 
 #include "tomahawk/tomahawkapp.h"
 
+#include "kdsingleapplicationguard/kdsingleapplicationguard.h"
+#include <QTranslator>
+
 #ifdef Q_WS_MAC
     #include "tomahawkapp_mac.h"
     #include </System/Library/Frameworks/CoreServices.framework/Versions/A/Frameworks/AE.framework/Versions/A/Headers/AppleEvents.h>
     static pascal OSErr appleEventHandler( const AppleEvent*, AppleEvent*, long );
 #endif
 
-#include <exception>
+
 int
 main( int argc, char *argv[] )
 {
@@ -36,18 +39,20 @@ main( int argc, char *argv[] )
       // used for url handler
       AEEventHandlerUPP h = AEEventHandlerUPP( appleEventHandler );
       AEInstallEventHandler( 'GURL', 'GURL', h, 0, false );
-
 #endif
-    try
-    {
-        TomahawkApp a( argc, argv );
-        return a.exec();
-    }
-    catch( const std::runtime_error& e )
-    {
-        return 0;
-    }
+
+    TomahawkApp a( argc, argv );
+    KDSingleApplicationGuard guard( &a, KDSingleApplicationGuard::AutoKillOtherInstances );
+    QObject::connect( &guard, SIGNAL( instanceStarted( KDSingleApplicationGuard::Instance ) ), &a, SLOT( instanceStarted( KDSingleApplicationGuard::Instance )  ) );
+    
+    QString locale = QLocale::system().name();
+
+    QTranslator translator;
+    translator.load( QString( ":/lang/tomahawk_" ) + locale );
+    a.installTranslator( &translator );
+    return a.exec();
 }
+
 
 #ifdef Q_WS_MAC
 static pascal OSErr

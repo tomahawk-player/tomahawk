@@ -116,6 +116,8 @@ private:
     QString m_track;
     int m_duration;
     QString m_resultHint;
+
+    mutable QMutex m_mutex;
 };
 
 }; //ns

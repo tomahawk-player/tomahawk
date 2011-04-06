@@ -40,6 +40,7 @@
 #include "network/servent.h"
 
 #include "utils/tomahawkutils.h"
+#include "kdsingleapplicationguard/kdsingleapplicationguard.h"
 
 class AudioEngine;
 class Database;
@@ -98,9 +99,11 @@ public:
     // because QApplication::arguments() is expensive
     bool scrubFriendlyName() const { return m_scrubFriendlyName; }
     
+public slots:
+    void instanceStarted( KDSingleApplicationGuard::Instance );
+    
 private slots:
     void setupSIP();
-    void messageReceived( const QString& );
 
 private:
     void initLocalCollection();

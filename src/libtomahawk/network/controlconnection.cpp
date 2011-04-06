@@ -75,6 +75,13 @@ ControlConnection::setup()
 {
     qDebug() << Q_FUNC_INFO << id() << name();
 
+    if ( !m_source.isNull() )
+    {
+        qDebug() << "This source seems to be online already.";
+        Q_ASSERT( false );
+        return;
+    }
+
     QString friendlyName;
     if ( Servent::isIPWhitelisted( m_sock->peerAddress() ) )
     {
@@ -85,7 +92,7 @@ ControlConnection::setup()
     }
     else
         friendlyName = name();
-    
+
     // setup source and remote collection for this peer
     m_source = SourceList::instance()->get( id(), friendlyName );
     m_source->setControlConnection( this );

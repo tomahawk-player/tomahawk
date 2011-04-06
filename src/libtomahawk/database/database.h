@@ -41,6 +41,7 @@
 class DLLEXPORT Database : public QObject
 {
 Q_OBJECT
+
 public:
     static Database* instance();
 
@@ -51,16 +52,24 @@ public:
     const bool indexReady() const { return m_indexReady; }
 
     void loadIndex();
+    
+    bool isReady() const { return m_ready; }
 
 signals:
     void indexReady(); // search index
+    void ready();
+
     void newJobRO( QSharedPointer<DatabaseCommand> );
     void newJobRW( QSharedPointer<DatabaseCommand> );
 
 public slots:
     void enqueue( QSharedPointer<DatabaseCommand> lc );
 
+private slots:
+    void setIsReadyTrue() { m_ready = true; }
+    
 private:
+    bool m_ready;
     DatabaseImpl* m_impl;
     DatabaseWorker* m_workerRW;
     QHash< QString, DatabaseWorker* > m_workers;

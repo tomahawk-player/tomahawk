@@ -27,15 +27,12 @@
 
 QtScriptResolver::QtScriptResolver( const QString& scriptPath )
     : Tomahawk::ExternalResolver( scriptPath )
-    , m_engine( new ScriptEngine( this ) )
-    , m_thread( new QThread( this ) )
     , m_ready( false )
     , m_stopped( false )
 {
     qDebug() << Q_FUNC_INFO << scriptPath;
 
-    m_thread->start();
-
+    m_engine = new ScriptEngine( this );
     QFile scriptFile( scriptPath );
     if ( !scriptFile.open( QIODevice::ReadOnly ) )
     {
@@ -54,17 +51,10 @@ QtScriptResolver::QtScriptResolver( const QString& scriptPath )
     m_timeout    = m.value( "timeout", 25 ).toUInt() * 1000;
     m_preference = m.value( "preference", 0 ).toUInt();
 
-    qDebug() << "QTSCRIPT" << filePath() << "READY," << endl
-    << "name" << m_name << endl
-    << "weight" << m_weight << endl
-    << "timeout" << m_timeout << endl
-    << "preference" << m_preference;
+    qDebug() << Q_FUNC_INFO << m_name << m_weight << m_timeout << m_preference;
 
-    m_engine->moveToThread( m_thread );
     m_ready = true;
     Tomahawk::Pipeline::instance()->addResolver( this );
-    
-    connect( this, SIGNAL( destroyed( QObject* ) ), m_thread, SLOT( deleteLater() ) );
 }
 
 
@@ -78,23 +68,23 @@ QtScriptResolver::~QtScriptResolver()
 void
 QtScriptResolver::resolve( const Tomahawk::query_ptr& query )
 {
-    QMetaObject::invokeMethod( m_engine, "resolve", Qt::QueuedConnection, Q_ARG( Tomahawk::query_ptr, query ) );
-}
+    if ( QThread::currentThread() != thread() )
+    {
+        qDebug() << "Reinvoking in correct thread:" << Q_FUNC_INFO;
+        QMetaObject::invokeMethod( this, "resolve", Qt::QueuedConnection, Q_ARG(Tomahawk::query_ptr, query) );
+        return;
+    }
 
-
-void
-ScriptEngine::resolve( const Tomahawk::query_ptr& query )
-{
     qDebug() << Q_FUNC_INFO << query->toString();
     QString eval = QString( "resolve( '%1', '%2', '%3', '%4' );" )
-                      .arg( query->id().replace( "'", "\\'" ) )
-                      .arg( query->artist().replace( "'", "\\'" ) )
-                      .arg( query->album().replace( "'", "\\'" ) )
-                      .arg( query->track().replace( "'", "\\'" ) );
+        .arg( query->id().replace( "'", "\\'" ) )
+        .arg( query->artist().replace( "'", "\\'" ) )
+        .arg( query->album().replace( "'", "\\'" ) )
+        .arg( query->track().replace( "'", "\\'" ) );
 
     QList< Tomahawk::result_ptr > results;
 
-    QVariantMap m = mainFrame()->evaluateJavaScript( eval ).toMap();
+    QVariantMap m = m_engine->mainFrame()->evaluateJavaScript( eval ).toMap();
     qDebug() << "JavaScript Result:" << m;
 
     const QString qid = query->id();
@@ -113,9 +103,9 @@ ScriptEngine::resolve( const Tomahawk::query_ptr& query )
         rp->setBitrate( m.value( "bitrate" ).toUInt() );
         rp->setUrl( m.value( "url" ).toString() );
         rp->setSize( m.value( "size" ).toUInt() );
-        rp->setScore( m.value( "score" ).toFloat() * ( (float)m_parent->weight() / 100.0 ) );
+        rp->setScore( m.value( "score" ).toFloat() * ( (float)weight() / 100.0 ) );
         rp->setRID( uuid() );
-        rp->setFriendlySource( m_parent->name() );
+        rp->setFriendlySource( name() );
 
         if ( m.contains( "year" ) )
         {

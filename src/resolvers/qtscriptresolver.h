@@ -26,6 +26,7 @@
 #include <QApplication>
 #include <QDebug>
 #include <QFile>
+#include <QThread>
 #include <QtWebKit/QWebPage>
 #include <QtWebKit/QWebFrame>
 
@@ -37,16 +38,15 @@ Q_OBJECT
 
 public:
     explicit ScriptEngine( QtScriptResolver* parent )
-        : QWebPage( (QObject*)parent )
+        : QWebPage( (QObject*) parent )
         , m_parent( parent )
-    {}
+    {
+    }
 
 public slots:
-    void resolve( const Tomahawk::query_ptr& query );
-
     bool shouldInterruptJavaScript()
     {
-        return false;
+        return true;
     }
 
 protected:
@@ -56,6 +56,7 @@ protected:
 private:
     QtScriptResolver* m_parent;
 };
+
 
 class QtScriptResolver : public Tomahawk::ExternalResolver
 {
@@ -76,12 +77,9 @@ public slots:
 
 signals:
     void finished();
-    
-private slots:
 
 private:
     ScriptEngine* m_engine;
-    QThread* m_thread;
 
     QString m_name;
     unsigned int m_weight, m_preference, m_timeout;

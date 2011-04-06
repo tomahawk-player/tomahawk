@@ -39,8 +39,8 @@ Scrobbler::Scrobbler( QObject* parent )
                                         SLOT( engineTick( unsigned int ) ), Qt::QueuedConnection );
     
     connect( TomahawkApp::instance()->infoSystem(),
-        SIGNAL( info( QString, Tomahawk::InfoSystem::InfoType, QVariant, QVariant, Tomahawk::InfoSystem::InfoCustomDataHash ) ),
-        SLOT( infoSystemInfo( QString, Tomahawk::InfoSystem::InfoType, QVariant, QVariant, Tomahawk::InfoSystem::InfoCustomDataHash ) ) );
+        SIGNAL( info( QString, Tomahawk::InfoSystem::InfoType, QVariant, QVariant, Tomahawk::InfoSystem::InfoCustomData ) ),
+        SLOT( infoSystemInfo( QString, Tomahawk::InfoSystem::InfoType, QVariant, QVariant, Tomahawk::InfoSystem::InfoCustomData ) ) );
     
     connect( TomahawkApp::instance()->infoSystem(), SIGNAL( finished( QString ) ), SLOT( infoSystemFinished( QString ) ) );
 }
@@ -63,7 +63,7 @@ Scrobbler::trackStarted( const Tomahawk::result_ptr& track )
         scrobble();
     }
 
-    Tomahawk::InfoSystem::InfoCustomDataHash trackInfo;
+    Tomahawk::InfoSystem::InfoCustomData trackInfo;
     
     trackInfo["title"] = QVariant::fromValue< QString >( track->track() );
     trackInfo["artist"] = QVariant::fromValue< QString >( track->artist()->name() );
@@ -71,7 +71,7 @@ Scrobbler::trackStarted( const Tomahawk::result_ptr& track )
     trackInfo["duration"] = QVariant::fromValue< uint >( track->duration() );
     TomahawkApp::instance()->infoSystem()->getInfo(
         s_infoIdentifier, Tomahawk::InfoSystem::InfoMiscSubmitNowPlaying,
-        QVariant::fromValue< Tomahawk::InfoSystem::InfoCustomDataHash >( trackInfo ), Tomahawk::InfoSystem::InfoCustomDataHash() );
+        QVariant::fromValue< Tomahawk::InfoSystem::InfoCustomData >( trackInfo ), Tomahawk::InfoSystem::InfoCustomData() );
     
     m_scrobblePoint = ScrobblePoint( track->duration() / 2 );
 }
@@ -119,11 +119,11 @@ Scrobbler::scrobble()
     
     TomahawkApp::instance()->infoSystem()->getInfo(
         s_infoIdentifier, Tomahawk::InfoSystem::InfoMiscSubmitScrobble,
-        QVariant(), Tomahawk::InfoSystem::InfoCustomDataHash() );
+        QVariant(), Tomahawk::InfoSystem::InfoCustomData() );
 }
 
 void
-Scrobbler::infoSystemInfo( QString caller, Tomahawk::InfoSystem::InfoType type, QVariant input, QVariant output, Tomahawk::InfoSystem::InfoCustomDataHash customData )
+Scrobbler::infoSystemInfo( QString caller, Tomahawk::InfoSystem::InfoType type, QVariant input, QVariant output, Tomahawk::InfoSystem::InfoCustomData customData )
 {
     if ( caller == s_infoIdentifier )
     {

@@ -36,10 +36,10 @@ public:
     MusixMatchPlugin(QObject *parent);
     virtual ~MusixMatchPlugin();
     
-    void getInfo(const QString &caller, const InfoType type, const QVariant &data, InfoCustomDataHash customData);
+    void getInfo(const QString &caller, const InfoType type, const QVariant &data, InfoCustomData customData);
     
 private:
-    bool isValidTrackData( const QString &caller, const QVariant& data, InfoCustomDataHash &customData );
+    bool isValidTrackData( const QString &caller, const QVariant& data, InfoCustomData &customData );
     
 public slots:
     void trackSearchSlot();

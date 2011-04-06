@@ -45,6 +45,12 @@ public:
         setSource( source );
     }
     
+    explicit DatabaseCommand_DeleteFiles( const QVariantList& ids, const Tomahawk::source_ptr& source, QObject* parent = 0 )
+    : DatabaseCommandLoggable( parent ), m_ids( ids )
+    {
+        setSource( source );
+    }
+    
     virtual QString commandname() const { return "deletefiles"; }
 
     virtual void exec( DatabaseImpl* );

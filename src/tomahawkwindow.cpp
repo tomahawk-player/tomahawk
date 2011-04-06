@@ -147,7 +147,7 @@ TomahawkWindow::TomahawkWindow( QWidget* parent )
     toolbar->installEventFilter( new WidgetDragFilter( toolbar ) );
     
 #if defined( Q_OS_DARWIN ) && defined( HAVE_SPARKLE )
-    QAction* checkForUpdates = ui->menu_Help->addAction( tr( "Check for updates...") );
+    QAction* checkForUpdates = ui->menu_Help->addAction( tr( "Check For Updates...") );
     checkForUpdates->setMenuRole( QAction::ApplicationSpecificRole );
     connect(checkForUpdates, SIGNAL( triggered( bool ) ), SLOT( checkForUpdates() ) );
 #elif defined( WIN32 )
@@ -163,7 +163,7 @@ TomahawkWindow::TomahawkWindow( QWidget* parent )
     updater->SetVersion( VERSION );
     
     ui->menu_Help->addSeparator();
-    QAction* checkForUpdates = ui->menu_Help->addAction( tr( "Check for updates...") );
+    QAction* checkForUpdates = ui->menu_Help->addAction( tr( "Check For Updates...") );
     connect( checkForUpdates, SIGNAL( triggered() ), updater, SLOT( CheckNow() ) );
 #endif
 
@@ -319,8 +319,8 @@ TomahawkWindow::showSettingsDialog()
 void
 TomahawkWindow::updateCollectionManually()
 {
-    if ( TomahawkSettings::instance()->hasScannerPath() )
-        ScanManager::instance()->runManualScan( TomahawkSettings::instance()->scannerPath() );
+    if ( TomahawkSettings::instance()->hasScannerPaths() )
+        ScanManager::instance()->runManualScan( TomahawkSettings::instance()->scannerPaths() );
 }
 
 
@@ -380,7 +380,7 @@ void
 TomahawkWindow::loadSpiff()
 {
     bool ok;
-    QString urlstr = QInputDialog::getText( this, "Load XSPF", "Path:", QLineEdit::Normal, "http://ws.audioscrobbler.com/1.0/tag/metal/toptracks.xspf", &ok );
+    QString urlstr = QInputDialog::getText( this, tr( "Load XSPF" ), tr( "Path:" ), QLineEdit::Normal, "http://ws.audioscrobbler.com/1.0/tag/metal/toptracks.xspf", &ok );
     if ( !ok || urlstr.isEmpty() )
         return;
 
@@ -395,7 +395,7 @@ void
 TomahawkWindow::createAutomaticPlaylist()
 {
     bool ok;
-    QString name = QInputDialog::getText( this, "Create New Automatic Playlist", "Name:", QLineEdit::Normal, "New Automatic Playlist", &ok );
+    QString name = QInputDialog::getText( this, tr( "Create New Automatic Playlist" ), tr( "Name:" ), QLineEdit::Normal, tr( "New Automatic Playlist" ), &ok );
     if ( !ok || name.isEmpty() )
         return;
     
@@ -414,7 +414,7 @@ void
 TomahawkWindow::createStation()
 {
     bool ok;
-    QString name = QInputDialog::getText( this, "Create New Station", "Name:", QLineEdit::Normal, "New Station", &ok );
+    QString name = QInputDialog::getText( this, tr( "Create New Station" ), tr( "Name:" ), QLineEdit::Normal, tr( "New Station" ), &ok );
     if ( !ok || name.isEmpty() )
         return;
     
@@ -493,8 +493,8 @@ TomahawkWindow::setWindowTitle( const QString& title )
         QMainWindow::setWindowTitle( title );
     else
     {
-        QString s = m_currentTrack->track() + " " + tr( "by" ) + " " + m_currentTrack->artist()->name();
-        QMainWindow::setWindowTitle( s + " - " + title );
+        QString s = tr( "%1 by %2", "track, artist name" ).arg( m_currentTrack->track(), m_currentTrack->artist()->name() );
+        QMainWindow::setWindowTitle( tr( "%1 - %2", "current track, some window title" ).arg( s, title ) );
     }
 }
 
@@ -502,7 +502,7 @@ TomahawkWindow::setWindowTitle( const QString& title )
 void
 TomahawkWindow::showAboutTomahawk()
 {
-    QMessageBox::about( this, "About Tomahawk",
+    QMessageBox::about( this, tr( "About Tomahawk" ),
                         tr( "<h2><b>Tomahawk %1</h2>Copyright 2010, 2011<br/>Christian Muehlhaeuser &lt;muesli@tomahawk-player.org&gt;<br/><br/>"
                             "Thanks to: Leo Franchi, Jeff Mitchell, Dominik Schmidt, Jason Herskowitz, Alejandro Wainzinger, Harald Sitter and Steve Robertson" )
                         .arg( qApp->applicationVersion() ) );
