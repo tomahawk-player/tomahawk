@@ -266,7 +266,13 @@ TwitterPlugin::connectTimerFired()
     {
         QHash< QString, QVariant > peerData = m_cachedPeers[screenName].toHash();
 
-        if ( QDateTime::currentDateTimeUtc().toMSecsSinceEpoch() - peerData["lastseen"].toLongLong() > 1209600000 ) // 2 weeks
+        if ( Servent::instance()->connectedToSession( peerData["node"] ) )
+        {
+            peerData["lastseen"] = QDateTime::currentMSecsSinceEpoch();
+            m_cachedPeers[screenName] = peerData;
+        }
+        
+        if ( QDateTime::currentMSecsSinceEpoch() - peerData["lastseen"].toLongLong() > 1209600000 ) // 2 weeks
         {
             qDebug() << "Aging peer " << screenName << " out of cache";
             m_cachedPeers.remove( screenName );
@@ -578,7 +584,7 @@ TwitterPlugin::registerOffer( const QString &screenName, const QHash< QString, Q
 
     if ( peersChanged )
     {
-        _peerData["lastseen"] = QString::number( QDateTime::currentDateTimeUtc().toMSecsSinceEpoch() );
+        _peerData["lastseen"] = QString::number( QDateTime::currentMSecsSinceEpoch() );
         m_cachedPeers[screenName] = QVariant::fromValue< QHash< QString, QVariant > >( _peerData );
         TomahawkSettings::instance()->setTwitterCachedPeers( m_cachedPeers );
     }
