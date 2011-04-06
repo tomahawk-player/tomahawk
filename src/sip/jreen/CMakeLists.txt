@@ -23,6 +23,7 @@ set( jabberHeaders
 include_directories( . ${CMAKE_CURRENT_BINARY_DIR} ..
    ${QT_INCLUDE_DIR}
    ${LIBJREEN_INCLUDE_DIR}
+   ${CMAKE_SOURCE_DIR}/thirdparty/jreen/src/
 )
 
 qt4_wrap_cpp( jabberMoc ${jabberHeaders} )
