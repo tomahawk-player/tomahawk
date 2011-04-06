@@ -1,5 +1,5 @@
 /* === This file is part of Tomahawk Player - <http://tomahawk-player.org> ===
- * 
+ *
  *   Copyright 2010-2011, Christian Muehlhaeuser <muesli@tomahawk-player.org>
  *
  *   Tomahawk is free software: you can redistribute it and/or modify
@@ -163,14 +163,14 @@ PlaylistManager::show( const Tomahawk::playlist_ptr& playlist )
         playlist->resolve();
 
         m_playlistViews.insert( playlist, view );
-        
+
         connect( playlist.data(), SIGNAL( deleted( Tomahawk::playlist_ptr ) ), this, SLOT( onPlaylistDeleted( Tomahawk::playlist_ptr ) ) );
     }
     else
     {
         view = m_playlistViews.value( playlist );
     }
-    
+
     setPage( view );
     TomahawkSettings::instance()->appendRecentlyPlayedPlaylist( playlist );
     emit numSourcesChanged( SourceList::instance()->count() );
@@ -179,7 +179,7 @@ PlaylistManager::show( const Tomahawk::playlist_ptr& playlist )
 }
 
 
-bool 
+bool
 PlaylistManager::show( const Tomahawk::dynplaylist_ptr& playlist )
 {
     if ( !m_dynamicWidgets.contains( playlist ) )
@@ -187,17 +187,17 @@ PlaylistManager::show( const Tomahawk::dynplaylist_ptr& playlist )
        m_dynamicWidgets[ playlist ] = new Tomahawk::DynamicWidget( playlist, m_stack );
 
        connect( playlist.data(), SIGNAL( deleted( Tomahawk::dynplaylist_ptr ) ), this, SLOT( onDynamicDeleted( Tomahawk::dynplaylist_ptr ) ) );
-        
+
        playlist->resolve();
     }
-    
+
     setPage( m_dynamicWidgets.value( playlist ) );
 
     if ( playlist->mode() == Tomahawk::OnDemand )
         m_queueView->hide();
     else
         m_queueView->show();
-    
+
     TomahawkSettings::instance()->appendRecentlyPlayedPlaylist( playlist );
     emit numSourcesChanged( SourceList::instance()->count() );
 
@@ -225,7 +225,7 @@ PlaylistManager::show( const Tomahawk::artist_ptr& artist )
     {
         view = m_artistViews.value( artist );
     }
-    
+
     setPage( view );
     emit numSourcesChanged( 1 );
 
@@ -252,7 +252,7 @@ PlaylistManager::show( const Tomahawk::album_ptr& album )
     {
         view = m_albumViews.value( album );
     }
-    
+
     setPage( view );
     emit numSourcesChanged( 1 );
 
@@ -359,10 +359,10 @@ PlaylistManager::showSuperCollection()
         }
     }
     m_superCollectionFlatModel->addCollections( toAdd );
-    
+
     m_superCollectionFlatModel->setTitle( tr( "All available tracks" ) );
     m_superAlbumModel->setTitle( tr( "All available albums" ) );
-    
+
     if ( m_currentMode == 0 )
     {
         setPage( m_superCollectionView );
@@ -472,7 +472,7 @@ PlaylistManager::historyForward()
 {
     if ( m_historyPosition >= m_pageHistory.count() - 1 )
         return;
-    
+
     showHistory( m_historyPosition + 1 );
 }
 
@@ -557,13 +557,10 @@ PlaylistManager::setPage( ViewPage* page, bool trackHistory )
     // UGH!
     if( QObject* obj = dynamic_cast< QObject* >( currentPage() ) ) {
         // if the signal exists (just to hide the qobject runtime warning...)
-        if( obj->metaObject()->indexOfSignal( "descriptionChanged(QString)" ) > -1 ) 
+        if( obj->metaObject()->indexOfSignal( "descriptionChanged(QString)" ) > -1 )
             connect( obj, SIGNAL( descriptionChanged( QString ) ), m_infobar, SLOT( setDescription( QString ) ) );
-        
-        if( obj->metaObject()->indexOfSignal( "deleted()" ) > -1 ) 
-            connect( obj, SIGNAL( deleted() ), this, SLOT( pageDeleted() ) );
     }
-        
+
     m_stack->setCurrentWidget( page->widget() );
     updateView();
 }
@@ -623,7 +620,7 @@ PlaylistManager::updateView()
         emit modeChanged( currentPlaylistInterface()->viewMode() );
     }
 
-    if ( currentPage()->queueVisible() ) 
+    if ( currentPage()->queueVisible() )
         m_queueView->show();
     else
         m_queueView->hide();
@@ -641,28 +638,28 @@ PlaylistManager::updateView()
     m_infobar->setPixmap( currentPage()->pixmap() );
 }
 
-void 
+void
 PlaylistManager::onDynamicDeleted( const Tomahawk::dynplaylist_ptr& pl )
 {
     QWidget* w = m_dynamicWidgets.value( pl );
     m_dynamicWidgets.remove( pl );
-    
+
     onWidgetDestroyed( w );
 }
 
-void 
+void
 PlaylistManager::onPlaylistDeleted( const Tomahawk::playlist_ptr& pl )
 {
     QWidget* w = m_playlistViews.value( pl );
     m_playlistViews.remove( pl );
-    
+
     onWidgetDestroyed( w );
 }
 
 
 void
 PlaylistManager::onWidgetDestroyed( QWidget* widget )
-{   
+{
     qDebug() << "Destroyed child:" << widget << widget->metaObject()->className();
 
     bool resetWidget = ( m_stack->currentWidget() == widget );
@@ -679,7 +676,7 @@ PlaylistManager::onWidgetDestroyed( QWidget* widget )
             break;
         }
     }
-    
+
     if ( resetWidget )
     {
         if ( m_pageHistory.count() )
@@ -704,7 +701,7 @@ PlaylistManager::setShuffled( bool enabled )
 }
 
 
-void 
+void
 PlaylistManager::createPlaylist( const Tomahawk::source_ptr& src,
                                  const QVariant& contents )
 {
@@ -714,7 +711,7 @@ PlaylistManager::createPlaylist( const Tomahawk::source_ptr& src,
 }
 
 
-void 
+void
 PlaylistManager::createDynamicPlaylist( const Tomahawk::source_ptr& src,
                                         const QVariant& contents )
 {
