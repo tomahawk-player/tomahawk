@@ -163,8 +163,6 @@ PlaylistManager::show( const Tomahawk::playlist_ptr& playlist )
         playlist->resolve();
 
         m_playlistViews.insert( playlist, view );
-
-        connect( playlist.data(), SIGNAL( deleted( Tomahawk::playlist_ptr ) ), this, SLOT( onPlaylistDeleted( Tomahawk::playlist_ptr ) ) );
     }
     else
     {
@@ -540,11 +538,11 @@ PlaylistManager::setPage( ViewPage* page, bool trackHistory )
         setHistoryPosition( m_pageHistory.count() - 1 );
     }
 
-    if ( playlistForInterface( currentPlaylistInterface() ) )
+    if ( !playlistForInterface( currentPlaylistInterface() ).isNull() )
         emit playlistActivated( playlistForInterface( currentPlaylistInterface() ) );
-    if ( dynamicPlaylistForInterface( currentPlaylistInterface() ) )
+    if ( !dynamicPlaylistForInterface( currentPlaylistInterface() ).isNull() )
         emit dynamicPlaylistActivated( dynamicPlaylistForInterface( currentPlaylistInterface() ) );
-    if ( collectionForInterface( currentPlaylistInterface() ) )
+    if ( !collectionForInterface( currentPlaylistInterface() ).isNull() )
         emit collectionActivated( collectionForInterface( currentPlaylistInterface() ) );
     if ( isSuperCollectionVisible() )
         emit superCollectionActivated();
@@ -555,10 +553,17 @@ PlaylistManager::setPage( ViewPage* page, bool trackHistory )
         AudioEngine::instance()->setPlaylist( currentPlaylistInterface() );
 
     // UGH!
-    if( QObject* obj = dynamic_cast< QObject* >( currentPage() ) ) {
+    if ( QObject* obj = dynamic_cast< QObject* >( currentPage() ) )
+    {
         // if the signal exists (just to hide the qobject runtime warning...)
         if( obj->metaObject()->indexOfSignal( "descriptionChanged(QString)" ) > -1 )
-            connect( obj, SIGNAL( descriptionChanged( QString ) ), m_infobar, SLOT( setDescription( QString ) ) );
+            connect( obj, SIGNAL( descriptionChanged( QString ) ), m_infobar, SLOT( setDescription( QString ) ), Qt::UniqueConnection );
+    }
+    if ( QObject* obj = dynamic_cast< QObject* >( currentPage() ) )
+    {
+        // if the signal exists (just to hide the qobject runtime warning...)
+        if( obj->metaObject()->indexOfSignal( "destroyed(QWidget*)" ) > -1 )
+            connect( obj, SIGNAL( destroyed( QWidget* ) ), SLOT( onWidgetDestroyed( QWidget* ) ), Qt::UniqueConnection );
     }
 
     m_stack->setCurrentWidget( page->widget() );
@@ -638,24 +643,6 @@ PlaylistManager::updateView()
     m_infobar->setPixmap( currentPage()->pixmap() );
 }
 
-void
-PlaylistManager::onDynamicDeleted( const Tomahawk::dynplaylist_ptr& pl )
-{
-    QWidget* w = m_dynamicWidgets.value( pl );
-    m_dynamicWidgets.remove( pl );
-
-    onWidgetDestroyed( w );
-}
-
-void
-PlaylistManager::onPlaylistDeleted( const Tomahawk::playlist_ptr& pl )
-{
-    QWidget* w = m_playlistViews.value( pl );
-    m_playlistViews.remove( pl );
-
-    onWidgetDestroyed( w );
-}
-
 
 void
 PlaylistManager::onWidgetDestroyed( QWidget* widget )
@@ -663,11 +650,20 @@ PlaylistManager::onWidgetDestroyed( QWidget* widget )
     qDebug() << "Destroyed child:" << widget << widget->metaObject()->className();
 
     bool resetWidget = ( m_stack->currentWidget() == widget );
-    m_stack->removeWidget( widget );
 
     for ( int i = 0; i < m_pageHistory.count(); i++ )
     {
         ViewPage* page = m_pageHistory.at( i );
+
+        if ( !playlistForInterface( page->playlistInterface() ).isNull() )
+        {
+            m_playlistViews.remove( playlistForInterface( page->playlistInterface() ) );
+        }
+        if ( !dynamicPlaylistForInterface( page->playlistInterface() ).isNull() )
+        {
+            m_dynamicWidgets.remove( dynamicPlaylistForInterface( page->playlistInterface() ) );
+        }
+
         if ( page->widget() == widget )
         {
             m_pageHistory.removeAt( i );
@@ -676,6 +672,8 @@ PlaylistManager::onWidgetDestroyed( QWidget* widget )
             break;
         }
     }
+
+    m_stack->removeWidget( widget );
 
     if ( resetWidget )
     {
@@ -783,6 +781,7 @@ PlaylistManager::playlistForInterface( PlaylistInterface* interface ) const
 {
     foreach ( PlaylistView* view, m_playlistViews.values() )
     {
+        qDebug() << "LAAAA:" << view;
         if ( view->playlistInterface() == interface )
         {
             return m_playlistViews.key( view );

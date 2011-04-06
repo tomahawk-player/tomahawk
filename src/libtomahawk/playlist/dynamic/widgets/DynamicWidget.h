@@ -1,5 +1,5 @@
 /* === This file is part of Tomahawk Player - <http://tomahawk-player.org> ===
- * 
+ *
  *   Copyright 2010-2011, Christian Muehlhaeuser <muesli@tomahawk-player.org>
  *
  *   Tomahawk is free software: you can redistribute it and/or modify
@@ -58,57 +58,59 @@ class CollapsibleControls;
  */
 class DynamicWidget : public QWidget, public Tomahawk::ViewPage
 {
-Q_OBJECT 
+Q_OBJECT
 public:
     explicit DynamicWidget( const dynplaylist_ptr& playlist, QWidget* parent = 0);
     virtual ~DynamicWidget();
-    
+
     void loadDynamicPlaylist( const dynplaylist_ptr& playlist );
-    
+
     virtual PlaylistInterface* playlistInterface() const;
-    
+
     virtual QSize sizeHint() const;
     virtual void resizeEvent( QResizeEvent* );
     virtual void showEvent(QShowEvent* );
-    
+
     static void paintRoundedFilledRect( QPainter& p, QPalette& pal, QRect& r, qreal opacity = .95 );
 
     virtual QWidget* widget() { return this; }
-    
+
     virtual QString title() const { return m_model->title(); }
     virtual QString description() const { return m_model->description(); }
     virtual QPixmap pixmap() const { return QPixmap( RESPATH "images/playlist-icon.png" ); }
-    
+
     virtual bool jumpToCurrentTrack();
-    
+
 public slots:
     void onRevisionLoaded( const Tomahawk::DynamicPlaylistRevision& rev );
     void playlistTypeChanged(QString);
-    
+
     void startStation();
     void stopStation( bool stopPlaying = true );
-    
+
     void trackStarted();
     void stationFailed( const QString& );
-    
+
     void playlistChanged( PlaylistInterface* );
     void tracksAdded();
-    
+
 signals:
     void descriptionChanged( const QString& caption );
-    
+    void destroyed( QWidget* widget );
+
 private slots:
     void generate( int = -1 );
     void tracksGenerated( const QList< Tomahawk::query_ptr>& queries );
     void generatorError( const QString& title, const QString& content );
-    
+
     void controlsChanged();
     void controlChanged( const Tomahawk::dyncontrol_ptr& control );
     void showPreview();
-    
-    void layoutFloatingWidgets();
 
-private:    
+    void layoutFloatingWidgets();
+    void onDeleted();
+
+private:
     dynplaylist_ptr m_playlist;
     QVBoxLayout* m_layout;
     bool m_resolveOnNextLoad;
@@ -117,17 +119,17 @@ private:
 
     // loading animation
     LoadingSpinner* m_loading;
-    
+
     // setup controls
     DynamicSetupWidget* m_setup;
-    
+
     // used in OnDemand mode
     bool m_runningOnDemand;
     bool m_controlsChanged;
     QWidget* m_steering;
-        
+
     CollapsibleControls* m_controls;
-    
+
     DynamicView* m_view;
     DynamicModel* m_model;
 };

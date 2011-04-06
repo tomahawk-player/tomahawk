@@ -1,5 +1,5 @@
 /* === This file is part of Tomahawk Player - <http://tomahawk-player.org> ===
- * 
+ *
  *   Copyright 2010-2011, Christian Muehlhaeuser <muesli@tomahawk-player.org>
  *
  *   Tomahawk is free software: you can redistribute it and/or modify
@@ -71,7 +71,10 @@ void
 PlaylistModel::loadPlaylist( const Tomahawk::playlist_ptr& playlist, bool loadEntries )
 {
     if ( !m_playlist.isNull() )
+    {
         disconnect( m_playlist.data(), SIGNAL( revisionLoaded( Tomahawk::PlaylistRevision ) ), this, SLOT( onRevisionLoaded( Tomahawk::PlaylistRevision ) ) );
+        disconnect( m_playlist.data(), SIGNAL( deleted( Tomahawk::playlist_ptr ) ), this, SIGNAL( playlistDeleted() ) );
+    }
 
     if ( rowCount( QModelIndex() ) && loadEntries )
     {
@@ -80,6 +83,7 @@ PlaylistModel::loadPlaylist( const Tomahawk::playlist_ptr& playlist, bool loadEn
 
     m_playlist = playlist;
     connect( playlist.data(), SIGNAL( revisionLoaded( Tomahawk::PlaylistRevision ) ), SLOT( onRevisionLoaded( Tomahawk::PlaylistRevision ) ) );
+    connect( playlist.data(), SIGNAL( deleted( Tomahawk::playlist_ptr ) ), this, SIGNAL( playlistDeleted() ) );
 
     setReadOnly( !m_playlist->author()->isLocal() );
     setTitle( playlist->title() );
@@ -105,7 +109,7 @@ PlaylistModel::loadPlaylist( const Tomahawk::playlist_ptr& playlist, bool loadEn
             plitem->index = createIndex( m_rootItem->children.count() - 1, 0, plitem );
 
             connect( plitem, SIGNAL( dataChanged() ), SLOT( onDataChanged() ) );
-            
+
             if( !entry->query()->resolvingFinished() && entry->query()->playable() ) {
                 m_waitingForResolved.append( entry->query().data() );
                 connect( entry->query().data(), SIGNAL( resolvingFinished( bool ) ), this, SLOT( trackResolved( bool ) ) );
@@ -119,7 +123,7 @@ PlaylistModel::loadPlaylist( const Tomahawk::playlist_ptr& playlist, bool loadEn
 
     if( !m_waitingForResolved.isEmpty() )
         emit loadingStarted();
-    
+
     emit trackCountChanged( rowCount( QModelIndex() ) );
 }
 
@@ -145,7 +149,7 @@ PlaylistModel::loadHistory( const Tomahawk::source_ptr& source, unsigned int amo
 }
 
 
-void 
+void
 PlaylistModel::clear()
 {
     if ( rowCount( QModelIndex() ) )
@@ -210,15 +214,15 @@ PlaylistModel::insert( unsigned int row, const Tomahawk::query_ptr& query )
     onTracksInserted( row, ql );
 }
 
-void 
+void
 PlaylistModel::trackResolved( bool )
 {
     Tomahawk::Query* q = qobject_cast< Query* >( sender() );
     Q_ASSERT( q );
-    
+
     m_waitingForResolved.removeAll( q );
     disconnect( q, SIGNAL( resolvingFinished( bool ) ), this, SLOT( trackResolved( bool ) ) );
-    
+
     if( m_waitingForResolved.isEmpty() )
         emit loadingFinished();
 }
