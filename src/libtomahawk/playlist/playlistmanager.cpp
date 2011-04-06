@@ -163,6 +163,8 @@ PlaylistManager::show( const Tomahawk::playlist_ptr& playlist )
         playlist->resolve();
 
         m_playlistViews.insert( playlist, view );
+        
+        connect( playlist.data(), SIGNAL( deleted( Tomahawk::playlist_ptr ) ), this, SLOT( onPlaylistDeleted( Tomahawk::playlist_ptr ) ) );
     }
     else
     {
@@ -184,6 +186,8 @@ PlaylistManager::show( const Tomahawk::dynplaylist_ptr& playlist )
     {
        m_dynamicWidgets[ playlist ] = new Tomahawk::DynamicWidget( playlist, m_stack );
 
+       connect( playlist.data(), SIGNAL( deleted( Tomahawk::dynplaylist_ptr ) ), this, SLOT( onDynamicDeleted( Tomahawk::dynplaylist_ptr ) ) );
+        
        playlist->resolve();
     }
     
@@ -335,11 +339,6 @@ PlaylistManager::show( const Tomahawk::source_ptr& source )
 bool
 PlaylistManager::show( ViewPage* page )
 {
-    if ( m_stack->indexOf( page->widget() ) < 0 )
-    {
-        connect( page->widget(), SIGNAL( destroyed( QWidget* ) ), SLOT( onWidgetDestroyed( QWidget* ) ) );
-    }
-
     setPage( page );
 
     return true;
@@ -490,6 +489,7 @@ PlaylistManager::showHistory( int historyPosition )
 
     setHistoryPosition( historyPosition );
     ViewPage* page = m_pageHistory.at( historyPosition );
+    qDebug() << "Showing page after a deleting:" << page->widget()->metaObject()->className();
     setPage( page, false );
 }
 
@@ -556,10 +556,14 @@ PlaylistManager::setPage( ViewPage* page, bool trackHistory )
 
     // UGH!
     if( QObject* obj = dynamic_cast< QObject* >( currentPage() ) ) {
-        if( obj->metaObject()->indexOfSignal( "descriptionChanged(QString)" ) > -1 ) // if the signal exists (just to hide the qobject runtime warning...)
+        // if the signal exists (just to hide the qobject runtime warning...)
+        if( obj->metaObject()->indexOfSignal( "descriptionChanged(QString)" ) > -1 ) 
             connect( obj, SIGNAL( descriptionChanged( QString ) ), m_infobar, SLOT( setDescription( QString ) ) );
+        
+        if( obj->metaObject()->indexOfSignal( "deleted()" ) > -1 ) 
+            connect( obj, SIGNAL( deleted() ), this, SLOT( pageDeleted() ) );
     }
-    
+        
     m_stack->setCurrentWidget( page->widget() );
     updateView();
 }
@@ -637,11 +641,29 @@ PlaylistManager::updateView()
     m_infobar->setPixmap( currentPage()->pixmap() );
 }
 
+void 
+PlaylistManager::onDynamicDeleted( const Tomahawk::dynplaylist_ptr& pl )
+{
+    QWidget* w = m_dynamicWidgets.value( pl );
+    m_dynamicWidgets.remove( pl );
+    
+    onWidgetDestroyed( w );
+}
+
+void 
+PlaylistManager::onPlaylistDeleted( const Tomahawk::playlist_ptr& pl )
+{
+    QWidget* w = m_playlistViews.value( pl );
+    m_playlistViews.remove( pl );
+    
+    onWidgetDestroyed( w );
+}
+
 
 void
 PlaylistManager::onWidgetDestroyed( QWidget* widget )
-{
-    qDebug() << "Destroyed child:" << widget;
+{   
+    qDebug() << "Destroyed child:" << widget << widget->metaObject()->className();
 
     bool resetWidget = ( m_stack->currentWidget() == widget );
     m_stack->removeWidget( widget );
@@ -657,7 +679,7 @@ PlaylistManager::onWidgetDestroyed( QWidget* widget )
             break;
         }
     }
-
+    
     if ( resetWidget )
     {
         if ( m_pageHistory.count() )

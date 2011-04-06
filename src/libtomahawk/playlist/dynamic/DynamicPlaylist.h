@@ -113,6 +113,8 @@ signals:
     /// emitted when the playlist revision changes (whenever the playlist changes)
     void dynamicRevisionLoaded( Tomahawk::DynamicPlaylistRevision );
     
+    void deleted( const Tomahawk::dynplaylist_ptr& pl );
+    
 public slots:
     // want to update the playlist from the model?
     // generate a newrev using uuid() and call this:

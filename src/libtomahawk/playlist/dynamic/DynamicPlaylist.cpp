@@ -265,6 +265,8 @@ DynamicPlaylist::reportDeleted( const Tomahawk::dynplaylist_ptr& self )
     Q_ASSERT( self.data() == this );
     // will emit Collection::playlistDeleted(...)
     author()->collection()->deleteDynamicPlaylist( self ); 
+    
+    emit deleted( self );
 }
 
 void DynamicPlaylist::addEntries(const QList< query_ptr >& queries, const QString& oldrev)

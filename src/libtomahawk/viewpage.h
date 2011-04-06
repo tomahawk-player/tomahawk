@@ -48,6 +48,12 @@ public:
     
     virtual bool jumpToCurrentTrack() = 0;
 
+    /** subclasses implementing ViewPage can emit the following signals:
+     * descriptionChanged( const QString& )
+     * deleted()
+     * 
+     * See DynamicWidget for an example
+     */
 private:
 };
     

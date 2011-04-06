@@ -182,6 +182,9 @@ signals:
     /// renamed etc.
     void changed();
 
+    /// was deleted, eh?
+    void deleted( const Tomahawk::playlist_ptr& pl );
+    
     void repeatModeChanged( PlaylistInterface::RepeatMode mode );
     void shuffleModeChanged( bool enabled );
 

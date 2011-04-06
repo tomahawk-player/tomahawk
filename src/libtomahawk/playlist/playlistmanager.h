@@ -135,6 +135,9 @@ public slots:
 private slots:
     void setFilter( const QString& filter );
     void applyFilter();
+    
+    void onPlaylistDeleted( const Tomahawk::playlist_ptr& pl );
+    void onDynamicDeleted( const Tomahawk::dynplaylist_ptr& pl );
     void onWidgetDestroyed( QWidget* widget );
 
 private:
