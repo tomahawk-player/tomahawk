@@ -266,7 +266,7 @@ TwitterPlugin::connectTimerFired()
     {
         QHash< QString, QVariant > peerData = m_cachedPeers[screenName].toHash();
 
-        if ( Servent::instance()->connectedToSession( peerData["node"] ) )
+        if ( Servent::instance()->connectedToSession( peerData["node"].toString() ) )
         {
             peerData["lastseen"] = QDateTime::currentMSecsSinceEpoch();
             m_cachedPeers[screenName] = peerData;
