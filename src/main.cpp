@@ -1,5 +1,5 @@
 /* === This file is part of Tomahawk Player - <http://tomahawk-player.org> ===
- * 
+ *
  *   Copyright 2010-2011, Christian Muehlhaeuser <muesli@tomahawk-player.org>
  *
  *   Tomahawk is free software: you can redistribute it and/or modify
@@ -18,15 +18,15 @@
 
 #include "tomahawk/tomahawkapp.h"
 
+#include "kdsingleapplicationguard/kdsingleapplicationguard.h"
+
 #ifdef Q_WS_MAC
     #include "tomahawkapp_mac.h"
     #include </System/Library/Frameworks/CoreServices.framework/Versions/A/Frameworks/AE.framework/Versions/A/Headers/AppleEvents.h>
     static pascal OSErr appleEventHandler( const AppleEvent*, AppleEvent*, long );
 #endif
 
-#include <exception>
-    
-#include "kdsingleapplicationguard/kdsingleapplicationguard.h"
+
 int
 main( int argc, char *argv[] )
 {
@@ -42,10 +42,14 @@ main( int argc, char *argv[] )
 
     TomahawkApp a( argc, argv );
     KDSingleApplicationGuard guard( &a, KDSingleApplicationGuard::AutoKillOtherInstances );
-    QObject::connect( &guard, SIGNAL( instanceStarted( KDSingleApplicationGuard::Instance ) ), &a, SLOT( instanceStarted( KDSingleApplicationGuard::Instance )  ) );
-    
+    QObject::connect( &guard, SIGNAL( instanceStarted( KDSingleApplicationGuard::Instance ) ), &a, SLOT( instanceStarted( KDSingleApplicationGuard::Instance ) ) );
+
+    if ( guard.isPrimaryInstance() )
+        a.init();
+
     return a.exec();
 }
+
 
 #ifdef Q_WS_MAC
 static pascal OSErr

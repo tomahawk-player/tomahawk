@@ -1,5 +1,5 @@
 /* === This file is part of Tomahawk Player - <http://tomahawk-player.org> ===
- * 
+ *
  *   Copyright 2010-2011, Christian Muehlhaeuser <muesli@tomahawk-player.org>
  *
  *   Tomahawk is free software: you can redistribute it and/or modify
@@ -78,6 +78,7 @@ public:
     TomahawkApp( int& argc, char *argv[] );
     virtual ~TomahawkApp();
 
+    void init();
     static TomahawkApp* instance();
 
     SipHandler* sipHandler() { return m_sipHandler; }
@@ -98,10 +99,10 @@ public:
 
     // because QApplication::arguments() is expensive
     bool scrubFriendlyName() const { return m_scrubFriendlyName; }
-    
+
 public slots:
     void instanceStarted( KDSingleApplicationGuard::Instance );
-    
+
 private slots:
     void setupSIP();
 
@@ -124,14 +125,14 @@ private:
     XMPPBot* m_xmppBot;
     Tomahawk::ShortcutHandler* m_shortcutHandler;
     bool m_scrubFriendlyName;
-    
+
 #ifdef LIBLASTFM_FOUND
     Scrobbler* m_scrobbler;
 #endif
 
 #ifndef TOMAHAWK_HEADLESS
     TomahawkWindow* m_mainwindow;
-#endif    
+#endif
 
     bool m_headless;
 
