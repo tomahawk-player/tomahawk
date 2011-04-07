@@ -23,7 +23,6 @@
 
 #include "album.h"
 #include "query.h"
-#include "collectionmodel.h"
 
 
 CollectionProxyModel::CollectionProxyModel( QObject* parent )

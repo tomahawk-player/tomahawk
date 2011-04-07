@@ -74,7 +74,10 @@ set( libSources
     database/databasecommand_clientauthvalid.cpp
     database/database.cpp
 
-    playlist/collectionmodel.cpp
+    playlist/treemodel.cpp
+    playlist/treeproxymodel.cpp
+    playlist/treeheader.cpp
+    playlist/treeitemdelegate.cpp
     playlist/collectionproxymodel.cpp
     playlist/collectionflatmodel.cpp
     playlist/collectionview.cpp
@@ -96,6 +99,7 @@ set( libSources
     playlist/albumproxymodel.cpp
     playlist/albumitemdelegate.cpp
     playlist/albumview.cpp
+    playlist/artistview.cpp
 
     playlist/topbar/topbar.cpp
     playlist/topbar/clearbutton.cpp
@@ -230,7 +234,10 @@ set( libHeaders
     network/controlconnection.h
     network/portfwdthread.h
 
-    playlist/collectionmodel.h
+    playlist/treemodel.h
+    playlist/treeproxymodel.h
+    playlist/treeheader.h
+    playlist/treeitemdelegate.h
     playlist/collectionproxymodel.h
     playlist/collectionflatmodel.h
     playlist/collectionview.h
@@ -252,6 +259,7 @@ set( libHeaders
     playlist/albumproxymodel.h
     playlist/albumitemdelegate.h
     playlist/albumview.h
+    playlist/artistview.h
 
     playlist/topbar/topbar.h
     playlist/topbar/clearbutton.h

@@ -16,7 +16,7 @@
  *   along with Tomahawk. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include "collectionmodel.h"
+#include "treemodel.h"
 
 #include <QDebug>
 #include <QMimeData>
@@ -28,7 +28,7 @@
 using namespace Tomahawk;
 
 
-CollectionModel::CollectionModel( QObject* parent )
+TreeModel::TreeModel( QObject* parent )
     : QAbstractItemModel( parent )
     , m_rootItem( 0 )
 {
@@ -38,13 +38,13 @@ CollectionModel::CollectionModel( QObject* parent )
 }
 
 
-CollectionModel::~CollectionModel()
+TreeModel::~TreeModel()
 {
 }
 
 
 QModelIndex
-CollectionModel::index( int row, int column, const QModelIndex& parent ) const
+TreeModel::index( int row, int column, const QModelIndex& parent ) const
 {
     if ( !m_rootItem || row < 0 || column < 0 )
         return QModelIndex();
@@ -59,7 +59,7 @@ CollectionModel::index( int row, int column, const QModelIndex& parent ) const
 
 
 int
-CollectionModel::rowCount( const QModelIndex& parent ) const
+TreeModel::rowCount( const QModelIndex& parent ) const
 {
     if ( parent.column() > 0 )
         return 0;
@@ -73,7 +73,7 @@ CollectionModel::rowCount( const QModelIndex& parent ) const
 
 
 int
-CollectionModel::columnCount( const QModelIndex& parent ) const
+TreeModel::columnCount( const QModelIndex& parent ) const
 {
     Q_UNUSED( parent );
     return 4;
@@ -81,7 +81,7 @@ CollectionModel::columnCount( const QModelIndex& parent ) const
 
 
 QModelIndex
-CollectionModel::parent( const QModelIndex& child ) const
+TreeModel::parent( const QModelIndex& child ) const
 {
     TreeModelItem* entry = itemFromIndex( child );
     if ( !entry )
@@ -101,7 +101,7 @@ CollectionModel::parent( const QModelIndex& child ) const
 
 
 QVariant
-CollectionModel::data( const QModelIndex& index, int role ) const
+TreeModel::data( const QModelIndex& index, int role ) const
 {
     if ( role != Qt::DisplayRole )
         return QVariant();
@@ -162,7 +162,7 @@ CollectionModel::data( const QModelIndex& index, int role ) const
 
 
 QVariant
-CollectionModel::headerData( int section, Qt::Orientation orientation, int role ) const
+TreeModel::headerData( int section, Qt::Orientation orientation, int role ) const
 {
     QStringList headers;
     headers << tr( "Name" ) << tr( "Tracks" ) << tr( "Duration" ) << tr( "Origin" );
@@ -176,7 +176,30 @@ CollectionModel::headerData( int section, Qt::Orientation orientation, int role 
 
 
 void
-CollectionModel::addCollection( const collection_ptr& collection )
+TreeModel::setCurrentItem( const QModelIndex& index )
+{
+    qDebug() << Q_FUNC_INFO;
+    TreeModelItem* oldEntry = itemFromIndex( m_currentIndex );
+    if ( oldEntry )
+    {
+        oldEntry->setIsPlaying( false );
+    }
+
+    TreeModelItem* entry = itemFromIndex( index );
+    if ( entry )
+    {
+        m_currentIndex = index;
+        entry->setIsPlaying( true );
+    }
+    else
+    {
+        m_currentIndex = QModelIndex();
+    }
+}
+
+
+void
+TreeModel::addCollection( const collection_ptr& collection )
 {
     qDebug() << Q_FUNC_INFO << collection->name()
                             << collection->source()->id()
@@ -192,7 +215,7 @@ CollectionModel::addCollection( const collection_ptr& collection )
 
 
 void
-CollectionModel::removeCollection( const collection_ptr& collection )
+TreeModel::removeCollection( const collection_ptr& collection )
 {
     disconnect( collection.data(), SIGNAL( tracksAdded( QList<Tomahawk::query_ptr>, Tomahawk::collection_ptr ) ),
                 this, SLOT( onTracksAdded( QList<Tomahawk::query_ptr>, Tomahawk::collection_ptr ) ) );
@@ -206,7 +229,7 @@ CollectionModel::removeCollection( const collection_ptr& collection )
 
 
 void
-CollectionModel::onTracksAdded( const QList<Tomahawk::query_ptr>& tracks, const collection_ptr& collection )
+TreeModel::onTracksAdded( const QList<Tomahawk::query_ptr>& tracks, const collection_ptr& collection )
 {
 //    int c = rowCount( QModelIndex() );
 
@@ -250,7 +273,7 @@ CollectionModel::onTracksAdded( const QList<Tomahawk::query_ptr>& tracks, const 
 
 
 void
-CollectionModel::onTracksAddingFinished( const Tomahawk::collection_ptr& collection )
+TreeModel::onTracksAddingFinished( const Tomahawk::collection_ptr& collection )
 {
     qDebug() << "Finished loading tracks" << collection->source()->friendlyName();
 
@@ -264,7 +287,7 @@ CollectionModel::onTracksAddingFinished( const Tomahawk::collection_ptr& collect
 
 
 void
-CollectionModel::onSourceOffline( Tomahawk::source_ptr src )
+TreeModel::onSourceOffline( Tomahawk::source_ptr src )
 {
     qDebug() << Q_FUNC_INFO;
 
@@ -276,7 +299,7 @@ CollectionModel::onSourceOffline( Tomahawk::source_ptr src )
 
 
 TreeModelItem*
-CollectionModel::itemFromIndex( const QModelIndex& index ) const
+TreeModel::itemFromIndex( const QModelIndex& index ) const
 {
     if ( index.isValid() )
         return static_cast<TreeModelItem*>( index.internalPointer() );

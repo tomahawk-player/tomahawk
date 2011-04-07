@@ -1,5 +1,5 @@
 /* === This file is part of Tomahawk Player - <http://tomahawk-player.org> ===
- * 
+ *
  *   Copyright 2010-2011, Christian Muehlhaeuser <muesli@tomahawk-player.org>
  *
  *   Tomahawk is free software: you can redistribute it and/or modify
@@ -39,7 +39,7 @@ public:
 public slots:
     void showOfflineSources();
     void hideOfflineSources();
-    
+
 signals:
     void onOnline( const QModelIndex& index );
     void onOffline( const QModelIndex& index );
@@ -50,14 +50,14 @@ private slots:
     void onCollectionActivated( const Tomahawk::collection_ptr& collection );
     void onSuperCollectionActivated();
     void onTempPageActivated();
-    
+
     void onItemActivated( const QModelIndex& index );
     void onSelectionChanged();
 
     void loadPlaylist();
     void deletePlaylist();
     void renamePlaylist();
-    
+
     void onCustomContextMenu( const QPoint& pos );
     void onSourceOffline( Tomahawk::source_ptr );
 
@@ -75,7 +75,6 @@ protected:
 private:
     void setupMenus();
 
-    CollectionModel* m_collectionModel;
     SourcesModel* m_model;
     SourcesProxyModel* m_proxyModel;
     QModelIndex m_contextMenuIndex;

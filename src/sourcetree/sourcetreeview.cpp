@@ -19,7 +19,6 @@
 #include "sourcetreeview.h"
 
 #include "playlist.h"
-#include "playlist/collectionmodel.h"
 #include "playlist/playlistmanager.h"
 #include "sourcetreeitem.h"
 #include "sourcesmodel.h"
@@ -61,7 +60,6 @@ private:
 
 SourceTreeView::SourceTreeView( QWidget* parent )
     : QTreeView( parent )
-    , m_collectionModel( new CollectionModel( this ) )
     , m_dragging( false )
 {
     setFrameShape( QFrame::NoFrame );

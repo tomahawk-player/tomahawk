@@ -28,7 +28,7 @@
 #include "widgets/infowidgets/sourceinfowidget.h"
 #include "widgets/welcomewidget.h"
 
-#include "collectionmodel.h"
+#include "treemodel.h"
 #include "collectionflatmodel.h"
 #include "collectionview.h"
 #include "playlistmodel.h"
@@ -36,6 +36,7 @@
 #include "queueview.h"
 #include "trackproxymodel.h"
 #include "trackmodel.h"
+#include "artistview.h"
 #include "albumview.h"
 #include "albumproxymodel.h"
 #include "albummodel.h"
@@ -261,6 +262,7 @@ PlaylistManager::show( const Tomahawk::album_ptr& album )
 bool
 PlaylistManager::show( const Tomahawk::collection_ptr& collection )
 {
+    qDebug() << Q_FUNC_INFO << m_currentMode;
     m_currentCollection = collection;
     if ( m_currentMode == 0 )
     {
@@ -280,6 +282,29 @@ PlaylistManager::show( const Tomahawk::collection_ptr& collection )
         else
         {
             view = m_collectionViews.value( collection );
+        }
+
+        setPage( view );
+    }
+
+    if ( m_currentMode == 1 )
+    {
+        ArtistView* view;
+        if ( !m_treeViews.contains( collection ) )
+        {
+            view = new ArtistView();
+            TreeModel* model = new TreeModel();
+            view->setModel( model );
+            view->setFrameShape( QFrame::NoFrame );
+            view->setAttribute( Qt::WA_MacShowFocusRect, 0 );
+
+            model->addCollection( collection );
+
+            m_treeViews.insert( collection, view );
+        }
+        else
+        {
+            view = m_treeViews.value( collection );
         }
 
         setPage( view );
@@ -400,8 +425,6 @@ PlaylistManager::setTableMode()
 void
 PlaylistManager::setTreeMode()
 {
-    return;
-
     qDebug() << Q_FUNC_INFO;
 
     m_currentMode = 1;

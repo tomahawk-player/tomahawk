@@ -34,13 +34,13 @@
 
 class QMetaData;
 
-class DLLEXPORT CollectionModel : public QAbstractItemModel
+class DLLEXPORT TreeModel : public QAbstractItemModel
 {
 Q_OBJECT
 
 public:
-    explicit CollectionModel( QObject* parent = 0 );
-    ~CollectionModel();
+    explicit TreeModel( QObject* parent = 0 );
+    ~TreeModel();
 
     QModelIndex index( int row, int column, const QModelIndex& parent ) const;
     QModelIndex parent( const QModelIndex& child ) const;
@@ -50,11 +50,13 @@ public:
     int rowCount( const QModelIndex& parent ) const;
     int columnCount( const QModelIndex& parent ) const;
 
-    QVariant data( const QModelIndex& index, int role ) const;
+    QVariant data( const QModelIndex& index, int role = Qt::DisplayRole ) const;
     QVariant headerData( int section, Qt::Orientation orientation, int role ) const;
 
     void addCollection( const Tomahawk::collection_ptr& collection );
     void removeCollection( const Tomahawk::collection_ptr& collection );
+
+    virtual QPersistentModelIndex currentItem() { return m_currentIndex; }
 
     virtual PlaylistInterface::RepeatMode repeatMode() const { return PlaylistInterface::NoRepeat; }
     virtual bool shuffled() const { return false; }
@@ -63,6 +65,9 @@ public:
     virtual void setShuffled( bool /*shuffled*/ ) {}
 
     TreeModelItem* itemFromIndex( const QModelIndex& index ) const;
+
+public slots:
+    virtual void setCurrentItem( const QModelIndex& index );
 
 signals:
     void repeatModeChanged( PlaylistInterface::RepeatMode mode );
@@ -81,6 +86,7 @@ private slots:
 private:
     TreeModelItem* m_rootItem;
     QMap< Tomahawk::collection_ptr, TreeModelItem* > m_collectionIndex;
+    QPersistentModelIndex m_currentIndex;
 };
 
 #endif // COLLECTIONMODEL_H
