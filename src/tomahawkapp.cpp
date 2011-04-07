@@ -162,23 +162,6 @@ TomahawkApp::TomahawkApp( int& argc, char *argv[] )
     setupLogfile();
 }
 
-
-TomahawkApp::~TomahawkApp()
-{
-    qDebug() << Q_FUNC_INFO;
-
-    delete m_sipHandler;
-    delete m_servent;
-
-#ifndef TOMAHAWK_HEADLESS
-    delete m_mainwindow;
-    delete m_audioEngine;
-#endif
-
-    delete m_database;
-}
-
-
 void
 TomahawkApp::init()
 {
