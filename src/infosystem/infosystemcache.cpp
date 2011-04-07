@@ -127,19 +127,21 @@ InfoSystemCache::loadCache( InfoType type, const QString &cacheFile )
     qDebug() << Q_FUNC_INFO;
     QSettings cachedSettings( cacheFile, QSettings::IniFormat );
 
-    foreach( QString group, cachedSettings.childGroups() )
+    foreach ( QString group, cachedSettings.childGroups() )
     {
+        cachedSettings.beginGroup( group );
+        if ( cachedSettings.value( "maxtime" ).toDateTime().toMSecsSinceEpoch() < QDateTime::currentMSecsSinceEpoch() )
+            continue;
         QHash< InfoCacheCriteria, QVariant > dataHash = m_dataCache[type];
         QHash< InfoCacheCriteria, QDateTime > insertDateHash = m_insertTimeCache[type];
         QHash< InfoCacheCriteria, QDateTime > maxDateHash = m_maxTimeCache[type];
         InfoCacheCriteria criteria;
-        cachedSettings.beginGroup( group );
         int numCriteria = cachedSettings.beginReadArray( "criteria" );
-        for( int i = 0; i < numCriteria; i++ )
+        for ( int i = 0; i < numCriteria; i++ )
         {
             cachedSettings.setArrayIndex( i );
             QStringList criteriaValues = cachedSettings.value( QString::number( i ) ).toStringList();
-            for( int j = 0; j < criteriaValues.length(); j += 2 )
+            for ( int j = 0; j < criteriaValues.length(); j += 2 )
                 criteria[criteriaValues.at( j )] = criteriaValues.at( j + 1 );
         }
         cachedSettings.endArray();
