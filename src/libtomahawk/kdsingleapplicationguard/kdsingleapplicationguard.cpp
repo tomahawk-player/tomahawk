@@ -8,11 +8,11 @@
 #define KDSINGLEAPPLICATIONGUARD_MAX_COMMAND_LINE 1024
 #endif
 
-        
+
 
 KDSingleApplicationGuard::Instance::Instance( const QStringList& args, qint64 p )
-    : arguments( args ),
-      pid( p )
+: arguments( args ),
+pid( p )
 {
 }
 
@@ -61,31 +61,31 @@ void KDSingleApplicationGuard::timerEvent( QTimerEvent* )
 using namespace kdtools;
 
 /*!
-  \class KDSingleApplicationGuard KDSingleApplicationGuard
-  \brief A guard to protect an application from having several instances.
- 
-  KDSingleApplicationGuard can be used to make sure only one instance of an
-  application is running at the same time.
- 
-  \note As KDSingleApplicationGuard uses QSharedMemory Qt 4.4 or later is required
+ *  \class KDSingleApplicationGuard KDSingleApplicationGuard
+ *  \brief A guard to protect an application from having several instances.
+ *
+ *  KDSingleApplicationGuard can be used to make sure only one instance of an
+ *  application is running at the same time.
+ *
+ *  \note As KDSingleApplicationGuard uses QSharedMemory Qt 4.4 or later is required
  */
 
 /*!
-  \fn void KDSingleApplicationGuard::instanceStarted()
-  This signal is emitted by the primary instance when ever one other
-  instance was started.
+ *  \fn void KDSingleApplicationGuard::instanceStarted()
+ *  This signal is emitted by the primary instance when ever one other
+ *  instance was started.
  */
 
 /*!
-  \fn void KDSingleApplicationGuard::instanceExited()
-  This signal is emitted by the primary instance when ever one other
-  instance was exited.
+ *  \fn void KDSingleApplicationGuard::instanceExited()
+ *  This signal is emitted by the primary instance when ever one other
+ *  instance was exited.
  */
-    
+
 /*!
-  \fn void KDSingleApplicationGuard::becamePrimaryInstance()
-  This signal is emitted, when the current running application gets the new
-  primary application. The old primary application has quit.
+ *  \fn void KDSingleApplicationGuard::becamePrimaryInstance()
+ *  This signal is emitted, when the current running application gets the new
+ *  primary application. The old primary application has quit.
  */
 
 enum Command
@@ -105,8 +105,8 @@ Q_DECLARE_OPERATORS_FOR_FLAGS( Commands )
 struct ProcessInfo
 {
     explicit ProcessInfo( Command c = FreeInstance, const QStringList& arguments = QStringList(), qint64 p = -1 )
-        : command( c ),
-          pid( p )
+    : command( c ),
+    pid( p )
     {
         std::fill_n( commandline, KDSINGLEAPPLICATIONGUARD_MAX_COMMAND_LINE, '\0' );
 
@@ -149,7 +149,7 @@ struct ProcessInfo
 bool operator==( const ProcessInfo& lhs, const ProcessInfo& rhs )
 {
     return lhs.command == rhs.command &&
-           ::memcmp( lhs.commandline, rhs.commandline, KDSINGLEAPPLICATIONGUARD_MAX_COMMAND_LINE ) == 0;
+    ::memcmp( lhs.commandline, rhs.commandline, KDSINGLEAPPLICATIONGUARD_MAX_COMMAND_LINE ) == 0;
 }
 
 bool operator!=( const ProcessInfo& lhs, const ProcessInfo& rhs )
@@ -158,21 +158,21 @@ bool operator!=( const ProcessInfo& lhs, const ProcessInfo& rhs )
 }
 
 /*!
-  This struct contains information about the managed process system.
-  \internal
+ *  This struct contains information about the managed process system.
+ *  \internal
  */
 struct InstanceRegister
 {
     InstanceRegister( KDSingleApplicationGuard::Policy policy = KDSingleApplicationGuard::NoPolicy )
-        : policy( policy )
+    : policy( policy )
     {
         std::fill_n( info, KDSINGLEAPPLICATIONGUARD_NUMBER_OF_PROCESSES, ProcessInfo() );
         ::memcpy( magicCookie, "kdsingleapp", 12 );
     }
 
     /*!
-      Returns wheter this register was properly initialized by the first instance.
-      */
+     *      Returns wheter this register was properly initialized by the first instance.
+     */
     bool isValid() const
     {
         return ::strcmp( magicCookie, "kdsingleapp" ) == 0;
@@ -192,18 +192,18 @@ bool operator==( const InstanceRegister& lhs, const InstanceRegister& rhs )
         if( lhs.info[ i ] != rhs.info[ i ] )
             return false;
 
-    return true;
+        return true;
 }
 
 /*!
- \internal
+ * \internal
  */
 class KDSingleApplicationGuard::Private
 {
 public:
     Private( KDSingleApplicationGuard* qq )
-        : q( qq ),
-          id( -1 )
+    : q( qq ),
+    id( -1 )
     {
         if( primaryInstance == 0 )
             primaryInstance = q;
@@ -258,28 +258,28 @@ void SIGINT_handler( int sig )
 #endif
 
 /*!
-  Creates a new KDSingleApplicationGuard guarding \a parent from mulitply instances.
-  If \a policy is AutoKillOtherInstances (the default), all instances, which try to start, 
-  are killed automatically and instanceStarted() is emitted.
-  If \a policy is NoPolicy, the other instance will run and instanceStarted() is emitted.
+ *  Creates a new KDSingleApplicationGuard guarding \a parent from mulitply instances.
+ *  If \a policy is AutoKillOtherInstances (the default), all instances, which try to start,
+ *  are killed automatically and instanceStarted() is emitted.
+ *  If \a policy is NoPolicy, the other instance will run and instanceStarted() is emitted.
  */
 KDSingleApplicationGuard::KDSingleApplicationGuard( QCoreApplication* parent, Policy policy )
-    : QObject( parent ),
-      d( new Private( this ) )
+: QObject( parent ),
+d( new Private( this ) )
 {
     const QString name = parent->applicationName();
     Q_ASSERT_X( !name.isEmpty(), "KDSingleApplicationGuard::KDSingleApplicationGuard", "applicationName must not be emty" );
     d->mem.setKey( name );
-   
+
     // if another instance crashed, the shared memory segment is still there on Unix
     // the following lines trigger deletion in that case
-#ifndef Q_WS_WIN
+    #ifndef Q_WS_WIN
     d->mem.attach();
     d->mem.detach();
-#endif
-    
+    #endif
+
     d->policy = policy;
-            
+
     const bool created = d->mem.create( sizeof( InstanceRegister ) );
     if( !created )
     {
@@ -288,7 +288,7 @@ KDSingleApplicationGuard::KDSingleApplicationGuard( QCoreApplication* parent, Po
             qWarning( "KDSingleApplicationGuard: Could neither create nor attach to shared memory segment." );
             return;
         }
-        
+
         // lets wait till the other instance initialized the register
         bool initialized = false;
         while( !initialized )
@@ -298,52 +298,57 @@ KDSingleApplicationGuard::KDSingleApplicationGuard( QCoreApplication* parent, Po
         }
     }
 
-
-    KDLockedSharedMemoryPointer< InstanceRegister > instances( &d->mem );
-
-    if( !created )
+    bool killMyself = false;
     {
-        // we're _not_ the first instance
-        // but the 
-        bool killOurSelf = false;
-        
-        // find a new slot...
-        d->id = std::find( instances->info, instances->info + KDSINGLEAPPLICATIONGUARD_NUMBER_OF_PROCESSES, ProcessInfo() ) - instances->info;
-        ProcessInfo& info = instances->info[ d->id ];
-        info = ProcessInfo( NewInstance, parent->arguments(), QCoreApplication::applicationPid() );
-        killOurSelf = instances->policy == AutoKillOtherInstances;
-        d->policy = instances->policy;
+        KDLockedSharedMemoryPointer< InstanceRegister > instances( &d->mem );
 
-        // but the signal that we tried to start was sent to the primary application
-        if( killOurSelf )
+        if( !created )
         {
-            info.command |= ExitedInstance;
-            exit( 1 );
+            // we're _not_ the first instance
+            // but the
+            bool killOurSelf = false;
+
+            // find a new slot...
+            d->id = std::find( instances->info, instances->info + KDSINGLEAPPLICATIONGUARD_NUMBER_OF_PROCESSES, ProcessInfo() ) - instances->info;
+            ProcessInfo& info = instances->info[ d->id ];
+            info = ProcessInfo( NewInstance, parent->arguments(), QCoreApplication::applicationPid() );
+            killOurSelf = instances->policy == AutoKillOtherInstances;
+            d->policy = instances->policy;
+
+            // but the signal that we tried to start was sent to the primary application
+            if( killOurSelf )
+            {
+                info.command |= ExitedInstance;
+                killMyself = true;
+            }
+        }
+        else
+        {
+            // ok.... we are the first instance
+            InstanceRegister reg( policy );        // create a new list
+            d->id = 0;                             // our id = 0
+            // and we've no command
+            reg.info[ 0 ] = ProcessInfo( NoCommand, parent->arguments(), QCoreApplication::applicationPid() );
+            *instances = reg;                      // push this is the process list into shared memory
         }
     }
-    else
-    {
-        // ok.... we are the first instance
-        InstanceRegister reg( policy );        // create a new list
-        d->id = 0;                             // our id = 0
-        // and we've no command
-        reg.info[ 0 ] = ProcessInfo( NoCommand, parent->arguments(), QCoreApplication::applicationPid() );
-        *instances = reg;                      // push this is the process list into shared memory
-    }
+    // call exit after we let the locker release our memory, as exit() is not guaranteed to clean up objects on the stack
+    if ( killMyself )
+        exit( 1 );
 
-#ifndef Q_WS_WIN
-    ::signal( SIGINT, SIGINT_handler );
-#endif
+    #ifndef Q_WS_WIN
+        ::signal( SIGINT, SIGINT_handler );
+        #endif
 
-    // now listen for commands
-    startTimer( 250 );
+        // now listen for commands
+        startTimer( 250 );
 }
 
 /*!
-  Destroys this SingleApplicationGuard.
-  If this instance has been the primary instance and no other instance is existing anymore,
-  the application is shut down completely. Otherwise the destructor selects another instance to 
-  be the primary instances.
+ *  Destroys this SingleApplicationGuard.
+ *  If this instance has been the primary instance and no other instance is existing anymore,
+ *  the application is shut down completely. Otherwise the destructor selects another instance to
+ *  be the primary instances.
  */
 KDSingleApplicationGuard::~KDSingleApplicationGuard()
 {
@@ -352,16 +357,16 @@ KDSingleApplicationGuard::~KDSingleApplicationGuard()
 
     d->shutdownInstance();
 }
- 
-/*!
-  \property KDSingleApplicationGuard::primaryInstance
-   Determines wheter this instance is the primary instance. 
-   The primary instance is the first instance which was started or an instance which
-   got selected by KDSingleApplicationGuard's destructor, when the primary instance was
-   shut down.
 
-   Get this property's value using %isPrimaryInstance(), and monitor changes to it
-   using becamePrimaryInstance().
+/*!
+ *  \property KDSingleApplicationGuard::primaryInstance
+ *   Determines wheter this instance is the primary instance.
+ *   The primary instance is the first instance which was started or an instance which
+ *   got selected by KDSingleApplicationGuard's destructor, when the primary instance was
+ *   shut down.
+ *
+ *   Get this property's value using %isPrimaryInstance(), and monitor changes to it
+ *   using becamePrimaryInstance().
  */
 bool KDSingleApplicationGuard::isPrimaryInstance() const
 {
@@ -369,12 +374,12 @@ bool KDSingleApplicationGuard::isPrimaryInstance() const
 }
 
 /*!
- \property KDSingleApplicationGuard::Policy
- Specifies the policy KDSingleApplicationGuard is using when new instances are started.
- This can only be set in the primary instance.
-
- Get this property's value using %policy(), set it using %setPolicy(), and monitor changes
- to it using policyChanged().
+ * \property KDSingleApplicationGuard::Policy
+ * Specifies the policy KDSingleApplicationGuard is using when new instances are started.
+ * This can only be set in the primary instance.
+ *
+ * Get this property's value using %policy(), set it using %setPolicy(), and monitor changes
+ * to it using policyChanged().
  */
 KDSingleApplicationGuard::Policy KDSingleApplicationGuard::policy() const
 {
@@ -394,7 +399,7 @@ void KDSingleApplicationGuard::setPolicy( Policy policy )
 }
 
 /*!
- Returns a list of all currently running instances.
+ * Returns a list of all currently running instances.
  */
 QList< KDSingleApplicationGuard::Instance > KDSingleApplicationGuard::instances() const
 {
@@ -409,10 +414,10 @@ QList< KDSingleApplicationGuard::Instance > KDSingleApplicationGuard::instances(
     return result;
 }
 
-/*! 
-  Shuts down all other instances. This can only be called from the
-  the primary instance.
-  Shut down is done gracefully via QCoreApplication::quit().
+/*!
+ *  Shuts down all other instances. This can only be called from the
+ *  the primary instance.
+ *  Shut down is done gracefully via QCoreApplication::quit().
  */
 void KDSingleApplicationGuard::shutdownOtherInstances()
 {
@@ -426,9 +431,9 @@ void KDSingleApplicationGuard::shutdownOtherInstances()
 }
 
 /*!
-  Kills all other instances. This can only be called from the
-  the primary instance.
-  Killing is done via exit(1)
+ *  Kills all other instances. This can only be called from the
+ *  the primary instance.
+ *  Killing is done via exit(1)
  */
 void KDSingleApplicationGuard::killOtherInstances()
 {
@@ -442,7 +447,7 @@ void KDSingleApplicationGuard::killOtherInstances()
 }
 
 /*!
-  \reimp
+ *  \reimp
  */
 void KDSingleApplicationGuard::timerEvent( QTimerEvent* event )
 {
@@ -456,11 +461,11 @@ void KDSingleApplicationGuard::timerEvent( QTimerEvent* event )
 
         {
             KDLockedSharedMemoryPointer< InstanceRegister > instances( &d->mem );
-            
+
             for( int i = 1; i < KDSINGLEAPPLICATIONGUARD_NUMBER_OF_PROCESSES; ++i )
             {
                 ProcessInfo& info = instances->info[ i ];
-                if( info.command & NewInstance ) 
+                if( info.command & NewInstance )
                 {
                     startedInstances.push_back( Instance( info.arguments(), info.pid ) );
                     info.command &= ~NewInstance;  // clear NewInstance flag
@@ -472,7 +477,7 @@ void KDSingleApplicationGuard::timerEvent( QTimerEvent* event )
                 }
             }
         }
-     
+
         // one signal for every new instance - _after_ the memory segment was unlocked again
         for( QList< Instance >::const_iterator it = startedInstances.begin(); it != startedInstances.end(); ++it )
             emit instanceStarted( *it );
@@ -495,7 +500,7 @@ void KDSingleApplicationGuard::timerEvent( QTimerEvent* event )
             if( instances->info[ d->id ].command & BecomePrimaryCommand )
             {
                 // we became primary!
-                instances->info[ 0 ] = instances->info[ d->id ]; 
+                instances->info[ 0 ] = instances->info[ d->id ];
                 instances->info[ d->id ] = ProcessInfo();  // change our id to 0 and declare the old slot as free
                 d->id = 0;
                 emit becamePrimaryInstance();
@@ -510,7 +515,7 @@ void KDSingleApplicationGuard::timerEvent( QTimerEvent* event )
                 d->id = -1;                                          // becauso our d'tor won't be called anymore
             }
         }
-   
+
         if( killOurSelf )  // kill our self takes precedence
             exit( 1 );
         else if( shutDownOurSelf )
@@ -590,14 +595,14 @@ KDAB_UNITTEST_SIMPLE( KDSingleApplicationGuard, "kdcoretools" ) {
         spy3 = new QSignalSpy( guard3, SIGNAL( becamePrimaryInstance() ) );
         assertFalse( guard3->isPrimaryInstance() );
     }
-        
+
     wait( 1000 );
     assertEqual( spy3->count(), 1 );
     assertEqual( guard3->instances().count(), 1 );
     assertTrue( guard3->isPrimaryInstance() );
 
     assertEqual( guard3->instances().first().arguments, qApp->arguments() );
-    
+
     QSignalSpy spyStarted( guard3, SIGNAL( instanceStarted( KDSingleApplicationGuard::Instance ) ) );
     QSignalSpy spyExited( guard3, SIGNAL( instanceExited( KDSingleApplicationGuard::Instance ) ) );
 
@@ -609,13 +614,13 @@ KDAB_UNITTEST_SIMPLE( KDSingleApplicationGuard, "kdcoretools" ) {
 
         assertEqual( spyStarted.count(), 2 );
     }
-        
+
     wait( 1000 );
     assertEqual( spyExited.count(), 2 );
 
     delete spy3;
     delete guard3;
- }
+}
 
 #endif // KDTOOLSCORE_UNITTESTS
 

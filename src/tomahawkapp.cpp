@@ -154,29 +154,54 @@ TomahawkApp::TomahawkApp( int& argc, char *argv[] )
     , m_mainwindow( 0 )
     , m_infoSystem( 0 )
 {
-    qsrand( QTime( 0, 0, 0 ).secsTo( QTime::currentTime() ) );
-    
-#ifdef TOMAHAWK_HEADLESS
-    m_headless = true;
-#else
-    m_mainwindow = 0;
-    m_headless = arguments().contains( "--headless" );
-    setWindowIcon( QIcon( RESPATH "icons/tomahawk-icon-128x128.png" ) );
-#endif
-
     qDebug() << "TomahawkApp thread:" << this->thread();
     setOrganizationName( QLatin1String( ORGANIZATION_NAME ) );
     setOrganizationDomain( QLatin1String( ORGANIZATION_DOMAIN ) );
     setApplicationName( QLatin1String( APPLICATION_NAME ) );
     setApplicationVersion( QLatin1String( VERSION ) );
+    setupLogfile();
+}
+
+
+TomahawkApp::~TomahawkApp()
+{
+    qDebug() << Q_FUNC_INFO;
+
+    delete m_sipHandler;
+    delete m_servent;
+
+#ifndef TOMAHAWK_HEADLESS
+    delete m_mainwindow;
+    delete m_audioEngine;
+#endif
+
+    delete m_database;
+}
+
+
+void
+TomahawkApp::init()
+{
+    qsrand( QTime( 0, 0, 0 ).secsTo( QTime::currentTime() ) );
+
+    #ifdef TOMAHAWK_HEADLESS
+    m_headless = true;
+    #else
+    m_mainwindow = 0;
+    m_headless = arguments().contains( "--headless" );
+    setWindowIcon( QIcon( RESPATH "icons/tomahawk-icon-128x128.png" ) );
+    #endif
+
     registerMetaTypes();
     setupLogfile();
-    
+
+    Echonest::Config::instance()->setAPIKey( "JRIHWEP6GPOER2QQ6" );
+
     new TomahawkSettings( this );
     m_audioEngine = new AudioEngine;
     m_scanManager = new ScanManager( this );
     new Pipeline( this );
-    
+
     m_servent = new Servent( this );
     connect( m_servent, SIGNAL( ready() ), SLOT( setupSIP() ) );
 
@@ -185,15 +210,15 @@ TomahawkApp::TomahawkApp( int& argc, char *argv[] )
 
     qDebug() << "Init Echonest Factory.";
     GeneratorFactory::registerFactory( "echonest", new EchonestFactory );
-    
+
     m_scrubFriendlyName = arguments().contains( "--demo" );
     // Register shortcut handler for this platform
-#ifdef Q_WS_MAC
+    #ifdef Q_WS_MAC
     m_shortcutHandler = new MacShortcutHandler( this );
     Tomahawk::setShortcutHandler( static_cast<MacShortcutHandler*>( m_shortcutHandler) );
 
     Tomahawk::setApplicationHandler( this );
-#endif
+    #endif
 
     // Connect up shortcuts
     if ( m_shortcutHandler )
@@ -228,10 +253,10 @@ TomahawkApp::TomahawkApp( int& argc, char *argv[] )
 
     connect( m_audioEngine, SIGNAL( stopped() ),
              m_scrobbler,     SLOT( trackStopped() ), Qt::QueuedConnection );
-#else
+    #else
     qDebug() << "Setting NAM.";
     TomahawkUtils::setNam( new QNetworkAccessManager );
-#endif
+    #endif
 
     // Set up proxy
     //FIXME: This overrides the lastfm proxy above?
@@ -248,10 +273,10 @@ TomahawkApp::TomahawkApp( int& argc, char *argv[] )
     else
         TomahawkUtils::setProxy( new QNetworkProxy( QNetworkProxy::NoProxy ) );
 
-    
+
     Echonest::Config::instance()->setAPIKey( "JRIHWEP6GPOER2QQ6" );
     Echonest::Config::instance()->setNetworkAccessManager( TomahawkUtils::nam() );
-        
+
     QNetworkProxy::setApplicationProxy( *TomahawkUtils::proxy() );
 
     qDebug() << "Init SIP system.";
@@ -265,7 +290,7 @@ TomahawkApp::TomahawkApp( int& argc, char *argv[] )
         m_mainwindow->setWindowTitle( "Tomahawk" );
         m_mainwindow->show();
     }
-#endif
+    #endif
 
     qDebug() << "Init Local Collection.";
     initLocalCollection();
@@ -339,7 +364,7 @@ TomahawkApp::registerMetaTypes()
     qRegisterMetaType< QMap<QString, unsigned int> >("QMap<QString, unsigned int>");
     qRegisterMetaType< QMap< QString, plentry_ptr > >("QMap< QString, plentry_ptr >");
     qRegisterMetaType< QHash< QString, QMap<quint32, quint16> > >("QHash< QString, QMap<quint32, quint16> >");
-    
+
     qRegisterMetaType< GeneratorMode>("GeneratorMode");
     qRegisterMetaType<Tomahawk::GeneratorMode>("Tomahawk::GeneratorMode");
     // Extra definition for namespaced-versions of signals/slots required
@@ -532,16 +557,16 @@ TomahawkApp::loadUrl( const QString& url )
 }
 
 
-void 
+void
 TomahawkApp::instanceStarted( KDSingleApplicationGuard::Instance instance )
 {
     qDebug() << "INSTANCE STARTED!" << instance.pid << instance.arguments;
-    
-    if( instance.arguments.size() < 2 ) 
+
+    if( instance.arguments.size() < 2 )
     {
         return;
     }
-    
+
     loadUrl( instance.arguments.at( 1 ) );
 }
 
