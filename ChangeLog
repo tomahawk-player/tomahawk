@@ -1,4 +1,8 @@
 Version 0.0.3:
+    * Show spinner while resolving playlists.
+    * Go back to previous page visible when deleting a playlist.
+    * Fixed issue where automatic playlists and station summaries were not
+      updated in the playlist header.
     * Fixed an issue which caused duplicate items when rescanning.
     * Revert change introduced in 0.0.2 causing Twitter protocol to not try
       to reconnect to a peer if it couldn't connect the first time the plugin
