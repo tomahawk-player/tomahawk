@@ -82,8 +82,11 @@ InfoSystemCache::getCachedInfoSlot( Tomahawk::InfoSystem::InfoCacheCriteria crit
         QHash< InfoCacheCriteria, QVariant > typedatacache = m_dataCache[type];
         QHash< InfoCacheCriteria, QDateTime > typeinserttimecache = m_insertTimeCache[type];
         typemaxtimecache.remove( criteria );
+        m_maxTimeCache[type] = typemaxtimecache;
         typedatacache.remove( criteria );
+        m_dataCache[type] = typedatacache;
         typeinserttimecache.remove( criteria );
+        m_insertTimeCache[type] = typeinserttimecache;
         m_dirtySet.insert( type );
         emit notInCache( criteria, caller, type, input, customData );
         return;
