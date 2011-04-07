@@ -178,7 +178,7 @@ LastFmPlugin::fetchCoverArt( const QString &caller, const InfoType type, const Q
     criteria["artist"] = hash["artist"].toString();
     criteria["album"] = hash["album"].toString();
     
-    emit getCachedInfo( criteria, caller, type, data, customData );
+    emit getCachedInfo( criteria, 2419200000, caller, type, data, customData );
 }
 
 void
