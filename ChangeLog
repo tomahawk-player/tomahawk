@@ -1,3 +1,6 @@
+Version 0.0.4:
+    * Fixed a crash situation caused by sources going on- or offline.
+
 Version 0.0.3:
     * Show spinner while resolving playlists.
     * Go back to previous page visible when deleting a playlist.
