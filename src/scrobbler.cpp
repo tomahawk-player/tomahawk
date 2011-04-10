@@ -43,6 +43,18 @@ Scrobbler::Scrobbler( QObject* parent )
         SLOT( infoSystemInfo( QString, Tomahawk::InfoSystem::InfoType, QVariant, QVariant, Tomahawk::InfoSystem::InfoCustomData ) ) );
     
     connect( TomahawkApp::instance()->infoSystem(), SIGNAL( finished( QString ) ), SLOT( infoSystemFinished( QString ) ) );
+
+    connect( AudioEngine::instance(), SIGNAL( started( const Tomahawk::result_ptr& ) ),
+             SLOT( trackStarted( const Tomahawk::result_ptr& ) ), Qt::QueuedConnection );
+
+    connect( AudioEngine::instance(), SIGNAL( paused() ),
+             SLOT( trackPaused() ), Qt::QueuedConnection );
+
+    connect( AudioEngine::instance(), SIGNAL( resumed() ),
+             SLOT( trackResumed() ), Qt::QueuedConnection );
+
+    connect( AudioEngine::instance(), SIGNAL( stopped() ),
+             SLOT( trackStopped() ), Qt::QueuedConnection );
 }
 
 

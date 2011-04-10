@@ -225,17 +225,6 @@ TomahawkApp::init()
     qDebug() << "Setting NAM.";
     TomahawkUtils::setNam( new lastfm::NetworkAccessManager( this ) );
 
-    connect( m_audioEngine, SIGNAL( started( const Tomahawk::result_ptr& ) ),
-             m_scrobbler,     SLOT( trackStarted( const Tomahawk::result_ptr& ) ), Qt::QueuedConnection );
-
-    connect( m_audioEngine, SIGNAL( paused() ),
-             m_scrobbler,     SLOT( trackPaused() ), Qt::QueuedConnection );
-
-    connect( m_audioEngine, SIGNAL( resumed() ),
-             m_scrobbler,     SLOT( trackResumed() ), Qt::QueuedConnection );
-
-    connect( m_audioEngine, SIGNAL( stopped() ),
-             m_scrobbler,     SLOT( trackStopped() ), Qt::QueuedConnection );
     #else
     qDebug() << "Setting NAM.";
     TomahawkUtils::setNam( new QNetworkAccessManager );
