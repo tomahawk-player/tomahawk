@@ -1,5 +1,5 @@
 /* === This file is part of Tomahawk Player - <http://tomahawk-player.org> ===
- * 
+ *
  *   Copyright 2010-2011, Christian Muehlhaeuser <muesli@tomahawk-player.org>
  *
  *   Tomahawk is free software: you can redistribute it and/or modify
@@ -50,7 +50,6 @@ DatabaseCommand_AllTracks::exec( DatabaseImpl* dbi )
             m_orderToken = "file_join.albumpos";
             break;
     }
-
 
     if ( !m_collection.isNull() )
         sourceToken = QString( "AND file.source %1" ).arg( m_collection->source()->isLocal() ? "IS NULL" : QString( "= %1" ).arg( m_collection->source()->id() ) );
@@ -138,12 +137,12 @@ DatabaseCommand_AllTracks::exec( DatabaseImpl* dbi )
         results << result;
         qry->addResults( results );
         qry->setResolveFinished( true );
-        
+
         ql << qry;
     }
 
     qDebug() << Q_FUNC_INFO << ql.length();
 
-    emit tracks( ql );
+    emit tracks( ql, data() );
     emit done( m_collection );
 }

@@ -1,5 +1,5 @@
 /* === This file is part of Tomahawk Player - <http://tomahawk-player.org> ===
- * 
+ *
  *   Copyright 2010-2011, Christian Muehlhaeuser <muesli@tomahawk-player.org>
  *
  *   Tomahawk is free software: you can redistribute it and/or modify
@@ -38,9 +38,10 @@ public:
         ModificationTime = 1
     };
 
-    explicit DatabaseCommand_AllAlbums( const Tomahawk::collection_ptr& collection, QObject* parent = 0 )
+    explicit DatabaseCommand_AllAlbums( const Tomahawk::collection_ptr& collection, const Tomahawk::artist_ptr& artist = Tomahawk::artist_ptr(), QObject* parent = 0 )
         : DatabaseCommand( parent )
         , m_collection( collection )
+        , m_artist( artist )
         , m_amount( 0 )
         , m_sortOrder( DatabaseCommand_AllAlbums::None )
         , m_sortDescending( false )
@@ -51,16 +52,21 @@ public:
     virtual bool doesMutates() const { return false; }
     virtual QString commandname() const { return "allalbums"; }
 
+    void execForCollection( DatabaseImpl* );
+    void execForArtist( DatabaseImpl* );
+
     void setLimit( unsigned int amount ) { m_amount = amount; }
     void setSortOrder( DatabaseCommand_AllAlbums::SortOrder order ) { m_sortOrder = order; }
     void setSortDescending( bool descending ) { m_sortDescending = descending; }
 
 signals:
-    void albums( const QList<Tomahawk::album_ptr>&, const Tomahawk::collection_ptr& );
-    void done( const Tomahawk::collection_ptr& );
+    void albums( const QList<Tomahawk::album_ptr>&, const QVariant& data );
+    void done();
 
 private:
     Tomahawk::collection_ptr m_collection;
+    Tomahawk::artist_ptr m_artist;
+
     unsigned int m_amount;
     DatabaseCommand_AllAlbums::SortOrder m_sortOrder;
     bool m_sortDescending;

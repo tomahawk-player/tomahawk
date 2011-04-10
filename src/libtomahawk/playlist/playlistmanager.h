@@ -162,8 +162,8 @@ private:
 
     AlbumModel* m_superAlbumModel;
     AlbumView* m_superAlbumView;
-    CollectionFlatModel* m_superCollectionFlatModel;
-    CollectionView* m_superCollectionView;
+    TreeModel* m_superCollectionModel;
+    ArtistView* m_superCollectionView;
     WelcomeWidget* m_welcomeWidget;
 
     QList< Tomahawk::collection_ptr > m_superCollections;

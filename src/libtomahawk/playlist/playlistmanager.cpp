@@ -101,12 +101,12 @@ PlaylistManager::PlaylistManager( QObject* parent )
     m_widget->layout()->addWidget( line );
     m_widget->layout()->addWidget( m_splitter );
 
-    m_superCollectionView = new CollectionView();
-    m_superCollectionFlatModel = new CollectionFlatModel( m_superCollectionView );
-    m_superCollectionView->setTrackModel( m_superCollectionFlatModel );
+    m_superCollectionView = new ArtistView();
+    m_superCollectionModel = new TreeModel( m_superCollectionView );
+    m_superCollectionView->setModel( m_superCollectionModel );
     m_superCollectionView->setFrameShape( QFrame::NoFrame );
     m_superCollectionView->setAttribute( Qt::WA_MacShowFocusRect, 0 );
-    m_superCollectionView->proxyModel()->setShowOfflineResults( false );
+//    m_superCollectionView->proxyModel()->setShowOfflineResults( false );
 
     m_superAlbumView = new AlbumView();
     m_superAlbumModel = new AlbumModel( m_superAlbumView );
@@ -371,19 +371,19 @@ PlaylistManager::show( ViewPage* page )
 bool
 PlaylistManager::showSuperCollection()
 {
-    QList< collection_ptr > toAdd;
+    if ( m_superCollections.isEmpty() )
+        m_superCollectionModel->addAllCollections();
+
     foreach( const Tomahawk::source_ptr& source, SourceList::instance()->sources() )
     {
         if ( !m_superCollections.contains( source->collection() ) )
         {
             m_superCollections.append( source->collection() );
-            toAdd << source->collection();
-            m_superAlbumModel->addCollection( source->collection() );
+//            m_superAlbumModel->addCollection( source->collection() );
         }
     }
-    m_superCollectionFlatModel->addCollections( toAdd );
 
-    m_superCollectionFlatModel->setTitle( tr( "All available tracks" ) );
+    m_superCollectionModel->setTitle( tr( "All available tracks" ) );
     m_superAlbumModel->setTitle( tr( "All available albums" ) );
 
     if ( m_currentMode == 0 )

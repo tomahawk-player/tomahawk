@@ -43,6 +43,7 @@ set( libSources
     database/databasecommand.cpp
     database/databasecommandloggable.cpp
     database/databasecommand_resolve.cpp
+    database/databasecommand_allartists.cpp
     database/databasecommand_allalbums.cpp
     database/databasecommand_alltracks.cpp
     database/databasecommand_addfiles.cpp
@@ -194,6 +195,7 @@ set( libHeaders
     database/databasecommand.h
     database/databasecommandloggable.h
     database/databasecommand_resolve.h
+    database/databasecommand_allartists.h
     database/databasecommand_allalbums.h
     database/databasecommand_alltracks.h
     database/databasecommand_addfiles.h

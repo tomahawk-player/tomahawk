@@ -16,19 +16,19 @@
  *   along with Tomahawk. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef COLLECTIONMODEL_H
-#define COLLECTIONMODEL_H
+#ifndef TREEMODEL_H
+#define TREEMODEL_H
 
 #include <QAbstractItemModel>
-#include <QList>
-#include <QHash>
+#include <QPixmap>
+
+#include "album.h"
+#include "collection.h"
+#include "playlistinterface.h"
+#include "database/databasecommand_allartists.h"
 
 #include "treemodelitem.h"
-#include "collection.h"
-#include "query.h"
-#include "typedefs.h"
-#include "playlist.h"
-#include "playlistinterface.h"
+#include "tomahawk/infosystem.h"
 
 #include "dllmacro.h"
 
@@ -40,53 +40,84 @@ Q_OBJECT
 
 public:
     explicit TreeModel( QObject* parent = 0 );
-    ~TreeModel();
+    virtual ~TreeModel();
 
-    QModelIndex index( int row, int column, const QModelIndex& parent ) const;
-    QModelIndex parent( const QModelIndex& child ) const;
+    virtual QModelIndex index( int row, int column, const QModelIndex& parent ) const;
+    virtual QModelIndex parent( const QModelIndex& child ) const;
 
-    int trackCount() const { return rowCount( QModelIndex() ); }
+    virtual bool isReadOnly() const { return true; }
 
-    int rowCount( const QModelIndex& parent ) const;
-    int columnCount( const QModelIndex& parent ) const;
+    virtual int trackCount() const { return rowCount( QModelIndex() ); }
+    virtual int albumCount() const { return rowCount( QModelIndex() ); }
 
-    QVariant data( const QModelIndex& index, int role = Qt::DisplayRole ) const;
-    QVariant headerData( int section, Qt::Orientation orientation, int role ) const;
+    virtual int rowCount( const QModelIndex& parent ) const;
+    virtual int columnCount( const QModelIndex& parent ) const;
 
+    virtual QVariant data( const QModelIndex& index, int role = Qt::DisplayRole ) const;
+    virtual QVariant headerData( int section, Qt::Orientation orientation, int role ) const;
+
+    virtual void removeIndex( const QModelIndex& index );
+    virtual void removeIndexes( const QList<QModelIndex>& indexes );
+
+    virtual QMimeData* mimeData( const QModelIndexList& indexes ) const;
+    virtual QStringList mimeTypes() const;
+    virtual Qt::ItemFlags flags( const QModelIndex& index ) const;
+
+    void addAllCollections();
     void addCollection( const Tomahawk::collection_ptr& collection );
-    void removeCollection( const Tomahawk::collection_ptr& collection );
+    void addFilteredCollection( const Tomahawk::collection_ptr& collection, unsigned int amount, DatabaseCommand_AllArtists::SortOrder order );
 
-    virtual QPersistentModelIndex currentItem() { return m_currentIndex; }
+    void addAlbums( const Tomahawk::artist_ptr& artist, const QModelIndex& parent );
+    void addTracks( const Tomahawk::album_ptr& album, const QModelIndex& parent );
 
-    virtual PlaylistInterface::RepeatMode repeatMode() const { return PlaylistInterface::NoRepeat; }
-    virtual bool shuffled() const { return false; }
+    virtual QString title() const { return m_title; }
+    virtual QString description() const { return m_description; }
+    virtual void setTitle( const QString& title ) { m_title = title; }
+    virtual void setDescription( const QString& description ) { m_description = description; }
 
-    virtual void setRepeatMode( PlaylistInterface::RepeatMode /*mode*/ ) {}
-    virtual void setShuffled( bool /*shuffled*/ ) {}
-
-    TreeModelItem* itemFromIndex( const QModelIndex& index ) const;
+    TreeModelItem* itemFromIndex( const QModelIndex& index ) const
+    {
+        if ( index.isValid() )
+            return static_cast<TreeModelItem*>( index.internalPointer() );
+        else
+        {
+            return m_rootItem;
+        }
+    }
 
 public slots:
-    virtual void setCurrentItem( const QModelIndex& index );
+    virtual void setRepeatMode( PlaylistInterface::RepeatMode /*mode*/ ) {}
+    virtual void setShuffled( bool /*shuffled*/ ) {}
 
 signals:
     void repeatModeChanged( PlaylistInterface::RepeatMode mode );
     void shuffleModeChanged( bool enabled );
 
-    void loadingStarts();
-    void loadingFinished();
     void trackCountChanged( unsigned int tracks );
 
-private slots:
-    void onTracksAdded( const QList<Tomahawk::query_ptr>& tracks, const Tomahawk::collection_ptr& collection );
-    void onTracksAddingFinished( const Tomahawk::collection_ptr& collection );
+protected:
+    bool canFetchMore( const QModelIndex& parent ) const;
+    void fetchMore( const QModelIndex& parent );
 
-    void onSourceOffline( Tomahawk::source_ptr src );
+private slots:
+    void onArtistsAdded( const QList<Tomahawk::artist_ptr>& artists );
+    void onAlbumsAdded( const QList<Tomahawk::album_ptr>& albums, const QVariant& data );
+    void onTracksAdded( const QList<Tomahawk::query_ptr>& tracks, const QVariant& data );
+
+    void infoSystemInfo( QString caller, Tomahawk::InfoSystem::InfoType type, QVariant input, QVariant output, Tomahawk::InfoSystem::InfoCustomData customData );
+    void infoSystemFinished( QString target );
+
+    void onDataChanged();
 
 private:
-    TreeModelItem* m_rootItem;
-    QMap< Tomahawk::collection_ptr, TreeModelItem* > m_collectionIndex;
     QPersistentModelIndex m_currentIndex;
+    TreeModelItem* m_rootItem;
+    QPixmap m_defaultCover;
+
+    QString m_title;
+    QString m_description;
+
+    Tomahawk::collection_ptr m_collection;
 };
 
-#endif // COLLECTIONMODEL_H
+#endif // ALBUMMODEL_H

@@ -1,5 +1,5 @@
 /* === This file is part of Tomahawk Player - <http://tomahawk-player.org> ===
- * 
+ *
  *   Copyright 2010-2011, Christian Muehlhaeuser <muesli@tomahawk-player.org>
  *
  *   Tomahawk is free software: you can redistribute it and/or modify
@@ -76,6 +76,9 @@ public:
     virtual bool singletonCmd() const { return false; }
     virtual bool localOnly() const { return false; }
 
+    virtual QVariant data() const { return m_data; }
+    virtual void setData( const QVariant& data ) { m_data = data; }
+
     QString guid() const
     {
         if( m_guid.isEmpty() )
@@ -98,6 +101,8 @@ private:
     State m_state;
     Tomahawk::source_ptr m_source;
     mutable QString m_guid;
+
+    QVariant m_data;
 };
 
 Q_DECLARE_METATYPE( DatabaseCommand )

@@ -31,7 +31,8 @@
 
 #define LASTFM_DEFAULT_COVER "http://cdn.last.fm/flatness/catalogue/noimage"
 
-static QString s_infoIdentifier = QString("AUDIOCONTROLS");
+static QString s_infoIdentifier = QString( "AUDIOCONTROLS" );
+
 
 AudioControls::AudioControls( QWidget* parent )
     : QWidget( parent )
@@ -209,57 +210,21 @@ AudioControls::onVolumeChanged( int volume )
 
 
 void
-AudioControls::onCoverArtDownloaded()
-{
-    if ( m_currentTrack.isNull() )
-        return;
-
-    QNetworkReply* reply = qobject_cast<QNetworkReply*>( sender() );
-    QUrl redir = reply->attribute( QNetworkRequest::RedirectionTargetAttribute ).toUrl();
-    if ( redir.isEmpty() )
-    {
-        const QByteArray ba = reply->readAll();
-        if ( ba.length() )
-        {
-            QPixmap pm;
-            pm.loadFromData( ba );
-
-            if ( pm.isNull() || reply->url().toString().startsWith( LASTFM_DEFAULT_COVER ) )
-                ui->coverImage->setPixmap( m_defaultCover );
-            else
-                ui->coverImage->setPixmap( pm.scaled( ui->coverImage->size(), Qt::IgnoreAspectRatio, Qt::SmoothTransformation ) );
-        }
-    }
-    else
-    {
-        // Follow HTTP redirect
-        QNetworkRequest req( redir );
-        QNetworkReply* reply = TomahawkUtils::nam()->get( req );
-        connect( reply, SIGNAL( finished() ), SLOT( onCoverArtDownloaded() ) );
-    }
-
-    reply->deleteLater();
-}
-
-
-void
 AudioControls::onPlaybackStarted( const Tomahawk::result_ptr& result )
 {
     qDebug() << Q_FUNC_INFO;
 
     onPlaybackLoading( result );
 
-    QString artistName = result->artist()->name();
-    QString albumName = result->album()->name();
-
     Tomahawk::InfoSystem::InfoCustomData trackInfo;
-
     trackInfo["artist"] = QVariant::fromValue< QString >( result->artist()->name() );
     trackInfo["album"] = QVariant::fromValue< QString >( result->album()->name() );
+
     TomahawkApp::instance()->infoSystem()->getInfo(
         s_infoIdentifier, Tomahawk::InfoSystem::InfoAlbumCoverArt,
         QVariant::fromValue< Tomahawk::InfoSystem::InfoCustomData >( trackInfo ), Tomahawk::InfoSystem::InfoCustomData() );
 }
+
 
 void
 AudioControls::infoSystemInfo( QString caller, Tomahawk::InfoSystem::InfoType type, QVariant input, QVariant output, Tomahawk::InfoSystem::InfoCustomData customData )
@@ -270,7 +235,7 @@ AudioControls::infoSystemInfo( QString caller, Tomahawk::InfoSystem::InfoType ty
     qDebug() << Q_FUNC_INFO;
     if ( caller != s_infoIdentifier || type != Tomahawk::InfoSystem::InfoAlbumCoverArt )
     {
-        qDebug() << "info of wrong type or not with our identifier";
+        qDebug() << "Info of wrong type or not with our identifier";
         return;
     }
 
@@ -300,12 +265,14 @@ AudioControls::infoSystemInfo( QString caller, Tomahawk::InfoSystem::InfoType ty
     }
 }
 
+
 void
 AudioControls::infoSystemFinished( QString target )
 {
     Q_UNUSED( target );
     qDebug() << Q_FUNC_INFO;
 }
+
 
 void
 AudioControls::onPlaybackLoading( const Tomahawk::result_ptr& result )
