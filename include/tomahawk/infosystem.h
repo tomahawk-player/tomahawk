@@ -112,7 +112,7 @@ public:
     virtual void getInfo( const QString &caller, const InfoType type, const QVariant &data, InfoCustomData customData ) = 0;
     
 signals:
-    void getCachedInfo( Tomahawk::InfoSystem::InfoCacheCriteria criteria, qint64 newMaxAge, QString caller, Tomahawk::InfoSystem::InfoType type, QVariant input, Tomahawk::InfoSystem::InfoCustomData customData );
+    void getCachedInfo( Tomahawk::InfoSystem::InfoCacheCriteria criteria, QString caller, Tomahawk::InfoSystem::InfoType type, QVariant input, Tomahawk::InfoSystem::InfoCustomData customData );
     void updateCache( Tomahawk::InfoSystem::InfoCacheCriteria criteria, Tomahawk::InfoSystem::InfoType type, QVariant output );
     void info( QString caller, Tomahawk::InfoSystem::InfoType type, QVariant input, QVariant output, Tomahawk::InfoSystem::InfoCustomData customData );
     void finished( QString, Tomahawk::InfoSystem::InfoType );

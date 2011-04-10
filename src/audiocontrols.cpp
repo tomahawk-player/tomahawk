@@ -45,11 +45,11 @@ AudioControls::AudioControls( QWidget* parent )
 
     QFont font( ui->artistTrackLabel->font() );
     font.setPixelSize( 12 );
-    
+
 #ifdef Q_WS_MAC
     font.setPointSize( font.pointSize() - 2 );
 #endif
-    
+
     ui->artistTrackLabel->setFont( font );
     ui->artistTrackLabel->setElideMode( Qt::ElideMiddle );
     ui->artistTrackLabel->setType( QueryLabel::ArtistAndTrack );
@@ -144,10 +144,10 @@ AudioControls::AudioControls( QWidget* parent )
     connect( ui->volumeLowButton,  SIGNAL( clicked() ), AudioEngine::instance(), SLOT( lowerVolume() ) );
     connect( ui->volumeHighButton, SIGNAL( clicked() ), AudioEngine::instance(), SLOT( raiseVolume() ) );
 
-    
+
     connect( ui->playPauseButton,  SIGNAL( clicked() ), this, SIGNAL( playPressed() ) );
     connect( ui->pauseButton,  SIGNAL( clicked() ), this,     SIGNAL( pausePressed() ) );
-    
+
     connect( ui->repeatButton,     SIGNAL( clicked() ), SLOT( onRepeatClicked() ) );
     connect( ui->shuffleButton,    SIGNAL( clicked() ), SLOT( onShuffleClicked() ) );
 
@@ -170,7 +170,7 @@ AudioControls::AudioControls( QWidget* parent )
     connect( TomahawkApp::instance()->infoSystem(),
         SIGNAL( info( QString, Tomahawk::InfoSystem::InfoType, QVariant, QVariant, Tomahawk::InfoSystem::InfoCustomData ) ),
         SLOT( infoSystemInfo( QString, Tomahawk::InfoSystem::InfoType, QVariant, QVariant, Tomahawk::InfoSystem::InfoCustomData ) ) );
-    
+
     connect( TomahawkApp::instance()->infoSystem(), SIGNAL( finished( QString ) ), SLOT( infoSystemFinished( QString ) ) );
 
     onPlaybackStopped(); // initial state
@@ -251,9 +251,9 @@ AudioControls::onPlaybackStarted( const Tomahawk::result_ptr& result )
 
     QString artistName = result->artist()->name();
     QString albumName = result->album()->name();
-    
+
     Tomahawk::InfoSystem::InfoCustomData trackInfo;
-    
+
     trackInfo["artist"] = QVariant::fromValue< QString >( result->artist()->name() );
     trackInfo["album"] = QVariant::fromValue< QString >( result->album()->name() );
     TomahawkApp::instance()->infoSystem()->getInfo(
@@ -270,7 +270,7 @@ AudioControls::infoSystemInfo( QString caller, Tomahawk::InfoSystem::InfoType ty
         qDebug() << "info of wrong type or not with our identifier";
         return;
     }
-    
+
     if ( m_currentTrack.isNull() )
     {
         qDebug() << "Current track is null when trying to apply fetched cover art";
@@ -281,7 +281,7 @@ AudioControls::infoSystemInfo( QString caller, Tomahawk::InfoSystem::InfoType ty
     {
         qDebug() << "Cannot convert fetched art from a QByteArray";
         return;
-    }   
+    }
 
     Tomahawk::InfoSystem::InfoCustomData returnedData = output.value< Tomahawk::InfoSystem::InfoCustomData >();
     const QByteArray ba = returnedData["imgbytes"].toByteArray();
@@ -296,7 +296,7 @@ AudioControls::infoSystemInfo( QString caller, Tomahawk::InfoSystem::InfoType ty
             ui->coverImage->setPixmap( pm.scaled( ui->coverImage->size(), Qt::IgnoreAspectRatio, Qt::SmoothTransformation ) );
     }
 }
-   
+
 void
 AudioControls::infoSystemFinished( QString target )
 {
@@ -356,7 +356,7 @@ AudioControls::onPlaybackResumed()
     ui->pauseButton->setVisible( true );
     ui->pauseButton->setEnabled( true );
     ui->playPauseButton->setVisible( false );
-    ui->playPauseButton->setEnabled( false );  
+    ui->playPauseButton->setEnabled( false );
 }
 
 

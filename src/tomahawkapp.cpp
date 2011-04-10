@@ -223,7 +223,7 @@ TomahawkApp::init()
     qDebug() << "Init Scrobbler.";
     m_scrobbler = new Scrobbler( this );
     qDebug() << "Setting NAM.";
-    TomahawkUtils::setNam( new lastfm::NetworkAccessManager( this ) );
+    TomahawkUtils::setNam( lastfm::nam() );
 
     #else
     qDebug() << "Setting NAM.";
@@ -289,6 +289,13 @@ TomahawkApp::init()
 TomahawkApp::~TomahawkApp()
 {
     qDebug() << Q_FUNC_INFO;
+
+    // stop script resolvers
+    foreach( Tomahawk::ExternalResolver* r, m_scriptResolvers )
+    {
+        delete r;
+    }
+    m_scriptResolvers.clear();
 
     delete m_sipHandler;
     delete m_servent;

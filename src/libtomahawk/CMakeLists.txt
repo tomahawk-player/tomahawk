@@ -29,6 +29,7 @@ set( libSources
     sip/SipPlugin.cpp
 
     audio/madtranscode.cpp
+    audio/dummytranscode.cpp
     audio/vorbistranscode.cpp
     audio/flactranscode.cpp
     audio/audioengine.cpp
@@ -96,8 +97,8 @@ set( libSources
     playlist/albumview.cpp
 
     playlist/topbar/topbar.cpp
-    playlist/topbar/clearbutton.cpp  
-    playlist/topbar/searchlineedit.cpp  
+    playlist/topbar/clearbutton.cpp
+    playlist/topbar/searchlineedit.cpp
     playlist/topbar/lineedit.cpp
     playlist/topbar/searchbutton.cpp
 
@@ -175,6 +176,7 @@ set( libHeaders
 
     audio/transcodeinterface.h
     audio/madtranscode.h
+    audio/dummytranscode.h
     audio/vorbistranscode.h
     audio/flactranscode.h
     audio/audioengine.h
@@ -251,7 +253,7 @@ set( libHeaders
 
     playlist/topbar/topbar.h
     playlist/topbar/clearbutton.h
-    playlist/topbar/searchlineedit.h  
+    playlist/topbar/searchlineedit.h
     playlist/topbar/lineedit.h
     playlist/topbar/lineedit_p.h
     playlist/topbar/searchbutton.h
@@ -297,8 +299,8 @@ set( libHeaders
     kdsingleapplicationguard/kdlockedsharedmemorypointer.h
 )
 
-set( libHeaders_NoMOC 
-		playlist/dynamic/GeneratorInterface.h 
+set( libHeaders_NoMOC
+		playlist/dynamic/GeneratorInterface.h
 )
 set( libUI ${libUI}
     widgets/newplaylistwidget.ui

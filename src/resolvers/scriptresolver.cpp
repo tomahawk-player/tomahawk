@@ -1,5 +1,5 @@
 /* === This file is part of Tomahawk Player - <http://tomahawk-player.org> ===
- * 
+ *
  *   Copyright 2010-2011, Christian Muehlhaeuser <muesli@tomahawk-player.org>
  *
  *   Tomahawk is free software: you can redistribute it and/or modify
@@ -46,6 +46,8 @@ ScriptResolver::ScriptResolver( const QString& exe )
 
 ScriptResolver::~ScriptResolver()
 {
+    stop();
+
     Tomahawk::Pipeline::instance()->removeResolver( this );
 }
 
@@ -175,7 +177,7 @@ ScriptResolver::cmdExited( int code, QProcess::ExitStatus status )
     qDebug() << Q_FUNC_INFO << "SCRIPT EXITED, code" << code << "status" << status << filePath();
     Tomahawk::Pipeline::instance()->removeResolver( this );
 
-    if( m_stopped ) 
+    if( m_stopped )
     {
         qDebug() << "*** Script resolver stopped ";
         emit finished();
@@ -233,10 +235,11 @@ ScriptResolver::doSetup( const QVariantMap& m )
 }
 
 
-void 
+void
 ScriptResolver::stop()
 {
     m_stopped = true;
+    qDebug() << "KILLING PROCESS!";
     m_proc.kill();
 }
 
