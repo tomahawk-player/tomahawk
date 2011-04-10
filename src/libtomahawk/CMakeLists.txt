@@ -329,6 +329,7 @@ include_directories( . ${CMAKE_CURRENT_BINARY_DIR} ${CMAKE_CURRENT_BINARY_DIR}/.
     ${THIRDPARTY_DIR}/jdns/jdns
     ${THIRDPARTY_DIR}/jdns/jdnsshared
     ${THIRDPARTY_DIR}/qtweetlib/qtweetlib/src
+    ${CMAKE_BINARY_DIR}/thirdparty/liblastfm2/src
 )
 
 
