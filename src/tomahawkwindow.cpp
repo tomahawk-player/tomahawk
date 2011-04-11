@@ -385,15 +385,7 @@ TomahawkWindow::loadSpiff()
         return;
 
     XSPFLoader* loader = new XSPFLoader;
-    QFileInfo info( urlstr );
-    if( info.isFile() )
-    {
-        QFile f( urlstr );
-        loader->load( f );
-    } else
-    {
-        loader->load( QUrl( urlstr ) );
-    }
+    loader->load( QUrl::fromUserInput( urlstr ) );
 }
 
 

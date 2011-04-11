@@ -524,7 +524,7 @@ TomahawkApp::loadUrl( const QString& url )
         if( f.exists() && info.suffix() == "xspf" ) {
             XSPFLoader* l = new XSPFLoader( true, this );
             qDebug() << "Loading spiff:" << url;
-            l->load( QUrl( url ) );
+            l->load( QUrl::fromUserInput( url ) );
         }
     }
     return true;
