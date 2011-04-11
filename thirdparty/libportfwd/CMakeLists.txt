@@ -17,6 +17,8 @@ ELSE()
 ENDIF()
 INCLUDE_DIRECTORIES(${MINIUPNP_DIR} include)
 
+SET( CMAKE_C_FLAGS ${CLEAN_C_FLAGS} )
+
 ADD_LIBRARY(portfwd STATIC
 
         # the needed bits of miniupnpc (no python module, no tests, no cli)
