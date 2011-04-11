@@ -1,5 +1,5 @@
 /* === This file is part of Tomahawk Player - <http://tomahawk-player.org> ===
- * 
+ *
  *   Copyright 2010-2011, Christian Muehlhaeuser <muesli@tomahawk-player.org>
  *
  *   Tomahawk is free software: you can redistribute it and/or modify
@@ -89,10 +89,13 @@ Query::refreshResults()
 void
 Query::onResultStatusChanged()
 {
-    if ( m_results.count() )
-        qStableSort( m_results.begin(), m_results.end(), Query::resultSorter );
-    checkResults();
+    {
+        QMutexLocker lock( &m_mutex );
+        if ( m_results.count() )
+            qStableSort( m_results.begin(), m_results.end(), Query::resultSorter );
+    }
 
+    checkResults();
     emit resultsChanged();
 }
 
@@ -180,27 +183,31 @@ Query::checkResults()
 {
     bool becameSolved = false;
     bool becameUnsolved = true;
-    m_playable = false;
-
-    // hook up signals, and check solved status
-    foreach( const result_ptr& rp, m_results )
     {
-        if ( rp->score() > 0.0 && rp->collection().isNull() )
-        {
-            m_playable = true;
-        }
-        if ( !rp->collection().isNull() && rp->collection()->source()->isOnline() )
-        {
-            m_playable = true;
+        QMutexLocker lock( &m_mutex );
 
-            if ( rp->score() > 0.99 )
+        m_playable = false;
+
+        // hook up signals, and check solved status
+        foreach( const result_ptr& rp, m_results )
+        {
+            if ( rp->score() > 0.0 && rp->collection().isNull() )
             {
-                becameUnsolved = false;
+                m_playable = true;
+            }
+            if ( !rp->collection().isNull() && rp->collection()->source()->isOnline() )
+            {
+                m_playable = true;
 
-                if ( !m_solved )
+                if ( rp->score() > 0.99 )
                 {
-                    m_solved = true;
-                    becameSolved = true;
+                    becameUnsolved = false;
+
+                    if ( !m_solved )
+                    {
+                        m_solved = true;
+                        becameSolved = true;
+                    }
                 }
             }
         }
@@ -226,7 +233,7 @@ Query::toVariant() const
     m.insert( "track", track() );
     m.insert( "duration", duration() );
     m.insert( "qid", id() );
-    
+
     return m;
 }
 
