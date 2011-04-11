@@ -1,5 +1,5 @@
 [Protocol]
-exec=/home/leo/kde/tomahawk/build/tomahawk "%u"
+exec=/path/to/binary "%u"
 protocol=tomahawk
 input=none
 output=none

@@ -9,6 +9,8 @@ INCLUDE( ${QT_USE_FILE} )
 add_definitions( ${QT_DEFINITIONS} )
 add_definitions( -DQT_SHARED )
 
+SET( CMAKE_C_FLAGS ${CLEAN_C_FLAGS} )
+
 if(WIN32)
     set(PLATFORM_SPECIFIC_LIBS "ws2_32.dll" "advapi32.dll" )
 endif(WIN32)
