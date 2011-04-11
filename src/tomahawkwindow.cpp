@@ -1,5 +1,5 @@
 /* === This file is part of Tomahawk Player - <http://tomahawk-player.org> ===
- * 
+ *
  *   Copyright 2010-2011, Christian Muehlhaeuser <muesli@tomahawk-player.org>
  *
  *   Tomahawk is free software: you can redistribute it and/or modify
@@ -108,7 +108,7 @@ TomahawkWindow::TomahawkWindow( QWidget* parent )
 
     connect( ui->actionHideOfflineSources, SIGNAL( triggered() ), stv, SLOT( hideOfflineSources() ) );
     connect( ui->actionShowOfflineSources, SIGNAL( triggered() ), stv, SLOT( showOfflineSources() ) );
-    
+
     sidebar->addWidget( stv );
     sidebar->addWidget( transferView );
     sidebar->hide( 1, false );
@@ -145,7 +145,7 @@ TomahawkWindow::TomahawkWindow( QWidget* parent )
     toolbar->setIconSize( QSize( 32, 32 ) );
     toolbar->setToolButtonStyle( Qt::ToolButtonFollowStyle );
     toolbar->installEventFilter( new WidgetDragFilter( toolbar ) );
-    
+
 #if defined( Q_OS_DARWIN ) && defined( HAVE_SPARKLE )
     QAction* checkForUpdates = ui->menu_Help->addAction( tr( "Check For Updates...") );
     checkForUpdates->setMenuRole( QAction::ApplicationSpecificRole );
@@ -161,7 +161,7 @@ TomahawkWindow::TomahawkWindow( QWidget* parent )
     qtsparkle::Updater* updater = new qtsparkle::Updater( updaterUrl, this );
     updater->SetNetworkAccessManager( TomahawkUtils::nam() );
     updater->SetVersion( VERSION );
-    
+
     ui->menu_Help->addSeparator();
     QAction* checkForUpdates = ui->menu_Help->addAction( tr( "Check For Updates...") );
     connect( checkForUpdates, SIGNAL( triggered() ), updater, SLOT( CheckNow() ) );
@@ -355,14 +355,14 @@ TomahawkWindow::addPeerManually()
 }
 
 
-void 
+void
 TomahawkWindow::pluginMenuAdded( QMenu* menu )
 {
     ui->menuNetwork->addMenu( menu );
 }
 
 
-void 
+void
 TomahawkWindow::pluginMenuRemoved( QMenu* menu )
 {
     foreach( QAction* action, ui->menuNetwork->actions() )
@@ -384,21 +384,27 @@ TomahawkWindow::loadSpiff()
     if ( !ok || urlstr.isEmpty() )
         return;
 
-    QUrl url( urlstr );
-
     XSPFLoader* loader = new XSPFLoader;
-    loader->load( url );
+    QFileInfo info( urlstr );
+    if( info.isFile() )
+    {
+        QFile f( urlstr );
+        loader->load( f );
+    } else
+    {
+        loader->load( QUrl( urlstr ) );
+    }
 }
 
 
-void 
+void
 TomahawkWindow::createAutomaticPlaylist()
 {
     bool ok;
     QString name = QInputDialog::getText( this, tr( "Create New Automatic Playlist" ), tr( "Name:" ), QLineEdit::Normal, tr( "New Automatic Playlist" ), &ok );
     if ( !ok || name.isEmpty() )
         return;
-    
+
     source_ptr author = SourceList::instance()->getLocal();
     QString id = uuid();
     QString info  = ""; // FIXME
@@ -417,7 +423,7 @@ TomahawkWindow::createStation()
     QString name = QInputDialog::getText( this, tr( "Create New Station" ), tr( "Name:" ), QLineEdit::Normal, tr( "New Station" ), &ok );
     if ( !ok || name.isEmpty() )
         return;
-    
+
     source_ptr author = SourceList::instance()->getLocal();
     QString id = uuid();
     QString info  = ""; // FIXME
