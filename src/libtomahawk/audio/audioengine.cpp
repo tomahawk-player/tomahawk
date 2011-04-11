@@ -206,9 +206,7 @@ AudioEngine::loadTrack( const Tomahawk::result_ptr& result )
         else
         {
             setCurrentTrack( result );
-            qDebug() << "Getting IODEVICE, on thread:" << QThread::currentThread() << QThread::currentThreadId();
             io = Servent::instance()->getIODeviceForUrl( m_currentTrack );
-            qDebug() << "GOT IODEVICE:" << io.data();
             if ( m_currentTrack->url().startsWith( "http://" ) )
             {
                 m_readReady = false;
