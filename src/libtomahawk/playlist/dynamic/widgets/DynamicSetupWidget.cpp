@@ -104,7 +104,7 @@ DynamicSetupWidget::~DynamicSetupWidget()
 void 
 DynamicSetupWidget::setPlaylist( const Tomahawk::dynplaylist_ptr& playlist )
 {
-
+    Q_UNUSED( playlist );
 }
 
 void 

@@ -68,6 +68,7 @@ void EchoNestPlugin::getInfo(const QString &caller, const InfoType type, const Q
 void EchoNestPlugin::getSongProfile(const QString &caller, const QVariant& data, InfoCustomData &customData, const QString &item)
 {
     //WARNING: Totally not implemented yet
+    Q_UNUSED( item );
     
     if( !isValidTrackData( caller, data, customData ) )
         return;
@@ -139,6 +140,7 @@ void EchoNestPlugin::getArtistTerms(const QString &caller, const QVariant& data,
 
 void EchoNestPlugin::getMiscTopTerms(const QString &caller, const QVariant& data, InfoCustomData& customData)
 {
+    Q_UNUSED( data );
     QNetworkReply* reply = Echonest::Artist::topTerms( 20 );
     m_replyMap[reply] = customData;
     m_callerMap[reply] = caller;

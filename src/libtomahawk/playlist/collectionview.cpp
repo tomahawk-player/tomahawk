@@ -53,6 +53,7 @@ CollectionView::~CollectionView()
 void
 CollectionView::setModel( QAbstractItemModel* model )
 {
+    Q_UNUSED( model );
     qDebug() << "Explicitly use setTrackModel instead";
     Q_ASSERT( false );
 }

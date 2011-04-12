@@ -36,6 +36,7 @@ DummyTranscode::~DummyTranscode()
 void
 DummyTranscode::processData( const QByteArray &buffer, bool finish )
 {
+    Q_UNUSED( finish );
     m_buffer.append( buffer );
 //     qDebug() << "DUMMYTRANSCODING:" << buffer.size();
 
@@ -49,6 +50,7 @@ DummyTranscode::processData( const QByteArray &buffer, bool finish )
 void
 DummyTranscode::onSeek( int seconds )
 {
+    Q_UNUSED( seconds );
     m_buffer.clear();
 }
 

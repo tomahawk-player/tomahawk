@@ -39,6 +39,7 @@ FLACTranscode::~FLACTranscode()
 void
 FLACTranscode::onSeek( int seconds )
 {
+    Q_UNUSED( seconds );
     QMutexLocker locker( &m_mutex );
 
     m_buffer.clear();
@@ -120,6 +121,7 @@ FLACTranscode::write_callback( const ::FLAC__Frame *frame, const FLAC__int32 *co
 ::FLAC__StreamDecoderSeekStatus
 FLACTranscode::seek_callback(FLAC__uint64 absolute_byte_offset)
 {
+    Q_UNUSED( absolute_byte_offset );
     return FLAC__STREAM_DECODER_SEEK_STATUS_UNSUPPORTED;
 }
 

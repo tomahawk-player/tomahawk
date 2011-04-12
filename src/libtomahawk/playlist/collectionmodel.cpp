@@ -75,6 +75,7 @@ CollectionModel::rowCount( const QModelIndex& parent ) const
 int
 CollectionModel::columnCount( const QModelIndex& parent ) const
 {
+    Q_UNUSED( parent );
     return 4;
 }
 

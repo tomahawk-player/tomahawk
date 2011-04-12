@@ -106,6 +106,7 @@ LoadingSpinner::reposition()
 void 
 LoadingSpinner::paintEvent( QPaintEvent* ev )
 {
+    Q_UNUSED( ev );
     QPainter p( this );
     
 //     qDebug() << "FADING" << ( m_showHide->state() == QTimeLine::Running ) << "at frame:" << m_showHide->currentValue();

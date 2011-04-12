@@ -145,6 +145,7 @@ Api_v1::api( QxtWebRequestEvent* event )
 void
 Api_v1::sid( QxtWebRequestEvent* event, QString unused )
 {
+    Q_UNUSED( unused );
     using namespace Tomahawk;
     RID rid = event->url.path().mid( 5 );
     qDebug() << "Request for sid " << rid;
@@ -206,6 +207,8 @@ Api_v1::stat( QxtWebRequestEvent* event )
 void
 Api_v1::statResult( const QString& clientToken, const QString& name, bool valid )
 {
+    Q_UNUSED( clientToken )
+    Q_UNUSED( name )
     QVariantMap m;
     m.insert( "name", "playdar" );
     m.insert( "version", "0.1.1" ); // TODO (needs to be >=0.1.1 for JS to work)

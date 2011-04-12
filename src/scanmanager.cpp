@@ -273,6 +273,7 @@ ScanManager::scannerQuit()
 void
 ScanManager::scannerDestroyed( QObject* scanner )
 {
+    Q_UNUSED( scanner );
     qDebug() << Q_FUNC_INFO;
     m_musicScannerThreadController->deleteLater();
     m_musicScannerThreadController = 0;

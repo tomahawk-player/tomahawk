@@ -170,6 +170,7 @@ TwitterConfigWidget::deauthenticateTwitter()
 void
 TwitterConfigWidget::tweetComboBoxIndexChanged( int index )
 {
+    Q_UNUSED( index );
     if( ui->twitterTweetComboBox->currentText() == tr( "Global Tweet" ) ) //FIXME: use data!
     {
         ui->twitterUserTweetLineEdit->setReadOnly( true );

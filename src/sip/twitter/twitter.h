@@ -64,14 +64,19 @@ public slots:
 
     void sendMsg( const QString& to, const QString& msg )
     {
+        Q_UNUSED( to );
+        Q_UNUSED( msg );
     }
 
     void broadcastMsg( const QString &msg )
     {
+        Q_UNUSED( msg );
     }
 
     void addContact( const QString &jid, const QString& msg = QString() )
     {
+        Q_UNUSED( jid );
+        Q_UNUSED( msg );
     }
 
 private slots:

@@ -263,6 +263,7 @@ MusicScanner::listerQuit()
 void
 MusicScanner::listerDestroyed( QObject* dirLister )
 {
+    Q_UNUSED( dirLister );
     qDebug() << Q_FUNC_INFO;
     m_dirListerThreadController->deleteLater();
     m_dirListerThreadController = 0;
