@@ -71,13 +71,13 @@ DynamicView::~DynamicView()
 }
 
 void 
-DynamicView::setModel( DynamicModel* model)
+DynamicView::setDynamicModel( DynamicModel* model)
 {
     m_model = model;
-    PlaylistView::setModel( model );
+    PlaylistView::setModel( m_model );
     
-    connect( model, SIGNAL( trackCountChanged( unsigned int ) ), SLOT( onTrackCountChanged( unsigned int ) ) );
-    connect( model, SIGNAL( checkForOverflow() ), this, SLOT( checkForOverflow() ) );
+    connect( m_model, SIGNAL( trackCountChanged( unsigned int ) ), SLOT( onTrackCountChanged( unsigned int ) ) );
+    connect( m_model, SIGNAL( checkForOverflow() ), this, SLOT( checkForOverflow() ) );
 }
 
 void

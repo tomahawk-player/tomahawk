@@ -34,7 +34,8 @@ public:
     explicit TrackProxyModel ( QObject* parent = 0 );
 
     virtual TrackModel* sourceModel() const { return m_model; }
-    virtual void setSourceModel( QAbstractItemModel* sourceModel );
+    virtual void setSourceTrackModel( TrackModel* sourceModel );
+    virtual void setSourceModel( QAbstractItemModel* model );
 
     virtual QPersistentModelIndex currentItem() const { return mapFromSource( m_model->currentItem() ); }
     virtual void setCurrentItem( const QModelIndex& index ) { m_model->setCurrentItem( mapToSource( index ) ); }

@@ -40,7 +40,7 @@ public:
     explicit DynamicView( QWidget* parent = 0 );
     virtual ~DynamicView();
     
-    virtual void setModel( DynamicModel* model );
+    virtual void setDynamicModel( DynamicModel* model );
     
     void setOnDemand( bool onDemand );
     void setReadOnly( bool readOnly );

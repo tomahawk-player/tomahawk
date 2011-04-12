@@ -47,14 +47,18 @@ PlaylistView::~PlaylistView()
 void
 PlaylistView::setModel( QAbstractItemModel* model )
 {
-    PlaylistModel* pmodel = static_cast< PlaylistModel* >( model );
+    Q_UNUSED( model );
+    qDebug() << "Explicitly use setPlaylistModel instead";
+    Q_ASSERT( false );
+}
 
-    if ( !pmodel )
-      return;
-    else
-      m_model = pmodel;
 
-    TrackView::setModel( model );
+void
+PlaylistView::setPlaylistModel( PlaylistModel* model )
+{
+    m_model = model;
+
+    TrackView::setModel( m_model );
     setColumnHidden( 5, true ); // Hide age column per default
 
     if ( !m_model->playlist().isNull() )

@@ -34,6 +34,7 @@ public:
     explicit AlbumProxyModel( QObject* parent = 0 );
 
     virtual AlbumModel* sourceModel() const { return m_model; }
+    virtual void setSourceAlbumModel( AlbumModel* sourceModel );
     virtual void setSourceModel( QAbstractItemModel* sourceModel );
 
     virtual QList<Tomahawk::query_ptr> tracks() { Q_ASSERT( FALSE ); QList<Tomahawk::query_ptr> queries; return queries; }

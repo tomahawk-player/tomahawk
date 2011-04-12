@@ -36,6 +36,7 @@ public:
     explicit CollectionView( QWidget* parent = 0 );
     ~CollectionView();
 
+    virtual void setTrackModel( TrackModel* model );
     virtual void setModel( QAbstractItemModel* model );
 
     virtual QWidget* widget() { return this; }

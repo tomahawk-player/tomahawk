@@ -33,6 +33,7 @@
 #include "queueview.h"
 #include "trackmodel.h"
 #include "trackproxymodel.h"
+#include <track.h>
 
 using namespace Tomahawk;
 
@@ -109,16 +110,20 @@ TrackView::setProxyModel( TrackProxyModel* model )
 void
 TrackView::setModel( QAbstractItemModel* model )
 {
-    TrackModel* tmodel = static_cast< TrackModel* >( model );
+    Q_UNUSED( model );
+    qDebug() << "Explicitly use setTrackModel instead";
+    Q_ASSERT( false );
+}
 
-    if ( !tmodel )
-      return;
-    else
-      m_model = tmodel;
+
+void
+TrackView::setTrackModel( TrackModel* model )
+{
+    m_model = model;
 
     if ( m_proxyModel )
     {
-        m_proxyModel->setSourceModel( model );
+        m_proxyModel->setSourceModel( m_model );
     }
 
     connect( m_model, SIGNAL( itemSizeChanged( QModelIndex ) ), SLOT( onItemResized( QModelIndex ) ) );

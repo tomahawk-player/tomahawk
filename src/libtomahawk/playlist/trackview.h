@@ -44,6 +44,7 @@ public:
     virtual QString guid() const { return m_guid; }
     virtual void setGuid( const QString& guid );
 
+    virtual void setTrackModel( TrackModel* model );
     virtual void setModel( QAbstractItemModel* model );
     void setProxyModel( TrackProxyModel* model );
 

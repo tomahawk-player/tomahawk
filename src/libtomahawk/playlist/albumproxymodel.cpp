@@ -41,15 +41,18 @@ AlbumProxyModel::AlbumProxyModel( QObject* parent )
     setSourceModel( 0 );
 }
 
-
 void
 AlbumProxyModel::setSourceModel( QAbstractItemModel* sourceModel )
 {
-    AlbumModel* amodel = static_cast< AlbumModel* >( sourceModel );
-    if( !amodel )
-      return;
-    else
-      m_model = amodel;
+    Q_UNUSED( sourceModel );
+    qDebug() << "Explicitly use setSourceAlbumModel instead";
+    Q_ASSERT( false );
+}
+
+void
+AlbumProxyModel::setSourceAlbumModel( AlbumModel* sourceModel )
+{
+    m_model = sourceModel;
 
     connect( m_model, SIGNAL( trackCountChanged( unsigned int ) ),
                       SIGNAL( sourceTrackCountChanged( unsigned int ) ) );

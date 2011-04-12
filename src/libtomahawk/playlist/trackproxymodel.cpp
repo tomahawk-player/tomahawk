@@ -45,19 +45,23 @@ TrackProxyModel::TrackProxyModel( QObject* parent )
 
 
 void
-TrackProxyModel::setSourceModel( QAbstractItemModel* sourceModel )
+TrackProxyModel::setSourceModel( QAbstractItemModel* model )
 {
-    TrackModel* tmodel = static_cast< TrackModel* >( sourceModel );
+    Q_UNUSED( model );
+    qDebug() << "Explicitly use setSourceTrackModel instead";
+    Q_ASSERT( false );
+}
 
-    if ( !tmodel )
-      return;
-    else
-      m_model = tmodel;
+
+void
+TrackProxyModel::setSourceTrackModel( TrackModel* sourceModel )
+{
+    m_model = sourceModel;
 
     connect( m_model, SIGNAL( trackCountChanged( unsigned int ) ),
                       SIGNAL( sourceTrackCountChanged( unsigned int ) ) );
 
-    QSortFilterProxyModel::setSourceModel( sourceModel );
+    QSortFilterProxyModel::setSourceModel( m_model );
 }
 
 

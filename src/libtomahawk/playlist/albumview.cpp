@@ -74,16 +74,20 @@ AlbumView::setProxyModel( AlbumProxyModel* model )
 void
 AlbumView::setModel( QAbstractItemModel* model )
 {
-    AlbumModel *amodel = static_cast< AlbumModel* >( model );
+    Q_UNUSED( model );
+    qDebug() << "Explicitly use setAlbumModel instead";
+    Q_ASSERT( false );
+}
 
-    if ( !amodel )
-      return;
-    else
-      m_model = amodel;
+
+void
+AlbumView::setAlbumModel( AlbumModel* model )
+{
+    m_model = model;
 
     if ( m_proxyModel )
     {
-        m_proxyModel->setSourceModel( model );
+        m_proxyModel->setSourceModel( m_model );
         m_proxyModel->sort( 0 );
     }
 
@@ -147,6 +151,7 @@ AlbumView::onFilterChanged( const QString& )
 void
 AlbumView::startDrag( Qt::DropActions supportedActions )
 {
+    Q_UNUSED( supportedActions );
 }
 
 
@@ -154,5 +159,6 @@ AlbumView::startDrag( Qt::DropActions supportedActions )
 QPixmap
 AlbumView::createDragPixmap( int itemCount ) const
 {
+    Q_UNUSED( itemCount );
     return QPixmap();
 }
