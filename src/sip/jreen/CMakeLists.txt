@@ -37,6 +37,7 @@ target_link_libraries( tomahawk_sipjreen
     ${QT_LIBRARIES}
     ${LIBJREEN_LIBRARY}
     ${OS_SPECIFIC_LINK_LIBRARIES}
+    tomahawklib
 )
 
 IF( APPLE )
