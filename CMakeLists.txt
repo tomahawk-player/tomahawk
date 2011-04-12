@@ -1,6 +1,8 @@
 PROJECT( tomahawk )
 CMAKE_MINIMUM_REQUIRED( VERSION 2.8 )
 
+CMAKE_POLICY(SET CMP0017 NEW)
+
 ###
 ### Tomahawk application info
 ###
