@@ -38,7 +38,7 @@ AlbumProxyModel::AlbumProxyModel( QObject* parent )
     setSortCaseSensitivity( Qt::CaseInsensitive );
     setDynamicSortFilter( true );
 
-    setSourceModel( 0 );
+    setSourceAlbumModel( 0 );
 }
 
 void

@@ -62,7 +62,7 @@ CollectionView::setModel( QAbstractItemModel* model )
 void
 CollectionView::setTrackModel( TrackModel* model )
 {
-    TrackView::setModel( model );
+    TrackView::setTrackModel( model );
     setGuid( "collectionview" );
 
     connect( model, SIGNAL( trackCountChanged( unsigned int ) ), SLOT( onTrackCountChanged( unsigned int ) ) );

@@ -89,7 +89,7 @@ PlaylistManager::PlaylistManager( QObject* parent )
 
     m_queueView = new QueueView( m_splitter );
     m_queueModel = new PlaylistModel( m_queueView );
-    m_queueView->queue()->setModel( m_queueModel );
+    m_queueView->queue()->setPlaylistModel( m_queueModel );
     AudioEngine::instance()->setQueue( m_queueView->queue()->proxyModel() );
 
     m_splitter->addWidget( m_queueView );
@@ -102,14 +102,14 @@ PlaylistManager::PlaylistManager( QObject* parent )
 
     m_superCollectionView = new CollectionView();
     m_superCollectionFlatModel = new CollectionFlatModel( m_superCollectionView );
-    m_superCollectionView->setModel( m_superCollectionFlatModel );
+    m_superCollectionView->setTrackModel( m_superCollectionFlatModel );
     m_superCollectionView->setFrameShape( QFrame::NoFrame );
     m_superCollectionView->setAttribute( Qt::WA_MacShowFocusRect, 0 );
     m_superCollectionView->proxyModel()->setShowOfflineResults( false );
 
     m_superAlbumView = new AlbumView();
     m_superAlbumModel = new AlbumModel( m_superAlbumView );
-    m_superAlbumView->setModel( m_superAlbumModel );
+    m_superAlbumView->setAlbumModel( m_superAlbumModel );
     m_superAlbumView->setFrameShape( QFrame::NoFrame );
     m_superAlbumView->setAttribute( Qt::WA_MacShowFocusRect, 0 );
 

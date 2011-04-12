@@ -124,7 +124,7 @@ TrackView::setTrackModel( TrackModel* model )
 
     if ( m_proxyModel )
     {
-        m_proxyModel->setSourceModel( m_model );
+        m_proxyModel->setSourceTrackModel( m_model );
     }
 
     connect( m_model, SIGNAL( itemSizeChanged( QModelIndex ) ), SLOT( onItemResized( QModelIndex ) ) );

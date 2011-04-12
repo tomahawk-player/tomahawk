@@ -87,7 +87,7 @@ AlbumView::setAlbumModel( AlbumModel* model )
 
     if ( m_proxyModel )
     {
-        m_proxyModel->setSourceModel( m_model );
+        m_proxyModel->setSourceAlbumModel( m_model );
         m_proxyModel->sort( 0 );
     }
 

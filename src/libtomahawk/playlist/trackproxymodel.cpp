@@ -40,7 +40,7 @@ TrackProxyModel::TrackProxyModel( QObject* parent )
     setSortCaseSensitivity( Qt::CaseInsensitive );
     setDynamicSortFilter( true );
 
-    setSourceModel( 0 );
+    setSourceTrackModel( 0 );
 }
 
 

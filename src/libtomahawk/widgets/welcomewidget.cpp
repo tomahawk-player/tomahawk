@@ -47,7 +47,7 @@ WelcomeWidget::WelcomeWidget( QWidget* parent )
     ui->tracksView->overlay()->setEnabled( false );
 
     m_tracksModel = new PlaylistModel( ui->tracksView );
-    ui->tracksView->setModel( m_tracksModel );
+    ui->tracksView->setPlaylistModel( m_tracksModel );
     m_tracksModel->loadHistory( Tomahawk::source_ptr(), HISTORY_TRACK_ITEMS );
 
     m_timer = new QTimer( this );
