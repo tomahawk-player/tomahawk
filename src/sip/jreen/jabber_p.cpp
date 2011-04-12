@@ -60,7 +60,7 @@ Jabber_p::Jabber_p( const QString& jid, const QString& password, const QString& 
     m_jid = Jreen::JID( jid );
 
     m_client = new Jreen::Client( jid, password );
-    m_client->setResource( QString( "tomahawk%1" ).arg( "DOMME" ) );
+    m_client->setResource( QString( "tomahawk-jreen%1" ).arg( QString::number( qrand() % 10000 ) ) );
 
     Jreen::Capabilities::Ptr caps = m_client->presence().findExtension<Jreen::Capabilities>();
     caps->setNode(TOMAHAWK_CAP_NODE_NAME);
