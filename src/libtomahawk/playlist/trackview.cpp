@@ -47,6 +47,7 @@ TrackView::TrackView( QWidget* parent )
     , m_overlay( new OverlayWidget( this ) )
     , m_loadingSpinner( new LoadingSpinner( this ) )
     , m_resizing( false )
+    , m_dragging( false )
 {
     setSortingEnabled( false );
     setAlternatingRowColors( true );
