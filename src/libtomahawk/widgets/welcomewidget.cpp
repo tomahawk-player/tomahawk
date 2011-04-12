@@ -190,6 +190,8 @@ PlaylistWidgetItem::data( int role ) const
 QSize
 PlaylistDelegate::sizeHint( const QStyleOptionViewItem& option, const QModelIndex& index ) const
 {
+    Q_UNUSED( option );
+    Q_UNUSED( index );
     return QSize( 0, 64 );
 }
 

@@ -369,6 +369,7 @@ DatabaseImpl::albumId( int artistid, const QString& name_orig, bool& isnew )
 QList< int >
 DatabaseImpl::searchTable( const QString& table, const QString& name, uint limit )
 {
+    Q_UNUSED( limit );
     QList< int > results;
     if( table != "artist" && table != "track" && table != "album" )
         return results;

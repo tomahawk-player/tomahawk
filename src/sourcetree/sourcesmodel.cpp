@@ -352,6 +352,7 @@ SourcesModel::collectionToIndex( const Tomahawk::collection_ptr& collection )
 bool
 SourcesModel::setData( const QModelIndex& index, const QVariant& value, int role )
 {
+    Q_UNUSED( role );
     qDebug() << Q_FUNC_INFO;
 
     if ( !index.isValid() )

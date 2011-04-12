@@ -32,7 +32,9 @@ Q_OBJECT
 public:
     explicit DatabaseCommand_loadOps( const Tomahawk::source_ptr& src, QString since, QObject* parent = 0 )
         : DatabaseCommand( src ), m_since( since )
-    {}
+    {
+        Q_UNUSED( parent );
+    }
 
     virtual void exec( DatabaseImpl* db );
     virtual bool doesMutates() const { return false; }

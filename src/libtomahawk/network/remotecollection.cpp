@@ -31,6 +31,7 @@ RemoteCollection::RemoteCollection( source_ptr source, QObject* parent )
 // the database will make us emit the appropriate signals (tracksAdded etc.)
 void RemoteCollection::addTracks( const QList<QVariant>& newitems )
 {
+    Q_UNUSED( newitems );
     qDebug() << Q_FUNC_INFO;
     Q_ASSERT( false );
 }
@@ -38,6 +39,7 @@ void RemoteCollection::addTracks( const QList<QVariant>& newitems )
 
 void RemoteCollection::removeTracks( const QDir& dir )
 {
+    Q_UNUSED( dir );
     qDebug() << Q_FUNC_INFO;
     Q_ASSERT( false );
 }

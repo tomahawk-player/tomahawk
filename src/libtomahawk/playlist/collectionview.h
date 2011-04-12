@@ -36,7 +36,7 @@ public:
     explicit CollectionView( QWidget* parent = 0 );
     ~CollectionView();
 
-    virtual void setModel( TrackModel* model );
+    virtual void setModel( QAbstractItemModel* model );
 
     virtual QWidget* widget() { return this; }
     virtual PlaylistInterface* playlistInterface() const { return proxyModel(); }

@@ -121,6 +121,11 @@ public slots:
     //FIXME: Make pure virtual when everything supports it
     virtual void notInCacheSlot( Tomahawk::InfoSystem::InfoCacheCriteria criteria, QString caller, Tomahawk::InfoSystem::InfoType type, QVariant input, Tomahawk::InfoSystem::InfoCustomData customData )
     {
+        Q_UNUSED( criteria );
+        Q_UNUSED( caller );
+        Q_UNUSED( type );
+        Q_UNUSED( input );
+        Q_UNUSED( customData );
     }
     
 protected:

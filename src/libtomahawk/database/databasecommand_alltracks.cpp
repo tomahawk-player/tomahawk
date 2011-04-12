@@ -77,7 +77,6 @@ DatabaseCommand_AllTracks::exec( DatabaseImpl* dbi )
     query.prepare( sql );
     query.exec();
 
-    int i = 0;
     while( query.next() )
     {
         Tomahawk::result_ptr result = Tomahawk::result_ptr( new Tomahawk::Result() );

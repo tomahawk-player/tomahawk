@@ -171,6 +171,7 @@ DynamicWidget::loadDynamicPlaylist( const Tomahawk::dynplaylist_ptr& playlist )
 void
 DynamicWidget::onRevisionLoaded( const Tomahawk::DynamicPlaylistRevision& rev )
 {
+    Q_UNUSED( rev );
     qDebug() << "DynamicWidget::onRevisionLoaded";
     loadDynamicPlaylist( m_playlist );
     if( m_resolveOnNextLoad || !m_playlist->author()->isLocal() )
@@ -354,6 +355,7 @@ DynamicWidget::controlsChanged()
 void
 DynamicWidget::controlChanged( const Tomahawk::dyncontrol_ptr& control )
 {
+    Q_UNUSED( control );
     if( !m_playlist->author()->isLocal() )
         return;
     m_playlist->createNewRevision();

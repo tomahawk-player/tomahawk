@@ -51,12 +51,16 @@ CollectionView::~CollectionView()
 
 
 void
-CollectionView::setModel( TrackModel* model )
+CollectionView::setModel( QAbstractItemModel* model )
 {
-    TrackView::setModel( model );
+    TrackModel *tmodel = static_cast< TrackModel* >( model );
+    if ( !tmodel )
+      return;
+
+    TrackView::setModel( tmodel );
     setGuid( "collectionview" );
 
-    connect( model, SIGNAL( trackCountChanged( unsigned int ) ), SLOT( onTrackCountChanged( unsigned int ) ) );
+    connect( tmodel, SIGNAL( trackCountChanged( unsigned int ) ), SLOT( onTrackCountChanged( unsigned int ) ) );
 }
 
 

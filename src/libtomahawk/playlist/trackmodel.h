@@ -99,8 +99,8 @@ public slots:
     virtual void removeIndex( const QModelIndex& index, bool moreToCome = false );
     virtual void removeIndexes( const QList<QModelIndex>& indexes );
 
-    virtual void setRepeatMode( PlaylistInterface::RepeatMode mode ) {}
-    virtual void setShuffled( bool shuffled ) {}
+    virtual void setRepeatMode( PlaylistInterface::RepeatMode /*mode*/ ) {}
+    virtual void setShuffled( bool /*shuffled*/ ) {}
 
 protected:
     virtual void setReadOnly( bool b ) { m_readOnly = b; }

@@ -137,6 +137,9 @@ Scrobbler::scrobble()
 void
 Scrobbler::infoSystemInfo( QString caller, Tomahawk::InfoSystem::InfoType type, QVariant input, QVariant output, Tomahawk::InfoSystem::InfoCustomData customData )
 {
+    Q_UNUSED( input );
+    Q_UNUSED( output );
+    Q_UNUSED( customData );
     if ( caller == s_infoIdentifier )
     {
         qDebug() << Q_FUNC_INFO;

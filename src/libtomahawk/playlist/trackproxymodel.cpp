@@ -45,13 +45,17 @@ TrackProxyModel::TrackProxyModel( QObject* parent )
 
 
 void
-TrackProxyModel::setSourceModel( TrackModel* sourceModel )
+TrackProxyModel::setSourceModel( QAbstractItemModel* sourceModel )
 {
-    m_model = sourceModel;
+    TrackModel* tmodel = static_cast< TrackModel* >( sourceModel );
 
-    if ( m_model )
-        connect( m_model, SIGNAL( trackCountChanged( unsigned int ) ),
-                          SIGNAL( sourceTrackCountChanged( unsigned int ) ) );
+    if ( !tmodel )
+      return;
+    else
+      m_model = tmodel;
+
+    connect( m_model, SIGNAL( trackCountChanged( unsigned int ) ),
+                      SIGNAL( sourceTrackCountChanged( unsigned int ) ) );
 
     QSortFilterProxyModel::setSourceModel( sourceModel );
 }

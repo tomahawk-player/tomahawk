@@ -81,8 +81,8 @@ public:
     }
 
 public slots:
-    virtual void setRepeatMode( PlaylistInterface::RepeatMode mode ) {}
-    virtual void setShuffled( bool shuffled ) {}
+    virtual void setRepeatMode( PlaylistInterface::RepeatMode /*mode*/ ) {}
+    virtual void setShuffled( bool /*shuffled*/ ) {}
 
 signals:
     void repeatModeChanged( PlaylistInterface::RepeatMode mode );

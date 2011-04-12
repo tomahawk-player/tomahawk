@@ -32,4 +32,5 @@ DatabaseCommand_ModifyPlaylist::DatabaseCommand_ModifyPlaylist( Playlist* playli
 
 void DatabaseCommand_ModifyPlaylist::exec( DatabaseImpl* lib )
 {
+    Q_UNUSED( lib );
 }

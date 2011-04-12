@@ -79,8 +79,8 @@ public:
     virtual QString summary() const { Q_ASSERT( false ); return QString(); }
     
     // used by JSON serialization
-    virtual void setMatch( const QString& match ) { Q_ASSERT( false ); }
-    virtual void setInput( const QString& input ) { Q_ASSERT( false ); }
+    virtual void setMatch( const QString& /*match*/ ) { Q_ASSERT( false ); }
+    virtual void setInput( const QString& /*input*/ ) { Q_ASSERT( false ); }
     /// All the potential type selectors for this control
     QStringList typeSelectors() const { return m_typeSelectors; }
     

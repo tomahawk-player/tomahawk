@@ -137,7 +137,11 @@ Servent::startListening( QHostAddress ha, bool upnp, int port )
         return true;
     }
 
-    switch( TomahawkSettings::instance()->externalAddressMode() )
+    TomahawkSettings::ExternalAddressMode mode = TomahawkSettings::instance()->externalAddressMode();
+    if ( mode == TomahawkSettings::Upnp && !upnp )
+      mode = TomahawkSettings::Lan;
+
+    switch( mode )
     {
         case TomahawkSettings::Lan:
             foreach( QHostAddress ha, QNetworkInterface::allAddresses() )
@@ -696,7 +700,16 @@ Servent::checkACL( const Connection* conn, const QString &nodeid, bool showDialo
             return false;
         }
         else if( msgBox.clickedButton() == alwaysAllowButton )
+        {
             aclSystem->authorizeUser( nodeid, ACLSystem::Allow );
+            return true;
+        }
+        else if( msgBox.clickedButton() == allowButton )
+            return true;
+
+        //How could we get here?
+        qDebug() << "Somehow no button matched";
+        return false;
     }
 #endif
 

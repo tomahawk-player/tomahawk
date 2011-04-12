@@ -168,6 +168,7 @@ SourceTreeView::hideOfflineSources()
 void
 SourceTreeView::onSourceOffline( Tomahawk::source_ptr src )
 {
+    Q_UNUSED( src );
     qDebug() << Q_FUNC_INFO;
 }
 

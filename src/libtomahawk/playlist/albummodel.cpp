@@ -81,6 +81,7 @@ AlbumModel::rowCount( const QModelIndex& parent ) const
 int
 AlbumModel::columnCount( const QModelIndex& parent ) const
 {
+    Q_UNUSED( parent );
     return 1;
 }
 
@@ -273,6 +274,7 @@ AlbumModel::addFilteredCollection( const collection_ptr& collection, unsigned in
 void
 AlbumModel::onAlbumsAdded( const QList<Tomahawk::album_ptr>& albums, const Tomahawk::collection_ptr& collection )
 {
+    Q_UNUSED( collection );
     if ( !albums.count() )
         return;
 

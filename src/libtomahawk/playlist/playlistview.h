@@ -39,7 +39,7 @@ public:
     ~PlaylistView();
 
     PlaylistModel* playlistModel() const { return m_model; }
-    virtual void setModel( PlaylistModel* model );
+    virtual void setModel( QAbstractItemModel* model );
 
     virtual QWidget* widget() { return this; }
     virtual PlaylistInterface* playlistInterface() const { return proxyModel(); }

@@ -264,6 +264,9 @@ AudioControls::onPlaybackStarted( const Tomahawk::result_ptr& result )
 void
 AudioControls::infoSystemInfo( QString caller, Tomahawk::InfoSystem::InfoType type, QVariant input, QVariant output, Tomahawk::InfoSystem::InfoCustomData customData )
 {
+    Q_UNUSED( input );
+    Q_UNUSED( customData );
+
     qDebug() << Q_FUNC_INFO;
     if ( caller != s_infoIdentifier || type != Tomahawk::InfoSystem::InfoAlbumCoverArt )
     {
@@ -300,6 +303,7 @@ AudioControls::infoSystemInfo( QString caller, Tomahawk::InfoSystem::InfoType ty
 void
 AudioControls::infoSystemFinished( QString target )
 {
+    Q_UNUSED( target );
     qDebug() << Q_FUNC_INFO;
 }
 

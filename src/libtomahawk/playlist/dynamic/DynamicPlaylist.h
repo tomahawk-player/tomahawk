@@ -105,7 +105,7 @@ public:
     // maybe friend QObjectHelper and make them private?
     explicit DynamicPlaylist( const source_ptr& author, const QString& type );
     void setMode( int mode );
-    void setType( const QString& type )           { /** TODO */; }
+    void setType( const QString& /*type*/ )           { /** TODO */; }
     void setGenerator( const geninterface_ptr& gen_ptr );
     // </IGNORE>
     

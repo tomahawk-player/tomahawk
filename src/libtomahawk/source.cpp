@@ -181,6 +181,7 @@ Source::scanningProgress( unsigned int files )
 void
 Source::scanningFinished( unsigned int files )
 {
+    Q_UNUSED( files );
     m_textStatus = QString();
     emit stateChanged();
 }
@@ -189,6 +190,7 @@ Source::scanningFinished( unsigned int files )
 void
 Source::onStateChanged( DBSyncConnection::State newstate, DBSyncConnection::State oldstate, const QString& info )
 {
+    Q_UNUSED( oldstate );
     QString msg;
     switch( newstate )
     {

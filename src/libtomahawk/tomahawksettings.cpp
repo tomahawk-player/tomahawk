@@ -624,7 +624,7 @@ TomahawkSettings::xmppBotPort() const
 void
 TomahawkSettings::setXmppBotPort( const int port )
 {
-    setValue( "xmppBot/port", -1 );
+    setValue( "xmppBot/port", port );
 }
 
 void 

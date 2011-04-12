@@ -70,7 +70,7 @@ public:
      * Connect to the generated() signal for the results.
      * 
      */
-    virtual void generate( int number = -1 ) {}
+    virtual void generate( int number = -1 ) { Q_UNUSED( number ); }
     
     /**
      * Starts an on demand session for this generator. Listen to the nextTrack() signal to get
@@ -82,7 +82,7 @@ public:
      * Get the next on demand track.
      * \param rating Rating from 1-5, -1 for none
      */
-    virtual void fetchNext( int rating = -1 ) {}
+    virtual void fetchNext( int rating = -1 ) { Q_UNUSED( rating ) }
     
     /**
      * Return a sentence that describes this generator's controls. TODO english only ATM

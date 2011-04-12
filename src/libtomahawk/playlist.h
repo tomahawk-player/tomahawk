@@ -162,7 +162,7 @@ public:
     virtual int unfilteredTrackCount() const { return m_entries.count(); }
     virtual int trackCount() const { return m_entries.count(); }
 
-    virtual Tomahawk::result_ptr siblingItem( int itemsAway ) { return result_ptr(); }
+    virtual Tomahawk::result_ptr siblingItem( int /*itemsAway*/ ) { return result_ptr(); }
 
     virtual PlaylistInterface::RepeatMode repeatMode() const { return PlaylistInterface::NoRepeat; }
     virtual bool shuffled() const { return false; }
@@ -170,7 +170,7 @@ public:
     virtual void setRepeatMode( PlaylistInterface::RepeatMode ) {}
     virtual void setShuffled( bool ) {}
 
-    virtual void setFilter( const QString& pattern ) {}
+    virtual void setFilter( const QString& /*pattern*/ ) {}
 
 signals:
     /// emitted when the playlist revision changes (whenever the playlist changes)

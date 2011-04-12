@@ -298,6 +298,7 @@ PlaylistModel::onRevisionLoaded( Tomahawk::PlaylistRevision revision )
 bool
 PlaylistModel::dropMimeData( const QMimeData* data, Qt::DropAction action, int row, int column, const QModelIndex& parent )
 {
+    Q_UNUSED( column );
     if ( action == Qt::IgnoreAction || isReadOnly() )
         return true;
 

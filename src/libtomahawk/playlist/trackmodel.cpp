@@ -81,6 +81,7 @@ TrackModel::rowCount( const QModelIndex& parent ) const
 int
 TrackModel::columnCount( const QModelIndex& parent ) const
 {
+    Q_UNUSED( parent );
     return 9;
 }
 
@@ -207,6 +208,7 @@ TrackModel::data( const QModelIndex& index, int role ) const
 QVariant
 TrackModel::headerData( int section, Qt::Orientation orientation, int role ) const
 {
+    Q_UNUSED( orientation );
     QStringList headers;
     headers << tr( "Artist" ) << tr( "Track" ) << tr( "Album" ) << tr( "Duration" ) << tr( "Bitrate" ) << tr( "Age" ) << tr( "Year" ) << tr( "Size" ) << tr( "Origin" );
     if ( role == Qt::DisplayRole && section >= 0 )

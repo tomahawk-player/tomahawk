@@ -431,6 +431,7 @@ Playlist::resolve()
 void
 Playlist::onResultsFound( const QList<Tomahawk::result_ptr>& results )
 {
+    Q_UNUSED( results );
     m_locallyChanged = true;
 }
 

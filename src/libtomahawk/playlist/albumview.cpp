@@ -72,9 +72,14 @@ AlbumView::setProxyModel( AlbumProxyModel* model )
 
 
 void
-AlbumView::setModel( AlbumModel* model )
+AlbumView::setModel( QAbstractItemModel* model )
 {
-    m_model = model;
+    AlbumModel *amodel = static_cast< AlbumModel* >( model );
+
+    if ( !amodel )
+      return;
+    else
+      m_model = amodel;
 
     if ( m_proxyModel )
     {

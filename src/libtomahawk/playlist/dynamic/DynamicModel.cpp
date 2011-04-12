@@ -42,8 +42,10 @@ DynamicModel::~DynamicModel()
 }
 
 void 
-DynamicModel::loadPlaylist( const Tomahawk::dynplaylist_ptr& playlist )
+DynamicModel::loadPlaylist( const Tomahawk::dynplaylist_ptr& playlist, bool loadEntries )
 {
+    Q_UNUSED( loadEntries );
+
     if( !m_playlist.isNull() ) {
         disconnect( m_playlist->generator().data(), SIGNAL( nextTrackGenerated( Tomahawk::query_ptr ) ), this, SLOT( newTrackGenerated( Tomahawk::query_ptr ) ) );
     }
@@ -108,6 +110,8 @@ DynamicModel::changeStation()
 void 
 DynamicModel::trackResolveFinished( bool success )
 {
+    Q_UNUSED( success );
+
     Query* q = qobject_cast<Query*>(sender());
 
     if( !q->playable() ) {

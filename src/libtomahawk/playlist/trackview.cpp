@@ -107,9 +107,14 @@ TrackView::setProxyModel( TrackProxyModel* model )
 
 
 void
-TrackView::setModel( TrackModel* model )
+TrackView::setModel( QAbstractItemModel* model )
 {
-    m_model = model;
+    TrackModel* tmodel = static_cast< TrackModel* >( model );
+
+    if ( !tmodel )
+      return;
+    else
+      m_model = tmodel;
 
     if ( m_proxyModel )
     {

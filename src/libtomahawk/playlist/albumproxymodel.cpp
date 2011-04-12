@@ -43,9 +43,13 @@ AlbumProxyModel::AlbumProxyModel( QObject* parent )
 
 
 void
-AlbumProxyModel::setSourceModel( AlbumModel* sourceModel )
+AlbumProxyModel::setSourceModel( QAbstractItemModel* sourceModel )
 {
-    m_model = sourceModel;
+    AlbumModel* amodel = static_cast< AlbumModel* >( sourceModel );
+    if( !amodel )
+      return;
+    else
+      m_model = amodel;
 
     connect( m_model, SIGNAL( trackCountChanged( unsigned int ) ),
                       SIGNAL( sourceTrackCountChanged( unsigned int ) ) );
@@ -141,6 +145,7 @@ AlbumProxyModel::removeIndexes( const QList<QModelIndex>& indexes )
 Tomahawk::result_ptr
 AlbumProxyModel::siblingItem( int itemsAway )
 {
+    Q_UNUSED( itemsAway );
     qDebug() << Q_FUNC_INFO;
     return Tomahawk::result_ptr( 0 );
 }

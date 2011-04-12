@@ -42,7 +42,7 @@ public:
     AlbumProxyModel* proxyModel() const { return m_proxyModel; }
 //    PlaylistItemDelegate* delegate() { return m_delegate; }
 
-    void setModel( AlbumModel* model );
+    void setModel( QAbstractItemModel* model );
 
     virtual QWidget* widget() { return this; }
     virtual PlaylistInterface* playlistInterface() const { return proxyModel(); }

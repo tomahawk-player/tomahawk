@@ -48,6 +48,7 @@ public:
     explicit DatabaseCommand( const Tomahawk::source_ptr& src, QObject* parent = 0 );
 
     DatabaseCommand( const DatabaseCommand &other )
+        : QObject( other.parent() )
     {
     }
 
@@ -59,7 +60,7 @@ public:
 
     // if i make this pure virtual, i get compile errors in qmetatype.h.
     // we need Q_DECLARE_METATYPE to use in queued sig/slot connections.
-    virtual void exec( DatabaseImpl* lib ) { Q_ASSERT( false ); }
+    virtual void exec( DatabaseImpl* /*lib*/ ) { Q_ASSERT( false ); }
 
     void _exec( DatabaseImpl* lib );
 
