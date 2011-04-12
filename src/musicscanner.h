@@ -46,7 +46,7 @@ public:
         MTimeOnly
     };
     
-    DirLister( QStringList dirs, QMap<QString, unsigned int>& mtimes, bool recursive )
+    DirLister( const QStringList& dirs, const QMap<QString, unsigned int>& mtimes, bool recursive )
         : QObject(), m_dirs( dirs ), m_dirmtimes( mtimes ), m_recursive( recursive )
     {
         qDebug() << Q_FUNC_INFO;
