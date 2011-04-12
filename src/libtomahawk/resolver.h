@@ -1,5 +1,5 @@
 /* === This file is part of Tomahawk Player - <http://tomahawk-player.org> ===
- * 
+ *
  *   Copyright 2010-2011, Christian Muehlhaeuser <muesli@tomahawk-player.org>
  *
  *   Tomahawk is free software: you can redistribute it and/or modify
@@ -33,6 +33,9 @@
              weighted resolver
 
 */
+
+class QWidget;
+
 namespace Tomahawk
 {
 
@@ -45,11 +48,7 @@ public:
 
     virtual QString name() const = 0;
     virtual unsigned int weight() const = 0;
-    virtual unsigned int preference() const { return 100; };
     virtual unsigned int timeout() const = 0;
-
-    //virtual QWidget * configUI() { return 0; };
-    //etc
 
 public slots:
     virtual void resolve( const Tomahawk::query_ptr& query ) = 0;
@@ -64,10 +63,18 @@ public:
 
     virtual QString filePath() const { return m_filePath; }
 
+    virtual QWidget* configUI() const = 0;
+    virtual void saveConfig() = 0;
 public slots:
     virtual void stop() = 0;
 
+protected:
+    QWidget* widgetFromData( QByteArray& data, QWidget* parent = 0 );
+    QVariant configMsgFromWidget( QWidget* w );
+    QByteArray fixDataImagePaths( const QByteArray& data, bool compressed, const QVariantMap& images );
 private:
+    void addChildProperties( QObject* parent, QVariantMap& m );
+
     QString m_filePath;
 };
 

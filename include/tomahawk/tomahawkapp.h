@@ -90,8 +90,9 @@ public:
     TomahawkWindow* mainWindow() const { return m_mainwindow; }
 #endif
 
-    void addScriptResolver( const QString& scriptPath );
-    void removeScriptResolver( const QString& scriptPath );
+    void enableScriptResolver( const QString& scriptPath );
+    void disableScriptResolver( const QString& scriptPath );
+    Tomahawk::ExternalResolver* resolverForPath( const QString& scriptPath );
 
     // PlatformInterface
     virtual void activate();
@@ -116,7 +117,7 @@ private:
     void startHTTP();
 
     QList<Tomahawk::collection_ptr> m_collections;
-    QList<Tomahawk::ExternalResolver*> m_scriptResolvers;
+    QHash<QString, Tomahawk::ExternalResolver*> m_scriptResolvers;
 
     Database* m_database;
     ScanManager *m_scanManager;
@@ -143,3 +144,4 @@ private:
 };
 
 #endif // TOMAHAWKAPP_H
+

@@ -4,6 +4,7 @@ SET( QT_USE_QTGUI TRUE )
 SET( QT_USE_QTSQL TRUE )
 SET( QT_USE_QTNETWORK TRUE )
 SET( QT_USE_QTXML TRUE )
+SET(QT_USE_QTUITOOLS TRUE)
 
 include( ${QT_USE_FILE} )
 
@@ -21,6 +22,7 @@ set( libSources
     album.cpp
     collection.cpp
     playlist.cpp
+    resolver.cpp
     query.cpp
     result.cpp
     source.cpp

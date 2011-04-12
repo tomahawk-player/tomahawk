@@ -1,5 +1,5 @@
 /* === This file is part of Tomahawk Player - <http://tomahawk-player.org> ===
- * 
+ *
  *   Copyright 2010-2011, Christian Muehlhaeuser <muesli@tomahawk-player.org>
  *
  *   Tomahawk is free software: you can redistribute it and/or modify
@@ -21,6 +21,7 @@
 
 #include <QDialog>
 
+class ResolversModel;
 class QNetworkReply;
 
 namespace Ui
@@ -53,7 +54,7 @@ public:
 
 signals:
     void settingsChanged();
-    
+
 protected:
     void changeEvent( QEvent* e );
 
@@ -71,13 +72,15 @@ private slots:
     void addScriptResolver();
     void scriptSelectionChanged();
     void removeScriptResolver();
-    
+    void openResolverConfig( const QString& );
+
 private:
     Ui::SettingsDialog* ui;
 
     ProxyDialog m_proxySettings;
     bool m_rejected;
     QNetworkReply* m_testLastFmQuery;
+    ResolversModel* m_resolversModel;
 };
 
 #endif // SETTINGSDIALOG_H

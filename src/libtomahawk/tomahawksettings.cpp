@@ -1,5 +1,5 @@
 /* === This file is part of Tomahawk Player - <http://tomahawk-player.org> ===
- * 
+ *
  *   Copyright 2010-2011, Christian Muehlhaeuser <muesli@tomahawk-player.org>
  *
  *   Tomahawk is free software: you can redistribute it and/or modify
@@ -52,7 +52,7 @@ TomahawkSettings::TomahawkSettings( QObject* parent )
         qDebug() << "Config version outdated, old:" << value( "configversion" ).toUInt()
                  << "new:" << VERSION
                  << "Doing upgrade, if any...";
-        
+
         // insert upgrade code here as required
         setValue( "configversion", VERSION );
     }
@@ -415,7 +415,7 @@ int
 TomahawkSettings::defaultPort() const
 {
     return 50210;
-}    
+}
 
 int
 TomahawkSettings::externalPort() const
@@ -485,7 +485,7 @@ TomahawkSettings::setTwitterScreenName( const QString& screenName )
 {
     setValue( "twitter/ScreenName", screenName );
 }
-    
+
 QString
 TomahawkSettings::twitterOAuthToken() const
 {
@@ -627,20 +627,33 @@ TomahawkSettings::setXmppBotPort( const int port )
     setValue( "xmppBot/port", port );
 }
 
-void 
+void
 TomahawkSettings::addScriptResolver(const QString& resolver)
 {
-    setValue( "script/resolvers", scriptResolvers() << resolver );
+    setValue( "script/resolvers", allScriptResolvers() << resolver );
 }
 
-QStringList 
-TomahawkSettings::scriptResolvers() const
+QStringList
+TomahawkSettings::allScriptResolvers() const
 {
     return value( "script/resolvers" ).toStringList();
 }
 
-void 
-TomahawkSettings::setScriptResolvers( const QStringList& resolver )
+void
+TomahawkSettings::setAllScriptResolvers( const QStringList& resolver )
 {
     setValue( "script/resolvers", resolver );
+}
+
+
+QStringList
+TomahawkSettings::enabledScriptResolvers() const
+{
+    return value( "script/loadedresolvers" ).toStringList();
+}
+
+void
+TomahawkSettings::setEnabledScriptResolvers( const QStringList& resolvers )
+{
+    setValue( "script/loadedresolvers", resolvers );
 }

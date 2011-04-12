@@ -1,5 +1,5 @@
 /* === This file is part of Tomahawk Player - <http://tomahawk-player.org> ===
- * 
+ *
  *   Copyright 2010-2011, Christian Muehlhaeuser <muesli@tomahawk-player.org>
  *
  *   Tomahawk is free software: you can redistribute it and/or modify
@@ -68,9 +68,10 @@ public:
 
     virtual QString name() const            { return m_name; }
     virtual unsigned int weight() const     { return m_weight; }
-    virtual unsigned int preference() const { return m_preference; }
     virtual unsigned int timeout() const    { return m_timeout; }
 
+    virtual QWidget* configUI() const { return 0; } // TODO support properly for qtscript resolvers too!
+    virtual void saveConfig() {}
 public slots:
     virtual void resolve( const Tomahawk::query_ptr& query );
     virtual void stop();
@@ -82,7 +83,7 @@ private:
     ScriptEngine* m_engine;
 
     QString m_name;
-    unsigned int m_weight, m_preference, m_timeout;
+    unsigned int m_weight, m_timeout;
 
     bool m_ready, m_stopped;
 };

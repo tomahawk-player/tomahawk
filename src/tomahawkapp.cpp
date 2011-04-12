@@ -289,7 +289,7 @@ TomahawkApp::~TomahawkApp()
     qDebug() << Q_FUNC_INFO;
 
     // stop script resolvers
-    foreach( Tomahawk::ExternalResolver* r, m_scriptResolvers )
+    foreach( Tomahawk::ExternalResolver* r, m_scriptResolvers.values() )
     {
         delete r;
     }
@@ -415,35 +415,39 @@ TomahawkApp::setupPipeline()
     Pipeline::instance()->addResolver( new DatabaseResolver( 100 ) );
 
     // load script resolvers
-    foreach( QString resolver, TomahawkSettings::instance()->scriptResolvers() )
-        addScriptResolver( resolver );
+    foreach( QString resolver, TomahawkSettings::instance()->enabledScriptResolvers() )
+        enableScriptResolver( resolver );
 }
 
 
 void
-TomahawkApp::addScriptResolver( const QString& path )
+TomahawkApp::enableScriptResolver( const QString& path )
 {
     const QFileInfo fi( path );
     if ( fi.suffix() == "js" || fi.suffix() == "script" )
-        m_scriptResolvers << new QtScriptResolver( path );
+        m_scriptResolvers.insert( path, new QtScriptResolver( path ) );
     else
-        m_scriptResolvers << new ScriptResolver( path );
+        m_scriptResolvers.insert( path, new ScriptResolver( path ) );
 }
 
 
 void
-TomahawkApp::removeScriptResolver( const QString& path )
+TomahawkApp::disableScriptResolver( const QString& path )
 {
-    foreach( Tomahawk::ExternalResolver* r, m_scriptResolvers )
+    if( m_scriptResolvers.contains( path ) )
     {
-        if( r->filePath() == path )
-        {
-            m_scriptResolvers.removeAll( r );
-            connect( r, SIGNAL( finished() ), r, SLOT( deleteLater() ) );
-            r->stop();
-            return;
-        }
+        Tomahawk::ExternalResolver* r = m_scriptResolvers.take( path );
+
+        connect( r, SIGNAL( finished() ), r, SLOT( deleteLater() ) );
+        r->stop();
+        return;
     }
+}
+
+Tomahawk::ExternalResolver*
+TomahawkApp::resolverForPath( const QString& scriptPath )
+{
+    return m_scriptResolvers.value( scriptPath, 0 );
 }
 
 
