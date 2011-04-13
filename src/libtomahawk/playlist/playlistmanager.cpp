@@ -156,7 +156,7 @@ PlaylistManager::show( const Tomahawk::playlist_ptr& playlist )
     {
         view = new PlaylistView();
         PlaylistModel* model = new PlaylistModel();
-        view->setModel( model );
+        view->setPlaylistModel( model );
         view->setFrameShape( QFrame::NoFrame );
         view->setAttribute( Qt::WA_MacShowFocusRect, 0 );
         model->loadPlaylist( playlist );
@@ -212,7 +212,7 @@ PlaylistManager::show( const Tomahawk::artist_ptr& artist )
     {
         view = new PlaylistView();
         PlaylistModel* model = new PlaylistModel();
-        view->setModel( model );
+        view->setPlaylistModel( model );
         view->setFrameShape( QFrame::NoFrame );
         view->setAttribute( Qt::WA_MacShowFocusRect, 0 );
         model->append( artist );
@@ -239,7 +239,7 @@ PlaylistManager::show( const Tomahawk::album_ptr& album )
     {
         view = new PlaylistView();
         PlaylistModel* model = new PlaylistModel();
-        view->setModel( model );
+        view->setPlaylistModel( model );
         view->setFrameShape( QFrame::NoFrame );
         view->setAttribute( Qt::WA_MacShowFocusRect, 0 );
         model->append( album );
@@ -292,7 +292,7 @@ PlaylistManager::show( const Tomahawk::collection_ptr& collection )
         {
             aview = new AlbumView();
             AlbumModel* amodel = new AlbumModel( aview );
-            aview->setModel( amodel );
+            aview->setAlbumModel( amodel );
             aview->setFrameShape( QFrame::NoFrame );
             aview->setAttribute( Qt::WA_MacShowFocusRect, 0 );
             amodel->addCollection( collection );
