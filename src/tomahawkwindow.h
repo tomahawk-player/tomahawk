@@ -54,6 +54,8 @@ public:
 protected:
     void changeEvent( QEvent* e );
     void closeEvent( QCloseEvent* e );
+    void showEvent( QShowEvent* e );
+    void hideEvent( QHideEvent* e );
 
 public slots:
     void createAutomaticPlaylist();
@@ -78,6 +80,9 @@ private slots:
     
     void showAboutTomahawk();
     void checkForUpdates();
+
+    void minimize();
+    void maximize();
 
 private:
     void loadSettings();
