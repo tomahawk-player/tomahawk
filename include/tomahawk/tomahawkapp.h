@@ -52,10 +52,6 @@ class XMPPBot;
 namespace Tomahawk
 {
     class ShortcutHandler;
-    namespace InfoSystem
-    {
-        class InfoSystem;
-    }
 }
 
 #ifdef LIBLASTFM_FOUND
@@ -83,7 +79,6 @@ public:
     static TomahawkApp* instance();
 
     SipHandler* sipHandler() { return m_sipHandler; }
-    Tomahawk::InfoSystem::InfoSystem* infoSystem() { return m_infoSystem; }
     XMPPBot* xmppBot() { return m_xmppBot; }
 
 #ifndef TOMAHAWK_HEADLESS
@@ -137,8 +132,6 @@ private:
 #endif
 
     bool m_headless;
-
-    Tomahawk::InfoSystem::InfoSystem* m_infoSystem;
 
     QxtHttpServerConnector m_connector;
     QxtHttpSessionManager m_session;

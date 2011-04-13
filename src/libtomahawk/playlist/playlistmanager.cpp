@@ -390,6 +390,10 @@ PlaylistManager::showSuperCollection()
     {
         setPage( m_superCollectionView );
     }
+    else if ( m_currentMode == 1 )
+    {
+        setPage( m_superCollectionView );
+    }
     else if ( m_currentMode == 2 )
     {
         setPage( m_superAlbumView );

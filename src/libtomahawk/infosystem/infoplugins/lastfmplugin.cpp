@@ -1,5 +1,5 @@
 /* === This file is part of Tomahawk Player - <http://tomahawk-player.org> ===
- * 
+ *
  *   Copyright 2010-2011, Christian Muehlhaeuser <muesli@tomahawk-player.org>
  *
  *   Tomahawk is free software: you can redistribute it and/or modify
@@ -26,7 +26,7 @@
 #include "typedefs.h"
 #include "audio/audioengine.h"
 #include "tomahawksettings.h"
-#include "tomahawk/tomahawkapp.h"
+#include "utils/tomahawkutils.h"
 
 #include <lastfm/ws.h>
 #include <lastfm/XmlQuery>
@@ -49,7 +49,7 @@ LastFmPlugin::LastFmPlugin( QObject* parent )
     QSet< InfoType > supportedTypes;
     supportedTypes << InfoMiscSubmitScrobble << InfoMiscSubmitNowPlaying << InfoAlbumCoverArt;
     qobject_cast< InfoSystem* >(parent)->registerInfoTypes(this, supportedTypes);
-    
+
 /*
       Your API Key is 7194b85b6d1f424fe1668173a78c0c4a
       Your secret is ba80f1df6d27ae63e9cb1d33ccf2052f
@@ -61,14 +61,14 @@ LastFmPlugin::LastFmPlugin( QObject* parent )
     lastfm::ws::ApiKey = "7194b85b6d1f424fe1668173a78c0c4a";
     lastfm::ws::SharedSecret = "ba80f1df6d27ae63e9cb1d33ccf2052f";
     lastfm::ws::Username = TomahawkSettings::instance()->lastFmUsername();
-    
+
     m_pw = TomahawkSettings::instance()->lastFmPassword();
-    
+
     if( TomahawkSettings::instance()->scrobblingEnabled() && !lastfm::ws::Username.isEmpty() )
     {
         createScrobbler();
     }
-        
+
     //HACK work around a bug in liblastfm---it doesn't create its config dir, so when it
     // tries to write the track cache, it fails silently. until we have a fixed version, do this
     // code taken from Amarok (src/services/lastfm/ScrobblerAdapter.cpp)
@@ -126,7 +126,7 @@ LastFmPlugin::nowPlaying( const QString &caller, const InfoType type, const QVar
         dataError( caller, type, data, customData );
         return;
     }
-    
+
     m_track = lastfm::MutableTrack();
     m_track.stamp();
 
@@ -154,7 +154,7 @@ LastFmPlugin::scrobble( const QString &caller, const InfoType type, const QVaria
     qDebug() << Q_FUNC_INFO << m_track.toString();
     m_scrobbler->cache( m_track );
     m_scrobbler->submit();
-    
+
     emit info( caller, type, data, QVariant(), customData );
 }
 
@@ -173,11 +173,11 @@ LastFmPlugin::fetchCoverArt( const QString &caller, const InfoType type, const Q
         dataError( caller, type, data, customData );
         return;
     }
-    
+
     Tomahawk::InfoSystem::InfoCacheCriteria criteria;
     criteria["artist"] = hash["artist"].toString();
     criteria["album"] = hash["album"].toString();
-    
+
     emit getCachedInfo( criteria, 2419200000, caller, type, data, customData );
 }
 
@@ -217,7 +217,7 @@ LastFmPlugin::coverArtReturned()
         InfoCustomData returnedData;
         returnedData["imgbytes"] = ba;
         returnedData["url"] = reply->url().toString();
-        
+
         InfoCustomData customData = reply->property( "customData" ).value< Tomahawk::InfoSystem::InfoCustomData >();
         InfoType type = (Tomahawk::InfoSystem::InfoType)(reply->property( "type" ).toUInt());
         emit info(
@@ -227,12 +227,12 @@ LastFmPlugin::coverArtReturned()
             returnedData,
             customData
         );
-        
+
         InfoCustomData origData = reply->property( "origData" ).value< Tomahawk::InfoSystem::InfoCustomData >();
         Tomahawk::InfoSystem::InfoCacheCriteria criteria;
         criteria["artist"] = origData["artist"].toString();
         criteria["album"] = origData["album"].toString();
-        emit updateCache( criteria, type, returnedData );
+        emit updateCache( criteria, 2419200000, type, returnedData );
     }
     else
     {
@@ -280,12 +280,12 @@ LastFmPlugin::settingsChanged()
 void
 LastFmPlugin::onAuthenticated()
 {
-    if( !m_authJob ) 
+    if( !m_authJob )
     {
         qDebug() << Q_FUNC_INFO << "Help! No longer got a last.fm auth job!";
         return;
     }
-    
+
     if( m_authJob->error() == QNetworkReply::NoError )
     {
         lastfm::XmlQuery lfm = lastfm::XmlQuery( m_authJob->readAll() );
@@ -294,7 +294,7 @@ LastFmPlugin::onAuthenticated()
         {
             qDebug() << "Error from authenticating with Last.fm service:" << lfm.text();
             TomahawkSettings::instance()->setLastFmSessionKey( QByteArray() );
-            
+
         }
         else
         {
@@ -310,7 +310,7 @@ LastFmPlugin::onAuthenticated()
     {
         qDebug() << "Got error in Last.fm authentication job:" << m_authJob->errorString();
     }
-    
+
     m_authJob->deleteLater();
 }
 
@@ -321,19 +321,19 @@ LastFmPlugin::createScrobbler()
     if( TomahawkSettings::instance()->lastFmSessionKey().isEmpty() ) // no session key, so get one
     {
         QString authToken = md5( ( lastfm::ws::Username.toLower() + md5( m_pw.toUtf8() ) ).toUtf8() );
-        
+
         QMap<QString, QString> query;
         query[ "method" ] = "auth.getMobileSession";
         query[ "username" ] = lastfm::ws::Username;
         query[ "authToken" ] = authToken;
         m_authJob = lastfm::ws::post( query );
-        
+
         connect( m_authJob, SIGNAL( finished() ), SLOT( onAuthenticated() ) );
     }
     else
     {
         lastfm::ws::SessionKey = TomahawkSettings::instance()->lastFmSessionKey();
-        
+
         m_scrobbler = new lastfm::Audioscrobbler( "thk" );
         m_scrobbler->moveToThread( thread() );
     }

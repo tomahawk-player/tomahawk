@@ -30,7 +30,7 @@
 
 #define LASTFM_DEFAULT_COVER "http://cdn.last.fm/flatness/catalogue/noimage"
 
-static QString s_infoIdentifier = QString( "TREEMODEL" );
+static QString s_tmInfoIdentifier = QString( "TREEMODEL" );
 
 using namespace Tomahawk;
 
@@ -44,11 +44,11 @@ TreeModel::TreeModel( QObject* parent )
     m_defaultCover = QPixmap( RESPATH "images/no-album-art-placeholder.png" )
                      .scaled( QSize( 120, 120 ), Qt::IgnoreAspectRatio, Qt::SmoothTransformation );
 
-/*    connect( TomahawkApp::instance()->infoSystem(),
+    connect( Tomahawk::InfoSystem::InfoSystem::instance(),
              SIGNAL( info( QString, Tomahawk::InfoSystem::InfoType, QVariant, QVariant, Tomahawk::InfoSystem::InfoCustomData ) ),
                SLOT( infoSystemInfo( QString, Tomahawk::InfoSystem::InfoType, QVariant, QVariant, Tomahawk::InfoSystem::InfoCustomData ) ) );
 
-    connect( TomahawkApp::instance()->infoSystem(), SIGNAL( finished( QString ) ), SLOT( infoSystemFinished( QString ) ) );*/
+    connect( Tomahawk::InfoSystem::InfoSystem::instance(), SIGNAL( finished( QString ) ), SLOT( infoSystemFinished( QString ) ) );
 }
 
 
@@ -142,7 +142,7 @@ int
 TreeModel::columnCount( const QModelIndex& parent ) const
 {
     Q_UNUSED( parent );
-    return 4;
+    return 7;
 }
 
 
@@ -190,22 +190,47 @@ TreeModel::data( const QModelIndex& index, int role ) const
     if ( role != Qt::DisplayRole ) // && role != Qt::ToolTipRole )
         return QVariant();
 
-    switch( index.column() )
+    if ( !entry->artist().isNull() && index.column() == Name )
     {
-        case 0:
-            if ( !entry->artist().isNull() )
-            {
-                return entry->artist()->name();
-            }
-            else if ( !entry->artist().isNull() )
-            {
-                return entry->album()->name();
-            }
-            else if ( !entry->result().isNull() )
-            {
-                return entry->result()->track();
-            }
-            break;
+        return entry->artist()->name();
+    }
+    else if ( !entry->album().isNull() && index.column() == Name )
+    {
+        return entry->album()->name();
+    }
+    else
+    {
+        const result_ptr& result = entry->result();
+        switch( index.column() )
+        {
+            case Name:
+                return QString( "%1%2" ).arg( result->albumpos() > 0 ? QString( "%1. ").arg( result->albumpos() ) : QString() )
+                                        .arg( result->track() );
+
+            case Duration:
+                return TomahawkUtils::timeToString( result->duration() );
+
+            case Bitrate:
+                return result->bitrate();
+
+            case Age:
+                return TomahawkUtils::ageToString( QDateTime::fromTime_t( result->modificationTime() ) );
+
+            case Year:
+                return result->year();
+
+            case Filesize:
+                return TomahawkUtils::filesizeToString( result->size() );
+
+            case Origin:
+                return result->friendlySource();
+
+            case AlbumPosition:
+                return result->albumpos();
+
+            default:
+                return QVariant();
+        }
     }
 
     return QVariant();
@@ -216,7 +241,7 @@ QVariant
 TreeModel::headerData( int section, Qt::Orientation orientation, int role ) const
 {
     QStringList headers;
-    headers << tr( "Artist" );
+    headers << tr( "Name" ) << tr( "Duration" ) << tr( "Bitrate" ) << tr( "Age" ) << tr( "Year" ) << tr( "Size" ) << tr( "Origin" );
     if ( orientation == Qt::Horizontal && role == Qt::DisplayRole && section >= 0 )
     {
         return headers.at( section );
@@ -453,14 +478,14 @@ TreeModel::onAlbumsAdded( const QList<Tomahawk::album_ptr>& albums, const QVaria
         albumitem->index = createIndex( parentItem->children.count() - 1, 0, albumitem );
         connect( albumitem, SIGNAL( dataChanged() ), SLOT( onDataChanged() ) );
 
-/*        Tomahawk::InfoSystem::InfoCustomData trackInfo;
+        Tomahawk::InfoSystem::InfoCustomData trackInfo;
         trackInfo["artist"] = QVariant::fromValue< QString >( album->artist()->name() );
         trackInfo["album"] = QVariant::fromValue< QString >( album->name() );
-        trackInfo["pptr"] = (qlonglong)albumitem;
+        trackInfo["pptr"] = QVariant::fromValue< qlonglong >( (qlonglong)albumitem );
 
-        TomahawkApp::instance()->infoSystem()->getInfo(
-            s_infoIdentifier, Tomahawk::InfoSystem::InfoAlbumCoverArt,
-            QVariant::fromValue< Tomahawk::InfoSystem::InfoCustomData >( trackInfo ), Tomahawk::InfoSystem::InfoCustomData() );*/
+        Tomahawk::InfoSystem::InfoSystem::instance()->getInfo(
+            s_tmInfoIdentifier, Tomahawk::InfoSystem::InfoAlbumCoverArt,
+            QVariant::fromValue< Tomahawk::InfoSystem::InfoCustomData >( trackInfo ), Tomahawk::InfoSystem::InfoCustomData() );
     }
 
     if ( crows.second > 0 )
@@ -517,7 +542,7 @@ void
 TreeModel::infoSystemInfo( QString caller, Tomahawk::InfoSystem::InfoType type, QVariant input, QVariant output, Tomahawk::InfoSystem::InfoCustomData customData )
 {
     qDebug() << Q_FUNC_INFO;
-    if ( caller != s_infoIdentifier || type != Tomahawk::InfoSystem::InfoAlbumCoverArt )
+    if ( caller != s_tmInfoIdentifier || type != Tomahawk::InfoSystem::InfoAlbumCoverArt )
     {
         qDebug() << "Info of wrong type or not with our identifier";
         return;
@@ -529,6 +554,7 @@ TreeModel::infoSystemInfo( QString caller, Tomahawk::InfoSystem::InfoType type, 
         return;
     }
 
+    Tomahawk::InfoSystem::InfoCustomData pptr = input.value< Tomahawk::InfoSystem::InfoCustomData >();
     Tomahawk::InfoSystem::InfoCustomData returnedData = output.value< Tomahawk::InfoSystem::InfoCustomData >();
     const QByteArray ba = returnedData["imgbytes"].toByteArray();
     if ( ba.length() )
@@ -536,13 +562,15 @@ TreeModel::infoSystemInfo( QString caller, Tomahawk::InfoSystem::InfoType type, 
         QPixmap pm;
         pm.loadFromData( ba );
 
-        qlonglong pptr = input.toLongLong();
-        TreeModelItem* ai = reinterpret_cast<TreeModelItem*>(pptr);
+        qlonglong p = pptr["pptr"].toLongLong();
+        TreeModelItem* ai = reinterpret_cast<TreeModelItem*>(p);
 
         if ( pm.isNull() || returnedData["url"].toString().startsWith( LASTFM_DEFAULT_COVER ) )
             ai->cover = m_defaultCover;
         else
             ai->cover = pm;
+
+        emit dataChanged( ai->index, ai->index.sibling( ai->index.row(), columnCount( QModelIndex() ) - 1 ) );
     }
 }
 

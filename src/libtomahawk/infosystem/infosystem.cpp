@@ -1,5 +1,5 @@
 /* === This file is part of Tomahawk Player - <http://tomahawk-player.org> ===
- * 
+ *
  *   Copyright 2010-2011, Christian Muehlhaeuser <muesli@tomahawk-player.org>
  *
  *   Tomahawk is free software: you can redistribute it and/or modify
@@ -18,8 +18,8 @@
 
 #include <QCoreApplication>
 
-#include "tomahawk/infosystem.h"
-#include "tomahawkutils.h"
+#include "infosystem.h"
+#include "utils/tomahawkutils.h"
 #include "infosystemcache.h"
 #include "infoplugins/echonestplugin.h"
 #include "infoplugins/musixmatchplugin.h"
@@ -27,7 +27,7 @@
 
 namespace Tomahawk
 {
-    
+
 namespace InfoSystem
 {
 
@@ -40,9 +40,9 @@ InfoPlugin::InfoPlugin(QObject *parent)
         {
             QObject::connect(
                 this,
-                SIGNAL( getCachedInfo( Tomahawk::InfoSystem::InfoCacheCriteria, QString, Tomahawk::InfoSystem::InfoType, QVariant, Tomahawk::InfoSystem::InfoCustomData ) ),
+                SIGNAL( getCachedInfo( Tomahawk::InfoSystem::InfoCacheCriteria, qint64, QString, Tomahawk::InfoSystem::InfoType, QVariant, Tomahawk::InfoSystem::InfoCustomData ) ),
                 system->getCache(),
-                SLOT( getCachedInfoSlot( Tomahawk::InfoSystem::InfoCacheCriteria, QString, Tomahawk::InfoSystem::InfoType, QVariant, Tomahawk::InfoSystem::InfoCustomData ) )
+                SLOT( getCachedInfoSlot( Tomahawk::InfoSystem::InfoCacheCriteria, qint64, QString, Tomahawk::InfoSystem::InfoType, QVariant, Tomahawk::InfoSystem::InfoCustomData ) )
             );
             QObject::connect(
                 system->getCache(),
@@ -52,35 +52,45 @@ InfoPlugin::InfoPlugin(QObject *parent)
             );
             QObject::connect(
                 this,
-                SIGNAL( updateCache( Tomahawk::InfoSystem::InfoCacheCriteria, Tomahawk::InfoSystem::InfoType, QVariant ) ),
+                SIGNAL( updateCache( Tomahawk::InfoSystem::InfoCacheCriteria, qint64, Tomahawk::InfoSystem::InfoType, QVariant ) ),
                 system->getCache(),
-                SLOT( updateCacheSlot( Tomahawk::InfoSystem::InfoCacheCriteria, Tomahawk::InfoSystem::InfoType, QVariant ) )
+                SLOT( updateCacheSlot( Tomahawk::InfoSystem::InfoCacheCriteria, qint64, Tomahawk::InfoSystem::InfoType, QVariant ) )
             );
         }
     }
 
 
+InfoSystem* InfoSystem::s_instance = 0;
+
+InfoSystem*
+InfoSystem::instance()
+{
+    return s_instance;
+}
+
 InfoSystem::InfoSystem(QObject *parent)
     : QObject(parent)
 {
+    s_instance = this;
+
     qDebug() << Q_FUNC_INFO;
     qRegisterMetaType< QMap< QString, QMap< QString, QString > > >( "Tomahawk::InfoSystem::InfoGenericMap" );
     qRegisterMetaType< QHash< QString, QVariant > >( "Tomahawk::InfoSystem::InfoCustomData" );
     qRegisterMetaType< QHash< QString, QString > >( "Tomahawk::InfoSystem::InfoCacheCriteria" );
     qRegisterMetaType< Tomahawk::InfoSystem::InfoType >( "Tomahawk::InfoSystem::InfoType" );
-    
+
     m_infoSystemCacheThreadController = new QThread( this );
     m_cache = new InfoSystemCache();
     m_cache->moveToThread( m_infoSystemCacheThreadController );
     m_infoSystemCacheThreadController->start( QThread::IdlePriority );
-    
+
     InfoPluginPtr enptr( new EchoNestPlugin( this ) );
     m_plugins.append( enptr );
     InfoPluginPtr mmptr( new MusixMatchPlugin( this ) );
     m_plugins.append( mmptr );
     InfoPluginPtr lfmptr( new LastFmPlugin( this ) );
     m_plugins.append( lfmptr );
-    
+
     Q_FOREACH( InfoPluginPtr plugin, m_plugins )
     {
         connect(
@@ -107,19 +117,19 @@ InfoSystem::~InfoSystem()
     if( m_infoSystemCacheThreadController )
     {
         m_infoSystemCacheThreadController->quit();
-    
+
         while( !m_infoSystemCacheThreadController->isFinished() )
         {
             QCoreApplication::processEvents( QEventLoop::AllEvents, 200 );
             TomahawkUtils::Sleep::msleep( 100 );
         }
-        
+
         if( m_cache )
         {
             delete m_cache;
             m_cache = 0;
         }
-        
+
         delete m_infoSystemCacheThreadController;
         m_infoSystemCacheThreadController = 0;
     }
@@ -152,7 +162,7 @@ void InfoSystem::getInfo(const QString &caller, const InfoType type, const QVari
         emit finished(caller);
         return;
     }
-    
+
     InfoPluginPtr ptr = providers.first();
     if (!ptr)
     {
@@ -160,7 +170,7 @@ void InfoSystem::getInfo(const QString &caller, const InfoType type, const QVari
         emit finished(caller);
         return;
     }
-    
+
     m_dataTracker[caller][type] = m_dataTracker[caller][type] + 1;
     qDebug() << "current count in dataTracker for type" << type << "is" << m_dataTracker[caller][type];
     ptr.data()->getInfo(caller, type, data, customData);
@@ -182,7 +192,7 @@ void InfoSystem::infoSlot(QString target, InfoType type, QVariant input, QVarian
         return;
     }
     emit info(target, type, input, output, customData);
-    
+
     m_dataTracker[target][type] = m_dataTracker[target][type] - 1;
     qDebug() << "current count in dataTracker is " << m_dataTracker[target][type];
     Q_FOREACH(InfoType testtype, m_dataTracker[target].keys())

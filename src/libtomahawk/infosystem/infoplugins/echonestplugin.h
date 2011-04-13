@@ -1,5 +1,5 @@
 /* === This file is part of Tomahawk Player - <http://tomahawk-player.org> ===
- * 
+ *
  *   Copyright 2010-2011, Christian Muehlhaeuser <muesli@tomahawk-player.org>
  *
  *   Tomahawk is free software: you can redistribute it and/or modify
@@ -19,7 +19,7 @@
 #ifndef ECHONESTPLUGIN_H
 #define ECHONESTPLUGIN_H
 
-#include "tomahawk/infosystem.h"
+#include "infosystem/infosystem.h"
 
 #include <QObject>
 
@@ -37,13 +37,13 @@ namespace InfoSystem
 class EchoNestPlugin : public InfoPlugin
 {
     Q_OBJECT
-    
+
 public:
     EchoNestPlugin(QObject *parent);
     virtual ~EchoNestPlugin();
-    
+
     void getInfo( const QString &caller, const InfoType type, const QVariant &data, InfoCustomData customData );
-    
+
 private:
     void getSongProfile( const QString &caller, const QVariant &data, InfoCustomData &customData, const QString &item = QString() );
     void getArtistBiography ( const QString &caller, const QVariant &data, InfoCustomData &customData );
@@ -55,14 +55,14 @@ private:
     bool isValidArtistData( const QString &caller, const QVariant& data, InfoCustomData& customData );
     bool isValidTrackData( const QString &caller, const QVariant& data, InfoCustomData& customData );
     Echonest::Artist artistFromReply( QNetworkReply* );
-    
+
 private slots:
     void getArtistBiographySlot();
     void getArtistFamiliaritySlot();
     void getArtistHotttnesssSlot();
     void getArtistTermsSlot();
     void getMiscTopSlot();
-    
+
 private:
     QHash< QNetworkReply*, InfoCustomData > m_replyMap;
     QHash< QNetworkReply*, QString > m_callerMap;

@@ -23,7 +23,7 @@
 
 #include "result.h"
 #include "playlistinterface.h"
-#include "tomahawk/infosystem.h"
+#include "infosystem/infosystem.h"
 
 namespace Ui
 {

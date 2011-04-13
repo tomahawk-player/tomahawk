@@ -34,12 +34,6 @@ ENDIF()
 SET( tomahawkSources ${tomahawkSources}
      sip/SipHandler.cpp
 
-     infosystem/infosystemcache.cpp
-     infosystem/infosystem.cpp
-     infosystem/infoplugins/echonestplugin.cpp
-     infosystem/infoplugins/lastfmplugin.cpp
-     infosystem/infoplugins/musixmatchplugin.cpp
-
      web/api_v1.cpp
 
      resolvers/scriptresolver.cpp
@@ -74,14 +68,8 @@ SET( tomahawkSourcesGui ${tomahawkSourcesGui}
 
 SET( tomahawkHeaders ${tomahawkHeaders}
      "${TOMAHAWK_INC_DIR}/tomahawk/tomahawkapp.h"
-     "${TOMAHAWK_INC_DIR}/tomahawk/infosystem.h"
 
      sip/SipHandler.h
-
-     infosystem/infosystemcache.h
-     infosystem/infoplugins/echonestplugin.h
-     infosystem/infoplugins/lastfmplugin.h
-     infosystem/infoplugins/musixmatchplugin.h
 
      web/api_v1.h
 
@@ -137,8 +125,6 @@ INCLUDE_DIRECTORIES(
     topbar
     utils
     libtomahawk
-    libtomahawk/utils
-    infosystem
     mac
 
     ${THIRDPARTY_DIR}/alsa-playback

@@ -1,5 +1,5 @@
 /* === This file is part of Tomahawk Player - <http://tomahawk-player.org> ===
- * 
+ *
  *   Copyright 2010-2011, Christian Muehlhaeuser <muesli@tomahawk-player.org>
  *
  *   Tomahawk is free software: you can redistribute it and/or modify
@@ -20,7 +20,7 @@
 #define XMPPBOT_H
 
 #include <result.h>
-#include <tomahawk/infosystem.h>
+#include <infosystem/infosystem.h>
 
 #include <QtCore/QObject>
 #include <QtCore/qsharedpointer.h>
@@ -42,12 +42,12 @@ class XMPPBotClient
 public:
     XMPPBotClient(QObject* parent, gloox::JID &jid, std::string password, int port);
     virtual ~XMPPBotClient();
-    
+
     void run();
-    
+
 private slots:
     void recvSlot();
-    
+
 private:
     QTimer m_timer;
 };
@@ -59,7 +59,7 @@ class XMPPBot
     , public gloox::MessageHandler
 {
     Q_OBJECT
-    
+
 public:
     XMPPBot(QObject *parent);
     virtual ~XMPPBot();
@@ -68,16 +68,16 @@ public slots:
     virtual void newTrackSlot(const Tomahawk::result_ptr &track);
     virtual void infoReturnedSlot(QString caller, Tomahawk::InfoSystem::InfoType type, QVariant input, QVariant output, Tomahawk::InfoSystem::InfoCustomData customData);
     virtual void infoFinishedSlot(QString caller);
-    
+
 protected:
     // ConnectionListener
     virtual void onConnect();
     virtual void onDisconnect(gloox::ConnectionError e);
     virtual bool onTLSConnect(const gloox::CertInfo &info);
-    
+
     // SubscriptionHandler
     virtual void handleSubscription(const gloox::Subscription &subscription);
-    
+
     // MessageHandler
     virtual void handleMessage(const gloox::Message &msg, gloox::MessageSession *session = 0);
 

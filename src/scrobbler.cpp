@@ -1,5 +1,5 @@
 /* === This file is part of Tomahawk Player - <http://tomahawk-player.org> ===
- * 
+ *
  *   Copyright 2010-2011, Christian Muehlhaeuser <muesli@tomahawk-player.org>
  *
  *   Tomahawk is free software: you can redistribute it and/or modify
@@ -26,10 +26,9 @@
 #include "typedefs.h"
 #include "audio/audioengine.h"
 #include "tomahawksettings.h"
-#include "tomahawk/tomahawkapp.h"
-#include "tomahawk/infosystem.h"
+#include "infosystem/infosystem.h"
 
-static QString s_infoIdentifier = QString("SCROBBLER");
+static QString s_scInfoIdentifier = QString( "SCROBBLER" );
 
 Scrobbler::Scrobbler( QObject* parent )
     : QObject( parent )
@@ -37,13 +36,11 @@ Scrobbler::Scrobbler( QObject* parent )
 {
     connect( AudioEngine::instance(), SIGNAL( timerSeconds( unsigned int ) ),
                                         SLOT( engineTick( unsigned int ) ), Qt::QueuedConnection );
-    
-    connect( TomahawkApp::instance()->infoSystem(),
+
+    connect( Tomahawk::InfoSystem::InfoSystem::instance(),
         SIGNAL( info( QString, Tomahawk::InfoSystem::InfoType, QVariant, QVariant, Tomahawk::InfoSystem::InfoCustomData ) ),
         SLOT( infoSystemInfo( QString, Tomahawk::InfoSystem::InfoType, QVariant, QVariant, Tomahawk::InfoSystem::InfoCustomData ) ) );
     
-    connect( TomahawkApp::instance()->infoSystem(), SIGNAL( finished( QString ) ), SLOT( infoSystemFinished( QString ) ) );
-
     connect( AudioEngine::instance(), SIGNAL( started( const Tomahawk::result_ptr& ) ),
              SLOT( trackStarted( const Tomahawk::result_ptr& ) ), Qt::QueuedConnection );
 
@@ -55,6 +52,8 @@ Scrobbler::Scrobbler( QObject* parent )
 
     connect( AudioEngine::instance(), SIGNAL( stopped() ),
              SLOT( trackStopped() ), Qt::QueuedConnection );
+
+    connect( Tomahawk::InfoSystem::InfoSystem::instance(), SIGNAL( finished( QString ) ), SLOT( infoSystemFinished( QString ) ) );
 }
 
 
@@ -63,7 +62,7 @@ Scrobbler::~Scrobbler()
 }
 
 
-void 
+void
 Scrobbler::trackStarted( const Tomahawk::result_ptr& track )
 {
     Q_ASSERT( QThread::currentThread() == thread() );
@@ -76,34 +75,34 @@ Scrobbler::trackStarted( const Tomahawk::result_ptr& track )
     }
 
     Tomahawk::InfoSystem::InfoCustomData trackInfo;
-    
+
     trackInfo["title"] = QVariant::fromValue< QString >( track->track() );
     trackInfo["artist"] = QVariant::fromValue< QString >( track->artist()->name() );
     trackInfo["album"] = QVariant::fromValue< QString >( track->album()->name() );
     trackInfo["duration"] = QVariant::fromValue< uint >( track->duration() );
-    TomahawkApp::instance()->infoSystem()->getInfo(
-        s_infoIdentifier, Tomahawk::InfoSystem::InfoMiscSubmitNowPlaying,
+    Tomahawk::InfoSystem::InfoSystem::instance()->getInfo(
+        s_scInfoIdentifier, Tomahawk::InfoSystem::InfoMiscSubmitNowPlaying,
         QVariant::fromValue< Tomahawk::InfoSystem::InfoCustomData >( trackInfo ), Tomahawk::InfoSystem::InfoCustomData() );
-    
+
     m_scrobblePoint = ScrobblePoint( track->duration() / 2 );
 }
 
 
-void 
+void
 Scrobbler::trackPaused()
 {
     Q_ASSERT( QThread::currentThread() == thread() );
 }
 
 
-void 
+void
 Scrobbler::trackResumed()
 {
     Q_ASSERT( QThread::currentThread() == thread() );
 }
 
 
-void 
+void
 Scrobbler::trackStopped()
 {
     Q_ASSERT( QThread::currentThread() == thread() );
@@ -128,11 +127,12 @@ void
 Scrobbler::scrobble()
 {
     Q_ASSERT( QThread::currentThread() == thread() );
-    
-    TomahawkApp::instance()->infoSystem()->getInfo(
-        s_infoIdentifier, Tomahawk::InfoSystem::InfoMiscSubmitScrobble,
+
+    Tomahawk::InfoSystem::InfoSystem::instance()->getInfo(
+        s_scInfoIdentifier, Tomahawk::InfoSystem::InfoMiscSubmitScrobble,
         QVariant(), Tomahawk::InfoSystem::InfoCustomData() );
 }
+
 
 void
 Scrobbler::infoSystemInfo( QString caller, Tomahawk::InfoSystem::InfoType type, QVariant input, QVariant output, Tomahawk::InfoSystem::InfoCustomData customData )
@@ -140,7 +140,7 @@ Scrobbler::infoSystemInfo( QString caller, Tomahawk::InfoSystem::InfoType type, 
     Q_UNUSED( input );
     Q_UNUSED( output );
     Q_UNUSED( customData );
-    if ( caller == s_infoIdentifier )
+    if ( caller == s_scInfoIdentifier )
     {
         qDebug() << Q_FUNC_INFO;
         if ( type == Tomahawk::InfoSystem::InfoMiscSubmitNowPlaying )
@@ -150,10 +150,11 @@ Scrobbler::infoSystemInfo( QString caller, Tomahawk::InfoSystem::InfoType type, 
     }
 }
 
-void 
+
+void
 Scrobbler::infoSystemFinished( QString target )
 {
-    if ( target == s_infoIdentifier )
+    if ( target == s_scInfoIdentifier )
     {
         qDebug() << Q_FUNC_INFO;
         qDebug() << "Scrobbler received done signal from InfoSystem";

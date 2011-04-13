@@ -99,6 +99,12 @@ TreeProxyModel::lessThan( const QModelIndex& left, const QModelIndex& right ) co
     if ( !p2 )
         return false;
 
+    if ( !p1->result().isNull() )
+    {
+        if ( p1->result()->albumpos() != p2->result()->albumpos() )
+            return p1->result()->albumpos() < p2->result()->albumpos();
+    }
+
     return QString::localeAwareCompare( textForItem( p1 ), textForItem( p2 ) ) < 0;
 }
 

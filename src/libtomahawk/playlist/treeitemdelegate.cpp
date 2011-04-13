@@ -78,6 +78,9 @@ TreeItemDelegate::paint( QPainter* painter, const QStyleOptionViewItem& option, 
         opt.palette.setColor( QPalette::Text, opt.palette.color( QPalette::HighlightedText ) );
     }
 
+    if ( index.column() > 0 )
+        return;
+
     painter->save();
     painter->setRenderHint( QPainter::Antialiasing );
     painter->setPen( opt.palette.color( QPalette::Text ) );
@@ -92,7 +95,8 @@ TreeItemDelegate::paint( QPainter* painter, const QStyleOptionViewItem& option, 
     QFont boldFont = opt.font;
     boldFont.setBold( true );
 
-    r = option.rect.adjusted( option.rect.height(), 6, 0, -option.rect.height() + 22 );
+    r = option.rect.adjusted( option.rect.height(), 6, -4, -option.rect.height() + 22 );
+    text = painter->fontMetrics().elidedText( text, Qt::ElideRight, r.width() );
     painter->drawText( r, text, to );
 
     painter->setFont( boldFont );

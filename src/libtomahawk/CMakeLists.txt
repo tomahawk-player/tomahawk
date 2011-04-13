@@ -75,6 +75,12 @@ set( libSources
     database/databasecommand_clientauthvalid.cpp
     database/database.cpp
 
+    infosystem/infosystemcache.cpp
+    infosystem/infosystem.cpp
+    infosystem/infoplugins/echonestplugin.cpp
+    infosystem/infoplugins/lastfmplugin.cpp
+    infosystem/infoplugins/musixmatchplugin.cpp
+
     playlist/treemodel.cpp
     playlist/treeproxymodel.cpp
     playlist/treeheader.cpp
@@ -226,6 +232,12 @@ set( libHeaders
     database/databasecommand_addclientauth.h
     database/databasecommand_clientauthvalid.h
 
+    infosystem/infosystem.h
+    infosystem/infosystemcache.h
+    infosystem/infoplugins/echonestplugin.h
+    infosystem/infoplugins/lastfmplugin.h
+    infosystem/infoplugins/musixmatchplugin.h
+
     network/bufferiodevice.h
     network/msgprocessor.h
     network/remotecollection.h
@@ -330,9 +342,9 @@ include_directories( . ${CMAKE_CURRENT_BINARY_DIR} ${CMAKE_CURRENT_BINARY_DIR}/.
     ${LIBECHONEST_INCLUDE_DIR}/..
     ${CLUCENE_INCLUDE_DIR}
     ${CLUCENE_LIBRARY_DIR}
+    ${CMAKE_BINARY_DIR}/thirdparty/liblastfm2/src
 
     ../../include
-    ../network
     playlist
 
     ${THIRDPARTY_DIR}/libportfwd/include
@@ -394,6 +406,10 @@ IF( UNIX AND NOT APPLE )
     )
 ENDIF( UNIX AND NOT APPLE )
 
+IF(LIBLASTFM_FOUND)
+    SET(LINK_LIBRARIES ${LINK_LIBRARIES} tomahawk_lastfm2 )
+ENDIF(LIBLASTFM_FOUND)
+
 qt4_wrap_ui( libUI_H ${libUI} )
 qt4_wrap_cpp( libMoc ${libHeaders} )
 
@@ -422,6 +438,7 @@ target_link_libraries( tomahawklib
     ${QT_LIBRARIES}
     ${OS_SPECIFIC_LINK_LIBRARIES}
     ${CMAKE_THREAD_LIBS_INIT}
+    ${LINK_LIBRARIES}
 )
 
 INSTALL( TARGETS tomahawklib DESTINATION lib${LIB_SUFFIX} )

@@ -1,5 +1,5 @@
 /* === This file is part of Tomahawk Player - <http://tomahawk-player.org> ===
- * 
+ *
  *   Copyright 2010-2011, Christian Muehlhaeuser <muesli@tomahawk-player.org>
  *
  *   Tomahawk is free software: you can redistribute it and/or modify
@@ -16,9 +16,9 @@
  *   along with Tomahawk. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include "tomahawk/infosystem.h"
-#include "tomahawk/tomahawkapp.h"
 #include "musixmatchplugin.h"
+
+#include "utils/tomahawkutils.h"
 
 #include <QNetworkReply>
 #include <QDomDocument>
@@ -65,7 +65,7 @@ void MusixMatchPlugin::getInfo(const QString &caller, const InfoType type, const
     reply->setProperty("customData", QVariant::fromValue<Tomahawk::InfoSystem::InfoCustomData>(customData));
     reply->setProperty("origData", data);
     reply->setProperty("caller", caller);
-    
+
     connect(reply, SIGNAL(finished()), SLOT(trackSearchSlot()));
 }
 

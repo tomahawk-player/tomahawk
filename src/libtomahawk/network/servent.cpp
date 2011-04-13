@@ -26,6 +26,7 @@
 #include <QNetworkProxy>
 #include <QNetworkRequest>
 #include <QNetworkReply>
+#include <QPushButton>
 #include <QMessageBox>
 
 #include "result.h"
@@ -41,7 +42,6 @@
 #include "tomahawksettings.h"
 #include "utils/tomahawkutils.h"
 #include <aclsystem.h>
-#include <tomahawk/tomahawkapp.h>
 
 using namespace Tomahawk;
 

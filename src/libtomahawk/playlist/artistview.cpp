@@ -27,6 +27,7 @@
 #include "audio/audioengine.h"
 
 #include "tomahawksettings.h"
+#include "treeheader.h"
 #include "treeitemdelegate.h"
 #include "playlistmanager.h"
 
@@ -37,16 +38,34 @@ ArtistView::ArtistView( QWidget* parent )
     : QTreeView( parent )
     , m_model( 0 )
     , m_proxyModel( 0 )
+    , m_header( new TreeHeader( this ) )
 //    , m_delegate( 0 )
 {
+    setAlternatingRowColors( true );
     setDragEnabled( true );
     setDropIndicatorShown( false );
     setDragDropOverwriteMode( false );
     setUniformRowHeights( false );
     setVerticalScrollMode( QAbstractItemView::ScrollPerPixel );
     setRootIsDecorated( true );
+    setAnimated( false );
+    setAllColumnsShowFocus( true );
+    setSelectionMode( QAbstractItemView::ExtendedSelection );
+    setSelectionBehavior( QAbstractItemView::SelectRows );
 
+    setHeader( m_header );
     setProxyModel( new TreeProxyModel( this ) );
+
+    #ifndef Q_WS_WIN
+    QFont f = font();
+    f.setPointSize( f.pointSize() - 1 );
+    setFont( f );
+    #endif
+
+    #ifdef Q_WS_MAC
+    f.setPointSize( f.pointSize() - 2 );
+    setFont( f );
+    #endif
 
     connect( this, SIGNAL( doubleClicked( QModelIndex ) ), SLOT( onItemActivated( QModelIndex ) ) );
 }

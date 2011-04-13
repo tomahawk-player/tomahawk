@@ -1,5 +1,5 @@
 /* === This file is part of Tomahawk Player - <http://tomahawk-player.org> ===
- * 
+ *
  *   Copyright 2010-2011, Christian Muehlhaeuser <muesli@tomahawk-player.org>
  *
  *   Tomahawk is free software: you can redistribute it and/or modify
@@ -18,8 +18,7 @@
 
 #include "xmppbot.h"
 
-#include "tomahawk/tomahawkapp.h"
-#include "tomahawk/infosystem.h"
+#include "infosystem/infosystem.h"
 #include "album.h"
 #include "typedefs.h"
 #include "tomahawksettings.h"
@@ -36,7 +35,7 @@
 using namespace gloox;
 using namespace Tomahawk::InfoSystem;
 
-static QString s_infoIdentifier = QString("XMPPBot");
+static QString s_botInfoIdentifier = QString( "XMPPBot" );
 
 XMPPBot::XMPPBot(QObject *parent)
     : QObject(parent)
@@ -50,7 +49,7 @@ XMPPBot::XMPPBot(QObject *parent)
     int port = settings->xmppBotPort();
     if (jidstring.isEmpty() || password.isEmpty())
         return;
-    
+
     JID jid(jidstring.toStdString());
     jid.setResource( QString( "tomahawkbot%1" ).arg( qrand() ).toStdString() );
 
@@ -66,11 +65,11 @@ XMPPBot::XMPPBot(QObject *parent)
     connect(AudioEngine::instance(), SIGNAL(started(const Tomahawk::result_ptr &)),
             SLOT(newTrackSlot(const Tomahawk::result_ptr &)));
 
-    connect(TomahawkApp::instance()->infoSystem(),
+    connect(InfoSystem::instance(),
         SIGNAL(info(QString, Tomahawk::InfoSystem::InfoType, QVariant, QVariant, Tomahawk::InfoSystem::InfoCustomData)),
         SLOT(infoReturnedSlot(QString, Tomahawk::InfoSystem::InfoType, QVariant, QVariant, Tomahawk::InfoSystem::InfoCustomData)));
-    
-    connect(TomahawkApp::instance()->infoSystem(), SIGNAL(finished(QString)), SLOT(infoFinishedSlot(QString)));
+
+    connect(InfoSystem::instance(), SIGNAL(finished(QString)), SLOT(infoFinishedSlot(QString)));
 
     bool success = m_client.data()->gloox::Client::connect(false);
     if (success)
@@ -149,7 +148,7 @@ void XMPPBot::handleMessage(const Message& msg, MessageSession* session)
     //TODO: implement "properly" with MessageSessions, if the bot is to be multi-user
     if (msg.subtype() != Message::Chat || msg.from().full().empty() || msg.to().full().empty())
         return;
-    
+
     QString body = QString::fromStdString( msg.body() ).toLower().trimmed();
     QString originatingJid = QString::fromStdString( msg.from().full() );
 
@@ -192,7 +191,7 @@ void XMPPBot::handleMessage(const Message& msg, MessageSession* session)
 
     qDebug() << "jid from:" << QString::fromStdString(msg.from().full()) << ", jid to:" << QString::fromStdString(msg.to().full());
     qDebug() << "Operating on tokens:" << tokens;
-    
+
     if (m_currTrack.isNull() || m_currTrack->artist()->name().isEmpty() || m_currTrack->track().isEmpty())
     {
         qDebug() << "XMPPBot can't figure out track";
@@ -201,8 +200,8 @@ void XMPPBot::handleMessage(const Message& msg, MessageSession* session)
         m_client.data()->send(retMsg);
         return;
     }
-    
-    InfoMap infoMap; 
+
+    InfoMap infoMap;
     Q_FOREACH(QString token, tokens)
     {
         if (token == "biography")
@@ -221,7 +220,7 @@ void XMPPBot::handleMessage(const Message& msg, MessageSession* session)
             infoMap[InfoTrackLyrics] = QVariant::fromValue<Tomahawk::InfoSystem::InfoCustomData>(myhash);
         }
     }
-    
+
     if (infoMap.isEmpty())
     {
         qDebug() << "XMPPBot can't figure out track";
@@ -229,38 +228,38 @@ void XMPPBot::handleMessage(const Message& msg, MessageSession* session)
         Message retMsg(Message::Chat, JID(originatingJid.toStdString()), m_currReturnMessage.toStdString());
         m_client.data()->send(retMsg);
         return;
-    }        
-    
+    }
+
     m_currInfoMap.unite(infoMap);
     QString waitMsg("Please wait...");
     Message retMsg(Message::Chat, JID(originatingJid.toStdString()), waitMsg.toStdString());
     m_client.data()->send(retMsg);
     Tomahawk::InfoSystem::InfoCustomData hash;
     hash["XMPPBotSendToJID"] = originatingJid;
-    TomahawkApp::instance()->infoSystem()->getInfo(s_infoIdentifier, infoMap, hash);
+    InfoSystem::instance()->getInfo(s_botInfoIdentifier, infoMap, hash);
 }
 
 void XMPPBot::infoReturnedSlot(QString caller, Tomahawk::InfoSystem::InfoType type, QVariant input, QVariant output, Tomahawk::InfoSystem::InfoCustomData customData)
 {
     qDebug() << Q_FUNC_INFO;
-    
-    if (caller != s_infoIdentifier ||
+
+    if (caller != s_botInfoIdentifier ||
         input.isNull() || !input.isValid() ||
         !customData.contains("XMPPBotSendToJID")
        )
     {
         qDebug() << "Not the right object, custom data is null, or don't have a set JID";
         return;
-    }   
-    
+    }
+
     if (!m_currInfoMap.contains(type))
     {
         qDebug() << "not in currInfoMap";
         return;
     }
-    else 
+    else
         m_currInfoMap.remove(type);
-    
+
     QString jid = customData["XMPPBotSendToJID"].toString();
     if (!m_currReturnJid.isEmpty() && m_currReturnJid != jid && !m_currReturnMessage.isEmpty())
     {
@@ -269,7 +268,7 @@ void XMPPBot::infoReturnedSlot(QString caller, Tomahawk::InfoSystem::InfoType ty
         m_currReturnMessage = QString("\n");
     }
     m_currReturnJid = jid;
-    
+
     switch(type)
     {
         case InfoArtistBiography:
@@ -287,7 +286,7 @@ void XMPPBot::infoReturnedSlot(QString caller, Tomahawk::InfoSystem::InfoType ty
             m_currReturnMessage += QString("\nBiographies for %1\n").arg(artist);
             Q_FOREACH(QString source, bmap.keys())
             {
-                m_currReturnMessage += (bmap[source]["attribution"].isEmpty() ? 
+                m_currReturnMessage += (bmap[source]["attribution"].isEmpty() ?
                         QString("From %1:\n").arg(bmap[source]["site"]) :
                         QString("From %1 at %2:\n").arg(bmap[source]["attribution"]).arg(bmap[source]["site"]));
                 m_currReturnMessage += bmap[source]["text"] + QString("\n");
@@ -381,15 +380,15 @@ void XMPPBot::infoReturnedSlot(QString caller, Tomahawk::InfoSystem::InfoType ty
         default:
             break;
     }
-    
+
     if (m_currReturnMessage.isEmpty())
     {
         qDebug() << "Empty message, not sending anything back";
         return;
     }
-    
+
     qDebug() << "Going to send message: " << m_currReturnMessage << " to " << jid;
-    
+
     //gloox::Message msg(Message::Chat, JID(jid.toStdString()), m_currReturnMessage.toStdString());
     //m_client.data()->send(msg);
 }
@@ -398,10 +397,10 @@ void XMPPBot::infoFinishedSlot(QString caller)
 {
     qDebug() << Q_FUNC_INFO;
     qDebug() << "current return message is" << m_currReturnMessage;
-    qDebug() << "id is" << caller << "and our id is" << s_infoIdentifier;
-    if (m_currReturnMessage.isEmpty() || caller != s_infoIdentifier)
+    qDebug() << "id is" << caller << "and our id is" << s_botInfoIdentifier;
+    if (m_currReturnMessage.isEmpty() || caller != s_botInfoIdentifier)
         return;
-    
+
     qDebug() << "Sending message to JID" << m_currReturnJid;
     gloox::Message msg(Message::Chat, JID(m_currReturnJid.toStdString()), m_currReturnMessage.toStdString());
     m_client.data()->send(msg);

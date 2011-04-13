@@ -28,6 +28,8 @@
 
 #include "dllmacro.h"
 
+class TreeHeader;
+
 class DLLEXPORT ArtistView : public QTreeView, public Tomahawk::ViewPage
 {
 Q_OBJECT
@@ -71,6 +73,7 @@ private slots:
 private:
     QPixmap createDragPixmap( int itemCount ) const;
 
+    TreeHeader* m_header;
     TreeModel* m_model;
     TreeProxyModel* m_proxyModel;
 //    PlaylistItemDelegate* m_delegate;

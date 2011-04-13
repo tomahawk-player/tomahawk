@@ -1,5 +1,5 @@
 /* === This file is part of Tomahawk Player - <http://tomahawk-player.org> ===
- * 
+ *
  *   Copyright 2010-2011, Christian Muehlhaeuser <muesli@tomahawk-player.org>
  *
  *   Tomahawk is free software: you can redistribute it and/or modify
@@ -18,7 +18,8 @@
 
 #ifndef MUSIXMATCHPLUGIN_H
 #define MUSIXMATCHPLUGIN_H
-#include "tomahawk/infosystem.h"
+
+#include "infosystem/infosystem.h"
 
 class QNetworkReply;
 
@@ -31,16 +32,16 @@ namespace InfoSystem
 class MusixMatchPlugin : public InfoPlugin
 {
     Q_OBJECT
-    
+
 public:
     MusixMatchPlugin(QObject *parent);
     virtual ~MusixMatchPlugin();
-    
+
     void getInfo(const QString &caller, const InfoType type, const QVariant &data, InfoCustomData customData);
-    
+
 private:
     bool isValidTrackData( const QString &caller, const QVariant& data, InfoCustomData &customData );
-    
+
 public slots:
     void trackSearchSlot();
     void trackLyricsSlot();

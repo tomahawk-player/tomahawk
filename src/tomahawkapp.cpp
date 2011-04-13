@@ -32,7 +32,7 @@
 #include "artist.h"
 #include "album.h"
 #include "collection.h"
-#include "tomahawk/infosystem.h"
+#include "infosystem/infosystem.h"
 #include "database/database.h"
 #include "database/databasecollection.h"
 #include "database/databasecommand_collectionstats.h"
@@ -152,7 +152,6 @@ TomahawkApp::TomahawkApp( int& argc, char *argv[] )
     , m_shortcutHandler( 0 )
     , m_scrubFriendlyName( false )
     , m_mainwindow( 0 )
-    , m_infoSystem( 0 )
 {
     qDebug() << "TomahawkApp thread:" << this->thread();
     setOrganizationName( QLatin1String( ORGANIZATION_NAME ) );
@@ -176,7 +175,6 @@ TomahawkApp::init()
     #endif
 
     registerMetaTypes();
-    setupLogfile();
 
     Echonest::Config::instance()->setAPIKey( "JRIHWEP6GPOER2QQ6" );
 
@@ -217,7 +215,7 @@ TomahawkApp::init()
     }
 
     qDebug() << "Init InfoSystem.";
-    m_infoSystem = new Tomahawk::InfoSystem::InfoSystem( this );
+    new Tomahawk::InfoSystem::InfoSystem( this );
 
 #ifdef LIBLASTFM_FOUND
     qDebug() << "Init Scrobbler.";
@@ -304,7 +302,7 @@ TomahawkApp::~TomahawkApp()
     delete m_mainwindow;
     delete m_audioEngine;
 #endif
-    delete m_infoSystem;
+//    delete m_infoSystem;
     delete m_database;
 }
 

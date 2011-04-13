@@ -28,7 +28,7 @@
 #include "database/databasecommand_allartists.h"
 
 #include "treemodelitem.h"
-#include "tomahawk/infosystem.h"
+#include "infosystem/infosystem.h"
 
 #include "dllmacro.h"
 
@@ -39,6 +39,17 @@ class DLLEXPORT TreeModel : public QAbstractItemModel
 Q_OBJECT
 
 public:
+    enum Columns {
+        Name = 0,
+        Duration,
+        Bitrate,
+        Age,
+        Year,
+        Filesize,
+        Origin,
+        AlbumPosition
+    };
+
     explicit TreeModel( QObject* parent = 0 );
     virtual ~TreeModel();
 

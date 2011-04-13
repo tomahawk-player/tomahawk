@@ -240,8 +240,8 @@ AlbumModel::addCollection( const collection_ptr& collection )
 
     DatabaseCommand_AllAlbums* cmd = new DatabaseCommand_AllAlbums( collection );
 
-    connect( cmd, SIGNAL( albums( QList<Tomahawk::album_ptr>, Tomahawk::collection_ptr ) ),
-                    SLOT( onAlbumsAdded( QList<Tomahawk::album_ptr>, Tomahawk::collection_ptr ) ) );
+    connect( cmd, SIGNAL( albums( QList<Tomahawk::album_ptr>, QVariant ) ),
+                    SLOT( onAlbumsAdded( QList<Tomahawk::album_ptr> ) ) );
 
     Database::instance()->enqueue( QSharedPointer<DatabaseCommand>( cmd ) );
 
@@ -262,7 +262,7 @@ AlbumModel::addFilteredCollection( const collection_ptr& collection, unsigned in
     cmd->setSortOrder( order );
     cmd->setSortDescending( true );
 
-    connect( cmd, SIGNAL( albums( QList<Tomahawk::album_ptr> ) ),
+    connect( cmd, SIGNAL( albums( QList<Tomahawk::album_ptr>, QVariant ) ),
                     SLOT( onAlbumsAdded( QList<Tomahawk::album_ptr> ) ) );
 
     Database::instance()->enqueue( QSharedPointer<DatabaseCommand>( cmd ) );
