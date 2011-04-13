@@ -269,7 +269,7 @@ PlaylistManager::show( const Tomahawk::collection_ptr& collection )
         {
             view = new CollectionView();
             CollectionFlatModel* model = new CollectionFlatModel();
-            view->setModel( model );
+            view->setTrackModel( model );
             view->setFrameShape( QFrame::NoFrame );
             view->setAttribute( Qt::WA_MacShowFocusRect, 0 );
 
