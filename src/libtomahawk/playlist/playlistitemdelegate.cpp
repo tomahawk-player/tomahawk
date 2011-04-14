@@ -76,24 +76,16 @@ PlaylistItemDelegate::paint( QPainter* painter, const QStyleOptionViewItem& opti
         return;
 
     float opacity = 0.0;
-    painter->save();
     if ( item->query()->results().count() )
         opacity = item->query()->results().first()->score();
 
-    QColor textcol, bgcol;
-    textcol = option.palette.color( QPalette::Foreground );
-    bgcol = option.palette.color( QPalette::Background );
-
     opacity = qMax( (float)0.3, opacity );
-    int r = textcol.red(), g = textcol.green(), b = textcol.blue();
-    r = opacity * r + ( 1 - opacity ) * bgcol.red();
-    g = opacity * g + ( 1 - opacity ) * bgcol.green();
-    b = opacity * b + ( 1 - opacity ) * bgcol.blue();
-    textcol = QColor( r, g, b );
+    QColor textColor = TomahawkUtils::alphaBlend( option.palette.color( QPalette::Foreground ), option.palette.color( QPalette::Background ), opacity );
 
     if ( item->isPlaying() )
     {
 //        painter->setRenderHint( QPainter::Antialiasing );
+        painter->save();
 
         {
             QRect r = option.rect.adjusted( 3, 0, 0, 0 );
@@ -120,18 +112,18 @@ PlaylistItemDelegate::paint( QPainter* painter, const QStyleOptionViewItem& opti
             painter->setPen( pen );
             painter->drawRoundedRect( r, 3.0, 3.0 );
         }
+
+        painter->restore();
     }
     else
     {
         if ( const QStyleOptionViewItem *vioption = qstyleoption_cast<const QStyleOptionViewItem *>(&option))
         {
             QStyleOptionViewItemV4 o( *vioption );
-            o.palette.setColor( QPalette::Text, textcol );
+            o.palette.setColor( QPalette::Text, textColor );
             QStyledItemDelegate::paint( painter, o, index );
         }
         else
             QStyledItemDelegate::paint( painter, option, index );
     }
-
-    painter->restore();
 }

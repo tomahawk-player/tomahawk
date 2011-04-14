@@ -66,7 +66,19 @@ TreeItemDelegate::paint( QPainter* painter, const QStyleOptionViewItem& option, 
     }
     else if ( !item->result().isNull() )
     {
-        return QStyledItemDelegate::paint( painter, option, index );
+        float opacity = item->result()->score();
+
+        opacity = qMax( (float)0.3, opacity );
+        QColor textColor = TomahawkUtils::alphaBlend( option.palette.color( QPalette::Foreground ), option.palette.color( QPalette::Background ), opacity );
+
+        if ( const QStyleOptionViewItem *vioption = qstyleoption_cast<const QStyleOptionViewItem *>(&option))
+        {
+            QStyleOptionViewItemV4 o( *vioption );
+            o.palette.setColor( QPalette::Text, textColor );
+            return QStyledItemDelegate::paint( painter, o, index );
+        }
+        else
+            return QStyledItemDelegate::paint( painter, option, index );
     }
 
     QStyleOptionViewItemV4 opt = option;
@@ -99,7 +111,7 @@ TreeItemDelegate::paint( QPainter* painter, const QStyleOptionViewItem& option, 
     text = painter->fontMetrics().elidedText( text, Qt::ElideRight, r.width() );
     painter->drawText( r, text, to );
 
-    painter->setFont( boldFont );
+//    painter->setFont( boldFont );
 
     painter->restore();
 }

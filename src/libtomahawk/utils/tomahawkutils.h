@@ -1,5 +1,5 @@
 /* === This file is part of Tomahawk Player - <http://tomahawk-player.org> ===
- * 
+ *
  *   Copyright 2010-2011, Christian Muehlhaeuser <muesli@tomahawk-player.org>
  *
  *   Tomahawk is free software: you can redistribute it and/or modify
@@ -25,6 +25,7 @@
 
 #define RESPATH ":/data/"
 
+class QColor;
 class QDir;
 class QDateTime;
 class QString;
@@ -70,11 +71,11 @@ namespace TomahawkUtils
         {
             QThread::sleep( secs );
         }
-        static void msleep( unsigned long msecs ) 
+        static void msleep( unsigned long msecs )
         {
             QThread::msleep( msecs );
         }
-        static void usleep( unsigned long usecs ) 
+        static void usleep( unsigned long usecs )
         {
             QThread::usleep( usecs );
         }
@@ -89,6 +90,7 @@ namespace TomahawkUtils
     DLLEXPORT QString filesizeToString( unsigned int size );
     DLLEXPORT QString extensionToMimetype( const QString& extension );
 
+    DLLEXPORT QColor alphaBlend( const QColor& colorFrom, const QColor& colorTo, float opacity );
     DLLEXPORT QPixmap createDragPixmap( int itemCount = 1 );
 
     DLLEXPORT QNetworkAccessManager* nam();
