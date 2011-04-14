@@ -150,6 +150,14 @@ ArtistView::paintEvent( QPaintEvent* event )
 
 
 void
+ArtistView::resizeEvent( QResizeEvent* event )
+{
+    QTreeView::resizeEvent( event );
+    m_header->checkState();
+}
+
+
+void
 ArtistView::onFilterChanged( const QString& )
 {
     if ( selectedIndexes().count() )

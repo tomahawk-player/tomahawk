@@ -396,7 +396,7 @@ TreeModel::addCollection( const collection_ptr& collection )
 
     Database::instance()->enqueue( QSharedPointer<DatabaseCommand>( cmd ) );
 
-    m_title = tr( "All artists from %1" ).arg( collection->source()->friendlyName() );
+    m_title = tr( "All Artists from %1" ).arg( collection->source()->friendlyName() );
 }
 
 

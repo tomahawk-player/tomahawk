@@ -29,6 +29,8 @@
 #include <QtCore/QVariant>
 #include <QtCore/QThread>
 
+#include "dllmacro.h"
+
 namespace Tomahawk {
 
 namespace InfoSystem {
@@ -97,7 +99,7 @@ typedef QMap< QString, QMap< QString, QString > > InfoGenericMap;
 typedef QHash< QString, QVariant > InfoCustomData;
 typedef QHash< QString, QString > InfoCacheCriteria;
 
-class InfoPlugin : public QObject
+class DLLEXPORT InfoPlugin : public QObject
 {
     Q_OBJECT
 
@@ -134,7 +136,7 @@ protected:
 
 typedef QWeakPointer< InfoPlugin > InfoPluginPtr;
 
-class InfoSystem : public QObject
+class DLLEXPORT InfoSystem : public QObject
 {
     Q_OBJECT
 

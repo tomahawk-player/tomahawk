@@ -52,6 +52,10 @@ class XMPPBot;
 namespace Tomahawk
 {
     class ShortcutHandler;
+    namespace InfoSystem
+    {
+        class InfoSystem;
+    }
 }
 
 #ifdef LIBLASTFM_FOUND
@@ -119,6 +123,7 @@ private:
     AudioEngine* m_audioEngine;
     SipHandler* m_sipHandler;
     Servent* m_servent;
+    Tomahawk::InfoSystem::InfoSystem* m_infoSystem;
     XMPPBot* m_xmppBot;
     Tomahawk::ShortcutHandler* m_shortcutHandler;
     bool m_scrubFriendlyName;

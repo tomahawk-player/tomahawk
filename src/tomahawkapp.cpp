@@ -215,7 +215,7 @@ TomahawkApp::init()
     }
 
     qDebug() << "Init InfoSystem.";
-    new Tomahawk::InfoSystem::InfoSystem( this );
+    m_infoSystem = new Tomahawk::InfoSystem::InfoSystem( this );
 
 #ifdef LIBLASTFM_FOUND
     qDebug() << "Init Scrobbler.";
@@ -302,7 +302,7 @@ TomahawkApp::~TomahawkApp()
     delete m_mainwindow;
     delete m_audioEngine;
 #endif
-//    delete m_infoSystem;
+    delete m_infoSystem;
     delete m_database;
 }
 

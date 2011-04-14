@@ -274,7 +274,6 @@ AlbumModel::addFilteredCollection( const collection_ptr& collection, unsigned in
 void
 AlbumModel::onAlbumsAdded( const QList<Tomahawk::album_ptr>& albums )
 {
-    Q_UNUSED( collection );
     if ( !albums.count() )
         return;
 

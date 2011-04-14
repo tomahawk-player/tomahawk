@@ -85,7 +85,7 @@ TreeItemDelegate::paint( QPainter* painter, const QStyleOptionViewItem& option, 
     painter->setRenderHint( QPainter::Antialiasing );
     painter->setPen( opt.palette.color( QPalette::Text ) );
 
-    QRect r = option.rect.adjusted( 4, 4, -option.rect.width() + option.rect.height() - 8, -4 );
+    QRect r = option.rect.adjusted( 4, 4, -option.rect.width() + option.rect.height() - 4, -4 );
 //    painter->drawPixmap( option.rect.adjusted( 4, 4, -4, -38 ), QPixmap( RESPATH "images/cover-shadow.png" ) );
     painter->drawPixmap( r, item->cover );
 

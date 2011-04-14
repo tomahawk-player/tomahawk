@@ -52,9 +52,12 @@ public:
     virtual QString title() const { return m_model->title(); }
     virtual QString description() const { return m_model->description(); }
 
+    virtual bool showStatsBar() const { return false; }
     virtual bool showModes() const { return true; }
 
     virtual bool jumpToCurrentTrack() { return false; }
+
+    QString guid() const { return QString( "ArtistView" ); }
 
 public slots:
     void onItemActivated( const QModelIndex& index );
@@ -64,6 +67,7 @@ protected:
     virtual void dragEnterEvent( QDragEnterEvent* event );
     virtual void dragMoveEvent( QDragMoveEvent* event );
     virtual void dropEvent( QDropEvent* event );
+    virtual void resizeEvent( QResizeEvent* event );
 
     void paintEvent( QPaintEvent* event );
 

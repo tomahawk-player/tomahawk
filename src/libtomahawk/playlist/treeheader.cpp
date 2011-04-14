@@ -60,7 +60,7 @@ TreeHeader::onSectionResized()
     if ( !m_init )
         return;
 
-//    TomahawkSettings::instance()->setPlaylistColumnSizes( m_parent->guid(), saveState() );
+    TomahawkSettings::instance()->setPlaylistColumnSizes( m_parent->guid(), saveState() );
 }
 
 
@@ -77,13 +77,13 @@ TreeHeader::checkState()
     if ( !count() || m_init )
         return;
 
-/*    QByteArray state = TomahawkSettings::instance()->playlistColumnSizes( m_parent->guid() );
+    QByteArray state = TomahawkSettings::instance()->playlistColumnSizes( m_parent->guid() );
     if ( !state.isEmpty() )
         restoreState( state );
     else
     {
         QList< double > m_columnWeights;
-        m_columnWeights << 0.21 << 0.22 << 0.20 << 0.05 << 0.05 << 0.05 << 0.05 << 0.05; // << 0.12;
+        m_columnWeights << 0.50 << 0.07 << 0.07 << 0.07 << 0.07 << 0.07; // << 0.12;
 
         for ( int i = 0; i < count() - 1; i++ )
         {
@@ -96,7 +96,7 @@ TreeHeader::checkState()
         }
     }
 
-    m_init = true;*/
+    m_init = true;
 }
 
 
