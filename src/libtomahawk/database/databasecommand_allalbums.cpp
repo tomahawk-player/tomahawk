@@ -44,10 +44,11 @@ DatabaseCommand_AllAlbums::execForArtist( DatabaseImpl* dbi )
 
     QString sql = QString(
         "SELECT DISTINCT album.id, album.name "
-        "FROM album, file, file_join "
+        "FROM file, file_join "
+        "LEFT OUTER JOIN album "
+        "ON file_join.album = album.id "
         "WHERE file.id = file_join.file "
-        "AND file_join.album = album.id "
-        "AND album.artist = %1 "
+        "AND file_join.artist = %1 "
         "%2 "
         "%3 %4 %5"
         ).arg( m_artist->id() )
@@ -61,7 +62,14 @@ DatabaseCommand_AllAlbums::execForArtist( DatabaseImpl* dbi )
 
     while( query.next() )
     {
-        Tomahawk::album_ptr album = Tomahawk::Album::get( query.value( 0 ).toUInt(), query.value( 1 ).toString(), m_artist );
+        unsigned int albumId = query.value( 0 ).toUInt();
+        QString albumName;
+        if ( query.value( 0 ).isNull() )
+        {
+            albumName = tr( "Unknown" );
+        }
+
+        Tomahawk::album_ptr album = Tomahawk::Album::get( albumId, albumName, m_artist );
         al << album;
     }
 

@@ -67,7 +67,6 @@ TreeItemDelegate::paint( QPainter* painter, const QStyleOptionViewItem& option, 
     else if ( !item->result().isNull() )
     {
         float opacity = item->result()->score();
-
         opacity = qMax( (float)0.3, opacity );
         QColor textColor = TomahawkUtils::alphaBlend( option.palette.color( QPalette::Foreground ), option.palette.color( QPalette::Background ), opacity );
 
@@ -77,9 +76,12 @@ TreeItemDelegate::paint( QPainter* painter, const QStyleOptionViewItem& option, 
             o.palette.setColor( QPalette::Text, textColor );
             return QStyledItemDelegate::paint( painter, o, index );
         }
-        else
-            return QStyledItemDelegate::paint( painter, option, index );
     }
+    else
+        return;
+
+    if ( text.trimmed().isEmpty() )
+        text = tr( "Unknown" );
 
     QStyleOptionViewItemV4 opt = option;
     initStyleOption( &opt, QModelIndex() );

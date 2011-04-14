@@ -96,8 +96,6 @@ TreeModel::canFetchMore( const QModelIndex& parent ) const
 void
 TreeModel::fetchMore( const QModelIndex& parent )
 {
-    qDebug() << Q_FUNC_INFO;
-
     TreeModelItem* parentItem = itemFromIndex( parent );
     if ( !parentItem || parentItem->fetchingMore )
         return;
@@ -105,16 +103,16 @@ TreeModel::fetchMore( const QModelIndex& parent )
     parentItem->fetchingMore = true;
     if ( !parentItem->artist().isNull() )
     {
-        qDebug() << "Artist" << parentItem->artist()->name();
+        qDebug() << Q_FUNC_INFO << "Loading Artist:" << parentItem->artist()->name();
         addAlbums( parentItem->artist(), parent );
     }
     else if ( !parentItem->album().isNull() )
     {
-        qDebug() << "Artist" << parentItem->album()->name();
+        qDebug() << Q_FUNC_INFO << "Loading Album:" << parentItem->album()->name();
         addTracks( parentItem->album(), parent );
     }
     else
-        qDebug() << "Something else";
+        Q_ASSERT( false );
 }
 
 
@@ -183,8 +181,12 @@ TreeModel::data( const QModelIndex& index, int role ) const
         {
             return QSize( 128, 32 );
         }
+        else if ( !entry->artist().isNull() )
+        {
+            return QSize( 128, 44 );
+        }
 
-        return QSize( 128, 44 );
+        return QSize( 128, 0 );
     }
 
     if ( role != Qt::DisplayRole ) // && role != Qt::ToolTipRole )
@@ -371,7 +373,6 @@ TreeModel::addTracks( const album_ptr& album, const QModelIndex& parent )
     QList< QVariant > rows;
     rows << parent.row();
     rows << parent.parent().row();
-
     cmd->setData( QVariant( rows ) );
 
     connect( cmd, SIGNAL( tracks( QList<Tomahawk::query_ptr>, QVariant ) ),
@@ -438,7 +439,6 @@ TreeModel::onArtistsAdded( const QList<Tomahawk::artist_ptr>& artists )
     TreeModelItem* artistitem;
     foreach( const artist_ptr& artist, artists )
     {
-        qDebug() << artist->name();
         artistitem = new TreeModelItem( artist, m_rootItem );
         artistitem->cover = m_defaultCover;
         artistitem->index = createIndex( m_rootItem->children.count() - 1, 0, artistitem );
@@ -470,7 +470,7 @@ TreeModel::onAlbumsAdded( const QList<Tomahawk::album_ptr>& albums, const QVaria
     if ( crows.second > 0 )
         emit beginInsertRows( parent, crows.first + 1, crows.second );
 
-    TreeModelItem* albumitem;
+    TreeModelItem* albumitem = 0;
     foreach( const album_ptr& album, albums )
     {
         albumitem = new TreeModelItem( album, parentItem );
@@ -518,7 +518,7 @@ TreeModel::onTracksAdded( const QList<Tomahawk::query_ptr>& tracks, const QVaria
     if ( crows.second > 0 )
         emit beginInsertRows( parent, crows.first + 1, crows.second );
 
-    TreeModelItem* item;
+    TreeModelItem* item = 0;
     foreach( const query_ptr& query, tracks )
     {
         qDebug() << query->toString();
@@ -541,7 +541,9 @@ TreeModel::onTracksAdded( const QList<Tomahawk::query_ptr>& tracks, const QVaria
 void
 TreeModel::infoSystemInfo( QString caller, Tomahawk::InfoSystem::InfoType type, QVariant input, QVariant output, Tomahawk::InfoSystem::InfoCustomData customData )
 {
+    Q_UNUSED( customData );
     qDebug() << Q_FUNC_INFO;
+
     if ( caller != s_tmInfoIdentifier || type != Tomahawk::InfoSystem::InfoAlbumCoverArt )
     {
         qDebug() << "Info of wrong type or not with our identifier";
@@ -578,6 +580,7 @@ TreeModel::infoSystemInfo( QString caller, Tomahawk::InfoSystem::InfoType type, 
 void
 TreeModel::infoSystemFinished( QString target )
 {
+    Q_UNUSED( target );
     qDebug() << Q_FUNC_INFO;
 }
 

@@ -54,6 +54,12 @@ DatabaseCommand_AllTracks::exec( DatabaseImpl* dbi )
     if ( !m_collection.isNull() )
         sourceToken = QString( "AND file.source %1" ).arg( m_collection->source()->isLocal() ? "IS NULL" : QString( "= %1" ).arg( m_collection->source()->id() ) );
 
+    if ( m_album && m_album->id() == 0 )
+    {
+        m_artist = m_album->artist().data();
+        m_album = 0;
+    }
+
     QString sql = QString(
             "SELECT file.id, artist.name, album.name, track.name, file.size, "
                    "file.duration, file.bitrate, file.url, file.source, file.mtime, file.mimetype, file_join.albumpos, artist.id, album.id, track.id "
