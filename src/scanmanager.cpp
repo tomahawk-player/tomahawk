@@ -67,10 +67,12 @@ ScanManager::ScanManager( QObject* parent )
     connect( m_dirWatcher, SIGNAL( directoryChanged( const QString & ) ), SLOT( handleChangedDir( const QString & ) ) );
 
     if ( TomahawkSettings::instance()->hasScannerPaths() )
+    {
         m_currScannerPaths = TomahawkSettings::instance()->scannerPaths();
-
-    qDebug() << "loading initial directories to watch";
-    QTimer::singleShot( 1000, this, SLOT( startupWatchPaths() ) );
+        if ( TomahawkSettings::instance()->watchForChanges() )
+            QTimer::singleShot( 1000, this, SLOT( runStartupScan() ) );
+    }
+    
     m_deferredScanTimer->start();
 }
 
@@ -109,7 +111,6 @@ ScanManager::onSettingsChanged()
     {
         m_currScannerPaths = TomahawkSettings::instance()->scannerPaths();
         m_dirWatcher->removePaths( m_dirWatcher->directories() );
-        m_dirWatcher->addPaths( m_currScannerPaths );
         runManualScan( m_currScannerPaths );
     }
 
@@ -119,35 +120,13 @@ ScanManager::onSettingsChanged()
 }
 
 
-void
-ScanManager::startupWatchPaths()
+void ScanManager::runStartupScan()
 {
     qDebug() << Q_FUNC_INFO;
-
     if( !Database::instance() || ( Database::instance() && !Database::instance()->isReady() ) )
-    {
-        QTimer::singleShot( 1000, this, SLOT( startupWatchPaths() ) );
-        return;
-    }
-
-    DatabaseCommand_DirMtimes* cmd = new DatabaseCommand_DirMtimes( m_currScannerPaths );
-    connect( cmd, SIGNAL( done( QMap< QString, unsigned int > ) ),
-             SLOT( setInitialPaths( QMap< QString, unsigned int > ) ) );
-    Database::instance()->enqueue( QSharedPointer< DatabaseCommand >( cmd ) );
-}
-
-
-void
-ScanManager::setInitialPaths( QMap< QString, unsigned int > pathMap )
-{
-    qDebug() << Q_FUNC_INFO;
-    foreach( QString path, pathMap.keys() )
-    {
-        qDebug() << "Adding " << path << " to watcher";
-        m_dirWatcher->addPath( path );
-    }
-    if( TomahawkSettings::instance()->hasScannerPaths() && TomahawkSettings::instance()->watchForChanges() )
-        runManualScan( TomahawkSettings::instance()->scannerPaths() );
+        QTimer::singleShot( 1000, this, SLOT( runStartupScan() ) );
+    else
+        runManualScan( m_currScannerPaths );
 }
 
 
@@ -155,6 +134,9 @@ void
 ScanManager::runManualScan( const QStringList& paths, bool recursive )
 {
     qDebug() << Q_FUNC_INFO;
+
+    if( !Database::instance() || ( Database::instance() && !Database::instance()->isReady() ) )
+        return;
 
     if ( !m_musicScannerThreadController && !m_scanner ) //still running if these are not zero
     {
@@ -193,10 +175,13 @@ void
 ScanManager::addWatchedDirs( const QStringList& paths )
 {
     qDebug() << Q_FUNC_INFO;
+    if ( !TomahawkSettings::instance()->watchForChanges() )
+        return;
+    
     QStringList currentWatchedPaths = m_dirWatcher->directories();
-    foreach( QString path, paths )
+    foreach ( QString path, paths )
     {
-        if( !currentWatchedPaths.contains( path ) )
+        if ( !currentWatchedPaths.contains( path ) )
         {
             qDebug() << "adding " << path << " to watched dirs";
             m_dirWatcher->addPath( path );
