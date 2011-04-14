@@ -118,6 +118,7 @@ ControlConnection::registerSource()
 {
     qDebug() << Q_FUNC_INFO << m_source->id();
     Source* source = (Source*) sender();
+    Q_UNUSED( source )
     Q_ASSERT( source == m_source.data() );
     // .. but we'll use the shared pointer we've already made:
 

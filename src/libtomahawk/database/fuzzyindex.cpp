@@ -179,7 +179,7 @@ FuzzyIndex::search( const QString& table, const QString& name )
         FuzzyQuery* qry = _CLNEW FuzzyQuery( _CLNEW Term( table.toStdWString().c_str(), DatabaseImpl::sortname( name ).toStdWString().c_str() ) );
         hits = m_luceneSearcher->search( qry );
 
-        for ( int i = 0; i < hits->length(); i++ )
+        for ( uint i = 0; i < hits->length(); i++ )
         {
             Document* d = &hits->doc( i );
 

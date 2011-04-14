@@ -19,6 +19,7 @@
 #include "treemodelitem.h"
 
 #include "utils/tomahawkutils.h"
+#include "album.h"
 
 #include <QDebug>
 
