@@ -63,7 +63,7 @@ DatabaseCommand_AllAlbums::execForArtist( DatabaseImpl* dbi )
     while( query.next() )
     {
         unsigned int albumId = query.value( 0 ).toUInt();
-        QString albumName;
+        QString albumName = query.value( 1 ).toString();
         if ( query.value( 0 ).isNull() )
         {
             albumName = tr( "Unknown" );
