@@ -78,7 +78,7 @@ private slots:
 private:
     TomahawkZeroconf* m_zeroconf;
     bool m_isOnline;
-    QSet< QStringList* > m_cachedNodes;
+    QVector<QStringList> m_cachedNodes;
 };
 
 #endif
