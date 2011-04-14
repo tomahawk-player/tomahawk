@@ -194,7 +194,8 @@ lastfm::Audioscrobbler::onTrackScrobbleReturn()
         }
         else
         {
-            Q_ASSERT(false);
+            qWarning() << "Got error in scrobble submission:" << lfm[ "error" ] << "and silently ignoring. Submission is cached.";
+            //Q_ASSERT(false);
         }
     }
 
