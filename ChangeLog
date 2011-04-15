@@ -1,4 +1,5 @@
 Version 0.1.0:
+    * You can now browse and play collections in a tree-view.
     * Watch folders for changes and automatically update your collection. This
       is on by default; you can turn it off on the Local Music tab in the
       settings dialog. Note that this triggers only on files or folders being
