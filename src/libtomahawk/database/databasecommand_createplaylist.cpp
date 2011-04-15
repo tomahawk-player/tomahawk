@@ -88,8 +88,16 @@ DatabaseCommand_CreatePlaylist::createPlaylist( DatabaseImpl* lib, bool dynamic)
     Q_ASSERT( !( m_playlist.isNull() && m_v.isNull() ) );
     Q_ASSERT( !source().isNull() );
 
-    uint now = QDateTime::currentDateTime().toTime_t();
-    m_playlist->setCreatedOn( now );
+    uint now = 0;
+    if( m_playlist.isNull() )
+    {
+        now = m_v.toMap()[ "createdon" ].toUInt();
+    }
+    else
+    {
+        now = QDateTime::currentDateTime().toTime_t();
+        m_playlist->setCreatedOn( now );
+    }
 
     TomahawkSqlQuery cre = lib->newquery();
     cre.prepare( "INSERT INTO playlist( guid, source, shared, title, info, creator, lastmodified, dynplaylist, createdOn) "
