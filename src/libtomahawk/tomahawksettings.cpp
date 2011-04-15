@@ -26,7 +26,7 @@
 #include <QDir>
 #include <QDebug>
 
-#define VERSION 1
+#define VERSION 2
 
 TomahawkSettings* TomahawkSettings::s_instance = 0;
 
@@ -55,6 +55,9 @@ TomahawkSettings::TomahawkSettings( QObject* parent )
 
         // insert upgrade code here as required
         setValue( "configversion", VERSION );
+        if( contains( "script/resolvers") ) {
+            setValue( "script/loadedresolvers", value( "script/resolvers" ) );
+        }
     }
 }
 
