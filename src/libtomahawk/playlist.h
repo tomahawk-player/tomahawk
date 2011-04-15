@@ -108,7 +108,7 @@ Q_PROPERTY( QString currentrevision READ currentrevision    WRITE setCurrentrevi
 Q_PROPERTY( QString title           READ title              WRITE setTitle )
 Q_PROPERTY( QString info            READ info               WRITE setInfo )
 Q_PROPERTY( QString creator         READ creator            WRITE setCreator )
-Q_PROPERTY( unsigned int createdon    READ createdOn    WRITE setCreatedOn )
+Q_PROPERTY( unsigned int createdon  READ createdOn          WRITE setCreatedOn )
 Q_PROPERTY( bool    shared          READ shared             WRITE setShared )
 
 friend class ::DatabaseCommand_LoadAllPlaylists;
@@ -141,7 +141,7 @@ public:
     QString guid() const              { return m_guid; }
     bool shared() const               { return m_shared; }
     unsigned int lastmodified() const { return m_lastmodified; }
-    uint createdOn() const { return m_createdOn; }
+    uint createdOn() const            { return m_createdOn; }
 
     const QList< plentry_ptr >& entries() { return m_entries; }
     virtual void addEntry( const Tomahawk::query_ptr& query, const QString& oldrev );
