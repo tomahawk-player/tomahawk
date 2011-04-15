@@ -88,19 +88,19 @@ ResolverConfigDelegate::paint( QPainter* painter, const QStyleOptionViewItem& op
     style->drawPrimitive( QStyle::PE_IndicatorViewItemCheck, &opt, painter, w );
     itemRect.setX( opt.rect.topRight().x() + PADDING );
 
-    QString nameStr = bfm.elidedText( index.data( ResolversModel::ResolverName ).toString(),Qt::ElideRight, rightSplit );
     painter->save();
     painter->setFont( name );
     QRect textRect = itemRect.adjusted( PADDING, PADDING, -PADDING, -PADDING );
     textRect.setBottom( itemRect.height() / 2 + top  );
+    QString nameStr = bfm.elidedText( index.data( ResolversModel::ResolverName ).toString(),Qt::ElideRight, textRect.width() );
     painter->drawText( textRect, nameStr );
     painter->restore();
 
-    QString pathStr = sfm.elidedText( index.data( ResolversModel::ResolverPath ).toString(),Qt::ElideMiddle, rightSplit );
     painter->save();
     painter->setFont( path );
     painter->setBrush( Qt::gray );
     textRect.moveTop(  itemRect.height() / 2 + top );
+    QString pathStr = sfm.elidedText( index.data( ResolversModel::ResolverPath ).toString(),Qt::ElideMiddle, textRect.width() );
     painter->drawText( textRect, pathStr );
     painter->restore();
 
