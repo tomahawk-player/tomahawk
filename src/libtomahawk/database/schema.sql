@@ -67,13 +67,14 @@ CREATE TABLE IF NOT EXISTS playlist (
     creator TEXT,
     lastmodified INTEGER NOT NULL DEFAULT 0,
     currentrevision TEXT REFERENCES playlist_revision(guid) DEFERRABLE INITIALLY DEFERRED,
-    dynplaylist BOOLEAN DEFAULT false
+    dynplaylist BOOLEAN DEFAULT false,
+    createdOn INTEGER NOT NULL DEFAULT 0
 );
 
---INSERT INTO playlist(guid, title, info, currentrevision, dynplaylist) 
+--INSERT INTO playlist(guid, title, info, currentrevision, dynplaylist)
 --VALUES('dynamic_playlist-guid-1','Test Dynamic Playlist Dynamic','this playlist automatically created and used for testing','revisionguid-1', 1);
 
---INSERT INTO playlist(guid, title, info, currentrevision, dynplaylist) 
+--INSERT INTO playlist(guid, title, info, currentrevision, dynplaylist)
 --VALUES('dynamic_playlist-guid-2','Test Dynamic Playlist Static','this playlist automatically created and used for testing','revisionguid-11', 1);
 
 CREATE TABLE IF NOT EXISTS playlist_item (
@@ -129,8 +130,8 @@ CREATE TABLE IF NOT EXISTS dynamic_playlist_controls (
 --INSERT INTO dynamic_playlist_controls(id, playlist, selectedType, match, input)
 --      VALUES('controlid-2', 'dynamic_playlist-guid-11', "artist", 0, "FooArtist" );
 
-    
-    
+
+
 CREATE TABLE IF NOT EXISTS dynamic_playlist_revision (
     guid TEXT PRIMARY KEY NOT NULL REFERENCES playlist_revision(guid) ON DELETE CASCADE ON UPDATE CASCADE DEFERRABLE INITIALLY DEFERRED,
     controls TEXT, -- qlist( id, id, id )
@@ -148,7 +149,7 @@ CREATE TABLE IF NOT EXISTS dynamic_playlist_revision (
 
 -- if source=null, file is local to this machine
 CREATE TABLE IF NOT EXISTS file (
-    id INTEGER PRIMARY KEY AUTOINCREMENT, 
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
     source INTEGER REFERENCES source(id) ON DELETE CASCADE ON UPDATE CASCADE DEFERRABLE INITIALLY DEFERRED,
     url TEXT NOT NULL,                   -- file:///music/foo/bar.mp3, <guid or hash?>
     size INTEGER NOT NULL,               -- in bytes
@@ -212,7 +213,7 @@ CREATE TABLE IF NOT EXISTS artist_tags (
 );
 CREATE INDEX artist_tags_tag ON artist_tags(tag);
 
--- all other attributes. 
+-- all other attributes.
 -- like tags that have a value, eg:
 --  BPM=120, releaseyear=1980, key=Dminor, composer=Someone
 -- NB: since all values are text, numeric values should be zero-padded to a set amount
@@ -263,4 +264,4 @@ CREATE TABLE IF NOT EXISTS settings (
     v TEXT NOT NULL DEFAULT ''
 );
 
-INSERT INTO settings(k,v) VALUES('schema_version', '22');
+INSERT INTO settings(k,v) VALUES('schema_version', '23');

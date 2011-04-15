@@ -80,6 +80,9 @@ SourceTreeView::SourceTreeView( QWidget* parent )
     setIndentation( 16 );
     setAnimated( true );
 
+    setSortingEnabled( true );
+    sortByColumn( 1, Qt::AscendingOrder );
+
     setItemDelegate( new SourceDelegate( this ) );
 
     setContextMenuPolicy( Qt::CustomContextMenu );

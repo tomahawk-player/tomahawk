@@ -1,5 +1,5 @@
 /* === This file is part of Tomahawk Player - <http://tomahawk-player.org> ===
- * 
+ *
  *   Copyright 2010-2011, Christian Muehlhaeuser <muesli@tomahawk-player.org>
  *
  *   Tomahawk is free software: you can redistribute it and/or modify
@@ -57,28 +57,28 @@ PlaylistEntry::queryVariant() const
 }
 
 
-void 
+void
 PlaylistEntry::setQuery( const Tomahawk::query_ptr& q )
 {
     m_query = q;
 }
 
 
-const Tomahawk::query_ptr& 
+const Tomahawk::query_ptr&
 PlaylistEntry::query() const
 {
     return m_query;
 }
 
 
-source_ptr 
+source_ptr
 PlaylistEntry::lastSource() const
 {
     return m_lastsource;
 }
 
 
-void 
+void
 PlaylistEntry::setLastSource( source_ptr s )
 {
     m_lastsource = s;
@@ -99,6 +99,7 @@ Playlist::Playlist( const source_ptr& src,
                     const QString& title,
                     const QString& info,
                     const QString& creator,
+                    uint createdOn,
                     bool shared,
                     int lastmod,
                     const QString& guid )
@@ -109,6 +110,7 @@ Playlist::Playlist( const source_ptr& src,
     , m_title( title )
     , m_info( info )
     , m_creator( creator )
+    , m_createdOn( createdOn )
     , m_lastmodified( lastmod )
     , m_shared( shared )
 {
@@ -129,6 +131,7 @@ Playlist::Playlist( const source_ptr& author,
     , m_title( title )
     , m_info ( info )
     , m_creator( creator )
+    , m_createdOn( 0 ) // will be set by db command
     , m_lastmodified( 0 )
     , m_shared( shared )
 {
@@ -141,7 +144,7 @@ void
 Playlist::init()
 {
    m_locallyChanged = false;
-   connect( Pipeline::instance(), SIGNAL( idle() ), SLOT( onResolvingFinished() ) );  
+   connect( Pipeline::instance(), SIGNAL( idle() ), SLOT( onResolvingFinished() ) );
 }
 
 
@@ -229,7 +232,7 @@ Playlist::reportDeleted( const Tomahawk::playlist_ptr& self )
     qDebug() << Q_FUNC_INFO;
     Q_ASSERT( self.data() == this );
     m_source->collection()->deletePlaylist( self );
-    
+
     emit deleted( self );
 }
 
@@ -310,24 +313,24 @@ Playlist::setRevision( const QString& rev,
                                  );
         return;
     }
-    
+
     PlaylistRevision pr = setNewRevision( rev, neworderedguids, oldorderedguids, is_newest_rev, addedmap );
-    
+
     if( applied )
         m_currentrevision = rev;
     pr.applied = applied;
-    
+
     foreach( const plentry_ptr& entry, m_entries )
     {
         connect( entry->query().data(), SIGNAL( resultsAdded( QList<Tomahawk::result_ptr> ) ),
                  SLOT( onResultsFound( QList<Tomahawk::result_ptr> ) ), Qt::UniqueConnection );
-        
+
     }
     emit revisionLoaded( pr );
 }
 
 
-PlaylistRevision 
+PlaylistRevision
 Playlist::setNewRevision( const QString& rev,
                                  const QList<QString>& neworderedguids,
                                  const QList<QString>& oldorderedguids,
@@ -340,10 +343,10 @@ Playlist::setNewRevision( const QString& rev,
     QMap<QString, plentry_ptr> entriesmap;
     foreach( const plentry_ptr& p, m_entries )
         entriesmap.insert( p->guid(), p );
-    
-        
+
+
         QList<plentry_ptr> entries;
-        
+
         foreach( const QString& id, neworderedguids )
         {
             //qDebug() << "id:" << id;
@@ -351,7 +354,7 @@ Playlist::setNewRevision( const QString& rev,
             //qDebug() << "entriesmap:" << entriesmap.count() << entriesmap;
             //qDebug() << "addedmap:" << addedmap.count() << addedmap;
             //qDebug() << "m_entries" << m_entries;
-            
+
             if( entriesmap.contains( id ) )
             {
                 entries.append( entriesmap.value( id ) );
@@ -367,13 +370,13 @@ Playlist::setNewRevision( const QString& rev,
                 Q_ASSERT( false ); // XXX
             }
         }
-        
+
         //qDebug() << Q_FUNC_INFO << rev << entries.length() << applied;
-        
+
         PlaylistRevision pr;
         pr.oldrevisionguid = m_currentrevision;
         pr.revisionguid = rev;
-        
+
         // entries that have been removed:
         QSet<QString> removedguids = oldorderedguids.toSet().subtract( neworderedguids.toSet() );
         //qDebug() << "Removedguids:" << removedguids << "oldorederedguids" << oldorderedguids << "newog" << neworderedguids;
@@ -399,10 +402,10 @@ Playlist::setNewRevision( const QString& rev,
                 }
             }
         }
-        
+
         pr.added = addedmap.values();
-        
-        
+
+
         pr.newlist = entries;
         return pr;
 }
@@ -410,12 +413,12 @@ Playlist::setNewRevision( const QString& rev,
 
 source_ptr
 Playlist::author() const
-{ 
-    return m_source; 
+{
+    return m_source;
 }
 
 
-void 
+void
 Playlist::resolve()
 {
     QList< query_ptr > qlist;
@@ -462,7 +465,7 @@ void
 Playlist::addEntries( const QList<query_ptr>& queries, const QString& oldrev )
 {
     //qDebug() << Q_FUNC_INFO;
-    
+
     QList<plentry_ptr> el = addEntriesInternal( queries );
 
     QString newrev = uuid();
@@ -470,7 +473,7 @@ Playlist::addEntries( const QList<query_ptr>& queries, const QString& oldrev )
 }
 
 
-QList<plentry_ptr> 
+QList<plentry_ptr>
 Playlist::addEntriesInternal( const QList<Tomahawk::query_ptr>& queries )
 {
     QList<plentry_ptr> el = entries();
@@ -478,16 +481,16 @@ Playlist::addEntriesInternal( const QList<Tomahawk::query_ptr>& queries )
     {
         plentry_ptr e( new PlaylistEntry() );
         e->setGuid( uuid() );
-        
+
         if ( query->results().count() )
             e->setDuration( query->results().at( 0 )->duration() );
         else
             e->setDuration( 0 );
-        
+
         e->setLastmodified( 0 );
         e->setAnnotation( "" ); // FIXME
         e->setQuery( query );
-        
+
         el << e;
     }
     return el;
@@ -500,14 +503,14 @@ Playlist::newEntries( const QList< plentry_ptr >& entries )
     QSet<QString> currentguids;
     foreach( const plentry_ptr& p, m_entries )
         currentguids.insert( p->guid() ); // could be cached as member?
-        
+
     // calc list of newly added entries:
     QList<plentry_ptr> added;
     foreach( const plentry_ptr& p, entries )
     {
         if( !currentguids.contains( p->guid() ) )
             added << p;
-    }   
+    }
     return added;
 }
 

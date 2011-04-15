@@ -1,5 +1,5 @@
 /* === This file is part of Tomahawk Player - <http://tomahawk-player.org> ===
- * 
+ *
  *   Copyright 2010-2011, Christian Muehlhaeuser <muesli@tomahawk-player.org>
  *
  *   Tomahawk is free software: you can redistribute it and/or modify
@@ -32,6 +32,7 @@ SourcesProxyModel::SourcesProxyModel( SourcesModel* model, QObject* parent )
 {
     setDynamicSortFilter( true );
 
+    setSortRole( SourcesModel::SortRole );
     setSourceModel( model );
 }
 
@@ -63,7 +64,7 @@ SourcesProxyModel::filterAcceptsRow( int sourceRow, const QModelIndex& sourcePar
 {
     if ( !m_filtered )
         return true;
-    
+
     SourceTreeItem* sti = m_model->indexToTreeItem( sourceModel()->index( sourceRow, 0, sourceParent ) );
     if ( sti )
     {
