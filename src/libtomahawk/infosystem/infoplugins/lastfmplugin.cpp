@@ -81,7 +81,6 @@ LastFmPlugin::LastFmPlugin( QObject* parent )
     }
 #endif
 
-
     m_badUrls << QUrl( "http://cdn.last.fm/flatness/catalogue/noimage" );
 
     connect( TomahawkSettings::instance(), SIGNAL( changed() ),
@@ -333,8 +332,11 @@ LastFmPlugin::artistImagesReturned()
     if ( redir.isEmpty() )
     {
         QByteArray ba = reply->readAll();
-        if ( m_badUrls.contains( reply->url() ) )
-            ba = QByteArray();
+        foreach ( const QUrl& url, m_badUrls )
+        {
+            if ( reply->url().toString().startsWith( url.toString() ) )
+                ba = QByteArray();
+        }
 
         InfoCustomData returnedData;
         returnedData["imgbytes"] = ba;

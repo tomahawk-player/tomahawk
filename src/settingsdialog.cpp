@@ -105,7 +105,7 @@ SettingsDialog::SettingsDialog( QWidget *parent )
     ResolverConfigDelegate* del = new ResolverConfigDelegate( this );
     connect( del, SIGNAL( openConfig( QString ) ), this, SLOT( openResolverConfig( QString ) ) );
     ui->scriptList->setItemDelegate( del );
-    m_resolversModel =  new ResolversModel( s->allScriptResolvers(), s->enabledScriptResolvers(), this );
+    m_resolversModel = new ResolversModel( s->allScriptResolvers(), s->enabledScriptResolvers(), this );
     ui->scriptList->setModel( m_resolversModel );
 
     connect( ui->scriptList->selectionModel(), SIGNAL( selectionChanged( QItemSelection,QItemSelection ) ), this, SLOT( scriptSelectionChanged() ) );
