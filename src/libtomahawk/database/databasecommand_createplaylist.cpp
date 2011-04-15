@@ -96,8 +96,8 @@ DatabaseCommand_CreatePlaylist::createPlaylist( DatabaseImpl* lib, bool dynamic)
     else
     {
         now = QDateTime::currentDateTime().toTime_t();
-        m_playlist->setCreatedOn( now );
     }
+    m_playlist->setCreatedOn( now );
 
     TomahawkSqlQuery cre = lib->newquery();
     cre.prepare( "INSERT INTO playlist( guid, source, shared, title, info, creator, lastmodified, dynplaylist, createdOn) "
