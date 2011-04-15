@@ -1,5 +1,5 @@
 /* === This file is part of Tomahawk Player - <http://tomahawk-player.org> ===
- * 
+ *
  *   Copyright 2010-2011, Christian Muehlhaeuser <muesli@tomahawk-player.org>
  *
  *   Tomahawk is free software: you can redistribute it and/or modify
@@ -54,7 +54,7 @@ NewPlaylistWidget::NewPlaylistWidget( QWidget* parent )
     connect( ui->buttonBox, SIGNAL( rejected() ), SLOT( cancel() ) );
 
     m_suggestionsModel = new PlaylistModel( ui->suggestionsView );
-    ui->suggestionsView->setModel( m_suggestionsModel );
+    ui->suggestionsView->setPlaylistModel( m_suggestionsModel );
     ui->suggestionsView->overlay()->setEnabled( false );
 
     connect( &m_filterTimer, SIGNAL( timeout() ), SLOT( updateSuggestions() ) );
@@ -123,7 +123,7 @@ NewPlaylistWidget::suggestionsFound()
 
     delete m_suggestionsModel;
     m_suggestionsModel = new PlaylistModel( ui->suggestionsView );
-    ui->suggestionsView->setModel( m_suggestionsModel );
+    ui->suggestionsView->setPlaylistModel( m_suggestionsModel );
 
     QList<Tomahawk::query_ptr> ql;
     foreach( const Tomahawk::plentry_ptr& entry, m_entries )
