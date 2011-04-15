@@ -82,8 +82,7 @@ LastFmPlugin::LastFmPlugin( QObject* parent )
 #endif
 
 
-    m_badUrls << QUrl( "http://cdn.last.fm/flatness/catalogue/noimage" )
-              << QUrl( "http://cdn.last.fm/flatness/catalogue/noimage/2/default_artist_medium.png" );
+    m_badUrls << QUrl( "http://cdn.last.fm/flatness/catalogue/noimage" );
 
     connect( TomahawkSettings::instance(), SIGNAL( changed() ),
                                              SLOT( settingsChanged() ), Qt::QueuedConnection );
@@ -283,8 +282,11 @@ LastFmPlugin::coverArtReturned()
     if ( redir.isEmpty() )
     {
         QByteArray ba = reply->readAll();
-        if ( m_badUrls.contains( reply->url() ) )
-            ba = QByteArray();
+        foreach ( const QUrl& url, m_badUrls )
+        {
+            if ( reply->url().toString().startsWith( url.toString() ) )
+                ba = QByteArray();
+        }
 
         InfoCustomData returnedData;
         returnedData["imgbytes"] = ba;
