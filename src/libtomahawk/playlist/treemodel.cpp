@@ -28,8 +28,6 @@
 #include "database/database.h"
 #include "utils/tomahawkutils.h"
 
-#define LASTFM_DEFAULT_COVER "http://cdn.last.fm/flatness/catalogue/noimage"
-
 static QString s_tmInfoIdentifier = QString( "TREEMODEL" );
 
 using namespace Tomahawk;
@@ -369,6 +367,7 @@ TreeModel::addTracks( const album_ptr& album, const QModelIndex& parent )
 
     DatabaseCommand_AllTracks* cmd = new DatabaseCommand_AllTracks( m_collection );
     cmd->setAlbum( album.data() );
+//    cmd->setArtist( album->artist().data() );
 
     QList< QVariant > rows;
     rows << parent.row();
@@ -442,7 +441,6 @@ TreeModel::onArtistsAdded( const QList<Tomahawk::artist_ptr>& artists )
         artistitem = new TreeModelItem( artist, m_rootItem );
         artistitem->cover = m_defaultCover;
         artistitem->index = createIndex( m_rootItem->children.count() - 1, 0, artistitem );
-
         connect( artistitem, SIGNAL( dataChanged() ), SLOT( onDataChanged() ) );
     }
 
@@ -544,7 +542,8 @@ TreeModel::infoSystemInfo( QString caller, Tomahawk::InfoSystem::InfoType type, 
     Q_UNUSED( customData );
     qDebug() << Q_FUNC_INFO;
 
-    if ( caller != s_tmInfoIdentifier || type != Tomahawk::InfoSystem::InfoAlbumCoverArt )
+    if ( caller != s_tmInfoIdentifier ||
+       ( type != Tomahawk::InfoSystem::InfoAlbumCoverArt && type != Tomahawk::InfoSystem::InfoArtistImages ) )
     {
         qDebug() << "Info of wrong type or not with our identifier";
         return;
@@ -567,7 +566,7 @@ TreeModel::infoSystemInfo( QString caller, Tomahawk::InfoSystem::InfoType type, 
         qlonglong p = pptr["pptr"].toLongLong();
         TreeModelItem* ai = reinterpret_cast<TreeModelItem*>(p);
 
-        if ( pm.isNull() || returnedData["url"].toString().startsWith( LASTFM_DEFAULT_COVER ) )
+        if ( pm.isNull() )
             ai->cover = m_defaultCover;
         else
             ai->cover = pm;

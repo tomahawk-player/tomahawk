@@ -31,14 +31,18 @@
 #include "treeitemdelegate.h"
 #include "playlistmanager.h"
 
+static QString s_tmInfoIdentifier = QString( "TREEMODEL" );
+
+#define SCROLL_TIMEOUT 280
+
 using namespace Tomahawk;
 
 
 ArtistView::ArtistView( QWidget* parent )
     : QTreeView( parent )
+    , m_header( new TreeHeader( this ) )
     , m_model( 0 )
     , m_proxyModel( 0 )
-    , m_header( new TreeHeader( this ) )
 //    , m_delegate( 0 )
 {
     setAlternatingRowColors( true );
@@ -66,6 +70,12 @@ ArtistView::ArtistView( QWidget* parent )
     f.setPointSize( f.pointSize() - 2 );
     setFont( f );
     #endif
+
+    m_timer.setInterval( SCROLL_TIMEOUT );
+
+    connect( verticalScrollBar(), SIGNAL( rangeChanged( int, int ) ), SLOT( onViewChanged() ) );
+    connect( verticalScrollBar(), SIGNAL( valueChanged( int ) ), SLOT( onViewChanged() ) );
+    connect( &m_timer, SIGNAL( timeout() ), SLOT( onScrollTimeout() ) );
 
     connect( this, SIGNAL( doubleClicked( QModelIndex ) ), SLOT( onItemActivated( QModelIndex ) ) );
 }
@@ -168,12 +178,57 @@ ArtistView::onFilterChanged( const QString& )
 void
 ArtistView::startDrag( Qt::DropActions supportedActions )
 {
+    Q_UNUSED( supportedActions );
 }
 
 
-// Inspired from dolphin's draganddrophelper.cpp
 QPixmap
 ArtistView::createDragPixmap( int itemCount ) const
 {
+    Q_UNUSED( itemCount );
     return QPixmap();
+}
+
+
+void
+ArtistView::onViewChanged()
+{
+    if ( m_timer.isActive() )
+        m_timer.stop();
+
+    m_timer.start();
+}
+
+
+void
+ArtistView::onScrollTimeout()
+{
+    qDebug() << Q_FUNC_INFO;
+    if ( m_timer.isActive() )
+        m_timer.stop();
+
+    QModelIndex left = indexAt( viewport()->rect().topLeft() );
+    while ( left.isValid() && left.parent().isValid() )
+        left = left.parent();
+
+    QModelIndex right = indexAt( viewport()->rect().bottomLeft() );
+    while ( right.isValid() && right.parent().isValid() )
+        right = right.parent();
+
+    int max = m_proxyModel->trackCount();
+    if ( right.isValid() )
+        max = right.row() + 1;
+
+    for ( int i = left.row(); i < max; i++ )
+    {
+        TreeModelItem* item = m_model->itemFromIndex( m_proxyModel->mapToSource( m_proxyModel->index( i, 0 ) ) );
+
+        Tomahawk::InfoSystem::InfoCustomData trackInfo;
+        trackInfo["artist"] = QVariant::fromValue< QString >( item->artist()->name() );
+        trackInfo["pptr"] = QVariant::fromValue< qlonglong >( (qlonglong)item );
+
+        Tomahawk::InfoSystem::InfoSystem::instance()->getInfo(
+            s_tmInfoIdentifier, Tomahawk::InfoSystem::InfoArtistImages,
+            QVariant::fromValue< Tomahawk::InfoSystem::InfoCustomData >( trackInfo ), Tomahawk::InfoSystem::InfoCustomData() );
+    }
 }

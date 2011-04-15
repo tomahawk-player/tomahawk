@@ -47,20 +47,28 @@ public:
 
 public slots:
     void settingsChanged();
+
     void onAuthenticated();
     void coverArtReturned();
+    void artistImagesReturned();
+
     virtual void notInCacheSlot( Tomahawk::InfoSystem::InfoCacheCriteria criteria, QString caller, Tomahawk::InfoSystem::InfoType type, QVariant input, Tomahawk::InfoSystem::InfoCustomData customData );
 
 private:
     void fetchCoverArt( const QString &caller, const InfoType type, const QVariant& data, Tomahawk::InfoSystem::InfoCustomData &customData );
-    void scrobble( const QString &caller, const InfoType type, const QVariant& data, InfoCustomData &customData );
+    void fetchArtistImages( const QString &caller, const InfoType type, const QVariant& data, Tomahawk::InfoSystem::InfoCustomData &customData );
+
     void createScrobbler();
+    void scrobble( const QString &caller, const InfoType type, const QVariant& data, InfoCustomData &customData );
     void nowPlaying( const QString &caller, const InfoType type, const QVariant& data, InfoCustomData &customData );
+
     void dataError( const QString &caller, const InfoType type, const QVariant& data, InfoCustomData &customData );
 
     lastfm::MutableTrack m_track;
     lastfm::Audioscrobbler* m_scrobbler;
     QString m_pw;
+
+    QList< QUrl > m_badUrls;
 
     QNetworkReply* m_authJob;
 };

@@ -47,7 +47,7 @@ LastFmPlugin::LastFmPlugin( QObject* parent )
     , m_authJob( 0 )
 {
     QSet< InfoType > supportedTypes;
-    supportedTypes << InfoMiscSubmitScrobble << InfoMiscSubmitNowPlaying << InfoAlbumCoverArt;
+    supportedTypes << InfoMiscSubmitScrobble << InfoMiscSubmitNowPlaying << InfoAlbumCoverArt << InfoArtistImages;
     qobject_cast< InfoSystem* >(parent)->registerInfoTypes(this, supportedTypes);
 
 /*
@@ -81,6 +81,10 @@ LastFmPlugin::LastFmPlugin( QObject* parent )
     }
 #endif
 
+
+    m_badUrls << QUrl( "http://cdn.last.fm/flatness/catalogue/noimage" )
+              << QUrl( "http://cdn.last.fm/flatness/catalogue/noimage/2/default_artist_medium.png" );
+
     connect( TomahawkSettings::instance(), SIGNAL( changed() ),
                                              SLOT( settingsChanged() ), Qt::QueuedConnection );
 }
@@ -91,6 +95,7 @@ LastFmPlugin::~LastFmPlugin()
     delete m_scrobbler;
 }
 
+
 void
 LastFmPlugin::dataError( const QString &caller, const InfoType type, const QVariant& data, Tomahawk::InfoSystem::InfoCustomData &customData )
 {
@@ -98,19 +103,35 @@ LastFmPlugin::dataError( const QString &caller, const InfoType type, const QVari
     return;
 }
 
+
 void
 LastFmPlugin::getInfo( const QString &caller, const InfoType type, const QVariant& data, Tomahawk::InfoSystem::InfoCustomData customData )
 {
     qDebug() << Q_FUNC_INFO;
-    if ( type == InfoMiscSubmitNowPlaying )
-        nowPlaying( caller, type, data, customData );
-    else if ( type == InfoMiscSubmitScrobble )
-        scrobble( caller, type, data, customData );
-    else if ( type == InfoAlbumCoverArt )
-        fetchCoverArt( caller, type, data, customData );
-    else
-        dataError( caller, type, data, customData );
+
+    switch ( type )
+    {
+        case InfoMiscSubmitNowPlaying:
+            nowPlaying( caller, type, data, customData );
+            break;
+
+        case InfoMiscSubmitScrobble:
+            scrobble( caller, type, data, customData );
+            break;
+
+        case InfoArtistImages:
+            fetchArtistImages( caller, type, data, customData );
+            break;
+
+        case InfoAlbumCoverArt:
+            fetchCoverArt( caller, type, data, customData );
+            break;
+
+        default:
+            dataError( caller, type, data, customData );
+    }
 }
+
 
 void
 LastFmPlugin::nowPlaying( const QString &caller, const InfoType type, const QVariant& data, Tomahawk::InfoSystem::InfoCustomData &customData )
@@ -140,6 +161,7 @@ LastFmPlugin::nowPlaying( const QString &caller, const InfoType type, const QVar
     emit info( caller, type, data, QVariant(), customData );
 }
 
+
 void
 LastFmPlugin::scrobble( const QString &caller, const InfoType type, const QVariant& data, Tomahawk::InfoSystem::InfoCustomData &customData )
 {
@@ -157,6 +179,7 @@ LastFmPlugin::scrobble( const QString &caller, const InfoType type, const QVaria
 
     emit info( caller, type, data, QVariant(), customData );
 }
+
 
 void
 LastFmPlugin::fetchCoverArt( const QString &caller, const InfoType type, const QVariant& data, Tomahawk::InfoSystem::InfoCustomData &customData )
@@ -181,29 +204,75 @@ LastFmPlugin::fetchCoverArt( const QString &caller, const InfoType type, const Q
     emit getCachedInfo( criteria, 2419200000, caller, type, data, customData );
 }
 
+
+void
+LastFmPlugin::fetchArtistImages( const QString &caller, const InfoType type, const QVariant& data, Tomahawk::InfoSystem::InfoCustomData &customData )
+{
+    qDebug() << Q_FUNC_INFO;
+    if ( !data.canConvert< Tomahawk::InfoSystem::InfoCustomData >() )
+    {
+        dataError( caller, type, data, customData );
+        return;
+    }
+    InfoCustomData hash = data.value< Tomahawk::InfoSystem::InfoCustomData >();
+    if ( !hash.contains( "artist" ) )
+    {
+        dataError( caller, type, data, customData );
+        return;
+    }
+
+    Tomahawk::InfoSystem::InfoCacheCriteria criteria;
+    criteria["artist"] = hash["artist"].toString();
+
+    emit getCachedInfo( criteria, 2419200000, caller, type, data, customData );
+}
+
+
 void
 LastFmPlugin::notInCacheSlot( QHash<QString, QString> criteria, QString caller, Tomahawk::InfoSystem::InfoType type, QVariant input, Tomahawk::InfoSystem::InfoCustomData customData )
 {
     qDebug() << Q_FUNC_INFO;
-    if ( type == InfoAlbumCoverArt )
+
+    switch ( type )
     {
-        QString artistName = criteria["artist"];
-        QString albumName = criteria["album"];
+        case InfoAlbumCoverArt:
+        {
+            QString artistName = criteria["artist"];
+            QString albumName = criteria["album"];
 
-        QString imgurl = "http://ws.audioscrobbler.com/2.0/?method=album.imageredirect&artist=%1&album=%2&size=medium&api_key=7a90f6672a04b809ee309af169f34b8b";
-        QNetworkRequest req( imgurl.arg( artistName ).arg( albumName ) );
-        QNetworkReply* reply = TomahawkUtils::nam()->get( req );
-        reply->setProperty( "customData", QVariant::fromValue<Tomahawk::InfoSystem::InfoCustomData>( customData ) );
-        reply->setProperty( "origData", input );
-        reply->setProperty( "caller", caller );
-        reply->setProperty( "type", (uint)(type) );
+            QString imgurl = "http://ws.audioscrobbler.com/2.0/?method=album.imageredirect&artist=%1&album=%2&autocorrect=1&size=medium&api_key=7a90f6672a04b809ee309af169f34b8b";
+            QNetworkRequest req( imgurl.arg( artistName ).arg( albumName ) );
+            QNetworkReply* reply = TomahawkUtils::nam()->get( req );
+            reply->setProperty( "customData", QVariant::fromValue<Tomahawk::InfoSystem::InfoCustomData>( customData ) );
+            reply->setProperty( "origData", input );
+            reply->setProperty( "caller", caller );
+            reply->setProperty( "type", (uint)(type) );
 
-        connect( reply, SIGNAL( finished() ), SLOT( coverArtReturned() ) );
-        return;
+            connect( reply, SIGNAL( finished() ), SLOT( coverArtReturned() ) );
+            return;
+        }
+
+        case InfoArtistImages:
+        {
+            QString artistName = criteria["artist"];
+
+            QString imgurl = "http://ws.audioscrobbler.com/2.0/?method=artist.imageredirect&artist=%1&autocorrect=1&size=medium&api_key=7a90f6672a04b809ee309af169f34b8b";
+            QNetworkRequest req( imgurl.arg( artistName ) );
+            QNetworkReply* reply = TomahawkUtils::nam()->get( req );
+            reply->setProperty( "customData", QVariant::fromValue<Tomahawk::InfoSystem::InfoCustomData>( customData ) );
+            reply->setProperty( "origData", input );
+            reply->setProperty( "caller", caller );
+            reply->setProperty( "type", (uint)(type) );
+
+            connect( reply, SIGNAL( finished() ), SLOT( artistImagesReturned() ) );
+            return;
+        }
+
+        default:
+            qDebug() << "Couldn't figure out what to do with this type of request after cache miss";
     }
-    else
-        qDebug() << "Couldn't figure out what to do with this type of request after cache miss";
 }
+
 
 void
 LastFmPlugin::coverArtReturned()
@@ -213,7 +282,10 @@ LastFmPlugin::coverArtReturned()
     QUrl redir = reply->attribute( QNetworkRequest::RedirectionTargetAttribute ).toUrl();
     if ( redir.isEmpty() )
     {
-        const QByteArray ba = reply->readAll();
+        QByteArray ba = reply->readAll();
+        if ( m_badUrls.contains( reply->url() ) )
+            ba = QByteArray();
+
         InfoCustomData returnedData;
         returnedData["imgbytes"] = ba;
         returnedData["url"] = reply->url().toString();
@@ -248,6 +320,54 @@ LastFmPlugin::coverArtReturned()
 
     reply->deleteLater();
 }
+
+
+void
+LastFmPlugin::artistImagesReturned()
+{
+    qDebug() << Q_FUNC_INFO;
+    QNetworkReply* reply = qobject_cast<QNetworkReply*>( sender() );
+    QUrl redir = reply->attribute( QNetworkRequest::RedirectionTargetAttribute ).toUrl();
+    if ( redir.isEmpty() )
+    {
+        QByteArray ba = reply->readAll();
+        if ( m_badUrls.contains( reply->url() ) )
+            ba = QByteArray();
+
+        InfoCustomData returnedData;
+        returnedData["imgbytes"] = ba;
+        returnedData["url"] = reply->url().toString();
+
+        InfoCustomData customData = reply->property( "customData" ).value< Tomahawk::InfoSystem::InfoCustomData >();
+        InfoType type = (Tomahawk::InfoSystem::InfoType)(reply->property( "type" ).toUInt());
+        emit info(
+            reply->property( "caller" ).toString(),
+                  type,
+                  reply->property( "origData" ),
+                  returnedData,
+                  customData
+                  );
+
+                  InfoCustomData origData = reply->property( "origData" ).value< Tomahawk::InfoSystem::InfoCustomData >();
+                  Tomahawk::InfoSystem::InfoCacheCriteria criteria;
+                  criteria["artist"] = origData["artist"].toString();
+                  emit updateCache( criteria, 2419200000, type, returnedData );
+    }
+    else
+    {
+        // Follow HTTP redirect
+        QNetworkRequest req( redir );
+        QNetworkReply* newReply = TomahawkUtils::nam()->get( req );
+        newReply->setProperty( "origData", reply->property( "origData" ) );
+        newReply->setProperty( "customData", reply->property( "customData" ) );
+        newReply->setProperty( "caller", reply->property( "caller" ) );
+        newReply->setProperty( "type", reply->property( "type" ) );
+        connect( newReply, SIGNAL( finished() ), SLOT( artistImagesReturned() ) );
+    }
+
+    reply->deleteLater();
+}
+
 
 void
 LastFmPlugin::settingsChanged()

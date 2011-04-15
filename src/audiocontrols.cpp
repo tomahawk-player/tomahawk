@@ -28,8 +28,6 @@
 
 #include "album.h"
 
-#define LASTFM_DEFAULT_COVER "http://cdn.last.fm/flatness/catalogue/noimage"
-
 static QString s_acInfoIdentifier = QString( "AUDIOCONTROLS" );
 
 
@@ -257,7 +255,7 @@ AudioControls::infoSystemInfo( QString caller, Tomahawk::InfoSystem::InfoType ty
         QPixmap pm;
         pm.loadFromData( ba );
 
-        if ( pm.isNull() || returnedData["url"].toString().startsWith( LASTFM_DEFAULT_COVER ) )
+        if ( pm.isNull() )
             ui->coverImage->setPixmap( m_defaultCover );
         else
             ui->coverImage->setPixmap( pm.scaled( ui->coverImage->size(), Qt::IgnoreAspectRatio, Qt::SmoothTransformation ) );

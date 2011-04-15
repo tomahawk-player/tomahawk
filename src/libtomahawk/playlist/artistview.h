@@ -73,6 +73,8 @@ protected:
 
 private slots:
     void onFilterChanged( const QString& filter );
+    void onViewChanged();
+    void onScrollTimeout();
 
 private:
     QPixmap createDragPixmap( int itemCount ) const;
@@ -81,6 +83,8 @@ private:
     TreeModel* m_model;
     TreeProxyModel* m_proxyModel;
 //    PlaylistItemDelegate* m_delegate;
+
+    QTimer m_timer;
 };
 
 #endif // ARTISTVIEW_H
