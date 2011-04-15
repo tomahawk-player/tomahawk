@@ -1,6 +1,25 @@
+/* === This file is part of Tomahawk Player - <http://tomahawk-player.org> ===
+ *
+ *   Copyright 2010-2011, Christian Muehlhaeuser <muesli@tomahawk-player.org>
+ *
+ *   Tomahawk is free software: you can redistribute it and/or modify
+ *   it under the terms of the GNU General Public License as published by
+ *   the Free Software Foundation, either version 3 of the License, or
+ *   (at your option) any later version.
+ *
+ *   Tomahawk is distributed in the hope that it will be useful,
+ *   but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ *   GNU General Public License for more details.
+ *
+ *   You should have received a copy of the GNU General Public License
+ *   along with Tomahawk. If not, see <http://www.gnu.org/licenses/>.
+ */
+
 #include "playlistmanager.h"
 
 #include <QVBoxLayout>
+#include <QMetaMethod>
 
 #include "audio/audioengine.h"
 #include "utils/animatedsplitter.h"
@@ -9,7 +28,7 @@
 #include "widgets/infowidgets/sourceinfowidget.h"
 #include "widgets/welcomewidget.h"
 
-#include "collectionmodel.h"
+#include "treemodel.h"
 #include "collectionflatmodel.h"
 #include "collectionview.h"
 #include "playlistmodel.h"
@@ -17,6 +36,7 @@
 #include "queueview.h"
 #include "trackproxymodel.h"
 #include "trackmodel.h"
+#include "artistview.h"
 #include "albumview.h"
 #include "albumproxymodel.h"
 #include "albummodel.h"
@@ -27,7 +47,6 @@
 
 #include "widgets/welcomewidget.h"
 #include "widgets/infowidgets/sourceinfowidget.h"
-#include "dynamic/widgets/LoadingSpinner.h"
 
 #define FILTER_TIMEOUT 280
 
@@ -48,7 +67,6 @@ PlaylistManager::PlaylistManager( QObject* parent )
     , m_widget( new QWidget() )
     , m_welcomeWidget( new WelcomeWidget() )
     , m_currentMode( 0 )
-    , m_loadingSpinner( 0 )
 {
     s_instance = this;
 
@@ -58,7 +76,7 @@ PlaylistManager::PlaylistManager( QObject* parent )
     m_topbar = new TopBar();
     m_infobar = new InfoBar();
     m_stack = new QStackedWidget();
-    
+
     QFrame* line = new QFrame();
     line->setFrameStyle( QFrame::HLine );
     line->setStyleSheet( "border: 1px solid gray;" );
@@ -72,7 +90,7 @@ PlaylistManager::PlaylistManager( QObject* parent )
 
     m_queueView = new QueueView( m_splitter );
     m_queueModel = new PlaylistModel( m_queueView );
-    m_queueView->queue()->setModel( m_queueModel );
+    m_queueView->queue()->setPlaylistModel( m_queueModel );
     AudioEngine::instance()->setQueue( m_queueView->queue()->proxyModel() );
 
     m_splitter->addWidget( m_queueView );
@@ -83,27 +101,25 @@ PlaylistManager::PlaylistManager( QObject* parent )
     m_widget->layout()->addWidget( line );
     m_widget->layout()->addWidget( m_splitter );
 
-    m_superCollectionView = new CollectionView();
-    m_superCollectionFlatModel = new CollectionFlatModel( m_superCollectionView );
-    m_superCollectionView->setModel( m_superCollectionFlatModel );
+    m_superCollectionView = new ArtistView();
+    m_superCollectionModel = new TreeModel( m_superCollectionView );
+    m_superCollectionView->setModel( m_superCollectionModel );
     m_superCollectionView->setFrameShape( QFrame::NoFrame );
     m_superCollectionView->setAttribute( Qt::WA_MacShowFocusRect, 0 );
+//    m_superCollectionView->proxyModel()->setShowOfflineResults( false );
 
     m_superAlbumView = new AlbumView();
     m_superAlbumModel = new AlbumModel( m_superAlbumView );
-    m_superAlbumView->setModel( m_superAlbumModel );
+    m_superAlbumView->setAlbumModel( m_superAlbumModel );
     m_superAlbumView->setFrameShape( QFrame::NoFrame );
     m_superAlbumView->setAttribute( Qt::WA_MacShowFocusRect, 0 );
-    
+
     m_stack->setContentsMargins( 0, 0, 0, 0 );
     m_widget->setContentsMargins( 0, 0, 0, 0 );
     m_widget->layout()->setContentsMargins( 0, 0, 0, 0 );
     m_widget->layout()->setMargin( 0 );
     m_widget->layout()->setSpacing( 0 );
 
-    m_loadingSpinner = new LoadingSpinner( m_widget );
-    connect( m_superCollectionFlatModel, SIGNAL( doneLoadingCollections() ), m_loadingSpinner, SLOT( fadeOut() ) );
-    
     connect( &m_filterTimer, SIGNAL( timeout() ), SLOT( applyFilter() ) );
 
     connect( m_topbar, SIGNAL( filterTextChanged( QString ) ),
@@ -111,10 +127,10 @@ PlaylistManager::PlaylistManager( QObject* parent )
 
     connect( m_topbar, SIGNAL( flatMode() ),
                          SLOT( setTableMode() ) );
-    
+
     connect( m_topbar, SIGNAL( artistMode() ),
                          SLOT( setTreeMode() ) );
-    
+
     connect( m_topbar, SIGNAL( albumMode() ),
                          SLOT( setAlbumMode() ) );
 }
@@ -141,7 +157,7 @@ PlaylistManager::show( const Tomahawk::playlist_ptr& playlist )
     {
         view = new PlaylistView();
         PlaylistModel* model = new PlaylistModel();
-        view->setModel( model );
+        view->setPlaylistModel( model );
         view->setFrameShape( QFrame::NoFrame );
         view->setAttribute( Qt::WA_MacShowFocusRect, 0 );
         model->loadPlaylist( playlist );
@@ -153,7 +169,7 @@ PlaylistManager::show( const Tomahawk::playlist_ptr& playlist )
     {
         view = m_playlistViews.value( playlist );
     }
-    
+
     setPage( view );
     TomahawkSettings::instance()->appendRecentlyPlayedPlaylist( playlist );
     emit numSourcesChanged( SourceList::instance()->count() );
@@ -162,23 +178,25 @@ PlaylistManager::show( const Tomahawk::playlist_ptr& playlist )
 }
 
 
-bool 
+bool
 PlaylistManager::show( const Tomahawk::dynplaylist_ptr& playlist )
 {
     if ( !m_dynamicWidgets.contains( playlist ) )
     {
        m_dynamicWidgets[ playlist ] = new Tomahawk::DynamicWidget( playlist, m_stack );
 
+       connect( playlist.data(), SIGNAL( deleted( Tomahawk::dynplaylist_ptr ) ), this, SLOT( onDynamicDeleted( Tomahawk::dynplaylist_ptr ) ) );
+
        playlist->resolve();
     }
-    
+
     setPage( m_dynamicWidgets.value( playlist ) );
 
     if ( playlist->mode() == Tomahawk::OnDemand )
         m_queueView->hide();
     else
         m_queueView->show();
-    
+
     TomahawkSettings::instance()->appendRecentlyPlayedPlaylist( playlist );
     emit numSourcesChanged( SourceList::instance()->count() );
 
@@ -195,7 +213,7 @@ PlaylistManager::show( const Tomahawk::artist_ptr& artist )
     {
         view = new PlaylistView();
         PlaylistModel* model = new PlaylistModel();
-        view->setModel( model );
+        view->setPlaylistModel( model );
         view->setFrameShape( QFrame::NoFrame );
         view->setAttribute( Qt::WA_MacShowFocusRect, 0 );
         model->append( artist );
@@ -206,7 +224,7 @@ PlaylistManager::show( const Tomahawk::artist_ptr& artist )
     {
         view = m_artistViews.value( artist );
     }
-    
+
     setPage( view );
     emit numSourcesChanged( 1 );
 
@@ -222,7 +240,7 @@ PlaylistManager::show( const Tomahawk::album_ptr& album )
     {
         view = new PlaylistView();
         PlaylistModel* model = new PlaylistModel();
-        view->setModel( model );
+        view->setPlaylistModel( model );
         view->setFrameShape( QFrame::NoFrame );
         view->setAttribute( Qt::WA_MacShowFocusRect, 0 );
         model->append( album );
@@ -233,7 +251,7 @@ PlaylistManager::show( const Tomahawk::album_ptr& album )
     {
         view = m_albumViews.value( album );
     }
-    
+
     setPage( view );
     emit numSourcesChanged( 1 );
 
@@ -244,6 +262,7 @@ PlaylistManager::show( const Tomahawk::album_ptr& album )
 bool
 PlaylistManager::show( const Tomahawk::collection_ptr& collection )
 {
+    qDebug() << Q_FUNC_INFO << m_currentMode;
     m_currentCollection = collection;
     if ( m_currentMode == 0 )
     {
@@ -252,19 +271,40 @@ PlaylistManager::show( const Tomahawk::collection_ptr& collection )
         {
             view = new CollectionView();
             CollectionFlatModel* model = new CollectionFlatModel();
-            view->setModel( model );
+            view->setTrackModel( model );
             view->setFrameShape( QFrame::NoFrame );
             view->setAttribute( Qt::WA_MacShowFocusRect, 0 );
+
             model->addCollection( collection );
-            
-            m_loadingSpinner->fadeIn();
-            connect( model, SIGNAL( doneLoadingCollections() ), m_loadingSpinner, SLOT( fadeOut() ) );
 
             m_collectionViews.insert( collection, view );
         }
         else
         {
             view = m_collectionViews.value( collection );
+        }
+
+        setPage( view );
+    }
+
+    if ( m_currentMode == 1 )
+    {
+        ArtistView* view;
+        if ( !m_treeViews.contains( collection ) )
+        {
+            view = new ArtistView();
+            TreeModel* model = new TreeModel();
+            view->setModel( model );
+            view->setFrameShape( QFrame::NoFrame );
+            view->setAttribute( Qt::WA_MacShowFocusRect, 0 );
+
+            model->addCollection( collection );
+
+            m_treeViews.insert( collection, view );
+        }
+        else
+        {
+            view = m_treeViews.value( collection );
         }
 
         setPage( view );
@@ -277,7 +317,7 @@ PlaylistManager::show( const Tomahawk::collection_ptr& collection )
         {
             aview = new AlbumView();
             AlbumModel* amodel = new AlbumModel( aview );
-            aview->setModel( amodel );
+            aview->setAlbumModel( amodel );
             aview->setFrameShape( QFrame::NoFrame );
             aview->setAttribute( Qt::WA_MacShowFocusRect, 0 );
             amodel->addCollection( collection );
@@ -322,11 +362,6 @@ PlaylistManager::show( const Tomahawk::source_ptr& source )
 bool
 PlaylistManager::show( ViewPage* page )
 {
-    if ( m_stack->indexOf( page->widget() ) < 0 )
-    {
-        connect( page->widget(), SIGNAL( destroyed( QWidget* ) ), SLOT( onWidgetDestroyed( QWidget* ) ) );
-    }
-
     setPage( page );
 
     return true;
@@ -336,22 +371,26 @@ PlaylistManager::show( ViewPage* page )
 bool
 PlaylistManager::showSuperCollection()
 {
-    QList< collection_ptr > toAdd;
+    if ( m_superCollections.isEmpty() )
+        m_superCollectionModel->addAllCollections();
+
     foreach( const Tomahawk::source_ptr& source, SourceList::instance()->sources() )
     {
         if ( !m_superCollections.contains( source->collection() ) )
         {
             m_superCollections.append( source->collection() );
-            toAdd << source->collection();
-            m_superAlbumModel->addCollection( source->collection() );
+//            m_superAlbumModel->addCollection( source->collection() );
         }
-
-        m_superCollectionFlatModel->setTitle( tr( "All available tracks" ) );
-        m_superAlbumModel->setTitle( tr( "All available albums" ) );
     }
-    m_superCollectionFlatModel->addCollections( toAdd );
-    
+
+    m_superCollectionModel->setTitle( tr( "All available tracks" ) );
+    m_superAlbumModel->setTitle( tr( "All available albums" ) );
+
     if ( m_currentMode == 0 )
+    {
+        setPage( m_superCollectionView );
+    }
+    else if ( m_currentMode == 1 )
     {
         setPage( m_superCollectionView );
     }
@@ -359,9 +398,7 @@ PlaylistManager::showSuperCollection()
     {
         setPage( m_superAlbumView );
     }
-    
-    m_loadingSpinner->fadeIn();
-    
+
     emit numSourcesChanged( m_superCollections.count() );
 
     return true;
@@ -392,8 +429,6 @@ PlaylistManager::setTableMode()
 void
 PlaylistManager::setTreeMode()
 {
-    return;
-
     qDebug() << Q_FUNC_INFO;
 
     m_currentMode = 1;
@@ -462,7 +497,7 @@ PlaylistManager::historyForward()
 {
     if ( m_historyPosition >= m_pageHistory.count() - 1 )
         return;
-    
+
     showHistory( m_historyPosition + 1 );
 }
 
@@ -479,6 +514,7 @@ PlaylistManager::showHistory( int historyPosition )
 
     setHistoryPosition( historyPosition );
     ViewPage* page = m_pageHistory.at( historyPosition );
+    qDebug() << "Showing page after a deleting:" << page->widget()->metaObject()->className();
     setPage( page, false );
 }
 
@@ -529,11 +565,11 @@ PlaylistManager::setPage( ViewPage* page, bool trackHistory )
         setHistoryPosition( m_pageHistory.count() - 1 );
     }
 
-    if ( playlistForInterface( currentPlaylistInterface() ) )
+    if ( !playlistForInterface( currentPlaylistInterface() ).isNull() )
         emit playlistActivated( playlistForInterface( currentPlaylistInterface() ) );
-    if ( dynamicPlaylistForInterface( currentPlaylistInterface() ) )
+    if ( !dynamicPlaylistForInterface( currentPlaylistInterface() ).isNull() )
         emit dynamicPlaylistActivated( dynamicPlaylistForInterface( currentPlaylistInterface() ) );
-    if ( collectionForInterface( currentPlaylistInterface() ) )
+    if ( !collectionForInterface( currentPlaylistInterface() ).isNull() )
         emit collectionActivated( collectionForInterface( currentPlaylistInterface() ) );
     if ( isSuperCollectionVisible() )
         emit superCollectionActivated();
@@ -542,6 +578,20 @@ PlaylistManager::setPage( ViewPage* page, bool trackHistory )
 
     if ( !AudioEngine::instance()->isPlaying() )
         AudioEngine::instance()->setPlaylist( currentPlaylistInterface() );
+
+    // UGH!
+    if ( QObject* obj = dynamic_cast< QObject* >( currentPage() ) )
+    {
+        // if the signal exists (just to hide the qobject runtime warning...)
+        if( obj->metaObject()->indexOfSignal( "descriptionChanged(QString)" ) > -1 )
+            connect( obj, SIGNAL( descriptionChanged( QString ) ), m_infobar, SLOT( setDescription( QString ) ), Qt::UniqueConnection );
+    }
+    if ( QObject* obj = dynamic_cast< QObject* >( currentPage() ) )
+    {
+        // if the signal exists (just to hide the qobject runtime warning...)
+        if( obj->metaObject()->indexOfSignal( "destroyed(QWidget*)" ) > -1 )
+            connect( obj, SIGNAL( destroyed( QWidget* ) ), SLOT( onWidgetDestroyed( QWidget* ) ), Qt::UniqueConnection );
+    }
 
     m_stack->setCurrentWidget( page->widget() );
     updateView();
@@ -602,7 +652,7 @@ PlaylistManager::updateView()
         emit modeChanged( currentPlaylistInterface()->viewMode() );
     }
 
-    if ( currentPage()->queueVisible() ) 
+    if ( currentPage()->queueVisible() )
         m_queueView->show();
     else
         m_queueView->hide();
@@ -624,14 +674,23 @@ PlaylistManager::updateView()
 void
 PlaylistManager::onWidgetDestroyed( QWidget* widget )
 {
-    qDebug() << "Destroyed child:" << widget;
+    qDebug() << "Destroyed child:" << widget << widget->metaObject()->className();
 
     bool resetWidget = ( m_stack->currentWidget() == widget );
-    m_stack->removeWidget( widget );
 
     for ( int i = 0; i < m_pageHistory.count(); i++ )
     {
         ViewPage* page = m_pageHistory.at( i );
+
+        if ( !playlistForInterface( page->playlistInterface() ).isNull() )
+        {
+            m_playlistViews.remove( playlistForInterface( page->playlistInterface() ) );
+        }
+        if ( !dynamicPlaylistForInterface( page->playlistInterface() ).isNull() )
+        {
+            m_dynamicWidgets.remove( dynamicPlaylistForInterface( page->playlistInterface() ) );
+        }
+
         if ( page->widget() == widget )
         {
             m_pageHistory.removeAt( i );
@@ -640,6 +699,8 @@ PlaylistManager::onWidgetDestroyed( QWidget* widget )
             break;
         }
     }
+
+    m_stack->removeWidget( widget );
 
     if ( resetWidget )
     {
@@ -665,7 +726,7 @@ PlaylistManager::setShuffled( bool enabled )
 }
 
 
-void 
+void
 PlaylistManager::createPlaylist( const Tomahawk::source_ptr& src,
                                  const QVariant& contents )
 {
@@ -675,7 +736,7 @@ PlaylistManager::createPlaylist( const Tomahawk::source_ptr& src,
 }
 
 
-void 
+void
 PlaylistManager::createDynamicPlaylist( const Tomahawk::source_ptr& src,
                                         const QVariant& contents )
 {

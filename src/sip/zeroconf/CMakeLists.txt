@@ -20,7 +20,7 @@ include_directories( . ${CMAKE_CURRENT_BINARY_DIR} ..
 )
 
 qt4_wrap_cpp( zeroconfMoc ${zeroconfHeaders} )
-add_library( sip_zeroconf SHARED ${zeroconfSources} ${zeroconfMoc} )
+add_library( tomahawk_sipzeroconf SHARED ${zeroconfSources} ${zeroconfMoc} )
 
 IF( WIN32 )
 SET( OS_SPECIFIC_LINK_LIBRARIES
@@ -31,7 +31,7 @@ SET( OS_SPECIFIC_LINK_LIBRARIES
 )
 ENDIF( WIN32 )
 
-target_link_libraries( sip_zeroconf
+target_link_libraries( tomahawk_sipzeroconf
 	${QT_LIBRARIES}
 	${OS_SPECIFIC_LINK_LIBRARIES}
 	tomahawklib
@@ -41,4 +41,4 @@ IF( APPLE )
 #  SET( CMAKE_SHARED_LINKER_FLAGS ${CMAKE_SHARED_LINKER_FLAGS} "-undefined dynamic_lookup" )
 ENDIF( APPLE )
 
-install( TARGETS sip_zeroconf DESTINATION lib )
+install( TARGETS tomahawk_sipzeroconf DESTINATION lib${LIB_SUFFIX} )

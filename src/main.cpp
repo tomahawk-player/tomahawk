@@ -1,4 +1,26 @@
+/* === This file is part of Tomahawk Player - <http://tomahawk-player.org> ===
+ *
+ *   Copyright 2010-2011, Christian Muehlhaeuser <muesli@tomahawk-player.org>
+ *
+ *   Tomahawk is free software: you can redistribute it and/or modify
+ *   it under the terms of the GNU General Public License as published by
+ *   the Free Software Foundation, either version 3 of the License, or
+ *   (at your option) any later version.
+ *
+ *   Tomahawk is distributed in the hope that it will be useful,
+ *   but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ *   GNU General Public License for more details.
+ *
+ *   You should have received a copy of the GNU General Public License
+ *   along with Tomahawk. If not, see <http://www.gnu.org/licenses/>.
+ */
+
 #include "tomahawk/tomahawkapp.h"
+
+#include "kdsingleapplicationguard/kdsingleapplicationguard.h"
+
+#include <QTranslator>
 
 #ifdef Q_WS_MAC
     #include "tomahawkapp_mac.h"
@@ -6,7 +28,7 @@
     static pascal OSErr appleEventHandler( const AppleEvent*, AppleEvent*, long );
 #endif
 
-#include <exception>
+
 int
 main( int argc, char *argv[] )
 {
@@ -18,18 +40,24 @@ main( int argc, char *argv[] )
       // used for url handler
       AEEventHandlerUPP h = AEEventHandlerUPP( appleEventHandler );
       AEInstallEventHandler( 'GURL', 'GURL', h, 0, false );
-
 #endif
-    try
-    {
-        TomahawkApp a( argc, argv );
-        return a.exec();
-    }
-    catch( const std::runtime_error& e )
-    {
-        return 0;
-    }
+
+    TomahawkApp a( argc, argv );
+    KDSingleApplicationGuard guard( &a, KDSingleApplicationGuard::AutoKillOtherInstances );
+    QObject::connect( &guard, SIGNAL( instanceStarted( KDSingleApplicationGuard::Instance ) ), &a, SLOT( instanceStarted( KDSingleApplicationGuard::Instance )  ) );
+    
+    if ( guard.isPrimaryInstance() )
+        a.init();
+    
+    QString locale = QLocale::system().name();
+
+    QTranslator translator;
+    translator.load( QString( ":/lang/tomahawk_" ) + locale );
+    a.installTranslator( &translator );
+
+    return a.exec();
 }
+
 
 #ifdef Q_WS_MAC
 static pascal OSErr

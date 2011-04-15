@@ -1,3 +1,21 @@
+/* === This file is part of Tomahawk Player - <http://tomahawk-player.org> ===
+ *
+ *   Copyright 2010-2011, Christian Muehlhaeuser <muesli@tomahawk-player.org>
+ *
+ *   Tomahawk is free software: you can redistribute it and/or modify
+ *   it under the terms of the GNU General Public License as published by
+ *   the Free Software Foundation, either version 3 of the License, or
+ *   (at your option) any later version.
+ *
+ *   Tomahawk is distributed in the hope that it will be useful,
+ *   but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ *   GNU General Public License for more details.
+ *
+ *   You should have received a copy of the GNU General Public License
+ *   along with Tomahawk. If not, see <http://www.gnu.org/licenses/>.
+ */
+
 #ifndef PLAYLISTMANAGER_H
 #define PLAYLISTMANAGER_H
 
@@ -11,10 +29,10 @@
 
 #include "dllmacro.h"
 
-class LoadingSpinner;
 class AnimatedSplitter;
 class AlbumModel;
 class AlbumView;
+class ArtistView;
 class CollectionModel;
 class CollectionFlatModel;
 class CollectionView;
@@ -23,6 +41,8 @@ class PlaylistView;
 class QueueView;
 class TrackProxyModel;
 class TrackModel;
+class TreeProxyModel;
+class TreeModel;
 class TrackView;
 class SourceInfoWidget;
 class InfoBar;
@@ -87,7 +107,7 @@ signals:
     void collectionActivated( const Tomahawk::collection_ptr& collection );
     void playlistActivated( const Tomahawk::playlist_ptr& playlist );
     void dynamicPlaylistActivated( const Tomahawk::dynplaylist_ptr& playlist );
-    
+
 public slots:
     bool showSuperCollection();
     void showWelcomePage();
@@ -106,18 +126,19 @@ public slots:
 
     void setRepeatMode( PlaylistInterface::RepeatMode mode );
     void setShuffled( bool enabled );
-    
+
     // called by the playlist creation dbcmds
     void createPlaylist( const Tomahawk::source_ptr& src, const QVariant& contents );
     void createDynamicPlaylist( const Tomahawk::source_ptr& src, const QVariant& contents );
-    
+
     // ugh need to set up the connection in tomahawk to libtomahawk
     void onPlayClicked();
     void onPauseClicked();
-    
+
 private slots:
     void setFilter( const QString& filter );
     void applyFilter();
+
     void onWidgetDestroyed( QWidget* widget );
 
 private:
@@ -129,7 +150,7 @@ private:
     Tomahawk::playlist_ptr playlistForInterface( PlaylistInterface* interface ) const;
     Tomahawk::dynplaylist_ptr dynamicPlaylistForInterface( PlaylistInterface* interface ) const;
     Tomahawk::collection_ptr collectionForInterface( PlaylistInterface* interface ) const;
-    
+
     QWidget* m_widget;
     InfoBar* m_infobar;
     TopBar* m_topbar;
@@ -141,27 +162,27 @@ private:
 
     AlbumModel* m_superAlbumModel;
     AlbumView* m_superAlbumView;
-    CollectionFlatModel* m_superCollectionFlatModel;
-    CollectionView* m_superCollectionView;
+    TreeModel* m_superCollectionModel;
+    ArtistView* m_superCollectionView;
     WelcomeWidget* m_welcomeWidget;
-    LoadingSpinner* m_loadingSpinner;
-    
+
     QList< Tomahawk::collection_ptr > m_superCollections;
 
     QHash< Tomahawk::dynplaylist_ptr, Tomahawk::DynamicWidget* > m_dynamicWidgets;
     QHash< Tomahawk::collection_ptr, CollectionView* > m_collectionViews;
+    QHash< Tomahawk::collection_ptr, ArtistView* > m_treeViews;
     QHash< Tomahawk::collection_ptr, AlbumView* > m_collectionAlbumViews;
     QHash< Tomahawk::artist_ptr, PlaylistView* > m_artistViews;
     QHash< Tomahawk::album_ptr, PlaylistView* > m_albumViews;
     QHash< Tomahawk::playlist_ptr, PlaylistView* > m_playlistViews;
     QHash< Tomahawk::source_ptr, SourceInfoWidget* > m_sourceViews;
-    
+
     QList<Tomahawk::ViewPage*> m_pageHistory;
     int m_historyPosition;
 
     Tomahawk::collection_ptr m_currentCollection;
     int m_currentMode;
-    
+
     QTimer m_filterTimer;
     QString m_filter;
 

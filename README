@@ -1,8 +1,8 @@
 Quickstart on Ubuntu
 --------------------
 
-    $ sudo apt-get install build-essential cmake libtag1c2a libtag1-dev liblastfm-dev libqt4-dev \
-                           libqt4-sql-sqlite libboost-dev zlib1g-dev libgnutls-dev pkg-config
+    $ sudo apt-get install build-essential cmake libtag1c2a libtag1-dev libqt4-dev libqt4-sql-sqlite \
+                           libboost-dev zlib1g-dev libgnutls-dev pkg-config
 
 
 Gloox 1.0 (XMPP library)
@@ -29,7 +29,7 @@ QJson (Qt JSON library)
     $ ./configure && make
     $ sudo make install
 
-libEchonest 1.1.1
+libEchonest 1.1.4
 ---------------
  See: http://projects.kde.org/projects/playground/libs/libechonest/
 
@@ -56,7 +56,7 @@ Quickstart on OS X
 
  Install homebrew
     $ ruby -e "$(curl -fsSL https://gist.github.com/raw/323731/install_homebrew.rb)"
-    $ brew install cmake qt qjson gloox taglib boost liblastfm
+    $ brew install cmake qt qjson gloox taglib boost
 
  Install libEchnoest & CLucene as per the above instructions.
 
@@ -89,23 +89,18 @@ Dependencies
   TagLib 1.6.2 http://developer.kde.org/~wheeler/taglib.html
   Boost 1.3x http://www.boost.org/
   CLucene 0.9.23 (0.9.21 will fail) http://clucene.sourceforge.net/download.shtml
-  liblastfm 0.3.3 http://github.com/mxcl/liblastfm/
-  libechonest 1.1.1 http://projects.kde.org/projects/playground/libs/libechonest/
+  libechonest 1.1.4 http://projects.kde.org/projects/playground/libs/libechonest/
 
  Third party libraries that we ship with our source:
 
   MiniUPnP http://miniupnp.free.fr/
+  liblastfm 0.4.0 http://github.com/jonocole/liblastfm/
 
 
 To build the app:
 -----------------
-
     $ mkdir build && cd build
-
- Pick one of the following two choices. If uncertain pick the second one, you probably want a GUI.
-    $ cmake -Dgui=no ..     # enables headless mode, build without GUI
-    $ cmake ..              # normal build including GUI
-
+    $ cmake ..
     $ make
 
 To run the app:

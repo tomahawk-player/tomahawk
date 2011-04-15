@@ -1,3 +1,21 @@
+/* === This file is part of Tomahawk Player - <http://tomahawk-player.org> ===
+ *
+ *   Copyright 2010-2011, Christian Muehlhaeuser <muesli@tomahawk-player.org>
+ *
+ *   Tomahawk is free software: you can redistribute it and/or modify
+ *   it under the terms of the GNU General Public License as published by
+ *   the Free Software Foundation, either version 3 of the License, or
+ *   (at your option) any later version.
+ *
+ *   Tomahawk is distributed in the hope that it will be useful,
+ *   but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ *   GNU General Public License for more details.
+ *
+ *   You should have received a copy of the GNU General Public License
+ *   along with Tomahawk. If not, see <http://www.gnu.org/licenses/>.
+ */
+
 #include "query.h"
 
 #include "collection.h"
@@ -26,6 +44,8 @@ Query::get( const QString& artist, const QString& track, const QString& album, c
 
 Query::Query( const QString& artist, const QString& track, const QString& album, const QID& qid )
     : m_solved( false )
+    , m_playable( false )
+    , m_resolveFinished( false )
     , m_qid( qid )
     , m_artist( artist )
     , m_album( album )
@@ -42,9 +62,8 @@ Query::Query( const QString& artist, const QString& track, const QString& album,
 void
 Query::addResults( const QList< Tomahawk::result_ptr >& newresults )
 {
-    bool becameSolved = false;
     {
-//        QMutexLocker lock( &m_mut );
+        QMutexLocker lock( &m_mutex );
         m_results.append( newresults );
         qStableSort( m_results.begin(), m_results.end(), Query::resultSorter );
 
@@ -70,10 +89,13 @@ Query::refreshResults()
 void
 Query::onResultStatusChanged()
 {
-    if ( m_results.count() )
-        qStableSort( m_results.begin(), m_results.end(), Query::resultSorter );
-    checkResults();
+    {
+        QMutexLocker lock( &m_mutex );
+        if ( m_results.count() )
+            qStableSort( m_results.begin(), m_results.end(), Query::resultSorter );
+    }
 
+    checkResults();
     emit resultsChanged();
 }
 
@@ -82,7 +104,7 @@ void
 Query::removeResult( const Tomahawk::result_ptr& result )
 {
     {
-//        QMutexLocker lock( &m_mut );
+        QMutexLocker lock( &m_mutex );
         m_results.removeAll( result );
     }
 
@@ -95,6 +117,7 @@ void
 Query::onResolvingFinished()
 {
 //    qDebug() << Q_FUNC_INFO << "Finished resolving." << toString();
+    m_resolveFinished = true;
     emit resolvingFinished( m_solved );
 }
 
@@ -102,7 +125,7 @@ Query::onResolvingFinished()
 QList< result_ptr >
 Query::results() const
 {
-//    QMutexLocker lock( &m_mut );
+    QMutexLocker lock( &m_mutex );
     return m_results;
 }
 
@@ -110,7 +133,7 @@ Query::results() const
 unsigned int
 Query::numResults() const
 {
-//    QMutexLocker lock( &m_mut );
+    QMutexLocker lock( &m_mutex );
     return m_results.length();
 }
 
@@ -130,7 +153,18 @@ Query::id() const
 bool
 Query::resultSorter( const result_ptr& left, const result_ptr& right )
 {
-    return left->score() > right->score();
+    const float ls = left->score();
+    const float rs = right->score();
+
+    if ( ls == rs )
+    {
+        if ( !left->collection().isNull() && left->collection()->source()->isLocal() )
+            return true;
+        else
+            return false;
+    }
+
+    return ls > rs;
 }
 
 
@@ -149,18 +183,33 @@ Query::checkResults()
 {
     bool becameSolved = false;
     bool becameUnsolved = true;
-
-    // hook up signals, and check solved status
-    foreach( const result_ptr& rp, m_results )
     {
-        if ( !m_solved && rp->score() > 0.99 && rp->collection()->source()->isOnline() )
+        QMutexLocker lock( &m_mutex );
+
+        m_playable = false;
+
+        // hook up signals, and check solved status
+        foreach( const result_ptr& rp, m_results )
         {
-            m_solved = true;
-            becameSolved = true;
-        }
-        if ( rp->score() > 0.99 && rp->collection()->source()->isOnline() )
-        {
-            becameUnsolved = false;
+            if ( rp->score() > 0.0 && rp->collection().isNull() )
+            {
+                m_playable = true;
+            }
+            if ( !rp->collection().isNull() && rp->collection()->source()->isOnline() )
+            {
+                m_playable = true;
+
+                if ( rp->score() > 0.99 )
+                {
+                    becameUnsolved = false;
+
+                    if ( !m_solved )
+                    {
+                        m_solved = true;
+                        becameSolved = true;
+                    }
+                }
+            }
         }
     }
 
@@ -184,7 +233,7 @@ Query::toVariant() const
     m.insert( "track", track() );
     m.insert( "duration", duration() );
     m.insert( "qid", id() );
-    
+
     return m;
 }
 

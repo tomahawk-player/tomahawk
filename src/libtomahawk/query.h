@@ -1,3 +1,21 @@
+/* === This file is part of Tomahawk Player - <http://tomahawk-player.org> ===
+ * 
+ *   Copyright 2010-2011, Christian Muehlhaeuser <muesli@tomahawk-player.org>
+ *
+ *   Tomahawk is free software: you can redistribute it and/or modify
+ *   it under the terms of the GNU General Public License as published by
+ *   the Free Software Foundation, either version 3 of the License, or
+ *   (at your option) any later version.
+ *
+ *   Tomahawk is distributed in the hope that it will be useful,
+ *   but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ *   GNU General Public License for more details.
+ *
+ *   You should have received a copy of the GNU General Public License
+ *   along with Tomahawk. If not, see <http://www.gnu.org/licenses/>.
+ */
+
 #ifndef QUERY_H
 #define QUERY_H
 
@@ -41,9 +59,13 @@ public:
     /// sorter for list of results
     static bool resultSorter( const result_ptr &left, const result_ptr& right );
 
-    /// solved=true when a perfect result has been found (score of 1.0)
+    /// true when a perfect result has been found (score of 1.0)
     bool solved() const { return m_solved; }
+    /// true when any result has been found (score may be less than 1.0)
+    bool playable() const { return m_playable; }
 
+    bool resolvingFinished() const { return m_resolveFinished; }
+    
     unsigned int lastPipelineWeight() const { return m_lastpipelineweight; }
     void setLastPipelineWeight( unsigned int w ) { m_lastpipelineweight = w; }
 
@@ -52,7 +74,8 @@ public:
     void setTrack( const QString& track ) { m_track = track; }
     void setResultHint( const QString& resultHint ) { m_resultHint = resultHint; }
     void setDuration( int duration ) { m_duration = duration; }
-
+    void setResolveFinished( bool resolved ) { m_resolveFinished = resolved; }
+    
     QVariant toVariant() const;
     QString toString() const;
 
@@ -61,7 +84,7 @@ public:
     QString album() const { return m_album; }
     QString track() const { return m_track; }
     int duration() const { return m_duration; }
-    
+
 signals:
     void resultsAdded( const QList<Tomahawk::result_ptr>& );
     void resultsRemoved( const Tomahawk::result_ptr& );
@@ -87,6 +110,8 @@ private:
 
     QList< Tomahawk::result_ptr > m_results;
     bool m_solved;
+    bool m_playable;
+    bool m_resolveFinished;
     mutable QID m_qid;
     unsigned int m_lastpipelineweight;
 
@@ -95,6 +120,8 @@ private:
     QString m_track;
     int m_duration;
     QString m_resultHint;
+
+    mutable QMutex m_mutex;
 };
 
 }; //ns

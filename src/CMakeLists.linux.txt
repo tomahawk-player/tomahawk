@@ -10,5 +10,3 @@ ELSE()
          gnutls
        )
 ENDIF()
-
-#include( "CPack.txt" )

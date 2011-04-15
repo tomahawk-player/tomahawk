@@ -1,3 +1,51 @@
+Version 0.1.0:
+    * You can now browse and play collections in a tree-view.
+    * Watch folders for changes and automatically update your collection. This
+      is on by default; you can turn it off on the Local Music tab in the
+      settings dialog. Note that this triggers only on files or folders being
+      added to or removed from folders; it is not watch individual files as
+      most OSes can't support enough file watches to handle a normal-sized
+      music collection.
+
+Version 0.0.4:
+    * Fixed a crash situation caused by sources going on- or offline.
+
+Version 0.0.3:
+    * Show spinner while resolving playlists.
+    * Go back to previous page visible when deleting a playlist.
+    * Fixed issue where automatic playlists and station summaries were not
+      updated in the playlist header.
+    * Fixed an issue which caused duplicate items when rescanning.
+    * Revert change introduced in 0.0.2 causing Twitter protocol to not try
+      to reconnect to a peer if it couldn't connect the first time the plugin
+      was connected. This caused confusing (and for most unwanted) behavior.
+    * Fix crashes in Twitter authentication.
+    * Properly honor the chosen port number if a static host and port are
+      marked as preferred.
+    * Don't automatically try to resolve all incoming playback logs. This
+      speeds up importing sources a lot.
+    * Faster painting of playlists with lots of unresolved tracks.
+    * Prefer local results when results' score is equal.
+    * (Windows) The tomahawk:// protocol handler works on Windows now.
+    * (Windows) Fixed launching Tomahawk from Windows installer with admin privileges.
+    * (Windows) Prevent launching a second instance on Windows.
+
+Version 0.0.2:
+    * Don't reconnect to Jabber if the settings dialog is closed successfully
+      but the Jabber settings haven't changed.
+    * Don't run a rescan of the local collection if the settings dialog is
+      closed successfully but the path hasn't changed.
+    * Don't attempt to connect to unavailable Twitter peers over and over.
+    * Find Twitter peers if the peer's Got Tomahawk? tweet is not their latest
+      tweet.
+    * Got Tomahawk? tweets can now be sent directly to specific users or in
+      private direct messages.
+    * Display a helpful message when someone sends a normal instant message to
+      the Tomahawk XMPP presence.
+    * Incompatible change: Twitter SIP protocol has changed slightly. 0.0.1
+      clients will not be able to talk to newer clients.
+    * Don't let long playlist or summary names force a large Tomahawk window.
+    * Tomahawk now asks you to authorize new contacts.
+
 Version 0.0.1:
-    Features:
-        * Knocks your socks off
+    * First public release.

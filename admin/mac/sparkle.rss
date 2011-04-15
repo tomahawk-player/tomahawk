@@ -2,16 +2,24 @@
 <rss version="2.0" xmlns:sparkle="http://www.andymatuschak.org/xml-namespaces/sparkle"  xmlns:dc="http://purl.org/dc/elements/1.1/">
    <channel>
       <title>Tomahawk Player Changelog</title>
-      <link>http://download.tomahawk-player.org/sparkle</link>
-      <description>Most recent changes with links to updates.</description>
+      <link>http://www.gettomahawk.com</link>
+      <description>Tomahawk Player</description>
       <language>en</language>
          <item>
             <title>Version 0.0.1 (Tomahawk Player - It Lives!)</title>
 						<sparkle:releaseNotesLink>
-						https://github.com/tomahawk-player/tomahawk/raw/master/ChangeLog
+						https://github.com/tomahawk-player/tomahawk/raw/0.0.1/ChangeLog
 						</sparkle:releaseNotesLink>
-            <pubDate>Fri, 04 Mar 2011 16:05:15 -0500</pubDate>
-            <enclosure url="http://download.tomahawk-player.org/sparkle/updates/tomahawk0.1.tar.bz2" sparkle:version="0.0.1" length="10627176" type="application/octet-stream" sparkle:dsaSignature="MC0CFAyYNZq58X7hPC7Qn+DtotVgym7pAhUA5hkLGllYxjOwwCf7i2LxUsvGyps=" />
+            <pubDate>Fri, 25 Mar 2011 00:00:01 +0100</pubDate>
+            <enclosure url="http://download.tomahawk-player.org/sparkle/updates/tomahawk-0.0.1.tar.bz2" sparkle:version="0.0.1" length="10627176" type="application/octet-stream" sparkle:dsaSignature="MC0CFAyYNZq58X7hPC7Qn+DtotVgym7pAhUA5hkLGllYxjOwwCf7i2LxUsvGyps=" />
+         </item>
+         <item>
+            <title>Version 0.0.2 (Tomahawk Player - It Lives!)</title>
+						<sparkle:releaseNotesLink>
+						https://github.com/tomahawk-player/tomahawk/raw/0.0.2/ChangeLog
+						</sparkle:releaseNotesLink>
+            <pubDate>Mon, 28 Mar 2011 06:13:01 +0100</pubDate>
+            <enclosure url="http://download.tomahawk-player.org/sparkle/updates/tomahawk-0.0.2.tar.bz2" sparkle:version="0.0.2" length="19831287" type="application/octet-stream" sparkle:dsaSignature="MC0CFC0Hwq9x9BWMF/8sA+c5KfzKoBzFAhUAk9r0IJlxQf9qEJk4IL6bbTWTiuI=" />
          </item>
    </channel>
 </rss>

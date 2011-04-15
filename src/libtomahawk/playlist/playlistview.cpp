@@ -1,3 +1,21 @@
+/* === This file is part of Tomahawk Player - <http://tomahawk-player.org> ===
+ *
+ *   Copyright 2010-2011, Christian Muehlhaeuser <muesli@tomahawk-player.org>
+ *
+ *   Tomahawk is free software: you can redistribute it and/or modify
+ *   it under the terms of the GNU General Public License as published by
+ *   the Free Software Foundation, either version 3 of the License, or
+ *   (at your option) any later version.
+ *
+ *   Tomahawk is distributed in the hope that it will be useful,
+ *   but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ *   GNU General Public License for more details.
+ *
+ *   You should have received a copy of the GNU General Public License
+ *   along with Tomahawk. If not, see <http://www.gnu.org/licenses/>.
+ */
+
 #include "playlistview.h"
 
 #include <QDebug>
@@ -27,19 +45,29 @@ PlaylistView::~PlaylistView()
 
 
 void
-PlaylistView::setModel( PlaylistModel* model )
+PlaylistView::setModel( QAbstractItemModel* model )
+{
+    Q_UNUSED( model );
+    qDebug() << "Explicitly use setPlaylistModel instead";
+    Q_ASSERT( false );
+}
+
+
+void
+PlaylistView::setPlaylistModel( PlaylistModel* model )
 {
     m_model = model;
 
-    TrackView::setModel( model );
+    TrackView::setTrackModel( m_model );
     setColumnHidden( 5, true ); // Hide age column per default
 
-    if ( !model->playlist().isNull() )
-        setGuid( QString( "playlistview/%1" ).arg( model->playlist()->guid() ) );
+    if ( !m_model->playlist().isNull() )
+        setGuid( QString( "playlistview/%1" ).arg( m_model->playlist()->guid() ) );
     else
         setGuid( "playlistview" );
 
-    connect( model, SIGNAL( trackCountChanged( unsigned int ) ), SLOT( onTrackCountChanged( unsigned int ) ) );
+    connect( m_model, SIGNAL( trackCountChanged( unsigned int ) ), SLOT( onTrackCountChanged( unsigned int ) ) );
+    connect( m_model, SIGNAL( playlistDeleted() ), SLOT( onDeleted() ) );
 }
 
 
@@ -134,4 +162,14 @@ bool
 PlaylistView::jumpToCurrentTrack()
 {
     scrollTo( proxyModel()->currentItem(), QAbstractItemView::PositionAtCenter );
+    return true;
+}
+
+
+void
+PlaylistView::onDeleted()
+{
+    qDebug() << Q_FUNC_INFO;
+    emit destroyed( widget() );
+    deleteLater();
 }

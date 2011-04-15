@@ -1,3 +1,21 @@
+/* === This file is part of Tomahawk Player - <http://tomahawk-player.org> ===
+ *
+ *   Copyright 2010-2011, Christian Muehlhaeuser <muesli@tomahawk-player.org>
+ *
+ *   Tomahawk is free software: you can redistribute it and/or modify
+ *   it under the terms of the GNU General Public License as published by
+ *   the Free Software Foundation, either version 3 of the License, or
+ *   (at your option) any later version.
+ *
+ *   Tomahawk is distributed in the hope that it will be useful,
+ *   but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ *   GNU General Public License for more details.
+ *
+ *   You should have received a copy of the GNU General Public License
+ *   along with Tomahawk. If not, see <http://www.gnu.org/licenses/>.
+ */
+
 #include "source.h"
 
 #include "collection.h"
@@ -12,7 +30,7 @@
 using namespace Tomahawk;
 
 
-Source::Source( int id, const QString &username )
+Source::Source( int id, const QString& username )
     : QObject()
     , m_isLocal( false )
     , m_online( false )
@@ -20,7 +38,7 @@ Source::Source( int id, const QString &username )
     , m_id( id )
     , m_cc( 0 )
 {
-    qDebug() << Q_FUNC_INFO;
+    qDebug() << Q_FUNC_INFO << id << username;
 
     if ( id == 0 )
     {
@@ -128,6 +146,7 @@ Source::setOnline()
 {
     if ( m_online )
         return;
+    m_online = true;
 
     // ensure username is in the database
     DatabaseCommand_addSource* cmd = new DatabaseCommand_addSource( m_username, m_friendlyname );
@@ -135,7 +154,6 @@ Source::setOnline()
                     SLOT( dbLoaded( unsigned int, const QString& ) ) );
     Database::instance()->enqueue( QSharedPointer<DatabaseCommand>(cmd) );
 
-    m_online = true;
     emit online();
 }
 
@@ -163,6 +181,7 @@ Source::scanningProgress( unsigned int files )
 void
 Source::scanningFinished( unsigned int files )
 {
+    Q_UNUSED( files );
     m_textStatus = QString();
     emit stateChanged();
 }
@@ -171,6 +190,7 @@ Source::scanningFinished( unsigned int files )
 void
 Source::onStateChanged( DBSyncConnection::State newstate, DBSyncConnection::State oldstate, const QString& info )
 {
+    Q_UNUSED( oldstate );
     QString msg;
     switch( newstate )
     {
@@ -199,6 +219,16 @@ Source::onStateChanged( DBSyncConnection::State newstate, DBSyncConnection::Stat
 
     m_textStatus = msg;
     emit stateChanged();
+}
+
+
+unsigned int
+Source::trackCount() const
+{
+    if ( m_stats.contains( "numfiles" ) )
+        return m_stats.value( "numfiles" ).toUInt();
+    else
+        return 0;
 }
 
 

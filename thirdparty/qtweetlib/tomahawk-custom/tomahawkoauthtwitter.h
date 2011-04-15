@@ -16,6 +16,9 @@ public:
     
 protected:
     virtual int authorizationWidget();
+    
+private slots:
+    void error();
 };
 
 #endif

@@ -1,3 +1,21 @@
+/* === This file is part of Tomahawk Player - <http://tomahawk-player.org> ===
+ *
+ *   Copyright 2010-2011, Christian Muehlhaeuser <muesli@tomahawk-player.org>
+ *
+ *   Tomahawk is free software: you can redistribute it and/or modify
+ *   it under the terms of the GNU General Public License as published by
+ *   the Free Software Foundation, either version 3 of the License, or
+ *   (at your option) any later version.
+ *
+ *   Tomahawk is distributed in the hope that it will be useful,
+ *   but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *   GNU General Public License for more details.
+ *
+ *   You should have received a copy of the GNU General Public License
+ *   along with Tomahawk. If not, see <http://www.gnu.org/licenses/>.
+ */
+
 #include "tomahawk/tomahawkapp.h"
 
 #include "config.h"
@@ -14,7 +32,7 @@
 #include "artist.h"
 #include "album.h"
 #include "collection.h"
-#include "tomahawk/infosystem.h"
+#include "infosystem/infosystem.h"
 #include "database/database.h"
 #include "database/databasecollection.h"
 #include "database/databasecommand_collectionstats.h"
@@ -33,6 +51,9 @@
 
 #include "audio/audioengine.h"
 #include "utils/xspfloader.h"
+
+#include <lastfm/ws.h>
+#include "config.h"
 
 #ifndef TOMAHAWK_HEADLESS
     #include "tomahawkwindow.h"
@@ -60,6 +81,9 @@ ofstream logfile;
 
 void TomahawkLogHandler( QtMsgType type, const char *msg )
 {
+    static QMutex s_mutex;
+
+    QMutexLocker locker( &s_mutex );
     switch( type )
     {
         case QtDebugMsg:
@@ -121,46 +145,44 @@ using namespace Tomahawk;
 TomahawkApp::TomahawkApp( int& argc, char *argv[] )
     : TOMAHAWK_APPLICATION( argc, argv )
     , m_database( 0 )
+    , m_scanManager( 0 )
     , m_audioEngine( 0 )
     , m_sipHandler( 0 )
     , m_servent( 0 )
     , m_shortcutHandler( 0 )
+    , m_scrubFriendlyName( false )
     , m_mainwindow( 0 )
-    , m_infoSystem( 0 )
 {
-    qsrand( QTime( 0, 0, 0 ).secsTo( QTime::currentTime() ) );
-    
-    // send the first arg to an already running instance, but don't open twice no matter what
-    if( ( argc > 1 && sendMessage( argv[ 1 ] ) ) || sendMessage( "" ) ) {
-        qDebug() << "Sent message, already exists";
-        throw runtime_error( "Already Running" );
-    }
-    
-    connect( this, SIGNAL( messageReceived( QString ) ), this, SLOT( messageReceived( QString ) ) );
-    
-#ifdef TOMAHAWK_HEADLESS
-    m_headless = true;
-#else
-    m_mainwindow = 0;
-    m_headless = arguments().contains( "--headless" );
-    setWindowIcon( QIcon( RESPATH "icons/tomahawk-icon-128x128.png" ) );
-#endif
-
     qDebug() << "TomahawkApp thread:" << this->thread();
     setOrganizationName( QLatin1String( ORGANIZATION_NAME ) );
     setOrganizationDomain( QLatin1String( ORGANIZATION_DOMAIN ) );
     setApplicationName( QLatin1String( APPLICATION_NAME ) );
     setApplicationVersion( QLatin1String( VERSION ) );
-    registerMetaTypes();
     setupLogfile();
-    
+}
+
+void
+TomahawkApp::init()
+{
+    qsrand( QTime( 0, 0, 0 ).secsTo( QTime::currentTime() ) );
+
+    #ifdef TOMAHAWK_HEADLESS
+    m_headless = true;
+    #else
+    m_mainwindow = 0;
+    m_headless = arguments().contains( "--headless" );
+    setWindowIcon( QIcon( RESPATH "icons/tomahawk-icon-128x128.png" ) );
+    #endif
+
+    registerMetaTypes();
+
     Echonest::Config::instance()->setAPIKey( "JRIHWEP6GPOER2QQ6" );
-    
+
     new TomahawkSettings( this );
     m_audioEngine = new AudioEngine;
-    new ScanManager( this );
+    m_scanManager = new ScanManager( this );
     new Pipeline( this );
-    
+
     m_servent = new Servent( this );
     connect( m_servent, SIGNAL( ready() ), SLOT( setupSIP() ) );
 
@@ -169,18 +191,15 @@ TomahawkApp::TomahawkApp( int& argc, char *argv[] )
 
     qDebug() << "Init Echonest Factory.";
     GeneratorFactory::registerFactory( "echonest", new EchonestFactory );
-    
+
+    m_scrubFriendlyName = arguments().contains( "--demo" );
     // Register shortcut handler for this platform
-#ifdef Q_WS_MAC
+    #ifdef Q_WS_MAC
     m_shortcutHandler = new MacShortcutHandler( this );
     Tomahawk::setShortcutHandler( static_cast<MacShortcutHandler*>( m_shortcutHandler) );
 
     Tomahawk::setApplicationHandler( this );
-
-    QFont f( QApplication::font() );
-    f.setPointSize( f.pointSize() - 2 );
-    QApplication::setFont( f );
-#endif
+    #endif
 
     // Connect up shortcuts
     if ( m_shortcutHandler )
@@ -195,29 +214,22 @@ TomahawkApp::TomahawkApp( int& argc, char *argv[] )
         connect( m_shortcutHandler, SIGNAL( mute() ), m_audioEngine, SLOT( mute() ) );
     }
 
+    qDebug() << "Init InfoSystem.";
+    m_infoSystem = new Tomahawk::InfoSystem::InfoSystem( this );
+
 #ifdef LIBLASTFM_FOUND
     qDebug() << "Init Scrobbler.";
     m_scrobbler = new Scrobbler( this );
     qDebug() << "Setting NAM.";
-    TomahawkUtils::setNam( new lastfm::NetworkAccessManager( this ) );
+    TomahawkUtils::setNam( lastfm::nam() );
 
-    connect( m_audioEngine, SIGNAL( started( const Tomahawk::result_ptr& ) ),
-             m_scrobbler,     SLOT( trackStarted( const Tomahawk::result_ptr& ) ), Qt::QueuedConnection );
-
-    connect( m_audioEngine, SIGNAL( paused() ),
-             m_scrobbler,     SLOT( trackPaused() ), Qt::QueuedConnection );
-
-    connect( m_audioEngine, SIGNAL( resumed() ),
-             m_scrobbler,     SLOT( trackResumed() ), Qt::QueuedConnection );
-
-    connect( m_audioEngine, SIGNAL( stopped() ),
-             m_scrobbler,     SLOT( trackStopped() ), Qt::QueuedConnection );
-#else
+    #else
     qDebug() << "Setting NAM.";
     TomahawkUtils::setNam( new QNetworkAccessManager );
-#endif
+    #endif
 
     // Set up proxy
+    //FIXME: This overrides the lastfm proxy above?
     if( TomahawkSettings::instance()->proxyType() != QNetworkProxy::NoProxy &&
         !TomahawkSettings::instance()->proxyHost().isEmpty() )
     {
@@ -226,16 +238,19 @@ TomahawkApp::TomahawkApp( int& argc, char *argv[] )
         qDebug() << "Proxy type =" << QString::number( static_cast<int>(TomahawkUtils::proxy()->type()) );
         qDebug() << "Proxy host =" << TomahawkUtils::proxy()->hostName();
         TomahawkUtils::nam()->setProxy( *TomahawkUtils::proxy() );
+        lastfm::nam()->setProxy( *TomahawkUtils::proxy() );
     }
     else
         TomahawkUtils::setProxy( new QNetworkProxy( QNetworkProxy::NoProxy ) );
+
+
+    Echonest::Config::instance()->setAPIKey( "JRIHWEP6GPOER2QQ6" );
+    Echonest::Config::instance()->setNetworkAccessManager( TomahawkUtils::nam() );
 
     QNetworkProxy::setApplicationProxy( *TomahawkUtils::proxy() );
 
     qDebug() << "Init SIP system.";
     m_sipHandler = new SipHandler( this );
-    qDebug() << "Init InfoSystem.";
-    m_infoSystem = new Tomahawk::InfoSystem::InfoSystem( this );
 
     #ifndef TOMAHAWK_HEADLESS
     if ( !m_headless )
@@ -245,7 +260,7 @@ TomahawkApp::TomahawkApp( int& argc, char *argv[] )
         m_mainwindow->setWindowTitle( "Tomahawk" );
         m_mainwindow->show();
     }
-#endif
+    #endif
 
     qDebug() << "Init Local Collection.";
     initLocalCollection();
@@ -253,7 +268,6 @@ TomahawkApp::TomahawkApp( int& argc, char *argv[] )
     setupPipeline();
     qDebug() << "Init Servent.";
     startServent();
-    //loadPlugins();
 
     if( arguments().contains( "--http" ) || TomahawkSettings::instance()->value( "network/http", true ).toBool() )
     {
@@ -262,7 +276,7 @@ TomahawkApp::TomahawkApp( int& argc, char *argv[] )
     }
 
 #ifndef TOMAHAWK_HEADLESS
-    if ( !TomahawkSettings::instance()->hasScannerPath() )
+    if ( !TomahawkSettings::instance()->hasScannerPaths() )
     {
         m_mainwindow->showSettingsDialog();
     }
@@ -274,14 +288,21 @@ TomahawkApp::~TomahawkApp()
 {
     qDebug() << Q_FUNC_INFO;
 
+    // stop script resolvers
+    foreach( Tomahawk::ExternalResolver* r, m_scriptResolvers.values() )
+    {
+        delete r;
+    }
+    m_scriptResolvers.clear();
+
     delete m_sipHandler;
     delete m_servent;
-
+    delete m_scanManager;
 #ifndef TOMAHAWK_HEADLESS
     delete m_mainwindow;
     delete m_audioEngine;
 #endif
-
+    delete m_infoSystem;
     delete m_database;
 }
 
@@ -320,7 +341,7 @@ TomahawkApp::registerMetaTypes()
     qRegisterMetaType< QMap<QString, unsigned int> >("QMap<QString, unsigned int>");
     qRegisterMetaType< QMap< QString, plentry_ptr > >("QMap< QString, plentry_ptr >");
     qRegisterMetaType< QHash< QString, QMap<quint32, quint16> > >("QHash< QString, QMap<quint32, quint16> >");
-    
+
     qRegisterMetaType< GeneratorMode>("GeneratorMode");
     qRegisterMetaType<Tomahawk::GeneratorMode>("Tomahawk::GeneratorMode");
     // Extra definition for namespaced-versions of signals/slots required
@@ -330,6 +351,8 @@ TomahawkApp::registerMetaTypes()
     qRegisterMetaType< Tomahawk::query_ptr >("Tomahawk::query_ptr");
     qRegisterMetaType< Tomahawk::source_ptr >("Tomahawk::source_ptr");
     qRegisterMetaType< Tomahawk::dyncontrol_ptr >("Tomahawk::dyncontrol_ptr");
+    qRegisterMetaType< Tomahawk::playlist_ptr >("Tomahawk::playlist_ptr");
+    qRegisterMetaType< Tomahawk::dynplaylist_ptr >("Tomahawk::dynplaylist_ptr");
     qRegisterMetaType< Tomahawk::geninterface_ptr >("Tomahawk::geninterface_ptr");
     qRegisterMetaType< QList<Tomahawk::playlist_ptr> >("QList<Tomahawk::playlist_ptr>");
     qRegisterMetaType< QList<Tomahawk::dynplaylist_ptr> >("QList<Tomahawk::dynplaylist_ptr>");
@@ -392,35 +415,39 @@ TomahawkApp::setupPipeline()
     Pipeline::instance()->addResolver( new DatabaseResolver( 100 ) );
 
     // load script resolvers
-    foreach( QString resolver, TomahawkSettings::instance()->scriptResolvers() )
-        addScriptResolver( resolver );
+    foreach( QString resolver, TomahawkSettings::instance()->enabledScriptResolvers() )
+        enableScriptResolver( resolver );
 }
 
 
 void
-TomahawkApp::addScriptResolver( const QString& path )
+TomahawkApp::enableScriptResolver( const QString& path )
 {
     const QFileInfo fi( path );
     if ( fi.suffix() == "js" || fi.suffix() == "script" )
-        m_scriptResolvers << new QtScriptResolver( path );
+        m_scriptResolvers.insert( path, new QtScriptResolver( path ) );
     else
-        m_scriptResolvers << new ScriptResolver( path );
+        m_scriptResolvers.insert( path, new ScriptResolver( path ) );
 }
 
 
 void
-TomahawkApp::removeScriptResolver( const QString& path )
+TomahawkApp::disableScriptResolver( const QString& path )
 {
-    foreach( Tomahawk::ExternalResolver* r, m_scriptResolvers )
+    if( m_scriptResolvers.contains( path ) )
     {
-        if( r->filePath() == path )
-        {
-            m_scriptResolvers.removeAll( r );
-            connect( r, SIGNAL( finished() ), r, SLOT( deleteLater() ) );
-            r->stop();
-            return;
-        }
+        Tomahawk::ExternalResolver* r = m_scriptResolvers.take( path );
+
+        connect( r, SIGNAL( finished() ), r, SLOT( deleteLater() ) );
+        r->stop();
+        return;
     }
+}
+
+Tomahawk::ExternalResolver*
+TomahawkApp::resolverForPath( const QString& scriptPath )
+{
+    return m_scriptResolvers.value( scriptPath, 0 );
 }
 
 
@@ -446,51 +473,14 @@ TomahawkApp::initLocalCollection()
 void
 TomahawkApp::startServent()
 {
-    bool upnp = !arguments().contains( "--noupnp" ) && TomahawkSettings::instance()->value( "network/upnp", true ).toBool();
-    if ( !Servent::instance()->startListening( QHostAddress( QHostAddress::Any ), upnp ) )
+    bool upnp = !arguments().contains( "--noupnp" ) && TomahawkSettings::instance()->value( "network/upnp", true ).toBool() && !TomahawkSettings::instance()->preferStaticHostPort();
+    int port = TomahawkSettings::instance()->externalPort();
+    if ( !Servent::instance()->startListening( QHostAddress( QHostAddress::Any ), upnp, port ) )
     {
         qDebug() << "Failed to start listening with servent";
         exit( 1 );
     }
 }
-
-
-void
-TomahawkApp::loadPlugins()
-{
-    // look in same dir as executable for plugins
-    QDir dir( TomahawkApp::instance()->applicationDirPath() );
-    QStringList filters;
-    filters << "*.so" << "*.dll" << "*.dylib";
-
-    QStringList files = dir.entryList( filters );
-    foreach( const QString& filename, files )
-    {
-        qDebug() << "Attempting to load" << QString( "%1/%2" ).arg( dir.absolutePath() ).arg( filename );
-
-        QPluginLoader loader( dir.absoluteFilePath( filename ) );
-        if ( QObject* inst = loader.instance() )
-        {
-            TomahawkPlugin* pluginst = qobject_cast<TomahawkPlugin *>(inst);
-            if ( !pluginst )
-                continue;
-
-            PluginAPI* api = new PluginAPI( Pipeline::instance() );
-            TomahawkPlugin* plugin = pluginst->factory( api );
-            qDebug() << "Loaded Plugin:" << plugin->name();
-            qDebug() << plugin->description();
-            m_plugins.append( plugin );
-
-            // plugins responsibility to register itself as a resolver/collection
-            // all we need to do is create an instance of it.
-        }
-        else
-        {
-            qDebug() << "PluginLoader failed to create instance:" << filename << " Err:" << loader.errorString();
-        }
-    }
-}
-
 
 void
 TomahawkApp::setupSIP()
@@ -526,8 +516,8 @@ TomahawkApp::loadUrl( const QString& url )
     if( url.contains( "tomahawk://" ) ) {
         QString cmd = url.mid( 11 );
         qDebug() << "tomahawk!s" << cmd;
-        if( cmd.startsWith( "load/" ) ) {
-            cmd = cmd.mid( 5 );
+        if( cmd.startsWith( "load/?" ) ) {
+            cmd = cmd.mid( 6 );
             qDebug() << "loading.." << cmd;
             if( cmd.startsWith( "xspf=" ) ) {
                 XSPFLoader* l = new XSPFLoader( true, this );
@@ -541,21 +531,23 @@ TomahawkApp::loadUrl( const QString& url )
         if( f.exists() && info.suffix() == "xspf" ) {
             XSPFLoader* l = new XSPFLoader( true, this );
             qDebug() << "Loading spiff:" << url;
-            l->load( QUrl( url ) );
+            l->load( QUrl::fromUserInput( url ) );
         }
     }
     return true;
 }
 
 
-void 
-TomahawkApp::messageReceived( const QString& msg ) 
+void
+TomahawkApp::instanceStarted( KDSingleApplicationGuard::Instance instance )
 {
-    qDebug() << "MESSAGE RECEIVED" << msg;
-    if( msg.isEmpty() ) {
+    qDebug() << "INSTANCE STARTED!" << instance.pid << instance.arguments;
+
+    if( instance.arguments.size() < 2 )
+    {
         return;
     }
-    
-    loadUrl( msg );
+
+    loadUrl( instance.arguments.at( 1 ) );
 }
 

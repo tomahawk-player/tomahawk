@@ -1,3 +1,21 @@
+/* === This file is part of Tomahawk Player - <http://tomahawk-player.org> ===
+ *
+ *   Copyright 2010-2011, Christian Muehlhaeuser <muesli@tomahawk-player.org>
+ *
+ *   Tomahawk is free software: you can redistribute it and/or modify
+ *   it under the terms of the GNU General Public License as published by
+ *   the Free Software Foundation, either version 3 of the License, or
+ *   (at your option) any later version.
+ *
+ *   Tomahawk is distributed in the hope that it will be useful,
+ *   but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ *   GNU General Public License for more details.
+ *
+ *   You should have received a copy of the GNU General Public License
+ *   along with Tomahawk. If not, see <http://www.gnu.org/licenses/>.
+ */
+
 #include "topbar.h"
 #include "ui_topbar.h"
 
@@ -54,8 +72,6 @@ TopBar::TopBar( QWidget* parent )
     ui->radioDetailed->setFocusPolicy( Qt::NoFocus );
     ui->radioCloud->setFocusPolicy( Qt::NoFocus );
 
-    ui->radioDetailed->setEnabled( false );
-
     connect( ui->radioNormal, SIGNAL( clicked() ), SIGNAL( flatMode() ) );
     connect( ui->radioDetailed, SIGNAL( clicked() ), SIGNAL( artistMode() ) );
     connect( ui->radioCloud, SIGNAL( clicked() ), SIGNAL( albumMode() ) );
@@ -69,19 +85,19 @@ TopBar::TopBar( QWidget* parent )
 
     connect( PlaylistManager::instance(), SIGNAL( numSourcesChanged( unsigned int ) ),
                                             SLOT( setNumSources( unsigned int ) ) );
-    
+
     connect( PlaylistManager::instance(), SIGNAL( numTracksChanged( unsigned int ) ),
                                             SLOT( setNumTracks( unsigned int ) ) );
-    
+
     connect( PlaylistManager::instance(), SIGNAL( numArtistsChanged( unsigned int ) ),
                                             SLOT( setNumArtists( unsigned int ) ) );
-    
+
     connect( PlaylistManager::instance(), SIGNAL( numShownChanged( unsigned int ) ),
                                             SLOT( setNumShown( unsigned int ) ) );
-    
+
     connect( PlaylistManager::instance(), SIGNAL( statsAvailable( bool ) ),
                                             SLOT( setStatsVisible( bool ) ) );
-    
+
     connect( PlaylistManager::instance(), SIGNAL( modesAvailable( bool ) ),
                                             SLOT( setModesVisible( bool ) ) );
 

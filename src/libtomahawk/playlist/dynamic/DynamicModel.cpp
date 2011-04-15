@@ -1,18 +1,20 @@
-/****************************************************************************************
- * Copyright (c) 2011 Leo Franchi <lfranchi@kde.org>                                    *
- *                                                                                      *
- * This program is free software; you can redistribute it and/or modify it under        *
- * the terms of the GNU General Public License as published by the Free Software        *
- * Foundation; either version 2 of the License, or (at your option) any later           *
- * version.                                                                             *
- *                                                                                      *
- * This program is distributed in the hope that it will be useful, but WITHOUT ANY      *
- * WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A      *
- * PARTICULAR PURPOSE. See the GNU General Public License for more details.             *
- *                                                                                      *
- * You should have received a copy of the GNU General Public License along with         *
- * this program.  If not, see <http://www.gnu.org/licenses/>.                           *
- ****************************************************************************************/
+/* === This file is part of Tomahawk Player - <http://tomahawk-player.org> ===
+ * 
+ *   Copyright 2010-2011, Christian Muehlhaeuser <muesli@tomahawk-player.org>
+ *
+ *   Tomahawk is free software: you can redistribute it and/or modify
+ *   it under the terms of the GNU General Public License as published by
+ *   the Free Software Foundation, either version 3 of the License, or
+ *   (at your option) any later version.
+ *
+ *   Tomahawk is distributed in the hope that it will be useful,
+ *   but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ *   GNU General Public License for more details.
+ *
+ *   You should have received a copy of the GNU General Public License
+ *   along with Tomahawk. If not, see <http://www.gnu.org/licenses/>.
+ */
 
 #include "playlist/dynamic/DynamicModel.h"
 #include "GeneratorInterface.h"
@@ -40,8 +42,10 @@ DynamicModel::~DynamicModel()
 }
 
 void 
-DynamicModel::loadPlaylist( const Tomahawk::dynplaylist_ptr& playlist )
+DynamicModel::loadPlaylist( const Tomahawk::dynplaylist_ptr& playlist, bool loadEntries )
 {
+    Q_UNUSED( loadEntries );
+
     if( !m_playlist.isNull() ) {
         disconnect( m_playlist->generator().data(), SIGNAL( nextTrackGenerated( Tomahawk::query_ptr ) ), this, SLOT( newTrackGenerated( Tomahawk::query_ptr ) ) );
     }
@@ -52,6 +56,9 @@ DynamicModel::loadPlaylist( const Tomahawk::dynplaylist_ptr& playlist )
     
     connect( m_playlist->generator().data(), SIGNAL( nextTrackGenerated( Tomahawk::query_ptr ) ), this, SLOT( newTrackGenerated( Tomahawk::query_ptr ) ) );
     PlaylistModel::loadPlaylist( m_playlist, m_playlist->mode() == Static );
+    
+    if( m_playlist->mode() == OnDemand )
+        emit trackCountChanged( rowCount( QModelIndex() ) );
 }
 
 QString 
@@ -76,7 +83,6 @@ DynamicModel::newTrackGenerated( const Tomahawk::query_ptr& query )
 {
     if( m_onDemandRunning ) {
         connect( query.data(), SIGNAL( resolvingFinished( bool ) ), this, SLOT( trackResolveFinished( bool ) ) );
-        connect( query.data(), SIGNAL( solvedStateChanged( bool ) ), this, SLOT( trackResolved( bool ) ) );
     
         append( query );
     }
@@ -101,31 +107,14 @@ DynamicModel::changeStation()
         m_playlist->generator()->startOnDemand();
 }
 
-
-void 
-DynamicModel::trackResolved( bool resolved )
-{   
-    if( !resolved )
-        return;
-    
-    Query* q = qobject_cast<Query*>(sender());
-    qDebug() << "Got successful resolved track:" << q->track() << q->artist() << m_lastResolvedRow << m_currentAttempts;
-    
-    if( m_currentAttempts > 0 ) {
-        qDebug() << "EMITTING AN ASK FOR COLLAPSE:" << m_lastResolvedRow << m_currentAttempts;
-        emit collapseFromTo( m_lastResolvedRow, m_currentAttempts );
-    }
-    m_currentAttempts = 0;
-    m_searchingForNext = false;
-
-    emit checkForOverflow();
-}
-
 void 
 DynamicModel::trackResolveFinished( bool success )
 {
-    if( !success ) { // if it was successful, we've already gotten a trackResolved() signal
-        Query* q = qobject_cast<Query*>(sender());
+    Q_UNUSED( success );
+
+    Query* q = qobject_cast<Query*>(sender());
+
+    if( !q->playable() ) {
         qDebug() << "Got not resolved track:" << q->track() << q->artist() << m_lastResolvedRow << m_currentAttempts;
         m_currentAttempts++;
         
@@ -137,6 +126,18 @@ DynamicModel::trackResolveFinished( bool success )
             m_startingAfterFailed = true;
             emit trackGenerationFailure( tr( "Could not find a playable track.\n\nPlease change the filters or try again." ) );
         }
+    }
+    else {
+        qDebug() << "Got successful resolved track:" << q->track() << q->artist() << m_lastResolvedRow << m_currentAttempts;
+        
+        if( m_currentAttempts > 0 ) {
+            qDebug() << "EMITTING AN ASK FOR COLLAPSE:" << m_lastResolvedRow << m_currentAttempts;
+            emit collapseFromTo( m_lastResolvedRow, m_currentAttempts );
+        }
+        m_currentAttempts = 0;
+        m_searchingForNext = false;
+        
+        emit checkForOverflow();
     }
 }
 
@@ -179,8 +180,8 @@ DynamicModel::filterUnresolved( const QList< query_ptr >& entries )
     
     foreach( const query_ptr& q, entries ) {
         connect( q.data(), SIGNAL( resolvingFinished( bool ) ), this, SLOT( filteringTrackResolved( bool ) ) );
-        Pipeline::instance()->resolve( q );
-    }    
+    }
+    Pipeline::instance()->resolve( entries, true );
 }
 
 void 
@@ -216,7 +217,9 @@ DynamicModel::filteringTrackResolved( bool successful )
         if( m_playlist->mode() == OnDemand ) {
             m_lastResolvedRow = rowCount( QModelIndex() );
         }
-    }       
+    }
+    if( m_toResolveList.isEmpty() && rowCount( QModelIndex() ) == 0 ) // we failed
+        emit trackGenerationFailure( tr( "Could not find a playable track.\n\nPlease change the filters or try again." ) );
 }
 
 

@@ -1,3 +1,21 @@
+/* === This file is part of Tomahawk Player - <http://tomahawk-player.org> ===
+ *
+ *   Copyright 2010-2011, Christian Muehlhaeuser <muesli@tomahawk-player.org>
+ *
+ *   Tomahawk is free software: you can redistribute it and/or modify
+ *   it under the terms of the GNU General Public License as published by
+ *   the Free Software Foundation, either version 3 of the License, or
+ *   (at your option) any later version.
+ *
+ *   Tomahawk is distributed in the hope that it will be useful,
+ *   but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ *   GNU General Public License for more details.
+ *
+ *   You should have received a copy of the GNU General Public License
+ *   along with Tomahawk. If not, see <http://www.gnu.org/licenses/>.
+ */
+
 #include "config.h"
 
 #include <QCryptographicHash>
@@ -6,6 +24,7 @@
 #include <QFileDialog>
 #include <QMessageBox>
 #include <QNetworkProxy>
+#include <QVBoxLayout>
 
 #ifdef LIBLASTFM_FOUND
 #include <lastfm/ws.h>
@@ -21,6 +40,9 @@
 #include "sip/SipHandler.h"
 #include <database/database.h>
 #include "scanmanager.h"
+#include "resolverconfigdelegate.h"
+#include "resolversmodel.h"
+#include "resolverconfigwrapper.h"
 
 static QString
 md5( const QByteArray& src )
@@ -28,7 +50,6 @@ md5( const QByteArray& src )
     QByteArray const digest = QCryptographicHash::hash( src, QCryptographicHash::Md5 );
     return QString::fromLatin1( digest.toHex() ).rightJustified( 32, '0' );
 }
-
 
 SettingsDialog::SettingsDialog( QWidget *parent )
     : QDialog( parent )
@@ -68,25 +89,29 @@ SettingsDialog::SettingsDialog( QWidget *parent )
     }
 
     // MUSIC SCANNER
-    ui->lineEditMusicPath->setText( s->scannerPath() );
+    //FIXME: MULTIPLECOLLECTIONDIRS
+    if ( s->scannerPaths().count() )
+        ui->lineEditMusicPath->setText( s->scannerPaths().first() );
+    ui->checkBoxWatchForChanges->setChecked( s->watchForChanges() );
 
     // LAST FM
     ui->checkBoxEnableLastfm->setChecked( s->scrobblingEnabled() );
     ui->lineEditLastfmUsername->setText( s->lastFmUsername() );
     ui->lineEditLastfmPassword->setText(s->lastFmPassword() );
     connect( ui->pushButtonTestLastfmLogin, SIGNAL( clicked( bool) ), this, SLOT( testLastFmLogin() ) );
-    
+
     // SCRIPT RESOLVER
     ui->removeScript->setEnabled( false );
-    foreach( const QString& resolver, s->scriptResolvers() ) {
-        QFileInfo info( resolver );
-        ui->scriptList->addTopLevelItem( new QTreeWidgetItem( QStringList() << info.baseName() << resolver ) );
-        
-    }
-    connect( ui->scriptList, SIGNAL( itemClicked( QTreeWidgetItem*, int ) ), this, SLOT( scriptSelectionChanged() ) );
+    ResolverConfigDelegate* del = new ResolverConfigDelegate( this );
+    connect( del, SIGNAL( openConfig( QString ) ), this, SLOT( openResolverConfig( QString ) ) );
+    ui->scriptList->setItemDelegate( del );
+    m_resolversModel = new ResolversModel( s->allScriptResolvers(), s->enabledScriptResolvers(), this );
+    ui->scriptList->setModel( m_resolversModel );
+
+    connect( ui->scriptList->selectionModel(), SIGNAL( selectionChanged( QItemSelection,QItemSelection ) ), this, SLOT( scriptSelectionChanged() ) );
     connect( ui->addScript, SIGNAL( clicked( bool ) ), this, SLOT( addScriptResolver() ) );
     connect( ui->removeScript, SIGNAL( clicked( bool ) ), this, SLOT( removeScriptResolver() ) );
-    
+
     connect( ui->buttonBrowse, SIGNAL( clicked() ),  SLOT( showPathSelector() ) );
     connect( ui->proxyButton,  SIGNAL( clicked() ),  SLOT( showProxySettings() ) );
     connect( ui->checkBoxStaticPreferred, SIGNAL( toggled(bool) ), SLOT( toggleUpnp(bool) ) );
@@ -111,22 +136,19 @@ SettingsDialog::~SettingsDialog()
         s->setJabberPassword( ui->jabberPassword->text() );
         s->setJabberServer( ui->jabberServer->text() );
         s->setJabberPort( ui->jabberPort->value() );
-        
+
         s->setExternalHostname( ui->staticHostName->text() );
         s->setExternalPort( ui->staticPort->value() );
 
-        s->setScannerPath( ui->lineEditMusicPath->text() );
-        
+        s->setScannerPaths( QStringList( ui->lineEditMusicPath->text() ) );
+        s->setWatchForChanges( ui->checkBoxWatchForChanges->isChecked() );
+
         s->setScrobblingEnabled( ui->checkBoxEnableLastfm->isChecked() );
         s->setLastFmUsername( ui->lineEditLastfmUsername->text() );
         s->setLastFmPassword( ui->lineEditLastfmPassword->text() );
 
-        QStringList resolvers;
-        for( int i = 0; i < ui->scriptList->topLevelItemCount(); i++ )
-        {
-            resolvers << ui->scriptList->topLevelItem( i )->data( 1, Qt::DisplayRole ).toString();
-        }
-        s->setScriptResolvers( resolvers );
+        s->setAllScriptResolvers( m_resolversModel->allResolvers() );
+        s->setEnabledScriptResolvers( m_resolversModel->enabledResolvers() );
 
         s->applyChanges();
     }
@@ -238,13 +260,13 @@ SettingsDialog::onLastFmFinished()
                  ui->pushButtonTestLastfmLogin->setEnabled( false );
              }
              break;
-             
+
         case QNetworkReply::ContentOperationNotPermittedError:
         case QNetworkReply::AuthenticationRequiredError:
             ui->pushButtonTestLastfmLogin->setText( tr( "Failed" ) );
             ui->pushButtonTestLastfmLogin->setEnabled( true );
             break;
-            
+
         default:
             qDebug() << "Couldn't get last.fm auth result";
             ui->pushButtonTestLastfmLogin->setText( tr( "Could not contact server" ) );
@@ -297,10 +319,10 @@ ProxyDialog::saveSettings()
     s->setProxyPassword( ui->passwordLineEdit->text() );
     s->setProxyType( ui->typeBox->itemData( ui->typeBox->currentIndex() ).toInt() );
 
-    // Now, if a proxy is defined, set QNAM
-    if( s->proxyType() == QNetworkProxy::NoProxy || s->proxyHost().isEmpty() )
+    if( s->proxyHost().isEmpty() )
         return;
 
+    // Now, set QNAM
     QNetworkProxy proxy( static_cast<QNetworkProxy::ProxyType>(s->proxyType()), s->proxyHost(), s->proxyPort(), s->proxyUsername(), s->proxyPassword() );
     QNetworkAccessManager* nam = TomahawkUtils::nam();
     nam->setProxy( proxy );
@@ -314,38 +336,50 @@ ProxyDialog::saveSettings()
 }
 
 
-void 
+void
 SettingsDialog::addScriptResolver()
 {
     QString resolver = QFileDialog::getOpenFileName( this, tr( "Load script resolver file" ), qApp->applicationDirPath() );
     if( !resolver.isEmpty() ) {
-        QFileInfo info( resolver );
-        ui->scriptList->addTopLevelItem( new QTreeWidgetItem(  QStringList() << info.baseName() << resolver ) );
-        
-        TomahawkApp::instance()->addScriptResolver( resolver );
+        m_resolversModel->addResolver( resolver, true );
+        TomahawkApp::instance()->enableScriptResolver( resolver );
     }
 }
 
 
-void 
+void
 SettingsDialog::removeScriptResolver()
 {
     // only one selection
-    if( !ui->scriptList->selectedItems().isEmpty() ) {
-        QString resolver = ui->scriptList->selectedItems().first()->data( 1, Qt::DisplayRole ).toString();
-        delete ui->scriptList->takeTopLevelItem( ui->scriptList->indexOfTopLevelItem( ui->scriptList->selectedItems().first() ) );
-        
-        TomahawkApp::instance()->removeScriptResolver( resolver );
+    if( !ui->scriptList->selectionModel()->selectedIndexes().isEmpty() ) {
+        QString resolver = ui->scriptList->selectionModel()->selectedIndexes().first().data( ResolversModel::ResolverPath ).toString();
+        m_resolversModel->removeResolver( resolver );
+
+        TomahawkApp::instance()->disableScriptResolver( resolver );
     }
 }
 
-
-void 
+void
 SettingsDialog::scriptSelectionChanged()
 {
-    if( !ui->scriptList->selectedItems().isEmpty() ) {
+    if( !ui->scriptList->selectionModel()->selectedIndexes().isEmpty() ) {
         ui->removeScript->setEnabled( true );
     } else {
         ui->removeScript->setEnabled( false );
+    }
+}
+
+void
+SettingsDialog::openResolverConfig( const QString& resolver )
+{
+    Tomahawk::ExternalResolver* r = TomahawkApp::instance()->resolverForPath( resolver );
+    if( r && r->configUI() ) {
+        ResolverConfigWrapper dialog( r->configUI(), "Resolver Config", this );
+        QWeakPointer< ResolverConfigWrapper > watcher( &dialog );
+        int ret = dialog.exec();
+        if( !watcher.isNull() && ret == QDialog::Accepted ) {
+            // send changed config to resolver
+            r->saveConfig();
+        }
     }
 }

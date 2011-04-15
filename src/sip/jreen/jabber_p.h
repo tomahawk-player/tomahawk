@@ -1,3 +1,21 @@
+/* === This file is part of Tomahawk Player - <http://tomahawk-player.org> ===
+ * 
+ *   Copyright 2010-2011, Christian Muehlhaeuser <muesli@tomahawk-player.org>
+ *
+ *   Tomahawk is free software: you can redistribute it and/or modify
+ *   it under the terms of the GNU General Public License as published by
+ *   the Free Software Foundation, either version 3 of the License, or
+ *   (at your option) any later version.
+ *
+ *   Tomahawk is distributed in the hope that it will be useful,
+ *   but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ *   GNU General Public License for more details.
+ *
+ *   You should have received a copy of the GNU General Public License
+ *   along with Tomahawk. If not, see <http://www.gnu.org/licenses/>.
+ */
+
 /*
     This is the Jabber client that the rest of the app sees
     Gloox stuff should NOT leak outside this class.
@@ -59,25 +77,25 @@ public slots:
     void addContact( const QString& jid, const QString& msg = QString() );
     void disconnect();
 
-    void onDisconnect(jreen::Client::DisconnectReason reason);
+    void onDisconnect(Jreen::Client::DisconnectReason reason);
     void onConnect();
 
 private slots:
-    virtual void onNewPresence( const jreen::Presence& presence );
-    virtual void onNewMessage( const jreen::Message& msg );
-    virtual void onError( const jreen::Connection::SocketError& e )
+    virtual void onNewPresence( const Jreen::Presence& presence );
+    virtual void onNewMessage( const Jreen::Message& msg );
+    virtual void onError( const Jreen::Connection::SocketError& e )
     {
         qDebug() << e;
     }
 
 private:
-    bool presenceMeansOnline( jreen::Presence::Type p );
-    jreen::Client *m_client;
-    jreen::MUCRoom *m_room;
-    jreen::SimpleRoster *m_roster;
-    jreen::JID m_jid;
-    QMap<jreen::Presence::Type, QString> m_presences;
-    QMap<QString, jreen::Presence::Type> m_peers;
+    bool presenceMeansOnline( Jreen::Presence::Type p );
+    Jreen::Client *m_client;
+    Jreen::MUCRoom *m_room;
+    Jreen::SimpleRoster *m_roster;
+    Jreen::JID m_jid;
+    QMap<Jreen::Presence::Type, QString> m_presences;
+    QMap<QString, Jreen::Presence::Type> m_peers;
     QString m_server;
 };
 

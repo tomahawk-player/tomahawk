@@ -1,3 +1,21 @@
+/* === This file is part of Tomahawk Player - <http://tomahawk-player.org> ===
+ * 
+ *   Copyright 2010-2011, Christian Muehlhaeuser <muesli@tomahawk-player.org>
+ *
+ *   Tomahawk is free software: you can redistribute it and/or modify
+ *   it under the terms of the GNU General Public License as published by
+ *   the Free Software Foundation, either version 3 of the License, or
+ *   (at your option) any later version.
+ *
+ *   Tomahawk is distributed in the hope that it will be useful,
+ *   but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ *   GNU General Public License for more details.
+ *
+ *   You should have received a copy of the GNU General Public License
+ *   along with Tomahawk. If not, see <http://www.gnu.org/licenses/>.
+ */
+
 #include "databasecommand_addfiles.h"
 
 #include <QSqlQuery>
@@ -45,11 +63,11 @@ DatabaseCommand_AddFiles::postCommitHook()
     // collection browser will update/fade in etc.
     Collection* coll = source()->collection().data();
 
-    connect( this, SIGNAL( notify( QList<Tomahawk::query_ptr>, Tomahawk::collection_ptr ) ),
-             coll, SLOT( setTracks( QList<Tomahawk::query_ptr>, Tomahawk::collection_ptr ) ),
+    connect( this, SIGNAL( notify( QList<Tomahawk::query_ptr> ) ),
+             coll, SLOT( setTracks( QList<Tomahawk::query_ptr> ) ),
              Qt::QueuedConnection );
 
-    emit notify( m_queries, source()->collection() );
+    emit notify( m_queries );
 
     // also re-calc the collection stats, to updates the "X tracks" in the sidebar etc:
     DatabaseCommand_CollectionStats* cmd = new DatabaseCommand_CollectionStats( source() );

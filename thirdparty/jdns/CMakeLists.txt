@@ -9,6 +9,8 @@ INCLUDE( ${QT_USE_FILE} )
 add_definitions( ${QT_DEFINITIONS} )
 add_definitions( -DQT_SHARED )
 
+SET( CMAKE_C_FLAGS ${CLEAN_C_FLAGS} )
+
 if(WIN32)
     set(PLATFORM_SPECIFIC_LIBS "ws2_32.dll" "advapi32.dll" )
 endif(WIN32)
@@ -49,4 +51,4 @@ target_link_libraries(tomahawk_jdns
 
 SET_TARGET_PROPERTIES( tomahawk_jdns PROPERTIES DEFINE_SYMBOL  MAKE_JDNS_LIB )
 
-INSTALL(TARGETS tomahawk_jdns DESTINATION lib)
+INSTALL(TARGETS tomahawk_jdns DESTINATION lib${LIB_SUFFIX})

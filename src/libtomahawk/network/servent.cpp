@@ -1,3 +1,21 @@
+/* === This file is part of Tomahawk Player - <http://tomahawk-player.org> ===
+ *
+ *   Copyright 2010-2011, Christian Muehlhaeuser <muesli@tomahawk-player.org>
+ *
+ *   Tomahawk is free software: you can redistribute it and/or modify
+ *   it under the terms of the GNU General Public License as published by
+ *   the Free Software Foundation, either version 3 of the License, or
+ *   (at your option) any later version.
+ *
+ *   Tomahawk is distributed in the hope that it will be useful,
+ *   but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ *   GNU General Public License for more details.
+ *
+ *   You should have received a copy of the GNU General Public License
+ *   along with Tomahawk. If not, see <http://www.gnu.org/licenses/>.
+ */
+
 #include "servent.h"
 
 #include <QCoreApplication>
@@ -8,6 +26,8 @@
 #include <QNetworkProxy>
 #include <QNetworkRequest>
 #include <QNetworkReply>
+#include <QPushButton>
+#include <QMessageBox>
 
 #include "result.h"
 #include "source.h"
@@ -15,12 +35,13 @@
 #include "connection.h"
 #include "controlconnection.h"
 #include "database/database.h"
-#include "filetransferconnection.h"
+#include "streamconnection.h"
 #include "sourcelist.h"
 
 #include "portfwdthread.h"
 #include "tomahawksettings.h"
 #include "utils/tomahawkutils.h"
+#include <aclsystem.h>
 
 using namespace Tomahawk;
 
@@ -41,6 +62,8 @@ Servent::Servent( QObject* parent )
     , m_portfwd( 0 )
 {
     s_instance = this;
+
+    new ACLSystem( this );
 
     setProxy( QNetworkProxy::NoProxy );
 
@@ -74,23 +97,36 @@ bool
 Servent::startListening( QHostAddress ha, bool upnp, int port )
 {
     m_port = port;
-    // try listening on one port higher as well, to aid debugging
-    // and let you run 2 instances easily
-    if( !listen( ha, m_port ) && !listen( ha, ++m_port ) )
+    int defPort = TomahawkSettings::instance()->defaultPort();
+    // Listen on both the selected port and, if not the same, the default port -- the latter sometimes necessary for zeroconf
+    // TODO: only listen on both when zeroconf sip is enabled
+    // TODO: use a real zeroconf system instead of a simple UDP broadcast?
+    if( !listen( ha, m_port ) )
     {
-        qDebug() << "Failed to listen on port" << m_port;
-        qDebug() << "Error string is " << errorString();
-        return false;
+        bool defPortAlso = false;
+        if( m_port != defPort )
+            defPortAlso = listen( ha, defPort );
+        if( !defPortAlso )
+        {
+            qDebug() << "Failed to listen on both port " << m_port << " and port " << defPort;
+            qDebug() << "Error string is " << errorString();
+            return false;
+        }
+        else
+            qDebug() << "Servent listening on port " << defPort << " servent thread:" << thread();
     }
     else
     {
-        qDebug() << "Servent listening on port" << m_port << " servent thread:" << thread();
+        bool defPortAlso = listen( ha, defPort );
+        qDebug() << "Servent listening on port " << m_port << " servent thread:" << thread();
+        if( defPortAlso )
+            qDebug() << "Servent also listening on port " << defPort << " servent thread:" << thread();
     }
 
     // --lanhack means to advertise your LAN IP over jabber as if it were externallyVisible
     qDebug() << "Address mode = " << (int)(TomahawkSettings::instance()->externalAddressMode());
     qDebug() << "Static host/port preferred ? = " << ( TomahawkSettings::instance()->preferStaticHostPort() ? "true" : "false" );
-    
+
     if( TomahawkSettings::instance()->preferStaticHostPort() )
     {
         qDebug() << "Forcing static preferred host and port";
@@ -100,8 +136,12 @@ Servent::startListening( QHostAddress ha, bool upnp, int port )
         emit ready();
         return true;
     }
-    
-    switch( TomahawkSettings::instance()->externalAddressMode() )
+
+    TomahawkSettings::ExternalAddressMode mode = TomahawkSettings::instance()->externalAddressMode();
+    if ( mode == TomahawkSettings::Upnp && !upnp )
+      mode = TomahawkSettings::Lan;
+
+    switch( mode )
     {
         case TomahawkSettings::Lan:
             foreach( QHostAddress ha, QNetworkInterface::allAddresses() )
@@ -283,7 +323,7 @@ Servent::readyRead()
     nodeid    = m.value( "nodeid" ).toString();
     controlid = m.value( "controlid" ).toString();
 
-    qDebug() << m;
+    qDebug() << "Incoming connection details: " << m;
 
     if( !nodeid.isEmpty() ) // only control connections send nodeid
     {
@@ -313,7 +353,7 @@ Servent::readyRead()
     if( conntype == "accept-offer" || "push-offer" )
     {
         sock->_msg.clear();
-        Connection* conn = claimOffer( cc, key, sock->peerAddress() );
+        Connection* conn = claimOffer( cc, nodeid, key, sock->peerAddress() );
         if( !conn )
         {
             qDebug() << "claimOffer FAILED, key:" << key;
@@ -331,7 +371,7 @@ Servent::readyRead()
     {
         qDebug() << "Invalid or unhandled conntype";
     }
-    
+
     // fallthru to cleanup:
 closeconnection:
     qDebug() << "Closing incoming connection, something was wrong.";
@@ -463,6 +503,13 @@ Servent::connectToPeer( const QString& ha, int port, const QString &key, Connect
     qDebug() << "Servent::connectToPeer:" << ha << ":" << port
              << thread() << QThread::currentThread();
 
+    if ( ( ha == m_externalAddress.toString() || ha == m_externalHostname ) &&
+         ( port == m_externalPort ) )
+    {
+        qDebug() << "ERROR: Tomahawk won't try to connect to" << ha << ":" << port << ": identified as ourselves.";
+        return;
+    }
+
     if( key.length() && conn->firstMessage().isNull() )
     {
         QVariantMap m;
@@ -491,12 +538,12 @@ Servent::connectToPeer( const QString& ha, int port, const QString &key, Connect
 
 
 void
-Servent::reverseOfferRequest( ControlConnection* orig_conn, const QString& key, const QString& theirkey )
+Servent::reverseOfferRequest( ControlConnection* orig_conn, const QString &theirdbid, const QString& key, const QString& theirkey )
 {
     Q_ASSERT( this->thread() == QThread::currentThread() );
 
     qDebug() << "Servent::reverseOfferRequest received for" << key;
-    Connection* new_conn = claimOffer( orig_conn, key );
+    Connection* new_conn = claimOffer( orig_conn, theirdbid, key );
     if ( !new_conn )
     {
         qDebug() << "claimOffer failed, killing requesting connection out of spite";
@@ -516,11 +563,13 @@ Servent::reverseOfferRequest( ControlConnection* orig_conn, const QString& key, 
 
 // return the appropriate connection for a given offer key, or NULL if invalid
 Connection*
-Servent::claimOffer( ControlConnection* cc, const QString &key, const QHostAddress peer )
+Servent::claimOffer( ControlConnection* cc, const QString &nodeid, const QString &key, const QHostAddress peer )
 {
+    qDebug() << Q_FUNC_INFO;
+
     bool noauth = qApp->arguments().contains( "--noauth" );
 
-    // magic key for file transfers:
+    // magic key for stream connections:
     if( key.startsWith( "FILE_REQUEST_KEY:" ) )
     {
         // check if the source IP matches an existing, authenticated connection
@@ -543,8 +592,8 @@ Servent::claimOffer( ControlConnection* cc, const QString &key, const QHostAddre
         }
 
         QString fid = key.right( key.length() - 17 );
-        FileTransferConnection* ftc = new FileTransferConnection( this, cc, fid );
-        return ftc;
+        StreamConnection* sc = new StreamConnection( this, cc, fid );
+        return sc;
     }
 
     if( key == "whitelist" ) // LAN IP address, check source IP
@@ -568,12 +617,24 @@ Servent::claimOffer( ControlConnection* cc, const QString &key, const QHostAddre
         QPointer<Connection> conn = m_offers.value( key );
         if( conn.isNull() )
         {
-            // This can happen if it's a filetransferconnection, but the audioengine has
+            // This can happen if it's a streamconnection, but the audioengine has
             // already closed the iodevice, causing the connection to be deleted before
             // the peer connects and provides the first byte
             qDebug() << Q_FUNC_INFO << "invalid/expired offer:" << key;
             return NULL;
         }
+
+        if( !nodeid.isEmpty() )
+        {
+            // If there isn't a nodeid it's not the first connection and will already have been stopped
+            if( !checkACL( conn, nodeid, true ) )
+            {
+                qDebug() << "Connection not allowed due to ACL";
+                return NULL;
+            }
+        }
+
+        qDebug() << "ACL has allowed the connection";
 
         if( conn->onceOnly() )
         {
@@ -599,6 +660,61 @@ Servent::claimOffer( ControlConnection* cc, const QString &key, const QHostAddre
     }
 }
 
+bool
+Servent::checkACL( const Connection* conn, const QString &nodeid, bool showDialog ) const
+{
+    qDebug() << "Checking ACLs";
+    ACLSystem* aclSystem = ACLSystem::instance();
+    ACLSystem::ACL peerStatus = aclSystem->isAuthorizedUser( nodeid );
+    if( peerStatus == ACLSystem::Deny )
+        return false;
+
+#ifndef TOMAHAWK_HEADLESS
+    //FIXME: Actually enable it when it makes sense
+    return true;
+    if( peerStatus == ACLSystem::NotFound )
+    {
+        if( !showDialog )
+            return false;
+
+        qDebug() << "ACL for this node not found";
+        QMessageBox msgBox;
+        msgBox.setIcon( QMessageBox::Question );
+        msgBox.setText( tr( "Incoming Connection Attempt" ) );
+        msgBox.setInformativeText( tr( "Another Tomahawk instance is attempting to connect to you. Select whether to allow or deny this connection.\n\nPeer name: %1\nPeer ID: %2\n\nRemember: Only allow peers to connect if you have the legal right for them to stream music from you.").arg( conn->name(), nodeid ) );
+        QPushButton *denyButton = msgBox.addButton( tr( "Deny" ), QMessageBox::HelpRole );
+        QPushButton *alwaysDenyButton = msgBox.addButton( tr( "Always Deny" ), QMessageBox::YesRole );
+        QPushButton *allowButton = msgBox.addButton( tr( "Allow" ), QMessageBox::NoRole );
+        QPushButton *alwaysAllowButton = msgBox.addButton( tr( "Always Allow" ), QMessageBox::ActionRole );
+
+        msgBox.setDefaultButton( denyButton );
+        msgBox.setEscapeButton( denyButton );
+
+        msgBox.exec();
+
+        if( msgBox.clickedButton() == denyButton )
+            return false;
+        else if( msgBox.clickedButton() == alwaysDenyButton )
+        {
+            aclSystem->authorizeUser( nodeid, ACLSystem::Deny );
+            return false;
+        }
+        else if( msgBox.clickedButton() == alwaysAllowButton )
+        {
+            aclSystem->authorizeUser( nodeid, ACLSystem::Allow );
+            return true;
+        }
+        else if( msgBox.clickedButton() == allowButton )
+            return true;
+
+        //How could we get here?
+        qDebug() << "Somehow no button matched";
+        return false;
+    }
+#endif
+
+    return true;
+}
 
 QSharedPointer<QIODevice>
 Servent::remoteIODeviceFactory( const result_ptr& result )
@@ -614,37 +730,37 @@ Servent::remoteIODeviceFactory( const result_ptr& result )
         return sp;
 
     ControlConnection* cc = s->controlConnection();
-    FileTransferConnection* ftc = new FileTransferConnection( this, cc, fileId, result );
-    createParallelConnection( cc, ftc, QString( "FILE_REQUEST_KEY:%1" ).arg( fileId ) );
-    return ftc->iodevice();
+    StreamConnection* sc = new StreamConnection( this, cc, fileId, result );
+    createParallelConnection( cc, sc, QString( "FILE_REQUEST_KEY:%1" ).arg( fileId ) );
+    return sc->iodevice();
 }
 
 
 void
-Servent::registerFileTransferConnection( FileTransferConnection* ftc )
+Servent::registerStreamConnection( StreamConnection* sc )
 {
-    Q_ASSERT( !m_ftsessions.contains( ftc ) );
-    qDebug() << "Registering FileTransfer" << m_ftsessions.length() + 1;
+    Q_ASSERT( !m_scsessions.contains( sc ) );
+    qDebug() << "Registering Stream" << m_scsessions.length() + 1;
 
     QMutexLocker lock( &m_ftsession_mut );
-    m_ftsessions.append( ftc );
+    m_scsessions.append( sc );
 
     printCurrentTransfers();
-    emit fileTransferStarted( ftc );
+    emit streamStarted( sc );
 }
 
 
 void
-Servent::onFileTransferFinished( FileTransferConnection* ftc )
+Servent::onStreamFinished( StreamConnection* sc )
 {
-    Q_ASSERT( ftc );
-    qDebug() << "FileTransfer Finished, unregistering" << ftc->id();
+    Q_ASSERT( sc );
+    qDebug() << "Stream Finished, unregistering" << sc->id();
 
     QMutexLocker lock( &m_ftsession_mut );
-    m_ftsessions.removeAll( ftc );
+    m_scsessions.removeAll( sc );
 
     printCurrentTransfers();
-    emit fileTransferFinished( ftc );
+    emit streamFinished( sc );
 }
 
 
@@ -653,8 +769,8 @@ void
 Servent::printCurrentTransfers()
 {
     int k = 1;
-    qDebug() << "~~~ Active file transfer connections:" << m_ftsessions.length();
-    foreach( FileTransferConnection* i, m_ftsessions )
+    qDebug() << "~~~ Active file transfer connections:" << m_scsessions.length();
+    foreach( StreamConnection* i, m_scsessions )
     {
         qDebug() << k << ") " << i->id();
     }
@@ -689,8 +805,11 @@ Servent::isIPWhitelisted( QHostAddress ip )
 bool
 Servent::connectedToSession( const QString& session )
 {
+    qDebug() << Q_FUNC_INFO;
+    qDebug() << "Checking against " << session;
     foreach( ControlConnection* cc, m_controlconnections )
     {
+        qDebug() << "Checking session " << cc->id();
         if( cc->id() == session )
             return true;
     }
@@ -726,7 +845,6 @@ Servent::registerIODeviceFactory( const QString &proto, boost::function<QSharedP
 }
 
 
-
 QSharedPointer<QIODevice>
 Servent::getIODeviceForUrl( const Tomahawk::result_ptr& result )
 {
@@ -739,9 +857,9 @@ Servent::getIODeviceForUrl( const Tomahawk::result_ptr& result )
 
     const QString proto = rx.cap( 1 );
     //const QString urlpart = rx.cap( 2 );
+    qDebug() << "Getting IODevice for URL:" << proto << m_iofactories.contains( proto );
     if ( !m_iofactories.contains( proto ) )
         return sp;
-
     return m_iofactories.value( proto )( result );
 }
 
@@ -764,5 +882,5 @@ Servent::httpIODeviceFactory( const Tomahawk::result_ptr& result )
     qDebug() << Q_FUNC_INFO << result->url();
     QNetworkRequest req( result->url() );
     QNetworkReply* reply = TomahawkUtils::nam()->get( req );
-    return QSharedPointer<QIODevice>( reply );
+    return QSharedPointer<QIODevice>( reply, &QObject::deleteLater );
 }

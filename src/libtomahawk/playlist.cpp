@@ -1,3 +1,21 @@
+/* === This file is part of Tomahawk Player - <http://tomahawk-player.org> ===
+ * 
+ *   Copyright 2010-2011, Christian Muehlhaeuser <muesli@tomahawk-player.org>
+ *
+ *   Tomahawk is free software: you can redistribute it and/or modify
+ *   it under the terms of the GNU General Public License as published by
+ *   the Free Software Foundation, either version 3 of the License, or
+ *   (at your option) any later version.
+ *
+ *   Tomahawk is distributed in the hope that it will be useful,
+ *   but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ *   GNU General Public License for more details.
+ *
+ *   You should have received a copy of the GNU General Public License
+ *   along with Tomahawk. If not, see <http://www.gnu.org/licenses/>.
+ */
+
 #include "playlist.h"
 
 #include <QDomDocument>
@@ -94,7 +112,7 @@ Playlist::Playlist( const source_ptr& src,
     , m_lastmodified( lastmod )
     , m_shared( shared )
 {
-    qDebug() << Q_FUNC_INFO << "1";
+//    qDebug() << Q_FUNC_INFO << "1";
     init();
 }
 
@@ -211,6 +229,8 @@ Playlist::reportDeleted( const Tomahawk::playlist_ptr& self )
     qDebug() << Q_FUNC_INFO;
     Q_ASSERT( self.data() == this );
     m_source->collection()->deletePlaylist( self );
+    
+    emit deleted( self );
 }
 
 
@@ -411,6 +431,7 @@ Playlist::resolve()
 void
 Playlist::onResultsFound( const QList<Tomahawk::result_ptr>& results )
 {
+    Q_UNUSED( results );
     m_locallyChanged = true;
 }
 

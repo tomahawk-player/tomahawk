@@ -61,6 +61,7 @@ QTweetStatus QTweetConvert::variantMapToStatus(const QVariantMap &var)
     status.setId(var["id"].toLongLong());
     status.setInReplyToUserId(var["in_reply_to_user_id"].toLongLong());
     status.setInReplyToScreenName(var["in_reply_to_screen_name"].toString());
+    status.setFavorited(var["favorited"].toBool());
 
     QVariantMap userMap = var["user"].toMap();
     QTweetUser user = variantMapToUserInfo(userMap);

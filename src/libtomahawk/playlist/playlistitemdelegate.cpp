@@ -1,3 +1,21 @@
+/* === This file is part of Tomahawk Player - <http://tomahawk-player.org> ===
+ *
+ *   Copyright 2010-2011, Christian Muehlhaeuser <muesli@tomahawk-player.org>
+ *
+ *   Tomahawk is free software: you can redistribute it and/or modify
+ *   it under the terms of the GNU General Public License as published by
+ *   the Free Software Foundation, either version 3 of the License, or
+ *   (at your option) any later version.
+ *
+ *   Tomahawk is distributed in the hope that it will be useful,
+ *   but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ *   GNU General Public License for more details.
+ *
+ *   You should have received a copy of the GNU General Public License
+ *   along with Tomahawk. If not, see <http://www.gnu.org/licenses/>.
+ */
+
 #include "playlistitemdelegate.h"
 
 #include <QDebug>
@@ -6,10 +24,10 @@
 #include "query.h"
 #include "result.h"
 
-#include "playlist/plitem.h"
-#include "playlist/trackproxymodel.h"
-#include "playlist/trackview.h"
-#include "playlist/trackheader.h"
+#include "trackmodelitem.h"
+#include "trackproxymodel.h"
+#include "trackview.h"
+#include "trackheader.h"
 
 #include "utils/tomahawkutils.h"
 
@@ -43,6 +61,9 @@ PlaylistItemDelegate::sizeHint( const QStyleOptionViewItem& option, const QModel
 QWidget*
 PlaylistItemDelegate::createEditor( QWidget* parent, const QStyleOptionViewItem& option, const QModelIndex& index ) const
 {
+    Q_UNUSED( parent );
+    Q_UNUSED( option );
+    Q_UNUSED( index );
     return 0;
 }
 
@@ -50,22 +71,21 @@ PlaylistItemDelegate::createEditor( QWidget* parent, const QStyleOptionViewItem&
 void
 PlaylistItemDelegate::paint( QPainter* painter, const QStyleOptionViewItem& option, const QModelIndex& index ) const
 {
-    PlItem* item = m_model->itemFromIndex( m_model->mapToSource( index ) );
+    TrackModelItem* item = m_model->itemFromIndex( m_model->mapToSource( index ) );
     if ( !item || item->query().isNull() )
         return;
 
-    painter->save();
+    float opacity = 0.0;
     if ( item->query()->results().count() )
-        painter->setOpacity( item->query()->results().at( 0 )->score() );
-    else
-        painter->setOpacity( 0.0 );
+        opacity = item->query()->results().first()->score();
 
-    if ( painter->opacity() < 0.3 )
-        painter->setOpacity( 0.3 );
+    opacity = qMax( (float)0.3, opacity );
+    QColor textColor = TomahawkUtils::alphaBlend( option.palette.color( QPalette::Foreground ), option.palette.color( QPalette::Background ), opacity );
 
     if ( item->isPlaying() )
     {
 //        painter->setRenderHint( QPainter::Antialiasing );
+        painter->save();
 
         {
             QRect r = option.rect.adjusted( 3, 0, 0, 0 );
@@ -92,11 +112,18 @@ PlaylistItemDelegate::paint( QPainter* painter, const QStyleOptionViewItem& opti
             painter->setPen( pen );
             painter->drawRoundedRect( r, 3.0, 3.0 );
         }
+
+        painter->restore();
     }
     else
     {
-        QStyledItemDelegate::paint( painter, option, index );
+        if ( const QStyleOptionViewItem *vioption = qstyleoption_cast<const QStyleOptionViewItem *>(&option))
+        {
+            QStyleOptionViewItemV4 o( *vioption );
+            o.palette.setColor( QPalette::Text, textColor );
+            QStyledItemDelegate::paint( painter, o, index );
+        }
+        else
+            QStyledItemDelegate::paint( painter, option, index );
     }
-
-    painter->restore();
 }

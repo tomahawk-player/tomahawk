@@ -1,3 +1,21 @@
+/* === This file is part of Tomahawk Player - <http://tomahawk-player.org> ===
+ * 
+ *   Copyright 2010-2011, Christian Muehlhaeuser <muesli@tomahawk-player.org>
+ *
+ *   Tomahawk is free software: you can redistribute it and/or modify
+ *   it under the terms of the GNU General Public License as published by
+ *   the Free Software Foundation, either version 3 of the License, or
+ *   (at your option) any later version.
+ *
+ *   Tomahawk is distributed in the hope that it will be useful,
+ *   but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ *   GNU General Public License for more details.
+ *
+ *   You should have received a copy of the GNU General Public License
+ *   along with Tomahawk. If not, see <http://www.gnu.org/licenses/>.
+ */
+
 #include "sourcetreeitem.h"
 
 #include <QDebug>
@@ -25,7 +43,18 @@ SourceTreeItem::SourceTreeItem( const source_ptr& source, QObject* parent )
     : QObject( parent )
     , m_source( source )
 {
-    QStandardItem* item = new QStandardItem( source.isNull() ? "Super Collection" : source->friendlyName() );
+    QString name;
+    if( source.isNull() )
+        name = tr( "Super Collection" );
+    else 
+    {
+        if( TomahawkApp::instance()->scrubFriendlyName() && source->friendlyName().contains( '@' ) )
+            name = source->friendlyName().left( source->friendlyName().indexOf( '@' ) );
+        else
+            name = source->friendlyName();
+    }
+    
+    QStandardItem* item = new QStandardItem( name );
     item->setIcon( QIcon( RESPATH "images/user-avatar.png" ) );
     item->setEditable( false );
     item->setData( SourcesModel::CollectionSource, Type );
@@ -121,8 +150,9 @@ SourceTreeItem::onPlaylistsDeleted( const QList<playlist_ptr>& playlists )
 
             if ( type == SourcesModel::PlaylistSource && ptr == qlonglong( pl->data() ) )
             {
-                m_playlists.removeAll( p );
                 item->removeRow( i );
+                m_playlists.removeAll( p );
+                break;
             }
         }
     }
@@ -147,6 +177,7 @@ SourceTreeItem::onPlaylistLoaded( Tomahawk::PlaylistRevision revision )
         {
             pi->setEnabled( true );
             m_current_revisions.insert( pl->data()->guid(), revision.revisionguid );
+            break;
         }
     }
 }
@@ -170,7 +201,10 @@ SourceTreeItem::onPlaylistChanged()
             playlist_ptr* pl = reinterpret_cast<playlist_ptr*>(piptr);
 
             if ( ptr == qlonglong( pl->data() ) )
+            {
                 pi->setText( pl->data()->title() );
+                break;
+            }
         }
         if ( type == SourcesModel::DynamicPlaylistSource )
         {
@@ -178,7 +212,10 @@ SourceTreeItem::onPlaylistChanged()
             dynplaylist_ptr* pl = reinterpret_cast<dynplaylist_ptr*>(piptr);
 
             if ( ptr == qlonglong( pl->data() ) )
+            {
                 pi->setText( pl->data()->title() );
+                break;
+            }
         }
     }
 }
@@ -226,8 +263,9 @@ SourceTreeItem::onDynamicPlaylistsDeleted( const QList< dynplaylist_ptr >& playl
             //qDebug() << "Deleting dynamic playlist:" << pl->isNull();
             if ( type == SourcesModel::DynamicPlaylistSource && ptr == qlonglong( pl->data() ) )
             {
-                m_dynplaylists.removeAll( p );
                 item->removeRow( i );
+                m_dynplaylists.removeAll( p );
+                break;
             }
         }
     }
@@ -252,6 +290,7 @@ SourceTreeItem::onDynamicPlaylistLoaded( DynamicPlaylistRevision revision )
         {
             pi->setEnabled( true );
             m_current_dynamic_revisions.insert( pl->data()->guid(), revision.revisionguid );
+            break;
         }
     }
 }

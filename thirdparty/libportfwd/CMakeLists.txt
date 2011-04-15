@@ -17,6 +17,8 @@ ELSE()
 ENDIF()
 INCLUDE_DIRECTORIES(${MINIUPNP_DIR} include)
 
+SET( CMAKE_C_FLAGS ${CLEAN_C_FLAGS} )
+
 ADD_LIBRARY(portfwd STATIC
 
         # the needed bits of miniupnpc (no python module, no tests, no cli)
@@ -46,6 +48,6 @@ ENDIF()
 #              )
 #TARGET_LINK_LIBRARIES(portfwd-demo portfwd)
 
-INSTALL(TARGETS portfwd ARCHIVE DESTINATION lib)
+# INSTALL(TARGETS portfwd ARCHIVE DESTINATION lib${LIB_SUFFIX})
 #INSTALL(TARGETS portfwd-demo RUNTIME DESTINATION bin)
 #INSTALL(DIRECTORY include/portfwd DESTINATION include PATTERN "*~" EXCLUDE)

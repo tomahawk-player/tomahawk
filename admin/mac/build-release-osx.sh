@@ -16,6 +16,11 @@ function die {
 }
 ################################################################################
 
+if [ -z $1 ]
+then
+    echo This script expects the version number as a parameter, e.g. 1.0.0
+    exit 1
+fi
 
 ROOT=`pwd`
 
@@ -31,7 +36,7 @@ echo "Goes here: $QTDIR"
 export QMAKESPEC='macx-g++'
 export QTDIR
 export VERSION
-export QTVERSION='4.7.1'
+export QTVERSION='4.7.2'
 ################################################################################
 
 
@@ -39,17 +44,34 @@ CLEAN='1'
 BUILD='1'
 NOTQUICK='1'
 CREATEDMG='1'
+VERSION=$1
 
-    header addQt
+    header "Adding Qt to app bundle"
     cd tomahawk.app
     $ROOT/../admin/mac/add-Qt-to-bundle.sh \
-                   'QtCore QtGui QtXml QtNetwork QtSql'
+                   'QtCore QtGui QtXml QtNetwork QtSql QtXmlPatterns QtWebKit phonon'
 
-    header deposx
+    header "Running install_name_tool"
     $ROOT/../admin/mac/deposx.sh
-    header "Copying Sparkle pubkey and framework, and qt.conf"
+
+    header "Renaming files"
+    mv Contents/Resources/tomahawkSources.icns Contents/Resources/Tomahawk.icns
+    mv Contents/MacOS/tomahawk Contents/MacOS/Tomahawk
+#    cp $ROOT/../admin/mac/Info.plist Contents/Info.plist
+
+    header "Copying Sparkle pubkey & framework, and qt.conf"
     cp $ROOT/../admin/mac/sparkle_pub.pem Contents/Resources
     cp -R /Library/Frameworks/Sparkle.framework Contents/Frameworks
     cp $ROOT/../admin/mac/qt.conf Contents/Resources
-    header Done!
 
+    header "Creating DMG"
+    cd ..
+    mv tomahawk.app Tomahawk.app
+    $ROOT/../admin/mac/create-dmg.sh Tomahawk.app
+    mv Tomahawk.dmg Tomahawk-$VERSION.dmg
+    
+    header "Creating signed Sparkle update"
+    $ROOT/../admin/mac/sign_bundle.rb $VERSION ~/tomahawk_sparkle_privkey.pem
+    mv Tomahawk.app tomahawk.app
+
+    header "Done!"

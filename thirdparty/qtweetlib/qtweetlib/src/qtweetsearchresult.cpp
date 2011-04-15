@@ -69,7 +69,7 @@ void QTweetSearchResult::setCreatedAt(const QDateTime &dateTime)
 void QTweetSearchResult::setCreatedAt(const QString &twitterDate)
 {
     QString dateString = twitterDate.left(3) + ' ' + twitterDate.mid(8, 3) + ' ' +
-                         twitterDate.mid(5, 2) + ' ' + twitterDate.mid(13, 4);
+                         twitterDate.mid(5, 2) + ' ' + twitterDate.mid(12, 4);
     QString timeString = twitterDate.mid(17, 8);
 
     QDate date = QDate::fromString(dateString);

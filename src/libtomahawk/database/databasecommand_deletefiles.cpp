@@ -1,3 +1,21 @@
+/* === This file is part of Tomahawk Player - <http://tomahawk-player.org> ===
+ *
+ *   Copyright 2010-2011, Christian Muehlhaeuser <muesli@tomahawk-player.org>
+ *
+ *   Tomahawk is free software: you can redistribute it and/or modify
+ *   it under the terms of the GNU General Public License as published by
+ *   the Free Software Foundation, either version 3 of the License, or
+ *   (at your option) any later version.
+ *
+ *   Tomahawk is distributed in the hope that it will be useful,
+ *   but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ *   GNU General Public License for more details.
+ *
+ *   You should have received a copy of the GNU General Public License
+ *   along with Tomahawk. If not, see <http://www.gnu.org/licenses/>.
+ */
+
 #include "databasecommand_deletefiles.h"
 
 #include <QSqlQuery>
@@ -23,10 +41,10 @@ DatabaseCommand_DeleteFiles::postCommitHook()
     // collection browser will update/fade in etc.
     Collection* coll = source()->collection().data();
 
-    connect( this, SIGNAL( notify( QStringList, Tomahawk::collection_ptr ) ),
-             coll,   SLOT( delTracks( QStringList, Tomahawk::collection_ptr ) ), Qt::QueuedConnection );
+    connect( this, SIGNAL( notify( QStringList ) ),
+             coll,   SLOT( delTracks( QStringList ) ), Qt::QueuedConnection );
 
-    emit notify( m_files, source()->collection() );
+    emit notify( m_files );
 
     // also re-calc the collection stats, to updates the "X tracks" in the sidebar etc:
     DatabaseCommand_CollectionStats* cmd = new DatabaseCommand_CollectionStats( source() );
@@ -48,6 +66,7 @@ DatabaseCommand_DeleteFiles::exec( DatabaseImpl* dbi )
     int deleted = 0;
     QVariant srcid = source()->isLocal() ? QVariant( QVariant::Int ) : source()->id();
     TomahawkSqlQuery delquery = dbi->newquery();
+    QString lastPath;
 
     if ( !m_dir.path().isEmpty() && source()->isLocal() )
     {
@@ -59,15 +78,18 @@ DatabaseCommand_DeleteFiles::exec( DatabaseImpl* dbi )
         delquery.prepare( QString( "DELETE FROM file WHERE source %1 AND id = ?" )
                              .arg( source()->isLocal() ? "IS NULL" : QString( "= %1" ).arg( source()->id() ) ) );
 
-        dirquery.bindValue( 0, "file://" + m_dir.absolutePath() + "/%" );
+        dirquery.bindValue( 0, "file://" + m_dir.canonicalPath() + "/%" );
         dirquery.exec();
 
         while ( dirquery.next() )
         {
             QFileInfo fi( dirquery.value( 1 ).toString().mid( 7 ) ); // remove file://
-            if ( fi.absolutePath() != m_dir.absolutePath() )
+            if ( fi.canonicalPath() != m_dir.canonicalPath() )
             {
-                qDebug() << "Skipping subdir:" << fi.absolutePath();
+                if ( lastPath != fi.canonicalPath() )
+                    qDebug() << "Skipping subdir:" << fi.canonicalPath();
+
+                lastPath = fi.canonicalPath();
                 continue;
             }
 
@@ -111,11 +133,11 @@ DatabaseCommand_DeleteFiles::exec( DatabaseImpl* dbi )
                     << delquery.boundValues();
                 continue;
             }
-            
+
             deleted++;
         }
     }
-    
+
     qDebug() << "Deleted" << deleted << m_ids << m_files;
 
     emit done( m_files, source()->collection() );

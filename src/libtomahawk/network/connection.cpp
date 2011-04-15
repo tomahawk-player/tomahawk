@@ -1,3 +1,21 @@
+/* === This file is part of Tomahawk Player - <http://tomahawk-player.org> ===
+ * 
+ *   Copyright 2010-2011, Christian Muehlhaeuser <muesli@tomahawk-player.org>
+ *
+ *   Tomahawk is free software: you can redistribute it and/or modify
+ *   it under the terms of the GNU General Public License as published by
+ *   the Free Software Foundation, either version 3 of the License, or
+ *   (at your option) any later version.
+ *
+ *   Tomahawk is distributed in the hope that it will be useful,
+ *   but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ *   GNU General Public License for more details.
+ *
+ *   You should have received a copy of the GNU General Public License
+ *   along with Tomahawk. If not, see <http://www.gnu.org/licenses/>.
+ */
+
 #include "connection.h"
 
 #include <QTime>
@@ -44,15 +62,11 @@ Connection::Connection( Servent* parent )
 
 Connection::~Connection()
 {
-    qDebug() << "DTOR connection (super)" << id() << thread();
+    qDebug() << "DTOR connection (super)" << id() << thread() << m_sock.isNull();
     if( !m_sock.isNull() )
     {
-        qDebug() << "deleteLatering sock" << m_sock;
+//        qDebug() << "deleteLatering sock" << m_sock;
         m_sock->deleteLater();
-    }
-    else
-    {
-        qDebug() << "no valid sock to delete";
     }
 
     delete m_statstimer;
@@ -100,7 +114,7 @@ Connection::setFirstMessage( msg_ptr m )
 void
 Connection::shutdown( bool waitUntilSentAll )
 {
-    qDebug() << Q_FUNC_INFO << waitUntilSentAll;
+    qDebug() << Q_FUNC_INFO << waitUntilSentAll << id();
     if ( m_do_shutdown )
     {
         //qDebug() << id() << " already shutting down";
@@ -110,7 +124,7 @@ Connection::shutdown( bool waitUntilSentAll )
     m_do_shutdown = true;
     if ( !waitUntilSentAll )
     {
-        qDebug() << "Shutting down immediately " << id();
+//        qDebug() << "Shutting down immediately " << id();
         actualShutdown();
     }
     else
@@ -128,10 +142,9 @@ Connection::shutdown( bool waitUntilSentAll )
 void
 Connection::actualShutdown()
 {
-    qDebug() << Q_FUNC_INFO;
+    qDebug() << Q_FUNC_INFO << m_actually_shutting_down << id();
     if( m_actually_shutting_down )
     {
-        qDebug() << "(already actually shutting down)";
         return;
     }
     m_actually_shutting_down = true;
@@ -141,7 +154,7 @@ Connection::actualShutdown()
         m_sock->disconnectFromHost();
     }
 
-    qDebug() << "EMITTING finished()";
+//    qDebug() << "EMITTING finished()";
     emit finished();
 }
 

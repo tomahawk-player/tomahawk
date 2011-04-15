@@ -1,3 +1,21 @@
+/* === This file is part of Tomahawk Player - <http://tomahawk-player.org> ===
+ * 
+ *   Copyright 2010-2011, Christian Muehlhaeuser <muesli@tomahawk-player.org>
+ *
+ *   Tomahawk is free software: you can redistribute it and/or modify
+ *   it under the terms of the GNU General Public License as published by
+ *   the Free Software Foundation, either version 3 of the License, or
+ *   (at your option) any later version.
+ *
+ *   Tomahawk is distributed in the hope that it will be useful,
+ *   but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ *   GNU General Public License for more details.
+ *
+ *   You should have received a copy of the GNU General Public License
+ *   along with Tomahawk. If not, see <http://www.gnu.org/licenses/>.
+ */
+
 #ifndef PLAYLIST_H
 #define PLAYLIST_H
 
@@ -144,7 +162,7 @@ public:
     virtual int unfilteredTrackCount() const { return m_entries.count(); }
     virtual int trackCount() const { return m_entries.count(); }
 
-    virtual Tomahawk::result_ptr siblingItem( int itemsAway ) { return result_ptr(); }
+    virtual Tomahawk::result_ptr siblingItem( int /*itemsAway*/ ) { return result_ptr(); }
 
     virtual PlaylistInterface::RepeatMode repeatMode() const { return PlaylistInterface::NoRepeat; }
     virtual bool shuffled() const { return false; }
@@ -152,7 +170,7 @@ public:
     virtual void setRepeatMode( PlaylistInterface::RepeatMode ) {}
     virtual void setShuffled( bool ) {}
 
-    virtual void setFilter( const QString& pattern ) {}
+    virtual void setFilter( const QString& /*pattern*/ ) {}
 
 signals:
     /// emitted when the playlist revision changes (whenever the playlist changes)
@@ -164,6 +182,9 @@ signals:
     /// renamed etc.
     void changed();
 
+    /// was deleted, eh?
+    void deleted( const Tomahawk::playlist_ptr& pl );
+    
     void repeatModeChanged( PlaylistInterface::RepeatMode mode );
     void shuffleModeChanged( bool enabled );
 

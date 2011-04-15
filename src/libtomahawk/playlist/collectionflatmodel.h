@@ -1,3 +1,21 @@
+/* === This file is part of Tomahawk Player - <http://tomahawk-player.org> ===
+ *
+ *   Copyright 2010-2011, Christian Muehlhaeuser <muesli@tomahawk-player.org>
+ *
+ *   Tomahawk is free software: you can redistribute it and/or modify
+ *   it under the terms of the GNU General Public License as published by
+ *   the Free Software Foundation, either version 3 of the License, or
+ *   (at your option) any later version.
+ *
+ *   Tomahawk is distributed in the hope that it will be useful,
+ *   but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ *   GNU General Public License for more details.
+ *
+ *   You should have received a copy of the GNU General Public License
+ *   along with Tomahawk. If not, see <http://www.gnu.org/licenses/>.
+ */
+
 #ifndef COLLECTIONFLATMODEL_H
 #define COLLECTIONFLATMODEL_H
 
@@ -5,7 +23,7 @@
 #include <QList>
 #include <QHash>
 
-#include "plitem.h"
+#include "trackmodelitem.h"
 #include "trackmodel.h"
 #include "collection.h"
 #include "query.h"
@@ -27,21 +45,16 @@ public:
     explicit CollectionFlatModel( QObject* parent = 0 );
     ~CollectionFlatModel();
 
-    int columnCount( const QModelIndex& parent = QModelIndex() ) const;
-
     virtual int trackCount() const { return rowCount( QModelIndex() ) + m_tracksToAdd.count(); }
 
-    QVariant data( const QModelIndex& index, int role ) const;
-    QVariant headerData( int section, Qt::Orientation orientation, int role ) const;
-
     void addCollections( const QList< Tomahawk::collection_ptr >& collections );
-    
-    void addCollection( const Tomahawk::collection_ptr& collection );
+
+    void addCollection( const Tomahawk::collection_ptr& collection, bool sendNotifications = true );
     void removeCollection( const Tomahawk::collection_ptr& collection );
 
     void addFilteredCollection( const Tomahawk::collection_ptr& collection, unsigned int amount, DatabaseCommand_AllTracks::SortOrder order );
 
-    virtual void append( const Tomahawk::query_ptr& query ) {}
+    virtual void append( const Tomahawk::query_ptr& /*query*/ ) {}
 
 signals:
     void repeatModeChanged( PlaylistInterface::RepeatMode mode );
@@ -49,7 +62,6 @@ signals:
 
     void itemSizeChanged( const QModelIndex& index );
 
-    void doneLoadingCollections();
 private slots:
     void onDataChanged();
 

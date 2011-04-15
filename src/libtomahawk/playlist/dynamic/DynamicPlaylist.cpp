@@ -1,18 +1,20 @@
-/****************************************************************************************
- * Copyright (c) 2010 Leo Franchi <lfranchi@kde.org>                                    *
- *                                                                                      *
- * This program is free software; you can redistribute it and/or modify it under        *
- * the terms of the GNU General Public License as published by the Free Software        *
- * Foundation; either version 2 of the License, or (at your option) any later           *
- * version.                                                                             *
- *                                                                                      *
- * This program is distributed in the hope that it will be useful, but WITHOUT ANY      *
- * WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A      *
- * PARTICULAR PURPOSE. See the GNU General Public License for more details.             *
- *                                                                                      *
- * You should have received a copy of the GNU General Public License along with         *
- * this program.  If not, see <http://www.gnu.org/licenses/>.                           *
- ****************************************************************************************/
+/* === This file is part of Tomahawk Player - <http://tomahawk-player.org> ===
+ * 
+ *   Copyright 2010-2011, Christian Muehlhaeuser <muesli@tomahawk-player.org>
+ *
+ *   Tomahawk is free software: you can redistribute it and/or modify
+ *   it under the terms of the GNU General Public License as published by
+ *   the Free Software Foundation, either version 3 of the License, or
+ *   (at your option) any later version.
+ *
+ *   Tomahawk is distributed in the hope that it will be useful,
+ *   but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ *   GNU General Public License for more details.
+ *
+ *   You should have received a copy of the GNU General Public License
+ *   along with Tomahawk. If not, see <http://www.gnu.org/licenses/>.
+ */
 
 #include "DynamicPlaylist.h"
 
@@ -251,8 +253,8 @@ DynamicPlaylist::reportCreated( const Tomahawk::dynplaylist_ptr& self )
     Q_ASSERT( !author().isNull() );
     Q_ASSERT( !author()->collection().isNull() );
     // will emit Collection::playlistCreated(...)
-    qDebug() << "Creating dynplaylist belonging to:" << author().data() << author().isNull();
-    qDebug() << "REPORTING DYNAMIC PLAYLIST CREATED:" << this << author()->friendlyName();
+//    qDebug() << "Creating dynplaylist belonging to:" << author().data() << author().isNull();
+//    qDebug() << "REPORTING DYNAMIC PLAYLIST CREATED:" << this << author()->friendlyName();
     author()->collection()->addDynamicPlaylist( self );    
 }
 
@@ -263,6 +265,8 @@ DynamicPlaylist::reportDeleted( const Tomahawk::dynplaylist_ptr& self )
     Q_ASSERT( self.data() == this );
     // will emit Collection::playlistDeleted(...)
     author()->collection()->deleteDynamicPlaylist( self ); 
+    
+    emit deleted( self );
 }
 
 void DynamicPlaylist::addEntries(const QList< query_ptr >& queries, const QString& oldrev)
@@ -429,7 +433,7 @@ QList< dyncontrol_ptr > DynamicPlaylist::variantsToControl( const QList< QVarian
     QList<dyncontrol_ptr> realControls;
     foreach( QVariantMap controlV, controlsV ) {
         dyncontrol_ptr control = GeneratorFactory::createControl( controlV.value( "type" ).toString(), controlV.value( "selectedType" ).toString() );
-        qDebug() << "CReating control with data:" << controlV;
+        qDebug() << "Creating control with data:" << controlV;
         QJson::QObjectHelper::qvariant2qobject( controlV, control.data() );
         realControls << control;
     }

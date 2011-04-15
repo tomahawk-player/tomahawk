@@ -1,10 +1,28 @@
+/* === This file is part of Tomahawk Player - <http://tomahawk-player.org> ===
+ *
+ *   Copyright 2010-2011, Christian Muehlhaeuser <muesli@tomahawk-player.org>
+ *
+ *   Tomahawk is free software: you can redistribute it and/or modify
+ *   it under the terms of the GNU General Public License as published by
+ *   the Free Software Foundation, either version 3 of the License, or
+ *   (at your option) any later version.
+ *
+ *   Tomahawk is distributed in the hope that it will be useful,
+ *   but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ *   GNU General Public License for more details.
+ *
+ *   You should have received a copy of the GNU General Public License
+ *   along with Tomahawk. If not, see <http://www.gnu.org/licenses/>.
+ */
+
 #ifndef TRACKMODEL_H
 #define TRACKMODEL_H
 
 #include <QAbstractItemModel>
 
 #include "playlistinterface.h"
-#include "playlist/plitem.h"
+#include "trackmodelitem.h"
 
 #include "dllmacro.h"
 
@@ -58,11 +76,13 @@ public:
     virtual PlaylistInterface::RepeatMode repeatMode() const { return PlaylistInterface::NoRepeat; }
     virtual bool shuffled() const { return false; }
 
+    virtual void ensureResolved();
+
     virtual void append( const Tomahawk::query_ptr& query ) = 0;
 
-    PlItem* itemFromIndex( const QModelIndex& index ) const;
+    TrackModelItem* itemFromIndex( const QModelIndex& index ) const;
 
-    PlItem* m_rootItem;
+    TrackModelItem* m_rootItem;
 
 signals:
     void repeatModeChanged( PlaylistInterface::RepeatMode mode );
@@ -70,14 +90,17 @@ signals:
 
     void trackCountChanged( unsigned int tracks );
 
+    void loadingStarted();
+    void loadingFinished();
+
 public slots:
     virtual void setCurrentItem( const QModelIndex& index );
 
     virtual void removeIndex( const QModelIndex& index, bool moreToCome = false );
     virtual void removeIndexes( const QList<QModelIndex>& indexes );
 
-    virtual void setRepeatMode( PlaylistInterface::RepeatMode mode ) {}
-    virtual void setShuffled( bool shuffled ) {}
+    virtual void setRepeatMode( PlaylistInterface::RepeatMode /*mode*/ ) {}
+    virtual void setShuffled( bool /*shuffled*/ ) {}
 
 protected:
     virtual void setReadOnly( bool b ) { m_readOnly = b; }

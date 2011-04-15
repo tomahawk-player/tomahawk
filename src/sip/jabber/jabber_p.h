@@ -1,3 +1,21 @@
+/* === This file is part of Tomahawk Player - <http://tomahawk-player.org> ===
+ * 
+ *   Copyright 2010-2011, Christian Muehlhaeuser <muesli@tomahawk-player.org>
+ *
+ *   Tomahawk is free software: you can redistribute it and/or modify
+ *   it under the terms of the GNU General Public License as published by
+ *   the Free Software Foundation, either version 3 of the License, or
+ *   (at your option) any later version.
+ *
+ *   Tomahawk is distributed in the hope that it will be useful,
+ *   but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ *   GNU General Public License for more details.
+ *
+ *   You should have received a copy of the GNU General Public License
+ *   along with Tomahawk. If not, see <http://www.gnu.org/licenses/>.
+ */
+
 /*
     This is the Jabber client that the rest of the app sees
     Gloox stuff should NOT leak outside this class.
@@ -12,6 +30,7 @@
 #include <QSocketNotifier>
 #include <QMap>
 #include <QNetworkProxy>
+#include <QMessageBox>
 
 #include <string>
 
@@ -58,6 +77,7 @@ class SIPDLLEXPORT Jabber_p :
        public gloox::MessageHandler,
        public gloox::VCardHandler,
        public gloox::PresenceHandler,
+       public gloox::RosterListener,
        gloox::LogHandler
        //public gloox::DiscoHandler,
 {
@@ -91,6 +111,11 @@ public:
 
     virtual void handleRoster( const gloox::Roster& roster );
     virtual void handleRosterError( const gloox::IQ& /*iq*/ );
+
+    // not actually used, just needed for the interface to support subscription requests, see handlePresence for presence handling
+    virtual void handleRosterPresence( const gloox::RosterItem&, const std::string&, gloox::Presence::PresenceType, const std::string& ) {}
+    virtual void handleSelfPresence( const gloox::RosterItem&, const std::string&, gloox::Presence::PresenceType, const std::string& ) {}
+
     virtual void handlePresence( const gloox::Presence& presence );
     virtual bool handleSubscription( const gloox::JID& jid, const std::string& /*msg*/ );
     virtual bool handleSubscriptionRequest( const gloox::JID& jid, const std::string& /*msg*/ );
@@ -129,6 +154,7 @@ public slots:
 
 private slots:
     void doJabberRecv();
+    void onSubscriptionRequestConfirmed( int result );
 
 private:
     bool presenceMeansOnline( gloox::Presence::PresenceType p );
@@ -140,6 +166,7 @@ private:
     QSharedPointer<gloox::VCardManager> m_vcardManager;
     QString m_server;
     QScopedPointer<QSocketNotifier> m_notifier;
+    QHash<gloox::JID, QMessageBox*> m_subscriptionConfirmBoxes;
 };
 
 #endif // JABBER_H

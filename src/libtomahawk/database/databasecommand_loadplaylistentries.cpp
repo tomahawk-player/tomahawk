@@ -1,3 +1,21 @@
+/* === This file is part of Tomahawk Player - <http://tomahawk-player.org> ===
+ * 
+ *   Copyright 2010-2011, Christian Muehlhaeuser <muesli@tomahawk-player.org>
+ *
+ *   Tomahawk is free software: you can redistribute it and/or modify
+ *   it under the terms of the GNU General Public License as published by
+ *   the Free Software Foundation, either version 3 of the License, or
+ *   (at your option) any later version.
+ *
+ *   Tomahawk is distributed in the hope that it will be useful,
+ *   but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ *   GNU General Public License for more details.
+ *
+ *   You should have received a copy of the GNU General Public License
+ *   along with Tomahawk. If not, see <http://www.gnu.org/licenses/>.
+ */
+
 #include "databasecommand_loadplaylistentries.h"
 
 #include <QSqlQuery>
@@ -27,7 +45,7 @@ DatabaseCommand_LoadPlaylistEntries::generateEntries( DatabaseImpl* dbi )
     query_entries.bindValue( ":guid", m_revguid );
     query_entries.exec();
     
-    qDebug() << "trying to load entries:" << m_revguid;
+//    qDebug() << "trying to load entries:" << m_revguid;
     QString prevrev;
     QJson::Parser parser; bool ok;
     
@@ -37,7 +55,6 @@ DatabaseCommand_LoadPlaylistEntries::generateEntries( DatabaseImpl* dbi )
         QVariant v = parser.parse( query_entries.value(0).toByteArray(), &ok );
         Q_ASSERT( ok && v.type() == QVariant::List ); //TODO
         m_guids = v.toStringList();
-        //        qDebug() << "Entries:" << guids;
         
         QString inclause = QString("('%1')").arg(m_guids.join("', '"));
         
@@ -97,5 +114,5 @@ DatabaseCommand_LoadPlaylistEntries::generateEntries( DatabaseImpl* dbi )
         m_islatest = query_entries_old.value( 1 ).toBool();
     }
     
-    qDebug() << Q_FUNC_INFO << "entrymap:" << m_entrymap;
+//    qDebug() << Q_FUNC_INFO << "entrymap:" << m_entrymap;
 }

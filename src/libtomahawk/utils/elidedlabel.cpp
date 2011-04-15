@@ -1,9 +1,28 @@
+/* === This file is part of Tomahawk Player - <http://tomahawk-player.org> ===
+ * 
+ *   Copyright 2010-2011, Christian Muehlhaeuser <muesli@tomahawk-player.org>
+ *
+ *   Tomahawk is free software: you can redistribute it and/or modify
+ *   it under the terms of the GNU General Public License as published by
+ *   the Free Software Foundation, either version 3 of the License, or
+ *   (at your option) any later version.
+ *
+ *   Tomahawk is distributed in the hope that it will be useful,
+ *   but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ *   GNU General Public License for more details.
+ *
+ *   You should have received a copy of the GNU General Public License
+ *   along with Tomahawk. If not, see <http://www.gnu.org/licenses/>.
+ */
+
 #include "elidedlabel.h"
 
 #include <QEvent>
 #include <QPainter>
 #include <QFontMetrics>
 #include <QApplication>
+#include <QRect>
 
 
 ElidedLabel::ElidedLabel( QWidget* parent, Qt::WindowFlags flags )
@@ -47,16 +66,16 @@ ElidedLabel::setText( const QString& text )
 Qt::Alignment
 ElidedLabel::alignment() const
 {
-    return align;
+    return m_align;
 }
 
 
 void
 ElidedLabel::setAlignment( Qt::Alignment alignment )
 {
-    if ( this->align != alignment )
+    if ( m_align != alignment )
     {
-        this->align = alignment;
+        m_align = alignment;
         update(); // no geometry change, repaint is sufficient
     }
 }
@@ -65,18 +84,30 @@ ElidedLabel::setAlignment( Qt::Alignment alignment )
 Qt::TextElideMode
 ElidedLabel::elideMode() const
 {
-    return mode;
+    return m_mode;
 }
 
 
 void
 ElidedLabel::setElideMode( Qt::TextElideMode mode )
 {
-    if ( this->mode != mode )
+    if ( m_mode != mode )
     {
-        this->mode = mode;
+        m_mode = mode;
         updateLabel();
     }
+}
+
+void 
+ElidedLabel::setMargin( int margin )
+{
+    m_margin = margin;
+}
+
+int 
+ElidedLabel::margin() const
+{
+    return m_margin;
 }
 
 
@@ -84,8 +115,9 @@ void
 ElidedLabel::init( const QString& txt )
 {
     m_text = txt;
-    align = Qt::AlignLeft;
-    mode = Qt::ElideMiddle;
+    m_align = Qt::AlignLeft;
+    m_mode = Qt::ElideMiddle;
+    m_margin = 0;
     setContentsMargins( 0, 0, 0, 0 );
 }
 
@@ -110,7 +142,7 @@ ElidedLabel::sizeHint() const
 QSize
 ElidedLabel::minimumSizeHint() const
 {
-    switch ( mode )
+    switch ( m_mode )
     {
         case Qt::ElideNone:
             return sizeHint();
@@ -131,8 +163,10 @@ ElidedLabel::paintEvent( QPaintEvent* event )
     QFrame::paintEvent( event );
     QPainter p( this );
     QRect r = contentsRect();
-    const QString elidedText = fontMetrics().elidedText( m_text, mode, r.width() );
-    p.drawText( r, align, elidedText );
+    r.adjust( m_margin, m_margin, -m_margin, -m_margin );
+    
+    const QString elidedText = fontMetrics().elidedText( m_text, m_mode, r.width() );
+    p.drawText( r, m_align, elidedText );
 }
 
 
@@ -158,7 +192,7 @@ void
 ElidedLabel::mousePressEvent( QMouseEvent* event )
 {
     QFrame::mousePressEvent( event );
-    time.start();
+    m_time.start();
 }
 
 
@@ -166,6 +200,6 @@ void
 ElidedLabel::mouseReleaseEvent( QMouseEvent* event )
 {
     QFrame::mouseReleaseEvent( event );
-    if ( time.elapsed() < qApp->doubleClickInterval() )
+    if ( m_time.elapsed() < qApp->doubleClickInterval() )
         emit clicked();
 }

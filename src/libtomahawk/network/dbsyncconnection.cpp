@@ -1,3 +1,21 @@
+/* === This file is part of Tomahawk Player - <http://tomahawk-player.org> ===
+ * 
+ *   Copyright 2010-2011, Christian Muehlhaeuser <muesli@tomahawk-player.org>
+ *
+ *   Tomahawk is free software: you can redistribute it and/or modify
+ *   it under the terms of the GNU General Public License as published by
+ *   the Free Software Foundation, either version 3 of the License, or
+ *   (at your option) any later version.
+ *
+ *   Tomahawk is distributed in the hope that it will be useful,
+ *   but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ *   GNU General Public License for more details.
+ *
+ *   You should have received a copy of the GNU General Public License
+ *   along with Tomahawk. If not, see <http://www.gnu.org/licenses/>.
+ */
+
 /*
     Database syncing using the oplog table.
     =======================================
@@ -57,7 +75,7 @@ DBSyncConnection::~DBSyncConnection()
 void
 DBSyncConnection::idleTimeout()
 {
-    qDebug() << Q_FUNC_INFO << "*************";
+    qDebug() << Q_FUNC_INFO;
     shutdown( true );
 }
 
@@ -69,11 +87,6 @@ DBSyncConnection::changeState( State newstate )
     m_state = newstate;
     qDebug() << "DBSYNC State changed from" << s << "to" << newstate;
     emit stateChanged( newstate, s, "" );
-
-    if ( newstate == SYNCED )
-    {
-        qDebug() << "Synced :)";
-    }
 }
 
 
@@ -179,7 +192,7 @@ DBSyncConnection::handleMsg( msg_ptr msg )
          msg->is( Msg::DBOP ) &&
          msg->payload() == "ok" )
     {
-        qDebug() << "No ops to apply, we are synced.";
+//        qDebug() << "No ops to apply, we are synced.";
         changeState( SYNCED );
         // calc the collection stats, to updates the "X tracks" in the sidebar etc
         // this is done automatically if you run a dbcmd to add files.

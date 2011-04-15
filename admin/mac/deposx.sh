@@ -62,7 +62,7 @@ function deposx_change
 function deplib_change
 {
     install_name_tool -change /usr/local/Cellar/liblastfm/0.3.3/lib/liblastfm.0.dylib @executable_path/liblastfm.0.dylib $1
-    install_name_tool -change /usr/local/Cellar/qjson/0.7.1/lib/libqjson.0.dylib @executable_path/libqjson.0.dylib $1
+    install_name_tool -change /usr/local/Cellar/qjson/0.7.1/lib/libqjson.0.7.1.dylib @executable_path/libqjson.0.7.1.dylib $1
     install_name_tool -change /usr/local/lib/libechonest.1.1.dylib @executable_path/libechonest.1.1.dylib $1
     install_name_tool -change /usr/local/lib/libclucene-core.0.9.23.dylib @executable_path/libclucene-core.0.9.23.dylib $1
     install_name_tool -change /usr/local/lib/libclucene-shared.0.9.23.dylib @executable_path/libclucene-shared.0.9.23.dylib $1
@@ -75,13 +75,13 @@ function deplib_change
     install_name_tool -change /usr/local/Cellar/flac/1.2.1/lib/libFLAC++.6.dylib @executable_path/libFLAC++.6.dylib $1
     install_name_tool -change /usr/local/Cellar/flac/1.2.1/lib/libFLAC.8.dylib @executable_path/libFLAC.8.dylib $1
     install_name_tool -change $ORIGROOT/src/libtomahawk/libtomahawklib.dylib @executable_path/libtomahawklib.dylib $1
-    install_name_tool -change $ORIGROOT/libsip_jabber.dylib @executable_path/libsip_jabber.dylib $1
-    install_name_tool -change $ORIGROOT/libsip_twitter.dylib @executable_path/libsip_twitter.dylib $1
-    install_name_tool -change $ORIGROOT/libsip_zeroconf.dylib @executable_path/libsip_zeroconf.dylib $1
+    install_name_tool -change $ORIGROOT/libtomahawk_sipjabber.dylib @executable_path/libtomahawk_sipjabber.dylib $1
+    install_name_tool -change $ORIGROOT/libtomahawk_siptwitter.dylib @executable_path/libtomahawk_siptwitter.dylib $1
+    install_name_tool -change $ORIGROOT/libtomahawk_sipzeroconf.dylib @executable_path/libtomahawk_sipzeroconf.dylib $1
     install_name_tool -change $ORIGROOT/thirdparty/jdns/libtomahawk_jdns.dylib @executable_path/libtomahawk_jdns.dylib $1
     install_name_tool -change $ORIGROOT/thirdparty/qtweetlib/libtomahawk_qtweetlib.dylib @executable_path/libtomahawk_qtweetlib.dylib $1
 
-    install_name_tool -change libqjson.0.dylib @executable_path/libqjson.0.dylib $1
+    install_name_tool -change libqjson.0.7.1.dylib @executable_path/libqjson.0.7.1.dylib $1
     install_name_tool -change libechonest.1.1.dylib @executable_path/libechonest.1.1.dylib $1
     install_name_tool -change libclucene-core.0.9.23.dylib @executable_path/libclucene-core.0.9.23.dylib $1
     install_name_tool -change libclucene-shared.0.9.23.dylib @executable_path/libclucene-shared.0.9.23.dylib $1
@@ -99,7 +99,7 @@ do
     deplib_change "$x"
 done
 
-import_lib /usr/local/Cellar/qjson/0.7.1/lib/libqjson.0.dylib
+import_lib /usr/local/Cellar/qjson/0.7.1/lib/libqjson.0.7.1.dylib
 import_lib /usr/local/Cellar/liblastfm/0.3.3/lib/liblastfm.0.dylib
 import_lib /usr/local/Cellar/gloox/1.0/lib/libgloox.8.dylib
 import_lib /usr/local/Cellar/taglib/1.6.3/lib/libtag.1.dylib
@@ -113,9 +113,9 @@ import_lib /usr/local/lib/libechonest.1.1.dylib
 import_lib /usr/local/lib/libclucene-core.0.9.23.dylib
 import_lib /usr/local/lib/libclucene-shared.0.9.23.dylib
 
-import_lib ../../libsip_jabber.dylib
-import_lib ../../libsip_twitter.dylib
-import_lib ../../libsip_zeroconf.dylib
+import_lib ../../libtomahawk_sipjabber.dylib
+import_lib ../../libtomahawk_siptwitter.dylib
+import_lib ../../libtomahawk_sipzeroconf.dylib
 import_lib ../../src/libtomahawk/libtomahawklib.dylib
 import_lib ../../thirdparty/jdns/libtomahawk_jdns.dylib
 import_lib ../../thirdparty/qtweetlib/libtomahawk_qtweetlib.dylib

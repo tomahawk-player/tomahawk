@@ -1,3 +1,21 @@
+/* === This file is part of Tomahawk Player - <http://tomahawk-player.org> ===
+ *
+ *   Copyright 2010-2011, Christian Muehlhaeuser <muesli@tomahawk-player.org>
+ *
+ *   Tomahawk is free software: you can redistribute it and/or modify
+ *   it under the terms of the GNU General Public License as published by
+ *   the Free Software Foundation, either version 3 of the License, or
+ *   (at your option) any later version.
+ *
+ *   Tomahawk is distributed in the hope that it will be useful,
+ *   but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ *   GNU General Public License for more details.
+ *
+ *   You should have received a copy of the GNU General Public License
+ *   along with Tomahawk. If not, see <http://www.gnu.org/licenses/>.
+ */
+
 #include "collectionflatmodel.h"
 
 #include <QDebug>
@@ -24,45 +42,23 @@ CollectionFlatModel::~CollectionFlatModel()
 }
 
 
-int
-CollectionFlatModel::columnCount( const QModelIndex& parent ) const
-{
-    return TrackModel::columnCount( parent );
-}
-
-
-QVariant
-CollectionFlatModel::data( const QModelIndex& index, int role ) const
-{
-    return TrackModel::data( index, role );
-}
-
-
-QVariant
-CollectionFlatModel::headerData( int section, Qt::Orientation orientation, int role ) const
-{
-    return TrackModel::headerData( section, orientation, role );
-}
-
-void 
+void
 CollectionFlatModel::addCollections( const QList< collection_ptr >& collections )
 {
     qDebug() << Q_FUNC_INFO << "Adding collections!";
-    foreach( const collection_ptr& col, collections ) 
+    foreach( const collection_ptr& col, collections )
     {
-        if( !col->isLoaded() )
-            m_loadingCollections << col.data();
-        
         addCollection( col );
     }
-    
-    if( m_loadingCollections.isEmpty() )
-        emit doneLoadingCollections();
+
+    // we are waiting for some to load
+    if( !m_loadingCollections.isEmpty() )
+        emit loadingStarted();
 }
 
 
 void
-CollectionFlatModel::addCollection( const collection_ptr& collection )
+CollectionFlatModel::addCollection( const collection_ptr& collection, bool sendNotifications )
 {
     qDebug() << Q_FUNC_INFO << collection->name()
                             << collection->source()->id()
@@ -73,15 +69,19 @@ CollectionFlatModel::addCollection( const collection_ptr& collection )
     connect( collection.data(), SIGNAL( tracksRemoved( QList<Tomahawk::query_ptr> ) ),
                                   SLOT( onTracksRemoved( QList<Tomahawk::query_ptr> ) ) );
 
+    if( sendNotifications )
+        emit loadingStarted();
+
     if ( collection->isLoaded() )
+    {
         onTracksAdded( collection->tracks() );
+    }
     else
     {
         collection->tracks(); // data will arrive via signals
-        
         m_loadingCollections << collection.data();
     }
-    
+
     if ( collection->source()->isLocal() )
         setTitle( tr( "Your Collection" ) );
     else
@@ -102,8 +102,8 @@ CollectionFlatModel::addFilteredCollection( const collection_ptr& collection, un
     cmd->setSortOrder( order );
     cmd->setSortDescending( true );
 
-    connect( cmd, SIGNAL( tracks( QList<Tomahawk::query_ptr>, Tomahawk::collection_ptr ) ),
-                    SLOT( onTracksAdded( QList<Tomahawk::query_ptr>, Tomahawk::collection_ptr ) ), Qt::QueuedConnection );
+    connect( cmd, SIGNAL( tracks( QList<Tomahawk::query_ptr>, QVariant ) ),
+                    SLOT( onTracksAdded( QList<Tomahawk::query_ptr> ) ), Qt::QueuedConnection );
 
     Database::instance()->enqueue( QSharedPointer<DatabaseCommand>( cmd ) );
 }
@@ -120,7 +120,7 @@ CollectionFlatModel::removeCollection( const collection_ptr& collection )
     QTime timer;
     timer.start();
 
-//    QList<PlItem*> plitems = m_collectionIndex.values( collection );
+//    QList<TrackModelItem*> plitems = m_collectionIndex.values( collection );
     QList< QPair< int, int > > rows;
     QList< QPair< int, int > > sortrows;
     QPair< int, int > row;
@@ -167,7 +167,7 @@ CollectionFlatModel::removeCollection( const collection_ptr& collection )
         emit beginRemoveRows( QModelIndex(), row.first, row.second );
         for ( int i = row.second; i >= row.first; i-- )
         {
-            PlItem* item = itemFromIndex( index( i, 0, QModelIndex() ) );
+            TrackModelItem* item = itemFromIndex( index( i, 0, QModelIndex() ) );
             delete item;
         }
         emit endRemoveRows();
@@ -184,13 +184,12 @@ CollectionFlatModel::onTracksAdded( const QList<Tomahawk::query_ptr>& tracks )
 {
     qDebug() << Q_FUNC_INFO << tracks.count() << rowCount( QModelIndex() );
 
-    if( !m_loadingCollections.isEmpty() && sender() && qobject_cast< Collection* >( sender() ) ) { // we are keeping track and are called as a slot
+    if( !m_loadingCollections.isEmpty() && sender() && qobject_cast< Collection* >( sender() ) )
+    {
+        // we are keeping track and are called as a slot
         m_loadingCollections.removeAll( qobject_cast< Collection* >( sender() ) );
-        
-        if( m_loadingCollections.isEmpty() )
-            emit doneLoadingCollections();
     }
-    
+
     bool kickOff = m_tracksToAdd.isEmpty();
     m_tracksToAdd << tracks;
 
@@ -198,26 +197,27 @@ CollectionFlatModel::onTracksAdded( const QList<Tomahawk::query_ptr>& tracks )
 
     if ( m_tracksToAdd.count() && kickOff )
         processTracksToAdd();
+    else if ( m_tracksToAdd.isEmpty() && m_loadingCollections.isEmpty() )
+        emit loadingFinished();
 }
 
 
 void
 CollectionFlatModel::processTracksToAdd()
 {
-    int chunkSize = 500000;
+    int chunkSize = 5000;
     int maxc = qMin( chunkSize, m_tracksToAdd.count() );
     int c = rowCount( QModelIndex() );
 
-    //emit beginInsertRows( QModelIndex(), c, c + maxc - 1 );
-    beginResetModel();
+    emit beginInsertRows( QModelIndex(), c, c + maxc - 1 );
+    //beginResetModel();
 
-    PlItem* plitem;
+    TrackModelItem* plitem;
     QList< Tomahawk::query_ptr >::iterator iter = m_tracksToAdd.begin();
 
     for( int i = 0; i < maxc; ++i )
     {
-
-        plitem = new PlItem( *iter, m_rootItem );
+        plitem = new TrackModelItem( *iter, m_rootItem );
         plitem->index = createIndex( m_rootItem->children.count() - 1, 0, plitem );
 
         connect( plitem, SIGNAL( dataChanged() ), SLOT( onDataChanged() ) );
@@ -227,8 +227,11 @@ CollectionFlatModel::processTracksToAdd()
 
     m_tracksToAdd.erase( m_tracksToAdd.begin(), iter );
 
-    endResetModel();
-    //emit endInsertRows();
+    if ( m_tracksToAdd.isEmpty() && m_loadingCollections.isEmpty() )
+        emit loadingFinished();
+
+    //endResetModel();
+    emit endInsertRows();
     qDebug() << Q_FUNC_INFO << rowCount( QModelIndex() );
 
     if ( m_tracksToAdd.count() )
@@ -242,7 +245,7 @@ CollectionFlatModel::onTracksRemoved( const QList<Tomahawk::query_ptr>& tracks )
     QList<Tomahawk::query_ptr> t = tracks;
     for ( int i = rowCount( QModelIndex() ); i >= 0 && t.count(); i-- )
     {
-        PlItem* item = itemFromIndex( index( i, 0, QModelIndex() ) );
+        TrackModelItem* item = itemFromIndex( index( i, 0, QModelIndex() ) );
         if ( !item )
             continue;
 
@@ -272,11 +275,11 @@ CollectionFlatModel::onTracksRemoved( const QList<Tomahawk::query_ptr>& tracks )
 void
 CollectionFlatModel::onDataChanged()
 {
-    PlItem* p = (PlItem*)sender();
+    TrackModelItem* p = (TrackModelItem*)sender();
 //    emit itemSizeChanged( p->index );
 
     if ( p )
-        emit dataChanged( p->index, p->index.sibling( p->index.row(), columnCount() - 1 ) );
+        emit dataChanged( p->index, p->index.sibling( p->index.row(), columnCount( QModelIndex() ) - 1 ) );
 }
 
 

@@ -71,7 +71,6 @@
     </property>
     <addaction name="actionToggleConnect"/>
     <addaction name="separator"/>
-    <addaction name="actionAddPeerManually"/>
    </widget>
    <widget class="QMenu" name="menu_Help">
     <property name="title">
@@ -100,11 +99,6 @@
   <action name="actionToggleConnect">
    <property name="text">
     <string>Go &amp;online</string>
-   </property>
-  </action>
-  <action name="actionAddPeerManually">
-   <property name="text">
-    <string>Add &amp;Peer Manually...</string>
    </property>
   </action>
   <action name="actionAddFriendManually">

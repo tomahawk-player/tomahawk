@@ -1,3 +1,21 @@
+/* === This file is part of Tomahawk Player - <http://tomahawk-player.org> ===
+ *
+ *   Copyright 2010-2011, Christian Muehlhaeuser <muesli@tomahawk-player.org>
+ *
+ *   Tomahawk is free software: you can redistribute it and/or modify
+ *   it under the terms of the GNU General Public License as published by
+ *   the Free Software Foundation, either version 3 of the License, or
+ *   (at your option) any later version.
+ *
+ *   Tomahawk is distributed in the hope that it will be useful,
+ *   but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ *   GNU General Public License for more details.
+ *
+ *   You should have received a copy of the GNU General Public License
+ *   along with Tomahawk. If not, see <http://www.gnu.org/licenses/>.
+ */
+
 #include "tomahawkwindow.h"
 #include "ui_tomahawkwindow.h"
 
@@ -90,7 +108,7 @@ TomahawkWindow::TomahawkWindow( QWidget* parent )
 
     connect( ui->actionHideOfflineSources, SIGNAL( triggered() ), stv, SLOT( hideOfflineSources() ) );
     connect( ui->actionShowOfflineSources, SIGNAL( triggered() ), stv, SLOT( showOfflineSources() ) );
-    
+
     sidebar->addWidget( stv );
     sidebar->addWidget( transferView );
     sidebar->hide( 1, false );
@@ -127,24 +145,25 @@ TomahawkWindow::TomahawkWindow( QWidget* parent )
     toolbar->setIconSize( QSize( 32, 32 ) );
     toolbar->setToolButtonStyle( Qt::ToolButtonFollowStyle );
     toolbar->installEventFilter( new WidgetDragFilter( toolbar ) );
-    
+
 #if defined( Q_OS_DARWIN ) && defined( HAVE_SPARKLE )
-    QAction* checkForUpdates = ui->menu_Help->addAction( tr( "Check for updates...") );
+    QAction* checkForUpdates = ui->menu_Help->addAction( tr( "Check For Updates...") );
     checkForUpdates->setMenuRole( QAction::ApplicationSpecificRole );
     connect(checkForUpdates, SIGNAL( triggered( bool ) ), SLOT( checkForUpdates() ) );
 #elif defined( WIN32 )
     QUrl updaterUrl;
-    #ifdef DEBUG_BUILD
+
+    if ( qApp->arguments().contains( "--debug" ) )
         updaterUrl.setUrl( "http://download.tomahawk-player.org/sparklewin-debug" );
-    #else
+    else
         updaterUrl.setUrl( "http://download.tomahawk-player.org/sparklewin" );
-    #endif
+
     qtsparkle::Updater* updater = new qtsparkle::Updater( updaterUrl, this );
     updater->SetNetworkAccessManager( TomahawkUtils::nam() );
     updater->SetVersion( VERSION );
-    
+
     ui->menu_Help->addSeparator();
-    QAction* checkForUpdates = ui->menu_Help->addAction( tr( "Check for updates...") );
+    QAction* checkForUpdates = ui->menu_Help->addAction( tr( "Check For Updates...") );
     connect( checkForUpdates, SIGNAL( triggered() ), updater, SLOT( CheckNow() ) );
 #endif
 
@@ -236,7 +255,7 @@ TomahawkWindow::setupSignals()
     // <Menu Items>
     connect( ui->actionPreferences, SIGNAL( triggered() ), SLOT( showSettingsDialog() ) );
     connect( ui->actionToggleConnect, SIGNAL( triggered() ), APP->sipHandler(), SLOT( toggleConnect() ) );
-    connect( ui->actionAddPeerManually, SIGNAL( triggered() ), SLOT( addPeerManually() ) );
+//    connect( ui->actionAddPeerManually, SIGNAL( triggered() ), SLOT( addPeerManually() ) );
     connect( ui->actionRescanCollection, SIGNAL( triggered() ), SLOT( updateCollectionManually() ) );
     connect( ui->actionLoadXSPF, SIGNAL( triggered() ), SLOT( loadSpiff() ));
     connect( ui->actionCreatePlaylist, SIGNAL( triggered() ), SLOT( createPlaylist() ));
@@ -300,8 +319,8 @@ TomahawkWindow::showSettingsDialog()
 void
 TomahawkWindow::updateCollectionManually()
 {
-    if ( TomahawkSettings::instance()->hasScannerPath() )
-        ScanManager::instance()->runManualScan( TomahawkSettings::instance()->scannerPath() );
+    if ( TomahawkSettings::instance()->hasScannerPaths() )
+        ScanManager::instance()->runManualScan( TomahawkSettings::instance()->scannerPaths() );
 }
 
 
@@ -335,13 +354,15 @@ TomahawkWindow::addPeerManually()
     Servent::instance()->connectToPeer( addr, port, key );
 }
 
-void 
+
+void
 TomahawkWindow::pluginMenuAdded( QMenu* menu )
 {
     ui->menuNetwork->addMenu( menu );
 }
 
-void 
+
+void
 TomahawkWindow::pluginMenuRemoved( QMenu* menu )
 {
     foreach( QAction* action, ui->menuNetwork->actions() )
@@ -359,25 +380,23 @@ void
 TomahawkWindow::loadSpiff()
 {
     bool ok;
-    QString urlstr = QInputDialog::getText( this, "Load XSPF", "Path:", QLineEdit::Normal, "http://ws.audioscrobbler.com/1.0/tag/metal/toptracks.xspf", &ok );
+    QString urlstr = QInputDialog::getText( this, tr( "Load XSPF" ), tr( "Path:" ), QLineEdit::Normal, "http://ws.audioscrobbler.com/1.0/tag/metal/toptracks.xspf", &ok );
     if ( !ok || urlstr.isEmpty() )
         return;
 
-    QUrl url( urlstr );
-
     XSPFLoader* loader = new XSPFLoader;
-    loader->load( url );
+    loader->load( QUrl::fromUserInput( urlstr ) );
 }
 
 
-void 
+void
 TomahawkWindow::createAutomaticPlaylist()
 {
     bool ok;
-    QString name = QInputDialog::getText( this, "Create New Automatic Playlist", "Name:", QLineEdit::Normal, "New Automatic Playlist", &ok );
+    QString name = QInputDialog::getText( this, tr( "Create New Automatic Playlist" ), tr( "Name:" ), QLineEdit::Normal, tr( "New Automatic Playlist" ), &ok );
     if ( !ok || name.isEmpty() )
         return;
-    
+
     source_ptr author = SourceList::instance()->getLocal();
     QString id = uuid();
     QString info  = ""; // FIXME
@@ -393,10 +412,10 @@ void
 TomahawkWindow::createStation()
 {
     bool ok;
-    QString name = QInputDialog::getText( this, "Create New Station", "Name:", QLineEdit::Normal, "New Station", &ok );
+    QString name = QInputDialog::getText( this, tr( "Create New Station" ), tr( "Name:" ), QLineEdit::Normal, tr( "New Station" ), &ok );
     if ( !ok || name.isEmpty() )
         return;
-    
+
     source_ptr author = SourceList::instance()->getLocal();
     QString id = uuid();
     QString info  = ""; // FIXME
@@ -472,8 +491,8 @@ TomahawkWindow::setWindowTitle( const QString& title )
         QMainWindow::setWindowTitle( title );
     else
     {
-        QString s = m_currentTrack->track() + " " + tr( "by" ) + " " + m_currentTrack->artist()->name();
-        QMainWindow::setWindowTitle( s + " - " + title );
+        QString s = tr( "%1 by %2", "track, artist name" ).arg( m_currentTrack->track(), m_currentTrack->artist()->name() );
+        QMainWindow::setWindowTitle( tr( "%1 - %2", "current track, some window title" ).arg( s, title ) );
     }
 }
 
@@ -481,7 +500,7 @@ TomahawkWindow::setWindowTitle( const QString& title )
 void
 TomahawkWindow::showAboutTomahawk()
 {
-    QMessageBox::about( this, "About Tomahawk",
+    QMessageBox::about( this, tr( "About Tomahawk" ),
                         tr( "<h2><b>Tomahawk %1</h2>Copyright 2010, 2011<br/>Christian Muehlhaeuser &lt;muesli@tomahawk-player.org&gt;<br/><br/>"
                             "Thanks to: Leo Franchi, Jeff Mitchell, Dominik Schmidt, Jason Herskowitz, Alejandro Wainzinger, Harald Sitter and Steve Robertson" )
                         .arg( qApp->applicationVersion() ) );

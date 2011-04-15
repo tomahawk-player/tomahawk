@@ -1,3 +1,21 @@
+/* === This file is part of Tomahawk Player - <http://tomahawk-player.org> ===
+ * 
+ *   Copyright 2010-2011, Christian Muehlhaeuser <muesli@tomahawk-player.org>
+ *
+ *   Tomahawk is free software: you can redistribute it and/or modify
+ *   it under the terms of the GNU General Public License as published by
+ *   the Free Software Foundation, either version 3 of the License, or
+ *   (at your option) any later version.
+ *
+ *   Tomahawk is distributed in the hope that it will be useful,
+ *   but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ *   GNU General Public License for more details.
+ *
+ *   You should have received a copy of the GNU General Public License
+ *   along with Tomahawk. If not, see <http://www.gnu.org/licenses/>.
+ */
+
 #ifndef TWITTER_H
 #define TWITTER_H
 
@@ -41,22 +59,28 @@ public:
 
 public slots:
     virtual bool connectPlugin( bool startup );
-
     void disconnectPlugin();
+    void checkSettings();
 
     void sendMsg( const QString& to, const QString& msg )
     {
+        Q_UNUSED( to );
+        Q_UNUSED( msg );
     }
 
     void broadcastMsg( const QString &msg )
     {
+        Q_UNUSED( msg );
     }
 
     void addContact( const QString &jid, const QString& msg = QString() )
     {
+        Q_UNUSED( jid );
+        Q_UNUSED( msg );
     }
 
 private slots:
+    void configDialogAuthedSignalSlot( bool authed );
     void connectAuthVerifyReply( const QTweetUser &user );
     void checkTimerFired();
     void connectTimerFired();
@@ -72,6 +96,9 @@ private slots:
     void makeConnection( const QString &screenName, const QHash< QString, QVariant > &peerdata );
 
 private:
+    bool refreshTwitterAuth();
+    void parseGotTomahawk( const QRegExp &regex, const QString &screenName, const QString &text );
+
     QWeakPointer< TomahawkOAuthTwitter > m_twitterAuth;
     QWeakPointer< QTweetFriendsTimeline > m_friendsTimeline;
     QWeakPointer< QTweetMentions > m_mentions;

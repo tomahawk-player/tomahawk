@@ -1,3 +1,21 @@
+/* === This file is part of Tomahawk Player - <http://tomahawk-player.org> ===
+ *
+ *   Copyright 2010-2011, Christian Muehlhaeuser <muesli@tomahawk-player.org>
+ *
+ *   Tomahawk is free software: you can redistribute it and/or modify
+ *   it under the terms of the GNU General Public License as published by
+ *   the Free Software Foundation, either version 3 of the License, or
+ *   (at your option) any later version.
+ *
+ *   Tomahawk is distributed in the hope that it will be useful,
+ *   but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ *   GNU General Public License for more details.
+ *
+ *   You should have received a copy of the GNU General Public License
+ *   along with Tomahawk. If not, see <http://www.gnu.org/licenses/>.
+ */
+
 #ifndef TRACKPROXYMODEL_H
 #define TRACKPROXYMODEL_H
 
@@ -16,7 +34,8 @@ public:
     explicit TrackProxyModel ( QObject* parent = 0 );
 
     virtual TrackModel* sourceModel() const { return m_model; }
-    virtual void setSourceModel( TrackModel* sourceModel );
+    virtual void setSourceTrackModel( TrackModel* sourceModel );
+    virtual void setSourceModel( QAbstractItemModel* model );
 
     virtual QPersistentModelIndex currentItem() const { return mapFromSource( m_model->currentItem() ); }
     virtual void setCurrentItem( const QModelIndex& index ) { m_model->setCurrentItem( mapToSource( index ) ); }
@@ -38,7 +57,10 @@ public:
     virtual PlaylistInterface::RepeatMode repeatMode() const { return m_repeatMode; }
     virtual bool shuffled() const { return m_shuffled; }
 
-    PlItem* itemFromIndex( const QModelIndex& index ) const { return sourceModel()->itemFromIndex( index ); }
+    bool showOfflineResults() const { return m_showOfflineResults; }
+    void setShowOfflineResults( bool b ) { m_showOfflineResults = b; }
+
+    TrackModelItem* itemFromIndex( const QModelIndex& index ) const { return sourceModel()->itemFromIndex( index ); }
 
 signals:
     void repeatModeChanged( PlaylistInterface::RepeatMode mode );
@@ -60,6 +82,7 @@ private:
     TrackModel* m_model;
     RepeatMode m_repeatMode;
     bool m_shuffled;
+    bool m_showOfflineResults;
 };
 
 #endif // TRACKPROXYMODEL_H

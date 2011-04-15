@@ -1,26 +1,29 @@
-/****************************************************************************************
- * Copyright (c) 2010-2011 Leo Franchi <lfranchi@kde.org>                               *
- *                                                                                      *
- * This program is free software; you can redistribute it and/or modify it under        *
- * the terms of the GNU General Public License as published by the Free Software        *
- * Foundation; either version 2 of the License, or (at your option) any later           *
- * version.                                                                             *
- *                                                                                      *
- * This program is distributed in the hope that it will be useful, but WITHOUT ANY      *
- * WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A      *
- * PARTICULAR PURPOSE. See the GNU General Public License for more details.             *
- *                                                                                      *
- * You should have received a copy of the GNU General Public License along with         *
- * this program.  If not, see <http://www.gnu.org/licenses/>.                           *
- ****************************************************************************************/
+/* === This file is part of Tomahawk Player - <http://tomahawk-player.org> ===
+ * 
+ *   Copyright 2010-2011, Christian Muehlhaeuser <muesli@tomahawk-player.org>
+ *
+ *   Tomahawk is free software: you can redistribute it and/or modify
+ *   it under the terms of the GNU General Public License as published by
+ *   the Free Software Foundation, either version 3 of the License, or
+ *   (at your option) any later version.
+ *
+ *   Tomahawk is distributed in the hope that it will be useful,
+ *   but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ *   GNU General Public License for more details.
+ *
+ *   You should have received a copy of the GNU General Public License
+ *   along with Tomahawk. If not, see <http://www.gnu.org/licenses/>.
+ */
 
 #include "CollapsibleControls.h"
 
-#include "tomahawk/tomahawkapp.h"
 #include "DynamicControlList.h"
 #include "DynamicControlWrapper.h"
 #include "dynamic/GeneratorInterface.h"
 #include "dynamic/DynamicControl.h"
+#include "utils/tomahawkutils.h"
+#include "utils/elidedlabel.h"
 
 #include <QLabel>
 #include <QStackedLayout>
@@ -83,7 +86,7 @@ CollapsibleControls::init()
     m_summaryLayout->setMargin( 0 );
     m_summaryWidget->setContentsMargins( 3, 0, 0, 0 );
     
-    m_summary = new QLabel( m_summaryWidget );
+    m_summary = new ElidedLabel( m_summaryWidget );
     QFont f = m_summary->font();
     f.setPointSize( f.pointSize() + 1 );
     f.setBold( true );

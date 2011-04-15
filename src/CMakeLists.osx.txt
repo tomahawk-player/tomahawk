@@ -33,15 +33,18 @@ if (APPLE)
 
 # Use two different sparkle update tracks for debug and release
 # We have to change the URL in the Info.plist file :-/
-  IF( NOT CMAKE_BUILD_TYPE STREQUAL "Release" )
-    FILE(READ ${CMAKE_SOURCE_DIR}/admin/mac/Info.plist plist)
-    STRING( REPLACE "http://download.tomahawk-player.org/sparkle" # match this
-              "http://download.tomahawk-player.org/sparkle-debug"  #replace with debug url
+  FILE(READ ${CMAKE_SOURCE_DIR}/admin/mac/Info.plist plist)
+  STRING( REPLACE "TOMAHAWK_VERSION"
+              ${VERSION}
               edited_plist # save in this variable
               "${plist}" # from the contents of this var
           )
-   FILE( WRITE ${CMAKE_BINARY_DIR}/Info.plist "${edited_plist}" )
-  ELSE() # Just copy the release one
-    FILE( COPY ${CMAKE_SOURCE_DIR}/admin/mac/Info.plist DESTINATION ${CMAKE_BINARY_DIR} )
+  IF( NOT CMAKE_BUILD_TYPE STREQUAL "Release" )
+    STRING( REPLACE "http://download.tomahawk-player.org/sparkle" # match this
+              "http://download.tomahawk-player.org/sparkle-debug"  #replace with debug url
+              edited_plist # save in this variable
+              "${edited_plist}" # from the contents of this var
+          )
   ENDIF()
+  FILE( WRITE ${CMAKE_BINARY_DIR}/Info.plist "${edited_plist}" )
 endif (APPLE)

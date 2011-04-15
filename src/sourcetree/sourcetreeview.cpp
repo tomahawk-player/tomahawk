@@ -1,7 +1,24 @@
+/* === This file is part of Tomahawk Player - <http://tomahawk-player.org> ===
+ *
+ *   Copyright 2010-2011, Christian Muehlhaeuser <muesli@tomahawk-player.org>
+ *
+ *   Tomahawk is free software: you can redistribute it and/or modify
+ *   it under the terms of the GNU General Public License as published by
+ *   the Free Software Foundation, either version 3 of the License, or
+ *   (at your option) any later version.
+ *
+ *   Tomahawk is distributed in the hope that it will be useful,
+ *   but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ *   GNU General Public License for more details.
+ *
+ *   You should have received a copy of the GNU General Public License
+ *   along with Tomahawk. If not, see <http://www.gnu.org/licenses/>.
+ */
+
 #include "sourcetreeview.h"
 
 #include "playlist.h"
-#include "playlist/collectionmodel.h"
 #include "playlist/playlistmanager.h"
 #include "sourcetreeitem.h"
 #include "sourcesmodel.h"
@@ -43,7 +60,6 @@ private:
 
 SourceTreeView::SourceTreeView( QWidget* parent )
     : QTreeView( parent )
-    , m_collectionModel( new CollectionModel( this ) )
     , m_dragging( false )
 {
     setFrameShape( QFrame::NoFrame );
@@ -114,10 +130,10 @@ SourceTreeView::setupMenus()
     if ( type == SourcesModel::PlaylistSource || type == SourcesModel::DynamicPlaylistSource )
     {
         playlist_ptr playlist = SourcesModel::indexToDynamicPlaylist( m_contextMenuIndex );
-        if( playlist.isNull() ) 
+        if ( playlist.isNull() )
         {
             playlist = SourcesModel::indexToPlaylist( m_contextMenuIndex );
-        } 
+        }
         if ( !playlist.isNull() )
         {
             readonly = !playlist->author()->isLocal();
@@ -150,6 +166,7 @@ SourceTreeView::hideOfflineSources()
 void
 SourceTreeView::onSourceOffline( Tomahawk::source_ptr src )
 {
+    Q_UNUSED( src );
     qDebug() << Q_FUNC_INFO;
 }
 
@@ -245,7 +262,7 @@ SourceTreeView::onItemActivated( const QModelIndex& index )
         if ( !playlist.isNull() )
         {
             qDebug() << "Dynamic Playlist activated:" << playlist->title();
-            
+
             PlaylistManager::instance()->show( playlist );
         }
     }
@@ -280,13 +297,16 @@ SourceTreeView::deletePlaylist()
         playlist_ptr playlist = SourcesModel::indexToPlaylist( idx );
         if ( !playlist.isNull() )
         {
-            qDebug() << "Playlist about to be deleted:" << playlist->title();
             Playlist::remove( playlist );
         }
-    } else if( type == SourcesModel::DynamicPlaylistSource ) {
-        dynplaylist_ptr playlist = SourcesModel::indexToDynamicPlaylist( idx );       
+    }
+    else if ( type == SourcesModel::DynamicPlaylistSource )
+    {
+        dynplaylist_ptr playlist = SourcesModel::indexToDynamicPlaylist( idx );
         if( !playlist.isNull() )
+        {
             DynamicPlaylist::remove( playlist );
+        }
     }
 }
 
@@ -479,9 +499,14 @@ void
 SourceDelegate::paint( QPainter* painter, const QStyleOptionViewItem& option, const QModelIndex& index ) const
 {
     QStyleOptionViewItem o = option;
-    QStyleOptionViewItem o2 = option;
-    o2.rect.setX( 0 );
-    o2.state = option.state;
+
+#ifdef Q_WS_MAC
+    QFont savedFont = painter->font();
+    QFont smaller = savedFont;
+    smaller.setPointSize( smaller.pointSize() - 2 );
+    painter->setFont( smaller );
+    o.font = smaller;
+#endif
 
     if ( ( option.state & QStyle::State_Enabled ) == QStyle::State_Enabled )
     {
@@ -492,13 +517,13 @@ SourceDelegate::paint( QPainter* painter, const QStyleOptionViewItem& option, co
             o.palette.setColor( QPalette::Text, o.palette.color( QPalette::HighlightedText ) );
         }
     }
-    
+
     QStyleOptionViewItemV4 o3 = option;
     if ( index.data( SourceTreeItem::Type ) != SourcesModel::CollectionSource )
         o3.rect.setX( 0 );
-    
+
     QApplication::style()->drawControl( QStyle::CE_ItemViewItem, &o3, painter );
-    
+
     if ( index.data( SourceTreeItem::Type ) == SourcesModel::CollectionSource )
     {
         painter->save();
@@ -506,7 +531,7 @@ SourceDelegate::paint( QPainter* painter, const QStyleOptionViewItem& option, co
         QFont normal = painter->font();
         QFont bold = painter->font();
         bold.setBold( true );
-        
+
         SourceTreeItem* sti = SourcesModel::indexToTreeItem( index );
         bool status = !( !sti || sti->source().isNull() || !sti->source()->isOnline() );
         QString tracks;
@@ -519,13 +544,13 @@ SourceDelegate::paint( QPainter* painter, const QStyleOptionViewItem& option, co
         }
 
         QRect iconRect = option.rect.adjusted( 4, 6, -option.rect.width() + option.rect.height() - 12 + 4, -6 );
-        painter->drawPixmap( iconRect, QPixmap( RESPATH "images/user-avatar.png" ) );
+        painter->drawPixmap( iconRect, QPixmap( RESPATH "images/user-avatar.png" ).scaledToHeight( iconRect.height(), Qt::SmoothTransformation ) );
 
         if ( ( option.state & QStyle::State_Selected ) == QStyle::State_Selected )
         {
             painter->setPen( o.palette.color( QPalette::HighlightedText ) );
         }
-        
+
         QRect textRect = option.rect.adjusted( iconRect.width() + 8, 6, -figWidth - 24, 0 );
         if ( status || sti->source().isNull() )
             painter->setFont( bold );
@@ -585,4 +610,8 @@ SourceDelegate::paint( QPainter* painter, const QStyleOptionViewItem& option, co
     {
         QStyledItemDelegate::paint( painter, o, index );
     }
+
+#ifdef Q_WS_MAC
+    painter->setFont( savedFont );
+#endif
 }

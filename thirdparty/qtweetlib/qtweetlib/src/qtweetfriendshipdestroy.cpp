@@ -64,7 +64,7 @@ void QTweetFriendshipDestroy::unfollow(qint64 userid, bool includeEntities)
 
     QNetworkRequest req(url);
 
-    QByteArray oauthHeader = oauthTwitter()->generateAuthorizationHeader(url, OAuth::GET);
+    QByteArray oauthHeader = oauthTwitter()->generateAuthorizationHeader(url, OAuth::DELETE);
     req.setRawHeader(AUTH_HEADER, oauthHeader);
 
     QNetworkReply *reply = oauthTwitter()->networkAccessManager()->deleteResource(req);
@@ -92,7 +92,7 @@ void QTweetFriendshipDestroy::unfollow(const QString &screenName, bool includeEn
 
     QNetworkRequest req(url);
 
-    QByteArray oauthHeader = oauthTwitter()->generateAuthorizationHeader(url, OAuth::GET);
+    QByteArray oauthHeader = oauthTwitter()->generateAuthorizationHeader(url, OAuth::DELETE);
     req.setRawHeader(AUTH_HEADER, oauthHeader);
 
     QNetworkReply *reply = oauthTwitter()->networkAccessManager()->deleteResource(req);

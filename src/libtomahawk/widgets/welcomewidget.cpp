@@ -1,3 +1,21 @@
+/* === This file is part of Tomahawk Player - <http://tomahawk-player.org> ===
+ * 
+ *   Copyright 2010-2011, Christian Muehlhaeuser <muesli@tomahawk-player.org>
+ *
+ *   Tomahawk is free software: you can redistribute it and/or modify
+ *   it under the terms of the GNU General Public License as published by
+ *   the Free Software Foundation, either version 3 of the License, or
+ *   (at your option) any later version.
+ *
+ *   Tomahawk is distributed in the hope that it will be useful,
+ *   but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ *   GNU General Public License for more details.
+ *
+ *   You should have received a copy of the GNU General Public License
+ *   along with Tomahawk. If not, see <http://www.gnu.org/licenses/>.
+ */
+
 #include "welcomewidget.h"
 #include "ui_welcomewidget.h"
 
@@ -13,7 +31,9 @@
 
 #include <QPainter>
 
-#define FILTER_TIMEOUT 280
+#define HISTORY_TRACK_ITEMS 50
+#define HISTORY_PLAYLIST_ITEMS 10
+#define HISTORY_RESOLVING_TIMEOUT 2500
 
 
 WelcomeWidget::WelcomeWidget( QWidget* parent )
@@ -23,11 +43,15 @@ WelcomeWidget::WelcomeWidget( QWidget* parent )
     ui->setupUi( this );
 
     ui->playlistWidget->setItemDelegate( new PlaylistDelegate() );
+    ui->playlistWidget->overlay()->resize( 380, 86 );
     ui->tracksView->overlay()->setEnabled( false );
 
     m_tracksModel = new PlaylistModel( ui->tracksView );
-    ui->tracksView->setModel( m_tracksModel );
-    m_tracksModel->loadHistory( Tomahawk::source_ptr() );
+    ui->tracksView->setPlaylistModel( m_tracksModel );
+    m_tracksModel->loadHistory( Tomahawk::source_ptr(), HISTORY_TRACK_ITEMS );
+
+    m_timer = new QTimer( this );
+    connect( m_timer, SIGNAL( timeout() ), SLOT( checkQueries() ) );
 
     connect( SourceList::instance(), SIGNAL( sourceAdded( Tomahawk::source_ptr ) ), SLOT( onSourceAdded( Tomahawk::source_ptr ) ) );
 
@@ -78,9 +102,24 @@ WelcomeWidget::onSourceAdded( const Tomahawk::source_ptr& source )
 
 
 void
+WelcomeWidget::checkQueries()
+{
+    m_timer->stop();
+    m_tracksModel->ensureResolved();
+}
+
+
+void
 WelcomeWidget::onPlaybackFinished( const Tomahawk::query_ptr& query )
 {
     m_tracksModel->insert( 0, query );
+
+    if ( m_tracksModel->trackCount() > HISTORY_TRACK_ITEMS )
+        m_tracksModel->remove( HISTORY_TRACK_ITEMS );
+
+    if ( m_timer->isActive() )
+        m_timer->stop();
+    m_timer->start( HISTORY_RESOLVING_TIMEOUT );
 }
 
 
@@ -151,6 +190,8 @@ PlaylistWidgetItem::data( int role ) const
 QSize
 PlaylistDelegate::sizeHint( const QStyleOptionViewItem& option, const QModelIndex& index ) const
 {
+    Q_UNUSED( option );
+    Q_UNUSED( index );
     return QSize( 0, 64 );
 }
 
@@ -177,7 +218,7 @@ PlaylistDelegate::paint( QPainter* painter, const QStyleOptionViewItem& option, 
     QFont boldFont = opt.font;
     boldFont.setBold( true );
 
-    painter->drawPixmap( option.rect.adjusted( 10, 12, -option.rect.width() + 42, -12 ), m_playlistIcon );
+    painter->drawPixmap( option.rect.adjusted( 10, 13, -option.rect.width() + 48, -13 ), m_playlistIcon );
 
     painter->drawText( option.rect.adjusted( 56, 26, -100, -8 ), index.data( PlaylistWidgetItem::ArtistRole ).toString() );
 

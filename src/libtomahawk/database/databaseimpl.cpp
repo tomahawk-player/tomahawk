@@ -1,3 +1,21 @@
+/* === This file is part of Tomahawk Player - <http://tomahawk-player.org> ===
+ * 
+ *   Copyright 2010-2011, Christian Muehlhaeuser <muesli@tomahawk-player.org>
+ *
+ *   Tomahawk is free software: you can redistribute it and/or modify
+ *   it under the terms of the GNU General Public License as published by
+ *   the Free Software Foundation, either version 3 of the License, or
+ *   (at your option) any later version.
+ *
+ *   Tomahawk is distributed in the hope that it will be useful,
+ *   but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ *   GNU General Public License for more details.
+ *
+ *   You should have received a copy of the GNU General Public License
+ *   along with Tomahawk. If not, see <http://www.gnu.org/licenses/>.
+ */
+
 #include "databaseimpl.h"
 
 #include <QCoreApplication>
@@ -28,8 +46,6 @@ DatabaseImpl::DatabaseImpl( const QString& dbname, Database* parent )
     , m_lastalbid( 0 )
     , m_lasttrkid( 0 )
 {
-    connect( this, SIGNAL( indexReady() ), parent, SIGNAL( indexReady() ) );
-
     db = QSqlDatabase::addDatabase( "QSQLITE", "tomahawk" );
     db.setDatabaseName( dbname );
     if ( !db.open() )
@@ -353,6 +369,7 @@ DatabaseImpl::albumId( int artistid, const QString& name_orig, bool& isnew )
 QList< int >
 DatabaseImpl::searchTable( const QString& table, const QString& name, uint limit )
 {
+    Q_UNUSED( limit );
     QList< int > results;
     if( table != "artist" && table != "track" && table != "album" )
         return results;

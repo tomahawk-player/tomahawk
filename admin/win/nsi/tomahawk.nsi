@@ -4,7 +4,7 @@
 ; Some installer script options (comment-out options not required)
 ;-----------------------------------------------------------------------------
 ;!define OPTION_LICENSE_AGREEMENT
-;!define OPTION_UAC_PLUGIN_ENHANCED
+!define OPTION_UAC_PLUGIN_ENHANCED
 !define OPTION_SECTION_SC_START_MENU
 !define OPTION_SECTION_SC_DESKTOP
 !define OPTION_SECTION_SC_QUICK_LAUNCH
@@ -15,7 +15,7 @@
 ;-----------------------------------------------------------------------------
 ; Some paths.
 ;-----------------------------------------------------------------------------
-!define MING_PATH "/usr/i686-pc-mingw32/sys-root/mingw"
+!define MING_PATH "/usr/i686-w64-mingw32/sys-root/mingw"
 !define MING_BIN "${MING_PATH}/bin"
 !define MING_DLL_PATH "${MING_BIN}"
 !define MING_LIB "${MING_PATH}/lib"
@@ -23,6 +23,7 @@
 !define BUILD_PATH "${ROOT_PATH}\build"
 !define QT_DLL_PATH "${MING_BIN}"
 !define SQLITE_DLL_PATH "${MING_LIB}/qt4/plugins/sqldrivers"
+!define IMAGEFORMATS_DLL_PATH "${MING_LIB}/qt4/plugins/imageformats"
 
 ;-----------------------------------------------------------------------------
 ; Increment installer revision number as part of this script.
@@ -34,7 +35,7 @@
 
 !define VER_MAJOR "0"
 !define VER_MINOR "0"
-!define VER_BUILD "0"
+!define VER_BUILD "3"
 
 !define VERSION "${VER_MAJOR}.${VER_MINOR}.${VER_BUILD}"
 
@@ -57,16 +58,9 @@ InstType Full
 InstType Minimal
 CRCCheck On
 SetCompressor /SOLID lzma
+RequestExecutionLevel user ;Now using the UAC plugin.
 ReserveFile tomahawk.ini
 ReserveFile "${NSISDIR}\Plugins\InstallOptions.dll"
-
-;The UAC plugin provides an elevated user.
-;Otherwise request admin level here.
-!ifdef OPTION_UAC_PLUGIN_ENHANCED
-   RequestExecutionLevel user
-!else
-   RequestExecutionLevel admin
-!endif
 
 ;-----------------------------------------------------------------------------
 ; Include some required header files.
@@ -78,9 +72,7 @@ ReserveFile "${NSISDIR}\Plugins\InstallOptions.dll"
 !include Memento.nsh ;Remember user selections.
 !include WinVer.nsh ;Windows version detection.
 !include WordFunc.nsh  ;Used by VersionCompare macro function.
-!ifdef OPTION_UAC_PLUGIN_ENHANCED
-   !include UAC.nsh ;Used by the UAC elevation to install as user or admin.
-!endif
+!include UAC.nsh ;Used by the UAC elevation to install as user or admin.
 
 ;-----------------------------------------------------------------------------
 ; Memento selections stored in registry.
@@ -145,18 +137,46 @@ UninstPage custom un.UnPageUserAppData un.UnPageUserAppDataLeave
 ##############################################################################
 
 Function LaunchTomahawk
-   !ifdef OPTION_UAC_PLUGIN_ENHANCED
-      ${UAC.CallFunctionAsUser} LaunchTomahawkAsUser
-   !else
-      Exec "$INSTDIR\tomahawk.exe"
-   !endif
+   ${UAC.CallFunctionAsUser} LaunchTomahawkAsUser
 FunctionEnd
 
-!ifdef OPTION_UAC_PLUGIN_ENHANCED
 Function LaunchTomahawkAsUser
    Exec "$INSTDIR\tomahawk.exe"
 FunctionEnd
-!endif
+
+##############################################################################
+#                                                                            #
+#   PROCESS HANDLING FUNCTIONS AND MACROS                                    #
+#                                                                            #
+##############################################################################
+
+!macro CheckForProcess processName gotoWhenFound gotoWhenNotFound
+   Processes::FindProcess ${processName}
+   StrCmp $R0 "0" ${gotoWhenNotFound} ${gotoWhenFound}
+!macroend
+
+!macro ConfirmEndProcess processName
+   MessageBox MB_YESNO|MB_ICONEXCLAMATION \
+     "Found ${processName} process(s) which need to be stopped.$\nDo you want the installer to stop these for you?" \
+     IDYES process_${processName}_kill IDNO process_${processName}_ended
+   process_${processName}_kill:
+      DetailPrint "Killing ${processName} processes."
+      Processes::KillProcess ${processName}
+      Sleep 1500
+      StrCmp $R0 "1" process_${processName}_ended
+      DetailPrint "Process to kill not found!"
+   process_${processName}_ended:
+!macroend
+
+!macro CheckAndConfirmEndProcess processName
+   !insertmacro CheckForProcess ${processName} 0 no_process_${processName}_to_end
+   !insertmacro ConfirmEndProcess ${processName}
+   no_process_${processName}_to_end:
+!macroend
+
+Function EnsureTomahawkShutdown
+   !insertmacro CheckAndConfirmEndProcess "tomahawk.exe"
+FunctionEnd
 
 ##############################################################################
 #                                                                            #
@@ -225,12 +245,10 @@ Function PageLeaveReinstall
       Delete $R1
       RMDir $INSTDIR
    no_remove_uninstaller:
-      StrCmp $R0 "2" +2 0
+      StrCmp $R0 "2" 0 +3
+      UAC::Unload
+      Quit
       BringToFront
-      !ifdef OPTION_UAC_PLUGIN_ENHANCED
-         UAC::Unload
-         Quit
-      !endif
    reinst_done:
 FunctionEnd
 
@@ -249,14 +267,32 @@ Section "Tomahawk Player" SEC_TOMAHAWK_PLAYER
    SetDetailsPrint listonly
    SetOutPath "$INSTDIR"
 
-   ;Main executable.
-   File "${BUILD_PATH}\tomahawk.exe"
+   !ifdef INSTALL_PATH
+        ;Main executable.
+        File "${INSTALL_PATH}\bin\tomahawk.exe"
 
-   ;Plugins
-   File "${BUILD_PATH}\src\libtomahawk\libtomahawklib.dll"
-   File "${BUILD_PATH}\libsip_jabber.dll"
-   File "${BUILD_PATH}\libsip_twitter.dll"
-   File "${BUILD_PATH}\libsip_zeroconf.dll"
+        File "${INSTALL_PATH}\lib\librtaudio.dll"
+        File "${INSTALL_PATH}\lib\libqxtweb-standalone.dll"
+        File "${INSTALL_PATH}\lib\libtomahawk_jdns.dll"
+        File "${INSTALL_PATH}\lib\libtomahawk_qtweetlib.dll"
+        File "${INSTALL_PATH}\lib\libtomahawklib.dll"
+        File "${INSTALL_PATH}\lib\libtomahawk_sipjabber.dll"
+        File "${INSTALL_PATH}\lib\libtomahawk_siptwitter.dll"
+        File "${INSTALL_PATH}\lib\libtomahawk_sipzeroconf.dll"
+   !endif
+   !ifndef INSTALL_PATH
+        ;Main executable.
+        File "${BUILD_PATH}\tomahawk.exe"
+
+        File "${BUILD_PATH}\thirdparty\rtaudio\librtaudio.dll"
+        File "${BUILD_PATH}\thirdparty\qxt\qxtweb-standalone\libqxtweb-standalone.dll"
+        File "${BUILD_PATH}\thirdparty\jdns\libtomahawk_jdns.dll"
+        File "${BUILD_PATH}\thirdparty\qtweetlib\libtomahawk_qtweetlib.dll"
+        File "${BUILD_PATH}\src\libtomahawk\libtomahawklib.dll"
+        File "${BUILD_PATH}\libtomahawk_sipjabber.dll"
+        File "${BUILD_PATH}\libtomahawk_siptwitter.dll"
+        File "${BUILD_PATH}\libtomahawk_sipzeroconf.dll"
+   !endif
 
    ;License & release notes.
    File "${ROOT_PATH}\LICENSE.txt"
@@ -274,6 +310,12 @@ Section "Tomahawk Player" SEC_TOMAHAWK_PLAYER
    SetOutPath "$INSTDIR\sqldrivers"
    File "${SQLITE_DLL_PATH}\qsqlite4.dll"
    SetOutPath "$INSTDIR"
+
+   ;Image plugins
+   SetOutPath "$INSTDIR\imageformats"
+   File "${IMAGEFORMATS_DLL_PATH}\qgif4.dll"
+   File "${IMAGEFORMATS_DLL_PATH}\qjpeg4.dll"
+   SetOutPath "$INSTDIR"
     
    ;Cygwin/c++ stuff
    ;File "${MING_DLL_PATH}\cygmad-0.dll"
@@ -283,8 +325,7 @@ Section "Tomahawk Player" SEC_TOMAHAWK_PLAYER
    File "${MING_DLL_PATH}\libstdc++-6.dll"
    
    ;Audio stuff
-   File "${BUILD_PATH}\thirdparty\rtaudio\librtaudio.dll"
-   ;File "${MING_DLL_PATH}\libmad.dll"
+   File "${MING_DLL_PATH}\libmad-0.dll"
    File "${MING_DLL_PATH}\libogg-0.dll"
    File "${MING_DLL_PATH}\libvorbisfile-3.dll"
    File "${MING_DLL_PATH}\libvorbis-0.dll"
@@ -296,6 +337,7 @@ Section "Tomahawk Player" SEC_TOMAHAWK_PLAYER
    File "${MING_DLL_PATH}\libtag.dll"
    File "${MING_DLL_PATH}\libgloox-8.dll"
    File "${MING_DLL_PATH}\libpng15-15.dll"
+   File "${MING_DLL_PATH}\libjpeg-8.dll"
    File "${MING_DLL_PATH}\zlib1.dll"
 
    File "${MING_DLL_PATH}\libechonest.dll"
@@ -304,9 +346,7 @@ Section "Tomahawk Player" SEC_TOMAHAWK_PLAYER
    File "${MING_LIB}\libclucene-core.dll"
    File "${MING_LIB}\libclucene-shared.dll"
 
-   File "${BUILD_PATH}\thirdparty\qxt\qxtweb-standalone\libqxtweb-standalone.dll"
-   File "${BUILD_PATH}\thirdparty\jdns\libtomahawk_jdns.dll"
-   File "${BUILD_PATH}\thirdparty\qtweetlib\libtomahawk_qtweetlib.dll"
+   File "${MING_BIN}\libqtsparkle.dll"
 SectionEnd
 
 SectionGroup "Shortcuts"
@@ -323,7 +363,7 @@ SectionGroup "Shortcuts"
       CreateShortCut "$SMPROGRAMS\Tomahawk\LICENSE.lnk" "$INSTDIR\LICENSE.txt"
       CreateShortCut "$SMPROGRAMS\Tomahawk\Tomahawk.lnk" "$INSTDIR\tomahawk.exe"
       CreateShortCut "$SMPROGRAMS\Tomahawk\Release notes.lnk" "$INSTDIR\NOTES.txt"
-      CreateShortCut "$SMPROGRAMS\Tomahawk\Uninstall.lnk" "$INSTDIR\Uninstall.exe"
+      CreateShortCut "$SMPROGRAMS\Tomahawk\Uninstall.lnk" "$INSTDIR\uninstall.exe"
       SetShellVarContext current
    ${MementoSectionEnd}
 !endif
@@ -367,7 +407,7 @@ Section -post
    SetDetailsPrint textonly
    DetailPrint "Writing Uninstaller"
    SetDetailsPrint listonly
-   WriteUninstaller $INSTDIR\Uninstall.exe
+   WriteUninstaller $INSTDIR\uninstall.exe
 
    ;Registry keys required for installer version handling and uninstaller.
    SetDetailsPrint textonly
@@ -394,6 +434,12 @@ Section -post
    WriteRegStr HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\Tomahawk" "HelpLink" "http://tomahawk-player.org/"
    WriteRegDWORD HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\Tomahawk" "NoModify" "1"
    WriteRegDWORD HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\Tomahawk" "NoRepair" "1"
+
+   ; Register tomahawk:// protocol handler
+   WriteRegStr HKCR "tomahawk" "" "URL: Tomahawk Protocol"
+   WriteRegStr HKCR "tomahawk\DefaultIcon" "" $INSTDIR\tomahawk.exe,1
+   WriteRegStr HKCR "tomahawk\shell" "" "open"
+   WriteRegStr HKCR "tomahawk\shell\open\command" "" '"$INSTDIR\tomahawk.exe" "%1"'
 
    SetDetailsPrint textonly
    DetailPrint "Finsihed."
@@ -454,6 +500,8 @@ Section Uninstall
    DeleteRegValue HKLM "Software\Tomahawk" ""
    DeleteRegKey HKLM "Software\Tomahawk"
 
+   DeleteRegKey HKCR "tomahawk"
+
    ;Start menu shortcuts.
    !ifdef OPTION_SECTION_SC_START_MENU
       SetShellVarContext all
@@ -503,27 +551,25 @@ Function .onInit
 
    ${MementoSectionRestore}
 
-   !ifdef OPTION_UAC_PLUGIN_ENHANCED
-      UAC_Elevate:
-         UAC::RunElevated 
-         StrCmp 1223 $0 UAC_ElevationAborted ; UAC dialog aborted by user?
-         StrCmp 0 $0 0 UAC_Err ; Error?
-         StrCmp 1 $1 0 UAC_Success ;Are we the real deal or just the wrapper?
-         Quit
+   UAC_Elevate:
+      UAC::RunElevated 
+      StrCmp 1223 $0 UAC_ElevationAborted ; UAC dialog aborted by user?
+      StrCmp 0 $0 0 UAC_Err ; Error?
+      StrCmp 1 $1 0 UAC_Success ;Are we the real deal or just the wrapper?
+      Quit
        
-      UAC_Err:
-         MessageBox MB_ICONSTOP "Unable to elevate, error $0"
-         Abort
+   UAC_Err:
+      MessageBox MB_ICONSTOP "Unable to elevate, error $0"
+      Abort
        
-      UAC_ElevationAborted:
-         Abort
+   UAC_ElevationAborted:
+      Abort
        
-      UAC_Success:
-         StrCmp 1 $3 +4 ;Admin?
-         StrCmp 3 $1 0 UAC_ElevationAborted ;Try again?
-         MessageBox MB_ICONSTOP "This installer requires admin access, try again"
-         goto UAC_Elevate
-   !endif
+   UAC_Success:
+      StrCmp 1 $3 +4 ;Admin?
+      StrCmp 3 $1 0 UAC_ElevationAborted ;Try again?
+      MessageBox MB_ICONSTOP "This installer requires admin access, try again"
+      goto UAC_Elevate
 
    ;Prevent multiple instances.
    System::Call 'kernel32::CreateMutexA(i 0, i 0, t "tomahawkInstaller") i .r1 ?e'
@@ -531,19 +577,25 @@ Function .onInit
    StrCmp $R0 0 +3
       MessageBox MB_OK|MB_ICONEXCLAMATION "The installer is already running."
       Abort
+
+   ;Use available InstallLocation when possible. This is useful in the uninstaller
+   ;via re-install, which would otherwise use a default location - a bug.
+   ReadRegStr $R0 HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\Tomahawk" "InstallLocation"
+   StrCmp $R0 "" SkipSetInstDir
+   StrCpy $INSTDIR $R0
+   SkipSetInstDir:
+   
+   ;Shutdown Tomahawk in case Add/Remove re-installer option used.
+   Call EnsureTomahawkShutdown
 FunctionEnd
 
 Function .onInstSuccess
    ${MementoSectionSave}
-   !ifdef OPTION_UAC_PLUGIN_ENHANCED
-      UAC::Unload ;Must call unload!
-   !endif
+   UAC::Unload ;Must call unload!
 FunctionEnd
 
 Function .onInstFailed
-   !ifdef OPTION_UAC_PLUGIN_ENHANCED
-      UAC::Unload ;Must call unload!
-   !endif
+   UAC::Unload ;Must call unload!
 FunctionEnd
 
 ##############################################################################
@@ -553,27 +605,25 @@ FunctionEnd
 ##############################################################################
 
 Function un.onInit
-   !ifdef OPTION_UAC_PLUGIN_ENHANCED
-      UAC_Elevate:
-         UAC::RunElevated 
-         StrCmp 1223 $0 UAC_ElevationAborted ; UAC dialog aborted by user?
-         StrCmp 0 $0 0 UAC_Err ; Error?
-         StrCmp 1 $1 0 UAC_Success ;Are we the real deal or just the wrapper?
-         Quit
+   UAC_Elevate:
+      UAC::RunElevated 
+      StrCmp 1223 $0 UAC_ElevationAborted ; UAC dialog aborted by user?
+      StrCmp 0 $0 0 UAC_Err ; Error?
+      StrCmp 1 $1 0 UAC_Success ;Are we the real deal or just the wrapper?
+      Quit
 
-      UAC_Err:
-         MessageBox MB_ICONSTOP "Unable to elevate, error $0"
-         Abort
+   UAC_Err:
+      MessageBox MB_ICONSTOP "Unable to elevate, error $0"
+      Abort
        
-      UAC_ElevationAborted:
-         Abort
+   UAC_ElevationAborted:
+      Abort
        
-      UAC_Success:
-         StrCmp 1 $3 +4 ;Admin?
-         StrCmp 3 $1 0 UAC_ElevationAborted ;Try again?
-         MessageBox MB_ICONSTOP "This uninstaller requires admin access, try again"
-         goto UAC_Elevate 
-   !endif
+   UAC_Success:
+      StrCmp 1 $3 +4 ;Admin?
+      StrCmp 3 $1 0 UAC_ElevationAborted ;Try again?
+      MessageBox MB_ICONSTOP "This uninstaller requires admin access, try again"
+      goto UAC_Elevate 
 
    ;Prevent multiple instances.
    System::Call 'kernel32::CreateMutexA(i 0, i 0, t "tomahawkUninstaller") i .r1 ?e'
@@ -584,13 +634,9 @@ Function un.onInit
 FunctionEnd
 
 Function un.onUnInstSuccess
-   !ifdef OPTION_UAC_PLUGIN_ENHANCED
-      UAC::Unload ;Must call unload!
-   !endif
+   UAC::Unload ;Must call unload!
 FunctionEnd
 
 Function un.onUnInstFailed
-   !ifdef OPTION_UAC_PLUGIN_ENHANCED
-      UAC::Unload ;Must call unload!
-   !endif
+   UAC::Unload ;Must call unload!
 FunctionEnd

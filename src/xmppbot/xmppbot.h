@@ -1,8 +1,26 @@
+/* === This file is part of Tomahawk Player - <http://tomahawk-player.org> ===
+ *
+ *   Copyright 2010-2011, Christian Muehlhaeuser <muesli@tomahawk-player.org>
+ *
+ *   Tomahawk is free software: you can redistribute it and/or modify
+ *   it under the terms of the GNU General Public License as published by
+ *   the Free Software Foundation, either version 3 of the License, or
+ *   (at your option) any later version.
+ *
+ *   Tomahawk is distributed in the hope that it will be useful,
+ *   but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ *   GNU General Public License for more details.
+ *
+ *   You should have received a copy of the GNU General Public License
+ *   along with Tomahawk. If not, see <http://www.gnu.org/licenses/>.
+ */
+
 #ifndef XMPPBOT_H
 #define XMPPBOT_H
 
 #include <result.h>
-#include <tomahawk/infosystem.h>
+#include <infosystem/infosystem.h>
 
 #include <QtCore/QObject>
 #include <QtCore/qsharedpointer.h>
@@ -24,12 +42,12 @@ class XMPPBotClient
 public:
     XMPPBotClient(QObject* parent, gloox::JID &jid, std::string password, int port);
     virtual ~XMPPBotClient();
-    
+
     void run();
-    
+
 private slots:
     void recvSlot();
-    
+
 private:
     QTimer m_timer;
 };
@@ -41,25 +59,25 @@ class XMPPBot
     , public gloox::MessageHandler
 {
     Q_OBJECT
-    
+
 public:
     XMPPBot(QObject *parent);
     virtual ~XMPPBot();
 
 public slots:
     virtual void newTrackSlot(const Tomahawk::result_ptr &track);
-    virtual void infoReturnedSlot(QString caller, Tomahawk::InfoSystem::InfoType type, QVariant input, QVariant output, Tomahawk::InfoSystem::InfoCustomDataHash customData);
+    virtual void infoReturnedSlot(QString caller, Tomahawk::InfoSystem::InfoType type, QVariant input, QVariant output, Tomahawk::InfoSystem::InfoCustomData customData);
     virtual void infoFinishedSlot(QString caller);
-    
+
 protected:
     // ConnectionListener
     virtual void onConnect();
     virtual void onDisconnect(gloox::ConnectionError e);
     virtual bool onTLSConnect(const gloox::CertInfo &info);
-    
+
     // SubscriptionHandler
     virtual void handleSubscription(const gloox::Subscription &subscription);
-    
+
     // MessageHandler
     virtual void handleMessage(const gloox::Message &msg, gloox::MessageSession *session = 0);
 

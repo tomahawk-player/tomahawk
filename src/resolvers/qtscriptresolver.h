@@ -1,3 +1,21 @@
+/* === This file is part of Tomahawk Player - <http://tomahawk-player.org> ===
+ *
+ *   Copyright 2010-2011, Christian Muehlhaeuser <muesli@tomahawk-player.org>
+ *
+ *   Tomahawk is free software: you can redistribute it and/or modify
+ *   it under the terms of the GNU General Public License as published by
+ *   the Free Software Foundation, either version 3 of the License, or
+ *   (at your option) any later version.
+ *
+ *   Tomahawk is distributed in the hope that it will be useful,
+ *   but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ *   GNU General Public License for more details.
+ *
+ *   You should have received a copy of the GNU General Public License
+ *   along with Tomahawk. If not, see <http://www.gnu.org/licenses/>.
+ */
+
 #ifndef QTSCRIPTRESOLVER_H
 #define QTSCRIPTRESOLVER_H
 
@@ -8,6 +26,7 @@
 #include <QApplication>
 #include <QDebug>
 #include <QFile>
+#include <QThread>
 #include <QtWebKit/QWebPage>
 #include <QtWebKit/QWebFrame>
 
@@ -19,16 +38,15 @@ Q_OBJECT
 
 public:
     explicit ScriptEngine( QtScriptResolver* parent )
-        : QWebPage( (QObject*)parent )
+        : QWebPage( (QObject*) parent )
         , m_parent( parent )
-    {}
+    {
+    }
 
 public slots:
-    void resolve( const Tomahawk::query_ptr& query );
-
     bool shouldInterruptJavaScript()
     {
-        return false;
+        return true;
     }
 
 protected:
@@ -38,6 +56,7 @@ protected:
 private:
     QtScriptResolver* m_parent;
 };
+
 
 class QtScriptResolver : public Tomahawk::ExternalResolver
 {
@@ -49,21 +68,22 @@ public:
 
     virtual QString name() const            { return m_name; }
     virtual unsigned int weight() const     { return m_weight; }
-    virtual unsigned int preference() const { return m_preference; }
     virtual unsigned int timeout() const    { return m_timeout; }
 
+    virtual QWidget* configUI() const { return 0; } // TODO support properly for qtscript resolvers too!
+    virtual void saveConfig() {}
 public slots:
     virtual void resolve( const Tomahawk::query_ptr& query );
     virtual void stop();
 
-private slots:
+signals:
+    void finished();
 
 private:
     ScriptEngine* m_engine;
-    QThread* m_thread;
 
     QString m_name;
-    unsigned int m_weight, m_preference, m_timeout;
+    unsigned int m_weight, m_timeout;
 
     bool m_ready, m_stopped;
 };

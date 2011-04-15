@@ -1,16 +1,32 @@
+/* === This file is part of Tomahawk Player - <http://tomahawk-player.org> ===
+ *
+ *   Copyright 2010-2011, Christian Muehlhaeuser <muesli@tomahawk-player.org>
+ *
+ *   Tomahawk is free software: you can redistribute it and/or modify
+ *   it under the terms of the GNU General Public License as published by
+ *   the Free Software Foundation, either version 3 of the License, or
+ *   (at your option) any later version.
+ *
+ *   Tomahawk is distributed in the hope that it will be useful,
+ *   but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ *   GNU General Public License for more details.
+ *
+ *   You should have received a copy of the GNU General Public License
+ *   along with Tomahawk. If not, see <http://www.gnu.org/licenses/>.
+ */
 
 #ifndef TOMAHAWK_SCROBBLER_H
 #define TOMAHAWK_SCROBBLER_H
 
 #include "result.h"
 
-#include <lastfm/Track>
-#include <lastfm/Audioscrobbler>
-#include <lastfm/ScrobblePoint>
+#include "lastfm/ScrobblePoint"
+
+#include "infosystem/infosystem.h"
 
 #include <QObject>
 
-class QNetworkReply;
 /**
  * Simple class that listens to signals from AudioEngine and scrobbles
  *  what it is playing.
@@ -21,28 +37,22 @@ class Scrobbler : public QObject
 public:
     Scrobbler( QObject* parent = 0 );
     virtual ~Scrobbler();
-    
+
 public slots:
     void trackStarted( const Tomahawk::result_ptr& );
     void trackPaused();
     void trackResumed();
     void trackStopped();
     void engineTick( unsigned int secondsElapsed );
-    
-    void settingsChanged();
-    void onAuthenticated();
-    
+
+    void infoSystemInfo( QString caller, Tomahawk::InfoSystem::InfoType type, QVariant input, QVariant output, Tomahawk::InfoSystem::InfoCustomData customData );
+    void infoSystemFinished( QString target );
+
 private:
     void scrobble();
-    void createScrobbler();
-    
-    lastfm::MutableTrack m_track;
-    lastfm::Audioscrobbler* m_scrobbler;
-    QString m_pw;
+
     bool m_reachedScrobblePoint;
     ScrobblePoint m_scrobblePoint;
-    
-    QNetworkReply* m_authJob;
 };
 
 

@@ -1,3 +1,21 @@
+/* === This file is part of Tomahawk Player - <http://tomahawk-player.org> ===
+ * 
+ *   Copyright 2010-2011, Christian Muehlhaeuser <muesli@tomahawk-player.org>
+ *
+ *   Tomahawk is free software: you can redistribute it and/or modify
+ *   it under the terms of the GNU General Public License as published by
+ *   the Free Software Foundation, either version 3 of the License, or
+ *   (at your option) any later version.
+ *
+ *   Tomahawk is distributed in the hope that it will be useful,
+ *   but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ *   GNU General Public License for more details.
+ *
+ *   You should have received a copy of the GNU General Public License
+ *   along with Tomahawk. If not, see <http://www.gnu.org/licenses/>.
+ */
+
 #ifndef DATABASECOMMAND_DELETEFILES_H
 #define DATABASECOMMAND_DELETEFILES_H
 
@@ -27,6 +45,12 @@ public:
         setSource( source );
     }
     
+    explicit DatabaseCommand_DeleteFiles( const QVariantList& ids, const Tomahawk::source_ptr& source, QObject* parent = 0 )
+    : DatabaseCommandLoggable( parent ), m_ids( ids )
+    {
+        setSource( source );
+    }
+    
     virtual QString commandname() const { return "deletefiles"; }
 
     virtual void exec( DatabaseImpl* );
@@ -41,7 +65,7 @@ public:
 
 signals:
     void done( const QStringList&, const Tomahawk::collection_ptr& );
-    void notify( const QStringList&, const Tomahawk::collection_ptr& );
+    void notify( const QStringList& );
 
 private:
     QDir m_dir;

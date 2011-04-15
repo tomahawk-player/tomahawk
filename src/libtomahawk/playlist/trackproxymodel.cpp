@@ -1,3 +1,21 @@
+/* === This file is part of Tomahawk Player - <http://tomahawk-player.org> ===
+ *
+ *   Copyright 2010-2011, Christian Muehlhaeuser <muesli@tomahawk-player.org>
+ *
+ *   Tomahawk is free software: you can redistribute it and/or modify
+ *   it under the terms of the GNU General Public License as published by
+ *   the Free Software Foundation, either version 3 of the License, or
+ *   (at your option) any later version.
+ *
+ *   Tomahawk is distributed in the hope that it will be useful,
+ *   but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ *   GNU General Public License for more details.
+ *
+ *   You should have received a copy of the GNU General Public License
+ *   along with Tomahawk. If not, see <http://www.gnu.org/licenses/>.
+ */
+
 #include "trackproxymodel.h"
 
 #include <QDebug>
@@ -5,7 +23,6 @@
 
 #include "album.h"
 #include "query.h"
-#include "collectionmodel.h"
 
 
 TrackProxyModel::TrackProxyModel( QObject* parent )
@@ -14,6 +31,7 @@ TrackProxyModel::TrackProxyModel( QObject* parent )
     , m_model( 0 )
     , m_repeatMode( PlaylistInterface::NoRepeat )
     , m_shuffled( false )
+    , m_showOfflineResults( true )
 {
     qsrand( QTime( 0, 0, 0 ).secsTo( QTime::currentTime() ) );
 
@@ -21,20 +39,28 @@ TrackProxyModel::TrackProxyModel( QObject* parent )
     setSortCaseSensitivity( Qt::CaseInsensitive );
     setDynamicSortFilter( true );
 
-    setSourceModel( 0 );
+    setSourceTrackModel( 0 );
 }
 
 
 void
-TrackProxyModel::setSourceModel( TrackModel* sourceModel )
+TrackProxyModel::setSourceModel( QAbstractItemModel* model )
+{
+    Q_UNUSED( model );
+    qDebug() << "Explicitly use setSourceTrackModel instead";
+    Q_ASSERT( false );
+}
+
+
+void
+TrackProxyModel::setSourceTrackModel( TrackModel* sourceModel )
 {
     m_model = sourceModel;
 
-    if ( m_model )
-        connect( m_model, SIGNAL( trackCountChanged( unsigned int ) ),
-                          SIGNAL( sourceTrackCountChanged( unsigned int ) ) );
+    connect( m_model, SIGNAL( trackCountChanged( unsigned int ) ),
+                      SIGNAL( sourceTrackCountChanged( unsigned int ) ) );
 
-    QSortFilterProxyModel::setSourceModel( sourceModel );
+    QSortFilterProxyModel::setSourceModel( m_model );
 }
 
 
@@ -57,7 +83,7 @@ TrackProxyModel::tracks()
 
     for ( int i = 0; i < rowCount( QModelIndex() ); i++ )
     {
-        PlItem* item = itemFromIndex( mapToSource( index( i, 0 ) ) );
+        TrackModelItem* item = itemFromIndex( mapToSource( index( i, 0 ) ) );
         if ( item )
             queries << item->query();
     }
@@ -116,9 +142,9 @@ TrackProxyModel::siblingItem( int itemsAway )
     // Try to find the next available PlaylistItem (with results)
     if ( idx.isValid() ) do
     {
-        PlItem* item = itemFromIndex( mapToSource( idx ) );
+        TrackModelItem* item = itemFromIndex( mapToSource( idx ) );
         qDebug() << item->query()->toString();
-        if ( item && item->query()->solved() )
+        if ( item && item->query()->playable() )
         {
             qDebug() << "Next PlaylistItem found:" << item->query()->toString() << item->query()->results().at( 0 )->url();
             setCurrentItem( idx );
@@ -137,17 +163,20 @@ TrackProxyModel::siblingItem( int itemsAway )
 bool
 TrackProxyModel::filterAcceptsRow( int sourceRow, const QModelIndex& sourceParent ) const
 {
-    PlItem* pi = itemFromIndex( sourceModel()->index( sourceRow, 0, sourceParent ) );
+    TrackModelItem* pi = itemFromIndex( sourceModel()->index( sourceRow, 0, sourceParent ) );
     if ( !pi )
         return false;
 
     const Tomahawk::query_ptr& q = pi->query();
+    if( q.isNull() ) // uh oh? filter out invalid queries i guess
+        return false;
+
     Tomahawk::result_ptr r;
     if ( q->numResults() )
         r = q->results().first();
 
-//    if ( !r.isNull() && !r->collection()->source()->isOnline() )
-//        return false;
+    if ( !m_showOfflineResults && !r.isNull() && !r->collection()->source()->isOnline() )
+        return false;
 
     if ( filterRegExp().isEmpty() )
         return true;

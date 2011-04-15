@@ -1,3 +1,21 @@
+/* === This file is part of Tomahawk Player - <http://tomahawk-player.org> ===
+ *
+ *   Copyright 2010-2011, Christian Muehlhaeuser <muesli@tomahawk-player.org>
+ *
+ *   Tomahawk is free software: you can redistribute it and/or modify
+ *   it under the terms of the GNU General Public License as published by
+ *   the Free Software Foundation, either version 3 of the License, or
+ *   (at your option) any later version.
+ *
+ *   Tomahawk is distributed in the hope that it will be useful,
+ *   but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ *   GNU General Public License for more details.
+ *
+ *   You should have received a copy of the GNU General Public License
+ *   along with Tomahawk. If not, see <http://www.gnu.org/licenses/>.
+ */
+
 #ifndef SCRIPTRESOLVER_H
 #define SCRIPTRESOLVER_H
 
@@ -11,6 +29,7 @@
 #include "query.h"
 #include "result.h"
 
+class QWidget;
 class ScriptResolver : public Tomahawk::ExternalResolver
 {
 Q_OBJECT
@@ -23,6 +42,9 @@ public:
     virtual unsigned int weight() const     { return m_weight; }
     virtual unsigned int preference() const { return m_preference; }
     virtual unsigned int timeout() const    { return m_timeout; }
+
+    virtual QWidget* configUI() const;
+    virtual void saveConfig();
 
 signals:
     void finished();
@@ -42,10 +64,12 @@ private:
     void handleMsg( const QByteArray& msg );
     void sendMsg( const QByteArray& msg );
     void doSetup( const QVariantMap& m );
+    void setupConfWidget( const QVariantMap& m );
 
     QProcess m_proc;
     QString m_name;
     unsigned int m_weight, m_preference, m_timeout, m_num_restarts;
+    QWeakPointer< QWidget > m_configWidget;
 
     quint32 m_msgsize;
     QByteArray m_msg;

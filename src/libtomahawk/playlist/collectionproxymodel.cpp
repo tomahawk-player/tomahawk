@@ -1,3 +1,21 @@
+/* === This file is part of Tomahawk Player - <http://tomahawk-player.org> ===
+ *
+ *   Copyright 2010-2011, Christian Muehlhaeuser <muesli@tomahawk-player.org>
+ *
+ *   Tomahawk is free software: you can redistribute it and/or modify
+ *   it under the terms of the GNU General Public License as published by
+ *   the Free Software Foundation, either version 3 of the License, or
+ *   (at your option) any later version.
+ *
+ *   Tomahawk is distributed in the hope that it will be useful,
+ *   but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ *   GNU General Public License for more details.
+ *
+ *   You should have received a copy of the GNU General Public License
+ *   along with Tomahawk. If not, see <http://www.gnu.org/licenses/>.
+ */
+
 #include "collectionproxymodel.h"
 
 #include <QDebug>
@@ -5,7 +23,6 @@
 
 #include "album.h"
 #include "query.h"
-#include "collectionmodel.h"
 
 
 CollectionProxyModel::CollectionProxyModel( QObject* parent )
@@ -17,8 +34,8 @@ CollectionProxyModel::CollectionProxyModel( QObject* parent )
 bool
 CollectionProxyModel::lessThan( const QModelIndex& left, const QModelIndex& right ) const
 {
-    PlItem* p1 = itemFromIndex( left );
-    PlItem* p2 = itemFromIndex( right );
+    TrackModelItem* p1 = itemFromIndex( left );
+    TrackModelItem* p2 = itemFromIndex( right );
 
     if ( !p1 )
         return true;
@@ -27,11 +44,6 @@ CollectionProxyModel::lessThan( const QModelIndex& left, const QModelIndex& righ
 
     const Tomahawk::query_ptr& q1 = p1->query();
     const Tomahawk::query_ptr& q2 = p2->query();
-
-    if ( q1.isNull() || q2.isNull() )
-    {
-        return QString::localeAwareCompare( p1->caption, p2->caption ) < 0;
-    }
 
     QString artist1 = q1->artist();
     QString artist2 = q2->artist();

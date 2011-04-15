@@ -1,3 +1,21 @@
+/* === This file is part of Tomahawk Player - <http://tomahawk-player.org> ===
+ * 
+ *   Copyright 2010-2011, Christian Muehlhaeuser <muesli@tomahawk-player.org>
+ *
+ *   Tomahawk is free software: you can redistribute it and/or modify
+ *   it under the terms of the GNU General Public License as published by
+ *   the Free Software Foundation, either version 3 of the License, or
+ *   (at your option) any later version.
+ *
+ *   Tomahawk is distributed in the hope that it will be useful,
+ *   but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ *   GNU General Public License for more details.
+ *
+ *   You should have received a copy of the GNU General Public License
+ *   along with Tomahawk. If not, see <http://www.gnu.org/licenses/>.
+ */
+
 #include "twitter.h"
 
 #include "twitterconfigwidget.h"
@@ -15,6 +33,7 @@
 #include <database/database.h>
 #include <network/servent.h>
 
+static QString s_gotTomahawkRegex = QString( "^(@[a-zA-Z0-9]+ )?(Got Tomahawk\\?) (\\{[a-fA-F0-9\\-]+\\}) (.*)$" );
 
 TwitterPlugin::TwitterPlugin()
     : SipPlugin()
@@ -35,31 +54,40 @@ TwitterPlugin::TwitterPlugin()
     m_checkTimer.setInterval( 60000 );
     m_checkTimer.setSingleShot( false );
     connect( &m_checkTimer, SIGNAL( timeout() ), SLOT( checkTimerFired() ) );
-    m_checkTimer.start();
 
     m_connectTimer.setInterval( 60000 );
     m_connectTimer.setSingleShot( false );
     connect( &m_connectTimer, SIGNAL( timeout() ), SLOT( connectTimerFired() ) );
-    m_connectTimer.start();
+}
+
+void
+TwitterPlugin::configDialogAuthedSignalSlot( bool authed )
+{
+    m_isAuthed = authed;
+    if ( !authed )
+    {
+        TomahawkSettings::instance()->setTwitterScreenName( QString() );
+        TomahawkSettings::instance()->setTwitterOAuthToken( QString() );
+        TomahawkSettings::instance()->setTwitterOAuthTokenSecret( QString() );
+    }
 }
 
 bool
 TwitterPlugin::isValid()
 {
-    return m_isAuthed || !m_cachedPeers.isEmpty();
+    return m_isAuthed;
 }
 
 const QString
 TwitterPlugin::name()
 {
-    qDebug() << "TwitterPlugin returning plugin name " << QString( MYNAME );
     return QString( MYNAME );
 }
 
 const QString
 TwitterPlugin::friendlyName()
 {
-    return QString("Twitter");
+    return tr("Twitter");
 }
 
 const QString
@@ -72,10 +100,10 @@ QWidget* TwitterPlugin::configWidget()
 {
     m_configWidget = new TwitterConfigWidget( this );
 
+    connect( m_configWidget, SIGNAL( twitterAuthed(bool) ), SLOT( configDialogAuthedSignalSlot(bool) ) );
+    
     return m_configWidget;
 }
-
-
 
 bool
 TwitterPlugin::connectPlugin( bool /*startup*/ )
@@ -101,16 +129,32 @@ TwitterPlugin::connectPlugin( bool /*startup*/ )
         return m_cachedPeers.isEmpty();
     }
  
-    delete m_twitterAuth.data();
+    if ( refreshTwitterAuth() )
+    {
+      QTweetAccountVerifyCredentials *credVerifier = new QTweetAccountVerifyCredentials( m_twitterAuth.data(), this );
+      connect( credVerifier, SIGNAL( parsedUser(const QTweetUser &) ), SLOT( connectAuthVerifyReply(const QTweetUser &) ) );
+      credVerifier->verify();
+    }
+    
+    return true;
+}
+
+bool
+TwitterPlugin::refreshTwitterAuth()
+{
+    if( !m_twitterAuth.isNull() )
+        delete m_twitterAuth.data();
     m_twitterAuth = QWeakPointer<TomahawkOAuthTwitter>( new TomahawkOAuthTwitter( this ) );
+    
+    if( m_twitterAuth.isNull() )
+      return false;
+    
+    TomahawkSettings *settings = TomahawkSettings::instance();
+
     m_twitterAuth.data()->setNetworkAccessManager( TomahawkUtils::nam() );
     m_twitterAuth.data()->setOAuthToken( settings->twitterOAuthToken().toLatin1() );
     m_twitterAuth.data()->setOAuthTokenSecret( settings->twitterOAuthTokenSecret().toLatin1() );
-    
-    QTweetAccountVerifyCredentials *credVerifier = new QTweetAccountVerifyCredentials( m_twitterAuth.data(), this );
-    connect( credVerifier, SIGNAL( parsedUser(const QTweetUser &) ), SLOT( connectAuthVerifyReply(const QTweetUser &) ) );
-    credVerifier->verify();
-    
+
     return true;
 }
 
@@ -118,13 +162,22 @@ void
 TwitterPlugin::disconnectPlugin()
 {
     qDebug() << Q_FUNC_INFO;
+    m_checkTimer.stop();
+    m_connectTimer.stop();
     if( !m_friendsTimeline.isNull() )
-        m_friendsTimeline.data()->deleteLater();
+        delete m_friendsTimeline.data();
+    if( !m_mentions.isNull() )
+        delete m_mentions.data();
+    if( !m_directMessages.isNull() )
+        delete m_directMessages.data();
+    if( !m_directMessageNew.isNull() )
+        delete m_directMessageNew.data();
+    if( !m_directMessageDestroy.isNull() )
+        delete m_directMessageDestroy.data();
     if( !m_twitterAuth.isNull() )
-        m_twitterAuth.data()->deleteLater();
-    
+        delete m_twitterAuth.data();
+
     m_cachedPeers.empty();
-    delete m_twitterAuth.data();
     m_isOnline = false;
 }
 
@@ -155,13 +208,24 @@ TwitterPlugin::connectAuthVerifyReply( const QTweetUser &user )
             connect( m_directMessageNew.data(), SIGNAL( error(QTweetNetBase::ErrorCode, const QString &) ), SLOT( directMessagePostError(QTweetNetBase::ErrorCode, const QString &) ) );
             connect( m_directMessageDestroy.data(), SIGNAL( parsedDirectMessage(const QTweetDMStatus &) ), SLOT( directMessageDestroyed(const QTweetDMStatus &) ) );
             m_isOnline = true;
+            m_connectTimer.start();
+            m_checkTimer.start();
             QMetaObject::invokeMethod( this, "checkTimerFired", Qt::AutoConnection );
             QTimer::singleShot( 20000, this, SLOT( connectTimerFired() ) );
         }
         else
         {
-            qDebug() << "TwitterPlugin auth pointer was null!";
-            m_isAuthed = false;
+            if ( refreshTwitterAuth() )
+            {
+                QTweetAccountVerifyCredentials *credVerifier = new QTweetAccountVerifyCredentials( m_twitterAuth.data(), this );
+                connect( credVerifier, SIGNAL( parsedUser(const QTweetUser &) ), SLOT( connectAuthVerifyReply(const QTweetUser &) ) );
+                credVerifier->verify();
+            }
+            else
+            {
+                qDebug() << "TwitterPlugin auth pointer was null!";
+                m_isAuthed = false;
+            }
         }
     }
 }
@@ -169,7 +233,7 @@ TwitterPlugin::connectAuthVerifyReply( const QTweetUser &user )
 void
 TwitterPlugin::checkTimerFired()
 {
-    if ( !isValid() )
+    if ( !isValid() || m_twitterAuth.isNull() )
         return;
 
     if ( m_cachedFriendsSinceId == 0 )
@@ -178,8 +242,7 @@ TwitterPlugin::checkTimerFired()
     qDebug() << "TwitterPlugin looking at friends timeline since id " << m_cachedFriendsSinceId;
     
     if ( !m_friendsTimeline.isNull() )
-        m_friendsTimeline.data()->fetch( m_cachedFriendsSinceId, 0, 800 );
-    
+        m_friendsTimeline.data()->fetch( m_cachedFriendsSinceId, 0, 800 );    
     
     if ( m_cachedMentionsSinceId == 0 )
         m_cachedMentionsSinceId = TomahawkSettings::instance()->twitterCachedMentionsSinceId();
@@ -193,19 +256,32 @@ TwitterPlugin::checkTimerFired()
 void
 TwitterPlugin::connectTimerFired()
 {
-    if ( !isValid() || m_cachedPeers.isEmpty() )
+    if ( !isValid() || m_cachedPeers.isEmpty() || m_twitterAuth.isNull() )
         return;
-    
+
     QString myScreenName = TomahawkSettings::instance()->twitterScreenName();
     QList<QString> peerlist = m_cachedPeers.keys();
     qStableSort( peerlist.begin(), peerlist.end() );
     foreach( QString screenName, peerlist )
     {
         QHash< QString, QVariant > peerData = m_cachedPeers[screenName].toHash();
+
+        if ( Servent::instance()->connectedToSession( peerData["node"].toString() ) )
+        {
+            peerData["lastseen"] = QDateTime::currentMSecsSinceEpoch();
+            m_cachedPeers[screenName] = peerData;
+        }
+        
+        if ( QDateTime::currentMSecsSinceEpoch() - peerData["lastseen"].toLongLong() > 1209600000 ) // 2 weeks
+        {
+            qDebug() << "Aging peer " << screenName << " out of cache";
+            m_cachedPeers.remove( screenName );
+            continue;
+        }
         
         if ( !peerData.contains( "host" ) || !peerData.contains( "port" ) || !peerData.contains( "pkey" ) )
         {
-            qDebug() << "TwitterPlugin does not have host, port and/or pkey values for " << screenName;
+            qDebug() << "TwitterPlugin does not have host, port and/or pkey values for " << screenName << " (this is usually *not* a bug or problem but a normal part of the process)";
             continue;
         }
         
@@ -214,15 +290,65 @@ TwitterPlugin::connectTimerFired()
 }
 
 void
+TwitterPlugin::parseGotTomahawk( const QRegExp &regex, const QString &screenName, const QString &text )
+{
+    QString myScreenName = TomahawkSettings::instance()->twitterScreenName();
+    qDebug() << "TwitterPlugin found an exact matching Got Tomahawk? mention or direct message from user " << screenName << ", now parsing";
+    regex.exactMatch( text );
+    if ( text.startsWith( '@' ) && regex.captureCount() >= 2 && regex.cap( 1 ) != QString( '@' + myScreenName ) )
+    {
+        qDebug() << "TwitterPlugin skipping mention because it's directed @someone that isn't us";
+        return;
+    }
+    
+    QString node;
+    for ( int i = 0; i < regex.captureCount(); ++i )
+    {
+        if ( regex.cap( i ) == QString( "Got Tomahawk?" ) )
+        {
+            QString nodeCap = regex.cap( i + 1 );
+            nodeCap.chop( 1 );
+            node = nodeCap.mid( 1 );
+        }
+    }
+    if ( node.isEmpty() )
+    {
+        qDebug() << "TwitterPlugin could not parse node out of the tweet";
+        return;
+    }
+    else
+        qDebug() << "TwitterPlugin parsed node " << node << " out of the tweet";
+    
+    if ( screenName == myScreenName && node == Database::instance()->dbid() )
+    {
+        qDebug() << "My screen name and my dbid found; ignoring";
+        return;
+    }
+    
+    QHash< QString, QVariant > peerData;
+    if( m_cachedPeers.contains( screenName ) )
+    {
+        peerData = m_cachedPeers[screenName].toHash();
+        //force a re-send of info but no need to re-register
+        peerData["resend"] = QVariant::fromValue< bool >( true );
+    }
+    peerData["node"] = QVariant::fromValue< QString >( node );
+    QMetaObject::invokeMethod( this, "registerOffer", Q_ARG( QString, screenName ), QGenericArgument( "QHash< QString, QVariant >", (const void*)&peerData ) );
+}
+
+void
 TwitterPlugin::friendsTimelineStatuses( const QList< QTweetStatus > &statuses )
 {
     qDebug() << Q_FUNC_INFO;
-    QRegExp regex( QString( "^(@[a-zA-Z0-9]+ )?(Got Tomahawk\\?) (\\{[a-fA-F0-9\\-]+\\}) (.*)$" ), Qt::CaseSensitive, QRegExp::RegExp2 );
+    QRegExp regex( s_gotTomahawkRegex, Qt::CaseSensitive, QRegExp::RegExp2 );
     QString myScreenName = TomahawkSettings::instance()->twitterScreenName();
     
     QHash< QString, QTweetStatus > latestHash;
     foreach ( QTweetStatus status, statuses )
     {
+        if ( !regex.exactMatch( status.text() ) )
+            continue;
+        
         if ( !latestHash.contains( status.user().screenName() ) )
             latestHash[status.user().screenName()] = status;
         else
@@ -237,46 +363,8 @@ TwitterPlugin::friendsTimelineStatuses( const QList< QTweetStatus > &statuses )
         if ( status.id() > m_cachedFriendsSinceId )
             m_cachedFriendsSinceId = status.id();
 
-        if ( regex.exactMatch( status.text() ) )
-        {
-            qDebug() << "TwitterPlugin found an exact tweet from friend " << status.user().screenName();
-            if ( status.text().startsWith( '@' ) && regex.captureCount() >= 2 && regex.cap( 1 ) != QString( '@' + myScreenName ) )
-            {
-                qDebug() << "TwitterPlugin skipping tweet because it's directed @someone that isn't us";
-                continue;
-            }
-            
-            QString node;
-            for ( int i = 0; i < regex.captureCount(); ++i )
-            {
-                if ( regex.cap( i ) == QString( "Got Tomahawk?" ) )
-                {
-                    QString nodeCap = regex.cap( i + 1 );
-                    nodeCap.chop( 1 );
-                    node = nodeCap.mid( 1 );
-                }
-            }
-            if ( node.isEmpty() )
-            {
-                qDebug() << "TwitterPlugin could not parse node out of the tweet";
-                continue;
-            }
-            else
-                qDebug() << "TwitterPlugin parsed node " << node << " out of the tweet";
-        
-            if ( status.user().screenName() == myScreenName && node == Database::instance()->dbid() )
-                continue;
-            
-            QHash< QString, QVariant > peerData;
-            if( m_cachedPeers.contains( status.user().screenName() ) )
-            {
-                peerData = m_cachedPeers[status.user().screenName()].toHash();
-                //force a re-send of info but no need to re-register
-                peerData["resend"] = QVariant::fromValue< bool >( true );
-            }
-            peerData["node"] = QVariant::fromValue< QString >( node );
-            QMetaObject::invokeMethod( this, "registerOffer", Q_ARG( QString, status.user().screenName() ), QGenericArgument( "QHash< QString, QVariant >", (const void*)&peerData ) );
-        }
+        qDebug() << "TwitterPlugin checking mention from " << status.user().screenName() << " with content " << status.text();
+        parseGotTomahawk( regex, status.user().screenName(), status.text() );
     }
     
     TomahawkSettings::instance()->setTwitterCachedFriendsSinceId( m_cachedFriendsSinceId );
@@ -289,12 +377,14 @@ void
 TwitterPlugin::mentionsStatuses( const QList< QTweetStatus > &statuses )
 {
     qDebug() << Q_FUNC_INFO;
-    QRegExp regex( QString( "^(@[a-zA-Z0-9]+ )?(Got Tomahawk\\?) (\\{[a-fA-F0-9\\-]+\\}) (.*)$" ), Qt::CaseSensitive, QRegExp::RegExp2 );
-    QString myScreenName = TomahawkSettings::instance()->twitterScreenName();
+    QRegExp regex( s_gotTomahawkRegex, Qt::CaseSensitive, QRegExp::RegExp2 );
     
     QHash< QString, QTweetStatus > latestHash;
     foreach ( QTweetStatus status, statuses )
     {
+        if ( !regex.exactMatch( status.text() ) )
+            continue;
+        
         if ( !latestHash.contains( status.user().screenName() ) )
             latestHash[status.user().screenName()] = status;
         else
@@ -308,47 +398,9 @@ TwitterPlugin::mentionsStatuses( const QList< QTweetStatus > &statuses )
     {
         if ( status.id() > m_cachedMentionsSinceId )
             m_cachedMentionsSinceId = status.id();
-
-        if ( regex.exactMatch( status.text() ) )
-        {
-            qDebug() << "TwitterPlugin found an exact matching mention from user " << status.user().screenName();
-            if ( status.text().startsWith( '@' ) && regex.captureCount() >= 2 && regex.cap( 1 ) != QString( '@' + myScreenName ) )
-            {
-                qDebug() << "TwitterPlugin skipping mention because it's directed @someone that isn't us";
-                continue;
-            }
-            
-            QString node;
-            for ( int i = 0; i < regex.captureCount(); ++i )
-            {
-                if ( regex.cap( i ) == QString( "Got Tomahawk?" ) )
-                {
-                    QString nodeCap = regex.cap( i + 1 );
-                    nodeCap.chop( 1 );
-                    node = nodeCap.mid( 1 );
-                }
-            }
-            if ( node.isEmpty() )
-            {
-                qDebug() << "TwitterPlugin could not parse node out of the tweet";
-                continue;
-            }
-            else
-                qDebug() << "TwitterPlugin parsed node " << node << " out of the tweet";
-            
-            if ( status.user().screenName() == myScreenName && node == Database::instance()->dbid() )
-                continue;
-            
-            QHash< QString, QVariant > peerData;
-            if( m_cachedPeers.contains( status.user().screenName() ) )
-            {
-                peerData = m_cachedPeers[status.user().screenName()].toHash();
-                //force a re-send of info but no need to re-register
-                peerData["resend"] = QVariant::fromValue< bool >( true );
-            }
-            peerData["node"] = QVariant::fromValue< QString >( node );
-            QMetaObject::invokeMethod( this, "registerOffer", Q_ARG( QString, status.user().screenName() ), QGenericArgument( "QHash< QString, QVariant >", (const void*)&peerData ) );
-        }
+        
+        qDebug() << "TwitterPlugin checking mention from " << status.user().screenName() << " with content " << status.text();
+        parseGotTomahawk( regex, status.user().screenName(), status.text() );
     }
     
     TomahawkSettings::instance()->setTwitterCachedMentionsSinceId( m_cachedMentionsSinceId );
@@ -383,9 +435,26 @@ TwitterPlugin::directMessages( const QList< QTweetDMStatus > &messages )
 {
     qDebug() << Q_FUNC_INFO;
     
+    QRegExp regex( s_gotTomahawkRegex, Qt::CaseSensitive, QRegExp::RegExp2 );
+    QString myScreenName = TomahawkSettings::instance()->twitterScreenName();
+    
     QHash< QString, QTweetDMStatus > latestHash;
     foreach ( QTweetDMStatus status, messages )
     {
+        if ( !regex.exactMatch( status.text() ) )
+        {
+            QStringList splitList = status.text().split(':');
+            if ( splitList.length() != 5 )
+                continue;
+            if ( splitList[0] != "TOMAHAWKPEER" )
+                continue;
+            if ( !splitList[1].startsWith( "Host=" ) || !splitList[2].startsWith( "Port=" ) || !splitList[3].startsWith( "Node=" ) || !splitList[4].startsWith( "PKey=" ) )
+                continue;
+            int port = splitList[2].mid( 5 ).toInt();
+            if ( port == 0 )
+                continue;
+        }
+        
         if ( !latestHash.contains( status.senderScreenName() ) )
             latestHash[status.senderScreenName()] = status;
         else
@@ -400,43 +469,48 @@ TwitterPlugin::directMessages( const QList< QTweetDMStatus > &messages )
         qDebug() << "TwitterPlugin checking direct message from " << status.senderScreenName() << " with content " << status.text();
         if ( status.id() > m_cachedDirectMessagesSinceId )
             m_cachedDirectMessagesSinceId = status.id();
-        QStringList splitList = status.text().split(':');
-        qDebug() << "TwitterPlugin found " << splitList.length() << " parts to the message; the parts are:";
-        foreach( QString part, splitList )
-            qDebug() << part;
-        if ( splitList.length() != 5 )
-            continue;
-        if ( splitList[0] != "TOMAHAWKPEER" )
-            continue;
-        if ( !splitList[1].startsWith( "Host=" ) || !splitList[2].startsWith( "Port=" ) || !splitList[3].startsWith( "Node=" ) || !splitList[4].startsWith( "PKey=" ) )
-            continue;
-        int port = splitList[2].mid( 5 ).toInt();
-        if ( port == 0 )
-            continue;
-        QString host = splitList[1].mid( 5 );
-        QString node = splitList[3].mid( 5 );
-        QString pkey = splitList[4].mid( 5 );
-        qDebug() << "TwitterPlugin found a peerstart message from " << status.senderScreenName() << " with host " << host << " and port " << port << " and pkey " << pkey << " destined for node " << node;
         
-        if ( node != Database::instance()->dbid() )
+        if ( regex.exactMatch( status.text() ) )
+            parseGotTomahawk( regex, status.sender().screenName(), status.text() );
+        else
         {
-            qDebug() << "Not destined for this node; leaving it alone and not answering";
-            continue;
-        }
+            QStringList splitList = status.text().split(':');
+            qDebug() << "TwitterPlugin found " << splitList.length() << " parts to the message; the parts are:";
+            foreach( QString part, splitList )
+                qDebug() << part;
+            //validity is checked above
+            int port = splitList[2].mid( 5 ).toInt();
+            QString host = splitList[1].mid( 5 );
+            QString node = splitList[3].mid( 5 );
+            QString pkey = splitList[4].mid( 5 );
+            QStringList splitNode = node.split('*');
+            if ( splitNode.length() != 2 )
+            {
+                qDebug() << "Old-style node info found, ignoring";
+                continue;
+            }
+            qDebug() << "TwitterPlugin found a peerstart message from " << status.senderScreenName() << " with host " << host << " and port " << port << " and pkey " << pkey << " and node " << splitNode[0] << " destined for node " << splitNode[1];
+            
         
-        QHash< QString, QVariant > peerData = ( m_cachedPeers.contains( status.senderScreenName() ) ) ?
-                                                    m_cachedPeers[status.senderScreenName()].toHash() :
-                                                    QHash< QString, QVariant >();
-        
-        peerData["host"] = QVariant::fromValue< QString >( host );
-        peerData["port"] = QVariant::fromValue< int >( port );
-        peerData["pkey"] = QVariant::fromValue< QString >( pkey );
-        peerData["dirty"] = QVariant::fromValue< bool >( true );
+            QHash< QString, QVariant > peerData = ( m_cachedPeers.contains( status.senderScreenName() ) ) ?
+                                                        m_cachedPeers[status.senderScreenName()].toHash() :
+                                                        QHash< QString, QVariant >();
+            
+            peerData["host"] = QVariant::fromValue< QString >( host );
+            peerData["port"] = QVariant::fromValue< int >( port );
+            peerData["pkey"] = QVariant::fromValue< QString >( pkey );
+            peerData["node"] = QVariant::fromValue< QString >( splitNode[0] );
+            peerData["dirty"] = QVariant::fromValue< bool >( true );
 
-        QMetaObject::invokeMethod( this, "registerOffer", Q_ARG( QString, status.senderScreenName() ), QGenericArgument( "QHash< QString, QVariant >", (const void*)&peerData ) );
-        
-        if ( !m_directMessageDestroy.isNull() )
-            m_directMessageDestroy.data()->destroyMessage( status.id() );
+            QMetaObject::invokeMethod( this, "registerOffer", Q_ARG( QString, status.senderScreenName() ), QGenericArgument( "QHash< QString, QVariant >", (const void*)&peerData ) );
+
+            if ( Database::instance()->dbid().startsWith( splitNode[1] ) )
+            {
+                qDebug() << "TwitterPlugin found message destined for this node; destroying it";
+                if ( !m_directMessageDestroy.isNull() )
+                    m_directMessageDestroy.data()->destroyMessage( status.id() );
+            }
+        }
     }
 
     TomahawkSettings::instance()->setTwitterCachedDirectMessagesSinceId( m_cachedDirectMessagesSinceId );
@@ -468,11 +542,14 @@ TwitterPlugin::registerOffer( const QString &screenName, const QHash< QString, Q
         _peerData.remove( "resend" );
     }
 
-    if ( !_peerData.contains( "okey" ) )
+    if ( !_peerData.contains( "okey" ) ||
+         !_peerData.contains( "onod" ) ||
+         ( _peerData.contains( "onod" ) && _peerData["onod"] != Database::instance()->dbid() ) )
     {
         QString okey = QUuid::createUuid().toString().split( '-' ).last();
         okey.chop( 1 );
         _peerData["okey"] = QVariant::fromValue< QString >( okey );
+        _peerData["onod"] = QVariant::fromValue< QString >( Database::instance()->dbid() );
         peersChanged = true;
         needToAddToCache = true;
         needToSend = true;
@@ -505,24 +582,27 @@ TwitterPlugin::registerOffer( const QString &screenName, const QHash< QString, Q
             qDebug() << "TwitterPlugin did not send offer because external address is " << Servent::instance()->externalAddress() << " and external port is " << Servent::instance()->externalPort();
     }
 
-    if ( m_isOnline && _peerData.contains( "host" ) && _peerData.contains( "port" ) && _peerData.contains( "pkey" ) )
-        QMetaObject::invokeMethod( this, "makeConnection", Q_ARG( QString, screenName ), QGenericArgument( "QHash< QString, QVariant >", (const void*)&_peerData ) );
-    
     if ( peersChanged )
     {
+        _peerData["lastseen"] = QString::number( QDateTime::currentMSecsSinceEpoch() );
         m_cachedPeers[screenName] = QVariant::fromValue< QHash< QString, QVariant > >( _peerData );
         TomahawkSettings::instance()->setTwitterCachedPeers( m_cachedPeers );
     }
+
+    if ( m_isOnline && _peerData.contains( "host" ) && _peerData.contains( "port" ) && _peerData.contains( "pkey" ) )
+        QMetaObject::invokeMethod( this, "makeConnection", Q_ARG( QString, screenName ), QGenericArgument( "QHash< QString, QVariant >", (const void*)&_peerData ) );
+    
 }
 
 void
 TwitterPlugin::sendOffer( const QString &screenName, const QHash< QString, QVariant > &peerData )
 {
     qDebug() << Q_FUNC_INFO;
-    QString offerString = QString( "TOMAHAWKPEER:Host=%1:Port=%2:Node=%3:PKey=%4" ).arg( peerData["ohst"].toString() )
-                                                                                   .arg( peerData["oprt"].toString() )
-                                                                                   .arg( peerData["node"].toString() )
-                                                                                   .arg( peerData["okey"].toString() );
+    QString offerString = QString( "TOMAHAWKPEER:Host=%1:Port=%2:Node=%3*%4:PKey=%5" ).arg( peerData["ohst"].toString() )
+                                                                                      .arg( peerData["oprt"].toString() )
+                                                                                      .arg( Database::instance()->dbid() )
+                                                                                      .arg( peerData["node"].toString().left( 8 ) )
+                                                                                      .arg( peerData["okey"].toString() );
     qDebug() << "TwitterPlugin sending message to " << screenName << ": " << offerString;
     if( !m_directMessageNew.isNull() )
         m_directMessageNew.data()->post( screenName, offerString );
@@ -532,9 +612,10 @@ void
 TwitterPlugin::makeConnection( const QString &screenName, const QHash< QString, QVariant > &peerData )
 {
     qDebug() << Q_FUNC_INFO;
-    if ( !peerData.contains( "host" ) || !peerData.contains( "port" ) || !peerData.contains( "pkey" ) || !peerData.contains( "node" ) )
+    if ( !peerData.contains( "host" ) || !peerData.contains( "port" ) || !peerData.contains( "pkey" ) || !peerData.contains( "node" ) ||
+         peerData["host"].toString().isEmpty() || peerData["port"].toString().isEmpty() || peerData["pkey"].toString().isEmpty() || peerData["node"].toString().isEmpty() )
     {
-        qDebug() << "TwitterPlugin could not find host and/or port and/or pkey for peer " << screenName;
+        qDebug() << "TwitterPlugin could not find host and/or port and/or pkey and/or node for peer " << screenName;
         return;
     }
     QString friendlyName = QString( '@' + screenName );
@@ -557,6 +638,8 @@ TwitterPlugin::directMessagePosted( const QTweetDMStatus& message )
 void
 TwitterPlugin::directMessagePostError( QTweetNetBase::ErrorCode errorCode, const QString &message )
 {
+    Q_UNUSED( errorCode );
+    Q_UNUSED( message );
     qDebug() << Q_FUNC_INFO;
     qDebug() << "TwitterPlugin received an error posting direct message: " << m_directMessageNew.data()->lastErrorMessage();
 }
@@ -566,6 +649,13 @@ TwitterPlugin::directMessageDestroyed( const QTweetDMStatus& message )
 {
     qDebug() << Q_FUNC_INFO;
     qDebug() << "TwitterPlugin destroyed message " << message.text();
+}
+
+void
+TwitterPlugin::checkSettings()
+{
+    disconnectPlugin();
+    connectPlugin( false );
 }
 
 Q_EXPORT_PLUGIN2( sip, TwitterPlugin )

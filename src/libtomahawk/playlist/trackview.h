@@ -1,3 +1,21 @@
+/* === This file is part of Tomahawk Player - <http://tomahawk-player.org> ===
+ * 
+ *   Copyright 2010-2011, Christian Muehlhaeuser <muesli@tomahawk-player.org>
+ *
+ *   Tomahawk is free software: you can redistribute it and/or modify
+ *   it under the terms of the GNU General Public License as published by
+ *   the Free Software Foundation, either version 3 of the License, or
+ *   (at your option) any later version.
+ *
+ *   Tomahawk is distributed in the hope that it will be useful,
+ *   but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ *   GNU General Public License for more details.
+ *
+ *   You should have received a copy of the GNU General Public License
+ *   along with Tomahawk. If not, see <http://www.gnu.org/licenses/>.
+ */
+
 #ifndef TRACKVIEW_H
 #define TRACKVIEW_H
 
@@ -8,6 +26,7 @@
 
 #include "dllmacro.h"
 
+class LoadingSpinner;
 class PlaylistInterface;
 class TrackHeader;
 class TrackModel;
@@ -25,7 +44,8 @@ public:
     virtual QString guid() const { return m_guid; }
     virtual void setGuid( const QString& guid );
 
-    virtual void setModel( TrackModel* model );
+    virtual void setTrackModel( TrackModel* model );
+    virtual void setModel( QAbstractItemModel* model );
     void setProxyModel( TrackProxyModel* model );
 
     virtual TrackModel* model() const { return m_model; }
@@ -48,7 +68,7 @@ protected:
 
     virtual void startDrag( Qt::DropActions supportedActions );
     virtual void dragEnterEvent( QDragEnterEvent* event );
-    virtual void dragLeaveEvent( QDragLeaveEvent* event ) { m_dragging = false; setDirtyRegion( m_dropRect ); }
+    virtual void dragLeaveEvent( QDragLeaveEvent* /*event*/ ) { m_dragging = false; setDirtyRegion( m_dropRect ); }
     virtual void dragMoveEvent( QDragMoveEvent* event );
     virtual void dropEvent( QDropEvent* event );
 
@@ -67,6 +87,7 @@ private:
     PlaylistItemDelegate* m_delegate;
     TrackHeader* m_header;
     OverlayWidget* m_overlay;
+    LoadingSpinner* m_loadingSpinner;
 
     bool m_resizing;
     bool m_dragging;

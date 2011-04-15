@@ -1,3 +1,21 @@
+/* === This file is part of Tomahawk Player - <http://tomahawk-player.org> ===
+ * 
+ *   Copyright 2010-2011, Christian Muehlhaeuser <muesli@tomahawk-player.org>
+ *
+ *   Tomahawk is free software: you can redistribute it and/or modify
+ *   it under the terms of the GNU General Public License as published by
+ *   the Free Software Foundation, either version 3 of the License, or
+ *   (at your option) any later version.
+ *
+ *   Tomahawk is distributed in the hope that it will be useful,
+ *   but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ *   GNU General Public License for more details.
+ *
+ *   You should have received a copy of the GNU General Public License
+ *   along with Tomahawk. If not, see <http://www.gnu.org/licenses/>.
+ */
+
 /*
     The collection  - acts as container for someones music library
     load() -> async populate by calling addArtists etc,
@@ -33,6 +51,7 @@ public:
     Collection( const source_ptr& source, const QString& name, QObject* parent = 0 );
     virtual ~Collection();
 
+    virtual void setLoaded() { m_isLoaded = true; }
     virtual bool isLoaded() const { return m_isLoaded; }
     virtual QString name() const;
 
@@ -72,9 +91,10 @@ public slots:
 
     void setPlaylists( const QList<Tomahawk::playlist_ptr>& plists );
     void setDynamicPlaylists( const QList< Tomahawk::dynplaylist_ptr >& dynplists );
-    void setTracks( const QList<Tomahawk::query_ptr>& tracks );
 
+    void setTracks( const QList<Tomahawk::query_ptr>& tracks );
     void delTracks( const QStringList& files );
+    void resetTrackCache() { m_tracks.clear(); m_isLoaded = false; }
 
 protected:
     QString m_name;

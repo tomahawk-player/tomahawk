@@ -1,18 +1,20 @@
-/****************************************************************************************
- * Copyright (c) 2011 Leo Franchi <lfranchi@kde.org>                                    *
- *                                                                                      *
- * This program is free software; you can redistribute it and/or modify it under        *
- * the terms of the GNU General Public License as published by the Free Software        *
- * Foundation; either version 2 of the License, or (at your option) any later           *
- * version.                                                                             *
- *                                                                                      *
- * This program is distributed in the hope that it will be useful, but WITHOUT ANY      *
- * WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A      *
- * PARTICULAR PURPOSE. See the GNU General Public License for more details.             *
- *                                                                                      *
- * You should have received a copy of the GNU General Public License along with         *
- * this program.  If not, see <http://www.gnu.org/licenses/>.                           *
- ****************************************************************************************/
+/* === This file is part of Tomahawk Player - <http://tomahawk-player.org> ===
+ *
+ *   Copyright 2010-2011, Christian Muehlhaeuser <muesli@tomahawk-player.org>
+ *
+ *   Tomahawk is free software: you can redistribute it and/or modify
+ *   it under the terms of the GNU General Public License as published by
+ *   the Free Software Foundation, either version 3 of the License, or
+ *   (at your option) any later version.
+ *
+ *   Tomahawk is distributed in the hope that it will be useful,
+ *   but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ *   GNU General Public License for more details.
+ *
+ *   You should have received a copy of the GNU General Public License
+ *   along with Tomahawk. If not, see <http://www.gnu.org/licenses/>.
+ */
 
 #include "DynamicView.h"
 
@@ -47,18 +49,18 @@ DynamicView::DynamicView( QWidget* parent )
     setContentsMargins( 0, 0, 0, 0 );
     setFrameShape( QFrame::NoFrame );
     setAttribute( Qt::WA_MacShowFocusRect, 0 );
-    
+
     m_fadeOutAnim.setDuration( FADE_LENGTH );
     m_fadeOutAnim.setCurveShape( QTimeLine::LinearCurve );
     m_fadeOutAnim.setFrameRange( 100, 0 );
     m_fadeOutAnim.setUpdateInterval( 5 );
-    
+
     QEasingCurve curve( QEasingCurve::OutBounce );
     curve.setAmplitude( .25 );
     m_slideAnim.setEasingCurve( curve );
     m_slideAnim.setDirection( QTimeLine::Forward );
     m_fadeOutAnim.setUpdateInterval( 5 );
-    
+
     connect( &m_fadeOutAnim, SIGNAL( frameChanged( int ) ), viewport(), SLOT( update() ) );
     connect( &m_fadeOutAnim, SIGNAL( finished() ), this, SLOT( animFinished() ) );
 }
@@ -68,51 +70,51 @@ DynamicView::~DynamicView()
 
 }
 
-void 
-DynamicView::setModel( DynamicModel* model)
+void
+DynamicView::setDynamicModel( DynamicModel* model)
 {
     m_model = model;
-    PlaylistView::setModel( model );
-    
-    connect( model, SIGNAL( trackCountChanged( unsigned int ) ), SLOT( onTrackCountChanged( unsigned int ) ) );
-    connect( model, SIGNAL( checkForOverflow() ), this, SLOT( checkForOverflow() ) );
+    PlaylistView::setPlaylistModel( m_model );
+
+    connect( m_model, SIGNAL( trackCountChanged( unsigned int ) ), SLOT( onTrackCountChanged( unsigned int ) ) );
+    connect( m_model, SIGNAL( checkForOverflow() ), this, SLOT( checkForOverflow() ) );
 }
 
 void
 DynamicView::setOnDemand( bool onDemand )
 {
     m_onDemand = onDemand;
-    
+
     if( m_onDemand )
         setVerticalScrollBarPolicy( Qt::ScrollBarAlwaysOff );
     else
         setVerticalScrollBarPolicy( Qt::ScrollBarAsNeeded );
 }
 
-void 
+void
 DynamicView::setReadOnly( bool readOnly )
 {
     m_readOnly = readOnly;
 }
 
-void 
+void
 DynamicView::showMessageTimeout( const QString& title, const QString& body )
 {
     m_title = title;
     m_body = body;
-    
+
     overlay()->setText( QString( "%1:\n\n%2" ).arg( m_title, m_body ) );
     overlay()->show( 10 );
 }
 
-void 
+void
 DynamicView::showMessage(const QString& message)
 {
     overlay()->setText( message );
     overlay()->show();
 }
 
-void 
+void
 DynamicView::setDynamicWorking(bool working)
 {
     m_working = working;
@@ -123,16 +125,16 @@ DynamicView::setDynamicWorking(bool working)
 }
 
 
-void 
+void
 DynamicView::onTrackCountChanged( unsigned int tracks )
 {
     if ( tracks == 0 && !m_working )
     {
         if( m_onDemand ) {
-            if( m_readOnly )
-                overlay()->setText( tr( "Press play to begin listening to this custom station!" ) );
+            if( !m_readOnly )
+                overlay()->setText( tr( "Add some filters above to seed this station!" ) );
             else
-                overlay()->setText( tr( "Add some filters above, and press play to begin listening to this custom station!" ) );
+                return; // when viewing a read-only station, don't show anything
         } else
             if( m_readOnly )
                 overlay()->setText( tr( "Press Generate to get started!" ) );
@@ -142,7 +144,6 @@ DynamicView::onTrackCountChanged( unsigned int tracks )
             overlay()->show();
     }
     else {
-        m_working = false;
         overlay()->hide();
     }
 }
@@ -172,7 +173,7 @@ DynamicView::checkForOverflow()
     }
 }
 
-void 
+void
 DynamicView::collapseEntries( int startRow, int num, int numToKeep )
 {
     qDebug() << "BEGINNING TO COLLAPSE FROM" << startRow << num << numToKeep;
@@ -191,7 +192,7 @@ DynamicView::collapseEntries( int startRow, int num, int numToKeep )
     } else {
         m_fadeOnly = false;
     }
-    
+
      // we capture the image of the rows we're going to collapse
     // then we capture the image of the target row we're going to animate downwards
     // then we fade the first image out while sliding the second image up.
@@ -203,7 +204,7 @@ DynamicView::collapseEntries( int startRow, int num, int numToKeep )
     QRect fadingRectViewport = fadingRect; // all values that we use in paintEvent() have to be in viewport coords
     fadingRect.moveTo( viewport()->mapTo( this, fadingRect.topLeft() ) );
     //fadingRect.setBottom( qMin( fadingRect.bottom(), viewport()->mapTo( this, viewport()->rect().bottomLeft() ).y() ) ); // limit what we capture to the viewport rect, if the last item is partially obscured
-    
+
     m_fadingIndexes = QPixmap::grabWidget( this, fadingRect ); // but all values we use to grab the widgetr have to be in scrollarea coords :(
     m_fadingPointAnchor = QPoint( 0, fadingRectViewport.topLeft().y() );
 
@@ -211,7 +212,7 @@ DynamicView::collapseEntries( int startRow, int num, int numToKeep )
     m_bg = backgroundBetween( m_fadingIndexes.rect(), startRow );
 
     m_fadeOutAnim.start();
-    
+
     qDebug() << "Grabbed fading indexes from rect:" << fadingRect << m_fadingIndexes.size() << "ANCHORED:" << m_fadingPointAnchor;
 
     if( !m_fadeOnly ) {
@@ -232,7 +233,7 @@ DynamicView::collapseEntries( int startRow, int num, int numToKeep )
         QRect slidingRectViewport = slidingRect;
         // map internal view coord to external qscrollarea
         slidingRect.moveTo( viewport()->mapTo( this, slidingRect.topLeft() ) );
-    
+
         m_slidingIndex = QPixmap::grabWidget( this, slidingRect );
         m_bottomAnchor = QPoint( 0, slidingRectViewport.topLeft().y() );
         m_bottomOfAnim = QPoint( 0, slidingRectViewport.bottomLeft().y() );
@@ -245,7 +246,7 @@ DynamicView::collapseEntries( int startRow, int num, int numToKeep )
 
         QTimer::singleShot( SLIDE_OFFSET, &m_slideAnim, SLOT( start() ) );
     }
-    
+
     // delete the actual indices
     QModelIndexList todel;
     for( int i = 0; i < num; i++ ) {
@@ -293,11 +294,11 @@ DynamicView::animFinished()
     m_checkOnCollapse = false;
 }
 
-void 
+void
 DynamicView::paintEvent( QPaintEvent* event )
 {
     TrackView::paintEvent(event);
-    
+
     QPainter p( viewport() );
     if( m_fadeOutAnim.state() == QTimeLine::Running ) { // both run together
         p.save();
@@ -315,8 +316,8 @@ DynamicView::paintEvent( QPaintEvent* event )
         //         qDebug() << "FAST SETOPACITY:" << p.paintEngine()->hasFeature(QPaintEngine::ConstantOpacity);
         p.setOpacity( 1 - m_fadeOutAnim.currentValue() );
         p.drawPixmap( m_fadingPointAnchor, m_fadingIndexes );
-        p.restore();   
-        
+        p.restore();
+
         if( m_slideAnim.state() == QTimeLine::Running ) {
             // draw the collapsing entry
             p.drawPixmap( 0, m_slideAnim.currentFrame(), m_slidingIndex );

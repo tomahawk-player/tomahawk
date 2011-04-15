@@ -1,3 +1,21 @@
+/* === This file is part of Tomahawk Player - <http://tomahawk-player.org> ===
+ *
+ *   Copyright 2010-2011, Christian Muehlhaeuser <muesli@tomahawk-player.org>
+ *
+ *   Tomahawk is free software: you can redistribute it and/or modify
+ *   it under the terms of the GNU General Public License as published by
+ *   the Free Software Foundation, either version 3 of the License, or
+ *   (at your option) any later version.
+ *
+ *   Tomahawk is distributed in the hope that it will be useful,
+ *   but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ *   GNU General Public License for more details.
+ *
+ *   You should have received a copy of the GNU General Public License
+ *   along with Tomahawk. If not, see <http://www.gnu.org/licenses/>.
+ */
+
 #ifndef ALBUMMODEL_H
 #define ALBUMMODEL_H
 
@@ -51,7 +69,7 @@ public:
     virtual QString description() const { return m_description; }
     virtual void setTitle( const QString& title ) { m_title = title; }
     virtual void setDescription( const QString& description ) { m_description = description; }
-    
+
     AlbumItem* itemFromIndex( const QModelIndex& index ) const
     {
         if ( index.isValid() )
@@ -63,8 +81,8 @@ public:
     }
 
 public slots:
-    virtual void setRepeatMode( PlaylistInterface::RepeatMode mode ) {}
-    virtual void setShuffled( bool shuffled ) {}
+    virtual void setRepeatMode( PlaylistInterface::RepeatMode /*mode*/ ) {}
+    virtual void setShuffled( bool /*shuffled*/ ) {}
 
 signals:
     void repeatModeChanged( PlaylistInterface::RepeatMode mode );
@@ -75,7 +93,7 @@ signals:
 protected:
 
 private slots:
-    void onAlbumsAdded( const QList<Tomahawk::album_ptr>& albums, const Tomahawk::collection_ptr& collection );
+    void onAlbumsAdded( const QList<Tomahawk::album_ptr>& albums );
     void onCoverArtDownloaded();
     void onDataChanged();
 

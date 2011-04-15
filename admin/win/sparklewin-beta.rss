@@ -3,15 +3,23 @@
     <channel>
         <title>Tomahawk Player</title>
         <link>http://www.gettomahawk.com</link>
-        <description>Tomahawk Player</description>
+        <description>Tomahawk Player Beta</description>
         <language>en</language>
         <item>
-            <title>Version 0.0.1 (Tomahawk Player - It Lives!)</title>
+            <title>Version 0.0.1 (Tomahawk Player Beta - It Lives?)</title>
             <sparkle:releaseNotesLink>
-                https://github.com/tomahawk-player/tomahawk/blob/master/ChangeLog
+                https://github.com/tomahawk-player/tomahawk/raw/0.0.1/ChangeLog
             </sparkle:releaseNotesLink>
-            <pubDate>Fri, 04 Mar 2011 16:05:15 -0500</pubDate>
-            <enclosure url="http://download.tomahawk-player.org/sparklewin/updates/tomahawk0.0.1.exe" sparkle:version="0.0.1" />
+            <pubDate>Fri, 25 Mar 2011 00:00:01 +0100</pubDate>
+            <enclosure url="http://download.tomahawk-player.org/tomahawk-beta-0.0.1.exe" sparkle:version="0.0.1" />
+        </item>
+        <item>
+            <title>Version 0.0.2 (Tomahawk Player Beta - It Lives?)</title>
+            <sparkle:releaseNotesLink>
+                https://github.com/tomahawk-player/tomahawk/raw/0.0.2/ChangeLog
+            </sparkle:releaseNotesLink>
+            <pubDate>Mon, 28 Mar 2011 05:00:02 +0100</pubDate>
+            <enclosure url="http://download.tomahawk-player.org/tomahawk-0.0.2.exe" sparkle:version="0.0.2" />
         </item>
     </channel>
 </rss>

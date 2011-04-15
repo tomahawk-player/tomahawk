@@ -9,10 +9,10 @@ INCLUDE( ${QT_USE_FILE} )
 
 add_definitions( ${QT_DEFINITIONS} )
 add_definitions( -DQT_SHARED )
+add_definitions( -DQTWEETLIB_MAKEDLL )
 
 if(WIN32)
     set(PLATFORM_SPECIFIC_LIBS "ws2_32.dll" "advapi32.dll" )
-    add_definitions( -DQTWEETLIB_MAKEDLL )
 endif(WIN32)
 
 set(TOMAHAWK_QTWEETLIB_SOURCES
@@ -164,6 +164,7 @@ include_directories(
     .
     ${QT_INCLUDE_DIR}
     ${QT_INCLUDES}
+    ${QJSON_INCLUDE_DIR}
     qtweetlib/src
 )
 
@@ -171,15 +172,20 @@ qt4_wrap_cpp( TOMAHAWK_QTWEETLIB_MOC ${TOMAHAWK_QTWEETLIB_HEADERS} )
 
 ADD_LIBRARY(tomahawk_qtweetlib SHARED ${TOMAHAWK_QTWEETLIB_SOURCES} ${TOMAHAWK_QTWEETLIB_MOC})
 
+if(APPLE)
+  SET(QJSON_FLAGS ${QJSON_LIBRARIES})
+else(APPLE)
+  SET(QJSON_FLAGS ${QJSON_LDFLAGS})
+endif(APPLE)
+ 
 target_link_libraries(tomahawk_qtweetlib
     ${QT_LIBRARIES}
-    qjson
-)
-
-#SET_TARGET_PROPERTIES( tomahawk_qtweetlib PROPERTIES DEFINE_SYMBOL  MAKE_QTWEETLIB_LIB )
+    ${QJSON_FLAGS}
+    ${QJSON_LIBRARIES}
+)   
 
 INCLUDE( ${CMAKE_CURRENT_SOURCE_DIR}/twitter-api-keys )
 
-INSTALL(TARGETS tomahawk_qtweetlib DESTINATION lib)
+INSTALL(TARGETS tomahawk_qtweetlib DESTINATION lib${LIB_SUFFIX})
 
 

@@ -1,3 +1,21 @@
+/* === This file is part of Tomahawk Player - <http://tomahawk-player.org> ===
+ *
+ *   Copyright 2010-2011, Christian Muehlhaeuser <muesli@tomahawk-player.org>
+ *
+ *   Tomahawk is free software: you can redistribute it and/or modify
+ *   it under the terms of the GNU General Public License as published by
+ *   the Free Software Foundation, either version 3 of the License, or
+ *   (at your option) any later version.
+ *
+ *   Tomahawk is distributed in the hope that it will be useful,
+ *   but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ *   GNU General Public License for more details.
+ *
+ *   You should have received a copy of the GNU General Public License
+ *   along with Tomahawk. If not, see <http://www.gnu.org/licenses/>.
+ */
+
 #include "tomahawksettings.h"
 
 #ifndef TOMAHAWK_HEADLESS
@@ -8,7 +26,7 @@
 #include <QDir>
 #include <QDebug>
 
-#define VERSION 1
+#define VERSION 2
 
 TomahawkSettings* TomahawkSettings::s_instance = 0;
 
@@ -34,9 +52,12 @@ TomahawkSettings::TomahawkSettings( QObject* parent )
         qDebug() << "Config version outdated, old:" << value( "configversion" ).toUInt()
                  << "new:" << VERSION
                  << "Doing upgrade, if any...";
-        
+
         // insert upgrade code here as required
         setValue( "configversion", VERSION );
+        if( contains( "script/resolvers") ) {
+            setValue( "script/loadedresolvers", value( "script/resolvers" ) );
+        }
     }
 }
 
@@ -47,30 +68,62 @@ TomahawkSettings::~TomahawkSettings()
 }
 
 
-QString
-TomahawkSettings::scannerPath() const
+QStringList
+TomahawkSettings::scannerPaths()
 {
+    //FIXME: After enough time, remove this hack (and make const)
     #ifndef TOMAHAWK_HEADLESS
-    return value( "scannerpath", QDesktopServices::storageLocation( QDesktopServices::MusicLocation ) ).toString();
+    if( value( "scannerpaths" ).isNull() )
+        setValue( "scannerpaths", value( "scannerpath" ) );
+    return value( "scannerpaths", QDesktopServices::storageLocation( QDesktopServices::MusicLocation ) ).toStringList();
     #else
-    return value( "scannerpath", "" ).toString();
+    if( value( "scannerpaths" ).isNull() )
+        setValue( "scannerpaths", value( "scannerpath" ) );
+    return value( "scannerpaths", "" ).toStringList();
     #endif
 }
 
 
 void
-TomahawkSettings::setScannerPath( const QString& path )
+TomahawkSettings::setScannerPaths( const QStringList& paths )
 {
-    setValue( "scannerpath", path );
+    setValue( "scannerpaths", paths );
 }
 
 
 bool
-TomahawkSettings::hasScannerPath() const
+TomahawkSettings::hasScannerPaths() const
 {
-    return contains( "scannerpath" );
+    //FIXME: After enough time, remove this hack
+    return contains( "scannerpaths" ) || contains( "scannerpath" );
 }
 
+
+bool
+TomahawkSettings::watchForChanges() const
+{
+    return value( "watchForChanges", true ).toBool();
+}
+
+
+void
+TomahawkSettings::setWatchForChanges( bool watch )
+{
+    setValue( "watchForChanges", watch );
+}
+
+
+void
+TomahawkSettings::setAcceptedLegalWarning( bool accept )
+{
+    setValue( "acceptedLegalWarning", accept );
+}
+
+bool
+TomahawkSettings::acceptedLegalWarning() const
+{
+    return value( "acceptedLegalWarning", false ).toBool();
+}
 
 bool
 TomahawkSettings::httpEnabled() const
@@ -153,6 +206,19 @@ void
 TomahawkSettings::setProxyType( const int type )
 {
     setValue( "network/proxy/type", type );
+}
+
+
+QStringList
+TomahawkSettings::aclEntries() const
+{
+    return value( "acl/entries", QStringList() ).toStringList();
+}
+
+void
+TomahawkSettings::setAclEntries( const QStringList &entries )
+{
+    setValue( "acl/entries", entries );
 }
 
 
@@ -349,6 +415,12 @@ TomahawkSettings::setExternalHostname(const QString& externalHostname)
 }
 
 int
+TomahawkSettings::defaultPort() const
+{
+    return 50210;
+}
+
+int
 TomahawkSettings::externalPort() const
 {
     return value( "network/external-port", 50210 ).toInt();
@@ -416,7 +488,7 @@ TomahawkSettings::setTwitterScreenName( const QString& screenName )
 {
     setValue( "twitter/ScreenName", screenName );
 }
-    
+
 QString
 TomahawkSettings::twitterOAuthToken() const
 {
@@ -555,23 +627,36 @@ TomahawkSettings::xmppBotPort() const
 void
 TomahawkSettings::setXmppBotPort( const int port )
 {
-    setValue( "xmppBot/port", -1 );
+    setValue( "xmppBot/port", port );
 }
 
-void 
+void
 TomahawkSettings::addScriptResolver(const QString& resolver)
 {
-    setValue( "script/resolvers", scriptResolvers() << resolver );
+    setValue( "script/resolvers", allScriptResolvers() << resolver );
 }
 
-QStringList 
-TomahawkSettings::scriptResolvers() const
+QStringList
+TomahawkSettings::allScriptResolvers() const
 {
     return value( "script/resolvers" ).toStringList();
 }
 
-void 
-TomahawkSettings::setScriptResolvers( const QStringList& resolver )
+void
+TomahawkSettings::setAllScriptResolvers( const QStringList& resolver )
 {
     setValue( "script/resolvers", resolver );
+}
+
+
+QStringList
+TomahawkSettings::enabledScriptResolvers() const
+{
+    return value( "script/loadedresolvers" ).toStringList();
+}
+
+void
+TomahawkSettings::setEnabledScriptResolvers( const QStringList& resolvers )
+{
+    setValue( "script/loadedresolvers", resolvers );
 }

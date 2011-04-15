@@ -1,3 +1,21 @@
+/* === This file is part of Tomahawk Player - <http://tomahawk-player.org> ===
+ * 
+ *   Copyright 2010-2011, Christian Muehlhaeuser <muesli@tomahawk-player.org>
+ *
+ *   Tomahawk is free software: you can redistribute it and/or modify
+ *   it under the terms of the GNU General Public License as published by
+ *   the Free Software Foundation, either version 3 of the License, or
+ *   (at your option) any later version.
+ *
+ *   Tomahawk is distributed in the hope that it will be useful,
+ *   but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ *   GNU General Public License for more details.
+ *
+ *   You should have received a copy of the GNU General Public License
+ *   along with Tomahawk. If not, see <http://www.gnu.org/licenses/>.
+ */
+
 #include "zeroconf.h"
 
 #include <QtPlugin>
@@ -31,15 +49,12 @@ ZeroconfPlugin::connectPlugin( bool /*startup*/ )
     m_zeroconf->advertise();
     m_isOnline = true;
 
-    foreach( QStringList *currNode, m_cachedNodes )
+    foreach( const QStringList& nodeSet, m_cachedNodes )
     {
-        QStringList nodeSet = *currNode;
         if ( !Servent::instance()->connectedToSession( nodeSet[3] ) )
             Servent::instance()->connectToPeer( nodeSet[0], nodeSet[1].toInt(), "whitelist", nodeSet[2], nodeSet[3] );
-
-        delete currNode;
     }
-
+    m_cachedNodes.clear();
     return true;
 }
 
@@ -63,9 +78,9 @@ ZeroconfPlugin::lanHostFound( const QString& host, int port, const QString& name
     if ( !m_isOnline )
     {
         qDebug() << "Not online, so not connecting.";
-        QStringList *nodeSet = new QStringList();
-        *nodeSet << host << QString::number( port ) << name << nodeid;
-        m_cachedNodes.insert( nodeSet );
+        QStringList nodeSet;
+        nodeSet << host << QString::number( port ) << name << nodeid;
+        m_cachedNodes.append( nodeSet );
         return;
     }
     

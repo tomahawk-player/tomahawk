@@ -1,10 +1,28 @@
+/* === This file is part of Tomahawk Player - <http://tomahawk-player.org> ===
+ *
+ *   Copyright 2010-2011, Christian Muehlhaeuser <muesli@tomahawk-player.org>
+ *
+ *   Tomahawk is free software: you can redistribute it and/or modify
+ *   it under the terms of the GNU General Public License as published by
+ *   the Free Software Foundation, either version 3 of the License, or
+ *   (at your option) any later version.
+ *
+ *   Tomahawk is distributed in the hope that it will be useful,
+ *   but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ *   GNU General Public License for more details.
+ *
+ *   You should have received a copy of the GNU General Public License
+ *   along with Tomahawk. If not, see <http://www.gnu.org/licenses/>.
+ */
+
 #ifndef PLAYLISTMODEL_H
 #define PLAYLISTMODEL_H
 
 #include <QList>
 #include <QHash>
 
-#include "plitem.h"
+#include "trackmodelitem.h"
 #include "trackmodel.h"
 #include "collection.h"
 #include "query.h"
@@ -33,7 +51,7 @@ public:
 
     Tomahawk::playlist_ptr playlist() const { return m_playlist; }
 
-    void loadPlaylist( const Tomahawk::playlist_ptr& playlist, bool loadEntries = true );
+    virtual void loadPlaylist( const Tomahawk::playlist_ptr& playlist, bool loadEntries = true );
     void loadHistory( const Tomahawk::source_ptr& source, unsigned int amount = 50 );
 
     void clear();
@@ -44,6 +62,7 @@ public:
 
     void insert( unsigned int row, const Tomahawk::query_ptr& query );
 
+    void remove( unsigned int row, bool moreToCome = false );
     virtual void removeIndex( const QModelIndex& index, bool moreToCome = false );
 
 signals:
@@ -52,8 +71,7 @@ signals:
 
     void itemSizeChanged( const QModelIndex& index );
 
-    void loadingStarts();
-    void loadingFinished();
+    void playlistDeleted();
 
 private slots:
     void onDataChanged();
@@ -64,11 +82,14 @@ private slots:
     void onTracksAdded( const QList<Tomahawk::query_ptr>& tracks );
     void onTracksInserted( unsigned int row, const QList<Tomahawk::query_ptr>& tracks );
 
+    void trackResolved( bool );
+
 private:
     QList<Tomahawk::plentry_ptr> playlistEntries() const;
 
     Tomahawk::playlist_ptr m_playlist;
     bool m_waitForUpdate;
+    QList< Tomahawk::Query* > m_waitingForResolved;
 };
 
 #endif // PLAYLISTMODEL_H

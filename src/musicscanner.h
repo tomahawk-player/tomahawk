@@ -1,8 +1,27 @@
+/* === This file is part of Tomahawk Player - <http://tomahawk-player.org> ===
+ * 
+ *   Copyright 2010-2011, Christian Muehlhaeuser <muesli@tomahawk-player.org>
+ *
+ *   Tomahawk is free software: you can redistribute it and/or modify
+ *   it under the terms of the GNU General Public License as published by
+ *   the Free Software Foundation, either version 3 of the License, or
+ *   (at your option) any later version.
+ *
+ *   Tomahawk is distributed in the hope that it will be useful,
+ *   but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ *   GNU General Public License for more details.
+ *
+ *   You should have received a copy of the GNU General Public License
+ *   along with Tomahawk. If not, see <http://www.gnu.org/licenses/>.
+ */
+
 #ifndef MUSICSCANNER_H
 #define MUSICSCANNER_H
 
-#include <taglib/fileref.h>
-#include <taglib/tag.h>
+/* taglib */
+#include <fileref.h>
+#include <tag.h>
 
 #include <QVariantMap>
 #include <QDir>
@@ -20,8 +39,15 @@ class DirLister : public QObject
 Q_OBJECT
 
 public:
-    DirLister( QDir d, QMap<QString, unsigned int>& mtimes )
-        : QObject(), m_dir( d ), m_dirmtimes( mtimes )
+    
+    enum Mode {
+        NonRecursive,
+        Recursive,
+        MTimeOnly
+    };
+    
+    DirLister( const QStringList& dirs, const QMap<QString, unsigned int>& mtimes, bool recursive )
+        : QObject(), m_dirs( dirs ), m_dirmtimes( mtimes ), m_recursive( recursive )
     {
         qDebug() << Q_FUNC_INFO;
     }
@@ -37,11 +63,13 @@ signals:
 
 private slots:
     void go();
-    void scanDir( QDir dir, int depth );
+    void scanDir( QDir dir, int depth, DirLister::Mode mode );
 
 private:
-    QDir m_dir;
+    QStringList m_dirs;
     QMap<QString, unsigned int> m_dirmtimes;
+    bool m_recursive;
+    
     QMap<QString, unsigned int> m_newdirmtimes;
 };
 
@@ -50,13 +78,15 @@ class MusicScanner : public QObject
 Q_OBJECT
 
 public:
-    MusicScanner( const QString& dir, quint32 bs = 0 );
+    MusicScanner( const QStringList& dirs, bool recursive = true, quint32 bs = 0 );
     ~MusicScanner();
 
 signals:
     //void fileScanned( QVariantMap );
     void finished();
     void batchReady( const QVariantList& );
+    void addWatchedDirs( const QStringList & );
+    void removeWatchedDir( const QString & );
 
 private:
     QVariant readFile( const QFileInfo& fi );
@@ -73,7 +103,7 @@ private slots:
     void commitBatch( const QVariantList& );
 
 private:
-    QString m_dir;
+    QStringList m_dirs;
     QMap<QString, QString> m_ext2mime; // eg: mp3 -> audio/mpeg
     unsigned int m_scanned;
     unsigned int m_skipped;
@@ -84,6 +114,7 @@ private:
     QMap<QString, unsigned int> m_newdirmtimes;
 
     QList<QVariant> m_scannedfiles;
+    bool m_recursive;
     quint32 m_batchsize;
 
     DirLister* m_dirLister;

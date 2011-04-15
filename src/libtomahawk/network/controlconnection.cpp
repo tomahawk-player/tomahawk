@@ -1,6 +1,24 @@
+/* === This file is part of Tomahawk Player - <http://tomahawk-player.org> ===
+ * 
+ *   Copyright 2010-2011, Christian Muehlhaeuser <muesli@tomahawk-player.org>
+ *
+ *   Tomahawk is free software: you can redistribute it and/or modify
+ *   it under the terms of the GNU General Public License as published by
+ *   the Free Software Foundation, either version 3 of the License, or
+ *   (at your option) any later version.
+ *
+ *   Tomahawk is distributed in the hope that it will be useful,
+ *   but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ *   GNU General Public License for more details.
+ *
+ *   You should have received a copy of the GNU General Public License
+ *   along with Tomahawk. If not, see <http://www.gnu.org/licenses/>.
+ */
+
 #include "controlconnection.h"
 
-#include "filetransferconnection.h"
+#include "streamconnection.h"
 #include "database/database.h"
 #include "database/databasecommand_collectionstats.h"
 #include "dbsyncconnection.h"
@@ -57,6 +75,13 @@ ControlConnection::setup()
 {
     qDebug() << Q_FUNC_INFO << id() << name();
 
+    if ( !m_source.isNull() )
+    {
+        qDebug() << "This source seems to be online already.";
+        Q_ASSERT( false );
+        return;
+    }
+
     QString friendlyName;
     if ( Servent::isIPWhitelisted( m_sock->peerAddress() ) )
     {
@@ -67,7 +92,7 @@ ControlConnection::setup()
     }
     else
         friendlyName = name();
-    
+
     // setup source and remote collection for this peer
     m_source = SourceList::instance()->get( id(), friendlyName );
     m_source->setControlConnection( this );
@@ -105,7 +130,7 @@ ControlConnection::registerSource()
 void
 ControlConnection::setupDbSyncConnection( bool ondemand )
 {
-    qDebug() << Q_FUNC_INFO << ondemand << m_source->id() << ondemand << m_dbconnkey << m_dbsyncconn << m_registered;
+    qDebug() << Q_FUNC_INFO << ondemand << m_source->id() << m_dbconnkey << m_dbsyncconn << m_registered;
 
     if ( m_dbsyncconn || !m_registered )
         return;
@@ -165,7 +190,7 @@ ControlConnection::dbSyncConnection()
     if ( !m_dbsyncconn )
     {
         setupDbSyncConnection( true );
-        Q_ASSERT( m_dbsyncconn );
+//        Q_ASSERT( m_dbsyncconn );
     }
 
     return m_dbsyncconn;
@@ -203,7 +228,8 @@ ControlConnection::handleMsg( msg_ptr msg )
         {
             QString theirkey = m["key"].toString();
             QString ourkey   = m["offer"].toString();
-            servent()->reverseOfferRequest( this, ourkey, theirkey );
+            QString theirdbid = m["controlid"].toString();
+            servent()->reverseOfferRequest( this, theirdbid, ourkey, theirkey );
         }
         else if( m.value( "method" ).toString() == "dbsync-offer" )
         {

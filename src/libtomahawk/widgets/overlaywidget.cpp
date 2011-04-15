@@ -1,3 +1,21 @@
+/* === This file is part of Tomahawk Player - <http://tomahawk-player.org> ===
+ * 
+ *   Copyright 2010-2011, Christian Muehlhaeuser <muesli@tomahawk-player.org>
+ *
+ *   Tomahawk is free software: you can redistribute it and/or modify
+ *   it under the terms of the GNU General Public License as published by
+ *   the Free Software Foundation, either version 3 of the License, or
+ *   (at your option) any later version.
+ *
+ *   Tomahawk is distributed in the hope that it will be useful,
+ *   but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ *   GNU General Public License for more details.
+ *
+ *   You should have received a copy of the GNU General Public License
+ *   along with Tomahawk. If not, see <http://www.gnu.org/licenses/>.
+ */
+
 #include "overlaywidget.h"
 
 #include <QDebug>
@@ -6,7 +24,7 @@
 
 #define CORNER_ROUNDNESS 16.0
 #define FADING_DURATION 500
-#define FONT_SIZE 18
+#define FONT_SIZE 16
 #define OPACITY 0.86
 
 
@@ -19,9 +37,15 @@ OverlayWidget::OverlayWidget( QWidget* parent )
     setAttribute( Qt::WA_TranslucentBackground, true );
 
     setOpacity( m_opacity );
-    
+
     m_timer.setSingleShot( true );
     connect( &m_timer, SIGNAL( timeout() ), this, SLOT( hide() ) );
+
+#ifdef Q_WS_MAC
+    QFont f( font() );
+    f.setPointSize( f.pointSize() - 2 );
+    setFont( f );
+#endif
 }
 
 
@@ -63,10 +87,9 @@ OverlayWidget::show( int timeoutSecs )
 
     QPropertyAnimation* animation = new QPropertyAnimation( this, "opacity" );
     animation->setDuration( FADING_DURATION );
-    animation->setStartValue( 0.00 );
     animation->setEndValue( OPACITY );
     animation->start();
-    
+
     if( timeoutSecs > 0 )
         m_timer.start( timeoutSecs * 1000 );
 }
@@ -98,6 +121,7 @@ OverlayWidget::shown() const
 void
 OverlayWidget::paintEvent( QPaintEvent* event )
 {
+    Q_UNUSED( event );
     QPoint center( ( m_parent->width() - width() ) / 2, ( m_parent->height() - height() ) / 2 );
     move( center );
 
@@ -117,11 +141,26 @@ OverlayWidget::paintEvent( QPaintEvent* event )
     QTextOption to( Qt::AlignCenter );
     to.setWrapMode( QTextOption::WrapAtWordBoundaryOrAnywhere );
 
+    // shrink to fit if needed
     QFont f( font() );
-    f.setPixelSize( FONT_SIZE );
+    f.setPointSize( FONT_SIZE );
     f.setBold( true );
 
+    QRectF textRect = r.adjusted( 8, 8, -8, -8 );
+    qreal availHeight = textRect.height();
+
+    QFontMetricsF fm( f );
+    qreal textHeight = fm.boundingRect( textRect, Qt::AlignCenter | Qt::TextWordWrap, text() ).height();
+    while( textHeight > availHeight )
+    {
+        if( f.pointSize() <= 4 ) // don't try harder
+            break;
+
+        f.setPointSize( f.pointSize() - 1 );
+        fm = QFontMetricsF( f );
+        textHeight = fm.boundingRect( textRect, Qt::AlignCenter | Qt::TextWordWrap, text() ).height();
+    }
     p.setFont( f );
     p.setPen( palette().highlightedText().color() );
-    p.drawText( r.adjusted( 16, 16, -16, -16 ), text(), to );
+    p.drawText( r.adjusted( 8, 8, -8, -8 ), text(), to );
 }

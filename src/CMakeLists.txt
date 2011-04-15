@@ -35,10 +35,6 @@ ENDIF()
 SET( tomahawkSources ${tomahawkSources}
      sip/SipHandler.cpp
 
-     infosystem/infosystem.cpp
-     infosystem/infoplugins/echonestplugin.cpp
-     infosystem/infoplugins/musixmatchplugin.cpp
-
      web/api_v1.cpp
 
      resolvers/scriptresolver.cpp
@@ -68,17 +64,15 @@ SET( tomahawkSourcesGui ${tomahawkSourcesGui}
      tomahawktrayicon.cpp
      audiocontrols.cpp
      settingsdialog.cpp
+     resolverconfigdelegate.cpp
+     resolversmodel.cpp
      tomahawkwindow.cpp
 )
 
 SET( tomahawkHeaders ${tomahawkHeaders}
      "${TOMAHAWK_INC_DIR}/tomahawk/tomahawkapp.h"
-     "${TOMAHAWK_INC_DIR}/tomahawk/infosystem.h"
 
      sip/SipHandler.h
-
-     infosystem/infoplugins/echonestplugin.h
-     infosystem/infoplugins/musixmatchplugin.h
 
      web/api_v1.h
 
@@ -108,6 +102,9 @@ SET( tomahawkHeadersGui ${tomahawkHeadersGui}
      tomahawktrayicon.h
      audiocontrols.h
      settingsdialog.h
+     resolverconfigdelegate.h
+     resolversmodel.h
+     resolverconfigwrapper.h
      tomahawkwindow.h
 )
 
@@ -121,9 +118,10 @@ SET( tomahawkUI ${tomahawkUI}
 )
 
 INCLUDE_DIRECTORIES(
-    . 
+    .
     ${TOMAHAWK_INC_DIR}
     ${CMAKE_CURRENT_BINARY_DIR}
+    ${CMAKE_BINARY_DIR}/thirdparty/liblastfm2/src
 
     audio
     database
@@ -133,14 +131,14 @@ INCLUDE_DIRECTORIES(
     topbar
     utils
     libtomahawk
-    libtomahawk/utils
     mac
 
-    ${THIRDPARTY_DIR}/qxt/qxtweb-standalone/qxtweb/
+    ${THIRDPARTY_DIR}/qxt/qxtweb-standalone/qxtweb
     ${THIRDPARTY_DIR}/qtweetlib/qtweetlib/src
     ${THIRDPARTY_DIR}/qtweetlib/tomahawk-custom
 
     ${TAGLIB_INCLUDES}
+    ${QJSON_INCLUDE_DIR}
     ${LIBECHONEST_INCLUDE_DIR}
     ${LIBECHONEST_INCLUDE_DIR}/..
 )
@@ -165,6 +163,7 @@ IF( APPLE )
 ENDIF( APPLE )
 
 IF(GLOOX_FOUND)
+  INCLUDE_DIRECTORIES( ${GLOOX_INCLUDE_DIR} )
   SET( tomahawkHeaders ${tomahawkHeaders} xmppbot/xmppbot.h )
   SET( tomahawkSources ${tomahawkSources} xmppbot/xmppbot.cpp )
 ENDIF(GLOOX_FOUND)
@@ -177,7 +176,9 @@ qt4_wrap_cpp( tomahawkMoc ${tomahawkHeaders} )
 configure_file(${CMAKE_CURRENT_SOURCE_DIR}/config.h.in
                ${CMAKE_CURRENT_BINARY_DIR}/config.h)
 
-SET( final_src ${final_src} ${tomahawkMoc} ${tomahawkSources} ${tomahawkHeaders} )
+include( ${CMAKE_SOURCE_DIR}/lang/translations.cmake )
+
+SET( final_src ${final_src} ${tomahawkMoc} ${tomahawkSources} ${tomahawkHeaders} ${trans_outfile})
 
 IF( "${gui}" STREQUAL "no" )
 ELSE()
@@ -195,14 +196,14 @@ IF( APPLE )
 )
 ENDIF( APPLE )
 IF( WIN32 )
-    ADD_EXECUTABLE( tomahawk ${final_src} )
+    ADD_EXECUTABLE( tomahawk WIN32 ${final_src} )
 ENDIF( WIN32 )
 
 MESSAGE( STATUS "OS_SPECIFIC_LINK_LIBRARIES: ${OS_SPECIFIC_LINK_LIBRARIES}" )
 
 SET(LINK_LIBRARIES  "")
 IF(LIBLASTFM_FOUND)
-    SET(LINK_LIBRARIES ${LINK_LIBRARIES} ${LIBLASTFM_LIBRARY} )
+    SET(LINK_LIBRARIES ${LINK_LIBRARIES} tomahawk_lastfm2 )
 ENDIF(LIBLASTFM_FOUND)
 IF(GLOOX_FOUND)
     SET(LINK_LIBRARIES ${LINK_LIBRARIES} ${GLOOX_LIBRARIES} )
@@ -232,4 +233,16 @@ IF( APPLE )
   ENDIF(HAVE_SPARKLE)
 ENDIF( APPLE )
 
-INCLUDE( "CPack.txt" )
+INSTALL( TARGETS tomahawk BUNDLE DESTINATION . RUNTIME DESTINATION bin )
+
+IF(KDE4_FOUND) #install protocol file
+  FILE(READ ${CMAKE_SOURCE_DIR}/admin/unix/tomahawk.protocol protocol)
+  STRING( REPLACE "/path/to/binary" # match this
+              "${CMAKE_INSTALL_PREFIX}/bin/tomahawk" # this is linux (kde) so pretty safe I think
+              edited_protocol # save in this variable
+              "${protocol}" # from the contents of this var
+          )
+  FILE( WRITE ${CMAKE_BINARY_DIR}/tomahawk.protocol "${edited_protocol}" )
+  INSTALL( FILES ${CMAKE_BINARY_DIR}/tomahawk.protocol DESTINATION ${SERVICES_INSTALL_DIR} )
+ENDIF()
+#INCLUDE( "CPack.txt" )
