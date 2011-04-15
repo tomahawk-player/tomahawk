@@ -160,7 +160,7 @@ DatabaseImpl::updateSearchIndex()
 bool
 DatabaseImpl::updateSchema( int oldVersion )
 {
-    // we are called here with the old database. we must migrate it to the CURRENT_SCHEMA_VERSION from t7he oldVersion
+    // we are called here with the old database. we must migrate it to the CURRENT_SCHEMA_VERSION from the oldVersion
     if ( oldVersion == 0 ) // empty database, so create our tables and stuff
     {
         qDebug() << "Create tables... old version is" << oldVersion;
@@ -181,11 +181,13 @@ DatabaseImpl::updateSchema( int oldVersion )
 
         db.commit();
         return true;
-    } else // update in place! run the proper upgrade script
+    }
+    else // update in place! run the proper upgrade script
     {
         int cur = oldVersion;
         db.transaction();
-        while( cur < CURRENT_SCHEMA_VERSION ) {
+        while ( cur < CURRENT_SCHEMA_VERSION )
+        {
             cur++;
 
             QString path = QString( RESPATH "sql/dbmigrate-%1_to_%2.sql" ).arg( cur - 1 ).arg( cur );
@@ -195,9 +197,9 @@ DatabaseImpl::updateSchema( int oldVersion )
                 qWarning() << "Failed to find or open upgrade script from" << (cur-1) << "to" << cur << " (" << path << ")! Aborting upgrade..";
                 return false;
             }
+
             QString sql = QString::fromUtf8( script.readAll() ).trimmed();
             QStringList statements = sql.split( ";", QString::SkipEmptyParts );
-
             foreach( const QString& sql, statements )
             {
                 QString clean = cleanSql( sql ).trimmed();
@@ -214,6 +216,7 @@ DatabaseImpl::updateSchema( int oldVersion )
         return true;
     }
 }
+
 
 QString
 DatabaseImpl::cleanSql( const QString& sql )
