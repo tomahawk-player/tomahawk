@@ -1,4 +1,6 @@
 Version 0.1.0:
+    * Resolvers can now be enabled and disabled, and some can be configured
+      directly in Tomahawk.
     * You can now browse and play collections in a tree-view.
     * Watch folders for changes and automatically update your collection. This
       is on by default; you can turn it off on the Local Music tab in the
