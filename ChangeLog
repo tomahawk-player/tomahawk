@@ -10,6 +10,7 @@ Version 0.1.0:
       music collection.
 
 Version 0.0.4:
+    * Fixed crash that could occur when playing a track from a browser.
     * Fixed a crash situation caused by sources going on- or offline.
 
 Version 0.0.3:
