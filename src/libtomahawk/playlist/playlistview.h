@@ -1,5 +1,5 @@
 /* === This file is part of Tomahawk Player - <http://tomahawk-player.org> ===
- * 
+ *
  *   Copyright 2010-2011, Christian Muehlhaeuser <muesli@tomahawk-player.org>
  *
  *   Tomahawk is free software: you can redistribute it and/or modify
@@ -50,6 +50,9 @@ public:
 
     virtual bool jumpToCurrentTrack();
 
+signals:
+    void destroyed( QWidget* widget );
+
 protected:
     void keyPressEvent( QKeyEvent* event );
 
@@ -59,6 +62,8 @@ private slots:
 
     void addItemsToPlaylist();
     void deleteItems();
+
+    void onDeleted();
 
 private:
     void setupMenus();

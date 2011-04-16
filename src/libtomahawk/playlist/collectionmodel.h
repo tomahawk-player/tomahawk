@@ -1,5 +1,5 @@
 /* === This file is part of Tomahawk Player - <http://tomahawk-player.org> ===
- * 
+ *
  *   Copyright 2010-2011, Christian Muehlhaeuser <muesli@tomahawk-player.org>
  *
  *   Tomahawk is free software: you can redistribute it and/or modify
@@ -23,7 +23,7 @@
 #include <QList>
 #include <QHash>
 
-#include "plitem.h"
+#include "trackmodelitem.h"
 #include "collection.h"
 #include "query.h"
 #include "typedefs.h"
@@ -62,7 +62,7 @@ public:
     virtual void setRepeatMode( PlaylistInterface::RepeatMode mode ) {}
     virtual void setShuffled( bool shuffled ) {}
 
-    PlItem* itemFromIndex( const QModelIndex& index ) const;
+    TrackModelItem* itemFromIndex( const QModelIndex& index ) const;
 
 signals:
     void repeatModeChanged( PlaylistInterface::RepeatMode mode );
@@ -79,8 +79,8 @@ private slots:
     void onSourceOffline( Tomahawk::source_ptr src );
 
 private:
-    PlItem* m_rootItem;
-    QMap< Tomahawk::collection_ptr, PlItem* > m_collectionIndex;
+    TrackModelItem* m_rootItem;
+    QMap< Tomahawk::collection_ptr, TrackModelItem* > m_collectionIndex;
 };
 
 #endif // COLLECTIONMODEL_H

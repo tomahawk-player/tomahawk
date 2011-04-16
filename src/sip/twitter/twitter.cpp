@@ -265,6 +265,19 @@ TwitterPlugin::connectTimerFired()
     foreach( QString screenName, peerlist )
     {
         QHash< QString, QVariant > peerData = m_cachedPeers[screenName].toHash();
+
+        if ( Servent::instance()->connectedToSession( peerData["node"].toString() ) )
+        {
+            peerData["lastseen"] = QDateTime::currentMSecsSinceEpoch();
+            m_cachedPeers[screenName] = peerData;
+        }
+        
+        if ( QDateTime::currentMSecsSinceEpoch() - peerData["lastseen"].toLongLong() > 1209600000 ) // 2 weeks
+        {
+            qDebug() << "Aging peer " << screenName << " out of cache";
+            m_cachedPeers.remove( screenName );
+            continue;
+        }
         
         if ( !peerData.contains( "host" ) || !peerData.contains( "port" ) || !peerData.contains( "pkey" ) )
         {
@@ -529,11 +542,14 @@ TwitterPlugin::registerOffer( const QString &screenName, const QHash< QString, Q
         _peerData.remove( "resend" );
     }
 
-    if ( !_peerData.contains( "okey" ) )
+    if ( !_peerData.contains( "okey" ) ||
+         !_peerData.contains( "onod" ) ||
+         ( _peerData.contains( "onod" ) && _peerData["onod"] != Database::instance()->dbid() ) )
     {
         QString okey = QUuid::createUuid().toString().split( '-' ).last();
         okey.chop( 1 );
         _peerData["okey"] = QVariant::fromValue< QString >( okey );
+        _peerData["onod"] = QVariant::fromValue< QString >( Database::instance()->dbid() );
         peersChanged = true;
         needToAddToCache = true;
         needToSend = true;
@@ -568,6 +584,7 @@ TwitterPlugin::registerOffer( const QString &screenName, const QHash< QString, Q
 
     if ( peersChanged )
     {
+        _peerData["lastseen"] = QString::number( QDateTime::currentMSecsSinceEpoch() );
         m_cachedPeers[screenName] = QVariant::fromValue< QHash< QString, QVariant > >( _peerData );
         TomahawkSettings::instance()->setTwitterCachedPeers( m_cachedPeers );
     }
@@ -595,7 +612,8 @@ void
 TwitterPlugin::makeConnection( const QString &screenName, const QHash< QString, QVariant > &peerData )
 {
     qDebug() << Q_FUNC_INFO;
-    if ( !peerData.contains( "host" ) || !peerData.contains( "port" ) || !peerData.contains( "pkey" ) || !peerData.contains( "node" ) )
+    if ( !peerData.contains( "host" ) || !peerData.contains( "port" ) || !peerData.contains( "pkey" ) || !peerData.contains( "node" ) ||
+         peerData["host"].toString().isEmpty() || peerData["port"].toString().isEmpty() || peerData["pkey"].toString().isEmpty() || peerData["node"].toString().isEmpty() )
     {
         qDebug() << "TwitterPlugin could not find host and/or port and/or pkey and/or node for peer " << screenName;
         return;

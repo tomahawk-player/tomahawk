@@ -1,5 +1,5 @@
 /* === This file is part of Tomahawk Player - <http://tomahawk-player.org> ===
- * 
+ *
  *   Copyright 2010-2011, Christian Muehlhaeuser <muesli@tomahawk-player.org>
  *
  *   Tomahawk is free software: you can redistribute it and/or modify
@@ -22,7 +22,7 @@
 #include <QAbstractItemModel>
 
 #include "playlistinterface.h"
-#include "playlist/plitem.h"
+#include "trackmodelitem.h"
 
 #include "dllmacro.h"
 
@@ -80,9 +80,9 @@ public:
 
     virtual void append( const Tomahawk::query_ptr& query ) = 0;
 
-    PlItem* itemFromIndex( const QModelIndex& index ) const;
+    TrackModelItem* itemFromIndex( const QModelIndex& index ) const;
 
-    PlItem* m_rootItem;
+    TrackModelItem* m_rootItem;
 
 signals:
     void repeatModeChanged( PlaylistInterface::RepeatMode mode );

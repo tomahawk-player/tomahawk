@@ -1,5 +1,5 @@
 /* === This file is part of Tomahawk Player - <http://tomahawk-player.org> ===
- * 
+ *
  *   Copyright 2010-2011, Christian Muehlhaeuser <muesli@tomahawk-player.org>
  *
  *   Tomahawk is free software: you can redistribute it and/or modify
@@ -59,7 +59,7 @@ public:
     bool showOfflineResults() const { return m_showOfflineResults; }
     void setShowOfflineResults( bool b ) { m_showOfflineResults = b; }
 
-    PlItem* itemFromIndex( const QModelIndex& index ) const { return sourceModel()->itemFromIndex( index ); }
+    TrackModelItem* itemFromIndex( const QModelIndex& index ) const { return sourceModel()->itemFromIndex( index ); }
 
 signals:
     void repeatModeChanged( PlaylistInterface::RepeatMode mode );

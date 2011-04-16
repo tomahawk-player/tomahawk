@@ -229,6 +229,8 @@ Playlist::reportDeleted( const Tomahawk::playlist_ptr& self )
     qDebug() << Q_FUNC_INFO;
     Q_ASSERT( self.data() == this );
     m_source->collection()->deletePlaylist( self );
+    
+    emit deleted( self );
 }
 
 

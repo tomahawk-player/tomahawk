@@ -1,5 +1,5 @@
 /* === This file is part of Tomahawk Player - <http://tomahawk-player.org> ===
- * 
+ *
  *   Copyright 2010-2011, Christian Muehlhaeuser <muesli@tomahawk-player.org>
  *
  *   Tomahawk is free software: you can redistribute it and/or modify
@@ -23,7 +23,7 @@
 #include <QList>
 #include <QHash>
 
-#include "plitem.h"
+#include "trackmodelitem.h"
 #include "trackmodel.h"
 #include "collection.h"
 #include "query.h"

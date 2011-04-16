@@ -1,5 +1,5 @@
 /* === This file is part of Tomahawk Player - <http://tomahawk-player.org> ===
- * 
+ *
  *   Copyright 2010-2011, Christian Muehlhaeuser <muesli@tomahawk-player.org>
  *
  *   Tomahawk is free software: you can redistribute it and/or modify
@@ -33,7 +33,7 @@ using namespace Tomahawk;
 
 TrackModel::TrackModel( QObject* parent )
     : QAbstractItemModel( parent )
-    , m_rootItem( new PlItem( 0, this ) )
+    , m_rootItem( new TrackModelItem( 0, this ) )
     , m_readOnly( true )
 {
     qDebug() << Q_FUNC_INFO;
@@ -45,7 +45,7 @@ TrackModel::TrackModel( QObject* parent )
 
 TrackModel::~TrackModel()
 {
-    delete m_rootItem;
+//    delete m_rootItem;
 }
 
 
@@ -55,8 +55,8 @@ TrackModel::index( int row, int column, const QModelIndex& parent ) const
     if ( !m_rootItem || row < 0 || column < 0 )
         return QModelIndex();
 
-    PlItem* parentItem = itemFromIndex( parent );
-    PlItem* childItem = parentItem->children.value( row );
+    TrackModelItem* parentItem = itemFromIndex( parent );
+    TrackModelItem* childItem = parentItem->children.value( row );
     if ( !childItem )
         return QModelIndex();
 
@@ -70,7 +70,7 @@ TrackModel::rowCount( const QModelIndex& parent ) const
     if ( parent.column() > 0 )
         return 0;
 
-    PlItem* parentItem = itemFromIndex( parent );
+    TrackModelItem* parentItem = itemFromIndex( parent );
     if ( !parentItem )
         return 0;
 
@@ -88,15 +88,15 @@ TrackModel::columnCount( const QModelIndex& parent ) const
 QModelIndex
 TrackModel::parent( const QModelIndex& child ) const
 {
-    PlItem* entry = itemFromIndex( child );
+    TrackModelItem* entry = itemFromIndex( child );
     if ( !entry )
         return QModelIndex();
 
-    PlItem* parentEntry = entry->parent;
+    TrackModelItem* parentEntry = entry->parent;
     if ( !parentEntry )
         return QModelIndex();
 
-    PlItem* grandparentEntry = parentEntry->parent;
+    TrackModelItem* grandparentEntry = parentEntry->parent;
     if ( !grandparentEntry )
         return QModelIndex();
 
@@ -108,7 +108,7 @@ TrackModel::parent( const QModelIndex& child ) const
 QVariant
 TrackModel::data( const QModelIndex& index, int role ) const
 {
-    PlItem* entry = itemFromIndex( index );
+    TrackModelItem* entry = itemFromIndex( index );
     if ( !entry )
         return QVariant();
 
@@ -222,13 +222,13 @@ void
 TrackModel::setCurrentItem( const QModelIndex& index )
 {
     qDebug() << Q_FUNC_INFO;
-    PlItem* oldEntry = itemFromIndex( m_currentIndex );
+    TrackModelItem* oldEntry = itemFromIndex( m_currentIndex );
     if ( oldEntry )
     {
         oldEntry->setIsPlaying( false );
     }
 
-    PlItem* entry = itemFromIndex( index );
+    TrackModelItem* entry = itemFromIndex( index );
     if ( entry )
     {
         m_currentIndex = index;
@@ -283,7 +283,7 @@ TrackModel::mimeData( const QModelIndexList &indexes ) const
             continue;
 
         QModelIndex idx = index( i.row(), 0, i.parent() );
-        PlItem* item = itemFromIndex( idx );
+        TrackModelItem* item = itemFromIndex( idx );
         if ( item )
         {
             const query_ptr& query = item->query();
@@ -315,7 +315,7 @@ TrackModel::removeIndex( const QModelIndex& index, bool moreToCome )
     if ( index.column() > 0 )
         return;
 
-    PlItem* item = itemFromIndex( index );
+    TrackModelItem* item = itemFromIndex( index );
     if ( item )
     {
         emit beginRemoveRows( index.parent(), index.row(), index.row() );
@@ -337,11 +337,11 @@ TrackModel::removeIndexes( const QList<QModelIndex>& indexes )
 }
 
 
-PlItem*
+TrackModelItem*
 TrackModel::itemFromIndex( const QModelIndex& index ) const
 {
     if ( index.isValid() )
-        return static_cast<PlItem*>( index.internalPointer() );
+        return static_cast<TrackModelItem*>( index.internalPointer() );
     else
     {
         return m_rootItem;
@@ -352,7 +352,7 @@ TrackModel::itemFromIndex( const QModelIndex& index ) const
 void
 TrackModel::onPlaybackFinished( const Tomahawk::result_ptr& result )
 {
-    PlItem* oldEntry = itemFromIndex( m_currentIndex );
+    TrackModelItem* oldEntry = itemFromIndex( m_currentIndex );
     if ( oldEntry && !oldEntry->query().isNull() && oldEntry->query()->results().contains( result ) )
     {
         oldEntry->setIsPlaying( false );
@@ -363,7 +363,7 @@ TrackModel::onPlaybackFinished( const Tomahawk::result_ptr& result )
 void
 TrackModel::onPlaybackStopped()
 {
-    PlItem* oldEntry = itemFromIndex( m_currentIndex );
+    TrackModelItem* oldEntry = itemFromIndex( m_currentIndex );
     if ( oldEntry )
     {
         oldEntry->setIsPlaying( false );

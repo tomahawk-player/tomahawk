@@ -64,6 +64,8 @@ public:
     /// true when any result has been found (score may be less than 1.0)
     bool playable() const { return m_playable; }
 
+    bool resolvingFinished() const { return m_resolveFinished; }
+    
     unsigned int lastPipelineWeight() const { return m_lastpipelineweight; }
     void setLastPipelineWeight( unsigned int w ) { m_lastpipelineweight = w; }
 
@@ -72,7 +74,8 @@ public:
     void setTrack( const QString& track ) { m_track = track; }
     void setResultHint( const QString& resultHint ) { m_resultHint = resultHint; }
     void setDuration( int duration ) { m_duration = duration; }
-
+    void setResolveFinished( bool resolved ) { m_resolveFinished = resolved; }
+    
     QVariant toVariant() const;
     QString toString() const;
 
@@ -108,6 +111,7 @@ private:
     QList< Tomahawk::result_ptr > m_results;
     bool m_solved;
     bool m_playable;
+    bool m_resolveFinished;
     mutable QID m_qid;
     unsigned int m_lastpipelineweight;
 

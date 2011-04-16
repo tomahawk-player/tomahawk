@@ -1,5 +1,5 @@
 /* === This file is part of Tomahawk Player - <http://tomahawk-player.org> ===
- * 
+ *
  *   Copyright 2010-2011, Christian Muehlhaeuser <muesli@tomahawk-player.org>
  *
  *   Tomahawk is free software: you can redistribute it and/or modify
@@ -40,7 +40,6 @@ CollectionModel::CollectionModel( QObject* parent )
 
 CollectionModel::~CollectionModel()
 {
-//    delete m_rootItem;
 }
 
 
@@ -50,8 +49,8 @@ CollectionModel::index( int row, int column, const QModelIndex& parent ) const
     if ( !m_rootItem || row < 0 || column < 0 )
         return QModelIndex();
 
-    PlItem* parentItem = itemFromIndex( parent );
-    PlItem* childItem = parentItem->children.value( row );
+    TrackModelItem* parentItem = itemFromIndex( parent );
+    TrackModelItem* childItem = parentItem->children.value( row );
     if ( !childItem )
         return QModelIndex();
 
@@ -65,7 +64,7 @@ CollectionModel::rowCount( const QModelIndex& parent ) const
     if ( parent.column() > 0 )
         return 0;
 
-    PlItem* parentItem = itemFromIndex( parent );
+    TrackModelItem* parentItem = itemFromIndex( parent );
     if ( !parentItem )
         return 0;
 
@@ -83,15 +82,15 @@ CollectionModel::columnCount( const QModelIndex& parent ) const
 QModelIndex
 CollectionModel::parent( const QModelIndex& child ) const
 {
-    PlItem* entry = itemFromIndex( child );
+    TrackModelItem* entry = itemFromIndex( child );
     if ( !entry )
         return QModelIndex();
 
-    PlItem* parentEntry = entry->parent;
+    TrackModelItem* parentEntry = entry->parent;
     if ( !parentEntry )
         return QModelIndex();
 
-    PlItem* grandparentEntry = parentEntry->parent;
+    TrackModelItem* grandparentEntry = parentEntry->parent;
     if ( !grandparentEntry )
         return QModelIndex();
 
@@ -106,7 +105,7 @@ CollectionModel::data( const QModelIndex& index, int role ) const
     if ( role != Qt::DisplayRole )
         return QVariant();
 
-    PlItem* entry = itemFromIndex( index );
+    TrackModelItem* entry = itemFromIndex( index );
     if ( !entry )
         return QVariant();
 
@@ -199,7 +198,7 @@ CollectionModel::removeCollection( const collection_ptr& collection )
     disconnect( collection.data(), SIGNAL( tracksFinished( Tomahawk::collection_ptr ) ),
                 this, SLOT( onTracksAddingFinished( Tomahawk::collection_ptr ) ) );
 
-    QList<PlItem*> plitems = m_collectionIndex.values( collection );
+    QList<TrackModelItem*> plitems = m_collectionIndex.values( collection );
 
     m_collectionIndex.remove( collection );
 }
@@ -210,17 +209,17 @@ CollectionModel::onTracksAdded( const QList<Tomahawk::query_ptr>& tracks, const 
 {
 //    int c = rowCount( QModelIndex() );
 
-    PlItem* plitem;
+    TrackModelItem* plitem;
     foreach( const Tomahawk::query_ptr& query, tracks )
     {
-        PlItem* parent = m_rootItem;
+        TrackModelItem* parent = m_rootItem;
         if ( parent->hash.contains( query->artist() ) )
         {
             parent = parent->hash.value( query->artist() );
         }
         else
         {
-            parent = new PlItem( query->artist(), m_rootItem );
+            parent = new TrackModelItem( query->artist(), m_rootItem );
             m_rootItem->hash.insert( query->artist(), parent );
         }
 
@@ -232,14 +231,14 @@ CollectionModel::onTracksAdded( const QList<Tomahawk::query_ptr>& tracks, const 
         }
         else
         {
-            PlItem* subitem = new PlItem( query->album(), parent );
+            TrackModelItem* subitem = new TrackModelItem( query->album(), parent );
             parent->hash.insert( query->album(), subitem );
             parent->childCount++;
             subitem->childCount++;
             parent = subitem;
         }
 
-        plitem = new PlItem( query, parent );
+        plitem = new TrackModelItem( query, parent );
         m_collectionIndex.insertMulti( collection, plitem );
     }
 
@@ -275,11 +274,11 @@ CollectionModel::onSourceOffline( Tomahawk::source_ptr src )
 }
 
 
-PlItem*
+TrackModelItem*
 CollectionModel::itemFromIndex( const QModelIndex& index ) const
 {
     if ( index.isValid() )
-        return static_cast<PlItem*>( index.internalPointer() );
+        return static_cast<TrackModelItem*>( index.internalPointer() );
     else
     {
         return m_rootItem;

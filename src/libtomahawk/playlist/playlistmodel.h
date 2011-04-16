@@ -1,5 +1,5 @@
 /* === This file is part of Tomahawk Player - <http://tomahawk-player.org> ===
- * 
+ *
  *   Copyright 2010-2011, Christian Muehlhaeuser <muesli@tomahawk-player.org>
  *
  *   Tomahawk is free software: you can redistribute it and/or modify
@@ -22,7 +22,7 @@
 #include <QList>
 #include <QHash>
 
-#include "plitem.h"
+#include "trackmodelitem.h"
 #include "trackmodel.h"
 #include "collection.h"
 #include "query.h"
@@ -71,8 +71,7 @@ signals:
 
     void itemSizeChanged( const QModelIndex& index );
 
-    void loadingStarts();
-    void loadingFinished();
+    void playlistDeleted();
 
 private slots:
     void onDataChanged();
@@ -83,11 +82,14 @@ private slots:
     void onTracksAdded( const QList<Tomahawk::query_ptr>& tracks );
     void onTracksInserted( unsigned int row, const QList<Tomahawk::query_ptr>& tracks );
 
+    void trackResolved( bool );
+
 private:
     QList<Tomahawk::plentry_ptr> playlistEntries() const;
 
     Tomahawk::playlist_ptr m_playlist;
     bool m_waitForUpdate;
+    QList< Tomahawk::Query* > m_waitingForResolved;
 };
 
 #endif // PLAYLISTMODEL_H
