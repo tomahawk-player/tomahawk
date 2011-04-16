@@ -96,6 +96,8 @@ private:
     QString m_server;
 
     enum IqContext { NoContext, RequestDisco, RequestedDisco, SipMessageSent };
+
+    QStringList m_legacy_peers;
 };
 
 #endif // JABBER_H

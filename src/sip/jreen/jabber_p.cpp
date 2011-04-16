@@ -55,7 +55,7 @@ Jabber_p::Jabber_p( const QString& jid, const QString& password, const QString& 
     // general client setup
     m_client = new Jreen::Client( jid, password );
     m_client->registerStanzaExtension(new TomahawkSipMessageFactory);
-    m_client->setResource( QString( "DISABLEDtomahawk%1" ).arg( QString::number( qrand() % 10000 ) ) );
+    m_client->setResource( QString( "tomahawk%1" ).arg( QString::number( qrand() % 10000 ) ) );
 
     // setup disco
     m_client->disco()->setSoftwareVersion( "Tomahawk Player", TOMAHAWK_VERSION, CMAKE_SYSTEM );
@@ -63,9 +63,8 @@ Jabber_p::Jabber_p( const QString& jid, const QString& password, const QString& 
     m_client->disco()->addFeature( TOMAHAWK_FEATURE );
 
     // setup caps node, legacy peer detection - used before 0.1
-    // disable it for testing
     Jreen::Capabilities::Ptr caps = m_client->presence().findExtension<Jreen::Capabilities>();
-    caps->setNode(TOMAHAWK_CAP_NODE_NAME);
+    caps->setNode( TOMAHAWK_CAP_NODE_NAME );
 
     // print connection parameters
     qDebug() << "Our JID set to:" << m_client->jid().full();
@@ -112,13 +111,21 @@ Jabber_p::disconnect()
 void
 Jabber_p::sendMsg( const QString& to, const QString& msg )
 {
-    qDebug() << Q_FUNC_INFO;
+    qDebug() << Q_FUNC_INFO << to << msg;
 
     if ( !m_client ) {
         return;
     }
 
-    qDebug() << "SEND MESSAGE:" << msg;
+    if( m_legacy_peers.contains( to ) )
+    {
+        qDebug() << Q_FUNC_INFO << to << "Send legacy message" << msg;
+        Jreen::Message m( Jreen::Message::Chat, Jreen::JID(to), msg);
+        m_client->send( m );
+
+        return;
+    }
+
 
     /*******************************************************
      * Obsolete this by a SipMessage class
@@ -161,9 +168,6 @@ Jabber_p::sendMsg( const QString& to, const QString& msg )
 void
 Jabber_p::broadcastMsg( const QString &msg )
 {
-    QString *foobar;
-    foobar->append("blabla");
-
     qDebug() << Q_FUNC_INFO;
 
     if ( !m_client )
@@ -171,9 +175,7 @@ Jabber_p::broadcastMsg( const QString &msg )
 
     foreach( const QString& jidstr, m_peers.keys() )
     {
-        qDebug() << "Broadcasting to" << jidstr <<"...";
-        Jreen::Message m( Jreen::Message::Chat, Jreen::JID(jidstr), msg, "" );
-        m_client->send( m );
+        sendMsg( jidstr, msg );
     }
 }
 
@@ -224,8 +226,8 @@ Jabber_p::onConnect()
     //m_room->join();
 
     // treat muc participiants like contacts
-    connect(m_room, SIGNAL(messageReceived(Jreen::Message, bool)), this, SLOT(onNewMessage(Jreen::Message)));
-    connect(m_room, SIGNAL(presenceReceived(Jreen::Presence,const Jreen::MUCRoom::Participant*)), this, SLOT(onNewPresence(Jreen::Presence)));
+    connect( m_room, SIGNAL( messageReceived( Jreen::Message, bool ) ), this, SLOT( onNewMessage( Jreen::Message ) ) );
+    connect( m_room, SIGNAL( presenceReceived( Jreen::Presence, const Jreen::MUCRoom::Participant* ) ), this, SLOT( onNewPresence( Jreen::Presence ) ) );
 }
 
 
@@ -313,15 +315,15 @@ void Jabber_p::onNewPresence( const Jreen::Presence& presence)
         return;
 
     if ( presence.error() ) {
-        qDebug() << Q_FUNC_INFO << fulljid << "Running tomahawk: no" << "presence error";
+        //qDebug() << Q_FUNC_INFO << fulljid << "Running tomahawk: no" << "presence error";
         return;
     }
 
     // ignore anyone not Running tomahawk:
     Jreen::Capabilities::Ptr caps = presence.findExtension<Jreen::Capabilities>();
-    if ( caps && (caps->node() == TOMAHAWK_CAP_NODE_NAME ) && false) // disable this method to test the new one
+    if ( caps && ( caps->node() == TOMAHAWK_CAP_NODE_NAME ) )
     {
-        // legacy peer detection
+        // must be a jreen resource, implementation in gloox was broken
         qDebug() << Q_FUNC_INFO << fulljid << "Running tomahawk: yes" << "caps " << caps->node();
         handlePeerStatus( fulljid, presence.subtype() );
     }
@@ -347,7 +349,6 @@ void Jabber_p::onNewPresence( const Jreen::Presence& presence)
 void
 Jabber_p::onNewIq( const Jreen::IQ &iq, int context )
 {
-    qDebug() << Q_FUNC_INFO;
     if( context == RequestDisco )
     {
         qDebug() << Q_FUNC_INFO << "Received disco IQ...";
@@ -369,6 +370,17 @@ Jabber_p::onNewIq( const Jreen::IQ &iq, int context )
         else
         {
             qDebug() << Q_FUNC_INFO << fulljid << "Running tomahawk/feature enabled: no";
+
+            //LEGACY: accept resources starting with tomahawk too
+            if( iq.from().resource().startsWith("tomahawk") )
+            {
+                qDebug() << Q_FUNC_INFO << fulljid << "Detected legacy tomahawk..";
+
+                // add to legacy peers, so we can send text messages instead of iqs
+                m_legacy_peers.append( fulljid );
+
+                handlePeerStatus( fulljid, Jreen::Presence::Available );
+            }
         }
     }
     else if(context == RequestedDisco)
@@ -381,7 +393,6 @@ Jabber_p::onNewIq( const Jreen::IQ &iq, int context )
     }
     else
     {
-        qDebug() << Q_FUNC_INFO << "No context!";
         TomahawkSipMessage *sipMessage = iq.findExtension<TomahawkSipMessage>().data();
         if(sipMessage)
         {
@@ -446,6 +457,13 @@ Jabber_p::handlePeerStatus( const QString& fulljid, Jreen::Presence::Type presen
     {
         m_peers[ fulljid ] = presenceType;
         qDebug() << Q_FUNC_INFO << "* Peer goes offline:" << fulljid;
+
+        // remove peer from legacy peers
+        if( m_legacy_peers.contains( fulljid ) )
+        {
+            m_legacy_peers.removeAll( fulljid );
+        }
+
         emit peerOffline( fulljid );
         return;
     }
