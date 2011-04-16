@@ -1,5 +1,5 @@
 /* === This file is part of Tomahawk Player - <http://tomahawk-player.org> ===
- * 
+ *
  *   Copyright 2010-2011, Christian Muehlhaeuser <muesli@tomahawk-player.org>
  *
  *   Tomahawk is free software: you can redistribute it and/or modify
@@ -23,11 +23,11 @@
 #include <QObject>
 #include <QtDebug>
 
-#include "tomahawk/infosystem.h"
+#include "infosystem.h"
 
 namespace Tomahawk
 {
-    
+
 namespace InfoSystem
 {
 
@@ -37,7 +37,7 @@ Q_OBJECT
 
 public:
     InfoSystemCache( QObject *parent = 0 );
-    
+
     virtual ~InfoSystemCache();
 
 signals:
@@ -45,16 +45,19 @@ signals:
     void info( QString caller, Tomahawk::InfoSystem::InfoType type, QVariant input, QVariant output, Tomahawk::InfoSystem::InfoCustomData customData );
 
 public slots:
-    void getCachedInfoSlot( Tomahawk::InfoSystem::InfoCacheCriteria criteria, QString caller, Tomahawk::InfoSystem::InfoType type, QVariant input, Tomahawk::InfoSystem::InfoCustomData customData );
-    void updateCacheSlot( Tomahawk::InfoSystem::InfoCacheCriteria criteria, Tomahawk::InfoSystem::InfoType type, QVariant output );
-    
+    void getCachedInfoSlot( Tomahawk::InfoSystem::InfoCacheCriteria criteria, qint64 newMaxAge, QString caller, Tomahawk::InfoSystem::InfoType type, QVariant input, Tomahawk::InfoSystem::InfoCustomData customData );
+    void updateCacheSlot( Tomahawk::InfoSystem::InfoCacheCriteria criteria, qint64 maxAge, Tomahawk::InfoSystem::InfoType type, QVariant output );
+
+private slots:
+    void loadCache( Tomahawk::InfoSystem::InfoType type, const QString &cacheFile );
+    void saveCache( Tomahawk::InfoSystem::InfoType type, const QString &cacheDir );
+
 private:
-    void loadCache( InfoType type, const QString &cache );
-    void saveCache( InfoType type, const QString &cache );
-    
     QHash< InfoType, QHash< InfoCacheCriteria, QVariant > > m_dataCache;
-    QHash< InfoType, QHash< InfoCacheCriteria, QDateTime > > m_timeCache;
+    QHash< InfoType, QHash< InfoCacheCriteria, QDateTime > > m_insertTimeCache;
+    QHash< InfoType, QHash< InfoCacheCriteria, QDateTime > > m_maxTimeCache;
     QSet< InfoType > m_dirtySet;
+    int m_cacheRemainingToLoad;
 };
 
 } //namespace InfoSystem

@@ -1,5 +1,5 @@
 /* === This file is part of Tomahawk Player - <http://tomahawk-player.org> ===
- * 
+ *
  *   Copyright 2010-2011, Christian Muehlhaeuser <muesli@tomahawk-player.org>
  *
  *   Tomahawk is free software: you can redistribute it and/or modify
@@ -181,6 +181,7 @@ Source::scanningProgress( unsigned int files )
 void
 Source::scanningFinished( unsigned int files )
 {
+    Q_UNUSED( files );
     m_textStatus = QString();
     emit stateChanged();
 }
@@ -189,6 +190,7 @@ Source::scanningFinished( unsigned int files )
 void
 Source::onStateChanged( DBSyncConnection::State newstate, DBSyncConnection::State oldstate, const QString& info )
 {
+    Q_UNUSED( oldstate );
     QString msg;
     switch( newstate )
     {
@@ -217,6 +219,16 @@ Source::onStateChanged( DBSyncConnection::State newstate, DBSyncConnection::Stat
 
     m_textStatus = msg;
     emit stateChanged();
+}
+
+
+unsigned int
+Source::trackCount() const
+{
+    if ( m_stats.contains( "numfiles" ) )
+        return m_stats.value( "numfiles" ).toUInt();
+    else
+        return 0;
 }
 
 

@@ -1,5 +1,5 @@
 /* === This file is part of Tomahawk Player - <http://tomahawk-player.org> ===
- * 
+ *
  *   Copyright 2010-2011, Christian Muehlhaeuser <muesli@tomahawk-player.org>
  *
  *   Tomahawk is free software: you can redistribute it and/or modify
@@ -51,9 +51,20 @@ DatabaseCommand_AllTracks::exec( DatabaseImpl* dbi )
             break;
     }
 
-
     if ( !m_collection.isNull() )
         sourceToken = QString( "AND file.source %1" ).arg( m_collection->source()->isLocal() ? "IS NULL" : QString( "= %1" ).arg( m_collection->source()->id() ) );
+
+    QString albumToken;
+    if ( m_album )
+    {
+        if ( m_album->id() == 0 )
+        {
+            m_artist = m_album->artist().data();
+            albumToken = QString( "AND album.id IS NULL" );
+        }
+        else
+            albumToken = QString( "AND album.id = %1" ).arg( m_album->id() );
+    }
 
     QString sql = QString(
             "SELECT file.id, artist.name, album.name, track.name, file.size, "
@@ -69,7 +80,7 @@ DatabaseCommand_AllTracks::exec( DatabaseImpl* dbi )
             "%4 %5 %6"
             ).arg( sourceToken )
              .arg( !m_artist ? QString() : QString( "AND artist.id = %1" ).arg( m_artist->id() ) )
-             .arg( !m_album ? QString() : QString( "AND album.id = %1" ).arg( m_album->id() ) )
+             .arg( !m_album ? QString() : albumToken )
              .arg( m_sortOrder > 0 ? QString( "ORDER BY %1" ).arg( m_orderToken ) : QString() )
              .arg( m_sortDescending ? "DESC" : QString() )
              .arg( m_amount > 0 ? QString( "LIMIT 0, %1" ).arg( m_amount ) : QString() );
@@ -77,7 +88,6 @@ DatabaseCommand_AllTracks::exec( DatabaseImpl* dbi )
     query.prepare( sql );
     query.exec();
 
-    int i = 0;
     while( query.next() )
     {
         Tomahawk::result_ptr result = Tomahawk::result_ptr( new Tomahawk::Result() );
@@ -139,12 +149,12 @@ DatabaseCommand_AllTracks::exec( DatabaseImpl* dbi )
         results << result;
         qry->addResults( results );
         qry->setResolveFinished( true );
-        
+
         ql << qry;
     }
 
     qDebug() << Q_FUNC_INFO << ql.length();
 
-    emit tracks( ql );
+    emit tracks( ql, data() );
     emit done( m_collection );
 }

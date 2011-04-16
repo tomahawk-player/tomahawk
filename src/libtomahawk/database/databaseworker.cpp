@@ -32,6 +32,9 @@ DatabaseWorker::DatabaseWorker( DatabaseImpl* lib, Database* db, bool mutates )
     , m_abort( false )
     , m_outstanding( 0 )
 {
+    Q_UNUSED( db );
+    Q_UNUSED( mutates );
+
     moveToThread( this );
 
     qDebug() << "CTOR DatabaseWorker" << this->thread();

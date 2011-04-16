@@ -1,5 +1,5 @@
 /*
-    This file was automatically generated from ./schema.sql on Wed Mar  2 01:40:39 CET 2011.
+    This file was automatically generated from schema.sql on Fri Apr 15 15:55:52 EDT 2011.
 */
 
 static const char * tomahawk_schema_sql = 
@@ -51,7 +51,8 @@ static const char * tomahawk_schema_sql =
 "    creator TEXT,"
 "    lastmodified INTEGER NOT NULL DEFAULT 0,"
 "    currentrevision TEXT REFERENCES playlist_revision(guid) DEFERRABLE INITIALLY DEFERRED,"
-"    dynplaylist BOOLEAN DEFAULT false"
+"    dynplaylist BOOLEAN DEFAULT false,"
+"    createdOn INTEGER NOT NULL DEFAULT 0"
 ");"
 "CREATE TABLE IF NOT EXISTS playlist_item ("
 "    guid TEXT PRIMARY KEY,"
@@ -86,8 +87,6 @@ static const char * tomahawk_schema_sql =
 "    match TEXT,"
 "    input TEXT"
 ");"
-""
-""
 "CREATE TABLE IF NOT EXISTS dynamic_playlist_revision ("
 "    guid TEXT PRIMARY KEY NOT NULL REFERENCES playlist_revision(guid) ON DELETE CASCADE ON UPDATE CASCADE DEFERRABLE INITIALLY DEFERRED,"
 "    controls TEXT, "
@@ -173,7 +172,7 @@ static const char * tomahawk_schema_sql =
 "    k TEXT NOT NULL PRIMARY KEY,"
 "    v TEXT NOT NULL DEFAULT ''"
 ");"
-"INSERT INTO settings(k,v) VALUES('schema_version', '22');"
+"INSERT INTO settings(k,v) VALUES('schema_version', '23');"
     ;
 
 const char * get_tomahawk_sql()

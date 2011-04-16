@@ -1,5 +1,5 @@
 /* === This file is part of Tomahawk Player - <http://tomahawk-player.org> ===
- * 
+ *
  *   Copyright 2010-2011, Christian Muehlhaeuser <muesli@tomahawk-player.org>
  *
  *   Tomahawk is free software: you can redistribute it and/or modify
@@ -48,6 +48,7 @@ public:
     explicit DatabaseCommand( const Tomahawk::source_ptr& src, QObject* parent = 0 );
 
     DatabaseCommand( const DatabaseCommand &other )
+        : QObject( other.parent() )
     {
     }
 
@@ -59,7 +60,7 @@ public:
 
     // if i make this pure virtual, i get compile errors in qmetatype.h.
     // we need Q_DECLARE_METATYPE to use in queued sig/slot connections.
-    virtual void exec( DatabaseImpl* lib ) { Q_ASSERT( false ); }
+    virtual void exec( DatabaseImpl* /*lib*/ ) { Q_ASSERT( false ); }
 
     void _exec( DatabaseImpl* lib );
 
@@ -74,6 +75,9 @@ public:
     virtual bool loggable() const { return false; }
     virtual bool singletonCmd() const { return false; }
     virtual bool localOnly() const { return false; }
+
+    virtual QVariant data() const { return m_data; }
+    virtual void setData( const QVariant& data ) { m_data = data; }
 
     QString guid() const
     {
@@ -97,6 +101,8 @@ private:
     State m_state;
     Tomahawk::source_ptr m_source;
     mutable QString m_guid;
+
+    QVariant m_data;
 };
 
 Q_DECLARE_METATYPE( DatabaseCommand )

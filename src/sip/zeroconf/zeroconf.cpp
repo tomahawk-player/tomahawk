@@ -49,15 +49,12 @@ ZeroconfPlugin::connectPlugin( bool /*startup*/ )
     m_zeroconf->advertise();
     m_isOnline = true;
 
-    foreach( QStringList *currNode, m_cachedNodes )
+    foreach( const QStringList& nodeSet, m_cachedNodes )
     {
-        QStringList nodeSet = *currNode;
         if ( !Servent::instance()->connectedToSession( nodeSet[3] ) )
             Servent::instance()->connectToPeer( nodeSet[0], nodeSet[1].toInt(), "whitelist", nodeSet[2], nodeSet[3] );
-
-        delete currNode;
     }
-
+    m_cachedNodes.clear();
     return true;
 }
 
@@ -81,9 +78,9 @@ ZeroconfPlugin::lanHostFound( const QString& host, int port, const QString& name
     if ( !m_isOnline )
     {
         qDebug() << "Not online, so not connecting.";
-        QStringList *nodeSet = new QStringList();
-        *nodeSet << host << QString::number( port ) << name << nodeid;
-        m_cachedNodes.insert( nodeSet );
+        QStringList nodeSet;
+        nodeSet << host << QString::number( port ) << name << nodeid;
+        m_cachedNodes.append( nodeSet );
         return;
     }
     

@@ -65,7 +65,7 @@ DirLister::go()
 void
 DirLister::scanDir( QDir dir, int depth, DirLister::Mode mode )
 {
-    qDebug() << "DirLister::scanDir scanning: " << dir.absolutePath() << " with mode " << mode;
+    qDebug() << "DirLister::scanDir scanning: " << dir.canonicalPath() << " with mode " << mode;
     
     if( !dir.exists() )
     {
@@ -74,16 +74,16 @@ DirLister::scanDir( QDir dir, int depth, DirLister::Mode mode )
     }
     
     QFileInfoList dirs;
-    const uint mtime = QFileInfo( dir.absolutePath() ).lastModified().toUTC().toTime_t();
-    m_newdirmtimes.insert( dir.absolutePath(), mtime );
+    const uint mtime = QFileInfo( dir.canonicalPath() ).lastModified().toUTC().toTime_t();
+    m_newdirmtimes.insert( dir.canonicalPath(), mtime );
 
-    if ( m_dirmtimes.contains( dir.absolutePath() ) && mtime == m_dirmtimes.value( dir.absolutePath() ) )
+    if ( m_dirmtimes.contains( dir.canonicalPath() ) && mtime == m_dirmtimes.value( dir.canonicalPath() ) )
     {
         // dont scan this dir, unchanged since last time.
     }
     else
     {
-        if( m_dirmtimes.contains( dir.absolutePath() ) || !m_recursive )
+        if( m_dirmtimes.contains( dir.canonicalPath() ) || !m_recursive )
             Database::instance()->enqueue( QSharedPointer<DatabaseCommand>( new DatabaseCommand_DeleteFiles( dir, SourceList::instance()->getLocal() ) ) );
 
         dir.setFilter( QDir::Files | QDir::Readable | QDir::NoDotAndDotDot );
@@ -99,10 +99,13 @@ DirLister::scanDir( QDir dir, int depth, DirLister::Mode mode )
     
     foreach( const QFileInfo& di, dirs )
     {
-        qDebug() << "Considering dir " << di.absoluteFilePath();
-        qDebug() << "m_dirmtimes contains it? " << (m_dirmtimes.contains( di.absoluteFilePath() ) ? "true" : "false");
-        if( mode == DirLister::Recursive || !m_dirmtimes.contains( di.absoluteFilePath() ) )
-            scanDir( di.absoluteFilePath(), depth + 1, DirLister::Recursive );
+        const QString canonical = di.canonicalFilePath();
+        qDebug() << "Considering dir " << canonical;
+        const bool haveDi = m_dirmtimes.contains( canonical );
+        qDebug() << "m_dirmtimes contains it?" << haveDi;
+        if( !m_newdirmtimes.contains( canonical ) && ( mode == DirLister::Recursive || !haveDi ) ) {
+            scanDir( di.canonicalFilePath(), depth + 1, DirLister::Recursive );
+        }
     }
 }
 
@@ -263,6 +266,7 @@ MusicScanner::listerQuit()
 void
 MusicScanner::listerDestroyed( QObject* dirLister )
 {
+    Q_UNUSED( dirLister );
     qDebug() << Q_FUNC_INFO;
     m_dirListerThreadController->deleteLater();
     m_dirListerThreadController = 0;
@@ -316,20 +320,20 @@ MusicScanner::readFile( const QFileInfo& fi )
         if( m_scanned % 3 == 0 )
             SourceList::instance()->getLocal()->scanningProgress( m_scanned );
     if( m_scanned % 100 == 0 )
-        qDebug() << "SCAN" << m_scanned << fi.absoluteFilePath();
+        qDebug() << "SCAN" << m_scanned << fi.canonicalFilePath();
 
     #ifdef COMPLEX_TAGLIB_FILENAME
-        const wchar_t *encodedName = reinterpret_cast< const wchar_t * >( fi.absoluteFilePath().utf16() );
+        const wchar_t *encodedName = reinterpret_cast< const wchar_t * >( fi.canonicalFilePath().utf16() );
     #else
-        QByteArray fileName = QFile::encodeName( fi.absoluteFilePath() );
+        QByteArray fileName = QFile::encodeName( fi.canonicalFilePath() );
         const char *encodedName = fileName.constData();
     #endif
 
     TagLib::FileRef f( encodedName );
     if ( f.isNull() || !f.tag() )
     {
-        // qDebug() << "Doesn't seem to be a valid audiofile:" << fi.absoluteFilePath();
-        m_skippedFiles << fi.absoluteFilePath();
+        // qDebug() << "Doesn't seem to be a valid audiofile:" << fi.canonicalFilePath();
+        m_skippedFiles << fi.canonicalFilePath();
         m_skipped++;
         return QVariantMap();
     }
@@ -350,8 +354,8 @@ MusicScanner::readFile( const QFileInfo& fi )
     if ( artist.isEmpty() || track.isEmpty() )
     {
         // FIXME: do some clever filename guessing
-        // qDebug() << "No tags found, skipping" << fi.absoluteFilePath();
-        m_skippedFiles << fi.absoluteFilePath();
+        // qDebug() << "No tags found, skipping" << fi.canonicalFilePath();
+        m_skippedFiles << fi.canonicalFilePath();
         m_skipped++;
         return QVariantMap();
     }
@@ -360,7 +364,7 @@ MusicScanner::readFile( const QFileInfo& fi )
     QString url( "file://%1" );
 
     QVariantMap m;
-    m["url"]          = url.arg( fi.absoluteFilePath() );
+    m["url"]          = url.arg( fi.canonicalFilePath() );
     m["mtime"]        = fi.lastModified().toUTC().toTime_t();
     m["size"]         = (unsigned int)fi.size();
     m["mimetype"]     = mimetype;

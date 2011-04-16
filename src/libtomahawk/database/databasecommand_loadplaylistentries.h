@@ -33,7 +33,7 @@ Q_OBJECT
 
 public:
     explicit DatabaseCommand_LoadPlaylistEntries( QString revision_guid, QObject* parent = 0 )
-    : DatabaseCommand( parent ), m_revguid( revision_guid ), m_islatest( true )
+    : DatabaseCommand( parent ), m_islatest( true ), m_revguid( revision_guid )
     {}
 
     virtual void exec( DatabaseImpl* );

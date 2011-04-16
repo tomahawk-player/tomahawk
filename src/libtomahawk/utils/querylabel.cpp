@@ -544,6 +544,7 @@ QueryLabel::mouseMoveEvent( QMouseEvent* event )
 void
 QueryLabel::leaveEvent( QEvent* event )
 {
+    Q_UNUSED( event );
     m_hoverArea = QRect();
     m_hoverType = None;
     repaint();

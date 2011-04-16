@@ -1,5 +1,5 @@
 /* === This file is part of Tomahawk Player - <http://tomahawk-player.org> ===
- * 
+ *
  *   Copyright 2010-2011, Christian Muehlhaeuser <muesli@tomahawk-player.org>
  *
  *   Tomahawk is free software: you can redistribute it and/or modify
@@ -65,11 +65,11 @@ public:
 
     void scanningProgress( unsigned int files );
     void scanningFinished( unsigned int files );
-    
+
     void setOffline();
     void setOnline();
 
-    unsigned int trackCount() const { return m_stats.value( "numfiles" ).toUInt(); }
+    unsigned int trackCount() const;
 
     Tomahawk::query_ptr currentTrack() const { return m_currentTrack; }
     QString textStatus() const { return m_textStatus; }
@@ -102,7 +102,7 @@ private slots:
     void onStateChanged( DBSyncConnection::State newstate, DBSyncConnection::State oldstate, const QString& info );
     void onPlaybackStarted( const Tomahawk::query_ptr& query );
     void onPlaybackFinished( const Tomahawk::query_ptr& query );
-    
+
 private:
     bool m_isLocal;
     bool m_online;

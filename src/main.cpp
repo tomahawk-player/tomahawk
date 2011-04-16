@@ -1,5 +1,5 @@
 /* === This file is part of Tomahawk Player - <http://tomahawk-player.org> ===
- * 
+ *
  *   Copyright 2010-2011, Christian Muehlhaeuser <muesli@tomahawk-player.org>
  *
  *   Tomahawk is free software: you can redistribute it and/or modify
@@ -19,6 +19,7 @@
 #include "tomahawk/tomahawkapp.h"
 
 #include "kdsingleapplicationguard/kdsingleapplicationguard.h"
+
 #include <QTranslator>
 
 #ifdef Q_WS_MAC
@@ -45,11 +46,15 @@ main( int argc, char *argv[] )
     KDSingleApplicationGuard guard( &a, KDSingleApplicationGuard::AutoKillOtherInstances );
     QObject::connect( &guard, SIGNAL( instanceStarted( KDSingleApplicationGuard::Instance ) ), &a, SLOT( instanceStarted( KDSingleApplicationGuard::Instance )  ) );
     
+    if ( guard.isPrimaryInstance() )
+        a.init();
+    
     QString locale = QLocale::system().name();
 
     QTranslator translator;
     translator.load( QString( ":/lang/tomahawk_" ) + locale );
     a.installTranslator( &translator );
+
     return a.exec();
 }
 

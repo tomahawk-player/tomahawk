@@ -1,5 +1,5 @@
 /* === This file is part of Tomahawk Player - <http://tomahawk-player.org> ===
- * 
+ *
  *   Copyright 2010-2011, Christian Muehlhaeuser <muesli@tomahawk-player.org>
  *
  *   Tomahawk is free software: you can redistribute it and/or modify
@@ -23,7 +23,7 @@
 
 #include "lastfm/ScrobblePoint"
 
-#include "tomahawk/infosystem.h"
+#include "infosystem/infosystem.h"
 
 #include <QObject>
 
@@ -37,20 +37,20 @@ class Scrobbler : public QObject
 public:
     Scrobbler( QObject* parent = 0 );
     virtual ~Scrobbler();
-    
+
 public slots:
     void trackStarted( const Tomahawk::result_ptr& );
     void trackPaused();
     void trackResumed();
     void trackStopped();
     void engineTick( unsigned int secondsElapsed );
-    
+
     void infoSystemInfo( QString caller, Tomahawk::InfoSystem::InfoType type, QVariant input, QVariant output, Tomahawk::InfoSystem::InfoCustomData customData );
     void infoSystemFinished( QString target );
-    
+
 private:
     void scrobble();
-    
+
     bool m_reachedScrobblePoint;
     ScrobblePoint m_scrobblePoint;
 };

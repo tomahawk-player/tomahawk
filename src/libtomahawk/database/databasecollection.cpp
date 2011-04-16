@@ -1,5 +1,5 @@
 /* === This file is part of Tomahawk Player - <http://tomahawk-player.org> ===
- * 
+ *
  *   Copyright 2010-2011, Christian Muehlhaeuser <muesli@tomahawk-player.org>
  *
  *   Tomahawk is free software: you can redistribute it and/or modify
@@ -52,10 +52,10 @@ DatabaseCollection::loadDynamicPlaylists()
 {
     qDebug() << Q_FUNC_INFO;
     DatabaseCommand_LoadAllDynamicPlaylists* cmd = new DatabaseCommand_LoadAllDynamicPlaylists( source() );
-    
+
     connect( cmd, SIGNAL( playlistLoaded( Tomahawk::source_ptr, QVariantList ) ),
                     SLOT( dynamicPlaylistCreated( const Tomahawk::source_ptr&, const QVariantList& ) ) );
-    
+
     Database::instance()->enqueue( QSharedPointer<DatabaseCommand>( cmd ) );
 }
 
@@ -68,7 +68,7 @@ DatabaseCollection::loadTracks()
     setLoaded();
     DatabaseCommand_AllTracks* cmd = new DatabaseCommand_AllTracks( source()->collection() );
 
-    connect( cmd, SIGNAL( tracks( QList<Tomahawk::query_ptr> ) ),
+    connect( cmd, SIGNAL( tracks( QList<Tomahawk::query_ptr>, QVariant ) ),
                     SLOT( setTracks( QList<Tomahawk::query_ptr> ) ) );
 
     Database::instance()->enqueue( QSharedPointer<DatabaseCommand>( cmd ) );
@@ -112,12 +112,12 @@ DatabaseCollection::playlists()
 QList< dynplaylist_ptr > DatabaseCollection::dynamicPlaylists()
 {
     qDebug() << Q_FUNC_INFO;
-    
+
     if ( Collection::dynamicPlaylists().isEmpty() )
     {
         loadDynamicPlaylists();
     }
-    
+
     return Collection::dynamicPlaylists();
 }
 
@@ -143,11 +143,12 @@ void DatabaseCollection::dynamicPlaylistCreated( const source_ptr& source, const
                                             data[1].toString(),  //title
                                             data[2].toString(),  //info
                                             data[3].toString(),  //creator
-                                            data[4].toString(),  // dynamic type
-                                            static_cast<GeneratorMode>(data[5].toInt()),  // dynamic mode
-                                            data[6].toBool(),    //shared
-                                            data[7].toInt(),     //lastmod
-                                            data[8].toString() ) );  //GUID
+                                            data[4].toUInt(),  // createdOn
+                                            data[5].toString(),  // dynamic type
+                                            static_cast<GeneratorMode>(data[6].toInt()),  // dynamic mode
+                                            data[7].toBool(),    //shared
+                                            data[8].toInt(),     //lastmod
+                                            data[9].toString() ) );  //GUID
     addDynamicPlaylist( p );
 }
 

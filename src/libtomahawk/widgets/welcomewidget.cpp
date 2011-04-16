@@ -47,7 +47,7 @@ WelcomeWidget::WelcomeWidget( QWidget* parent )
     ui->tracksView->overlay()->setEnabled( false );
 
     m_tracksModel = new PlaylistModel( ui->tracksView );
-    ui->tracksView->setModel( m_tracksModel );
+    ui->tracksView->setPlaylistModel( m_tracksModel );
     m_tracksModel->loadHistory( Tomahawk::source_ptr(), HISTORY_TRACK_ITEMS );
 
     m_timer = new QTimer( this );
@@ -190,6 +190,8 @@ PlaylistWidgetItem::data( int role ) const
 QSize
 PlaylistDelegate::sizeHint( const QStyleOptionViewItem& option, const QModelIndex& index ) const
 {
+    Q_UNUSED( option );
+    Q_UNUSED( index );
     return QSize( 0, 64 );
 }
 

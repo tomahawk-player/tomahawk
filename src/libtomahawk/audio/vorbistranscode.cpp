@@ -39,6 +39,9 @@ vorbis_read( void* data_ptr, size_t byteSize, size_t sizeToRead, void* data_src 
 int
 vorbis_seek( void* data_src, ogg_int64_t offset, int origin )
 {
+    Q_UNUSED( data_src );
+    Q_UNUSED( offset );
+    Q_UNUSED( origin );
     return -1;
 }
 
@@ -46,6 +49,7 @@ vorbis_seek( void* data_src, ogg_int64_t offset, int origin )
 int
 vorbis_close( void* data_src )
 {
+    Q_UNUSED( data_src );
     // done ;-)
     return 0;
 }
@@ -54,6 +58,7 @@ vorbis_close( void* data_src )
 long
 vorbis_tell( void* data_src )
 {
+    Q_UNUSED( data_src );
     return -1;
 }
 
@@ -74,6 +79,7 @@ VorbisTranscode::~VorbisTranscode()
 void
 VorbisTranscode::onSeek( int seconds )
 {
+    Q_UNUSED( seconds );
     QMutexLocker locker( &m_mutex );
 
     m_buffer.clear();

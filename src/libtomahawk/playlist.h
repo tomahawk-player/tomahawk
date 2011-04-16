@@ -1,5 +1,5 @@
 /* === This file is part of Tomahawk Player - <http://tomahawk-player.org> ===
- * 
+ *
  *   Copyright 2010-2011, Christian Muehlhaeuser <muesli@tomahawk-player.org>
  *
  *   Tomahawk is free software: you can redistribute it and/or modify
@@ -77,6 +77,7 @@ public:
     source_ptr lastSource() const;
     void setLastSource( source_ptr s );
 
+
 private:
     QString m_guid;
     Tomahawk::query_ptr m_query;
@@ -107,6 +108,7 @@ Q_PROPERTY( QString currentrevision READ currentrevision    WRITE setCurrentrevi
 Q_PROPERTY( QString title           READ title              WRITE setTitle )
 Q_PROPERTY( QString info            READ info               WRITE setInfo )
 Q_PROPERTY( QString creator         READ creator            WRITE setCreator )
+Q_PROPERTY( unsigned int createdon  READ createdOn          WRITE setCreatedOn )
 Q_PROPERTY( bool    shared          READ shared             WRITE setShared )
 
 friend class ::DatabaseCommand_LoadAllPlaylists;
@@ -139,6 +141,7 @@ public:
     QString guid() const              { return m_guid; }
     bool shared() const               { return m_shared; }
     unsigned int lastmodified() const { return m_lastmodified; }
+    uint createdOn() const            { return m_createdOn; }
 
     const QList< plentry_ptr >& entries() { return m_entries; }
     virtual void addEntry( const Tomahawk::query_ptr& query, const QString& oldrev );
@@ -155,6 +158,7 @@ public:
     void setCreator( const QString& s )         { m_creator = s; }
     void setGuid( const QString& s )            { m_guid = s; }
     void setShared( bool b )                    { m_shared = b; }
+    void setCreatedOn( uint createdOn )         { m_createdOn = createdOn; }
     // </IGNORE>
 
     virtual QList<Tomahawk::query_ptr> tracks();
@@ -162,7 +166,7 @@ public:
     virtual int unfilteredTrackCount() const { return m_entries.count(); }
     virtual int trackCount() const { return m_entries.count(); }
 
-    virtual Tomahawk::result_ptr siblingItem( int itemsAway ) { return result_ptr(); }
+    virtual Tomahawk::result_ptr siblingItem( int /*itemsAway*/ ) { return result_ptr(); }
 
     virtual PlaylistInterface::RepeatMode repeatMode() const { return PlaylistInterface::NoRepeat; }
     virtual bool shuffled() const { return false; }
@@ -170,7 +174,7 @@ public:
     virtual void setRepeatMode( PlaylistInterface::RepeatMode ) {}
     virtual void setShuffled( bool ) {}
 
-    virtual void setFilter( const QString& pattern ) {}
+    virtual void setFilter( const QString& /*pattern*/ ) {}
 
 signals:
     /// emitted when the playlist revision changes (whenever the playlist changes)
@@ -184,7 +188,7 @@ signals:
 
     /// was deleted, eh?
     void deleted( const Tomahawk::playlist_ptr& pl );
-    
+
     void repeatModeChanged( PlaylistInterface::RepeatMode mode );
     void shuffleModeChanged( bool enabled );
 
@@ -214,6 +218,7 @@ protected:
                        const QString& title,
                        const QString& info,
                        const QString& creator,
+                       uint createdOn,
                        bool shared,
                        int lastmod,
                        const QString& guid = "" ); // populate db
@@ -247,6 +252,7 @@ private:
     QString m_currentrevision;
     QString m_guid, m_title, m_info, m_creator;
     unsigned int m_lastmodified;
+    unsigned int m_createdOn;
     bool m_shared;
 
     QList< plentry_ptr > m_entries;

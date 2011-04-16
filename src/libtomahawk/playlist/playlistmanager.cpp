@@ -28,7 +28,7 @@
 #include "widgets/infowidgets/sourceinfowidget.h"
 #include "widgets/welcomewidget.h"
 
-#include "collectionmodel.h"
+#include "treemodel.h"
 #include "collectionflatmodel.h"
 #include "collectionview.h"
 #include "playlistmodel.h"
@@ -36,6 +36,7 @@
 #include "queueview.h"
 #include "trackproxymodel.h"
 #include "trackmodel.h"
+#include "artistview.h"
 #include "albumview.h"
 #include "albumproxymodel.h"
 #include "albummodel.h"
@@ -89,7 +90,7 @@ PlaylistManager::PlaylistManager( QObject* parent )
 
     m_queueView = new QueueView( m_splitter );
     m_queueModel = new PlaylistModel( m_queueView );
-    m_queueView->queue()->setModel( m_queueModel );
+    m_queueView->queue()->setPlaylistModel( m_queueModel );
     AudioEngine::instance()->setQueue( m_queueView->queue()->proxyModel() );
 
     m_splitter->addWidget( m_queueView );
@@ -100,16 +101,16 @@ PlaylistManager::PlaylistManager( QObject* parent )
     m_widget->layout()->addWidget( line );
     m_widget->layout()->addWidget( m_splitter );
 
-    m_superCollectionView = new CollectionView();
-    m_superCollectionFlatModel = new CollectionFlatModel( m_superCollectionView );
-    m_superCollectionView->setModel( m_superCollectionFlatModel );
+    m_superCollectionView = new ArtistView();
+    m_superCollectionModel = new TreeModel( m_superCollectionView );
+    m_superCollectionView->setModel( m_superCollectionModel );
     m_superCollectionView->setFrameShape( QFrame::NoFrame );
     m_superCollectionView->setAttribute( Qt::WA_MacShowFocusRect, 0 );
-    m_superCollectionView->proxyModel()->setShowOfflineResults( false );
+//    m_superCollectionView->proxyModel()->setShowOfflineResults( false );
 
     m_superAlbumView = new AlbumView();
     m_superAlbumModel = new AlbumModel( m_superAlbumView );
-    m_superAlbumView->setModel( m_superAlbumModel );
+    m_superAlbumView->setAlbumModel( m_superAlbumModel );
     m_superAlbumView->setFrameShape( QFrame::NoFrame );
     m_superAlbumView->setAttribute( Qt::WA_MacShowFocusRect, 0 );
 
@@ -156,7 +157,7 @@ PlaylistManager::show( const Tomahawk::playlist_ptr& playlist )
     {
         view = new PlaylistView();
         PlaylistModel* model = new PlaylistModel();
-        view->setModel( model );
+        view->setPlaylistModel( model );
         view->setFrameShape( QFrame::NoFrame );
         view->setAttribute( Qt::WA_MacShowFocusRect, 0 );
         model->loadPlaylist( playlist );
@@ -212,7 +213,7 @@ PlaylistManager::show( const Tomahawk::artist_ptr& artist )
     {
         view = new PlaylistView();
         PlaylistModel* model = new PlaylistModel();
-        view->setModel( model );
+        view->setPlaylistModel( model );
         view->setFrameShape( QFrame::NoFrame );
         view->setAttribute( Qt::WA_MacShowFocusRect, 0 );
         model->append( artist );
@@ -239,7 +240,7 @@ PlaylistManager::show( const Tomahawk::album_ptr& album )
     {
         view = new PlaylistView();
         PlaylistModel* model = new PlaylistModel();
-        view->setModel( model );
+        view->setPlaylistModel( model );
         view->setFrameShape( QFrame::NoFrame );
         view->setAttribute( Qt::WA_MacShowFocusRect, 0 );
         model->append( album );
@@ -261,6 +262,7 @@ PlaylistManager::show( const Tomahawk::album_ptr& album )
 bool
 PlaylistManager::show( const Tomahawk::collection_ptr& collection )
 {
+    qDebug() << Q_FUNC_INFO << m_currentMode;
     m_currentCollection = collection;
     if ( m_currentMode == 0 )
     {
@@ -269,7 +271,7 @@ PlaylistManager::show( const Tomahawk::collection_ptr& collection )
         {
             view = new CollectionView();
             CollectionFlatModel* model = new CollectionFlatModel();
-            view->setModel( model );
+            view->setTrackModel( model );
             view->setFrameShape( QFrame::NoFrame );
             view->setAttribute( Qt::WA_MacShowFocusRect, 0 );
 
@@ -285,6 +287,29 @@ PlaylistManager::show( const Tomahawk::collection_ptr& collection )
         setPage( view );
     }
 
+    if ( m_currentMode == 1 )
+    {
+        ArtistView* view;
+        if ( !m_treeViews.contains( collection ) )
+        {
+            view = new ArtistView();
+            TreeModel* model = new TreeModel();
+            view->setModel( model );
+            view->setFrameShape( QFrame::NoFrame );
+            view->setAttribute( Qt::WA_MacShowFocusRect, 0 );
+
+            model->addCollection( collection );
+
+            m_treeViews.insert( collection, view );
+        }
+        else
+        {
+            view = m_treeViews.value( collection );
+        }
+
+        setPage( view );
+    }
+
     if ( m_currentMode == 2 )
     {
         AlbumView* aview;
@@ -292,7 +317,7 @@ PlaylistManager::show( const Tomahawk::collection_ptr& collection )
         {
             aview = new AlbumView();
             AlbumModel* amodel = new AlbumModel( aview );
-            aview->setModel( amodel );
+            aview->setAlbumModel( amodel );
             aview->setFrameShape( QFrame::NoFrame );
             aview->setAttribute( Qt::WA_MacShowFocusRect, 0 );
             amodel->addCollection( collection );
@@ -346,22 +371,26 @@ PlaylistManager::show( ViewPage* page )
 bool
 PlaylistManager::showSuperCollection()
 {
-    QList< collection_ptr > toAdd;
+    if ( m_superCollections.isEmpty() )
+        m_superCollectionModel->addAllCollections();
+
     foreach( const Tomahawk::source_ptr& source, SourceList::instance()->sources() )
     {
         if ( !m_superCollections.contains( source->collection() ) )
         {
             m_superCollections.append( source->collection() );
-            toAdd << source->collection();
-            m_superAlbumModel->addCollection( source->collection() );
+//            m_superAlbumModel->addCollection( source->collection() );
         }
     }
-    m_superCollectionFlatModel->addCollections( toAdd );
 
-    m_superCollectionFlatModel->setTitle( tr( "All available tracks" ) );
+    m_superCollectionModel->setTitle( tr( "All available tracks" ) );
     m_superAlbumModel->setTitle( tr( "All available albums" ) );
 
     if ( m_currentMode == 0 )
+    {
+        setPage( m_superCollectionView );
+    }
+    else if ( m_currentMode == 1 )
     {
         setPage( m_superCollectionView );
     }
@@ -400,8 +429,6 @@ PlaylistManager::setTableMode()
 void
 PlaylistManager::setTreeMode()
 {
-    return;
-
     qDebug() << Q_FUNC_INFO;
 
     m_currentMode = 1;

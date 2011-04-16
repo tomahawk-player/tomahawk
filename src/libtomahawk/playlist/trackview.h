@@ -44,7 +44,8 @@ public:
     virtual QString guid() const { return m_guid; }
     virtual void setGuid( const QString& guid );
 
-    virtual void setModel( TrackModel* model );
+    virtual void setTrackModel( TrackModel* model );
+    virtual void setModel( QAbstractItemModel* model );
     void setProxyModel( TrackProxyModel* model );
 
     virtual TrackModel* model() const { return m_model; }
@@ -67,7 +68,7 @@ protected:
 
     virtual void startDrag( Qt::DropActions supportedActions );
     virtual void dragEnterEvent( QDragEnterEvent* event );
-    virtual void dragLeaveEvent( QDragLeaveEvent* event ) { m_dragging = false; setDirtyRegion( m_dropRect ); }
+    virtual void dragLeaveEvent( QDragLeaveEvent* /*event*/ ) { m_dragging = false; setDirtyRegion( m_dropRect ); }
     virtual void dragMoveEvent( QDragMoveEvent* event );
     virtual void dropEvent( QDropEvent* event );
 

@@ -1,5 +1,5 @@
 /* === This file is part of Tomahawk Player - <http://tomahawk-player.org> ===
- * 
+ *
  *   Copyright 2010-2011, Christian Muehlhaeuser <muesli@tomahawk-player.org>
  *
  *   Tomahawk is free software: you can redistribute it and/or modify
@@ -16,8 +16,6 @@
  *   along with Tomahawk. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include "tomahawk/infosystem.h"
-#include "tomahawk/tomahawkapp.h"
 #include "echonestplugin.h"
 #include <echonest/Artist.h>
 #include <echonest/ArtistTypes.h>
@@ -68,13 +66,14 @@ void EchoNestPlugin::getInfo(const QString &caller, const InfoType type, const Q
 void EchoNestPlugin::getSongProfile(const QString &caller, const QVariant& data, InfoCustomData &customData, const QString &item)
 {
     //WARNING: Totally not implemented yet
+    Q_UNUSED( item );
     
     if( !isValidTrackData( caller, data, customData ) )
         return;
-    
+
 //     Track track( data.toString() );
 //     Artist artist( customData.data()->property("artistName").toString() );
-//     reply->setProperty("artist", QVariant::fromValue<Artist>(artist)); 
+//     reply->setProperty("artist", QVariant::fromValue<Artist>(artist));
 //     reply->setProperty( "data", data );
 //     m_replyMap[reply] = customData;
 //     connect(reply, SIGNAL(finished()), SLOT(getArtistBiographySlot()));
@@ -84,7 +83,7 @@ void EchoNestPlugin::getArtistBiography(const QString &caller, const QVariant& d
 {
     if( !isValidArtistData( caller, data, customData ) )
         return;
-    
+
     Echonest::Artist artist( data.toString() );
     QNetworkReply *reply = artist.fetchBiographies();
     reply->setProperty("artist", QVariant::fromValue<Echonest::Artist>(artist));
@@ -98,7 +97,7 @@ void EchoNestPlugin::getArtistFamiliarity(const QString &caller, const QVariant&
 {
     if( !isValidArtistData( caller, data, customData ) )
         return;
-    
+
     qDebug() << "Fetching artist familiarity!" << data;
     Echonest::Artist artist( data.toString() );
     QNetworkReply* reply = artist.fetchFamiliarity();
@@ -106,14 +105,14 @@ void EchoNestPlugin::getArtistFamiliarity(const QString &caller, const QVariant&
     reply->setProperty( "data", data );
     m_replyMap[reply] = customData;
     m_callerMap[reply] = caller;
-    connect(reply, SIGNAL(finished()), SLOT(getArtistFamiliaritySlot())); 
+    connect(reply, SIGNAL(finished()), SLOT(getArtistFamiliaritySlot()));
 }
 
 void EchoNestPlugin::getArtistHotttnesss(const QString &caller, const QVariant& data, InfoCustomData &customData)
 {
     if( !isValidArtistData( caller, data, customData ) )
         return;
-    
+
     Echonest::Artist artist( data.toString() );
     QNetworkReply* reply = artist.fetchHotttnesss();
     reply->setProperty( "artist", QVariant::fromValue<Echonest::Artist>(artist));
@@ -127,7 +126,7 @@ void EchoNestPlugin::getArtistTerms(const QString &caller, const QVariant& data,
 {
     if( !isValidArtistData( caller, data, customData ) )
         return;
-    
+
     Echonest::Artist artist( data.toString() );
     QNetworkReply* reply = artist.fetchTerms( Echonest::Artist::Weight );
     reply->setProperty( "artist", QVariant::fromValue<Echonest::Artist>(artist));
@@ -139,6 +138,7 @@ void EchoNestPlugin::getArtistTerms(const QString &caller, const QVariant& data,
 
 void EchoNestPlugin::getMiscTopTerms(const QString &caller, const QVariant& data, InfoCustomData& customData)
 {
+    Q_UNUSED( data );
     QNetworkReply* reply = Echonest::Artist::topTerms( 20 );
     m_replyMap[reply] = customData;
     m_callerMap[reply] = caller;
@@ -160,7 +160,7 @@ void EchoNestPlugin::getArtistBiographySlot()
         biographyMap[biography.site()]["attribution"] = biography.license().attribution;
         biographyMap[biography.site()]["licensetype"] = biography.license().type;
         biographyMap[biography.site()]["attribution"] = biography.license().url.toString();
-        
+
     }
     emit info( m_callerMap[reply], Tomahawk::InfoSystem::InfoArtistBiography, reply->property( "data" ), QVariant::fromValue<Tomahawk::InfoSystem::InfoGenericMap>(biographyMap), m_replyMap[reply] );
     m_replyMap.remove(reply);
@@ -254,7 +254,7 @@ bool EchoNestPlugin::isValidTrackData(const QString &caller, const QVariant& dat
         emit info(caller, Tomahawk::InfoSystem::InfoNoInfo, QVariant(), QVariant(), customData);
         return false;
     }
-    if (!customData.contains("artistName") || 
+    if (!customData.contains("artistName") ||
          customData["artistName"].toString().isEmpty())
         return false;
     return true;

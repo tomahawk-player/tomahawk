@@ -638,6 +638,8 @@ TwitterPlugin::directMessagePosted( const QTweetDMStatus& message )
 void
 TwitterPlugin::directMessagePostError( QTweetNetBase::ErrorCode errorCode, const QString &message )
 {
+    Q_UNUSED( errorCode );
+    Q_UNUSED( message );
     qDebug() << Q_FUNC_INFO;
     qDebug() << "TwitterPlugin received an error posting direct message: " << m_directMessageNew.data()->lastErrorMessage();
 }

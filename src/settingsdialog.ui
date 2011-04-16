@@ -23,7 +23,7 @@
    <item>
     <widget class="QTabWidget" name="tabWidget">
      <property name="currentIndex">
-      <number>0</number>
+      <number>4</number>
      </property>
      <widget class="QWidget" name="tabJabber">
       <attribute name="title">
@@ -590,7 +590,7 @@
        <item>
         <layout class="QHBoxLayout" name="horizontalLayout_4">
          <item>
-          <widget class="QTreeWidget" name="scriptList">
+          <widget class="QTreeView" name="scriptList">
            <property name="alternatingRowColors">
             <bool>true</bool>
            </property>
@@ -600,40 +600,18 @@
            <property name="rootIsDecorated">
             <bool>false</bool>
            </property>
+           <property name="uniformRowHeights">
+            <bool>true</bool>
+           </property>
            <property name="itemsExpandable">
             <bool>false</bool>
            </property>
            <property name="animated">
             <bool>true</bool>
            </property>
-           <property name="columnCount">
-            <number>2</number>
+           <property name="headerHidden">
+            <bool>true</bool>
            </property>
-           <attribute name="headerVisible">
-            <bool>false</bool>
-           </attribute>
-           <attribute name="headerCascadingSectionResizes">
-            <bool>true</bool>
-           </attribute>
-           <attribute name="headerDefaultSectionSize">
-            <number>150</number>
-           </attribute>
-           <attribute name="headerHighlightSections">
-            <bool>true</bool>
-           </attribute>
-           <attribute name="headerStretchLastSection">
-            <bool>true</bool>
-           </attribute>
-           <column>
-            <property name="text">
-             <string notr="true">1</string>
-            </property>
-           </column>
-           <column>
-            <property name="text">
-             <string notr="true">2</string>
-            </property>
-           </column>
           </widget>
          </item>
          <item>

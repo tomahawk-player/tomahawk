@@ -44,7 +44,7 @@ public:
     
     virtual QString description() const;
     
-    void loadPlaylist( const dynplaylist_ptr& playlist );
+    void loadPlaylist( const dynplaylist_ptr& playlist, bool loadEntries = true );
     
     virtual void removeIndex( const QModelIndex& index, bool moreToCome = false );
     

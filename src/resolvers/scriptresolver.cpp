@@ -1,5 +1,5 @@
 /* === This file is part of Tomahawk Player - <http://tomahawk-player.org> ===
- * 
+ *
  *   Copyright 2010-2011, Christian Muehlhaeuser <muesli@tomahawk-player.org>
  *
  *   Tomahawk is free software: you can redistribute it and/or modify
@@ -46,7 +46,12 @@ ScriptResolver::ScriptResolver( const QString& exe )
 
 ScriptResolver::~ScriptResolver()
 {
+    stop();
+
     Tomahawk::Pipeline::instance()->removeResolver( this );
+
+    if( !m_configWidget.isNull() )
+        delete m_configWidget.data();
 }
 
 
@@ -92,8 +97,6 @@ ScriptResolver::sendMsg( const QByteArray& msg )
 {
     qDebug() << Q_FUNC_INFO << m_ready << msg << msg.length();
 
-    if( !m_ready ) return;
-
     quint32 len;
     qToBigEndian( msg.length(), (uchar*) &len );
     m_proc.write( (const char*) &len, 4 );
@@ -118,6 +121,9 @@ ScriptResolver::handleMsg( const QByteArray& msg )
     if( msgtype == "settings" )
     {
         doSetup( m );
+        return;
+    } else if( msgtype == "confwidget" ) {
+        setupConfWidget( m );
         return;
     }
 
@@ -175,7 +181,7 @@ ScriptResolver::cmdExited( int code, QProcess::ExitStatus status )
     qDebug() << Q_FUNC_INFO << "SCRIPT EXITED, code" << code << "status" << status << filePath();
     Tomahawk::Pipeline::instance()->removeResolver( this );
 
-    if( m_stopped ) 
+    if( m_stopped )
     {
         qDebug() << "*** Script resolver stopped ";
         emit finished();
@@ -210,7 +216,7 @@ ScriptResolver::resolve( const Tomahawk::query_ptr& query )
     sendMsg( msg );
 
     m_queryState.insert( query->id(), 1 );
-    new Tomahawk::FuncTimeout( m_timeout, boost::bind( &ScriptResolver::onTimeout, this, query ) );
+    new Tomahawk::FuncTimeout( m_timeout, boost::bind( &ScriptResolver::onTimeout, this, query ), this );
 }
 
 
@@ -221,22 +227,60 @@ ScriptResolver::doSetup( const QVariantMap& m )
     m_name       = m.value( "name" ).toString();
     m_weight     = m.value( "weight", 0 ).toUInt();
     m_timeout    = m.value( "timeout", 25 ).toUInt() * 1000;
-    m_preference = m.value( "preference", 0 ).toUInt();
     qDebug() << "SCRIPT" << filePath() << "READY," << endl
              << "name" << m_name << endl
              << "weight" << m_weight << endl
-             << "timeout" << m_timeout << endl
-             << "preference" << m_preference;
+             << "timeout" << m_timeout;
 
     m_ready = true;
     Tomahawk::Pipeline::instance()->addResolver( this );
 }
 
+void
+ScriptResolver::setupConfWidget( const QVariantMap& m )
+{
+    bool compressed = m.value( "compressed", "false" ).toString() == "true";
+    qDebug() << "Resolver has a preferences widget! compressed?" << compressed << m;
 
-void 
+    QByteArray uiData = m[ "widget" ].toByteArray();
+    if( compressed )
+        uiData = qUncompress( QByteArray::fromBase64( uiData ) );
+    else
+        uiData = QByteArray::fromBase64( uiData );
+
+    if( m.contains( "images" ) )
+        uiData = fixDataImagePaths( uiData, compressed, m[ "images" ].toMap() );
+    m_configWidget = QWeakPointer< QWidget >( widgetFromData( uiData, 0 ) );
+}
+
+
+void
+ScriptResolver::saveConfig()
+{
+    Q_ASSERT( !m_configWidget.isNull() );
+
+    QVariantMap m;
+    m.insert( "_msgtype", "setpref" );
+    QVariant widgets = configMsgFromWidget( m_configWidget.data() );
+    m.insert( "widgets", widgets );
+    QByteArray data = m_serializer.serialize( m );
+    sendMsg( data );
+}
+
+QWidget* ScriptResolver::configUI() const
+{
+    if( m_configWidget.isNull() )
+        return 0;
+    else
+        return m_configWidget.data();
+}
+
+
+void
 ScriptResolver::stop()
 {
     m_stopped = true;
+    qDebug() << "KILLING PROCESS!";
     m_proc.kill();
 }
 

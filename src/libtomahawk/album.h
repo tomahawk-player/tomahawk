@@ -58,7 +58,7 @@ public:
     virtual void setRepeatMode( PlaylistInterface::RepeatMode ) {}
     virtual void setShuffled( bool ) {}
 
-    virtual void setFilter( const QString& pattern ) {}
+    virtual void setFilter( const QString& /*pattern*/ ) {}
 
 signals:
     void repeatModeChanged( PlaylistInterface::RepeatMode mode );

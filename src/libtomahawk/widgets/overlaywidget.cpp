@@ -121,6 +121,7 @@ OverlayWidget::shown() const
 void
 OverlayWidget::paintEvent( QPaintEvent* event )
 {
+    Q_UNUSED( event );
     QPoint center( ( m_parent->width() - width() ) / 2, ( m_parent->height() - height() ) / 2 );
     move( center );
 

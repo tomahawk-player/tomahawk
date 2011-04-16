@@ -1,5 +1,5 @@
 /* === This file is part of Tomahawk Player - <http://tomahawk-player.org> ===
- * 
+ *
  *   Copyright 2010-2011, Christian Muehlhaeuser <muesli@tomahawk-player.org>
  *
  *   Tomahawk is free software: you can redistribute it and/or modify
@@ -29,6 +29,7 @@
 #include "query.h"
 #include "result.h"
 
+class QWidget;
 class ScriptResolver : public Tomahawk::ExternalResolver
 {
 Q_OBJECT
@@ -41,6 +42,9 @@ public:
     virtual unsigned int weight() const     { return m_weight; }
     virtual unsigned int preference() const { return m_preference; }
     virtual unsigned int timeout() const    { return m_timeout; }
+
+    virtual QWidget* configUI() const;
+    virtual void saveConfig();
 
 signals:
     void finished();
@@ -60,10 +64,12 @@ private:
     void handleMsg( const QByteArray& msg );
     void sendMsg( const QByteArray& msg );
     void doSetup( const QVariantMap& m );
+    void setupConfWidget( const QVariantMap& m );
 
     QProcess m_proc;
     QString m_name;
     unsigned int m_weight, m_preference, m_timeout, m_num_restarts;
+    QWeakPointer< QWidget > m_configWidget;
 
     quint32 m_msgsize;
     QByteArray m_msg;

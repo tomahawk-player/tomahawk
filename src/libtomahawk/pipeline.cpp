@@ -1,5 +1,5 @@
 /* === This file is part of Tomahawk Player - <http://tomahawk-player.org> ===
- * 
+ *
  *   Copyright 2010-2011, Christian Muehlhaeuser <muesli@tomahawk-player.org>
  *
  *   Tomahawk is free software: you can redistribute it and/or modify
@@ -134,7 +134,7 @@ Pipeline::resolve( const query_ptr& q, bool prioritized )
 {
     if ( q.isNull() )
         return;
-    
+
     QList< query_ptr > qlist;
     qlist << q;
     resolve( qlist, prioritized );
@@ -292,7 +292,7 @@ Pipeline::shunt( const query_ptr& q )
         {
             incQIDState( q );
 //            qDebug() << "Shunting in" << lasttimeout << "ms, q:" << q->toString();
-            new FuncTimeout( lasttimeout, boost::bind( &Pipeline::shunt, this, q ) );
+            new FuncTimeout( lasttimeout, boost::bind( &Pipeline::shunt, this, q ), this );
         }
     }
     else
@@ -311,8 +311,8 @@ Pipeline::shunt( const query_ptr& q )
 bool
 Pipeline::resolverSorter( const Resolver* left, const Resolver* right )
 {
-    if( left->weight() == right->weight() )
-        return left->preference() > right->preference();
+    if( left->weight() == right->weight() ) // TODO dispatch in parallel
+        return left;
     else
         return left->weight() > right->weight();
 }

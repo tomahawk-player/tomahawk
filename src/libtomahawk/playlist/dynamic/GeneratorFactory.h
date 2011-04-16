@@ -36,6 +36,8 @@ class DLLEXPORT GeneratorFactoryInterface
 {
 public:
     GeneratorFactoryInterface() {}
+
+    virtual ~GeneratorFactoryInterface() {}
     
     virtual GeneratorInterface* create() = 0;
     /**

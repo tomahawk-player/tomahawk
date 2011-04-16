@@ -32,6 +32,7 @@
 class AnimatedSplitter;
 class AlbumModel;
 class AlbumView;
+class ArtistView;
 class CollectionModel;
 class CollectionFlatModel;
 class CollectionView;
@@ -40,6 +41,8 @@ class PlaylistView;
 class QueueView;
 class TrackProxyModel;
 class TrackModel;
+class TreeProxyModel;
+class TreeModel;
 class TrackView;
 class SourceInfoWidget;
 class InfoBar;
@@ -159,14 +162,15 @@ private:
 
     AlbumModel* m_superAlbumModel;
     AlbumView* m_superAlbumView;
-    CollectionFlatModel* m_superCollectionFlatModel;
-    CollectionView* m_superCollectionView;
+    TreeModel* m_superCollectionModel;
+    ArtistView* m_superCollectionView;
     WelcomeWidget* m_welcomeWidget;
 
     QList< Tomahawk::collection_ptr > m_superCollections;
 
     QHash< Tomahawk::dynplaylist_ptr, Tomahawk::DynamicWidget* > m_dynamicWidgets;
     QHash< Tomahawk::collection_ptr, CollectionView* > m_collectionViews;
+    QHash< Tomahawk::collection_ptr, ArtistView* > m_treeViews;
     QHash< Tomahawk::collection_ptr, AlbumView* > m_collectionAlbumViews;
     QHash< Tomahawk::artist_ptr, PlaylistView* > m_artistViews;
     QHash< Tomahawk::album_ptr, PlaylistView* > m_albumViews;

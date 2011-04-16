@@ -1,5 +1,5 @@
 /* === This file is part of Tomahawk Player - <http://tomahawk-player.org> ===
- * 
+ *
  *   Copyright 2010-2011, Christian Muehlhaeuser <muesli@tomahawk-player.org>
  *
  *   Tomahawk is free software: you can redistribute it and/or modify
@@ -63,7 +63,7 @@ public:
     void setSortDescending( bool descending ) { m_sortDescending = descending; }
 
 signals:
-    void tracks( const QList<Tomahawk::query_ptr>& );
+    void tracks( const QList<Tomahawk::query_ptr>&, const QVariant& data );
     void done( const Tomahawk::collection_ptr& );
 
 private:

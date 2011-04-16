@@ -1,5 +1,5 @@
 /* === This file is part of Tomahawk Player - <http://tomahawk-player.org> ===
- * 
+ *
  *   Copyright 2010-2011, Christian Muehlhaeuser <muesli@tomahawk-player.org>
  *
  *   Tomahawk is free software: you can redistribute it and/or modify
@@ -26,6 +26,7 @@
 #include <QNetworkProxy>
 #include <QNetworkRequest>
 #include <QNetworkReply>
+#include <QPushButton>
 #include <QMessageBox>
 
 #include "result.h"
@@ -41,7 +42,6 @@
 #include "tomahawksettings.h"
 #include "utils/tomahawkutils.h"
 #include <aclsystem.h>
-#include <tomahawk/tomahawkapp.h>
 
 using namespace Tomahawk;
 
@@ -62,7 +62,7 @@ Servent::Servent( QObject* parent )
     , m_portfwd( 0 )
 {
     s_instance = this;
-    
+
     new ACLSystem( this );
 
     setProxy( QNetworkProxy::NoProxy );
@@ -126,7 +126,7 @@ Servent::startListening( QHostAddress ha, bool upnp, int port )
     // --lanhack means to advertise your LAN IP over jabber as if it were externallyVisible
     qDebug() << "Address mode = " << (int)(TomahawkSettings::instance()->externalAddressMode());
     qDebug() << "Static host/port preferred ? = " << ( TomahawkSettings::instance()->preferStaticHostPort() ? "true" : "false" );
-    
+
     if( TomahawkSettings::instance()->preferStaticHostPort() )
     {
         qDebug() << "Forcing static preferred host and port";
@@ -136,8 +136,12 @@ Servent::startListening( QHostAddress ha, bool upnp, int port )
         emit ready();
         return true;
     }
-    
-    switch( TomahawkSettings::instance()->externalAddressMode() )
+
+    TomahawkSettings::ExternalAddressMode mode = TomahawkSettings::instance()->externalAddressMode();
+    if ( mode == TomahawkSettings::Upnp && !upnp )
+      mode = TomahawkSettings::Lan;
+
+    switch( mode )
     {
         case TomahawkSettings::Lan:
             foreach( QHostAddress ha, QNetworkInterface::allAddresses() )
@@ -318,7 +322,7 @@ Servent::readyRead()
     pport     = m.value( "port" ).toInt();
     nodeid    = m.value( "nodeid" ).toString();
     controlid = m.value( "controlid" ).toString();
-    
+
     qDebug() << "Incoming connection details: " << m;
 
     if( !nodeid.isEmpty() ) // only control connections send nodeid
@@ -367,7 +371,7 @@ Servent::readyRead()
     {
         qDebug() << "Invalid or unhandled conntype";
     }
-    
+
     // fallthru to cleanup:
 closeconnection:
     qDebug() << "Closing incoming connection, something was wrong.";
@@ -562,7 +566,7 @@ Connection*
 Servent::claimOffer( ControlConnection* cc, const QString &nodeid, const QString &key, const QHostAddress peer )
 {
     qDebug() << Q_FUNC_INFO;
-    
+
     bool noauth = qApp->arguments().contains( "--noauth" );
 
     // magic key for stream connections:
@@ -629,9 +633,9 @@ Servent::claimOffer( ControlConnection* cc, const QString &nodeid, const QString
                 return NULL;
             }
         }
-        
+
         qDebug() << "ACL has allowed the connection";
-        
+
         if( conn->onceOnly() )
         {
             m_offers.remove( key );
@@ -672,7 +676,7 @@ Servent::checkACL( const Connection* conn, const QString &nodeid, bool showDialo
     {
         if( !showDialog )
             return false;
-        
+
         qDebug() << "ACL for this node not found";
         QMessageBox msgBox;
         msgBox.setIcon( QMessageBox::Question );
@@ -682,7 +686,7 @@ Servent::checkACL( const Connection* conn, const QString &nodeid, bool showDialo
         QPushButton *alwaysDenyButton = msgBox.addButton( tr( "Always Deny" ), QMessageBox::YesRole );
         QPushButton *allowButton = msgBox.addButton( tr( "Allow" ), QMessageBox::NoRole );
         QPushButton *alwaysAllowButton = msgBox.addButton( tr( "Always Allow" ), QMessageBox::ActionRole );
-        
+
         msgBox.setDefaultButton( denyButton );
         msgBox.setEscapeButton( denyButton );
 
@@ -696,12 +700,21 @@ Servent::checkACL( const Connection* conn, const QString &nodeid, bool showDialo
             return false;
         }
         else if( msgBox.clickedButton() == alwaysAllowButton )
+        {
             aclSystem->authorizeUser( nodeid, ACLSystem::Allow );
+            return true;
+        }
+        else if( msgBox.clickedButton() == allowButton )
+            return true;
+
+        //How could we get here?
+        qDebug() << "Somehow no button matched";
+        return false;
     }
 #endif
 
     return true;
-}       
+}
 
 QSharedPointer<QIODevice>
 Servent::remoteIODeviceFactory( const result_ptr& result )
@@ -832,7 +845,6 @@ Servent::registerIODeviceFactory( const QString &proto, boost::function<QSharedP
 }
 
 
-
 QSharedPointer<QIODevice>
 Servent::getIODeviceForUrl( const Tomahawk::result_ptr& result )
 {
@@ -845,9 +857,9 @@ Servent::getIODeviceForUrl( const Tomahawk::result_ptr& result )
 
     const QString proto = rx.cap( 1 );
     //const QString urlpart = rx.cap( 2 );
+    qDebug() << "Getting IODevice for URL:" << proto << m_iofactories.contains( proto );
     if ( !m_iofactories.contains( proto ) )
         return sp;
-
     return m_iofactories.value( proto )( result );
 }
 
@@ -870,5 +882,5 @@ Servent::httpIODeviceFactory( const Tomahawk::result_ptr& result )
     qDebug() << Q_FUNC_INFO << result->url();
     QNetworkRequest req( result->url() );
     QNetworkReply* reply = TomahawkUtils::nam()->get( req );
-    return QSharedPointer<QIODevice>( reply );
+    return QSharedPointer<QIODevice>( reply, &QObject::deleteLater );
 }

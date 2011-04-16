@@ -38,6 +38,7 @@ BufferIODevice::BufferIODevice( unsigned int size, QObject* parent )
 bool
 BufferIODevice::open( OpenMode mode )
 {
+    Q_UNUSED( mode );
     QMutexLocker lock( &m_mut );
 
     qDebug() << Q_FUNC_INFO;
@@ -148,6 +149,8 @@ BufferIODevice::readData( char* data, qint64 maxSize )
 qint64
 BufferIODevice::writeData( const char* data, qint64 maxSize )
 {
+    Q_UNUSED( data );
+    Q_UNUSED( maxSize );
     // call addData instead
     Q_ASSERT( false );
     return 0;

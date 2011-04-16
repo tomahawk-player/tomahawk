@@ -1,5 +1,5 @@
 /* === This file is part of Tomahawk Player - <http://tomahawk-player.org> ===
- * 
+ *
  *   Copyright 2010-2011, Christian Muehlhaeuser <muesli@tomahawk-player.org>
  *
  *   Tomahawk is free software: you can redistribute it and/or modify
@@ -38,8 +38,7 @@
 #include <QStringList>
 
 #include "network/servent.h"
-#include "tomahawkutils.h"
-#include "tomahawk/tomahawkapp.h"
+#include "utils/tomahawkutils.h"
 #include <database/databasecommand_addclientauth.h>
 #include <qxtwebcontent.h>
 #include <database/database.h>

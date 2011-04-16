@@ -32,7 +32,7 @@
 #include "artist.h"
 #include "album.h"
 #include "collection.h"
-#include "tomahawk/infosystem.h"
+#include "infosystem/infosystem.h"
 #include "database/database.h"
 #include "database/databasecollection.h"
 #include "database/databasecommand_collectionstats.h"
@@ -145,24 +145,14 @@ using namespace Tomahawk;
 TomahawkApp::TomahawkApp( int& argc, char *argv[] )
     : TOMAHAWK_APPLICATION( argc, argv )
     , m_database( 0 )
+    , m_scanManager( 0 )
     , m_audioEngine( 0 )
     , m_sipHandler( 0 )
     , m_servent( 0 )
     , m_shortcutHandler( 0 )
     , m_scrubFriendlyName( false )
     , m_mainwindow( 0 )
-    , m_infoSystem( 0 )
 {
-    qsrand( QTime( 0, 0, 0 ).secsTo( QTime::currentTime() ) );
-
-#ifdef TOMAHAWK_HEADLESS
-    m_headless = true;
-#else
-    m_mainwindow = 0;
-    m_headless = arguments().contains( "--headless" );
-    setWindowIcon( QIcon( RESPATH "icons/tomahawk-icon-128x128.png" ) );
-#endif
-
     qDebug() << "TomahawkApp thread:" << this->thread();
     setOrganizationName( QLatin1String( TOMAHAWK_ORGANIZATION_NAME ) );
     setOrganizationDomain( QLatin1String( TOMAHAWK_ORGANIZATION_DOMAIN ) );
@@ -170,10 +160,28 @@ TomahawkApp::TomahawkApp( int& argc, char *argv[] )
     setApplicationVersion( QLatin1String( TOMAHAWK_VERSION ) );
     registerMetaTypes();
     setupLogfile();
+}
+
+void
+TomahawkApp::init()
+{
+    qsrand( QTime( 0, 0, 0 ).secsTo( QTime::currentTime() ) );
+
+    #ifdef TOMAHAWK_HEADLESS
+    m_headless = true;
+    #else
+    m_mainwindow = 0;
+    m_headless = arguments().contains( "--headless" );
+    setWindowIcon( QIcon( RESPATH "icons/tomahawk-icon-128x128.png" ) );
+    #endif
+
+    registerMetaTypes();
+
+    Echonest::Config::instance()->setAPIKey( "JRIHWEP6GPOER2QQ6" );
 
     new TomahawkSettings( this );
     m_audioEngine = new AudioEngine;
-    new ScanManager( this );
+    m_scanManager = new ScanManager( this );
     new Pipeline( this );
 
     m_servent = new Servent( this );
@@ -187,12 +195,12 @@ TomahawkApp::TomahawkApp( int& argc, char *argv[] )
 
     m_scrubFriendlyName = arguments().contains( "--demo" );
     // Register shortcut handler for this platform
-#ifdef Q_WS_MAC
+    #ifdef Q_WS_MAC
     m_shortcutHandler = new MacShortcutHandler( this );
     Tomahawk::setShortcutHandler( static_cast<MacShortcutHandler*>( m_shortcutHandler) );
 
     Tomahawk::setApplicationHandler( this );
-#endif
+    #endif
 
     // Connect up shortcuts
     if ( m_shortcutHandler )
@@ -214,23 +222,12 @@ TomahawkApp::TomahawkApp( int& argc, char *argv[] )
     qDebug() << "Init Scrobbler.";
     m_scrobbler = new Scrobbler( this );
     qDebug() << "Setting NAM.";
-    TomahawkUtils::setNam( new lastfm::NetworkAccessManager( this ) );
+    TomahawkUtils::setNam( lastfm::nam() );
 
-    connect( m_audioEngine, SIGNAL( started( const Tomahawk::result_ptr& ) ),
-             m_scrobbler,     SLOT( trackStarted( const Tomahawk::result_ptr& ) ), Qt::QueuedConnection );
-
-    connect( m_audioEngine, SIGNAL( paused() ),
-             m_scrobbler,     SLOT( trackPaused() ), Qt::QueuedConnection );
-
-    connect( m_audioEngine, SIGNAL( resumed() ),
-             m_scrobbler,     SLOT( trackResumed() ), Qt::QueuedConnection );
-
-    connect( m_audioEngine, SIGNAL( stopped() ),
-             m_scrobbler,     SLOT( trackStopped() ), Qt::QueuedConnection );
-#else
+    #else
     qDebug() << "Setting NAM.";
     TomahawkUtils::setNam( new QNetworkAccessManager );
-#endif
+    #endif
 
     // Set up proxy
     //FIXME: This overrides the lastfm proxy above?
@@ -264,7 +261,7 @@ TomahawkApp::TomahawkApp( int& argc, char *argv[] )
         m_mainwindow->setWindowTitle( "Tomahawk" );
         m_mainwindow->show();
     }
-#endif
+    #endif
 
     qDebug() << "Init Local Collection.";
     initLocalCollection();
@@ -292,9 +289,16 @@ TomahawkApp::~TomahawkApp()
 {
     qDebug() << Q_FUNC_INFO;
 
+    // stop script resolvers
+    foreach( Tomahawk::ExternalResolver* r, m_scriptResolvers.values() )
+    {
+        delete r;
+    }
+    m_scriptResolvers.clear();
+
     delete m_sipHandler;
     delete m_servent;
-
+    delete m_scanManager;
 #ifndef TOMAHAWK_HEADLESS
     delete m_mainwindow;
     delete m_audioEngine;
@@ -412,35 +416,39 @@ TomahawkApp::setupPipeline()
     Pipeline::instance()->addResolver( new DatabaseResolver( 100 ) );
 
     // load script resolvers
-    foreach( QString resolver, TomahawkSettings::instance()->scriptResolvers() )
-        addScriptResolver( resolver );
+    foreach( QString resolver, TomahawkSettings::instance()->enabledScriptResolvers() )
+        enableScriptResolver( resolver );
 }
 
 
 void
-TomahawkApp::addScriptResolver( const QString& path )
+TomahawkApp::enableScriptResolver( const QString& path )
 {
     const QFileInfo fi( path );
     if ( fi.suffix() == "js" || fi.suffix() == "script" )
-        m_scriptResolvers << new QtScriptResolver( path );
+        m_scriptResolvers.insert( path, new QtScriptResolver( path ) );
     else
-        m_scriptResolvers << new ScriptResolver( path );
+        m_scriptResolvers.insert( path, new ScriptResolver( path ) );
 }
 
 
 void
-TomahawkApp::removeScriptResolver( const QString& path )
+TomahawkApp::disableScriptResolver( const QString& path )
 {
-    foreach( Tomahawk::ExternalResolver* r, m_scriptResolvers )
+    if( m_scriptResolvers.contains( path ) )
     {
-        if( r->filePath() == path )
-        {
-            m_scriptResolvers.removeAll( r );
-            connect( r, SIGNAL( finished() ), r, SLOT( deleteLater() ) );
-            r->stop();
-            return;
-        }
+        Tomahawk::ExternalResolver* r = m_scriptResolvers.take( path );
+
+        connect( r, SIGNAL( finished() ), r, SLOT( deleteLater() ) );
+        r->stop();
+        return;
     }
+}
+
+Tomahawk::ExternalResolver*
+TomahawkApp::resolverForPath( const QString& scriptPath )
+{
+    return m_scriptResolvers.value( scriptPath, 0 );
 }
 
 
@@ -524,7 +532,7 @@ TomahawkApp::loadUrl( const QString& url )
         if( f.exists() && info.suffix() == "xspf" ) {
             XSPFLoader* l = new XSPFLoader( true, this );
             qDebug() << "Loading spiff:" << url;
-            l->load( QUrl( url ) );
+            l->load( QUrl::fromUserInput( url ) );
         }
     }
     return true;

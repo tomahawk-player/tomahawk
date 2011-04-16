@@ -1,5 +1,5 @@
 /* === This file is part of Tomahawk Player - <http://tomahawk-player.org> ===
- * 
+ *
  *   Copyright 2010-2011, Christian Muehlhaeuser <muesli@tomahawk-player.org>
  *
  *   Tomahawk is free software: you can redistribute it and/or modify
@@ -71,7 +71,7 @@ Api_v1::auth_2( QxtWebRequestEvent* event, QString arg )
         else
             qDebug() << "Failed parsing url parameters: " << part;
     }
-    
+
     qDebug() << "has query items:" << pieces;
     if( !params.contains( "website" ) || !params.contains( "name" ) || !params.contains( "formtoken" ) )
     {
@@ -145,6 +145,7 @@ Api_v1::api( QxtWebRequestEvent* event )
 void
 Api_v1::sid( QxtWebRequestEvent* event, QString unused )
 {
+    Q_UNUSED( unused );
     using namespace Tomahawk;
     RID rid = event->url.path().mid( 5 );
     qDebug() << "Request for sid " << rid;
@@ -164,7 +165,8 @@ Api_v1::sid( QxtWebRequestEvent* event, QString unused )
     QxtWebPageEvent* e = new QxtWebPageEvent( event->sessionID, event->requestID, iodev );
     e->streaming = iodev->isSequential();
     e->contentType = rp->mimetype().toAscii();
-    e->headers.insert( "Content-Length", QString::number( rp->size() ) );
+    if( rp->size() > 0 )
+        e->headers.insert( "Content-Length", QString::number( rp->size() ) );
     postEvent( e );
 }
 
@@ -206,6 +208,8 @@ Api_v1::stat( QxtWebRequestEvent* event )
 void
 Api_v1::statResult( const QString& clientToken, const QString& name, bool valid )
 {
+    Q_UNUSED( clientToken )
+    Q_UNUSED( name )
     QVariantMap m;
     m.insert( "name", "playdar" );
     m.insert( "version", "0.1.1" ); // TODO (needs to be >=0.1.1 for JS to work)
@@ -338,7 +342,7 @@ Api_v1::sendWebpageWithArgs( QxtWebRequestEvent* event, const QString& filenameS
     // workaround for receiverurl
     if( !args.keys().contains( "URL" ) )
         html.replace( QString( "<%URL%>" ).toLatin1(), QByteArray() );
-        
+
 
     QxtWebPageEvent* e = new QxtWebPageEvent( event->sessionID, event->requestID, html );
     postEvent( e );

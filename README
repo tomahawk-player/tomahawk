@@ -1,82 +1,23 @@
-Quickstart on Ubuntu
---------------------
-
-    $ sudo apt-get install build-essential cmake libtag1c2a libtag1-dev libqt4-dev libqt4-sql-sqlite \
-                           libvorbis-dev libmad0-dev libflac++-dev libasound2-dev libboost-dev zlib1g-dev \
-                           libgnutls-dev pkg-config
-
-
-Gloox 1.0 (XMPP library)
-------------------------
- On Ubuntu 10.10 (and higher):
-    $ sudo apt-get install libgloox-dev
-
- Otherwise see: http://camaya.net/glooxdownload
- You need to build gloox 1.0 from source, Ubuntu 10.04 only packages version 0.9.
-
- Download and unpack tarball:
-    $ ./configure --without-openssl --with-gnutls --without-libidn --with-zlib --without-examples --without-tests
-    $ CXXFLAGS=-fPIC make
-    $ sudo make install
-
-QJson (Qt JSON library)
------------------------
- On Ubuntu 10.04 (and higher):
-    $ sudo apt-get install libqjson-dev
-
- Otherwise see: http://sourceforge.net/projects/qjson/files/ (developed using version 0.7.1)
-
- Download and unpack tarball:
-    $ ./configure && make
-    $ sudo make install
-
-libEchonest 1.1.4
----------------
- See: http://projects.kde.org/projects/playground/libs/libechonest/
-
- Download and unpack tarball:
-    $ mkdir build && cd build
-    $ cmake ..
-    $ make
-    $ sudo make install
-
-CLucene 0.9.23
----------------
- See: http://clucene.sourceforge.net/download.shtml
-
- Clone from git and build CLucene:
-    $ git clone git://clucene.git.sourceforge.net/gitroot/clucene/clucene
-    $ cd clucene && mkdir build && cd build
-    $ cmake ..
-    $ make
-    $ sudo make install
-
-
-Quickstart on OS X
+Compiling Tomahawk
 ------------------
 
- Install homebrew
-    $ ruby -e "$(curl -fsSL https://gist.github.com/raw/323731/install_homebrew.rb)"
-    $ brew install cmake qt qjson gloox libmad libvorbis flac taglib boost
-
- Install libEchnoest & CLucene as per the above instructions.
-
- If liblastfm gives problems, do the below:
-    $ brew edit liblastfm
- Change the url to https://github.com/davidsansome/liblastfm/tarball/0.3.1
-    $ brew install liblastfm
- Copy the md5 hash it returns.
-    $ brew edit liblastfm
- Replace the md5 hash with the new one you copied.
-    $ brew install liblastfm
-
-
-Now compile Tomahawk
---------------------
     $ mkdir build && cd build
     $ cmake ..
     $ make
+
+ Start the application on Linux:
     $ ./tomahawk
+ Start the application on OS X:
+    $ open tomahawk.app
+
+
+Detailed building instructions for Ubuntu
+-----------------------------------------
+ See: http://wiki.tomahawk-player.org/mediawiki/index.php/Building_Ubuntu_Binary_on_Maverick_(10.10)
+
+Detailed building instructions for OS X
+---------------------------------------
+ See: http://wiki.tomahawk-player.org/mediawiki/index.php/Building_OS_X_Application_Bundle_on_Snow_Leopard_(10.6)
 
 
 Dependencies
@@ -85,7 +26,7 @@ Dependencies
   CMake 2.8.0 http://www.cmake.org/
   Qt 4.7.0 http://qt.nokia.com/
   QJson 0.7.1 http://qjson.sourceforge.net/
-  Gloox 1.0 (0.9.x will fail) http://camaya.net/gloox/
+  Gloox 1.0 http://camaya.net/gloox/
   SQLite 3.6.22 http://www.sqlite.org/
   TagLib 1.6.2 http://developer.kde.org/~wheeler/taglib.html
   Boost 1.3x http://www.boost.org/
@@ -101,24 +42,5 @@ Dependencies
   RtAudio 4.0.7 http://www.music.mcgill.ca/~gary/rtaudio/
   MiniUPnP http://miniupnp.free.fr/
   liblastfm 0.4.0 http://github.com/jonocole/liblastfm/
-
-
-To build the app:
------------------
-    $ mkdir build && cd build
-    $ cmake ..
-    $ make
-
-To run the app:
----------------
- Only run the next two commands if you installed any of the dependencies from source on Linux.
-    $ export LD_LIBRARY_PATH=/usr/local/lib:$LD_LIBRARY_PATH
-    $ sudo ldconfig -v
-
- Start the application on Linux:
-    $ ./tomahawk
-
- Start the application on OS X:
-    $ open tomahawk.app
 
 Enjoy!

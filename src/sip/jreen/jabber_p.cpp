@@ -55,7 +55,7 @@ Jabber_p::Jabber_p( const QString& jid, const QString& password, const QString& 
     // general client setup
     m_client = new Jreen::Client( jid, password );
     m_client->registerStanzaExtension(new TomahawkSipMessageFactory);
-    m_client->setResource( QString( "DISABLEDtomahawk%1" ).arg( qrand() ) );
+    m_client->setResource( QString( "DISABLEDtomahawk%1" ).arg( QString::number( qrand() % 10000 ) ) );
 
     // setup disco
     m_client->disco()->setSoftwareVersion( "Tomahawk Player", TOMAHAWK_VERSION, CMAKE_SYSTEM );

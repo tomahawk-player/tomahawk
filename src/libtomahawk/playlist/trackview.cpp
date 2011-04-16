@@ -33,6 +33,7 @@
 #include "queueview.h"
 #include "trackmodel.h"
 #include "trackproxymodel.h"
+#include <track.h>
 
 using namespace Tomahawk;
 
@@ -46,6 +47,7 @@ TrackView::TrackView( QWidget* parent )
     , m_overlay( new OverlayWidget( this ) )
     , m_loadingSpinner( new LoadingSpinner( this ) )
     , m_resizing( false )
+    , m_dragging( false )
 {
     setSortingEnabled( false );
     setAlternatingRowColors( true );
@@ -107,13 +109,22 @@ TrackView::setProxyModel( TrackProxyModel* model )
 
 
 void
-TrackView::setModel( TrackModel* model )
+TrackView::setModel( QAbstractItemModel* model )
+{
+    Q_UNUSED( model );
+    qDebug() << "Explicitly use setTrackModel instead";
+    Q_ASSERT( false );
+}
+
+
+void
+TrackView::setTrackModel( TrackModel* model )
 {
     m_model = model;
 
     if ( m_proxyModel )
     {
-        m_proxyModel->setSourceModel( model );
+        m_proxyModel->setSourceTrackModel( m_model );
     }
 
     connect( m_model, SIGNAL( itemSizeChanged( QModelIndex ) ), SLOT( onItemResized( QModelIndex ) ) );

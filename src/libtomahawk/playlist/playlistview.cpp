@@ -45,20 +45,29 @@ PlaylistView::~PlaylistView()
 
 
 void
-PlaylistView::setModel( PlaylistModel* model )
+PlaylistView::setModel( QAbstractItemModel* model )
+{
+    Q_UNUSED( model );
+    qDebug() << "Explicitly use setPlaylistModel instead";
+    Q_ASSERT( false );
+}
+
+
+void
+PlaylistView::setPlaylistModel( PlaylistModel* model )
 {
     m_model = model;
 
-    TrackView::setModel( model );
+    TrackView::setTrackModel( m_model );
     setColumnHidden( 5, true ); // Hide age column per default
 
-    if ( !model->playlist().isNull() )
-        setGuid( QString( "playlistview/%1" ).arg( model->playlist()->guid() ) );
+    if ( !m_model->playlist().isNull() )
+        setGuid( QString( "playlistview/%1" ).arg( m_model->playlist()->guid() ) );
     else
         setGuid( "playlistview" );
 
-    connect( model, SIGNAL( trackCountChanged( unsigned int ) ), SLOT( onTrackCountChanged( unsigned int ) ) );
-    connect( model, SIGNAL( playlistDeleted() ), SLOT( onDeleted() ) );
+    connect( m_model, SIGNAL( trackCountChanged( unsigned int ) ), SLOT( onTrackCountChanged( unsigned int ) ) );
+    connect( m_model, SIGNAL( playlistDeleted() ), SLOT( onDeleted() ) );
 }
 
 

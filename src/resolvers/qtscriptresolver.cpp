@@ -1,5 +1,5 @@
 /* === This file is part of Tomahawk Player - <http://tomahawk-player.org> ===
- * 
+ *
  *   Copyright 2010-2011, Christian Muehlhaeuser <muesli@tomahawk-player.org>
  *
  *   Tomahawk is free software: you can redistribute it and/or modify
@@ -49,9 +49,8 @@ QtScriptResolver::QtScriptResolver( const QString& scriptPath )
     m_name       = m.value( "name" ).toString();
     m_weight     = m.value( "weight", 0 ).toUInt();
     m_timeout    = m.value( "timeout", 25 ).toUInt() * 1000;
-    m_preference = m.value( "preference", 0 ).toUInt();
 
-    qDebug() << Q_FUNC_INFO << m_name << m_weight << m_timeout << m_preference;
+    qDebug() << Q_FUNC_INFO << m_name << m_weight << m_timeout;
 
     m_ready = true;
     Tomahawk::Pipeline::instance()->addResolver( this );

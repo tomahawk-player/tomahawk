@@ -1,5 +1,5 @@
 /* === This file is part of Tomahawk Player - <http://tomahawk-player.org> ===
- * 
+ *
  *   Copyright 2010-2011, Christian Muehlhaeuser <muesli@tomahawk-player.org>
  *
  *   Tomahawk is free software: you can redistribute it and/or modify
@@ -16,41 +16,31 @@
  *   along with Tomahawk. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef MUSIXMATCHPLUGIN_H
-#define MUSIXMATCHPLUGIN_H
-#include "tomahawk/infosystem.h"
+#ifndef TREEITEMDELEGATE_H
+#define TREEITEMDELEGATE_H
 
-class QNetworkReply;
+#include <QStyledItemDelegate>
 
-namespace Tomahawk
+#include "dllmacro.h"
+
+class TreeProxyModel;
+
+class DLLEXPORT TreeItemDelegate : public QStyledItemDelegate
 {
+Q_OBJECT
 
-namespace InfoSystem
-{
-
-class MusixMatchPlugin : public InfoPlugin
-{
-    Q_OBJECT
-    
 public:
-    MusixMatchPlugin(QObject *parent);
-    virtual ~MusixMatchPlugin();
-    
-    void getInfo(const QString &caller, const InfoType type, const QVariant &data, InfoCustomData customData);
-    
-private:
-    bool isValidTrackData( const QString &caller, const QVariant& data, InfoCustomData &customData );
-    
-public slots:
-    void trackSearchSlot();
-    void trackLyricsSlot();
+    TreeItemDelegate( QAbstractItemView* parent = 0, TreeProxyModel* proxy = 0 );
+
+protected:
+    void paint( QPainter* painter, const QStyleOptionViewItem& option, const QModelIndex& index ) const;
+    QSize sizeHint( const QStyleOptionViewItem& option, const QModelIndex& index ) const;
+
+//    QWidget* createEditor( QWidget* parent, const QStyleOptionViewItem& option, const QModelIndex& index ) const;
 
 private:
-    QString m_apiKey;
+    QAbstractItemView* m_view;
+    TreeProxyModel* m_model;
 };
 
-}
-
-}
-
-#endif // MUSIXMATCHPLUGIN_H
+#endif // TREEITEMDELEGATE_H

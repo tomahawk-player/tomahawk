@@ -1,5 +1,5 @@
 /* === This file is part of Tomahawk Player - <http://tomahawk-player.org> ===
- * 
+ *
  *   Copyright 2010-2011, Christian Muehlhaeuser <muesli@tomahawk-player.org>
  *
  *   Tomahawk is free software: you can redistribute it and/or modify
@@ -28,6 +28,7 @@
 #include "network/servent.h"
 
 #include "madtranscode.h"
+#include "dummytranscode.h"
 #ifndef NO_OGG
 #include "vorbistranscode.h"
 #endif
@@ -228,12 +229,15 @@ AudioEngine::loadTrack( const Tomahawk::result_ptr& result )
             qDebug() << "Starting new song from url:" << m_currentTrack->url();
             emit loading( m_currentTrack );
 
+            qDebug() << "input is:" << m_input.isNull();
             if ( !m_input.isNull() )
             {
                 m_input->close();
                 m_input.clear();
             }
 
+            if( !m_lastTrack.isNull() ) qDebug() << "LAST TRACK:" << m_lastTrack->mimetype();
+            qDebug() << "LOADING SONG:" << m_currentTrack->mimetype();
             if ( m_lastTrack.isNull() || ( m_currentTrack->mimetype() != m_lastTrack->mimetype() ) )
             {
                 if ( !m_transcode.isNull() )
@@ -241,7 +245,10 @@ AudioEngine::loadTrack( const Tomahawk::result_ptr& result )
                     m_transcode.clear();
                 }
 
-                if ( m_currentTrack->mimetype() == "audio/mpeg" )
+                if ( m_currentTrack->mimetype() == "audio/basic" )
+                {
+                    m_transcode = QSharedPointer<TranscodeInterface>(new DummyTranscode());
+                } else if ( m_currentTrack->mimetype() == "audio/mpeg" )
                 {
                     m_transcode = QSharedPointer<TranscodeInterface>(new MADTranscode());
                 }
@@ -428,8 +435,10 @@ AudioEngine::setCurrentTrack( const Tomahawk::result_ptr& result )
 void
 AudioEngine::onDownloadProgress( qint64 recv, qint64 total )
 {
-    if ( ( recv > 1024 * 32 ) || recv > total ) 
+    if ( ( recv > 1024 * 32 ) || recv > total )
         m_readReady = true;
+
+//     qDebug() << "Got onDownloadProgress from reading http stream, received enough?" << m_readReady << "(" << recv << "> 1024 * 32 and" << recv << "<" << total << ")";
 }
 
 
@@ -454,28 +463,30 @@ void
 AudioEngine::loop()
 {
     m_i++;
-    //if( m_i % 500 == 0 ) qDebug() << Q_FUNC_INFO << thread();
+//     if( m_i % 500 == 0 ) qDebug() << Q_FUNC_INFO << thread();
 
     {
         QMutexLocker lock( &m_mutex );
 
-/*        if ( m_i % 200 == 0 )
-        {
-            if ( !m_input.isNull() )
-                qDebug() << "Outer audio loop" << m_input->bytesAvailable() << m_audio->needData();
-        }*/
+//         if ( m_i % 200 == 0 )
+//         {
+//             if ( !m_input.isNull() )
+//                 qDebug() << "Outer audio loop" << m_input->bytesAvailable() << m_audio->needData();
+//         }
 
         if ( m_i % 10 == 0 && m_audio->isPlaying() )
             m_audio->triggerTimers();
 
+//         qDebug() << !m_transcode.isNull() << !m_input.isNull() << m_audio->needData() << !m_audio->isPaused();
+//         if( !m_input.isNull() ) qDebug() << "INPUT has bytes:" << m_input->bytesAvailable();
         if( !m_transcode.isNull() &&
             !m_input.isNull() &&
             m_input->bytesAvailable() &&
             m_audio->needData() &&
             !m_audio->isPaused() )
         {
-            //if ( m_i % 50 == 0 )
-            //    qDebug() << "Inner audio loop";
+//             if ( m_i % 50 == 0 )
+//                qDebug() << "Inner audio loop";
 
             if ( m_transcode->needData() > 0 )
             {
@@ -498,11 +509,12 @@ AudioEngine::loop()
     // are we cleanly at the end of a track, and ready for the next one?
     if ( !m_input.isNull() &&
           m_input->atEnd() &&
-          m_readReady && 
+          m_readReady &&
          !m_input->bytesAvailable() &&
          !m_audio->haveData() &&
          !m_audio->isPaused() )
     {
+        qDebug() << !m_input.isNull() << m_input->atEnd() << m_readReady << !m_input->bytesAvailable() << !m_audio->haveData() << !m_audio->isPaused();
         qDebug() << "Starting next track then";
         loadNextTrack();
         // will need data immediately:

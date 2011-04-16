@@ -1,5 +1,5 @@
 /* === This file is part of Tomahawk Player - <http://tomahawk-player.org> ===
- * 
+ *
  *   Copyright 2010-2011, Christian Muehlhaeuser <muesli@tomahawk-player.org>
  *
  *   Tomahawk is free software: you can redistribute it and/or modify
@@ -19,6 +19,7 @@
 #include "tomahawkutils.h"
 
 #include <QCoreApplication>
+#include <QColor>
 #include <QDateTime>
 #include <QDebug>
 #include <QDir>
@@ -265,6 +266,19 @@ extensionToMimetype( const QString& extension )
 }
 
 
+QColor
+alphaBlend( const QColor& colorFrom, const QColor& colorTo, float opacity )
+{
+    opacity = qMax( (float)0.3, opacity );
+    int r = colorFrom.red(), g = colorFrom.green(), b = colorFrom.blue();
+    r = opacity * r + ( 1 - opacity ) * colorTo.red();
+    g = opacity * g + ( 1 - opacity ) * colorTo.green();
+    b = opacity * b + ( 1 - opacity ) * colorTo.blue();
+
+    return QColor( r, g, b );
+}
+
+
 QPixmap
 createDragPixmap( int itemCount )
 {
@@ -366,7 +380,7 @@ dnsResolver()
 {
     if( !s_dnsResolver )
         s_dnsResolver = new DNSResolver();
-    
+
     return s_dnsResolver;
 }
 
@@ -387,7 +401,7 @@ DNSResolver::resolve( QString &host, QString type )
     {
         // For the moment, assume we are looking for XMPP...
         QString fullHost( "_xmpp-client._tcp." + host );
-        
+
         qDebug() << "Looking up SRV record for " << fullHost.toUtf8();
 
         m_dnsSharedRequest->query( fullHost.toUtf8(), QJDns::Srv );

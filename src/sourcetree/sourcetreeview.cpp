@@ -19,7 +19,6 @@
 #include "sourcetreeview.h"
 
 #include "playlist.h"
-#include "playlist/collectionmodel.h"
 #include "playlist/playlistmanager.h"
 #include "sourcetreeitem.h"
 #include "sourcesmodel.h"
@@ -61,7 +60,6 @@ private:
 
 SourceTreeView::SourceTreeView( QWidget* parent )
     : QTreeView( parent )
-    , m_collectionModel( new CollectionModel( this ) )
     , m_dragging( false )
 {
     setFrameShape( QFrame::NoFrame );
@@ -81,6 +79,9 @@ SourceTreeView::SourceTreeView( QWidget* parent )
     setUniformRowHeights( false );
     setIndentation( 16 );
     setAnimated( true );
+
+    setSortingEnabled( true );
+    sortByColumn( 1, Qt::AscendingOrder );
 
     setItemDelegate( new SourceDelegate( this ) );
 
@@ -168,6 +169,7 @@ SourceTreeView::hideOfflineSources()
 void
 SourceTreeView::onSourceOffline( Tomahawk::source_ptr src )
 {
+    Q_UNUSED( src );
     qDebug() << Q_FUNC_INFO;
 }
 

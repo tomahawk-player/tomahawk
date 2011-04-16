@@ -1,5 +1,5 @@
 /* === This file is part of Tomahawk Player - <http://tomahawk-player.org> ===
- * 
+ *
  *   Copyright 2010-2011, Christian Muehlhaeuser <muesli@tomahawk-player.org>
  *
  *   Tomahawk is free software: you can redistribute it and/or modify
@@ -22,6 +22,7 @@
 #include <QObject>
 #include <QTimer>
 #include <QDebug>
+#include <QWeakPointer>
 
 #include "boost/function.hpp"
 #include "boost/bind.hpp"
@@ -43,8 +44,9 @@ class DLLEXPORT FuncTimeout : public QObject
 Q_OBJECT
 
 public:
-    FuncTimeout( int ms, boost::function<void()> func )
+    FuncTimeout( int ms, boost::function<void()> func, QObject* besafe )
         : m_func( func )
+        , m_watch( QWeakPointer< QObject >( besafe ) )
     {
         //qDebug() << Q_FUNC_INFO;
         QTimer::singleShot( ms, this, SLOT( exec() ) );
@@ -58,12 +60,14 @@ public:
 public slots:
     void exec()
     {
-        m_func();
+        if( !m_watch.isNull() )
+            m_func();
         this->deleteLater();
     };
 
 private:
     boost::function<void()> m_func;
+    QWeakPointer< QObject > m_watch;
 };
 
 }; // ns

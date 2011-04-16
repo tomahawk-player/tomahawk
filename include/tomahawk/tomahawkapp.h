@@ -1,5 +1,5 @@
 /* === This file is part of Tomahawk Player - <http://tomahawk-player.org> ===
- * 
+ *
  *   Copyright 2010-2011, Christian Muehlhaeuser <muesli@tomahawk-player.org>
  *
  *   Tomahawk is free software: you can redistribute it and/or modify
@@ -44,6 +44,7 @@
 
 class AudioEngine;
 class Database;
+class ScanManager;
 class SipHandler;
 class TomahawkSettings;
 class XMPPBot;
@@ -78,10 +79,10 @@ public:
     TomahawkApp( int& argc, char *argv[] );
     virtual ~TomahawkApp();
 
+    void init();
     static TomahawkApp* instance();
 
     SipHandler* sipHandler() { return m_sipHandler; }
-    Tomahawk::InfoSystem::InfoSystem* infoSystem() { return m_infoSystem; }
     XMPPBot* xmppBot() { return m_xmppBot; }
 
 #ifndef TOMAHAWK_HEADLESS
@@ -89,8 +90,9 @@ public:
     TomahawkWindow* mainWindow() const { return m_mainwindow; }
 #endif
 
-    void addScriptResolver( const QString& scriptPath );
-    void removeScriptResolver( const QString& scriptPath );
+    void enableScriptResolver( const QString& scriptPath );
+    void disableScriptResolver( const QString& scriptPath );
+    Tomahawk::ExternalResolver* resolverForPath( const QString& scriptPath );
 
     // PlatformInterface
     virtual void activate();
@@ -98,10 +100,10 @@ public:
 
     // because QApplication::arguments() is expensive
     bool scrubFriendlyName() const { return m_scrubFriendlyName; }
-    
+
 public slots:
     void instanceStarted( KDSingleApplicationGuard::Instance );
-    
+
 private slots:
     void setupSIP();
 
@@ -115,30 +117,31 @@ private:
     void startHTTP();
 
     QList<Tomahawk::collection_ptr> m_collections;
-    QList<Tomahawk::ExternalResolver*> m_scriptResolvers;
+    QHash<QString, Tomahawk::ExternalResolver*> m_scriptResolvers;
 
     Database* m_database;
+    ScanManager *m_scanManager;
     AudioEngine* m_audioEngine;
     SipHandler* m_sipHandler;
     Servent* m_servent;
+    Tomahawk::InfoSystem::InfoSystem* m_infoSystem;
     XMPPBot* m_xmppBot;
     Tomahawk::ShortcutHandler* m_shortcutHandler;
     bool m_scrubFriendlyName;
-    
+
 #ifdef LIBLASTFM_FOUND
     Scrobbler* m_scrobbler;
 #endif
 
 #ifndef TOMAHAWK_HEADLESS
     TomahawkWindow* m_mainwindow;
-#endif    
+#endif
 
     bool m_headless;
-
-    Tomahawk::InfoSystem::InfoSystem* m_infoSystem;
 
     QxtHttpServerConnector m_connector;
     QxtHttpSessionManager m_session;
 };
 
 #endif // TOMAHAWKAPP_H
+

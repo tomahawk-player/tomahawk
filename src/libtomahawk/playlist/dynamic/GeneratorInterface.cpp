@@ -71,6 +71,7 @@ void Tomahawk::GeneratorInterface::removeControl(const Tomahawk::dyncontrol_ptr&
 Tomahawk::dyncontrol_ptr 
 Tomahawk::GeneratorInterface::createControl(const QString& type)
 {
+    Q_UNUSED( type );
     Q_ASSERT( false );
     return dyncontrol_ptr();
 }

@@ -1,5 +1,5 @@
 /* === This file is part of Tomahawk Player - <http://tomahawk-player.org> ===
- * 
+ *
  *   Copyright 2010-2011, Christian Muehlhaeuser <muesli@tomahawk-player.org>
  *
  *   Tomahawk is free software: you can redistribute it and/or modify
@@ -22,7 +22,6 @@
 #include <QListView>
 
 #include "query.h"
-#include "collectionmodel.h"
 
 
 AlbumProxyModel::AlbumProxyModel( QObject* parent )
@@ -38,12 +37,19 @@ AlbumProxyModel::AlbumProxyModel( QObject* parent )
     setSortCaseSensitivity( Qt::CaseInsensitive );
     setDynamicSortFilter( true );
 
-    setSourceModel( 0 );
+    setSourceAlbumModel( 0 );
 }
 
+void
+AlbumProxyModel::setSourceModel( QAbstractItemModel* sourceModel )
+{
+    Q_UNUSED( sourceModel );
+    qDebug() << "Explicitly use setSourceAlbumModel instead";
+    Q_ASSERT( false );
+}
 
 void
-AlbumProxyModel::setSourceModel( AlbumModel* sourceModel )
+AlbumProxyModel::setSourceAlbumModel( AlbumModel* sourceModel )
 {
     m_model = sourceModel;
 
@@ -141,6 +147,7 @@ AlbumProxyModel::removeIndexes( const QList<QModelIndex>& indexes )
 Tomahawk::result_ptr
 AlbumProxyModel::siblingItem( int itemsAway )
 {
+    Q_UNUSED( itemsAway );
     qDebug() << Q_FUNC_INFO;
     return Tomahawk::result_ptr( 0 );
 }

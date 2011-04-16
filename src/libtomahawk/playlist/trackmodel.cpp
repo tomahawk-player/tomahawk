@@ -81,6 +81,7 @@ TrackModel::rowCount( const QModelIndex& parent ) const
 int
 TrackModel::columnCount( const QModelIndex& parent ) const
 {
+    Q_UNUSED( parent );
     return 9;
 }
 
@@ -126,21 +127,6 @@ TrackModel::data( const QModelIndex& index, int role ) const
         return QVariant();
 
     const query_ptr& query = entry->query();
-    if ( query.isNull() )
-    {
-        if ( !index.column() )
-        {
-            return entry->caption.isEmpty() ? "Unknown" : entry->caption;
-        }
-
-        if ( index.column() == 1 )
-        {
-            return entry->childCount;
-        }
-
-        return QVariant( "" );
-    }
-
     if ( !query->numResults() )
     {
         switch( index.column() )
@@ -207,6 +193,7 @@ TrackModel::data( const QModelIndex& index, int role ) const
 QVariant
 TrackModel::headerData( int section, Qt::Orientation orientation, int role ) const
 {
+    Q_UNUSED( orientation );
     QStringList headers;
     headers << tr( "Artist" ) << tr( "Track" ) << tr( "Album" ) << tr( "Duration" ) << tr( "Bitrate" ) << tr( "Age" ) << tr( "Year" ) << tr( "Size" ) << tr( "Origin" );
     if ( role == Qt::DisplayRole && section >= 0 )

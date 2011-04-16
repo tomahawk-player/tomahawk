@@ -51,9 +51,18 @@ CollectionView::~CollectionView()
 
 
 void
-CollectionView::setModel( TrackModel* model )
+CollectionView::setModel( QAbstractItemModel* model )
 {
-    TrackView::setModel( model );
+    Q_UNUSED( model );
+    qDebug() << "Explicitly use setTrackModel instead";
+    Q_ASSERT( false );
+}
+
+
+void
+CollectionView::setTrackModel( TrackModel* model )
+{
+    TrackView::setTrackModel( model );
     setGuid( "collectionview" );
 
     connect( model, SIGNAL( trackCountChanged( unsigned int ) ), SLOT( onTrackCountChanged( unsigned int ) ) );

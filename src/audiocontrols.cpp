@@ -21,7 +21,6 @@
 
 #include <QNetworkReply>
 
-#include "tomahawk/tomahawkapp.h"
 #include "audio/audioengine.h"
 #include "playlist/playlistmanager.h"
 #include "utils/imagebutton.h"
@@ -29,9 +28,8 @@
 
 #include "album.h"
 
-#define LASTFM_DEFAULT_COVER "http://cdn.last.fm/flatness/catalogue/noimage"
+static QString s_acInfoIdentifier = QString( "AUDIOCONTROLS" );
 
-static QString s_infoIdentifier = QString("AUDIOCONTROLS");
 
 AudioControls::AudioControls( QWidget* parent )
     : QWidget( parent )
@@ -45,11 +43,11 @@ AudioControls::AudioControls( QWidget* parent )
 
     QFont font( ui->artistTrackLabel->font() );
     font.setPixelSize( 12 );
-    
+
 #ifdef Q_WS_MAC
     font.setPointSize( font.pointSize() - 2 );
 #endif
-    
+
     ui->artistTrackLabel->setFont( font );
     ui->artistTrackLabel->setElideMode( Qt::ElideMiddle );
     ui->artistTrackLabel->setType( QueryLabel::ArtistAndTrack );
@@ -144,10 +142,10 @@ AudioControls::AudioControls( QWidget* parent )
     connect( ui->volumeLowButton,  SIGNAL( clicked() ), AudioEngine::instance(), SLOT( lowerVolume() ) );
     connect( ui->volumeHighButton, SIGNAL( clicked() ), AudioEngine::instance(), SLOT( raiseVolume() ) );
 
-    
+
     connect( ui->playPauseButton,  SIGNAL( clicked() ), this, SIGNAL( playPressed() ) );
     connect( ui->pauseButton,  SIGNAL( clicked() ), this,     SIGNAL( pausePressed() ) );
-    
+
     connect( ui->repeatButton,     SIGNAL( clicked() ), SLOT( onRepeatClicked() ) );
     connect( ui->shuffleButton,    SIGNAL( clicked() ), SLOT( onShuffleClicked() ) );
 
@@ -167,11 +165,11 @@ AudioControls::AudioControls( QWidget* parent )
     m_defaultCover = QPixmap( RESPATH "images/no-album-art-placeholder.png" )
                      .scaled( ui->coverImage->size(), Qt::IgnoreAspectRatio, Qt::SmoothTransformation );
 
-    connect( TomahawkApp::instance()->infoSystem(),
+    connect( Tomahawk::InfoSystem::InfoSystem::instance(),
         SIGNAL( info( QString, Tomahawk::InfoSystem::InfoType, QVariant, QVariant, Tomahawk::InfoSystem::InfoCustomData ) ),
         SLOT( infoSystemInfo( QString, Tomahawk::InfoSystem::InfoType, QVariant, QVariant, Tomahawk::InfoSystem::InfoCustomData ) ) );
-    
-    connect( TomahawkApp::instance()->infoSystem(), SIGNAL( finished( QString ) ), SLOT( infoSystemFinished( QString ) ) );
+
+    connect( Tomahawk::InfoSystem::InfoSystem::instance(), SIGNAL( finished( QString ) ), SLOT( infoSystemFinished( QString ) ) );
 
     onPlaybackStopped(); // initial state
 }
@@ -209,68 +207,35 @@ AudioControls::onVolumeChanged( int volume )
 
 
 void
-AudioControls::onCoverArtDownloaded()
-{
-    if ( m_currentTrack.isNull() )
-        return;
-
-    QNetworkReply* reply = qobject_cast<QNetworkReply*>( sender() );
-    QUrl redir = reply->attribute( QNetworkRequest::RedirectionTargetAttribute ).toUrl();
-    if ( redir.isEmpty() )
-    {
-        const QByteArray ba = reply->readAll();
-        if ( ba.length() )
-        {
-            QPixmap pm;
-            pm.loadFromData( ba );
-
-            if ( pm.isNull() || reply->url().toString().startsWith( LASTFM_DEFAULT_COVER ) )
-                ui->coverImage->setPixmap( m_defaultCover );
-            else
-                ui->coverImage->setPixmap( pm.scaled( ui->coverImage->size(), Qt::IgnoreAspectRatio, Qt::SmoothTransformation ) );
-        }
-    }
-    else
-    {
-        // Follow HTTP redirect
-        QNetworkRequest req( redir );
-        QNetworkReply* reply = TomahawkUtils::nam()->get( req );
-        connect( reply, SIGNAL( finished() ), SLOT( onCoverArtDownloaded() ) );
-    }
-
-    reply->deleteLater();
-}
-
-
-void
 AudioControls::onPlaybackStarted( const Tomahawk::result_ptr& result )
 {
     qDebug() << Q_FUNC_INFO;
 
     onPlaybackLoading( result );
 
-    QString artistName = result->artist()->name();
-    QString albumName = result->album()->name();
-    
     Tomahawk::InfoSystem::InfoCustomData trackInfo;
-    
     trackInfo["artist"] = QVariant::fromValue< QString >( result->artist()->name() );
     trackInfo["album"] = QVariant::fromValue< QString >( result->album()->name() );
-    TomahawkApp::instance()->infoSystem()->getInfo(
-        s_infoIdentifier, Tomahawk::InfoSystem::InfoAlbumCoverArt,
+
+    Tomahawk::InfoSystem::InfoSystem::instance()->getInfo(
+        s_acInfoIdentifier, Tomahawk::InfoSystem::InfoAlbumCoverArt,
         QVariant::fromValue< Tomahawk::InfoSystem::InfoCustomData >( trackInfo ), Tomahawk::InfoSystem::InfoCustomData() );
 }
+
 
 void
 AudioControls::infoSystemInfo( QString caller, Tomahawk::InfoSystem::InfoType type, QVariant input, QVariant output, Tomahawk::InfoSystem::InfoCustomData customData )
 {
-    qDebug() << Q_FUNC_INFO;
-    if ( caller != s_infoIdentifier || type != Tomahawk::InfoSystem::InfoAlbumCoverArt )
+    Q_UNUSED( input );
+    Q_UNUSED( customData );
+
+    qDebug() << Q_FUNC_INFO << caller << type << s_acInfoIdentifier << Tomahawk::InfoSystem::InfoAlbumCoverArt;
+    if ( caller != s_acInfoIdentifier || type != Tomahawk::InfoSystem::InfoAlbumCoverArt )
     {
-        qDebug() << "info of wrong type or not with our identifier";
+        qDebug() << "Info of wrong type or not with our identifier";
         return;
     }
-    
+
     if ( m_currentTrack.isNull() )
     {
         qDebug() << "Current track is null when trying to apply fetched cover art";
@@ -281,7 +246,7 @@ AudioControls::infoSystemInfo( QString caller, Tomahawk::InfoSystem::InfoType ty
     {
         qDebug() << "Cannot convert fetched art from a QByteArray";
         return;
-    }   
+    }
 
     Tomahawk::InfoSystem::InfoCustomData returnedData = output.value< Tomahawk::InfoSystem::InfoCustomData >();
     const QByteArray ba = returnedData["imgbytes"].toByteArray();
@@ -290,18 +255,21 @@ AudioControls::infoSystemInfo( QString caller, Tomahawk::InfoSystem::InfoType ty
         QPixmap pm;
         pm.loadFromData( ba );
 
-        if ( pm.isNull() || returnedData["url"].toString().startsWith( LASTFM_DEFAULT_COVER ) )
+        if ( pm.isNull() )
             ui->coverImage->setPixmap( m_defaultCover );
         else
             ui->coverImage->setPixmap( pm.scaled( ui->coverImage->size(), Qt::IgnoreAspectRatio, Qt::SmoothTransformation ) );
     }
 }
-   
+
+
 void
 AudioControls::infoSystemFinished( QString target )
 {
+    Q_UNUSED( target );
     qDebug() << Q_FUNC_INFO;
 }
+
 
 void
 AudioControls::onPlaybackLoading( const Tomahawk::result_ptr& result )
@@ -356,7 +324,7 @@ AudioControls::onPlaybackResumed()
     ui->pauseButton->setVisible( true );
     ui->pauseButton->setEnabled( true );
     ui->playPauseButton->setVisible( false );
-    ui->playPauseButton->setEnabled( false );  
+    ui->playPauseButton->setEnabled( false );
 }
 
 

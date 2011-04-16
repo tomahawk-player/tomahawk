@@ -479,6 +479,7 @@ Jabber_p::handleLog( gloox::LogLevel level, gloox::LogArea area, const std::stri
 void
 Jabber_p::onResourceBindError( gloox::ResourceBindError error )
 {
+    Q_UNUSED( error );
     qDebug() << Q_FUNC_INFO;
 }
 
@@ -486,6 +487,7 @@ Jabber_p::onResourceBindError( gloox::ResourceBindError error )
 void
 Jabber_p::onSessionCreateError( gloox::SessionCreateError error )
 {
+    Q_UNUSED( error );
     qDebug() << Q_FUNC_INFO;
 }
 
@@ -731,6 +733,7 @@ Jabber_p::handleNonrosterPresence( const gloox::Presence& presence )
 void
 Jabber_p::handleVCard( const gloox::JID& jid, const gloox::VCard* vcard )
 {
+    Q_UNUSED( vcard );
     qDebug() << "VCARD RECEIVED!" << jid.bare().c_str();
 }
 
@@ -738,6 +741,8 @@ Jabber_p::handleVCard( const gloox::JID& jid, const gloox::VCard* vcard )
 void
 Jabber_p::handleVCardResult( gloox::VCardHandler::VCardContext context, const gloox::JID& jid, gloox::StanzaError se )
 {
+    Q_UNUSED( context );
+    Q_UNUSED( se );
     qDebug() << "VCARD RESULT RECEIVED!" << jid.bare().c_str();
 }
 
@@ -746,6 +751,7 @@ Jabber_p::handleVCardResult( gloox::VCardHandler::VCardContext context, const gl
 void
 Jabber_p::handleDiscoInfo( const gloox::JID& from, const gloox::Disco::Info& info, int context )
 {
+    Q_UNUSED( context );
     QString jidstr( from.full().c_str() );
     //qDebug() << "DISCOinfo" << jidstr;
     if ( info.hasFeature("tomahawk:player") )
@@ -762,15 +768,19 @@ Jabber_p::handleDiscoInfo( const gloox::JID& from, const gloox::Disco::Info& inf
 
 
 void
-Jabber_p::handleDiscoItems( const gloox::JID& /*iq*/, const gloox::Disco::Items&, int /*context*/ )
+Jabber_p::handleDiscoItems( const gloox::JID& iq, const gloox::Disco::Items& items, int context )
 {
+    Q_UNUSED( iq );
+    Q_UNUSED( items );
+    Q_UNUSED( context );
     qDebug() << Q_FUNC_INFO;
 }
 
 
 void
-Jabber_p::handleDiscoError( const gloox::JID& j, const gloox::Error* e, int /*context*/ )
+Jabber_p::handleDiscoError( const gloox::JID& j, const gloox::Error* e, int context )
 {
+    Q_UNUSED( context );
     qDebug() << Q_FUNC_INFO << j.full().c_str() << e->text().c_str() << e->type();
 }
 /// END DISCO STUFF

@@ -1,5 +1,5 @@
 /* === This file is part of Tomahawk Player - <http://tomahawk-player.org> ===
- * 
+ *
  *   Copyright 2010-2011, Christian Muehlhaeuser <muesli@tomahawk-player.org>
  *
  *   Tomahawk is free software: you can redistribute it and/or modify
@@ -72,8 +72,6 @@ TopBar::TopBar( QWidget* parent )
     ui->radioDetailed->setFocusPolicy( Qt::NoFocus );
     ui->radioCloud->setFocusPolicy( Qt::NoFocus );
 
-    ui->radioDetailed->setEnabled( false );
-
     connect( ui->radioNormal, SIGNAL( clicked() ), SIGNAL( flatMode() ) );
     connect( ui->radioDetailed, SIGNAL( clicked() ), SIGNAL( artistMode() ) );
     connect( ui->radioCloud, SIGNAL( clicked() ), SIGNAL( albumMode() ) );
@@ -87,19 +85,19 @@ TopBar::TopBar( QWidget* parent )
 
     connect( PlaylistManager::instance(), SIGNAL( numSourcesChanged( unsigned int ) ),
                                             SLOT( setNumSources( unsigned int ) ) );
-    
+
     connect( PlaylistManager::instance(), SIGNAL( numTracksChanged( unsigned int ) ),
                                             SLOT( setNumTracks( unsigned int ) ) );
-    
+
     connect( PlaylistManager::instance(), SIGNAL( numArtistsChanged( unsigned int ) ),
                                             SLOT( setNumArtists( unsigned int ) ) );
-    
+
     connect( PlaylistManager::instance(), SIGNAL( numShownChanged( unsigned int ) ),
                                             SLOT( setNumShown( unsigned int ) ) );
-    
+
     connect( PlaylistManager::instance(), SIGNAL( statsAvailable( bool ) ),
                                             SLOT( setStatsVisible( bool ) ) );
-    
+
     connect( PlaylistManager::instance(), SIGNAL( modesAvailable( bool ) ),
                                             SLOT( setModesVisible( bool ) ) );
 

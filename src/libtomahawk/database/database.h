@@ -49,7 +49,7 @@ public:
     ~Database();
 
     QString dbid() const;
-    const bool indexReady() const { return m_indexReady; }
+    bool indexReady() const { return m_indexReady; }
 
     void loadIndex();
     

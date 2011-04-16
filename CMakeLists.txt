@@ -1,6 +1,10 @@
 PROJECT( tomahawk )
 CMAKE_MINIMUM_REQUIRED( VERSION 2.8 )
 
+IF( ${CMAKE_VERSION} VERSION_GREATER 2.8.3 )
+  CMAKE_POLICY(SET CMP0017 NEW)
+ENDIF( ${CMAKE_VERSION} VERSION_GREATER 2.8.3 )
+
 ###
 ### Tomahawk application info
 ###
@@ -49,35 +53,39 @@ macro_log_feature(TAGLIB_FOUND "TagLib" "Audio Meta-Data Library" "http://develo
 # we need pthreads too
 find_package(Threads)
 
+find_package(KDE4)
+IF(KDE4_FOUND)
+    #KDE4 adds and removes some compiler flags that we don't like
+    STRING( REPLACE "-std=iso9899:1990" "" CLEAN_C_FLAGS ${CMAKE_C_FLAGS} )
+    SET( CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fexceptions" )
+ELSE()
+    SET( CLEAN_C_FLAGS ${CMAKE_C_FLAGS} )
+ENDIF()
+
 include( CheckTagLibFileName )
 check_taglib_filename( COMPLEX_TAGLIB_FILENAME )
 
 # optional
 macro_optional_find_package(Jreen)
 IF( NOT LIBJREEN_FOUND )
+    SET( CMAKE_C_FLAGS ${CLEAN_C_FLAGS} )
     ADD_SUBDIRECTORY( thirdparty/jreen )
     SET( LIBJREEN_INCLUDE_DIR  ${CMAKE_CURRENT_BINARY_DIR}/thirdparty/jreen/include )
     IF( UNIX AND NOT APPLE )
         SET( LIBJREEN_LIBRARY ${CMAKE_CURRENT_BINARY_DIR}/thirdparty/jreen/libjreen.so )
     ENDIF( UNIX AND NOT APPLE )
     IF( WIN32 )
-	SET( LIBJREEN_LIBRARY ${CMAKE_CURRENT_BINARY_DIR}/thirdparty/jreen/libjreen.dll )
+    	SET( LIBJREEN_LIBRARY ${CMAKE_CURRENT_BINARY_DIR}/thirdparty/jreen/libjreen.dll )
     ENDIF( WIN32 )
     SET( LIBJREEN_FOUND  true )
     MESSAGE(STATUS "Internal libjreen: ${LIBJREEN_INCLUDE_DIR}, ${LIBJREEN_LIBRARY}")
 ENDIF( NOT LIBJREEN_FOUND )
 
+
 IF( WIN32 )
   find_library(QTSPARKLE_LIBRARIES qtsparkle)
 ENDIF( WIN32 )
 
-macro_log_feature(JREEN_FOUND "Jreen" "Qt XMPP library" "http://gitorious.org/jreen" FALSE "" "Jreen is needed for the alternative/new Jabber SIP plugin. Built automatically inside Tomahawk, if not installed systemwide and ENABLE_JREEN is true")
-
-macro_optional_find_package(Gloox 1.0)
-IF( ENABLE_JREEN )
-    set( GLOOX_FOUND  false )
-ENDIF( ENABLE_JREEN)
-macro_log_feature(GLOOX_FOUND "Gloox" "A portable high-level Jabber/XMPP library for C++" "http://camaya.net/gloox" FALSE "" "Gloox is needed for the Jabber SIP plugin and the XMPP-Bot")
 #show dep log
 macro_display_feature_log()
 MESSAGE("WARNING!")
@@ -94,9 +102,10 @@ CONFIGURE_FILE(
   "${CMAKE_CURRENT_BINARY_DIR}/cmake_uninstall.cmake"
   IMMEDIATE @ONLY)
 
-ADD_CUSTOM_TARGET(uninstall
-  "${CMAKE_COMMAND}" -P "${CMAKE_CURRENT_BINARY_DIR}/cmake_uninstall.cmake")
-
+# KDE4 defines an uninstall target for us automatically
+IF( NOT KDE4_FOUND )
+    ADD_CUSTOM_TARGET(uninstall "${CMAKE_COMMAND}" -P "${CMAKE_CURRENT_BINARY_DIR}/cmake_uninstall.cmake")
+ENDIF()
 
 IF( NOT APPLE )
     # Make linking as strict on linux as it is on osx. Then we don't break linking on mac so often

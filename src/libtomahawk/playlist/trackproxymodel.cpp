@@ -23,7 +23,6 @@
 
 #include "album.h"
 #include "query.h"
-#include "collectionmodel.h"
 
 
 TrackProxyModel::TrackProxyModel( QObject* parent )
@@ -40,20 +39,28 @@ TrackProxyModel::TrackProxyModel( QObject* parent )
     setSortCaseSensitivity( Qt::CaseInsensitive );
     setDynamicSortFilter( true );
 
-    setSourceModel( 0 );
+    setSourceTrackModel( 0 );
 }
 
 
 void
-TrackProxyModel::setSourceModel( TrackModel* sourceModel )
+TrackProxyModel::setSourceModel( QAbstractItemModel* model )
+{
+    Q_UNUSED( model );
+    qDebug() << "Explicitly use setSourceTrackModel instead";
+    Q_ASSERT( false );
+}
+
+
+void
+TrackProxyModel::setSourceTrackModel( TrackModel* sourceModel )
 {
     m_model = sourceModel;
 
-    if ( m_model )
-        connect( m_model, SIGNAL( trackCountChanged( unsigned int ) ),
-                          SIGNAL( sourceTrackCountChanged( unsigned int ) ) );
+    connect( m_model, SIGNAL( trackCountChanged( unsigned int ) ),
+                      SIGNAL( sourceTrackCountChanged( unsigned int ) ) );
 
-    QSortFilterProxyModel::setSourceModel( sourceModel );
+    QSortFilterProxyModel::setSourceModel( m_model );
 }
 
 

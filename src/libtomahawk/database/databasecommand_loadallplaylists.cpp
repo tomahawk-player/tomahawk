@@ -1,5 +1,5 @@
 /* === This file is part of Tomahawk Player - <http://tomahawk-player.org> ===
- * 
+ *
  *   Copyright 2010-2011, Christian Muehlhaeuser <muesli@tomahawk-player.org>
  *
  *   Tomahawk is free software: you can redistribute it and/or modify
@@ -30,7 +30,7 @@ void DatabaseCommand_LoadAllPlaylists::exec( DatabaseImpl* dbi )
 {
     TomahawkSqlQuery query = dbi->newquery();
 
-    query.exec( QString( "SELECT guid, title, info, creator, lastmodified, shared, currentrevision "
+    query.exec( QString( "SELECT guid, title, info, creator, lastmodified, shared, currentrevision, createdOn "
                          "FROM playlist WHERE source %1 AND dynplaylist = 'false'" )
                    .arg( source()->isLocal() ? "IS NULL" :
                          QString( "= %1" ).arg( source()->id() )
@@ -44,6 +44,7 @@ void DatabaseCommand_LoadAllPlaylists::exec( DatabaseImpl* dbi )
                                       query.value(1).toString(), //title
                                       query.value(2).toString(), //info
                                       query.value(3).toString(), //creator
+                                      query.value(7).toInt(),    //lastmod
                                       query.value(5).toBool(),   //shared
                                       query.value(4).toInt(),    //lastmod
                                       query.value(0).toString()  //GUID

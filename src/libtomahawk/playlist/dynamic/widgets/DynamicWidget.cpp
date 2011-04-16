@@ -65,7 +65,7 @@ DynamicWidget::DynamicWidget( const Tomahawk::dynplaylist_ptr& playlist, QWidget
 
     m_model = new DynamicModel( this );
     m_view = new DynamicView( this );
-    m_view->setModel( m_model );
+    m_view->setDynamicModel( m_model );
     m_view->setContentsMargins( 0, 0, 0, 0 );
     m_layout->addWidget( m_view, 1 );
 
@@ -171,6 +171,7 @@ DynamicWidget::loadDynamicPlaylist( const Tomahawk::dynplaylist_ptr& playlist )
 void
 DynamicWidget::onRevisionLoaded( const Tomahawk::DynamicPlaylistRevision& rev )
 {
+    Q_UNUSED( rev );
     qDebug() << "DynamicWidget::onRevisionLoaded";
     loadDynamicPlaylist( m_playlist );
     if( m_resolveOnNextLoad || !m_playlist->author()->isLocal() )
@@ -354,6 +355,7 @@ DynamicWidget::controlsChanged()
 void
 DynamicWidget::controlChanged( const Tomahawk::dyncontrol_ptr& control )
 {
+    Q_UNUSED( control );
     if( !m_playlist->author()->isLocal() )
         return;
     m_playlist->createNewRevision();

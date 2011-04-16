@@ -35,6 +35,8 @@ class DLLEXPORT ViewPage
 public:
     ViewPage() {}
 
+    virtual ~ViewPage() {}
+
     virtual QWidget* widget() = 0;
     virtual PlaylistInterface* playlistInterface() const = 0;
 
