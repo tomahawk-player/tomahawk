@@ -43,7 +43,7 @@ InfoSystemCache::InfoSystemCache( QObject* parent )
         QString cacheFile = cacheDir + '/' + QString::number( i );
         QDir dir( cacheDir );
         if( dir.exists() && QFile::exists( cacheFile ) )
-            QMetaObject::invokeMethod( this, "loadCache", Qt::AutoConnection, Q_ARG( Tomahawk::InfoSystem::InfoType, type ), Q_ARG( QString, cacheFile ) );
+            QMetaObject::invokeMethod( this, "loadCache", Qt::QueuedConnection, Q_ARG( Tomahawk::InfoSystem::InfoType, type ), Q_ARG( QString, cacheFile ) );
     }
 }
 
