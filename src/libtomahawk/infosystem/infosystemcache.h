@@ -57,6 +57,7 @@ private:
     QHash< InfoType, QHash< InfoCacheCriteria, QDateTime > > m_insertTimeCache;
     QHash< InfoType, QHash< InfoCacheCriteria, QDateTime > > m_maxTimeCache;
     QSet< InfoType > m_dirtySet;
+    int m_cacheRemainingToLoad;
 };
 
 } //namespace InfoSystem

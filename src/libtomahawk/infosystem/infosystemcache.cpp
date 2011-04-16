@@ -33,6 +33,7 @@ namespace InfoSystem
 
 InfoSystemCache::InfoSystemCache( QObject* parent )
     : QObject(parent)
+    , m_cacheRemainingToLoad( 0 )
 {
     qDebug() << Q_FUNC_INFO;
     QString cacheBaseDir = QDesktopServices::storageLocation( QDesktopServices::CacheLocation );
@@ -43,7 +44,10 @@ InfoSystemCache::InfoSystemCache( QObject* parent )
         QString cacheFile = cacheDir + '/' + QString::number( i );
         QDir dir( cacheDir );
         if( dir.exists() && QFile::exists( cacheFile ) )
+        {
+            m_cacheRemainingToLoad++;
             QMetaObject::invokeMethod( this, "loadCache", Qt::QueuedConnection, Q_ARG( Tomahawk::InfoSystem::InfoType, type ), Q_ARG( QString, cacheFile ) );
+        }
     }
 }
 
@@ -72,6 +76,13 @@ InfoSystemCache::getCachedInfoSlot( Tomahawk::InfoSystem::InfoCacheCriteria crit
     if ( !m_dataCache.contains( type ) || !m_dataCache[type].contains( criteria ) )
     {
         emit notInCache( criteria, caller, type, input, customData );
+        return;
+    }
+
+    if ( m_cacheRemainingToLoad > 0 )
+    {
+        qDebug() << "Cache not fully loaded, punting request for a bit";
+        QMetaObject::invokeMethod( this, "getCachedInfoSlot", Qt::QueuedConnection,  Q_ARG( Tomahawk::InfoSystem::InfoCacheCriteria, criteria ), Q_ARG( qint64, newMaxAge ), Q_ARG( QString, caller ), Q_ARG( Tomahawk::InfoSystem::InfoType, type ), Q_ARG( Tomahawk::InfoSystem::InfoCustomData, customData ) );
         return;
     }
     
@@ -153,6 +164,7 @@ InfoSystemCache::loadCache( Tomahawk::InfoSystem::InfoType type, const QString &
         m_insertTimeCache[type] = insertDateHash;
         m_maxTimeCache[type] = maxDateHash;
     }
+    m_cacheRemainingToLoad--;
 }
 
 
