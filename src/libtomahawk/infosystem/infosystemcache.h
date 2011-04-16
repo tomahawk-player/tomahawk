@@ -48,10 +48,11 @@ public slots:
     void getCachedInfoSlot( Tomahawk::InfoSystem::InfoCacheCriteria criteria, qint64 newMaxAge, QString caller, Tomahawk::InfoSystem::InfoType type, QVariant input, Tomahawk::InfoSystem::InfoCustomData customData );
     void updateCacheSlot( Tomahawk::InfoSystem::InfoCacheCriteria criteria, qint64 maxAge, Tomahawk::InfoSystem::InfoType type, QVariant output );
 
-private:
-    void loadCache( InfoType type, const QString &cacheFile );
-    void saveCache( InfoType type, const QString &cacheDir );
+private slots:
+    void loadCache( Tomahawk::InfoSystem::InfoType type, const QString &cacheFile );
+    void saveCache( Tomahawk::InfoSystem::InfoType type, const QString &cacheDir );
 
+private:
     QHash< InfoType, QHash< InfoCacheCriteria, QVariant > > m_dataCache;
     QHash< InfoType, QHash< InfoCacheCriteria, QDateTime > > m_insertTimeCache;
     QHash< InfoType, QHash< InfoCacheCriteria, QDateTime > > m_maxTimeCache;

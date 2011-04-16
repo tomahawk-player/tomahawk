@@ -43,7 +43,7 @@ InfoSystemCache::InfoSystemCache( QObject* parent )
         QString cacheFile = cacheDir + '/' + QString::number( i );
         QDir dir( cacheDir );
         if( dir.exists() && QFile::exists( cacheFile ) )
-            loadCache( type, cacheFile );
+            QMetaObject::invokeMethod( this, "loadCache", Qt::AutoConnection, Q_ARG( Tomahawk::InfoSystem::InfoType, type ), Q_ARG( QString, cacheFile ) );
     }
 }
 
@@ -122,7 +122,7 @@ InfoSystemCache::updateCacheSlot( Tomahawk::InfoSystem::InfoCacheCriteria criter
 
 
 void
-InfoSystemCache::loadCache( InfoType type, const QString &cacheFile )
+InfoSystemCache::loadCache( Tomahawk::InfoSystem::InfoType type, const QString &cacheFile )
 {
     qDebug() << Q_FUNC_INFO;
     QSettings cachedSettings( cacheFile, QSettings::IniFormat );
@@ -157,7 +157,7 @@ InfoSystemCache::loadCache( InfoType type, const QString &cacheFile )
 
 
 void
-InfoSystemCache::saveCache( InfoType type, const QString &cacheDir )
+InfoSystemCache::saveCache( Tomahawk::InfoSystem::InfoType type, const QString &cacheDir )
 {
     qDebug() << Q_FUNC_INFO;
     QDir dir( cacheDir );
