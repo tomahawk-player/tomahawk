@@ -50,6 +50,28 @@ macro_log_feature(QJSON_FOUND "QJson" "Qt library that maps JSON data to QVarian
 macro_optional_find_package(Taglib 1.6.0)
 macro_log_feature(TAGLIB_FOUND "TagLib" "Audio Meta-Data Library" "http://developer.kde.org/~wheeler/taglib.html" TRUE "" "taglib is needed for reading meta data from audio files")
 
+# this installs headers and such and should really be handled in a separate package by packagers
+IF( INTERNAL_JREEN )
+    ADD_SUBDIRECTORY( thirdparty/jreen )
+    SET( LIBJREEN_INCLUDE_DIR  ${CMAKE_CURRENT_BINARY_DIR}/thirdparty/jreen/include )
+
+    IF( UNIX AND NOT APPLE )
+        SET( LIBJREEN_LIBRARY ${CMAKE_CURRENT_BINARY_DIR}/thirdparty/jreen/libjreen.so )
+    ENDIF( UNIX AND NOT APPLE )
+    IF( APPLE )
+        SET( LIBJREEN_LIBRARY ${CMAKE_CURRENT_BINARY_DIR}/thirdparty/jreen/libjreen.dylib )
+    ENDIF( APPLE )
+    IF( WIN32 )
+        SET( LIBJREEN_LIBRARY ${CMAKE_CURRENT_BINARY_DIR}/thirdparty/jreen/libjreen.dll )
+    ENDIF( WIN32 )
+
+    SET( LIBJREEN_FOUND  true )
+    MESSAGE(STATUS "INTERNAL libjreen: ${LIBJREEN_INCLUDE_DIR}, ${LIBJREEN_LIBRARY}")
+ELSE( INTERNAL_JREEN )
+    macro_optional_find_package(Jreen)
+ENDIF( INTERNAL_JREEN )
+macro_log_feature(LIBJREEN_FOUND "Jreen" "Qt XMPP Library" "http://gitorious.org/jreen/jreen" FALSE "" "Jreen is needed for the Jabber SIP plugin. \n\n     Use -DINTERNAL_JREEN=ON to build the git submodule inside Tomahawk \n     Be aware this installs a full jreen with headers and everything!")
+
 # we need pthreads too
 find_package(Threads)
 
@@ -64,23 +86,6 @@ ENDIF()
 
 include( CheckTagLibFileName )
 check_taglib_filename( COMPLEX_TAGLIB_FILENAME )
-
-# optional
-macro_optional_find_package(Jreen)
-IF( NOT LIBJREEN_FOUND )
-    SET( CMAKE_C_FLAGS ${CLEAN_C_FLAGS} )
-    ADD_SUBDIRECTORY( thirdparty/jreen )
-    SET( LIBJREEN_INCLUDE_DIR  ${CMAKE_CURRENT_BINARY_DIR}/thirdparty/jreen/include )
-    IF( UNIX AND NOT APPLE )
-        SET( LIBJREEN_LIBRARY ${CMAKE_CURRENT_BINARY_DIR}/thirdparty/jreen/libjreen.so )
-    ENDIF( UNIX AND NOT APPLE )
-    IF( WIN32 )
-    	SET( LIBJREEN_LIBRARY ${CMAKE_CURRENT_BINARY_DIR}/thirdparty/jreen/libjreen.dll )
-    ENDIF( WIN32 )
-    SET( LIBJREEN_FOUND  true )
-    MESSAGE(STATUS "Internal libjreen: ${LIBJREEN_INCLUDE_DIR}, ${LIBJREEN_LIBRARY}")
-ENDIF( NOT LIBJREEN_FOUND )
-
 
 IF( WIN32 )
   find_library(QTSPARKLE_LIBRARIES qtsparkle)
