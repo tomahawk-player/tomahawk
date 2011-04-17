@@ -106,8 +106,8 @@ JabberPlugin::connectPlugin( bool startup )
     QObject::connect( p, SIGNAL( peerOffline( QString ) ), SIGNAL( peerOffline( QString ) ) );
     QObject::connect( p, SIGNAL( msgReceived( QString, QString ) ), SIGNAL( msgReceived( QString, QString ) ) );
 
-    QObject::connect( p, SIGNAL( connected() ), SIGNAL( onConnected() ) );
-    QObject::connect( p, SIGNAL( disconnected() ), SIGNAL( onDisconnected() ) );
+    QObject::connect( p, SIGNAL( connected() ), SLOT( onConnected() ) );
+    QObject::connect( p, SIGNAL( disconnected() ), SLOT( onDisconnected() ) );
 
     return true;
 }
