@@ -8,10 +8,10 @@ ENDIF( ${CMAKE_VERSION} VERSION_GREATER 2.8.3 )
 ###
 ### Tomahawk application info
 ###
-SET( ORGANIZATION_NAME "Tomahawk" )
-SET( ORGANIZATION_DOMAIN "tomahawk-player.org" )
-SET( APPLICATION_NAME  "Tomahawk" )
-SET( VERSION "0.0.3" )
+SET( TOMAHAWK_ORGANIZATION_NAME "Tomahawk" )
+SET( TOMAHAWK_ORGANIZATION_DOMAIN "tomahawk-player.org" )
+SET( TOMAHAWK_APPLICATION_NAME  "Tomahawk" )
+SET( TOMAHAWK_VERSION "0.0.3" )
 
 
 # set paths
@@ -50,6 +50,28 @@ macro_log_feature(QJSON_FOUND "QJson" "Qt library that maps JSON data to QVarian
 macro_optional_find_package(Taglib 1.6.0)
 macro_log_feature(TAGLIB_FOUND "TagLib" "Audio Meta-Data Library" "http://developer.kde.org/~wheeler/taglib.html" TRUE "" "taglib is needed for reading meta data from audio files")
 
+# this installs headers and such and should really be handled in a separate package by packagers
+IF( INTERNAL_JREEN )
+    ADD_SUBDIRECTORY( thirdparty/jreen )
+    SET( LIBJREEN_INCLUDE_DIR  ${CMAKE_CURRENT_BINARY_DIR}/thirdparty/jreen/include )
+
+    IF( UNIX AND NOT APPLE )
+        SET( LIBJREEN_LIBRARY ${CMAKE_CURRENT_BINARY_DIR}/thirdparty/jreen/libjreen.so )
+    ENDIF( UNIX AND NOT APPLE )
+    IF( APPLE )
+        SET( LIBJREEN_LIBRARY ${CMAKE_CURRENT_BINARY_DIR}/thirdparty/jreen/libjreen.dylib )
+    ENDIF( APPLE )
+    IF( WIN32 )
+        SET( LIBJREEN_LIBRARY ${CMAKE_CURRENT_BINARY_DIR}/thirdparty/jreen/libjreen.dll )
+    ENDIF( WIN32 )
+
+    SET( LIBJREEN_FOUND  true )
+    MESSAGE(STATUS "INTERNAL libjreen: ${LIBJREEN_INCLUDE_DIR}, ${LIBJREEN_LIBRARY}")
+ELSE( INTERNAL_JREEN )
+    macro_optional_find_package(Jreen)
+ENDIF( INTERNAL_JREEN )
+macro_log_feature(LIBJREEN_FOUND "Jreen" "Qt XMPP Library" "http://gitorious.org/jreen/jreen" FALSE "" "Jreen is needed for the Jabber SIP plugin. \n\n     Use -DINTERNAL_JREEN=ON to build the git submodule inside Tomahawk \n     Be aware this installs a full jreen with headers and everything!")
+
 # we need pthreads too
 find_package(Threads)
 
@@ -64,32 +86,6 @@ ENDIF()
 
 include( CheckTagLibFileName )
 check_taglib_filename( COMPLEX_TAGLIB_FILENAME )
-
-# optional
-IF( ENABLE_JREEN )
-  macro_optional_find_package(Jreen)
-  IF( LIBJREEN_FOUND )
-    macro_log_feature(JREEN_FOUND "Jreen" "Qt XMPP library" "http://gitorious.org/jreen" FALSE "" "Jreen is needed for the alternative/new Jabber SIP plugin. Built automatically inside Tomahawk, if not installed systemwide and ENABLE_JREEN is true")
-  ELSE( LIBJREEN_FOUND )
-    SET( OLD_C_FLAGS ${CMAKE_C_FLAGS} )
-    SET( CMAKE_C_FLAGS ${CLEAN_C_FLAGS} )
-    ADD_SUBDIRECTORY( thirdparty/jreen )
-    SET( LIBJREEN_INCLUDE_DIR  ${CMAKE_CURRENT_BINARY_DIR}/thirdparty/jreen/include )
-    IF( UNIX AND NOT APPLE )
-        SET( LIBJREEN_LIBRARY ${CMAKE_CURRENT_BINARY_DIR}/thirdparty/jreen/libjreen.so )
-    ENDIF( UNIX AND NOT APPLE )
-    IF( WIN32 )
-    	SET( LIBJREEN_LIBRARY ${CMAKE_CURRENT_BINARY_DIR}/thirdparty/jreen/libjreen.dll )
-    ENDIF( WIN32 )
-    SET( LIBJREEN_FOUND  true )
-    MESSAGE(STATUS "Internal libjreen: ${LIBJREEN_INCLUDE_DIR}, ${LIBJREEN_LIBRARY}")
-    SET( CMAKE_C_FLAGS ${OLD_C_FLAGS} )
-  ENDIF( LIBJREEN_FOUND )
-ELSE( LIBJREEN_FOUND )
-  macro_optional_find_package(Gloox 1.0)
-  macro_log_feature(GLOOX_FOUND "Gloox" "A portable high-level Jabber/XMPP library for C++" "http://camaya.net/gloox" FALSE "" "Gloox is needed for the Jabber SIP plugin and the XMPP-Bot")
-
-ENDIF( ENABLE_JREEN )
 
 IF( WIN32 )
   find_library(QTSPARKLE_LIBRARIES qtsparkle)
