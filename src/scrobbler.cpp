@@ -74,15 +74,15 @@ Scrobbler::trackStarted( const Tomahawk::result_ptr& track )
         scrobble();
     }
 
-    Tomahawk::InfoSystem::InfoCustomData trackInfo;
+    Tomahawk::InfoSystem::InfoCriteriaHash trackInfo;
 
-    trackInfo["title"] = QVariant::fromValue< QString >( track->track() );
-    trackInfo["artist"] = QVariant::fromValue< QString >( track->artist()->name() );
-    trackInfo["album"] = QVariant::fromValue< QString >( track->album()->name() );
-    trackInfo["duration"] = QVariant::fromValue< uint >( track->duration() );
+    trackInfo["title"] = track->track();
+    trackInfo["artist"] = track->artist()->name();
+    trackInfo["album"] = track->album()->name();
+    trackInfo["duration"] = QString::number( track->duration() );
     Tomahawk::InfoSystem::InfoSystem::instance()->getInfo(
         s_scInfoIdentifier, Tomahawk::InfoSystem::InfoMiscSubmitNowPlaying,
-        QVariant::fromValue< Tomahawk::InfoSystem::InfoCustomData >( trackInfo ), Tomahawk::InfoSystem::InfoCustomData() );
+        QVariant::fromValue< Tomahawk::InfoSystem::InfoCriteriaHash >( trackInfo ), Tomahawk::InfoSystem::InfoCustomData() );
 
     m_scrobblePoint = ScrobblePoint( track->duration() / 2 );
 }

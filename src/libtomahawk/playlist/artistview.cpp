@@ -223,12 +223,12 @@ ArtistView::onScrollTimeout()
     {
         TreeModelItem* item = m_model->itemFromIndex( m_proxyModel->mapToSource( m_proxyModel->index( i, 0 ) ) );
 
-        Tomahawk::InfoSystem::InfoCustomData trackInfo;
-        trackInfo["artist"] = QVariant::fromValue< QString >( item->artist()->name() );
-        trackInfo["pptr"] = QVariant::fromValue< qlonglong >( (qlonglong)item );
+        Tomahawk::InfoSystem::InfoCriteriaHash trackInfo;
+        trackInfo["artist"] = item->artist()->name();
+        trackInfo["pptr"] = QString::number( (qlonglong)item );
 
         Tomahawk::InfoSystem::InfoSystem::instance()->getInfo(
             s_tmInfoIdentifier, Tomahawk::InfoSystem::InfoArtistImages,
-            QVariant::fromValue< Tomahawk::InfoSystem::InfoCustomData >( trackInfo ), Tomahawk::InfoSystem::InfoCustomData() );
+            QVariant::fromValue< Tomahawk::InfoSystem::InfoCriteriaHash >( trackInfo ), Tomahawk::InfoSystem::InfoCustomData() );
     }
 }
