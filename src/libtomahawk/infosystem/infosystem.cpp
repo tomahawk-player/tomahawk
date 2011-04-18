@@ -40,21 +40,21 @@ InfoPlugin::InfoPlugin(QObject *parent)
         {
             QObject::connect(
                 this,
-                SIGNAL( getCachedInfo( Tomahawk::InfoSystem::InfoCacheCriteria, qint64, QString, Tomahawk::InfoSystem::InfoType, QVariant, Tomahawk::InfoSystem::InfoCustomData ) ),
+                SIGNAL( getCachedInfo( Tomahawk::InfoSystem::InfoCriteriaHash, qint64, QString, Tomahawk::InfoSystem::InfoType, QVariant, Tomahawk::InfoSystem::InfoCustomData ) ),
                 system->getCache(),
-                SLOT( getCachedInfoSlot( Tomahawk::InfoSystem::InfoCacheCriteria, qint64, QString, Tomahawk::InfoSystem::InfoType, QVariant, Tomahawk::InfoSystem::InfoCustomData ) )
+                SLOT( getCachedInfoSlot( Tomahawk::InfoSystem::InfoCriteriaHash, qint64, QString, Tomahawk::InfoSystem::InfoType, QVariant, Tomahawk::InfoSystem::InfoCustomData ) )
             );
             QObject::connect(
                 system->getCache(),
-                SIGNAL( notInCache( Tomahawk::InfoSystem::InfoCacheCriteria, QString, Tomahawk::InfoSystem::InfoType, QVariant, Tomahawk::InfoSystem::InfoCustomData ) ),
+                SIGNAL( notInCache( Tomahawk::InfoSystem::InfoCriteriaHash, QString, Tomahawk::InfoSystem::InfoType, QVariant, Tomahawk::InfoSystem::InfoCustomData ) ),
                 this,
-                SLOT( notInCacheSlot( Tomahawk::InfoSystem::InfoCacheCriteria, QString, Tomahawk::InfoSystem::InfoType, QVariant, Tomahawk::InfoSystem::InfoCustomData ) )
+                SLOT( notInCacheSlot( Tomahawk::InfoSystem::InfoCriteriaHash, QString, Tomahawk::InfoSystem::InfoType, QVariant, Tomahawk::InfoSystem::InfoCustomData ) )
             );
             QObject::connect(
                 this,
-                SIGNAL( updateCache( Tomahawk::InfoSystem::InfoCacheCriteria, qint64, Tomahawk::InfoSystem::InfoType, QVariant ) ),
+                SIGNAL( updateCache( Tomahawk::InfoSystem::InfoCriteriaHash, qint64, Tomahawk::InfoSystem::InfoType, QVariant ) ),
                 system->getCache(),
-                SLOT( updateCacheSlot( Tomahawk::InfoSystem::InfoCacheCriteria, qint64, Tomahawk::InfoSystem::InfoType, QVariant ) )
+                SLOT( updateCacheSlot( Tomahawk::InfoSystem::InfoCriteriaHash, qint64, Tomahawk::InfoSystem::InfoType, QVariant ) )
             );
         }
     }
@@ -76,7 +76,7 @@ InfoSystem::InfoSystem(QObject *parent)
     qDebug() << Q_FUNC_INFO;
     qRegisterMetaType< QMap< QString, QMap< QString, QString > > >( "Tomahawk::InfoSystem::InfoGenericMap" );
     qRegisterMetaType< QHash< QString, QVariant > >( "Tomahawk::InfoSystem::InfoCustomData" );
-    qRegisterMetaType< QHash< QString, QString > >( "Tomahawk::InfoSystem::InfoCacheCriteria" );
+    qRegisterMetaType< QHash< QString, QString > >( "Tomahawk::InfoSystem::InfoCriteriaHash" );
     qRegisterMetaType< Tomahawk::InfoSystem::InfoType >( "Tomahawk::InfoSystem::InfoType" );
 
     m_infoSystemCacheThreadController = new QThread( this );
