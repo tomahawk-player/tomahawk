@@ -1,5 +1,6 @@
 /* === This file is part of Tomahawk Player - <http://tomahawk-player.org> ===
- * 
+ *
+ *   Copyright 2010-2011, Dominik Schmidt <dev@dominik-schmidt.de>
  *   Copyright 2010-2011, Christian Muehlhaeuser <muesli@tomahawk-player.org>
  *
  *   Tomahawk is free software: you can redistribute it and/or modify
@@ -17,6 +18,16 @@
  */
 
 #include "jabber_p.h"
+#include "tomahawksipmessage.h"
+#include "tomahawksipmessagefactory.h"
+
+#include "config.h"
+#include "utils/tomahawkutils.h"
+
+#include <jreen/capabilities.h>
+
+#include <qjson/parser.h>
+#include <qjson/serializer.h>
 
 #include <QDebug>
 #include <QTime>
@@ -24,58 +35,53 @@
 #include <QString>
 #include <QRegExp>
 #include <QThread>
-#include <utils/tomahawkutils.h>
+#include <QVariant>
+#include <QMap>
 
-#include <jreen/abstractroster.h>
-#include <jreen/capabilities.h>
+#define TOMAHAWK_FEATURE QLatin1String( "tomahawk:sip:v1" )
 
-
-//remove
-#include <QMessageBox>
-#include <jreen/connection.h>
-
-using namespace std;
-
-
-#define TOMAHAWK_CAP_NODE_NAME QLatin1String("http://tomahawk-player.org/")
+#define TOMAHAWK_CAP_NODE_NAME QLatin1String( "http://tomahawk-player.org/" )
 
 Jabber_p::Jabber_p( const QString& jid, const QString& password, const QString& server, const int port )
     : QObject()
     , m_server()
 {
     qDebug() << Q_FUNC_INFO;
-    //qsrand( QTime( 0, 0, 0 ).secsTo( QTime::currentTime() ) );
     qsrand(QDateTime::currentDateTime().toTime_t());
 
-    m_presences[Jreen::Presence::Available] = "available";
-    m_presences[Jreen::Presence::Chat] = "chat";
-    m_presences[Jreen::Presence::Away] = "away";
-    m_presences[Jreen::Presence::DND] = "dnd";
-    m_presences[Jreen::Presence::XA] = "xa";
-    m_presences[Jreen::Presence::Unavailable] = "unavailable";
-    m_presences[Jreen::Presence::Probe] = "probe";
-    m_presences[Jreen::Presence::Error] = "error";
-    m_presences[Jreen::Presence::Invalid] = "invalid";
-
+    // setup JID object
     m_jid = Jreen::JID( jid );
 
+    // general client setup
     m_client = new Jreen::Client( jid, password );
-    m_client->setResource( QString( "tomahawk-jreen%1" ).arg( QString::number( qrand() % 10000 ) ) );
+    m_client->registerStanzaExtension(new TomahawkSipMessageFactory);
+    m_client->setResource( QString( "tomahawk%1" ).arg( QString::number( qrand() % 10000 ) ) );
 
+    // setup disco
+    m_client->disco()->setSoftwareVersion( "Tomahawk Player", TOMAHAWK_VERSION, CMAKE_SYSTEM );
+    m_client->disco()->addIdentity( Jreen::Disco::Identity( "client", "type", "tomahawk", "en" ) );
+    m_client->disco()->addFeature( TOMAHAWK_FEATURE );
+
+    // setup caps node, legacy peer detection - used before 0.1
     Jreen::Capabilities::Ptr caps = m_client->presence().findExtension<Jreen::Capabilities>();
-    caps->setNode(TOMAHAWK_CAP_NODE_NAME);
+    caps->setNode( TOMAHAWK_CAP_NODE_NAME );
 
+    // print connection parameters
     qDebug() << "Our JID set to:" << m_client->jid().full();
     qDebug() << "Our Server set to:" << m_client->server();
     qDebug() << "Our Port set to" << m_client->port();
 
+    // setup slots
     connect(m_client->connection(), SIGNAL(error(SocketError)), SLOT(onError(SocketError)));
     connect(m_client, SIGNAL(serverFeaturesReceived(QSet<QString>)), SLOT(onConnect()));
     connect(m_client, SIGNAL(disconnected(Jreen::Client::DisconnectReason)), SLOT(onDisconnect(Jreen::Client::DisconnectReason)));
     connect(m_client, SIGNAL(destroyed(QObject*)), this, SLOT(onDestroy()));
     connect(m_client, SIGNAL(newMessage(Jreen::Message)), SLOT(onNewMessage(Jreen::Message)));
     connect(m_client, SIGNAL(newPresence(Jreen::Presence)), SLOT(onNewPresence(Jreen::Presence)));
+    connect(m_client, SIGNAL(newIQ(Jreen::IQ)), SLOT(onNewIq(Jreen::IQ)));
 
+
+    // connect
     qDebug() << "Connecting to the XMPP server...";
     m_client->connectToServer();
 }
@@ -105,28 +111,57 @@ Jabber_p::disconnect()
 void
 Jabber_p::sendMsg( const QString& to, const QString& msg )
 {
-    qDebug() << Q_FUNC_INFO;
-    if ( QThread::currentThread() != thread() )
-    {
-        qDebug() << Q_FUNC_INFO << "invoking in correct thread, not"
-                 << QThread::currentThread();
-
-        QMetaObject::invokeMethod( this, "sendMsg",
-                                   Qt::QueuedConnection,
-                                   Q_ARG( const QString, to ),
-                                   Q_ARG( const QString, msg )
-                                 );
-        return;
-    }
+    qDebug() << Q_FUNC_INFO << to << msg;
 
     if ( !m_client ) {
         return;
     }
 
-    qDebug() << Q_FUNC_INFO << to << msg;
-    Jreen::Message m( Jreen::Message::Chat, Jreen::JID(to), msg);
+    if( m_legacy_peers.contains( to ) )
+    {
+        qDebug() << Q_FUNC_INFO << to << "Send legacy message" << msg;
+        Jreen::Message m( Jreen::Message::Chat, Jreen::JID(to), msg);
+        m_client->send( m );
 
-    m_client->send( m ); // assuming this is threadsafe
+        return;
+    }
+
+
+    /*******************************************************
+     * Obsolete this by a SipMessage class
+     */
+    QJson::Parser parser;
+    bool ok;
+    QVariant v = parser.parse( msg.toAscii(), &ok );
+    if ( !ok  || v.type() != QVariant::Map )
+    {
+        qDebug() << "Invalid JSON in XMPP msg";
+        return;
+    }
+    QVariantMap m = v.toMap();
+    /*******************************************************/
+
+    TomahawkSipMessage *sipMessage;
+    if(m["visible"].toBool())
+    {
+        sipMessage = new TomahawkSipMessage(m["ip"].toString(),
+                                            m["port"].toInt(),
+                                            m["uniqname"].toString(),
+                                            m["key"].toString(),
+                                            m["visible"].toBool()
+                                            );
+    }
+    else
+    {
+        sipMessage = new TomahawkSipMessage();
+    }
+
+
+    qDebug() << "Send sip messsage to " << to;
+    Jreen::IQ iq( Jreen::IQ::Set, to );
+    iq.addExtension( sipMessage );
+
+    m_client->send( iq, this, SLOT( onNewIq( Jreen::IQ, int ) ), SipMessageSent );
 }
 
 
@@ -134,23 +169,13 @@ void
 Jabber_p::broadcastMsg( const QString &msg )
 {
     qDebug() << Q_FUNC_INFO;
-    if ( QThread::currentThread() != thread() )
-    {
-        QMetaObject::invokeMethod( this, "broadcastMsg",
-                                   Qt::QueuedConnection,
-                                   Q_ARG(const QString, msg)
-                                 );
-        return;
-    }
 
     if ( !m_client )
         return;
 
     foreach( const QString& jidstr, m_peers.keys() )
     {
-        qDebug() << "Broadcasting to" << jidstr <<"...";
-        Jreen::Message m(Jreen::Message::Chat, Jreen::JID(jidstr), msg, "");
-        m_client->send( m );
+        sendMsg( jidstr, msg );
     }
 }
 
@@ -158,16 +183,6 @@ Jabber_p::broadcastMsg( const QString &msg )
 void
 Jabber_p::addContact( const QString& jid, const QString& msg )
 {
-    if ( QThread::currentThread() != thread() )
-    {
-        QMetaObject::invokeMethod( this, "addContact",
-                                   Qt::QueuedConnection,
-                                   Q_ARG(const QString, jid),
-                                   Q_ARG(const QString, msg)
-                                 );
-        return;
-    }
-
     // Add contact to the Tomahawk group on the roster
     m_roster->add( jid, jid, QStringList() << "Tomahawk" );
 
@@ -183,6 +198,7 @@ Jabber_p::onConnect()
     // have changed our requested /resource
     if ( m_client->jid().resource() != m_jid.resource() )
     {
+        // TODO: check if this is still neccessary with jreen
         m_jid.setResource( m_client->jid().resource() );
         QString jidstr( m_jid.full() );
         emit jidChanged( jidstr );
@@ -191,22 +207,27 @@ Jabber_p::onConnect()
     emit connected();
     qDebug() << "Connected as:" << m_jid.full();
 
-    m_client->setPresence(Jreen::Presence::Available, "Tomahawk-JREEN available", 1);
-    m_client->disco()->setSoftwareVersion( "Tomahawk JREEN", "0.0.0.0", "Foobar" );
-    m_client->setPingInterval(60000);
+    // set presence to least valid value
+    m_client->setPresence(Jreen::Presence::XA, "Got Tomahawk? http://gettomahawk.com", -127);
+
+    // set ping timeout to 15 secs (TODO: verify if this works)
+    m_client->setPingInterval(15000);
+
+    // load roster
     m_roster = new Jreen::SimpleRoster( m_client );
     m_roster->load();
 
+    //FIXME: this implementation is totally broken atm, so it's disabled to avoid harm :P
     // join MUC with bare jid as nickname
     //TODO: make the room a list of rooms and make that configurable
-    QString bare(m_jid.bare());
-    m_room = new Jreen::MUCRoom(m_client, Jreen::JID(QString("tomahawk@conference.qutim.org/").append(bare.replace("@", "-"))));
+    QString mucNickname = QString( "tomahawk@conference.qutim.org/" ).append( QString( m_jid.bare() ).replace( "@", "-" ) );
+    m_room = new Jreen::MUCRoom(m_client, Jreen::JID( mucNickname ) );
     //m_room->setHistorySeconds(0);
     //m_room->join();
 
     // treat muc participiants like contacts
-    connect(m_room, SIGNAL(messageReceived(Jreen::Message, bool)), this, SLOT(onNewMessage(Jreen::Message)));
-    connect(m_room, SIGNAL(presenceReceived(Jreen::Presence,const Jreen::MUCRoom::Participant*)), this, SLOT(onNewPresence(Jreen::Presence)));
+    connect( m_room, SIGNAL( messageReceived( Jreen::Message, bool ) ), this, SLOT( onNewMessage( Jreen::Message ) ) );
+    connect( m_room, SIGNAL( presenceReceived( Jreen::Presence, const Jreen::MUCRoom::Participant* ) ), this, SLOT( onNewPresence( Jreen::Presence ) ) );
 }
 
 
@@ -262,6 +283,10 @@ Jabber_p::onDisconnect( Jreen::Client::DisconnectReason reason )
     }
 
     qDebug() << "Disconnected from server:" << error;
+    if( reason != Jreen::Client::User )
+    {
+        emit authError( reason, error );
+    }
 
     if(reconnect)
         QTimer::singleShot(reconnectInSeconds*1000, m_client, SLOT(connectToServer()));
@@ -278,81 +303,151 @@ Jabber_p::onNewMessage( const Jreen::Message& m )
     if ( msg.isEmpty() )
         return;
 
-    qDebug() << Q_FUNC_INFO << m.from().full() << ":" << m.body();
+    QJson::Parser parser;
+    bool ok;
+    QVariant v = parser.parse( msg.toAscii(), &ok );
+    if ( !ok  || v.type() != QVariant::Map )
+    {
+        QString to = from;
+        QString response = QString( tr("I'm sorry -- I'm just an automatic presence used by Tomahawk Player"
+                                    " (http://gettomahawk.com). If you are getting this message, the person you"
+                                    " are trying to reach is probably not signed on, so please try again later!") );
+
+        // this is not a sip message, so we send it directly through the client
+        m_client->send( Jreen::Message ( Jreen::Message::Chat, Jreen::JID(to), response) );
+
+        return;
+    }
+
+    qDebug() << Q_FUNC_INFO << "From:" << m.from().full() << ":" << m.body();
     emit msgReceived( from, msg );
 }
 
 
 void Jabber_p::onNewPresence( const Jreen::Presence& presence)
 {
-
     Jreen::JID jid = presence.from();
     QString fulljid( jid.full() );
 
-    qDebug() << Q_FUNC_INFO << "handle presence" << fulljid << presence.subtype();
+    qDebug() << Q_FUNC_INFO << "* New presence: " << fulljid << presence.subtype();
 
     if( jid == m_jid )
         return;
 
     if ( presence.error() ) {
-        qDebug() << Q_FUNC_INFO << "presence error: no tomahawk";
+        //qDebug() << Q_FUNC_INFO << fulljid << "Running tomahawk: no" << "presence error";
         return;
     }
 
-    // ignore anyone not running tomahawk:
+    // ignore anyone not Running tomahawk:
     Jreen::Capabilities::Ptr caps = presence.findExtension<Jreen::Capabilities>();
-    if ( caps && (caps->node() == TOMAHAWK_CAP_NODE_NAME ))
+    if ( caps && ( caps->node() == TOMAHAWK_CAP_NODE_NAME ) )
     {
-        qDebug() << Q_FUNC_INFO << presence.from().full() << "tomahawk detected by caps";
+        // must be a jreen resource, implementation in gloox was broken
+        qDebug() << Q_FUNC_INFO << fulljid << "Running tomahawk: yes" << "caps " << caps->node();
+        handlePeerStatus( fulljid, presence.subtype() );
     }
-    // this is a hack actually as long as gloox based libsip_jabber is around
-    // remove this as soon as everyone is using jreen
-    else if( presence.from().resource().startsWith( QLatin1String("tomahawk") ) )
+    else if( caps )
     {
-        qDebug() << Q_FUNC_INFO << presence.from().full() << "tomahawk detected by resource";
-    }
-    else if( caps && caps->node() != TOMAHAWK_CAP_NODE_NAME )
-    {
-        qDebug() << Q_FUNC_INFO << presence.from().full() << "*no tomahawk* detected by caps!" << caps->node() << presence.from().resource();
-        return;
+        qDebug() << Q_FUNC_INFO << fulljid << "Running tomahawk: maybe" << "caps " << caps->node()
+            << "requesting disco..";
+
+        // request disco features
+        QString node = caps->node() + '#' + caps->ver();
+
+        Jreen::IQ iq( Jreen::IQ::Get, jid );
+        iq.addExtension( new Jreen::Disco::Info( node ) );
+
+        m_client->send( iq, this, SLOT( onNewIq( Jreen::IQ, int ) ), RequestDisco );
     }
     else if( !caps )
     {
-        qDebug() << Q_FUNC_INFO << "no tomahawk detected by resource and !caps";
-        return;
+        qDebug() << Q_FUNC_INFO << "Running tomahawk: no" << "no caps";
     }
+}
 
-    qDebug() << Q_FUNC_INFO << fulljid << " is a tomahawk resource.";
-
-    // "going offline" event
-    if ( !presenceMeansOnline( presence.subtype() ) &&
-         ( !m_peers.contains( fulljid ) ||
-           presenceMeansOnline( m_peers.value( fulljid ) )
-         )
-       )
+void
+Jabber_p::onNewIq( const Jreen::IQ &iq, int context )
+{
+    if( context == RequestDisco )
     {
-        m_peers[ fulljid ] = presence.subtype();
-        qDebug() << Q_FUNC_INFO << "* Peer goes offline:" << fulljid;
-        emit peerOffline( fulljid );
-        return;
-    }
+        qDebug() << Q_FUNC_INFO << "Received disco IQ...";
+        Jreen::Disco::Info *discoInfo = iq.findExtension<Jreen::Disco::Info>().data();
+        if(!discoInfo)
+            return;
+        iq.accept();
 
-    // "coming online" event
-    if( presenceMeansOnline( presence.subtype() ) &&
-        ( !m_peers.contains( fulljid ) ||
-          !presenceMeansOnline( m_peers.value( fulljid ) )
-        )
-       )
+        QString fulljid = iq.from().full();
+        Jreen::DataForm::Ptr form = discoInfo->form();
+
+        if(discoInfo->features().contains( TOMAHAWK_FEATURE ))
+        {
+            qDebug() << Q_FUNC_INFO << fulljid << "Running tomahawk/feature enabled: yes";
+
+            // the actual presence doesn't matter, it just needs to be "online"
+            handlePeerStatus( fulljid, Jreen::Presence::Available );
+        }
+        else
+        {
+            qDebug() << Q_FUNC_INFO << fulljid << "Running tomahawk/feature enabled: no";
+
+            //LEGACY: accept resources starting with tomahawk too
+            if( iq.from().resource().startsWith("tomahawk") )
+            {
+                qDebug() << Q_FUNC_INFO << fulljid << "Detected legacy tomahawk..";
+
+                // add to legacy peers, so we can send text messages instead of iqs
+                m_legacy_peers.append( fulljid );
+
+                handlePeerStatus( fulljid, Jreen::Presence::Available );
+            }
+        }
+    }
+    else if(context == RequestedDisco)
     {
-        m_peers[ fulljid ] = presence.subtype();
-        qDebug() << Q_FUNC_INFO << "* Peer goes online:" << fulljid;
-        emit peerOnline( fulljid );
-        return;
+        qDebug() << "Sent IQ(Set), what should be happening here?";
     }
+    else if(context == SipMessageSent )
+    {
+        qDebug() << "Sent SipMessage... what now?!";
+    }
+    else
+    {
+        TomahawkSipMessage *sipMessage = iq.findExtension<TomahawkSipMessage>().data();
+        if(sipMessage)
+        {
+            qDebug() << Q_FUNC_INFO << "Got SipMessage ...";
+            qDebug() << "ip" << sipMessage->ip();
+            qDebug() << "port" << sipMessage->port();
+            qDebug() << "uniqname" << sipMessage->uniqname();
+            qDebug() << "key" << sipMessage->key();
+            qDebug() << "visible" << sipMessage->visible();
 
-    //qDebug() << "Updating presence data for" << fulljid;
-    m_peers[ fulljid ] = presence.subtype();
 
+            QVariantMap m;
+            if( sipMessage->visible() )
+            {
+                m["visible"] = true;
+                m["ip"] = sipMessage->ip();
+                m["port"] = sipMessage->port();
+                m["key"] = sipMessage->key();
+                m["uniqname"] = sipMessage->uniqname();
+            }
+            else
+            {
+                m["visible"] = false;
+            }
+
+
+            QJson::Serializer ser;
+            QByteArray ba = ser.serialize( m );
+            QString msg = QString::fromAscii( ba );
+
+            QString from = iq.from().full();
+            qDebug() << Q_FUNC_INFO << "From:" << from << ":" << msg;
+            emit msgReceived( from, msg );
+        }
+    }
 }
 
 bool
@@ -369,3 +464,44 @@ Jabber_p::presenceMeansOnline( Jreen::Presence::Type p )
             return true;
     }
 }
+
+void
+Jabber_p::handlePeerStatus( const QString& fulljid, Jreen::Presence::Type presenceType )
+{
+    // "going offline" event
+    if ( !presenceMeansOnline( presenceType ) &&
+         ( !m_peers.contains( fulljid ) ||
+           presenceMeansOnline( m_peers.value( fulljid ) )
+         )
+       )
+    {
+        m_peers[ fulljid ] = presenceType;
+        qDebug() << Q_FUNC_INFO << "* Peer goes offline:" << fulljid;
+
+        // remove peer from legacy peers
+        if( m_legacy_peers.contains( fulljid ) )
+        {
+            m_legacy_peers.removeAll( fulljid );
+        }
+
+        emit peerOffline( fulljid );
+        return;
+    }
+
+    // "coming online" event
+    if( presenceMeansOnline( presenceType ) &&
+        ( !m_peers.contains( fulljid ) ||
+          !presenceMeansOnline( m_peers.value( fulljid ) )
+        )
+       )
+    {
+        m_peers[ fulljid ] = presenceType;
+        qDebug() << Q_FUNC_INFO << "* Peer goes online:" << fulljid;
+        emit peerOnline( fulljid );
+        return;
+    }
+
+    //qDebug() << "Updating presence data for" << fulljid;
+    m_peers[ fulljid ] = presenceType;
+}
+

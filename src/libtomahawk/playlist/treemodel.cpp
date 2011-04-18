@@ -476,14 +476,14 @@ TreeModel::onAlbumsAdded( const QList<Tomahawk::album_ptr>& albums, const QVaria
         albumitem->index = createIndex( parentItem->children.count() - 1, 0, albumitem );
         connect( albumitem, SIGNAL( dataChanged() ), SLOT( onDataChanged() ) );
 
-        Tomahawk::InfoSystem::InfoCustomData trackInfo;
-        trackInfo["artist"] = QVariant::fromValue< QString >( album->artist()->name() );
-        trackInfo["album"] = QVariant::fromValue< QString >( album->name() );
-        trackInfo["pptr"] = QVariant::fromValue< qlonglong >( (qlonglong)albumitem );
+        Tomahawk::InfoSystem::InfoCriteriaHash trackInfo;
+        trackInfo["artist"] = album->artist()->name();
+        trackInfo["album"] = album->name();
+        trackInfo["pptr"] = QString::number( (qlonglong)albumitem );
 
         Tomahawk::InfoSystem::InfoSystem::instance()->getInfo(
             s_tmInfoIdentifier, Tomahawk::InfoSystem::InfoAlbumCoverArt,
-            QVariant::fromValue< Tomahawk::InfoSystem::InfoCustomData >( trackInfo ), Tomahawk::InfoSystem::InfoCustomData() );
+            QVariant::fromValue< Tomahawk::InfoSystem::InfoCriteriaHash >( trackInfo ), Tomahawk::InfoSystem::InfoCustomData() );
     }
 
     if ( crows.second > 0 )
@@ -555,7 +555,7 @@ TreeModel::infoSystemInfo( QString caller, Tomahawk::InfoSystem::InfoType type, 
         return;
     }
 
-    Tomahawk::InfoSystem::InfoCustomData pptr = input.value< Tomahawk::InfoSystem::InfoCustomData >();
+    Tomahawk::InfoSystem::InfoCriteriaHash pptr = input.value< Tomahawk::InfoSystem::InfoCriteriaHash >();
     Tomahawk::InfoSystem::InfoCustomData returnedData = output.value< Tomahawk::InfoSystem::InfoCustomData >();
     const QByteArray ba = returnedData["imgbytes"].toByteArray();
     if ( ba.length() )
@@ -563,7 +563,8 @@ TreeModel::infoSystemInfo( QString caller, Tomahawk::InfoSystem::InfoType type, 
         QPixmap pm;
         pm.loadFromData( ba );
 
-        qlonglong p = pptr["pptr"].toLongLong();
+        bool ok;
+        qlonglong p = pptr["pptr"].toLongLong( &ok );
         TreeModelItem* ai = reinterpret_cast<TreeModelItem*>(p);
 
         if ( pm.isNull() )

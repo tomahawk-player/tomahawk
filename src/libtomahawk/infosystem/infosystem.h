@@ -97,7 +97,7 @@ enum InfoType {
 typedef QMap< InfoType, QVariant > InfoMap;
 typedef QMap< QString, QMap< QString, QString > > InfoGenericMap;
 typedef QHash< QString, QVariant > InfoCustomData;
-typedef QHash< QString, QString > InfoCacheCriteria;
+typedef QHash< QString, QString > InfoCriteriaHash;
 
 class DLLEXPORT InfoPlugin : public QObject
 {
@@ -114,14 +114,14 @@ public:
     virtual void getInfo( const QString &caller, const InfoType type, const QVariant &data, InfoCustomData customData ) = 0;
 
 signals:
-    void getCachedInfo( Tomahawk::InfoSystem::InfoCacheCriteria criteria, qint64 newMaxAge, QString caller, Tomahawk::InfoSystem::InfoType type, QVariant input, Tomahawk::InfoSystem::InfoCustomData customData );
-    void updateCache( Tomahawk::InfoSystem::InfoCacheCriteria criteria, qint64, Tomahawk::InfoSystem::InfoType type, QVariant output );
+    void getCachedInfo( Tomahawk::InfoSystem::InfoCriteriaHash criteria, qint64 newMaxAge, QString caller, Tomahawk::InfoSystem::InfoType type, QVariant input, Tomahawk::InfoSystem::InfoCustomData customData );
+    void updateCache( Tomahawk::InfoSystem::InfoCriteriaHash criteria, qint64, Tomahawk::InfoSystem::InfoType type, QVariant output );
     void info( QString caller, Tomahawk::InfoSystem::InfoType type, QVariant input, QVariant output, Tomahawk::InfoSystem::InfoCustomData customData );
     void finished( QString, Tomahawk::InfoSystem::InfoType );
 
 public slots:
     //FIXME: Make pure virtual when everything supports it
-    virtual void notInCacheSlot( Tomahawk::InfoSystem::InfoCacheCriteria criteria, QString caller, Tomahawk::InfoSystem::InfoType type, QVariant input, Tomahawk::InfoSystem::InfoCustomData customData )
+    virtual void notInCacheSlot( Tomahawk::InfoSystem::InfoCriteriaHash criteria, QString caller, Tomahawk::InfoSystem::InfoType type, QVariant input, Tomahawk::InfoSystem::InfoCustomData customData )
     {
         Q_UNUSED( criteria );
         Q_UNUSED( caller );
@@ -180,7 +180,7 @@ private:
 
 }
 
-inline uint qHash( Tomahawk::InfoSystem::InfoCacheCriteria hash )
+inline uint qHash( Tomahawk::InfoSystem::InfoCriteriaHash hash )
 {
     QCryptographicHash md5( QCryptographicHash::Md5 );
     foreach( QString key, hash.keys()  )
@@ -200,6 +200,6 @@ inline uint qHash( Tomahawk::InfoSystem::InfoCacheCriteria hash )
 
 Q_DECLARE_METATYPE( Tomahawk::InfoSystem::InfoGenericMap );
 Q_DECLARE_METATYPE( Tomahawk::InfoSystem::InfoCustomData );
-Q_DECLARE_METATYPE( Tomahawk::InfoSystem::InfoCacheCriteria );
+Q_DECLARE_METATYPE( Tomahawk::InfoSystem::InfoCriteriaHash );
 
 #endif // TOMAHAWK_INFOSYSTEM_H

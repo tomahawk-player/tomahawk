@@ -1,5 +1,5 @@
 /* === This file is part of Tomahawk Player - <http://tomahawk-player.org> ===
- * 
+ *
  *   Copyright 2010-2011, Christian Muehlhaeuser <muesli@tomahawk-player.org>
  *
  *   Tomahawk is free software: you can redistribute it and/or modify
@@ -30,6 +30,7 @@
 #include "result.h"
 #include "artist.h"
 #include "album.h"
+#include "utils/tomahawkutils.h"
 
 /* !!!! You need to manually generate schema.sql.h when the schema changes:
     cd src/libtomahawk/database
@@ -37,7 +38,7 @@
 */
 #include "schema.sql.h"
 
-#define CURRENT_SCHEMA_VERSION 22
+#define CURRENT_SCHEMA_VERSION 23
 
 
 DatabaseImpl::DatabaseImpl( const QString& dbname, Database* parent )
@@ -63,21 +64,22 @@ DatabaseImpl::DatabaseImpl( const QString& dbname, Database* parent )
         int v = qry.value( 0 ).toInt();
         qDebug() << "Current schema is" << v << this->thread();
         if ( v != CURRENT_SCHEMA_VERSION )
-        {  
+        {
 
             QString newname = QString("%1.v%2").arg(dbname).arg(v);
             qDebug() << endl << "****************************" << endl;
             qDebug() << "Schema version too old: " << v << ". Current version is:" << CURRENT_SCHEMA_VERSION;
             qDebug() << "Moving" << dbname << newname;
+            qDebug() << "If the migration fails, you can recover your DB by copying" << newname << "back to" << dbname;
             qDebug() << endl << "****************************" << endl;
 
             qry.clear();
             qry.finish();
-            
+
             db.close();
             db.removeDatabase( "tomahawk" );
 
-            if( QFile::rename( dbname, newname ) )
+            if( QFile::copy( dbname, newname ) )
             {
                 db = QSqlDatabase::addDatabase( "QSQLITE", "tomahawk" );
                 db.setDatabaseName( dbname );
@@ -87,6 +89,13 @@ DatabaseImpl::DatabaseImpl( const QString& dbname, Database* parent )
                 TomahawkSqlQuery query = newquery();
                 query.exec( "PRAGMA auto_vacuum = FULL" );
                 schemaUpdated = updateSchema( v );
+
+                if( !schemaUpdated )
+                {
+                    Q_ASSERT( false );
+                    QTimer::singleShot( 0, qApp, SLOT( quit() ) );
+                }
+
             }
             else
             {
@@ -149,26 +158,73 @@ DatabaseImpl::updateSearchIndex()
 
 
 bool
-DatabaseImpl::updateSchema( int currentver )
+DatabaseImpl::updateSchema( int oldVersion )
 {
-    qDebug() << "Create tables... old version is" << currentver;
-    QString sql( get_tomahawk_sql() );
-    QStringList statements = sql.split( ";", QString::SkipEmptyParts );
-    db.transaction();
-
-    foreach( const QString& sl, statements )
+    // we are called here with the old database. we must migrate it to the CURRENT_SCHEMA_VERSION from the oldVersion
+    if ( oldVersion == 0 ) // empty database, so create our tables and stuff
     {
-        QString s( sl.trimmed() );
-        if( s.length() == 0 )
-            continue;
+        qDebug() << "Create tables... old version is" << oldVersion;
+        QString sql( get_tomahawk_sql() );
+        QStringList statements = sql.split( ";", QString::SkipEmptyParts );
+        db.transaction();
 
-        qDebug() << "Executing:" << s;
-        TomahawkSqlQuery query = newquery();
-        query.exec( s );
+        foreach( const QString& sl, statements )
+        {
+            QString s( sl.trimmed() );
+            if( s.length() == 0 )
+                continue;
+
+            qDebug() << "Executing:" << s;
+            TomahawkSqlQuery query = newquery();
+            query.exec( s );
+        }
+
+        db.commit();
+        return true;
     }
+    else // update in place! run the proper upgrade script
+    {
+        int cur = oldVersion;
+        db.transaction();
+        while ( cur < CURRENT_SCHEMA_VERSION )
+        {
+            cur++;
 
-    db.commit();
-    return true;
+            QString path = QString( RESPATH "sql/dbmigrate-%1_to_%2.sql" ).arg( cur - 1 ).arg( cur );
+            QFile script( path );
+            if( !script.exists() || !script.open( QIODevice::ReadOnly ) )
+            {
+                qWarning() << "Failed to find or open upgrade script from" << (cur-1) << "to" << cur << " (" << path << ")! Aborting upgrade..";
+                return false;
+            }
+
+            QString sql = QString::fromUtf8( script.readAll() ).trimmed();
+            QStringList statements = sql.split( ";", QString::SkipEmptyParts );
+            foreach( const QString& sql, statements )
+            {
+                QString clean = cleanSql( sql ).trimmed();
+                if( clean.isEmpty() )
+                    continue;
+
+                qDebug() << "Executing upgrade statement:" << clean;
+                TomahawkSqlQuery q = newquery();
+                q.exec( clean );
+            }
+        }
+        db.commit();
+        qDebug() << "DB Upgrade successful!";
+        return true;
+    }
+}
+
+
+QString
+DatabaseImpl::cleanSql( const QString& sql )
+{
+    QString fixed = sql;
+    QRegExp r( "--[^\\n]*" );
+    fixed.replace( r, QString() );
+    return fixed.trimmed();
 }
 
 

@@ -33,6 +33,7 @@ namespace InfoSystem
 
 InfoSystemCache::InfoSystemCache( QObject* parent )
     : QObject(parent)
+    , m_cacheRemainingToLoad( 0 )
 {
     qDebug() << Q_FUNC_INFO;
     QString cacheBaseDir = QDesktopServices::storageLocation( QDesktopServices::CacheLocation );
@@ -43,7 +44,10 @@ InfoSystemCache::InfoSystemCache( QObject* parent )
         QString cacheFile = cacheDir + '/' + QString::number( i );
         QDir dir( cacheDir );
         if( dir.exists() && QFile::exists( cacheFile ) )
-            loadCache( type, cacheFile );
+        {
+            m_cacheRemainingToLoad++;
+            QMetaObject::invokeMethod( this, "loadCache", Qt::QueuedConnection, Q_ARG( Tomahawk::InfoSystem::InfoType, type ), Q_ARG( QString, cacheFile ) );
+        }
     }
 }
 
@@ -66,7 +70,7 @@ InfoSystemCache::~InfoSystemCache()
 
 
 void
-InfoSystemCache::getCachedInfoSlot( Tomahawk::InfoSystem::InfoCacheCriteria criteria, qint64 newMaxAge, QString caller, Tomahawk::InfoSystem::InfoType type, QVariant input, Tomahawk::InfoSystem::InfoCustomData customData )
+InfoSystemCache::getCachedInfoSlot( Tomahawk::InfoSystem::InfoCriteriaHash criteria, qint64 newMaxAge, QString caller, Tomahawk::InfoSystem::InfoType type, QVariant input, Tomahawk::InfoSystem::InfoCustomData customData )
 {
     qDebug() << Q_FUNC_INFO;
     if ( !m_dataCache.contains( type ) || !m_dataCache[type].contains( criteria ) )
@@ -74,13 +78,20 @@ InfoSystemCache::getCachedInfoSlot( Tomahawk::InfoSystem::InfoCacheCriteria crit
         emit notInCache( criteria, caller, type, input, customData );
         return;
     }
+
+    if ( m_cacheRemainingToLoad > 0 )
+    {
+        qDebug() << "Cache not fully loaded, punting request for a bit";
+        QMetaObject::invokeMethod( this, "getCachedInfoSlot", Qt::QueuedConnection,  Q_ARG( Tomahawk::InfoSystem::InfoCriteriaHash, criteria ), Q_ARG( qint64, newMaxAge ), Q_ARG( QString, caller ), Q_ARG( Tomahawk::InfoSystem::InfoType, type ), Q_ARG( Tomahawk::InfoSystem::InfoCustomData, customData ) );
+        return;
+    }
     
-    QHash< InfoCacheCriteria, QDateTime > typemaxtimecache = m_maxTimeCache[type];
+    QHash< InfoCriteriaHash, QDateTime > typemaxtimecache = m_maxTimeCache[type];
     
     if ( typemaxtimecache[criteria].toMSecsSinceEpoch() < QDateTime::currentMSecsSinceEpoch() )
     {
-        QHash< InfoCacheCriteria, QVariant > typedatacache = m_dataCache[type];
-        QHash< InfoCacheCriteria, QDateTime > typeinserttimecache = m_insertTimeCache[type];
+        QHash< InfoCriteriaHash, QVariant > typedatacache = m_dataCache[type];
+        QHash< InfoCriteriaHash, QDateTime > typeinserttimecache = m_insertTimeCache[type];
         typemaxtimecache.remove( criteria );
         m_maxTimeCache[type] = typemaxtimecache;
         typedatacache.remove( criteria );
@@ -94,7 +105,7 @@ InfoSystemCache::getCachedInfoSlot( Tomahawk::InfoSystem::InfoCacheCriteria crit
     
     if ( newMaxAge > 0 )
     {
-        QHash< InfoCacheCriteria, QDateTime > typemaxtimecache = m_maxTimeCache[type];
+        QHash< InfoCriteriaHash, QDateTime > typemaxtimecache = m_maxTimeCache[type];
         typemaxtimecache[criteria] = QDateTime::fromMSecsSinceEpoch( QDateTime::currentMSecsSinceEpoch() + newMaxAge );
         m_maxTimeCache[type] = typemaxtimecache;
         m_dirtySet.insert( type );
@@ -105,12 +116,12 @@ InfoSystemCache::getCachedInfoSlot( Tomahawk::InfoSystem::InfoCacheCriteria crit
 
 
 void
-InfoSystemCache::updateCacheSlot( Tomahawk::InfoSystem::InfoCacheCriteria criteria, qint64 maxAge, Tomahawk::InfoSystem::InfoType type, QVariant output )
+InfoSystemCache::updateCacheSlot( Tomahawk::InfoSystem::InfoCriteriaHash criteria, qint64 maxAge, Tomahawk::InfoSystem::InfoType type, QVariant output )
 {
     qDebug() << Q_FUNC_INFO;
-    QHash< InfoCacheCriteria, QVariant > typedatacache = m_dataCache[type];
-    QHash< InfoCacheCriteria, QDateTime > typeinserttimecache = m_insertTimeCache[type];
-    QHash< InfoCacheCriteria, QDateTime > typemaxtimecache = m_maxTimeCache[type];
+    QHash< InfoCriteriaHash, QVariant > typedatacache = m_dataCache[type];
+    QHash< InfoCriteriaHash, QDateTime > typeinserttimecache = m_insertTimeCache[type];
+    QHash< InfoCriteriaHash, QDateTime > typemaxtimecache = m_maxTimeCache[type];
     typedatacache[criteria] = output;
     typeinserttimecache[criteria] = QDateTime::currentDateTimeUtc();
     typemaxtimecache[criteria] = QDateTime::fromMSecsSinceEpoch( QDateTime::currentMSecsSinceEpoch() + maxAge );
@@ -122,7 +133,7 @@ InfoSystemCache::updateCacheSlot( Tomahawk::InfoSystem::InfoCacheCriteria criter
 
 
 void
-InfoSystemCache::loadCache( InfoType type, const QString &cacheFile )
+InfoSystemCache::loadCache( Tomahawk::InfoSystem::InfoType type, const QString &cacheFile )
 {
     qDebug() << Q_FUNC_INFO;
     QSettings cachedSettings( cacheFile, QSettings::IniFormat );
@@ -132,10 +143,10 @@ InfoSystemCache::loadCache( InfoType type, const QString &cacheFile )
         cachedSettings.beginGroup( group );
         if ( cachedSettings.value( "maxtime" ).toDateTime().toMSecsSinceEpoch() < QDateTime::currentMSecsSinceEpoch() )
             continue;
-        QHash< InfoCacheCriteria, QVariant > dataHash = m_dataCache[type];
-        QHash< InfoCacheCriteria, QDateTime > insertDateHash = m_insertTimeCache[type];
-        QHash< InfoCacheCriteria, QDateTime > maxDateHash = m_maxTimeCache[type];
-        InfoCacheCriteria criteria;
+        QHash< InfoCriteriaHash, QVariant > dataHash = m_dataCache[type];
+        QHash< InfoCriteriaHash, QDateTime > insertDateHash = m_insertTimeCache[type];
+        QHash< InfoCriteriaHash, QDateTime > maxDateHash = m_maxTimeCache[type];
+        InfoCriteriaHash criteria;
         int numCriteria = cachedSettings.beginReadArray( "criteria" );
         for ( int i = 0; i < numCriteria; i++ )
         {
@@ -153,11 +164,12 @@ InfoSystemCache::loadCache( InfoType type, const QString &cacheFile )
         m_insertTimeCache[type] = insertDateHash;
         m_maxTimeCache[type] = maxDateHash;
     }
+    m_cacheRemainingToLoad--;
 }
 
 
 void
-InfoSystemCache::saveCache( InfoType type, const QString &cacheDir )
+InfoSystemCache::saveCache( Tomahawk::InfoSystem::InfoType type, const QString &cacheDir )
 {
     qDebug() << Q_FUNC_INFO;
     QDir dir( cacheDir );
@@ -175,7 +187,7 @@ InfoSystemCache::saveCache( InfoType type, const QString &cacheDir )
 
     int criteriaNumber = 0;
 
-    foreach( InfoCacheCriteria criteria, m_dataCache[type].keys() )
+    foreach( InfoCriteriaHash criteria, m_dataCache[type].keys() )
     {
         cachedSettings.beginGroup( "group_" +  QString::number( criteriaNumber ) );
         cachedSettings.beginWriteArray( "criteria" );

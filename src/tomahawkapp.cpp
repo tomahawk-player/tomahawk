@@ -154,10 +154,11 @@ TomahawkApp::TomahawkApp( int& argc, char *argv[] )
     , m_mainwindow( 0 )
 {
     qDebug() << "TomahawkApp thread:" << this->thread();
-    setOrganizationName( QLatin1String( ORGANIZATION_NAME ) );
-    setOrganizationDomain( QLatin1String( ORGANIZATION_DOMAIN ) );
-    setApplicationName( QLatin1String( APPLICATION_NAME ) );
-    setApplicationVersion( QLatin1String( VERSION ) );
+    setOrganizationName( QLatin1String( TOMAHAWK_ORGANIZATION_NAME ) );
+    setOrganizationDomain( QLatin1String( TOMAHAWK_ORGANIZATION_DOMAIN ) );
+    setApplicationName( QLatin1String( TOMAHAWK_APPLICATION_NAME ) );
+    setApplicationVersion( QLatin1String( TOMAHAWK_VERSION ) );
+    registerMetaTypes();
     setupLogfile();
 }
 

@@ -1,5 +1,8 @@
 Version 0.1.0:
-    * You can now browse and play collections in a tree-view.
+    * Resolvers can now be enabled and disabled, and some can be configured
+      directly in Tomahawk.
+    * Browse and play collections in our snappy tree-view, which also shows
+      images for artists and albums.
     * Watch folders for changes and automatically update your collection. This
       is on by default; you can turn it off on the Local Music tab in the
       settings dialog. Note that this triggers only on files or folders being
@@ -8,6 +11,7 @@ Version 0.1.0:
       music collection.
 
 Version 0.0.4:
+    * Fixed crash that could occur when playing a track from a browser.
     * Fixed a crash situation caused by sources going on- or offline.
 
 Version 0.0.3:

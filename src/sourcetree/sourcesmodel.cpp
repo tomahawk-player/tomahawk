@@ -1,5 +1,5 @@
 /* === This file is part of Tomahawk Player - <http://tomahawk-player.org> ===
- * 
+ *
  *   Copyright 2010-2011, Christian Muehlhaeuser <muesli@tomahawk-player.org>
  *
  *   Tomahawk is free software: you can redistribute it and/or modify
@@ -38,6 +38,7 @@ SourcesModel::SourcesModel( SourceTreeView* parent )
     , m_parent( parent )
 {
     setColumnCount( 1 );
+    setSortRole( SortRole );
 
     onSourceAdded( SourceList::instance()->sources() );
     connect( SourceList::instance(), SIGNAL( sourceAdded( Tomahawk::source_ptr ) ), SLOT( onSourceAdded( Tomahawk::source_ptr ) ) );
@@ -97,6 +98,32 @@ SourcesModel::data( const QModelIndex& index, int role ) const
     if ( role == Qt::SizeHintRole )
     {
         return QSize( 0, 18 );
+    } else if ( role == SortRole )
+    {
+        if ( indexType( index ) == PlaylistSource )
+        {
+            playlist_ptr playlist = indexToPlaylist( index );
+            if ( !playlist.isNull() )
+                return playlist->createdOn();
+        } else if ( indexType( index ) == DynamicPlaylistSource )
+        {
+            dynplaylist_ptr playlist = indexToDynamicPlaylist( index );
+            if ( !playlist.isNull() )
+                return playlist->createdOn();
+        } else if( indexType( index ) == CollectionSource )
+        {
+            source_ptr source = indexToTreeItem( index )->source();
+            if( source.isNull() )
+                return 0; // Super Collection is first
+            else if( source->isLocal() )
+                return 1; // Then Local collection
+            else // then all the rest
+                return 5;
+        } else
+        {
+            qDebug() << "RETURNING NULL SORT DATA!";
+            return QVariant();
+        }
     }
 
     return QStandardItemModel::data( index, role );
@@ -152,7 +179,7 @@ SourcesModel::appendItem( const source_ptr& source )
         connect( source.data(), SIGNAL( playbackStarted( Tomahawk::query_ptr ) ), SLOT( onSourceChanged() ) );
         connect( source.data(), SIGNAL( stateChanged() ), SLOT( onSourceChanged() ) );
     }
-    
+
     return true; // FIXME
 }
 
@@ -246,7 +273,7 @@ SourcesModel::indexToDynamicPlaylist( const QModelIndex& index )
     dynplaylist_ptr res;
     if ( !index.isValid() )
         return res;
-    
+
     if ( indexType( index ) == DynamicPlaylistSource )
     {
         QModelIndex idx = index.model()->index( index.row(), 0, index.parent() );
@@ -255,7 +282,7 @@ SourcesModel::indexToDynamicPlaylist( const QModelIndex& index )
         if ( playlist )
             return *playlist;
     }
-    
+
     return res;
 }
 
@@ -311,12 +338,12 @@ SourcesModel::dynamicPlaylistToIndex( const Tomahawk::dynplaylist_ptr& playlist 
     for ( int i = 0; i < rowCount(); i++ )
     {
         QModelIndex pidx = index( i, 0 );
-        
+
         for ( int j = 0; j < rowCount( pidx ); j++ )
         {
             QModelIndex idx = index( j, 0, pidx );
             SourcesModel::SourceType type = SourcesModel::indexType( idx );
-            
+
             if ( type == SourcesModel::DynamicPlaylistSource )
             {
                 playlist_ptr p = SourcesModel::indexToDynamicPlaylist( idx );
@@ -325,7 +352,7 @@ SourcesModel::dynamicPlaylistToIndex( const Tomahawk::dynplaylist_ptr& playlist 
             }
         }
     }
-    
+
     return QModelIndex();
 }
 
@@ -367,11 +394,11 @@ SourcesModel::setData( const QModelIndex& index, const QVariant& value, int role
     {
         playlist = indexToDynamicPlaylist( index ).staticCast< Playlist >();
     }
-    
+
     if ( !playlist.isNull() )
     {
         playlist->rename( value.toString() );
-        QStandardItemModel::setData( index, value, Qt::DisplayRole );   
+        QStandardItemModel::setData( index, value, Qt::DisplayRole );
         return true;
     }
 
@@ -383,7 +410,7 @@ void
 SourcesModel::onSourceChanged()
 {
     Source* src = qobject_cast< Source* >( sender() );
-    
+
     for ( int i = 0; i < rowCount(); i++ )
     {
         QModelIndex idx = index( i, 0 );

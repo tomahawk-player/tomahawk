@@ -1,5 +1,5 @@
 /* === This file is part of Tomahawk Player - <http://tomahawk-player.org> ===
- * 
+ *
  *   Copyright 2010-2011, Christian Muehlhaeuser <muesli@tomahawk-player.org>
  *
  *   Tomahawk is free software: you can redistribute it and/or modify
@@ -75,25 +75,37 @@ DatabaseCommand_CreatePlaylist::postCommitHook()
     } else {
         m_playlist->reportCreated( m_playlist );
     }
-    
+
 
     if( source()->isLocal() )
         Servent::instance()->triggerDBSync();
 }
 
-void 
+void
 DatabaseCommand_CreatePlaylist::createPlaylist( DatabaseImpl* lib, bool dynamic)
 {
     qDebug() << Q_FUNC_INFO;
     Q_ASSERT( !( m_playlist.isNull() && m_v.isNull() ) );
     Q_ASSERT( !source().isNull() );
-    
+
+    uint now = 0;
+    if( m_playlist.isNull() )
+    {
+        now = m_v.toMap()[ "createdon" ].toUInt();
+    }
+    else
+    {
+        now = QDateTime::currentDateTime().toTime_t();
+        m_playlist->setCreatedOn( now );
+    }
+
     TomahawkSqlQuery cre = lib->newquery();
-    cre.prepare( "INSERT INTO playlist( guid, source, shared, title, info, creator, lastmodified, dynplaylist) "
-                 "VALUES( :guid, :source, :shared, :title, :info, :creator, :lastmodified, :dynplaylist )" );
-    
+    cre.prepare( "INSERT INTO playlist( guid, source, shared, title, info, creator, lastmodified, dynplaylist, createdOn) "
+                 "VALUES( :guid, :source, :shared, :title, :info, :creator, :lastmodified, :dynplaylist, :createdOn )" );
+
     cre.bindValue( ":source", source()->isLocal() ? QVariant(QVariant::Int) : source()->id() );
     cre.bindValue( ":dynplaylist", dynamic );
+    cre.bindValue( ":createdOn", now );
     if( !m_playlist.isNull() ) {
         cre.bindValue( ":guid", m_playlist->guid() );
         cre.bindValue( ":shared", m_playlist->shared() );
@@ -111,6 +123,6 @@ DatabaseCommand_CreatePlaylist::createPlaylist( DatabaseImpl* lib, bool dynamic)
         cre.bindValue( ":lastmodified", m.value( "lastmodified", 0 ) );
     }
     qDebug() << "CREATE PLAYLIST:" << cre.boundValues();
-    
+
     cre.exec();
 }

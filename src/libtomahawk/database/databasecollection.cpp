@@ -143,11 +143,12 @@ void DatabaseCollection::dynamicPlaylistCreated( const source_ptr& source, const
                                             data[1].toString(),  //title
                                             data[2].toString(),  //info
                                             data[3].toString(),  //creator
-                                            data[4].toString(),  // dynamic type
-                                            static_cast<GeneratorMode>(data[5].toInt()),  // dynamic mode
-                                            data[6].toBool(),    //shared
-                                            data[7].toInt(),     //lastmod
-                                            data[8].toString() ) );  //GUID
+                                            data[4].toUInt(),  // createdOn
+                                            data[5].toString(),  // dynamic type
+                                            static_cast<GeneratorMode>(data[6].toInt()),  // dynamic mode
+                                            data[7].toBool(),    //shared
+                                            data[8].toInt(),     //lastmod
+                                            data[9].toString() ) );  //GUID
     addDynamicPlaylist( p );
 }
 
