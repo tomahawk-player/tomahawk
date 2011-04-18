@@ -303,6 +303,22 @@ Jabber_p::onNewMessage( const Jreen::Message& m )
     if ( msg.isEmpty() )
         return;
 
+    QJson::Parser parser;
+    bool ok;
+    QVariant v = parser.parse( msg.toAscii(), &ok );
+    if ( !ok  || v.type() != QVariant::Map )
+    {
+        QString to = from;
+        QString response = QString( tr("I'm sorry -- I'm just an automatic presence used by Tomahawk Player"
+                                    " (http://gettomahawk.com). If you are getting this message, the person you"
+                                    " are trying to reach is probably not signed on, so please try again later!") );
+
+        // this is not a sip message, so we send it directly through the client
+        m_client->send( Jreen::Message ( Jreen::Message::Chat, Jreen::JID(to), response) );
+
+        return;
+    }
+
     qDebug() << Q_FUNC_INFO << "From:" << m.from().full() << ":" << m.body();
     emit msgReceived( from, msg );
 }
