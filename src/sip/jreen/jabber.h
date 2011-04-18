@@ -57,6 +57,7 @@ private slots:
     void showAddFriendDialog();
     void onConnected();
     void onDisconnected();
+    void onAuthError(int code, const QString &msg);
 
 private:
     Jabber_p* p;

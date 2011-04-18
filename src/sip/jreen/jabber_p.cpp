@@ -283,6 +283,10 @@ Jabber_p::onDisconnect( Jreen::Client::DisconnectReason reason )
     }
 
     qDebug() << "Disconnected from server:" << error;
+    if( reason != Jreen::Client::User )
+    {
+        emit authError( reason, error );
+    }
 
     if(reconnect)
         QTimer::singleShot(reconnectInSeconds*1000, m_client, SLOT(connectToServer()));

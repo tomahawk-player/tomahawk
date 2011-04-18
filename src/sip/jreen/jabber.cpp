@@ -109,6 +109,8 @@ JabberPlugin::connectPlugin( bool startup )
     QObject::connect( p, SIGNAL( connected() ), SLOT( onConnected() ) );
     QObject::connect( p, SIGNAL( disconnected() ), SLOT( onDisconnected() ) );
 
+    QObject::connect( p, SIGNAL( authError( int, QString ) ), SLOT( onAuthError( int, QString ) ) );
+
     return true;
 }
 
@@ -154,6 +156,33 @@ JabberPlugin::onDisconnected()
     }
 
     emit disconnected();
+}
+
+void
+JabberPlugin::onAuthError( int code, const QString& msg )
+{
+    switch( code )
+    {
+        case Jreen::Client::AuthorizationError:
+            emit error( SipPlugin::AuthError, msg );
+            break;
+
+        case Jreen::Client::HostUnknown:
+        case Jreen::Client::ItemNotFound:
+        case Jreen::Client::RemoteStreamError:
+        case Jreen::Client::RemoteConnectionFailed:
+        case Jreen::Client::InternalServerError:
+        case Jreen::Client::SystemShutdown:
+        case Jreen::Client::Conflict:
+        case Jreen::Client::Unknown:
+            emit error( SipPlugin::ConnectionError, msg );
+            break;
+
+        default:
+            qDebug() << "Not all Client::DisconnectReasons checked";
+            Q_ASSERT(false);
+            break;
+    }
 }
 
 void
