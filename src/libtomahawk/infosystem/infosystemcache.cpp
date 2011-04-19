@@ -51,9 +51,11 @@ InfoSystemCache::InfoSystemCache( QObject* parent )
             QMetaObject::invokeMethod( this, "loadCache", Qt::QueuedConnection, Q_ARG( Tomahawk::InfoSystem::InfoType, type ), Q_ARG( QString, cacheDir ) );
         }
     }
+    
     m_syncTimer.setInterval( 60000 );
     m_syncTimer.setSingleShot( false );
     connect( &m_syncTimer, SIGNAL( timeout() ), SLOT( syncTimerFired() ) );
+    m_syncTimer.start();
 }
 
 
