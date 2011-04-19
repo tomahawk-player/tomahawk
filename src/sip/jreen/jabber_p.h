@@ -85,7 +85,7 @@ private slots:
 
 private:
     bool presenceMeansOnline( Jreen::Presence::Type p );
-    void handlePeerStatus( const QString &fulljid, Jreen::Presence::Type presenceType );
+    void handlePeerStatus( const Jreen::JID &jid, Jreen::Presence::Type presenceType );
 
     Jreen::Client *m_client;
     Jreen::MUCRoom *m_room;
@@ -95,9 +95,14 @@ private:
     QMap<QString, Jreen::Presence::Type> m_peers;
     QString m_server;
 
-    enum IqContext { NoContext, RequestDisco, RequestedDisco, SipMessageSent };
+    enum IqContext { NoContext, RequestDisco, RequestedDisco, SipMessageSent, RequestedVCard };
 
     QStringList m_legacy_peers;
+
+
+    //sort out
+    //QHash<Jreen::JID, QString> m_contactsPhotoHashes;
+    QStringList m_photoHashes;
 };
 
 #endif // JABBER_H

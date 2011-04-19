@@ -25,6 +25,8 @@
 #include "utils/tomahawkutils.h"
 
 #include <jreen/capabilities.h>
+#include <jreen/vcardupdate.h>
+#include <jreen/vcard.h>
 
 #include <qjson/parser.h>
 #include <qjson/serializer.h>
@@ -37,6 +39,14 @@
 #include <QThread>
 #include <QVariant>
 #include <QMap>
+#include <QCryptographicHash>
+#include <QDir>
+#include <QFile>
+#include <QPixmap>
+
+//remove
+#include <QLabel>
+#include <QtGui/QLabel>
 
 #define TOMAHAWK_FEATURE QLatin1String( "tomahawk:sip:v1" )
 
@@ -56,6 +66,12 @@ Jabber_p::Jabber_p( const QString& jid, const QString& password, const QString& 
     m_client = new Jreen::Client( jid, password );
     m_client->registerStanzaExtension(new TomahawkSipMessageFactory);
     m_client->setResource( QString( "tomahawk%1" ).arg( QString::number( qrand() % 10000 ) ) );
+
+    // add VCardUpdate extension to own presence
+    m_client->presence().addExtension( new Jreen::VCardUpdate() );
+
+    // read cached avatars
+    m_photoHashes = QDir("/home/domme/jreen/").entryList();
 
     // setup disco
     m_client->disco()->setSoftwareVersion( "Tomahawk Player", TOMAHAWK_VERSION, CMAKE_SYSTEM );
@@ -210,6 +226,9 @@ Jabber_p::onConnect()
     // set presence to least valid value
     m_client->setPresence(Jreen::Presence::XA, "Got Tomahawk? http://gettomahawk.com", -127);
 
+    // request own vcard
+    fetchVCard( m_jid.bare() );
+
     // set ping timeout to 15 secs (TODO: verify if this works)
     m_client->setPingInterval(15000);
 
@@ -329,7 +348,18 @@ void Jabber_p::onNewPresence( const Jreen::Presence& presence)
     Jreen::JID jid = presence.from();
     QString fulljid( jid.full() );
 
+
     qDebug() << Q_FUNC_INFO << "* New presence: " << fulljid << presence.subtype();
+
+    Jreen::VCardUpdate::Ptr update = presence.findExtension<Jreen::VCardUpdate>();
+    if(update)
+    {
+        qDebug() << "vcard: found update for " << fulljid;
+        if(!m_photoHashes.contains(update->photoHash()))
+        {
+            fetchVCard( jid.bare() );
+        }
+    }
 
     if( jid == m_jid )
         return;
@@ -411,11 +441,18 @@ Jabber_p::onNewIq( const Jreen::IQ &iq, int context )
     {
         qDebug() << "Sent SipMessage... what now?!";
     }
+    /*else if(context == RequestedVCard )
+    {
+        qDebug() << "Requested VCard... what now?!";
+    }*/
     else
     {
+
         TomahawkSipMessage *sipMessage = iq.findExtension<TomahawkSipMessage>().data();
         if(sipMessage)
         {
+            iq.accept();
+
             qDebug() << Q_FUNC_INFO << "Got SipMessage ...";
             qDebug() << "ip" << sipMessage->ip();
             qDebug() << "port" << sipMessage->port();
@@ -466,8 +503,10 @@ Jabber_p::presenceMeansOnline( Jreen::Presence::Type p )
 }
 
 void
-Jabber_p::handlePeerStatus( const QString& fulljid, Jreen::Presence::Type presenceType )
+Jabber_p::handlePeerStatus( const Jreen::JID& jid, Jreen::Presence::Type presenceType )
 {
+    QString fulljid = jid.full();
+
     // "going offline" event
     if ( !presenceMeansOnline( presenceType ) &&
          ( !m_peers.contains( fulljid ) ||
@@ -504,4 +543,3 @@ Jabber_p::handlePeerStatus( const QString& fulljid, Jreen::Presence::Type presen
     //qDebug() << "Updating presence data for" << fulljid;
     m_peers[ fulljid ] = presenceType;
 }
-
