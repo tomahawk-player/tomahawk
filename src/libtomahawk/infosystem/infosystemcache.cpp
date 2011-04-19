@@ -32,7 +32,8 @@ namespace InfoSystem
 
 
 InfoSystemCache::InfoSystemCache( QObject* parent )
-    : QObject(parent)
+    : QObject( parent )
+    , m_syncTimer( this )
     , m_cacheRemainingToLoad( 0 )
 {
     qDebug() << Q_FUNC_INFO;
@@ -49,6 +50,9 @@ InfoSystemCache::InfoSystemCache( QObject* parent )
             QMetaObject::invokeMethod( this, "loadCache", Qt::QueuedConnection, Q_ARG( Tomahawk::InfoSystem::InfoType, type ), Q_ARG( QString, cacheFile ) );
         }
     }
+    m_syncTimer.setInterval( 60000 );
+    m_syncTimer.setSingleShot( false );
+    connect( &m_syncTimer, SIGNAL( timeout() ), SLOT( syncTimerFired() ) );
 }
 
 
@@ -56,6 +60,27 @@ InfoSystemCache::~InfoSystemCache()
 {
     qDebug() << Q_FUNC_INFO;
     qDebug() << "Saving infosystemcache to disk";
+    QString cacheBaseDir = QDesktopServices::storageLocation( QDesktopServices::CacheLocation );
+    for ( int i = 0; i <= InfoNoInfo; i++ )
+    {
+        InfoType type = (InfoType)(i);
+        if ( m_dirtySet.contains( type ) && m_dataCache.contains( type ) )
+        {
+            QString cacheDir = cacheBaseDir + "/InfoSystemCache/" + QString::number( i );
+            saveCache( type, cacheDir );
+        }
+    }
+}
+
+
+void
+InfoSystemCache::syncTimerFired()
+{
+    qDebug() << Q_FUNC_INFO;
+    if ( m_cacheRemainingToLoad > 0 )
+        return;
+
+    qDebug() << "Syncing infosystemcache to disk";
     QString cacheBaseDir = QDesktopServices::storageLocation( QDesktopServices::CacheLocation );
     for ( int i = 0; i <= InfoNoInfo; i++ )
     {

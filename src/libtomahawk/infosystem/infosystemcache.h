@@ -22,6 +22,7 @@
 #include <QDateTime>
 #include <QObject>
 #include <QtDebug>
+#include <QTimer>
 
 #include "infosystem.h"
 
@@ -49,6 +50,7 @@ public slots:
     void updateCacheSlot( Tomahawk::InfoSystem::InfoCriteriaHash criteria, qint64 maxAge, Tomahawk::InfoSystem::InfoType type, QVariant output );
 
 private slots:
+    void syncTimerFired();
     void loadCache( Tomahawk::InfoSystem::InfoType type, const QString &cacheFile );
     void saveCache( Tomahawk::InfoSystem::InfoType type, const QString &cacheDir );
 
@@ -57,6 +59,7 @@ private:
     QHash< InfoType, QHash< InfoCriteriaHash, QDateTime > > m_insertTimeCache;
     QHash< InfoType, QHash< InfoCriteriaHash, QDateTime > > m_maxTimeCache;
     QSet< InfoType > m_dirtySet;
+    QTimer m_syncTimer;
     int m_cacheRemainingToLoad;
 };
 
