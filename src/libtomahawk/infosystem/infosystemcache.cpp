@@ -227,7 +227,7 @@ InfoSystemCache::saveCache( Tomahawk::InfoSystem::InfoType type, const QString &
             hash.addData( key.toUtf8() );
         foreach( QString value, criteria.values() )
             hash.addData( value.toUtf8() );
-        QSettings cachedSettings( QString( cacheDir + '/' + maxAge + '.' + hash.result() ), QSettings::IniFormat );
+        QSettings cachedSettings( QString( cacheDir + '/' + maxAge + '.' + hash.result().toHex() ), QSettings::IniFormat );
         QStringList keys = criteria.keys();
         cachedSettings.beginWriteArray( "criteria" );
         for( int i = 0; i < criteria.size(); i++ )
