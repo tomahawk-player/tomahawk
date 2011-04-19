@@ -166,14 +166,18 @@ InfoSystemCache::loadCache( Tomahawk::InfoSystem::InfoType type, const QString &
 
     QDir dir( cacheDir );
 
-    QFileInfoList files = dir.entryInfoList( QDir::NoDotAndDotDot );
-
+    qDebug() << "Checking files in dir " << dir.canonicalPath();
+    QFileInfoList files = dir.entryInfoList( QDir::Files );
+    qDebug() << "Found " << files.size() << " files";
+    
     foreach ( QFileInfo file, files )
     {
         if ( file.baseName().toLongLong() < QDateTime::currentMSecsSinceEpoch() )
         {
             if ( !QFile::remove( file.canonicalFilePath() ) )
                 qDebug() << "Failed to remove stale cache file " << file.canonicalFilePath();
+            else
+                qDebug() << "Removed stale cache file " << file.canonicalFilePath();
             continue;
         }
             
@@ -182,22 +186,20 @@ InfoSystemCache::loadCache( Tomahawk::InfoSystem::InfoType type, const QString &
         QHash< InfoCriteriaHash, QVariant > dataHash = m_dataCache[type];
         QHash< InfoCriteriaHash, QDateTime > insertDateHash = m_insertTimeCache[type];
         QHash< InfoCriteriaHash, QDateTime > maxDateHash = m_maxTimeCache[type];
+        QHash< InfoCriteriaHash, QString > fileLocationHash = m_fileLocationCache[type];
         InfoCriteriaHash criteria;
-        int numCriteria = cachedSettings.beginReadArray( "criteria" );
-        for ( int i = 0; i < numCriteria; i++ )
-        {
-            cachedSettings.setArrayIndex( i );
-            QStringList criteriaValues = cachedSettings.value( QString::number( i ) ).toStringList();
-            for ( int j = 0; j < criteriaValues.length(); j += 2 )
-                criteria[criteriaValues.at( j )] = criteriaValues.at( j + 1 );
-        }
-        cachedSettings.endArray();
+        cachedSettings.beginGroup( "criteria" );
+        foreach ( QString key, cachedSettings.childKeys() )
+            criteria[key] = cachedSettings.value( key ).toString();
+        cachedSettings.endGroup();
         dataHash[criteria] = cachedSettings.value( "data" );
         insertDateHash[criteria] = cachedSettings.value( "inserttime" ).toDateTime();
         maxDateHash[criteria] =  QDateTime::fromMSecsSinceEpoch( file.baseName().toLongLong() );
+        fileLocationHash[criteria] = file.canonicalFilePath();
         m_dataCache[type] = dataHash;
         m_insertTimeCache[type] = insertDateHash;
         m_maxTimeCache[type] = maxDateHash;
+        m_fileLocationCache[type] = fileLocationHash;
     }
     
     m_cacheRemainingToLoad--;
@@ -227,17 +229,21 @@ InfoSystemCache::saveCache( Tomahawk::InfoSystem::InfoType type, const QString &
             hash.addData( key.toUtf8() );
         foreach( QString value, criteria.values() )
             hash.addData( value.toUtf8() );
-        QSettings cachedSettings( QString( cacheDir + '/' + maxAge + '.' + hash.result().toHex() ), QSettings::IniFormat );
-        QStringList keys = criteria.keys();
-        cachedSettings.beginWriteArray( "criteria" );
-        for( int i = 0; i < criteria.size(); i++ )
+        QString settingsFilePath( cacheDir + '/' + maxAge + '.' + hash.result().toHex() );
+        if ( m_fileLocationCache[type].contains( criteria ) )
         {
-            cachedSettings.setArrayIndex( i );
-            QStringList critVal;
-            critVal << keys.at( i ) << criteria[keys.at( i )];
-            cachedSettings.setValue( QString::number( i ), critVal );
+            if ( !QFile::rename( m_fileLocationCache[type][criteria], settingsFilePath ) )
+                qDebug() << "Failed to move old cache file to new location!";
+            else
+                m_dirtySet[type].remove( criteria );
+            continue;
         }
-        cachedSettings.endArray();
+        QSettings cachedSettings( settingsFilePath, QSettings::IniFormat );
+        QStringList keys = criteria.keys();
+        cachedSettings.beginGroup( "criteria" );
+        for( int i = 0; i < criteria.size(); i++ )
+            cachedSettings.setValue( keys.at( i ), criteria[keys.at( i )] );
+        cachedSettings.endGroup();
         cachedSettings.setValue( "data", m_dataCache[type][criteria] );
         cachedSettings.setValue( "inserttime", m_insertTimeCache[type][criteria] );
         m_dirtySet[type].remove( criteria );

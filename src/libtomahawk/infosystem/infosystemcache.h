@@ -58,6 +58,7 @@ private:
     QHash< InfoType, QHash< InfoCriteriaHash, QVariant > > m_dataCache;
     QHash< InfoType, QHash< InfoCriteriaHash, QDateTime > > m_insertTimeCache;
     QHash< InfoType, QHash< InfoCriteriaHash, QDateTime > > m_maxTimeCache;
+    QHash< InfoType, QHash< InfoCriteriaHash, QString > > m_fileLocationCache;
     QHash< InfoType, QSet< InfoCriteriaHash > > m_dirtySet;
     QTimer m_syncTimer;
     int m_cacheRemainingToLoad;
