@@ -51,14 +51,14 @@ public slots:
 
 private slots:
     void syncTimerFired();
-    void loadCache( Tomahawk::InfoSystem::InfoType type, const QString &cacheFile );
+    void loadCache( Tomahawk::InfoSystem::InfoType type, const QString &cacheDir );
     void saveCache( Tomahawk::InfoSystem::InfoType type, const QString &cacheDir );
 
 private:
     QHash< InfoType, QHash< InfoCriteriaHash, QVariant > > m_dataCache;
     QHash< InfoType, QHash< InfoCriteriaHash, QDateTime > > m_insertTimeCache;
     QHash< InfoType, QHash< InfoCriteriaHash, QDateTime > > m_maxTimeCache;
-    QSet< InfoType > m_dirtySet;
+    QHash< InfoType, QSet< InfoCriteriaHash > > m_dirtySet;
     QTimer m_syncTimer;
     int m_cacheRemainingToLoad;
 };
