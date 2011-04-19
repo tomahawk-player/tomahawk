@@ -43,8 +43,6 @@ public:
     LastFmPlugin( QObject *parent );
     virtual ~LastFmPlugin();
 
-    void getInfo( const QString &caller, const InfoType type, const QVariant &data, InfoCustomData customData );
-
 public slots:
     void settingsChanged();
 
@@ -52,17 +50,19 @@ public slots:
     void coverArtReturned();
     void artistImagesReturned();
 
-    virtual void notInCacheSlot( Tomahawk::InfoSystem::InfoCriteriaHash criteria, QString caller, Tomahawk::InfoSystem::InfoType type, QVariant input, Tomahawk::InfoSystem::InfoCustomData customData );
-
+protected slots:
+    virtual void getInfo( const QString caller, const Tomahawk::InfoSystem::InfoType type, const QVariant input, const Tomahawk::InfoSystem::InfoCustomData customData );
+    virtual void notInCacheSlot( const Tomahawk::InfoSystem::InfoCriteriaHash criteria, const QString caller, const Tomahawk::InfoSystem::InfoType type, const QVariant input, const Tomahawk::InfoSystem::InfoCustomData customData );
+    
 private:
-    void fetchCoverArt( const QString &caller, const InfoType type, const QVariant& data, Tomahawk::InfoSystem::InfoCustomData &customData );
-    void fetchArtistImages( const QString &caller, const InfoType type, const QVariant& data, Tomahawk::InfoSystem::InfoCustomData &customData );
+    void fetchCoverArt( const QString &caller, const Tomahawk::InfoSystem::InfoType type, const QVariant &input, const Tomahawk::InfoSystem::InfoCustomData &customData );
+    void fetchArtistImages( const QString &caller, const Tomahawk::InfoSystem::InfoType type, const QVariant &input, const Tomahawk::InfoSystem::InfoCustomData &customData );
 
     void createScrobbler();
-    void scrobble( const QString &caller, const InfoType type, const QVariant& data, InfoCustomData &customData );
-    void nowPlaying( const QString &caller, const InfoType type, const QVariant& data, InfoCustomData &customData );
+    void scrobble( const QString &caller, const Tomahawk::InfoSystem::InfoType type, const QVariant &input, const Tomahawk::InfoSystem::InfoCustomData &customData );
+    void nowPlaying( const QString &caller, const Tomahawk::InfoSystem::InfoType type, const QVariant &input, const Tomahawk::InfoSystem::InfoCustomData &customData );
 
-    void dataError( const QString &caller, const InfoType type, const QVariant& data, InfoCustomData &customData );
+    void dataError( const QString &caller, const Tomahawk::InfoSystem::InfoType type, const QVariant &input, const Tomahawk::InfoSystem::InfoCustomData &customData );
 
     lastfm::MutableTrack m_track;
     lastfm::Audioscrobbler* m_scrobbler;

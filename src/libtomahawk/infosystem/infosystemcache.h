@@ -46,13 +46,13 @@ signals:
     void info( QString caller, Tomahawk::InfoSystem::InfoType type, QVariant input, QVariant output, Tomahawk::InfoSystem::InfoCustomData customData );
 
 public slots:
-    void getCachedInfoSlot( Tomahawk::InfoSystem::InfoCriteriaHash criteria, qint64 newMaxAge, QString caller, Tomahawk::InfoSystem::InfoType type, QVariant input, Tomahawk::InfoSystem::InfoCustomData customData );
-    void updateCacheSlot( Tomahawk::InfoSystem::InfoCriteriaHash criteria, qint64 maxAge, Tomahawk::InfoSystem::InfoType type, QVariant output );
+    void getCachedInfoSlot( const Tomahawk::InfoSystem::InfoCriteriaHash criteria, const qint64 newMaxAge, const QString caller, const Tomahawk::InfoSystem::InfoType type, const QVariant input, const Tomahawk::InfoSystem::InfoCustomData customData );
+    void updateCacheSlot( const Tomahawk::InfoSystem::InfoCriteriaHash criteria, const qint64 maxAge, const Tomahawk::InfoSystem::InfoType type, const QVariant output );
 
 private slots:
     void syncTimerFired();
-    void loadCache( Tomahawk::InfoSystem::InfoType type, const QString &cacheDir );
-    void saveCache( Tomahawk::InfoSystem::InfoType type, const QString &cacheDir );
+    void loadCache( const Tomahawk::InfoSystem::InfoType type, const QString cacheDir );
+    void saveCache( const Tomahawk::InfoSystem::InfoType type, const QString cacheDir );
 
 private:
     QHash< InfoType, QHash< InfoCriteriaHash, QVariant > > m_dataCache;

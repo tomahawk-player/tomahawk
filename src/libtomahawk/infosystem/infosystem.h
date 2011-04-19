@@ -111,17 +111,17 @@ public:
         qDebug() << Q_FUNC_INFO;
     }
 
-    virtual void getInfo( const QString &caller, const InfoType type, const QVariant &data, InfoCustomData customData ) = 0;
-
 signals:
     void getCachedInfo( Tomahawk::InfoSystem::InfoCriteriaHash criteria, qint64 newMaxAge, QString caller, Tomahawk::InfoSystem::InfoType type, QVariant input, Tomahawk::InfoSystem::InfoCustomData customData );
     void updateCache( Tomahawk::InfoSystem::InfoCriteriaHash criteria, qint64, Tomahawk::InfoSystem::InfoType type, QVariant output );
     void info( QString caller, Tomahawk::InfoSystem::InfoType type, QVariant input, QVariant output, Tomahawk::InfoSystem::InfoCustomData customData );
     void finished( QString, Tomahawk::InfoSystem::InfoType );
 
-public slots:
+protected slots:
+    virtual void getInfo( const QString caller, const Tomahawk::InfoSystem::InfoType type, const QVariant data, const Tomahawk::InfoSystem::InfoCustomData customData ) = 0;
+
     //FIXME: Make pure virtual when everything supports it
-    virtual void notInCacheSlot( Tomahawk::InfoSystem::InfoCriteriaHash criteria, QString caller, Tomahawk::InfoSystem::InfoType type, QVariant input, Tomahawk::InfoSystem::InfoCustomData customData )
+    virtual void notInCacheSlot( const Tomahawk::InfoSystem::InfoCriteriaHash criteria, const QString caller, const Tomahawk::InfoSystem::InfoType type, const QVariant input, const Tomahawk::InfoSystem::InfoCustomData customData )
     {
         Q_UNUSED( criteria );
         Q_UNUSED( caller );
@@ -132,6 +132,10 @@ public slots:
 
 protected:
     InfoType m_type;
+
+private:
+    friend class InfoSystem;
+    friend class InfoSystemCache;
 };
 
 typedef QWeakPointer< InfoPlugin > InfoPluginPtr;
@@ -148,7 +152,7 @@ public:
 
     void registerInfoTypes( const InfoPluginPtr &plugin, const QSet< InfoType > &types );
 
-    void getInfo( const QString &caller, const InfoType type, const QVariant &data, InfoCustomData customData );
+    void getInfo( const QString &caller, const InfoType type, const QVariant &input, InfoCustomData customData );
     void getInfo( const QString &caller, const InfoMap &input, InfoCustomData customData );
 
     InfoSystemCache* getCache() { return m_cache; }
@@ -158,7 +162,7 @@ signals:
     void finished( QString target );
 
 public slots:
-    void infoSlot( QString target, Tomahawk::InfoSystem::InfoType type, QVariant input, QVariant output, Tomahawk::InfoSystem::InfoCustomData customData );
+    void infoSlot( const QString target, const Tomahawk::InfoSystem::InfoType type, const QVariant input, const QVariant output, const Tomahawk::InfoSystem::InfoCustomData customData );
 
 private:
     QLinkedList< InfoPluginPtr > determineOrderedMatches( const InfoType type ) const;

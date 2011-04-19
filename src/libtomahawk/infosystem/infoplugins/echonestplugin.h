@@ -42,18 +42,19 @@ public:
     EchoNestPlugin(QObject *parent);
     virtual ~EchoNestPlugin();
 
-    void getInfo( const QString &caller, const InfoType type, const QVariant &data, InfoCustomData customData );
+protected slots:
+    virtual void getInfo( const QString caller, const Tomahawk::InfoSystem::InfoType type, const QVariant input, const Tomahawk::InfoSystem::InfoCustomData customData );
 
 private:
-    void getSongProfile( const QString &caller, const QVariant &data, InfoCustomData &customData, const QString &item = QString() );
-    void getArtistBiography ( const QString &caller, const QVariant &data, InfoCustomData &customData );
-    void getArtistFamiliarity( const QString &caller, const QVariant &data, InfoCustomData &customData );
-    void getArtistHotttnesss( const QString &caller, const QVariant &data, InfoCustomData &customData );
-    void getArtistTerms( const QString &caller, const QVariant &data, InfoCustomData &customData );
-    void getMiscTopTerms( const QString &caller, const QVariant &data, InfoCustomData &customData );
+    void getSongProfile( const QString &caller, const QVariant &input, const InfoCustomData &customData, const QString &item = QString() );
+    void getArtistBiography ( const QString &caller, const QVariant &input, const InfoCustomData &customData );
+    void getArtistFamiliarity( const QString &caller, const QVariant &input, const InfoCustomData &customData );
+    void getArtistHotttnesss( const QString &caller, const QVariant &input, const InfoCustomData &customData );
+    void getArtistTerms( const QString &caller, const QVariant &input, const InfoCustomData &customData );
+    void getMiscTopTerms( const QString &caller, const QVariant &input, const InfoCustomData &customData );
 
-    bool isValidArtistData( const QString &caller, const QVariant& data, InfoCustomData& customData );
-    bool isValidTrackData( const QString &caller, const QVariant& data, InfoCustomData& customData );
+    bool isValidArtistData( const QString &caller, const QVariant &input, const InfoCustomData& customData );
+    bool isValidTrackData( const QString &caller, const QVariant &input, const InfoCustomData& customData );
     Echonest::Artist artistFromReply( QNetworkReply* );
 
 private slots:

@@ -98,7 +98,7 @@ InfoSystemCache::syncTimerFired()
 
 
 void
-InfoSystemCache::getCachedInfoSlot( Tomahawk::InfoSystem::InfoCriteriaHash criteria, qint64 newMaxAge, QString caller, Tomahawk::InfoSystem::InfoType type, QVariant input, Tomahawk::InfoSystem::InfoCustomData customData )
+InfoSystemCache::getCachedInfoSlot( const Tomahawk::InfoSystem::InfoCriteriaHash criteria, const qint64 newMaxAge, const QString caller, const Tomahawk::InfoSystem::InfoType type, const QVariant input, const Tomahawk::InfoSystem::InfoCustomData customData )
 {
     qDebug() << Q_FUNC_INFO;
     if ( !m_dataCache.contains( type ) || !m_dataCache[type].contains( criteria ) )
@@ -110,7 +110,7 @@ InfoSystemCache::getCachedInfoSlot( Tomahawk::InfoSystem::InfoCriteriaHash crite
     if ( m_cacheRemainingToLoad > 0 )
     {
         qDebug() << "Cache not fully loaded, punting request for a bit";
-        QMetaObject::invokeMethod( this, "getCachedInfoSlot", Qt::QueuedConnection,  Q_ARG( Tomahawk::InfoSystem::InfoCriteriaHash, criteria ), Q_ARG( qint64, newMaxAge ), Q_ARG( QString, caller ), Q_ARG( Tomahawk::InfoSystem::InfoType, type ), Q_ARG( Tomahawk::InfoSystem::InfoCustomData, customData ) );
+        QMetaObject::invokeMethod( this, "getCachedInfoSlot", Qt::QueuedConnection,  Q_ARG( Tomahawk::InfoSystem::InfoCriteriaHash, criteria ), Q_ARG( qint64, newMaxAge ), Q_ARG( QString, caller ), Q_ARG( Tomahawk::InfoSystem::InfoType, type ), Q_ARG( QVariant, input ), Q_ARG( Tomahawk::InfoSystem::InfoCustomData, customData ) );
         return;
     }
     
@@ -143,7 +143,7 @@ InfoSystemCache::getCachedInfoSlot( Tomahawk::InfoSystem::InfoCriteriaHash crite
 
 
 void
-InfoSystemCache::updateCacheSlot( Tomahawk::InfoSystem::InfoCriteriaHash criteria, qint64 maxAge, Tomahawk::InfoSystem::InfoType type, QVariant output )
+InfoSystemCache::updateCacheSlot( const Tomahawk::InfoSystem::InfoCriteriaHash criteria, const qint64 maxAge, const Tomahawk::InfoSystem::InfoType type, const QVariant output )
 {
     qDebug() << Q_FUNC_INFO;
     QHash< InfoCriteriaHash, QVariant > typedatacache = m_dataCache[type];
@@ -160,7 +160,7 @@ InfoSystemCache::updateCacheSlot( Tomahawk::InfoSystem::InfoCriteriaHash criteri
 
 
 void
-InfoSystemCache::loadCache( Tomahawk::InfoSystem::InfoType type, const QString &cacheDir )
+InfoSystemCache::loadCache( const Tomahawk::InfoSystem::InfoType type, const QString cacheDir )
 {
     qDebug() << Q_FUNC_INFO;
 
@@ -210,7 +210,7 @@ InfoSystemCache::loadCache( Tomahawk::InfoSystem::InfoType type, const QString &
 
 
 void
-InfoSystemCache::saveCache( Tomahawk::InfoSystem::InfoType type, const QString &cacheDir )
+InfoSystemCache::saveCache( const Tomahawk::InfoSystem::InfoType type, const QString cacheDir )
 {
     qDebug() << Q_FUNC_INFO;
     QDir dir( cacheDir );
