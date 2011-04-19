@@ -169,6 +169,11 @@ InfoSystemCache::loadCache( Tomahawk::InfoSystem::InfoType type, const QString &
     qDebug() << "Checking files in dir " << dir.canonicalPath();
     QFileInfoList files = dir.entryInfoList( QDir::Files );
     qDebug() << "Found " << files.size() << " files";
+
+    QHash< InfoCriteriaHash, QVariant > dataHash = m_dataCache[type];
+    QHash< InfoCriteriaHash, QDateTime > insertDateHash = m_insertTimeCache[type];
+    QHash< InfoCriteriaHash, QDateTime > maxDateHash = m_maxTimeCache[type];
+    QHash< InfoCriteriaHash, QString > fileLocationHash = m_fileLocationCache[type];
     
     foreach ( QFileInfo file, files )
     {
@@ -183,10 +188,7 @@ InfoSystemCache::loadCache( Tomahawk::InfoSystem::InfoType type, const QString &
             
         QSettings cachedSettings( file.canonicalFilePath(), QSettings::IniFormat );
 
-        QHash< InfoCriteriaHash, QVariant > dataHash = m_dataCache[type];
-        QHash< InfoCriteriaHash, QDateTime > insertDateHash = m_insertTimeCache[type];
-        QHash< InfoCriteriaHash, QDateTime > maxDateHash = m_maxTimeCache[type];
-        QHash< InfoCriteriaHash, QString > fileLocationHash = m_fileLocationCache[type];
+
         InfoCriteriaHash criteria;
         cachedSettings.beginGroup( "criteria" );
         foreach ( QString key, cachedSettings.childKeys() )
@@ -196,12 +198,13 @@ InfoSystemCache::loadCache( Tomahawk::InfoSystem::InfoType type, const QString &
         insertDateHash[criteria] = cachedSettings.value( "inserttime" ).toDateTime();
         maxDateHash[criteria] =  QDateTime::fromMSecsSinceEpoch( file.baseName().toLongLong() );
         fileLocationHash[criteria] = file.canonicalFilePath();
-        m_dataCache[type] = dataHash;
-        m_insertTimeCache[type] = insertDateHash;
-        m_maxTimeCache[type] = maxDateHash;
-        m_fileLocationCache[type] = fileLocationHash;
     }
-    
+
+    m_dataCache[type] = dataHash;
+    m_insertTimeCache[type] = insertDateHash;
+    m_maxTimeCache[type] = maxDateHash;
+    m_fileLocationCache[type] = fileLocationHash;
+
     m_cacheRemainingToLoad--;
 }
 
@@ -220,6 +223,8 @@ InfoSystemCache::saveCache( Tomahawk::InfoSystem::InfoType type, const QString &
             return;
         }
     }
+
+    QHash< InfoCriteriaHash, QString > fileLocationHash = m_fileLocationCache[type];
 
     foreach ( InfoCriteriaHash criteria, m_dirtySet[type].values() )
     {
@@ -246,8 +251,11 @@ InfoSystemCache::saveCache( Tomahawk::InfoSystem::InfoType type, const QString &
         cachedSettings.endGroup();
         cachedSettings.setValue( "data", m_dataCache[type][criteria] );
         cachedSettings.setValue( "inserttime", m_insertTimeCache[type][criteria] );
+        fileLocationHash[criteria] = settingsFilePath;
         m_dirtySet[type].remove( criteria );
     }
+
+    m_fileLocationCache[type] = fileLocationHash;
 
 }
 
