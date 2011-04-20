@@ -20,6 +20,7 @@
 #define SIPHANDLER_H
 
 #include "sip/SipPlugin.h"
+#include "dllmacro.h"
 
 #include <QDebug>
 #include <QObject>
@@ -27,7 +28,7 @@
 #include <QPixmap>
 #include <QString>
 
-class SipHandler : public QObject
+class DLLEXPORT SipHandler : public QObject
 {
     Q_OBJECT
 
