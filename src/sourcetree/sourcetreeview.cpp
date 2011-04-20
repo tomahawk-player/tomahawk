@@ -537,17 +537,20 @@ SourceDelegate::paint( QPainter* painter, const QStyleOptionViewItem& option, co
 
         SourceTreeItem* sti = SourcesModel::indexToTreeItem( index );
         bool status = !( !sti || sti->source().isNull() || !sti->source()->isOnline() );
+        QPixmap avatar( RESPATH "images/user-avatar.png" );
         QString tracks;
         int figWidth = 0;
 
-        if ( status )
+        if ( status && sti && !sti->source().isNull() )
         {
             tracks = QString::number( sti->source()->trackCount() );
             figWidth = painter->fontMetrics().width( tracks );
+            if ( !sti->source()->avatar().isNull() )
+                avatar = sti->source()->avatar();
         }
 
         QRect iconRect = option.rect.adjusted( 4, 6, -option.rect.width() + option.rect.height() - 12 + 4, -6 );
-        painter->drawPixmap( iconRect, QPixmap( RESPATH "images/user-avatar.png" ).scaledToHeight( iconRect.height(), Qt::SmoothTransformation ) );
+        painter->drawPixmap( iconRect, avatar.scaledToHeight( iconRect.height(), Qt::SmoothTransformation ) );
 
         if ( ( option.state & QStyle::State_Selected ) == QStyle::State_Selected )
         {

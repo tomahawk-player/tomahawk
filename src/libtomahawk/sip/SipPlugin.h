@@ -57,7 +57,9 @@ signals:
     void peerOnline( const QString& );
     void peerOffline( const QString& );
     void msgReceived( const QString& from, const QString& msg );
-    
+
+    void avatarReceived ( const QString& from,  const QPixmap& avatar);
+
     void addMenu( QMenu* menu );
     void removeMenu( QMenu* menu );
 };

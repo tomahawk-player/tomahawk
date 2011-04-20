@@ -107,6 +107,16 @@ Source::friendlyName() const
     return m_friendlyname;
 }
 
+void Source::setAvatar(const QPixmap& avatar)
+{
+    m_avatar = avatar;
+}
+
+const QPixmap Source::avatar() const
+{
+    return m_avatar;
+}
+
 
 void
 Source::addCollection( const collection_ptr& c )
