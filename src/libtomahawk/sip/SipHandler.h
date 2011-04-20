@@ -1,5 +1,5 @@
 /* === This file is part of Tomahawk Player - <http://tomahawk-player.org> ===
- * 
+ *
  *   Copyright 2010-2011, Christian Muehlhaeuser <muesli@tomahawk-player.org>
  *
  *   Tomahawk is free software: you can redistribute it and/or modify
@@ -23,18 +23,23 @@
 
 #include <QDebug>
 #include <QObject>
+#include <QHash>
+#include <QPixmap>
+#include <QString>
 
 class SipHandler : public QObject
 {
     Q_OBJECT
 
 public:
-//    static SipHandler* instance() { return s_instance ? s_instance : new SipHandler(); }
+    static SipHandler* instance();
 
     SipHandler( QObject* parent );
     ~SipHandler();
 
     QList< SipPlugin* > plugins() const;
+
+    const QPixmap avatar( const QString& name ) const;
 
 public slots:
     void addContact( const QString& id ) { qDebug() << Q_FUNC_INFO << id; }
@@ -57,7 +62,11 @@ private slots:
 
     void onSettingsChanged();
 
+    void onAvatarReceived( const QString& from, const QPixmap& avatar = QPixmap());
+
 private:
+    static SipHandler *s_instance;
+
     QStringList findPlugins();
     bool pluginLoaded( const QString& name ) const;
 
@@ -66,6 +75,9 @@ private:
 
     QList< SipPlugin* > m_plugins;
     bool m_connected;
+
+
+    QHash<QString, QPixmap> m_usernameAvatars;
 };
 
 #endif
