@@ -22,6 +22,8 @@
 
 #include "../sipdllmacro.h"
 
+#include "avatarmanager.h"
+
 #include <jreen/client.h>
 #include <jreen/disco.h>
 #include <jreen/message.h>
@@ -63,6 +65,7 @@ signals:
     void connected();
     void disconnected();
     void jidChanged( const QString& );
+    void avatarReceived( const QString&, const QPixmap& avatar );
     void authError( int, const QString& );
 
 public slots:
@@ -82,6 +85,7 @@ private slots:
         qDebug() << e;
     }
     virtual void onNewIq( const Jreen::IQ &iq, int context = NoContext );
+    virtual void onNewAvatar( const QString &jid );
 
 private:
     bool presenceMeansOnline( Jreen::Presence::Type p );
@@ -99,10 +103,7 @@ private:
 
     QStringList m_legacy_peers;
 
-
-    //sort out
-    //QHash<Jreen::JID, QString> m_contactsPhotoHashes;
-    QStringList m_photoHashes;
+    AvatarManager *m_avatarManager;
 };
 
 #endif // JABBER_H

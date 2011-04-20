@@ -70,8 +70,8 @@ Jabber_p::Jabber_p( const QString& jid, const QString& password, const QString& 
     // add VCardUpdate extension to own presence
     m_client->presence().addExtension( new Jreen::VCardUpdate() );
 
-    // read cached avatars
-    m_photoHashes = QDir("/home/domme/jreen/").entryList();
+    // initialize the AvatarManager
+    m_avatarManager = new AvatarManager(m_client);
 
     // setup disco
     m_client->disco()->setSoftwareVersion( "Tomahawk Player", TOMAHAWK_VERSION, CMAKE_SYSTEM );
@@ -95,6 +95,8 @@ Jabber_p::Jabber_p( const QString& jid, const QString& password, const QString& 
     connect(m_client, SIGNAL(newMessage(Jreen::Message)), SLOT(onNewMessage(Jreen::Message)));
     connect(m_client, SIGNAL(newPresence(Jreen::Presence)), SLOT(onNewPresence(Jreen::Presence)));
     connect(m_client, SIGNAL(newIQ(Jreen::IQ)), SLOT(onNewIq(Jreen::IQ)));
+
+    connect(m_avatarManager, SIGNAL(newAvatar(QString)), SLOT(onNewAvatar(QString)));
 
 
     // connect
@@ -226,9 +228,6 @@ Jabber_p::onConnect()
     // set presence to least valid value
     m_client->setPresence(Jreen::Presence::XA, "Got Tomahawk? http://gettomahawk.com", -127);
 
-    // request own vcard
-    fetchVCard( m_jid.bare() );
-
     // set ping timeout to 15 secs (TODO: verify if this works)
     m_client->setPingInterval(15000);
 
@@ -350,16 +349,6 @@ void Jabber_p::onNewPresence( const Jreen::Presence& presence)
 
 
     qDebug() << Q_FUNC_INFO << "* New presence: " << fulljid << presence.subtype();
-
-    Jreen::VCardUpdate::Ptr update = presence.findExtension<Jreen::VCardUpdate>();
-    if(update)
-    {
-        qDebug() << "vcard: found update for " << fulljid;
-        if(!m_photoHashes.contains(update->photoHash()))
-        {
-            fetchVCard( jid.bare() );
-        }
-    }
 
     if( jid == m_jid )
         return;
@@ -536,10 +525,33 @@ Jabber_p::handlePeerStatus( const Jreen::JID& jid, Jreen::Presence::Type presenc
     {
         m_peers[ fulljid ] = presenceType;
         qDebug() << Q_FUNC_INFO << "* Peer goes online:" << fulljid;
+
         emit peerOnline( fulljid );
+
+        if(!m_avatarManager->avatar(jid.bare()).isNull())
+            onNewAvatar( jid.bare() );
+
         return;
     }
 
     //qDebug() << "Updating presence data for" << fulljid;
     m_peers[ fulljid ] = presenceType;
+}
+
+void Jabber_p::onNewAvatar(const QString& jid)
+{
+    qDebug() << Q_FUNC_INFO << jid;
+    Q_ASSERT(!m_avatarManager->avatar( jid ).isNull());
+
+    // find peers for the jid
+    QStringList peers =  m_peers.keys();
+    foreach(const QString &peer, peers)
+    {
+        if( peer.startsWith(jid) )
+        {
+            emit avatarReceived ( peer,  m_avatarManager->avatar( jid ) );
+        }
+    }
+
+    emit avatarReceived ( jid,  m_avatarManager->avatar( jid ) );
 }
