@@ -150,7 +150,6 @@ TomahawkApp::TomahawkApp( int& argc, char *argv[] )
     , m_sipHandler( 0 )
     , m_servent( 0 )
     , m_shortcutHandler( 0 )
-    , m_scrubFriendlyName( false )
     , m_mainwindow( 0 )
 {
     qDebug() << "TomahawkApp thread:" << this->thread();
@@ -193,7 +192,6 @@ TomahawkApp::init()
     qDebug() << "Init Echonest Factory.";
     GeneratorFactory::registerFactory( "echonest", new EchonestFactory );
 
-    m_scrubFriendlyName = arguments().contains( "--demo" );
     // Register shortcut handler for this platform
     #ifdef Q_WS_MAC
     m_shortcutHandler = new MacShortcutHandler( this );
