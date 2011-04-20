@@ -540,7 +540,7 @@ SourceDelegate::paint( QPainter* painter, const QStyleOptionViewItem& option, co
         QString tracks;
         int figWidth = 0;
 
-        if ( status )
+        if ( status && sti && !sti->source().isNull() )
         {
             tracks = QString::number( sti->source()->trackCount() );
             figWidth = painter->fontMetrics().width( tracks );
