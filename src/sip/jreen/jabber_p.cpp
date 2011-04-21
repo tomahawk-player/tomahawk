@@ -25,6 +25,8 @@
 #include "utils/tomahawkutils.h"
 
 #include <jreen/capabilities.h>
+#include <jreen/vcardupdate.h>
+#include <jreen/vcard.h>
 
 #include <qjson/parser.h>
 #include <qjson/serializer.h>
@@ -37,6 +39,14 @@
 #include <QThread>
 #include <QVariant>
 #include <QMap>
+#include <QCryptographicHash>
+#include <QDir>
+#include <QFile>
+#include <QPixmap>
+
+//remove
+#include <QLabel>
+#include <QtGui/QLabel>
 
 #define TOMAHAWK_FEATURE QLatin1String( "tomahawk:sip:v1" )
 
@@ -56,6 +66,12 @@ Jabber_p::Jabber_p( const QString& jid, const QString& password, const QString& 
     m_client = new Jreen::Client( jid, password );
     m_client->registerStanzaExtension(new TomahawkSipMessageFactory);
     m_client->setResource( QString( "tomahawk%1" ).arg( QString::number( qrand() % 10000 ) ) );
+
+    // add VCardUpdate extension to own presence
+    m_client->presence().addExtension( new Jreen::VCardUpdate() );
+
+    // initialize the AvatarManager
+    m_avatarManager = new AvatarManager(m_client);
 
     // setup disco
     m_client->disco()->setSoftwareVersion( "Tomahawk Player", TOMAHAWK_VERSION, CMAKE_SYSTEM );
@@ -79,6 +95,8 @@ Jabber_p::Jabber_p( const QString& jid, const QString& password, const QString& 
     connect(m_client, SIGNAL(newMessage(Jreen::Message)), SLOT(onNewMessage(Jreen::Message)));
     connect(m_client, SIGNAL(newPresence(Jreen::Presence)), SLOT(onNewPresence(Jreen::Presence)));
     connect(m_client, SIGNAL(newIQ(Jreen::IQ)), SLOT(onNewIq(Jreen::IQ)));
+
+    connect(m_avatarManager, SIGNAL(newAvatar(QString)), SLOT(onNewAvatar(QString)));
 
 
     // connect
@@ -329,6 +347,7 @@ void Jabber_p::onNewPresence( const Jreen::Presence& presence)
     Jreen::JID jid = presence.from();
     QString fulljid( jid.full() );
 
+
     qDebug() << Q_FUNC_INFO << "* New presence: " << fulljid << presence.subtype();
 
     if( jid == m_jid )
@@ -411,11 +430,18 @@ Jabber_p::onNewIq( const Jreen::IQ &iq, int context )
     {
         qDebug() << "Sent SipMessage... what now?!";
     }
+    /*else if(context == RequestedVCard )
+    {
+        qDebug() << "Requested VCard... what now?!";
+    }*/
     else
     {
+
         TomahawkSipMessage *sipMessage = iq.findExtension<TomahawkSipMessage>().data();
         if(sipMessage)
         {
+            iq.accept();
+
             qDebug() << Q_FUNC_INFO << "Got SipMessage ...";
             qDebug() << "ip" << sipMessage->ip();
             qDebug() << "port" << sipMessage->port();
@@ -466,8 +492,10 @@ Jabber_p::presenceMeansOnline( Jreen::Presence::Type p )
 }
 
 void
-Jabber_p::handlePeerStatus( const QString& fulljid, Jreen::Presence::Type presenceType )
+Jabber_p::handlePeerStatus( const Jreen::JID& jid, Jreen::Presence::Type presenceType )
 {
+    QString fulljid = jid.full();
+
     // "going offline" event
     if ( !presenceMeansOnline( presenceType ) &&
          ( !m_peers.contains( fulljid ) ||
@@ -497,7 +525,12 @@ Jabber_p::handlePeerStatus( const QString& fulljid, Jreen::Presence::Type presen
     {
         m_peers[ fulljid ] = presenceType;
         qDebug() << Q_FUNC_INFO << "* Peer goes online:" << fulljid;
+
         emit peerOnline( fulljid );
+
+        if(!m_avatarManager->avatar(jid.bare()).isNull())
+            onNewAvatar( jid.bare() );
+
         return;
     }
 
@@ -505,3 +538,25 @@ Jabber_p::handlePeerStatus( const QString& fulljid, Jreen::Presence::Type presen
     m_peers[ fulljid ] = presenceType;
 }
 
+void Jabber_p::onNewAvatar(const QString& jid)
+{
+    qDebug() << Q_FUNC_INFO << jid;
+    Q_ASSERT(!m_avatarManager->avatar( jid ).isNull());
+
+    // find peers for the jid
+    QStringList peers =  m_peers.keys();
+    foreach(const QString &peer, peers)
+    {
+        if( peer.startsWith(jid) )
+        {
+            emit avatarReceived ( peer,  m_avatarManager->avatar( jid ) );
+        }
+    }
+
+    if( jid == m_client->jid().bare() )
+        // own avatar
+        emit avatarReceived ( m_avatarManager->avatar( jid ) );
+    else
+        // someone else's avatar
+        emit avatarReceived ( jid,  m_avatarManager->avatar( jid ) );
+}

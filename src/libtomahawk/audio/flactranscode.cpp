@@ -70,7 +70,7 @@ FLACTranscode::processData( const QByteArray& data, bool finish )
     m_buffer.append( data );
     m_mutex.unlock();
 
-    while ( m_buffer.size() >= FLAC_BUFFER )
+    while ( m_buffer.size() >= FLAC_BUFFER || ( finish && !m_buffer.isEmpty() ) )
     {
         process_single();
     }

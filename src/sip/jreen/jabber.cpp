@@ -110,6 +110,8 @@ JabberPlugin::connectPlugin( bool startup )
     QObject::connect( p, SIGNAL( disconnected() ), SLOT( onDisconnected() ) );
 
     QObject::connect( p, SIGNAL( authError( int, QString ) ), SLOT( onAuthError( int, QString ) ) );
+    QObject::connect( p, SIGNAL( avatarReceived( QString, QPixmap ) ), SIGNAL( avatarReceived( QString, QPixmap ) ) );
+    QObject::connect( p, SIGNAL( avatarReceived( QPixmap ) ), SIGNAL( avatarReceived( QPixmap) ) );
 
     return true;
 }

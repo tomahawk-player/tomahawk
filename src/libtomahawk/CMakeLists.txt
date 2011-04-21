@@ -29,6 +29,7 @@ set( libSources
     viewpage.cpp
 
     sip/SipPlugin.cpp
+    sip/SipHandler.cpp
 
     audio/madtranscode.cpp
     audio/dummytranscode.cpp
@@ -187,6 +188,7 @@ set( libHeaders
     playlist.h
 
     sip/SipPlugin.h
+    sip/SipHandler.h
 
     audio/transcodeinterface.h
     audio/madtranscode.h

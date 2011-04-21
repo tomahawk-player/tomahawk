@@ -23,6 +23,7 @@
 #include "database/databasecommand_collectionstats.h"
 #include "dbsyncconnection.h"
 #include "sourcelist.h"
+#include <sip/SipHandler.h>
 
 #define TCP_TIMEOUT 600
 
@@ -120,6 +121,10 @@ ControlConnection::registerSource()
     Source* source = (Source*) sender();
     Q_UNUSED( source )
     Q_ASSERT( source == m_source.data() );
+
+    qDebug() << Q_FUNC_INFO << "Setting avatar ... " << name() << !SipHandler::instance()->avatar( name() ).isNull();
+    source->setAvatar( SipHandler::instance()->avatar( name() ) );
+
     // .. but we'll use the shared pointer we've already made:
 
     m_registered = true;
