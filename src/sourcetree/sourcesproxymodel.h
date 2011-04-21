@@ -34,6 +34,11 @@ public slots:
     void showOfflineSources();
     void hideOfflineSources();
 
+    void selectRequested( const QModelIndex& );
+
+signals:
+    void selectRequest( const QModelIndex& idx );
+
 protected:
     bool filterAcceptsRow( int sourceRow, const QModelIndex& sourceParent ) const;
 

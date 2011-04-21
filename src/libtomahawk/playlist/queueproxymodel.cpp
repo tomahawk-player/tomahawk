@@ -20,7 +20,7 @@
 
 #include <QDebug>
 
-#include "playlist/playlistmanager.h"
+#include "viewmanager.h"
 
 using namespace Tomahawk;
 
@@ -47,7 +47,7 @@ QueueProxyModel::siblingItem( int itemsAway )
 
     qDebug() << "new rowcount:" << rowCount( QModelIndex() );
     if ( rowCount( QModelIndex() ) == 1 )
-        PlaylistManager::instance()->hideQueue();
+        ViewManager::instance()->hideQueue();
 
     removeIndex( currentItem() );
 

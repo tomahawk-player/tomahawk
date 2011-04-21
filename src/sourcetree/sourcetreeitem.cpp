@@ -20,10 +20,11 @@
 #include "playlist.h"
 #include "playlist/dynamic/DynamicPlaylist.h"
 #include "source.h"
-#include <playlist/playlistmanager.h>
+#include "viewmanager.h"
 #include "tomahawk/tomahawkapp.h"
+#include "widgets/newplaylistwidget.h"
+
 #include <QMimeData>
-#include <widgets/newplaylistwidget.h>
 
 using namespace Tomahawk;
 
@@ -32,15 +33,16 @@ SourceTreeItem::SourceTreeItem( SourcesModel* model, SourceTreeItem* parent, Sou
     , m_type( thisType )
     , m_parent( parent )
     , m_model( model )
-{       
+{
     connect( this, SIGNAL( beginChildRowsAdded( int,int ) ), m_model, SLOT( onItemRowsAddedBegin( int,int ) ) );
     connect( this, SIGNAL( beginChildRowsRemoved( int,int ) ), m_model, SLOT( onItemRowsRemovedBegin( int,int ) ) );
     connect( this, SIGNAL( childRowsAdded() ), m_model, SLOT( onItemRowsAddedDone() ) );
     connect( this, SIGNAL( childRowsRemoved() ), m_model, SLOT( onItemRowsRemovedDone() ) );
-    
+    connect( this, SIGNAL( updated() ), m_model, SLOT( itemUpdated() ) );
+
     if( !m_parent )
         return;
-    
+
     // caller must call begin/endInsertRows
     if( index < 0 )
         m_parent->appendChild( this );
@@ -57,7 +59,7 @@ SourceTreeItem::~SourceTreeItem()
 
 /// Category item
 
-void 
+void
 CategoryItem::activate()
 {
     if( m_category == SourcesModel::StationsCategory ) {
@@ -77,82 +79,86 @@ PlaylistItem::PlaylistItem( SourcesModel* mdl, SourceTreeItem* parent, const pla
               SLOT( onPlaylistLoaded( Tomahawk::PlaylistRevision ) ), Qt::QueuedConnection );
     connect( pl.data(), SIGNAL( changed() ),
               SIGNAL( updated() ), Qt::QueuedConnection );
+
+    if( ViewManager::instance()->pageForPlaylist( pl ) )
+        model()->linkSourceItemToPage( this, ViewManager::instance()->pageForPlaylist( pl ) );
 }
 
 
-QString 
+QString
 PlaylistItem::text() const
 {
     return m_playlist->title();
 }
 
-Tomahawk::playlist_ptr 
+Tomahawk::playlist_ptr
 PlaylistItem::playlist() const
 {
     return m_playlist;
 }
-void 
+void
 PlaylistItem::onPlaylistLoaded( Tomahawk::PlaylistRevision revision )
 {
     m_loaded = true;
     emit updated();
 }
 
-void 
+void
 PlaylistItem::onPlaylistChanged()
 {
     emit updated();
 }
 
-Qt::ItemFlags 
+Qt::ItemFlags
 PlaylistItem::flags() const
 {
     Qt::ItemFlags flags = SourceTreeItem::flags();
-    
+
     if( !m_loaded )
         flags &= !Qt::ItemIsEnabled;
-    
+
     flags |= Qt::ItemIsDragEnabled | Qt::ItemIsDropEnabled;
     if( playlist()->author()->isLocal() )
         flags |= Qt::ItemIsEditable;
-    
+
     return flags;
 }
 
-void 
+void
 PlaylistItem::activate()
 {
-    PlaylistManager::instance()->show( m_playlist );
+    ViewPage* p = ViewManager::instance()->show( m_playlist );
+    model()->linkSourceItemToPage( this, p );
 }
 
-void 
+void
 PlaylistItem::setLoaded( bool loaded )
 {
     m_loaded = loaded;
 }
 
-bool 
+bool
 PlaylistItem::willAcceptDrag( const QMimeData* data ) const
 {
     return !m_playlist.isNull() && m_playlist->author()->isLocal();
 }
 
 
-bool 
+bool
 PlaylistItem::dropMimeData( const QMimeData* data, Qt::DropAction action )
 {
     if( data->hasFormat( "application/tomahawk.query.list" ) ) {
         if ( !m_playlist.isNull() && m_playlist->author()->isLocal() ) {
-            
+
             QByteArray itemData = data->data( "application/tomahawk.query.list" );
             QDataStream stream( &itemData, QIODevice::ReadOnly );
             QList< Tomahawk::query_ptr > queries;
-            
+
             while ( !stream.atEnd() )
             {
                 qlonglong qptr;
                 stream >> qptr;
-                
+
                 Tomahawk::query_ptr* query = reinterpret_cast<Tomahawk::query_ptr*>(qptr);
                 if ( query && !query->isNull() )
                 {
@@ -160,21 +166,21 @@ PlaylistItem::dropMimeData( const QMimeData* data, Qt::DropAction action )
                     queries << *query;
                 }
             }
-            
+
             qDebug() << "on playlist:" << m_playlist->title() << m_playlist->guid();
-            
+
             // TODO do we need to use this in the refactor?
             //                     QString rev = item->currentlyLoadedPlaylistRevision( playlist->guid() );
             m_playlist->addEntries( queries, m_playlist->currentrevision() );
-            
+
             return true;
         }
     }
-    
+
     return false;
 }
 
-QIcon 
+QIcon
 PlaylistItem::icon() const
 {
     return QIcon( RESPATH "images/playlist-icon.png" );
@@ -194,32 +200,32 @@ DynPlaylistItem::DynPlaylistItem( SourcesModel* mdl, SourceTreeItem* parent, con
 }
 
 
-QString 
+QString
 DynPlaylistItem::text()
 {
     return m_dynplaylist->title();
 }
 
-Tomahawk::playlist_ptr 
+Tomahawk::playlist_ptr
 DynPlaylistItem::playlist() const
 {
     return m_dynplaylist.staticCast<Tomahawk::Playlist>();
 }
 
-// Tomahawk::dynplaylist_ptr 
+// Tomahawk::dynplaylist_ptr
 // DynPlaylistItem::playlist() const
 // {
 //     return m_dynplaylist;
 // }
 
-void 
+void
 DynPlaylistItem::activate()
 {
-    PlaylistManager::instance()->show( m_playlist );
+    ViewManager::instance()->show( m_playlist );
 }
 
 
-void 
+void
 DynPlaylistItem::onDynamicPlaylistLoaded( Tomahawk::DynamicPlaylistRevision revision )
 {
     setLoaded( true );
@@ -239,27 +245,29 @@ CategoryAddItem::~CategoryAddItem()
 
 }
 
-QString 
+QString
 CategoryAddItem::text() const
 {
     switch( m_categoryType ) {
-    case SourcesModel::PlaylistsCategory:     
+    case SourcesModel::PlaylistsCategory:
         return tr( "New Playlist" );
     case SourcesModel::StationsCategory:
         return tr( "New Station" );
     }
-    
+
     return QString();
 }
 
-void 
+void
 CategoryAddItem::activate()
 {
     switch( m_categoryType ) {
-        case SourcesModel::PlaylistsCategory:     
+        case SourcesModel::PlaylistsCategory:
             // only show if none is shown yet
-            if( !PlaylistManager::instance()->isNewPlaylistPageVisible() )
-                PlaylistManager::instance()->show( new NewPlaylistWidget() );
+            if( !ViewManager::instance()->isNewPlaylistPageVisible() ) {
+                ViewPage* p = ViewManager::instance()->show( new NewPlaylistWidget() );
+                model()->linkSourceItemToPage( this, p );
+            }
             break;
         case SourcesModel::StationsCategory:
             // TODO
@@ -267,13 +275,13 @@ CategoryAddItem::activate()
     }
 }
 
-Qt::ItemFlags 
+Qt::ItemFlags
 CategoryAddItem::flags() const
 {
     return Qt::ItemIsEnabled | Qt::ItemIsSelectable;
 }
 
-QIcon 
+QIcon
 CategoryAddItem::icon() const
 {
     return QIcon( RESPATH "images/add.png" );
@@ -295,19 +303,19 @@ CategoryItem::CategoryItem( SourcesModel* model, SourceTreeItem* parent, Sources
 //     endRowsAdded();
 }
 
-void 
+void
 CategoryItem::insertItem( SourceTreeItem* item )
 {
     insertItems( QList< SourceTreeItem* >() << item );
 }
 
-void 
+void
 CategoryItem::insertItems( QList< SourceTreeItem* > items )
 {
     // add the items to the category, and connect to the signals
     int curCount = children().size();
     if( m_showAdd ) // if there's an add item, add it before that
-        curCount--; 
+        curCount--;
     beginRowsAdded( curCount, curCount + items.size() - 1 );
     foreach( SourceTreeItem* item, items ) {
         int index = m_showAdd ? children().count() - 1 : children().count();
@@ -319,7 +327,7 @@ CategoryItem::insertItems( QList< SourceTreeItem* > items )
 
 /// CollectionItem
 
-CollectionItem::CollectionItem(  SourcesModel* mdl, SourceTreeItem* parent, const Tomahawk::source_ptr& source ) 
+CollectionItem::CollectionItem(  SourcesModel* mdl, SourceTreeItem* parent, const Tomahawk::source_ptr& source )
     : SourceTreeItem( mdl, parent, SourcesModel::Collection )
     , m_source( source )
     , m_playlists( 0 )
@@ -330,29 +338,37 @@ CollectionItem::CollectionItem(  SourcesModel* mdl, SourceTreeItem* parent, cons
     }
     // create category items if there are playlists to show, or stations to show
     QList< playlist_ptr > playlists = source->collection()->playlists();
-    
+
     if( !playlists.isEmpty() || source->isLocal() ) {
-        m_playlists = new CategoryItem( model(), this, SourcesModel::PlaylistsCategory, source->isLocal() );    
+        m_playlists = new CategoryItem( model(), this, SourcesModel::PlaylistsCategory, source->isLocal() );
         // ugh :( we're being added by the model, no need to notify for added rows now
 //         m_playlists->blockSignals( true );
-        onPlaylistsAdded( source->collection()->playlists() );
+        onPlaylistsAdded( playlists );
 //         m_playlists->blockSignals( false );
     }
-    
+
     // TODO always show for now, till we actually support stations
 //     m_stations = new CategoryItem( model(), this, SourcesModel::StationsCategory, source->isLocal() );
-    
-    
+
+    if( ViewManager::instance()->pageForCollection( source->collection() ) )
+        model()->linkSourceItemToPage( this, ViewManager::instance()->pageForCollection( source->collection() ) );
+
     // HACK to load only for now
     source->collection()->dynamicPlaylists();
-    
+
+    connect( source.data(), SIGNAL( stats( QVariantMap ) ), this, SIGNAL( updated() ) );
+    connect( source.data(), SIGNAL( playbackStarted( Tomahawk::query_ptr ) ), this, SIGNAL( updated() ) );
+    connect( source.data(), SIGNAL( stateChanged() ), this, SIGNAL( updated() ) );
+    connect( source.data(), SIGNAL( offline() ), this, SIGNAL( updated() ) );
+    connect( source.data(), SIGNAL( online() ), this, SIGNAL( updated() ) );
+
     connect( source->collection().data(), SIGNAL( playlistsAdded( QList<Tomahawk::playlist_ptr> ) ),
-             SLOT( onPlaylistsAdded( QList<Tomahawk::playlist_ptr> ) ) );
+             SLOT( onPlaylistsAdded( QList<Tomahawk::playlist_ptr> ) ), Qt::QueuedConnection );
     connect( source->collection().data(), SIGNAL( playlistsDeleted( QList<Tomahawk::playlist_ptr> ) ),
-             SLOT( onPlaylistsDeleted( QList<Tomahawk::playlist_ptr> ) ) );
+             SLOT( onPlaylistsDeleted( QList<Tomahawk::playlist_ptr> ) ), Qt::QueuedConnection );
 }
 
-Tomahawk::source_ptr 
+Tomahawk::source_ptr
 CollectionItem::source() const
 {
     return m_source;
@@ -364,17 +380,19 @@ CollectionItem::text() const
     return m_source.isNull() ? tr( "Super Collection" ) : m_source->friendlyName();
 }
 
-void 
+void
 CollectionItem::activate()
 {
     if( source().isNull() ) {
-        PlaylistManager::instance()->showSuperCollection();
+        ViewPage* p = ViewManager::instance()->showSuperCollection();
+        model()->linkSourceItemToPage( this, p );
     } else {
-        PlaylistManager::instance()->show( source()->collection() );
+        ViewPage* p = ViewManager::instance()->show( source()->collection() );
+        model()->linkSourceItemToPage( this, p );
     }
 }
 
-QIcon 
+QIcon
 CollectionItem::icon() const
 {
     if( m_source.isNull() )
@@ -384,23 +402,23 @@ CollectionItem::icon() const
 }
 
 
-void 
+void
 CollectionItem::onPlaylistsAdded( const QList< playlist_ptr >& playlists )
 {
     if( playlists.isEmpty() )
         return;
-    
+
     if( !m_playlists ) { // add the category too
-        m_playlists = new CategoryItem( model(), this, SourcesModel::PlaylistsCategory, source()->isLocal() );    
+        m_playlists = new CategoryItem( model(), this, SourcesModel::PlaylistsCategory, source()->isLocal() );
     }
-    
+
     QList< SourceTreeItem* > items;
     int addOffset = playlists.first()->author()->isLocal() ? 1 : 0;
-    
+
     int from = m_playlists->children().count() - addOffset;
     m_playlists->beginRowsAdded( from, from + playlists.count() - 1 );
     foreach( const playlist_ptr& p, playlists )
-    {   
+    {
         PlaylistItem* plItem = new PlaylistItem( model(), m_playlists, p, m_playlists->children().count() - addOffset );
         qDebug() << "Playlist added:" << p->title() << p->creator() << p->info();
         p->loadRevision();
@@ -409,7 +427,7 @@ CollectionItem::onPlaylistsAdded( const QList< playlist_ptr >& playlists )
     m_playlists->endRowsAdded();
 }
 
-void 
+void
 CollectionItem::onPlaylistsDeleted( const QList< playlist_ptr >& playlists )
 {
     Q_ASSERT( m_playlists ); // How can we delete playlists if we have none?
@@ -442,26 +460,26 @@ GenericPageItem::~GenericPageItem()
 
 }
 
-void 
+void
 GenericPageItem::activate()
 {
     emit activated();
 }
 
-QString 
+QString
 GenericPageItem::text() const
 {
     return m_text;
 }
 
-QIcon 
+QIcon
 GenericPageItem::icon() const
 {
     return m_icon;
 }
 
 
-bool 
+bool
 GenericPageItem::willAcceptDrag(const QMimeData* data) const
 {
     return false;

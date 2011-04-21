@@ -24,7 +24,7 @@
 
 #include "utils/tomahawkutils.h"
 
-#include "playlist/playlistmanager.h"
+#include "viewmanager.h"
 #include "playlist/playlistmodel.h"
 
 #include "widgets/overlaywidget.h"
@@ -144,7 +144,7 @@ NewPlaylistWidget::savePlaylist()
     playlist = Tomahawk::Playlist::create( SourceList::instance()->getLocal(), uuid(), ui->titleEdit->text(), "", "", false );
     playlist->createNewRevision( uuid(), playlist->currentrevision(), m_entries );
 
-    PlaylistManager::instance()->show( playlist );
+    ViewManager::instance()->show( playlist );
     cancel();
 }
 

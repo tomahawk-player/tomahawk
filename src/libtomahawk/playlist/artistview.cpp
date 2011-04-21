@@ -29,7 +29,7 @@
 #include "tomahawksettings.h"
 #include "treeheader.h"
 #include "treeitemdelegate.h"
-#include "playlistmanager.h"
+#include "viewmanager.h"
 
 static QString s_tmInfoIdentifier = QString( "TREEMODEL" );
 
@@ -121,9 +121,9 @@ ArtistView::onItemActivated( const QModelIndex& index )
     if ( item )
     {
         if ( !item->artist().isNull() )
-            PlaylistManager::instance()->show( item->artist() );
+            ViewManager::instance()->show( item->artist() );
         else if ( !item->album().isNull() )
-            PlaylistManager::instance()->show( item->album() );
+            ViewManager::instance()->show( item->album() );
         else if ( !item->result().isNull() )
             AudioEngine::instance()->playItem( 0, item->result() );
     }

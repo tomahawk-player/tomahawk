@@ -83,25 +83,25 @@ TopBar::TopBar( QWidget* parent )
 
     onFlatMode();
 
-    connect( PlaylistManager::instance(), SIGNAL( numSourcesChanged( unsigned int ) ),
+    connect( ViewManager::instance(), SIGNAL( numSourcesChanged( unsigned int ) ),
                                             SLOT( setNumSources( unsigned int ) ) );
 
-    connect( PlaylistManager::instance(), SIGNAL( numTracksChanged( unsigned int ) ),
+    connect( ViewManager::instance(), SIGNAL( numTracksChanged( unsigned int ) ),
                                             SLOT( setNumTracks( unsigned int ) ) );
 
-    connect( PlaylistManager::instance(), SIGNAL( numArtistsChanged( unsigned int ) ),
+    connect( ViewManager::instance(), SIGNAL( numArtistsChanged( unsigned int ) ),
                                             SLOT( setNumArtists( unsigned int ) ) );
 
-    connect( PlaylistManager::instance(), SIGNAL( numShownChanged( unsigned int ) ),
+    connect( ViewManager::instance(), SIGNAL( numShownChanged( unsigned int ) ),
                                             SLOT( setNumShown( unsigned int ) ) );
 
-    connect( PlaylistManager::instance(), SIGNAL( statsAvailable( bool ) ),
+    connect( ViewManager::instance(), SIGNAL( statsAvailable( bool ) ),
                                             SLOT( setStatsVisible( bool ) ) );
 
-    connect( PlaylistManager::instance(), SIGNAL( modesAvailable( bool ) ),
+    connect( ViewManager::instance(), SIGNAL( modesAvailable( bool ) ),
                                             SLOT( setModesVisible( bool ) ) );
 
-    connect( PlaylistManager::instance(), SIGNAL( modeChanged( PlaylistInterface::ViewMode ) ),
+    connect( ViewManager::instance(), SIGNAL( modeChanged( PlaylistInterface::ViewMode ) ),
                                             SLOT( onModeChanged( PlaylistInterface::ViewMode ) ) );
 }
 

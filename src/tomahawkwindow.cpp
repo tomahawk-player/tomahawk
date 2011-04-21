@@ -39,7 +39,7 @@
 #include "database/database.h"
 #include "database/databasecommand_collectionstats.h"
 #include "network/controlconnection.h"
-#include "playlist/playlistmanager.h"
+#include "viewmanager.h"
 #include "sip/SipHandler.h"
 #include "sourcetree/sourcetreeview.h"
 #include "utils/animatedsplitter.h"
@@ -77,7 +77,7 @@ TomahawkWindow::TomahawkWindow( QWidget* parent )
     setUnifiedTitleAndToolBarOnMac( true );
 #endif
 
-    PlaylistManager* pm = new PlaylistManager( this );
+    ViewManager* pm = new ViewManager( this );
     connect( pm, SIGNAL( historyBackAvailable( bool ) ), SLOT( onHistoryBackAvailable( bool ) ) );
     connect( pm, SIGNAL( historyForwardAvailable( bool ) ), SLOT( onHistoryForwardAvailable( bool ) ) );
 
@@ -131,7 +131,7 @@ TomahawkWindow::TomahawkWindow( QWidget* parent )
     buttonWidget->layout()->setSpacing( 0 );*/
 
     ui->splitter->addWidget( sidebarWidget );
-    ui->splitter->addWidget( PlaylistManager::instance()->widget() );
+    ui->splitter->addWidget( ViewManager::instance()->widget() );
 
     ui->splitter->setStretchFactor( 0, 1 );
     ui->splitter->setStretchFactor( 1, 3 );
@@ -167,8 +167,8 @@ TomahawkWindow::TomahawkWindow( QWidget* parent )
     connect( checkForUpdates, SIGNAL( triggered() ), updater, SLOT( CheckNow() ) );
 #endif
 
-    m_backAvailable = toolbar->addAction( QIcon( RESPATH "images/back.png" ), tr( "Back" ), PlaylistManager::instance(), SLOT( historyBack() ) );
-    m_forwardAvailable = toolbar->addAction( QIcon( RESPATH "images/forward.png" ), tr( "Forward" ), PlaylistManager::instance(), SLOT( historyForward() ) );
+    m_backAvailable = toolbar->addAction( QIcon( RESPATH "images/back.png" ), tr( "Back" ), ViewManager::instance(), SLOT( historyBack() ) );
+    m_forwardAvailable = toolbar->addAction( QIcon( RESPATH "images/forward.png" ), tr( "Forward" ), ViewManager::instance(), SLOT( historyForward() ) );
 
     statusBar()->addPermanentWidget( m_audioControls, 1 );
 
@@ -181,7 +181,7 @@ TomahawkWindow::TomahawkWindow( QWidget* parent )
 
     loadSettings();
     setupSignals();
-    PlaylistManager::instance()->showWelcomePage();
+    ViewManager::instance()->showWelcomePage();
 }
 
 
@@ -241,10 +241,10 @@ void
 TomahawkWindow::setupSignals()
 {
     // <From PlaylistManager>
-    connect( PlaylistManager::instance(), SIGNAL( repeatModeChanged( PlaylistInterface::RepeatMode ) ),
+    connect( ViewManager::instance(), SIGNAL( repeatModeChanged( PlaylistInterface::RepeatMode ) ),
              m_audioControls,     SLOT( onRepeatModeChanged( PlaylistInterface::RepeatMode ) ) );
 
-    connect( PlaylistManager::instance(), SIGNAL( shuffleModeChanged( bool ) ),
+    connect( ViewManager::instance(), SIGNAL( shuffleModeChanged( bool ) ),
              m_audioControls,     SLOT( onShuffleModeChanged( bool ) ) );
 
     // <From AudioEngine>
@@ -403,7 +403,7 @@ TomahawkWindow::createAutomaticPlaylist()
     dynplaylist_ptr playlist = DynamicPlaylist::create( author, id, name, info, creator, false );
     playlist->setMode( Static );
     playlist->createNewRevision( uuid(), playlist->currentrevision(), playlist->type(), playlist->generator()->controls(), playlist->entries() );
-    PlaylistManager::instance()->show( playlist );
+    ViewManager::instance()->show( playlist );
 }
 
 
@@ -422,14 +422,14 @@ TomahawkWindow::createStation()
     dynplaylist_ptr playlist = DynamicPlaylist::create( author, id, name, info, creator, false );
     playlist->setMode( OnDemand );
     playlist->createNewRevision( uuid(), playlist->currentrevision(), playlist->type(), playlist->generator()->controls() );
-    PlaylistManager::instance()->show( playlist );
+    ViewManager::instance()->show( playlist );
 }
 
 
 void
 TomahawkWindow::createPlaylist()
 {
-    PlaylistManager::instance()->show( new NewPlaylistWidget() );
+    ViewManager::instance()->show( new NewPlaylistWidget() );
 }
 
 

@@ -21,7 +21,7 @@
 
 #include "utils/tomahawkutils.h"
 
-#include "playlist/playlistmanager.h"
+#include "viewmanager.h"
 #include "playlist/albummodel.h"
 #include "playlist/collectionflatmodel.h"
 #include "playlist/playlistmodel.h"

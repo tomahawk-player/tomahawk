@@ -26,15 +26,15 @@
 #include <QIcon>
 
 class QMimeData;
-class SourceTreeItem : public QObject 
+class SourceTreeItem : public QObject
 {
     Q_OBJECT
 public:
     SourceTreeItem() : m_type( SourcesModel::Invalid ), m_parent( 0 ), m_model( 0 ) {}
     SourceTreeItem( SourcesModel* model, SourceTreeItem* parent, SourcesModel::RowType thisType, int index = -1 ); // if index is -1, append at end of parent's child list
     virtual ~SourceTreeItem();
-    
-    // generic info used by the tree model 
+
+    // generic info used by the tree model
     SourcesModel::RowType type() const { return m_type; }
     SourceTreeItem* parent() const { return m_parent; }
     SourcesModel* model() const { return m_model; }
@@ -43,7 +43,7 @@ public:
     void appendChild( SourceTreeItem* item ) { m_children.append( item ); }
     void insertChild( int index, SourceTreeItem* item ) { m_children.insert( index, item ); }
     void removeChild( SourceTreeItem* item ) { m_children.removeAll( item ); }
-    
+
     // varies depending on the type of the item
     virtual QString text() const { return QString(); }
     virtual Qt::ItemFlags flags() const { return Qt::ItemIsSelectable | Qt::ItemIsEnabled; }
@@ -51,7 +51,7 @@ public:
     virtual QIcon icon() const { return QIcon(); }
     virtual bool willAcceptDrag( const QMimeData* data ) const { return false; }
     virtual bool dropMimeData( const QMimeData* data, Qt::DropAction action ) { return false; }
-    
+
     /// don't call me unless you are a sourcetreeitem. i prefer this to making everyone a friend
     void beginRowsAdded( int from, int to ) { emit beginChildRowsAdded( from, to ); }
     void endRowsAdded() { emit childRowsAdded(); }
@@ -59,15 +59,15 @@ public:
     void endRowsRemoved() { emit childRowsRemoved(); }
 signals:
     void updated();
-    
+
     void beginChildRowsAdded( int fromRow, int toRow );
     void childRowsAdded();
-    
+
     void beginChildRowsRemoved( int fromRow, int toRow );
     void childRowsRemoved();
 private:
     SourcesModel::RowType m_type;
-    
+
     SourceTreeItem* m_parent;
     QList< SourceTreeItem* > m_children;
     SourcesModel* m_model;
@@ -79,12 +79,12 @@ class CategoryAddItem : public SourceTreeItem
 public:
     CategoryAddItem( SourcesModel* model, SourceTreeItem* parent, SourcesModel::CategoryType type );
     ~CategoryAddItem();
-    
+
     virtual Qt::ItemFlags flags() const;
     virtual QString text() const;
     virtual void activate();
     virtual QIcon icon() const;
-    
+
 private:
     SourcesModel::CategoryType m_categoryType;
 };
@@ -94,8 +94,8 @@ class CategoryItem : public SourceTreeItem
     Q_OBJECT
 public:
     CategoryItem( SourcesModel* model, SourceTreeItem* parent, SourcesModel::CategoryType category, bool showAddItem );
-    
-    virtual QString text() const { 
+
+    virtual QString text() const {
         switch( m_category )
         {
             case SourcesModel::PlaylistsCategory:
@@ -107,13 +107,13 @@ public:
     }
     virtual void activate();
     virtual Qt::ItemFlags flags() const { return Qt::ItemIsEnabled; }
-    
+
     // inserts an item at the end, but before the category add item
     void insertItem( SourceTreeItem* item );
     void insertItems( QList< SourceTreeItem* > item );
-    
+
     SourcesModel::CategoryType categoryType() { return m_category; }
-    
+
 private:
     SourcesModel::CategoryType m_category;
     CategoryAddItem* m_addItem;
@@ -125,20 +125,20 @@ class CollectionItem : public SourceTreeItem
     Q_OBJECT
 public:
     CollectionItem( SourcesModel* model, SourceTreeItem* parent, const Tomahawk::source_ptr& source );
-    
+
     virtual QString text() const;
     virtual void activate();
     virtual QIcon icon() const;
-    
+
     Tomahawk::source_ptr source() const;
-    
+
 private slots:
     void onPlaylistsAdded( const QList<Tomahawk::playlist_ptr>& playlists );
     void onPlaylistsDeleted( const QList<Tomahawk::playlist_ptr>& playlists );
-    
+
 private:
     Tomahawk::source_ptr m_source;
-    
+
     CategoryItem* m_playlists;
     CategoryItem* m_stations;
 };
@@ -148,7 +148,7 @@ class PlaylistItem : public SourceTreeItem
     Q_OBJECT
 public:
     PlaylistItem( SourcesModel* model, SourceTreeItem* parent, const Tomahawk::playlist_ptr& pl, int index = -1 );
-    
+
     virtual QString text() const;
     virtual Tomahawk::playlist_ptr playlist() const;
     virtual Qt::ItemFlags flags() const;
@@ -156,14 +156,14 @@ public:
     virtual bool willAcceptDrag( const QMimeData* data ) const;
     virtual bool dropMimeData( const QMimeData* data, Qt::DropAction action );
     virtual QIcon icon() const;
-    
+
 protected:
     void setLoaded( bool loaded );
-    
+
 private slots:
     void onPlaylistLoaded( Tomahawk::PlaylistRevision revision );
     void onPlaylistChanged();
-    
+
 private:
     bool m_loaded;
     Tomahawk::playlist_ptr m_playlist;
@@ -175,15 +175,15 @@ class DynPlaylistItem : public PlaylistItem
     Q_OBJECT
 public:
     DynPlaylistItem( SourcesModel* model, SourceTreeItem* parent, const Tomahawk::dynplaylist_ptr& pl );
-    
+
     virtual QString text() const;
     virtual Tomahawk::playlist_ptr playlist() const;
 //     Tomahawk::dynplaylist_ptr playlist() const;
     virtual void activate();
-    
+
 private slots:
     void onDynamicPlaylistLoaded( Tomahawk::DynamicPlaylistRevision revision );
-    
+
 private:
     Tomahawk::dynplaylist_ptr m_dynplaylist;
 };*/
@@ -195,15 +195,15 @@ class GenericPageItem : public SourceTreeItem
 public:
     GenericPageItem( SourcesModel* model, SourceTreeItem* parent, const QString& text, const QIcon& icon );
     virtual ~GenericPageItem();
-    
+
     virtual QString text() const;
     virtual void activate();
     virtual bool willAcceptDrag( const QMimeData* data ) const;
     virtual QIcon icon() const;
-    
+
 signals:
     void activated();
-    
+
 private:
     QIcon m_icon;
     QString m_text;

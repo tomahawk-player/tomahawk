@@ -21,7 +21,7 @@
 #include <QSqlQuery>
 
 #include "network/servent.h"
-#include "playlist/playlistmanager.h"
+#include "viewmanager.h"
 
 using namespace Tomahawk;
 
@@ -66,7 +66,7 @@ DatabaseCommand_CreatePlaylist::postCommitHook()
     qDebug() << Q_FUNC_INFO << "..reporting..";
     if( m_playlist.isNull() ) {
         source_ptr src = source();
-        QMetaObject::invokeMethod( PlaylistManager::instance(),
+        QMetaObject::invokeMethod( ViewManager::instance(),
                                 "createPlaylist",
                                 Qt::BlockingQueuedConnection,
                                 QGenericArgument( "Tomahawk::source_ptr", (const void*)&src ),

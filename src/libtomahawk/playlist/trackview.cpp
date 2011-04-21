@@ -29,7 +29,7 @@
 #include "dynamic/widgets/LoadingSpinner.h"
 
 #include "trackheader.h"
-#include "playlistmanager.h"
+#include "viewmanager.h"
 #include "queueview.h"
 #include "trackmodel.h"
 #include "trackproxymodel.h"
@@ -192,8 +192,8 @@ TrackView::addItemsToQueue()
         TrackModelItem* item = model()->itemFromIndex( proxyModel()->mapToSource( idx ) );
         if ( item && item->query()->numResults() )
         {
-            PlaylistManager::instance()->queue()->model()->append( item->query() );
-            PlaylistManager::instance()->showQueue();
+            ViewManager::instance()->queue()->model()->append( item->query() );
+            ViewManager::instance()->showQueue();
         }
     }
 }

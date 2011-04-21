@@ -55,8 +55,8 @@ private slots:
     void onNewPlaylistPageActivated();
 
     void onItemExpanded( const QModelIndex& idx );
-
     void onItemActivated( const QModelIndex& index );
+    void selectRequest( const QModelIndex& idx );
 
     void loadPlaylist();
     void deletePlaylist();

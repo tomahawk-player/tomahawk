@@ -22,7 +22,7 @@
 #include <QNetworkReply>
 
 #include "audio/audioengine.h"
-#include "playlist/playlistmanager.h"
+#include "viewmanager.h"
 #include "utils/imagebutton.h"
 #include "utils/tomahawkutils.h"
 
@@ -408,21 +408,21 @@ AudioControls::onRepeatClicked()
         case PlaylistInterface::NoRepeat:
         {
             // switch to RepeatOne
-            PlaylistManager::instance()->setRepeatMode( PlaylistInterface::RepeatOne );
+            ViewManager::instance()->setRepeatMode( PlaylistInterface::RepeatOne );
         }
         break;
 
         case PlaylistInterface::RepeatOne:
         {
             // switch to RepeatAll
-            PlaylistManager::instance()->setRepeatMode( PlaylistInterface::RepeatAll );
+            ViewManager::instance()->setRepeatMode( PlaylistInterface::RepeatAll );
         }
         break;
 
         case PlaylistInterface::RepeatAll:
         {
             // switch to NoRepeat
-            PlaylistManager::instance()->setRepeatMode( PlaylistInterface::NoRepeat );
+            ViewManager::instance()->setRepeatMode( PlaylistInterface::NoRepeat );
         }
         break;
 
@@ -457,26 +457,26 @@ AudioControls::onShuffleModeChanged( bool enabled )
 void
 AudioControls::onShuffleClicked()
 {
-    PlaylistManager::instance()->setShuffled( m_shuffled ^ true );
+    ViewManager::instance()->setShuffled( m_shuffled ^ true );
 }
 
 
 void
 AudioControls::onArtistClicked()
 {
-    PlaylistManager::instance()->show( m_currentTrack->artist() );
+    ViewManager::instance()->show( m_currentTrack->artist() );
 }
 
 
 void
 AudioControls::onAlbumClicked()
 {
-    PlaylistManager::instance()->show( m_currentTrack->album() );
+    ViewManager::instance()->show( m_currentTrack->album() );
 }
 
 
 void
 AudioControls::onTrackClicked()
 {
-    PlaylistManager::instance()->showCurrentTrack();
+    ViewManager::instance()->showCurrentTrack();
 }

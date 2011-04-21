@@ -24,15 +24,16 @@
 #include "collection.h"
 #include "source.h"
 #include "tomahawk/tomahawkapp.h"
+#include "viewmanager.h"
 
 #include <QMimeData>
 #include <QSize>
-#include <playlist/playlistmanager.h>
 
 using namespace Tomahawk;
 
 SourcesModel::SourcesModel( QObject* parent )
     : QAbstractItemModel( parent )
+    , m_viewPageDelayedCacheItem( 0 )
 {
     m_rootItem = new SourceTreeItem( this, 0, Invalid );
 
@@ -40,12 +41,13 @@ SourcesModel::SourcesModel( QObject* parent )
 
     // add misc children of root node
     GenericPageItem* recent = new GenericPageItem( this, m_rootItem->children().at( 0 ), tr( "Recently Played" ), QIcon( RESPATH "images/recently-played.png" ) );
-    connect( recent, SIGNAL( activated() ), PlaylistManager::instance(), SLOT( showWelcomePage() ) );
+    connect( recent, SIGNAL( activated() ), ViewManager::instance(), SLOT( showWelcomePage() ) );
 
     onSourcesAdded( SourceList::instance()->sources() );
 
     connect( SourceList::instance(), SIGNAL( sourceAdded( Tomahawk::source_ptr ) ), SLOT( onSourceAdded( Tomahawk::source_ptr ) ) );
     connect( SourceList::instance(), SIGNAL( sourceRemoved( Tomahawk::source_ptr ) ), SLOT( onSourceRemoved( Tomahawk::source_ptr ) ) );
+    connect( ViewManager::instance(), SIGNAL( viewPageActivated( Tomahawk::ViewPage* ) ), this, SLOT( viewPageActivated( Tomahawk::ViewPage* ) ) );
 }
 
 SourcesModel::~SourcesModel()
@@ -186,19 +188,8 @@ SourcesModel::appendItem( const Tomahawk::source_ptr& source )
     beginInsertRows( QModelIndex(), rowCount(), rowCount() );
     // append to end
     CollectionItem* item = new CollectionItem( this, m_rootItem, source );
-    connect( item, SIGNAL( updated() ), this, SLOT( collectionUpdated() ) );
 
     endInsertRows();
-
-    if ( !source.isNull() )
-    {
-        qDebug() << "Appending source item:" << item->source()->friendlyName();
-
-        connect( source.data(), SIGNAL( stats( QVariantMap ) ), SLOT( onSourceChanged() ) );
-        connect( source.data(), SIGNAL( playbackStarted( Tomahawk::query_ptr ) ), SLOT( onSourceChanged() ) );
-        connect( source.data(), SIGNAL( stateChanged() ), SLOT( onSourceChanged() ) );
-
-    }
 }
 
 bool
@@ -229,6 +220,23 @@ SourcesModel::removeItem( const Tomahawk::source_ptr& source )
     return false;
 }
 
+void
+SourcesModel::viewPageActivated( Tomahawk::ViewPage* page )
+{
+    if ( m_sourceTreeLinks.contains( page ) )
+    {
+        Q_ASSERT( m_sourceTreeLinks[ page ] );
+        qDebug() << "Got view page activated for itemL:" << m_sourceTreeLinks[ page ]->text();
+        QModelIndex idx = indexFromItem( m_sourceTreeLinks[ page ] );
+        Q_ASSERT( idx.isValid() );
+
+        emit selectRequest( idx );
+    } else {
+        m_viewPageDelayedCacheItem = page;
+    }
+}
+/*
+
 QModelIndex
 SourcesModel::indexFromPlaylist( const playlist_ptr& playlist )
 {
@@ -257,30 +265,7 @@ SourcesModel::indexFromPlaylist( const playlist_ptr& playlist )
     }
     qDebug() << "FAILED to find playlist in source tree:" << playlist->title();
     return idx;
-}
-
-
-void
-SourcesModel::onSourceChanged() {
-
-    Source* src = qobject_cast< Source* >( sender() );
-    Q_ASSERT( src );
-
-    qDebug() << "Searching for source item:" << src->friendlyName();
-
-    for( int i = 0; i < rowCount(); i++ )
-    {
-        QModelIndex idx = index( i, 0 , QModelIndex() );
-
-        if( idx.isValid() && itemFromIndex( idx ) && itemFromIndex( idx )->type() == Collection && // this is a source
-            static_cast< CollectionItem* >( itemFromIndex( idx ) )->source().data() == src )       // and it is the one we want
-        {
-            qDebug() << "Found changed source, emitting dataChanged:" << src->friendlyName();
-            emit dataChanged( idx, idx );
-            return;
-        }
-    }
-}
+}*/
 
 void
 SourcesModel::loadSources()
@@ -314,10 +299,18 @@ SourcesModel::onSourceRemoved( const source_ptr& source )
 }
 
 void
-SourcesModel::collectionUpdated()
+SourcesModel::itemUpdated()
 {
+    Q_ASSERT( qobject_cast< SourceTreeItem* >( sender() ) );
+    SourceTreeItem* item = qobject_cast< SourceTreeItem* >( sender() );
 
+    if( !item )
+        return;
+
+    QModelIndex idx = indexFromItem( item );
+    emit dataChanged( idx, idx );
 }
+
 
 void
 SourcesModel::onItemRowsAddedBegin( int first, int last )
@@ -361,6 +354,19 @@ SourcesModel::onItemRowsRemovedDone()
 
     endRemoveRows();
 }
+
+void
+SourcesModel::linkSourceItemToPage( SourceTreeItem* item, ViewPage* p )
+{
+    // TODO handle removal
+    m_sourceTreeLinks[ p ] = item;
+
+    if( m_viewPageDelayedCacheItem = p )
+        emit selectRequest( indexFromItem( item ) );
+
+    m_viewPageDelayedCacheItem = 0;
+}
+
 
 SourceTreeItem*
 SourcesModel::itemFromIndex( const QModelIndex& idx ) const

@@ -28,7 +28,7 @@
 
 #include "tomahawksettings.h"
 #include "albumitemdelegate.h"
-#include "playlistmanager.h"
+#include "viewmanager.h"
 
 using namespace Tomahawk;
 
@@ -106,7 +106,7 @@ AlbumView::onItemActivated( const QModelIndex& index )
 //        qDebug() << "Result activated:" << item->album()->tracks().first()->toString() << item->album()->tracks().first()->results().first()->url();
 //        APP->audioEngine()->playItem( item->album().data(), item->album()->tracks().first()->results().first() );
 
-        PlaylistManager::instance()->show( item->album() );
+        ViewManager::instance()->show( item->album() );
     }
 }
 

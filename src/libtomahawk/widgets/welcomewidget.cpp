@@ -21,7 +21,7 @@
 
 #include "utils/tomahawkutils.h"
 
-#include "playlist/playlistmanager.h"
+#include "viewmanager.h"
 #include "playlist/playlistmodel.h"
 
 #include "widgets/overlaywidget.h"
@@ -130,9 +130,9 @@ WelcomeWidget::onPlaylistActivated( QListWidgetItem* item )
 
     PlaylistWidgetItem* pwi = dynamic_cast<PlaylistWidgetItem*>(item);
     if( Tomahawk::dynplaylist_ptr dynplaylist = pwi->playlist().dynamicCast< Tomahawk::DynamicPlaylist >() )
-        PlaylistManager::instance()->show( dynplaylist );
+        ViewManager::instance()->show( dynplaylist );
     else
-        PlaylistManager::instance()->show( pwi->playlist() );
+        ViewManager::instance()->show( pwi->playlist() );
 }
 
 

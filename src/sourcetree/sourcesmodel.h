@@ -31,6 +31,7 @@ class SourceTreeItem;
 namespace Tomahawk {
     class Source;
     class Playlist;
+    class ViewPage;
 }
 
 class SourcesModel : public QAbstractItemModel
@@ -43,13 +44,10 @@ public:
         Collection = 0,
 
         Category = 1,
-
         CategoryAdd = 2,
 
         StaticPlaylist = 3,
-
         AutomaticPlaylist = 4,
-
         Stations = 5,
 
         GenericPage = 6
@@ -85,22 +83,26 @@ public:
     void appendItem( const Tomahawk::source_ptr& source );
     bool removeItem( const Tomahawk::source_ptr& source );
 
+    void linkSourceItemToPage( SourceTreeItem* item, Tomahawk::ViewPage* p );
     // HACK i don't like this
     // SLOW DON'T USE IF YOU CAN AVOID IT
-    QModelIndex indexFromPlaylist( const Tomahawk::playlist_ptr& playlist );
+//     QModelIndex indexFromPlaylist( const Tomahawk::playlist_ptr& playlist );
     QModelIndex indexFromItem( SourceTreeItem* item ) const;
+
+signals:
+    void selectRequest( const QModelIndex& idx );
 
 private slots:
     void onSourcesAdded( const QList<Tomahawk::source_ptr>& sources );
     void onSourceAdded( const Tomahawk::source_ptr& source );
     void onSourceRemoved( const Tomahawk::source_ptr& source );
 
-    void onSourceChanged();
+    void viewPageActivated( Tomahawk::ViewPage* );
 
 public slots:
     void loadSources();
-    void collectionUpdated();
 
+    void itemUpdated();
     void onItemRowsAddedBegin( int first, int last );
     void onItemRowsAddedDone();
     void onItemRowsRemovedBegin( int first, int last );
@@ -114,6 +116,9 @@ private:
 //     QModelIndex indexForCategory( const QModelIndex& sourceIndex, CategoryType type );
 
     SourceTreeItem* m_rootItem;
+
+    QHash< Tomahawk::ViewPage*, SourceTreeItem* > m_sourceTreeLinks;
+    Tomahawk::ViewPage* m_viewPageDelayedCacheItem;
 };
 
 #endif // SOURCESMODEL_H

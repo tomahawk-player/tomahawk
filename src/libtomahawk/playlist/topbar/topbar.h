@@ -23,7 +23,7 @@
 #include <QLabel>
 #include <QList>
 
-#include "playlist/playlistmanager.h"
+#include "viewmanager.h"
 #include "sourcelist.h"
 #include "dllmacro.h"
 

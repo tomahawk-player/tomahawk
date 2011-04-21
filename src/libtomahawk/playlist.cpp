@@ -184,6 +184,7 @@ playlist_ptr
 Playlist::load( const QString& guid )
 {
     playlist_ptr p;
+    qDebug() << "asked to load playlist:" << guid;
 
     foreach( const Tomahawk::source_ptr& source, SourceList::instance()->sources() )
     {

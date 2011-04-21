@@ -27,6 +27,7 @@ set( libSources
     result.cpp
     source.cpp
     viewpage.cpp
+    viewmanager.cpp
 
     sip/SipPlugin.cpp
 
@@ -90,7 +91,6 @@ set( libSources
     playlist/collectionproxymodel.cpp
     playlist/collectionflatmodel.cpp
     playlist/collectionview.cpp
-    playlist/playlistmanager.cpp
     playlist/playlistmodel.cpp
     playlist/playlistproxymodel.cpp
     playlist/playlistview.cpp
@@ -180,6 +180,7 @@ set( libHeaders
     result.h
     source.h
     viewpage.h
+    viewmanager.h
 
     artist.h
     album.h
@@ -257,7 +258,6 @@ set( libHeaders
     playlist/collectionproxymodel.h
     playlist/collectionflatmodel.h
     playlist/collectionview.h
-    playlist/playlistmanager.h
     playlist/playlistmodel.h
     playlist/playlistproxymodel.h
     playlist/playlistview.h

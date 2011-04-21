@@ -54,15 +54,15 @@ namespace Tomahawk
     class DynamicWidget;
 }
 
-class DLLEXPORT PlaylistManager : public QObject
+class DLLEXPORT ViewManager : public QObject
 {
 Q_OBJECT
 
 public:
-    static PlaylistManager* instance();
+    static ViewManager* instance();
 
-    explicit PlaylistManager( QObject* parent = 0 );
-    ~PlaylistManager();
+    explicit ViewManager( QObject* parent = 0 );
+    ~ViewManager();
 
     QWidget* widget() const { return m_widget; }
     PlaylistView* queue() const;
@@ -75,14 +75,23 @@ public:
     Tomahawk::ViewPage* pageForInterface( PlaylistInterface* interface ) const;
     int positionInHistory( Tomahawk::ViewPage* page ) const;
 
-    bool show( const Tomahawk::playlist_ptr& playlist );
-    bool show( const Tomahawk::dynplaylist_ptr& playlist );
-    bool show( const Tomahawk::artist_ptr& artist );
-    bool show( const Tomahawk::album_ptr& album );
-    bool show( const Tomahawk::collection_ptr& collection );
-    bool show( const Tomahawk::source_ptr& source );
+    // Returns the shown viewpage
+    Tomahawk::ViewPage* show( const Tomahawk::playlist_ptr& playlist );
+    Tomahawk::ViewPage* show( const Tomahawk::dynplaylist_ptr& playlist );
+    Tomahawk::ViewPage* show( const Tomahawk::artist_ptr& artist );
+    Tomahawk::ViewPage* show( const Tomahawk::album_ptr& album );
+    Tomahawk::ViewPage* show( const Tomahawk::collection_ptr& collection );
+    Tomahawk::ViewPage* show( const Tomahawk::source_ptr& source );
 
-    bool show( Tomahawk::ViewPage* page );
+    Tomahawk::ViewPage* show( Tomahawk::ViewPage* page );
+
+    WelcomeWidget* welcomeWidget() const { return m_welcomeWidget; }
+    ArtistView* superCollectionView() const { return m_superCollectionView; }
+
+    /// Get the view page for the given item. Not pretty...
+    Tomahawk::ViewPage* pageForPlaylist( const Tomahawk::playlist_ptr& pl ) const;
+    Tomahawk::ViewPage* pageForDynPlaylist( const Tomahawk::dynplaylist_ptr& pl ) const;
+    Tomahawk::ViewPage* pageForCollection( const Tomahawk::collection_ptr& pl ) const;
 
 signals:
     void numSourcesChanged( unsigned int sources );
@@ -110,9 +119,10 @@ signals:
     void dynamicPlaylistActivated( const Tomahawk::dynplaylist_ptr& playlist );
 
     void newPlaylistActivated();
+    void viewPageActivated( Tomahawk::ViewPage* );
 
 public slots:
-    bool showSuperCollection();
+    Tomahawk::ViewPage* showSuperCollection();
     void showWelcomePage();
     void showCurrentTrack();
 
@@ -189,7 +199,7 @@ private:
     QTimer m_filterTimer;
     QString m_filter;
 
-    static PlaylistManager* s_instance;
+    static ViewManager* s_instance;
 };
 
 #endif // PLAYLISTMANAGER_H

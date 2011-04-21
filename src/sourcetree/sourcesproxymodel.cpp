@@ -34,8 +34,9 @@ SourcesProxyModel::SourcesProxyModel( SourcesModel* model, QObject* parent )
 //     setSortRole( SourcesModel::SortRole );
 
     setSourceModel( model );
-    
+
     connect( model, SIGNAL( askForExpand( QModelIndex ) ), this, SLOT( askedToExpand( QModelIndex ) ) );
+    connect( model, SIGNAL( selectRequest( QModelIndex ) ), this, SLOT( selectRequested( QModelIndex ) ) );
 }
 
 
@@ -73,3 +74,11 @@ SourcesProxyModel::filterAcceptsRow( int sourceRow, const QModelIndex& sourcePar
     // accept rows that aren't sources
     return true;
 }
+
+void
+SourcesProxyModel::selectRequested( const QModelIndex& idx )
+{
+    qDebug() << "asking for select from idx:" << idx << idx.model()->metaObject()->className();
+    emit selectRequest( mapFromSource( idx ) );
+}
+

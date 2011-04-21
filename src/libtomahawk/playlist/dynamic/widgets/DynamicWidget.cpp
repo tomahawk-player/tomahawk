@@ -34,7 +34,7 @@
 #include "ReadOrWriteWidget.h"
 #include "CollapsibleControls.h"
 #include "DynamicControlWrapper.h"
-#include "playlistmanager.h"
+#include "viewmanager.h"
 #include "dynamic/DynamicView.h"
 #include <qevent.h>
 #include "DynamicSetupWidget.h"

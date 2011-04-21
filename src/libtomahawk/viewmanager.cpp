@@ -16,7 +16,7 @@
  *   along with Tomahawk. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include "playlistmanager.h"
+#include "viewmanager.h"
 
 #include <QVBoxLayout>
 #include <QMetaMethod>
@@ -47,23 +47,23 @@
 
 #include "widgets/welcomewidget.h"
 #include "widgets/infowidgets/sourceinfowidget.h"
-#include <widgets/newplaylistwidget.h>
+#include "widgets/newplaylistwidget.h"
 
 #define FILTER_TIMEOUT 280
 
 using namespace Tomahawk;
 
-PlaylistManager* PlaylistManager::s_instance = 0;
+ViewManager* ViewManager::s_instance = 0;
 
 
-PlaylistManager*
-PlaylistManager::instance()
+ViewManager*
+ViewManager::instance()
 {
     return s_instance;
 }
 
 
-PlaylistManager::PlaylistManager( QObject* parent )
+ViewManager::ViewManager( QObject* parent )
     : QObject( parent )
     , m_widget( new QWidget() )
     , m_welcomeWidget( new WelcomeWidget() )
@@ -137,21 +137,21 @@ PlaylistManager::PlaylistManager( QObject* parent )
 }
 
 
-PlaylistManager::~PlaylistManager()
+ViewManager::~ViewManager()
 {
     delete m_widget;
 }
 
 
 PlaylistView*
-PlaylistManager::queue() const
+ViewManager::queue() const
 {
     return m_queueView->queue();
 }
 
 
-bool
-PlaylistManager::show( const Tomahawk::playlist_ptr& playlist )
+Tomahawk::ViewPage*
+ViewManager::show( const Tomahawk::playlist_ptr& playlist )
 {
     PlaylistView* view;
     if ( !m_playlistViews.contains( playlist ) )
@@ -175,12 +175,12 @@ PlaylistManager::show( const Tomahawk::playlist_ptr& playlist )
     TomahawkSettings::instance()->appendRecentlyPlayedPlaylist( playlist );
     emit numSourcesChanged( SourceList::instance()->count() );
 
-    return true;
+    return view;
 }
 
 
-bool
-PlaylistManager::show( const Tomahawk::dynplaylist_ptr& playlist )
+Tomahawk::ViewPage*
+ViewManager::show( const Tomahawk::dynplaylist_ptr& playlist )
 {
     if ( !m_dynamicWidgets.contains( playlist ) )
     {
@@ -201,12 +201,12 @@ PlaylistManager::show( const Tomahawk::dynplaylist_ptr& playlist )
     TomahawkSettings::instance()->appendRecentlyPlayedPlaylist( playlist );
     emit numSourcesChanged( SourceList::instance()->count() );
 
-    return true;
+    return m_dynamicWidgets.value( playlist );
 }
 
 
-bool
-PlaylistManager::show( const Tomahawk::artist_ptr& artist )
+Tomahawk::ViewPage*
+ViewManager::show( const Tomahawk::artist_ptr& artist )
 {
     PlaylistView* view;
 
@@ -229,12 +229,12 @@ PlaylistManager::show( const Tomahawk::artist_ptr& artist )
     setPage( view );
     emit numSourcesChanged( 1 );
 
-    return true;
+    return view;
 }
 
 
-bool
-PlaylistManager::show( const Tomahawk::album_ptr& album )
+Tomahawk::ViewPage*
+ViewManager::show( const Tomahawk::album_ptr& album )
 {
     PlaylistView* view;
     if ( !m_albumViews.contains( album ) )
@@ -256,15 +256,16 @@ PlaylistManager::show( const Tomahawk::album_ptr& album )
     setPage( view );
     emit numSourcesChanged( 1 );
 
-    return true;
+    return view;
 }
 
 
-bool
-PlaylistManager::show( const Tomahawk::collection_ptr& collection )
+Tomahawk::ViewPage*
+ViewManager::show( const Tomahawk::collection_ptr& collection )
 {
     qDebug() << Q_FUNC_INFO << m_currentMode;
     m_currentCollection = collection;
+    ViewPage* shown = 0;
     if ( m_currentMode == 0 )
     {
         CollectionView* view;
@@ -285,6 +286,7 @@ PlaylistManager::show( const Tomahawk::collection_ptr& collection )
             view = m_collectionViews.value( collection );
         }
 
+        shown = view;
         setPage( view );
     }
 
@@ -308,6 +310,7 @@ PlaylistManager::show( const Tomahawk::collection_ptr& collection )
             view = m_treeViews.value( collection );
         }
 
+        shown = view;
         setPage( view );
     }
 
@@ -330,17 +333,18 @@ PlaylistManager::show( const Tomahawk::collection_ptr& collection )
             aview = m_collectionAlbumViews.value( collection );
         }
 
+        shown = aview;
         setPage( aview );
     }
 
     emit numSourcesChanged( 1 );
 
-    return true;
+    return shown;
 }
 
 
-bool
-PlaylistManager::show( const Tomahawk::source_ptr& source )
+Tomahawk::ViewPage*
+ViewManager::show( const Tomahawk::source_ptr& source )
 {
     SourceInfoWidget* swidget;
     if ( !m_sourceViews.contains( source ) )
@@ -356,21 +360,21 @@ PlaylistManager::show( const Tomahawk::source_ptr& source )
     setPage( swidget );
     emit numSourcesChanged( 1 );
 
-    return true;
+    return swidget;
 }
 
 
-bool
-PlaylistManager::show( ViewPage* page )
+Tomahawk::ViewPage*
+ViewManager::show( ViewPage* page )
 {
     setPage( page );
 
-    return true;
+    return page;
 }
 
 
-bool
-PlaylistManager::showSuperCollection()
+Tomahawk::ViewPage*
+ViewManager::showSuperCollection()
 {
     if ( m_superCollections.isEmpty() )
         m_superCollectionModel->addAllCollections();
@@ -387,34 +391,37 @@ PlaylistManager::showSuperCollection()
     m_superCollectionModel->setTitle( tr( "All available tracks" ) );
     m_superAlbumModel->setTitle( tr( "All available albums" ) );
 
+    ViewPage* shown = 0;
     if ( m_currentMode == 0 )
     {
+        shown = m_superCollectionView;
         setPage( m_superCollectionView );
     }
     else if ( m_currentMode == 1 )
     {
+        shown = m_superCollectionView;
         setPage( m_superCollectionView );
     }
     else if ( m_currentMode == 2 )
     {
+        shown = m_superAlbumView;
         setPage( m_superAlbumView );
     }
 
     emit numSourcesChanged( m_superCollections.count() );
 
-    return true;
+    return shown;
 }
 
-
 void
-PlaylistManager::showWelcomePage()
+ViewManager::showWelcomePage()
 {
     show( m_welcomeWidget );
 }
 
 
 void
-PlaylistManager::setTableMode()
+ViewManager::setTableMode()
 {
     qDebug() << Q_FUNC_INFO;
 
@@ -428,7 +435,7 @@ PlaylistManager::setTableMode()
 
 
 void
-PlaylistManager::setTreeMode()
+ViewManager::setTreeMode()
 {
     qDebug() << Q_FUNC_INFO;
 
@@ -442,7 +449,7 @@ PlaylistManager::setTreeMode()
 
 
 void
-PlaylistManager::setAlbumMode()
+ViewManager::setAlbumMode()
 {
     qDebug() << Q_FUNC_INFO;
 
@@ -456,7 +463,7 @@ PlaylistManager::setAlbumMode()
 
 
 void
-PlaylistManager::showQueue()
+ViewManager::showQueue()
 {
     if ( QThread::currentThread() != thread() )
     {
@@ -470,7 +477,7 @@ PlaylistManager::showQueue()
 
 
 void
-PlaylistManager::hideQueue()
+ViewManager::hideQueue()
 {
     if ( QThread::currentThread() != thread() )
     {
@@ -484,7 +491,7 @@ PlaylistManager::hideQueue()
 
 
 void
-PlaylistManager::historyBack()
+ViewManager::historyBack()
 {
     if ( m_historyPosition < 1 )
         return;
@@ -494,7 +501,7 @@ PlaylistManager::historyBack()
 
 
 void
-PlaylistManager::historyForward()
+ViewManager::historyForward()
 {
     if ( m_historyPosition >= m_pageHistory.count() - 1 )
         return;
@@ -504,7 +511,7 @@ PlaylistManager::historyForward()
 
 
 void
-PlaylistManager::showHistory( int historyPosition )
+ViewManager::showHistory( int historyPosition )
 {
     if ( historyPosition < 0 || historyPosition >= m_pageHistory.count() )
     {
@@ -521,7 +528,7 @@ PlaylistManager::showHistory( int historyPosition )
 
 
 void
-PlaylistManager::setFilter( const QString& filter )
+ViewManager::setFilter( const QString& filter )
 {
     m_filter = filter;
 
@@ -533,7 +540,7 @@ PlaylistManager::setFilter( const QString& filter )
 
 
 void
-PlaylistManager::applyFilter()
+ViewManager::applyFilter()
 {
     qDebug() << Q_FUNC_INFO;
 
@@ -543,7 +550,7 @@ PlaylistManager::applyFilter()
 
 
 void
-PlaylistManager::setPage( ViewPage* page, bool trackHistory )
+ViewManager::setPage( ViewPage* page, bool trackHistory )
 {
     if ( !page )
         return;
@@ -581,6 +588,9 @@ PlaylistManager::setPage( ViewPage* page, bool trackHistory )
     else if ( !currentPlaylistInterface() )
         emit tempPageActivated();*/
 
+    qDebug() << "View page shown:" << page->title();
+    emit viewPageActivated( page );
+
     if ( !AudioEngine::instance()->isPlaying() )
         AudioEngine::instance()->setPlaylist( currentPlaylistInterface() );
 
@@ -603,14 +613,14 @@ PlaylistManager::setPage( ViewPage* page, bool trackHistory )
 }
 
 bool
-PlaylistManager::isNewPlaylistPageVisible() const
+ViewManager::isNewPlaylistPageVisible() const
 {
     return dynamic_cast< NewPlaylistWidget* >( currentPage() ) != 0;
 }
 
 
 void
-PlaylistManager::unlinkPlaylist()
+ViewManager::unlinkPlaylist()
 {
     if ( currentPlaylistInterface() )
     {
@@ -630,7 +640,7 @@ PlaylistManager::unlinkPlaylist()
 
 
 void
-PlaylistManager::updateView()
+ViewManager::updateView()
 {
     if ( currentPlaylistInterface() )
     {
@@ -683,7 +693,7 @@ PlaylistManager::updateView()
 
 
 void
-PlaylistManager::onWidgetDestroyed( QWidget* widget )
+ViewManager::onWidgetDestroyed( QWidget* widget )
 {
     qDebug() << "Destroyed child:" << widget << widget->metaObject()->className();
 
@@ -722,7 +732,7 @@ PlaylistManager::onWidgetDestroyed( QWidget* widget )
 
 
 void
-PlaylistManager::setRepeatMode( PlaylistInterface::RepeatMode mode )
+ViewManager::setRepeatMode( PlaylistInterface::RepeatMode mode )
 {
     if ( currentPlaylistInterface() )
         currentPlaylistInterface()->setRepeatMode( mode );
@@ -730,7 +740,7 @@ PlaylistManager::setRepeatMode( PlaylistInterface::RepeatMode mode )
 
 
 void
-PlaylistManager::setShuffled( bool enabled )
+ViewManager::setShuffled( bool enabled )
 {
     if ( currentPlaylistInterface() )
         currentPlaylistInterface()->setShuffled( enabled );
@@ -738,7 +748,7 @@ PlaylistManager::setShuffled( bool enabled )
 
 
 void
-PlaylistManager::createPlaylist( const Tomahawk::source_ptr& src,
+ViewManager::createPlaylist( const Tomahawk::source_ptr& src,
                                  const QVariant& contents )
 {
     Tomahawk::playlist_ptr p = Tomahawk::playlist_ptr( new Tomahawk::Playlist( src ) );
@@ -748,7 +758,7 @@ PlaylistManager::createPlaylist( const Tomahawk::source_ptr& src,
 
 
 void
-PlaylistManager::createDynamicPlaylist( const Tomahawk::source_ptr& src,
+ViewManager::createDynamicPlaylist( const Tomahawk::source_ptr& src,
                                         const QVariant& contents )
 {
     Tomahawk::dynplaylist_ptr p = Tomahawk::dynplaylist_ptr( new Tomahawk::DynamicPlaylist( src, contents.toMap().value( "type", QString() ).toString()  ) );
@@ -756,9 +766,27 @@ PlaylistManager::createDynamicPlaylist( const Tomahawk::source_ptr& src,
     p->reportCreated( p );
 }
 
+ViewPage*
+ViewManager::pageForCollection( const collection_ptr& col ) const
+{
+    return m_collectionViews.value( col, 0 );
+}
 
 ViewPage*
-PlaylistManager::pageForInterface( PlaylistInterface* interface ) const
+ViewManager::pageForDynPlaylist(const dynplaylist_ptr& pl) const
+{
+    return m_dynamicWidgets.value( pl, 0 );
+}
+
+ViewPage*
+ViewManager::pageForPlaylist(const playlist_ptr& pl) const
+{
+    return m_playlistViews.value( pl, 0 );
+}
+
+
+ViewPage*
+ViewManager::pageForInterface( PlaylistInterface* interface ) const
 {
     for ( int i = 0; i < m_pageHistory.count(); i++ )
     {
@@ -772,7 +800,7 @@ PlaylistManager::pageForInterface( PlaylistInterface* interface ) const
 
 
 int
-PlaylistManager::positionInHistory( ViewPage* page ) const
+ViewManager::positionInHistory( ViewPage* page ) const
 {
     for ( int i = 0; i < m_pageHistory.count(); i++ )
     {
@@ -785,7 +813,7 @@ PlaylistManager::positionInHistory( ViewPage* page ) const
 
 
 PlaylistInterface*
-PlaylistManager::currentPlaylistInterface() const
+ViewManager::currentPlaylistInterface() const
 {
     if ( currentPage() )
         return currentPage()->playlistInterface();
@@ -795,7 +823,7 @@ PlaylistManager::currentPlaylistInterface() const
 
 
 Tomahawk::ViewPage*
-PlaylistManager::currentPage() const
+ViewManager::currentPage() const
 {
     if ( m_historyPosition >= 0 )
         return m_pageHistory.at( m_historyPosition );
@@ -805,7 +833,7 @@ PlaylistManager::currentPage() const
 
 
 void
-PlaylistManager::setHistoryPosition( int position )
+ViewManager::setHistoryPosition( int position )
 {
     m_historyPosition = position;
 
@@ -815,7 +843,7 @@ PlaylistManager::setHistoryPosition( int position )
 
 
 Tomahawk::playlist_ptr
-PlaylistManager::playlistForInterface( PlaylistInterface* interface ) const
+ViewManager::playlistForInterface( PlaylistInterface* interface ) const
 {
     foreach ( PlaylistView* view, m_playlistViews.values() )
     {
@@ -830,7 +858,7 @@ PlaylistManager::playlistForInterface( PlaylistInterface* interface ) const
 
 
 Tomahawk::dynplaylist_ptr
-PlaylistManager::dynamicPlaylistForInterface( PlaylistInterface* interface ) const
+ViewManager::dynamicPlaylistForInterface( PlaylistInterface* interface ) const
 {
     foreach ( DynamicWidget* view, m_dynamicWidgets.values() )
     {
@@ -845,7 +873,7 @@ PlaylistManager::dynamicPlaylistForInterface( PlaylistInterface* interface ) con
 
 
 Tomahawk::collection_ptr
-PlaylistManager::collectionForInterface( PlaylistInterface* interface ) const
+ViewManager::collectionForInterface( PlaylistInterface* interface ) const
 {
     foreach ( CollectionView* view, m_collectionViews.values() )
     {
@@ -867,7 +895,7 @@ PlaylistManager::collectionForInterface( PlaylistInterface* interface ) const
 
 
 bool
-PlaylistManager::isSuperCollectionVisible() const
+ViewManager::isSuperCollectionVisible() const
 {
     return ( m_pageHistory.count() &&
            ( currentPage()->playlistInterface() == m_superCollectionView->playlistInterface() ||
@@ -876,7 +904,7 @@ PlaylistManager::isSuperCollectionVisible() const
 
 
 void
-PlaylistManager::showCurrentTrack()
+ViewManager::showCurrentTrack()
 {
     ViewPage* page = pageForInterface( AudioEngine::instance()->currentTrackPlaylist() );
 
@@ -889,14 +917,14 @@ PlaylistManager::showCurrentTrack()
 
 
 void
-PlaylistManager::onPlayClicked()
+ViewManager::onPlayClicked()
 {
     emit playClicked();
 }
 
 
 void
-PlaylistManager::onPauseClicked()
+ViewManager::onPauseClicked()
 {
     emit pauseClicked();
 }
