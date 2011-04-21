@@ -131,8 +131,8 @@ SourcesModel::index( int row, int column, const QModelIndex& parent ) const
 bool
 SourcesModel::setData( const QModelIndex& index, const QVariant& value, int role )
 {
-    // TODO
-    return false;
+    SourceTreeItem* item = itemFromIndex( index );
+    return item->setData( value, role );
 }
 
 QStringList
@@ -235,37 +235,6 @@ SourcesModel::viewPageActivated( Tomahawk::ViewPage* page )
         m_viewPageDelayedCacheItem = page;
     }
 }
-/*
-
-QModelIndex
-SourcesModel::indexFromPlaylist( const playlist_ptr& playlist )
-{
-    QModelIndex idx;
-    // No option but to iterate through everything... lame
-    for( int i = 0; i < rowCount(); i++ ) {
-        QModelIndex source = index( i, 0, QModelIndex() );
-        CollectionItem* col = qobject_cast< CollectionItem* >( m_rootItem->children().at( i ) );
-        if(  col->source().isNull() )
-            continue; // skip super collection
-
-        // get the playlist item and look through its children
-        for( int k = 0; k < col->children().count(); k++ ) {
-            CategoryItem* cat = qobject_cast< CategoryItem* >( col->children().at( k ) );
-            if( cat && cat->categoryType() == SourcesModel::PlaylistsCategory ) { // this is it
-                // now find the playlist itself
-                foreach( SourceTreeItem* plItem, cat->children() ) {
-                    PlaylistItem* plI = qobject_cast< PlaylistItem* >( plItem );
-                    if( plI && plI->playlist() == playlist ) {
-                        return indexFromItem( plI );
-                    }
-                }
-                break; // only one playlist category per source anyway, stop looking here
-            }
-        }
-    }
-    qDebug() << "FAILED to find playlist in source tree:" << playlist->title();
-    return idx;
-}*/
 
 void
 SourcesModel::loadSources()

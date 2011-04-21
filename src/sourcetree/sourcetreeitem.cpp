@@ -186,6 +186,17 @@ PlaylistItem::icon() const
     return QIcon( RESPATH "images/playlist-icon.png" );
 }
 
+bool
+PlaylistItem::setData(const QVariant& v, bool role)
+{
+    if( m_playlist->author()->isLocal() ) {
+        m_playlist->rename( v.toString() );
+
+        return true;
+    }
+    return false;
+}
+
 
 /// Dynamic Playlist Item
 /*

@@ -51,6 +51,7 @@ public:
     virtual QIcon icon() const { return QIcon(); }
     virtual bool willAcceptDrag( const QMimeData* data ) const { return false; }
     virtual bool dropMimeData( const QMimeData* data, Qt::DropAction action ) { return false; }
+    virtual bool setData( const QVariant& v, bool role ) { return false; }
 
     /// don't call me unless you are a sourcetreeitem. i prefer this to making everyone a friend
     void beginRowsAdded( int from, int to ) { emit beginChildRowsAdded( from, to ); }
@@ -156,6 +157,7 @@ public:
     virtual bool willAcceptDrag( const QMimeData* data ) const;
     virtual bool dropMimeData( const QMimeData* data, Qt::DropAction action );
     virtual QIcon icon() const;
+    virtual bool setData(const QVariant& v, bool role);
 
 protected:
     void setLoaded( bool loaded );

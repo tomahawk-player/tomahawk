@@ -84,9 +84,7 @@ public:
     bool removeItem( const Tomahawk::source_ptr& source );
 
     void linkSourceItemToPage( SourceTreeItem* item, Tomahawk::ViewPage* p );
-    // HACK i don't like this
-    // SLOW DON'T USE IF YOU CAN AVOID IT
-//     QModelIndex indexFromPlaylist( const Tomahawk::playlist_ptr& playlist );
+
     QModelIndex indexFromItem( SourceTreeItem* item ) const;
 
 signals:
