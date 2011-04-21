@@ -41,21 +41,21 @@ public:
     virtual ~InfoSystemCache();
 
 signals:
-    void notInCache( Tomahawk::InfoSystem::InfoCacheCriteria criteria, QString caller, Tomahawk::InfoSystem::InfoType type, QVariant input, Tomahawk::InfoSystem::InfoCustomData customData );
+    void notInCache( Tomahawk::InfoSystem::InfoCriteriaHash criteria, QString caller, Tomahawk::InfoSystem::InfoType type, QVariant input, Tomahawk::InfoSystem::InfoCustomData customData );
     void info( QString caller, Tomahawk::InfoSystem::InfoType type, QVariant input, QVariant output, Tomahawk::InfoSystem::InfoCustomData customData );
 
 public slots:
-    void getCachedInfoSlot( Tomahawk::InfoSystem::InfoCacheCriteria criteria, qint64 newMaxAge, QString caller, Tomahawk::InfoSystem::InfoType type, QVariant input, Tomahawk::InfoSystem::InfoCustomData customData );
-    void updateCacheSlot( Tomahawk::InfoSystem::InfoCacheCriteria criteria, qint64 maxAge, Tomahawk::InfoSystem::InfoType type, QVariant output );
+    void getCachedInfoSlot( Tomahawk::InfoSystem::InfoCriteriaHash criteria, qint64 newMaxAge, QString caller, Tomahawk::InfoSystem::InfoType type, QVariant input, Tomahawk::InfoSystem::InfoCustomData customData );
+    void updateCacheSlot( Tomahawk::InfoSystem::InfoCriteriaHash criteria, qint64 maxAge, Tomahawk::InfoSystem::InfoType type, QVariant output );
 
 private slots:
     void loadCache( Tomahawk::InfoSystem::InfoType type, const QString &cacheFile );
     void saveCache( Tomahawk::InfoSystem::InfoType type, const QString &cacheDir );
 
 private:
-    QHash< InfoType, QHash< InfoCacheCriteria, QVariant > > m_dataCache;
-    QHash< InfoType, QHash< InfoCacheCriteria, QDateTime > > m_insertTimeCache;
-    QHash< InfoType, QHash< InfoCacheCriteria, QDateTime > > m_maxTimeCache;
+    QHash< InfoType, QHash< InfoCriteriaHash, QVariant > > m_dataCache;
+    QHash< InfoType, QHash< InfoCriteriaHash, QDateTime > > m_insertTimeCache;
+    QHash< InfoType, QHash< InfoCriteriaHash, QDateTime > > m_maxTimeCache;
     QSet< InfoType > m_dirtySet;
     int m_cacheRemainingToLoad;
 };

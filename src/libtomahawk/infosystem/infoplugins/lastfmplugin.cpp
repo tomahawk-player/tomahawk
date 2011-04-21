@@ -195,7 +195,7 @@ LastFmPlugin::fetchCoverArt( const QString &caller, const InfoType type, const Q
         return;
     }
 
-    Tomahawk::InfoSystem::InfoCacheCriteria criteria;
+    Tomahawk::InfoSystem::InfoCriteriaHash criteria;
     criteria["artist"] = hash["artist"].toString();
     criteria["album"] = hash["album"].toString();
 
@@ -219,7 +219,7 @@ LastFmPlugin::fetchArtistImages( const QString &caller, const InfoType type, con
         return;
     }
 
-    Tomahawk::InfoSystem::InfoCacheCriteria criteria;
+    Tomahawk::InfoSystem::InfoCriteriaHash criteria;
     criteria["artist"] = hash["artist"].toString();
 
     emit getCachedInfo( criteria, 2419200000, caller, type, data, customData );
@@ -302,7 +302,7 @@ LastFmPlugin::coverArtReturned()
         );
 
         InfoCustomData origData = reply->property( "origData" ).value< Tomahawk::InfoSystem::InfoCustomData >();
-        Tomahawk::InfoSystem::InfoCacheCriteria criteria;
+        Tomahawk::InfoSystem::InfoCriteriaHash criteria;
         criteria["artist"] = origData["artist"].toString();
         criteria["album"] = origData["album"].toString();
         emit updateCache( criteria, 2419200000, type, returnedData );
@@ -353,7 +353,7 @@ LastFmPlugin::artistImagesReturned()
                   );
 
                   InfoCustomData origData = reply->property( "origData" ).value< Tomahawk::InfoSystem::InfoCustomData >();
-                  Tomahawk::InfoSystem::InfoCacheCriteria criteria;
+                  Tomahawk::InfoSystem::InfoCriteriaHash criteria;
                   criteria["artist"] = origData["artist"].toString();
                   emit updateCache( criteria, 2419200000, type, returnedData );
     }
