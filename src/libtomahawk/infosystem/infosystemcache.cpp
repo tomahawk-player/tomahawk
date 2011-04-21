@@ -34,65 +34,51 @@ namespace InfoSystem
 
 InfoSystemCache::InfoSystemCache( QObject* parent )
     : QObject( parent )
-    , m_syncTimer( this )
-    , m_cacheRemainingToLoad( 0 )
+    , m_cacheBaseDir( QDesktopServices::storageLocation( QDesktopServices::CacheLocation ) + "/InfoSystemCache/" )
 {
     qDebug() << Q_FUNC_INFO;
 
-    QString cacheBaseDir = QDesktopServices::storageLocation( QDesktopServices::CacheLocation );
-    for( int i = 0; i <= InfoNoInfo; i++ )
-    {
-        InfoType type = (InfoType)(i);
-        QString cacheDir = cacheBaseDir + "/InfoSystemCache/" + QString::number( i );
-        QDir dir( cacheDir );
-        if( dir.exists() )
-        {
-            m_cacheRemainingToLoad++;
-            QMetaObject::invokeMethod( this, "loadCache", Qt::QueuedConnection, Q_ARG( Tomahawk::InfoSystem::InfoType, type ), Q_ARG( QString, cacheDir ) );
-        }
-    }
-    
-    m_syncTimer.setInterval( 60000 );
-    m_syncTimer.setSingleShot( false );
-    connect( &m_syncTimer, SIGNAL( timeout() ), SLOT( syncTimerFired() ) );
-    m_syncTimer.start();
+    m_pruneTimer.setInterval( 300000 );
+    m_pruneTimer.setSingleShot( false );
+    connect( &m_pruneTimer, SIGNAL( timeout() ), SLOT( pruneTimerFired() ) );
+    m_pruneTimer.start();
 }
 
 
 InfoSystemCache::~InfoSystemCache()
 {
     qDebug() << Q_FUNC_INFO;
-    qDebug() << "Saving infosystemcache to disk";
-    QString cacheBaseDir = QDesktopServices::storageLocation( QDesktopServices::CacheLocation );
-    for ( int i = 0; i <= InfoNoInfo; i++ )
-    {
-        InfoType type = (InfoType)(i);
-        if ( m_dirtySet.contains( type ) && !m_dirtySet[type].isEmpty() && m_dataCache.contains( type ) )
-        {
-            QString cacheDir = cacheBaseDir + "/InfoSystemCache/" + QString::number( i );
-            saveCache( type, cacheDir );
-        }
-    }
 }
 
 
 void
-InfoSystemCache::syncTimerFired()
+InfoSystemCache::pruneTimerFired()
 {
     qDebug() << Q_FUNC_INFO;
-    if ( m_cacheRemainingToLoad > 0 )
-        return;
 
-    qDebug() << "Syncing infosystemcache to disk";
-    QString cacheBaseDir = QDesktopServices::storageLocation( QDesktopServices::CacheLocation );
+    qDebug() << "Pruning infosystemcache";
+    qlonglong currentMSecsSinceEpoch = QDateTime::currentMSecsSinceEpoch();
+    
     for ( int i = 0; i <= InfoNoInfo; i++ )
     {
         InfoType type = (InfoType)(i);
-        if ( m_dirtySet.contains( type ) && !m_dirtySet[type].isEmpty() && m_dataCache.contains( type ) )
+        QHash< QString, QString > fileLocationHash = m_fileLocationCache[type];
+        const QString cacheDirName = m_cacheBaseDir + QString::number( (int)type );
+        QFileInfoList fileList = QDir( cacheDirName ).entryInfoList( QDir::Files | QDir::NoDotAndDotDot );
+        foreach ( QFileInfo file, fileList )
         {
-            QString cacheDir = cacheBaseDir + "/InfoSystemCache/" + QString::number( i );
-            saveCache( type, cacheDir );
+            QString baseName = file.baseName();
+            if ( file.suffix().toLongLong() < currentMSecsSinceEpoch )
+            {
+                if ( !QFile::remove( file.canonicalFilePath() ) )
+                    qDebug() << "Failed to remove stale cache file " << file.canonicalFilePath();
+                else
+                    qDebug() << "Removed stale cache file " << file.canonicalFilePath();
+            }
+            if ( fileLocationHash.contains( baseName ) )
+                fileLocationHash.remove( baseName );
         }
+        m_fileLocationCache[type] = fileLocationHash;
     }
 }
 
@@ -101,44 +87,78 @@ void
 InfoSystemCache::getCachedInfoSlot( const Tomahawk::InfoSystem::InfoCriteriaHash criteria, const qint64 newMaxAge, const QString caller, const Tomahawk::InfoSystem::InfoType type, const QVariant input, const Tomahawk::InfoSystem::InfoCustomData customData )
 {
     qDebug() << Q_FUNC_INFO;
-    if ( !m_dataCache.contains( type ) || !m_dataCache[type].contains( criteria ) )
+    const QString criteriaHashVal = criteriaMd5( criteria );
+    QHash< QString, QString > fileLocationHash = m_fileLocationCache[type];
+    if ( !fileLocationHash.contains( criteriaHashVal ) )
     {
-        emit notInCache( criteria, caller, type, input, customData );
-        return;
+        if ( !fileLocationHash.isEmpty() )
+        {
+            //We already know of some values, so no need to re-read the directory again as it's already happened
+            emit notInCache( criteria, caller, type, input, customData );
+            return;
+        }
+            
+        const QString cacheDir = m_cacheBaseDir + QString::number( (int)type );
+        QDir dir( cacheDir );
+        if ( !dir.exists() )
+        {
+            //Dir doesn't exist so clearly not in cache
+            emit notInCache( criteria, caller, type, input, customData );
+            return;
+        }
+        
+        QFileInfoList fileList = dir.entryInfoList( QDir::Files | QDir::NoDotAndDotDot );
+        foreach ( QFileInfo file, fileList )
+        {
+            QString baseName = file.baseName();
+            fileLocationHash[baseName] = file.canonicalFilePath();
+        }
+
+        //Store what we've loaded up
+        m_fileLocationCache[type] = fileLocationHash;
+        if ( !fileLocationHash.contains( criteriaHashVal ) )
+        {
+            //Still didn't fine it? It's really not in the cache then
+            emit notInCache( criteria, caller, type, input, customData );
+            return;
+        }
     }
 
-    if ( m_cacheRemainingToLoad > 0 )
+    QFileInfo file( fileLocationHash[criteriaHashVal] );
+    qlonglong currMaxAge = file.suffix().toLongLong();
+
+    if ( currMaxAge < QDateTime::currentMSecsSinceEpoch() )
     {
-        qDebug() << "Cache not fully loaded, punting request for a bit";
-        QMetaObject::invokeMethod( this, "getCachedInfoSlot", Qt::QueuedConnection,  Q_ARG( Tomahawk::InfoSystem::InfoCriteriaHash, criteria ), Q_ARG( qint64, newMaxAge ), Q_ARG( QString, caller ), Q_ARG( Tomahawk::InfoSystem::InfoType, type ), Q_ARG( QVariant, input ), Q_ARG( Tomahawk::InfoSystem::InfoCustomData, customData ) );
-        return;
-    }
-    
-    QHash< InfoCriteriaHash, QDateTime > typemaxtimecache = m_maxTimeCache[type];
-    
-    if ( typemaxtimecache[criteria].toMSecsSinceEpoch() < QDateTime::currentMSecsSinceEpoch() )
-    {
-        QHash< InfoCriteriaHash, QVariant > typedatacache = m_dataCache[type];
-        QHash< InfoCriteriaHash, QDateTime > typeinserttimecache = m_insertTimeCache[type];
-        typemaxtimecache.remove( criteria );
-        m_maxTimeCache[type] = typemaxtimecache;
-        typedatacache.remove( criteria );
-        m_dataCache[type] = typedatacache;
-        typeinserttimecache.remove( criteria );
-        m_insertTimeCache[type] = typeinserttimecache;
+        if ( !QFile::remove( file.canonicalFilePath() ) )
+            qDebug() << "Failed to remove stale cache file " << file.canonicalFilePath();
+        else
+            qDebug() << "Removed stale cache file " << file.canonicalFilePath();
+        
+        fileLocationHash.remove( criteriaHashVal );
+        m_fileLocationCache[type] = fileLocationHash;
+        
         emit notInCache( criteria, caller, type, input, customData );
         return;
     }
-    
-    if ( newMaxAge > 0 )
+    else if ( newMaxAge > 0 )
     {
-        QHash< InfoCriteriaHash, QDateTime > typemaxtimecache = m_maxTimeCache[type];
-        typemaxtimecache[criteria] = QDateTime::fromMSecsSinceEpoch( QDateTime::currentMSecsSinceEpoch() + newMaxAge );
-        m_maxTimeCache[type] = typemaxtimecache;
-        m_dirtySet[type].insert( criteria );
+        const QString newFilePath = QString( file.dir().canonicalPath() + '/' + criteriaHashVal + '.' + QString::number( QDateTime::currentMSecsSinceEpoch() + newMaxAge ) );
+        
+        if ( !QFile::rename( file.canonicalFilePath(), newFilePath ) )
+        {
+            qDebug() << "Failed to move old cache file to new location!";
+            emit notInCache( criteria, caller, type, input, customData );
+            return;
+        }
+        
+        fileLocationHash[criteriaHashVal] = newFilePath;
+        m_fileLocationCache[type] = fileLocationHash;
     }
     
-    emit info( caller, type, input, m_dataCache[type][criteria], customData );
+    QSettings cachedSettings( fileLocationHash[criteriaHashVal], QSettings::IniFormat );
+    QVariant output = cachedSettings.value( "data" );   
+
+    emit info( caller, type, input, output, customData );
 }
 
 
@@ -146,73 +166,28 @@ void
 InfoSystemCache::updateCacheSlot( const Tomahawk::InfoSystem::InfoCriteriaHash criteria, const qint64 maxAge, const Tomahawk::InfoSystem::InfoType type, const QVariant output )
 {
     qDebug() << Q_FUNC_INFO;
-    QHash< InfoCriteriaHash, QVariant > typedatacache = m_dataCache[type];
-    QHash< InfoCriteriaHash, QDateTime > typeinserttimecache = m_insertTimeCache[type];
-    QHash< InfoCriteriaHash, QDateTime > typemaxtimecache = m_maxTimeCache[type];
-    typedatacache[criteria] = output;
-    typeinserttimecache[criteria] = QDateTime::currentDateTimeUtc();
-    typemaxtimecache[criteria] = QDateTime::fromMSecsSinceEpoch( QDateTime::currentMSecsSinceEpoch() + maxAge );
-    m_dataCache[type] = typedatacache;
-    m_insertTimeCache[type] = typeinserttimecache;
-    m_maxTimeCache[type] = typemaxtimecache;
-    m_dirtySet[type].insert( criteria );
-}
-
-
-void
-InfoSystemCache::loadCache( const Tomahawk::InfoSystem::InfoType type, const QString cacheDir )
-{
-    qDebug() << Q_FUNC_INFO;
-
-    QDir dir( cacheDir );
-
-    qDebug() << "Checking files in dir " << dir.canonicalPath();
-    QFileInfoList files = dir.entryInfoList( QDir::Files );
-    qDebug() << "Found " << files.size() << " files";
-
-    QHash< InfoCriteriaHash, QVariant > dataHash = m_dataCache[type];
-    QHash< InfoCriteriaHash, QDateTime > insertDateHash = m_insertTimeCache[type];
-    QHash< InfoCriteriaHash, QDateTime > maxDateHash = m_maxTimeCache[type];
-    QHash< InfoCriteriaHash, QString > fileLocationHash = m_fileLocationCache[type];
     
-    foreach ( QFileInfo file, files )
+    const QString criteriaHashVal = criteriaMd5( criteria );
+    const QString cacheDir = m_cacheBaseDir + QString::number( (int)type );
+    const QString settingsFilePath( cacheDir + '/' + criteriaHashVal + '.' + QString::number( QDateTime::currentMSecsSinceEpoch() + maxAge ) );
+
+    QHash< QString, QString > fileLocationHash = m_fileLocationCache[type];
+    if ( fileLocationHash.contains( criteriaHashVal ) )
     {
-        if ( file.baseName().toLongLong() < QDateTime::currentMSecsSinceEpoch() )
+        if ( !QFile::rename( fileLocationHash[criteriaHashVal], settingsFilePath ) )
         {
-            if ( !QFile::remove( file.canonicalFilePath() ) )
-                qDebug() << "Failed to remove stale cache file " << file.canonicalFilePath();
-            else
-                qDebug() << "Removed stale cache file " << file.canonicalFilePath();
-            continue;
+            qDebug() << "Failed to move old cache file to new location!";
+            return;
         }
-            
-        QSettings cachedSettings( file.canonicalFilePath(), QSettings::IniFormat );
-
-
-        InfoCriteriaHash criteria;
-        cachedSettings.beginGroup( "criteria" );
-        foreach ( QString key, cachedSettings.childKeys() )
-            criteria[key] = cachedSettings.value( key ).toString();
-        cachedSettings.endGroup();
-        dataHash[criteria] = cachedSettings.value( "data" );
-        insertDateHash[criteria] = cachedSettings.value( "inserttime" ).toDateTime();
-        maxDateHash[criteria] =  QDateTime::fromMSecsSinceEpoch( file.baseName().toLongLong() );
-        fileLocationHash[criteria] = file.canonicalFilePath();
+        fileLocationHash[criteriaHashVal] = settingsFilePath;
+        m_fileLocationCache[type] = fileLocationHash;
+        
+        QSettings cachedSettings( fileLocationHash[criteriaHashVal], QSettings::IniFormat );
+        cachedSettings.setValue( "data", output );
+        
+        return;
     }
-
-    m_dataCache[type] = dataHash;
-    m_insertTimeCache[type] = insertDateHash;
-    m_maxTimeCache[type] = maxDateHash;
-    m_fileLocationCache[type] = fileLocationHash;
-
-    m_cacheRemainingToLoad--;
-}
-
-
-void
-InfoSystemCache::saveCache( const Tomahawk::InfoSystem::InfoType type, const QString cacheDir )
-{
-    qDebug() << Q_FUNC_INFO;
+    
     QDir dir( cacheDir );
     if( !dir.exists( cacheDir ) )
     {
@@ -223,40 +198,29 @@ InfoSystemCache::saveCache( const Tomahawk::InfoSystem::InfoType type, const QSt
             return;
         }
     }
-
-    QHash< InfoCriteriaHash, QString > fileLocationHash = m_fileLocationCache[type];
-
-    foreach ( InfoCriteriaHash criteria, m_dirtySet[type].values() )
-    {
-        QString maxAge( QString::number( m_maxTimeCache[type][criteria].toMSecsSinceEpoch() ) );
-        QCryptographicHash hash( QCryptographicHash::Md5 );
-        foreach( QString key, criteria.keys() )
-            hash.addData( key.toUtf8() );
-        foreach( QString value, criteria.values() )
-            hash.addData( value.toUtf8() );
-        QString settingsFilePath( cacheDir + '/' + maxAge + '.' + hash.result().toHex() );
-        if ( m_fileLocationCache[type].contains( criteria ) )
-        {
-            if ( !QFile::rename( m_fileLocationCache[type][criteria], settingsFilePath ) )
-                qDebug() << "Failed to move old cache file to new location!";
-            else
-                m_dirtySet[type].remove( criteria );
-            continue;
-        }
-        QSettings cachedSettings( settingsFilePath, QSettings::IniFormat );
-        QStringList keys = criteria.keys();
-        cachedSettings.beginGroup( "criteria" );
-        for( int i = 0; i < criteria.size(); i++ )
-            cachedSettings.setValue( keys.at( i ), criteria[keys.at( i )] );
-        cachedSettings.endGroup();
-        cachedSettings.setValue( "data", m_dataCache[type][criteria] );
-        cachedSettings.setValue( "inserttime", m_insertTimeCache[type][criteria] );
-        fileLocationHash[criteria] = settingsFilePath;
-        m_dirtySet[type].remove( criteria );
-    }
-
+    
+    QSettings cachedSettings( settingsFilePath, QSettings::IniFormat );
+    QStringList keys = criteria.keys();
+    cachedSettings.beginGroup( "criteria" );
+    for( int i = 0; i < criteria.size(); i++ )
+        cachedSettings.setValue( keys.at( i ), criteria[keys.at( i )] );
+    cachedSettings.endGroup();
+    cachedSettings.setValue( "data", output );
+    
+    fileLocationHash[criteriaHashVal] = settingsFilePath;
     m_fileLocationCache[type] = fileLocationHash;
+}
 
+
+const QString
+InfoSystemCache::criteriaMd5( const Tomahawk::InfoSystem::InfoCriteriaHash &criteria ) const
+{
+    QCryptographicHash hash( QCryptographicHash::Md5 );
+    foreach( QString key, criteria.keys() )
+        hash.addData( key.toUtf8() );
+    foreach( QString value, criteria.values() )
+        hash.addData( value.toUtf8() );
+    return hash.result().toHex();
 }
 
 

@@ -50,18 +50,14 @@ public slots:
     void updateCacheSlot( const Tomahawk::InfoSystem::InfoCriteriaHash criteria, const qint64 maxAge, const Tomahawk::InfoSystem::InfoType type, const QVariant output );
 
 private slots:
-    void syncTimerFired();
-    void loadCache( const Tomahawk::InfoSystem::InfoType type, const QString cacheDir );
-    void saveCache( const Tomahawk::InfoSystem::InfoType type, const QString cacheDir );
+    void pruneTimerFired();
 
 private:
-    QHash< InfoType, QHash< InfoCriteriaHash, QVariant > > m_dataCache;
-    QHash< InfoType, QHash< InfoCriteriaHash, QDateTime > > m_insertTimeCache;
-    QHash< InfoType, QHash< InfoCriteriaHash, QDateTime > > m_maxTimeCache;
-    QHash< InfoType, QHash< InfoCriteriaHash, QString > > m_fileLocationCache;
-    QHash< InfoType, QSet< InfoCriteriaHash > > m_dirtySet;
-    QTimer m_syncTimer;
-    int m_cacheRemainingToLoad;
+    const QString criteriaMd5( const Tomahawk::InfoSystem::InfoCriteriaHash &criteria ) const;
+    
+    QString m_cacheBaseDir;
+    QHash< InfoType, QHash< QString, QString > > m_fileLocationCache;
+    QTimer m_pruneTimer;
 };
 
 } //namespace InfoSystem
