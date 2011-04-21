@@ -63,7 +63,12 @@ private slots:
 
     void onSettingsChanged();
 
-    void onAvatarReceived( const QString& from, const QPixmap& avatar = QPixmap());
+    // set data for local source
+    void onAvatarReceived( const QPixmap& avatar );
+
+    // set data for other sources
+    void onAvatarReceived( const QString& from, const QPixmap& avatar );
+
 
 private:
     static SipHandler *s_instance;

@@ -65,6 +65,7 @@ signals:
     void connected();
     void disconnected();
     void jidChanged( const QString& );
+    void avatarReceived( const QPixmap& avatar );
     void avatarReceived( const QString&, const QPixmap& avatar );
     void authError( int, const QString& );
 

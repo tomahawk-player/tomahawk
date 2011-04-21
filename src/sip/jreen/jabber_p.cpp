@@ -553,5 +553,10 @@ void Jabber_p::onNewAvatar(const QString& jid)
         }
     }
 
-    emit avatarReceived ( jid,  m_avatarManager->avatar( jid ) );
+    if( jid == m_client->jid().bare() )
+        // own avatar
+        emit avatarReceived ( m_avatarManager->avatar( jid ) );
+    else
+        // someone else's avatar
+        emit avatarReceived ( jid,  m_avatarManager->avatar( jid ) );
 }

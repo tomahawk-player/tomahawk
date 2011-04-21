@@ -179,6 +179,7 @@ SipHandler::loadPlugin( const QString& path )
         QObject::connect( sip, SIGNAL( error( int, QString ) ), SLOT( onError( int, QString ) ) );
 
         QObject::connect( sip, SIGNAL( avatarReceived( QString, QPixmap ) ), SLOT( onAvatarReceived( QString, QPixmap ) ) );
+        QObject::connect( sip, SIGNAL( avatarReceived( QPixmap ) ), SLOT( onAvatarReceived( QPixmap ) ) );
         m_plugins << sip;
     }
 }
@@ -410,4 +411,10 @@ void SipHandler::onAvatarReceived( const QString& from, const QPixmap& avatar )
     {
         qDebug() << Q_FUNC_INFO << from << "no control connection setup yet";
     }
+}
+
+void SipHandler::onAvatarReceived( const QPixmap& avatar )
+{
+    qDebug() << Q_FUNC_INFO << "Set own avatar on MyCollection";
+    SourceList::instance()->getLocal()->setAvatar( avatar );
 }

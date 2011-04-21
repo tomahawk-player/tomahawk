@@ -58,7 +58,12 @@ signals:
     void peerOffline( const QString& );
     void msgReceived( const QString& from, const QString& msg );
 
+    // new data for own source
+    void avatarReceived ( const QPixmap& avatar );
+
+    // new data for other sources;
     void avatarReceived ( const QString& from,  const QPixmap& avatar);
+
 
     void addMenu( QMenu* menu );
     void removeMenu( QMenu* menu );
