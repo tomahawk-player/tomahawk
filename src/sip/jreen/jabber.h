@@ -1,5 +1,6 @@
 /* === This file is part of Tomahawk Player - <http://tomahawk-player.org> ===
- * 
+ *
+ *   Copyright 2010-2011, Dominik Schmidt <dev@dominik-schmidt.de>
  *   Copyright 2010-2011, Christian Muehlhaeuser <muesli@tomahawk-player.org>
  *
  *   Tomahawk is free software: you can redistribute it and/or modify
@@ -24,7 +25,7 @@
 
 #include "../sipdllmacro.h"
 
-#define MYNAME "SIPJABBER"
+#define MYNAME "SIPJREEN"
 
 class SIPDLLEXPORT JabberPlugin : public SipPlugin
 {
@@ -56,6 +57,7 @@ private slots:
     void showAddFriendDialog();
     void onConnected();
     void onDisconnected();
+    void onAuthError(int code, const QString &msg);
 
 private:
     Jabber_p* p;

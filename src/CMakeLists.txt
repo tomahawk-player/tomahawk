@@ -32,8 +32,6 @@ ENDIF()
 #ENDFOREACH( moddir )
 
 SET( tomahawkSources ${tomahawkSources}
-     sip/SipHandler.cpp
-
      web/api_v1.cpp
 
      resolvers/scriptresolver.cpp
@@ -70,7 +68,6 @@ SET( tomahawkSourcesGui ${tomahawkSourcesGui}
 SET( tomahawkHeaders ${tomahawkHeaders}
      "${TOMAHAWK_INC_DIR}/tomahawk/tomahawkapp.h"
 
-     sip/SipHandler.h
 
      web/api_v1.h
 

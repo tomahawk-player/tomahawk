@@ -53,7 +53,9 @@ public:
 
     QString userName() const { return m_username; }
     QString friendlyName() const;
-    void setFriendlyName( const QString& fname ) { m_friendlyname = fname; }
+    void setFriendlyName( const QString& fname );
+    void setAvatar(const QPixmap &avatar);
+    const QPixmap avatar() const;
 
     collection_ptr collection() const;
     void addCollection( const Tomahawk::collection_ptr& c );
@@ -111,11 +113,14 @@ private:
     QList< QSharedPointer<Collection> > m_collections;
     QVariantMap m_stats;
     QString m_lastOpGuid;
+    bool m_scrubFriendlyName;
 
     Tomahawk::query_ptr m_currentTrack;
     QString m_textStatus;
 
     ControlConnection* m_cc;
+
+    QPixmap m_avatar;
 };
 
 };

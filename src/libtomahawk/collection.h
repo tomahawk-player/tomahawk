@@ -1,5 +1,5 @@
 /* === This file is part of Tomahawk Player - <http://tomahawk-player.org> ===
- * 
+ *
  *   Copyright 2010-2011, Christian Muehlhaeuser <muesli@tomahawk-player.org>
  *
  *   Tomahawk is free software: you can redistribute it and/or modify
@@ -68,8 +68,8 @@ public:
     virtual void addDynamicPlaylist( const Tomahawk::dynplaylist_ptr& p );
     virtual void deleteDynamicPlaylist( const Tomahawk::dynplaylist_ptr& p );
 
-    virtual QList< Tomahawk::playlist_ptr > playlists() { return m_playlists; }
-    virtual QList< Tomahawk::dynplaylist_ptr > dynamicPlaylists() { return m_dynplaylists; }
+    virtual QList< Tomahawk::playlist_ptr > playlists() { return m_playlists.values(); }
+    virtual QList< Tomahawk::dynplaylist_ptr > dynamicPlaylists() { return m_dynplaylists.values(); }
     virtual QList< Tomahawk::query_ptr > tracks() { return m_tracks; }
 
     const source_ptr& source() const;
@@ -107,8 +107,8 @@ private:
 
     source_ptr m_source;
     QList< Tomahawk::query_ptr > m_tracks;
-    QList< Tomahawk::playlist_ptr > m_playlists;
-    QList< Tomahawk::dynplaylist_ptr > m_dynplaylists;
+    QHash< QString, Tomahawk::playlist_ptr > m_playlists;
+    QHash< QString, Tomahawk::dynplaylist_ptr > m_dynplaylists;
 };
 
 }; // ns

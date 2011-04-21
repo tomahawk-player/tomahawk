@@ -1,5 +1,5 @@
 /* === This file is part of Tomahawk Player - <http://tomahawk-player.org> ===
- * 
+ *
  *   Copyright 2010-2011, Christian Muehlhaeuser <muesli@tomahawk-player.org>
  *
  *   Tomahawk is free software: you can redistribute it and/or modify
@@ -24,19 +24,33 @@
 #include <QPluginLoader>
 #include <QMessageBox>
 
+#include "functimeout.h"
+
 #include "database/database.h"
 #include "network/controlconnection.h"
 #include "sourcelist.h"
 #include "tomahawksettings.h"
-#include "tomahawk/tomahawkapp.h"
+//#include "tomahawk/tomahawkapp.h"
 
 #include "config.h"
 
+
+//remove
+#include <QLabel>
+
+SipHandler* SipHandler::s_instance = 0;
+
+SipHandler* SipHandler::instance()
+{
+    return s_instance;
+}
 
 SipHandler::SipHandler( QObject* parent )
     : QObject( parent )
     , m_connected( false )
 {
+    s_instance = this;
+
     loadPlugins( findPlugins() );
 
     connect( TomahawkSettings::instance(), SIGNAL( changed() ), SLOT( onSettingsChanged() ) );
@@ -54,6 +68,23 @@ SipHandler::plugins() const
 {
     return m_plugins;
 }
+
+const QPixmap SipHandler::avatar( const QString& name ) const
+{
+    qDebug() << Q_FUNC_INFO << "Getting avatar" << name << m_usernameAvatars.keys();
+    if( m_usernameAvatars.keys().contains( name ) )
+    {
+        qDebug() << Q_FUNC_INFO << "Getting avatar and avatar != null ";
+        Q_ASSERT(!m_usernameAvatars.value( name ).isNull());
+        return m_usernameAvatars.value( name );
+    }
+    else
+    {
+        qDebug() << Q_FUNC_INFO << "Getting avatar and avatar == null, GAAAAAH ";
+        return QPixmap();
+    }
+}
+
 
 
 void
@@ -147,6 +178,8 @@ SipHandler::loadPlugin( const QString& path )
         QObject::connect( sip, SIGNAL( disconnected() ), SIGNAL( disconnected() ) );
         QObject::connect( sip, SIGNAL( error( int, QString ) ), SLOT( onError( int, QString ) ) );
 
+        QObject::connect( sip, SIGNAL( avatarReceived( QString, QPixmap ) ), SLOT( onAvatarReceived( QString, QPixmap ) ) );
+        QObject::connect( sip, SIGNAL( avatarReceived( QPixmap ) ), SLOT( onAvatarReceived( QPixmap ) ) );
         m_plugins << sip;
     }
 }
@@ -182,7 +215,8 @@ SipHandler::connectPlugins( bool startup, const QString &pluginName )
     if ( !TomahawkSettings::instance()->acceptedLegalWarning() )
     {
         int result = QMessageBox::question(
-            TomahawkApp::instance()->mainWindow(), tr( "Legal Warning" ),
+            //TomahawkApp::instance()->mainWindow(),
+            0, tr( "Legal Warning" ),
             tr( "By pressing OK below, you agree that your use of Tomahawk will be in accordance with any applicable laws, including copyright and intellectual property laws, in effect in your country of residence, and indemnify the Tomahawk developers and project from liability should you choose to break those laws.\n\nFor more information, please see http://gettomahawk.com/legal" ),
             tr( "I Do Not Agree" ), tr( "I Agree" )
         );
@@ -345,4 +379,42 @@ SipHandler::onError( int code, const QString& msg )
         SipPlugin* sip = qobject_cast<SipPlugin*>(sender());
         QTimer::singleShot( 10000, sip, SLOT( connectPlugin() ) );
     }
+}
+
+void SipHandler::onAvatarReceived( const QString& from, const QPixmap& avatar )
+{
+    qDebug() << Q_FUNC_INFO << "Set avatar on source for " << from;
+    Q_ASSERT(!avatar.isNull());
+
+    m_usernameAvatars.insert( from, avatar );
+
+    //
+
+    //Tomahawk::source_ptr source = ->source();
+    ControlConnection *conn = Servent::instance()->lookupControlConnection( from );
+    if( conn )
+    {
+        qDebug() << Q_FUNC_INFO << from << "got control connection";
+        Tomahawk::source_ptr source = conn->source();
+        if( source )
+        {
+
+            qDebug() << Q_FUNC_INFO << from << "got source, setting avatar";
+            source->setAvatar( avatar );
+        }
+        else
+        {
+            qDebug() << Q_FUNC_INFO << from << "no source found, not setting avatar";
+        }
+    }
+    else
+    {
+        qDebug() << Q_FUNC_INFO << from << "no control connection setup yet";
+    }
+}
+
+void SipHandler::onAvatarReceived( const QPixmap& avatar )
+{
+    qDebug() << Q_FUNC_INFO << "Set own avatar on MyCollection";
+    SourceList::instance()->getLocal()->setAvatar( avatar );
 }

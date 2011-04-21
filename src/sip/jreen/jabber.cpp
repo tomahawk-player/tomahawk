@@ -1,5 +1,6 @@
 /* === This file is part of Tomahawk Player - <http://tomahawk-player.org> ===
- * 
+ *
+ *   Copyright 2010-2011, Dominik Schmidt <dev@dominik-schmidt.de>
  *   Copyright 2010-2011, Christian Muehlhaeuser <muesli@tomahawk-player.org>
  *
  *   Tomahawk is free software: you can redistribute it and/or modify
@@ -105,8 +106,12 @@ JabberPlugin::connectPlugin( bool startup )
     QObject::connect( p, SIGNAL( peerOffline( QString ) ), SIGNAL( peerOffline( QString ) ) );
     QObject::connect( p, SIGNAL( msgReceived( QString, QString ) ), SIGNAL( msgReceived( QString, QString ) ) );
 
-    QObject::connect( p, SIGNAL( connected() ), SIGNAL( onConnected() ) );
-    QObject::connect( p, SIGNAL( disconnected() ), SIGNAL( onDisconnected() ) );
+    QObject::connect( p, SIGNAL( connected() ), SLOT( onConnected() ) );
+    QObject::connect( p, SIGNAL( disconnected() ), SLOT( onDisconnected() ) );
+
+    QObject::connect( p, SIGNAL( authError( int, QString ) ), SLOT( onAuthError( int, QString ) ) );
+    QObject::connect( p, SIGNAL( avatarReceived( QString, QPixmap ) ), SIGNAL( avatarReceived( QString, QPixmap ) ) );
+    QObject::connect( p, SIGNAL( avatarReceived( QPixmap ) ), SIGNAL( avatarReceived( QPixmap) ) );
 
     return true;
 }
@@ -153,6 +158,33 @@ JabberPlugin::onDisconnected()
     }
 
     emit disconnected();
+}
+
+void
+JabberPlugin::onAuthError( int code, const QString& msg )
+{
+    switch( code )
+    {
+        case Jreen::Client::AuthorizationError:
+            emit error( SipPlugin::AuthError, msg );
+            break;
+
+        case Jreen::Client::HostUnknown:
+        case Jreen::Client::ItemNotFound:
+        case Jreen::Client::RemoteStreamError:
+        case Jreen::Client::RemoteConnectionFailed:
+        case Jreen::Client::InternalServerError:
+        case Jreen::Client::SystemShutdown:
+        case Jreen::Client::Conflict:
+        case Jreen::Client::Unknown:
+            emit error( SipPlugin::ConnectionError, msg );
+            break;
+
+        default:
+            qDebug() << "Not all Client::DisconnectReasons checked";
+            Q_ASSERT(false);
+            break;
+    }
 }
 
 void

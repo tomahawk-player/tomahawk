@@ -213,13 +213,13 @@ AudioControls::onPlaybackStarted( const Tomahawk::result_ptr& result )
 
     onPlaybackLoading( result );
 
-    Tomahawk::InfoSystem::InfoCustomData trackInfo;
-    trackInfo["artist"] = QVariant::fromValue< QString >( result->artist()->name() );
-    trackInfo["album"] = QVariant::fromValue< QString >( result->album()->name() );
+    Tomahawk::InfoSystem::InfoCriteriaHash trackInfo;
+    trackInfo["artist"] = result->artist()->name();
+    trackInfo["album"] = result->album()->name();
 
     Tomahawk::InfoSystem::InfoSystem::instance()->getInfo(
         s_acInfoIdentifier, Tomahawk::InfoSystem::InfoAlbumCoverArt,
-        QVariant::fromValue< Tomahawk::InfoSystem::InfoCustomData >( trackInfo ), Tomahawk::InfoSystem::InfoCustomData() );
+        QVariant::fromValue< Tomahawk::InfoSystem::InfoCriteriaHash >( trackInfo ), Tomahawk::InfoSystem::InfoCustomData() );
 }
 
 

@@ -1,5 +1,5 @@
 /* === This file is part of Tomahawk Player - <http://tomahawk-player.org> ===
- * 
+ *
  *   Copyright 2010-2011, Christian Muehlhaeuser <muesli@tomahawk-player.org>
  *
  *   Tomahawk is free software: you can redistribute it and/or modify
@@ -51,7 +51,7 @@ Collection::name() const
 }
 
 
-const 
+const
 source_ptr& Collection::source() const
 {
     return m_source;
@@ -64,11 +64,11 @@ Collection::addPlaylist( const Tomahawk::playlist_ptr& p )
     qDebug() << Q_FUNC_INFO;
     QList<playlist_ptr> toadd;
     toadd << p;
-    m_playlists.append( toadd );
+    m_playlists.insert( p->guid(), p );
 
     qDebug() << Q_FUNC_INFO << "Collection name" << name()
                             << "from source id" << source()->id()
-                            << "numplaylists:" << m_playlists.length();
+                            << "numplaylists:" << m_playlists.count();
     emit playlistsAdded( toadd );
 }
 
@@ -79,11 +79,11 @@ Collection::addDynamicPlaylist( const Tomahawk::dynplaylist_ptr& p )
     qDebug() << Q_FUNC_INFO;
     QList<dynplaylist_ptr> toadd;
     toadd << p;
-    m_dynplaylists.append( toadd );
-    
+    m_dynplaylists.insert( p->guid(), p );
+
     qDebug() << Q_FUNC_INFO << "Collection name" << name()
-    << "from source id" << source()->id()
-    << "numplaylists:" << m_playlists.length();
+             << "from source id" << source()->id()
+             << "numplaylists:" << m_playlists.count();
     emit dynamicPlaylistsAdded( toadd );
 }
 
@@ -94,11 +94,11 @@ Collection::deletePlaylist( const Tomahawk::playlist_ptr& p )
     qDebug() << Q_FUNC_INFO;
     QList<playlist_ptr> todelete;
     todelete << p;
-    m_playlists.removeAll( p );
+    m_playlists.remove( p->guid() );
 
     qDebug() << Q_FUNC_INFO << "Collection name" << name()
                             << "from source id" << source()->id()
-                            << "numplaylists:" << m_playlists.length();
+                            << "numplaylists:" << m_playlists.count();
     emit playlistsDeleted( todelete );
 }
 
@@ -109,11 +109,11 @@ Collection::deleteDynamicPlaylist( const Tomahawk::dynplaylist_ptr& p )
     qDebug() << Q_FUNC_INFO;
     QList<dynplaylist_ptr> todelete;
     todelete << p;
-    m_dynplaylists.removeAll( p );
+    m_dynplaylists.remove( p->guid() );
 
     qDebug() << Q_FUNC_INFO << "Collection name" << name()
                             << "from source id" << source()->id()
-                            << "numplaylists:" << m_playlists.length();
+                            << "numplaylists:" << m_playlists.count();
     emit dynamicPlaylistsDeleted( todelete );
 }
 
@@ -121,33 +121,15 @@ Collection::deleteDynamicPlaylist( const Tomahawk::dynplaylist_ptr& p )
 playlist_ptr
 Collection::playlist( const QString& guid )
 {
-    foreach( const playlist_ptr& pp, m_playlists )
-    {
-        if( pp->guid() == guid )
-            return pp;
-    }
-    
-    // TODO do we really want to do this?
-    foreach( const dynplaylist_ptr& pp, m_dynplaylists )
-    {
-        if( pp->guid() == guid )
-            return pp.staticCast<Playlist>();
-    }
-    
-    return playlist_ptr();
+    return m_playlists.value( guid, playlist_ptr() );
 }
 
 
 dynplaylist_ptr
 Collection::dynamicPlaylist( const QString& guid )
 {
-    foreach( const dynplaylist_ptr& pp, m_dynplaylists )
-    {
-        if( pp->guid() == guid )
-            return pp;
-    }
 
-    return dynplaylist_ptr();
+    return m_dynplaylists.value( guid, dynplaylist_ptr() );
 }
 
 
@@ -155,8 +137,9 @@ void
 Collection::setPlaylists( const QList<Tomahawk::playlist_ptr>& plists )
 {
     qDebug() << Q_FUNC_INFO << plists.count();
+    foreach ( const playlist_ptr& p, plists )
+        m_playlists.insert( p->guid(), p );
 
-    m_playlists.append( plists );
     emit playlistsAdded( plists );
 }
 
@@ -166,7 +149,8 @@ Collection::setDynamicPlaylists( const QList< Tomahawk::dynplaylist_ptr >& plist
 {
     qDebug() << Q_FUNC_INFO << plists.count();
 
-    m_dynplaylists.append( plists );
+    foreach ( const dynplaylist_ptr& p, plists )
+        m_dynplaylists.insert( p->guid(), p );
 //     emit dynamicPlaylistsAdded( plists );
 }
 
