@@ -119,13 +119,13 @@ MusicScanner::MusicScanner( const QStringList& dirs, bool recursive, quint32 bs 
     , m_dirListerThreadController( 0 )
 {
     m_ext2mime.insert( "mp3", TomahawkUtils::extensionToMimetype( "mp3" ) );
-
-#ifndef NO_OGG
     m_ext2mime.insert( "ogg", TomahawkUtils::extensionToMimetype( "ogg" ) );
-#endif
-#ifndef NO_FLAC
     m_ext2mime.insert( "flac", TomahawkUtils::extensionToMimetype( "flac" ) );
-#endif
+    m_ext2mime.insert( "mpc", TomahawkUtils::extensionToMimetype( "mpc" ) );
+    m_ext2mime.insert( "wma", TomahawkUtils::extensionToMimetype( "wma" ) );
+    m_ext2mime.insert( "aac", TomahawkUtils::extensionToMimetype( "aac" ) );
+    m_ext2mime.insert( "m4a", TomahawkUtils::extensionToMimetype( "m4a" ) );
+    m_ext2mime.insert( "mp4", TomahawkUtils::extensionToMimetype( "mp4" ) );
 }
 
 

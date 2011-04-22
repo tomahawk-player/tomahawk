@@ -7,6 +7,7 @@ ENDIF()
 SET( QT_USE_QTSQL TRUE )
 SET( QT_USE_QTNETWORK TRUE )
 SET( QT_USE_QTXML TRUE )
+SET( QT_USE_PHONON TRUE )
 SET( QT_USE_QTWEBKIT TRUE )
 
 INCLUDE( ${QT_USE_FILE} )
@@ -129,8 +130,6 @@ INCLUDE_DIRECTORIES(
     libtomahawk
     mac
 
-    ${THIRDPARTY_DIR}/alsa-playback
-    ${THIRDPARTY_DIR}/rtaudio
     ${THIRDPARTY_DIR}/qxt/qxtweb-standalone/qxtweb
     ${THIRDPARTY_DIR}/qtweetlib/qtweetlib/src
     ${THIRDPARTY_DIR}/qtweetlib/tomahawk-custom

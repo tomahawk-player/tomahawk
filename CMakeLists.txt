@@ -93,11 +93,6 @@ ENDIF( WIN32 )
 
 #show dep log
 macro_display_feature_log()
-MESSAGE("WARNING!")
-MESSAGE("Phonon is going to replace our own audio abstraction layer soon so we didn't")
-MESSAGE("add checks for libmad, libvorbis and libflac. Make sure they are installed!")
-MESSAGE("")
-MESSAGE("-----------------------------------------------------------------------------")
 
 SET( INSTALL_PREFIX "${CMAKE_INSTALL_PREFIX}" )
 
