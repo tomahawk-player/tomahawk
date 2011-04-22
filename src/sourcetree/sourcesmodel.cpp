@@ -77,6 +77,7 @@ SourcesModel::data( const QModelIndex& index, int role ) const
     case SourceTreeItemTypeRole:
         return itemFromIndex( index )->type();
     case Qt::DisplayRole:
+    case Qt::EditRole:
         return itemFromIndex( index )->text();
     case Qt::DecorationRole:
         return itemFromIndex( index )->icon();
