@@ -10,8 +10,6 @@ SET( OS_SPECIFIC_LINK_LIBRARIES
     /System/Library/Frameworks/DiskArbitration.framework
     /System/Library/Frameworks/Foundation.framework
     /System/Library/Frameworks/IOKit.framework
-
-    rtaudio
 )
 
 

@@ -56,7 +56,7 @@ private slots:
     void onPlaybackResumed();
     void onPlaybackStopped();
 
-    void onPlaybackTimer( unsigned int seconds );
+    void onPlaybackTimer( qint64 msElapsed );
     void onVolumeChanged( int volume );
 
     void onRepeatClicked();
