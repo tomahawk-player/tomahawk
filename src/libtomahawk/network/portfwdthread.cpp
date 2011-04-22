@@ -41,7 +41,7 @@ PortFwdThread::~PortFwdThread()
 {
     qDebug() << Q_FUNC_INFO << "waiting for event loop to finish...";
     quit();
-    wait( 10000 );
+    wait( 1000 );
 
     delete m_portfwd;
 }

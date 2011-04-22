@@ -98,9 +98,6 @@ public:
     virtual void activate();
     virtual bool loadUrl( const QString& url );
 
-    // because QApplication::arguments() is expensive
-    bool scrubFriendlyName() const { return m_scrubFriendlyName; }
-
 public slots:
     void instanceStarted( KDSingleApplicationGuard::Instance );
 

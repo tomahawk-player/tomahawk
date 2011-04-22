@@ -1,5 +1,5 @@
 /* === This file is part of Tomahawk Player - <http://tomahawk-player.org> ===
- * 
+ *
  *   Copyright 2010-2011, Christian Muehlhaeuser <muesli@tomahawk-player.org>
  *
  *   Tomahawk is free software: you can redistribute it and/or modify
@@ -46,14 +46,9 @@ SourceTreeItem::SourceTreeItem( const source_ptr& source, QObject* parent )
     QString name;
     if( source.isNull() )
         name = tr( "Super Collection" );
-    else 
-    {
-        if( TomahawkApp::instance()->scrubFriendlyName() && source->friendlyName().contains( '@' ) )
-            name = source->friendlyName().left( source->friendlyName().indexOf( '@' ) );
-        else
-            name = source->friendlyName();
-    }
-    
+    else
+        name = source->friendlyName();
+
     QStandardItem* item = new QStandardItem( name );
     item->setIcon( QIcon( RESPATH "images/user-avatar.png" ) );
     item->setEditable( false );
@@ -114,7 +109,7 @@ SourceTreeItem::onPlaylistsAdded( const QList<playlist_ptr>& playlists )
 {
     // const-ness is important for getting the right pointer!
     foreach( const playlist_ptr& p, playlists )
-    { 
+    {
         m_playlists.append( p );
         qlonglong ptr = reinterpret_cast<qlonglong>( &m_playlists.last() );
 

@@ -35,7 +35,7 @@ if (APPLE)
 # We have to change the URL in the Info.plist file :-/
   FILE(READ ${CMAKE_SOURCE_DIR}/admin/mac/Info.plist plist)
   STRING( REPLACE "TOMAHAWK_VERSION"
-              ${VERSION}
+              ${TOMAHAWK_VERSION}
               edited_plist # save in this variable
               "${plist}" # from the contents of this var
           )

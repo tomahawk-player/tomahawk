@@ -30,6 +30,7 @@ set( libSources
     viewpage.cpp
 
     sip/SipPlugin.cpp
+    sip/SipHandler.cpp
 
     audio/audioengine.cpp
 
@@ -184,6 +185,7 @@ set( libHeaders
     playlist.h
 
     sip/SipPlugin.h
+    sip/SipHandler.h
 
     audio/audioengine.h
 
