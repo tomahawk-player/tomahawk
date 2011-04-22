@@ -65,8 +65,11 @@ Jabber_p::Jabber_p( const QString& jid, const QString& password, const QString& 
 
     // general client setup
     m_client = new Jreen::Client( jid, password );
-    m_client->setServer( server );
-    m_client->setPort( port );
+    if ( !server.isEmpty() )
+    {
+        m_client->setServer( server );
+        m_client->setPort( port );
+    }
     m_client->registerStanzaExtension(new TomahawkSipMessageFactory);
     m_client->setResource( QString( "tomahawk%1" ).arg( QString::number( qrand() % 10000 ) ) );
 
