@@ -180,13 +180,6 @@ AudioEngine::loadTrack( const Tomahawk::result_ptr& result )
         {
             setCurrentTrack( result );
             io = Servent::instance()->getIODeviceForUrl( m_currentTrack );
-            if ( m_currentTrack->url().startsWith( "http://" ) )
-            {
-                m_readReady = false;
-                connect( io.data(), SIGNAL( downloadProgress( qint64, qint64 ) ), SLOT( onDownloadProgress( qint64, qint64 ) ) );
-            }
-            else
-                m_readReady = true;
 
             if ( !io || io.isNull() )
             {
@@ -203,8 +196,6 @@ AudioEngine::loadTrack( const Tomahawk::result_ptr& result )
             if ( !m_input.isNull() )
             {
                 m_expectStop = true;
-                m_input->close();
-                m_input.clear();
             }
 
             m_input = io;

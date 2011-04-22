@@ -116,7 +116,6 @@ private:
     Phonon::MediaObject* m_mediaObject;
     Phonon::AudioOutput* m_audioOutput;
 
-    bool m_readReady;
     unsigned int m_timeElapsed;
     bool m_expectStop;
 
