@@ -197,6 +197,111 @@ PlaylistItem::setData(const QVariant& v, bool role)
     return false;
 }
 
+DynamicPlaylistItem::DynamicPlaylistItem( SourcesModel* mdl, SourceTreeItem* parent, const dynplaylist_ptr& pl, int index )
+    : PlaylistItem( mdl, parent, pl.staticCast< Playlist >(), index )
+    , m_dynplaylist( pl )
+{
+    setRowType( m_dynplaylist->mode() == Static ? SourcesModel::AutomaticPlaylist : SourcesModel::Station );
+
+    connect( pl.data(), SIGNAL( dynamicRevisionLoaded( Tomahawk::DynamicPlaylistRevision ) ),
+             SLOT( onDynamicPlaylistLoaded( Tomahawk::DynamicPlaylistRevision ) ), Qt::QueuedConnection );
+
+    if( ViewManager::instance()->pageForDynPlaylist( pl ) )
+        model()->linkSourceItemToPage( this, ViewManager::instance()->pageForDynPlaylist( pl ) );
+}
+
+DynamicPlaylistItem::~DynamicPlaylistItem()
+{
+}
+
+void
+DynamicPlaylistItem::activate()
+{
+    ViewPage* p = ViewManager::instance()->show( m_dynplaylist );
+    model()->linkSourceItemToPage( this, p );
+}
+
+void
+DynamicPlaylistItem::onDynamicPlaylistLoaded( DynamicPlaylistRevision revision )
+{
+    setLoaded( true );
+    checkReparentHackNeeded( revision );
+    // END HACK
+    emit updated();
+}
+
+void
+DynamicPlaylistItem::checkReparentHackNeeded( const DynamicPlaylistRevision& revision )
+{
+    // HACK HACK HACK  workaround for an ugly hack where we have to be compatible with older tomahawks (pre-0.1.0) that created dynplaylists as OnDemand then changed them to Static if they were static.
+    //  we need to reparent this playlist to the correct category :-/.
+    CategoryItem* cat = qobject_cast< CategoryItem* >( parent() );
+    qDebug() << "with category" << cat;
+    if( cat ) qDebug() << "and cat type:" << cat->categoryType();
+    if( cat ) {
+        CategoryItem* from = cat;
+        CategoryItem* to = 0;
+        if( cat->categoryType() == SourcesModel::PlaylistsCategory && revision.mode == OnDemand ) { // WRONG
+            CollectionItem* col = qobject_cast< CollectionItem* >( cat->parent() );
+            to = col->stationsCategory();
+            if( !to ) { // you have got to be fucking kidding me
+                int fme = col->children().count();
+                col->beginRowsAdded( fme, fme );
+                to = new CategoryItem( model(), col, SourcesModel::StationsCategory, false );
+                col->appendChild( to ); // we f'ing know it's not local b/c we're not getting into this mess ourselves
+                col->endRowsAdded();
+                col->setStationsCategory( to );
+            }
+        } else if( cat->categoryType() == SourcesModel::StationsCategory && revision.mode == Static ) { // WRONG
+            CollectionItem* col = qobject_cast< CollectionItem* >( cat->parent() );
+            to = col->playlistsCategory();
+            qDebug() << "TRYING TO HACK TO:" << to;
+            if( !to ) { // you have got to be fucking kidding me
+                int fme = col->children().count();
+                col->beginRowsAdded( fme, fme );
+                to = new CategoryItem( model(), col, SourcesModel::PlaylistsCategory, false );
+                col->appendChild( to ); // we f'ing know it's not local b/c we're not getting into this mess ourselves
+                col->endRowsAdded();
+                col->setPlaylistsCategory( to );
+            }
+        }
+        if( to ) {
+            qDebug() << "HACKING! moving dynamic playlist from" << from->text() << "to:" << to->text();
+            // remove and add
+            int idx = from->children().indexOf( this );
+            from->beginRowsRemoved( idx, idx );
+            from->removeChild( this );
+            from->endRowsRemoved();
+
+            idx = to->children().count();
+            to->beginRowsAdded( idx, idx );
+            to->appendChild( this );
+            to->endRowsAdded();
+
+            setParentItem( to );
+        }
+    }
+}
+
+
+dynplaylist_ptr
+DynamicPlaylistItem::dynPlaylist() const
+{
+    return m_dynplaylist;
+}
+
+QString
+DynamicPlaylistItem::text() const
+{
+    return m_dynplaylist->title();
+}
+
+bool
+DynamicPlaylistItem::willAcceptDrag( const QMimeData* data ) const
+{
+    return false;
+}
+
 
 /// Dynamic Playlist Item
 /*
@@ -272,7 +377,8 @@ CategoryAddItem::text() const
 void
 CategoryAddItem::activate()
 {
-    switch( m_categoryType ) {
+    switch( m_categoryType )
+    {
         case SourcesModel::PlaylistsCategory:
             // only show if none is shown yet
             if( !ViewManager::instance()->isNewPlaylistPageVisible() ) {
@@ -281,7 +387,7 @@ CategoryAddItem::activate()
             }
             break;
         case SourcesModel::StationsCategory:
-            // TODO
+            APP->mainWindow()->createStation();
             break;
     }
 }
@@ -289,7 +395,15 @@ CategoryAddItem::activate()
 Qt::ItemFlags
 CategoryAddItem::flags() const
 {
-    return Qt::ItemIsEnabled | Qt::ItemIsSelectable;
+    switch( m_categoryType )
+    {
+        case SourcesModel::PlaylistsCategory:
+            return Qt::ItemIsEnabled | Qt::ItemIsSelectable;
+        case SourcesModel::StationsCategory:
+        default:
+            return Qt::ItemIsEnabled;
+            break;
+    }
 }
 
 QIcon
@@ -349,23 +463,23 @@ CollectionItem::CollectionItem(  SourcesModel* mdl, SourceTreeItem* parent, cons
     }
     // create category items if there are playlists to show, or stations to show
     QList< playlist_ptr > playlists = source->collection()->playlists();
+    QList< dynplaylist_ptr > autoplaylists = source->collection()->autoPlaylists();
+    QList< dynplaylist_ptr > stations = source->collection()->stations();
 
-    if( !playlists.isEmpty() || source->isLocal() ) {
+    if( !playlists.isEmpty() || !autoplaylists.isEmpty() || source->isLocal() ) {
         m_playlists = new CategoryItem( model(), this, SourcesModel::PlaylistsCategory, source->isLocal() );
-        // ugh :( we're being added by the model, no need to notify for added rows now
-//         m_playlists->blockSignals( true );
         onPlaylistsAdded( playlists );
-//         m_playlists->blockSignals( false );
+        onAutoPlaylistsAdded( autoplaylists );
     }
-
-    // TODO always show for now, till we actually support stations
-//     m_stations = new CategoryItem( model(), this, SourcesModel::StationsCategory, source->isLocal() );
+    if( !stations.isEmpty() || source->isLocal() ) {
+        m_stations = new CategoryItem( model(), this, SourcesModel::StationsCategory, source->isLocal() );
+        onStationsAdded( stations );
+    }
 
     if( ViewManager::instance()->pageForCollection( source->collection() ) )
         model()->linkSourceItemToPage( this, ViewManager::instance()->pageForCollection( source->collection() ) );
 
-    // HACK to load only for now
-    source->collection()->dynamicPlaylists();
+    // load auto playlists and stations!
 
     connect( source.data(), SIGNAL( stats( QVariantMap ) ), this, SIGNAL( updated() ) );
     connect( source.data(), SIGNAL( playbackStarted( Tomahawk::query_ptr ) ), this, SIGNAL( updated() ) );
@@ -377,6 +491,16 @@ CollectionItem::CollectionItem(  SourcesModel* mdl, SourceTreeItem* parent, cons
              SLOT( onPlaylistsAdded( QList<Tomahawk::playlist_ptr> ) ), Qt::QueuedConnection );
     connect( source->collection().data(), SIGNAL( playlistsDeleted( QList<Tomahawk::playlist_ptr> ) ),
              SLOT( onPlaylistsDeleted( QList<Tomahawk::playlist_ptr> ) ), Qt::QueuedConnection );
+
+    connect( source->collection().data(), SIGNAL( autoPlaylistsAdded( QList< Tomahawk::dynplaylist_ptr > ) ),
+             SLOT( onAutoPlaylistsAdded( QList<Tomahawk::dynplaylist_ptr> ) ), Qt::QueuedConnection );
+    connect( source->collection().data(), SIGNAL( autoPlaylistsDeleted( QList<Tomahawk::dynplaylist_ptr> ) ),
+             SLOT( onAutoPlaylistsDeleted( QList<Tomahawk::dynplaylist_ptr> ) ), Qt::QueuedConnection );
+
+    connect( source->collection().data(), SIGNAL( stationsAdded( QList<Tomahawk::dynplaylist_ptr> ) ),
+             SLOT( onStationsAdded( QList<Tomahawk::dynplaylist_ptr> ) ), Qt::QueuedConnection );
+    connect( source->collection().data(), SIGNAL( stationsDeleted( QList<Tomahawk::dynplaylist_ptr> ) ),
+             SLOT( onStationsDeleted( QList<Tomahawk::dynplaylist_ptr> ) ), Qt::QueuedConnection );
 }
 
 Tomahawk::source_ptr
@@ -412,6 +536,44 @@ CollectionItem::icon() const
         return QIcon( RESPATH "images/user-avatar.png" );
 }
 
+void
+CollectionItem::playlistsAddedInternal( SourceTreeItem* parent, const QList< dynplaylist_ptr >& playlists )
+{
+    QList< SourceTreeItem* > items;
+    int addOffset = playlists.first()->author()->isLocal() ? 1 : 0;
+
+    int from = parent->children().count() - addOffset;
+    parent->beginRowsAdded( from, from + playlists.count() - 1 );
+    foreach( const dynplaylist_ptr& p, playlists )
+    {
+        DynamicPlaylistItem* plItem = new DynamicPlaylistItem( model(), parent, p, parent->children().count() - addOffset );
+        qDebug() << "Dynamic Playlist added:" << p->title() << p->creator() << p->info();
+        p->loadRevision();
+        items << plItem;
+    }
+    parent->endRowsAdded();
+}
+
+template< typename T >
+void
+CollectionItem::playlistsDeletedInternal( SourceTreeItem* parent, const QList< T >& playlists )
+{
+    Q_ASSERT( parent ); // How can we delete playlists if we have none?
+    QList< SourceTreeItem* > items;
+    foreach( const T& playlist, playlists ) {
+        int curCount = parent->children().count();
+        for( int i = 0; i < curCount; i++ ) {
+            PlaylistItem* pl = qobject_cast< PlaylistItem* >( parent->children().at( i ) );
+            if( pl && pl->playlist() == playlist ) {
+                parent->beginRowsRemoved( i, i );
+                parent->removeChild( pl );
+                parent->endRowsRemoved();
+                break;
+            }
+        }
+    }
+}
+
 
 void
 CollectionItem::onPlaylistsAdded( const QList< playlist_ptr >& playlists )
@@ -420,7 +582,10 @@ CollectionItem::onPlaylistsAdded( const QList< playlist_ptr >& playlists )
         return;
 
     if( !m_playlists ) { // add the category too
+        int cur = children().count();
+        beginRowsAdded( cur, cur );
         m_playlists = new CategoryItem( model(), this, SourcesModel::PlaylistsCategory, source()->isLocal() );
+        endRowsAdded();
     }
 
     QList< SourceTreeItem* > items;
@@ -441,21 +606,56 @@ CollectionItem::onPlaylistsAdded( const QList< playlist_ptr >& playlists )
 void
 CollectionItem::onPlaylistsDeleted( const QList< playlist_ptr >& playlists )
 {
-    Q_ASSERT( m_playlists ); // How can we delete playlists if we have none?
-    QList< SourceTreeItem* > items;
-    foreach( const playlist_ptr& playlist, playlists ) {
-        int curCount = m_playlists->children().count();
-        for( int i = 0; i < curCount; i++ ) {
-            PlaylistItem* pl = qobject_cast< PlaylistItem* >( m_playlists->children().at( i ) );
-            if( pl && pl->playlist() == playlist ) {
-                m_playlists->beginRowsRemoved( i, i );
-                m_playlists->removeChild( pl );
-                m_playlists->endRowsRemoved();
-                break;
-            }
-        }
-    }
+    playlistsDeletedInternal( m_playlists, playlists );
 }
+
+void
+CollectionItem::onAutoPlaylistsAdded( const QList< dynplaylist_ptr >& playlists )
+{
+    if( playlists.isEmpty() )
+        return;
+
+    if( !m_playlists ) { // add the category too
+        int cur = children().count();
+        beginRowsAdded( cur, cur );
+        m_playlists = new CategoryItem( model(), this, SourcesModel::PlaylistsCategory, source()->isLocal() );
+        endRowsAdded();
+    }
+
+    playlistsAddedInternal( m_playlists, playlists );
+}
+
+void
+CollectionItem::onAutoPlaylistsDeleted( const QList< dynplaylist_ptr >& playlists )
+{
+    if( !m_playlists )
+        qDebug() << "NO playlist category item for a deleting playlist..";
+
+    playlistsDeletedInternal( m_playlists, playlists );
+}
+
+void
+CollectionItem::onStationsAdded( const QList< dynplaylist_ptr >& stations )
+{
+    if( stations.isEmpty() )
+        return;
+
+    if( !m_stations ) { // add the category too
+        int cur = children().count();
+        beginRowsAdded( cur, cur );
+        m_stations = new CategoryItem( model(), this, SourcesModel::StationsCategory, source()->isLocal() );
+        endRowsAdded();
+    }
+
+    playlistsAddedInternal( m_stations, stations );
+}
+
+void
+CollectionItem::onStationsDeleted( const QList< dynplaylist_ptr >& stations )
+{
+    playlistsDeletedInternal( m_stations, stations );
+}
+
 
 /// Generic page item
 GenericPageItem::GenericPageItem( SourcesModel* model, SourceTreeItem* parent, const QString& text, const QIcon& icon )

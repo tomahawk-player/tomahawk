@@ -377,14 +377,14 @@ SourcesModel::indexFromItem( SourceTreeItem* item ) const
 
         curItem = curItem->parent();
     }
-    qDebug() << "build child index list:" << childIndexList;
+//     qDebug() << "build child index list:" << childIndexList;
     // now rebuild the qmodelindex we need
     QModelIndex idx;
     for( int i = childIndexList.size() - 1; i >= 0 ; i-- ) {
         idx = index( childIndexList[ i ], 0, idx );
     }
-    qDebug() << "Got index from item:" << idx << idx.data( Qt::DisplayRole ).toString();
-    qDebug() << "parent:" << idx.parent();
+//     qDebug() << "Got index from item:" << idx << idx.data( Qt::DisplayRole ).toString();
+//     qDebug() << "parent:" << idx.parent();
     return idx;
 }
 

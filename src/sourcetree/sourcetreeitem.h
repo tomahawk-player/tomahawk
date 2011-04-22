@@ -58,6 +58,7 @@ public:
     void endRowsAdded() { emit childRowsAdded(); }
     void beginRowsRemoved( int from, int to ) { emit beginChildRowsRemoved( from, to ); }
     void endRowsRemoved() { emit childRowsRemoved(); }
+
 signals:
     void updated();
 
@@ -66,6 +67,10 @@ signals:
 
     void beginChildRowsRemoved( int fromRow, int toRow );
     void childRowsRemoved();
+
+protected:
+    void setRowType( SourcesModel::RowType t ) { m_type = t; }
+    void setParentItem( SourceTreeItem* item ) { m_parent = item; }
 private:
     SourcesModel::RowType m_type;
 
@@ -133,13 +138,24 @@ public:
 
     Tomahawk::source_ptr source() const;
 
+    CategoryItem* stationsCategory() const { return m_stations; }
+    CategoryItem* playlistsCategory() const { return m_playlists; }
+    void setStationsCategory( CategoryItem* item ) { m_stations = item; }
+    void setPlaylistsCategory( CategoryItem* item ) { m_playlists = item; }
 private slots:
     void onPlaylistsAdded( const QList<Tomahawk::playlist_ptr>& playlists );
     void onPlaylistsDeleted( const QList<Tomahawk::playlist_ptr>& playlists );
+    void onAutoPlaylistsAdded( const QList<Tomahawk::dynplaylist_ptr>& playlists );
+    void onAutoPlaylistsDeleted( const QList<Tomahawk::dynplaylist_ptr>& playlists );
+    void onStationsAdded( const QList<Tomahawk::dynplaylist_ptr>& stations );
+    void onStationsDeleted( const QList<Tomahawk::dynplaylist_ptr>& stations );
 
 private:
-    Tomahawk::source_ptr m_source;
+    void playlistsAddedInternal( SourceTreeItem* parent, const QList< Tomahawk::dynplaylist_ptr >& playlists );
+    template< typename T >
+    void playlistsDeletedInternal( SourceTreeItem* parent, const QList< T >& playlists );
 
+    Tomahawk::source_ptr m_source;
     CategoryItem* m_playlists;
     CategoryItem* m_stations;
 };
@@ -171,24 +187,27 @@ private:
     Tomahawk::playlist_ptr m_playlist;
 };
 
-/*
-class DynPlaylistItem : public PlaylistItem
+// can be a station or an auto playlist
+class DynamicPlaylistItem : public PlaylistItem
 {
     Q_OBJECT
 public:
-    DynPlaylistItem( SourcesModel* model, SourceTreeItem* parent, const Tomahawk::dynplaylist_ptr& pl );
+    DynamicPlaylistItem( SourcesModel* model, SourceTreeItem* parent, const Tomahawk::dynplaylist_ptr& pl, int index = -1 );
+    virtual ~DynamicPlaylistItem();
 
     virtual QString text() const;
-    virtual Tomahawk::playlist_ptr playlist() const;
-//     Tomahawk::dynplaylist_ptr playlist() const;
+    Tomahawk::dynplaylist_ptr dynPlaylist() const;
+    virtual bool willAcceptDrag( const QMimeData* data ) const;
     virtual void activate();
 
 private slots:
     void onDynamicPlaylistLoaded( Tomahawk::DynamicPlaylistRevision revision );
 
 private:
+    void checkReparentHackNeeded( const DynamicPlaylistRevision& rev );
+
     Tomahawk::dynplaylist_ptr m_dynplaylist;
-};*/
+};
 
 // generic item that has some name, some text, and calls a certain slot when activated. badabing!
 class GenericPageItem : public SourceTreeItem

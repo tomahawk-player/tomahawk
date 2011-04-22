@@ -46,14 +46,6 @@ signals:
     void onOffline( const QModelIndex& index );
 
 private slots:
-    void onPlaylistActivated( const Tomahawk::playlist_ptr& playlist );
-//     void onDynamicPlaylistActivated( const Tomahawk::dynplaylist_ptr& playlist );
-
-    void onCollectionActivated( const Tomahawk::collection_ptr& collection );
-    void onSuperCollectionActivated();
-    void onTempPageActivated();
-    void onNewPlaylistPageActivated();
-
     void onItemExpanded( const QModelIndex& idx );
     void onItemActivated( const QModelIndex& index );
     void selectRequest( const QModelIndex& idx );

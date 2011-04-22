@@ -64,6 +64,7 @@ Collection::addPlaylist( const Tomahawk::playlist_ptr& p )
     qDebug() << Q_FUNC_INFO;
     QList<playlist_ptr> toadd;
     toadd << p;
+    qDebug() << "Inserted playlist with guid:" << p->guid();
     m_playlists.insert( p->guid(), p );
 
     qDebug() << Q_FUNC_INFO << "Collection name" << name()
@@ -74,18 +75,35 @@ Collection::addPlaylist( const Tomahawk::playlist_ptr& p )
 
 
 void
-Collection::addDynamicPlaylist( const Tomahawk::dynplaylist_ptr& p )
+Collection::addAutoPlaylist( const Tomahawk::dynplaylist_ptr& p )
 {
     qDebug() << Q_FUNC_INFO;
     QList<dynplaylist_ptr> toadd;
     toadd << p;
-    m_dynplaylists.insert( p->guid(), p );
+    qDebug() << "Inserted dynamic playlist with guid:" << p->guid();
+    m_autoplaylists.insert( p->guid(), p );
 
     qDebug() << Q_FUNC_INFO << "Collection name" << name()
              << "from source id" << source()->id()
              << "numplaylists:" << m_playlists.count();
-    emit dynamicPlaylistsAdded( toadd );
+    emit autoPlaylistsAdded( toadd );
 }
+
+void
+Collection::addStation( const dynplaylist_ptr& s )
+{
+    qDebug() << Q_FUNC_INFO;
+    QList<dynplaylist_ptr> toadd;
+    toadd << s;
+    qDebug() << "Inserted station with guid:" << s->guid();
+    m_stations.insert( s->guid(), s );
+
+    qDebug() << Q_FUNC_INFO << "Collection name" << name()
+    << "from source id" << source()->id()
+    << "numplaylists:" << m_playlists.count();
+    emit stationsAdded( toadd );
+}
+
 
 
 void
@@ -104,32 +122,55 @@ Collection::deletePlaylist( const Tomahawk::playlist_ptr& p )
 
 
 void
-Collection::deleteDynamicPlaylist( const Tomahawk::dynplaylist_ptr& p )
+Collection::deleteAutoPlaylist( const Tomahawk::dynplaylist_ptr& p )
 {
     qDebug() << Q_FUNC_INFO;
     QList<dynplaylist_ptr> todelete;
     todelete << p;
-    m_dynplaylists.remove( p->guid() );
+    m_autoplaylists.remove( p->guid() );
 
     qDebug() << Q_FUNC_INFO << "Collection name" << name()
                             << "from source id" << source()->id()
                             << "numplaylists:" << m_playlists.count();
-    emit dynamicPlaylistsDeleted( todelete );
+    emit autoPlaylistsDeleted( todelete );
+}
+
+void
+Collection::deleteStation( const dynplaylist_ptr& s )
+{
+    qDebug() << Q_FUNC_INFO;
+    QList<dynplaylist_ptr> todelete;
+    todelete << s;
+    m_stations.remove( s->guid() );
+
+    qDebug() << Q_FUNC_INFO << "Collection name" << name()
+    << "from source id" << source()->id()
+    << "numplaylists:" << m_playlists.count();
+    emit stationsDeleted( todelete );
 }
 
 
 playlist_ptr
 Collection::playlist( const QString& guid )
 {
+    qDebug() << "Returning playlist for guid:" << guid << "found?" << m_playlists.contains( guid );
     return m_playlists.value( guid, playlist_ptr() );
 }
 
 
 dynplaylist_ptr
-Collection::dynamicPlaylist( const QString& guid )
+Collection::autoPlaylist( const QString& guid )
+{
+    qDebug() << "Returning auto playlist for guid:" << guid << "found?" << m_autoplaylists.contains( guid );
+    return m_autoplaylists.value( guid, dynplaylist_ptr() );
+}
+
+dynplaylist_ptr
+Collection::station( const QString& guid )
 {
 
-    return m_dynplaylists.value( guid, dynplaylist_ptr() );
+    qDebug() << "Returning station for guid:" << guid << "found?" << m_stations.contains( guid );
+    return m_stations.value( guid, dynplaylist_ptr() );
 }
 
 
@@ -137,23 +178,37 @@ void
 Collection::setPlaylists( const QList<Tomahawk::playlist_ptr>& plists )
 {
     qDebug() << Q_FUNC_INFO << plists.count();
-    foreach ( const playlist_ptr& p, plists )
+    foreach ( const playlist_ptr& p, plists ) {
+        qDebug() << "Batch inserting playlist:" << p->guid();
         m_playlists.insert( p->guid(), p );
-
+    }
     emit playlistsAdded( plists );
 }
 
 
 void
-Collection::setDynamicPlaylists( const QList< Tomahawk::dynplaylist_ptr >& plists )
+Collection::setAutoPlaylists( const QList< Tomahawk::dynplaylist_ptr >& plists )
 {
     qDebug() << Q_FUNC_INFO << plists.count();
 
-    foreach ( const dynplaylist_ptr& p, plists )
-        m_dynplaylists.insert( p->guid(), p );
-//     emit dynamicPlaylistsAdded( plists );
+    foreach ( const dynplaylist_ptr& p, plists ) {
+        qDebug() << "Batch inserting dynamic playlist:" << p->guid();
+        m_autoplaylists.insert( p->guid(), p );
+    }
+    emit autoPlaylistsAdded( plists );
 }
 
+void
+Collection::setStations( const QList< dynplaylist_ptr >& stations )
+{
+    qDebug() << Q_FUNC_INFO << stations.count();
+
+    foreach ( const dynplaylist_ptr& s, stations ) {
+        qDebug() << "Batch inserting station:" << s->guid();
+        m_stations.insert( s->guid(), s );
+    }
+    emit autoPlaylistsAdded( stations );
+}
 
 void
 Collection::setTracks( const QList<Tomahawk::query_ptr>& tracks )
@@ -192,4 +247,19 @@ Collection::delTracks( const QStringList& files )
     }
 
     emit tracksRemoved( tracks );
+}
+
+void
+Collection::moveAutoToStation( const QString& guid )
+{
+
+    if( m_autoplaylists.contains( guid ) )
+        m_stations.insert( guid, m_autoplaylists.take( guid ) );
+}
+
+void
+Collection::moveStationToAuto( const QString& guid )
+{
+    if( m_stations.contains( guid ) )
+        m_autoplaylists.insert( guid, m_stations.take( guid ) );
 }

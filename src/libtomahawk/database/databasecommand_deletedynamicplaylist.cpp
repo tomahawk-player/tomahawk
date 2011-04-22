@@ -1,5 +1,5 @@
 /* === This file is part of Tomahawk Player - <http://tomahawk-player.org> ===
- * 
+ *
  *   Copyright 2010-2011, Christian Muehlhaeuser <muesli@tomahawk-player.org>
  *
  *   Tomahawk is free software: you can redistribute it and/or modify
@@ -18,9 +18,11 @@
 
 #include "databasecommand_deletedynamicplaylist.h"
 
-#include <QSqlQuery>
+#include "dynamic/DynamicPlaylist.h"
 #include "network/servent.h"
-	
+
+#include <QSqlQuery>
+
 using namespace Tomahawk;
 
 
@@ -37,10 +39,10 @@ DatabaseCommand_DeleteDynamicPlaylist::exec( DatabaseImpl* lib )
     qDebug() << "deleting dynamic playlist:" << m_playlistguid;
     DatabaseCommand_DeletePlaylist::exec( lib );
     TomahawkSqlQuery cre = lib->newquery();
-    
+
     cre.prepare( "DELETE FROM dynamic_playlist WHERE guid = :id" );
     cre.bindValue( ":id", m_playlistguid );
-    
+
     cre.exec();
 }
 
@@ -54,12 +56,16 @@ DatabaseCommand_DeleteDynamicPlaylist::postCommitHook()
         qDebug() << "Source has gone offline, not emitting to GUI.";
         return;
     }
-    
-    dynplaylist_ptr playlist = source()->collection()->dynamicPlaylist( m_playlistguid );
+    // we arent sure which it is, but it can't be more th an one. so try both
+    dynplaylist_ptr playlist = source()->collection()->autoPlaylist( m_playlistguid );
+    if( playlist.isNull() )
+        playlist = source()->collection()->station( m_playlistguid );
+
+    qDebug() << "Just tried to load playlist for deletion:" << m_playlistguid << "Did we get a null one?" << playlist.isNull() << "is it a station?" << (playlist->mode() == OnDemand);
     Q_ASSERT( !playlist.isNull() );
-    
+
     playlist->reportDeleted( playlist );
-    
+
     if( source()->isLocal() )
         Servent::instance()->triggerDBSync();
 }

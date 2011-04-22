@@ -16,7 +16,7 @@
  *   along with Tomahawk. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include "databasecommand_loadalldynamicplaylists.h"
+#include "databasecommand_loadallautoplaylists.h"
 
 #include <QSqlQuery>
 
@@ -26,15 +26,14 @@
 using namespace Tomahawk;
 
 
-void DatabaseCommand_LoadAllDynamicPlaylists::exec( DatabaseImpl* dbi )
+void DatabaseCommand_LoadAllAutoPlaylists::exec( DatabaseImpl* dbi )
 {
     TomahawkSqlQuery query = dbi->newquery();
 
     query.exec( QString( "SELECT playlist.guid as guid, title, info, creator, createdOn, lastmodified, shared, currentrevision, dynamic_playlist.pltype, dynamic_playlist.plmode "
-                         "FROM playlist, dynamic_playlist WHERE source %1 AND dynplaylist = 'true' AND playlist.guid = dynamic_playlist.guid" )
-    .arg( source()->isLocal() ? "IS NULL" :
-    QString( "=%1" ).arg( source()->id() )
-    ) );
+                         "FROM playlist, dynamic_playlist WHERE source %1 AND dynplaylist = 'true' AND playlist.guid = dynamic_playlist.guid AND dynamic_playlist.plmode = %2" )
+    .arg( source()->isLocal() ? "IS NULL" : QString( "=%1" ).arg( source()->id() ) )
+    .arg( Static ) );
 
     QList<dynplaylist_ptr> plists;
     while ( query.next() )
@@ -49,12 +48,7 @@ void DatabaseCommand_LoadAllDynamicPlaylists::exec( DatabaseImpl* dbi )
                                                 <<      query.value(6).toBool()    //shared
                                                 <<      query.value(5).toInt()     //lastmod
                                                 <<      query.value(0).toString();  //GUID
-            emit dynamicPlaylistLoaded( source(), data );
-            /*
-            if( static_cast<GeneratorMode>( query.value(8).toInt() ) == Static )
-                emit autoPlaylistLoaded( source(), data );
-            else
-                emit stationLoaded( source(), data );*/
+            emit autoPlaylistLoaded( source(), data );
     }
 
     emit done();

@@ -48,7 +48,7 @@ public:
 
         StaticPlaylist = 3,
         AutomaticPlaylist = 4,
-        Stations = 5,
+        Station = 5,
 
         GenericPage = 6
     };

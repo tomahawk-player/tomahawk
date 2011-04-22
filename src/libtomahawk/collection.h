@@ -57,19 +57,25 @@ public:
 
     virtual void loadPlaylists() { qDebug() << Q_FUNC_INFO; }
     virtual void loadTracks() { qDebug() << Q_FUNC_INFO; }
-    virtual void loadDynamicPlaylists() { qDebug() << Q_FUNC_INFO ; }
+    virtual void loadAutoPlaylists() { qDebug() << Q_FUNC_INFO ; }
+    virtual void loadStations() { qDebug() << Q_FUNC_INFO ; }
 
     virtual Tomahawk::playlist_ptr playlist( const QString& guid );
-    virtual Tomahawk::dynplaylist_ptr dynamicPlaylist( const QString& guid );
+    virtual Tomahawk::dynplaylist_ptr autoPlaylist( const QString& guid );
+    virtual Tomahawk::dynplaylist_ptr station( const QString& guid );
 
     virtual void addPlaylist( const Tomahawk::playlist_ptr& p );
     virtual void deletePlaylist( const Tomahawk::playlist_ptr& p );
 
-    virtual void addDynamicPlaylist( const Tomahawk::dynplaylist_ptr& p );
-    virtual void deleteDynamicPlaylist( const Tomahawk::dynplaylist_ptr& p );
+    virtual void addAutoPlaylist( const Tomahawk::dynplaylist_ptr& p );
+    virtual void deleteAutoPlaylist( const Tomahawk::dynplaylist_ptr& p );
+
+    virtual void addStation( const Tomahawk::dynplaylist_ptr& s );
+    virtual void deleteStation( const Tomahawk::dynplaylist_ptr& s );
 
     virtual QList< Tomahawk::playlist_ptr > playlists() { return m_playlists.values(); }
-    virtual QList< Tomahawk::dynplaylist_ptr > dynamicPlaylists() { return m_dynplaylists.values(); }
+    virtual QList< Tomahawk::dynplaylist_ptr > autoPlaylists() { return m_autoplaylists.values(); }
+    virtual QList< Tomahawk::dynplaylist_ptr > stations() { return m_stations.values(); }
     virtual QList< Tomahawk::query_ptr > tracks() { return m_tracks; }
 
     const source_ptr& source() const;
@@ -82,17 +88,19 @@ signals:
     void playlistsAdded( const QList<Tomahawk::playlist_ptr>& );
     void playlistsDeleted( const QList<Tomahawk::playlist_ptr>& );
 
-    void dynamicPlaylistsAdded( const QList<Tomahawk::dynplaylist_ptr>& );
-    void dynamicPlaylistsDeleted( const QList<Tomahawk::dynplaylist_ptr>& );
-//     void stationsAdded( const QList<Tomahawk::dynplaylist_ptr>& );
-//     void stationsDeleted( const QList<Tomahawk::dynplaylist_ptr>& );
+    void autoPlaylistsAdded( const QList<Tomahawk::dynplaylist_ptr>& );
+    void autoPlaylistsDeleted( const QList<Tomahawk::dynplaylist_ptr>& );
+
+    void stationsAdded( const QList<Tomahawk::dynplaylist_ptr>& );
+    void stationsDeleted( const QList<Tomahawk::dynplaylist_ptr>& );
 
 public slots:
     virtual void addTracks( const QList<QVariant>& newitems ) = 0;
     virtual void removeTracks( const QDir& dir ) = 0;
 
     void setPlaylists( const QList<Tomahawk::playlist_ptr>& plists );
-    void setDynamicPlaylists( const QList< Tomahawk::dynplaylist_ptr >& dynplists );
+    void setAutoPlaylists( const QList< Tomahawk::dynplaylist_ptr >& autoplists );
+    void setStations( const QList< Tomahawk::dynplaylist_ptr >& stations );
 
     void setTracks( const QList<Tomahawk::query_ptr>& tracks );
     void delTracks( const QStringList& files );
@@ -108,7 +116,13 @@ private:
     source_ptr m_source;
     QList< Tomahawk::query_ptr > m_tracks;
     QHash< QString, Tomahawk::playlist_ptr > m_playlists;
-    QHash< QString, Tomahawk::dynplaylist_ptr > m_dynplaylists;
+    QHash< QString, Tomahawk::dynplaylist_ptr > m_autoplaylists;
+    QHash< QString, Tomahawk::dynplaylist_ptr > m_stations;
+
+    // HACK see line 99 in the dbcmd for why we need this for backwards-compatibility
+    void moveAutoToStation( const QString& guid );
+    void moveStationToAuto( const QString& guid );
+    friend class ::DatabaseCommand_SetDynamicPlaylistRevision;
 };
 
 }; // ns

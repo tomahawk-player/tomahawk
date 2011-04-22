@@ -73,7 +73,8 @@ set( libSources
     database/databasecommand_setdynamicplaylistrevision.cpp
     database/databasecommand_createdynamicplaylist.cpp
     database/databasecommand_loaddynamicplaylist.cpp
-    database/databasecommand_loadalldynamicplaylists.cpp
+    database/databasecommand_loadallautoplaylists.cpp
+    database/databasecommand_loadallstations.cpp
     database/databasecommand_deletedynamicplaylist.cpp
     database/databasecommand_addclientauth.cpp
     database/databasecommand_clientauthvalid.cpp
@@ -233,7 +234,8 @@ set( libHeaders
     database/databasecommand_createdynamicplaylist.h
     database/databasecommand_loaddynamicplaylist.h
     database/databasecommand_deletedynamicplaylist.h
-    database/databasecommand_loadalldynamicplaylists.h
+    database/databasecommand_loadallautoplaylists.h
+    database/databasecommand_loadallstations.h
     database/databasecommand_addclientauth.h
     database/databasecommand_clientauthvalid.h
 

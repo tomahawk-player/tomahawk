@@ -1,5 +1,5 @@
 /* === This file is part of Tomahawk Player - <http://tomahawk-player.org> ===
- * 
+ *
  *   Copyright 2010-2011, Christian Muehlhaeuser <muesli@tomahawk-player.org>
  *
  *   Tomahawk is free software: you can redistribute it and/or modify
@@ -40,18 +40,21 @@ public:
 
     virtual void loadTracks();
     virtual void loadPlaylists();
-    virtual void loadDynamicPlaylists();
+    virtual void loadAutoPlaylists();
+    virtual void loadStations();
 
     virtual QList< Tomahawk::playlist_ptr > playlists();
     virtual QList< Tomahawk::query_ptr > tracks();
-    virtual QList< Tomahawk::dynplaylist_ptr > dynamicPlaylists();
+    virtual QList< Tomahawk::dynplaylist_ptr > autoPlaylists();
+    virtual QList< Tomahawk::dynplaylist_ptr > stations();
 
 public slots:
     virtual void addTracks( const QList<QVariant>& newitems );
     virtual void removeTracks( const QDir& dir );
 
 private slots:
-    void dynamicPlaylistCreated( const Tomahawk::source_ptr& source, const QVariantList& data );
+    void stationCreated( const Tomahawk::source_ptr& source, const QVariantList& data );
+    void autoPlaylistCreated( const Tomahawk::source_ptr& source, const QVariantList& data );
 };
 
 #endif // DATABASECOLLECTION_H

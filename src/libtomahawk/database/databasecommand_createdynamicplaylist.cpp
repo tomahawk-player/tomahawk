@@ -57,6 +57,7 @@ DatabaseCommand_CreateDynamicPlaylist::exec( DatabaseImpl* lib )
     DatabaseCommand_CreatePlaylist::createPlaylist( lib, true );
     qDebug() << "Created normal playlist, now creating additional dynamic info!";
 
+    qDebug() << "Create dynamic execing!" << m_playlist << m_v;
     TomahawkSqlQuery cre = lib->newquery();
 
     cre.prepare( "INSERT INTO dynamic_playlist( guid, pltype, plmode ) "

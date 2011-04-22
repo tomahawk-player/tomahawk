@@ -400,7 +400,7 @@ TomahawkWindow::createAutomaticPlaylist()
     QString id = uuid();
     QString info  = ""; // FIXME
     QString creator = "someone"; // FIXME
-    dynplaylist_ptr playlist = DynamicPlaylist::create( author, id, name, info, creator, false );
+    dynplaylist_ptr playlist = DynamicPlaylist::create( author, id, name, info, creator, Static, false );
     playlist->setMode( Static );
     playlist->createNewRevision( uuid(), playlist->currentrevision(), playlist->type(), playlist->generator()->controls(), playlist->entries() );
     ViewManager::instance()->show( playlist );
@@ -419,7 +419,7 @@ TomahawkWindow::createStation()
     QString id = uuid();
     QString info  = ""; // FIXME
     QString creator = "someone"; // FIXME
-    dynplaylist_ptr playlist = DynamicPlaylist::create( author, id, name, info, creator, false );
+    dynplaylist_ptr playlist = DynamicPlaylist::create( author, id, name, info, creator, OnDemand, false );
     playlist->setMode( OnDemand );
     playlist->createNewRevision( uuid(), playlist->currentrevision(), playlist->type(), playlist->generator()->controls() );
     ViewManager::instance()->show( playlist );

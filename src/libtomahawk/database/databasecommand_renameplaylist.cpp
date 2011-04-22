@@ -1,5 +1,5 @@
 /* === This file is part of Tomahawk Player - <http://tomahawk-player.org> ===
- * 
+ *
  *   Copyright 2010-2011, Christian Muehlhaeuser <muesli@tomahawk-player.org>
  *
  *   Tomahawk is free software: you can redistribute it and/or modify
@@ -21,6 +21,7 @@
 #include <QSqlQuery>
 
 #include "network/servent.h"
+#include "collection.h"
 
 using namespace Tomahawk;
 
@@ -62,8 +63,14 @@ DatabaseCommand_RenamePlaylist::postCommitHook()
         qDebug() << "Source has gone offline, not emitting to GUI.";
         return;
     }
-    
+
     playlist_ptr playlist = source()->collection()->playlist( m_playlistguid );
+    // fallback, check for auto and stations too
+    if( playlist.isNull() )
+        playlist = source()->collection()->autoPlaylist( m_playlistguid );
+    if( playlist.isNull() )
+        playlist = source()->collection()->station( m_playlistguid );
+
     Q_ASSERT( !playlist.isNull() );
 
     qDebug() << "Renaming old playlist" << playlist->title() << "to" << m_playlistTitle << m_playlistguid;

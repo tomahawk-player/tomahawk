@@ -105,19 +105,6 @@ SourceTreeView::SourceTreeView( QWidget* parent )
 //     connect( selectionModel(), SIGNAL( selectionChanged( QItemSelection, QItemSelection ) ), SLOT( onSelectionChanged() ) );
 
     hideOfflineSources();
-
-    connect( ViewManager::instance(), SIGNAL( playlistActivated( Tomahawk::playlist_ptr ) ),
-                                            SLOT( onPlaylistActivated( Tomahawk::playlist_ptr ) ) );
-//     connect( PlaylistManager::instance(), SIGNAL( dynamicPlaylistActivated( Tomahawk::dynplaylist_ptr ) ),
-//                                             SLOT( onDynamicPlaylistActivated( Tomahawk::dynplaylist_ptr ) ) );
-    connect( ViewManager::instance(), SIGNAL( collectionActivated( Tomahawk::collection_ptr ) ),
-                                            SLOT( onCollectionActivated( Tomahawk::collection_ptr ) ) );
-    connect( ViewManager::instance(), SIGNAL( superCollectionActivated() ),
-                                            SLOT( onSuperCollectionActivated() ) );
-    connect( ViewManager::instance(), SIGNAL( tempPageActivated() ),
-                                            SLOT( onTempPageActivated() ) );
-    connect( ViewManager::instance(), SIGNAL( newPlaylistActivated() ),
-                                            SLOT( onNewPlaylistPageActivated() ) );
 }
 
 
@@ -133,7 +120,7 @@ SourceTreeView::setupMenus()
 
     bool readonly = true;
     SourcesModel::RowType type = ( SourcesModel::RowType )model()->data( m_contextMenuIndex, SourcesModel::SourceTreeItemTypeRole ).toInt();
-    if ( type == SourcesModel::StaticPlaylist )
+    if ( type == SourcesModel::StaticPlaylist || type == SourcesModel::AutomaticPlaylist || type == SourcesModel::Station )
     {
 
         PlaylistItem* item = itemFromIndex< PlaylistItem >( m_contextMenuIndex );
@@ -165,65 +152,6 @@ SourceTreeView::hideOfflineSources()
 {
     m_proxyModel->hideOfflineSources();
 }
-
-
-void
-SourceTreeView::onPlaylistActivated( const Tomahawk::playlist_ptr& playlist )
-{
-//     QModelIndex idx = m_proxyModel->mapFromSource( m_model->indexFromPlaylist( playlist ) );
-//     if ( idx.isValid() )
-//     {
-//         selectionModel()->select( idx, QItemSelectionModel::ClearAndSelect | QItemSelectionModel::Current );
-//         setCurrentIndex( idx );
-//     }
-}
-
-/*
-void
-SourceTreeView::onDynamicPlaylistActivated( const Tomahawk::dynplaylist_ptr& playlist )
-{
-    QModelIndex idx = m_proxyModel->mapFromSource( m_model->dynamicPlaylistToIndex( playlist ) );
-    if ( idx.isValid() )
-    {
-        setCurrentIndex( idx );
-    }
-}*/
-
-
-void
-SourceTreeView::onCollectionActivated( const Tomahawk::collection_ptr& collection )
-{
-//     QModelIndex idx = m_proxyModel->mapFromSource( m_model->collectionToIndex( collection ) );
-//     if ( idx.isValid() )
-//     {
-//         setCurrentIndex( idx );
-//     }
-}
-
-
-void
-SourceTreeView::onSuperCollectionActivated()
-{
-//     QModelIndex idx = m_proxyModel->index( 0, 0 );
-//     if ( idx.isValid() )
-//     {
-//         setCurrentIndex( idx );
-//     }
-}
-
-
-void
-SourceTreeView::onTempPageActivated()
-{
-    clearSelection();
-}
-
-void
-SourceTreeView::onNewPlaylistPageActivated()
-{
-    // nothing atm
-}
-
 
 void
 SourceTreeView::onItemActivated( const QModelIndex& index )
@@ -278,6 +206,11 @@ SourceTreeView::deletePlaylist()
         PlaylistItem* item = itemFromIndex< PlaylistItem >( m_contextMenuIndex );
         playlist_ptr playlist = item->playlist();
         Playlist::remove( playlist );
+    } else if( type == SourcesModel::AutomaticPlaylist || type == SourcesModel::Station )
+    {
+        DynamicPlaylistItem* item = itemFromIndex< DynamicPlaylistItem >( m_contextMenuIndex );
+        dynplaylist_ptr playlist = item->dynPlaylist();
+        DynamicPlaylist::remove( playlist );
     }
 }
 
@@ -300,7 +233,9 @@ SourceTreeView::onCustomContextMenu( const QPoint& pos )
 
     setupMenus();
 
-    if ( model()->data( m_contextMenuIndex, SourcesModel::SourceTreeItemTypeRole ) == SourcesModel::StaticPlaylist )
+    if ( model()->data( m_contextMenuIndex, SourcesModel::SourceTreeItemTypeRole ) == SourcesModel::StaticPlaylist ||
+         model()->data( m_contextMenuIndex, SourcesModel::SourceTreeItemTypeRole ) == SourcesModel::AutomaticPlaylist ||
+         model()->data( m_contextMenuIndex, SourcesModel::SourceTreeItemTypeRole ) == SourcesModel::Station )
     {
         PlaylistItem* item = itemFromIndex< PlaylistItem >( m_contextMenuIndex );
         if( item->playlist()->author()->isLocal() )

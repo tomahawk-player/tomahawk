@@ -70,11 +70,13 @@ DynamicPlaylist::DynamicPlaylist ( const Tomahawk::source_ptr& author,
                                    const QString& info,
                                    const QString& creator,
                                    const QString& type,
+                                   GeneratorMode mode,
                                    bool shared )
     : Playlist ( author, guid, title, info, creator, shared )
 {
     qDebug() << "Creating Dynamic Playlist 2";
     m_generator = geninterface_ptr( GeneratorFactory::create( type ) );
+    m_generator->setMode( mode );
 }
 
 geninterface_ptr
@@ -115,11 +117,12 @@ DynamicPlaylist::create( const Tomahawk::source_ptr& author,
                                          const QString& title,
                                          const QString& info,
                                          const QString& creator,
+                                         GeneratorMode mode,
                                          bool shared )
 {
     // default generator
     QString type = "";
-    dynplaylist_ptr dynplaylist = dynplaylist_ptr( new DynamicPlaylist( author, guid, title, info, creator, type, shared ) );
+    dynplaylist_ptr dynplaylist = dynplaylist_ptr( new DynamicPlaylist( author, guid, title, info, creator, type, mode, shared ) );
 
     DatabaseCommand_CreateDynamicPlaylist* cmd = new DatabaseCommand_CreateDynamicPlaylist( author, dynplaylist );
     connect( cmd, SIGNAL(finished()), dynplaylist.data(), SIGNAL(created()) );
@@ -256,7 +259,10 @@ DynamicPlaylist::reportCreated( const Tomahawk::dynplaylist_ptr& self )
     // will emit Collection::playlistCreated(...)
 //    qDebug() << "Creating dynplaylist belonging to:" << author().data() << author().isNull();
 //    qDebug() << "REPORTING DYNAMIC PLAYLIST CREATED:" << this << author()->friendlyName();
-    author()->collection()->addDynamicPlaylist( self );
+    if( self->mode() == Static )
+        author()->collection()->addAutoPlaylist( self );
+    else
+        author()->collection()->addStation( self );
 }
 
 void
@@ -265,7 +271,10 @@ DynamicPlaylist::reportDeleted( const Tomahawk::dynplaylist_ptr& self )
     qDebug() << Q_FUNC_INFO;
     Q_ASSERT( self.data() == this );
     // will emit Collection::playlistDeleted(...)
-    author()->collection()->deleteDynamicPlaylist( self );
+    if( self->mode() == Static )
+        author()->collection()->deleteAutoPlaylist( self );
+    else
+        author()->collection()->deleteStation( self );
 
     emit deleted( self );
 }
