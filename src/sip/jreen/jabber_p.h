@@ -85,6 +85,10 @@ private slots:
     {
         qDebug() << e;
     }
+    virtual void onDestroy( QObject */*object*/ )
+    {
+        qDebug() << Q_FUNC_INFO;
+    }
     virtual void onNewIq( const Jreen::IQ &iq, int context = NoContext );
     virtual void onNewAvatar( const QString &jid );
 

@@ -25,6 +25,7 @@
 #include "utils/tomahawkutils.h"
 
 #include <jreen/capabilities.h>
+#include <jreen/tcpconnection.h>
 #include <jreen/vcardupdate.h>
 #include <jreen/vcard.h>
 
@@ -64,6 +65,8 @@ Jabber_p::Jabber_p( const QString& jid, const QString& password, const QString& 
 
     // general client setup
     m_client = new Jreen::Client( jid, password );
+    m_client->setServer( server );
+    m_client->setPort( port );
     m_client->registerStanzaExtension(new TomahawkSipMessageFactory);
     m_client->setResource( QString( "tomahawk%1" ).arg( QString::number( qrand() % 10000 ) ) );
 
@@ -86,12 +89,14 @@ Jabber_p::Jabber_p( const QString& jid, const QString& password, const QString& 
     qDebug() << "Our JID set to:" << m_client->jid().full();
     qDebug() << "Our Server set to:" << m_client->server();
     qDebug() << "Our Port set to" << m_client->port();
+    
+    m_client->setConnectionImpl( new Jreen::TcpConnection( m_client->server(), m_client->port() ) );
 
     // setup slots
-    connect(m_client->connection(), SIGNAL(error(SocketError)), SLOT(onError(SocketError)));
+    connect(qobject_cast<Jreen::Connection*>(m_client->connection()), SIGNAL(error(const Jreen::Connection::SocketError&)), SLOT(onError(const Jreen::Connection::SocketError&)));
     connect(m_client, SIGNAL(serverFeaturesReceived(QSet<QString>)), SLOT(onConnect()));
     connect(m_client, SIGNAL(disconnected(Jreen::Client::DisconnectReason)), SLOT(onDisconnect(Jreen::Client::DisconnectReason)));
-    connect(m_client, SIGNAL(destroyed(QObject*)), this, SLOT(onDestroy()));
+    connect(m_client, SIGNAL(destroyed(QObject*)), this, SLOT(onDestroy(QObject*)));
     connect(m_client, SIGNAL(newMessage(Jreen::Message)), SLOT(onNewMessage(Jreen::Message)));
     connect(m_client, SIGNAL(newPresence(Jreen::Presence)), SLOT(onNewPresence(Jreen::Presence)));
     connect(m_client, SIGNAL(newIQ(Jreen::IQ)), SLOT(onNewIq(Jreen::IQ)));
