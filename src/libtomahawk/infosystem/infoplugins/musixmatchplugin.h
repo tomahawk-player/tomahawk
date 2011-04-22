@@ -34,19 +34,19 @@ class MusixMatchPlugin : public InfoPlugin
     Q_OBJECT
 
 public:
-    MusixMatchPlugin(QObject *parent);
+    MusixMatchPlugin( QObject *parent );
     virtual ~MusixMatchPlugin();
-
-    void getInfo(const QString &caller, const InfoType type, const QVariant &data, InfoCustomData customData);
-
-private:
-    bool isValidTrackData( const QString &caller, const QVariant& data, InfoCustomData &customData );
 
 public slots:
     void trackSearchSlot();
     void trackLyricsSlot();
 
+protected slots:
+    virtual void getInfo( const QString caller, const Tomahawk::InfoSystem::InfoType type, const QVariant input, const Tomahawk::InfoSystem::InfoCustomData customData );
+    
 private:
+    bool isValidTrackData( const QString &caller, const QVariant &input, const InfoCustomData &customData );
+    
     QString m_apiKey;
 };
 

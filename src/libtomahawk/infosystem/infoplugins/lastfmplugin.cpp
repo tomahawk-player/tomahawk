@@ -95,54 +95,54 @@ LastFmPlugin::~LastFmPlugin()
 
 
 void
-LastFmPlugin::dataError( const QString &caller, const InfoType type, const QVariant& data, Tomahawk::InfoSystem::InfoCustomData &customData )
+LastFmPlugin::dataError( const QString &caller, const Tomahawk::InfoSystem::InfoType type, const QVariant &input, const Tomahawk::InfoSystem::InfoCustomData &customData )
 {
-    emit info( caller, type, data, QVariant(), customData );
+    emit info( caller, type, input, QVariant(), customData );
     return;
 }
 
 
 void
-LastFmPlugin::getInfo( const QString &caller, const InfoType type, const QVariant& data, Tomahawk::InfoSystem::InfoCustomData customData )
+LastFmPlugin::getInfo( const QString caller, const Tomahawk::InfoSystem::InfoType type, const QVariant input, const Tomahawk::InfoSystem::InfoCustomData customData )
 {
     qDebug() << Q_FUNC_INFO;
 
     switch ( type )
     {
         case InfoMiscSubmitNowPlaying:
-            nowPlaying( caller, type, data, customData );
+            nowPlaying( caller, type, input, customData );
             break;
 
         case InfoMiscSubmitScrobble:
-            scrobble( caller, type, data, customData );
+            scrobble( caller, type, input, customData );
             break;
 
         case InfoArtistImages:
-            fetchArtistImages( caller, type, data, customData );
+            fetchArtistImages( caller, type, input, customData );
             break;
 
         case InfoAlbumCoverArt:
-            fetchCoverArt( caller, type, data, customData );
+            fetchCoverArt( caller, type, input, customData );
             break;
 
         default:
-            dataError( caller, type, data, customData );
+            dataError( caller, type, input, customData );
     }
 }
 
 
 void
-LastFmPlugin::nowPlaying( const QString &caller, const InfoType type, const QVariant& data, Tomahawk::InfoSystem::InfoCustomData &customData )
+LastFmPlugin::nowPlaying( const QString &caller, const InfoType type, const QVariant &input, const Tomahawk::InfoSystem::InfoCustomData &customData )
 {
-    if ( !data.canConvert< Tomahawk::InfoSystem::InfoCriteriaHash >() || !m_scrobbler )
+    if ( !input.canConvert< Tomahawk::InfoSystem::InfoCriteriaHash >() || !m_scrobbler )
     {
-        dataError( caller, type, data, customData );
+        dataError( caller, type, input, customData );
         return;
     }
-    InfoCriteriaHash hash = data.value< Tomahawk::InfoSystem::InfoCriteriaHash >();
+    InfoCriteriaHash hash = input.value< Tomahawk::InfoSystem::InfoCriteriaHash >();
     if ( !hash.contains( "title" ) || !hash.contains( "artist" ) || !hash.contains( "album" ) || !hash.contains( "duration" ) )
     {
-        dataError( caller, type, data, customData );
+        dataError( caller, type, input, customData );
         return;
     }
 
@@ -157,18 +157,18 @@ LastFmPlugin::nowPlaying( const QString &caller, const InfoType type, const QVar
     m_track.setSource( lastfm::Track::Player );
 
     m_scrobbler->nowPlaying( m_track );
-    emit info( caller, type, data, QVariant(), customData );
+    emit info( caller, type, input, QVariant(), customData );
 }
 
 
 void
-LastFmPlugin::scrobble( const QString &caller, const InfoType type, const QVariant& data, Tomahawk::InfoSystem::InfoCustomData &customData )
+LastFmPlugin::scrobble( const QString &caller, const InfoType type, const QVariant &input, const Tomahawk::InfoSystem::InfoCustomData &customData )
 {
     Q_ASSERT( QThread::currentThread() == thread() );
 
     if ( !m_scrobbler || m_track.isNull() )
     {
-        dataError( caller, type, data, customData );
+        dataError( caller, type, input, customData );
         return;
     }
 
@@ -176,23 +176,23 @@ LastFmPlugin::scrobble( const QString &caller, const InfoType type, const QVaria
     m_scrobbler->cache( m_track );
     m_scrobbler->submit();
 
-    emit info( caller, type, data, QVariant(), customData );
+    emit info( caller, type, input, QVariant(), customData );
 }
 
 
 void
-LastFmPlugin::fetchCoverArt( const QString &caller, const InfoType type, const QVariant& data, Tomahawk::InfoSystem::InfoCustomData &customData )
+LastFmPlugin::fetchCoverArt( const QString &caller, const InfoType type, const QVariant &input, const Tomahawk::InfoSystem::InfoCustomData &customData )
 {
     qDebug() << Q_FUNC_INFO;
-    if ( !data.canConvert< Tomahawk::InfoSystem::InfoCriteriaHash >() )
+    if ( !input.canConvert< Tomahawk::InfoSystem::InfoCriteriaHash >() )
     {
-        dataError( caller, type, data, customData );
+        dataError( caller, type, input, customData );
         return;
     }
-    InfoCriteriaHash hash = data.value< Tomahawk::InfoSystem::InfoCriteriaHash >();
+    InfoCriteriaHash hash = input.value< Tomahawk::InfoSystem::InfoCriteriaHash >();
     if ( !hash.contains( "artist" ) || !hash.contains( "album" ) )
     {
-        dataError( caller, type, data, customData );
+        dataError( caller, type, input, customData );
         return;
     }
 
@@ -200,35 +200,35 @@ LastFmPlugin::fetchCoverArt( const QString &caller, const InfoType type, const Q
     criteria["artist"] = hash["artist"];
     criteria["album"] = hash["album"];
 
-    emit getCachedInfo( criteria, 2419200000, caller, type, data, customData );
+    emit getCachedInfo( criteria, 2419200000, caller, type, input, customData );
 }
 
 
 void
-LastFmPlugin::fetchArtistImages( const QString &caller, const InfoType type, const QVariant& data, Tomahawk::InfoSystem::InfoCustomData &customData )
+LastFmPlugin::fetchArtistImages( const QString &caller, const InfoType type, const QVariant &input, const Tomahawk::InfoSystem::InfoCustomData &customData )
 {
     qDebug() << Q_FUNC_INFO;
-    if ( !data.canConvert< Tomahawk::InfoSystem::InfoCriteriaHash >() )
+    if ( !input.canConvert< Tomahawk::InfoSystem::InfoCriteriaHash >() )
     {
-        dataError( caller, type, data, customData );
+        dataError( caller, type, input, customData );
         return;
     }
-    InfoCriteriaHash hash = data.value< Tomahawk::InfoSystem::InfoCriteriaHash >();
+    InfoCriteriaHash hash = input.value< Tomahawk::InfoSystem::InfoCriteriaHash >();
     if ( !hash.contains( "artist" ) )
     {
-        dataError( caller, type, data, customData );
+        dataError( caller, type, input, customData );
         return;
     }
 
     Tomahawk::InfoSystem::InfoCriteriaHash criteria;
     criteria["artist"] = hash["artist"];
 
-    emit getCachedInfo( criteria, 2419200000, caller, type, data, customData );
+    emit getCachedInfo( criteria, 2419200000, caller, type, input, customData );
 }
 
 
 void
-LastFmPlugin::notInCacheSlot( QHash<QString, QString> criteria, QString caller, Tomahawk::InfoSystem::InfoType type, QVariant input, Tomahawk::InfoSystem::InfoCustomData customData )
+LastFmPlugin::notInCacheSlot( const QHash<QString, QString> criteria, const QString caller, const Tomahawk::InfoSystem::InfoType type, const QVariant input, const Tomahawk::InfoSystem::InfoCustomData customData )
 {
     qDebug() << Q_FUNC_INFO;
 

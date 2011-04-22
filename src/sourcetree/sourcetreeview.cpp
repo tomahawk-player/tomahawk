@@ -218,7 +218,10 @@ SourceTreeView::deletePlaylist()
 void
 SourceTreeView::renamePlaylist()
 {
-    edit( m_contextMenuIndex );
+    if( !m_contextMenuIndex.isValid() && !selectionModel()->selectedIndexes().isEmpty() )
+        edit( selectionModel()->selectedIndexes().first() );
+    else
+        edit( m_contextMenuIndex );
 }
 
 

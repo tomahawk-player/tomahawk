@@ -38,6 +38,8 @@ INCLUDE( MacroLogFeature )
 #macro_log_feature(LIBLASTFM_FOUND "LastFm" "Qt library for the Last.fm webservices" "https://github.com/mxcl/liblastfm" FALSE "" "liblastfm is needed for scrobbling tracks to Last.fm and fetching cover artwork")
 set(LIBLASTFM_FOUND true)
 
+find_package(Phonon REQUIRED)
+
 macro_optional_find_package(LibEchonest 1.1.1)
 macro_log_feature(LIBECHONEST_FOUND "Echonest" "Qt library for communicating with The Echo Nest" "http://projects.kde.org/libechonest" TRUE "" "libechonest is needed for dynamic playlists and the infosystem")
 
@@ -93,11 +95,6 @@ ENDIF( WIN32 )
 
 #show dep log
 macro_display_feature_log()
-MESSAGE("WARNING!")
-MESSAGE("Phonon is going to replace our own audio abstraction layer soon so we didn't")
-MESSAGE("add checks for libmad, libvorbis and libflac. Make sure they are installed!")
-MESSAGE("")
-MESSAGE("-----------------------------------------------------------------------------")
 
 SET( INSTALL_PREFIX "${CMAKE_INSTALL_PREFIX}" )
 

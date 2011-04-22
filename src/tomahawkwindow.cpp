@@ -69,6 +69,7 @@ TomahawkWindow::TomahawkWindow( QWidget* parent )
     , ui( new Ui::TomahawkWindow )
     , m_audioControls( new AudioControls( this ) )
     , m_trayIcon( new TomahawkTrayIcon( this ) )
+    , m_sourcetree( 0 )
 {
     qApp->setStyle( new ProxyStyle() );
     setWindowIcon( QIcon( RESPATH "icons/tomahawk-icon-128x128.png" ) );
@@ -103,13 +104,13 @@ TomahawkWindow::TomahawkWindow( QWidget* parent )
     sidebar->setStretchFactor( 0, 3 );
     sidebar->setStretchFactor( 1, 1 );
 
-    SourceTreeView* stv = new SourceTreeView();
+    m_sourcetree = new SourceTreeView();
     TransferView* transferView = new TransferView();
 
-    connect( ui->actionHideOfflineSources, SIGNAL( triggered() ), stv, SLOT( hideOfflineSources() ) );
-    connect( ui->actionShowOfflineSources, SIGNAL( triggered() ), stv, SLOT( showOfflineSources() ) );
+    connect( ui->actionHideOfflineSources, SIGNAL( triggered() ), m_sourcetree, SLOT( hideOfflineSources() ) );
+    connect( ui->actionShowOfflineSources, SIGNAL( triggered() ), m_sourcetree, SLOT( showOfflineSources() ) );
 
-    sidebar->addWidget( stv );
+    sidebar->addWidget( m_sourcetree );
     sidebar->addWidget( transferView );
     sidebar->hide( 1, false );
 
@@ -168,7 +169,10 @@ TomahawkWindow::TomahawkWindow( QWidget* parent )
 #endif
 
     m_backAvailable = toolbar->addAction( QIcon( RESPATH "images/back.png" ), tr( "Back" ), ViewManager::instance(), SLOT( historyBack() ) );
+    m_backAvailable->setToolTip( tr( "Go back one page" ) );
     m_forwardAvailable = toolbar->addAction( QIcon( RESPATH "images/forward.png" ), tr( "Forward" ), ViewManager::instance(), SLOT( historyForward() ) );
+    m_forwardAvailable->setToolTip( tr( "Go forward one page" ) );
+    toolbar->addAction( QIcon( RESPATH "images/home.png" ), tr( "Home" ), ViewManager::instance(), SLOT( showWelcomePage() ) );
 
     statusBar()->addPermanentWidget( m_audioControls, 1 );
 

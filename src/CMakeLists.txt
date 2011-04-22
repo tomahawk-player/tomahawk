@@ -134,13 +134,12 @@ INCLUDE_DIRECTORIES(
     libtomahawk
     mac
 
-    ${THIRDPARTY_DIR}/alsa-playback
-    ${THIRDPARTY_DIR}/rtaudio
     ${THIRDPARTY_DIR}/qxt/qxtweb-standalone/qxtweb
     ${THIRDPARTY_DIR}/qtweetlib/qtweetlib/src
     ${THIRDPARTY_DIR}/qtweetlib/tomahawk-custom
 
     ${TAGLIB_INCLUDES}
+    ${PHONON_INCLUDES}
     ${QJSON_INCLUDE_DIR}
     ${LIBECHONEST_INCLUDE_DIR}
     ${LIBECHONEST_INCLUDE_DIR}/..
@@ -215,6 +214,7 @@ ENDIF(GLOOX_FOUND)
 TARGET_LINK_LIBRARIES( tomahawk
     ${LINK_LIBRARIES}
     ${TOMAHAWK_LIBRARIES}
+    ${PHONON_LIBS}
     ${OS_SPECIFIC_LINK_LIBRARIES}
     ${QT_LIBRARIES}
     ${MAC_EXTRA_LIBS}

@@ -15,7 +15,6 @@ SET( OS_SPECIFIC_LINK_LIBRARIES
     ${QTSPARKLE_LIBRARIES}
 
 # third party shipped with tomahawk
-    ${CMAKE_BINARY_DIR}/thirdparty/rtaudio/librtaudio.dll
 
 # system libs
     "secur32.dll"

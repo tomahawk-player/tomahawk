@@ -90,9 +90,6 @@ JabberPlugin::connectPlugin( bool startup )
         return false;
     }
 
-    if ( server.isEmpty() )
-        server = splitJid[1];
-
     if ( port < 1 || port > 65535 || jid.isEmpty() || password.isEmpty() )
     {
         qDebug() << "Jabber credentials look wrong, not connecting";
@@ -100,7 +97,7 @@ JabberPlugin::connectPlugin( bool startup )
     }
 
     delete p;
-    p = new Jabber_p( jid, password, server, port );
+    p = new Jabber_p( jid, password, ( server.isEmpty() ? QString() : server ), port );
 
     QObject::connect( p, SIGNAL( peerOnline( QString ) ), SIGNAL( peerOnline( QString ) ) );
     QObject::connect( p, SIGNAL( peerOffline( QString ) ), SIGNAL( peerOffline( QString ) ) );

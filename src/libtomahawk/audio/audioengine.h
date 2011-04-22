@@ -1,5 +1,5 @@
 /* === This file is part of Tomahawk Player - <http://tomahawk-player.org> ===
- * 
+ *
  *   Copyright 2010-2011, Christian Muehlhaeuser <muesli@tomahawk-player.org>
  *
  *   Tomahawk is free software: you can redistribute it and/or modify
@@ -19,16 +19,13 @@
 #ifndef AUDIOENGINE_H
 #define AUDIOENGINE_H
 
-#include <QThread>
-#include <QMutex>
-#include <QBuffer>
+#include <QObject>
+
+#include <phonon/MediaObject>
+#include <phonon/AudioOutput>
 
 #include "result.h"
 #include "typedefs.h"
-
-#include "rtaudiooutput.h"
-#include "alsaplayback.h"
-#include "transcodeinterface.h"
 
 #include "dllmacro.h"
 
@@ -36,7 +33,7 @@
 
 class PlaylistInterface;
 
-class DLLEXPORT AudioEngine : public QThread
+class DLLEXPORT AudioEngine : public QObject
 {
 Q_OBJECT
 
@@ -48,10 +45,10 @@ public:
     explicit AudioEngine();
     ~AudioEngine();
 
-    unsigned int volume() const { if ( m_audio ) return m_audio->volume() * 100.0; else return 0; }; // in percent
-    bool isPaused() const { return m_audio->isPaused(); }
-    bool isPlaying() const { return m_audio->isPlaying(); }
-    
+    unsigned int volume() const { return m_audioOutput->volume() * 100.0; } // in percent
+    bool isPlaying() const { return m_mediaObject->state() == Phonon::PlayingState; }
+    bool isPaused() const { return m_mediaObject->state() == Phonon::PausedState; }
+
     /* Returns the PlaylistInterface of the currently playing track. Note: This might be different to the current playlist! */
     PlaylistInterface* currentTrackPlaylist() const { return m_currentTrackPlaylist; }
 
@@ -77,7 +74,7 @@ public slots:
     void setPlaylist( PlaylistInterface* playlist );
     void setQueue( PlaylistInterface* queue ) { m_queue = queue; }
 
-    void onTrackAboutToClose();
+    void onTrackAboutToFinish();
 
 signals:
     void loading( const Tomahawk::result_ptr& track );
@@ -89,6 +86,7 @@ signals:
 
     void volumeChanged( int volume /* in percent */ );
 
+    void timerMilliSeconds( qint64 msElapsed );
     void timerSeconds( unsigned int secondsElapsed );
     void timerPercentage( unsigned int percentage );
 
@@ -101,39 +99,25 @@ private slots:
     void loadPreviousTrack();
     void loadNextTrack();
 
-    void onDownloadProgress( qint64 recv, qint64 total );
-
-    void setStreamData( long sampleRate, int channels );
-    void timerTriggered( unsigned int seconds );
-
-    void engineLoop();
-    void loop();
+    void onStateChanged( Phonon::State newState, Phonon::State oldState );
+    void timerTriggered( qint64 time );
 
     void setCurrentTrack( const Tomahawk::result_ptr& result );
 
 private:
-    void run();
-    void clearBuffers();
-
     QSharedPointer<QIODevice> m_input;
-    QSharedPointer<TranscodeInterface> m_transcode;
-
-#ifdef Q_WS_X11
-    AlsaPlayback* m_audio;
-#else
-    RTAudioOutput* m_audio;
-#endif
 
     Tomahawk::result_ptr m_currentTrack;
     Tomahawk::result_ptr m_lastTrack;
     PlaylistInterface* m_playlist;
     PlaylistInterface* m_currentTrackPlaylist;
     PlaylistInterface* m_queue;
-    QMutex m_mutex;
 
-    bool m_readReady;
+    Phonon::MediaObject* m_mediaObject;
+    Phonon::AudioOutput* m_audioOutput;
+
     unsigned int m_timeElapsed;
-    int m_i;
+    bool m_expectStop;
 
     static AudioEngine* s_instance;
 };

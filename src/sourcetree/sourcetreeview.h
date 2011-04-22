@@ -41,6 +41,7 @@ public slots:
     void showOfflineSources();
     void hideOfflineSources();
 
+    void renamePlaylist();
 signals:
     void onOnline( const QModelIndex& index );
     void onOffline( const QModelIndex& index );
@@ -52,7 +53,6 @@ private slots:
 
     void loadPlaylist();
     void deletePlaylist();
-    void renamePlaylist();
 
     void onCustomContextMenu( const QPoint& pos );
 protected:

@@ -22,6 +22,7 @@
 #include "viewmanager.h"
 #include "viewpage.h"
 #include "sourcelist.h"
+#include "sourcetreeview.h"
 
 #include <QMimeData>
 
@@ -78,7 +79,7 @@ CategoryAddItem::flags() const
     switch( m_categoryType )
     {
         case SourcesModel::PlaylistsCategory:
-            return Qt::ItemIsEnabled | Qt::ItemIsSelectable;
+            return Qt::ItemIsEnabled | Qt::ItemIsSelectable | Qt::ItemIsDropEnabled;
         case SourcesModel::StationsCategory:
         default:
             return Qt::ItemIsEnabled;
@@ -127,6 +128,8 @@ CategoryAddItem::dropMimeData( const QMimeData* data, Qt::DropAction action )
         newpl->addEntries( queries, newpl->currentrevision() );
         ViewManager::instance()->show( newpl );
 
+        // Give a shot to try to rename it. The playlist has to be created first. ugly.
+        QTimer::singleShot( 300, APP->mainWindow()->sourceTreeView(), SLOT( renamePlaylist() ) );
         return true;
     }
     return false;

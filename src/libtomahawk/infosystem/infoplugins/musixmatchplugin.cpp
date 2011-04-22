@@ -42,17 +42,18 @@ MusixMatchPlugin::~MusixMatchPlugin()
     qDebug() << Q_FUNC_INFO;
 }
 
-void MusixMatchPlugin::getInfo(const QString &caller, const InfoType type, const QVariant& data, Tomahawk::InfoSystem::InfoCustomData customData)
+void
+MusixMatchPlugin::getInfo( const QString caller, const Tomahawk::InfoSystem::InfoType type, const QVariant input, const Tomahawk::InfoSystem::InfoCustomData customData )
 {
     qDebug() << Q_FUNC_INFO;
-    if( !isValidTrackData(caller, data, customData) || !data.canConvert<Tomahawk::InfoSystem::InfoCustomData>())
+    if( !isValidTrackData(caller, input, customData) || !input.canConvert<Tomahawk::InfoSystem::InfoCustomData>())
         return;
-    Tomahawk::InfoSystem::InfoCustomData hash = data.value<Tomahawk::InfoSystem::InfoCustomData>();
+    Tomahawk::InfoSystem::InfoCustomData hash = input.value<Tomahawk::InfoSystem::InfoCustomData>();
     QString artist = hash["artistName"].toString();
     QString track = hash["trackName"].toString();
     if( artist.isEmpty() || track.isEmpty() )
     {
-        emit info(caller, Tomahawk::InfoSystem::InfoTrackLyrics, data, QVariant(), customData);
+        emit info(caller, Tomahawk::InfoSystem::InfoTrackLyrics, input, QVariant(), customData);
         return;
     }
     qDebug() << "artist is " << artist << ", track is " << track;
@@ -63,38 +64,40 @@ void MusixMatchPlugin::getInfo(const QString &caller, const InfoType type, const
     url.addQueryItem("q_track", track);
     QNetworkReply* reply = TomahawkUtils::nam()->get(QNetworkRequest(url));
     reply->setProperty("customData", QVariant::fromValue<Tomahawk::InfoSystem::InfoCustomData>(customData));
-    reply->setProperty("origData", data);
+    reply->setProperty("origData", input);
     reply->setProperty("caller", caller);
 
     connect(reply, SIGNAL(finished()), SLOT(trackSearchSlot()));
 }
 
-bool MusixMatchPlugin::isValidTrackData(const QString &caller, const QVariant& data, Tomahawk::InfoSystem::InfoCustomData &customData)
+bool
+MusixMatchPlugin::isValidTrackData( const QString &caller, const QVariant &input, const Tomahawk::InfoSystem::InfoCustomData &customData )
 {
     qDebug() << Q_FUNC_INFO;
-    if (data.isNull() || !data.isValid() || !data.canConvert<Tomahawk::InfoSystem::InfoCustomData>())
+    if (input.isNull() || !input.isValid() || !input.canConvert<Tomahawk::InfoSystem::InfoCustomData>())
     {
-        emit info(caller, Tomahawk::InfoSystem::InfoTrackLyrics, data, QVariant(), customData);
+        emit info(caller, Tomahawk::InfoSystem::InfoTrackLyrics, input, QVariant(), customData);
         qDebug() << "MusixMatchPlugin::isValidTrackData: Data null, invalid, or can't convert";
         return false;
     }
-    InfoCustomData hash = data.value<Tomahawk::InfoSystem::InfoCustomData>();
+    InfoCustomData hash = input.value<Tomahawk::InfoSystem::InfoCustomData>();
     if (hash["trackName"].toString().isEmpty() )
     {
-        emit info(caller, Tomahawk::InfoSystem::InfoTrackLyrics, data, QVariant(), customData);
+        emit info(caller, Tomahawk::InfoSystem::InfoTrackLyrics, input, QVariant(), customData);
         qDebug() << "MusixMatchPlugin::isValidTrackData: Track name is empty";
         return false;
     }
     if (hash["artistName"].toString().isEmpty() )
     {
-        emit info(caller, Tomahawk::InfoSystem::InfoTrackLyrics, data, QVariant(), customData);
+        emit info(caller, Tomahawk::InfoSystem::InfoTrackLyrics, input, QVariant(), customData);
         qDebug() << "MusixMatchPlugin::isValidTrackData: No artist name found";
         return false;
     }
     return true;
 }
 
-void MusixMatchPlugin::trackSearchSlot()
+void
+MusixMatchPlugin::trackSearchSlot()
 {
     qDebug() << Q_FUNC_INFO;
     QNetworkReply* oldReply = qobject_cast<QNetworkReply*>( sender() );
@@ -124,7 +127,8 @@ void MusixMatchPlugin::trackSearchSlot()
     connect(newReply, SIGNAL(finished()), SLOT(trackLyricsSlot()));
 }
 
-void MusixMatchPlugin::trackLyricsSlot()
+void
+MusixMatchPlugin::trackLyricsSlot()
 {
     qDebug() << Q_FUNC_INFO;
     QNetworkReply* reply = qobject_cast<QNetworkReply*>( sender() );

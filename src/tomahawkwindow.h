@@ -1,5 +1,5 @@
 /* === This file is part of Tomahawk Player - <http://tomahawk-player.org> ===
- * 
+ *
  *   Copyright 2010-2011, Christian Muehlhaeuser <muesli@tomahawk-player.org>
  *
  *   Tomahawk is free software: you can redistribute it and/or modify
@@ -27,6 +27,7 @@
 
 #include "result.h"
 
+class SourceTreeView;
 class QAction;
 
 class MusicScanner;
@@ -48,6 +49,7 @@ public:
 
     AudioControls* audioControls() { return m_audioControls; }
     QStackedWidget* playlistStack();
+    SourceTreeView* sourceTreeView() const { return m_sourcetree; }
 
     void setWindowTitle( const QString& title );
 
@@ -64,7 +66,7 @@ public slots:
     void updateCollectionManually();
     void pluginMenuAdded(QMenu*);
     void pluginMenuRemoved(QMenu*);
-    
+
 private slots:
     void onSipConnected();
     void onSipDisconnected();
@@ -75,7 +77,7 @@ private slots:
     void onPlaybackLoading( const Tomahawk::result_ptr& result );
     void onHistoryBackAvailable( bool avail );
     void onHistoryForwardAvailable( bool avail );
-    
+
     void showAboutTomahawk();
     void checkForUpdates();
 
@@ -83,15 +85,16 @@ private:
     void loadSettings();
     void saveSettings();
     void setupSignals();
-    
+
     Ui::TomahawkWindow* ui;
     AudioControls* m_audioControls;
     TomahawkTrayIcon* m_trayIcon;
+    SourceTreeView* m_sourcetree;
     QPushButton* m_statusButton;
 
     QAction* m_backAvailable;
     QAction* m_forwardAvailable;
-    
+
     Tomahawk::result_ptr m_currentTrack;
     QString m_windowTitle;
 };

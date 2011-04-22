@@ -74,10 +74,6 @@ InfoSystem::InfoSystem(QObject *parent)
     s_instance = this;
 
     qDebug() << Q_FUNC_INFO;
-    qRegisterMetaType< QMap< QString, QMap< QString, QString > > >( "Tomahawk::InfoSystem::InfoGenericMap" );
-    qRegisterMetaType< QHash< QString, QVariant > >( "Tomahawk::InfoSystem::InfoCustomData" );
-    qRegisterMetaType< QHash< QString, QString > >( "Tomahawk::InfoSystem::InfoCriteriaHash" );
-    qRegisterMetaType< Tomahawk::InfoSystem::InfoType >( "Tomahawk::InfoSystem::InfoType" );
 
     m_infoSystemCacheThreadController = new QThread( this );
     m_cache = new InfoSystemCache();
@@ -152,7 +148,7 @@ QLinkedList< InfoPluginPtr > InfoSystem::determineOrderedMatches(const InfoType 
     return providers;
 }
 
-void InfoSystem::getInfo(const QString &caller, const InfoType type, const QVariant& data, InfoCustomData customData)
+void InfoSystem::getInfo(const QString &caller, const InfoType type, const QVariant& input, InfoCustomData customData)
 {
     qDebug() << Q_FUNC_INFO;
     QLinkedList< InfoPluginPtr > providers = determineOrderedMatches(type);
@@ -173,7 +169,7 @@ void InfoSystem::getInfo(const QString &caller, const InfoType type, const QVari
 
     m_dataTracker[caller][type] = m_dataTracker[caller][type] + 1;
     qDebug() << "current count in dataTracker for type" << type << "is" << m_dataTracker[caller][type];
-    ptr.data()->getInfo(caller, type, data, customData);
+    QMetaObject::invokeMethod( ptr.data(), "getInfo", Qt::QueuedConnection, Q_ARG( QString, caller ), Q_ARG( Tomahawk::InfoSystem::InfoType, type ), Q_ARG( QVariant, input ), Q_ARG( Tomahawk::InfoSystem::InfoCustomData, customData ) );
 }
 
 void InfoSystem::getInfo(const QString &caller, const InfoMap &input, InfoCustomData customData)
