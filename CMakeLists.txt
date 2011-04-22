@@ -39,11 +39,6 @@ INCLUDE( MacroLogFeature )
 set(LIBLASTFM_FOUND true)
 
 find_package(Phonon REQUIRED)
-if(PHONON_FOUND)
-message("Phonon found, all is good!" )
-else()
-message(STATUS "Phonon not found, but required!")
-endif()
 
 macro_optional_find_package(LibEchonest 1.1.1)
 macro_log_feature(LIBECHONEST_FOUND "Echonest" "Qt library for communicating with The Echo Nest" "http://projects.kde.org/libechonest" TRUE "" "libechonest is needed for dynamic playlists and the infosystem")
