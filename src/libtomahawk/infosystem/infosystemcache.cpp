@@ -136,6 +136,7 @@ InfoSystemCache::getCachedInfoSlot( const Tomahawk::InfoSystem::InfoCriteriaHash
         
         fileLocationHash.remove( criteriaHashVal );
         m_fileLocationCache[type] = fileLocationHash;
+        m_dataCache.remove( criteriaHashVal );
         
         emit notInCache( criteria, caller, type, input, customData );
         return;
@@ -155,10 +156,16 @@ InfoSystemCache::getCachedInfoSlot( const Tomahawk::InfoSystem::InfoCriteriaHash
         m_fileLocationCache[type] = fileLocationHash;
     }
     
-    QSettings cachedSettings( fileLocationHash[criteriaHashVal], QSettings::IniFormat );
-    QVariant output = cachedSettings.value( "data" );   
-
-    emit info( caller, type, input, output, customData );
+    if ( !m_dataCache.contains( criteriaHashVal ) )
+    {
+        QSettings cachedSettings( fileLocationHash[criteriaHashVal], QSettings::IniFormat );
+        QVariant output = cachedSettings.value( "data" );   
+        m_dataCache.insert( criteriaHashVal, new QVariant( output ) );
+        
+        emit info( caller, type, input, output, customData );
+    }
+    else
+        emit info( caller, type, input, QVariant( *(m_dataCache[criteriaHashVal]) ), customData );
 }
 
 
@@ -184,6 +191,8 @@ InfoSystemCache::updateCacheSlot( const Tomahawk::InfoSystem::InfoCriteriaHash c
         
         QSettings cachedSettings( fileLocationHash[criteriaHashVal], QSettings::IniFormat );
         cachedSettings.setValue( "data", output );
+    
+        m_dataCache.insert( criteriaHashVal, new QVariant( output ) );
         
         return;
     }
@@ -209,6 +218,7 @@ InfoSystemCache::updateCacheSlot( const Tomahawk::InfoSystem::InfoCriteriaHash c
     
     fileLocationHash[criteriaHashVal] = settingsFilePath;
     m_fileLocationCache[type] = fileLocationHash;
+    m_dataCache.insert( criteriaHashVal, new QVariant( output ) );
 }
 
 

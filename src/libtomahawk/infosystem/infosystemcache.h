@@ -19,6 +19,7 @@
 #ifndef TOMAHAWK_INFOSYSTEMCACHE_H
 #define TOMAHAWK_INFOSYSTEMCACHE_H
 
+#include <QCache>
 #include <QDateTime>
 #include <QObject>
 #include <QtDebug>
@@ -58,6 +59,7 @@ private:
     QString m_cacheBaseDir;
     QHash< InfoType, QHash< QString, QString > > m_fileLocationCache;
     QTimer m_pruneTimer;
+    QCache< QString, QVariant > m_dataCache;
 };
 
 } //namespace InfoSystem
