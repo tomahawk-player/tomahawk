@@ -107,11 +107,7 @@ public slots:
     void onItemRowsRemovedDone();
 private:
     SourceTreeItem* itemFromIndex( const QModelIndex& idx ) const;
-    Tomahawk::playlist_ptr playlistFromItem( SourceTreeItem* item ) const;
     int rowForItem( SourceTreeItem* item ) const;
-//     QModelIndex indexForSource( Tomahawk::Source* source ) const;
-//     QModelIndex indexForPlaylist( Tomahawk::Playlist* pl ) const;
-//     QModelIndex indexForCategory( const QModelIndex& sourceIndex, CategoryType type );
 
     SourceTreeItem* m_rootItem;
 

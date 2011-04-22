@@ -413,10 +413,10 @@ ViewManager::showSuperCollection()
     return shown;
 }
 
-void
+Tomahawk::ViewPage*
 ViewManager::showWelcomePage()
 {
-    show( m_welcomeWidget );
+    return show( m_welcomeWidget );
 }
 
 

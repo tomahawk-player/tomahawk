@@ -22,7 +22,8 @@
 #include "viewmanager.h"
 #include "sourcesproxymodel.h"
 #include "sourcelist.h"
-#include "sourcetree/sourcetreeitem.h"
+#include "sourcetree/items/playlistitems.h"
+#include "sourcetree/items/collectionitem.h"
 #include "tomahawk/tomahawkapp.h"
 
 #include <QAction>

@@ -22,7 +22,7 @@
 #include <QTreeView>
 
 #include "sourcesmodel.h"
-#include "sourcetree/sourcetreeitem.h"
+#include "sourcetree/items/collectionitem.h"
 
 
 SourcesProxyModel::SourcesProxyModel( SourcesModel* model, QObject* parent )

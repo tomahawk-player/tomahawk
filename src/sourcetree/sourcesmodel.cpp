@@ -18,13 +18,17 @@
 
 #include "sourcetree/sourcesmodel.h"
 
-#include "sourcetree/sourcetreeitem.h"
+#include "sourcetree/items/sourcetreeitem.h"
+#include "sourcetree/items/collectionitem.h"
+#include "sourcetree/items/genericpageitems.h"
 #include "sourcelist.h"
 #include "playlist.h"
 #include "collection.h"
 #include "source.h"
 #include "tomahawk/tomahawkapp.h"
 #include "viewmanager.h"
+
+#include <boost/bind.hpp>
 
 #include <QMimeData>
 #include <QSize>
@@ -40,8 +44,7 @@ SourcesModel::SourcesModel( QObject* parent )
     appendItem( source_ptr() );
 
     // add misc children of root node
-    GenericPageItem* recent = new GenericPageItem( this, m_rootItem->children().at( 0 ), tr( "Recently Played" ), QIcon( RESPATH "images/recently-played.png" ) );
-    connect( recent, SIGNAL( activated() ), ViewManager::instance(), SLOT( showWelcomePage() ) );
+    GenericPageItem* recent = new GenericPageItem( this, m_rootItem->children().at( 0 ), tr( "Recently Played" ), QIcon( RESPATH "images/recently-played.png" ), boost::bind( &ViewManager::showWelcomePage, ViewManager::instance() ) );
 
     onSourcesAdded( SourceList::instance()->sources() );
 
@@ -386,16 +389,6 @@ SourcesModel::indexFromItem( SourceTreeItem* item ) const
 //     qDebug() << "Got index from item:" << idx << idx.data( Qt::DisplayRole ).toString();
 //     qDebug() << "parent:" << idx.parent();
     return idx;
-}
-
-
-playlist_ptr
-SourcesModel::playlistFromItem( SourceTreeItem* item ) const
-{
-    Q_ASSERT( item );
-    Q_ASSERT( item->type() == StaticPlaylist );
-
-    return dynamic_cast< PlaylistItem* >( item )->playlist();
 }
 
 int

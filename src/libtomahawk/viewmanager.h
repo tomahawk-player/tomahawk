@@ -123,7 +123,7 @@ signals:
 
 public slots:
     Tomahawk::ViewPage* showSuperCollection();
-    void showWelcomePage();
+    Tomahawk::ViewPage* showWelcomePage();
     void showCurrentTrack();
 
     void historyBack();

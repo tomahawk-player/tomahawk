@@ -53,8 +53,12 @@ ENDIF(LIBLASTFM_FOUND)
 SET( tomahawkSourcesGui ${tomahawkSourcesGui}
      sourcetree/sourcesmodel.cpp
      sourcetree/sourcesproxymodel.cpp
-     sourcetree/sourcetreeitem.cpp
      sourcetree/sourcetreeview.cpp
+     sourcetree/items/sourcetreeitem.cpp
+     sourcetree/items/collectionitem.cpp
+     sourcetree/items/playlistitems.cpp
+     sourcetree/items/categoryitems.cpp
+     sourcetree/items/genericpageitems.cpp
 
      transferview.cpp
      tomahawktrayicon.cpp
@@ -89,8 +93,12 @@ ENDIF(LIBLASTFM_FOUND)
 SET( tomahawkHeadersGui ${tomahawkHeadersGui}
      sourcetree/sourcesmodel.h
      sourcetree/sourcesproxymodel.h
-     sourcetree/sourcetreeitem.h
      sourcetree/sourcetreeview.h
+     sourcetree/items/sourcetreeitem.h
+     sourcetree/items/collectionitem.h
+     sourcetree/items/playlistitems.h
+     sourcetree/items/categoryitems.h
+     sourcetree/items/genericpageitems.h
 
      transferview.h
      tomahawktrayicon.h
