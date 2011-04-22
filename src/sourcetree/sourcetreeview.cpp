@@ -404,6 +404,7 @@ SourceDelegate::paint( QPainter* painter, const QStyleOptionViewItem& option, co
         QPixmap avatar( RESPATH "images/user-avatar.png" );
 
         QString tracks;
+        QString name = index.data().toString();
         int figWidth = 0;
 
         if ( status && colItem && !colItem->source().isNull() )
@@ -412,6 +413,7 @@ SourceDelegate::paint( QPainter* painter, const QStyleOptionViewItem& option, co
             figWidth = painter->fontMetrics().width( tracks );
             if ( !colItem->source()->avatar().isNull() )
                 avatar = colItem->source()->avatar();
+            name = colItem->source()->friendlyName();
         }
 
         QRect iconRect = option.rect.adjusted( 4, 6, -option.rect.width() + option.rect.height() - 12 + 4, -6 );
@@ -426,7 +428,7 @@ SourceDelegate::paint( QPainter* painter, const QStyleOptionViewItem& option, co
         QRect textRect = option.rect.adjusted( iconRect.width() + 8, 6, -figWidth - 24, 0 );
         if ( status || colItem->source().isNull() )
             painter->setFont( bold );
-        QString text = painter->fontMetrics().elidedText( index.data().toString(), Qt::ElideRight, textRect.width() );
+        QString text = painter->fontMetrics().elidedText( name, Qt::ElideRight, textRect.width() );
         painter->drawText( textRect, text );
 
         QString desc = status ? colItem->source()->textStatus() : tr( "Offline" );

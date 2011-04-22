@@ -204,7 +204,7 @@ private slots:
     void onDynamicPlaylistLoaded( Tomahawk::DynamicPlaylistRevision revision );
 
 private:
-    void checkReparentHackNeeded( const DynamicPlaylistRevision& rev );
+    void checkReparentHackNeeded( const Tomahawk::DynamicPlaylistRevision& rev );
 
     Tomahawk::dynplaylist_ptr m_dynplaylist;
 };
