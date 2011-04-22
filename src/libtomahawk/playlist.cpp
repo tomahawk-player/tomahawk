@@ -110,8 +110,8 @@ Playlist::Playlist( const source_ptr& src,
     , m_title( title )
     , m_info( info )
     , m_creator( creator )
-    , m_createdOn( createdOn )
     , m_lastmodified( lastmod )
+    , m_createdOn( createdOn )
     , m_shared( shared )
 {
 //    qDebug() << Q_FUNC_INFO << "1";
@@ -131,8 +131,8 @@ Playlist::Playlist( const source_ptr& author,
     , m_title( title )
     , m_info ( info )
     , m_creator( creator )
-    , m_createdOn( 0 ) // will be set by db command
     , m_lastmodified( 0 )
+    , m_createdOn( 0 ) // will be set by db command
     , m_shared( shared )
 {
     qDebug() << Q_FUNC_INFO << "2";
