@@ -22,13 +22,15 @@
 using namespace Tomahawk;
 
 /// Generic page item
-GenericPageItem::GenericPageItem( SourcesModel* model, SourceTreeItem* parent, const QString& text, const QIcon& icon, boost::function< ViewPage* () > func )
+GenericPageItem::GenericPageItem( SourcesModel* model, SourceTreeItem* parent, const QString& text, const QIcon& icon, boost::function< ViewPage* () > show, boost::function< ViewPage* () > get )
     : SourceTreeItem( model, parent, SourcesModel::GenericPage )
     , m_icon( icon )
     , m_text( text )
-    , m_func( func )
+    , m_show( show )
+    , m_get( get )
 {
-
+    if( ViewPage* p = m_get() )
+        model->linkSourceItemToPage( this, p );
 }
 
 GenericPageItem::~GenericPageItem()
@@ -39,7 +41,7 @@ GenericPageItem::~GenericPageItem()
 void
 GenericPageItem::activate()
 {
-    ViewPage* p = m_func();
+    ViewPage* p = m_show();
     model()->linkSourceItemToPage( this, p );
 }
 

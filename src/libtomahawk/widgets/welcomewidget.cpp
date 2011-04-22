@@ -19,6 +19,7 @@
 #include "welcomewidget.h"
 #include "ui_welcomewidget.h"
 
+#include "audio/audioengine.h"
 #include "utils/tomahawkutils.h"
 
 #include "viewmanager.h"
@@ -56,6 +57,7 @@ WelcomeWidget::WelcomeWidget( QWidget* parent )
     connect( SourceList::instance(), SIGNAL( sourceAdded( Tomahawk::source_ptr ) ), SLOT( onSourceAdded( Tomahawk::source_ptr ) ) );
 
     connect( ui->playlistWidget, SIGNAL( itemActivated( QListWidgetItem* ) ), SLOT( onPlaylistActivated( QListWidgetItem* ) ) );
+    connect( AudioEngine::instance() ,SIGNAL( playlistChanged( PlaylistInterface* ) ), this, SLOT( updatePlaylists() ), Qt::QueuedConnection );
 }
 
 

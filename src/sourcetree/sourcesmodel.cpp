@@ -44,7 +44,10 @@ SourcesModel::SourcesModel( QObject* parent )
     appendItem( source_ptr() );
 
     // add misc children of root node
-    GenericPageItem* recent = new GenericPageItem( this, m_rootItem->children().at( 0 ), tr( "Recently Played" ), QIcon( RESPATH "images/recently-played.png" ), boost::bind( &ViewManager::showWelcomePage, ViewManager::instance() ) );
+    GenericPageItem* recent = new GenericPageItem( this, m_rootItem->children().at( 0 ), tr( "Recently Played" ), QIcon( RESPATH "images/recently-played.png" ),
+                                                   boost::bind( &ViewManager::showWelcomePage, ViewManager::instance() ),
+                                                   boost::bind( &ViewManager::welcomeWidget, ViewManager::instance() )
+                                                 );
 
     onSourcesAdded( SourceList::instance()->sources() );
 

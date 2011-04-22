@@ -99,7 +99,6 @@ PlaylistModel::loadPlaylist( const Tomahawk::playlist_ptr& playlist, bool loadEn
         int c = rowCount( QModelIndex() );
 
         qDebug() << "Starting loading" << playlist->title();
-        emit loadingStarted();
         emit beginInsertRows( QModelIndex(), c, c + entries.count() - 1 );
 
         m_waitingForResolved.clear();

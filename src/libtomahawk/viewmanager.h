@@ -26,6 +26,7 @@
 #include "collection.h"
 #include "playlistinterface.h"
 #include "viewpage.h"
+#include "widgets/welcomewidget.h"
 
 #include "dllmacro.h"
 
@@ -85,7 +86,7 @@ public:
 
     Tomahawk::ViewPage* show( Tomahawk::ViewPage* page );
 
-    WelcomeWidget* welcomeWidget() const { return m_welcomeWidget; }
+    Tomahawk::ViewPage* welcomeWidget() const { return m_welcomeWidget; }
     ArtistView* superCollectionView() const { return m_superCollectionView; }
 
     /// Get the view page for the given item. Not pretty...
