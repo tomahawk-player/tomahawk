@@ -1,5 +1,5 @@
 /* === This file is part of Tomahawk Player - <http://tomahawk-player.org> ===
- * 
+ *
  *   Copyright 2010-2011, Christian Muehlhaeuser <muesli@tomahawk-player.org>
  *
  *   Tomahawk is free software: you can redistribute it and/or modify
@@ -21,8 +21,8 @@
 
 #include <QObject>
 
-#include <MediaObject>
-#include <AudioOutput>
+#include <phonon/MediaObject>
+#include <phonon/AudioOutput>
 
 #include "result.h"
 #include "typedefs.h"
@@ -48,7 +48,7 @@ public:
     unsigned int volume() const { return m_audioOutput->volume() * 100.0; } // in percent
     bool isPlaying() const { return m_mediaObject->state() == Phonon::PlayingState; }
     bool isPaused() const { return m_mediaObject->state() == Phonon::PausedState; }
-    
+
     /* Returns the PlaylistInterface of the currently playing track. Note: This might be different to the current playlist! */
     PlaylistInterface* currentTrackPlaylist() const { return m_currentTrackPlaylist; }
 

@@ -4,7 +4,6 @@ SET( QT_USE_QTGUI TRUE )
 SET( QT_USE_QTSQL TRUE )
 SET( QT_USE_QTNETWORK TRUE )
 SET( QT_USE_QTXML TRUE )
-SET( QT_USE_PHONON TRUE )
 SET( QT_USE_QTUITOOLS TRUE )
 
 include( ${QT_USE_FILE} )
@@ -338,6 +337,7 @@ include_directories( . ${CMAKE_CURRENT_BINARY_DIR} ${CMAKE_CURRENT_BINARY_DIR}/.
     ${LIBECHONEST_INCLUDE_DIR}/..
     ${CLUCENE_INCLUDE_DIR}
     ${CLUCENE_LIBRARY_DIR}
+    ${PHONON_INCLUDES}
     ${CMAKE_BINARY_DIR}/thirdparty/liblastfm2/src
 
     ../../include
@@ -411,6 +411,7 @@ target_link_libraries( tomahawklib
     portfwd
 
     # External deps
+    ${PHONON_LIBS}
     ${TAGLIB_LIBRARIES}
     ${CLUCENE_LIBRARIES}
     ${LIBECHONEST_LIBRARY}
