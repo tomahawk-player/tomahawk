@@ -6,7 +6,7 @@
 #define TOMAHAWK_SIP_MESSAGE_NS QLatin1String("http://www.tomhawk-player.org/sip/transports")
 
 class TomahawkSipMessagePrivate;
-class TomahawkSipMessage : public Jreen::StanzaExtension
+class TomahawkSipMessage : public jreen::StanzaExtension
 {
     J_EXTENSION(TomahawkSipMessage, "")
     Q_DECLARE_PRIVATE(TomahawkSipMessage)

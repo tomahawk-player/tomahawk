@@ -12,7 +12,7 @@
 #include <QCryptographicHash>
 #include <QPixmap>
 
-AvatarManager::AvatarManager(Jreen::Client *client) :
+AvatarManager::AvatarManager(jreen::Client *client) :
     m_cacheDir(TomahawkUtils::appDataDir().absolutePath().append("/jreen/"))
 {
     m_client = client;
@@ -20,8 +20,8 @@ AvatarManager::AvatarManager(Jreen::Client *client) :
     m_cachedAvatars = m_cacheDir.entryList();
 
     connect(m_client, SIGNAL(serverFeaturesReceived(QSet<QString>)), SLOT(onNewConnection()));
-    connect(m_client, SIGNAL(newPresence(Jreen::Presence)), SLOT(onNewPresence(Jreen::Presence)));
-    connect(m_client, SIGNAL(newIQ(Jreen::IQ)), SLOT(onNewIq(Jreen::IQ)));
+    connect(m_client, SIGNAL(newPresence(jreen::Presence)), SLOT(onNewPresence(jreen::Presence)));
+    connect(m_client, SIGNAL(newIQ(jreen::IQ)), SLOT(onNewIq(jreen::IQ)));
 
     connect(this, SIGNAL(newAvatar(QString)), SLOT(onNewAvatar(QString)));
 }
@@ -40,14 +40,14 @@ void AvatarManager::fetchVCard(const QString &jid)
 {
     qDebug() << Q_FUNC_INFO;
 
-    Jreen::IQ iq(Jreen::IQ::Get, jid );
-    iq.addExtension(new Jreen::VCard());
-    m_client->send( iq, this, SLOT( onNewIq( Jreen::IQ, int ) ), 0 );
+    jreen::IQ iq(jreen::IQ::Get, jid );
+    iq.addExtension(new jreen::VCard());
+    m_client->send( iq, this, SLOT( onNewIq( jreen::IQ, int ) ), 0 );
 }
 
-void AvatarManager::onNewPresence(const Jreen::Presence& presence)
+void AvatarManager::onNewPresence(const jreen::Presence& presence)
 {
-    Jreen::VCardUpdate::Ptr update = presence.findExtension<Jreen::VCardUpdate>();
+    jreen::VCardUpdate::Ptr update = presence.findExtension<jreen::VCardUpdate>();
     if(update)
     {
         qDebug() << "vcard: found update for " << presence.from().full();
@@ -74,9 +74,9 @@ void AvatarManager::onNewPresence(const Jreen::Presence& presence)
     }
 }
 
-void AvatarManager::onNewIq(const Jreen::IQ& iq, int context)
+void AvatarManager::onNewIq(const jreen::IQ& iq, int context)
 {
-    Jreen::VCard *vcard = iq.findExtension<Jreen::VCard>().data();
+    jreen::VCard *vcard = iq.findExtension<jreen::VCard>().data();
     if(vcard)
     {
         iq.accept();
@@ -86,7 +86,7 @@ void AvatarManager::onNewIq(const Jreen::IQ& iq, int context)
         QString id = iq.from().full();
         QString avatarHash;
 
-        const Jreen::VCard::Photo &photo = vcard->photo();
+        const jreen::VCard::Photo &photo = vcard->photo();
         if (!photo.data().isEmpty()) {
             qDebug() << "vcard: got photo data" << id;
 
@@ -118,8 +118,8 @@ void AvatarManager::onNewIq(const Jreen::IQ& iq, int context)
         {
             qDebug() << Q_FUNC_INFO << "got own vcard";
 
-            Jreen::Presence presence = m_client->presence();
-            Jreen::VCardUpdate::Ptr update = presence.findExtension<Jreen::VCardUpdate>();
+            jreen::Presence presence = m_client->presence();
+            jreen::VCardUpdate::Ptr update = presence.findExtension<jreen::VCardUpdate>();
             if (update->photoHash() != avatarHash)
             {
                 qDebug() << Q_FUNC_INFO << "Updating own presence...";

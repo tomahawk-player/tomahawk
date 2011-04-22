@@ -12,7 +12,7 @@ class AvatarManager : public QObject
 Q_OBJECT
 
 public:
-    AvatarManager(Jreen::Client *client);
+    AvatarManager(jreen::Client *client);
     virtual ~AvatarManager();
 
     QPixmap avatar(const QString &jid) const;
@@ -21,8 +21,8 @@ signals:
     void newAvatar( const QString &jid );
 
 private slots:
-    void onNewPresence( const Jreen::Presence& presence );
-    void onNewIq(const Jreen::IQ &iq, int context = 0 );
+    void onNewPresence( const jreen::Presence& presence );
+    void onNewIq(const jreen::IQ &iq, int context = 0 );
     void onNewConnection();
     void onNewAvatar( const QString &jid );
 
@@ -34,7 +34,7 @@ private:
     QDir avatarDir(const QString &avatarHash) const;
     bool isCached(const QString &avatarHash) const;
 
-    Jreen::Client *m_client;
+    jreen::Client *m_client;
     QStringList m_cachedAvatars;
     QDir m_cacheDir;
     QMap<QString, QString> m_JidsAvatarHashes;

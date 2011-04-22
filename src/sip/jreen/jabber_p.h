@@ -75,13 +75,13 @@ public slots:
     void addContact( const QString& jid, const QString& msg = QString() );
     void disconnect();
 
-    void onDisconnect(Jreen::Client::DisconnectReason reason);
+    void onDisconnect(jreen::Client::DisconnectReason reason);
     void onConnect();
 
 private slots:
-    virtual void onNewPresence( const Jreen::Presence& presence );
-    virtual void onNewMessage( const Jreen::Message& msg );
-    virtual void onError( const Jreen::Connection::SocketError& e )
+    virtual void onNewPresence( const jreen::Presence& presence );
+    virtual void onNewMessage( const jreen::Message& msg );
+    virtual void onError( const jreen::Connection::SocketError& e )
     {
         qDebug() << e;
     }
@@ -89,19 +89,19 @@ private slots:
     {
         qDebug() << Q_FUNC_INFO;
     }
-    virtual void onNewIq( const Jreen::IQ &iq, int context = NoContext );
+    virtual void onNewIq( const jreen::IQ &iq, int context = NoContext );
     virtual void onNewAvatar( const QString &jid );
 
 private:
-    bool presenceMeansOnline( Jreen::Presence::Type p );
-    void handlePeerStatus( const Jreen::JID &jid, Jreen::Presence::Type presenceType );
+    bool presenceMeansOnline( jreen::Presence::Type p );
+    void handlePeerStatus( const jreen::JID &jid, jreen::Presence::Type presenceType );
 
-    Jreen::Client *m_client;
-    Jreen::MUCRoom *m_room;
-    Jreen::SimpleRoster *m_roster;
-    Jreen::JID m_jid;
-    QMap<Jreen::Presence::Type, QString> m_presences;
-    QMap<QString, Jreen::Presence::Type> m_peers;
+    jreen::Client *m_client;
+    jreen::MUCRoom *m_room;
+    jreen::SimpleRoster *m_roster;
+    jreen::JID m_jid;
+    QMap<jreen::Presence::Type, QString> m_presences;
+    QMap<QString, jreen::Presence::Type> m_peers;
     QString m_server;
 
     enum IqContext { NoContext, RequestDisco, RequestedDisco, SipMessageSent, RequestedVCard };
