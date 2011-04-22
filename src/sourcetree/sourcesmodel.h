@@ -59,9 +59,11 @@ public:
     };
 
     enum Roles {
-        SourceTreeItemRole = Qt::UserRole + 10,
-        SourceTreeItemTypeRole = Qt::UserRole + 11
+        SourceTreeItemRole      = Qt::UserRole + 10,
+        SourceTreeItemTypeRole  = Qt::UserRole + 11,
+        SortRole                = Qt::UserRole + 12
     };
+
 
     SourcesModel( QObject* parent = 0 );
     virtual ~SourcesModel();

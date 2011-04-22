@@ -78,9 +78,8 @@ SourceTreeView::SourceTreeView( QWidget* parent )
     setAllColumnsShowFocus( true );
     setUniformRowHeights( false );
     setIndentation( 16 );
-
-//     setSortingEnabled( true );
-//     sortByColumn( 1, Qt::AscendingOrder );
+    setSortingEnabled( true );
+    sortByColumn( 1, Qt::AscendingOrder );
 
     // TODO animation conflicts with the expanding-playlists-when-collection-is-null
     // so investigate

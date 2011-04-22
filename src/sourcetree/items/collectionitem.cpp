@@ -89,6 +89,18 @@ CollectionItem::text() const
     return m_source.isNull() ? tr( "Super Collection" ) : m_source->friendlyName();
 }
 
+int
+CollectionItem::peerSortValue() const
+{
+    if( m_source.isNull() )
+        return -1;
+    if( m_source->isLocal() )
+        return 0;
+
+    return 1;
+}
+
+
 void
 CollectionItem::activate()
 {

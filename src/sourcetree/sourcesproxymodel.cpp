@@ -31,7 +31,7 @@ SourcesProxyModel::SourcesProxyModel( SourcesModel* model, QObject* parent )
     , m_filtered( false )
 {
     setDynamicSortFilter( true );
-//     setSortRole( SourcesModel::SortRole );
+    setSortRole( SourcesModel::SortRole );
 
     setSourceModel( model );
 

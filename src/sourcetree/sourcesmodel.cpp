@@ -77,6 +77,8 @@ SourcesModel::data( const QModelIndex& index, int role ) const
         return itemFromIndex( index )->text();
     case Qt::DecorationRole:
         return itemFromIndex( index )->icon();
+    case SourcesModel::SortRole:
+        return itemFromIndex( index )->peerSortValue();
     }
     return QVariant();
 }

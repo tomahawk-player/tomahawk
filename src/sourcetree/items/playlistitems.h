@@ -34,6 +34,7 @@ public:
     virtual bool dropMimeData( const QMimeData* data, Qt::DropAction action );
     virtual QIcon icon() const;
     virtual bool setData(const QVariant& v, bool role);
+    virtual int peerSortValue() const;
 
 protected:
     void setLoaded( bool loaded );
@@ -59,6 +60,7 @@ public:
     Tomahawk::dynplaylist_ptr dynPlaylist() const;
     virtual bool willAcceptDrag( const QMimeData* data ) const;
     virtual void activate();
+    virtual int peerSortValue() const;
 
 private slots:
     void onDynamicPlaylistLoaded( Tomahawk::DynamicPlaylistRevision revision );

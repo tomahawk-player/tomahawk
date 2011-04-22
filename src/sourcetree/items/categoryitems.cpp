@@ -21,6 +21,9 @@
 #include "widgets/newplaylistwidget.h"
 #include "viewmanager.h"
 #include "viewpage.h"
+#include "sourcelist.h"
+
+#include <QMimeData>
 
 using namespace Tomahawk;
 
@@ -88,6 +91,47 @@ CategoryAddItem::icon() const
 {
     return QIcon( RESPATH "images/add.png" );
 }
+
+bool
+CategoryAddItem::willAcceptDrag( const QMimeData* data ) const
+{
+    if( m_categoryType == SourcesModel::PlaylistsCategory && data->hasFormat( "application/tomahawk.query.list" ) ) {
+        return true;
+    }
+    return false;
+}
+
+bool
+CategoryAddItem::dropMimeData( const QMimeData* data, Qt::DropAction action )
+{
+    // Create a new playlist seeded with these items
+    if( m_categoryType == SourcesModel::PlaylistsCategory && data->hasFormat( "application/tomahawk.query.list" ) ) {
+        QByteArray itemData = data->data( "application/tomahawk.query.list" );
+        QDataStream stream( &itemData, QIODevice::ReadOnly );
+        QList< Tomahawk::query_ptr > queries;
+
+        while ( !stream.atEnd() )
+        {
+            qlonglong qptr;
+            stream >> qptr;
+
+            Tomahawk::query_ptr* query = reinterpret_cast<Tomahawk::query_ptr*>(qptr);
+            if ( query && !query->isNull() )
+            {
+                qDebug() << "Dropped query item:" << query->data()->artist() << "-" << query->data()->track();
+                queries << *query;
+            }
+        }
+
+        playlist_ptr newpl = Playlist::create( SourceList::instance()->getLocal(), uuid(), "New Playlist", "", SourceList::instance()->getLocal()->friendlyName(), false );
+        newpl->addEntries( queries, newpl->currentrevision() );
+        ViewManager::instance()->show( newpl );
+
+        return true;
+    }
+    return false;
+}
+
 
 /// CategoryItem
 

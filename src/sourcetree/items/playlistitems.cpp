@@ -66,6 +66,13 @@ PlaylistItem::onPlaylistChanged()
     emit updated();
 }
 
+int
+PlaylistItem::peerSortValue() const
+{
+    return m_playlist->createdOn();
+}
+
+
 Qt::ItemFlags
 PlaylistItem::flags() const
 {
@@ -186,6 +193,13 @@ DynamicPlaylistItem::onDynamicPlaylistLoaded( DynamicPlaylistRevision revision )
     // END HACK
     emit updated();
 }
+
+int
+DynamicPlaylistItem::peerSortValue() const
+{
+    return m_dynplaylist->createdOn();
+}
+
 
 void
 DynamicPlaylistItem::checkReparentHackNeeded( const DynamicPlaylistRevision& revision )
