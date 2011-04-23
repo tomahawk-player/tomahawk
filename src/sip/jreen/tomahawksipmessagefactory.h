@@ -21,7 +21,7 @@
 
 #include <jreen/stanzaextension.h>
 
-class TomahawkSipMessageFactory : public jreen::StanzaExtensionFactory<TomahawkSipMessage>
+class TomahawkSipMessageFactory : public Jreen::StanzaExtensionFactory<TomahawkSipMessage>
 {
 public:
     TomahawkSipMessageFactory();
@@ -31,8 +31,8 @@ public:
     void handleStartElement(const QStringRef &name, const QStringRef &uri, const QXmlStreamAttributes &attributes);
     void handleEndElement(const QStringRef &name, const QStringRef &uri);
     void handleCharacterData(const QStringRef &text);
-    void serialize(jreen::StanzaExtension *extension, QXmlStreamWriter *writer);
-    jreen::StanzaExtension::Ptr createExtension();
+    void serialize(Jreen::StanzaExtension *extension, QXmlStreamWriter *writer);
+    Jreen::StanzaExtension::Ptr createExtension();
 private:
     enum State { AtNowhere, AtTransport, AtCandidate } m_state;
     int m_depth;

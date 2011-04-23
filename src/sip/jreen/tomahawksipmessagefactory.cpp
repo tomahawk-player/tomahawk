@@ -5,7 +5,7 @@
 #include <QDebug>
 #include <QVariant>
 
-using namespace jreen;
+using namespace Jreen;
 
 TomahawkSipMessageFactory::TomahawkSipMessageFactory()
 {

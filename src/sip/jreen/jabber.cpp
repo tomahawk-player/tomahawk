@@ -162,18 +162,18 @@ JabberPlugin::onAuthError( int code, const QString& msg )
 {
     switch( code )
     {
-        case jreen::Client::AuthorizationError:
+        case Jreen::Client::AuthorizationError:
             emit error( SipPlugin::AuthError, msg );
             break;
 
-        case jreen::Client::HostUnknown:
-        case jreen::Client::ItemNotFound:
-        case jreen::Client::RemoteStreamError:
-        case jreen::Client::RemoteConnectionFailed:
-        case jreen::Client::InternalServerError:
-        case jreen::Client::SystemShutdown:
-        case jreen::Client::Conflict:
-        case jreen::Client::Unknown:
+        case Jreen::Client::HostUnknown:
+        case Jreen::Client::ItemNotFound:
+        case Jreen::Client::RemoteStreamError:
+        case Jreen::Client::RemoteConnectionFailed:
+        case Jreen::Client::InternalServerError:
+        case Jreen::Client::SystemShutdown:
+        case Jreen::Client::Conflict:
+        case Jreen::Client::Unknown:
             emit error( SipPlugin::ConnectionError, msg );
             break;
 
