@@ -172,7 +172,6 @@ TomahawkWindow::TomahawkWindow( QWidget* parent )
     m_backAvailable->setToolTip( tr( "Go back one page" ) );
     m_forwardAvailable = toolbar->addAction( QIcon( RESPATH "images/forward.png" ), tr( "Forward" ), ViewManager::instance(), SLOT( historyForward() ) );
     m_forwardAvailable->setToolTip( tr( "Go forward one page" ) );
-    toolbar->addAction( QIcon( RESPATH "images/home.png" ), tr( "Home" ), ViewManager::instance(), SLOT( showWelcomePage() ) );
 
     statusBar()->addPermanentWidget( m_audioControls, 1 );
 
