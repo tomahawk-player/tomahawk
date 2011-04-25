@@ -404,12 +404,14 @@ SourceDelegate::paint( QPainter* painter, const QStyleOptionViewItem& option, co
         CollectionItem* colItem = qobject_cast< CollectionItem* >( item );
         Q_ASSERT( colItem );
         bool status = !( !colItem || colItem->source().isNull() || !colItem->source()->isOnline() );
-        QPixmap avatar( RESPATH "images/user-avatar.png" );
+
 
         QString tracks;
         QString name = index.data().toString();
         int figWidth = 0;
 
+        QRect iconRect = option.rect.adjusted( 4, 6, -option.rect.width() + option.rect.height() - 12 + 4, -6 );
+        QPixmap avatar = index.data( Qt::DecorationRole ).value< QIcon >().pixmap( iconRect.size() );
         if ( status && colItem && !colItem->source().isNull() )
         {
             tracks = QString::number( colItem->source()->trackCount() );
@@ -419,7 +421,6 @@ SourceDelegate::paint( QPainter* painter, const QStyleOptionViewItem& option, co
             name = colItem->source()->friendlyName();
         }
 
-        QRect iconRect = option.rect.adjusted( 4, 6, -option.rect.width() + option.rect.height() - 12 + 4, -6 );
 
         painter->drawPixmap( iconRect, avatar.scaledToHeight( iconRect.height(), Qt::SmoothTransformation ) );
 
