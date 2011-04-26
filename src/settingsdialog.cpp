@@ -43,6 +43,7 @@
 #include "resolverconfigdelegate.h"
 #include "resolversmodel.h"
 #include "resolverconfigwrapper.h"
+#include "sip/SipModel.h"
 
 static QString
 md5( const QByteArray& src )
@@ -57,6 +58,8 @@ SettingsDialog::SettingsDialog( QWidget *parent )
     , m_proxySettings( this )
     , m_rejected( false )
     , m_testLastFmQuery( 0 )
+    , m_sipModel( 0 )
+    , m_resolversModel( 0 )
 {
     ui->setupUi( this );
     TomahawkSettings* s = TomahawkSettings::instance();
@@ -66,27 +69,23 @@ SettingsDialog::SettingsDialog( QWidget *parent )
     ui->checkBoxUpnp->setChecked( s->externalAddressMode() == TomahawkSettings::Upnp );
     ui->checkBoxUpnp->setEnabled( !s->preferStaticHostPort() );
 
-    // JABBER
-    ui->checkBoxJabberAutoConnect->setChecked( s->jabberAutoConnect() );
-    ui->jabberUsername->setText( s->jabberUsername() );
-    ui->jabberPassword->setText( s->jabberPassword() );
-    ui->jabberServer->setText( s->jabberServer() );
-    ui->jabberPort->setValue( s->jabberPort() );
+    // SIP PLUGINS
+//     SipPluginDelegate* ad = new SipPluginDelegate( this );
+//     ui->accountsView->setItemDelegate( ad );
+//     connect( ad, SIGNAL( openConfig( QString ) ), this, SLOT( openSipPluginConfig( QString ) ) );
+    m_sipModel = new SipModel( this );
+    ui->accountsView->setModel( m_sipModel );
+
+//     ui->checkBoxJabberAutoConnect->setChecked( s->jabberAutoConnect() );
+//     ui->jabberUsername->setText( s->jabberUsername() );
+//     ui->jabberPassword->setText( s->jabberPassword() );
+//     ui->jabberServer->setText( s->jabberServer() );
+//     ui->jabberPort->setValue( s->jabberPort() );
 
     ui->staticHostName->setText( s->externalHostname() );
     ui->staticPort->setValue( s->externalPort() );
 
     ui->proxyButton->setVisible( false );
-
-    // SIP PLUGINS
-    foreach(SipPlugin *plugin, APP->sipHandler()->plugins())
-    {
-        if(plugin->configWidget())
-        {
-            qDebug() << "Adding configWidget for " << plugin->name();
-            ui->tabWidget->addTab(plugin->configWidget(), plugin->friendlyName());
-        }
-    }
 
     // MUSIC SCANNER
     //FIXME: MULTIPLECOLLECTIONDIRS
@@ -130,12 +129,6 @@ SettingsDialog::~SettingsDialog()
         s->setHttpEnabled( ui->checkBoxHttp->checkState() == Qt::Checked );
         s->setPreferStaticHostPort( ui->checkBoxStaticPreferred->checkState() == Qt::Checked );
         s->setExternalAddressMode( ui->checkBoxUpnp->checkState() == Qt::Checked ? TomahawkSettings::Upnp : TomahawkSettings::Lan );
-
-        s->setJabberAutoConnect( ui->checkBoxJabberAutoConnect->checkState() == Qt::Checked );
-        s->setJabberUsername( ui->jabberUsername->text() );
-        s->setJabberPassword( ui->jabberPassword->text() );
-        s->setJabberServer( ui->jabberServer->text() );
-        s->setJabberPort( ui->jabberPort->value() );
 
         s->setExternalHostname( ui->staticHostName->text() );
         s->setExternalPort( ui->staticPort->value() );

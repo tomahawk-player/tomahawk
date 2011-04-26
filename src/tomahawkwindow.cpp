@@ -172,11 +172,14 @@ TomahawkWindow::TomahawkWindow( QWidget* parent )
     m_backAvailable->setToolTip( tr( "Go back one page" ) );
     m_forwardAvailable = toolbar->addAction( QIcon( RESPATH "images/forward.png" ), tr( "Forward" ), ViewManager::instance(), SLOT( historyForward() ) );
     m_forwardAvailable->setToolTip( tr( "Go forward one page" ) );
+    toolbar->addAction( QIcon( RESPATH "images/home.png" ), tr( "Home" ), ViewManager::instance(), SLOT( showWelcomePage() ) );
 
     statusBar()->addPermanentWidget( m_audioControls, 1 );
 
     // propagate sip menu
-    foreach( SipPlugin *plugin, APP->sipHandler()->plugins() )
+    connect( SipHandler::instance(), SIGNAL( pluginAdded( SipPlugin* ) ), this, SLOT( onSipPluginAdded( SiPlugin* ) ) );
+    connect( SipHandler::instance(), SIGNAL( pluginRemoved( SipPlugin* ) ), this, SLOT( onSipPluginRemoved( SiPlugin* ) ) );
+    foreach( SipPlugin *plugin, APP->sipHandler()->allPlugins() )
     {
         connect( plugin, SIGNAL( addMenu( QMenu* ) ), this, SLOT( pluginMenuAdded( QMenu* ) ) );
         connect( plugin, SIGNAL( removeMenu( QMenu* ) ), this, SLOT( pluginMenuRemoved( QMenu* ) ) );
@@ -469,6 +472,19 @@ void
 TomahawkWindow::onSipDisconnected()
 {
     ui->actionToggleConnect->setText( tr( "Go &online" ) );
+}
+
+void
+TomahawkWindow::onSipPluginAdded( SipPlugin* p )
+{
+    connect( p, SIGNAL( addMenu( QMenu* ) ), this, SLOT( pluginMenuAdded( QMenu* ) ) );
+    connect( p, SIGNAL( removeMenu( QMenu* ) ), this, SLOT( pluginMenuRemoved( QMenu* ) ) );
+}
+
+void
+TomahawkWindow::onSipPluginRemoved( SipPlugin* p )
+{
+    Q_UNUSED( p );
 }
 
 

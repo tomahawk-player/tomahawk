@@ -27,20 +27,34 @@
 
 #define MYNAME "SIPJREEN"
 
+class SIPDLLEXPORT JabberFactory : public SipPluginFactory
+{
+    Q_OBJECT
+    Q_INTERFACES( SipPluginFactory )
+
+public:
+    JabberFactory() {}
+    virtual ~JabberFactory() {}
+
+    virtual QString prettyName() { return "Jabber"; }
+    virtual QString factoryId() { return "sipjabber"; }
+    virtual SipPlugin* createPlugin( const QString& pluginId );
+};
+
 class SIPDLLEXPORT JabberPlugin : public SipPlugin
 {
     Q_OBJECT
-    Q_INTERFACES( SipPlugin )
 
 public:
-    JabberPlugin();
+    JabberPlugin( const QString& pluginId );
     virtual ~JabberPlugin();
 
     //FIXME: Make this more correct
-    virtual bool isValid() { return true; }
-    virtual const QString name();
-    virtual const QString friendlyName();
-    virtual const QString accountName();
+    virtual bool isValid() const { return true; }
+    virtual const QString name() const;
+    virtual const QString friendlyName() const;
+    virtual const QString accountName() const;
+    virtual ConnectionState connectionState() const;
     virtual QMenu* menu();
 
     void setProxy( QNetworkProxy* proxy );
@@ -60,6 +74,11 @@ private slots:
     void onAuthError(int code, const QString &msg);
 
 private:
+    QString readPassword();
+    QString readServer();
+    bool readAutoConnect();
+    int readPort();
+
     Jabber_p* p;
     QMenu* m_menu;
     QAction* m_addFriendAction;
@@ -68,6 +87,7 @@ private:
     QString m_currentPassword;
     QString m_currentServer;
     unsigned int m_currentPort;
+    ConnectionState m_state;
 };
 
 #endif

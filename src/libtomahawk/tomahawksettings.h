@@ -68,21 +68,19 @@ public:
     QList<Tomahawk::playlist_ptr> recentlyPlayedPlaylists() const;
     void appendRecentlyPlayedPlaylist( const Tomahawk::playlist_ptr& playlist );
 
-    /// Jabber settings
-    bool jabberAutoConnect() const; /// true by default
-    void setJabberAutoConnect( bool autoconnect = false );
+    /// SIP plugins
+    // all plugins we know about. loaded, unloaded, enabled, disabled.
+    void setSipPlugins( const QStringList& plugins );
+    QStringList sipPlugins() const;
 
-    QString jabberUsername() const;
-    void setJabberUsername( const QString& username );
+    // just the enabled sip plugins.
+    void setEnabledSipPlugins( const QStringList& list );
+    QStringList enabledSipPlugins() const;
+    void enableSipPlugin( const QString& pluginId );
+    void disableSipPlugin( const QString& pluginId );
 
-    QString jabberPassword() const;
-    void setJabberPassword( const QString& pw );
-
-    QString jabberServer() const;
-    void setJabberServer( const QString& server );
-
-    unsigned int jabberPort() const; // default is 5222
-    void setJabberPort( int port );
+    void addSipPlugin( const QString& pluginId, bool enable = true );
+    void removeSipPlugin( const QString& pluginId );
 
     /// Network settings
     enum ExternalAddressMode { Lan, Upnp };
@@ -134,28 +132,6 @@ public:
     QByteArray lastFmSessionKey() const;
     void setLastFmSessionKey( const QByteArray& key );
 
-    /// Twitter settings
-    QString twitterScreenName() const;
-    void setTwitterScreenName( const QString& screenName );
-
-    QString twitterOAuthToken() const;
-    void setTwitterOAuthToken( const QString& oauthtoken );
-
-    QString twitterOAuthTokenSecret() const;
-    void setTwitterOAuthTokenSecret( const QString& oauthtokensecret );
-
-    qint64 twitterCachedFriendsSinceId() const;
-    void setTwitterCachedFriendsSinceId( qint64 sinceid );
-
-    qint64 twitterCachedMentionsSinceId() const;
-    void setTwitterCachedMentionsSinceId( qint64 sinceid );
-
-    qint64 twitterCachedDirectMessagesSinceId() const;
-    void setTwitterCachedDirectMessagesSinceId( qint64 sinceid );
-
-    QHash<QString, QVariant> twitterCachedPeers() const;
-    void setTwitterCachedPeers( const QHash<QString, QVariant> &cachedPeers );
-
     /// XMPP Component Settings
     QString xmppBotServer() const;
     void setXmppBotServer( const QString &server );
@@ -181,6 +157,8 @@ signals:
     void changed();
 
 private:
+    void doUpgrade( int oldVersion, int newVersion );
+
     static TomahawkSettings* s_instance;
 };
 

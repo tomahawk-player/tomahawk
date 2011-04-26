@@ -42,6 +42,8 @@ SipHandler* SipHandler::s_instance = 0;
 
 SipHandler* SipHandler::instance()
 {
+    if( s_instance == 0 )
+        s_instance = new SipHandler( 0 );
     return s_instance;
 }
 
@@ -51,7 +53,7 @@ SipHandler::SipHandler( QObject* parent )
 {
     s_instance = this;
 
-    loadPlugins( findPlugins() );
+    loadPluginFactories( findPluginFactories() );
 
     connect( TomahawkSettings::instance(), SIGNAL( changed() ), SLOT( onSettingsChanged() ) );
 }
@@ -59,14 +61,7 @@ SipHandler::SipHandler( QObject* parent )
 
 SipHandler::~SipHandler()
 {
-    disconnectPlugins();
-}
-
-
-QList< SipPlugin* >
-SipHandler::plugins() const
-{
-    return m_plugins;
+    disconnectAll();
 }
 
 const QPixmap SipHandler::avatar( const QString& name ) const
@@ -95,7 +90,7 @@ SipHandler::onSettingsChanged()
 
 
 QStringList
-SipHandler::findPlugins()
+SipHandler::findPluginFactories()
 {
     QStringList paths;
     QList< QDir > pluginDirs;
@@ -137,7 +132,7 @@ SipHandler::findPlugins()
 
 
 void
-SipHandler::loadPlugins( const QStringList& paths )
+SipHandler::loadPluginFactories( const QStringList& paths )
 {
     foreach ( QString fileName, paths )
     {
@@ -145,13 +140,69 @@ SipHandler::loadPlugins( const QStringList& paths )
             continue;
 
         qDebug() << "Trying to load plugin:" << fileName;
-        loadPlugin( fileName );
+        loadPluginFactory( fileName );
     }
+}
+
+SipPlugin*
+SipHandler::createPlugin( const QString& factoryName )
+{
+    Q_ASSERT( m_pluginFactories.contains( factoryName ) );
+
+    SipPlugin* sip = m_pluginFactories[ factoryName ]->createPlugin();
+    hookUpPlugin( sip );
+
+    return sip;
+}
+
+SipPlugin*
+SipHandler::loadPlugin( const QString& pluginId )
+{
+    QString factoryName = factoryFromId( pluginId );
+
+    Q_ASSERT( m_pluginFactories.contains( factoryName ) );
+
+    SipPlugin* sip = m_pluginFactories[ factoryName ]->createPlugin( pluginId );
+    hookUpPlugin( sip );
+
+    return sip;
+}
+
+void
+SipHandler::removePlugin( SipPlugin* p )
+{
+    p->disconnectPlugin();
+
+    m_allPlugins.removeAll( p );
+    m_enabledPlugins.removeAll( p );
+
+    TomahawkSettings::instance()->removeSipPlugin( p->pluginId() );
+
+    emit pluginRemoved( p );
 }
 
 
 void
-SipHandler::loadPlugin( const QString& path )
+SipHandler::hookUpPlugin( SipPlugin* sip )
+{
+    QObject::connect( sip, SIGNAL( peerOnline( QString ) ), SLOT( onPeerOnline( QString ) ) );
+    QObject::connect( sip, SIGNAL( peerOffline( QString ) ), SLOT( onPeerOffline( QString ) ) );
+    QObject::connect( sip, SIGNAL( msgReceived( QString, QString ) ), SLOT( onMessage( QString, QString ) ) );
+
+    QObject::connect( sip, SIGNAL( error( int, QString ) ), SLOT( onError( int, QString ) ) );
+    QObject::connect( sip, SIGNAL( stateChanged( SipPlugin::ConnectionState ) ), SLOT( onStateChanged( SipPlugin::ConnectionState ) ) );
+
+    QObject::connect( sip, SIGNAL( avatarReceived( QString, QPixmap ) ), SLOT( onAvatarReceived( QString, QPixmap ) ) );
+    QObject::connect( sip, SIGNAL( avatarReceived( QPixmap ) ), SLOT( onAvatarReceived( QPixmap ) ) );
+
+    m_allPlugins << sip;
+
+    emit pluginAdded( sip );
+}
+
+
+void
+SipHandler::loadPluginFactory( const QString& path )
 {
     QPluginLoader loader( path );
     QObject* plugin = loader.instance();
@@ -160,37 +211,24 @@ SipHandler::loadPlugin( const QString& path )
         qDebug() << "Error loading plugin:" << loader.errorString();
     }
 
-    SipPlugin* sip = qobject_cast<SipPlugin*>(plugin);
-    if ( sip )
+    SipPluginFactory* sipfactory = qobject_cast<SipPluginFactory*>(plugin);
+    if ( sipfactory )
     {
-        if ( pluginLoaded( sip->name() ) )
-        {
-            qDebug() << "Plugin" << sip->name() << "already loaded! Not loading:" << loader.fileName();
-            return;
-        }
-        qDebug() << "Loaded plugin:" << loader.fileName();
-
-        QObject::connect( sip, SIGNAL( peerOnline( QString ) ), SLOT( onPeerOnline( QString ) ) );
-        QObject::connect( sip, SIGNAL( peerOffline( QString ) ), SLOT( onPeerOffline( QString ) ) );
-        QObject::connect( sip, SIGNAL( msgReceived( QString, QString ) ), SLOT( onMessage( QString, QString ) ) );
-
-        QObject::connect( sip, SIGNAL( connected() ), SIGNAL( connected() ) );
-        QObject::connect( sip, SIGNAL( disconnected() ), SIGNAL( disconnected() ) );
-        QObject::connect( sip, SIGNAL( error( int, QString ) ), SLOT( onError( int, QString ) ) );
-
-        QObject::connect( sip, SIGNAL( avatarReceived( QString, QPixmap ) ), SLOT( onAvatarReceived( QString, QPixmap ) ) );
-        QObject::connect( sip, SIGNAL( avatarReceived( QPixmap ) ), SLOT( onAvatarReceived( QPixmap ) ) );
-        m_plugins << sip;
+        qDebug() << "Loaded plugin factory:" << loader.fileName() << sipfactory->factoryId() << sipfactory->prettyName();
+        m_pluginFactories[ sipfactory->factoryId() ] = sipfactory;
+    } else
+    {
+        qDebug() << "Loaded invalid plugin.." << loader.fileName();
     }
 }
 
 
 bool
-SipHandler::pluginLoaded( const QString& name ) const
+SipHandler::pluginLoaded( const QString& pluginId ) const
 {
-    foreach( SipPlugin* plugin, m_plugins )
+    foreach( SipPlugin* plugin, m_allPlugins )
     {
-        if ( plugin->name() == name )
+        if ( plugin->pluginId() == pluginId )
             return true;
     }
 
@@ -201,15 +239,75 @@ SipHandler::pluginLoaded( const QString& name ) const
 void
 SipHandler::checkSettings()
 {
-    foreach( SipPlugin* sip, m_plugins )
+    foreach( SipPlugin* sip, m_allPlugins )
     {
         sip->checkSettings();
     }
 }
 
+void
+SipHandler::loadFromConfig( bool startup )
+{
+    QStringList pluginIds = TomahawkSettings::instance()->enabledSipPlugins();
+    foreach( const QString& pluginId, pluginIds )
+    {
+        QString pluginFactory = factoryFromId( pluginId );
+        if( m_pluginFactories.contains( pluginFactory ) )
+        {
+            SipPlugin* p = loadPlugin( pluginId );
+            p->connectPlugin( startup );
+
+            m_enabledPlugins << p;
+        }
+    }
+    m_connected = true;
+}
 
 void
-SipHandler::connectPlugins( bool startup, const QString &pluginName )
+SipHandler::connectAll()
+{
+    foreach( SipPlugin* sip, m_enabledPlugins )
+    {
+        sip->connectPlugin();
+    }
+    m_connected = true;
+}
+
+
+void
+SipHandler::disconnectAll()
+{
+    foreach( SipPlugin* p, m_connectedPlugins )
+        p->disconnectPlugin();
+
+    SourceList::instance()->removeAllRemote();
+    m_connected = false;
+}
+
+void
+SipHandler::disablePlugin( SipPlugin* p )
+{
+    Q_ASSERT( m_enabledPlugins.contains( p ) );
+
+    TomahawkSettings::instance()->disableSipPlugin( p->pluginId() );
+    p->disconnectPlugin();
+
+    m_enabledPlugins.removeAll( p );
+}
+
+void
+SipHandler::enablePlugin( SipPlugin* p )
+{
+    Q_ASSERT( !m_enabledPlugins.contains( p ) );
+    p->connectPlugin();
+
+    TomahawkSettings::instance()->enableSipPlugin( p->pluginId() );
+    m_enabledPlugins << p;
+}
+
+
+void
+SipHandler::connectPlugin( bool startup, const QString &pluginId )
 {
 #ifndef TOMAHAWK_HEADLESS
     if ( !TomahawkSettings::instance()->acceptedLegalWarning() )
@@ -226,33 +324,49 @@ SipHandler::connectPlugins( bool startup, const QString &pluginName )
             TomahawkSettings::instance()->setAcceptedLegalWarning( true );
     }
 #endif
-    foreach( SipPlugin* sip, m_plugins )
+    foreach( SipPlugin* sip, m_allPlugins )
     {
-        if ( pluginName.isEmpty() || ( !pluginName.isEmpty() && sip->name() == pluginName ) )
+        if ( sip->pluginId() == pluginId )
+        {
+            Q_ASSERT( m_enabledPlugins.contains( sip ) ); // make sure the plugin we're connecting is enabled. should always be the case
             sip->connectPlugin( startup );
-    }
-
-    if ( pluginName.isEmpty() )
-    {
-        m_connected = true;
+        }
     }
 }
 
 
 void
-SipHandler::disconnectPlugins( const QString &pluginName )
+SipHandler::disconnectPlugin( const QString &pluginName )
 {
-    foreach( SipPlugin* sip, m_plugins )
+    foreach( SipPlugin* sip, m_connectedPlugins )
     {
-        if ( pluginName.isEmpty() || ( !pluginName.isEmpty() && sip->name() == pluginName ) )
+        if ( sip->name() == pluginName )
             sip->disconnectPlugin();
     }
+}
 
-    if ( pluginName.isEmpty() )
-    {
-        SourceList::instance()->removeAllRemote();
-        m_connected = false;
-    }
+QList< SipPlugin* >
+SipHandler::allPlugins() const
+{
+    return m_allPlugins;
+}
+
+QList< SipPlugin* >
+SipHandler::enabledPlugins() const
+{
+    return m_enabledPlugins;
+}
+
+QList< SipPlugin* >
+SipHandler::connectedPlugins() const
+{
+    return m_connectedPlugins;
+}
+
+QList< SipPluginFactory* >
+SipHandler::pluginFactories() const
+{
+    return m_pluginFactories.values();
 }
 
 
@@ -260,9 +374,9 @@ void
 SipHandler::toggleConnect()
 {
     if( m_connected )
-        disconnectPlugins();
+        disconnectAll();
     else
-        connectPlugins();
+        connectAll();
 }
 
 
@@ -368,20 +482,43 @@ SipHandler::onMessage( const QString& from, const QString& msg )
 void
 SipHandler::onError( int code, const QString& msg )
 {
-    qWarning() << "Failed to connect to SIP:" << code << msg;
+    SipPlugin* sip = qobject_cast< SipPlugin* >( sender() );
+    Q_ASSERT( sip );
+
+    qWarning() << "Failed to connect to SIP:" << sip->accountName() << code << msg;
 
     if ( code == SipPlugin::AuthError )
     {
-        emit authError();
+        emit authError( sip );
     }
     else
     {
-        SipPlugin* sip = qobject_cast<SipPlugin*>(sender());
         QTimer::singleShot( 10000, sip, SLOT( connectPlugin() ) );
     }
 }
 
-void SipHandler::onAvatarReceived( const QString& from, const QPixmap& avatar )
+void
+SipHandler::onStateChanged( SipPlugin::ConnectionState state )
+{
+    SipPlugin* sip = qobject_cast< SipPlugin* >( sender() );
+    Q_ASSERT( sip );
+
+    if ( sip->connectionState() == SipPlugin::Disconnected )
+    {
+        m_connectedPlugins.removeAll( sip );
+        emit disconnected( sip );
+    } else if ( sip->connectionState() == SipPlugin::Connected )
+    {
+        m_connectedPlugins.removeAll( sip );
+        emit disconnected( sip );
+    }
+
+    emit stateChanged( sip, state );
+}
+
+
+void
+SipHandler::onAvatarReceived( const QString& from, const QPixmap& avatar )
 {
     qDebug() << Q_FUNC_INFO << "Set avatar on source for " << from;
     Q_ASSERT(!avatar.isNull());
@@ -413,8 +550,16 @@ void SipHandler::onAvatarReceived( const QString& from, const QPixmap& avatar )
     }
 }
 
-void SipHandler::onAvatarReceived( const QPixmap& avatar )
+void
+SipHandler::onAvatarReceived( const QPixmap& avatar )
 {
     qDebug() << Q_FUNC_INFO << "Set own avatar on MyCollection";
     SourceList::instance()->getLocal()->setAvatar( avatar );
+}
+
+
+QString
+SipHandler::factoryFromId( const QString& pluginId )
+{
+    return pluginId.split( "_" ).first();
 }

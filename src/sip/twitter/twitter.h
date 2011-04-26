@@ -1,5 +1,5 @@
 /* === This file is part of Tomahawk Player - <http://tomahawk-player.org> ===
- * 
+ *
  *   Copyright 2010-2011, Christian Muehlhaeuser <muesli@tomahawk-player.org>
  *
  *   Tomahawk is free software: you can redistribute it and/or modify
@@ -40,21 +40,34 @@
 
 #define MYNAME "SIPTWITTER"
 
+class SIPDLLEXPORT TwitterFactory : public SipPluginFactory
+{
+    Q_OBJECT
+    Q_INTERFACES( SipPluginFactory )
+
+public:
+    TwitterFactory() {}
+    virtual ~TwitterFactory() {}
+
+    virtual QString prettyName() { return "Twitter"; }
+    virtual QString factoryId() { return "siptwitter"; }
+    virtual SipPlugin* createPlugin( const QString& pluginId = QString() );
+};
+
 class SIPDLLEXPORT TwitterPlugin : public SipPlugin
 {
     Q_OBJECT
-    Q_INTERFACES( SipPlugin )
-    
+
 public:
-    TwitterPlugin();
+    TwitterPlugin( const QString& pluginId );
 
     virtual ~TwitterPlugin() {}
-    
-    virtual bool isValid();
-    virtual const QString name();
-    virtual const QString accountName();
-    virtual const QString friendlyName();
 
+    virtual bool isValid() const;
+    virtual const QString name() const;
+    virtual const QString accountName() const;
+    virtual const QString friendlyName() const;
+    virtual ConnectionState connectionState() const;
     virtual QWidget* configWidget();
 
 public slots:
@@ -98,6 +111,21 @@ private slots:
 private:
     bool refreshTwitterAuth();
     void parseGotTomahawk( const QRegExp &regex, const QString &screenName, const QString &text );
+    // handle per-plugin config
+    QString twitterScreenName() const;
+    void setTwitterScreenName( const QString& screenName );
+    QString twitterOAuthToken() const;
+    void setTwitterOAuthToken( const QString& oauthtoken );
+    QString twitterOAuthTokenSecret() const;
+    void setTwitterOAuthTokenSecret( const QString& oauthtokensecret );
+    qint64 twitterCachedFriendsSinceId() const;
+    void setTwitterCachedFriendsSinceId( qint64 sinceid );
+    qint64 twitterCachedMentionsSinceId() const;
+    void setTwitterCachedMentionsSinceId( qint64 sinceid );
+    qint64 twitterCachedDirectMessagesSinceId() const;
+    void setTwitterCachedDirectMessagesSinceId( qint64 sinceid );
+    QHash<QString, QVariant> twitterCachedPeers() const;
+    void setTwitterCachedPeers( const QHash<QString, QVariant> &cachedPeers );
 
     QWeakPointer< TomahawkOAuthTwitter > m_twitterAuth;
     QWeakPointer< QTweetFriendsTimeline > m_friendsTimeline;
@@ -105,8 +133,8 @@ private:
     QWeakPointer< QTweetDirectMessages > m_directMessages;
     QWeakPointer< QTweetDirectMessageNew > m_directMessageNew;
     QWeakPointer< QTweetDirectMessageDestroy > m_directMessageDestroy;
+
     bool m_isAuthed;
-    bool m_isOnline;
     QTimer m_checkTimer;
     QTimer m_connectTimer;
     qint64 m_cachedFriendsSinceId;
@@ -116,8 +144,12 @@ private:
     QSet<QString> m_keyCache;
     bool m_finishedFriends;
     bool m_finishedMentions;
+    ConnectionState m_state;
 
     TwitterConfigWidget *m_configWidget;
+
+    // for settings access
+    friend class TwitterConfigWidget;
 };
 
 #endif

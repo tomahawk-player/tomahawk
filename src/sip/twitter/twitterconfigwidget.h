@@ -1,5 +1,5 @@
 /* === This file is part of Tomahawk Player - <http://tomahawk-player.org> ===
- * 
+ *
  *   Copyright 2010-2011, Christian Muehlhaeuser <muesli@tomahawk-player.org>
  *
  *   Tomahawk is free software: you can redistribute it and/or modify
@@ -28,6 +28,7 @@
 
 #include <QWidget>
 
+class TwitterPlugin;
 
 namespace Ui {
     class TwitterConfigWidget;
@@ -38,12 +39,12 @@ class TwitterConfigWidget : public QWidget
     Q_OBJECT
 
 public:
-    explicit TwitterConfigWidget( SipPlugin* plugin = 0, QWidget *parent = 0 );
+    explicit TwitterConfigWidget( TwitterPlugin* plugin = 0, QWidget *parent = 0 );
     ~TwitterConfigWidget();
 
 signals:
     void twitterAuthed( bool authed );
-    
+
 private slots:
     void authDeauthTwitter();
     void startPostGotTomahawkStatus();
@@ -58,9 +59,9 @@ private slots:
 private:
     void authenticateTwitter();
     void deauthenticateTwitter();
-    
+
     Ui::TwitterConfigWidget *ui;
-    SipPlugin *m_plugin;
+    TwitterPlugin *m_plugin;
     QString m_postGTtype;
 };
 

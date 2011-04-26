@@ -1,5 +1,5 @@
 /* === This file is part of Tomahawk Player - <http://tomahawk-player.org> ===
- * 
+ *
  *   Copyright 2010-2011, Christian Muehlhaeuser <muesli@tomahawk-player.org>
  *
  *   Tomahawk is free software: you can redistribute it and/or modify
@@ -20,23 +20,38 @@
 
 #include <QtPlugin>
 
+SipPlugin*
+ZeroconfFactory::createPlugin( const QString& pluginId )
+{
+    return new ZeroconfPlugin( pluginId.isEmpty() ? generateId() : pluginId );
+}
+
+
+
 const QString
-ZeroconfPlugin::name()
+ZeroconfPlugin::name() const
 {
     return QString( MYNAME );
 }
 
 const QString
-ZeroconfPlugin::accountName()
+ZeroconfPlugin::accountName() const
 {
     return QString();
 }
 
 const QString
-ZeroconfPlugin::friendlyName()
+ZeroconfPlugin::friendlyName() const
 {
     return QString( "Zeroconf" );
 }
+
+SipPlugin::ConnectionState
+ZeroconfPlugin::connectionState() const
+{
+    return m_state;
+}
+
 
 bool
 ZeroconfPlugin::connectPlugin( bool /*startup*/ )
@@ -47,7 +62,7 @@ ZeroconfPlugin::connectPlugin( bool /*startup*/ )
                                     SLOT( lanHostFound( QString, int, QString, QString ) ) );
 
     m_zeroconf->advertise();
-    m_isOnline = true;
+    m_state = Connected;
 
     foreach( const QStringList& nodeSet, m_cachedNodes )
     {
@@ -61,7 +76,7 @@ ZeroconfPlugin::connectPlugin( bool /*startup*/ )
 void
 ZeroconfPlugin::disconnectPlugin()
 {
-    m_isOnline = false;
+    m_state = Disconnected;
 
     delete m_zeroconf;
     m_zeroconf = 0;
@@ -75,7 +90,7 @@ ZeroconfPlugin::lanHostFound( const QString& host, int port, const QString& name
 
     qDebug() << "Found LAN host:" << host << port << nodeid;
 
-    if ( !m_isOnline )
+    if ( m_state != Connected )
     {
         qDebug() << "Not online, so not connecting.";
         QStringList nodeSet;
@@ -83,11 +98,11 @@ ZeroconfPlugin::lanHostFound( const QString& host, int port, const QString& name
         m_cachedNodes.append( nodeSet );
         return;
     }
-    
+
     if ( !Servent::instance()->connectedToSession( nodeid ) )
         Servent::instance()->connectToPeer( host, port, "whitelist", name, nodeid );
     else
         qDebug() << "Already connected to" << host;
 }
 
-Q_EXPORT_PLUGIN2( sip, ZeroconfPlugin )
+Q_EXPORT_PLUGIN2( sipfactory, ZeroconfFactory )

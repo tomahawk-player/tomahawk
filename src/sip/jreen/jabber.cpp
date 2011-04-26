@@ -27,10 +27,18 @@
 #include <QLineEdit>
 #include <QMessageBox>
 
-JabberPlugin::JabberPlugin()
-    : p( 0 )
+SipPlugin*
+JabberFactory::createPlugin( const QString& pluginId )
+{
+    return new JabberPlugin( pluginId.isEmpty() ? generateId() : pluginId );
+}
+
+JabberPlugin::JabberPlugin( const QString& pluginId )
+    : SipPlugin( pluginId )
+    , p( 0 )
     , m_menu( 0 )
     , m_addFriendAction( 0 )
+    , m_state( Disconnected )
 {
 }
 
@@ -47,21 +55,21 @@ JabberPlugin::setProxy( QNetworkProxy* proxy )
 
 
 const QString
-JabberPlugin::name()
+JabberPlugin::name() const
 {
     return QString( MYNAME );
 }
 
 const QString
-JabberPlugin::friendlyName()
+JabberPlugin::friendlyName() const
 {
     return QString( "Jabber" );
 }
 
 const QString
-JabberPlugin::accountName()
+JabberPlugin::accountName() const
 {
-    return TomahawkSettings::instance()->jabberUsername();
+    return TomahawkSettings::instance()->value( pluginId() + "/username" ).toString();
 }
 
 QMenu*
@@ -75,13 +83,13 @@ JabberPlugin::connectPlugin( bool startup )
 {
     qDebug() << Q_FUNC_INFO;
 
-    if ( startup && !TomahawkSettings::instance()->jabberAutoConnect() )
+    if ( startup && !readAutoConnect() )
         return false;
 
-    QString jid       = m_currentUsername = TomahawkSettings::instance()->jabberUsername();
-    QString server    = m_currentServer = TomahawkSettings::instance()->jabberServer();
-    QString password  = m_currentPassword = TomahawkSettings::instance()->jabberPassword();
-    unsigned int port = m_currentPort = TomahawkSettings::instance()->jabberPort();
+    QString jid       = m_currentUsername = accountName();
+    QString server    = m_currentServer = readServer();
+    QString password  = m_currentPassword = readPassword();
+    unsigned int port = m_currentPort = readPort();
 
     QStringList splitJid = jid.split( '@', QString::SkipEmptyParts );
     if ( splitJid.size() < 2 )
@@ -110,6 +118,8 @@ JabberPlugin::connectPlugin( bool startup )
     QObject::connect( p, SIGNAL( avatarReceived( QString, QPixmap ) ), SIGNAL( avatarReceived( QString, QPixmap ) ) );
     QObject::connect( p, SIGNAL( avatarReceived( QPixmap ) ), SIGNAL( avatarReceived( QPixmap) ) );
 
+    m_state = Connecting;
+    emit stateChanged( m_state );
     return true;
 }
 
@@ -140,7 +150,9 @@ JabberPlugin::onConnected()
         emit addMenu( m_menu );
     }
 
-    emit connected();
+    m_state = Connected;
+
+    emit stateChanged( m_state );
 }
 
 void
@@ -154,7 +166,9 @@ JabberPlugin::onDisconnected()
         m_addFriendAction = 0; // deleted by menu
     }
 
-    emit disconnected();
+    m_state = Disconnected;
+
+    emit stateChanged( m_state );
 }
 
 void
@@ -182,6 +196,9 @@ JabberPlugin::onAuthError( int code, const QString& msg )
             Q_ASSERT(false);
             break;
     }
+    m_state = Disconnected;
+
+    emit stateChanged( m_state );
 }
 
 void
@@ -223,25 +240,56 @@ void
 JabberPlugin::checkSettings()
 {
     bool reconnect = false;
-    if ( m_currentUsername != TomahawkSettings::instance()->jabberUsername() )
+    if ( m_currentUsername != accountName() )
         reconnect = true;
-    if ( m_currentPassword != TomahawkSettings::instance()->jabberPassword() )
+    if ( m_currentPassword != readPassword() )
         reconnect = true;
-    if ( m_currentServer != TomahawkSettings::instance()->jabberServer() )
+    if ( m_currentServer != readServer() )
         reconnect = true;
-    if ( m_currentPort != TomahawkSettings::instance()->jabberPort() )
+    if ( m_currentPort != readPort() )
         reconnect = true;
 
-    m_currentUsername = TomahawkSettings::instance()->jabberUsername();
-    m_currentPassword = TomahawkSettings::instance()->jabberPassword();
-    m_currentServer = TomahawkSettings::instance()->jabberServer();
-    m_currentPort = TomahawkSettings::instance()->jabberPort();
+    m_currentUsername = accountName();
+    m_currentPassword = readPassword();
+    m_currentServer = readServer();
+    m_currentPort = readPort();
 
-    if ( reconnect && ( p || TomahawkSettings::instance()->jabberAutoConnect() ) )
+    if ( reconnect && ( p || readAutoConnect() ) )
     {
         disconnectPlugin();
         connectPlugin( false );
     }
 }
 
-Q_EXPORT_PLUGIN2( sip, JabberPlugin )
+QString
+JabberPlugin::readPassword()
+{
+    return TomahawkSettings::instance()->value( pluginId() + "/password" ).toString();
+}
+
+int
+JabberPlugin::readPort()
+{
+    return TomahawkSettings::instance()->value( pluginId() + "/port", 5222 ).toInt();
+}
+
+QString
+JabberPlugin::readServer()
+{
+    return TomahawkSettings::instance()->value( pluginId() + "/server" ).toString();
+}
+
+bool
+JabberPlugin::readAutoConnect()
+{
+    return TomahawkSettings::instance()->value( pluginId() + "/autoconnect", true ).toBool();
+}
+
+SipPlugin::ConnectionState
+JabberPlugin::connectionState() const
+{
+    return m_state;
+}
+
+
+Q_EXPORT_PLUGIN2( sipfactory, JabberFactory )

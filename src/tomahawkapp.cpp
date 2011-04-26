@@ -147,7 +147,6 @@ TomahawkApp::TomahawkApp( int& argc, char *argv[] )
     , m_database( 0 )
     , m_scanManager( 0 )
     , m_audioEngine( 0 )
-    , m_sipHandler( 0 )
     , m_servent( 0 )
     , m_shortcutHandler( 0 )
     , m_mainwindow( 0 )
@@ -166,13 +165,13 @@ TomahawkApp::init()
 {
     qsrand( QTime( 0, 0, 0 ).secsTo( QTime::currentTime() ) );
 
-    #ifdef TOMAHAWK_HEADLESS
+#ifdef TOMAHAWK_HEADLESS
     m_headless = true;
-    #else
+#else
     m_mainwindow = 0;
     m_headless = arguments().contains( "--headless" );
     setWindowIcon( QIcon( RESPATH "icons/tomahawk-icon-128x128.png" ) );
-    #endif
+#endif
 
     registerMetaTypes();
 
@@ -193,12 +192,12 @@ TomahawkApp::init()
     GeneratorFactory::registerFactory( "echonest", new EchonestFactory );
 
     // Register shortcut handler for this platform
-    #ifdef Q_WS_MAC
+#ifdef Q_WS_MAC
     m_shortcutHandler = new MacShortcutHandler( this );
     Tomahawk::setShortcutHandler( static_cast<MacShortcutHandler*>( m_shortcutHandler) );
 
     Tomahawk::setApplicationHandler( this );
-    #endif
+#endif
 
     // Connect up shortcuts
     if ( m_shortcutHandler )
@@ -249,9 +248,9 @@ TomahawkApp::init()
     QNetworkProxy::setApplicationProxy( *TomahawkUtils::proxy() );
 
     qDebug() << "Init SIP system.";
-    m_sipHandler = new SipHandler( this );
 
-    #ifndef TOMAHAWK_HEADLESS
+
+#ifndef TOMAHAWK_HEADLESS
     if ( !m_headless )
     {
         qDebug() << "Init MainWindow.";
@@ -259,7 +258,7 @@ TomahawkApp::init()
         m_mainwindow->setWindowTitle( "Tomahawk" );
         m_mainwindow->show();
     }
-    #endif
+#endif
 
     qDebug() << "Init Local Collection.";
     initLocalCollection();
@@ -294,7 +293,6 @@ TomahawkApp::~TomahawkApp()
     }
     m_scriptResolvers.clear();
 
-    delete m_sipHandler;
     delete m_servent;
     delete m_scanManager;
 #ifndef TOMAHAWK_HEADLESS
@@ -321,6 +319,11 @@ TomahawkApp::audioControls()
 }
 #endif
 
+SipHandler*
+TomahawkApp::sipHandler()
+{
+    return SipHandler::instance();
+}
 
 void
 TomahawkApp::registerMetaTypes()
@@ -492,15 +495,15 @@ TomahawkApp::setupSIP()
     qDebug() << Q_FUNC_INFO;
 
     //FIXME: jabber autoconnect is really more, now that there is sip -- should be renamed and/or split out of jabber-specific settings
-    if( !arguments().contains( "--nosip" ) && TomahawkSettings::instance()->jabberAutoConnect() )
+    if( !arguments().contains( "--nosip" ) )
     {
-        #ifdef GLOOX_FOUND
+#ifdef GLOOX_FOUND
         m_xmppBot = new XMPPBot( this );
-        #endif
+#endif
 
         qDebug() << "Connecting SIP classes";
-        m_sipHandler->connectPlugins( true );
-//        m_sipHandler->setProxy( *TomahawkUtils::proxy() );
+        SipHandler::instance()->loadFromConfig( true );
+//        SipHandler::instance()->setProxy( *TomahawkUtils::proxy() );
     }
 }
 

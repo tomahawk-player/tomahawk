@@ -23,8 +23,18 @@
    <item>
     <widget class="QTabWidget" name="tabWidget">
      <property name="currentIndex">
-      <number>4</number>
+      <number>0</number>
      </property>
+     <widget class="QWidget" name="tabFriends">
+      <attribute name="title">
+       <string>Accounts</string>
+      </attribute>
+      <layout class="QVBoxLayout" name="verticalLayout_20">
+       <item>
+        <widget class="QListView" name="accountsView"/>
+       </item>
+      </layout>
+     </widget>
      <widget class="QWidget" name="tabJabber">
       <attribute name="title">
        <string>Jabber</string>
