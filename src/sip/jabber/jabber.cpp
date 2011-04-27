@@ -1,5 +1,5 @@
 /* === This file is part of Tomahawk Player - <http://tomahawk-player.org> ===
- * 
+ *
  *   Copyright 2010-2011, Christian Muehlhaeuser <muesli@tomahawk-player.org>
  *
  *   Tomahawk is free software: you can redistribute it and/or modify
@@ -42,21 +42,21 @@ JabberPlugin::setProxy( QNetworkProxy* proxy )
 
 
 const QString
-JabberPlugin::name()
+JabberPlugin::name() const
 {
     return QString( MYNAME );
 }
 
 
 const QString
-JabberPlugin::friendlyName()
+JabberPlugin::friendlyName() const
 {
     return QString( "Jabber" );
 }
 
 
 const QString
-JabberPlugin::accountName()
+JabberPlugin::accountName() const
 {
     return TomahawkSettings::instance()->jabberUsername();
 }

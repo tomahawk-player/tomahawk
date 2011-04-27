@@ -24,7 +24,7 @@
 
 #include "../sipdllmacro.h"
 
-#define MYNAME "Local Netwrok"
+#define MYNAME "Local Network"
 
 class SIPDLLEXPORT ZeroconfFactory : public SipPluginFactory
 {
@@ -34,8 +34,8 @@ public:
     ZeroconfFactory() {}
     virtual ~ZeroconfFactory() {}
 
-    virtual QString factoryId() { return "sipzeroconf"; }
-    virtual QString prettyName() { return "Local Network"; }
+    virtual QString factoryId() const { return "sipzeroconf"; }
+    virtual QString prettyName() const { return "Local Network"; }
     virtual SipPlugin* createPlugin ( const QString& pluginId = QString() );
 };
 

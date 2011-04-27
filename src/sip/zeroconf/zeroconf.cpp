@@ -37,13 +37,13 @@ ZeroconfPlugin::name() const
 const QString
 ZeroconfPlugin::accountName() const
 {
-    return QString();
+    return QString( MYNAME );
 }
 
 const QString
 ZeroconfPlugin::friendlyName() const
 {
-    return QString( "Zeroconf" );
+    return QString( MYNAME );
 }
 
 SipPlugin::ConnectionState

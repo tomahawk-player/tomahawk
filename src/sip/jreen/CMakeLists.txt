@@ -51,3 +51,6 @@ IF( APPLE )
 ENDIF( APPLE )
 
 install( TARGETS tomahawk_sipjabber DESTINATION lib${LIB_SUFFIX} )
+
+
+add_subdirectory(googlewrapper)

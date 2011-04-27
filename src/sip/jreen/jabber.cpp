@@ -291,5 +291,6 @@ JabberPlugin::connectionState() const
     return m_state;
 }
 
-
+#ifndef GOOGLE_WRAPPER
 Q_EXPORT_PLUGIN2( sipfactory, JabberFactory )
+#endif

@@ -49,8 +49,8 @@ public:
     TwitterFactory() {}
     virtual ~TwitterFactory() {}
 
-    virtual QString prettyName() { return "Twitter"; }
-    virtual QString factoryId() { return "siptwitter"; }
+    virtual QString prettyName() const { return "Twitter"; }
+    virtual QString factoryId() const { return "siptwitter"; }
     virtual SipPlugin* createPlugin( const QString& pluginId = QString() );
 };
 

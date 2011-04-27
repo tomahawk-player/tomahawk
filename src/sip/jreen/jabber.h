@@ -36,8 +36,8 @@ public:
     JabberFactory() {}
     virtual ~JabberFactory() {}
 
-    virtual QString prettyName() { return "Jabber"; }
-    virtual QString factoryId() { return "sipjabber"; }
+    virtual QString prettyName() const { return "Jabber"; }
+    virtual QString factoryId() const { return "sipjabber"; }
     virtual SipPlugin* createPlugin( const QString& pluginId );
 };
 
