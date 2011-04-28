@@ -44,6 +44,7 @@
 #include "resolversmodel.h"
 #include "resolverconfigwrapper.h"
 #include "sip/SipModel.h"
+#include "sipconfigdelegate.h"
 
 static QString
 md5( const QByteArray& src )
@@ -70,9 +71,9 @@ SettingsDialog::SettingsDialog( QWidget *parent )
     ui->checkBoxUpnp->setEnabled( !s->preferStaticHostPort() );
 
     // SIP PLUGINS
-//     SipPluginDelegate* ad = new SipPluginDelegate( this );
-//     ui->accountsView->setItemDelegate( ad );
-//     connect( ad, SIGNAL( openConfig( QString ) ), this, SLOT( openSipPluginConfig( QString ) ) );
+    SipConfigDelegate* sipdel = new SipConfigDelegate( this );
+    ui->accountsView->setItemDelegate( sipdel );
+//     connect( sipdel, SIGNAL( openConfig( SipPlugin* ) ), this, SLOT( openSipPluginConfig( SipPlugin* ) ) );
     m_sipModel = new SipModel( this );
     ui->accountsView->setModel( m_sipModel );
 

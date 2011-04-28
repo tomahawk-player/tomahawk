@@ -20,23 +20,21 @@
 #ifndef RESOLVERCONFIGDELEGATE_H
 #define RESOLVERCONFIGDELEGATE_H
 
-#include <QStyledItemDelegate>
+#include "configdelegatebase.h"
 
 
-class ResolverConfigDelegate : public QStyledItemDelegate
+class ResolverConfigDelegate : public ConfigDelegateBase
 {
     Q_OBJECT
 public:
     explicit ResolverConfigDelegate(QObject* parent = 0);
     virtual void paint(QPainter* painter, const QStyleOptionViewItem& option, const QModelIndex& index) const;
-    virtual QSize sizeHint(const QStyleOptionViewItem& option, const QModelIndex& index) const;
-    virtual bool editorEvent( QEvent* event, QAbstractItemModel* model, const QStyleOptionViewItem& option, const QModelIndex& index );
+
+private slots:
+    void onConfigPressed ( const QModelIndex& );
 
 signals:
     void openConfig( const QString& resolverPath );
-
-private:
-    bool m_configPressed;
 };
 
 #endif // RESOLVERCONFIGDELEGATE_H

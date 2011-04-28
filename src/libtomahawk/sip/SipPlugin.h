@@ -35,9 +35,9 @@ public:
     virtual ~SipPluginFactory() {}
 
     // display name for plugin
-    virtual QString prettyName() = 0;
+    virtual QString prettyName() const = 0;
     // internal name
-    virtual QString factoryId() = 0;
+    virtual QString factoryId() const = 0;
     virtual SipPlugin* createPlugin( const QString& pluginId = QString() ) = 0;
 
 protected:
@@ -63,8 +63,10 @@ public:
     virtual const QString friendlyName() const = 0;
     virtual const QString accountName() const = 0;
     virtual ConnectionState connectionState() const = 0;
+    virtual QString errorMessage() const;
     virtual QMenu* menu();
     virtual QWidget* configWidget();
+    virtual QIcon icon() const;
 
 public slots:
     virtual bool connectPlugin( bool startup = false ) = 0;

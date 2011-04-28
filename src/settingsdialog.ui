@@ -31,7 +31,20 @@
       </attribute>
       <layout class="QVBoxLayout" name="verticalLayout_20">
        <item>
-        <widget class="QListView" name="accountsView"/>
+        <widget class="QTreeView" name="accountsView">
+         <property name="rootIsDecorated">
+          <bool>false</bool>
+         </property>
+         <property name="uniformRowHeights">
+          <bool>false</bool>
+         </property>
+         <property name="animated">
+          <bool>true</bool>
+         </property>
+         <property name="headerHidden">
+          <bool>true</bool>
+         </property>
+        </widget>
        </item>
       </layout>
      </widget>

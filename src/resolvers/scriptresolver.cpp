@@ -165,12 +165,6 @@ ScriptResolver::handleMsg( const QByteArray& msg )
                 rp->setMimetype( TomahawkUtils::extensionToMimetype( m.value( "extension" ).toString() ) );
                 Q_ASSERT( !rp->mimetype().isEmpty() );
             }
-            if ( m.contains( "year" ) )
-            {
-                QVariantMap attr;
-                attr[ "releaseyear" ] = m.value( "year" );
-                rp->setAttributes( attr );
-            }
 
             results << rp;
         }

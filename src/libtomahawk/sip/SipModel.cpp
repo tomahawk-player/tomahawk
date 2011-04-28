@@ -23,7 +23,7 @@
 #include "sip/SipHandler.h"
 
 SipModel::SipModel( QObject* parent )
-    : QAbstractListModel( parent )
+    : QAbstractItemModel( parent )
 {
     connect( SipHandler::instance(), SIGNAL( stateChanged( SipPlugin*, SipPlugin::ConnectionState ) ), this, SLOT( pluginStateChanged( SipPlugin* ) ) );
 }
@@ -56,15 +56,15 @@ SipModel::data( const QModelIndex& index, int role ) const
     {
         case Qt::DisplayRole:
         case SipModel::PluginName:
-        {
-            p->accountName();
-        }
+            return p->accountName();
         case SipModel::ConnectionStateRole:
             return p->connectionState();
         case SipModel::HasConfig:
             return ( p->configWidget() == 0 );
         case SipModel::FactoryRole:
             return false;
+        case Qt::DecorationRole:
+            return p->icon();
         case Qt::CheckStateRole:
             return SipHandler::instance()->enabledPlugins().contains( p ) ? Qt::Checked : Qt::Unchecked;
         default:
@@ -94,11 +94,44 @@ SipModel::setData( const QModelIndex& index, const QVariant& value, int role )
     return false;
 }
 
+QModelIndex
+SipModel::index( int row, int column, const QModelIndex& parent ) const
+{
+    if( !parent.isValid() )
+        return hasIndex( row, column, parent ) ? createIndex( row, column, 0 ) : QModelIndex();
+
+    // it's a child of the Add Account, e.g. a factory
+    if( hasIndex( row, column, parent ) ) {
+        createIndex( row, column, 1 /* magic */ );
+    }
+
+    return QModelIndex();
+}
+
+QModelIndex
+SipModel::parent( const QModelIndex& child ) const
+{
+    if( !child.isValid() )
+        return QModelIndex();
+
+    if( child.internalId() == 1 ) {
+        return createIndex( SipHandler::instance()->allPlugins().size() - 1, 0, 0 );
+    }
+
+    return QModelIndex();
+}
 
 int
 SipModel::rowCount( const QModelIndex& parent ) const
 {
-    return SipHandler::instance()->allPlugins().size() + 1;
+    if( !parent.isValid() ) { // top level item
+        if( parent.row() == SipHandler::instance()->allPlugins().count() ) { // last row, this is the factory
+            return SipHandler::instance()->pluginFactories().count();
+        } else {
+            return SipHandler::instance()->allPlugins().size() + 1;
+        }
+    }
+    return 0;
 }
 
 int

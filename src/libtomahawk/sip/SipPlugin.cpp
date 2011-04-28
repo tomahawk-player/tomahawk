@@ -52,3 +52,15 @@ SipPlugin::configWidget()
 {
     return 0;
 }
+
+QString
+SipPlugin::errorMessage() const
+{
+    return QString();
+}
+
+QIcon
+SipPlugin::icon() const
+{
+    return QIcon();
+}

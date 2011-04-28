@@ -195,8 +195,6 @@ SipHandler::hookUpPlugin( SipPlugin* sip )
     QObject::connect( sip, SIGNAL( avatarReceived( QString, QPixmap ) ), SLOT( onAvatarReceived( QString, QPixmap ) ) );
     QObject::connect( sip, SIGNAL( avatarReceived( QPixmap ) ), SLOT( onAvatarReceived( QPixmap ) ) );
 
-    m_allPlugins << sip;
-
     emit pluginAdded( sip );
 }
 
@@ -248,16 +246,21 @@ SipHandler::checkSettings()
 void
 SipHandler::loadFromConfig( bool startup )
 {
-    QStringList pluginIds = TomahawkSettings::instance()->enabledSipPlugins();
+    QStringList pluginIds = TomahawkSettings::instance()->sipPlugins();
+    QStringList enabled = TomahawkSettings::instance()->enabledSipPlugins();
     foreach( const QString& pluginId, pluginIds )
     {
         QString pluginFactory = factoryFromId( pluginId );
         if( m_pluginFactories.contains( pluginFactory ) )
         {
             SipPlugin* p = loadPlugin( pluginId );
-            p->connectPlugin( startup );
+            m_allPlugins << p;
 
-            m_enabledPlugins << p;
+            if ( enabled.contains( pluginId ) )
+            {
+                p->connectPlugin( startup );
+                m_enabledPlugins << p;
+            }
         }
     }
     m_connected = true;
