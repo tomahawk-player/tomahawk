@@ -18,6 +18,8 @@
 
 #include "jabber_p.h"
 
+#include <string>
+
 #include <QDebug>
 #include <QTime>
 #include <QTimer>
@@ -456,6 +458,11 @@ Jabber_p::handleMessage( const gloox::Message& m, gloox::MessageSession * /*sess
     QVariant v = parser.parse( msg.toAscii(), &ok );
     if ( !ok  || v.type() != QVariant::Map )
     {
+        if ( m.from().server().find( "googlemail." ) != string::npos
+             || m.from().server().find( "gmail." ) != string::npos
+             || m.from().server().find( "gtalk." ) != string::npos )
+            return;
+        
         sendMsg( from, QString( "I'm sorry -- I'm just an automatic presence used by Tomahawk Player (http://gettomahawk.com). If you are getting this message, the person you are trying to reach is probably not signed on, so please try again later!" ) );
         return;
     }
