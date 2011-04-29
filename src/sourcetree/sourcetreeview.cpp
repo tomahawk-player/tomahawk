@@ -105,6 +105,13 @@ SourceTreeView::SourceTreeView( QWidget* parent )
 //     connect( selectionModel(), SIGNAL( selectionChanged( QItemSelection, QItemSelection ) ), SLOT( onSelectionChanged() ) );
 
     hideOfflineSources();
+
+    // Light-blue sourcetree on osx
+#ifdef Q_WS_MAC
+    setStyleSheet( "SourceTreeView:active { background: #DDE4EB; } "
+                   "SourceTreeView        { background: #EDEDED; } " );
+#endif
+
 }
 
 

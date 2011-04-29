@@ -135,10 +135,16 @@ protected:
 
 private:
     friend class InfoSystem;
-    friend class InfoSystemCache;
 };
 
 typedef QWeakPointer< InfoPlugin > InfoPluginPtr;
+
+class DLLEXPORT InfoSystemWorker : public QObject
+{
+    Q_OBJECT
+    InfoSystemWorker() {};
+    ~InfoSystemWorker() {};
+};
 
 class DLLEXPORT InfoSystem : public QObject
 {
@@ -175,7 +181,9 @@ private:
     QHash< QString, QHash< InfoType, int > > m_dataTracker;
 
     InfoSystemCache* m_cache;
+    InfoSystemWorker* m_worker;
     QThread* m_infoSystemCacheThreadController;
+    QThread* m_infoSystemWorkerThreadController;
 
     static InfoSystem* s_instance;
 };

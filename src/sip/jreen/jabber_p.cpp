@@ -334,6 +334,12 @@ Jabber_p::onNewMessage( const Jreen::Message& m )
     QVariant v = parser.parse( msg.toAscii(), &ok );
     if ( !ok  || v.type() != QVariant::Map )
     {
+        if ( m.from().domain().contains( "googlemail." )
+             || m.from().domain().contains( "gmail." )
+             || m.from().domain().contains( "gtalk." )
+        )
+            return;
+        
         QString to = from;
         QString response = QString( tr("I'm sorry -- I'm just an automatic presence used by Tomahawk Player"
                                     " (http://gettomahawk.com). If you are getting this message, the person you"
