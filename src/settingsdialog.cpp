@@ -32,7 +32,6 @@
 #endif
 
 #include "settingsdialog.h"
-#include "ui_settingsdialog.h"
 #include "ui_proxydialog.h"
 #include "tomahawk/tomahawkapp.h"
 #include "musicscanner.h"
@@ -46,6 +45,8 @@
 #include "sip/SipModel.h"
 #include "sipconfigdelegate.h"
 
+#include "ui_stackedsettingsdialog.h"
+
 static QString
 md5( const QByteArray& src )
 {
@@ -55,7 +56,7 @@ md5( const QByteArray& src )
 
 SettingsDialog::SettingsDialog( QWidget *parent )
     : QDialog( parent )
-    , ui( new Ui::SettingsDialog )
+    , ui( new Ui_StackedSettingsDialog )
     , m_proxySettings( this )
     , m_rejected( false )
     , m_testLastFmQuery( 0 )
@@ -69,6 +70,8 @@ SettingsDialog::SettingsDialog( QWidget *parent )
     ui->checkBoxStaticPreferred->setChecked( s->preferStaticHostPort() );
     ui->checkBoxUpnp->setChecked( s->externalAddressMode() == TomahawkSettings::Upnp );
     ui->checkBoxUpnp->setEnabled( !s->preferStaticHostPort() );
+
+    createIcons();
 
     // SIP PLUGINS
     SipConfigDelegate* sipdel = new SipConfigDelegate( this );
@@ -86,7 +89,7 @@ SettingsDialog::SettingsDialog( QWidget *parent )
     // MUSIC SCANNER
     //FIXME: MULTIPLECOLLECTIONDIRS
     if ( s->scannerPaths().count() )
-        ui->lineEditMusicPath->setText( s->scannerPaths().first() );
+        ui->lineEditMusicPath_2->setText( s->scannerPaths().first() );
     ui->checkBoxWatchForChanges->setChecked( s->watchForChanges() );
 
     // LAST FM
@@ -107,7 +110,7 @@ SettingsDialog::SettingsDialog( QWidget *parent )
     connect( ui->addScript, SIGNAL( clicked( bool ) ), this, SLOT( addScriptResolver() ) );
     connect( ui->removeScript, SIGNAL( clicked( bool ) ), this, SLOT( removeScriptResolver() ) );
 
-    connect( ui->buttonBrowse, SIGNAL( clicked() ),  SLOT( showPathSelector() ) );
+    connect( ui->buttonBrowse_2, SIGNAL( clicked() ),  SLOT( showPathSelector() ) );
     connect( ui->proxyButton,  SIGNAL( clicked() ),  SLOT( showProxySettings() ) );
     connect( ui->checkBoxStaticPreferred, SIGNAL( toggled(bool) ), SLOT( toggleUpnp(bool) ) );
     connect( this,             SIGNAL( rejected() ), SLOT( onRejected() ) );
@@ -129,7 +132,7 @@ SettingsDialog::~SettingsDialog()
         s->setExternalHostname( ui->staticHostName->text() );
         s->setExternalPort( ui->staticPort->value() );
 
-        s->setScannerPaths( QStringList( ui->lineEditMusicPath->text() ) );
+        s->setScannerPaths( QStringList( ui->lineEditMusicPath_2->text() ) );
         s->setWatchForChanges( ui->checkBoxWatchForChanges->isChecked() );
 
         s->setScrobblingEnabled( ui->checkBoxEnableLastfm->isChecked() );
@@ -147,6 +150,51 @@ SettingsDialog::~SettingsDialog()
     delete ui;
 }
 
+void
+SettingsDialog::createIcons()
+{
+    QListWidgetItem *accountsButton = new QListWidgetItem( ui->listWidget );
+    accountsButton->setIcon( QIcon( RESPATH "images/account-settings.png" ) );
+    accountsButton->setText( tr( "Accounts" ) );
+    accountsButton->setTextAlignment( Qt::AlignHCenter );
+    accountsButton->setFlags( Qt::ItemIsSelectable | Qt::ItemIsEnabled );
+
+    QListWidgetItem *advancedButton = new QListWidgetItem( ui->listWidget );
+    advancedButton->setIcon( QIcon( RESPATH "images/advanced-settings.png" ) );
+    advancedButton->setText( tr( "Advanced" ) );
+    advancedButton->setTextAlignment( Qt::AlignHCenter );
+    advancedButton->setFlags( Qt::ItemIsSelectable | Qt::ItemIsEnabled );
+
+    QListWidgetItem *musicButton = new QListWidgetItem( ui->listWidget );
+    musicButton->setIcon( QIcon( RESPATH "images/music-settings.png" ) );
+    musicButton->setText( tr( "Music" ) );
+    musicButton->setTextAlignment( Qt::AlignHCenter );
+    musicButton->setFlags( Qt::ItemIsSelectable | Qt::ItemIsEnabled );
+
+    QListWidgetItem *lastfmButton = new QListWidgetItem( ui->listWidget );
+    lastfmButton->setIcon( QIcon( RESPATH "images/lastfm-settings.png" ) );
+    lastfmButton->setText( tr( "Last.fm" ) );
+    lastfmButton->setTextAlignment( Qt::AlignHCenter );
+    lastfmButton->setFlags( Qt::ItemIsSelectable | Qt::ItemIsEnabled );
+
+    QListWidgetItem *resolversButton = new QListWidgetItem( ui->listWidget );
+    resolversButton->setIcon( QIcon( RESPATH "images/resolvers-settings.png" ) );
+    resolversButton->setText( tr( "Resolvers" ) );
+    resolversButton->setTextAlignment( Qt::AlignHCenter );
+    resolversButton->setFlags( Qt::ItemIsSelectable | Qt::ItemIsEnabled );
+
+    connect( ui->listWidget, SIGNAL( currentItemChanged( QListWidgetItem* ,QListWidgetItem* ) ), this, SLOT( changePage( QListWidgetItem*, QListWidgetItem* ) ) );
+}
+
+void
+SettingsDialog::changePage( QListWidgetItem* current, QListWidgetItem* previous )
+{
+    if( !current )
+        current = previous;
+
+    ui->stackedWidget->setCurrentIndex( ui->listWidget->row(current) );
+}
+
 
 void
 SettingsDialog::showPathSelector()
@@ -160,7 +208,7 @@ SettingsDialog::showPathSelector()
     if ( path.isEmpty() )
         return;
 
-    ui->lineEditMusicPath->setText( path );
+    ui->lineEditMusicPath_2->setText( path );
 }
 
 

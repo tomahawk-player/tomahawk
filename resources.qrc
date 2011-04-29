@@ -81,6 +81,11 @@
 <file>./data/images/supercollection.png</file>
 <file>./data/images/sipplugin-online.png</file>
 <file>./data/images/sipplugin-offline.png</file>
+<file>./data/images/advanced-settings.png</file>
+<file>./data/images/account-settings.png</file>
+<file>./data/images/music-settings.png</file>
+<file>./data/images/resolvers-settings.png</file>
+<file>./data/images/lastfm-settings.png</file>
 <file>./data/topbar-radiobuttons.css</file>
 <file>./data/icons/tomahawk-icon-16x16.png</file>
 <file>./data/icons/tomahawk-icon-32x32.png</file>

@@ -22,6 +22,8 @@
 #include <QDialog>
 #include <QModelIndex>
 
+class QListWidgetItem;
+class Ui_StackedSettingsDialog;
 class SipPluginFactory;
 class SipPlugin;
 class SipModel;
@@ -80,9 +82,12 @@ private slots:
     void sipItemClicked ( const QModelIndex& );
     void openSipConfig( SipPlugin* );
     void sipFactoryClicked( SipPluginFactory* );
+    void changePage( QListWidgetItem*, QListWidgetItem* );
 
 private:
-    Ui::SettingsDialog* ui;
+    void createIcons();
+
+    Ui_StackedSettingsDialog* ui;
 
     ProxyDialog m_proxySettings;
     bool m_rejected;

@@ -117,6 +117,7 @@ SET( tomahawkHeadersGui ${tomahawkHeadersGui}
 SET( tomahawkUI ${tomahawkUI}
      tomahawkwindow.ui
      settingsdialog.ui
+     stackedsettingsdialog.ui
      proxydialog.ui
 
      audiocontrols.ui
