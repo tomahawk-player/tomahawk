@@ -159,12 +159,6 @@ SettingsDialog::createIcons()
     accountsButton->setTextAlignment( Qt::AlignHCenter );
     accountsButton->setFlags( Qt::ItemIsSelectable | Qt::ItemIsEnabled );
 
-    QListWidgetItem *advancedButton = new QListWidgetItem( ui->listWidget );
-    advancedButton->setIcon( QIcon( RESPATH "images/advanced-settings.png" ) );
-    advancedButton->setText( tr( "Advanced" ) );
-    advancedButton->setTextAlignment( Qt::AlignHCenter );
-    advancedButton->setFlags( Qt::ItemIsSelectable | Qt::ItemIsEnabled );
-
     QListWidgetItem *musicButton = new QListWidgetItem( ui->listWidget );
     musicButton->setIcon( QIcon( RESPATH "images/music-settings.png" ) );
     musicButton->setText( tr( "Music" ) );
@@ -182,6 +176,13 @@ SettingsDialog::createIcons()
     resolversButton->setText( tr( "Resolvers" ) );
     resolversButton->setTextAlignment( Qt::AlignHCenter );
     resolversButton->setFlags( Qt::ItemIsSelectable | Qt::ItemIsEnabled );
+
+    QListWidgetItem *advancedButton = new QListWidgetItem( ui->listWidget );
+    advancedButton->setIcon( QIcon( RESPATH "images/advanced-settings.png" ) );
+    advancedButton->setText( tr( "Advanced" ) );
+    advancedButton->setTextAlignment( Qt::AlignHCenter );
+    advancedButton->setFlags( Qt::ItemIsSelectable | Qt::ItemIsEnabled );
+
 
     connect( ui->listWidget, SIGNAL( currentItemChanged( QListWidgetItem* ,QListWidgetItem* ) ), this, SLOT( changePage( QListWidgetItem*, QListWidgetItem* ) ) );
 }
