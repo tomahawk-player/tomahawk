@@ -27,6 +27,8 @@
 
 #define MYNAME "SIPJREEN"
 
+class Ui_JabberConfig;
+
 class SIPDLLEXPORT JabberFactory : public SipPluginFactory
 {
     Q_OBJECT
@@ -38,6 +40,7 @@ public:
 
     virtual QString prettyName() const { return "Jabber"; }
     virtual QString factoryId() const { return "sipjabber"; }
+    virtual QIcon icon() const;
     virtual SipPlugin* createPlugin( const QString& pluginId );
 };
 
@@ -56,6 +59,9 @@ public:
     virtual const QString accountName() const;
     virtual ConnectionState connectionState() const;
     virtual QMenu* menu();
+    virtual QIcon icon() const;
+    virtual QWidget* configWidget();
+    virtual void saveConfig();
 
     void setProxy( QNetworkProxy* proxy );
 
@@ -66,6 +72,9 @@ public slots:
     void sendMsg( const QString& to, const QString& msg );
     void broadcastMsg( const QString &msg );
     void addContact( const QString &jid, const QString& msg = QString() );
+
+protected:
+    Ui_JabberConfig* m_ui; // so the google wrapper can change the config dialog a bit
 
 private slots:
     void showAddFriendDialog();
@@ -88,6 +97,8 @@ private:
     QString m_currentServer;
     unsigned int m_currentPort;
     ConnectionState m_state;
+
+    QWeakPointer< QWidget > m_configWidget;
 };
 
 #endif

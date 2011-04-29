@@ -25,6 +25,7 @@
 #include <QModelIndex>
 #include <QStringList>
 
+class SipPluginFactory;
 class SipPlugin;
 
 class DLLEXPORT SipModel : public QAbstractItemModel
@@ -36,7 +37,11 @@ public:
         ConnectionStateRole = Qt::UserRole + 17,
         HasConfig = Qt::UserRole + 18,
         FactoryRole = Qt::UserRole + 19,
-        ErrorString = Qt::UserRole + 20
+        ErrorString = Qt::UserRole + 20,
+        FactoryItemRole = Qt::UserRole + 21,
+        FactoryItemIcon = Qt::UserRole + 22,
+        SipPluginData = Qt::UserRole + 23,
+        SipPluginFactoryData = Qt::UserRole + 24
     };
 
     explicit SipModel( QObject* parent = 0 );
@@ -54,6 +59,9 @@ private slots:
     void pluginAdded( SipPlugin* p );
     void pluginRemoved( SipPlugin* p );
     void pluginStateChanged( SipPlugin* p );
+
+private:
+    QList< SipPluginFactory* > m_factories;
 };
 
 #endif // SIPMODEL_H

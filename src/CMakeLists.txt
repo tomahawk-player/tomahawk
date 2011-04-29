@@ -110,7 +110,7 @@ SET( tomahawkHeadersGui ${tomahawkHeadersGui}
      resolverconfigdelegate.h
      sipconfigdelegate.h
      resolversmodel.h
-     resolverconfigwrapper.h
+     delegateconfigwrapper.h
      tomahawkwindow.h
 )
 

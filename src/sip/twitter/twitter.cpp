@@ -41,6 +41,11 @@ TwitterFactory::createPlugin( const QString& pluginId )
     return new TwitterPlugin( pluginId.isEmpty() ? generateId() : pluginId );
 }
 
+QIcon TwitterFactory::icon() const
+{
+    return QIcon( ":/twitter-icon.jpg" );
+}
+
 
 TwitterPlugin::TwitterPlugin( const QString& pluginId )
     : SipPlugin( pluginId )
@@ -55,7 +60,6 @@ TwitterPlugin::TwitterPlugin( const QString& pluginId )
     , m_finishedFriends( false )
     , m_finishedMentions( false )
     , m_state( Disconnected )
-    , m_configWidget( 0 )
 {
     qDebug() << Q_FUNC_INFO;
     m_checkTimer.setInterval( 60000 );
@@ -65,18 +69,29 @@ TwitterPlugin::TwitterPlugin( const QString& pluginId )
     m_connectTimer.setInterval( 60000 );
     m_connectTimer.setSingleShot( false );
     connect( &m_connectTimer, SIGNAL( timeout() ), SLOT( connectTimerFired() ) );
+
+    m_configWidget = QWeakPointer< TwitterConfigWidget >( new TwitterConfigWidget( this, 0 ) );
+    connect( m_configWidget.data(), SIGNAL( twitterAuthed( bool ) ), SLOT( configDialogAuthedSignalSlot( bool ) ) );
+
 }
 
 void
 TwitterPlugin::configDialogAuthedSignalSlot( bool authed )
 {
-    m_isAuthed = authed;
+
     if ( !authed )
     {
+        if( m_isAuthed ) {
+            m_state = Disconnected;
+            emit stateChanged( m_state );
+        }
+
         setTwitterScreenName( QString() );
         setTwitterOAuthToken( QString() );
         setTwitterOAuthTokenSecret( QString() );
     }
+
+    m_isAuthed = authed;
 }
 
 bool
@@ -100,8 +115,18 @@ TwitterPlugin::friendlyName() const
 const QString
 TwitterPlugin::accountName() const
 {
-    return twitterScreenName();
+    if( twitterScreenName().isEmpty() )
+        return friendlyName();
+    else
+        return twitterScreenName();
 }
+
+QIcon
+TwitterPlugin::icon() const
+{
+    return QIcon( ":/twitter-icon.jpg" );
+}
+
 
 SipPlugin::ConnectionState
 TwitterPlugin::connectionState() const
@@ -112,11 +137,7 @@ TwitterPlugin::connectionState() const
 
 QWidget* TwitterPlugin::configWidget()
 {
-    m_configWidget = new TwitterConfigWidget( this, 0 );
-
-    connect( m_configWidget, SIGNAL( twitterAuthed(bool) ), SLOT( configDialogAuthedSignalSlot(bool) ) );
-
-    return m_configWidget;
+    return m_configWidget.data();
 }
 
 bool

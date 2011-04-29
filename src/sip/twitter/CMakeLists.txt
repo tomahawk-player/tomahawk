@@ -26,9 +26,10 @@ include_directories( . ${CMAKE_CURRENT_BINARY_DIR} ..
    ${CMAKE_SOURCE_DIR}/thirdparty/qtweetlib/tomahawk-custom
 )
 
+qt4_add_resources( RC_SRCS "resources.qrc" )
 qt4_wrap_cpp( twitterMoc ${twitterHeaders} )
 qt4_wrap_ui( twitterUI_H ${twitterUI} )
-add_library( tomahawk_siptwitter SHARED ${twitterUI_H} ${twitterSources} ${twitterMoc} )
+add_library( tomahawk_siptwitter SHARED ${twitterUI_H} ${twitterSources} ${twitterMoc} ${RC_SRCS} )
 
 IF( WIN32 )
 SET( OS_SPECIFIC_LINK_LIBRARIES

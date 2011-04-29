@@ -20,17 +20,34 @@
 #include "googlewrapper.h"
 #include <QtPlugin>
 
+#include "ui_configwidget.h"
+
 SipPlugin*
 GoogleWrapperFactory::createPlugin( const QString& pluginId )
 {
     return new GoogleWrapper( pluginId.isEmpty() ? generateId() : pluginId );
 }
 
+QIcon
+GoogleWrapperFactory::icon() const
+{
+    return QIcon( ":/gmail-logo.jpg" );
+}
+
 GoogleWrapper::GoogleWrapper ( const QString& pluginID )
     : JabberPlugin ( pluginID )
 {
+    m_ui->headerLabel->setText( tr( "Configure this Google Account" ) );
+    m_ui->emailLabel->setText( tr( "GMail Address" ) );
 
 }
+
+QIcon
+GoogleWrapper::icon() const
+{
+    return QIcon( ":/gmail-logo.jpg" );
+}
+
 
 #ifdef GOOGLE_WRAPPER
 Q_EXPORT_PLUGIN2( sipfactory, GoogleWrapperFactory )

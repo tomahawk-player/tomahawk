@@ -20,7 +20,10 @@
 #define SETTINGSDIALOG_H
 
 #include <QDialog>
+#include <QModelIndex>
 
+class SipPluginFactory;
+class SipPlugin;
 class SipModel;
 class ResolversModel;
 class QNetworkReply;
@@ -74,6 +77,9 @@ private slots:
     void scriptSelectionChanged();
     void removeScriptResolver();
     void openResolverConfig( const QString& );
+    void sipItemClicked ( const QModelIndex& );
+    void openSipConfig( SipPlugin* );
+    void sipFactoryClicked( SipPluginFactory* );
 
 private:
     Ui::SettingsDialog* ui;

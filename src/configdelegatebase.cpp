@@ -52,7 +52,7 @@ ConfigDelegateBase::sizeHint( const QStyleOptionViewItem& option, const QModelIn
 
     QFontMetrics bfm( name );
     QFontMetrics sfm( path );
-    return QSize( width, 3 * PADDING + bfm.height() + sfm.height() );
+    return QSize( width, 2 * PADDING + bfm.height() + sfm.height() );
 }
 
 void

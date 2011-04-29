@@ -44,6 +44,8 @@ public:
     QList< SipPlugin* > connectedPlugins() const;
     void loadFromConfig( bool startup = false );
 
+    void addSipPlugin( SipPlugin* p, bool enable = true, bool connectImmediately = true );
+
     const QPixmap avatar( const QString& name ) const;
 
 public slots:

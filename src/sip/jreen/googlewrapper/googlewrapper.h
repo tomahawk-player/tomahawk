@@ -32,6 +32,7 @@ public:
 
     virtual QString prettyName() const { return "GMail"; }
     virtual QString factoryId() const { return "sipgoogle"; }
+    virtual QIcon icon() const;
     virtual SipPlugin* createPlugin( const QString& pluginId );
 };
 
@@ -44,6 +45,7 @@ public:
 
   virtual const QString name() const { return QString( "GMail" ); }
   virtual const QString friendlyName() const { return "GMail Friends"; }
+  virtual QIcon icon() const;
 };
 
 #endif // GOOGLEWRAPPER_H

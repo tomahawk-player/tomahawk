@@ -32,6 +32,9 @@
       <layout class="QVBoxLayout" name="verticalLayout_20">
        <item>
         <widget class="QTreeView" name="accountsView">
+         <property name="indentation">
+          <number>0</number>
+         </property>
          <property name="rootIsDecorated">
           <bool>false</bool>
          </property>
@@ -43,6 +46,9 @@
          </property>
          <property name="headerHidden">
           <bool>true</bool>
+         </property>
+         <property name="expandsOnDoubleClick">
+          <bool>false</bool>
          </property>
         </widget>
        </item>

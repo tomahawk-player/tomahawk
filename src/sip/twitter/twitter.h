@@ -51,6 +51,7 @@ public:
 
     virtual QString prettyName() const { return "Twitter"; }
     virtual QString factoryId() const { return "siptwitter"; }
+    virtual QIcon icon() const;
     virtual SipPlugin* createPlugin( const QString& pluginId = QString() );
 };
 
@@ -68,6 +69,7 @@ public:
     virtual const QString accountName() const;
     virtual const QString friendlyName() const;
     virtual ConnectionState connectionState() const;
+    virtual QIcon icon() const;
     virtual QWidget* configWidget();
 
 public slots:
@@ -146,7 +148,7 @@ private:
     bool m_finishedMentions;
     ConnectionState m_state;
 
-    TwitterConfigWidget *m_configWidget;
+    QWeakPointer<TwitterConfigWidget > m_configWidget;
 
     // for settings access
     friend class TwitterConfigWidget;

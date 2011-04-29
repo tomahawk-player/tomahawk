@@ -38,6 +38,9 @@ public:
     virtual QString prettyName() const = 0;
     // internal name
     virtual QString factoryId() const = 0;
+    // if the user can create multiple
+    virtual QIcon icon() const { return QIcon(); }
+    virtual bool isCreatable() const { return true; }
     virtual SipPlugin* createPlugin( const QString& pluginId = QString() ) = 0;
 
 protected:
@@ -66,6 +69,7 @@ public:
     virtual QString errorMessage() const;
     virtual QMenu* menu();
     virtual QWidget* configWidget();
+    virtual void saveConfig() {} // called when the widget has been edited
     virtual QIcon icon() const;
 
 public slots:

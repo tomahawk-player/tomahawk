@@ -27,11 +27,20 @@
 #include <QLineEdit>
 #include <QMessageBox>
 
+#include "ui_configwidget.h"
+
 SipPlugin*
 JabberFactory::createPlugin( const QString& pluginId )
 {
     return new JabberPlugin( pluginId.isEmpty() ? generateId() : pluginId );
 }
+
+QIcon
+JabberFactory::icon() const
+{
+    return QIcon( ":/jabber-icon.png" );
+}
+
 
 JabberPlugin::JabberPlugin( const QString& pluginId )
     : SipPlugin( pluginId )
@@ -40,6 +49,17 @@ JabberPlugin::JabberPlugin( const QString& pluginId )
     , m_addFriendAction( 0 )
     , m_state( Disconnected )
 {
+    m_configWidget = QWeakPointer< QWidget >( new QWidget );
+    m_ui = new Ui_JabberConfig;
+    m_ui->setupUi( m_configWidget.data() );
+    m_configWidget.data()->setVisible( false );
+
+    m_ui->checkBoxAutoConnect->setChecked( readAutoConnect() );
+    m_ui->jabberUsername->setText( accountName() );
+    m_ui->jabberPassword->setText( readPassword() );
+    m_ui->jabberServer->setText( readServer() );
+    m_ui->jabberPort->setValue( readPort() );
+
 }
 
 JabberPlugin::~JabberPlugin()
@@ -77,6 +97,19 @@ JabberPlugin::menu()
 {
     return m_menu;
 }
+
+QWidget*
+JabberPlugin::configWidget()
+{
+    return m_configWidget.data();
+}
+
+QIcon
+JabberPlugin::icon() const
+{
+    return QIcon( ":/jabber-icon.png" );
+}
+
 
 bool
 JabberPlugin::connectPlugin( bool startup )
@@ -284,6 +317,19 @@ JabberPlugin::readAutoConnect()
 {
     return TomahawkSettings::instance()->value( pluginId() + "/autoconnect", true ).toBool();
 }
+
+void
+JabberPlugin::saveConfig()
+{
+    TomahawkSettings::instance()->setValue( pluginId() + "/autoconnect", m_ui->checkBoxAutoConnect->isChecked() );
+    TomahawkSettings::instance()->setValue( pluginId() + "/username", m_ui->jabberUsername->text() );
+    TomahawkSettings::instance()->setValue( pluginId() + "/pasword", m_ui->jabberPassword->text() );
+    TomahawkSettings::instance()->setValue( pluginId() + "/port", m_ui->jabberPort->value() );
+    TomahawkSettings::instance()->setValue( pluginId() + "/server", m_ui->jabberServer->text() );
+
+    checkSettings();
+}
+
 
 SipPlugin::ConnectionState
 JabberPlugin::connectionState() const

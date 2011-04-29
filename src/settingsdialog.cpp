@@ -42,7 +42,7 @@
 #include "scanmanager.h"
 #include "resolverconfigdelegate.h"
 #include "resolversmodel.h"
-#include "resolverconfigwrapper.h"
+#include "delegateconfigwrapper.h"
 #include "sip/SipModel.h"
 #include "sipconfigdelegate.h"
 
@@ -73,15 +73,10 @@ SettingsDialog::SettingsDialog( QWidget *parent )
     // SIP PLUGINS
     SipConfigDelegate* sipdel = new SipConfigDelegate( this );
     ui->accountsView->setItemDelegate( sipdel );
-//     connect( sipdel, SIGNAL( openConfig( SipPlugin* ) ), this, SLOT( openSipPluginConfig( SipPlugin* ) ) );
+    connect( ui->accountsView, SIGNAL( clicked( QModelIndex ) ), this, SLOT( sipItemClicked( QModelIndex ) ) );
+    connect( sipdel, SIGNAL( openConfig( SipPlugin* ) ), this, SLOT( openSipConfig( SipPlugin* ) ) );
     m_sipModel = new SipModel( this );
     ui->accountsView->setModel( m_sipModel );
-
-//     ui->checkBoxJabberAutoConnect->setChecked( s->jabberAutoConnect() );
-//     ui->jabberUsername->setText( s->jabberUsername() );
-//     ui->jabberPassword->setText( s->jabberPassword() );
-//     ui->jabberServer->setText( s->jabberServer() );
-//     ui->jabberPort->setValue( s->jabberPort() );
 
     ui->staticHostName->setText( s->externalHostname() );
     ui->staticPort->setValue( s->externalPort() );
@@ -368,12 +363,65 @@ SettingsDialog::openResolverConfig( const QString& resolver )
 {
     Tomahawk::ExternalResolver* r = TomahawkApp::instance()->resolverForPath( resolver );
     if( r && r->configUI() ) {
-        ResolverConfigWrapper dialog( r->configUI(), "Resolver Config", this );
-        QWeakPointer< ResolverConfigWrapper > watcher( &dialog );
+        DelegateConfigWrapper dialog( r->configUI(), "Resolver Config", this );
+        QWeakPointer< DelegateConfigWrapper > watcher( &dialog );
         int ret = dialog.exec();
         if( !watcher.isNull() && ret == QDialog::Accepted ) {
             // send changed config to resolver
             r->saveConfig();
         }
+    }
+}
+
+void
+SettingsDialog::sipItemClicked( const QModelIndex& item )
+{
+    if( item.data( SipModel::FactoryRole ).toBool() )
+        if( ui->accountsView->isExpanded( item ) )
+            ui->accountsView->collapse( item );
+        else
+            ui->accountsView->expand( item );
+    else if( item.data( SipModel::FactoryItemRole ).toBool() )
+        sipFactoryClicked( qobject_cast<SipPluginFactory* >( item.data( SipModel::SipPluginFactoryData ).value< QObject* >() ) );
+}
+
+void
+SettingsDialog::openSipConfig( SipPlugin* p )
+{
+    if( p->configWidget() ) {
+        DelegateConfigWrapper dialog( p->configWidget(), QString("%1 Config" ).arg( p->friendlyName() ), this );
+        QWeakPointer< DelegateConfigWrapper > watcher( &dialog );
+        int ret = dialog.exec();
+        if( !watcher.isNull() && ret == QDialog::Accepted ) {
+            // send changed config to resolver
+            p->saveConfig();
+        }
+    }
+}
+
+void
+SettingsDialog::sipFactoryClicked( SipPluginFactory* factory )
+{
+    Q_ASSERT( factory->isCreatable() );
+    //if exited with OK, create it, if not, delete it immediately!
+    SipPlugin* p = factory->createPlugin();
+    if( p->configWidget() ) {
+        DelegateConfigWrapper dialog( p->configWidget(), QString("%1 Config" ).arg( p->friendlyName() ), this );
+        QWeakPointer< DelegateConfigWrapper > watcher( &dialog );
+        int ret = dialog.exec();
+        if( !watcher.isNull() && ret == QDialog::Accepted ) {
+            // send changed config to resolver
+            p->saveConfig();
+
+            // accepted, so add it to tomahawk
+            TomahawkSettings::instance()->addSipPlugin( p->pluginId() );
+            SipHandler::instance()->addSipPlugin( p );
+        } else {
+            // canceled, delete it
+            delete p;
+        }
+    } else {
+        // no config, so just add it
+        SipHandler::instance()->addSipPlugin( p );
     }
 }

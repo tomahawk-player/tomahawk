@@ -21,11 +21,20 @@
 #include "tomahawksettings.h"
 #include "tomahawk/tomahawkapp.h"
 #include "sip/SipHandler.h"
+#include "sip/SipPlugin.h"
 
 SipModel::SipModel( QObject* parent )
     : QAbstractItemModel( parent )
 {
     connect( SipHandler::instance(), SIGNAL( stateChanged( SipPlugin*, SipPlugin::ConnectionState ) ), this, SLOT( pluginStateChanged( SipPlugin* ) ) );
+    connect( SipHandler::instance(), SIGNAL( pluginAdded( SipPlugin* ) ), this, SLOT( pluginAdded( SipPlugin* ) ) );
+    connect( SipHandler::instance(), SIGNAL( pluginRemoved( SipPlugin* ) ), this, SLOT( pluginRemoved( SipPlugin* ) ) );
+
+    foreach( SipPluginFactory* f, SipHandler::instance()->pluginFactories() ) {
+        if( f->isCreatable() )
+            m_factories << f;
+    }
+
 }
 
 
@@ -40,36 +49,59 @@ SipModel::data( const QModelIndex& index, int role ) const
     if( !index.isValid() )
         return QVariant();
 
-    if( index.row() == SipHandler::instance()->allPlugins().count() ) { // last row, this is the factory
+    if( !index.parent().isValid() && index.row() == SipHandler::instance()->allPlugins().count() ) { // last row, this is the factory
         if( role == Qt::DisplayRole )
-            return tr( "Add New Account" );
+            return tr( "Add New Account..." );
         else if( role == FactoryRole )
             return true;
         else
             return QVariant();
     }
 
-    QList< SipPlugin* > plugins = SipHandler::instance()->allPlugins();
-    Q_ASSERT( index.row() <= plugins.size() );
-    SipPlugin* p = plugins[ index.row() ];
-    switch( role )
-    {
+    if( !index.parent().isValid() ) { // account
+        QList< SipPlugin* > plugins = SipHandler::instance()->allPlugins();
+        Q_ASSERT( index.row() <= plugins.size() );
+        SipPlugin* p = plugins[ index.row() ];
+        switch( role )
+        {
+            case Qt::DisplayRole:
+            case SipModel::PluginName:
+                return p->accountName();
+            case SipModel::ConnectionStateRole:
+                return p->connectionState();
+            case SipModel::HasConfig:
+                return ( p->configWidget() != 0 );
+            case SipModel::FactoryRole:
+                return false;
+            case Qt::DecorationRole:
+                return p->icon();
+            case SipModel::SipPluginData:
+                return QVariant::fromValue< QObject* >( p );
+            case Qt::CheckStateRole:
+                return SipHandler::instance()->enabledPlugins().contains( p ) ? Qt::Checked : Qt::Unchecked;
+            default:
+                return QVariant();
+        }
+    }
+
+    if( index.parent().isValid() ) { // this is a factory type
+        SipPluginFactory* p = m_factories.at( index.row() );
+        switch( role )
+        {
         case Qt::DisplayRole:
-        case SipModel::PluginName:
-            return p->accountName();
-        case SipModel::ConnectionStateRole:
-            return p->connectionState();
-        case SipModel::HasConfig:
-            return ( p->configWidget() == 0 );
-        case SipModel::FactoryRole:
-            return false;
-        case Qt::DecorationRole:
+            return p->prettyName();
+        case SipModel::FactoryItemRole:
+            return true;
+        case SipModel::FactoryItemIcon:
             return p->icon();
-        case Qt::CheckStateRole:
-            return SipHandler::instance()->enabledPlugins().contains( p ) ? Qt::Checked : Qt::Unchecked;
+        case SipModel::SipPluginFactoryData:
+            return QVariant::fromValue< QObject* >( p );
         default:
             return QVariant();
+        }
     }
+
+    return QVariant();
 }
 
 bool
@@ -100,9 +132,10 @@ SipModel::index( int row, int column, const QModelIndex& parent ) const
     if( !parent.isValid() )
         return hasIndex( row, column, parent ) ? createIndex( row, column, 0 ) : QModelIndex();
 
+//     qDebug() << "Creating index for non-top level row!";
     // it's a child of the Add Account, e.g. a factory
     if( hasIndex( row, column, parent ) ) {
-        createIndex( row, column, 1 /* magic */ );
+        return createIndex( row, column, 1 /* magic */ );
     }
 
     return QModelIndex();
@@ -115,7 +148,7 @@ SipModel::parent( const QModelIndex& child ) const
         return QModelIndex();
 
     if( child.internalId() == 1 ) {
-        return createIndex( SipHandler::instance()->allPlugins().size() - 1, 0, 0 );
+        return index( SipHandler::instance()->allPlugins().size(), 0, QModelIndex() );
     }
 
     return QModelIndex();
@@ -124,25 +157,29 @@ SipModel::parent( const QModelIndex& child ) const
 int
 SipModel::rowCount( const QModelIndex& parent ) const
 {
-    if( !parent.isValid() ) { // top level item
-        if( parent.row() == SipHandler::instance()->allPlugins().count() ) { // last row, this is the factory
-            return SipHandler::instance()->pluginFactories().count();
-        } else {
-            return SipHandler::instance()->allPlugins().size() + 1;
+    if( !parent.isValid() ) // invalid root node
+        return SipHandler::instance()->allPlugins().size() + 1;
+    if( parent.isValid() && !parent.parent().isValid() ) { // top level item
+        if( parent.row() == SipHandler::instance()->allPlugins().count() ) {// last row, this is the factory
+            return m_factories.count();
         }
     }
+
     return 0;
 }
 
 int
 SipModel::columnCount(const QModelIndex& parent) const
 {
+    Q_UNUSED( parent );
     return 1;
 }
 
 Qt::ItemFlags
 SipModel::flags( const QModelIndex& index ) const
 {
+    if( index.data( SipModel::FactoryRole ).toBool() || index.data( SipModel::FactoryItemRole ).toBool() )
+        return QAbstractItemModel::flags( index ) & ~Qt::ItemIsSelectable;
     return QAbstractItemModel::flags( index ) | Qt::ItemIsUserCheckable;
 }
 
@@ -153,6 +190,7 @@ SipModel::pluginAdded( SipPlugin* p )
     Q_ASSERT( SipHandler::instance()->allPlugins().last() == p );
     int size = SipHandler::instance()->allPlugins().count() - 1;
     beginInsertRows( QModelIndex(), size, size );
+    endInsertRows();
 }
 
 void

@@ -21,6 +21,8 @@
 
 #include "configdelegatebase.h"
 
+class SipPlugin;
+class SipPluginFactory;
 class SipConfigDelegate : public ConfigDelegateBase
 {
     Q_OBJECT
@@ -29,6 +31,14 @@ public:
 
     virtual void paint ( QPainter* painter, const QStyleOptionViewItem& option, const QModelIndex& index ) const;
     virtual bool editorEvent ( QEvent* event, QAbstractItemModel* model, const QStyleOptionViewItem& option, const QModelIndex& index );
+    virtual QSize sizeHint ( const QStyleOptionViewItem& option, const QModelIndex& index ) const;
+
+private slots:
+    void askedForEdit( const QModelIndex& idx );
+
+signals:
+    void sipFactoryClicked( SipPluginFactory* );
+    void openConfig( SipPlugin* );
 };
 
 #endif // SIPCONFIGDELEGATE_H

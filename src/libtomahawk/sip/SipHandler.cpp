@@ -244,6 +244,21 @@ SipHandler::checkSettings()
 }
 
 void
+SipHandler::addSipPlugin( SipPlugin* p, bool enabled, bool startup )
+{
+    m_allPlugins << p;
+
+    if ( enabled )
+    {
+        p->connectPlugin( startup );
+        m_enabledPlugins << p;
+    }
+
+    emit pluginAdded( p );
+}
+
+
+void
 SipHandler::loadFromConfig( bool startup )
 {
     QStringList pluginIds = TomahawkSettings::instance()->sipPlugins();
@@ -254,13 +269,7 @@ SipHandler::loadFromConfig( bool startup )
         if( m_pluginFactories.contains( pluginFactory ) )
         {
             SipPlugin* p = loadPlugin( pluginId );
-            m_allPlugins << p;
-
-            if ( enabled.contains( pluginId ) )
-            {
-                p->connectPlugin( startup );
-                m_enabledPlugins << p;
-            }
+            addSipPlugin( p, enabled.contains( pluginId ), startup );
         }
     }
     m_connected = true;
