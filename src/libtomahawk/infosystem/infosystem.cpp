@@ -35,28 +35,6 @@ InfoPlugin::InfoPlugin(QObject *parent)
         :QObject( parent )
     {
         qDebug() << Q_FUNC_INFO;
-        InfoSystem *system = qobject_cast< InfoSystem* >( parent );
-        if( system )
-        {
-            QObject::connect(
-                this,
-                SIGNAL( getCachedInfo( Tomahawk::InfoSystem::InfoCriteriaHash, qint64, QString, Tomahawk::InfoSystem::InfoType, QVariant, Tomahawk::InfoSystem::InfoCustomData ) ),
-                system->getCache(),
-                SLOT( getCachedInfoSlot( Tomahawk::InfoSystem::InfoCriteriaHash, qint64, QString, Tomahawk::InfoSystem::InfoType, QVariant, Tomahawk::InfoSystem::InfoCustomData ) )
-            );
-            QObject::connect(
-                system->getCache(),
-                SIGNAL( notInCache( Tomahawk::InfoSystem::InfoCriteriaHash, QString, Tomahawk::InfoSystem::InfoType, QVariant, Tomahawk::InfoSystem::InfoCustomData ) ),
-                this,
-                SLOT( notInCacheSlot( Tomahawk::InfoSystem::InfoCriteriaHash, QString, Tomahawk::InfoSystem::InfoType, QVariant, Tomahawk::InfoSystem::InfoCustomData ) )
-            );
-            QObject::connect(
-                this,
-                SIGNAL( updateCache( Tomahawk::InfoSystem::InfoCriteriaHash, qint64, Tomahawk::InfoSystem::InfoType, QVariant ) ),
-                system->getCache(),
-                SLOT( updateCacheSlot( Tomahawk::InfoSystem::InfoCriteriaHash, qint64, Tomahawk::InfoSystem::InfoType, QVariant ) )
-            );
-        }
     }
 
 
@@ -67,6 +45,7 @@ InfoSystem::instance()
 {
     return s_instance;
 }
+
 
 InfoSystem::InfoSystem(QObject *parent)
     : QObject(parent)
@@ -95,6 +74,25 @@ InfoSystem::InfoSystem(QObject *parent)
                 this,
                 SLOT( infoSlot( QString, Tomahawk::InfoSystem::InfoType, QVariant, QVariant, Tomahawk::InfoSystem::InfoCustomData ) ),
                 Qt::UniqueConnection
+            );
+
+        connect(
+                plugin.data(),
+                SIGNAL( getCachedInfo( Tomahawk::InfoSystem::InfoCriteriaHash, qint64, QString, Tomahawk::InfoSystem::InfoType, QVariant, Tomahawk::InfoSystem::InfoCustomData ) ),
+                m_cache,
+                SLOT( getCachedInfoSlot( Tomahawk::InfoSystem::InfoCriteriaHash, qint64, QString, Tomahawk::InfoSystem::InfoType, QVariant, Tomahawk::InfoSystem::InfoCustomData ) )
+            );
+        connect(
+                m_cache,
+                SIGNAL( notInCache( Tomahawk::InfoSystem::InfoCriteriaHash, QString, Tomahawk::InfoSystem::InfoType, QVariant, Tomahawk::InfoSystem::InfoCustomData ) ),
+                plugin.data(),
+                SLOT( notInCacheSlot( Tomahawk::InfoSystem::InfoCriteriaHash, QString, Tomahawk::InfoSystem::InfoType, QVariant, Tomahawk::InfoSystem::InfoCustomData ) )
+            );
+        connect(
+                plugin.data(),
+                SIGNAL( updateCache( Tomahawk::InfoSystem::InfoCriteriaHash, qint64, Tomahawk::InfoSystem::InfoType, QVariant ) ),
+                m_cache,
+                SLOT( updateCacheSlot( Tomahawk::InfoSystem::InfoCriteriaHash, qint64, Tomahawk::InfoSystem::InfoType, QVariant ) )
             );
     }
     connect( m_cache, SIGNAL( info( QString, Tomahawk::InfoSystem::InfoType, QVariant, QVariant, Tomahawk::InfoSystem::InfoCustomData ) ),
@@ -154,7 +152,7 @@ void InfoSystem::getInfo(const QString &caller, const InfoType type, const QVari
     QLinkedList< InfoPluginPtr > providers = determineOrderedMatches(type);
     if (providers.isEmpty())
     {
-        emit info(QString(), InfoNoInfo, QVariant(), QVariant(), customData);
+        emit info(caller, InfoNoInfo, QVariant(), QVariant(), customData);
         emit finished(caller);
         return;
     }
@@ -162,7 +160,7 @@ void InfoSystem::getInfo(const QString &caller, const InfoType type, const QVari
     InfoPluginPtr ptr = providers.first();
     if (!ptr)
     {
-        emit info(QString(), InfoNoInfo, QVariant(), QVariant(), customData);
+        emit info(caller, InfoNoInfo, QVariant(), QVariant(), customData);
         emit finished(caller);
         return;
     }
