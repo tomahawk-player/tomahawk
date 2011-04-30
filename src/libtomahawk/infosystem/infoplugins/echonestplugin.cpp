@@ -25,13 +25,13 @@ using namespace Echonest;
 
 // for internal neatness
 
-EchoNestPlugin::EchoNestPlugin(QObject *parent)
+EchoNestPlugin::EchoNestPlugin(InfoSystemWorker *parent)
     : InfoPlugin(parent)
 {
     qDebug() << Q_FUNC_INFO;
     QSet< InfoType > supportedTypes;
     supportedTypes << Tomahawk::InfoSystem::InfoArtistBiography << Tomahawk::InfoSystem::InfoArtistFamiliarity << Tomahawk::InfoSystem::InfoArtistHotttness << Tomahawk::InfoSystem::InfoArtistTerms << Tomahawk::InfoSystem::InfoMiscTopTerms;
-    qobject_cast< InfoSystem* >(parent)->registerInfoTypes(this, supportedTypes);
+    parent->registerInfoTypes(this, supportedTypes);
 }
 
 EchoNestPlugin::~EchoNestPlugin()

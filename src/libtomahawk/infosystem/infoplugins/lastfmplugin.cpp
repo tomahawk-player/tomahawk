@@ -41,14 +41,14 @@ md5( const QByteArray& src )
 }
 
 
-LastFmPlugin::LastFmPlugin( QObject* parent )
+LastFmPlugin::LastFmPlugin( InfoSystemWorker* parent )
     : InfoPlugin(parent)
     , m_scrobbler( 0 )
     , m_authJob( 0 )
 {
     QSet< InfoType > supportedTypes;
     supportedTypes << InfoMiscSubmitScrobble << InfoMiscSubmitNowPlaying << InfoAlbumCoverArt << InfoArtistImages;
-    qobject_cast< InfoSystem* >(parent)->registerInfoTypes(this, supportedTypes);
+    parent->registerInfoTypes(this, supportedTypes);
 
 /*
       Your API Key is 7194b85b6d1f424fe1668173a78c0c4a

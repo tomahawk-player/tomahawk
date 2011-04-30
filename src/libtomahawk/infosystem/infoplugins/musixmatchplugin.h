@@ -34,7 +34,7 @@ class MusixMatchPlugin : public InfoPlugin
     Q_OBJECT
 
 public:
-    MusixMatchPlugin( QObject *parent );
+    MusixMatchPlugin( InfoSystemWorker *parent );
     virtual ~MusixMatchPlugin();
 
 public slots:

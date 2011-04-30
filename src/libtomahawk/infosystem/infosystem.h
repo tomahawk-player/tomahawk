@@ -36,6 +36,7 @@ namespace Tomahawk {
 namespace InfoSystem {
 
 class InfoSystemCache;
+class InfoSystemWorker;
 
 enum InfoType {
     InfoTrackID = 0,
@@ -104,7 +105,7 @@ class DLLEXPORT InfoPlugin : public QObject
     Q_OBJECT
 
 public:
-    InfoPlugin( QObject *parent );
+    InfoPlugin( InfoSystemWorker *parent );
 
     virtual ~InfoPlugin()
     {
@@ -142,8 +143,26 @@ typedef QWeakPointer< InfoPlugin > InfoPluginPtr;
 class DLLEXPORT InfoSystemWorker : public QObject
 {
     Q_OBJECT
-    InfoSystemWorker() {};
-    ~InfoSystemWorker() {};
+
+public:
+    InfoSystemWorker();
+    ~InfoSystemWorker();
+
+    void registerInfoTypes( const InfoPluginPtr &plugin, const QSet< InfoType > &types );
+    
+signals:
+    void info( QString target, Tomahawk::InfoSystem::InfoType, QVariant input, QVariant output, Tomahawk::InfoSystem::InfoCustomData customData );
+
+public slots:
+    void getInfo( const QString caller, const Tomahawk::InfoSystem::InfoType type, const QVariant input, const Tomahawk::InfoSystem::InfoCustomData customData );
+    
+private:
+    QLinkedList< InfoPluginPtr > determineOrderedMatches( const InfoType type ) const;
+    
+    // For now, statically instantiate plugins; this is just somewhere to keep them
+    QLinkedList< InfoPluginPtr > m_plugins;
+
+    QMap< InfoType, QLinkedList< InfoPluginPtr > > m_infoMap;
 };
 
 class DLLEXPORT InfoSystem : public QObject
@@ -155,8 +174,6 @@ public:
 
     InfoSystem( QObject *parent );
     ~InfoSystem();
-
-    void registerInfoTypes( const InfoPluginPtr &plugin, const QSet< InfoType > &types );
 
     void getInfo( const QString &caller, const InfoType type, const QVariant &input, InfoCustomData customData );
     void getInfo( const QString &caller, const InfoMap &input, InfoCustomData customData );
@@ -171,13 +188,6 @@ public slots:
     void infoSlot( const QString target, const Tomahawk::InfoSystem::InfoType type, const QVariant input, const QVariant output, const Tomahawk::InfoSystem::InfoCustomData customData );
 
 private:
-    QLinkedList< InfoPluginPtr > determineOrderedMatches( const InfoType type ) const;
-
-    QMap< InfoType, QLinkedList< InfoPluginPtr > > m_infoMap;
-
-    // For now, statically instantiate plugins; this is just somewhere to keep them
-    QLinkedList< InfoPluginPtr > m_plugins;
-
     QHash< QString, QHash< InfoType, int > > m_dataTracker;
 
     InfoSystemCache* m_cache;

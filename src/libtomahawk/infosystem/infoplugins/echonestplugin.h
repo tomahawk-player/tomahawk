@@ -39,7 +39,7 @@ class EchoNestPlugin : public InfoPlugin
     Q_OBJECT
 
 public:
-    EchoNestPlugin(QObject *parent);
+    EchoNestPlugin( InfoSystemWorker *parent );
     virtual ~EchoNestPlugin();
 
 protected slots:

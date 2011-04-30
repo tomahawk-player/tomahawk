@@ -27,14 +27,14 @@ using namespace Tomahawk::InfoSystem;
 
 // for internal neatness
 
-MusixMatchPlugin::MusixMatchPlugin(QObject *parent)
+MusixMatchPlugin::MusixMatchPlugin(InfoSystemWorker *parent)
     : InfoPlugin(parent)
     , m_apiKey("61be4ea5aea7dd942d52b2f1311dd9fe")
 {
     qDebug() << Q_FUNC_INFO;
     QSet< InfoType > supportedTypes;
     supportedTypes << Tomahawk::InfoSystem::InfoTrackLyrics;
-    qobject_cast< InfoSystem* >(parent)->registerInfoTypes(this, supportedTypes);
+    parent->registerInfoTypes(this, supportedTypes);
 }
 
 MusixMatchPlugin::~MusixMatchPlugin()

@@ -40,7 +40,7 @@ class LastFmPlugin : public InfoPlugin
     Q_OBJECT
 
 public:
-    LastFmPlugin( QObject *parent );
+    LastFmPlugin( InfoSystemWorker *parent );
     virtual ~LastFmPlugin();
 
 public slots:
