@@ -78,6 +78,7 @@ set( libSources
 
     infosystem/infosystemcache.cpp
     infosystem/infosystem.cpp
+    infosystem/infosystemworker.cpp
     infosystem/infoplugins/echonestplugin.cpp
     infosystem/infoplugins/lastfmplugin.cpp
     infosystem/infoplugins/musixmatchplugin.cpp
