@@ -82,6 +82,9 @@ private slots:
     void sipItemClicked ( const QModelIndex& );
     void openSipConfig( SipPlugin* );
     void sipFactoryClicked( SipPluginFactory* );
+    void sipContextMenuRequest( const QPoint& );
+    void sipPluginDeleted( bool );
+
     void changePage( QListWidgetItem*, QListWidgetItem* );
 
 private:

@@ -257,6 +257,18 @@ SipHandler::addSipPlugin( SipPlugin* p, bool enabled, bool startup )
     emit pluginAdded( p );
 }
 
+void
+SipHandler::removeSipPlugin( SipPlugin* p )
+{
+    p->disconnectPlugin();
+    emit pluginRemoved( p );
+    // emit first so sipmodel can find the indexOf
+
+    TomahawkSettings::instance()->removeSipPlugin( p->pluginId() );
+    m_allPlugins.removeAll( p );
+    m_enabledPlugins.removeAll( p );
+}
+
 
 void
 SipHandler::loadFromConfig( bool startup )

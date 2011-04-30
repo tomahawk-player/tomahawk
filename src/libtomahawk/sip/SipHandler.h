@@ -45,6 +45,7 @@ public:
     void loadFromConfig( bool startup = false );
 
     void addSipPlugin( SipPlugin* p, bool enable = true, bool connectImmediately = true );
+    void removeSipPlugin( SipPlugin* p );
 
     const QPixmap avatar( const QString& name ) const;
 

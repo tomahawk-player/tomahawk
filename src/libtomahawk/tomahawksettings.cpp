@@ -434,6 +434,9 @@ TomahawkSettings::removeSipPlugin( const QString& pluginId )
     QStringList list = sipPlugins();
     list.removeAll( pluginId );
     setSipPlugins( list );
+
+    if( enabledSipPlugins().contains( pluginId ) )
+        disableSipPlugin( pluginId );
 }
 
 
