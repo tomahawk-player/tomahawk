@@ -548,7 +548,8 @@ TomahawkWindow::checkForUpdates()
 void
 TomahawkWindow::minimize()
 {
-    if (isMinimized()) {
+    if ( isMinimized() )
+    {
         showNormal();
     } else {
         showMinimized();
@@ -558,7 +559,8 @@ TomahawkWindow::minimize()
 void
 TomahawkWindow::maximize()
 {
-    if (isMaximized()) {
+    if ( isMaximized() )
+    {
         showNormal();
     } else {
         showMaximized();
