@@ -35,7 +35,7 @@ MusixMatchPlugin::MusixMatchPlugin(InfoSystemWorker *parent)
     qDebug() << Q_FUNC_INFO;
     QSet< InfoType > supportedTypes;
     supportedTypes << Tomahawk::InfoSystem::InfoTrackLyrics;
-    parent->registerInfoTypes(this, supportedTypes);
+    parent->registerInfoTypes( this, supportedTypes, QSet< InfoType>() );
 }
 
 MusixMatchPlugin::~MusixMatchPlugin()

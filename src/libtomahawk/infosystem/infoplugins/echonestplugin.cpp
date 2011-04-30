@@ -32,7 +32,7 @@ EchoNestPlugin::EchoNestPlugin(InfoSystemWorker *parent)
     qDebug() << Q_FUNC_INFO;
     QSet< InfoType > supportedTypes;
     supportedTypes << Tomahawk::InfoSystem::InfoArtistBiography << Tomahawk::InfoSystem::InfoArtistFamiliarity << Tomahawk::InfoSystem::InfoArtistHotttness << Tomahawk::InfoSystem::InfoArtistTerms << Tomahawk::InfoSystem::InfoMiscTopTerms;
-    parent->registerInfoTypes(this, supportedTypes);
+    parent->registerInfoTypes( this, supportedTypes, QSet< InfoType>() );
 }
 
 EchoNestPlugin::~EchoNestPlugin()

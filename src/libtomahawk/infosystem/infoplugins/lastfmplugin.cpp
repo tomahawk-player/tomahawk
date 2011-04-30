@@ -47,9 +47,10 @@ LastFmPlugin::LastFmPlugin( InfoSystemWorker* parent )
     , m_authJob( 0 )
     , m_infoSystemWorker( parent )
 {
-    QSet< InfoType > supportedTypes;
-    supportedTypes << InfoMiscSubmitScrobble << InfoMiscSubmitNowPlaying << InfoAlbumCoverArt << InfoArtistImages;
-    parent->registerInfoTypes(this, supportedTypes);
+    QSet< InfoType > supportedGetTypes, supportedPushTypes;
+    supportedGetTypes << InfoAlbumCoverArt << InfoArtistImages;
+    supportedPushTypes << InfoSubmitScrobble << InfoSubmitNowPlaying; 
+    parent->registerInfoTypes( this, supportedGetTypes, supportedPushTypes );
 
 /*
       Your API Key is 7194b85b6d1f424fe1668173a78c0c4a
@@ -110,14 +111,6 @@ LastFmPlugin::getInfo( const QString caller, const Tomahawk::InfoSystem::InfoTyp
 
     switch ( type )
     {
-        case InfoMiscSubmitNowPlaying:
-            nowPlaying( caller, type, input, customData );
-            break;
-
-        case InfoMiscSubmitScrobble:
-            scrobble( caller, type, input, customData );
-            break;
-
         case InfoArtistImages:
             fetchArtistImages( caller, type, input, customData );
             break;
@@ -133,19 +126,34 @@ LastFmPlugin::getInfo( const QString caller, const Tomahawk::InfoSystem::InfoTyp
 
 
 void
-LastFmPlugin::nowPlaying( const QString &caller, const InfoType type, const QVariant &input, const Tomahawk::InfoSystem::InfoCustomData &customData )
+LastFmPlugin::pushInfo( const QString caller, const Tomahawk::InfoSystem::InfoType type, const QVariant input )
+{
+    qDebug() << Q_FUNC_INFO;
+
+    switch ( type )
+    {
+        case InfoSubmitNowPlaying:
+            nowPlaying( caller, type, input );
+            break;
+
+        case InfoSubmitScrobble:
+            scrobble( caller, type, input );
+            break;
+
+        default:
+            return;
+    }
+}
+
+void
+LastFmPlugin::nowPlaying( const QString &caller, const InfoType type, const QVariant &input )
 {
     if ( !input.canConvert< Tomahawk::InfoSystem::InfoCriteriaHash >() || !m_scrobbler )
-    {
-        dataError( caller, type, input, customData );
         return;
-    }
+
     InfoCriteriaHash hash = input.value< Tomahawk::InfoSystem::InfoCriteriaHash >();
     if ( !hash.contains( "title" ) || !hash.contains( "artist" ) || !hash.contains( "album" ) || !hash.contains( "duration" ) )
-    {
-        dataError( caller, type, input, customData );
         return;
-    }
 
     m_track = lastfm::MutableTrack();
     m_track.stamp();
@@ -158,26 +166,20 @@ LastFmPlugin::nowPlaying( const QString &caller, const InfoType type, const QVar
     m_track.setSource( lastfm::Track::Player );
 
     m_scrobbler->nowPlaying( m_track );
-    emit info( caller, type, input, QVariant(), customData );
 }
 
 
 void
-LastFmPlugin::scrobble( const QString &caller, const InfoType type, const QVariant &input, const Tomahawk::InfoSystem::InfoCustomData &customData )
+LastFmPlugin::scrobble( const QString &caller, const InfoType type, const QVariant &input )
 {
     Q_ASSERT( QThread::currentThread() == thread() );
 
     if ( !m_scrobbler || m_track.isNull() )
-    {
-        dataError( caller, type, input, customData );
         return;
-    }
 
     qDebug() << Q_FUNC_INFO << m_track.toString();
     m_scrobbler->cache( m_track );
     m_scrobbler->submit();
-
-    emit info( caller, type, input, QVariant(), customData );
 }
 
 

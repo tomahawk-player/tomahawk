@@ -54,14 +54,16 @@ public slots:
 protected slots:
     virtual void getInfo( const QString caller, const Tomahawk::InfoSystem::InfoType type, const QVariant input, const Tomahawk::InfoSystem::InfoCustomData customData );
     virtual void notInCacheSlot( const Tomahawk::InfoSystem::InfoCriteriaHash criteria, const QString caller, const Tomahawk::InfoSystem::InfoType type, const QVariant input, const Tomahawk::InfoSystem::InfoCustomData customData );
+
+    virtual void pushInfo( const QString caller, const Tomahawk::InfoSystem::InfoType type, const QVariant data );
     
 private:
     void fetchCoverArt( const QString &caller, const Tomahawk::InfoSystem::InfoType type, const QVariant &input, const Tomahawk::InfoSystem::InfoCustomData &customData );
     void fetchArtistImages( const QString &caller, const Tomahawk::InfoSystem::InfoType type, const QVariant &input, const Tomahawk::InfoSystem::InfoCustomData &customData );
 
     void createScrobbler();
-    void scrobble( const QString &caller, const Tomahawk::InfoSystem::InfoType type, const QVariant &input, const Tomahawk::InfoSystem::InfoCustomData &customData );
-    void nowPlaying( const QString &caller, const Tomahawk::InfoSystem::InfoType type, const QVariant &input, const Tomahawk::InfoSystem::InfoCustomData &customData );
+    void scrobble( const QString &caller, const Tomahawk::InfoSystem::InfoType type, const QVariant &input );
+    void nowPlaying( const QString &caller, const Tomahawk::InfoSystem::InfoType type, const QVariant &input );
 
     void dataError( const QString &caller, const Tomahawk::InfoSystem::InfoType type, const QVariant &input, const Tomahawk::InfoSystem::InfoCustomData &customData );
 

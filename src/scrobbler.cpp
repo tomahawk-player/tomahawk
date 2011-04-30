@@ -80,9 +80,9 @@ Scrobbler::trackStarted( const Tomahawk::result_ptr& track )
     trackInfo["artist"] = track->artist()->name();
     trackInfo["album"] = track->album()->name();
     trackInfo["duration"] = QString::number( track->duration() );
-    Tomahawk::InfoSystem::InfoSystem::instance()->getInfo(
-        s_scInfoIdentifier, Tomahawk::InfoSystem::InfoMiscSubmitNowPlaying,
-        QVariant::fromValue< Tomahawk::InfoSystem::InfoCriteriaHash >( trackInfo ), Tomahawk::InfoSystem::InfoCustomData() );
+    Tomahawk::InfoSystem::InfoSystem::instance()->pushInfo(
+        s_scInfoIdentifier, Tomahawk::InfoSystem::InfoSubmitNowPlaying,
+        QVariant::fromValue< Tomahawk::InfoSystem::InfoCriteriaHash >( trackInfo ) );
 
     m_scrobblePoint = ScrobblePoint( track->duration() / 2 );
 }
@@ -128,9 +128,9 @@ Scrobbler::scrobble()
 {
     Q_ASSERT( QThread::currentThread() == thread() );
 
-    Tomahawk::InfoSystem::InfoSystem::instance()->getInfo(
-        s_scInfoIdentifier, Tomahawk::InfoSystem::InfoMiscSubmitScrobble,
-        QVariant(), Tomahawk::InfoSystem::InfoCustomData() );
+    Tomahawk::InfoSystem::InfoSystem::instance()->pushInfo(
+        s_scInfoIdentifier, Tomahawk::InfoSystem::InfoSubmitScrobble,
+        QVariant() );
 }
 
 
@@ -141,13 +141,7 @@ Scrobbler::infoSystemInfo( QString caller, Tomahawk::InfoSystem::InfoType type, 
     Q_UNUSED( output );
     Q_UNUSED( customData );
     if ( caller == s_scInfoIdentifier )
-    {
         qDebug() << Q_FUNC_INFO;
-        if ( type == Tomahawk::InfoSystem::InfoMiscSubmitNowPlaying )
-            qDebug() << "Scrobbler received now playing response from InfoSystem";
-        else if ( type == Tomahawk::InfoSystem::InfoMiscSubmitScrobble )
-            qDebug() << "Scrobbler received scrobble response from InfoSystem";
-    }
 }
 
 

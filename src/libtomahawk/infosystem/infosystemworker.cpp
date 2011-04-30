@@ -89,21 +89,23 @@ InfoSystemWorker::~InfoSystemWorker()
 
 
 void
-InfoSystemWorker::registerInfoTypes(const InfoPluginPtr &plugin, const QSet< InfoType >& types)
+InfoSystemWorker::registerInfoTypes( const InfoPluginPtr &plugin, const QSet< InfoType >& getTypes, const QSet< InfoType >& pushTypes )
 {
     qDebug() << Q_FUNC_INFO;
-    Q_FOREACH(InfoType type, types)
-        m_infoMap[type].append(plugin);
+    Q_FOREACH( InfoType type, getTypes )
+        m_infoGetMap[type].append( plugin );
+    Q_FOREACH( InfoType type, pushTypes )
+        m_infoPushMap[type].append( plugin );
 }
 
 
 QLinkedList< InfoPluginPtr >
-InfoSystemWorker::determineOrderedMatches(const InfoType type) const
+InfoSystemWorker::determineOrderedMatches( const InfoType type ) const
 {
     //Dummy function for now that returns the various items in the QSet; at some point this will
     //probably need to support ordering based on the data source
     QLinkedList< InfoPluginPtr > providers;
-    Q_FOREACH(InfoPluginPtr ptr, m_infoMap[type])
+    Q_FOREACH( InfoPluginPtr ptr, m_infoGetMap[type] )
         providers << ptr;
     return providers;
 }
@@ -114,20 +116,33 @@ InfoSystemWorker::getInfo( QString caller, InfoType type, QVariant input, InfoCu
 {
     qDebug() << Q_FUNC_INFO;
     QLinkedList< InfoPluginPtr > providers = determineOrderedMatches(type);
-    if (providers.isEmpty())
+    if ( providers.isEmpty() )
     {
-        emit info(caller, type, QVariant(), QVariant(), customData);
+        emit info( caller, type, QVariant(), QVariant(), customData );
         return;
     }
 
     InfoPluginPtr ptr = providers.first();
-    if (!ptr)
+    if ( !ptr )
     {
-        emit info(caller, type, QVariant(), QVariant(), customData);
+        emit info( caller, type, QVariant(), QVariant(), customData );
         return;
     }
 
     QMetaObject::invokeMethod( ptr.data(), "getInfo", Qt::QueuedConnection, Q_ARG( QString, caller ), Q_ARG( Tomahawk::InfoSystem::InfoType, type ), Q_ARG( QVariant, input ), Q_ARG( Tomahawk::InfoSystem::InfoCustomData, customData ) );
+}
+
+
+void
+InfoSystemWorker::pushInfo( const QString caller, const InfoType type, const QVariant input )
+{
+    qDebug() << Q_FUNC_INFO;
+
+    Q_FOREACH( InfoPluginPtr ptr, m_infoPushMap[type] )
+    {
+        if( ptr )
+            QMetaObject::invokeMethod( ptr.data(), "pushInfo", Qt::QueuedConnection, Q_ARG( QString, caller ), Q_ARG( Tomahawk::InfoSystem::InfoType, type ), Q_ARG( QVariant, input ) );
+    }
 }
 
 

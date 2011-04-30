@@ -44,7 +44,7 @@ public:
     InfoSystemWorker();
     ~InfoSystemWorker();
 
-    void registerInfoTypes( const InfoPluginPtr &plugin, const QSet< InfoType > &types );
+    void registerInfoTypes( const InfoPluginPtr &plugin, const QSet< InfoType > &getTypes, const QSet< InfoType > &pushTypes );
     QNetworkAccessManager* nam() const;
     
 signals:
@@ -52,6 +52,7 @@ signals:
 
 public slots:
     void getInfo( const QString caller, const Tomahawk::InfoSystem::InfoType type, const QVariant input, const Tomahawk::InfoSystem::InfoCustomData customData );
+    void pushInfo( const QString caller, const Tomahawk::InfoSystem::InfoType type, const QVariant input );
     void newNam();
     
 private:
@@ -60,7 +61,8 @@ private:
     // For now, statically instantiate plugins; this is just somewhere to keep them
     QLinkedList< InfoPluginPtr > m_plugins;
 
-    QMap< InfoType, QLinkedList< InfoPluginPtr > > m_infoMap;
+    QMap< InfoType, QLinkedList< InfoPluginPtr > > m_infoGetMap;
+    QMap< InfoType, QLinkedList< InfoPluginPtr > > m_infoPushMap;
 
     QNetworkAccessManager *m_nam;
 };

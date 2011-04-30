@@ -131,7 +131,7 @@ InfoSystem::newNam() const
 
 
 void
-InfoSystem::getInfo(const QString &caller, const InfoType type, const QVariant& input, InfoCustomData customData)
+InfoSystem::getInfo( const QString &caller, const InfoType type, const QVariant& input, InfoCustomData customData )
 {
     qDebug() << Q_FUNC_INFO;
 
@@ -142,15 +142,32 @@ InfoSystem::getInfo(const QString &caller, const InfoType type, const QVariant& 
 
 
 void
-InfoSystem::getInfo(const QString &caller, const InfoMap &input, InfoCustomData customData)
+InfoSystem::getInfo( const QString &caller, const InfoMap &input, InfoCustomData customData )
 {
     Q_FOREACH( InfoType type, input.keys() )
-        getInfo(caller, type, input[type], customData);
+        getInfo( caller, type, input[type], customData );
 }
 
 
 void
-InfoSystem::infoSlot(QString target, InfoType type, QVariant input, QVariant output, InfoCustomData customData)
+InfoSystem::pushInfo( const QString &caller, const InfoType type, const QVariant& input )
+{
+    qDebug() << Q_FUNC_INFO;
+
+    QMetaObject::invokeMethod( m_worker, "pushInfo", Qt::QueuedConnection, Q_ARG( QString, caller ), Q_ARG( Tomahawk::InfoSystem::InfoType, type ), Q_ARG( QVariant, input ) );
+}
+
+
+void
+InfoSystem::pushInfo( const QString &caller, const InfoMap &input )
+{
+    Q_FOREACH( InfoType type, input.keys() )
+        pushInfo( caller, type, input[type] );
+}
+
+
+void
+InfoSystem::infoSlot( QString target, InfoType type, QVariant input, QVariant output, InfoCustomData customData )
 {
     qDebug() << Q_FUNC_INFO;
     qDebug() << "current count in dataTracker is " << m_dataTracker[target][type];
