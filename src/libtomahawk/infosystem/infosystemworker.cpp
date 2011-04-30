@@ -152,12 +152,9 @@ InfoSystemWorker::newNam()
         m_nam = newNam;
         return;
     }
-    newNam->setCache( oldNam->cache() );
     newNam->setConfiguration( oldNam->configuration() );
-    newNam->setCookieJar( oldNam->cookieJar() );
     newNam->setNetworkAccessible( oldNam->networkAccessible() );
     newNam->setProxy( oldNam->proxy() );
-    newNam->setProxyFactory( oldNam->proxyFactory() );
     m_nam = newNam;
 }
 
