@@ -21,6 +21,8 @@
 
 #include <QAction>
 #include <QCloseEvent>
+#include <QShowEvent>
+#include <QHideEvent>
 #include <QInputDialog>
 #include <QPixmap>
 #include <QPropertyAnimation>
@@ -265,6 +267,13 @@ TomahawkWindow::setupSignals()
     connect( ui->actionCreate_New_Station, SIGNAL( triggered() ), SLOT( createStation() ));
     connect( ui->actionAboutTomahawk, SIGNAL( triggered() ), SLOT( showAboutTomahawk() ) );
     connect( ui->actionExit, SIGNAL( triggered() ), APP, SLOT( quit() ) );
+#if defined( Q_OS_DARWIN )
+    connect( ui->actionMinimize, SIGNAL( triggered() ), SLOT( minimize() ) );
+    connect( ui->actionZoom, SIGNAL( triggered() ), SLOT( maximize() ) );
+#else
+    ui->menuWindow->clear();
+    ui->menuWindow->menuAction()->setVisible( false );
+#endif
 
     // <SipHandler>
     connect( APP->sipHandler(), SIGNAL( connected() ), SLOT( onSipConnected() ) );
@@ -292,7 +301,6 @@ TomahawkWindow::changeEvent( QEvent* e )
     }
 }
 
-
 void
 TomahawkWindow::closeEvent( QCloseEvent* e )
 {
@@ -308,6 +316,27 @@ TomahawkWindow::closeEvent( QCloseEvent* e )
     e->accept();
 }
 
+void
+TomahawkWindow::showEvent( QShowEvent* e )
+{
+    QMainWindow::showEvent( e );
+
+#if defined( Q_OS_DARWIN )
+    ui->actionMinimize->setDisabled( false );
+    ui->actionZoom->setDisabled( false );
+#endif
+}
+
+void
+TomahawkWindow::hideEvent( QHideEvent* e )
+{
+    QMainWindow::hideEvent( e );
+
+#if defined( Q_OS_DARWIN )
+    ui->actionMinimize->setDisabled( true );
+    ui->actionZoom->setDisabled( true );
+#endif
+}
 
 void
 TomahawkWindow::showSettingsDialog()
@@ -514,4 +543,24 @@ TomahawkWindow::checkForUpdates()
 #ifdef Q_WS_MAC
     Tomahawk::checkForUpdates();
 #endif
+}
+
+void
+TomahawkWindow::minimize()
+{
+    if (isMinimized()) {
+        showNormal();
+    } else {
+        showMinimized();
+    }
+}
+
+void
+TomahawkWindow::maximize()
+{
+    if (isMaximized()) {
+        showNormal();
+    } else {
+        showMaximized();
+    }
 }
