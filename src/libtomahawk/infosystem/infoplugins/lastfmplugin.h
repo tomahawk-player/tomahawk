@@ -19,6 +19,7 @@
 #ifndef LASTFMPLUGIN_H
 #define LASTFMPLUGIN_H
 #include "infosystem/infosystem.h"
+#include "infosystem/infosystemworker.h"
 #include "result.h"
 
 #include <lastfm/Track>

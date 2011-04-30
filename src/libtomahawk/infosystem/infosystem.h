@@ -140,31 +140,6 @@ private:
 
 typedef QWeakPointer< InfoPlugin > InfoPluginPtr;
 
-class DLLEXPORT InfoSystemWorker : public QObject
-{
-    Q_OBJECT
-
-public:
-    InfoSystemWorker();
-    ~InfoSystemWorker();
-
-    void registerInfoTypes( const InfoPluginPtr &plugin, const QSet< InfoType > &types );
-    
-signals:
-    void info( QString target, Tomahawk::InfoSystem::InfoType, QVariant input, QVariant output, Tomahawk::InfoSystem::InfoCustomData customData );
-
-public slots:
-    void getInfo( const QString caller, const Tomahawk::InfoSystem::InfoType type, const QVariant input, const Tomahawk::InfoSystem::InfoCustomData customData );
-    
-private:
-    QLinkedList< InfoPluginPtr > determineOrderedMatches( const InfoType type ) const;
-    
-    // For now, statically instantiate plugins; this is just somewhere to keep them
-    QLinkedList< InfoPluginPtr > m_plugins;
-
-    QMap< InfoType, QLinkedList< InfoPluginPtr > > m_infoMap;
-};
-
 class DLLEXPORT InfoSystem : public QObject
 {
     Q_OBJECT

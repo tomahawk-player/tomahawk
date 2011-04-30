@@ -232,6 +232,7 @@ set( libHeaders
     database/databasecommand_clientauthvalid.h
 
     infosystem/infosystem.h
+    infosystem/infosystemworker.h
     infosystem/infosystemcache.h
     infosystem/infoplugins/echonestplugin.h
     infosystem/infoplugins/lastfmplugin.h

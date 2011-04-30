@@ -18,7 +18,7 @@
 
 #include <QCoreApplication>
 
-#include "infosystem.h"
+#include "infosystemworker.h"
 #include "utils/tomahawkutils.h"
 #include "infosystemcache.h"
 #include "infoplugins/echonestplugin.h"

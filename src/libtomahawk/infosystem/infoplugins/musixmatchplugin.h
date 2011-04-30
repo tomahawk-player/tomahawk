@@ -20,6 +20,7 @@
 #define MUSIXMATCHPLUGIN_H
 
 #include "infosystem/infosystem.h"
+#include "infosystem/infosystemworker.h"
 
 class QNetworkReply;
 
