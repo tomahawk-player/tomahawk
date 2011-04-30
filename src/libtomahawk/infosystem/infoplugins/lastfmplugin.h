@@ -72,6 +72,8 @@ private:
     QList< QUrl > m_badUrls;
 
     QNetworkReply* m_authJob;
+
+    InfoSystemWorker* m_infoSystemWorker;
 };
 
 }

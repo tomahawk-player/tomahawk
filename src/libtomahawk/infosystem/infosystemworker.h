@@ -21,6 +21,7 @@
 
 #include "infosystem/infosystem.h"
 
+#include <QNetworkAccessManager>
 #include <QtCore/QObject>
 #include <QtCore/QtDebug>
 #include <QtCore/QMap>
@@ -44,12 +45,14 @@ public:
     ~InfoSystemWorker();
 
     void registerInfoTypes( const InfoPluginPtr &plugin, const QSet< InfoType > &types );
+    QNetworkAccessManager* nam() const;
     
 signals:
     void info( QString target, Tomahawk::InfoSystem::InfoType, QVariant input, QVariant output, Tomahawk::InfoSystem::InfoCustomData customData );
 
 public slots:
     void getInfo( const QString caller, const Tomahawk::InfoSystem::InfoType type, const QVariant input, const Tomahawk::InfoSystem::InfoCustomData customData );
+    void newNam();
     
 private:
     QLinkedList< InfoPluginPtr > determineOrderedMatches( const InfoType type ) const;
@@ -58,6 +61,8 @@ private:
     QLinkedList< InfoPluginPtr > m_plugins;
 
     QMap< InfoType, QLinkedList< InfoPluginPtr > > m_infoMap;
+
+    QNetworkAccessManager *m_nam;
 };
 
 }

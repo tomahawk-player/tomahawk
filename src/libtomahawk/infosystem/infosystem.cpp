@@ -19,6 +19,7 @@
 #include <QCoreApplication>
 
 #include "infosystem.h"
+#include "tomahawksettings.h"
 #include "utils/tomahawkutils.h"
 #include "infosystemcache.h"
 #include "infoplugins/echonestplugin.h"
@@ -63,7 +64,11 @@ InfoSystem::InfoSystem(QObject *parent)
     m_worker = new InfoSystemWorker();
     m_worker->moveToThread( m_infoSystemWorkerThreadController );
     m_infoSystemWorkerThreadController->start();
-    
+
+    QMetaObject::invokeMethod( m_worker, "newNam", Qt::QueuedConnection );
+
+    connect( TomahawkSettings::instance(), SIGNAL( changed() ), m_worker, SLOT( newNam() ) );
+
     connect( m_cache, SIGNAL( info( QString, Tomahawk::InfoSystem::InfoType, QVariant, QVariant, Tomahawk::InfoSystem::InfoCustomData ) ),
             this,       SLOT( infoSlot( QString, Tomahawk::InfoSystem::InfoType, QVariant, QVariant, Tomahawk::InfoSystem::InfoCustomData ) ), Qt::UniqueConnection );
 
@@ -118,7 +123,15 @@ InfoSystem::~InfoSystem()
 }
 
 
-void InfoSystem::getInfo(const QString &caller, const InfoType type, const QVariant& input, InfoCustomData customData)
+void
+InfoSystem::newNam() const
+{
+    QMetaObject::invokeMethod( m_worker, "newNam", Qt::QueuedConnection );
+}
+
+
+void
+InfoSystem::getInfo(const QString &caller, const InfoType type, const QVariant& input, InfoCustomData customData)
 {
     qDebug() << Q_FUNC_INFO;
 
@@ -128,14 +141,16 @@ void InfoSystem::getInfo(const QString &caller, const InfoType type, const QVari
 }
 
 
-void InfoSystem::getInfo(const QString &caller, const InfoMap &input, InfoCustomData customData)
+void
+InfoSystem::getInfo(const QString &caller, const InfoMap &input, InfoCustomData customData)
 {
     Q_FOREACH( InfoType type, input.keys() )
         getInfo(caller, type, input[type], customData);
 }
 
 
-void InfoSystem::infoSlot(QString target, InfoType type, QVariant input, QVariant output, InfoCustomData customData)
+void
+InfoSystem::infoSlot(QString target, InfoType type, QVariant input, QVariant output, InfoCustomData customData)
 {
     qDebug() << Q_FUNC_INFO;
     qDebug() << "current count in dataTracker is " << m_dataTracker[target][type];

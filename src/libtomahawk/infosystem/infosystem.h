@@ -153,7 +153,8 @@ public:
     void getInfo( const QString &caller, const InfoType type, const QVariant &input, InfoCustomData customData );
     void getInfo( const QString &caller, const InfoMap &input, InfoCustomData customData );
 
-    InfoSystemCache* getCache() { return m_cache; }
+    InfoSystemCache* getCache() const { return m_cache; }
+    void newNam() const;
 
 signals:
     void info( QString caller, Tomahawk::InfoSystem::InfoType, QVariant input, QVariant output, Tomahawk::InfoSystem::InfoCustomData customData );

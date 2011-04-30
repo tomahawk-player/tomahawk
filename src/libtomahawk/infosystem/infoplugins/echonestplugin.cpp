@@ -27,6 +27,7 @@ using namespace Echonest;
 
 EchoNestPlugin::EchoNestPlugin(InfoSystemWorker *parent)
     : InfoPlugin(parent)
+    , m_infoSystemWorker( parent )
 {
     qDebug() << Q_FUNC_INFO;
     QSet< InfoType > supportedTypes;

@@ -17,6 +17,8 @@
  */
 
 #include <QCoreApplication>
+#include <QNetworkConfiguration>
+#include <QNetworkProxy>
 
 #include "infosystemworker.h"
 #include "utils/tomahawkutils.h"
@@ -32,6 +34,7 @@ namespace InfoSystem
 {
 
 InfoSystemWorker::InfoSystemWorker()
+    : m_nam( 0 )
 {
     InfoPluginPtr enptr( new EchoNestPlugin( this ) );
     m_plugins.append( enptr );
@@ -126,6 +129,38 @@ InfoSystemWorker::getInfo( QString caller, InfoType type, QVariant input, InfoCu
 
     QMetaObject::invokeMethod( ptr.data(), "getInfo", Qt::QueuedConnection, Q_ARG( QString, caller ), Q_ARG( Tomahawk::InfoSystem::InfoType, type ), Q_ARG( QVariant, input ), Q_ARG( Tomahawk::InfoSystem::InfoCustomData, customData ) );
 }
+
+
+QNetworkAccessManager*
+InfoSystemWorker::nam() const
+{
+    return m_nam;
+}
+
+
+void
+InfoSystemWorker::newNam()
+{
+    QNetworkAccessManager *newNam = new QNetworkAccessManager( this );
+    if ( m_nam )
+    {
+        delete m_nam;
+    }
+    QNetworkAccessManager *oldNam = TomahawkUtils::nam();
+    if ( !oldNam )
+    {
+        m_nam = newNam;
+        return;
+    }
+    newNam->setCache( oldNam->cache() );
+    newNam->setConfiguration( oldNam->configuration() );
+    newNam->setCookieJar( oldNam->cookieJar() );
+    newNam->setNetworkAccessible( oldNam->networkAccessible() );
+    newNam->setProxy( oldNam->proxy() );
+    newNam->setProxyFactory( oldNam->proxyFactory() );
+    m_nam = newNam;
+}
+
 
 } //namespace InfoSystem
 

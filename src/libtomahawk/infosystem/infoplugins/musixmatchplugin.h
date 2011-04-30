@@ -49,6 +49,8 @@ private:
     bool isValidTrackData( const QString &caller, const QVariant &input, const InfoCustomData &customData );
     
     QString m_apiKey;
+
+    InfoSystemWorker* m_infoSystemWorker;
 };
 
 }

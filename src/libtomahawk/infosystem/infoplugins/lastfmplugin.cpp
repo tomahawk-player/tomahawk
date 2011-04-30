@@ -45,6 +45,7 @@ LastFmPlugin::LastFmPlugin( InfoSystemWorker* parent )
     : InfoPlugin(parent)
     , m_scrobbler( 0 )
     , m_authJob( 0 )
+    , m_infoSystemWorker( parent )
 {
     QSet< InfoType > supportedTypes;
     supportedTypes << InfoMiscSubmitScrobble << InfoMiscSubmitNowPlaying << InfoAlbumCoverArt << InfoArtistImages;
@@ -241,7 +242,7 @@ LastFmPlugin::notInCacheSlot( const QHash<QString, QString> criteria, const QStr
 
             QString imgurl = "http://ws.audioscrobbler.com/2.0/?method=album.imageredirect&artist=%1&album=%2&autocorrect=1&size=medium&api_key=7a90f6672a04b809ee309af169f34b8b";
             QNetworkRequest req( imgurl.arg( artistName ).arg( albumName ) );
-            QNetworkReply* reply = TomahawkUtils::nam()->get( req );
+            QNetworkReply* reply = m_infoSystemWorker->nam()->get( req );
             reply->setProperty( "customData", QVariant::fromValue<Tomahawk::InfoSystem::InfoCustomData>( customData ) );
             reply->setProperty( "origData", input );
             reply->setProperty( "caller", caller );
@@ -257,7 +258,7 @@ LastFmPlugin::notInCacheSlot( const QHash<QString, QString> criteria, const QStr
 
             QString imgurl = "http://ws.audioscrobbler.com/2.0/?method=artist.imageredirect&artist=%1&autocorrect=1&size=medium&api_key=7a90f6672a04b809ee309af169f34b8b";
             QNetworkRequest req( imgurl.arg( artistName ) );
-            QNetworkReply* reply = TomahawkUtils::nam()->get( req );
+            QNetworkReply* reply = m_infoSystemWorker->nam()->get( req );
             reply->setProperty( "customData", QVariant::fromValue<Tomahawk::InfoSystem::InfoCustomData>( customData ) );
             reply->setProperty( "origData", input );
             reply->setProperty( "caller", caller );
@@ -312,7 +313,7 @@ LastFmPlugin::coverArtReturned()
     {
         // Follow HTTP redirect
         QNetworkRequest req( redir );
-        QNetworkReply* newReply = TomahawkUtils::nam()->get( req );
+        QNetworkReply* newReply = m_infoSystemWorker->nam()->get( req );
         newReply->setProperty( "origData", reply->property( "origData" ) );
         newReply->setProperty( "customData", reply->property( "customData" ) );
         newReply->setProperty( "caller", reply->property( "caller" ) );
@@ -362,7 +363,7 @@ LastFmPlugin::artistImagesReturned()
     {
         // Follow HTTP redirect
         QNetworkRequest req( redir );
-        QNetworkReply* newReply = TomahawkUtils::nam()->get( req );
+        QNetworkReply* newReply = m_infoSystemWorker->nam()->get( req );
         newReply->setProperty( "origData", reply->property( "origData" ) );
         newReply->setProperty( "customData", reply->property( "customData" ) );
         newReply->setProperty( "caller", reply->property( "caller" ) );

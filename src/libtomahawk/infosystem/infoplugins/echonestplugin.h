@@ -68,6 +68,7 @@ private slots:
 private:
     QHash< QNetworkReply*, InfoCustomData > m_replyMap;
     QHash< QNetworkReply*, QString > m_callerMap;
+    InfoSystemWorker* m_infoSystemWorker;
 };
 
 }
