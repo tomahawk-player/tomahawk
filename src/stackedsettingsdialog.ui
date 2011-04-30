@@ -6,15 +6,24 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>519</width>
-    <height>425</height>
+    <width>641</width>
+    <height>370</height>
    </rect>
   </property>
   <property name="windowTitle">
    <string>Tomahawk Settings</string>
   </property>
   <layout class="QVBoxLayout" name="verticalLayout_12">
-   <property name="margin">
+   <property name="leftMargin">
+    <number>0</number>
+   </property>
+   <property name="topMargin">
+    <number>2</number>
+   </property>
+   <property name="rightMargin">
+    <number>0</number>
+   </property>
+   <property name="bottomMargin">
     <number>0</number>
    </property>
    <item>
