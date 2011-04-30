@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>561</width>
+    <width>629</width>
     <height>362</height>
    </rect>
   </property>
@@ -23,21 +23,45 @@
       <widget class="QListWidget" name="listWidget">
        <property name="maximumSize">
         <size>
-         <width>68</width>
+         <width>16777215</width>
          <height>16777215</height>
         </size>
        </property>
+       <property name="focusPolicy">
+        <enum>Qt::NoFocus</enum>
+       </property>
+       <property name="frameShape">
+        <enum>QFrame::Panel</enum>
+       </property>
+       <property name="frameShadow">
+        <enum>QFrame::Raised</enum>
+       </property>
+       <property name="verticalScrollBarPolicy">
+        <enum>Qt::ScrollBarAlwaysOff</enum>
+       </property>
+       <property name="horizontalScrollBarPolicy">
+        <enum>Qt::ScrollBarAlwaysOff</enum>
+       </property>
+       <property name="autoScroll">
+        <bool>true</bool>
+       </property>
        <property name="iconSize">
         <size>
-         <width>64</width>
-         <height>64</height>
+         <width>48</width>
+         <height>48</height>
         </size>
        </property>
        <property name="movement">
         <enum>QListView::Static</enum>
        </property>
+       <property name="resizeMode">
+        <enum>QListView::Adjust</enum>
+       </property>
+       <property name="layoutMode">
+        <enum>QListView::Batched</enum>
+       </property>
        <property name="spacing">
-        <number>4</number>
+        <number>1</number>
        </property>
        <property name="viewMode">
         <enum>QListView::IconMode</enum>
@@ -334,16 +358,9 @@
              </layout>
             </item>
            </layout>
-           <zorder>scriptList</zorder>
-           <zorder>scriptList</zorder>
-           <zorder></zorder>
-           <zorder>label</zorder>
           </widget>
          </item>
         </layout>
-        <zorder>layoutWidget_2</zorder>
-        <zorder>verticalSpacer_4</zorder>
-        <zorder>groupBox_3</zorder>
        </widget>
        <widget class="QWidget" name="advancedPage">
         <layout class="QVBoxLayout" name="verticalLayout_3">

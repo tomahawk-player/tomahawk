@@ -153,36 +153,53 @@ SettingsDialog::~SettingsDialog()
 void
 SettingsDialog::createIcons()
 {
+    /// Not fun but QListWidget sucks. Do our max-width calculation manually
+    /// so the icons arre lined up.
+    // Resolvers is the longest string... in english. fml.
+
+    int maxlen = 0;
+    QFontMetrics fm( font() );
     QListWidgetItem *accountsButton = new QListWidgetItem( ui->listWidget );
     accountsButton->setIcon( QIcon( RESPATH "images/account-settings.png" ) );
     accountsButton->setText( tr( "Accounts" ) );
     accountsButton->setTextAlignment( Qt::AlignHCenter );
     accountsButton->setFlags( Qt::ItemIsSelectable | Qt::ItemIsEnabled );
+    maxlen = fm.width( accountsButton->text() );
 
     QListWidgetItem *musicButton = new QListWidgetItem( ui->listWidget );
     musicButton->setIcon( QIcon( RESPATH "images/music-settings.png" ) );
     musicButton->setText( tr( "Music" ) );
     musicButton->setTextAlignment( Qt::AlignHCenter );
     musicButton->setFlags( Qt::ItemIsSelectable | Qt::ItemIsEnabled );
+    maxlen = qMax( fm.width( musicButton->text() ), maxlen );
 
     QListWidgetItem *lastfmButton = new QListWidgetItem( ui->listWidget );
     lastfmButton->setIcon( QIcon( RESPATH "images/lastfm-settings.png" ) );
     lastfmButton->setText( tr( "Last.fm" ) );
     lastfmButton->setTextAlignment( Qt::AlignHCenter );
     lastfmButton->setFlags( Qt::ItemIsSelectable | Qt::ItemIsEnabled );
+    maxlen = qMax( fm.width( lastfmButton->text() ), maxlen );
 
     QListWidgetItem *resolversButton = new QListWidgetItem( ui->listWidget );
     resolversButton->setIcon( QIcon( RESPATH "images/resolvers-settings.png" ) );
     resolversButton->setText( tr( "Resolvers" ) );
     resolversButton->setTextAlignment( Qt::AlignHCenter );
     resolversButton->setFlags( Qt::ItemIsSelectable | Qt::ItemIsEnabled );
+    maxlen = qMax( fm.width( resolversButton->text() ), maxlen );
 
     QListWidgetItem *advancedButton = new QListWidgetItem( ui->listWidget );
     advancedButton->setIcon( QIcon( RESPATH "images/advanced-settings.png" ) );
     advancedButton->setText( tr( "Advanced" ) );
     advancedButton->setTextAlignment( Qt::AlignHCenter );
     advancedButton->setFlags( Qt::ItemIsSelectable | Qt::ItemIsEnabled );
+    maxlen = qMax( fm.width( advancedButton->text() ), maxlen );
 
+    maxlen += 16; // padding
+    accountsButton->setSizeHint( QSize( maxlen, 60 ) );
+    musicButton->setSizeHint( QSize( maxlen, 60 ) );
+    lastfmButton->setSizeHint( QSize( maxlen, 60 ) );
+    resolversButton->setSizeHint( QSize( maxlen, 60 ) );
+    advancedButton->setSizeHint( QSize( maxlen, 60 ) );
 
     connect( ui->listWidget, SIGNAL( currentItemChanged( QListWidgetItem* ,QListWidgetItem* ) ), this, SLOT( changePage( QListWidgetItem*, QListWidgetItem* ) ) );
 }
