@@ -72,6 +72,12 @@ SettingsDialog::SettingsDialog( QWidget *parent )
     ui->checkBoxUpnp->setEnabled( !s->preferStaticHostPort() );
 
     createIcons();
+#ifdef Q_WS_X11
+    ui->listWidget->setFrameShape( QFrame::StyledPanel );
+    ui->listWidget->setFrameShadow( QFrame::Sunken );
+#else
+    ui->verticalLayout->removeItem( ui->verticalSpacer_3 );
+#endif
 
     // SIP PLUGINS
     SipConfigDelegate* sipdel = new SipConfigDelegate( this );
@@ -194,12 +200,17 @@ SettingsDialog::createIcons()
     advancedButton->setFlags( Qt::ItemIsSelectable | Qt::ItemIsEnabled );
     maxlen = qMax( fm.width( advancedButton->text() ), maxlen );
 
-    maxlen += 16; // padding
+    maxlen += 15; // padding
     accountsButton->setSizeHint( QSize( maxlen, 60 ) );
     musicButton->setSizeHint( QSize( maxlen, 60 ) );
     lastfmButton->setSizeHint( QSize( maxlen, 60 ) );
     resolversButton->setSizeHint( QSize( maxlen, 60 ) );
     advancedButton->setSizeHint( QSize( maxlen, 60 ) );
+
+#ifndef Q_WS_MAC
+    // doesn't listen to sizehint...
+    ui->listWidget->setMaximumWidth( maxlen + 14 );
+#endif
 
     connect( ui->listWidget, SIGNAL( currentItemChanged( QListWidgetItem* ,QListWidgetItem* ) ), this, SLOT( changePage( QListWidgetItem*, QListWidgetItem* ) ) );
 }

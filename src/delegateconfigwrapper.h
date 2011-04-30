@@ -29,6 +29,7 @@ public:
     DelegateConfigWrapper( QWidget* conf, const QString& title, QWidget* parent ) : QDialog( parent ), m_widget( conf )
     {
         m_widget->setVisible( true );
+        m_widget->setWindowFlags( Qt::Sheet );
 
         setWindowTitle( title );
         QVBoxLayout* v = new QVBoxLayout( this );
