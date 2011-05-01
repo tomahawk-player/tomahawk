@@ -62,6 +62,9 @@ protected slots:
         Q_UNUSED( customData );
     }
 
+public slots:
+    void namChangedSlot();
+
 private:
     void getSongProfile( const QString &caller, const QVariant &input, const InfoCustomData &customData, const QString &item = QString() );
     void getArtistBiography ( const QString &caller, const QVariant &input, const InfoCustomData &customData );

@@ -33,11 +33,19 @@ EchoNestPlugin::EchoNestPlugin(InfoSystemWorker *parent)
     QSet< InfoType > supportedTypes;
     supportedTypes << Tomahawk::InfoSystem::InfoArtistBiography << Tomahawk::InfoSystem::InfoArtistFamiliarity << Tomahawk::InfoSystem::InfoArtistHotttness << Tomahawk::InfoSystem::InfoArtistTerms << Tomahawk::InfoSystem::InfoMiscTopTerms;
     parent->registerInfoTypes( this, supportedTypes, QSet< InfoType>() );
+
+    connect( parent, SIGNAL( namChanged() ), SLOT( namChangedSlot() ) );
 }
 
 EchoNestPlugin::~EchoNestPlugin()
 {
     qDebug() << Q_FUNC_INFO;
+}
+
+void
+EchoNestPlugin::namChangedSlot()
+{
+    Echonest::Config::instance()->setNetworkAccessManager( m_infoSystemWorker->nam() );
 }
 
 void

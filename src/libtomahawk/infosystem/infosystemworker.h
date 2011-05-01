@@ -49,6 +49,7 @@ public:
     
 signals:
     void info( QString target, Tomahawk::InfoSystem::InfoType, QVariant input, QVariant output, Tomahawk::InfoSystem::InfoCustomData customData );
+    void namChanged();
 
 public slots:
     void init();
