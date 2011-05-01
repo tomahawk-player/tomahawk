@@ -21,11 +21,29 @@
 #define JABBER_H
 
 #include "sip/SipPlugin.h"
-#include "jabber_p.h"
 
-#include "../sipdllmacro.h"
+#include "avatarmanager.h"
+
+#include <jreen/client.h>
+#include <jreen/disco.h>
+#include <jreen/message.h>
+#include <jreen/messagesession.h>
+#include <jreen/stanza.h>
+#include <jreen/jreen.h>
+#include <jreen/error.h>
+#include <jreen/presence.h>
+#include <jreen/vcard.h>
+#include <jreen/abstractroster.h>
+#include <jreen/connection.h>
+#include <jreen/mucroom.h>
+
+#include <QNetworkProxy>
 
 #define MYNAME "SIPJREEN"
+#define TOMAHAWK_FEATURE QLatin1String( "tomahawk:sip:v1" )
+#define TOMAHAWK_CAP_NODE_NAME QLatin1String( "http://tomahawk-player.org/" )
+
+#include "../sipdllmacro.h"
 
 class SIPDLLEXPORT JabberPlugin : public SipPlugin
 {
@@ -44,6 +62,8 @@ public:
     virtual QMenu* menu();
 
     void setProxy( QNetworkProxy* proxy );
+signals:
+    void jidChanged( const QString& );
 
 public slots:
     virtual bool connectPlugin( bool startup );
@@ -55,12 +75,28 @@ public slots:
 
 private slots:
     void showAddFriendDialog();
-    void onConnected();
-    void onDisconnected();
+    void onConnect();
+    void onDisconnect(Jreen::Client::DisconnectReason reason);
     void onAuthError(int code, const QString &msg);
 
+    void onNewPresence( const Jreen::Presence& presence );
+    void onNewMessage( const Jreen::Message& message );
+    void onError( const Jreen::Connection::SocketError& e )
+    {
+        qDebug() << e;
+    }
+    void onNewIq( const Jreen::IQ &iq, int context = NoContext );
+    void onNewAvatar( const QString &jid );
+
 private:
-    Jabber_p* p;
+    void addMenuHelper();
+    void removeMenuHelper();
+
+    bool presenceMeansOnline( Jreen::Presence::Type p );
+    void handlePeerStatus( const Jreen::JID &jid, Jreen::Presence::Type presenceType );
+
+    bool m_connected;
+
     QMenu* m_menu;
     QAction* m_addFriendAction;
 
@@ -68,6 +104,17 @@ private:
     QString m_currentPassword;
     QString m_currentServer;
     unsigned int m_currentPort;
+    QString m_currentResource;
+
+    // sort out
+    Jreen::Client *m_client;
+
+    Jreen::MUCRoom *m_room;
+    Jreen::SimpleRoster *m_roster;
+    QHash<Jreen::JID, Jreen::Presence::Type> m_peers;
+    enum IqContext { NoContext, RequestDisco, RequestedDisco, SipMessageSent, RequestedVCard };
+    QStringList m_legacy_peers;
+    AvatarManager *m_avatarManager;
 };
 
 #endif

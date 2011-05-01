@@ -8,7 +8,6 @@ add_definitions( -DSIPDLLEXPORT_PRO )
 
 set( jabberSources
     jabber.cpp
-    jabber_p.cpp
     tomahawksipmessage.cpp
     tomahawksipmessagefactory.cpp
     avatarmanager.cpp
@@ -16,7 +15,6 @@ set( jabberSources
 
 set( jabberHeaders
     jabber.h
-    jabber_p.h
     tomahawksipmessage.h
     tomahawksipmessagefactory.h
     avatarmanager.h
