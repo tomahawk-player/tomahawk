@@ -113,12 +113,6 @@ AudioEngine::stop()
     m_expectStop = true;
     m_mediaObject->stop();
 
-    if ( !m_input.isNull() )
-    {
-        m_input->close();
-        m_input.clear();
-    }
-
     setCurrentTrack( Tomahawk::result_ptr() );
     emit stopped();
 }
@@ -198,8 +192,6 @@ AudioEngine::loadTrack( const Tomahawk::result_ptr& result )
                 m_expectStop = true;
             }
 
-            m_input = io;
-
             if ( !m_currentTrack->url().startsWith( "http://" ) )
             {
                 m_mediaObject->setCurrentSource( io.data() );
@@ -215,6 +207,9 @@ AudioEngine::loadTrack( const Tomahawk::result_ptr& result )
                 }
                 m_mediaObject->setCurrentSource( furl );
             }
+
+            m_input = io;
+
             m_mediaObject->currentSource().setAutoDelete( true );
             m_mediaObject->play();
 
