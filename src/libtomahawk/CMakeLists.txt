@@ -21,6 +21,7 @@ set( libSources
     artist.cpp
     album.cpp
     collection.cpp
+    webcollection.cpp
     playlist.cpp
     resolver.cpp
     query.cpp
@@ -37,6 +38,7 @@ set( libSources
     database/database.cpp
     database/fuzzyindex.cpp
     database/databasecollection.cpp
+    database/localcollection.cpp
     database/databaseworker.cpp
     database/databaseimpl.cpp
     database/databaseresolver.cpp
@@ -65,7 +67,6 @@ set( libSources
     database/databasecommand_renameplaylist.cpp
     database/databasecommand_loadops.cpp
     database/databasecommand_updatesearchindex.cpp
-    database/databasecollection.cpp
     database/databasecommand_setdynamicplaylistrevision.cpp
     database/databasecommand_createdynamicplaylist.cpp
     database/databasecommand_loaddynamicplaylist.cpp
@@ -174,6 +175,7 @@ set( libHeaders
 
     aclsystem.h
     collection.h
+    webcollection.h
     query.h
     resolver.h
     result.h
@@ -222,6 +224,7 @@ set( libHeaders
     database/databasecommand_loadops.h
     database/databasecommand_updatesearchindex.h
     database/databasecollection.h
+    database/localcollection.h
     database/databasecommand_setdynamicplaylistrevision.h
     database/databasecommand_createdynamicplaylist.h
     database/databasecommand_loaddynamicplaylist.h

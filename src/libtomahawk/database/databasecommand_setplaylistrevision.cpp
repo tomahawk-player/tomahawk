@@ -1,5 +1,5 @@
 /* === This file is part of Tomahawk Player - <http://tomahawk-player.org> ===
- * 
+ *
  *   Copyright 2010-2011, Christian Muehlhaeuser <muesli@tomahawk-player.org>
  *
  *   Tomahawk is free software: you can redistribute it and/or modify
@@ -60,7 +60,7 @@ DatabaseCommand_SetPlaylistRevision::postCommitHook()
         qDebug() << "Source has gone offline, not emitting to GUI.";
         return;
     }
-    
+
     if ( m_localOnly )
         return;
 
@@ -149,6 +149,8 @@ DatabaseCommand_SetPlaylistRevision::exec( DatabaseImpl* lib )
             QString resultHint;
             if ( !e->query()->results().isEmpty() )
                 resultHint = e->query()->results().first()->url();
+            else if ( !e->query()->resultHint().isEmpty() )
+                resultHint = e->query()->resultHint();
 
             adde.bindValue( 0, e->guid() );
             adde.bindValue( 1, m_playlistguid );

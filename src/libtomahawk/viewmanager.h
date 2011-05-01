@@ -67,6 +67,7 @@ public:
 
     QWidget* widget() const { return m_widget; }
     PlaylistView* queue() const;
+    TopBar* topbar() const { return m_topbar; }
 
     bool isSuperCollectionVisible() const;
     bool isNewPlaylistPageVisible() const;
@@ -75,14 +76,6 @@ public:
     Tomahawk::ViewPage* currentPage() const;
     Tomahawk::ViewPage* pageForInterface( PlaylistInterface* interface ) const;
     int positionInHistory( Tomahawk::ViewPage* page ) const;
-
-    // Returns the shown viewpage
-    Tomahawk::ViewPage* show( const Tomahawk::playlist_ptr& playlist );
-    Tomahawk::ViewPage* show( const Tomahawk::dynplaylist_ptr& playlist );
-    Tomahawk::ViewPage* show( const Tomahawk::artist_ptr& artist );
-    Tomahawk::ViewPage* show( const Tomahawk::album_ptr& album );
-    Tomahawk::ViewPage* show( const Tomahawk::collection_ptr& collection );
-    Tomahawk::ViewPage* show( const Tomahawk::source_ptr& source );
 
     Tomahawk::ViewPage* show( Tomahawk::ViewPage* page );
 
@@ -126,6 +119,14 @@ public slots:
     Tomahawk::ViewPage* showSuperCollection();
     Tomahawk::ViewPage* showWelcomePage();
     void showCurrentTrack();
+
+    // Returns the shown viewpage
+    Tomahawk::ViewPage* show( const Tomahawk::playlist_ptr& playlist );
+    Tomahawk::ViewPage* show( const Tomahawk::dynplaylist_ptr& playlist );
+    Tomahawk::ViewPage* show( const Tomahawk::artist_ptr& artist );
+    Tomahawk::ViewPage* show( const Tomahawk::album_ptr& album );
+    Tomahawk::ViewPage* show( const Tomahawk::collection_ptr& collection );
+    Tomahawk::ViewPage* show( const Tomahawk::source_ptr& source );
 
     void historyBack();
     void historyForward();

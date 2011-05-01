@@ -29,6 +29,12 @@
 
 using namespace Tomahawk;
 
+void
+XSPFLoader::setOverrideTitle( const QString& newTitle )
+{
+    m_overrideTitle = newTitle;
+}
+
 
 void
 XSPFLoader::load( const QUrl& url )
@@ -116,13 +122,15 @@ XSPFLoader::gotBody()
     m_title = origTitle;
     if ( m_title.isEmpty() )
         m_title = tr( "New Playlist" );
+    if( !m_overrideTitle.isEmpty() )
+        m_title = m_overrideTitle;
 
     bool shownError = false;
     for ( unsigned int i = 0; i < tracklist.length(); i++ )
     {
         QDomNode e = tracklist.at( i );
 
-        QString artist, album, track, duration, annotation;
+        QString artist, album, track, duration, annotation, url;
         QDomElement n = e.firstChildElement();
         for ( ; !n.isNull(); n = n.nextSiblingElement() ) {
             if (n.namespaceURI() == m_NS && n.localName() == "duration") {
@@ -135,6 +143,8 @@ XSPFLoader::gotBody()
                 album = n.text();
             } else if (n.namespaceURI() == m_NS && n.localName() == "title") {
                 track = n.text();
+            } else if (n.namespaceURI() == m_NS && n.localName() == "url") {
+                url = n.text();
             }
         }
 
@@ -154,6 +164,8 @@ XSPFLoader::gotBody()
 
         p->setQuery( Tomahawk::Query::get( artist, track, album, uuid() ) );
         p->query()->setDuration( duration.toInt() / 1000 );
+        if( !url.isEmpty() )
+            p->query()->setResultHint( url );
         m_entries << p;
     }
 

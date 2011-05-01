@@ -82,7 +82,8 @@ public:
                                           const QString& info,
                                           const QString& creator,
                                           GeneratorMode mode,
-                                          bool shared
+                                          bool shared,
+                                          const QString& type = QString()
                                           );
     static bool remove( const dynplaylist_ptr& playlist );
 
