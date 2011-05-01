@@ -90,7 +90,6 @@ JabberPlugin::JabberPlugin()
     connect(m_client->connection(), SIGNAL(error(SocketError)), SLOT(onError(SocketError)));
     connect(m_client, SIGNAL(serverFeaturesReceived(QSet<QString>)), SLOT(onConnect()));
     connect(m_client, SIGNAL(disconnected(Jreen::Client::DisconnectReason)), SLOT(onDisconnect(Jreen::Client::DisconnectReason)));
-    connect(m_client, SIGNAL(destroyed(QObject*)), this, SLOT(onDestroy()));
     connect(m_client, SIGNAL(newMessage(Jreen::Message)), SLOT(onNewMessage(Jreen::Message)));
     connect(m_client, SIGNAL(newPresence(Jreen::Presence)), SLOT(onNewPresence(Jreen::Presence)));
     connect(m_client, SIGNAL(newIQ(Jreen::IQ)), SLOT(onNewIq(Jreen::IQ)));
