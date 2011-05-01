@@ -217,6 +217,8 @@ JabberPlugin::onConnect()
     //connect( m_room, SIGNAL( presenceReceived( Jreen::Presence, const Jreen::MUCRoom::Participant* ) ), this, SLOT( onNewPresence( Jreen::Presence ) ) );
 
     m_connected = true;
+
+    addMenuHelper();
 }
 
 void
