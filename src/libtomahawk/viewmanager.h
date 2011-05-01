@@ -87,6 +87,9 @@ public:
     Tomahawk::ViewPage* pageForDynPlaylist( const Tomahawk::dynplaylist_ptr& pl ) const;
     Tomahawk::ViewPage* pageForCollection( const Tomahawk::collection_ptr& pl ) const;
 
+    // only use this is you need to create a playlist and show it directly and want it to be
+    // linked to the sidebar. call it right after creating the playlist
+    PlaylistView* createPageForPlaylist( const Tomahawk::playlist_ptr& pl );
 signals:
     void numSourcesChanged( unsigned int sources );
     void numTracksChanged( unsigned int tracks );

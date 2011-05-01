@@ -19,7 +19,9 @@
 
 
 #include "localcollection.h"
-#include <sourcelist.h>
+
+#include "sourcelist.h"
+#include "viewmanager.h"
 
 #define MAGIC_BOOKMARK_GUID "_bookmarkplaylist"
 
@@ -40,8 +42,9 @@ LocalCollection::createBookmarksPlaylist()
 {
     if( bookmarksPlaylist().isNull() ) {
         Tomahawk::playlist_ptr p = Tomahawk::Playlist::create( SourceList::instance()->getLocal(), MAGIC_BOOKMARK_GUID, tr( "Bookmarks" ), tr( "Saved tracks" ), QString(), false );
+        ViewManager::instance()->createPageForPlaylist( p );
 //         connect( p.data(), SIGNAL( revisionLoaded( Tomahawk::PlaylistRevision ) ), this, SLOT( loaded( Tomahawk::PlaylistRevision ) ), Qt::QueuedConnection );
-        connect( p.data(), SIGNAL( created() ), this, SLOT( created() ), Qt::QueuedConnection );
+        connect( p.data(), SIGNAL( created() ), this, SLOT( created() ) );
 
 //         p->createNewRevision( uuid(), p->currentrevision(), QList< Tomahawk::plentry_ptr >() );
     }

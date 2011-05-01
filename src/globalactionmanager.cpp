@@ -170,8 +170,8 @@ GlobalActionManager::handleQueueCommand( const QUrl& url )
                 if( pair.first != "url" )
                     continue;
                 QUrl track = QUrl::fromUserInput( pair.second  );
-                //FIXME: isLocalFile is part of KUrl, not QUrl
-                if( false /*track.isLocalFile()*/ ) { // it's local, so we see if it's in the DB and load it if so
+                //FIXME: isLocalFile is Qt 4.8
+                if( track.toString().startsWith( "file://" ) ) { // it's local, so we see if it's in the DB and load it if so
                     // TODO
                 } else { // give it a web result hint
                     // TODO actually read the tags
@@ -287,7 +287,7 @@ GlobalActionManager::handlePlayCommand( const QUrl& url )
         if( bookmarkpl.isNull() ) { // create it and do the deed then
             m_waitingToBookmark = q;
             col->createBookmarksPlaylist();
-            connect( col.data(), SIGNAL( bookmarkPlaylistCreated( Tomahawk::playlist_ptr ) ), this, SLOT( bookmarkPlaylistCreated( Tomahawk::playlist_ptr ) ) );
+            connect( col.data(), SIGNAL( bookmarkPlaylistCreated( Tomahawk::playlist_ptr ) ), this, SLOT( bookmarkPlaylistCreated( Tomahawk::playlist_ptr ) ), Qt::UniqueConnection );
         } else {
             doBookmark( bookmarkpl, q );
         }
@@ -301,6 +301,7 @@ GlobalActionManager::handlePlayCommand( const QUrl& url )
 void
 GlobalActionManager::bookmarkPlaylistCreated( const Tomahawk::playlist_ptr& pl )
 {
+    Q_ASSERT( !m_waitingToBookmark.isNull() );
     doBookmark( pl, m_waitingToBookmark );
 }
 
