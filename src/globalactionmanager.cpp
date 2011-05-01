@@ -26,6 +26,7 @@
 #include "pipeline.h"
 #include "database/localcollection.h"
 #include "playlist/playlistview.h"
+#include "echonest/Util.h"
 
 #include <QUrl>
 #include <Playlist.h>
