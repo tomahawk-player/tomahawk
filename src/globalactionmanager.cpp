@@ -169,7 +169,8 @@ GlobalActionManager::handleQueueCommand( const QUrl& url )
                 if( pair.first != "url" )
                     continue;
                 QUrl track = QUrl::fromUserInput( pair.second  );
-                if( track.isLocalFile() ) { // it's local, so we see if it's in the DB and load it if so
+                //FIXME: isLocalFile is part of KUrl, not QUrl
+                if( false /*track.isLocalFile()*/ ) { // it's local, so we see if it's in the DB and load it if so
                     // TODO
                 } else { // give it a web result hint
                     // TODO actually read the tags
