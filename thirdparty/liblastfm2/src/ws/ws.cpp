@@ -25,9 +25,10 @@
 #include <QDomElement>
 #include <QLocale>
 #include <QStringList>
+#include <QThread>
 #include <QUrl>
-static QNetworkAccessManager* nam = 0;
 
+static QMap< QThread*, QNetworkAccessManager* > threadNamMap;
 
 QString 
 lastfm::ws::host()
@@ -191,18 +192,30 @@ lastfm::ws::parse( QNetworkReply* reply ) throw( ParseError )
 
 QNetworkAccessManager*
 lastfm::nam()
-{    
-    if (!::nam) ::nam = new NetworkAccessManager( qApp );
-    return ::nam;
+{
+    QThread* thread = QThread::currentThread();
+    if ( !threadNamMap.contains( thread ) )
+    {
+        NetworkAccessManager* newNam = new NetworkAccessManager();
+        threadNamMap[thread] = newNam;
+        return newNam;
+    }
+    
+    return threadNamMap[thread];
 }
 
 
 void
 lastfm::setNetworkAccessManager( QNetworkAccessManager* nam )
 {
-    delete ::nam;
-    ::nam = nam;
-    nam->setParent( qApp ); // ensure it isn't deleted out from under us
+    QThread* thread = QThread::currentThread();
+    if ( threadNamMap.contains( thread ) )
+    {
+        delete threadNamMap[thread];
+        threadNamMap[thread] = 0;
+    }
+    
+    threadNamMap[thread] = nam;
 }
 
 
