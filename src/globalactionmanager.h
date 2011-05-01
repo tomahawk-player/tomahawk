@@ -34,6 +34,7 @@ public:
 
 public slots:
     bool parseTomahawkLink( const QString& link );
+    void waitingForResolved( bool );
 
 private slots:
     void bookmarkPlaylistCreated( const Tomahawk::playlist_ptr& pl );
@@ -50,8 +51,9 @@ private:
     bool handleSearchCommand(const QUrl& url );
     bool handlePlayCommand(const QUrl& url );
 
-    Tomahawk::query_ptr m_waitingToBookmark;
     Tomahawk::playlist_ptr m_toShow;
+    Tomahawk::query_ptr m_waitingToBookmark;
+    Tomahawk::query_ptr m_waitingToPlay;
 
     static GlobalActionManager* s_instance;
 };

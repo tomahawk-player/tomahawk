@@ -18,6 +18,7 @@
 
 #include "globalactionmanager.h"
 
+#include "audio/audioengine.h"
 #include "utils/xspfloader.h"
 #include "sourcelist.h"
 #include "playlist/dynamic/GeneratorInterface.h"
@@ -324,11 +325,15 @@ GlobalActionManager::doBookmark( const Tomahawk::playlist_ptr& pl, const Tomahaw
     connect( pl.data(), SIGNAL( revisionLoaded( Tomahawk::PlaylistRevision ) ), this, SLOT( showPlaylist() ) );
 
     m_toShow = pl;
-    m_waitingToBookmark.clear();
 
     // if nothing is playing, lets start this
     // TODO
-//     if( !AudioEngine::instance()->isPlaying() )
+    if( !AudioEngine::instance()->isPlaying() ) {
+        connect( q.data(), SIGNAL( resolvingFinished( bool ) ), this, SLOT( waitingForResolved( bool ) ) );
+        m_waitingToPlay = q;
+    }
+
+    m_waitingToBookmark.clear();
 }
 
 void
@@ -341,4 +346,15 @@ GlobalActionManager::showPlaylist()
 
     m_toShow.clear();
 }
+
+void
+GlobalActionManager::waitingForResolved( bool success )
+{
+    if( success && !m_waitingToPlay.isNull() && !m_waitingToPlay->results().isEmpty() ) { // play it!
+        AudioEngine::instance()->playItem( AudioEngine::instance()->playlist(), m_waitingToPlay->results().first() );
+    }
+
+    m_waitingToPlay.clear();
+}
+
 
