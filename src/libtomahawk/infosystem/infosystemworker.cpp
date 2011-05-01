@@ -91,6 +91,8 @@ void InfoSystemWorker::init()
                 SLOT( updateCacheSlot( Tomahawk::InfoSystem::InfoCriteriaHash, qint64, Tomahawk::InfoSystem::InfoType, QVariant ) )
             );
     }
+
+    QMetaObject::invokeMethod( this, "newNam" );
 }
 
 
@@ -162,7 +164,8 @@ InfoSystemWorker::nam() const
 void
 InfoSystemWorker::newNam()
 {
-    QNetworkAccessManager *newNam = new QNetworkAccessManager( this );
+    qDebug() << Q_FUNC_INFO;
+    QNetworkAccessManager *newNam = new QNetworkAccessManager();
     if ( m_nam )
     {
         delete m_nam;

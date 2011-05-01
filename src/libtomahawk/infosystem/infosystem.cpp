@@ -66,7 +66,6 @@ InfoSystem::InfoSystem(QObject *parent)
     m_infoSystemWorkerThreadController->start();
 
     QMetaObject::invokeMethod( m_worker, "init", Qt::QueuedConnection );
-    QMetaObject::invokeMethod( m_worker, "newNam", Qt::QueuedConnection );
 
     connect( TomahawkSettings::instance(), SIGNAL( changed() ), m_worker, SLOT( newNam() ) );
 

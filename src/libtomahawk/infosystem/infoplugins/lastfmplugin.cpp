@@ -52,6 +52,8 @@ LastFmPlugin::LastFmPlugin( InfoSystemWorker* parent )
     supportedPushTypes << InfoSubmitScrobble << InfoSubmitNowPlaying; 
     parent->registerInfoTypes( this, supportedGetTypes, supportedPushTypes );
 
+    connect( parent, SIGNAL( namChanged() ), SLOT( namChangedSlot() ) );
+
 /*
       Your API Key is 7194b85b6d1f424fe1668173a78c0c4a
       Your secret is ba80f1df6d27ae63e9cb1d33ccf2052f
@@ -93,6 +95,14 @@ LastFmPlugin::LastFmPlugin( InfoSystemWorker* parent )
 LastFmPlugin::~LastFmPlugin()
 {
     delete m_scrobbler;
+}
+
+
+void
+LastFmPlugin::namChangedSlot()
+{
+    qDebug() << Q_FUNC_INFO;
+    lastfm::setNetworkAccessManager( m_infoSystemWorker->nam() );
 }
 
 

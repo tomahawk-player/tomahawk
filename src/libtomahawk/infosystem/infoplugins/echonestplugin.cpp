@@ -45,6 +45,7 @@ EchoNestPlugin::~EchoNestPlugin()
 void
 EchoNestPlugin::namChangedSlot()
 {
+    qDebug() << Q_FUNC_INFO;
     Echonest::Config::instance()->setNetworkAccessManager( m_infoSystemWorker->nam() );
 }
 
