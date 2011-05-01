@@ -67,7 +67,7 @@ InfoSystem::InfoSystem(QObject *parent)
 
     QMetaObject::invokeMethod( m_worker, "init", Qt::QueuedConnection );
 
-    connect( TomahawkSettings::instance(), SIGNAL( changed() ), m_worker, SLOT( newNam() ) );
+    connect( TomahawkSettings::instance(), SIGNAL( changed() ), SLOT( newNam() ) );
 
     connect( m_cache, SIGNAL( info( QString, Tomahawk::InfoSystem::InfoType, QVariant, QVariant, Tomahawk::InfoSystem::InfoCustomData ) ),
             this,       SLOT( infoSlot( QString, Tomahawk::InfoSystem::InfoType, QVariant, QVariant, Tomahawk::InfoSystem::InfoCustomData ) ), Qt::UniqueConnection );
@@ -126,6 +126,7 @@ InfoSystem::~InfoSystem()
 void
 InfoSystem::newNam() const
 {
+    qDebug() << Q_FUNC_INFO;
     QMetaObject::invokeMethod( m_worker, "newNam", Qt::QueuedConnection );
 }
 

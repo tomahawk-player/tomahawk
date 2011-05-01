@@ -145,7 +145,6 @@ public:
     void pushInfo( const QString &caller, const InfoMap &input );
 
     InfoSystemCache* getCache() const { return m_cache; }
-    void newNam() const;
 
 signals:
     void info( QString caller, Tomahawk::InfoSystem::InfoType, QVariant input, QVariant output, Tomahawk::InfoSystem::InfoCustomData customData );
@@ -153,6 +152,8 @@ signals:
 
 public slots:
     void infoSlot( const QString target, const Tomahawk::InfoSystem::InfoType type, const QVariant input, const QVariant output, const Tomahawk::InfoSystem::InfoCustomData customData );
+
+    void newNam() const;
 
 private:
     QHash< QString, QHash< InfoType, int > > m_dataTracker;

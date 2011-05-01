@@ -226,7 +226,7 @@ TomahawkApp::init()
 
     #else
     qDebug() << "Setting NAM.";
-    TomahawkUtils::setNam( new QNetworkAccessManager );
+    TomahawkUtils::setNam( new QNetworkAccessManager() );
     #endif
 
     // Set up proxy
