@@ -177,6 +177,8 @@ InfoSystemWorker::newNam()
     newNam->setNetworkAccessible( oldNam->networkAccessible() );
     newNam->setProxy( oldNam->proxy() );
     m_nam = newNam;
+
+    emit namChanged();
 }
 
 
