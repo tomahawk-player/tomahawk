@@ -388,7 +388,7 @@ void
 JabberPlugin::addContact(const QString& jid, const QString& msg)
 {
     // Add contact to the Tomahawk group on the roster
-    m_roster->add( jid, jid, QStringList() << "Tomahawk" );
+    m_roster->subscribe( jid, msg, jid, QStringList() << "Tomahawk" );
 
     return;
 }
