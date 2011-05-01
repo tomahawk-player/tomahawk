@@ -36,6 +36,23 @@ namespace InfoSystem
 InfoSystemWorker::InfoSystemWorker()
     : m_nam( 0 )
 {
+    qDebug() << Q_FUNC_INFO;
+}
+
+
+InfoSystemWorker::~InfoSystemWorker()
+{
+    qDebug() << Q_FUNC_INFO;
+    Q_FOREACH( InfoPluginPtr plugin, m_plugins )
+    {
+        if( plugin )
+            delete plugin.data();
+    }
+}
+
+
+void InfoSystemWorker::init()
+{
     InfoPluginPtr enptr( new EchoNestPlugin( this ) );
     m_plugins.append( enptr );
     InfoPluginPtr mmptr( new MusixMatchPlugin( this ) );
@@ -73,17 +90,6 @@ InfoSystemWorker::InfoSystemWorker()
                 cache,
                 SLOT( updateCacheSlot( Tomahawk::InfoSystem::InfoCriteriaHash, qint64, Tomahawk::InfoSystem::InfoType, QVariant ) )
             );
-    }
-}
-
-
-InfoSystemWorker::~InfoSystemWorker()
-{
-    qDebug() << Q_FUNC_INFO;
-    Q_FOREACH( InfoPluginPtr plugin, m_plugins )
-    {
-        if( plugin )
-            delete plugin.data();
     }
 }
 

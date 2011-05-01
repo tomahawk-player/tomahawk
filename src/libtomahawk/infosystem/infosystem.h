@@ -107,10 +107,7 @@ class DLLEXPORT InfoPlugin : public QObject
 public:
     InfoPlugin( InfoSystemWorker *parent );
 
-    virtual ~InfoPlugin()
-    {
-        qDebug() << Q_FUNC_INFO;
-    }
+    virtual ~InfoPlugin() {}
 
 signals:
     void getCachedInfo( Tomahawk::InfoSystem::InfoCriteriaHash criteria, qint64 newMaxAge, QString caller, Tomahawk::InfoSystem::InfoType type, QVariant input, Tomahawk::InfoSystem::InfoCustomData customData );
