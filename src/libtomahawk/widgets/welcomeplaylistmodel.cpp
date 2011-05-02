@@ -53,6 +53,8 @@ WelcomePlaylistModel::loadFromSettings()
             m_recplaylists << pl;
     }
     endResetModel();
+
+    emit emptinessChanged( m_recplaylists.isEmpty() );
 }
 
 
