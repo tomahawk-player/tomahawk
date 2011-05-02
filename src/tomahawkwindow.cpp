@@ -163,7 +163,7 @@ TomahawkWindow::TomahawkWindow( QWidget* parent )
 
     qtsparkle::Updater* updater = new qtsparkle::Updater( updaterUrl, this );
     updater->SetNetworkAccessManager( TomahawkUtils::nam() );
-    updater->SetVersion( VERSION );
+    updater->SetVersion( TOMAHAWK_VERSION );
 
     ui->menu_Help->addSeparator();
     QAction* checkForUpdates = ui->menu_Help->addAction( tr( "Check For Updates...") );
