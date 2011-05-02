@@ -68,6 +68,9 @@ JabberPlugin::JabberPlugin()
     // add VCardUpdate extension to own presence
     m_client->presence().addExtension( new Jreen::VCardUpdate() );
 
+    // initaliaze the roster
+    m_roster = new Jreen::SimpleRoster( m_client );
+
     // initialize the AvatarManager
     m_avatarManager = new AvatarManager( m_client );
 
@@ -91,8 +94,13 @@ JabberPlugin::JabberPlugin()
     connect(m_client, SIGNAL(serverFeaturesReceived(QSet<QString>)), SLOT(onConnect()));
     connect(m_client, SIGNAL(disconnected(Jreen::Client::DisconnectReason)), SLOT(onDisconnect(Jreen::Client::DisconnectReason)));
     connect(m_client, SIGNAL(newMessage(Jreen::Message)), SLOT(onNewMessage(Jreen::Message)));
-    connect(m_client, SIGNAL(newPresence(Jreen::Presence)), SLOT(onNewPresence(Jreen::Presence)));
+
     connect(m_client, SIGNAL(newIQ(Jreen::IQ)), SLOT(onNewIq(Jreen::IQ)));
+
+    connect(m_roster, SIGNAL(presenceReceived(Jreen::RosterItem::Ptr,Jreen::Presence)),
+                      SLOT(onPresenceReceived(Jreen::RosterItem::Ptr,Jreen::Presence)));
+    connect(m_roster, SIGNAL(subscriptionReceived(Jreen::RosterItem::Ptr,Jreen::Presence)),
+                      SLOT(onSubscriptionReceived(Jreen::RosterItem::Ptr,Jreen::Presence)));
 
     connect(m_avatarManager, SIGNAL(newAvatar(QString)), SLOT(onNewAvatar(QString)));
 }
@@ -201,7 +209,6 @@ JabberPlugin::onConnect()
     m_client->setPingInterval(1000);
 
     // load roster
-    m_roster = new Jreen::SimpleRoster( m_client );
     m_roster->load();
 
     //FIXME: this implementation is totally broken atm, so it's disabled to avoid harm :P
@@ -497,8 +504,10 @@ void JabberPlugin::onNewMessage(const Jreen::Message& message)
 }
 
 
-void JabberPlugin::onNewPresence( const Jreen::Presence& presence)
+void JabberPlugin::onPresenceReceived( const Jreen::RosterItem::Ptr &item, const Jreen::Presence& presence )
 {
+    Q_UNUSED(item);
+
     Jreen::JID jid = presence.from();
     QString fulljid( jid.full() );
 
@@ -538,6 +547,93 @@ void JabberPlugin::onNewPresence( const Jreen::Presence& presence)
     {
         qDebug() << Q_FUNC_INFO << "Running tomahawk: no" << "no caps";
     }
+}
+
+void JabberPlugin::onSubscriptionReceived(const Jreen::RosterItem::Ptr& item, const Jreen::Presence& presence)
+{
+    qDebug() << Q_FUNC_INFO << "presence type: " << presence.subtype();
+    if(item)
+        qDebug() << Q_FUNC_INFO << presence.from().full() << "subs" << item->subscription() << "ask" << item->ask();
+    else
+        qDebug() << Q_FUNC_INFO << "item empty";
+
+    // don't do anything if the contact is already subscribed to us
+    if( presence.subtype() != Jreen::Presence::Subscribe ||
+        (
+            item && (item->subscription() == Jreen::RosterItem::From || item->subscription() == Jreen::RosterItem::Both)
+        )
+    )
+    {
+        return;
+    }
+
+    // check if the requester is already on the roster
+    if(item &&
+        (
+            item->subscription() == Jreen::RosterItem::To ||
+            ( item->subscription() == Jreen::RosterItem::None && !item->ask().isEmpty() )
+        )
+    )
+    {
+        qDebug() << Q_FUNC_INFO << presence.from().bare() << "already on the roster so we assume ack'ing subscription request is okay...";
+        m_roster->allowSubscription(presence.from(), true);
+
+        return;
+    }
+
+    qDebug() << Q_FUNC_INFO << presence.from().bare() << "open subscription request box";
+
+    // preparing the confirm box for the user
+    QMessageBox *confirmBox = new QMessageBox(
+                                QMessageBox::Question,
+                                tr( "Authorize User" ),
+                                QString( tr( "Do you want to grant <b>%1</b> access to your Collection?" ) ).arg(presence.from().bare()),
+                                QMessageBox::Yes | QMessageBox::No,
+                                0
+                              );
+
+    // add confirmBox to m_subscriptionConfirmBoxes
+    m_subscriptionConfirmBoxes.insert( presence.from(), confirmBox );
+
+    // display the box and wait for the answer
+    confirmBox->open( this, SLOT( onSubscriptionRequestConfirmed( int ) ) );
+}
+
+void
+JabberPlugin::onSubscriptionRequestConfirmed( int result )
+{
+    qDebug() << Q_FUNC_INFO << result;
+
+    QList< QMessageBox* > confirmBoxes = m_subscriptionConfirmBoxes.values();
+    Jreen::JID jid;
+
+    foreach( QMessageBox* currentBox, confirmBoxes )
+    {
+        if( currentBox == sender() )
+        {
+            jid = m_subscriptionConfirmBoxes.key( currentBox );
+        }
+    }
+
+    qDebug() << Q_FUNC_INFO << "box confirmed for" << jid.bare();
+
+    // we got an answer, deleting the box
+    m_subscriptionConfirmBoxes.remove( jid );
+    sender()->deleteLater();
+
+    QMessageBox::StandardButton allowSubscription = static_cast<QMessageBox::StandardButton>( result );
+
+    if ( allowSubscription == QMessageBox::Yes )
+    {
+        qDebug() << Q_FUNC_INFO << jid.bare() << "accepted by user, adding to roster";
+        addContact(jid, "");
+    }
+    else
+    {
+        qDebug() << Q_FUNC_INFO << jid.bare() << "declined by user";
+    }
+
+    m_roster->allowSubscription( jid, allowSubscription == QMessageBox::Yes );
 }
 
 void JabberPlugin::onNewIq(const Jreen::IQ& iq, int context)
