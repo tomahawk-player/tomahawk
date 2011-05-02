@@ -51,6 +51,9 @@ private:
     bool handleSearchCommand(const QUrl& url );
     bool handlePlayCommand(const QUrl& url );
     bool handleBookmarkCommand(const QUrl& url );
+    bool handleOpenCommand(const QUrl& url );
+
+    bool doQueueAdd( const QStringList& parts, const QList< QPair< QString, QString > >& queryItems );
 
     Tomahawk::playlist_ptr m_toShow;
     Tomahawk::query_ptr m_waitingToBookmark;
