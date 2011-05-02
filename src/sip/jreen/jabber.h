@@ -38,6 +38,7 @@
 #include <jreen/mucroom.h>
 
 #include <QNetworkProxy>
+#include <QMessageBox>
 
 #define MYNAME "SIPJREEN"
 #define TOMAHAWK_FEATURE QLatin1String( "tomahawk:sip:v1" )
@@ -79,7 +80,10 @@ private slots:
     void onDisconnect(Jreen::Client::DisconnectReason reason);
     void onAuthError(int code, const QString &msg);
 
-    void onNewPresence( const Jreen::Presence& presence );
+    void onPresenceReceived( const Jreen::RosterItem::Ptr &item, const Jreen::Presence& presence );
+    void onSubscriptionReceived( const Jreen::RosterItem::Ptr &item, const Jreen::Presence& presence );
+    void onSubscriptionRequestConfirmed( int result );
+
     void onNewMessage( const Jreen::Message& message );
     void onError( const Jreen::Connection::SocketError& e )
     {
@@ -89,6 +93,7 @@ private slots:
     void onNewAvatar( const QString &jid );
 
 private:
+    void setupClientHelper();
     void addMenuHelper();
     void removeMenuHelper();
 
@@ -112,6 +117,7 @@ private:
     Jreen::MUCRoom *m_room;
     Jreen::SimpleRoster *m_roster;
     QHash<Jreen::JID, Jreen::Presence::Type> m_peers;
+    QHash<Jreen::JID, QMessageBox*> m_subscriptionConfirmBoxes;
     enum IqContext { NoContext, RequestDisco, RequestedDisco, SipMessageSent, RequestedVCard };
     QStringList m_legacy_peers;
     AvatarManager *m_avatarManager;
