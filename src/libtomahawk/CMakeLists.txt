@@ -158,6 +158,7 @@ set( libSources
 
     widgets/newplaylistwidget.cpp
     widgets/welcomewidget.cpp
+    widgets/welcomeplaylistmodel.cpp
     widgets/overlaywidget.cpp
     widgets/infowidgets/sourceinfowidget.cpp
 
@@ -316,6 +317,7 @@ set( libHeaders
 
     widgets/newplaylistwidget.h
     widgets/welcomewidget.h
+    widgets/welcomeplaylistmodel.h
     widgets/overlaywidget.h
     widgets/infowidgets/sourceinfowidget.h
 
