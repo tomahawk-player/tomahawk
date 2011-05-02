@@ -50,6 +50,7 @@ private:
     bool handleStationCommand(const QUrl& url );
     bool handleSearchCommand(const QUrl& url );
     bool handlePlayCommand(const QUrl& url );
+    bool handleBookmarkCommand(const QUrl& url );
 
     Tomahawk::playlist_ptr m_toShow;
     Tomahawk::query_ptr m_waitingToBookmark;
