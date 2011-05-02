@@ -306,6 +306,18 @@ TomahawkSettings::appendRecentlyPlayedPlaylist( const Tomahawk::playlist_ptr& pl
     setValue( "playlists/recentlyPlayed", playlist_guids );
 }
 
+QString
+TomahawkSettings::bookmarkPlaylist() const
+{
+    return value( "playlists/bookmark", QString() ).toString();
+}
+
+void
+TomahawkSettings::setBookmarkPlaylist( const QString& guid )
+{
+    setValue( "playlists/bookmark", guid );
+}
+
 
 bool
 TomahawkSettings::jabberAutoConnect() const
