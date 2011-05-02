@@ -1,5 +1,5 @@
 /*
-   Copyright 2009 Last.fm Ltd. 
+   Copyright 2009 Last.fm Ltd.
       - Primarily authored by Max Howell, Jono Cole and Doug Mansell
 
    This file is part of liblastfm.
@@ -21,8 +21,9 @@
 #include <QNetworkRequest>
 #include <QStringList>
 #include <QUrl>
-#include <atlbase.h>
-#include <atlconv.h>
+//#include <atlbase.h>
+//#include <atlconv.h>
+#include <winhttp.h>
 
 
 static bool
@@ -45,7 +46,7 @@ parsePacServer(const QString &s, QNetworkProxy &p)
 static QList<QNetworkProxy>
 parsePacResult(const QString &pacResult)
 {
-    // msdn says: "The proxy server list contains one or more of the 
+    // msdn says: "The proxy server list contains one or more of the
     // following strings separated by semicolons or whitespace."
     // ([<scheme>=][<scheme>"://"]<server>[":"<port>])
 
@@ -73,8 +74,10 @@ lastfm::Pac::Pac()
 
 lastfm::Pac::~Pac()
 {
+#ifndef WIN32
     if (m_hSession)
         WinHttpCloseHandle(m_hSession);
+#endif
 }
 
 QNetworkProxy
@@ -86,42 +89,45 @@ lastfm::Pac::resolve(const QNetworkRequest &request, const wchar_t* pacUrl)
     if (!m_hSession)
     {
         QByteArray user_agent = request.rawHeader("user-agent");
-        m_hSession = WinHttpOpen(CA2W(user_agent), WINHTTP_ACCESS_TYPE_NO_PROXY, 0, 0, WINHTTP_FLAG_ASYNC);
+        //m_hSession = WinHttpOpen(CA2W(user_agent), WINHTTP_ACCESS_TYPE_NO_PROXY, 0, 0, WINHTTP_FLAG_ASYNC);
     }
     if (m_hSession)
     {
         WINHTTP_PROXY_INFO info;
         WINHTTP_AUTOPROXY_OPTIONS opts;
         memset(&opts, 0, sizeof(opts));
-        if (pacUrl) 
+        if (pacUrl)
         {
-            opts.dwFlags = WINHTTP_AUTOPROXY_CONFIG_URL;
-            opts.lpszAutoConfigUrl = pacUrl;
-        } 
+            //opts.dwFlags = WINHTTP_AUTOPROXY_CONFIG_URL;
+            //opts.lpszAutoConfigUrl = pacUrl;
+        }
         else
         {
-            opts.dwFlags = WINHTTP_AUTOPROXY_AUTO_DETECT;
-            opts.dwAutoDetectFlags = WINHTTP_AUTO_DETECT_TYPE_DHCP | WINHTTP_AUTO_DETECT_TYPE_DNS_A;
+            //opts.dwFlags = WINHTTP_AUTOPROXY_AUTO_DETECT;
+            //opts.dwAutoDetectFlags = WINHTTP_AUTO_DETECT_TYPE_DHCP | WINHTTP_AUTO_DETECT_TYPE_DNS_A;
         }
         opts.fAutoLogonIfChallenged = TRUE;
-        
-        if (WinHttpGetProxyForUrl(m_hSession, request.url().toString().utf16(), &opts, &info)) {
-            if (info.lpszProxy) 
+#ifndef WIN32
+        if (WinHttpGetProxyForUrl(m_hSession, (const WCHAR*)(request.url().toString().utf16()), &opts, &info)) {
+            if (info.lpszProxy)
             {
-                QList<QNetworkProxy> proxies = parsePacResult(QString::fromUtf16(info.lpszProxy));
+                QList<QNetworkProxy> proxies = parsePacResult(QString::fromUtf16((const ushort*)info.lpszProxy));
                 if (!proxies.empty())
                 {
                     out = proxies.at(0);
                 }
-                GlobalFree(info.lpszProxy);
+                // pay attention! casting away constness
+                GlobalFree((void*)info.lpszProxy);
             }
             if (info.lpszProxyBypass)
             {
-                GlobalFree(info.lpszProxyBypass);
+                // pay attention! casting away constness
+                GlobalFree((void*)info.lpszProxyBypass);
             }
         } else {
             m_bFailed = true;
         }
+#endif
     }
 
     return out;

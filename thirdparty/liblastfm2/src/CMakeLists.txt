@@ -78,7 +78,7 @@ if(UNIX)
   endif(APPLE)
 endif(UNIX)
 if(WIN32)
-  set(SOURCES ${SOURCES} ws/win/WNetworkConnectionMonitor_win.cpp)
+  set(SOURCES ${SOURCES} ws/win/WNetworkConnectionMonitor_win.cpp ws/win/Pac.cpp ws/win/NdisEvents.cpp )
   set(MOC_HEADERS ${MOC_HEADERS} ws/win/WNetworkConnectionMonitor.h)
 endif(WIN32)
 
@@ -100,9 +100,10 @@ ENDIF()
 target_link_libraries(tomahawk_lastfm2
   ${QT_LIBRARIES}
   ${QT_QTDBUS_LIBRARY}
+
 )
 
-set_target_properties(tomahawk_lastfm2 PROPERTIES COMPILE_FLAGS "-DLASTFM_OHAI_QMAKE"  ) 
+set_target_properties(tomahawk_lastfm2 PROPERTIES COMPILE_FLAGS "-DLASTFM_OHAI_QMAKE"  )
 
 if(APPLE)
   target_link_libraries(tomahawk_lastfm2

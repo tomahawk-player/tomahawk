@@ -1,5 +1,5 @@
 /*
-   Copyright 2009 Last.fm Ltd. 
+   Copyright 2009 Last.fm Ltd.
       - Primarily authored by Max Howell, Jono Cole and Doug Mansell
 
    This file is part of liblastfm.
@@ -32,35 +32,37 @@ NdisEvents::NdisEvents()
 
 NdisEvents::~NdisEvents()
 {
+#ifndef WIN32
     if (m_pSink)
         m_pSink->disconnect();
-    if (m_pServices && m_pSink)
-        m_pServices->CancelAsyncCall(m_pSink);
+#endif
+    //if (m_pServices && m_pSink)
+        //m_pServices->CancelAsyncCall(m_pSink);
     // and reference counting will take care of the WmiSink object
 }
 
 HRESULT
 NdisEvents::registerForNdisEvents()
 {
-    HRESULT hr = m_pLocator.CoCreateInstance(CLSID_WbemLocator);
+    HRESULT hr = 0; //m_pLocator.CoCreateInstance(CLSID_WbemLocator);
     if (FAILED(hr))
         return hr;
 
     // Connect to the root\wmi namespace with the current user.
-    hr = m_pLocator->ConnectServer(CComBSTR("ROOT\\WMI"),       // strNetworkResource
+    hr = 0; /*m_pLocator->ConnectServer(CComBSTR("ROOT\\WMI"),       // strNetworkResource
                                     NULL,               // strUser
                                     NULL,               // strPassword
-                                    NULL,               // strLocale  
+                                    NULL,               // strLocale
                                     0,                  // lSecurityFlags
-                                    CComBSTR(""),       // strAuthority               
+                                    CComBSTR(""),       // strAuthority
                                     NULL,               // pCtx
                                     &m_pServices
-                                    );
+                                    );*/
     if (FAILED(hr))
         return hr;
-
+#ifndef WIN32
     m_pSink = new WmiSink(this);
-
+#endif
     //////////////////////////
 
     // other notifications we're not interested in right now include...
@@ -75,12 +77,12 @@ NdisEvents::registerForNdisEvents()
     // MSNdis_StatusProtocolUnbind
     // MSNdis_StatusMediaSpecificIndication
 
-    CComBSTR wql("WQL");
+    /*CComBSTR wql("WQL");
     CComBSTR query("SELECT * FROM MSNdis_StatusMediaDisconnect");
     hr = m_pServices->ExecNotificationQueryAsync(wql, query, 0, 0, m_pSink);
 
     query = "SELECT * FROM MSNdis_StatusMediaConnect";
-    hr = m_pServices->ExecNotificationQueryAsync(wql, query, 0, 0, m_pSink);
+    hr = m_pServices->ExecNotificationQueryAsync(wql, query, 0, 0, m_pSink);*/
 
     return S_OK;
 }
