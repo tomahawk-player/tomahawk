@@ -45,9 +45,13 @@ WelcomeWidget::WelcomeWidget( QWidget* parent )
     ui->setupUi( this );
 
     ui->playlistWidget->setItemDelegate( new PlaylistDelegate() );
-    ui->playlistWidget->setModel( new WelcomePlaylistModel( this ) );
+    WelcomePlaylistModel* model =  new WelcomePlaylistModel( this );
+    ui->playlistWidget->setModel( model );
     ui->playlistWidget->overlay()->resize( 380, 86 );
     ui->tracksView->overlay()->setEnabled( false );
+
+    connect( model,SIGNAL( emptinessChanged( bool) ), this, SLOT( updatePlaylists() ) );
+
 
     m_tracksModel = new PlaylistModel( ui->tracksView );
     ui->tracksView->setPlaylistModel( m_tracksModel );
