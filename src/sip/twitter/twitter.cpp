@@ -270,6 +270,7 @@ TwitterPlugin::connectTimerFired()
         {
             peerData["lastseen"] = QDateTime::currentMSecsSinceEpoch();
             m_cachedPeers[screenName] = peerData;
+            continue;
         }
         
         if ( QDateTime::currentMSecsSinceEpoch() - peerData["lastseen"].toLongLong() > 1209600000 ) // 2 weeks
