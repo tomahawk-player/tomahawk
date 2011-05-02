@@ -55,26 +55,26 @@ CollectionItem::CollectionItem(  SourcesModel* mdl, SourceTreeItem* parent, cons
 
     // load auto playlists and stations!
 
-        connect( source.data(), SIGNAL( stats( QVariantMap ) ), this, SIGNAL( updated() ) );
-        connect( source.data(), SIGNAL( playbackStarted( Tomahawk::query_ptr ) ), this, SIGNAL( updated() ) );
-        connect( source.data(), SIGNAL( stateChanged() ), this, SIGNAL( updated() ) );
-        connect( source.data(), SIGNAL( offline() ), this, SIGNAL( updated() ) );
-        connect( source.data(), SIGNAL( online() ), this, SIGNAL( updated() ) );
+    connect( source.data(), SIGNAL( stats( QVariantMap ) ), this, SIGNAL( updated() ) );
+    connect( source.data(), SIGNAL( playbackStarted( Tomahawk::query_ptr ) ), this, SIGNAL( updated() ) );
+    connect( source.data(), SIGNAL( stateChanged() ), this, SIGNAL( updated() ) );
+    connect( source.data(), SIGNAL( offline() ), this, SIGNAL( updated() ) );
+    connect( source.data(), SIGNAL( online() ), this, SIGNAL( updated() ) );
 
-        connect( source->collection().data(), SIGNAL( playlistsAdded( QList<Tomahawk::playlist_ptr> ) ),
-                 SLOT( onPlaylistsAdded( QList<Tomahawk::playlist_ptr> ) ), Qt::QueuedConnection );
-        connect( source->collection().data(), SIGNAL( playlistsDeleted( QList<Tomahawk::playlist_ptr> ) ),
-                 SLOT( onPlaylistsDeleted( QList<Tomahawk::playlist_ptr> ) ), Qt::QueuedConnection );
+    connect( source->collection().data(), SIGNAL( playlistsAdded( QList<Tomahawk::playlist_ptr> ) ),
+                SLOT( onPlaylistsAdded( QList<Tomahawk::playlist_ptr> ) ), Qt::QueuedConnection );
+    connect( source->collection().data(), SIGNAL( playlistsDeleted( QList<Tomahawk::playlist_ptr> ) ),
+                SLOT( onPlaylistsDeleted( QList<Tomahawk::playlist_ptr> ) ), Qt::QueuedConnection );
 
-        connect( source->collection().data(), SIGNAL( autoPlaylistsAdded( QList< Tomahawk::dynplaylist_ptr > ) ),
-                 SLOT( onAutoPlaylistsAdded( QList<Tomahawk::dynplaylist_ptr> ) ), Qt::QueuedConnection );
-        connect( source->collection().data(), SIGNAL( autoPlaylistsDeleted( QList<Tomahawk::dynplaylist_ptr> ) ),
-                 SLOT( onAutoPlaylistsDeleted( QList<Tomahawk::dynplaylist_ptr> ) ), Qt::QueuedConnection );
+    connect( source->collection().data(), SIGNAL( autoPlaylistsAdded( QList< Tomahawk::dynplaylist_ptr > ) ),
+                SLOT( onAutoPlaylistsAdded( QList<Tomahawk::dynplaylist_ptr> ) ), Qt::QueuedConnection );
+    connect( source->collection().data(), SIGNAL( autoPlaylistsDeleted( QList<Tomahawk::dynplaylist_ptr> ) ),
+                SLOT( onAutoPlaylistsDeleted( QList<Tomahawk::dynplaylist_ptr> ) ), Qt::QueuedConnection );
 
-        connect( source->collection().data(), SIGNAL( stationsAdded( QList<Tomahawk::dynplaylist_ptr> ) ),
-                 SLOT( onStationsAdded( QList<Tomahawk::dynplaylist_ptr> ) ), Qt::QueuedConnection );
-        connect( source->collection().data(), SIGNAL( stationsDeleted( QList<Tomahawk::dynplaylist_ptr> ) ),
-                 SLOT( onStationsDeleted( QList<Tomahawk::dynplaylist_ptr> ) ), Qt::QueuedConnection );
+    connect( source->collection().data(), SIGNAL( stationsAdded( QList<Tomahawk::dynplaylist_ptr> ) ),
+                SLOT( onStationsAdded( QList<Tomahawk::dynplaylist_ptr> ) ), Qt::QueuedConnection );
+    connect( source->collection().data(), SIGNAL( stationsDeleted( QList<Tomahawk::dynplaylist_ptr> ) ),
+                SLOT( onStationsDeleted( QList<Tomahawk::dynplaylist_ptr> ) ), Qt::QueuedConnection );
 }
 
 Tomahawk::source_ptr
