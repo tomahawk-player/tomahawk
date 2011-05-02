@@ -22,8 +22,7 @@
 
 #include "sourcelist.h"
 #include "viewmanager.h"
-
-#define MAGIC_BOOKMARK_GUID "_bookmarkplaylist"
+#include <tomahawksettings.h>
 
 LocalCollection::LocalCollection( const Tomahawk::source_ptr& source, QObject* parent )
     : DatabaseCollection( source, parent )
@@ -34,18 +33,23 @@ LocalCollection::LocalCollection( const Tomahawk::source_ptr& source, QObject* p
 Tomahawk::playlist_ptr
 LocalCollection::bookmarksPlaylist()
 {
-    return playlist( MAGIC_BOOKMARK_GUID );
+    if( TomahawkSettings::instance()->bookmarkPlaylist().isEmpty() )
+        return Tomahawk::playlist_ptr();
+
+    return playlist( TomahawkSettings::instance()->bookmarkPlaylist() );
 }
 
 void
 LocalCollection::createBookmarksPlaylist()
 {
     if( bookmarksPlaylist().isNull() ) {
-        Tomahawk::playlist_ptr p = Tomahawk::Playlist::create( SourceList::instance()->getLocal(), MAGIC_BOOKMARK_GUID, tr( "Bookmarks" ), tr( "Saved tracks" ), QString(), false );
+        QString guid = uuid();
+        Tomahawk::playlist_ptr p = Tomahawk::Playlist::create( SourceList::instance()->getLocal(), guid, tr( "Bookmarks" ), tr( "Saved tracks" ), QString(), false );
         ViewManager::instance()->createPageForPlaylist( p );
 //         connect( p.data(), SIGNAL( revisionLoaded( Tomahawk::PlaylistRevision ) ), this, SLOT( loaded( Tomahawk::PlaylistRevision ) ), Qt::QueuedConnection );
         connect( p.data(), SIGNAL( created() ), this, SLOT( created() ) );
 
+        TomahawkSettings::instance()->setBookmarkPlaylist( guid );
 //         p->createNewRevision( uuid(), p->currentrevision(), QList< Tomahawk::plentry_ptr >() );
     }
 }

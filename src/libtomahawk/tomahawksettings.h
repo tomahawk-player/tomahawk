@@ -68,6 +68,9 @@ public:
     QList<Tomahawk::playlist_ptr> recentlyPlayedPlaylists() const;
     void appendRecentlyPlayedPlaylist( const Tomahawk::playlist_ptr& playlist );
 
+    void setBookmarkPlaylist( const QString& guid );
+    QString bookmarkPlaylist() const;
+
     /// Jabber settings
     bool jabberAutoConnect() const; /// true by default
     void setJabberAutoConnect( bool autoconnect = false );
