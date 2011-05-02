@@ -93,6 +93,7 @@ private slots:
     void onNewAvatar( const QString &jid );
 
 private:
+    void setupClientHelper();
     void addMenuHelper();
     void removeMenuHelper();
 

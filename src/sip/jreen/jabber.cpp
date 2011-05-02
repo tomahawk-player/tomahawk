@@ -61,6 +61,8 @@ JabberPlugin::JabberPlugin()
 
     // general client setup
     m_client = new Jreen::Client( jid, m_currentPassword );
+    setupClientHelper();
+
     m_client->registerStanzaExtension(new TomahawkSipMessageFactory);
     m_currentResource = QString::fromAscii( "tomahawk%1" ).arg( QString::number( qrand() % 10000 ) );
     m_client->setResource( m_currentResource );
@@ -439,14 +441,31 @@ JabberPlugin::checkSettings()
         m_currentServer = TomahawkSettings::instance()->jabberServer();
         m_currentPort = TomahawkSettings::instance()->jabberPort();
 
-        Jreen::JID jid = Jreen::JID( accountName() );
-        m_client->setJID( jid );
-        m_client->setPassword( m_currentPassword );
-        m_client->setServer( m_currentServer );
-        m_client->setPort( m_currentPort );
+        setupClientHelper();
 
         qDebug() << Q_FUNC_INFO << "Updated settings";
         connectPlugin( false );
+    }
+}
+
+void JabberPlugin::setupClientHelper()
+{
+    Jreen::JID jid = Jreen::JID( m_currentUsername );
+
+    m_client->setJID( jid );
+    m_client->setPassword( m_currentPassword );
+
+    if( !m_currentServer.isEmpty() )
+    {
+        // set explicit server details
+        m_client->setServer( m_currentServer );
+        m_client->setPort( m_currentPort );
+    }
+    else
+    {
+        // let jreen find out server and port via jdns
+        m_client->setServer( jid.domain() );
+        m_client->setPort( -1 );
     }
 }
 
