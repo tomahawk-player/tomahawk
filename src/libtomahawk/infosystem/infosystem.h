@@ -31,6 +31,8 @@
 
 #include "dllmacro.h"
 
+class QNetworkAccessManager;
+
 namespace Tomahawk {
 
 namespace InfoSystem {
@@ -105,12 +107,12 @@ class DLLEXPORT InfoPlugin : public QObject
     Q_OBJECT
 
 public:
-    InfoPlugin( InfoSystemWorker *parent );
+    InfoPlugin();
 
-    virtual ~InfoPlugin()
-    {
-        qDebug() << Q_FUNC_INFO;
-    }
+    virtual ~InfoPlugin();
+
+    QSet< InfoType > supportedGetTypes() const { return m_supportedGetTypes; }
+    QSet< InfoType > supportedPushTypes() const { return m_supportedPushTypes; }
 
 signals:
     void getCachedInfo( Tomahawk::InfoSystem::InfoCriteriaHash criteria, qint64 newMaxAge, QString caller, Tomahawk::InfoSystem::InfoType type, QVariant input, Tomahawk::InfoSystem::InfoCustomData customData );
@@ -123,8 +125,12 @@ protected slots:
     virtual void pushInfo( const QString caller, const Tomahawk::InfoSystem::InfoType type, const QVariant data ) = 0;
     virtual void notInCacheSlot( const Tomahawk::InfoSystem::InfoCriteriaHash criteria, const QString caller, const Tomahawk::InfoSystem::InfoType type, const QVariant input, const Tomahawk::InfoSystem::InfoCustomData customData ) = 0;
 
+    virtual void namChangedSlot( QNetworkAccessManager *nam ) = 0;
+    
 protected:
     InfoType m_type;
+    QSet< InfoType > m_supportedGetTypes;
+    QSet< InfoType > m_supportedPushTypes;
 
 private:
     friend class InfoSystem;

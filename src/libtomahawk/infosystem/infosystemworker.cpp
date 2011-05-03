@@ -36,7 +36,6 @@ namespace InfoSystem
 {
 
 InfoSystemWorker::InfoSystemWorker()
-    : m_nam( 0 )
 {
     qDebug() << Q_FUNC_INFO;
 }
@@ -56,12 +55,15 @@ InfoSystemWorker::~InfoSystemWorker()
 
 void InfoSystemWorker::init()
 {
-    InfoPluginPtr enptr( new EchoNestPlugin( this ) );
+    InfoPluginPtr enptr( new EchoNestPlugin() );
     m_plugins.append( enptr );
-    InfoPluginPtr mmptr( new MusixMatchPlugin( this ) );
+    registerInfoTypes( enptr, enptr.data()->supportedGetTypes(), enptr.data()->supportedPushTypes() );
+    InfoPluginPtr mmptr( new MusixMatchPlugin() );
     m_plugins.append( mmptr );
-    InfoPluginPtr lfmptr( new LastFmPlugin( this ) );
+    registerInfoTypes( mmptr, mmptr.data()->supportedGetTypes(), mmptr.data()->supportedPushTypes() );
+    InfoPluginPtr lfmptr( new LastFmPlugin() );
     m_plugins.append( lfmptr );
+    registerInfoTypes( lfmptr, lfmptr.data()->supportedGetTypes(), lfmptr.data()->supportedPushTypes() );
 
     InfoSystemCache *cache = InfoSystem::instance()->getCache();
     
@@ -92,6 +94,12 @@ void InfoSystemWorker::init()
                 SIGNAL( updateCache( Tomahawk::InfoSystem::InfoCriteriaHash, qint64, Tomahawk::InfoSystem::InfoType, QVariant ) ),
                 cache,
                 SLOT( updateCacheSlot( Tomahawk::InfoSystem::InfoCriteriaHash, qint64, Tomahawk::InfoSystem::InfoType, QVariant ) )
+            );
+        connect(
+                this,
+                SIGNAL( namChanged( QNetworkAccessManger* ) ),
+                plugin.data(),
+                SLOT( namChangedSlot( QNetworkAccessManager* ) )
             );
     }
 
@@ -160,7 +168,10 @@ InfoSystemWorker::pushInfo( const QString caller, const InfoType type, const QVa
 QNetworkAccessManager*
 InfoSystemWorker::nam() const
 {
-    return m_nam;
+    if ( m_nam.isNull() )
+        return 0;
+    
+    return m_nam.data();
 }
 
 
@@ -169,13 +180,12 @@ InfoSystemWorker::newNam()
 {
     qDebug() << Q_FUNC_INFO << " begin";
 
-    Q_ASSERT( TomahawkUtils::nam() != 0 );
     QNetworkAccessManager *oldNam = TomahawkUtils::nam();
     if ( oldNam && oldNam->thread() == thread() )
     {
-        qDebug() << Q_FUNC_INFO << " returning old nam as it's the same thread as me";
-        m_nam = oldNam;
-        emit namChanged();
+        qDebug() << Q_FUNC_INFO << " using old nam as it's the same thread as me";
+        m_nam = QWeakPointer< QNetworkAccessManager >( oldNam );
+        emit namChanged( m_nam.data() );
         return;
     }
     
@@ -186,20 +196,21 @@ InfoSystemWorker::newNam()
 #else
     newNam = new QNetworkAccessManager( this );
 #endif
-    if ( m_nam )
-        delete m_nam;
+    if ( !m_nam.isNull() )
+        delete m_nam.data();
 
     if ( !oldNam )
     {
-        m_nam = newNam;
+        m_nam = QWeakPointer< QNetworkAccessManager >( newNam );
         return;
     }
+    
     newNam->setConfiguration( oldNam->configuration() );
     newNam->setNetworkAccessible( oldNam->networkAccessible() );
     newNam->setProxy( oldNam->proxy() );
-    m_nam = newNam;
+    m_nam = QWeakPointer< QNetworkAccessManager >( newNam );
 
-    emit namChanged();
+    emit namChanged( m_nam.data() );
 }
 
 

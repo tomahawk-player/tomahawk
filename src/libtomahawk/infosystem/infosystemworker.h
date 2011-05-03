@@ -49,7 +49,7 @@ public:
     
 signals:
     void info( QString target, Tomahawk::InfoSystem::InfoType, QVariant input, QVariant output, Tomahawk::InfoSystem::InfoCustomData customData );
-    void namChanged();
+    void namChanged( QNetworkAccessManager* );
 
 public slots:
     void init();
@@ -66,7 +66,7 @@ private:
     QMap< InfoType, QLinkedList< InfoPluginPtr > > m_infoGetMap;
     QMap< InfoType, QLinkedList< InfoPluginPtr > > m_infoPushMap;
 
-    QNetworkAccessManager *m_nam;
+    QWeakPointer< QNetworkAccessManager> m_nam;
 };
 
 }

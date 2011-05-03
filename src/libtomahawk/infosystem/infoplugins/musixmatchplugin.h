@@ -35,13 +35,15 @@ class MusixMatchPlugin : public InfoPlugin
     Q_OBJECT
 
 public:
-    MusixMatchPlugin( InfoSystemWorker *parent );
+    MusixMatchPlugin();
     virtual ~MusixMatchPlugin();
 
 public slots:
     void trackSearchSlot();
     void trackLyricsSlot();
 
+    void namChangedSlot( QNetworkAccessManager *nam );
+    
 protected slots:
     virtual void getInfo( const QString caller, const Tomahawk::InfoSystem::InfoType type, const QVariant input, const Tomahawk::InfoSystem::InfoCustomData customData );
 
@@ -66,7 +68,7 @@ private:
     
     QString m_apiKey;
 
-    InfoSystemWorker* m_infoSystemWorker;
+    QWeakPointer< QNetworkAccessManager > m_nam;
 };
 
 }
