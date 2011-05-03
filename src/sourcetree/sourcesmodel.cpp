@@ -39,6 +39,8 @@ SourcesModel::SourcesModel( QObject* parent )
     : QAbstractItemModel( parent )
     , m_viewPageDelayedCacheItem( 0 )
 {
+    Q_UNUSED(recent);
+
     m_rootItem = new SourceTreeItem( this, 0, Invalid );
 
     appendItem( source_ptr() );
@@ -193,6 +195,7 @@ SourcesModel::flags( const QModelIndex& index ) const
 void
 SourcesModel::appendItem( const Tomahawk::source_ptr& source )
 {
+    Q_UNUSED(item);
 
     beginInsertRows( QModelIndex(), rowCount(), rowCount() );
     // append to end
@@ -339,7 +342,7 @@ SourcesModel::linkSourceItemToPage( SourceTreeItem* item, ViewPage* p )
     // TODO handle removal
     m_sourceTreeLinks[ p ] = item;
 
-    if( m_viewPageDelayedCacheItem = p )
+    if( m_viewPageDelayedCacheItem == p )
         emit selectRequest( indexFromItem( item ) );
 
     m_viewPageDelayedCacheItem = 0;

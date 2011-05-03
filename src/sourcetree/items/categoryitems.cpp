@@ -161,6 +161,8 @@ CategoryItem::insertItem( SourceTreeItem* item )
 void
 CategoryItem::insertItems( QList< SourceTreeItem* > items )
 {
+    Q_UNUSED(index);
+
     // add the items to the category, and connect to the signals
     int curCount = children().size();
     if( m_showAdd ) // if there's an add item, add it before that

@@ -132,6 +132,8 @@ ResolverConfigDelegate::sizeHint( const QStyleOptionViewItem& option, const QMod
 bool
 ResolverConfigDelegate::editorEvent(QEvent* event, QAbstractItemModel* model, const QStyleOptionViewItem& option, const QModelIndex& index)
 {
+    Q_UNUSED(style);
+
 //     qDebug() << "EDITOR EVENT!" << ( event->type() == QEvent::MouseButtonRelease );
 
     QStyleOptionViewItemV4 viewOpt( option );
