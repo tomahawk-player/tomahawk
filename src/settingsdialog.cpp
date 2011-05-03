@@ -324,6 +324,7 @@ ProxyDialog::saveSettings()
 
     // Now, set QNAM
     QNetworkProxy proxy( static_cast<QNetworkProxy::ProxyType>(s->proxyType()), s->proxyHost(), s->proxyPort(), s->proxyUsername(), s->proxyPassword() );
+    Q_ASSERT( TomahawkUtils::nam() != 0 );
     QNetworkAccessManager* nam = TomahawkUtils::nam();
     nam->setProxy( proxy );
     QNetworkProxy* globalProxy = TomahawkUtils::proxy();

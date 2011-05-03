@@ -340,13 +340,16 @@ createDragPixmap( int itemCount )
 }
 
 
-QNetworkAccessManager* s_nam = 0;
-QNetworkProxy* s_proxy = 0;
+QWeakPointer< QNetworkAccessManager > s_nam;
+QNetworkProxy* s_proxy;
 
 QNetworkAccessManager*
 nam()
 {
-    return s_nam;
+    if ( s_nam.isNull() )
+        return 0;
+    
+    return s_nam.data();
 }
 
 
@@ -360,7 +363,7 @@ proxy()
 void
 setNam( QNetworkAccessManager* nam )
 {
-    s_nam = nam;
+    s_nam = QWeakPointer< QNetworkAccessManager >( nam );
 }
 
 

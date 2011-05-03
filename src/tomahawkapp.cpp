@@ -198,7 +198,6 @@ TomahawkApp::init()
         qDebug() << "Proxy type =" << QString::number( static_cast<int>(TomahawkUtils::proxy()->type()) );
         qDebug() << "Proxy host =" << TomahawkUtils::proxy()->hostName();
         TomahawkUtils::nam()->setProxy( *TomahawkUtils::proxy() );
-        lastfm::nam()->setProxy( *TomahawkUtils::proxy() );
     }
     else
         TomahawkUtils::setProxy( new QNetworkProxy( QNetworkProxy::NoProxy ) );

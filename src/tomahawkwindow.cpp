@@ -162,6 +162,7 @@ TomahawkWindow::TomahawkWindow( QWidget* parent )
         updaterUrl.setUrl( "http://download.tomahawk-player.org/sparklewin" );
 
     qtsparkle::Updater* updater = new qtsparkle::Updater( updaterUrl, this );
+    Q_ASSERT( TomahawkUtils::nam() != 0 );
     updater->SetNetworkAccessManager( TomahawkUtils::nam() );
     updater->SetVersion( TOMAHAWK_VERSION );
 

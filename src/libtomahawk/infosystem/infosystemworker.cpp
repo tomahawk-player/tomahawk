@@ -169,6 +169,7 @@ InfoSystemWorker::newNam()
 {
     qDebug() << Q_FUNC_INFO << " begin";
 
+    Q_ASSERT( TomahawkUtils::nam() != 0 );
     QNetworkAccessManager *oldNam = TomahawkUtils::nam();
     if ( oldNam && oldNam->thread() == thread() )
     {

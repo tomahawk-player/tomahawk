@@ -146,6 +146,7 @@ TwitterPlugin::refreshTwitterAuth()
     if( !m_twitterAuth.isNull() )
         delete m_twitterAuth.data();
     
+    Q_ASSERT( TomahawkUtils::nam() != 0 );
     qDebug() << Q_FUNC_INFO << " with nam " << TomahawkUtils::nam();
     m_twitterAuth = QWeakPointer<TomahawkOAuthTwitter>( new TomahawkOAuthTwitter( TomahawkUtils::nam(), this ) );
     

@@ -337,6 +337,7 @@ AlbumModel::onCoverArtDownloaded()
         // Follow HTTP redirect
         QNetworkRequest req( redir );
         req.setAttribute( QNetworkRequest::User, reply->request().attribute( QNetworkRequest::User ) );
+        Q_ASSERT( TomahawkUtils::nam() != 0 );
         QNetworkReply* reply = TomahawkUtils::nam()->get( req );
         connect( reply, SIGNAL( finished() ), SLOT( onCoverArtDownloaded() ) );
     }
