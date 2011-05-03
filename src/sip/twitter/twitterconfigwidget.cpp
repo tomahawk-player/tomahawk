@@ -94,8 +94,7 @@ void
 TwitterConfigWidget::authenticateTwitter()
 {
     qDebug() << Q_FUNC_INFO;
-    TomahawkOAuthTwitter *twitAuth = new TomahawkOAuthTwitter( this );
-    twitAuth->setNetworkAccessManager( TomahawkUtils::nam() );
+    TomahawkOAuthTwitter *twitAuth = new TomahawkOAuthTwitter( TomahawkUtils::nam(), this );
     twitAuth->authorizePin();
     
     TomahawkSettings* s = TomahawkSettings::instance();
@@ -207,8 +206,7 @@ TwitterConfigWidget::startPostGotTomahawkStatus()
         emit twitterAuthed( false );
         return;
     }
-    TomahawkOAuthTwitter *twitAuth = new TomahawkOAuthTwitter( this );
-    twitAuth->setNetworkAccessManager( TomahawkUtils::nam() );
+    TomahawkOAuthTwitter *twitAuth = new TomahawkOAuthTwitter( TomahawkUtils::nam(), this );
     twitAuth->setOAuthToken( s->twitterOAuthToken().toLatin1() );
     twitAuth->setOAuthTokenSecret( s->twitterOAuthTokenSecret().toLatin1() );
     QTweetAccountVerifyCredentials *credVerifier = new QTweetAccountVerifyCredentials( twitAuth, this );
@@ -227,8 +225,7 @@ TwitterConfigWidget::postGotTomahawkStatusAuthVerifyReply( const QTweetUser &use
     }
     TomahawkSettings* s = TomahawkSettings::instance();
     s->setTwitterScreenName( user.screenName() );
-    TomahawkOAuthTwitter *twitAuth = new TomahawkOAuthTwitter( this );
-    twitAuth->setNetworkAccessManager( TomahawkUtils::nam() );
+    TomahawkOAuthTwitter *twitAuth = new TomahawkOAuthTwitter( TomahawkUtils::nam(), this );
     twitAuth->setOAuthToken( s->twitterOAuthToken().toLatin1() );
     twitAuth->setOAuthTokenSecret( s->twitterOAuthTokenSecret().toLatin1() );
     if ( m_postGTtype != "Direct Message" )

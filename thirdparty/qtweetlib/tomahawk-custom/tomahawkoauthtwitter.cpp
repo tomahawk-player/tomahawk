@@ -2,8 +2,8 @@
 #include <QInputDialog>
 #include <QDebug>
 
-TomahawkOAuthTwitter::TomahawkOAuthTwitter( QObject* parent )
-    : OAuthTwitter( parent )
+TomahawkOAuthTwitter::TomahawkOAuthTwitter( QNetworkAccessManager *nam, QObject* parent )
+    : OAuthTwitter( nam, parent )
 {
 }
 

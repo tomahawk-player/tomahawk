@@ -10,7 +10,7 @@ class QTWEETLIBSHARED_EXPORT TomahawkOAuthTwitter : public OAuthTwitter
     Q_OBJECT
     
 public:
-    TomahawkOAuthTwitter( QObject *parent = 0 );
+    TomahawkOAuthTwitter( QNetworkAccessManager *nam, QObject *parent = 0 );
 
     ~TomahawkOAuthTwitter() {}
     

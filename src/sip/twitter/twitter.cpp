@@ -131,9 +131,9 @@ TwitterPlugin::connectPlugin( bool /*startup*/ )
  
     if ( refreshTwitterAuth() )
     {
-      QTweetAccountVerifyCredentials *credVerifier = new QTweetAccountVerifyCredentials( m_twitterAuth.data(), this );
-      connect( credVerifier, SIGNAL( parsedUser(const QTweetUser &) ), SLOT( connectAuthVerifyReply(const QTweetUser &) ) );
-      credVerifier->verify();
+        QTweetAccountVerifyCredentials *credVerifier = new QTweetAccountVerifyCredentials( m_twitterAuth.data(), this );
+        connect( credVerifier, SIGNAL( parsedUser(const QTweetUser &) ), SLOT( connectAuthVerifyReply(const QTweetUser &) ) );
+        credVerifier->verify();
     }
     
     return true;
@@ -142,16 +142,18 @@ TwitterPlugin::connectPlugin( bool /*startup*/ )
 bool
 TwitterPlugin::refreshTwitterAuth()
 {
+    qDebug() << Q_FUNC_INFO << " begin";
     if( !m_twitterAuth.isNull() )
         delete m_twitterAuth.data();
-    m_twitterAuth = QWeakPointer<TomahawkOAuthTwitter>( new TomahawkOAuthTwitter( this ) );
+    
+    qDebug() << Q_FUNC_INFO << " with nam " << TomahawkUtils::nam();
+    m_twitterAuth = QWeakPointer<TomahawkOAuthTwitter>( new TomahawkOAuthTwitter( TomahawkUtils::nam(), this ) );
     
     if( m_twitterAuth.isNull() )
       return false;
     
     TomahawkSettings *settings = TomahawkSettings::instance();
 
-    m_twitterAuth.data()->setNetworkAccessManager( TomahawkUtils::nam() );
     m_twitterAuth.data()->setOAuthToken( settings->twitterOAuthToken().toLatin1() );
     m_twitterAuth.data()->setOAuthTokenSecret( settings->twitterOAuthTokenSecret().toLatin1() );
 
