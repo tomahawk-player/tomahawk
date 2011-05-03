@@ -31,7 +31,7 @@ GoogleWrapperFactory::createPlugin( const QString& pluginId )
 QIcon
 GoogleWrapperFactory::icon() const
 {
-    return QIcon( ":/gmail-logo.jpg" );
+    return QIcon( ":/gmail-logo.png" );
 }
 
 GoogleWrapper::GoogleWrapper ( const QString& pluginID )
@@ -45,7 +45,7 @@ GoogleWrapper::GoogleWrapper ( const QString& pluginID )
 QIcon
 GoogleWrapper::icon() const
 {
-    return QIcon( ":/gmail-logo.jpg" );
+    return QIcon( ":/gmail-logo.png" );
 }
 
 

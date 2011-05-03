@@ -43,7 +43,7 @@ TwitterFactory::createPlugin( const QString& pluginId )
 
 QIcon TwitterFactory::icon() const
 {
-    return QIcon( ":/twitter-icon.jpg" );
+    return QIcon( ":/twitter-icon.png" );
 }
 
 
@@ -124,7 +124,7 @@ TwitterPlugin::accountName() const
 QIcon
 TwitterPlugin::icon() const
 {
-    return QIcon( ":/twitter-icon.jpg" );
+    return QIcon( ":/twitter-icon.png" );
 }
 
 

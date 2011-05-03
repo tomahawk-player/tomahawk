@@ -38,6 +38,7 @@ public:
     virtual QString prettyName() const { return "Local Network"; }
     virtual bool isCreatable() const { return false; };
     virtual SipPlugin* createPlugin ( const QString& pluginId = QString() );
+    virtual QIcon icon() const;
 };
 
 class SIPDLLEXPORT ZeroconfPlugin : public SipPlugin
@@ -64,6 +65,7 @@ public:
     virtual const QString accountName() const;
     virtual ConnectionState connectionState() const;
     virtual bool isValid() const { return true; };
+    virtual QIcon icon() const;
 
 public slots:
     virtual bool connectPlugin( bool startup );

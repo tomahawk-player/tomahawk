@@ -52,6 +52,12 @@ ZeroconfPlugin::connectionState() const
     return m_state;
 }
 
+QIcon
+ZeroconfFactory::icon() const
+{
+    return QIcon( ":/zeroconf-icon.png" );
+}
+
 
 bool
 ZeroconfPlugin::connectPlugin( bool /*startup*/ )
@@ -81,6 +87,13 @@ ZeroconfPlugin::disconnectPlugin()
     delete m_zeroconf;
     m_zeroconf = 0;
 }
+
+QIcon
+ZeroconfPlugin::icon() const
+{
+    return QIcon( ":/zeroconf-icon.png" );
+}
+
 
 void
 ZeroconfPlugin::lanHostFound( const QString& host, int port, const QString& name, const QString& nodeid )
