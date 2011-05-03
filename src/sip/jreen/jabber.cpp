@@ -29,6 +29,8 @@
 #include <jreen/capabilities.h>
 #include <jreen/vcardupdate.h>
 #include <jreen/vcard.h>
+#include <jreen/directconnection.h>
+#include <jreen/tcpconnection.h>
 
 #include <qjson/parser.h>
 #include <qjson/serializer.h>
@@ -125,10 +127,10 @@ JabberPlugin::setProxy( QNetworkProxy* proxy )
 
     if(!m_client->connection())
     {
-        m_client->setConnection(new TcpConnection(m_currentServer, m_currentPort));
+        m_client->setConnection(new Jreen::TcpConnection(m_currentServer, m_currentPort));
     }
 
-    qobject_cast<DirectConnection*>(m_client->connection())->setProxy(proxy);
+    qobject_cast<Jreen::DirectConnection*>(m_client->connection())->setProxy(*proxy);
 }
 
 
