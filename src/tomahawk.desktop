@@ -1,0 +1,11 @@
+[Desktop Entry]
+Type=Application
+Version=1.0
+Name=Tomahawk
+GenericName=Music Player
+TryExec=tomahawk
+Exec=tomahawk
+Comment=Tomahawk - Social Music Player
+Icon=tomahawk
+Terminal=false
+Categories=Qt;AudioVideo;Audio;Player;
