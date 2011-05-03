@@ -11,7 +11,9 @@ class TomahawkSipMessage : public Jreen::StanzaExtension
     J_EXTENSION(TomahawkSipMessage, "")
     Q_DECLARE_PRIVATE(TomahawkSipMessage)
     public:
-        TomahawkSipMessage(QString ip, unsigned int port, QString uniqname, QString key, bool visible);
+        // sets visible to true
+        TomahawkSipMessage(QString ip, unsigned int port, QString uniqname, QString key);
+
         // sets visible to false as we dont have any extra information
         TomahawkSipMessage();
         ~TomahawkSipMessage();

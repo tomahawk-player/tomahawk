@@ -26,14 +26,14 @@ public:
     bool visible;
 };
 
-TomahawkSipMessage::TomahawkSipMessage(QString ip, unsigned int port, QString uniqname, QString key, bool visible) : d_ptr(new TomahawkSipMessagePrivate)
+TomahawkSipMessage::TomahawkSipMessage(QString ip, unsigned int port, QString uniqname, QString key) : d_ptr(new TomahawkSipMessagePrivate)
 {
     Q_D(TomahawkSipMessage);
     d->ip = ip;
     d->port = port;
     d->uniqname = uniqname;
     d->key = key;
-    d->visible = visible;
+    d->visible = true;
 }
 
 TomahawkSipMessage::TomahawkSipMessage() : d_ptr(new TomahawkSipMessagePrivate)

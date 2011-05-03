@@ -363,8 +363,7 @@ JabberPlugin::sendMsg(const QString& to, const QString& msg)
         sipMessage = new TomahawkSipMessage(m["ip"].toString(),
                                             m["port"].toInt(),
                                             m["uniqname"].toString(),
-                                            m["key"].toString(),
-                                            m["visible"].toBool()
+                                            m["key"].toString()
                                             );
     }
     else
