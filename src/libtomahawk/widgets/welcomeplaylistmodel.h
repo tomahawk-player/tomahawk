@@ -50,6 +50,7 @@ private slots:
 
 private:
     QList< Tomahawk::playlist_ptr > m_recplaylists;
+    QHash< QString, Tomahawk::playlist_ptr > m_cached;
     mutable QHash< Tomahawk::playlist_ptr, QString > m_artists;
 };
 

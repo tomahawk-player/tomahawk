@@ -48,9 +48,17 @@ WelcomePlaylistModel::loadFromSettings()
     for( int i = playlist_guids.size() - 1; i >= 0; i-- )
     {
         qDebug() << "loading playlist" << playlist_guids[i];
-        Tomahawk::playlist_ptr pl = Tomahawk::Playlist::load( playlist_guids[i] );
-        if ( !pl.isNull() )
+
+        playlist_ptr pl = m_cached.value( playlist_guids[i], playlist_ptr() );
+        if( pl.isNull() )
+            pl = Tomahawk::Playlist::load( playlist_guids[i] );
+
+        if ( !pl.isNull() ) {
             m_recplaylists << pl;
+
+            if( !m_cached.contains( playlist_guids[i] ) )
+                m_cached[playlist_guids[i]] = pl;
+        }
     }
     endResetModel();
 
@@ -108,6 +116,8 @@ WelcomePlaylistModel::onPlaylistsRemoved( QList< playlist_ptr > playlists )
     foreach( const playlist_ptr& pl, playlists ) {
         if( m_recplaylists.contains( pl ) ) {
             m_artists.remove( pl );
+            m_cached.remove( pl->guid() );
+
             int idx = m_recplaylists.indexOf( pl );
             beginRemoveRows( QModelIndex(), idx, idx );
             m_recplaylists.removeAt( idx );
