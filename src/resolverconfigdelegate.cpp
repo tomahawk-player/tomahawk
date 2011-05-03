@@ -132,14 +132,11 @@ ResolverConfigDelegate::sizeHint( const QStyleOptionViewItem& option, const QMod
 bool
 ResolverConfigDelegate::editorEvent(QEvent* event, QAbstractItemModel* model, const QStyleOptionViewItem& option, const QModelIndex& index)
 {
-    Q_UNUSED(style);
-
 //     qDebug() << "EDITOR EVENT!" << ( event->type() == QEvent::MouseButtonRelease );
 
     QStyleOptionViewItemV4 viewOpt( option );
     initStyleOption( &viewOpt, index );
     const QWidget* w = viewOpt.widget;
-    QStyle* style = w ? w->style() : QApplication::style();
     int top = viewOpt.rect.top();
 
     if( event->type() == QEvent::MouseButtonRelease || event->type() == QEvent::MouseButtonDblClick ) {

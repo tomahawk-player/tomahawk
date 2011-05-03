@@ -193,11 +193,9 @@ SourcesModel::flags( const QModelIndex& index ) const
 void
 SourcesModel::appendItem( const Tomahawk::source_ptr& source )
 {
-    Q_UNUSED(item);
-
     beginInsertRows( QModelIndex(), rowCount(), rowCount() );
     // append to end
-    CollectionItem* item = new CollectionItem( this, m_rootItem, source );
+    new CollectionItem( this, m_rootItem, source );
 
     endInsertRows();
 }
