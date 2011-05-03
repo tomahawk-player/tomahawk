@@ -60,80 +60,87 @@ InfoSystem::InfoSystem(QObject *parent)
     qDebug() << Q_FUNC_INFO;
 
     m_infoSystemCacheThreadController = new QThread( this );
-    m_cache = new InfoSystemCache();
-    m_cache->moveToThread( m_infoSystemCacheThreadController );
+    m_cache = QWeakPointer< InfoSystemCache >( new InfoSystemCache() );
+    m_cache.data()->moveToThread( m_infoSystemCacheThreadController );
     m_infoSystemCacheThreadController->start( QThread::IdlePriority );
 
     m_infoSystemWorkerThreadController = new QThread( this );
-    m_worker = new InfoSystemWorker();
-    m_worker->moveToThread( m_infoSystemWorkerThreadController );
+    m_worker = QWeakPointer< InfoSystemWorker>( new InfoSystemWorker() );
+    m_worker.data()->moveToThread( m_infoSystemWorkerThreadController );
     m_infoSystemWorkerThreadController->start();
 
-    QMetaObject::invokeMethod( m_worker, "init", Qt::QueuedConnection );
+    QMetaObject::invokeMethod( m_worker.data(), "init", Qt::QueuedConnection, Q_ARG( QWeakPointer< Tomahawk::InfoSystem::InfoSystemCache >, m_cache ) );
 
     connect( TomahawkSettings::instance(), SIGNAL( changed() ), SLOT( newNam() ) );
 
-    connect( m_cache, SIGNAL( info( QString, Tomahawk::InfoSystem::InfoType, QVariant, QVariant, Tomahawk::InfoSystem::InfoCustomData ) ),
+    connect( m_cache.data(), SIGNAL( info( QString, Tomahawk::InfoSystem::InfoType, QVariant, QVariant, Tomahawk::InfoSystem::InfoCustomData ) ),
             this,       SLOT( infoSlot( QString, Tomahawk::InfoSystem::InfoType, QVariant, QVariant, Tomahawk::InfoSystem::InfoCustomData ) ), Qt::UniqueConnection );
 
-    connect( m_worker, SIGNAL( info( QString, Tomahawk::InfoSystem::InfoType, QVariant, QVariant, Tomahawk::InfoSystem::InfoCustomData ) ),
+    connect( m_worker.data(), SIGNAL( info( QString, Tomahawk::InfoSystem::InfoType, QVariant, QVariant, Tomahawk::InfoSystem::InfoCustomData ) ),
             this,       SLOT( infoSlot( QString, Tomahawk::InfoSystem::InfoType, QVariant, QVariant, Tomahawk::InfoSystem::InfoCustomData ) ), Qt::UniqueConnection );
 }
 
 InfoSystem::~InfoSystem()
 {
     qDebug() << Q_FUNC_INFO << " beginning";
-
-    if ( m_infoSystemWorkerThreadController )
-        m_infoSystemWorkerThreadController->quit();
-
-    qDebug() << Q_FUNC_INFO << " sent quit signals";
-
-    if( m_infoSystemWorkerThreadController )
+    qDebug() << "THREAD I'M RUNNING IN: " << QThread::currentThread();
+    
+    if ( !m_worker.isNull() )
     {
-        while( !m_infoSystemWorkerThreadController->isFinished() )
+        QMetaObject::invokeMethod( m_worker.data(), "deleteLater", Qt::QueuedConnection );
+        while( !m_worker.isNull() )
         {
-            qDebug() << Q_FUNC_INFO << " worker thread controller not finished, processing events";
+            qDebug() << Q_FUNC_INFO << " worker not deleted, processing events";
             QCoreApplication::processEvents( QEventLoop::AllEvents, 200 );
             TomahawkUtils::Sleep::msleep( 100 );
         }
 
-        qDebug() << Q_FUNC_INFO << " worker is finished, deleting worker";
-        if( m_worker )
-        {
-            qDebug() << "THREAD I'M RUNNING IN: " << QThread::currentThread();
-            delete m_worker;
-            m_worker = 0;
-        }
+        if ( m_infoSystemWorkerThreadController )
+            m_infoSystemWorkerThreadController->quit();
 
-        qDebug() << Q_FUNC_INFO << " worker finished being deleted";
-        delete m_infoSystemWorkerThreadController;
-        m_infoSystemWorkerThreadController = 0;
+        if( m_infoSystemWorkerThreadController )
+        {
+            while( !m_infoSystemWorkerThreadController->isFinished() )
+            {
+                qDebug() << Q_FUNC_INFO << " worker thread controller not finished, processing events";
+                QCoreApplication::processEvents( QEventLoop::AllEvents, 200 );
+                TomahawkUtils::Sleep::msleep( 100 );
+            }
+            
+            delete m_infoSystemWorkerThreadController;
+            m_infoSystemWorkerThreadController = 0;
+        }
     }
 
     qDebug() << Q_FUNC_INFO << " done deleting worker";
 
-    if ( m_infoSystemCacheThreadController )
-        m_infoSystemCacheThreadController->quit();
-    
-    if( m_infoSystemCacheThreadController )
+    if ( !m_cache.isNull() )
     {
-        while( !m_infoSystemCacheThreadController->isFinished() )
+        QMetaObject::invokeMethod( m_cache.data(), "deleteLater", Qt::QueuedConnection );
+        while( !m_cache.isNull() )
         {
-            qDebug() << Q_FUNC_INFO << " cache thread controller not finished, processing events";
+            qDebug() << Q_FUNC_INFO << " worker not deleted, processing events";
             QCoreApplication::processEvents( QEventLoop::AllEvents, 200 );
             TomahawkUtils::Sleep::msleep( 100 );
         }
-
-        if( m_cache )
+        
+        if ( m_infoSystemCacheThreadController )
+            m_infoSystemCacheThreadController->quit();
+        
+        if( m_infoSystemCacheThreadController )
         {
-            delete m_cache;
-            m_cache = 0;
+            while( !m_infoSystemCacheThreadController->isFinished() )
+            {
+                qDebug() << Q_FUNC_INFO << " worker thread controller not finished, processing events";
+                QCoreApplication::processEvents( QEventLoop::AllEvents, 200 );
+                TomahawkUtils::Sleep::msleep( 100 );
+            }
+            
+            delete m_infoSystemCacheThreadController;
+            m_infoSystemCacheThreadController = 0;
         }
-
-        delete m_infoSystemCacheThreadController;
-        m_infoSystemCacheThreadController = 0;
     }
+    
     qDebug() << Q_FUNC_INFO << " done deleting cache";
 }
 
@@ -142,7 +149,7 @@ void
 InfoSystem::newNam() const
 {
     qDebug() << Q_FUNC_INFO;
-    QMetaObject::invokeMethod( m_worker, "newNam", Qt::QueuedConnection );
+    QMetaObject::invokeMethod( m_worker.data(), "newNam", Qt::QueuedConnection );
 }
 
 
@@ -153,7 +160,7 @@ InfoSystem::getInfo( const QString &caller, const InfoType type, const QVariant&
 
     m_dataTracker[caller][type] = m_dataTracker[caller][type] + 1;
     qDebug() << "current count in dataTracker for type" << type << "is" << m_dataTracker[caller][type];
-    QMetaObject::invokeMethod( m_worker, "getInfo", Qt::QueuedConnection, Q_ARG( QString, caller ), Q_ARG( Tomahawk::InfoSystem::InfoType, type ), Q_ARG( QVariant, input ), Q_ARG( Tomahawk::InfoSystem::InfoCustomData, customData ) );
+    QMetaObject::invokeMethod( m_worker.data(), "getInfo", Qt::QueuedConnection, Q_ARG( QString, caller ), Q_ARG( Tomahawk::InfoSystem::InfoType, type ), Q_ARG( QVariant, input ), Q_ARG( Tomahawk::InfoSystem::InfoCustomData, customData ) );
 }
 
 
@@ -170,7 +177,7 @@ InfoSystem::pushInfo( const QString &caller, const InfoType type, const QVariant
 {
     qDebug() << Q_FUNC_INFO;
 
-    QMetaObject::invokeMethod( m_worker, "pushInfo", Qt::QueuedConnection, Q_ARG( QString, caller ), Q_ARG( Tomahawk::InfoSystem::InfoType, type ), Q_ARG( QVariant, input ) );
+    QMetaObject::invokeMethod( m_worker.data(), "pushInfo", Qt::QueuedConnection, Q_ARG( QString, caller ), Q_ARG( Tomahawk::InfoSystem::InfoType, type ), Q_ARG( QVariant, input ) );
 }
 
 

@@ -54,8 +54,10 @@ InfoSystemWorker::~InfoSystemWorker()
 }
 
 
-void InfoSystemWorker::init()
+void
+InfoSystemWorker::init( QWeakPointer< Tomahawk::InfoSystem::InfoSystemCache> cache )
 {
+    qDebug() << Q_FUNC_INFO << " and cache is " << cache.data();
     InfoPluginPtr enptr( new EchoNestPlugin() );
     m_plugins.append( enptr );
     registerInfoTypes( enptr, enptr.data()->supportedGetTypes(), enptr.data()->supportedPushTypes() );
@@ -66,8 +68,6 @@ void InfoSystemWorker::init()
     m_plugins.append( lfmptr );
     registerInfoTypes( lfmptr, lfmptr.data()->supportedGetTypes(), lfmptr.data()->supportedPushTypes() );
 
-    InfoSystemCache *cache = InfoSystem::instance()->getCache();
-    
     Q_FOREACH( InfoPluginPtr plugin, m_plugins )
     {
         connect(
@@ -81,11 +81,11 @@ void InfoSystemWorker::init()
         connect(
                 plugin.data(),
                 SIGNAL( getCachedInfo( Tomahawk::InfoSystem::InfoCriteriaHash, qint64, QString, Tomahawk::InfoSystem::InfoType, QVariant, Tomahawk::InfoSystem::InfoCustomData ) ),
-                cache,
+                cache.data(),
                 SLOT( getCachedInfoSlot( Tomahawk::InfoSystem::InfoCriteriaHash, qint64, QString, Tomahawk::InfoSystem::InfoType, QVariant, Tomahawk::InfoSystem::InfoCustomData ) )
             );
         connect(
-                cache,
+                cache.data(),
                 SIGNAL( notInCache( Tomahawk::InfoSystem::InfoCriteriaHash, QString, Tomahawk::InfoSystem::InfoType, QVariant, Tomahawk::InfoSystem::InfoCustomData ) ),
                 plugin.data(),
                 SLOT( notInCacheSlot( Tomahawk::InfoSystem::InfoCriteriaHash, QString, Tomahawk::InfoSystem::InfoType, QVariant, Tomahawk::InfoSystem::InfoCustomData ) )
@@ -93,7 +93,7 @@ void InfoSystemWorker::init()
         connect(
                 plugin.data(),
                 SIGNAL( updateCache( Tomahawk::InfoSystem::InfoCriteriaHash, qint64, Tomahawk::InfoSystem::InfoType, QVariant ) ),
-                cache,
+                cache.data(),
                 SLOT( updateCacheSlot( Tomahawk::InfoSystem::InfoCriteriaHash, qint64, Tomahawk::InfoSystem::InfoType, QVariant ) )
             );
         connect(

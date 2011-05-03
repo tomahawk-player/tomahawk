@@ -153,8 +153,6 @@ public:
     void pushInfo( const QString &caller, const InfoType type, const QVariant &input );
     void pushInfo( const QString &caller, const InfoMap &input );
 
-    InfoSystemCache* getCache() const { return m_cache; }
-
 signals:
     void info( QString caller, Tomahawk::InfoSystem::InfoType, QVariant input, QVariant output, Tomahawk::InfoSystem::InfoCustomData customData );
     void finished( QString target );
@@ -167,8 +165,8 @@ public slots:
 private:
     QHash< QString, QHash< InfoType, int > > m_dataTracker;
 
-    InfoSystemCache* m_cache;
-    InfoSystemWorker* m_worker;
+    QWeakPointer< InfoSystemCache > m_cache;
+    QWeakPointer< InfoSystemWorker > m_worker;
     QThread* m_infoSystemCacheThreadController;
     QThread* m_infoSystemWorkerThreadController;
 
@@ -200,5 +198,6 @@ inline uint qHash( Tomahawk::InfoSystem::InfoCriteriaHash hash )
 Q_DECLARE_METATYPE( Tomahawk::InfoSystem::InfoGenericMap );
 Q_DECLARE_METATYPE( Tomahawk::InfoSystem::InfoCustomData );
 Q_DECLARE_METATYPE( Tomahawk::InfoSystem::InfoCriteriaHash );
+Q_DECLARE_METATYPE( QWeakPointer< Tomahawk::InfoSystem::InfoSystemCache > );
 
 #endif // TOMAHAWK_INFOSYSTEM_H

@@ -52,7 +52,7 @@ signals:
     void namChanged( QNetworkAccessManager* );
 
 public slots:
-    void init();
+    void init( QWeakPointer< Tomahawk::InfoSystem::InfoSystemCache > cache );
     void getInfo( const QString caller, const Tomahawk::InfoSystem::InfoType type, const QVariant input, const Tomahawk::InfoSystem::InfoCustomData customData );
     void pushInfo( const QString caller, const Tomahawk::InfoSystem::InfoType type, const QVariant input );
     void newNam();
