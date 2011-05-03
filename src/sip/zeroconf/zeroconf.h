@@ -36,9 +36,10 @@ public:
 
     virtual QString factoryId() const { return "sipzeroconf"; }
     virtual QString prettyName() const { return "Local Network"; }
-    virtual bool isCreatable() const { return false; };
-    virtual SipPlugin* createPlugin ( const QString& pluginId = QString() );
+    virtual bool isUnique() const { return true; }
     virtual QIcon icon() const;
+
+    virtual SipPlugin* createPlugin ( const QString& pluginId = QString() );
 };
 
 class SIPDLLEXPORT ZeroconfPlugin : public SipPlugin

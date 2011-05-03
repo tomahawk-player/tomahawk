@@ -43,7 +43,8 @@ public:
     virtual QString factoryId() const = 0;
     // if the user can create multiple
     virtual QIcon icon() const { return QIcon(); }
-    virtual bool isCreatable() const { return true; }
+    virtual bool isUnique() const { return false; }
+
     virtual SipPlugin* createPlugin( const QString& pluginId = QString() ) = 0;
 
 protected:

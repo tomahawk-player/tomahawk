@@ -145,11 +145,11 @@ SipHandler::loadPluginFactories( const QStringList& paths )
 }
 
 SipPlugin*
-SipHandler::createPlugin( const QString& factoryName )
+SipHandler::createPlugin( const QString& factoryId )
 {
-    Q_ASSERT( m_pluginFactories.contains( factoryName ) );
+    Q_ASSERT( m_pluginFactories.contains( factoryId ) );
 
-    SipPlugin* sip = m_pluginFactories[ factoryName ]->createPlugin();
+    SipPlugin* sip = m_pluginFactories[ factoryId ]->createPlugin();
     hookUpPlugin( sip );
 
     return sip;
@@ -267,6 +267,16 @@ SipHandler::removeSipPlugin( SipPlugin* p )
     TomahawkSettings::instance()->removeSipPlugin( p->pluginId() );
     m_allPlugins.removeAll( p );
     m_enabledPlugins.removeAll( p );
+}
+
+bool
+SipHandler::hasPluginType( const QString& factoryId ) const
+{
+    foreach( SipPlugin* p, m_allPlugins ) {
+        if( factoryFromId( p->pluginId() ) == factoryId )
+            return true;
+    }
+    return false;
 }
 
 
@@ -583,7 +593,14 @@ SipHandler::onAvatarReceived( const QPixmap& avatar )
 
 
 QString
-SipHandler::factoryFromId( const QString& pluginId )
+SipHandler::factoryFromId( const QString& pluginId ) const
 {
     return pluginId.split( "_" ).first();
+}
+
+SipPluginFactory*
+SipHandler::factoryFromPlugin( SipPlugin* p ) const
+{
+    QString factoryId = factoryFromId( p->pluginId() );
+    return m_pluginFactories.value( factoryId, 0 );
 }

@@ -227,8 +227,9 @@ void
 SettingsDialog::setupSipButtons()
 {
     foreach( SipPluginFactory* f, SipHandler::instance()->pluginFactories() ) {
-        if( !f->isCreatable() )
+        if( f->isUnique() && SipHandler::instance()->hasPluginType( f->factoryId() ) ) {
             continue;
+        }
 
         QAction* action = new QAction( f->icon(), f->prettyName(), ui->addSipButton );
         action->setProperty( "factory", QVariant::fromValue< QObject* >( f ) );
@@ -518,9 +519,9 @@ SettingsDialog::factoryActionTriggered( bool )
 void
 SettingsDialog::sipFactoryClicked( SipPluginFactory* factory )
 {
-    Q_ASSERT( factory->isCreatable() );
     //if exited with OK, create it, if not, delete it immediately!
     SipPlugin* p = factory->createPlugin();
+    bool added = false;
     if( p->configWidget() ) {
         DelegateConfigWrapper dialog( p->configWidget(), QString("%1 Config" ).arg( p->friendlyName() ), this );
         QWeakPointer< DelegateConfigWrapper > watcher( &dialog );
@@ -532,13 +533,32 @@ SettingsDialog::sipFactoryClicked( SipPluginFactory* factory )
             // accepted, so add it to tomahawk
             TomahawkSettings::instance()->addSipPlugin( p->pluginId() );
             SipHandler::instance()->addSipPlugin( p );
+
+            added = true;
         } else {
             // canceled, delete it
             delete p;
         }
     } else {
         // no config, so just add it
+        added = true;
         SipHandler::instance()->addSipPlugin( p );
+    }
+
+    SipPluginFactory* f = SipHandler::instance()->factoryFromPlugin( p );
+    if( added && f && f->isUnique() ) {
+        // remove from actions list
+        QAction* toremove = 0;
+        foreach( QAction* a, ui->addSipButton->actions() )
+        {
+            if( f == qobject_cast< SipPluginFactory* >( a->property( "factory" ).value< QObject* >() ) )
+            {
+                toremove = a;
+                break;
+            }
+        }
+        if( toremove )
+            ui->addSipButton->removeAction( toremove );
     }
 }
 
@@ -574,6 +594,18 @@ SettingsDialog::sipPluginDeleted( bool )
         if( idx.isValid() && !idx.data( SipModel::FactoryRole ).toBool() && !idx.data( SipModel::FactoryItemRole ).toBool() )
         {
             SipPlugin* p = qobject_cast< SipPlugin* >( idx.data( SipModel::SipPluginData ).value< QObject* >() );
+
+            if( SipPluginFactory* f = SipHandler::instance()->factoryFromPlugin( p ) )
+            {
+                if( f->isUnique() ) // just deleted a unique plugin->re-add to add menu
+                {
+                    QAction* action = new QAction( f->icon(), f->prettyName(), ui->addSipButton );
+                    action->setProperty( "factory", QVariant::fromValue< QObject* >( f ) );
+                    ui->addSipButton->addAction( action );
+
+                    connect( action, SIGNAL( triggered(bool) ), this, SLOT( factoryActionTriggered( bool ) ) );
+                }
+            }
             SipHandler::instance()->removeSipPlugin( p );
         }
     }

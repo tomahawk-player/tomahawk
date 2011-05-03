@@ -47,6 +47,9 @@ public:
     void addSipPlugin( SipPlugin* p, bool enable = true, bool connectImmediately = true );
     void removeSipPlugin( SipPlugin* p );
 
+    bool hasPluginType( const QString& factoryId ) const;
+    SipPluginFactory* factoryFromPlugin( SipPlugin* p ) const;
+
     const QPixmap avatar( const QString& name ) const;
 
 public slots:
@@ -104,7 +107,7 @@ private:
 
     void loadPluginFactories( const QStringList& paths );
     void loadPluginFactory( const QString& path );
-    QString factoryFromId( const QString& pluginId );
+    QString factoryFromId( const QString& pluginId ) const;
 
     QHash< QString, SipPluginFactory* > m_pluginFactories;
     QList< SipPlugin* > m_allPlugins;
