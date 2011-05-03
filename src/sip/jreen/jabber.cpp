@@ -77,6 +77,10 @@ JabberPlugin::JabberPlugin( const QString& pluginId )
     m_ui->jabberPassword->setText( readPassword() );
     m_ui->jabberServer->setText( readServer() );
     m_ui->jabberPort->setValue( readPort() );
+    m_currentUsername = accountName();
+    m_currentServer = readServer();
+    m_currentPassword = readPassword();
+    m_currentPort = readPort();
 
     // setup JID object
     Jreen::JID jid = Jreen::JID( accountName() );
@@ -915,7 +919,7 @@ JabberPlugin::saveConfig()
 {
     TomahawkSettings::instance()->setValue( pluginId() + "/autoconnect", m_ui->checkBoxAutoConnect->isChecked() );
     TomahawkSettings::instance()->setValue( pluginId() + "/username", m_ui->jabberUsername->text() );
-    TomahawkSettings::instance()->setValue( pluginId() + "/pasword", m_ui->jabberPassword->text() );
+    TomahawkSettings::instance()->setValue( pluginId() + "/password", m_ui->jabberPassword->text() );
     TomahawkSettings::instance()->setValue( pluginId() + "/port", m_ui->jabberPort->value() );
     TomahawkSettings::instance()->setValue( pluginId() + "/server", m_ui->jabberServer->text() );
 
