@@ -101,6 +101,7 @@ InfoSystem::~InfoSystem()
         qDebug() << Q_FUNC_INFO << " worker is finished, deleting worker";
         if( m_worker )
         {
+            qDebug() << "THREAD I'M RUNNING IN: " << QThread::currentThread();
             delete m_worker;
             m_worker = 0;
         }
