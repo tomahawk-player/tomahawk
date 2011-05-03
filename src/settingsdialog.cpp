@@ -75,6 +75,7 @@ SettingsDialog::SettingsDialog( QWidget *parent )
 #ifdef Q_WS_X11
     ui->listWidget->setFrameShape( QFrame::StyledPanel );
     ui->listWidget->setFrameShadow( QFrame::Sunken );
+    setContentsMargins( 4, 4, 4, 4 );
 #else
     ui->verticalLayout->removeItem( ui->verticalSpacer_3 );
 #endif
@@ -122,6 +123,8 @@ SettingsDialog::SettingsDialog( QWidget *parent )
     connect( ui->proxyButton,  SIGNAL( clicked() ),  SLOT( showProxySettings() ) );
     connect( ui->checkBoxStaticPreferred, SIGNAL( toggled(bool) ), SLOT( toggleUpnp(bool) ) );
     connect( this,             SIGNAL( rejected() ), SLOT( onRejected() ) );
+
+    ui->listWidget->setCurrentRow( 0 );
 }
 
 
@@ -211,7 +214,7 @@ SettingsDialog::createIcons()
 
 #ifndef Q_WS_MAC
     // doesn't listen to sizehint...
-    ui->listWidget->setMaximumWidth( maxlen + 14 );
+    ui->listWidget->setMaximumWidth( maxlen + 8 );
 #endif
 
     connect( ui->listWidget, SIGNAL( currentItemChanged( QListWidgetItem* ,QListWidgetItem* ) ), this, SLOT( changePage( QListWidgetItem*, QListWidgetItem* ) ) );
