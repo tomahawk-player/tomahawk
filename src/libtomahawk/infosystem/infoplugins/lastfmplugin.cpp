@@ -68,11 +68,6 @@ LastFmPlugin::LastFmPlugin( InfoSystemWorker* parent )
 
     m_pw = TomahawkSettings::instance()->lastFmPassword();
 
-    if( TomahawkSettings::instance()->scrobblingEnabled() && !lastfm::ws::Username.isEmpty() )
-    {
-        createScrobbler();
-    }
-
     //HACK work around a bug in liblastfm---it doesn't create its config dir, so when it
     // tries to write the track cache, it fails silently. until we have a fixed version, do this
     // code taken from Amarok (src/services/lastfm/ScrobblerAdapter.cpp)
@@ -103,6 +98,7 @@ LastFmPlugin::namChangedSlot()
 {
     qDebug() << Q_FUNC_INFO;
     lastfm::setNetworkAccessManager( m_infoSystemWorker->nam() );
+    settingsChanged(); // to get the scrobbler set up
 }
 
 
@@ -158,13 +154,20 @@ LastFmPlugin::pushInfo( const QString caller, const Tomahawk::InfoSystem::InfoTy
 void
 LastFmPlugin::nowPlaying( const QString &caller, const InfoType type, const QVariant &input )
 {
+    qDebug() << Q_FUNC_INFO;
     if ( !input.canConvert< Tomahawk::InfoSystem::InfoCriteriaHash >() || !m_scrobbler )
+    {
+        qDebug() << "LastFmPlugin::nowPlaying no m_scrobbler, or cannot convert input!";
+        if ( ! m_scrobbler )
+            qDebug() << "no scrobbler!";
         return;
+    }
 
     InfoCriteriaHash hash = input.value< Tomahawk::InfoSystem::InfoCriteriaHash >();
     if ( !hash.contains( "title" ) || !hash.contains( "artist" ) || !hash.contains( "album" ) || !hash.contains( "duration" ) )
         return;
 
+    qDebug() << "LastFmPlugin::nowPlaying valid criteria hash";
     m_track = lastfm::MutableTrack();
     m_track.stamp();
 
@@ -182,7 +185,8 @@ LastFmPlugin::nowPlaying( const QString &caller, const InfoType type, const QVar
 void
 LastFmPlugin::scrobble( const QString &caller, const InfoType type, const QVariant &input )
 {
-    Q_ASSERT( QThread::currentThread() == thread() );
+    qDebug() << Q_FUNC_INFO;
+    //Q_ASSERT( QThread::currentThread() == thread() );
 
     if ( !m_scrobbler || m_track.isNull() )
         return;
@@ -418,6 +422,7 @@ LastFmPlugin::settingsChanged()
 void
 LastFmPlugin::onAuthenticated()
 {
+    qDebug() << Q_FUNC_INFO;
     if( !m_authJob )
     {
         qDebug() << Q_FUNC_INFO << "Help! No longer got a last.fm auth job!";
@@ -440,6 +445,7 @@ LastFmPlugin::onAuthenticated()
 
             TomahawkSettings::instance()->setLastFmSessionKey( lastfm::ws::SessionKey.toLatin1() );
 
+            qDebug() << "Got session key from last.fm";
             if( TomahawkSettings::instance()->scrobblingEnabled() )
                 m_scrobbler = new lastfm::Audioscrobbler( "thk" );
         }
@@ -456,8 +462,10 @@ LastFmPlugin::onAuthenticated()
 void
 LastFmPlugin::createScrobbler()
 {
+    qDebug() << Q_FUNC_INFO;
     if( TomahawkSettings::instance()->lastFmSessionKey().isEmpty() ) // no session key, so get one
     {
+        qDebug() << "LastFmPlugin::createScrobbler Session key is empty";
         QString authToken = md5( ( lastfm::ws::Username.toLower() + md5( m_pw.toUtf8() ) ).toUtf8() );
 
         QMap<QString, QString> query;
@@ -470,9 +478,9 @@ LastFmPlugin::createScrobbler()
     }
     else
     {
+        qDebug() << "LastFmPlugin::createScrobbler Already have session key";
         lastfm::ws::SessionKey = TomahawkSettings::instance()->lastFmSessionKey();
 
         m_scrobbler = new lastfm::Audioscrobbler( "thk" );
-        m_scrobbler->moveToThread( thread() );
     }
 }
