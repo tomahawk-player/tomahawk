@@ -1,5 +1,5 @@
 /* === This file is part of Tomahawk Player - <http://tomahawk-player.org> ===
- * 
+ *
  *   Copyright 2010-2011, Christian Muehlhaeuser <muesli@tomahawk-player.org>
  *
  *   Tomahawk is free software: you can redistribute it and/or modify
@@ -83,7 +83,10 @@ CollectionView::setupMenus()
 
     m_playItemAction = m_itemMenu.addAction( tr( "&Play" ) );
     m_addItemsToQueueAction = m_itemMenu.addAction( tr( "Add to &Queue" ) );
-//    m_itemMenu.addSeparator();
+   m_itemMenu.addSeparator();
+
+   foreach( QAction* a, actions() )
+       m_itemMenu.addAction( a );
 //    m_addItemsToPlaylistAction = m_itemMenu.addAction( tr( "&Add to Playlist" ) );
 
     connect( m_playItemAction,           SIGNAL( triggered() ), SLOT( playItem() ) );

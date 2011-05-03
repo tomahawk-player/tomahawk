@@ -29,6 +29,7 @@ set( libSources
     source.cpp
     viewpage.cpp
     viewmanager.cpp
+    globalactionmanager.cpp
 
     sip/SipPlugin.cpp
     sip/SipHandler.cpp
@@ -159,6 +160,7 @@ set( libSources
 
     widgets/newplaylistwidget.cpp
     widgets/welcomewidget.cpp
+    widgets/welcomeplaylistmodel.cpp
     widgets/overlaywidget.cpp
     widgets/infowidgets/sourceinfowidget.cpp
 
@@ -183,6 +185,7 @@ set( libHeaders
     source.h
     viewpage.h
     viewmanager.h
+    globalactionmanager.h
 
     artist.h
     album.h
@@ -318,6 +321,7 @@ set( libHeaders
 
     widgets/newplaylistwidget.h
     widgets/welcomewidget.h
+    widgets/welcomeplaylistmodel.h
     widgets/overlaywidget.h
     widgets/infowidgets/sourceinfowidget.h
 

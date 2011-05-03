@@ -145,6 +145,8 @@ public slots:
     void setRepeatMode( PlaylistInterface::RepeatMode mode );
     void setShuffled( bool enabled );
 
+    void playlistInterfaceChanged( PlaylistInterface* );
+
     // called by the playlist creation dbcmds
     void createPlaylist( const Tomahawk::source_ptr& src, const QVariant& contents );
     void createDynamicPlaylist( const Tomahawk::source_ptr& src, const QVariant& contents );

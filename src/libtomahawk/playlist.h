@@ -262,4 +262,6 @@ private:
 
 };
 
+Q_DECLARE_METATYPE( QSharedPointer< Tomahawk::Playlist > )
+
 #endif // PLAYLIST_H

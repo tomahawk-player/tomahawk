@@ -128,6 +128,7 @@ JabberPlugin::onConnected()
         emit addMenu( m_menu );
     }
 
+
     emit connected();
 }
 

@@ -38,6 +38,7 @@
 #include <jreen/mucroom.h>
 
 #include <QNetworkProxy>
+#include <QMessageBox>
 
 #define MYNAME "SIPJREEN"
 #define TOMAHAWK_FEATURE QLatin1String( "tomahawk:sip:v1" )
@@ -81,7 +82,6 @@ public:
     virtual QWidget* configWidget();
     virtual void saveConfig();
 
-    void setProxy( QNetworkProxy* proxy );
 signals:
     void jidChanged( const QString& );
 
@@ -92,6 +92,7 @@ public slots:
     void sendMsg( const QString& to, const QString& msg );
     void broadcastMsg( const QString &msg );
     void addContact( const QString &jid, const QString& msg = QString() );
+    void setProxy( const QNetworkProxy &proxy );
 
 protected:
     Ui_JabberConfig* m_ui; // so the google wrapper can change the config dialog a bit
@@ -102,7 +103,10 @@ private slots:
     void onDisconnect(Jreen::Client::DisconnectReason reason);
     void onAuthError(int code, const QString &msg);
 
-    void onNewPresence( const Jreen::Presence& presence );
+    void onPresenceReceived( const Jreen::RosterItem::Ptr &item, const Jreen::Presence& presence );
+    void onSubscriptionReceived( const Jreen::RosterItem::Ptr &item, const Jreen::Presence& presence );
+    void onSubscriptionRequestConfirmed( int result );
+
     void onNewMessage( const Jreen::Message& message );
     void onError( const Jreen::Connection::SocketError& e )
     {
@@ -117,6 +121,7 @@ private:
     bool readAutoConnect();
     int readPort();
 
+    void setupClientHelper();
     void addMenuHelper();
     void removeMenuHelper();
 
@@ -142,6 +147,7 @@ private:
     Jreen::MUCRoom *m_room;
     Jreen::SimpleRoster *m_roster;
     QHash<Jreen::JID, Jreen::Presence::Type> m_peers;
+    QHash<Jreen::JID, QMessageBox*> m_subscriptionConfirmBoxes;
     enum IqContext { NoContext, RequestDisco, RequestedDisco, SipMessageSent, RequestedVCard };
     QStringList m_legacy_peers;
     AvatarManager *m_avatarManager;

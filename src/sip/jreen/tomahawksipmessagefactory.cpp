@@ -120,5 +120,8 @@ void TomahawkSipMessageFactory::serialize(StanzaExtension *extension, QXmlStream
 
 StanzaExtension::Ptr TomahawkSipMessageFactory::createExtension()
 {
-    return StanzaExtension::Ptr(new TomahawkSipMessage(m_ip, m_port, m_uniqname, m_key, m_visible));
+    if(m_visible)
+        return StanzaExtension::Ptr(new TomahawkSipMessage(m_ip, m_port, m_uniqname, m_key));
+    else
+        return StanzaExtension::Ptr(new TomahawkSipMessage());
 }

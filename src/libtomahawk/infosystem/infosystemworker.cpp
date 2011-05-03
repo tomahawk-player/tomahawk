@@ -27,6 +27,8 @@
 #include "infoplugins/musixmatchplugin.h"
 #include "infoplugins/lastfmplugin.h"
 
+#include "lastfm/NetworkAccessManager"
+
 namespace Tomahawk
 {
 
@@ -42,12 +44,13 @@ InfoSystemWorker::InfoSystemWorker()
 
 InfoSystemWorker::~InfoSystemWorker()
 {
-    qDebug() << Q_FUNC_INFO;
+    qDebug() << Q_FUNC_INFO << " beginning";
     Q_FOREACH( InfoPluginPtr plugin, m_plugins )
     {
         if( plugin )
             delete plugin.data();
     }
+    qDebug() << Q_FUNC_INFO << " is done deleting plugins";
 }
 
 
@@ -165,7 +168,13 @@ void
 InfoSystemWorker::newNam()
 {
     qDebug() << Q_FUNC_INFO;
-    QNetworkAccessManager *newNam = new QNetworkAccessManager();
+
+    QNetworkAccessManager* newNam;
+#ifdef LIBLASTFM_FOUND
+    newNam = new lastfm::NetworkAccessManager( this );
+#else
+    newNam = new QNetworkAccessManager( this );
+#endif
     if ( m_nam )
     {
         delete m_nam;

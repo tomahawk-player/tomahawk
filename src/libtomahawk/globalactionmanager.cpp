@@ -31,6 +31,8 @@
 
 #include <QUrl>
 #include <Playlist.h>
+#include <qclipboard.h>
+#include <qapplication.h>
 
 GlobalActionManager* GlobalActionManager::s_instance = 0;
 
@@ -52,6 +54,28 @@ GlobalActionManager::GlobalActionManager( QObject* parent )
 
 GlobalActionManager::~GlobalActionManager()
 {}
+
+QUrl
+GlobalActionManager::openLinkFromQuery( const Tomahawk::query_ptr& query ) const
+{
+    QUrl link( "tomahawk://open/track/" );
+    if( !query->track().isEmpty() )
+        link.addQueryItem( "title", query->track() );
+    if( !query->artist().isEmpty() )
+        link.addQueryItem( "artist", query->artist() );
+    if( !query->album().isEmpty() )
+        link.addQueryItem( "album", query->album() );
+
+    return link;
+}
+
+void
+GlobalActionManager::copyToClipboard( const Tomahawk::query_ptr& query ) const
+{
+    QClipboard* cb = QApplication::clipboard();
+    cb->setText( openLinkFromQuery( query ).toEncoded() );
+}
+
 
 bool
 GlobalActionManager::parseTomahawkLink( const QString& url )
@@ -88,6 +112,10 @@ GlobalActionManager::parseTomahawkLink( const QString& url )
             return handleSearchCommand( u );
         } else if( cmdType == "play" ) {
             return handlePlayCommand( u );
+        } else if( cmdType == "bookmark" ) {
+            return handlePlayCommand( u );
+        } else if( cmdType == "open" ) {
+            return handleOpenCommand( u );
         } else {
             qDebug() << "Tomahawk link not supported, command not known!" << cmdType << u.path();
             return false;
@@ -128,7 +156,7 @@ GlobalActionManager::handlePlaylistCommand( const QUrl& url )
         pl->createNewRevision( uuid(), pl->currentrevision(), QList< Tomahawk::plentry_ptr >() );
         ViewManager::instance()->show( pl );
     } else if( parts[ 0 ] == "add" ) {
-        if( !url.hasQueryItem( "playlistid" ) || !url.hasQueryItem( "track" ) || !url.hasQueryItem( "artist" ) ) {
+        if( !url.hasQueryItem( "playlistid" ) || !url.hasQueryItem( "title" ) || !url.hasQueryItem( "artist" ) ) {
             qDebug() << "Add to playlist command needs playlistid, track, and artist..." << url.toString();
             return false;
         }
@@ -156,6 +184,19 @@ GlobalActionManager::handleCollectionCommand( const QUrl& url )
 }
 
 bool
+GlobalActionManager::handleOpenCommand(const QUrl& url)
+{
+    QStringList parts = url.path().split( "/" ).mid( 1 );
+    if( parts.isEmpty() ) {
+        qDebug() << "No specific type to open:" << url.toString();
+        return false;
+    }
+    // TODO user configurable in the UI
+    return doQueueAdd( parts, url.queryItems() );
+}
+
+
+bool
 GlobalActionManager::handleQueueCommand( const QUrl& url )
 {
     QStringList parts = url.path().split( "/" ).mid( 1 ); // get the rest of the command
@@ -165,9 +206,50 @@ GlobalActionManager::handleQueueCommand( const QUrl& url )
     }
 
     if( parts[ 0 ] == "add" ) {
-        if( parts.size() > 1 && parts[ 1 ] == "track" ) {
-            QPair< QString, QString > pair;
-            foreach( pair, url.queryItems() ) {
+        doQueueAdd( parts.mid( 1 ), url.queryItems() );
+    } else {
+        qDebug() << "Only queue/add/track is support at the moment, got:" << parts;
+        return false;
+    }
+
+    return false;
+}
+
+bool
+GlobalActionManager::doQueueAdd( const QStringList& parts, const QList< QPair< QString, QString > >& queryItems )
+{
+    if( parts.size() && parts[ 0 ] == "track" ) {
+        QPair< QString, QString > pair;
+
+        QString title, artist, album, urlStr;
+        foreach( pair, queryItems ) {
+            if( pair.first == "title" )
+                title = pair.second;
+            else if( pair.first == "artist" )
+                artist = pair.second;
+            else if( pair.first == "album" )
+                album = pair.second;
+            else if( pair.first == "url" )
+                urlStr = pair.second;
+        }
+
+        if( !title.isEmpty() || !artist.isEmpty() || !album.isEmpty() ) { // an individual; query to add to queue
+            Tomahawk::query_ptr q = Tomahawk::Query::get( artist, title, album );
+            if( !urlStr.isEmpty() )
+                q->setResultHint( urlStr );
+            Tomahawk::Pipeline::instance()->resolve( q, true );
+
+            ViewManager::instance()->queue()->model()->append( q );
+            ViewManager::instance()->showQueue();
+
+            if( !AudioEngine::instance()->isPlaying() ) {
+                connect( q.data(), SIGNAL( resolvingFinished( bool ) ), this, SLOT( waitingForResolved( bool ) ) );
+                m_waitingToPlay = q;
+            }
+            return true;
+
+        } else { // a list of urls to add to the queue
+            foreach( pair, queryItems ) {
                 if( pair.first != "url" )
                     continue;
                 QUrl track = QUrl::fromUserInput( pair.second  );
@@ -175,7 +257,6 @@ GlobalActionManager::handleQueueCommand( const QUrl& url )
                 if( track.toString().startsWith( "file://" ) ) { // it's local, so we see if it's in the DB and load it if so
                     // TODO
                 } else { // give it a web result hint
-                    // TODO actually read the tags
                     QFileInfo info( track.path() );
                     Tomahawk::query_ptr q = Tomahawk::Query::get( QString(), info.baseName(), QString() );
                     q->setResultHint( track.toString() );
@@ -186,12 +267,8 @@ GlobalActionManager::handleQueueCommand( const QUrl& url )
                 }
                 return true;
             }
-        } else {
-            qDebug() << "Only queue/add/track is support at the moment, got:" << parts;
-            return false;
         }
     }
-
     return false;
 }
 
@@ -204,8 +281,8 @@ GlobalActionManager::handleSearchCommand( const QUrl& url )
         query << url.queryItemValue( "artist" );
     if( url.hasQueryItem( "album" ) )
         query << url.queryItemValue( "album" );
-    if( url.hasQueryItem( "track" ) )
-        query << url.queryItemValue( "track" );
+    if( url.hasQueryItem( "title" ) )
+        query << url.queryItemValue( "title" );
     QString queryStr = query.join( " " );
 
     if( queryStr.isEmpty() )
@@ -268,7 +345,42 @@ GlobalActionManager::handlePlayCommand( const QUrl& url )
         QPair< QString, QString > pair;
         QString title, artist, album, urlStr;
         foreach( pair, url.queryItems() ) {
-            if( pair.first == "track" )
+            if( pair.first == "title" )
+                title = pair.second;
+            else if( pair.first == "artist" )
+                artist = pair.second;
+            else if( pair.first == "album" )
+                album = pair.second;
+            else if( pair.first == "url" )
+                urlStr = pair.second;
+        }
+        Tomahawk::query_ptr q = Tomahawk::Query::get( artist, title, album );
+        if( !urlStr.isEmpty() )
+            q->setResultHint( urlStr );
+        Tomahawk::Pipeline::instance()->resolve( q, true );
+
+        m_waitingToPlay = q;
+        connect( q.data(), SIGNAL( resolvingFinished( bool ) ), this, SLOT( waitingForResolved( bool ) ) );
+
+        return true;
+    }
+
+    return false;
+}
+
+bool GlobalActionManager::handleBookmarkCommand(const QUrl& url)
+{
+    QStringList parts = url.path().split( "/" ).mid( 1 ); // get the rest of the command
+    if( parts.isEmpty() ) {
+        qDebug() << "No specific bookmark command:" << url.toString();
+        return false;
+    }
+
+    if( parts[ 0 ] == "track" ) {
+        QPair< QString, QString > pair;
+        QString title, artist, album, urlStr;
+        foreach( pair, url.queryItems() ) {
+            if( pair.first == "title" )
                 title = pair.second;
             else if( pair.first == "artist" )
                 artist = pair.second;
@@ -299,6 +411,8 @@ GlobalActionManager::handlePlayCommand( const QUrl& url )
     return false;
 }
 
+
+
 void
 GlobalActionManager::bookmarkPlaylistCreated( const Tomahawk::playlist_ptr& pl )
 {
@@ -326,13 +440,6 @@ GlobalActionManager::doBookmark( const Tomahawk::playlist_ptr& pl, const Tomahaw
 
     m_toShow = pl;
 
-    // if nothing is playing, lets start this
-    // TODO
-    if( !AudioEngine::instance()->isPlaying() ) {
-        connect( q.data(), SIGNAL( resolvingFinished( bool ) ), this, SLOT( waitingForResolved( bool ) ) );
-        m_waitingToPlay = q;
-    }
-
     m_waitingToBookmark.clear();
 }
 
@@ -351,7 +458,8 @@ void
 GlobalActionManager::waitingForResolved( bool success )
 {
     if( success && !m_waitingToPlay.isNull() && !m_waitingToPlay->results().isEmpty() ) { // play it!
-        AudioEngine::instance()->playItem( AudioEngine::instance()->playlist(), m_waitingToPlay->results().first() );
+//         AudioEngine::instance()->playItem( AudioEngine::instance()->playlist(), m_waitingToPlay->results().first() );
+        AudioEngine::instance()->play();
     }
 
     m_waitingToPlay.clear();

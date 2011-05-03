@@ -21,16 +21,20 @@
 #define GLOBALACTIONMANAGER_H
 
 #include "playlist.h"
+#include "dllmacro.h"
 
 #include <QObject>
 #include <QUrl>
 
-class GlobalActionManager : public QObject
+class DLLEXPORT GlobalActionManager : public QObject
 {
     Q_OBJECT
 public:
     static GlobalActionManager* instance();
     virtual ~GlobalActionManager();
+
+    QUrl openLinkFromQuery( const Tomahawk::query_ptr& query ) const;
+    void copyToClipboard( const Tomahawk::query_ptr& query ) const;
 
 public slots:
     bool parseTomahawkLink( const QString& link );
@@ -50,6 +54,10 @@ private:
     bool handleStationCommand(const QUrl& url );
     bool handleSearchCommand(const QUrl& url );
     bool handlePlayCommand(const QUrl& url );
+    bool handleBookmarkCommand(const QUrl& url );
+    bool handleOpenCommand(const QUrl& url );
+
+    bool doQueueAdd( const QStringList& parts, const QList< QPair< QString, QString > >& queryItems );
 
     Tomahawk::playlist_ptr m_toShow;
     Tomahawk::query_ptr m_waitingToBookmark;

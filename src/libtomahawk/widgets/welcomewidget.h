@@ -59,28 +59,7 @@ private:
     QPixmap m_playlistIcon;
 };
 
-
-class DLLEXPORT PlaylistWidgetItem : public QListWidgetItem
-{
-public:
-    enum ItemRoles
-    { ArtistRole = Qt::UserRole, TrackCountRole };
-
-    PlaylistWidgetItem( const Tomahawk::playlist_ptr& playlist ) : QListWidgetItem() { m_playlist = playlist; }
-    ~PlaylistWidgetItem() {}
-
-    virtual QVariant data( int role ) const;
-
-    Tomahawk::playlist_ptr playlist() const { return m_playlist; }
-
-private:
-    Tomahawk::playlist_ptr m_playlist;
-
-    mutable QString m_artists;
-};
-
-
-class DLLEXPORT PlaylistWidget : public QListWidget
+class DLLEXPORT PlaylistWidget : public QListView
 {
 public:
     PlaylistWidget( QWidget* parent = 0 );
@@ -118,11 +97,10 @@ signals:
 
 public slots:
     void updatePlaylists();
-    void refresh();
 
 private slots:
     void onSourceAdded( const Tomahawk::source_ptr& source );
-    void onPlaylistActivated( QListWidgetItem* item );
+    void onPlaylistActivated( const QModelIndex& );
     void onPlaybackFinished( const Tomahawk::query_ptr& query );
 
     void checkQueries();

@@ -29,6 +29,8 @@
 #include <jreen/capabilities.h>
 #include <jreen/vcardupdate.h>
 #include <jreen/vcard.h>
+#include <jreen/directconnection.h>
+#include <jreen/tcpconnection.h>
 
 #include <qjson/parser.h>
 #include <qjson/serializer.h>
@@ -81,12 +83,17 @@ JabberPlugin::JabberPlugin( const QString& pluginId )
 
     // general client setup
     m_client = new Jreen::Client( jid, m_currentPassword );
+    setupClientHelper();
+
     m_client->registerStanzaExtension(new TomahawkSipMessageFactory);
     m_currentResource = QString::fromAscii( "tomahawk%1" ).arg( QString::number( qrand() % 10000 ) );
     m_client->setResource( m_currentResource );
 
     // add VCardUpdate extension to own presence
     m_client->presence().addExtension( new Jreen::VCardUpdate() );
+
+    // initaliaze the roster
+    m_roster = new Jreen::SimpleRoster( m_client );
 
     // initialize the AvatarManager
     m_avatarManager = new AvatarManager( m_client );
@@ -111,8 +118,13 @@ JabberPlugin::JabberPlugin( const QString& pluginId )
     connect(m_client, SIGNAL(serverFeaturesReceived(QSet<QString>)), SLOT(onConnect()));
     connect(m_client, SIGNAL(disconnected(Jreen::Client::DisconnectReason)), SLOT(onDisconnect(Jreen::Client::DisconnectReason)));
     connect(m_client, SIGNAL(newMessage(Jreen::Message)), SLOT(onNewMessage(Jreen::Message)));
-    connect(m_client, SIGNAL(newPresence(Jreen::Presence)), SLOT(onNewPresence(Jreen::Presence)));
+
     connect(m_client, SIGNAL(newIQ(Jreen::IQ)), SLOT(onNewIq(Jreen::IQ)));
+
+    connect(m_roster, SIGNAL(presenceReceived(Jreen::RosterItem::Ptr,Jreen::Presence)),
+                      SLOT(onPresenceReceived(Jreen::RosterItem::Ptr,Jreen::Presence)));
+    connect(m_roster, SIGNAL(subscriptionReceived(Jreen::RosterItem::Ptr,Jreen::Presence)),
+                      SLOT(onSubscriptionReceived(Jreen::RosterItem::Ptr,Jreen::Presence)));
 
     connect(m_avatarManager, SIGNAL(newAvatar(QString)), SLOT(onNewAvatar(QString)));
 }
@@ -123,9 +135,22 @@ JabberPlugin::~JabberPlugin()
 }
 
 void
-JabberPlugin::setProxy( QNetworkProxy* proxy )
+JabberPlugin::setProxy( const QNetworkProxy &proxy )
 {
-    qDebug() << Q_FUNC_INFO << "Not implemented";
+    if(m_currentServer.isEmpty() || !(m_currentPort > 0))
+    {
+        // patches are welcome in Jreen that implement jdns through proxy
+        qDebug() << Q_FUNC_INFO << "Jreen proxy only works when you explicitly set host and port";
+        Q_ASSERT(false);
+        return;
+    }
+
+    if(!m_client->connection())
+    {
+        m_client->setConnection(new Jreen::TcpConnection(m_currentServer, m_currentPort));
+    }
+
+    qobject_cast<Jreen::DirectConnection*>(m_client->connection())->setProxy(proxy);
 }
 
 
@@ -174,18 +199,20 @@ JabberPlugin::connectPlugin( bool startup )
     if ( startup && !readAutoConnect() )
         return false;
 
-    QString jid       = m_currentUsername = accountName();
-    QString server    = m_currentServer = readServer();
-    QString password  = m_currentPassword = readPassword();
-    unsigned int port = m_currentPort = readPort();
+    if(m_client->isConnected())
+    {
+        qDebug() << Q_FUNC_INFO << "Already connected to server, not connecting again...";
+        return true; //FIXME: should i return false here?!
+    }
 
-    qDebug() << "Connecting to the XMPP server..." << (m_state == Connected);
+    qDebug() << "Connecting to the XMPP server...";
+
     qDebug() << m_client->jid().full();
-    //m_client->setServer( m_client->jid().domain() );
     qDebug() << m_client->server() << m_client->port();
 
+    //FIXME: we're badly workarounding some missing reconnection api here, to be fixed soon
     QTimer::singleShot(1000, m_client, SLOT( connectToServer() ) );
-    //m_client->connectToServer();
+
 
     m_state = Connecting;
     emit stateChanged( m_state );
@@ -195,9 +222,7 @@ JabberPlugin::connectPlugin( bool startup )
 void
 JabberPlugin::disconnectPlugin()
 {
-    qDebug() << Q_FUNC_INFO << (m_state == Connected);
-
-    if( m_state == Disconnected )
+    if(!m_client->isConnected())
         return;
 
     foreach(const Jreen::JID &peer, m_peers.keys())
@@ -239,7 +264,6 @@ JabberPlugin::onConnect()
     m_client->setPingInterval(1000);
 
     // load roster
-    m_roster = new Jreen::SimpleRoster( m_client );
     m_roster->load();
 
     //FIXME: this implementation is totally broken atm, so it's disabled to avoid harm :P
@@ -392,8 +416,7 @@ JabberPlugin::sendMsg(const QString& to, const QString& msg)
         sipMessage = new TomahawkSipMessage(m["ip"].toString(),
                                             m["port"].toInt(),
                                             m["uniqname"].toString(),
-                                            m["key"].toString(),
-                                            m["visible"].toBool()
+                                            m["key"].toString()
                                             );
     }
     else
@@ -474,14 +497,31 @@ JabberPlugin::checkSettings()
         m_currentServer = readServer();
         m_currentPort = readPort();
 
-        Jreen::JID jid = Jreen::JID( accountName() );
-        m_client->setJID( jid );
-        m_client->setPassword( m_currentPassword );
-        m_client->setServer( m_currentServer );
-        m_client->setPort( m_currentPort );
+        setupClientHelper();
 
         qDebug() << Q_FUNC_INFO << "Updated settings";
         connectPlugin( false );
+    }
+}
+
+void JabberPlugin::setupClientHelper()
+{
+    Jreen::JID jid = Jreen::JID( m_currentUsername );
+
+    m_client->setJID( jid );
+    m_client->setPassword( m_currentPassword );
+
+    if( !m_currentServer.isEmpty() )
+    {
+        // set explicit server details
+        m_client->setServer( m_currentServer );
+        m_client->setPort( m_currentPort );
+    }
+    else
+    {
+        // let jreen find out server and port via jdns
+        m_client->setServer( jid.domain() );
+        m_client->setPort( -1 );
     }
 }
 
@@ -539,8 +579,10 @@ void JabberPlugin::onNewMessage(const Jreen::Message& message)
 }
 
 
-void JabberPlugin::onNewPresence( const Jreen::Presence& presence)
+void JabberPlugin::onPresenceReceived( const Jreen::RosterItem::Ptr &item, const Jreen::Presence& presence )
 {
+    Q_UNUSED(item);
+
     Jreen::JID jid = presence.from();
     QString fulljid( jid.full() );
 
@@ -580,6 +622,93 @@ void JabberPlugin::onNewPresence( const Jreen::Presence& presence)
     {
         qDebug() << Q_FUNC_INFO << "Running tomahawk: no" << "no caps";
     }
+}
+
+void JabberPlugin::onSubscriptionReceived(const Jreen::RosterItem::Ptr& item, const Jreen::Presence& presence)
+{
+    qDebug() << Q_FUNC_INFO << "presence type: " << presence.subtype();
+    if(item)
+        qDebug() << Q_FUNC_INFO << presence.from().full() << "subs" << item->subscription() << "ask" << item->ask();
+    else
+        qDebug() << Q_FUNC_INFO << "item empty";
+
+    // don't do anything if the contact is already subscribed to us
+    if( presence.subtype() != Jreen::Presence::Subscribe ||
+        (
+            item && (item->subscription() == Jreen::RosterItem::From || item->subscription() == Jreen::RosterItem::Both)
+        )
+    )
+    {
+        return;
+    }
+
+    // check if the requester is already on the roster
+    if(item &&
+        (
+            item->subscription() == Jreen::RosterItem::To ||
+            ( item->subscription() == Jreen::RosterItem::None && !item->ask().isEmpty() )
+        )
+    )
+    {
+        qDebug() << Q_FUNC_INFO << presence.from().bare() << "already on the roster so we assume ack'ing subscription request is okay...";
+        m_roster->allowSubscription(presence.from(), true);
+
+        return;
+    }
+
+    qDebug() << Q_FUNC_INFO << presence.from().bare() << "open subscription request box";
+
+    // preparing the confirm box for the user
+    QMessageBox *confirmBox = new QMessageBox(
+                                QMessageBox::Question,
+                                tr( "Authorize User" ),
+                                QString( tr( "Do you want to grant <b>%1</b> access to your Collection?" ) ).arg(presence.from().bare()),
+                                QMessageBox::Yes | QMessageBox::No,
+                                0
+                              );
+
+    // add confirmBox to m_subscriptionConfirmBoxes
+    m_subscriptionConfirmBoxes.insert( presence.from(), confirmBox );
+
+    // display the box and wait for the answer
+    confirmBox->open( this, SLOT( onSubscriptionRequestConfirmed( int ) ) );
+}
+
+void
+JabberPlugin::onSubscriptionRequestConfirmed( int result )
+{
+    qDebug() << Q_FUNC_INFO << result;
+
+    QList< QMessageBox* > confirmBoxes = m_subscriptionConfirmBoxes.values();
+    Jreen::JID jid;
+
+    foreach( QMessageBox* currentBox, confirmBoxes )
+    {
+        if( currentBox == sender() )
+        {
+            jid = m_subscriptionConfirmBoxes.key( currentBox );
+        }
+    }
+
+    qDebug() << Q_FUNC_INFO << "box confirmed for" << jid.bare();
+
+    // we got an answer, deleting the box
+    m_subscriptionConfirmBoxes.remove( jid );
+    sender()->deleteLater();
+
+    QMessageBox::StandardButton allowSubscription = static_cast<QMessageBox::StandardButton>( result );
+
+    if ( allowSubscription == QMessageBox::Yes )
+    {
+        qDebug() << Q_FUNC_INFO << jid.bare() << "accepted by user, adding to roster";
+        addContact(jid, "");
+    }
+    else
+    {
+        qDebug() << Q_FUNC_INFO << jid.bare() << "declined by user";
+    }
+
+    m_roster->allowSubscription( jid, allowSubscription == QMessageBox::Yes );
 }
 
 void JabberPlugin::onNewIq(const Jreen::IQ& iq, int context)

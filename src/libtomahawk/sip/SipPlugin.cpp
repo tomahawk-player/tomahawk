@@ -1,6 +1,7 @@
 /* === This file is part of Tomahawk Player - <http://tomahawk-player.org> ===
  *
  *   Copyright 2010-2011, Christian Muehlhaeuser <muesli@tomahawk-player.org>
+ *             2011, Dominik Schmidt <dev@dominik-schmidt.de>
  *
  *   Tomahawk is free software: you can redistribute it and/or modify
  *   it under the terms of the GNU General Public License as published by
@@ -63,4 +64,10 @@ QIcon
 SipPlugin::icon() const
 {
     return QIcon();
+}
+
+void
+SipPlugin::setProxy( const QNetworkProxy& proxy )
+{
+    qDebug() << Q_FUNC_INFO << "Not implemented";
 }

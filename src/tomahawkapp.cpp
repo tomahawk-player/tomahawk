@@ -224,10 +224,10 @@ TomahawkApp::init()
     qDebug() << "Setting NAM.";
     TomahawkUtils::setNam( lastfm::nam() );
 
-    #else
+#else
     qDebug() << "Setting NAM.";
     TomahawkUtils::setNam( new QNetworkAccessManager() );
-    #endif
+#endif
 
     // Set up proxy
     //FIXME: This overrides the lastfm proxy above?

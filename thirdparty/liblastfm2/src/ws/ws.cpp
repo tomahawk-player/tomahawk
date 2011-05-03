@@ -218,11 +218,15 @@ lastfm::setNetworkAccessManager( QNetworkAccessManager* nam )
 
     QMutexLocker l( &namAccessMutex );
     QThread* thread = QThread::currentThread();
+    QNetworkAccessManager* oldNam = 0;
     if ( threadNamHash.contains( thread ) && ourNamHash.contains( thread ) && ourNamHash[thread] )
-        delete threadNamHash[thread];
+        oldNam = threadNamHash[thread];
     
     threadNamHash[thread] = nam;
     ourNamHash[thread] = false;
+
+    if ( oldNam )
+        delete oldNam;
 }
 
 

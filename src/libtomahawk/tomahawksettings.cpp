@@ -365,6 +365,12 @@ TomahawkSettings::recentlyPlayedPlaylists() const
     return playlists;
 }
 
+QStringList
+TomahawkSettings::recentlyPlayedPlaylistGuids() const
+{
+    return value( "playlists/recentlyPlayed" ).toStringList();
+}
+
 
 void
 TomahawkSettings::appendRecentlyPlayedPlaylist( const Tomahawk::playlist_ptr& playlist )
@@ -375,6 +381,8 @@ TomahawkSettings::appendRecentlyPlayedPlaylist( const Tomahawk::playlist_ptr& pl
     playlist_guids.append( playlist->guid() );
 
     setValue( "playlists/recentlyPlayed", playlist_guids );
+
+    emit recentlyPlayedPlaylistAdded( playlist );
 }
 
 QString

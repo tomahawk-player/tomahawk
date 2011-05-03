@@ -26,14 +26,14 @@ public:
     bool visible;
 };
 
-TomahawkSipMessage::TomahawkSipMessage(QString ip, unsigned int port, QString uniqname, QString key, bool visible) : d_ptr(new TomahawkSipMessagePrivate)
+TomahawkSipMessage::TomahawkSipMessage(const QString &ip, unsigned int port, const QString &uniqname, const QString &key) : d_ptr(new TomahawkSipMessagePrivate)
 {
     Q_D(TomahawkSipMessage);
     d->ip = ip;
     d->port = port;
     d->uniqname = uniqname;
     d->key = key;
-    d->visible = visible;
+    d->visible = true;
 }
 
 TomahawkSipMessage::TomahawkSipMessage() : d_ptr(new TomahawkSipMessagePrivate)
@@ -58,12 +58,12 @@ unsigned int TomahawkSipMessage::port() const
     return d_func()->port;
 }
 
-QString TomahawkSipMessage::uniqname() const
+const QString TomahawkSipMessage::uniqname() const
 {
     return d_func()->uniqname;
 }
 
-QString TomahawkSipMessage::key() const
+const QString TomahawkSipMessage::key() const
 {
     return d_func()->key;
 }

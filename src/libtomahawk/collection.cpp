@@ -153,7 +153,6 @@ Collection::deleteStation( const dynplaylist_ptr& s )
 playlist_ptr
 Collection::playlist( const QString& guid )
 {
-    qDebug() << "Returning playlist for guid:" << guid << "found?" << m_playlists.contains( guid );
     return m_playlists.value( guid, playlist_ptr() );
 }
 
@@ -161,7 +160,6 @@ Collection::playlist( const QString& guid )
 dynplaylist_ptr
 Collection::autoPlaylist( const QString& guid )
 {
-    qDebug() << "Returning auto playlist for guid:" << guid << "found?" << m_autoplaylists.contains( guid );
     return m_autoplaylists.value( guid, dynplaylist_ptr() );
 }
 
@@ -169,7 +167,6 @@ dynplaylist_ptr
 Collection::station( const QString& guid )
 {
 
-    qDebug() << "Returning station for guid:" << guid << "found?" << m_stations.contains( guid );
     return m_stations.value( guid, dynplaylist_ptr() );
 }
 

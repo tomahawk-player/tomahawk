@@ -33,7 +33,8 @@
 #include "queueview.h"
 #include "trackmodel.h"
 #include "trackproxymodel.h"
-#include <track.h>
+#include "track.h"
+#include "globalactionmanager.h"
 
 using namespace Tomahawk;
 
@@ -76,6 +77,10 @@ TrackView::TrackView( QWidget* parent )
     f.setPointSize( f.pointSize() - 2 );
     setFont( f );
 #endif
+
+    QAction* createLinkAction = new QAction( tr( "Copy track link" ), this );
+    connect( createLinkAction, SIGNAL( triggered( bool ) ), this, SLOT( copyLink() ) );
+    addAction( createLinkAction );
 
     connect( this, SIGNAL( doubleClicked( QModelIndex ) ), SLOT( onItemActivated( QModelIndex ) ) );
 }
@@ -172,7 +177,6 @@ TrackView::onItemResized( const QModelIndex& index )
     qDebug() << Q_FUNC_INFO;
     m_delegate->updateRowSize( index );
 }
-
 
 void
 TrackView::playItem()
@@ -339,6 +343,16 @@ TrackView::onFilterChanged( const QString& )
     else
         if ( model()->trackCount() )
             m_overlay->hide();
+}
+
+void
+TrackView::copyLink()
+{
+    TrackModelItem* item = model()->itemFromIndex( proxyModel()->mapToSource( contextMenuIndex() ) );
+    if ( item && !item->query().isNull() )
+    {
+        GlobalActionManager::instance()->copyToClipboard( item->query() );
+    }
 }
 
 

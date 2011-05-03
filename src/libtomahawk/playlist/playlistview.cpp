@@ -30,6 +30,12 @@ using namespace Tomahawk;
 
 PlaylistView::PlaylistView( QWidget* parent )
     : TrackView( parent )
+    , m_model( 0 )
+    , m_itemMenu( 0 )
+    , m_playItemAction( 0 )
+    , m_addItemsToQueueAction( 0 )
+    , m_addItemsToPlaylistAction( 0 )
+    , m_deleteItemsAction( 0 )
 {
     setProxyModel( new PlaylistProxyModel( this ) );
 
@@ -84,6 +90,9 @@ PlaylistView::setupMenus()
     m_playItemAction = m_itemMenu.addAction( tr( "&Play" ) );
     m_addItemsToQueueAction = m_itemMenu.addAction( tr( "Add to &Queue" ) );
     m_itemMenu.addSeparator();
+
+    foreach( QAction* a, actions() )
+        m_itemMenu.addAction( a );
 //    m_addItemsToPlaylistAction = m_itemMenu.addAction( tr( "&Add to Playlist" ) );
 //    m_itemMenu.addSeparator();
     m_deleteItemsAction = m_itemMenu.addAction( i > 1 ? tr( "&Delete Items" ) : tr( "&Delete Item" ) );
@@ -143,7 +152,6 @@ PlaylistView::deleteItems()
 {
     proxyModel()->removeIndexes( selectedIndexes() );
 }
-
 
 void
 PlaylistView::onTrackCountChanged( unsigned int tracks )

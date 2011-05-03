@@ -121,6 +121,8 @@ ViewManager::ViewManager( QObject* parent )
     m_widget->layout()->setMargin( 0 );
     m_widget->layout()->setSpacing( 0 );
 
+    connect( AudioEngine::instance(), SIGNAL( playlistChanged( PlaylistInterface* ) ), this, SLOT( playlistInterfaceChanged( PlaylistInterface* ) ) );
+
     connect( &m_filterTimer, SIGNAL( timeout() ), SLOT( applyFilter() ) );
 
     connect( m_topbar, SIGNAL( filterTextChanged( QString ) ),
@@ -180,7 +182,7 @@ ViewManager::show( const Tomahawk::playlist_ptr& playlist )
     }
 
     setPage( view );
-    TomahawkSettings::instance()->appendRecentlyPlayedPlaylist( playlist );
+
     emit numSourcesChanged( SourceList::instance()->count() );
 
     return view;
@@ -206,7 +208,6 @@ ViewManager::show( const Tomahawk::dynplaylist_ptr& playlist )
     else
         m_queueView->show();
 
-    TomahawkSettings::instance()->appendRecentlyPlayedPlaylist( playlist );
     emit numSourcesChanged( SourceList::instance()->count() );
 
     return m_dynamicWidgets.value( playlist );
@@ -421,6 +422,22 @@ ViewManager::showSuperCollection()
     return shown;
 }
 
+void
+ViewManager::playlistInterfaceChanged( PlaylistInterface* interface )
+{
+    playlist_ptr pl = playlistForInterface( interface );
+    if ( !pl.isNull() )
+    {
+        TomahawkSettings::instance()->appendRecentlyPlayedPlaylist( pl );
+    } else
+    {
+        pl = dynamicPlaylistForInterface( interface );
+        if ( !pl.isNull() )
+            TomahawkSettings::instance()->appendRecentlyPlayedPlaylist( pl );
+    }
+}
+
+
 Tomahawk::ViewPage*
 ViewManager::showWelcomePage()
 {
@@ -599,7 +616,7 @@ ViewManager::setPage( ViewPage* page, bool trackHistory )
     qDebug() << "View page shown:" << page->title();
     emit viewPageActivated( page );
 
-    if ( !AudioEngine::instance()->isPlaying() )
+    if ( !AudioEngine::instance()->playlist() )
         AudioEngine::instance()->setPlaylist( currentPlaylistInterface() );
 
     // UGH!
