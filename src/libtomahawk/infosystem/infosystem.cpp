@@ -62,7 +62,7 @@ InfoSystem::InfoSystem(QObject *parent)
 
     m_infoSystemWorkerThreadController = new QThread( this );
     m_worker = new InfoSystemWorker();
-    //m_worker->moveToThread( m_infoSystemWorkerThreadController );
+    m_worker->moveToThread( m_infoSystemWorkerThreadController );
     m_infoSystemWorkerThreadController->start();
 
     QMetaObject::invokeMethod( m_worker, "init", Qt::QueuedConnection );
