@@ -100,8 +100,6 @@ private:
     bool presenceMeansOnline( Jreen::Presence::Type p );
     void handlePeerStatus( const Jreen::JID &jid, Jreen::Presence::Type presenceType );
 
-    bool m_connected;
-
     QMenu* m_menu;
     QAction* m_addFriendAction;
 

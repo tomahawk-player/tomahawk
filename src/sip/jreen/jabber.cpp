@@ -46,7 +46,6 @@
 JabberPlugin::JabberPlugin()
     : m_menu( 0 )
     , m_addFriendAction( 0 )
-    , m_connected(false)
 {
     qDebug() << Q_FUNC_INFO;
 
@@ -166,13 +165,19 @@ JabberPlugin::connectPlugin( bool startup )
     if ( startup && !TomahawkSettings::instance()->jabberAutoConnect() )
         return false;
 
-    qDebug() << "Connecting to the XMPP server..." << m_connected;
+    if(m_client->isConnected())
+    {
+        qDebug() << Q_FUNC_INFO << "Already connected to server, not connecting again...";
+        return true; //FIXME: should i return false here?!
+    }
+
+    qDebug() << "Connecting to the XMPP server...";
     qDebug() << m_client->jid().full();
-    //m_client->setServer( m_client->jid().domain() );
     qDebug() << m_client->server() << m_client->port();
 
+    //FIXME: we're badly workarounding some missing reconnection api here, to be fixed soon
     QTimer::singleShot(1000, m_client, SLOT( connectToServer() ) );
-    //m_client->connectToServer();
+
 
     return true;
 }
@@ -180,9 +185,9 @@ JabberPlugin::connectPlugin( bool startup )
 void
 JabberPlugin::disconnectPlugin()
 {
-    qDebug() << Q_FUNC_INFO << m_connected;
+    qDebug() << Q_FUNC_INFO;
 
-    if(!m_connected)
+    if(!m_client->isConnected())
         return;
 
     foreach(const Jreen::JID &peer, m_peers.keys())
@@ -239,8 +244,6 @@ JabberPlugin::onConnect()
     // treat muc participiants like contacts
     //connect( m_room, SIGNAL( messageReceived( Jreen::Message, bool ) ), this, SLOT( onNewMessage( Jreen::Message ) ) );
     //connect( m_room, SIGNAL( presenceReceived( Jreen::Presence, const Jreen::MUCRoom::Participant* ) ), this, SLOT( onNewPresence( Jreen::Presence ) ) );
-
-    m_connected = true;
 
     addMenuHelper();
 }
@@ -329,8 +332,6 @@ JabberPlugin::onDisconnect( Jreen::Client::DisconnectReason reason )
 
     if(reconnect)
         QTimer::singleShot(reconnectInSeconds*1000, this, SLOT(connectPlugin()));
-
-    m_connected = false;
 }
 
 void
