@@ -178,6 +178,32 @@ TomahawkApp::init()
 
     registerMetaTypes();
 
+#ifdef LIBLASTFM_FOUND
+    qDebug() << "Init Scrobbler.";
+    m_scrobbler = new Scrobbler( this );
+    qDebug() << "Setting NAM.";
+    TomahawkUtils::setNam( lastfm::nam() );
+    
+#else
+    qDebug() << "Setting NAM.";
+    TomahawkUtils::setNam( new QNetworkAccessManager() );
+#endif
+
+    // Set up proxy
+    //FIXME: This overrides the lastfm proxy above?
+    if( TomahawkSettings::instance()->proxyType() != QNetworkProxy::NoProxy &&
+        !TomahawkSettings::instance()->proxyHost().isEmpty() )
+    {
+        qDebug() << "Setting proxy to saved values";
+        TomahawkUtils::setProxy( new QNetworkProxy( static_cast<QNetworkProxy::ProxyType>(TomahawkSettings::instance()->proxyType()), TomahawkSettings::instance()->proxyHost(), TomahawkSettings::instance()->proxyPort(), TomahawkSettings::instance()->proxyUsername(), TomahawkSettings::instance()->proxyPassword() ) );
+        qDebug() << "Proxy type =" << QString::number( static_cast<int>(TomahawkUtils::proxy()->type()) );
+        qDebug() << "Proxy host =" << TomahawkUtils::proxy()->hostName();
+        TomahawkUtils::nam()->setProxy( *TomahawkUtils::proxy() );
+        lastfm::nam()->setProxy( *TomahawkUtils::proxy() );
+    }
+    else
+        TomahawkUtils::setProxy( new QNetworkProxy( QNetworkProxy::NoProxy ) );
+    
     Echonest::Config::instance()->setAPIKey( "JRIHWEP6GPOER2QQ6" );
 
     new TomahawkSettings( this );
@@ -217,32 +243,6 @@ TomahawkApp::init()
 
     qDebug() << "Init InfoSystem.";
     m_infoSystem = new Tomahawk::InfoSystem::InfoSystem( this );
-
-#ifdef LIBLASTFM_FOUND
-    qDebug() << "Init Scrobbler.";
-    m_scrobbler = new Scrobbler( this );
-    qDebug() << "Setting NAM.";
-    TomahawkUtils::setNam( lastfm::nam() );
-
-#else
-    qDebug() << "Setting NAM.";
-    TomahawkUtils::setNam( new QNetworkAccessManager() );
-#endif
-
-    // Set up proxy
-    //FIXME: This overrides the lastfm proxy above?
-    if( TomahawkSettings::instance()->proxyType() != QNetworkProxy::NoProxy &&
-        !TomahawkSettings::instance()->proxyHost().isEmpty() )
-    {
-        qDebug() << "Setting proxy to saved values";
-        TomahawkUtils::setProxy( new QNetworkProxy( static_cast<QNetworkProxy::ProxyType>(TomahawkSettings::instance()->proxyType()), TomahawkSettings::instance()->proxyHost(), TomahawkSettings::instance()->proxyPort(), TomahawkSettings::instance()->proxyUsername(), TomahawkSettings::instance()->proxyPassword() ) );
-        qDebug() << "Proxy type =" << QString::number( static_cast<int>(TomahawkUtils::proxy()->type()) );
-        qDebug() << "Proxy host =" << TomahawkUtils::proxy()->hostName();
-        TomahawkUtils::nam()->setProxy( *TomahawkUtils::proxy() );
-        lastfm::nam()->setProxy( *TomahawkUtils::proxy() );
-    }
-    else
-        TomahawkUtils::setProxy( new QNetworkProxy( QNetworkProxy::NoProxy ) );
 
     Echonest::Config::instance()->setAPIKey( "JRIHWEP6GPOER2QQ6" );
     Echonest::Config::instance()->setNetworkAccessManager( TomahawkUtils::nam() );
