@@ -206,7 +206,7 @@ lastfm::nam()
         NetworkAccessManager* newNam = new NetworkAccessManager();
         threadNamHash[thread] = newNam;
         ourNamHash[thread] = true;
-        qDebug() << Q_FUNC_INFO << " returning " << newNam;
+        qDebug() << Q_FUNC_INFO << " returning " << dynamic_cast<QNetworkAccessManager*>(newNam);
         return newNam;
     }
     qDebug() << Q_FUNC_INFO << " found a nam, is " << threadNamHash[thread];
