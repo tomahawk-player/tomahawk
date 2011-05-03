@@ -1,6 +1,7 @@
 /* === This file is part of Tomahawk Player - <http://tomahawk-player.org> ===
- * 
+ *
  *   Copyright 2010-2011, Christian Muehlhaeuser <muesli@tomahawk-player.org>
+ *             2011, Dominik Schmidt <dev@dominik-schmidt.de>
  *
  *   Tomahawk is free software: you can redistribute it and/or modify
  *   it under the terms of the GNU General Public License as published by
@@ -22,6 +23,8 @@
 #include <QObject>
 #include <QString>
 #include <QMenu>
+#include <QNetworkProxy>
+
 
 #include "dllmacro.h"
 
@@ -48,6 +51,8 @@ public slots:
 
     virtual void addContact( const QString &jid, const QString& msg = QString() ) = 0;
     virtual void sendMsg( const QString& to, const QString& msg ) = 0;
+
+    void setProxy( const QNetworkProxy &proxy );
 
 signals:
     void error( int, const QString& );

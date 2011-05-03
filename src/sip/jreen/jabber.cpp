@@ -115,7 +115,7 @@ JabberPlugin::~JabberPlugin()
 }
 
 void
-JabberPlugin::setProxy( QNetworkProxy* proxy )
+JabberPlugin::setProxy( const QNetworkProxy &proxy )
 {
     if(m_currentServer.isEmpty() || !(m_currentPort > 0))
     {
@@ -130,7 +130,7 @@ JabberPlugin::setProxy( QNetworkProxy* proxy )
         m_client->setConnection(new Jreen::TcpConnection(m_currentServer, m_currentPort));
     }
 
-    qobject_cast<Jreen::DirectConnection*>(m_client->connection())->setProxy(*proxy);
+    qobject_cast<Jreen::DirectConnection*>(m_client->connection())->setProxy(proxy);
 }
 
 
