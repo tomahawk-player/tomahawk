@@ -1,5 +1,5 @@
 /*
-   Copyright 2009 Last.fm Ltd. 
+   Copyright 2009 Last.fm Ltd.
       - Primarily authored by Max Howell, Jono Cole and Doug Mansell
 
    This file is part of liblastfm.
@@ -23,12 +23,13 @@
 #endif
 
 #include <objbase.h>
-#include <atlbase.h>
-#include <atlcom.h>
-
+//#include <boost/range/atl.hpp>
+//#include <atlbase.h>
+//#include <atlcom.h>
+#include <winable.h>
 
 /** @brief WsConnectionMonitor needs Com to work as early as possible so we do this
-  * @author <doug@last.fm> 
+  * @author <doug@last.fm>
   */
 class ComSetup
 {
@@ -37,27 +38,27 @@ public:
     {
         HRESULT hr = CoInitialize(0);
         m_bComInitialised = SUCCEEDED(hr);
-        _ASSERT(m_bComInitialised);
+        //_ASSERT(m_bComInitialised);
         if (m_bComInitialised) {
             setupSecurity();
         }
     }
-    
+
     void setupSecurity()
     {
-        CSecurityDescriptor sd;
-        sd.InitializeFromThreadToken();
-        HRESULT hr = CoInitializeSecurity(sd, -1, NULL, NULL, RPC_C_AUTHN_LEVEL_PKT, RPC_C_IMP_LEVEL_IMPERSONATE, NULL, EOAC_NONE, NULL); 
-        _ASSERT(SUCCEEDED(hr));
+        //CSecurityDescriptor sd;
+        //sd.InitializeFromThreadToken();
+        //HRESULT hr = CoInitializeSecurity(sd, -1, NULL, NULL, RPC_C_AUTHN_LEVEL_PKT, RPC_C_IMP_LEVEL_IMPERSONATE, NULL, EOAC_NONE, NULL);
+        //_ASSERT(SUCCEEDED(hr));
     }
-    
+
     ~ComSetup()
     {
         if (m_bComInitialised) {
             CoUninitialize();
         }
     }
-    
+
 private:
     bool m_bComInitialised;
 };

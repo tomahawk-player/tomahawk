@@ -1,5 +1,5 @@
 /* === This file is part of Tomahawk Player - <http://tomahawk-player.org> ===
- * 
+ *
  *   Copyright 2010-2011, Christian Muehlhaeuser <muesli@tomahawk-player.org>
  *
  *   Tomahawk is free software: you can redistribute it and/or modify
@@ -53,6 +53,18 @@ const source_ptr&
 SourceList::getLocal()
 {
     return m_local;
+}
+
+void
+SourceList::setWebSource( const source_ptr& websrc )
+{
+    m_dummy = websrc;
+}
+
+const
+source_ptr SourceList::webSource() const
+{
+    return m_dummy;
 }
 
 

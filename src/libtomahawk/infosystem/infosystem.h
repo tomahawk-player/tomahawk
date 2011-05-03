@@ -36,62 +36,63 @@ namespace Tomahawk {
 namespace InfoSystem {
 
 class InfoSystemCache;
+class InfoSystemWorker;
 
-enum InfoType {
+enum InfoType { // as items are saved in cache, mark them here to not change them
     InfoTrackID = 0,
-    InfoTrackArtist,
-    InfoTrackAlbum,
-    InfoTrackGenre,
-    InfoTrackComposer,
-    InfoTrackDate,
-    InfoTrackNumber,
-    InfoTrackDiscNumber,
-    InfoTrackBitRate,
-    InfoTrackLength,
-    InfoTrackSampleRate,
-    InfoTrackFileSize,
-    InfoTrackBPM,
-    InfoTrackReplayGain,
-    InfoTrackReplayPeakGain,
-    InfoTrackLyrics,
-    InfoTrackLocation,
-    InfoTrackProfile,
-    InfoTrackEnergy,
-    InfoTrackDanceability,
-    InfoTrackTempo,
-    InfoTrackLoudness,
+    InfoTrackArtist = 1,
+    InfoTrackAlbum = 2,
+    InfoTrackGenre = 3,
+    InfoTrackComposer = 4,
+    InfoTrackDate = 5,
+    InfoTrackNumber = 6,
+    InfoTrackDiscNumber = 7,
+    InfoTrackBitRate = 8,
+    InfoTrackLength = 9,
+    InfoTrackSampleRate = 10,
+    InfoTrackFileSize = 11,
+    InfoTrackBPM = 12,
+    InfoTrackReplayGain = 13,
+    InfoTrackReplayPeakGain = 14,
+    InfoTrackLyrics = 15,
+    InfoTrackLocation = 16,
+    InfoTrackProfile = 17,
+    InfoTrackEnergy = 18,
+    InfoTrackDanceability = 19,
+    InfoTrackTempo = 20,
+    InfoTrackLoudness = 21,
 
-    InfoArtistID,
-    InfoArtistName,
-    InfoArtistBiography,
-    InfoArtistBlog,
-    InfoArtistFamiliarity,
-    InfoArtistHotttness,
-    InfoArtistImages,
-    InfoArtistNews,
-    InfoArtistProfile,
-    InfoArtistReviews,
-    InfoArtistSongs,
-    InfoArtistSimilars,
-    InfoArtistTerms,
-    InfoArtistLinks,
-    InfoArtistVideos,
+    InfoArtistID = 22,
+    InfoArtistName = 23,
+    InfoArtistBiography = 24,
+    InfoArtistBlog = 25,
+    InfoArtistFamiliarity = 26,
+    InfoArtistHotttness = 27,
+    InfoArtistImages = 28,
+    InfoArtistNews = 29,
+    InfoArtistProfile = 30,
+    InfoArtistReviews = 31,
+    InfoArtistSongs = 32,
+    InfoArtistSimilars = 33,
+    InfoArtistTerms = 34,
+    InfoArtistLinks = 35,
+    InfoArtistVideos = 36,
 
-    InfoAlbumID,
-    InfoAlbumName,
-    InfoAlbumArtist,
-    InfoAlbumDate,
-    InfoAlbumGenre,
-    InfoAlbumComposer,
-    InfoAlbumCoverArt,
+    InfoAlbumID = 37,
+    InfoAlbumName = 38,
+    InfoAlbumArtist = 39,
+    InfoAlbumDate = 40,
+    InfoAlbumGenre = 41,
+    InfoAlbumComposer = 42,
+    InfoAlbumCoverArt = 43, //cached -- do not change
 
-    InfoMiscTopHotttness,
-    InfoMiscTopTerms,
+    InfoMiscTopHotttness = 44,
+    InfoMiscTopTerms = 45,
 
-    InfoMiscSubmitNowPlaying,
-    InfoMiscSubmitScrobble,
+    InfoSubmitNowPlaying = 46,
+    InfoSubmitScrobble = 47,
 
-    InfoNoInfo
+    InfoNoInfo = 48
 };
 
 typedef QMap< InfoType, QVariant > InfoMap;
@@ -104,12 +105,9 @@ class DLLEXPORT InfoPlugin : public QObject
     Q_OBJECT
 
 public:
-    InfoPlugin( QObject *parent );
+    InfoPlugin( InfoSystemWorker *parent );
 
-    virtual ~InfoPlugin()
-    {
-        qDebug() << Q_FUNC_INFO;
-    }
+    virtual ~InfoPlugin() {}
 
 signals:
     void getCachedInfo( Tomahawk::InfoSystem::InfoCriteriaHash criteria, qint64 newMaxAge, QString caller, Tomahawk::InfoSystem::InfoType type, QVariant input, Tomahawk::InfoSystem::InfoCustomData customData );
@@ -119,16 +117,8 @@ signals:
 
 protected slots:
     virtual void getInfo( const QString caller, const Tomahawk::InfoSystem::InfoType type, const QVariant data, const Tomahawk::InfoSystem::InfoCustomData customData ) = 0;
-
-    //FIXME: Make pure virtual when everything supports it
-    virtual void notInCacheSlot( const Tomahawk::InfoSystem::InfoCriteriaHash criteria, const QString caller, const Tomahawk::InfoSystem::InfoType type, const QVariant input, const Tomahawk::InfoSystem::InfoCustomData customData )
-    {
-        Q_UNUSED( criteria );
-        Q_UNUSED( caller );
-        Q_UNUSED( type );
-        Q_UNUSED( input );
-        Q_UNUSED( customData );
-    }
+    virtual void pushInfo( const QString caller, const Tomahawk::InfoSystem::InfoType type, const QVariant data ) = 0;
+    virtual void notInCacheSlot( const Tomahawk::InfoSystem::InfoCriteriaHash criteria, const QString caller, const Tomahawk::InfoSystem::InfoType type, const QVariant input, const Tomahawk::InfoSystem::InfoCustomData customData ) = 0;
 
 protected:
     InfoType m_type;
@@ -138,13 +128,6 @@ private:
 };
 
 typedef QWeakPointer< InfoPlugin > InfoPluginPtr;
-
-class DLLEXPORT InfoSystemWorker : public QObject
-{
-    Q_OBJECT
-    InfoSystemWorker() {};
-    ~InfoSystemWorker() {};
-};
 
 class DLLEXPORT InfoSystem : public QObject
 {
@@ -156,12 +139,12 @@ public:
     InfoSystem( QObject *parent );
     ~InfoSystem();
 
-    void registerInfoTypes( const InfoPluginPtr &plugin, const QSet< InfoType > &types );
-
     void getInfo( const QString &caller, const InfoType type, const QVariant &input, InfoCustomData customData );
     void getInfo( const QString &caller, const InfoMap &input, InfoCustomData customData );
+    void pushInfo( const QString &caller, const InfoType type, const QVariant &input );
+    void pushInfo( const QString &caller, const InfoMap &input );
 
-    InfoSystemCache* getCache() { return m_cache; }
+    InfoSystemCache* getCache() const { return m_cache; }
 
 signals:
     void info( QString caller, Tomahawk::InfoSystem::InfoType, QVariant input, QVariant output, Tomahawk::InfoSystem::InfoCustomData customData );
@@ -170,14 +153,9 @@ signals:
 public slots:
     void infoSlot( const QString target, const Tomahawk::InfoSystem::InfoType type, const QVariant input, const QVariant output, const Tomahawk::InfoSystem::InfoCustomData customData );
 
+    void newNam() const;
+
 private:
-    QLinkedList< InfoPluginPtr > determineOrderedMatches( const InfoType type ) const;
-
-    QMap< InfoType, QLinkedList< InfoPluginPtr > > m_infoMap;
-
-    // For now, statically instantiate plugins; this is just somewhere to keep them
-    QLinkedList< InfoPluginPtr > m_plugins;
-
     QHash< QString, QHash< InfoType, int > > m_dataTracker;
 
     InfoSystemCache* m_cache;

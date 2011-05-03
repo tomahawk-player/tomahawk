@@ -67,6 +67,7 @@ public:
 
     QWidget* widget() const { return m_widget; }
     PlaylistView* queue() const;
+    TopBar* topbar() const { return m_topbar; }
 
     bool isSuperCollectionVisible() const;
     bool isNewPlaylistPageVisible() const;
@@ -75,14 +76,6 @@ public:
     Tomahawk::ViewPage* currentPage() const;
     Tomahawk::ViewPage* pageForInterface( PlaylistInterface* interface ) const;
     int positionInHistory( Tomahawk::ViewPage* page ) const;
-
-    // Returns the shown viewpage
-    Tomahawk::ViewPage* show( const Tomahawk::playlist_ptr& playlist );
-    Tomahawk::ViewPage* show( const Tomahawk::dynplaylist_ptr& playlist );
-    Tomahawk::ViewPage* show( const Tomahawk::artist_ptr& artist );
-    Tomahawk::ViewPage* show( const Tomahawk::album_ptr& album );
-    Tomahawk::ViewPage* show( const Tomahawk::collection_ptr& collection );
-    Tomahawk::ViewPage* show( const Tomahawk::source_ptr& source );
 
     Tomahawk::ViewPage* show( Tomahawk::ViewPage* page );
 
@@ -94,6 +87,9 @@ public:
     Tomahawk::ViewPage* pageForDynPlaylist( const Tomahawk::dynplaylist_ptr& pl ) const;
     Tomahawk::ViewPage* pageForCollection( const Tomahawk::collection_ptr& pl ) const;
 
+    // only use this is you need to create a playlist and show it directly and want it to be
+    // linked to the sidebar. call it right after creating the playlist
+    PlaylistView* createPageForPlaylist( const Tomahawk::playlist_ptr& pl );
 signals:
     void numSourcesChanged( unsigned int sources );
     void numTracksChanged( unsigned int tracks );
@@ -126,6 +122,14 @@ public slots:
     Tomahawk::ViewPage* showSuperCollection();
     Tomahawk::ViewPage* showWelcomePage();
     void showCurrentTrack();
+
+    // Returns the shown viewpage
+    Tomahawk::ViewPage* show( const Tomahawk::playlist_ptr& playlist );
+    Tomahawk::ViewPage* show( const Tomahawk::dynplaylist_ptr& playlist );
+    Tomahawk::ViewPage* show( const Tomahawk::artist_ptr& artist );
+    Tomahawk::ViewPage* show( const Tomahawk::album_ptr& album );
+    Tomahawk::ViewPage* show( const Tomahawk::collection_ptr& collection );
+    Tomahawk::ViewPage* show( const Tomahawk::source_ptr& source );
 
     void historyBack();
     void historyForward();

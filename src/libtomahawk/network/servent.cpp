@@ -496,12 +496,12 @@ Servent::connectToPeer( const QString& ha, int port, const QString &key, const Q
 void
 Servent::connectToPeer( const QString& ha, int port, const QString &key, Connection* conn )
 {
+    qDebug() << "Servent::connectToPeer:" << ha << ":" << port
+             << thread() << QThread::currentThread();
+
     Q_ASSERT( port > 0 );
     Q_ASSERT( conn );
 //    Q_ASSERT( this->thread() == QThread::currentThread() );
-
-    qDebug() << "Servent::connectToPeer:" << ha << ":" << port
-             << thread() << QThread::currentThread();
 
     if ( ( ha == m_externalAddress.toString() || ha == m_externalHostname ) &&
          ( port == m_externalPort ) )

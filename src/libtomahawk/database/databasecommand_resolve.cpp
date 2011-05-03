@@ -1,5 +1,5 @@
 /* === This file is part of Tomahawk Player - <http://tomahawk-player.org> ===
- * 
+ *
  *   Copyright 2010-2011, Christian Muehlhaeuser <muesli@tomahawk-player.org>
  *
  *   Tomahawk is free software: you can redistribute it and/or modify
@@ -41,7 +41,7 @@ DatabaseCommand_Resolve::exec( DatabaseImpl* lib )
     {
         qDebug() << "Using result-hint to speed up resolving:" << m_query->resultHint();
 
-        Tomahawk::result_ptr result = lib->result( m_query->resultHint() );
+        Tomahawk::result_ptr result = lib->resultFromHint( m_query );
         if ( !result.isNull() && result->collection()->source()->isOnline() )
         {
             res << result;
@@ -119,7 +119,7 @@ DatabaseCommand_Resolve::exec( DatabaseImpl* lib )
             s = SourceList::instance()->get( files_query.value( 13 ).toUInt() );
             if( s.isNull() )
             {
-                Q_ASSERT( false );
+                qDebug() << "WTF: Could not find source" << files_query.value( 13 ).toUInt();
                 continue;
             }
 

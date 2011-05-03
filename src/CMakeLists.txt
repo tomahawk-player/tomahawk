@@ -39,6 +39,7 @@ SET( tomahawkSources ${tomahawkSources}
 
      musicscanner.cpp
      shortcuthandler.cpp
+     globalactionmanager.cpp
      scanmanager.cpp
      tomahawkapp.cpp
      main.cpp
@@ -83,6 +84,7 @@ SET( tomahawkHeaders ${tomahawkHeaders}
      musicscanner.h
      scanmanager.h
      shortcuthandler.h
+     globalactionmanager.h
 )
 
 IF(LIBLASTFM_FOUND)

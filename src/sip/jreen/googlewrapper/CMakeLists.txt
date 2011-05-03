@@ -10,7 +10,6 @@ set( googleHeaders
 
 set( googleSources
      ../jabber.cpp
-     ../jabber_p.cpp
      ../tomahawksipmessage.cpp
      ../tomahawksipmessagefactory.cpp
      ../avatarmanager.cpp

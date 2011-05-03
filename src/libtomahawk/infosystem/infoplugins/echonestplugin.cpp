@@ -25,18 +25,28 @@ using namespace Echonest;
 
 // for internal neatness
 
-EchoNestPlugin::EchoNestPlugin(QObject *parent)
+EchoNestPlugin::EchoNestPlugin(InfoSystemWorker *parent)
     : InfoPlugin(parent)
+    , m_infoSystemWorker( parent )
 {
     qDebug() << Q_FUNC_INFO;
     QSet< InfoType > supportedTypes;
     supportedTypes << Tomahawk::InfoSystem::InfoArtistBiography << Tomahawk::InfoSystem::InfoArtistFamiliarity << Tomahawk::InfoSystem::InfoArtistHotttness << Tomahawk::InfoSystem::InfoArtistTerms << Tomahawk::InfoSystem::InfoMiscTopTerms;
-    qobject_cast< InfoSystem* >(parent)->registerInfoTypes(this, supportedTypes);
+    parent->registerInfoTypes( this, supportedTypes, QSet< InfoType>() );
+
+    connect( parent, SIGNAL( namChanged() ), SLOT( namChangedSlot() ) );
 }
 
 EchoNestPlugin::~EchoNestPlugin()
 {
     qDebug() << Q_FUNC_INFO;
+}
+
+void
+EchoNestPlugin::namChangedSlot()
+{
+    qDebug() << Q_FUNC_INFO;
+    Echonest::Config::instance()->setNetworkAccessManager( m_infoSystemWorker->nam() );
 }
 
 void

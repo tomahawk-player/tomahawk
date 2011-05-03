@@ -57,6 +57,8 @@ public:
 protected:
     void changeEvent( QEvent* e );
     void closeEvent( QCloseEvent* e );
+    void showEvent( QShowEvent* e );
+    void hideEvent( QHideEvent* e );
 
 public slots:
     void createAutomaticPlaylist();
@@ -84,6 +86,10 @@ private slots:
 
     void onSipPluginAdded( SipPlugin* p );
     void onSipPluginRemoved( SipPlugin* p );
+
+    void minimize();
+    void maximize();
+
 private:
     void loadSettings();
     void saveSettings();

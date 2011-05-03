@@ -25,9 +25,13 @@
 #include <QDomElement>
 #include <QLocale>
 #include <QStringList>
+#include <QThread>
+#include <QMutex>
 #include <QUrl>
-static QNetworkAccessManager* nam = 0;
 
+static QMap< QThread*, QNetworkAccessManager* > threadNamHash;
+static QMap< QThread*, bool > ourNamHash;
+static QMutex namAccessMutex;
 
 QString 
 lastfm::ws::host()
@@ -191,18 +195,34 @@ lastfm::ws::parse( QNetworkReply* reply ) throw( ParseError )
 
 QNetworkAccessManager*
 lastfm::nam()
-{    
-    if (!::nam) ::nam = new NetworkAccessManager( qApp );
-    return ::nam;
+{
+    QMutexLocker l( &namAccessMutex );
+    QThread* thread = QThread::currentThread();
+    if ( !threadNamHash.contains( thread ) )
+    {
+        NetworkAccessManager* newNam = new NetworkAccessManager();
+        threadNamHash[thread] = newNam;
+        ourNamHash[thread] = true;
+        return newNam;
+    }
+    
+    return threadNamHash[thread];
 }
 
 
 void
 lastfm::setNetworkAccessManager( QNetworkAccessManager* nam )
 {
-    delete ::nam;
-    ::nam = nam;
-    nam->setParent( qApp ); // ensure it isn't deleted out from under us
+    if ( !nam )
+        return;
+
+    QMutexLocker l( &namAccessMutex );
+    QThread* thread = QThread::currentThread();
+    if ( threadNamHash.contains( thread ) && ourNamHash.contains( thread ) && ourNamHash[thread] )
+        delete threadNamHash[thread];
+    
+    threadNamHash[thread] = nam;
+    ourNamHash[thread] = false;
 }
 
 

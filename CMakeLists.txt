@@ -39,6 +39,11 @@ INCLUDE( MacroLogFeature )
 set(LIBLASTFM_FOUND true)
 
 find_package(Phonon REQUIRED)
+if(PHONON_VERSION STRLESS "4.5.0")
+	message(FATAL_ERROR "Phonon version 4.5.0 or higher is required, you have version ${PHONON_VERSION}")
+else()
+	message(STATUS "Phonon found; ensure that phonon-vlc is at least 0.4")
+endif()
 
 macro_optional_find_package(LibEchonest 1.1.1)
 macro_log_feature(LIBECHONEST_FOUND "Echonest" "Qt library for communicating with The Echo Nest" "http://projects.kde.org/libechonest" TRUE "" "libechonest is needed for dynamic playlists and the infosystem")

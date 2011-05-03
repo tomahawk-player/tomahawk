@@ -20,6 +20,7 @@
 #define MUSIXMATCHPLUGIN_H
 
 #include "infosystem/infosystem.h"
+#include "infosystem/infosystemworker.h"
 
 class QNetworkReply;
 
@@ -34,7 +35,7 @@ class MusixMatchPlugin : public InfoPlugin
     Q_OBJECT
 
 public:
-    MusixMatchPlugin( QObject *parent );
+    MusixMatchPlugin( InfoSystemWorker *parent );
     virtual ~MusixMatchPlugin();
 
 public slots:
@@ -43,11 +44,29 @@ public slots:
 
 protected slots:
     virtual void getInfo( const QString caller, const Tomahawk::InfoSystem::InfoType type, const QVariant input, const Tomahawk::InfoSystem::InfoCustomData customData );
+
+    virtual void pushInfo( const QString caller, const Tomahawk::InfoSystem::InfoType type, const QVariant data )
+    {
+        Q_UNUSED( caller );
+        Q_UNUSED( type );
+        Q_UNUSED( data );
+    }
+
+    virtual void notInCacheSlot( const Tomahawk::InfoSystem::InfoCriteriaHash criteria, const QString caller, const Tomahawk::InfoSystem::InfoType type, const QVariant input, const Tomahawk::InfoSystem::InfoCustomData customData )
+    {
+        Q_UNUSED( criteria );
+        Q_UNUSED( caller );
+        Q_UNUSED( type );
+        Q_UNUSED( input );
+        Q_UNUSED( customData );
+    }
     
 private:
     bool isValidTrackData( const QString &caller, const QVariant &input, const InfoCustomData &customData );
     
     QString m_apiKey;
+
+    InfoSystemWorker* m_infoSystemWorker;
 };
 
 }

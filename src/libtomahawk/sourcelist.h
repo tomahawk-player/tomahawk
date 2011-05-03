@@ -1,5 +1,5 @@
 /* === This file is part of Tomahawk Player - <http://tomahawk-player.org> ===
- * 
+ *
  *   Copyright 2010-2011, Christian Muehlhaeuser <muesli@tomahawk-player.org>
  *
  *   Tomahawk is free software: you can redistribute it and/or modify
@@ -40,6 +40,9 @@ public:
     const Tomahawk::source_ptr& getLocal();
     void setLocal( const Tomahawk::source_ptr& localSrc );
 
+    void setWebSource( const Tomahawk::source_ptr& websrc );
+    const Tomahawk::source_ptr webSource() const;
+
     void removeAllRemote();
 
     QList<Tomahawk::source_ptr> sources( bool onlyOnline = false ) const;
@@ -57,7 +60,7 @@ signals:
 private slots:
     void setSources( const QList<Tomahawk::source_ptr>& sources );
     void sourceSynced();
-    
+
 private:
     void loadSources();
     void add( const Tomahawk::source_ptr& source );
@@ -66,8 +69,9 @@ private:
     QMap< int, QString > m_sources_id2name;
 
     Tomahawk::source_ptr m_local;
+    Tomahawk::source_ptr m_dummy;
     mutable QMutex m_mut; // mutable so const methods can use a lock
-    
+
     static SourceList* s_instance;
 };
 

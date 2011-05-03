@@ -64,7 +64,7 @@ public:
     QVariantMap album( int id );
     QVariantMap track( int id );
     Tomahawk::result_ptr file( int fid );
-    Tomahawk::result_ptr result( const QString& url );
+    Tomahawk::result_ptr resultFromHint( const Tomahawk::query_ptr& query );
 
     static bool scorepairSorter( const QPair<int,float>& left, const QPair<int,float>& right )
     {

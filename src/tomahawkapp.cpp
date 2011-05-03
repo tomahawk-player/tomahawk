@@ -48,6 +48,9 @@
 #include "shortcuthandler.h"
 #include "scanmanager.h"
 #include "tomahawksettings.h"
+#include "globalactionmanager.h"
+#include "webcollection.h"
+#include "database/localcollection.h"
 
 #include "audio/audioengine.h"
 #include "utils/xspfloader.h"
@@ -223,7 +226,7 @@ TomahawkApp::init()
 
     #else
     qDebug() << "Setting NAM.";
-    TomahawkUtils::setNam( new QNetworkAccessManager );
+    TomahawkUtils::setNam( new QNetworkAccessManager() );
     #endif
 
     // Set up proxy
@@ -241,14 +244,12 @@ TomahawkApp::init()
     else
         TomahawkUtils::setProxy( new QNetworkProxy( QNetworkProxy::NoProxy ) );
 
-
     Echonest::Config::instance()->setAPIKey( "JRIHWEP6GPOER2QQ6" );
     Echonest::Config::instance()->setNetworkAccessManager( TomahawkUtils::nam() );
 
     QNetworkProxy::setApplicationProxy( *TomahawkUtils::proxy() );
 
     qDebug() << "Init SIP system.";
-
 
 #ifndef TOMAHAWK_HEADLESS
     if ( !m_headless )
@@ -462,11 +463,18 @@ void
 TomahawkApp::initLocalCollection()
 {
     source_ptr src( new Source( 0, "My Collection" ) );
-    collection_ptr coll( new DatabaseCollection( src ) );
+    collection_ptr coll( new LocalCollection( src ) );
 
     src->addCollection( coll );
     SourceList::instance()->setLocal( src );
 //    src->collection()->tracks();
+
+    // dummy source/collection for web-based result-hints.
+    source_ptr dummy( new Source( -1, "" ) );
+    dummy->setOnline();
+    collection_ptr dummycol( new WebCollection( dummy ) );
+    dummy->addCollection( dummycol );
+    SourceList::instance()->setWebSource( dummy );
 
     // to make the stats signal be emitted by our local source
     // this will update the sidebar, etc.
@@ -503,7 +511,9 @@ TomahawkApp::setupSIP()
 
         qDebug() << "Connecting SIP classes";
         SipHandler::instance()->loadFromConfig( true );
-//        SipHandler::instance()->setProxy( *TomahawkUtils::proxy() );
+
+//        m_sipHandler->setProxy( *TomahawkUtils::proxy() );
+
     }
 }
 
@@ -520,28 +530,22 @@ TomahawkApp::activate()
 bool
 TomahawkApp::loadUrl( const QString& url )
 {
-    if( url.contains( "tomahawk://" ) ) {
-        QString cmd = url.mid( 11 );
-        qDebug() << "tomahawk!s" << cmd;
-        if( cmd.startsWith( "load/?" ) ) {
-            cmd = cmd.mid( 6 );
-            qDebug() << "loading.." << cmd;
-            if( cmd.startsWith( "xspf=" ) ) {
-                XSPFLoader* l = new XSPFLoader( true, this );
-                qDebug() << "Loading spiff:" << cmd.mid( 5 );
-                l->load( QUrl( cmd.mid( 5 ) ) );
-            }
-        }
-    } else {
+    if( url.startsWith( "tomahawk://" ) )
+        return GlobalActionManager::instance()->parseTomahawkLink( url );
+    else
+    {
         QFile f( url );
         QFileInfo info( f );
         if( f.exists() && info.suffix() == "xspf" ) {
             XSPFLoader* l = new XSPFLoader( true, this );
             qDebug() << "Loading spiff:" << url;
             l->load( QUrl::fromUserInput( url ) );
+
+            return true;
         }
     }
-    return true;
+
+    return false;
 }
 
 
@@ -555,6 +559,7 @@ TomahawkApp::instanceStarted( KDSingleApplicationGuard::Instance instance )
         return;
     }
 
-    loadUrl( instance.arguments.at( 1 ) );
+    QString arg1 = instance.arguments[ 1 ];
+    loadUrl( arg1 );
 }
 

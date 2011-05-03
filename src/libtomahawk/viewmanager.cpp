@@ -149,6 +149,22 @@ ViewManager::queue() const
     return m_queueView->queue();
 }
 
+PlaylistView*
+ViewManager::createPageForPlaylist( const playlist_ptr& pl )
+{
+    PlaylistView* view = new PlaylistView();
+
+    PlaylistModel* model = new PlaylistModel();
+    view->setPlaylistModel( model );
+    view->setFrameShape( QFrame::NoFrame );
+    view->setAttribute( Qt::WA_MacShowFocusRect, 0 );
+    model->loadPlaylist( pl );
+    pl->resolve();
+
+    m_playlistViews.insert( pl, view );
+    return view;
+}
+
 
 Tomahawk::ViewPage*
 ViewManager::show( const Tomahawk::playlist_ptr& playlist )
@@ -156,15 +172,7 @@ ViewManager::show( const Tomahawk::playlist_ptr& playlist )
     PlaylistView* view;
     if ( !m_playlistViews.contains( playlist ) )
     {
-        view = new PlaylistView();
-        PlaylistModel* model = new PlaylistModel();
-        view->setPlaylistModel( model );
-        view->setFrameShape( QFrame::NoFrame );
-        view->setAttribute( Qt::WA_MacShowFocusRect, 0 );
-        model->loadPlaylist( playlist );
-        playlist->resolve();
-
-        m_playlistViews.insert( playlist, view );
+        view = createPageForPlaylist( playlist );
     }
     else
     {

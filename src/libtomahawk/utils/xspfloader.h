@@ -53,6 +53,7 @@ public:
 
     QList< Tomahawk::plentry_ptr > entries() const { return m_entries; }
 
+    void setOverrideTitle( const QString& newTitle );
 signals:
     void failed();
     void ok( const Tomahawk::playlist_ptr& );
@@ -70,7 +71,7 @@ private:
     void gotBody();
 
     bool m_autoCreate;
-    QString m_NS;
+    QString m_NS,m_overrideTitle;
     QList< Tomahawk::plentry_ptr > m_entries;
     QString m_title, m_info, m_creator;
 
