@@ -12,7 +12,7 @@ class TomahawkSipMessage : public Jreen::StanzaExtension
     Q_DECLARE_PRIVATE(TomahawkSipMessage)
     public:
         // sets visible to true
-        TomahawkSipMessage(QString ip, unsigned int port, QString uniqname, QString key);
+        TomahawkSipMessage(const QString &ip, unsigned int port, const QString &uniqname, const QString &key);
 
         // sets visible to false as we dont have any extra information
         TomahawkSipMessage();
@@ -20,8 +20,8 @@ class TomahawkSipMessage : public Jreen::StanzaExtension
 
         const QString ip() const;
         unsigned int port() const;
-        QString uniqname() const;
-        QString key() const;
+        const QString uniqname() const;
+        const QString key() const;
         bool visible() const;
     private:
         QScopedPointer<TomahawkSipMessagePrivate> d_ptr;
