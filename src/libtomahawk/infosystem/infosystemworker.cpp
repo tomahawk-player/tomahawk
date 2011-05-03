@@ -167,15 +167,18 @@ InfoSystemWorker::nam() const
 void
 InfoSystemWorker::newNam()
 {
-    qDebug() << Q_FUNC_INFO;
+    qDebug() << Q_FUNC_INFO << " begin";
 
     QNetworkAccessManager *oldNam = TomahawkUtils::nam();
-    if ( oldNam && m_nam == oldNam )
+    if ( oldNam && oldNam->thread() == thread() )
     {
+        qDebug() << Q_FUNC_INFO << " returning old nam as it's the same thread as me";
+        m_nam = oldNam;
         emit namChanged();
         return;
     }
     
+    qDebug() << Q_FUNC_INFO << " no nam exists, or it's a different thread, creating a new one";
     QNetworkAccessManager* newNam;
 #ifdef LIBLASTFM_FOUND
     newNam = new lastfm::NetworkAccessManager( this );
