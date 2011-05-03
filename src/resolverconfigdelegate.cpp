@@ -27,7 +27,7 @@
 #include <QMouseEvent>
 
 #define PADDING 4
-
+#define ICONSIZE 24
 ResolverConfigDelegate::ResolverConfigDelegate( QObject* parent )
     : ConfigDelegateBase( parent )
 {
@@ -60,8 +60,7 @@ ResolverConfigDelegate::paint( QPainter* painter, const QStyleOptionViewItem& op
     style->drawPrimitive( QStyle::PE_PanelItemViewItem, &opt, painter, w );
 
     int rightSplit = itemRect.width();
-    int rectW = 24;
-    QRect confRect = QRect( rightSplit - rectW - 2 * PADDING, 2 * PADDING + top, rectW, rectW );
+    QRect confRect = QRect( rightSplit - ICONSIZE - 2 * PADDING, 2 * PADDING + top, ICONSIZE, ICONSIZE );
 
     // if the resolver has a config widget, paint it first (right-aligned)
     if( index.data( ResolversModel::HasConfig ).toBool() ) {
@@ -100,6 +99,19 @@ ResolverConfigDelegate::paint( QPainter* painter, const QStyleOptionViewItem& op
     painter->restore();
 
 }
+
+QRect
+ResolverConfigDelegate::configRectForIndex( const QStyleOptionViewItem& option, const QModelIndex& idx ) const
+{
+    QStyleOptionViewItemV4 opt = option;
+    initStyleOption( &opt, idx );
+    QRect itemRect = opt.rect;
+    int top = itemRect.top();
+
+    QRect confRect = QRect( itemRect.width() - ICONSIZE - 2 * PADDING, 2 * PADDING + top, ICONSIZE, ICONSIZE );
+    return confRect;
+}
+
 
 void
 ResolverConfigDelegate::onConfigPressed( const QModelIndex& idx )

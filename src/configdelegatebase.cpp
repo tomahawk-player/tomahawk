@@ -71,7 +71,6 @@ ConfigDelegateBase::drawConfigWrench ( QPainter* painter, QStyleOptionViewItemV4
     const QWidget* w = opt.widget;
     QStyle* style = w ? w->style() : QApplication::style();
 
-    m_configRect = topt.rect;
     // draw it the same size as the check belox
     topt.font = opt.font;
     topt.icon = QIcon( RESPATH "images/configure.png" );
@@ -109,7 +108,7 @@ ConfigDelegateBase::editorEvent ( QEvent* event, QAbstractItemModel* model, cons
 
     } else if( event->type() == QEvent::MouseButtonPress ) {
         QMouseEvent* me = static_cast< QMouseEvent* >( event );
-        if( me->button() == Qt::LeftButton && m_configRect.contains( me->pos() ) ) {
+        if( me->button() == Qt::LeftButton && configRectForIndex( option, index ).contains( me->pos() ) ) {
             m_configPressed = true;
 
             emit configPressed( index );

@@ -24,6 +24,7 @@
 #include <QApplication>
 #include <QPainter>
 
+#define ICONSIZE 24
 SipConfigDelegate::SipConfigDelegate( QObject* parent )
     : ConfigDelegateBase ( parent )
 {
@@ -61,10 +62,9 @@ SipConfigDelegate::paint ( QPainter* painter, const QStyleOptionViewItem& option
     QStyle* style = w ? w->style() : QApplication::style();
     style->drawPrimitive( QStyle::PE_PanelItemViewItem, &opt, painter, w );
 
-    int iconSize = 24;
     int checkLeftEdge = 8;
-    int iconLeftEdge = checkLeftEdge + iconSize + PADDING;
-    int textLeftEdge = iconLeftEdge + iconSize + PADDING;
+    int iconLeftEdge = checkLeftEdge + ICONSIZE + PADDING;
+    int textLeftEdge = iconLeftEdge + ICONSIZE + PADDING;
 
     if( index.data( SipModel::FactoryRole ).toBool() ) { // this is the "add new account" row
         // draw a border and background
@@ -80,7 +80,7 @@ SipConfigDelegate::paint ( QPainter* painter, const QStyleOptionViewItem& option
 
         // draw "+" icon in checkbox column
         int rectW = 18;
-        int diff = ( iconSize/ 2 ) - ( rectW / 2) ;
+        int diff = ( ICONSIZE/ 2 ) - ( rectW / 2) ;
         int pos = ( mid ) - ( rectW / 2 );
         QRect plusRect = QRect( checkLeftEdge + diff, pos + top, rectW, rectW );
         QPixmap p( RESPATH "images/list-add.png" );
@@ -116,7 +116,7 @@ SipConfigDelegate::paint ( QPainter* painter, const QStyleOptionViewItem& option
         QIcon icon = index.data( SipModel::FactoryItemIcon ).value< QIcon >();
         if( !icon.isNull() ) {
             int rectW = 18;
-            int diff = ( iconSize/ 2 ) - ( rectW / 2) ;
+            int diff = ( ICONSIZE/ 2 ) - ( rectW / 2) ;
             int pos = ( mid ) - ( rectW / 2 );
             QRect rect = QRect( checkLeftEdge + diff, pos + top, rectW, rectW );
             QPixmap p( icon.pixmap( rect.size() ) );
@@ -137,15 +137,15 @@ SipConfigDelegate::paint ( QPainter* painter, const QStyleOptionViewItem& option
         painter->drawText( textR, text );
     } else { // this is an existing account to show
         // draw checkbox first
-        int pos = ( mid ) - ( iconSize / 2 );
-        QRect checkRect = QRect( checkLeftEdge, pos + top, iconSize, iconSize );
+        int pos = ( mid ) - ( ICONSIZE / 2 );
+        QRect checkRect = QRect( checkLeftEdge, pos + top, ICONSIZE, ICONSIZE );
         opt.rect = checkRect;
         drawCheckBox( opt, painter, w );
 
         // draw the icon if it exists
-        pos = ( mid ) - ( iconSize / 2 );
+        pos = ( mid ) - ( ICONSIZE / 2 );
         if( !index.data( Qt::DecorationRole ).value< QIcon >().isNull() ) {
-            QRect prect = QRect( iconLeftEdge, pos + top, iconSize, iconSize );
+            QRect prect = QRect( iconLeftEdge, pos + top, ICONSIZE, ICONSIZE );
 
             painter->save();
             painter->drawPixmap( prect, index.data( Qt::DecorationRole ).value< QIcon >().pixmap( prect.size() ) );
@@ -153,7 +153,7 @@ SipConfigDelegate::paint ( QPainter* painter, const QStyleOptionViewItem& option
         }
 
         // from the right edge--config status and online/offline
-        QRect confRect = QRect( itemRect.width() - iconSize - 2 * PADDING, mid - iconSize / 2 + top, iconSize, iconSize );
+        QRect confRect = QRect( itemRect.width() - ICONSIZE - 2 * PADDING, mid - ICONSIZE / 2 + top, ICONSIZE, ICONSIZE );
         if( index.data( SipModel::HasConfig ).toBool() ) {
 
             QStyleOptionToolButton topt;
@@ -213,6 +213,17 @@ SipConfigDelegate::paint ( QPainter* painter, const QStyleOptionViewItem& option
         painter->restore();
     }
 }
+
+QRect
+SipConfigDelegate::configRectForIndex( const QStyleOptionViewItem& option, const QModelIndex& idx ) const
+{
+    QStyleOptionViewItemV4 opt = option;
+    initStyleOption( &opt, idx );
+    QRect itemRect = opt.rect;
+    QRect confRect = QRect( itemRect.width() - ICONSIZE - 2 * PADDING, (opt.rect.height() / 2) - ICONSIZE / 2 + opt.rect.top(), ICONSIZE, ICONSIZE );
+    return confRect;
+}
+
 
 QSize
 SipConfigDelegate::sizeHint( const QStyleOptionViewItem& option, const QModelIndex& index ) const
