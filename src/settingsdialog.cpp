@@ -84,11 +84,14 @@ SettingsDialog::SettingsDialog( QWidget *parent )
     SipConfigDelegate* sipdel = new SipConfigDelegate( this );
     ui->accountsView->setItemDelegate( sipdel );
     ui->accountsView->setContextMenuPolicy( Qt::CustomContextMenu );
+
     connect( ui->accountsView, SIGNAL( clicked( QModelIndex ) ), this, SLOT( sipItemClicked( QModelIndex ) ) );
     connect( sipdel, SIGNAL( openConfig( SipPlugin* ) ), this, SLOT( openSipConfig( SipPlugin* ) ) );
     connect( ui->accountsView, SIGNAL( customContextMenuRequested( QPoint ) ), this, SLOT( sipContextMenuRequest( QPoint ) ) );
     m_sipModel = new SipModel( this );
     ui->accountsView->setModel( m_sipModel );
+
+    setupSipButtons();
 
     ui->staticHostName->setText( s->externalHostname() );
     ui->staticPort->setValue( s->externalPort() );
@@ -219,6 +222,24 @@ SettingsDialog::createIcons()
 
     connect( ui->listWidget, SIGNAL( currentItemChanged( QListWidgetItem* ,QListWidgetItem* ) ), this, SLOT( changePage( QListWidgetItem*, QListWidgetItem* ) ) );
 }
+
+void
+SettingsDialog::setupSipButtons()
+{
+    foreach( SipPluginFactory* f, SipHandler::instance()->pluginFactories() ) {
+        if( !f->isCreatable() )
+            continue;
+
+        QAction* action = new QAction( f->icon(), f->prettyName(), ui->addSipButton );
+        action->setProperty( "factory", QVariant::fromValue< QObject* >( f ) );
+        ui->addSipButton->addAction( action );
+
+        connect( action, SIGNAL( triggered(bool) ), this, SLOT( factoryActionTriggered( bool ) ) );
+    }
+
+    connect( ui->removeSipButton, SIGNAL( clicked( bool ) ), this, SLOT( sipPluginDeleted( bool ) ) );
+}
+
 
 void
 SettingsDialog::changePage( QListWidgetItem* current, QListWidgetItem* previous )
@@ -482,6 +503,19 @@ SettingsDialog::openSipConfig( SipPlugin* p )
 }
 
 void
+SettingsDialog::factoryActionTriggered( bool )
+{
+    Q_ASSERT( sender() && qobject_cast< QAction* >( sender() ) );
+
+    QAction* a = qobject_cast< QAction* >( sender() );
+    Q_ASSERT( qobject_cast< SipPluginFactory* >( a->property( "factory" ).value< QObject* >() ) );
+
+    SipPluginFactory* f = qobject_cast< SipPluginFactory* >( a->property( "factory" ).value< QObject* >() );
+    sipFactoryClicked( f );
+}
+
+
+void
 SettingsDialog::sipFactoryClicked( SipPluginFactory* factory )
 {
     Q_ASSERT( factory->isCreatable() );
@@ -518,14 +552,29 @@ SettingsDialog::sipContextMenuRequest( const QPoint& p )
         QList< QAction* > acts;
         acts << new QAction( tr( "Delete Account" ), this );
         acts.first()->setProperty( "sipplugin", idx.data( SipModel::SipPluginData ) );
-        connect( acts.first(), SIGNAL( triggered( bool ) ), this, SLOT( sipPluginDeleted( bool ) ) );
+        connect( acts.first(), SIGNAL( triggered( bool ) ), this, SLOT( sipPluginRowDeleted( bool ) ) );
         QMenu::exec( acts, ui->accountsView->mapToGlobal( p ) );
     }
 }
 
 void
-SettingsDialog::sipPluginDeleted( bool )
+SettingsDialog::sipPluginRowDeleted( bool )
 {
     SipPlugin* p = qobject_cast< SipPlugin* >( qobject_cast< QAction* >( sender() )->property( "sipplugin" ).value< QObject* >() );
     SipHandler::instance()->removeSipPlugin( p );
+}
+
+void
+SettingsDialog::sipPluginDeleted( bool )
+{
+    QModelIndexList indexes = ui->accountsView->selectionModel()->selectedIndexes();
+    // if it's an account, allow to delete
+    foreach( const QModelIndex& idx, indexes )
+    {
+        if( idx.isValid() && !idx.data( SipModel::FactoryRole ).toBool() && !idx.data( SipModel::FactoryItemRole ).toBool() )
+        {
+            SipPlugin* p = qobject_cast< SipPlugin* >( idx.data( SipModel::SipPluginData ).value< QObject* >() );
+            SipHandler::instance()->removeSipPlugin( p );
+        }
+    }
 }

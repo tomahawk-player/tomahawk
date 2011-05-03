@@ -30,10 +30,12 @@ SipModel::SipModel( QObject* parent )
     connect( SipHandler::instance(), SIGNAL( pluginAdded( SipPlugin* ) ), this, SLOT( pluginAdded( SipPlugin* ) ) );
     connect( SipHandler::instance(), SIGNAL( pluginRemoved( SipPlugin* ) ), this, SLOT( pluginRemoved( SipPlugin* ) ) );
 
+    // TODO disable inline factories for now
+    /*
     foreach( SipPluginFactory* f, SipHandler::instance()->pluginFactories() ) {
         if( f->isCreatable() )
             m_factories << f;
-    }
+    } */
 
 }
 
@@ -158,7 +160,7 @@ int
 SipModel::rowCount( const QModelIndex& parent ) const
 {
     if( !parent.isValid() ) // invalid root node
-        return SipHandler::instance()->allPlugins().size() + 1;
+        return SipHandler::instance()->allPlugins().size() /* TODO inline factories disabled + 1*/;
     if( parent.isValid() && !parent.parent().isValid() ) { // top level item
         if( parent.row() == SipHandler::instance()->allPlugins().count() ) {// last row, this is the factory
             return m_factories.count();

@@ -81,14 +81,17 @@ private slots:
     void openResolverConfig( const QString& );
     void sipItemClicked ( const QModelIndex& );
     void openSipConfig( SipPlugin* );
+    void factoryActionTriggered ( bool );
     void sipFactoryClicked( SipPluginFactory* );
     void sipContextMenuRequest( const QPoint& );
     void sipPluginDeleted( bool );
+    void sipPluginRowDeleted( bool );
 
     void changePage( QListWidgetItem*, QListWidgetItem* );
 
 private:
     void createIcons();
+    void setupSipButtons();
 
     Ui_StackedSettingsDialog* ui;
 
