@@ -89,7 +89,9 @@ LastFmPlugin::LastFmPlugin( InfoSystemWorker* parent )
 
 LastFmPlugin::~LastFmPlugin()
 {
+    qDebug() << Q_FUNC_INFO << " beginning";
     delete m_scrobbler;
+    qDebug() << Q_FUNC_INFO << " exiting";
 }
 
 
