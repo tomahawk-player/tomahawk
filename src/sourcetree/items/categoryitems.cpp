@@ -161,15 +161,12 @@ CategoryItem::insertItem( SourceTreeItem* item )
 void
 CategoryItem::insertItems( QList< SourceTreeItem* > items )
 {
-    Q_UNUSED(index);
-
     // add the items to the category, and connect to the signals
     int curCount = children().size();
     if( m_showAdd ) // if there's an add item, add it before that
         curCount--;
     beginRowsAdded( curCount, curCount + items.size() - 1 );
     foreach( SourceTreeItem* item, items ) {
-        int index = m_showAdd ? children().count() - 1 : children().count();
         insertChild( children().count() - 1, item );
     }
     endRowsAdded();
