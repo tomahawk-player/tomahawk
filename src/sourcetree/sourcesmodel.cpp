@@ -39,14 +39,12 @@ SourcesModel::SourcesModel( QObject* parent )
     : QAbstractItemModel( parent )
     , m_viewPageDelayedCacheItem( 0 )
 {
-    Q_UNUSED(recent);
-
     m_rootItem = new SourceTreeItem( this, 0, Invalid );
 
     appendItem( source_ptr() );
 
     // add misc children of root node
-    GenericPageItem* recent = new GenericPageItem( this, m_rootItem->children().at( 0 ), tr( "Recently Played" ), QIcon( RESPATH "images/recently-played.png" ),
+    new GenericPageItem( this, m_rootItem->children().at( 0 ), tr( "Recently Played" ), QIcon( RESPATH "images/recently-played.png" ),
                                                    boost::bind( &ViewManager::showWelcomePage, ViewManager::instance() ),
                                                    boost::bind( &ViewManager::welcomeWidget, ViewManager::instance() )
                                                  );
