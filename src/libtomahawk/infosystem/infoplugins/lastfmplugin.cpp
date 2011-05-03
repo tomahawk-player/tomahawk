@@ -99,6 +99,7 @@ void
 LastFmPlugin::namChangedSlot()
 {
     qDebug() << Q_FUNC_INFO;
+    qDebug() << Q_FUNC_INFO << " using nam " << m_infoSystemWorker->nam();
     lastfm::setNetworkAccessManager( m_infoSystemWorker->nam() );
     settingsChanged(); // to get the scrobbler set up
 }
@@ -412,6 +413,7 @@ LastFmPlugin::settingsChanged()
                TomahawkSettings::instance()->lastFmPassword() != m_pw )
     {
         lastfm::ws::Username = TomahawkSettings::instance()->lastFmUsername();
+        m_pw = TomahawkSettings::instance()->lastFmPassword();
         // credentials have changed, have to re-create scrobbler for them to take effect
         if( m_scrobbler )
             delete m_scrobbler;

@@ -229,8 +229,8 @@ lastfm::setNetworkAccessManager( QNetworkAccessManager* nam )
     threadNamHash[thread] = nam;
     ourNamHash[thread] = false;
 
-    if ( oldNam )
-        delete oldNam;
+    //if ( oldNam )
+    //    delete oldNam;
 }
 
 
