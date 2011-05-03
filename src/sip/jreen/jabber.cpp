@@ -29,6 +29,8 @@
 #include <jreen/capabilities.h>
 #include <jreen/vcardupdate.h>
 #include <jreen/vcard.h>
+#include <jreen/directconnection.h>
+#include <jreen/tcpconnection.h>
 
 #include <qjson/parser.h>
 #include <qjson/serializer.h>
@@ -113,9 +115,22 @@ JabberPlugin::~JabberPlugin()
 }
 
 void
-JabberPlugin::setProxy( QNetworkProxy* proxy )
+JabberPlugin::setProxy( const QNetworkProxy &proxy )
 {
-    qDebug() << Q_FUNC_INFO << "Not implemented";
+    if(m_currentServer.isEmpty() || !(m_currentPort > 0))
+    {
+        // patches are welcome in Jreen that implement jdns through proxy
+        qDebug() << Q_FUNC_INFO << "Jreen proxy only works when you explicitly set host and port";
+        Q_ASSERT(false);
+        return;
+    }
+
+    if(!m_client->connection())
+    {
+        m_client->setConnection(new Jreen::TcpConnection(m_currentServer, m_currentPort));
+    }
+
+    qobject_cast<Jreen::DirectConnection*>(m_client->connection())->setProxy(proxy);
 }
 
 

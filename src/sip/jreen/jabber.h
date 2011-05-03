@@ -62,7 +62,6 @@ public:
     virtual const QString accountName();
     virtual QMenu* menu();
 
-    void setProxy( QNetworkProxy* proxy );
 signals:
     void jidChanged( const QString& );
 
@@ -73,6 +72,7 @@ public slots:
     void sendMsg( const QString& to, const QString& msg );
     void broadcastMsg( const QString &msg );
     void addContact( const QString &jid, const QString& msg = QString() );
+    void setProxy( const QNetworkProxy &proxy );
 
 private slots:
     void showAddFriendDialog();
