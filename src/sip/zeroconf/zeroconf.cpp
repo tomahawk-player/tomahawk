@@ -26,8 +26,6 @@ ZeroconfFactory::createPlugin( const QString& pluginId )
     return new ZeroconfPlugin( pluginId.isEmpty() ? generateId() : pluginId );
 }
 
-
-
 const QString
 ZeroconfPlugin::name() const
 {

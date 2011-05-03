@@ -542,6 +542,7 @@ SettingsDialog::sipFactoryClicked( SipPluginFactory* factory )
     } else {
         // no config, so just add it
         added = true;
+        TomahawkSettings::instance()->addSipPlugin( p->pluginId() );
         SipHandler::instance()->addSipPlugin( p );
     }
 

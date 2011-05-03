@@ -162,6 +162,7 @@ signals:
     void recentlyPlayedPlaylistAdded( const Tomahawk::playlist_ptr& playlist );
 
 private:
+    void doInitialSetup();
     void doUpgrade( int oldVersion, int newVersion );
 
     static TomahawkSettings* s_instance;

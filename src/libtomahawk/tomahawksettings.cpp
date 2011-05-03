@@ -47,6 +47,7 @@ TomahawkSettings::TomahawkSettings( QObject* parent )
     if( !contains( "configversion") )
     {
         setValue( "configversion", VERSION );
+        doInitialSetup();
     }
     else if( value( "configversion" ).toUInt() != VERSION )
     {
@@ -71,6 +72,14 @@ TomahawkSettings::~TomahawkSettings()
 {
     s_instance = 0;
 }
+
+void
+TomahawkSettings::doInitialSetup()
+{
+    // by default we add a local network resolver
+    addSipPlugin( "sipzeroconf_autocreated" );
+}
+
 
 void
 TomahawkSettings::doUpgrade( int oldVersion, int newVersion )
@@ -104,10 +113,6 @@ TomahawkSettings::doUpgrade( int oldVersion, int newVersion )
             remove( "jabber/autoconnect" );
             remove( "jabber/server" );
             remove( "jabber/port" );
-
-            // will be auto-added in the appropriate places
-//             SipPlugin* p = SipHandler::instance()->loadPlugin( "sipjabber_legacy" );
-//             SipHandler::instance()->enablePlugin( p );
         }
         if( contains( "twitter/ScreenName" ) && contains( "twitter/OAuthToken" ) )
         {
@@ -127,14 +132,9 @@ TomahawkSettings::doUpgrade( int oldVersion, int newVersion )
             remove( "twitter/CachedFriendsSinceID" );
             remove( "twitter/CachedMentionsSinceID" );
             remove( "twitter/CachedDirectMessagesSinceID" );
-
-//             SipPlugin* p = SipHandler::instance()->loadPlugin( "siptwitter_legacy" );
-//             SipHandler::instance()->enablePlugin( p );
         }
         // create a zeroconf plugin too
         addSipPlugin( "sipzeroconf_legacy" );
-//         SipPlugin* p = SipHandler::instance()->createPlugin( "sipzeroconf" );
-//         SipHandler::instance()->enablePlugin( p );
     }
 }
 
