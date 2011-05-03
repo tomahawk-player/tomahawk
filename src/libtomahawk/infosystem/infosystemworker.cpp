@@ -169,6 +169,13 @@ InfoSystemWorker::newNam()
 {
     qDebug() << Q_FUNC_INFO;
 
+    QNetworkAccessManager *oldNam = TomahawkUtils::nam();
+    if ( oldNam && m_nam == oldNam )
+    {
+        emit namChanged();
+        return;
+    }
+    
     QNetworkAccessManager* newNam;
 #ifdef LIBLASTFM_FOUND
     newNam = new lastfm::NetworkAccessManager( this );
@@ -176,10 +183,8 @@ InfoSystemWorker::newNam()
     newNam = new QNetworkAccessManager( this );
 #endif
     if ( m_nam )
-    {
         delete m_nam;
-    }
-    QNetworkAccessManager *oldNam = TomahawkUtils::nam();
+
     if ( !oldNam )
     {
         m_nam = newNam;
