@@ -152,6 +152,7 @@ SipHandler::createPlugin( const QString& factoryId )
     SipPlugin* sip = m_pluginFactories[ factoryId ]->createPlugin();
     hookUpPlugin( sip );
 
+    emit pluginAdded( sip );
     return sip;
 }
 
@@ -165,6 +166,7 @@ SipHandler::loadPlugin( const QString& pluginId )
     SipPlugin* sip = m_pluginFactories[ factoryName ]->createPlugin( pluginId );
     hookUpPlugin( sip );
 
+    // caller responsible for calling pluginAdded()
     return sip;
 }
 
@@ -194,8 +196,6 @@ SipHandler::hookUpPlugin( SipPlugin* sip )
 
     QObject::connect( sip, SIGNAL( avatarReceived( QString, QPixmap ) ), SLOT( onAvatarReceived( QString, QPixmap ) ) );
     QObject::connect( sip, SIGNAL( avatarReceived( QPixmap ) ), SLOT( onAvatarReceived( QPixmap ) ) );
-
-    emit pluginAdded( sip );
 }
 
 

@@ -537,7 +537,7 @@ SettingsDialog::sipFactoryClicked( SipPluginFactory* factory )
             added = true;
         } else {
             // canceled, delete it
-            delete p;
+            added = false;
         }
     } else {
         // no config, so just add it
@@ -560,6 +560,8 @@ SettingsDialog::sipFactoryClicked( SipPluginFactory* factory )
         }
         if( toremove )
             ui->addSipButton->removeAction( toremove );
+    } else if( added == false ) { // user pressed cancel
+        delete p;
     }
 }
 
