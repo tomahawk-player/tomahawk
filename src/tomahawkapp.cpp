@@ -179,11 +179,8 @@ TomahawkApp::init()
     registerMetaTypes();
 
 #ifdef LIBLASTFM_FOUND
-    qDebug() << "Init Scrobbler.";
-    m_scrobbler = new Scrobbler( this );
     qDebug() << "Setting NAM.";
     TomahawkUtils::setNam( lastfm::nam() );
-    
 #else
     qDebug() << "Setting NAM.";
     TomahawkUtils::setNam( new QNetworkAccessManager() );
@@ -280,6 +277,11 @@ TomahawkApp::init()
     {
         m_mainwindow->showSettingsDialog();
     }
+#endif
+
+#ifdef LIBLASTFM_FOUND
+    qDebug() << "Init Scrobbler.";
+    m_scrobbler = new Scrobbler( this );
 #endif
 }
 
