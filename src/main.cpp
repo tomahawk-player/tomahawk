@@ -45,15 +45,21 @@ main( int argc, char *argv[] )
     TomahawkApp a( argc, argv );
     KDSingleApplicationGuard guard( &a, KDSingleApplicationGuard::AutoKillOtherInstances );
     QObject::connect( &guard, SIGNAL( instanceStarted( KDSingleApplicationGuard::Instance ) ), &a, SLOT( instanceStarted( KDSingleApplicationGuard::Instance )  ) );
-    
+
     if ( guard.isPrimaryInstance() )
         a.init();
-    
+
     QString locale = QLocale::system().name();
 
     QTranslator translator;
     translator.load( QString( ":/lang/tomahawk_" ) + locale );
     a.installTranslator( &translator );
+
+    if ( argc > 1 )
+    {
+        QString arg = a.arguments()[ 1 ];
+        a.loadUrl( arg );
+    }
 
     return a.exec();
 }
