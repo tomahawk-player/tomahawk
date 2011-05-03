@@ -31,6 +31,8 @@
 
 #include <QUrl>
 #include <Playlist.h>
+#include <qclipboard.h>
+#include <qapplication.h>
 
 GlobalActionManager* GlobalActionManager::s_instance = 0;
 
@@ -52,6 +54,28 @@ GlobalActionManager::GlobalActionManager( QObject* parent )
 
 GlobalActionManager::~GlobalActionManager()
 {}
+
+QUrl
+GlobalActionManager::openLinkFromQuery( const Tomahawk::query_ptr& query ) const
+{
+    QUrl link( "tomahawk://open/track/" );
+    if( !query->track().isEmpty() )
+        link.addQueryItem( "title", query->track() );
+    if( !query->artist().isEmpty() )
+        link.addQueryItem( "artist", query->artist() );
+    if( !query->album().isEmpty() )
+        link.addQueryItem( "album", query->album() );
+
+    return link;
+}
+
+void
+GlobalActionManager::copyToClipboard( const Tomahawk::query_ptr& query ) const
+{
+    QClipboard* cb = QApplication::clipboard();
+    cb->setText( openLinkFromQuery( query ).toEncoded() );
+}
+
 
 bool
 GlobalActionManager::parseTomahawkLink( const QString& url )

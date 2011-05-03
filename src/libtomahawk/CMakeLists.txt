@@ -29,6 +29,7 @@ set( libSources
     source.cpp
     viewpage.cpp
     viewmanager.cpp
+    globalactionmanager.cpp
 
     sip/SipPlugin.cpp
     sip/SipHandler.cpp
@@ -183,6 +184,7 @@ set( libHeaders
     source.h
     viewpage.h
     viewmanager.h
+    globalactionmanager.h
 
     artist.h
     album.h

@@ -65,7 +65,6 @@ private slots:
     void deleteItems();
 
     void onDeleted();
-
 private:
     void setupMenus();
 

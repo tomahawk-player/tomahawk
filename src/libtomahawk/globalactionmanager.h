@@ -21,16 +21,20 @@
 #define GLOBALACTIONMANAGER_H
 
 #include "playlist.h"
+#include "dllmacro.h"
 
 #include <QObject>
 #include <QUrl>
 
-class GlobalActionManager : public QObject
+class DLLEXPORT GlobalActionManager : public QObject
 {
     Q_OBJECT
 public:
     static GlobalActionManager* instance();
     virtual ~GlobalActionManager();
+
+    QUrl openLinkFromQuery( const Tomahawk::query_ptr& query ) const;
+    void copyToClipboard( const Tomahawk::query_ptr& query ) const;
 
 public slots:
     bool parseTomahawkLink( const QString& link );

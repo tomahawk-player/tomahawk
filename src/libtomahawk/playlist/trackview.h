@@ -1,5 +1,5 @@
 /* === This file is part of Tomahawk Player - <http://tomahawk-player.org> ===
- * 
+ *
  *   Copyright 2010-2011, Christian Muehlhaeuser <muesli@tomahawk-player.org>
  *
  *   Tomahawk is free software: you can redistribute it and/or modify
@@ -26,6 +26,7 @@
 
 #include "dllmacro.h"
 
+class QAction;
 class LoadingSpinner;
 class PlaylistInterface;
 class TrackHeader;
@@ -80,6 +81,7 @@ private slots:
 
     void onFilterChanged( const QString& filter );
 
+    void copyLink();
 private:
     QString m_guid;
     TrackModel* m_model;
