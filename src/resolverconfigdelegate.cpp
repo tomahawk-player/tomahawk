@@ -136,7 +136,6 @@ ResolverConfigDelegate::editorEvent(QEvent* event, QAbstractItemModel* model, co
 
     QStyleOptionViewItemV4 viewOpt( option );
     initStyleOption( &viewOpt, index );
-    const QWidget* w = viewOpt.widget;
     int top = viewOpt.rect.top();
 
     if( event->type() == QEvent::MouseButtonRelease || event->type() == QEvent::MouseButtonDblClick ) {
