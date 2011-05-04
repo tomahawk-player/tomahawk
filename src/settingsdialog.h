@@ -87,6 +87,10 @@ private slots:
     void sipPluginDeleted( bool );
     void sipPluginRowDeleted( bool );
 
+    // dialog slots
+    void resolverConfigClosed( int value );
+    void sipConfigClosed( int value );
+
     void changePage( QListWidgetItem*, QListWidgetItem* );
 
 private:

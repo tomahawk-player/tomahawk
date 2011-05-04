@@ -468,6 +468,7 @@ SettingsDialog::openResolverConfig( const QString& resolver )
 {
     Tomahawk::ExternalResolver* r = TomahawkApp::instance()->resolverForPath( resolver );
     if( r && r->configUI() ) {
+#ifndef Q_OS_MAC
         DelegateConfigWrapper dialog( r->configUI(), "Resolver Configuration", this );
         QWeakPointer< DelegateConfigWrapper > watcher( &dialog );
         int ret = dialog.exec();
@@ -475,6 +476,25 @@ SettingsDialog::openResolverConfig( const QString& resolver )
             // send changed config to resolver
             r->saveConfig();
         }
+#else
+        // on osx a sheet needs to be non-modal
+        DelegateConfigWrapper* dialog = new DelegateConfigWrapper( r->configUI(), "Resolver Configuration", this, Qt::Sheet );
+        dialog->setProperty( "resolver", QVariant::fromValue< QObject* >( r ) );
+        connect( dialog, SIGNAL( finished( int ) ), this, SLOT( resolverConfigClosed( int ) ) );
+
+        dialog->show();
+#endif
+
+    }
+}
+
+void
+SettingsDialog::resolverConfigClosed( int value )
+{
+    if( value == QDialog::Accepted ) {
+        DelegateConfigWrapper* dialog = qobject_cast< DelegateConfigWrapper* >( sender() );
+        Tomahawk::ExternalResolver* r = qobject_cast< Tomahawk::ExternalResolver* >( dialog->property( "resolver" ).value< QObject* >() );
+        r->saveConfig();
     }
 }
 
@@ -494,13 +514,33 @@ void
 SettingsDialog::openSipConfig( SipPlugin* p )
 {
     if( p->configWidget() ) {
-        DelegateConfigWrapper dialog( p->configWidget(), QString("%1 Config" ).arg( p->friendlyName() ), this );
+#ifndef Q_OS_MAC
+        DelegateConfigWrapper dialog( p->configWidget(), QString("%1 Configuration" ).arg( p->friendlyName() ), this );
         QWeakPointer< DelegateConfigWrapper > watcher( &dialog );
         int ret = dialog.exec();
         if( !watcher.isNull() && ret == QDialog::Accepted ) {
             // send changed config to resolver
             p->saveConfig();
         }
+#else
+        // on osx a sheet needs to be non-modal
+        DelegateConfigWrapper* dialog = new DelegateConfigWrapper( p->configWidget(), QString("%1 Configuration" ).arg( p->friendlyName() ), this, Qt::Sheet );
+        dialog->setProperty( "sipplugin", QVariant::fromValue< QObject* >( p ) );
+        connect( dialog, SIGNAL( finished( int ) ), this, SLOT( sipConfigClosed( int ) ) );
+
+        dialog->show();
+#endif
+    }
+}
+
+
+void
+SettingsDialog::sipConfigClosed( int value )
+{
+    if( value == QDialog::Accepted ) {
+        DelegateConfigWrapper* dialog = qobject_cast< DelegateConfigWrapper* >( sender() );
+        SipPlugin* p = qobject_cast< SipPlugin* >( dialog->property( "sipplugin" ).value< QObject* >() );
+        p->saveConfig();
     }
 }
 

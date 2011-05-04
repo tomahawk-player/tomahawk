@@ -26,7 +26,7 @@ class DelegateConfigWrapper : public QDialog
 {
     Q_OBJECT
 public:
-    DelegateConfigWrapper( QWidget* conf, const QString& title, QWidget* parent ) : QDialog( parent ), m_widget( conf )
+    DelegateConfigWrapper( QWidget* conf, const QString& title, QWidget* parent, Qt::WindowFlags flags = 0 ) : QDialog( parent, flags ), m_widget( conf )
     {
         m_widget->setVisible( true );
         m_widget->setWindowFlags( Qt::Sheet );
