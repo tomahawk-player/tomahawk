@@ -52,9 +52,7 @@ public slots:
     void removeWatchedDir( const QString& path );
 
 private slots:
-    void scannerQuit();
     void scannerFinished();
-    void scannerDestroyed( QObject* scanner );
     
     void runStartupScan();
     void queuedScanTimeout();

@@ -245,18 +245,6 @@ ScanManager::deferredScanTimeout()
 void
 ScanManager::scannerFinished()
 {
-    qDebug() << Q_FUNC_INFO;
-    connect( m_musicScannerThreadController, SIGNAL( finished() ), SLOT( scannerQuit() ) );
-    m_musicScannerThreadController->quit();
-}
-
-
-void
-ScanManager::scannerQuit()
-{
-    qDebug() << Q_FUNC_INFO;
-    connect( m_scanner.data(), SIGNAL( destroyed( QObject* ) ), SLOT( scannerDestroyed( QObject* ) ) );
-
     if ( !m_scanner.isNull() )
     {
         QMetaObject::invokeMethod( m_scanner.data(), "deleteLater", Qt::QueuedConnection );
@@ -266,17 +254,22 @@ ScanManager::scannerQuit()
             QCoreApplication::processEvents( QEventLoop::AllEvents, 200 );
             TomahawkUtils::Sleep::msleep( 100 );
         }
+
+        if ( m_musicScannerThreadController )
+            m_musicScannerThreadController->quit();
+
+        if( m_musicScannerThreadController )
+        {
+            while( !m_musicScannerThreadController->isFinished() )
+            {
+                qDebug() << Q_FUNC_INFO << " scanner thread controller not finished, processing events";
+                QCoreApplication::processEvents( QEventLoop::AllEvents, 200 );
+                TomahawkUtils::Sleep::msleep( 100 );
+            }
+
+            delete m_musicScannerThreadController;
+            m_musicScannerThreadController = 0;
+        }
     }
-}
-
-
-void
-ScanManager::scannerDestroyed( QObject* scanner )
-{
-    Q_UNUSED( scanner );
-    qDebug() << Q_FUNC_INFO;
-    m_musicScannerThreadController->deleteLater();
-    m_musicScannerThreadController = 0;
     emit finished();
 }
-
