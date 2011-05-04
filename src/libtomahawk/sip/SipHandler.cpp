@@ -248,6 +248,7 @@ SipHandler::addSipPlugin( SipPlugin* p, bool enabled, bool startup )
 {
     m_allPlugins << p;
 
+    hookUpPlugin( p );
     if ( enabled )
     {
         p->connectPlugin( startup );
