@@ -1,6 +1,6 @@
 [Desktop Entry]
 Type=Application
-Version=TOMAHAWK_VERSION
+Version=1.0
 Name=Tomahawk
 GenericName=Music Player
 TryExec=tomahawk
