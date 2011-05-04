@@ -1,11 +1,11 @@
-SET( OS_SPECIFIC_LINK_LIBRARIES 
+SET( OS_SPECIFIC_LINK_LIBRARIES
      ${OS_SPECIFIC_LINK_LIBRARIES}
      tomahawklib
 )
 
 IF( "${gui}" STREQUAL "no" )
 ELSE()
-    SET( OS_SPECIFIC_LINK_LIBRARIES 
+    SET( OS_SPECIFIC_LINK_LIBRARIES
          ${OS_SPECIFIC_LINK_LIBRARIES}
          gnutls
        )
@@ -20,4 +20,12 @@ ENDFOREACH( _file )
 
 INSTALL( FILES ${CMAKE_SOURCE_DIR}/data/icons/tomahawk-icon.svg RENAME tomahawk.svg  DESTINATION share/icons/hicolor/scalable )
 
-INSTALL( FILES tomahawk.desktop DESTINATION share/applications )
+FILE(READ ${CMAKE_SOURCE_DIR}/admin/unix/tomahawk.desktop desktopfile)
+
+STRING( REPLACE "TOMAHAWK_VERSION"
+                ${TOMAHAWK_VERSION}
+                edited_desktopfile # save in this variable
+                "${desktopfile}" # from the contents of this var
+)
+FILE( WRITE ${CMAKE_BINARY_DIR}/tomahawk.desktop "${edited_desktopfile}" )
+INSTALL( FILES ${CMAKE_BINARY_DIR}/tomahawk.desktop DESTINATION share/applications )
