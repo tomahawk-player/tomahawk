@@ -100,7 +100,7 @@
      <item>
       <widget class="QStackedWidget" name="stackedWidget">
        <property name="currentIndex">
-        <number>3</number>
+        <number>0</number>
        </property>
        <widget class="QWidget" name="accountsPage">
         <layout class="QVBoxLayout" name="verticalLayout_11">
@@ -153,7 +153,7 @@
                   </property>
                   <property name="icon">
                    <iconset resource="../resources.qrc">
-                    <normaloff>:/data/images/list-add.png</normaloff>:/data/images/list-add.png</iconset>
+                    <normaloff>:/data/images/sipplugin-add.png</normaloff>:/data/images/sipplugin-add.png</iconset>
                   </property>
                   <property name="popupMode">
                    <enum>QToolButton::InstantPopup</enum>
@@ -167,7 +167,7 @@
                   </property>
                   <property name="icon">
                    <iconset resource="../resources.qrc">
-                    <normaloff>:/data/images/list-remove.png</normaloff>:/data/images/list-remove.png</iconset>
+                    <normaloff>:/data/images/sipplugin-remove.png</normaloff>:/data/images/sipplugin-remove.png</iconset>
                   </property>
                   <property name="popupMode">
                    <enum>QToolButton::DelayedPopup</enum>

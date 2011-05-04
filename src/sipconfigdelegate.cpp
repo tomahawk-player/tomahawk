@@ -164,7 +164,7 @@ SipConfigDelegate::paint ( QPainter* painter, const QStyleOptionViewItem& option
         }
 
         // draw the online/offline status
-        int statusIconSize = 10;
+        int statusIconSize = 18;
         int statusX = confRect.left() - 2*PADDING - statusIconSize;
         QFont statusF = opt.font;
         statusF.setPointSize( statusF.pointSize() - 2 );
@@ -198,7 +198,7 @@ SipConfigDelegate::paint ( QPainter* painter, const QStyleOptionViewItem& option
         width = itemRect.width() - textLeftEdge;
 
         if( !index.data( SipModel::ErrorString ).toString().isEmpty() ) { // error, show that too
-            QRect errorRect( textLeftEdge, mid + top, width, mid - PADDING );
+            QRect errorRect( textLeftEdge, mid + top, width, mid - PADDING + 1 );
 
             QFontMetrics errorFm( error );
             QString str = errorFm.elidedText( index.data( SipModel::ErrorString ).toString(), Qt::ElideRight, errorRect.width() );
@@ -209,7 +209,7 @@ SipConfigDelegate::paint ( QPainter* painter, const QStyleOptionViewItem& option
         }
         QString nameStr = namefm.elidedText( index.data( Qt::DisplayRole ).toString(), Qt::ElideRight, width );
         painter->setFont( name );
-        painter->drawText( QRect( textLeftEdge, pos + top, width, nameHeight ), nameStr );
+        painter->drawText( QRect( textLeftEdge, pos + top, width, nameHeight + 1 ), nameStr );
         painter->restore();
     }
 }

@@ -19,9 +19,10 @@ include_directories( . ${CMAKE_CURRENT_BINARY_DIR} ..
    ${QT_INCLUDE_DIR}
 )
 
+qt4_wrap_ui( UI_SRCS configwidget.ui )
 qt4_add_resources( RC_SRCS "resources.qrc" )
 qt4_wrap_cpp( zeroconfMoc ${zeroconfHeaders} )
-add_library( tomahawk_sipzeroconf SHARED ${zeroconfSources} ${zeroconfMoc} ${RC_SRCS} )
+add_library( tomahawk_sipzeroconf SHARED ${zeroconfSources} ${zeroconfMoc} ${RC_SRCS} ${UI_SRCS} )
 
 IF( WIN32 )
 SET( OS_SPECIFIC_LINK_LIBRARIES

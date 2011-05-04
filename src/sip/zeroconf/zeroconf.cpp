@@ -18,12 +18,30 @@
 
 #include "zeroconf.h"
 
+#include "tomahawksettings.h"
+#include "ui_configwidget.h"
+
 #include <QtPlugin>
 
 SipPlugin*
 ZeroconfFactory::createPlugin( const QString& pluginId )
 {
     return new ZeroconfPlugin( pluginId.isEmpty() ? generateId() : pluginId );
+}
+
+ZeroconfPlugin::ZeroconfPlugin ( const QString& pluginId )
+    : SipPlugin( pluginId )
+    , m_zeroconf( 0 )
+    , m_state( Disconnected )
+    , m_cachedNodes()
+{
+    qDebug() << Q_FUNC_INFO;
+
+    m_configWidget = QWeakPointer< QWidget >( new QWidget );
+    m_ui = new Ui_ZeroconfConfig;
+    m_ui->setupUi( m_configWidget.data() );
+    m_ui->autoConnectCheckbox->setChecked( autoConnect() );
+    m_configWidget.data()->setVisible( false );
 }
 
 const QString
@@ -58,8 +76,11 @@ ZeroconfFactory::icon() const
 
 
 bool
-ZeroconfPlugin::connectPlugin( bool /*startup*/ )
+ZeroconfPlugin::connectPlugin( bool startup )
 {
+    if( startup && !autoConnect() )
+        return false;
+
     delete m_zeroconf;
     m_zeroconf = new TomahawkZeroconf( Servent::instance()->port(), this );
     QObject::connect( m_zeroconf, SIGNAL( tomahawkHostFound( QString, int, QString, QString ) ),
@@ -115,5 +136,18 @@ ZeroconfPlugin::lanHostFound( const QString& host, int port, const QString& name
     else
         qDebug() << "Already connected to" << host;
 }
+
+void
+ZeroconfPlugin::saveConfig()
+{
+    TomahawkSettings::instance()->setValue( pluginId() + "/autoconnect", m_ui->autoConnectCheckbox->isChecked() );
+}
+
+bool
+ZeroconfPlugin::autoConnect() const
+{
+    return TomahawkSettings::instance()->value( pluginId() + "/autoconnect", true ).toBool();
+}
+
 
 Q_EXPORT_PLUGIN2( sipfactory, ZeroconfFactory )

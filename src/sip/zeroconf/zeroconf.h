@@ -26,6 +26,8 @@
 
 #define MYNAME "Local Network"
 
+class Ui_ZeroconfConfig;
+
 class SIPDLLEXPORT ZeroconfFactory : public SipPluginFactory
 {
     Q_OBJECT
@@ -39,6 +41,7 @@ public:
     virtual bool isUnique() const { return true; }
     virtual QIcon icon() const;
 
+
     virtual SipPlugin* createPlugin ( const QString& pluginId = QString() );
 };
 
@@ -47,14 +50,7 @@ class SIPDLLEXPORT ZeroconfPlugin : public SipPlugin
     Q_OBJECT
 
 public:
-    ZeroconfPlugin( const QString& pluginId )
-        : SipPlugin( pluginId )
-        , m_zeroconf( 0 )
-        , m_state( Disconnected )
-        , m_cachedNodes()
-    {
-        qDebug() << Q_FUNC_INFO;
-    }
+    ZeroconfPlugin( const QString& pluginId );
 
     virtual ~ZeroconfPlugin()
     {
@@ -67,6 +63,8 @@ public:
     virtual ConnectionState connectionState() const;
     virtual bool isValid() const { return true; };
     virtual QIcon icon() const;
+    virtual QWidget* configWidget() { return m_configWidget.data(); }
+    virtual void saveConfig();
 
 public slots:
     virtual bool connectPlugin( bool startup );
@@ -94,9 +92,14 @@ private slots:
     void lanHostFound( const QString& host, int port, const QString& name, const QString& nodeid );
 
 private:
+    bool autoConnect() const;
+
     TomahawkZeroconf* m_zeroconf;
     ConnectionState m_state;
     QVector<QStringList> m_cachedNodes;
+
+    Ui_ZeroconfConfig* m_ui; // so the google wrapper can change the config dialog a bit
+    QWeakPointer< QWidget > m_configWidget;
 };
 
 #endif
