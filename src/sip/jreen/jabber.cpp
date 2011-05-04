@@ -294,9 +294,6 @@ JabberPlugin::onDisconnect( Jreen::Client::DisconnectReason reason )
     qDebug() << Q_FUNC_INFO;
 
     QString errorMessage;
-    bool reconnect = false;
-    int reconnectInSeconds = 0;
-
     switch( reason )
     {
         case Jreen::Client::User:
@@ -313,19 +310,15 @@ JabberPlugin::onDisconnect( Jreen::Client::DisconnectReason reason )
             break;
         case Jreen::Client::RemoteStreamError:
             errorMessage = "Remote Stream Error";
-            reconnect = true;
             break;
         case Jreen::Client::RemoteConnectionFailed:
             errorMessage = "Remote Connection failed";
             break;
         case Jreen::Client::InternalServerError:
             errorMessage = "Internal Server Error";
-            reconnect = true;
             break;
         case Jreen::Client::SystemShutdown:
             errorMessage = "System shutdown";
-            reconnect = true;
-            reconnectInSeconds = 60;
             break;
         case Jreen::Client::Conflict:
             errorMessage = "Conflict";
@@ -341,6 +334,7 @@ JabberPlugin::onDisconnect( Jreen::Client::DisconnectReason reason )
             break;
     }
 
+    bool reconnect = false;
     switch( reason )
     {
         case Jreen::Client::User:
@@ -359,6 +353,7 @@ JabberPlugin::onDisconnect( Jreen::Client::DisconnectReason reason )
         case Jreen::Client::Conflict:
         case Jreen::Client::Unknown:
             emit error( SipPlugin::ConnectionError, errorMessage );
+            reconnect = true;
             break;
 
         default:
@@ -372,7 +367,7 @@ JabberPlugin::onDisconnect( Jreen::Client::DisconnectReason reason )
     removeMenuHelper();
 
     if(reconnect)
-        QTimer::singleShot(reconnectInSeconds*1000, this, SLOT(connectPlugin()));
+        QTimer::singleShot(15*1000, this, SLOT(connectPlugin()));
 }
 
 void
