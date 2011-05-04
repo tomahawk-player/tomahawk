@@ -101,7 +101,6 @@ private slots:
     void showAddFriendDialog();
     void onConnect();
     void onDisconnect(Jreen::Client::DisconnectReason reason);
-    void onAuthError(int code, const QString &msg);
 
     void onPresenceReceived( const Jreen::RosterItem::Ptr &item, const Jreen::Presence& presence );
     void onSubscriptionReceived( const Jreen::RosterItem::Ptr &item, const Jreen::Presence& presence );
@@ -121,6 +120,7 @@ private:
     bool readAutoConnect();
     int readPort();
 
+    QString errorMessage( Jreen::Client::DisconnectReason reason );
     void setupClientHelper();
     void addMenuHelper();
     void removeMenuHelper();

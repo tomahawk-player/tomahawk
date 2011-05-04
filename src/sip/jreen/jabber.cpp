@@ -293,55 +293,13 @@ JabberPlugin::onDisconnect( Jreen::Client::DisconnectReason reason )
 {
     qDebug() << Q_FUNC_INFO;
 
-    QString errorMessage;
-    switch( reason )
-    {
-        case Jreen::Client::User:
-            errorMessage = "User Interaction";
-            break;
-        case Jreen::Client::HostUnknown:
-            errorMessage = "Host is unknown";
-            break;
-        case Jreen::Client::ItemNotFound:
-            errorMessage = "Item not found";
-            break;
-        case Jreen::Client::AuthorizationError:
-            errorMessage = "Authorization Error";
-            break;
-        case Jreen::Client::RemoteStreamError:
-            errorMessage = "Remote Stream Error";
-            break;
-        case Jreen::Client::RemoteConnectionFailed:
-            errorMessage = "Remote Connection failed";
-            break;
-        case Jreen::Client::InternalServerError:
-            errorMessage = "Internal Server Error";
-            break;
-        case Jreen::Client::SystemShutdown:
-            errorMessage = "System shutdown";
-            break;
-        case Jreen::Client::Conflict:
-            errorMessage = "Conflict";
-            break;
-
-        case Jreen::Client::Unknown:
-            errorMessage = "Unknown";
-            break;
-
-        default:
-            qDebug() << "Not all Client::DisconnectReasons checked";
-            Q_ASSERT(false);
-            break;
-    }
-
-    bool reconnect = false;
     switch( reason )
     {
         case Jreen::Client::User:
             break;
 
         case Jreen::Client::AuthorizationError:
-            emit error( SipPlugin::AuthError, errorMessage );
+            emit error( SipPlugin::AuthError, errorMessage( reason ) );
             break;
 
         case Jreen::Client::HostUnknown:
@@ -352,8 +310,7 @@ JabberPlugin::onDisconnect( Jreen::Client::DisconnectReason reason )
         case Jreen::Client::SystemShutdown:
         case Jreen::Client::Conflict:
         case Jreen::Client::Unknown:
-            emit error( SipPlugin::ConnectionError, errorMessage );
-            reconnect = true;
+            emit error( SipPlugin::ConnectionError, errorMessage( reason ) );
             break;
 
         default:
@@ -365,15 +322,51 @@ JabberPlugin::onDisconnect( Jreen::Client::DisconnectReason reason )
     emit stateChanged( m_state );
 
     removeMenuHelper();
-
-    if(reconnect)
-        QTimer::singleShot(15*1000, this, SLOT(connectPlugin()));
 }
 
-void
-JabberPlugin::onAuthError( int code, const QString& msg )
+QString JabberPlugin::errorMessage(Jreen::Client::DisconnectReason reason)
 {
+    switch( reason )
+    {
+        case Jreen::Client::User:
+            return tr("User Interaction");
+            break;
+        case Jreen::Client::HostUnknown:
+            return tr("Host is unknown");
+            break;
+        case Jreen::Client::ItemNotFound:
+            return tr("Item not found");
+            break;
+        case Jreen::Client::AuthorizationError:
+            return tr("Authorization Error");
+            break;
+        case Jreen::Client::RemoteStreamError:
+            return tr("Remote Stream Error");
+            break;
+        case Jreen::Client::RemoteConnectionFailed:
+            return tr("Remote Connection failed");
+            break;
+        case Jreen::Client::InternalServerError:
+            return tr("Internal Server Error");
+            break;
+        case Jreen::Client::SystemShutdown:
+            return tr("System shutdown");
+            break;
+        case Jreen::Client::Conflict:
+            return tr("Conflict");
+            break;
 
+        case Jreen::Client::Unknown:
+            return tr("Unknown");
+            break;
+
+        default:
+            qDebug() << "Not all Client::DisconnectReasons checked";
+            Q_ASSERT(false);
+            break;
+    }
+
+    return QString();
 }
 
 void
