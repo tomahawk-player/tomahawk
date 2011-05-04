@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>433</width>
-    <height>253</height>
+    <height>260</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -185,13 +185,6 @@
         </item>
        </layout>
       </item>
-      <item>
-       <widget class="QCheckBox" name="checkBoxAutoConnect">
-        <property name="text">
-         <string>Connect automatically when Tomahawk starts</string>
-        </property>
-       </widget>
-      </item>
      </layout>
     </widget>
    </item>
@@ -304,10 +297,17 @@
      <property name="sizeHint" stdset="0">
       <size>
        <width>20</width>
-       <height>40</height>
+       <height>5</height>
       </size>
      </property>
     </spacer>
+   </item>
+   <item>
+    <widget class="QCheckBox" name="checkBoxAutoConnect">
+     <property name="text">
+      <string>Connect automatically when Tomahawk starts</string>
+     </property>
+    </widget>
    </item>
   </layout>
  </widget>
