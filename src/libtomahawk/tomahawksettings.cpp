@@ -100,13 +100,17 @@ TomahawkSettings::doUpgrade( int oldVersion, int newVersion )
         // not pretty as we hardcode a plugin id and assume that we know how the config layout is, but hey, this is migration after all
         if( contains( "jabber/username" ) && contains( "jabber/password" ) )
         {
-            setValue( "sipjabber_legacy/username", value( "jabber/username" ) );
-            setValue( "sipjabber_legacy/password", value( "jabber/password" ) );
-            setValue( "sipjabber_legacy/autoconnect", value( "jabber/autoconnect" ) );
-            setValue( "sipjabber_legacy/port", value( "jabber/port" ) );
-            setValue( "sipjabber_legacy/server", value( "jabber/server" ) );
+            QString sipName = "sipjabber";
+            if( value( "jabber/username" ).toString().contains( "@gmail" ) )
+                sipName = "sipgoogle";
 
-            addSipPlugin( "sipjabber_legacy" );
+            setValue( QString( "%1_legacy/username" ).arg( sipName ), value( "jabber/username" ) );
+            setValue( QString( "%1_legacy/password" ).arg( sipName ), value( "jabber/password" ) );
+            setValue( QString( "%1r_legacy/autoconnect" ).arg( sipName ), value( "jabber/autoconnect" ) );
+            setValue( QString( "%1_legacy/port" ).arg( sipName ), value( "jabber/port" ) );
+            setValue( QString( "%1_legacy/server" ).arg( sipName ), value( "jabber/server" ) );
+
+            addSipPlugin( QString( "%1_legacy" ).arg( sipName ) );
 
             remove( "jabber/username" );
             remove( "jabber/password" );
