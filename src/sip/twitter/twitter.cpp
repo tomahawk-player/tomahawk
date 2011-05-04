@@ -181,16 +181,16 @@ TwitterPlugin::refreshTwitterAuth()
     qDebug() << Q_FUNC_INFO << " begin";
     if( !m_twitterAuth.isNull() )
         delete m_twitterAuth.data();
-    
+
     Q_ASSERT( TomahawkUtils::nam() != 0 );
     qDebug() << Q_FUNC_INFO << " with nam " << TomahawkUtils::nam();
     m_twitterAuth = QWeakPointer<TomahawkOAuthTwitter>( new TomahawkOAuthTwitter( TomahawkUtils::nam(), this ) );
-    
+
     if( m_twitterAuth.isNull() )
       return false;
 
-    m_twitterAuth.data()->setOAuthToken( settings->twitterOAuthToken().toLatin1() );
-    m_twitterAuth.data()->setOAuthTokenSecret( settings->twitterOAuthTokenSecret().toLatin1() );
+    m_twitterAuth.data()->setOAuthToken( twitterOAuthToken().toLatin1() );
+    m_twitterAuth.data()->setOAuthTokenSecret( twitterOAuthTokenSecret().toLatin1() );
 
     return true;
 }

@@ -203,8 +203,8 @@ TwitterConfigWidget::startPostGotTomahawkStatus()
         return;
     }
     TomahawkOAuthTwitter *twitAuth = new TomahawkOAuthTwitter( TomahawkUtils::nam(), this );
-    twitAuth->setOAuthToken( s->twitterOAuthToken().toLatin1() );
-    twitAuth->setOAuthTokenSecret( s->twitterOAuthTokenSecret().toLatin1() );
+    twitAuth->setOAuthToken( m_plugin->twitterOAuthToken().toLatin1() );
+    twitAuth->setOAuthTokenSecret( m_plugin->twitterOAuthTokenSecret().toLatin1() );
     QTweetAccountVerifyCredentials *credVerifier = new QTweetAccountVerifyCredentials( twitAuth, this );
     connect( credVerifier, SIGNAL( parsedUser(const QTweetUser &) ), SLOT( postGotTomahawkStatusAuthVerifyReply(const QTweetUser &) ) );
     credVerifier->verify();
