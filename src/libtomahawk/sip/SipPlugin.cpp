@@ -17,7 +17,28 @@
  *   along with Tomahawk. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include <sip/SipPlugin.h>
+#include "sip/SipPlugin.h"
+
+#include <QUuid>
+
+QString
+SipPluginFactory::generateId()
+{
+    QString uniq = QUuid::createUuid().toString().mid( 1, 8 );
+    return factoryId() + "_" + uniq;
+}
+
+SipPlugin::SipPlugin( const QString& pluginId, QObject* parent )
+    : QObject( parent )
+    , m_pluginId( pluginId )
+{
+
+}
+
+QString SipPlugin::pluginId() const
+{
+    return m_pluginId;
+}
 
 
 QMenu*
@@ -31,6 +52,18 @@ QWidget*
 SipPlugin::configWidget()
 {
     return 0;
+}
+
+QString
+SipPlugin::errorMessage() const
+{
+    return QString();
+}
+
+QIcon
+SipPlugin::icon() const
+{
+    return QIcon();
 }
 
 void

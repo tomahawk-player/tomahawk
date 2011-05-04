@@ -179,7 +179,9 @@ TomahawkWindow::TomahawkWindow( QWidget* parent )
     statusBar()->addPermanentWidget( m_audioControls, 1 );
 
     // propagate sip menu
-    foreach( SipPlugin *plugin, APP->sipHandler()->plugins() )
+    connect( SipHandler::instance(), SIGNAL( pluginAdded( SipPlugin* ) ), this, SLOT( onSipPluginAdded( SiPlugin* ) ) );
+    connect( SipHandler::instance(), SIGNAL( pluginRemoved( SipPlugin* ) ), this, SLOT( onSipPluginRemoved( SiPlugin* ) ) );
+    foreach( SipPlugin *plugin, APP->sipHandler()->allPlugins() )
     {
         connect( plugin, SIGNAL( addMenu( QMenu* ) ), this, SLOT( pluginMenuAdded( QMenu* ) ) );
         connect( plugin, SIGNAL( removeMenu( QMenu* ) ), this, SLOT( pluginMenuRemoved( QMenu* ) ) );
@@ -499,6 +501,19 @@ void
 TomahawkWindow::onSipDisconnected()
 {
     ui->actionToggleConnect->setText( tr( "Go &online" ) );
+}
+
+void
+TomahawkWindow::onSipPluginAdded( SipPlugin* p )
+{
+    connect( p, SIGNAL( addMenu( QMenu* ) ), this, SLOT( pluginMenuAdded( QMenu* ) ) );
+    connect( p, SIGNAL( removeMenu( QMenu* ) ), this, SLOT( pluginMenuRemoved( QMenu* ) ) );
+}
+
+void
+TomahawkWindow::onSipPluginRemoved( SipPlugin* p )
+{
+    Q_UNUSED( p );
 }
 
 

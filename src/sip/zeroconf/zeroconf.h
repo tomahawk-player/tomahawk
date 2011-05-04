@@ -1,5 +1,5 @@
 /* === This file is part of Tomahawk Player - <http://tomahawk-player.org> ===
- * 
+ *
  *   Copyright 2010-2011, Christian Muehlhaeuser <muesli@tomahawk-player.org>
  *
  *   Tomahawk is free software: you can redistribute it and/or modify
@@ -24,17 +24,33 @@
 
 #include "../sipdllmacro.h"
 
-#define MYNAME "SIPZEROCONF"
+#define MYNAME "Local Network"
+
+class SIPDLLEXPORT ZeroconfFactory : public SipPluginFactory
+{
+    Q_OBJECT
+    Q_INTERFACES( SipPluginFactory )
+public:
+    ZeroconfFactory() {}
+    virtual ~ZeroconfFactory() {}
+
+    virtual QString factoryId() const { return "sipzeroconf"; }
+    virtual QString prettyName() const { return "Local Network"; }
+    virtual bool isUnique() const { return true; }
+    virtual QIcon icon() const;
+
+    virtual SipPlugin* createPlugin ( const QString& pluginId = QString() );
+};
 
 class SIPDLLEXPORT ZeroconfPlugin : public SipPlugin
 {
     Q_OBJECT
-    Q_INTERFACES( SipPlugin )
 
 public:
-    ZeroconfPlugin()
-        : m_zeroconf( 0 )
-        , m_isOnline( false )
+    ZeroconfPlugin( const QString& pluginId )
+        : SipPlugin( pluginId )
+        , m_zeroconf( 0 )
+        , m_state( Disconnected )
         , m_cachedNodes()
     {
         qDebug() << Q_FUNC_INFO;
@@ -44,11 +60,13 @@ public:
     {
         qDebug() << Q_FUNC_INFO;
     }
-    
-    virtual bool isValid() { return true; }
-    virtual const QString name();
-    virtual const QString friendlyName();
-    virtual const QString accountName();
+
+    virtual const QString name() const;
+    virtual const QString friendlyName() const;
+    virtual const QString accountName() const;
+    virtual ConnectionState connectionState() const;
+    virtual bool isValid() const { return true; };
+    virtual QIcon icon() const;
 
 public slots:
     virtual bool connectPlugin( bool startup );
@@ -77,7 +95,7 @@ private slots:
 
 private:
     TomahawkZeroconf* m_zeroconf;
-    bool m_isOnline;
+    ConnectionState m_state;
     QVector<QStringList> m_cachedNodes;
 };
 

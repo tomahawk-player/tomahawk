@@ -44,7 +44,7 @@ SourcesModel::SourcesModel( QObject* parent )
     appendItem( source_ptr() );
 
     // add misc children of root node
-    GenericPageItem* recent = new GenericPageItem( this, m_rootItem->children().at( 0 ), tr( "Recently Played" ), QIcon( RESPATH "images/recently-played.png" ),
+    new GenericPageItem( this, m_rootItem->children().at( 0 ), tr( "Recently Played" ), QIcon( RESPATH "images/recently-played.png" ),
                                                    boost::bind( &ViewManager::showWelcomePage, ViewManager::instance() ),
                                                    boost::bind( &ViewManager::welcomeWidget, ViewManager::instance() )
                                                  );
@@ -193,10 +193,9 @@ SourcesModel::flags( const QModelIndex& index ) const
 void
 SourcesModel::appendItem( const Tomahawk::source_ptr& source )
 {
-
     beginInsertRows( QModelIndex(), rowCount(), rowCount() );
     // append to end
-    CollectionItem* item = new CollectionItem( this, m_rootItem, source );
+    new CollectionItem( this, m_rootItem, source );
 
     endInsertRows();
 }
@@ -339,7 +338,7 @@ SourcesModel::linkSourceItemToPage( SourceTreeItem* item, ViewPage* p )
     // TODO handle removal
     m_sourceTreeLinks[ p ] = item;
 
-    if( m_viewPageDelayedCacheItem = p )
+    if( m_viewPageDelayedCacheItem == p )
         emit selectRequest( indexFromItem( item ) );
 
     m_viewPageDelayedCacheItem = 0;

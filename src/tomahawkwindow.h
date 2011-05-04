@@ -27,6 +27,7 @@
 
 #include "result.h"
 
+class SipPlugin;
 class SourceTreeView;
 class QAction;
 
@@ -82,6 +83,9 @@ private slots:
 
     void showAboutTomahawk();
     void checkForUpdates();
+
+    void onSipPluginAdded( SipPlugin* p );
+    void onSipPluginRemoved( SipPlugin* p );
 
     void minimize();
     void maximize();

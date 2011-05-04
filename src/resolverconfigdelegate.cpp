@@ -27,12 +27,11 @@
 #include <QMouseEvent>
 
 #define PADDING 4
-
+#define ICONSIZE 24
 ResolverConfigDelegate::ResolverConfigDelegate( QObject* parent )
-    : QStyledItemDelegate( parent )
-    , m_configPressed( false )
+    : ConfigDelegateBase( parent )
 {
-
+    connect( this, SIGNAL( configPressed( QModelIndex ) ), this, SLOT( onConfigPressed( QModelIndex ) ) );
 }
 
 void
@@ -61,36 +60,31 @@ ResolverConfigDelegate::paint( QPainter* painter, const QStyleOptionViewItem& op
     style->drawPrimitive( QStyle::PE_PanelItemViewItem, &opt, painter, w );
 
     int rightSplit = itemRect.width();
-    int rectW = opt.rect.height() - 4 * PADDING;
-    QRect confRect = QRect( rightSplit - rectW - 2 * PADDING, 2 * PADDING + top, rectW, rectW );
+    QRect confRect = QRect( rightSplit - ICONSIZE - 2 * PADDING, 2 * PADDING + top, ICONSIZE, ICONSIZE );
+
     // if the resolver has a config widget, paint it first (right-aligned)
     if( index.data( ResolversModel::HasConfig ).toBool() ) {
-        // draw it the same size as the check belox
         QStyleOptionToolButton topt;
-        topt.font = opt.font;
-        topt.icon = QIcon( RESPATH "images/configure.png" );
-        topt.iconSize = QSize( 16, 16 );
         topt.rect = confRect;
-        topt.subControls = QStyle::SC_ToolButton;
-        topt.activeSubControls = QStyle::SC_None;
-        topt.features = QStyleOptionToolButton::None;
         topt.pos = confRect.topLeft();
-        topt.state = m_configPressed ? QStyle::State_On : QStyle::State_Raised;
-        if( opt.state & QStyle::State_MouseOver || m_configPressed )
-            topt.state |= QStyle::State_HasFocus;
-        style->drawComplexControl( QStyle::CC_ToolButton, &topt, painter, w );
+
+        drawConfigWrench( painter, opt, topt );
     }
 
     // draw check
-    confRect.moveTo( 2 * PADDING, 2 * PADDING + top );
-    opt.rect = confRect;
-    opt.checkState == Qt::Checked ? opt.state |= QStyle::State_On : opt.state |= QStyle::State_Off;
-    style->drawPrimitive( QStyle::PE_IndicatorViewItemCheck, &opt, painter, w );
+    QRect checkRect = confRect;
+    checkRect.moveTo( 2 * PADDING, 2 * PADDING + top );
+    opt.rect = checkRect;
+    drawCheckBox( opt, painter, w );
     itemRect.setX( opt.rect.topRight().x() + PADDING );
 
     painter->save();
     painter->setFont( name );
     QRect textRect = itemRect.adjusted( PADDING, PADDING, -PADDING, -PADDING );
+
+    if( index.data( ResolversModel::HasConfig ).toBool() )
+        textRect.setRight( confRect.topLeft().x() - PADDING );
+
     textRect.setBottom( itemRect.height() / 2 + top  );
     QString nameStr = bfm.elidedText( index.data( ResolversModel::ResolverName ).toString(),Qt::ElideRight, textRect.width() );
     painter->drawText( textRect, nameStr );
@@ -106,71 +100,21 @@ ResolverConfigDelegate::paint( QPainter* painter, const QStyleOptionViewItem& op
 
 }
 
-QSize
-ResolverConfigDelegate::sizeHint( const QStyleOptionViewItem& option, const QModelIndex& index ) const
+QRect
+ResolverConfigDelegate::configRectForIndex( const QStyleOptionViewItem& option, const QModelIndex& idx ) const
 {
-    int width = QStyledItemDelegate::sizeHint( option, index ).width();
-
     QStyleOptionViewItemV4 opt = option;
-    initStyleOption( &opt, index );
+    initStyleOption( &opt, idx );
+    QRect itemRect = opt.rect;
+    int top = itemRect.top();
 
-
-    QFont name = opt.font;
-    name.setPointSize( name.pointSize() + 2 );
-    name.setBold( true );
-
-    QFont path = opt.font;
-    path.setItalic( true );
-    path.setPointSize( path.pointSize() - 1 );
-
-
-    QFontMetrics bfm( name );
-    QFontMetrics sfm( path );
-    return QSize( width, 3 * PADDING + bfm.height() + sfm.height() );
+    QRect confRect = QRect( itemRect.width() - ICONSIZE - 2 * PADDING, 2 * PADDING + top, ICONSIZE, ICONSIZE );
+    return confRect;
 }
 
-bool
-ResolverConfigDelegate::editorEvent(QEvent* event, QAbstractItemModel* model, const QStyleOptionViewItem& option, const QModelIndex& index)
+
+void
+ResolverConfigDelegate::onConfigPressed( const QModelIndex& idx )
 {
-//     qDebug() << "EDITOR EVENT!" << ( event->type() == QEvent::MouseButtonRelease );
-
-    QStyleOptionViewItemV4 viewOpt( option );
-    initStyleOption( &viewOpt, index );
-    const QWidget* w = viewOpt.widget;
-    QStyle* style = w ? w->style() : QApplication::style();
-    int top = viewOpt.rect.top();
-
-    if( event->type() == QEvent::MouseButtonRelease || event->type() == QEvent::MouseButtonDblClick ) {
-        m_configPressed = false;
-
-        int rectW = option.rect.height() - 4 * PADDING;
-        QRect checkRect = QRect( 2 * PADDING, 2 * PADDING + top, rectW, rectW );
-        QMouseEvent* me = static_cast< QMouseEvent* >( event );
-        if( me->button() != Qt::LeftButton || !checkRect.contains( me->pos() ) )
-            return false;
-
-        // eat the double click events inside the check rect
-        if( event->type() == QEvent::MouseButtonDblClick ) {
-            return true;
-        }
-
-        Qt::CheckState curState = static_cast< Qt::CheckState >( index.data( Qt::CheckStateRole ).toInt() );
-        Qt::CheckState newState = curState == Qt::Checked ? Qt::Unchecked : Qt::Checked;
-        return model->setData( index, newState, Qt::CheckStateRole );
-
-    } else if( event->type() == QEvent::MouseButtonPress ) {
-        int rightSplit = viewOpt.rect.width();
-        int rectW = viewOpt.rect.height() - 4 * PADDING;
-        QRect confRect = QRect( rightSplit - rectW - 2 * PADDING, 2 * PADDING + top, rectW, rectW );
-
-        QMouseEvent* me = static_cast< QMouseEvent* >( event );
-        if( me->button() == Qt::LeftButton && confRect.contains( me->pos() ) ) {
-            m_configPressed = true;
-
-            emit openConfig( index.data( ResolversModel::ResolverPath ).toString() );
-            return true;
-        }
-    }
-
-    return QStyledItemDelegate::editorEvent( event, model, option, index );
+    emit openConfig( idx.data( ResolversModel::ResolverPath ).toString() );
 }

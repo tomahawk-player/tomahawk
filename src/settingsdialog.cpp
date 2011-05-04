@@ -32,7 +32,6 @@
 #endif
 
 #include "settingsdialog.h"
-#include "ui_settingsdialog.h"
 #include "ui_proxydialog.h"
 #include "tomahawk/tomahawkapp.h"
 #include "musicscanner.h"
@@ -42,7 +41,11 @@
 #include "scanmanager.h"
 #include "resolverconfigdelegate.h"
 #include "resolversmodel.h"
-#include "resolverconfigwrapper.h"
+#include "delegateconfigwrapper.h"
+#include "sip/SipModel.h"
+#include "sipconfigdelegate.h"
+
+#include "ui_stackedsettingsdialog.h"
 
 static QString
 md5( const QByteArray& src )
@@ -53,10 +56,12 @@ md5( const QByteArray& src )
 
 SettingsDialog::SettingsDialog( QWidget *parent )
     : QDialog( parent )
-    , ui( new Ui::SettingsDialog )
+    , ui( new Ui_StackedSettingsDialog )
     , m_proxySettings( this )
     , m_rejected( false )
     , m_testLastFmQuery( 0 )
+    , m_sipModel( 0 )
+    , m_resolversModel( 0 )
 {
     ui->setupUi( this );
     TomahawkSettings* s = TomahawkSettings::instance();
@@ -66,32 +71,37 @@ SettingsDialog::SettingsDialog( QWidget *parent )
     ui->checkBoxUpnp->setChecked( s->externalAddressMode() == TomahawkSettings::Upnp );
     ui->checkBoxUpnp->setEnabled( !s->preferStaticHostPort() );
 
-    // JABBER
-    ui->checkBoxJabberAutoConnect->setChecked( s->jabberAutoConnect() );
-    ui->jabberUsername->setText( s->jabberUsername() );
-    ui->jabberPassword->setText( s->jabberPassword() );
-    ui->jabberServer->setText( s->jabberServer() );
-    ui->jabberPort->setValue( s->jabberPort() );
+    createIcons();
+#ifdef Q_WS_X11
+    ui->listWidget->setFrameShape( QFrame::StyledPanel );
+    ui->listWidget->setFrameShadow( QFrame::Sunken );
+    setContentsMargins( 4, 4, 4, 4 );
+#else
+    ui->verticalLayout->removeItem( ui->verticalSpacer_3 );
+#endif
+
+    // SIP PLUGINS
+    SipConfigDelegate* sipdel = new SipConfigDelegate( this );
+    ui->accountsView->setItemDelegate( sipdel );
+    ui->accountsView->setContextMenuPolicy( Qt::CustomContextMenu );
+
+    connect( ui->accountsView, SIGNAL( clicked( QModelIndex ) ), this, SLOT( sipItemClicked( QModelIndex ) ) );
+    connect( sipdel, SIGNAL( openConfig( SipPlugin* ) ), this, SLOT( openSipConfig( SipPlugin* ) ) );
+    connect( ui->accountsView, SIGNAL( customContextMenuRequested( QPoint ) ), this, SLOT( sipContextMenuRequest( QPoint ) ) );
+    m_sipModel = new SipModel( this );
+    ui->accountsView->setModel( m_sipModel );
+
+    setupSipButtons();
 
     ui->staticHostName->setText( s->externalHostname() );
     ui->staticPort->setValue( s->externalPort() );
 
     ui->proxyButton->setVisible( false );
 
-    // SIP PLUGINS
-    foreach(SipPlugin *plugin, APP->sipHandler()->plugins())
-    {
-        if(plugin->configWidget())
-        {
-            qDebug() << "Adding configWidget for " << plugin->name();
-            ui->tabWidget->addTab(plugin->configWidget(), plugin->friendlyName());
-        }
-    }
-
     // MUSIC SCANNER
     //FIXME: MULTIPLECOLLECTIONDIRS
     if ( s->scannerPaths().count() )
-        ui->lineEditMusicPath->setText( s->scannerPaths().first() );
+        ui->lineEditMusicPath_2->setText( s->scannerPaths().first() );
     ui->checkBoxWatchForChanges->setChecked( s->watchForChanges() );
 
     // LAST FM
@@ -112,10 +122,12 @@ SettingsDialog::SettingsDialog( QWidget *parent )
     connect( ui->addScript, SIGNAL( clicked( bool ) ), this, SLOT( addScriptResolver() ) );
     connect( ui->removeScript, SIGNAL( clicked( bool ) ), this, SLOT( removeScriptResolver() ) );
 
-    connect( ui->buttonBrowse, SIGNAL( clicked() ),  SLOT( showPathSelector() ) );
+    connect( ui->buttonBrowse_2, SIGNAL( clicked() ),  SLOT( showPathSelector() ) );
     connect( ui->proxyButton,  SIGNAL( clicked() ),  SLOT( showProxySettings() ) );
     connect( ui->checkBoxStaticPreferred, SIGNAL( toggled(bool) ), SLOT( toggleUpnp(bool) ) );
     connect( this,             SIGNAL( rejected() ), SLOT( onRejected() ) );
+
+    ui->listWidget->setCurrentRow( 0 );
 }
 
 
@@ -131,16 +143,10 @@ SettingsDialog::~SettingsDialog()
         s->setPreferStaticHostPort( ui->checkBoxStaticPreferred->checkState() == Qt::Checked );
         s->setExternalAddressMode( ui->checkBoxUpnp->checkState() == Qt::Checked ? TomahawkSettings::Upnp : TomahawkSettings::Lan );
 
-        s->setJabberAutoConnect( ui->checkBoxJabberAutoConnect->checkState() == Qt::Checked );
-        s->setJabberUsername( ui->jabberUsername->text() );
-        s->setJabberPassword( ui->jabberPassword->text() );
-        s->setJabberServer( ui->jabberServer->text() );
-        s->setJabberPort( ui->jabberPort->value() );
-
         s->setExternalHostname( ui->staticHostName->text() );
         s->setExternalPort( ui->staticPort->value() );
 
-        s->setScannerPaths( QStringList( ui->lineEditMusicPath->text() ) );
+        s->setScannerPaths( QStringList( ui->lineEditMusicPath_2->text() ) );
         s->setWatchForChanges( ui->checkBoxWatchForChanges->isChecked() );
 
         s->setScrobblingEnabled( ui->checkBoxEnableLastfm->isChecked() );
@@ -158,6 +164,93 @@ SettingsDialog::~SettingsDialog()
     delete ui;
 }
 
+void
+SettingsDialog::createIcons()
+{
+    /// Not fun but QListWidget sucks. Do our max-width calculation manually
+    /// so the icons arre lined up.
+    // Resolvers is the longest string... in english. fml.
+
+    int maxlen = 0;
+    QFontMetrics fm( font() );
+    QListWidgetItem *accountsButton = new QListWidgetItem( ui->listWidget );
+    accountsButton->setIcon( QIcon( RESPATH "images/account-settings.png" ) );
+    accountsButton->setText( tr( "Accounts" ) );
+    accountsButton->setTextAlignment( Qt::AlignHCenter );
+    accountsButton->setFlags( Qt::ItemIsSelectable | Qt::ItemIsEnabled );
+    maxlen = fm.width( accountsButton->text() );
+
+    QListWidgetItem *musicButton = new QListWidgetItem( ui->listWidget );
+    musicButton->setIcon( QIcon( RESPATH "images/music-settings.png" ) );
+    musicButton->setText( tr( "Music" ) );
+    musicButton->setTextAlignment( Qt::AlignHCenter );
+    musicButton->setFlags( Qt::ItemIsSelectable | Qt::ItemIsEnabled );
+    maxlen = qMax( fm.width( musicButton->text() ), maxlen );
+
+    QListWidgetItem *lastfmButton = new QListWidgetItem( ui->listWidget );
+    lastfmButton->setIcon( QIcon( RESPATH "images/lastfm-settings.png" ) );
+    lastfmButton->setText( tr( "Last.fm" ) );
+    lastfmButton->setTextAlignment( Qt::AlignHCenter );
+    lastfmButton->setFlags( Qt::ItemIsSelectable | Qt::ItemIsEnabled );
+    maxlen = qMax( fm.width( lastfmButton->text() ), maxlen );
+
+    QListWidgetItem *resolversButton = new QListWidgetItem( ui->listWidget );
+    resolversButton->setIcon( QIcon( RESPATH "images/resolvers-settings.png" ) );
+    resolversButton->setText( tr( "Resolvers" ) );
+    resolversButton->setTextAlignment( Qt::AlignHCenter );
+    resolversButton->setFlags( Qt::ItemIsSelectable | Qt::ItemIsEnabled );
+    maxlen = qMax( fm.width( resolversButton->text() ), maxlen );
+
+    QListWidgetItem *advancedButton = new QListWidgetItem( ui->listWidget );
+    advancedButton->setIcon( QIcon( RESPATH "images/advanced-settings.png" ) );
+    advancedButton->setText( tr( "Advanced" ) );
+    advancedButton->setTextAlignment( Qt::AlignHCenter );
+    advancedButton->setFlags( Qt::ItemIsSelectable | Qt::ItemIsEnabled );
+    maxlen = qMax( fm.width( advancedButton->text() ), maxlen );
+
+    maxlen += 15; // padding
+    accountsButton->setSizeHint( QSize( maxlen, 60 ) );
+    musicButton->setSizeHint( QSize( maxlen, 60 ) );
+    lastfmButton->setSizeHint( QSize( maxlen, 60 ) );
+    resolversButton->setSizeHint( QSize( maxlen, 60 ) );
+    advancedButton->setSizeHint( QSize( maxlen, 60 ) );
+
+#ifndef Q_WS_MAC
+    // doesn't listen to sizehint...
+    ui->listWidget->setMaximumWidth( maxlen + 8 );
+#endif
+
+    connect( ui->listWidget, SIGNAL( currentItemChanged( QListWidgetItem* ,QListWidgetItem* ) ), this, SLOT( changePage( QListWidgetItem*, QListWidgetItem* ) ) );
+}
+
+void
+SettingsDialog::setupSipButtons()
+{
+    foreach( SipPluginFactory* f, SipHandler::instance()->pluginFactories() ) {
+        if( f->isUnique() && SipHandler::instance()->hasPluginType( f->factoryId() ) ) {
+            continue;
+        }
+
+        QAction* action = new QAction( f->icon(), f->prettyName(), ui->addSipButton );
+        action->setProperty( "factory", QVariant::fromValue< QObject* >( f ) );
+        ui->addSipButton->addAction( action );
+
+        connect( action, SIGNAL( triggered(bool) ), this, SLOT( factoryActionTriggered( bool ) ) );
+    }
+
+    connect( ui->removeSipButton, SIGNAL( clicked( bool ) ), this, SLOT( sipPluginDeleted( bool ) ) );
+}
+
+
+void
+SettingsDialog::changePage( QListWidgetItem* current, QListWidgetItem* previous )
+{
+    if( !current )
+        current = previous;
+
+    ui->stackedWidget->setCurrentIndex( ui->listWidget->row(current) );
+}
+
 
 void
 SettingsDialog::showPathSelector()
@@ -171,7 +264,7 @@ SettingsDialog::showPathSelector()
     if ( path.isEmpty() )
         return;
 
-    ui->lineEditMusicPath->setText( path );
+    ui->lineEditMusicPath_2->setText( path );
 }
 
 
@@ -375,12 +468,149 @@ SettingsDialog::openResolverConfig( const QString& resolver )
 {
     Tomahawk::ExternalResolver* r = TomahawkApp::instance()->resolverForPath( resolver );
     if( r && r->configUI() ) {
-        ResolverConfigWrapper dialog( r->configUI(), "Resolver Config", this );
-        QWeakPointer< ResolverConfigWrapper > watcher( &dialog );
+        DelegateConfigWrapper dialog( r->configUI(), "Resolver Config", this );
+        QWeakPointer< DelegateConfigWrapper > watcher( &dialog );
         int ret = dialog.exec();
         if( !watcher.isNull() && ret == QDialog::Accepted ) {
             // send changed config to resolver
             r->saveConfig();
+        }
+    }
+}
+
+void
+SettingsDialog::sipItemClicked( const QModelIndex& item )
+{
+    if( item.data( SipModel::FactoryRole ).toBool() )
+        if( ui->accountsView->isExpanded( item ) )
+            ui->accountsView->collapse( item );
+        else
+            ui->accountsView->expand( item );
+    else if( item.data( SipModel::FactoryItemRole ).toBool() )
+        sipFactoryClicked( qobject_cast<SipPluginFactory* >( item.data( SipModel::SipPluginFactoryData ).value< QObject* >() ) );
+}
+
+void
+SettingsDialog::openSipConfig( SipPlugin* p )
+{
+    if( p->configWidget() ) {
+        DelegateConfigWrapper dialog( p->configWidget(), QString("%1 Config" ).arg( p->friendlyName() ), this );
+        QWeakPointer< DelegateConfigWrapper > watcher( &dialog );
+        int ret = dialog.exec();
+        if( !watcher.isNull() && ret == QDialog::Accepted ) {
+            // send changed config to resolver
+            p->saveConfig();
+        }
+    }
+}
+
+void
+SettingsDialog::factoryActionTriggered( bool )
+{
+    Q_ASSERT( sender() && qobject_cast< QAction* >( sender() ) );
+
+    QAction* a = qobject_cast< QAction* >( sender() );
+    Q_ASSERT( qobject_cast< SipPluginFactory* >( a->property( "factory" ).value< QObject* >() ) );
+
+    SipPluginFactory* f = qobject_cast< SipPluginFactory* >( a->property( "factory" ).value< QObject* >() );
+    sipFactoryClicked( f );
+}
+
+
+void
+SettingsDialog::sipFactoryClicked( SipPluginFactory* factory )
+{
+    //if exited with OK, create it, if not, delete it immediately!
+    SipPlugin* p = factory->createPlugin();
+    bool added = false;
+    if( p->configWidget() ) {
+        DelegateConfigWrapper dialog( p->configWidget(), QString("%1 Config" ).arg( p->friendlyName() ), this );
+        QWeakPointer< DelegateConfigWrapper > watcher( &dialog );
+        int ret = dialog.exec();
+        if( !watcher.isNull() && ret == QDialog::Accepted ) {
+            // send changed config to resolver
+            p->saveConfig();
+
+            // accepted, so add it to tomahawk
+            TomahawkSettings::instance()->addSipPlugin( p->pluginId() );
+            SipHandler::instance()->addSipPlugin( p );
+
+            added = true;
+        } else {
+            // canceled, delete it
+            added = false;
+        }
+    } else {
+        // no config, so just add it
+        added = true;
+        TomahawkSettings::instance()->addSipPlugin( p->pluginId() );
+        SipHandler::instance()->addSipPlugin( p );
+    }
+
+    SipPluginFactory* f = SipHandler::instance()->factoryFromPlugin( p );
+    if( added && f && f->isUnique() ) {
+        // remove from actions list
+        QAction* toremove = 0;
+        foreach( QAction* a, ui->addSipButton->actions() )
+        {
+            if( f == qobject_cast< SipPluginFactory* >( a->property( "factory" ).value< QObject* >() ) )
+            {
+                toremove = a;
+                break;
+            }
+        }
+        if( toremove )
+            ui->addSipButton->removeAction( toremove );
+    } else if( added == false ) { // user pressed cancel
+        delete p;
+    }
+}
+
+void
+SettingsDialog::sipContextMenuRequest( const QPoint& p )
+{
+    QModelIndex idx = ui->accountsView->indexAt( p );
+    // if it's an account, allow to delete
+    if( idx.isValid() && !idx.data( SipModel::FactoryRole ).toBool() && !idx.data( SipModel::FactoryItemRole ).toBool() )
+    {
+        QList< QAction* > acts;
+        acts << new QAction( tr( "Delete Account" ), this );
+        acts.first()->setProperty( "sipplugin", idx.data( SipModel::SipPluginData ) );
+        connect( acts.first(), SIGNAL( triggered( bool ) ), this, SLOT( sipPluginRowDeleted( bool ) ) );
+        QMenu::exec( acts, ui->accountsView->mapToGlobal( p ) );
+    }
+}
+
+void
+SettingsDialog::sipPluginRowDeleted( bool )
+{
+    SipPlugin* p = qobject_cast< SipPlugin* >( qobject_cast< QAction* >( sender() )->property( "sipplugin" ).value< QObject* >() );
+    SipHandler::instance()->removeSipPlugin( p );
+}
+
+void
+SettingsDialog::sipPluginDeleted( bool )
+{
+    QModelIndexList indexes = ui->accountsView->selectionModel()->selectedIndexes();
+    // if it's an account, allow to delete
+    foreach( const QModelIndex& idx, indexes )
+    {
+        if( idx.isValid() && !idx.data( SipModel::FactoryRole ).toBool() && !idx.data( SipModel::FactoryItemRole ).toBool() )
+        {
+            SipPlugin* p = qobject_cast< SipPlugin* >( idx.data( SipModel::SipPluginData ).value< QObject* >() );
+
+            if( SipPluginFactory* f = SipHandler::instance()->factoryFromPlugin( p ) )
+            {
+                if( f->isUnique() ) // just deleted a unique plugin->re-add to add menu
+                {
+                    QAction* action = new QAction( f->icon(), f->prettyName(), ui->addSipButton );
+                    action->setProperty( "factory", QVariant::fromValue< QObject* >( f ) );
+                    ui->addSipButton->addAction( action );
+
+                    connect( action, SIGNAL( triggered(bool) ), this, SLOT( factoryActionTriggered( bool ) ) );
+                }
+            }
+            SipHandler::instance()->removeSipPlugin( p );
         }
     }
 }

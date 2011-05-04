@@ -167,7 +167,6 @@ CategoryItem::insertItems( QList< SourceTreeItem* > items )
         curCount--;
     beginRowsAdded( curCount, curCount + items.size() - 1 );
     foreach( SourceTreeItem* item, items ) {
-        int index = m_showAdd ? children().count() - 1 : children().count();
         insertChild( children().count() - 1, item );
     }
     endRowsAdded();

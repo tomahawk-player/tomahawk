@@ -20,13 +20,19 @@ set( jabberHeaders
     avatarmanager.h
 )
 
+set( jabberUI
+     configwidget.ui
+)
+
 include_directories( . ${CMAKE_CURRENT_BINARY_DIR} ..
    ${QT_INCLUDE_DIR}
    ${LIBJREEN_INCLUDE_DIR}
 )
 
+qt4_add_resources( RC_SRCS "resources.qrc" )
+qt4_wrap_ui( jabberUI_H ${jabberUI} )
 qt4_wrap_cpp( jabberMoc ${jabberHeaders} )
-add_library( tomahawk_sipjabber SHARED ${jabberSources} ${jabberMoc} )
+add_library( tomahawk_sipjabber SHARED ${jabberSources} ${jabberMoc} ${jabberUI_H} ${RC_SRCS} )
 
 IF( WIN32 )
 SET( OS_SPECIFIC_LINK_LIBRARIES
@@ -49,3 +55,6 @@ IF( APPLE )
 ENDIF( APPLE )
 
 install( TARGETS tomahawk_sipjabber DESTINATION lib${LIB_SUFFIX} )
+
+
+add_subdirectory(googlewrapper)

@@ -20,7 +20,13 @@
 #define SETTINGSDIALOG_H
 
 #include <QDialog>
+#include <QModelIndex>
 
+class QListWidgetItem;
+class Ui_StackedSettingsDialog;
+class SipPluginFactory;
+class SipPlugin;
+class SipModel;
 class ResolversModel;
 class QNetworkReply;
 
@@ -73,13 +79,26 @@ private slots:
     void scriptSelectionChanged();
     void removeScriptResolver();
     void openResolverConfig( const QString& );
+    void sipItemClicked ( const QModelIndex& );
+    void openSipConfig( SipPlugin* );
+    void factoryActionTriggered ( bool );
+    void sipFactoryClicked( SipPluginFactory* );
+    void sipContextMenuRequest( const QPoint& );
+    void sipPluginDeleted( bool );
+    void sipPluginRowDeleted( bool );
+
+    void changePage( QListWidgetItem*, QListWidgetItem* );
 
 private:
-    Ui::SettingsDialog* ui;
+    void createIcons();
+    void setupSipButtons();
+
+    Ui_StackedSettingsDialog* ui;
 
     ProxyDialog m_proxySettings;
     bool m_rejected;
     QNetworkReply* m_testLastFmQuery;
+    SipModel* m_sipModel;
     ResolversModel* m_resolversModel;
 };
 

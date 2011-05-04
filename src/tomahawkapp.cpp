@@ -247,7 +247,6 @@ TomahawkApp::init()
     QNetworkProxy::setApplicationProxy( *TomahawkUtils::proxy() );
 
     qDebug() << "Init SIP system.";
-    m_sipHandler = new SipHandler( this );
 
 #ifndef TOMAHAWK_HEADLESS
     if ( !m_headless )
@@ -322,6 +321,12 @@ TomahawkApp::audioControls()
     return m_mainwindow->audioControls();
 }
 #endif
+
+SipHandler*
+TomahawkApp::sipHandler()
+{
+    return SipHandler::instance();
+}
 
 void
 TomahawkApp::registerMetaTypes()
@@ -501,14 +506,15 @@ TomahawkApp::setupSIP()
     qDebug() << Q_FUNC_INFO;
 
     //FIXME: jabber autoconnect is really more, now that there is sip -- should be renamed and/or split out of jabber-specific settings
-    if( !arguments().contains( "--nosip" ) && TomahawkSettings::instance()->jabberAutoConnect() )
+    if( !arguments().contains( "--nosip" ) )
     {
 #ifdef GLOOX_FOUND
         m_xmppBot = new XMPPBot( this );
 #endif
 
         qDebug() << "Connecting SIP classes";
-        m_sipHandler->connectPlugins( true );
+        SipHandler::instance()->loadFromConfig( true );
+
 //        m_sipHandler->setProxy( *TomahawkUtils::proxy() );
 
     }

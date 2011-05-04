@@ -28,21 +28,53 @@
 
 #include "dllmacro.h"
 
+class SipPlugin;
+
+class DLLEXPORT SipPluginFactory : public QObject
+{
+    Q_OBJECT
+public:
+    SipPluginFactory() {}
+    virtual ~SipPluginFactory() {}
+
+    // display name for plugin
+    virtual QString prettyName() const = 0;
+    // internal name
+    virtual QString factoryId() const = 0;
+    // if the user can create multiple
+    virtual QIcon icon() const { return QIcon(); }
+    virtual bool isUnique() const { return false; }
+
+    virtual SipPlugin* createPlugin( const QString& pluginId = QString() ) = 0;
+
+protected:
+    QString generateId();
+};
+
 class DLLEXPORT SipPlugin : public QObject
 {
     Q_OBJECT
 
 public:
     enum SipErrorCode { AuthError, ConnectionError }; // Placeholder for errors, to be defined
+    enum ConnectionState { Disconnected, Connecting, Connected };
 
+    explicit SipPlugin( const QString& pluginId, QObject* parent = 0 );
     virtual ~SipPlugin() {}
 
-    virtual bool isValid() = 0;
-    virtual const QString name() = 0;
-    virtual const QString friendlyName() = 0;
-    virtual const QString accountName() = 0;
+    // plugin id is "pluginfactoryname_someuniqueid".  get it from SipPluginFactory::generateId
+    QString pluginId() const;
+
+    virtual bool isValid() const = 0;
+    virtual const QString name() const = 0;
+    virtual const QString friendlyName() const = 0;
+    virtual const QString accountName() const = 0;
+    virtual ConnectionState connectionState() const = 0;
+    virtual QString errorMessage() const;
     virtual QMenu* menu();
     virtual QWidget* configWidget();
+    virtual void saveConfig() {} // called when the widget has been edited
+    virtual QIcon icon() const;
 
 public slots:
     virtual bool connectPlugin( bool startup = false ) = 0;
@@ -56,8 +88,7 @@ public slots:
 
 signals:
     void error( int, const QString& );
-    void connected();
-    void disconnected();
+    void stateChanged( SipPlugin::ConnectionState state );
 
     void peerOnline( const QString& );
     void peerOffline( const QString& );
@@ -72,8 +103,11 @@ signals:
 
     void addMenu( QMenu* menu );
     void removeMenu( QMenu* menu );
+
+private:
+    QString m_pluginId;
 };
 
-Q_DECLARE_INTERFACE( SipPlugin, "tomahawk.Sip/1.0" )
+Q_DECLARE_INTERFACE( SipPluginFactory, "tomahawk.SipFactory/1.0" )
 
 #endif

@@ -82,7 +82,7 @@ public:
     void init();
     static TomahawkApp* instance();
 
-    SipHandler* sipHandler() { return m_sipHandler; }
+    SipHandler* sipHandler();
     XMPPBot* xmppBot() { return m_xmppBot; }
 
 #ifndef TOMAHAWK_HEADLESS
@@ -119,7 +119,6 @@ private:
     Database* m_database;
     ScanManager *m_scanManager;
     AudioEngine* m_audioEngine;
-    SipHandler* m_sipHandler;
     Servent* m_servent;
     Tomahawk::InfoSystem::InfoSystem* m_infoSystem;
     XMPPBot* m_xmppBot;

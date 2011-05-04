@@ -46,21 +46,41 @@
 
 #include "../sipdllmacro.h"
 
+class Ui_JabberConfig;
+
+class SIPDLLEXPORT JabberFactory : public SipPluginFactory
+{
+    Q_OBJECT
+    Q_INTERFACES( SipPluginFactory )
+
+public:
+    JabberFactory() {}
+    virtual ~JabberFactory() {}
+
+    virtual QString prettyName() const { return "Jabber"; }
+    virtual QString factoryId() const { return "sipjabber"; }
+    virtual QIcon icon() const;
+    virtual SipPlugin* createPlugin( const QString& pluginId );
+};
+
 class SIPDLLEXPORT JabberPlugin : public SipPlugin
 {
     Q_OBJECT
-    Q_INTERFACES( SipPlugin )
 
 public:
-    JabberPlugin();
+    JabberPlugin( const QString& pluginId );
     virtual ~JabberPlugin();
 
     //FIXME: Make this more correct
-    virtual bool isValid() { return true; }
-    virtual const QString name();
-    virtual const QString friendlyName();
-    virtual const QString accountName();
+    virtual bool isValid() const { return true; }
+    virtual const QString name() const;
+    virtual const QString friendlyName() const;
+    virtual const QString accountName() const;
+    virtual ConnectionState connectionState() const;
     virtual QMenu* menu();
+    virtual QIcon icon() const;
+    virtual QWidget* configWidget();
+    virtual void saveConfig();
 
 signals:
     void jidChanged( const QString& );
@@ -73,6 +93,9 @@ public slots:
     void broadcastMsg( const QString &msg );
     void addContact( const QString &jid, const QString& msg = QString() );
     void setProxy( const QNetworkProxy &proxy );
+
+protected:
+    Ui_JabberConfig* m_ui; // so the google wrapper can change the config dialog a bit
 
 private slots:
     void showAddFriendDialog();
@@ -93,14 +116,17 @@ private slots:
     void onNewAvatar( const QString &jid );
 
 private:
+    QString readPassword();
+    QString readServer();
+    bool readAutoConnect();
+    int readPort();
+
     void setupClientHelper();
     void addMenuHelper();
     void removeMenuHelper();
 
     bool presenceMeansOnline( Jreen::Presence::Type p );
     void handlePeerStatus( const Jreen::JID &jid, Jreen::Presence::Type presenceType );
-
-    bool m_connected;
 
     QMenu* m_menu;
     QAction* m_addFriendAction;
@@ -109,6 +135,10 @@ private:
     QString m_currentPassword;
     QString m_currentServer;
     unsigned int m_currentPort;
+    ConnectionState m_state;
+
+    QWeakPointer< QWidget > m_configWidget;
+
     QString m_currentResource;
 
     // sort out
