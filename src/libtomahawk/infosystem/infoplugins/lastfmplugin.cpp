@@ -186,7 +186,6 @@ void
 LastFmPlugin::scrobble()
 {
     qDebug() << Q_FUNC_INFO;
-    //Q_ASSERT( QThread::currentThread() == thread() );
 
     if ( !m_scrobbler || m_track.isNull() )
         return;

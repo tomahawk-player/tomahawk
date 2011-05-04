@@ -83,7 +83,6 @@ InfoSystem::InfoSystem(QObject *parent)
 InfoSystem::~InfoSystem()
 {
     qDebug() << Q_FUNC_INFO << " beginning";
-    qDebug() << "THREAD I'M RUNNING IN: " << QThread::currentThread();
     
     if ( !m_worker.isNull() )
     {

@@ -44,13 +44,11 @@ InfoSystemWorker::InfoSystemWorker()
 InfoSystemWorker::~InfoSystemWorker()
 {
     qDebug() << Q_FUNC_INFO << " beginning";
-    qDebug() << "THREAD I'M RUNNING IN: " << QThread::currentThread();
     Q_FOREACH( InfoPluginPtr plugin, m_plugins )
     {
         if( plugin )
             delete plugin.data();
     }
-    qDebug() << Q_FUNC_INFO << " is done deleting plugins";
 }
 
 

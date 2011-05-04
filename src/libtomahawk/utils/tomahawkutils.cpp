@@ -341,7 +341,7 @@ createDragPixmap( int itemCount )
 
 
 QWeakPointer< QNetworkAccessManager > s_nam;
-QNetworkProxy* s_proxy;
+QNetworkProxy* s_proxy = 0;
 
 QNetworkAccessManager*
 nam()
