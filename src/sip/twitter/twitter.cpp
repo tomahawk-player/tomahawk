@@ -141,9 +141,12 @@ QWidget* TwitterPlugin::configWidget()
 }
 
 bool
-TwitterPlugin::connectPlugin( bool /*startup*/ )
+TwitterPlugin::connectPlugin( bool startup )
 {
     qDebug() << Q_FUNC_INFO;
+
+    if( startup && !twitterAutoConnect() )
+        return false;
 
     m_cachedPeers = twitterCachedPeers();
     QList<QString> peerlist = m_cachedPeers.keys();
@@ -786,5 +789,18 @@ TwitterPlugin::setTwitterCachedPeers( const QHash<QString, QVariant> &cachedPeer
 {
     TomahawkSettings::instance()->setValue( pluginId() + "/CachedPeers", cachedPeers );
 }
+
+void
+TwitterPlugin::setTwitterAutoConnect( bool autoConnect )
+{
+    TomahawkSettings::instance()->setValue( pluginId() + "/AutoConnect", autoConnect );
+}
+
+bool
+TwitterPlugin::twitterAutoConnect() const
+{
+    return TomahawkSettings::instance()->value( pluginId() + "/AutoConnect", true ).toBool();
+}
+
 
 Q_EXPORT_PLUGIN2( sipfactory, TwitterFactory )

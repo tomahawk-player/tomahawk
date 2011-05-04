@@ -33,6 +33,7 @@ public:
 
         setWindowTitle( title );
         QVBoxLayout* v = new QVBoxLayout( this );
+        v->setContentsMargins( 0, 0, 0, 0 );
         v->addWidget( m_widget );
 
         QDialogButtonBox* buttons = new QDialogButtonBox( QDialogButtonBox::Ok | QDialogButtonBox::Cancel, Qt::Horizontal, this );

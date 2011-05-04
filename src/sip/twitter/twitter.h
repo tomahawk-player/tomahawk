@@ -128,6 +128,8 @@ private:
     void setTwitterCachedDirectMessagesSinceId( qint64 sinceid );
     QHash<QString, QVariant> twitterCachedPeers() const;
     void setTwitterCachedPeers( const QHash<QString, QVariant> &cachedPeers );
+    bool twitterAutoConnect() const;
+    void setTwitterAutoConnect( bool autoConnect );
 
     QWeakPointer< TomahawkOAuthTwitter > m_twitterAuth;
     QWeakPointer< QTweetFriendsTimeline > m_friendsTimeline;

@@ -39,6 +39,8 @@ GoogleWrapper::GoogleWrapper ( const QString& pluginID )
 {
     m_ui->headerLabel->setText( tr( "Configure this Google Account" ) );
     m_ui->emailLabel->setText( tr( "GMail Address" ) );
+    m_ui->jabberBlurb->setText( tr( "Enter your GMail login to connect with your friends using Tomahawk!" ) );
+    m_ui->logoLabel->setPixmap( QPixmap( ":/gmail-logo.png" ) );
 
 }
 

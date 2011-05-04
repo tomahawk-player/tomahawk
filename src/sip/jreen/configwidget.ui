@@ -6,14 +6,17 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>437</width>
-    <height>207</height>
+    <width>433</width>
+    <height>253</height>
    </rect>
   </property>
   <property name="windowTitle">
-   <string>Form</string>
+   <string>Jabber Configuration</string>
   </property>
   <layout class="QVBoxLayout" name="verticalLayout_2">
+   <property name="topMargin">
+    <number>0</number>
+   </property>
    <item>
     <layout class="QHBoxLayout" name="horizontalLayout">
      <item>
@@ -30,10 +33,22 @@
       </spacer>
      </item>
      <item>
+      <widget class="QLabel" name="logoLabel">
+       <property name="text">
+        <string/>
+       </property>
+       <property name="pixmap">
+        <pixmap resource="resources.qrc">:/jabber-icon.png</pixmap>
+       </property>
+      </widget>
+     </item>
+     <item>
       <widget class="QLabel" name="headerLabel">
        <property name="font">
         <font>
-         <pointsize>12</pointsize>
+         <pointsize>11</pointsize>
+         <weight>75</weight>
+         <bold>true</bold>
         </font>
        </property>
        <property name="text">
@@ -43,6 +58,43 @@
      </item>
      <item>
       <spacer name="horizontalSpacer_2">
+       <property name="orientation">
+        <enum>Qt::Horizontal</enum>
+       </property>
+       <property name="sizeHint" stdset="0">
+        <size>
+         <width>40</width>
+         <height>20</height>
+        </size>
+       </property>
+      </spacer>
+     </item>
+    </layout>
+   </item>
+   <item>
+    <layout class="QHBoxLayout" name="horizontalLayout_2">
+     <item>
+      <spacer name="horizontalSpacer_3">
+       <property name="orientation">
+        <enum>Qt::Horizontal</enum>
+       </property>
+       <property name="sizeHint" stdset="0">
+        <size>
+         <width>40</width>
+         <height>20</height>
+        </size>
+       </property>
+      </spacer>
+     </item>
+     <item>
+      <widget class="QLabel" name="jabberBlurb">
+       <property name="text">
+        <string>Enter your Jabber login to connect with your friends using Tomahawk!</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <spacer name="horizontalSpacer_4">
        <property name="orientation">
         <enum>Qt::Horizontal</enum>
        </property>
@@ -259,6 +311,8 @@
    </item>
   </layout>
  </widget>
- <resources/>
+ <resources>
+  <include location="resources.qrc"/>
+ </resources>
  <connections/>
 </ui>

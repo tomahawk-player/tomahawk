@@ -468,7 +468,7 @@ SettingsDialog::openResolverConfig( const QString& resolver )
 {
     Tomahawk::ExternalResolver* r = TomahawkApp::instance()->resolverForPath( resolver );
     if( r && r->configUI() ) {
-        DelegateConfigWrapper dialog( r->configUI(), "Resolver Config", this );
+        DelegateConfigWrapper dialog( r->configUI(), "Resolver Configuration", this );
         QWeakPointer< DelegateConfigWrapper > watcher( &dialog );
         int ret = dialog.exec();
         if( !watcher.isNull() && ret == QDialog::Accepted ) {

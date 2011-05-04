@@ -55,6 +55,7 @@ private slots:
     void postGotTomahawkDirectMessageReply( const QTweetDMStatus &status );
     void postGotTomahawkStatusUpdateError( QTweetNetBase::ErrorCode, const QString &errorMsg );
     void tweetComboBoxIndexChanged( int index );
+    void autoConnectToggled( bool on );
 
 private:
     void authenticateTwitter();

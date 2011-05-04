@@ -100,7 +100,7 @@
      <item>
       <widget class="QStackedWidget" name="stackedWidget">
        <property name="currentIndex">
-        <number>0</number>
+        <number>3</number>
        </property>
        <widget class="QWidget" name="accountsPage">
         <layout class="QVBoxLayout" name="verticalLayout_11">
@@ -366,7 +366,7 @@
             <item>
              <widget class="QLabel" name="label">
               <property name="text">
-               <string>Script resolver search for a given track to make it playable.</string>
+               <string>Script resolvers search for a given track to make it playable.</string>
               </property>
              </widget>
             </item>
