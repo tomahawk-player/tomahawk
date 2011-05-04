@@ -48,7 +48,6 @@ void TomahawkSipMessageFactory::handleStartElement(const QStringRef &name, const
 
             m_uniqname = attributes.value(QLatin1String("uniqname")).toString();
             m_key = attributes.value(QLatin1String("pwd")).toString();
-            m_visible = true;
         }
     } else if(m_depth == 3) {
         if (name == QLatin1String("candidate"))
@@ -58,6 +57,7 @@ void TomahawkSipMessageFactory::handleStartElement(const QStringRef &name, const
             m_ip = attributes.value(QLatin1String("ip")).toString();
             m_port = attributes.value(QLatin1String("port")).toString().toInt();
 
+            m_visible = true;
         }
     }
     Q_UNUSED(uri);
