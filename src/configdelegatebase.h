@@ -35,6 +35,8 @@ public:
 
   virtual bool editorEvent ( QEvent* event, QAbstractItemModel* model, const QStyleOptionViewItem& option, const QModelIndex& index );
 
+  // if you want to use a checkbox, you need to have this say where to paint it
+  virtual QRect checkRectForIndex( const QStyleOptionViewItem& option, const QModelIndex& idx ) const = 0;
   // if you want to use a config wrench, you need to have this say where to paint it
   virtual QRect configRectForIndex( const QStyleOptionViewItem& option, const QModelIndex& idx ) const = 0;
 
@@ -46,8 +48,6 @@ protected:
     void drawConfigWrench( QPainter* painter, QStyleOptionViewItemV4& option, QStyleOptionToolButton& topt ) const;
 
 private:
-    mutable QRect m_checkRect;
-    mutable QRect m_configRect;
     bool m_configPressed;
 };
 

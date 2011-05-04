@@ -25,6 +25,7 @@
 #include <QPainter>
 
 #define ICONSIZE 24
+#define CHECK_LEFT_EDGE 8
 SipConfigDelegate::SipConfigDelegate( QObject* parent )
     : ConfigDelegateBase ( parent )
 {
@@ -62,8 +63,7 @@ SipConfigDelegate::paint ( QPainter* painter, const QStyleOptionViewItem& option
     QStyle* style = w ? w->style() : QApplication::style();
     style->drawPrimitive( QStyle::PE_PanelItemViewItem, &opt, painter, w );
 
-    int checkLeftEdge = 8;
-    int iconLeftEdge = checkLeftEdge + ICONSIZE + PADDING;
+    int iconLeftEdge = CHECK_LEFT_EDGE + ICONSIZE + PADDING;
     int textLeftEdge = iconLeftEdge + ICONSIZE + PADDING;
 
     if( index.data( SipModel::FactoryRole ).toBool() ) { // this is the "add new account" row
@@ -82,7 +82,7 @@ SipConfigDelegate::paint ( QPainter* painter, const QStyleOptionViewItem& option
         int rectW = 18;
         int diff = ( ICONSIZE/ 2 ) - ( rectW / 2) ;
         int pos = ( mid ) - ( rectW / 2 );
-        QRect plusRect = QRect( checkLeftEdge + diff, pos + top, rectW, rectW );
+        QRect plusRect = QRect( CHECK_LEFT_EDGE + diff, pos + top, rectW, rectW );
         QPixmap p( RESPATH "images/list-add.png" );
         painter->drawPixmap( plusRect, p );
 
@@ -118,7 +118,7 @@ SipConfigDelegate::paint ( QPainter* painter, const QStyleOptionViewItem& option
             int rectW = 18;
             int diff = ( ICONSIZE/ 2 ) - ( rectW / 2) ;
             int pos = ( mid ) - ( rectW / 2 );
-            QRect rect = QRect( checkLeftEdge + diff, pos + top, rectW, rectW );
+            QRect rect = QRect( CHECK_LEFT_EDGE + diff, pos + top, rectW, rectW );
             QPixmap p( icon.pixmap( rect.size() ) );
             painter->drawPixmap( rect, p );
         }
@@ -138,7 +138,7 @@ SipConfigDelegate::paint ( QPainter* painter, const QStyleOptionViewItem& option
     } else { // this is an existing account to show
         // draw checkbox first
         int pos = ( mid ) - ( ICONSIZE / 2 );
-        QRect checkRect = QRect( checkLeftEdge, pos + top, ICONSIZE, ICONSIZE );
+        QRect checkRect = QRect( CHECK_LEFT_EDGE, pos + top, ICONSIZE, ICONSIZE );
         opt.rect = checkRect;
         drawCheckBox( opt, painter, w );
 
@@ -215,13 +215,33 @@ SipConfigDelegate::paint ( QPainter* painter, const QStyleOptionViewItem& option
 }
 
 QRect
+SipConfigDelegate::checkRectForIndex( const QStyleOptionViewItem &option, const QModelIndex &idx ) const
+{
+    if( !idx.data( SipModel::FactoryItemRole ).toBool() && !idx.data( SipModel::FactoryRole ).toBool() )
+    {
+        QStyleOptionViewItemV4 opt = option;
+        initStyleOption( &opt, idx );
+        int mid = opt.rect.height() / 2;
+        int pos = ( mid ) - ( ICONSIZE / 2 );
+        QRect checkRect = QRect( CHECK_LEFT_EDGE, pos + opt.rect.top(), ICONSIZE, ICONSIZE );
+
+        return checkRect;
+    }
+    return QRect();
+}
+
+QRect
 SipConfigDelegate::configRectForIndex( const QStyleOptionViewItem& option, const QModelIndex& idx ) const
 {
-    QStyleOptionViewItemV4 opt = option;
-    initStyleOption( &opt, idx );
-    QRect itemRect = opt.rect;
-    QRect confRect = QRect( itemRect.width() - ICONSIZE - 2 * PADDING, (opt.rect.height() / 2) - ICONSIZE / 2 + opt.rect.top(), ICONSIZE, ICONSIZE );
-    return confRect;
+    if( !idx.data( SipModel::FactoryItemRole ).toBool() && !idx.data( SipModel::FactoryRole ).toBool() )
+    {
+        QStyleOptionViewItemV4 opt = option;
+        initStyleOption( &opt, idx );
+        QRect itemRect = opt.rect;
+        QRect confRect = QRect( itemRect.width() - ICONSIZE - 2 * PADDING, (opt.rect.height() / 2) - ICONSIZE / 2 + opt.rect.top(), ICONSIZE, ICONSIZE );
+        return confRect;
+    }
+    return QRect();
 }
 
 

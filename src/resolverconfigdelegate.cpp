@@ -112,6 +112,17 @@ ResolverConfigDelegate::configRectForIndex( const QStyleOptionViewItem& option, 
     return confRect;
 }
 
+QRect
+ResolverConfigDelegate::checkRectForIndex( const QStyleOptionViewItem &option, const QModelIndex &idx ) const
+{
+    QStyleOptionViewItemV4 opt = option;
+    initStyleOption( &opt, idx );
+    QRect itemRect = opt.rect;
+    int top = itemRect.top();
+
+    QRect checkRect = QRect(2 * PADDING, 2 * PADDING + top, ICONSIZE, ICONSIZE );
+    return checkRect;
+}
 
 void
 ResolverConfigDelegate::onConfigPressed( const QModelIndex& idx )

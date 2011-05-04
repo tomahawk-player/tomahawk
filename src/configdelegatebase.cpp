@@ -58,7 +58,6 @@ ConfigDelegateBase::sizeHint( const QStyleOptionViewItem& option, const QModelIn
 void
 ConfigDelegateBase::drawCheckBox( QStyleOptionViewItemV4& opt, QPainter* p, const QWidget* w ) const
 {
-    m_checkRect = opt.rect;
     QStyle* style = w ? w->style() : QApplication::style();
     opt.checkState == Qt::Checked ? opt.state |= QStyle::State_On : opt.state |= QStyle::State_Off;
     style->drawPrimitive( QStyle::PE_IndicatorViewItemCheck, &opt, p, w );
@@ -94,7 +93,7 @@ ConfigDelegateBase::editorEvent ( QEvent* event, QAbstractItemModel* model, cons
         m_configPressed = false;
 
         QMouseEvent* me = static_cast< QMouseEvent* >( event );
-        if( me->button() != Qt::LeftButton || !m_checkRect.contains( me->pos() ) )
+        if( me->button() != Qt::LeftButton || !checkRectForIndex( option, index ).contains( me->pos() ) )
             return false;
 
         // eat the double click events inside the check rect

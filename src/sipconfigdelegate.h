@@ -33,6 +33,7 @@ public:
     virtual bool editorEvent ( QEvent* event, QAbstractItemModel* model, const QStyleOptionViewItem& option, const QModelIndex& index );
     virtual QSize sizeHint ( const QStyleOptionViewItem& option, const QModelIndex& index ) const;
 
+    virtual QRect checkRectForIndex( const QStyleOptionViewItem &option, const QModelIndex &idx ) const;
     virtual QRect configRectForIndex( const QStyleOptionViewItem& option, const QModelIndex& idx ) const;
 private slots:
     void askedForEdit( const QModelIndex& idx );
