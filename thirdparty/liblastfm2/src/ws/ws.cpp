@@ -196,21 +196,15 @@ lastfm::ws::parse( QNetworkReply* reply ) throw( ParseError )
 QNetworkAccessManager*
 lastfm::nam()
 {
-    qDebug() << Q_FUNC_INFO << " begin";
     QMutexLocker l( &namAccessMutex );
     QThread* thread = QThread::currentThread();
-    qDebug() << Q_FUNC_INFO << " thread is " << thread;
     if ( !threadNamHash.contains( thread ) )
     {
-        qDebug() << Q_FUNC_INFO << " does not yet have a NAM, creating a new one";
         NetworkAccessManager* newNam = new NetworkAccessManager();
         threadNamHash[thread] = newNam;
         ourNamSet.insert( thread );
-        qDebug() << Q_FUNC_INFO << " returning " << threadNamHash[thread];
         return newNam;
     }
-    Q_ASSERT( threadNamHash[thread] );
-    qDebug() << Q_FUNC_INFO << " found a nam, is " << threadNamHash[thread];
     return threadNamHash[thread];
 }
 

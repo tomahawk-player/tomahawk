@@ -85,7 +85,6 @@ lastfm::NetworkAccessManager::NetworkAccessManager( QObject* parent )
                , m_monitor( 0 )
             #endif
 {
-    qDebug() << Q_FUNC_INFO << " begin";
     // can't be done in above init, as applicationName() won't be set
     if (lastfm::UserAgent.isEmpty())
     {
@@ -94,8 +93,6 @@ lastfm::NetworkAccessManager::NetworkAccessManager( QObject* parent )
         if (version.size()) version.prepend( ' ' );
         lastfm::UserAgent = name + version + " (" + lastfm::platform() + ")";
     }
-    
-    qDebug() << Q_FUNC_INFO << " end, useragent is " << lastfm::UserAgent;
 }
 
 
