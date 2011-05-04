@@ -115,7 +115,6 @@ MusicScanner::MusicScanner( const QStringList& dirs, bool recursive, quint32 bs 
     , m_dirs( dirs )
     , m_recursive( recursive )
     , m_batchsize( bs )
-    , m_dirLister( 0 )
     , m_dirListerThreadController( 0 )
 {
     m_ext2mime.insert( "mp3", TomahawkUtils::extensionToMimetype( "mp3" ) );
@@ -133,24 +132,31 @@ MusicScanner::~MusicScanner()
 {
     qDebug() << Q_FUNC_INFO;
 
-    if( m_dirListerThreadController )
+    if ( !m_dirLister.isNull() )
     {
-        m_dirListerThreadController->quit();
-
-        while( !m_dirListerThreadController->isFinished() )
+        QMetaObject::invokeMethod( m_dirLister.data(), "deleteLater", Qt::QueuedConnection );
+        while( !m_dirLister.isNull() )
         {
+            qDebug() << Q_FUNC_INFO << " scanner not deleted, processing events";
             QCoreApplication::processEvents( QEventLoop::AllEvents, 200 );
             TomahawkUtils::Sleep::msleep( 100 );
         }
 
-        if( m_dirLister )
+        if ( m_dirListerThreadController )
+            m_dirListerThreadController->quit();
+
+        if( m_dirListerThreadController )
         {
-            delete m_dirLister;
-            m_dirLister = 0;
+            while( !m_dirListerThreadController->isFinished() )
+            {
+                qDebug() << Q_FUNC_INFO << " scanner thread controller not finished, processing events";
+                QCoreApplication::processEvents( QEventLoop::AllEvents, 200 );
+                TomahawkUtils::Sleep::msleep( 100 );
+            }
+
+            delete m_dirListerThreadController;
+            m_dirListerThreadController = 0;
         }
-        
-        delete m_dirListerThreadController;
-        m_dirListerThreadController = 0;
     }
 }
 
@@ -190,18 +196,18 @@ MusicScanner::scan()
 
     m_dirListerThreadController = new QThread( this );
     
-    m_dirLister = new DirLister( m_dirs, m_dirmtimes, m_recursive );
-    m_dirLister->moveToThread( m_dirListerThreadController );
+    m_dirLister = QWeakPointer< DirLister >( new DirLister( m_dirs, m_dirmtimes, m_recursive ) );
+    m_dirLister.data()->moveToThread( m_dirListerThreadController );
 
-    connect( m_dirLister, SIGNAL( fileToScan( QFileInfo ) ),
+    connect( m_dirLister.data(), SIGNAL( fileToScan( QFileInfo ) ),
                             SLOT( scanFile( QFileInfo ) ), Qt::QueuedConnection );
 
     // queued, so will only fire after all dirs have been scanned:
-    connect( m_dirLister, SIGNAL( finished( QMap<QString, unsigned int> ) ),
+    connect( m_dirLister.data(), SIGNAL( finished( QMap<QString, unsigned int> ) ),
                             SLOT( listerFinished( QMap<QString, unsigned int> ) ), Qt::QueuedConnection );
     
     m_dirListerThreadController->start();
-    QMetaObject::invokeMethod( m_dirLister, "go" );
+    QMetaObject::invokeMethod( m_dirLister.data(), "go" );
 }
 
 
@@ -247,29 +253,32 @@ MusicScanner::listerFinished( const QMap<QString, unsigned int>& newmtimes )
 void
 MusicScanner::deleteLister()
 {
-    qDebug() << Q_FUNC_INFO;
-    connect( m_dirListerThreadController, SIGNAL( finished() ), SLOT( listerQuit() ) );
-    m_dirListerThreadController->quit();
-}
+    if ( !m_dirLister.isNull() )
+    {
+        QMetaObject::invokeMethod( m_dirLister.data(), "deleteLater", Qt::QueuedConnection );
+        while( !m_dirLister.isNull() )
+        {
+            qDebug() << Q_FUNC_INFO << " scanner not deleted, processing events";
+            QCoreApplication::processEvents( QEventLoop::AllEvents, 200 );
+            TomahawkUtils::Sleep::msleep( 100 );
+        }
 
+        if ( m_dirListerThreadController )
+            m_dirListerThreadController->quit();
 
-void
-MusicScanner::listerQuit()
-{
-    qDebug() << Q_FUNC_INFO;
-    connect( m_dirLister, SIGNAL( destroyed( QObject* ) ), SLOT( listerDestroyed( QObject* ) ) );
-    delete m_dirLister;
-    m_dirLister = 0;
-}
+        if( m_dirListerThreadController )
+        {
+            while( !m_dirListerThreadController->isFinished() )
+            {
+                qDebug() << Q_FUNC_INFO << " scanner thread controller not finished, processing events";
+                QCoreApplication::processEvents( QEventLoop::AllEvents, 200 );
+                TomahawkUtils::Sleep::msleep( 100 );
+            }
 
-
-void
-MusicScanner::listerDestroyed( QObject* dirLister )
-{
-    Q_UNUSED( dirLister );
-    qDebug() << Q_FUNC_INFO;
-    m_dirListerThreadController->deleteLater();
-    m_dirListerThreadController = 0;
+            delete m_dirListerThreadController;
+            m_dirListerThreadController = 0;
+        }
+    }
     emit finished();
 }
 
