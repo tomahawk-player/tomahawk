@@ -198,6 +198,7 @@ TwitterConfigWidget::autoConnectToggled( bool on )
 void
 TwitterConfigWidget::startPostGotTomahawkStatus()
 {
+    qDebug() << Q_FUNC_INFO;
     m_postGTtype = ui->twitterTweetComboBox->currentText();
 
     if ( m_postGTtype != "Global Tweet" && ( ui->twitterUserTweetLineEdit->text().isEmpty() || ui->twitterUserTweetLineEdit->text() == "@" ) )
@@ -224,6 +225,7 @@ TwitterConfigWidget::startPostGotTomahawkStatus()
 void
 TwitterConfigWidget::postGotTomahawkStatusAuthVerifyReply( const QTweetUser &user )
 {
+    qDebug() << Q_FUNC_INFO;
     if ( user.id() == 0 )
     {
         QMessageBox::critical( this, tr("Tweetin' Error"), tr("Your saved credentials could not be verified.\nYou may wish to try re-authenticating.") );
@@ -232,6 +234,8 @@ TwitterConfigWidget::postGotTomahawkStatusAuthVerifyReply( const QTweetUser &use
     }
     m_plugin->setTwitterScreenName( user.screenName() );
     TomahawkOAuthTwitter *twitAuth = new TomahawkOAuthTwitter( TomahawkUtils::nam(), this );
+    twitAuth->setOAuthToken( m_plugin->twitterOAuthToken().toLatin1() );
+    twitAuth->setOAuthTokenSecret( m_plugin->twitterOAuthTokenSecret().toLatin1() );
     if ( m_postGTtype != "Direct Message" )
     {
         QTweetStatusUpdate *statUpdate = new QTweetStatusUpdate( twitAuth, this );
