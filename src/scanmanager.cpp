@@ -43,7 +43,6 @@ ScanManager::instance()
 
 ScanManager::ScanManager( QObject* parent )
     : QObject( parent )
-    , m_scanner( 0 )
     , m_musicScannerThreadController( 0 )
     , m_currScannerPaths()
     , m_dirWatcher( 0 )
@@ -81,24 +80,31 @@ ScanManager::~ScanManager()
 {
     qDebug() << Q_FUNC_INFO;
 
-    if( m_musicScannerThreadController )
+    if ( !m_scanner.isNull() )
     {
-        m_musicScannerThreadController->quit();
-
-        while( !m_musicScannerThreadController->isFinished() )
+        QMetaObject::invokeMethod( m_scanner.data(), "deleteLater", Qt::QueuedConnection );
+        while( !m_scanner.isNull() )
         {
+            qDebug() << Q_FUNC_INFO << " scanner not deleted, processing events";
             QCoreApplication::processEvents( QEventLoop::AllEvents, 200 );
             TomahawkUtils::Sleep::msleep( 100 );
         }
 
-        if( m_scanner )
-        {
-            delete m_scanner;
-            m_scanner = 0;
-        }
+        if ( m_musicScannerThreadController )
+            m_musicScannerThreadController->quit();
 
-        delete m_musicScannerThreadController;
-        m_musicScannerThreadController = 0;
+        if( m_musicScannerThreadController )
+        {
+            while( !m_musicScannerThreadController->isFinished() )
+            {
+                qDebug() << Q_FUNC_INFO << " scanner thread controller not finished, processing events";
+                QCoreApplication::processEvents( QEventLoop::AllEvents, 200 );
+                TomahawkUtils::Sleep::msleep( 100 );
+            }
+
+            delete m_musicScannerThreadController;
+            m_musicScannerThreadController = 0;
+        }
     }
 }
 
@@ -138,7 +144,7 @@ ScanManager::runManualScan( const QStringList& paths, bool recursive )
     if( !Database::instance() || ( Database::instance() && !Database::instance()->isReady() ) )
         return;
 
-    if ( !m_musicScannerThreadController && !m_scanner ) //still running if these are not zero
+    if ( !m_musicScannerThreadController && m_scanner.isNull() ) //still running if these are not zero
     {
         m_musicScannerThreadController = new QThread( this );
         QStringList allPaths = paths;
@@ -147,13 +153,13 @@ ScanManager::runManualScan( const QStringList& paths, bool recursive )
             if( !allPaths.contains( path ) )
                 allPaths << path;
         }
-        m_scanner = new MusicScanner( paths, recursive );
-        m_scanner->moveToThread( m_musicScannerThreadController );
-        connect( m_scanner, SIGNAL( finished() ), SLOT( scannerFinished() ) );
-        connect( m_scanner, SIGNAL( addWatchedDirs( const QStringList & ) ), SLOT( addWatchedDirs( const QStringList & ) ) );
-        connect( m_scanner, SIGNAL( removeWatchedDir( const QString & ) ), SLOT( removeWatchedDir( const QString & ) ) );
+        m_scanner = QWeakPointer< MusicScanner>( new MusicScanner( paths, recursive ) );
+        m_scanner.data()->moveToThread( m_musicScannerThreadController );
+        connect( m_scanner.data(), SIGNAL( finished() ), SLOT( scannerFinished() ) );
+        connect( m_scanner.data(), SIGNAL( addWatchedDirs( const QStringList & ) ), SLOT( addWatchedDirs( const QStringList & ) ) );
+        connect( m_scanner.data(), SIGNAL( removeWatchedDir( const QString & ) ), SLOT( removeWatchedDir( const QString & ) ) );
         m_musicScannerThreadController->start( QThread::IdlePriority );
-        QMetaObject::invokeMethod( m_scanner, "startScan" );
+        QMetaObject::invokeMethod( m_scanner.data(), "startScan" );
         m_deferredDirs[recursive].clear();
     }
     else
@@ -249,9 +255,18 @@ void
 ScanManager::scannerQuit()
 {
     qDebug() << Q_FUNC_INFO;
-    connect( m_scanner, SIGNAL( destroyed( QObject* ) ), SLOT( scannerDestroyed( QObject* ) ) );
-    delete m_scanner;
-    m_scanner = 0;
+    connect( m_scanner.data(), SIGNAL( destroyed( QObject* ) ), SLOT( scannerDestroyed( QObject* ) ) );
+
+    if ( !m_scanner.isNull() )
+    {
+        QMetaObject::invokeMethod( m_scanner.data(), "deleteLater", Qt::QueuedConnection );
+        while( !m_scanner.isNull() )
+        {
+            qDebug() << Q_FUNC_INFO << " scanner not deleted, processing events";
+            QCoreApplication::processEvents( QEventLoop::AllEvents, 200 );
+            TomahawkUtils::Sleep::msleep( 100 );
+        }
+    }
 }
 
 

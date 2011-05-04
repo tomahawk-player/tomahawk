@@ -64,7 +64,7 @@ private slots:
 private:
     static ScanManager* s_instance;
     
-    MusicScanner* m_scanner;
+    QWeakPointer< MusicScanner > m_scanner;
     QThread* m_musicScannerThreadController;
     QStringList m_currScannerPaths;
     QFileSystemWatcher* m_dirWatcher;
