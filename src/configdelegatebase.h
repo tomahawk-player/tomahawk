@@ -48,7 +48,7 @@ protected:
     void drawConfigWrench( QPainter* painter, QStyleOptionViewItemV4& option, QStyleOptionToolButton& topt ) const;
 
 private:
-    bool m_configPressed;
+    QModelIndex m_configPressed;
 };
 
 #endif // CONFIGDELEGATEBASE_H
