@@ -96,7 +96,7 @@ InfoSystemWorker::init( QWeakPointer< Tomahawk::InfoSystem::InfoSystemCache> cac
             );
         connect(
                 this,
-                SIGNAL( namChanged( QNetworkAccessManger* ) ),
+                SIGNAL( namChanged( QNetworkAccessManager* ) ),
                 plugin.data(),
                 SLOT( namChangedSlot( QNetworkAccessManager* ) )
             );
