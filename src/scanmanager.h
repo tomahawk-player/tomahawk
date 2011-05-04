@@ -23,6 +23,7 @@
 #include <QMap>
 #include <QObject>
 #include <QStringList>
+#include <QWeakPointer>
 
 #include "dllmacro.h"
 
