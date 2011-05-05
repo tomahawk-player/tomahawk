@@ -76,6 +76,9 @@ public:
     virtual void saveConfig() {} // called when the widget has been edited
     virtual QIcon icon() const;
 
+    // peer infos
+    virtual const QStringList peersOnline() const;
+
 public slots:
     virtual bool connectPlugin( bool startup = false ) = 0;
     virtual void disconnectPlugin() = 0;
@@ -108,9 +111,13 @@ private slots:
     void onError( int, const QString& );
     void onStateChange( SipPlugin::ConnectionState state );
 
+    void onPeerOnline( const QString &peerId );
+    void onPeerOffline( const QString &peerId );
+
 private:
     QString m_pluginId;
     QString m_cachedError;
+    QStringList m_peersOnline;
 };
 
 Q_DECLARE_INTERFACE( SipPluginFactory, "tomahawk.SipFactory/1.0" )
