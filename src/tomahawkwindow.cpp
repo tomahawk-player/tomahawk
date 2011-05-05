@@ -52,6 +52,7 @@
 
 #include "audiocontrols.h"
 #include "settingsdialog.h"
+#include "diagnosticsdialog.h"
 #include "tomahawksettings.h"
 #include "sourcelist.h"
 #include "transferview.h"
@@ -261,6 +262,7 @@ TomahawkWindow::setupSignals()
 
     // <Menu Items>
     connect( ui->actionPreferences, SIGNAL( triggered() ), SLOT( showSettingsDialog() ) );
+    connect( ui->actionDiagnostics, SIGNAL( triggered() ), SLOT( showDiagnosticsDialog() ) );
     connect( ui->actionToggleConnect, SIGNAL( triggered() ), APP->sipHandler(), SLOT( toggleConnect() ) );
 //    connect( ui->actionAddPeerManually, SIGNAL( triggered() ), SLOT( addPeerManually() ) );
     connect( ui->actionRescanCollection, SIGNAL( triggered() ), SLOT( updateCollectionManually() ) );
@@ -346,6 +348,13 @@ TomahawkWindow::showSettingsDialog()
 {
     qDebug() << Q_FUNC_INFO;
     SettingsDialog win;
+    win.exec();
+}
+
+void TomahawkWindow::showDiagnosticsDialog()
+{
+    qDebug() << Q_FUNC_INFO;
+    DiagnosticsDialog win;
     win.exec();
 }
 
