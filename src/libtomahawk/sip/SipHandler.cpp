@@ -164,9 +164,8 @@ SipHandler::loadPlugin( const QString& pluginId )
     Q_ASSERT( m_pluginFactories.contains( factoryName ) );
 
     SipPlugin* sip = m_pluginFactories[ factoryName ]->createPlugin( pluginId );
-    hookUpPlugin( sip );
 
-    // caller responsible for calling pluginAdded()
+    // caller responsible for calling pluginAdded() and hookupPlugin
     return sip;
 }
 
