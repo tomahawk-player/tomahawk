@@ -32,7 +32,8 @@ SipPlugin::SipPlugin( const QString& pluginId, QObject* parent )
     : QObject( parent )
     , m_pluginId( pluginId )
 {
-
+    connect( this, SIGNAL( error( int, QString ) ), this, SLOT( onError( int,QString ) ) );
+    connect( this, SIGNAL( stateChanged( SipPlugin::ConnectionState ) ), this, SLOT( onStateChange( SipPlugin::ConnectionState ) ) );
 }
 
 QString SipPlugin::pluginId() const
@@ -57,7 +58,7 @@ SipPlugin::configWidget()
 QString
 SipPlugin::errorMessage() const
 {
-    return QString();
+    return m_cachedError;
 }
 
 QIcon
@@ -71,3 +72,16 @@ SipPlugin::setProxy( const QNetworkProxy& proxy )
 {
     qDebug() << Q_FUNC_INFO << "Not implemented";
 }
+
+void
+SipPlugin::onError( int code, const QString& error )
+{
+    m_cachedError = error;
+}
+
+void
+SipPlugin::onStateChange( SipPlugin::ConnectionState state )
+{
+    m_cachedError.clear();
+}
+

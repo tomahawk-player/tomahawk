@@ -104,8 +104,13 @@ signals:
     void addMenu( QMenu* menu );
     void removeMenu( QMenu* menu );
 
+private slots:
+    void onError( int, const QString& );
+    void onStateChange( SipPlugin::ConnectionState state );
+
 private:
     QString m_pluginId;
+    QString m_cachedError;
 };
 
 Q_DECLARE_INTERFACE( SipPluginFactory, "tomahawk.SipFactory/1.0" )
