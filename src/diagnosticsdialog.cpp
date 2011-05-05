@@ -19,8 +19,10 @@
 #include "diagnosticsdialog.h"
 #include "ui_diagnosticsdialog.h"
 
+#include <sip/SipHandler.h>
 
-#include <QPlainTextEdit>
+#include <QTextEdit>
+#include <QDebug>
 
 DiagnosticsDialog::DiagnosticsDialog( QWidget *parent )
     : QDialog( parent )
@@ -41,7 +43,43 @@ void DiagnosticsDialog::updateLogView()
         "Tomahawk Diagnostics Log\n\n"
     );
 
+    // Peers
+    log.append("Sip Plugins:\n");
+    Q_FOREACH(SipPlugin *sip, SipHandler::instance()->allPlugins())
+    {
+        Q_ASSERT(sip);
+        QString stateString;
+        switch( sip->connectionState() )
+        {
+            case SipPlugin::Connecting:
+                stateString = "Connecting";
+                break;
+
+            case SipPlugin::Connected:
+                stateString = "Connected";
+                break;
+
+            case SipPlugin::Disconnected:
+                stateString = "Disconnected";
+                break;
+        }
+        log.append(
+            QString("%2 (%1): %3 (%4)\n")
+                .arg(sip->name())
+                .arg(sip->friendlyName())
+                .arg(sip->accountName())
+                .arg(stateString)
+        );
+
+        Q_FOREACH(const QString &peerId, sip->peersOnline())
+        {
+            log.append(
+                QString("   %1\n")
+                    .arg(peerId)
+            );
+        }
+        log.append("\n");
+    }
+
     ui->logView->setPlainText(log);
 }
-
-
