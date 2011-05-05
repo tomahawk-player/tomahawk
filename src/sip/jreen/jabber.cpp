@@ -226,8 +226,15 @@ JabberPlugin::connectPlugin( bool startup )
 void
 JabberPlugin::disconnectPlugin()
 {
-    if(!m_client->isConnected())
+    if (!m_client->isConnected())
+    {
+        if ( m_state != Disconnected ) // might be Connecting
+        {
+           m_state = Disconnected;
+           emit stateChanged( m_state );
+        }
         return;
+    }
 
     foreach(const Jreen::JID &peer, m_peers.keys())
     {
@@ -365,6 +372,9 @@ QString JabberPlugin::errorMessage(Jreen::Client::DisconnectReason reason)
             Q_ASSERT(false);
             break;
     }
+
+    m_state == Disconnected;
+    emit stateChanged( m_state );
 
     return QString();
 }

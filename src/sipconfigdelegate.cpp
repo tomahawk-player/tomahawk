@@ -172,9 +172,13 @@ SipConfigDelegate::paint ( QPainter* painter, const QStyleOptionViewItem& option
 
         QPixmap p;
         QString statusText;
-        if( index.data( SipModel::ConnectionStateRole ).toInt() == SipPlugin::Connected ) {
+        SipPlugin::ConnectionState state = static_cast< SipPlugin::ConnectionState >( index.data( SipModel::ConnectionStateRole ).toInt() );
+        if( state == SipPlugin::Connected ) {
             p = QPixmap( RESPATH "images/sipplugin-online.png" );
             statusText = tr( "Online" );
+        } else if( state == SipPlugin::Connecting ) {
+            p = QPixmap( RESPATH "images/sipplugin-offline.png" );
+            statusText = tr( "Connecting..." );
         } else {
             p = QPixmap( RESPATH "images/sipplugin-offline.png" );
             statusText = tr( "Offline" );
