@@ -20,6 +20,7 @@
 #include "ui_diagnosticsdialog.h"
 
 #include <sip/SipHandler.h>
+#include <network/servent.h>
 
 #include <QTextEdit>
 #include <QDebug>
@@ -44,11 +45,40 @@ DiagnosticsDialog::DiagnosticsDialog( QWidget *parent )
 void DiagnosticsDialog::updateLogView()
 {
     QString log(
-        "Tomahawk Diagnostics Log\n\n"
+        "TOMAHAWK DIAGNOSTICS LOG\n\n"
     );
 
+    // network
+    log.append(
+        "NETWORK:\n"
+        "General:\n"
+    );
+    if( Servent::instance()->visibleExternally() )
+    {
+        log.append(
+            QString(
+                "visible: true\n"
+                "host: %1\n"
+                "port: %2\n"
+                "\n"
+            ).arg( Servent::instance()->externalAddress() )
+             .arg( Servent::instance()->externalPort() )
+
+        );
+    }
+    else
+    {
+        log.append(
+            QString(
+                "visible: false"
+            )
+        );
+    }
+    log.append("\n\n");
+
+
     // Peers
-    log.append("Sip Plugins:\n");
+    log.append("SIP PLUGINS:\n");
     Q_FOREACH(SipPlugin *sip, SipHandler::instance()->allPlugins())
     {
         Q_ASSERT(sip);
