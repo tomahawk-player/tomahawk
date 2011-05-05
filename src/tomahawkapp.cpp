@@ -71,6 +71,9 @@
 
 #ifdef Q_WS_MAC
 #include "mac/macshortcuthandler.h"
+
+#include <sys/resource.h>
+#include <sys/sysctl.h>
 #endif
 
 #include <iostream>
@@ -223,6 +226,24 @@ TomahawkApp::init()
     Tomahawk::setShortcutHandler( static_cast<MacShortcutHandler*>( m_shortcutHandler) );
 
     Tomahawk::setApplicationHandler( this );
+
+    /// Following code taken from Clementine project, main.cpp. Thanks!
+    // Bump the soft limit for the number of file descriptors from the default of 256 to
+    // the maximum (usually 1024).
+    struct rlimit limit;
+    getrlimit(RLIMIT_NOFILE, &limit);
+
+    // getrlimit() lies about the hard limit so we have to check sysctl.
+    int max_fd = 0;
+    size_t len = sizeof(max_fd);
+    sysctlbyname("kern.maxfilesperproc", &max_fd, &len, NULL, 0);
+
+    limit.rlim_cur = max_fd;
+    int ret = setrlimit(RLIMIT_NOFILE, &limit);
+
+    if (ret == 0) {
+      qDebug() << "Max fd:" << max_fd;
+    }
 #endif
 
     // Connect up shortcuts
