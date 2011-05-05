@@ -37,6 +37,8 @@ public:
 
 private slots:
     void updateLogView();
+    void copyToClipboard();
+
 private:
     Ui::DiagnosticsDialog* ui;
 };

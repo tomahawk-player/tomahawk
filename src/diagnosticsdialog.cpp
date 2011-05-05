@@ -23,6 +23,10 @@
 
 #include <QTextEdit>
 #include <QDebug>
+#include <QDialogButtonBox>
+#include <QPushButton>
+#include <QApplication>
+#include <QClipboard>
 
 DiagnosticsDialog::DiagnosticsDialog( QWidget *parent )
     : QDialog( parent )
@@ -30,9 +34,9 @@ DiagnosticsDialog::DiagnosticsDialog( QWidget *parent )
 {
     ui->setupUi( this );
 
+    connect( ui->updateButton, SIGNAL( clicked() ), this, SLOT( updateLogView() ) );
+    connect( ui->clipboardButton, SIGNAL( clicked() ), this, SLOT( copyToClipboard() ) );
     connect( ui->buttonBox, SIGNAL( rejected() ), this, SLOT( reject() ) );
-
-    ui->logView->setReadOnly(true);
 
     updateLogView();
 }
@@ -83,3 +87,9 @@ void DiagnosticsDialog::updateLogView()
 
     ui->logView->setPlainText(log);
 }
+
+void DiagnosticsDialog::copyToClipboard()
+{
+    QApplication::clipboard()->setText( ui->logView->toPlainText() );
+}
+
