@@ -80,7 +80,11 @@ const QPixmap SipHandler::avatar( const QString& name ) const
     }
 }
 
-
+const QVariantMap
+SipHandler::sipInfo(const QString& peerId) const
+{
+    return m_peersSipInfos.value( peerId );
+}
 
 void
 SipHandler::onSettingsChanged()
@@ -510,6 +514,8 @@ SipHandler::onMessage( const QString& from, const QString& msg )
     {
         qDebug() << Q_FUNC_INFO << "They are not visible, doing nothing atm";
     }
+
+    m_peersSipInfos.insert( from, m );
 }
 
 

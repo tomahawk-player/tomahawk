@@ -21,6 +21,7 @@
 
 #include <sip/SipHandler.h>
 #include <network/servent.h>
+#include <sourcelist.h>
 
 #include <QTextEdit>
 #include <QDebug>
@@ -79,6 +80,7 @@ void DiagnosticsDialog::updateLogView()
 
     // Peers
     log.append("SIP PLUGINS:\n");
+    QList< Tomahawk::source_ptr > sources = SourceList::instance()->sources( true );
     Q_FOREACH(SipPlugin *sip, SipHandler::instance()->allPlugins())
     {
         Q_ASSERT(sip);
@@ -105,12 +107,33 @@ void DiagnosticsDialog::updateLogView()
                 .arg(stateString)
         );
 
-        Q_FOREACH(const QString &peerId, sip->peersOnline())
+        Q_FOREACH( const QString &peerId, sip->peersOnline() )
         {
-            log.append(
-                QString("   %1\n")
-                    .arg(peerId)
-            );
+            bool connected = false;
+            Q_FOREACH( const Tomahawk::source_ptr &source, sources )
+            {
+                if( source->controlConnection() )
+                {
+                    connected = true;
+                    break;
+                }
+            }
+
+            QVariantMap sipInfo = SipHandler::instance()->sipInfo( peerId );
+            if( sipInfo.value( "visible").toBool() )
+                log.append(
+                    QString("   %1: %2:%3 (%4)\n")
+                        .arg( peerId )
+                        .arg( sipInfo.value( "ip" ).toString() )
+                        .arg( sipInfo.value( "port" ).toString() )
+                        .arg( connected ? "connected" : "not connected")
+                );
+            else
+                log.append(
+                    QString("   %1: visible: false (%2)\n")
+                        .arg( peerId )
+                        .arg( connected ? "connected" : "not connected")
+                );
         }
         log.append("\n");
     }
