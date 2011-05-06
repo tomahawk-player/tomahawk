@@ -236,12 +236,6 @@ JabberPlugin::disconnectPlugin()
         return;
     }
 
-    foreach(const Jreen::JID &peer, m_peers.keys())
-    {
-        handlePeerStatus(peer, Jreen::Presence::Unavailable);
-    }
-
-
     //m_roster->deleteLater();
     //m_roster = 0;
     //m_room->deleteLater();
@@ -329,6 +323,11 @@ JabberPlugin::onDisconnect( Jreen::Client::DisconnectReason reason )
     emit stateChanged( m_state );
 
     removeMenuHelper();
+
+    Q_FOREACH(const Jreen::JID &peer, m_peers.keys())
+    {
+        handlePeerStatus(peer, Jreen::Presence::Unavailable);
+    }
 }
 
 QString
