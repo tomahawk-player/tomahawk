@@ -529,7 +529,7 @@ void JabberPlugin::addMenuHelper()
 {
     if( !m_menu )
     {
-        m_menu = new QMenu( QString( "JREEN (" ).append( accountName() ).append(")" ) );
+        m_menu = new QMenu( QString( "%1 (" ).arg( friendlyName() ).append( accountName() ).append(")" ) );
         m_addFriendAction = m_menu->addAction( "Add Friend..." );
 
         connect( m_addFriendAction, SIGNAL( triggered() ), this, SLOT( showAddFriendDialog() ) );

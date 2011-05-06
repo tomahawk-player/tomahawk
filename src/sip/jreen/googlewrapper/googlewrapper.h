@@ -30,7 +30,7 @@ public:
     GoogleWrapperFactory() {}
     virtual ~GoogleWrapperFactory() {}
 
-    virtual QString prettyName() const { return "GMail"; }
+    virtual QString prettyName() const { return "Google"; }
     virtual QString factoryId() const { return "sipgoogle"; }
     virtual QIcon icon() const;
     virtual SipPlugin* createPlugin( const QString& pluginId );
@@ -43,9 +43,10 @@ public:
   GoogleWrapper( const QString& pluginID );
   virtual ~GoogleWrapper() {}
 
-  virtual const QString name() const { return QString( "GMail" ); }
-  virtual const QString friendlyName() const { return "GMail Friends"; }
+  virtual const QString name() const { return QString( "Google" ); }
+  virtual const QString friendlyName() const { return "Google"; }
   virtual QIcon icon() const;
+
 };
 
 #endif // GOOGLEWRAPPER_H
