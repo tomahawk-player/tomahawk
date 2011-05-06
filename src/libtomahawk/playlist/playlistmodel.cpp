@@ -154,6 +154,8 @@ PlaylistModel::clear()
 {
     if ( rowCount( QModelIndex() ) )
     {
+        emit loadingFinished();;
+
         emit beginResetModel();
         delete m_rootItem;
         m_rootItem = 0;
@@ -431,6 +433,14 @@ PlaylistModel::remove( unsigned int row, bool moreToCome )
 void
 PlaylistModel::removeIndex( const QModelIndex& index, bool moreToCome )
 {
+    TrackModelItem* item = itemFromIndex( index );
+    if ( item && m_waitingForResolved.contains( item->query().data() ) )
+    {
+        m_waitingForResolved.removeAll( item->query().data() );
+        if ( m_waitingForResolved.isEmpty() )
+            emit loadingFinished();
+    }
+
     TrackModel::removeIndex( index );
 
     if ( !moreToCome && !m_playlist.isNull() )
