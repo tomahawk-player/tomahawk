@@ -84,6 +84,7 @@ DynamicModel::newTrackGenerated( const Tomahawk::query_ptr& query )
     if( m_onDemandRunning ) {
         connect( query.data(), SIGNAL( resolvingFinished( bool ) ), this, SLOT( trackResolveFinished( bool ) ) );
 
+        m_waitingFor << query.data();
         append( query );
     }
 }
@@ -112,7 +113,10 @@ DynamicModel::trackResolveFinished( bool success )
 {
     Q_UNUSED( success );
 
-    Query* q = qobject_cast<Query*>(sender());
+    Query* q = qobject_cast<Query*>( sender() );
+
+    if( !m_waitingFor.contains( q ) )
+        return;
 
     if( !q->playable() ) {
         qDebug() << "Got not resolved track:" << q->track() << q->artist() << m_lastResolvedRow << m_currentAttempts;
@@ -139,6 +143,7 @@ DynamicModel::trackResolveFinished( bool success )
 
         emit checkForOverflow();
     }
+    m_waitingFor.removeAll( q );
 }
 
 
