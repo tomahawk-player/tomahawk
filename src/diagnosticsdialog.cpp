@@ -45,22 +45,25 @@ DiagnosticsDialog::DiagnosticsDialog( QWidget *parent )
 
 void DiagnosticsDialog::updateLogView()
 {
-    QString log(
-        "TOMAHAWK DIAGNOSTICS LOG\n\n"
+    QString log;
+
+    log.append(
+        QString("TOMAHAWK DIAGNOSTICS LOG -%1 \n\n")
+            .arg( QDateTime::currentDateTime().toString() )
     );
 
     // network
     log.append(
         "NETWORK:\n"
-        "General:\n"
+        "    General:\n"
     );
     if( Servent::instance()->visibleExternally() )
     {
         log.append(
             QString(
-                "visible: true\n"
-                "host: %1\n"
-                "port: %2\n"
+                "      visible: true\n"
+                "      host: %1\n"
+                "      port: %2\n"
                 "\n"
             ).arg( Servent::instance()->externalAddress() )
              .arg( Servent::instance()->externalPort() )
@@ -71,7 +74,7 @@ void DiagnosticsDialog::updateLogView()
     {
         log.append(
             QString(
-                "visible: false"
+                "      visible: false"
             )
         );
     }
@@ -100,7 +103,7 @@ void DiagnosticsDialog::updateLogView()
                 break;
         }
         log.append(
-            QString("%2 (%1): %3 (%4)\n")
+            QString("  %2 (%1): %3 (%4)\n")
                 .arg(sip->name())
                 .arg(sip->friendlyName())
                 .arg(sip->accountName())
@@ -122,7 +125,7 @@ void DiagnosticsDialog::updateLogView()
             QVariantMap sipInfo = SipHandler::instance()->sipInfo( peerId );
             if( sipInfo.value( "visible").toBool() )
                 log.append(
-                    QString("   %1: %2:%3 (%4)\n")
+                    QString("       %1: %2:%3 (%4)\n")
                         .arg( peerId )
                         .arg( sipInfo.value( "ip" ).toString() )
                         .arg( sipInfo.value( "port" ).toString() )
@@ -130,7 +133,7 @@ void DiagnosticsDialog::updateLogView()
                 );
             else
                 log.append(
-                    QString("   %1: visible: false (%2)\n")
+                    QString("       %1: visible: false (%2)\n")
                         .arg( peerId )
                         .arg( connected ? "connected" : "not connected")
                 );
