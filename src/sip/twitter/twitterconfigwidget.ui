@@ -238,13 +238,6 @@ If connections to peers seem to have been lost, just press the appropriate butto
      </property>
     </spacer>
    </item>
-   <item>
-    <widget class="QCheckBox" name="autoConnectCheckbox">
-     <property name="text">
-      <string>Connect automatically when Tomahawk starts</string>
-     </property>
-    </widget>
-   </item>
   </layout>
  </widget>
  <resources>

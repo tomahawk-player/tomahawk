@@ -117,7 +117,6 @@ private slots:
 private:
     QString readPassword();
     QString readServer();
-    bool readAutoConnect();
     int readPort();
 
     QString errorMessage( Jreen::Client::DisconnectReason reason );

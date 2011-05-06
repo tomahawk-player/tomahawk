@@ -72,7 +72,6 @@ JabberPlugin::JabberPlugin( const QString& pluginId )
     m_ui->setupUi( m_configWidget.data() );
     m_configWidget.data()->setVisible( false );
 
-    m_ui->checkBoxAutoConnect->setChecked( readAutoConnect() );
     m_ui->jabberUsername->setText( accountName() );
     m_ui->jabberPassword->setText( readPassword() );
     m_ui->jabberServer->setText( readServer() );
@@ -118,7 +117,6 @@ JabberPlugin::JabberPlugin( const QString& pluginId )
     qDebug() << "Our Port set to" << m_client->port();
 
     // setup slots
-    connect(m_client->connection(), SIGNAL(error(SocketError)), SLOT(onError(SocketError)));
     connect(m_client, SIGNAL(serverFeaturesReceived(QSet<QString>)), SLOT(onConnect()));
     connect(m_client, SIGNAL(disconnected(Jreen::Client::DisconnectReason)), SLOT(onDisconnect(Jreen::Client::DisconnectReason)));
     connect(m_client, SIGNAL(newMessage(Jreen::Message)), SLOT(onNewMessage(Jreen::Message)));
@@ -200,9 +198,6 @@ JabberPlugin::connectPlugin( bool startup )
 {
     qDebug() << Q_FUNC_INFO;
 
-    if ( startup && !readAutoConnect() )
-        return false;
-
     if(m_client->isConnected())
     {
         qDebug() << Q_FUNC_INFO << "Already connected to server, not connecting again...";
@@ -217,6 +212,8 @@ JabberPlugin::connectPlugin( bool startup )
     //FIXME: we're badly workarounding some missing reconnection api here, to be fixed soon
     QTimer::singleShot( 1000, m_client, SLOT( connectToServer() ) );
 
+
+    connect(m_client->connection(), SIGNAL(error(Jreen::Connection::SocketError)), SLOT(onError(Jreen::Connection::SocketError)));
 
     m_state = Connecting;
     emit stateChanged( m_state );
@@ -907,16 +904,9 @@ JabberPlugin::readServer()
     return TomahawkSettings::instance()->value( pluginId() + "/server" ).toString();
 }
 
-bool
-JabberPlugin::readAutoConnect()
-{
-    return TomahawkSettings::instance()->value( pluginId() + "/autoconnect", true ).toBool();
-}
-
 void
 JabberPlugin::saveConfig()
 {
-    TomahawkSettings::instance()->setValue( pluginId() + "/autoconnect", m_ui->checkBoxAutoConnect->isChecked() );
     TomahawkSettings::instance()->setValue( pluginId() + "/username", m_ui->jabberUsername->text() );
     TomahawkSettings::instance()->setValue( pluginId() + "/password", m_ui->jabberPassword->text() );
     TomahawkSettings::instance()->setValue( pluginId() + "/port", m_ui->jabberPort->value() );

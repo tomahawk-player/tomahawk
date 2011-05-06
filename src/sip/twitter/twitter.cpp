@@ -145,9 +145,6 @@ TwitterPlugin::connectPlugin( bool startup )
 {
     qDebug() << Q_FUNC_INFO;
 
-    if( startup && !twitterAutoConnect() )
-        return false;
-
     m_cachedPeers = twitterCachedPeers();
     QList<QString> peerlist = m_cachedPeers.keys();
     qStableSort( peerlist.begin(), peerlist.end() );
@@ -720,7 +717,7 @@ TwitterPlugin::twitterScreenName() const
         TomahawkSettings::instance()->remove( pluginId() + "/ScreenName" );
 
         TomahawkSettings::instance()->sync();
-        
+
         TomahawkSettings::instance()->setValue( pluginId() + "/screenname",
             TomahawkSettings::instance()->value( pluginId() + "/screenname_tmp" ).toString() );
         TomahawkSettings::instance()->remove( pluginId() + "/screenname_tmp" );
@@ -745,12 +742,12 @@ TwitterPlugin::twitterOAuthToken() const
         TomahawkSettings::instance()->remove( pluginId() + "/OAuthToken" );
 
         TomahawkSettings::instance()->sync();
-        
+
         TomahawkSettings::instance()->setValue( pluginId() + "/oauthtoken",
             TomahawkSettings::instance()->value( pluginId() + "/oauthtoken_tmp" ).toString() );
         TomahawkSettings::instance()->remove( pluginId() + "/oauthtoken_tmp" );
     }
-    
+
     return TomahawkSettings::instance()->value( pluginId() + "/oauthtoken" ).toString();
 }
 
@@ -770,12 +767,12 @@ TwitterPlugin::twitterOAuthTokenSecret() const
         TomahawkSettings::instance()->remove( pluginId() + "/OAuthTokenSecret" );
 
         TomahawkSettings::instance()->sync();
-        
+
         TomahawkSettings::instance()->setValue( pluginId() + "/oauthtokensecret",
             TomahawkSettings::instance()->value( pluginId() + "/oauthtokensecret_tmp" ).toString() );
         TomahawkSettings::instance()->remove( pluginId() + "/oauthtokensecret_tmp" );
     }
-    
+
     return TomahawkSettings::instance()->value( pluginId() + "/oauthtokensecret" ).toString();
 }
 
@@ -795,7 +792,7 @@ TwitterPlugin::twitterCachedFriendsSinceId() const
         TomahawkSettings::instance()->remove( pluginId() + "/CachedFriendsSinceID" );
 
         TomahawkSettings::instance()->sync();
-        
+
         TomahawkSettings::instance()->setValue( pluginId() + "/cachedfriendssinceid",
             TomahawkSettings::instance()->value( pluginId() + "/cachedfriendssinceid_tmp" ).toLongLong() );
         TomahawkSettings::instance()->remove( pluginId() + "/cachedfriendssinceid_tmp" );
@@ -820,7 +817,7 @@ TwitterPlugin::twitterCachedMentionsSinceId() const
         TomahawkSettings::instance()->remove( pluginId() + "/CachedMentionsSinceID" );
 
         TomahawkSettings::instance()->sync();
-        
+
         TomahawkSettings::instance()->setValue( pluginId() + "/cachedmentionssinceid",
             TomahawkSettings::instance()->value( pluginId() + "/cachedmentionssinceid_tmp" ).toLongLong() );
         TomahawkSettings::instance()->remove( pluginId() + "/cachedmentionssinceid_tmp" );
@@ -845,12 +842,12 @@ TwitterPlugin::twitterCachedDirectMessagesSinceId() const
         TomahawkSettings::instance()->remove( pluginId() + "/CachedDirectMessagesSinceID" );
 
         TomahawkSettings::instance()->sync();
-        
+
         TomahawkSettings::instance()->setValue( pluginId() + "/cacheddirectmessagessinceid",
             TomahawkSettings::instance()->value( pluginId() + "/cacheddirectmessagessinceid_tmp" ).toLongLong() );
         TomahawkSettings::instance()->remove( pluginId() + "/cacheddirectmessagessinceid_tmp" );
     }
-    
+
     return TomahawkSettings::instance()->value( pluginId() + "/cacheddirectmessagessinceid", 0 ).toLongLong();
 }
 
@@ -870,12 +867,12 @@ TwitterPlugin::twitterCachedPeers() const
         TomahawkSettings::instance()->remove( pluginId() + "/CachedPeers" );
 
         TomahawkSettings::instance()->sync();
-        
+
         TomahawkSettings::instance()->setValue( pluginId() + "/cachedpeers",
             TomahawkSettings::instance()->value( pluginId() + "/cachedpeers_tmp" ).toHash() );
         TomahawkSettings::instance()->remove( pluginId() + "/cachedpeers_tmp" );
     }
-    
+
     return TomahawkSettings::instance()->value( pluginId() + "/cachedpeers", QHash<QString, QVariant>() ).toHash();
 }
 
@@ -883,30 +880,6 @@ void
 TwitterPlugin::setTwitterCachedPeers( const QHash<QString, QVariant> &cachedPeers )
 {
     TomahawkSettings::instance()->setValue( pluginId() + "/cachedpeers", cachedPeers );
-}
-
-bool
-TwitterPlugin::twitterAutoConnect() const
-{
-    if ( TomahawkSettings::instance()->contains( pluginId() + "/AutoConnect" ) )
-    {
-        TomahawkSettings::instance()->setValue( pluginId() + "/autoconnect_tmp",
-            TomahawkSettings::instance()->value( pluginId() + "/AutoConnect" ).toBool() );
-        TomahawkSettings::instance()->remove( pluginId() + "/AutoConnect" );
-
-        TomahawkSettings::instance()->sync();
-        
-        TomahawkSettings::instance()->setValue( pluginId() + "/autoconnect",
-            TomahawkSettings::instance()->value( pluginId() + "/autoconnect_tmp" ).toBool() );
-        TomahawkSettings::instance()->remove( pluginId() + "/autoconnect_tmp" );
-    }
-    return TomahawkSettings::instance()->value( pluginId() + "/autoconnect", true ).toBool();
-}
-
-void
-TwitterPlugin::setTwitterAutoConnect( bool autoConnect )
-{
-    TomahawkSettings::instance()->setValue( pluginId() + "/autoconnect", autoConnect );
 }
 
 Q_EXPORT_PLUGIN2( sipfactory, TwitterFactory )
