@@ -38,15 +38,11 @@ static void setStatus(const QString &status)
 
 using namespace Tomahawk::InfoSystem;
 
-AdiumPlugin::AdiumPlugin( InfoSystemWorker* parent )
-    : InfoPlugin(parent)
+AdiumPlugin::AdiumPlugin()
+    : InfoPlugin()
 {
-    /** No supported types since the plugin pushes info, doesn't get any */
     qDebug() << Q_FUNC_INFO;
-    QSet< InfoType > supportedGetTypes, supportedPushTypes;
-    supportedPushTypes << InfoNowPlaying;
-    parent->registerInfoTypes( this, supportedGetTypes, supportedPushTypes );
-
+    m_supportedPushTypes << InfoNowPlaying;
 }
 
 AdiumPlugin::~AdiumPlugin()

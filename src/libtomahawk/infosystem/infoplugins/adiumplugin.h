@@ -33,7 +33,7 @@ class AdiumPlugin : public InfoPlugin
     Q_OBJECT
 
 public:
-    AdiumPlugin( InfoSystemWorker *parent );
+    AdiumPlugin();
     virtual ~AdiumPlugin();
 
 protected slots:
@@ -47,7 +47,7 @@ public slots:
     void audioPaused();
     void audioResumed( const QVariant &input );
 
-    void namChangedSlot() {} // unused
+    void namChangedSlot( QNetworkAccessManager *nam ) {} // unused
     void notInCacheSlot( const Tomahawk::InfoSystem::InfoCriteriaHash criteria, const QString caller, const Tomahawk::InfoSystem::InfoType type, const QVariant input, const Tomahawk::InfoSystem::InfoCustomData customData ) {} // unused
 
 };
