@@ -36,7 +36,7 @@ echo "Goes here: $QTDIR"
 export QMAKESPEC='macx-g++'
 export QTDIR
 export VERSION
-export QTVERSION='4.7.2'
+export QTVERSION='4.7.3'
 ################################################################################
 
 
@@ -49,20 +49,31 @@ VERSION=$1
     header "Adding Qt to app bundle"
     cd tomahawk.app
     $ROOT/../admin/mac/add-Qt-to-bundle.sh \
-                   'QtCore QtGui QtXml QtNetwork QtSql QtXmlPatterns QtWebKit phonon'
-
-    header "Running install_name_tool"
-    $ROOT/../admin/mac/deposx.sh
+                   'QtCore QtGui QtXml QtNetwork QtSql QtXmlPatterns QtWebKit QtDbus phonon'
 
     header "Renaming files"
     mv Contents/Resources/tomahawkSources.icns Contents/Resources/Tomahawk.icns
     mv Contents/MacOS/tomahawk Contents/MacOS/Tomahawk
 #    cp $ROOT/../admin/mac/Info.plist Contents/Info.plist
 
+    header "Copying VLC plugins into bundle"
+    mkdir -p Contents/PlugIns
+    cp -R /usr/local/Cellar/vlc-git/HEAD/lib/vlc/plugins/* Contents/PlugIns
+
+    header "Running install_name_tool"
+    $ROOT/../admin/mac/deposx.sh
+
     header "Copying Sparkle pubkey & framework, and qt.conf"
     cp $ROOT/../admin/mac/sparkle_pub.pem Contents/Resources
     cp -R /Library/Frameworks/Sparkle.framework Contents/Frameworks
     cp $ROOT/../admin/mac/qt.conf Contents/Resources
+
+    header "Adding spotify resolver to bundle if tomahawk_spotify found in $ROOT"
+    if [ -e $ROOT/tomahawk_spotify ]
+       then
+        header "Found, so adding spotify resolver."
+        $ROOT/../admin/mac/add-spotify.sh $ROOT/tomahawk_spotify
+    fi
 
     header "Creating DMG"
     cd ..
