@@ -1,5 +1,5 @@
 /* === This file is part of Tomahawk Player - <http://tomahawk-player.org> ===
- * 
+ *
  *   Copyright 2010-2011, Christian Muehlhaeuser <muesli@tomahawk-player.org>
  *
  *   Tomahawk is free software: you can redistribute it and/or modify
@@ -18,36 +18,76 @@
 
 #include "zeroconf.h"
 
+#include "tomahawksettings.h"
+#include "ui_configwidget.h"
+
 #include <QtPlugin>
 
+SipPlugin*
+ZeroconfFactory::createPlugin( const QString& pluginId )
+{
+    return new ZeroconfPlugin( pluginId.isEmpty() ? generateId() : pluginId );
+}
+
+ZeroconfPlugin::ZeroconfPlugin ( const QString& pluginId )
+    : SipPlugin( pluginId )
+    , m_zeroconf( 0 )
+    , m_state( Disconnected )
+    , m_cachedNodes()
+{
+    qDebug() << Q_FUNC_INFO;
+
+    m_configWidget = QWeakPointer< QWidget >( new QWidget );
+    m_ui = new Ui_ZeroconfConfig;
+    m_ui->setupUi( m_configWidget.data() );
+    m_ui->autoConnectCheckbox->setChecked( autoConnect() );
+    m_configWidget.data()->setVisible( false );
+}
+
 const QString
-ZeroconfPlugin::name()
+ZeroconfPlugin::name() const
 {
     return QString( MYNAME );
 }
 
 const QString
-ZeroconfPlugin::accountName()
+ZeroconfPlugin::accountName() const
 {
-    return QString();
+    return QString( MYNAME );
 }
 
 const QString
-ZeroconfPlugin::friendlyName()
+ZeroconfPlugin::friendlyName() const
 {
-    return QString( "Zeroconf" );
+    return QString( MYNAME );
 }
 
-bool
-ZeroconfPlugin::connectPlugin( bool /*startup*/ )
+SipPlugin::ConnectionState
+ZeroconfPlugin::connectionState() const
 {
+    return m_state;
+}
+
+QIcon
+ZeroconfFactory::icon() const
+{
+    return QIcon( ":/zeroconf-icon.png" );
+}
+
+
+bool
+ZeroconfPlugin::connectPlugin( bool startup )
+{
+    if( startup && !autoConnect() )
+        return false;
+
     delete m_zeroconf;
     m_zeroconf = new TomahawkZeroconf( Servent::instance()->port(), this );
     QObject::connect( m_zeroconf, SIGNAL( tomahawkHostFound( QString, int, QString, QString ) ),
                                     SLOT( lanHostFound( QString, int, QString, QString ) ) );
 
     m_zeroconf->advertise();
-    m_isOnline = true;
+    m_state = Connected;
 
     foreach( const QStringList& nodeSet, m_cachedNodes )
     {
@@ -61,11 +101,18 @@ ZeroconfPlugin::connectPlugin( bool /*startup*/ )
 void
 ZeroconfPlugin::disconnectPlugin()
 {
-    m_isOnline = false;
+    m_state = Disconnected;
 
     delete m_zeroconf;
     m_zeroconf = 0;
 }
+
+QIcon
+ZeroconfPlugin::icon() const
+{
+    return QIcon( ":/zeroconf-icon.png" );
+}
+
 
 void
 ZeroconfPlugin::lanHostFound( const QString& host, int port, const QString& name, const QString& nodeid )
@@ -75,7 +122,7 @@ ZeroconfPlugin::lanHostFound( const QString& host, int port, const QString& name
 
     qDebug() << "Found LAN host:" << host << port << nodeid;
 
-    if ( !m_isOnline )
+    if ( m_state != Connected )
     {
         qDebug() << "Not online, so not connecting.";
         QStringList nodeSet;
@@ -83,11 +130,24 @@ ZeroconfPlugin::lanHostFound( const QString& host, int port, const QString& name
         m_cachedNodes.append( nodeSet );
         return;
     }
-    
+
     if ( !Servent::instance()->connectedToSession( nodeid ) )
         Servent::instance()->connectToPeer( host, port, "whitelist", name, nodeid );
     else
         qDebug() << "Already connected to" << host;
 }
 
-Q_EXPORT_PLUGIN2( sip, ZeroconfPlugin )
+void
+ZeroconfPlugin::saveConfig()
+{
+    TomahawkSettings::instance()->setValue( pluginId() + "/autoconnect", m_ui->autoConnectCheckbox->isChecked() );
+}
+
+bool
+ZeroconfPlugin::autoConnect() const
+{
+    return TomahawkSettings::instance()->value( pluginId() + "/autoconnect", true ).toBool();
+}
+
+
+Q_EXPORT_PLUGIN2( sipfactory, ZeroconfFactory )

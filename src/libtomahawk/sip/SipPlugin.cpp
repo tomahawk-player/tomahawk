@@ -1,6 +1,7 @@
 /* === This file is part of Tomahawk Player - <http://tomahawk-player.org> ===
- * 
+ *
  *   Copyright 2010-2011, Christian Muehlhaeuser <muesli@tomahawk-player.org>
+ *             2011, Dominik Schmidt <dev@dominik-schmidt.de>
  *
  *   Tomahawk is free software: you can redistribute it and/or modify
  *   it under the terms of the GNU General Public License as published by
@@ -16,7 +17,29 @@
  *   along with Tomahawk. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include <sip/SipPlugin.h>
+#include "sip/SipPlugin.h"
+
+#include <QUuid>
+
+QString
+SipPluginFactory::generateId()
+{
+    QString uniq = QUuid::createUuid().toString().mid( 1, 8 );
+    return factoryId() + "_" + uniq;
+}
+
+SipPlugin::SipPlugin( const QString& pluginId, QObject* parent )
+    : QObject( parent )
+    , m_pluginId( pluginId )
+{
+    connect( this, SIGNAL( error( int, QString ) ), this, SLOT( onError( int,QString ) ) );
+    connect( this, SIGNAL( stateChanged( SipPlugin::ConnectionState ) ), this, SLOT( onStateChange( SipPlugin::ConnectionState ) ) );
+}
+
+QString SipPlugin::pluginId() const
+{
+    return m_pluginId;
+}
 
 
 QMenu*
@@ -31,3 +54,34 @@ SipPlugin::configWidget()
 {
     return 0;
 }
+
+QString
+SipPlugin::errorMessage() const
+{
+    return m_cachedError;
+}
+
+QIcon
+SipPlugin::icon() const
+{
+    return QIcon();
+}
+
+void
+SipPlugin::setProxy( const QNetworkProxy& proxy )
+{
+    qDebug() << Q_FUNC_INFO << "Not implemented";
+}
+
+void
+SipPlugin::onError( int code, const QString& error )
+{
+    m_cachedError = error;
+}
+
+void
+SipPlugin::onStateChange( SipPlugin::ConnectionState state )
+{
+    m_cachedError.clear();
+}
+

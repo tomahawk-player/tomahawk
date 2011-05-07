@@ -27,10 +27,11 @@ using namespace Tomahawk;
 
 WelcomePlaylistModel::WelcomePlaylistModel( QObject* parent )
     : QAbstractListModel( parent )
+    , m_waitingForSome( true )
 {
     loadFromSettings();
 
-    connect( SourceList::instance(), SIGNAL( sourceAdded( Tomahawk::source_ptr ) ), SLOT( loadFromSettings() ), Qt::QueuedConnection );
+    connect( SourceList::instance(), SIGNAL( sourceAdded( Tomahawk::source_ptr ) ), this, SLOT( onSourceAdded( Tomahawk::source_ptr ) ), Qt::QueuedConnection );
     connect( TomahawkSettings::instance(), SIGNAL( recentlyPlayedPlaylistAdded( Tomahawk::playlist_ptr ) ), this, SLOT( plAdded( Tomahawk::playlist_ptr ) ) );
     connect( AudioEngine::instance(),SIGNAL( playlistChanged( PlaylistInterface* ) ), this, SLOT( playlistChanged( PlaylistInterface* ) ), Qt::QueuedConnection );
 
@@ -40,8 +41,12 @@ WelcomePlaylistModel::WelcomePlaylistModel( QObject* parent )
 void
 WelcomePlaylistModel::loadFromSettings()
 {
+    if( !m_waitingForSome )
+        return;
+
     beginResetModel();
     m_recplaylists.clear();
+    m_waitingForSome = false;
 
     QStringList playlist_guids = TomahawkSettings::instance()->recentlyPlayedPlaylistGuids();
 
@@ -58,12 +63,14 @@ WelcomePlaylistModel::loadFromSettings()
 
             if( !m_cached.contains( playlist_guids[i] ) )
                 m_cached[playlist_guids[i]] = pl;
-        }
+        } else
+            m_waitingForSome = true;
     }
     endResetModel();
 
     emit emptinessChanged( m_recplaylists.isEmpty() );
 }
+
 
 
 QVariant
@@ -107,6 +114,7 @@ WelcomePlaylistModel::data( const QModelIndex& index, int role ) const
 void
 WelcomePlaylistModel::onSourceAdded( const Tomahawk::source_ptr& source )
 {
+    connect( source->collection().data(), SIGNAL( playlistsAdded( QList<Tomahawk::playlist_ptr> ) ), SLOT( loadFromSettings() ) );
     connect( source->collection().data(), SIGNAL( playlistsDeleted( QList<Tomahawk::playlist_ptr> ) ), SLOT( onPlaylistsRemoved( QList<Tomahawk::playlist_ptr> ) ) );
 }
 

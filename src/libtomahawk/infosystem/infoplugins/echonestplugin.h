@@ -40,7 +40,7 @@ class EchoNestPlugin : public InfoPlugin
     Q_OBJECT
 
 public:
-    EchoNestPlugin( InfoSystemWorker *parent );
+    EchoNestPlugin();
     virtual ~EchoNestPlugin();
 
 protected slots:
@@ -63,7 +63,7 @@ protected slots:
     }
 
 public slots:
-    void namChangedSlot();
+    void namChangedSlot( QNetworkAccessManager *nam );
 
 private:
     void getSongProfile( const QString &caller, const QVariant &input, const InfoCustomData &customData, const QString &item = QString() );
@@ -87,7 +87,7 @@ private slots:
 private:
     QHash< QNetworkReply*, InfoCustomData > m_replyMap;
     QHash< QNetworkReply*, QString > m_callerMap;
-    InfoSystemWorker* m_infoSystemWorker;
+    QWeakPointer< QNetworkAccessManager > m_nam;
 };
 
 }

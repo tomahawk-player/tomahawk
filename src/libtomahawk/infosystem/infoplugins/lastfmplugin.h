@@ -41,7 +41,7 @@ class LastFmPlugin : public InfoPlugin
     Q_OBJECT
 
 public:
-    LastFmPlugin( InfoSystemWorker *parent );
+    LastFmPlugin();
     virtual ~LastFmPlugin();
 
 public slots:
@@ -51,7 +51,7 @@ public slots:
     void coverArtReturned();
     void artistImagesReturned();
 
-    void namChangedSlot();
+    void namChangedSlot( QNetworkAccessManager *nam );
 
 protected slots:
     virtual void getInfo( const QString caller, const Tomahawk::InfoSystem::InfoType type, const QVariant input, const Tomahawk::InfoSystem::InfoCustomData customData );
@@ -64,8 +64,8 @@ private:
     void fetchArtistImages( const QString &caller, const Tomahawk::InfoSystem::InfoType type, const QVariant &input, const Tomahawk::InfoSystem::InfoCustomData &customData );
 
     void createScrobbler();
-    void scrobble( const QString &caller, const Tomahawk::InfoSystem::InfoType type, const QVariant &input );
-    void nowPlaying( const QString &caller, const Tomahawk::InfoSystem::InfoType type, const QVariant &input );
+    void nowPlaying( const QVariant &input );
+    void scrobble();
 
     void dataError( const QString &caller, const Tomahawk::InfoSystem::InfoType type, const QVariant &input, const Tomahawk::InfoSystem::InfoCustomData &customData );
 
@@ -77,7 +77,7 @@ private:
 
     QNetworkReply* m_authJob;
 
-    InfoSystemWorker* m_infoSystemWorker;
+    QWeakPointer< QNetworkAccessManager > m_nam;
 };
 
 }

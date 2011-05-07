@@ -48,7 +48,6 @@ void TomahawkSipMessageFactory::handleStartElement(const QStringRef &name, const
 
             m_uniqname = attributes.value(QLatin1String("uniqname")).toString();
             m_key = attributes.value(QLatin1String("pwd")).toString();
-            m_visible = true;
         }
     } else if(m_depth == 3) {
         if (name == QLatin1String("candidate"))
@@ -58,6 +57,7 @@ void TomahawkSipMessageFactory::handleStartElement(const QStringRef &name, const
             m_ip = attributes.value(QLatin1String("ip")).toString();
             m_port = attributes.value(QLatin1String("port")).toString().toInt();
 
+            m_visible = true;
         }
     }
     Q_UNUSED(uri);
@@ -120,5 +120,8 @@ void TomahawkSipMessageFactory::serialize(StanzaExtension *extension, QXmlStream
 
 StanzaExtension::Ptr TomahawkSipMessageFactory::createExtension()
 {
-    return StanzaExtension::Ptr(new TomahawkSipMessage(m_ip, m_port, m_uniqname, m_key, m_visible));
+    if(m_visible)
+        return StanzaExtension::Ptr(new TomahawkSipMessage(m_ip, m_port, m_uniqname, m_key));
+    else
+        return StanzaExtension::Ptr(new TomahawkSipMessage());
 }

@@ -1,5 +1,5 @@
 /* === This file is part of Tomahawk Player - <http://tomahawk-player.org> ===
- * 
+ *
  *   Copyright 2010-2011, Christian Muehlhaeuser <muesli@tomahawk-player.org>
  *
  *   Tomahawk is free software: you can redistribute it and/or modify
@@ -35,10 +35,21 @@
 
 static QString s_gotTomahawkRegex = QString( "^(@[a-zA-Z0-9]+ )?(Got Tomahawk\\?) (\\{[a-fA-F0-9\\-]+\\}) (.*)$" );
 
-TwitterPlugin::TwitterPlugin()
-    : SipPlugin()
+SipPlugin*
+TwitterFactory::createPlugin( const QString& pluginId )
+{
+    return new TwitterPlugin( pluginId.isEmpty() ? generateId() : pluginId );
+}
+
+QIcon TwitterFactory::icon() const
+{
+    return QIcon( ":/twitter-icon.png" );
+}
+
+
+TwitterPlugin::TwitterPlugin( const QString& pluginId )
+    : SipPlugin( pluginId )
     , m_isAuthed( false )
-    , m_isOnline( false )
     , m_checkTimer( this )
     , m_connectTimer( this )
     , m_cachedFriendsSinceId( 0 )
@@ -48,7 +59,7 @@ TwitterPlugin::TwitterPlugin()
     , m_keyCache()
     , m_finishedFriends( false )
     , m_finishedMentions( false )
-    , m_configWidget( 0 )
+    , m_state( Disconnected )
 {
     qDebug() << Q_FUNC_INFO;
     m_checkTimer.setInterval( 60000 );
@@ -58,61 +69,86 @@ TwitterPlugin::TwitterPlugin()
     m_connectTimer.setInterval( 60000 );
     m_connectTimer.setSingleShot( false );
     connect( &m_connectTimer, SIGNAL( timeout() ), SLOT( connectTimerFired() ) );
+
+    m_configWidget = QWeakPointer< TwitterConfigWidget >( new TwitterConfigWidget( this, 0 ) );
+    connect( m_configWidget.data(), SIGNAL( twitterAuthed( bool ) ), SLOT( configDialogAuthedSignalSlot( bool ) ) );
+
 }
 
 void
 TwitterPlugin::configDialogAuthedSignalSlot( bool authed )
 {
-    m_isAuthed = authed;
+
     if ( !authed )
     {
-        TomahawkSettings::instance()->setTwitterScreenName( QString() );
-        TomahawkSettings::instance()->setTwitterOAuthToken( QString() );
-        TomahawkSettings::instance()->setTwitterOAuthTokenSecret( QString() );
+        if( m_isAuthed ) {
+            m_state = Disconnected;
+            emit stateChanged( m_state );
+        }
+
+        setTwitterScreenName( QString() );
+        setTwitterOAuthToken( QString() );
+        setTwitterOAuthTokenSecret( QString() );
     }
+
+    m_isAuthed = authed;
 }
 
 bool
-TwitterPlugin::isValid()
+TwitterPlugin::isValid() const
 {
     return m_isAuthed;
 }
 
 const QString
-TwitterPlugin::name()
+TwitterPlugin::name() const
 {
     return QString( MYNAME );
 }
 
 const QString
-TwitterPlugin::friendlyName()
+TwitterPlugin::friendlyName() const
 {
     return tr("Twitter");
 }
 
 const QString
-TwitterPlugin::accountName()
+TwitterPlugin::accountName() const
 {
-    return QString( TomahawkSettings::instance()->twitterScreenName() );
+    if( twitterScreenName().isEmpty() )
+        return friendlyName();
+    else
+        return twitterScreenName();
 }
+
+QIcon
+TwitterPlugin::icon() const
+{
+    return QIcon( ":/twitter-icon.png" );
+}
+
+
+SipPlugin::ConnectionState
+TwitterPlugin::connectionState() const
+{
+    return m_state;
+}
+
 
 QWidget* TwitterPlugin::configWidget()
 {
-    m_configWidget = new TwitterConfigWidget( this );
-
-    connect( m_configWidget, SIGNAL( twitterAuthed(bool) ), SLOT( configDialogAuthedSignalSlot(bool) ) );
-    
-    return m_configWidget;
+    return m_configWidget.data();
 }
 
 bool
-TwitterPlugin::connectPlugin( bool /*startup*/ )
+TwitterPlugin::connectPlugin( bool startup )
 {
     qDebug() << Q_FUNC_INFO;
 
-    TomahawkSettings *settings = TomahawkSettings::instance();
+    if( startup && !twitterAutoConnect() )
+        return false;
 
-    m_cachedPeers = settings->twitterCachedPeers();
+    m_cachedPeers = twitterCachedPeers();
     QList<QString> peerlist = m_cachedPeers.keys();
     qStableSort( peerlist.begin(), peerlist.end() );
     foreach( QString screenName, peerlist )
@@ -122,38 +158,42 @@ TwitterPlugin::connectPlugin( bool /*startup*/ )
             qDebug() << "TwitterPlugin : " << screenName << ", key " << prop << ", value " << ( cachedPeer[prop].canConvert< QString >() ? cachedPeer[prop].toString() : QString::number( cachedPeer[prop].toInt() ) );
         QMetaObject::invokeMethod( this, "registerOffer", Q_ARG( QString, screenName ), QGenericArgument( "QHash< QString, QVariant >", (const void*)&cachedPeer ) );
     }
-    
-    if ( settings->twitterOAuthToken().isEmpty() || settings->twitterOAuthTokenSecret().isEmpty() )
+
+    if ( twitterOAuthToken().isEmpty() || twitterOAuthTokenSecret().isEmpty() )
     {
         qDebug() << "TwitterPlugin has empty Twitter credentials; not connecting";
         return m_cachedPeers.isEmpty();
     }
- 
+
     if ( refreshTwitterAuth() )
     {
       QTweetAccountVerifyCredentials *credVerifier = new QTweetAccountVerifyCredentials( m_twitterAuth.data(), this );
       connect( credVerifier, SIGNAL( parsedUser(const QTweetUser &) ), SLOT( connectAuthVerifyReply(const QTweetUser &) ) );
       credVerifier->verify();
+
+      m_state = Connecting;
+      emit stateChanged( m_state );
     }
-    
+
     return true;
 }
 
 bool
 TwitterPlugin::refreshTwitterAuth()
 {
+    qDebug() << Q_FUNC_INFO << " begin";
     if( !m_twitterAuth.isNull() )
         delete m_twitterAuth.data();
-    m_twitterAuth = QWeakPointer<TomahawkOAuthTwitter>( new TomahawkOAuthTwitter( this ) );
-    
+
+    Q_ASSERT( TomahawkUtils::nam() != 0 );
+    qDebug() << Q_FUNC_INFO << " with nam " << TomahawkUtils::nam();
+    m_twitterAuth = QWeakPointer<TomahawkOAuthTwitter>( new TomahawkOAuthTwitter( TomahawkUtils::nam(), this ) );
+
     if( m_twitterAuth.isNull() )
       return false;
-    
-    TomahawkSettings *settings = TomahawkSettings::instance();
 
-    m_twitterAuth.data()->setNetworkAccessManager( TomahawkUtils::nam() );
-    m_twitterAuth.data()->setOAuthToken( settings->twitterOAuthToken().toLatin1() );
-    m_twitterAuth.data()->setOAuthTokenSecret( settings->twitterOAuthTokenSecret().toLatin1() );
+    m_twitterAuth.data()->setOAuthToken( twitterOAuthToken().toLatin1() );
+    m_twitterAuth.data()->setOAuthTokenSecret( twitterOAuthTokenSecret().toLatin1() );
 
     return true;
 }
@@ -178,7 +218,8 @@ TwitterPlugin::disconnectPlugin()
         delete m_twitterAuth.data();
 
     m_cachedPeers.empty();
-    m_isOnline = false;
+    m_state = Disconnected;
+    emit stateChanged( m_state );
 }
 
 void
@@ -188,6 +229,10 @@ TwitterPlugin::connectAuthVerifyReply( const QTweetUser &user )
     {
         qDebug() << "TwitterPlugin could not authenticate to Twitter";
         m_isAuthed = false;
+        m_state = Disconnected;
+        m_connectTimer.stop();
+        m_checkTimer.stop();
+        emit stateChanged( m_state );
     }
     else
     {
@@ -195,7 +240,7 @@ TwitterPlugin::connectAuthVerifyReply( const QTweetUser &user )
         m_isAuthed = true;
         if ( !m_twitterAuth.isNull() )
         {
-            TomahawkSettings::instance()->setTwitterScreenName( user.screenName() );
+            setTwitterScreenName( user.screenName() );
             m_friendsTimeline = QWeakPointer<QTweetFriendsTimeline>( new QTweetFriendsTimeline( m_twitterAuth.data(), this ) );
             m_mentions = QWeakPointer<QTweetMentions>( new QTweetMentions( m_twitterAuth.data(), this ) );
             m_directMessages = QWeakPointer<QTweetDirectMessages>( new QTweetDirectMessages( m_twitterAuth.data(), this ) );
@@ -207,7 +252,8 @@ TwitterPlugin::connectAuthVerifyReply( const QTweetUser &user )
             connect( m_directMessageNew.data(), SIGNAL( parsedDirectMessage(const QTweetDMStatus &)), SLOT( directMessagePosted(const QTweetDMStatus &) ) );
             connect( m_directMessageNew.data(), SIGNAL( error(QTweetNetBase::ErrorCode, const QString &) ), SLOT( directMessagePostError(QTweetNetBase::ErrorCode, const QString &) ) );
             connect( m_directMessageDestroy.data(), SIGNAL( parsedDirectMessage(const QTweetDMStatus &) ), SLOT( directMessageDestroyed(const QTweetDMStatus &) ) );
-            m_isOnline = true;
+            m_state = Connected;
+            emit stateChanged( m_state );
             m_connectTimer.start();
             m_checkTimer.start();
             QMetaObject::invokeMethod( this, "checkTimerFired", Qt::AutoConnection );
@@ -225,6 +271,10 @@ TwitterPlugin::connectAuthVerifyReply( const QTweetUser &user )
             {
                 qDebug() << "TwitterPlugin auth pointer was null!";
                 m_isAuthed = false;
+                m_state = Disconnected;
+                m_connectTimer.stop();
+                m_checkTimer.stop();
+                emit stateChanged( m_state );
             }
         }
     }
@@ -237,18 +287,18 @@ TwitterPlugin::checkTimerFired()
         return;
 
     if ( m_cachedFriendsSinceId == 0 )
-        m_cachedFriendsSinceId = TomahawkSettings::instance()->twitterCachedFriendsSinceId();
-    
+        m_cachedFriendsSinceId = twitterCachedFriendsSinceId();
+
     qDebug() << "TwitterPlugin looking at friends timeline since id " << m_cachedFriendsSinceId;
-    
+
     if ( !m_friendsTimeline.isNull() )
-        m_friendsTimeline.data()->fetch( m_cachedFriendsSinceId, 0, 800 );    
-    
+        m_friendsTimeline.data()->fetch( m_cachedFriendsSinceId, 0, 800 );
+
     if ( m_cachedMentionsSinceId == 0 )
-        m_cachedMentionsSinceId = TomahawkSettings::instance()->twitterCachedMentionsSinceId();
-    
+        m_cachedMentionsSinceId = twitterCachedMentionsSinceId();
+
     qDebug() << "TwitterPlugin looking at mentions timeline since id " << m_cachedMentionsSinceId;
-    
+
     if ( !m_mentions.isNull() )
         m_mentions.data()->fetch( m_cachedMentionsSinceId, 0, 800 );
 }
@@ -259,7 +309,7 @@ TwitterPlugin::connectTimerFired()
     if ( !isValid() || m_cachedPeers.isEmpty() || m_twitterAuth.isNull() )
         return;
 
-    QString myScreenName = TomahawkSettings::instance()->twitterScreenName();
+    QString myScreenName = twitterScreenName();
     QList<QString> peerlist = m_cachedPeers.keys();
     qStableSort( peerlist.begin(), peerlist.end() );
     foreach( QString screenName, peerlist )
@@ -272,20 +322,20 @@ TwitterPlugin::connectTimerFired()
             m_cachedPeers[screenName] = peerData;
             continue;
         }
-        
+
         if ( QDateTime::currentMSecsSinceEpoch() - peerData["lastseen"].toLongLong() > 1209600000 ) // 2 weeks
         {
             qDebug() << "Aging peer " << screenName << " out of cache";
             m_cachedPeers.remove( screenName );
             continue;
         }
-        
+
         if ( !peerData.contains( "host" ) || !peerData.contains( "port" ) || !peerData.contains( "pkey" ) )
         {
             qDebug() << "TwitterPlugin does not have host, port and/or pkey values for " << screenName << " (this is usually *not* a bug or problem but a normal part of the process)";
             continue;
         }
-        
+
         QMetaObject::invokeMethod( this, "registerOffer", Q_ARG( QString, screenName ), QGenericArgument( "QHash< QString, QVariant >", (const void*)&peerData ) );
     }
 }
@@ -293,7 +343,7 @@ TwitterPlugin::connectTimerFired()
 void
 TwitterPlugin::parseGotTomahawk( const QRegExp &regex, const QString &screenName, const QString &text )
 {
-    QString myScreenName = TomahawkSettings::instance()->twitterScreenName();
+    QString myScreenName = twitterScreenName();
     qDebug() << "TwitterPlugin found an exact matching Got Tomahawk? mention or direct message from user " << screenName << ", now parsing";
     regex.exactMatch( text );
     if ( text.startsWith( '@' ) && regex.captureCount() >= 2 && regex.cap( 1 ) != QString( '@' + myScreenName ) )
@@ -301,7 +351,7 @@ TwitterPlugin::parseGotTomahawk( const QRegExp &regex, const QString &screenName
         qDebug() << "TwitterPlugin skipping mention because it's directed @someone that isn't us";
         return;
     }
-    
+
     QString node;
     for ( int i = 0; i < regex.captureCount(); ++i )
     {
@@ -319,13 +369,13 @@ TwitterPlugin::parseGotTomahawk( const QRegExp &regex, const QString &screenName
     }
     else
         qDebug() << "TwitterPlugin parsed node " << node << " out of the tweet";
-    
+
     if ( screenName == myScreenName && node == Database::instance()->dbid() )
     {
         qDebug() << "My screen name and my dbid found; ignoring";
         return;
     }
-    
+
     QHash< QString, QVariant > peerData;
     if( m_cachedPeers.contains( screenName ) )
     {
@@ -342,14 +392,14 @@ TwitterPlugin::friendsTimelineStatuses( const QList< QTweetStatus > &statuses )
 {
     qDebug() << Q_FUNC_INFO;
     QRegExp regex( s_gotTomahawkRegex, Qt::CaseSensitive, QRegExp::RegExp2 );
-    QString myScreenName = TomahawkSettings::instance()->twitterScreenName();
-    
+    QString myScreenName = twitterScreenName();
+
     QHash< QString, QTweetStatus > latestHash;
     foreach ( QTweetStatus status, statuses )
     {
         if ( !regex.exactMatch( status.text() ) )
             continue;
-        
+
         if ( !latestHash.contains( status.user().screenName() ) )
             latestHash[status.user().screenName()] = status;
         else
@@ -358,7 +408,7 @@ TwitterPlugin::friendsTimelineStatuses( const QList< QTweetStatus > &statuses )
                 latestHash[status.user().screenName()] = status;
         }
     }
-    
+
     foreach( QTweetStatus status, latestHash.values() )
     {
         if ( status.id() > m_cachedFriendsSinceId )
@@ -367,9 +417,9 @@ TwitterPlugin::friendsTimelineStatuses( const QList< QTweetStatus > &statuses )
         qDebug() << "TwitterPlugin checking mention from " << status.user().screenName() << " with content " << status.text();
         parseGotTomahawk( regex, status.user().screenName(), status.text() );
     }
-    
-    TomahawkSettings::instance()->setTwitterCachedFriendsSinceId( m_cachedFriendsSinceId );
-    
+
+    setTwitterCachedFriendsSinceId( m_cachedFriendsSinceId );
+
     m_finishedFriends = true;
     QMetaObject::invokeMethod( this, "pollDirectMessages", Qt::AutoConnection );
 }
@@ -379,13 +429,13 @@ TwitterPlugin::mentionsStatuses( const QList< QTweetStatus > &statuses )
 {
     qDebug() << Q_FUNC_INFO;
     QRegExp regex( s_gotTomahawkRegex, Qt::CaseSensitive, QRegExp::RegExp2 );
-    
+
     QHash< QString, QTweetStatus > latestHash;
     foreach ( QTweetStatus status, statuses )
     {
         if ( !regex.exactMatch( status.text() ) )
             continue;
-        
+
         if ( !latestHash.contains( status.user().screenName() ) )
             latestHash[status.user().screenName()] = status;
         else
@@ -394,18 +444,18 @@ TwitterPlugin::mentionsStatuses( const QList< QTweetStatus > &statuses )
                 latestHash[status.user().screenName()] = status;
         }
     }
-    
+
     foreach( QTweetStatus status, latestHash.values() )
     {
         if ( status.id() > m_cachedMentionsSinceId )
             m_cachedMentionsSinceId = status.id();
-        
+
         qDebug() << "TwitterPlugin checking mention from " << status.user().screenName() << " with content " << status.text();
         parseGotTomahawk( regex, status.user().screenName(), status.text() );
     }
-    
-    TomahawkSettings::instance()->setTwitterCachedMentionsSinceId( m_cachedMentionsSinceId );
-    
+
+    setTwitterCachedMentionsSinceId( m_cachedMentionsSinceId );
+
     m_finishedMentions = true;
     QMetaObject::invokeMethod( this, "pollDirectMessages", Qt::AutoConnection );
 }
@@ -415,18 +465,18 @@ TwitterPlugin::pollDirectMessages()
 {
     if ( !m_finishedMentions || !m_finishedFriends )
         return;
-    
+
     m_finishedFriends = false;
     m_finishedMentions = false;
-    
+
     if ( !isValid() )
         return;
-    
+
     if ( m_cachedDirectMessagesSinceId == 0 )
-            m_cachedDirectMessagesSinceId = TomahawkSettings::instance()->twitterCachedDirectMessagesSinceId();
-    
+            m_cachedDirectMessagesSinceId = twitterCachedDirectMessagesSinceId();
+
     qDebug() << "TwitterPlugin looking for direct messages since id " << m_cachedDirectMessagesSinceId;
-    
+
     if ( !m_directMessages.isNull() )
         m_directMessages.data()->fetch( m_cachedDirectMessagesSinceId, 0, 800 );
 }
@@ -435,10 +485,10 @@ void
 TwitterPlugin::directMessages( const QList< QTweetDMStatus > &messages )
 {
     qDebug() << Q_FUNC_INFO;
-    
+
     QRegExp regex( s_gotTomahawkRegex, Qt::CaseSensitive, QRegExp::RegExp2 );
-    QString myScreenName = TomahawkSettings::instance()->twitterScreenName();
-    
+    QString myScreenName = twitterScreenName();
+
     QHash< QString, QTweetDMStatus > latestHash;
     foreach ( QTweetDMStatus status, messages )
     {
@@ -455,7 +505,7 @@ TwitterPlugin::directMessages( const QList< QTweetDMStatus > &messages )
             if ( port == 0 )
                 continue;
         }
-        
+
         if ( !latestHash.contains( status.senderScreenName() ) )
             latestHash[status.senderScreenName()] = status;
         else
@@ -464,13 +514,13 @@ TwitterPlugin::directMessages( const QList< QTweetDMStatus > &messages )
                 latestHash[status.senderScreenName()] = status;
         }
     }
-    
+
     foreach( QTweetDMStatus status, latestHash.values() )
     {
         qDebug() << "TwitterPlugin checking direct message from " << status.senderScreenName() << " with content " << status.text();
         if ( status.id() > m_cachedDirectMessagesSinceId )
             m_cachedDirectMessagesSinceId = status.id();
-        
+
         if ( regex.exactMatch( status.text() ) )
             parseGotTomahawk( regex, status.sender().screenName(), status.text() );
         else
@@ -491,12 +541,12 @@ TwitterPlugin::directMessages( const QList< QTweetDMStatus > &messages )
                 continue;
             }
             qDebug() << "TwitterPlugin found a peerstart message from " << status.senderScreenName() << " with host " << host << " and port " << port << " and pkey " << pkey << " and node " << splitNode[0] << " destined for node " << splitNode[1];
-            
-        
+
+
             QHash< QString, QVariant > peerData = ( m_cachedPeers.contains( status.senderScreenName() ) ) ?
                                                         m_cachedPeers[status.senderScreenName()].toHash() :
                                                         QHash< QString, QVariant >();
-            
+
             peerData["host"] = QVariant::fromValue< QString >( host );
             peerData["port"] = QVariant::fromValue< int >( port );
             peerData["pkey"] = QVariant::fromValue< QString >( pkey );
@@ -514,7 +564,7 @@ TwitterPlugin::directMessages( const QList< QTweetDMStatus > &messages )
         }
     }
 
-    TomahawkSettings::instance()->setTwitterCachedDirectMessagesSinceId( m_cachedDirectMessagesSinceId );
+    setTwitterCachedDirectMessagesSinceId( m_cachedDirectMessagesSinceId );
 }
 
 void
@@ -570,7 +620,7 @@ TwitterPlugin::registerOffer( const QString &screenName, const QHash< QString, Q
         qDebug() << "TwitterPlugin registering offer to " << friendlyName << " with node " << _peerData["node"].toString() << " and offeredkey " << _peerData["okey"].toString();
         m_keyCache << Servent::instance()->createConnectionKey( friendlyName, _peerData["node"].toString(), _peerData["okey"].toString(), false );
     }
-        
+
     if( needToSend && _peerData.contains( "node") )
     {
         qDebug() << "TwitterPlugin needs to send and has node";
@@ -587,12 +637,12 @@ TwitterPlugin::registerOffer( const QString &screenName, const QHash< QString, Q
     {
         _peerData["lastseen"] = QString::number( QDateTime::currentMSecsSinceEpoch() );
         m_cachedPeers[screenName] = QVariant::fromValue< QHash< QString, QVariant > >( _peerData );
-        TomahawkSettings::instance()->setTwitterCachedPeers( m_cachedPeers );
+        setTwitterCachedPeers( m_cachedPeers );
     }
 
-    if ( m_isOnline && _peerData.contains( "host" ) && _peerData.contains( "port" ) && _peerData.contains( "pkey" ) )
+    if ( m_state == Connected && _peerData.contains( "host" ) && _peerData.contains( "port" ) && _peerData.contains( "pkey" ) )
         QMetaObject::invokeMethod( this, "makeConnection", Q_ARG( QString, screenName ), QGenericArgument( "QHash< QString, QVariant >", (const void*)&_peerData ) );
-    
+
 }
 
 void
@@ -633,7 +683,7 @@ TwitterPlugin::directMessagePosted( const QTweetDMStatus& message )
 {
     qDebug() << Q_FUNC_INFO;
     qDebug() << "TwitterPlugin sent message to " << message.recipientScreenName() << " containing: " << message.text();
-    
+
 }
 
 void
@@ -659,4 +709,204 @@ TwitterPlugin::checkSettings()
     connectPlugin( false );
 }
 
-Q_EXPORT_PLUGIN2( sip, TwitterPlugin )
+
+QString
+TwitterPlugin::twitterScreenName() const
+{
+    if ( TomahawkSettings::instance()->contains( pluginId() + "/ScreenName" ) )
+    {
+        TomahawkSettings::instance()->setValue( pluginId() + "/screenname_tmp",
+            TomahawkSettings::instance()->value( pluginId() + "/ScreenName" ).toString() );
+        TomahawkSettings::instance()->remove( pluginId() + "/ScreenName" );
+
+        TomahawkSettings::instance()->sync();
+        
+        TomahawkSettings::instance()->setValue( pluginId() + "/screenname",
+            TomahawkSettings::instance()->value( pluginId() + "/screenname_tmp" ).toString() );
+        TomahawkSettings::instance()->remove( pluginId() + "/screenname_tmp" );
+    }
+
+    return TomahawkSettings::instance()->value( pluginId() + "/screenname" ).toString();
+}
+
+void
+TwitterPlugin::setTwitterScreenName( const QString& screenName )
+{
+    TomahawkSettings::instance()->setValue( pluginId() + "/screenname", screenName );
+}
+
+QString
+TwitterPlugin::twitterOAuthToken() const
+{
+    if ( TomahawkSettings::instance()->contains( pluginId() + "/OAuthToken" ) )
+    {
+        TomahawkSettings::instance()->setValue( pluginId() + "/oauthtoken_tmp",
+            TomahawkSettings::instance()->value( pluginId() + "/OAuthToken" ).toString() );
+        TomahawkSettings::instance()->remove( pluginId() + "/OAuthToken" );
+
+        TomahawkSettings::instance()->sync();
+        
+        TomahawkSettings::instance()->setValue( pluginId() + "/oauthtoken",
+            TomahawkSettings::instance()->value( pluginId() + "/oauthtoken_tmp" ).toString() );
+        TomahawkSettings::instance()->remove( pluginId() + "/oauthtoken_tmp" );
+    }
+    
+    return TomahawkSettings::instance()->value( pluginId() + "/oauthtoken" ).toString();
+}
+
+void
+TwitterPlugin::setTwitterOAuthToken( const QString& oauthtoken )
+{
+    TomahawkSettings::instance()->setValue( pluginId() + "/oauthtoken", oauthtoken );
+}
+
+QString
+TwitterPlugin::twitterOAuthTokenSecret() const
+{
+    if ( TomahawkSettings::instance()->contains( pluginId() + "/OAuthTokenSecret" ) )
+    {
+        TomahawkSettings::instance()->setValue( pluginId() + "/oauthtokensecret_tmp",
+            TomahawkSettings::instance()->value( pluginId() + "/OAuthTokenSecret" ).toString() );
+        TomahawkSettings::instance()->remove( pluginId() + "/OAuthTokenSecret" );
+
+        TomahawkSettings::instance()->sync();
+        
+        TomahawkSettings::instance()->setValue( pluginId() + "/oauthtokensecret",
+            TomahawkSettings::instance()->value( pluginId() + "/oauthtokensecret_tmp" ).toString() );
+        TomahawkSettings::instance()->remove( pluginId() + "/oauthtokensecret_tmp" );
+    }
+    
+    return TomahawkSettings::instance()->value( pluginId() + "/oauthtokensecret" ).toString();
+}
+
+void
+TwitterPlugin::setTwitterOAuthTokenSecret( const QString& oauthtokensecret )
+{
+    TomahawkSettings::instance()->setValue( pluginId() + "/oauthtokensecret", oauthtokensecret );
+}
+
+qint64
+TwitterPlugin::twitterCachedFriendsSinceId() const
+{
+    if ( TomahawkSettings::instance()->contains( pluginId() + "/CachedFriendsSinceID" ) )
+    {
+        TomahawkSettings::instance()->setValue( pluginId() + "/cachedfriendssinceid_tmp",
+            TomahawkSettings::instance()->value( pluginId() + "/CachedFriendsSinceID" ).toLongLong() );
+        TomahawkSettings::instance()->remove( pluginId() + "/CachedFriendsSinceID" );
+
+        TomahawkSettings::instance()->sync();
+        
+        TomahawkSettings::instance()->setValue( pluginId() + "/cachedfriendssinceid",
+            TomahawkSettings::instance()->value( pluginId() + "/cachedfriendssinceid_tmp" ).toLongLong() );
+        TomahawkSettings::instance()->remove( pluginId() + "/cachedfriendssinceid_tmp" );
+    }
+
+    return TomahawkSettings::instance()->value( pluginId() + "/cachedfriendssinceid", 0 ).toLongLong();
+}
+
+void
+TwitterPlugin::setTwitterCachedFriendsSinceId( qint64 cachedId )
+{
+    TomahawkSettings::instance()->setValue( pluginId() + "/cachedfriendssinceid", cachedId );
+}
+
+qint64
+TwitterPlugin::twitterCachedMentionsSinceId() const
+{
+    if ( TomahawkSettings::instance()->contains( pluginId() + "/CachedMentionsSinceID" ) )
+    {
+        TomahawkSettings::instance()->setValue( pluginId() + "/cachedmentionssinceid_tmp",
+            TomahawkSettings::instance()->value( pluginId() + "/CachedMentionsSinceID" ).toLongLong() );
+        TomahawkSettings::instance()->remove( pluginId() + "/CachedMentionsSinceID" );
+
+        TomahawkSettings::instance()->sync();
+        
+        TomahawkSettings::instance()->setValue( pluginId() + "/cachedmentionssinceid",
+            TomahawkSettings::instance()->value( pluginId() + "/cachedmentionssinceid_tmp" ).toLongLong() );
+        TomahawkSettings::instance()->remove( pluginId() + "/cachedmentionssinceid_tmp" );
+    }
+
+    return TomahawkSettings::instance()->value( pluginId() + "/cachedmentionssinceid", 0 ).toLongLong();
+}
+
+void
+TwitterPlugin::setTwitterCachedMentionsSinceId( qint64 cachedId )
+{
+    TomahawkSettings::instance()->setValue( pluginId() + "/cachedmentionssinceid", cachedId );
+}
+
+qint64
+TwitterPlugin::twitterCachedDirectMessagesSinceId() const
+{
+    if ( TomahawkSettings::instance()->contains( pluginId() + "/CachedDirectMessagesSinceID" ) )
+    {
+        TomahawkSettings::instance()->setValue( pluginId() + "/cacheddirectmessagessinceid_tmp",
+            TomahawkSettings::instance()->value( pluginId() + "/CachedDirectMessagesSinceID" ).toLongLong() );
+        TomahawkSettings::instance()->remove( pluginId() + "/CachedDirectMessagesSinceID" );
+
+        TomahawkSettings::instance()->sync();
+        
+        TomahawkSettings::instance()->setValue( pluginId() + "/cacheddirectmessagessinceid",
+            TomahawkSettings::instance()->value( pluginId() + "/cacheddirectmessagessinceid_tmp" ).toLongLong() );
+        TomahawkSettings::instance()->remove( pluginId() + "/cacheddirectmessagessinceid_tmp" );
+    }
+    
+    return TomahawkSettings::instance()->value( pluginId() + "/cacheddirectmessagessinceid", 0 ).toLongLong();
+}
+
+void
+TwitterPlugin::setTwitterCachedDirectMessagesSinceId( qint64 cachedId )
+{
+    TomahawkSettings::instance()->setValue( pluginId() + "/cacheddirectmessagessinceid", cachedId );
+}
+
+QHash<QString, QVariant>
+TwitterPlugin::twitterCachedPeers() const
+{
+    if ( TomahawkSettings::instance()->contains( pluginId() + "/CachedPeers" ) )
+    {
+        TomahawkSettings::instance()->setValue( pluginId() + "/cachedpeers_tmp",
+            TomahawkSettings::instance()->value( pluginId() + "/CachedPeers" ).toHash() );
+        TomahawkSettings::instance()->remove( pluginId() + "/CachedPeers" );
+
+        TomahawkSettings::instance()->sync();
+        
+        TomahawkSettings::instance()->setValue( pluginId() + "/cachedpeers",
+            TomahawkSettings::instance()->value( pluginId() + "/cachedpeers_tmp" ).toHash() );
+        TomahawkSettings::instance()->remove( pluginId() + "/cachedpeers_tmp" );
+    }
+    
+    return TomahawkSettings::instance()->value( pluginId() + "/cachedpeers", QHash<QString, QVariant>() ).toHash();
+}
+
+void
+TwitterPlugin::setTwitterCachedPeers( const QHash<QString, QVariant> &cachedPeers )
+{
+    TomahawkSettings::instance()->setValue( pluginId() + "/cachedpeers", cachedPeers );
+}
+
+bool
+TwitterPlugin::twitterAutoConnect() const
+{
+    if ( TomahawkSettings::instance()->contains( pluginId() + "/AutoConnect" ) )
+    {
+        TomahawkSettings::instance()->setValue( pluginId() + "/autoconnect_tmp",
+            TomahawkSettings::instance()->value( pluginId() + "/AutoConnect" ).toBool() );
+        TomahawkSettings::instance()->remove( pluginId() + "/AutoConnect" );
+
+        TomahawkSettings::instance()->sync();
+        
+        TomahawkSettings::instance()->setValue( pluginId() + "/autoconnect",
+            TomahawkSettings::instance()->value( pluginId() + "/autoconnect_tmp" ).toBool() );
+        TomahawkSettings::instance()->remove( pluginId() + "/autoconnect_tmp" );
+    }
+    return TomahawkSettings::instance()->value( pluginId() + "/autoconnect", true ).toBool();
+}
+
+void
+TwitterPlugin::setTwitterAutoConnect( bool autoConnect )
+{
+    TomahawkSettings::instance()->setValue( pluginId() + "/autoconnect", autoConnect );
+}
+
+Q_EXPORT_PLUGIN2( sipfactory, TwitterFactory )

@@ -30,7 +30,7 @@
 #include <QUrl>
 
 static QMap< QThread*, QNetworkAccessManager* > threadNamHash;
-static QMap< QThread*, bool > ourNamHash;
+static QSet< QThread* > ourNamSet;
 static QMutex namAccessMutex;
 
 QString 
@@ -202,10 +202,9 @@ lastfm::nam()
     {
         NetworkAccessManager* newNam = new NetworkAccessManager();
         threadNamHash[thread] = newNam;
-        ourNamHash[thread] = true;
+        ourNamSet.insert( thread );
         return newNam;
     }
-    
     return threadNamHash[thread];
 }
 
@@ -218,11 +217,18 @@ lastfm::setNetworkAccessManager( QNetworkAccessManager* nam )
 
     QMutexLocker l( &namAccessMutex );
     QThread* thread = QThread::currentThread();
-    if ( threadNamHash.contains( thread ) && ourNamHash.contains( thread ) && ourNamHash[thread] )
-        delete threadNamHash[thread];
+    QNetworkAccessManager* oldNam = 0;
+    if ( threadNamHash.contains( thread ) && ourNamSet.contains( thread ) )
+        oldNam = threadNamHash[thread];
+
+    if ( oldNam == nam )
+        return;
     
     threadNamHash[thread] = nam;
-    ourNamHash[thread] = false;
+    ourNamSet.remove( thread );
+
+    if ( oldNam )
+        delete oldNam;
 }
 
 

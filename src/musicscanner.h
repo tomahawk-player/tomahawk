@@ -30,6 +30,7 @@
 #include <QDebug>
 #include <QDateTime>
 #include <QTimer>
+#include <QWeakPointer>
 
 // descend dir tree comparing dir mtimes to last known mtime
 // emit signal for any dir with new content, so we can scan it.
@@ -94,8 +95,6 @@ private:
 private slots:
     void listerFinished( const QMap<QString, unsigned int>& newmtimes );
     void deleteLister();
-    void listerQuit();
-    void listerDestroyed( QObject* dirLister );
     void scanFile( const QFileInfo& fi );
     void startScan();
     void scan();
@@ -117,7 +116,7 @@ private:
     bool m_recursive;
     quint32 m_batchsize;
 
-    DirLister* m_dirLister;
+    QWeakPointer< DirLister > m_dirLister;
     QThread* m_dirListerThreadController;
 };
 

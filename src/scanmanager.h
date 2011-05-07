@@ -23,6 +23,7 @@
 #include <QMap>
 #include <QObject>
 #include <QStringList>
+#include <QWeakPointer>
 
 #include "dllmacro.h"
 
@@ -51,9 +52,7 @@ public slots:
     void removeWatchedDir( const QString& path );
 
 private slots:
-    void scannerQuit();
     void scannerFinished();
-    void scannerDestroyed( QObject* scanner );
     
     void runStartupScan();
     void queuedScanTimeout();
@@ -64,7 +63,7 @@ private slots:
 private:
     static ScanManager* s_instance;
     
-    MusicScanner* m_scanner;
+    QWeakPointer< MusicScanner > m_scanner;
     QThread* m_musicScannerThreadController;
     QStringList m_currScannerPaths;
     QFileSystemWatcher* m_dirWatcher;

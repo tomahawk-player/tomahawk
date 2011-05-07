@@ -37,7 +37,6 @@ namespace InfoSystem
 {
 
 InfoSystemWorker::InfoSystemWorker()
-    : m_nam( 0 )
 {
     qDebug() << Q_FUNC_INFO;
 }
@@ -45,7 +44,7 @@ InfoSystemWorker::InfoSystemWorker()
 
 InfoSystemWorker::~InfoSystemWorker()
 {
-    qDebug() << Q_FUNC_INFO;
+    qDebug() << Q_FUNC_INFO << " beginning";
     Q_FOREACH( InfoPluginPtr plugin, m_plugins )
     {
         if( plugin )
@@ -54,19 +53,23 @@ InfoSystemWorker::~InfoSystemWorker()
 }
 
 
-void InfoSystemWorker::init()
+void
+InfoSystemWorker::init( QWeakPointer< Tomahawk::InfoSystem::InfoSystemCache> cache )
 {
-    InfoPluginPtr enptr( new EchoNestPlugin( this ) );
+    qDebug() << Q_FUNC_INFO << " and cache is " << cache.data();
+    InfoPluginPtr enptr( new EchoNestPlugin() );
     m_plugins.append( enptr );
-    InfoPluginPtr mmptr( new MusixMatchPlugin( this ) );
+    registerInfoTypes( enptr, enptr.data()->supportedGetTypes(), enptr.data()->supportedPushTypes() );
+    InfoPluginPtr mmptr( new MusixMatchPlugin() );
     m_plugins.append( mmptr );
-    InfoPluginPtr lfmptr( new LastFmPlugin( this ) );
+    registerInfoTypes( mmptr, mmptr.data()->supportedGetTypes(), mmptr.data()->supportedPushTypes() );
+    InfoPluginPtr lfmptr( new LastFmPlugin() );
     m_plugins.append( lfmptr );
-    InfoPluginPtr admptr( new AdiumPlugin( this ) );
+    registerInfoTypes( lfmptr, lfmptr.data()->supportedGetTypes(), lfmptr.data()->supportedPushTypes() );
+    InfoPluginPtr admptr( new AdiumPlugin() );
     m_plugins.append( admptr );
+    registerInfoTypes( admptr, admptr.data()->supportedGetTypes(), admptr.data()->supportedPushTypes() );
 
-    InfoSystemCache *cache = InfoSystem::instance()->getCache();
-    
     Q_FOREACH( InfoPluginPtr plugin, m_plugins )
     {
         connect(
@@ -80,11 +83,11 @@ void InfoSystemWorker::init()
         connect(
                 plugin.data(),
                 SIGNAL( getCachedInfo( Tomahawk::InfoSystem::InfoCriteriaHash, qint64, QString, Tomahawk::InfoSystem::InfoType, QVariant, Tomahawk::InfoSystem::InfoCustomData ) ),
-                cache,
+                cache.data(),
                 SLOT( getCachedInfoSlot( Tomahawk::InfoSystem::InfoCriteriaHash, qint64, QString, Tomahawk::InfoSystem::InfoType, QVariant, Tomahawk::InfoSystem::InfoCustomData ) )
             );
         connect(
-                cache,
+                cache.data(),
                 SIGNAL( notInCache( Tomahawk::InfoSystem::InfoCriteriaHash, QString, Tomahawk::InfoSystem::InfoType, QVariant, Tomahawk::InfoSystem::InfoCustomData ) ),
                 plugin.data(),
                 SLOT( notInCacheSlot( Tomahawk::InfoSystem::InfoCriteriaHash, QString, Tomahawk::InfoSystem::InfoType, QVariant, Tomahawk::InfoSystem::InfoCustomData ) )
@@ -92,8 +95,14 @@ void InfoSystemWorker::init()
         connect(
                 plugin.data(),
                 SIGNAL( updateCache( Tomahawk::InfoSystem::InfoCriteriaHash, qint64, Tomahawk::InfoSystem::InfoType, QVariant ) ),
-                cache,
+                cache.data(),
                 SLOT( updateCacheSlot( Tomahawk::InfoSystem::InfoCriteriaHash, qint64, Tomahawk::InfoSystem::InfoType, QVariant ) )
+            );
+        connect(
+                this,
+                SIGNAL( namChanged( QNetworkAccessManager* ) ),
+                plugin.data(),
+                SLOT( namChangedSlot( QNetworkAccessManager* ) )
             );
     }
 
@@ -162,37 +171,49 @@ InfoSystemWorker::pushInfo( const QString caller, const InfoType type, const QVa
 QNetworkAccessManager*
 InfoSystemWorker::nam() const
 {
-    return m_nam;
+    if ( m_nam.isNull() )
+        return 0;
+    
+    return m_nam.data();
 }
 
 
 void
 InfoSystemWorker::newNam()
 {
-    qDebug() << Q_FUNC_INFO;
+    qDebug() << Q_FUNC_INFO << " begin";
 
+    QNetworkAccessManager *oldNam = TomahawkUtils::nam();
+    if ( oldNam && oldNam->thread() == thread() )
+    {
+        qDebug() << Q_FUNC_INFO << " using old nam as it's the same thread as me";
+        m_nam = QWeakPointer< QNetworkAccessManager >( oldNam );
+        emit namChanged( m_nam.data() );
+        return;
+    }
+    
+    qDebug() << Q_FUNC_INFO << " no nam exists, or it's a different thread, creating a new one";
     QNetworkAccessManager* newNam;
 #ifdef LIBLASTFM_FOUND
     newNam = new lastfm::NetworkAccessManager( this );
 #else
     newNam = new QNetworkAccessManager( this );
 #endif
-    if ( m_nam )
-    {
-        delete m_nam;
-    }
-    QNetworkAccessManager *oldNam = TomahawkUtils::nam();
+    if ( !m_nam.isNull() )
+        delete m_nam.data();
+
     if ( !oldNam )
     {
-        m_nam = newNam;
+        m_nam = QWeakPointer< QNetworkAccessManager >( newNam );
         return;
     }
+    
     newNam->setConfiguration( oldNam->configuration() );
     newNam->setNetworkAccessible( oldNam->networkAccessible() );
     newNam->setProxy( oldNam->proxy() );
-    m_nam = newNam;
+    m_nam = QWeakPointer< QNetworkAccessManager >( newNam );
 
-    emit namChanged();
+    emit namChanged( m_nam.data() );
 }
 
 

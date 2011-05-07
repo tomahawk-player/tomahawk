@@ -25,16 +25,11 @@ using namespace Echonest;
 
 // for internal neatness
 
-EchoNestPlugin::EchoNestPlugin(InfoSystemWorker *parent)
-    : InfoPlugin(parent)
-    , m_infoSystemWorker( parent )
+EchoNestPlugin::EchoNestPlugin()
+    : InfoPlugin()
 {
     qDebug() << Q_FUNC_INFO;
-    QSet< InfoType > supportedTypes;
-    supportedTypes << Tomahawk::InfoSystem::InfoArtistBiography << Tomahawk::InfoSystem::InfoArtistFamiliarity << Tomahawk::InfoSystem::InfoArtistHotttness << Tomahawk::InfoSystem::InfoArtistTerms << Tomahawk::InfoSystem::InfoMiscTopTerms;
-    parent->registerInfoTypes( this, supportedTypes, QSet< InfoType>() );
-
-    connect( parent, SIGNAL( namChanged() ), SLOT( namChangedSlot() ) );
+    m_supportedGetTypes << Tomahawk::InfoSystem::InfoArtistBiography << Tomahawk::InfoSystem::InfoArtistFamiliarity << Tomahawk::InfoSystem::InfoArtistHotttness << Tomahawk::InfoSystem::InfoArtistTerms << Tomahawk::InfoSystem::InfoMiscTopTerms;
 }
 
 EchoNestPlugin::~EchoNestPlugin()
@@ -43,10 +38,14 @@ EchoNestPlugin::~EchoNestPlugin()
 }
 
 void
-EchoNestPlugin::namChangedSlot()
+EchoNestPlugin::namChangedSlot( QNetworkAccessManager *nam )
 {
     qDebug() << Q_FUNC_INFO;
-    Echonest::Config::instance()->setNetworkAccessManager( m_infoSystemWorker->nam() );
+    if( !nam )
+        return;
+    
+    m_nam = QWeakPointer< QNetworkAccessManager >( nam );
+    Echonest::Config::instance()->setNetworkAccessManager( nam );
 }
 
 void

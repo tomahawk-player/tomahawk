@@ -22,15 +22,18 @@
 #include <QDialogButtonBox>
 #include <QVBoxLayout>
 
-class ResolverConfigWrapper : public QDialog
+class DelegateConfigWrapper : public QDialog
 {
     Q_OBJECT
 public:
-    ResolverConfigWrapper( QWidget* conf, const QString& title, QWidget* parent ) : QDialog( parent ), m_widget( conf )
+    DelegateConfigWrapper( QWidget* conf, const QString& title, QWidget* parent, Qt::WindowFlags flags = 0 ) : QDialog( parent, flags ), m_widget( conf )
     {
-        setWindowTitle( title );
+        m_widget->setVisible( true );
+        m_widget->setWindowFlags( Qt::Sheet );
 
+        setWindowTitle( title );
         QVBoxLayout* v = new QVBoxLayout( this );
+        v->setContentsMargins( 0, 0, 0, 0 );
         v->addWidget( m_widget );
 
         QDialogButtonBox* buttons = new QDialogButtonBox( QDialogButtonBox::Ok | QDialogButtonBox::Cancel, Qt::Horizontal, this );
@@ -46,6 +49,7 @@ public slots:
         // let the config widget live to see another day
         layout()->removeWidget( m_widget );
         m_widget->setParent( 0 );
+        m_widget->setVisible( false );
 
         QDialogButtonBox* buttons = qobject_cast< QDialogButtonBox* >( sender() );
         if( buttons->standardButton( b ) == QDialogButtonBox::Ok )
@@ -59,6 +63,7 @@ public slots:
     {
         layout()->removeWidget( m_widget );
         m_widget->setParent( 0 );
+        m_widget->setVisible( false );
     }
 
 private:

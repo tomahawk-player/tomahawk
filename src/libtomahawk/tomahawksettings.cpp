@@ -25,8 +25,9 @@
 
 #include <QDir>
 #include <QDebug>
+#include "sip/SipHandler.h"
 
-#define VERSION 2
+#define VERSION 3
 
 TomahawkSettings* TomahawkSettings::s_instance = 0;
 
@@ -46,6 +47,7 @@ TomahawkSettings::TomahawkSettings( QObject* parent )
     if( !contains( "configversion") )
     {
         setValue( "configversion", VERSION );
+        doInitialSetup();
     }
     else if( value( "configversion" ).toUInt() != VERSION )
     {
@@ -53,11 +55,15 @@ TomahawkSettings::TomahawkSettings( QObject* parent )
                  << "new:" << VERSION
                  << "Doing upgrade, if any...";
 
+        int current = value( "configversion" ).toUInt();
+        while( current < VERSION )
+        {
+            doUpgrade( current, current + 1 );
+
+            current++;
+        }
         // insert upgrade code here as required
         setValue( "configversion", VERSION );
-        if( contains( "script/resolvers") ) {
-            setValue( "script/loadedresolvers", value( "script/resolvers" ) );
-        }
     }
 }
 
@@ -65,6 +71,75 @@ TomahawkSettings::TomahawkSettings( QObject* parent )
 TomahawkSettings::~TomahawkSettings()
 {
     s_instance = 0;
+}
+
+void
+TomahawkSettings::doInitialSetup()
+{
+    // by default we add a local network resolver
+    addSipPlugin( "sipzeroconf_autocreated" );
+}
+
+
+void
+TomahawkSettings::doUpgrade( int oldVersion, int newVersion )
+{
+    Q_UNUSED( newVersion );
+
+    if( oldVersion == 1 )
+    {
+        qDebug() << "Migrating config from verson 1 to 2: script resolver config name";
+        if( contains( "script/resolvers" ) ) {
+            setValue( "script/loadedresolvers", value( "script/resolvers" ) );
+            remove( "script/resolvers" );
+        }
+    } else if( oldVersion == 2 )
+    {
+        qDebug() << "Migrating config from version 2 to 3: Converting jabber and twitter accounts to new SIP Factory approach";
+        // migrate old accounts to new system. only jabber and twitter, and max one each. create a new plugin for each if needed
+        // not pretty as we hardcode a plugin id and assume that we know how the config layout is, but hey, this is migration after all
+        if( contains( "jabber/username" ) && contains( "jabber/password" ) )
+        {
+            QString sipName = "sipjabber";
+            if( value( "jabber/username" ).toString().contains( "@gmail" ) )
+                sipName = "sipgoogle";
+
+            setValue( QString( "%1_legacy/username" ).arg( sipName ), value( "jabber/username" ) );
+            setValue( QString( "%1_legacy/password" ).arg( sipName ), value( "jabber/password" ) );
+            setValue( QString( "%1r_legacy/autoconnect" ).arg( sipName ), value( "jabber/autoconnect" ) );
+            setValue( QString( "%1_legacy/port" ).arg( sipName ), value( "jabber/port" ) );
+            setValue( QString( "%1_legacy/server" ).arg( sipName ), value( "jabber/server" ) );
+
+            addSipPlugin( QString( "%1_legacy" ).arg( sipName ) );
+
+            remove( "jabber/username" );
+            remove( "jabber/password" );
+            remove( "jabber/autoconnect" );
+            remove( "jabber/server" );
+            remove( "jabber/port" );
+        }
+        if( contains( "twitter/ScreenName" ) && contains( "twitter/OAuthToken" ) )
+        {
+            setValue( "siptwitter_legacy/ScreenName", value( "twitter/ScreenName" ) );
+            setValue( "siptwitter_legacy/OAuthToken", value( "twitter/OAuthToken" ) );
+            setValue( "siptwitter_legacy/OAuthTokenSecret", value( "twitter/OAuthTokenSecret" ) );
+            setValue( "siptwitter_legacy/CachedFriendsSinceID", value( "twitter/CachedFriendsSinceID" ) );
+            setValue( "siptwitter_legacy/CachedMentionsSinceID", value( "twitter/CachedMentionsSinceID" ) );
+            setValue( "siptwitter_legacy/CachedDirectMessagesSinceID", value( "twitter/CachedDirectMessagesSinceID" ) );
+            setValue( "siptwitter_legacy/CachedPeers", value( "twitter/CachedPeers" ) );
+            setValue( "siptwitter_legacy/AutoConnect", value( "jabber/autoconnect" ) );
+
+            addSipPlugin( "siptwitter_legacy" );
+            remove( "twitter/ScreenName" );
+            remove( "twitter/OAuthToken" );
+            remove( "twitter/OAuthTokenSecret" );
+            remove( "twitter/CachedFriendsSinceID" );
+            remove( "twitter/CachedMentionsSinceID" );
+            remove( "twitter/CachedDirectMessagesSinceID" );
+        }
+        // create a zeroconf plugin too
+        addSipPlugin( "sipzeroconf_legacy" );
+    }
 }
 
 
@@ -326,76 +401,66 @@ TomahawkSettings::setBookmarkPlaylist( const QString& guid )
     setValue( "playlists/bookmark", guid );
 }
 
-
-bool
-TomahawkSettings::jabberAutoConnect() const
+QStringList
+TomahawkSettings::sipPlugins() const
 {
-    return value( "jabber/autoconnect", true ).toBool();
+    return value( "sip/allplugins", QStringList() ).toStringList();
 }
-
 
 void
-TomahawkSettings::setJabberAutoConnect( bool autoconnect )
+TomahawkSettings::setSipPlugins( const QStringList& plugins )
 {
-    setValue( "jabber/autoconnect", autoconnect );
+    setValue( "sip/allplugins", plugins );
 }
 
-
-unsigned int
-TomahawkSettings::jabberPort() const
+QStringList
+TomahawkSettings::enabledSipPlugins() const
 {
-    return value( "jabber/port", 5222 ).toUInt();
+    return value( "sip/enabledplugins", QStringList() ).toStringList();
 }
-
 
 void
-TomahawkSettings::setJabberPort( int port )
+TomahawkSettings::setEnabledSipPlugins( const QStringList& list )
 {
-    if ( port < 0 )
-      return;
-    setValue( "jabber/port", port );
+    setValue( "sip/enabledplugins", list );
 }
-
-
-QString
-TomahawkSettings::jabberServer() const
-{
-    return value( "jabber/server" ).toString();
-}
-
 
 void
-TomahawkSettings::setJabberServer( const QString& server )
+TomahawkSettings::enableSipPlugin( const QString& pluginId )
 {
-    setValue( "jabber/server", server );
+    QStringList list = enabledSipPlugins();
+    list << pluginId;
+    setEnabledSipPlugins( list );
 }
-
-
-QString
-TomahawkSettings::jabberUsername() const
-{
-    return value( "jabber/username" ).toString();
-}
-
 
 void
-TomahawkSettings::setJabberUsername( const QString& username )
+TomahawkSettings::disableSipPlugin( const QString& pluginId )
 {
-    setValue( "jabber/username", username );
+    QStringList list = enabledSipPlugins();
+    list.removeAll( pluginId );
+    setEnabledSipPlugins( list );
 }
-
-
-QString
-TomahawkSettings::jabberPassword() const
-{
-    return value( "jabber/password" ).toString();
-}
-
 
 void
-TomahawkSettings::setJabberPassword( const QString& pw )
+TomahawkSettings::addSipPlugin( const QString& pluginId, bool enable )
 {
-    setValue( "jabber/password", pw );
+    QStringList list = sipPlugins();
+    list << pluginId;
+    setSipPlugins( list );
+
+    if ( enable )
+        enableSipPlugin( pluginId );
+}
+
+void
+TomahawkSettings::removeSipPlugin( const QString& pluginId )
+{
+    QStringList list = sipPlugins();
+    list.removeAll( pluginId );
+    setSipPlugins( list );
+
+    if( enabledSipPlugins().contains( pluginId ) )
+        disableSipPlugin( pluginId );
 }
 
 
@@ -495,90 +560,6 @@ void
 TomahawkSettings::setLastFmUsername( const QString& username )
 {
     setValue( "lastfm/username", username );
-}
-
-QString
-TomahawkSettings::twitterScreenName() const
-{
-    return value( "twitter/ScreenName" ).toString();
-}
-
-void
-TomahawkSettings::setTwitterScreenName( const QString& screenName )
-{
-    setValue( "twitter/ScreenName", screenName );
-}
-
-QString
-TomahawkSettings::twitterOAuthToken() const
-{
-    return value( "twitter/OAuthToken" ).toString();
-}
-
-void
-TomahawkSettings::setTwitterOAuthToken( const QString& oauthtoken )
-{
-    setValue( "twitter/OAuthToken", oauthtoken );
-}
-
-QString
-TomahawkSettings::twitterOAuthTokenSecret() const
-{
-    return value( "twitter/OAuthTokenSecret" ).toString();
-}
-
-void
-TomahawkSettings::setTwitterOAuthTokenSecret( const QString& oauthtokensecret )
-{
-    setValue( "twitter/OAuthTokenSecret", oauthtokensecret );
-}
-
-qint64
-TomahawkSettings::twitterCachedFriendsSinceId() const
-{
-    return value( "twitter/CachedFriendsSinceID", 0 ).toLongLong();
-}
-
-void
-TomahawkSettings::setTwitterCachedFriendsSinceId( qint64 cachedId )
-{
-    setValue( "twitter/CachedFriendsSinceID", cachedId );
-}
-
-qint64
-TomahawkSettings::twitterCachedMentionsSinceId() const
-{
-    return value( "twitter/CachedMentionsSinceID", 0 ).toLongLong();
-}
-
-void
-TomahawkSettings::setTwitterCachedMentionsSinceId( qint64 cachedId )
-{
-    setValue( "twitter/CachedMentionsSinceID", cachedId );
-}
-
-qint64
-TomahawkSettings::twitterCachedDirectMessagesSinceId() const
-{
-    return value( "twitter/CachedDirectMessagesSinceID", 0 ).toLongLong();
-}
-
-void
-TomahawkSettings::setTwitterCachedDirectMessagesSinceId( qint64 cachedId )
-{
-    setValue( "twitter/CachedDirectMessagesSinceID", cachedId );
-}
-
-QHash<QString, QVariant>
-TomahawkSettings::twitterCachedPeers() const
-{
-    return value( "twitter/CachedPeers", QHash<QString, QVariant>() ).toHash();
-}
-
-void
-TomahawkSettings::setTwitterCachedPeers( const QHash<QString, QVariant> &cachedPeers )
-{
-    setValue( "twitter/CachedPeers", cachedPeers );
 }
 
 bool

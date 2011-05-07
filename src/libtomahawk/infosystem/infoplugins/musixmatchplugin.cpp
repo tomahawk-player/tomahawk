@@ -27,15 +27,12 @@ using namespace Tomahawk::InfoSystem;
 
 // for internal neatness
 
-MusixMatchPlugin::MusixMatchPlugin(InfoSystemWorker *parent)
-    : InfoPlugin(parent)
+MusixMatchPlugin::MusixMatchPlugin()
+    : InfoPlugin()
     , m_apiKey("61be4ea5aea7dd942d52b2f1311dd9fe")
-    , m_infoSystemWorker( parent )
 {
     qDebug() << Q_FUNC_INFO;
-    QSet< InfoType > supportedTypes;
-    supportedTypes << Tomahawk::InfoSystem::InfoTrackLyrics;
-    parent->registerInfoTypes( this, supportedTypes, QSet< InfoType>() );
+    m_supportedGetTypes << Tomahawk::InfoSystem::InfoTrackLyrics;
 }
 
 MusixMatchPlugin::~MusixMatchPlugin()
@@ -44,10 +41,20 @@ MusixMatchPlugin::~MusixMatchPlugin()
 }
 
 void
+MusixMatchPlugin::namChangedSlot( QNetworkAccessManager *nam )
+{
+    qDebug() << Q_FUNC_INFO;
+    if( !nam )
+        return;
+    
+    m_nam = QWeakPointer< QNetworkAccessManager >( nam );
+}
+
+void
 MusixMatchPlugin::getInfo( const QString caller, const Tomahawk::InfoSystem::InfoType type, const QVariant input, const Tomahawk::InfoSystem::InfoCustomData customData )
 {
     qDebug() << Q_FUNC_INFO;
-    if( !isValidTrackData(caller, input, customData) || !input.canConvert<Tomahawk::InfoSystem::InfoCustomData>())
+    if( !isValidTrackData(caller, input, customData) || !input.canConvert<Tomahawk::InfoSystem::InfoCustomData>() || m_nam.isNull() )
         return;
     Tomahawk::InfoSystem::InfoCustomData hash = input.value<Tomahawk::InfoSystem::InfoCustomData>();
     QString artist = hash["artistName"].toString();
@@ -63,7 +70,7 @@ MusixMatchPlugin::getInfo( const QString caller, const Tomahawk::InfoSystem::Inf
     url.addQueryItem("apikey", m_apiKey);
     url.addQueryItem("q_artist", artist);
     url.addQueryItem("q_track", track);
-    QNetworkReply* reply = m_infoSystemWorker->nam()->get(QNetworkRequest(url));
+    QNetworkReply* reply = m_nam.data()->get(QNetworkRequest(url));
     reply->setProperty("customData", QVariant::fromValue<Tomahawk::InfoSystem::InfoCustomData>(customData));
     reply->setProperty("origData", input);
     reply->setProperty("caller", caller);
@@ -102,7 +109,7 @@ MusixMatchPlugin::trackSearchSlot()
 {
     qDebug() << Q_FUNC_INFO;
     QNetworkReply* oldReply = qobject_cast<QNetworkReply*>( sender() );
-    if (!oldReply)
+    if ( !oldReply || m_nam.isNull() )
     {
         emit info(QString(), Tomahawk::InfoSystem::InfoTrackLyrics, QVariant(), QVariant(), Tomahawk::InfoSystem::InfoCustomData());
         return;
@@ -121,7 +128,7 @@ MusixMatchPlugin::trackSearchSlot()
     QUrl url(requestString);
     url.addQueryItem("apikey", m_apiKey);
     url.addQueryItem("track_id", track_id);
-    QNetworkReply* newReply = m_infoSystemWorker->nam()->get(QNetworkRequest(url));
+    QNetworkReply* newReply = m_nam.data()->get(QNetworkRequest(url));
     newReply->setProperty("origData", oldReply->property("origData"));
     newReply->setProperty("customData", oldReply->property("customData"));
     newReply->setProperty("caller", oldReply->property("caller"));

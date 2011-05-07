@@ -38,28 +38,56 @@ public:
     SipHandler( QObject* parent );
     ~SipHandler();
 
-    QList< SipPlugin* > plugins() const;
+    QList< SipPluginFactory* > pluginFactories() const;
+    QList< SipPlugin* > allPlugins() const;
+    QList< SipPlugin* > enabledPlugins() const;
+    QList< SipPlugin* > connectedPlugins() const;
+    void loadFromConfig( bool startup = false );
+
+    void addSipPlugin( SipPlugin* p, bool enable = true, bool connectImmediately = true );
+    void removeSipPlugin( SipPlugin* p );
+
+    bool hasPluginType( const QString& factoryId ) const;
+    SipPluginFactory* factoryFromPlugin( SipPlugin* p ) const;
 
     const QPixmap avatar( const QString& name ) const;
 
 public slots:
-    void addContact( const QString& id ) { qDebug() << Q_FUNC_INFO << id; }
-
     void checkSettings();
-    void connectPlugins( bool startup = false, const QString &pluginName = QString() );
-    void disconnectPlugins( const QString &pluginName = QString() );
+
+    void enablePlugin( SipPlugin* p );
+    void disablePlugin( SipPlugin* p );
+
+    void connectPlugin( bool startup = false, const QString &pluginId = QString() );
+    void disconnectPlugin( const QString &pluginId = QString() );
+    void connectAll();
+    void disconnectAll();
+
     void toggleConnect();
 
+    // create a new plugin of the given name. the name is the value returned in SipPluginFactory::pluginName
+    // be default sip plugins are NOt connected when created
+    SipPlugin* createPlugin( const QString& factoryName );
+    // load a plugin with the given id
+    SipPlugin* loadPlugin( const QString& pluginId );
+    void removePlugin( SipPlugin* p );
+
 signals:
-    void connected();
-    void disconnected();
-    void authError();
+    void connected( SipPlugin* );
+    void disconnected( SipPlugin* );
+    void authError( SipPlugin* );
+
+    void stateChanged( SipPlugin* p, SipPlugin::ConnectionState state );
+
+    void pluginAdded( SipPlugin* p );
+    void pluginRemoved( SipPlugin* p );
 
 private slots:
     void onMessage( const QString&, const QString& );
     void onPeerOffline( const QString& );
     void onPeerOnline( const QString& );
     void onError( int code, const QString& msg );
+    void onStateChanged( SipPlugin::ConnectionState );
 
     void onSettingsChanged();
 
@@ -73,13 +101,18 @@ private slots:
 private:
     static SipHandler *s_instance;
 
-    QStringList findPlugins();
-    bool pluginLoaded( const QString& name ) const;
+    QStringList findPluginFactories();
+    bool pluginLoaded( const QString& pluginId ) const;
+    void hookUpPlugin( SipPlugin* p );
 
-    void loadPlugins( const QStringList& paths );
-    void loadPlugin( const QString& path );
+    void loadPluginFactories( const QStringList& paths );
+    void loadPluginFactory( const QString& path );
+    QString factoryFromId( const QString& pluginId ) const;
 
-    QList< SipPlugin* > m_plugins;
+    QHash< QString, SipPluginFactory* > m_pluginFactories;
+    QList< SipPlugin* > m_allPlugins;
+    QList< SipPlugin* > m_enabledPlugins;
+    QList< SipPlugin* > m_connectedPlugins;
     bool m_connected;
 
 

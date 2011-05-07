@@ -1,5 +1,5 @@
 /* === This file is part of Tomahawk Player - <http://tomahawk-player.org> ===
- * 
+ *
  *   Copyright 2010-2011, Christian Muehlhaeuser <muesli@tomahawk-player.org>
  *
  *   Tomahawk is free software: you can redistribute it and/or modify
@@ -37,10 +37,10 @@ public:
     virtual ~JabberPlugin() { delete p; }
 
     //FIXME: Make this more correct
-    virtual bool isValid() { return true; }
-    virtual const QString name();
-    virtual const QString friendlyName();
-    virtual const QString accountName();
+    virtual bool isValid() const { return true; }
+    virtual const QString name() const;
+    virtual const QString friendlyName() const;
+    virtual const QString accountName() const;
     virtual QMenu* menu();
 
     void setProxy( QNetworkProxy* proxy );
@@ -51,7 +51,7 @@ public slots:
     void disconnectPlugin()
     {
         onDisconnected();
-        
+
         if ( p )
             p->disconnect();
 
@@ -84,7 +84,7 @@ private slots:
     void showAddFriendDialog();
     void onConnected();
     void onDisconnected();
-    
+
 private:
     Jabber_p* p;
     QMenu* m_menu;
