@@ -104,6 +104,13 @@ SettingsDialog::SettingsDialog( QWidget *parent )
         ui->lineEditMusicPath_2->setText( s->scannerPaths().first() );
     ui->checkBoxWatchForChanges->setChecked( s->watchForChanges() );
 
+    // NOW PLAYING
+    #ifdef Q_WS_MAC
+    ui->checkBoxEnableAdium->setChecked( s->nowPlayingEnabled() );
+    #else
+    ui->checkBoxEnableAdium->hide();
+    #endif
+
     // LAST FM
     ui->checkBoxEnableLastfm->setChecked( s->scrobblingEnabled() );
     ui->lineEditLastfmUsername->setText( s->lastFmUsername() );
@@ -148,6 +155,8 @@ SettingsDialog::~SettingsDialog()
 
         s->setScannerPaths( QStringList( ui->lineEditMusicPath_2->text() ) );
         s->setWatchForChanges( ui->checkBoxWatchForChanges->isChecked() );
+
+	s->setNowPlayingEnabled( ui->checkBoxEnableAdium->isChecked() );
 
         s->setScrobblingEnabled( ui->checkBoxEnableLastfm->isChecked() );
         s->setLastFmUsername( ui->lineEditLastfmUsername->text() );

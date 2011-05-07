@@ -21,6 +21,7 @@
 #include "infosystem/infosystemworker.h"
 #include "artist.h"
 #include "result.h"
+#include "tomahawksettings.h"
 
 #include "adiumplugin.h"
 #include "adium.h"
@@ -43,11 +44,24 @@ AdiumPlugin::AdiumPlugin()
 {
     qDebug() << Q_FUNC_INFO;
     m_supportedPushTypes << InfoNowPlaying << InfoNowPaused << InfoNowResumed << InfoNowStopped;
+
+    m_active = TomahawkSettings::instance()->nowPlayingEnabled();
+
+    connect( TomahawkSettings::instance(), SIGNAL( changed() ),
+                                             SLOT( settingsChanged() ), Qt::QueuedConnection );
 }
 
 AdiumPlugin::~AdiumPlugin()
 {
     qDebug() << Q_FUNC_INFO;
+    setStatus( "" );
+}
+
+void
+AdiumPlugin::settingsChanged()
+{
+  m_active = TomahawkSettings::instance()->nowPlayingEnabled();
+  if( !m_active )
     setStatus( "" );
 }
 
@@ -68,6 +82,9 @@ void
 AdiumPlugin::pushInfo( const QString caller, const Tomahawk::InfoSystem::InfoType type, const QVariant input )
 {
     qDebug() << Q_FUNC_INFO;
+
+    if( !m_active )
+      return;
     
     switch ( type )
     {

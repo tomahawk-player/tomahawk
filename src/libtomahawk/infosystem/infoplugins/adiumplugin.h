@@ -41,6 +41,8 @@ protected slots:
     void pushInfo( const QString caller, const Tomahawk::InfoSystem::InfoType type, const QVariant input );
 
 public slots:
+    void settingsChanged();
+
     void audioStarted( const QVariant &input );
     void audioFinished( const QVariant &input );
     void audioStopped();
@@ -49,6 +51,9 @@ public slots:
 
     void namChangedSlot( QNetworkAccessManager *nam ) {} // unused
     void notInCacheSlot( const Tomahawk::InfoSystem::InfoCriteriaHash criteria, const QString caller, const Tomahawk::InfoSystem::InfoType type, const QVariant input, const Tomahawk::InfoSystem::InfoCustomData customData ) {} // unused
+
+private:
+    bool m_active;
 
 };
 

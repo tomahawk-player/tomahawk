@@ -156,6 +156,11 @@ public:
     QStringList enabledScriptResolvers() const;
     void setEnabledScriptResolvers( const QStringList& resolvers );
 
+    // Now-Playing Settings
+    // For now, just Adium. Soon, the world!
+    bool nowPlayingEnabled() const; // false by default
+    void setNowPlayingEnabled( bool enable );
+
 
 signals:
     void changed();
