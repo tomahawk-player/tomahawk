@@ -83,6 +83,8 @@
     <property name="title">
      <string>&amp;Help</string>
     </property>
+    <addaction name="actionDiagnostics"/>
+    <addaction name="separator"/>
     <addaction name="actionAboutTomahawk"/>
    </widget>
    <addaction name="menuApp"/>
@@ -179,6 +181,11 @@
    </property>
    <property name="shortcut">
     <string>Meta+Ctrl+Z</string>
+   </property>
+  </action>
+  <action name="actionDiagnostics">
+   <property name="text">
+    <string>Diagnostics...</string>
    </property>
   </action>
  </widget>

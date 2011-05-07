@@ -66,6 +66,7 @@ public slots:
     void createPlaylist();
     void loadSpiff();
     void showSettingsDialog();
+    void showDiagnosticsDialog();
     void updateCollectionManually();
     void pluginMenuAdded(QMenu*);
     void pluginMenuRemoved(QMenu*);
