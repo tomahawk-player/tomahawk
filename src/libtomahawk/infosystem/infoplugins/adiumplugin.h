@@ -22,6 +22,7 @@
 #include "infosystem/infosystem.h"
 
 #include <QObject>
+#include <QVariant>
 
 namespace Tomahawk {
 
@@ -32,17 +33,22 @@ class AdiumPlugin : public InfoPlugin
     Q_OBJECT
 
 public:
-    AdiumPlugin( QObject *parent );
+    AdiumPlugin( InfoSystemWorker *parent );
     virtual ~AdiumPlugin();
 
-    void getInfo( const QString &caller, const InfoType type, const QVariant &data, InfoCustomData customData );
+protected slots:
+    void getInfo( const QString caller, const InfoType type, const QVariant data, InfoCustomData customData );
+    void pushInfo( const QString caller, const Tomahawk::InfoSystem::InfoType type, const QVariant input );
 
 public slots:
-    void audioStarted( const Tomahawk::result_ptr& track );
-    void audioFinished( const Tomahawk::result_ptr& track );
+    void audioStarted( const QVariant &input );
+    void audioFinished( const QVariant &input );
     void audioStopped();
     void audioPaused();
-    void audioResumed( const Tomahawk::result_ptr& track );    
+    void audioResumed( const QVariant &input );
+
+    void namChangedSlot() {} // unused
+    void notInCacheSlot( const Tomahawk::InfoSystem::InfoCriteriaHash criteria, const QString caller, const Tomahawk::InfoSystem::InfoType type, const QVariant input, const Tomahawk::InfoSystem::InfoCustomData customData ) {} // unused
 
 };
 

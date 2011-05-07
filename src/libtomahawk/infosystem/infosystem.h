@@ -92,7 +92,9 @@ enum InfoType { // as items are saved in cache, mark them here to not change the
     InfoSubmitNowPlaying = 46,
     InfoSubmitScrobble = 47,
 
-    InfoNoInfo = 48
+    InfoNowPlaying = 48,
+
+    InfoNoInfo = 49
 };
 
 typedef QMap< InfoType, QVariant > InfoMap;

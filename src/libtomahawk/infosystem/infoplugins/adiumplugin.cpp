@@ -18,6 +18,7 @@
 
 #include <string.h>
 
+#include "infosystem/infosystemworker.h"
 #include "artist.h"
 #include "result.h"
 
@@ -37,30 +38,15 @@ static void setStatus(const QString &status)
 
 using namespace Tomahawk::InfoSystem;
 
-AdiumPlugin::AdiumPlugin(QObject *parent)
+AdiumPlugin::AdiumPlugin( InfoSystemWorker* parent )
     : InfoPlugin(parent)
 {
     /** No supported types since the plugin pushes info, doesn't get any */
     qDebug() << Q_FUNC_INFO;
-    QSet< InfoType > supportedTypes;
-    InfoSystem *system = qobject_cast< InfoSystem* >(parent);
-    system->registerInfoTypes(this, supportedTypes);
+    QSet< InfoType > supportedGetTypes, supportedPushTypes;
+    supportedPushTypes << InfoNowPlaying;
+    parent->registerInfoTypes( this, supportedGetTypes, supportedPushTypes );
 
-    /** Connect to audio state signals.
-	TODO: Move this into InfoSystem? There could end up being many plugins
-	connected to audio state signals. */
-
-    connect( system, SIGNAL( audioStarted( const Tomahawk::result_ptr& ) ),
-	     SLOT( audioStarted( const Tomahawk::result_ptr& ) ) );
-    connect( system, SIGNAL( audioFinished( const Tomahawk::result_ptr& ) ),
-	     SLOT( audioFinished( const Tomahawk::result_ptr& ) ) );
-    connect( system, SIGNAL( audioStopped() ),
-	     SLOT( audioStopped() ) );
-    connect( system, SIGNAL( audioPaused() ),
-	     SLOT( audioPaused() ) );
-    connect( system, SIGNAL( audioResumed( const Tomahawk::result_ptr& ) ),
-	     SLOT( audioResumed( const Tomahawk::result_ptr& ) ) );
-    
 }
 
 AdiumPlugin::~AdiumPlugin()
@@ -69,7 +55,8 @@ AdiumPlugin::~AdiumPlugin()
     setStatus( "" );
 }
 
-void AdiumPlugin::getInfo(const QString &caller, const InfoType type, const QVariant& data, InfoCustomData customData)
+void 
+AdiumPlugin::getInfo( const QString caller, const InfoType type, const QVariant data, InfoCustomData customData )
 {
     switch (type)
     {
@@ -81,19 +68,44 @@ void AdiumPlugin::getInfo(const QString &caller, const InfoType type, const QVar
     }
 }
 
-/** Audio state slots */
-
-void AdiumPlugin::audioStarted( const Tomahawk::result_ptr& track )
+void
+AdiumPlugin::pushInfo( const QString caller, const Tomahawk::InfoSystem::InfoType type, const QVariant input )
 {
     qDebug() << Q_FUNC_INFO;
+
+    switch ( type )
+    {
+        case InfoNowPlaying:
+            audioStarted( input );
+            break;
+
+        default:
+            return;
+    }
+}
+
+/** Audio state slots */
+void AdiumPlugin::audioStarted( const QVariant &input )
+//void AdiumPlugin::audioStarted( const Tomahawk::result_ptr& track )
+{
+    qDebug() << Q_FUNC_INFO;
+
+    if ( !input.canConvert< Tomahawk::InfoSystem::InfoCriteriaHash >() )
+        return;
+
+    InfoCriteriaHash hash = input.value< Tomahawk::InfoSystem::InfoCriteriaHash >();
+    if ( !hash.contains( "title" ) || !hash.contains( "artist" ) )
+        return;
+
     QString nowPlaying = "";
-    nowPlaying.append( track->track() );
+    nowPlaying.append( hash["title"] );
     nowPlaying.append(" - ");
-    nowPlaying.append(track->artist()->name());
+    nowPlaying.append( hash["artist"] );
     setStatus( nowPlaying );
 }
 
-void AdiumPlugin::audioFinished( const Tomahawk::result_ptr& track )
+void 
+AdiumPlugin::audioFinished( const QVariant &input )
 {
     //qDebug() << Q_FUNC_INFO;
 }
@@ -112,10 +124,10 @@ void AdiumPlugin::audioPaused()
     setStatus( "Paused" );
 }
 
-void AdiumPlugin::audioResumed( const Tomahawk::result_ptr& track )
+void AdiumPlugin::audioResumed( const QVariant &input )
 {
     qDebug() << Q_FUNC_INFO;
     // TODO: audio resumed, so push update status to Adium with playing track
-    this->audioStarted( track );
+    audioStarted( input );
 }
 

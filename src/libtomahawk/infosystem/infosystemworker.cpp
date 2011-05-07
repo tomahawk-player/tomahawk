@@ -26,6 +26,7 @@
 #include "infoplugins/echonestplugin.h"
 #include "infoplugins/musixmatchplugin.h"
 #include "infoplugins/lastfmplugin.h"
+#include "infoplugins/adiumplugin.h"
 
 #include "lastfm/NetworkAccessManager"
 
@@ -61,6 +62,8 @@ void InfoSystemWorker::init()
     m_plugins.append( mmptr );
     InfoPluginPtr lfmptr( new LastFmPlugin( this ) );
     m_plugins.append( lfmptr );
+    InfoPluginPtr admptr( new AdiumPlugin( this ) );
+    m_plugins.append( admptr );
 
     InfoSystemCache *cache = InfoSystem::instance()->getCache();
     

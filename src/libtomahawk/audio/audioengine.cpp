@@ -24,10 +24,12 @@
 
 #include "database/database.h"
 #include "database/databasecommand_logplayback.h"
+#include "infosystem/infosystem.h"
 #include "network/servent.h"
 
 AudioEngine* AudioEngine::s_instance = 0;
 
+static QString s_aeInfoIdentifier = QString( "AUDIOENGINE" );
 
 AudioEngine*
 AudioEngine::instance()
@@ -217,6 +219,15 @@ AudioEngine::loadTrack( const Tomahawk::result_ptr& result )
 
             DatabaseCommand_LogPlayback* cmd = new DatabaseCommand_LogPlayback( m_currentTrack, DatabaseCommand_LogPlayback::Started );
             Database::instance()->enqueue( QSharedPointer<DatabaseCommand>(cmd) );
+
+	    Tomahawk::InfoSystem::InfoCriteriaHash trackInfo;
+
+	    trackInfo["title"] = m_currentTrack->track();
+	    trackInfo["artist"] = m_currentTrack->artist()->name();
+	    Tomahawk::InfoSystem::InfoSystem::instance()->pushInfo(
+	       s_aeInfoIdentifier, Tomahawk::InfoSystem::InfoNowPlaying,
+	       QVariant::fromValue< Tomahawk::InfoSystem::InfoCriteriaHash >( trackInfo ) );
+	    
         }
     }
 

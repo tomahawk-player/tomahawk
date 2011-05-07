@@ -382,7 +382,17 @@ ENDIF( WIN32 )
 IF( APPLE )
     FIND_LIBRARY( COREAUDIO_LIBRARY CoreAudio )
     FIND_LIBRARY( COREFOUNDATION_LIBRARY CoreFoundation )
-    MARK_AS_ADVANCED( COREAUDIO_LIBRARY COREFOUNDATION_LIBRARY )
+    FIND_LIBRARY( FOUNDATION_LIBRARY Foundation )
+    FIND_LIBRARY( SCRIPTINGBRIDGE_LIBRARY ScriptingBridge )
+    MARK_AS_ADVANCED( COREAUDIO_LIBRARY COREFOUNDATION_LIBRARY FOUNDATION_LIBRARY SCRIPTINGBRIDGE_LIBRARY )
+
+    SET( libSources ${libSources} 
+      infosystem/infoplugins/adium.mm
+      infosystem/infoplugins/adiumplugin.cpp )
+
+    SET( libHeaders ${libHeaders} 
+      infosystem/infoplugins/adium.h
+      infosystem/infoplugins/adiumplugin.h )
 
     SET( OS_SPECIFIC_LINK_LIBRARIES
         ${OS_SPECIFIC_LINK_LIBRARIES}
@@ -391,6 +401,8 @@ IF( APPLE )
         # System
         ${COREAUDIO_LIBRARY}
         ${COREFOUNDATION_LIBRARY}
+	${FOUNDATION_LIBRARY}
+	${SCRIPTINGBRIDGE_LIBRARY}
     )
 ENDIF( APPLE )
 
