@@ -553,8 +553,8 @@ DatabaseImpl::resultFromHint( const Tomahawk::query_ptr& origquery )
     else
     {
 //        Q_ASSERT( false );
-//         qDebug() << "We don't support non-servent / non-file result-hints yet.";
-        res = Tomahawk::result_ptr( new Tomahawk::Result() );
+        qDebug() << "We don't support non-servent / non-file result-hints yet.";
+/*        res = Tomahawk::result_ptr( new Tomahawk::Result() );
         s = SourceList::instance()->webSource();
         res->setUrl( url );
         res->setCollection( s->collection() );
@@ -565,7 +565,7 @@ DatabaseImpl::resultFromHint( const Tomahawk::query_ptr& origquery )
         res->setTrack( origquery->track() );
         res->setDuration( origquery->duration() );
         res->setFriendlySource( url );
-        return res;
+        return res;*/
     }
 
     res = Tomahawk::result_ptr( new Tomahawk::Result() );

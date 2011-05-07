@@ -15,10 +15,8 @@
     <file>./data/images/pause-rest.png</file>
     <file>./data/images/play-pressed.png</file>
     <file>./data/images/play-rest.png</file>
-    <file>data/images/sipplugin-add.png</file>
-    <file>data/images/seek-slider-level.png</file>
-    <file>data/images/shuffle-off-rest.png</file>
-    <file>data/images/sipplugin-remove.png</file>
+    <file>./data/images/sipplugin-add.png</file>
+    <file>./data/images/sipplugin-remove.png</file>
     <file>./data/images/playlist-icon.png</file>
     <file>./data/images/repeat-1-on-pressed.png</file>
     <file>./data/images/repeat-1-on-rest.png</file>
