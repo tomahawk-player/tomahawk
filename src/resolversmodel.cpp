@@ -39,6 +39,7 @@ ResolversModel::ResolversModel( const QStringList& allResolvers, const QStringLi
      if( changed )
         TomahawkSettings::instance()->setEnabledScriptResolvers( m_enabledResolvers );
 
+     addInstalledResolvers();
 }
 
 
@@ -150,5 +151,32 @@ QStringList
 ResolversModel::enabledResolvers() const
 {
     return m_enabledResolvers;
+}
+
+void
+ResolversModel::addInstalledResolvers()
+{
+    QList< QDir > pluginDirs;
+
+    QDir appDir( qApp->applicationDirPath() );
+    QDir libDir( CMAKE_INSTALL_PREFIX "/lib" );
+
+    QDir lib64Dir( appDir );
+    lib64Dir.cdUp();
+    lib64Dir.cd( "lib64" );
+
+    pluginDirs << appDir << libDir << lib64Dir << QDir( qApp->applicationDirPath() );
+    foreach ( const QDir& pluginDir, pluginDirs )
+    {
+        qDebug() << "Checking directory for resolvers:" << pluginDir;
+        foreach ( QString fileName, pluginDir.entryList( QStringList() << "*_tomahawkresolver*", QDir::Files ) ){
+            if ( fileName.contains( "_tomahawkresolver" ) ) {
+                const QString path = pluginDir.absoluteFilePath( fileName );
+                if( !m_allResolvers.contains( path ) ) {
+                    m_allResolvers.append( path );
+                }
+            }
+        }
+    }
 }
 
