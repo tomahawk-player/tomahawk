@@ -42,7 +42,7 @@ AdiumPlugin::AdiumPlugin()
     : InfoPlugin()
 {
     qDebug() << Q_FUNC_INFO;
-    m_supportedPushTypes << InfoNowPlaying;
+    m_supportedPushTypes << InfoNowPlaying << InfoNowPaused << InfoNowResumed << InfoNowStopped;
 }
 
 AdiumPlugin::~AdiumPlugin()
@@ -68,15 +68,24 @@ void
 AdiumPlugin::pushInfo( const QString caller, const Tomahawk::InfoSystem::InfoType type, const QVariant input )
 {
     qDebug() << Q_FUNC_INFO;
-
+    
     switch ( type )
     {
         case InfoNowPlaying:
-            audioStarted( input );
-            break;
+	  audioStarted( input );
+	  break;
+        case InfoNowPaused:
+	  audioPaused();
+	  break;
+        case InfoNowResumed:
+	  audioResumed( input );
+	  break;
+        case InfoNowStopped:
+	  audioStopped();
+	  break;
 
         default:
-            return;
+	  return;
     }
 }
 

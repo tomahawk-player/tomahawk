@@ -91,6 +91,13 @@ AudioEngine::play()
     {
         m_mediaObject->play();
         emit resumed();
+	Tomahawk::InfoSystem::InfoCriteriaHash trackInfo;
+
+	trackInfo["title"] = m_currentTrack->track();
+	trackInfo["artist"] = m_currentTrack->artist()->name();
+	Tomahawk::InfoSystem::InfoSystem::instance()->pushInfo(
+	   s_aeInfoIdentifier, Tomahawk::InfoSystem::InfoNowResumed,
+	   QVariant::fromValue< Tomahawk::InfoSystem::InfoCriteriaHash >( trackInfo ) );
     }
     else
         loadNextTrack();
@@ -104,6 +111,8 @@ AudioEngine::pause()
 
     m_mediaObject->pause();
     emit paused();
+    Tomahawk::InfoSystem::InfoSystem::instance()->pushInfo(
+       s_aeInfoIdentifier, Tomahawk::InfoSystem::InfoNowPaused, QVariant() );
 }
 
 
@@ -117,6 +126,8 @@ AudioEngine::stop()
 
     setCurrentTrack( Tomahawk::result_ptr() );
     emit stopped();
+    Tomahawk::InfoSystem::InfoSystem::instance()->pushInfo(
+       s_aeInfoIdentifier, Tomahawk::InfoSystem::InfoNowStopped, QVariant() );
 }
 
 
