@@ -102,6 +102,11 @@ SettingsDialog::SettingsDialog( QWidget *parent )
     //FIXME: MULTIPLECOLLECTIONDIRS
     if ( s->scannerPaths().count() )
         ui->lineEditMusicPath_2->setText( s->scannerPaths().first() );
+    else
+    {
+        ui->lineEditMusicPath_2->setText( QDesktopServices::storageLocation( QDesktopServices::MusicLocation ) );
+    }
+
     ui->checkBoxWatchForChanges->setChecked( s->watchForChanges() );
 
     // LAST FM
