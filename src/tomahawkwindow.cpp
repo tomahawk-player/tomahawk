@@ -151,7 +151,7 @@ TomahawkWindow::TomahawkWindow( QWidget* parent )
     toolbar->installEventFilter( new WidgetDragFilter( toolbar ) );
 
 #ifndef Q_WS_MAC
-    ui->menuHelp->insertSeparator( 1 );
+    ui->menu_Help->insertSeparator( ui->actionAboutTomahawk );
 #endif
 
 #if defined( Q_OS_DARWIN ) && defined( HAVE_SPARKLE )
