@@ -38,6 +38,7 @@ AudioEngine::instance()
 
 AudioEngine::AudioEngine()
     : QObject()
+    , m_isPlayingHttp( false )
     , m_playlist( 0 )
     , m_currentTrackPlaylist( 0 )
     , m_queue( 0 )
@@ -173,13 +174,18 @@ AudioEngine::loadTrack( const Tomahawk::result_ptr& result )
         else
         {
             setCurrentTrack( result );
-            io = Servent::instance()->getIODeviceForUrl( m_currentTrack );
 
-            if ( !io || io.isNull() )
+            if ( !isHttpResult( m_currentTrack->url() ) )
             {
-                qDebug() << "Error getting iodevice for item";
-                err = true;
+                io = Servent::instance()->getIODeviceForUrl( m_currentTrack );
+
+                if ( !io || io.isNull() )
+                {
+                    qDebug() << "Error getting iodevice for item";
+                    err = true;
+                }
             }
+
         }
 
         if ( !err )
@@ -187,14 +193,18 @@ AudioEngine::loadTrack( const Tomahawk::result_ptr& result )
             qDebug() << "Starting new song from url:" << m_currentTrack->url();
             emit loading( m_currentTrack );
 
-            if ( !m_input.isNull() )
+            if ( !m_input.isNull() || m_isPlayingHttp )
             {
                 m_expectStop = true;
             }
 
-            if ( !m_currentTrack->url().startsWith( "http://" ) )
+
+            m_mediaObject->currentSource().setAutoDelete( true );
+
+            if ( !isHttpResult( m_currentTrack->url() ) )
             {
                 m_mediaObject->setCurrentSource( io.data() );
+                m_isPlayingHttp = false;
             }
             else
             {
@@ -206,13 +216,11 @@ AudioEngine::loadTrack( const Tomahawk::result_ptr& result )
                     qDebug() << Q_FUNC_INFO << furl;
                 }
                 m_mediaObject->setCurrentSource( furl );
+                m_isPlayingHttp = true;
             }
 
             m_input = io;
-
-            m_mediaObject->currentSource().setAutoDelete( true );
             m_mediaObject->play();
-
             emit started( m_currentTrack );
 
             DatabaseCommand_LogPlayback* cmd = new DatabaseCommand_LogPlayback( m_currentTrack, DatabaseCommand_LogPlayback::Started );
@@ -228,7 +236,6 @@ AudioEngine::loadTrack( const Tomahawk::result_ptr& result )
 
     return true;
 }
-
 
 void
 AudioEngine::loadPreviousTrack()
@@ -345,4 +352,10 @@ AudioEngine::setCurrentTrack( const Tomahawk::result_ptr& result )
     }
 
     m_currentTrack = result;
+}
+
+bool
+AudioEngine::isHttpResult( const QString& url ) const
+{
+    return url.startsWith( "http://" );
 }
