@@ -150,6 +150,10 @@ TomahawkWindow::TomahawkWindow( QWidget* parent )
     toolbar->setToolButtonStyle( Qt::ToolButtonFollowStyle );
     toolbar->installEventFilter( new WidgetDragFilter( toolbar ) );
 
+#ifndef Q_WS_MAC
+    ui->menuHelp->insertSeparator( 1 );
+#endif
+
 #if defined( Q_OS_DARWIN ) && defined( HAVE_SPARKLE )
     QAction* checkForUpdates = ui->menu_Help->addAction( tr( "Check For Updates...") );
     checkForUpdates->setMenuRole( QAction::ApplicationSpecificRole );
