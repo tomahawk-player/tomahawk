@@ -145,7 +145,7 @@ JabberPlugin::setProxy( const QNetworkProxy &proxy )
     {
         // patches are welcome in Jreen that implement jdns through proxy
         emit error( SipPlugin::ConnectionError,
-                    errorMessage( tr( "You need to set hostname and port of your jabber server, if you want to use it through a proxy" ) ) );
+                    tr( "You need to set hostname and port of your jabber server, if you want to use it through a proxy" ) );
         return;
     }
 
