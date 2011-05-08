@@ -48,6 +48,8 @@ public:
     QStringList allResolvers() const;
     QStringList enabledResolvers() const;
 private:
+    void addInstalledResolvers();
+
     QStringList m_allResolvers;
     QStringList m_enabledResolvers;
 };

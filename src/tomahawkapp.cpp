@@ -182,7 +182,7 @@ TomahawkApp::init()
     registerMetaTypes();
 
     new TomahawkSettings( this );
-    
+
 #ifdef LIBLASTFM_FOUND
     qDebug() << "Setting NAM.";
     TomahawkUtils::setNam( lastfm::nam() );
@@ -204,7 +204,7 @@ TomahawkApp::init()
     }
     else
         TomahawkUtils::setProxy( new QNetworkProxy( QNetworkProxy::NoProxy ) );
-    
+
     Echonest::Config::instance()->setAPIKey( "JRIHWEP6GPOER2QQ6" );
 
     m_audioEngine = new AudioEngine;
