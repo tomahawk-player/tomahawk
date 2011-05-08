@@ -218,6 +218,10 @@ SipInfo::fromJson( QString json )
 
 QDebug operator<< ( QDebug dbg, const SipInfo& info )
 {
-    dbg.nospace() << info.toJson();
+    if( !isValid() )
+        dbg.nospace() << "info is invalid";
+    else
+        dbg.nospace() << info.toJson();
+
     return dbg.maybeSpace();
 }
