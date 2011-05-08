@@ -87,7 +87,7 @@ public slots:
     virtual void addContact( const QString &jid, const QString& msg = QString() ) = 0;
     virtual void sendMsg( const QString& to, const QString& msg ) = 0;
 
-    void setProxy( const QNetworkProxy &proxy );
+    virtual void setProxy( const QNetworkProxy &proxy );
 
 signals:
     void error( int, const QString& );

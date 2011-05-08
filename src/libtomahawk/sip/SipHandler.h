@@ -67,6 +67,8 @@ public slots:
 
     void toggleConnect();
 
+    void setProxy( const QNetworkProxy &proxy );
+
     // create a new plugin of the given name. the name is the value returned in SipPluginFactory::pluginName
     // be default sip plugins are NOt connected when created
     SipPlugin* createPlugin( const QString& factoryName );
@@ -116,6 +118,7 @@ private:
     QList< SipPlugin* > m_enabledPlugins;
     QList< SipPlugin* > m_connectedPlugins;
     bool m_connected;
+    QNetworkProxy m_proxy;
 
     //TODO: move this to source
     QHash<QString, QVariantMap> m_peersSipInfos;

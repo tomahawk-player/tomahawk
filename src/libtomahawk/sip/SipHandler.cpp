@@ -367,6 +367,7 @@ SipHandler::connectPlugin( bool startup, const QString &pluginId )
         if ( sip->pluginId() == pluginId )
         {
             Q_ASSERT( m_enabledPlugins.contains( sip ) ); // make sure the plugin we're connecting is enabled. should always be the case
+            sip->setProxy( m_proxy );
             sip->connectPlugin( startup );
         }
     }
@@ -415,6 +416,17 @@ SipHandler::toggleConnect()
         disconnectAll();
     else
         connectAll();
+}
+
+void
+SipHandler::setProxy( const QNetworkProxy& proxy )
+{
+    qDebug() << Q_FUNC_INFO;
+
+    m_proxy = proxy;
+
+    foreach( SipPlugin* sip, m_allPlugins )
+        sip->setProxy( proxy );
 }
 
 

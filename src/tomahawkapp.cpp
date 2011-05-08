@@ -534,10 +534,8 @@ TomahawkApp::setupSIP()
 #endif
 
         qDebug() << "Connecting SIP classes";
+        SipHandler::instance()->setProxy( *TomahawkUtils::proxy() );
         SipHandler::instance()->loadFromConfig( true );
-
-//        m_sipHandler->setProxy( *TomahawkUtils::proxy() );
-
     }
 }
 
