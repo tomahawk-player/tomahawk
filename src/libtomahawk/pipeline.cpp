@@ -182,6 +182,8 @@ Pipeline::reportResults( QID qid, const QList< result_ptr >& results )
             if ( m_qidsTimeout.contains( q->id() ) )
                 m_qidsTimeout.remove( q->id() );
 
+            qDebug() << "Queries running:" << m_qidsState.count();
+
             shuntNext();
             return;
         }
@@ -192,6 +194,10 @@ Pipeline::reportResults( QID qid, const QList< result_ptr >& results )
         if ( !q->solved() )
             q->onResolvingFinished();
 
+        if ( m_qidsTimeout.contains( q->id() ) )
+            m_qidsTimeout.remove( q->id() );
+
+        qDebug() << "Queries running:" << m_qidsState.count();
         shuntNext();
     }
     else
@@ -305,6 +311,7 @@ Pipeline::shunt( const query_ptr& q )
         // reached end of pipeline
         qDebug() << "Reached end of pipeline for:" << q->toString();
         setQIDState( q, 0 );
+        qDebug() << "Queries running:" << m_qidsState.count();
         return;
     }
 
@@ -327,7 +334,7 @@ Pipeline::setQIDState( const Tomahawk::query_ptr& query, int state )
 {
     QMutexLocker lock( &m_mut );
 
-    if ( state )
+    if ( state > 0 )
     {
         qDebug() << Q_FUNC_INFO << "inserting to qidsstate:" << query->id() << state;
         m_qidsState.insert( query->id(), state );
