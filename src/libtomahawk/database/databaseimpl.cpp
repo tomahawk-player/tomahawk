@@ -564,8 +564,9 @@ DatabaseImpl::resultFromHint( const Tomahawk::query_ptr& origquery )
         res->setAlbum( Tomahawk::album_ptr( new Tomahawk::Album( 0, origquery->album(), res->artist() ) ) );
         res->setTrack( origquery->track() );
         res->setDuration( origquery->duration() );
-        res->setFriendlySource( url );
-        return res;*/
+        res->setFriendlySource( url );*/
+
+        return res;
     }
 
     res = Tomahawk::result_ptr( new Tomahawk::Result() );
