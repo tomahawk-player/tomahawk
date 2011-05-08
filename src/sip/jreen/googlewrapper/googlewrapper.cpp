@@ -41,6 +41,8 @@ GoogleWrapper::GoogleWrapper ( const QString& pluginID )
     m_ui->emailLabel->setText( tr( "Google Address" ) );
     m_ui->jabberBlurb->setText( tr( "Enter your Google login to connect with your friends using Tomahawk!" ) );
     m_ui->logoLabel->setPixmap( QPixmap( ":/gmail-logo.png" ) );
+    m_ui->jabberServer->setText( "talk.google.com" );
+    m_ui->jabberPort->setValue( 5222 );
     m_ui->groupBoxJabberAdvanced->hide();
 }
 
