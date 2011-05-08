@@ -312,7 +312,6 @@ Pipeline::shunt( const query_ptr& q )
         qDebug() << "Reached end of pipeline for:" << q->toString();
         setQIDState( q, 0 );
         qDebug() << "Queries running:" << m_qidsState.count();
-        return;
     }
 
     shuntNext();
