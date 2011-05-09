@@ -107,7 +107,7 @@ SipInfo::isVisible() const
 {
     Q_ASSERT( isValid() );
 
-    d->visible.toBool();
+    return d->visible.toBool();
 }
 
 void
