@@ -2,7 +2,7 @@
 # author: lfranchi@kde.org
 # usage:  Run from inside the bundle root directory, eg. Tomahawk.app
 #         The first parameter should be the spotify resolver binary to copy.
-# eg:     add-spotify.sh /path/to/tomahawk_spotify
+# eg:     add-spotify.sh /path/to/spotify_tomahawkresolver
 ################################################################################
 
 mkdir -p Contents/Frameworks
