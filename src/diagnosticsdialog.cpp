@@ -122,13 +122,13 @@ void DiagnosticsDialog::updateLogView()
                 }
             }
 
-            QVariantMap sipInfo = SipHandler::instance()->sipInfo( peerId );
-            if( sipInfo.value( "visible").toBool() )
+            SipInfo sipInfo = SipHandler::instance()->sipInfo( peerId );
+            if( sipInfo.isVisible() )
                 log.append(
                     QString("       %1: %2:%3 (%4)\n")
                         .arg( peerId )
-                        .arg( sipInfo.value( "ip" ).toString() )
-                        .arg( sipInfo.value( "port" ).toString() )
+                        .arg( sipInfo.host().toString() )
+                        .arg( sipInfo.port() )
                         .arg( connected ? "connected" : "not connected")
                 );
             else

@@ -20,6 +20,8 @@
 #ifndef SIPPLUGIN_H
 #define SIPPLUGIN_H
 
+#include "sipinfo.h"
+
 #include <QObject>
 #include <QString>
 #include <QMenu>
@@ -96,6 +98,7 @@ signals:
     void peerOnline( const QString& );
     void peerOffline( const QString& );
     void msgReceived( const QString& from, const QString& msg );
+    void sipInfoReceived( const QString& peerId, const SipInfo& info );
 
     // new data for own source
     void avatarReceived ( const QPixmap& avatar );

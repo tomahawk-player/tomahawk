@@ -556,13 +556,9 @@ void JabberPlugin::onNewMessage(const Jreen::Message& message)
     QString from = message.from().full();
     QString msg = message.body();
 
-    if ( msg.isEmpty() )
-        return;
+    SipInfo info = SipInfo::fromJson( msg );
 
-    QJson::Parser parser;
-    bool ok;
-    QVariant v = parser.parse( msg.toAscii(), &ok );
-    if ( !ok  || v.type() != QVariant::Map )
+    if ( !info.isValid() )
     {
         QString to = from;
         QString response = QString( tr("I'm sorry -- I'm just an automatic presence used by Tomahawk Player"
@@ -572,11 +568,12 @@ void JabberPlugin::onNewMessage(const Jreen::Message& message)
         // this is not a sip message, so we send it directly through the client
         m_client->send( Jreen::Message ( Jreen::Message::Chat, Jreen::JID(to), response) );
 
+        emit msgReceived( from, msg );
         return;
     }
 
     qDebug() << Q_FUNC_INFO << "From:" << message.from().full() << ":" << message.body();
-    emit msgReceived( from, msg );
+    emit sipInfoReceived( from, info );
 }
 
 
@@ -770,35 +767,26 @@ void JabberPlugin::onNewIq(const Jreen::IQ& iq, int context)
             iq.accept();
 
             qDebug() << Q_FUNC_INFO << "Got SipMessage ...";
-            qDebug() << "ip" << sipMessage->ip();
-            qDebug() << "port" << sipMessage->port();
-            qDebug() << "uniqname" << sipMessage->uniqname();
-            qDebug() << "key" << sipMessage->key();
-            qDebug() << "visible" << sipMessage->visible();
+            qDebug() << Q_FUNC_INFO << "ip" << sipMessage->ip();
+            qDebug() << Q_FUNC_INFO << "port" << sipMessage->port();
+            qDebug() << Q_FUNC_INFO << "uniqname" << sipMessage->uniqname();
+            qDebug() << Q_FUNC_INFO << "key" << sipMessage->key();
+            qDebug() << Q_FUNC_INFO << "visible" << sipMessage->visible();
 
-
-            QVariantMap m;
+            SipInfo info;
+            info.setVisible( sipMessage->visible() );
             if( sipMessage->visible() )
             {
-                m["visible"] = true;
-                m["ip"] = sipMessage->ip();
-                m["port"] = sipMessage->port();
-                m["key"] = sipMessage->key();
-                m["uniqname"] = sipMessage->uniqname();
-            }
-            else
-            {
-                m["visible"] = false;
+                info.setHost( QHostAddress( sipMessage->ip() ) );
+                info.setPort( sipMessage->port() );
+                info.setUniqname( sipMessage->uniqname() );
+                info.setKey( sipMessage->key() );
             }
 
+            Q_ASSERT( info.isValid() );
 
-            QJson::Serializer ser;
-            QByteArray ba = ser.serialize( m );
-            QString msg = QString::fromAscii( ba );
-
-            QString from = iq.from().full();
-            qDebug() << Q_FUNC_INFO << "From:" << from << ":" << msg;
-            emit msgReceived( from, msg );
+            qDebug() << Q_FUNC_INFO << "From:" << iq.from().full() << ":" << info;
+            emit sipInfoReceived( iq.from().full(), info );
         }
     }
 }
