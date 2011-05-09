@@ -63,7 +63,7 @@ private:
     QSharedDataPointer<SipInfoPrivate> d;
 };
 
-QDebug operator<<( QDebug dbg, const SipInfo &info );
+DLLEXPORT QDebug operator<<( QDebug dbg, const SipInfo &info );
 
 
 
