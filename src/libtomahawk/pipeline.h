@@ -1,5 +1,5 @@
 /* === This file is part of Tomahawk Player - <http://tomahawk-player.org> ===
- * 
+ *
  *   Copyright 2010-2011, Christian Muehlhaeuser <muesli@tomahawk-player.org>
  *
  *   Tomahawk is free software: you can redistribute it and/or modify
@@ -73,17 +73,20 @@ signals:
     void idle();
 
 private slots:
+    void timeoutShunt( const query_ptr& q );
     void shunt( const query_ptr& q );
     void shuntNext();
 
     void indexReady();
 
 private:
+    void setQIDState( const Tomahawk::query_ptr& query, int state );
     int incQIDState( const Tomahawk::query_ptr& query );
     int decQIDState( const Tomahawk::query_ptr& query );
 
     QList< Resolver* > m_resolvers;
 
+    QMap< QID, bool > m_qidsTimeout;
     QMap< QID, unsigned int > m_qidsState;
     QMap< QID, query_ptr > m_qids;
     QMap< RID, result_ptr > m_rids;

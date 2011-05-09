@@ -80,7 +80,7 @@ const QPixmap SipHandler::avatar( const QString& name ) const
     }
 }
 
-const QVariantMap
+const SipInfo
 SipHandler::sipInfo(const QString& peerId) const
 {
     return m_peersSipInfos.value( peerId );
@@ -193,6 +193,7 @@ SipHandler::hookUpPlugin( SipPlugin* sip )
     QObject::connect( sip, SIGNAL( peerOnline( QString ) ), SLOT( onPeerOnline( QString ) ) );
     QObject::connect( sip, SIGNAL( peerOffline( QString ) ), SLOT( onPeerOffline( QString ) ) );
     QObject::connect( sip, SIGNAL( msgReceived( QString, QString ) ), SLOT( onMessage( QString, QString ) ) );
+    QObject::connect( sip, SIGNAL( sipInfoReceived( QString, SipInfo ) ), SLOT( onSipInfo( QString, SipInfo ) ) );
 
     QObject::connect( sip, SIGNAL( error( int, QString ) ), SLOT( onError( int, QString ) ) );
     QObject::connect( sip, SIGNAL( stateChanged( SipPlugin::ConnectionState ) ), SLOT( onStateChanged( SipPlugin::ConnectionState ) ) );
@@ -367,6 +368,7 @@ SipHandler::connectPlugin( bool startup, const QString &pluginId )
         if ( sip->pluginId() == pluginId )
         {
             Q_ASSERT( m_enabledPlugins.contains( sip ) ); // make sure the plugin we're connecting is enabled. should always be the case
+            sip->setProxy( m_proxy );
             sip->connectPlugin( startup );
         }
     }
@@ -415,6 +417,17 @@ SipHandler::toggleConnect()
         disconnectAll();
     else
         connectAll();
+}
+
+void
+SipHandler::setProxy( const QNetworkProxy& proxy )
+{
+    qDebug() << Q_FUNC_INFO;
+
+    m_proxy = proxy;
+
+    foreach( SipPlugin* sip, m_allPlugins )
+        sip->setProxy( proxy );
 }
 
 
@@ -471,39 +484,27 @@ SipHandler::onPeerOffline( const QString& jid )
     qDebug() << "SIP offline:" << jid;
 }
 
-
 void
-SipHandler::onMessage( const QString& from, const QString& msg )
+SipHandler::onSipInfo( const QString& peerId, const SipInfo& info )
 {
-    qDebug() << Q_FUNC_INFO;
-    qDebug() << "SIP Message:" << from << msg;
+    qDebug() << Q_FUNC_INFO << "SIP Message:" << peerId << info;
 
-    QJson::Parser parser;
-    bool ok;
-    QVariant v = parser.parse( msg.toAscii(), &ok );
-    if ( !ok  || v.type() != QVariant::Map )
-    {
-        qDebug() << "Invalid JSON in XMPP msg";
-        return;
-    }
-
-    QVariantMap m = v.toMap();
     /*
       If only one party is externally visible, connection is obvious
       If both are, peer with lowest IP address initiates the connection.
       This avoids dupe connections.
      */
-    if ( m.value( "visible" ).toBool() )
+    if ( info.isVisible() )
     {
         if( !Servent::instance()->visibleExternally() ||
-            Servent::instance()->externalAddress() <= m.value( "ip" ).toString() )
+            Servent::instance()->externalAddress() <= info.host().hostName() )
         {
-            qDebug() << "Initiate connection to" << from;
-            Servent::instance()->connectToPeer( m.value( "ip" ).toString(),
-                                          m.value( "port" ).toInt(),
-                                          m.value( "key" ).toString(),
-                                          from,
-                                          m.value( "uniqname" ).toString() );
+            qDebug() << "Initiate connection to" << peerId;
+            Servent::instance()->connectToPeer( info.host().hostName(),
+                                          info.port(),
+                                          info.key(),
+                                          peerId,
+                                          info.uniqname() );
         }
         else
         {
@@ -515,7 +516,13 @@ SipHandler::onMessage( const QString& from, const QString& msg )
         qDebug() << Q_FUNC_INFO << "They are not visible, doing nothing atm";
     }
 
-    m_peersSipInfos.insert( from, m );
+    m_peersSipInfos.insert( peerId, info );
+}
+
+void
+SipHandler::onMessage( const QString& from, const QString& msg )
+{
+    qDebug() << Q_FUNC_INFO;
 }
 
 
