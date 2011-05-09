@@ -522,7 +522,7 @@ SipHandler::onSipInfo( const QString& peerId, const SipInfo& info )
 void
 SipHandler::onMessage( const QString& from, const QString& msg )
 {
-    qDebug() << Q_FUNC_INFO;
+    qDebug() << Q_FUNC_INFO << from << msg;
 }
 
 
