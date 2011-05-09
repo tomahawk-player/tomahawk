@@ -84,6 +84,7 @@ SipInfo::isValid() const
 {
     qDebug() << Q_FUNC_INFO << d->visible << d->host.hostName() << d->port << d->uniqname << d->key;
     if( !d->visible.isNull() )
+    {
         if(
             // visible and all data available
             (  d->visible.toBool() && !d->host.hostName().isNull() && ( d->port > 0 ) && !d->uniqname.isNull() && !d->key.isNull() )
@@ -91,9 +92,9 @@ SipInfo::isValid() const
          || ( !d->visible.toBool() &&  d->host.hostName().isNull() && ( d->port < 0 ) && d->uniqname.isNull() &&   d->key.isNull() )
         )
             return true;
-        else
-            return false;
+    }
 
+    return false;
 }
 
 void
