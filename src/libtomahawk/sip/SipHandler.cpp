@@ -497,10 +497,10 @@ SipHandler::onSipInfo( const QString& peerId, const SipInfo& info )
     if ( info.isVisible() )
     {
         if( !Servent::instance()->visibleExternally() ||
-            Servent::instance()->externalAddress() <= info.host().toString() )
+            Servent::instance()->externalAddress() <= info.host().hostName() )
         {
             qDebug() << "Initiate connection to" << peerId;
-            Servent::instance()->connectToPeer( info.host().toString(),
+            Servent::instance()->connectToPeer( info.host().hostName(),
                                           info.port(),
                                           info.key(),
                                           peerId,

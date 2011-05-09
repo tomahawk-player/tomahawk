@@ -556,6 +556,9 @@ void JabberPlugin::onNewMessage(const Jreen::Message& message)
     QString from = message.from().full();
     QString msg = message.body();
 
+    if(msg.isEmpty())
+        return;
+
     SipInfo info = SipInfo::fromJson( msg );
 
     if ( !info.isValid() )
@@ -777,7 +780,10 @@ void JabberPlugin::onNewIq(const Jreen::IQ& iq, int context)
             info.setVisible( sipMessage->visible() );
             if( sipMessage->visible() )
             {
-                info.setHost( QHostAddress( sipMessage->ip() ) );
+
+                QHostInfo hi;
+                hi.setHostName( sipMessage->ip() );
+                info.setHost( hi );
                 info.setPort( sipMessage->port() );
                 info.setUniqname( sipMessage->uniqname() );
                 info.setKey( sipMessage->key() );

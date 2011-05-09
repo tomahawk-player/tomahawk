@@ -21,7 +21,7 @@
 
 #include <QDebug>
 #include <QSharedPointer>
-#include <QHostAddress>
+#include <QHostInfo>
 
 class SipInfoPrivate;
 
@@ -30,12 +30,10 @@ class SipInfo : public QObject
 Q_OBJECT
 
 public:
-    // create invalid message
-    // becomes valid if either visible == false or visible == true and all attributes are set
     SipInfo();
-    SipInfo(const SipInfo &other);
+    SipInfo(const SipInfo& other);
     virtual ~SipInfo();
-    SipInfo& operator=(const SipInfo &info);
+    SipInfo& operator=(const SipInfo& info);
 
     void clear();
     bool isValid() const;
@@ -43,16 +41,16 @@ public:
     void setVisible( bool visible );
     bool isVisible() const;
 
-    void setHost( const QHostAddress &host );
-    const QHostAddress host() const;
+    void setHost( const QHostInfo& host );
+    const QHostInfo host() const;
 
     void setPort( int port );
     int port() const;
 
-    void setUniqname( const QString &uniqname );
+    void setUniqname( const QString& uniqname );
     const QString uniqname() const;
 
-    void setKey( const QString &key );
+    void setKey( const QString& key );
     const QString key() const;
 
 

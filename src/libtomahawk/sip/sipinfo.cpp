@@ -41,7 +41,7 @@ public:
     ~SipInfoPrivate() { }
 
     QVariant visible;
-    QHostAddress host;
+    QHostInfo host;
     int port;
     QString uniqname;
     QString key;
@@ -73,7 +73,7 @@ void
 SipInfo::clear()
 {
     d->visible.clear();
-    d->host = QHostAddress();
+    d->host = QHostInfo();
     d->port = -1;
     d->uniqname = QString();
     d->key = QString();
@@ -82,12 +82,13 @@ SipInfo::clear()
 bool
 SipInfo::isValid() const
 {
+    qDebug() << Q_FUNC_INFO << d->visible << d->host.hostName() << d->port << d->uniqname << d->key;
     if( !d->visible.isNull() )
         if(
             // visible and all data available
-            (  d->visible.toBool() && !d->host.isNull() && ( d->port > 0 ) && !d->uniqname.isNull() && !d->key.isNull() )
+            (  d->visible.toBool() && !d->host.hostName().isNull() && ( d->port > 0 ) && !d->uniqname.isNull() && !d->key.isNull() )
             // invisible and no data available
-         || ( !d->visible.toBool() &&  d->host.isNull() && ( d->port < 0 ) && d->uniqname.isNull() &&   d->key.isNull() )
+         || ( !d->visible.toBool() &&  d->host.hostName().isNull() && ( d->port < 0 ) && d->uniqname.isNull() &&   d->key.isNull() )
         )
             return true;
         else
@@ -110,12 +111,12 @@ SipInfo::isVisible() const
 }
 
 void
-SipInfo::setHost( const QHostAddress& host )
+SipInfo::setHost( const QHostInfo& host )
 {
     d->host = host;
 }
 
-const QHostAddress
+const QHostInfo
 SipInfo::host() const
 {
     Q_ASSERT( isValid() );
@@ -168,14 +169,12 @@ SipInfo::key() const
 const QString
 SipInfo::toJson() const
 {
-    Q_ASSERT( isValid() );
-
     // build variant map
     QVariantMap m;
     m["visible"] = isVisible();
     if( isVisible() )
     {
-        m["ip"] = host().toString();
+        m["ip"] = host().hostName();
         m["port"] = port();
         m["key"] = key();
         m["uniqname"] = uniqname();
@@ -198,7 +197,7 @@ SipInfo::fromJson( QString json )
     QVariant v = parser.parse( json.toAscii(), &ok );
     if ( !ok  || v.type() != QVariant::Map )
     {
-        qDebug() << Q_FUNC_INFO << "Invalid JSON";
+        qDebug() << Q_FUNC_INFO << "Invalid JSON: " << json;
         return info;
     }
     QVariantMap m = v.toMap();
@@ -206,7 +205,9 @@ SipInfo::fromJson( QString json )
     info.setVisible( m["visible"].toBool() );
     if( m["visible"].toBool() )
     {
-        info.setHost( QHostAddress( m["host"].toString() ) );
+        QHostInfo hostInfo;
+        hostInfo.setHostName( m["host"].toString() );
+        info.setHost( hostInfo );
         info.setPort( m["port"].toInt() );
         info.setUniqname( m["uniqname"].toString() );
         info.setKey( m["key"].toString() );

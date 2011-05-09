@@ -127,7 +127,7 @@ void DiagnosticsDialog::updateLogView()
                 log.append(
                     QString("       %1: %2:%3 (%4)\n")
                         .arg( peerId )
-                        .arg( sipInfo.host().toString() )
+                        .arg( sipInfo.host().hostName() )
                         .arg( sipInfo.port() )
                         .arg( connected ? "connected" : "not connected")
                 );
