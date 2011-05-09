@@ -25,7 +25,9 @@
 
 class SipInfoPrivate;
 
-class SipInfo : public QObject
+#include "../dllmacro.h"
+
+class DLLEXPORT SipInfo : public QObject
 {
 Q_OBJECT
 
