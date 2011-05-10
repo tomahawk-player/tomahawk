@@ -18,6 +18,9 @@
  */
 
 #include "jabber.h"
+#include "ui_configwidget.h"
+
+#include "xmlconsole.h"
 
 #include "config.h"
 
@@ -43,8 +46,6 @@
 #include <QDateTime>
 #include <QTimer>
 
-#include "ui_configwidget.h"
-
 SipPlugin*
 JabberFactory::createPlugin( const QString& pluginId )
 {
@@ -60,7 +61,6 @@ JabberFactory::icon() const
 JabberPlugin::JabberPlugin( const QString& pluginId )
     : SipPlugin( pluginId )
     , m_menu( 0 )
-    , m_addFriendAction( 0 )
     , m_state( Disconnected )
 {
     qDebug() << Q_FUNC_INFO;
@@ -91,6 +91,13 @@ JabberPlugin::JabberPlugin( const QString& pluginId )
     m_client->registerStanzaExtension(new TomahawkSipMessageFactory);
     m_currentResource = QString::fromAscii( "tomahawk%1" ).arg( QString::number( qrand() % 10000 ) );
     m_client->setResource( m_currentResource );
+
+    // instantiate XmlConsole
+    if( readXmlConsoleEnabled() )
+    {
+        m_xmlConsole =  new XmlConsole( m_client );
+        m_xmlConsole->show();
+    }
 
     // add VCardUpdate extension to own presence
     m_client->presence().addExtension( new Jreen::VCardUpdate() );
@@ -471,6 +478,12 @@ JabberPlugin::showAddFriendDialog()
 }
 
 void
+JabberPlugin::showXmlConsole()
+{
+   m_xmlConsole->show();
+}
+
+void
 JabberPlugin::checkSettings()
 {
     bool reconnect = false;
@@ -531,9 +544,15 @@ void JabberPlugin::addMenuHelper()
     if( !m_menu )
     {
         m_menu = new QMenu( QString( "%1 (" ).arg( friendlyName() ).append( accountName() ).append(")" ) );
-        m_addFriendAction = m_menu->addAction( "Add Friend..." );
 
-        connect( m_addFriendAction, SIGNAL( triggered() ), this, SLOT( showAddFriendDialog() ) );
+        QAction* addFriendAction = m_menu->addAction( tr( "Add Friend..." ) );
+        connect( addFriendAction, SIGNAL( triggered() ), this, SLOT( showAddFriendDialog() ) );
+
+        if( readXmlConsoleEnabled() )
+        {
+            QAction* showXmlConsoleAction = m_menu->addAction( tr( "XML Console...") );
+            connect( showXmlConsoleAction, SIGNAL( triggered() ), this, SLOT( showXmlConsole() ) );
+        }
 
         emit addMenu( m_menu );
     }
@@ -541,13 +560,12 @@ void JabberPlugin::addMenuHelper()
 
 void JabberPlugin::removeMenuHelper()
 {
-    if( m_menu && m_addFriendAction )
+    if( m_menu )
     {
         emit removeMenu( m_menu );
 
         delete m_menu;
         m_menu = 0;
-        m_addFriendAction = 0; // deleted by menu
     }
 }
 
@@ -878,6 +896,12 @@ void JabberPlugin::onNewAvatar(const QString& jid)
     else
         // someone else's avatar
         emit avatarReceived ( jid,  m_avatarManager->avatar( jid ) );
+}
+
+bool
+JabberPlugin::readXmlConsoleEnabled()
+{
+    return TomahawkSettings::instance()->value( pluginId() + "/xmlconsole", QVariant( false ) ).toBool();
 }
 
 
