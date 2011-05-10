@@ -61,6 +61,7 @@ JabberFactory::icon() const
 JabberPlugin::JabberPlugin( const QString& pluginId )
     : SipPlugin( pluginId )
     , m_menu( 0 )
+    , m_xmlConsole( 0 )
     , m_state( Disconnected )
 {
     qDebug() << Q_FUNC_INFO;
