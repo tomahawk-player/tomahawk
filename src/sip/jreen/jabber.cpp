@@ -578,6 +578,12 @@ void JabberPlugin::onNewMessage(const Jreen::Message& message)
     if(msg.isEmpty())
         return;
 
+    if( message.subtype() == Jreen::Message::Error )
+    {
+        qDebug() << Q_FUNC_INFO << "Received error message from " << from << ", not answering... (Condition: " << message.error()->condition() << ")";
+        return;
+    }
+
     SipInfo info = SipInfo::fromJson( msg );
 
     if ( !info.isValid() )
