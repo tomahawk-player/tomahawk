@@ -135,7 +135,7 @@ private:
     QString m_currentUsername;
     QString m_currentPassword;
     QString m_currentServer;
-    unsigned int m_currentPort;
+    int m_currentPort;
     ConnectionState m_state;
 
     QWeakPointer< QWidget > m_configWidget;
