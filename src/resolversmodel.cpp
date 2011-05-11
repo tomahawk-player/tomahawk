@@ -197,4 +197,3 @@ ResolversModel::addInstalledResolvers()
         }
     }
 }
-

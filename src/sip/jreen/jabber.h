@@ -23,6 +23,7 @@
 #include "sip/SipPlugin.h"
 
 #include "avatarmanager.h"
+#include "xmlconsole.h"
 
 #include <jreen/client.h>
 #include <jreen/disco.h>
@@ -99,6 +100,7 @@ protected:
 
 private slots:
     void showAddFriendDialog();
+    void showXmlConsole();
     void onConnect();
     void onDisconnect(Jreen::Client::DisconnectReason reason);
 
@@ -115,6 +117,7 @@ private slots:
     void onNewAvatar( const QString &jid );
 
 private:
+    bool readXmlConsoleEnabled();
     QString readPassword();
     QString readServer();
     int readPort();
@@ -128,8 +131,7 @@ private:
     void handlePeerStatus( const Jreen::JID &jid, Jreen::Presence::Type presenceType );
 
     QMenu* m_menu;
-    QAction* m_addFriendAction;
-
+    XmlConsole* m_xmlConsole;
     QString m_currentUsername;
     QString m_currentPassword;
     QString m_currentServer;
