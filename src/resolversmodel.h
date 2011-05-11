@@ -26,6 +26,7 @@
 
 class ResolversModel : public QAbstractListModel
 {
+    Q_OBJECT
 public:
     enum Roles {
         ResolverName = Qt::UserRole + 15,
@@ -47,6 +48,10 @@ public:
 
     QStringList allResolvers() const;
     QStringList enabledResolvers() const;
+
+private slots:
+    void resolverChanged();
+
 private:
     void addInstalledResolvers();
 

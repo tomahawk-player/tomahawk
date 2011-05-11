@@ -440,8 +440,8 @@ SettingsDialog::addScriptResolver()
 {
     QString resolver = QFileDialog::getOpenFileName( this, tr( "Load script resolver file" ), qApp->applicationDirPath() );
     if( !resolver.isEmpty() ) {
-        m_resolversModel->addResolver( resolver, true );
         TomahawkApp::instance()->enableScriptResolver( resolver );
+        m_resolversModel->addResolver( resolver, true );
     }
 }
 

@@ -125,6 +125,12 @@ ResolversModel::addResolver( const QString& resolver, bool enable )
     m_allResolvers << resolver;
     if( enable )
         m_enabledResolvers << resolver;
+    if( Tomahawk::ExternalResolver* res = TomahawkApp::instance()->resolverForPath( resolver ) ) {
+        qDebug() << "Added resolver with config and stuff:" << res->configUI();
+        connect( res, SIGNAL( changed() ), this, SLOT( resolverChanged() ) );
+    } else
+        qDebug() << "No resolver object for path yet:" << resolver;
+
     endInsertRows();
 }
 
@@ -154,6 +160,19 @@ ResolversModel::enabledResolvers() const
 }
 
 void
+ResolversModel::resolverChanged()
+{
+    Q_ASSERT( qobject_cast< Tomahawk::ExternalResolver* >( sender() ) );
+    Tomahawk::ExternalResolver* res = qobject_cast< Tomahawk::ExternalResolver* >( sender() );
+    qDebug() << "Got resolverChanged signal, does it have a config UI yet?" << res->configUI();
+    if( m_enabledResolvers.contains( res->filePath() ) ) {
+        QModelIndex idx = index( m_allResolvers.indexOf( res->filePath() ), 0, QModelIndex() );
+        emit dataChanged( idx, idx );
+    }
+}
+
+void
+
 ResolversModel::addInstalledResolvers()
 {
     QList< QDir > pluginDirs;
@@ -179,4 +198,3 @@ ResolversModel::addInstalledResolvers()
         }
     }
 }
-

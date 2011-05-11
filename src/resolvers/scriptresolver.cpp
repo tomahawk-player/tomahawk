@@ -257,6 +257,8 @@ ScriptResolver::setupConfWidget( const QVariantMap& m )
     if( m.contains( "images" ) )
         uiData = fixDataImagePaths( uiData, compressed, m[ "images" ].toMap() );
     m_configWidget = QWeakPointer< QWidget >( widgetFromData( uiData, 0 ) );
+
+    emit changed();
 }
 
 
