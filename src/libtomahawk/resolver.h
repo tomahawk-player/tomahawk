@@ -65,8 +65,12 @@ public:
 
     virtual QWidget* configUI() const = 0;
     virtual void saveConfig() = 0;
+
 public slots:
     virtual void stop() = 0;
+
+signals:
+    void changed(); // if config widget was added/removed
 
 protected:
     QWidget* widgetFromData( QByteArray& data, QWidget* parent = 0 );
