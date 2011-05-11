@@ -40,12 +40,15 @@
 
 SipHandler* SipHandler::s_instance = 0;
 
-SipHandler* SipHandler::instance()
+SipHandler*
+SipHandler::instance()
 {
-    if( s_instance == 0 )
-        s_instance = new SipHandler( 0 );
+    if ( !s_instance )
+        new SipHandler( 0 );
+
     return s_instance;
 }
+
 
 SipHandler::SipHandler( QObject* parent )
     : QObject( parent )
@@ -61,10 +64,14 @@ SipHandler::SipHandler( QObject* parent )
 
 SipHandler::~SipHandler()
 {
+    qDebug() << Q_FUNC_INFO;
     disconnectAll();
+    qDeleteAll( m_allPlugins );
 }
 
-const QPixmap SipHandler::avatar( const QString& name ) const
+
+const QPixmap
+SipHandler::avatar( const QString& name ) const
 {
     qDebug() << Q_FUNC_INFO << "Getting avatar" << name << m_usernameAvatars.keys();
     if( m_usernameAvatars.keys().contains( name ) )
@@ -80,11 +87,13 @@ const QPixmap SipHandler::avatar( const QString& name ) const
     }
 }
 
+
 const SipInfo
 SipHandler::sipInfo(const QString& peerId) const
 {
     return m_peersSipInfos.value( peerId );
 }
+
 
 void
 SipHandler::onSettingsChanged()
@@ -554,10 +563,11 @@ SipHandler::onStateChanged( SipPlugin::ConnectionState state )
     {
         m_connectedPlugins.removeAll( sip );
         emit disconnected( sip );
-    } else if ( sip->connectionState() == SipPlugin::Connected )
+    }
+    else if ( sip->connectionState() == SipPlugin::Connected )
     {
-        m_connectedPlugins.removeAll( sip );
-        emit disconnected( sip );
+        m_connectedPlugins << sip;
+        emit connected( sip );
     }
 
     emit stateChanged( sip, state );

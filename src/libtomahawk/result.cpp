@@ -1,5 +1,5 @@
 /* === This file is part of Tomahawk Player - <http://tomahawk-player.org> ===
- * 
+ *
  *   Copyright 2010-2011, Christian Muehlhaeuser <muesli@tomahawk-player.org>
  *
  *   Tomahawk is free software: you can redistribute it and/or modify
@@ -30,7 +30,14 @@ using namespace Tomahawk;
 
 Result::Result()
     : QObject()
+    , m_duration( 0 )
+    , m_bitrate( 0 )
+    , m_size( 0 )
+    , m_albumpos( 0 )
+    , m_modtime( 0 )
     , m_year( 0 )
+    , m_score( 0 )
+    , m_id( 0 )
 {
 }
 
@@ -40,21 +47,21 @@ Result::~Result()
 }
 
 
-artist_ptr 
+artist_ptr
 Result::artist() const
 {
     return m_artist;
 }
 
 
-album_ptr 
+album_ptr
 Result::album() const
 {
     return m_album;
 }
 
 
-collection_ptr 
+collection_ptr
 Result::collection() const
 {
     return m_collection;
@@ -84,6 +91,13 @@ Result::id() const
 {
     Q_ASSERT( !m_rid.isEmpty() );
     return m_rid;
+}
+
+
+bool
+Result::isOnline() const
+{
+    return ( !collection().isNull() && collection()->source()->isOnline() );
 }
 
 

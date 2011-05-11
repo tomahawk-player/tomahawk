@@ -96,7 +96,7 @@ JabberPlugin::JabberPlugin( const QString& pluginId )
     // instantiate XmlConsole
     if( readXmlConsoleEnabled() )
     {
-        m_xmlConsole =  new XmlConsole( m_client );
+        m_xmlConsole = new XmlConsole( m_client );
         m_xmlConsole->show();
     }
 
@@ -141,7 +141,11 @@ JabberPlugin::JabberPlugin( const QString& pluginId )
 
 JabberPlugin::~JabberPlugin()
 {
-
+    delete m_avatarManager;
+    delete m_roster;
+    delete m_client;
+    delete m_xmlConsole;
+    delete m_ui;
 }
 
 void
@@ -222,7 +226,6 @@ JabberPlugin::connectPlugin( bool startup )
     //FIXME: we're badly workarounding some missing reconnection api here, to be fixed soon
     QTimer::singleShot( 1000, m_client, SLOT( connectToServer() ) );
 
-
     connect(m_client->connection(), SIGNAL(error(Jreen::Connection::SocketError)), SLOT(onError(Jreen::Connection::SocketError)));
 
     m_state = Connecting;
@@ -251,7 +254,9 @@ JabberPlugin::disconnectPlugin()
     m_peers.clear();
     m_legacy_peers.clear();
 
-    m_client->disconnectFromServer(true);
+    m_client->disconnectFromServer( true );
+    m_state = Disconnecting;
+    emit stateChanged( m_state );
 }
 
 void
@@ -572,6 +577,11 @@ void JabberPlugin::removeMenuHelper()
 
 void JabberPlugin::onNewMessage(const Jreen::Message& message)
 {
+    if ( m_state != Connected )
+        return;
+
+    qDebug() << Q_FUNC_INFO << "message type" << message.subtype();
+
     QString from = message.from().full();
     QString msg = message.body();
 
@@ -608,6 +618,8 @@ void JabberPlugin::onNewMessage(const Jreen::Message& message)
 void JabberPlugin::onPresenceReceived( const Jreen::RosterItem::Ptr &item, const Jreen::Presence& presence )
 {
     Q_UNUSED(item);
+    if ( m_state != Connected )
+        return;
 
     Jreen::JID jid = presence.from();
     QString fulljid( jid.full() );
@@ -652,6 +664,9 @@ void JabberPlugin::onPresenceReceived( const Jreen::RosterItem::Ptr &item, const
 
 void JabberPlugin::onSubscriptionReceived(const Jreen::RosterItem::Ptr& item, const Jreen::Presence& presence)
 {
+    if ( m_state != Connected )
+        return;
+
     qDebug() << Q_FUNC_INFO << "presence type: " << presence.subtype();
     if(item)
         qDebug() << Q_FUNC_INFO << presence.from().full() << "subs" << item->subscription() << "ask" << item->ask();
@@ -739,6 +754,9 @@ JabberPlugin::onSubscriptionRequestConfirmed( int result )
 
 void JabberPlugin::onNewIq(const Jreen::IQ& iq, int context)
 {
+    if ( m_state != Connected )
+        return;
+
     if( context == RequestDisco )
     {
         qDebug() << Q_FUNC_INFO << "Received disco IQ...";
@@ -885,6 +903,9 @@ void JabberPlugin::handlePeerStatus(const Jreen::JID& jid, Jreen::Presence::Type
 void JabberPlugin::onNewAvatar(const QString& jid)
 {
     qDebug() << Q_FUNC_INFO << jid;
+    if ( m_state != Connected )
+        return;
+
     Q_ASSERT(!m_avatarManager->avatar( jid ).isNull());
 
     // find peers for the jid

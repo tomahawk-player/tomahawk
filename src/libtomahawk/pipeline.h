@@ -44,6 +44,7 @@ public:
     static Pipeline* instance();
 
     explicit Pipeline( QObject* parent = 0 );
+    virtual ~Pipeline();
 
     void reportResults( QID qid, const QList< result_ptr >& results );
 
@@ -67,6 +68,9 @@ public slots:
     void resolve( const query_ptr& q, bool prioritized = false );
     void resolve( const QList<query_ptr>& qlist, bool prioritized = false );
     void resolve( QID qid, bool prioritized = false );
+
+    void start();
+    void stop();
     void databaseReady();
 
 signals:
@@ -76,8 +80,6 @@ private slots:
     void timeoutShunt( const query_ptr& q );
     void shunt( const query_ptr& q );
     void shuntNext();
-
-    void indexReady();
 
 private:
     void setQIDState( const Tomahawk::query_ptr& query, int state );
@@ -95,7 +97,7 @@ private:
 
     // store queries here until DB index is loaded, then shunt them all
     QList< query_ptr > m_queries_pending;
-    bool m_index_ready;
+    bool m_running;
 
     static Pipeline* s_instance;
 };

@@ -45,7 +45,6 @@ SourceList::instance()
 SourceList::SourceList( QObject* parent )
     : QObject( parent )
 {
-    loadSources();
 }
 
 

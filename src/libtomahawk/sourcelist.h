@@ -43,6 +43,7 @@ public:
     void setWebSource( const Tomahawk::source_ptr& websrc );
     const Tomahawk::source_ptr webSource() const;
 
+    void loadSources();
     void removeAllRemote();
 
     QList<Tomahawk::source_ptr> sources( bool onlyOnline = false ) const;
@@ -62,7 +63,6 @@ private slots:
     void sourceSynced();
 
 private:
-    void loadSources();
     void add( const Tomahawk::source_ptr& source );
 
     QMap< QString, Tomahawk::source_ptr > m_sources;

@@ -1,5 +1,5 @@
 /* === This file is part of Tomahawk Player - <http://tomahawk-player.org> ===
- * 
+ *
  *   Copyright 2010-2011, Christian Muehlhaeuser <muesli@tomahawk-player.org>
  *
  *   Tomahawk is free software: you can redistribute it and/or modify
@@ -53,11 +53,10 @@ ControlConnection::~ControlConnection()
 
     if ( !m_source.isNull() )
         m_source->setOffline();
-    
+
     delete m_pingtimer;
-    m_servent->unregisterControlConnection(this);
-    if( m_dbsyncconn )
-        m_dbsyncconn->deleteLater();
+    m_servent->unregisterControlConnection( this );
+    delete m_dbsyncconn;
 }
 
 

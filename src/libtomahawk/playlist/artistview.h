@@ -51,11 +51,12 @@ public:
 
     virtual QString title() const { return m_model->title(); }
     virtual QString description() const { return m_model->description(); }
+    virtual QPixmap pixmap() const { return QPixmap( RESPATH "images/music-icon.png" ); }
 
     virtual bool showStatsBar() const { return false; }
     virtual bool showModes() const { return true; }
 
-    virtual bool jumpToCurrentTrack() { return false; }
+    virtual bool jumpToCurrentTrack();
 
     QString guid() const { return QString( "ArtistView" ); }
 
@@ -64,9 +65,6 @@ public slots:
 
 protected:
     virtual void startDrag( Qt::DropActions supportedActions );
-    virtual void dragEnterEvent( QDragEnterEvent* event );
-    virtual void dragMoveEvent( QDragMoveEvent* event );
-    virtual void dropEvent( QDropEvent* event );
     virtual void resizeEvent( QResizeEvent* event );
 
     void paintEvent( QPaintEvent* event );
@@ -77,8 +75,6 @@ private slots:
     void onScrollTimeout();
 
 private:
-    QPixmap createDragPixmap( int itemCount ) const;
-
     TreeHeader* m_header;
     TreeModel* m_model;
     TreeProxyModel* m_proxyModel;

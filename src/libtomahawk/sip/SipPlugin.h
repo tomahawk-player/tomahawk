@@ -59,7 +59,7 @@ class DLLEXPORT SipPlugin : public QObject
 
 public:
     enum SipErrorCode { AuthError, ConnectionError }; // Placeholder for errors, to be defined
-    enum ConnectionState { Disconnected, Connecting, Connected };
+    enum ConnectionState { Disconnected, Connecting, Connected, Disconnecting };
 
     explicit SipPlugin( const QString& pluginId, QObject* parent = 0 );
     virtual ~SipPlugin() {}

@@ -41,26 +41,40 @@ Pipeline::instance()
 
 Pipeline::Pipeline( QObject* parent )
     : QObject( parent )
-    , m_index_ready( false )
+    , m_running( false )
 {
     s_instance = this;
+}
+
+
+Pipeline::~Pipeline()
+{
+    m_running = false;
 }
 
 
 void
 Pipeline::databaseReady()
 {
-    connect( Database::instance(), SIGNAL( indexReady() ), this, SLOT( indexReady() ), Qt::QueuedConnection );
+    connect( Database::instance(), SIGNAL( indexReady() ), this, SLOT( start() ), Qt::QueuedConnection );
     Database::instance()->loadIndex();
 }
 
 
-void Pipeline::indexReady()
+void
+Pipeline::start()
 {
     qDebug() << Q_FUNC_INFO << "shunting this many pending queries:" << m_queries_pending.size();
-    m_index_ready = true;
+    m_running = true;
 
     shuntNext();
+}
+
+
+void
+Pipeline::stop()
+{
+    m_running = false;
 }
 
 
@@ -210,7 +224,7 @@ Pipeline::reportResults( QID qid, const QList< result_ptr >& results )
 void
 Pipeline::shuntNext()
 {
-    if ( !m_index_ready )
+    if ( !m_running )
         return;
 
     query_ptr q;
@@ -245,6 +259,9 @@ Pipeline::shuntNext()
 void
 Pipeline::timeoutShunt( const query_ptr& q )
 {
+    if ( !m_running )
+        return;
+
     // are we still waiting for a timeout?
     if ( m_qidsTimeout.contains( q->id() ) )
     {
@@ -259,6 +276,9 @@ Pipeline::timeoutShunt( const query_ptr& q )
 void
 Pipeline::shunt( const query_ptr& q )
 {
+    if ( !m_running )
+        return;
+
     qDebug() << Q_FUNC_INFO << q->solved() << q->toString() << q->id();
     unsigned int lastweight = 0;
     unsigned int lasttimeout = 0;

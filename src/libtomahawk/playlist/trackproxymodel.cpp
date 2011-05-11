@@ -143,7 +143,6 @@ TrackProxyModel::siblingItem( int itemsAway )
     if ( idx.isValid() ) do
     {
         TrackModelItem* item = itemFromIndex( mapToSource( idx ) );
-        qDebug() << item->query()->toString();
         if ( item && item->query()->playable() )
         {
             qDebug() << "Next PlaylistItem found:" << item->query()->toString() << item->query()->results().at( 0 )->url();
