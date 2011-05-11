@@ -165,6 +165,9 @@ Pipeline::resolve( QID qid, bool prioritized )
 void
 Pipeline::reportResults( QID qid, const QList< result_ptr >& results )
 {
+    if ( !m_running )
+        return;
+
     {
         QMutexLocker lock( &m_mut );
 
