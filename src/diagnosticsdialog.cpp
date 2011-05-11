@@ -124,11 +124,13 @@ void DiagnosticsDialog::updateLogView()
 
             SipInfo sipInfo = SipHandler::instance()->sipInfo( peerId );
             if( !sipInfo.isValid() )
-            {
-                qDebug() << Q_FUNC_INFO << "SipInfo invalid for " << peerId;
-                continue;
-            }
-            if( sipInfo.isVisible() )
+               log.append(
+                    QString("       %1: %2 (%3)\n")
+                        .arg( peerId )
+                        .arg( "sipinfo invalid" )
+                        .arg( connected ? "connected" : "not connected")
+                );
+            else if( sipInfo.isVisible() )
                 log.append(
                     QString("       %1: %2:%3 (%4)\n")
                         .arg( peerId )
