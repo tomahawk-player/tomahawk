@@ -45,7 +45,7 @@ else()
 	message(STATUS "Phonon found; ensure that phonon-vlc is at least 0.4")
 endif()
 
-macro_optional_find_package(LibEchonest 1.1.1)
+macro_optional_find_package(LibEchonest 1.1.5)
 macro_log_feature(LIBECHONEST_FOUND "Echonest" "Qt library for communicating with The Echo Nest" "http://projects.kde.org/libechonest" TRUE "" "libechonest is needed for dynamic playlists and the infosystem")
 
 macro_optional_find_package(CLucene 0.9.23)

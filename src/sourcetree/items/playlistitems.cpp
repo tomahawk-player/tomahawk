@@ -111,34 +111,54 @@ PlaylistItem::willAcceptDrag( const QMimeData* data ) const
 bool
 PlaylistItem::dropMimeData( const QMimeData* data, Qt::DropAction action )
 {
-    if( data->hasFormat( "application/tomahawk.query.list" ) ) {
-        if ( !m_playlist.isNull() && m_playlist->author()->isLocal() ) {
+    QList< Tomahawk::query_ptr > queries;
+    if ( data->hasFormat( "application/tomahawk.result.list" ) )
+    {
+        QByteArray itemData = data->data( "application/tomahawk.result.list" );
+        QDataStream stream( &itemData, QIODevice::ReadOnly );
 
-            QByteArray itemData = data->data( "application/tomahawk.query.list" );
-            QDataStream stream( &itemData, QIODevice::ReadOnly );
-            QList< Tomahawk::query_ptr > queries;
+        while ( !stream.atEnd() )
+        {
+            qlonglong qptr;
+            stream >> qptr;
 
-            while ( !stream.atEnd() )
+            Tomahawk::result_ptr* result = reinterpret_cast<Tomahawk::result_ptr*>(qptr);
+            if ( result && !result->isNull() )
             {
-                qlonglong qptr;
-                stream >> qptr;
-
-                Tomahawk::query_ptr* query = reinterpret_cast<Tomahawk::query_ptr*>(qptr);
-                if ( query && !query->isNull() )
-                {
-                    qDebug() << "Dropped query item:" << query->data()->artist() << "-" << query->data()->track();
-                    queries << *query;
-                }
+                qDebug() << "Dropped result item:" << result->data()->artist() << "-" << result->data()->track();
+                queries << result->data()->toQuery();
             }
-
-            qDebug() << "on playlist:" << m_playlist->title() << m_playlist->guid();
-
-            // TODO do we need to use this in the refactor?
-            //                     QString rev = item->currentlyLoadedPlaylistRevision( playlist->guid() );
-            m_playlist->addEntries( queries, m_playlist->currentrevision() );
-
-            return true;
         }
+    }
+
+    if ( data->hasFormat( "application/tomahawk.query.list" ) )
+    {
+        QByteArray itemData = data->data( "application/tomahawk.query.list" );
+        QDataStream stream( &itemData, QIODevice::ReadOnly );
+
+        while ( !stream.atEnd() )
+        {
+            qlonglong qptr;
+            stream >> qptr;
+
+            Tomahawk::query_ptr* query = reinterpret_cast<Tomahawk::query_ptr*>(qptr);
+            if ( query && !query->isNull() )
+            {
+                qDebug() << "Dropped query item:" << query->data()->artist() << "-" << query->data()->track();
+                queries << *query;
+            }
+        }
+    }
+
+    if ( queries.count() && !m_playlist.isNull() && m_playlist->author()->isLocal() )
+    {
+        qDebug() << "on playlist:" << m_playlist->title() << m_playlist->guid();
+
+        // TODO do we need to use this in the refactor?
+        //                     QString rev = item->currentlyLoadedPlaylistRevision( playlist->guid() );
+        m_playlist->addEntries( queries, m_playlist->currentrevision() );
+
+        return true;
     }
 
     return false;

@@ -30,22 +30,21 @@
 #include "network/controlconnection.h"
 #include "sourcelist.h"
 #include "tomahawksettings.h"
-//#include "tomahawk/tomahawkapp.h"
 
 #include "config.h"
 
-
-//remove
-#include <QLabel>
-
 SipHandler* SipHandler::s_instance = 0;
 
-SipHandler* SipHandler::instance()
+
+SipHandler*
+SipHandler::instance()
 {
-    if( s_instance == 0 )
-        s_instance = new SipHandler( 0 );
+    if ( !s_instance )
+        new SipHandler( 0 );
+
     return s_instance;
 }
+
 
 SipHandler::SipHandler( QObject* parent )
     : QObject( parent )
@@ -61,10 +60,14 @@ SipHandler::SipHandler( QObject* parent )
 
 SipHandler::~SipHandler()
 {
+    qDebug() << Q_FUNC_INFO;
     disconnectAll();
+    qDeleteAll( m_allPlugins );
 }
 
-const QPixmap SipHandler::avatar( const QString& name ) const
+
+const QPixmap
+SipHandler::avatar( const QString& name ) const
 {
     qDebug() << Q_FUNC_INFO << "Getting avatar" << name << m_usernameAvatars.keys();
     if( m_usernameAvatars.keys().contains( name ) )
@@ -80,6 +83,12 @@ const QPixmap SipHandler::avatar( const QString& name ) const
     }
 }
 
+
+const SipInfo
+SipHandler::sipInfo(const QString& peerId) const
+{
+    return m_peersSipInfos.value( peerId );
+}
 
 
 void
@@ -144,6 +153,7 @@ SipHandler::loadPluginFactories( const QStringList& paths )
     }
 }
 
+
 SipPlugin*
 SipHandler::createPlugin( const QString& factoryId )
 {
@@ -155,6 +165,7 @@ SipHandler::createPlugin( const QString& factoryId )
     emit pluginAdded( sip );
     return sip;
 }
+
 
 SipPlugin*
 SipHandler::loadPlugin( const QString& pluginId )
@@ -168,6 +179,7 @@ SipHandler::loadPlugin( const QString& pluginId )
     // caller responsible for calling pluginAdded() and hookupPlugin
     return sip;
 }
+
 
 void
 SipHandler::removePlugin( SipPlugin* p )
@@ -189,6 +201,7 @@ SipHandler::hookUpPlugin( SipPlugin* sip )
     QObject::connect( sip, SIGNAL( peerOnline( QString ) ), SLOT( onPeerOnline( QString ) ) );
     QObject::connect( sip, SIGNAL( peerOffline( QString ) ), SLOT( onPeerOffline( QString ) ) );
     QObject::connect( sip, SIGNAL( msgReceived( QString, QString ) ), SLOT( onMessage( QString, QString ) ) );
+    QObject::connect( sip, SIGNAL( sipInfoReceived( QString, SipInfo ) ), SLOT( onSipInfo( QString, SipInfo ) ) );
 
     QObject::connect( sip, SIGNAL( error( int, QString ) ), SLOT( onError( int, QString ) ) );
     QObject::connect( sip, SIGNAL( stateChanged( SipPlugin::ConnectionState ) ), SLOT( onStateChanged( SipPlugin::ConnectionState ) ) );
@@ -242,6 +255,7 @@ SipHandler::checkSettings()
     }
 }
 
+
 void
 SipHandler::addSipPlugin( SipPlugin* p, bool enabled, bool startup )
 {
@@ -257,6 +271,7 @@ SipHandler::addSipPlugin( SipPlugin* p, bool enabled, bool startup )
     emit pluginAdded( p );
 }
 
+
 void
 SipHandler::removeSipPlugin( SipPlugin* p )
 {
@@ -268,6 +283,7 @@ SipHandler::removeSipPlugin( SipPlugin* p )
     m_allPlugins.removeAll( p );
     m_enabledPlugins.removeAll( p );
 }
+
 
 bool
 SipHandler::hasPluginType( const QString& factoryId ) const
@@ -297,6 +313,7 @@ SipHandler::loadFromConfig( bool startup )
     m_connected = true;
 }
 
+
 void
 SipHandler::connectAll()
 {
@@ -318,6 +335,7 @@ SipHandler::disconnectAll()
     m_connected = false;
 }
 
+
 void
 SipHandler::disablePlugin( SipPlugin* p )
 {
@@ -328,6 +346,7 @@ SipHandler::disablePlugin( SipPlugin* p )
 
     m_enabledPlugins.removeAll( p );
 }
+
 
 void
 SipHandler::enablePlugin( SipPlugin* p )
@@ -363,6 +382,7 @@ SipHandler::connectPlugin( bool startup, const QString &pluginId )
         if ( sip->pluginId() == pluginId )
         {
             Q_ASSERT( m_enabledPlugins.contains( sip ) ); // make sure the plugin we're connecting is enabled. should always be the case
+            sip->setProxy( m_proxy );
             sip->connectPlugin( startup );
         }
     }
@@ -379,11 +399,13 @@ SipHandler::disconnectPlugin( const QString &pluginName )
     }
 }
 
+
 QList< SipPlugin* >
 SipHandler::allPlugins() const
 {
     return m_allPlugins;
 }
+
 
 QList< SipPlugin* >
 SipHandler::enabledPlugins() const
@@ -391,11 +413,13 @@ SipHandler::enabledPlugins() const
     return m_enabledPlugins;
 }
 
+
 QList< SipPlugin* >
 SipHandler::connectedPlugins() const
 {
     return m_connectedPlugins;
 }
+
 
 QList< SipPluginFactory* >
 SipHandler::pluginFactories() const
@@ -411,6 +435,18 @@ SipHandler::toggleConnect()
         disconnectAll();
     else
         connectAll();
+}
+
+
+void
+SipHandler::setProxy( const QNetworkProxy& proxy )
+{
+    qDebug() << Q_FUNC_INFO;
+
+    m_proxy = proxy;
+
+    foreach( SipPlugin* sip, m_allPlugins )
+        sip->setProxy( proxy );
 }
 
 
@@ -469,37 +505,26 @@ SipHandler::onPeerOffline( const QString& jid )
 
 
 void
-SipHandler::onMessage( const QString& from, const QString& msg )
+SipHandler::onSipInfo( const QString& peerId, const SipInfo& info )
 {
-    qDebug() << Q_FUNC_INFO;
-    qDebug() << "SIP Message:" << from << msg;
+    qDebug() << Q_FUNC_INFO << "SIP Message:" << peerId << info;
 
-    QJson::Parser parser;
-    bool ok;
-    QVariant v = parser.parse( msg.toAscii(), &ok );
-    if ( !ok  || v.type() != QVariant::Map )
-    {
-        qDebug() << "Invalid JSON in XMPP msg";
-        return;
-    }
-
-    QVariantMap m = v.toMap();
     /*
       If only one party is externally visible, connection is obvious
       If both are, peer with lowest IP address initiates the connection.
       This avoids dupe connections.
      */
-    if ( m.value( "visible" ).toBool() )
+    if ( info.isVisible() )
     {
         if( !Servent::instance()->visibleExternally() ||
-            Servent::instance()->externalAddress() <= m.value( "ip" ).toString() )
+            Servent::instance()->externalAddress() <= info.host().hostName() )
         {
-            qDebug() << "Initiate connection to" << from;
-            Servent::instance()->connectToPeer( m.value( "ip" ).toString(),
-                                          m.value( "port" ).toInt(),
-                                          m.value( "key" ).toString(),
-                                          from,
-                                          m.value( "uniqname" ).toString() );
+            qDebug() << "Initiate connection to" << peerId;
+            Servent::instance()->connectToPeer( info.host().hostName(),
+                                          info.port(),
+                                          info.key(),
+                                          peerId,
+                                          info.uniqname() );
         }
         else
         {
@@ -510,6 +535,15 @@ SipHandler::onMessage( const QString& from, const QString& msg )
     {
         qDebug() << Q_FUNC_INFO << "They are not visible, doing nothing atm";
     }
+
+    m_peersSipInfos.insert( peerId, info );
+}
+
+
+void
+SipHandler::onMessage( const QString& from, const QString& msg )
+{
+    qDebug() << Q_FUNC_INFO << from << msg;
 }
 
 
@@ -531,6 +565,7 @@ SipHandler::onError( int code, const QString& msg )
     }
 }
 
+
 void
 SipHandler::onStateChanged( SipPlugin::ConnectionState state )
 {
@@ -541,10 +576,11 @@ SipHandler::onStateChanged( SipPlugin::ConnectionState state )
     {
         m_connectedPlugins.removeAll( sip );
         emit disconnected( sip );
-    } else if ( sip->connectionState() == SipPlugin::Connected )
+    }
+    else if ( sip->connectionState() == SipPlugin::Connected )
     {
-        m_connectedPlugins.removeAll( sip );
-        emit disconnected( sip );
+        m_connectedPlugins << sip;
+        emit connected( sip );
     }
 
     emit stateChanged( sip, state );
@@ -584,6 +620,7 @@ SipHandler::onAvatarReceived( const QString& from, const QPixmap& avatar )
     }
 }
 
+
 void
 SipHandler::onAvatarReceived( const QPixmap& avatar )
 {
@@ -597,6 +634,7 @@ SipHandler::factoryFromId( const QString& pluginId ) const
 {
     return pluginId.split( "_" ).first();
 }
+
 
 SipPluginFactory*
 SipHandler::factoryFromPlugin( SipPlugin* p ) const

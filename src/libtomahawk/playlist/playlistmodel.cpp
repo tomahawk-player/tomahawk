@@ -154,6 +154,8 @@ PlaylistModel::clear()
 {
     if ( rowCount( QModelIndex() ) )
     {
+        emit loadingFinished();;
+
         emit beginResetModel();
         delete m_rootItem;
         m_rootItem = 0;
@@ -298,6 +300,7 @@ PlaylistModel::onRevisionLoaded( Tomahawk::PlaylistRevision revision )
 bool
 PlaylistModel::dropMimeData( const QMimeData* data, Qt::DropAction action, int row, int column, const QModelIndex& parent )
 {
+    qDebug() << "LALALA";
     Q_UNUSED( column );
     if ( action == Qt::IgnoreAction || isReadOnly() )
         return true;
@@ -317,11 +320,30 @@ PlaylistModel::dropMimeData( const QMimeData* data, Qt::DropAction action, int r
 
     qDebug() << data->formats();
 
+    QList<Tomahawk::query_ptr> queries;
+    if ( data->hasFormat( "application/tomahawk.result.list" ) )
+    {
+        QByteArray itemData = data->data( "application/tomahawk.result.list" );
+        QDataStream stream( &itemData, QIODevice::ReadOnly );
+
+        while ( !stream.atEnd() )
+        {
+            qlonglong qptr;
+            stream >> qptr;
+
+            Tomahawk::result_ptr* result = reinterpret_cast<Tomahawk::result_ptr*>(qptr);
+            if ( result && !result->isNull() )
+            {
+                qDebug() << "Dropped result item:" << result->data()->artist() << "-" << result->data()->track() << action;
+                queries << result->data()->toQuery();
+            }
+        }
+    }
+
     if ( data->hasFormat( "application/tomahawk.query.list" ) )
     {
         QByteArray itemData = data->data( "application/tomahawk.query.list" );
         QDataStream stream( &itemData, QIODevice::ReadOnly );
-        QList<Tomahawk::query_ptr> queries;
 
         while ( !stream.atEnd() )
         {
@@ -335,7 +357,10 @@ PlaylistModel::dropMimeData( const QMimeData* data, Qt::DropAction action, int r
                 queries << *query;
             }
         }
+    }
 
+    if ( queries.count() )
+    {
         emit beginInsertRows( QModelIndex(), beginRow, beginRow + queries.count() - 1 );
         foreach( const Tomahawk::query_ptr& query, queries )
         {
@@ -431,6 +456,14 @@ PlaylistModel::remove( unsigned int row, bool moreToCome )
 void
 PlaylistModel::removeIndex( const QModelIndex& index, bool moreToCome )
 {
+    TrackModelItem* item = itemFromIndex( index );
+    if ( item && m_waitingForResolved.contains( item->query().data() ) )
+    {
+        m_waitingForResolved.removeAll( item->query().data() );
+        if ( m_waitingForResolved.isEmpty() )
+            emit loadingFinished();
+    }
+
     TrackModel::removeIndex( index );
 
     if ( !moreToCome && !m_playlist.isNull() )

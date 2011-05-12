@@ -1,5 +1,5 @@
 /* === This file is part of Tomahawk Player - <http://tomahawk-player.org> ===
- * 
+ *
  *   Copyright 2010-2011, Christian Muehlhaeuser <muesli@tomahawk-player.org>
  *
  *   Tomahawk is free software: you can redistribute it and/or modify
@@ -33,7 +33,7 @@ DynamicModel::DynamicModel( QObject* parent )
     , m_currentAttempts( 0 )
     , m_lastResolvedRow( 0 )
 {
-    
+
 }
 
 DynamicModel::~DynamicModel()
@@ -41,7 +41,7 @@ DynamicModel::~DynamicModel()
 
 }
 
-void 
+void
 DynamicModel::loadPlaylist( const Tomahawk::dynplaylist_ptr& playlist, bool loadEntries )
 {
     Q_UNUSED( loadEntries );
@@ -50,55 +50,56 @@ DynamicModel::loadPlaylist( const Tomahawk::dynplaylist_ptr& playlist, bool load
         disconnect( m_playlist->generator().data(), SIGNAL( nextTrackGenerated( Tomahawk::query_ptr ) ), this, SLOT( newTrackGenerated( Tomahawk::query_ptr ) ) );
     }
     m_playlist = playlist;
-    
+
     if( m_playlist->mode() == OnDemand )
         setFilterUnresolvable( true );
-    
+
     connect( m_playlist->generator().data(), SIGNAL( nextTrackGenerated( Tomahawk::query_ptr ) ), this, SLOT( newTrackGenerated( Tomahawk::query_ptr ) ) );
     PlaylistModel::loadPlaylist( m_playlist, m_playlist->mode() == Static );
-    
+
     if( m_playlist->mode() == OnDemand )
         emit trackCountChanged( rowCount( QModelIndex() ) );
 }
 
-QString 
+QString
 DynamicModel::description() const
 {
     return m_playlist->generator()->sentenceSummary();
 }
 
 
-void 
+void
 DynamicModel::startOnDemand()
 {
     connect( AudioEngine::instance(), SIGNAL( loading( Tomahawk::result_ptr ) ), this, SLOT( newTrackLoading() ) );
-    
+
     m_playlist->generator()->startOnDemand();
-    
+
     m_onDemandRunning = true;
 }
 
-void 
+void
 DynamicModel::newTrackGenerated( const Tomahawk::query_ptr& query )
 {
     if( m_onDemandRunning ) {
         connect( query.data(), SIGNAL( resolvingFinished( bool ) ), this, SLOT( trackResolveFinished( bool ) ) );
-    
+
+        m_waitingFor << query.data();
         append( query );
     }
 }
 
-void 
+void
 DynamicModel::stopOnDemand( bool stopPlaying )
 {
     m_onDemandRunning = false;
     if( stopPlaying )
         AudioEngine::instance()->stop();
-    
+
     disconnect( AudioEngine::instance(), SIGNAL( loading( Tomahawk::result_ptr ) ), this, SLOT( newTrackLoading() ) );
 }
 
-void 
+void
 DynamicModel::changeStation()
 {
     if( m_onDemandRunning )
@@ -107,17 +108,20 @@ DynamicModel::changeStation()
         m_playlist->generator()->startOnDemand();
 }
 
-void 
+void
 DynamicModel::trackResolveFinished( bool success )
 {
     Q_UNUSED( success );
 
-    Query* q = qobject_cast<Query*>(sender());
+    Query* q = qobject_cast<Query*>( sender() );
+
+    if( !m_waitingFor.contains( q ) )
+        return;
 
     if( !q->playable() ) {
         qDebug() << "Got not resolved track:" << q->track() << q->artist() << m_lastResolvedRow << m_currentAttempts;
         m_currentAttempts++;
-        
+
         int curAttempts = m_startingAfterFailed ? m_currentAttempts - 20 : m_currentAttempts; // if we just failed, m_currentAttempts includes those failures
         if( curAttempts < 20 ) {
             qDebug() << "FETCHING MORE!";
@@ -129,20 +133,21 @@ DynamicModel::trackResolveFinished( bool success )
     }
     else {
         qDebug() << "Got successful resolved track:" << q->track() << q->artist() << m_lastResolvedRow << m_currentAttempts;
-        
+
         if( m_currentAttempts > 0 ) {
             qDebug() << "EMITTING AN ASK FOR COLLAPSE:" << m_lastResolvedRow << m_currentAttempts;
             emit collapseFromTo( m_lastResolvedRow, m_currentAttempts );
         }
         m_currentAttempts = 0;
         m_searchingForNext = false;
-        
+
         emit checkForOverflow();
     }
+    m_waitingFor.removeAll( q );
 }
 
 
-void 
+void
 DynamicModel::newTrackLoading()
 {
     qDebug() << "Got NEW TRACK LOADING signal";
@@ -155,10 +160,10 @@ DynamicModel::newTrackLoading()
         m_searchingForNext = true;
         qDebug() << "IDLE fetching new track!";
         m_playlist->generator()->fetchNext();
-    }    
+    }
 }
 
-void 
+void
 DynamicModel::tracksGenerated( const QList< query_ptr > entries, int limitResolvedTo )
 {
     if( m_filterUnresolvable && m_playlist->mode() == OnDemand ) { // wait till we get them resolved (for previewing stations)
@@ -166,31 +171,39 @@ DynamicModel::tracksGenerated( const QList< query_ptr > entries, int limitResolv
         filterUnresolved( entries );
     } else {
         addToPlaylist( entries, m_playlist->mode() == OnDemand ); // if ondemand, we're previewing, so clear old
-        
+
         if( m_playlist->mode() == OnDemand ) {
             m_lastResolvedRow = rowCount( QModelIndex() );
         }
     }
 }
 
-void 
+void
 DynamicModel::filterUnresolved( const QList< query_ptr >& entries )
 {
     m_toResolveList = entries;
-    
+
     foreach( const query_ptr& q, entries ) {
         connect( q.data(), SIGNAL( resolvingFinished( bool ) ), this, SLOT( filteringTrackResolved( bool ) ) );
     }
     Pipeline::instance()->resolve( entries, true );
 }
 
-void 
+void
 DynamicModel::filteringTrackResolved( bool successful )
-{    
+{
     // arg, we don't have the query_ptr, just the Query
     Query* q = qobject_cast< Query* >( sender() );
     Q_ASSERT( q );
-    
+
+    // if meantime the user began the station, abort
+    if( m_onDemandRunning ) {
+        m_toResolveList.clear();
+        m_resolvedList.clear();
+
+        return;
+    }
+
     query_ptr realptr;
     foreach( const query_ptr& qptr, m_toResolveList ) {
         if( qptr.data() == q ) {
@@ -200,53 +213,54 @@ DynamicModel::filteringTrackResolved( bool successful )
     }
     if( realptr.isNull() ) // we already finished
         return;
-    
+
     m_toResolveList.removeAll( realptr );
-    
-    if( successful )
+
+    if( successful ) {
         m_resolvedList << realptr;
-    
-    if( m_toResolveList.isEmpty() || m_resolvedList.size() == m_limitResolvedTo ) { // done, add to playlist
-        if( m_limitResolvedTo < m_resolvedList.count() ) // limit to how many we were asked for
-            m_resolvedList = m_resolvedList.mid( 0, m_limitResolvedTo );
-        
-        addToPlaylist( m_resolvedList, true );
-        m_toResolveList.clear();
-        m_resolvedList.clear();
-        
+
+        // append and update internal lastResolvedRow
+        addToPlaylist( QList< query_ptr >() << realptr, false );
         if( m_playlist->mode() == OnDemand ) {
             m_lastResolvedRow = rowCount( QModelIndex() );
         }
+
+        if( m_toResolveList.isEmpty() || m_resolvedList.size() == m_limitResolvedTo ) { // done
+            m_toResolveList.clear();
+            m_resolvedList.clear();
+
+        }
     }
+
     if( m_toResolveList.isEmpty() && rowCount( QModelIndex() ) == 0 ) // we failed
         emit trackGenerationFailure( tr( "Could not find a playable track.\n\nPlease change the filters or try again." ) );
 }
 
 
-void 
+void
 DynamicModel::addToPlaylist( const QList< query_ptr >& entries, bool clearFirst )
 {
     if( clearFirst )
         clear();
-    
+
     if( m_playlist->author()->isLocal() && m_playlist->mode() == Static ) {
         m_playlist->addEntries( entries, m_playlist->currentrevision() );
     } else { // read-only, so add tracks only in the GUI, not to the playlist itself
         foreach( const query_ptr& query, entries ) {
             append( query );
         }
-    }    
-    
+    }
+
     emit tracksAdded();
 }
 
 
-void 
+void
 DynamicModel::removeIndex(const QModelIndex& idx, bool moreToCome)
 {
     if ( m_playlist->mode() == Static && isReadOnly() )
         return;
-    
+
     if( m_playlist->mode() == OnDemand ) {
         if( !moreToCome && idx == index( rowCount( QModelIndex() ) - 1, 0, QModelIndex() ) ) { // if the user is manually removing the last one, re-add as we're a station
             newTrackLoading();
@@ -255,7 +269,7 @@ DynamicModel::removeIndex(const QModelIndex& idx, bool moreToCome)
     } else
         PlaylistModel::removeIndex( idx, moreToCome );
     // don't call onPlaylistChanged.
-        
+
     if( !moreToCome )
         m_lastResolvedRow = rowCount( QModelIndex() );
 }

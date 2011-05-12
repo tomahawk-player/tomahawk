@@ -3,14 +3,6 @@ SET( OS_SPECIFIC_LINK_LIBRARIES
      tomahawklib
 )
 
-IF( "${gui}" STREQUAL "no" )
-ELSE()
-    SET( OS_SPECIFIC_LINK_LIBRARIES
-         ${OS_SPECIFIC_LINK_LIBRARIES}
-         gnutls
-       )
-ENDIF()
-
 FILE( GLOB _icons "${CMAKE_SOURCE_DIR}/data/icons/tomahawk-icon-*.png" )
 FOREACH( _file ${_icons} )
  STRING( REPLACE "${CMAKE_SOURCE_DIR}/data/icons/tomahawk-icon-" "" _res ${_file} )

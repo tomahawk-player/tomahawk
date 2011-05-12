@@ -44,7 +44,6 @@ md5( const QByteArray& src )
 LastFmPlugin::LastFmPlugin()
     : InfoPlugin()
     , m_scrobbler( 0 )
-    , m_authJob( 0 )
 {
     m_supportedGetTypes << InfoAlbumCoverArt << InfoArtistImages;
     m_supportedPushTypes << InfoSubmitScrobble << InfoSubmitNowPlaying; 
@@ -442,17 +441,18 @@ LastFmPlugin::settingsChanged()
 
 void
 LastFmPlugin::onAuthenticated()
-{
+{    
     qDebug() << Q_FUNC_INFO;
-    if( !m_authJob )
+    QNetworkReply* authJob = dynamic_cast<QNetworkReply*>( sender() );
+    if( !authJob )
     {
         qDebug() << Q_FUNC_INFO << "Help! No longer got a last.fm auth job!";
         return;
     }
 
-    if( m_authJob->error() == QNetworkReply::NoError )
+    if( authJob->error() == QNetworkReply::NoError )
     {
-        lastfm::XmlQuery lfm = lastfm::XmlQuery( m_authJob->readAll() );
+        lastfm::XmlQuery lfm = lastfm::XmlQuery( authJob->readAll() );
 
         if( lfm.children( "error" ).size() > 0 )
         {
@@ -473,10 +473,10 @@ LastFmPlugin::onAuthenticated()
     }
     else
     {
-        qDebug() << "Got error in Last.fm authentication job:" << m_authJob->errorString();
+        qDebug() << "Got error in Last.fm authentication job:" << authJob->errorString();
     }
 
-    m_authJob->deleteLater();
+    authJob->deleteLater();
 }
 
 
@@ -493,9 +493,9 @@ LastFmPlugin::createScrobbler()
         query[ "method" ] = "auth.getMobileSession";
         query[ "username" ] = lastfm::ws::Username;
         query[ "authToken" ] = authToken;
-        m_authJob = lastfm::ws::post( query );
+        QNetworkReply* authJob = lastfm::ws::post( query );
 
-        connect( m_authJob, SIGNAL( finished() ), SLOT( onAuthenticated() ) );
+        connect( authJob, SIGNAL( finished() ), SLOT( onAuthenticated() ) );
     }
     else
     {

@@ -20,6 +20,8 @@
 #ifndef SIPPLUGIN_H
 #define SIPPLUGIN_H
 
+#include "sipinfo.h"
+
 #include <QObject>
 #include <QString>
 #include <QMenu>
@@ -57,7 +59,7 @@ class DLLEXPORT SipPlugin : public QObject
 
 public:
     enum SipErrorCode { AuthError, ConnectionError }; // Placeholder for errors, to be defined
-    enum ConnectionState { Disconnected, Connecting, Connected };
+    enum ConnectionState { Disconnected, Connecting, Connected, Disconnecting };
 
     explicit SipPlugin( const QString& pluginId, QObject* parent = 0 );
     virtual ~SipPlugin() {}
@@ -76,6 +78,9 @@ public:
     virtual void saveConfig() {} // called when the widget has been edited
     virtual QIcon icon() const;
 
+    // peer infos
+    virtual const QStringList peersOnline() const;
+
 public slots:
     virtual bool connectPlugin( bool startup = false ) = 0;
     virtual void disconnectPlugin() = 0;
@@ -84,7 +89,7 @@ public slots:
     virtual void addContact( const QString &jid, const QString& msg = QString() ) = 0;
     virtual void sendMsg( const QString& to, const QString& msg ) = 0;
 
-    void setProxy( const QNetworkProxy &proxy );
+    virtual void setProxy( const QNetworkProxy &proxy );
 
 signals:
     void error( int, const QString& );
@@ -93,6 +98,7 @@ signals:
     void peerOnline( const QString& );
     void peerOffline( const QString& );
     void msgReceived( const QString& from, const QString& msg );
+    void sipInfoReceived( const QString& peerId, const SipInfo& info );
 
     // new data for own source
     void avatarReceived ( const QPixmap& avatar );
@@ -108,9 +114,13 @@ private slots:
     void onError( int, const QString& );
     void onStateChange( SipPlugin::ConnectionState state );
 
+    void onPeerOnline( const QString &peerId );
+    void onPeerOffline( const QString &peerId );
+
 private:
     QString m_pluginId;
     QString m_cachedError;
+    QStringList m_peersOnline;
 };
 
 Q_DECLARE_INTERFACE( SipPluginFactory, "tomahawk.SipFactory/1.0" )

@@ -54,8 +54,9 @@ public:
     QString userName() const { return m_username; }
     QString friendlyName() const;
     void setFriendlyName( const QString& fname );
-    void setAvatar(const QPixmap &avatar);
-    const QPixmap avatar() const;
+
+    void setAvatar( const QPixmap& avatar );
+    QPixmap avatar() const;
 
     collection_ptr collection() const;
     void addCollection( const Tomahawk::collection_ptr& c );
@@ -120,7 +121,7 @@ private:
 
     ControlConnection* m_cc;
 
-    QPixmap m_avatar;
+    QPixmap* m_avatar;
 };
 
 };

@@ -140,7 +140,28 @@ Tomahawk::result_ptr
 TreeProxyModel::siblingItem( int itemsAway )
 {
     qDebug() << Q_FUNC_INFO;
-    return Tomahawk::result_ptr( 0 );
+
+    QModelIndex idx = currentItem();
+
+    // Try to find the next available PlaylistItem (with results)
+    if ( idx.isValid() ) do
+    {
+        idx = index( idx.row() + ( itemsAway > 0 ? 1 : -1 ), 0, idx.parent() );
+        if ( !idx.isValid() )
+            break;
+
+        TreeModelItem* item = itemFromIndex( mapToSource( idx ) );
+        if ( item && item->result()->isOnline() )
+        {
+            qDebug() << "Next PlaylistItem found:" << item->result()->url();
+            setCurrentItem( idx );
+            return item->result();
+        }
+    }
+    while ( idx.isValid() );
+
+    setCurrentItem( QModelIndex() );
+    return Tomahawk::result_ptr();
 }
 
 

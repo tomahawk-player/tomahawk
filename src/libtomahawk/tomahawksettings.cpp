@@ -177,7 +177,7 @@ TomahawkSettings::hasScannerPaths() const
 bool
 TomahawkSettings::watchForChanges() const
 {
-    return value( "watchForChanges", true ).toBool();
+    return value( "watchForChanges", false ).toBool();
 }
 
 

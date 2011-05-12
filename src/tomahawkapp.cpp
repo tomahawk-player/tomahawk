@@ -182,7 +182,7 @@ TomahawkApp::init()
     registerMetaTypes();
 
     new TomahawkSettings( this );
-    
+
 #ifdef LIBLASTFM_FOUND
     qDebug() << "Setting NAM.";
     TomahawkUtils::setNam( lastfm::nam() );
@@ -204,7 +204,7 @@ TomahawkApp::init()
     }
     else
         TomahawkUtils::setProxy( new QNetworkProxy( QNetworkProxy::NoProxy ) );
-    
+
     Echonest::Config::instance()->setAPIKey( "JRIHWEP6GPOER2QQ6" );
 
     m_audioEngine = new AudioEngine;
@@ -323,8 +323,14 @@ TomahawkApp::~TomahawkApp()
     delete m_mainwindow;
     delete m_audioEngine;
 #endif
-    delete m_infoSystem;
+
+    delete SipHandler::instance();
+    Pipeline::instance()->stop();
+
     delete m_database;
+    delete m_infoSystem;
+
+    qDebug() << "Finished shutdown.";
 }
 
 
@@ -343,11 +349,6 @@ TomahawkApp::audioControls()
 }
 #endif
 
-SipHandler*
-TomahawkApp::sipHandler()
-{
-    return SipHandler::instance();
-}
 
 void
 TomahawkApp::registerMetaTypes()
@@ -476,6 +477,7 @@ TomahawkApp::disableScriptResolver( const QString& path )
     }
 }
 
+
 Tomahawk::ExternalResolver*
 TomahawkApp::resolverForPath( const QString& scriptPath )
 {
@@ -499,6 +501,7 @@ TomahawkApp::initLocalCollection()
     collection_ptr dummycol( new WebCollection( dummy ) );
     dummy->addCollection( dummycol );
     SourceList::instance()->setWebSource( dummy );
+    SourceList::instance()->loadSources();
 
     // to make the stats signal be emitted by our local source
     // this will update the sidebar, etc.
@@ -521,6 +524,7 @@ TomahawkApp::startServent()
     }
 }
 
+
 void
 TomahawkApp::setupSIP()
 {
@@ -534,10 +538,8 @@ TomahawkApp::setupSIP()
 #endif
 
         qDebug() << "Connecting SIP classes";
+        SipHandler::instance()->setProxy( *TomahawkUtils::proxy() );
         SipHandler::instance()->loadFromConfig( true );
-
-//        m_sipHandler->setProxy( *TomahawkUtils::proxy() );
-
     }
 }
 

@@ -18,6 +18,9 @@
  */
 
 #include "jabber.h"
+#include "ui_configwidget.h"
+
+#include "xmlconsole.h"
 
 #include "config.h"
 
@@ -43,8 +46,6 @@
 #include <QDateTime>
 #include <QTimer>
 
-#include "ui_configwidget.h"
-
 SipPlugin*
 JabberFactory::createPlugin( const QString& pluginId )
 {
@@ -60,7 +61,7 @@ JabberFactory::icon() const
 JabberPlugin::JabberPlugin( const QString& pluginId )
     : SipPlugin( pluginId )
     , m_menu( 0 )
-    , m_addFriendAction( 0 )
+    , m_xmlConsole( 0 )
     , m_state( Disconnected )
 {
     qDebug() << Q_FUNC_INFO;
@@ -72,7 +73,6 @@ JabberPlugin::JabberPlugin( const QString& pluginId )
     m_ui->setupUi( m_configWidget.data() );
     m_configWidget.data()->setVisible( false );
 
-    m_ui->checkBoxAutoConnect->setChecked( readAutoConnect() );
     m_ui->jabberUsername->setText( accountName() );
     m_ui->jabberPassword->setText( readPassword() );
     m_ui->jabberServer->setText( readServer() );
@@ -92,6 +92,13 @@ JabberPlugin::JabberPlugin( const QString& pluginId )
     m_client->registerStanzaExtension(new TomahawkSipMessageFactory);
     m_currentResource = QString::fromAscii( "tomahawk%1" ).arg( QString::number( qrand() % 10000 ) );
     m_client->setResource( m_currentResource );
+
+    // instantiate XmlConsole
+    if( readXmlConsoleEnabled() )
+    {
+        m_xmlConsole = new XmlConsole( m_client );
+        m_xmlConsole->show();
+    }
 
     // add VCardUpdate extension to own presence
     m_client->presence().addExtension( new Jreen::VCardUpdate() );
@@ -118,7 +125,6 @@ JabberPlugin::JabberPlugin( const QString& pluginId )
     qDebug() << "Our Port set to" << m_client->port();
 
     // setup slots
-    connect(m_client->connection(), SIGNAL(error(SocketError)), SLOT(onError(SocketError)));
     connect(m_client, SIGNAL(serverFeaturesReceived(QSet<QString>)), SLOT(onConnect()));
     connect(m_client, SIGNAL(disconnected(Jreen::Client::DisconnectReason)), SLOT(onDisconnect(Jreen::Client::DisconnectReason)));
     connect(m_client, SIGNAL(newMessage(Jreen::Message)), SLOT(onNewMessage(Jreen::Message)));
@@ -135,17 +141,23 @@ JabberPlugin::JabberPlugin( const QString& pluginId )
 
 JabberPlugin::~JabberPlugin()
 {
-
+    delete m_avatarManager;
+    delete m_roster;
+    delete m_xmlConsole;
+    delete m_client;
+    delete m_ui;
 }
 
 void
 JabberPlugin::setProxy( const QNetworkProxy &proxy )
 {
-    if(m_currentServer.isEmpty() || !(m_currentPort > 0))
+    qDebug() << Q_FUNC_INFO;
+
+    if( ( proxy.type() != QNetworkProxy::NoProxy ) && ( m_currentServer.isEmpty() || !(m_currentPort > 0) ) )
     {
         // patches are welcome in Jreen that implement jdns through proxy
-        qDebug() << Q_FUNC_INFO << "Jreen proxy only works when you explicitly set host and port";
-        Q_ASSERT(false);
+        emit error( SipPlugin::ConnectionError,
+                    tr( "You need to set hostname and port of your jabber server, if you want to use it through a proxy" ) );
         return;
     }
 
@@ -200,9 +212,6 @@ JabberPlugin::connectPlugin( bool startup )
 {
     qDebug() << Q_FUNC_INFO;
 
-    if ( startup && !readAutoConnect() )
-        return false;
-
     if(m_client->isConnected())
     {
         qDebug() << Q_FUNC_INFO << "Already connected to server, not connecting again...";
@@ -217,6 +226,7 @@ JabberPlugin::connectPlugin( bool startup )
     //FIXME: we're badly workarounding some missing reconnection api here, to be fixed soon
     QTimer::singleShot( 1000, m_client, SLOT( connectToServer() ) );
 
+    connect(m_client->connection(), SIGNAL(error(Jreen::Connection::SocketError)), SLOT(onError(Jreen::Connection::SocketError)));
 
     m_state = Connecting;
     emit stateChanged( m_state );
@@ -236,12 +246,6 @@ JabberPlugin::disconnectPlugin()
         return;
     }
 
-    foreach(const Jreen::JID &peer, m_peers.keys())
-    {
-        handlePeerStatus(peer, Jreen::Presence::Unavailable);
-    }
-
-
     //m_roster->deleteLater();
     //m_roster = 0;
     //m_room->deleteLater();
@@ -250,7 +254,9 @@ JabberPlugin::disconnectPlugin()
     m_peers.clear();
     m_legacy_peers.clear();
 
-    m_client->disconnectFromServer(true);
+    m_client->disconnectFromServer( true );
+    m_state = Disconnecting;
+    emit stateChanged( m_state );
 }
 
 void
@@ -329,6 +335,11 @@ JabberPlugin::onDisconnect( Jreen::Client::DisconnectReason reason )
     emit stateChanged( m_state );
 
     removeMenuHelper();
+
+    Q_FOREACH(const Jreen::JID &peer, m_peers.keys())
+    {
+        handlePeerStatus(peer, Jreen::Presence::Unavailable);
+    }
 }
 
 QString
@@ -473,6 +484,12 @@ JabberPlugin::showAddFriendDialog()
 }
 
 void
+JabberPlugin::showXmlConsole()
+{
+   m_xmlConsole->show();
+}
+
+void
 JabberPlugin::checkSettings()
 {
     bool reconnect = false;
@@ -532,10 +549,16 @@ void JabberPlugin::addMenuHelper()
 {
     if( !m_menu )
     {
-        m_menu = new QMenu( QString( "JREEN (" ).append( accountName() ).append(")" ) );
-        m_addFriendAction = m_menu->addAction( "Add Friend..." );
+        m_menu = new QMenu( QString( "%1 (" ).arg( friendlyName() ).append( accountName() ).append(")" ) );
 
-        connect( m_addFriendAction, SIGNAL( triggered() ), this, SLOT( showAddFriendDialog() ) );
+        QAction* addFriendAction = m_menu->addAction( tr( "Add Friend..." ) );
+        connect( addFriendAction, SIGNAL( triggered() ), this, SLOT( showAddFriendDialog() ) );
+
+        if( readXmlConsoleEnabled() )
+        {
+            QAction* showXmlConsoleAction = m_menu->addAction( tr( "XML Console...") );
+            connect( showXmlConsoleAction, SIGNAL( triggered() ), this, SLOT( showXmlConsole() ) );
+        }
 
         emit addMenu( m_menu );
     }
@@ -543,28 +566,37 @@ void JabberPlugin::addMenuHelper()
 
 void JabberPlugin::removeMenuHelper()
 {
-    if( m_menu && m_addFriendAction )
+    if( m_menu )
     {
         emit removeMenu( m_menu );
 
         delete m_menu;
         m_menu = 0;
-        m_addFriendAction = 0; // deleted by menu
     }
 }
 
 void JabberPlugin::onNewMessage(const Jreen::Message& message)
 {
+    if ( m_state != Connected )
+        return;
+
+    qDebug() << Q_FUNC_INFO << "message type" << message.subtype();
+
     QString from = message.from().full();
     QString msg = message.body();
 
-    if ( msg.isEmpty() )
+    if(msg.isEmpty())
         return;
 
-    QJson::Parser parser;
-    bool ok;
-    QVariant v = parser.parse( msg.toAscii(), &ok );
-    if ( !ok  || v.type() != QVariant::Map )
+    if( message.subtype() == Jreen::Message::Error )
+    {
+        qDebug() << Q_FUNC_INFO << "Received error message from " << from << ", not answering... (Condition: " << message.error()->condition() << ")";
+        return;
+    }
+
+    SipInfo info = SipInfo::fromJson( msg );
+
+    if ( !info.isValid() )
     {
         QString to = from;
         QString response = QString( tr("I'm sorry -- I'm just an automatic presence used by Tomahawk Player"
@@ -574,17 +606,20 @@ void JabberPlugin::onNewMessage(const Jreen::Message& message)
         // this is not a sip message, so we send it directly through the client
         m_client->send( Jreen::Message ( Jreen::Message::Chat, Jreen::JID(to), response) );
 
+        emit msgReceived( from, msg );
         return;
     }
 
     qDebug() << Q_FUNC_INFO << "From:" << message.from().full() << ":" << message.body();
-    emit msgReceived( from, msg );
+    emit sipInfoReceived( from, info );
 }
 
 
 void JabberPlugin::onPresenceReceived( const Jreen::RosterItem::Ptr &item, const Jreen::Presence& presence )
 {
     Q_UNUSED(item);
+    if ( m_state != Connected )
+        return;
 
     Jreen::JID jid = presence.from();
     QString fulljid( jid.full() );
@@ -629,6 +664,9 @@ void JabberPlugin::onPresenceReceived( const Jreen::RosterItem::Ptr &item, const
 
 void JabberPlugin::onSubscriptionReceived(const Jreen::RosterItem::Ptr& item, const Jreen::Presence& presence)
 {
+    if ( m_state != Connected )
+        return;
+
     qDebug() << Q_FUNC_INFO << "presence type: " << presence.subtype();
     if(item)
         qDebug() << Q_FUNC_INFO << presence.from().full() << "subs" << item->subscription() << "ask" << item->ask();
@@ -716,6 +754,9 @@ JabberPlugin::onSubscriptionRequestConfirmed( int result )
 
 void JabberPlugin::onNewIq(const Jreen::IQ& iq, int context)
 {
+    if ( m_state != Connected )
+        return;
+
     if( context == RequestDisco )
     {
         qDebug() << Q_FUNC_INFO << "Received disco IQ...";
@@ -772,35 +813,29 @@ void JabberPlugin::onNewIq(const Jreen::IQ& iq, int context)
             iq.accept();
 
             qDebug() << Q_FUNC_INFO << "Got SipMessage ...";
-            qDebug() << "ip" << sipMessage->ip();
-            qDebug() << "port" << sipMessage->port();
-            qDebug() << "uniqname" << sipMessage->uniqname();
-            qDebug() << "key" << sipMessage->key();
-            qDebug() << "visible" << sipMessage->visible();
+            qDebug() << Q_FUNC_INFO << "ip" << sipMessage->ip();
+            qDebug() << Q_FUNC_INFO << "port" << sipMessage->port();
+            qDebug() << Q_FUNC_INFO << "uniqname" << sipMessage->uniqname();
+            qDebug() << Q_FUNC_INFO << "key" << sipMessage->key();
+            qDebug() << Q_FUNC_INFO << "visible" << sipMessage->visible();
 
-
-            QVariantMap m;
+            SipInfo info;
+            info.setVisible( sipMessage->visible() );
             if( sipMessage->visible() )
             {
-                m["visible"] = true;
-                m["ip"] = sipMessage->ip();
-                m["port"] = sipMessage->port();
-                m["key"] = sipMessage->key();
-                m["uniqname"] = sipMessage->uniqname();
-            }
-            else
-            {
-                m["visible"] = false;
+
+                QHostInfo hi;
+                hi.setHostName( sipMessage->ip() );
+                info.setHost( hi );
+                info.setPort( sipMessage->port() );
+                info.setUniqname( sipMessage->uniqname() );
+                info.setKey( sipMessage->key() );
             }
 
+            Q_ASSERT( info.isValid() );
 
-            QJson::Serializer ser;
-            QByteArray ba = ser.serialize( m );
-            QString msg = QString::fromAscii( ba );
-
-            QString from = iq.from().full();
-            qDebug() << Q_FUNC_INFO << "From:" << from << ":" << msg;
-            emit msgReceived( from, msg );
+            qDebug() << Q_FUNC_INFO << "From:" << iq.from().full() << ":" << info;
+            emit sipInfoReceived( iq.from().full(), info );
         }
     }
 }
@@ -868,6 +903,9 @@ void JabberPlugin::handlePeerStatus(const Jreen::JID& jid, Jreen::Presence::Type
 void JabberPlugin::onNewAvatar(const QString& jid)
 {
     qDebug() << Q_FUNC_INFO << jid;
+    if ( m_state != Connected )
+        return;
+
     Q_ASSERT(!m_avatarManager->avatar( jid ).isNull());
 
     // find peers for the jid
@@ -886,6 +924,12 @@ void JabberPlugin::onNewAvatar(const QString& jid)
     else
         // someone else's avatar
         emit avatarReceived ( jid,  m_avatarManager->avatar( jid ) );
+}
+
+bool
+JabberPlugin::readXmlConsoleEnabled()
+{
+    return TomahawkSettings::instance()->value( pluginId() + "/xmlconsole", QVariant( false ) ).toBool();
 }
 
 
@@ -907,16 +951,9 @@ JabberPlugin::readServer()
     return TomahawkSettings::instance()->value( pluginId() + "/server" ).toString();
 }
 
-bool
-JabberPlugin::readAutoConnect()
-{
-    return TomahawkSettings::instance()->value( pluginId() + "/autoconnect", true ).toBool();
-}
-
 void
 JabberPlugin::saveConfig()
 {
-    TomahawkSettings::instance()->setValue( pluginId() + "/autoconnect", m_ui->checkBoxAutoConnect->isChecked() );
     TomahawkSettings::instance()->setValue( pluginId() + "/username", m_ui->jabberUsername->text() );
     TomahawkSettings::instance()->setValue( pluginId() + "/password", m_ui->jabberPassword->text() );
     TomahawkSettings::instance()->setValue( pluginId() + "/port", m_ui->jabberPort->value() );

@@ -302,13 +302,6 @@
      </property>
     </spacer>
    </item>
-   <item>
-    <widget class="QCheckBox" name="checkBoxAutoConnect">
-     <property name="text">
-      <string>Connect automatically when Tomahawk starts</string>
-     </property>
-    </widget>
-   </item>
   </layout>
  </widget>
  <resources>

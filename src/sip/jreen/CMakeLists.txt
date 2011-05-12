@@ -11,6 +11,7 @@ set( jabberSources
     tomahawksipmessage.cpp
     tomahawksipmessagefactory.cpp
     avatarmanager.cpp
+    xmlconsole.cpp
 )
 
 set( jabberHeaders
@@ -18,10 +19,12 @@ set( jabberHeaders
     tomahawksipmessage.h
     tomahawksipmessagefactory.h
     avatarmanager.h
+    xmlconsole.h
 )
 
 set( jabberUI
-     configwidget.ui
+    configwidget.ui
+    xmlconsole.ui
 )
 
 include_directories( . ${CMAKE_CURRENT_BINARY_DIR} ..

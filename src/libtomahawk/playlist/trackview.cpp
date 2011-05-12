@@ -290,6 +290,19 @@ TrackView::dropEvent( QDropEvent* event )
                 model()->dropMimeData( event->mimeData(), event->proposedAction(), index.row(), 0, index.parent() );
             }
         }
+        else if ( event->mimeData()->hasFormat( "application/tomahawk.result.list" ) )
+        {
+            const QPoint pos = event->pos();
+            const QModelIndex index = indexAt( pos );
+
+            qDebug() << "Drop Event accepted at row:" << index.row();
+            event->acceptProposedAction();
+
+            if ( !model()->isReadOnly() )
+            {
+                model()->dropMimeData( event->mimeData(), event->proposedAction(), index.row(), 0, index.parent() );
+            }
+        }
     }
 
     m_dragging = false;
@@ -344,6 +357,7 @@ TrackView::onFilterChanged( const QString& )
         if ( model()->trackCount() )
             m_overlay->hide();
 }
+
 
 void
 TrackView::copyLink()

@@ -105,6 +105,9 @@ private slots:
     void setCurrentTrack( const Tomahawk::result_ptr& result );
 
 private:
+    bool isHttpResult( const QString& ) const;
+
+    bool m_isPlayingHttp;
     QSharedPointer<QIODevice> m_input;
 
     Tomahawk::result_ptr m_currentTrack;

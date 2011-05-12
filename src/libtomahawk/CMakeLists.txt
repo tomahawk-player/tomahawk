@@ -34,6 +34,7 @@ set( libSources
     sip/SipPlugin.cpp
     sip/SipHandler.cpp
     sip/SipModel.cpp
+    sip/sipinfo.cpp
 
     audio/audioengine.cpp
 
@@ -195,6 +196,7 @@ set( libHeaders
     sip/SipPlugin.h
     sip/SipHandler.h
     sip/SipModel.h
+    sip/sipinfo.h
 
     audio/audioengine.h
 

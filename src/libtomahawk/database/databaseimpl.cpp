@@ -553,8 +553,8 @@ DatabaseImpl::resultFromHint( const Tomahawk::query_ptr& origquery )
     else
     {
 //        Q_ASSERT( false );
-//         qDebug() << "We don't support non-servent / non-file result-hints yet.";
-        res = Tomahawk::result_ptr( new Tomahawk::Result() );
+        qDebug() << "We don't support non-servent / non-file result-hints yet.";
+/*        res = Tomahawk::result_ptr( new Tomahawk::Result() );
         s = SourceList::instance()->webSource();
         res->setUrl( url );
         res->setCollection( s->collection() );
@@ -564,7 +564,8 @@ DatabaseImpl::resultFromHint( const Tomahawk::query_ptr& origquery )
         res->setAlbum( Tomahawk::album_ptr( new Tomahawk::Album( 0, origquery->album(), res->artist() ) ) );
         res->setTrack( origquery->track() );
         res->setDuration( origquery->duration() );
-        res->setFriendlySource( url );
+        res->setFriendlySource( url );*/
+
         return res;
     }
 
