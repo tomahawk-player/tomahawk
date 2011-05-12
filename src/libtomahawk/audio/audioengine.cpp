@@ -185,7 +185,6 @@ AudioEngine::loadTrack( const Tomahawk::result_ptr& result )
                     err = true;
                 }
             }
-
         }
 
         if ( !err )
@@ -195,15 +194,19 @@ AudioEngine::loadTrack( const Tomahawk::result_ptr& result )
 
             if ( !m_input.isNull() || m_isPlayingHttp )
             {
+                if ( !m_input.isNull() )
+                {
+                    m_input->close();
+                    m_input.clear();
+                }
+
                 m_expectStop = true;
             }
-
-
-            m_mediaObject->currentSource().setAutoDelete( true );
 
             if ( !isHttpResult( m_currentTrack->url() ) )
             {
                 m_mediaObject->setCurrentSource( io.data() );
+                m_mediaObject->currentSource().setAutoDelete( false );
                 m_isPlayingHttp = false;
             }
             else
@@ -216,6 +219,7 @@ AudioEngine::loadTrack( const Tomahawk::result_ptr& result )
                     qDebug() << Q_FUNC_INFO << furl;
                 }
                 m_mediaObject->setCurrentSource( furl );
+                m_mediaObject->currentSource().setAutoDelete( true );
                 m_isPlayingHttp = true;
             }
 
