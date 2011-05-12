@@ -30,15 +30,11 @@
 #include "network/controlconnection.h"
 #include "sourcelist.h"
 #include "tomahawksettings.h"
-//#include "tomahawk/tomahawkapp.h"
 
 #include "config.h"
 
-
-//remove
-#include <QLabel>
-
 SipHandler* SipHandler::s_instance = 0;
+
 
 SipHandler*
 SipHandler::instance()
@@ -163,6 +159,7 @@ SipHandler::loadPluginFactories( const QStringList& paths )
     }
 }
 
+
 SipPlugin*
 SipHandler::createPlugin( const QString& factoryId )
 {
@@ -174,6 +171,7 @@ SipHandler::createPlugin( const QString& factoryId )
     emit pluginAdded( sip );
     return sip;
 }
+
 
 SipPlugin*
 SipHandler::loadPlugin( const QString& pluginId )
@@ -187,6 +185,7 @@ SipHandler::loadPlugin( const QString& pluginId )
     // caller responsible for calling pluginAdded() and hookupPlugin
     return sip;
 }
+
 
 void
 SipHandler::removePlugin( SipPlugin* p )
@@ -263,6 +262,7 @@ SipHandler::checkSettings()
     }
 }
 
+
 void
 SipHandler::addSipPlugin( SipPlugin* p, bool enabled, bool startup )
 {
@@ -278,6 +278,7 @@ SipHandler::addSipPlugin( SipPlugin* p, bool enabled, bool startup )
     emit pluginAdded( p );
 }
 
+
 void
 SipHandler::removeSipPlugin( SipPlugin* p )
 {
@@ -289,6 +290,7 @@ SipHandler::removeSipPlugin( SipPlugin* p )
     m_allPlugins.removeAll( p );
     m_enabledPlugins.removeAll( p );
 }
+
 
 bool
 SipHandler::hasPluginType( const QString& factoryId ) const
@@ -318,6 +320,7 @@ SipHandler::loadFromConfig( bool startup )
     m_connected = true;
 }
 
+
 void
 SipHandler::connectAll()
 {
@@ -339,6 +342,7 @@ SipHandler::disconnectAll()
     m_connected = false;
 }
 
+
 void
 SipHandler::disablePlugin( SipPlugin* p )
 {
@@ -349,6 +353,7 @@ SipHandler::disablePlugin( SipPlugin* p )
 
     m_enabledPlugins.removeAll( p );
 }
+
 
 void
 SipHandler::enablePlugin( SipPlugin* p )
@@ -401,11 +406,13 @@ SipHandler::disconnectPlugin( const QString &pluginName )
     }
 }
 
+
 QList< SipPlugin* >
 SipHandler::allPlugins() const
 {
     return m_allPlugins;
 }
+
 
 QList< SipPlugin* >
 SipHandler::enabledPlugins() const
@@ -413,11 +420,13 @@ SipHandler::enabledPlugins() const
     return m_enabledPlugins;
 }
 
+
 QList< SipPlugin* >
 SipHandler::connectedPlugins() const
 {
     return m_connectedPlugins;
 }
+
 
 QList< SipPluginFactory* >
 SipHandler::pluginFactories() const
@@ -434,6 +443,7 @@ SipHandler::toggleConnect()
     else
         connectAll();
 }
+
 
 void
 SipHandler::setProxy( const QNetworkProxy& proxy )
@@ -500,6 +510,7 @@ SipHandler::onPeerOffline( const QString& jid )
     qDebug() << "SIP offline:" << jid;
 }
 
+
 void
 SipHandler::onSipInfo( const QString& peerId, const SipInfo& info )
 {
@@ -565,6 +576,7 @@ SipHandler::onError( int code, const QString& msg )
     }
 }
 
+
 void
 SipHandler::onStateChanged( SipPlugin::ConnectionState state )
 {
@@ -619,6 +631,7 @@ SipHandler::onAvatarReceived( const QString& from, const QPixmap& avatar )
     }
 }
 
+
 void
 SipHandler::onAvatarReceived( const QPixmap& avatar )
 {
@@ -632,6 +645,7 @@ SipHandler::factoryFromId( const QString& pluginId ) const
 {
     return pluginId.split( "_" ).first();
 }
+
 
 SipPluginFactory*
 SipHandler::factoryFromPlugin( SipPlugin* p ) const

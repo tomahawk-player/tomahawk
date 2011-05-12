@@ -56,7 +56,8 @@ ControlConnection::~ControlConnection()
 
     delete m_pingtimer;
     m_servent->unregisterControlConnection( this );
-    delete m_dbsyncconn;
+    if ( m_dbsyncconn )
+        m_dbsyncconn->deleteLater();
 }
 
 

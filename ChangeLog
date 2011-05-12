@@ -9,10 +9,8 @@ Version 0.1.0:
       added to or removed from folders; it is not watch individual files as
       most OSes can't support enough file watches to handle a normal-sized
       music collection.
-
-Version 0.0.4:
     * Fixed crash that could occur when playing a track from a browser.
-    * Fixed a crash situation caused by sources going on- or offline.
+    * Fixed a crash caused by sources going on- or offline.
 
 Version 0.0.3:
     * Show spinner while resolving playlists.

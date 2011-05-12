@@ -1,5 +1,5 @@
 /* === This file is part of Tomahawk Player - <http://tomahawk-player.org> ===
- * 
+ *
  *   Copyright 2010-2011, Christian Muehlhaeuser <muesli@tomahawk-player.org>
  *
  *   Tomahawk is free software: you can redistribute it and/or modify
@@ -69,6 +69,7 @@ DBSyncConnection::DBSyncConnection( Servent* s, source_ptr src )
 DBSyncConnection::~DBSyncConnection()
 {
     qDebug() << "DTOR" << Q_FUNC_INFO;
+    m_state = SHUTDOWN;
 }
 
 
@@ -83,6 +84,9 @@ DBSyncConnection::idleTimeout()
 void
 DBSyncConnection::changeState( State newstate )
 {
+    if ( m_state == SHUTDOWN )
+        return;
+
     State s = m_state;
     m_state = newstate;
     qDebug() << "DBSYNC State changed from" << s << "to" << newstate;
@@ -124,6 +128,12 @@ DBSyncConnection::check()
         qDebug() << "Syncing in progress already.";
         return;
     }
+    if ( m_state == SHUTDOWN )
+    {
+        qDebug() << "Aborting sync due to shutdown.";
+        return;
+    }
+
     m_uscache.clear();
     m_themcache.clear();
     m_us.clear();
