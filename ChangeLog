@@ -1,7 +1,7 @@
 Version 0.1.0:
     * Fix issue where track resolving spinner never stopped if tracks were
       removed from playlist while resolving.
-    * Fix issues with stations where multiple tracks could be added at once
+    * Fix issues with stations where multiple tracks could be added at once.
     * Allow multiple accounts of the same type.
     * Add new Google account type that is a thin wrapper around a Jabber plugin.
     * Overhaul the settings dialog interface.
