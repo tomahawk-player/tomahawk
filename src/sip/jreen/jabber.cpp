@@ -143,8 +143,8 @@ JabberPlugin::~JabberPlugin()
 {
     delete m_avatarManager;
     delete m_roster;
-    delete m_client;
     delete m_xmlConsole;
+    delete m_client;
     delete m_ui;
 }
 
