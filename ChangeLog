@@ -14,12 +14,6 @@ Version 0.1.0:
       played playlists.
     * Browse and play collections in our snappy tree-view, which also shows
       images for artists and albums.
-    * Watch folders for changes and automatically update your collection. This
-      is on by default; you can turn it off on the Local Music tab in the
-      settings dialog. Note that this triggers only on files or folders being
-      added to or removed from folders; it is not watch individual files as
-      most OSes can't support enough file watches to handle a normal-sized
-      music collection.
     * Fixed crash that could occur when playing a track from a browser.
     * Fixed a crash caused by sources going on- or offline.
     * (OS X) Open configuration dialogs as sliding sheets.

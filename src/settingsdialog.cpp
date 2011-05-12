@@ -107,7 +107,10 @@ SettingsDialog::SettingsDialog( QWidget *parent )
         ui->lineEditMusicPath_2->setText( QDesktopServices::storageLocation( QDesktopServices::MusicLocation ) );
     }
 
+    // WATCH CHANGES
+    // FIXME: QFileSystemWatcher is broken (as we know) and deprecated. Find another way.
     ui->checkBoxWatchForChanges->setChecked( s->watchForChanges() );
+    ui->checkBoxWatchForChanges->setVisible( false );
 
     // LAST FM
     ui->checkBoxEnableLastfm->setChecked( s->scrobblingEnabled() );
