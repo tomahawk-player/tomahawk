@@ -101,6 +101,8 @@ void DiagnosticsDialog::updateLogView()
             case SipPlugin::Disconnected:
                 stateString = "Disconnected";
                 break;
+            case SipPlugin::Disconnecting:
+                stateString = "Disconnecting";
         }
         log.append(
             QString("  %2 (%1): %3 (%4)\n")
@@ -122,27 +124,31 @@ void DiagnosticsDialog::updateLogView()
                 }
             }
 
+            QString versionString = SipHandler::instance()->versionString( peerId );
             SipInfo sipInfo = SipHandler::instance()->sipInfo( peerId );
             if( !sipInfo.isValid() )
                log.append(
-                    QString("       %1: %2 (%3)\n")
+                    QString("       %1: %2 (%3) %4\n")
                         .arg( peerId )
                         .arg( "sipinfo invalid" )
                         .arg( connected ? "connected" : "not connected")
+                        .arg( versionString )
                 );
             else if( sipInfo.isVisible() )
                 log.append(
-                    QString("       %1: %2:%3 (%4)\n")
+                    QString("       %1: %2:%3 (%4) %5\n")
                         .arg( peerId )
                         .arg( sipInfo.host().hostName() )
                         .arg( sipInfo.port() )
                         .arg( connected ? "connected" : "not connected")
+                        .arg( versionString )
                 );
             else
                 log.append(
-                    QString("       %1: visible: false (%2)\n")
+                    QString("       %1: visible: false (%2) %3\n")
                         .arg( peerId )
                         .arg( connected ? "connected" : "not connected")
+                        .arg( versionString )
                 );
         }
         log.append("\n");

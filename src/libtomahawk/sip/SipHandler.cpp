@@ -94,6 +94,12 @@ SipHandler::sipInfo(const QString& peerId) const
     return m_peersSipInfos.value( peerId );
 }
 
+const QString
+SipHandler::versionString(const QString& peerId) const
+{
+    return m_peersSoftwareVersions.value( peerId );
+}
+
 
 void
 SipHandler::onSettingsChanged()
@@ -203,6 +209,7 @@ SipHandler::hookUpPlugin( SipPlugin* sip )
     QObject::connect( sip, SIGNAL( peerOffline( QString ) ), SLOT( onPeerOffline( QString ) ) );
     QObject::connect( sip, SIGNAL( msgReceived( QString, QString ) ), SLOT( onMessage( QString, QString ) ) );
     QObject::connect( sip, SIGNAL( sipInfoReceived( QString, SipInfo ) ), SLOT( onSipInfo( QString, SipInfo ) ) );
+    QObject::connect( sip, SIGNAL( softwareVersionReceived( QString, QString ) ), SLOT( onSoftwareVersion( QString, QString ) ) );
 
     QObject::connect( sip, SIGNAL( error( int, QString ) ), SLOT( onError( int, QString ) ) );
     QObject::connect( sip, SIGNAL( stateChanged( SipPlugin::ConnectionState ) ), SLOT( onStateChanged( SipPlugin::ConnectionState ) ) );
@@ -526,6 +533,11 @@ SipHandler::onSipInfo( const QString& peerId, const SipInfo& info )
     }
 
     m_peersSipInfos.insert( peerId, info );
+}
+
+void SipHandler::onSoftwareVersion(const QString& peerId, const QString& versionString)
+{
+    m_peersSoftwareVersions.insert( peerId, versionString );
 }
 
 void
