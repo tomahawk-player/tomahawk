@@ -117,6 +117,7 @@ Source::friendlyName() const
 void
 Source::setAvatar( const QPixmap& avatar )
 {
+    //HACK: we should really properly make sure that only the GUI thread ever accesses this function
     m_avatar = new QPixmap( avatar );
 }
 
@@ -124,6 +125,7 @@ Source::setAvatar( const QPixmap& avatar )
 QPixmap
 Source::avatar() const
 {
+    //HACK: we should really properly make sure that only the GUI thread ever accesses this function
     if ( m_avatar )
         return QPixmap( *m_avatar );
     else
