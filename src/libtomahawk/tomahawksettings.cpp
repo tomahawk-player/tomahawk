@@ -284,11 +284,26 @@ TomahawkSettings::setProxyType( const int type )
 }
 
 
+bool
+TomahawkSettings::proxyDns() const
+{
+    return value( "network/proxy/dns", false ).toBool();
+}
+
+
+void
+TomahawkSettings::setProxyDns( bool lookupViaProxy )
+{
+    setValue( "network/proxy/dns", lookupViaProxy );
+}
+
+
 QStringList
 TomahawkSettings::aclEntries() const
 {
     return value( "acl/entries", QStringList() ).toStringList();
 }
+
 
 void
 TomahawkSettings::setAclEntries( const QStringList &entries )
