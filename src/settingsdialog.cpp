@@ -96,7 +96,7 @@ SettingsDialog::SettingsDialog( QWidget *parent )
     ui->staticHostName->setText( s->externalHostname() );
     ui->staticPort->setValue( s->externalPort() );
 
-    ui->proxyButton->setVisible( false );
+    ui->proxyButton->setVisible( true );
 
     // MUSIC SCANNER
     //FIXME: MULTIPLECOLLECTIONDIRS
@@ -375,66 +375,6 @@ SettingsDialog::onLastFmFinished()
 }
 
 
-ProxyDialog::ProxyDialog( QWidget *parent )
-    : QDialog( parent )
-    , ui( new Ui::ProxyDialog )
-{
-    ui->setupUi( this );
-
-    // ugly, I know, but...
-    QHash<int,int> enumMap;
-    int i = 0;
-    ui->typeBox->insertItem( i, "No Proxy", QNetworkProxy::NoProxy );
-    enumMap[QNetworkProxy::NoProxy] = i++;
-    ui->typeBox->insertItem( i, "SOCKS 5", QNetworkProxy::Socks5Proxy );
-    enumMap[QNetworkProxy::Socks5Proxy] = i++;
-
-    TomahawkSettings* s = TomahawkSettings::instance();
-
-    ui->typeBox->setCurrentIndex( enumMap[s->proxyType()] );
-    ui->hostLineEdit->setText( s->proxyHost() );
-    ui->portLineEdit->setText( QString::number( s->proxyPort() ) );
-    ui->userLineEdit->setText( s->proxyUsername() );
-    ui->passwordLineEdit->setText( s->proxyPassword() );
-}
-
-
-void
-ProxyDialog::saveSettings()
-{
-    qDebug() << Q_FUNC_INFO;
-
-    //First set settings
-    TomahawkSettings* s = TomahawkSettings::instance();
-    s->setProxyHost( ui->hostLineEdit->text() );
-
-    bool ok;
-    qulonglong port = ui->portLineEdit->text().toULongLong( &ok );
-    if( ok )
-        s->setProxyPort( port );
-
-    s->setProxyUsername( ui->userLineEdit->text() );
-    s->setProxyPassword( ui->passwordLineEdit->text() );
-    s->setProxyType( ui->typeBox->itemData( ui->typeBox->currentIndex() ).toInt() );
-
-    if( s->proxyHost().isEmpty() )
-        return;
-
-    // Now, set QNAM
-    QNetworkProxy proxy( static_cast<QNetworkProxy::ProxyType>(s->proxyType()), s->proxyHost(), s->proxyPort(), s->proxyUsername(), s->proxyPassword() );
-    Q_ASSERT( TomahawkUtils::nam() != 0 );
-    QNetworkAccessManager* nam = TomahawkUtils::nam();
-    nam->setProxy( proxy );
-    QNetworkProxy* globalProxy = TomahawkUtils::proxy();
-    QNetworkProxy* oldProxy = globalProxy;
-    globalProxy = new QNetworkProxy( proxy );
-    if( oldProxy )
-        delete oldProxy;
-
-    QNetworkProxy::setApplicationProxy( proxy );
-}
-
-
 void
 SettingsDialog::addScriptResolver()
 {
@@ -658,4 +598,64 @@ SettingsDialog::sipPluginDeleted( bool )
             SipHandler::instance()->removeSipPlugin( p );
         }
     }
+}
+
+
+ProxyDialog::ProxyDialog( QWidget *parent )
+: QDialog( parent )
+, ui( new Ui::ProxyDialog )
+{
+    ui->setupUi( this );
+    
+    // ugly, I know, but...
+    QHash<int,int> enumMap;
+    int i = 0;
+    ui->typeBox->insertItem( i, "No Proxy", QNetworkProxy::NoProxy );
+    enumMap[QNetworkProxy::NoProxy] = i++;
+    ui->typeBox->insertItem( i, "SOCKS 5", QNetworkProxy::Socks5Proxy );
+    enumMap[QNetworkProxy::Socks5Proxy] = i++;
+    
+    TomahawkSettings* s = TomahawkSettings::instance();
+    
+    ui->typeBox->setCurrentIndex( enumMap[s->proxyType()] );
+    ui->hostLineEdit->setText( s->proxyHost() );
+    ui->portSpinBox->setValue( s->proxyPort() );
+    ui->userLineEdit->setText( s->proxyUsername() );
+    ui->passwordLineEdit->setText( s->proxyPassword() );
+    ui->checkBoxUseProxyForDns->setChecked( s->proxyDns() );
+}
+
+
+void
+ProxyDialog::saveSettings()
+{
+    qDebug() << Q_FUNC_INFO;
+    
+    //First set settings
+    TomahawkSettings* s = TomahawkSettings::instance();
+    s->setProxyHost( ui->hostLineEdit->text() );
+    
+    int port = ui->portSpinBox->value();
+    s->setProxyPort( port );
+    
+    s->setProxyUsername( ui->userLineEdit->text() );
+    s->setProxyPassword( ui->passwordLineEdit->text() );
+    s->setProxyType( ui->typeBox->itemData( ui->typeBox->currentIndex() ).toInt() );
+    s->setProxyDns( ui->checkBoxUseProxyForDns->checkState() == Qt::Checked );
+    
+    if( s->proxyHost().isEmpty() )
+        return;
+    
+    // Now, set QNAM
+        QNetworkProxy proxy( static_cast<QNetworkProxy::ProxyType>(s->proxyType()), s->proxyHost(), s->proxyPort(), s->proxyUsername(), s->proxyPassword() );
+        Q_ASSERT( TomahawkUtils::nam() != 0 );
+        QNetworkAccessManager* nam = TomahawkUtils::nam();
+        nam->setProxy( proxy );
+        QNetworkProxy* globalProxy = TomahawkUtils::proxy();
+        QNetworkProxy* oldProxy = globalProxy;
+        globalProxy = new QNetworkProxy( proxy );
+        if( oldProxy )
+            delete oldProxy;
+        
+        QNetworkProxy::setApplicationProxy( proxy );
 }
