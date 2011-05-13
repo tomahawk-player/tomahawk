@@ -25,7 +25,7 @@ set(TOMAHAWK_QTWEETLIB_SOURCES
     QTweetLib/src/qtweetretweetbyme.cpp
     QTweetLib/src/qtweetretweetsofme.cpp
     QTweetLib/src/qtweetretweettome.cpp
-    QTweetLib/src/qtweetstatus.cpp
+    tomahawk-custom/qtweetstatus.cpp
     QTweetLib/src/qtweetstatusshow.cpp
     QTweetLib/src/qtweetstatusupdate.cpp
     QTweetLib/src/qtweetuser.cpp
