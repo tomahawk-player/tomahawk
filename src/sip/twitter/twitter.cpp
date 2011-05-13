@@ -143,6 +143,7 @@ QWidget* TwitterPlugin::configWidget()
 bool
 TwitterPlugin::connectPlugin( bool startup )
 {
+    Q_UNUSED( startup );
     qDebug() << Q_FUNC_INFO;
 
     m_cachedPeers = twitterCachedPeers();

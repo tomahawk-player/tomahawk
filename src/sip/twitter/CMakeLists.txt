@@ -22,7 +22,7 @@ set( twitterUI
 
 include_directories( . ${CMAKE_CURRENT_BINARY_DIR} ..
    ${QT_INCLUDE_DIR}
-   ${CMAKE_SOURCE_DIR}/thirdparty/qtweetlib/qtweetlib/src
+   ${CMAKE_SOURCE_DIR}/thirdparty/qtweetlib/QTweetLib/src
    ${CMAKE_SOURCE_DIR}/thirdparty/qtweetlib/tomahawk-custom
 )
 
