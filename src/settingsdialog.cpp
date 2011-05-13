@@ -25,6 +25,7 @@
 #include <QMessageBox>
 #include <QNetworkProxy>
 #include <QVBoxLayout>
+#include <QSizeGrip>
 
 #ifdef LIBLASTFM_FOUND
 #include <lastfm/ws.h>
@@ -78,6 +79,13 @@ SettingsDialog::SettingsDialog( QWidget *parent )
     setContentsMargins( 4, 4, 4, 4 );
 #else
     ui->verticalLayout->removeItem( ui->verticalSpacer_3 );
+#endif
+
+#ifdef Q_WS_MAC
+    // Avoid resize handles on sheets on osx
+    m_proxySettings.setSizeGripEnabled( true );
+    QSizeGrip* p = m_proxySettings.findChild< QSizeGrip* >();
+    p->setFixedSize( 0, 0 );
 #endif
 
     // SIP PLUGINS
