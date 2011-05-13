@@ -26,7 +26,7 @@
 #define PADDING 4
 
 class QPainter;
-class DLLEXPORT ConfigDelegateBase : public QStyledItemDelegate
+class Q_DECL_EXPORT ConfigDelegateBase : public QStyledItemDelegate
 {
     Q_OBJECT
 public:

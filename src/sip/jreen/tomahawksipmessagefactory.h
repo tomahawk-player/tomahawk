@@ -21,7 +21,9 @@
 
 #include <jreen/stanzaextension.h>
 
-class TomahawkSipMessageFactory : public Jreen::StanzaExtensionFactory<TomahawkSipMessage>
+#include "../sipdllmacro.h"
+
+class SIPDLLEXPORT TomahawkSipMessageFactory : public Jreen::StanzaExtensionFactory<TomahawkSipMessage>
 {
 public:
     TomahawkSipMessageFactory();

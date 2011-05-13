@@ -6,8 +6,9 @@
 #include <QObject>
 #include <QDir>
 
+#include "../sipdllmacro.h"
 
-class AvatarManager : public QObject
+class SIPDLLEXPORT AvatarManager : public QObject
 {
 Q_OBJECT
 

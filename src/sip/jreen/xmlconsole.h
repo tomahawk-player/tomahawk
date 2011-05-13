@@ -32,7 +32,9 @@ namespace Ui {
 class XmlConsole;
 }
 
-class XmlConsole : public QWidget, public Jreen::XmlStreamHandler
+#include "../sipdllmacro.h"
+
+class SIPDLLEXPORT XmlConsole : public QWidget, public Jreen::XmlStreamHandler
 {
     Q_OBJECT
 

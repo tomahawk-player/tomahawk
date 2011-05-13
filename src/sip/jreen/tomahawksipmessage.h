@@ -5,8 +5,10 @@
 
 #define TOMAHAWK_SIP_MESSAGE_NS QLatin1String("http://www.tomhawk-player.org/sip/transports")
 
+#include "../sipdllmacro.h"
+
 class TomahawkSipMessagePrivate;
-class TomahawkSipMessage : public Jreen::StanzaExtension
+class SIPDLLEXPORT TomahawkSipMessage : public Jreen::StanzaExtension
 {
     J_EXTENSION(TomahawkSipMessage, "")
     Q_DECLARE_PRIVATE(TomahawkSipMessage)
