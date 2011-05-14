@@ -271,10 +271,10 @@ Section "Tomahawk Player" SEC_TOMAHAWK_PLAYER
         ;Main executable.
         File "${INSTALL_PATH}\bin\tomahawk.exe"
 
-        File "${INSTALL_PATH}\lib\librtaudio.dll"
         File "${INSTALL_PATH}\lib\libqxtweb-standalone.dll"
         File "${INSTALL_PATH}\lib\libtomahawk_jdns.dll"
         File "${INSTALL_PATH}\lib\libtomahawk_qtweetlib.dll"
+        File "${INSTALL_PATH}\lib\libtomahawk_lastfm2.dll"
         File "${INSTALL_PATH}\lib\libtomahawklib.dll"
         File "${INSTALL_PATH}\lib\libtomahawk_sipjabber.dll"
         File "${INSTALL_PATH}\lib\libtomahawk_siptwitter.dll"
@@ -283,11 +283,10 @@ Section "Tomahawk Player" SEC_TOMAHAWK_PLAYER
    !ifndef INSTALL_PATH
         ;Main executable.
         File "${BUILD_PATH}\tomahawk.exe"
-
-        File "${BUILD_PATH}\thirdparty\rtaudio\librtaudio.dll"
         File "${BUILD_PATH}\thirdparty\qxt\qxtweb-standalone\libqxtweb-standalone.dll"
         File "${BUILD_PATH}\thirdparty\jdns\libtomahawk_jdns.dll"
         File "${BUILD_PATH}\thirdparty\qtweetlib\libtomahawk_qtweetlib.dll"
+        File "${BUILD_PATH}\thirdparty\liblastfm2\src\libtomahawk_lastfm2.dll"
         File "${BUILD_PATH}\src\libtomahawk\libtomahawklib.dll"
         File "${BUILD_PATH}\libtomahawk_sipjabber.dll"
         File "${BUILD_PATH}\libtomahawk_siptwitter.dll"
@@ -325,13 +324,12 @@ Section "Tomahawk Player" SEC_TOMAHAWK_PLAYER
    File "${MING_DLL_PATH}\libstdc++-6.dll"
    
    ;Audio stuff
-   File "${MING_DLL_PATH}\libmad-0.dll"
-   File "${MING_DLL_PATH}\libogg-0.dll"
-   File "${MING_DLL_PATH}\libvorbisfile-3.dll"
-   File "${MING_DLL_PATH}\libvorbis-0.dll"
-   File "${MING_DLL_PATH}\libFLAC-8.dll"
-   File "${MING_DLL_PATH}\libFLAC++-6.dll"
-    
+   File "${MING_DLL_PATH}\libphonon.dll"
+   ;Fix the phonon build to not use Dbus
+   File "${QT_DLL_PATH}\QtDbus4.dll"
+   File "${MING_DLL_PATH}\libdbus-1-3.dll"
+   File "${MING_DLL_PATH}\dbus-daemon.exe"
+
    ;Other
    File "${MING_DLL_PATH}\libqjson.dll"
    File "${MING_DLL_PATH}\libtag.dll"
