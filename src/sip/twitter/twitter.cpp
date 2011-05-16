@@ -713,6 +713,8 @@ void
 TwitterPlugin::fetchAvatar( const QString& screenName )
 {
     qDebug() << Q_FUNC_INFO;
+    if ( m_twitterAuth.isNull() )
+        return;
     QTweetUserShow *userShowFetch = new QTweetUserShow( m_twitterAuth.data(), this );
     connect( userShowFetch, SIGNAL( parsedUserInfo( QTweetUser ) ), SLOT( avatarUserDataSlot( QTweetUser ) ) );
     userShowFetch->fetch( screenName );
