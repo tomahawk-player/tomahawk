@@ -309,26 +309,38 @@ TwitterPlugin::checkTimerFired()
 void
 TwitterPlugin::connectTimerFired()
 {
+    qDebug() << Q_FUNC_INFO << " beginning";
     if ( !isValid() || m_cachedPeers.isEmpty() || m_twitterAuth.isNull() )
+    {
+        if ( !isValid() )
+            qDebug() << Q_FUNC_INFO << " is not valid";
+        if ( m_cachedPeers.isEmpty() )
+            qDebug() << Q_FUNC_INFO << " has empty cached peers";
+        if ( m_twitterAuth.isNull() )
+            qDebug() << Q_FUNC_INFO << " has null twitterAuth";
         return;
+    }
 
+    qDebug() << Q_FUNC_INFO << " continuing";
     QString myScreenName = twitterScreenName();
     QList<QString> peerlist = m_cachedPeers.keys();
     qStableSort( peerlist.begin(), peerlist.end() );
     foreach( QString screenName, peerlist )
     {
+        qDebug() << Q_FUNC_INFO << " checking peer " << screenName;
         QHash< QString, QVariant > peerData = m_cachedPeers[screenName].toHash();
 
         if ( Servent::instance()->connectedToSession( peerData["node"].toString() ) )
         {
             peerData["lastseen"] = QDateTime::currentMSecsSinceEpoch();
             m_cachedPeers[screenName] = peerData;
+            qDebug() << Q_FUNC_INFO << " already connected";
             continue;
         }
 
         if ( QDateTime::currentMSecsSinceEpoch() - peerData["lastseen"].toLongLong() > 1209600000 ) // 2 weeks
         {
-            qDebug() << "Aging peer " << screenName << " out of cache";
+            qDebug() << Q_FUNC_INFO << " aging peer " << screenName << " out of cache";
             m_cachedPeers.remove( screenName );
             m_cachedAvatars.remove( screenName );
             continue;
