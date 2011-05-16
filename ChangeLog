@@ -1,4 +1,5 @@
 Version 0.1.0:
+    * Twitter peer profile pictures are shown
     * Initial SOCKS5 proxy support.
     * Fix issue where track resolving spinner never stopped if tracks were
       removed from playlist while resolving.

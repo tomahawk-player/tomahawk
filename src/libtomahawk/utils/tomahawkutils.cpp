@@ -372,6 +372,7 @@ void
 setProxy( QNetworkProxy* proxy )
 {
     s_proxy = proxy;
+    s_nam.data()->setProxy( *proxy );
     qDebug() << Q_FUNC_INFO << " setting proxy to use proxy DNS? " << (TomahawkSettings::instance()->proxyDns() ? "true" : "false");
     if ( !TomahawkSettings::instance()->proxyDns() )
         s_proxy->setCapabilities( QNetworkProxy::TunnelingCapability | QNetworkProxy::ListeningCapability | QNetworkProxy::UdpTunnelingCapability );

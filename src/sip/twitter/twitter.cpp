@@ -22,16 +22,21 @@
 
 #include <QtPlugin>
 #include <QRegExp>
+#include <QNetworkAccessManager>
+#include <QNetworkRequest>
+#include <QNetworkReply>
 #include <QStringList>
 
 #include <qtweetaccountverifycredentials.h>
 #include <qtweetuser.h>
 #include <qtweetstatus.h>
+#include <qtweetusershow.h>
 
 #include <utils/tomahawkutils.h>
 #include <tomahawksettings.h>
 #include <database/database.h>
 #include <network/servent.h>
+
 
 static QString s_gotTomahawkRegex = QString( "^(@[a-zA-Z0-9]+ )?(Got Tomahawk\\?) (\\{[a-fA-F0-9\\-]+\\}) (.*)$" );
 
@@ -325,6 +330,7 @@ TwitterPlugin::connectTimerFired()
         {
             qDebug() << "Aging peer " << screenName << " out of cache";
             m_cachedPeers.remove( screenName );
+            m_cachedAvatars.remove( screenName );
             continue;
         }
 
@@ -576,6 +582,9 @@ TwitterPlugin::registerOffer( const QString &screenName, const QHash< QString, Q
 
     QString friendlyName = QString( '@' + screenName );
 
+    if ( !m_cachedAvatars.contains( screenName ) )
+        QMetaObject::invokeMethod( this, "fetchAvatar", Q_ARG( QString, screenName ) );
+    
     QHash< QString, QVariant > _peerData( peerData );
 
     if ( _peerData.contains( "dirty" ) )
@@ -701,12 +710,61 @@ TwitterPlugin::directMessageDestroyed( const QTweetDMStatus& message )
 }
 
 void
+TwitterPlugin::fetchAvatar( const QString& screenName )
+{
+    qDebug() << Q_FUNC_INFO;
+    QTweetUserShow *userShowFetch = new QTweetUserShow( m_twitterAuth.data(), this );
+    connect( userShowFetch, SIGNAL( parsedUserInfo( QTweetUser ) ), SLOT( avatarUserDataSlot( QTweetUser ) ) );
+    userShowFetch->fetch( screenName );
+}
+
+void
+TwitterPlugin::avatarUserDataSlot( const QTweetUser &user )
+{
+    qDebug() << Q_FUNC_INFO;
+    if ( user.profileImageUrl().isEmpty() || m_twitterAuth.isNull() )
+        return;
+
+    QNetworkRequest request( user.profileImageUrl() );
+    QNetworkReply *reply = m_twitterAuth.data()->networkAccessManager()->get( request );
+    reply->setProperty( "screenname", user.screenName() );
+    connect( reply, SIGNAL( finished() ), this, SLOT( profilePicReply() ) );
+}
+
+void
+TwitterPlugin::setProxy( const QNetworkProxy& proxy )
+{
+    Q_UNUSED( proxy );
+    if ( !m_twitterAuth.isNull() )
+        m_twitterAuth.data()->setNetworkAccessManager( TomahawkUtils::nam() );
+}
+
+void
+TwitterPlugin::profilePicReply()
+{
+    qDebug() << Q_FUNC_INFO;
+    QNetworkReply *reply = qobject_cast< QNetworkReply* >( sender() );
+    if ( !reply || reply->error() != QNetworkReply::NoError || !reply->property( "screenname" ).isValid() )
+    {
+        qDebug() << Q_FUNC_INFO << " reply not valid or came back with error";
+        return;
+    }
+    QString screenName = reply->property( "screenname" ).toString();
+    QString friendlyName = '@' + screenName;
+    QByteArray rawData = reply->readAll();
+    QImage image;
+    image.loadFromData( rawData, "PNG" );
+    QPixmap pixmap = QPixmap::fromImage( image );
+    m_cachedAvatars[screenName] = pixmap;
+    emit avatarReceived( friendlyName, QPixmap::fromImage( image ) );
+}
+
+void
 TwitterPlugin::checkSettings()
 {
     disconnectPlugin();
     connectPlugin( false );
 }
-
 
 QString
 TwitterPlugin::twitterScreenName() const
