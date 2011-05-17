@@ -115,11 +115,12 @@ DynamicModel::trackResolveFinished( bool success )
 
     Query* q = qobject_cast<Query*>( sender() );
 
+    qDebug() << "Got resolveFinished in DynamicModel" << q->track() << q->artist();
     if( !m_waitingFor.contains( q ) )
         return;
 
     if( !q->playable() ) {
-        qDebug() << "Got not resolved track:" << q->track() << q->artist() << m_lastResolvedRow << m_currentAttempts;
+        qDebug() << "Got not playable or resolved track:" << q->track() << q->artist() << m_lastResolvedRow << m_currentAttempts;
         m_currentAttempts++;
 
         int curAttempts = m_startingAfterFailed ? m_currentAttempts - 20 : m_currentAttempts; // if we just failed, m_currentAttempts includes those failures
@@ -197,6 +198,7 @@ DynamicModel::filteringTrackResolved( bool successful )
     Q_ASSERT( q );
 
     // if meantime the user began the station, abort
+    qDebug() << "Got filtering resolved finished for track, was it successful?:" << q->track() << q->artist() << successful << q->playable();
     if( m_onDemandRunning ) {
         m_toResolveList.clear();
         m_resolvedList.clear();
@@ -216,7 +218,7 @@ DynamicModel::filteringTrackResolved( bool successful )
 
     m_toResolveList.removeAll( realptr );
 
-    if( successful ) {
+    if( realptr->playable() ) {
         m_resolvedList << realptr;
 
         // append and update internal lastResolvedRow
@@ -230,6 +232,8 @@ DynamicModel::filteringTrackResolved( bool successful )
             m_resolvedList.clear();
 
         }
+    } else {
+        qDebug() << "Got unsuccessful resolve request for this track" << realptr->track() << realptr->artist();
     }
 
     if( m_toResolveList.isEmpty() && rowCount( QModelIndex() ) == 0 ) // we failed
