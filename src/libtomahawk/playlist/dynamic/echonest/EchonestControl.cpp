@@ -33,8 +33,12 @@ Tomahawk::EchonestControl::EchonestControl( const QString& selectedType, const Q
     setType( "echonest" );
     m_editingTimer.setInterval( 500 ); //timeout to edits
     m_editingTimer.setSingleShot( true );
-    
     connect( &m_editingTimer, SIGNAL( timeout() ), this, SLOT( editTimerFired() ) );
+    
+    m_delayedEditTimer.setInterval( 250 ); // additional timer for "just typing" without enter or focus change
+    m_delayedEditTimer.setSingleShot( true );
+    connect( &m_delayedEditTimer, SIGNAL( timeout() ), &m_editingTimer, SLOT( start() ) );
+
     updateWidgets();
 }
 
@@ -149,6 +153,7 @@ Tomahawk::EchonestControl::updateWidgets()
         connect( input, SIGNAL( textChanged(QString) ), this, SLOT( updateData() ) );
         connect( input, SIGNAL( editingFinished() ), this, SLOT( editingFinished() ) );
         connect( input, SIGNAL( textEdited( QString ) ), &m_editingTimer, SLOT( stop() ) );
+        connect( input, SIGNAL( textEdited( QString ) ), &m_delayedEditTimer, SLOT( start() ) );
         
         match->hide();
         input->hide();
@@ -166,6 +171,7 @@ Tomahawk::EchonestControl::updateWidgets()
         connect( input, SIGNAL( textChanged(QString) ), this, SLOT( updateData() ) );
         connect( input, SIGNAL( editingFinished() ), this, SLOT( editingFinished() ) );
         connect( input, SIGNAL( textEdited( QString ) ), &m_editingTimer, SLOT( stop() ) );
+        connect( input, SIGNAL( textEdited( QString ) ), &m_delayedEditTimer, SLOT( start() ) );
         
         match->hide();
         input->hide();

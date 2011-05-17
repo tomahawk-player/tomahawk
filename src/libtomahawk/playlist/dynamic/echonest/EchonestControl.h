@@ -80,6 +80,7 @@ private:
     QString m_summary;
     
     QTimer m_editingTimer;
+    QTimer m_delayedEditTimer;
     
     Echonest::DynamicPlaylist::PlaylistParamData m_data;
     QVariant m_cacheData;
