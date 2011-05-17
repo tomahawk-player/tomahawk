@@ -34,6 +34,9 @@ public:
     ~QueueProxyModel();
 
     virtual Tomahawk::result_ptr siblingItem( int itemsAway );
+
+private slots:
+    void onTrackCountChanged( unsigned int count );
 };
 
 #endif // QUEUEPROXYMODEL_H
