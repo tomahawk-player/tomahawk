@@ -51,6 +51,9 @@ public:
     SipPluginFactory* factoryFromPlugin( SipPlugin* p ) const;
 
     const QPixmap avatar( const QString& name ) const;
+    //TODO: implement a proper SipInfo class and maybe attach it to the source
+    const SipInfo sipInfo( const QString& peerId ) const;
+    const QString versionString( const QString& peerId ) const;
 
 public slots:
     void checkSettings();
@@ -64,6 +67,8 @@ public slots:
     void disconnectAll();
 
     void toggleConnect();
+
+    void setProxy( const QNetworkProxy &proxy );
 
     // create a new plugin of the given name. the name is the value returned in SipPluginFactory::pluginName
     // be default sip plugins are NOt connected when created
@@ -83,6 +88,8 @@ signals:
     void pluginRemoved( SipPlugin* p );
 
 private slots:
+    void onSipInfo( const QString& peerId, const SipInfo& info );
+    void onSoftwareVersion( const QString& peerId, const QString& versionString );
     void onMessage( const QString&, const QString& );
     void onPeerOffline( const QString& );
     void onPeerOnline( const QString& );
@@ -114,9 +121,12 @@ private:
     QList< SipPlugin* > m_enabledPlugins;
     QList< SipPlugin* > m_connectedPlugins;
     bool m_connected;
+    QNetworkProxy m_proxy;
 
-
+    //TODO: move this to source
+    QHash<QString, SipInfo> m_peersSipInfos;
     QHash<QString, QPixmap> m_usernameAvatars;
+    QHash<QString, QString> m_peersSoftwareVersions;
 };
 
 #endif

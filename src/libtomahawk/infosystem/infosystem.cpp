@@ -91,8 +91,7 @@ InfoSystem::~InfoSystem()
         while( !m_worker.isNull() )
         {
             qDebug() << Q_FUNC_INFO << " worker not deleted, processing events";
-            QCoreApplication::processEvents( QEventLoop::AllEvents, 200 );
-            TomahawkUtils::Sleep::msleep( 100 );
+            TomahawkUtils::Sleep::msleep( 50 );
         }
 
         if ( m_infoSystemWorkerThreadController )
@@ -103,8 +102,7 @@ InfoSystem::~InfoSystem()
             while( !m_infoSystemWorkerThreadController->isFinished() )
             {
                 qDebug() << Q_FUNC_INFO << " worker thread controller not finished, processing events";
-                QCoreApplication::processEvents( QEventLoop::AllEvents, 200 );
-                TomahawkUtils::Sleep::msleep( 100 );
+                TomahawkUtils::Sleep::msleep( 50 );
             }
             
             delete m_infoSystemWorkerThreadController;
@@ -120,8 +118,7 @@ InfoSystem::~InfoSystem()
         while( !m_cache.isNull() )
         {
             qDebug() << Q_FUNC_INFO << " worker not deleted, processing events";
-            QCoreApplication::processEvents( QEventLoop::AllEvents, 200 );
-            TomahawkUtils::Sleep::msleep( 100 );
+            TomahawkUtils::Sleep::msleep( 50 );
         }
         
         if ( m_infoSystemCacheThreadController )
@@ -132,8 +129,7 @@ InfoSystem::~InfoSystem()
             while( !m_infoSystemCacheThreadController->isFinished() )
             {
                 qDebug() << Q_FUNC_INFO << " worker thread controller not finished, processing events";
-                QCoreApplication::processEvents( QEventLoop::AllEvents, 200 );
-                TomahawkUtils::Sleep::msleep( 100 );
+                TomahawkUtils::Sleep::msleep( 50 );
             }
             
             delete m_infoSystemCacheThreadController;

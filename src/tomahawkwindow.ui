@@ -35,7 +35,7 @@
      <x>0</x>
      <y>0</y>
      <width>1000</width>
-     <height>20</height>
+     <height>22</height>
     </rect>
    </property>
    <widget class="QMenu" name="menuSettings">
@@ -83,6 +83,7 @@
     <property name="title">
      <string>&amp;Help</string>
     </property>
+    <addaction name="actionDiagnostics"/>
     <addaction name="actionAboutTomahawk"/>
    </widget>
    <addaction name="menuApp"/>
@@ -179,6 +180,14 @@
    </property>
    <property name="shortcut">
     <string>Meta+Ctrl+Z</string>
+   </property>
+  </action>
+  <action name="actionDiagnostics">
+   <property name="text">
+    <string>Diagnostics...</string>
+   </property>
+   <property name="menuRole">
+    <enum>QAction::ApplicationSpecificRole</enum>
    </property>
   </action>
  </widget>

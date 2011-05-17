@@ -39,6 +39,7 @@ Source::Source( int id, const QString& username )
     , m_username( username )
     , m_id( id )
     , m_cc( 0 )
+    , m_avatar( 0 )
 {
     qDebug() << Q_FUNC_INFO << id << username;
 
@@ -55,6 +56,7 @@ Source::Source( int id, const QString& username )
 Source::~Source()
 {
     qDebug() << Q_FUNC_INFO << friendlyName();
+    delete m_avatar;
 }
 
 
@@ -111,14 +113,24 @@ Source::friendlyName() const
     return m_friendlyname;
 }
 
-void Source::setAvatar(const QPixmap& avatar)
+
+void
+Source::setAvatar( const QPixmap& avatar )
 {
-    m_avatar = avatar;
+    //FIXME: use a proper pixmap store that's thread-safe
+    delete m_avatar;
+    m_avatar = new QPixmap( avatar );
 }
 
-const QPixmap Source::avatar() const
+
+QPixmap
+Source::avatar() const
 {
-    return m_avatar;
+    //FIXME: use a proper pixmap store that's thread-safe
+    if ( m_avatar )
+        return QPixmap( *m_avatar );
+    else
+        return QPixmap();
 }
 
 

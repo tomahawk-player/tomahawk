@@ -74,6 +74,8 @@ public:
     virtual QStringList mimeTypes() const;
     virtual Qt::ItemFlags flags( const QModelIndex& index ) const;
 
+    virtual QPersistentModelIndex currentItem() { return m_currentIndex; }
+
     void addAllCollections();
     void addCollection( const Tomahawk::collection_ptr& collection );
     void addFilteredCollection( const Tomahawk::collection_ptr& collection, unsigned int amount, DatabaseCommand_AllArtists::SortOrder order );
@@ -97,6 +99,8 @@ public:
     }
 
 public slots:
+    virtual void setCurrentItem( const QModelIndex& index );
+
     virtual void setRepeatMode( PlaylistInterface::RepeatMode /*mode*/ ) {}
     virtual void setShuffled( bool /*shuffled*/ ) {}
 

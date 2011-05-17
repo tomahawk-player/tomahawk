@@ -1,5 +1,5 @@
 /* === This file is part of Tomahawk Player - <http://tomahawk-player.org> ===
- * 
+ *
  *   Copyright 2010-2011, Christian Muehlhaeuser <muesli@tomahawk-player.org>
  *
  *   Tomahawk is free software: you can redistribute it and/or modify
@@ -44,6 +44,7 @@ public:
     static Pipeline* instance();
 
     explicit Pipeline( QObject* parent = 0 );
+    virtual ~Pipeline();
 
     void reportResults( QID qid, const QList< result_ptr >& results );
 
@@ -67,23 +68,27 @@ public slots:
     void resolve( const query_ptr& q, bool prioritized = false );
     void resolve( const QList<query_ptr>& qlist, bool prioritized = false );
     void resolve( QID qid, bool prioritized = false );
+
+    void start();
+    void stop();
     void databaseReady();
 
 signals:
     void idle();
 
 private slots:
+    void timeoutShunt( const query_ptr& q );
     void shunt( const query_ptr& q );
     void shuntNext();
 
-    void indexReady();
-
 private:
+    void setQIDState( const Tomahawk::query_ptr& query, int state );
     int incQIDState( const Tomahawk::query_ptr& query );
     int decQIDState( const Tomahawk::query_ptr& query );
 
     QList< Resolver* > m_resolvers;
 
+    QMap< QID, bool > m_qidsTimeout;
     QMap< QID, unsigned int > m_qidsState;
     QMap< QID, query_ptr > m_qids;
     QMap< RID, result_ptr > m_rids;
@@ -92,7 +97,7 @@ private:
 
     // store queries here until DB index is loaded, then shunt them all
     QList< query_ptr > m_queries_pending;
-    bool m_index_ready;
+    bool m_running;
 
     static Pipeline* s_instance;
 };

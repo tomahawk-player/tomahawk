@@ -22,16 +22,21 @@
 
 #include <QtPlugin>
 #include <QRegExp>
+#include <QNetworkAccessManager>
+#include <QNetworkRequest>
+#include <QNetworkReply>
 #include <QStringList>
 
 #include <qtweetaccountverifycredentials.h>
 #include <qtweetuser.h>
 #include <qtweetstatus.h>
+#include <qtweetusershow.h>
 
 #include <utils/tomahawkutils.h>
 #include <tomahawksettings.h>
 #include <database/database.h>
 #include <network/servent.h>
+
 
 static QString s_gotTomahawkRegex = QString( "^(@[a-zA-Z0-9]+ )?(Got Tomahawk\\?) (\\{[a-fA-F0-9\\-]+\\}) (.*)$" );
 
@@ -143,10 +148,8 @@ QWidget* TwitterPlugin::configWidget()
 bool
 TwitterPlugin::connectPlugin( bool startup )
 {
+    Q_UNUSED( startup );
     qDebug() << Q_FUNC_INFO;
-
-    if( startup && !twitterAutoConnect() )
-        return false;
 
     m_cachedPeers = twitterCachedPeers();
     QList<QString> peerlist = m_cachedPeers.keys();
@@ -306,27 +309,40 @@ TwitterPlugin::checkTimerFired()
 void
 TwitterPlugin::connectTimerFired()
 {
+    qDebug() << Q_FUNC_INFO << " beginning";
     if ( !isValid() || m_cachedPeers.isEmpty() || m_twitterAuth.isNull() )
+    {
+        if ( !isValid() )
+            qDebug() << Q_FUNC_INFO << " is not valid";
+        if ( m_cachedPeers.isEmpty() )
+            qDebug() << Q_FUNC_INFO << " has empty cached peers";
+        if ( m_twitterAuth.isNull() )
+            qDebug() << Q_FUNC_INFO << " has null twitterAuth";
         return;
+    }
 
+    qDebug() << Q_FUNC_INFO << " continuing";
     QString myScreenName = twitterScreenName();
     QList<QString> peerlist = m_cachedPeers.keys();
     qStableSort( peerlist.begin(), peerlist.end() );
     foreach( QString screenName, peerlist )
     {
+        qDebug() << Q_FUNC_INFO << " checking peer " << screenName;
         QHash< QString, QVariant > peerData = m_cachedPeers[screenName].toHash();
 
         if ( Servent::instance()->connectedToSession( peerData["node"].toString() ) )
         {
             peerData["lastseen"] = QDateTime::currentMSecsSinceEpoch();
             m_cachedPeers[screenName] = peerData;
+            qDebug() << Q_FUNC_INFO << " already connected";
             continue;
         }
 
         if ( QDateTime::currentMSecsSinceEpoch() - peerData["lastseen"].toLongLong() > 1209600000 ) // 2 weeks
         {
-            qDebug() << "Aging peer " << screenName << " out of cache";
+            qDebug() << Q_FUNC_INFO << " aging peer " << screenName << " out of cache";
             m_cachedPeers.remove( screenName );
+            m_cachedAvatars.remove( screenName );
             continue;
         }
 
@@ -578,6 +594,9 @@ TwitterPlugin::registerOffer( const QString &screenName, const QHash< QString, Q
 
     QString friendlyName = QString( '@' + screenName );
 
+    if ( !m_cachedAvatars.contains( screenName ) )
+        QMetaObject::invokeMethod( this, "fetchAvatar", Q_ARG( QString, screenName ) );
+    
     QHash< QString, QVariant > _peerData( peerData );
 
     if ( _peerData.contains( "dirty" ) )
@@ -703,12 +722,63 @@ TwitterPlugin::directMessageDestroyed( const QTweetDMStatus& message )
 }
 
 void
+TwitterPlugin::fetchAvatar( const QString& screenName )
+{
+    qDebug() << Q_FUNC_INFO;
+    if ( m_twitterAuth.isNull() )
+        return;
+    QTweetUserShow *userShowFetch = new QTweetUserShow( m_twitterAuth.data(), this );
+    connect( userShowFetch, SIGNAL( parsedUserInfo( QTweetUser ) ), SLOT( avatarUserDataSlot( QTweetUser ) ) );
+    userShowFetch->fetch( screenName );
+}
+
+void
+TwitterPlugin::avatarUserDataSlot( const QTweetUser &user )
+{
+    qDebug() << Q_FUNC_INFO;
+    if ( user.profileImageUrl().isEmpty() || m_twitterAuth.isNull() )
+        return;
+
+    QNetworkRequest request( user.profileImageUrl() );
+    QNetworkReply *reply = m_twitterAuth.data()->networkAccessManager()->get( request );
+    reply->setProperty( "screenname", user.screenName() );
+    connect( reply, SIGNAL( finished() ), this, SLOT( profilePicReply() ) );
+}
+
+void
+TwitterPlugin::setProxy( const QNetworkProxy& proxy )
+{
+    Q_UNUSED( proxy );
+    if ( !m_twitterAuth.isNull() )
+        m_twitterAuth.data()->setNetworkAccessManager( TomahawkUtils::nam() );
+}
+
+void
+TwitterPlugin::profilePicReply()
+{
+    qDebug() << Q_FUNC_INFO;
+    QNetworkReply *reply = qobject_cast< QNetworkReply* >( sender() );
+    if ( !reply || reply->error() != QNetworkReply::NoError || !reply->property( "screenname" ).isValid() )
+    {
+        qDebug() << Q_FUNC_INFO << " reply not valid or came back with error";
+        return;
+    }
+    QString screenName = reply->property( "screenname" ).toString();
+    QString friendlyName = '@' + screenName;
+    QByteArray rawData = reply->readAll();
+    QImage image;
+    image.loadFromData( rawData, "PNG" );
+    QPixmap pixmap = QPixmap::fromImage( image );
+    m_cachedAvatars[screenName] = pixmap;
+    emit avatarReceived( friendlyName, QPixmap::fromImage( image ) );
+}
+
+void
 TwitterPlugin::checkSettings()
 {
     disconnectPlugin();
     connectPlugin( false );
 }
-
 
 QString
 TwitterPlugin::twitterScreenName() const
@@ -720,7 +790,7 @@ TwitterPlugin::twitterScreenName() const
         TomahawkSettings::instance()->remove( pluginId() + "/ScreenName" );
 
         TomahawkSettings::instance()->sync();
-        
+
         TomahawkSettings::instance()->setValue( pluginId() + "/screenname",
             TomahawkSettings::instance()->value( pluginId() + "/screenname_tmp" ).toString() );
         TomahawkSettings::instance()->remove( pluginId() + "/screenname_tmp" );
@@ -745,12 +815,12 @@ TwitterPlugin::twitterOAuthToken() const
         TomahawkSettings::instance()->remove( pluginId() + "/OAuthToken" );
 
         TomahawkSettings::instance()->sync();
-        
+
         TomahawkSettings::instance()->setValue( pluginId() + "/oauthtoken",
             TomahawkSettings::instance()->value( pluginId() + "/oauthtoken_tmp" ).toString() );
         TomahawkSettings::instance()->remove( pluginId() + "/oauthtoken_tmp" );
     }
-    
+
     return TomahawkSettings::instance()->value( pluginId() + "/oauthtoken" ).toString();
 }
 
@@ -770,12 +840,12 @@ TwitterPlugin::twitterOAuthTokenSecret() const
         TomahawkSettings::instance()->remove( pluginId() + "/OAuthTokenSecret" );
 
         TomahawkSettings::instance()->sync();
-        
+
         TomahawkSettings::instance()->setValue( pluginId() + "/oauthtokensecret",
             TomahawkSettings::instance()->value( pluginId() + "/oauthtokensecret_tmp" ).toString() );
         TomahawkSettings::instance()->remove( pluginId() + "/oauthtokensecret_tmp" );
     }
-    
+
     return TomahawkSettings::instance()->value( pluginId() + "/oauthtokensecret" ).toString();
 }
 
@@ -795,7 +865,7 @@ TwitterPlugin::twitterCachedFriendsSinceId() const
         TomahawkSettings::instance()->remove( pluginId() + "/CachedFriendsSinceID" );
 
         TomahawkSettings::instance()->sync();
-        
+
         TomahawkSettings::instance()->setValue( pluginId() + "/cachedfriendssinceid",
             TomahawkSettings::instance()->value( pluginId() + "/cachedfriendssinceid_tmp" ).toLongLong() );
         TomahawkSettings::instance()->remove( pluginId() + "/cachedfriendssinceid_tmp" );
@@ -820,7 +890,7 @@ TwitterPlugin::twitterCachedMentionsSinceId() const
         TomahawkSettings::instance()->remove( pluginId() + "/CachedMentionsSinceID" );
 
         TomahawkSettings::instance()->sync();
-        
+
         TomahawkSettings::instance()->setValue( pluginId() + "/cachedmentionssinceid",
             TomahawkSettings::instance()->value( pluginId() + "/cachedmentionssinceid_tmp" ).toLongLong() );
         TomahawkSettings::instance()->remove( pluginId() + "/cachedmentionssinceid_tmp" );
@@ -845,12 +915,12 @@ TwitterPlugin::twitterCachedDirectMessagesSinceId() const
         TomahawkSettings::instance()->remove( pluginId() + "/CachedDirectMessagesSinceID" );
 
         TomahawkSettings::instance()->sync();
-        
+
         TomahawkSettings::instance()->setValue( pluginId() + "/cacheddirectmessagessinceid",
             TomahawkSettings::instance()->value( pluginId() + "/cacheddirectmessagessinceid_tmp" ).toLongLong() );
         TomahawkSettings::instance()->remove( pluginId() + "/cacheddirectmessagessinceid_tmp" );
     }
-    
+
     return TomahawkSettings::instance()->value( pluginId() + "/cacheddirectmessagessinceid", 0 ).toLongLong();
 }
 
@@ -870,12 +940,12 @@ TwitterPlugin::twitterCachedPeers() const
         TomahawkSettings::instance()->remove( pluginId() + "/CachedPeers" );
 
         TomahawkSettings::instance()->sync();
-        
+
         TomahawkSettings::instance()->setValue( pluginId() + "/cachedpeers",
             TomahawkSettings::instance()->value( pluginId() + "/cachedpeers_tmp" ).toHash() );
         TomahawkSettings::instance()->remove( pluginId() + "/cachedpeers_tmp" );
     }
-    
+
     return TomahawkSettings::instance()->value( pluginId() + "/cachedpeers", QHash<QString, QVariant>() ).toHash();
 }
 
@@ -883,30 +953,6 @@ void
 TwitterPlugin::setTwitterCachedPeers( const QHash<QString, QVariant> &cachedPeers )
 {
     TomahawkSettings::instance()->setValue( pluginId() + "/cachedpeers", cachedPeers );
-}
-
-bool
-TwitterPlugin::twitterAutoConnect() const
-{
-    if ( TomahawkSettings::instance()->contains( pluginId() + "/AutoConnect" ) )
-    {
-        TomahawkSettings::instance()->setValue( pluginId() + "/autoconnect_tmp",
-            TomahawkSettings::instance()->value( pluginId() + "/AutoConnect" ).toBool() );
-        TomahawkSettings::instance()->remove( pluginId() + "/AutoConnect" );
-
-        TomahawkSettings::instance()->sync();
-        
-        TomahawkSettings::instance()->setValue( pluginId() + "/autoconnect",
-            TomahawkSettings::instance()->value( pluginId() + "/autoconnect_tmp" ).toBool() );
-        TomahawkSettings::instance()->remove( pluginId() + "/autoconnect_tmp" );
-    }
-    return TomahawkSettings::instance()->value( pluginId() + "/autoconnect", true ).toBool();
-}
-
-void
-TwitterPlugin::setTwitterAutoConnect( bool autoConnect )
-{
-    TomahawkSettings::instance()->setValue( pluginId() + "/autoconnect", autoConnect );
 }
 
 Q_EXPORT_PLUGIN2( sipfactory, TwitterFactory )

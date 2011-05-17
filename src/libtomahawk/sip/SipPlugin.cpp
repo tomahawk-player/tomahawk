@@ -34,6 +34,8 @@ SipPlugin::SipPlugin( const QString& pluginId, QObject* parent )
 {
     connect( this, SIGNAL( error( int, QString ) ), this, SLOT( onError( int,QString ) ) );
     connect( this, SIGNAL( stateChanged( SipPlugin::ConnectionState ) ), this, SLOT( onStateChange( SipPlugin::ConnectionState ) ) );
+    connect( this, SIGNAL( peerOnline( QString ) ), this, SLOT( onPeerOnline( QString ) ) );
+    connect( this, SIGNAL( peerOffline( QString ) ), this, SLOT( onPeerOffline( QString ) ) );
 }
 
 QString SipPlugin::pluginId() const
@@ -67,6 +69,13 @@ SipPlugin::icon() const
     return QIcon();
 }
 
+const QStringList
+SipPlugin::peersOnline() const
+{
+    return m_peersOnline;
+}
+
+
 void
 SipPlugin::setProxy( const QNetworkProxy& proxy )
 {
@@ -83,5 +92,20 @@ void
 SipPlugin::onStateChange( SipPlugin::ConnectionState state )
 {
     m_cachedError.clear();
+}
+
+void
+SipPlugin::onPeerOnline(const QString& peerId)
+{
+   if( !m_peersOnline.contains( peerId ) )
+   {
+       m_peersOnline.append( peerId );
+   }
+}
+
+void
+SipPlugin::onPeerOffline(const QString& peerId)
+{
+    m_peersOnline.removeAll( peerId );
 }
 

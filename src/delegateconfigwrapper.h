@@ -42,6 +42,12 @@ public:
         v->addWidget( buttons );
 
         setLayout( v );
+
+#ifdef Q_OS_MAC
+        setSizeGripEnabled( false );
+        setMinimumSize( sizeHint() );
+        setMaximumSize( sizeHint() ); // to remove the resize grip on osx this is the only way
+#endif
     }
 public slots:
     void closed( QAbstractButton* b )

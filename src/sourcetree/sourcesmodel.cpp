@@ -87,11 +87,13 @@ SourcesModel::data( const QModelIndex& index, int role ) const
     return QVariant();
 }
 
+
 int
 SourcesModel::columnCount( const QModelIndex& parent ) const
 {
     return 1;
 }
+
 
 int
 SourcesModel::rowCount( const QModelIndex& parent ) const
@@ -102,6 +104,7 @@ SourcesModel::rowCount( const QModelIndex& parent ) const
 //     qDebug() << "ASKING FOR AND RETURNING ROWCOUNT:" << parent.row() << parent.column() << parent.internalPointer() << itemFromIndex( parent )->children().count() << itemFromIndex( parent )->text();
     return itemFromIndex( parent )->children().count();
 }
+
 
 QModelIndex
 SourcesModel::parent( const QModelIndex& child ) const
@@ -118,6 +121,7 @@ SourcesModel::parent( const QModelIndex& child ) const
 
     return createIndex( rowForItem( parent ), 0, parent );
 }
+
 
 QModelIndex
 SourcesModel::index( int row, int column, const QModelIndex& parent ) const
@@ -137,6 +141,7 @@ SourcesModel::index( int row, int column, const QModelIndex& parent ) const
 
 }
 
+
 bool
 SourcesModel::setData( const QModelIndex& index, const QVariant& value, int role )
 {
@@ -144,13 +149,16 @@ SourcesModel::setData( const QModelIndex& index, const QVariant& value, int role
     return item->setData( value, role );
 }
 
+
 QStringList
 SourcesModel::mimeTypes() const
 {
     QStringList types;
     types << "application/tomahawk.query.list";
+    types << "application/tomahawk.result.list";
     return types;
 }
+
 
 QMimeData*
 SourcesModel::mimeData( const QModelIndexList& indexes ) const
@@ -158,6 +166,7 @@ SourcesModel::mimeData( const QModelIndexList& indexes ) const
     // TODO
     return new QMimeData();
 }
+
 
 bool
 SourcesModel::dropMimeData( const QMimeData* data, Qt::DropAction action, int row, int column, const QModelIndex& parent )
@@ -173,11 +182,13 @@ SourcesModel::dropMimeData( const QMimeData* data, Qt::DropAction action, int ro
     return item->dropMimeData( data, action );
 }
 
+
 Qt::DropActions
 SourcesModel::supportedDropActions() const
 {
     return Qt::CopyAction;
 }
+
 
 Qt::ItemFlags
 SourcesModel::flags( const QModelIndex& index ) const
@@ -199,6 +210,7 @@ SourcesModel::appendItem( const Tomahawk::source_ptr& source )
 
     endInsertRows();
 }
+
 
 bool
 SourcesModel::removeItem( const Tomahawk::source_ptr& source )
@@ -228,6 +240,7 @@ SourcesModel::removeItem( const Tomahawk::source_ptr& source )
     return false;
 }
 
+
 void
 SourcesModel::viewPageActivated( Tomahawk::ViewPage* page )
 {
@@ -243,6 +256,7 @@ SourcesModel::viewPageActivated( Tomahawk::ViewPage* page )
         m_viewPageDelayedCacheItem = page;
     }
 }
+
 
 void
 SourcesModel::loadSources()
@@ -275,6 +289,7 @@ SourcesModel::onSourceRemoved( const source_ptr& source )
     removeItem( source );
 }
 
+
 void
 SourcesModel::itemUpdated()
 {
@@ -303,6 +318,7 @@ SourcesModel::onItemRowsAddedBegin( int first, int last )
     beginInsertRows( idx, first, last );
 }
 
+
 void
 SourcesModel::onItemRowsAddedDone()
 {
@@ -310,6 +326,7 @@ SourcesModel::onItemRowsAddedDone()
 
     endInsertRows();
 }
+
 
 void
 SourcesModel::onItemRowsRemovedBegin( int first, int last )
@@ -324,6 +341,7 @@ SourcesModel::onItemRowsRemovedBegin( int first, int last )
     beginRemoveRows( idx, first, last );
 }
 
+
 void
 SourcesModel::onItemRowsRemovedDone()
 {
@@ -331,6 +349,7 @@ SourcesModel::onItemRowsRemovedDone()
 
     endRemoveRows();
 }
+
 
 void
 SourcesModel::linkSourceItemToPage( SourceTreeItem* item, ViewPage* p )
@@ -355,6 +374,7 @@ SourcesModel::itemFromIndex( const QModelIndex& idx ) const
 
     return reinterpret_cast< SourceTreeItem* >( idx.internalPointer() );
 }
+
 
 QModelIndex
 SourcesModel::indexFromItem( SourceTreeItem* item ) const
@@ -395,6 +415,7 @@ SourcesModel::indexFromItem( SourceTreeItem* item ) const
 //     qDebug() << "parent:" << idx.parent();
     return idx;
 }
+
 
 int
 SourcesModel::rowForItem( SourceTreeItem* item ) const

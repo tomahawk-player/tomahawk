@@ -72,10 +72,14 @@ public:
     virtual QIcon icon() const;
     virtual QWidget* configWidget();
 
+signals:
+    void avatarReceived( QString, QPixmap );
+    
 public slots:
     virtual bool connectPlugin( bool startup );
     void disconnectPlugin();
     void checkSettings();
+    void setProxy( const QNetworkProxy &proxy );
 
     void sendMsg( const QString& to, const QString& msg )
     {
@@ -109,6 +113,9 @@ private slots:
     void registerOffer( const QString &screenName, const QHash< QString, QVariant > &peerdata );
     void sendOffer( const QString &screenName, const QHash< QString, QVariant > &peerdata );
     void makeConnection( const QString &screenName, const QHash< QString, QVariant > &peerdata );
+    void fetchAvatar( const QString &screenName );
+    void avatarUserDataSlot( const QTweetUser &user );
+    void profilePicReply();
 
 private:
     bool refreshTwitterAuth();
@@ -145,6 +152,7 @@ private:
     qint64 m_cachedMentionsSinceId;
     qint64 m_cachedDirectMessagesSinceId;
     QHash< QString, QVariant > m_cachedPeers;
+    QHash< QString, QPixmap > m_cachedAvatars;
     QSet<QString> m_keyCache;
     bool m_finishedFriends;
     bool m_finishedMentions;

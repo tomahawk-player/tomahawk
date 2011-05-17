@@ -36,6 +36,9 @@ public:
     virtual TreeModel* sourceModel() const { return m_model; }
     virtual void setSourceModel( TreeModel* sourceModel );
 
+    virtual QPersistentModelIndex currentItem() const { return mapFromSource( m_model->currentItem() ); }
+    virtual void setCurrentItem( const QModelIndex& index ) { m_model->setCurrentItem( mapToSource( index ) ); }
+
     virtual QList<Tomahawk::query_ptr> tracks() { Q_ASSERT( FALSE ); QList<Tomahawk::query_ptr> queries; return queries; }
 
     virtual int unfilteredTrackCount() const { return sourceModel()->rowCount( QModelIndex() ); }
@@ -52,6 +55,8 @@ public:
     virtual PlaylistInterface::RepeatMode repeatMode() const { return m_repeatMode; }
     virtual bool shuffled() const { return m_shuffled; }
     virtual PlaylistInterface::ViewMode viewMode() const { return PlaylistInterface::Tree; }
+
+    TreeModelItem* itemFromIndex( const QModelIndex& index ) const { return sourceModel()->itemFromIndex( index ); }
 
 signals:
     void repeatModeChanged( PlaylistInterface::RepeatMode mode );

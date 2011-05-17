@@ -6,6 +6,7 @@ set( googleHeaders
      ../tomahawksipmessage.h
      ../tomahawksipmessagefactory.h
      ../avatarmanager.h
+     ../xmlconsole.h
      googlewrapper.h )
 
 set( googleSources
@@ -13,13 +14,14 @@ set( googleSources
      ../tomahawksipmessage.cpp
      ../tomahawksipmessagefactory.cpp
      ../avatarmanager.cpp
+     ../xmlconsole.cpp
      googlewrapper.cpp )
 
 add_definitions(-DGOOGLE_WRAPPER)
 
 qt4_add_resources( RCX_SRCS "resources.qrc" )
 
-qt4_wrap_cpp( googleMoc ../jabber.h ../avatarmanager.h googlewrapper.h )
+qt4_wrap_cpp( googleMoc ${googleHeaders} )
 add_library( tomahawk_sipgoogle SHARED ${googleSources} ${googleMoc} ${googleMoc} ${RCX_SRCS} )
 
 target_link_libraries( tomahawk_sipgoogle

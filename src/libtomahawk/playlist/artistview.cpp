@@ -125,30 +125,11 @@ ArtistView::onItemActivated( const QModelIndex& index )
         else if ( !item->album().isNull() )
             ViewManager::instance()->show( item->album() );
         else if ( !item->result().isNull() )
-            AudioEngine::instance()->playItem( 0, item->result() );
+        {
+            m_model->setCurrentItem( item->index );
+            AudioEngine::instance()->playItem( m_proxyModel, item->result() );
+        }
     }
-}
-
-
-void
-ArtistView::dragEnterEvent( QDragEnterEvent* event )
-{
-    qDebug() << Q_FUNC_INFO;
-    QTreeView::dragEnterEvent( event );
-}
-
-
-void
-ArtistView::dragMoveEvent( QDragMoveEvent* event )
-{
-    QTreeView::dragMoveEvent( event );
-}
-
-
-void
-ArtistView::dropEvent( QDropEvent* event )
-{
-    QTreeView::dropEvent( event );
 }
 
 
@@ -178,15 +159,32 @@ ArtistView::onFilterChanged( const QString& )
 void
 ArtistView::startDrag( Qt::DropActions supportedActions )
 {
-    Q_UNUSED( supportedActions );
-}
+    QList<QPersistentModelIndex> pindexes;
+    QModelIndexList indexes;
+    foreach( const QModelIndex& idx, selectedIndexes() )
+    {
+        if ( ( m_proxyModel->flags( idx ) & Qt::ItemIsDragEnabled ) )
+        {
+            indexes << idx;
+            pindexes << idx;
+        }
+    }
 
+    if ( indexes.count() == 0 )
+        return;
 
-QPixmap
-ArtistView::createDragPixmap( int itemCount ) const
-{
-    Q_UNUSED( itemCount );
-    return QPixmap();
+    qDebug() << "Dragging" << indexes.count() << "indexes";
+    QMimeData* data = m_proxyModel->mimeData( indexes );
+    if ( !data )
+        return;
+
+    QDrag* drag = new QDrag( this );
+    drag->setMimeData( data );
+    const QPixmap p = TomahawkUtils::createDragPixmap( indexes.count() );
+    drag->setPixmap( p );
+    drag->setHotSpot( QPoint( -20, -20 ) );
+
+    drag->exec( supportedActions, Qt::CopyAction );
 }
 
 
@@ -231,4 +229,12 @@ ArtistView::onScrollTimeout()
             s_tmInfoIdentifier, Tomahawk::InfoSystem::InfoArtistImages,
             QVariant::fromValue< Tomahawk::InfoSystem::InfoCriteriaHash >( trackInfo ), Tomahawk::InfoSystem::InfoCustomData() );
     }
+}
+
+
+bool
+ArtistView::jumpToCurrentTrack()
+{
+    scrollTo( m_proxyModel->currentItem(), QAbstractItemView::PositionAtCenter );
+    return true;
 }

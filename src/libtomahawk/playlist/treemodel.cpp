@@ -55,6 +55,29 @@ TreeModel::~TreeModel()
 }
 
 
+void
+TreeModel::setCurrentItem( const QModelIndex& index )
+{
+    qDebug() << Q_FUNC_INFO;
+    TreeModelItem* oldEntry = itemFromIndex( m_currentIndex );
+    if ( oldEntry )
+    {
+//        oldEntry->setIsPlaying( false );
+    }
+
+    TreeModelItem* entry = itemFromIndex( index );
+    if ( entry )
+    {
+        m_currentIndex = index;
+//        entry->setIsPlaying( true );
+    }
+    else
+    {
+        m_currentIndex = QModelIndex();
+    }
+}
+
+
 QModelIndex
 TreeModel::index( int row, int column, const QModelIndex& parent ) const
 {
@@ -257,9 +280,13 @@ TreeModel::flags( const QModelIndex& index ) const
     Qt::ItemFlags defaultFlags = QAbstractItemModel::flags( index );
 
     if ( index.isValid() && index.column() == 0 )
-        return Qt::ItemIsDragEnabled | Qt::ItemIsDropEnabled | defaultFlags;
-    else
-        return defaultFlags;
+    {
+        TreeModelItem* item = itemFromIndex( index );
+        if ( item && !item->result().isNull() )
+            return Qt::ItemIsDragEnabled | Qt::ItemIsDropEnabled | defaultFlags;
+    }
+
+    return defaultFlags;
 }
 
 
@@ -267,7 +294,7 @@ QStringList
 TreeModel::mimeTypes() const
 {
     QStringList types;
-    types << "application/tomahawk.query.list";
+    types << "application/tomahawk.result.list";
     return types;
 }
 
@@ -277,8 +304,8 @@ TreeModel::mimeData( const QModelIndexList &indexes ) const
 {
     qDebug() << Q_FUNC_INFO;
 
-    QByteArray queryData;
-    QDataStream queryStream( &queryData, QIODevice::WriteOnly );
+    QByteArray resultData;
+    QDataStream resultStream( &resultData, QIODevice::WriteOnly );
 
     foreach ( const QModelIndex& i, indexes )
     {
@@ -287,15 +314,15 @@ TreeModel::mimeData( const QModelIndexList &indexes ) const
 
         QModelIndex idx = index( i.row(), 0, i.parent() );
         TreeModelItem* item = itemFromIndex( idx );
-        if ( item )
+        if ( item && !item->result().isNull() )
         {
-            const album_ptr& album = item->album();
-            queryStream << qlonglong( &album );
+            const result_ptr& result = item->result();
+            resultStream << qlonglong( &result );
         }
     }
 
     QMimeData* mimeData = new QMimeData();
-    mimeData->setData( "application/tomahawk.query.list", queryData );
+    mimeData->setData( "application/tomahawk.result.list", resultData );
 
     return mimeData;
 }
@@ -396,7 +423,10 @@ TreeModel::addCollection( const collection_ptr& collection )
 
     Database::instance()->enqueue( QSharedPointer<DatabaseCommand>( cmd ) );
 
-    m_title = tr( "All Artists from %1" ).arg( collection->source()->friendlyName() );
+    if ( collection->source()->isLocal() )
+        setTitle( tr( "Your Collection" ) );
+    else
+        setTitle( tr( "Collection of %1" ).arg( collection->source()->friendlyName() ) );
 }
 
 
@@ -418,7 +448,10 @@ TreeModel::addFilteredCollection( const collection_ptr& collection, unsigned int
 
     Database::instance()->enqueue( QSharedPointer<DatabaseCommand>( cmd ) );
 
-    m_title = tr( "All albums from %1" ).arg( collection->source()->friendlyName() );
+    if ( collection->source()->isLocal() )
+        setTitle( tr( "Your Collection" ) );
+    else
+        setTitle( tr( "Collection of %1" ).arg( collection->source()->friendlyName() ) );
 }
 
 

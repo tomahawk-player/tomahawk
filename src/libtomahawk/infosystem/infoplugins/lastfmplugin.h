@@ -75,8 +75,6 @@ private:
 
     QList< QUrl > m_badUrls;
 
-    QNetworkReply* m_authJob;
-
     QWeakPointer< QNetworkAccessManager > m_nam;
 };
 

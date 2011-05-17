@@ -64,6 +64,7 @@ SET( tomahawkSourcesGui ${tomahawkSourcesGui}
      tomahawktrayicon.cpp
      audiocontrols.cpp
      settingsdialog.cpp
+     diagnosticsdialog.cpp
      configdelegatebase.cpp
      sipconfigdelegate.cpp
      resolverconfigdelegate.cpp
@@ -106,6 +107,7 @@ SET( tomahawkHeadersGui ${tomahawkHeadersGui}
      tomahawktrayicon.h
      audiocontrols.h
      settingsdialog.h
+     diagnosticsdialog.h
      configdelegatebase.h
      resolverconfigdelegate.h
      sipconfigdelegate.h
@@ -117,6 +119,7 @@ SET( tomahawkHeadersGui ${tomahawkHeadersGui}
 SET( tomahawkUI ${tomahawkUI}
      tomahawkwindow.ui
      settingsdialog.ui
+     diagnosticsdialog.ui
      stackedsettingsdialog.ui
      proxydialog.ui
 

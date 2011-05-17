@@ -160,6 +160,7 @@ SourceTreeView::hideOfflineSources()
     m_proxyModel->hideOfflineSources();
 }
 
+
 void
 SourceTreeView::onItemActivated( const QModelIndex& index )
 {
@@ -181,6 +182,7 @@ SourceTreeView::onItemExpanded( const QModelIndex& idx )
        }
     }
 }
+
 
 void
 SourceTreeView::selectRequest( const QModelIndex& idx )
@@ -260,7 +262,8 @@ SourceTreeView::dragEnterEvent( QDragEnterEvent* event )
     qDebug() << Q_FUNC_INFO;
     QTreeView::dragEnterEvent( event );
 
-    if ( event->mimeData()->hasFormat( "application/tomahawk.query.list" ) )
+    if ( event->mimeData()->hasFormat( "application/tomahawk.query.list" )
+      || event->mimeData()->hasFormat( "application/tomahawk.result.list" ) )
     {
         m_dragging = true;
         m_dropRect = QRect();
@@ -278,7 +281,8 @@ SourceTreeView::dragMoveEvent( QDragMoveEvent* event )
     bool accept = false;
     QTreeView::dragMoveEvent( event );
 
-    if ( event->mimeData()->hasFormat( "application/tomahawk.query.list" ) )
+    if ( event->mimeData()->hasFormat( "application/tomahawk.query.list" )
+      || event->mimeData()->hasFormat( "application/tomahawk.result.list" ) )
     {
         setDirtyRegion( m_dropRect );
         const QPoint pos = event->pos();
@@ -292,7 +296,9 @@ SourceTreeView::dragMoveEvent( QDragMoveEvent* event )
             const SourceTreeItem* item = itemFromIndex< SourceTreeItem >( index );
             if( item->willAcceptDrag( event->mimeData() ) )
                 accept = true;
-        } else {
+        }
+        else
+        {
             m_dropRect = QRect();
         }
 
@@ -344,6 +350,7 @@ SourceTreeView::drawRow( QPainter* painter, const QStyleOptionViewItem& option, 
     QTreeView::drawRow( painter, option, index );
 }
 
+
 template< typename T > T*
 SourceTreeView::itemFromIndex( const QModelIndex& index ) const
 {
@@ -388,7 +395,6 @@ SourceDelegate::paint( QPainter* painter, const QStyleOptionViewItem& option, co
             o.palette.setColor( QPalette::Text, o.palette.color( QPalette::HighlightedText ) );
         }
     }
-
 
     SourcesModel::RowType type = static_cast< SourcesModel::RowType >( index.data( SourcesModel::SourceTreeItemTypeRole ).toInt() );
     SourceTreeItem* item = index.data( SourcesModel::SourceTreeItemRole ).value< SourceTreeItem* >();

@@ -82,7 +82,6 @@ public:
     void init();
     static TomahawkApp* instance();
 
-    SipHandler* sipHandler();
     XMPPBot* xmppBot() { return m_xmppBot; }
 
 #ifndef TOMAHAWK_HEADLESS

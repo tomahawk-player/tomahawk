@@ -52,6 +52,7 @@
 
 #include "audiocontrols.h"
 #include "settingsdialog.h"
+#include "diagnosticsdialog.h"
 #include "tomahawksettings.h"
 #include "sourcelist.h"
 #include "transferview.h"
@@ -149,6 +150,10 @@ TomahawkWindow::TomahawkWindow( QWidget* parent )
     toolbar->setToolButtonStyle( Qt::ToolButtonFollowStyle );
     toolbar->installEventFilter( new WidgetDragFilter( toolbar ) );
 
+#ifndef Q_WS_MAC
+    ui->menu_Help->insertSeparator( ui->actionAboutTomahawk );
+#endif
+
 #if defined( Q_OS_DARWIN ) && defined( HAVE_SPARKLE )
     QAction* checkForUpdates = ui->menu_Help->addAction( tr( "Check For Updates...") );
     checkForUpdates->setMenuRole( QAction::ApplicationSpecificRole );
@@ -181,7 +186,7 @@ TomahawkWindow::TomahawkWindow( QWidget* parent )
     // propagate sip menu
     connect( SipHandler::instance(), SIGNAL( pluginAdded( SipPlugin* ) ), this, SLOT( onSipPluginAdded( SipPlugin* ) ) );
     connect( SipHandler::instance(), SIGNAL( pluginRemoved( SipPlugin* ) ), this, SLOT( onSipPluginRemoved( SipPlugin* ) ) );
-    foreach( SipPlugin *plugin, APP->sipHandler()->allPlugins() )
+    foreach( SipPlugin *plugin, SipHandler::instance()->allPlugins() )
     {
         connect( plugin, SIGNAL( addMenu( QMenu* ) ), this, SLOT( pluginMenuAdded( QMenu* ) ) );
         connect( plugin, SIGNAL( removeMenu( QMenu* ) ), this, SLOT( pluginMenuRemoved( QMenu* ) ) );
@@ -261,7 +266,8 @@ TomahawkWindow::setupSignals()
 
     // <Menu Items>
     connect( ui->actionPreferences, SIGNAL( triggered() ), SLOT( showSettingsDialog() ) );
-    connect( ui->actionToggleConnect, SIGNAL( triggered() ), APP->sipHandler(), SLOT( toggleConnect() ) );
+    connect( ui->actionDiagnostics, SIGNAL( triggered() ), SLOT( showDiagnosticsDialog() ) );
+    connect( ui->actionToggleConnect, SIGNAL( triggered() ), SipHandler::instance(), SLOT( toggleConnect() ) );
 //    connect( ui->actionAddPeerManually, SIGNAL( triggered() ), SLOT( addPeerManually() ) );
     connect( ui->actionRescanCollection, SIGNAL( triggered() ), SLOT( updateCollectionManually() ) );
     connect( ui->actionLoadXSPF, SIGNAL( triggered() ), SLOT( loadSpiff() ));
@@ -279,9 +285,9 @@ TomahawkWindow::setupSignals()
 #endif
 
     // <SipHandler>
-    connect( APP->sipHandler(), SIGNAL( connected() ), SLOT( onSipConnected() ) );
-    connect( APP->sipHandler(), SIGNAL( disconnected() ), SLOT( onSipDisconnected() ) );
-    connect( APP->sipHandler(), SIGNAL( authError() ), SLOT( onSipError() ) );
+    connect( SipHandler::instance(), SIGNAL( connected( SipPlugin* ) ), SLOT( onSipConnected() ) );
+    connect( SipHandler::instance(), SIGNAL( disconnected( SipPlugin* ) ), SLOT( onSipDisconnected() ) );
+    connect( SipHandler::instance(), SIGNAL( authError( SipPlugin* ) ), SLOT( onSipError() ) );
 
     // set initial connection state
     onSipDisconnected();
@@ -346,6 +352,13 @@ TomahawkWindow::showSettingsDialog()
 {
     qDebug() << Q_FUNC_INFO;
     SettingsDialog win;
+    win.exec();
+}
+
+void TomahawkWindow::showDiagnosticsDialog()
+{
+    qDebug() << Q_FUNC_INFO;
+    DiagnosticsDialog win;
     win.exec();
 }
 

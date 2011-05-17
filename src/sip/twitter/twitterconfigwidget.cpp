@@ -44,14 +44,10 @@ TwitterConfigWidget::TwitterConfigWidget( TwitterPlugin* plugin, QWidget *parent
             this, SLOT( startPostGotTomahawkStatus() ) );
     connect( ui->twitterTweetComboBox, SIGNAL( currentIndexChanged( int ) ),
             this, SLOT( tweetComboBoxIndexChanged( int ) ) );
-    connect( ui->autoConnectCheckbox, SIGNAL( toggled( bool ) ),
-            this, SLOT( autoConnectToggled( bool ) ) );
-
 
     ui->twitterTweetComboBox->setCurrentIndex( 0 );
     ui->twitterUserTweetLineEdit->setReadOnly( true );
     ui->twitterUserTweetLineEdit->setEnabled( false );
-    ui->autoConnectCheckbox->setChecked( m_plugin->twitterAutoConnect() );
 
     if ( m_plugin->twitterOAuthToken().isEmpty() || m_plugin->twitterOAuthTokenSecret().isEmpty() || m_plugin->twitterScreenName().isEmpty() )
     {
@@ -187,13 +183,6 @@ TwitterConfigWidget::tweetComboBoxIndexChanged( int index )
     else
         ui->twitterTweetGotTomahawkButton->setText( tr( "Tweet!" ) );
 }
-
-void
-TwitterConfigWidget::autoConnectToggled( bool on )
-{
-    m_plugin->setTwitterAutoConnect( on );
-}
-
 
 void
 TwitterConfigWidget::startPostGotTomahawkStatus()

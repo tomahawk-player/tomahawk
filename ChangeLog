@@ -1,18 +1,25 @@
 Version 0.1.0:
+    * Twitter peer profile pictures are shown
+    * Initial SOCKS5 proxy support.
+    * Fix issue where track resolving spinner never stopped if tracks were
+      removed from playlist while resolving.
+    * Fix issues with stations where multiple tracks could be added at once.
+    * Allow multiple accounts of the same type.
+    * Add new Google account type that is a thin wrapper around a Jabber plugin.
+    * Overhaul the settings dialog interface.
     * Resolvers can now be enabled and disabled, and some can be configured
       directly in Tomahawk.
+    * Split playlists and stations in sources tree view. Show Recently Played
+      as a node under the Super Collection.
+    * Fix massive speed bottleneck on startup in the case of many recently
+      played playlists.
     * Browse and play collections in our snappy tree-view, which also shows
       images for artists and albums.
-    * Watch folders for changes and automatically update your collection. This
-      is on by default; you can turn it off on the Local Music tab in the
-      settings dialog. Note that this triggers only on files or folders being
-      added to or removed from folders; it is not watch individual files as
-      most OSes can't support enough file watches to handle a normal-sized
-      music collection.
-
-Version 0.0.4:
     * Fixed crash that could occur when playing a track from a browser.
-    * Fixed a crash situation caused by sources going on- or offline.
+    * Fixed a crash caused by sources going on- or offline.
+    * (OS X) Open configuration dialogs as sliding sheets.
+    * (OS X) Increase our available file watches to the maximum that the system
+      reports.
 
 Version 0.0.3:
     * Show spinner while resolving playlists.
