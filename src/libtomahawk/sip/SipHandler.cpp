@@ -70,7 +70,7 @@ const QPixmap
 SipHandler::avatar( const QString& name ) const
 {
     qDebug() << Q_FUNC_INFO << "Getting avatar" << name << m_usernameAvatars.keys();
-    if( m_usernameAvatars.keys().contains( name ) )
+    if( m_usernameAvatars.contains( name ) )
     {
         qDebug() << Q_FUNC_INFO << "Getting avatar and avatar != null ";
         Q_ASSERT(!m_usernameAvatars.value( name ).isNull());
@@ -601,8 +601,12 @@ SipHandler::onStateChanged( SipPlugin::ConnectionState state )
 void
 SipHandler::onAvatarReceived( const QString& from, const QPixmap& avatar )
 {
-    qDebug() << Q_FUNC_INFO << "Set avatar on source for " << from;
-    Q_ASSERT(!avatar.isNull());
+    qDebug() << Q_FUNC_INFO << " setting avatar on source for " << from;
+    if ( avatar.isNull() )
+    {
+        qDebug() << Q_FUNC_INFO << " got null pixmap, not adding anything";
+        return;
+    }
 
     m_usernameAvatars.insert( from, avatar );
 
