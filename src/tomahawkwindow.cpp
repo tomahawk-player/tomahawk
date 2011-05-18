@@ -19,6 +19,8 @@
 #include "tomahawkwindow.h"
 #include "ui_tomahawkwindow.h"
 
+#include "config.h"
+
 #include <QAction>
 #include <QCloseEvent>
 #include <QShowEvent>
