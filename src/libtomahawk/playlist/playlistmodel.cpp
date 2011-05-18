@@ -296,11 +296,19 @@ PlaylistModel::onRevisionLoaded( Tomahawk::PlaylistRevision revision )
         loadPlaylist( m_playlist );
 }
 
+QMimeData*
+PlaylistModel::mimeData( const QModelIndexList& indexes ) const
+{
+    // Add the playlist id to the mime data so that we can detect dropping on ourselves
+    QMimeData* d = TrackModel::mimeData( indexes );
+    d->setData( "application/tomahawk.playlist.id", m_playlist->guid().toLatin1() );
+
+    return d;
+}
 
 bool
 PlaylistModel::dropMimeData( const QMimeData* data, Qt::DropAction action, int row, int column, const QModelIndex& parent )
 {
-    qDebug() << "LALALA";
     Q_UNUSED( column );
     if ( action == Qt::IgnoreAction || isReadOnly() )
         return true;
@@ -309,6 +317,10 @@ PlaylistModel::dropMimeData( const QMimeData* data, Qt::DropAction action, int r
         && !data->hasFormat( "application/tomahawk.plentry.list" )
         && !data->hasFormat( "application/tomahawk.result.list" ) )
         return false;
+
+    if ( data->hasFormat( "application/tomahawk.playlist.id" ) &&
+         data->data( "application/tomahawk.playlist.id" ) == m_playlist->guid() )
+        return false; // don't allow dropping on ourselves
 
     int beginRow;
     if ( row != -1 )

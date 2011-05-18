@@ -112,6 +112,12 @@ bool
 PlaylistItem::dropMimeData( const QMimeData* data, Qt::DropAction action )
 {
     QList< Tomahawk::query_ptr > queries;
+
+    if ( data->hasFormat( "application/tomahawk.playlist.id" ) &&
+        data->data( "application/tomahawk.playlist.id" ) == m_playlist->guid() )
+        return false; // don't allow dropping on ourselves
+
+
     if ( data->hasFormat( "application/tomahawk.result.list" ) )
     {
         QByteArray itemData = data->data( "application/tomahawk.result.list" );
