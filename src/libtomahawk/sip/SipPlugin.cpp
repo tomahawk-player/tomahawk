@@ -79,18 +79,21 @@ SipPlugin::peersOnline() const
 void
 SipPlugin::setProxy( const QNetworkProxy& proxy )
 {
+    Q_UNUSED( proxy );
     qDebug() << Q_FUNC_INFO << "Not implemented";
 }
 
 void
 SipPlugin::onError( int code, const QString& error )
 {
+    Q_UNUSED( code );
     m_cachedError = error;
 }
 
 void
 SipPlugin::onStateChange( SipPlugin::ConnectionState state )
 {
+    Q_UNUSED( state );
     m_cachedError.clear();
 }
 

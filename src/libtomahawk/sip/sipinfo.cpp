@@ -52,7 +52,9 @@ SipInfo::SipInfo()
     d = new SipInfoPrivate;
 }
 
-SipInfo::SipInfo(const SipInfo& other): d ( other.d )
+SipInfo::SipInfo(const SipInfo& other)
+    : QObject()
+    , d( other.d )
 {
 
 }
