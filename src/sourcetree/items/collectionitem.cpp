@@ -78,17 +78,20 @@ CollectionItem::CollectionItem(  SourcesModel* mdl, SourceTreeItem* parent, cons
                 SLOT( onStationsDeleted( QList<Tomahawk::dynplaylist_ptr> ) ), Qt::QueuedConnection );
 }
 
+
 Tomahawk::source_ptr
 CollectionItem::source() const
 {
     return m_source;
 }
 
+
 QString
 CollectionItem::text() const
 {
     return m_source.isNull() ? tr( "Super Collection" ) : m_source->friendlyName();
 }
+
 
 int
 CollectionItem::peerSortValue() const
@@ -114,6 +117,7 @@ CollectionItem::activate()
     }
 }
 
+
 QIcon
 CollectionItem::icon() const
 {
@@ -122,6 +126,7 @@ CollectionItem::icon() const
     else
         return QIcon( RESPATH "images/user-avatar.png" );
 }
+
 
 void
 CollectionItem::playlistsAddedInternal( SourceTreeItem* parent, const QList< dynplaylist_ptr >& playlists )
@@ -140,6 +145,7 @@ CollectionItem::playlistsAddedInternal( SourceTreeItem* parent, const QList< dyn
     }
     parent->endRowsAdded();
 }
+
 
 template< typename T >
 void
@@ -165,6 +171,8 @@ CollectionItem::playlistsDeletedInternal( SourceTreeItem* parent, const QList< T
 void
 CollectionItem::onPlaylistsAdded( const QList< playlist_ptr >& playlists )
 {
+    qDebug() << Q_FUNC_INFO << m_source->friendlyName() << playlists.count();
+
     if( playlists.isEmpty() )
         return;
 
@@ -190,11 +198,13 @@ CollectionItem::onPlaylistsAdded( const QList< playlist_ptr >& playlists )
     m_playlists->endRowsAdded();
 }
 
+
 void
 CollectionItem::onPlaylistsDeleted( const QList< playlist_ptr >& playlists )
 {
     playlistsDeletedInternal( m_playlists, playlists );
 }
+
 
 void
 CollectionItem::onAutoPlaylistsAdded( const QList< dynplaylist_ptr >& playlists )
@@ -212,6 +222,7 @@ CollectionItem::onAutoPlaylistsAdded( const QList< dynplaylist_ptr >& playlists 
     playlistsAddedInternal( m_playlists, playlists );
 }
 
+
 void
 CollectionItem::onAutoPlaylistsDeleted( const QList< dynplaylist_ptr >& playlists )
 {
@@ -220,6 +231,7 @@ CollectionItem::onAutoPlaylistsDeleted( const QList< dynplaylist_ptr >& playlist
 
     playlistsDeletedInternal( m_playlists, playlists );
 }
+
 
 void
 CollectionItem::onStationsAdded( const QList< dynplaylist_ptr >& stations )
@@ -236,6 +248,7 @@ CollectionItem::onStationsAdded( const QList< dynplaylist_ptr >& stations )
 
     playlistsAddedInternal( m_stations, stations );
 }
+
 
 void
 CollectionItem::onStationsDeleted( const QList< dynplaylist_ptr >& stations )

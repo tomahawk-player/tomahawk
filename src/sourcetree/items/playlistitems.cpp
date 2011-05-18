@@ -23,9 +23,9 @@
 #include "collectionitem.h"
 
 #include <QMimeData>
+
 using namespace Tomahawk;
 
-/// PlaylistItem
 
 PlaylistItem::PlaylistItem( SourcesModel* mdl, SourceTreeItem* parent, const playlist_ptr& pl, int index )
     : SourceTreeItem( mdl, parent, SourcesModel::StaticPlaylist, index )
@@ -33,9 +33,9 @@ PlaylistItem::PlaylistItem( SourcesModel* mdl, SourceTreeItem* parent, const pla
     , m_playlist( pl )
 {
     connect( pl.data(), SIGNAL( revisionLoaded( Tomahawk::PlaylistRevision ) ),
-              SLOT( onPlaylistLoaded( Tomahawk::PlaylistRevision ) ), Qt::QueuedConnection );
+             SLOT( onPlaylistLoaded( Tomahawk::PlaylistRevision ) ), Qt::QueuedConnection );
     connect( pl.data(), SIGNAL( changed() ),
-              SIGNAL( updated() ), Qt::QueuedConnection );
+             SIGNAL( updated() ), Qt::QueuedConnection );
 
     if( ViewManager::instance()->pageForPlaylist( pl ) )
         model()->linkSourceItemToPage( this, ViewManager::instance()->pageForPlaylist( pl ) );
@@ -48,11 +48,14 @@ PlaylistItem::text() const
     return m_playlist->title();
 }
 
+
 Tomahawk::playlist_ptr
 PlaylistItem::playlist() const
 {
     return m_playlist;
 }
+
+
 void
 PlaylistItem::onPlaylistLoaded( Tomahawk::PlaylistRevision revision )
 {
@@ -60,11 +63,13 @@ PlaylistItem::onPlaylistLoaded( Tomahawk::PlaylistRevision revision )
     emit updated();
 }
 
+
 void
 PlaylistItem::onPlaylistChanged()
 {
     emit updated();
 }
+
 
 int
 PlaylistItem::peerSortValue() const
@@ -88,6 +93,7 @@ PlaylistItem::flags() const
     return flags;
 }
 
+
 void
 PlaylistItem::activate()
 {
@@ -95,11 +101,13 @@ PlaylistItem::activate()
     model()->linkSourceItemToPage( this, p );
 }
 
+
 void
 PlaylistItem::setLoaded( bool loaded )
 {
     m_loaded = loaded;
 }
+
 
 bool
 PlaylistItem::willAcceptDrag( const QMimeData* data ) const
@@ -170,11 +178,13 @@ PlaylistItem::dropMimeData( const QMimeData* data, Qt::DropAction action )
     return false;
 }
 
+
 QIcon
 PlaylistItem::icon() const
 {
     return QIcon( RESPATH "images/playlist-icon.png" );
 }
+
 
 bool
 PlaylistItem::setData(const QVariant& v, bool role)
@@ -186,6 +196,7 @@ PlaylistItem::setData(const QVariant& v, bool role)
     }
     return false;
 }
+
 
 DynamicPlaylistItem::DynamicPlaylistItem( SourcesModel* mdl, SourceTreeItem* parent, const dynplaylist_ptr& pl, int index )
     : PlaylistItem( mdl, parent, pl.staticCast< Playlist >(), index )
@@ -200,9 +211,11 @@ DynamicPlaylistItem::DynamicPlaylistItem( SourcesModel* mdl, SourceTreeItem* par
         model()->linkSourceItemToPage( this, ViewManager::instance()->pageForDynPlaylist( pl ) );
 }
 
+
 DynamicPlaylistItem::~DynamicPlaylistItem()
 {
 }
+
 
 void
 DynamicPlaylistItem::activate()
@@ -210,6 +223,7 @@ DynamicPlaylistItem::activate()
     ViewPage* p = ViewManager::instance()->show( m_dynplaylist );
     model()->linkSourceItemToPage( this, p );
 }
+
 
 void
 DynamicPlaylistItem::onDynamicPlaylistLoaded( DynamicPlaylistRevision revision )
@@ -219,6 +233,7 @@ DynamicPlaylistItem::onDynamicPlaylistLoaded( DynamicPlaylistRevision revision )
     // END HACK
     emit updated();
 }
+
 
 int
 DynamicPlaylistItem::peerSortValue() const
@@ -287,11 +302,13 @@ DynamicPlaylistItem::dynPlaylist() const
     return m_dynplaylist;
 }
 
+
 QString
 DynamicPlaylistItem::text() const
 {
     return m_dynplaylist->title();
 }
+
 
 bool
 DynamicPlaylistItem::willAcceptDrag( const QMimeData* data ) const

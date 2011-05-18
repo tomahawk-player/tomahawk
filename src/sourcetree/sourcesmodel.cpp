@@ -54,6 +54,7 @@ SourcesModel::SourcesModel( QObject* parent )
     connect( ViewManager::instance(), SIGNAL( viewPageActivated( Tomahawk::ViewPage* ) ), this, SLOT( viewPageActivated( Tomahawk::ViewPage* ) ) );
 }
 
+
 SourcesModel::~SourcesModel()
 {
     delete m_rootItem;
