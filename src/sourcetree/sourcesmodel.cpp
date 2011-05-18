@@ -15,7 +15,6 @@
     51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 */
 
-
 #include "sourcetree/sourcesmodel.h"
 
 #include "sourcetree/items/sourcetreeitem.h"
@@ -25,7 +24,6 @@
 #include "playlist.h"
 #include "collection.h"
 #include "source.h"
-#include "tomahawk/tomahawkapp.h"
 #include "viewmanager.h"
 
 #include <boost/bind.hpp>

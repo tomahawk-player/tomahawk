@@ -344,70 +344,67 @@ Playlist::setNewRevision( const QString& rev,
     foreach( const plentry_ptr& p, m_entries )
         entriesmap.insert( p->guid(), p );
 
+    QList<plentry_ptr> entries;
+    foreach( const QString& id, neworderedguids )
+    {
+        qDebug() << "id:" << id;
+        qDebug() << "newordered:" << neworderedguids.count() << neworderedguids;
+        qDebug() << "entriesmap:" << entriesmap.count() << entriesmap;
+        qDebug() << "addedmap:" << addedmap.count() << addedmap;
+        qDebug() << "m_entries" << m_entries;
 
-        QList<plentry_ptr> entries;
-
-        foreach( const QString& id, neworderedguids )
+        if( entriesmap.contains( id ) )
         {
-            //qDebug() << "id:" << id;
-            //qDebug() << "newordered:" << neworderedguids.count() << neworderedguids;
-            //qDebug() << "entriesmap:" << entriesmap.count() << entriesmap;
-            //qDebug() << "addedmap:" << addedmap.count() << addedmap;
-            //qDebug() << "m_entries" << m_entries;
-
-            if( entriesmap.contains( id ) )
-            {
-                entries.append( entriesmap.value( id ) );
-            }
-            else if( addedmap.contains( id ) )
-            {
-                entries.append( addedmap.value( id ) );
-                if( is_newest_rev )
-                    m_entries.append( addedmap.value( id ) );
-            }
-            else
-            {
-                Q_ASSERT( false ); // XXX
-            }
+            entries.append( entriesmap.value( id ) );
         }
-
-        //qDebug() << Q_FUNC_INFO << rev << entries.length() << applied;
-
-        PlaylistRevision pr;
-        pr.oldrevisionguid = m_currentrevision;
-        pr.revisionguid = rev;
-
-        // entries that have been removed:
-        QSet<QString> removedguids = oldorderedguids.toSet().subtract( neworderedguids.toSet() );
-        //qDebug() << "Removedguids:" << removedguids << "oldorederedguids" << oldorderedguids << "newog" << neworderedguids;
-        foreach( QString remid, removedguids )
+        else if( addedmap.contains( id ) )
         {
-            // NB: entriesmap will contain old/removed entries only if the removal was done
-            // in the same session - after a restart, history is not in memory.
-            if( entriesmap.contains( remid ) )
+            entries.append( addedmap.value( id ) );
+            if( is_newest_rev )
+                m_entries.append( addedmap.value( id ) );
+        }
+        else
+        {
+            Q_ASSERT( false ); // XXX
+        }
+    }
+
+    //qDebug() << Q_FUNC_INFO << rev << entries.length() << applied;
+
+    PlaylistRevision pr;
+    pr.oldrevisionguid = m_currentrevision;
+    pr.revisionguid = rev;
+
+    // entries that have been removed:
+    QSet<QString> removedguids = oldorderedguids.toSet().subtract( neworderedguids.toSet() );
+    //qDebug() << "Removedguids:" << removedguids << "oldorederedguids" << oldorderedguids << "newog" << neworderedguids;
+    foreach( QString remid, removedguids )
+    {
+        // NB: entriesmap will contain old/removed entries only if the removal was done
+        // in the same session - after a restart, history is not in memory.
+        if( entriesmap.contains( remid ) )
+        {
+            pr.removed << entriesmap.value( remid );
+            if( is_newest_rev )
             {
-                pr.removed << entriesmap.value( remid );
-                if( is_newest_rev )
+                //qDebug() << "Removing from m_entries" << remid;
+                for( int k = 0 ; k < m_entries.length(); ++k )
                 {
-                    //qDebug() << "Removing from m_entries" << remid;
-                    for( int k = 0 ; k < m_entries.length(); ++k )
+                    if( m_entries.at( k )->guid() == remid )
                     {
-                        if( m_entries.at( k )->guid() == remid )
-                        {
-                            //qDebug() << "removed at" << k;
-                            m_entries.removeAt( k );
-                            break;
-                        }
+                        //qDebug() << "removed at" << k;
+                        m_entries.removeAt( k );
+                        break;
                     }
                 }
             }
         }
+    }
 
-        pr.added = addedmap.values();
+    pr.added = addedmap.values();
 
-
-        pr.newlist = entries;
-        return pr;
+    pr.newlist = entries;
+    return pr;
 }
 
 

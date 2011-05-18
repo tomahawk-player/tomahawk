@@ -355,7 +355,6 @@ include_directories( . ${CMAKE_CURRENT_BINARY_DIR} ${CMAKE_CURRENT_BINARY_DIR}/.
     ${PHONON_INCLUDES}
     ${CMAKE_BINARY_DIR}/thirdparty/liblastfm2/src
 
-    ../../include
     playlist
 
     ${THIRDPARTY_DIR}/libportfwd/include

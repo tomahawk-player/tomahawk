@@ -24,9 +24,9 @@
 #include "sourcelist.h"
 #include "sourcetree/items/playlistitems.h"
 #include "sourcetree/items/collectionitem.h"
-#include "tomahawk/tomahawkapp.h"
 
 #include <QAction>
+#include <QApplication>
 #include <QContextMenuEvent>
 #include <QDragEnterEvent>
 #include <QHeaderView>

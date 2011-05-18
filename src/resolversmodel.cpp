@@ -16,11 +16,12 @@
  *   along with Tomahawk. If not, see <http://www.gnu.org/licenses/>.
  */
 
-
 #include "resolversmodel.h"
+
 #include <QFileInfo>
+
 #include <tomahawksettings.h>
-#include <tomahawk/tomahawkapp.h>
+#include <tomahawkapp.h>
 
 
 ResolversModel::ResolversModel( const QStringList& allResolvers, const QStringList& enabledResolvers, QObject* parent )

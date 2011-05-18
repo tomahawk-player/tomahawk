@@ -32,7 +32,6 @@
 #include <QTimer>
 #include <QToolBar>
 
-#include "tomahawk/tomahawkapp.h"
 #include "playlist.h"
 #include "query.h"
 #include "artist.h"
@@ -275,7 +274,7 @@ TomahawkWindow::setupSignals()
     connect( ui->actionCreateAutomaticPlaylist, SIGNAL( triggered() ), SLOT( createAutomaticPlaylist() ));
     connect( ui->actionCreate_New_Station, SIGNAL( triggered() ), SLOT( createStation() ));
     connect( ui->actionAboutTomahawk, SIGNAL( triggered() ), SLOT( showAboutTomahawk() ) );
-    connect( ui->actionExit, SIGNAL( triggered() ), APP, SLOT( quit() ) );
+    connect( ui->actionExit, SIGNAL( triggered() ), qApp, SLOT( quit() ) );
 #if defined( Q_OS_DARWIN )
     connect( ui->actionMinimize, SIGNAL( triggered() ), SLOT( minimize() ) );
     connect( ui->actionZoom, SIGNAL( triggered() ), SLOT( maximize() ) );

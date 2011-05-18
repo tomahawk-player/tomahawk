@@ -33,12 +33,12 @@
 #endif
 
 #include "settingsdialog.h"
-#include "ui_proxydialog.h"
-#include "tomahawk/tomahawkapp.h"
+
+#include "tomahawkapp.h"
 #include "musicscanner.h"
 #include "tomahawksettings.h"
 #include "sip/SipHandler.h"
-#include <database/database.h>
+#include "database/database.h"
 #include "scanmanager.h"
 #include "resolverconfigdelegate.h"
 #include "resolversmodel.h"
@@ -46,6 +46,7 @@
 #include "sip/SipModel.h"
 #include "sipconfigdelegate.h"
 
+#include "ui_proxydialog.h"
 #include "ui_stackedsettingsdialog.h"
 
 static QString

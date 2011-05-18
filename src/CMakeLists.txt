@@ -17,7 +17,6 @@ SET( CMAKE_VERBOSE_MAKEFILE ON )
 SET( CMAKE_RUNTIME_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}" )
 SET( CMAKE_LIBRARY_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}" )
 SET( CMAKE_ARCHIVE_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}" )
-SET( TOMAHAWK_INC_DIR "${CMAKE_SOURCE_DIR}/include/" )
 IF( NOT CMAKE_BUILD_TYPE STREQUAL "Release" )
     MESSAGE( "Building in debug mode, enabling all debug updates" )
     SET( DEBUG_BUILD ON )
@@ -73,8 +72,7 @@ SET( tomahawkSourcesGui ${tomahawkSourcesGui}
 )
 
 SET( tomahawkHeaders ${tomahawkHeaders}
-     "${TOMAHAWK_INC_DIR}/tomahawk/tomahawkapp.h"
-
+     tomahawkapp.h
 
      web/api_v1.h
 
@@ -128,7 +126,6 @@ SET( tomahawkUI ${tomahawkUI}
 
 INCLUDE_DIRECTORIES(
     .
-    ${TOMAHAWK_INC_DIR}
     ${CMAKE_CURRENT_BINARY_DIR}
     ${CMAKE_BINARY_DIR}/thirdparty/liblastfm2/src
 

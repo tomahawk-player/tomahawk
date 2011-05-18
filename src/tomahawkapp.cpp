@@ -16,7 +16,7 @@
  *   along with Tomahawk. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include "tomahawk/tomahawkapp.h"
+#include "tomahawkapp.h"
 
 #include "config.h"
 

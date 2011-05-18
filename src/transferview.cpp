@@ -21,7 +21,6 @@
 #include <QHeaderView>
 #include <QVBoxLayout>
 
-#include "tomahawk/tomahawkapp.h"
 #include "artist.h"
 #include "source.h"
 #include "network/streamconnection.h"

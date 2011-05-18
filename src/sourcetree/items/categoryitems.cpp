@@ -16,8 +16,8 @@
 
 #include "categoryitems.h"
 
+#include "tomahawkapp.h"
 #include "utils/tomahawkutils.h"
-#include "tomahawk/tomahawkapp.h"
 #include "widgets/newplaylistwidget.h"
 #include "viewmanager.h"
 #include "viewpage.h"
