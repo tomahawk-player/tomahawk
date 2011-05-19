@@ -1,19 +1,19 @@
 Version 0.1.0:
-    * Twitter peer profile pictures are shown
     * Initial SOCKS5 proxy support.
     * Fix issue where track resolving spinner never stopped if tracks were
       removed from playlist while resolving.
+    * Twitter & Jabber profile pictures are shown.
     * Fix issues with stations where multiple tracks could be added at once.
     * Allow multiple accounts of the same type.
     * Add new Google account type that is a thin wrapper around a Jabber plugin.
     * Overhaul the settings dialog interface.
     * Resolvers can now be enabled and disabled, and some can be configured
       directly in Tomahawk.
-    * Split playlists and stations in sources tree view. Show Recently Played
+    * Split playlists and stations in sources sidebar. Show Recently Played
       as a node under the Super Collection.
     * Fix massive speed bottleneck on startup in the case of many recently
       played playlists.
-    * Browse and play collections in our snappy tree-view, which also shows
+    * Browse and play collections in our snappy tree-mode, which also shows
       images for artists and albums.
     * Fixed crash that could occur when playing a track from a browser.
     * Fixed a crash caused by sources going on- or offline.
