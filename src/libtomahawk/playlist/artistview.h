@@ -29,6 +29,7 @@
 #include "dllmacro.h"
 
 class TreeHeader;
+class LoadingSpinner;
 
 class DLLEXPORT ArtistView : public QTreeView, public Tomahawk::ViewPage
 {
@@ -79,6 +80,8 @@ private:
     TreeModel* m_model;
     TreeProxyModel* m_proxyModel;
 //    PlaylistItemDelegate* m_delegate;
+
+    LoadingSpinner* m_loadingSpinner;
 
     QTimer m_timer;
 };

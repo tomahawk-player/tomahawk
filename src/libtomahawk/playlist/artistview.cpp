@@ -25,6 +25,7 @@
 #include <QScrollBar>
 
 #include "audio/audioengine.h"
+#include "dynamic/widgets/LoadingSpinner.h"
 
 #include "tomahawksettings.h"
 #include "treeheader.h"
@@ -44,6 +45,7 @@ ArtistView::ArtistView( QWidget* parent )
     , m_model( 0 )
     , m_proxyModel( 0 )
 //    , m_delegate( 0 )
+    , m_loadingSpinner( new LoadingSpinner( this ) )
 {
     setAlternatingRowColors( true );
     setDragEnabled( true );
@@ -107,6 +109,9 @@ ArtistView::setModel( TreeModel* model )
         m_proxyModel->setSourceModel( model );
         m_proxyModel->sort( 0 );
     }
+
+    connect( m_model, SIGNAL( loadingStarted() ), m_loadingSpinner, SLOT( fadeIn() ) );
+    connect( m_model, SIGNAL( loadingFinished() ), m_loadingSpinner, SLOT( fadeOut() ) );
 
     connect( m_proxyModel, SIGNAL( filterChanged( QString ) ), SLOT( onFilterChanged( QString ) ) );
 

@@ -110,6 +110,9 @@ signals:
 
     void trackCountChanged( unsigned int tracks );
 
+    void loadingStarted();
+    void loadingFinished();
+
 protected:
     bool canFetchMore( const QModelIndex& parent ) const;
     void fetchMore( const QModelIndex& parent );

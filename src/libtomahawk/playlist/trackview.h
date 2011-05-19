@@ -82,6 +82,7 @@ private slots:
     void onFilterChanged( const QString& filter );
 
     void copyLink();
+
 private:
     QString m_guid;
     TrackModel* m_model;
