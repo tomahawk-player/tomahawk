@@ -189,6 +189,8 @@ DynamicPlaylist::createNewRevision( const QString& newrev,
                                     const QString& type,
                                     const QList< dyncontrol_ptr>& controls )
 {
+    setBusy( true );
+
     // can skip the entry stuff. just overwrite with new info
     source_ptr author = SourceList::instance()->getLocal();
     // command writes new rev to DB and calls setRevision, which emits our signal
@@ -411,10 +413,11 @@ void DynamicPlaylist::setRevision( const QString& rev,
     dpr.type = type;
     dpr.mode = OnDemand;
 
-    if( applied ) {
+    if( applied )
         setCurrentrevision( rev );
-    }
+
     //     qDebug() << "EMITTING REVISION LOADED 2!";
+    setBusy( false );
     emit dynamicRevisionLoaded( dpr );
 }
 
