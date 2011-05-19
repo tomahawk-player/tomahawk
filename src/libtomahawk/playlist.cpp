@@ -383,11 +383,11 @@ Playlist::setNewRevision( const QString& rev,
     QList<plentry_ptr> entries;
     foreach( const QString& id, neworderedguids )
     {
-        qDebug() << "id:" << id;
+/*        qDebug() << "id:" << id;
         qDebug() << "newordered:" << neworderedguids.count() << neworderedguids;
         qDebug() << "entriesmap:" << entriesmap.count() << entriesmap;
         qDebug() << "addedmap:" << addedmap.count() << addedmap;
-        qDebug() << "m_entries" << m_entries;
+        qDebug() << "m_entries" << m_entries; */
 
         if( entriesmap.contains( id ) )
         {
