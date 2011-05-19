@@ -38,7 +38,6 @@ DatabaseCollection::DatabaseCollection( const source_ptr& src, QObject* parent )
 void
 DatabaseCollection::loadPlaylists()
 {
-    qDebug() << Q_FUNC_INFO;
     DatabaseCommand_LoadAllPlaylists* cmd = new DatabaseCommand_LoadAllPlaylists( source() );
 
     connect( cmd,  SIGNAL( done( const QList<Tomahawk::playlist_ptr>& ) ),
@@ -51,7 +50,6 @@ DatabaseCollection::loadPlaylists()
 void
 DatabaseCollection::loadAutoPlaylists()
 {
-    qDebug() << Q_FUNC_INFO;
     DatabaseCommand_LoadAllAutoPlaylists* cmd = new DatabaseCommand_LoadAllAutoPlaylists( source() );
 
     connect( cmd, SIGNAL( autoPlaylistLoaded( Tomahawk::source_ptr, QVariantList ) ),
@@ -60,10 +58,10 @@ DatabaseCollection::loadAutoPlaylists()
     Database::instance()->enqueue( QSharedPointer<DatabaseCommand>( cmd ) );
 }
 
+
 void
 DatabaseCollection::loadStations()
 {
-    qDebug() << Q_FUNC_INFO;
     DatabaseCommand_LoadAllStations* cmd = new DatabaseCommand_LoadAllStations( source() );
 
     connect( cmd, SIGNAL( stationLoaded( Tomahawk::source_ptr, QVariantList ) ),
@@ -110,8 +108,6 @@ DatabaseCollection::removeTracks( const QDir& dir )
 QList< Tomahawk::playlist_ptr >
 DatabaseCollection::playlists()
 {
-    qDebug() << Q_FUNC_INFO;
-
     if ( Collection::playlists().isEmpty() )
     {
         loadPlaylists();
@@ -124,8 +120,6 @@ DatabaseCollection::playlists()
 QList< dynplaylist_ptr >
 DatabaseCollection::autoPlaylists()
 {
-    qDebug() << Q_FUNC_INFO;
-
     if ( Collection::autoPlaylists().isEmpty() )
     {
         loadAutoPlaylists();
@@ -134,11 +128,10 @@ DatabaseCollection::autoPlaylists()
     return Collection::autoPlaylists();
 }
 
+
 QList< dynplaylist_ptr >
 DatabaseCollection::stations()
 {
-    qDebug() << Q_FUNC_INFO;
-
     if ( Collection::stations().isEmpty() )
     {
         loadStations();
@@ -151,8 +144,6 @@ DatabaseCollection::stations()
 QList< Tomahawk::query_ptr >
 DatabaseCollection::tracks()
 {
-    qDebug() << Q_FUNC_INFO;
-
     if ( !isLoaded() )
     {
         loadTracks();
@@ -160,6 +151,7 @@ DatabaseCollection::tracks()
 
     return Collection::tracks();
 }
+
 
 void DatabaseCollection::autoPlaylistCreated( const source_ptr& source, const QVariantList& data )
 {
@@ -176,6 +168,7 @@ void DatabaseCollection::autoPlaylistCreated( const source_ptr& source, const QV
                                             data[9].toString() ) );  //GUID
     addAutoPlaylist( p );
 }
+
 
 void DatabaseCollection::stationCreated( const source_ptr& source, const QVariantList& data )
 {

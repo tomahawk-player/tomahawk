@@ -349,7 +349,7 @@ nam()
 {
     if ( s_nam.isNull() )
         return 0;
-    
+
     return s_nam.data();
 }
 
@@ -373,7 +373,7 @@ setProxy( QNetworkProxy* proxy )
 {
     s_proxy = proxy;
     s_nam.data()->setProxy( *proxy );
-    qDebug() << Q_FUNC_INFO << " setting proxy to use proxy DNS? " << (TomahawkSettings::instance()->proxyDns() ? "true" : "false");
+    qDebug() << Q_FUNC_INFO << "setting proxy to use proxy DNS?" << (TomahawkSettings::instance()->proxyDns() ? "true" : "false");
     if ( !TomahawkSettings::instance()->proxyDns() )
         s_proxy->setCapabilities( QNetworkProxy::TunnelingCapability | QNetworkProxy::ListeningCapability | QNetworkProxy::UdpTunnelingCapability );
 }
@@ -410,8 +410,7 @@ DNSResolver::resolve( QString &host, QString type )
         // For the moment, assume we are looking for XMPP...
         QString fullHost( "_xmpp-client._tcp." + host );
 
-        qDebug() << "Looking up SRV record for " << fullHost.toUtf8();
-
+        qDebug() << "Looking up SRV record for" << fullHost.toUtf8();
         m_dnsSharedRequest->query( fullHost.toUtf8(), QJDns::Srv );
     }
     else
@@ -429,7 +428,7 @@ DNSResolver::resultsReady()
         QList<QJDns::Record> results = m_dnsSharedRequest->results();
         foreach( QJDns::Record r, results )
         {
-	    qDebug() << "Found result (of some type): " << QString( r.name );
+	    qDebug() << "Found result (of some type):" << QString( r.name );
             if( r.type == QJDns::Srv )
             {
                 QString foundResult( r.name );
@@ -438,7 +437,7 @@ DNSResolver::resultsReady()
             }
         }
     }
-    qDebug() << "DNS resolve request was NOT successful! Error: " << (int)(m_dnsSharedRequest->error());
+    qDebug() << "DNS resolve request was NOT successful! Error:" << (int)(m_dnsSharedRequest->error());
     QString badResult( "NONE" );
     emit result( badResult );
 }

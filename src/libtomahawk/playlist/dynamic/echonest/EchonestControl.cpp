@@ -1,5 +1,5 @@
 /* === This file is part of Tomahawk Player - <http://tomahawk-player.org> ===
- * 
+ *
  *   Copyright 2010-2011, Christian Muehlhaeuser <muesli@tomahawk-player.org>
  *
  *   Tomahawk is free software: you can redistribute it and/or modify
@@ -34,7 +34,7 @@ Tomahawk::EchonestControl::EchonestControl( const QString& selectedType, const Q
     m_editingTimer.setInterval( 500 ); //timeout to edits
     m_editingTimer.setSingleShot( true );
     connect( &m_editingTimer, SIGNAL( timeout() ), this, SLOT( editTimerFired() ) );
-    
+
     m_delayedEditTimer.setInterval( 250 ); // additional timer for "just typing" without enter or focus change
     m_delayedEditTimer.setSingleShot( true );
     connect( &m_delayedEditTimer, SIGNAL( timeout() ), &m_editingTimer, SLOT( start() ) );
@@ -54,7 +54,7 @@ Tomahawk::EchonestControl::matchSelector()
     return m_match.data();
 }
 
-void 
+void
 Tomahawk::EchonestControl::setSelectedType ( const QString& type )
 {
     if( type != selectedType() ) {
@@ -62,11 +62,11 @@ Tomahawk::EchonestControl::setSelectedType ( const QString& type )
             delete m_input.data();
         if( !m_match.isNull() )
             delete m_match.data();
-        
+
         Tomahawk::DynamicControl::setSelectedType ( type );
         updateWidgets();
         updateData();
-        qDebug() << "Setting new type, set data to:" << m_data.first << m_data.second;
+//        qDebug() << "Setting new type, set data to:" << m_data.first << m_data.second;
     }
 }
 
@@ -81,34 +81,34 @@ Tomahawk::EchonestControl::toENParam() const
     return m_data;
 }
 
-QString 
+QString
 Tomahawk::EchonestControl::input() const
 {
     return m_data.second.toString();
 }
 
-QString 
+QString
 Tomahawk::EchonestControl::match() const
 {
     return m_matchData;
 }
 
-QString 
+QString
 Tomahawk::EchonestControl::matchString() const
 {
     return m_matchString;
 }
 
-QString 
+QString
 Tomahawk::EchonestControl::summary() const
-{   
+{
     if( m_summary.isEmpty() )
         const_cast< EchonestControl* >( this )->calculateSummary();
-    
+
     return m_summary;
 }
 
-void 
+void
 Tomahawk::EchonestControl::setInput(const QString& input)
 {
     // TODO generate widgets
@@ -116,7 +116,7 @@ Tomahawk::EchonestControl::setInput(const QString& input)
     updateWidgetsFromData();
 }
 
-void 
+void
 Tomahawk::EchonestControl::setMatch(const QString& match)
 {
     // TODO generate widgets
@@ -124,7 +124,7 @@ Tomahawk::EchonestControl::setMatch(const QString& match)
     updateWidgetsFromData();
 }
 
-void 
+void
 Tomahawk::EchonestControl::updateWidgets()
 {
     if( !m_input.isNull() )
@@ -132,54 +132,54 @@ Tomahawk::EchonestControl::updateWidgets()
     if( !m_match.isNull() )
         delete m_match.data();
     m_overrideType = -1;
-    
+
     // make sure the widgets are the proper kind for the selected type, and hook up to their slots
     if( selectedType() == "Artist" ) {
         m_currentType = Echonest::DynamicPlaylist::Artist;
-        
+
         QComboBox* match = new QComboBox();
         QLineEdit* input =  new QLineEdit();
-        
+
         match->addItem( "Limit To", Echonest::DynamicPlaylist::ArtistType );
         match->addItem( "Similar To", Echonest::DynamicPlaylist::ArtistRadioType );
         m_matchString = match->currentText();
         m_matchData = match->itemData( match->currentIndex() ).toString();
-        
+
         input->setPlaceholderText( "Artist name" );
         input->setSizePolicy( QSizePolicy::Ignored, QSizePolicy::Fixed );
-        
+
         connect( match, SIGNAL( currentIndexChanged(int) ), this, SLOT( updateData() ) );
         connect( match, SIGNAL( currentIndexChanged(int) ), this, SIGNAL( changed() ) );
         connect( input, SIGNAL( textChanged(QString) ), this, SLOT( updateData() ) );
         connect( input, SIGNAL( editingFinished() ), this, SLOT( editingFinished() ) );
         connect( input, SIGNAL( textEdited( QString ) ), &m_editingTimer, SLOT( stop() ) );
         connect( input, SIGNAL( textEdited( QString ) ), &m_delayedEditTimer, SLOT( start() ) );
-        
+
         match->hide();
         input->hide();
         m_match = QWeakPointer< QWidget >( match );
         m_input = QWeakPointer< QWidget >( input );
     } else if( selectedType() == "Artist Description" ) {
         m_currentType = Echonest::DynamicPlaylist::Description;
-        
+
         QLabel* match = new QLabel( tr( "is" ) );
         QLineEdit* input =  new QLineEdit();
-        
+
         m_matchString = QString();
         m_matchData = QString::number( (int)Echonest::DynamicPlaylist::ArtistDescriptionType );
-        
+
         connect( input, SIGNAL( textChanged(QString) ), this, SLOT( updateData() ) );
         connect( input, SIGNAL( editingFinished() ), this, SLOT( editingFinished() ) );
         connect( input, SIGNAL( textEdited( QString ) ), &m_editingTimer, SLOT( stop() ) );
         connect( input, SIGNAL( textEdited( QString ) ), &m_delayedEditTimer, SLOT( start() ) );
-        
+
         match->hide();
         input->hide();
         m_match = QWeakPointer< QWidget >( match );
         m_input = QWeakPointer< QWidget >( input );
     } else if( selectedType() == "Variety" ) {
         m_currentType = Echonest::DynamicPlaylist::Variety;
-        
+
         QLabel* match = new QLabel( tr( "is" ) );
         LabeledSlider* input = new LabeledSlider( tr( "Less" ), tr( "More" ) );
         input->slider()->setRange( 0, 10000 );
@@ -188,47 +188,47 @@ Tomahawk::EchonestControl::updateWidgets()
 
         m_matchString = match->text();
         m_matchData = match->text();
-        
-        
+
+
         connect( input->slider(), SIGNAL( valueChanged( int ) ), this, SLOT( updateData() ) );
         connect( input->slider(), SIGNAL( valueChanged( int ) ), this, SLOT( editingFinished() ) );
-        
+
         match->hide();
         input->hide();
         m_match = QWeakPointer< QWidget >( match );
         m_input = QWeakPointer< QWidget >( input );
     } else if( selectedType() == "Tempo" ) {
         m_currentType = Echonest::DynamicPlaylist::MinTempo;
-        
+
         setupMinMaxWidgets( Echonest::DynamicPlaylist::MinTempo, Echonest::DynamicPlaylist::MaxTempo, tr( "0 BPM" ), tr( "500 BPM" ), 500 );
     } else if( selectedType() == "Duration" ) {
         m_currentType = Echonest::DynamicPlaylist::MinDuration;
-        
+
         setupMinMaxWidgets( Echonest::DynamicPlaylist::MinDuration, Echonest::DynamicPlaylist::MaxDuration, tr( "0 secs" ), tr( "3600 secs" ), 3600 );
     } else if( selectedType() == "Loudness" ) {
         m_currentType = Echonest::DynamicPlaylist::MinLoudness;
-        
+
         setupMinMaxWidgets( Echonest::DynamicPlaylist::MinLoudness, Echonest::DynamicPlaylist::MaxLoudness, tr( "-100 dB" ), tr( "100 dB" ), 100 );
         qobject_cast< LabeledSlider* >( m_input.data() )->slider()->setMinimum( -100 );
     } else if( selectedType() == "Danceability" ) {
         m_currentType = Echonest::DynamicPlaylist::MinDanceability;
-        
+
         setupMinMaxWidgets( Echonest::DynamicPlaylist::MinDanceability, Echonest::DynamicPlaylist::MaxDanceability, tr( "Less" ), tr( "More" ), 10000 );
     } else if( selectedType() == "Energy" ) {
         m_currentType = Echonest::DynamicPlaylist::MinEnergy;
-        
+
         setupMinMaxWidgets( Echonest::DynamicPlaylist::MinEnergy, Echonest::DynamicPlaylist::MaxEnergy, tr( "Less" ), tr( "More" ), 10000 );
     } else if( selectedType() == "Artist Familiarity" ) {
         m_currentType = Echonest::DynamicPlaylist::ArtistMinFamiliarity;
-        
+
         setupMinMaxWidgets( Echonest::DynamicPlaylist::ArtistMinFamiliarity, Echonest::DynamicPlaylist::ArtistMaxFamiliarity, tr( "Less" ), tr( "More" ), 10000 );
     } else if( selectedType() == "Artist Hotttnesss" ) {
         m_currentType = Echonest::DynamicPlaylist::ArtistMinHotttnesss;
-        
+
         setupMinMaxWidgets( Echonest::DynamicPlaylist::ArtistMinHotttnesss, Echonest::DynamicPlaylist::ArtistMaxHotttnesss, tr( "Less" ), tr( "More" ), 10000 );
     } else if( selectedType() == "Song Hotttnesss" ) {
         m_currentType = Echonest::DynamicPlaylist::SongMinHotttnesss;
-        
+
         setupMinMaxWidgets( Echonest::DynamicPlaylist::SongMinHotttnesss, Echonest::DynamicPlaylist::SongMaxHotttnesss, tr( "Less" ), tr( "More" ), 10000 );
     } else if( selectedType() == "Latitude" ) {
         m_currentType = Echonest::DynamicPlaylist::ArtistMinLatitude;
@@ -242,26 +242,26 @@ Tomahawk::EchonestControl::updateWidgets()
         qobject_cast< LabeledSlider* >( m_input.data() )->slider()->setMinimum( -180 );
     } else if( selectedType() == "Mode" ) {
         m_currentType = Echonest::DynamicPlaylist::Mode;
-        
+
         QLabel* match = new QLabel( tr( "is" ) );
         QComboBox* combo = new QComboBox;
         combo->addItem( tr( "Major" ), QString::number( 1 ) );
         combo->addItem( tr( "Minor" ), QString::number( 0 ) );
-        
+
         m_matchString = match->text();
         m_matchData = match->text();
-        
-        
+
+
         connect( combo, SIGNAL( activated( int ) ), this, SLOT( updateData() ) );
         connect( combo, SIGNAL( activated( int ) ), this, SLOT( editingFinished() ) );
-        
+
         match->hide();
         combo->hide();
         m_match = QWeakPointer< QWidget >( match );
         m_input = QWeakPointer< QWidget >( combo );
     } else if( selectedType() == "Key" ) {
         m_currentType = Echonest::DynamicPlaylist::Key;
-        
+
         QLabel* match = new QLabel( tr( "is" ) );
         QComboBox* combo = new QComboBox;
         combo->addItem( tr( "C" ), QString::number( 0 ) );
@@ -276,25 +276,25 @@ Tomahawk::EchonestControl::updateWidgets()
         combo->addItem( tr( "A" ), QString::number( 9 ) );
         combo->addItem( tr( "B Flat" ), QString::number( 10 ) );
         combo->addItem( tr( "B" ), QString::number( 11 ) );
-        
+
         m_matchString = match->text();
         m_matchData = match->text();
-        
-        
+
+
         connect( combo, SIGNAL( activated( int ) ), this, SLOT( updateData() ) );
         connect( combo, SIGNAL( activated( int ) ), this, SLOT( editingFinished() ) );
-        
+
         match->hide();
         combo->hide();
         m_match = QWeakPointer< QWidget >( match );
         m_input = QWeakPointer< QWidget >( combo );
     } else if( selectedType() == "Sorting" ) {
         m_currentType = Echonest::DynamicPlaylist::Key;
-        
+
         QComboBox* match = new QComboBox();
         match->addItem( tr( "Ascending" ), 0 );
         match->addItem( tr( "Descending" ), 1 );
-        
+
         QComboBox* combo = new QComboBox;
         combo->addItem( tr( "Tempo" ), QString::number( Echonest::DynamicPlaylist::SortTempoAscending ) );
         combo->addItem( tr( "Duration" ), QString::number( Echonest::DynamicPlaylist::SortDurationAscending ) );
@@ -308,15 +308,15 @@ Tomahawk::EchonestControl::updateWidgets()
         combo->addItem( tr( "Key" ), QString::number( Echonest::DynamicPlaylist::SortKeyAscending ) );
         combo->addItem( tr( "Energy" ), QString::number( Echonest::DynamicPlaylist::SortEnergyAscending ) );
         combo->addItem( tr( "Danceability" ), QString::number( Echonest::DynamicPlaylist::SortDanceabilityAscending ) );
-        
+
         m_matchString = "Ascending"; // default
         m_matchData = Echonest::DynamicPlaylist::SortTempoAscending;
-        
+
         connect( match, SIGNAL( activated( int ) ), this, SLOT( updateData() ) );
         connect( match, SIGNAL( activated( int ) ), this, SLOT( editingFinished() ) );
         connect( combo, SIGNAL( activated( int ) ), this, SLOT( updateData() ) );
         connect( combo, SIGNAL( activated( int ) ), this, SLOT( editingFinished() ) );
-        
+
         match->hide();
         combo->hide();
         m_match = QWeakPointer< QWidget >( match );
@@ -329,26 +329,26 @@ Tomahawk::EchonestControl::updateWidgets()
     calculateSummary();
 }
 
-void 
+void
 Tomahawk::EchonestControl::setupMinMaxWidgets( Echonest::DynamicPlaylist::PlaylistParam min, Echonest::DynamicPlaylist::PlaylistParam max, const QString& leftL, const QString& rightL, int maxRange )
 {
     QComboBox* match = new QComboBox;
     match->addItem( "At Least", min );
     match->addItem( "At Most", max );
-    
+
     LabeledSlider* input = new LabeledSlider( leftL, rightL );
     input->slider()->setRange( 0, maxRange );
     input->slider()->setTickInterval( 1 );
     input->slider()->setTracking( false );
-    
+
     m_matchString = match->currentText();
     m_matchData = match->itemData( match->currentIndex() ).toString();
-    
+
     connect( match, SIGNAL( activated( int ) ), this, SLOT( updateData() ) );
     connect( match, SIGNAL( activated( int ) ), this, SLOT( editingFinished() ) );
     connect( input->slider(), SIGNAL( valueChanged( int ) ), this, SLOT( updateData() ) );
     connect( input->slider(), SIGNAL( valueChanged( int ) ), this, SLOT( editingFinished() ) );
-    
+
     match->hide();
     input->hide();
     m_match = QWeakPointer< QWidget >( match );
@@ -356,7 +356,7 @@ Tomahawk::EchonestControl::setupMinMaxWidgets( Echonest::DynamicPlaylist::Playli
 }
 
 
-void 
+void
 Tomahawk::EchonestControl::updateData()
 {
     if( selectedType() == "Artist" ) {
@@ -394,7 +394,7 @@ Tomahawk::EchonestControl::updateData()
         if( match && input ) {
             m_matchString = match->currentText();
             m_matchData = match->itemData( match->currentIndex() ).toString();
-            
+
             // what a HACK
             int enumVal = input->itemData( input->currentIndex() ).toInt() + m_matchData.toInt();
             m_data.first = Echonest::DynamicPlaylist::Sort;
@@ -402,11 +402,11 @@ Tomahawk::EchonestControl::updateData()
 //             qDebug() << "SAVING" << input->currentIndex() << "AS" << enumVal << "(" << input->itemData( input->currentIndex() ).toInt() << "+" << m_matchData.toInt() << ")";
         }
     }
-    
+
     calculateSummary();
 }
 
-void 
+void
 Tomahawk::EchonestControl::updateFromComboAndSlider( bool smooth )
 {
     QComboBox* combo = qobject_cast<QComboBox*>( m_match.data() );
@@ -421,7 +421,7 @@ Tomahawk::EchonestControl::updateFromComboAndSlider( bool smooth )
     }
 }
 
-void 
+void
 Tomahawk::EchonestControl::updateFromLabelAndCombo()
 {
     QComboBox* s = qobject_cast<QComboBox*>( m_input.data() );
@@ -433,7 +433,7 @@ Tomahawk::EchonestControl::updateFromLabelAndCombo()
 
 
 // fills in the current widget with the data from json or dbcmd (m_data.second and m_matchData)
-void 
+void
 Tomahawk::EchonestControl::updateWidgetsFromData()
 {
     if( selectedType() == "Artist" ) {
@@ -452,7 +452,7 @@ Tomahawk::EchonestControl::updateWidgetsFromData()
         if( s )
             s->slider()->setValue( m_data.second.toDouble() * 10000 );
     } else if( selectedType() == "Tempo" || selectedType() == "Duration" || selectedType() == "Loudness"  || selectedType() == "Latitude" || selectedType() == "Longitude" ) {
-        updateToComboAndSlider();   
+        updateToComboAndSlider();
     } else if( selectedType() == "Danceability" || selectedType() == "Energy" || selectedType() == "Artist Familiarity" || selectedType() == "Artist Hotttnesss" || selectedType() == "Song Hotttnesss" ) {
         updateToComboAndSlider( true );
     } else if( selectedType() == "Mode" || selectedType() == "Key" ) {
@@ -462,7 +462,7 @@ Tomahawk::EchonestControl::updateWidgetsFromData()
         QComboBox* input = qobject_cast< QComboBox* >( m_input.data() );
         if( match && input ) {
             match->setCurrentIndex( match->findData( m_matchData ));
-            
+
             // HACK alert. if it's odd, subtract 1
             int val = ( m_data.second.toInt() - ( m_data.second.toInt() % 2 ) ) / 2;
             input->setCurrentIndex( val );
@@ -472,7 +472,7 @@ Tomahawk::EchonestControl::updateWidgetsFromData()
     calculateSummary();
 }
 
-void 
+void
 Tomahawk::EchonestControl::updateToComboAndSlider( bool smooth )
 {
     QComboBox* combo = qobject_cast<QComboBox*>( m_match.data() );
@@ -491,26 +491,26 @@ void Tomahawk::EchonestControl::updateToLabelAndCombo()
     }
 }
 
-void 
+void
 Tomahawk::EchonestControl::editingFinished()
 {
-    qDebug() << Q_FUNC_INFO;
+//    qDebug() << Q_FUNC_INFO;
     m_editingTimer.start();
 }
 
-void 
+void
 Tomahawk::EchonestControl::editTimerFired()
 {
     // make sure it's really changed
     if( m_cacheData != m_data.second ) { // new, so emit changed
         emit changed();
     }
-    
+
     m_cacheData = m_data.second;
 }
 
 
-void 
+void
 Tomahawk::EchonestControl::calculateSummary()
 {
     // turns the current control into an english phrase suitable for embedding into a sentence summary
@@ -522,7 +522,7 @@ Tomahawk::EchonestControl::calculateSummary()
         else if( static_cast< Echonest::DynamicPlaylist::ArtistTypeEnum >( m_matchData.toInt() ) == Echonest::DynamicPlaylist::ArtistRadioType )
             summary = QString( "similar to ~%1" ).arg( m_data.second.toString() );
     } else if( selectedType() == "Artist Description" ) {
-        summary = QString( "with genre ~%1" ).arg( m_data.second.toString() );     
+        summary = QString( "with genre ~%1" ).arg( m_data.second.toString() );
     } else if( selectedType() == "Variety" || selectedType() == "Danceability" || selectedType() == "Artist Hotttnesss" || selectedType() == "Energy" || selectedType() == "Artist Familiarity" || selectedType() == "Song Hotttnesss" ) {
         QString modifier;
         qreal sliderVal = m_data.second.toReal();
@@ -560,11 +560,11 @@ Tomahawk::EchonestControl::calculateSummary()
         Q_ASSERT( !m_input.isNull() );
         Q_ASSERT( qobject_cast< QComboBox* >( m_input.data() ) );
         QString sortType = qobject_cast< QComboBox* >( m_input.data() )->currentText().toLower();
-        
+
         Q_ASSERT( !m_match.isNull() );
         Q_ASSERT( qobject_cast< QComboBox* >( m_match.data() ) );
         QString ascdesc = qobject_cast< QComboBox* >( m_match.data() )->currentText().toLower();
-        
+
         summary = QString( "sorted in %1 %2 order" ).arg( ascdesc ).arg( sortType );
     }
     m_summary = summary;

@@ -1,5 +1,5 @@
 /* === This file is part of Tomahawk Player - <http://tomahawk-player.org> ===
- * 
+ *
  *   Copyright 2010-2011, Christian Muehlhaeuser <muesli@tomahawk-player.org>
  *
  *   Tomahawk is free software: you can redistribute it and/or modify
@@ -27,27 +27,27 @@ using namespace Tomahawk;
 EchonestFactory::EchonestFactory()
 {}
 
-GeneratorInterface* 
+GeneratorInterface*
 EchonestFactory::create()
 {
     return new EchonestGenerator();
 }
 
-dyncontrol_ptr 
+dyncontrol_ptr
 EchonestFactory::createControl( const QString& controlType )
 {
     return dyncontrol_ptr( new EchonestControl( controlType, typeSelectors() ) );
 }
 
-QStringList 
+QStringList
 EchonestFactory::typeSelectors() const
 {
-    return QStringList() << "Artist" << "Artist Description" << "Variety" << "Tempo" << "Duration" << "Loudness" 
-                          << "Danceability" << "Energy" << "Artist Familiarity" << "Artist Hotttnesss" << "Song Hotttnesss" 
+    return QStringList() << "Artist" << "Artist Description" << "Variety" << "Tempo" << "Duration" << "Loudness"
+                          << "Danceability" << "Energy" << "Artist Familiarity" << "Artist Hotttnesss" << "Song Hotttnesss"
                           << "Longitude" << "Latitude" <<  "Mode" << "Key" << "Sorting";
 }
 
-EchonestGenerator::EchonestGenerator ( QObject* parent ) 
+EchonestGenerator::EchonestGenerator ( QObject* parent )
     : GeneratorInterface ( parent )
     , m_dynPlaylist( new Echonest::DynamicPlaylist() )
     , m_steeredSinceLastTrack( false )
@@ -55,7 +55,7 @@ EchonestGenerator::EchonestGenerator ( QObject* parent )
     m_type = "echonest";
     m_mode = OnDemand;
     m_logo.load( RESPATH "/images/echonest_logo.png" );
-    qDebug() << "ECHONEST:" << m_logo.size();
+//    qDebug() << "ECHONEST:" << m_logo.size();
 }
 
 EchonestGenerator::~EchonestGenerator()
@@ -63,7 +63,7 @@ EchonestGenerator::~EchonestGenerator()
     delete m_dynPlaylist;
 }
 
-dyncontrol_ptr 
+dyncontrol_ptr
 EchonestGenerator::createControl( const QString& type )
 {
     m_controls << dyncontrol_ptr( new EchonestControl( type, GeneratorFactory::typeSelectors( m_type ) ) );
@@ -76,18 +76,18 @@ QPixmap EchonestGenerator::logo()
 }
 
 
-void 
-EchonestGenerator::generate ( int number )
+void
+EchonestGenerator::generate( int number )
 {
    // convert to an echonest query, and fire it off
    qDebug() << Q_FUNC_INFO;
-   qDebug() << "Generating playlist with " << m_controls.size();
+   qDebug() << "Generating playlist with" << m_controls.size();
    foreach( const dyncontrol_ptr& ctrl, m_controls )
        qDebug() << ctrl->selectedType() << ctrl->match() << ctrl->input();
-   
+
     try {
         Echonest::DynamicPlaylist::PlaylistParams params = getParams();
-        
+
         params.append( Echonest::DynamicPlaylist::PlaylistParamData( Echonest::DynamicPlaylist::Results, number ) );
         QNetworkReply* reply = Echonest::DynamicPlaylist::staticPlaylist( params );
         qDebug() << "Generating a static playlist from echonest!" << reply->url().toString();
@@ -98,12 +98,12 @@ EchonestGenerator::generate ( int number )
     }
 }
 
-void 
+void
 EchonestGenerator::startOnDemand()
 {
     try {
         Echonest::DynamicPlaylist::PlaylistParams params = getParams();
-        
+
         QNetworkReply* reply = m_dynPlaylist->start( params );
         qDebug() << "starting a dynamic playlist from echonest!" << reply->url().toString();
         connect( reply, SIGNAL( finished() ), this, SLOT( dynamicStarted() ) );
@@ -113,7 +113,7 @@ EchonestGenerator::startOnDemand()
     }
 }
 
-void 
+void
 EchonestGenerator::fetchNext( int rating )
 {
     if( m_dynPlaylist->sessionId().isEmpty() ) {
@@ -121,7 +121,7 @@ EchonestGenerator::fetchNext( int rating )
         qWarning() << Q_FUNC_INFO << "asked to fetch next dynamic song when we're not in the middle of a playlist!";
         return;
     }
-    
+
     QNetworkReply* reply;
     if( m_steeredSinceLastTrack ) {
         qDebug() << "Steering dynamic playlist!" << m_steerData.first << m_steerData.second;
@@ -135,34 +135,34 @@ EchonestGenerator::fetchNext( int rating )
 }
 
 
-void 
+void
 EchonestGenerator::staticFinished()
 {
     Q_ASSERT( sender() );
     Q_ASSERT( qobject_cast< QNetworkReply* >( sender() ) );
-    
+
     QNetworkReply* reply = qobject_cast< QNetworkReply* >( sender() );
-    
+
     Echonest::SongList songs;
     try {
         songs = Echonest::DynamicPlaylist::parseStaticPlaylist( reply );
     } catch( const Echonest::ParseError& e ) {
-        qWarning() << "libechonest threw an error trying to parse the static playlist! code" << e.errorType() << "error desc:" << e.what();
-        
+        qWarning() << "libechonest threw an error trying to parse the static playlist code" << e.errorType() << "error desc:" << e.what();
+
         emit error( "The Echo Nest returned an error creating the playlist", e.what() );
         return;
     }
-    
+
     QList< query_ptr > queries;
     foreach( const Echonest::Song& song, songs ) {
         qDebug() << "EchonestGenerator got song:" << song;
         queries << queryFromSong( song );
     }
-    
+
     emit generated( queries );
 }
 
-Echonest::DynamicPlaylist::PlaylistParams 
+Echonest::DynamicPlaylist::PlaylistParams
 EchonestGenerator::getParams() const throw( std::runtime_error )
 {
     Echonest::DynamicPlaylist::PlaylistParams params;
@@ -173,14 +173,14 @@ EchonestGenerator::getParams() const throw( std::runtime_error )
     return params;
 }
 
-void 
+void
 EchonestGenerator::dynamicStarted()
 {
     Q_ASSERT( sender() );
     Q_ASSERT( qobject_cast< QNetworkReply* >( sender() ) );
     QNetworkReply* reply = qobject_cast< QNetworkReply* >( sender() );
-    
-    try 
+
+    try
     {
         Echonest::Song song = m_dynPlaylist->parseStart( reply );
         query_ptr songQuery = queryFromSong( song );
@@ -191,19 +191,19 @@ EchonestGenerator::dynamicStarted()
     }
 }
 
-void 
+void
 EchonestGenerator::dynamicFetched()
 {
     Q_ASSERT( sender() );
     Q_ASSERT( qobject_cast< QNetworkReply* >( sender() ) );
     QNetworkReply* reply = qobject_cast< QNetworkReply* >( sender() );
-    
-    resetSteering(); 
-    
+
+    resetSteering();
+
     if( !m_steerer.isNull() )
         m_steerer.data()->resetSteering( true );
-    
-    try 
+
+    try
     {
         Echonest::Song song = m_dynPlaylist->parseNextSong( reply );
         query_ptr songQuery = queryFromSong( song );
@@ -214,7 +214,7 @@ EchonestGenerator::dynamicFetched()
     }
 }
 
-void 
+void
 EchonestGenerator::steerDescription( const QString& desc )
 {
     m_steeredSinceLastTrack = true;
@@ -222,7 +222,7 @@ EchonestGenerator::steerDescription( const QString& desc )
     m_steerData.second = desc;
 }
 
-void 
+void
 EchonestGenerator::steerField( const QString& field )
 {
     m_steeredSinceLastTrack = true;
@@ -230,7 +230,7 @@ EchonestGenerator::steerField( const QString& field )
     m_steerData.second = field;
 }
 
-void 
+void
 EchonestGenerator::resetSteering()
 {
     m_steeredSinceLastTrack = false;
@@ -239,12 +239,12 @@ EchonestGenerator::resetSteering()
 }
 
 
-bool 
+bool
 EchonestGenerator::onlyThisArtistType( Echonest::DynamicPlaylist::ArtistTypeEnum type ) const throw( std::runtime_error )
 {
     bool only = true;
     bool some = false;
-    
+
     foreach( const dyncontrol_ptr& control, m_controls ) {
         if( ( control->selectedType() == "Artist" || control->selectedType() == "Artist Description" ) && static_cast<Echonest::DynamicPlaylist::ArtistTypeEnum>( control->match().toInt() ) != type ) {
             only = false;
@@ -257,11 +257,11 @@ EchonestGenerator::onlyThisArtistType( Echonest::DynamicPlaylist::ArtistTypeEnum
     } else if( some && !only ) {
         throw std::runtime_error( "All artist match types must be the same" );
     }
-    
+
     return false;
 }
 
-void 
+void
 EchonestGenerator::appendRadioType( Echonest::DynamicPlaylist::PlaylistParams& params ) const throw( std::runtime_error )
 {
     /**
@@ -269,9 +269,9 @@ EchonestGenerator::appendRadioType( Echonest::DynamicPlaylist::PlaylistParams& p
      * the types are artist, artist-radio, artist-description, catalog, catalog-radio, song-radio. we don't care about the catalog ones, and
      * we can't use the song ones since for the moment EN only accepts Song IDs, not names, and we don't want to insert an extra song.search
      * call first.
-     * 
+     *
      */
-    
+
     /// 1. artist: If all the artist controls are Limit-To. If some were but not all, error out.
     /// 2. artist-description: If all the artist entries are Description. If some were but not all, error out.
     /// 3. artist-radio: If all the artist entries are Similar To. If some were but not all, error out.
@@ -283,34 +283,34 @@ EchonestGenerator::appendRadioType( Echonest::DynamicPlaylist::PlaylistParams& p
         params.append( Echonest::DynamicPlaylist::PlaylistParamData( Echonest::DynamicPlaylist::Type, Echonest::DynamicPlaylist::ArtistRadioType ) );
 }
 
-query_ptr 
+query_ptr
 EchonestGenerator::queryFromSong(const Echonest::Song& song)
 {
     //         track[ "album" ] = song.release(); // TODO should we include it? can be quite specific
     return Query::get( song.artistName(), song.title(), QString(), uuid() );
 }
 
-QWidget* 
+QWidget*
 EchonestGenerator::steeringWidget()
 {
     if( m_steerer.isNull() ) {
         m_steerer = QWeakPointer< EchonestSteerer >( new EchonestSteerer );
-        
+
         connect( m_steerer.data(), SIGNAL( steerField( QString ) ), this, SLOT( steerField( QString ) ) );
         connect( m_steerer.data(), SIGNAL( steerDescription( QString ) ), this, SLOT( steerDescription( QString ) ) );
         connect( m_steerer.data(), SIGNAL( reset() ), this, SLOT( resetSteering() ) );
     }
-    
+
     return m_steerer.data();
 }
 
 
-QString 
+QString
 EchonestGenerator::sentenceSummary()
 {
     /**
      * The idea is we generate an english sentence from the individual phrases of the controls. We have to follow a few rules, but othewise it's quite straightforward.
-     * 
+     *
      * Rules:
      *   - Sentence starts with "Songs "
      *   - Artists always go first
@@ -318,16 +318,16 @@ EchonestGenerator::sentenceSummary()
      *   - sorting always at end
      *   - collapse artists. "Like X, like Y, like Z, ..." -> "Like X, Y, and Z"
      *   - skip empty artist entries
-     * 
+     *
      *  NOTE / TODO: In order for the sentence to be grammatically correct, we must follow the EN API rules. That means we can't have multiple of some types of filters,
      *        and all Artist types must be the same. The filters aren't checked at the moment until Generate / Play is pressed. Consider doing a check on hide as well.
      */
     QList< dyncontrol_ptr > allcontrols = m_controls;
     QString sentence = "Songs ";
-    
+
     /// 1. Collect all artist filters
     /// 2. Get the sorted by filter if it exists.
-    QList< dyncontrol_ptr > artists;    
+    QList< dyncontrol_ptr > artists;
     dyncontrol_ptr sorting;
     foreach( const dyncontrol_ptr& control, allcontrols ) {
         if( control->selectedType() == "Artist" || control->selectedType() == "Artist Description" )
@@ -337,7 +337,7 @@ EchonestGenerator::sentenceSummary()
     }
     if( !sorting.isNull() )
         allcontrols.removeAll( sorting );
-    
+
     /// Skip empty artists
     QList< dyncontrol_ptr > empty;
     foreach( const dyncontrol_ptr& artist, artists ) {
@@ -349,20 +349,20 @@ EchonestGenerator::sentenceSummary()
         artists.removeAll( toremove );
         allcontrols.removeAll( toremove );
     }
-    
+
     /// If there are no artists and no filters, show some help text
     if( artists.isEmpty() && allcontrols.isEmpty() )
         sentence = "No configured filters!";
-    
-    /// Do the assembling. Start with the artists if there are any, then do all the rest.    
+
+    /// Do the assembling. Start with the artists if there are any, then do all the rest.
     for( int i = 0; i < artists.size(); i++ ) {
         dyncontrol_ptr artist = artists.value( i );
         allcontrols.removeAll( artist ); // remove from pool while we're here
-        
+
         /// Collapse artist lists
         QString center, suffix;
         QString summary = artist.dynamicCast< EchonestControl >()->summary();
-        
+
         if( i == 0 ) { // if it's the first.. special casez
             center = summary.remove( "~" );
             if( artists.size() == 2 ) // special case for 2, no comma. ( X and Y )
@@ -399,12 +399,12 @@ EchonestGenerator::sentenceSummary()
         sentence += prefix + allcontrols.value( i ).dynamicCast< EchonestControl >()->summary() + suffix;
     }
     qDebug() << "Got artists and contents:" << sentence;
-    
+
     if( !sorting.isNull() ) {
         sentence += "and " + sorting.dynamicCast< EchonestControl >()->summary() + ".";
     }
     qDebug() << "Got full summary:" << sentence;
-    
+
     return sentence;
 }
 

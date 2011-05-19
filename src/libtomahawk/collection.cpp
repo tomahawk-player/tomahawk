@@ -185,7 +185,7 @@ Collection::station( const QString& guid )
 void
 Collection::setPlaylists( const QList<Tomahawk::playlist_ptr>& plists )
 {
-    qDebug() << Q_FUNC_INFO << plists.count();
+//    qDebug() << Q_FUNC_INFO << plists.count();
     foreach ( const playlist_ptr& p, plists )
     {
 //        qDebug() << "Batch inserting playlist:" << p->guid();
@@ -198,7 +198,7 @@ Collection::setPlaylists( const QList<Tomahawk::playlist_ptr>& plists )
 void
 Collection::setAutoPlaylists( const QList< Tomahawk::dynplaylist_ptr >& plists )
 {
-    qDebug() << Q_FUNC_INFO << plists.count();
+//    qDebug() << Q_FUNC_INFO << plists.count();
 
     foreach ( const dynplaylist_ptr& p, plists )
     {
@@ -212,7 +212,7 @@ Collection::setAutoPlaylists( const QList< Tomahawk::dynplaylist_ptr >& plists )
 void
 Collection::setStations( const QList< dynplaylist_ptr >& stations )
 {
-    qDebug() << Q_FUNC_INFO << stations.count();
+//    qDebug() << Q_FUNC_INFO << stations.count();
 
     foreach ( const dynplaylist_ptr& s, stations )
     {
@@ -226,7 +226,7 @@ Collection::setStations( const QList< dynplaylist_ptr >& stations )
 void
 Collection::setTracks( const QList<Tomahawk::query_ptr>& tracks )
 {
-    qDebug() << Q_FUNC_INFO << tracks.count() << name();
+//    qDebug() << Q_FUNC_INFO << tracks.count() << name();
 
     m_tracks << tracks;
     emit tracksAdded( tracks );

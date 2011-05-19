@@ -178,7 +178,7 @@ CollectionItem::playlistsDeletedInternal( SourceTreeItem* parent, const QList< T
 void
 CollectionItem::onPlaylistsAdded( const QList< playlist_ptr >& playlists )
 {
-    qDebug() << Q_FUNC_INFO << m_source->friendlyName() << playlists.count();
+//    qDebug() << Q_FUNC_INFO << m_source->friendlyName() << playlists.count();
 
     if( playlists.isEmpty() )
         return;

@@ -56,7 +56,7 @@ DynamicPlaylist::DynamicPlaylist ( const Tomahawk::source_ptr& src,
                                    const QString& guid )
 : Playlist( src, currentrevision, title, info, creator, createdOn, shared, lastmod, guid )
 {
-    qDebug() << "Creating Dynamic Playlist 1";
+//    qDebug() << "Creating Dynamic Playlist 1";
     // TODO instantiate generator
     m_generator = geninterface_ptr( GeneratorFactory::create( type ) );
     m_generator->setMode( mode );
@@ -74,7 +74,7 @@ DynamicPlaylist::DynamicPlaylist ( const Tomahawk::source_ptr& author,
                                    bool shared )
 : Playlist ( author, guid, title, info, creator, shared )
 {
-    qDebug() << "Creating Dynamic Playlist 2";
+//    qDebug() << "Creating Dynamic Playlist 2";
     m_generator = geninterface_ptr( GeneratorFactory::create( type ) );
     m_generator->setMode( mode );
 }
@@ -208,7 +208,7 @@ DynamicPlaylist::createNewRevision( const QString& newrev,
 void
 DynamicPlaylist::loadRevision( const QString& rev )
 {
-    qDebug() << Q_FUNC_INFO << "Loading with:" << ( rev.isEmpty() ? currentrevision() : rev );
+//    qDebug() << Q_FUNC_INFO << "Loading with:" << ( rev.isEmpty() ? currentrevision() : rev );
 
     setBusy( true );
     DatabaseCommand_LoadDynamicPlaylist* cmd = new DatabaseCommand_LoadDynamicPlaylist( rev.isEmpty() ? currentrevision() : rev );
@@ -258,7 +258,7 @@ DynamicPlaylist::remove( const Tomahawk::dynplaylist_ptr& playlist )
 void
 DynamicPlaylist::reportCreated( const Tomahawk::dynplaylist_ptr& self )
 {
-    qDebug() << Q_FUNC_INFO;
+//    qDebug() << Q_FUNC_INFO;
     Q_ASSERT( self.data() == this );
     Q_ASSERT( !author().isNull() );
     Q_ASSERT( !author()->collection().isNull() );
@@ -274,7 +274,7 @@ DynamicPlaylist::reportCreated( const Tomahawk::dynplaylist_ptr& self )
 void
 DynamicPlaylist::reportDeleted( const Tomahawk::dynplaylist_ptr& self )
 {
-    qDebug() << Q_FUNC_INFO;
+//    qDebug() << Q_FUNC_INFO;
     Q_ASSERT( self.data() == this );
     // will emit Collection::playlistDeleted(...)
     if( self->mode() == Static )
