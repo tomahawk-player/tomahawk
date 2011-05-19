@@ -62,6 +62,10 @@ void
 Collection::addPlaylist( const Tomahawk::playlist_ptr& p )
 {
     qDebug() << Q_FUNC_INFO;
+
+    if ( m_playlists.contains( p->guid() ) )
+        return;
+
     QList<playlist_ptr> toadd;
     toadd << p;
     qDebug() << "Inserted playlist with guid:" << p->guid();

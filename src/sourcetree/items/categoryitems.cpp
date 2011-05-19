@@ -34,12 +34,10 @@ CategoryAddItem::CategoryAddItem( SourcesModel* model, SourceTreeItem* parent, S
     : SourceTreeItem( model, parent, SourcesModel::CategoryAdd )
     , m_categoryType( type )
 {
-
 }
 
 CategoryAddItem::~CategoryAddItem()
 {
-
 }
 
 QString
@@ -124,8 +122,7 @@ CategoryAddItem::dropMimeData( const QMimeData* data, Qt::DropAction action )
             }
         }
 
-        playlist_ptr newpl = Playlist::create( SourceList::instance()->getLocal(), uuid(), "New Playlist", "", SourceList::instance()->getLocal()->friendlyName(), false );
-        newpl->addEntries( queries, newpl->currentrevision() );
+        playlist_ptr newpl = Playlist::create( SourceList::instance()->getLocal(), uuid(), "New Playlist", "", SourceList::instance()->getLocal()->friendlyName(), false, queries );
         ViewManager::instance()->show( newpl );
 
         // Give a shot to try to rename it. The playlist has to be created first. ugly.

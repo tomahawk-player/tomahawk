@@ -326,10 +326,6 @@ PlaylistModel::dropMimeData( const QMimeData* data, Qt::DropAction action, int r
         && !data->hasFormat( "application/tomahawk.result.list" ) )
         return false;
 
-    if ( data->hasFormat( "application/tomahawk.playlist.id" ) &&
-         data->data( "application/tomahawk.playlist.id" ) == m_playlist->guid() )
-        return false; // don't allow dropping on ourselves
-
     int beginRow;
     if ( row != -1 )
         beginRow = row;

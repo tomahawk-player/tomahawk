@@ -131,7 +131,6 @@ PlaylistItem::dropMimeData( const QMimeData* data, Qt::DropAction action )
         data->data( "application/tomahawk.playlist.id" ) == m_playlist->guid() )
         return false; // don't allow dropping on ourselves
 
-
     if ( data->hasFormat( "application/tomahawk.result.list" ) )
     {
         QByteArray itemData = data->data( "application/tomahawk.result.list" );
@@ -174,8 +173,6 @@ PlaylistItem::dropMimeData( const QMimeData* data, Qt::DropAction action )
     {
         qDebug() << "on playlist:" << m_playlist->title() << m_playlist->guid() << m_playlist->currentrevision();
 
-        // TODO do we need to use this in the refactor?
-        //                     QString rev = item->currentlyLoadedPlaylistRevision( playlist->guid() );
         m_playlist->addEntries( queries, m_playlist->currentrevision() );
 
         return true;

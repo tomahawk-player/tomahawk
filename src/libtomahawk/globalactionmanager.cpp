@@ -153,7 +153,6 @@ GlobalActionManager::handlePlaylistCommand( const QUrl& url )
             return false;
         }
         Tomahawk::playlist_ptr pl = Tomahawk::Playlist::create( SourceList::instance()->getLocal(), uuid(), url.queryItemValue( "title" ), QString(), QString(), false );
-        pl->createNewRevision( uuid(), pl->currentrevision(), QList< Tomahawk::plentry_ptr >() );
         ViewManager::instance()->show( pl );
     } else if( parts[ 0 ] == "add" ) {
         if( !url.hasQueryItem( "playlistid" ) || !url.hasQueryItem( "title" ) || !url.hasQueryItem( "artist" ) ) {

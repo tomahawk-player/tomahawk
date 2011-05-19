@@ -160,18 +160,12 @@ XSPFLoader::gotBody()
             continue;
         }
 
-        plentry_ptr p( new PlaylistEntry );
-        p->setGuid( uuid() );
-        p->setDuration( duration.toInt() / 1000 );
-        p->setLastmodified( 0 );
-        p->setAnnotation( annotation );
-
-        p->setQuery( Tomahawk::Query::get( artist, track, album, uuid() ) );
-        p->query()->setDuration( duration.toInt() / 1000 );
+        query_ptr q = Tomahawk::Query::get( artist, track, album, uuid() );
+        q->setDuration( duration.toInt() / 1000 );
         if( !url.isEmpty() )
-            p->query()->setResultHint( url );
+            q->setResultHint( url );
 
-        m_entries << p;
+        m_entries << q;
     }
 
     if ( origTitle.isEmpty() && m_entries.isEmpty() )
@@ -196,21 +190,11 @@ XSPFLoader::gotBody()
                                        m_title,
                                        m_info,
                                        m_creator,
-                                       false );
+                                       false,
+                                       m_entries );
 
-        connect( m_playlist.data(), SIGNAL( revisionLoaded( Tomahawk::PlaylistRevision ) ), SLOT( onCreated() ) );
+        deleteLater();
     }
 
     emit ok( m_playlist );
-}
-
-
-void
-XSPFLoader::onCreated()
-{
-    qDebug() << Q_FUNC_INFO;
-
-    Playlist* playlist = qobject_cast<Playlist*>(sender());
-    m_playlist->createNewRevision( uuid(), m_playlist->currentrevision(), m_entries );
-    deleteLater();
 }

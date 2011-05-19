@@ -34,7 +34,6 @@ public:
     virtual bool willAcceptDrag(const QMimeData* data) const;
     virtual bool dropMimeData(const QMimeData* data, Qt::DropAction action);
 
-
 private:
     SourcesModel::CategoryType m_categoryType;
 };

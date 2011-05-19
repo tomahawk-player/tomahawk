@@ -123,11 +123,12 @@ public:
 
     // one CTOR is private, only called by DatabaseCommand_LoadAllPlaylists
     static Tomahawk::playlist_ptr create( const source_ptr& author,
-                                         const QString& guid,
-                                         const QString& title,
-                                         const QString& info,
-                                         const QString& creator,
-                                         bool shared );
+                                          const QString& guid,
+                                          const QString& title,
+                                          const QString& info,
+                                          const QString& creator,
+                                          bool shared,
+                                          const QList<Tomahawk::query_ptr>& queries = QList<Tomahawk::query_ptr>() );
 
     static bool remove( const playlist_ptr& playlist );
     bool rename( const QString& title );
@@ -232,7 +233,8 @@ protected:
                        const QString& title,
                        const QString& info,
                        const QString& creator,
-                       bool shared );
+                       bool shared,
+                       const QList< Tomahawk::plentry_ptr >& entries = QList< Tomahawk::plentry_ptr >() );
 
     QList< plentry_ptr > newEntries( const QList< plentry_ptr >& entries );
     PlaylistRevision setNewRevision( const QString& rev,
@@ -260,7 +262,9 @@ private:
     unsigned int m_createdOn;
     bool m_shared;
 
+    QList< plentry_ptr > m_initEntries;
     QList< plentry_ptr > m_entries;
+
     bool m_locallyChanged;
     bool m_busy;
 };

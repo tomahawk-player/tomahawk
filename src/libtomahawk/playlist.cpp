@@ -125,7 +125,8 @@ Playlist::Playlist( const source_ptr& author,
                     const QString& title,
                     const QString& info,
                     const QString& creator,
-                    bool shared )
+                    bool shared,
+                    const QList< Tomahawk::plentry_ptr >& entries )
     : QObject()
     , m_source( author )
     , m_guid( guid )
@@ -136,6 +137,7 @@ Playlist::Playlist( const source_ptr& author,
     , m_createdOn( 0 ) // will be set by db command
     , m_shared( shared )
     , m_busy( false )
+    , m_initEntries( entries )
 {
     qDebug() << Q_FUNC_INFO << "2";
     init();
@@ -159,9 +161,24 @@ Playlist::create( const source_ptr& author,
                   const QString& title,
                   const QString& info,
                   const QString& creator,
-                  bool shared )
+                  bool shared,
+                  const QList<Tomahawk::query_ptr>& queries )
 {
-    playlist_ptr playlist( new Playlist( author, guid, title, info, creator, shared ) );
+    QList< plentry_ptr > entries;
+    foreach( const Tomahawk::query_ptr& query, queries )
+    {
+        plentry_ptr p( new PlaylistEntry );
+        p->setGuid( uuid() );
+        p->setDuration( query->duration() );
+        p->setLastmodified( 0 );
+        p->setAnnotation( "" );
+        p->setQuery( query );
+
+        entries << p;
+    }
+
+    playlist_ptr playlist( new Playlist( author, guid, title, info, creator, shared, entries ) );
+
     // save to DB in the background
     // Hope this doesn't cause any problems..
     // Watch for the created() signal if you need to be sure it's written.
@@ -178,6 +195,7 @@ Playlist::create( const source_ptr& author,
     connect( cmd, SIGNAL( finished() ), playlist.data(), SIGNAL( created() ) );
     Database::instance()->enqueue( QSharedPointer<DatabaseCommand>(cmd) );
     playlist->reportCreated( playlist );
+
     return playlist;
 }
 
@@ -223,7 +241,6 @@ Playlist::reportCreated( const playlist_ptr& self )
 {
     qDebug() << Q_FUNC_INFO;
     Q_ASSERT( self.data() == this );
-    // will emit Collection::playlistCreated(...)
     m_source->collection()->addPlaylist( self );
 }
 
@@ -337,7 +354,14 @@ Playlist::setRevision( const QString& rev,
     }
 
     setBusy( false );
-    emit revisionLoaded( pr );
+
+    if ( m_initEntries.count() && currentrevision().isEmpty() )
+    {
+        // add initial tracks
+        createNewRevision( uuid(), currentrevision(), m_initEntries );
+    }
+    else
+        emit revisionLoaded( pr );
 }
 
 
