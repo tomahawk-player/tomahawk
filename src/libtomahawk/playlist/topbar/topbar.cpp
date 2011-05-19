@@ -278,7 +278,7 @@ TopBar::setModesVisible( bool b )
 void
 TopBar::setFilterVisible( bool b )
 {
-    ui->filterEdit->setEnabled( b );
+    ui->filterEdit->setVisible( b );
 }
 
 
