@@ -54,6 +54,7 @@ public:
     virtual bool jumpToCurrentTrack();
 
 signals:
+    void nameChanged( const QString& title );
     void destroyed( QWidget* widget );
 
 protected:
@@ -67,6 +68,7 @@ private slots:
     void deleteItems();
 
     void onDeleted();
+    void onChanged();
 private:
     void setupMenus();
 

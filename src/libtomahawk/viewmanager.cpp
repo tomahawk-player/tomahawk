@@ -158,10 +158,10 @@ ViewManager::createPageForPlaylist( const playlist_ptr& pl )
     PlaylistView* view = new PlaylistView();
 
     PlaylistModel* model = new PlaylistModel();
+    model->loadPlaylist( pl );
     view->setPlaylistModel( model );
     view->setFrameShape( QFrame::NoFrame );
     view->setAttribute( Qt::WA_MacShowFocusRect, 0 );
-    model->loadPlaylist( pl );
     pl->resolve();
 
     m_playlistViews.insert( pl, view );
@@ -626,10 +626,10 @@ ViewManager::setPage( ViewPage* page, bool trackHistory )
         // if the signal exists (just to hide the qobject runtime warning...)
         if( obj->metaObject()->indexOfSignal( "descriptionChanged(QString)" ) > -1 )
             connect( obj, SIGNAL( descriptionChanged( QString ) ), m_infobar, SLOT( setDescription( QString ) ), Qt::UniqueConnection );
-    }
-    if ( QObject* obj = dynamic_cast< QObject* >( currentPage() ) )
-    {
-        // if the signal exists (just to hide the qobject runtime warning...)
+
+        if( obj->metaObject()->indexOfSignal( "nameChanged(QString)" ) > -1 )
+            connect( obj, SIGNAL( nameChanged( QString ) ), m_infobar, SLOT( setCaption( QString ) ), Qt::UniqueConnection );
+
         if( obj->metaObject()->indexOfSignal( "destroyed(QWidget*)" ) > -1 )
             connect( obj, SIGNAL( destroyed( QWidget* ) ), SLOT( onWidgetDestroyed( QWidget* ) ), Qt::UniqueConnection );
     }

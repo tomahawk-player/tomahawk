@@ -74,6 +74,7 @@ PlaylistView::setPlaylistModel( PlaylistModel* model )
 
     connect( m_model, SIGNAL( trackCountChanged( unsigned int ) ), SLOT( onTrackCountChanged( unsigned int ) ) );
     connect( m_model, SIGNAL( playlistDeleted() ), SLOT( onDeleted() ) );
+    connect( m_model->playlist().data(), SIGNAL( changed() ), SLOT( onChanged() ) );
 }
 
 
@@ -180,4 +181,11 @@ PlaylistView::onDeleted()
     qDebug() << Q_FUNC_INFO;
     emit destroyed( widget() );
     deleteLater();
+}
+
+void
+PlaylistView::onChanged()
+{
+    if ( m_model && !m_model->playlist().isNull() )
+        emit nameChanged( m_model->playlist()->title() );
 }

@@ -95,6 +95,7 @@ public slots:
     void tracksAdded();
 
 signals:
+    void nameChanged( const QString& name );
     void descriptionChanged( const QString& caption );
     void destroyed( QWidget* widget );
 
@@ -109,6 +110,7 @@ private slots:
 
     void layoutFloatingWidgets();
     void onDeleted();
+    void onChanged();
 
 private:
     dynplaylist_ptr m_playlist;
