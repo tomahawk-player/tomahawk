@@ -28,6 +28,7 @@
 #include "database/localcollection.h"
 #include "playlist/playlistview.h"
 #include "echonest/Playlist.h"
+#include "album.h"
 
 #include <QUrl>
 #include <Playlist.h>
@@ -59,12 +60,26 @@ QUrl
 GlobalActionManager::openLinkFromQuery( const Tomahawk::query_ptr& query ) const
 {
     QUrl link( "tomahawk://open/track/" );
-    if( !query->track().isEmpty() )
-        link.addQueryItem( "title", query->track() );
-    if( !query->artist().isEmpty() )
-        link.addQueryItem( "artist", query->artist() );
-    if( !query->album().isEmpty() )
-        link.addQueryItem( "album", query->album() );
+    QString title, artist, album;
+
+    if( !query->results().isEmpty() && !query->results().first().isNull() )
+    {
+        title = query->results().first()->track();
+        artist = query->results().first()->artist().isNull() ? QString() : query->results().first()->artist()->name();
+        album = query->results().first()->album().isNull() ? QString() : query->results().first()->album()->name();
+    } else
+    {
+        title = query->track();
+        artist = query->artist();
+        album = query->album();
+    }
+
+    if( !title.isEmpty() )
+        link.addQueryItem( "title", title );
+    if( !artist.isEmpty() )
+        link.addQueryItem( "artist", artist );
+    if( !album.isEmpty() )
+        link.addQueryItem( "album", album );
 
     return link;
 }
