@@ -95,7 +95,7 @@ ScriptResolver::readStdout()
 void
 ScriptResolver::sendMsg( const QByteArray& msg )
 {
-    qDebug() << Q_FUNC_INFO << m_ready << msg << msg.length();
+//    qDebug() << Q_FUNC_INFO << m_ready << msg << msg.length();
 
     quint32 len;
     qToBigEndian( msg.length(), (uchar*) &len );
@@ -107,7 +107,7 @@ ScriptResolver::sendMsg( const QByteArray& msg )
 void
 ScriptResolver::handleMsg( const QByteArray& msg )
 {
-    qDebug() << Q_FUNC_INFO << msg.size() << QString::fromAscii( msg );
+//    qDebug() << Q_FUNC_INFO << msg.size() << QString::fromAscii( msg );
 
     bool ok;
     QVariant v = m_parser.parse( msg, &ok );
@@ -213,7 +213,7 @@ ScriptResolver::resolve( const Tomahawk::query_ptr& query )
     m.insert( "qid", query->id() );
 
     const QByteArray msg = m_serializer.serialize( QVariant( m ) );
-    qDebug() << "ASKING SCRIPT RESOLVER TO RESOLVE:" << msg;
+//    qDebug() << "ASKING SCRIPT RESOLVER TO RESOLVE:" << msg;
     sendMsg( msg );
 }
 
@@ -221,7 +221,8 @@ ScriptResolver::resolve( const Tomahawk::query_ptr& query )
 void
 ScriptResolver::doSetup( const QVariantMap& m )
 {
-    qDebug() << Q_FUNC_INFO << m;
+//    qDebug() << Q_FUNC_INFO << m;
+
     m_name       = m.value( "name" ).toString();
     m_weight     = m.value( "weight", 0 ).toUInt();
     m_timeout    = m.value( "timeout", 25 ).toUInt() * 1000;
@@ -266,6 +267,7 @@ ScriptResolver::saveConfig()
     QByteArray data = m_serializer.serialize( m );
     sendMsg( data );
 }
+
 
 QWidget* ScriptResolver::configUI() const
 {
