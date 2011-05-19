@@ -81,14 +81,14 @@ void AvatarManager::onNewIq(const Jreen::IQ& iq, int context)
     {
         iq.accept();
 
-        qDebug() << Q_FUNC_INFO << "Got vcard from " << iq.from().full();
+//        qDebug() << Q_FUNC_INFO << "Got vcard from " << iq.from().full();
 
         QString id = iq.from().full();
         QString avatarHash;
 
         const Jreen::VCard::Photo &photo = vcard->photo();
         if (!photo.data().isEmpty()) {
-            qDebug() << "vcard: got photo data" << id;
+//            qDebug() << "vcard: got photo data" << id;
 
             avatarHash = QCryptographicHash::hash(photo.data(), QCryptographicHash::Sha1).toHex();
 
@@ -110,13 +110,13 @@ void AvatarManager::onNewIq(const Jreen::IQ& iq, int context)
         }
         else
         {
-            qDebug() << "vcard: got no photo data" << id;
+//            qDebug() << "vcard: got no photo data" << id;
         }
 
         // got own presence
         if ( m_client->jid().bare() == id )
         {
-            qDebug() << Q_FUNC_INFO << "got own vcard";
+//            qDebug() << Q_FUNC_INFO << "got own vcard";
 
             Jreen::Presence presence = m_client->presence();
             Jreen::VCardUpdate::Ptr update = presence.findExtension<Jreen::VCardUpdate>();
@@ -167,5 +167,5 @@ bool AvatarManager::isCached(const QString &avatarHash) const
 
 void AvatarManager::onNewAvatar(const QString& jid)
 {
-    qDebug() << Q_FUNC_INFO <<  "Found new Avatar..." << jid;
+//    qDebug() << Q_FUNC_INFO <<  "Found new Avatar..." << jid;
 }

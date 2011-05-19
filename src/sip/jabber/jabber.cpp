@@ -219,10 +219,7 @@ JabberPlugin::connectPlugin( bool startup )
         return true; //FIXME: should i return false here?!
     }
 
-    qDebug() << "Connecting to the XMPP server...";
-
-    qDebug() << m_client->jid().full();
-    qDebug() << m_client->server() << m_client->port();
+    qDebug() << "Connecting to the XMPP server..." << m_client->jid().full();
 
     //FIXME: we're badly workarounding some missing reconnection api here, to be fixed soon
     QTimer::singleShot( 1000, m_client, SLOT( connectToServer() ) );
@@ -263,7 +260,7 @@ JabberPlugin::disconnectPlugin()
 void
 JabberPlugin::onConnect()
 {
-    qDebug() << Q_FUNC_INFO;
+//    qDebug() << Q_FUNC_INFO;
 
     // update jid resource, servers like gtalk use resource binding and may
     // have changed our requested /resource
@@ -273,7 +270,7 @@ JabberPlugin::onConnect()
         emit jidChanged( m_client->jid().full() );
     }
 
-    qDebug() << "Connected as:" << m_client->jid().full();
+    qDebug() << "Connected to jabber as:" << m_client->jid().full();
 
     // set presence to least valid value
     m_client->setPresence(Jreen::Presence::XA, "Got Tomahawk? http://gettomahawk.com", -127);
@@ -439,7 +436,6 @@ JabberPlugin::sendMsg(const QString& to, const QString& msg)
         sipMessage = new TomahawkSipMessage();
     }
 
-
     qDebug() << "Send sip messsage to " << to;
     Jreen::IQ iq( Jreen::IQ::Set, to );
     iq.addExtension( sipMessage );
@@ -581,7 +577,7 @@ void JabberPlugin::onNewMessage(const Jreen::Message& message)
     if ( m_state != Connected )
         return;
 
-    qDebug() << Q_FUNC_INFO << "message type" << message.subtype();
+//    qDebug() << Q_FUNC_INFO << "message type" << message.subtype();
 
     QString from = message.from().full();
     QString msg = message.body();
@@ -626,7 +622,7 @@ void JabberPlugin::onPresenceReceived( const Jreen::RosterItem::Ptr &item, const
     QString fulljid( jid.full() );
 
 
-    qDebug() << Q_FUNC_INFO << "* New presence: " << fulljid << presence.subtype();
+    qDebug() << Q_FUNC_INFO << "* New presence:" << fulljid << presence.subtype();
 
     if( jid == m_client->jid() )
         return;
@@ -648,8 +644,7 @@ void JabberPlugin::onPresenceReceived( const Jreen::RosterItem::Ptr &item, const
     */
     if( caps )
     {
-        qDebug() << Q_FUNC_INFO << fulljid << "Running tomahawk: maybe" << "caps " << caps->node()
-            << "requesting disco..";
+        qDebug() << Q_FUNC_INFO << fulljid << "Running tomahawk: maybe" << "caps " << caps->node() << "requesting disco..";
 
         // request disco features
         QString node = caps->node() + '#' + caps->ver();
@@ -670,7 +665,7 @@ void JabberPlugin::onSubscriptionReceived(const Jreen::RosterItem::Ptr& item, co
     if ( m_state != Connected )
         return;
 
-    qDebug() << Q_FUNC_INFO << "presence type: " << presence.subtype();
+    qDebug() << Q_FUNC_INFO << "presence type:" << presence.subtype();
     if(item)
         qDebug() << Q_FUNC_INFO << presence.from().full() << "subs" << item->subscription() << "ask" << item->ask();
     else
@@ -699,8 +694,6 @@ void JabberPlugin::onSubscriptionReceived(const Jreen::RosterItem::Ptr& item, co
 
         return;
     }
-
-    qDebug() << Q_FUNC_INFO << presence.from().bare() << "open subscription request box";
 
     // preparing the confirm box for the user
     QMessageBox *confirmBox = new QMessageBox(
@@ -734,8 +727,6 @@ JabberPlugin::onSubscriptionRequestConfirmed( int result )
         }
     }
 
-    qDebug() << Q_FUNC_INFO << "box confirmed for" << jid.bare();
-
     // we got an answer, deleting the box
     m_subscriptionConfirmBoxes.remove( jid );
     sender()->deleteLater();
@@ -762,7 +753,7 @@ void JabberPlugin::onNewIq(const Jreen::IQ& iq, int context)
 
     if( context == RequestDisco )
     {
-        qDebug() << Q_FUNC_INFO << "Received disco IQ...";
+//        qDebug() << Q_FUNC_INFO << "Received disco IQ...";
         Jreen::Disco::Info *discoInfo = iq.findExtension<Jreen::Disco::Info>().data();
         if(!discoInfo)
             return;
@@ -809,7 +800,7 @@ void JabberPlugin::onNewIq(const Jreen::IQ& iq, int context)
     {
         qDebug() << "Sent IQ(Set), what should be happening here?";
     }
-    else if(context == SipMessageSent )
+    else if( context == SipMessageSent )
     {
         qDebug() << "Sent SipMessage... what now?!";
     }
@@ -819,18 +810,13 @@ void JabberPlugin::onNewIq(const Jreen::IQ& iq, int context)
     }*/
     else
     {
-
         TomahawkSipMessage *sipMessage = iq.findExtension<TomahawkSipMessage>().data();
         if(sipMessage)
         {
             iq.accept();
 
-            qDebug() << Q_FUNC_INFO << "Got SipMessage ...";
-            qDebug() << Q_FUNC_INFO << "ip" << sipMessage->ip();
-            qDebug() << Q_FUNC_INFO << "port" << sipMessage->port();
-            qDebug() << Q_FUNC_INFO << "uniqname" << sipMessage->uniqname();
-            qDebug() << Q_FUNC_INFO << "key" << sipMessage->key();
-            qDebug() << Q_FUNC_INFO << "visible" << sipMessage->visible();
+            qDebug() << Q_FUNC_INFO << "Got SipMessage ..."
+                     << "ip" << sipMessage->ip() << "port" << sipMessage->port() << "uniqname" << sipMessage->uniqname() << "key" << sipMessage->key() << "visible" << sipMessage->visible();
 
             SipInfo info;
             info.setVisible( sipMessage->visible() );
@@ -920,7 +906,7 @@ void JabberPlugin::handlePeerStatus(const Jreen::JID& jid, Jreen::Presence::Type
 
 void JabberPlugin::onNewAvatar(const QString& jid)
 {
-    qDebug() << Q_FUNC_INFO << jid;
+//    qDebug() << Q_FUNC_INFO << jid;
     if ( m_state != Connected )
         return;
 

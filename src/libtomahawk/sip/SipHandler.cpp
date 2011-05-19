@@ -69,16 +69,16 @@ SipHandler::~SipHandler()
 const QPixmap
 SipHandler::avatar( const QString& name ) const
 {
-    qDebug() << Q_FUNC_INFO << "Getting avatar" << name << m_usernameAvatars.keys();
+    qDebug() << Q_FUNC_INFO << "Getting avatar" << name; // << m_usernameAvatars.keys();
     if( m_usernameAvatars.contains( name ) )
     {
-        qDebug() << Q_FUNC_INFO << "Getting avatar and avatar != null ";
+//        qDebug() << Q_FUNC_INFO << "Getting avatar and avatar != null ";
         Q_ASSERT(!m_usernameAvatars.value( name ).isNull());
         return m_usernameAvatars.value( name );
     }
     else
     {
-        qDebug() << Q_FUNC_INFO << "Getting avatar and avatar == null, GAAAAAH ";
+        qDebug() << Q_FUNC_INFO << "Getting avatar and avatar == null :-(";
         return QPixmap();
     }
 }
@@ -601,10 +601,10 @@ SipHandler::onStateChanged( SipPlugin::ConnectionState state )
 void
 SipHandler::onAvatarReceived( const QString& from, const QPixmap& avatar )
 {
-    qDebug() << Q_FUNC_INFO << " setting avatar on source for " << from;
+//    qDebug() << Q_FUNC_INFO << "setting avatar on source for" << from;
     if ( avatar.isNull() )
     {
-        qDebug() << Q_FUNC_INFO << " got null pixmap, not adding anything";
+//        qDebug() << Q_FUNC_INFO << "got null pixmap, not adding anything";
         return;
     }
 
@@ -616,22 +616,22 @@ SipHandler::onAvatarReceived( const QString& from, const QPixmap& avatar )
     ControlConnection *conn = Servent::instance()->lookupControlConnection( from );
     if( conn )
     {
-        qDebug() << Q_FUNC_INFO << from << "got control connection";
+//        qDebug() << Q_FUNC_INFO << from << "got control connection";
         Tomahawk::source_ptr source = conn->source();
         if( source )
         {
 
-            qDebug() << Q_FUNC_INFO << from << "got source, setting avatar";
+//            qDebug() << Q_FUNC_INFO << from << "got source, setting avatar";
             source->setAvatar( avatar );
         }
         else
         {
-            qDebug() << Q_FUNC_INFO << from << "no source found, not setting avatar";
+//            qDebug() << Q_FUNC_INFO << from << "no source found, not setting avatar";
         }
     }
     else
     {
-        qDebug() << Q_FUNC_INFO << from << "no control connection setup yet";
+//        qDebug() << Q_FUNC_INFO << from << "no control connection setup yet";
     }
 }
 
@@ -639,7 +639,7 @@ SipHandler::onAvatarReceived( const QString& from, const QPixmap& avatar )
 void
 SipHandler::onAvatarReceived( const QPixmap& avatar )
 {
-    qDebug() << Q_FUNC_INFO << "Set own avatar on MyCollection";
+//    qDebug() << Q_FUNC_INFO << "Set own avatar on MyCollection";
     SourceList::instance()->getLocal()->setAvatar( avatar );
 }
 

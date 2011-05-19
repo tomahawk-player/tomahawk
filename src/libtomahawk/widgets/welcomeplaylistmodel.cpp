@@ -42,7 +42,7 @@ WelcomePlaylistModel::WelcomePlaylistModel( QObject* parent )
 void
 WelcomePlaylistModel::loadFromSettings()
 {
-    qDebug() << Q_FUNC_INFO;
+//    qDebug() << Q_FUNC_INFO;
     if( !m_waitingForSome )
         return;
 
@@ -54,7 +54,7 @@ WelcomePlaylistModel::loadFromSettings()
 
     for( int i = playlist_guids.size() - 1; i >= 0; i-- )
     {
-        qDebug() << "loading playlist" << playlist_guids[i];
+//        qDebug() << "loading playlist" << playlist_guids[i];
 
         playlist_ptr pl = m_cached.value( playlist_guids[i], playlist_ptr() );
         if( pl.isNull() )
