@@ -621,8 +621,7 @@ void JabberPlugin::onPresenceReceived( const Jreen::RosterItem::Ptr &item, const
     Jreen::JID jid = presence.from();
     QString fulljid( jid.full() );
 
-
-    qDebug() << Q_FUNC_INFO << "* New presence:" << fulljid << presence.subtype();
+//    qDebug() << Q_FUNC_INFO << "* New presence:" << fulljid << presence.subtype();
 
     if( jid == m_client->jid() )
         return;
@@ -656,7 +655,7 @@ void JabberPlugin::onPresenceReceived( const Jreen::RosterItem::Ptr &item, const
     }
     else if( !caps )
     {
-        qDebug() << Q_FUNC_INFO << "Running tomahawk: no" << "no caps";
+//        qDebug() << Q_FUNC_INFO << "Running tomahawk: no" << "no caps";
     }
 }
 
@@ -665,7 +664,7 @@ void JabberPlugin::onSubscriptionReceived(const Jreen::RosterItem::Ptr& item, co
     if ( m_state != Connected )
         return;
 
-    qDebug() << Q_FUNC_INFO << "presence type:" << presence.subtype();
+//    qDebug() << Q_FUNC_INFO << "presence type:" << presence.subtype();
     if(item)
         qDebug() << Q_FUNC_INFO << presence.from().full() << "subs" << item->subscription() << "ask" << item->ask();
     else
@@ -772,7 +771,7 @@ void JabberPlugin::onNewIq(const Jreen::IQ& iq, int context)
         }
         else
         {
-            qDebug() << Q_FUNC_INFO << jid.full() << "Running tomahawk/feature enabled: no";
+//            qDebug() << Q_FUNC_INFO << jid.full() << "Running tomahawk/feature enabled: no";
 
             //LEGACY: accept resources starting with tomahawk too
             if( jid.resource().startsWith("tomahawk") )

@@ -320,7 +320,7 @@ Pipeline::shunt( const query_ptr& q )
 
         if ( thisResolver < m_resolvers.count() )
         {
-            qDebug() << "Shunting in" << lasttimeout << "ms, q:" << q->toString();
+//            qDebug() << "Shunting in" << lasttimeout << "ms, q:" << q->toString();
 
             m_qidsTimeout.insert( q->id(), true );
             new FuncTimeout( lasttimeout, boost::bind( &Pipeline::timeoutShunt, this, q ), this );
@@ -361,9 +361,8 @@ Pipeline::setQIDState( const Tomahawk::query_ptr& query, int state )
     {
 //        qDebug() << Q_FUNC_INFO << "removing" << query->id() << state;
         m_qidsState.remove( query->id() );
+        qDebug() << "Queries running:" << m_qidsState.count();
     }
-
-    qDebug() << "Queries running:" << m_qidsState.count();
 }
 
 
@@ -381,7 +380,6 @@ Pipeline::incQIDState( const Tomahawk::query_ptr& query )
 //    qDebug() << Q_FUNC_INFO << "inserting to qidsstate:" << query->id() << state;
     m_qidsState.insert( query->id(), state );
 
-    qDebug() << "Queries running:" << m_qidsState.count();
     return state;
 }
 
@@ -404,8 +402,8 @@ Pipeline::decQIDState( const Tomahawk::query_ptr& query )
     {
 //        qDebug() << Q_FUNC_INFO << "removing" << query->id() << state;
         m_qidsState.remove( query->id() );
+        qDebug() << "Queries running:" << m_qidsState.count();
     }
 
-    qDebug() << "Queries running:" << m_qidsState.count();
     return state;
 }

@@ -146,7 +146,7 @@ CollectionItem::playlistsAddedInternal( SourceTreeItem* parent, const QList< dyn
     foreach( const dynplaylist_ptr& p, playlists )
     {
         DynamicPlaylistItem* plItem = new DynamicPlaylistItem( model(), parent, p, parent->children().count() - addOffset );
-        qDebug() << "Dynamic Playlist added:" << p->title() << p->creator() << p->info();
+//        qDebug() << "Dynamic Playlist added:" << p->title() << p->creator() << p->info();
         p->loadRevision();
         items << plItem;
     }
@@ -200,7 +200,7 @@ CollectionItem::onPlaylistsAdded( const QList< playlist_ptr >& playlists )
     foreach( const playlist_ptr& p, playlists )
     {
         PlaylistItem* plItem = new PlaylistItem( model(), m_playlists, p, m_playlists->children().count() - addOffset );
-        qDebug() << "Playlist added:" << p->title() << p->creator() << p->info();
+//        qDebug() << "Playlist added:" << p->title() << p->creator() << p->info();
         p->loadRevision();
         items << plItem;
     }

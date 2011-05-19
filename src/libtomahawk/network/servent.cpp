@@ -341,7 +341,7 @@ Servent::readyRead()
 
     foreach( ControlConnection* con, m_controlconnections )
     {
-        qDebug() << "conid:" << con->id();
+//        qDebug() << "conid:" << con->id();
 
         if ( con->id() == controlid )
         {
@@ -660,10 +660,12 @@ Servent::claimOffer( ControlConnection* cc, const QString &nodeid, const QString
     }
 }
 
+
 bool
 Servent::checkACL( const Connection* conn, const QString &nodeid, bool showDialog ) const
 {
     qDebug() << "Checking ACLs";
+
     ACLSystem* aclSystem = ACLSystem::instance();
     ACLSystem::ACL peerStatus = aclSystem->isAuthorizedUser( nodeid );
     if( peerStatus == ACLSystem::Deny )
@@ -715,6 +717,7 @@ Servent::checkACL( const Connection* conn, const QString &nodeid, bool showDialo
 
     return true;
 }
+
 
 QSharedPointer<QIODevice>
 Servent::remoteIODeviceFactory( const result_ptr& result )
@@ -769,7 +772,7 @@ void
 Servent::printCurrentTransfers()
 {
     int k = 1;
-    qDebug() << "~~~ Active file transfer connections:" << m_scsessions.length();
+//    qDebug() << "~~~ Active file transfer connections:" << m_scsessions.length();
     foreach( StreamConnection* i, m_scsessions )
     {
         qDebug() << k << ") " << i->id();
@@ -806,10 +809,10 @@ bool
 Servent::connectedToSession( const QString& session )
 {
     qDebug() << Q_FUNC_INFO;
-    qDebug() << "Checking against " << session;
+    qDebug() << "Checking against" << session;
     foreach( ControlConnection* cc, m_controlconnections )
     {
-        qDebug() << "Checking session " << cc->id();
+        qDebug() << "Checking session" << cc->id();
         if( cc->id() == session )
             return true;
     }
@@ -857,7 +860,7 @@ Servent::getIODeviceForUrl( const Tomahawk::result_ptr& result )
 
     const QString proto = rx.cap( 1 );
     //const QString urlpart = rx.cap( 2 );
-    qDebug() << "Getting IODevice for URL:" << proto << m_iofactories.contains( proto );
+//    qDebug() << "Getting IODevice for URL:" << proto << m_iofactories.contains( proto );
     if ( !m_iofactories.contains( proto ) )
         return sp;
     return m_iofactories.value( proto )( result );

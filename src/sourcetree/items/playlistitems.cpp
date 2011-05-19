@@ -251,9 +251,11 @@ DynamicPlaylistItem::checkReparentHackNeeded( const DynamicPlaylistRevision& rev
     // HACK HACK HACK  workaround for an ugly hack where we have to be compatible with older tomahawks (pre-0.1.0) that created dynplaylists as OnDemand then changed them to Static if they were static.
     //  we need to reparent this playlist to the correct category :-/.
     CategoryItem* cat = qobject_cast< CategoryItem* >( parent() );
-    qDebug() << "with category" << cat;
-    if( cat ) qDebug() << "and cat type:" << cat->categoryType();
-    if( cat ) {
+
+//    qDebug() << "with category" << cat;
+//    if( cat ) qDebug() << "and cat type:" << cat->categoryType();
+    if( cat )
+    {
         CategoryItem* from = cat;
         CategoryItem* to = 0;
         if( cat->categoryType() == SourcesModel::PlaylistsCategory && revision.mode == OnDemand ) { // WRONG
@@ -270,7 +272,7 @@ DynamicPlaylistItem::checkReparentHackNeeded( const DynamicPlaylistRevision& rev
         } else if( cat->categoryType() == SourcesModel::StationsCategory && revision.mode == Static ) { // WRONG
             CollectionItem* col = qobject_cast< CollectionItem* >( cat->parent() );
             to = col->playlistsCategory();
-            qDebug() << "TRYING TO HACK TO:" << to;
+//            qDebug() << "TRYING TO HACK TO:" << to;
             if( !to ) { // you have got to be fucking kidding me
                 int fme = col->children().count();
                 col->beginRowsAdded( fme, fme );
@@ -281,7 +283,7 @@ DynamicPlaylistItem::checkReparentHackNeeded( const DynamicPlaylistRevision& rev
             }
         }
         if( to ) {
-            qDebug() << "HACKING! moving dynamic playlist from" << from->text() << "to:" << to->text();
+//            qDebug() << "HACKING! moving dynamic playlist from" << from->text() << "to:" << to->text();
             // remove and add
             int idx = from->children().indexOf( this );
             from->beginRowsRemoved( idx, idx );
