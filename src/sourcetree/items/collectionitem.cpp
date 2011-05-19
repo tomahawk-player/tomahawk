@@ -126,7 +126,12 @@ CollectionItem::icon() const
     if( m_source.isNull() )
         return QIcon( RESPATH "images/supercollection.png" );
     else
-        return QIcon( RESPATH "images/user-avatar.png" );
+    {
+        if( m_source->avatar().isNull() )
+            return QIcon( RESPATH "images/user-avatar.png" );
+        else
+            return QIcon( m_source->avatar() );
+    }
 }
 
 
