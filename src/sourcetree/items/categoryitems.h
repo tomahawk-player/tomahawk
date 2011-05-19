@@ -30,6 +30,7 @@ public:
     virtual QString text() const;
     virtual void activate();
     virtual QIcon icon() const;
+    virtual int peerSortValue() const;
 
     virtual bool willAcceptDrag(const QMimeData* data) const;
     virtual bool dropMimeData(const QMimeData* data, Qt::DropAction action);

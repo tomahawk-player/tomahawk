@@ -132,6 +132,12 @@ CategoryAddItem::dropMimeData( const QMimeData* data, Qt::DropAction action )
     return false;
 }
 
+int
+CategoryAddItem::peerSortValue() const
+{
+    return INT_MAX; // after any siblings
+}
+
 
 /// CategoryItem
 
@@ -173,9 +179,9 @@ int
 CategoryItem::peerSortValue() const
 {
     if( m_category == SourcesModel::PlaylistsCategory )
-        return 100;
-    else if( m_category == SourcesModel::StationsCategory )
         return -100;
+    else if( m_category == SourcesModel::StationsCategory )
+        return 100;
     else
         return 0;
 }
