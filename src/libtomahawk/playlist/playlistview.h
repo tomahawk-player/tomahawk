@@ -45,6 +45,8 @@ public:
     virtual QWidget* widget() { return this; }
     virtual PlaylistInterface* playlistInterface() const { return proxyModel(); }
 
+    virtual bool showFilter() const { return true; }
+
     virtual QString title() const { return playlistModel()->title(); }
     virtual QString description() const { return m_model->description(); }
     virtual QPixmap pixmap() const { return QPixmap( RESPATH "images/playlist-icon.png" ); }

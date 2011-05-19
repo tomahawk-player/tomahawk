@@ -1,5 +1,5 @@
 /* === This file is part of Tomahawk Player - <http://tomahawk-player.org> ===
- * 
+ *
  *   Copyright 2010-2011, Christian Muehlhaeuser <muesli@tomahawk-player.org>
  *
  *   Tomahawk is free software: you can redistribute it and/or modify
@@ -55,6 +55,7 @@ public slots:
 
     void setStatsVisible( bool b );
     void setModesVisible( bool b );
+    void setFilterVisible( bool b );
 
     void addSource();
     void removeSource();
@@ -66,7 +67,7 @@ private slots:
     void onFlatMode();
     void onArtistMode();
     void onAlbumMode();
-    
+
 protected:
     void changeEvent( QEvent* e );
     void resizeEvent( QResizeEvent* e );

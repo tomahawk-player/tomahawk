@@ -46,6 +46,7 @@ ArtistView::ArtistView( QWidget* parent )
     , m_proxyModel( 0 )
 //    , m_delegate( 0 )
     , m_loadingSpinner( new LoadingSpinner( this ) )
+    , m_showModes( true )
 {
     setAlternatingRowColors( true );
     setDragEnabled( true );

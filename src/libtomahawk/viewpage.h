@@ -46,6 +46,7 @@ public:
 
     virtual bool showStatsBar() const { return true; }
     virtual bool showModes() const { return false; }
+    virtual bool showFilter() const { return false; }
     virtual bool queueVisible() const { return true; }
 
     virtual bool jumpToCurrentTrack() = 0;

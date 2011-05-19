@@ -1,5 +1,5 @@
 /* === This file is part of Tomahawk Player - <http://tomahawk-player.org> ===
- * 
+ *
  *   Copyright 2010-2011, Christian Muehlhaeuser <muesli@tomahawk-player.org>
  *
  *   Tomahawk is free software: you can redistribute it and/or modify
@@ -31,8 +31,8 @@ class DLLEXPORT PlaylistInterface
 {
 public:
     enum RepeatMode { NoRepeat, RepeatOne, RepeatAll };
-    enum ViewMode { Unknown, Flat, Tree, Album };
-    
+    enum ViewMode { Unknown, Tree, Flat, Album };
+
     PlaylistInterface( QObject* parent = 0 ) : m_object( parent ) {}
     virtual ~PlaylistInterface() {}
 
