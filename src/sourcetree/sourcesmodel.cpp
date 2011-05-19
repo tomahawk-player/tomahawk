@@ -111,7 +111,7 @@ SourcesModel::data( const QModelIndex& index, int role ) const
 
 
 int
-SourcesModel::columnCount( const QModelIndex& parent ) const
+SourcesModel::columnCount( const QModelIndex& ) const
 {
     return 1;
 }
@@ -183,7 +183,7 @@ SourcesModel::mimeTypes() const
 
 
 QMimeData*
-SourcesModel::mimeData( const QModelIndexList& indexes ) const
+SourcesModel::mimeData( const QModelIndexList& ) const
 {
     // TODO
     return new QMimeData();

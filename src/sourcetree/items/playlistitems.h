@@ -19,6 +19,7 @@
 
 #include "sourcetreeitem.h"
 #include "playlist/dynamic/DynamicPlaylist.h"
+#include "artist.h"
 
 class PlaylistItem : public SourceTreeItem
 {
