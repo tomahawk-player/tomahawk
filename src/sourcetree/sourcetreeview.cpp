@@ -120,11 +120,6 @@ SourceTreeView::setupMenus()
 {
     m_playlistMenu.clear();
 
-    m_loadPlaylistAction = m_playlistMenu.addAction( tr( "&Load Playlist" ) );
-    m_renamePlaylistAction = m_playlistMenu.addAction( tr( "&Rename Playlist" ) );
-    m_playlistMenu.addSeparator();
-    m_deletePlaylistAction = m_playlistMenu.addAction( tr( "&Delete Playlist" ) );
-
     bool readonly = true;
     SourcesModel::RowType type = ( SourcesModel::RowType )model()->data( m_contextMenuIndex, SourcesModel::SourceTreeItemTypeRole ).toInt();
     if ( type == SourcesModel::StaticPlaylist || type == SourcesModel::AutomaticPlaylist || type == SourcesModel::Station )
@@ -137,6 +132,11 @@ SourceTreeView::setupMenus()
             readonly = !playlist->author()->isLocal();
         }
     }
+
+    m_loadPlaylistAction = m_playlistMenu.addAction( tr( "&Load Playlist" ) );
+    m_renamePlaylistAction = m_playlistMenu.addAction( tr( "&Rename Playlist" ) );
+    m_playlistMenu.addSeparator();
+    m_deletePlaylistAction = m_playlistMenu.addAction( tr( "&Delete %1" ).arg( SourcesModel::rowTypeToString( type ) ) );
 
     m_deletePlaylistAction->setEnabled( !readonly );
     m_renamePlaylistAction->setEnabled( !readonly );

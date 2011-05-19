@@ -61,6 +61,29 @@ SourcesModel::~SourcesModel()
 }
 
 
+QString
+SourcesModel::rowTypeToString( RowType type )
+{
+    switch ( type )
+    {
+        case Collection:
+            return tr( "Collection" );
+
+        case StaticPlaylist:
+            return tr( "Playlist" );
+
+        case AutomaticPlaylist:
+            return tr( "Automatic Playlist" );
+
+        case Station:
+            return tr( "Station" );
+
+        default:
+            return QString( "Unknown" );
+    }
+}
+
+
 QVariant
 SourcesModel::data( const QModelIndex& index, int role ) const
 {
