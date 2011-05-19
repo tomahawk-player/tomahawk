@@ -216,6 +216,7 @@ PlaylistModel::insert( unsigned int row, const Tomahawk::query_ptr& query )
     onTracksInserted( row, ql );
 }
 
+
 void
 PlaylistModel::trackResolved( bool )
 {
@@ -296,15 +297,18 @@ PlaylistModel::onRevisionLoaded( Tomahawk::PlaylistRevision revision )
         loadPlaylist( m_playlist );
 }
 
+
 QMimeData*
 PlaylistModel::mimeData( const QModelIndexList& indexes ) const
 {
     // Add the playlist id to the mime data so that we can detect dropping on ourselves
     QMimeData* d = TrackModel::mimeData( indexes );
-    d->setData( "application/tomahawk.playlist.id", m_playlist->guid().toLatin1() );
+    if ( !m_playlist.isNull() )
+        d->setData( "application/tomahawk.playlist.id", m_playlist->guid().toLatin1() );
 
     return d;
 }
+
 
 bool
 PlaylistModel::dropMimeData( const QMimeData* data, Qt::DropAction action, int row, int column, const QModelIndex& parent )

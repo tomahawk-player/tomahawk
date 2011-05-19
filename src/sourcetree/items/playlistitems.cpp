@@ -82,13 +82,19 @@ Qt::ItemFlags
 PlaylistItem::flags() const
 {
     Qt::ItemFlags flags = SourceTreeItem::flags();
-
-    if( !m_loaded )
-        flags &= !Qt::ItemIsEnabled;
-
     flags |= Qt::ItemIsDragEnabled | Qt::ItemIsDropEnabled;
-    if( playlist()->author()->isLocal() )
+
+    if ( !m_loaded )
+        flags &= !Qt::ItemIsEnabled;
+    if ( playlist()->author()->isLocal() )
         flags |= Qt::ItemIsEditable;
+
+    if ( playlist()->busy() )
+    {
+        flags &= !Qt::ItemIsEnabled;
+        flags &= !Qt::ItemIsEditable;
+        flags &= !Qt::ItemIsDropEnabled;
+    }
 
     return flags;
 }
@@ -166,7 +172,7 @@ PlaylistItem::dropMimeData( const QMimeData* data, Qt::DropAction action )
 
     if ( queries.count() && !m_playlist.isNull() && m_playlist->author()->isLocal() )
     {
-        qDebug() << "on playlist:" << m_playlist->title() << m_playlist->guid();
+        qDebug() << "on playlist:" << m_playlist->title() << m_playlist->guid() << m_playlist->currentrevision();
 
         // TODO do we need to use this in the refactor?
         //                     QString rev = item->currentlyLoadedPlaylistRevision( playlist->guid() );

@@ -32,13 +32,15 @@ DatabaseCommand_SetPlaylistRevision::DatabaseCommand_SetPlaylistRevision(
                       const QStringList& orderedguids,
                       const QList<plentry_ptr>& addedentries,
                       const QList<plentry_ptr>& entries )
-: DatabaseCommandLoggable( s )
+    : DatabaseCommandLoggable( s )
     , m_applied( false )
     , m_newrev( newrev )
     , m_oldrev( oldrev )
     , m_addedentries( addedentries )
     , m_entries( entries )
 {
+    Q_ASSERT( !newrev.isEmpty() );
+    Q_ASSERT( !oldrev.isEmpty() );
     m_localOnly = ( newrev == oldrev );
 
     setPlaylistguid( playlistguid );
@@ -70,7 +72,6 @@ DatabaseCommand_SetPlaylistRevision::postCommitHook()
 
     // private, but we are a friend. will recall itself in its own thread:
     playlist_ptr playlist = source()->collection()->playlist( m_playlistguid );
-
     if ( playlist.isNull() )
     {
         qDebug() << m_playlistguid;

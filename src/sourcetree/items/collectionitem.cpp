@@ -40,12 +40,14 @@ CollectionItem::CollectionItem(  SourcesModel* mdl, SourceTreeItem* parent, cons
     QList< dynplaylist_ptr > autoplaylists = source->collection()->autoPlaylists();
     QList< dynplaylist_ptr > stations = source->collection()->stations();
 
-    if( !playlists.isEmpty() || !autoplaylists.isEmpty() || source->isLocal() ) {
+    if ( !playlists.isEmpty() || !autoplaylists.isEmpty() || source->isLocal() )
+    {
         m_playlists = new CategoryItem( model(), this, SourcesModel::PlaylistsCategory, source->isLocal() );
         onPlaylistsAdded( playlists );
         onAutoPlaylistsAdded( autoplaylists );
     }
-    if( !stations.isEmpty() || source->isLocal() ) {
+    if ( !stations.isEmpty() || source->isLocal() )
+    {
         m_stations = new CategoryItem( model(), this, SourcesModel::StationsCategory, source->isLocal() );
         onStationsAdded( stations );
     }
@@ -63,19 +65,19 @@ CollectionItem::CollectionItem(  SourcesModel* mdl, SourceTreeItem* parent, cons
     connect( source.data(), SIGNAL( online() ), this, SIGNAL( updated() ) );
 
     connect( source->collection().data(), SIGNAL( playlistsAdded( QList<Tomahawk::playlist_ptr> ) ),
-                SLOT( onPlaylistsAdded( QList<Tomahawk::playlist_ptr> ) ), Qt::QueuedConnection );
+             SLOT( onPlaylistsAdded( QList<Tomahawk::playlist_ptr> ) ), Qt::QueuedConnection );
     connect( source->collection().data(), SIGNAL( playlistsDeleted( QList<Tomahawk::playlist_ptr> ) ),
-                SLOT( onPlaylistsDeleted( QList<Tomahawk::playlist_ptr> ) ), Qt::QueuedConnection );
+             SLOT( onPlaylistsDeleted( QList<Tomahawk::playlist_ptr> ) ), Qt::QueuedConnection );
 
     connect( source->collection().data(), SIGNAL( autoPlaylistsAdded( QList< Tomahawk::dynplaylist_ptr > ) ),
-                SLOT( onAutoPlaylistsAdded( QList<Tomahawk::dynplaylist_ptr> ) ), Qt::QueuedConnection );
+             SLOT( onAutoPlaylistsAdded( QList<Tomahawk::dynplaylist_ptr> ) ), Qt::QueuedConnection );
     connect( source->collection().data(), SIGNAL( autoPlaylistsDeleted( QList<Tomahawk::dynplaylist_ptr> ) ),
-                SLOT( onAutoPlaylistsDeleted( QList<Tomahawk::dynplaylist_ptr> ) ), Qt::QueuedConnection );
+             SLOT( onAutoPlaylistsDeleted( QList<Tomahawk::dynplaylist_ptr> ) ), Qt::QueuedConnection );
 
     connect( source->collection().data(), SIGNAL( stationsAdded( QList<Tomahawk::dynplaylist_ptr> ) ),
-                SLOT( onStationsAdded( QList<Tomahawk::dynplaylist_ptr> ) ), Qt::QueuedConnection );
+             SLOT( onStationsAdded( QList<Tomahawk::dynplaylist_ptr> ) ), Qt::QueuedConnection );
     connect( source->collection().data(), SIGNAL( stationsDeleted( QList<Tomahawk::dynplaylist_ptr> ) ),
-                SLOT( onStationsDeleted( QList<Tomahawk::dynplaylist_ptr> ) ), Qt::QueuedConnection );
+             SLOT( onStationsDeleted( QList<Tomahawk::dynplaylist_ptr> ) ), Qt::QueuedConnection );
 }
 
 
@@ -108,13 +110,13 @@ CollectionItem::peerSortValue() const
 void
 CollectionItem::activate()
 {
-    if( source().isNull() ) {
-        ViewPage* p = ViewManager::instance()->showSuperCollection();
-        model()->linkSourceItemToPage( this, p );
-    } else {
-        ViewPage* p = ViewManager::instance()->show( source()->collection() );
-        model()->linkSourceItemToPage( this, p );
-    }
+    ViewPage* p = 0;
+    if ( source().isNull() )
+        p = ViewManager::instance()->showSuperCollection();
+    else
+        p = ViewManager::instance()->show( source()->collection() );
+
+    model()->linkSourceItemToPage( this, p );
 }
 
 
@@ -176,7 +178,9 @@ CollectionItem::onPlaylistsAdded( const QList< playlist_ptr >& playlists )
     if( playlists.isEmpty() )
         return;
 
-    if( !m_playlists ) { // add the category too
+    if( !m_playlists )
+    {
+        // add the category too
         int cur = children().count();
         beginRowsAdded( cur, cur );
         m_playlists = new CategoryItem( model(), this, SourcesModel::PlaylistsCategory, source()->isLocal() );

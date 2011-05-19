@@ -143,6 +143,8 @@ public:
     unsigned int lastmodified() const { return m_lastmodified; }
     uint createdOn() const            { return m_createdOn; }
 
+    bool busy() const { return m_busy; }
+
     const QList< plentry_ptr >& entries() { return m_entries; }
     virtual void addEntry( const Tomahawk::query_ptr& query, const QString& oldrev );
     virtual void addEntries( const QList<Tomahawk::query_ptr>& queries, const QString& oldrev );
@@ -248,6 +250,8 @@ private:
     Playlist();
     void init();
 
+    void setBusy( bool b );
+
     source_ptr m_source;
     QString m_currentrevision;
     QString m_guid, m_title, m_info, m_creator;
@@ -257,7 +261,7 @@ private:
 
     QList< plentry_ptr > m_entries;
     bool m_locallyChanged;
-
+    bool m_busy;
 };
 
 };

@@ -41,6 +41,7 @@ WelcomePlaylistModel::WelcomePlaylistModel( QObject* parent )
 void
 WelcomePlaylistModel::loadFromSettings()
 {
+    qDebug() << Q_FUNC_INFO;
     if( !m_waitingForSome )
         return;
 
@@ -78,7 +79,6 @@ WelcomePlaylistModel::data( const QModelIndex& index, int role ) const
 {
     if( !index.isValid() || !hasIndex( index.row(), index.column(), index.parent() ) )
         return QVariant();
-
 
     playlist_ptr pl = m_recplaylists[index.row()];
     switch( role )

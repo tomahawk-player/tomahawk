@@ -113,6 +113,7 @@ Playlist::Playlist( const source_ptr& src,
     , m_lastmodified( lastmod )
     , m_createdOn( createdOn )
     , m_shared( shared )
+    , m_busy( false )
 {
 //    qDebug() << Q_FUNC_INFO << "1";
     init();
@@ -134,6 +135,7 @@ Playlist::Playlist( const source_ptr& author,
     , m_lastmodified( 0 )
     , m_createdOn( 0 ) // will be set by db command
     , m_shared( shared )
+    , m_busy( false )
 {
     qDebug() << Q_FUNC_INFO << "2";
     init();
@@ -266,11 +268,16 @@ Playlist::loadRevision( const QString& rev )
 void
 Playlist::createNewRevision( const QString& newrev, const QString& oldrev, const QList< plentry_ptr >& entries )
 {
-   // qDebug() << "m_entries guids:";
+    qDebug() << Q_FUNC_INFO << newrev << oldrev << entries.count();
+
+    Q_ASSERT( !busy() );
+    if ( newrev != oldrev )
+        setBusy( true );
+
     // calc list of newly added entries:
     QList<plentry_ptr> added = newEntries( entries );
     QStringList orderedguids;
-    foreach( plentry_ptr p, entries )
+    foreach( const plentry_ptr& p, entries )
         orderedguids << p->guid();
 
     // source making the change (local user in this case)
@@ -283,8 +290,8 @@ Playlist::createNewRevision( const QString& newrev, const QString& oldrev, const
                                                      oldrev,
                                                      orderedguids,
                                                      added,
-                                                     entries
-                                                   );
+                                                     entries );
+
     Database::instance()->enqueue( QSharedPointer<DatabaseCommand>( cmd ) );
 }
 
@@ -316,7 +323,8 @@ Playlist::setRevision( const QString& rev,
 
     PlaylistRevision pr = setNewRevision( rev, neworderedguids, oldorderedguids, is_newest_rev, addedmap );
 
-    if( applied )
+    Q_ASSERT( applied );
+    if ( applied )
         m_currentrevision = rev;
     pr.applied = applied;
 
@@ -326,18 +334,21 @@ Playlist::setRevision( const QString& rev,
                  SLOT( onResultsFound( QList<Tomahawk::result_ptr> ) ), Qt::UniqueConnection );
 
     }
+
+    setBusy( false );
     emit revisionLoaded( pr );
 }
 
 
 PlaylistRevision
 Playlist::setNewRevision( const QString& rev,
-                                 const QList<QString>& neworderedguids,
-                                 const QList<QString>& oldorderedguids,
-                                 bool is_newest_rev,
-                                 const QMap< QString, Tomahawk::plentry_ptr >& addedmap )
+                          const QList<QString>& neworderedguids,
+                          const QList<QString>& oldorderedguids,
+                          bool is_newest_rev,
+                          const QMap< QString, Tomahawk::plentry_ptr >& addedmap )
 {
     qDebug() << Q_FUNC_INFO << rev << is_newest_rev << m_title << addedmap.count() << neworderedguids.count() << oldorderedguids.count();
+
     // build up correctly ordered new list of plentry_ptrs from
     // existing ones, and the ones that have been added
     QMap<QString, plentry_ptr> entriesmap;
@@ -461,8 +472,6 @@ Playlist::addEntry( const query_ptr& query, const QString& oldrev )
 void
 Playlist::addEntries( const QList<query_ptr>& queries, const QString& oldrev )
 {
-    //qDebug() << Q_FUNC_INFO;
-
     QList<plentry_ptr> el = addEntriesInternal( queries );
 
     QString newrev = uuid();
@@ -522,3 +531,10 @@ Playlist::tracks()
     return queries;
 }
 
+
+void
+Playlist::setBusy( bool b )
+{
+    m_busy = b;
+    emit changed();
+}
