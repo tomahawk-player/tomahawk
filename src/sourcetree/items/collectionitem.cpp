@@ -103,7 +103,7 @@ CollectionItem::peerSortValue() const
     if( m_source->isLocal() )
         return 0;
 
-    return 1;
+    return m_source->id();
 }
 
 
