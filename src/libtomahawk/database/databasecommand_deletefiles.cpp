@@ -37,6 +37,9 @@ DatabaseCommand_DeleteFiles::postCommitHook()
 {
     qDebug() << Q_FUNC_INFO;
 
+    if ( !m_files.count() )
+        return;
+
     // make the collection object emit its tracksAdded signal, so the
     // collection browser will update/fade in etc.
     Collection* coll = source()->collection().data();
