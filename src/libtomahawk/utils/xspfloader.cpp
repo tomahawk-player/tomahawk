@@ -133,7 +133,8 @@ XSPFLoader::gotBody()
 
         QString artist, album, track, duration, annotation, url;
         QDomElement n = e.firstChildElement();
-        for ( ; !n.isNull(); n = n.nextSiblingElement() ) {
+        for ( ; !n.isNull(); n = n.nextSiblingElement() )
+        {
             if (n.namespaceURI() == m_NS && n.localName() == "duration") {
                 duration = n.text();
             } else if (n.namespaceURI() == m_NS && n.localName() == "annotation") {
@@ -149,8 +150,10 @@ XSPFLoader::gotBody()
             }
         }
 
-        if( artist.isEmpty() || track.isEmpty() ) {
-            if( !shownError ) {
+        if( artist.isEmpty() || track.isEmpty() )
+        {
+            if( !shownError )
+            {
                 QMessageBox::warning( 0, tr( "Failed to save tracks" ), tr( "Some tracks in the playlist do not contain an artist and a title. They will be ignored." ), QMessageBox::Ok );
                 shownError = true;
             }
@@ -167,6 +170,7 @@ XSPFLoader::gotBody()
         p->query()->setDuration( duration.toInt() / 1000 );
         if( !url.isEmpty() )
             p->query()->setResultHint( url );
+
         m_entries << p;
     }
 
@@ -194,9 +198,19 @@ XSPFLoader::gotBody()
                                        m_creator,
                                        false );
 
-        m_playlist->createNewRevision( uuid(), m_playlist->currentrevision(), m_entries );
-        deleteLater();
+        connect( m_playlist.data(), SIGNAL( revisionLoaded( Tomahawk::PlaylistRevision ) ), SLOT( onCreated() ) );
     }
 
     emit ok( m_playlist );
+}
+
+
+void
+XSPFLoader::onCreated()
+{
+    qDebug() << Q_FUNC_INFO;
+
+    Playlist* playlist = qobject_cast<Playlist*>(sender());
+    m_playlist->createNewRevision( uuid(), m_playlist->currentrevision(), m_entries );
+    deleteLater();
 }

@@ -66,6 +66,8 @@ private slots:
     void networkLoadFinished();
     void networkError( QNetworkReply::NetworkError e );
 
+    void onCreated();
+
 private:
     void reportError();
     void gotBody();

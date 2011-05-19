@@ -137,7 +137,7 @@ GlobalActionManager::handlePlaylistCommand( const QUrl& url )
 
     if( parts[ 0 ] == "import" ) {
         if( !url.hasQueryItem( "xspf" ) ) {
-            qDebug() << "No xspf to load..";
+            qDebug() << "No xspf to load...";
             return false;
         }
         QUrl xspf = QUrl( url.queryItemValue( "xspf" ) );
