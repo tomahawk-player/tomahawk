@@ -61,7 +61,6 @@ SettingsDialog::SettingsDialog( QWidget *parent )
     , ui( new Ui_StackedSettingsDialog )
     , m_proxySettings( this )
     , m_rejected( false )
-    , m_testLastFmQuery( 0 )
     , m_sipModel( 0 )
     , m_resolversModel( 0 )
 {
@@ -334,16 +333,16 @@ SettingsDialog::testLastFmLogin()
     ui->pushButtonTestLastfmLogin->setEnabled( false );
     ui->pushButtonTestLastfmLogin->setText( "Testing..." );
 
-    QString authToken = md5( ( ui->lineEditLastfmUsername->text() + md5( ui->lineEditLastfmPassword->text().toUtf8() ) ).toUtf8() );
+    QString authToken = md5( ( ui->lineEditLastfmUsername->text().toLower() + md5( ui->lineEditLastfmPassword->text().toUtf8() ) ).toUtf8() );
 
     // now authenticate w/ last.fm and get our session key
     QMap<QString, QString> query;
     query[ "method" ] = "auth.getMobileSession";
-    query[ "username" ] =  ui->lineEditLastfmUsername->text();
+    query[ "username" ] =  ui->lineEditLastfmUsername->text().toLower();
     query[ "authToken" ] = authToken;
-    m_testLastFmQuery = lastfm::ws::post( query );
+    QNetworkReply* authJob = lastfm::ws::post( query );
 
-    connect( m_testLastFmQuery, SIGNAL( finished() ), SLOT( onLastFmFinished() ) );
+    connect( authJob, SIGNAL( finished() ), SLOT( onLastFmFinished() ) );
 #endif
 }
 
@@ -352,36 +351,44 @@ void
 SettingsDialog::onLastFmFinished()
 {
 #ifdef LIBLASTFM_FOUND
-    lastfm::XmlQuery lfm = lastfm::XmlQuery( m_testLastFmQuery->readAll() );
-
-    switch( m_testLastFmQuery->error() )
+    QNetworkReply* authJob = dynamic_cast<QNetworkReply*>( sender() );
+    if( !authJob )
     {
-        case QNetworkReply::NoError:
-             qDebug() << "NoError in getting lastfm auth check result";
-             if( lfm.children( "error" ).size() > 0 )
-             {
-                 qDebug() << "ERROR from last.fm:" << lfm.text();
-                 ui->pushButtonTestLastfmLogin->setText( tr( "Failed" ) );
-                 ui->pushButtonTestLastfmLogin->setEnabled( true );
-             }
-             else
-             {
-                 ui->pushButtonTestLastfmLogin->setText( tr( "Success" ) );
-                 ui->pushButtonTestLastfmLogin->setEnabled( false );
-             }
-             break;
+        qDebug() << Q_FUNC_INFO << "No auth job returned!";
+        return;
+    }
+    if( authJob->error() == QNetworkReply::NoError )
+    {
+        lastfm::XmlQuery lfm = lastfm::XmlQuery( authJob->readAll() );
 
-        case QNetworkReply::ContentOperationNotPermittedError:
-        case QNetworkReply::AuthenticationRequiredError:
+        if( lfm.children( "error" ).size() > 0 )
+        {
+            qDebug() << "ERROR from last.fm:" << lfm.text();
             ui->pushButtonTestLastfmLogin->setText( tr( "Failed" ) );
             ui->pushButtonTestLastfmLogin->setEnabled( true );
-            break;
-
-        default:
-            qDebug() << "Couldn't get last.fm auth result";
-            ui->pushButtonTestLastfmLogin->setText( tr( "Could not contact server" ) );
-            ui->pushButtonTestLastfmLogin->setEnabled( true );
-            return;
+        }
+        else
+        {
+            ui->pushButtonTestLastfmLogin->setText( tr( "Success" ) );
+            ui->pushButtonTestLastfmLogin->setEnabled( false );
+        }
+    }
+    else
+    {
+        switch( authJob->error() )
+        {
+            case QNetworkReply::ContentOperationNotPermittedError:
+            case QNetworkReply::AuthenticationRequiredError:
+                ui->pushButtonTestLastfmLogin->setText( tr( "Failed" ) );
+                ui->pushButtonTestLastfmLogin->setEnabled( true );
+                break;
+                
+            default:
+                qDebug() << "Couldn't get last.fm auth result";
+                ui->pushButtonTestLastfmLogin->setText( tr( "Could not contact server" ) );
+                ui->pushButtonTestLastfmLogin->setEnabled( true );
+                return;
+        }
     }
 #endif
 }

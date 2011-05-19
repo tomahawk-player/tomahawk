@@ -101,7 +101,6 @@ private:
 
     ProxyDialog m_proxySettings;
     bool m_rejected;
-    QNetworkReply* m_testLastFmQuery;
     SipModel* m_sipModel;
     ResolversModel* m_resolversModel;
 };

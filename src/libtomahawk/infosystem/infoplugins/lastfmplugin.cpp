@@ -458,7 +458,6 @@ LastFmPlugin::onAuthenticated()
         {
             qDebug() << "Error from authenticating with Last.fm service:" << lfm.text();
             TomahawkSettings::instance()->setLastFmSessionKey( QByteArray() );
-
         }
         else
         {
