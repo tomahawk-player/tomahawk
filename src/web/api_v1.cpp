@@ -283,7 +283,7 @@ Api_v1::get_results( QxtWebRequestEvent* event )
     r.insert( "poll_interval", 1000 );
     r.insert( "refresh_interval", 1000 );
     r.insert( "poll_limit", 6 );
-    r.insert( "solved", qry->solved() );
+    r.insert( "solved", qry->playable() );
     r.insert( "query", qry->toVariant() );
 
     QVariantList res;

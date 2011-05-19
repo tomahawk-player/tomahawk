@@ -55,6 +55,7 @@ public:
         return QString();
     }
     virtual void activate();
+    virtual int peerSortValue() const;
     virtual Qt::ItemFlags flags() const { return Qt::ItemIsEnabled; }
 
     // inserts an item at the end, but before the category add item

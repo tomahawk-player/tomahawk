@@ -169,6 +169,16 @@ CategoryItem::insertItems( QList< SourceTreeItem* > items )
     endRowsAdded();
 }
 
+int
+CategoryItem::peerSortValue() const
+{
+    if( m_category == SourcesModel::PlaylistsCategory )
+        return 100;
+    else if( m_category == SourcesModel::StationsCategory )
+        return -100;
+    else
+        return 0;
+}
 
 void
 CategoryItem::activate()
