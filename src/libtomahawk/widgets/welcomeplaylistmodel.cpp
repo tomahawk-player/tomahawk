@@ -28,6 +28,7 @@ using namespace Tomahawk;
 WelcomePlaylistModel::WelcomePlaylistModel( QObject* parent )
     : QAbstractListModel( parent )
     , m_waitingForSome( true )
+    , m_maxPlaylists( 0 )
 {
     loadFromSettings();
 
@@ -49,7 +50,7 @@ WelcomePlaylistModel::loadFromSettings()
     m_recplaylists.clear();
     m_waitingForSome = false;
 
-    QStringList playlist_guids = TomahawkSettings::instance()->recentlyPlayedPlaylistGuids();
+    QStringList playlist_guids = TomahawkSettings::instance()->recentlyPlayedPlaylistGuids( m_maxPlaylists );
 
     for( int i = playlist_guids.size() - 1; i >= 0; i-- )
     {

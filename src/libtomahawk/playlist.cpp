@@ -175,7 +175,7 @@ Playlist::create( const source_ptr& author,
     // reportCreated for us automatically, which should cause new playlists to be added to the GUI.
 
     DatabaseCommand_CreatePlaylist* cmd = new DatabaseCommand_CreatePlaylist( author, playlist );
-    connect( cmd, SIGNAL(finished()), playlist.data(), SIGNAL(created()) );
+    connect( cmd, SIGNAL( finished() ), playlist.data(), SIGNAL( created() ) );
     Database::instance()->enqueue( QSharedPointer<DatabaseCommand>(cmd) );
     playlist->reportCreated( playlist );
     return playlist;
@@ -244,6 +244,7 @@ Playlist::loadRevision( const QString& rev )
 {
     qDebug() << Q_FUNC_INFO << currentrevision() << rev << m_title;
 
+    setBusy( true );
     DatabaseCommand_LoadPlaylistEntries* cmd =
             new DatabaseCommand_LoadPlaylistEntries( rev.isEmpty() ? currentrevision() : rev );
 

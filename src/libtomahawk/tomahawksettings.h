@@ -66,7 +66,7 @@ public:
     void setPlaylistColumnSizes( const QString& playlistid, const QByteArray& state );
 
     QList<Tomahawk::playlist_ptr> recentlyPlayedPlaylists() const;
-    QStringList recentlyPlayedPlaylistGuids() const;
+    QStringList recentlyPlayedPlaylistGuids( unsigned int amount = 0 ) const;
     void appendRecentlyPlayedPlaylist( const Tomahawk::playlist_ptr& playlist );
 
     /// SIP plugins

@@ -40,7 +40,6 @@ DatabaseCommand_SetPlaylistRevision::DatabaseCommand_SetPlaylistRevision(
     , m_entries( entries )
 {
     Q_ASSERT( !newrev.isEmpty() );
-    Q_ASSERT( !oldrev.isEmpty() );
     m_localOnly = ( newrev == oldrev );
 
     setPlaylistguid( playlistguid );

@@ -114,6 +114,7 @@ Q_PROPERTY( bool    shared          READ shared             WRITE setShared )
 friend class ::DatabaseCommand_LoadAllPlaylists;
 friend class ::DatabaseCommand_SetPlaylistRevision;
 friend class ::DatabaseCommand_CreatePlaylist;
+friend class DynamicPlaylist;
 
 public:
     ~Playlist();

@@ -153,6 +153,9 @@ DynamicPlaylist::createNewRevision( const QString& newrev,
                                     const QList< dyncontrol_ptr>& controls,
                                     const QList< plentry_ptr >& entries )
 {
+    Q_ASSERT( !busy() );
+    setBusy( true );
+
     // get the newly added tracks
     QList< plentry_ptr > added = newEntries( entries );
 
@@ -162,21 +165,21 @@ DynamicPlaylist::createNewRevision( const QString& newrev,
 
     // no conflict resolution or partial updating for controls. all or nothing baby
 
-        // source making the change (local user in this case)
-        source_ptr author = SourceList::instance()->getLocal();
-        // command writes new rev to DB and calls setRevision, which emits our signal
-        DatabaseCommand_SetDynamicPlaylistRevision* cmd =
-        new DatabaseCommand_SetDynamicPlaylistRevision( author,
-                                                        guid(),
-                                                        newrev,
-                                                        oldrev,
-                                                        orderedguids,
-                                                        added,
-                                                        entries,
-                                                        type,
-                                                        Static,
-                                                        controls );
-        Database::instance()->enqueue( QSharedPointer<DatabaseCommand>( cmd ) );
+    // source making the change (local user in this case)
+    source_ptr author = SourceList::instance()->getLocal();
+    // command writes new rev to DB and calls setRevision, which emits our signal
+    DatabaseCommand_SetDynamicPlaylistRevision* cmd =
+    new DatabaseCommand_SetDynamicPlaylistRevision( author,
+                                                    guid(),
+                                                    newrev,
+                                                    oldrev,
+                                                    orderedguids,
+                                                    added,
+                                                    entries,
+                                                    type,
+                                                    Static,
+                                                    controls );
+    Database::instance()->enqueue( QSharedPointer<DatabaseCommand>( cmd ) );
 }
 
 // create a new revision that will be an ondemand playlist, as it has no entries
@@ -205,6 +208,7 @@ DynamicPlaylist::loadRevision( const QString& rev )
 {
     qDebug() << Q_FUNC_INFO << "Loading with:" << ( rev.isEmpty() ? currentrevision() : rev );
 
+    setBusy( true );
     DatabaseCommand_LoadDynamicPlaylist* cmd = new DatabaseCommand_LoadDynamicPlaylist( rev.isEmpty() ? currentrevision() : rev );
 
     if( m_generator->mode() == OnDemand ) {
@@ -335,10 +339,11 @@ void DynamicPlaylist::setRevision( const QString& rev,
     dpr.type = type;
     dpr.mode = Static;
 
-    if( applied ) {
+    if( applied )
         setCurrentrevision( rev );
-    }
+
     //     qDebug() << "EMITTING REVISION LOADED 1!";
+    setBusy( false );
     emit dynamicRevisionLoaded( dpr );
 }
 

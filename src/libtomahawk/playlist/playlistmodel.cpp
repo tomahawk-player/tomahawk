@@ -221,7 +221,11 @@ void
 PlaylistModel::trackResolved( bool )
 {
     Tomahawk::Query* q = qobject_cast< Query* >( sender() );
-    Q_ASSERT( q );
+    if ( !q )
+    {
+        // Track has been removed from the playlist by now
+        return;
+    }
 
     m_waitingForResolved.removeAll( q );
     disconnect( q, SIGNAL( resolvingFinished( bool ) ), this, SLOT( trackResolved( bool ) ) );

@@ -33,8 +33,8 @@
 #include <QPainter>
 #include "welcomeplaylistmodel.h"
 
-#define HISTORY_TRACK_ITEMS 50
-#define HISTORY_PLAYLIST_ITEMS 10
+#define HISTORY_TRACK_ITEMS 25
+#define HISTORY_PLAYLIST_ITEMS 5
 #define HISTORY_RESOLVING_TIMEOUT 2500
 
 
@@ -44,14 +44,15 @@ WelcomeWidget::WelcomeWidget( QWidget* parent )
 {
     ui->setupUi( this );
 
+    WelcomePlaylistModel* model = new WelcomePlaylistModel( this );
+    model->setMaxPlaylists( HISTORY_PLAYLIST_ITEMS );
+
     ui->playlistWidget->setItemDelegate( new PlaylistDelegate() );
-    WelcomePlaylistModel* model =  new WelcomePlaylistModel( this );
     ui->playlistWidget->setModel( model );
     ui->playlistWidget->overlay()->resize( 380, 86 );
     ui->tracksView->overlay()->setEnabled( false );
 
-    connect( model,SIGNAL( emptinessChanged( bool) ), this, SLOT( updatePlaylists() ) );
-
+    connect( model, SIGNAL( emptinessChanged( bool) ), this, SLOT( updatePlaylists() ) );
 
     m_tracksModel = new PlaylistModel( ui->tracksView );
     ui->tracksView->setPlaylistModel( m_tracksModel );
