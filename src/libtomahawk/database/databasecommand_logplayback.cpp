@@ -1,5 +1,5 @@
 /* === This file is part of Tomahawk Player - <http://tomahawk-player.org> ===
- * 
+ *
  *   Copyright 2010-2011, Christian Muehlhaeuser <muesli@tomahawk-player.org>
  *
  *   Tomahawk is free software: you can redistribute it and/or modify
@@ -38,7 +38,7 @@ DatabaseCommand_LogPlayback::postCommitHook()
         qDebug() << "Source has gone offline, not emitting to GUI.";
         return;
     }
-    
+
     connect( this, SIGNAL( trackPlaying( Tomahawk::query_ptr ) ),
              source().data(), SLOT( onPlaybackStarted( Tomahawk::query_ptr ) ), Qt::QueuedConnection );
     connect( this, SIGNAL( trackPlayed( Tomahawk::query_ptr ) ),
@@ -57,7 +57,13 @@ DatabaseCommand_LogPlayback::postCommitHook()
     }
 
     if( source()->isLocal() )
+    {
+        // Only tell remote sources about tracks that we listen to long enough
+        if ( m_secsPlayed < 20 )
+            return;
+
         Servent::instance()->triggerDBSync();
+    }
 }
 
 
@@ -68,6 +74,8 @@ DatabaseCommand_LogPlayback::exec( DatabaseImpl* dbi )
     Q_ASSERT( !source().isNull() );
 
     if ( m_action != Finished )
+        return;
+    if ( m_secsPlayed < 10 )
         return;
 
     TomahawkSqlQuery query = dbi->newquery();
