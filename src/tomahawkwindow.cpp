@@ -60,6 +60,7 @@
 #include "tomahawktrayicon.h"
 #include "playlist/dynamic/GeneratorInterface.h"
 #include "scanmanager.h"
+#include "tomahawkapp.h"
 
 #ifdef Q_OS_WIN32
 #include <qtsparkle/Updater>
@@ -158,7 +159,7 @@ TomahawkWindow::TomahawkWindow( QWidget* parent )
 #if defined( Q_OS_DARWIN ) && defined( HAVE_SPARKLE )
     QAction* checkForUpdates = ui->menu_Help->addAction( tr( "Check For Updates...") );
     checkForUpdates->setMenuRole( QAction::ApplicationSpecificRole );
-    connect(checkForUpdates, SIGNAL( triggered( bool ) ), SLOT( checkForUpdates() ) );
+    connect( checkForUpdates, SIGNAL( triggered( bool ) ), SLOT( checkForUpdates() ) );
 #elif defined( WIN32 )
     QUrl updaterUrl;
 
@@ -311,6 +312,7 @@ TomahawkWindow::changeEvent( QEvent* e )
     }
 }
 
+
 void
 TomahawkWindow::closeEvent( QCloseEvent* e )
 {
@@ -326,6 +328,7 @@ TomahawkWindow::closeEvent( QCloseEvent* e )
     e->accept();
 }
 
+
 void
 TomahawkWindow::showEvent( QShowEvent* e )
 {
@@ -336,6 +339,7 @@ TomahawkWindow::showEvent( QShowEvent* e )
     ui->actionZoom->setDisabled( false );
 #endif
 }
+
 
 void
 TomahawkWindow::hideEvent( QHideEvent* e )
@@ -348,6 +352,7 @@ TomahawkWindow::hideEvent( QHideEvent* e )
 #endif
 }
 
+
 void
 TomahawkWindow::showSettingsDialog()
 {
@@ -355,6 +360,7 @@ TomahawkWindow::showSettingsDialog()
     SettingsDialog win;
     win.exec();
 }
+
 
 void TomahawkWindow::showDiagnosticsDialog()
 {
@@ -517,12 +523,14 @@ TomahawkWindow::onSipDisconnected()
     ui->actionToggleConnect->setText( tr( "Go &online" ) );
 }
 
+
 void
 TomahawkWindow::onSipPluginAdded( SipPlugin* p )
 {
     connect( p, SIGNAL( addMenu( QMenu* ) ), this, SLOT( pluginMenuAdded( QMenu* ) ) );
     connect( p, SIGNAL( removeMenu( QMenu* ) ), this, SLOT( pluginMenuRemoved( QMenu* ) ) );
 }
+
 
 void
 TomahawkWindow::onSipPluginRemoved( SipPlugin* p )
@@ -567,6 +575,7 @@ TomahawkWindow::showAboutTomahawk()
                         .arg( qApp->applicationVersion() ) );
 }
 
+
 void
 TomahawkWindow::checkForUpdates()
 {
@@ -574,6 +583,7 @@ TomahawkWindow::checkForUpdates()
     Tomahawk::checkForUpdates();
 #endif
 }
+
 
 void
 TomahawkWindow::minimize()
@@ -585,6 +595,7 @@ TomahawkWindow::minimize()
         showMinimized();
     }
 }
+
 
 void
 TomahawkWindow::maximize()
