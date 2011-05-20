@@ -152,14 +152,14 @@ ViewManager::queue() const
     return m_queueView->queue();
 }
 
+
 PlaylistView*
 ViewManager::createPageForPlaylist( const playlist_ptr& pl )
 {
     PlaylistView* view = new PlaylistView();
-
     PlaylistModel* model = new PlaylistModel();
-    model->loadPlaylist( pl );
     view->setPlaylistModel( model );
+    model->loadPlaylist( pl );
     view->setFrameShape( QFrame::NoFrame );
     view->setAttribute( Qt::WA_MacShowFocusRect, 0 );
     pl->resolve();

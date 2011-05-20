@@ -110,9 +110,10 @@ PlaylistModel::loadPlaylist( const Tomahawk::playlist_ptr& playlist, bool loadEn
 
             connect( plitem, SIGNAL( dataChanged() ), SLOT( onDataChanged() ) );
 
-            if( !entry->query()->resolvingFinished() && !entry->query()->playable() ) {
+            if ( !entry->query()->resolvingFinished() && !entry->query()->playable() )
+            {
                 m_waitingForResolved.append( entry->query().data() );
-                connect( entry->query().data(), SIGNAL( resolvingFinished( bool ) ), this, SLOT( trackResolved( bool ) ) );
+                connect( entry->query().data(), SIGNAL( resolvingFinished( bool ) ), SLOT( trackResolved( bool ) ) );
             }
         }
 
@@ -121,8 +122,10 @@ PlaylistModel::loadPlaylist( const Tomahawk::playlist_ptr& playlist, bool loadEn
     else
         qDebug() << "Playlist seems empty:" << playlist->title();
 
-    if( !m_waitingForResolved.isEmpty() )
+    if ( !m_waitingForResolved.isEmpty() )
+    {
         emit loadingStarted();
+    }
 
     emit trackCountChanged( rowCount( QModelIndex() ) );
 }
@@ -230,8 +233,10 @@ PlaylistModel::trackResolved( bool )
     m_waitingForResolved.removeAll( q );
     disconnect( q, SIGNAL( resolvingFinished( bool ) ), this, SLOT( trackResolved( bool ) ) );
 
-    if( m_waitingForResolved.isEmpty() )
+    if ( m_waitingForResolved.isEmpty() )
+    {
         emit loadingFinished();
+    }
 }
 
 
