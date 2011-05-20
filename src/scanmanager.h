@@ -47,8 +47,8 @@ signals:
     void finished();
     
 public slots:
-    void runScan();
-    void runDirScan( const QStringList& paths );
+    void runScan( bool manualFull = false );
+    void runDirScan( const QStringList& paths, bool manualFull );
 
 private slots:
     void scannerFinished();

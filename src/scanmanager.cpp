@@ -50,7 +50,7 @@ ScanManager::ScanManager( QObject* parent )
 
     m_scanTimer = new QTimer( this );
     m_scanTimer->setSingleShot( false );
-    m_scanTimer->setInterval( 10000 );
+    m_scanTimer->setInterval( 120000 );
 
     connect( TomahawkSettings::instance(), SIGNAL( changed() ), SLOT( onSettingsChanged() ) );
     connect( m_scanTimer, SIGNAL( timeout() ), SLOT( scanTimerTimeout() ) );
@@ -141,18 +141,18 @@ ScanManager::scanTimerTimeout()
 
 
 void
-ScanManager::runScan()
+ScanManager::runScan( bool manualFull )
 {
     qDebug() << Q_FUNC_INFO;
     if ( !Database::instance() || ( Database::instance() && !Database::instance()->isReady() ) )
         return;
 
-    runDirScan( TomahawkSettings::instance()->scannerPaths() );
+    runDirScan( TomahawkSettings::instance()->scannerPaths(), manualFull );
 }
 
 
 void
-ScanManager::runDirScan( const QStringList& paths )
+ScanManager::runDirScan( const QStringList& paths, bool manualFull )
 {
     qDebug() << Q_FUNC_INFO;
 
@@ -162,7 +162,7 @@ ScanManager::runDirScan( const QStringList& paths )
     if ( !m_musicScannerThreadController && m_scanner.isNull() ) //still running if these are not zero
     {
         m_musicScannerThreadController = new QThread( this );
-        m_scanner = QWeakPointer< MusicScanner>( new MusicScanner( paths, TomahawkSettings::instance()->scannerMode() ) );
+        m_scanner = QWeakPointer< MusicScanner>( new MusicScanner( paths, TomahawkSettings::instance()->scannerMode(), manualFull ) );
         m_scanner.data()->moveToThread( m_musicScannerThreadController );
         connect( m_scanner.data(), SIGNAL( finished() ), SLOT( scannerFinished() ) );
         m_musicScannerThreadController->start( QThread::IdlePriority );

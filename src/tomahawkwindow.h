@@ -68,6 +68,7 @@ public slots:
     void showSettingsDialog();
     void showDiagnosticsDialog();
     void updateCollectionManually();
+    void rescanCollectionManually();
     void pluginMenuAdded(QMenu*);
     void pluginMenuRemoved(QMenu*);
 

@@ -49,8 +49,8 @@ public:
         MTimeOnly
     };
     
-    DirLister( const QStringList& dirs, const QMap<QString, unsigned int>& dirmtimes, TomahawkSettings::ScannerMode mode, bool recursive )
-        : QObject(), m_dirs( dirs ), m_dirmtimes( dirmtimes ), m_mode( mode ), m_recursive( recursive )
+    DirLister( const QStringList& dirs, const QMap<QString, unsigned int>& dirmtimes, TomahawkSettings::ScannerMode mode, bool manualFull, bool recursive )
+        : QObject(), m_dirs( dirs ), m_dirmtimes( dirmtimes ), m_mode( mode ), m_manualFull( manualFull ), m_recursive( recursive )
     {
         qDebug() << Q_FUNC_INFO;
     }
@@ -72,6 +72,7 @@ private:
     QStringList m_dirs;
     QMap<QString, unsigned int> m_dirmtimes;
     TomahawkSettings::ScannerMode m_mode;
+    bool m_manualFull;
     bool m_recursive;
     
     QMap<QString, unsigned int> m_newdirmtimes;
@@ -83,13 +84,13 @@ class MusicScanner : public QObject
 Q_OBJECT
 
 public:
-    MusicScanner( const QStringList& dirs, TomahawkSettings::ScannerMode mode, bool recursive = true, quint32 bs = 0 );
+    MusicScanner( const QStringList& dirs, TomahawkSettings::ScannerMode mode, bool manualFull, bool recursive = true, quint32 bs = 0 );
     ~MusicScanner();
 
 signals:
     //void fileScanned( QVariantMap );
     void finished();
-    void batchReady( const QVariantList& );
+    void batchReady( const QVariantList&, const QVariantList& );
 
 private:
     QVariant readFile( const QFileInfo& fi );
@@ -102,7 +103,7 @@ private slots:
     void scan();
     void setDirMtimes( const QMap< QString, unsigned int >& m );
     void setFileMtimes( const QMap< QString, QMap< unsigned int, unsigned int > >& m );
-    void commitBatch( const QVariantList& );
+    void commitBatch( const QVariantList& tracks, const QVariantList& deletethese );
 
 private:
     QStringList m_dirs;
@@ -117,7 +118,9 @@ private:
     QMap<QString, QMap< unsigned int, unsigned int > > m_filemtimes;
     QMap<QString, unsigned int> m_newdirmtimes;
 
-    QList<QVariant> m_scannedfiles;
+    QVariantList m_scannedfiles;
+    QVariantList m_filesToDelete;
+    bool m_manualFull;
     bool m_recursive;
     quint32 m_batchsize;
 

@@ -271,7 +271,8 @@ TomahawkWindow::setupSignals()
     connect( ui->actionDiagnostics, SIGNAL( triggered() ), SLOT( showDiagnosticsDialog() ) );
     connect( ui->actionToggleConnect, SIGNAL( triggered() ), SipHandler::instance(), SLOT( toggleConnect() ) );
 //    connect( ui->actionAddPeerManually, SIGNAL( triggered() ), SLOT( addPeerManually() ) );
-    connect( ui->actionRescanCollection, SIGNAL( triggered() ), SLOT( updateCollectionManually() ) );
+    connect( ui->actionUpdateCollection, SIGNAL( triggered() ), SLOT( updateCollectionManually() ) );
+    connect( ui->actionRescanCollection, SIGNAL( triggered() ), SLOT( rescanCollectionManually() ) );
     connect( ui->actionLoadXSPF, SIGNAL( triggered() ), SLOT( loadSpiff() ));
     connect( ui->actionCreatePlaylist, SIGNAL( triggered() ), SLOT( createPlaylist() ));
     connect( ui->actionCreateAutomaticPlaylist, SIGNAL( triggered() ), SLOT( createAutomaticPlaylist() ));
@@ -375,6 +376,14 @@ TomahawkWindow::updateCollectionManually()
 {
     if ( TomahawkSettings::instance()->hasScannerPaths() )
         ScanManager::instance()->runScan();
+}
+
+
+void
+TomahawkWindow::rescanCollectionManually()
+{
+    if ( TomahawkSettings::instance()->hasScannerPaths() )
+        ScanManager::instance()->runScan( true );
 }
 
 

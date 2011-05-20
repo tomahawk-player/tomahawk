@@ -35,7 +35,7 @@
      <x>0</x>
      <y>0</y>
      <width>1000</width>
-     <height>22</height>
+     <height>20</height>
     </rect>
    </property>
    <widget class="QMenu" name="menuSettings">
@@ -48,6 +48,7 @@
     <property name="title">
      <string>&amp;Music Player</string>
     </property>
+    <addaction name="actionUpdateCollection"/>
     <addaction name="actionRescanCollection"/>
     <addaction name="separator"/>
     <addaction name="actionShowOfflineSources"/>
@@ -115,9 +116,12 @@
     <string>Add &amp;Friend...</string>
    </property>
   </action>
-  <action name="actionRescanCollection">
+  <action name="actionUpdateCollection">
    <property name="text">
-    <string>Re&amp;scan Collection...</string>
+    <string>U&amp;pdate Collection</string>
+   </property>
+   <property name="toolTip">
+    <string>Update Collection</string>
    </property>
   </action>
   <action name="actionPreferences">
@@ -188,6 +192,14 @@
    </property>
    <property name="menuRole">
     <enum>QAction::ApplicationSpecificRole</enum>
+   </property>
+  </action>
+  <action name="actionRescanCollection">
+   <property name="text">
+    <string>Fully &amp;Rescan Collection</string>
+   </property>
+   <property name="toolTip">
+    <string>Fully Rescan Collection</string>
    </property>
   </action>
  </widget>

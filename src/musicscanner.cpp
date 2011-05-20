@@ -37,6 +37,7 @@ DirLister::go()
 {
     qDebug() << Q_FUNC_INFO;
     qDebug() << "Recursive? : " << (m_recursive ? "true" : "false");
+    qDebug() << "Manual full? : " << (m_manualFull ? "true" : "false");
     if( !m_recursive )
     {
         foreach( QString dir, m_dirs )
@@ -68,7 +69,7 @@ DirLister::go()
 void
 DirLister::scanDir( QDir dir, int depth, DirLister::Mode mode )
 {
-    qDebug() << "DirLister::scanDir scanning: " << dir.canonicalPath() << " with mode " << mode;
+    //qDebug() << "DirLister::scanDir scanning: " << dir.canonicalPath() << " with mode " << mode;
     
     if( !dir.exists() )
     {
@@ -80,15 +81,16 @@ DirLister::scanDir( QDir dir, int depth, DirLister::Mode mode )
     const uint mtime = QFileInfo( dir.canonicalPath() ).lastModified().toUTC().toTime_t();
     m_newdirmtimes.insert( dir.canonicalPath(), mtime );
 
-    if ( m_mode == TomahawkSettings::Dirs && m_dirmtimes.contains( dir.canonicalPath() ) && mtime == m_dirmtimes.value( dir.canonicalPath() ) )
+    if ( !m_manualFull && m_mode == TomahawkSettings::Dirs && m_dirmtimes.contains( dir.canonicalPath() ) && mtime == m_dirmtimes.value( dir.canonicalPath() ) )
     {
         // dont scan this dir, unchanged since last time.
     }
     else
     {
-        if( m_mode == TomahawkSettings::Dirs
-                && ( m_dirmtimes.contains( dir.canonicalPath() ) || !m_recursive )
-                && mtime == m_dirmtimes.value( dir.canonicalPath() ) )
+        if( m_manualFull ||
+                ( m_mode == TomahawkSettings::Dirs
+                    && ( m_dirmtimes.contains( dir.canonicalPath() ) || !m_recursive )
+                    && mtime == m_dirmtimes.value( dir.canonicalPath() ) ) )
             Database::instance()->enqueue( QSharedPointer<DatabaseCommand>( new DatabaseCommand_DeleteFiles( dir, SourceList::instance()->getLocal() ) ) );
 
         dir.setFilter( QDir::Files | QDir::Readable | QDir::NoDotAndDotDot );
@@ -105,9 +107,9 @@ DirLister::scanDir( QDir dir, int depth, DirLister::Mode mode )
     foreach( const QFileInfo& di, dirs )
     {
         const QString canonical = di.canonicalFilePath();
-        qDebug() << "Considering dir " << canonical;
+        //qDebug() << "Considering dir " << canonical;
         const bool haveDi = m_dirmtimes.contains( canonical );
-        qDebug() << "m_dirmtimes contains it?" << haveDi;
+        //qDebug() << "m_dirmtimes contains it?" << haveDi;
         if( !m_newdirmtimes.contains( canonical ) && ( mode == DirLister::Recursive || !haveDi ) ) {
             scanDir( di.canonicalFilePath(), depth + 1, DirLister::Recursive );
         }
@@ -115,10 +117,11 @@ DirLister::scanDir( QDir dir, int depth, DirLister::Mode mode )
 }
 
 
-MusicScanner::MusicScanner( const QStringList& dirs, TomahawkSettings::ScannerMode mode, bool recursive, quint32 bs )
+MusicScanner::MusicScanner( const QStringList& dirs, TomahawkSettings::ScannerMode mode, bool manualFull, bool recursive, quint32 bs )
     : QObject()
     , m_dirs( dirs )
-    , m_mode( mode )
+    , m_mode( manualFull ? TomahawkSettings::Dirs : mode )
+    , m_manualFull( manualFull )
     , m_recursive( recursive )
     , m_batchsize( bs )
     , m_dirListerThreadController( 0 )
@@ -218,12 +221,12 @@ MusicScanner::scan()
     if ( m_mode == TomahawkSettings::Files )
         qDebug() << "Num saved file mtimes from last scan:" << m_filemtimes.size();
 
-    connect( this, SIGNAL( batchReady( QVariantList ) ),
-                     SLOT( commitBatch( QVariantList ) ), Qt::DirectConnection );
+    connect( this, SIGNAL( batchReady( QVariantList, QVariantList ) ),
+                     SLOT( commitBatch( QVariantList, QVariantList ) ), Qt::DirectConnection );
 
     m_dirListerThreadController = new QThread( this );
     
-    m_dirLister = QWeakPointer< DirLister >( new DirLister( m_dirs, m_dirmtimes, m_mode, m_recursive ) );
+    m_dirLister = QWeakPointer< DirLister >( new DirLister( m_dirs, m_dirmtimes, m_mode, m_manualFull, m_recursive ) );
     m_dirLister.data()->moveToThread( m_dirListerThreadController );
 
     connect( m_dirLister.data(), SIGNAL( fileToScan( QFileInfo ) ),
@@ -247,7 +250,7 @@ MusicScanner::listerFinished( const QMap<QString, unsigned int>& newmtimes )
     if( m_scannedfiles.length() )
     {
         SourceList::instance()->getLocal()->scanningFinished( m_scanned );
-        commitBatch( m_scannedfiles );
+        commitBatch( m_scannedfiles, m_filesToDelete );
     }
 
     // remove obsolete / stale files
@@ -308,11 +311,19 @@ MusicScanner::deleteLister()
 
 
 void
-MusicScanner::commitBatch( const QVariantList& tracks )
+MusicScanner::commitBatch( const QVariantList& tracks, const QVariantList& deletethese )
 {
+    if ( deletethese.length() )
+    {
+        qDebug() << Q_FUNC_INFO << " deleting " << deletethese.length() << " tracks ";
+        source_ptr localsrc = SourceList::instance()->getLocal();
+        Database::instance()->enqueue(
+            QSharedPointer<DatabaseCommand>( new DatabaseCommand_DeleteFiles( deletethese, SourceList::instance()->getLocal() ) )
+        );
+    }
     if ( tracks.length() )
     {
-        qDebug() << Q_FUNC_INFO << tracks.length();
+        qDebug() << Q_FUNC_INFO << " adding " << tracks.length() << " tracks ";
         source_ptr localsrc = SourceList::instance()->getLocal();
         Database::instance()->enqueue(
             QSharedPointer<DatabaseCommand>( new DatabaseCommand_AddFiles( tracks, localsrc ) )
@@ -331,15 +342,9 @@ MusicScanner::scanFile( const QFileInfo& fi )
         //qDebug() << "All keys: " << m_filemtimes.keys();
         //qDebug() << "Checking " << fi.canonicalFilePath() << " with last modified time " << fi.lastModified().toUTC().toTime_t() << " << against value in m_filemtimes " << m_filemtimes.value( "file://" + fi.canonicalFilePath() ).values().first();
         if ( fi.lastModified().toUTC().toTime_t() == m_filemtimes.value( "file://" + fi.canonicalFilePath() ).values().first() )
-        {
-            qDebug() << "Same mtime";
             return;
-        }
-        else
-        {
-            qDebug() << "Different mtime";
-            return;
-        }
+
+        m_filesToDelete << m_filemtimes.value( "file://" + fi.canonicalFilePath() ).keys().first();
     }
     
     QVariant m = readFile( fi );
@@ -350,8 +355,9 @@ MusicScanner::scanFile( const QFileInfo& fi )
     if ( m_batchsize != 0 && (quint32)m_scannedfiles.length() >= m_batchsize )
     {
         qDebug() << "batchReady, size:" << m_scannedfiles.length();
-        emit batchReady( m_scannedfiles );
+        emit batchReady( m_scannedfiles, m_filesToDelete );
         m_scannedfiles.clear();
+        m_filesToDelete.clear();
     }
 }
 
