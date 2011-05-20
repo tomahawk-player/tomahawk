@@ -270,8 +270,11 @@ Pipeline::timeoutShunt( const query_ptr& q )
         m_qidsTimeout.remove( q->id() );
         shunt( q );
     }
-/*    else
-        qDebug() << Q_FUNC_INFO << q->toString() << "Ignoring timeout";*/
+    else
+    {
+        qDebug() << "Reached end of pipeline for:" << q->toString();
+        setQIDState( q, 0 );
+    }
 }
 
 
@@ -284,12 +287,6 @@ Pipeline::shunt( const query_ptr& q )
 //    qDebug() << Q_FUNC_INFO << q->solved() << q->toString() << q->id();
     unsigned int lastweight = 0;
     unsigned int lasttimeout = 0;
-    int rc;
-    int thisResolver = 0;
-    {
-        QMutexLocker lock( &m_mut );
-        rc = m_resolvers.count();
-    }
 
     if ( !q->resolvingFinished() )
     {
@@ -313,7 +310,6 @@ Pipeline::shunt( const query_ptr& q )
                     lasttimeout = r->timeout();
 
                 qDebug() << "Dispatching to resolver" << r->name() << q->toString() << q->solved() << q->id();
-                thisResolver = i;
                 r->resolve( q );
             }
             else
@@ -330,7 +326,6 @@ Pipeline::shunt( const query_ptr& q )
     }
     else
     {
-        // reached end of pipeline
         qDebug() << "Reached end of pipeline for:" << q->toString();
         setQIDState( q, 0 );
     }
@@ -362,8 +357,8 @@ Pipeline::setQIDState( const Tomahawk::query_ptr& query, int state )
     else
     {
 //        qDebug() << Q_FUNC_INFO << "removing" << query->id() << state;
-        m_qidsState.remove( query->id() );
-        qDebug() << "Queries running:" << m_qidsState.count();
+        if ( m_qidsState.remove( query->id() ) )
+            qDebug() << "Queries running:" << m_qidsState.count();
     }
 }
 
@@ -403,8 +398,8 @@ Pipeline::decQIDState( const Tomahawk::query_ptr& query )
     else
     {
 //        qDebug() << Q_FUNC_INFO << "removing" << query->id() << state;
-        m_qidsState.remove( query->id() );
-        qDebug() << "Queries running:" << m_qidsState.count();
+        if ( m_qidsState.remove( query->id() ) )
+            qDebug() << "Queries running:" << m_qidsState.count();
     }
 
     return state;
