@@ -81,6 +81,8 @@ Pipeline::stop()
 void
 Pipeline::removeResolver( Resolver* r )
 {
+    QMutexLocker lock( &m_mut );
+
     m_resolvers.removeAll( r );
 }
 
@@ -88,6 +90,8 @@ Pipeline::removeResolver( Resolver* r )
 void
 Pipeline::addResolver( Resolver* r, bool sort )
 {
+    QMutexLocker lock( &m_mut );
+
     m_resolvers.append( r );
     if( sort )
     {
@@ -168,15 +172,11 @@ Pipeline::reportResults( QID qid, const QList< result_ptr >& results )
     if ( !m_running )
         return;
 
+    if ( !m_qids.contains( qid ) )
     {
-        QMutexLocker lock( &m_mut );
-
-        if ( !m_qids.contains( qid ) )
-        {
-            qDebug() << "reportResults called for unknown QID" << qid;
-            Q_ASSERT( false );
-            return;
-        }
+        qDebug() << "reportResults called for unknown QID" << qid;
+        Q_ASSERT( false );
+        return;
     }
 
     const query_ptr& q = m_qids.value( qid );
@@ -227,10 +227,12 @@ Pipeline::shuntNext()
     if ( !m_running )
         return;
 
+    unsigned int rc;
     query_ptr q;
     {
         QMutexLocker lock( &m_mut );
 
+        rc = m_resolvers.count();
         if ( m_queries_pending.isEmpty() )
         {
             if ( m_qidsState.isEmpty() )
@@ -251,7 +253,7 @@ Pipeline::shuntNext()
         q->setLastPipelineWeight( 101 );
     }
 
-    setQIDState( q, m_resolvers.count() );
+    setQIDState( q, rc );
     new FuncTimeout( 500, boost::bind( &Pipeline::shunt, this, q ), this );
 }
 
@@ -317,6 +319,7 @@ Pipeline::shunt( const query_ptr& q )
     if ( lastweight > 0 )
     {
         q->setLastPipelineWeight( lastweight );
+        QMutexLocker lock( &m_mut );
 
         if ( thisResolver < m_resolvers.count() )
         {
