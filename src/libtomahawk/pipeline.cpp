@@ -284,7 +284,12 @@ Pipeline::shunt( const query_ptr& q )
 //    qDebug() << Q_FUNC_INFO << q->solved() << q->toString() << q->id();
     unsigned int lastweight = 0;
     unsigned int lasttimeout = 0;
+    int rc;
     int thisResolver = 0;
+    {
+        QMutexLocker lock( &m_mut );
+        rc = m_resolvers.count();
+    }
 
     if ( !q->resolvingFinished() )
     {
@@ -319,9 +324,7 @@ Pipeline::shunt( const query_ptr& q )
     if ( lastweight > 0 )
     {
         q->setLastPipelineWeight( lastweight );
-        QMutexLocker lock( &m_mut );
-
-        if ( thisResolver < m_resolvers.count() )
+        if ( thisResolver < rc )
         {
 //            qDebug() << "Shunting in" << lasttimeout << "ms, q:" << q->toString();
 
