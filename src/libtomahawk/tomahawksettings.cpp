@@ -174,6 +174,21 @@ TomahawkSettings::hasScannerPaths() const
 }
 
 
+TomahawkSettings::ScannerMode
+TomahawkSettings::scannerMode() const
+{
+    //FIXME: Default to directories?
+    return (TomahawkSettings::ScannerMode) value( "scanner-mode", TomahawkSettings::Files ).toInt();
+}
+
+ 
+void
+TomahawkSettings::setScannerMode( ScannerMode mode )
+{
+    setValue( "scanner-mode", mode );
+}
+
+
 bool
 TomahawkSettings::watchForChanges() const
 {

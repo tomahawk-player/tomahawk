@@ -17,7 +17,7 @@
  */
 
 #ifndef TOMAHAWK_SETTINGS_H
-#define TOMAHAWK_SETTINGS_h
+#define TOMAHAWK_SETTINGS_H
 
 #include <QSettings>
 
@@ -41,9 +41,12 @@ public:
     void applyChanges() { emit changed(); }
 
     /// General settings
+    enum ScannerMode { Dirs, Files };
     QStringList scannerPaths(); /// QDesktopServices::MusicLocation by default
     void setScannerPaths( const QStringList& paths );
     bool hasScannerPaths() const;
+    ScannerMode scannerMode() const;
+    void setScannerMode( ScannerMode mode );
 
     bool watchForChanges() const;
     void setWatchForChanges( bool watch );

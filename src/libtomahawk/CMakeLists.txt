@@ -54,6 +54,7 @@ set( libSources
     database/databasecommand_addfiles.cpp
     database/databasecommand_deletefiles.cpp
     database/databasecommand_dirmtimes.cpp
+    database/databasecommand_filemtimes.cpp
     database/databasecommand_loadfile.cpp
     database/databasecommand_logplayback.cpp
     database/databasecommand_addsource.cpp
@@ -214,6 +215,7 @@ set( libHeaders
     database/databasecommand_addfiles.h
     database/databasecommand_deletefiles.h
     database/databasecommand_dirmtimes.h
+    database/databasecommand_filemtimes.h
     database/databasecommand_loadfile.h
     database/databasecommand_logplayback.h
     database/databasecommand_addsource.h

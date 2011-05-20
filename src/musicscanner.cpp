@@ -25,6 +25,7 @@
 #include "sourcelist.h"
 #include "database/database.h"
 #include "database/databasecommand_dirmtimes.h"
+#include "database/databasecommand_filemtimes.h"
 #include "database/databasecommand_addfiles.h"
 #include "database/databasecommand_deletefiles.h"
 
@@ -79,13 +80,15 @@ DirLister::scanDir( QDir dir, int depth, DirLister::Mode mode )
     const uint mtime = QFileInfo( dir.canonicalPath() ).lastModified().toUTC().toTime_t();
     m_newdirmtimes.insert( dir.canonicalPath(), mtime );
 
-    if ( m_dirmtimes.contains( dir.canonicalPath() ) && mtime == m_dirmtimes.value( dir.canonicalPath() ) )
+    if ( m_mode == TomahawkSettings::Dirs && m_dirmtimes.contains( dir.canonicalPath() ) && mtime == m_dirmtimes.value( dir.canonicalPath() ) )
     {
         // dont scan this dir, unchanged since last time.
     }
     else
     {
-        if( m_dirmtimes.contains( dir.canonicalPath() ) || !m_recursive )
+        if( m_mode == TomahawkSettings::Dirs
+                && ( m_dirmtimes.contains( dir.canonicalPath() ) || !m_recursive )
+                && mtime == m_dirmtimes.value( dir.canonicalPath() ) )
             Database::instance()->enqueue( QSharedPointer<DatabaseCommand>( new DatabaseCommand_DeleteFiles( dir, SourceList::instance()->getLocal() ) ) );
 
         dir.setFilter( QDir::Files | QDir::Readable | QDir::NoDotAndDotDot );
@@ -112,9 +115,10 @@ DirLister::scanDir( QDir dir, int depth, DirLister::Mode mode )
 }
 
 
-MusicScanner::MusicScanner( const QStringList& dirs, bool recursive, quint32 bs )
+MusicScanner::MusicScanner( const QStringList& dirs, TomahawkSettings::ScannerMode mode, bool recursive, quint32 bs )
     : QObject()
     , m_dirs( dirs )
+    , m_mode( mode )
     , m_recursive( recursive )
     , m_batchsize( bs )
     , m_dirListerThreadController( 0 )
@@ -172,19 +176,37 @@ MusicScanner::startScan()
     //FIXME: For multiple collection support make sure the right prefix gets passed in...or not...
     //bear in mind that simply passing in the top-level of a defined collection means it will not return items that need
     //to be removed that aren't in that root any longer -- might have to do the filtering in setMTimes based on strings
-    DatabaseCommand_DirMtimes* cmd = new DatabaseCommand_DirMtimes();
+    DatabaseCommand_DirMtimes *cmd = new DatabaseCommand_DirMtimes();
     connect( cmd, SIGNAL( done( QMap<QString, unsigned int> ) ),
-                    SLOT( setMtimes( QMap<QString, unsigned int> ) ) );
+                    SLOT( setDirMtimes( QMap<QString, unsigned int> ) ) );
 
     Database::instance()->enqueue( QSharedPointer<DatabaseCommand>(cmd) );
 }
 
 
 void
-MusicScanner::setMtimes( const QMap<QString, unsigned int>& m )
+MusicScanner::setDirMtimes( const QMap<QString, unsigned int>& m )
 {
     qDebug() << Q_FUNC_INFO << m.count();
     m_dirmtimes = m;
+    if ( m_mode == TomahawkSettings::Files )
+    {
+        DatabaseCommand_FileMtimes *cmd = new DatabaseCommand_FileMtimes();
+        connect( cmd, SIGNAL( done( QMap<QString, unsigned int> ) ),
+                    SLOT( setFileMtimes( QMap<QString, unsigned int> ) ) );
+
+        Database::instance()->enqueue( QSharedPointer<DatabaseCommand>(cmd) );
+        return;
+    }
+    scan();
+}
+
+
+void
+MusicScanner::setFileMtimes( const QMap<QString, unsigned int>& m )
+{
+    qDebug() << Q_FUNC_INFO << m.count();
+    m_filemtimes = m;
     scan();
 }
 
@@ -192,14 +214,16 @@ MusicScanner::setMtimes( const QMap<QString, unsigned int>& m )
 void
 MusicScanner::scan()
 {
-    qDebug() << "Scanning, num saved mtimes from last scan:" << m_dirmtimes.size();
+    qDebug() << "Scanning, num saved dir mtimes from last scan:" << m_dirmtimes.size();
+    if ( m_mode == TomahawkSettings::Files )
+        qDebug() << "Num saved file mtimes from last scan:" << m_filemtimes.size();
 
     connect( this, SIGNAL( batchReady( QVariantList ) ),
                      SLOT( commitBatch( QVariantList ) ), Qt::DirectConnection );
 
     m_dirListerThreadController = new QThread( this );
     
-    m_dirLister = QWeakPointer< DirLister >( new DirLister( m_dirs, m_dirmtimes, m_recursive ) );
+    m_dirLister = QWeakPointer< DirLister >( new DirLister( m_dirs, m_dirmtimes, m_mode, m_recursive ) );
     m_dirLister.data()->moveToThread( m_dirListerThreadController );
 
     connect( m_dirLister.data(), SIGNAL( fileToScan( QFileInfo ) ),

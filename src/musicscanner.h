@@ -19,6 +19,8 @@
 #ifndef MUSICSCANNER_H
 #define MUSICSCANNER_H
 
+#include <tomahawksettings.h>
+
 /* taglib */
 #include <fileref.h>
 #include <tag.h>
@@ -47,8 +49,8 @@ public:
         MTimeOnly
     };
     
-    DirLister( const QStringList& dirs, const QMap<QString, unsigned int>& mtimes, bool recursive )
-        : QObject(), m_dirs( dirs ), m_dirmtimes( mtimes ), m_recursive( recursive )
+    DirLister( const QStringList& dirs, const QMap<QString, unsigned int>& dirmtimes, TomahawkSettings::ScannerMode mode, bool recursive )
+        : QObject(), m_dirs( dirs ), m_dirmtimes( dirmtimes ), m_mode( mode ), m_recursive( recursive )
     {
         qDebug() << Q_FUNC_INFO;
     }
@@ -69,17 +71,19 @@ private slots:
 private:
     QStringList m_dirs;
     QMap<QString, unsigned int> m_dirmtimes;
+    TomahawkSettings::ScannerMode m_mode;
     bool m_recursive;
     
     QMap<QString, unsigned int> m_newdirmtimes;
 };
+
 
 class MusicScanner : public QObject
 {
 Q_OBJECT
 
 public:
-    MusicScanner( const QStringList& dirs, bool recursive = true, quint32 bs = 0 );
+    MusicScanner( const QStringList& dirs, TomahawkSettings::ScannerMode mode, bool recursive = true, quint32 bs = 0 );
     ~MusicScanner();
 
 signals:
@@ -96,11 +100,13 @@ private slots:
     void scanFile( const QFileInfo& fi );
     void startScan();
     void scan();
-    void setMtimes( const QMap<QString, unsigned int>& m );
+    void setDirMtimes( const QMap<QString, unsigned int>& m );
+    void setFileMtimes( const QMap<QString, unsigned int>& m );
     void commitBatch( const QVariantList& );
 
 private:
     QStringList m_dirs;
+    TomahawkSettings::ScannerMode m_mode;
     QMap<QString, QString> m_ext2mime; // eg: mp3 -> audio/mpeg
     unsigned int m_scanned;
     unsigned int m_skipped;
@@ -108,6 +114,7 @@ private:
     QList<QString> m_skippedFiles;
 
     QMap<QString, unsigned int> m_dirmtimes;
+    QMap<QString, unsigned int> m_filemtimes;
     QMap<QString, unsigned int> m_newdirmtimes;
 
     QList<QVariant> m_scannedfiles;

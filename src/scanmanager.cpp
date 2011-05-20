@@ -109,7 +109,7 @@ ScanManager::onSettingsChanged()
         m_currScannerPaths != TomahawkSettings::instance()->scannerPaths() )
     {
         m_currScannerPaths = TomahawkSettings::instance()->scannerPaths();
-        runManualScan( m_currScannerPaths );
+        runScan();
     }
 
     if ( TomahawkSettings::instance()->watchForChanges() && !m_scanTimer->isActive() )
@@ -121,10 +121,10 @@ void
 ScanManager::runStartupScan()
 {
     qDebug() << Q_FUNC_INFO;
-    if( !Database::instance() || ( Database::instance() && !Database::instance()->isReady() ) )
+    if ( !Database::instance() || ( Database::instance() && !Database::instance()->isReady() ) )
         QTimer::singleShot( 1000, this, SLOT( runStartupScan() ) );
     else
-        runManualScan( m_currScannerPaths );
+        runScan();
 }
 
 
@@ -132,25 +132,36 @@ void
 ScanManager::scanTimerTimeout()
 {
     qDebug() << Q_FUNC_INFO;
-    if( !Database::instance() || ( Database::instance() && !Database::instance()->isReady() ) )
+    if ( !Database::instance() || ( Database::instance() && !Database::instance()->isReady() ) )
         return;
     else
-        runManualScan( m_currScannerPaths );
+        runScan();
 }
 
 
 void
-ScanManager::runManualScan( const QStringList& paths )
+ScanManager::runScan()
+{
+    qDebug() << Q_FUNC_INFO;
+    if ( !Database::instance() || ( Database::instance() && !Database::instance()->isReady() ) )
+        return;
+
+    runDirScan( TomahawkSettings::instance()->scannerPaths() );
+}
+
+
+void
+ScanManager::runDirScan( const QStringList& paths )
 {
     qDebug() << Q_FUNC_INFO;
 
-    if( !Database::instance() || ( Database::instance() && !Database::instance()->isReady() ) )
+    if ( !Database::instance() || ( Database::instance() && !Database::instance()->isReady() ) )
         return;
 
     if ( !m_musicScannerThreadController && m_scanner.isNull() ) //still running if these are not zero
     {
         m_musicScannerThreadController = new QThread( this );
-        m_scanner = QWeakPointer< MusicScanner>( new MusicScanner( paths ) );
+        m_scanner = QWeakPointer< MusicScanner>( new MusicScanner( paths, TomahawkSettings::instance()->scannerMode() ) );
         m_scanner.data()->moveToThread( m_musicScannerThreadController );
         connect( m_scanner.data(), SIGNAL( finished() ), SLOT( scannerFinished() ) );
         m_musicScannerThreadController->start( QThread::IdlePriority );
@@ -158,7 +169,7 @@ ScanManager::runManualScan( const QStringList& paths )
     }
     else
     {
-        qDebug() << "Could not run manual scan, old scan still running";
+        qDebug() << "Could not run dir scan, old scan still running";
         return;
     }
 }

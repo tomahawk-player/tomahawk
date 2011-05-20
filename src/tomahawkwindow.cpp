@@ -374,7 +374,7 @@ void
 TomahawkWindow::updateCollectionManually()
 {
     if ( TomahawkSettings::instance()->hasScannerPaths() )
-        ScanManager::instance()->runManualScan( TomahawkSettings::instance()->scannerPaths() );
+        ScanManager::instance()->runScan();
 }
 
 
