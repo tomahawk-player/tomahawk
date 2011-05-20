@@ -60,6 +60,9 @@ void
 Api_v1::auth_2( QxtWebRequestEvent* event, QString arg )
 {
     qDebug() << "AUTH_2 HTTP" << event->url.toString() << arg;
+    if( event->content.isNull() )
+        return;
+
     QString params = QUrl::fromPercentEncoding( event->content->readAll() );
     params = params.mid( params.indexOf( '?' ) );
     QStringList pieces = params.split( '&' );
