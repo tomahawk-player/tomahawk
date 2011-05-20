@@ -100,8 +100,8 @@ private slots:
     void scanFile( const QFileInfo& fi );
     void startScan();
     void scan();
-    void setDirMtimes( const QMap<QString, unsigned int>& m );
-    void setFileMtimes( const QMap<QString, unsigned int>& m );
+    void setDirMtimes( const QMap< QString, unsigned int >& m );
+    void setFileMtimes( const QMap< QString, QMap< unsigned int, unsigned int > >& m );
     void commitBatch( const QVariantList& );
 
 private:
@@ -114,7 +114,7 @@ private:
     QList<QString> m_skippedFiles;
 
     QMap<QString, unsigned int> m_dirmtimes;
-    QMap<QString, unsigned int> m_filemtimes;
+    QMap<QString, QMap< unsigned int, unsigned int > > m_filemtimes;
     QMap<QString, unsigned int> m_newdirmtimes;
 
     QList<QVariant> m_scannedfiles;

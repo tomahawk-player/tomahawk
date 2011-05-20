@@ -192,8 +192,8 @@ MusicScanner::setDirMtimes( const QMap<QString, unsigned int>& m )
     if ( m_mode == TomahawkSettings::Files )
     {
         DatabaseCommand_FileMtimes *cmd = new DatabaseCommand_FileMtimes();
-        connect( cmd, SIGNAL( done( QMap<QString, unsigned int> ) ),
-                    SLOT( setFileMtimes( QMap<QString, unsigned int> ) ) );
+        connect( cmd, SIGNAL( done( QMap<QString, QMap< unsigned int, unsigned int > > ) ),
+                    SLOT( setFileMtimes( QMap<QString, QMap< unsigned int, unsigned int > > ) ) );
 
         Database::instance()->enqueue( QSharedPointer<DatabaseCommand>(cmd) );
         return;
@@ -203,7 +203,7 @@ MusicScanner::setDirMtimes( const QMap<QString, unsigned int>& m )
 
 
 void
-MusicScanner::setFileMtimes( const QMap<QString, unsigned int>& m )
+MusicScanner::setFileMtimes( const QMap<QString, QMap< unsigned int, unsigned int > >& m )
 {
     qDebug() << Q_FUNC_INFO << m.count();
     m_filemtimes = m;
@@ -324,6 +324,24 @@ MusicScanner::commitBatch( const QVariantList& tracks )
 void
 MusicScanner::scanFile( const QFileInfo& fi )
 {
+    //qDebug() << "Scanning file with canonical file path " << fi.canonicalFilePath();
+    //qDebug() << "is directory ? " << ( fi.isDir() ? " yes" : " no");
+    if ( m_mode == TomahawkSettings::Files && m_filemtimes.contains( "file://" + fi.canonicalFilePath() ) )
+    {
+        //qDebug() << "All keys: " << m_filemtimes.keys();
+        //qDebug() << "Checking " << fi.canonicalFilePath() << " with last modified time " << fi.lastModified().toUTC().toTime_t() << " << against value in m_filemtimes " << m_filemtimes.value( "file://" + fi.canonicalFilePath() ).values().first();
+        if ( fi.lastModified().toUTC().toTime_t() == m_filemtimes.value( "file://" + fi.canonicalFilePath() ).values().first() )
+        {
+            qDebug() << "Same mtime";
+            return;
+        }
+        else
+        {
+            qDebug() << "Different mtime";
+            return;
+        }
+    }
+    
     QVariant m = readFile( fi );
     if ( m.toMap().isEmpty() )
         return;

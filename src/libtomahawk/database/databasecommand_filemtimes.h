@@ -47,18 +47,15 @@ public:
     virtual QString commandname() const { return "filemtimes"; }
 
 signals:
-    void done( const QMap<QString, unsigned int>& );
+    void done( const QMap< QString, QMap< unsigned int, unsigned int > >& );
 
 public slots:
 
 private:
-    void execSelectPath( DatabaseImpl *dbi, const QDir& path, QMap<QString, unsigned int> &mtimes );
-        
+    void execSelectPath( DatabaseImpl *dbi, const QDir& path, QMap< QString, QMap< unsigned int, unsigned int > > &mtimes );
     void execSelect( DatabaseImpl* dbi );
-    void execUpdate( DatabaseImpl* dbi );
     QString m_prefix;
     QStringList m_prefixes;
-    QMap<QString, unsigned int> m_tosave;
 };
 
 #endif // DATABASECOMMAND_FILEMTIMES_H

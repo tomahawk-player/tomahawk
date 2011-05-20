@@ -56,7 +56,8 @@ ScanManager::ScanManager( QObject* parent )
     connect( m_scanTimer, SIGNAL( timeout() ), SLOT( scanTimerTimeout() ) );
 
     // FIXME: Disable this until we find something nondeprecated and working (e.g. not QFileSystemWatcher)
-    //TomahawkSettings::instance()->setWatchForChanges( true );
+    TomahawkSettings::instance()->setWatchForChanges( true );
+    TomahawkSettings::instance()->setScannerMode( TomahawkSettings::Files );
     
     if ( TomahawkSettings::instance()->hasScannerPaths() )
     {

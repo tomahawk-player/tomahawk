@@ -33,14 +33,19 @@ DatabaseCommand_FileMtimes::exec( DatabaseImpl* dbi )
 void
 DatabaseCommand_FileMtimes::execSelect( DatabaseImpl* dbi )
 {
+    qDebug() << Q_FUNC_INFO;
     //FIXME: If ever needed for a non-local source this will have to be fixed/updated
-    QMap<QString,unsigned int> mtimes;
+    QMap< QString, QMap< unsigned int, unsigned int > > mtimes;
     TomahawkSqlQuery query = dbi->newquery();
     if( m_prefix.isEmpty() && m_prefixes.isEmpty() )
     {
-        query.exec( "SELECT id, mtime FROM file WHERE souce IS NULL" );
+        query.exec( "SELECT url, id, mtime FROM file WHERE source IS NULL" );
         while( query.next() )
-            mtimes.insert( query.value( 0 ).toString(), query.value( 1 ).toUInt() );
+        {
+            QMap< unsigned int, unsigned int > map;
+            map.insert( query.value( 1 ).toUInt(), query.value( 2 ).toUInt() );
+            mtimes.insert( query.value( 0 ).toString(), map );
+        }
     }
     else if( m_prefixes.isEmpty() )
         execSelectPath( dbi, m_prefix, mtimes );
@@ -55,10 +60,10 @@ DatabaseCommand_FileMtimes::execSelect( DatabaseImpl* dbi )
 }
 
 void
-DatabaseCommand_FileMtimes::execSelectPath( DatabaseImpl *dbi, const QDir& path, QMap<QString, unsigned int> &mtimes )
+DatabaseCommand_FileMtimes::execSelectPath( DatabaseImpl *dbi, const QDir& path, QMap<QString, QMap< unsigned int, unsigned int > > &mtimes )
 {
     TomahawkSqlQuery query = dbi->newquery();
-    query.prepare( QString( "SELECT id, mtime "
+    query.prepare( QString( "SELECT url, id, mtime "
                             "FROM file "
                             "WHERE source IS NULL "
                             "AND url LIKE :prefix" ) );
@@ -67,5 +72,9 @@ DatabaseCommand_FileMtimes::execSelectPath( DatabaseImpl *dbi, const QDir& path,
     query.exec();
 
     while( query.next() )
-        mtimes.insert( query.value( 0 ).toString(), query.value( 1 ).toUInt() );
+    {
+        QMap< unsigned int, unsigned int > map;
+        map.insert( query.value( 1 ).toUInt(), query.value( 2 ).toUInt() );
+        mtimes.insert( query.value( 0 ).toString(), map );
+    }
 }
