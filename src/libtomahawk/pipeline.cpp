@@ -323,14 +323,10 @@ Pipeline::shunt( const query_ptr& q )
 
     if ( lastweight > 0 )
     {
+        //            qDebug() << "Shunting in" << lasttimeout << "ms, q:" << q->toString();
         q->setLastPipelineWeight( lastweight );
-        if ( thisResolver < rc )
-        {
-//            qDebug() << "Shunting in" << lasttimeout << "ms, q:" << q->toString();
-
-            m_qidsTimeout.insert( q->id(), true );
-            new FuncTimeout( lasttimeout, boost::bind( &Pipeline::timeoutShunt, this, q ), this );
-        }
+        m_qidsTimeout.insert( q->id(), true );
+        new FuncTimeout( lasttimeout, boost::bind( &Pipeline::timeoutShunt, this, q ), this );
     }
     else
     {
