@@ -89,7 +89,7 @@ InfoSystem::~InfoSystem()
         QMetaObject::invokeMethod( m_worker.data(), "deleteLater", Qt::QueuedConnection );
         while( !m_worker.isNull() )
         {
-            qDebug() << Q_FUNC_INFO << " worker not deleted, processing events";
+            qDebug() << Q_FUNC_INFO << " worker not deleted";
             TomahawkUtils::Sleep::msleep( 50 );
         }
 
@@ -100,7 +100,7 @@ InfoSystem::~InfoSystem()
         {
             while( !m_infoSystemWorkerThreadController->isFinished() )
             {
-                qDebug() << Q_FUNC_INFO << " worker thread controller not finished, processing events";
+                qDebug() << Q_FUNC_INFO << " worker thread controller not finished";
                 TomahawkUtils::Sleep::msleep( 50 );
             }
             

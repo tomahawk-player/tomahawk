@@ -38,7 +38,7 @@ public:
         : DatabaseCommand( parent ), m_prefix( prefix ), m_update( false )
     {}
     
-    explicit DatabaseCommand_DirMtimes( const QStringList& prefixes = QStringList(), QObject* parent = 0 )
+    explicit DatabaseCommand_DirMtimes( const QStringList& prefixes, QObject* parent = 0 )
     : DatabaseCommand( parent ), m_prefixes( prefixes ), m_update( false )
     {}
 

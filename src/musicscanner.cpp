@@ -139,9 +139,8 @@ MusicScanner::~MusicScanner()
         QMetaObject::invokeMethod( m_dirLister.data(), "deleteLater", Qt::QueuedConnection );
         while( !m_dirLister.isNull() )
         {
-            qDebug() << Q_FUNC_INFO << " scanner not deleted, processing events";
-            QCoreApplication::processEvents( QEventLoop::AllEvents, 200 );
-            TomahawkUtils::Sleep::msleep( 100 );
+            qDebug() << Q_FUNC_INFO << " scanner not deleted";
+            TomahawkUtils::Sleep::msleep( 50 );
         }
 
         if ( m_dirListerThreadController )
@@ -151,9 +150,8 @@ MusicScanner::~MusicScanner()
         {
             while( !m_dirListerThreadController->isFinished() )
             {
-                qDebug() << Q_FUNC_INFO << " scanner thread controller not finished, processing events";
-                QCoreApplication::processEvents( QEventLoop::AllEvents, 200 );
-                TomahawkUtils::Sleep::msleep( 100 );
+                qDebug() << Q_FUNC_INFO << " scanner thread controller not finished";
+                TomahawkUtils::Sleep::msleep( 50 );
             }
 
             delete m_dirListerThreadController;
@@ -171,7 +169,10 @@ MusicScanner::startScan()
     m_skippedFiles.clear();
 
     // trigger the scan once we've loaded old mtimes for dirs below our path
-    DatabaseCommand_DirMtimes* cmd = new DatabaseCommand_DirMtimes( TomahawkSettings::instance()->scannerPaths() );
+    //FIXME: For multiple collection support make sure the right prefix gets passed in...or not...
+    //bear in mind that simply passing in the top-level of a defined collection means it will not return items that need
+    //to be removed that aren't in that root any longer -- might have to do the filtering in setMTimes based on strings
+    DatabaseCommand_DirMtimes* cmd = new DatabaseCommand_DirMtimes();
     connect( cmd, SIGNAL( done( QMap<QString, unsigned int> ) ),
                     SLOT( setMtimes( QMap<QString, unsigned int> ) ) );
 
@@ -232,11 +233,8 @@ MusicScanner::listerFinished( const QMap<QString, unsigned int>& newmtimes )
         {
             qDebug() << "Removing stale dir:" << path;
             Database::instance()->enqueue( QSharedPointer<DatabaseCommand>( new DatabaseCommand_DeleteFiles( path, SourceList::instance()->getLocal() ) ) );
-            emit removeWatchedDir( path );
         }
     }
-
-    emit addWatchedDirs( newmtimes.keys() );
 
     // save mtimes, then quit thread
     DatabaseCommand_DirMtimes* cmd = new DatabaseCommand_DirMtimes( newmtimes );

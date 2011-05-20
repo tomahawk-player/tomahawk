@@ -86,8 +86,6 @@ signals:
     //void fileScanned( QVariantMap );
     void finished();
     void batchReady( const QVariantList& );
-    void addWatchedDirs( const QStringList & );
-    void removeWatchedDir( const QString & );
 
 private:
     QVariant readFile( const QFileInfo& fi );
