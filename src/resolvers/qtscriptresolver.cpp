@@ -60,7 +60,7 @@ QtScriptResolver::QtScriptResolver( const QString& scriptPath )
 QtScriptResolver::~QtScriptResolver()
 {
     Tomahawk::Pipeline::instance()->removeResolver( this );
-//    delete m_engine;
+    delete m_engine;
 }
 
 
