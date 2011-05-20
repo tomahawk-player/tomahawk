@@ -82,6 +82,7 @@ macro_log_feature(LIBJREEN_FOUND "Jreen" "Qt XMPP Library" "http://gitorious.org
 # we need pthreads too
 find_package(Threads)
 
+find_package(KDE4Installed)
 find_package(KDE4)
 IF(KDE4_FOUND)
     #KDE4 adds and removes some compiler flags that we don't like
