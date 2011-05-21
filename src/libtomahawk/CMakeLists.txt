@@ -362,7 +362,6 @@ include_directories( . ${CMAKE_CURRENT_BINARY_DIR} ${CMAKE_CURRENT_BINARY_DIR}/.
     ${THIRDPARTY_DIR}/jdns
     ${THIRDPARTY_DIR}/jdns/jdns
     ${THIRDPARTY_DIR}/jdns/jdnsshared
-    ${THIRDPARTY_DIR}/qtweetlib/qtweetlib/src
     ${CMAKE_BINARY_DIR}/thirdparty/liblastfm2/src
 )
 
@@ -419,12 +418,12 @@ add_library( tomahawklib SHARED ${libSources} ${libMoc} )
 target_link_libraries( tomahawklib
     # Internal
     tomahawk_jdns
-    tomahawk_qtweetlib
 
     # Thirdparty shipped with tomahawk
     portfwd
 
     # External deps
+    ${QJSON_LIBRARIES}
     ${PHONON_LIBS}
     ${TAGLIB_LIBRARIES}
     ${CLUCENE_LIBRARIES}

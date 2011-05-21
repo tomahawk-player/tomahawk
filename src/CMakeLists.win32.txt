@@ -6,7 +6,6 @@ ADD_DEFINITIONS( -static-libgcc )
 
 
 SET( TOMAHAWK_LIBRARIES  ${CMAKE_BINARY_DIR}/src/libtomahawk/libtomahawklib.dll )
-SET( QTWEETLIB_LIBRARIES  ${CMAKE_BINARY_DIR}/thirdparty/qtweetlib/libtomahawk_qtweetlib.dll )
 SET( QXTWEB_LIBRARIES  ${CMAKE_BINARY_DIR}/thirdparty/qxt/qxtweb-standalone/libqxtweb-standalone.dll )
 
 SET( OS_SPECIFIC_LINK_LIBRARIES
