@@ -50,15 +50,11 @@ ScanManager::ScanManager( QObject* parent )
 
     m_scanTimer = new QTimer( this );
     m_scanTimer->setSingleShot( false );
-    m_scanTimer->setInterval( 120000 );
+    m_scanTimer->setInterval( TomahawkSettings::instance()->scannerTime() * 1000 );
 
     connect( TomahawkSettings::instance(), SIGNAL( changed() ), SLOT( onSettingsChanged() ) );
     connect( m_scanTimer, SIGNAL( timeout() ), SLOT( scanTimerTimeout() ) );
 
-    // FIXME: Disable this until we find something nondeprecated and working (e.g. not QFileSystemWatcher)
-    TomahawkSettings::instance()->setWatchForChanges( true );
-    TomahawkSettings::instance()->setScannerMode( TomahawkSettings::Files );
-    
     if ( TomahawkSettings::instance()->hasScannerPaths() )
     {
         m_currScannerPaths = TomahawkSettings::instance()->scannerPaths();
@@ -105,6 +101,8 @@ ScanManager::onSettingsChanged()
 {
     if ( !TomahawkSettings::instance()->watchForChanges() && m_scanTimer->isActive() )
         m_scanTimer->stop();
+
+    m_scanTimer->setInterval( TomahawkSettings::instance()->scannerTime() * 1000 );
     
     if ( TomahawkSettings::instance()->hasScannerPaths() &&
         m_currScannerPaths != TomahawkSettings::instance()->scannerPaths() )

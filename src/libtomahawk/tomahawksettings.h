@@ -47,7 +47,9 @@ public:
     bool hasScannerPaths() const;
     ScannerMode scannerMode() const;
     void setScannerMode( ScannerMode mode );
-
+    uint scannerTime() const;
+    void setScannerTime( uint time );
+    
     bool watchForChanges() const;
     void setWatchForChanges( bool watch );
 

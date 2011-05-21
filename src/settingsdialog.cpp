@@ -115,11 +115,26 @@ SettingsDialog::SettingsDialog( QWidget *parent )
         ui->lineEditMusicPath_2->setText( QDesktopServices::storageLocation( QDesktopServices::MusicLocation ) );
     }
 
-    // WATCH CHANGES
-    // FIXME: QFileSystemWatcher is broken (as we know) and deprecated. Find another way.
     ui->checkBoxWatchForChanges->setChecked( s->watchForChanges() );
-    ui->checkBoxWatchForChanges->setVisible( false );
-
+    ui->scannerTimeSpinBox->setValue( s->scannerTime() );
+    if ( s->scannerMode() == TomahawkSettings::Files )
+        ui->scannerFileModeButton->setChecked( true );
+    else
+        ui->scannerDirModeButton->setChecked( false );
+    connect( ui->checkBoxWatchForChanges, SIGNAL( clicked( bool ) ), SLOT( updateScanOptionsView() ) );
+    connect( ui->scannerDirModeButton, SIGNAL( clicked( bool ) ), SLOT( updateScanOptionsView() ) );
+    connect( ui->scannerFileModeButton, SIGNAL( clicked( bool ) ), SLOT( updateScanOptionsView() ) );
+    if ( s->scannerMode() == TomahawkSettings::Files )
+    {
+        ui->scanInformationLabel->setText( "Files mode uses the changed time of every file to determine if the file has\nchanged. This can be more processor, disk, and network-intensive, especially\nfor files over a network connection. This mode is recommended, but switch\nto Directory Mode or raise the time between scans if you encounter trouble." );
+        ui->scannerFileModeButton->setChecked( true );
+    }
+    else
+    {
+        ui->scanInformationLabel->setText( "Directory mode mode uses the changed time of collection directories to\ndetermine if files have changed. This is less processor, disk, and \nnetwork-intensive when simply running checks, so may be better for\nfiles over a network connection. However, it will only pick up changes\nif a file has been added to or removed from a directory, and scans\nentire directories at once (so is not good for very flat collections)." );
+        ui->scannerDirModeButton->setChecked( true );
+    }
+    
     // LAST FM
     ui->checkBoxEnableLastfm->setChecked( s->scrobblingEnabled() );
     ui->lineEditLastfmUsername->setText( s->lastFmUsername() );
@@ -164,6 +179,8 @@ SettingsDialog::~SettingsDialog()
 
         s->setScannerPaths( QStringList( ui->lineEditMusicPath_2->text() ) );
         s->setWatchForChanges( ui->checkBoxWatchForChanges->isChecked() );
+        s->setScannerTime( ui->scannerTimeSpinBox->value() );
+        s->setScannerMode( ui->scannerFileModeButton->isChecked() ? TomahawkSettings::Files : TomahawkSettings::Dirs );
 
         s->setScrobblingEnabled( ui->checkBoxEnableLastfm->isChecked() );
         s->setLastFmUsername( ui->lineEditLastfmUsername->text() );
@@ -179,6 +196,7 @@ SettingsDialog::~SettingsDialog()
 
     delete ui;
 }
+
 
 void
 SettingsDialog::createIcons()
@@ -323,6 +341,38 @@ SettingsDialog::toggleUpnp( bool preferStaticEnabled )
         ui->checkBoxUpnp->setEnabled( false );
     else
         ui->checkBoxUpnp->setEnabled( true );
+}
+
+
+void
+SettingsDialog::updateScanOptionsView()
+{
+    if ( ui->checkBoxWatchForChanges->isChecked() )
+    {
+        ui->scanTimeLabel->show();
+        ui->scannerTimeSpinBox->show();
+        ui->scannerDirModeButton->show();
+        ui->scannerFileModeButton->show();
+        ui->scanInformationLabel->show();
+        if ( sender() == ui->scannerFileModeButton )
+        {
+            ui->scanInformationLabel->setText( "Files mode uses the changed time of every file to determine if the file has\nchanged. This can be more processor, disk, and network-intensive, especially\nfor files over a network connection. This mode is recommended, but switch\nto Directory Mode or raise the time between scans if you encounter trouble." );
+            ui->scannerFileModeButton->setChecked( true );
+        }
+        else
+        {
+            ui->scanInformationLabel->setText( "Directory mode mode uses the changed time of collection directories to\ndetermine if files have changed. This is less processor, disk, and \nnetwork-intensive when simply running checks, so may be better for\nfiles over a network connection. However, it will only pick up changes\nif a file has been added to or removed from a directory, and scans\nentire directories at once (so is not good for very flat collections)." );
+            ui->scannerDirModeButton->setChecked( true );
+        }
+    }
+    else
+    {
+        ui->scanTimeLabel->hide();
+        ui->scannerTimeSpinBox->hide();
+        ui->scannerDirModeButton->hide();
+        ui->scannerFileModeButton->hide();
+        ui->scanInformationLabel->hide();
+    }
 }
 
 
