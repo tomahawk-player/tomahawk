@@ -27,10 +27,10 @@
 #include <QNetworkReply>
 #include <QStringList>
 
-#include <qtweetaccountverifycredentials.h>
-#include <qtweetuser.h>
-#include <qtweetstatus.h>
-#include <qtweetusershow.h>
+#include <QTweetLib/qtweetaccountverifycredentials.h>
+#include <QTweetLib/qtweetuser.h>
+#include <QTweetLib/qtweetstatus.h>
+#include <QTweetLib/qtweetusershow.h>
 
 #include <utils/tomahawkutils.h>
 #include <tomahawksettings.h>

@@ -61,23 +61,30 @@ macro_log_feature(TAGLIB_FOUND "TagLib" "Audio Meta-Data Library" "http://develo
 IF( INTERNAL_JREEN )
     ADD_SUBDIRECTORY( thirdparty/jreen )
     SET( LIBJREEN_INCLUDE_DIR  ${CMAKE_CURRENT_BINARY_DIR}/thirdparty/jreen/include )
-
-    IF( UNIX AND NOT APPLE )
-        SET( LIBJREEN_LIBRARY ${CMAKE_CURRENT_BINARY_DIR}/thirdparty/jreen/libjreen.so )
-    ENDIF( UNIX AND NOT APPLE )
-    IF( APPLE )
-        SET( LIBJREEN_LIBRARY ${CMAKE_CURRENT_BINARY_DIR}/thirdparty/jreen/libjreen.dylib )
-    ENDIF( APPLE )
-    IF( WIN32 )
-        SET( LIBJREEN_LIBRARY ${CMAKE_CURRENT_BINARY_DIR}/thirdparty/jreen/libjreen.dll )
-    ENDIF( WIN32 )
-
+    SET( LIBJREEN_LIBRARY jreen )
+    SET( LIBJREEN_LIBRARIES ${LIBJREEN_LIBRARY} )
     SET( LIBJREEN_FOUND  true )
     MESSAGE(STATUS "INTERNAL libjreen: ${LIBJREEN_INCLUDE_DIR}, ${LIBJREEN_LIBRARY}")
 ELSE( INTERNAL_JREEN )
     macro_optional_find_package(Jreen)
 ENDIF( INTERNAL_JREEN )
-macro_log_feature(LIBJREEN_FOUND "Jreen" "Qt XMPP Library" "http://gitorious.org/jreen/jreen" FALSE "" "Jreen is needed for the Jabber SIP plugin. \n\n     Use -DINTERNAL_JREEN=ON to build the git submodule inside Tomahawk \n     Be aware this installs a full jreen with headers and everything!")
+macro_log_feature(LIBJREEN_FOUND "Jreen" "Qt XMPP Library" "http://gitorious.org/jreen/jreen" FALSE "" "Jreen is needed for the Jabber SIP plugin. \n\n     Use -DINTERNAL_JREEN=ON to build the git submodule inside Tomahawk \n     Be aware this installs a full jreen with headers and everything!\n")
+
+# this installs headers and such and should really be handled in a separate package by packagers
+IF( INTERNAL_QTWEETLIB )
+    ADD_SUBDIRECTORY( thirdparty/qtweetlib )
+    # copy headers to build/QTweetLib so we can use proper includes inside the code
+    FILE( COPY ${CMAKE_SOURCE_DIR}/thirdparty/qtweetlib/QTweetLib/src/ DESTINATION ${CMAKE_BINARY_DIR}/QTweetLib )
+    SET( QTWEETLIB_INCLUDE_DIR  ${CMAKE_BINARY_DIR} )
+    SET( QTWEETLIB_LIBRARY  tomahawk_qtweetlib )
+    SET( QTWEETLIB_LIBRARIES ${QTWEETLIB_LIBRARY} )
+    SET( QTWEETLIB_FOUND  true )
+    MESSAGE(STATUS "INTERNAL libQTweetLib: ${QTWEETLIB_INCLUDE_DIR}, ${QTWEETLIB_LIBRARY}")
+ELSE( INTERNAL_QTWEETLIB )
+    macro_optional_find_package(QTweetLib)
+ENDIF( INTERNAL_QTWEETLIB )
+macro_log_feature(QTWEETLIB_FOUND "QTweetLib" "Qt Twitter Library" "https://github.com/minimoog/QTweetLib" FALSE "" "QTweetLib is needed for the Twitter SIP plugin. \n\n     Use -DINTERNAL_QTWEETLIB=ON to build the git submodule inside Tomahawk \n")
+
 
 # we need pthreads too
 find_package(Threads)

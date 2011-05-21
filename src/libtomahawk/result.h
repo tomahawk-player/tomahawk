@@ -87,6 +87,7 @@ public:
     void setSize( unsigned int size ) { m_size = size; }
     void setAlbumPos( unsigned int albumpos ) { m_albumpos = albumpos; }
     void setModificationTime( unsigned int modtime ) { m_modtime = modtime; }
+    void setYear( unsigned int year ) { m_year = year; }
 
     QVariantMap attributes() const { return m_attributes; }
     void setAttributes( const QVariantMap& map ) { m_attributes = map; updateAttributes(); }
