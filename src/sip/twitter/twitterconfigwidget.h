@@ -21,10 +21,10 @@
 
 #include "sip/SipPlugin.h"
 
-#include <qtweetstatus.h>
-#include <qtweetdmstatus.h>
-#include <qtweetuser.h>
-#include <qtweetnetbase.h>
+#include <QTweetLib/qtweetstatus.h>
+#include <QTweetLib/qtweetdmstatus.h>
+#include <QTweetLib/qtweetuser.h>
+#include <QTweetLib/qtweetnetbase.h>
 
 #include <QWidget>
 

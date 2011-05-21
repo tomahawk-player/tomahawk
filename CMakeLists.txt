@@ -73,7 +73,9 @@ macro_log_feature(LIBJREEN_FOUND "Jreen" "Qt XMPP Library" "http://gitorious.org
 # this installs headers and such and should really be handled in a separate package by packagers
 IF( INTERNAL_QTWEETLIB )
     ADD_SUBDIRECTORY( thirdparty/qtweetlib )
-    SET( QTWEETLIB_INCLUDE_DIR  ${CMAKE_SOURCE_DIR}/thirdparty/qtweetlib/QTweetLib/src )
+    # copy headers to build/QTweetLib so we can use proper includes inside the code
+    FILE( COPY ${CMAKE_SOURCE_DIR}/thirdparty/qtweetlib/QTweetLib/src/ DESTINATION ${CMAKE_BINARY_DIR}/QTweetLib )
+    SET( QTWEETLIB_INCLUDE_DIR  ${CMAKE_BINARY_DIR} )
     SET( QTWEETLIB_LIBRARY  tomahawk_qtweetlib )
     SET( QTWEETLIB_LIBRARIES ${QTWEETLIB_LIBRARY} )
     SET( QTWEETLIB_FOUND  true )

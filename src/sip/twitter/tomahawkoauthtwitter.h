@@ -3,8 +3,8 @@
 
 #include "../sipdllmacro.h"
 
-#include <qtweetlib_global.h>
-#include <oauthtwitter.h>
+#include <QTweetLib/qtweetlib_global.h>
+#include <QTweetLib/oauthtwitter.h>
 
 class SIPDLLEXPORT TomahawkOAuthTwitter : public OAuthTwitter
 {

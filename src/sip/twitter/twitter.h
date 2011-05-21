@@ -25,14 +25,14 @@
 #include <QWeakPointer>
 #include <QSet>
 
-#include <qtweetuser.h>
-#include <qtweetnetbase.h>
-#include <qtweetfriendstimeline.h>
-#include <qtweetdirectmessages.h>
-#include <qtweetdirectmessagenew.h>
-#include <qtweetdirectmessagedestroy.h>
-#include <qtweetmentions.h>
-#include <qtweetdmstatus.h>
+#include <QTweetLib/qtweetuser.h>
+#include <QTweetLib/qtweetnetbase.h>
+#include <QTweetLib/qtweetfriendstimeline.h>
+#include <QTweetLib/qtweetdirectmessages.h>
+#include <QTweetLib/qtweetdirectmessagenew.h>
+#include <QTweetLib/qtweetdirectmessagedestroy.h>
+#include <QTweetLib/qtweetmentions.h>
+#include <QTweetLib/qtweetdmstatus.h>
 
 #include "../sipdllmacro.h"
 #include "sip/SipPlugin.h"
