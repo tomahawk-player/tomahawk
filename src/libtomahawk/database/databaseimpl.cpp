@@ -580,14 +580,16 @@ DatabaseImpl::resultFromHint( const Tomahawk::query_ptr& origquery )
                             "file.source, "
                             "file_join.albumpos, "
                             "artist.id as artid, "
-                            "album.id as albid "
-                            "FROM file, file_join, artist, track "
+                            "album.id as albid, "
+                            "track_attributes.v as year "
+                            "FROM file, file_join, artist, track, track_attributes "
                             "LEFT JOIN album ON album.id = file_join.album "
                             "WHERE "
                             "artist.id = file_join.artist AND "
                             "track.id = file_join.track AND "
                             "file.source %1 AND "
                             "file_join.file = file.id AND "
+                            "file.id = track_attributes.id AND "
                             "file.url = ?"
         ).arg( searchlocal ? "IS NULL" : QString( "= %1" ).arg( s->id() ) );
 
@@ -632,6 +634,7 @@ DatabaseImpl::resultFromHint( const Tomahawk::query_ptr& origquery )
         res->setRID( uuid() );
         res->setId( query.value( 9 ).toUInt() );
         res->setCollection( s->collection() );
+        res->setYear( query.value( 17 ).toUInt() );
     }
 
     return res;
