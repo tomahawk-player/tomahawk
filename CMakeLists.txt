@@ -59,7 +59,7 @@ macro_log_feature(TAGLIB_FOUND "TagLib" "Audio Meta-Data Library" "http://develo
 
 # this installs headers and such and should really be handled in a separate package by packagers
 IF( INTERNAL_JREEN )
-    ADD_SUBDIRECTORY( thirdparty/jreen )
+    ADD_SUBDIRECTORY( ${THIRDPARTY_DIR}/jreen )
     SET( LIBJREEN_INCLUDE_DIR  ${CMAKE_CURRENT_BINARY_DIR}/thirdparty/jreen/include )
     SET( LIBJREEN_LIBRARY jreen )
     SET( LIBJREEN_LIBRARIES ${LIBJREEN_LIBRARY} )
@@ -72,7 +72,7 @@ macro_log_feature(LIBJREEN_FOUND "Jreen" "Qt XMPP Library" "http://gitorious.org
 
 # this installs headers and such and should really be handled in a separate package by packagers
 IF( INTERNAL_QTWEETLIB )
-    ADD_SUBDIRECTORY( thirdparty/qtweetlib )
+    ADD_SUBDIRECTORY( ${THIRDPARTY_DIR}/qtweetlib )
     # copy headers to build/QTweetLib so we can use proper includes inside the code
     FILE( COPY ${CMAKE_SOURCE_DIR}/thirdparty/qtweetlib/QTweetLib/src/ DESTINATION ${CMAKE_BINARY_DIR}/QTweetLib )
     SET( QTWEETLIB_INCLUDE_DIR  ${CMAKE_BINARY_DIR} )
@@ -85,6 +85,11 @@ ELSE( INTERNAL_QTWEETLIB )
 ENDIF( INTERNAL_QTWEETLIB )
 macro_log_feature(QTWEETLIB_FOUND "QTweetLib" "Qt Twitter Library" "https://github.com/minimoog/QTweetLib" FALSE "" "QTweetLib is needed for the Twitter SIP plugin. \n\n     Use -DINTERNAL_QTWEETLIB=ON to build the git submodule inside Tomahawk \n")
 
+### libportfwd
+SET( LIBPORTFWD_INCLUDE_DIR ${THIRDPARTY_DIR}/libportfwd/include )
+SET( LIBPORTFWD_LIBRARY tomahawk_portfwd )
+SET( LIBPORTFWD_LIBRARIES ${LIBPORTFWD_LIBRARY} )
+ADD_SUBDIRECTORY( ${THIRDPARTY_DIR}/libportfwd )
 
 # we need pthreads too
 find_package(Threads)

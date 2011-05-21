@@ -17,6 +17,9 @@
 
 #ifndef LIBPORTFWD_PORTFWD_H
 #define LIBPORTFWD_PORTFWD_H true
+
+#include "portfwddllmacro.h"
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -26,7 +29,7 @@
 struct UPNPUrls;
 struct IGDdatas;
 
-class Portfwd
+class PORTFWDDLLEXPORT Portfwd
 {
     public:
         Portfwd();
