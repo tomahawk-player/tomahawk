@@ -34,6 +34,7 @@
 #include <Playlist.h>
 #include <qclipboard.h>
 #include <qapplication.h>
+#include "utils/xspfgenerator.h"
 
 GlobalActionManager* GlobalActionManager::s_instance = 0;
 
@@ -123,6 +124,22 @@ GlobalActionManager::copyPlaylistToClipboard( const Tomahawk::dynplaylist_ptr& p
 
     QClipboard* cb = QApplication::clipboard();
     cb->setText( link.toEncoded() );
+}
+
+void
+GlobalActionManager::copyPlaylistToClipboard( const Tomahawk::playlist_ptr& playlist )
+{
+    XSPFGenerator* g = new XSPFGenerator( playlist, this );
+    connect( g, SIGNAL( generated( QByteArray ) ), this, SLOT( xspfCreated( QByteArray ) ) );
+}
+
+void
+GlobalActionManager::xspfCreated( const QByteArray& xspf )
+{
+    QClipboard* cb = QApplication::clipboard();
+    cb->setText( xspf );
+
+    sender()->deleteLater();
 }
 
 

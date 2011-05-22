@@ -158,6 +158,7 @@ set( libSources
     utils/widgetdragfilter.cpp
     utils/animatedsplitter.cpp
     utils/xspfloader.cpp
+    utils/xspfgenerator.cpp
 
     widgets/newplaylistwidget.cpp
     widgets/welcomewidget.cpp
@@ -320,6 +321,7 @@ set( libHeaders
     utils/widgetdragfilter.h
     utils/animatedsplitter.h
     utils/xspfloader.h
+    utils/xspfgenerator.h
 
     widgets/newplaylistwidget.h
     widgets/welcomewidget.h

@@ -39,6 +39,7 @@ public:
 
     void copyToClipboard( const Tomahawk::query_ptr& query ) const;
     void copyPlaylistToClipboard( const Tomahawk::dynplaylist_ptr& playlist );
+    void copyPlaylistToClipboard( const Tomahawk::playlist_ptr& playlist );
 
 public slots:
     bool parseTomahawkLink( const QString& link );
@@ -47,6 +48,8 @@ public slots:
 private slots:
     void bookmarkPlaylistCreated( const Tomahawk::playlist_ptr& pl );
     void showPlaylist();
+
+    void xspfCreated( const QByteArray& xspf );
 
 private:
     explicit GlobalActionManager( QObject* parent = 0 );

@@ -246,6 +246,11 @@ SourceTreeView::copyPlaylistLink()
         DynamicPlaylistItem* item = itemFromIndex< DynamicPlaylistItem >( m_contextMenuIndex );
         dynplaylist_ptr playlist = item->dynPlaylist();
         GlobalActionManager::instance()->copyPlaylistToClipboard( playlist );
+    } else if ( type == SourcesModel::StaticPlaylist )
+    {
+        PlaylistItem* item = itemFromIndex< PlaylistItem >( m_contextMenuIndex );
+        playlist_ptr playlist = item->playlist();
+        GlobalActionManager::instance()->copyPlaylistToClipboard( playlist );
     }
 }
 
