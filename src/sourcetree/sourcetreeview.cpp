@@ -139,7 +139,7 @@ SourceTreeView::setupMenus()
     m_renamePlaylistAction = m_playlistMenu.addAction( tr( "&Rename Playlist" ) );
     m_playlistMenu.addSeparator();
 
-    m_copyPlaylistAction = m_playlistMenu.addAction( tr( "&Copy Playlist Link" ) );
+    m_copyPlaylistAction = m_playlistMenu.addAction( tr( "&Copy Link" ) );
     m_deletePlaylistAction = m_playlistMenu.addAction( tr( "&Delete %1" ).arg( SourcesModel::rowTypeToString( type ) ) );
 
     m_roPlaylistMenu.addAction( m_copyPlaylistAction );
@@ -283,7 +283,7 @@ SourceTreeView::onCustomContextMenu( const QPoint& pos )
         PlaylistItem* item = itemFromIndex< PlaylistItem >( m_contextMenuIndex );
         if( item->playlist()->author()->isLocal() )
             m_playlistMenu.exec( mapToGlobal( pos ) );
-        else if( model()->data( m_contextMenuIndex, SourcesModel::SourceTreeItemTypeRole ) != SourcesModel::StaticPlaylist )
+        else
             m_roPlaylistMenu.exec( mapToGlobal( pos ) );
     }
 }
