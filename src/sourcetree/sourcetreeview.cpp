@@ -34,6 +34,7 @@
 #include <QStyledItemDelegate>
 #include <QSize>
 #include <globalactionmanager.h>
+#include <QFileDialog>
 
 using namespace Tomahawk;
 
@@ -250,7 +251,9 @@ SourceTreeView::copyPlaylistLink()
     {
         PlaylistItem* item = itemFromIndex< PlaylistItem >( m_contextMenuIndex );
         playlist_ptr playlist = item->playlist();
-        GlobalActionManager::instance()->copyPlaylistToClipboard( playlist );
+
+        QString filename = QFileDialog::getSaveFileName( this, tr( "Save XSPF" ), QDir::homePath(), tr( "Playlists (*.xspf)" ) );
+        GlobalActionManager::instance()->savePlaylistToFile( playlist, filename );
     }
 }
 

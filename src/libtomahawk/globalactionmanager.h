@@ -39,7 +39,7 @@ public:
 
     void copyToClipboard( const Tomahawk::query_ptr& query ) const;
     void copyPlaylistToClipboard( const Tomahawk::dynplaylist_ptr& playlist );
-    void copyPlaylistToClipboard( const Tomahawk::playlist_ptr& playlist );
+    void savePlaylistToFile( const Tomahawk::playlist_ptr& playlist, const QString& filename );
 
 public slots:
     bool parseTomahawkLink( const QString& link );

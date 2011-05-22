@@ -127,17 +127,27 @@ GlobalActionManager::copyPlaylistToClipboard( const Tomahawk::dynplaylist_ptr& p
 }
 
 void
-GlobalActionManager::copyPlaylistToClipboard( const Tomahawk::playlist_ptr& playlist )
+GlobalActionManager::savePlaylistToFile( const Tomahawk::playlist_ptr& playlist, const QString& filename )
 {
     XSPFGenerator* g = new XSPFGenerator( playlist, this );
+    g->setProperty( "filename", filename );
+
     connect( g, SIGNAL( generated( QByteArray ) ), this, SLOT( xspfCreated( QByteArray ) ) );
 }
 
 void
 GlobalActionManager::xspfCreated( const QByteArray& xspf )
 {
-    QClipboard* cb = QApplication::clipboard();
-    cb->setText( xspf );
+    QString filename = sender()->property( "filename" ).toString();
+
+    QFile f( filename );
+    if( !f.open( QIODevice::WriteOnly ) ) {
+        qWarning() << "Failed to open file to save XSPF:" << filename;
+        return;
+    }
+
+    f.write( xspf );
+    f.close();
 
     sender()->deleteLater();
 }
