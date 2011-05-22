@@ -111,7 +111,6 @@ Tomahawk::EchonestControl::summary() const
 void
 Tomahawk::EchonestControl::setInput(const QString& input)
 {
-    // TODO generate widgets
     m_data.second = input;
     updateWidgetsFromData();
 }
@@ -119,7 +118,6 @@ Tomahawk::EchonestControl::setInput(const QString& input)
 void
 Tomahawk::EchonestControl::setMatch(const QString& match)
 {
-    // TODO generate widgets
     m_matchData = match;
     updateWidgetsFromData();
 }
@@ -289,7 +287,7 @@ Tomahawk::EchonestControl::updateWidgets()
         m_match = QWeakPointer< QWidget >( match );
         m_input = QWeakPointer< QWidget >( combo );
     } else if( selectedType() == "Sorting" ) {
-        m_currentType = Echonest::DynamicPlaylist::Key;
+        m_currentType = Echonest::DynamicPlaylist::Sort;
 
         QComboBox* match = new QComboBox();
         match->addItem( tr( "Ascending" ), 0 );

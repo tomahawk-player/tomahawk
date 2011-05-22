@@ -21,6 +21,8 @@
 #define GLOBALACTIONMANAGER_H
 
 #include "playlist.h"
+#include "query.h"
+#include "playlist/dynamic/DynamicPlaylist.h"
 #include "dllmacro.h"
 
 #include <QObject>
@@ -34,7 +36,9 @@ public:
     virtual ~GlobalActionManager();
 
     QUrl openLinkFromQuery( const Tomahawk::query_ptr& query ) const;
+
     void copyToClipboard( const Tomahawk::query_ptr& query ) const;
+    void copyPlaylistToClipboard( const Tomahawk::dynplaylist_ptr& playlist );
 
 public slots:
     bool parseTomahawkLink( const QString& link );
