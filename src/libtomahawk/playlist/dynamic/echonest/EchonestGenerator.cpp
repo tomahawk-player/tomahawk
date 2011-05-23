@@ -24,6 +24,9 @@
 
 using namespace Tomahawk;
 
+QVector< QString > EchonestGenerator::s_moods = QVector< QString >();
+QVector< QString > EchonestGenerator::s_styles = QVector< QString >();
+
 EchonestFactory::EchonestFactory()
 {}
 
@@ -42,7 +45,7 @@ EchonestFactory::createControl( const QString& controlType )
 QStringList
 EchonestFactory::typeSelectors() const
 {
-    return QStringList() << "Artist" << "Artist Description" << "Variety" << "Tempo" << "Duration" << "Loudness"
+    return QStringList() << "Artist" << "Artist Description" << "Song" << "Mood" << "Style" << "Variety" << "Tempo" << "Duration" << "Loudness"
                           << "Danceability" << "Energy" << "Artist Familiarity" << "Artist Hotttnesss" << "Song Hotttnesss"
                           << "Longitude" << "Latitude" <<  "Mode" << "Key" << "Sorting";
 }
@@ -55,6 +58,14 @@ EchonestGenerator::EchonestGenerator ( QObject* parent )
     m_type = "echonest";
     m_mode = OnDemand;
     m_logo.load( RESPATH "/images/echonest_logo.png" );
+
+    // fetch style and moods
+    QNetworkReply* style = Echonest::Artist::listTerms( "style" );
+    connect( style, SIGNAL( finished() ), this, SLOT( stylesReceived() ) );
+
+    QNetworkReply* moods = Echonest::Artist::listTerms( "mood" );
+    connect( moods, SIGNAL( finished() ), this, SLOT( moodsReceived() ) );
+
 //    qDebug() << "ECHONEST:" << m_logo.size();
 }
 
@@ -408,3 +419,40 @@ EchonestGenerator::sentenceSummary()
     return sentence;
 }
 
+QVector< QString >
+EchonestGenerator::moods()
+{
+    return s_moods;
+}
+
+void
+EchonestGenerator::moodsReceived()
+{
+    QNetworkReply* r = qobject_cast< QNetworkReply* >( sender() );
+    Q_ASSERT( r );
+
+    try {
+        s_moods = Echonest::Artist::parseTermList( r );
+    } catch( Echonest::ParseError& e ) {
+        qWarning() << "Echonest failed to parse moods list";
+    }
+}
+
+QVector< QString >
+EchonestGenerator::styles()
+{
+    return s_styles;
+}
+
+void
+EchonestGenerator::stylesReceived()
+{
+    QNetworkReply* r = qobject_cast< QNetworkReply* >( sender() );
+    Q_ASSERT( r );
+
+    try {
+        s_styles = Echonest::Artist::parseTermList( r );
+    } catch( Echonest::ParseError& e ) {
+        qWarning() << "Echonest failed to parse styles list";
+    }
+}

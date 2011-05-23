@@ -25,6 +25,7 @@
 #include <QComboBox>
 #include <QLineEdit>
 #include <QLabel>
+#include "EchonestGenerator.h"
 
 
 Tomahawk::EchonestControl::EchonestControl( const QString& selectedType, const QStringList& typeSelectors, QObject* parent )
@@ -319,6 +320,31 @@ Tomahawk::EchonestControl::updateWidgets()
         combo->hide();
         m_match = QWeakPointer< QWidget >( match );
         m_input = QWeakPointer< QWidget >( combo );
+    } else if( selectedType() == "Mood" || selectedType() == "Style" ) {
+        if( selectedType() == "Mood" )
+            m_currentType = Echonest::DynamicPlaylist::Mood;
+        else
+            m_currentType = Echonest::DynamicPlaylist::Style;
+
+        QLabel* match = new QLabel( tr( "is" ) );
+
+        QComboBox* combo = new QComboBox;
+        QVector< QString > src = selectedType() == "Mood" ? EchonestGenerator::moods() : EchonestGenerator::styles();
+        foreach( const QString& item, src ) {
+            combo->addItem( item, item );
+        }
+
+        m_matchString = match->text();
+        m_matchData = match->text();
+
+
+        connect( combo, SIGNAL( activated( int ) ), this, SLOT( updateData() ) );
+        connect( combo, SIGNAL( activated( int ) ), this, SLOT( editingFinished() ) );
+
+        match->hide();
+        combo->hide();
+        m_match = QWeakPointer< QWidget >( match );
+        m_input = QWeakPointer< QWidget >( combo );
     } else {
         m_match = QWeakPointer<QWidget>( new QWidget );
         m_input = QWeakPointer<QWidget>( new QWidget );
@@ -384,7 +410,7 @@ Tomahawk::EchonestControl::updateData()
         updateFromComboAndSlider();
     } else if( selectedType() == "Danceability" || selectedType() == "Energy" || selectedType() == "Artist Familiarity" || selectedType() == "Artist Hotttnesss" || selectedType() == "Song Hotttnesss" ) {
         updateFromComboAndSlider( true );
-    } else if( selectedType() == "Mode" || selectedType() == "Key" ) {
+    } else if( selectedType() == "Mode" || selectedType() == "Key" || selectedType() == "Mood" || selectedType() == "Style" ) {
         updateFromLabelAndCombo();
     } else if( selectedType() == "Sorting" ) {
         QComboBox* match = qobject_cast<QComboBox*>( m_match.data() );
@@ -453,7 +479,7 @@ Tomahawk::EchonestControl::updateWidgetsFromData()
         updateToComboAndSlider();
     } else if( selectedType() == "Danceability" || selectedType() == "Energy" || selectedType() == "Artist Familiarity" || selectedType() == "Artist Hotttnesss" || selectedType() == "Song Hotttnesss" ) {
         updateToComboAndSlider( true );
-    } else if( selectedType() == "Mode" || selectedType() == "Key" ) {
+    } else if( selectedType() == "Mode" || selectedType() == "Key" || selectedType() == "Mood" || selectedType() == "Style" ) {
         updateToLabelAndCombo();
     } else if( selectedType() == "Sorting" ) {
         QComboBox* match = qobject_cast<QComboBox*>( m_match.data() );
@@ -564,6 +590,11 @@ Tomahawk::EchonestControl::calculateSummary()
         QString ascdesc = qobject_cast< QComboBox* >( m_match.data() )->currentText().toLower();
 
         summary = QString( "sorted in %1 %2 order" ).arg( ascdesc ).arg( sortType );
+    } else if( selectedType() == "Mood" || selectedType() == "Style" ) {
+        Q_ASSERT( !m_input.isNull() );
+        Q_ASSERT( qobject_cast< QComboBox* >( m_input.data() ) );
+        QString text = qobject_cast< QComboBox* >( m_input.data() )->currentText().toLower();
+        summary = QString( "with %1 %2" ).arg( selectedType() == "Mood" ? "mood" : "style" ).arg( text );
     }
     m_summary = summary;
 }
