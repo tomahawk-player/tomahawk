@@ -88,7 +88,7 @@ GlobalActionManager::openLinkFromQuery( const Tomahawk::query_ptr& query ) const
 void
 GlobalActionManager::copyPlaylistToClipboard( const Tomahawk::dynplaylist_ptr& playlist )
 {
-    QUrl link( "tomahawk://station/create/" );
+    QUrl link( QString( "tomahawk://%1/create/" ).arg( playlist->mode() == Tomahawk::OnDemand ? "station" : "autoplaylist" ) );
 
     if( playlist->generator()->type() != "echonest" ) {
         qDebug() << "Only echonest generators are supported";
