@@ -97,7 +97,6 @@ GlobalActionManager::copyPlaylistToClipboard( const Tomahawk::dynplaylist_ptr& p
 
     link.addEncodedQueryItem( "type", "echonest" );
     link.addQueryItem( "title", playlist->title() );
-    link.addQueryItem( "plmode", QString::number( static_cast<int>( playlist->mode() ) ) );
 
     QList< Tomahawk::dyncontrol_ptr > controls = playlist->generator()->controls();
     foreach( const Tomahawk::dyncontrol_ptr& c, controls ) {
