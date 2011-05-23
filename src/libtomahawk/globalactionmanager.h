@@ -59,11 +59,13 @@ private:
     bool handleCollectionCommand(const QUrl& url );
     bool handleQueueCommand(const QUrl& url );
     bool handleStationCommand(const QUrl& url );
+    bool handleAutoPlaylistCommand(const QUrl& url );
     bool handleSearchCommand(const QUrl& url );
     bool handlePlayCommand(const QUrl& url );
     bool handleBookmarkCommand(const QUrl& url );
     bool handleOpenCommand(const QUrl& url );
 
+    bool loadDynamicPlaylist( const QUrl& url, bool station );
     bool doQueueAdd( const QStringList& parts, const QList< QPair< QString, QString > >& queryItems );
 
     Tomahawk::playlist_ptr m_toShow;

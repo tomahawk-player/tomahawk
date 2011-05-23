@@ -103,7 +103,7 @@ GlobalActionManager::copyPlaylistToClipboard( const Tomahawk::dynplaylist_ptr& p
     foreach( const Tomahawk::dyncontrol_ptr& c, controls ) {
         if( c->selectedType() == "Artist" ) {
             if( c->match().toInt() == Echonest::DynamicPlaylist::ArtistType )
-                link.addQueryItem( "artist_limit", c->input() );
+                link.addQueryItem( "artist_limitto", c->input() );
             else
                 link.addQueryItem( "artist", c->input() );
         } else if( c->selectedType() == "Artist Description" ) {
@@ -192,6 +192,8 @@ GlobalActionManager::parseTomahawkLink( const QString& url )
             return handleQueueCommand( u );
         } else if( cmdType == "station" ) {
             return handleStationCommand( u );
+        } else if( cmdType == "autoplaylist" ) {
+            return handleAutoPlaylistCommand( u );
         } else if( cmdType == "search" ) {
             return handleSearchCommand( u );
         } else if( cmdType == "play" ) {
@@ -377,7 +379,13 @@ GlobalActionManager::handleSearchCommand( const QUrl& url )
 }
 
 bool
-GlobalActionManager::handleStationCommand( const QUrl& url )
+GlobalActionManager::handleAutoPlaylistCommand( const QUrl& url )
+{
+    return loadDynamicPlaylist( url, false );
+}
+
+bool
+GlobalActionManager::loadDynamicPlaylist( const QUrl& url, bool station )
 {
     QStringList parts = url.path().split( "/" ).mid( 1 ); // get the rest of the command
     if( parts.isEmpty() ) {
@@ -392,9 +400,9 @@ GlobalActionManager::handleStationCommand( const QUrl& url )
         }
         QString title = url.queryItemValue( "title" );
         QString type = url.queryItemValue( "type" );
-        Tomahawk::GeneratorMode m = Tomahawk::OnDemand;
-        if( url.hasQueryItem( "plmode" ) && url.queryItemValue( "plmode" ).toInt() == 1 )
-            m = Tomahawk::Static;
+        Tomahawk::GeneratorMode m = Tomahawk::Static;
+        if( station )
+            m = Tomahawk::OnDemand;
 
         Tomahawk::dynplaylist_ptr pl = Tomahawk::DynamicPlaylist::create( SourceList::instance()->getLocal(), uuid(), title, QString(), QString(), m, false, type );
         pl->setMode( m );
@@ -406,7 +414,7 @@ GlobalActionManager::handleStationCommand( const QUrl& url )
                 c->setInput( param.second );
                 c->setMatch( QString::number( (int)Echonest::DynamicPlaylist::ArtistRadioType ) );
                 controls << c;
-            } else if( param.first == "artist_limit" ) {
+            } else if( param.first == "artist_limitto" ) {
                 Tomahawk::dyncontrol_ptr c = pl->generator()->createControl( "Artist" );
                 c->setInput( param.second );
                 c->setMatch( QString::number( (int)Echonest::DynamicPlaylist::ArtistType ) );
@@ -461,7 +469,7 @@ GlobalActionManager::handleStationCommand( const QUrl& url )
                 Tomahawk::dyncontrol_ptr c = pl->generator()->createControl( "Artist Hotttnesss" );
                 int extra = param.first.endsWith( "_max" ) ? -1 : 0;
                 c->setInput( param.second );
-                c->setMatch( QString::number( (int)Echonest::DynamicPlaylist::ArtistMinFamiliarity + extra ) );
+                c->setMatch( QString::number( (int)Echonest::DynamicPlaylist::ArtistMinHotttnesss + extra ) );
                 controls << c;
             } else if( param.first.startsWith( "song_hotttnesss" ) ) {
                 Tomahawk::dyncontrol_ptr c = pl->generator()->createControl( "Song Hotttnesss" );
@@ -502,6 +510,13 @@ GlobalActionManager::handleStationCommand( const QUrl& url )
     }
 
     return false;
+}
+
+
+bool
+GlobalActionManager::handleStationCommand( const QUrl& url )
+{
+    return loadDynamicPlaylist( url, true );
 }
 
 bool
