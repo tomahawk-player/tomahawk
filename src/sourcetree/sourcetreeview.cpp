@@ -33,6 +33,8 @@
 #include <QPainter>
 #include <QStyledItemDelegate>
 #include <QSize>
+#include <globalactionmanager.h>
+#include <QFileDialog>
 
 using namespace Tomahawk;
 
@@ -119,6 +121,7 @@ void
 SourceTreeView::setupMenus()
 {
     m_playlistMenu.clear();
+    m_roPlaylistMenu.clear();
 
     bool readonly = true;
     SourcesModel::RowType type = ( SourcesModel::RowType )model()->data( m_contextMenuIndex, SourcesModel::SourceTreeItemTypeRole ).toInt();
@@ -136,14 +139,22 @@ SourceTreeView::setupMenus()
     m_loadPlaylistAction = m_playlistMenu.addAction( tr( "&Load Playlist" ) );
     m_renamePlaylistAction = m_playlistMenu.addAction( tr( "&Rename Playlist" ) );
     m_playlistMenu.addSeparator();
+
+    m_copyPlaylistAction = m_playlistMenu.addAction( tr( "&Copy Link" ) );
     m_deletePlaylistAction = m_playlistMenu.addAction( tr( "&Delete %1" ).arg( SourcesModel::rowTypeToString( type ) ) );
+
+    m_roPlaylistMenu.addAction( m_copyPlaylistAction );
 
     m_deletePlaylistAction->setEnabled( !readonly );
     m_renamePlaylistAction->setEnabled( !readonly );
 
+    if ( type == SourcesModel::StaticPlaylist )
+        m_copyPlaylistAction->setText( tr( "&Export Playlist" ) );
+
     connect( m_loadPlaylistAction,   SIGNAL( triggered() ), SLOT( loadPlaylist() ) );
     connect( m_renamePlaylistAction, SIGNAL( triggered() ), SLOT( renamePlaylist() ) );
     connect( m_deletePlaylistAction, SIGNAL( triggered() ), SLOT( deletePlaylist() ) );
+    connect( m_copyPlaylistAction,   SIGNAL( triggered() ), SLOT( copyPlaylistLink() ) );
 }
 
 
@@ -223,6 +234,29 @@ SourceTreeView::deletePlaylist()
     }
 }
 
+void
+SourceTreeView::copyPlaylistLink()
+{
+    QModelIndex idx = m_contextMenuIndex;
+    if ( !idx.isValid() )
+        return;
+
+    SourcesModel::RowType type = ( SourcesModel::RowType )model()->data( m_contextMenuIndex, SourcesModel::SourceTreeItemTypeRole ).toInt();
+    if( type == SourcesModel::AutomaticPlaylist || type == SourcesModel::Station )
+    {
+        DynamicPlaylistItem* item = itemFromIndex< DynamicPlaylistItem >( m_contextMenuIndex );
+        dynplaylist_ptr playlist = item->dynPlaylist();
+        GlobalActionManager::instance()->copyPlaylistToClipboard( playlist );
+    } else if ( type == SourcesModel::StaticPlaylist )
+    {
+        PlaylistItem* item = itemFromIndex< PlaylistItem >( m_contextMenuIndex );
+        playlist_ptr playlist = item->playlist();
+
+        QString filename = QFileDialog::getSaveFileName( this, tr( "Save XSPF" ), QDir::homePath(), tr( "Playlists (*.xspf)" ) );
+        GlobalActionManager::instance()->savePlaylistToFile( playlist, filename );
+    }
+}
+
 
 void
 SourceTreeView::renamePlaylist()
@@ -252,6 +286,8 @@ SourceTreeView::onCustomContextMenu( const QPoint& pos )
         PlaylistItem* item = itemFromIndex< PlaylistItem >( m_contextMenuIndex );
         if( item->playlist()->author()->isLocal() )
             m_playlistMenu.exec( mapToGlobal( pos ) );
+        else
+            m_roPlaylistMenu.exec( mapToGlobal( pos ) );
     }
 }
 
