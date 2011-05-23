@@ -61,19 +61,35 @@ DirLister::go()
     }
     
     foreach( QString dir, m_dirs )
-        scanDir( QDir( dir, 0 ), 0, ( m_recursive ? DirLister::Recursive : DirLister::NonRecursive ) );
-    emit finished( m_newdirmtimes );
+    {
+        m_opcount++;
+        QMetaObject::invokeMethod( this, "scanDir", Qt::QueuedConnection, Q_ARG( QDir, QDir( dir, 0 ) ), Q_ARG( int, 0 ), Q_ARG( DirLister::Mode, ( m_recursive ? DirLister::Recursive : DirLister::NonRecursive ) ) );
+    }
 }
 
 
 void
 DirLister::scanDir( QDir dir, int depth, DirLister::Mode mode )
 {
+    if ( isDeleting() )
+    {
+        m_opcount--;
+        if ( m_opcount == 0 )
+            emit finished( m_newdirmtimes );
+        
+        return;
+    }
+    
     //qDebug() << "DirLister::scanDir scanning: " << dir.canonicalPath() << " with mode " << mode;
     
     if( !dir.exists() )
     {
         qDebug() << "Dir no longer exists, not scanning";
+
+        m_opcount--;
+        if ( m_opcount == 0 )
+            emit finished( m_newdirmtimes );
+        
         return;
     }
     
@@ -97,9 +113,7 @@ DirLister::scanDir( QDir dir, int depth, DirLister::Mode mode )
         dir.setSorting( QDir::Name );
         dirs = dir.entryInfoList();
         foreach( const QFileInfo& di, dirs )
-        {
             emit fileToScan( di );
-        }
     }
     dir.setFilter( QDir::Dirs | QDir::Readable | QDir::NoDotAndDotDot );
     dirs = dir.entryInfoList();
@@ -111,9 +125,14 @@ DirLister::scanDir( QDir dir, int depth, DirLister::Mode mode )
         const bool haveDi = m_dirmtimes.contains( canonical );
         //qDebug() << "m_dirmtimes contains it?" << haveDi;
         if( !m_newdirmtimes.contains( canonical ) && ( mode == DirLister::Recursive || !haveDi ) ) {
-            scanDir( di.canonicalFilePath(), depth + 1, DirLister::Recursive );
+            m_opcount++;
+            QMetaObject::invokeMethod( this, "scanDir", Qt::QueuedConnection, Q_ARG( QDir, di.canonicalFilePath() ), Q_ARG( int, depth + 1 ), Q_ARG( DirLister::Mode, DirLister::Recursive ) );
         }
     }
+    
+    m_opcount--;
+    if ( m_opcount == 0 )
+        emit finished( m_newdirmtimes );
 }
 
 
@@ -143,7 +162,8 @@ MusicScanner::~MusicScanner()
 
     if ( !m_dirLister.isNull() )
     {
-        QMetaObject::invokeMethod( m_dirLister.data(), "deleteLater", Qt::QueuedConnection );
+        m_dirLister.data()->setIsDeleting();
+        QMetaObject::invokeMethod( m_dirLister.data(), "deleteLater", Qt::DirectConnection );
         while( !m_dirLister.isNull() )
         {
             qDebug() << Q_FUNC_INFO << " scanner not deleted";
@@ -242,7 +262,7 @@ MusicScanner::scan()
 
 
 void
-MusicScanner::listerFinished( const QMap<QString, unsigned int>& newmtimes )
+MusicScanner::listerFinished( const QMap<QString, unsigned int>& newmtimes  )
 {
     qDebug() << Q_FUNC_INFO;
 
@@ -263,50 +283,19 @@ MusicScanner::listerFinished( const QMap<QString, unsigned int>& newmtimes )
         }
     }
 
-    // save mtimes, then quit thread
-    DatabaseCommand_DirMtimes* cmd = new DatabaseCommand_DirMtimes( newmtimes );
-    connect( cmd, SIGNAL( finished() ), SLOT( deleteLister() ) );
-    Database::instance()->enqueue( QSharedPointer<DatabaseCommand>(cmd) );
-
     qDebug() << "Scanning complete, saving to database. "
                 "( scanned" << m_scanned << "skipped" << m_skipped << ")";
 
     qDebug() << "Skipped the following files (no tags / no valid audio):";
     foreach( const QString& s, m_skippedFiles )
         qDebug() << s;
-}
 
 
-void
-MusicScanner::deleteLister()
-{
-    if ( !m_dirLister.isNull() )
-    {
-        QMetaObject::invokeMethod( m_dirLister.data(), "deleteLater", Qt::QueuedConnection );
-        while( !m_dirLister.isNull() )
-        {
-            qDebug() << Q_FUNC_INFO << " scanner not deleted, processing events";
-            QCoreApplication::processEvents( QEventLoop::AllEvents, 200 );
-            TomahawkUtils::Sleep::msleep( 100 );
-        }
+    // save mtimes, then quit thread
+    DatabaseCommand_DirMtimes* cmd = new DatabaseCommand_DirMtimes( newmtimes );
+    connect( cmd, SIGNAL( finished() ), SIGNAL( finished() ) );
 
-        if ( m_dirListerThreadController )
-            m_dirListerThreadController->quit();
-
-        if( m_dirListerThreadController )
-        {
-            while( !m_dirListerThreadController->isFinished() )
-            {
-                qDebug() << Q_FUNC_INFO << " scanner thread controller not finished, processing events";
-                QCoreApplication::processEvents( QEventLoop::AllEvents, 200 );
-                TomahawkUtils::Sleep::msleep( 100 );
-            }
-
-            delete m_dirListerThreadController;
-            m_dirListerThreadController = 0;
-        }
-    }
-    emit finished();
+    Database::instance()->enqueue( QSharedPointer<DatabaseCommand>(cmd) );
 }
 
 

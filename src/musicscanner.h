@@ -50,7 +50,7 @@ public:
     };
     
     DirLister( const QStringList& dirs, const QMap<QString, unsigned int>& dirmtimes, TomahawkSettings::ScannerMode mode, bool manualFull, bool recursive )
-        : QObject(), m_dirs( dirs ), m_dirmtimes( dirmtimes ), m_mode( mode ), m_manualFull( manualFull ), m_recursive( recursive )
+        : QObject(), m_dirs( dirs ), m_dirmtimes( dirmtimes ), m_mode( mode ), m_manualFull( manualFull ), m_recursive( recursive ), m_opcount( 0 ), m_deleting( false )
     {
         qDebug() << Q_FUNC_INFO;
     }
@@ -59,6 +59,9 @@ public:
     {
         qDebug() << Q_FUNC_INFO;
     }
+
+    bool isDeleting() { QMutexLocker locker( &m_deletingMutex ); return m_deleting; };
+    void setIsDeleting() { QMutexLocker locker( &m_deletingMutex ); m_deleting = true; };
 
 signals:
     void fileToScan( QFileInfo );
@@ -76,6 +79,10 @@ private:
     bool m_recursive;
     
     QMap<QString, unsigned int> m_newdirmtimes;
+
+    uint m_opcount;
+    QMutex m_deletingMutex;
+    bool m_deleting;
 };
 
 
@@ -97,7 +104,6 @@ private:
 
 private slots:
     void listerFinished( const QMap<QString, unsigned int>& newmtimes );
-    void deleteLister();
     void scanFile( const QFileInfo& fi );
     void startScan();
     void scan();

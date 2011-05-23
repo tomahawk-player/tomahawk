@@ -51,6 +51,7 @@
 #include "globalactionmanager.h"
 #include "webcollection.h"
 #include "database/localcollection.h"
+#include "musicscanner.h"
 
 #include "audio/audioengine.h"
 #include "utils/xspfloader.h"
@@ -364,6 +365,7 @@ TomahawkApp::registerMetaTypes()
     qRegisterMetaType< QTcpSocket* >("QTcpSocket*");
     qRegisterMetaType< QSharedPointer<QIODevice> >("QSharedPointer<QIODevice>");
     qRegisterMetaType< QFileInfo >("QFileInfo");
+    qRegisterMetaType< QDir >("QDir");
     qRegisterMetaType< QHostAddress >("QHostAddress");
     qRegisterMetaType< QMap<QString, unsigned int> >("QMap<QString, unsigned int>");
     qRegisterMetaType< QMap< QString, plentry_ptr > >("QMap< QString, plentry_ptr >");
@@ -404,6 +406,8 @@ TomahawkApp::registerMetaTypes()
     qRegisterMetaType< QHash< QString, QString > >( "Tomahawk::InfoSystem::InfoCriteriaHash" );
     qRegisterMetaType< Tomahawk::InfoSystem::InfoType >( "Tomahawk::InfoSystem::InfoType" );
     qRegisterMetaType< QWeakPointer< Tomahawk::InfoSystem::InfoSystemCache > >( "QWeakPointer< Tomahawk::InfoSystem::InfoSystemCache >" );
+
+    qRegisterMetaType< DirLister::Mode >("DirLister::Mode");
 }
 
 
