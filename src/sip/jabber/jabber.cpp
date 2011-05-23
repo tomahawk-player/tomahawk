@@ -601,7 +601,7 @@ void JabberPlugin::onNewMessage(const Jreen::Message& message)
                                     " are trying to reach is probably not signed on, so please try again later!") );
 
         // this is not a sip message, so we send it directly through the client
-        m_client->send( Jreen::Message ( Jreen::Message::Chat, Jreen::JID(to), response) );
+        m_client->send( Jreen::Message ( Jreen::Message::Error, Jreen::JID(to), response) );
 
         emit msgReceived( from, msg );
         return;
