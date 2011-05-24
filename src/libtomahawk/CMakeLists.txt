@@ -361,9 +361,6 @@ include_directories( . ${CMAKE_CURRENT_BINARY_DIR} ${CMAKE_CURRENT_BINARY_DIR}/.
 
     ${LIBPORTFWD_INCLUDE_DIR}
     ${THIRDPARTY_DIR}/qxt/qxtweb-standalone/qxtweb
-    ${THIRDPARTY_DIR}/jdns
-    ${THIRDPARTY_DIR}/jdns/jdns
-    ${THIRDPARTY_DIR}/jdns/jdnsshared
     ${CMAKE_BINARY_DIR}/thirdparty/liblastfm2/src
 )
 
@@ -418,9 +415,6 @@ SET( libSources ${libSources} ${libUI_H} ${libHeaders_NoMOC} )
 add_library( tomahawklib SHARED ${libSources} ${libMoc} )
 
 target_link_libraries( tomahawklib
-    # Internal
-    tomahawk_jdns
-
     # Thirdparty shipped with tomahawk
     ${LIBPORTFWD_LIBRARIES}
 
