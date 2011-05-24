@@ -26,6 +26,8 @@
 #include <QLineEdit>
 #include <QLabel>
 #include "EchonestGenerator.h"
+#include <qcompleter.h>
+#include <qstringlistmodel.h>
 
 
 Tomahawk::EchonestControl::EchonestControl( const QString& selectedType, const QStringList& typeSelectors, QObject* parent )
@@ -146,6 +148,8 @@ Tomahawk::EchonestControl::updateWidgets()
 
         input->setPlaceholderText( "Artist name" );
         input->setSizePolicy( QSizePolicy::Ignored, QSizePolicy::Fixed );
+        input->setCompleter( new QCompleter( QStringList(), input ) );
+        input->completer()->setCaseSensitivity( Qt::CaseInsensitive );
 
         connect( match, SIGNAL( currentIndexChanged(int) ), this, SLOT( updateData() ) );
         connect( match, SIGNAL( currentIndexChanged(int) ), this, SIGNAL( changed() ) );
@@ -153,6 +157,7 @@ Tomahawk::EchonestControl::updateWidgets()
         connect( input, SIGNAL( editingFinished() ), this, SLOT( editingFinished() ) );
         connect( input, SIGNAL( textEdited( QString ) ), &m_editingTimer, SLOT( stop() ) );
         connect( input, SIGNAL( textEdited( QString ) ), &m_delayedEditTimer, SLOT( start() ) );
+        connect( input, SIGNAL( textEdited( QString ) ), this, SLOT( artistTextEdited( QString ) ) );
 
         match->hide();
         input->hide();
@@ -552,6 +557,78 @@ Tomahawk::EchonestControl::editTimerFired()
     m_cacheData = m_data.second;
 }
 
+void
+Tomahawk::EchonestControl::artistTextEdited( const QString& text )
+{
+    // if the user is editing an artist field, try to help him out and suggest from echonest
+    QLineEdit* l = qobject_cast<QLineEdit*>( m_input.data() );
+    Q_ASSERT( l );
+//     l->setCompleter( new QCompleter( this ) ); // clear
+
+    foreach( QNetworkReply* r, m_suggestWorkers ) {
+        r->abort();
+        r->deleteLater();
+    }
+    m_suggestWorkers.clear();
+
+    if( !text.isEmpty() ) {
+        if( m_suggestCache.contains( text ) ) {
+            addArtistSuggestions( m_suggestCache[ text ] );
+        } else { // gotta look it up
+            QNetworkReply* r = Echonest::Artist::suggest( text );
+            qDebug() << "Asking echonest for suggestions to help our completion..." << r->url().toString();
+            r->setProperty( "curtext", text );
+
+            m_suggestWorkers.insert( r );
+            connect( r, SIGNAL( finished() ), this, SLOT( suggestFinished() ) );
+        }
+    }
+}
+
+void
+Tomahawk::EchonestControl::suggestFinished()
+{
+    qDebug() << Q_FUNC_INFO;
+    QNetworkReply* r = qobject_cast< QNetworkReply* >( sender() );
+    Q_ASSERT( r );
+    QLineEdit* l = qobject_cast<QLineEdit*>( m_input.data() );
+    Q_ASSERT( l );
+
+    m_suggestWorkers.remove( r );
+
+    if( r->error() != QNetworkReply::NoError )
+        return;
+
+    QString origText = r->property( "curtext" ).toString();
+    if( origText != l->text() ) { // user might have kept on typing, then ignore
+        qDebug() << "Text changed meanwhile, stopping suggestion parsing";
+        return;
+    }
+
+    QStringList suggestions;
+    try {
+        Echonest::Artists artists = Echonest::Artist::parseSuggest( r );
+        foreach( const Echonest::Artist& artist, artists )
+            suggestions << artist.name();
+    } catch( Echonest::ParseError& e ) {
+        qWarning() << "libechonest failed to parse this artist/suggest call..." << e.errorType() << e.what();
+        return;
+    }
+
+    m_suggestCache[ origText ] = suggestions;
+    addArtistSuggestions( suggestions );
+}
+
+void
+Tomahawk::EchonestControl::addArtistSuggestions( const QStringList& suggestions )
+{
+    // if the user is editing an artist field, try to help him out and suggest from echonest
+    QLineEdit* l = qobject_cast<QLineEdit*>( m_input.data() );
+    Q_ASSERT( l );
+
+    l->completer()->setModel( new QStringListModel( suggestions, l->completer() ) );
+    l->completer()->complete();
+}
 
 void
 Tomahawk::EchonestControl::calculateSummary()
