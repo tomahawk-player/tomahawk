@@ -91,7 +91,7 @@ private:
     QVariant m_cacheData;
 
     QSet< QNetworkReply* > m_suggestWorkers;
-    QHash< QString, QStringList > m_suggestCache;
+    static QHash< QString, QStringList > s_suggestCache;
 
     friend class EchonestGenerator;
 };

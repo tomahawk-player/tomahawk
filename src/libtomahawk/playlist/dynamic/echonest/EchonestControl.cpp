@@ -29,6 +29,7 @@
 #include <qcompleter.h>
 #include <qstringlistmodel.h>
 
+QHash< QString, QStringList > Tomahawk::EchonestControl::s_suggestCache = QHash< QString, QStringList >();
 
 Tomahawk::EchonestControl::EchonestControl( const QString& selectedType, const QStringList& typeSelectors, QObject* parent )
     : DynamicControl ( selectedType.isEmpty() ? "Artist" : selectedType, typeSelectors, parent )
@@ -572,8 +573,8 @@ Tomahawk::EchonestControl::artistTextEdited( const QString& text )
     m_suggestWorkers.clear();
 
     if( !text.isEmpty() ) {
-        if( m_suggestCache.contains( text ) ) {
-            addArtistSuggestions( m_suggestCache[ text ] );
+        if( s_suggestCache.contains( text ) ) {
+            addArtistSuggestions( s_suggestCache[ text ] );
         } else { // gotta look it up
             QNetworkReply* r = Echonest::Artist::suggest( text );
             qDebug() << "Asking echonest for suggestions to help our completion..." << r->url().toString();
@@ -615,7 +616,7 @@ Tomahawk::EchonestControl::suggestFinished()
         return;
     }
 
-    m_suggestCache[ origText ] = suggestions;
+    s_suggestCache[ origText ] = suggestions;
     addArtistSuggestions( suggestions );
 }
 
