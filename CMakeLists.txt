@@ -46,7 +46,7 @@ else()
 endif()
 
 macro_optional_find_package(LibEchonest 1.1.7)
-macro_log_feature(LIBECHONEST_FOUND "Echonest" "Qt library for communicating with The Echo Nest" "http://projects.kde.org/libechonest" TRUE "" "libechonest 1.1.7 is needed for dynamic playlists and the infosystem")
+macro_log_feature(LIBECHONEST_FOUND "Echonest" "Qt library for communicating with The Echo Nest" "http://projects.kde.org/libechonest" TRUE "" "libechonest 1.1.8 is needed for dynamic playlists and the infosystem")
 
 macro_optional_find_package(CLucene 0.9.23)
 macro_log_feature(CLucene_FOUND "CLucene" "The open-source, C++ search engine" "http://clucene.sf.net" TRUE "" "CLucene is used for indexing the collection")
