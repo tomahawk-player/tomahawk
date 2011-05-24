@@ -27,6 +27,7 @@
 #include <QPainter>
 #include <QPixmap>
 #include <QNetworkAccessManager>
+#include <QNetworkProxy>
 
 #ifdef WIN32
     #include <windows.h>
