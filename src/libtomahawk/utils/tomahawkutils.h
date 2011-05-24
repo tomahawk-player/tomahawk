@@ -69,8 +69,6 @@ namespace TomahawkUtils
 
     DLLEXPORT void setNam( QNetworkAccessManager* nam );
     DLLEXPORT void setProxy( QNetworkProxy* proxy );
-
-    DLLEXPORT DNSResolver* dnsResolver();
 }
 
 #endif // TOMAHAWKUTILS_H
