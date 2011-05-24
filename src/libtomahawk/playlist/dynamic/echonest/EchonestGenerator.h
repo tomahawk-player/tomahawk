@@ -61,6 +61,10 @@ public:
 
     static QVector< QString > styles();
     static QVector< QString > moods();
+
+signals:
+    void paramsGenerated( const Echonest::DynamicPlaylist::PlaylistParams& );
+
 private slots:
     void staticFinished();
     void dynamicStarted();
@@ -71,13 +75,19 @@ private slots:
     void steerDescription( const QString& desc );
     void resetSteering();
 
+    void doGenerate( const Echonest::DynamicPlaylist::PlaylistParams& params );
+    void doStartOnDemand( const Echonest::DynamicPlaylist::PlaylistParams& params );
+
     void stylesReceived();
     void moodsReceived();
 
+    void songLookupFinished();
 private:
-    Echonest::DynamicPlaylist::PlaylistParams getParams() const throw( std::runtime_error );
+    // get result from signal paramsGenerated
+    void getParams() throw( std::runtime_error );
+
     query_ptr queryFromSong( const Echonest::Song& song );
-    void appendRadioType( Echonest::DynamicPlaylist::PlaylistParams& params ) const throw( std::runtime_error );
+    Echonest::DynamicPlaylist::ArtistTypeEnum appendRadioType( Echonest::DynamicPlaylist::PlaylistParams& params ) const throw( std::runtime_error );
     bool onlyThisArtistType( Echonest::DynamicPlaylist::ArtistTypeEnum type ) const throw( std::runtime_error );
 
     Echonest::DynamicPlaylist* m_dynPlaylist;
@@ -85,6 +95,10 @@ private:
 
     static QVector< QString > s_styles;
     static QVector< QString > s_moods;
+
+    // used for the intermediary song id lookup
+    QSet< QNetworkReply* > m_waiting;
+    Echonest::DynamicPlaylist::PlaylistParams m_storedParams;
 
     QWeakPointer<EchonestSteerer> m_steerer;
     bool m_steeredSinceLastTrack;

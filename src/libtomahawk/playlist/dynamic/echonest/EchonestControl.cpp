@@ -176,6 +176,24 @@ Tomahawk::EchonestControl::updateWidgets()
         input->hide();
         m_match = QWeakPointer< QWidget >( match );
         m_input = QWeakPointer< QWidget >( input );
+    } else if( selectedType() == "Song" ) {
+        m_currentType = Echonest::DynamicPlaylist::SongId;
+
+        QLabel* match = new QLabel( tr( "similar to" ) );
+        QLineEdit* input =  new QLineEdit();
+
+        m_matchString = QString();
+        m_matchData = QString::number( (int)Echonest::DynamicPlaylist::SongRadioType );
+
+        connect( input, SIGNAL( textChanged(QString) ), this, SLOT( updateData() ) );
+        connect( input, SIGNAL( editingFinished() ), this, SLOT( editingFinished() ) );
+        connect( input, SIGNAL( textEdited( QString ) ), &m_editingTimer, SLOT( stop() ) );
+        connect( input, SIGNAL( textEdited( QString ) ), &m_delayedEditTimer, SLOT( start() ) );
+
+        match->hide();
+        input->hide();
+        m_match = QWeakPointer< QWidget >( match );
+        m_input = QWeakPointer< QWidget >( input );
     } else if( selectedType() == "Variety" ) {
         m_currentType = Echonest::DynamicPlaylist::Variety;
 
@@ -394,7 +412,7 @@ Tomahawk::EchonestControl::updateData()
             m_data.first = m_currentType;
             m_data.second = edit->text();
         }
-    } else if( selectedType() == "Artist Description" ) {
+    } else if( selectedType() == "Artist Description" || selectedType() == "Song" ) {
         QLineEdit* edit = qobject_cast<QLineEdit*>( m_input.data() );
         if( edit && !edit->text().isEmpty() ) {
             m_data.first = m_currentType;
@@ -467,7 +485,7 @@ Tomahawk::EchonestControl::updateWidgetsFromData()
         QLineEdit* edit = qobject_cast<QLineEdit*>( m_input.data() );
         if( edit )
             edit->setText( m_data.second.toString() );
-    } else if( selectedType() == "Artist Description" ) {
+    } else if( selectedType() == "Artist Description" || selectedType() == "Song" ) {
         QLineEdit* edit = qobject_cast<QLineEdit*>( m_input.data() );
         if( edit )
             edit->setText( m_data.second.toString() );
@@ -547,6 +565,8 @@ Tomahawk::EchonestControl::calculateSummary()
             summary = QString( "similar to ~%1" ).arg( m_data.second.toString() );
     } else if( selectedType() == "Artist Description" ) {
         summary = QString( "with genre ~%1" ).arg( m_data.second.toString() );
+    } else if( selectedType() == "Artist Description" ) {
+        summary = QString( "similar to ~%1" ).arg( m_data.second.toString() );
     } else if( selectedType() == "Variety" || selectedType() == "Danceability" || selectedType() == "Artist Hotttnesss" || selectedType() == "Energy" || selectedType() == "Artist Familiarity" || selectedType() == "Song Hotttnesss" ) {
         QString modifier;
         qreal sliderVal = m_data.second.toReal();
