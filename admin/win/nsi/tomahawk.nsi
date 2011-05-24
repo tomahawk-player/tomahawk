@@ -24,6 +24,7 @@
 !define QT_DLL_PATH "${MING_BIN}"
 !define SQLITE_DLL_PATH "${MING_LIB}/qt4/plugins/sqldrivers"
 !define IMAGEFORMATS_DLL_PATH "${MING_LIB}/qt4/plugins/imageformats"
+!define VLC_PATH "..\vlc"
 
 ;-----------------------------------------------------------------------------
 ; Increment installer revision number as part of this script.
@@ -324,12 +325,27 @@ Section "Tomahawk Player" SEC_TOMAHAWK_PLAYER
    File "${MING_DLL_PATH}\libgcc_s_sjlj-1.dll"
    File "${MING_DLL_PATH}\libstdc++-6.dll"
 
-   ;Audio stuff
-   File "${MING_DLL_PATH}\libphonon.dll"
+   ;Phonon stuff
+
    ;Fix the phonon build to not use Dbus
    File "${QT_DLL_PATH}\QtDbus4.dll"
    File "${MING_DLL_PATH}\libdbus-1-3.dll"
    File "${MING_DLL_PATH}\dbus-daemon.exe"
+
+   File "${MING_DLL_PATH}\libphonon.dll"
+   SetOutPath "$INSTDIR\phonon_backend"
+   File "${MING_BIN}\phonon_backend\phonon_vlc.dll"
+   SetOutPath "$INSTDIR"
+
+   ;VLC
+   ;SetOutPath "$INSTDIR\phonon_backend"
+   File "${VLC_PATH}\libvlc.dll"
+   File "${VLC_PATH}\libvlccore.dll"
+   ;SetOutPath "$INSTDIR\phonon_backend\plugins"
+   SetOutPath "$INSTDIR\plugins"
+   File /r "${VLC_PATH}\plugins\"
+   SetOutPath "$INSTDIR"
+
 
    ;Other
    File "${MING_DLL_PATH}\libqjson.dll"
