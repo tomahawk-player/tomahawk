@@ -81,7 +81,7 @@ ReserveFile "${NSISDIR}\Plugins\InstallOptions.dll"
 ;-----------------------------------------------------------------------------
 !define MEMENTO_REGISTRY_ROOT HKLM
 !define MEMENTO_REGISTRY_KEY Software\Microsoft\Windows\CurrentVersion\Uninstall\Tomahawk
-                
+
 ;-----------------------------------------------------------------------------
 ; Modern User Interface (MUI) defintions and setup.
 ;-----------------------------------------------------------------------------
@@ -263,7 +263,7 @@ FunctionEnd
 Section "Tomahawk Player" SEC_TOMAHAWK_PLAYER
    SectionIn 1 2 3 RO
    SetDetailsPrint listonly
-   
+
    SetDetailsPrint textonly
    DetailPrint "Installing Tomahawk Player essentials."
    SetDetailsPrint listonly
@@ -277,6 +277,7 @@ Section "Tomahawk Player" SEC_TOMAHAWK_PLAYER
         File "${INSTALL_PATH}\lib\libtomahawk_lastfm2.dll"
         File "${INSTALL_PATH}\lib\libtomahawklib.dll"
         File "${INSTALL_PATH}\lib\libtomahawk_sipjabber.dll"
+        File "${INSTALL_PATH}\lib\libtomahawk_sipgoogle.dll"
         File "${INSTALL_PATH}\lib\libtomahawk_siptwitter.dll"
         File "${INSTALL_PATH}\lib\libtomahawk_sipzeroconf.dll"
    !endif
@@ -296,8 +297,8 @@ Section "Tomahawk Player" SEC_TOMAHAWK_PLAYER
    ;License & release notes.
    File "${ROOT_PATH}\LICENSE.txt"
    File /oname=NOTES.txt RELEASE_NOTES.txt
-    
-   ;QT stuff:  
+
+   ;QT stuff:
    File "${QT_DLL_PATH}\QtCore4.dll"
    File "${QT_DLL_PATH}\QtGui4.dll"
    File "${QT_DLL_PATH}\QtNetwork4.dll"
@@ -315,14 +316,14 @@ Section "Tomahawk Player" SEC_TOMAHAWK_PLAYER
    File "${IMAGEFORMATS_DLL_PATH}\qgif4.dll"
    File "${IMAGEFORMATS_DLL_PATH}\qjpeg4.dll"
    SetOutPath "$INSTDIR"
-    
+
    ;Cygwin/c++ stuff
    ;File "${MING_DLL_PATH}\cygmad-0.dll"
    ;File "${MING_DLL_PATH}\libgcc_s_dw2-1.dll"
    ;File "${MING_DLL_PATH}\mingwm10.dll"
    File "${MING_DLL_PATH}\libgcc_s_sjlj-1.dll"
    File "${MING_DLL_PATH}\libstdc++-6.dll"
-   
+
    ;Audio stuff
    File "${MING_DLL_PATH}\libphonon.dll"
    ;Fix the phonon build to not use Dbus
@@ -333,7 +334,6 @@ Section "Tomahawk Player" SEC_TOMAHAWK_PLAYER
    ;Other
    File "${MING_DLL_PATH}\libqjson.dll"
    File "${MING_DLL_PATH}\libtag.dll"
-   File "${MING_DLL_PATH}\libgloox-8.dll"
    File "${MING_DLL_PATH}\libpng15-15.dll"
    File "${MING_DLL_PATH}\libjpeg-8.dll"
    File "${MING_DLL_PATH}\zlib1.dll"
@@ -524,7 +524,7 @@ Section Uninstall
 
    ;Remove all the Program Files.
    RMDir /r $INSTDIR
-  
+
    ;Uninstall User Data if option is checked, otherwise skip.
    ${If} $UnPageUserAppDataCheckbox_State == ${BST_CHECKED}
       RMDir /r "$LOCALAPPDATA\Tomahawk"
@@ -540,7 +540,7 @@ SectionEnd
 #                                                                            #
 ##############################################################################
 
-Function .onInit   
+Function .onInit
    !insertmacro INSTALLOPTIONS_EXTRACT "tomahawk.ini"
 
    ;Remove Quick Launch option from Windows 7, as no longer applicable - usually.
@@ -553,19 +553,19 @@ Function .onInit
    ${MementoSectionRestore}
 
    UAC_Elevate:
-      UAC::RunElevated 
+      UAC::RunElevated
       StrCmp 1223 $0 UAC_ElevationAborted ; UAC dialog aborted by user?
       StrCmp 0 $0 0 UAC_Err ; Error?
       StrCmp 1 $1 0 UAC_Success ;Are we the real deal or just the wrapper?
       Quit
-       
+
    UAC_Err:
       MessageBox MB_ICONSTOP "Unable to elevate, error $0"
       Abort
-       
+
    UAC_ElevationAborted:
       Abort
-       
+
    UAC_Success:
       StrCmp 1 $3 +4 ;Admin?
       StrCmp 3 $1 0 UAC_ElevationAborted ;Try again?
@@ -585,7 +585,7 @@ Function .onInit
    StrCmp $R0 "" SkipSetInstDir
    StrCpy $INSTDIR $R0
    SkipSetInstDir:
-   
+
    ;Shutdown Tomahawk in case Add/Remove re-installer option used.
    Call EnsureTomahawkShutdown
 FunctionEnd
@@ -607,7 +607,7 @@ FunctionEnd
 
 Function un.onInit
    UAC_Elevate:
-      UAC::RunElevated 
+      UAC::RunElevated
       StrCmp 1223 $0 UAC_ElevationAborted ; UAC dialog aborted by user?
       StrCmp 0 $0 0 UAC_Err ; Error?
       StrCmp 1 $1 0 UAC_Success ;Are we the real deal or just the wrapper?
@@ -616,15 +616,15 @@ Function un.onInit
    UAC_Err:
       MessageBox MB_ICONSTOP "Unable to elevate, error $0"
       Abort
-       
+
    UAC_ElevationAborted:
       Abort
-       
+
    UAC_Success:
       StrCmp 1 $3 +4 ;Admin?
       StrCmp 3 $1 0 UAC_ElevationAborted ;Try again?
       MessageBox MB_ICONSTOP "This uninstaller requires admin access, try again"
-      goto UAC_Elevate 
+      goto UAC_Elevate
 
    ;Prevent multiple instances.
    System::Call 'kernel32::CreateMutexA(i 0, i 0, t "tomahawkUninstaller") i .r1 ?e'
