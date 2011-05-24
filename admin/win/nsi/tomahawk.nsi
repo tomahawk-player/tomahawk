@@ -33,9 +33,11 @@
 !delfile revision.txt
 !appendfile revision.txt ${REVISION}
 
-!define VER_MAJOR "0"
-!define VER_MINOR "0"
-!define VER_BUILD "3"
+!ifndef VER_MAJOR && VER_MINOR && VER_BUILD
+    !define VER_MAJOR "0"
+    !define VER_MINOR "1"
+    !define VER_BUILD "0"
+!endif
 
 !define VERSION "${VER_MAJOR}.${VER_MINOR}.${VER_BUILD}"
 
@@ -273,7 +275,6 @@ Section "Tomahawk Player" SEC_TOMAHAWK_PLAYER
 
         File "${INSTALL_PATH}\lib\libqxtweb-standalone.dll"
         File "${INSTALL_PATH}\lib\libtomahawk_jdns.dll"
-        File "${INSTALL_PATH}\lib\libtomahawk_qtweetlib.dll"
         File "${INSTALL_PATH}\lib\libtomahawk_lastfm2.dll"
         File "${INSTALL_PATH}\lib\libtomahawklib.dll"
         File "${INSTALL_PATH}\lib\libtomahawk_sipjabber.dll"
@@ -283,11 +284,12 @@ Section "Tomahawk Player" SEC_TOMAHAWK_PLAYER
    !ifndef INSTALL_PATH
         ;Main executable.
         File "${BUILD_PATH}\tomahawk.exe"
-        File "${BUILD_PATH}\thirdparty\qxt\qxtweb-standalone\libqxtweb-standalone.dll"
-        File "${BUILD_PATH}\thirdparty\jdns\libtomahawk_jdns.dll"
-        File "${BUILD_PATH}\thirdparty\qtweetlib\libtomahawk_qtweetlib.dll"
-        File "${BUILD_PATH}\thirdparty\liblastfm2\src\libtomahawk_lastfm2.dll"
-        File "${BUILD_PATH}\src\libtomahawk\libtomahawklib.dll"
+
+        File "${BUILD_PATH}\libtomahawklib.dll"
+        File "${BUILD_PATH}\libqxtweb-standalone.dll"
+        File "${BUILD_PATH}\libtomahawk_jdns.dll"
+        File "${BUILD_PATH}\libtomahawk_portfwd.dll"
+        File "${BUILD_PATH}\libtomahawk_lastfm2.dll"
         File "${BUILD_PATH}\libtomahawk_sipjabber.dll"
         File "${BUILD_PATH}\libtomahawk_siptwitter.dll"
         File "${BUILD_PATH}\libtomahawk_sipzeroconf.dll"
@@ -340,6 +342,9 @@ Section "Tomahawk Player" SEC_TOMAHAWK_PLAYER
 
    File "${MING_DLL_PATH}\libechonest.dll"
    File "${MING_DLL_PATH}\liblastfm.dll"
+   File "${MING_BIN}\libQTweetLib.dll"
+   File "${MING_BIN}\libjreen.dll"
+   File "${MING_BIN}\libqca.dll"
 
    File "${MING_LIB}\libclucene-core.dll"
    File "${MING_LIB}\libclucene-shared.dll"
