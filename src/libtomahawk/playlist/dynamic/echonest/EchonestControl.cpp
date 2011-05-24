@@ -181,6 +181,7 @@ Tomahawk::EchonestControl::updateWidgets()
 
         QLabel* match = new QLabel( tr( "similar to" ) );
         QLineEdit* input =  new QLineEdit();
+        input->setPlaceholderText( "Enter any combination of song name and artist here..." );
 
         m_matchString = QString();
         m_matchData = QString::number( (int)Echonest::DynamicPlaylist::SongRadioType );

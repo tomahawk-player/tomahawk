@@ -349,7 +349,7 @@ EchonestGenerator::onlyThisArtistType( Echonest::DynamicPlaylist::ArtistTypeEnum
     if( some && only ) {
         return true;
     } else if( some && !only ) {
-        throw std::runtime_error( "All artist match types must be the same" );
+        throw std::runtime_error( "All artist and song match types must be the same" );
     }
 
     return false;
