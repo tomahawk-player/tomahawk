@@ -226,6 +226,12 @@ EchonestGenerator::getParams() throw( std::runtime_error )
                 connect( r, SIGNAL( finished() ), this, SLOT( songLookupFinished() ) );
             }
         }
+
+        if( m_waiting.isEmpty() ) {
+            m_storedParams.clear();
+            emit paramsGenerated( params );
+        }
+
     } else {
         emit paramsGenerated( params );
     }
@@ -375,6 +381,8 @@ EchonestGenerator::appendRadioType( Echonest::DynamicPlaylist::PlaylistParams& p
     else if( onlyThisArtistType( Echonest::DynamicPlaylist::ArtistRadioType ) )
         params.append( Echonest::DynamicPlaylist::PlaylistParamData( Echonest::DynamicPlaylist::Type, Echonest::DynamicPlaylist::ArtistRadioType ) );
     else if( onlyThisArtistType( Echonest::DynamicPlaylist::SongRadioType ) )
+        params.append( Echonest::DynamicPlaylist::PlaylistParamData( Echonest::DynamicPlaylist::Type, Echonest::DynamicPlaylist::SongRadioType ) );
+    else // no artist or song or description types. default to song-radio
         params.append( Echonest::DynamicPlaylist::PlaylistParamData( Echonest::DynamicPlaylist::Type, Echonest::DynamicPlaylist::SongRadioType ) );
 
     return static_cast< Echonest::DynamicPlaylist::ArtistTypeEnum >( params.last().second.toInt() );
