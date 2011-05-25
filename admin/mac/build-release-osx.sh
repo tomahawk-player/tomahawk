@@ -49,7 +49,8 @@ VERSION=$1
     header "Adding Qt to app bundle"
     cd tomahawk.app
     $ROOT/../admin/mac/add-Qt-to-bundle.sh \
-                   'QtCore QtGui QtXml QtNetwork QtSql QtXmlPatterns QtWebKit QtDbus phonon'
+                   'QtCore QtGui QtXml QtNetwork QtSql QtXmlPatterns QtWebKit phonon'
+#                   'QtCore QtGui QtXml QtNetwork QtSql QtXmlPatterns QtWebKit QtDbus phonon'
 
     header "Renaming files"
     mv Contents/Resources/tomahawkSources.icns Contents/Resources/Tomahawk.icns
