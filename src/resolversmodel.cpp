@@ -173,7 +173,6 @@ ResolversModel::resolverChanged()
 }
 
 void
-
 ResolversModel::addInstalledResolvers()
 {
     QList< QDir > pluginDirs;

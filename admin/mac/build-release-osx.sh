@@ -36,7 +36,7 @@ echo "Goes here: $QTDIR"
 export QMAKESPEC='macx-g++'
 export QTDIR
 export VERSION
-export QTVERSION='4.7.2'
+export QTVERSION='4.7.3'
 ################################################################################
 
 
@@ -49,20 +49,34 @@ VERSION=$1
     header "Adding Qt to app bundle"
     cd tomahawk.app
     $ROOT/../admin/mac/add-Qt-to-bundle.sh \
-                   'QtCore QtGui QtXml QtNetwork QtSql QtXmlPatterns QtWebKit phonon'
-
-    header "Running install_name_tool"
-    $ROOT/../admin/mac/deposx.sh
+                   'QtCore QtGui QtXml QtNetwork QtSql QtXmlPatterns QtWebKit QtDbus phonon'
 
     header "Renaming files"
     mv Contents/Resources/tomahawkSources.icns Contents/Resources/Tomahawk.icns
     mv Contents/MacOS/tomahawk Contents/MacOS/Tomahawk
 #    cp $ROOT/../admin/mac/Info.plist Contents/Info.plist
 
+    header "Copying VLC plugins into bundle"
+    mkdir -p Contents/PlugIns
+    cp -R /usr/local/Cellar/vlc-git/HEAD/lib/vlc/plugins/ Contents/PlugIns
+    rm -rf Contents/PlugIns/video_* Contents/PlugIns/gui Contents/PlugIns/*/libold* Contents/PlugIns/*/libvcd* Contents/PlugIns/*/libdvd* \
+           Contents/PlugIns/*/liblibass* Contents/PlugIns/*/libx264* Contents/PlugIns/*/libschroe* Contents/PlugIns/*/liblibmpeg2* \
+           Contents/PlugIns/*/libstream_out_* Contents/PlugIns/*/libmjpeg_plugin* Contents/PlugIns/*/libh264_plugin* Contents/PlugIns/*/libzvbi_plugin* Contents/PlugIns/*/lib*sub*
+
+    header "Running install_name_tool"
+    $ROOT/../admin/mac/deposx.sh
+
     header "Copying Sparkle pubkey & framework, and qt.conf"
     cp $ROOT/../admin/mac/sparkle_pub.pem Contents/Resources
     cp -R /Library/Frameworks/Sparkle.framework Contents/Frameworks
     cp $ROOT/../admin/mac/qt.conf Contents/Resources
+
+    header "Adding spotify resolver to bundle if spotify_tomahawkresolver found in $ROOT"
+    if [ -e $ROOT/spotify_tomahawkresolver ]
+       then
+        header "Found, so adding spotify resolver."ac
+        $ROOT/../admin/mac/add-spotify.sh $ROOT/spotify_tomahawkresolver
+    fi
 
     header "Creating DMG"
     cd ..
