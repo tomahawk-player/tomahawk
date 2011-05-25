@@ -23,7 +23,7 @@ cd Contents
 
 QTLIBS=`ls Frameworks | cut -d. -f1`
 LIBS=`cd MacOS && ls -fR1 | grep dylib`
-PLUGINFOLDERS=`ls PlugIns | cut -d. -f1`
+PLUGINFOLDERS=`ls MacOS/plugins | cut -d. -f1`
 
 ################################################################################
 
@@ -77,22 +77,21 @@ function deplib_change
 #    install_name_tool -change /usr/local/Cellar/flac/1.2.1/lib/libFLAC.8.dylib @executable_path/libFLAC.8.dylib $1
     install_name_tool -change /usr/local/Cellar/kde-phonon/4.5.0/lib/libphonon.4.dylib  @executable_path/libphonon.4.dylib $1
     install_name_tool -change /usr/local/Cellar/kde-phonon/4.5.0/lib/libphonon.4.5.0.dylib  @executable_path/libphonon.4.dylib $1
+
     install_name_tool -change $ORIGROOT/libtomahawklib.dylib @executable_path/libtomahawklib.dylib $1
     install_name_tool -change $ORIGROOT/libtomahawk_sipjabber.dylib @executable_path/libtomahawk_sipjabber.dylib $1
     install_name_tool -change $ORIGROOT/libtomahawk_sipgoogle.dylib @executable_path/libtomahawk_sipgoogle.dylib $1
     install_name_tool -change $ORIGROOT/libtomahawk_siptwitter.dylib @executable_path/libtomahawk_siptwitter.dylib $1
     install_name_tool -change $ORIGROOT/libtomahawk_sipzeroconf.dylib @executable_path/libtomahawk_sipzeroconf.dylib $1
     install_name_tool -change $ORIGROOT/libtomahawk_qtweetlib.dylib @executable_path/libtomahawk_qtweetlib.dylib $1
+    install_name_tool -change $ORIGROOT/libtomahawk_portfwd.dylib @executable_path/libtomahawk_portfwd.dylib $1
     install_name_tool -change $ORIGROOT/libjreen.0.dylib  @executable_path/libjreen.0.dylib $1
-    install_name_tool -change /usr/local/Cellar/kde-phonon/4.5.0/lib/libphonon.4.5.0.dylib  @executable_path/libphonon.4.dylib $1
     install_name_tool -change /usr/local/Cellar/jreen/HEAD/lib/libjreen.dylib  @executable_path/libjreen.0.dylib $1
     install_name_tool -change /usr/local/Cellar/qca/2.0.2/lib/qca.framework/Versions/2/qca  @executable_path/../Frameworks/qca.framework/Versions/2/qca $1
-
     install_name_tool -change /usr/local/Cellar/gettext/0.18.1.1/lib/libintl.8.dylib  @executable_path/libintl.8.dylib $1
     install_name_tool -change /usr/local/Cellar/vlc-git/HEAD/lib/libvlc.5.dylib   @executable_path/libvlc.5.dylib $1
     install_name_tool -change /usr/local/Cellar/vlc-git/HEAD/lib/libvlccore.4.dylib  @executable_path/libvlccore.4.dylib $1
 
-#    install_name_tool -change /usr/local/Cellar/qt/4.7.3/lib/QtDBus.framework/Versions/4/QtDBus @executable_path/../Frameworks/QtDBus.framework/Versions/4/QtDBus $1
     install_name_tool -change libqjson.0.dylib @executable_path/libqjson.0.7.1.dylib $1
     install_name_tool -change libechonest.1.1.dylib @executable_path/libechonest.1.1.dylib $1
     install_name_tool -change libclucene-core.1.dylib @executable_path/libclucene-core.1.dylib $1
@@ -135,6 +134,7 @@ import_lib $ORIGROOT/libtomahawk_sipgoogle.dylib
 import_lib $ORIGROOT/libtomahawk_siptwitter.dylib
 import_lib $ORIGROOT/libtomahawk_sipzeroconf.dylib
 import_lib $ORIGROOT/libtomahawk_qtweetlib.dylib
+import_lib $ORIGROOT/libtomahawk_portfwd.dylib
 
 cp -R  /usr/local/Cellar/qca/2.0.2/lib/qca.framework Frameworks/
 chmod 644 Frameworks/qca.framework/Versions/2/qca
@@ -153,12 +153,12 @@ do
 done
 
 # now VLC plugins
-for x in PlugIns/$PLUGINFOLDERS
+for x in MacOS/plugins/$PLUGINFOLDERS
 do
-    for plugin in `ls PlugIns/$x | cut -f1`
+    for plugin in `ls MacOS/plugins/$x | cut -f1`
     do
         echo "Fixing VLC plugin: $plugin"
-        chmod 644 PlugIns/$x/$plugin
-        deplib_change PlugIns/$x/$plugin
+        chmod 644 MacOS/plugins/$x/$plugin
+        deplib_change MacOS/plugins/$x/$plugin
     done
 done
