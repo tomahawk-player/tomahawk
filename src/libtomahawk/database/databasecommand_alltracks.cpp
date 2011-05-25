@@ -91,9 +91,6 @@ DatabaseCommand_AllTracks::exec( DatabaseImpl* dbi )
     while( query.next() )
     {
         Tomahawk::result_ptr result = Tomahawk::result_ptr( new Tomahawk::Result() );
-
-        QVariantMap attr;
-        TomahawkSqlQuery attrQuery = dbi->newquery();
         Tomahawk::source_ptr s;
 
         if( query.value( 8 ).toUInt() == 0 )
@@ -134,6 +131,9 @@ DatabaseCommand_AllTracks::exec( DatabaseImpl* dbi )
         result->setAlbumPos( query.value( 11 ).toUInt() );
         result->setScore( 1.0 );
         result->setCollection( s->collection() );
+
+        TomahawkSqlQuery attrQuery = dbi->newquery();
+        QVariantMap attr;
 
         attrQuery.prepare( "SELECT k, v FROM track_attributes WHERE id = ?" );
         attrQuery.bindValue( 0, result->dbid() );
