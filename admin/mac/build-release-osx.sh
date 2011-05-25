@@ -58,11 +58,11 @@ VERSION=$1
 #    cp $ROOT/../admin/mac/Info.plist Contents/Info.plist
 
     header "Copying VLC plugins into bundle"
-    mkdir -p Contents/MacOS/plugins
-    cp -R /usr/local/Cellar/vlc-git/HEAD/lib/vlc/plugins/ Contents/MacOS/plugins
-    rm -rf Contents/MacOS/plugins/video_* Contents/MacOS/plugins/gui Contents/MacOS/plugins/*/libold* Contents/MacOS/plugins/*/libvcd* Contents/MacOS/plugins/*/libdvd* \
-           Contents/MacOS/plugins/*/liblibass* Contents/MacOS/plugins/*/libx264* Contents/MacOS/plugins/*/libschroe* Contents/MacOS/plugins/*/liblibmpeg2* \
-           Contents/MacOS/plugins/*/libstream_out_* Contents/MacOS/plugins/*/libmjpeg_plugin* Contents/MacOS/plugins/*/libh264_plugin* Contents/MacOS/plugins/*/libzvbi_plugin* Contents/MacOS/plugins/*/lib*sub*
+    mkdir -p Contents/plugins
+    cp -R /usr/local/Cellar/vlc-git/HEAD/lib/vlc/plugins/ Contents/plugins
+    rm -rf Contents/plugins/video_* Contents/plugins/gui Contents/plugins/*/libold* Contents/plugins/*/libvcd* Contents/plugins/*/libdvd* \
+           Contents/plugins/*/liblibass* Contents/plugins/*/libx264* Contents/plugins/*/libschroe* Contents/plugins/*/liblibmpeg2* \
+           Contents/plugins/*/libstream_out_* Contents/plugins/*/libmjpeg_plugin* Contents/plugins/*/libh264_plugin* Contents/plugins/*/libzvbi_plugin* Contents/plugins/*/lib*sub*
 
     header "Running install_name_tool"
     $ROOT/../admin/mac/deposx.sh

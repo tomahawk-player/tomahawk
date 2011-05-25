@@ -23,7 +23,7 @@ cd Contents
 
 QTLIBS=`ls Frameworks | cut -d. -f1`
 LIBS=`cd MacOS && ls -fR1 | grep dylib`
-PLUGINFOLDERS=`ls MacOS/plugins | cut -d. -f1`
+PLUGINFOLDERS=`ls plugins | cut -d. -f1`
 
 ################################################################################
 
@@ -153,12 +153,12 @@ do
 done
 
 # now VLC plugins
-for x in MacOS/plugins/$PLUGINFOLDERS
+for x in plugins/$PLUGINFOLDERS
 do
-    for plugin in `ls MacOS/plugins/$x | cut -f1`
+    for plugin in `ls plugins/$x | cut -f1`
     do
         echo "Fixing VLC plugin: $plugin"
-        chmod 644 MacOS/plugins/$x/$plugin
-        deplib_change MacOS/plugins/$x/$plugin
+        chmod 644 plugins/$x/$plugin
+        deplib_change plugins/$x/$plugin
     done
 done
