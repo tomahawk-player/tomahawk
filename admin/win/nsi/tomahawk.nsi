@@ -38,7 +38,7 @@
 !ifndef VER_MAJOR && VER_MINOR && VER_BUILD
     !define VER_MAJOR "0"
     !define VER_MINOR "1"
-    !define VER_BUILD "0"
+    !define VER_BUILD "0rc2"
 !endif
 
 !define VERSION "${VER_MAJOR}.${VER_MINOR}.${VER_BUILD}"
@@ -278,10 +278,7 @@ Section "Tomahawk Player" SEC_TOMAHAWK_PLAYER
         File "${INSTALL_PATH}\lib\libqxtweb-standalone.dll"
         File "${INSTALL_PATH}\lib\libtomahawk_lastfm2.dll"
         File "${INSTALL_PATH}\lib\libtomahawklib.dll"
-        File "${INSTALL_PATH}\lib\libtomahawk_sipjabber.dll"
-        File "${INSTALL_PATH}\lib\libtomahawk_sipgoogle.dll"
-        File "${INSTALL_PATH}\lib\libtomahawk_siptwitter.dll"
-        File "${INSTALL_PATH}\lib\libtomahawk_sipzeroconf.dll"
+        File "${INSTALL_PATH}\lib\libtomahawk_sip*.dll"
    !endif
    !ifndef INSTALL_PATH
         ;Main executable.
@@ -291,9 +288,7 @@ Section "Tomahawk Player" SEC_TOMAHAWK_PLAYER
         File "${BUILD_PATH}\libqxtweb-standalone.dll"
         File "${BUILD_PATH}\libtomahawk_portfwd.dll"
         File "${BUILD_PATH}\libtomahawk_lastfm2.dll"
-        File "${BUILD_PATH}\libtomahawk_sipjabber.dll"
-        File "${BUILD_PATH}\libtomahawk_siptwitter.dll"
-        File "${BUILD_PATH}\libtomahawk_sipzeroconf.dll"
+        File "${BUILD_PATH}\libtomahawk_sip*.dll"
    !endif
 
    ;License & release notes.
@@ -343,11 +338,17 @@ Section "Tomahawk Player" SEC_TOMAHAWK_PLAYER
    File "${VLC_PATH}\libvlc.dll"
    File "${VLC_PATH}\libvlccore.dll"
    SetOutPath "$INSTDIR\plugins"
-   File /r "${VLC_PLUGIN_PATH}"
+   File /r "${VLC_PLUGIN_PATH}\*.dll"
    SetOutPath "$INSTDIR"
+   File "${MING_BIN}\libmad-0.dll" ; MP3
+   File "${MING_BIN}\libFLAC-8.dll" ; FLAC
+   File "${MING_BIN}\libogg-0.dll" ; OGG, FLAC
+   File "${MING_BIN}\libvorbis-0.dll" ; OGG
+   File "${MING_BIN}\libvorbisenc-2.dll" ; OGG
 
 
-   ;Other
+
+   ; Other
    File "${MING_DLL_PATH}\libqjson.dll"
    File "${MING_DLL_PATH}\libtag.dll"
    File "${MING_DLL_PATH}\libpng15-15.dll"
@@ -357,8 +358,15 @@ Section "Tomahawk Player" SEC_TOMAHAWK_PLAYER
    File "${MING_DLL_PATH}\libechonest.dll"
    File "${MING_DLL_PATH}\liblastfm.dll"
    File "${MING_BIN}\libQTweetLib.dll"
+
+   ; Jabber
    File "${MING_BIN}\libjreen.dll"
    File "${MING_BIN}\libqca.dll"
+   SetOutPath "$INSTDIR\crypto"
+   File "${MING_LIB}\qt4\plugins\crypto\libqca-ossl.dll"
+   SetOutPath "$INSTDIR"
+   File "${MING_BIN}\libssl-8.dll"
+   File "${MING_BIN}\libcrypto-8.dll"
 
    File "${MING_LIB}\libclucene-core.dll"
    File "${MING_LIB}\libclucene-shared.dll"
