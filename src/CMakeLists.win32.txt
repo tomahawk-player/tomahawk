@@ -4,9 +4,8 @@ ADD_DEFINITIONS( /DNOMINMAX )
 ADD_DEFINITIONS( /DWIN32_LEAN_AND_MEAN )
 ADD_DEFINITIONS( -static-libgcc )
 
+SET( QXTWEB_LIBRARIES  qxtweb-standalone )
 
-SET( TOMAHAWK_LIBRARIES  ${CMAKE_BINARY_DIR}/src/libtomahawk/libtomahawklib.dll )
-SET( QXTWEB_LIBRARIES  ${CMAKE_BINARY_DIR}/thirdparty/qxt/qxtweb-standalone/libqxtweb-standalone.dll )
 
 SET( OS_SPECIFIC_LINK_LIBRARIES
     ${OS_SPECIFIC_LINK_LIBRARIES}
