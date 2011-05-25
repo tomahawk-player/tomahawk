@@ -368,8 +368,6 @@ include_directories( . ${CMAKE_CURRENT_BINARY_DIR} ${CMAKE_CURRENT_BINARY_DIR}/.
 IF( WIN32 )
     SET( OS_SPECIFIC_LINK_LIBRARIES
         ${OS_SPECIFIC_LINK_LIBRARIES}
-    # Thirdparty
-	${QJSON_LDFLAGS}
     # System
         "iphlpapi.a"
         "ws2_32.dll"
@@ -387,21 +385,11 @@ IF( APPLE )
 
     SET( OS_SPECIFIC_LINK_LIBRARIES
         ${OS_SPECIFIC_LINK_LIBRARIES}
-        # Thirdparty
-	${QJSON_LIBRARIES}
         # System
         ${COREAUDIO_LIBRARY}
         ${COREFOUNDATION_LIBRARY}
     )
 ENDIF( APPLE )
-
-IF( UNIX AND NOT APPLE )
-    SET( OS_SPECIFIC_LINK_LIBRARIES
-        ${OS_SPECIFIC_LINK_LIBRARIES}
-        # Thirdparty
-	${QJSON_LDFLAGS}
-    )
-ENDIF( UNIX AND NOT APPLE )
 
 IF(LIBLASTFM_FOUND)
     SET(LINK_LIBRARIES ${LINK_LIBRARIES} tomahawk_lastfm2 )

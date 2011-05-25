@@ -43,4 +43,8 @@ else (QJSON_INCLUDE_DIR AND QJSON_LIBRARIES)
   include(FindPackageHandleStandardArgs)
   find_package_handle_standard_args(QJSON DEFAULT_MSG QJSON_LIBRARIES QJSON_INCLUDE_DIR)
 
+  if ( WIN32 OR ( UNIX AND NOT APPLE ) )
+    set ( QJSON_LIBRARIES "${QJSON_LIBRARIES} ${QJSON_LDFLAGS}" )
+  endif ()
+
 endif (QJSON_INCLUDE_DIR AND QJSON_LIBRARIES)
