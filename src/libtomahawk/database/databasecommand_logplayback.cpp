@@ -98,6 +98,9 @@ DatabaseCommand_LogPlayback::exec( DatabaseImpl* dbi )
 bool
 DatabaseCommand_LogPlayback::localOnly() const
 {
-    return m_secsPlayed < 20;
+    if ( m_action == Finished )
+        return m_secsPlayed < 20;
+
+    return false;
 }
 
