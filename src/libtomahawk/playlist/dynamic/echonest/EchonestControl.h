@@ -50,6 +50,7 @@ public:
 
 public slots:
     virtual void setSelectedType ( const QString& type );
+
 private slots:
     void updateData();
     void editingFinished();
@@ -58,7 +59,7 @@ private slots:
     void artistTextEdited( const QString& );
     void suggestFinished();
 
-
+    void checkForMoodsOrStylesFetched();
 private:
     void updateWidgets();
     void updateWidgetsFromData();
@@ -67,6 +68,7 @@ private:
     void setupMinMaxWidgets( Echonest::DynamicPlaylist::PlaylistParam min, Echonest::DynamicPlaylist::PlaylistParam max, const QString& leftL, const QString& rightL, int maxRange );
     void updateFromComboAndSlider( bool smooth = false );
     void updateFromLabelAndCombo();
+    bool insertMoodsAndStyles();
 
     void updateToComboAndSlider( bool smooth = false );
     void updateToLabelAndCombo();

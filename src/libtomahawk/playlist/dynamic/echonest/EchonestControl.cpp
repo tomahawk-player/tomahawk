@@ -354,10 +354,6 @@ Tomahawk::EchonestControl::updateWidgets()
         QLabel* match = new QLabel( tr( "is" ) );
 
         QComboBox* combo = new QComboBox;
-        QVector< QString > src = selectedType() == "Mood" ? EchonestGenerator::moods() : EchonestGenerator::styles();
-        foreach( const QString& item, src ) {
-            combo->addItem( item, item );
-        }
 
         m_matchString = match->text();
         m_matchData = match->text();
@@ -370,6 +366,8 @@ Tomahawk::EchonestControl::updateWidgets()
         combo->hide();
         m_match = QWeakPointer< QWidget >( match );
         m_input = QWeakPointer< QWidget >( combo );
+
+        insertMoodsAndStyles();
     } else {
         m_match = QWeakPointer<QWidget>( new QWidget );
         m_input = QWeakPointer<QWidget>( new QWidget );
@@ -696,4 +694,37 @@ Tomahawk::EchonestControl::calculateSummary()
         summary = QString( "with %1 %2" ).arg( selectedType() == "Mood" ? "mood" : "style" ).arg( text );
     }
     m_summary = summary;
+}
+
+void
+Tomahawk::EchonestControl::checkForMoodsOrStylesFetched()
+{
+    if( selectedType() == "Mood" || selectedType() == "Style" ) {
+        QComboBox* cb = qobject_cast< QComboBox* >( m_input.data() );
+        if( cb && cb->count() == 0 ) { // got nothing, so lets populate
+            if( insertMoodsAndStyles() )
+                updateWidgetsFromData();
+        }
+    }
+}
+
+bool
+Tomahawk::EchonestControl::insertMoodsAndStyles()
+{
+    QVector< QString > src = selectedType() == "Mood" ? EchonestGenerator::moods() : EchonestGenerator::styles();
+    QComboBox* combo = qobject_cast< QComboBox* >( m_input.data() );
+    if( !combo )
+        return false;
+
+    qDebug() << "Inserting moods and or styles, here's the list" << src;
+    foreach( const QString& item, src ) {
+        combo->addItem( item, item );
+    }
+
+    if( src.isEmpty() ) {
+        QTimer::singleShot( 400, this, SLOT( checkForMoodsOrStylesFetched() ) );
+        return false;
+    }
+
+    return true;
 }
