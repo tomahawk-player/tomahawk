@@ -46,8 +46,13 @@ public:
 
     void saveSettings();
 
+private slots:
+    void proxyTypeChangedSlot( int index );
+    
 private:
     Ui::ProxyDialog* ui;
+    QHash<int,int> m_forwardMap;
+    QHash<int,int> m_backwardMap;
 };
 
 class SettingsDialog : public QDialog

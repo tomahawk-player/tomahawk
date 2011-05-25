@@ -46,6 +46,7 @@
 #include <QMessageBox>
 #include <QDateTime>
 #include <QTimer>
+#include <utils/tomahawkutils.h>
 
 SipPlugin*
 JabberFactory::createPlugin( const QString& pluginId )
@@ -150,11 +151,19 @@ JabberPlugin::~JabberPlugin()
 }
 
 void
-JabberPlugin::setProxy( const QNetworkProxy &proxy )
+JabberPlugin::refreshProxy()
 {
     qDebug() << Q_FUNC_INFO;
 
-    if( ( proxy.type() != QNetworkProxy::NoProxy ) && ( m_currentServer.isEmpty() || !(m_currentPort > 0) ) )
+    if(!m_client->connection())
+    {
+        m_client->setConnection(new Jreen::TcpConnection(m_currentServer, m_currentPort));
+    }
+
+    QNetworkProxy proxyToUse = TomahawkUtils::proxyFactory()->queryProxy( QNetworkProxyQuery( m_currentServer, m_currentPort ) ).first();
+    m_usedProxy = proxyToUse;
+    
+    if( proxyToUse.type() != QNetworkProxy::NoProxy && ( m_currentServer.isEmpty() || !(m_currentPort > 0) ) )
     {
         // patches are welcome in Jreen that implement jdns through proxy
         emit error( SipPlugin::ConnectionError,
@@ -162,12 +171,7 @@ JabberPlugin::setProxy( const QNetworkProxy &proxy )
         return;
     }
 
-    if(!m_client->connection())
-    {
-        m_client->setConnection(new Jreen::TcpConnection(m_currentServer, m_currentPort));
-    }
-
-    qobject_cast<Jreen::DirectConnection*>(m_client->connection())->setProxy(proxy);
+    qobject_cast<Jreen::DirectConnection*>( m_client->connection() )->setProxy( proxyToUse );
 }
 
 
@@ -221,10 +225,12 @@ JabberPlugin::connectPlugin( bool startup )
 
     qDebug() << "Connecting to the XMPP server..." << m_client->jid().full();
 
+    refreshProxy();
+    
     //FIXME: we're badly workarounding some missing reconnection api here, to be fixed soon
     QTimer::singleShot( 1000, m_client, SLOT( connectToServer() ) );
 
-    connect(m_client->connection(), SIGNAL(error(Jreen::Connection::SocketError)), SLOT(onError(Jreen::Connection::SocketError)));
+    connect(m_client->connection(), SIGNAL(error(SocketError)), SLOT(onError(SocketError)));
 
     m_state = Connecting;
     emit stateChanged( m_state );
@@ -498,6 +504,18 @@ JabberPlugin::checkSettings()
         reconnect = true;
     if ( m_currentPort != readPort() )
         reconnect = true;
+
+    QNetworkProxy proxyToUse = TomahawkUtils::proxyFactory()->queryProxy( QNetworkProxyQuery( m_currentServer, m_currentPort ) ).first();
+    if ( proxyToUse.hostName() != m_usedProxy.hostName() ||
+         proxyToUse.port() != m_usedProxy.port() ||
+         proxyToUse.user() != m_usedProxy.user() ||
+         proxyToUse.password() != m_usedProxy.password() ||
+         proxyToUse.type() != m_usedProxy.type() ||
+         proxyToUse.capabilities() != m_usedProxy.capabilities() )
+    {
+        m_usedProxy = proxyToUse;
+        reconnect = true;
+    }
 
     m_currentUsername = accountName();
     m_currentPassword = readPassword();

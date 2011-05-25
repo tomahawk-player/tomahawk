@@ -340,7 +340,78 @@ createDragPixmap( int itemCount )
 
 
 QWeakPointer< QNetworkAccessManager > s_nam;
-QNetworkProxy* s_proxy = 0;
+NetworkProxyFactory* s_proxyFactory = 0;
+
+
+QList< QNetworkProxy >
+NetworkProxyFactory::proxyForQuery( const QNetworkProxyQuery& query )
+{
+    Q_UNUSED( query );
+    QList< QNetworkProxy > proxies;
+    proxies << QNetworkProxy( QNetworkProxy::NoProxy );
+    return proxies;
+}
+
+
+QList< QNetworkProxy >
+NetworkProxyFactory::queryProxy( const QNetworkProxyQuery& query )
+{
+    QList< QNetworkProxy > proxies;
+    QString hostname = query.peerHostName();
+    if ( hostname.isEmpty() || m_noProxyHosts.contains( hostname ) )
+        proxies << QNetworkProxy( QNetworkProxy::NoProxy );
+    else
+        proxies << m_proxy << QNetworkProxy( QNetworkProxy::NoProxy ) << QNetworkProxy( QNetworkProxy::DefaultProxy );
+
+    return proxies;
+}
+
+
+void
+NetworkProxyFactory::setNoProxyHosts( const QStringList& hosts )
+{
+    QStringList newList;
+    foreach( QString host, hosts )
+    {
+        QString munge = host.simplified();
+        newList << munge;
+    }
+    qDebug() << Q_FUNC_INFO << " No-proxy hosts: " << newList;
+    m_noProxyHosts = newList;
+}
+
+
+void
+NetworkProxyFactory::setProxy( const QNetworkProxy& proxy )
+{
+    m_proxy = proxy;
+    if ( !TomahawkSettings::instance()->proxyDns() )
+        m_proxy.setCapabilities( QNetworkProxy::TunnelingCapability | QNetworkProxy::ListeningCapability | QNetworkProxy::UdpTunnelingCapability );
+    qDebug() << Q_FUNC_INFO << " Proxy using host " << proxy.hostName() << " and port " << proxy.port();
+    qDebug() << Q_FUNC_INFO << " setting proxy to use proxy DNS?" << (TomahawkSettings::instance()->proxyDns() ? "true" : "false");
+}
+
+
+NetworkProxyFactory*
+proxyFactory()
+{
+    // Don't use this anywhere! It's provided here for access reasons, but QNAM deletes this at will!
+    
+    if ( !s_proxyFactory )
+        s_proxyFactory = new NetworkProxyFactory();
+    
+    return s_proxyFactory;
+}
+
+
+void
+setProxyFactory( NetworkProxyFactory* factory )
+{
+    Q_ASSERT( factory );
+    s_proxyFactory = factory;
+    NetworkProxyFactory::setApplicationProxyFactory( s_proxyFactory );
+}
+
 
 QNetworkAccessManager*
 nam()
@@ -352,28 +423,12 @@ nam()
 }
 
 
-QNetworkProxy*
-proxy()
-{
-    return s_proxy;
-}
-
-
 void
 setNam( QNetworkAccessManager* nam )
 {
+    Q_ASSERT( nam );
     s_nam = QWeakPointer< QNetworkAccessManager >( nam );
 }
 
-
-void
-setProxy( QNetworkProxy* proxy )
-{
-    s_proxy = proxy;
-    s_nam.data()->setProxy( *proxy );
-    qDebug() << Q_FUNC_INFO << "setting proxy to use proxy DNS?" << (TomahawkSettings::instance()->proxyDns() ? "true" : "false");
-    if ( !TomahawkSettings::instance()->proxyDns() )
-        s_proxy->setCapabilities( QNetworkProxy::TunnelingCapability | QNetworkProxy::ListeningCapability | QNetworkProxy::UdpTunnelingCapability );
-}
 
 } // ns

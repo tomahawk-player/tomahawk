@@ -22,6 +22,8 @@
 #include "dllmacro.h"
 #include <QObject>
 #include <QThread>
+#include <QNetworkProxy>
+#include <QStringList>
 
 #define RESPATH ":/data/"
 
@@ -52,6 +54,25 @@ namespace TomahawkUtils
         }
     };
 
+    class DLLEXPORT NetworkProxyFactory : public QNetworkProxyFactory
+    {
+    public:
+        NetworkProxyFactory() {}
+        virtual ~NetworkProxyFactory() {}
+
+        virtual QList< QNetworkProxy > queryProxy( const QNetworkProxyQuery & query = QNetworkProxyQuery() );
+        static QList< QNetworkProxy > proxyForQuery( const QNetworkProxyQuery & query );
+
+        void setNoProxyHosts( const QStringList &hosts );
+        QStringList noProxyHosts() const { return m_noProxyHosts; }
+        void setProxy( const QNetworkProxy &proxy );
+        QNetworkProxy proxy() { return m_proxy; }
+
+    private:
+        QStringList m_noProxyHosts;
+        QNetworkProxy m_proxy;
+    };
+
     DLLEXPORT QDir appConfigDir();
     DLLEXPORT QDir appDataDir();
     DLLEXPORT QDir appLogDir();
@@ -64,11 +85,11 @@ namespace TomahawkUtils
     DLLEXPORT QColor alphaBlend( const QColor& colorFrom, const QColor& colorTo, float opacity );
     DLLEXPORT QPixmap createDragPixmap( int itemCount = 1 );
 
+    DLLEXPORT NetworkProxyFactory* proxyFactory();
     DLLEXPORT QNetworkAccessManager* nam();
-    DLLEXPORT QNetworkProxy* proxy();
 
+    DLLEXPORT void setProxyFactory( TomahawkUtils::NetworkProxyFactory* factory );
     DLLEXPORT void setNam( QNetworkAccessManager* nam );
-    DLLEXPORT void setProxy( QNetworkProxy* proxy );
 }
 
 #endif // TOMAHAWKUTILS_H

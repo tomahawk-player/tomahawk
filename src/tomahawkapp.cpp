@@ -182,7 +182,20 @@ TomahawkApp::init()
     registerMetaTypes();
 
     new TomahawkSettings( this );
-
+    TomahawkSettings* s = TomahawkSettings::instance();
+    
+    TomahawkUtils::NetworkProxyFactory* proxyFactory = new TomahawkUtils::NetworkProxyFactory();
+    
+    if( s->proxyType() != QNetworkProxy::NoProxy &&
+        !s->proxyHost().isEmpty() )
+    {
+        qDebug() << "Setting proxy to saved values";
+        QNetworkProxy proxy( static_cast<QNetworkProxy::ProxyType>( s->proxyType() ), s->proxyHost(), s->proxyPort(), s->proxyUsername(), s->proxyPassword() );
+        proxyFactory->setProxy( proxy );
+    }
+    proxyFactory->setNoProxyHosts( s->proxyNoProxyHosts().split( ',', QString::SkipEmptyParts ) );
+    TomahawkUtils::NetworkProxyFactory::setApplicationProxyFactory( proxyFactory );
+    
 #ifdef LIBLASTFM_FOUND
     qDebug() << "Setting NAM.";
     TomahawkUtils::setNam( lastfm::nam() );
@@ -190,20 +203,6 @@ TomahawkApp::init()
     qDebug() << "Setting NAM.";
     TomahawkUtils::setNam( new QNetworkAccessManager() );
 #endif
-
-    // Set up proxy
-    //FIXME: This overrides the lastfm proxy above?
-    if( TomahawkSettings::instance()->proxyType() != QNetworkProxy::NoProxy &&
-        !TomahawkSettings::instance()->proxyHost().isEmpty() )
-    {
-        qDebug() << "Setting proxy to saved values";
-        TomahawkUtils::setProxy( new QNetworkProxy( static_cast<QNetworkProxy::ProxyType>(TomahawkSettings::instance()->proxyType()), TomahawkSettings::instance()->proxyHost(), TomahawkSettings::instance()->proxyPort(), TomahawkSettings::instance()->proxyUsername(), TomahawkSettings::instance()->proxyPassword() ) );
-        qDebug() << "Proxy type =" << QString::number( static_cast<int>(TomahawkUtils::proxy()->type()) );
-        qDebug() << "Proxy host =" << TomahawkUtils::proxy()->hostName();
-        TomahawkUtils::nam()->setProxy( *TomahawkUtils::proxy() );
-    }
-    else
-        TomahawkUtils::setProxy( new QNetworkProxy( QNetworkProxy::NoProxy ) );
 
     Echonest::Config::instance()->setAPIKey( "JRIHWEP6GPOER2QQ6" );
 
@@ -265,8 +264,6 @@ TomahawkApp::init()
     Echonest::Config::instance()->setAPIKey( "JRIHWEP6GPOER2QQ6" );
     Echonest::Config::instance()->setNetworkAccessManager( TomahawkUtils::nam() );
 
-    QNetworkProxy::setApplicationProxy( *TomahawkUtils::proxy() );
-
     qDebug() << "Init SIP system.";
 
 #ifndef TOMAHAWK_HEADLESS
@@ -293,7 +290,7 @@ TomahawkApp::init()
     }
 
 #ifndef TOMAHAWK_HEADLESS
-    if ( !TomahawkSettings::instance()->hasScannerPaths() )
+    if ( !s->hasScannerPaths() )
     {
         m_mainwindow->showSettingsDialog();
     }
@@ -538,7 +535,7 @@ TomahawkApp::setupSIP()
 #endif
 
         qDebug() << "Connecting SIP classes";
-        SipHandler::instance()->setProxy( *TomahawkUtils::proxy() );
+        SipHandler::instance()->refreshProxy();
         SipHandler::instance()->loadFromConfig( true );
     }
 }

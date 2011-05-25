@@ -93,7 +93,7 @@ public slots:
     void sendMsg( const QString& to, const QString& msg );
     void broadcastMsg( const QString &msg );
     void addContact( const QString &jid, const QString& msg = QString() );
-    void setProxy( const QNetworkProxy &proxy );
+    void refreshProxy();
 
 protected:
     Ui_JabberConfig* m_ui; // so the google wrapper can change the config dialog a bit
@@ -152,6 +152,8 @@ private:
     enum IqContext { NoContext, RequestDisco, RequestedDisco, SipMessageSent, RequestedVCard, RequestVersion, RequestedVersion };
     QStringList m_legacy_peers;
     AvatarManager *m_avatarManager;
+
+    QNetworkProxy m_usedProxy;
 };
 
 #endif

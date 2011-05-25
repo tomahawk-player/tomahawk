@@ -79,7 +79,7 @@ public slots:
     virtual bool connectPlugin( bool startup );
     void disconnectPlugin();
     void checkSettings();
-    void setProxy( const QNetworkProxy &proxy );
+    void refreshProxy();
 
     void sendMsg( const QString& to, const QString& msg )
     {

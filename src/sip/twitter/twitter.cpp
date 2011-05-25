@@ -746,9 +746,8 @@ TwitterPlugin::avatarUserDataSlot( const QTweetUser &user )
 }
 
 void
-TwitterPlugin::setProxy( const QNetworkProxy& proxy )
+TwitterPlugin::refreshProxy()
 {
-    Q_UNUSED( proxy );
     if ( !m_twitterAuth.isNull() )
         m_twitterAuth.data()->setNetworkAccessManager( TomahawkUtils::nam() );
 }
