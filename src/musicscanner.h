@@ -20,8 +20,8 @@
 #define MUSICSCANNER_H
 
 /* taglib */
-#include <fileref.h>
-#include <tag.h>
+#include <taglib/fileref.h>
+#include <taglib/tag.h>
 
 #include <QVariantMap>
 #include <QDir>
