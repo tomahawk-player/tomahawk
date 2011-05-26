@@ -70,7 +70,7 @@ enum InfoType { // as items are saved in cache, mark them here to not change the
     InfoArtistBlog = 25,
     InfoArtistFamiliarity = 26,
     InfoArtistHotttness = 27,
-    InfoArtistImages = 28,
+    InfoArtistImages = 28, //cached -- do not change
     InfoArtistNews = 29,
     InfoArtistProfile = 30,
     InfoArtistReviews = 31,
