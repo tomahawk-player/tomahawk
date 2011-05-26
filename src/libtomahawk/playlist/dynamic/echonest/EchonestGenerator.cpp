@@ -66,7 +66,6 @@ EchonestGenerator::EchonestGenerator ( QObject* parent )
     QNetworkReply* moods = Echonest::Artist::listTerms( "mood" );
     connect( moods, SIGNAL( finished() ), this, SLOT( moodsReceived() ) );
 
-    QTimer::singleShot( 20000, this, SLOT( get() ) );
 //    qDebug() << "ECHONEST:" << m_logo.size();
 }
 
