@@ -199,7 +199,7 @@ SourcesModel::dropMimeData( const QMimeData* data, Qt::DropAction action, int ro
         item = itemFromIndex( parent );
     else if( column == 0 )
         item = itemFromIndex( index( row, column, parent ) );
-    else // column is -1, that means the drop is happening "below" the indices. that means we actually want the one before it
+    else if( column == -1 ) // column is -1, that means the drop is happening "below" the indices. that means we actually want the one before it
         item = itemFromIndex( index( row - 1, 0, parent ) );
 
     Q_ASSERT( item );
