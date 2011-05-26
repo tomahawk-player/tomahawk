@@ -133,7 +133,8 @@ CategoryAddItem::dropMimeData( const QMimeData* data, Qt::DropAction )
             QTimer::singleShot( 300, APP->mainWindow()->sourceTreeView(), SLOT( renamePlaylist() ) );
         } else if( m_categoryType == SourcesModel::StationsCategory ) {
             // seed the playlist with these song filters
-            dynplaylist_ptr newpl = DynamicPlaylist::create( SourceList::instance()->getLocal(), uuid(), "New Station", "", SourceList::instance()->getLocal()->friendlyName(), OnDemand, false );
+            QString name = queries.isEmpty() ? tr( "New Station" ) : tr( "%1 Station" ).arg( queries.first()->track() );
+            dynplaylist_ptr newpl = DynamicPlaylist::create( SourceList::instance()->getLocal(), uuid(), name, "", SourceList::instance()->getLocal()->friendlyName(), OnDemand, false );
             newpl->setMode( OnDemand );
 
             // now we want to add each query as a song filter...

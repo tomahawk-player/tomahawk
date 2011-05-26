@@ -33,6 +33,7 @@ QHash< QString, QStringList > Tomahawk::EchonestControl::s_suggestCache = QHash<
 
 Tomahawk::EchonestControl::EchonestControl( const QString& selectedType, const QStringList& typeSelectors, QObject* parent )
     : DynamicControl ( selectedType.isEmpty() ? "Artist" : selectedType, typeSelectors, parent )
+    , m_stylePollCount( 0 )
 {
     setType( "echonest" );
     m_editingTimer.setInterval( 500 ); //timeout to edits
@@ -721,8 +722,11 @@ Tomahawk::EchonestControl::insertMoodsAndStyles()
         combo->addItem( item, item );
     }
 
-    if( src.isEmpty() ) {
-        QTimer::singleShot( 400, this, SLOT( checkForMoodsOrStylesFetched() ) );
+    if( src.isEmpty() && !combo->count() ) {
+        if( m_stylePollCount <= 20 ) { // try for 20s to get the styles...
+            QTimer::singleShot( 1000, this, SLOT( checkForMoodsOrStylesFetched() ) );
+        }
+        m_stylePollCount++;
         return false;
     }
 
