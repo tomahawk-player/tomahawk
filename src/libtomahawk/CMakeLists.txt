@@ -161,6 +161,7 @@ set( libSources
     utils/xspfgenerator.cpp
 
     widgets/newplaylistwidget.cpp
+    widgets/playlisttypeselectordlg.cpp
     widgets/welcomewidget.cpp
     widgets/welcomeplaylistmodel.cpp
     widgets/overlaywidget.cpp
@@ -324,6 +325,7 @@ set( libHeaders
     utils/xspfgenerator.h
 
     widgets/newplaylistwidget.h
+    widgets/playlisttypeselectordlg.h
     widgets/welcomewidget.h
     widgets/welcomeplaylistmodel.h
     widgets/overlaywidget.h
@@ -339,6 +341,7 @@ set( libHeaders_NoMOC
 		playlist/dynamic/GeneratorInterface.h
 )
 set( libUI ${libUI}
+    widgets/playlisttypeselectordlg.ui
     widgets/newplaylistwidget.ui
     widgets/welcomewidget.ui
     widgets/infowidgets/sourceinfowidget.ui
