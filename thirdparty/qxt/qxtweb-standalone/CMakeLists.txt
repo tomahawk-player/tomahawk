@@ -79,6 +79,11 @@ IF(WIN32)
 			${headers}
 			${sources}
 	)
+    INSTALL( TARGETS qxtweb-standalone
+             RUNTIME DESTINATION bin
+             LIBRARY DESTINATION lib
+             ARCHIVE DESTINATION lib
+    )
 ELSE()
 	ADD_LIBRARY(qxtweb-standalone STATIC
 			${mocstuff}
