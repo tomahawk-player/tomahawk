@@ -276,6 +276,7 @@ Section "Tomahawk Player" SEC_TOMAHAWK_PLAYER
         File "${INSTALL_PATH}\bin\tomahawk.exe"
 
         File "${INSTALL_PATH}\bin\libqxtweb-standalone.dll"
+        File "${INSTALL_PATH}\bin\libtomahawk_portfwd.dll"
         File "${INSTALL_PATH}\bin\libtomahawk_lastfm2.dll"
         File "${INSTALL_PATH}\bin\libtomahawklib.dll"
         File "${INSTALL_PATH}\lib\libtomahawk_sip*.dll"
@@ -356,7 +357,6 @@ Section "Tomahawk Player" SEC_TOMAHAWK_PLAYER
    File "${MING_DLL_PATH}\zlib1.dll"
 
    File "${MING_DLL_PATH}\libechonest.dll"
-   File "${MING_DLL_PATH}\liblastfm.dll"
    File "${MING_BIN}\libQTweetLib.dll"
 
    ; Jabber
