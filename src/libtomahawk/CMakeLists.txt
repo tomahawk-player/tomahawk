@@ -418,4 +418,8 @@ target_link_libraries( tomahawklib
     ${LINK_LIBRARIES}
 )
 
-INSTALL( TARGETS tomahawklib DESTINATION lib${LIB_SUFFIX} )
+INSTALL( TARGETS tomahawklib
+    RUNTIME DESTINATION bin
+    LIBRARY DESTINATION lib
+    ARCHIVE DESTINATION lib
+)

@@ -275,9 +275,9 @@ Section "Tomahawk Player" SEC_TOMAHAWK_PLAYER
         ;Main executable.
         File "${INSTALL_PATH}\bin\tomahawk.exe"
 
-        File "${INSTALL_PATH}\lib\libqxtweb-standalone.dll"
-        File "${INSTALL_PATH}\lib\libtomahawk_lastfm2.dll"
-        File "${INSTALL_PATH}\lib\libtomahawklib.dll"
+        File "${INSTALL_PATH}\bin\libqxtweb-standalone.dll"
+        File "${INSTALL_PATH}\bin\libtomahawk_lastfm2.dll"
+        File "${INSTALL_PATH}\bin\libtomahawklib.dll"
         File "${INSTALL_PATH}\lib\libtomahawk_sip*.dll"
    !endif
    !ifndef INSTALL_PATH
