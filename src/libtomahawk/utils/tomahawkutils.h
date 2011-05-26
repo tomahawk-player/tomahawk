@@ -57,7 +57,10 @@ namespace TomahawkUtils
     class DLLEXPORT NetworkProxyFactory : public QNetworkProxyFactory
     {
     public:
-        NetworkProxyFactory() {}
+        NetworkProxyFactory()
+            : m_proxy( QNetworkProxy::NoProxy )
+            {}
+            
         virtual ~NetworkProxyFactory() {}
 
         virtual QList< QNetworkProxy > queryProxy( const QNetworkProxyQuery & query = QNetworkProxyQuery() );

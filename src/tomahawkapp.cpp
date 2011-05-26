@@ -193,7 +193,9 @@ TomahawkApp::init()
         QNetworkProxy proxy( static_cast<QNetworkProxy::ProxyType>( s->proxyType() ), s->proxyHost(), s->proxyPort(), s->proxyUsername(), s->proxyPassword() );
         proxyFactory->setProxy( proxy );
     }
-    proxyFactory->setNoProxyHosts( s->proxyNoProxyHosts().split( ',', QString::SkipEmptyParts ) );
+    
+    if ( !s->proxyNoProxyHosts().isEmpty() )
+        proxyFactory->setNoProxyHosts( s->proxyNoProxyHosts().split( ',', QString::SkipEmptyParts ) );
     TomahawkUtils::NetworkProxyFactory::setApplicationProxyFactory( proxyFactory );
     
 #ifdef LIBLASTFM_FOUND
@@ -535,7 +537,7 @@ TomahawkApp::setupSIP()
 #endif
 
         qDebug() << "Connecting SIP classes";
-        SipHandler::instance()->refreshProxy();
+        //SipHandler::instance()->refreshProxy();
         SipHandler::instance()->loadFromConfig( true );
     }
 }

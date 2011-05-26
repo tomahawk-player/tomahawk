@@ -375,6 +375,7 @@ NetworkProxyFactory::setNoProxyHosts( const QStringList& hosts )
     {
         QString munge = host.simplified();
         newList << munge;
+        //TODO: wildcard support
     }
     qDebug() << Q_FUNC_INFO << " No-proxy hosts: " << newList;
     m_noProxyHosts = newList;
