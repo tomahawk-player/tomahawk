@@ -151,6 +151,7 @@ using namespace Tomahawk;
 TomahawkApp::TomahawkApp( int& argc, char *argv[] )
     : TOMAHAWK_APPLICATION( argc, argv )
     , m_database( 0 )
+    , m_databaseResolver( 0 )
     , m_scanManager( 0 )
     , m_audioEngine( 0 )
     , m_servent( 0 )
@@ -309,26 +310,50 @@ TomahawkApp::~TomahawkApp()
 {
     qDebug() << Q_FUNC_INFO;
 
+#ifdef LIBLASTFM_FOUND
+    delete m_scrobbler;
+#endif
+
+    //FIXME: m_session doesn't allow you to stop(), so is this safe?
+    delete m_session.staticContentService();
+    
     // stop script resolvers
     foreach( Tomahawk::ExternalResolver* r, m_scriptResolvers.values() )
     {
         delete r;
     }
     m_scriptResolvers.clear();
+    Pipeline::instance()->removeResolver( m_databaseResolver );
+    delete m_databaseResolver;
 
-    delete m_servent;
-    delete m_scanManager;
+    //FIXME: Delete stuff created in initLocalCollection ?
+    
 #ifndef TOMAHAWK_HEADLESS
     delete m_mainwindow;
+#endif
+
+    delete m_infoSystem;
+
+    //FIXME: delete GeneratorFactory::registerFactory( "echonest", new EchonestFactory ); ?
+
+    delete m_database;
+
+    delete SipHandler::instance();
+    
+    delete m_servent;
+    
+    Pipeline::instance()->stop();
+    delete Pipeline::instance();    
+
+    delete m_scanManager;
+    
+#ifndef TOMAHAWK_HEADLESS
     delete m_audioEngine;
 #endif
 
-    delete SipHandler::instance();
-    Pipeline::instance()->stop();
-
-    delete m_database;
-    delete m_infoSystem;
-
+    delete TomahawkUtils::proxyFactory();
+    delete TomahawkUtils::nam();
+    
     qDebug() << "Finished shutdown.";
 }
 
@@ -444,7 +469,8 @@ void
 TomahawkApp::setupPipeline()
 {
     // setup resolvers for local content, and (cached) remote collection content
-    Pipeline::instance()->addResolver( new DatabaseResolver( 100 ) );
+    m_databaseResolver = new DatabaseResolver( 100 );
+    Pipeline::instance()->addResolver( m_databaseResolver );
 
     // load script resolvers
     foreach( QString resolver, TomahawkSettings::instance()->enabledScriptResolvers() )
@@ -537,7 +563,6 @@ TomahawkApp::setupSIP()
 #endif
 
         qDebug() << "Connecting SIP classes";
-        //SipHandler::instance()->refreshProxy();
         SipHandler::instance()->loadFromConfig( true );
     }
 }
