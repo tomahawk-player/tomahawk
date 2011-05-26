@@ -532,8 +532,6 @@ JabberPlugin::checkSettings()
 
         setupClientHelper();
 
-        refreshProxy();
-
         qDebug() << Q_FUNC_INFO << "Updated settings";
         connectPlugin( false );
     }

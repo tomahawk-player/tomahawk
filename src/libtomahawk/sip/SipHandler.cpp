@@ -389,7 +389,7 @@ SipHandler::connectPlugin( bool startup, const QString &pluginId )
         if ( sip->pluginId() == pluginId )
         {
             Q_ASSERT( m_enabledPlugins.contains( sip ) ); // make sure the plugin we're connecting is enabled. should always be the case
-            sip->refreshProxy();
+            //each sip should refreshProxy() or take care of that function in some other way during connection
             sip->connectPlugin( startup );
         }
     }
