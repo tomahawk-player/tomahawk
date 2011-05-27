@@ -688,11 +688,16 @@ Tomahawk::EchonestControl::calculateSummary()
         QString ascdesc = qobject_cast< QComboBox* >( m_match.data() )->currentText().toLower();
 
         summary = QString( "sorted in %1 %2 order" ).arg( ascdesc ).arg( sortType );
-    } else if( selectedType() == "Mood" || selectedType() == "Style" ) {
+    } else if( selectedType() == "Mood" ) {
         Q_ASSERT( !m_input.isNull() );
         Q_ASSERT( qobject_cast< QComboBox* >( m_input.data() ) );
         QString text = qobject_cast< QComboBox* >( m_input.data() )->currentText().toLower();
-        summary = QString( "with %1 %2" ).arg( selectedType() == "Mood" ? "mood" : "style" ).arg( text );
+        summary = QString( "with a %1 mood" ).arg( text );
+    } else if( selectedType() == "Style"  ) {
+        Q_ASSERT( !m_input.isNull() );
+        Q_ASSERT( qobject_cast< QComboBox* >( m_input.data() ) );
+        QString text = qobject_cast< QComboBox* >( m_input.data() )->currentText().toLower();
+        summary = QString( "in a %1 style" ).arg( text );
     }
     m_summary = summary;
 }
