@@ -782,20 +782,29 @@ TwitterPlugin::checkSettings()
 QString
 TwitterPlugin::twitterScreenName() const
 {
-    if ( TomahawkSettings::instance()->contains( pluginId() + "/ScreenName" ) )
+    TomahawkSettings* s = TomahawkSettings::instance();
+    s->beginGroup( pluginId() );
+    QStringList keys = s->childKeys();
+    if ( keys.contains( "ScreenName", Qt::CaseSensitive ) )
     {
-        TomahawkSettings::instance()->setValue( pluginId() + "/screenname_tmp",
-            TomahawkSettings::instance()->value( pluginId() + "/ScreenName" ).toString() );
-        TomahawkSettings::instance()->remove( pluginId() + "/ScreenName" );
+        s->setValue( "screenname_tmp",
+            s->value( "ScreenName" ).toString() );
+        s->remove( "ScreenName" );
 
-        TomahawkSettings::instance()->sync();
-
-        TomahawkSettings::instance()->setValue( pluginId() + "/screenname",
-            TomahawkSettings::instance()->value( pluginId() + "/screenname_tmp" ).toString() );
-        TomahawkSettings::instance()->remove( pluginId() + "/screenname_tmp" );
+        s->sync();
     }
+    keys = s->childKeys();
+    if ( keys.contains( "screenname_tmp", Qt::CaseSensitive ) )
+    {
+        s->setValue( "screenname",
+            s->value( "screenname_tmp" ).toString() );
+        s->remove( "screenname_tmp" );
 
-    return TomahawkSettings::instance()->value( pluginId() + "/screenname" ).toString();
+        s->sync();
+    }
+    s->endGroup();
+
+    return s->value( pluginId() + "/screenname" ).toString();
 }
 
 void
@@ -807,20 +816,30 @@ TwitterPlugin::setTwitterScreenName( const QString& screenName )
 QString
 TwitterPlugin::twitterOAuthToken() const
 {
-    if ( TomahawkSettings::instance()->contains( pluginId() + "/OAuthToken" ) )
+    TomahawkSettings* s = TomahawkSettings::instance();
+    s->beginGroup( pluginId() );
+    QStringList keys = s->childKeys();
+    if ( keys.contains( "OAuthToken", Qt::CaseSensitive ) )
     {
-        TomahawkSettings::instance()->setValue( pluginId() + "/oauthtoken_tmp",
-            TomahawkSettings::instance()->value( pluginId() + "/OAuthToken" ).toString() );
-        TomahawkSettings::instance()->remove( pluginId() + "/OAuthToken" );
+        s->setValue( "oauthtoken_tmp",
+            s->value( "OAuthToken" ).toString() );
+        s->remove( "OAuthToken" );
 
-        TomahawkSettings::instance()->sync();
+        s->sync();
 
-        TomahawkSettings::instance()->setValue( pluginId() + "/oauthtoken",
-            TomahawkSettings::instance()->value( pluginId() + "/oauthtoken_tmp" ).toString() );
-        TomahawkSettings::instance()->remove( pluginId() + "/oauthtoken_tmp" );
     }
+    keys = s->childKeys();
+    if ( keys.contains( "oauthtoken_tmp", Qt::CaseSensitive ) )
+    {
+        s->setValue( "oauthtoken",
+            s->value( "oauthtoken_tmp" ).toString() );
+        s->remove( "oauthtoken_tmp" );
 
-    return TomahawkSettings::instance()->value( pluginId() + "/oauthtoken" ).toString();
+        s->sync();
+    }
+    s->endGroup();
+
+    return s->value( pluginId() + "/oauthtoken" ).toString();
 }
 
 void
@@ -832,20 +851,29 @@ TwitterPlugin::setTwitterOAuthToken( const QString& oauthtoken )
 QString
 TwitterPlugin::twitterOAuthTokenSecret() const
 {
-    if ( TomahawkSettings::instance()->contains( pluginId() + "/OAuthTokenSecret" ) )
+    TomahawkSettings* s = TomahawkSettings::instance();
+    s->beginGroup( pluginId() );
+    QStringList keys = s->childKeys();
+    if ( keys.contains( "OAuthTokenSecret", Qt::CaseSensitive ) )
     {
-        TomahawkSettings::instance()->setValue( pluginId() + "/oauthtokensecret_tmp",
-            TomahawkSettings::instance()->value( pluginId() + "/OAuthTokenSecret" ).toString() );
-        TomahawkSettings::instance()->remove( pluginId() + "/OAuthTokenSecret" );
+        s->setValue( "oauthtokensecret_tmp",
+            s->value( "OAuthTokenSecret" ).toString() );
+        s->remove( "OAuthTokenSecret" );
 
-        TomahawkSettings::instance()->sync();
-
-        TomahawkSettings::instance()->setValue( pluginId() + "/oauthtokensecret",
-            TomahawkSettings::instance()->value( pluginId() + "/oauthtokensecret_tmp" ).toString() );
-        TomahawkSettings::instance()->remove( pluginId() + "/oauthtokensecret_tmp" );
+        s->sync();
     }
+    keys = s->childKeys();
+    if ( keys.contains( "oauthtokensecret_tmp", Qt::CaseSensitive ) )
+    {
+        s->setValue( "oauthtokensecret",
+            s->value( "oauthtokensecret_tmp" ).toString() );
+        s->remove( "oauthtokensecret_tmp" );
 
-    return TomahawkSettings::instance()->value( pluginId() + "/oauthtokensecret" ).toString();
+        s->sync();
+    }
+    s->endGroup();
+
+    return s->value( pluginId() + "/oauthtokensecret" ).toString();
 }
 
 void
@@ -857,20 +885,29 @@ TwitterPlugin::setTwitterOAuthTokenSecret( const QString& oauthtokensecret )
 qint64
 TwitterPlugin::twitterCachedFriendsSinceId() const
 {
-    if ( TomahawkSettings::instance()->contains( pluginId() + "/CachedFriendsSinceID" ) )
+    TomahawkSettings* s = TomahawkSettings::instance();
+    s->beginGroup( pluginId() );
+    QStringList keys = s->childKeys();
+    if ( keys.contains( "CachedFriendsSinceID", Qt::CaseSensitive ) )
     {
-        TomahawkSettings::instance()->setValue( pluginId() + "/cachedfriendssinceid_tmp",
-            TomahawkSettings::instance()->value( pluginId() + "/CachedFriendsSinceID" ).toLongLong() );
-        TomahawkSettings::instance()->remove( pluginId() + "/CachedFriendsSinceID" );
+        s->setValue( "cachedfriendssinceid_tmp",
+            s->value( "CachedFriendsSinceID" ).toLongLong() );
+        s->remove( "CachedFriendsSinceID" );
 
-        TomahawkSettings::instance()->sync();
-
-        TomahawkSettings::instance()->setValue( pluginId() + "/cachedfriendssinceid",
-            TomahawkSettings::instance()->value( pluginId() + "/cachedfriendssinceid_tmp" ).toLongLong() );
-        TomahawkSettings::instance()->remove( pluginId() + "/cachedfriendssinceid_tmp" );
+        s->sync();
     }
+    keys = s->childKeys();
+    if ( keys.contains( "cachedfriendssinceid_tmp", Qt::CaseSensitive ) )
+    {
+        s->setValue( "cachedfriendssinceid",
+            s->value( "cachedfriendssinceid_tmp" ).toLongLong() );
+        s->remove( "cachedfriendssinceid_tmp" );
 
-    return TomahawkSettings::instance()->value( pluginId() + "/cachedfriendssinceid", 0 ).toLongLong();
+        s->sync();
+    }
+    s->endGroup();
+    
+    return s->value( pluginId() + "/cachedfriendssinceid", 0 ).toLongLong();
 }
 
 void
@@ -882,20 +919,29 @@ TwitterPlugin::setTwitterCachedFriendsSinceId( qint64 cachedId )
 qint64
 TwitterPlugin::twitterCachedMentionsSinceId() const
 {
-    if ( TomahawkSettings::instance()->contains( pluginId() + "/CachedMentionsSinceID" ) )
+    TomahawkSettings* s = TomahawkSettings::instance();
+    s->beginGroup( pluginId() );
+    QStringList keys = s->childKeys();
+    if ( keys.contains( "CachedMentionsSinceID", Qt::CaseSensitive ) )
     {
-        TomahawkSettings::instance()->setValue( pluginId() + "/cachedmentionssinceid_tmp",
-            TomahawkSettings::instance()->value( pluginId() + "/CachedMentionsSinceID" ).toLongLong() );
-        TomahawkSettings::instance()->remove( pluginId() + "/CachedMentionsSinceID" );
+        s->setValue( "cachedmentionssinceid_tmp",
+            s->value( "CachedMentionsSinceID" ).toLongLong() );
+        s->remove( "CachedMentionsSinceID" );
 
-        TomahawkSettings::instance()->sync();
-
-        TomahawkSettings::instance()->setValue( pluginId() + "/cachedmentionssinceid",
-            TomahawkSettings::instance()->value( pluginId() + "/cachedmentionssinceid_tmp" ).toLongLong() );
-        TomahawkSettings::instance()->remove( pluginId() + "/cachedmentionssinceid_tmp" );
+        s->sync();
     }
+    keys = s->childKeys();
+    if ( keys.contains( "cachedmentionssinceid_tmp", Qt::CaseSensitive ) )
+    {
+        s->setValue( "cachedmentionssinceid",
+            s->value( "cachedmentionssinceid_tmp" ).toLongLong() );
+        s->remove( "cachedmentionssinceid_tmp" );
 
-    return TomahawkSettings::instance()->value( pluginId() + "/cachedmentionssinceid", 0 ).toLongLong();
+        s->sync();
+    }
+    s->endGroup();
+
+    return s->value( pluginId() + "/cachedmentionssinceid", 0 ).toLongLong();
 }
 
 void
@@ -907,20 +953,29 @@ TwitterPlugin::setTwitterCachedMentionsSinceId( qint64 cachedId )
 qint64
 TwitterPlugin::twitterCachedDirectMessagesSinceId() const
 {
-    if ( TomahawkSettings::instance()->contains( pluginId() + "/CachedDirectMessagesSinceID" ) )
+    TomahawkSettings* s = TomahawkSettings::instance();
+    s->beginGroup( pluginId() );
+    QStringList keys = s->childKeys();
+    if ( keys.contains( "CachedDirectMessagesSinceID", Qt::CaseSensitive ) )
     {
-        TomahawkSettings::instance()->setValue( pluginId() + "/cacheddirectmessagessinceid_tmp",
-            TomahawkSettings::instance()->value( pluginId() + "/CachedDirectMessagesSinceID" ).toLongLong() );
-        TomahawkSettings::instance()->remove( pluginId() + "/CachedDirectMessagesSinceID" );
+        s->setValue( "cacheddirectmessagessinceid_tmp",
+            s->value( "CachedDirectMessagesSinceID" ).toLongLong() );
+        s->remove( "CachedDirectMessagesSinceID" );
 
-        TomahawkSettings::instance()->sync();
-
-        TomahawkSettings::instance()->setValue( pluginId() + "/cacheddirectmessagessinceid",
-            TomahawkSettings::instance()->value( pluginId() + "/cacheddirectmessagessinceid_tmp" ).toLongLong() );
-        TomahawkSettings::instance()->remove( pluginId() + "/cacheddirectmessagessinceid_tmp" );
+        s->sync();
     }
+    keys = s->childKeys();
+    if ( keys.contains( "cacheddirectmessagessinceid_tmp", Qt::CaseSensitive ) )
+    {
+        s->setValue( "cacheddirectmessagessinceid",
+            s->value( "cacheddirectmessagessinceid_tmp" ).toLongLong() );
+        s->remove( "cacheddirectmessagessinceid_tmp" );
 
-    return TomahawkSettings::instance()->value( pluginId() + "/cacheddirectmessagessinceid", 0 ).toLongLong();
+        s->sync();
+    }
+    s->endGroup();
+
+    return s->value( pluginId() + "/cacheddirectmessagessinceid", 0 ).toLongLong();
 }
 
 void
@@ -932,20 +987,29 @@ TwitterPlugin::setTwitterCachedDirectMessagesSinceId( qint64 cachedId )
 QHash<QString, QVariant>
 TwitterPlugin::twitterCachedPeers() const
 {
-    if ( TomahawkSettings::instance()->contains( pluginId() + "/CachedPeers" ) )
+    TomahawkSettings* s = TomahawkSettings::instance();
+    s->beginGroup( pluginId() );
+    QStringList keys = s->childKeys();
+    if ( keys.contains( "CachedPeers", Qt::CaseSensitive ) )
     {
-        TomahawkSettings::instance()->setValue( pluginId() + "/cachedpeers_tmp",
-            TomahawkSettings::instance()->value( pluginId() + "/CachedPeers" ).toHash() );
-        TomahawkSettings::instance()->remove( pluginId() + "/CachedPeers" );
+        s->setValue( "cachedpeers_tmp",
+            s->value( "CachedPeers" ).toHash() );
+        s->remove( "CachedPeers" );
 
-        TomahawkSettings::instance()->sync();
-
-        TomahawkSettings::instance()->setValue( pluginId() + "/cachedpeers",
-            TomahawkSettings::instance()->value( pluginId() + "/cachedpeers_tmp" ).toHash() );
-        TomahawkSettings::instance()->remove( pluginId() + "/cachedpeers_tmp" );
+        s->sync();
     }
+    keys = s->childKeys();
+    if ( keys.contains( "cachedpeers_tmp", Qt::CaseSensitive ) )
+    {
+        s->setValue( "cachedpeers",
+            s->value( "cachedpeers_tmp" ).toHash() );
+        s->remove( "cachedpeers_tmp" );
+        
+        s->sync();
+    }
+    s->endGroup();
 
-    return TomahawkSettings::instance()->value( pluginId() + "/cachedpeers", QHash<QString, QVariant>() ).toHash();
+    return s->value( pluginId() + "/cachedpeers", QHash<QString, QVariant>() ).toHash();
 }
 
 void
