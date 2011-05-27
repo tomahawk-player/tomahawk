@@ -117,6 +117,8 @@ Source::friendlyName() const
 void
 Source::setAvatar( const QPixmap& avatar )
 {
+    //FIXME: use a proper pixmap store that's thread-safe
+    delete m_avatar;
     m_avatar = new QPixmap( avatar );
 }
 
@@ -124,6 +126,7 @@ Source::setAvatar( const QPixmap& avatar )
 QPixmap
 Source::avatar() const
 {
+    //FIXME: use a proper pixmap store that's thread-safe
     if ( m_avatar )
         return QPixmap( *m_avatar );
     else

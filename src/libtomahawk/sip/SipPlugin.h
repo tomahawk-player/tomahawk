@@ -99,6 +99,7 @@ signals:
     void peerOffline( const QString& );
     void msgReceived( const QString& from, const QString& msg );
     void sipInfoReceived( const QString& peerId, const SipInfo& info );
+    void softwareVersionReceived( const QString& peerId, const QString& versionString );
 
     // new data for own source
     void avatarReceived ( const QPixmap& avatar );

@@ -119,6 +119,9 @@ public:
     int proxyType() const;
     void setProxyType( const int type );
 
+    bool proxyDns() const;
+    void setProxyDns( bool lookupViaProxy );
+
     /// ACL settings
     QStringList aclEntries() const;
     void setAclEntries( const QStringList &entries );

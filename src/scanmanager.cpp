@@ -65,6 +65,9 @@ ScanManager::ScanManager( QObject* parent )
     connect( m_deferredScanTimer, SIGNAL( timeout() ), SLOT( deferredScanTimeout() ) );
     connect( m_dirWatcher, SIGNAL( directoryChanged( const QString & ) ), SLOT( handleChangedDir( const QString & ) ) );
 
+    // FIXME: Disable this until we find something nondeprecated and working (e.g. not QFileSystemWatcher)
+    TomahawkSettings::instance()->setWatchForChanges( false );
+    
     if ( TomahawkSettings::instance()->hasScannerPaths() )
     {
         m_currScannerPaths = TomahawkSettings::instance()->scannerPaths();

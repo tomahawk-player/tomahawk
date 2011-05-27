@@ -34,6 +34,7 @@
 #include <jreen/vcard.h>
 #include <jreen/directconnection.h>
 #include <jreen/tcpconnection.h>
+#include <jreen/softwareversion.h>
 
 #include <qjson/parser.h>
 #include <qjson/serializer.h>
@@ -637,13 +638,15 @@ void JabberPlugin::onPresenceReceived( const Jreen::RosterItem::Ptr &item, const
 
     // ignore anyone not Running tomahawk:
     Jreen::Capabilities::Ptr caps = presence.findExtension<Jreen::Capabilities>();
+    /* Disabled this, because it's somewhat ugly and we should rely on nothing but the features
     if ( caps && ( caps->node() == TOMAHAWK_CAP_NODE_NAME ) )
     {
         // must be a jreen resource, implementation in gloox was broken
         qDebug() << Q_FUNC_INFO << fulljid << "Running tomahawk: yes" << "caps " << caps->node();
         handlePeerStatus( jid, presence.subtype() );
-    }
-    else if( caps )
+    } else
+    */
+    if( caps )
     {
         qDebug() << Q_FUNC_INFO << fulljid << "Running tomahawk: maybe" << "caps " << caps->node()
             << "requesting disco..";
@@ -651,10 +654,10 @@ void JabberPlugin::onPresenceReceived( const Jreen::RosterItem::Ptr &item, const
         // request disco features
         QString node = caps->node() + '#' + caps->ver();
 
-        Jreen::IQ iq( Jreen::IQ::Get, jid );
-        iq.addExtension( new Jreen::Disco::Info( node ) );
+        Jreen::IQ featuresIq( Jreen::IQ::Get, jid );
+        featuresIq.addExtension( new Jreen::Disco::Info( node ) );
 
-        m_client->send( iq, this, SLOT( onNewIq( Jreen::IQ, int ) ), RequestDisco );
+        m_client->send( featuresIq, this, SLOT( onNewIq( Jreen::IQ, int ) ), RequestDisco );
     }
     else if( !caps )
     {
@@ -792,6 +795,16 @@ void JabberPlugin::onNewIq(const Jreen::IQ& iq, int context)
             }
         }
     }
+    else if(context == RequestVersion)
+    {
+        Jreen::SoftwareVersion* softwareVersion = iq.findExtension<Jreen::SoftwareVersion>().data();
+        if( softwareVersion )
+        {
+            QString versionString = QString("%1 %2 %3").arg( softwareVersion->name(), softwareVersion->os(), softwareVersion->version() );
+            qDebug() << Q_FUNC_INFO << "Received software version for " << iq.from().full() << ":" << versionString;
+            emit softwareVersionReceived( iq.from().full(), versionString );
+        }
+    }
     else if(context == RequestedDisco)
     {
         qDebug() << "Sent IQ(Set), what should be happening here?";
@@ -892,6 +905,11 @@ void JabberPlugin::handlePeerStatus(const Jreen::JID& jid, Jreen::Presence::Type
 
         if(!m_avatarManager->avatar(jid.bare()).isNull())
             onNewAvatar( jid.bare() );
+
+        // request software version
+        Jreen::IQ versionIq( Jreen::IQ::Get, jid );
+        versionIq.addExtension( new Jreen::SoftwareVersion() );
+        m_client->send( versionIq, this, SLOT( onNewIq( Jreen::IQ, int ) ), RequestVersion );
 
         return;
     }
