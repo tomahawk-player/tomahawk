@@ -25,7 +25,7 @@ set(TOMAHAWK_QTWEETLIB_SOURCES
     QTweetLib/src/qtweetretweetbyme.cpp
     QTweetLib/src/qtweetretweetsofme.cpp
     QTweetLib/src/qtweetretweettome.cpp
-    tomahawk-custom/qtweetstatus.cpp
+    QTweetLib/src/qtweetstatus.cpp
     QTweetLib/src/qtweetstatusshow.cpp
     QTweetLib/src/qtweetstatusupdate.cpp
     QTweetLib/src/qtweetuser.cpp
@@ -88,8 +88,6 @@ set(TOMAHAWK_QTWEETLIB_SOURCES
     QTweetLib/src/qtweetblockscreate.cpp
     QTweetLib/src/qtweetblocksdestroy.cpp
     QTweetLib/src/qtweetblocksexists.cpp
-
-    tomahawk-custom/tomahawkoauthtwitter.cpp
 )
 
 set(TOMAHAWK_QTWEETLIB_HEADERS
@@ -166,8 +164,6 @@ set(TOMAHAWK_QTWEETLIB_HEADERS
     QTweetLib/src/qtweetblockscreate.h
     QTweetLib/src/qtweetblocksdestroy.h
     QTweetLib/src/qtweetblocksexists.h
-
-    tomahawk-custom/tomahawkoauthtwitter.h
 )
 
 include_directories(
@@ -193,8 +189,6 @@ target_link_libraries(tomahawk_qtweetlib
     ${QJSON_FLAGS}
     ${QJSON_LIBRARIES}
 )   
-
-INCLUDE( ${CMAKE_CURRENT_SOURCE_DIR}/twitter-api-keys )
 
 INSTALL(TARGETS tomahawk_qtweetlib DESTINATION lib${LIB_SUFFIX})
 

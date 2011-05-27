@@ -1,5 +1,5 @@
 /* === This file is part of Tomahawk Player - <http://tomahawk-player.org> ===
- * 
+ *
  *   Copyright 2010-2011, Christian Muehlhaeuser <muesli@tomahawk-player.org>
  *
  *   Tomahawk is free software: you can redistribute it and/or modify
@@ -111,7 +111,7 @@ DatabaseWorker::doWork()
         {
             cmd->_exec( m_dbimpl ); // runs actual SQL stuff
 
-            if( cmd->loggable() && !cmd->localOnly() )
+            if ( cmd->loggable() && !cmd->localOnly() )
             {
                 // We only save our own ops to the oplog, since incoming ops from peers
                 // are applied immediately.
@@ -119,7 +119,7 @@ DatabaseWorker::doWork()
                 // Crazy idea: if peers had keypairs and could sign ops/msgs, in theory it
                 // would be safe to sync ops for friend A from friend B's cache, if he saved them,
                 // which would mean you could get updates even if a peer was offline.
-                if( cmd->source()->isLocal() )
+                if ( cmd->source()->isLocal() )
                 {
                     // save to op-log
                     DatabaseCommandLoggable* command = (DatabaseCommandLoggable*)cmd.data();
@@ -148,7 +148,7 @@ DatabaseWorker::doWork()
                 }
             }
 
-            if( cmd->doesMutates() )
+            if ( cmd->doesMutates() )
             {
                 qDebug() << "Committing" << cmd->commandname();;
                 if( !m_dbimpl->database().commit() )

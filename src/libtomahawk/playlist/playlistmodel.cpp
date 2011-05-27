@@ -74,6 +74,7 @@ PlaylistModel::loadPlaylist( const Tomahawk::playlist_ptr& playlist, bool loadEn
     {
         disconnect( m_playlist.data(), SIGNAL( revisionLoaded( Tomahawk::PlaylistRevision ) ), this, SLOT( onRevisionLoaded( Tomahawk::PlaylistRevision ) ) );
         disconnect( m_playlist.data(), SIGNAL( deleted( Tomahawk::playlist_ptr ) ), this, SIGNAL( playlistDeleted() ) );
+        disconnect( m_playlist.data(), SIGNAL( changed() ), this, SIGNAL( playlistChanged() ) );
     }
 
     if ( rowCount( QModelIndex() ) && loadEntries )
@@ -84,6 +85,7 @@ PlaylistModel::loadPlaylist( const Tomahawk::playlist_ptr& playlist, bool loadEn
     m_playlist = playlist;
     connect( playlist.data(), SIGNAL( revisionLoaded( Tomahawk::PlaylistRevision ) ), SLOT( onRevisionLoaded( Tomahawk::PlaylistRevision ) ) );
     connect( playlist.data(), SIGNAL( deleted( Tomahawk::playlist_ptr ) ), this, SIGNAL( playlistDeleted() ) );
+    connect( playlist.data(), SIGNAL( changed() ), this, SIGNAL( playlistChanged() ) );
 
     setReadOnly( !m_playlist->author()->isLocal() );
     setTitle( playlist->title() );
@@ -110,9 +112,10 @@ PlaylistModel::loadPlaylist( const Tomahawk::playlist_ptr& playlist, bool loadEn
 
             connect( plitem, SIGNAL( dataChanged() ), SLOT( onDataChanged() ) );
 
-            if( !entry->query()->resolvingFinished() && !entry->query()->playable() ) {
+            if ( !entry->query()->resolvingFinished() && !entry->query()->playable() )
+            {
                 m_waitingForResolved.append( entry->query().data() );
-                connect( entry->query().data(), SIGNAL( resolvingFinished( bool ) ), this, SLOT( trackResolved( bool ) ) );
+                connect( entry->query().data(), SIGNAL( resolvingFinished( bool ) ), SLOT( trackResolved( bool ) ) );
             }
         }
 
@@ -121,8 +124,10 @@ PlaylistModel::loadPlaylist( const Tomahawk::playlist_ptr& playlist, bool loadEn
     else
         qDebug() << "Playlist seems empty:" << playlist->title();
 
-    if( !m_waitingForResolved.isEmpty() )
+    if ( !m_waitingForResolved.isEmpty() )
+    {
         emit loadingStarted();
+    }
 
     emit trackCountChanged( rowCount( QModelIndex() ) );
 }
@@ -216,17 +221,24 @@ PlaylistModel::insert( unsigned int row, const Tomahawk::query_ptr& query )
     onTracksInserted( row, ql );
 }
 
+
 void
 PlaylistModel::trackResolved( bool )
 {
     Tomahawk::Query* q = qobject_cast< Query* >( sender() );
-    Q_ASSERT( q );
+    if ( !q )
+    {
+        // Track has been removed from the playlist by now
+        return;
+    }
 
     m_waitingForResolved.removeAll( q );
     disconnect( q, SIGNAL( resolvingFinished( bool ) ), this, SLOT( trackResolved( bool ) ) );
 
-    if( m_waitingForResolved.isEmpty() )
+    if ( m_waitingForResolved.isEmpty() )
+    {
         emit loadingFinished();
+    }
 }
 
 
@@ -297,10 +309,21 @@ PlaylistModel::onRevisionLoaded( Tomahawk::PlaylistRevision revision )
 }
 
 
+QMimeData*
+PlaylistModel::mimeData( const QModelIndexList& indexes ) const
+{
+    // Add the playlist id to the mime data so that we can detect dropping on ourselves
+    QMimeData* d = TrackModel::mimeData( indexes );
+    if ( !m_playlist.isNull() )
+        d->setData( "application/tomahawk.playlist.id", m_playlist->guid().toLatin1() );
+
+    return d;
+}
+
+
 bool
 PlaylistModel::dropMimeData( const QMimeData* data, Qt::DropAction action, int row, int column, const QModelIndex& parent )
 {
-    qDebug() << "LALALA";
     Q_UNUSED( column );
     if ( action == Qt::IgnoreAction || isReadOnly() )
         return true;

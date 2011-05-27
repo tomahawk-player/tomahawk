@@ -23,9 +23,9 @@
 #include "collectionitem.h"
 
 #include <QMimeData>
+
 using namespace Tomahawk;
 
-/// PlaylistItem
 
 PlaylistItem::PlaylistItem( SourcesModel* mdl, SourceTreeItem* parent, const playlist_ptr& pl, int index )
     : SourceTreeItem( mdl, parent, SourcesModel::StaticPlaylist, index )
@@ -33,9 +33,9 @@ PlaylistItem::PlaylistItem( SourcesModel* mdl, SourceTreeItem* parent, const pla
     , m_playlist( pl )
 {
     connect( pl.data(), SIGNAL( revisionLoaded( Tomahawk::PlaylistRevision ) ),
-              SLOT( onPlaylistLoaded( Tomahawk::PlaylistRevision ) ), Qt::QueuedConnection );
+             SLOT( onPlaylistLoaded( Tomahawk::PlaylistRevision ) ), Qt::QueuedConnection );
     connect( pl.data(), SIGNAL( changed() ),
-              SIGNAL( updated() ), Qt::QueuedConnection );
+             SIGNAL( updated() ), Qt::QueuedConnection );
 
     if( ViewManager::instance()->pageForPlaylist( pl ) )
         model()->linkSourceItemToPage( this, ViewManager::instance()->pageForPlaylist( pl ) );
@@ -48,11 +48,14 @@ PlaylistItem::text() const
     return m_playlist->title();
 }
 
+
 Tomahawk::playlist_ptr
 PlaylistItem::playlist() const
 {
     return m_playlist;
 }
+
+
 void
 PlaylistItem::onPlaylistLoaded( Tomahawk::PlaylistRevision revision )
 {
@@ -60,11 +63,13 @@ PlaylistItem::onPlaylistLoaded( Tomahawk::PlaylistRevision revision )
     emit updated();
 }
 
+
 void
 PlaylistItem::onPlaylistChanged()
 {
     emit updated();
 }
+
 
 int
 PlaylistItem::peerSortValue() const
@@ -77,16 +82,23 @@ Qt::ItemFlags
 PlaylistItem::flags() const
 {
     Qt::ItemFlags flags = SourceTreeItem::flags();
-
-    if( !m_loaded )
-        flags &= !Qt::ItemIsEnabled;
-
     flags |= Qt::ItemIsDragEnabled | Qt::ItemIsDropEnabled;
-    if( playlist()->author()->isLocal() )
+
+    if ( !m_loaded )
+        flags &= !Qt::ItemIsEnabled;
+    if ( playlist()->author()->isLocal() )
         flags |= Qt::ItemIsEditable;
+
+    if ( playlist()->busy() )
+    {
+        flags &= !Qt::ItemIsEnabled;
+        flags &= !Qt::ItemIsEditable;
+        flags &= !Qt::ItemIsDropEnabled;
+    }
 
     return flags;
 }
+
 
 void
 PlaylistItem::activate()
@@ -95,11 +107,13 @@ PlaylistItem::activate()
     model()->linkSourceItemToPage( this, p );
 }
 
+
 void
 PlaylistItem::setLoaded( bool loaded )
 {
     m_loaded = loaded;
 }
+
 
 bool
 PlaylistItem::willAcceptDrag( const QMimeData* data ) const
@@ -112,6 +126,11 @@ bool
 PlaylistItem::dropMimeData( const QMimeData* data, Qt::DropAction action )
 {
     QList< Tomahawk::query_ptr > queries;
+
+    if ( data->hasFormat( "application/tomahawk.playlist.id" ) &&
+        data->data( "application/tomahawk.playlist.id" ) == m_playlist->guid() )
+        return false; // don't allow dropping on ourselves
+
     if ( data->hasFormat( "application/tomahawk.result.list" ) )
     {
         QByteArray itemData = data->data( "application/tomahawk.result.list" );
@@ -152,10 +171,8 @@ PlaylistItem::dropMimeData( const QMimeData* data, Qt::DropAction action )
 
     if ( queries.count() && !m_playlist.isNull() && m_playlist->author()->isLocal() )
     {
-        qDebug() << "on playlist:" << m_playlist->title() << m_playlist->guid();
+        qDebug() << "on playlist:" << m_playlist->title() << m_playlist->guid() << m_playlist->currentrevision();
 
-        // TODO do we need to use this in the refactor?
-        //                     QString rev = item->currentlyLoadedPlaylistRevision( playlist->guid() );
         m_playlist->addEntries( queries, m_playlist->currentrevision() );
 
         return true;
@@ -164,11 +181,13 @@ PlaylistItem::dropMimeData( const QMimeData* data, Qt::DropAction action )
     return false;
 }
 
+
 QIcon
 PlaylistItem::icon() const
 {
     return QIcon( RESPATH "images/playlist-icon.png" );
 }
+
 
 bool
 PlaylistItem::setData(const QVariant& v, bool role)
@@ -180,6 +199,7 @@ PlaylistItem::setData(const QVariant& v, bool role)
     }
     return false;
 }
+
 
 DynamicPlaylistItem::DynamicPlaylistItem( SourcesModel* mdl, SourceTreeItem* parent, const dynplaylist_ptr& pl, int index )
     : PlaylistItem( mdl, parent, pl.staticCast< Playlist >(), index )
@@ -194,9 +214,11 @@ DynamicPlaylistItem::DynamicPlaylistItem( SourcesModel* mdl, SourceTreeItem* par
         model()->linkSourceItemToPage( this, ViewManager::instance()->pageForDynPlaylist( pl ) );
 }
 
+
 DynamicPlaylistItem::~DynamicPlaylistItem()
 {
 }
+
 
 void
 DynamicPlaylistItem::activate()
@@ -204,6 +226,7 @@ DynamicPlaylistItem::activate()
     ViewPage* p = ViewManager::instance()->show( m_dynplaylist );
     model()->linkSourceItemToPage( this, p );
 }
+
 
 void
 DynamicPlaylistItem::onDynamicPlaylistLoaded( DynamicPlaylistRevision revision )
@@ -213,6 +236,7 @@ DynamicPlaylistItem::onDynamicPlaylistLoaded( DynamicPlaylistRevision revision )
     // END HACK
     emit updated();
 }
+
 
 int
 DynamicPlaylistItem::peerSortValue() const
@@ -227,9 +251,11 @@ DynamicPlaylistItem::checkReparentHackNeeded( const DynamicPlaylistRevision& rev
     // HACK HACK HACK  workaround for an ugly hack where we have to be compatible with older tomahawks (pre-0.1.0) that created dynplaylists as OnDemand then changed them to Static if they were static.
     //  we need to reparent this playlist to the correct category :-/.
     CategoryItem* cat = qobject_cast< CategoryItem* >( parent() );
-    qDebug() << "with category" << cat;
-    if( cat ) qDebug() << "and cat type:" << cat->categoryType();
-    if( cat ) {
+
+//    qDebug() << "with category" << cat;
+//    if( cat ) qDebug() << "and cat type:" << cat->categoryType();
+    if( cat )
+    {
         CategoryItem* from = cat;
         CategoryItem* to = 0;
         if( cat->categoryType() == SourcesModel::PlaylistsCategory && revision.mode == OnDemand ) { // WRONG
@@ -246,7 +272,7 @@ DynamicPlaylistItem::checkReparentHackNeeded( const DynamicPlaylistRevision& rev
         } else if( cat->categoryType() == SourcesModel::StationsCategory && revision.mode == Static ) { // WRONG
             CollectionItem* col = qobject_cast< CollectionItem* >( cat->parent() );
             to = col->playlistsCategory();
-            qDebug() << "TRYING TO HACK TO:" << to;
+//            qDebug() << "TRYING TO HACK TO:" << to;
             if( !to ) { // you have got to be fucking kidding me
                 int fme = col->children().count();
                 col->beginRowsAdded( fme, fme );
@@ -257,7 +283,7 @@ DynamicPlaylistItem::checkReparentHackNeeded( const DynamicPlaylistRevision& rev
             }
         }
         if( to ) {
-            qDebug() << "HACKING! moving dynamic playlist from" << from->text() << "to:" << to->text();
+//            qDebug() << "HACKING! moving dynamic playlist from" << from->text() << "to:" << to->text();
             // remove and add
             int idx = from->children().indexOf( this );
             from->beginRowsRemoved( idx, idx );
@@ -281,11 +307,13 @@ DynamicPlaylistItem::dynPlaylist() const
     return m_dynplaylist;
 }
 
+
 QString
 DynamicPlaylistItem::text() const
 {
     return m_dynplaylist->title();
 }
+
 
 bool
 DynamicPlaylistItem::willAcceptDrag( const QMimeData* data ) const

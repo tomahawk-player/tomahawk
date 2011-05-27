@@ -28,15 +28,14 @@ IF( WIN32 )
 SET( OS_SPECIFIC_LINK_LIBRARIES
 	${OS_SPECIFIC_LINK_LIBRARIES}
 	"winmm.dll"
-        "iphlpapi.a"
-        ${CMAKE_BINARY_DIR}/src/libtomahawk/libtomahawklib.dll
+    "iphlpapi.a"
 )
 ENDIF( WIN32 )
 
 target_link_libraries( tomahawk_sipzeroconf
 	${QT_LIBRARIES}
 	${OS_SPECIFIC_LINK_LIBRARIES}
-	tomahawklib
+	${TOMAHAWK_LIBRARIES}
 )
 
 IF( APPLE )

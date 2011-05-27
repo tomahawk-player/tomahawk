@@ -40,12 +40,14 @@ CollectionItem::CollectionItem(  SourcesModel* mdl, SourceTreeItem* parent, cons
     QList< dynplaylist_ptr > autoplaylists = source->collection()->autoPlaylists();
     QList< dynplaylist_ptr > stations = source->collection()->stations();
 
-    if( !playlists.isEmpty() || !autoplaylists.isEmpty() || source->isLocal() ) {
+    if ( !playlists.isEmpty() || !autoplaylists.isEmpty() || source->isLocal() )
+    {
         m_playlists = new CategoryItem( model(), this, SourcesModel::PlaylistsCategory, source->isLocal() );
         onPlaylistsAdded( playlists );
         onAutoPlaylistsAdded( autoplaylists );
     }
-    if( !stations.isEmpty() || source->isLocal() ) {
+    if ( !stations.isEmpty() || source->isLocal() )
+    {
         m_stations = new CategoryItem( model(), this, SourcesModel::StationsCategory, source->isLocal() );
         onStationsAdded( stations );
     }
@@ -63,20 +65,21 @@ CollectionItem::CollectionItem(  SourcesModel* mdl, SourceTreeItem* parent, cons
     connect( source.data(), SIGNAL( online() ), this, SIGNAL( updated() ) );
 
     connect( source->collection().data(), SIGNAL( playlistsAdded( QList<Tomahawk::playlist_ptr> ) ),
-                SLOT( onPlaylistsAdded( QList<Tomahawk::playlist_ptr> ) ), Qt::QueuedConnection );
+             SLOT( onPlaylistsAdded( QList<Tomahawk::playlist_ptr> ) ), Qt::QueuedConnection );
     connect( source->collection().data(), SIGNAL( playlistsDeleted( QList<Tomahawk::playlist_ptr> ) ),
-                SLOT( onPlaylistsDeleted( QList<Tomahawk::playlist_ptr> ) ), Qt::QueuedConnection );
+             SLOT( onPlaylistsDeleted( QList<Tomahawk::playlist_ptr> ) ), Qt::QueuedConnection );
 
     connect( source->collection().data(), SIGNAL( autoPlaylistsAdded( QList< Tomahawk::dynplaylist_ptr > ) ),
-                SLOT( onAutoPlaylistsAdded( QList<Tomahawk::dynplaylist_ptr> ) ), Qt::QueuedConnection );
+             SLOT( onAutoPlaylistsAdded( QList<Tomahawk::dynplaylist_ptr> ) ), Qt::QueuedConnection );
     connect( source->collection().data(), SIGNAL( autoPlaylistsDeleted( QList<Tomahawk::dynplaylist_ptr> ) ),
-                SLOT( onAutoPlaylistsDeleted( QList<Tomahawk::dynplaylist_ptr> ) ), Qt::QueuedConnection );
+             SLOT( onAutoPlaylistsDeleted( QList<Tomahawk::dynplaylist_ptr> ) ), Qt::QueuedConnection );
 
     connect( source->collection().data(), SIGNAL( stationsAdded( QList<Tomahawk::dynplaylist_ptr> ) ),
-                SLOT( onStationsAdded( QList<Tomahawk::dynplaylist_ptr> ) ), Qt::QueuedConnection );
+             SLOT( onStationsAdded( QList<Tomahawk::dynplaylist_ptr> ) ), Qt::QueuedConnection );
     connect( source->collection().data(), SIGNAL( stationsDeleted( QList<Tomahawk::dynplaylist_ptr> ) ),
-                SLOT( onStationsDeleted( QList<Tomahawk::dynplaylist_ptr> ) ), Qt::QueuedConnection );
+             SLOT( onStationsDeleted( QList<Tomahawk::dynplaylist_ptr> ) ), Qt::QueuedConnection );
 }
+
 
 Tomahawk::source_ptr
 CollectionItem::source() const
@@ -84,11 +87,13 @@ CollectionItem::source() const
     return m_source;
 }
 
+
 QString
 CollectionItem::text() const
 {
     return m_source.isNull() ? tr( "Super Collection" ) : m_source->friendlyName();
 }
+
 
 int
 CollectionItem::peerSortValue() const
@@ -98,21 +103,22 @@ CollectionItem::peerSortValue() const
     if( m_source->isLocal() )
         return 0;
 
-    return 1;
+    return m_source->id();
 }
 
 
 void
 CollectionItem::activate()
 {
-    if( source().isNull() ) {
-        ViewPage* p = ViewManager::instance()->showSuperCollection();
-        model()->linkSourceItemToPage( this, p );
-    } else {
-        ViewPage* p = ViewManager::instance()->show( source()->collection() );
-        model()->linkSourceItemToPage( this, p );
-    }
+    ViewPage* p = 0;
+    if ( source().isNull() )
+        p = ViewManager::instance()->showSuperCollection();
+    else
+        p = ViewManager::instance()->show( source()->collection() );
+
+    model()->linkSourceItemToPage( this, p );
 }
+
 
 QIcon
 CollectionItem::icon() const
@@ -120,8 +126,14 @@ CollectionItem::icon() const
     if( m_source.isNull() )
         return QIcon( RESPATH "images/supercollection.png" );
     else
-        return QIcon( RESPATH "images/user-avatar.png" );
+    {
+        if( m_source->avatar().isNull() )
+            return QIcon( RESPATH "images/user-avatar.png" );
+        else
+            return QIcon( m_source->avatar() );
+    }
 }
+
 
 void
 CollectionItem::playlistsAddedInternal( SourceTreeItem* parent, const QList< dynplaylist_ptr >& playlists )
@@ -134,12 +146,13 @@ CollectionItem::playlistsAddedInternal( SourceTreeItem* parent, const QList< dyn
     foreach( const dynplaylist_ptr& p, playlists )
     {
         DynamicPlaylistItem* plItem = new DynamicPlaylistItem( model(), parent, p, parent->children().count() - addOffset );
-        qDebug() << "Dynamic Playlist added:" << p->title() << p->creator() << p->info();
+//        qDebug() << "Dynamic Playlist added:" << p->title() << p->creator() << p->info();
         p->loadRevision();
         items << plItem;
     }
     parent->endRowsAdded();
 }
+
 
 template< typename T >
 void
@@ -165,10 +178,14 @@ CollectionItem::playlistsDeletedInternal( SourceTreeItem* parent, const QList< T
 void
 CollectionItem::onPlaylistsAdded( const QList< playlist_ptr >& playlists )
 {
+//    qDebug() << Q_FUNC_INFO << m_source->friendlyName() << playlists.count();
+
     if( playlists.isEmpty() )
         return;
 
-    if( !m_playlists ) { // add the category too
+    if( !m_playlists )
+    {
+        // add the category too
         int cur = children().count();
         beginRowsAdded( cur, cur );
         m_playlists = new CategoryItem( model(), this, SourcesModel::PlaylistsCategory, source()->isLocal() );
@@ -183,18 +200,20 @@ CollectionItem::onPlaylistsAdded( const QList< playlist_ptr >& playlists )
     foreach( const playlist_ptr& p, playlists )
     {
         PlaylistItem* plItem = new PlaylistItem( model(), m_playlists, p, m_playlists->children().count() - addOffset );
-        qDebug() << "Playlist added:" << p->title() << p->creator() << p->info();
+//        qDebug() << "Playlist added:" << p->title() << p->creator() << p->info();
         p->loadRevision();
         items << plItem;
     }
     m_playlists->endRowsAdded();
 }
 
+
 void
 CollectionItem::onPlaylistsDeleted( const QList< playlist_ptr >& playlists )
 {
     playlistsDeletedInternal( m_playlists, playlists );
 }
+
 
 void
 CollectionItem::onAutoPlaylistsAdded( const QList< dynplaylist_ptr >& playlists )
@@ -212,6 +231,7 @@ CollectionItem::onAutoPlaylistsAdded( const QList< dynplaylist_ptr >& playlists 
     playlistsAddedInternal( m_playlists, playlists );
 }
 
+
 void
 CollectionItem::onAutoPlaylistsDeleted( const QList< dynplaylist_ptr >& playlists )
 {
@@ -220,6 +240,7 @@ CollectionItem::onAutoPlaylistsDeleted( const QList< dynplaylist_ptr >& playlist
 
     playlistsDeletedInternal( m_playlists, playlists );
 }
+
 
 void
 CollectionItem::onStationsAdded( const QList< dynplaylist_ptr >& stations )
@@ -236,6 +257,7 @@ CollectionItem::onStationsAdded( const QList< dynplaylist_ptr >& stations )
 
     playlistsAddedInternal( m_stations, stations );
 }
+
 
 void
 CollectionItem::onStationsDeleted( const QList< dynplaylist_ptr >& stations )

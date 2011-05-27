@@ -90,6 +90,7 @@ public:
     // only use this is you need to create a playlist and show it directly and want it to be
     // linked to the sidebar. call it right after creating the playlist
     PlaylistView* createPageForPlaylist( const Tomahawk::playlist_ptr& pl );
+
 signals:
     void numSourcesChanged( unsigned int sources );
     void numTracksChanged( unsigned int tracks );
@@ -101,6 +102,7 @@ signals:
 
     void statsAvailable( bool b );
     void modesAvailable( bool b );
+    void filterAvailable( bool b );
     void modeChanged( PlaylistInterface::ViewMode mode );
 
     void playClicked();

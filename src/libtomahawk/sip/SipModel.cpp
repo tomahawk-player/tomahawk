@@ -19,7 +19,6 @@
 #include "SipModel.h"
 
 #include "tomahawksettings.h"
-#include "tomahawk/tomahawkapp.h"
 #include "sip/SipHandler.h"
 #include "sip/SipPlugin.h"
 

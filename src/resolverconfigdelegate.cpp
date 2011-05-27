@@ -20,7 +20,6 @@
 #include "resolverconfigdelegate.h"
 
 #include "resolversmodel.h"
-#include "tomahawk/tomahawkapp.h"
 
 #include <QApplication>
 #include <QPainter>
@@ -28,6 +27,7 @@
 
 #define PADDING 4
 #define ICONSIZE 24
+
 ResolverConfigDelegate::ResolverConfigDelegate( QObject* parent )
     : ConfigDelegateBase( parent )
 {

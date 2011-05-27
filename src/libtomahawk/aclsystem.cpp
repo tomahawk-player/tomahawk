@@ -1,5 +1,5 @@
 /* === This file is part of Tomahawk Player - <http://tomahawk-player.org> ===
- * 
+ *
  *   Copyright 2010-2011, Christian Muehlhaeuser <muesli@tomahawk-player.org>
  *
  *   Tomahawk is free software: you can redistribute it and/or modify
@@ -41,7 +41,7 @@ ACLSystem::ACLSystem( QObject* parent )
 {
     s_instance = this;
     //qRegisterMetaType< QHash< QString, QHash< QString, ACL > > >("ACLSystem::ACLCacheHash");
-    
+
     QStringList savedEntries = TomahawkSettings::instance()->aclEntries();
     if( !savedEntries.empty() && savedEntries.size() % 3 == 0 )
     {
@@ -54,7 +54,7 @@ ACLSystem::ACLSystem( QObject* parent )
             index += 3;
         }
     }
-    
+
     m_saveTimer.setSingleShot( false );
     m_saveTimer.setInterval( 60000 );
     connect( &m_saveTimer, SIGNAL( timeout() ), this, SLOT( saveTimerFired() ) );
@@ -70,10 +70,10 @@ ACLSystem::~ACLSystem()
 ACLSystem::ACL
 ACLSystem::isAuthorizedUser( const QString& dbid )
 {
-    qDebug() << Q_FUNC_INFO;
+//    qDebug() << Q_FUNC_INFO;
     QMutexLocker locker( &m_cacheMutex );
-    qDebug() << "Current cache keys = " << m_cache.keys();
-    qDebug() << "Looking up dbid";
+    qDebug() << "Current cache keys =" << m_cache.keys();
+//    qDebug() << "Looking up dbid";
     if( !m_cache.contains( dbid ) )
         return ACLSystem::NotFound;
     else
@@ -88,12 +88,12 @@ ACLSystem::isAuthorizedUser( const QString& dbid )
 void
 ACLSystem::authorizeUser( const QString& dbid, ACLSystem::ACL globalType )
 {
-    qDebug() << Q_FUNC_INFO;
+//    qDebug() << Q_FUNC_INFO;
     if( globalType == ACLSystem::NotFound )
         return;
-    
+
     QMutexLocker locker( &m_cacheMutex );
-    
+
     QHash< QString, ACL > peerHash;
     if( m_cache.contains( dbid ) )
         peerHash = m_cache[dbid];
@@ -105,10 +105,10 @@ ACLSystem::ACL
 ACLSystem::isAuthorizedPath( const QString& dbid, const QString& path )
 {
     QMutexLocker locker( &m_cacheMutex );
-    
+
     if( !m_cache.contains( dbid ) )
         return ACLSystem::NotFound;
-    
+
     QHash< QString, ACL > peerHash = m_cache[dbid];
     if( !peerHash.contains( path ) )
     {

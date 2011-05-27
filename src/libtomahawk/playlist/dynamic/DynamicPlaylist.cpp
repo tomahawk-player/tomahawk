@@ -56,7 +56,7 @@ DynamicPlaylist::DynamicPlaylist ( const Tomahawk::source_ptr& src,
                                    const QString& guid )
 : Playlist( src, currentrevision, title, info, creator, createdOn, shared, lastmod, guid )
 {
-    qDebug() << "Creating Dynamic Playlist 1";
+//    qDebug() << "Creating Dynamic Playlist 1";
     // TODO instantiate generator
     m_generator = geninterface_ptr( GeneratorFactory::create( type ) );
     m_generator->setMode( mode );
@@ -74,7 +74,7 @@ DynamicPlaylist::DynamicPlaylist ( const Tomahawk::source_ptr& author,
                                    bool shared )
 : Playlist ( author, guid, title, info, creator, shared )
 {
-    qDebug() << "Creating Dynamic Playlist 2";
+//    qDebug() << "Creating Dynamic Playlist 2";
     m_generator = geninterface_ptr( GeneratorFactory::create( type ) );
     m_generator->setMode( mode );
 }
@@ -153,6 +153,9 @@ DynamicPlaylist::createNewRevision( const QString& newrev,
                                     const QList< dyncontrol_ptr>& controls,
                                     const QList< plentry_ptr >& entries )
 {
+    Q_ASSERT( !busy() );
+    setBusy( true );
+
     // get the newly added tracks
     QList< plentry_ptr > added = newEntries( entries );
 
@@ -162,21 +165,21 @@ DynamicPlaylist::createNewRevision( const QString& newrev,
 
     // no conflict resolution or partial updating for controls. all or nothing baby
 
-        // source making the change (local user in this case)
-        source_ptr author = SourceList::instance()->getLocal();
-        // command writes new rev to DB and calls setRevision, which emits our signal
-        DatabaseCommand_SetDynamicPlaylistRevision* cmd =
-        new DatabaseCommand_SetDynamicPlaylistRevision( author,
-                                                        guid(),
-                                                        newrev,
-                                                        oldrev,
-                                                        orderedguids,
-                                                        added,
-                                                        entries,
-                                                        type,
-                                                        Static,
-                                                        controls );
-        Database::instance()->enqueue( QSharedPointer<DatabaseCommand>( cmd ) );
+    // source making the change (local user in this case)
+    source_ptr author = SourceList::instance()->getLocal();
+    // command writes new rev to DB and calls setRevision, which emits our signal
+    DatabaseCommand_SetDynamicPlaylistRevision* cmd =
+    new DatabaseCommand_SetDynamicPlaylistRevision( author,
+                                                    guid(),
+                                                    newrev,
+                                                    oldrev,
+                                                    orderedguids,
+                                                    added,
+                                                    entries,
+                                                    type,
+                                                    Static,
+                                                    controls );
+    Database::instance()->enqueue( QSharedPointer<DatabaseCommand>( cmd ) );
 }
 
 // create a new revision that will be an ondemand playlist, as it has no entries
@@ -186,6 +189,8 @@ DynamicPlaylist::createNewRevision( const QString& newrev,
                                     const QString& type,
                                     const QList< dyncontrol_ptr>& controls )
 {
+    setBusy( true );
+
     // can skip the entry stuff. just overwrite with new info
     source_ptr author = SourceList::instance()->getLocal();
     // command writes new rev to DB and calls setRevision, which emits our signal
@@ -203,8 +208,9 @@ DynamicPlaylist::createNewRevision( const QString& newrev,
 void
 DynamicPlaylist::loadRevision( const QString& rev )
 {
-    qDebug() << Q_FUNC_INFO << "Loading with:" << ( rev.isEmpty() ? currentrevision() : rev );
+//    qDebug() << Q_FUNC_INFO << "Loading with:" << ( rev.isEmpty() ? currentrevision() : rev );
 
+    setBusy( true );
     DatabaseCommand_LoadDynamicPlaylist* cmd = new DatabaseCommand_LoadDynamicPlaylist( rev.isEmpty() ? currentrevision() : rev );
 
     if( m_generator->mode() == OnDemand ) {
@@ -252,7 +258,7 @@ DynamicPlaylist::remove( const Tomahawk::dynplaylist_ptr& playlist )
 void
 DynamicPlaylist::reportCreated( const Tomahawk::dynplaylist_ptr& self )
 {
-    qDebug() << Q_FUNC_INFO;
+//    qDebug() << Q_FUNC_INFO;
     Q_ASSERT( self.data() == this );
     Q_ASSERT( !author().isNull() );
     Q_ASSERT( !author()->collection().isNull() );
@@ -268,7 +274,7 @@ DynamicPlaylist::reportCreated( const Tomahawk::dynplaylist_ptr& self )
 void
 DynamicPlaylist::reportDeleted( const Tomahawk::dynplaylist_ptr& self )
 {
-    qDebug() << Q_FUNC_INFO;
+//    qDebug() << Q_FUNC_INFO;
     Q_ASSERT( self.data() == this );
     // will emit Collection::playlistDeleted(...)
     if( self->mode() == Static )
@@ -335,10 +341,11 @@ void DynamicPlaylist::setRevision( const QString& rev,
     dpr.type = type;
     dpr.mode = Static;
 
-    if( applied ) {
+    if( applied )
         setCurrentrevision( rev );
-    }
+
     //     qDebug() << "EMITTING REVISION LOADED 1!";
+    setBusy( false );
     emit dynamicRevisionLoaded( dpr );
 }
 
@@ -406,10 +413,11 @@ void DynamicPlaylist::setRevision( const QString& rev,
     dpr.type = type;
     dpr.mode = OnDemand;
 
-    if( applied ) {
+    if( applied )
         setCurrentrevision( rev );
-    }
+
     //     qDebug() << "EMITTING REVISION LOADED 2!";
+    setBusy( false );
     emit dynamicRevisionLoaded( dpr );
 }
 
@@ -443,7 +451,7 @@ QList< dyncontrol_ptr > DynamicPlaylist::variantsToControl( const QList< QVarian
     QList<dyncontrol_ptr> realControls;
     foreach( QVariantMap controlV, controlsV ) {
         dyncontrol_ptr control = GeneratorFactory::createControl( controlV.value( "type" ).toString(), controlV.value( "selectedType" ).toString() );
-        qDebug() << "Creating control with data:" << controlV;
+//        qDebug() << "Creating control with data:" << controlV;
         QJson::QObjectHelper::qvariant2qobject( controlV, control.data() );
         realControls << control;
     }

@@ -15,7 +15,6 @@
     51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 */
 
-
 #include "sourcetree/sourcesmodel.h"
 
 #include "sourcetree/items/sourcetreeitem.h"
@@ -25,7 +24,6 @@
 #include "playlist.h"
 #include "collection.h"
 #include "source.h"
-#include "tomahawk/tomahawkapp.h"
 #include "viewmanager.h"
 
 #include <boost/bind.hpp>
@@ -56,9 +54,33 @@ SourcesModel::SourcesModel( QObject* parent )
     connect( ViewManager::instance(), SIGNAL( viewPageActivated( Tomahawk::ViewPage* ) ), this, SLOT( viewPageActivated( Tomahawk::ViewPage* ) ) );
 }
 
+
 SourcesModel::~SourcesModel()
 {
     delete m_rootItem;
+}
+
+
+QString
+SourcesModel::rowTypeToString( RowType type )
+{
+    switch ( type )
+    {
+        case Collection:
+            return tr( "Collection" );
+
+        case StaticPlaylist:
+            return tr( "Playlist" );
+
+        case AutomaticPlaylist:
+            return tr( "Automatic Playlist" );
+
+        case Station:
+            return tr( "Station" );
+
+        default:
+            return QString( "Unknown" );
+    }
 }
 
 
@@ -89,7 +111,7 @@ SourcesModel::data( const QModelIndex& index, int role ) const
 
 
 int
-SourcesModel::columnCount( const QModelIndex& parent ) const
+SourcesModel::columnCount( const QModelIndex& ) const
 {
     return 1;
 }
@@ -161,7 +183,7 @@ SourcesModel::mimeTypes() const
 
 
 QMimeData*
-SourcesModel::mimeData( const QModelIndexList& indexes ) const
+SourcesModel::mimeData( const QModelIndexList& ) const
 {
     // TODO
     return new QMimeData();
@@ -172,13 +194,17 @@ bool
 SourcesModel::dropMimeData( const QMimeData* data, Qt::DropAction action, int row, int column, const QModelIndex& parent )
 {
     SourceTreeItem* item;
+    qDebug() << "Got mime data dropped:" << row << column << parent << itemFromIndex( parent )->text();
     if( row == -1 && column == -1 )
         item = itemFromIndex( parent );
-    else
+    else if( column == 0 )
         item = itemFromIndex( index( row, column, parent ) );
+    else if( column == -1 ) // column is -1, that means the drop is happening "below" the indices. that means we actually want the one before it
+        item = itemFromIndex( index( row - 1, 0, parent ) );
 
     Q_ASSERT( item );
 
+    qDebug() << "Dropping on:" << item->text();
     return item->dropMimeData( data, action );
 }
 

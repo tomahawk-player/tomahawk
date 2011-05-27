@@ -67,7 +67,7 @@ ViewManager::ViewManager( QObject* parent )
     : QObject( parent )
     , m_widget( new QWidget() )
     , m_welcomeWidget( new WelcomeWidget() )
-    , m_currentMode( 0 )
+    , m_currentMode( PlaylistInterface::Tree )
 {
     s_instance = this;
 
@@ -107,6 +107,7 @@ ViewManager::ViewManager( QObject* parent )
     m_superCollectionView->setModel( m_superCollectionModel );
     m_superCollectionView->setFrameShape( QFrame::NoFrame );
     m_superCollectionView->setAttribute( Qt::WA_MacShowFocusRect, 0 );
+    m_superCollectionView->setShowModes( false );
 //    m_superCollectionView->proxyModel()->setShowOfflineResults( false );
 
     m_superAlbumView = new AlbumView();
@@ -151,16 +152,16 @@ ViewManager::queue() const
     return m_queueView->queue();
 }
 
+
 PlaylistView*
 ViewManager::createPageForPlaylist( const playlist_ptr& pl )
 {
     PlaylistView* view = new PlaylistView();
-
     PlaylistModel* model = new PlaylistModel();
     view->setPlaylistModel( model );
+    model->loadPlaylist( pl );
     view->setFrameShape( QFrame::NoFrame );
     view->setAttribute( Qt::WA_MacShowFocusRect, 0 );
-    model->loadPlaylist( pl );
     pl->resolve();
 
     m_playlistViews.insert( pl, view );
@@ -275,7 +276,7 @@ ViewManager::show( const Tomahawk::collection_ptr& collection )
     qDebug() << Q_FUNC_INFO << m_currentMode;
     m_currentCollection = collection;
     ViewPage* shown = 0;
-    if ( m_currentMode == 0 )
+    if ( m_currentMode == PlaylistInterface::Flat )
     {
         CollectionView* view;
         if ( !m_collectionViews.contains( collection ) )
@@ -299,7 +300,7 @@ ViewManager::show( const Tomahawk::collection_ptr& collection )
         setPage( view );
     }
 
-    if ( m_currentMode == 1 )
+    if ( m_currentMode == PlaylistInterface::Tree )
     {
         ArtistView* view;
         if ( !m_treeViews.contains( collection ) )
@@ -323,7 +324,7 @@ ViewManager::show( const Tomahawk::collection_ptr& collection )
         setPage( view );
     }
 
-    if ( m_currentMode == 2 )
+    if ( m_currentMode == PlaylistInterface::Album )
     {
         AlbumView* aview;
         if ( !m_collectionAlbumViews.contains( collection ) )
@@ -401,17 +402,17 @@ ViewManager::showSuperCollection()
     m_superAlbumModel->setTitle( tr( "All available albums" ) );
 
     ViewPage* shown = 0;
-    if ( m_currentMode == 0 )
+    if ( m_currentMode == PlaylistInterface::Tree )
     {
         shown = m_superCollectionView;
         setPage( m_superCollectionView );
     }
-    else if ( m_currentMode == 1 )
+    else if ( m_currentMode == PlaylistInterface::Flat )
     {
         shown = m_superCollectionView;
         setPage( m_superCollectionView );
     }
-    else if ( m_currentMode == 2 )
+    else if ( m_currentMode == PlaylistInterface::Album )
     {
         shown = m_superAlbumView;
         setPage( m_superAlbumView );
@@ -450,7 +451,7 @@ ViewManager::setTableMode()
 {
     qDebug() << Q_FUNC_INFO;
 
-    m_currentMode = 0;
+    m_currentMode = PlaylistInterface::Flat;
 
     if ( isSuperCollectionVisible() )
         showSuperCollection();
@@ -464,7 +465,7 @@ ViewManager::setTreeMode()
 {
     qDebug() << Q_FUNC_INFO;
 
-    m_currentMode = 1;
+    m_currentMode = PlaylistInterface::Tree;
 
     if ( isSuperCollectionVisible() )
         showSuperCollection();
@@ -478,7 +479,7 @@ ViewManager::setAlbumMode()
 {
     qDebug() << Q_FUNC_INFO;
 
-    m_currentMode = 2;
+    m_currentMode = PlaylistInterface::Album;
 
     if ( isSuperCollectionVisible() )
         showSuperCollection();
@@ -625,10 +626,10 @@ ViewManager::setPage( ViewPage* page, bool trackHistory )
         // if the signal exists (just to hide the qobject runtime warning...)
         if( obj->metaObject()->indexOfSignal( "descriptionChanged(QString)" ) > -1 )
             connect( obj, SIGNAL( descriptionChanged( QString ) ), m_infobar, SLOT( setDescription( QString ) ), Qt::UniqueConnection );
-    }
-    if ( QObject* obj = dynamic_cast< QObject* >( currentPage() ) )
-    {
-        // if the signal exists (just to hide the qobject runtime warning...)
+
+        if( obj->metaObject()->indexOfSignal( "nameChanged(QString)" ) > -1 )
+            connect( obj, SIGNAL( nameChanged( QString ) ), m_infobar, SLOT( setCaption( QString ) ), Qt::UniqueConnection );
+
         if( obj->metaObject()->indexOfSignal( "destroyed(QWidget*)" ) > -1 )
             connect( obj, SIGNAL( destroyed( QWidget* ) ), SLOT( onWidgetDestroyed( QWidget* ) ), Qt::UniqueConnection );
     }
@@ -705,8 +706,9 @@ ViewManager::updateView()
 
     emit statsAvailable( currentPage()->showStatsBar() );
     emit modesAvailable( currentPage()->showModes() );
+    emit filterAvailable( currentPage()->showFilter() );
 
-    if ( !currentPage()->showStatsBar() && !currentPage()->showModes() )
+    if ( !currentPage()->showStatsBar() && !currentPage()->showModes() && !currentPage()->showFilter() )
         m_topbar->setVisible( false );
     else
         m_topbar->setVisible( true );

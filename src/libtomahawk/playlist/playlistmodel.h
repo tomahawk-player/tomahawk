@@ -32,6 +32,7 @@
 
 #include "dllmacro.h"
 
+class QMimeData;
 class QMetaData;
 
 class DLLEXPORT PlaylistModel : public TrackModel
@@ -47,6 +48,7 @@ public:
     QVariant data( const QModelIndex& index, int role ) const;
     QVariant headerData( int section, Qt::Orientation orientation, int role ) const;
 
+    virtual QMimeData* mimeData ( const QModelIndexList& indexes ) const;
     virtual bool dropMimeData( const QMimeData* data, Qt::DropAction action, int row, int column, const QModelIndex& parent );
 
     Tomahawk::playlist_ptr playlist() const { return m_playlist; }
@@ -71,6 +73,7 @@ signals:
 
     void itemSizeChanged( const QModelIndex& index );
     void playlistDeleted();
+    void playlistChanged();
 
 private slots:
     void onDataChanged();

@@ -21,6 +21,8 @@
 #define GLOBALACTIONMANAGER_H
 
 #include "playlist.h"
+#include "query.h"
+#include "playlist/dynamic/DynamicPlaylist.h"
 #include "dllmacro.h"
 
 #include <QObject>
@@ -34,7 +36,10 @@ public:
     virtual ~GlobalActionManager();
 
     QUrl openLinkFromQuery( const Tomahawk::query_ptr& query ) const;
+
     void copyToClipboard( const Tomahawk::query_ptr& query ) const;
+    void copyPlaylistToClipboard( const Tomahawk::dynplaylist_ptr& playlist );
+    void savePlaylistToFile( const Tomahawk::playlist_ptr& playlist, const QString& filename );
 
 public slots:
     bool parseTomahawkLink( const QString& link );
@@ -44,6 +49,8 @@ private slots:
     void bookmarkPlaylistCreated( const Tomahawk::playlist_ptr& pl );
     void showPlaylist();
 
+    void xspfCreated( const QByteArray& xspf );
+
 private:
     explicit GlobalActionManager( QObject* parent = 0 );
     void doBookmark( const Tomahawk::playlist_ptr& pl, const Tomahawk::query_ptr& q );
@@ -52,11 +59,13 @@ private:
     bool handleCollectionCommand(const QUrl& url );
     bool handleQueueCommand(const QUrl& url );
     bool handleStationCommand(const QUrl& url );
+    bool handleAutoPlaylistCommand(const QUrl& url );
     bool handleSearchCommand(const QUrl& url );
     bool handlePlayCommand(const QUrl& url );
     bool handleBookmarkCommand(const QUrl& url );
     bool handleOpenCommand(const QUrl& url );
 
+    bool loadDynamicPlaylist( const QUrl& url, bool station );
     bool doQueueAdd( const QStringList& parts, const QList< QPair< QString, QString > >& queryItems );
 
     Tomahawk::playlist_ptr m_toShow;

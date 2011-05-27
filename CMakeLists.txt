@@ -11,12 +11,15 @@ ENDIF( ${CMAKE_VERSION} VERSION_GREATER 2.8.3 )
 SET( TOMAHAWK_ORGANIZATION_NAME "Tomahawk" )
 SET( TOMAHAWK_ORGANIZATION_DOMAIN "tomahawk-player.org" )
 SET( TOMAHAWK_APPLICATION_NAME  "Tomahawk" )
-SET( TOMAHAWK_VERSION "0.0.3" )
+SET( TOMAHAWK_VERSION "0.1.0" )
 
 
 # set paths
 SET( CMAKE_MODULE_PATH "${CMAKE_MODULE_PATH}" "${CMAKE_SOURCE_DIR}/CMakeModules" )
 SET( THIRDPARTY_DIR  ${CMAKE_SOURCE_DIR}/thirdparty )
+SET(CMAKE_RUNTIME_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}")
+SET(CMAKE_LIBRARY_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}")
+SET(CMAKE_ARCHIVE_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}")
 
 # Check if we need qtgui:
 IF( "${gui}" STREQUAL "no" )
@@ -45,8 +48,8 @@ else()
 	message(STATUS "Phonon found; ensure that phonon-vlc is at least 0.4")
 endif()
 
-macro_optional_find_package(LibEchonest 1.1.5)
-macro_log_feature(LIBECHONEST_FOUND "Echonest" "Qt library for communicating with The Echo Nest" "http://projects.kde.org/libechonest" TRUE "" "libechonest is needed for dynamic playlists and the infosystem")
+macro_optional_find_package(LibEchonest 1.1.7)
+macro_log_feature(LIBECHONEST_FOUND "Echonest" "Qt library for communicating with The Echo Nest" "http://projects.kde.org/libechonest" TRUE "" "libechonest 1.1.8 is needed for dynamic playlists and the infosystem")
 
 macro_optional_find_package(CLucene 0.9.23)
 macro_log_feature(CLucene_FOUND "CLucene" "The open-source, C++ search engine" "http://clucene.sf.net" TRUE "" "CLucene is used for indexing the collection")
@@ -59,29 +62,42 @@ macro_log_feature(TAGLIB_FOUND "TagLib" "Audio Meta-Data Library" "http://develo
 
 # this installs headers and such and should really be handled in a separate package by packagers
 IF( INTERNAL_JREEN )
-    ADD_SUBDIRECTORY( thirdparty/jreen )
+    ADD_SUBDIRECTORY( ${THIRDPARTY_DIR}/jreen )
     SET( LIBJREEN_INCLUDE_DIR  ${CMAKE_CURRENT_BINARY_DIR}/thirdparty/jreen/include )
-
-    IF( UNIX AND NOT APPLE )
-        SET( LIBJREEN_LIBRARY ${CMAKE_CURRENT_BINARY_DIR}/thirdparty/jreen/libjreen.so )
-    ENDIF( UNIX AND NOT APPLE )
-    IF( APPLE )
-        SET( LIBJREEN_LIBRARY ${CMAKE_CURRENT_BINARY_DIR}/thirdparty/jreen/libjreen.dylib )
-    ENDIF( APPLE )
-    IF( WIN32 )
-        SET( LIBJREEN_LIBRARY ${CMAKE_CURRENT_BINARY_DIR}/thirdparty/jreen/libjreen.dll )
-    ENDIF( WIN32 )
-
+    SET( LIBJREEN_LIBRARY jreen )
+    SET( LIBJREEN_LIBRARIES ${LIBJREEN_LIBRARY} )
     SET( LIBJREEN_FOUND  true )
     MESSAGE(STATUS "INTERNAL libjreen: ${LIBJREEN_INCLUDE_DIR}, ${LIBJREEN_LIBRARY}")
 ELSE( INTERNAL_JREEN )
     macro_optional_find_package(Jreen)
 ENDIF( INTERNAL_JREEN )
-macro_log_feature(LIBJREEN_FOUND "Jreen" "Qt XMPP Library" "http://gitorious.org/jreen/jreen" FALSE "" "Jreen is needed for the Jabber SIP plugin. \n\n     Use -DINTERNAL_JREEN=ON to build the git submodule inside Tomahawk \n     Be aware this installs a full jreen with headers and everything!")
+macro_log_feature(LIBJREEN_FOUND "Jreen" "Qt XMPP Library" "http://gitorious.org/jreen/jreen" FALSE "" "Jreen is needed for the Jabber SIP plugin. \n\n     Use -DINTERNAL_JREEN=ON to build the git submodule inside Tomahawk \n     Be aware this installs a full jreen with headers and everything!\n")
+
+# this installs headers and such and should really be handled in a separate package by packagers
+IF( INTERNAL_QTWEETLIB )
+    ADD_SUBDIRECTORY( ${THIRDPARTY_DIR}/qtweetlib )
+    # copy headers to build/QTweetLib so we can use proper includes inside the code
+    FILE( COPY ${CMAKE_SOURCE_DIR}/thirdparty/qtweetlib/QTweetLib/src/ DESTINATION ${CMAKE_BINARY_DIR}/QTweetLib )
+    SET( QTWEETLIB_INCLUDE_DIR  ${CMAKE_BINARY_DIR} )
+    SET( QTWEETLIB_LIBRARY  tomahawk_qtweetlib )
+    SET( QTWEETLIB_LIBRARIES ${QTWEETLIB_LIBRARY} )
+    SET( QTWEETLIB_FOUND  true )
+    MESSAGE(STATUS "INTERNAL libQTweetLib: ${QTWEETLIB_INCLUDE_DIR}, ${QTWEETLIB_LIBRARY}")
+ELSE( INTERNAL_QTWEETLIB )
+    macro_optional_find_package(QTweetLib)
+ENDIF( INTERNAL_QTWEETLIB )
+macro_log_feature(QTWEETLIB_FOUND "QTweetLib" "Qt Twitter Library" "https://github.com/minimoog/QTweetLib" FALSE "" "QTweetLib is needed for the Twitter SIP plugin. \n\n     Use -DINTERNAL_QTWEETLIB=ON to build the git submodule inside Tomahawk \n")
+
+### libportfwd
+SET( LIBPORTFWD_INCLUDE_DIR ${THIRDPARTY_DIR}/libportfwd/include )
+SET( LIBPORTFWD_LIBRARY tomahawk_portfwd )
+SET( LIBPORTFWD_LIBRARIES ${LIBPORTFWD_LIBRARY} )
+ADD_SUBDIRECTORY( ${THIRDPARTY_DIR}/libportfwd )
 
 # we need pthreads too
 find_package(Threads)
 
+find_package(KDE4Installed)
 find_package(KDE4)
 IF(KDE4_FOUND)
     #KDE4 adds and removes some compiler flags that we don't like
@@ -121,5 +137,6 @@ ENDIF( NOT APPLE )
 
 ADD_SUBDIRECTORY( thirdparty )
 ADD_SUBDIRECTORY( src/libtomahawk )
+SET( TOMAHAWK_LIBRARIES tomahawklib )
 ADD_SUBDIRECTORY( src )
 ADD_SUBDIRECTORY( admin )

@@ -17,7 +17,6 @@ SET( CMAKE_VERBOSE_MAKEFILE ON )
 SET( CMAKE_RUNTIME_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}" )
 SET( CMAKE_LIBRARY_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}" )
 SET( CMAKE_ARCHIVE_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}" )
-SET( TOMAHAWK_INC_DIR "${CMAKE_SOURCE_DIR}/include/" )
 IF( NOT CMAKE_BUILD_TYPE STREQUAL "Release" )
     MESSAGE( "Building in debug mode, enabling all debug updates" )
     SET( DEBUG_BUILD ON )
@@ -73,8 +72,7 @@ SET( tomahawkSourcesGui ${tomahawkSourcesGui}
 )
 
 SET( tomahawkHeaders ${tomahawkHeaders}
-     "${TOMAHAWK_INC_DIR}/tomahawk/tomahawkapp.h"
-
+     tomahawkapp.h
 
      web/api_v1.h
 
@@ -128,7 +126,6 @@ SET( tomahawkUI ${tomahawkUI}
 
 INCLUDE_DIRECTORIES(
     .
-    ${TOMAHAWK_INC_DIR}
     ${CMAKE_CURRENT_BINARY_DIR}
     ${CMAKE_BINARY_DIR}/thirdparty/liblastfm2/src
 
@@ -228,10 +225,8 @@ TARGET_LINK_LIBRARIES( tomahawk
     ${MAC_EXTRA_LIBS}
     ${LIBECHONEST_LIBRARY}
     ${QXTWEB_LIBRARIES}
-    ${QTWEETLIB_LIBRARIES}
     ${QJSON_LIBRARIES}
     ${TAGLIB_LIBRARIES}
-    ${QTWEETLIB_LIBRARIES}
     ${CLUCENE_LIBRARIES}
 )
 
@@ -246,14 +241,19 @@ ENDIF( APPLE )
 
 INSTALL( TARGETS tomahawk BUNDLE DESTINATION . RUNTIME DESTINATION bin )
 
-IF(KDE4_FOUND) #install protocol file
-  FILE(READ ${CMAKE_SOURCE_DIR}/admin/unix/tomahawk.protocol protocol)
+IF( UNIX AND NOT APPLE AND KDE4_INSTALLED ) #install protocol file
+  FILE( READ ${CMAKE_SOURCE_DIR}/admin/unix/tomahawk.protocol protocol )
   STRING( REPLACE "/path/to/binary" # match this
               "${CMAKE_INSTALL_PREFIX}/bin/tomahawk" # this is linux (kde) so pretty safe I think
               edited_protocol # save in this variable
               "${protocol}" # from the contents of this var
           )
   FILE( WRITE ${CMAKE_BINARY_DIR}/tomahawk.protocol "${edited_protocol}" )
-  INSTALL( FILES ${CMAKE_BINARY_DIR}/tomahawk.protocol DESTINATION ${SERVICES_INSTALL_DIR} )
+  IF( ${SERVICES_INSTALL_DIR} )
+    SET( PROTOCOL_INSTALL_DIR ${SERVICES_INSTALL_DIR} )
+  ELSE()
+    SET( PROTOCOL_INSTALL_DIR "${CMAKE_INSTALL_PREFIX}/share/kde4/services" )
+  ENDIF()
+  INSTALL( FILES ${CMAKE_BINARY_DIR}/tomahawk.protocol DESTINATION ${PROTOCOL_INSTALL_DIR} )
 ENDIF()
 #INCLUDE( "CPack.txt" )

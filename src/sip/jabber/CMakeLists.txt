@@ -7,36 +7,50 @@ add_definitions( -DQT_SHARED )
 add_definitions( -DSIPDLLEXPORT_PRO )
 
 set( jabberSources
-        jabber.cpp
-	jabber_p.cpp
+    jabber.cpp
+    tomahawksipmessage.cpp
+    tomahawksipmessagefactory.cpp
+    avatarmanager.cpp
+    xmlconsole.cpp
 )
 
 set( jabberHeaders
-	jabber.h
-        jabber_p.h
+    jabber.h
+    tomahawksipmessage.h
+    tomahawksipmessagefactory.h
+    avatarmanager.h
+    xmlconsole.h
 )
 
-include_directories( . ${CMAKE_CURRENT_BINARY_DIR} .. 
+set( jabberUI
+    configwidget.ui
+    xmlconsole.ui
+)
+
+include_directories( . ${CMAKE_CURRENT_BINARY_DIR} ..
    ${QT_INCLUDE_DIR}
+   ${LIBJREEN_INCLUDE_DIR}
 )
 
+qt4_add_resources( RC_SRCS "resources.qrc" )
+qt4_wrap_ui( jabberUI_H ${jabberUI} )
 qt4_wrap_cpp( jabberMoc ${jabberHeaders} )
-add_library( tomahawk_sipjabber SHARED ${jabberSources} ${jabberMoc} )
+add_library( tomahawk_sipjabber SHARED ${jabberSources} ${jabberMoc} ${jabberUI_H} ${RC_SRCS} )
 
 IF( WIN32 )
 SET( OS_SPECIFIC_LINK_LIBRARIES
-	${OS_SPECIFIC_LINK_LIBRARIES}
-	"secur32.dll"
-	"crypt32.dll"
-        ${CMAKE_BINARY_DIR}/src/libtomahawk/libtomahawklib.dll
+    ${OS_SPECIFIC_LINK_LIBRARIES}
+    "secur32.dll"
+    "crypt32.dll"
+    ${TOMAHAWK_LIBRARIES}
 )
 ENDIF( WIN32 )
 
 target_link_libraries( tomahawk_sipjabber
-	${QT_LIBRARIES}
-        ${GLOOX_LIBRARIES}
-	${OS_SPECIFIC_LINK_LIBRARIES}
-	tomahawklib
+    ${QT_LIBRARIES}
+    ${LIBJREEN_LIBRARY}
+    ${OS_SPECIFIC_LINK_LIBRARIES}
+    tomahawklib
 )
 
 IF( APPLE )
@@ -44,3 +58,6 @@ IF( APPLE )
 ENDIF( APPLE )
 
 install( TARGETS tomahawk_sipjabber DESTINATION lib${LIB_SUFFIX} )
+
+
+add_subdirectory(googlewrapper)

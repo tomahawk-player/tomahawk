@@ -228,6 +228,20 @@ TomahawkSettings::setProxyHost( const QString& host )
 }
 
 
+QString
+TomahawkSettings::proxyNoProxyHosts() const
+{
+    return value( "network/proxy/noproxyhosts", QString() ).toString();
+}
+
+
+void
+TomahawkSettings::setProxyNoProxyHosts( const QString& hosts )
+{
+    setValue( "network/proxy/noproxyhosts", hosts );
+}
+
+
 qulonglong
 TomahawkSettings::proxyPort() const
 {
@@ -385,9 +399,14 @@ TomahawkSettings::recentlyPlayedPlaylists() const
 }
 
 QStringList
-TomahawkSettings::recentlyPlayedPlaylistGuids() const
+TomahawkSettings::recentlyPlayedPlaylistGuids( unsigned int amount ) const
 {
-    return value( "playlists/recentlyPlayed" ).toStringList();
+    QStringList p = value( "playlists/recentlyPlayed" ).toStringList();
+
+    while ( amount && p.count() > (int)amount )
+        p.removeAt( p.count() - 1 );
+
+    return p;
 }
 
 

@@ -24,7 +24,6 @@
 #include "album.h"
 #include "pipeline.h"
 #include "sourcelist.h"
-#include "functimeout.h"
 #include "utils/tomahawkutils.h"
 
 
@@ -65,14 +64,15 @@ ScriptResolver::readStderr()
 void
 ScriptResolver::readStdout()
 {
-    qDebug() << Q_FUNC_INFO << m_proc.bytesAvailable();
+//    qDebug() << Q_FUNC_INFO << m_proc.bytesAvailable();
+
     if( m_msgsize == 0 )
     {
         if( m_proc.bytesAvailable() < 4 ) return;
         quint32 len_nbo;
         m_proc.read( (char*) &len_nbo, 4 );
         m_msgsize = qFromBigEndian( len_nbo );
-        qDebug() << Q_FUNC_INFO << "msgsize" << m_msgsize;
+//        qDebug() << Q_FUNC_INFO << "msgsize" << m_msgsize;
     }
 
     if( m_msgsize > 0 )
@@ -95,7 +95,7 @@ ScriptResolver::readStdout()
 void
 ScriptResolver::sendMsg( const QByteArray& msg )
 {
-    qDebug() << Q_FUNC_INFO << m_ready << msg << msg.length();
+//    qDebug() << Q_FUNC_INFO << m_ready << msg << msg.length();
 
     quint32 len;
     qToBigEndian( msg.length(), (uchar*) &len );
@@ -107,7 +107,8 @@ ScriptResolver::sendMsg( const QByteArray& msg )
 void
 ScriptResolver::handleMsg( const QByteArray& msg )
 {
-    qDebug() << Q_FUNC_INFO << msg.size() << QString::fromAscii( msg );
+//    qDebug() << Q_FUNC_INFO << msg.size() << QString::fromAscii( msg );
+
     bool ok;
     QVariant v = m_parser.parse( msg, &ok );
     if( !ok || v.type() != QVariant::Map )
@@ -122,7 +123,9 @@ ScriptResolver::handleMsg( const QByteArray& msg )
     {
         doSetup( m );
         return;
-    } else if( msgtype == "confwidget" ) {
+    }
+    else if( msgtype == "confwidget" )
+    {
         setupConfWidget( m );
         return;
     }
@@ -130,21 +133,13 @@ ScriptResolver::handleMsg( const QByteArray& msg )
     if( msgtype == "results" )
     {
         const QString qid = m.value( "qid" ).toString();
-        if ( !m_queryState.contains( qid ) )
-        {
-            //FIXME: We should always accept results, even if they arrive too late. Needs some work in Pipeline.
-            qDebug() << "Ignoring results for" << qid << "- arrived after timeout.";
-            return;
-        }
-        m_queryState.remove( qid );
-
         QList< Tomahawk::result_ptr > results;
         const QVariantList reslist = m.value( "results" ).toList();
 
         foreach( const QVariant& rv, reslist )
         {
             QVariantMap m = rv.toMap();
-            qDebug() << "RES" << m;
+            qDebug() << "Found result:" << m;
 
             Tomahawk::result_ptr rp( new Tomahawk::Result() );
             Tomahawk::artist_ptr ap = Tomahawk::Artist::get( 0, m.value( "artist" ).toString() );
@@ -218,18 +213,16 @@ ScriptResolver::resolve( const Tomahawk::query_ptr& query )
     m.insert( "qid", query->id() );
 
     const QByteArray msg = m_serializer.serialize( QVariant( m ) );
-    qDebug() << "ASKING SCRIPT RESOLVER TO RESOLVE:" << msg;
+//    qDebug() << "ASKING SCRIPT RESOLVER TO RESOLVE:" << msg;
     sendMsg( msg );
-
-    m_queryState.insert( query->id(), 1 );
-    new Tomahawk::FuncTimeout( m_timeout, boost::bind( &ScriptResolver::onTimeout, this, query ), this );
 }
 
 
 void
 ScriptResolver::doSetup( const QVariantMap& m )
 {
-    qDebug() << Q_FUNC_INFO << m;
+//    qDebug() << Q_FUNC_INFO << m;
+
     m_name       = m.value( "name" ).toString();
     m_weight     = m.value( "weight", 0 ).toUInt();
     m_timeout    = m.value( "timeout", 25 ).toUInt() * 1000;
@@ -275,6 +268,7 @@ ScriptResolver::saveConfig()
     sendMsg( data );
 }
 
+
 QWidget* ScriptResolver::configUI() const
 {
     if( m_configWidget.isNull() )
@@ -290,18 +284,4 @@ ScriptResolver::stop()
     m_stopped = true;
     qDebug() << "KILLING PROCESS!";
     m_proc.kill();
-}
-
-
-void
-ScriptResolver::onTimeout( const Tomahawk::query_ptr& query )
-{
-    // check if this query has already been processed
-    if ( !m_queryState.contains( query->id() ) )
-        return;
-
-    // if not, it's time to emit an empty result list
-    m_queryState.remove( query->id() );
-    QList< Tomahawk::result_ptr > results;
-    Tomahawk::Pipeline::instance()->reportResults( query->id(), results );
 }

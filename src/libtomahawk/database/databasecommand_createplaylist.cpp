@@ -47,7 +47,7 @@ DatabaseCommand_CreatePlaylist::DatabaseCommand_CreatePlaylist( const source_ptr
 void
 DatabaseCommand_CreatePlaylist::exec( DatabaseImpl* lib )
 {
-    createPlaylist(lib, false);
+    createPlaylist( lib, false );
 }
 
 
@@ -55,31 +55,28 @@ void
 DatabaseCommand_CreatePlaylist::postCommitHook()
 {
     qDebug() << Q_FUNC_INFO;
-    if ( source().isNull() || source()->collection().isNull() )
-    {
-        qDebug() << "Source has gone offline, not emitting to GUI.";
-        return;
-    }
-    if( m_report == false )
+    if ( m_report == false )
         return;
 
-    qDebug() << Q_FUNC_INFO << "..reporting..";
-    if( m_playlist.isNull() ) {
+    qDebug() << Q_FUNC_INFO << "reporting...";
+    if ( m_playlist.isNull() )
+    {
         source_ptr src = source();
         QMetaObject::invokeMethod( ViewManager::instance(),
-                                "createPlaylist",
-                                Qt::BlockingQueuedConnection,
-                                QGenericArgument( "Tomahawk::source_ptr", (const void*)&src ),
-                                Q_ARG( QVariant, m_v )
-                                 );
-    } else {
+                                   "createPlaylist",
+                                   Qt::BlockingQueuedConnection,
+                                   QGenericArgument( "Tomahawk::source_ptr", (const void*)&src ),
+                                   Q_ARG( QVariant, m_v ) );
+    }
+    else
+    {
         m_playlist->reportCreated( m_playlist );
     }
 
-
-    if( source()->isLocal() )
+    if ( source()->isLocal() )
         Servent::instance()->triggerDBSync();
 }
+
 
 void
 DatabaseCommand_CreatePlaylist::createPlaylist( DatabaseImpl* lib, bool dynamic)
@@ -89,7 +86,7 @@ DatabaseCommand_CreatePlaylist::createPlaylist( DatabaseImpl* lib, bool dynamic)
     Q_ASSERT( !source().isNull() );
 
     uint now = 0;
-    if( m_playlist.isNull() )
+    if ( m_playlist.isNull() )
     {
         now = m_v.toMap()[ "createdon" ].toUInt();
     }
@@ -100,20 +97,23 @@ DatabaseCommand_CreatePlaylist::createPlaylist( DatabaseImpl* lib, bool dynamic)
     }
 
     TomahawkSqlQuery cre = lib->newquery();
-    cre.prepare( "INSERT INTO playlist( guid, source, shared, title, info, creator, lastmodified, dynplaylist, createdOn) "
+    cre.prepare( "INSERT INTO playlist( guid, source, shared, title, info, creator, lastmodified, dynplaylist, createdOn ) "
                  "VALUES( :guid, :source, :shared, :title, :info, :creator, :lastmodified, :dynplaylist, :createdOn )" );
 
     cre.bindValue( ":source", source()->isLocal() ? QVariant(QVariant::Int) : source()->id() );
     cre.bindValue( ":dynplaylist", dynamic );
     cre.bindValue( ":createdOn", now );
-    if( !m_playlist.isNull() ) {
+    if ( !m_playlist.isNull() )
+    {
         cre.bindValue( ":guid", m_playlist->guid() );
         cre.bindValue( ":shared", m_playlist->shared() );
         cre.bindValue( ":title", m_playlist->title() );
         cre.bindValue( ":info", m_playlist->info() );
         cre.bindValue( ":creator", m_playlist->creator() );
         cre.bindValue( ":lastmodified", m_playlist->lastmodified() );
-    } else {
+    }
+    else
+    {
         QVariantMap m = m_v.toMap();
         cre.bindValue( ":guid", m.value( "guid" ) );
         cre.bindValue( ":shared", m.value( "shared" ) );

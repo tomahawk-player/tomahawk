@@ -34,6 +34,9 @@ public:
     { ArtistRole = Qt::UserRole, TrackCountRole, PlaylistRole };
 
     explicit WelcomePlaylistModel( QObject* parent = 0 );
+
+    void setMaxPlaylists( unsigned int max ) { m_maxPlaylists = max; }
+
     virtual QVariant data( const QModelIndex& index, int role = Qt::DisplayRole ) const;
     virtual int rowCount( const QModelIndex& parent = QModelIndex() ) const;
 
@@ -53,6 +56,7 @@ private:
     QHash< QString, Tomahawk::playlist_ptr > m_cached;
     mutable QHash< Tomahawk::playlist_ptr, QString > m_artists;
 
+    unsigned int m_maxPlaylists;
     bool m_waitingForSome;
 };
 

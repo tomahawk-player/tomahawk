@@ -138,6 +138,7 @@ DynamicWidget::loadDynamicPlaylist( const Tomahawk::dynplaylist_ptr& playlist )
         disconnect( m_playlist.data(), SIGNAL( dynamicRevisionLoaded( Tomahawk::DynamicPlaylistRevision) ), this, SLOT(onRevisionLoaded( Tomahawk::DynamicPlaylistRevision) ) );
         disconnect( m_playlist->generator().data(), SIGNAL( error( QString, QString ) ), this, SLOT( generatorError( QString, QString ) ) );
         disconnect( m_playlist.data(), SIGNAL( deleted( Tomahawk::dynplaylist_ptr ) ), this, SLOT( onDeleted() ) );
+        disconnect( m_playlist.data(), SIGNAL( changed() ), this, SLOT( onChanged() ) );
     }
 
 
@@ -165,6 +166,7 @@ DynamicWidget::loadDynamicPlaylist( const Tomahawk::dynplaylist_ptr& playlist )
     connect( m_playlist.data(), SIGNAL( dynamicRevisionLoaded( Tomahawk::DynamicPlaylistRevision ) ), this, SLOT( onRevisionLoaded( Tomahawk::DynamicPlaylistRevision ) ) );
     connect( m_playlist->generator().data(), SIGNAL( error( QString, QString ) ), this, SLOT( generatorError( QString, QString ) ) );
     connect( m_playlist.data(), SIGNAL( deleted( Tomahawk::dynplaylist_ptr ) ), this, SLOT( onDeleted() ) );
+    connect( m_playlist.data(), SIGNAL( changed() ), this, SLOT( onChanged() ) );
 }
 
 
@@ -417,4 +419,11 @@ DynamicWidget::onDeleted()
 {
     emit destroyed( widget() );
     deleteLater();
+}
+
+void
+DynamicWidget::onChanged()
+{
+    if( !m_playlist.isNull() )
+        emit nameChanged( m_playlist->title() );
 }

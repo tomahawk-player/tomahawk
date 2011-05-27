@@ -1,5 +1,5 @@
 /* === This file is part of Tomahawk Player - <http://tomahawk-player.org> ===
- * 
+ *
  *   Copyright 2010-2011, Christian Muehlhaeuser <muesli@tomahawk-player.org>
  *
  *   Tomahawk is free software: you can redistribute it and/or modify
@@ -28,17 +28,11 @@
 using namespace Tomahawk;
 
 
-// After changing a collection, we need to tell other bits of the system:
 void
 DatabaseCommand_LogPlayback::postCommitHook()
 {
     qDebug() << Q_FUNC_INFO;
-    if ( source().isNull() || source()->collection().isNull() )
-    {
-        qDebug() << "Source has gone offline, not emitting to GUI.";
-        return;
-    }
-    
+
     connect( this, SIGNAL( trackPlaying( Tomahawk::query_ptr ) ),
              source().data(), SLOT( onPlaybackStarted( Tomahawk::query_ptr ) ), Qt::QueuedConnection );
     connect( this, SIGNAL( trackPlayed( Tomahawk::query_ptr ) ),
@@ -56,8 +50,10 @@ DatabaseCommand_LogPlayback::postCommitHook()
         emit trackPlaying( q );
     }
 
-    if( source()->isLocal() )
+    if ( source()->isLocal() )
+    {
         Servent::instance()->triggerDBSync();
+    }
 }
 
 
@@ -68,6 +64,8 @@ DatabaseCommand_LogPlayback::exec( DatabaseImpl* dbi )
     Q_ASSERT( !source().isNull() );
 
     if ( m_action != Finished )
+        return;
+    if ( m_secsPlayed < 10 )
         return;
 
     TomahawkSqlQuery query = dbi->newquery();
@@ -95,3 +93,14 @@ DatabaseCommand_LogPlayback::exec( DatabaseImpl* dbi )
 
     query.exec();
 }
+
+
+bool
+DatabaseCommand_LogPlayback::localOnly() const
+{
+    if ( m_action == Finished )
+        return m_secsPlayed < 20;
+
+    return false;
+}
+

@@ -18,7 +18,9 @@
 
 #include "musicscanner.h"
 
-#include "tomahawk/tomahawkapp.h"
+#include <QCoreApplication>
+
+#include "utils/tomahawkutils.h"
 #include "tomahawksettings.h"
 #include "sourcelist.h"
 #include "database/database.h"

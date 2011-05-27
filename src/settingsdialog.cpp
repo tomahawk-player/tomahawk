@@ -33,12 +33,12 @@
 #endif
 
 #include "settingsdialog.h"
-#include "ui_proxydialog.h"
-#include "tomahawk/tomahawkapp.h"
+
+#include "tomahawkapp.h"
 #include "musicscanner.h"
 #include "tomahawksettings.h"
 #include "sip/SipHandler.h"
-#include <database/database.h>
+#include "database/database.h"
 #include "scanmanager.h"
 #include "resolverconfigdelegate.h"
 #include "resolversmodel.h"
@@ -46,6 +46,7 @@
 #include "sip/SipModel.h"
 #include "sipconfigdelegate.h"
 
+#include "ui_proxydialog.h"
 #include "ui_stackedsettingsdialog.h"
 
 static QString
@@ -60,7 +61,6 @@ SettingsDialog::SettingsDialog( QWidget *parent )
     , ui( new Ui_StackedSettingsDialog )
     , m_proxySettings( this )
     , m_rejected( false )
-    , m_testLastFmQuery( 0 )
     , m_sipModel( 0 )
     , m_resolversModel( 0 )
 {
@@ -342,16 +342,16 @@ SettingsDialog::testLastFmLogin()
     ui->pushButtonTestLastfmLogin->setEnabled( false );
     ui->pushButtonTestLastfmLogin->setText( "Testing..." );
 
-    QString authToken = md5( ( ui->lineEditLastfmUsername->text() + md5( ui->lineEditLastfmPassword->text().toUtf8() ) ).toUtf8() );
+    QString authToken = md5( ( ui->lineEditLastfmUsername->text().toLower() + md5( ui->lineEditLastfmPassword->text().toUtf8() ) ).toUtf8() );
 
     // now authenticate w/ last.fm and get our session key
     QMap<QString, QString> query;
     query[ "method" ] = "auth.getMobileSession";
-    query[ "username" ] =  ui->lineEditLastfmUsername->text();
+    query[ "username" ] =  ui->lineEditLastfmUsername->text().toLower();
     query[ "authToken" ] = authToken;
-    m_testLastFmQuery = lastfm::ws::post( query );
+    QNetworkReply* authJob = lastfm::ws::post( query );
 
-    connect( m_testLastFmQuery, SIGNAL( finished() ), SLOT( onLastFmFinished() ) );
+    connect( authJob, SIGNAL( finished() ), SLOT( onLastFmFinished() ) );
 #endif
 }
 
@@ -360,36 +360,44 @@ void
 SettingsDialog::onLastFmFinished()
 {
 #ifdef LIBLASTFM_FOUND
-    lastfm::XmlQuery lfm = lastfm::XmlQuery( m_testLastFmQuery->readAll() );
-
-    switch( m_testLastFmQuery->error() )
+    QNetworkReply* authJob = dynamic_cast<QNetworkReply*>( sender() );
+    if( !authJob )
     {
-        case QNetworkReply::NoError:
-             qDebug() << "NoError in getting lastfm auth check result";
-             if( lfm.children( "error" ).size() > 0 )
-             {
-                 qDebug() << "ERROR from last.fm:" << lfm.text();
-                 ui->pushButtonTestLastfmLogin->setText( tr( "Failed" ) );
-                 ui->pushButtonTestLastfmLogin->setEnabled( true );
-             }
-             else
-             {
-                 ui->pushButtonTestLastfmLogin->setText( tr( "Success" ) );
-                 ui->pushButtonTestLastfmLogin->setEnabled( false );
-             }
-             break;
+        qDebug() << Q_FUNC_INFO << "No auth job returned!";
+        return;
+    }
+    if( authJob->error() == QNetworkReply::NoError )
+    {
+        lastfm::XmlQuery lfm = lastfm::XmlQuery( authJob->readAll() );
 
-        case QNetworkReply::ContentOperationNotPermittedError:
-        case QNetworkReply::AuthenticationRequiredError:
+        if( lfm.children( "error" ).size() > 0 )
+        {
+            qDebug() << "ERROR from last.fm:" << lfm.text();
             ui->pushButtonTestLastfmLogin->setText( tr( "Failed" ) );
             ui->pushButtonTestLastfmLogin->setEnabled( true );
-            break;
-
-        default:
-            qDebug() << "Couldn't get last.fm auth result";
-            ui->pushButtonTestLastfmLogin->setText( tr( "Could not contact server" ) );
-            ui->pushButtonTestLastfmLogin->setEnabled( true );
-            return;
+        }
+        else
+        {
+            ui->pushButtonTestLastfmLogin->setText( tr( "Success" ) );
+            ui->pushButtonTestLastfmLogin->setEnabled( false );
+        }
+    }
+    else
+    {
+        switch( authJob->error() )
+        {
+            case QNetworkReply::ContentOperationNotPermittedError:
+            case QNetworkReply::AuthenticationRequiredError:
+                ui->pushButtonTestLastfmLogin->setText( tr( "Failed" ) );
+                ui->pushButtonTestLastfmLogin->setEnabled( true );
+                break;
+                
+            default:
+                qDebug() << "Couldn't get last.fm auth result";
+                ui->pushButtonTestLastfmLogin->setText( tr( "Could not contact server" ) );
+                ui->pushButtonTestLastfmLogin->setEnabled( true );
+                return;
+        }
     }
 #endif
 }
@@ -628,23 +636,62 @@ ProxyDialog::ProxyDialog( QWidget *parent )
     ui->setupUi( this );
     
     // ugly, I know, but...
-    QHash<int,int> enumMap;
+    
     int i = 0;
     ui->typeBox->insertItem( i, "No Proxy", QNetworkProxy::NoProxy );
-    enumMap[QNetworkProxy::NoProxy] = i++;
+    m_forwardMap[ QNetworkProxy::NoProxy ] = i;
+    m_backwardMap[ i ] = QNetworkProxy::NoProxy;
+    i++;
     ui->typeBox->insertItem( i, "SOCKS 5", QNetworkProxy::Socks5Proxy );
-    enumMap[QNetworkProxy::Socks5Proxy] = i++;
+    m_forwardMap[ QNetworkProxy::Socks5Proxy ] = i;
+    m_backwardMap[ i ] = QNetworkProxy::Socks5Proxy;
+    i++;
     
     TomahawkSettings* s = TomahawkSettings::instance();
     
-    ui->typeBox->setCurrentIndex( enumMap[s->proxyType()] );
+    ui->typeBox->setCurrentIndex( m_forwardMap[s->proxyType()] );
     ui->hostLineEdit->setText( s->proxyHost() );
     ui->portSpinBox->setValue( s->proxyPort() );
     ui->userLineEdit->setText( s->proxyUsername() );
     ui->passwordLineEdit->setText( s->proxyPassword() );
     ui->checkBoxUseProxyForDns->setChecked( s->proxyDns() );
+    ui->noHostLineEdit->setText( s->proxyNoProxyHosts() );
+
+    if ( s->proxyType() == QNetworkProxy::NoProxy )
+    {
+        ui->hostLineEdit->setEnabled( false );
+        ui->portSpinBox->setEnabled( false );
+        ui->userLineEdit->setEnabled( false );
+        ui->passwordLineEdit->setEnabled( false );
+        ui->checkBoxUseProxyForDns->setEnabled( false );
+        ui->noHostLineEdit->setEnabled( false );
+    }
+
+    connect( ui->typeBox, SIGNAL( currentIndexChanged( int ) ), SLOT( proxyTypeChangedSlot( int ) ) );
 }
 
+void
+ProxyDialog::proxyTypeChangedSlot( int index )
+{
+    if ( m_backwardMap[ index ] == QNetworkProxy::NoProxy )
+    {
+        ui->hostLineEdit->setEnabled( false );
+        ui->portSpinBox->setEnabled( false );
+        ui->userLineEdit->setEnabled( false );
+        ui->passwordLineEdit->setEnabled( false );
+        ui->checkBoxUseProxyForDns->setEnabled( false );
+        ui->noHostLineEdit->setEnabled( false );
+    }
+    else
+    {
+        ui->hostLineEdit->setEnabled( true );
+        ui->portSpinBox->setEnabled( true );
+        ui->userLineEdit->setEnabled( true );
+        ui->passwordLineEdit->setEnabled( true );
+        ui->checkBoxUseProxyForDns->setEnabled( true );
+        ui->noHostLineEdit->setEnabled( true );
+    }        
+}
 
 void
 ProxyDialog::saveSettings()
@@ -657,7 +704,7 @@ ProxyDialog::saveSettings()
     
     int port = ui->portSpinBox->value();
     s->setProxyPort( port );
-    
+    s->setProxyNoProxyHosts( ui->noHostLineEdit->text() );
     s->setProxyUsername( ui->userLineEdit->text() );
     s->setProxyPassword( ui->passwordLineEdit->text() );
     s->setProxyType( ui->typeBox->itemData( ui->typeBox->currentIndex() ).toInt() );
@@ -666,16 +713,10 @@ ProxyDialog::saveSettings()
     if( s->proxyHost().isEmpty() )
         return;
     
-    // Now, set QNAM
-        QNetworkProxy proxy( static_cast<QNetworkProxy::ProxyType>(s->proxyType()), s->proxyHost(), s->proxyPort(), s->proxyUsername(), s->proxyPassword() );
-        Q_ASSERT( TomahawkUtils::nam() != 0 );
-        QNetworkAccessManager* nam = TomahawkUtils::nam();
-        nam->setProxy( proxy );
-        QNetworkProxy* globalProxy = TomahawkUtils::proxy();
-        QNetworkProxy* oldProxy = globalProxy;
-        globalProxy = new QNetworkProxy( proxy );
-        if( oldProxy )
-            delete oldProxy;
-        
-        QNetworkProxy::setApplicationProxy( proxy );
+    TomahawkUtils::NetworkProxyFactory* proxyFactory = new TomahawkUtils::NetworkProxyFactory();
+    QNetworkProxy proxy( static_cast<QNetworkProxy::ProxyType>(s->proxyType()), s->proxyHost(), s->proxyPort(), s->proxyUsername(), s->proxyPassword() );
+    proxyFactory->setProxy( proxy );
+    if ( !ui->noHostLineEdit->text().isEmpty() )
+        proxyFactory->setNoProxyHosts( ui->noHostLineEdit->text().split( ',', QString::SkipEmptyParts ) );
+    TomahawkUtils::setProxyFactory( proxyFactory );
 }

@@ -119,17 +119,17 @@ NewPlaylistWidget::suggestionsFound()
 {
     XSPFLoader* loader = qobject_cast<XSPFLoader*>( sender() );
 
-    m_entries = loader->entries();
+    m_queries = loader->entries();
 
     delete m_suggestionsModel;
     m_suggestionsModel = new PlaylistModel( ui->suggestionsView );
     ui->suggestionsView->setPlaylistModel( m_suggestionsModel );
 
     QList<Tomahawk::query_ptr> ql;
-    foreach( const Tomahawk::plentry_ptr& entry, m_entries )
+    foreach( const Tomahawk::query_ptr& query, m_queries )
     {
-        m_suggestionsModel->append( entry->query() );
-        ql.append( entry->query() );
+        m_suggestionsModel->append( query );
+        ql.append( query );
     }
 
     loader->deleteLater();
@@ -141,8 +141,7 @@ NewPlaylistWidget::savePlaylist()
 {
     Tomahawk::playlist_ptr playlist;
 
-    playlist = Tomahawk::Playlist::create( SourceList::instance()->getLocal(), uuid(), ui->titleEdit->text(), "", "", false );
-    playlist->createNewRevision( uuid(), playlist->currentrevision(), m_entries );
+    playlist = Tomahawk::Playlist::create( SourceList::instance()->getLocal(), uuid(), ui->titleEdit->text(), "", "", false, m_queries );
 
     ViewManager::instance()->show( playlist );
     cancel();

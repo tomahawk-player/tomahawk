@@ -69,16 +69,16 @@ SipHandler::~SipHandler()
 const QPixmap
 SipHandler::avatar( const QString& name ) const
 {
-    qDebug() << Q_FUNC_INFO << "Getting avatar" << name << m_usernameAvatars.keys();
-    if( m_usernameAvatars.keys().contains( name ) )
+    qDebug() << Q_FUNC_INFO << "Getting avatar" << name; // << m_usernameAvatars.keys();
+    if( m_usernameAvatars.contains( name ) )
     {
-        qDebug() << Q_FUNC_INFO << "Getting avatar and avatar != null ";
+//        qDebug() << Q_FUNC_INFO << "Getting avatar and avatar != null ";
         Q_ASSERT(!m_usernameAvatars.value( name ).isNull());
         return m_usernameAvatars.value( name );
     }
     else
     {
-        qDebug() << Q_FUNC_INFO << "Getting avatar and avatar == null, GAAAAAH ";
+        qDebug() << Q_FUNC_INFO << "Getting avatar and avatar == null :-(";
         return QPixmap();
     }
 }
@@ -389,7 +389,7 @@ SipHandler::connectPlugin( bool startup, const QString &pluginId )
         if ( sip->pluginId() == pluginId )
         {
             Q_ASSERT( m_enabledPlugins.contains( sip ) ); // make sure the plugin we're connecting is enabled. should always be the case
-            sip->setProxy( m_proxy );
+            //each sip should refreshProxy() or take care of that function in some other way during connection
             sip->connectPlugin( startup );
         }
     }
@@ -446,14 +446,12 @@ SipHandler::toggleConnect()
 
 
 void
-SipHandler::setProxy( const QNetworkProxy& proxy )
+SipHandler::refreshProxy()
 {
     qDebug() << Q_FUNC_INFO;
 
-    m_proxy = proxy;
-
     foreach( SipPlugin* sip, m_allPlugins )
-        sip->setProxy( proxy );
+        sip->refreshProxy();
 }
 
 
@@ -601,8 +599,12 @@ SipHandler::onStateChanged( SipPlugin::ConnectionState state )
 void
 SipHandler::onAvatarReceived( const QString& from, const QPixmap& avatar )
 {
-    qDebug() << Q_FUNC_INFO << "Set avatar on source for " << from;
-    Q_ASSERT(!avatar.isNull());
+//    qDebug() << Q_FUNC_INFO << "setting avatar on source for" << from;
+    if ( avatar.isNull() )
+    {
+//        qDebug() << Q_FUNC_INFO << "got null pixmap, not adding anything";
+        return;
+    }
 
     m_usernameAvatars.insert( from, avatar );
 
@@ -612,22 +614,22 @@ SipHandler::onAvatarReceived( const QString& from, const QPixmap& avatar )
     ControlConnection *conn = Servent::instance()->lookupControlConnection( from );
     if( conn )
     {
-        qDebug() << Q_FUNC_INFO << from << "got control connection";
+//        qDebug() << Q_FUNC_INFO << from << "got control connection";
         Tomahawk::source_ptr source = conn->source();
         if( source )
         {
 
-            qDebug() << Q_FUNC_INFO << from << "got source, setting avatar";
+//            qDebug() << Q_FUNC_INFO << from << "got source, setting avatar";
             source->setAvatar( avatar );
         }
         else
         {
-            qDebug() << Q_FUNC_INFO << from << "no source found, not setting avatar";
+//            qDebug() << Q_FUNC_INFO << from << "no source found, not setting avatar";
         }
     }
     else
     {
-        qDebug() << Q_FUNC_INFO << from << "no control connection setup yet";
+//        qDebug() << Q_FUNC_INFO << from << "no control connection setup yet";
     }
 }
 
@@ -635,7 +637,7 @@ SipHandler::onAvatarReceived( const QString& from, const QPixmap& avatar )
 void
 SipHandler::onAvatarReceived( const QPixmap& avatar )
 {
-    qDebug() << Q_FUNC_INFO << "Set own avatar on MyCollection";
+//    qDebug() << Q_FUNC_INFO << "Set own avatar on MyCollection";
     SourceList::instance()->getLocal()->setAvatar( avatar );
 }
 

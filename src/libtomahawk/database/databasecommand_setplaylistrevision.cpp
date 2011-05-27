@@ -32,13 +32,14 @@ DatabaseCommand_SetPlaylistRevision::DatabaseCommand_SetPlaylistRevision(
                       const QStringList& orderedguids,
                       const QList<plentry_ptr>& addedentries,
                       const QList<plentry_ptr>& entries )
-: DatabaseCommandLoggable( s )
+    : DatabaseCommandLoggable( s )
     , m_applied( false )
     , m_newrev( newrev )
     , m_oldrev( oldrev )
     , m_addedentries( addedentries )
     , m_entries( entries )
 {
+    Q_ASSERT( !newrev.isEmpty() );
     m_localOnly = ( newrev == oldrev );
 
     setPlaylistguid( playlistguid );
@@ -55,12 +56,6 @@ void
 DatabaseCommand_SetPlaylistRevision::postCommitHook()
 {
     qDebug() << Q_FUNC_INFO;
-    if ( source().isNull() || source()->collection().isNull() )
-    {
-        qDebug() << "Source has gone offline, not emitting to GUI.";
-        return;
-    }
-
     if ( m_localOnly )
         return;
 
@@ -70,7 +65,6 @@ DatabaseCommand_SetPlaylistRevision::postCommitHook()
 
     // private, but we are a friend. will recall itself in its own thread:
     playlist_ptr playlist = source()->collection()->playlist( m_playlistguid );
-
     if ( playlist.isNull() )
     {
         qDebug() << m_playlistguid;
@@ -85,7 +79,7 @@ DatabaseCommand_SetPlaylistRevision::postCommitHook()
                            m_addedmap,
                            m_applied );
 
-    if( source()->isLocal() )
+    if ( source()->isLocal() )
         Servent::instance()->triggerDBSync();
 }
 

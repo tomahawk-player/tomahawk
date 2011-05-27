@@ -28,6 +28,7 @@ using namespace Tomahawk;
 WelcomePlaylistModel::WelcomePlaylistModel( QObject* parent )
     : QAbstractListModel( parent )
     , m_waitingForSome( true )
+    , m_maxPlaylists( 0 )
 {
     loadFromSettings();
 
@@ -41,6 +42,7 @@ WelcomePlaylistModel::WelcomePlaylistModel( QObject* parent )
 void
 WelcomePlaylistModel::loadFromSettings()
 {
+//    qDebug() << Q_FUNC_INFO;
     if( !m_waitingForSome )
         return;
 
@@ -48,11 +50,11 @@ WelcomePlaylistModel::loadFromSettings()
     m_recplaylists.clear();
     m_waitingForSome = false;
 
-    QStringList playlist_guids = TomahawkSettings::instance()->recentlyPlayedPlaylistGuids();
+    QStringList playlist_guids = TomahawkSettings::instance()->recentlyPlayedPlaylistGuids( m_maxPlaylists );
 
     for( int i = playlist_guids.size() - 1; i >= 0; i-- )
     {
-        qDebug() << "loading playlist" << playlist_guids[i];
+//        qDebug() << "loading playlist" << playlist_guids[i];
 
         playlist_ptr pl = m_cached.value( playlist_guids[i], playlist_ptr() );
         if( pl.isNull() )
@@ -78,7 +80,6 @@ WelcomePlaylistModel::data( const QModelIndex& index, int role ) const
 {
     if( !index.isValid() || !hasIndex( index.row(), index.column(), index.parent() ) )
         return QVariant();
-
 
     playlist_ptr pl = m_recplaylists[index.row()];
     switch( role )

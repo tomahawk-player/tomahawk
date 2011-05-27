@@ -114,6 +114,7 @@ Q_PROPERTY( bool    shared          READ shared             WRITE setShared )
 friend class ::DatabaseCommand_LoadAllPlaylists;
 friend class ::DatabaseCommand_SetPlaylistRevision;
 friend class ::DatabaseCommand_CreatePlaylist;
+friend class DynamicPlaylist;
 
 public:
     ~Playlist();
@@ -122,11 +123,12 @@ public:
 
     // one CTOR is private, only called by DatabaseCommand_LoadAllPlaylists
     static Tomahawk::playlist_ptr create( const source_ptr& author,
-                                         const QString& guid,
-                                         const QString& title,
-                                         const QString& info,
-                                         const QString& creator,
-                                         bool shared );
+                                          const QString& guid,
+                                          const QString& title,
+                                          const QString& info,
+                                          const QString& creator,
+                                          bool shared,
+                                          const QList<Tomahawk::query_ptr>& queries = QList<Tomahawk::query_ptr>() );
 
     static bool remove( const playlist_ptr& playlist );
     bool rename( const QString& title );
@@ -142,6 +144,8 @@ public:
     bool shared() const               { return m_shared; }
     unsigned int lastmodified() const { return m_lastmodified; }
     uint createdOn() const            { return m_createdOn; }
+
+    bool busy() const { return m_busy; }
 
     const QList< plentry_ptr >& entries() { return m_entries; }
     virtual void addEntry( const Tomahawk::query_ptr& query, const QString& oldrev );
@@ -229,7 +233,8 @@ protected:
                        const QString& title,
                        const QString& info,
                        const QString& creator,
-                       bool shared );
+                       bool shared,
+                       const QList< Tomahawk::plentry_ptr >& entries = QList< Tomahawk::plentry_ptr >() );
 
     QList< plentry_ptr > newEntries( const QList< plentry_ptr >& entries );
     PlaylistRevision setNewRevision( const QString& rev,
@@ -248,6 +253,8 @@ private:
     Playlist();
     void init();
 
+    void setBusy( bool b );
+
     source_ptr m_source;
     QString m_currentrevision;
     QString m_guid, m_title, m_info, m_creator;
@@ -255,9 +262,11 @@ private:
     unsigned int m_createdOn;
     bool m_shared;
 
+    QList< plentry_ptr > m_initEntries;
     QList< plentry_ptr > m_entries;
-    bool m_locallyChanged;
 
+    bool m_locallyChanged;
+    bool m_busy;
 };
 
 };

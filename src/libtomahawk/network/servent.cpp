@@ -108,31 +108,31 @@ Servent::startListening( QHostAddress ha, bool upnp, int port )
             defPortAlso = listen( ha, defPort );
         if( !defPortAlso )
         {
-            qDebug() << "Failed to listen on both port " << m_port << " and port " << defPort;
-            qDebug() << "Error string is " << errorString();
+            qDebug() << "Failed to listen on both port" << m_port << "and port" << defPort;
+            qDebug() << "Error string is" << errorString();
             return false;
         }
         else
-            qDebug() << "Servent listening on port " << defPort << " servent thread:" << thread();
+            qDebug() << "Servent listening on port" << defPort << "servent thread:" << thread();
     }
     else
     {
         bool defPortAlso = listen( ha, defPort );
-        qDebug() << "Servent listening on port " << m_port << " servent thread:" << thread();
+        qDebug() << "Servent listening on port" << m_port << "servent thread:" << thread();
         if( defPortAlso )
-            qDebug() << "Servent also listening on port " << defPort << " servent thread:" << thread();
+            qDebug() << "Servent also listening on port" << defPort << "servent thread:" << thread();
     }
 
     // --lanhack means to advertise your LAN IP over jabber as if it were externallyVisible
-    qDebug() << "Address mode = " << (int)(TomahawkSettings::instance()->externalAddressMode());
-    qDebug() << "Static host/port preferred ? = " << ( TomahawkSettings::instance()->preferStaticHostPort() ? "true" : "false" );
+    qDebug() << "Address mode =" << (int)(TomahawkSettings::instance()->externalAddressMode());
+    qDebug() << "Static host/port preferred =" << ( TomahawkSettings::instance()->preferStaticHostPort() ? "true" : "false" );
 
     if( TomahawkSettings::instance()->preferStaticHostPort() )
     {
         qDebug() << "Forcing static preferred host and port";
         m_externalHostname = TomahawkSettings::instance()->externalHostname();
         m_externalPort = TomahawkSettings::instance()->externalPort();
-        qDebug() << m_externalHostname << m_externalPort;
+//        qDebug() << m_externalHostname << m_externalPort;
         emit ready();
         return true;
     }
@@ -176,7 +176,7 @@ Servent::startListening( QHostAddress ha, bool upnp, int port )
 QString
 Servent::createConnectionKey( const QString& name, const QString &nodeid, const QString &key, bool onceOnly )
 {
-    qDebug() << Q_FUNC_INFO;
+//    qDebug() << Q_FUNC_INFO;
     Q_ASSERT( this->thread() == QThread::currentThread() );
 
     QString _key = ( key.isEmpty() ? uuid() : key );
@@ -185,6 +185,7 @@ Servent::createConnectionKey( const QString& name, const QString &nodeid, const 
     if( !nodeid.isEmpty() )
         cc->setId( nodeid );
     cc->setOnceOnly( onceOnly );
+
     qDebug() << "Creating connection key with name of " << cc->name() << " and id of " << cc->id() << " and key of " << _key << "; key is once only? : " << (onceOnly ? "true" : "false");
     registerOffer( _key, cc );
     return _key;
@@ -225,7 +226,7 @@ Servent::registerOffer( const QString& key, Connection* conn )
 void
 Servent::registerControlConnection( ControlConnection* conn )
 {
-    qDebug() << Q_FUNC_INFO << conn->id();
+//    qDebug() << Q_FUNC_INFO << conn->id();
     m_controlconnections.append( conn );
 }
 
@@ -273,7 +274,7 @@ Servent::incomingConnection( int sd )
 
     connect( sock, SIGNAL( readyRead() ), SLOT( readyRead() ), Qt::QueuedConnection );
     connect( sock, SIGNAL( disconnected() ), sock, SLOT( deleteLater() ), Qt::QueuedConnection );
-    qDebug() << "connection accepted.";
+//    qDebug() << "connection accepted.";
 }
 
 
@@ -323,13 +324,13 @@ Servent::readyRead()
     nodeid    = m.value( "nodeid" ).toString();
     controlid = m.value( "controlid" ).toString();
 
-    qDebug() << "Incoming connection details: " << m;
+    qDebug() << "Incoming connection details:" << m;
 
     if( !nodeid.isEmpty() ) // only control connections send nodeid
     {
         foreach( ControlConnection* con, m_controlconnections )
         {
-            qDebug() << con->socket() << sock;
+//            qDebug() << con->socket() << sock;
             if( con->id() == nodeid )
             {
                 qDebug() << "Duplicate control connection detected, dropping:" << nodeid << conntype;
@@ -340,7 +341,7 @@ Servent::readyRead()
 
     foreach( ControlConnection* con, m_controlconnections )
     {
-        qDebug() << "conid:" << con->id();
+//        qDebug() << "conid:" << con->id();
 
         if ( con->id() == controlid )
         {
@@ -419,7 +420,7 @@ Servent::socketConnected()
 {
     QTcpSocketExtra* sock = (QTcpSocketExtra*)sender();
 
-    qDebug() << "Servent::SocketConnected" << thread() << "socket:" << sock;
+//    qDebug() << "Servent::SocketConnected" << thread() << "socket:" << sock;
 
     Connection* conn = sock->_conn;
     handoverSocket( conn, sock );
@@ -438,7 +439,6 @@ void Servent::handoverSocket( Connection* conn, QTcpSocketExtra* sock )
     disconnect( sock, SIGNAL( disconnected() ), sock, SLOT( deleteLater() ) );
     disconnect( sock, SIGNAL( error( QAbstractSocket::SocketError ) ),
                 this, SLOT( socketError( QAbstractSocket::SocketError ) ) );
-
 
     sock->_disowned = true;
     conn->setOutbound( sock->_outbound );
@@ -565,7 +565,7 @@ Servent::reverseOfferRequest( ControlConnection* orig_conn, const QString &their
 Connection*
 Servent::claimOffer( ControlConnection* cc, const QString &nodeid, const QString &key, const QHostAddress peer )
 {
-    qDebug() << Q_FUNC_INFO;
+//    qDebug() << Q_FUNC_INFO;
 
     bool noauth = qApp->arguments().contains( "--noauth" );
 
@@ -660,10 +660,12 @@ Servent::claimOffer( ControlConnection* cc, const QString &nodeid, const QString
     }
 }
 
+
 bool
 Servent::checkACL( const Connection* conn, const QString &nodeid, bool showDialog ) const
 {
     qDebug() << "Checking ACLs";
+
     ACLSystem* aclSystem = ACLSystem::instance();
     ACLSystem::ACL peerStatus = aclSystem->isAuthorizedUser( nodeid );
     if( peerStatus == ACLSystem::Deny )
@@ -716,10 +718,11 @@ Servent::checkACL( const Connection* conn, const QString &nodeid, bool showDialo
     return true;
 }
 
+
 QSharedPointer<QIODevice>
 Servent::remoteIODeviceFactory( const result_ptr& result )
 {
-    qDebug() << Q_FUNC_INFO << thread();
+//    qDebug() << Q_FUNC_INFO << thread();
     QSharedPointer<QIODevice> sp;
 
     QStringList parts = result->url().mid( QString( "servent://" ).length() ).split( "\t" );
@@ -769,7 +772,7 @@ void
 Servent::printCurrentTransfers()
 {
     int k = 1;
-    qDebug() << "~~~ Active file transfer connections:" << m_scsessions.length();
+//    qDebug() << "~~~ Active file transfer connections:" << m_scsessions.length();
     foreach( StreamConnection* i, m_scsessions )
     {
         qDebug() << k << ") " << i->id();
@@ -806,10 +809,10 @@ bool
 Servent::connectedToSession( const QString& session )
 {
     qDebug() << Q_FUNC_INFO;
-    qDebug() << "Checking against " << session;
+//    qDebug() << "Checking against" << session;
     foreach( ControlConnection* cc, m_controlconnections )
     {
-        qDebug() << "Checking session " << cc->id();
+//        qDebug() << "Checking session" << cc->id();
         if( cc->id() == session )
             return true;
     }
@@ -857,7 +860,7 @@ Servent::getIODeviceForUrl( const Tomahawk::result_ptr& result )
 
     const QString proto = rx.cap( 1 );
     //const QString urlpart = rx.cap( 2 );
-    qDebug() << "Getting IODevice for URL:" << proto << m_iofactories.contains( proto );
+//    qDebug() << "Getting IODevice for URL:" << proto << m_iofactories.contains( proto );
     if ( !m_iofactories.contains( proto ) )
         return sp;
     return m_iofactories.value( proto )( result );

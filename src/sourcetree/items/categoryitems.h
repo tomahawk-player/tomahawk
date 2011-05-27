@@ -30,10 +30,10 @@ public:
     virtual QString text() const;
     virtual void activate();
     virtual QIcon icon() const;
+    virtual int peerSortValue() const;
 
     virtual bool willAcceptDrag(const QMimeData* data) const;
     virtual bool dropMimeData(const QMimeData* data, Qt::DropAction action);
-
 
 private:
     SourcesModel::CategoryType m_categoryType;
@@ -56,6 +56,7 @@ public:
         return QString();
     }
     virtual void activate();
+    virtual int peerSortValue() const;
     virtual Qt::ItemFlags flags() const { return Qt::ItemIsEnabled; }
 
     // inserts an item at the end, but before the category add item

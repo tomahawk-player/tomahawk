@@ -1,5 +1,5 @@
 /* === This file is part of Tomahawk Player - <http://tomahawk-player.org> ===
- * 
+ *
  *   Copyright 2010-2011, Christian Muehlhaeuser <muesli@tomahawk-player.org>
  *
  *   Tomahawk is free software: you can redistribute it and/or modify
@@ -31,17 +31,18 @@
 class DatabaseCommand_LoadDynamicPlaylist : public DatabaseCommand_LoadPlaylistEntries
 {
     Q_OBJECT
-    
+
 public:
     explicit DatabaseCommand_LoadDynamicPlaylist( QString revision_guid, QObject* parent = 0 )
     : DatabaseCommand_LoadPlaylistEntries( revision_guid, parent )
-    { qDebug() << "loaded with:" << revision_guid << guid(); }
-    
-    
+    {
+//        qDebug() << "loaded with:" << revision_guid << guid();
+    }
+
     virtual void exec( DatabaseImpl* );
     virtual bool doesMutates() const { return false; }
     virtual QString commandname() const { return "loaddynamicplaylist"; }
-    
+
 signals:
     // used if loading an ondemand playlist
     void done( QString,
@@ -58,7 +59,7 @@ signals:
                bool,
                QMap< QString, Tomahawk::plentry_ptr >,
                bool );
-    
+
 private:
 };
 

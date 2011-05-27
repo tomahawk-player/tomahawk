@@ -122,10 +122,8 @@ ControlConnection::registerSource()
     Q_UNUSED( source )
     Q_ASSERT( source == m_source.data() );
 
-    qDebug() << Q_FUNC_INFO << "Setting avatar ... " << name() << !SipHandler::instance()->avatar( name() ).isNull();
+//    qDebug() << Q_FUNC_INFO << "Setting avatar ... " << name() << !SipHandler::instance()->avatar( name() ).isNull();
     source->setAvatar( SipHandler::instance()->avatar( name() ) );
-
-    // .. but we'll use the shared pointer we've already made:
 
     m_registered = true;
     m_servent->registerControlConnection( this );

@@ -1,5 +1,5 @@
 /* === This file is part of Tomahawk Player - <http://tomahawk-player.org> ===
- * 
+ *
  *   Copyright 2010-2011, Christian Muehlhaeuser <muesli@tomahawk-player.org>
  *
  *   Tomahawk is free software: you can redistribute it and/or modify
@@ -28,7 +28,7 @@
 
 #include "dllmacro.h"
 
-namespace Tomahawk 
+namespace Tomahawk
 {
 
 class EchonestSteerer;
@@ -37,19 +37,19 @@ class DLLEXPORT EchonestFactory : public GeneratorFactoryInterface
 {
 public:
     EchonestFactory();
-    
+
     virtual GeneratorInterface* create();
     virtual dyncontrol_ptr createControl( const QString& controlType = QString() );
     virtual QStringList typeSelectors() const;
 };
-    
+
 class EchonestGenerator : public GeneratorInterface
 {
     Q_OBJECT
 public:
     explicit EchonestGenerator( QObject* parent = 0 );
     virtual ~EchonestGenerator();
-    
+
     virtual dyncontrol_ptr createControl( const QString& type = QString() );
     virtual QPixmap logo();
     virtual void generate ( int number = -1 );
@@ -58,26 +58,48 @@ public:
     virtual QString sentenceSummary();
     virtual bool onDemandSteerable() const { return true; }
     virtual QWidget* steeringWidget();
-    
+
+    static QVector< QString > styles();
+    static QVector< QString > moods();
+
+signals:
+    void paramsGenerated( const Echonest::DynamicPlaylist::PlaylistParams& );
+
 private slots:
     void staticFinished();
     void dynamicStarted();
     void dynamicFetched();
-    
+
     // steering controls
     void steerField( const QString& field );
     void steerDescription( const QString& desc );
     void resetSteering();
-    
+
+    void doGenerate( const Echonest::DynamicPlaylist::PlaylistParams& params );
+    void doStartOnDemand( const Echonest::DynamicPlaylist::PlaylistParams& params );
+
+    void stylesReceived();
+    void moodsReceived();
+
+    void songLookupFinished();
 private:
-    Echonest::DynamicPlaylist::PlaylistParams getParams() const throw( std::runtime_error );
+    // get result from signal paramsGenerated
+    void getParams() throw( std::runtime_error );
+
     query_ptr queryFromSong( const Echonest::Song& song );
-    void appendRadioType( Echonest::DynamicPlaylist::PlaylistParams& params ) const throw( std::runtime_error );
+    Echonest::DynamicPlaylist::ArtistTypeEnum appendRadioType( Echonest::DynamicPlaylist::PlaylistParams& params ) const throw( std::runtime_error );
     bool onlyThisArtistType( Echonest::DynamicPlaylist::ArtistTypeEnum type ) const throw( std::runtime_error );
-    
+
     Echonest::DynamicPlaylist* m_dynPlaylist;
     QPixmap m_logo;
-    
+
+    static QVector< QString > s_styles;
+    static QVector< QString > s_moods;
+
+    // used for the intermediary song id lookup
+    QSet< QNetworkReply* > m_waiting;
+    Echonest::DynamicPlaylist::PlaylistParams m_storedParams;
+
     QWeakPointer<EchonestSteerer> m_steerer;
     bool m_steeredSinceLastTrack;
     Echonest::DynamicPlaylist::DynamicControl m_steerData;

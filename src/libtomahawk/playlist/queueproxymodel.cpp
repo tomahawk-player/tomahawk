@@ -29,6 +29,8 @@ QueueProxyModel::QueueProxyModel( QObject* parent )
     : PlaylistProxyModel( parent )
 {
     qDebug() << Q_FUNC_INFO;
+
+    connect( this, SIGNAL( sourceTrackCountChanged( unsigned int ) ), this, SLOT( onTrackCountChanged( unsigned int ) ) );
 }
 
 
@@ -46,10 +48,15 @@ QueueProxyModel::siblingItem( int itemsAway )
     Tomahawk::result_ptr res = PlaylistProxyModel::siblingItem( itemsAway );
 
     qDebug() << "new rowcount:" << rowCount( QModelIndex() );
-    if ( rowCount( QModelIndex() ) == 1 )
-        ViewManager::instance()->hideQueue();
 
     removeIndex( currentItem() );
 
     return res;
+}
+
+void
+QueueProxyModel::onTrackCountChanged( unsigned int count )
+{
+    if ( count == 0 )
+        ViewManager::instance()->hideQueue();
 }

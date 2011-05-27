@@ -1,5 +1,5 @@
 #include "tomahawksipmessagefactory.h"
-//#include "util.h"
+
 #include <QStringList>
 #include <QXmlStreamWriter>
 #include <QDebug>
@@ -43,7 +43,7 @@ void TomahawkSipMessageFactory::handleStartElement(const QStringRef &name, const
     } else if (m_depth == 2) {
         if (name == QLatin1String("transport"))
         {
-            qDebug() << "Found Transport";
+//            qDebug() << "Found Transport";
             m_state = AtTransport;
 
             m_uniqname = attributes.value(QLatin1String("uniqname")).toString();
@@ -53,7 +53,7 @@ void TomahawkSipMessageFactory::handleStartElement(const QStringRef &name, const
         if (name == QLatin1String("candidate"))
         {
             m_state = AtCandidate;
-            qDebug() << "Found candidate";
+//            qDebug() << "Found candidate";
             m_ip = attributes.value(QLatin1String("ip")).toString();
             m_port = attributes.value(QLatin1String("port")).toString().toInt();
 

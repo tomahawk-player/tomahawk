@@ -158,6 +158,7 @@ set( libSources
     utils/widgetdragfilter.cpp
     utils/animatedsplitter.cpp
     utils/xspfloader.cpp
+    utils/xspfgenerator.cpp
 
     widgets/newplaylistwidget.cpp
     widgets/welcomewidget.cpp
@@ -320,6 +321,7 @@ set( libHeaders
     utils/widgetdragfilter.h
     utils/animatedsplitter.h
     utils/xspfloader.h
+    utils/xspfgenerator.h
 
     widgets/newplaylistwidget.h
     widgets/welcomewidget.h
@@ -355,15 +357,10 @@ include_directories( . ${CMAKE_CURRENT_BINARY_DIR} ${CMAKE_CURRENT_BINARY_DIR}/.
     ${PHONON_INCLUDES}
     ${CMAKE_BINARY_DIR}/thirdparty/liblastfm2/src
 
-    ../../include
     playlist
 
-    ${THIRDPARTY_DIR}/libportfwd/include
+    ${LIBPORTFWD_INCLUDE_DIR}
     ${THIRDPARTY_DIR}/qxt/qxtweb-standalone/qxtweb
-    ${THIRDPARTY_DIR}/jdns
-    ${THIRDPARTY_DIR}/jdns/jdns
-    ${THIRDPARTY_DIR}/jdns/jdnsshared
-    ${THIRDPARTY_DIR}/qtweetlib/qtweetlib/src
     ${CMAKE_BINARY_DIR}/thirdparty/liblastfm2/src
 )
 
@@ -371,8 +368,6 @@ include_directories( . ${CMAKE_CURRENT_BINARY_DIR} ${CMAKE_CURRENT_BINARY_DIR}/.
 IF( WIN32 )
     SET( OS_SPECIFIC_LINK_LIBRARIES
         ${OS_SPECIFIC_LINK_LIBRARIES}
-    # Thirdparty
-	${QJSON_LDFLAGS}
     # System
         "iphlpapi.a"
         "ws2_32.dll"
@@ -400,8 +395,6 @@ IF( APPLE )
 
     SET( OS_SPECIFIC_LINK_LIBRARIES
         ${OS_SPECIFIC_LINK_LIBRARIES}
-        # Thirdparty
-	${QJSON_LIBRARIES}
         # System
         ${COREAUDIO_LIBRARY}
         ${COREFOUNDATION_LIBRARY}
@@ -409,14 +402,6 @@ IF( APPLE )
 	${SCRIPTINGBRIDGE_LIBRARY}
     )
 ENDIF( APPLE )
-
-IF( UNIX AND NOT APPLE )
-    SET( OS_SPECIFIC_LINK_LIBRARIES
-        ${OS_SPECIFIC_LINK_LIBRARIES}
-        # Thirdparty
-	${QJSON_LDFLAGS}
-    )
-ENDIF( UNIX AND NOT APPLE )
 
 IF(LIBLASTFM_FOUND)
     SET(LINK_LIBRARIES ${LINK_LIBRARIES} tomahawk_lastfm2 )
@@ -430,14 +415,11 @@ SET( libSources ${libSources} ${libUI_H} ${libHeaders_NoMOC} )
 add_library( tomahawklib SHARED ${libSources} ${libMoc} )
 
 target_link_libraries( tomahawklib
-    # Internal
-    tomahawk_jdns
-    tomahawk_qtweetlib
-
     # Thirdparty shipped with tomahawk
-    portfwd
+    ${LIBPORTFWD_LIBRARIES}
 
     # External deps
+    ${QJSON_LIBRARIES}
     ${PHONON_LIBS}
     ${TAGLIB_LIBRARIES}
     ${CLUCENE_LIBRARIES}
@@ -448,4 +430,8 @@ target_link_libraries( tomahawklib
     ${LINK_LIBRARIES}
 )
 
-INSTALL( TARGETS tomahawklib DESTINATION lib${LIB_SUFFIX} )
+INSTALL( TARGETS tomahawklib
+    RUNTIME DESTINATION bin
+    LIBRARY DESTINATION lib${LIB_SUFFIX}
+    ARCHIVE DESTINATION lib${LIB_SUFFIX}
+)

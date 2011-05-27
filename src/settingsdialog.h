@@ -46,8 +46,13 @@ public:
 
     void saveSettings();
 
+private slots:
+    void proxyTypeChangedSlot( int index );
+    
 private:
     Ui::ProxyDialog* ui;
+    QHash<int,int> m_forwardMap;
+    QHash<int,int> m_backwardMap;
 };
 
 class SettingsDialog : public QDialog
@@ -101,7 +106,6 @@ private:
 
     ProxyDialog m_proxySettings;
     bool m_rejected;
-    QNetworkReply* m_testLastFmQuery;
     SipModel* m_sipModel;
     ResolversModel* m_resolversModel;
 };

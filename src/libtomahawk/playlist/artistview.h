@@ -29,6 +29,7 @@
 #include "dllmacro.h"
 
 class TreeHeader;
+class LoadingSpinner;
 
 class DLLEXPORT ArtistView : public QTreeView, public Tomahawk::ViewPage
 {
@@ -54,7 +55,10 @@ public:
     virtual QPixmap pixmap() const { return QPixmap( RESPATH "images/music-icon.png" ); }
 
     virtual bool showStatsBar() const { return false; }
-    virtual bool showModes() const { return true; }
+    virtual bool showFilter() const { return false; }
+
+    virtual void setShowModes( bool b ) { m_showModes = b; }
+    virtual bool showModes() const { return m_showModes; }
 
     virtual bool jumpToCurrentTrack();
 
@@ -80,6 +84,9 @@ private:
     TreeProxyModel* m_proxyModel;
 //    PlaylistItemDelegate* m_delegate;
 
+    LoadingSpinner* m_loadingSpinner;
+
+    bool m_showModes;
     QTimer m_timer;
 };
 

@@ -53,6 +53,7 @@ private slots:
 
     void loadPlaylist();
     void deletePlaylist();
+    void copyPlaylistLink();
 
     void onCustomContextMenu( const QPoint& pos );
 protected:
@@ -77,9 +78,11 @@ private:
     QModelIndex m_contextMenuIndex;
 
     QMenu m_playlistMenu;
+    QMenu m_roPlaylistMenu;
     QAction* m_loadPlaylistAction;
     QAction* m_renamePlaylistAction;
     QAction* m_deletePlaylistAction;
+    QAction* m_copyPlaylistAction;
 
     bool m_dragging;
     QRect m_dropRect;

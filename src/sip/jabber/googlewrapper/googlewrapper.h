@@ -19,7 +19,7 @@
 #ifndef GOOGLEWRAPPER_H
 #define GOOGLEWRAPPER_H
 
-#include "sip/jreen/jabber.h"
+#include "sip/jabber/jabber.h"
 
 class SIPDLLEXPORT GoogleWrapperFactory : public SipPluginFactory
 {

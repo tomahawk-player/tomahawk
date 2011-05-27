@@ -25,9 +25,9 @@
 #include "database/database.h"
 
 #include "tomahawkoauthtwitter.h"
-#include <qtweetaccountverifycredentials.h>
-#include <qtweetstatusupdate.h>
-#include <qtweetdirectmessagenew.h>
+#include <QTweetLib/qtweetaccountverifycredentials.h>
+#include <QTweetLib/qtweetstatusupdate.h>
+#include <QTweetLib/qtweetdirectmessagenew.h>
 
 #include <QMessageBox>
 

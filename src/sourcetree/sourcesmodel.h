@@ -64,9 +64,10 @@ public:
         SortRole                = Qt::UserRole + 12
     };
 
-
     SourcesModel( QObject* parent = 0 );
     virtual ~SourcesModel();
+
+    static QString rowTypeToString( RowType type );
 
     // reimplemented from QAIM
     virtual QVariant data(const QModelIndex& index, int role = Qt::DisplayRole) const;

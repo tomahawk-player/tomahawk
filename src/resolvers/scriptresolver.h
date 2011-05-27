@@ -58,8 +58,6 @@ private slots:
     void readStdout();
     void cmdExited( int code, QProcess::ExitStatus status );
 
-    void onTimeout( const Tomahawk::query_ptr& query );
-
 private:
     void handleMsg( const QByteArray& msg );
     void sendMsg( const QByteArray& msg );
@@ -75,8 +73,6 @@ private:
     QByteArray m_msg;
 
     bool m_ready, m_stopped;
-
-    QHash< QString /* QID */, unsigned int /* state */ > m_queryState;
 
     QJson::Parser m_parser;
     QJson::Serializer m_serializer;

@@ -75,7 +75,7 @@ private:
     Ui::NewPlaylistWidget *ui;
 
     PlaylistModel* m_suggestionsModel;
-    QList< Tomahawk::plentry_ptr > m_entries;
+    QList< Tomahawk::query_ptr > m_queries;
 
     QTimer m_filterTimer;
     QString m_tag;

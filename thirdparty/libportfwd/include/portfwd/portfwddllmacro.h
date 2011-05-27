@@ -1,6 +1,6 @@
 /* === This file is part of Tomahawk Player - <http://tomahawk-player.org> ===
- * 
- *   Copyright 2010-2011, Christian Muehlhaeuser <muesli@tomahawk-player.org>
+ *
+ *   Copyright 2011, Dominik Schmidt <dev@dominik-schmidt.de>
  *
  *   Tomahawk is free software: you can redistribute it and/or modify
  *   it under the terms of the GNU General Public License as published by
@@ -16,16 +16,17 @@
  *   along with Tomahawk. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef PLUGIN_INCLUDES_H
-#define PLUGIN_INCLUDES_H
+#ifndef PORTFWDDLLMACRO_H
+#define PORTFWDDLLMACRO_H
 
-// all the stuff a plugin needs
+#include <QtCore/qglobal.h>
 
-#include "tomahawk/resolver.h"
-#include "tomahawk/pluginapi.h"
-#include "tomahawk/typedefs.h"
-#include "tomahawk/tomahawkplugin.h"
-#include "tomahawk/collection.h"
-#include "tomahawk/source.h"
+#ifndef PORTFWDDLLEXPORT
+# if defined (PORTFWDDLLEXPORT_PRO)
+#  define PORTFWDDLLEXPORT Q_DECL_EXPORT
+# else
+#  define PORTFWDDLLEXPORT Q_DECL_IMPORT
+# endif
+#endif
 
-#endif // PLUGIN_INCLUDES_H
+#endif

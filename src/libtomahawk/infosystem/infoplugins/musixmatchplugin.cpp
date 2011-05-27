@@ -54,7 +54,7 @@ void
 MusixMatchPlugin::getInfo( const QString caller, const Tomahawk::InfoSystem::InfoType type, const QVariant input, const Tomahawk::InfoSystem::InfoCustomData customData )
 {
     qDebug() << Q_FUNC_INFO;
-    if( !isValidTrackData(caller, input, customData) || !input.canConvert<Tomahawk::InfoSystem::InfoCustomData>() || m_nam.isNull() )
+    if( !isValidTrackData(caller, input, customData) || !input.canConvert<Tomahawk::InfoSystem::InfoCustomData>() || m_nam.isNull() || type != Tomahawk::InfoSystem::InfoTrackLyrics )
         return;
     Tomahawk::InfoSystem::InfoCustomData hash = input.value<Tomahawk::InfoSystem::InfoCustomData>();
     QString artist = hash["artistName"].toString();

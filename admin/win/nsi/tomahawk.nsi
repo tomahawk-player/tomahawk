@@ -24,6 +24,8 @@
 !define QT_DLL_PATH "${MING_BIN}"
 !define SQLITE_DLL_PATH "${MING_LIB}/qt4/plugins/sqldrivers"
 !define IMAGEFORMATS_DLL_PATH "${MING_LIB}/qt4/plugins/imageformats"
+!define VLC_PATH "${MING_BIN}"
+!define VLC_PLUGIN_PATH "${MING_LIB}\vlc\plugins"
 
 ;-----------------------------------------------------------------------------
 ; Increment installer revision number as part of this script.
@@ -33,9 +35,11 @@
 !delfile revision.txt
 !appendfile revision.txt ${REVISION}
 
-!define VER_MAJOR "0"
-!define VER_MINOR "0"
-!define VER_BUILD "3"
+!ifndef VER_MAJOR && VER_MINOR && VER_BUILD
+    !define VER_MAJOR "0"
+    !define VER_MINOR "1"
+    !define VER_BUILD "0rc2"
+!endif
 
 !define VERSION "${VER_MAJOR}.${VER_MINOR}.${VER_BUILD}"
 
@@ -79,7 +83,7 @@ ReserveFile "${NSISDIR}\Plugins\InstallOptions.dll"
 ;-----------------------------------------------------------------------------
 !define MEMENTO_REGISTRY_ROOT HKLM
 !define MEMENTO_REGISTRY_KEY Software\Microsoft\Windows\CurrentVersion\Uninstall\Tomahawk
-                
+
 ;-----------------------------------------------------------------------------
 ; Modern User Interface (MUI) defintions and setup.
 ;-----------------------------------------------------------------------------
@@ -261,7 +265,7 @@ FunctionEnd
 Section "Tomahawk Player" SEC_TOMAHAWK_PLAYER
    SectionIn 1 2 3 RO
    SetDetailsPrint listonly
-   
+
    SetDetailsPrint textonly
    DetailPrint "Installing Tomahawk Player essentials."
    SetDetailsPrint listonly
@@ -271,33 +275,28 @@ Section "Tomahawk Player" SEC_TOMAHAWK_PLAYER
         ;Main executable.
         File "${INSTALL_PATH}\bin\tomahawk.exe"
 
-        File "${INSTALL_PATH}\lib\libqxtweb-standalone.dll"
-        File "${INSTALL_PATH}\lib\libtomahawk_jdns.dll"
-        File "${INSTALL_PATH}\lib\libtomahawk_qtweetlib.dll"
-        File "${INSTALL_PATH}\lib\libtomahawk_lastfm2.dll"
-        File "${INSTALL_PATH}\lib\libtomahawklib.dll"
-        File "${INSTALL_PATH}\lib\libtomahawk_sipjabber.dll"
-        File "${INSTALL_PATH}\lib\libtomahawk_siptwitter.dll"
-        File "${INSTALL_PATH}\lib\libtomahawk_sipzeroconf.dll"
+        File "${INSTALL_PATH}\bin\libqxtweb-standalone.dll"
+        File "${INSTALL_PATH}\bin\libtomahawk_portfwd.dll"
+        File "${INSTALL_PATH}\bin\libtomahawk_lastfm2.dll"
+        File "${INSTALL_PATH}\bin\libtomahawklib.dll"
+        File "${INSTALL_PATH}\lib\libtomahawk_sip*.dll"
    !endif
    !ifndef INSTALL_PATH
         ;Main executable.
         File "${BUILD_PATH}\tomahawk.exe"
-        File "${BUILD_PATH}\thirdparty\qxt\qxtweb-standalone\libqxtweb-standalone.dll"
-        File "${BUILD_PATH}\thirdparty\jdns\libtomahawk_jdns.dll"
-        File "${BUILD_PATH}\thirdparty\qtweetlib\libtomahawk_qtweetlib.dll"
-        File "${BUILD_PATH}\thirdparty\liblastfm2\src\libtomahawk_lastfm2.dll"
-        File "${BUILD_PATH}\src\libtomahawk\libtomahawklib.dll"
-        File "${BUILD_PATH}\libtomahawk_sipjabber.dll"
-        File "${BUILD_PATH}\libtomahawk_siptwitter.dll"
-        File "${BUILD_PATH}\libtomahawk_sipzeroconf.dll"
+
+        File "${BUILD_PATH}\libtomahawklib.dll"
+        File "${BUILD_PATH}\libqxtweb-standalone.dll"
+        File "${BUILD_PATH}\libtomahawk_portfwd.dll"
+        File "${BUILD_PATH}\libtomahawk_lastfm2.dll"
+        File "${BUILD_PATH}\libtomahawk_sip*.dll"
    !endif
 
    ;License & release notes.
    File "${ROOT_PATH}\LICENSE.txt"
    File /oname=NOTES.txt RELEASE_NOTES.txt
-    
-   ;QT stuff:  
+
+   ;QT stuff:
    File "${QT_DLL_PATH}\QtCore4.dll"
    File "${QT_DLL_PATH}\QtGui4.dll"
    File "${QT_DLL_PATH}\QtNetwork4.dll"
@@ -315,31 +314,59 @@ Section "Tomahawk Player" SEC_TOMAHAWK_PLAYER
    File "${IMAGEFORMATS_DLL_PATH}\qgif4.dll"
    File "${IMAGEFORMATS_DLL_PATH}\qjpeg4.dll"
    SetOutPath "$INSTDIR"
-    
+
    ;Cygwin/c++ stuff
    ;File "${MING_DLL_PATH}\cygmad-0.dll"
    ;File "${MING_DLL_PATH}\libgcc_s_dw2-1.dll"
    ;File "${MING_DLL_PATH}\mingwm10.dll"
    File "${MING_DLL_PATH}\libgcc_s_sjlj-1.dll"
    File "${MING_DLL_PATH}\libstdc++-6.dll"
-   
-   ;Audio stuff
-   File "${MING_DLL_PATH}\libphonon.dll"
+
+   ;Phonon stuff
+
    ;Fix the phonon build to not use Dbus
    File "${QT_DLL_PATH}\QtDbus4.dll"
    File "${MING_DLL_PATH}\libdbus-1-3.dll"
    File "${MING_DLL_PATH}\dbus-daemon.exe"
 
-   ;Other
+   File "${MING_DLL_PATH}\libphonon.dll"
+   SetOutPath "$INSTDIR\phonon_backend"
+   File "${MING_BIN}\phonon_backend\phonon_vlc.dll"
+   SetOutPath "$INSTDIR"
+
+   ;VLC
+   ;SetOutPath "$INSTDIR\phonon_backend"
+   File "${VLC_PATH}\libvlc.dll"
+   File "${VLC_PATH}\libvlccore.dll"
+   SetOutPath "$INSTDIR\plugins"
+   File /r "${VLC_PLUGIN_PATH}\*.dll"
+   SetOutPath "$INSTDIR"
+   File "${MING_BIN}\libmad-0.dll" ; MP3
+   File "${MING_BIN}\libFLAC-8.dll" ; FLAC
+   File "${MING_BIN}\libogg-0.dll" ; OGG, FLAC
+   File "${MING_BIN}\libvorbis-0.dll" ; OGG
+   File "${MING_BIN}\libvorbisenc-2.dll" ; OGG
+
+
+
+   ; Other
    File "${MING_DLL_PATH}\libqjson.dll"
    File "${MING_DLL_PATH}\libtag.dll"
-   File "${MING_DLL_PATH}\libgloox-8.dll"
    File "${MING_DLL_PATH}\libpng15-15.dll"
    File "${MING_DLL_PATH}\libjpeg-8.dll"
    File "${MING_DLL_PATH}\zlib1.dll"
 
    File "${MING_DLL_PATH}\libechonest.dll"
-   File "${MING_DLL_PATH}\liblastfm.dll"
+   File "${MING_BIN}\libQTweetLib.dll"
+
+   ; Jabber
+   File "${MING_BIN}\libjreen.dll"
+   File "${MING_BIN}\libqca.dll"
+   SetOutPath "$INSTDIR\crypto"
+   File "${MING_LIB}\qt4\plugins\crypto\libqca-ossl.dll"
+   SetOutPath "$INSTDIR"
+   File "${MING_BIN}\libssl-8.dll"
+   File "${MING_BIN}\libcrypto-8.dll"
 
    File "${MING_LIB}\libclucene-core.dll"
    File "${MING_LIB}\libclucene-shared.dll"
@@ -521,7 +548,7 @@ Section Uninstall
 
    ;Remove all the Program Files.
    RMDir /r $INSTDIR
-  
+
    ;Uninstall User Data if option is checked, otherwise skip.
    ${If} $UnPageUserAppDataCheckbox_State == ${BST_CHECKED}
       RMDir /r "$LOCALAPPDATA\Tomahawk"
@@ -537,7 +564,7 @@ SectionEnd
 #                                                                            #
 ##############################################################################
 
-Function .onInit   
+Function .onInit
    !insertmacro INSTALLOPTIONS_EXTRACT "tomahawk.ini"
 
    ;Remove Quick Launch option from Windows 7, as no longer applicable - usually.
@@ -550,19 +577,19 @@ Function .onInit
    ${MementoSectionRestore}
 
    UAC_Elevate:
-      UAC::RunElevated 
+      UAC::RunElevated
       StrCmp 1223 $0 UAC_ElevationAborted ; UAC dialog aborted by user?
       StrCmp 0 $0 0 UAC_Err ; Error?
       StrCmp 1 $1 0 UAC_Success ;Are we the real deal or just the wrapper?
       Quit
-       
+
    UAC_Err:
       MessageBox MB_ICONSTOP "Unable to elevate, error $0"
       Abort
-       
+
    UAC_ElevationAborted:
       Abort
-       
+
    UAC_Success:
       StrCmp 1 $3 +4 ;Admin?
       StrCmp 3 $1 0 UAC_ElevationAborted ;Try again?
@@ -582,7 +609,7 @@ Function .onInit
    StrCmp $R0 "" SkipSetInstDir
    StrCpy $INSTDIR $R0
    SkipSetInstDir:
-   
+
    ;Shutdown Tomahawk in case Add/Remove re-installer option used.
    Call EnsureTomahawkShutdown
 FunctionEnd
@@ -604,7 +631,7 @@ FunctionEnd
 
 Function un.onInit
    UAC_Elevate:
-      UAC::RunElevated 
+      UAC::RunElevated
       StrCmp 1223 $0 UAC_ElevationAborted ; UAC dialog aborted by user?
       StrCmp 0 $0 0 UAC_Err ; Error?
       StrCmp 1 $1 0 UAC_Success ;Are we the real deal or just the wrapper?
@@ -613,15 +640,15 @@ Function un.onInit
    UAC_Err:
       MessageBox MB_ICONSTOP "Unable to elevate, error $0"
       Abort
-       
+
    UAC_ElevationAborted:
       Abort
-       
+
    UAC_Success:
       StrCmp 1 $3 +4 ;Admin?
       StrCmp 3 $1 0 UAC_ElevationAborted ;Try again?
       MessageBox MB_ICONSTOP "This uninstaller requires admin access, try again"
-      goto UAC_Elevate 
+      goto UAC_Elevate
 
    ;Prevent multiple instances.
    System::Call 'kernel32::CreateMutexA(i 0, i 0, t "tomahawkUninstaller") i .r1 ?e'

@@ -24,15 +24,17 @@
 #include "sourcelist.h"
 #include "sourcetree/items/playlistitems.h"
 #include "sourcetree/items/collectionitem.h"
-#include "tomahawk/tomahawkapp.h"
 
 #include <QAction>
+#include <QApplication>
 #include <QContextMenuEvent>
 #include <QDragEnterEvent>
 #include <QHeaderView>
 #include <QPainter>
 #include <QStyledItemDelegate>
 #include <QSize>
+#include <globalactionmanager.h>
+#include <QFileDialog>
 
 using namespace Tomahawk;
 
@@ -79,7 +81,7 @@ SourceTreeView::SourceTreeView( QWidget* parent )
     setUniformRowHeights( false );
     setIndentation( 16 );
     setSortingEnabled( true );
-    sortByColumn( 1, Qt::AscendingOrder );
+    sortByColumn( 0, Qt::AscendingOrder );
 
     // TODO animation conflicts with the expanding-playlists-when-collection-is-null
     // so investigate
@@ -119,11 +121,7 @@ void
 SourceTreeView::setupMenus()
 {
     m_playlistMenu.clear();
-
-    m_loadPlaylistAction = m_playlistMenu.addAction( tr( "&Load Playlist" ) );
-    m_renamePlaylistAction = m_playlistMenu.addAction( tr( "&Rename Playlist" ) );
-    m_playlistMenu.addSeparator();
-    m_deletePlaylistAction = m_playlistMenu.addAction( tr( "&Delete Playlist" ) );
+    m_roPlaylistMenu.clear();
 
     bool readonly = true;
     SourcesModel::RowType type = ( SourcesModel::RowType )model()->data( m_contextMenuIndex, SourcesModel::SourceTreeItemTypeRole ).toInt();
@@ -138,12 +136,25 @@ SourceTreeView::setupMenus()
         }
     }
 
+    m_loadPlaylistAction = m_playlistMenu.addAction( tr( "&Load Playlist" ) );
+    m_renamePlaylistAction = m_playlistMenu.addAction( tr( "&Rename Playlist" ) );
+    m_playlistMenu.addSeparator();
+
+    m_copyPlaylistAction = m_playlistMenu.addAction( tr( "&Copy Link" ) );
+    m_deletePlaylistAction = m_playlistMenu.addAction( tr( "&Delete %1" ).arg( SourcesModel::rowTypeToString( type ) ) );
+
+    m_roPlaylistMenu.addAction( m_copyPlaylistAction );
+
     m_deletePlaylistAction->setEnabled( !readonly );
     m_renamePlaylistAction->setEnabled( !readonly );
+
+    if ( type == SourcesModel::StaticPlaylist )
+        m_copyPlaylistAction->setText( tr( "&Export Playlist" ) );
 
     connect( m_loadPlaylistAction,   SIGNAL( triggered() ), SLOT( loadPlaylist() ) );
     connect( m_renamePlaylistAction, SIGNAL( triggered() ), SLOT( renamePlaylist() ) );
     connect( m_deletePlaylistAction, SIGNAL( triggered() ), SLOT( deletePlaylist() ) );
+    connect( m_copyPlaylistAction,   SIGNAL( triggered() ), SLOT( copyPlaylistLink() ) );
 }
 
 
@@ -223,6 +234,29 @@ SourceTreeView::deletePlaylist()
     }
 }
 
+void
+SourceTreeView::copyPlaylistLink()
+{
+    QModelIndex idx = m_contextMenuIndex;
+    if ( !idx.isValid() )
+        return;
+
+    SourcesModel::RowType type = ( SourcesModel::RowType )model()->data( m_contextMenuIndex, SourcesModel::SourceTreeItemTypeRole ).toInt();
+    if( type == SourcesModel::AutomaticPlaylist || type == SourcesModel::Station )
+    {
+        DynamicPlaylistItem* item = itemFromIndex< DynamicPlaylistItem >( m_contextMenuIndex );
+        dynplaylist_ptr playlist = item->dynPlaylist();
+        GlobalActionManager::instance()->copyPlaylistToClipboard( playlist );
+    } else if ( type == SourcesModel::StaticPlaylist )
+    {
+        PlaylistItem* item = itemFromIndex< PlaylistItem >( m_contextMenuIndex );
+        playlist_ptr playlist = item->playlist();
+
+        QString filename = QFileDialog::getSaveFileName( this, tr( "Save XSPF" ), QDir::homePath(), tr( "Playlists (*.xspf)" ) );
+        GlobalActionManager::instance()->savePlaylistToFile( playlist, filename );
+    }
+}
+
 
 void
 SourceTreeView::renamePlaylist()
@@ -252,6 +286,8 @@ SourceTreeView::onCustomContextMenu( const QPoint& pos )
         PlaylistItem* item = itemFromIndex< PlaylistItem >( m_contextMenuIndex );
         if( item->playlist()->author()->isLocal() )
             m_playlistMenu.exec( mapToGlobal( pos ) );
+        else
+            m_roPlaylistMenu.exec( mapToGlobal( pos ) );
     }
 }
 
@@ -417,7 +453,6 @@ SourceDelegate::paint( QPainter* painter, const QStyleOptionViewItem& option, co
         CollectionItem* colItem = qobject_cast< CollectionItem* >( item );
         Q_ASSERT( colItem );
         bool status = !( !colItem || colItem->source().isNull() || !colItem->source()->isOnline() );
-        QPixmap avatar( RESPATH "images/user-avatar.png" );
 
         QString tracks;
         QString name = index.data().toString();
@@ -427,13 +462,12 @@ SourceDelegate::paint( QPainter* painter, const QStyleOptionViewItem& option, co
         {
             tracks = QString::number( colItem->source()->trackCount() );
             figWidth = painter->fontMetrics().width( tracks );
-            if ( !colItem->source()->avatar().isNull() )
-                avatar = colItem->source()->avatar();
             name = colItem->source()->friendlyName();
         }
 
         QRect iconRect = option.rect.adjusted( 4, 6, -option.rect.width() + option.rect.height() - 12 + 4, -6 );
 
+        QPixmap avatar = colItem->icon().pixmap( iconRect.size() );
         painter->drawPixmap( iconRect, avatar.scaledToHeight( iconRect.height(), Qt::SmoothTransformation ) );
 
         if ( ( option.state & QStyle::State_Selected ) == QStyle::State_Selected )

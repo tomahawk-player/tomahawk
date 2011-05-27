@@ -133,7 +133,8 @@ XSPFLoader::gotBody()
 
         QString artist, album, track, duration, annotation, url;
         QDomElement n = e.firstChildElement();
-        for ( ; !n.isNull(); n = n.nextSiblingElement() ) {
+        for ( ; !n.isNull(); n = n.nextSiblingElement() )
+        {
             if (n.namespaceURI() == m_NS && n.localName() == "duration") {
                 duration = n.text();
             } else if (n.namespaceURI() == m_NS && n.localName() == "annotation") {
@@ -149,25 +150,22 @@ XSPFLoader::gotBody()
             }
         }
 
-        if( artist.isEmpty() || track.isEmpty() ) {
-            if( !shownError ) {
+        if( artist.isEmpty() || track.isEmpty() )
+        {
+            if( !shownError )
+            {
                 QMessageBox::warning( 0, tr( "Failed to save tracks" ), tr( "Some tracks in the playlist do not contain an artist and a title. They will be ignored." ), QMessageBox::Ok );
                 shownError = true;
             }
             continue;
         }
 
-        plentry_ptr p( new PlaylistEntry );
-        p->setGuid( uuid() );
-        p->setDuration( duration.toInt() / 1000 );
-        p->setLastmodified( 0 );
-        p->setAnnotation( annotation );
-
-        p->setQuery( Tomahawk::Query::get( artist, track, album, uuid() ) );
-        p->query()->setDuration( duration.toInt() / 1000 );
+        query_ptr q = Tomahawk::Query::get( artist, track, album, uuid() );
+        q->setDuration( duration.toInt() / 1000 );
         if( !url.isEmpty() )
-            p->query()->setResultHint( url );
-        m_entries << p;
+            q->setResultHint( url );
+
+        m_entries << q;
     }
 
     if ( origTitle.isEmpty() && m_entries.isEmpty() )
@@ -192,9 +190,9 @@ XSPFLoader::gotBody()
                                        m_title,
                                        m_info,
                                        m_creator,
-                                       false );
+                                       false,
+                                       m_entries );
 
-        m_playlist->createNewRevision( uuid(), m_playlist->currentrevision(), m_entries );
         deleteLater();
     }
 

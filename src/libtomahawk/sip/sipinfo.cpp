@@ -52,7 +52,9 @@ SipInfo::SipInfo()
     d = new SipInfoPrivate;
 }
 
-SipInfo::SipInfo(const SipInfo& other): d ( other.d )
+SipInfo::SipInfo(const SipInfo& other)
+    : QObject()
+    , d( other.d )
 {
 
 }
@@ -82,7 +84,7 @@ SipInfo::clear()
 bool
 SipInfo::isValid() const
 {
-    qDebug() << Q_FUNC_INFO << d->visible << d->host.hostName() << d->port << d->uniqname << d->key;
+//    qDebug() << Q_FUNC_INFO << d->visible << d->host.hostName() << d->port << d->uniqname << d->key;
     if( !d->visible.isNull() )
     {
         if(
