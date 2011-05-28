@@ -212,23 +212,23 @@ SourceTreeView::loadPlaylist()
 
 
 void
-SourceTreeView::deletePlaylist()
+SourceTreeView::deletePlaylist( const QModelIndex& idxIn )
 {
     qDebug() << Q_FUNC_INFO;
 
-    QModelIndex idx = m_contextMenuIndex;
+    QModelIndex idx = idxIn.isValid() ? idxIn : m_contextMenuIndex;
     if ( !idx.isValid() )
         return;
 
-    SourcesModel::RowType type = ( SourcesModel::RowType )model()->data( m_contextMenuIndex, SourcesModel::SourceTreeItemTypeRole ).toInt();
+    SourcesModel::RowType type = ( SourcesModel::RowType )model()->data( idx, SourcesModel::SourceTreeItemTypeRole ).toInt();
     if ( type == SourcesModel::StaticPlaylist )
     {
-        PlaylistItem* item = itemFromIndex< PlaylistItem >( m_contextMenuIndex );
+        PlaylistItem* item = itemFromIndex< PlaylistItem >( idx );
         playlist_ptr playlist = item->playlist();
         Playlist::remove( playlist );
     } else if( type == SourcesModel::AutomaticPlaylist || type == SourcesModel::Station )
     {
-        DynamicPlaylistItem* item = itemFromIndex< DynamicPlaylistItem >( m_contextMenuIndex );
+        DynamicPlaylistItem* item = itemFromIndex< DynamicPlaylistItem >( idx );
         dynplaylist_ptr playlist = item->dynPlaylist();
         DynamicPlaylist::remove( playlist );
     }
@@ -358,6 +358,25 @@ SourceTreeView::dropEvent( QDropEvent* event )
     m_dragging = false;
 }
 
+void
+SourceTreeView::keyPressEvent( QKeyEvent *event )
+{
+    if( !selectionModel()->selectedIndexes().isEmpty() )
+    {
+        QModelIndex idx = selectionModel()->selectedIndexes().first();
+        if ( model()->data( idx, SourcesModel::SourceTreeItemTypeRole ) == SourcesModel::StaticPlaylist ||
+             model()->data( idx, SourcesModel::SourceTreeItemTypeRole ) == SourcesModel::AutomaticPlaylist ||
+             model()->data( idx, SourcesModel::SourceTreeItemTypeRole ) == SourcesModel::Station )
+        {
+            PlaylistItem* item = itemFromIndex< PlaylistItem >( idx );
+            Q_ASSERT( item );
+
+            if( item->playlist()->author()->isLocal() ) {
+                deletePlaylist( idx );
+            }
+        }
+    }
+}
 
 void
 SourceTreeView::paintEvent( QPaintEvent* event )

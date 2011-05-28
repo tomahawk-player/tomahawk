@@ -52,7 +52,7 @@ private slots:
     void selectRequest( const QModelIndex& idx );
 
     void loadPlaylist();
-    void deletePlaylist();
+    void deletePlaylist( const QModelIndex& = QModelIndex() );
     void copyPlaylistLink();
 
     void onCustomContextMenu( const QPoint& pos );
@@ -66,6 +66,7 @@ protected:
     virtual void dragLeaveEvent( QDragLeaveEvent* event ) { Q_UNUSED( event ); m_dragging = false; setDirtyRegion( m_dropRect ); }
     virtual void dragMoveEvent( QDragMoveEvent* event );
     virtual void dropEvent( QDropEvent* event );
+    virtual void keyPressEvent( QKeyEvent* event );
 
 private:
     void setupMenus();
