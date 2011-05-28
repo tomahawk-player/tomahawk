@@ -1,6 +1,16 @@
 Version 0.1.0:
+    * Fixed stations so they resolve against all available sources instead of
+      only local and friend's collections.
+    * Add a Song seed for stations and automatic playlists, and allow dragging of
+      any tracks to the New Stations entry to create a pre-seeded station.
+    * Added auto-completion for artists while filling in a station or automatic
+      playlist.
     * SOCKS5 proxy support. Noproxy hosts are also supported but no wildcard
       support (yet).
+    * Support loading of - and exporting to - .xspf playlists
+    * Added Tomahawk:// protocol support and share links for many things including
+      tracks, playlists, and stations.
+    * Autoload automatically detected resolvers on startup.
     * Fix issue where track resolving spinner never stopped if tracks were
       removed from playlist while resolving.
     * Twitter & Jabber profile pictures are shown.
@@ -9,18 +19,26 @@ Version 0.1.0:
     * Add new Google account type that is a thin wrapper around a Jabber plugin.
     * Overhaul the settings dialog interface.
     * Resolvers can now be enabled and disabled, and some can be configured
-      directly in Tomahawk.
+      directly in Tomahawk, for example the new Spotify resolver.
     * Split playlists and stations in sources sidebar. Show Recently Played
       as a node under the Super Collection.
     * Fix massive speed bottleneck on startup in the case of many recently
       played playlists.
+    * Removed filter and song view from Super Collection, coming back in the next
+      release.
     * Browse and play collections in our snappy tree-mode, which also shows
       images for artists and albums.
     * Fixed crash that could occur when playing a track from a browser.
-    * Fixed a crash caused by sources going on- or offline.
+    * Fixed a crash caused by sources going on or offline.
+    * Huge optimizations in the resolving pipeline.
+    * Improved the handling of automatic status messages for Google Talk
+    * Switch to Phonon sound system, allowing us to support a wide variety
+      of audio formats.
+    * UI tweaks and cleanup.
     * (OS X) Open configuration dialogs as sliding sheets.
     * (OS X) Increase our available file watches to the maximum that the system
       reports.
+    * (OS X) Added 'Window' menu with zoom/minimize actions
 
 Version 0.0.3:
     * Show spinner while resolving playlists.
