@@ -24,6 +24,7 @@
 
 #include "playlist/playlistproxymodel.h"
 #include "widgets/overlaywidget.h"
+#include "viewmanager.h"
 
 using namespace Tomahawk;
 
@@ -186,6 +187,7 @@ PlaylistView::onDeleted()
 void
 PlaylistView::onChanged()
 {
-    if ( m_model && !m_model->playlist().isNull() )
+    if ( m_model && !m_model->playlist().isNull() &&
+         ViewManager::instance()->currentPage() == this )
         emit nameChanged( m_model->playlist()->title() );
 }
