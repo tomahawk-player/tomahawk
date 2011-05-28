@@ -90,16 +90,6 @@ public:
 
     QModelIndex indexFromItem( SourceTreeItem* item ) const;
 
-signals:
-    void selectRequest( const QModelIndex& idx );
-
-private slots:
-    void onSourcesAdded( const QList<Tomahawk::source_ptr>& sources );
-    void onSourceAdded( const Tomahawk::source_ptr& source );
-    void onSourceRemoved( const Tomahawk::source_ptr& source );
-
-    void viewPageActivated( Tomahawk::ViewPage* );
-
 public slots:
     void loadSources();
 
@@ -108,6 +98,17 @@ public slots:
     void onItemRowsAddedDone();
     void onItemRowsRemovedBegin( int first, int last );
     void onItemRowsRemovedDone();
+
+    void viewPageActivated( Tomahawk::ViewPage* );
+
+signals:
+    void selectRequest( const QModelIndex& idx );
+
+private slots:
+    void onSourcesAdded( const QList<Tomahawk::source_ptr>& sources );
+    void onSourceAdded( const Tomahawk::source_ptr& source );
+    void onSourceRemoved( const Tomahawk::source_ptr& source );
+
 private:
     SourceTreeItem* itemFromIndex( const QModelIndex& idx ) const;
     int rowForItem( SourceTreeItem* item ) const;

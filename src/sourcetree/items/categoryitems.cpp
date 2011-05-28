@@ -78,6 +78,8 @@ CategoryAddItem::activate()
                // create Auto Playlist
                QString playlistName = playlistSelectorDlg.playlistName();
                APP->mainWindow()->createAutomaticPlaylist( playlistName );
+            } else if ( !successfulReturn ) {
+                model()->viewPageActivated( ViewManager::instance()->currentPage() );
             }
 
             break;
@@ -233,6 +235,6 @@ CategoryItem::activate()
 {
     if( m_category == SourcesModel::StationsCategory ) {
         // TODO activate stations page
-    } 
-    
+    }
+
 }

@@ -30,11 +30,13 @@
 
 #include <QMimeData>
 #include <QSize>
+#include <widgets/newplaylistwidget.h>
 
 using namespace Tomahawk;
 
 SourcesModel::SourcesModel( QObject* parent )
     : QAbstractItemModel( parent )
+    , m_rootItem( 0 )
     , m_viewPageDelayedCacheItem( 0 )
 {
     m_rootItem = new SourceTreeItem( this, 0, Invalid );
@@ -388,7 +390,6 @@ SourcesModel::linkSourceItemToPage( SourceTreeItem* item, ViewPage* p )
 
     m_viewPageDelayedCacheItem = 0;
 }
-
 
 SourceTreeItem*
 SourcesModel::itemFromIndex( const QModelIndex& idx ) const
