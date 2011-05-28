@@ -30,7 +30,6 @@
 
 #include <QMimeData>
 #include <QSize>
-#include <widgets/newplaylistwidget.h>
 
 using namespace Tomahawk;
 
