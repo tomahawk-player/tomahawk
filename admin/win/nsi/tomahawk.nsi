@@ -15,9 +15,10 @@
 ;-----------------------------------------------------------------------------
 ; Some paths.
 ;-----------------------------------------------------------------------------
-!define MING_PATH "/usr/i686-w64-mingw32/sys-root/mingw"
+!ifndef MING_PATH
+    !define MING_PATH "/usr/i686-w64-mingw32/sys-root/mingw"
+!endif
 !define MING_BIN "${MING_PATH}/bin"
-!define MING_DLL_PATH "${MING_BIN}"
 !define MING_LIB "${MING_PATH}/lib"
 !define ROOT_PATH "..\..\.." ; assuming the script is in ROOT/admin/win/nsi
 !define BUILD_PATH "${ROOT_PATH}\build"
@@ -316,20 +317,20 @@ Section "Tomahawk Player" SEC_TOMAHAWK_PLAYER
    SetOutPath "$INSTDIR"
 
    ;Cygwin/c++ stuff
-   ;File "${MING_DLL_PATH}\cygmad-0.dll"
-   ;File "${MING_DLL_PATH}\libgcc_s_dw2-1.dll"
-   ;File "${MING_DLL_PATH}\mingwm10.dll"
-   File "${MING_DLL_PATH}\libgcc_s_sjlj-1.dll"
-   File "${MING_DLL_PATH}\libstdc++-6.dll"
+   ;File "${MING_BIN}\cygmad-0.dll"
+   ;File "${MING_BIN}\libgcc_s_dw2-1.dll"
+   ;File "${MING_BIN}\mingwm10.dll"
+   File "${MING_BIN}\libgcc_s_sjlj-1.dll"
+   File "${MING_BIN}\libstdc++-6.dll"
 
    ;Phonon stuff
 
    ;Fix the phonon build to not use Dbus
    File "${QT_DLL_PATH}\QtDbus4.dll"
-   File "${MING_DLL_PATH}\libdbus-1-3.dll"
-   File "${MING_DLL_PATH}\dbus-daemon.exe"
+   File "${MING_BIN}\libdbus-1-3.dll"
+   File "${MING_BIN}\dbus-daemon.exe"
 
-   File "${MING_DLL_PATH}\libphonon.dll"
+   File "${MING_BIN}\libphonon.dll"
    SetOutPath "$INSTDIR\phonon_backend"
    File "${MING_BIN}\phonon_backend\phonon_vlc.dll"
    SetOutPath "$INSTDIR"
@@ -350,13 +351,13 @@ Section "Tomahawk Player" SEC_TOMAHAWK_PLAYER
 
 
    ; Other
-   File "${MING_DLL_PATH}\libqjson.dll"
-   File "${MING_DLL_PATH}\libtag.dll"
-   File "${MING_DLL_PATH}\libpng15-15.dll"
-   File "${MING_DLL_PATH}\libjpeg-8.dll"
-   File "${MING_DLL_PATH}\zlib1.dll"
+   File "${MING_BIN}\libqjson.dll"
+   File "${MING_BIN}\libtag.dll"
+   File "${MING_BIN}\libpng15-15.dll"
+   File "${MING_BIN}\libjpeg-8.dll"
+   File "${MING_BIN}\zlib1.dll"
 
-   File "${MING_DLL_PATH}\libechonest.dll"
+   File "${MING_BIN}\libechonest.dll"
    File "${MING_BIN}\libQTweetLib.dll"
 
    ; Jabber
