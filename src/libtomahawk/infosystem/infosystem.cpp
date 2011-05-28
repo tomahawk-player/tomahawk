@@ -120,6 +120,8 @@ InfoSystem::~InfoSystem()
             qDebug() << Q_FUNC_INFO << " cache not deleted";
             TomahawkUtils::Sleep::msleep( 50 );
         }
+
+        qDebug() << Q_FUNC_INFO << " cache deleted, telling cache thread controller to quit";
         
         if ( m_infoSystemCacheThreadController )
             m_infoSystemCacheThreadController->quit();
