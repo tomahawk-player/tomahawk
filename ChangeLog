@@ -1,5 +1,5 @@
 Version 0.1.0:
-    * Fixed stations so they resolve against all available sources instead of
+    * Fixed stations so they resolve against all available sources instead of
       only local and friend's collections.
     * Add a Song seed for stations and automatic playlists, and allow dragging of
       any tracks to the New Stations entry to create a pre-seeded station.
@@ -31,14 +31,14 @@ Version 0.1.0:
     * Fixed crash that could occur when playing a track from a browser.
     * Fixed a crash caused by sources going on or offline.
     * Huge optimizations in the resolving pipeline.
-    * Improved the handling of automatic status messages for Google Talk
-    * Switch to Phonon sound system, allowing us to support a wide variety
+    * Improved the handling of automatic status messages for Google Talk
+    * Switch to Phonon sound system, allowing us to support a wide variety
       of audio formats.
-    * UI tweaks and cleanup.
+    * UI tweaks and cleanup.
     * (OS X) Open configuration dialogs as sliding sheets.
     * (OS X) Increase our available file watches to the maximum that the system
       reports.
-    * (OS X) Added 'Window' menu with zoom/minimize actions
+    * (OS X) Added 'Window' menu with zoom/minimize actions
 
 Version 0.0.3:
     * Show spinner while resolving playlists.
