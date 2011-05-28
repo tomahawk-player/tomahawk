@@ -42,7 +42,6 @@
 #include "utils/tomahawkutils.h"
 #include "kdsingleapplicationguard/kdsingleapplicationguard.h"
 
-class DatabaseResolver;
 class AudioEngine;
 class Database;
 class ScanManager;
@@ -117,7 +116,6 @@ private:
     QHash<QString, Tomahawk::ExternalResolver*> m_scriptResolvers;
 
     Database* m_database;
-    DatabaseResolver* m_databaseResolver;
     ScanManager *m_scanManager;
     AudioEngine* m_audioEngine;
     Servent* m_servent;
