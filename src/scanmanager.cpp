@@ -93,6 +93,7 @@ ScanManager::~ScanManager()
             m_musicScannerThreadController = 0;
         }
     }
+    qDebug() << Q_FUNC_INFO << " scanner thread controller finished, exiting ScanManager";
 }
 
 
