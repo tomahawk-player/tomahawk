@@ -194,13 +194,17 @@ bool
 SourcesModel::dropMimeData( const QMimeData* data, Qt::DropAction action, int row, int column, const QModelIndex& parent )
 {
     SourceTreeItem* item;
+    qDebug() << "Got mime data dropped:" << row << column << parent << itemFromIndex( parent )->text();
     if( row == -1 && column == -1 )
         item = itemFromIndex( parent );
-    else
+    else if( column == 0 )
         item = itemFromIndex( index( row, column, parent ) );
+    else if( column == -1 ) // column is -1, that means the drop is happening "below" the indices. that means we actually want the one before it
+        item = itemFromIndex( index( row - 1, 0, parent ) );
 
     Q_ASSERT( item );
 
+    qDebug() << "Dropping on:" << item->text();
     return item->dropMimeData( data, action );
 }
 

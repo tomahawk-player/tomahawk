@@ -28,16 +28,10 @@
 using namespace Tomahawk;
 
 
-// After changing a collection, we need to tell other bits of the system:
 void
 DatabaseCommand_LogPlayback::postCommitHook()
 {
     qDebug() << Q_FUNC_INFO;
-    if ( source().isNull() || source()->collection().isNull() )
-    {
-        qDebug() << "Source has gone offline, not emitting to GUI.";
-        return;
-    }
 
     connect( this, SIGNAL( trackPlaying( Tomahawk::query_ptr ) ),
              source().data(), SLOT( onPlaybackStarted( Tomahawk::query_ptr ) ), Qt::QueuedConnection );
@@ -56,12 +50,8 @@ DatabaseCommand_LogPlayback::postCommitHook()
         emit trackPlaying( q );
     }
 
-    if( source()->isLocal() )
+    if ( source()->isLocal() )
     {
-        // Only tell remote sources about tracks that we listen to long enough
-        if ( m_secsPlayed < 20 )
-            return;
-
         Servent::instance()->triggerDBSync();
     }
 }
@@ -103,3 +93,14 @@ DatabaseCommand_LogPlayback::exec( DatabaseImpl* dbi )
 
     query.exec();
 }
+
+
+bool
+DatabaseCommand_LogPlayback::localOnly() const
+{
+    if ( m_action == Finished )
+        return m_secsPlayed < 20;
+
+    return false;
+}
+

@@ -88,15 +88,13 @@ DatabaseCommand_Resolve::exec( DatabaseImpl* lib )
                             "file.source, "
                             "file_join.albumpos, "
                             "artist.id as artid, "
-                            "album.id as albid, "
-                            "track_attributes.v as year "
-                            "FROM file, file_join, artist, track, track_attributes "
+                            "album.id as albid "
+                            "FROM file, file_join, artist, track "
                             "LEFT JOIN album ON album.id = file_join.album "
                             "WHERE "
                             "artist.id = file_join.artist AND "
                             "track.id = file_join.track AND "
                             "file.id = file_join.file AND "
-                            "file.id = track_attributes.id AND "
                             "file_join.artist IN (%1) AND "
                             "file_join.track IN (%2)" )
          .arg( artsl.join( "," ) )
@@ -143,6 +141,19 @@ DatabaseCommand_Resolve::exec( DatabaseImpl* lib )
         result->setAlbumPos( files_query.value( 14 ).toUInt() );
         result->setId( files_query.value( 9 ).toUInt() );
         result->setYear( files_query.value( 17 ).toUInt() );
+
+        TomahawkSqlQuery attrQuery = lib->newquery();
+        QVariantMap attr;
+
+        attrQuery.prepare( "SELECT k, v FROM track_attributes WHERE id = ?" );
+        attrQuery.bindValue( 0, result->dbid() );
+        attrQuery.exec();
+        while ( attrQuery.next() )
+        {
+            attr[ attrQuery.value( 0 ).toString() ] = attrQuery.value( 1 ).toString();
+        }
+
+        result->setAttributes( attr );
 
         float score = how_similar( m_query, result );
         result->setScore( score );

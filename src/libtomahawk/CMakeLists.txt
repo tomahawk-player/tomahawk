@@ -363,9 +363,6 @@ include_directories( . ${CMAKE_CURRENT_BINARY_DIR} ${CMAKE_CURRENT_BINARY_DIR}/.
 
     ${LIBPORTFWD_INCLUDE_DIR}
     ${THIRDPARTY_DIR}/qxt/qxtweb-standalone/qxtweb
-    ${THIRDPARTY_DIR}/jdns
-    ${THIRDPARTY_DIR}/jdns/jdns
-    ${THIRDPARTY_DIR}/jdns/jdnsshared
     ${CMAKE_BINARY_DIR}/thirdparty/liblastfm2/src
 )
 
@@ -373,8 +370,6 @@ include_directories( . ${CMAKE_CURRENT_BINARY_DIR} ${CMAKE_CURRENT_BINARY_DIR}/.
 IF( WIN32 )
     SET( OS_SPECIFIC_LINK_LIBRARIES
         ${OS_SPECIFIC_LINK_LIBRARIES}
-    # Thirdparty
-	${QJSON_LDFLAGS}
     # System
         "iphlpapi.a"
         "ws2_32.dll"
@@ -392,21 +387,11 @@ IF( APPLE )
 
     SET( OS_SPECIFIC_LINK_LIBRARIES
         ${OS_SPECIFIC_LINK_LIBRARIES}
-        # Thirdparty
-	${QJSON_LIBRARIES}
         # System
         ${COREAUDIO_LIBRARY}
         ${COREFOUNDATION_LIBRARY}
     )
 ENDIF( APPLE )
-
-IF( UNIX AND NOT APPLE )
-    SET( OS_SPECIFIC_LINK_LIBRARIES
-        ${OS_SPECIFIC_LINK_LIBRARIES}
-        # Thirdparty
-	${QJSON_LDFLAGS}
-    )
-ENDIF( UNIX AND NOT APPLE )
 
 IF(LIBLASTFM_FOUND)
     SET(LINK_LIBRARIES ${LINK_LIBRARIES} tomahawk_lastfm2 )
@@ -420,9 +405,6 @@ SET( libSources ${libSources} ${libUI_H} ${libHeaders_NoMOC} )
 add_library( tomahawklib SHARED ${libSources} ${libMoc} )
 
 target_link_libraries( tomahawklib
-    # Internal
-    tomahawk_jdns
-
     # Thirdparty shipped with tomahawk
     ${LIBPORTFWD_LIBRARIES}
 
@@ -438,4 +420,8 @@ target_link_libraries( tomahawklib
     ${LINK_LIBRARIES}
 )
 
-INSTALL( TARGETS tomahawklib DESTINATION lib${LIB_SUFFIX} )
+INSTALL( TARGETS tomahawklib
+    RUNTIME DESTINATION bin
+    LIBRARY DESTINATION lib${LIB_SUFFIX}
+    ARCHIVE DESTINATION lib${LIB_SUFFIX}
+)

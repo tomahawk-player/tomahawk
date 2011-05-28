@@ -25,10 +25,15 @@
 #include <QComboBox>
 #include <QLineEdit>
 #include <QLabel>
+#include "EchonestGenerator.h"
+#include <qcompleter.h>
+#include <qstringlistmodel.h>
 
+QHash< QString, QStringList > Tomahawk::EchonestControl::s_suggestCache = QHash< QString, QStringList >();
 
 Tomahawk::EchonestControl::EchonestControl( const QString& selectedType, const QStringList& typeSelectors, QObject* parent )
     : DynamicControl ( selectedType.isEmpty() ? "Artist" : selectedType, typeSelectors, parent )
+    , m_stylePollCount( 0 )
 {
     setType( "echonest" );
     m_editingTimer.setInterval( 500 ); //timeout to edits
@@ -145,6 +150,8 @@ Tomahawk::EchonestControl::updateWidgets()
 
         input->setPlaceholderText( "Artist name" );
         input->setSizePolicy( QSizePolicy::Ignored, QSizePolicy::Fixed );
+        input->setCompleter( new QCompleter( QStringList(), input ) );
+        input->completer()->setCaseSensitivity( Qt::CaseInsensitive );
 
         connect( match, SIGNAL( currentIndexChanged(int) ), this, SLOT( updateData() ) );
         connect( match, SIGNAL( currentIndexChanged(int) ), this, SIGNAL( changed() ) );
@@ -152,6 +159,7 @@ Tomahawk::EchonestControl::updateWidgets()
         connect( input, SIGNAL( editingFinished() ), this, SLOT( editingFinished() ) );
         connect( input, SIGNAL( textEdited( QString ) ), &m_editingTimer, SLOT( stop() ) );
         connect( input, SIGNAL( textEdited( QString ) ), &m_delayedEditTimer, SLOT( start() ) );
+        connect( input, SIGNAL( textEdited( QString ) ), this, SLOT( artistTextEdited( QString ) ) );
 
         match->hide();
         input->hide();
@@ -165,6 +173,25 @@ Tomahawk::EchonestControl::updateWidgets()
 
         m_matchString = QString();
         m_matchData = QString::number( (int)Echonest::DynamicPlaylist::ArtistDescriptionType );
+
+        connect( input, SIGNAL( textChanged(QString) ), this, SLOT( updateData() ) );
+        connect( input, SIGNAL( editingFinished() ), this, SLOT( editingFinished() ) );
+        connect( input, SIGNAL( textEdited( QString ) ), &m_editingTimer, SLOT( stop() ) );
+        connect( input, SIGNAL( textEdited( QString ) ), &m_delayedEditTimer, SLOT( start() ) );
+
+        match->hide();
+        input->hide();
+        m_match = QWeakPointer< QWidget >( match );
+        m_input = QWeakPointer< QWidget >( input );
+    } else if( selectedType() == "Song" ) {
+        m_currentType = Echonest::DynamicPlaylist::SongId;
+
+        QLabel* match = new QLabel( tr( "similar to" ) );
+        QLineEdit* input =  new QLineEdit();
+        input->setPlaceholderText( "Enter any combination of song name and artist here..." );
+
+        m_matchString = QString();
+        m_matchData = QString::number( (int)Echonest::DynamicPlaylist::SongRadioType );
 
         connect( input, SIGNAL( textChanged(QString) ), this, SLOT( updateData() ) );
         connect( input, SIGNAL( editingFinished() ), this, SLOT( editingFinished() ) );
@@ -319,6 +346,29 @@ Tomahawk::EchonestControl::updateWidgets()
         combo->hide();
         m_match = QWeakPointer< QWidget >( match );
         m_input = QWeakPointer< QWidget >( combo );
+    } else if( selectedType() == "Mood" || selectedType() == "Style" ) {
+        if( selectedType() == "Mood" )
+            m_currentType = Echonest::DynamicPlaylist::Mood;
+        else
+            m_currentType = Echonest::DynamicPlaylist::Style;
+
+        QLabel* match = new QLabel( tr( "is" ) );
+
+        QComboBox* combo = new QComboBox;
+
+        m_matchString = match->text();
+        m_matchData = match->text();
+
+
+        connect( combo, SIGNAL( activated( int ) ), this, SLOT( updateData() ) );
+        connect( combo, SIGNAL( activated( int ) ), this, SLOT( editingFinished() ) );
+
+        match->hide();
+        combo->hide();
+        m_match = QWeakPointer< QWidget >( match );
+        m_input = QWeakPointer< QWidget >( combo );
+
+        insertMoodsAndStyles();
     } else {
         m_match = QWeakPointer<QWidget>( new QWidget );
         m_input = QWeakPointer<QWidget>( new QWidget );
@@ -368,7 +418,7 @@ Tomahawk::EchonestControl::updateData()
             m_data.first = m_currentType;
             m_data.second = edit->text();
         }
-    } else if( selectedType() == "Artist Description" ) {
+    } else if( selectedType() == "Artist Description" || selectedType() == "Song" ) {
         QLineEdit* edit = qobject_cast<QLineEdit*>( m_input.data() );
         if( edit && !edit->text().isEmpty() ) {
             m_data.first = m_currentType;
@@ -384,7 +434,7 @@ Tomahawk::EchonestControl::updateData()
         updateFromComboAndSlider();
     } else if( selectedType() == "Danceability" || selectedType() == "Energy" || selectedType() == "Artist Familiarity" || selectedType() == "Artist Hotttnesss" || selectedType() == "Song Hotttnesss" ) {
         updateFromComboAndSlider( true );
-    } else if( selectedType() == "Mode" || selectedType() == "Key" ) {
+    } else if( selectedType() == "Mode" || selectedType() == "Key" || selectedType() == "Mood" || selectedType() == "Style" ) {
         updateFromLabelAndCombo();
     } else if( selectedType() == "Sorting" ) {
         QComboBox* match = qobject_cast<QComboBox*>( m_match.data() );
@@ -441,7 +491,7 @@ Tomahawk::EchonestControl::updateWidgetsFromData()
         QLineEdit* edit = qobject_cast<QLineEdit*>( m_input.data() );
         if( edit )
             edit->setText( m_data.second.toString() );
-    } else if( selectedType() == "Artist Description" ) {
+    } else if( selectedType() == "Artist Description" || selectedType() == "Song" ) {
         QLineEdit* edit = qobject_cast<QLineEdit*>( m_input.data() );
         if( edit )
             edit->setText( m_data.second.toString() );
@@ -453,7 +503,7 @@ Tomahawk::EchonestControl::updateWidgetsFromData()
         updateToComboAndSlider();
     } else if( selectedType() == "Danceability" || selectedType() == "Energy" || selectedType() == "Artist Familiarity" || selectedType() == "Artist Hotttnesss" || selectedType() == "Song Hotttnesss" ) {
         updateToComboAndSlider( true );
-    } else if( selectedType() == "Mode" || selectedType() == "Key" ) {
+    } else if( selectedType() == "Mode" || selectedType() == "Key" || selectedType() == "Mood" || selectedType() == "Style" ) {
         updateToLabelAndCombo();
     } else if( selectedType() == "Sorting" ) {
         QComboBox* match = qobject_cast<QComboBox*>( m_match.data() );
@@ -507,6 +557,78 @@ Tomahawk::EchonestControl::editTimerFired()
     m_cacheData = m_data.second;
 }
 
+void
+Tomahawk::EchonestControl::artistTextEdited( const QString& text )
+{
+    // if the user is editing an artist field, try to help him out and suggest from echonest
+    QLineEdit* l = qobject_cast<QLineEdit*>( m_input.data() );
+    Q_ASSERT( l );
+//     l->setCompleter( new QCompleter( this ) ); // clear
+
+    foreach( QNetworkReply* r, m_suggestWorkers ) {
+        r->abort();
+        r->deleteLater();
+    }
+    m_suggestWorkers.clear();
+
+    if( !text.isEmpty() ) {
+        if( s_suggestCache.contains( text ) ) {
+            addArtistSuggestions( s_suggestCache[ text ] );
+        } else { // gotta look it up
+            QNetworkReply* r = Echonest::Artist::suggest( text );
+            qDebug() << "Asking echonest for suggestions to help our completion..." << r->url().toString();
+            r->setProperty( "curtext", text );
+
+            m_suggestWorkers.insert( r );
+            connect( r, SIGNAL( finished() ), this, SLOT( suggestFinished() ) );
+        }
+    }
+}
+
+void
+Tomahawk::EchonestControl::suggestFinished()
+{
+    qDebug() << Q_FUNC_INFO;
+    QNetworkReply* r = qobject_cast< QNetworkReply* >( sender() );
+    Q_ASSERT( r );
+    QLineEdit* l = qobject_cast<QLineEdit*>( m_input.data() );
+    Q_ASSERT( l );
+
+    m_suggestWorkers.remove( r );
+
+    if( r->error() != QNetworkReply::NoError )
+        return;
+
+    QString origText = r->property( "curtext" ).toString();
+    if( origText != l->text() ) { // user might have kept on typing, then ignore
+        qDebug() << "Text changed meanwhile, stopping suggestion parsing";
+        return;
+    }
+
+    QStringList suggestions;
+    try {
+        Echonest::Artists artists = Echonest::Artist::parseSuggest( r );
+        foreach( const Echonest::Artist& artist, artists )
+            suggestions << artist.name();
+    } catch( Echonest::ParseError& e ) {
+        qWarning() << "libechonest failed to parse this artist/suggest call..." << e.errorType() << e.what();
+        return;
+    }
+
+    s_suggestCache[ origText ] = suggestions;
+    addArtistSuggestions( suggestions );
+}
+
+void
+Tomahawk::EchonestControl::addArtistSuggestions( const QStringList& suggestions )
+{
+    // if the user is editing an artist field, try to help him out and suggest from echonest
+    QLineEdit* l = qobject_cast<QLineEdit*>( m_input.data() );
+    Q_ASSERT( l );
+
+    l->completer()->setModel( new QStringListModel( suggestions, l->completer() ) );
+    l->completer()->complete();
+}
 
 void
 Tomahawk::EchonestControl::calculateSummary()
@@ -521,6 +643,8 @@ Tomahawk::EchonestControl::calculateSummary()
             summary = QString( "similar to ~%1" ).arg( m_data.second.toString() );
     } else if( selectedType() == "Artist Description" ) {
         summary = QString( "with genre ~%1" ).arg( m_data.second.toString() );
+    } else if( selectedType() == "Artist Description" ) {
+        summary = QString( "similar to ~%1" ).arg( m_data.second.toString() );
     } else if( selectedType() == "Variety" || selectedType() == "Danceability" || selectedType() == "Artist Hotttnesss" || selectedType() == "Energy" || selectedType() == "Artist Familiarity" || selectedType() == "Song Hotttnesss" ) {
         QString modifier;
         qreal sliderVal = m_data.second.toReal();
@@ -564,6 +688,52 @@ Tomahawk::EchonestControl::calculateSummary()
         QString ascdesc = qobject_cast< QComboBox* >( m_match.data() )->currentText().toLower();
 
         summary = QString( "sorted in %1 %2 order" ).arg( ascdesc ).arg( sortType );
+    } else if( selectedType() == "Mood" ) {
+        Q_ASSERT( !m_input.isNull() );
+        Q_ASSERT( qobject_cast< QComboBox* >( m_input.data() ) );
+        QString text = qobject_cast< QComboBox* >( m_input.data() )->currentText().toLower();
+        summary = QString( "with a %1 mood" ).arg( text );
+    } else if( selectedType() == "Style"  ) {
+        Q_ASSERT( !m_input.isNull() );
+        Q_ASSERT( qobject_cast< QComboBox* >( m_input.data() ) );
+        QString text = qobject_cast< QComboBox* >( m_input.data() )->currentText().toLower();
+        summary = QString( "in a %1 style" ).arg( text );
     }
     m_summary = summary;
+}
+
+void
+Tomahawk::EchonestControl::checkForMoodsOrStylesFetched()
+{
+    if( selectedType() == "Mood" || selectedType() == "Style" ) {
+        QComboBox* cb = qobject_cast< QComboBox* >( m_input.data() );
+        if( cb && cb->count() == 0 ) { // got nothing, so lets populate
+            if( insertMoodsAndStyles() )
+                updateWidgetsFromData();
+        }
+    }
+}
+
+bool
+Tomahawk::EchonestControl::insertMoodsAndStyles()
+{
+    QVector< QString > src = selectedType() == "Mood" ? EchonestGenerator::moods() : EchonestGenerator::styles();
+    QComboBox* combo = qobject_cast< QComboBox* >( m_input.data() );
+    if( !combo )
+        return false;
+
+    qDebug() << "Inserting moods and or styles, here's the list" << src;
+    foreach( const QString& item, src ) {
+        combo->addItem( item, item );
+    }
+
+    if( src.isEmpty() && !combo->count() ) {
+        if( m_stylePollCount <= 20 ) { // try for 20s to get the styles...
+            QTimer::singleShot( 1000, this, SLOT( checkForMoodsOrStylesFetched() ) );
+        }
+        m_stylePollCount++;
+        return false;
+    }
+
+    return true;
 }

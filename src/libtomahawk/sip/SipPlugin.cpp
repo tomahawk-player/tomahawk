@@ -77,9 +77,8 @@ SipPlugin::peersOnline() const
 
 
 void
-SipPlugin::setProxy( const QNetworkProxy& proxy )
+SipPlugin::refreshProxy()
 {
-    Q_UNUSED( proxy );
     qDebug() << Q_FUNC_INFO << "Not implemented";
 }
 

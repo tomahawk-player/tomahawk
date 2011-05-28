@@ -1,5 +1,6 @@
 Version 0.1.0:
-    * Initial SOCKS5 proxy support.
+    * SOCKS5 proxy support. Noproxy hosts are also supported but no wildcard
+      support (yet).
     * Fix issue where track resolving spinner never stopped if tracks were
       removed from playlist while resolving.
     * Twitter & Jabber profile pictures are shown.

@@ -36,10 +36,12 @@ struct IeSettings : WINHTTP_CURRENT_USER_IE_PROXY_CONFIG
     }
 #endif
 
+#ifndef WIN32
     ~IeSettings()
     {
         if (lpszAutoConfigUrl) GlobalFree(lpszAutoConfigUrl);
         if (lpszProxy) GlobalFree(lpszProxy);
         if (lpszProxyBypass) GlobalFree(lpszProxyBypass);
     }
+#endif
 };

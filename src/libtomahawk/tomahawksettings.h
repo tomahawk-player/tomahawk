@@ -111,7 +111,10 @@ public:
 
     QString proxyHost() const;
     void setProxyHost( const QString &host );
-
+    
+    QString proxyNoProxyHosts() const;
+    void setProxyNoProxyHosts( const QString &hosts );
+    
     qulonglong proxyPort() const;
     void setProxyPort( const qulonglong port );
 

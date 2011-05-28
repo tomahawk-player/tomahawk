@@ -498,6 +498,21 @@ GlobalActionManager::loadDynamicPlaylist( const QUrl& url, bool station )
                 c->setInput( param.second );
                 c->setMatch( QString::number( (int)Echonest::DynamicPlaylist::Mode ) );
                 controls << c;
+            } else if( param.first == "mood" ) {
+                Tomahawk::dyncontrol_ptr c = pl->generator()->createControl( "Mood" );
+                c->setInput( param.second );
+                c->setMatch( QString::number( (int)Echonest::DynamicPlaylist::Mood ) );
+                controls << c;
+            } else if( param.first == "style" ) {
+                Tomahawk::dyncontrol_ptr c = pl->generator()->createControl( "Style" );
+                c->setInput( param.second );
+                c->setMatch( QString::number( (int)Echonest::DynamicPlaylist::Style ) );
+                controls << c;
+            } else if( param.first == "song" ) {
+                Tomahawk::dyncontrol_ptr c = pl->generator()->createControl( "Song" );
+                c->setInput( param.second );
+                c->setMatch( QString::number( (int)Echonest::DynamicPlaylist::SongRadioType ) );
+                controls << c;
             }
         }
         if( m == Tomahawk::OnDemand )

@@ -182,7 +182,7 @@ InfoSystemWorker::newNam()
     QNetworkAccessManager *oldNam = TomahawkUtils::nam();
     if ( oldNam && oldNam->thread() == thread() )
     {
-        qDebug() << Q_FUNC_INFO << " using old nam as it's the same thread as me";
+        qDebug() << Q_FUNC_INFO << " using old nam as it's the same thread (GUI) as me";
         m_nam = QWeakPointer< QNetworkAccessManager >( oldNam );
         emit namChanged( m_nam.data() );
         return;
@@ -199,17 +199,23 @@ InfoSystemWorker::newNam()
         delete m_nam.data();
 
     if ( !oldNam )
-    {
-        m_nam = QWeakPointer< QNetworkAccessManager >( newNam );
-        return;
-    }
-    
+        oldNam = new QNetworkAccessManager();
+
+    TomahawkUtils::NetworkProxyFactory* oldProxyFactory = TomahawkUtils::proxyFactory();
+    if ( !oldProxyFactory )
+        oldProxyFactory = new TomahawkUtils::NetworkProxyFactory();
+
     newNam->setConfiguration( oldNam->configuration() );
     newNam->setNetworkAccessible( oldNam->networkAccessible() );
-    newNam->setProxy( oldNam->proxy() );
+    TomahawkUtils::NetworkProxyFactory* newProxyFactory = new TomahawkUtils::NetworkProxyFactory();
+    newProxyFactory->setNoProxyHosts( oldProxyFactory->noProxyHosts() );
+    newProxyFactory->setProxy( oldProxyFactory->proxy() );
+    newNam->setProxyFactory( newProxyFactory );
     m_nam = QWeakPointer< QNetworkAccessManager >( newNam );
 
     emit namChanged( m_nam.data() );
+
+    //FIXME: Currently leaking nam/proxyfactory above -- how to change in a thread-safe way?
 }
 
 

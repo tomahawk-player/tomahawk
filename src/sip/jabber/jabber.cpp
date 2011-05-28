@@ -46,6 +46,7 @@
 #include <QMessageBox>
 #include <QDateTime>
 #include <QTimer>
+#include <utils/tomahawkutils.h>
 
 SipPlugin*
 JabberFactory::createPlugin( const QString& pluginId )
@@ -150,24 +151,27 @@ JabberPlugin::~JabberPlugin()
 }
 
 void
-JabberPlugin::setProxy( const QNetworkProxy &proxy )
+JabberPlugin::refreshProxy()
 {
     qDebug() << Q_FUNC_INFO;
 
-    if( ( proxy.type() != QNetworkProxy::NoProxy ) && ( m_currentServer.isEmpty() || !(m_currentPort > 0) ) )
+    if( !m_client->connection() )
+        return;
+    
+    QNetworkProxy proxyToUse = TomahawkUtils::proxyFactory()->queryProxy( QNetworkProxyQuery( m_currentServer, m_currentPort ) ).first();
+    m_usedProxy = proxyToUse;
+    
+    if( proxyToUse.type() != QNetworkProxy::NoProxy && ( m_currentServer.isEmpty() || !(m_currentPort > 0) ) )
     {
+        qDebug() << Q_FUNC_INFO << " proxy type is not noproxy but no server/port set";
         // patches are welcome in Jreen that implement jdns through proxy
         emit error( SipPlugin::ConnectionError,
                     tr( "You need to set hostname and port of your jabber server, if you want to use it through a proxy" ) );
         return;
     }
 
-    if(!m_client->connection())
-    {
-        m_client->setConnection(new Jreen::TcpConnection(m_currentServer, m_currentPort));
-    }
-
-    qobject_cast<Jreen::DirectConnection*>(m_client->connection())->setProxy(proxy);
+    qDebug() << Q_FUNC_INFO << " proxy type is NoProxy ? " << (proxyToUse.type() == QNetworkProxy::NoProxy ? "true" : "false" );
+    qobject_cast<Jreen::DirectConnection*>( m_client->connection() )->setProxy( proxyToUse );
 }
 
 
@@ -219,12 +223,14 @@ JabberPlugin::connectPlugin( bool startup )
         return true; //FIXME: should i return false here?!
     }
 
+    refreshProxy();
+
     qDebug() << "Connecting to the XMPP server..." << m_client->jid().full();
 
     //FIXME: we're badly workarounding some missing reconnection api here, to be fixed soon
     QTimer::singleShot( 1000, m_client, SLOT( connectToServer() ) );
 
-    connect(m_client->connection(), SIGNAL(error(Jreen::Connection::SocketError)), SLOT(onError(Jreen::Connection::SocketError)));
+    connect(m_client->connection(), SIGNAL(error(SocketError)), SLOT(onError(SocketError)));
 
     m_state = Connecting;
     emit stateChanged( m_state );
@@ -499,6 +505,16 @@ JabberPlugin::checkSettings()
     if ( m_currentPort != readPort() )
         reconnect = true;
 
+    QNetworkProxy proxyToUse = TomahawkUtils::proxyFactory()->queryProxy( QNetworkProxyQuery( m_currentServer, m_currentPort ) ).first();
+    if ( proxyToUse.hostName() != m_usedProxy.hostName() ||
+            proxyToUse.port() != m_usedProxy.port() ||
+            proxyToUse.user() != m_usedProxy.user() ||
+            proxyToUse.password() != m_usedProxy.password() ||
+            proxyToUse.type() != m_usedProxy.type() ||
+            proxyToUse.capabilities() != m_usedProxy.capabilities()
+       )
+        reconnect = true;
+
     m_currentUsername = accountName();
     m_currentPassword = readPassword();
     m_currentServer = readServer();
@@ -601,7 +617,7 @@ void JabberPlugin::onNewMessage(const Jreen::Message& message)
                                     " are trying to reach is probably not signed on, so please try again later!") );
 
         // this is not a sip message, so we send it directly through the client
-        m_client->send( Jreen::Message ( Jreen::Message::Chat, Jreen::JID(to), response) );
+        m_client->send( Jreen::Message ( Jreen::Message::Error, Jreen::JID(to), response) );
 
         emit msgReceived( from, msg );
         return;

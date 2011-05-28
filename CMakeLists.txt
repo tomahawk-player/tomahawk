@@ -17,6 +17,9 @@ SET( TOMAHAWK_VERSION "0.1.0" )
 # set paths
 SET( CMAKE_MODULE_PATH "${CMAKE_MODULE_PATH}" "${CMAKE_SOURCE_DIR}/CMakeModules" )
 SET( THIRDPARTY_DIR  ${CMAKE_SOURCE_DIR}/thirdparty )
+SET(CMAKE_RUNTIME_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}")
+SET(CMAKE_LIBRARY_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}")
+SET(CMAKE_ARCHIVE_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}")
 
 # Check if we need qtgui:
 IF( "${gui}" STREQUAL "no" )
@@ -45,8 +48,8 @@ else()
 	message(STATUS "Phonon found; ensure that phonon-vlc is at least 0.4")
 endif()
 
-macro_optional_find_package(LibEchonest 1.1.5)
-macro_log_feature(LIBECHONEST_FOUND "Echonest" "Qt library for communicating with The Echo Nest" "http://projects.kde.org/libechonest" TRUE "" "libechonest is needed for dynamic playlists and the infosystem")
+macro_optional_find_package(LibEchonest 1.1.7)
+macro_log_feature(LIBECHONEST_FOUND "Echonest" "Qt library for communicating with The Echo Nest" "http://projects.kde.org/libechonest" TRUE "" "libechonest 1.1.8 is needed for dynamic playlists and the infosystem")
 
 macro_optional_find_package(CLucene 0.9.23)
 macro_log_feature(CLucene_FOUND "CLucene" "The open-source, C++ search engine" "http://clucene.sf.net" TRUE "" "CLucene is used for indexing the collection")
@@ -134,5 +137,6 @@ ENDIF( NOT APPLE )
 
 ADD_SUBDIRECTORY( thirdparty )
 ADD_SUBDIRECTORY( src/libtomahawk )
+SET( TOMAHAWK_LIBRARIES tomahawklib )
 ADD_SUBDIRECTORY( src )
 ADD_SUBDIRECTORY( admin )

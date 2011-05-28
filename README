@@ -30,7 +30,7 @@ Dependencies
   TagLib 1.6.2 http://developer.kde.org/~wheeler/taglib.html
   Boost 1.3x http://www.boost.org/
   CLucene 0.9.23 (0.9.21 will fail) http://clucene.sourceforge.net/download.shtml
-  libechonest 1.1.5 http://projects.kde.org/projects/playground/libs/libechonest/
+  libechonest 1.1.8 http://projects.kde.org/projects/playground/libs/libechonest/
 
  Third party libraries that we ship with our source:
 

@@ -256,6 +256,20 @@ TomahawkSettings::setProxyHost( const QString& host )
 }
 
 
+QString
+TomahawkSettings::proxyNoProxyHosts() const
+{
+    return value( "network/proxy/noproxyhosts", QString() ).toString();
+}
+
+
+void
+TomahawkSettings::setProxyNoProxyHosts( const QString& hosts )
+{
+    setValue( "network/proxy/noproxyhosts", hosts );
+}
+
+
 qulonglong
 TomahawkSettings::proxyPort() const
 {
