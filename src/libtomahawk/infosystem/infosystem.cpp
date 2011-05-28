@@ -103,7 +103,8 @@ InfoSystem::~InfoSystem()
                 qDebug() << Q_FUNC_INFO << " worker thread controller not finished";
                 TomahawkUtils::Sleep::msleep( 50 );
             }
-            
+
+            qDebug() << Q_FUNC_INFO << " worker thread controller finished, deleting worker";
             delete m_infoSystemWorkerThreadController;
             m_infoSystemWorkerThreadController = 0;
         }
@@ -131,12 +132,13 @@ InfoSystem::~InfoSystem()
                 TomahawkUtils::Sleep::msleep( 50 );
             }
             
+            qDebug() << Q_FUNC_INFO << " cache thread controller finished, deleting cache";
             delete m_infoSystemCacheThreadController;
             m_infoSystemCacheThreadController = 0;
         }
     }
     
-    qDebug() << Q_FUNC_INFO << " done deleting cache";
+    qDebug() << Q_FUNC_INFO << " done deleting cache, exiting";
 }
 
 
