@@ -116,7 +116,7 @@ InfoSystem::~InfoSystem()
         QMetaObject::invokeMethod( m_cache.data(), "deleteLater", Qt::QueuedConnection );
         while( !m_cache.isNull() )
         {
-            qDebug() << Q_FUNC_INFO << " worker not deleted";
+            qDebug() << Q_FUNC_INFO << " cache not deleted";
             TomahawkUtils::Sleep::msleep( 50 );
         }
         
@@ -127,7 +127,7 @@ InfoSystem::~InfoSystem()
         {
             while( !m_infoSystemCacheThreadController->isFinished() )
             {
-                qDebug() << Q_FUNC_INFO << " worker thread controller not finished";
+                qDebug() << Q_FUNC_INFO << " cache thread controller not finished";
                 TomahawkUtils::Sleep::msleep( 50 );
             }
             
