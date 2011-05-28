@@ -447,7 +447,7 @@ void
 TomahawkWindow::createAutomaticPlaylist( QString playlistName )
 {
     QString name = playlistName;
-    
+
     if ( name.isEmpty() )
         return;
 
@@ -486,17 +486,16 @@ TomahawkWindow::createPlaylist()
 {
     PlaylistTypeSelectorDlg playlistSelectorDlg;
     int successfulReturn = playlistSelectorDlg.exec();
-    
-    qDebug() << "\n\nSTAT == " << successfulReturn;
+
     if ( !playlistSelectorDlg.playlistTypeIsAuto() && successfulReturn ) {
-                
+
         // only show if none is shown yet
         if( !ViewManager::instance()->isNewPlaylistPageVisible() ) {
             ViewManager::instance()->show( new NewPlaylistWidget() );
         }
-            
+
     } else if ( playlistSelectorDlg.playlistTypeIsAuto() && successfulReturn ) {
-           // create Auto Playlist  
+           // create Auto Playlist
            QString playlistName = playlistSelectorDlg.playlistName();
            APP->mainWindow()->createAutomaticPlaylist( playlistName );
     }

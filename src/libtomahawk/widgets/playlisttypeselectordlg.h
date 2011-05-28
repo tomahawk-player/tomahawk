@@ -1,6 +1,6 @@
 /* === This file is part of Tomahawk Player - <http://tomahawk-player.org> ===
  *
- *   Copyright 2010-2011, Christian Muehlhaeuser <muesli@tomahawk-player.org>
+ *   Copyright 2011, Christopher Reichert <creichert07@gmail.com>
  *
  *   Tomahawk is free software: you can redistribute it and/or modify
  *   it under the terms of the GNU General Public License as published by
@@ -28,7 +28,7 @@ namespace Ui
     class PlaylistTypeSelectorDlg;
 }
 
-class DLLEXPORT PlaylistTypeSelectorDlg : public QDialog 
+class DLLEXPORT PlaylistTypeSelectorDlg : public QDialog
 {
 Q_OBJECT
 
@@ -43,13 +43,13 @@ private slots:
 	void createNormalPlaylist();
 	void createAutomaticPlaylist();
     void enableAutoPlaylistButton( const QString& );
-	
+
 private:
     bool m_isAutoPlaylist; // if not an auto playlist then its a normal playlist
-    
+
     Ui::PlaylistTypeSelectorDlg *ui;
     QString m_playlistName;
-    
+
 };
 
 #endif // PlaylistTypeSelectorDlg_H
