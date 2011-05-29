@@ -101,6 +101,7 @@ public slots:
 
     void viewPageActivated( Tomahawk::ViewPage* );
 
+    void itemSelectRequest( SourceTreeItem* item );
 signals:
     void selectRequest( const QModelIndex& idx );
 

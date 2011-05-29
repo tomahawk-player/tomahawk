@@ -198,9 +198,11 @@ SourceTreeView::onItemExpanded( const QModelIndex& idx )
 void
 SourceTreeView::selectRequest( const QModelIndex& idx )
 {
-    if( !selectionModel()->selectedIndexes().contains( idx ) )
+    if ( !selectionModel()->selectedIndexes().contains( idx ) )
+    {
+        scrollTo( idx, QTreeView::EnsureVisible );
         selectionModel()->select( idx, QItemSelectionModel::ClearAndSelect | QItemSelectionModel::Current );
-
+    }
 }
 
 

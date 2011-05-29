@@ -448,3 +448,9 @@ SourcesModel::rowForItem( SourceTreeItem* item ) const
 {
     return item->parent()->children().indexOf( item );
 }
+
+void
+SourcesModel::itemSelectRequest( SourceTreeItem* item )
+{
+    emit selectRequest( indexFromItem( item ) );
+}

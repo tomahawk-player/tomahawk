@@ -63,3 +63,10 @@ GenericPageItem::willAcceptDrag(const QMimeData* data) const
 {
     return false;
 }
+
+void
+GenericPageItem::setText( const QString &text )
+{
+    m_text = text;
+    emit updated();
+}

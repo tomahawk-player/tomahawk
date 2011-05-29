@@ -34,6 +34,7 @@ using namespace Tomahawk;
 PlaylistModel::PlaylistModel( QObject* parent )
     : TrackModel( parent )
     , m_waitForUpdate( false )
+    , m_isTemporary( false )
 {
     qDebug() << Q_FUNC_INFO;
 
@@ -91,6 +92,7 @@ PlaylistModel::loadPlaylist( const Tomahawk::playlist_ptr& playlist, bool loadEn
     setTitle( playlist->title() );
     setDescription( tr( "A playlist by %1" ).arg( playlist->author()->isLocal() ? tr( "you" ) : playlist->author()->friendlyName() ) );
 
+    m_isTemporary = false;
     if ( !loadEntries )
         return;
 
@@ -192,6 +194,12 @@ PlaylistModel::append( const Tomahawk::album_ptr& album )
     connect( album.data(), SIGNAL( tracksAdded( QList<Tomahawk::query_ptr> ) ),
                              SLOT( onTracksAdded( QList<Tomahawk::query_ptr> ) ) );
 
+    if( rowCount( QModelIndex() ) == 0 ) {
+        setTitle( album->name() );
+        setDescription( tr( "All tracks by %1 on album %2" ).arg( album->artist()->name() ).arg( album->name() ) );
+        m_isTemporary = true;
+    }
+
     onTracksAdded( album->tracks() );
 }
 
@@ -204,6 +212,12 @@ PlaylistModel::append( const Tomahawk::artist_ptr& artist )
 
     connect( artist.data(), SIGNAL( tracksAdded( QList<Tomahawk::query_ptr> ) ),
                               SLOT( onTracksAdded( QList<Tomahawk::query_ptr> ) ) );
+
+    if( rowCount( QModelIndex() ) == 0 ) {
+        setTitle( artist->name() );
+        setDescription( tr( "All tracks by %1" ).arg( artist->name() ) );
+        m_isTemporary = true;
+    }
 
     onTracksAdded( artist->tracks() );
 }
@@ -493,4 +507,10 @@ PlaylistModel::removeIndex( const QModelIndex& index, bool moreToCome )
     {
         onPlaylistChanged();
     }
+}
+
+bool
+PlaylistModel::isTemporary() const
+{
+    return m_isTemporary;
 }

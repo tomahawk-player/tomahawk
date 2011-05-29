@@ -62,6 +62,7 @@ public:
 
 signals:
     void updated();
+    void selectRequest( SourceTreeItem* );
 
     void beginChildRowsAdded( int fromRow, int toRow );
     void childRowsAdded();

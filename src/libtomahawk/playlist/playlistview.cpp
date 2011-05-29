@@ -71,8 +71,12 @@ PlaylistView::setPlaylistModel( PlaylistModel* model )
     if ( !m_model->playlist().isNull() )
         setGuid( QString( "playlistview/%1" ).arg( m_model->playlist()->guid() ) );
     else
+    {
         setGuid( "playlistview" );
 
+        m_model->title();
+        m_model->description();
+    }
     connect( m_model, SIGNAL( trackCountChanged( unsigned int ) ), SLOT( onTrackCountChanged( unsigned int ) ) );
     connect( m_model, SIGNAL( playlistDeleted() ), SLOT( onDeleted() ) );
     connect( m_model, SIGNAL( playlistChanged() ), SLOT( onChanged() ) );
@@ -190,4 +194,14 @@ PlaylistView::onChanged()
     if ( m_model && !m_model->playlist().isNull() &&
          ViewManager::instance()->currentPage() == this )
         emit nameChanged( m_model->playlist()->title() );
+}
+
+bool
+PlaylistView::isTemporaryPage() const
+{
+    if ( m_model ) {
+        return m_model->isTemporary();
+    } else {
+        return false;
+    }
 }

@@ -67,6 +67,7 @@ public:
     void remove( unsigned int row, bool moreToCome = false );
     virtual void removeIndex( const QModelIndex& index, bool moreToCome = false );
 
+    bool isTemporary() const;
 signals:
     void repeatModeChanged( PlaylistInterface::RepeatMode mode );
     void shuffleModeChanged( bool enabled );
@@ -90,7 +91,7 @@ private:
     QList<Tomahawk::plentry_ptr> playlistEntries() const;
 
     Tomahawk::playlist_ptr m_playlist;
-    bool m_waitForUpdate;
+    bool m_waitForUpdate, m_isTemporary;
     QList< Tomahawk::Query* > m_waitingForResolved;
 };
 
