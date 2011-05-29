@@ -135,7 +135,7 @@ PlaylistView::keyPressEvent( QKeyEvent* event )
     if ( !model() )
         return;
 
-    if ( event->key() == Qt::Key_Delete && !model()->isReadOnly() )
+    if ( ( event->key() == Qt::Key_Delete || event->key() == Qt::Key_Backspace ) && !model()->isReadOnly() )
     {
         qDebug() << "Removing selected items";
         proxyModel()->removeIndexes( selectedIndexes() );

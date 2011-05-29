@@ -361,7 +361,7 @@ SourceTreeView::dropEvent( QDropEvent* event )
 void
 SourceTreeView::keyPressEvent( QKeyEvent *event )
 {
-    if( event->key() == Qt::Key_Delete && !selectionModel()->selectedIndexes().isEmpty() )
+    if( ( event->key() == Qt::Key_Delete || event->key() == Qt::Key_Backspace ) && !selectionModel()->selectedIndexes().isEmpty() )
     {
         QModelIndex idx = selectionModel()->selectedIndexes().first();
         if ( model()->data( idx, SourcesModel::SourceTreeItemTypeRole ) == SourcesModel::StaticPlaylist ||
