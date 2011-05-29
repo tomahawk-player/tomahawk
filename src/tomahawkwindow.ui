@@ -106,7 +106,7 @@
   </action>
   <action name="actionToggleConnect">
    <property name="text">
-    <string>Go &amp;online</string>
+    <string>Go &amp;Online</string>
    </property>
   </action>
   <action name="actionAddFriendManually">
