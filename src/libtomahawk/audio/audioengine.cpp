@@ -64,7 +64,8 @@ AudioEngine::~AudioEngine()
 {
     qDebug() << Q_FUNC_INFO;
 
-    stop();
+    m_mediaObject->stop();
+//    stop();
 
     delete m_audioOutput;
     delete m_mediaObject;
