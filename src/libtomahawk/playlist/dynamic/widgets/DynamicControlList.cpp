@@ -143,7 +143,7 @@ void DynamicControlList::addNewControl()
     m_layout->removeItem( m_collapseLayout );
     
     dyncontrol_ptr control = m_generator->createControl();
-    m_controls.append( new DynamicControlWrapper( control, m_layout, m_controls.size(), this ) );
+    m_controls.append( new DynamicControlWrapper( control, m_layout, m_layout->rowCount(), this ) );
     connect( m_controls.last(), SIGNAL( removeControl() ), this, SLOT( removeControl() ) );
     connect( m_controls.last(), SIGNAL( changed() ), this, SLOT( controlChanged() ) );
     
