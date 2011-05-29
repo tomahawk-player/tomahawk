@@ -42,6 +42,9 @@ DatabaseCommand_Resolve::exec( DatabaseImpl* lib )
         qDebug() << "Using result-hint to speed up resolving:" << m_query->resultHint();
 
         Tomahawk::result_ptr result = lib->resultFromHint( m_query );
+        qDebug() << "Collection null:" << result.isNull();
+        qDebug() << "Collection null:" << result->collection().isNull();
+        qDebug() << "Source null:" << result->collection()->source().isNull();
         if ( !result.isNull() && result->collection()->source()->isOnline() )
         {
             res << result;
