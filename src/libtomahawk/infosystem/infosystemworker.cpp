@@ -49,6 +49,7 @@ InfoSystemWorker::~InfoSystemWorker()
         if( plugin )
             delete plugin.data();
     }
+    qDebug() << Q_FUNC_INFO << " finished";
 }
 
 
@@ -169,7 +170,7 @@ InfoSystemWorker::nam() const
 {
     if ( m_nam.isNull() )
         return 0;
-    
+
     return m_nam.data();
 }
 
@@ -187,7 +188,7 @@ InfoSystemWorker::newNam()
         emit namChanged( m_nam.data() );
         return;
     }
-    
+
     qDebug() << Q_FUNC_INFO << " no nam exists, or it's a different thread, creating a new one";
     QNetworkAccessManager* newNam;
 #ifdef LIBLASTFM_FOUND

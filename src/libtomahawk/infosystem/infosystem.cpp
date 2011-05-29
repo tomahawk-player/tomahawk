@@ -83,63 +83,32 @@ InfoSystem::InfoSystem(QObject *parent)
 InfoSystem::~InfoSystem()
 {
     qDebug() << Q_FUNC_INFO << " beginning";
-    
+
     if ( !m_worker.isNull() )
     {
-        QMetaObject::invokeMethod( m_worker.data(), "deleteLater", Qt::QueuedConnection );
-        while( !m_worker.isNull() )
-        {
-            qDebug() << Q_FUNC_INFO << " worker not deleted";
-            TomahawkUtils::Sleep::msleep( 50 );
-        }
-
-        if ( m_infoSystemWorkerThreadController )
-            m_infoSystemWorkerThreadController->quit();
-
         if( m_infoSystemWorkerThreadController )
         {
-            while( !m_infoSystemWorkerThreadController->isFinished() )
-            {
-                qDebug() << Q_FUNC_INFO << " worker thread controller not finished";
-                TomahawkUtils::Sleep::msleep( 50 );
-            }
-
-            qDebug() << Q_FUNC_INFO << " worker thread controller finished, deleting worker";
+            m_worker.clear();
+            m_infoSystemWorkerThreadController->quit();
+            m_infoSystemWorkerThreadController->wait( 60000 );
             delete m_infoSystemWorkerThreadController;
+            qDebug() << Q_FUNC_INFO << " worker thread controller finished, deleting worker";
             m_infoSystemWorkerThreadController = 0;
         }
     }
 
     qDebug() << Q_FUNC_INFO << " done deleting worker";
 
-    if ( !m_cache.isNull() )
+    if( m_infoSystemCacheThreadController )
     {
-        QMetaObject::invokeMethod( m_cache.data(), "deleteLater", Qt::QueuedConnection );
-        while( !m_cache.isNull() )
-        {
-            qDebug() << Q_FUNC_INFO << " cache not deleted";
-            TomahawkUtils::Sleep::msleep( 50 );
-        }
-
-        qDebug() << Q_FUNC_INFO << " cache deleted, telling cache thread controller to quit";
-        
-        if ( m_infoSystemCacheThreadController )
-            m_infoSystemCacheThreadController->quit();
-        
-        if( m_infoSystemCacheThreadController )
-        {
-            while( !m_infoSystemCacheThreadController->isFinished() )
-            {
-                qDebug() << Q_FUNC_INFO << " cache thread controller not finished";
-                TomahawkUtils::Sleep::msleep( 50 );
-            }
-            
-            qDebug() << Q_FUNC_INFO << " cache thread controller finished, deleting cache";
-            delete m_infoSystemCacheThreadController;
-            m_infoSystemCacheThreadController = 0;
-        }
+        m_cache.clear();
+        m_infoSystemCacheThreadController->quit();
+        m_infoSystemCacheThreadController->wait( 60000 );
+        delete m_infoSystemCacheThreadController;
+        qDebug() << Q_FUNC_INFO << " cache thread controller finished, deleting cache";
+        m_infoSystemCacheThreadController = 0;
     }
-    
+
     qDebug() << Q_FUNC_INFO << " done deleting cache, exiting";
 }
 
