@@ -194,7 +194,7 @@ SourcesModel::mimeData( const QModelIndexList& ) const
 bool
 SourcesModel::dropMimeData( const QMimeData* data, Qt::DropAction action, int row, int column, const QModelIndex& parent )
 {
-    SourceTreeItem* item;
+    SourceTreeItem* item = 0;
     qDebug() << "Got mime data dropped:" << row << column << parent << itemFromIndex( parent )->text();
     if( row == -1 && column == -1 )
         item = itemFromIndex( parent );
