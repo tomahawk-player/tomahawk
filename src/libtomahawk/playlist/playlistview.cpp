@@ -24,6 +24,7 @@
 
 #include "playlist/playlistproxymodel.h"
 #include "widgets/overlaywidget.h"
+#include "viewmanager.h"
 
 using namespace Tomahawk;
 
@@ -70,8 +71,12 @@ PlaylistView::setPlaylistModel( PlaylistModel* model )
     if ( !m_model->playlist().isNull() )
         setGuid( QString( "playlistview/%1" ).arg( m_model->playlist()->guid() ) );
     else
+    {
         setGuid( "playlistview" );
 
+        m_model->title();
+        m_model->description();
+    }
     connect( m_model, SIGNAL( trackCountChanged( unsigned int ) ), SLOT( onTrackCountChanged( unsigned int ) ) );
     connect( m_model, SIGNAL( playlistDeleted() ), SLOT( onDeleted() ) );
     connect( m_model, SIGNAL( playlistChanged() ), SLOT( onChanged() ) );
@@ -134,7 +139,7 @@ PlaylistView::keyPressEvent( QKeyEvent* event )
     if ( !model() )
         return;
 
-    if ( event->key() == Qt::Key_Delete && !model()->isReadOnly() )
+    if ( ( event->key() == Qt::Key_Delete || event->key() == Qt::Key_Backspace ) && !model()->isReadOnly() )
     {
         qDebug() << "Removing selected items";
         proxyModel()->removeIndexes( selectedIndexes() );
@@ -186,6 +191,17 @@ PlaylistView::onDeleted()
 void
 PlaylistView::onChanged()
 {
-    if ( m_model && !m_model->playlist().isNull() )
+    if ( m_model && !m_model->playlist().isNull() &&
+         ViewManager::instance()->currentPage() == this )
         emit nameChanged( m_model->playlist()->title() );
+}
+
+bool
+PlaylistView::isTemporaryPage() const
+{
+    if ( m_model ) {
+        return m_model->isTemporary();
+    } else {
+        return false;
+    }
 }

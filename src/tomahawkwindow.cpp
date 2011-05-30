@@ -50,6 +50,7 @@
 #include "utils/widgetdragfilter.h"
 #include "utils/xspfloader.h"
 #include "widgets/newplaylistwidget.h"
+#include "widgets/playlisttypeselectordlg.h"
 
 #include "audiocontrols.h"
 #include "settingsdialog.h"
@@ -275,7 +276,6 @@ TomahawkWindow::setupSignals()
     connect( ui->actionRescanCollection, SIGNAL( triggered() ), SLOT( rescanCollectionManually() ) );
     connect( ui->actionLoadXSPF, SIGNAL( triggered() ), SLOT( loadSpiff() ));
     connect( ui->actionCreatePlaylist, SIGNAL( triggered() ), SLOT( createPlaylist() ));
-    connect( ui->actionCreateAutomaticPlaylist, SIGNAL( triggered() ), SLOT( createAutomaticPlaylist() ));
     connect( ui->actionCreate_New_Station, SIGNAL( triggered() ), SLOT( createStation() ));
     connect( ui->actionAboutTomahawk, SIGNAL( triggered() ), SLOT( showAboutTomahawk() ) );
     connect( ui->actionExit, SIGNAL( triggered() ), qApp, SLOT( quit() ) );
@@ -453,11 +453,11 @@ TomahawkWindow::loadSpiff()
 
 
 void
-TomahawkWindow::createAutomaticPlaylist()
+TomahawkWindow::createAutomaticPlaylist( QString playlistName )
 {
-    bool ok;
-    QString name = QInputDialog::getText( this, tr( "Create New Automatic Playlist" ), tr( "Name:" ), QLineEdit::Normal, tr( "New Automatic Playlist" ), &ok );
-    if ( !ok || name.isEmpty() )
+    QString name = playlistName;
+
+    if ( name.isEmpty() )
         return;
 
     source_ptr author = SourceList::instance()->getLocal();
@@ -493,7 +493,21 @@ TomahawkWindow::createStation()
 void
 TomahawkWindow::createPlaylist()
 {
-    ViewManager::instance()->show( new NewPlaylistWidget() );
+    PlaylistTypeSelectorDlg playlistSelectorDlg;
+    int successfulReturn = playlistSelectorDlg.exec();
+
+    if ( !playlistSelectorDlg.playlistTypeIsAuto() && successfulReturn ) {
+
+        // only show if none is shown yet
+        if( !ViewManager::instance()->isNewPlaylistPageVisible() ) {
+            ViewManager::instance()->show( new NewPlaylistWidget() );
+        }
+
+    } else if ( playlistSelectorDlg.playlistTypeIsAuto() && successfulReturn ) {
+           // create Auto Playlist
+           QString playlistName = playlistSelectorDlg.playlistName();
+           APP->mainWindow()->createAutomaticPlaylist( playlistName );
+    }
 }
 
 

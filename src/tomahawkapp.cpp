@@ -324,11 +324,18 @@ TomahawkApp::~TomahawkApp()
     delete m_audioEngine;
 #endif
 
-    delete SipHandler::instance();
-    Pipeline::instance()->stop();
-
-    delete m_database;
     delete m_infoSystem;
+
+    //FIXME: delete GeneratorFactory::registerFactory( "echonest", new EchonestFactory ); ?
+
+    delete SipHandler::instance();    
+    delete m_servent;
+
+    delete m_scanManager;
+    delete m_database;
+    
+    Pipeline::instance()->stop();
+    delete Pipeline::instance();
 
     qDebug() << "Finished shutdown.";
 }

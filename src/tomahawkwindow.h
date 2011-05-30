@@ -61,7 +61,7 @@ protected:
     void hideEvent( QHideEvent* e );
 
 public slots:
-    void createAutomaticPlaylist();
+    void createAutomaticPlaylist( QString );
     void createStation();
     void createPlaylist();
     void loadSpiff();

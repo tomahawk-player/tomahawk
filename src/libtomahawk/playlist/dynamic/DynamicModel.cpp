@@ -64,7 +64,10 @@ DynamicModel::loadPlaylist( const Tomahawk::dynplaylist_ptr& playlist, bool load
 QString
 DynamicModel::description() const
 {
-    return m_playlist->generator()->sentenceSummary();
+    if( !m_playlist.isNull() && !m_playlist->generator().isNull() )
+        return m_playlist->generator()->sentenceSummary();
+    else
+        return QString();
 }
 
 

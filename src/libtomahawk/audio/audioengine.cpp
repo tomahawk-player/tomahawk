@@ -64,7 +64,8 @@ AudioEngine::~AudioEngine()
 {
     qDebug() << Q_FUNC_INFO;
 
-    stop();
+    m_mediaObject->stop();
+//    stop();
 
     delete m_audioOutput;
     delete m_mediaObject;
@@ -300,6 +301,12 @@ void
 AudioEngine::onStateChanged( Phonon::State newState, Phonon::State oldState )
 {
     qDebug() << Q_FUNC_INFO << oldState << newState;
+
+    if ( newState == Phonon::ErrorState )
+    {
+        qDebug() << "Phonon Error:" << m_mediaObject->errorString() << m_mediaObject->errorType();
+    }
+
     if ( oldState == Phonon::PlayingState && newState == Phonon::StoppedState )
     {
         if ( !m_expectStop )

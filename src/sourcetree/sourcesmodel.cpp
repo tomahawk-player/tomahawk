@@ -35,6 +35,7 @@ using namespace Tomahawk;
 
 SourcesModel::SourcesModel( QObject* parent )
     : QAbstractItemModel( parent )
+    , m_rootItem( 0 )
     , m_viewPageDelayedCacheItem( 0 )
 {
     m_rootItem = new SourceTreeItem( this, 0, Invalid );
@@ -193,7 +194,7 @@ SourcesModel::mimeData( const QModelIndexList& ) const
 bool
 SourcesModel::dropMimeData( const QMimeData* data, Qt::DropAction action, int row, int column, const QModelIndex& parent )
 {
-    SourceTreeItem* item;
+    SourceTreeItem* item = 0;
     qDebug() << "Got mime data dropped:" << row << column << parent << itemFromIndex( parent )->text();
     if( row == -1 && column == -1 )
         item = itemFromIndex( parent );
@@ -389,7 +390,6 @@ SourcesModel::linkSourceItemToPage( SourceTreeItem* item, ViewPage* p )
     m_viewPageDelayedCacheItem = 0;
 }
 
-
 SourceTreeItem*
 SourcesModel::itemFromIndex( const QModelIndex& idx ) const
 {
@@ -447,4 +447,10 @@ int
 SourcesModel::rowForItem( SourceTreeItem* item ) const
 {
     return item->parent()->children().indexOf( item );
+}
+
+void
+SourcesModel::itemSelectRequest( SourceTreeItem* item )
+{
+    emit selectRequest( indexFromItem( item ) );
 }

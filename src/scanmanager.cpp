@@ -71,27 +71,12 @@ ScanManager::~ScanManager()
 
     if ( !m_scanner.isNull() )
     {
-        QMetaObject::invokeMethod( m_scanner.data(), "deleteLater", Qt::DirectConnection );
-        while( !m_scanner.isNull() )
-        {
-            qDebug() << Q_FUNC_INFO << " scanner not deleted";
-            TomahawkUtils::Sleep::msleep( 50 );
-        }
+        m_musicScannerThreadController->quit();
+        m_musicScannerThreadController->wait( 60000 );
 
-        if ( m_musicScannerThreadController )
-            m_musicScannerThreadController->quit();
-
-        if( m_musicScannerThreadController )
-        {
-            while( !m_musicScannerThreadController->isFinished() )
-            {
-                qDebug() << Q_FUNC_INFO << " scanner thread controller not finished";
-                TomahawkUtils::Sleep::msleep( 50 );
-            }
-
-            delete m_musicScannerThreadController;
-            m_musicScannerThreadController = 0;
-        }
+        delete m_scanner.data();
+        delete m_musicScannerThreadController;
+        m_musicScannerThreadController = 0;
     }
     qDebug() << Q_FUNC_INFO << " scanner thread controller finished, exiting ScanManager";
 }
@@ -180,27 +165,12 @@ ScanManager::scannerFinished()
 {
     if ( !m_scanner.isNull() )
     {
-        QMetaObject::invokeMethod( m_scanner.data(), "deleteLater", Qt::DirectConnection );
-        while( !m_scanner.isNull() )
-        {
-            qDebug() << Q_FUNC_INFO << " scanner not deleted";
-            TomahawkUtils::Sleep::msleep( 50 );
-        }
+        m_musicScannerThreadController->quit();
+        m_musicScannerThreadController->wait( 60000 );
 
-        if ( m_musicScannerThreadController )
-            m_musicScannerThreadController->quit();
-
-        if( m_musicScannerThreadController )
-        {
-            while( !m_musicScannerThreadController->isFinished() )
-            {
-                qDebug() << Q_FUNC_INFO << " scanner thread controller not finished";
-                TomahawkUtils::Sleep::msleep( 50 );
-            }
-
-            delete m_musicScannerThreadController;
-            m_musicScannerThreadController = 0;
-        }
+        delete m_scanner.data();
+        delete m_musicScannerThreadController;
+        m_musicScannerThreadController = 0;
     }
     emit finished();
 }

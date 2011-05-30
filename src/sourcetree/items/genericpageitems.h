@@ -36,6 +36,7 @@ public:
     virtual bool willAcceptDrag( const QMimeData* data ) const;
     virtual QIcon icon() const;
 
+    void setText( const QString& text );
 signals:
     void activated();
 

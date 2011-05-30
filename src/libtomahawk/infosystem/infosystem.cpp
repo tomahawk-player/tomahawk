@@ -86,30 +86,26 @@ InfoSystem::~InfoSystem()
 
     if ( !m_worker.isNull() )
     {
-        if( m_infoSystemWorkerThreadController )
-        {
-            m_worker.clear();
-            m_infoSystemWorkerThreadController->quit();
-            m_infoSystemWorkerThreadController->wait( 60000 );
-            delete m_infoSystemWorkerThreadController;
-            qDebug() << Q_FUNC_INFO << " worker thread controller finished, deleting worker";
-            m_infoSystemWorkerThreadController = 0;
-        }
-    }
+        m_infoSystemWorkerThreadController->quit();
+        m_infoSystemWorkerThreadController->wait( 60000 );
 
+        delete m_worker.data();
+        delete m_infoSystemWorkerThreadController;
+        m_infoSystemWorkerThreadController = 0;
+    }
     qDebug() << Q_FUNC_INFO << " done deleting worker";
 
     if( m_infoSystemCacheThreadController )
     {
-        m_cache.clear();
         m_infoSystemCacheThreadController->quit();
         m_infoSystemCacheThreadController->wait( 60000 );
+
+        delete m_cache.data();
         delete m_infoSystemCacheThreadController;
-        qDebug() << Q_FUNC_INFO << " cache thread controller finished, deleting cache";
         m_infoSystemCacheThreadController = 0;
     }
 
-    qDebug() << Q_FUNC_INFO << " done deleting cache, exiting";
+    qDebug() << Q_FUNC_INFO << " done deleting cache";
 }
 
 

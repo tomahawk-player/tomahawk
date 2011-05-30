@@ -21,6 +21,7 @@
 #include "playlistitems.h"
 #include "viewmanager.h"
 #include "playlist.h"
+#include "genericpageitems.h"
 
 /// CollectionItem
 
@@ -31,8 +32,12 @@ CollectionItem::CollectionItem(  SourcesModel* mdl, SourceTreeItem* parent, cons
     , m_source( source )
     , m_playlists( 0 )
     , m_stations( 0 )
+    , m_tempItem( 0 )
+    , m_curTempPage( 0 )
 {
     if( m_source.isNull() ) { // super collection
+        connect( ViewManager::instance(), SIGNAL( tempPageActivated( Tomahawk::ViewPage*) ), this, SLOT( tempPageActivated( Tomahawk::ViewPage* ) ) );
+
         return;
     }
     // create category items if there are playlists to show, or stations to show
@@ -263,4 +268,41 @@ void
 CollectionItem::onStationsDeleted( const QList< dynplaylist_ptr >& stations )
 {
     playlistsDeletedInternal( m_stations, stations );
+}
+
+void
+CollectionItem::tempPageActivated( Tomahawk::ViewPage* v )
+{
+    QString name = v->title();
+    m_curTempPage = v;
+    if( !m_tempItem ) {
+        emit beginRowsAdded( children().count(), children().count() );
+        m_tempItem = new GenericPageItem( model(), this, name, QIcon( RESPATH "images/playlist-icon.png" ),
+                                          boost::bind( &CollectionItem::tempItemClicked, this ),
+                                          boost::bind( &CollectionItem::getTempPage, this )
+                                        );
+        emit endRowsAdded();
+    } else {
+        m_tempItem->setText( name );
+    }
+
+    model()->linkSourceItemToPage( m_tempItem, v );
+    emit selectRequest( m_tempItem );
+}
+
+ViewPage*
+CollectionItem::tempItemClicked()
+{
+    if( m_curTempPage ) {
+        // show the last temporary page the user displayed
+        return ViewManager::instance()->show( m_curTempPage );
+    }
+
+    return 0;
+}
+
+ViewPage*
+CollectionItem::getTempPage() const
+{
+    return m_curTempPage;
 }

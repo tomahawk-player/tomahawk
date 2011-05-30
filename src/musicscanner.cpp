@@ -162,28 +162,12 @@ MusicScanner::~MusicScanner()
 
     if ( !m_dirLister.isNull() )
     {
-        m_dirLister.data()->setIsDeleting();
-        QMetaObject::invokeMethod( m_dirLister.data(), "deleteLater", Qt::DirectConnection );
-        while( !m_dirLister.isNull() )
-        {
-            qDebug() << Q_FUNC_INFO << " scanner not deleted";
-            TomahawkUtils::Sleep::msleep( 50 );
-        }
+        m_dirListerThreadController->quit();;
+        m_dirListerThreadController->wait( 60000 );
 
-        if ( m_dirListerThreadController )
-            m_dirListerThreadController->quit();
-
-        if( m_dirListerThreadController )
-        {
-            while( !m_dirListerThreadController->isFinished() )
-            {
-                qDebug() << Q_FUNC_INFO << " scanner thread controller not finished";
-                TomahawkUtils::Sleep::msleep( 50 );
-            }
-
-            delete m_dirListerThreadController;
-            m_dirListerThreadController = 0;
-        }
+        delete m_dirLister.data();
+        delete m_dirListerThreadController;
+        m_dirListerThreadController = 0;
     }
 }
 

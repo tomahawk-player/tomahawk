@@ -599,23 +599,11 @@ ViewManager::setPage( ViewPage* page, bool trackHistory )
         setHistoryPosition( m_pageHistory.count() - 1 );
     }
 
-    if ( !playlistForInterface( currentPlaylistInterface() ).isNull() )
-        emit playlistActivated( playlistForInterface( currentPlaylistInterface() ) );
-
-    else if ( dynamicPlaylistForInterface( currentPlaylistInterface() ) )
-        emit dynamicPlaylistActivated( dynamicPlaylistForInterface( currentPlaylistInterface() ) );
-    else if ( collectionForInterface( currentPlaylistInterface() ) )
-        emit collectionActivated( collectionForInterface( currentPlaylistInterface() ) );
-    else if ( isSuperCollectionVisible() )
-        emit superCollectionActivated();
-    else if( isNewPlaylistPageVisible() )
-        emit newPlaylistActivated();
-    /* TODO refactor. now we have rows in the sourcetreeview that are connected to pages, e.g. Stations, Recently Updated, etc
-    else if ( !currentPlaylistInterface() )
-        emit tempPageActivated();*/
-
     qDebug() << "View page shown:" << page->title();
     emit viewPageActivated( page );
+
+    if( page->isTemporaryPage() )
+        emit tempPageActivated( page );
 
     if ( !AudioEngine::instance()->playlist() )
         AudioEngine::instance()->setPlaylist( currentPlaylistInterface() );
