@@ -25,8 +25,8 @@
 !define QT_DLL_PATH "${MING_BIN}"
 !define SQLITE_DLL_PATH "${MING_LIB}/qt4/plugins/sqldrivers"
 !define IMAGEFORMATS_DLL_PATH "${MING_LIB}/qt4/plugins/imageformats"
-!define VLC_PATH "${MING_BIN}"
-!define VLC_PLUGIN_PATH "${MING_LIB}\vlc\plugins"
+!define VLC_PATH "${ROOT_PATH}\..\vlc"
+!define VLC_PLUGIN_PATH "${VLC_PATH}\plugins"
 
 ;-----------------------------------------------------------------------------
 ; Increment installer revision number as part of this script.
