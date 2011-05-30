@@ -86,10 +86,10 @@ InfoSystem::~InfoSystem()
 
     if ( !m_worker.isNull() )
     {
-        m_worker.clear();
         m_infoSystemWorkerThreadController->quit();
         m_infoSystemWorkerThreadController->wait( 60000 );
 
+        delete m_worker.data();
         delete m_infoSystemWorkerThreadController;
         m_infoSystemWorkerThreadController = 0;
     }
@@ -97,10 +97,10 @@ InfoSystem::~InfoSystem()
 
     if ( !m_cache.isNull() )
     {
-        m_cache.clear();
         m_infoSystemCacheThreadController->quit();
         m_infoSystemCacheThreadController->wait( 60000 );
 
+        delete m_cache.data();
         delete m_infoSystemCacheThreadController;
         m_infoSystemCacheThreadController = 0;
     }
