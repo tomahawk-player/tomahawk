@@ -28,6 +28,7 @@
 #include "database/databasecommand_deleteplaylist.h"
 #include "database/databasecommand_renameplaylist.h"
 
+#include "tomahawksettings.h"
 #include "pipeline.h"
 #include "source.h"
 #include "sourcelist.h"
@@ -219,6 +220,9 @@ Playlist::load( const QString& guid )
 bool
 Playlist::remove( const playlist_ptr& playlist )
 {
+    TomahawkSettings *s = TomahawkSettings::instance();
+    s->removePlaylistSettings( playlist->guid() );
+
     DatabaseCommand_DeletePlaylist* cmd = new DatabaseCommand_DeletePlaylist( playlist->author(), playlist->guid() );
     Database::instance()->enqueue( QSharedPointer<DatabaseCommand>(cmd) );
 

@@ -24,7 +24,6 @@
 #include "network/controlconnection.h"
 #include "database/databasecommand_addsource.h"
 #include "database/databasecommand_sourceoffline.h"
-#include "database/databasecommand_logplayback.h"
 #include "database/database.h"
 
 #include <QCoreApplication>
@@ -50,6 +49,10 @@ Source::Source( int id, const QString& username )
         m_isLocal = true;
         m_online = true;
     }
+
+    m_currentTrackTimer.setInterval( 600000 ); // 10 minutes
+    m_currentTrackTimer.setSingleShot( true );
+    connect( &m_currentTrackTimer, SIGNAL( timeout() ), this, SLOT( trackTimerFired() ) );
 }
 
 
@@ -278,4 +281,14 @@ Source::onPlaybackFinished( const Tomahawk::query_ptr& query )
 {
     qDebug() << Q_FUNC_INFO << query->toString();
     emit playbackFinished( query );
+
+    m_currentTrackTimer.start();
+}
+
+void
+Source::trackTimerFired()
+{
+    m_currentTrack.clear();
+
+    emit stateChanged();
 }

@@ -26,6 +26,7 @@
 #include <QDir>
 #include <QDebug>
 #include "sip/SipHandler.h"
+#include "playlistinterface.h"
 
 #define VERSION 3
 
@@ -214,7 +215,6 @@ TomahawkSettings::setWatchForChanges( bool watch )
 {
     setValue( "watchForChanges", watch );
 }
-
 
 void
 TomahawkSettings::setAcceptedLegalWarning( bool accept )
@@ -409,6 +409,36 @@ TomahawkSettings::setPlaylistColumnSizes( const QString& playlistid, const QByte
     setValue( QString( "ui/playlist/%1/columnSizes" ).arg( playlistid ), state );
 }
 
+bool
+TomahawkSettings::shuffleState( const QString& playlistid ) const
+{
+    return value( QString( "ui/playlist/%1/shuffleState" ).arg( playlistid )).toBool();
+}
+
+void
+TomahawkSettings::setShuffleState( const QString& playlistid, bool state)
+{
+    setValue( QString( "ui/playlist/%1/shuffleState" ).arg( playlistid ), state );
+}
+
+void
+TomahawkSettings::removePlaylistSettings( const QString& playlistid )
+{
+    remove( QString( "ui/playlist/%1/shuffleState" ).arg( playlistid ) );
+    remove( QString( "ui/playlist/%1/repeatMode" ).arg( playlistid ) );
+}
+
+void
+TomahawkSettings::setRepeatMode( const QString& playlistid, PlaylistInterface::RepeatMode mode )
+{
+    setValue( QString( "ui/playlist/%1/repeatMode" ).arg( playlistid ), (int)mode );
+}
+
+PlaylistInterface::RepeatMode
+TomahawkSettings::repeatMode( const QString& playlistid )
+{
+    return (PlaylistInterface::RepeatMode)value( QString( "ui/playlist/%1/repeatMode" ).arg( playlistid )).toInt();
+}
 
 QList<Tomahawk::playlist_ptr>
 TomahawkSettings::recentlyPlayedPlaylists() const

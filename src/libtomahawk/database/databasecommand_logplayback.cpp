@@ -45,7 +45,7 @@ DatabaseCommand_LogPlayback::postCommitHook()
     {
         emit trackPlayed( q );
     }
-    else if ( m_action == Started )
+    else if ( m_action == Started && QDateTime::fromTime_t( playtime() ).secsTo( QDateTime::currentDateTime() ) < 600 ) // if the play time is more than 10 minutes in the past, ignore
     {
         emit trackPlaying( q );
     }

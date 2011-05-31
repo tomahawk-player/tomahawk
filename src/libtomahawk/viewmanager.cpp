@@ -142,6 +142,7 @@ ViewManager::ViewManager( QObject* parent )
 
 ViewManager::~ViewManager()
 {
+    saveCurrentPlaylistSettings();
     delete m_widget;
 }
 
@@ -581,6 +582,9 @@ ViewManager::setPage( ViewPage* page, bool trackHistory )
     if ( !page )
         return;
 
+    // save the old playlist shuffle state in config before we change playlists
+    saveCurrentPlaylistSettings();
+    
     unlinkPlaylist();
 
     if ( !m_pageHistory.contains( page ) )
@@ -652,6 +656,24 @@ ViewManager::unlinkPlaylist()
     }
 }
 
+void
+ViewManager::saveCurrentPlaylistSettings()
+{
+    TomahawkSettings* s = TomahawkSettings::instance();
+    Tomahawk::playlist_ptr pl = playlistForInterface( currentPlaylistInterface() );
+    
+    if ( !pl.isNull() ) {
+        s->setShuffleState(  pl->guid(), currentPlaylistInterface()->shuffled() );
+        s->setRepeatMode( pl->guid(), currentPlaylistInterface()->repeatMode() );
+    } else {
+        Tomahawk::dynplaylist_ptr dynPl = dynamicPlaylistForInterface( currentPlaylistInterface() );
+        if ( !dynPl.isNull() ) {
+            s->setShuffleState( dynPl->guid(), currentPlaylistInterface()->shuffled() );
+            s->setRepeatMode( dynPl->guid(), currentPlaylistInterface()->repeatMode() );
+        }
+    }
+}
+
 
 void
 ViewManager::updateView()
@@ -704,8 +726,26 @@ ViewManager::updateView()
     m_infobar->setCaption( currentPage()->title() );
     m_infobar->setDescription( currentPage()->description() );
     m_infobar->setPixmap( currentPage()->pixmap() );
+    
+    // turn on shuffle/repeat mode for the new playlist view if specified in config
+    loadCurrentPlaylistSettings();
 }
 
+void
+ViewManager::loadCurrentPlaylistSettings()
+{
+    TomahawkSettings* s = TomahawkSettings::instance();
+    Tomahawk::playlist_ptr pl = playlistForInterface( currentPlaylistInterface() );
+    if ( !pl.isNull() ) {
+        currentPlaylistInterface()->setShuffled( s->shuffleState( pl->guid() ));
+        currentPlaylistInterface()->setRepeatMode( s->repeatMode( pl->guid() ));
+    } else { 
+        Tomahawk::dynplaylist_ptr dynPl = dynamicPlaylistForInterface( currentPlaylistInterface() );
+        if ( !dynPl.isNull() ) {
+            currentPlaylistInterface()->setShuffled( s->shuffleState( dynPl->guid() ));
+        }
+    }
+}
 
 void
 ViewManager::onWidgetDestroyed( QWidget* widget )

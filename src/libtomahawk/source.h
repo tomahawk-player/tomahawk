@@ -105,6 +105,7 @@ private slots:
     void onStateChanged( DBSyncConnection::State newstate, DBSyncConnection::State oldstate, const QString& info );
     void onPlaybackStarted( const Tomahawk::query_ptr& query );
     void onPlaybackFinished( const Tomahawk::query_ptr& query );
+    void trackTimerFired();
 
 private:
     bool m_isLocal;
@@ -118,6 +119,7 @@ private:
 
     Tomahawk::query_ptr m_currentTrack;
     QString m_textStatus;
+    QTimer m_currentTrackTimer;
 
     ControlConnection* m_cc;
 

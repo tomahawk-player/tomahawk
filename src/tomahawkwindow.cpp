@@ -233,7 +233,6 @@ TomahawkWindow::loadSettings()
         restoreState( s->mainWindowState() );
     if ( !s->mainWindowSplitterState().isEmpty() )
         ui->splitter->restoreState( s->mainWindowSplitterState() );
-
 #ifdef QT_MAC_USE_COCOA
      if( workaround ) {
        // Make it visible again
