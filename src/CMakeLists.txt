@@ -70,6 +70,8 @@ SET( tomahawkSourcesGui ${tomahawkSourcesGui}
      resolverconfigdelegate.cpp
      resolversmodel.cpp
      tomahawkwindow.cpp
+
+     win/qtwin.cpp
 )
 
 SET( tomahawkHeaders ${tomahawkHeaders}
@@ -114,6 +116,9 @@ SET( tomahawkHeadersGui ${tomahawkHeadersGui}
      resolversmodel.h
      delegateconfigwrapper.h
      tomahawkwindow.h
+
+
+    win/qtwin.h
 )
 
 SET( tomahawkUI ${tomahawkUI}

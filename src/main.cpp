@@ -19,6 +19,7 @@
 #include "tomahawkapp.h"
 
 #include "kdsingleapplicationguard/kdsingleapplicationguard.h"
+#include "win/qtwin.h"
 
 #include <QTranslator>
 
@@ -61,6 +62,12 @@ main( int argc, char *argv[] )
         a.loadUrl( arg );
     }
 
+    // make translucent on windows7
+    if ( QtWin::isCompositionEnabled() )
+    {
+        QtWin::extendFrameIntoClientArea( a.mainWindow() );
+        a.mainWindow()->setContentsMargins( 0, 0, 0, 0 );
+    }
     return a.exec();
 }
 
