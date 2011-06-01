@@ -99,6 +99,7 @@ PlaylistView::setupMenus()
 
     foreach( QAction* a, actions() )
         m_itemMenu.addAction( a );
+
 //    m_addItemsToPlaylistAction = m_itemMenu.addAction( tr( "&Add to Playlist" ) );
 //    m_itemMenu.addSeparator();
     m_deleteItemsAction = m_itemMenu.addAction( i > 1 ? tr( "&Delete Items" ) : tr( "&Delete Item" ) );

@@ -137,6 +137,17 @@ AudioEngine::next()
 
 
 void
+AudioEngine::seek( int ms )
+{
+    if ( isPlaying() || isPaused() )
+    {
+        qDebug() << Q_FUNC_INFO << ms;
+        m_mediaObject->seek( ms );
+    }
+}
+
+
+void
 AudioEngine::setVolume( int percentage )
 {
     //qDebug() << Q_FUNC_INFO;
@@ -176,7 +187,7 @@ AudioEngine::loadTrack( const Tomahawk::result_ptr& result )
         {
             setCurrentTrack( result );
 
-            if ( !isHttpResult( m_currentTrack->url() ) )
+            if ( !isHttpResult( m_currentTrack->url() ) && !isLocalResult( m_currentTrack->url() ) )
             {
                 io = Servent::instance()->getIODeviceForUrl( m_currentTrack );
 
@@ -204,7 +215,7 @@ AudioEngine::loadTrack( const Tomahawk::result_ptr& result )
                 m_expectStop = true;
             }
 
-            if ( !isHttpResult( m_currentTrack->url() ) )
+            if ( !isHttpResult( m_currentTrack->url() ) && !isLocalResult( m_currentTrack->url() ) )
             {
                 m_mediaObject->setCurrentSource( io.data() );
                 m_mediaObject->currentSource().setAutoDelete( false );
@@ -217,7 +228,6 @@ AudioEngine::loadTrack( const Tomahawk::result_ptr& result )
                 {
                     furl = QUrl( m_currentTrack->url().left( m_currentTrack->url().indexOf( '?' ) ) );
                     furl.setEncodedQuery( QString( m_currentTrack->url().mid( m_currentTrack->url().indexOf( '?' ) + 1 ) ).toLocal8Bit() );
-                    qDebug() << Q_FUNC_INFO << furl;
                 }
                 m_mediaObject->setCurrentSource( furl );
                 m_mediaObject->currentSource().setAutoDelete( true );
@@ -306,11 +316,22 @@ AudioEngine::onStateChanged( Phonon::State newState, Phonon::State oldState )
     {
         qDebug() << "Phonon Error:" << m_mediaObject->errorString() << m_mediaObject->errorType();
     }
-
     if ( oldState == Phonon::PlayingState && newState == Phonon::StoppedState )
     {
+        qDebug() << "Expecting stop?" << m_expectStop;
         if ( !m_expectStop )
         {
+            qDebug() << "Loading next track.";
+            m_expectStop = false;
+            loadNextTrack();
+        }
+    }
+    else if ( oldState == Phonon::PlayingState && newState == Phonon::PausedState )
+    {
+        qDebug() << m_mediaObject->currentTime() << m_mediaObject->totalTime();
+        if ( m_mediaObject->currentTime() == m_mediaObject->totalTime() )
+        {
+            qDebug() << "Loading next track.";
             m_expectStop = false;
             loadNextTrack();
         }
@@ -365,8 +386,16 @@ AudioEngine::setCurrentTrack( const Tomahawk::result_ptr& result )
     m_currentTrack = result;
 }
 
+
 bool
 AudioEngine::isHttpResult( const QString& url ) const
 {
     return url.startsWith( "http://" );
+}
+
+
+bool
+AudioEngine::isLocalResult( const QString& url ) const
+{
+    return url.startsWith( "file://" );
 }

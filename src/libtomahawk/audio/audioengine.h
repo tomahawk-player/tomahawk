@@ -64,6 +64,7 @@ public slots:
     void previous();
     void next();
 
+    void seek( int ms );
     void setVolume( int percentage );
     void lowerVolume() { setVolume( volume() - AUDIO_VOLUME_STEP ); }
     void raiseVolume() { setVolume( volume() + AUDIO_VOLUME_STEP ); }
@@ -106,6 +107,7 @@ private slots:
 
 private:
     bool isHttpResult( const QString& ) const;
+    bool isLocalResult( const QString& ) const;
 
     bool m_isPlayingHttp;
     QSharedPointer<QIODevice> m_input;

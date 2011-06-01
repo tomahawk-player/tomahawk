@@ -57,6 +57,7 @@
 #include "diagnosticsdialog.h"
 #include "tomahawksettings.h"
 #include "sourcelist.h"
+#include "PipelineStatusView.h"
 #include "transferview.h"
 #include "tomahawktrayicon.h"
 #include "playlist/dynamic/GeneratorInterface.h"
@@ -107,18 +108,19 @@ TomahawkWindow::TomahawkWindow( QWidget* parent )
     sidebar->setOrientation( Qt::Vertical );
     sidebar->setChildrenCollapsible( false );
     sidebar->setGreedyWidget( 0 );
-    sidebar->setStretchFactor( 0, 3 );
-    sidebar->setStretchFactor( 1, 1 );
 
     m_sourcetree = new SourceTreeView();
-    TransferView* transferView = new TransferView();
+    TransferView* transferView = new TransferView( sidebar );
+    PipelineStatusView* pipelineView = new PipelineStatusView( sidebar );
 
     connect( ui->actionHideOfflineSources, SIGNAL( triggered() ), m_sourcetree, SLOT( hideOfflineSources() ) );
     connect( ui->actionShowOfflineSources, SIGNAL( triggered() ), m_sourcetree, SLOT( showOfflineSources() ) );
 
     sidebar->addWidget( m_sourcetree );
     sidebar->addWidget( transferView );
+    sidebar->addWidget( pipelineView );
     sidebar->hide( 1, false );
+    sidebar->hide( 2, false );
 
 /*    QWidget* buttonWidget = new QWidget();
     buttonWidget->setLayout( new QVBoxLayout() );

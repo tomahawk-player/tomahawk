@@ -60,6 +60,7 @@ SET( tomahawkSourcesGui ${tomahawkSourcesGui}
      sourcetree/items/genericpageitems.cpp
 
      transferview.cpp
+     PipelineStatusView.cpp
      tomahawktrayicon.cpp
      audiocontrols.cpp
      settingsdialog.cpp
@@ -102,6 +103,7 @@ SET( tomahawkHeadersGui ${tomahawkHeadersGui}
      sourcetree/items/genericpageitems.h
 
      transferview.h
+     PipelineStatusView.h
      tomahawktrayicon.h
      audiocontrols.h
      settingsdialog.h
