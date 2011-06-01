@@ -38,13 +38,14 @@ public:
     QUrl openLinkFromQuery( const Tomahawk::query_ptr& query ) const;
 
     void copyToClipboard( const Tomahawk::query_ptr& query ) const;
-    void copyPlaylistToClipboard( const Tomahawk::dynplaylist_ptr& playlist );
+    QString copyPlaylistToClipboard( const Tomahawk::dynplaylist_ptr& playlist );
     void savePlaylistToFile( const Tomahawk::playlist_ptr& playlist, const QString& filename );
 
 public slots:
     bool parseTomahawkLink( const QString& link );
     void waitingForResolved( bool );
 
+    Tomahawk::dynplaylist_ptr loadDynamicPlaylist( const QUrl& url, bool station );
 private slots:
     void bookmarkPlaylistCreated( const Tomahawk::playlist_ptr& pl );
     void showPlaylist();
@@ -65,7 +66,6 @@ private:
     bool handleBookmarkCommand(const QUrl& url );
     bool handleOpenCommand(const QUrl& url );
 
-    bool loadDynamicPlaylist( const QUrl& url, bool station );
     bool doQueueAdd( const QStringList& parts, const QList< QPair< QString, QString > >& queryItems );
 
     Tomahawk::playlist_ptr m_toShow;
