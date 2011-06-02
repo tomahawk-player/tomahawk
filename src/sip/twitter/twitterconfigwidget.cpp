@@ -132,6 +132,7 @@ TwitterConfigWidget::authenticateVerifyReply( const QTweetUser &user )
     m_plugin->connectPlugin( false );
 
     emit twitterAuthed( true );
+    emit sizeHintChanged();
 }
 
 void
@@ -161,6 +162,7 @@ TwitterConfigWidget::deauthenticateTwitter()
     ui->twitterTweetComboBox->setVisible( false );
 
     emit twitterAuthed( false );
+    emit sizeHintChanged();
 }
 
 void

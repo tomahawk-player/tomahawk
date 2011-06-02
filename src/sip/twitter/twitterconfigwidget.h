@@ -45,6 +45,7 @@ public:
 signals:
     void twitterAuthed( bool authed );
 
+    void sizeHintChanged();
 private slots:
     void authDeauthTwitter();
     void startPostGotTomahawkStatus();

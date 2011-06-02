@@ -47,6 +47,8 @@ public:
         setSizeGripEnabled( false );
         setMinimumSize( sizeHint() );
         setMaximumSize( sizeHint() ); // to remove the resize grip on osx this is the only way
+
+        connect( conf, SIGNAL( sizeHintChanged() ), this, SLOT( updateSizeHint() ) );
 #endif
     }
 public slots:
@@ -70,6 +72,15 @@ public slots:
         layout()->removeWidget( m_widget );
         m_widget->setParent( 0 );
         m_widget->setVisible( false );
+    }
+
+    void updateSizeHint() {
+        hide();
+        setSizeGripEnabled( false );
+        setMinimumSize( sizeHint() );
+        setMaximumSize( sizeHint() );
+
+        show();
     }
 
 private:
