@@ -28,7 +28,6 @@ class DelegateConfigWrapper : public QDialog
 public:
     DelegateConfigWrapper( QWidget* conf, const QString& title, QWidget* parent, Qt::WindowFlags flags = 0 ) : QDialog( parent, flags ), m_widget( conf )
     {
-        m_widget->setVisible( true );
         m_widget->setWindowFlags( Qt::Sheet );
 
         setWindowTitle( title );
@@ -50,6 +49,7 @@ public:
 
         connect( conf, SIGNAL( sizeHintChanged() ), this, SLOT( updateSizeHint() ) );
 #endif
+        m_widget->setVisible( true );
     }
 public slots:
     void closed( QAbstractButton* b )
