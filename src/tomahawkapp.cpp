@@ -330,26 +330,21 @@ TomahawkApp::~TomahawkApp()
     
 #ifndef TOMAHAWK_HEADLESS
     delete m_mainwindow;
+    delete m_audioEngine;
 #endif
 
     delete m_infoSystem;
 
     //FIXME: delete GeneratorFactory::registerFactory( "echonest", new EchonestFactory ); ?
 
-    delete m_database;
-
-    delete SipHandler::instance();
-    
+    delete SipHandler::instance();    
     delete m_servent;
-    
-    Pipeline::instance()->stop();
-    delete Pipeline::instance();    
 
     delete m_scanManager;
+    delete m_database;
     
-#ifndef TOMAHAWK_HEADLESS
-    delete m_audioEngine;
-#endif
+    Pipeline::instance()->stop();
+    delete Pipeline::instance();
 
     delete TomahawkUtils::proxyFactory();
     delete TomahawkUtils::nam();

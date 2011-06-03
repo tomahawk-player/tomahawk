@@ -19,7 +19,11 @@
 
 #include "sourcetreeitem.h"
 
+class GenericPageItem;
 class CategoryItem;
+namespace Tomahawk {
+    class ViewPage;
+}
 
 class CollectionItem : public SourceTreeItem
 {
@@ -38,6 +42,7 @@ public:
     CategoryItem* playlistsCategory() const { return m_playlists; }
     void setStationsCategory( CategoryItem* item ) { m_stations = item; }
     void setPlaylistsCategory( CategoryItem* item ) { m_playlists = item; }
+
 private slots:
     void onPlaylistsAdded( const QList<Tomahawk::playlist_ptr>& playlists );
     void onPlaylistsDeleted( const QList<Tomahawk::playlist_ptr>& playlists );
@@ -45,6 +50,10 @@ private slots:
     void onAutoPlaylistsDeleted( const QList<Tomahawk::dynplaylist_ptr>& playlists );
     void onStationsAdded( const QList<Tomahawk::dynplaylist_ptr>& stations );
     void onStationsDeleted( const QList<Tomahawk::dynplaylist_ptr>& stations );
+
+    void tempPageActivated( Tomahawk::ViewPage* );
+    Tomahawk::ViewPage* tempItemClicked();
+    Tomahawk::ViewPage* getTempPage() const;
 
 private:
     void playlistsAddedInternal( SourceTreeItem* parent, const QList< Tomahawk::dynplaylist_ptr >& playlists );
@@ -54,6 +63,9 @@ private:
     Tomahawk::source_ptr m_source;
     CategoryItem* m_playlists;
     CategoryItem* m_stations;
+
+    GenericPageItem* m_tempItem;
+    Tomahawk::ViewPage* m_curTempPage;
 };
 
 

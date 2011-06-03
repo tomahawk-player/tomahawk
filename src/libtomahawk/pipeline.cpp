@@ -311,6 +311,7 @@ Pipeline::shunt( const query_ptr& q )
 
                 qDebug() << "Dispatching to resolver" << r->name() << q->toString() << q->solved() << q->id();
                 r->resolve( q );
+                emit resolving( q );
             }
             else
                 break;

@@ -68,6 +68,14 @@ public:
     QList<Tomahawk::playlist_ptr> recentlyPlayedPlaylists() const;
     QStringList recentlyPlayedPlaylistGuids( unsigned int amount = 0 ) const;
     void appendRecentlyPlayedPlaylist( const Tomahawk::playlist_ptr& playlist );
+    
+    bool shuffleState( const QString& playlistid ) const;
+    void setShuffleState( const QString& playlistid, bool state );
+    PlaylistInterface::RepeatMode repeatMode( const QString& playlistid );
+    void setRepeatMode( const QString& playlistid, PlaylistInterface::RepeatMode mode);
+
+    // remove shuffle state and repeat state
+    void removePlaylistSettings( const QString& playlistid );
 
     /// SIP plugins
     // all plugins we know about. loaded, unloaded, enabled, disabled.

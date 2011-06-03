@@ -424,6 +424,7 @@ DynamicWidget::onDeleted()
 void
 DynamicWidget::onChanged()
 {
-    if( !m_playlist.isNull() )
+    if( !m_playlist.isNull() &&
+        ViewManager::instance()->currentPage() == this )
         emit nameChanged( m_playlist->title() );
 }

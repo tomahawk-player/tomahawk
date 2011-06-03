@@ -1,5 +1,5 @@
 /* === This file is part of Tomahawk Player - <http://tomahawk-player.org> ===
- * 
+ *
  *   Copyright 2010-2011, Christian Muehlhaeuser <muesli@tomahawk-player.org>
  *
  *   Tomahawk is free software: you can redistribute it and/or modify
@@ -39,8 +39,8 @@ public:
     QSize sizeHint() const { return QSize( 0, 200 ); }
 
 public slots:
-    virtual void onShown( QWidget* );
-    virtual void onHidden( QWidget* );
+    virtual void onShown( QWidget*, bool animated );
+    virtual void onHidden( QWidget*, bool animated );
 
 private:
     PlaylistView* m_queue;

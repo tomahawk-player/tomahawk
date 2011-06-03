@@ -50,12 +50,14 @@
 #include "utils/widgetdragfilter.h"
 #include "utils/xspfloader.h"
 #include "widgets/newplaylistwidget.h"
+#include "widgets/playlisttypeselectordlg.h"
 
 #include "audiocontrols.h"
 #include "settingsdialog.h"
 #include "diagnosticsdialog.h"
 #include "tomahawksettings.h"
 #include "sourcelist.h"
+#include "PipelineStatusView.h"
 #include "transferview.h"
 #include "tomahawktrayicon.h"
 #include "playlist/dynamic/GeneratorInterface.h"
@@ -106,18 +108,19 @@ TomahawkWindow::TomahawkWindow( QWidget* parent )
     sidebar->setOrientation( Qt::Vertical );
     sidebar->setChildrenCollapsible( false );
     sidebar->setGreedyWidget( 0 );
-    sidebar->setStretchFactor( 0, 3 );
-    sidebar->setStretchFactor( 1, 1 );
 
     m_sourcetree = new SourceTreeView();
-    TransferView* transferView = new TransferView();
+    TransferView* transferView = new TransferView( sidebar );
+    PipelineStatusView* pipelineView = new PipelineStatusView( sidebar );
 
     connect( ui->actionHideOfflineSources, SIGNAL( triggered() ), m_sourcetree, SLOT( hideOfflineSources() ) );
     connect( ui->actionShowOfflineSources, SIGNAL( triggered() ), m_sourcetree, SLOT( showOfflineSources() ) );
 
     sidebar->addWidget( m_sourcetree );
     sidebar->addWidget( transferView );
+    sidebar->addWidget( pipelineView );
     sidebar->hide( 1, false );
+    sidebar->hide( 2, false );
 
 /*    QWidget* buttonWidget = new QWidget();
     buttonWidget->setLayout( new QVBoxLayout() );
@@ -232,7 +235,6 @@ TomahawkWindow::loadSettings()
         restoreState( s->mainWindowState() );
     if ( !s->mainWindowSplitterState().isEmpty() )
         ui->splitter->restoreState( s->mainWindowSplitterState() );
-
 #ifdef QT_MAC_USE_COCOA
      if( workaround ) {
        // Make it visible again
@@ -274,7 +276,6 @@ TomahawkWindow::setupSignals()
     connect( ui->actionRescanCollection, SIGNAL( triggered() ), SLOT( updateCollectionManually() ) );
     connect( ui->actionLoadXSPF, SIGNAL( triggered() ), SLOT( loadSpiff() ));
     connect( ui->actionCreatePlaylist, SIGNAL( triggered() ), SLOT( createPlaylist() ));
-    connect( ui->actionCreateAutomaticPlaylist, SIGNAL( triggered() ), SLOT( createAutomaticPlaylist() ));
     connect( ui->actionCreate_New_Station, SIGNAL( triggered() ), SLOT( createStation() ));
     connect( ui->actionAboutTomahawk, SIGNAL( triggered() ), SLOT( showAboutTomahawk() ) );
     connect( ui->actionExit, SIGNAL( triggered() ), qApp, SLOT( quit() ) );
@@ -444,11 +445,11 @@ TomahawkWindow::loadSpiff()
 
 
 void
-TomahawkWindow::createAutomaticPlaylist()
+TomahawkWindow::createAutomaticPlaylist( QString playlistName )
 {
-    bool ok;
-    QString name = QInputDialog::getText( this, tr( "Create New Automatic Playlist" ), tr( "Name:" ), QLineEdit::Normal, tr( "New Automatic Playlist" ), &ok );
-    if ( !ok || name.isEmpty() )
+    QString name = playlistName;
+
+    if ( name.isEmpty() )
         return;
 
     source_ptr author = SourceList::instance()->getLocal();
@@ -484,7 +485,21 @@ TomahawkWindow::createStation()
 void
 TomahawkWindow::createPlaylist()
 {
-    ViewManager::instance()->show( new NewPlaylistWidget() );
+    PlaylistTypeSelectorDlg playlistSelectorDlg;
+    int successfulReturn = playlistSelectorDlg.exec();
+
+    if ( !playlistSelectorDlg.playlistTypeIsAuto() && successfulReturn ) {
+
+        // only show if none is shown yet
+        if( !ViewManager::instance()->isNewPlaylistPageVisible() ) {
+            ViewManager::instance()->show( new NewPlaylistWidget() );
+        }
+
+    } else if ( playlistSelectorDlg.playlistTypeIsAuto() && successfulReturn ) {
+           // create Auto Playlist
+           QString playlistName = playlistSelectorDlg.playlistName();
+           APP->mainWindow()->createAutomaticPlaylist( playlistName );
+    }
 }
 
 

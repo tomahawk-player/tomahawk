@@ -48,7 +48,7 @@ public:
 
 private slots:
     void proxyTypeChangedSlot( int index );
-    
+
 private:
     Ui::ProxyDialog* ui;
     QHash<int,int> m_forwardMap;
@@ -95,12 +95,14 @@ private slots:
     // dialog slots
     void resolverConfigClosed( int value );
     void sipConfigClosed( int value );
+    void sipCreateConfigClosed( int value );
 
     void changePage( QListWidgetItem*, QListWidgetItem* );
 
 private:
     void createIcons();
     void setupSipButtons();
+    void handleSipPluginAdded( SipPlugin* p, bool added );
 
     Ui_StackedSettingsDialog* ui;
 

@@ -52,6 +52,7 @@ public:
     virtual QPixmap pixmap() const { return QPixmap( RESPATH "images/playlist-icon.png" ); }
 
     virtual bool jumpToCurrentTrack();
+    virtual bool isTemporaryPage() const;
 
 signals:
     void nameChanged( const QString& title );
@@ -75,6 +76,8 @@ private:
     PlaylistModel* m_model;
 
     QMenu m_itemMenu;
+    QString m_customTitle;
+    QString m_customDescripton;
 
     QAction* m_playItemAction;
     QAction* m_addItemsToQueueAction;

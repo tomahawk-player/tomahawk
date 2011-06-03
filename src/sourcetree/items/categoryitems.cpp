@@ -19,6 +19,7 @@
 #include "tomahawkapp.h"
 #include "utils/tomahawkutils.h"
 #include "widgets/newplaylistwidget.h"
+#include "widgets/playlisttypeselectordlg.h"
 #include "viewmanager.h"
 #include "viewpage.h"
 #include "sourcelist.h"
@@ -59,13 +60,30 @@ CategoryAddItem::activate()
 {
     switch( m_categoryType )
     {
-        case SourcesModel::PlaylistsCategory:
-            // only show if none is shown yet
-            if( !ViewManager::instance()->isNewPlaylistPageVisible() ) {
-                ViewPage* p = ViewManager::instance()->show( new NewPlaylistWidget() );
-                model()->linkSourceItemToPage( this, p );
+        case SourcesModel::PlaylistsCategory: {
+
+            PlaylistTypeSelectorDlg playlistSelectorDlg( TomahawkApp::instance()->mainWindow() );
+            int successfulReturn = playlistSelectorDlg.exec();
+
+            if ( !playlistSelectorDlg.playlistTypeIsAuto() && successfulReturn ) {
+
+                // only show if none is shown yet
+                if( !ViewManager::instance()->isNewPlaylistPageVisible() ) {
+                    //fix this namespace resolution problem, was not there before
+                    Tomahawk::ViewPage* p = ViewManager::instance()->show( new NewPlaylistWidget() );
+                    model()->linkSourceItemToPage( this, p );
+                }
+
+            } else if ( playlistSelectorDlg.playlistTypeIsAuto() && successfulReturn ) {
+               // create Auto Playlist
+               QString playlistName = playlistSelectorDlg.playlistName();
+               APP->mainWindow()->createAutomaticPlaylist( playlistName );
+            } else if ( !successfulReturn ) {
+                model()->viewPageActivated( ViewManager::instance()->currentPage() );
             }
+
             break;
+                }
         case SourcesModel::StationsCategory:
             APP->mainWindow()->createStation();
             break;
@@ -218,4 +236,5 @@ CategoryItem::activate()
     if( m_category == SourcesModel::StationsCategory ) {
         // TODO activate stations page
     }
+
 }

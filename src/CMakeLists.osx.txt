@@ -5,6 +5,8 @@ SET( OS_SPECIFIC_LINK_LIBRARIES
     ${COREAUDIO_LIBRARY}
     ${COREFOUNDATION_LIBRARY}
 
+    SPMediaKeyTap
+
     /System/Library/Frameworks/AppKit.framework
     /System/Library/Frameworks/Carbon.framework
     /System/Library/Frameworks/DiskArbitration.framework

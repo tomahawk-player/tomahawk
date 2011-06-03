@@ -111,13 +111,7 @@ signals:
     void historyBackAvailable( bool avail );
     void historyForwardAvailable( bool avail );
 
-    void tempPageActivated();
-    void superCollectionActivated();
-    void collectionActivated( const Tomahawk::collection_ptr& collection );
-    void playlistActivated( const Tomahawk::playlist_ptr& playlist );
-    void dynamicPlaylistActivated( const Tomahawk::dynplaylist_ptr& playlist );
-
-    void newPlaylistActivated();
+    void tempPageActivated( Tomahawk::ViewPage* );
     void viewPageActivated( Tomahawk::ViewPage* );
 
 public slots:
@@ -168,7 +162,9 @@ private:
     void setPage( Tomahawk::ViewPage* page, bool trackHistory = true );
     void updateView();
     void unlinkPlaylist();
-
+    void saveCurrentPlaylistSettings();
+    void loadCurrentPlaylistSettings();
+    
     Tomahawk::playlist_ptr playlistForInterface( PlaylistInterface* interface ) const;
     Tomahawk::dynplaylist_ptr dynamicPlaylistForInterface( PlaylistInterface* interface ) const;
     Tomahawk::collection_ptr collectionForInterface( PlaylistInterface* interface ) const;

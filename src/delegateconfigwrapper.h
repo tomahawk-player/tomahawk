@@ -28,7 +28,6 @@ class DelegateConfigWrapper : public QDialog
 public:
     DelegateConfigWrapper( QWidget* conf, const QString& title, QWidget* parent, Qt::WindowFlags flags = 0 ) : QDialog( parent, flags ), m_widget( conf )
     {
-        m_widget->setVisible( true );
         m_widget->setWindowFlags( Qt::Sheet );
 
         setWindowTitle( title );
@@ -47,7 +46,10 @@ public:
         setSizeGripEnabled( false );
         setMinimumSize( sizeHint() );
         setMaximumSize( sizeHint() ); // to remove the resize grip on osx this is the only way
+
+        connect( conf, SIGNAL( sizeHintChanged() ), this, SLOT( updateSizeHint() ) );
 #endif
+        m_widget->setVisible( true );
     }
 public slots:
     void closed( QAbstractButton* b )
@@ -70,6 +72,15 @@ public slots:
         layout()->removeWidget( m_widget );
         m_widget->setParent( 0 );
         m_widget->setVisible( false );
+    }
+
+    void updateSizeHint() {
+        hide();
+        setSizeGripEnabled( false );
+        setMinimumSize( sizeHint() );
+        setMaximumSize( sizeHint() );
+
+        show();
     }
 
 private:

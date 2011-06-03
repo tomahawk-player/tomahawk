@@ -35,7 +35,7 @@
      <x>0</x>
      <y>0</y>
      <width>1000</width>
-     <height>22</height>
+     <height>21</height>
     </rect>
    </property>
    <widget class="QMenu" name="menuSettings">
@@ -54,16 +54,6 @@
     <addaction name="actionHideOfflineSources"/>
     <addaction name="separator"/>
     <addaction name="actionExit"/>
-   </widget>
-   <widget class="QMenu" name="menuPlaylist">
-    <property name="title">
-     <string>&amp;Playlist</string>
-    </property>
-    <addaction name="actionCreatePlaylist"/>
-    <addaction name="actionCreateAutomaticPlaylist"/>
-    <addaction name="actionCreate_New_Station"/>
-    <addaction name="separator"/>
-    <addaction name="actionLoadXSPF"/>
    </widget>
    <widget class="QMenu" name="menuNetwork">
     <property name="title">
@@ -86,6 +76,15 @@
     <addaction name="actionDiagnostics"/>
     <addaction name="actionAboutTomahawk"/>
    </widget>
+   <widget class="QMenu" name="menuPlaylist">
+    <property name="title">
+     <string>&amp;Playlist</string>
+    </property>
+    <addaction name="actionCreatePlaylist"/>
+    <addaction name="actionCreate_New_Station"/>
+    <addaction name="separator"/>
+    <addaction name="actionLoadXSPF"/>
+   </widget>
    <addaction name="menuApp"/>
    <addaction name="menuPlaylist"/>
    <addaction name="menuNetwork"/>
@@ -107,7 +106,7 @@
   </action>
   <action name="actionToggleConnect">
    <property name="text">
-    <string>Go &amp;online</string>
+    <string>Go &amp;Online</string>
    </property>
   </action>
   <action name="actionAddFriendManually">

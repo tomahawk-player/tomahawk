@@ -46,6 +46,9 @@ public:
     explicit Pipeline( QObject* parent = 0 );
     virtual ~Pipeline();
 
+    unsigned int pendingQueryCount() const { return m_queries_pending.count(); }
+    unsigned int activeQueryCount() const { return m_qidsState.count(); }
+
     void reportResults( QID qid, const QList< result_ptr >& results );
 
     /// sorter to rank resolver priority
@@ -75,6 +78,7 @@ public slots:
 
 signals:
     void idle();
+    void resolving( const Tomahawk::query_ptr& query );
 
 private slots:
     void timeoutShunt( const query_ptr& q );

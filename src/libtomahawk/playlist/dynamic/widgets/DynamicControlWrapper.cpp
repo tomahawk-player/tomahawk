@@ -41,7 +41,6 @@ DynamicControlWrapper::DynamicControlWrapper( const Tomahawk::dyncontrol_ptr& co
      , m_typeSelector( 0 )
      , m_layout( QWeakPointer< QGridLayout >( layout ) )
 {
-    
     qDebug() << "CREATING DYNAMIC CONTROL WRAPPER WITH ROW:" << row << layout;
     
     m_typeSelector = new QComboBox( m_parent );
@@ -74,8 +73,6 @@ DynamicControlWrapper::DynamicControlWrapper( const Tomahawk::dyncontrol_ptr& co
     
     m_layout.data()->addLayout( m_plusL, m_row, 3, Qt::AlignCenter );
     m_plusL->setCurrentIndex( 0 );
-
-    
 }
 
 DynamicControlWrapper::~DynamicControlWrapper()

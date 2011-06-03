@@ -63,7 +63,11 @@ DynamicControlList::init()
     m_layout->setColumnStretch( 2, 1 );
     m_layout->setMargin( 0 );
     m_layout->setVerticalSpacing( 0 );
+#ifdef Q_WS_MAC // on OS X we don't want the right edge of the toolbuttons against the window
+    m_layout->setContentsMargins( 0, 0, 3, 0 );
+#else
     m_layout->setContentsMargins( 0, 0, 0, 0 );
+#endif
     m_layout->setSizeConstraint( QLayout::SetMinimumSize );
     
     m_collapseLayout = new QHBoxLayout();
@@ -139,7 +143,7 @@ void DynamicControlList::addNewControl()
     m_layout->removeItem( m_collapseLayout );
     
     dyncontrol_ptr control = m_generator->createControl();
-    m_controls.append( new DynamicControlWrapper( control, m_layout, m_controls.size(), this ) );
+    m_controls.append( new DynamicControlWrapper( control, m_layout, m_layout->rowCount(), this ) );
     connect( m_controls.last(), SIGNAL( removeControl() ), this, SLOT( removeControl() ) );
     connect( m_controls.last(), SIGNAL( changed() ), this, SLOT( controlChanged() ) );
     

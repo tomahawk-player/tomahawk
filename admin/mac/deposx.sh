@@ -85,8 +85,8 @@ function deplib_change
     install_name_tool -change $ORIGROOT/libtomahawk_sipzeroconf.dylib @executable_path/libtomahawk_sipzeroconf.dylib $1
     install_name_tool -change $ORIGROOT/libtomahawk_qtweetlib.dylib @executable_path/libtomahawk_qtweetlib.dylib $1
     install_name_tool -change $ORIGROOT/libtomahawk_portfwd.dylib @executable_path/libtomahawk_portfwd.dylib $1
-    install_name_tool -change $ORIGROOT/libjreen.0.dylib  @executable_path/libjreen.0.dylib $1
-    install_name_tool -change /usr/local/Cellar/jreen/HEAD/lib/libjreen.dylib  @executable_path/libjreen.0.dylib $1
+    install_name_tool -change $ORIGROOT/libjreen.dylib  @executable_path/libjreen.dylib $1
+    install_name_tool -change /usr/local/Cellar/jreen/HEAD/lib/libjreen.dylib  @executable_path/libjreen.dylib $1
     install_name_tool -change /usr/local/Cellar/qca/2.0.2/lib/qca.framework/Versions/2/qca  @executable_path/../Frameworks/qca.framework/Versions/2/qca $1
     install_name_tool -change /usr/local/Cellar/gettext/0.18.1.1/lib/libintl.8.dylib  @executable_path/libintl.8.dylib $1
     install_name_tool -change /usr/local/Cellar/vlc-git/HEAD/lib/libvlc.5.dylib   @executable_path/libvlc.5.dylib $1
@@ -127,7 +127,7 @@ import_lib /usr/local/Cellar/vlc-git/HEAD/lib/libvlc.5.dylib
 import_lib /usr/local/Cellar/vlc-git/HEAD/lib/libvlccore.4.dylib
 import_lib /usr/local/Cellar/gettext/0.18.1.1/lib/libintl.8.dylib
 
-import_lib $ORIGROOT/libjreen.0.dylib
+import_lib $ORIGROOT/libjreen.dylib
 import_lib $ORIGROOT/libtomahawklib.dylib
 import_lib $ORIGROOT/libtomahawk_sipjabber.dylib
 import_lib $ORIGROOT/libtomahawk_sipgoogle.dylib
