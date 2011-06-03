@@ -106,7 +106,8 @@ AdiumPlugin::pushInfo( const QString caller, const Tomahawk::InfoSystem::InfoTyp
 }
 
 /** Audio state slots */
-void AdiumPlugin::audioStarted( const QVariant &input )
+void
+AdiumPlugin::audioStarted( const QVariant &input )
 //void AdiumPlugin::audioStarted( const Tomahawk::result_ptr& track )
 {
     qDebug() << Q_FUNC_INFO;
@@ -131,21 +132,24 @@ AdiumPlugin::audioFinished( const QVariant &input )
     //qDebug() << Q_FUNC_INFO;
 }
 
-void AdiumPlugin::audioStopped()
+void 
+AdiumPlugin::audioStopped()
 {
     qDebug() << Q_FUNC_INFO;
     // TODO: audio stopped, so push update status to Adium that says "stopped"
     setStatus( "Stopped" );
 }
 
-void AdiumPlugin::audioPaused()
+void 
+AdiumPlugin::audioPaused()
 {
     qDebug() << Q_FUNC_INFO;
     // TODO: audio paused, so push update status to Adium that says "paused"
     setStatus( "Paused" );
 }
 
-void AdiumPlugin::audioResumed( const QVariant &input )
+void 
+AdiumPlugin::audioResumed( const QVariant &input )
 {
     qDebug() << Q_FUNC_INFO;
     // TODO: audio resumed, so push update status to Adium with playing track
