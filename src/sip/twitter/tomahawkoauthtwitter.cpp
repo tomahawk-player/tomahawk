@@ -3,7 +3,7 @@
 #include <QDebug>
 
 TomahawkOAuthTwitter::TomahawkOAuthTwitter( QNetworkAccessManager *nam, QObject* parent )
-    : OAuthTwitter( QString( "C4v4Wfa21rfIDck4HMR3A" ), QString( "zXSjU6bjrvg6UVMJX4JufqHyjj3iextY14SR9uBEAo" ), parent )
+    : OAuthTwitter( QByteArray( "C4v4Wfa21rfIDck4HMR3A" ), QByteArray( "zXSjU6bjrvg6UVMJX4JufqHyjj3iextY14SR9uBEAo" ), parent )
 {
     setNetworkAccessManager( nam );
 }
