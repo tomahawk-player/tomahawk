@@ -28,13 +28,12 @@
 
 static void setStatus(const QString &status)
 {
-  QString adiumStatus = "tell application \"Adium\"\n";
-  adiumStatus.append("set the status message of every account to \"");
-  adiumStatus.append(status);
-  adiumStatus.append("\"\nend tell\n");
-  const char* scriptstr = adiumStatus.toUtf8();
-  script( scriptstr );
-
+    QString adiumStatus = "tell application \"Adium\"\n";
+    adiumStatus.append("set the status message of every account to \"");
+    adiumStatus.append(status);
+    adiumStatus.append("\"\nend tell\n");
+    const char* scriptstr = adiumStatus.toUtf8();
+    script( scriptstr );
 }
 
 using namespace Tomahawk::InfoSystem;
@@ -60,12 +59,12 @@ AdiumPlugin::~AdiumPlugin()
 void
 AdiumPlugin::settingsChanged()
 {
-  m_active = TomahawkSettings::instance()->nowPlayingEnabled();
-  if( !m_active )
-    setStatus( "" );
+    m_active = TomahawkSettings::instance()->nowPlayingEnabled();
+    if( !m_active )
+        setStatus( "" );
 }
 
-void 
+void
 AdiumPlugin::getInfo( const QString caller, const InfoType type, const QVariant data, InfoCustomData customData )
 {
     switch (type)
@@ -84,25 +83,25 @@ AdiumPlugin::pushInfo( const QString caller, const Tomahawk::InfoSystem::InfoTyp
     qDebug() << Q_FUNC_INFO;
 
     if( !m_active )
-      return;
-    
+        return;
+
     switch ( type )
     {
         case InfoNowPlaying:
-	  audioStarted( input );
-	  break;
+          audioStarted( input );
+          break;
         case InfoNowPaused:
-	  audioPaused();
-	  break;
+          audioPaused();
+          break;
         case InfoNowResumed:
-	  audioResumed( input );
-	  break;
+          audioResumed( input );
+          break;
         case InfoNowStopped:
-	  audioStopped();
-	  break;
+          audioStopped();
+          break;
 
         default:
-	  return;
+          return;
     }
 }
 
@@ -126,7 +125,7 @@ void AdiumPlugin::audioStarted( const QVariant &input )
     setStatus( nowPlaying );
 }
 
-void 
+void
 AdiumPlugin::audioFinished( const QVariant &input )
 {
     //qDebug() << Q_FUNC_INFO;
@@ -152,4 +151,3 @@ void AdiumPlugin::audioResumed( const QVariant &input )
     // TODO: audio resumed, so push update status to Adium with playing track
     audioStarted( input );
 }
-
