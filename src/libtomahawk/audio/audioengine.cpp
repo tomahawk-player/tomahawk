@@ -219,12 +219,6 @@ AudioEngine::loadTrack( const Tomahawk::result_ptr& result )
 
             if ( !m_input.isNull() || m_isPlayingHttp )
             {
-                if ( !m_input.isNull() )
-                {
-                    m_input->close();
-                    m_input.clear();
-                }
-
                 m_expectStop = true;
             }
 
@@ -233,6 +227,12 @@ AudioEngine::loadTrack( const Tomahawk::result_ptr& result )
                 m_mediaObject->setCurrentSource( io.data() );
                 m_mediaObject->currentSource().setAutoDelete( false );
                 m_isPlayingHttp = false;
+
+                if ( !m_input.isNull() )
+                {
+                    m_input->close();
+                    m_input.clear();
+                }
             }
             else
             {
