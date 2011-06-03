@@ -6,7 +6,7 @@
 #define CONSUMER_SECRET "zXSjU6bjrvg6UVMJX4JufqHyjj3iextY14SR9uBEAo"
 
 TomahawkOAuthTwitter::TomahawkOAuthTwitter( QNetworkAccessManager *nam, QObject* parent )
-    : OAuthTwitter( CONSUMER_KEY, CONSUMER_SECRET, parent )
+    : OAuthTwitter( QString( "C4v4Wfa21rfIDck4HMR3A" ), QString( "zXSjU6bjrvg6UVMJX4JufqHyjj3iextY14SR9uBEAo" ), parent )
 {
     setNetworkAccessManager( nam );
 }
