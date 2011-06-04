@@ -194,7 +194,7 @@ TomahawkWindow::TomahawkWindow( QWidget* parent )
 
     m_searchWidget->searchEdit->setStyleSheet( "QLineEdit { border: 1px solid gray; border-radius: 6px; margin-right: 2px; }" );
 #ifdef Q_WS_MAC
-    ui->filterEdit->setAttribute( Qt::WA_MacShowFocusRect, 0 );
+    m_searchWidget->searchEdit->setAttribute( Qt::WA_MacShowFocusRect, 0 );
 #endif
 
     connect( m_searchWidget->searchEdit, SIGNAL( returnPressed() ), SLOT( onSearch() ) );
