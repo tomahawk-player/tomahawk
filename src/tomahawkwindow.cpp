@@ -620,7 +620,7 @@ TomahawkWindow::checkForUpdates()
 void
 TomahawkWindow::onSearch()
 {
-    ViewManager::instance()->show( new SearchWidget( m_searchWidget->searchEdit->text() ) );
+    ViewManager::instance()->show( new SearchWidget( m_searchWidget->searchEdit->text(), this ) );
     m_searchWidget->searchEdit->setText( QString() );
 }
 
