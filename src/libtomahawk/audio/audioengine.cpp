@@ -227,12 +227,6 @@ AudioEngine::loadTrack( const Tomahawk::result_ptr& result )
                 m_mediaObject->setCurrentSource( io.data() );
                 m_mediaObject->currentSource().setAutoDelete( false );
                 m_isPlayingHttp = false;
-
-                if ( !m_input.isNull() )
-                {
-                    m_input->close();
-                    m_input.clear();
-                }
             }
             else
             {
@@ -247,6 +241,11 @@ AudioEngine::loadTrack( const Tomahawk::result_ptr& result )
                 m_isPlayingHttp = true;
             }
 
+            if ( !m_input.isNull() )
+            {
+                m_input->close();
+                m_input.clear();
+            }
             m_input = io;
             m_mediaObject->play();
             emit started( m_currentTrack );
@@ -261,7 +260,7 @@ AudioEngine::loadTrack( const Tomahawk::result_ptr& result )
 	    Tomahawk::InfoSystem::InfoSystem::instance()->pushInfo(
 	       s_aeInfoIdentifier, Tomahawk::InfoSystem::InfoNowPlaying,
 	       QVariant::fromValue< Tomahawk::InfoSystem::InfoCriteriaHash >( trackInfo ) );
-	    
+
         }
     }
 
