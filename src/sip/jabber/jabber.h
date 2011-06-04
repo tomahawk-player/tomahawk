@@ -113,7 +113,7 @@ private slots:
     {
         qDebug() << e;
     }
-    void onNewIq( const Jreen::IQ &iq, int context = NoContext );
+    void onNewIq( const Jreen::IQ &iq );
     void onNewAvatar( const QString &jid );
 
 private:
