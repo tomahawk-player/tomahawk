@@ -82,8 +82,9 @@ void
 Pipeline::removeResolver( Resolver* r )
 {
     QMutexLocker lock( &m_mut );
-
+    
     m_resolvers.removeAll( r );
+    emit resolverRemoved( r );
 }
 
 
@@ -100,6 +101,7 @@ Pipeline::addResolver( Resolver* r, bool sort )
                Pipeline::resolverSorter );
     }
     qDebug() << "Adding resolver" << r->name();
+    emit resolverAdded( r );
 
 /*    qDebug() << "Current pipeline:";
     foreach( Resolver * r, m_resolvers )

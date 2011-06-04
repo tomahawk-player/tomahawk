@@ -67,6 +67,11 @@ Query::Query( const QString& artist, const QString& track, const QString& album,
     {
         connect( Database::instance(), SIGNAL( indexReady() ), SLOT( refreshResults() ), Qt::QueuedConnection );
     }
+    
+    connect( Pipeline::instance(), SIGNAL( resolverAdded( Resolver* ) ), 
+            SLOT( onResolverAdded() ), Qt::QueuedConnection );  
+    connect( Pipeline::instance(), SIGNAL( resolverRemoved( Resolver* ) ),
+            SLOT( onResolverRemoved() ), Qt::QueuedConnection );  
 }
 
 
@@ -145,6 +150,26 @@ Query::onResolvingFinished()
 //    qDebug() << Q_FUNC_INFO << "Finished resolving." << toString();
     m_resolveFinished = true;
     emit resolvingFinished( m_solved );
+}
+
+
+void
+Query::onResolverAdded( )
+{
+    if ( !solved() ) 
+    {
+        refreshResults();
+    }
+}
+
+void
+Query::onResolverRemoved( )
+{
+    if ( !solved() )
+    {
+        refreshResults();
+    }
+
 }
 
 

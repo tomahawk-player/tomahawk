@@ -79,6 +79,9 @@ public slots:
 signals:
     void idle();
     void resolving( const Tomahawk::query_ptr& query );
+    
+    void resolverAdded( Resolver* );
+    void resolverRemoved( Resolver* );
 
 private slots:
     void timeoutShunt( const query_ptr& q );
