@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>SearchWidget</class>
+ <widget class="QWidget" name="SearchWidget">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>985</width>
+    <height>460</height>
+   </rect>
+  </property>
+  <property name="focusPolicy">
+   <enum>Qt::TabFocus</enum>
+  </property>
+  <layout class="QVBoxLayout" name="verticalLayout">
+   <item>
+    <widget class="PlaylistView" name="resultsView"/>
+   </item>
+   <item>
+    <widget class="QDialogButtonBox" name="buttonBox">
+     <property name="standardButtons">
+      <set>QDialogButtonBox::Cancel</set>
+     </property>
+    </widget>
+   </item>
+  </layout>
+ </widget>
+ <customwidgets>
+  <customwidget>
+   <class>PlaylistView</class>
+   <extends>QTreeView</extends>
+   <header>playlist/playlistview.h</header>
+  </customwidget>
+ </customwidgets>
+ <resources/>
+ <connections/>
+</ui>
