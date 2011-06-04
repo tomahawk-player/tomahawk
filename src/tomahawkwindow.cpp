@@ -18,7 +18,7 @@
 
 #include "tomahawkwindow.h"
 #include "ui_tomahawkwindow.h"
-#include "ui_searchwidget.h"
+#include "ui_searchbox.h"
 
 #include "config.h"
 

@@ -122,7 +122,7 @@ SET( tomahawkUI ${tomahawkUI}
      diagnosticsdialog.ui
      stackedsettingsdialog.ui
      proxydialog.ui
-     searchwidget.ui
+     searchbox.ui
 
      audiocontrols.ui
 )
