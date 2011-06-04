@@ -77,7 +77,7 @@ using namespace Tomahawk;
 TomahawkWindow::TomahawkWindow( QWidget* parent )
     : QMainWindow( parent )
     , ui( new Ui::TomahawkWindow )
-    , m_searchWidget( new Ui::SearchWidget )
+    , m_searchWidget( new Ui::GlobalSearchWidget )
     , m_audioControls( new AudioControls( this ) )
     , m_trayIcon( new TomahawkTrayIcon( this ) )
     , m_sourcetree( 0 )

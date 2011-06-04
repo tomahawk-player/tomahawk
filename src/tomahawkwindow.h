@@ -38,7 +38,7 @@ class TomahawkTrayIcon;
 namespace Ui
 {
     class TomahawkWindow;
-    class SearchWidget;
+    class GlobalSearchWidget;
 }
 
 class TomahawkWindow : public QMainWindow
@@ -100,7 +100,7 @@ private:
     void setupSignals();
 
     Ui::TomahawkWindow* ui;
-    Ui::SearchWidget* m_searchWidget;
+    Ui::GlobalSearchWidget* m_searchWidget;
     QWidget* m_searchBox;
     AudioControls* m_audioControls;
     TomahawkTrayIcon* m_trayIcon;
