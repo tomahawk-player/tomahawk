@@ -190,7 +190,7 @@ Pipeline::reportResults( QID qid, const QList< result_ptr >& results )
             m_rids.insert( r->id(), r );
         }
 
-        if ( q->solved() )
+        if ( q->solved() && !q->isFullTextQuery() )
         {
 //            qDebug() << "FINISHED RESOLVING EARLY" << q->toString();
             q->onResolvingFinished();
@@ -206,7 +206,7 @@ Pipeline::reportResults( QID qid, const QList< result_ptr >& results )
 
     if ( decQIDState( q ) == 0 )
     {
-        if ( !q->solved() )
+        if ( !q->solved() || q->isFullTextQuery() )
             q->onResolvingFinished();
 
         if ( m_qidsTimeout.contains( q->id() ) )

@@ -584,7 +584,7 @@ ViewManager::setPage( ViewPage* page, bool trackHistory )
 
     // save the old playlist shuffle state in config before we change playlists
     saveCurrentPlaylistSettings();
-    
+
     unlinkPlaylist();
 
     if ( !m_pageHistory.contains( page ) )
@@ -630,6 +630,7 @@ ViewManager::setPage( ViewPage* page, bool trackHistory )
     updateView();
 }
 
+
 bool
 ViewManager::isNewPlaylistPageVisible() const
 {
@@ -661,7 +662,7 @@ ViewManager::saveCurrentPlaylistSettings()
 {
     TomahawkSettings* s = TomahawkSettings::instance();
     Tomahawk::playlist_ptr pl = playlistForInterface( currentPlaylistInterface() );
-    
+
     if ( !pl.isNull() ) {
         s->setShuffleState(  pl->guid(), currentPlaylistInterface()->shuffled() );
         s->setRepeatMode( pl->guid(), currentPlaylistInterface()->repeatMode() );
@@ -726,7 +727,7 @@ ViewManager::updateView()
     m_infobar->setCaption( currentPage()->title() );
     m_infobar->setDescription( currentPage()->description() );
     m_infobar->setPixmap( currentPage()->pixmap() );
-    
+
     // turn on shuffle/repeat mode for the new playlist view if specified in config
     loadCurrentPlaylistSettings();
 }
@@ -739,7 +740,7 @@ ViewManager::loadCurrentPlaylistSettings()
     if ( !pl.isNull() ) {
         currentPlaylistInterface()->setShuffled( s->shuffleState( pl->guid() ));
         currentPlaylistInterface()->setRepeatMode( s->repeatMode( pl->guid() ));
-    } else { 
+    } else {
         Tomahawk::dynplaylist_ptr dynPl = dynamicPlaylistForInterface( currentPlaylistInterface() );
         if ( !dynPl.isNull() ) {
             currentPlaylistInterface()->setShuffled( s->shuffleState( dynPl->guid() ));

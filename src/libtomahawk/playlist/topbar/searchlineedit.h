@@ -33,7 +33,7 @@
 
 class ClearButton;
 class SearchButton;
-class SearchLineEdit : public LineEdit
+class DLLEXPORT SearchLineEdit : public LineEdit
 {
     Q_OBJECT
 

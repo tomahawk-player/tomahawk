@@ -1,5 +1,5 @@
 /* === This file is part of Tomahawk Player - <http://tomahawk-player.org> ===
- * 
+ *
  *   Copyright 2010-2011, Christian Muehlhaeuser <muesli@tomahawk-player.org>
  *
  *   Tomahawk is free software: you can redistribute it and/or modify
@@ -46,7 +46,10 @@ friend class ::DatabaseCommand_LoadPlaylistEntries;
 
 public:
     static query_ptr get( const QString& artist, const QString& track, const QString& album, const QID& qid = QString() );
+    static query_ptr get( const QString& query, const QID& qid );
+
     explicit Query( const QString& artist, const QString& track, const QString& album, const QID& qid );
+    explicit Query( const QString& query, const QID& qid );
 
     /// returns list of all results so far
     QList< result_ptr > results() const;
@@ -64,8 +67,9 @@ public:
     /// true when any result has been found (score may be less than 1.0)
     bool playable() const { return m_playable; }
 
+    bool isFullTextQuery() const { return !m_fullTextQuery.isEmpty(); }
     bool resolvingFinished() const { return m_resolveFinished; }
-    
+
     unsigned int lastPipelineWeight() const { return m_lastpipelineweight; }
     void setLastPipelineWeight( unsigned int w ) { m_lastpipelineweight = w; }
 
@@ -75,7 +79,7 @@ public:
     void setResultHint( const QString& resultHint ) { m_resultHint = resultHint; }
     void setDuration( int duration ) { m_duration = duration; }
     void setResolveFinished( bool resolved ) { m_resolveFinished = resolved; }
-    
+
     QVariant toVariant() const;
     QString toString() const;
 
@@ -83,6 +87,7 @@ public:
     QString artist() const { return m_artist; }
     QString album() const { return m_album; }
     QString track() const { return m_track; }
+    QString fullTextQuery() const { return m_fullTextQuery; }
     int duration() const { return m_duration; }
 
 signals:
@@ -92,7 +97,7 @@ signals:
     void resultsChanged();
     void solvedStateChanged( bool state );
     void resolvingFinished( bool hasResults );
-    
+
 public slots:
     /// (indirectly) called by resolver plugins when results are found
     void addResults( const QList< Tomahawk::result_ptr >& );
@@ -118,6 +123,8 @@ private:
     QString m_artist;
     QString m_album;
     QString m_track;
+    QString m_fullTextQuery;
+
     int m_duration;
     QString m_resultHint;
 

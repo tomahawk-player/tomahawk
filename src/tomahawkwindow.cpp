@@ -18,6 +18,7 @@
 
 #include "tomahawkwindow.h"
 #include "ui_tomahawkwindow.h"
+#include "ui_searchwidget.h"
 
 #include "config.h"
 
@@ -28,6 +29,7 @@
 #include <QInputDialog>
 #include <QPixmap>
 #include <QPropertyAnimation>
+#include <QLineEdit>
 #include <QMessageBox>
 #include <QNetworkAccessManager>
 #include <QNetworkReply>
@@ -50,6 +52,7 @@
 #include "utils/widgetdragfilter.h"
 #include "utils/xspfloader.h"
 #include "widgets/newplaylistwidget.h"
+#include "widgets/searchwidget.h"
 #include "widgets/playlisttypeselectordlg.h"
 
 #include "audiocontrols.h"
@@ -74,6 +77,7 @@ using namespace Tomahawk;
 TomahawkWindow::TomahawkWindow( QWidget* parent )
     : QMainWindow( parent )
     , ui( new Ui::TomahawkWindow )
+    , m_searchWidget( new Ui::SearchWidget )
     , m_audioControls( new AudioControls( this ) )
     , m_trayIcon( new TomahawkTrayIcon( this ) )
     , m_sourcetree( 0 )
@@ -92,7 +96,9 @@ TomahawkWindow::TomahawkWindow( QWidget* parent )
     connect( m_audioControls, SIGNAL( playPressed() ), pm, SLOT( onPlayClicked() ) );
     connect( m_audioControls, SIGNAL( pausePressed() ), pm, SLOT( onPauseClicked() ) );
 
+    m_searchBox = new QWidget();
     ui->setupUi( this );
+    m_searchWidget->setupUi( m_searchBox );
 
     delete ui->sidebarWidget;
     delete ui->playlistWidget;
@@ -185,6 +191,14 @@ TomahawkWindow::TomahawkWindow( QWidget* parent )
     m_backAvailable->setToolTip( tr( "Go back one page" ) );
     m_forwardAvailable = toolbar->addAction( QIcon( RESPATH "images/forward.png" ), tr( "Forward" ), ViewManager::instance(), SLOT( historyForward() ) );
     m_forwardAvailable->setToolTip( tr( "Go forward one page" ) );
+
+    m_searchWidget->searchEdit->setStyleSheet( "QLineEdit { border: 1px solid gray; border-radius: 6px; margin-right: 2px; }" );
+#ifdef Q_WS_MAC
+    ui->filterEdit->setAttribute( Qt::WA_MacShowFocusRect, 0 );
+#endif
+
+    connect( m_searchWidget->searchEdit, SIGNAL( returnPressed() ), SLOT( onSearch() ) );
+    toolbar->addWidget( m_searchBox );
 
     statusBar()->addPermanentWidget( m_audioControls, 1 );
 
@@ -488,14 +502,17 @@ TomahawkWindow::createPlaylist()
     PlaylistTypeSelectorDlg playlistSelectorDlg;
     int successfulReturn = playlistSelectorDlg.exec();
 
-    if ( !playlistSelectorDlg.playlistTypeIsAuto() && successfulReturn ) {
-
+    if ( !playlistSelectorDlg.playlistTypeIsAuto() && successfulReturn )
+    {
         // only show if none is shown yet
-        if( !ViewManager::instance()->isNewPlaylistPageVisible() ) {
+        if ( !ViewManager::instance()->isNewPlaylistPageVisible() )
+        {
             ViewManager::instance()->show( new NewPlaylistWidget() );
         }
 
-    } else if ( playlistSelectorDlg.playlistTypeIsAuto() && successfulReturn ) {
+    }
+    else if ( playlistSelectorDlg.playlistTypeIsAuto() && successfulReturn )
+    {
            // create Auto Playlist
            QString playlistName = playlistSelectorDlg.playlistName();
            APP->mainWindow()->createAutomaticPlaylist( playlistName );
@@ -601,12 +618,22 @@ TomahawkWindow::checkForUpdates()
 
 
 void
+TomahawkWindow::onSearch()
+{
+    ViewManager::instance()->show( new SearchWidget( m_searchWidget->searchEdit->text() ) );
+    m_searchWidget->searchEdit->setText( QString() );
+}
+
+
+void
 TomahawkWindow::minimize()
 {
     if ( isMinimized() )
     {
         showNormal();
-    } else {
+    }
+    else
+    {
         showMinimized();
     }
 }
@@ -618,7 +645,9 @@ TomahawkWindow::maximize()
     if ( isMaximized() )
     {
         showNormal();
-    } else {
+    }
+    else
+    {
         showMaximized();
     }
 }

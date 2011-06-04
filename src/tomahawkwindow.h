@@ -38,6 +38,7 @@ class TomahawkTrayIcon;
 namespace Ui
 {
     class TomahawkWindow;
+    class SearchWidget;
 }
 
 class TomahawkWindow : public QMainWindow
@@ -88,6 +89,8 @@ private slots:
     void onSipPluginAdded( SipPlugin* p );
     void onSipPluginRemoved( SipPlugin* p );
 
+    void onSearch();
+
     void minimize();
     void maximize();
 
@@ -97,6 +100,8 @@ private:
     void setupSignals();
 
     Ui::TomahawkWindow* ui;
+    Ui::SearchWidget* m_searchWidget;
+    QWidget* m_searchBox;
     AudioControls* m_audioControls;
     TomahawkTrayIcon* m_trayIcon;
     SourceTreeView* m_sourcetree;
