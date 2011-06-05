@@ -106,8 +106,8 @@ public slots:
     void onResolvingFinished();
 
     // resolve if not solved()
-    void onResolverAdded( );
-    void onResolverRemoved( );
+    void onResolverAdded();
+    void onResolverRemoved();
 
 private slots:
     void onResultStatusChanged();

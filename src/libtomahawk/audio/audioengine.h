@@ -100,6 +100,7 @@ private slots:
     void loadPreviousTrack();
     void loadNextTrack();
 
+    void onAboutToFinish();
     void onStateChanged( Phonon::State newState, Phonon::State oldState );
     void timerTriggered( qint64 time );
 
