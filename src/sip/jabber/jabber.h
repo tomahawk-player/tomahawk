@@ -82,6 +82,7 @@ public:
     virtual QIcon icon() const;
     virtual QWidget* configWidget();
     virtual void saveConfig();
+    virtual void deletePlugin();
 
 signals:
     void jidChanged( const QString& );
@@ -97,6 +98,8 @@ public slots:
     void showAddFriendDialog();
 
 protected:
+    virtual QString defaultSuffix() const;
+
     Ui_JabberConfig* m_ui; // so the google wrapper can change the config dialog a bit
 
 private slots:

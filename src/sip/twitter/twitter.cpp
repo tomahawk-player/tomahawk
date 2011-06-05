@@ -284,6 +284,12 @@ TwitterPlugin::connectAuthVerifyReply( const QTweetUser &user )
 }
 
 void
+TwitterPlugin::deletePlugin()
+{
+    TomahawkSettings::instance()->remove( pluginId() );
+}
+
+void
 TwitterPlugin::checkTimerFired()
 {
     if ( !isValid() || m_twitterAuth.isNull() )
@@ -596,7 +602,7 @@ TwitterPlugin::registerOffer( const QString &screenName, const QHash< QString, Q
 
     if ( !m_cachedAvatars.contains( screenName ) )
         QMetaObject::invokeMethod( this, "fetchAvatar", Q_ARG( QString, screenName ) );
-    
+
     QHash< QString, QVariant > _peerData( peerData );
 
     if ( _peerData.contains( "dirty" ) )
@@ -906,7 +912,7 @@ TwitterPlugin::twitterCachedFriendsSinceId() const
         s->sync();
     }
     s->endGroup();
-    
+
     return s->value( pluginId() + "/cachedfriendssinceid", 0 ).toLongLong();
 }
 
@@ -1004,7 +1010,7 @@ TwitterPlugin::twitterCachedPeers() const
         s->setValue( "cachedpeers",
             s->value( "cachedpeers_tmp" ).toHash() );
         s->remove( "cachedpeers_tmp" );
-        
+
         s->sync();
     }
     s->endGroup();

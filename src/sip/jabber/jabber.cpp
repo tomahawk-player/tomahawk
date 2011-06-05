@@ -157,10 +157,10 @@ JabberPlugin::refreshProxy()
 
     if( !m_client->connection() )
         return;
-    
+
     QNetworkProxy proxyToUse = TomahawkUtils::proxyFactory()->queryProxy( QNetworkProxyQuery( m_currentServer, m_currentPort ) ).first();
     m_usedProxy = proxyToUse;
-    
+
     if( proxyToUse.type() != QNetworkProxy::NoProxy && ( m_currentServer.isEmpty() || !(m_currentPort > 0) ) )
     {
         qDebug() << Q_FUNC_INFO << " proxy type is not noproxy but no server/port set";
@@ -467,7 +467,12 @@ void
 JabberPlugin::addContact(const QString& jid, const QString& msg)
 {
     // Add contact to the Tomahawk group on the roster
-    m_roster->subscribe( jid, msg, jid, QStringList() << "Tomahawk" );
+
+    QString realJid = jid;
+    if( !realJid.contains( '@' ) )
+        realJid += defaultSuffix();
+
+    m_roster->subscribe( realJid, msg, realJid, QStringList() << "Tomahawk" );
 
     return;
 }
@@ -485,6 +490,13 @@ JabberPlugin::showAddFriendDialog()
     qDebug() << "Attempting to add jabber contact to roster:" << id;
     addContact( id );
 }
+
+QString
+JabberPlugin::defaultSuffix() const
+{
+    return "@jabber.org";
+}
+
 
 void
 JabberPlugin::showXmlConsole()
@@ -513,12 +525,18 @@ JabberPlugin::checkSettings()
             proxyToUse.type() != m_usedProxy.type() ||
             proxyToUse.capabilities() != m_usedProxy.capabilities()
        )
-        reconnect = true;
+    reconnect = true;
 
     m_currentUsername = accountName();
     m_currentPassword = readPassword();
     m_currentServer = readServer();
     m_currentPort = readPort();
+
+    if ( !m_currentUsername.contains( '@' ) )
+    {
+        m_currentUsername += defaultSuffix();
+        TomahawkSettings::instance()->setValue( pluginId() + "/username", m_currentUsername );
+    }
 
     if ( reconnect )
     {
@@ -540,7 +558,6 @@ JabberPlugin::checkSettings()
 void JabberPlugin::setupClientHelper()
 {
     Jreen::JID jid = Jreen::JID( m_currentUsername );
-
     m_client->setJID( jid );
     m_client->setPassword( m_currentPassword );
 
@@ -979,6 +996,12 @@ JabberPlugin::saveConfig()
     TomahawkSettings::instance()->setValue( pluginId() + "/server", m_ui->jabberServer->text() );
 
     checkSettings();
+}
+
+void
+JabberPlugin::deletePlugin()
+{
+    TomahawkSettings::instance()->remove( pluginId() );
 }
 
 

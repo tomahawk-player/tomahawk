@@ -283,6 +283,8 @@ void
 SipHandler::removeSipPlugin( SipPlugin* p )
 {
     p->disconnectPlugin();
+    p->deletePlugin();
+
     emit pluginRemoved( p );
     // emit first so sipmodel can find the indexOf
 

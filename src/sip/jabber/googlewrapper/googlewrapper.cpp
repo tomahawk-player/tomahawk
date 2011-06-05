@@ -53,6 +53,13 @@ GoogleWrapper::icon() const
     return QIcon( ":/gmail-logo.png" );
 }
 
+QString
+GoogleWrapper::defaultSuffix() const
+{
+    return "@gmail.com";
+}
+
+
 void
 GoogleWrapper::showAddFriendDialog()
 {
