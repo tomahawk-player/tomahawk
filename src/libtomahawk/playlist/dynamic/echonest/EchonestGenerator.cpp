@@ -445,10 +445,10 @@ EchonestGenerator::sentenceSummary()
 
     /// Skip empty artists
     QList< dyncontrol_ptr > empty;
-    foreach( const dyncontrol_ptr& artist, required ) {
-        QString summary = artist.dynamicCast< EchonestControl >()->summary();
+    foreach( const dyncontrol_ptr& artistOrTrack, required ) {
+        QString summary = artistOrTrack.dynamicCast< EchonestControl >()->summary();
         if( summary.lastIndexOf( "~" ) == summary.length() - 1 )
-            empty << artist;
+            empty << artistOrTrack;
     }
     foreach( const dyncontrol_ptr& toremove, empty ) {
         required.removeAll( toremove );
