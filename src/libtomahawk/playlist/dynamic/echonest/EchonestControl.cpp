@@ -724,7 +724,6 @@ Tomahawk::EchonestControl::insertMoodsAndStyles()
     if( !combo )
         return false;
 
-    qDebug() << "Inserting moods and or styles, here's the list" << src;
     foreach( const QString& item, src ) {
         combo->addItem( item, item );
     }
