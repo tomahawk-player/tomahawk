@@ -51,8 +51,10 @@ public:
         setMaximumSize( sizeHint() ); // to remove the resize grip on osx this is the only way
 
         connect( conf, SIGNAL( sizeHintChanged() ), this, SLOT( updateSizeHint() ) );
-#endif
+#else
         m_widget->setVisible( true );
+#endif
+
     }
 public slots:
     void closed( QAbstractButton* b )
