@@ -62,6 +62,8 @@ AudioEngine::AudioEngine()
     connect( m_mediaObject, SIGNAL( stateChanged( Phonon::State, Phonon::State ) ), SLOT( onStateChanged( Phonon::State, Phonon::State ) ) );
     connect( m_mediaObject, SIGNAL( tick( qint64 ) ), SLOT( timerTriggered( qint64 ) ) );
     connect( m_mediaObject, SIGNAL( aboutToFinish() ), SLOT( onAboutToFinish() ) );
+
+    connect( m_audioOutput, SIGNAL( volumeChanged( qreal ) ), this, SLOT( onVolumeChanged( qreal ) ) );
 }
 
 
@@ -172,7 +174,6 @@ AudioEngine::setVolume( int percentage )
     m_audioOutput->setVolume( (qreal)percentage / 100.0 );
     emit volumeChanged( percentage );
 }
-
 
 void
 AudioEngine::mute()

@@ -68,7 +68,7 @@ public slots:
     void setVolume( int percentage );
     void lowerVolume() { setVolume( volume() - AUDIO_VOLUME_STEP ); }
     void raiseVolume() { setVolume( volume() + AUDIO_VOLUME_STEP ); }
-    void onVolumeChanged( float volume ) { emit volumeChanged( volume * 100 ); }
+    void onVolumeChanged( qreal volume ) { emit volumeChanged( volume * 100 ); }
     void mute();
 
     void playItem( PlaylistInterface* playlist, const Tomahawk::result_ptr& result );
