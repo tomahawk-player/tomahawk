@@ -23,7 +23,7 @@ signals:
 
 private slots:
     void onNewPresence( const Jreen::Presence& presence );
-    void onNewIq(const Jreen::IQ &iq, int context = 0 );
+    void onNewIq(const Jreen::IQ &iq);
     void onNewConnection();
     void onNewAvatar( const QString &jid );
 

@@ -8,9 +8,9 @@
 #include "../sipdllmacro.h"
 
 class TomahawkSipMessagePrivate;
-class SIPDLLEXPORT TomahawkSipMessage : public Jreen::StanzaExtension
+class SIPDLLEXPORT TomahawkSipMessage : public Jreen::Payload
 {
-    J_EXTENSION(TomahawkSipMessage, "")
+    J_PAYLOAD(TomahawkSipMessage)
     Q_DECLARE_PRIVATE(TomahawkSipMessage)
     public:
         // sets visible to true

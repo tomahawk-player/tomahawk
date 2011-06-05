@@ -35,6 +35,7 @@
 #include <jreen/directconnection.h>
 #include <jreen/tcpconnection.h>
 #include <jreen/softwareversion.h>
+#include <jreen/iqreply.h>
 
 #include <qjson/parser.h>
 #include <qjson/serializer.h>
@@ -91,7 +92,7 @@ JabberPlugin::JabberPlugin( const QString& pluginId )
     m_client = new Jreen::Client( jid, m_currentPassword );
     setupClientHelper();
 
-    m_client->registerStanzaExtension(new TomahawkSipMessageFactory);
+    m_client->registerPayload(new TomahawkSipMessageFactory);
     m_currentResource = QString::fromAscii( "tomahawk%1" ).arg( QString::number( qrand() % 10000 ) );
     m_client->setResource( m_currentResource );
 
@@ -117,7 +118,7 @@ JabberPlugin::JabberPlugin( const QString& pluginId )
     m_client->disco()->addFeature( TOMAHAWK_FEATURE );
 
     // setup caps node, legacy peer detection - used before 0.1
-    Jreen::Capabilities::Ptr caps = m_client->presence().findExtension<Jreen::Capabilities>();
+    Jreen::Capabilities::Ptr caps = m_client->presence().payload<Jreen::Capabilities>();
     caps->setNode( TOMAHAWK_CAP_NODE_NAME );
     //FIXME: caps->setVersion( TOMAHAWK_VERSION );
 
@@ -129,9 +130,9 @@ JabberPlugin::JabberPlugin( const QString& pluginId )
     // setup slots
     connect(m_client, SIGNAL(serverFeaturesReceived(QSet<QString>)), SLOT(onConnect()));
     connect(m_client, SIGNAL(disconnected(Jreen::Client::DisconnectReason)), SLOT(onDisconnect(Jreen::Client::DisconnectReason)));
-    connect(m_client, SIGNAL(newMessage(Jreen::Message)), SLOT(onNewMessage(Jreen::Message)));
+    connect(m_client, SIGNAL(messageReceived(Jreen::Message)), SLOT(onNewMessage(Jreen::Message)));
 
-    connect(m_client, SIGNAL(newIQ(Jreen::IQ)), SLOT(onNewIq(Jreen::IQ)));
+    connect(m_client, SIGNAL(iqReceived(Jreen::IQ)), SLOT(onNewIq(Jreen::IQ)));
 
     connect(m_roster, SIGNAL(presenceReceived(Jreen::RosterItem::Ptr,Jreen::Presence)),
                       SLOT(onPresenceReceived(Jreen::RosterItem::Ptr,Jreen::Presence)));
@@ -445,8 +446,9 @@ JabberPlugin::sendMsg(const QString& to, const QString& msg)
     qDebug() << "Send sip messsage to " << to;
     Jreen::IQ iq( Jreen::IQ::Set, to );
     iq.addExtension( sipMessage );
-
-    m_client->send( iq, this, SLOT( onNewIq( Jreen::IQ, int ) ), SipMessageSent );
+    Jreen::IQReply *reply = m_client->send(iq);
+    reply->setData(SipMessageSent);
+    connect(reply, SIGNAL(received(Jreen::IQ)), SLOT(onNewIq(Jreen::IQ)));
 }
 
 void
@@ -665,7 +667,7 @@ void JabberPlugin::onPresenceReceived( const Jreen::RosterItem::Ptr &item, const
     }
 
     // ignore anyone not Running tomahawk:
-    Jreen::Capabilities::Ptr caps = presence.findExtension<Jreen::Capabilities>();
+    Jreen::Capabilities::Ptr caps = presence.payload<Jreen::Capabilities>();
     /* Disabled this, because it's somewhat ugly and we should rely on nothing but the features
     if ( caps && ( caps->node() == TOMAHAWK_CAP_NODE_NAME ) )
     {
@@ -683,8 +685,10 @@ void JabberPlugin::onPresenceReceived( const Jreen::RosterItem::Ptr &item, const
 
         Jreen::IQ featuresIq( Jreen::IQ::Get, jid );
         featuresIq.addExtension( new Jreen::Disco::Info( node ) );
-
-        m_client->send( featuresIq, this, SLOT( onNewIq( Jreen::IQ, int ) ), RequestDisco );
+        
+        Jreen::IQReply *reply = m_client->send(featuresIq);
+        reply->setData(RequestDisco);
+        connect(reply, SIGNAL(received(Jreen::IQ)), SLOT(onNewIq(Jreen::IQ)));
     }
     else if( !caps )
     {
@@ -778,15 +782,18 @@ JabberPlugin::onSubscriptionRequestConfirmed( int result )
     m_roster->allowSubscription( jid, allowSubscription == QMessageBox::Yes );
 }
 
-void JabberPlugin::onNewIq(const Jreen::IQ& iq, int context)
+void JabberPlugin::onNewIq(const Jreen::IQ& iq)
 {
     if ( m_state != Connected )
         return;
 
+    Jreen::IQReply *reply = qobject_cast<Jreen::IQReply*>(sender());
+    int context = reply ? reply->data().toInt() : NoContext;
+
     if( context == RequestDisco )
     {
 //        qDebug() << Q_FUNC_INFO << "Received disco IQ...";
-        Jreen::Disco::Info *discoInfo = iq.findExtension<Jreen::Disco::Info>().data();
+        Jreen::Disco::Info *discoInfo = iq.payload<Jreen::Disco::Info>().data();
         if(!discoInfo)
             return;
         iq.accept();
@@ -820,7 +827,7 @@ void JabberPlugin::onNewIq(const Jreen::IQ& iq, int context)
     }
     else if(context == RequestVersion)
     {
-        Jreen::SoftwareVersion* softwareVersion = iq.findExtension<Jreen::SoftwareVersion>().data();
+        Jreen::SoftwareVersion::Ptr softwareVersion = iq.payload<Jreen::SoftwareVersion>();
         if( softwareVersion )
         {
             QString versionString = QString("%1 %2 %3").arg( softwareVersion->name(), softwareVersion->os(), softwareVersion->version() );
@@ -842,7 +849,7 @@ void JabberPlugin::onNewIq(const Jreen::IQ& iq, int context)
     }*/
     else
     {
-        TomahawkSipMessage *sipMessage = iq.findExtension<TomahawkSipMessage>().data();
+        TomahawkSipMessage::Ptr sipMessage = iq.payload<TomahawkSipMessage>();
         if(sipMessage)
         {
             iq.accept();
@@ -927,7 +934,9 @@ void JabberPlugin::handlePeerStatus(const Jreen::JID& jid, Jreen::Presence::Type
         // request software version
         Jreen::IQ versionIq( Jreen::IQ::Get, jid );
         versionIq.addExtension( new Jreen::SoftwareVersion() );
-        m_client->send( versionIq, this, SLOT( onNewIq( Jreen::IQ, int ) ), RequestVersion );
+        Jreen::IQReply *reply = m_client->send(versionIq);
+        reply->setData(RequestVersion);
+        connect(reply, SIGNAL(received(Jreen::IQ)), SLOT(onNewIq(Jreen::IQ)));
 
         return;
     }
