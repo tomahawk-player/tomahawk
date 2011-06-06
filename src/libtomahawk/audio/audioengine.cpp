@@ -59,6 +59,7 @@ AudioEngine::AudioEngine()
     m_mediaObject->setTickInterval( 150 );
     connect( m_mediaObject, SIGNAL( stateChanged( Phonon::State, Phonon::State ) ), SLOT( onStateChanged( Phonon::State, Phonon::State ) ) );
     connect( m_mediaObject, SIGNAL( tick( qint64 ) ), SLOT( timerTriggered( qint64 ) ) );
+    connect( m_mediaObject, SIGNAL( aboutToFinish() ), SLOT( onAboutToFinish() ) );
 }
 
 
@@ -123,7 +124,6 @@ AudioEngine::stop()
 {
     qDebug() << Q_FUNC_INFO;
 
-    m_expectStop = true;
     m_mediaObject->stop();
 
     setCurrentTrack( Tomahawk::result_ptr() );
@@ -216,11 +216,6 @@ AudioEngine::loadTrack( const Tomahawk::result_ptr& result )
         {
             qDebug() << "Starting new song from url:" << m_currentTrack->url();
             emit loading( m_currentTrack );
-
-            if ( !m_input.isNull() || m_isPlayingHttp )
-            {
-                m_expectStop = true;
-            }
 
             if ( !isHttpResult( m_currentTrack->url() ) && !isLocalResult( m_currentTrack->url() ) )
             {
@@ -329,36 +324,36 @@ AudioEngine::playItem( PlaylistInterface* playlist, const Tomahawk::result_ptr& 
 
 
 void
+AudioEngine::onAboutToFinish()
+{
+    qDebug() << Q_FUNC_INFO;
+    m_expectStop = true;
+}
+
+
+void
 AudioEngine::onStateChanged( Phonon::State newState, Phonon::State oldState )
 {
-    qDebug() << Q_FUNC_INFO << oldState << newState;
+    qDebug() << Q_FUNC_INFO << oldState << newState << m_expectStop;
 
     if ( newState == Phonon::ErrorState )
     {
         qDebug() << "Phonon Error:" << m_mediaObject->errorString() << m_mediaObject->errorType();
-    }
-    if ( oldState == Phonon::PlayingState && newState == Phonon::StoppedState )
-    {
-        qDebug() << "Expecting stop?" << m_expectStop;
-        if ( !m_expectStop )
-        {
-            qDebug() << "Loading next track.";
-            m_expectStop = false;
-            loadNextTrack();
-        }
-    }
-    else if ( oldState == Phonon::PlayingState && newState == Phonon::PausedState )
-    {
-        qDebug() << m_mediaObject->currentTime() << m_mediaObject->totalTime();
-        if ( m_mediaObject->currentTime() == m_mediaObject->totalTime() )
-        {
-            qDebug() << "Loading next track.";
-            m_expectStop = false;
-            loadNextTrack();
-        }
+        return;
     }
 
+    if ( !m_expectStop )
+        return;
     m_expectStop = false;
+
+    if ( oldState == Phonon::PlayingState )
+    {
+        if ( newState == Phonon::PausedState || newState == Phonon::StoppedState )
+        {
+            qDebug() << "Loading next track.";
+            loadNextTrack();
+        }
+    }
 }
 
 

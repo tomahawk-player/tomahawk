@@ -23,7 +23,7 @@
 
 #include "../sipdllmacro.h"
 
-class SIPDLLEXPORT TomahawkSipMessageFactory : public Jreen::StanzaExtensionFactory<TomahawkSipMessage>
+class SIPDLLEXPORT TomahawkSipMessageFactory : public Jreen::PayloadFactory<TomahawkSipMessage>
 {
 public:
     TomahawkSipMessageFactory();
@@ -33,8 +33,8 @@ public:
     void handleStartElement(const QStringRef &name, const QStringRef &uri, const QXmlStreamAttributes &attributes);
     void handleEndElement(const QStringRef &name, const QStringRef &uri);
     void handleCharacterData(const QStringRef &text);
-    void serialize(Jreen::StanzaExtension *extension, QXmlStreamWriter *writer);
-    Jreen::StanzaExtension::Ptr createExtension();
+    void serialize(Jreen::Payload *extension, QXmlStreamWriter *writer);
+    Jreen::Payload::Ptr createPayload();
 private:
     enum State { AtNowhere, AtTransport, AtCandidate } m_state;
     int m_depth;

@@ -86,7 +86,7 @@ void TomahawkSipMessageFactory::handleCharacterData(const QStringRef &text)
     Q_UNUSED(text);
 }
 
-void TomahawkSipMessageFactory::serialize(StanzaExtension *extension, QXmlStreamWriter *writer)
+void TomahawkSipMessageFactory::serialize(Payload *extension, QXmlStreamWriter *writer)
 {
     TomahawkSipMessage *sipMessage = se_cast<TomahawkSipMessage*>(extension);
 
@@ -118,10 +118,10 @@ void TomahawkSipMessageFactory::serialize(StanzaExtension *extension, QXmlStream
         writer->writeEndElement();
 }
 
-StanzaExtension::Ptr TomahawkSipMessageFactory::createExtension()
+Payload::Ptr TomahawkSipMessageFactory::createPayload()
 {
     if(m_visible)
-        return StanzaExtension::Ptr(new TomahawkSipMessage(m_ip, m_port, m_uniqname, m_key));
+        return Payload::Ptr(new TomahawkSipMessage(m_ip, m_port, m_uniqname, m_key));
     else
-        return StanzaExtension::Ptr(new TomahawkSipMessage());
+        return Payload::Ptr(new TomahawkSipMessage());
 }

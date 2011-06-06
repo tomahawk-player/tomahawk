@@ -644,7 +644,7 @@ Tomahawk::EchonestControl::calculateSummary()
             summary = QString( "similar to ~%1" ).arg( m_data.second.toString() );
     } else if( selectedType() == "Artist Description" ) {
         summary = QString( "with genre ~%1" ).arg( m_data.second.toString() );
-    } else if( selectedType() == "Artist Description" ) {
+    } else if( selectedType() == "Artist Description" || selectedType() == "Song" ) {
         summary = QString( "similar to ~%1" ).arg( m_data.second.toString() );
     } else if( selectedType() == "Variety" || selectedType() == "Danceability" || selectedType() == "Artist Hotttnesss" || selectedType() == "Energy" || selectedType() == "Artist Familiarity" || selectedType() == "Song Hotttnesss" ) {
         QString modifier;

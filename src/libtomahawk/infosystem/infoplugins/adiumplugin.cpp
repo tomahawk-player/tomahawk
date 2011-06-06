@@ -26,13 +26,18 @@
 #include "adiumplugin.h"
 #include "adium.h"
 
+QString adium_beforeStatus;
+QString adium_afterStatus;
+
 static void setStatus(const QString &status)
 {
-    QString adiumStatus = "tell application \"Adium\"\n";
-    adiumStatus.append("set the status message of every account to \"");
-    adiumStatus.append(status);
-    adiumStatus.append("\"\nend tell\n");
-    const char* scriptstr = adiumStatus.toUtf8();
+    // The command that updates the status
+    QString scriptqstr;
+    scriptqstr.append(adium_beforeStatus);
+    scriptqstr.append(status);
+    scriptqstr.append(adium_afterStatus);
+
+    const char* scriptstr = scriptqstr.toUtf8();
     script( scriptstr );
 }
 
@@ -42,6 +47,17 @@ AdiumPlugin::AdiumPlugin()
     : InfoPlugin()
 {
     qDebug() << Q_FUNC_INFO;
+
+    adium_beforeStatus = "if appIsRunning(\"Adium\") then\n";
+    adium_beforeStatus.append("tell application \"Adium\"\n");
+    adium_beforeStatus.append("set the status message of every account to \"");
+
+    adium_afterStatus.append("\"\nend tell\n");
+    adium_afterStatus.append("end if\n");
+    adium_afterStatus.append("on appIsRunning(appName)\n");
+    adium_afterStatus.append("tell application \"System Events\" to (name of processes) contains appName\n");
+    adium_afterStatus.append("end appIsRunning\n");
+
     m_supportedPushTypes << InfoNowPlaying << InfoNowPaused << InfoNowResumed << InfoNowStopped;
 
     m_active = TomahawkSettings::instance()->nowPlayingEnabled();

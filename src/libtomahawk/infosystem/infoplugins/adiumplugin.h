@@ -54,6 +54,8 @@ public slots:
 
 private:
     bool m_active;
+    QString m_beforeStatus;
+    QString m_afterStatus;
 
 };
 

@@ -47,6 +47,11 @@ public:
   virtual const QString friendlyName() const { return "Google"; }
   virtual QIcon icon() const;
 
+protected:
+    QString defaultSuffix() const;
+
+public slots:
+    void showAddFriendDialog();
 };
 
 #endif // GOOGLEWRAPPER_H

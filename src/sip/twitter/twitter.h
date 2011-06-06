@@ -74,12 +74,13 @@ public:
 
 signals:
     void avatarReceived( QString, QPixmap );
-    
+
 public slots:
     virtual bool connectPlugin( bool startup );
     void disconnectPlugin();
     void checkSettings();
     void refreshProxy();
+    void deletePlugin();
 
     void sendMsg( const QString& to, const QString& msg )
     {
@@ -135,8 +136,6 @@ private:
     void setTwitterCachedDirectMessagesSinceId( qint64 sinceid );
     QHash<QString, QVariant> twitterCachedPeers() const;
     void setTwitterCachedPeers( const QHash<QString, QVariant> &cachedPeers );
-    bool twitterAutoConnect() const;
-    void setTwitterAutoConnect( bool autoConnect );
 
     QWeakPointer< TomahawkOAuthTwitter > m_twitterAuth;
     QWeakPointer< QTweetFriendsTimeline > m_friendsTimeline;
