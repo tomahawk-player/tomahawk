@@ -64,6 +64,8 @@ AudioEngine::AudioEngine()
     connect( m_mediaObject, SIGNAL( aboutToFinish() ), SLOT( onAboutToFinish() ) );
 
     connect( m_audioOutput, SIGNAL( volumeChanged( qreal ) ), this, SLOT( onVolumeChanged( qreal ) ) );
+
+    onVolumeChanged( m_audioOutput->volume() );
 }
 
 
