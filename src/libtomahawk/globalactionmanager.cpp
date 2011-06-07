@@ -165,7 +165,7 @@ GlobalActionManager::copyToClipboard( const Tomahawk::query_ptr& query ) const
 bool
 GlobalActionManager::parseTomahawkLink( const QString& url )
 {
-  QString decodedUrl = QString::fromUtf8( QByteArray::fromPercentEncoding( url.toAscii() ).data() );
+    QString decodedUrl = QString::fromUtf8( QByteArray::fromPercentEncoding( url.toAscii() ).data() );
     if( decodedUrl.contains( "tomahawk://" ) ) {
         QString cmd = decodedUrl.mid( 11 );
         qDebug() << "Parsing tomahawk link command" << cmd;
