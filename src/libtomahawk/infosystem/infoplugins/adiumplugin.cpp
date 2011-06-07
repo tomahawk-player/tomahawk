@@ -124,7 +124,6 @@ AdiumPlugin::pushInfo( const QString caller, const Tomahawk::InfoSystem::InfoTyp
 /** Audio state slots */
 void
 AdiumPlugin::audioStarted( const QVariant &input )
-//void AdiumPlugin::audioStarted( const Tomahawk::result_ptr& track )
 {
     qDebug() << Q_FUNC_INFO;
 
@@ -139,6 +138,8 @@ AdiumPlugin::audioStarted( const QVariant &input )
     nowPlaying.append( hash["title"] );
     nowPlaying.append(" - ");
     nowPlaying.append( hash["artist"] );
+    nowPlaying.append( " " );
+    nowPlaying.append( openLinkFromHash( hash ).toString() );
     setStatus( nowPlaying );
 }
 

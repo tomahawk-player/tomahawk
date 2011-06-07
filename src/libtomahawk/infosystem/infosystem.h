@@ -26,6 +26,7 @@
 #include <QtCore/QWeakPointer>
 #include <QtCore/QSet>
 #include <QtCore/QLinkedList>
+#include <QtCore/QUrl>
 #include <QtCore/QVariant>
 #include <QtCore/QThread>
 
@@ -133,6 +134,8 @@ protected slots:
     virtual void namChangedSlot( QNetworkAccessManager *nam ) = 0;
     
 protected:
+    QUrl openLinkFromHash( const InfoCriteriaHash& hash ) const;
+
     InfoType m_type;
     QSet< InfoType > m_supportedGetTypes;
     QSet< InfoType > m_supportedPushTypes;

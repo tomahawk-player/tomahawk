@@ -27,6 +27,8 @@
 #include "infosystem/infosystem.h"
 #include "network/servent.h"
 
+#include "album.h"
+
 AudioEngine* AudioEngine::s_instance = 0;
 
 static QString s_aeInfoIdentifier = QString( "AUDIOENGINE" );
@@ -98,6 +100,7 @@ AudioEngine::play()
 
 	trackInfo["title"] = m_currentTrack->track();
 	trackInfo["artist"] = m_currentTrack->artist()->name();
+	trackInfo["album"] = m_currentTrack->album()->name();
 	Tomahawk::InfoSystem::InfoSystem::instance()->pushInfo(
 	   s_aeInfoIdentifier, Tomahawk::InfoSystem::InfoNowResumed,
 	   QVariant::fromValue< Tomahawk::InfoSystem::InfoCriteriaHash >( trackInfo ) );
@@ -252,6 +255,7 @@ AudioEngine::loadTrack( const Tomahawk::result_ptr& result )
 
 	    trackInfo["title"] = m_currentTrack->track();
 	    trackInfo["artist"] = m_currentTrack->artist()->name();
+	    trackInfo["album"] = m_currentTrack->album()->name();
 	    Tomahawk::InfoSystem::InfoSystem::instance()->pushInfo(
 	       s_aeInfoIdentifier, Tomahawk::InfoSystem::InfoNowPlaying,
 	       QVariant::fromValue< Tomahawk::InfoSystem::InfoCriteriaHash >( trackInfo ) );
