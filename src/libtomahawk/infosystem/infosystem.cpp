@@ -69,8 +69,6 @@ InfoPlugin::openLinkFromHash( const InfoCriteriaHash& hash ) const
     // Add encoding for spaces, since QUrl does not
     QUrl encodedLink( link.toString().replace(" ", "%20"), QUrl::StrictMode );
 
-    qDebug() << "encodedLink " << encodedLink.toString();
-
     return encodedLink;
 }
 
