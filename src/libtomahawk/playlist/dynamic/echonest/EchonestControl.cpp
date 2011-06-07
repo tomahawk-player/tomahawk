@@ -30,10 +30,11 @@
 #include <qstringlistmodel.h>
 
 QHash< QString, QStringList > Tomahawk::EchonestControl::s_suggestCache = QHash< QString, QStringList >();
+bool Tomahawk::EchonestControl::s_fetchingMoodsAndStyles = false;
+int Tomahawk::EchonestControl::s_stylePollCount = 0;
 
 Tomahawk::EchonestControl::EchonestControl( const QString& selectedType, const QStringList& typeSelectors, QObject* parent )
     : DynamicControl ( selectedType.isEmpty() ? "Artist" : selectedType, typeSelectors, parent )
-    , m_stylePollCount( 0 )
 {
     setType( "echonest" );
     m_editingTimer.setInterval( 500 ); //timeout to edits
@@ -705,6 +706,7 @@ Tomahawk::EchonestControl::calculateSummary()
 void
 Tomahawk::EchonestControl::checkForMoodsOrStylesFetched()
 {
+    s_fetchingMoodsAndStyles = false;
     if( selectedType() == "Mood" || selectedType() == "Style" ) {
         QComboBox* cb = qobject_cast< QComboBox* >( m_input.data() );
         if( cb && cb->count() == 0 ) { // got nothing, so lets populate
@@ -722,16 +724,16 @@ Tomahawk::EchonestControl::insertMoodsAndStyles()
     if( !combo )
         return false;
 
-    qDebug() << "Inserting moods and or styles, here's the list" << src;
     foreach( const QString& item, src ) {
         combo->addItem( item, item );
     }
 
     if( src.isEmpty() && !combo->count() ) {
-        if( m_stylePollCount <= 20 ) { // try for 20s to get the styles...
+        if( s_stylePollCount <= 20 && !s_fetchingMoodsAndStyles ) { // try for 20s to get the styles...
+            s_fetchingMoodsAndStyles = true;
             QTimer::singleShot( 1000, this, SLOT( checkForMoodsOrStylesFetched() ) );
         }
-        m_stylePollCount++;
+        s_stylePollCount++;
         return false;
     }
 
