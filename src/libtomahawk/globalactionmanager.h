@@ -23,6 +23,7 @@
 #include "playlist.h"
 #include "query.h"
 #include "playlist/dynamic/DynamicPlaylist.h"
+#include "infosystem/infosystem.h"
 #include "dllmacro.h"
 
 #include <QObject>
@@ -36,6 +37,7 @@ public:
     virtual ~GlobalActionManager();
 
     QUrl openLinkFromQuery( const Tomahawk::query_ptr& query ) const;
+    QUrl openLinkFromHash( const Tomahawk::InfoSystem::InfoCriteriaHash& hash ) const;
 
     void copyToClipboard( const Tomahawk::query_ptr& query ) const;
     QString copyPlaylistToClipboard( const Tomahawk::dynplaylist_ptr& playlist );
@@ -67,6 +69,8 @@ private:
     bool handleOpenCommand(const QUrl& url );
 
     bool doQueueAdd( const QStringList& parts, const QList< QPair< QString, QString > >& queryItems );
+
+    QUrl openLink( const QString& title, const QString& artist, const QString& album ) const;
 
     Tomahawk::playlist_ptr m_toShow;
     Tomahawk::query_ptr m_waitingToBookmark;

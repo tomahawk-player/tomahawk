@@ -60,7 +60,6 @@ GlobalActionManager::~GlobalActionManager()
 QUrl
 GlobalActionManager::openLinkFromQuery( const Tomahawk::query_ptr& query ) const
 {
-    QUrl link( "tomahawk://open/track/" );
     QString title, artist, album;
 
     if( !query->results().isEmpty() && !query->results().first().isNull() )
@@ -74,6 +73,30 @@ GlobalActionManager::openLinkFromQuery( const Tomahawk::query_ptr& query ) const
         artist = query->artist();
         album = query->album();
     }
+
+    return openLink( title, artist, album );
+}
+
+QUrl
+GlobalActionManager::openLinkFromHash( const Tomahawk::InfoSystem::InfoCriteriaHash& hash ) const
+{
+    QString title, artist, album;
+
+    if( !hash.isEmpty() && hash.contains( "title" ) && hash.contains( "artist" ) )
+    {
+        title = hash["title"];
+	artist = hash["artist"];
+	if( hash.contains( "album" ) )
+	    album = hash["album"];
+    }
+
+    return openLink( title, artist, album );
+}
+
+QUrl
+GlobalActionManager::openLink( const QString& title, const QString& artist, const QString& album ) const
+{
+    QUrl link( "tomahawk://open/track/" );
 
     if( !title.isEmpty() )
         link.addQueryItem( "title", title );
@@ -165,13 +188,12 @@ GlobalActionManager::copyToClipboard( const Tomahawk::query_ptr& query ) const
 bool
 GlobalActionManager::parseTomahawkLink( const QString& url )
 {
-    QString decodedUrl = QString::fromUtf8( QByteArray::fromPercentEncoding( url.toAscii() ).data() );
-    if( decodedUrl.contains( "tomahawk://" ) ) {
-        QString cmd = decodedUrl.mid( 11 );
+   if( url.contains( "tomahawk://" ) ) {
+        QString cmd = url.mid( 11 );
         qDebug() << "Parsing tomahawk link command" << cmd;
 
         QString cmdType = cmd.split( "/" ).first();
-        QUrl u( cmd );
+        QUrl u = QUrl::fromEncoded( cmd.toUtf8() );
 
         // for backwards compatibility
         if( cmdType == "load" ) {

@@ -134,8 +134,6 @@ protected slots:
     virtual void namChangedSlot( QNetworkAccessManager *nam ) = 0;
     
 protected:
-    QUrl openLinkFromHash( const InfoCriteriaHash& hash ) const;
-
     InfoType m_type;
     QSet< InfoType > m_supportedGetTypes;
     QSet< InfoType > m_supportedPushTypes;

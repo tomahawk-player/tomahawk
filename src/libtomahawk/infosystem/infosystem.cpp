@@ -44,34 +44,6 @@ InfoPlugin::~InfoPlugin()
     qDebug() << Q_FUNC_INFO;
 }
 
-QUrl
-InfoPlugin::openLinkFromHash( const InfoCriteriaHash& hash ) const
-{
-    QUrl link( "tomahawk://open/track/" );
-    QString title, artist, album;
-
-    if( !hash.isEmpty() && hash.contains( "title" ) && hash.contains( "artist" ) )
-    {
-        title = hash["title"];
-	artist = hash["artist"];
-	if( hash.contains( "album" ) )
-	    qDebug() << "Album is: " << album;
-	    album = hash["album"];
-    }
-
-    if( !title.isEmpty() )
-        link.addEncodedQueryItem( "title", QUrl::toPercentEncoding( title ) );
-    if( !artist.isEmpty() )
-        link.addEncodedQueryItem( "artist", QUrl::toPercentEncoding( artist ) );
-    if( !album.isEmpty() )
-        link.addEncodedQueryItem( "album", QUrl::toPercentEncoding( album ) );
-
-    // Add encoding for spaces, since QUrl does not
-    QUrl encodedLink( link.toString().replace(" ", "%20"), QUrl::StrictMode );
-
-    return encodedLink;
-}
-
 InfoSystem* InfoSystem::s_instance = 0;
 
 InfoSystem*

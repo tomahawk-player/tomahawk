@@ -22,6 +22,7 @@
 #include "artist.h"
 #include "result.h"
 #include "tomahawksettings.h"
+#include "globalactionmanager.h"
 
 #include "adiumplugin.h"
 #include "adium.h"
@@ -139,7 +140,7 @@ AdiumPlugin::audioStarted( const QVariant &input )
     nowPlaying.append(" - ");
     nowPlaying.append( hash["artist"] );
     nowPlaying.append( " " );
-    nowPlaying.append( openLinkFromHash( hash ).toString() );
+    nowPlaying.append( GlobalActionManager::instance()->openLinkFromHash( hash ).toEncoded() );
     setStatus( nowPlaying );
 }
 
