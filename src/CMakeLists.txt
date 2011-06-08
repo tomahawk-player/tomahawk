@@ -118,7 +118,6 @@ SET( tomahawkHeadersGui ${tomahawkHeadersGui}
 
 SET( tomahawkUI ${tomahawkUI}
      tomahawkwindow.ui
-     settingsdialog.ui
      diagnosticsdialog.ui
      stackedsettingsdialog.ui
      proxydialog.ui
