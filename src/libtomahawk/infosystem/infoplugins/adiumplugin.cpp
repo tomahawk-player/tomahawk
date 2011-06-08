@@ -157,7 +157,7 @@ AdiumPlugin::openLinkFromHash( const Tomahawk::InfoSystem::InfoCriteriaHash& has
             album = hash["album"];
     }
 
-    return GlobalActionManager::instance()->openLink( title, artist, album );
+    return GlobalActionManager::instance()->openLink( title, artist, album, true );
 }
 
 void

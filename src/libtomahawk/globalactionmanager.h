@@ -36,7 +36,7 @@ public:
     virtual ~GlobalActionManager();
 
     QUrl openLinkFromQuery( const Tomahawk::query_ptr& query ) const;
-    QUrl openLink( const QString& title, const QString& artist, const QString& album ) const;
+    QUrl openLink( const QString& title, const QString& artist, const QString& album, bool tomahk=false ) const;
 
     void copyToClipboard( const Tomahawk::query_ptr& query ) const;
     QString copyPlaylistToClipboard( const Tomahawk::dynplaylist_ptr& playlist );

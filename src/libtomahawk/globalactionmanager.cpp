@@ -78,9 +78,9 @@ GlobalActionManager::openLinkFromQuery( const Tomahawk::query_ptr& query ) const
 }
 
 QUrl
-GlobalActionManager::openLink( const QString& title, const QString& artist, const QString& album ) const
+GlobalActionManager::openLink( const QString& title, const QString& artist, const QString& album, bool tomahk ) const
 {
-    QUrl link( "tomahawk://open/track/" );
+    QUrl link( tomahk ? "http://toma.hk/open/track/" : "tomahawk://open/track/" );
 
     if( !title.isEmpty() )
         link.addQueryItem( "title", title );
@@ -172,8 +172,9 @@ GlobalActionManager::copyToClipboard( const Tomahawk::query_ptr& query ) const
 bool
 GlobalActionManager::parseTomahawkLink( const QString& url )
 {
-   if( url.contains( "tomahawk://" ) ) {
+    if( url.contains( "tomahawk://" ) ) {
         QString cmd = url.mid( 11 );
+        cmd.replace( "%2B", "%20" );
         qDebug() << "Parsing tomahawk link command" << cmd;
 
         QString cmdType = cmd.split( "/" ).first();
