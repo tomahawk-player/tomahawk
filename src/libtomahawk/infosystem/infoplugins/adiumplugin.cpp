@@ -140,8 +140,24 @@ AdiumPlugin::audioStarted( const QVariant &input )
     nowPlaying.append(" - ");
     nowPlaying.append( hash["artist"] );
     nowPlaying.append( " " );
-    nowPlaying.append( GlobalActionManager::instance()->openLinkFromHash( hash ).toEncoded() );
+    nowPlaying.append( openLinkFromHash( hash ).toEncoded() );
     setStatus( nowPlaying );
+}
+
+QUrl
+AdiumPlugin::openLinkFromHash( const Tomahawk::InfoSystem::InfoCriteriaHash& hash ) const
+{
+    QString title, artist, album;
+
+    if( !hash.isEmpty() && hash.contains( "title" ) && hash.contains( "artist" ) )
+    {
+        title = hash["title"];
+        artist = hash["artist"];
+        if( hash.contains( "album" ) )
+            album = hash["album"];
+    }
+
+    return GlobalActionManager::instance()->openLink( title, artist, album );
 }
 
 void

@@ -78,22 +78,6 @@ GlobalActionManager::openLinkFromQuery( const Tomahawk::query_ptr& query ) const
 }
 
 QUrl
-GlobalActionManager::openLinkFromHash( const Tomahawk::InfoSystem::InfoCriteriaHash& hash ) const
-{
-    QString title, artist, album;
-
-    if( !hash.isEmpty() && hash.contains( "title" ) && hash.contains( "artist" ) )
-    {
-        title = hash["title"];
-	artist = hash["artist"];
-	if( hash.contains( "album" ) )
-	    album = hash["album"];
-    }
-
-    return openLink( title, artist, album );
-}
-
-QUrl
 GlobalActionManager::openLink( const QString& title, const QString& artist, const QString& album ) const
 {
     QUrl link( "tomahawk://open/track/" );
