@@ -21,6 +21,7 @@
 #include <QtPlugin>
 
 #include "ui_configwidget.h"
+#include <QInputDialog>
 
 SipPlugin*
 GoogleWrapperFactory::createPlugin( const QString& pluginId )
@@ -52,6 +53,26 @@ GoogleWrapper::icon() const
     return QIcon( ":/gmail-logo.png" );
 }
 
+QString
+GoogleWrapper::defaultSuffix() const
+{
+    return "@gmail.com";
+}
+
+
+void
+GoogleWrapper::showAddFriendDialog()
+{
+    bool ok;
+    QString id = QInputDialog::getText( 0, tr( "Add Friend" ),
+                                        tr( "Enter Google Address:" ), QLineEdit::Normal,
+                                            "", &ok );
+    if ( !ok )
+        return;
+
+    qDebug() << "Attempting to add google contact to roster:" << id;
+    addContact( id );
+}
 
 #ifdef GOOGLE_WRAPPER
 Q_EXPORT_PLUGIN2( sipfactory, GoogleWrapperFactory )

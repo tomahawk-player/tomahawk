@@ -82,6 +82,7 @@ public:
     virtual QIcon icon() const;
     virtual QWidget* configWidget();
     virtual void saveConfig();
+    virtual void deletePlugin();
 
 signals:
     void jidChanged( const QString& );
@@ -94,12 +95,14 @@ public slots:
     void broadcastMsg( const QString &msg );
     void addContact( const QString &jid, const QString& msg = QString() );
     void refreshProxy();
+    void showAddFriendDialog();
 
 protected:
+    virtual QString defaultSuffix() const;
+
     Ui_JabberConfig* m_ui; // so the google wrapper can change the config dialog a bit
 
 private slots:
-    void showAddFriendDialog();
     void showXmlConsole();
     void onConnect();
     void onDisconnect(Jreen::Client::DisconnectReason reason);
@@ -113,7 +116,7 @@ private slots:
     {
         qDebug() << e;
     }
-    void onNewIq( const Jreen::IQ &iq, int context = NoContext );
+    void onNewIq( const Jreen::IQ &iq );
     void onNewAvatar( const QString &jid );
 
 private:

@@ -60,7 +60,6 @@ GlobalActionManager::~GlobalActionManager()
 QUrl
 GlobalActionManager::openLinkFromQuery( const Tomahawk::query_ptr& query ) const
 {
-    QUrl link( "tomahawk://open/track/" );
     QString title, artist, album;
 
     if( !query->results().isEmpty() && !query->results().first().isNull() )
@@ -75,6 +74,14 @@ GlobalActionManager::openLinkFromQuery( const Tomahawk::query_ptr& query ) const
         album = query->album();
     }
 
+    return openLink( title, artist, album );
+}
+
+QUrl
+GlobalActionManager::openLink( const QString& title, const QString& artist, const QString& album, bool tomahk ) const
+{
+    QUrl link( tomahk ? "http://toma.hk/open/track/" : "tomahawk://open/track/" );
+
     if( !title.isEmpty() )
         link.addQueryItem( "title", title );
     if( !artist.isEmpty() )
@@ -85,14 +92,14 @@ GlobalActionManager::openLinkFromQuery( const Tomahawk::query_ptr& query ) const
     return link;
 }
 
-void
+QString
 GlobalActionManager::copyPlaylistToClipboard( const Tomahawk::dynplaylist_ptr& playlist )
 {
     QUrl link( QString( "tomahawk://%1/create/" ).arg( playlist->mode() == Tomahawk::OnDemand ? "station" : "autoplaylist" ) );
 
     if( playlist->generator()->type() != "echonest" ) {
         qDebug() << "Only echonest generators are supported";
-        return;
+        return QString();
     }
 
     link.addEncodedQueryItem( "type", "echonest" );
@@ -123,6 +130,8 @@ GlobalActionManager::copyPlaylistToClipboard( const Tomahawk::dynplaylist_ptr& p
 
     QClipboard* cb = QApplication::clipboard();
     cb->setText( link.toEncoded() );
+
+    return link.toString();
 }
 
 void
@@ -165,10 +174,11 @@ GlobalActionManager::parseTomahawkLink( const QString& url )
 {
     if( url.contains( "tomahawk://" ) ) {
         QString cmd = url.mid( 11 );
+        cmd.replace( "%2B", "%20" );
         qDebug() << "Parsing tomahawk link command" << cmd;
 
         QString cmdType = cmd.split( "/" ).first();
-        QUrl u( cmd );
+        QUrl u = QUrl::fromEncoded( cmd.toUtf8() );
 
         // for backwards compatibility
         if( cmdType == "load" ) {
@@ -380,22 +390,22 @@ GlobalActionManager::handleSearchCommand( const QUrl& url )
 bool
 GlobalActionManager::handleAutoPlaylistCommand( const QUrl& url )
 {
-    return loadDynamicPlaylist( url, false );
+    return !loadDynamicPlaylist( url, false ).isNull();
 }
 
-bool
+Tomahawk::dynplaylist_ptr
 GlobalActionManager::loadDynamicPlaylist( const QUrl& url, bool station )
 {
     QStringList parts = url.path().split( "/" ).mid( 1 ); // get the rest of the command
     if( parts.isEmpty() ) {
         qDebug() << "No specific station command:" << url.toString();
-        return false;
+        return Tomahawk::dynplaylist_ptr();
     }
 
     if( parts[ 0 ] == "create" ) {
         if( !url.hasQueryItem( "title" ) || !url.hasQueryItem( "type" ) ) {
             qDebug() << "Station create command needs title and type..." << url.toString();
-            return false;
+            return Tomahawk::dynplaylist_ptr();
         }
         QString title = url.queryItemValue( "title" );
         QString type = url.queryItemValue( "type" );
@@ -520,17 +530,17 @@ GlobalActionManager::loadDynamicPlaylist( const QUrl& url, bool station )
         else
             pl->createNewRevision( uuid(), pl->currentrevision(), type, controls, pl->entries() );
 
-        return true;
+        return pl;
     }
 
-    return false;
+    return Tomahawk::dynplaylist_ptr();
 }
 
 
 bool
 GlobalActionManager::handleStationCommand( const QUrl& url )
 {
-    return loadDynamicPlaylist( url, true );
+    return !loadDynamicPlaylist( url, true ).isNull();
 }
 
 bool

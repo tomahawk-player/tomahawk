@@ -2,11 +2,8 @@
 #include <QInputDialog>
 #include <QDebug>
 
-#define CONSUMER_KEY "C4v4Wfa21rfIDck4HMR3A"
-#define CONSUMER_SECRET "zXSjU6bjrvg6UVMJX4JufqHyjj3iextY14SR9uBEAo"
-
 TomahawkOAuthTwitter::TomahawkOAuthTwitter( QNetworkAccessManager *nam, QObject* parent )
-    : OAuthTwitter( CONSUMER_KEY, CONSUMER_SECRET, parent )
+    : OAuthTwitter( QByteArray( "C4v4Wfa21rfIDck4HMR3A" ), QByteArray( "zXSjU6bjrvg6UVMJX4JufqHyjj3iextY14SR9uBEAo" ), parent )
 {
     setNetworkAccessManager( nam );
 }

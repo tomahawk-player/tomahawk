@@ -60,6 +60,7 @@ SET( tomahawkSourcesGui ${tomahawkSourcesGui}
      sourcetree/items/genericpageitems.cpp
 
      transferview.cpp
+     PipelineStatusView.cpp
      tomahawktrayicon.cpp
      audiocontrols.cpp
      settingsdialog.cpp
@@ -102,6 +103,7 @@ SET( tomahawkHeadersGui ${tomahawkHeadersGui}
      sourcetree/items/genericpageitems.h
 
      transferview.h
+     PipelineStatusView.h
      tomahawktrayicon.h
      audiocontrols.h
      settingsdialog.h
@@ -116,10 +118,10 @@ SET( tomahawkHeadersGui ${tomahawkHeadersGui}
 
 SET( tomahawkUI ${tomahawkUI}
      tomahawkwindow.ui
-     settingsdialog.ui
      diagnosticsdialog.ui
      stackedsettingsdialog.ui
      proxydialog.ui
+     searchbox.ui
 
      audiocontrols.ui
 )
@@ -160,6 +162,8 @@ IF( UNIX )
 ENDIF( UNIX )
 
 IF( APPLE )
+    INCLUDE_DIRECTORIES( ${CMAKE_SOURCE_DIR}/thirdparty/SPMediaKeyTap )
+
     SET( tomahawkHeaders ${tomahawkHeaders} mac/tomahawkapp_mac.h mac/macshortcuthandler.h  )
     SET( tomahawkSources ${tomahawkSources} mac/tomahawkapp_mac.mm  mac/macshortcuthandler.cpp )
 

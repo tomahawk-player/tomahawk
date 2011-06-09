@@ -1,5 +1,5 @@
 /* === This file is part of Tomahawk Player - <http://tomahawk-player.org> ===
- * 
+ *
  *   Copyright 2010-2011, Christian Muehlhaeuser <muesli@tomahawk-player.org>
  *
  *   Tomahawk is free software: you can redistribute it and/or modify
@@ -45,7 +45,7 @@ QueueView::QueueView( AnimatedSplitter* parent )
     m_queue->setFrameShape( QFrame::NoFrame );
     m_queue->setAttribute( Qt::WA_MacShowFocusRect, 0 );
     m_queue->overlay()->setEnabled( false );
-    
+
     m_button = new QPushButton();
     m_button->setSizePolicy( QSizePolicy::Preferred, QSizePolicy::Fixed );
     m_button->setText( tr( "Click to show queue" ) );
@@ -64,13 +64,13 @@ QueueView::~QueueView()
 
 
 void
-QueueView::onShown( QWidget* widget )
+QueueView::onShown( QWidget* widget, bool animated )
 {
     qDebug() << Q_FUNC_INFO << widget;
     if ( widget != this )
         return;
 
-    AnimatedWidget::onShown( widget );
+    AnimatedWidget::onShown( widget, animated );
 
     m_button->setText( tr( "Click to hide queue" ) );
     disconnect( m_button, SIGNAL( clicked() ), this, SIGNAL( showWidget() ) );
@@ -79,14 +79,14 @@ QueueView::onShown( QWidget* widget )
 
 
 void
-QueueView::onHidden( QWidget* widget )
+QueueView::onHidden( QWidget* widget, bool animated )
 {
     qDebug() << Q_FUNC_INFO << widget;
     if ( widget != this )
         return;
-    
-    AnimatedWidget::onHidden( widget );
-    
+
+    AnimatedWidget::onHidden( widget, animated );
+
     m_button->setText( tr( "Click to show queue" ) );
     disconnect( m_button, SIGNAL( clicked() ), this, SIGNAL( hideWidget() ) );
     connect( m_button, SIGNAL( clicked() ), SIGNAL( showWidget() ) );

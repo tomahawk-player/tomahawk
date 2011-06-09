@@ -1,2 +1,5 @@
 ADD_SUBDIRECTORY( qxt )
 ADD_SUBDIRECTORY( liblastfm2 )
+IF( APPLE )
+    ADD_SUBDIRECTORY( SPMediaKeyTap )
+ENDIF()

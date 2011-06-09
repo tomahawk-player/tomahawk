@@ -26,6 +26,9 @@
 #include "infoplugins/echonestplugin.h"
 #include "infoplugins/musixmatchplugin.h"
 #include "infoplugins/lastfmplugin.h"
+#ifdef Q_WS_MAC
+#include "infoplugins/adiumplugin.h"
+#endif
 
 #include "lastfm/NetworkAccessManager"
 
@@ -66,6 +69,11 @@ InfoSystemWorker::init( QWeakPointer< Tomahawk::InfoSystem::InfoSystemCache> cac
     InfoPluginPtr lfmptr( new LastFmPlugin() );
     m_plugins.append( lfmptr );
     registerInfoTypes( lfmptr, lfmptr.data()->supportedGetTypes(), lfmptr.data()->supportedPushTypes() );
+    #ifdef Q_WS_MAC
+    InfoPluginPtr admptr( new AdiumPlugin() );
+    m_plugins.append( admptr );
+    registerInfoTypes( admptr, admptr.data()->supportedGetTypes(), admptr.data()->supportedPushTypes() );
+    #endif
 
     Q_FOREACH( InfoPluginPtr plugin, m_plugins )
     {

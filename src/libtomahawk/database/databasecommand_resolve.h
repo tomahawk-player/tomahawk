@@ -1,5 +1,5 @@
 /* === This file is part of Tomahawk Player - <http://tomahawk-player.org> ===
- * 
+ *
  *   Copyright 2010-2011, Christian Muehlhaeuser <muesli@tomahawk-player.org>
  *
  *   Tomahawk is free software: you can redistribute it and/or modify
@@ -44,6 +44,9 @@ signals:
 public slots:
 
 private:
+    void fullTextResolve( DatabaseImpl* lib );
+    void resolve( DatabaseImpl* lib );
+
     Tomahawk::query_ptr m_query;
 
     float how_similar( const Tomahawk::query_ptr& q, const Tomahawk::result_ptr& r );

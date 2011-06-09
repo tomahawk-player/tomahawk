@@ -42,6 +42,17 @@ Query::get( const QString& artist, const QString& track, const QString& album, c
 }
 
 
+query_ptr
+Query::get( const QString& query, const QID& qid )
+{
+    query_ptr q = query_ptr( new Query( query, qid ) );
+
+    if ( !qid.isEmpty() )
+        Pipeline::instance()->resolve( q );
+    return q;
+}
+
+
 Query::Query( const QString& artist, const QString& track, const QString& album, const QID& qid )
     : m_solved( false )
     , m_playable( false )
@@ -50,6 +61,26 @@ Query::Query( const QString& artist, const QString& track, const QString& album,
     , m_artist( artist )
     , m_album( album )
     , m_track( track )
+    , m_duration( -1 )
+{
+    if ( !qid.isEmpty() )
+    {
+        connect( Database::instance(), SIGNAL( indexReady() ), SLOT( refreshResults() ), Qt::QueuedConnection );
+    }
+
+    connect( Pipeline::instance(), SIGNAL( resolverAdded( Resolver* ) ),
+             SLOT( onResolverAdded() ), Qt::QueuedConnection );
+    connect( Pipeline::instance(), SIGNAL( resolverRemoved( Resolver* ) ),
+             SLOT( onResolverRemoved() ), Qt::QueuedConnection );
+}
+
+
+Query::Query( const QString& query, const QID& qid )
+    : m_solved( false )
+    , m_playable( false )
+    , m_resolveFinished( false )
+    , m_qid( qid )
+    , m_fullTextQuery( query )
     , m_duration( -1 )
 {
     if ( !qid.isEmpty() )
@@ -119,6 +150,26 @@ Query::onResolvingFinished()
 //    qDebug() << Q_FUNC_INFO << "Finished resolving." << toString();
     m_resolveFinished = true;
     emit resolvingFinished( m_solved );
+}
+
+
+void
+Query::onResolverAdded()
+{
+    if ( !solved() )
+    {
+        refreshResults();
+    }
+}
+
+
+void
+Query::onResolverRemoved()
+{
+    if ( !solved() )
+    {
+        refreshResults();
+    }
 }
 
 

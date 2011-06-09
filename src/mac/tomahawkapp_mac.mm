@@ -17,7 +17,7 @@
  */
 
 #include "tomahawkapp_mac.h"
-#include "tomahawkapp_macdelegate.h"
+#include "macdelegate.h"
 #include "macshortcuthandler.h"
 #include <QDebug>
 
@@ -42,6 +42,7 @@
 // See: http://www.rogueamoeba.com/utm/2007/09/29/apple-keyboard-media-key-event-handling/
 
 @interface MacApplication :NSApplication {
+    AppDelegate* delegate_;
     Tomahawk::MacShortcutHandler* shortcut_handler_;
     Tomahawk::PlatformInterface* application_handler_;
 }
@@ -51,7 +52,6 @@
 
 - (Tomahawk::PlatformInterface*) application_handler;
 - (void) setApplicationHandler: (Tomahawk::PlatformInterface*)handler;
-- (void) mediaKeyEvent: (int)key state: (BOOL)state repeat: (BOOL)repeat;
 @end
 
 
@@ -59,14 +59,22 @@
 
 - (id) init {
   if ((self = [super init])) {
-    application_handler_ = nil;
-//    dock_menu_ = nil;
+      application_handler_ = nil;
+      shortcut_handler_ = nil;
+      //dock_menu_ = nil;
   }
   return self;
 }
 
 - (id) initWithHandler: (Tomahawk::PlatformInterface*)handler {
   application_handler_ = handler;
+
+  // Register defaults for the whitelist of apps that want to use media keys
+  [[NSUserDefaults standardUserDefaults] registerDefaults:[NSDictionary dictionaryWithObjectsAndKeys:
+     [SPMediaKeyTap defaultMediaKeyUserBundleIdentifiers], @"SPApplicationsNeedingMediaKeys",
+      nil]];
+
+
   return self;
 }
 
@@ -76,7 +84,7 @@
   }
   return YES;
 }
-/*
+
 - (void) setDockMenu: (NSMenu*)menu {
   dock_menu_ = menu;
 }
@@ -84,7 +92,45 @@
 - (NSMenu*) applicationDockMenu: (NSApplication*)sender {
   return dock_menu_;
 }
-*/
+
+
+- (Tomahawk::MacShortcutHandler*) shortcutHandler {
+    return shortcut_handler_;
+}
+
+- (void) setShortcutHandler: (Tomahawk::MacShortcutHandler*)handler {
+    qDebug() << "Setting shortcut handler of MacApp";
+    // should be the same as MacApplication's
+  shortcut_handler_ = handler;
+}
+
+- (void)applicationDidFinishLaunching:(NSNotification *)aNotification {
+  key_tap_ = [[SPMediaKeyTap alloc] initWithDelegate:self];
+  if([SPMediaKeyTap usesGlobalMediaKeyTap])
+    [key_tap_ startWatchingMediaKeys];
+  else
+    qWarning()<<"Media key monitoring disabled";
+
+}
+
+- (void) mediaKeyTap: (SPMediaKeyTap*)keyTap receivedMediaKeyEvent:(NSEvent*)event {
+  NSAssert([event type] == NSSystemDefined && [event subtype] == SPSystemDefinedEventMediaKeys, @"Unexpected NSEvent in mediaKeyTap:receivedMediaKeyEvent:");
+
+  int key_code = (([event data1] & 0xFFFF0000) >> 16);
+  int key_flags = ([event data1] & 0x0000FFFF);
+  BOOL key_is_pressed = (((key_flags & 0xFF00) >> 8)) == 0xA;
+  // not used. keep just in case
+  //  int key_repeat = (key_flags & 0x1);
+
+  if (!shortcut_handler_) {
+    qWarning() << "No shortcut handler when we get a media key event...";
+    return;
+  }
+  if (key_is_pressed) {
+    shortcut_handler_->macMediaKeyPressed(key_code);
+  }
+}
+
 - (BOOL) application: (NSApplication*)app openFile:(NSString*)filename {
   qDebug() << "Wants to open:" << [filename UTF8String];
 
@@ -94,6 +140,11 @@
 
   return NO;
 }
+
+- (NSApplicationTerminateReply) applicationShouldTerminate:(NSApplication*) sender {
+  return NSTerminateNow;
+}
+
 @end
 
 @implementation MacApplication
@@ -127,7 +178,7 @@
 }
 
 - (void) setShortcutHandler: (Tomahawk::MacShortcutHandler*)handler {
-    qDebug() << "Setting shortcut handler of MacAPp";
+    // should be the same as AppDelegate's
   shortcut_handler_ = handler;
 }
 
@@ -136,30 +187,22 @@
 }
 
 - (void) setApplicationHandler: (Tomahawk::PlatformInterface*)handler {
-  AppDelegate* delegate = [[AppDelegate alloc] initWithHandler:handler];
-  [self setDelegate:delegate];
+  delegate_ = [[AppDelegate alloc] initWithHandler:handler];
+  // App-shortcut-handler set before delegate is set.
+  // this makes sure the delegate's shortcut_handler is set
+  [delegate_ setShortcutHandler:shortcut_handler_];
+  [self setDelegate:delegate_];
 }
 
 -(void) sendEvent: (NSEvent*)event {
-  if ([event type] == NSSystemDefined && [event subtype] == 8) {
-    int keycode = (([event data1] & 0xFFFF0000) >> 16);
-    int keyflags = ([event data1] & 0x0000FFFF);
-    int keystate = (((keyflags & 0xFF00) >> 8)) == 0xA;
-    int keyrepeat = (keyflags & 0x1);
+    // If event tap is not installed, handle events that reach the app instead
+    BOOL shouldHandleMediaKeyEventLocally = ![SPMediaKeyTap usesGlobalMediaKeyTap];
 
-    [self mediaKeyEvent: keycode state: keystate repeat: keyrepeat];
-  }
+    if(shouldHandleMediaKeyEventLocally && [event type] == NSSystemDefined && [event subtype] == SPSystemDefinedEventMediaKeys) {
+      [(id)[self delegate] mediaKeyTap: nil receivedMediaKeyEvent: event];
+    }
 
-  [super sendEvent: event];
-}
-
--(void) mediaKeyEvent: (int)key state: (BOOL)state repeat: (BOOL)repeat {
-  if (!shortcut_handler_) {
-    return;
-  }
-  if (state == 0) {
-    shortcut_handler_->macMediaKeyPressed(key);
-  }
+    [super sendEvent: event];
 }
 
 @end

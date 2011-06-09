@@ -55,6 +55,7 @@ CollectionProxyModel::lessThan( const QModelIndex& left, const QModelIndex& righ
     unsigned int bitrate1 = 0, bitrate2 = 0;
     unsigned int mtime1 = 0, mtime2 = 0;
     unsigned int id1 = 0, id2 = 0;
+    unsigned int size1 = 0, size2 = 0;
 
     if ( q1->numResults() )
     {
@@ -66,6 +67,7 @@ CollectionProxyModel::lessThan( const QModelIndex& left, const QModelIndex& righ
         bitrate1 = r->bitrate();
         mtime1 = r->modificationTime();
         id1 = r->dbid();
+        size1 = r->size();
     }
     if ( q2->numResults() )
     {
@@ -77,9 +79,10 @@ CollectionProxyModel::lessThan( const QModelIndex& left, const QModelIndex& righ
         bitrate2 = r->bitrate();
         mtime2 = r->modificationTime();
         id2 = r->dbid();
+        size2 = r->size();
     }
 
-    if ( left.column() == 0 ) // sort by artist
+    if ( left.column() == TrackModel::Artist ) // sort by artist
     {
         if ( artist1 == artist2 )
         {
@@ -96,7 +99,7 @@ CollectionProxyModel::lessThan( const QModelIndex& left, const QModelIndex& righ
 
         return QString::localeAwareCompare( artist1, artist2 ) < 0;
     }
-    else if ( left.column() == 2 ) // sort by album
+    else if ( left.column() == TrackModel::Album ) // sort by album
     {
         if ( album1 == album2 )
         {
@@ -108,21 +111,27 @@ CollectionProxyModel::lessThan( const QModelIndex& left, const QModelIndex& righ
 
         return QString::localeAwareCompare( album1, album2 ) < 0;
     }
-    else if ( left.column() == 4 ) // sort by bitrate
+    else if ( left.column() == TrackModel::Bitrate ) // sort by bitrate
     {
         if ( bitrate1 == bitrate2 )
             return id1 < id2;
 
         return bitrate1 < bitrate2;
     }
-    else if ( left.column() == 5 ) // sort by mtime
+    else if ( left.column() == TrackModel::Age ) // sort by mtime
     {
         if ( mtime1 == mtime2 )
             return id1 < id2;
 
         return mtime1 < mtime2;
     }
+    else if ( left.column() == TrackModel::Filesize ) // sort by file size
+    {
+        if ( size1 == size2 )
+            return id1 < id2;
 
+        return size1 < size2;
+    }
     return QString::localeAwareCompare( sourceModel()->data( left ).toString(),
                                         sourceModel()->data( right ).toString() ) < 0;
 }

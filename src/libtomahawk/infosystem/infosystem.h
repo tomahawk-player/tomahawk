@@ -26,6 +26,7 @@
 #include <QtCore/QWeakPointer>
 #include <QtCore/QSet>
 #include <QtCore/QLinkedList>
+#include <QtCore/QUrl>
 #include <QtCore/QVariant>
 #include <QtCore/QThread>
 
@@ -94,7 +95,12 @@ enum InfoType { // as items are saved in cache, mark them here to not change the
     InfoSubmitNowPlaying = 46,
     InfoSubmitScrobble = 47,
 
-    InfoNoInfo = 48
+    InfoNowPlaying = 48,
+    InfoNowPaused = 49,
+    InfoNowResumed = 50,
+    InfoNowStopped = 51,
+
+    InfoNoInfo = 52
 };
 
 typedef QMap< InfoType, QVariant > InfoMap;

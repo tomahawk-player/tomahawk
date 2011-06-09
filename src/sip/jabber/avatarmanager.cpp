@@ -6,6 +6,7 @@
 #include <jreen/vcard.h>
 #include <jreen/vcardupdate.h>
 #include <jreen/presence.h>
+#include <jreen/iqreply.h>
 
 #include <QDir>
 #include <QDebug>
@@ -20,8 +21,8 @@ AvatarManager::AvatarManager(Jreen::Client *client) :
     m_cachedAvatars = m_cacheDir.entryList();
 
     connect(m_client, SIGNAL(serverFeaturesReceived(QSet<QString>)), SLOT(onNewConnection()));
-    connect(m_client, SIGNAL(newPresence(Jreen::Presence)), SLOT(onNewPresence(Jreen::Presence)));
-    connect(m_client, SIGNAL(newIQ(Jreen::IQ)), SLOT(onNewIq(Jreen::IQ)));
+    connect(m_client, SIGNAL(presenceReceived(Jreen::Presence)), SLOT(onNewPresence(Jreen::Presence)));
+    connect(m_client, SIGNAL(iqReceived(Jreen::IQ)), SLOT(onNewIq(Jreen::IQ)));
 
     connect(this, SIGNAL(newAvatar(QString)), SLOT(onNewAvatar(QString)));
 }
@@ -42,12 +43,13 @@ void AvatarManager::fetchVCard(const QString &jid)
 
     Jreen::IQ iq(Jreen::IQ::Get, jid );
     iq.addExtension(new Jreen::VCard());
-    m_client->send( iq, this, SLOT( onNewIq( Jreen::IQ, int ) ), 0 );
+    Jreen::IQReply *reply = m_client->send(iq);
+    connect(reply, SIGNAL(received(Jreen::IQ)), SLOT(onNewIq(Jreen::IQ)));
 }
 
 void AvatarManager::onNewPresence(const Jreen::Presence& presence)
 {
-    Jreen::VCardUpdate::Ptr update = presence.findExtension<Jreen::VCardUpdate>();
+    Jreen::VCardUpdate::Ptr update = presence.payload<Jreen::VCardUpdate>();
     if(update)
     {
 //        qDebug() << "vcard: found update for" << presence.from().full();
@@ -74,9 +76,9 @@ void AvatarManager::onNewPresence(const Jreen::Presence& presence)
     }
 }
 
-void AvatarManager::onNewIq(const Jreen::IQ& iq, int context)
+void AvatarManager::onNewIq(const Jreen::IQ& iq)
 {
-    Jreen::VCard *vcard = iq.findExtension<Jreen::VCard>().data();
+    Jreen::VCard::Ptr vcard = iq.payload<Jreen::VCard>();
     if(vcard)
     {
         iq.accept();
@@ -119,7 +121,7 @@ void AvatarManager::onNewIq(const Jreen::IQ& iq, int context)
 //            qDebug() << Q_FUNC_INFO << "got own vcard";
 
             Jreen::Presence presence = m_client->presence();
-            Jreen::VCardUpdate::Ptr update = presence.findExtension<Jreen::VCardUpdate>();
+            Jreen::VCardUpdate::Ptr update = presence.payload<Jreen::VCardUpdate>();
             if (update->photoHash() != avatarHash)
             {
                 qDebug() << Q_FUNC_INFO << "Updating own presence...";

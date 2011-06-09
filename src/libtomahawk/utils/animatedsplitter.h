@@ -1,5 +1,5 @@
 /* === This file is part of Tomahawk Player - <http://tomahawk-player.org> ===
- * 
+ *
  *   Copyright 2010-2011, Christian Muehlhaeuser <muesli@tomahawk-player.org>
  *
  *   Tomahawk is free software: you can redistribute it and/or modify
@@ -43,56 +43,52 @@ public:
     void addWidget( AnimatedWidget* widget );
 
 signals:
-    void shown( QWidget* );
-    void hidden( QWidget* );
+    void shown( QWidget*, bool animated );
+    void hidden( QWidget*, bool animated );
 
 private slots:
     void onShowRequest();
     void onHideRequest();
 
-    void onAnimationStep( int frame );
-    void onAnimationFinished();
-
-    void onHiddenSizeChanged();
-
 private:
-    int m_animateIndex;
-    bool m_animateForward;
-
     int m_greedyIndex;
-    QList<QSize> m_sizes;
-    QTimeLine* m_timeLine;
 };
 
 class DLLEXPORT AnimatedWidget : public QWidget
 {
 Q_OBJECT
 public:
-    explicit AnimatedWidget( AnimatedSplitter* parent = 0 );
+    explicit AnimatedWidget( AnimatedSplitter* parent );
     virtual ~AnimatedWidget();
-    
+
     QSize hiddenSize() const { return m_hiddenSize; }
     void setHiddenSize( const QSize& size ) { m_hiddenSize = size; emit hiddenSizeChanged(); }
 
     bool isHidden() const { return m_isHidden; }
 
 public slots:
-    virtual void onShown( QWidget* );
-    virtual void onHidden( QWidget* );
+    virtual void onShown( QWidget*, bool animated );
+    virtual void onHidden( QWidget*, bool animated );
 
 signals:
     void showWidget();
     void hideWidget();
 
     void hiddenSizeChanged();
+
+private slots:
+    void onAnimationStep( int frame );
+    void onAnimationFinished();
+
 protected:
-    
     AnimatedSplitter* splitter() { return m_parent; }
-    
+
 private:
     AnimatedSplitter* m_parent;
+    bool m_animateForward;
     QSize m_hiddenSize;
     bool m_isHidden;
+    QTimeLine* m_timeLine;
 };
 
 #endif //ANIMATEDSPLITTER_H

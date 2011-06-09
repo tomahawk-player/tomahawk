@@ -91,6 +91,8 @@ public slots:
 
     virtual void refreshProxy();
 
+    // so plugins can clean up after themselves
+    virtual void deletePlugin();
 signals:
     void error( int, const QString& );
     void stateChanged( SipPlugin::ConnectionState state );

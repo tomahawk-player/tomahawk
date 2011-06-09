@@ -16,49 +16,10 @@
  *   along with Tomahawk. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include "dummytranscode.h"
+#ifndef ADIUM_TOMAHAWK_H
+#define ADIUM_TOMAHAWK_H
+#include <string>
 
-#include <QDebug>
+void script( const char* status );
 
-DummyTranscode::DummyTranscode()
-    : m_init( false )
-{
-    qDebug() << Q_FUNC_INFO;
-}
-
-
-DummyTranscode::~DummyTranscode()
-{
-    qDebug() << Q_FUNC_INFO;
-}
-
-
-void
-DummyTranscode::processData( const QByteArray &buffer, bool finish )
-{
-    Q_UNUSED( finish );
-    m_buffer.append( buffer );
-//     qDebug() << "DUMMYTRANSCODING:" << buffer.size();
-
-    if( !m_init && m_buffer.size() >= 16364 ) {
-        m_init = true;
-        emit streamInitialized( 44100, 2 );
-    }
-}
-
-
-void
-DummyTranscode::onSeek( int seconds )
-{
-    Q_UNUSED( seconds );
-    m_buffer.clear();
-}
-
-
-void
-DummyTranscode::clearBuffers()
-{
-    m_buffer.clear();
-    m_init = false;
-}
-
+#endif ADIUM_TOMAHAWK_H

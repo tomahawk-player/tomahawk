@@ -80,27 +80,23 @@ AudioControls::AudioControls( QWidget* parent )
     ui->metaDataArea->setStyleSheet( "QWidget#metaDataArea {\nborder-width: 4px;\nborder-image: url(" RESPATH "images/now-playing-panel.png) 4 4 4 4 stretch stretch; }" );
 
     ui->seekSlider->setFixedHeight( 20 );
-    ui->seekSlider->setEnabled( false );
+    ui->seekSlider->setEnabled( true );
     ui->seekSlider->setStyleSheet( "QSlider::groove::horizontal {"
                                    "margin: 5px; border-width: 3px;"
                                    "border-image: url(" RESPATH "images/seek-slider-bkg.png) 3 3 3 3 stretch stretch;"
-                                   "}"
-
-                                   "QSlider::handle::horizontal {"
-                                   "margin-left: 5px; margin-right: -5px; "
-                                   "width: 0px;"
-
-                                   //"margin-bottom: -7px; margin-top: -7px;"
-                                   //"height: 17px; width: 16px;"
-                                   //"background-image: url(" RESPATH "images/seek-and-volume-knob-rest.png);"
-                                   //"background-repeat: no-repeat;"
                                    "}"
 
                                    "QSlider::sub-page:horizontal {"
                                    "margin: 5px; border-width: 3px;"
                                    "border-image: url(" RESPATH "images/seek-slider-level.png) 3 3 3 3 stretch stretch;"
                                    "}"
-                                  );
+
+                                   "QSlider::handle::horizontal {"
+                                   "margin-bottom: -7px; margin-top: -7px;"
+                                   "height: 17px; width: 16px;"
+                                   "background-image: url(" RESPATH "images/seek-and-volume-knob-rest.png);"
+                                   "background-repeat: no-repeat;"
+                                   "}" );
 
     ui->volumeSlider->setFixedHeight( 20 );
     ui->volumeSlider->setRange( 0, 100 );
@@ -120,9 +116,7 @@ AudioControls::AudioControls( QWidget* parent )
                                      "height: 17px; width: 16px;"
                                      "background-image: url(" RESPATH "images/seek-and-volume-knob-rest.png);"
                                      "background-repeat: no-repeat;"
-                                     "}"
-
-                                     );
+                                     "}" );
 
 /*    m_playAction  = new QAction( this );
     m_pauseAction = new QAction( this );
@@ -134,6 +128,7 @@ AudioControls::AudioControls( QWidget* parent )
     connect( m_prevAction,  SIGNAL( triggered() ), (QObject*)APP->audioEngine(), SLOT( previous() ) );
     connect( m_nextAction,  SIGNAL( triggered() ), (QObject*)APP->audioEngine(), SLOT( next() ) ); */
 
+    connect( ui->seekSlider,       SIGNAL( valueChanged( int ) ), AudioEngine::instance(), SLOT( seek( int ) ) );
     connect( ui->volumeSlider,     SIGNAL( valueChanged( int ) ), AudioEngine::instance(), SLOT( setVolume( int ) ) );
     connect( ui->prevButton,       SIGNAL( clicked() ), AudioEngine::instance(), SLOT( previous() ) );
     connect( ui->playPauseButton,  SIGNAL( clicked() ), AudioEngine::instance(), SLOT( play() ) );
@@ -283,13 +278,11 @@ AudioControls::onPlaybackLoading( const Tomahawk::result_ptr& result )
     ui->ownerLabel->setText( result->friendlySource() );
     ui->coverImage->setPixmap( m_defaultCover );
 
-    if ( ui->timeLabel->text().isEmpty() )
-        ui->timeLabel->setText( TomahawkUtils::timeToString( 0 ) );
-
-    if ( ui->timeLeftLabel->text().isEmpty() )
-        ui->timeLeftLabel->setText( "-" + TomahawkUtils::timeToString( result->duration() ) );
+    ui->timeLabel->setText( TomahawkUtils::timeToString( 0 ) );
+    ui->timeLeftLabel->setText( "-" + TomahawkUtils::timeToString( result->duration() ) );
 
     ui->seekSlider->setRange( 0, m_currentTrack->duration() * 1000 );
+    ui->seekSlider->setValue( 0 );
     ui->seekSlider->setVisible( true );
 
 /*    m_playAction->setEnabled( false );
@@ -357,10 +350,14 @@ AudioControls::onPlaybackTimer( qint64 msElapsed )
     if ( m_currentTrack.isNull() )
         return;
 
+    ui->seekSlider->blockSignals( true );
+
     const int seconds = msElapsed / 1000;
     ui->timeLabel->setText( TomahawkUtils::timeToString( seconds ) );
     ui->timeLeftLabel->setText( "-" + TomahawkUtils::timeToString( m_currentTrack->duration() - seconds ) );
     ui->seekSlider->setValue( msElapsed );
+
+    ui->seekSlider->blockSignals( false );
 }
 
 

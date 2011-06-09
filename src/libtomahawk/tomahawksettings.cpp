@@ -753,3 +753,16 @@ TomahawkSettings::setEnabledScriptResolvers( const QStringList& resolvers )
 {
     setValue( "script/loadedresolvers", resolvers );
 }
+
+bool
+TomahawkSettings::nowPlayingEnabled() const
+{
+    return value( "adium/enablenowplaying", false ).toBool();
+}
+
+
+void
+TomahawkSettings::setNowPlayingEnabled( bool enable )
+{
+    setValue( "adium/enablenowplaying", enable );
+}

@@ -208,12 +208,22 @@ ScriptResolver::resolve( const Tomahawk::query_ptr& query )
 {
     QVariantMap m;
     m.insert( "_msgtype", "rq" );
-    m.insert( "artist", query->artist() );
-    m.insert( "track", query->track() );
-    m.insert( "qid", query->id() );
+
+    if ( query->isFullTextQuery() )
+    {
+        m.insert( "fulltext", query->fullTextQuery() );
+        m.insert( "artist", query->artist() );
+        m.insert( "track", query->fullTextQuery() );
+        m.insert( "qid", query->id() );
+    }
+    else
+    {
+        m.insert( "artist", query->artist() );
+        m.insert( "track", query->track() );
+        m.insert( "qid", query->id() );
+    }
 
     const QByteArray msg = m_serializer.serialize( QVariant( m ) );
-//    qDebug() << "ASKING SCRIPT RESOLVER TO RESOLVE:" << msg;
     sendMsg( msg );
 }
 

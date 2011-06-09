@@ -95,6 +95,8 @@ private:
 
     static QVector< QString > s_styles;
     static QVector< QString > s_moods;
+    static QNetworkReply* s_stylesJob;
+    static QNetworkReply* s_moodsJob;
 
     // used for the intermediary song id lookup
     QSet< QNetworkReply* > m_waiting;

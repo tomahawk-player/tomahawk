@@ -162,6 +162,7 @@ set( libSources
     utils/xspfgenerator.cpp
 
     widgets/newplaylistwidget.cpp
+    widgets/searchwidget.cpp
     widgets/playlisttypeselectordlg.cpp
     widgets/welcomewidget.cpp
     widgets/welcomeplaylistmodel.cpp
@@ -327,6 +328,7 @@ set( libHeaders
     utils/xspfgenerator.h
 
     widgets/newplaylistwidget.h
+    widgets/searchwidget.h
     widgets/playlisttypeselectordlg.h
     widgets/welcomewidget.h
     widgets/welcomeplaylistmodel.h
@@ -345,6 +347,7 @@ set( libHeaders_NoMOC
 set( libUI ${libUI}
     widgets/playlisttypeselectordlg.ui
     widgets/newplaylistwidget.ui
+    widgets/searchwidget.ui
     widgets/welcomewidget.ui
     widgets/infowidgets/sourceinfowidget.ui
     playlist/topbar/topbar.ui
@@ -386,13 +389,25 @@ ENDIF( WIN32 )
 IF( APPLE )
     FIND_LIBRARY( COREAUDIO_LIBRARY CoreAudio )
     FIND_LIBRARY( COREFOUNDATION_LIBRARY CoreFoundation )
-    MARK_AS_ADVANCED( COREAUDIO_LIBRARY COREFOUNDATION_LIBRARY )
+    FIND_LIBRARY( FOUNDATION_LIBRARY Foundation )
+    FIND_LIBRARY( SCRIPTINGBRIDGE_LIBRARY ScriptingBridge )
+    MARK_AS_ADVANCED( COREAUDIO_LIBRARY COREFOUNDATION_LIBRARY FOUNDATION_LIBRARY SCRIPTINGBRIDGE_LIBRARY )
+
+    SET( libSources ${libSources} 
+      infosystem/infoplugins/adium.mm
+      infosystem/infoplugins/adiumplugin.cpp )
+
+    SET( libHeaders ${libHeaders} 
+      infosystem/infoplugins/adium.h
+      infosystem/infoplugins/adiumplugin.h )
 
     SET( OS_SPECIFIC_LINK_LIBRARIES
         ${OS_SPECIFIC_LINK_LIBRARIES}
         # System
         ${COREAUDIO_LIBRARY}
         ${COREFOUNDATION_LIBRARY}
+	${FOUNDATION_LIBRARY}
+	${SCRIPTINGBRIDGE_LIBRARY}
     )
 ENDIF( APPLE )
 

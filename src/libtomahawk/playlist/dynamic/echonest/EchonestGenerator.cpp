@@ -26,6 +26,8 @@ using namespace Tomahawk;
 
 QVector< QString > EchonestGenerator::s_moods = QVector< QString >();
 QVector< QString > EchonestGenerator::s_styles = QVector< QString >();
+QNetworkReply* EchonestGenerator::s_moodsJob = 0;
+QNetworkReply* EchonestGenerator::s_stylesJob = 0;
 
 EchonestFactory::EchonestFactory()
 {}
@@ -59,12 +61,14 @@ EchonestGenerator::EchonestGenerator ( QObject* parent )
     m_mode = OnDemand;
     m_logo.load( RESPATH "/images/echonest_logo.png" );
 
-    // fetch style and moods
-    QNetworkReply* style = Echonest::Artist::listTerms( "style" );
-    connect( style, SIGNAL( finished() ), this, SLOT( stylesReceived() ) );
-
-    QNetworkReply* moods = Echonest::Artist::listTerms( "mood" );
-    connect( moods, SIGNAL( finished() ), this, SLOT( moodsReceived() ) );
+    if( !s_stylesJob && s_styles.isEmpty() ) {
+        // fetch style and moods
+        s_stylesJob = Echonest::Artist::listTerms( "style" );
+        connect( s_stylesJob, SIGNAL( finished() ), this, SLOT( stylesReceived() ) );
+    } else if( !s_moodsJob && s_moods.isEmpty() ) {
+        s_moodsJob = Echonest::Artist::listTerms( "mood" );
+        connect( s_moodsJob, SIGNAL( finished() ), this, SLOT( moodsReceived() ) );
+    }
 
 //    qDebug() << "ECHONEST:" << m_logo.size();
 }
@@ -445,10 +449,10 @@ EchonestGenerator::sentenceSummary()
 
     /// Skip empty artists
     QList< dyncontrol_ptr > empty;
-    foreach( const dyncontrol_ptr& artist, required ) {
-        QString summary = artist.dynamicCast< EchonestControl >()->summary();
+    foreach( const dyncontrol_ptr& artistOrTrack, required ) {
+        QString summary = artistOrTrack.dynamicCast< EchonestControl >()->summary();
         if( summary.lastIndexOf( "~" ) == summary.length() - 1 )
-            empty << artist;
+            empty << artistOrTrack;
     }
     foreach( const dyncontrol_ptr& toremove, empty ) {
         required.removeAll( toremove );
@@ -530,6 +534,7 @@ EchonestGenerator::moodsReceived()
     } catch( Echonest::ParseError& e ) {
         qWarning() << "Echonest failed to parse moods list";
     }
+    s_moodsJob = 0;
 }
 
 QVector< QString >
@@ -549,4 +554,5 @@ EchonestGenerator::stylesReceived()
     } catch( Echonest::ParseError& e ) {
         qWarning() << "Echonest failed to parse styles list";
     }
+    s_stylesJob = 0;
 }

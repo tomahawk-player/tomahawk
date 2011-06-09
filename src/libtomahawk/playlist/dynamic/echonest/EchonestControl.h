@@ -91,7 +91,8 @@ private:
 
     Echonest::DynamicPlaylist::PlaylistParamData m_data;
     QVariant m_cacheData;
-    int m_stylePollCount;
+    static bool s_fetchingMoodsAndStyles;
+    static int s_stylePollCount;
 
     QSet< QNetworkReply* > m_suggestWorkers;
     static QHash< QString, QStringList > s_suggestCache;

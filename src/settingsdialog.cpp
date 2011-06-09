@@ -135,6 +135,13 @@ SettingsDialog::SettingsDialog( QWidget *parent )
         ui->scannerDirModeButton->setChecked( true );
     }
     
+    // NOW PLAYING
+    #ifdef Q_WS_MAC
+    ui->checkBoxEnableAdium->setChecked( s->nowPlayingEnabled() );
+    #else
+    ui->checkBoxEnableAdium->hide();
+    #endif
+
     // LAST FM
     ui->checkBoxEnableLastfm->setChecked( s->scrobblingEnabled() );
     ui->lineEditLastfmUsername->setText( s->lastFmUsername() );
@@ -181,6 +188,8 @@ SettingsDialog::~SettingsDialog()
         s->setWatchForChanges( ui->checkBoxWatchForChanges->isChecked() );
         s->setScannerTime( ui->scannerTimeSpinBox->value() );
         s->setScannerMode( ui->scannerFileModeButton->isChecked() ? TomahawkSettings::Files : TomahawkSettings::Dirs );
+
+	s->setNowPlayingEnabled( ui->checkBoxEnableAdium->isChecked() );
 
         s->setScrobblingEnabled( ui->checkBoxEnableLastfm->isChecked() );
         s->setLastFmUsername( ui->lineEditLastfmUsername->text() );
@@ -432,7 +441,7 @@ SettingsDialog::onLastFmFinished()
                 ui->pushButtonTestLastfmLogin->setText( tr( "Failed" ) );
                 ui->pushButtonTestLastfmLogin->setEnabled( true );
                 break;
-                
+
             default:
                 qDebug() << "Couldn't get last.fm auth result";
                 ui->pushButtonTestLastfmLogin->setText( tr( "Could not contact server" ) );
@@ -578,6 +587,15 @@ SettingsDialog::sipFactoryClicked( SipPluginFactory* factory )
     SipPlugin* p = factory->createPlugin();
     bool added = false;
     if( p->configWidget() ) {
+
+#ifdef Q_OS_MAC
+        // on osx a sheet needs to be non-modal
+        DelegateConfigWrapper* dialog = new DelegateConfigWrapper( p->configWidget(), QString("%1 Config" ).arg( p->friendlyName() ), this, Qt::Sheet );
+        dialog->setProperty( "sipplugin", QVariant::fromValue< QObject* >( p ) );
+        connect( dialog, SIGNAL( finished( int ) ), this, SLOT( sipCreateConfigClosed( int ) ) );
+
+        dialog->show();
+#else
         DelegateConfigWrapper dialog( p->configWidget(), QString("%1 Config" ).arg( p->friendlyName() ), this );
         QWeakPointer< DelegateConfigWrapper > watcher( &dialog );
         int ret = dialog.exec();
@@ -594,13 +612,44 @@ SettingsDialog::sipFactoryClicked( SipPluginFactory* factory )
             // canceled, delete it
             added = false;
         }
+
+        handleSipPluginAdded( p, added );
+#endif
     } else {
         // no config, so just add it
         added = true;
         TomahawkSettings::instance()->addSipPlugin( p->pluginId() );
         SipHandler::instance()->addSipPlugin( p );
+
+        handleSipPluginAdded( p, added );
     }
 
+}
+
+void
+SettingsDialog::sipCreateConfigClosed( int finished )
+{
+    DelegateConfigWrapper* dialog = qobject_cast< DelegateConfigWrapper* >( sender() );
+    SipPlugin* p = qobject_cast< SipPlugin* >( dialog->property( "sipplugin" ).value< QObject* >() );
+    Q_ASSERT( p );
+
+    bool added = false;
+    if( finished == QDialog::Accepted ) {
+
+        p->saveConfig();
+        TomahawkSettings::instance()->addSipPlugin( p->pluginId() );
+        SipHandler::instance()->addSipPlugin( p );
+
+        added = true;
+    }
+
+    handleSipPluginAdded( p, added );
+}
+
+
+void
+SettingsDialog::handleSipPluginAdded( SipPlugin* p, bool added )
+{
     SipPluginFactory* f = SipHandler::instance()->factoryFromPlugin( p );
     if( added && f && f->isUnique() ) {
         // remove from actions list
@@ -619,6 +668,7 @@ SettingsDialog::sipFactoryClicked( SipPluginFactory* factory )
         delete p;
     }
 }
+
 
 void
 SettingsDialog::sipContextMenuRequest( const QPoint& p )
@@ -675,9 +725,9 @@ ProxyDialog::ProxyDialog( QWidget *parent )
 , ui( new Ui::ProxyDialog )
 {
     ui->setupUi( this );
-    
+
     // ugly, I know, but...
-    
+
     int i = 0;
     ui->typeBox->insertItem( i, "No Proxy", QNetworkProxy::NoProxy );
     m_forwardMap[ QNetworkProxy::NoProxy ] = i;
@@ -687,9 +737,9 @@ ProxyDialog::ProxyDialog( QWidget *parent )
     m_forwardMap[ QNetworkProxy::Socks5Proxy ] = i;
     m_backwardMap[ i ] = QNetworkProxy::Socks5Proxy;
     i++;
-    
+
     TomahawkSettings* s = TomahawkSettings::instance();
-    
+
     ui->typeBox->setCurrentIndex( m_forwardMap[s->proxyType()] );
     ui->hostLineEdit->setText( s->proxyHost() );
     ui->portSpinBox->setValue( s->proxyPort() );
@@ -731,18 +781,18 @@ ProxyDialog::proxyTypeChangedSlot( int index )
         ui->passwordLineEdit->setEnabled( true );
         ui->checkBoxUseProxyForDns->setEnabled( true );
         ui->noHostLineEdit->setEnabled( true );
-    }        
+    }
 }
 
 void
 ProxyDialog::saveSettings()
 {
     qDebug() << Q_FUNC_INFO;
-    
+
     //First set settings
     TomahawkSettings* s = TomahawkSettings::instance();
     s->setProxyHost( ui->hostLineEdit->text() );
-    
+
     int port = ui->portSpinBox->value();
     s->setProxyPort( port );
     s->setProxyNoProxyHosts( ui->noHostLineEdit->text() );
@@ -750,10 +800,10 @@ ProxyDialog::saveSettings()
     s->setProxyPassword( ui->passwordLineEdit->text() );
     s->setProxyType( ui->typeBox->itemData( ui->typeBox->currentIndex() ).toInt() );
     s->setProxyDns( ui->checkBoxUseProxyForDns->checkState() == Qt::Checked );
-    
+
     if( s->proxyHost().isEmpty() )
         return;
-    
+
     TomahawkUtils::NetworkProxyFactory* proxyFactory = new TomahawkUtils::NetworkProxyFactory();
     QNetworkProxy proxy( static_cast<QNetworkProxy::ProxyType>(s->proxyType()), s->proxyHost(), s->proxyPort(), s->proxyUsername(), s->proxyPassword() );
     proxyFactory->setProxy( proxy );

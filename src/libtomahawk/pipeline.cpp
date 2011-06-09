@@ -82,8 +82,9 @@ void
 Pipeline::removeResolver( Resolver* r )
 {
     QMutexLocker lock( &m_mut );
-
+    
     m_resolvers.removeAll( r );
+    emit resolverRemoved( r );
 }
 
 
@@ -100,6 +101,7 @@ Pipeline::addResolver( Resolver* r, bool sort )
                Pipeline::resolverSorter );
     }
     qDebug() << "Adding resolver" << r->name();
+    emit resolverAdded( r );
 
 /*    qDebug() << "Current pipeline:";
     foreach( Resolver * r, m_resolvers )
@@ -190,7 +192,7 @@ Pipeline::reportResults( QID qid, const QList< result_ptr >& results )
             m_rids.insert( r->id(), r );
         }
 
-        if ( q->solved() )
+        if ( q->solved() && !q->isFullTextQuery() )
         {
 //            qDebug() << "FINISHED RESOLVING EARLY" << q->toString();
             q->onResolvingFinished();
@@ -206,7 +208,7 @@ Pipeline::reportResults( QID qid, const QList< result_ptr >& results )
 
     if ( decQIDState( q ) == 0 )
     {
-        if ( !q->solved() )
+        if ( !q->solved() || q->isFullTextQuery() )
             q->onResolvingFinished();
 
         if ( m_qidsTimeout.contains( q->id() ) )
@@ -311,6 +313,7 @@ Pipeline::shunt( const query_ptr& q )
 
                 qDebug() << "Dispatching to resolver" << r->name() << q->toString() << q->solved() << q->id();
                 r->resolve( q );
+                emit resolving( q );
             }
             else
                 break;

@@ -75,11 +75,24 @@ QtScriptResolver::resolve( const Tomahawk::query_ptr& query )
     }
 
 //    qDebug() << Q_FUNC_INFO << query->toString();
-    QString eval = QString( "resolve( '%1', '%2', '%3', '%4' );" )
-        .arg( query->id().replace( "'", "\\'" ) )
-        .arg( query->artist().replace( "'", "\\'" ) )
-        .arg( query->album().replace( "'", "\\'" ) )
-        .arg( query->track().replace( "'", "\\'" ) );
+    QString eval;
+
+    if ( !query->isFullTextQuery() )
+    {
+        eval = QString( "resolve( '%1', '%2', '%3', '%4' );" )
+            .arg( query->id().replace( "'", "\\'" ) )
+            .arg( query->artist().replace( "'", "\\'" ) )
+            .arg( query->album().replace( "'", "\\'" ) )
+            .arg( query->track().replace( "'", "\\'" ) );
+    }
+    else
+    {
+        eval = QString( "resolve( '%1', '%2', '%3', '%4' );" )
+            .arg( query->id().replace( "'", "\\'" ) )
+            .arg( query->fullTextQuery().replace( "'", "\\'" ) )
+            .arg( QString() )
+            .arg( QString() );
+    }
 
     QList< Tomahawk::result_ptr > results;
 

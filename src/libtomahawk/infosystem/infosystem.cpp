@@ -25,6 +25,7 @@
 #include "infoplugins/echonestplugin.h"
 #include "infoplugins/musixmatchplugin.h"
 #include "infoplugins/lastfmplugin.h"
+#include "infoplugins/adiumplugin.h"
 
 namespace Tomahawk
 {

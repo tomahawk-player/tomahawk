@@ -143,10 +143,20 @@ SourceTreeView::setupMenus()
     m_copyPlaylistAction = m_playlistMenu.addAction( tr( "&Copy Link" ) );
     m_deletePlaylistAction = m_playlistMenu.addAction( tr( "&Delete %1" ).arg( SourcesModel::rowTypeToString( type ) ) );
 
-    m_roPlaylistMenu.addAction( m_copyPlaylistAction );
+    QString addToText = QString( "Add to my %1" );
+    if ( type == SourcesModel::StaticPlaylist )
+        addToText = addToText.arg( "Playlists" );
+    if ( type == SourcesModel::AutomaticPlaylist )
+        addToText = addToText.arg( "Automatic Playlists" );
+    else if ( type == SourcesModel::Station )
+        addToText = addToText.arg( "Stations" );
 
+    m_addToLocalAction = m_roPlaylistMenu.addAction( tr( addToText.toUtf8(), "Adds the given playlist, dynamic playlist, or station to the users's own list" ) );
+
+    m_roPlaylistMenu.addAction( m_copyPlaylistAction );
     m_deletePlaylistAction->setEnabled( !readonly );
     m_renamePlaylistAction->setEnabled( !readonly );
+    m_addToLocalAction->setEnabled( readonly );
 
     if ( type == SourcesModel::StaticPlaylist )
         m_copyPlaylistAction->setText( tr( "&Export Playlist" ) );
@@ -155,6 +165,7 @@ SourceTreeView::setupMenus()
     connect( m_renamePlaylistAction, SIGNAL( triggered() ), SLOT( renamePlaylist() ) );
     connect( m_deletePlaylistAction, SIGNAL( triggered() ), SLOT( deletePlaylist() ) );
     connect( m_copyPlaylistAction,   SIGNAL( triggered() ), SLOT( copyPlaylistLink() ) );
+    connect( m_addToLocalAction,   SIGNAL( triggered() ), SLOT( addToLocal() ) );
 }
 
 
@@ -256,6 +267,36 @@ SourceTreeView::copyPlaylistLink()
 
         QString filename = QFileDialog::getSaveFileName( this, tr( "Save XSPF" ), QDir::homePath(), tr( "Playlists (*.xspf)" ) );
         GlobalActionManager::instance()->savePlaylistToFile( playlist, filename );
+    }
+}
+
+void SourceTreeView::addToLocal()
+{
+    QModelIndex idx = m_contextMenuIndex;
+    if ( !idx.isValid() )
+        return;
+
+    SourcesModel::RowType type = ( SourcesModel::RowType )model()->data( m_contextMenuIndex, SourcesModel::SourceTreeItemTypeRole ).toInt();
+    if( type == SourcesModel::AutomaticPlaylist || type == SourcesModel::Station )
+    {
+        DynamicPlaylistItem* item = itemFromIndex< DynamicPlaylistItem >( m_contextMenuIndex );
+        dynplaylist_ptr playlist = item->dynPlaylist();
+
+        // copy to a link and then generate a new playlist from that
+        // this way we cheaply regenerate the needed controls
+        QString link = GlobalActionManager::instance()->copyPlaylistToClipboard( playlist );
+        dynplaylist_ptr p = GlobalActionManager::instance()->loadDynamicPlaylist( link, type == SourcesModel::Station );
+    } else if ( type == SourcesModel::StaticPlaylist )
+    {
+        PlaylistItem* item = itemFromIndex< PlaylistItem >( m_contextMenuIndex );
+        playlist_ptr playlist = item->playlist();
+
+        // just create the new playlist with the same values
+        QList< query_ptr > queries;
+        foreach( const plentry_ptr& e, playlist->entries() )
+            queries << e->query();
+
+        playlist_ptr newpl = Playlist::create( SourceList::instance()->getLocal(), uuid(), playlist->title(), playlist->info(), playlist->creator(), playlist->shared(), queries );
     }
 }
 

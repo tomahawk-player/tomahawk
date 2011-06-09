@@ -28,8 +28,10 @@ class DelegateConfigWrapper : public QDialog
 public:
     DelegateConfigWrapper( QWidget* conf, const QString& title, QWidget* parent, Qt::WindowFlags flags = 0 ) : QDialog( parent, flags ), m_widget( conf )
     {
-        m_widget->setVisible( true );
         m_widget->setWindowFlags( Qt::Sheet );
+#ifdef Q_OS_MAC
+        m_widget->setVisible( true );
+#endif
 
         setWindowTitle( title );
         QVBoxLayout* v = new QVBoxLayout( this );
@@ -47,7 +49,12 @@ public:
         setSizeGripEnabled( false );
         setMinimumSize( sizeHint() );
         setMaximumSize( sizeHint() ); // to remove the resize grip on osx this is the only way
+
+        connect( conf, SIGNAL( sizeHintChanged() ), this, SLOT( updateSizeHint() ) );
+#else
+        m_widget->setVisible( true );
 #endif
+
     }
 public slots:
     void closed( QAbstractButton* b )
@@ -70,6 +77,15 @@ public slots:
         layout()->removeWidget( m_widget );
         m_widget->setParent( 0 );
         m_widget->setVisible( false );
+    }
+
+    void updateSizeHint() {
+        hide();
+        setSizeGripEnabled( false );
+        setMinimumSize( sizeHint() );
+        setMaximumSize( sizeHint() );
+
+        show();
     }
 
 private:

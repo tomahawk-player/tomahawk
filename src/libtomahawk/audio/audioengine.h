@@ -64,10 +64,11 @@ public slots:
     void previous();
     void next();
 
+    void seek( int ms );
     void setVolume( int percentage );
     void lowerVolume() { setVolume( volume() - AUDIO_VOLUME_STEP ); }
     void raiseVolume() { setVolume( volume() + AUDIO_VOLUME_STEP ); }
-    void onVolumeChanged( float volume ) { emit volumeChanged( volume * 100 ); }
+    void onVolumeChanged( qreal volume ) { emit volumeChanged( volume * 100 ); }
     void mute();
 
     void playItem( PlaylistInterface* playlist, const Tomahawk::result_ptr& result );
@@ -99,6 +100,7 @@ private slots:
     void loadPreviousTrack();
     void loadNextTrack();
 
+    void onAboutToFinish();
     void onStateChanged( Phonon::State newState, Phonon::State oldState );
     void timerTriggered( qint64 time );
 
@@ -106,6 +108,7 @@ private slots:
 
 private:
     bool isHttpResult( const QString& ) const;
+    bool isLocalResult( const QString& ) const;
 
     bool m_isPlayingHttp;
     QSharedPointer<QIODevice> m_input;
