@@ -35,14 +35,17 @@ public:
     virtual void activate();
     virtual bool willAcceptDrag( const QMimeData* data ) const;
     virtual QIcon icon() const;
+    virtual int peerSortValue() const { return m_sortValue; } // How to sort relative to peers in the tree.
 
     void setText( const QString& text );
+    void setSortValue( int value ) { m_sortValue = value; }
 signals:
     void activated();
 
 private:
     QIcon m_icon;
     QString m_text;
+    int m_sortValue;
     boost::function< Tomahawk::ViewPage*() > m_show;
     boost::function< Tomahawk::ViewPage*() > m_get;
 };

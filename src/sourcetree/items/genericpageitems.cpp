@@ -26,6 +26,7 @@ GenericPageItem::GenericPageItem( SourcesModel* model, SourceTreeItem* parent, c
     : SourceTreeItem( model, parent, SourcesModel::GenericPage )
     , m_icon( icon )
     , m_text( text )
+    , m_sortValue( 0 )
     , m_show( show )
     , m_get( get )
 {

@@ -55,6 +55,9 @@ private slots:
     Tomahawk::ViewPage* tempItemClicked();
     Tomahawk::ViewPage* getTempPage() const;
 
+    Tomahawk::ViewPage* sourceInfoClicked();
+    Tomahawk::ViewPage* getSourceInfoPage() const;
+
 private:
     void playlistsAddedInternal( SourceTreeItem* parent, const QList< Tomahawk::dynplaylist_ptr >& playlists );
     template< typename T >
@@ -65,7 +68,9 @@ private:
     CategoryItem* m_stations;
 
     GenericPageItem* m_tempItem;
+    GenericPageItem* m_sourceInfoItem;
     Tomahawk::ViewPage* m_curTempPage;
+    Tomahawk::ViewPage* m_sourceInfoPage;
 };
 
 

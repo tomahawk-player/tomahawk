@@ -33,13 +33,22 @@ CollectionItem::CollectionItem(  SourcesModel* mdl, SourceTreeItem* parent, cons
     , m_playlists( 0 )
     , m_stations( 0 )
     , m_tempItem( 0 )
+    , m_sourceInfoItem( 0   )
     , m_curTempPage( 0 )
+    , m_sourceInfoPage( 0 )
 {
     if( m_source.isNull() ) { // super collection
         connect( ViewManager::instance(), SIGNAL( tempPageActivated( Tomahawk::ViewPage*) ), this, SLOT( tempPageActivated( Tomahawk::ViewPage* ) ) );
 
         return;
     }
+
+    m_sourceInfoItem = new GenericPageItem( model(), this, tr( "New Additions" ), QIcon(),
+                                            boost::bind( &CollectionItem::sourceInfoClicked, this ),
+                                            boost::bind( &CollectionItem::getSourceInfoPage, this )
+                                          );
+    m_sourceInfoItem->setSortValue( -300 );
+
     // create category items if there are playlists to show, or stations to show
     QList< playlist_ptr > playlists = source->collection()->playlists();
     QList< dynplaylist_ptr > autoplaylists = source->collection()->autoPlaylists();
@@ -305,4 +314,20 @@ ViewPage*
 CollectionItem::getTempPage() const
 {
     return m_curTempPage;
+}
+
+ViewPage*
+CollectionItem::sourceInfoClicked()
+{
+    if( m_source.isNull() )
+        return 0;
+
+    m_sourceInfoPage = ViewManager::instance()->show( m_source );
+    return m_sourceInfoPage;
+}
+
+ViewPage*
+CollectionItem::getSourceInfoPage() const
+{
+    return m_sourceInfoPage;
 }
