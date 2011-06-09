@@ -107,9 +107,9 @@ AdiumPlugin::pushInfo( const QString caller, const Tomahawk::InfoSystem::InfoTyp
         case InfoNowPlaying:
           audioStarted( input );
           break;
-        case InfoNowPaused:
-          audioPaused();
-          break;
+          //        case InfoNowPaused:
+          //          audioPaused();
+          //          break;
         case InfoNowResumed:
           audioResumed( input );
           break;
@@ -170,16 +170,15 @@ void
 AdiumPlugin::audioStopped()
 {
     qDebug() << Q_FUNC_INFO;
-    // TODO: audio stopped, so push update status to Adium that says "stopped"
-    setStatus( "Stopped" );
+    setStatus( "" );
 }
 
 void 
 AdiumPlugin::audioPaused()
 {
     qDebug() << Q_FUNC_INFO;
-    // TODO: audio paused, so push update status to Adium that says "paused"
-    setStatus( "Paused" );
+
+    //setStatus( "Paused" );
 }
 
 void 
