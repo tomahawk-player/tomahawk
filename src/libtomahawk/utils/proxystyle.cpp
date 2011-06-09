@@ -24,8 +24,8 @@
 #include <QStyleOption>
 #include <QWidget>
 
-#define ARROW_WIDTH 8
-#define ARROW_HEIGHT 8
+#define ARROW_WIDTH 7
+#define ARROW_HEIGHT 7
 
 
 void
