@@ -54,6 +54,8 @@ protected:
             editor->setGeometry( option.rect.adjusted( 20, 0, 0, 0 ) );
         else
             QStyledItemDelegate::updateEditorGeometry( editor, option, index );
+
+        editor->setGeometry( editor->geometry().adjusted( TREEVIEW_INDENT_ADD, 0, 0, 0 ) );
     }
 
 private:
