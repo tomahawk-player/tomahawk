@@ -79,6 +79,7 @@ set( libSources
     database/databasecommand_deletedynamicplaylist.cpp
     database/databasecommand_addclientauth.cpp
     database/databasecommand_clientauthvalid.cpp
+    database/databasecommand_socialaction.cpp
     database/database.cpp
 
     infosystem/infosystemcache.cpp
@@ -245,6 +246,7 @@ set( libHeaders
     database/databasecommand_loadallstations.h
     database/databasecommand_addclientauth.h
     database/databasecommand_clientauthvalid.h
+    database/databasecommand_socialaction.h
 
     infosystem/infosystem.h
     infosystem/infosystemworker.h

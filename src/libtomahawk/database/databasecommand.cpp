@@ -30,6 +30,7 @@
 #include "databasecommand_createdynamicplaylist.h"
 #include "databasecommand_deletedynamicplaylist.h"
 #include "databasecommand_setdynamicplaylistrevision.h"
+#include "databasecommand_socialaction.h"
 
 
 DatabaseCommand::DatabaseCommand( QObject* parent )
@@ -138,6 +139,13 @@ DatabaseCommand::factory( const QVariant& op, const source_ptr& source )
     {
         qDebug() << "SETDYN CONTENT:" << op;
         DatabaseCommand_SetDynamicPlaylistRevision * cmd = new DatabaseCommand_SetDynamicPlaylistRevision;
+        cmd->setSource( source );
+        QJson::QObjectHelper::qvariant2qobject( op.toMap(), cmd );
+        return cmd;
+    }
+    else if( name == "socialaction" )
+    {
+        DatabaseCommand_SocialAction * cmd = new DatabaseCommand_SocialAction;
         cmd->setSource( source );
         QJson::QObjectHelper::qvariant2qobject( op.toMap(), cmd );
         return cmd;

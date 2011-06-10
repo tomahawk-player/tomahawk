@@ -65,6 +65,7 @@ private slots:
     void onArtistClicked();
     void onAlbumClicked();
     void onTrackClicked();
+    void onLoveButtonClicked();
 
     void infoSystemInfo( QString caller, Tomahawk::InfoSystem::InfoType type, QVariant input, QVariant output, Tomahawk::InfoSystem::InfoCustomData customData );
     void infoSystemFinished( QString target );

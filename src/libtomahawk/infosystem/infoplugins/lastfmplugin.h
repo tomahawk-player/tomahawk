@@ -3,8 +3,7 @@
  *   Copyright 2010-2011, Christian Muehlhaeuser <muesli@tomahawk-player.org>
  *
  *   Tomahawk is free software: you can redistribute it and/or modify
- *   it under the terms of the GNU General Public License as published by
- *   the Free Software Foundation, either version 3 of the License, or
+ *   it under the terms of the GNU General Public License as published by *   the Free Software Foundation, either version 3 of the License, or
  *   (at your option) any later version.
  *
  *   Tomahawk is distributed in the hope that it will be useful,
@@ -68,6 +67,7 @@ private:
     void scrobble();
 
     void dataError( const QString &caller, const Tomahawk::InfoSystem::InfoType type, const QVariant &input, const Tomahawk::InfoSystem::InfoCustomData &customData );
+    void sendLoveSong( QVariant input );
 
     lastfm::MutableTrack m_track;
     lastfm::Audioscrobbler* m_scrobbler;

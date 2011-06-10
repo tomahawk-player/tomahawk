@@ -45,8 +45,8 @@ LastFmPlugin::LastFmPlugin()
     : InfoPlugin()
     , m_scrobbler( 0 )
 {
-    m_supportedGetTypes << InfoAlbumCoverArt << InfoArtistImages;
-    m_supportedPushTypes << InfoSubmitScrobble << InfoSubmitNowPlaying; 
+    m_supportedGetTypes << InfoAlbumCoverArt << InfoArtistImages << InfoLove;
+    m_supportedPushTypes << InfoSubmitScrobble << InfoSubmitNowPlaying << InfoLove; 
 
 /*
       Your API Key is 7194b85b6d1f424fe1668173a78c0c4a
@@ -145,10 +145,15 @@ LastFmPlugin::pushInfo( const QString caller, const Tomahawk::InfoSystem::InfoTy
             scrobble();
             break;
 
+        case InfoLove:
+            sendLoveSong( input );
+            break;
+
         default:
             return;
     }
 }
+
 
 void
 LastFmPlugin::nowPlaying( const QVariant &input )
@@ -192,6 +197,34 @@ LastFmPlugin::scrobble()
     qDebug() << Q_FUNC_INFO << m_track.toString();
     m_scrobbler->cache( m_track );
     m_scrobbler->submit();
+}
+
+
+void
+LastFmPlugin::sendLoveSong( QVariant input )
+{
+    qDebug() << Q_FUNC_INFO;
+    
+    if ( !input.canConvert< Tomahawk::InfoSystem::InfoCriteriaHash >() )
+    {
+        qDebug() << "LastFmPlugin::nowPlaying cannot convert input!";
+        return;
+    }
+
+    InfoCriteriaHash hash = input.value< Tomahawk::InfoSystem::InfoCriteriaHash >();
+    if ( !hash.contains( "title" ) || !hash.contains( "artist" ) || !hash.contains( "album" ) || !hash.contains( "duration" ) )
+        return;
+
+    lastfm::MutableTrack track;
+    track.stamp();
+
+    track.setTitle( hash["title"] );
+    track.setArtist( hash["artist"] );
+    track.setAlbum( hash["album"] );
+    bool ok;
+    track.setDuration( hash["duration"].toUInt( &ok ) );
+    track.setSource( lastfm::Track::Player );
+    track.love();
 }
 
 
@@ -504,3 +537,4 @@ LastFmPlugin::createScrobbler()
         m_scrobbler = new lastfm::Audioscrobbler( "thk" );
     }
 }
+

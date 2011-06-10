@@ -25,6 +25,8 @@
 #include "viewmanager.h"
 #include "utils/imagebutton.h"
 #include "utils/tomahawkutils.h"
+#include "database/database.h"
+#include "database/databasecommand_socialaction.h"
 
 #include "album.h"
 
@@ -136,7 +138,6 @@ AudioControls::AudioControls( QWidget* parent )
     connect( ui->nextButton,       SIGNAL( clicked() ), AudioEngine::instance(), SLOT( next() ) );
     connect( ui->volumeLowButton,  SIGNAL( clicked() ), AudioEngine::instance(), SLOT( lowerVolume() ) );
     connect( ui->volumeHighButton, SIGNAL( clicked() ), AudioEngine::instance(), SLOT( raiseVolume() ) );
-
 
     connect( ui->playPauseButton,  SIGNAL( clicked() ), this, SIGNAL( playPressed() ) );
     connect( ui->pauseButton,  SIGNAL( clicked() ), this,     SIGNAL( pausePressed() ) );
@@ -478,3 +479,21 @@ AudioControls::onTrackClicked()
 {
     ViewManager::instance()->showCurrentTrack();
 }
+
+
+void
+AudioControls::onLoveButtonClicked()
+{
+    Tomahawk::InfoSystem::InfoCriteriaHash trackInfo;
+    trackInfo["title"] = m_currentTrack->track();
+    trackInfo["artist"] = m_currentTrack->artist()->name();
+    trackInfo["album"] = m_currentTrack->album()->name();
+    
+    Tomahawk::InfoSystem::InfoSystem::instance()->pushInfo(
+       s_acInfoIdentifier, Tomahawk::InfoSystem::InfoLove,
+       QVariant::fromValue< Tomahawk::InfoSystem::InfoCriteriaHash >( trackInfo ) );
+    
+    DatabaseCommand_SocialAction* cmd = new DatabaseCommand_SocialAction( m_currentTrack, QString( "Love" ) );                    
+    Database::instance()->enqueue( QSharedPointer<DatabaseCommand>(cmd) );
+}
+
