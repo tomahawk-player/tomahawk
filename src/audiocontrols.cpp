@@ -314,10 +314,10 @@ AudioControls::onPlaybackResumed()
 /*    m_playAction->setEnabled( false );
     m_pauseAction->setEnabled( true ); */
 
-    ui->pauseButton->setVisible( true );
-    ui->pauseButton->setEnabled( true );
     ui->playPauseButton->setVisible( false );
     ui->playPauseButton->setEnabled( false );
+    ui->pauseButton->setVisible( true );
+    ui->pauseButton->setEnabled( true );
 }
 
 
