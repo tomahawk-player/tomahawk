@@ -55,7 +55,7 @@ protected:
         else
             QStyledItemDelegate::updateEditorGeometry( editor, option, index );
 
-        editor->setGeometry( editor->geometry().adjusted( TREEVIEW_INDENT_ADD, 0, 0, 0 ) );
+        editor->setGeometry( editor->geometry().adjusted( 2*TREEVIEW_INDENT_ADD, 0, 0, 0 ) );
     }
 
 private:
@@ -597,7 +597,8 @@ SourceDelegate::paint( QPainter* painter, const QStyleOptionViewItem& option, co
     }
     else
     {
-        QStyleOptionViewItemV4 opt = option;
+        QStyledItemDelegate::paint( painter, o, index );
+        /*QStyleOptionViewItemV4 opt = o;
         initStyleOption( &opt, index );
 
         // shrink the indentations. count how indented this item is and remove it
@@ -613,7 +614,7 @@ SourceDelegate::paint( QPainter* painter, const QStyleOptionViewItem& option, co
         opt.rect.setX( realX );
         const QWidget *widget = opt.widget;
         QStyle *style = widget ? widget->style() : QApplication::style();
-        style->drawControl( QStyle::CE_ItemViewItem, &opt, painter, widget );
+        style->drawControl( QStyle::CE_ItemViewItem, &opt, painter, widget ); */
     }
 
 #ifdef Q_WS_MAC
