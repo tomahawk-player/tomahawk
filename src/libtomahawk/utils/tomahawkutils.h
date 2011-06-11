@@ -44,7 +44,7 @@ namespace TomahawkUtils
         NetworkProxyFactory()
             : m_proxy( QNetworkProxy::NoProxy )
             {}
-            
+
         virtual ~NetworkProxyFactory() {}
 
         virtual QList< QNetworkProxy > queryProxy( const QNetworkProxyQuery & query = QNetworkProxyQuery() );

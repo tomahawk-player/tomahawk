@@ -121,11 +121,12 @@ SettingsDialog::SettingsDialog( QWidget *parent )
     ui->checkBoxWatchForChanges->setVisible( false );
 
     // NOW PLAYING
-    #ifdef Q_WS_MAC
+#ifdef Q_WS_MAC
     ui->checkBoxEnableAdium->setChecked( s->nowPlayingEnabled() );
-    #else
+#else
+    ui->nowPlaying->hide();
     ui->checkBoxEnableAdium->hide();
-    #endif
+#endif
 
     // LAST FM
     ui->checkBoxEnableLastfm->setChecked( s->scrobblingEnabled() );
