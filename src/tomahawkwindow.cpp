@@ -293,6 +293,16 @@ TomahawkWindow::setupSignals()
     connect( ui->actionCreate_New_Station, SIGNAL( triggered() ), SLOT( createStation() ));
     connect( ui->actionAboutTomahawk, SIGNAL( triggered() ), SLOT( showAboutTomahawk() ) );
     connect( ui->actionExit, SIGNAL( triggered() ), qApp, SLOT( quit() ) );
+
+    connect( ui->actionPlay, SIGNAL( triggered() ), AudioEngine::instance(), SLOT( playPause() ) );
+    connect( ui->actionNext, SIGNAL( triggered() ), AudioEngine::instance(), SLOT( previous() ) );
+    connect( ui->actionPrevious, SIGNAL( triggered() ), AudioEngine::instance(), SLOT( next() ) );
+
+    connect( AudioEngine::instance(), SIGNAL( started( Tomahawk::result_ptr ) ), this, SLOT( audioStarted() ) );
+    connect( AudioEngine::instance(), SIGNAL( resumed()), this, SLOT( audioStarted() ) );
+    connect( AudioEngine::instance(), SIGNAL( paused() ), this, SLOT( audioStopped() ) );
+    connect( AudioEngine::instance(), SIGNAL( stopped() ), this, SLOT( audioStopped() ) );
+
 #if defined( Q_OS_DARWIN )
     connect( ui->actionMinimize, SIGNAL( triggered() ), SLOT( minimize() ) );
     connect( ui->actionZoom, SIGNAL( triggered() ), SLOT( maximize() ) );
@@ -517,6 +527,19 @@ TomahawkWindow::createPlaylist()
            QString playlistName = playlistSelectorDlg.playlistName();
            APP->mainWindow()->createAutomaticPlaylist( playlistName );
     }
+}
+
+void
+TomahawkWindow::audioStarted()
+{
+    ui->actionPlay->setText( tr( "Pause" ) );
+}
+
+void
+TomahawkWindow::audioStopped()
+{
+
+    ui->actionPlay->setText( tr( "Play" ) );
 }
 
 

@@ -35,7 +35,7 @@
      <x>0</x>
      <y>0</y>
      <width>1000</width>
-     <height>21</height>
+     <height>20</height>
     </rect>
    </property>
    <widget class="QMenu" name="menuSettings">
@@ -48,6 +48,10 @@
     <property name="title">
      <string>&amp;Music Player</string>
     </property>
+    <addaction name="actionPlay"/>
+    <addaction name="actionPrevious"/>
+    <addaction name="actionNext"/>
+    <addaction name="separator"/>
     <addaction name="actionRescanCollection"/>
     <addaction name="separator"/>
     <addaction name="actionShowOfflineSources"/>
@@ -187,6 +191,24 @@
    </property>
    <property name="menuRole">
     <enum>QAction::ApplicationSpecificRole</enum>
+   </property>
+  </action>
+  <action name="actionPlay">
+   <property name="text">
+    <string>Play</string>
+   </property>
+   <property name="shortcut">
+    <string>Space</string>
+   </property>
+  </action>
+  <action name="actionPrevious">
+   <property name="text">
+    <string>Previous</string>
+   </property>
+  </action>
+  <action name="actionNext">
+   <property name="text">
+    <string>Next</string>
    </property>
   </action>
  </widget>
