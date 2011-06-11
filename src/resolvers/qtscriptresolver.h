@@ -22,6 +22,7 @@
 #include "resolver.h"
 #include "query.h"
 #include "result.h"
+#include "utils/tomahawkutils.h"
 
 #include <QApplication>
 #include <QDebug>
@@ -41,6 +42,11 @@ public:
         : QWebPage( (QObject*) parent )
         , m_parent( parent )
     {
+        settings()->setAttribute( QWebSettings::OfflineStorageDatabaseEnabled, true );
+        settings()->setOfflineStoragePath( TomahawkUtils::appDataDir().path() );
+        settings()->setAttribute(QWebSettings::LocalStorageEnabled, true);
+        settings()->setLocalStoragePath( TomahawkUtils::appDataDir().path() );
+        settings()->setAttribute( QWebSettings::LocalStorageDatabaseEnabled, true );
     }
 
 public slots:

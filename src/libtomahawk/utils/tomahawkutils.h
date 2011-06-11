@@ -24,6 +24,7 @@
 #include <QThread>
 #include <QNetworkProxy>
 #include <QStringList>
+#include <QDir>
 
 #define RESPATH ":/data/"
 
