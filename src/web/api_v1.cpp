@@ -180,7 +180,7 @@ Api_v1::send404( QxtWebRequestEvent* event )
     qDebug() << "404" << event->url.toString();
     QxtWebPageEvent* wpe = new QxtWebPageEvent( event->sessionID, event->requestID, "<h1>Not Found</h1>" );
     wpe->status = 404;
-    wpe->statusMessage = "not feventound";
+    wpe->statusMessage = "no event found";
     postEvent( wpe );
 }
 

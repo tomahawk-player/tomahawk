@@ -682,6 +682,9 @@ void QxtHttpSessionManager::sendNextBlock(int requestID)
 {
     QSharedPointer<QIODevice>& dataSource = connector()->getRequestDataSource( requestID );
     QIODevice* device = connector()->getRequestConnection(requestID);
+    if (!device)
+        return;
+
     if (!qxt_d().connectionState.contains(device)) return;  // in case a disconnect signal and a bytesWritten signal get fired in the wrong order
     QxtHttpSessionManagerPrivate::ConnectionState& state = qxt_d().connectionState[device];
     if (state.finishedTransfer) return;
