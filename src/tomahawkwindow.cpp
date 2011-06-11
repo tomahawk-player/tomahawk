@@ -82,7 +82,12 @@ TomahawkWindow::TomahawkWindow( QWidget* parent )
     , m_trayIcon( new TomahawkTrayIcon( this ) )
     , m_sourcetree( 0 )
 {
-    qApp->setStyle( new ProxyStyle() );
+    // HACK QtCurve causes an infinite loop on startup. This is because setStyle calls setPalette, which calls ensureBaseStyle,
+    // which loads QtCurve. QtCurve calls setPalette, which creates an infinite loop. The UI will look like CRAP with QtCurve, but
+    // the user is asking for it explicitly... so he's gonna be stuck with an ugly UI.
+    if ( !QString( qApp->style()->metaObject()->className() ).toLower().contains( "qtcurve" ) )
+        qApp->setStyle( new ProxyStyle() );
+
     setWindowIcon( QIcon( RESPATH "icons/tomahawk-icon-128x128.png" ) );
 
 #ifdef Q_WS_MAC
