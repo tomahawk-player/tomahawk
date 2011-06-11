@@ -220,6 +220,8 @@ Playlist::load( const QString& guid )
 bool
 Playlist::remove( const playlist_ptr& playlist )
 {
+    playlist->aboutToBeDeleted( playlist );
+
     TomahawkSettings *s = TomahawkSettings::instance();
     s->removePlaylistSettings( playlist->guid() );
 
