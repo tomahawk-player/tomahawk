@@ -118,7 +118,10 @@ PlaylistItemDelegate::paintDetailed( QPainter* painter, const QStyleOptionViewIt
     initStyleOption( &opt, index );
 
     if ( item->isPlaying() )
+    {
+        opt.palette.setColor( QPalette::Highlight, opt.palette.color( QPalette::Mid ) );
         opt.state |= QStyle::State_Selected;
+    }
     if ( item->isPlaying() || index.column() == TrackModel::Score )
         opt.text.clear();
     if ( opt.state & QStyle::State_Selected )
