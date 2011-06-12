@@ -169,15 +169,14 @@ PlaylistItemDelegate::paintDetailed( QPainter* painter, const QStyleOptionViewIt
         }
 
         // Paint Now Playing Frame
-        return; //FIXME
-        {
+/*        {
             QRect r = QRect( 3, opt.rect.y() + 1, m_view->viewport()->width() - 6, opt.rect.height() - 2 );
             painter->setPen( opt.palette.highlight().color() );
             QPen pen = painter->pen();
             pen.setWidth( 1.0 );
             painter->setPen( pen );
             painter->drawRoundedRect( r, 3.0, 3.0 );
-        }
+        }*/
     }
     painter->restore();
 }
