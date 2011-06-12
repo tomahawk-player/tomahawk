@@ -123,6 +123,8 @@ PlaylistItemDelegate::paintDetailed( QPainter* painter, const QStyleOptionViewIt
         opt.text.clear();
     if ( opt.state & QStyle::State_Selected )
         opt.palette.setColor( QPalette::Text, opt.palette.color( QPalette::HighlightedText ) );
+    else
+        opt.palette.setColor( QPalette::Text, textColor );
 
     qApp->style()->drawControl( QStyle::CE_ItemViewItem, &opt, painter );
 
