@@ -685,7 +685,7 @@ void JabberPlugin::onPresenceReceived( const Jreen::RosterItem::Ptr &item, const
 
         Jreen::IQ featuresIq( Jreen::IQ::Get, jid );
         featuresIq.addExtension( new Jreen::Disco::Info( node ) );
-        
+
         Jreen::IQReply *reply = m_client->send(featuresIq);
         reply->setData(RequestDisco);
         connect(reply, SIGNAL(received(Jreen::IQ)), SLOT(onNewIq(Jreen::IQ)));

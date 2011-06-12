@@ -82,7 +82,7 @@ int
 TrackModel::columnCount( const QModelIndex& parent ) const
 {
     Q_UNUSED( parent );
-    return 9;
+    return 10;
 }
 
 
@@ -183,6 +183,10 @@ TrackModel::data( const QModelIndex& index, int role ) const
             case Origin:
                 return query->results().first()->friendlySource();
                 break;
+
+            case Score:
+                return query->results().first()->score();
+                break;
         }
     }
 
@@ -195,7 +199,7 @@ TrackModel::headerData( int section, Qt::Orientation orientation, int role ) con
 {
     Q_UNUSED( orientation );
     QStringList headers;
-    headers << tr( "Artist" ) << tr( "Track" ) << tr( "Album" ) << tr( "Duration" ) << tr( "Bitrate" ) << tr( "Age" ) << tr( "Year" ) << tr( "Size" ) << tr( "Origin" );
+    headers << tr( "Artist" ) << tr( "Track" ) << tr( "Album" ) << tr( "Duration" ) << tr( "Bitrate" ) << tr( "Age" ) << tr( "Year" ) << tr( "Size" ) << tr( "Origin" ) << tr( "Score" );
     if ( role == Qt::DisplayRole && section >= 0 )
     {
         return headers.at( section );

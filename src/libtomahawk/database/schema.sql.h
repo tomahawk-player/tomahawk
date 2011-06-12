@@ -1,5 +1,5 @@
 /*
-    This file was automatically generated from schema.sql on Fri Apr 15 15:55:52 EDT 2011.
+    This file was automatically generated from ./schema.sql on Sun Jun 12 05:17:25 CEST 2011.
 */
 
 static const char * tomahawk_schema_sql = 
@@ -151,6 +151,17 @@ static const char * tomahawk_schema_sql =
 ");"
 "CREATE INDEX track_attrib_id ON track_attributes(id);"
 "CREATE INDEX track_attrib_k  ON track_attributes(k);"
+"CREATE TABLE IF NOT EXISTS social_attributes ("
+"    id INTEGER REFERENCES track(id) ON DELETE CASCADE ON UPDATE CASCADE DEFERRABLE INITIALLY DEFERRED,   "
+"    source INTEGER REFERENCES source(id) ON DELETE CASCADE ON UPDATE CASCADE, "
+"    k TEXT NOT NULL,"
+"    v TEXT NOT NULL,"
+"    timestamp INTEGER NOT NULL DEFAULT 0"
+");"
+"CREATE INDEX social_attrib_id        ON social_attributes(id);"
+"CREATE INDEX social_attrib_source    ON social_attributes(source);"
+"CREATE INDEX social_attrib_k         ON social_attributes(k);"
+"CREATE INDEX social_attrib_timestamp ON social_attributes(timestamp);"
 "CREATE TABLE IF NOT EXISTS playback_log ("
 "    id INTEGER PRIMARY KEY AUTOINCREMENT,"
 "    source INTEGER REFERENCES source(id) ON DELETE CASCADE ON UPDATE CASCADE DEFERRABLE INITIALLY DEFERRED,"
@@ -172,7 +183,7 @@ static const char * tomahawk_schema_sql =
 "    k TEXT NOT NULL PRIMARY KEY,"
 "    v TEXT NOT NULL DEFAULT ''"
 ");"
-"INSERT INTO settings(k,v) VALUES('schema_version', '23');"
+"INSERT INTO settings(k,v) VALUES('schema_version', '24');"
     ;
 
 const char * get_tomahawk_sql()

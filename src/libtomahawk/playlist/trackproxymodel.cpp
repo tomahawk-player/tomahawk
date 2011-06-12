@@ -270,3 +270,111 @@ TrackProxyModel::removeIndexes( const QList<QPersistentModelIndex>& indexes )
         sourceModel()->removeIndex( idx, b );
     }
 }
+
+
+bool
+TrackProxyModel::lessThan( const QModelIndex& left, const QModelIndex& right ) const
+{
+    qDebug() << Q_FUNC_INFO;
+
+    TrackModelItem* p1 = itemFromIndex( left );
+    TrackModelItem* p2 = itemFromIndex( right );
+
+    if ( !p1 )
+        return true;
+    if ( !p2 )
+        return false;
+
+    const Tomahawk::query_ptr& q1 = p1->query();
+    const Tomahawk::query_ptr& q2 = p2->query();
+
+    QString artist1 = q1->artist();
+    QString artist2 = q2->artist();
+    QString album1 = q1->album();
+    QString album2 = q2->album();
+    QString track1 = q1->track();
+    QString track2 = q2->track();
+    unsigned int albumpos1 = 0, albumpos2 = 0;
+    unsigned int bitrate1 = 0, bitrate2 = 0;
+    unsigned int mtime1 = 0, mtime2 = 0;
+    unsigned int id1 = 0, id2 = 0;
+    unsigned int size1 = 0, size2 = 0;
+
+    if ( q1->numResults() )
+    {
+        const Tomahawk::result_ptr& r = q1->results().at( 0 );
+        artist1 = r->artist()->name();
+        album1 = r->album()->name();
+        track1 = r->track();
+        albumpos1 = r->albumpos();
+        bitrate1 = r->bitrate();
+        mtime1 = r->modificationTime();
+        id1 = r->dbid();
+        size1 = r->size();
+    }
+    if ( q2->numResults() )
+    {
+        const Tomahawk::result_ptr& r = q2->results().at( 0 );
+        artist2 = r->artist()->name();
+        album2 = r->album()->name();
+        track2 = r->track();
+        albumpos2 = r->albumpos();
+        bitrate2 = r->bitrate();
+        mtime2 = r->modificationTime();
+        id2 = r->dbid();
+        size2 = r->size();
+    }
+
+    if ( left.column() == TrackModel::Artist ) // sort by artist
+    {
+        if ( artist1 == artist2 )
+        {
+            if ( album1 == album2 )
+            {
+                if ( albumpos1 == albumpos2 )
+                    return id1 < id2;
+
+                return albumpos1 < albumpos2;
+            }
+
+            return QString::localeAwareCompare( album1, album2 ) < 0;
+        }
+
+        return QString::localeAwareCompare( artist1, artist2 ) < 0;
+    }
+    else if ( left.column() == TrackModel::Album ) // sort by album
+    {
+        if ( album1 == album2 )
+        {
+            if ( albumpos1 == albumpos2 )
+                return id1 < id2;
+
+            return albumpos1 < albumpos2;
+        }
+
+        return QString::localeAwareCompare( album1, album2 ) < 0;
+    }
+    else if ( left.column() == TrackModel::Bitrate ) // sort by bitrate
+    {
+        if ( bitrate1 == bitrate2 )
+            return id1 < id2;
+
+        return bitrate1 < bitrate2;
+    }
+    else if ( left.column() == TrackModel::Age ) // sort by mtime
+    {
+        if ( mtime1 == mtime2 )
+            return id1 < id2;
+
+        return mtime1 < mtime2;
+    }
+    else if ( left.column() == TrackModel::Filesize ) // sort by file size
+    {
+        if ( size1 == size2 )
+            return id1 < id2;
+
+        return size1 < size2;
+    }
+    return QString::localeAwareCompare( sourceModel()->data( left ).toString(),
+                                        sourceModel()->data( right ).toString() ) < 0;
+}

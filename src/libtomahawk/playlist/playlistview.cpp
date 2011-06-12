@@ -73,10 +73,8 @@ PlaylistView::setPlaylistModel( PlaylistModel* model )
     else
     {
         setGuid( "playlistview" );
-
-        m_model->title();
-        m_model->description();
     }
+
     connect( m_model, SIGNAL( trackCountChanged( unsigned int ) ), SLOT( onTrackCountChanged( unsigned int ) ) );
     connect( m_model, SIGNAL( playlistDeleted() ), SLOT( onDeleted() ) );
     connect( m_model, SIGNAL( playlistChanged() ), SLOT( onChanged() ) );
@@ -149,12 +147,6 @@ PlaylistView::keyPressEvent( QKeyEvent* event )
 
 
 void
-PlaylistView::addItemsToPlaylist()
-{
-}
-
-
-void
 PlaylistView::deleteItems()
 {
     proxyModel()->removeIndexes( selectedIndexes() );
@@ -189,6 +181,7 @@ PlaylistView::onDeleted()
     deleteLater();
 }
 
+
 void
 PlaylistView::onChanged()
 {
@@ -197,12 +190,9 @@ PlaylistView::onChanged()
         emit nameChanged( m_model->playlist()->title() );
 }
 
+
 bool
 PlaylistView::isTemporaryPage() const
 {
-    if ( m_model ) {
-        return m_model->isTemporary();
-    } else {
-        return false;
-    }
+    return ( m_model && m_model->isTemporary() );
 }

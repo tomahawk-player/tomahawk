@@ -227,6 +227,24 @@ CREATE TABLE IF NOT EXISTS track_attributes (
 CREATE INDEX track_attrib_id ON track_attributes(id);
 CREATE INDEX track_attrib_k  ON track_attributes(k);
 
+-- social attributes connected to the track.
+-- like love, hate, comments, recommendations
+--  love=[comment], hate=[comment], comment=Some text
+-- NB: since all values are text, numeric values should be zero-padded to a set amount
+--     so that we can always do range queries.
+
+CREATE TABLE IF NOT EXISTS social_attributes (
+    id INTEGER REFERENCES track(id) ON DELETE CASCADE ON UPDATE CASCADE DEFERRABLE INITIALLY DEFERRED,   -- track id
+    source INTEGER REFERENCES source(id) ON DELETE CASCADE ON UPDATE CASCADE, -- DEFERRABLE INITIALLY DEFERRED,
+    k TEXT NOT NULL,
+    v TEXT NOT NULL,
+    timestamp INTEGER NOT NULL DEFAULT 0
+);
+CREATE INDEX social_attrib_id        ON social_attributes(id);
+CREATE INDEX social_attrib_source    ON social_attributes(source);
+CREATE INDEX social_attrib_k         ON social_attributes(k);
+CREATE INDEX social_attrib_timestamp ON social_attributes(timestamp);
+
 
 
 -- playback history
@@ -264,4 +282,4 @@ CREATE TABLE IF NOT EXISTS settings (
     v TEXT NOT NULL DEFAULT ''
 );
 
-INSERT INTO settings(k,v) VALUES('schema_version', '23');
+INSERT INTO settings(k,v) VALUES('schema_version', '24');

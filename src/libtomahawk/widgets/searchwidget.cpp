@@ -42,6 +42,7 @@ SearchWidget::SearchWidget( const QString& search, QWidget* parent )
     m_resultsModel = new PlaylistModel( ui->resultsView );
     ui->resultsView->setPlaylistModel( m_resultsModel );
     ui->resultsView->overlay()->setEnabled( false );
+    ui->resultsView->sortByColumn( PlaylistModel::Score, Qt::DescendingOrder );
 
     m_queries << Tomahawk::Query::get( search, uuid() );
 

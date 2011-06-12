@@ -1,5 +1,5 @@
 /* === This file is part of Tomahawk Player - <http://tomahawk-player.org> ===
- * 
+ *
  *   Copyright 2010-2011, Christian Muehlhaeuser <muesli@tomahawk-player.org>
  *
  *   Tomahawk is free software: you can redistribute it and/or modify
@@ -79,11 +79,15 @@ TrackHeader::checkState()
 
     QByteArray state = TomahawkSettings::instance()->playlistColumnSizes( m_parent->guid() );
     if ( !state.isEmpty() )
+    {
         restoreState( state );
+        setSortIndicatorShown( true );
+        setSortIndicator( -1, Qt::AscendingOrder );
+    }
     else
     {
         QList< double > m_columnWeights;
-        m_columnWeights << 0.21 << 0.22 << 0.20 << 0.05 << 0.05 << 0.05 << 0.05 << 0.05; // << 0.12;
+        m_columnWeights << 0.20 << 0.20 << 0.18 << 0.05 << 0.05 << 0.05 << 0.05 << 0.05 << 0.12; // << 0.05;
 
         for ( int i = 0; i < count() - 1; i++ )
         {
