@@ -39,13 +39,6 @@ AudioControls::AudioControls( QWidget* parent )
 {
     ui->setupUi( this );
 
-    ui->buttonAreaLayout->setSpacing( 0 );
-    ui->stackedLayout->setSpacing( 0 );
-    ui->stackedLayout->setContentsMargins( 0, 0, 0, 0 );
-    ui->stackedLayout->setMargin( 0 );
-    ui->playPauseButton->setContentsMargins( 0, 0, 0, 0 );
-    ui->pauseButton->setContentsMargins( 0, 0, 0, 0 );
-
     QFont font( ui->artistTrackLabel->font() );
     font.setPixelSize( 12 );
 
@@ -170,6 +163,15 @@ AudioControls::AudioControls( QWidget* parent )
         SLOT( infoSystemInfo( QString, Tomahawk::InfoSystem::InfoType, QVariant, QVariant, Tomahawk::InfoSystem::InfoCustomData ) ) );
 
     connect( Tomahawk::InfoSystem::InfoSystem::instance(), SIGNAL( finished( QString ) ), SLOT( infoSystemFinished( QString ) ) );
+
+
+    ui->buttonAreaLayout->setSpacing( 0 );
+    ui->stackedLayout->setSpacing( 0 );
+    ui->stackedLayout->setContentsMargins( 0, 0, 0, 0 );
+    ui->stackedLayout->setMargin( 0 );
+    ui->playPauseButton->setContentsMargins( 0, 0, 0, 0 );
+    ui->pauseButton->setContentsMargins( 0, 0, 0, 0 );
+    ui->stackedLayout->setSizeConstraint( QLayout::SetFixedSize );
 
     onPlaybackStopped(); // initial state
 }

@@ -82,7 +82,7 @@
       <item>
        <layout class="QStackedLayout" name="stackedLayout">
         <property name="spacing">
-         <number>2</number>
+         <number>0</number>
         </property>
         <item>
          <widget class="ImageButton" name="playPauseButton">
