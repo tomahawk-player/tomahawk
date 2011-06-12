@@ -45,6 +45,8 @@ friend class FuzzyIndex;
 friend class DatabaseCommand_UpdateSearchIndex;
 
 public:
+    static int getDatabaseVersion( const QString& dbname );
+
     DatabaseImpl( const QString& dbname, Database* parent = 0 );
     ~DatabaseImpl();
 
@@ -84,8 +86,6 @@ signals:
 public slots:
 
 private:
-    static int getDatabaseVersion( const QString& dbname );
-
     QString cleanSql( const QString& sql );
     bool updateSchema( int oldVersion );
 
