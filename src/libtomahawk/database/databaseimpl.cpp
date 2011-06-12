@@ -50,7 +50,7 @@ DatabaseImpl::DatabaseImpl( const QString& dbname, Database* parent )
     bool schemaUpdated = false;
     int version = getDatabaseVersion( dbname );
 
-    if ( version != CURRENT_SCHEMA_VERSION )
+    if ( version > 0 && version != CURRENT_SCHEMA_VERSION )
     {
         QString newname = QString( "%1.v%2" ).arg( dbname ).arg( version );
         qDebug() << endl << "****************************" << endl;
@@ -87,7 +87,8 @@ DatabaseImpl::DatabaseImpl( const QString& dbname, Database* parent )
             throw "failed to open db"; // TODO
         }
 
-        schemaUpdated = updateSchema( 0 );
+        if ( version < 0 )
+            schemaUpdated = updateSchema( 0 );
     }
 
     TomahawkSqlQuery query = newquery();

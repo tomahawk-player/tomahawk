@@ -173,7 +173,7 @@ DatabaseCommand_Resolve::resolve( DatabaseImpl* lib )
 
         float score = how_similar( m_query, result );
         result->setScore( score );
-        if ( m_query->fullTextQuery().isEmpty() && score < MINSCORE )
+        if ( score < MINSCORE )
             continue;
 
         result->setCollection( s->collection() );
