@@ -54,8 +54,8 @@ cp -R $QT_PLUGINS_DIR/imageformats/libqgif.dylib Contents/MacOS/imageformats/
 cp -R $QT_PLUGINS_DIR/imageformats/libqjpeg.dylib Contents/MacOS/imageformats/
 cp -R $QT_PLUGINS_DIR/imageformats/libqico.dylib Contents/MacOS/imageformats/
 cp -R $QT_PLUGINS_DIR/imageformats/libqmng.dylib Contents/MacOS/imageformats/
-cp -R $QT_PLUGINS_DIR/imageformats/libqsvg.dylib Contents/MacOS/imageformats/
-cp -R $QT_PLUGINS_DIR/imageformats/libqtiff.dylib Contents/MacOS/imageformats/
+#cp -R $QT_PLUGINS_DIR/imageformats/libqsvg.dylib Contents/MacOS/imageformats/
+#cp -R $QT_PLUGINS_DIR/imageformats/libqtiff.dylib Contents/MacOS/imageformats/
 cp -R $QT_PLUGINS_DIR/crypto/libqca-ossl.dylib Contents/MacOS/crypto/
 cp -R $QT_PLUGINS_DIR/phonon_backend/phonon_vlc.so Contents/MacOS/phonon_backend/
 

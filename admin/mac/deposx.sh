@@ -50,7 +50,11 @@ function deposx_change
 
         install_name_tool -change /usr/local/Cellar/qt/$QTVERSION/lib/$y.framework/Versions/4/$y \
                           @executable_path/../Frameworks/$y.framework/Versions/4/$y \
-                          "$1"                          
+                          "$1"
+
+        install_name_tool -change /usr/X11/lib/libpng12.0.dylib \
+                          @executable_path/libpng12.0.dylib \
+                          "$1"
     done
     
     for y in $LIBS
@@ -126,6 +130,7 @@ import_lib /usr/local/Cellar/kde-phonon/4.5.0/lib/libphonon.4.dylib
 import_lib /usr/local/Cellar/vlc-git/HEAD/lib/libvlc.5.dylib
 import_lib /usr/local/Cellar/vlc-git/HEAD/lib/libvlccore.4.dylib
 import_lib /usr/local/Cellar/gettext/0.18.1.1/lib/libintl.8.dylib
+import_lib /usr/X11/lib/libpng12.0.dylib
 
 import_lib $ORIGROOT/libjreen.dylib
 import_lib $ORIGROOT/libtomahawklib.dylib
