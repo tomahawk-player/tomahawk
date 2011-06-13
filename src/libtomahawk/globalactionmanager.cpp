@@ -78,9 +78,9 @@ GlobalActionManager::openLinkFromQuery( const Tomahawk::query_ptr& query ) const
 }
 
 QUrl
-GlobalActionManager::openLink( const QString& title, const QString& artist, const QString& album, bool tomahk ) const
+GlobalActionManager::openLink( const QString& title, const QString& artist, const QString& album ) const
 {
-    QUrl link( tomahk ? "http://toma.hk/open/track/" : "tomahawk://open/track/" );
+    QUrl link( QString( "%1/open/track/" ).arg( hostname() ) );
 
     if( !title.isEmpty() )
         link.addQueryItem( "title", title );
@@ -95,7 +95,7 @@ GlobalActionManager::openLink( const QString& title, const QString& artist, cons
 QString
 GlobalActionManager::copyPlaylistToClipboard( const Tomahawk::dynplaylist_ptr& playlist )
 {
-    QUrl link( QString( "tomahawk://%1/create/" ).arg( playlist->mode() == Tomahawk::OnDemand ? "station" : "autoplaylist" ) );
+    QUrl link( QString( "%1/%2/create/" ).arg( hostname() ).arg( playlist->mode() == Tomahawk::OnDemand ? "station" : "autoplaylist" ) );
 
     if( playlist->generator()->type() != "echonest" ) {
         qDebug() << "Only echonest generators are supported";
@@ -676,4 +676,8 @@ GlobalActionManager::waitingForResolved( bool success )
     m_waitingToPlay.clear();
 }
 
-
+QString
+GlobalActionManager::hostname() const
+{
+    return QString( "http://toma.hk" );
+}

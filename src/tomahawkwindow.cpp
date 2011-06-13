@@ -82,7 +82,12 @@ TomahawkWindow::TomahawkWindow( QWidget* parent )
     , m_trayIcon( new TomahawkTrayIcon( this ) )
     , m_sourcetree( 0 )
 {
-    qApp->setStyle( new ProxyStyle() );
+    // HACK QtCurve causes an infinite loop on startup. This is because setStyle calls setPalette, which calls ensureBaseStyle,
+    // which loads QtCurve. QtCurve calls setPalette, which creates an infinite loop. The UI will look like CRAP with QtCurve, but
+    // the user is asking for it explicitly... so he's gonna be stuck with an ugly UI.
+    if ( !QString( qApp->style()->metaObject()->className() ).toLower().contains( "qtcurve" ) )
+        qApp->setStyle( new ProxyStyle() );
+
     setWindowIcon( QIcon( RESPATH "icons/tomahawk-icon-128x128.png" ) );
 
 #ifdef Q_WS_MAC
@@ -294,6 +299,16 @@ TomahawkWindow::setupSignals()
     connect( ui->actionCreate_New_Station, SIGNAL( triggered() ), SLOT( createStation() ));
     connect( ui->actionAboutTomahawk, SIGNAL( triggered() ), SLOT( showAboutTomahawk() ) );
     connect( ui->actionExit, SIGNAL( triggered() ), qApp, SLOT( quit() ) );
+
+    connect( ui->actionPlay, SIGNAL( triggered() ), AudioEngine::instance(), SLOT( playPause() ) );
+    connect( ui->actionNext, SIGNAL( triggered() ), AudioEngine::instance(), SLOT( previous() ) );
+    connect( ui->actionPrevious, SIGNAL( triggered() ), AudioEngine::instance(), SLOT( next() ) );
+
+    connect( AudioEngine::instance(), SIGNAL( started( Tomahawk::result_ptr ) ), this, SLOT( audioStarted() ) );
+    connect( AudioEngine::instance(), SIGNAL( resumed()), this, SLOT( audioStarted() ) );
+    connect( AudioEngine::instance(), SIGNAL( paused() ), this, SLOT( audioStopped() ) );
+    connect( AudioEngine::instance(), SIGNAL( stopped() ), this, SLOT( audioStopped() ) );
+
 #if defined( Q_OS_DARWIN )
     connect( ui->actionMinimize, SIGNAL( triggered() ), SLOT( minimize() ) );
     connect( ui->actionZoom, SIGNAL( triggered() ), SLOT( maximize() ) );
@@ -526,6 +541,19 @@ TomahawkWindow::createPlaylist()
            QString playlistName = playlistSelectorDlg.playlistName();
            APP->mainWindow()->createAutomaticPlaylist( playlistName );
     }
+}
+
+void
+TomahawkWindow::audioStarted()
+{
+    ui->actionPlay->setText( tr( "Pause" ) );
+}
+
+void
+TomahawkWindow::audioStopped()
+{
+
+    ui->actionPlay->setText( tr( "Play" ) );
 }
 
 

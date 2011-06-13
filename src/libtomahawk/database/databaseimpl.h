@@ -45,6 +45,8 @@ friend class FuzzyIndex;
 friend class DatabaseCommand_UpdateSearchIndex;
 
 public:
+    static int getDatabaseVersion( const QString& dbname );
+
     DatabaseImpl( const QString& dbname, Database* parent = 0 );
     ~DatabaseImpl();
 
@@ -55,7 +57,7 @@ public:
     int trackId( int artistid, const QString& name_orig, bool& isnew );
     int albumId( int artistid, const QString& name_orig, bool& isnew );
 
-    QList< int > searchTable( const QString& table, const QString& name, uint limit = 10 );
+    QList< QPair<int, float> > searchTable( const QString& table, const QString& name, uint limit = 10 );
     QList< int > getTrackFids( int tid );
 
     static QString sortname( const QString& str );
@@ -85,18 +87,15 @@ public slots:
 
 private:
     QString cleanSql( const QString& sql );
-
-    bool m_ready;
-
     bool updateSchema( int oldVersion );
 
+    bool m_ready;
     QSqlDatabase db;
 
     QString m_lastart, m_lastalb, m_lasttrk;
     int m_lastartid, m_lastalbid, m_lasttrkid;
 
     QString m_dbid;
-
     FuzzyIndex* m_fuzzyIndex;
 };
 

@@ -65,7 +65,6 @@ private slots:
     void onCustomContextMenu( const QPoint& pos );
     void onTrackCountChanged( unsigned int tracks );
 
-    void addItemsToPlaylist();
     void deleteItems();
 
     void onDeleted();

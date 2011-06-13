@@ -115,6 +115,7 @@ signals:
     /// emitted when the playlist revision changes (whenever the playlist changes)
     void dynamicRevisionLoaded( Tomahawk::DynamicPlaylistRevision );
 
+    void aboutToBeDeleted( const Tomahawk::dynplaylist_ptr& pl );
     void deleted( const Tomahawk::dynplaylist_ptr& pl );
 
 public slots:

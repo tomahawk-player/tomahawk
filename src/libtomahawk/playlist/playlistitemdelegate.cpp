@@ -18,6 +18,7 @@
 
 #include "playlistitemdelegate.h"
 
+#include <QApplication>
 #include <QDebug>
 #include <QPainter>
 
@@ -36,10 +37,18 @@
 
 PlaylistItemDelegate::PlaylistItemDelegate( TrackView* parent, TrackProxyModel* proxy )
     : QStyledItemDelegate( (QObject*)parent )
+    , m_style( Detailed )
     , m_view( parent )
     , m_model( proxy )
 {
     m_nowPlayingIcon = QPixmap( PLAYING_ICON );
+}
+
+
+void
+PlaylistItemDelegate::setStyle( PlaylistItemDelegate::PlaylistItemStyle style )
+{
+    m_style = style;
 }
 
 
@@ -71,6 +80,29 @@ PlaylistItemDelegate::createEditor( QWidget* parent, const QStyleOptionViewItem&
 void
 PlaylistItemDelegate::paint( QPainter* painter, const QStyleOptionViewItem& option, const QModelIndex& index ) const
 {
+    switch ( m_style )
+    {
+        case Detailed:
+            paintDetailed( painter, option, index );
+            break;
+
+        case Short:
+            paintShort( painter, option, index );
+            break;
+    }
+}
+
+
+void
+PlaylistItemDelegate::paintShort( QPainter* painter, const QStyleOptionViewItem& option, const QModelIndex& index ) const
+{
+
+}
+
+
+void
+PlaylistItemDelegate::paintDetailed( QPainter* painter, const QStyleOptionViewItem& option, const QModelIndex& index ) const
+{
     TrackModelItem* item = m_model->itemFromIndex( m_model->mapToSource( index ) );
     if ( !item || item->query().isNull() )
         return;
@@ -82,13 +114,51 @@ PlaylistItemDelegate::paint( QPainter* painter, const QStyleOptionViewItem& opti
     opacity = qMax( (float)0.3, opacity );
     QColor textColor = TomahawkUtils::alphaBlend( option.palette.color( QPalette::Foreground ), option.palette.color( QPalette::Background ), opacity );
 
+    QStyleOptionViewItemV4 opt = option;
+    initStyleOption( &opt, index );
+
     if ( item->isPlaying() )
     {
-//        painter->setRenderHint( QPainter::Antialiasing );
-        painter->save();
+        opt.palette.setColor( QPalette::Highlight, opt.palette.color( QPalette::Mid ) );
+        opt.state |= QStyle::State_Selected;
+    }
+    if ( item->isPlaying() || index.column() == TrackModel::Score )
+        opt.text.clear();
+    if ( opt.state & QStyle::State_Selected )
+        opt.palette.setColor( QPalette::Text, opt.palette.color( QPalette::HighlightedText ) );
+    else
+        opt.palette.setColor( QPalette::Text, textColor );
 
+    qApp->style()->drawControl( QStyle::CE_ItemViewItem, &opt, painter );
+
+    painter->save();
+    if ( index.column() == TrackModel::Score )
+    {
+        if ( opt.state & QStyle::State_Selected )
+            painter->setPen( opt.palette.brightText().color() );
+        else
+            painter->setPen( opt.palette.highlight().color() );
+
+        QRect r = opt.rect.adjusted( 3, 3, -6, -5 );
+        painter->drawRect( r );
+
+        QRect fillR = r;
+        int fillerWidth = (int)( index.data().toFloat() * (float)fillR.width() );
+        fillR.adjust( 0, 0, -( fillR.width() - fillerWidth ), 0 );
+
+        if ( opt.state & QStyle::State_Selected )
+            painter->setBrush( opt.palette.brightText().color() );
+        else
+            painter->setBrush( opt.palette.highlight().color() );
+
+        painter->drawRect( fillR );
+    }
+    else if ( item->isPlaying() )
+    {
         {
-            QRect r = option.rect.adjusted( 3, 0, 0, 0 );
+            QRect r = opt.rect.adjusted( 3, 0, 0, 0 );
+
+            // Paint Now Playing Speaker Icon
             if ( m_view->header()->visualIndex( index.column() ) == 0 )
             {
                 r.adjust( 0, 0, 0, -3 );
@@ -96,34 +166,22 @@ PlaylistItemDelegate::paint( QPainter* painter, const QStyleOptionViewItem& opti
                 r.adjust( 22, 0, 0, 3 );
             }
 
-            painter->setPen( option.palette.text().color() );
+            painter->setPen( opt.palette.text().color() );
 
             QTextOption to( Qt::AlignVCenter );
             QString text = painter->fontMetrics().elidedText( index.data().toString(), Qt::ElideRight, r.width() - 3 );
             painter->drawText( r.adjusted( 0, 1, 0, 0 ), text, to );
         }
 
-//        if ( m_view->header()->visualIndex( index.column() ) == m_view->header()->visibleSectionCount() - 1 )
-        {
-            QRect r = QRect( 3, option.rect.y() + 1, m_view->viewport()->width() - 6, option.rect.height() - 2 );
-            painter->setPen( option.palette.highlight().color() );
+        // Paint Now Playing Frame
+/*        {
+            QRect r = QRect( 3, opt.rect.y() + 1, m_view->viewport()->width() - 6, opt.rect.height() - 2 );
+            painter->setPen( opt.palette.highlight().color() );
             QPen pen = painter->pen();
             pen.setWidth( 1.0 );
             painter->setPen( pen );
             painter->drawRoundedRect( r, 3.0, 3.0 );
-        }
-
-        painter->restore();
+        }*/
     }
-    else
-    {
-        if ( const QStyleOptionViewItem *vioption = qstyleoption_cast<const QStyleOptionViewItem *>(&option))
-        {
-            QStyleOptionViewItemV4 o( *vioption );
-            o.palette.setColor( QPalette::Text, textColor );
-            QStyledItemDelegate::paint( painter, o, index );
-        }
-        else
-            QStyledItemDelegate::paint( painter, option, index );
-    }
+    painter->restore();
 }

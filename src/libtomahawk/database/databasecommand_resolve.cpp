@@ -36,6 +36,13 @@ DatabaseCommand_Resolve::DatabaseCommand_Resolve( const query_ptr& query )
 void
 DatabaseCommand_Resolve::exec( DatabaseImpl* lib )
 {
+    /*
+     *        Resolving is a 2 stage process.
+     *        1) find list of trk/art/alb IDs that are reasonable matches to the metadata given
+     *        2) find files in database by permitted sources and calculate score, ignoring
+     *           results that are less than MINSCORE
+     */
+
     if ( !m_query->resultHint().isEmpty() )
     {
         qDebug() << "Using result-hint to speed up resolving:" << m_query->resultHint();
@@ -64,20 +71,12 @@ void
 DatabaseCommand_Resolve::resolve( DatabaseImpl* lib )
 {
     QList<Tomahawk::result_ptr> res;
-
-    /*
-        Resolving is a 2 stage process.
-        1) find list of trk/art/alb IDs that are reasonable matches to the metadata given
-        2) find files in database by permitted sources and calculate score, ignoring
-           results that are less than MINSCORE
-     */
-
     typedef QPair<int, float> scorepair_t;
 
     // STEP 1
-    QList< int > artists = lib->searchTable( "artist", m_query->artist(), 10 );
-    QList< int > tracks = lib->searchTable( "track", m_query->track(), 10 );
-    QList< int > albums = lib->searchTable( "album", m_query->album(), 10 );
+    QList< QPair<int, float> > artists = lib->searchTable( "artist", m_query->artist(), 10 );
+    QList< QPair<int, float> > tracks = lib->searchTable( "track", m_query->track(), 10 );
+    QList< QPair<int, float> > albums = lib->searchTable( "album", m_query->album(), 10 );
 
     if ( artists.length() == 0 || tracks.length() == 0 )
     {
@@ -90,10 +89,10 @@ DatabaseCommand_Resolve::resolve( DatabaseImpl* lib )
     TomahawkSqlQuery files_query = lib->newquery();
 
     QStringList artsl, trksl;
-    foreach( int i, artists )
-        artsl.append( QString::number( i ) );
-    foreach( int i, tracks )
-        trksl.append( QString::number( i ) );
+    for ( int k = 0; k < artists.count(); k++ )
+        artsl.append( QString::number( artists.at( k ).first ) );
+    for ( int k = 0; k < tracks.count(); k++ )
+        trksl.append( QString::number( tracks.at( k ).first ) );
 
     QString artsToken = QString( "file_join.artist IN (%1)" ).arg( artsl.join( "," ) );
     QString trksToken = QString( "file_join.track IN (%1)" ).arg( trksl.join( "," ) );
@@ -174,7 +173,7 @@ DatabaseCommand_Resolve::resolve( DatabaseImpl* lib )
 
         float score = how_similar( m_query, result );
         result->setScore( score );
-        if ( m_query->fullTextQuery().isEmpty() && score < MINSCORE )
+        if ( score < MINSCORE )
             continue;
 
         result->setCollection( s->collection() );
@@ -189,20 +188,12 @@ void
 DatabaseCommand_Resolve::fullTextResolve( DatabaseImpl* lib )
 {
     QList<Tomahawk::result_ptr> res;
-
-    /*
-     *        Resolving is a 2 stage process.
-     *        1) find list of trk/art/alb IDs that are reasonable matches to the metadata given
-     *        2) find files in database by permitted sources and calculate score, ignoring
-     *           results that are less than MINSCORE
-     */
-
     typedef QPair<int, float> scorepair_t;
 
     // STEP 1
-    QList< int > artists = lib->searchTable( "artist", m_query->fullTextQuery(), 10 );
-    QList< int > tracks = lib->searchTable( "track", m_query->fullTextQuery(), 10 );
-    QList< int > albums = lib->searchTable( "album", m_query->fullTextQuery(), 10 );
+    QList< QPair<int, float> > artists = lib->searchTable( "artist", m_query->fullTextQuery(), 10 );
+    QList< QPair<int, float> > tracks = lib->searchTable( "track", m_query->fullTextQuery(), 10 );
+    QList< QPair<int, float> > albums = lib->searchTable( "album", m_query->fullTextQuery(), 10 );
 
     if ( artists.length() == 0 && tracks.length() == 0 && albums.length() == 0 )
     {
@@ -215,12 +206,12 @@ DatabaseCommand_Resolve::fullTextResolve( DatabaseImpl* lib )
     TomahawkSqlQuery files_query = lib->newquery();
 
     QStringList artsl, trksl, albsl;
-    foreach( int i, artists )
-        artsl.append( QString::number( i ) );
-    foreach( int i, tracks )
-        trksl.append( QString::number( i ) );
-    foreach( int i, albums )
-        albsl.append( QString::number( i ) );
+    for ( int k = 0; k < artists.count(); k++ )
+        artsl.append( QString::number( artists.at( k ).first ) );
+    for ( int k = 0; k < tracks.count(); k++ )
+        trksl.append( QString::number( tracks.at( k ).first ) );
+    for ( int k = 0; k < albums.count(); k++ )
+        albsl.append( QString::number( albums.at( k ).first ) );
 
     QString artsToken = QString( "file_join.artist IN (%1)" ).arg( artsl.join( "," ) );
     QString trksToken = QString( "file_join.track IN (%1)" ).arg( trksl.join( "," ) );
@@ -241,10 +232,8 @@ DatabaseCommand_Resolve::fullTextResolve( DatabaseImpl* lib )
                             "artist.id = file_join.artist AND "
                             "track.id = file_join.track AND "
                             "file.id = file_join.file AND "
-                            "(%1 OR %2 OR %3)" )
-                        .arg( artists.length() > 0 ? artsToken : QString( "0" ) )
-                        .arg( tracks.length() > 0 ? trksToken : QString( "0" ) )
-                        .arg( albums.length() > 0 ? albsToken : QString( "0" ) );
+                            "%1" )
+                        .arg( tracks.length() > 0 ? trksToken : QString( "0" ) );
 
     files_query.prepare( sql );
     files_query.exec();
@@ -288,6 +277,15 @@ DatabaseCommand_Resolve::fullTextResolve( DatabaseImpl* lib )
         result->setId( files_query.value( 9 ).toUInt() );
         result->setYear( files_query.value( 17 ).toUInt() );
 
+        for ( int k = 0; k < tracks.count(); k++ )
+        {
+            if ( tracks.at( k ).first == (int)result->dbid() )
+            {
+                result->setScore( tracks.at( k ).second );
+                break;
+            }
+        }
+
         TomahawkSqlQuery attrQuery = lib->newquery();
         QVariantMap attr;
 
@@ -300,11 +298,6 @@ DatabaseCommand_Resolve::fullTextResolve( DatabaseImpl* lib )
         }
 
         result->setAttributes( attr );
-
-        float score = how_similar( m_query, result );
-        result->setScore( score );
-        if ( m_query->fullTextQuery().isEmpty() && score < MINSCORE )
-            continue;
 
         result->setCollection( s->collection() );
         res << result;

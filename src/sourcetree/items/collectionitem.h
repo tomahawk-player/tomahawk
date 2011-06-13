@@ -45,27 +45,32 @@ public:
 
 private slots:
     void onPlaylistsAdded( const QList<Tomahawk::playlist_ptr>& playlists );
-    void onPlaylistsDeleted( const QList<Tomahawk::playlist_ptr>& playlists );
+    void onPlaylistDeleted( const Tomahawk::playlist_ptr& playlists );
     void onAutoPlaylistsAdded( const QList<Tomahawk::dynplaylist_ptr>& playlists );
-    void onAutoPlaylistsDeleted( const QList<Tomahawk::dynplaylist_ptr>& playlists );
+    void onAutoPlaylistDeleted( const Tomahawk::dynplaylist_ptr& playlists );
     void onStationsAdded( const QList<Tomahawk::dynplaylist_ptr>& stations );
-    void onStationsDeleted( const QList<Tomahawk::dynplaylist_ptr>& stations );
+    void onStationDeleted( const Tomahawk::dynplaylist_ptr& stations );
 
     void tempPageActivated( Tomahawk::ViewPage* );
     Tomahawk::ViewPage* tempItemClicked();
     Tomahawk::ViewPage* getTempPage() const;
 
+    Tomahawk::ViewPage* sourceInfoClicked();
+    Tomahawk::ViewPage* getSourceInfoPage() const;
+
 private:
     void playlistsAddedInternal( SourceTreeItem* parent, const QList< Tomahawk::dynplaylist_ptr >& playlists );
     template< typename T >
-    void playlistsDeletedInternal( SourceTreeItem* parent, const QList< T >& playlists );
+    void playlistDeletedInternal( SourceTreeItem* parent, const T& playlists );
 
     Tomahawk::source_ptr m_source;
     CategoryItem* m_playlists;
     CategoryItem* m_stations;
 
     GenericPageItem* m_tempItem;
+    GenericPageItem* m_sourceInfoItem;
     Tomahawk::ViewPage* m_curTempPage;
+    Tomahawk::ViewPage* m_sourceInfoPage;
 };
 
 

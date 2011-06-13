@@ -63,7 +63,11 @@ void
 CollectionView::setTrackModel( TrackModel* model )
 {
     TrackView::setTrackModel( model );
+    setColumnHidden( TrackModel::Score, true ); // Hide age column per default
     setGuid( "collectionview" );
+
+    setSortingEnabled( true );
+    sortByColumn( 0, Qt::AscendingOrder );
 
     connect( model, SIGNAL( trackCountChanged( unsigned int ) ), SLOT( onTrackCountChanged( unsigned int ) ) );
 }
@@ -83,14 +87,14 @@ CollectionView::setupMenus()
 
     m_playItemAction = m_itemMenu.addAction( tr( "&Play" ) );
     m_addItemsToQueueAction = m_itemMenu.addAction( tr( "Add to &Queue" ) );
-   m_itemMenu.addSeparator();
+    m_itemMenu.addSeparator();
 
-   foreach( QAction* a, actions() )
-       m_itemMenu.addAction( a );
+    foreach( QAction* a, actions() )
+     m_itemMenu.addAction( a );
 //    m_addItemsToPlaylistAction = m_itemMenu.addAction( tr( "&Add to Playlist" ) );
 
-    connect( m_playItemAction,           SIGNAL( triggered() ), SLOT( playItem() ) );
-    connect( m_addItemsToQueueAction,    SIGNAL( triggered() ), SLOT( addItemsToQueue() ) );
+     connect( m_playItemAction,           SIGNAL( triggered() ), SLOT( playItem() ) );
+     connect( m_addItemsToQueueAction,    SIGNAL( triggered() ), SLOT( addItemsToQueue() ) );
 //    connect( m_addItemsToPlaylistAction, SIGNAL( triggered() ), SLOT( addItemsToPlaylist() ) );
 }
 

@@ -190,6 +190,12 @@ signals:
     /// renamed etc.
     void changed();
 
+    /**
+     *   delete command is scheduled but not completed. Do not call remove() again once this
+     *   is emitted.
+     */
+    void aboutToBeDeleted( const Tomahawk::playlist_ptr& pl );
+
     /// was deleted, eh?
     void deleted( const Tomahawk::playlist_ptr& pl );
 

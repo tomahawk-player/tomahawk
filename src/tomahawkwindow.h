@@ -50,7 +50,6 @@ public:
     ~TomahawkWindow();
 
     AudioControls* audioControls() { return m_audioControls; }
-    QStackedWidget* playlistStack();
     SourceTreeView* sourceTreeView() const { return m_sourcetree; }
 
     void setWindowTitle( const QString& title );
@@ -83,6 +82,9 @@ private slots:
     void onPlaybackLoading( const Tomahawk::result_ptr& result );
     void onHistoryBackAvailable( bool avail );
     void onHistoryForwardAvailable( bool avail );
+
+    void audioStarted();
+    void audioStopped();
 
     void showAboutTomahawk();
     void checkForUpdates();

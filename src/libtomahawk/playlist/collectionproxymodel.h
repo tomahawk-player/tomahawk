@@ -1,5 +1,5 @@
 /* === This file is part of Tomahawk Player - <http://tomahawk-player.org> ===
- * 
+ *
  *   Copyright 2010-2011, Christian Muehlhaeuser <muesli@tomahawk-player.org>
  *
  *   Tomahawk is free software: you can redistribute it and/or modify
@@ -31,9 +31,6 @@ public:
     explicit CollectionProxyModel( QObject* parent = 0 );
 
     virtual PlaylistInterface::ViewMode viewMode() const { return PlaylistInterface::Flat; }
-    
-protected:
-    bool lessThan( const QModelIndex& left, const QModelIndex& right ) const;
 };
 
 #endif // COLLECTIONPROXYMODEL_H

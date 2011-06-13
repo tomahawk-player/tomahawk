@@ -1,5 +1,5 @@
 /*
-   Copyright 2009 Last.fm Ltd. 
+   Copyright 2009 Last.fm Ltd.
       - Primarily authored by Max Howell, Jono Cole and Doug Mansell
 
    This file is part of liblastfm.
@@ -33,7 +33,7 @@ static QMap< QThread*, QNetworkAccessManager* > threadNamHash;
 static QSet< QThread* > ourNamSet;
 static QMutex namAccessMutex;
 
-QString 
+QString
 lastfm::ws::host()
 {
     QStringList const args = QCoreApplication::arguments();
@@ -57,8 +57,8 @@ static QUrl url()
 }
 
 static QString iso639()
-{ 
-    return QLocale().name().left( 2 ).toLower(); 
+{
+    return QLocale().name().left( 2 ).toLower();
 }
 
 void autograph( QMap<QString, QString>& params )
@@ -99,17 +99,17 @@ lastfm::ws::get( QMap<QString, QString> params )
         QByteArray const value = QUrl::toPercentEncoding( i.value() );
         url.addEncodedQueryItem( key, value );
     }
-    
+
     qDebug() << url;
-    
+
     return nam()->get( QNetworkRequest(url) );
 }
 
 
 QNetworkReply*
 lastfm::ws::post( QMap<QString, QString> params, bool sk )
-{   
-    sign( params, sk ); 
+{
+    sign( params, sk );
     QByteArray query;
     QMapIterator<QString, QString> i( params );
     while (i.hasNext()) {
@@ -120,7 +120,9 @@ lastfm::ws::post( QMap<QString, QString> params, bool sk )
                + '&';
     }
 
-    return nam()->post( QNetworkRequest(url()), query );
+    QNetworkRequest req(url());
+    req.setHeader( QNetworkRequest::ContentTypeHeader, "application/x-www-form-urlencoded" );
+    return nam()->post( req, query );
 }
 
 
@@ -133,7 +135,7 @@ lastfm::ws::parse( QNetworkReply* reply ) throw( ParseError )
 
         if (!data.size())
             throw MalformedResponse;
-            
+
         QDomDocument xml;
         xml.setContent( data );
         QDomElement lfm = xml.documentElement();
@@ -223,7 +225,7 @@ lastfm::setNetworkAccessManager( QNetworkAccessManager* nam )
 
     if ( oldNam == nam )
         return;
-    
+
     threadNamHash[thread] = nam;
     ourNamSet.remove( thread );
 
@@ -286,7 +288,7 @@ namespace lastfm
         const char* ApiKey;
 
         /** if this is found set to "" we conjure ourselves a suitable one */
-        const char* UserAgent = 0;   
+        const char* UserAgent = 0;
     }
 }
 

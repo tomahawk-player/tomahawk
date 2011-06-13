@@ -102,5 +102,6 @@
     <file>./data/www/auth.na.html</file>
     <file>./data/www/tomahawk_banner_small.png</file>
     <file>./data/sql/dbmigrate-22_to_23.sql</file>
+    <file>./data/sql/dbmigrate-23_to_24.sql</file>
   </qresource>
 </RCC>

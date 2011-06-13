@@ -622,7 +622,8 @@ void JabberPlugin::onNewMessage(const Jreen::Message& message)
 
     if( message.subtype() == Jreen::Message::Error )
     {
-        qDebug() << Q_FUNC_INFO << "Received error message from " << from << ", not answering... (Condition: " << message.error()->condition() << ")";
+        qDebug() << Q_FUNC_INFO << "Received error message from " << from << ", not answering... (Condition: "
+                 << ( message.error().isNull() ? -1 : message.error()->condition() ) << ")";
         return;
     }
 
@@ -685,7 +686,7 @@ void JabberPlugin::onPresenceReceived( const Jreen::RosterItem::Ptr &item, const
 
         Jreen::IQ featuresIq( Jreen::IQ::Get, jid );
         featuresIq.addExtension( new Jreen::Disco::Info( node ) );
-        
+
         Jreen::IQReply *reply = m_client->send(featuresIq);
         reply->setData(RequestDisco);
         connect(reply, SIGNAL(received(Jreen::IQ)), SLOT(onNewIq(Jreen::IQ)));

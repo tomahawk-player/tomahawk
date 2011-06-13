@@ -36,7 +36,7 @@ public:
     virtual ~GlobalActionManager();
 
     QUrl openLinkFromQuery( const Tomahawk::query_ptr& query ) const;
-    QUrl openLink( const QString& title, const QString& artist, const QString& album, bool tomahk=false ) const;
+    QUrl openLink( const QString& title, const QString& artist, const QString& album ) const;
 
     void copyToClipboard( const Tomahawk::query_ptr& query ) const;
     QString copyPlaylistToClipboard( const Tomahawk::dynplaylist_ptr& playlist );
@@ -68,6 +68,7 @@ private:
     bool handleOpenCommand(const QUrl& url );
 
     bool doQueueAdd( const QStringList& parts, const QList< QPair< QString, QString > >& queryItems );
+    QString hostname() const;
 
     Tomahawk::playlist_ptr m_toShow;
     Tomahawk::query_ptr m_waitingToBookmark;

@@ -42,7 +42,8 @@ public:
         Age = 5,
         Year = 6,
         Filesize = 7,
-        Origin = 8
+        Origin = 8,
+        Score = 9
     };
 
     explicit TrackModel( QObject* parent = 0 );

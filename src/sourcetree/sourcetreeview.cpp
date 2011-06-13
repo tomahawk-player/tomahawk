@@ -38,6 +38,7 @@
 
 using namespace Tomahawk;
 
+#define TREEVIEW_INDENT_ADD -7
 
 class SourceDelegate : public QStyledItemDelegate
 {
@@ -53,6 +54,8 @@ protected:
             editor->setGeometry( option.rect.adjusted( 20, 0, 0, 0 ) );
         else
             QStyledItemDelegate::updateEditorGeometry( editor, option, index );
+
+        editor->setGeometry( editor->geometry().adjusted( 2*TREEVIEW_INDENT_ADD, 0, 0, 0 ) );
     }
 
 private:
@@ -79,7 +82,7 @@ SourceTreeView::SourceTreeView( QWidget* parent )
     setDropIndicatorShown( false );
     setAllColumnsShowFocus( true );
     setUniformRowHeights( false );
-    setIndentation( 16 );
+    setIndentation( 14 );
     setSortingEnabled( true );
     sortByColumn( 0, Qt::AscendingOrder );
 
@@ -595,6 +598,23 @@ SourceDelegate::paint( QPainter* painter, const QStyleOptionViewItem& option, co
     else
     {
         QStyledItemDelegate::paint( painter, o, index );
+        /*QStyleOptionViewItemV4 opt = o;
+        initStyleOption( &opt, index );
+
+        // shrink the indentations. count how indented this item is and remove it
+        int indentMult = 0;
+        QModelIndex counter = index;
+        while ( counter.parent().isValid() )
+        {
+            indentMult++;
+            counter = counter.parent();
+        }
+        int realX = opt.rect.x() + indentMult * TREEVIEW_INDENT_ADD;
+
+        opt.rect.setX( realX );
+        const QWidget *widget = opt.widget;
+        QStyle *style = widget ? widget->style() : QApplication::style();
+        style->drawControl( QStyle::CE_ItemViewItem, &opt, painter, widget ); */
     }
 
 #ifdef Q_WS_MAC

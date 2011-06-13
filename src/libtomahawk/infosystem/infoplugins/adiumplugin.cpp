@@ -18,6 +18,8 @@
 
 #include <string.h>
 
+#include <QTimer>
+
 #include "infosystem/infosystemworker.h"
 #include "artist.h"
 #include "result.h"
@@ -65,9 +67,20 @@ AdiumPlugin::AdiumPlugin()
 
     connect( TomahawkSettings::instance(), SIGNAL( changed() ),
                                              SLOT( settingsChanged() ), Qt::QueuedConnection );
+
+    m_pauseTimer = new QTimer( this );
+    connect( m_pauseTimer, SIGNAL( timeout() ),
+             this, SLOT( clearStatus() ) );
 }
 
 AdiumPlugin::~AdiumPlugin()
+{
+    qDebug() << Q_FUNC_INFO;
+    setStatus( "" );
+}
+
+void
+AdiumPlugin::clearStatus()
 {
     qDebug() << Q_FUNC_INFO;
     setStatus( "" );
@@ -107,9 +120,9 @@ AdiumPlugin::pushInfo( const QString caller, const Tomahawk::InfoSystem::InfoTyp
         case InfoNowPlaying:
           audioStarted( input );
           break;
-          //        case InfoNowPaused:
-          //          audioPaused();
-          //          break;
+        case InfoNowPaused:
+          audioPaused();
+          return;
         case InfoNowResumed:
           audioResumed( input );
           break;
@@ -120,6 +133,9 @@ AdiumPlugin::pushInfo( const QString caller, const Tomahawk::InfoSystem::InfoTyp
         default:
           return;
     }
+
+    // Stop the pause timer always, unless pausing of course
+    m_pauseTimer->stop();
 }
 
 /** Audio state slots */
@@ -136,11 +152,14 @@ AdiumPlugin::audioStarted( const QVariant &input )
         return;
 
     QString nowPlaying = "";
-    nowPlaying.append( hash["title"] );
-    nowPlaying.append(" - ");
     nowPlaying.append( hash["artist"] );
+    nowPlaying.append(" - ");
+    nowPlaying.append( hash["title"] );
     nowPlaying.append( " " );
+    // Escape quotes, or Applescript gets confused
+    nowPlaying.replace( "\"", "\\\"" );
     nowPlaying.append( openLinkFromHash( hash ).toEncoded() );
+    qDebug() << "nowPlaying: " << nowPlaying;
     setStatus( nowPlaying );
 }
 
@@ -157,7 +176,7 @@ AdiumPlugin::openLinkFromHash( const Tomahawk::InfoSystem::InfoCriteriaHash& has
             album = hash["album"];
     }
 
-    return GlobalActionManager::instance()->openLink( title, artist, album, true );
+    return GlobalActionManager::instance()->openLink( title, artist, album );
 }
 
 void
@@ -177,14 +196,12 @@ void
 AdiumPlugin::audioPaused()
 {
     qDebug() << Q_FUNC_INFO;
-
-    //setStatus( "Paused" );
+    m_pauseTimer->start( 60 * 1000 );
 }
 
 void 
 AdiumPlugin::audioResumed( const QVariant &input )
 {
     qDebug() << Q_FUNC_INFO;
-    // TODO: audio resumed, so push update status to Adium with playing track
     audioStarted( input );
 }

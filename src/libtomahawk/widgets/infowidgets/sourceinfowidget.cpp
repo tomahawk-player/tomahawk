@@ -41,11 +41,11 @@ SourceInfoWidget::SourceInfoWidget( const Tomahawk::source_ptr& source, QWidget*
     ui->historyView->overlay()->setEnabled( false );
 
     m_recentCollectionModel = new CollectionFlatModel( ui->recentCollectionView );
-    ui->recentCollectionView->setModel( m_recentCollectionModel );
+    ui->recentCollectionView->setTrackModel( m_recentCollectionModel );
     m_recentCollectionModel->addFilteredCollection( source->collection(), 250, DatabaseCommand_AllTracks::ModificationTime );
 
     m_historyModel = new PlaylistModel( ui->historyView );
-    ui->historyView->setModel( m_historyModel );
+    ui->historyView->setPlaylistModel( m_historyModel );
     m_historyModel->loadHistory( source );
 
     connect( source.data(), SIGNAL( playbackFinished( Tomahawk::query_ptr ) ), SLOT( onPlaybackFinished( Tomahawk::query_ptr ) ) );
@@ -59,7 +59,7 @@ SourceInfoWidget::SourceInfoWidget( const Tomahawk::source_ptr& source, QWidget*
     ui->historyView->setColumnHidden( TrackModel::Filesize, true );
 
     m_recentAlbumModel = new AlbumModel( ui->recentAlbumView );
-    ui->recentAlbumView->setModel( m_recentAlbumModel );
+    ui->recentAlbumView->setAlbumModel( m_recentAlbumModel );
     m_recentAlbumModel->addFilteredCollection( source->collection(), 20, DatabaseCommand_AllAlbums::ModificationTime );
 
     m_title = tr( "Info about %1" ).arg( source->isLocal() ? tr( "Your Collection" ) : source->friendlyName() );

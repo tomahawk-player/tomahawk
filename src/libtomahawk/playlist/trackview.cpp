@@ -50,7 +50,6 @@ TrackView::TrackView( QWidget* parent )
     , m_resizing( false )
     , m_dragging( false )
 {
-    setSortingEnabled( false );
     setAlternatingRowColors( true );
     setSelectionMode( QAbstractItemView::ExtendedSelection );
     setSelectionBehavior( QAbstractItemView::SelectRows );
@@ -63,9 +62,11 @@ TrackView::TrackView( QWidget* parent )
     setRootIsDecorated( false );
     setUniformRowHeights( true );
     setMinimumWidth( 300 );
-//    setVerticalScrollBarPolicy( Qt::ScrollBarAlwaysOn );
+    //    setVerticalScrollBarPolicy( Qt::ScrollBarAlwaysOn );
 
     setHeader( m_header );
+    setSortingEnabled( true );
+    sortByColumn( -1 );
 
 #ifndef Q_WS_WIN
     QFont f = font();
@@ -78,7 +79,7 @@ TrackView::TrackView( QWidget* parent )
     setFont( f );
 #endif
 
-    QAction* createLinkAction = new QAction( tr( "Copy track link" ), this );
+    QAction* createLinkAction = new QAction( tr( "Copy Track Link" ), this );
     connect( createLinkAction, SIGNAL( triggered( bool ) ), this, SLOT( copyLink() ) );
     addAction( createLinkAction );
 

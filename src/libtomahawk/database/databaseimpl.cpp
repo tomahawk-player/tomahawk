@@ -38,7 +38,7 @@
 */
 #include "schema.sql.h"
 
-#define CURRENT_SCHEMA_VERSION 23
+#define CURRENT_SCHEMA_VERSION 24
 
 
 DatabaseImpl::DatabaseImpl( const QString& dbname, Database* parent )
@@ -47,67 +47,48 @@ DatabaseImpl::DatabaseImpl( const QString& dbname, Database* parent )
     , m_lastalbid( 0 )
     , m_lasttrkid( 0 )
 {
-    db = QSqlDatabase::addDatabase( "QSQLITE", "tomahawk" );
-    db.setDatabaseName( dbname );
-    if ( !db.open() )
-    {
-        qDebug() << "FAILED TO OPEN DB";
-        throw "failed to open db"; // TODO
-    }
-
-    QSqlQuery qry = QSqlQuery( db );
-
     bool schemaUpdated = false;
-    qry.exec( "SELECT v FROM settings WHERE k='schema_version'" );
-    if ( qry.next() )
+    int version = getDatabaseVersion( dbname );
+
+    if ( version > 0 && version != CURRENT_SCHEMA_VERSION )
     {
-        int v = qry.value( 0 ).toInt();
-        qDebug() << "Current schema is" << v << this->thread();
-        if ( v != CURRENT_SCHEMA_VERSION )
+        QString newname = QString( "%1.v%2" ).arg( dbname ).arg( version );
+        qDebug() << endl << "****************************" << endl;
+        qDebug() << "Schema version too old: " << version << ". Current version is:" << CURRENT_SCHEMA_VERSION;
+        qDebug() << "Moving" << dbname << newname;
+        qDebug() << "If the migration fails, you can recover your DB by copying" << newname << "back to" << dbname;
+        qDebug() << endl << "****************************" << endl;
+
+        QFile::copy( dbname, newname );
         {
+            db = QSqlDatabase::addDatabase( "QSQLITE", "tomahawk" );
+            db.setDatabaseName( dbname );
+            if( !db.open() )
+                throw "db moving failed";
 
-            QString newname = QString("%1.v%2").arg(dbname).arg(v);
-            qDebug() << endl << "****************************" << endl;
-            qDebug() << "Schema version too old: " << v << ". Current version is:" << CURRENT_SCHEMA_VERSION;
-            qDebug() << "Moving" << dbname << newname;
-            qDebug() << "If the migration fails, you can recover your DB by copying" << newname << "back to" << dbname;
-            qDebug() << endl << "****************************" << endl;
+            TomahawkSqlQuery query = newquery();
+            query.exec( "PRAGMA auto_vacuum = FULL" );
 
-            qry.clear();
-            qry.finish();
-
-            db.close();
-            db.removeDatabase( "tomahawk" );
-
-            if( QFile::copy( dbname, newname ) )
-            {
-                db = QSqlDatabase::addDatabase( "QSQLITE", "tomahawk" );
-                db.setDatabaseName( dbname );
-                if( !db.open() )
-                    throw "db moving failed";
-
-                TomahawkSqlQuery query = newquery();
-                query.exec( "PRAGMA auto_vacuum = FULL" );
-                schemaUpdated = updateSchema( v );
-
-                if( !schemaUpdated )
-                {
-                    Q_ASSERT( false );
-                    QTimer::singleShot( 0, qApp, SLOT( quit() ) );
-                }
-
-            }
-            else
+            schemaUpdated = updateSchema( version );
+            if ( !schemaUpdated )
             {
                 Q_ASSERT( false );
                 QTimer::singleShot( 0, qApp, SLOT( quit() ) );
-                return;
             }
         }
     }
     else
     {
-        schemaUpdated = updateSchema( 0 );
+        db = QSqlDatabase::addDatabase( "QSQLITE", "tomahawk" );
+        db.setDatabaseName( dbname );
+        if ( !db.open() )
+        {
+            qDebug() << "Failed to open database" << dbname;
+            throw "failed to open db"; // TODO
+        }
+
+        if ( version < 0 )
+            schemaUpdated = updateSchema( 0 );
     }
 
     TomahawkSqlQuery query = newquery();
@@ -422,30 +403,23 @@ DatabaseImpl::albumId( int artistid, const QString& name_orig, bool& isnew )
 }
 
 
-QList< int >
+QList< QPair<int, float> >
 DatabaseImpl::searchTable( const QString& table, const QString& name, uint limit )
 {
     Q_UNUSED( limit );
-    QList< int > results;
-    if( table != "artist" && table != "track" && table != "album" )
-        return results;
-
-    QMap< int, float > resultsmap = m_fuzzyIndex->search( table, name );
 
     QList< QPair<int, float> > resultslist;
+    if( table != "artist" && table != "track" && table != "album" )
+        return resultslist;
+
+    QMap< int, float > resultsmap = m_fuzzyIndex->search( table, name );
     foreach( int i, resultsmap.keys() )
     {
         resultslist << QPair<int, float>( i, (float)resultsmap.value( i ) );
     }
     qSort( resultslist.begin(), resultslist.end(), DatabaseImpl::scorepairSorter );
 
-    for( int k = 0; k < resultslist.count(); k++ )
-    {
-        results << resultslist.at( k ).first;
-    }
-
-//    qDebug() << "Returning" << results.count() << "results";
-    return results;
+    return resultslist;
 }
 
 
@@ -638,4 +612,32 @@ DatabaseImpl::resultFromHint( const Tomahawk::query_ptr& origquery )
     }
 
     return res;
+}
+
+
+int
+DatabaseImpl::getDatabaseVersion( const QString& dbname )
+{
+    int version = -1;
+    {
+        QSqlDatabase db = QSqlDatabase::addDatabase( "QSQLITE", "tomahawk" );
+        db.setDatabaseName( dbname );
+        if ( !db.open() )
+        {
+            qDebug() << "Failed to open database" << dbname;
+            throw "failed to open db"; // TODO
+        }
+
+        QSqlQuery qry = QSqlQuery( db );
+        qry.exec( "SELECT v FROM settings WHERE k='schema_version'" );
+        if ( qry.next() )
+        {
+            version = qry.value( 0 ).toInt();
+            qDebug() << "Database schema of" << dbname << "is" << version;
+        }
+    }
+
+    QSqlDatabase::removeDatabase( "tomahawk" );
+
+    return version;
 }

@@ -24,6 +24,8 @@
 #include <QObject>
 #include <QVariant>
 
+class QTimer;
+
 namespace Tomahawk {
 
 namespace InfoSystem {
@@ -44,6 +46,9 @@ public slots:
     void namChangedSlot( QNetworkAccessManager *nam ) {} // unused
     void notInCacheSlot( const Tomahawk::InfoSystem::InfoCriteriaHash criteria, const QString caller, const Tomahawk::InfoSystem::InfoType type, const QVariant input, const Tomahawk::InfoSystem::InfoCustomData customData ) {} // unused
 
+private slots:
+    void clearStatus();
+
 private:
     void settingsChanged();
 
@@ -58,6 +63,8 @@ private:
     bool m_active;
     QString m_beforeStatus;
     QString m_afterStatus;
+
+    QTimer* m_pauseTimer;
 
 };
 

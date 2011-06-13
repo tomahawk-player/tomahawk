@@ -509,6 +509,7 @@ PlaylistModel::removeIndex( const QModelIndex& index, bool moreToCome )
     }
 }
 
+
 bool
 PlaylistModel::isTemporary() const
 {

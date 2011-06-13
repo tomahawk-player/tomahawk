@@ -39,7 +39,13 @@ ScriptResolver::ScriptResolver( const QString& exe )
     connect( &m_proc, SIGNAL( readyReadStandardOutput() ), SLOT( readStdout() ) );
     connect( &m_proc, SIGNAL( finished( int, QProcess::ExitStatus ) ), SLOT( cmdExited( int, QProcess::ExitStatus ) ) );
 
-    m_proc.start( filePath() );
+    QString filepath = filePath();
+#ifdef WIN32
+    // have to enclose in quotes if path contains spaces on windows...
+    filepath = QString( "\"%1\"" ).arg( filepath );
+#endif
+
+    m_proc.start( filepath );
 }
 
 
