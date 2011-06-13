@@ -152,9 +152,9 @@ AdiumPlugin::audioStarted( const QVariant &input )
         return;
 
     QString nowPlaying = "";
-    nowPlaying.append( hash["title"] );
-    nowPlaying.append(" - ");
     nowPlaying.append( hash["artist"] );
+    nowPlaying.append(" - ");
+    nowPlaying.append( hash["title"] );
     nowPlaying.append( " " );
     // Escape quotes, or Applescript gets confused
     nowPlaying.replace( "\"", "\\\"" );
