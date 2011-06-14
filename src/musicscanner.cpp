@@ -106,8 +106,11 @@ DirLister::scanDir( QDir dir, int depth, DirLister::Mode mode )
         if( m_manualFull ||
                 ( m_mode == TomahawkSettings::Dirs
                     && ( m_dirmtimes.contains( dir.canonicalPath() ) || !m_recursive )
-                    && mtime == m_dirmtimes.value( dir.canonicalPath() ) ) )
+                    && mtime != m_dirmtimes.value( dir.canonicalPath() ) ) )
+        {
+            qDebug() << "Deleting database file entries from " << dir;
             Database::instance()->enqueue( QSharedPointer<DatabaseCommand>( new DatabaseCommand_DeleteFiles( dir, SourceList::instance()->getLocal() ) ) );
+        }
 
         dir.setFilter( QDir::Files | QDir::Readable | QDir::NoDotAndDotDot );
         dir.setSorting( QDir::Name );

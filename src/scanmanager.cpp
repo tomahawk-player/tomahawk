@@ -145,6 +145,7 @@ ScanManager::runDirScan( const QStringList& paths, bool manualFull )
 
     if ( !m_musicScannerThreadController && m_scanner.isNull() ) //still running if these are not zero
     {
+        m_scanTimer->stop();
         m_musicScannerThreadController = new QThread( this );
         m_scanner = QWeakPointer< MusicScanner>( new MusicScanner( paths, TomahawkSettings::instance()->scannerMode(), manualFull ) );
         m_scanner.data()->moveToThread( m_musicScannerThreadController );
@@ -172,5 +173,6 @@ ScanManager::scannerFinished()
         delete m_musicScannerThreadController;
         m_musicScannerThreadController = 0;
     }
+    m_scanTimer->start();
     emit finished();
 }
