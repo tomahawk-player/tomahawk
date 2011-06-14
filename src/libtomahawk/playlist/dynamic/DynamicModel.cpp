@@ -85,6 +85,16 @@ void
 DynamicModel::newTrackGenerated( const Tomahawk::query_ptr& query )
 {
     if( m_onDemandRunning ) {
+        if( m_deduper.contains( QPair< QString, QString >( query->track(), query->artist() ) ) ) {
+            m_playlist->generator()->fetchNext();
+
+            return;
+        } else {
+            if( !m_deduper.isEmpty() )
+                m_deduper.pop_back();
+            m_deduper.append( QPair< QString, QString >( query->track(), query->artist() ) );
+        }
+
         connect( query.data(), SIGNAL( resolvingFinished( bool ) ), this, SLOT( trackResolveFinished( bool ) ) );
 
         m_waitingFor << query.data();

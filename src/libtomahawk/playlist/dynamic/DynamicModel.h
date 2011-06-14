@@ -82,6 +82,7 @@ private:
 
     // for managing upcoming queue
     QList< Query* > m_waitingFor;
+    QList< QPair< QString, QString > > m_deduper;
 
     bool m_onDemandRunning;
     bool m_changeOnNext;
