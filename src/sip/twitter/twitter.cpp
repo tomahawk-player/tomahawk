@@ -67,11 +67,11 @@ TwitterPlugin::TwitterPlugin( const QString& pluginId )
     , m_state( Disconnected )
 {
     qDebug() << Q_FUNC_INFO;
-    m_checkTimer.setInterval( 60000 );
+    m_checkTimer.setInterval( 150000 );
     m_checkTimer.setSingleShot( false );
     connect( &m_checkTimer, SIGNAL( timeout() ), SLOT( checkTimerFired() ) );
 
-    m_connectTimer.setInterval( 60000 );
+    m_connectTimer.setInterval( 150000 );
     m_connectTimer.setSingleShot( false );
     connect( &m_connectTimer, SIGNAL( timeout() ), SLOT( connectTimerFired() ) );
 
