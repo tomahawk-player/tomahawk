@@ -54,14 +54,14 @@ Tomahawk::ExternalResolver::addChildProperties( QObject* widget, QVariantMap& m 
 //         qDebug() << "Adding properties for this:" << widget->metaObject()->className();
         // add this widget's properties
         QVariantMap props;
-        for( int i = widget->metaObject()->propertyOffset(); i < widget->metaObject()->propertyCount(); i++ )
+        for( int i = 0; i < widget->metaObject()->propertyCount(); i++ )
         {
             QString prop = widget->metaObject()->property( i ).name();
             QVariant val = widget->property( prop.toLatin1() );
             // clean up for QJson....
             if( val.canConvert< QPixmap >() || val.canConvert< QImage >() || val.canConvert< QIcon >() )
                 continue;
-            props[ prop ] = val;
+            props[ prop ] = val.toString();
 //             qDebug() << QString( "%1: %2" ).arg( prop ).arg( props[ prop ].toString() );
         }
         m[ widget->objectName() ] = props;

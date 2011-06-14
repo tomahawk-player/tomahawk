@@ -281,6 +281,7 @@ ScriptResolver::saveConfig()
     QVariant widgets = configMsgFromWidget( m_configWidget.data() );
     m.insert( "widgets", widgets );
     QByteArray data = m_serializer.serialize( m );
+//     qDebug() << "Got widgets and data;" << widgets << data;
     sendMsg( data );
 }
 
