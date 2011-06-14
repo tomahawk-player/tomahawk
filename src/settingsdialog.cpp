@@ -117,16 +117,6 @@ SettingsDialog::SettingsDialog( QWidget *parent )
 
     ui->checkBoxWatchForChanges->setChecked( s->watchForChanges() );
     ui->scannerTimeSpinBox->setValue( s->scannerTime() );
-    if ( s->scannerMode() == TomahawkSettings::Files )
-    {
-        ui->scannerDirModeButton->setChecked( false );
-        ui->scannerFileModeButton->setChecked( true );
-    }
-    else
-    {
-        ui->scannerDirModeButton->setChecked( true );
-        ui->scannerFileModeButton->setChecked( false );
-    }
     connect( ui->checkBoxWatchForChanges, SIGNAL( clicked( bool ) ), SLOT( updateScanOptionsView() ) );
     connect( ui->scannerDirModeButton, SIGNAL( clicked( bool ) ), SLOT( updateScanOptionsView() ) );
     connect( ui->scannerFileModeButton, SIGNAL( clicked( bool ) ), SLOT( updateScanOptionsView() ) );
@@ -386,7 +376,7 @@ SettingsDialog::updateScanOptionsView()
         ui->scannerDirModeButton->show();
         ui->scannerFileModeButton->show();
         ui->scanInformationLabel->show();
-        if ( sender() == ui->scannerFileModeButton )
+        if ( sender() == ui->scannerFileModeButton || ( sender() == ui->checkBoxWatchForChanges && TomahawkSettings::instance()->scannerMode() == TomahawkSettings::Files ) )
         {
             ui->scanInformationLabel->setText( "Files mode uses the changed time of every file to determine if the file has\nchanged. This can be more processor, disk, and network-intensive, especially\nfor files over a network connection. This mode is recommended, but switch\nto Directory Mode or raise the time between scans if you encounter trouble." );
             ui->scannerFileModeButton->setChecked( true );
