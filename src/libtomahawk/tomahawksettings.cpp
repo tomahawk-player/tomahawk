@@ -149,13 +149,19 @@ TomahawkSettings::scannerPaths()
 {
     //FIXME: After enough time, remove this hack (and make const)
     #ifndef TOMAHAWK_HEADLESS
-    if( value( "scannerpaths" ).isNull() )
-        setValue( "scannerpaths", value( "scannerpath" ) );
-    return value( "scannerpaths", QDesktopServices::storageLocation( QDesktopServices::MusicLocation ) ).toStringList();
+    if( value( "scanner/paths" ).isNull() )
+    {
+        setValue( "scanner/paths", value( "scannerpath" ) );
+        remove( "scannerpath" );
+    }
+    return value( "scanner/paths", QDesktopServices::storageLocation( QDesktopServices::MusicLocation ) ).toStringList();
     #else
-    if( value( "scannerpaths" ).isNull() )
-        setValue( "scannerpaths", value( "scannerpath" ) );
-    return value( "scannerpaths", "" ).toStringList();
+    if( value( "scanner/paths" ).isNull() )
+    {
+        setValue( "scanner/paths", value( "scannerpath" ) );
+        remove( "scannerpath" );
+    }
+    return value( "scanner/paths", "" ).toStringList();
     #endif
 }
 
@@ -163,7 +169,7 @@ TomahawkSettings::scannerPaths()
 void
 TomahawkSettings::setScannerPaths( const QStringList& paths )
 {
-    setValue( "scannerpaths", paths );
+    setValue( "scanner/paths", paths );
 }
 
 
@@ -171,49 +177,49 @@ bool
 TomahawkSettings::hasScannerPaths() const
 {
     //FIXME: After enough time, remove this hack
-    return contains( "scannerpaths" ) || contains( "scannerpath" );
+    return contains( "scanner/paths" ) || contains( "scannerpath" );
 }
 
 
 TomahawkSettings::ScannerMode
 TomahawkSettings::scannerMode() const
 {
-    return (TomahawkSettings::ScannerMode) value( "scanner-mode", TomahawkSettings::Files ).toInt();
+    return (TomahawkSettings::ScannerMode) value( "scanner/mode", TomahawkSettings::Files ).toInt();
 }
 
  
 void
 TomahawkSettings::setScannerMode( ScannerMode mode )
 {
-    setValue( "scanner-mode", mode );
+    setValue( "scanner/mode", mode );
 }
 
 
 uint
 TomahawkSettings::scannerTime() const
 {
-    return value( "scannerTime", 60 ).toUInt();
+    return value( "scanner/intervaltime", 60 ).toUInt();
 }
 
 
 void
 TomahawkSettings::setScannerTime( uint time )
 {
-    setValue( "scannerTime", time );
+    setValue( "scanner/intervaltime", time );
 }
 
 
 bool
 TomahawkSettings::watchForChanges() const
 {
-    return value( "watchForChanges", false ).toBool();
+    return value( "scanner/watchforchanges", false ).toBool();
 }
 
 
 void
 TomahawkSettings::setWatchForChanges( bool watch )
 {
-    setValue( "watchForChanges", watch );
+    setValue( "scanner/watchforchanges", watch );
 }
 
 void

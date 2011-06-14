@@ -118,9 +118,15 @@ SettingsDialog::SettingsDialog( QWidget *parent )
     ui->checkBoxWatchForChanges->setChecked( s->watchForChanges() );
     ui->scannerTimeSpinBox->setValue( s->scannerTime() );
     if ( s->scannerMode() == TomahawkSettings::Files )
-        ui->scannerFileModeButton->setChecked( true );
-    else
+    {
         ui->scannerDirModeButton->setChecked( false );
+        ui->scannerFileModeButton->setChecked( true );
+    }
+    else
+    {
+        ui->scannerDirModeButton->setChecked( true );
+        ui->scannerFileModeButton->setChecked( false );
+    }
     connect( ui->checkBoxWatchForChanges, SIGNAL( clicked( bool ) ), SLOT( updateScanOptionsView() ) );
     connect( ui->scannerDirModeButton, SIGNAL( clicked( bool ) ), SLOT( updateScanOptionsView() ) );
     connect( ui->scannerFileModeButton, SIGNAL( clicked( bool ) ), SLOT( updateScanOptionsView() ) );
@@ -133,6 +139,22 @@ SettingsDialog::SettingsDialog( QWidget *parent )
     {
         ui->scanInformationLabel->setText( "Directory mode mode uses the changed time of collection directories to\ndetermine if files have changed. This is less processor, disk, and \nnetwork-intensive when simply running checks, so may be better for\nfiles over a network connection. However, it will only pick up changes\nif a file has been added to or removed from a directory, and scans\nentire directories at once (so is not good for very flat collections)." );
         ui->scannerDirModeButton->setChecked( true );
+    }
+    if ( ui->checkBoxWatchForChanges->isChecked() )
+    {
+        ui->scanTimeLabel->show();
+        ui->scannerTimeSpinBox->show();
+        ui->scannerDirModeButton->show();
+        ui->scannerFileModeButton->show();
+        ui->scanInformationLabel->show();
+    }
+    else
+    {
+        ui->scanTimeLabel->hide();
+        ui->scannerTimeSpinBox->hide();
+        ui->scannerDirModeButton->hide();
+        ui->scannerFileModeButton->hide();
+        ui->scanInformationLabel->hide();
     }
     
     // NOW PLAYING
