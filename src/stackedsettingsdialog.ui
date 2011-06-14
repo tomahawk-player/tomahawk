@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>641</width>
-    <height>370</height>
+    <height>393</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -302,7 +302,7 @@
               <item>
                <widget class="QRadioButton" name="scannerFileModeButton">
                 <property name="text">
-                 <string>Files Mode</string>
+                 <string>Files Mode (Recommended)</string>
                 </property>
                </widget>
               </item>
@@ -315,55 +315,60 @@
               </item>
              </layout>
             </item>
+            <item>
+             <layout class="QVBoxLayout" name="verticalLayout_21">
+              <item>
+               <layout class="QHBoxLayout" name="horizontalLayout_8">
+                <item>
+                 <widget class="QLabel" name="scanInformationLabelFiles">
+                  <property name="text">
+                   <string>⚫ More accurate
+⚫ Uses more computer resources</string>
+                  </property>
+                  <property name="alignment">
+                   <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignTop</set>
+                  </property>
+                  <property name="margin">
+                   <number>2</number>
+                  </property>
+                 </widget>
+                </item>
+                <item>
+                 <widget class="QLabel" name="scanInformationLabelDirs">
+                  <property name="text">
+                   <string>⚫ Less accurate
+⚫ Uses less computer resources
+⚫ Can be better for network files</string>
+                  </property>
+                  <property name="alignment">
+                   <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignTop</set>
+                  </property>
+                  <property name="margin">
+                   <number>2</number>
+                  </property>
+                 </widget>
+                </item>
+               </layout>
+              </item>
+              <item>
+               <spacer name="verticalSpacer">
+                <property name="orientation">
+                 <enum>Qt::Vertical</enum>
+                </property>
+                <property name="sizeHint" stdset="0">
+                 <size>
+                  <width>20</width>
+                  <height>40</height>
+                 </size>
+                </property>
+               </spacer>
+              </item>
+             </layout>
+            </item>
            </layout>
           </widget>
          </item>
          <item>
-          <layout class="QVBoxLayout" name="verticalLayout_2">
-           <item>
-            <spacer name="verticalSpacer_9">
-             <property name="orientation">
-              <enum>Qt::Vertical</enum>
-             </property>
-             <property name="sizeType">
-              <enum>QSizePolicy::Minimum</enum>
-             </property>
-             <property name="sizeHint" stdset="0">
-              <size>
-               <width>20</width>
-               <height>20</height>
-              </size>
-             </property>
-            </spacer>
-           </item>
-           <item>
-            <widget class="QLabel" name="scanInformationLabel">
-             <property name="text">
-              <string>Directory mode mode uses the changed time of collection directories to
-determine if files have changed. This is less processor, disk, and 
-network-intensive when simply running checks, so may be better for
-files over a network connection. However, it will only pick up changes
-if a file has been added to or removed from a directory, and scans
-entire directories at once (so is not good for very flat collections).</string>
-             </property>
-            </widget>
-           </item>
-           <item>
-            <spacer name="verticalSpacer">
-             <property name="orientation">
-              <enum>Qt::Vertical</enum>
-             </property>
-             <property name="sizeHint" stdset="0">
-              <size>
-               <width>20</width>
-               <height>40</height>
-              </size>
-             </property>
-            </spacer>
-           </item>
-          </layout>
-         </item>
-         <item> 
           <widget class="QGroupBox" name="nowPlaying">
            <property name="title">
             <string>Now Playing Information</string>
@@ -390,7 +395,7 @@ entire directories at once (so is not good for very flat collections).</string>
           </widget>
          </item>
          <item>
-          <spacer name="verticalSpacer">
+          <spacer name="verticalSpacer_1">
            <property name="orientation">
             <enum>Qt::Vertical</enum>
            </property>
