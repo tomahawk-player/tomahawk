@@ -90,8 +90,8 @@ DynamicModel::newTrackGenerated( const Tomahawk::query_ptr& query )
 
             return;
         } else {
-            if( !m_deduper.isEmpty() )
-                m_deduper.pop_back();
+            if( m_deduper.size() > 30 )
+                m_deduper.pop_front();
             m_deduper.append( QPair< QString, QString >( query->track(), query->artist() ) );
         }
 
