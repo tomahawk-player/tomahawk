@@ -69,6 +69,7 @@ AdiumPlugin::AdiumPlugin()
                                              SLOT( settingsChanged() ), Qt::QueuedConnection );
 
     m_pauseTimer = new QTimer( this );
+    m_pauseTimer->setSingleShot( true );
     connect( m_pauseTimer, SIGNAL( timeout() ),
              this, SLOT( clearStatus() ) );
 }
