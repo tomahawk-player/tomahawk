@@ -1,5 +1,5 @@
 /* === This file is part of Tomahawk Player - <http://tomahawk-player.org> ===
- * 
+ *
  *   Copyright 2010-2011, Christian Muehlhaeuser <muesli@tomahawk-player.org>
  *
  *   Tomahawk is free software: you can redistribute it and/or modify
@@ -52,7 +52,7 @@ public:
     bool indexReady() const { return m_indexReady; }
 
     void loadIndex();
-    
+
     bool isReady() const { return m_ready; }
 
 signals:
@@ -67,13 +67,14 @@ public slots:
 
 private slots:
     void setIsReadyTrue() { m_ready = true; }
-    
+
 private:
     bool m_ready;
     DatabaseImpl* m_impl;
     DatabaseWorker* m_workerRW;
     QHash< QString, DatabaseWorker* > m_workers;
     bool m_indexReady;
+    int m_maxConcurrentThreads;
 
     static Database* s_instance;
 };

@@ -1,5 +1,5 @@
 /* === This file is part of Tomahawk Player - <http://tomahawk-player.org> ===
- * 
+ *
  *   Copyright 2010-2011, Christian Muehlhaeuser <muesli@tomahawk-player.org>
  *
  *   Tomahawk is free software: you can redistribute it and/or modify
@@ -18,7 +18,8 @@
 
 #include "database.h"
 
-#define WORKER_THREADS 5
+#define DEFAULT_WORKER_THREADS 4
+#define MAX_WORKER_THREADS 16
 
 Database* Database::s_instance = 0;
 
@@ -37,6 +38,9 @@ Database::Database( const QString& dbname, QObject* parent )
     , m_workerRW( new DatabaseWorker( m_impl, this, true ) )
 {
     s_instance = this;
+
+    m_maxConcurrentThreads = qBound( DEFAULT_WORKER_THREADS, QThread::idealThreadCount() * 2, MAX_WORKER_THREADS );
+    qDebug() << Q_FUNC_INFO << "Using" << m_maxConcurrentThreads << "threads";
 
     connect( m_impl, SIGNAL( indexReady() ), SIGNAL( indexReady() ) );
     connect( m_impl, SIGNAL( indexReady() ), SIGNAL( ready() ) );
@@ -76,7 +80,7 @@ Database::enqueue( QSharedPointer<DatabaseCommand> lc )
     {
         // find existing amount of worker threads for commandname
         // create new thread if < WORKER_THREADS
-        if ( m_workers.count( lc->commandname() ) < WORKER_THREADS )
+        if ( m_workers.count( lc->commandname() ) < m_maxConcurrentThreads )
         {
             DatabaseWorker* worker = new DatabaseWorker( m_impl, this, false );
             worker->start();
