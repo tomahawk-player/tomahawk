@@ -151,15 +151,27 @@ TomahawkSettings::scannerPaths()
     #ifndef TOMAHAWK_HEADLESS
     if( value( "scanner/paths" ).isNull() )
     {
-        setValue( "scanner/paths", value( "scannerpath" ) );
+        if ( !value( "scannerpath" ).isNull() )
+            setValue( "scanner/paths", QStringList( value( "scannerpath" ).toString() ) );
+        else if ( !value( "scannerpaths" ).isNull() )
+            setValue( "scanner/paths", value( "scannerpaths" ) );
+        sync();
         remove( "scannerpath" );
+        remove( "scannerpaths" );
+        sync();
     }
     return value( "scanner/paths", QDesktopServices::storageLocation( QDesktopServices::MusicLocation ) ).toStringList();
     #else
     if( value( "scanner/paths" ).isNull() )
     {
-        setValue( "scanner/paths", value( "scannerpath" ) );
+        if ( !value( "scannerpath" ).isNull() )
+            setValue( "scanner/paths", QStringList( value( "scannerpath" ).toString() ) );
+        else if ( !value( "scannerpaths" ).isNull() )
+            setValue( "scanner/paths", value( "scannerpaths" ) );
+        sync();
         remove( "scannerpath" );
+        remove( "scannerpaths" );
+        sync();
     }
     return value( "scanner/paths", "" ).toStringList();
     #endif
@@ -177,7 +189,7 @@ bool
 TomahawkSettings::hasScannerPaths() const
 {
     //FIXME: After enough time, remove this hack
-    return contains( "scanner/paths" ) || contains( "scannerpath" );
+    return contains( "scanner/paths" ) || contains( "scannerpath" ) || contains( "scannerpaths" );
 }
 
 
