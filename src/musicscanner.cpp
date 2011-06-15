@@ -283,6 +283,16 @@ MusicScanner::listerFinished( const QMap<QString, unsigned int>& newmtimes  )
     connect( cmd, SIGNAL( finished() ), SIGNAL( finished() ) );
 
     Database::instance()->enqueue( QSharedPointer<DatabaseCommand>(cmd) );
+
+    if ( !m_dirLister.isNull() )
+    {
+        m_dirListerThreadController->quit();;
+        m_dirListerThreadController->wait( 60000 );
+
+        delete m_dirLister.data();
+        delete m_dirListerThreadController;
+        m_dirListerThreadController = 0;
+    }
 }
 
 
