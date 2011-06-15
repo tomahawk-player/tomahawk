@@ -117,7 +117,9 @@ void
 ScanManager::scanTimerTimeout()
 {
     qDebug() << Q_FUNC_INFO;
-    if ( !Database::instance() || ( Database::instance() && !Database::instance()->isReady() ) )
+    if ( !TomahawkSettings::instance()->watchForChanges() ||
+         !Database::instance() ||
+         ( Database::instance() && !Database::instance()->isReady() ) )
         return;
     else
         runScan();
