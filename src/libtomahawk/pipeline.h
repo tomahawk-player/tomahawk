@@ -79,7 +79,7 @@ public slots:
 signals:
     void idle();
     void resolving( const Tomahawk::query_ptr& query );
-    
+
     void resolverAdded( Resolver* );
     void resolverRemoved( Resolver* );
 
@@ -104,6 +104,7 @@ private:
 
     // store queries here until DB index is loaded, then shunt them all
     QList< query_ptr > m_queries_pending;
+    int m_maxConcurrentQueries;
     bool m_running;
 
     static Pipeline* s_instance;

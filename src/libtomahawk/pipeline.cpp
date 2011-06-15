@@ -25,7 +25,7 @@
 #include "functimeout.h"
 #include "database/database.h"
 
-#define CONCURRENT_QUERIES 4
+#define DEFAULT_CONCURRENT_QUERIES 4
 
 using namespace Tomahawk;
 
@@ -44,6 +44,9 @@ Pipeline::Pipeline( QObject* parent )
     , m_running( false )
 {
     s_instance = this;
+
+    m_maxConcurrentQueries = qMax( DEFAULT_CONCURRENT_QUERIES, QThread::idealThreadCount() * 2 );
+    qDebug() << Q_FUNC_INFO << "Using" << m_maxConcurrentQueries << "threads";
 }
 
 
@@ -82,7 +85,7 @@ void
 Pipeline::removeResolver( Resolver* r )
 {
     QMutexLocker lock( &m_mut );
-    
+
     m_resolvers.removeAll( r );
     emit resolverRemoved( r );
 }
@@ -244,7 +247,7 @@ Pipeline::shuntNext()
 
 //        qDebug() << Q_FUNC_INFO << m_qidsState.count();
         // Check if we are ready to dispatch more queries
-        if ( m_qidsState.count() >= CONCURRENT_QUERIES )
+        if ( m_qidsState.count() >= m_maxConcurrentQueries )
             return;
 
         /*
