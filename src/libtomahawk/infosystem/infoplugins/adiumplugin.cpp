@@ -76,7 +76,8 @@ AdiumPlugin::AdiumPlugin()
 AdiumPlugin::~AdiumPlugin()
 {
     qDebug() << Q_FUNC_INFO;
-    setStatus( "" );
+    if( m_active )
+      setStatus( "" );
 }
 
 void
