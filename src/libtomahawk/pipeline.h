@@ -51,10 +51,7 @@ public:
 
     void reportResults( QID qid, const QList< result_ptr >& results );
 
-    /// sorter to rank resolver priority
-    static bool resolverSorter( const Resolver* left, const Resolver* right );
-
-    void addResolver( Resolver* r, bool sort = true );
+    void addResolver( Resolver* r );
     void removeResolver( Resolver* r );
 
     query_ptr query( const QID& qid ) const
@@ -89,6 +86,8 @@ private slots:
     void shuntNext();
 
 private:
+    Tomahawk::Resolver* nextResolver( const Tomahawk::query_ptr& query ) const;
+
     void setQIDState( const Tomahawk::query_ptr& query, int state );
     int incQIDState( const Tomahawk::query_ptr& query );
     int decQIDState( const Tomahawk::query_ptr& query );

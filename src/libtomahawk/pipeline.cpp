@@ -26,6 +26,7 @@
 #include "database/database.h"
 
 #define DEFAULT_CONCURRENT_QUERIES 4
+#define MAX_CONCURRENT_QUERIES 16
 
 using namespace Tomahawk;
 
@@ -45,7 +46,7 @@ Pipeline::Pipeline( QObject* parent )
 {
     s_instance = this;
 
-    m_maxConcurrentQueries = qMax( DEFAULT_CONCURRENT_QUERIES, QThread::idealThreadCount() * 2 );
+    m_maxConcurrentQueries = qBound( DEFAULT_CONCURRENT_QUERIES, QThread::idealThreadCount(), MAX_CONCURRENT_QUERIES );
     qDebug() << Q_FUNC_INFO << "Using" << m_maxConcurrentQueries << "threads";
 }
 
@@ -92,27 +93,13 @@ Pipeline::removeResolver( Resolver* r )
 
 
 void
-Pipeline::addResolver( Resolver* r, bool sort )
+Pipeline::addResolver( Resolver* r )
 {
     QMutexLocker lock( &m_mut );
 
-    m_resolvers.append( r );
-    if( sort )
-    {
-        qSort( m_resolvers.begin(),
-               m_resolvers.end(),
-               Pipeline::resolverSorter );
-    }
     qDebug() << "Adding resolver" << r->name();
+    m_resolvers.append( r );
     emit resolverAdded( r );
-
-/*    qDebug() << "Current pipeline:";
-    foreach( Resolver * r, m_resolvers )
-    {
-        qDebug() << "* score:" << r->weight()
-                 << "pref:" << r->preference()
-                 << "name:" << r->name();
-    }*/
 }
 
 
@@ -255,7 +242,7 @@ Pipeline::shuntNext()
             and after timeout, dispatch to next highest etc, aborting when solved
         */
         q = m_queries_pending.takeFirst();
-        q->setLastPipelineWeight( 101 );
+        q->setCurrentResolver( 0 );
     }
 
     setQIDState( q, rc );
@@ -289,46 +276,20 @@ Pipeline::shunt( const query_ptr& q )
     if ( !m_running )
         return;
 
-//    qDebug() << Q_FUNC_INFO << q->solved() << q->toString() << q->id();
-    unsigned int lastweight = 0;
-    unsigned int lasttimeout = 0;
-
+    Resolver* r = 0;
     if ( !q->resolvingFinished() )
+        r = nextResolver( q );
+
+    if ( r )
     {
-        int i = 0;
-        foreach( Resolver* r, m_resolvers )
-        {
-            i++;
-            if ( r->weight() >= q->lastPipelineWeight() )
-                continue;
+        qDebug() << "Dispatching to resolver" << r->name() << q->toString() << q->solved() << q->id();
 
-            if ( lastweight == 0 )
-            {
-                lastweight = r->weight();
-                lasttimeout = r->timeout();
-                //qDebug() << "Shunting into weight" << lastweight << "q:" << q->toString();
-            }
-            if ( lastweight == r->weight() )
-            {
-                // snag the lowest timeout at this weight
-                if ( r->timeout() < lasttimeout )
-                    lasttimeout = r->timeout();
+        q->setCurrentResolver( r );
+        r->resolve( q );
+        emit resolving( q );
 
-                qDebug() << "Dispatching to resolver" << r->name() << q->toString() << q->solved() << q->id();
-                r->resolve( q );
-                emit resolving( q );
-            }
-            else
-                break;
-        }
-    }
-
-    if ( lastweight > 0 )
-    {
-        //            qDebug() << "Shunting in" << lasttimeout << "ms, q:" << q->toString();
-        q->setLastPipelineWeight( lastweight );
         m_qidsTimeout.insert( q->id(), true );
-        new FuncTimeout( lasttimeout, boost::bind( &Pipeline::timeoutShunt, this, q ), this );
+        new FuncTimeout( r->timeout(), boost::bind( &Pipeline::timeoutShunt, this, q ), this );
     }
     else
     {
@@ -340,13 +301,27 @@ Pipeline::shunt( const query_ptr& q )
 }
 
 
-bool
-Pipeline::resolverSorter( const Resolver* left, const Resolver* right )
+Tomahawk::Resolver*
+Pipeline::nextResolver( const Tomahawk::query_ptr& query ) const
 {
-    if( left->weight() == right->weight() ) // TODO dispatch in parallel
-        return left;
-    else
-        return left->weight() > right->weight();
+    Resolver* newResolver = 0;
+
+    foreach ( Resolver* r, m_resolvers )
+    {
+        if ( query->resolvedBy().contains( r ) )
+            continue;
+
+        if ( !newResolver )
+        {
+            newResolver = r;
+            continue;
+        }
+
+        if ( r->weight() > newResolver->weight() )
+            newResolver = r;
+    }
+
+    return newResolver;
 }
 
 
