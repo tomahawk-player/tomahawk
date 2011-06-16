@@ -79,6 +79,7 @@ AudioControls::AudioControls( QWidget* parent )
     ui->repeatButton->setPixmap( RESPATH "images/repeat-off-pressed.png", QIcon::Off, QIcon::Active );
     ui->volumeLowButton->setPixmap( RESPATH "images/volume-icon-muted.png" );
     ui->volumeHighButton->setPixmap( RESPATH "images/volume-icon-full.png" );
+    ui->loveButton->setPixmap( RESPATH "images/not-loved.png" );
 
     ui->ownerLabel->setForegroundRole( QPalette::Dark );
     ui->metaDataArea->setStyleSheet( "QWidget#metaDataArea {\nborder-width: 4px;\nborder-image: url(" RESPATH "images/now-playing-panel.png) 4 4 4 4 stretch stretch; }" );
@@ -150,6 +151,7 @@ AudioControls::AudioControls( QWidget* parent )
     connect( ui->artistTrackLabel, SIGNAL( clickedArtist() ), SLOT( onArtistClicked() ) );
     connect( ui->artistTrackLabel, SIGNAL( clickedTrack() ), SLOT( onTrackClicked() ) );
     connect( ui->albumLabel,       SIGNAL( clickedAlbum() ), SLOT( onAlbumClicked() ) );
+    connect( ui->loveButton,       SIGNAL( clicked() ), SLOT( onLoveButtonClicked() ) );
 
     // <From AudioEngine>
     connect( AudioEngine::instance(), SIGNAL( loading( Tomahawk::result_ptr ) ), SLOT( onPlaybackLoading( Tomahawk::result_ptr ) ) );
@@ -280,6 +282,7 @@ AudioControls::onPlaybackLoading( const Tomahawk::result_ptr& result )
     ui->albumLabel->setResult( result );
     ui->ownerLabel->setText( result->friendlySource() );
     ui->coverImage->setPixmap( m_defaultCover );
+    ui->loveButton->setVisible( true );
 
     ui->timeLabel->setText( TomahawkUtils::timeToString( 0 ) );
     ui->timeLeftLabel->setText( "-" + TomahawkUtils::timeToString( result->duration() ) );
@@ -321,6 +324,7 @@ AudioControls::onPlaybackResumed()
     ui->playPauseButton->setEnabled( false );
     ui->pauseButton->setVisible( true );
     ui->pauseButton->setEnabled( true );
+    ui->loveButton->setVisible( true );
 }
 
 
@@ -336,6 +340,7 @@ AudioControls::onPlaybackStopped()
     ui->timeLeftLabel->setText( "" );
     ui->coverImage->setPixmap( QPixmap() );
     ui->seekSlider->setVisible( false );
+    ui->loveButton->setVisible( false );
 
     ui->pauseButton->setVisible( false );
     ui->pauseButton->setEnabled( false );
