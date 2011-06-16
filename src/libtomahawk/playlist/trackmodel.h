@@ -74,7 +74,7 @@ public:
 
     virtual QPersistentModelIndex currentItem() { return m_currentIndex; }
 
-virtual Tomahawk::PlaylistInterface::RepeatMode repeatMode() const { return Tomahawk::PlaylistInterface::NoRepeat; }
+    virtual Tomahawk::PlaylistInterface::RepeatMode repeatMode() const { return Tomahawk::PlaylistInterface::NoRepeat; }
     virtual bool shuffled() const { return false; }
 
     virtual void ensureResolved();

@@ -55,7 +55,7 @@ public:
     virtual Tomahawk::PlaylistInterface::ViewMode viewMode() const { return Tomahawk::PlaylistInterface::Album; }
 
 signals:
-    void repeatModeChanged( PlaylistInterface::RepeatMode mode );
+    void repeatModeChanged( Tomahawk::PlaylistInterface::RepeatMode mode );
     void shuffleModeChanged( bool enabled );
 
     void trackCountChanged( unsigned int tracks );

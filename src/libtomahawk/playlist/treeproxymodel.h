@@ -59,7 +59,7 @@ public:
     TreeModelItem* itemFromIndex( const QModelIndex& index ) const { return sourceModel()->itemFromIndex( index ); }
 
 signals:
-    void repeatModeChanged( PlaylistInterface::RepeatMode mode );
+    void repeatModeChanged( Tomahawk::PlaylistInterface::RepeatMode mode );
     void shuffleModeChanged( bool enabled );
 
     void trackCountChanged( unsigned int tracks );
