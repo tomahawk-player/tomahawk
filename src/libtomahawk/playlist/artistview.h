@@ -48,7 +48,7 @@ public:
     void setModel( TreeModel* model );
 
     virtual QWidget* widget() { return this; }
-    virtual PlaylistInterface* playlistInterface() const { return proxyModel(); }
+    virtual Tomahawk::PlaylistInterface* playlistInterface() const { return proxyModel(); }
 
     virtual QString title() const { return m_model->title(); }
     virtual QString description() const { return m_model->description(); }

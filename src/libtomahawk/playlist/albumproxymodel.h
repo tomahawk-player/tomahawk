@@ -1,5 +1,5 @@
 /* === This file is part of Tomahawk Player - <http://tomahawk-player.org> ===
- * 
+ *
  *   Copyright 2010-2011, Christian Muehlhaeuser <muesli@tomahawk-player.org>
  *
  *   Tomahawk is free software: you can redistribute it and/or modify
@@ -26,7 +26,7 @@
 
 #include "dllmacro.h"
 
-class DLLEXPORT AlbumProxyModel : public QSortFilterProxyModel, public PlaylistInterface
+class DLLEXPORT AlbumProxyModel : public QSortFilterProxyModel, public Tomahawk::PlaylistInterface
 {
 Q_OBJECT
 
@@ -38,7 +38,7 @@ public:
     virtual void setSourceModel( QAbstractItemModel* sourceModel );
 
     virtual QList<Tomahawk::query_ptr> tracks() { Q_ASSERT( FALSE ); QList<Tomahawk::query_ptr> queries; return queries; }
-    
+
     virtual int unfilteredTrackCount() const { return sourceModel()->rowCount( QModelIndex() ); }
     virtual int trackCount() const { return rowCount( QModelIndex() ); }
     virtual int albumCount() const { return rowCount( QModelIndex() ); }
@@ -50,10 +50,10 @@ public:
 
     virtual void setFilter( const QString& pattern );
 
-    virtual PlaylistInterface::RepeatMode repeatMode() const { return m_repeatMode; }
+    virtual Tomahawk::PlaylistInterface::RepeatMode repeatMode() const { return m_repeatMode; }
     virtual bool shuffled() const { return m_shuffled; }
-    virtual PlaylistInterface::ViewMode viewMode() const { return PlaylistInterface::Album; }
-    
+    virtual Tomahawk::PlaylistInterface::ViewMode viewMode() const { return Tomahawk::PlaylistInterface::Album; }
+
 signals:
     void repeatModeChanged( PlaylistInterface::RepeatMode mode );
     void shuffleModeChanged( bool enabled );

@@ -69,7 +69,7 @@ public:
 
     bool isTemporary() const;
 signals:
-    void repeatModeChanged( PlaylistInterface::RepeatMode mode );
+    void repeatModeChanged( Tomahawk::PlaylistInterface::RepeatMode mode );
     void shuffleModeChanged( bool enabled );
 
     void itemSizeChanged( const QModelIndex& index );

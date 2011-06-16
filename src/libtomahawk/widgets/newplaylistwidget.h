@@ -46,7 +46,7 @@ public:
     ~NewPlaylistWidget();
 
     virtual QWidget* widget() { return this; }
-    virtual PlaylistInterface* playlistInterface() const { return 0; }
+    virtual Tomahawk::PlaylistInterface* playlistInterface() const { return 0; }
 
     virtual QString title() const { return tr( "Create a new playlist" ); }
     virtual QString description() const { return QString(); }

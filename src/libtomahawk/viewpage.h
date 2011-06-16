@@ -38,7 +38,7 @@ public:
     virtual ~ViewPage() {}
 
     virtual QWidget* widget() = 0;
-    virtual PlaylistInterface* playlistInterface() const = 0;
+    virtual Tomahawk::PlaylistInterface* playlistInterface() const = 0;
 
     virtual QString title() const = 0;
     virtual QString description() const = 0;

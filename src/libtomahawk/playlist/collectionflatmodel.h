@@ -57,7 +57,7 @@ public:
     virtual void append( const Tomahawk::query_ptr& /*query*/ ) {}
 
 signals:
-    void repeatModeChanged( PlaylistInterface::RepeatMode mode );
+    void repeatModeChanged( Tomahawk::PlaylistInterface::RepeatMode mode );
     void shuffleModeChanged( bool enabled );
 
     void loadingStarted();

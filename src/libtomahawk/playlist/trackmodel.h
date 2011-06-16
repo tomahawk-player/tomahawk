@@ -74,7 +74,7 @@ public:
 
     virtual QPersistentModelIndex currentItem() { return m_currentIndex; }
 
-    virtual PlaylistInterface::RepeatMode repeatMode() const { return PlaylistInterface::NoRepeat; }
+virtual Tomahawk::PlaylistInterface::RepeatMode repeatMode() const { return Tomahawk::PlaylistInterface::NoRepeat; }
     virtual bool shuffled() const { return false; }
 
     virtual void ensureResolved();
@@ -86,7 +86,7 @@ public:
     TrackModelItem* m_rootItem;
 
 signals:
-    void repeatModeChanged( PlaylistInterface::RepeatMode mode );
+    void repeatModeChanged( Tomahawk::PlaylistInterface::RepeatMode mode );
     void shuffleModeChanged( bool enabled );
 
     void trackCountChanged( unsigned int tracks );
@@ -100,7 +100,7 @@ public slots:
     virtual void removeIndex( const QModelIndex& index, bool moreToCome = false );
     virtual void removeIndexes( const QList<QModelIndex>& indexes );
 
-    virtual void setRepeatMode( PlaylistInterface::RepeatMode /*mode*/ ) {}
+    virtual void setRepeatMode( Tomahawk::PlaylistInterface::RepeatMode /*mode*/ ) {}
     virtual void setShuffled( bool /*shuffled*/ ) {}
 
 protected:

@@ -30,6 +30,8 @@
 
 #define VERSION 3
 
+using namespace Tomahawk;
+
 TomahawkSettings* TomahawkSettings::s_instance = 0;
 
 
@@ -199,7 +201,7 @@ TomahawkSettings::scannerMode() const
     return (TomahawkSettings::ScannerMode) value( "scanner/mode", TomahawkSettings::Files ).toInt();
 }
 
- 
+
 void
 TomahawkSettings::setScannerMode( ScannerMode mode )
 {

@@ -44,7 +44,7 @@ signals:
     void emptinessChanged( bool isEmpty );
 
 private slots:
-    void playlistChanged( PlaylistInterface* );
+    void playlistChanged( Tomahawk::PlaylistInterface* );
     void onSourceAdded( const Tomahawk::source_ptr& source );
     void onPlaylistsRemoved( QList<Tomahawk::playlist_ptr> );
     void loadFromSettings();

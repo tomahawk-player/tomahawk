@@ -63,7 +63,7 @@ public slots:
     void setFilter( const QString& filter );
 
 private slots:
-    void onModeChanged( PlaylistInterface::ViewMode mode );
+    void onModeChanged( Tomahawk::PlaylistInterface::ViewMode mode );
     void onFlatMode();
     void onArtistMode();
     void onAlbumMode();

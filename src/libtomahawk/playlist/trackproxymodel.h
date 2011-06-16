@@ -26,7 +26,7 @@
 
 #include "dllmacro.h"
 
-class DLLEXPORT TrackProxyModel : public QSortFilterProxyModel, public PlaylistInterface
+class DLLEXPORT TrackProxyModel : public QSortFilterProxyModel, public Tomahawk::PlaylistInterface
 {
 Q_OBJECT
 

@@ -43,7 +43,7 @@ public:
     virtual void setModel( QAbstractItemModel* model );
 
     virtual QWidget* widget() { return this; }
-    virtual PlaylistInterface* playlistInterface() const { return proxyModel(); }
+    virtual Tomahawk::PlaylistInterface* playlistInterface() const { return proxyModel(); }
 
     virtual bool showFilter() const { return true; }
 

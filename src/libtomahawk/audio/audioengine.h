@@ -31,7 +31,10 @@
 
 #define AUDIO_VOLUME_STEP 5
 
-class PlaylistInterface;
+namespace Tomahawk
+{
+    class PlaylistInterface;
+}
 
 class DLLEXPORT AudioEngine : public QObject
 {
@@ -50,10 +53,10 @@ public:
     bool isPaused() const { return m_mediaObject->state() == Phonon::PausedState; }
 
     /* Returns the PlaylistInterface of the currently playing track. Note: This might be different to the current playlist! */
-    PlaylistInterface* currentTrackPlaylist() const { return m_currentTrackPlaylist; }
+    Tomahawk::PlaylistInterface* currentTrackPlaylist() const { return m_currentTrackPlaylist; }
 
     /* Returns the PlaylistInterface of the current playlist. Note: The currently playing track might still be from a different playlist! */
-    PlaylistInterface* playlist() const { return m_playlist; }
+    Tomahawk::PlaylistInterface* playlist() const { return m_playlist; }
 
 public slots:
     void playPause();
@@ -71,9 +74,9 @@ public slots:
     void onVolumeChanged( qreal volume ) { emit volumeChanged( volume * 100 ); }
     void mute();
 
-    void playItem( PlaylistInterface* playlist, const Tomahawk::result_ptr& result );
-    void setPlaylist( PlaylistInterface* playlist );
-    void setQueue( PlaylistInterface* queue ) { m_queue = queue; }
+    void playItem( Tomahawk::PlaylistInterface* playlist, const Tomahawk::result_ptr& result );
+    void setPlaylist( Tomahawk::PlaylistInterface* playlist );
+    void setQueue( Tomahawk::PlaylistInterface* queue ) { m_queue = queue; }
 
     void onTrackAboutToFinish();
 
@@ -91,7 +94,7 @@ signals:
     void timerSeconds( unsigned int secondsElapsed );
     void timerPercentage( unsigned int percentage );
 
-    void playlistChanged( PlaylistInterface* playlist );
+    void playlistChanged( Tomahawk::PlaylistInterface* playlist );
 
     void error( AudioErrorCode errorCode );
 
@@ -115,9 +118,9 @@ private:
 
     Tomahawk::result_ptr m_currentTrack;
     Tomahawk::result_ptr m_lastTrack;
-    PlaylistInterface* m_playlist;
-    PlaylistInterface* m_currentTrackPlaylist;
-    PlaylistInterface* m_queue;
+    Tomahawk::PlaylistInterface* m_playlist;
+    Tomahawk::PlaylistInterface* m_currentTrackPlaylist;
+    Tomahawk::PlaylistInterface* m_queue;
 
     Phonon::MediaObject* m_mediaObject;
     Phonon::AudioOutput* m_audioOutput;

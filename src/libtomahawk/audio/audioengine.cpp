@@ -29,6 +29,8 @@
 
 #include "album.h"
 
+using namespace Tomahawk;
+
 AudioEngine* AudioEngine::s_instance = 0;
 
 static QString s_aeInfoIdentifier = QString( "AUDIOENGINE" );
@@ -319,7 +321,7 @@ AudioEngine::loadNextTrack()
 
 
 void
-AudioEngine::playItem( PlaylistInterface* playlist, const Tomahawk::result_ptr& result )
+AudioEngine::playItem( Tomahawk::PlaylistInterface* playlist, const Tomahawk::result_ptr& result )
 {
     qDebug() << Q_FUNC_INFO;
 

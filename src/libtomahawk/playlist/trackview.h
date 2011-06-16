@@ -28,7 +28,6 @@
 
 class QAction;
 class LoadingSpinner;
-class PlaylistInterface;
 class TrackHeader;
 class TrackModel;
 class TrackProxyModel;

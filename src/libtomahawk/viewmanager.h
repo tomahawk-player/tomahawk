@@ -72,9 +72,9 @@ public:
     bool isSuperCollectionVisible() const;
     bool isNewPlaylistPageVisible() const;
 
-    PlaylistInterface* currentPlaylistInterface() const;
+    Tomahawk::PlaylistInterface* currentPlaylistInterface() const;
     Tomahawk::ViewPage* currentPage() const;
-    Tomahawk::ViewPage* pageForInterface( PlaylistInterface* interface ) const;
+    Tomahawk::ViewPage* pageForInterface( Tomahawk::PlaylistInterface* interface ) const;
     int positionInHistory( Tomahawk::ViewPage* page ) const;
 
     Tomahawk::ViewPage* show( Tomahawk::ViewPage* page );
@@ -97,13 +97,13 @@ signals:
     void numArtistsChanged( unsigned int artists );
     void numShownChanged( unsigned int shown );
 
-    void repeatModeChanged( PlaylistInterface::RepeatMode mode );
+    void repeatModeChanged( Tomahawk::PlaylistInterface::RepeatMode mode );
     void shuffleModeChanged( bool enabled );
 
     void statsAvailable( bool b );
     void modesAvailable( bool b );
     void filterAvailable( bool b );
-    void modeChanged( PlaylistInterface::ViewMode mode );
+    void modeChanged( Tomahawk::PlaylistInterface::ViewMode mode );
 
     void playClicked();
     void pauseClicked();
@@ -138,10 +138,10 @@ public slots:
     void showQueue();
     void hideQueue();
 
-    void setRepeatMode( PlaylistInterface::RepeatMode mode );
+    void setRepeatMode( Tomahawk::PlaylistInterface::RepeatMode mode );
     void setShuffled( bool enabled );
 
-    void playlistInterfaceChanged( PlaylistInterface* );
+    void playlistInterfaceChanged( Tomahawk::PlaylistInterface* );
 
     // called by the playlist creation dbcmds
     void createPlaylist( const Tomahawk::source_ptr& src, const QVariant& contents );
@@ -164,10 +164,10 @@ private:
     void unlinkPlaylist();
     void saveCurrentPlaylistSettings();
     void loadCurrentPlaylistSettings();
-    
-    Tomahawk::playlist_ptr playlistForInterface( PlaylistInterface* interface ) const;
-    Tomahawk::dynplaylist_ptr dynamicPlaylistForInterface( PlaylistInterface* interface ) const;
-    Tomahawk::collection_ptr collectionForInterface( PlaylistInterface* interface ) const;
+
+    Tomahawk::playlist_ptr playlistForInterface( Tomahawk::PlaylistInterface* interface ) const;
+    Tomahawk::dynplaylist_ptr dynamicPlaylistForInterface( Tomahawk::PlaylistInterface* interface ) const;
+    Tomahawk::collection_ptr collectionForInterface( Tomahawk::PlaylistInterface* interface ) const;
 
     QWidget* m_widget;
     InfoBar* m_infobar;

@@ -27,6 +27,9 @@
 #include "dllmacro.h"
 #include "result.h"
 
+namespace Tomahawk
+{
+
 class DLLEXPORT PlaylistInterface
 {
 public:
@@ -68,6 +71,8 @@ private:
     QObject* m_object;
 
     QString m_filter;
+};
+
 };
 
 #endif // PLAYLISTINTERFACE_H

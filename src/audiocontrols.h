@@ -43,7 +43,7 @@ signals:
     void pausePressed();
 
 public slots:
-    void onRepeatModeChanged( PlaylistInterface::RepeatMode mode );
+    void onRepeatModeChanged( Tomahawk::PlaylistInterface::RepeatMode mode );
     void onShuffleModeChanged( bool enabled );
 
 protected:
@@ -81,7 +81,7 @@ private:
     QPixmap m_defaultCover;
 
     Tomahawk::result_ptr m_currentTrack;
-    PlaylistInterface::RepeatMode m_repeatMode;
+    Tomahawk::PlaylistInterface::RepeatMode m_repeatMode;
     bool m_shuffled;
 };
 

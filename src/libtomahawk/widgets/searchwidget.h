@@ -45,7 +45,7 @@ public:
     ~SearchWidget();
 
     virtual QWidget* widget() { return this; }
-    virtual PlaylistInterface* playlistInterface() const { return 0; }
+    virtual Tomahawk::PlaylistInterface* playlistInterface() const { return 0; }
 
     virtual QString title() const { return tr( "Search" ); }
     virtual QString description() const { return tr( "Results for '%1'" ).arg( m_search ); }
