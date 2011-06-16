@@ -27,14 +27,14 @@ using namespace Tomahawk;
 
 WelcomePlaylistModel::WelcomePlaylistModel( QObject* parent )
     : QAbstractListModel( parent )
-    , m_waitingForSome( true )
     , m_maxPlaylists( 0 )
+    , m_waitingForSome( true )
 {
     loadFromSettings();
 
     connect( SourceList::instance(), SIGNAL( sourceAdded( Tomahawk::source_ptr ) ), this, SLOT( onSourceAdded( Tomahawk::source_ptr ) ), Qt::QueuedConnection );
     connect( TomahawkSettings::instance(), SIGNAL( recentlyPlayedPlaylistAdded( Tomahawk::playlist_ptr ) ), this, SLOT( plAdded( Tomahawk::playlist_ptr ) ) );
-    connect( AudioEngine::instance(),SIGNAL( playlistChanged( PlaylistInterface* ) ), this, SLOT( playlistChanged( PlaylistInterface* ) ), Qt::QueuedConnection );
+    connect( AudioEngine::instance(),SIGNAL( playlistChanged( Tomahawk::PlaylistInterface* ) ), this, SLOT( playlistChanged( Tomahawk::PlaylistInterface* ) ), Qt::QueuedConnection );
 
     emit emptinessChanged( m_recplaylists.isEmpty() );
 }
@@ -157,7 +157,7 @@ WelcomePlaylistModel::plAdded( const playlist_ptr& pl )
 }
 
 void
-WelcomePlaylistModel::playlistChanged( PlaylistInterface* pli )
+WelcomePlaylistModel::playlistChanged( Tomahawk::PlaylistInterface* pli )
 {
     // ARG
     if( Playlist* pl = dynamic_cast< Playlist* >( pli ) ) {
