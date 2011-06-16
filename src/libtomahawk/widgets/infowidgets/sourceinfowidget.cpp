@@ -1,5 +1,5 @@
 /* === This file is part of Tomahawk Player - <http://tomahawk-player.org> ===
- * 
+ *
  *   Copyright 2010-2011, Christian Muehlhaeuser <muesli@tomahawk-player.org>
  *
  *   Tomahawk is free software: you can redistribute it and/or modify
@@ -41,22 +41,16 @@ SourceInfoWidget::SourceInfoWidget( const Tomahawk::source_ptr& source, QWidget*
     ui->historyView->overlay()->setEnabled( false );
 
     m_recentCollectionModel = new CollectionFlatModel( ui->recentCollectionView );
+    m_recentCollectionModel->setStyle( TrackModel::Short );
     ui->recentCollectionView->setTrackModel( m_recentCollectionModel );
     m_recentCollectionModel->addFilteredCollection( source->collection(), 250, DatabaseCommand_AllTracks::ModificationTime );
 
     m_historyModel = new PlaylistModel( ui->historyView );
+    m_historyModel->setStyle( TrackModel::Short );
     ui->historyView->setPlaylistModel( m_historyModel );
     m_historyModel->loadHistory( source );
 
     connect( source.data(), SIGNAL( playbackFinished( Tomahawk::query_ptr ) ), SLOT( onPlaybackFinished( Tomahawk::query_ptr ) ) );
-
-    ui->recentCollectionView->setColumnHidden( TrackModel::Bitrate, true );
-    ui->recentCollectionView->setColumnHidden( TrackModel::Origin, true );
-    ui->recentCollectionView->setColumnHidden( TrackModel::Filesize, true );
-
-    ui->historyView->setColumnHidden( TrackModel::Bitrate, true );
-    ui->historyView->setColumnHidden( TrackModel::Origin, true );
-    ui->historyView->setColumnHidden( TrackModel::Filesize, true );
 
     m_recentAlbumModel = new AlbumModel( ui->recentAlbumView );
     ui->recentAlbumView->setAlbumModel( m_recentAlbumModel );

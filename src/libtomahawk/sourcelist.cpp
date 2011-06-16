@@ -91,6 +91,7 @@ SourceList::setSources( const QList<Tomahawk::source_ptr>& sources )
     }
 
     qDebug() << Q_FUNC_INFO << "- Total sources now:" << m_sources.size();
+    emit ready();
 }
 
 

@@ -39,7 +39,7 @@ Database::Database( const QString& dbname, QObject* parent )
 {
     s_instance = this;
 
-    m_maxConcurrentThreads = qBound( DEFAULT_WORKER_THREADS, QThread::idealThreadCount() * 2, MAX_WORKER_THREADS );
+    m_maxConcurrentThreads = qBound( DEFAULT_WORKER_THREADS, QThread::idealThreadCount(), MAX_WORKER_THREADS );
     qDebug() << Q_FUNC_INFO << "Using" << m_maxConcurrentThreads << "threads";
 
     connect( m_impl, SIGNAL( indexReady() ), SIGNAL( indexReady() ) );

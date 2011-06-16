@@ -100,20 +100,15 @@ TreeItemDelegate::paint( QPainter* painter, const QStyleOptionViewItem& option, 
     painter->setPen( opt.palette.color( QPalette::Text ) );
 
     QRect r = option.rect.adjusted( 4, 4, -option.rect.width() + option.rect.height() - 4, -4 );
-//    painter->drawPixmap( option.rect.adjusted( 4, 4, -4, -38 ), QPixmap( RESPATH "images/cover-shadow.png" ) );
+//    painter->drawPixmap( r, QPixmap( RESPATH "images/cover-shadow.png" ) );
     painter->drawPixmap( r, item->cover );
 
     QTextOption to;
     to.setAlignment( Qt::AlignVCenter );
-    QFont font = opt.font;
-    QFont boldFont = opt.font;
-    boldFont.setBold( true );
 
     r = option.rect.adjusted( option.rect.height(), 6, -4, -option.rect.height() + 22 );
     text = painter->fontMetrics().elidedText( text, Qt::ElideRight, r.width() );
     painter->drawText( r, text, to );
-
-//    painter->setFont( boldFont );
 
     painter->restore();
 }

@@ -140,6 +140,9 @@ TrackView::setTrackModel( TrackModel* model )
     connect( m_proxyModel, SIGNAL( filterChanged( QString ) ), SLOT( onFilterChanged( QString ) ) );
 
     setAcceptDrops( true );
+
+    if ( model->style() == TrackModel::Short )
+        setHeaderHidden( true );
 }
 
 
@@ -178,6 +181,7 @@ TrackView::onItemResized( const QModelIndex& index )
     qDebug() << Q_FUNC_INFO;
     m_delegate->updateRowSize( index );
 }
+
 
 void
 TrackView::playItem()

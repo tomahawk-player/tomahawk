@@ -72,7 +72,7 @@ PlaylistView::setPlaylistModel( PlaylistModel* model )
         setGuid( QString( "playlistview/%1" ).arg( m_model->playlist()->guid() ) );
     else
     {
-        setGuid( "playlistview" );
+        setGuid( QString( "playlistview/%1" ).arg( m_model->columnCount() ) );
     }
 
     connect( m_model, SIGNAL( trackCountChanged( unsigned int ) ), SLOT( onTrackCountChanged( unsigned int ) ) );

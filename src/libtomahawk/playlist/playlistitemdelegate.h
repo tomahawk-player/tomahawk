@@ -21,6 +21,8 @@
 
 #include <QStyledItemDelegate>
 
+#include "trackmodel.h"
+
 #include "dllmacro.h"
 
 class TrackProxyModel;
@@ -31,12 +33,8 @@ class DLLEXPORT PlaylistItemDelegate : public QStyledItemDelegate
 Q_OBJECT
 
 public:
-    enum PlaylistItemStyle
-    { Detailed = 0, Short = 1 };
-
     PlaylistItemDelegate( TrackView* parent = 0, TrackProxyModel* proxy = 0 );
 
-    void setStyle( PlaylistItemDelegate::PlaylistItemStyle style );
     void updateRowSize( const QModelIndex& index );
 
 public slots:
@@ -48,13 +46,14 @@ protected:
     QWidget* createEditor( QWidget* parent, const QStyleOptionViewItem& option, const QModelIndex& index ) const;
 
 private:
+    void prepareStyleOption( QStyleOptionViewItemV4* option, const QModelIndex& index ) const;
+
     void paintDetailed( QPainter* painter, const QStyleOptionViewItem& option, const QModelIndex& index ) const;
     void paintShort( QPainter* painter, const QStyleOptionViewItem& option, const QModelIndex& index ) const;
 
     unsigned int m_removalProgress;
     QPixmap m_nowPlayingIcon;
 
-    PlaylistItemStyle m_style;
     TrackView* m_view;
     TrackProxyModel* m_model;
 };

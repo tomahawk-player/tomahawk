@@ -38,7 +38,7 @@ class DLLEXPORT TrackView : public QTreeView
 Q_OBJECT
 
 public:
-    explicit TrackView( QWidget* parent = 0 );
+explicit TrackView( QWidget* parent = 0 );
     ~TrackView();
 
     virtual QString guid() const { return m_guid; }

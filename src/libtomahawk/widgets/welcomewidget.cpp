@@ -50,19 +50,19 @@ WelcomeWidget::WelcomeWidget( QWidget* parent )
     ui->playlistWidget->setItemDelegate( new PlaylistDelegate() );
     ui->playlistWidget->setModel( model );
     ui->playlistWidget->overlay()->resize( 380, 86 );
-    ui->tracksView->overlay()->setEnabled( false );
 
     connect( model, SIGNAL( emptinessChanged( bool) ), this, SLOT( updatePlaylists() ) );
 
     m_tracksModel = new PlaylistModel( ui->tracksView );
+    m_tracksModel->setStyle( TrackModel::Short );
+    ui->tracksView->overlay()->setEnabled( false );
     ui->tracksView->setPlaylistModel( m_tracksModel );
-    m_tracksModel->loadHistory( Tomahawk::source_ptr(), HISTORY_TRACK_ITEMS );
 
     m_timer = new QTimer( this );
     connect( m_timer, SIGNAL( timeout() ), SLOT( checkQueries() ) );
 
+    connect( SourceList::instance(), SIGNAL( ready() ), SLOT( updateRecentTracks() ) );
     connect( SourceList::instance(), SIGNAL( sourceAdded( Tomahawk::source_ptr ) ), SLOT( onSourceAdded( Tomahawk::source_ptr ) ) );
-
     connect( ui->playlistWidget, SIGNAL( activated( QModelIndex ) ), SLOT( onPlaylistActivated( QModelIndex ) ) );
     connect( AudioEngine::instance() ,SIGNAL( playlistChanged( Tomahawk::PlaylistInterface* ) ), this, SLOT( updatePlaylists() ), Qt::QueuedConnection );
 }
@@ -71,6 +71,13 @@ WelcomeWidget::WelcomeWidget( QWidget* parent )
 WelcomeWidget::~WelcomeWidget()
 {
     delete ui;
+}
+
+
+void
+WelcomeWidget::updateRecentTracks()
+{
+    m_tracksModel->loadHistory( Tomahawk::source_ptr(), HISTORY_TRACK_ITEMS );
 }
 
 
@@ -99,6 +106,7 @@ WelcomeWidget::updatePlaylists()
     else
         ui->playlistWidget->overlay()->hide();
 }
+
 
 void
 WelcomeWidget::onSourceAdded( const Tomahawk::source_ptr& source )

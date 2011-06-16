@@ -33,6 +33,12 @@ class DLLEXPORT TrackModel : public QAbstractItemModel
 Q_OBJECT
 
 public:
+    enum TrackItemStyle
+    { Detailed = 0, Short = 1 };
+
+    enum TrackModelRole
+    { StyleRole = Qt::UserRole + 1 };
+
     enum Columns {
         Artist = 0,
         Track = 1,
@@ -48,6 +54,9 @@ public:
 
     explicit TrackModel( QObject* parent = 0 );
     virtual ~TrackModel();
+
+    TrackModel::TrackItemStyle style() const { return m_style; }
+    void setStyle( TrackModel::TrackItemStyle style );
 
     virtual QModelIndex index( int row, int column, const QModelIndex& parent ) const;
     virtual QModelIndex parent( const QModelIndex& child ) const;
@@ -116,6 +125,8 @@ private:
 
     QString m_title;
     QString m_description;
+
+    TrackItemStyle m_style;
 };
 
 #endif // TRACKMODEL_H

@@ -24,6 +24,9 @@
 
 #include "query.h"
 #include "result.h"
+#include "artist.h"
+#include "source.h"
+#include "sourcelist.h"
 
 #include "trackmodelitem.h"
 #include "trackproxymodel.h"
@@ -37,18 +40,10 @@
 
 PlaylistItemDelegate::PlaylistItemDelegate( TrackView* parent, TrackProxyModel* proxy )
     : QStyledItemDelegate( (QObject*)parent )
-    , m_style( Detailed )
     , m_view( parent )
     , m_model( proxy )
 {
     m_nowPlayingIcon = QPixmap( PLAYING_ICON );
-}
-
-
-void
-PlaylistItemDelegate::setStyle( PlaylistItemDelegate::PlaylistItemStyle style )
-{
-    m_style = style;
 }
 
 
@@ -63,6 +58,14 @@ QSize
 PlaylistItemDelegate::sizeHint( const QStyleOptionViewItem& option, const QModelIndex& index ) const
 {
     QSize size = QStyledItemDelegate::sizeHint( option, index );
+
+    if ( index.isValid() )
+    {
+        int style = index.data( TrackModel::StyleRole ).toInt();
+        if ( style == TrackModel::Short )
+            size.setHeight( 48 );
+    }
+
     return size;
 }
 
@@ -78,15 +81,49 @@ PlaylistItemDelegate::createEditor( QWidget* parent, const QStyleOptionViewItem&
 
 
 void
+PlaylistItemDelegate::prepareStyleOption( QStyleOptionViewItemV4* option, const QModelIndex& index ) const
+{
+    initStyleOption( option, index );
+
+    TrackModelItem* item = m_model->itemFromIndex( m_model->mapToSource( index ) );
+    if ( item->isPlaying() )
+    {
+        option->palette.setColor( QPalette::Highlight, option->palette.color( QPalette::Mid ) );
+        option->state |= QStyle::State_Selected;
+    }
+
+    if ( item->isPlaying() || index.column() == TrackModel::Score )
+        option->text.clear();
+
+    if ( option->state & QStyle::State_Selected )
+    {
+        option->palette.setColor( QPalette::Text, option->palette.color( QPalette::HighlightedText ) );
+    }
+    else
+    {
+        float opacity = 0.0;
+        if ( item->query()->results().count() )
+            opacity = item->query()->results().first()->score();
+
+        opacity = qMax( (float)0.3, opacity );
+        QColor textColor = TomahawkUtils::alphaBlend( option->palette.color( QPalette::Foreground ), option->palette.color( QPalette::Background ), opacity );
+
+        option->palette.setColor( QPalette::Text, textColor );
+    }
+}
+
+
+void
 PlaylistItemDelegate::paint( QPainter* painter, const QStyleOptionViewItem& option, const QModelIndex& index ) const
 {
-    switch ( m_style )
+    int style = index.data( TrackModel::StyleRole ).toInt();
+    switch ( style )
     {
-        case Detailed:
+        case TrackModel::Detailed:
             paintDetailed( painter, option, index );
             break;
 
-        case Short:
+        case TrackModel::Short:
             paintShort( painter, option, index );
             break;
     }
@@ -96,7 +133,85 @@ PlaylistItemDelegate::paint( QPainter* painter, const QStyleOptionViewItem& opti
 void
 PlaylistItemDelegate::paintShort( QPainter* painter, const QStyleOptionViewItem& option, const QModelIndex& index ) const
 {
+    TrackModelItem* item = m_model->itemFromIndex( m_model->mapToSource( index ) );
+    Q_ASSERT( item );
 
+    QStyleOptionViewItemV4 opt = option;
+    prepareStyleOption( &opt, index );
+    opt.text.clear();
+
+    qApp->style()->drawControl( QStyle::CE_ItemViewItem, &opt, painter );
+
+    if ( m_view->header()->visualIndex( index.column() ) > 0 )
+        return;
+
+    QPixmap pixmap;
+    QString artist, track, upperText, lowerText;
+    if ( item->query()->results().count() )
+    {
+        artist = item->query()->results().first()->artist()->name();
+        track = item->query()->results().first()->track();
+    }
+    else
+    {
+        artist = item->query()->artist();
+        track = item->query()->track();
+    }
+
+    if ( item->query()->playedBy().isNull() )
+    {
+        upperText = artist;
+        lowerText = track;
+    }
+    else
+    {
+        upperText = QString( "%1 - %2" ).arg( artist ).arg( track );
+
+        if ( item->query()->playedBy() == SourceList::instance()->getLocal() )
+            lowerText = QString( "played by you" );
+        else
+            lowerText = QString( "played by %1" ).arg( item->query()->playedBy()->friendlyName() );
+
+        pixmap = item->query()->playedBy()->avatar();
+    }
+
+    if ( pixmap.isNull() )
+        pixmap = QPixmap( RESPATH "images/no-album-art-placeholder.png" );
+
+    painter->save();
+    {
+        QRect r = opt.rect.adjusted( 3, 6, 0, -6 );
+
+        // Paint Now Playing Speaker Icon
+        if ( item->isPlaying() )
+        {
+            r.adjust( 0, 0, 0, 0 );
+            QRect npr = r.adjusted( 3, r.height() / 2 - m_nowPlayingIcon.height() / 2, 18 - r.width(), -r.height() + m_nowPlayingIcon.height() / 2 );
+            painter->drawPixmap( npr, m_nowPlayingIcon );
+            r.adjust( 22, 0, 0, 0 );
+        }
+
+        painter->setPen( opt.palette.text().color() );
+
+        QRect ir = r.adjusted( 4, 0, -option.rect.width() + option.rect.height() - 8 + r.left(), 0 );
+        painter->drawPixmap( ir, pixmap );
+        //painter->drawPixmap( ir, item->cover );
+
+        QFont boldFont = opt.font;
+        boldFont.setBold( true );
+
+        r.adjust( ir.width() + 12, 0, 0, 0 );
+        QTextOption to( Qt::AlignTop );
+        QString text = painter->fontMetrics().elidedText( upperText, Qt::ElideRight, r.width() - 3 );
+        painter->setFont( boldFont );
+        painter->drawText( r.adjusted( 0, 1, 0, 0 ), text, to );
+
+        to.setAlignment( Qt::AlignBottom );
+        text = painter->fontMetrics().elidedText( lowerText, Qt::ElideRight, r.width() - 3 );
+        painter->setFont( opt.font );
+        painter->drawText( r.adjusted( 0, 1, 0, 0 ), text, to );
+    }
+    painter->restore();
 }
 
 
@@ -104,30 +219,10 @@ void
 PlaylistItemDelegate::paintDetailed( QPainter* painter, const QStyleOptionViewItem& option, const QModelIndex& index ) const
 {
     TrackModelItem* item = m_model->itemFromIndex( m_model->mapToSource( index ) );
-    if ( !item || item->query().isNull() )
-        return;
-
-    float opacity = 0.0;
-    if ( item->query()->results().count() )
-        opacity = item->query()->results().first()->score();
-
-    opacity = qMax( (float)0.3, opacity );
-    QColor textColor = TomahawkUtils::alphaBlend( option.palette.color( QPalette::Foreground ), option.palette.color( QPalette::Background ), opacity );
+    Q_ASSERT( item );
 
     QStyleOptionViewItemV4 opt = option;
-    initStyleOption( &opt, index );
-
-    if ( item->isPlaying() )
-    {
-        opt.palette.setColor( QPalette::Highlight, opt.palette.color( QPalette::Mid ) );
-        opt.state |= QStyle::State_Selected;
-    }
-    if ( item->isPlaying() || index.column() == TrackModel::Score )
-        opt.text.clear();
-    if ( opt.state & QStyle::State_Selected )
-        opt.palette.setColor( QPalette::Text, opt.palette.color( QPalette::HighlightedText ) );
-    else
-        opt.palette.setColor( QPalette::Text, textColor );
+    prepareStyleOption( &opt, index );
 
     qApp->style()->drawControl( QStyle::CE_ItemViewItem, &opt, painter );
 
@@ -139,7 +234,7 @@ PlaylistItemDelegate::paintDetailed( QPainter* painter, const QStyleOptionViewIt
         else
             painter->setPen( opt.palette.highlight().color() );
 
-        QRect r = opt.rect.adjusted( 3, 3, -6, -5 );
+        QRect r = opt.rect.adjusted( 3, 3, -6, -4 );
         painter->drawRect( r );
 
         QRect fillR = r;
@@ -172,16 +267,6 @@ PlaylistItemDelegate::paintDetailed( QPainter* painter, const QStyleOptionViewIt
             QString text = painter->fontMetrics().elidedText( index.data().toString(), Qt::ElideRight, r.width() - 3 );
             painter->drawText( r.adjusted( 0, 1, 0, 0 ), text, to );
         }
-
-        // Paint Now Playing Frame
-/*        {
-            QRect r = QRect( 3, opt.rect.y() + 1, m_view->viewport()->width() - 6, opt.rect.height() - 2 );
-            painter->setPen( opt.palette.highlight().color() );
-            QPen pen = painter->pen();
-            pen.setWidth( 1.0 );
-            painter->setPen( pen );
-            painter->drawRoundedRect( r, 3.0, 3.0 );
-        }*/
     }
     painter->restore();
 }

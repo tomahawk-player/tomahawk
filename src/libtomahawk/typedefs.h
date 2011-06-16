@@ -1,5 +1,5 @@
 /* === This file is part of Tomahawk Player - <http://tomahawk-player.org> ===
- * 
+ *
  *   Copyright 2010-2011, Christian Muehlhaeuser <muesli@tomahawk-player.org>
  *
  *   Tomahawk is free software: you can redistribute it and/or modify
@@ -47,15 +47,15 @@ namespace Tomahawk
     typedef QSharedPointer<Source> source_ptr;
     typedef QSharedPointer<Artist> artist_ptr;
     typedef QSharedPointer<Album> album_ptr;
-    
+
     typedef QSharedPointer<DynamicControl> dyncontrol_ptr;
     typedef QSharedPointer<GeneratorInterface> geninterface_ptr;
-    
+
     // let's keep these typesafe, they are different kinds of GUID:
     typedef QString QID; //query id
     typedef QString RID; //result id
-    
-    
+
+
     enum GeneratorMode {
         OnDemand = 0,
         Static

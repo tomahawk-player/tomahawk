@@ -35,6 +35,7 @@ TrackModel::TrackModel( QObject* parent )
     : QAbstractItemModel( parent )
     , m_rootItem( new TrackModelItem( 0, this ) )
     , m_readOnly( true )
+    , m_style( Detailed )
 {
     qDebug() << Q_FUNC_INFO;
 
@@ -82,7 +83,18 @@ int
 TrackModel::columnCount( const QModelIndex& parent ) const
 {
     Q_UNUSED( parent );
-    return 10;
+
+    switch ( m_style )
+    {
+        case Short:
+            return 1;
+            break;
+
+        case Detailed:
+        default:
+            return 10;
+            break;
+    }
 }
 
 
@@ -121,6 +133,11 @@ TrackModel::data( const QModelIndex& index, int role ) const
     if ( role == Qt::SizeHintRole )
     {
         return QSize( 0, 18 );
+    }
+
+    if ( role == StyleRole )
+    {
+        return m_style;
     }
 
     if ( role != Qt::DisplayRole ) // && role != Qt::ToolTipRole )
@@ -372,4 +389,11 @@ TrackModel::ensureResolved()
         if ( !query->numResults() )
             Pipeline::instance()->resolve( query );
     }
+}
+
+
+void
+TrackModel::setStyle( TrackModel::TrackItemStyle style )
+{
+    m_style = style;
 }

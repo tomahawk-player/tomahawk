@@ -96,6 +96,7 @@ signals:
     void destroyed( QWidget* widget );
 
 public slots:
+    void updateRecentTracks();
     void updatePlaylists();
 
 private slots:

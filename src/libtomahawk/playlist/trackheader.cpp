@@ -87,7 +87,7 @@ TrackHeader::checkState()
     else
     {
         QList< double > m_columnWeights;
-        m_columnWeights << 0.20 << 0.20 << 0.18 << 0.05 << 0.05 << 0.05 << 0.05 << 0.05 << 0.12; // << 0.05;
+        m_columnWeights << 0.20 << 0.20 << 0.18 << 0.05 << 0.05 << 0.05 << 0.05 << 0.05 << 0.10; // << 0.05;
 
         for ( int i = 0; i < count() - 1; i++ )
         {
