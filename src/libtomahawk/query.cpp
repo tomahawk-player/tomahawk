@@ -26,6 +26,7 @@
 #include "database/databasecommand_playbackhistory.h"
 #include "database/databasecommand_loadplaylistentries.h"
 #include "pipeline.h"
+#include "resolver.h"
 #include "sourcelist.h"
 
 using namespace Tomahawk;
@@ -216,6 +217,30 @@ Query::resultSorter( const result_ptr& left, const result_ptr& right )
     }
 
     return ls > rs;
+}
+
+
+void
+Query::setCurrentResolver( Tomahawk::Resolver* resolver )
+{
+    m_resolvers << resolver;
+}
+
+
+Tomahawk::Resolver*
+Query::currentResolver() const
+{
+    int x = m_resolvers.count();
+    while ( --x )
+    {
+        QWeakPointer< Resolver > r = m_resolvers.at( x );
+        if ( r.isNull() )
+            continue;
+
+        return r.data();
+    }
+
+    return 0;
 }
 
 
