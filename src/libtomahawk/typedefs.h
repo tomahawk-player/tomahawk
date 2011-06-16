@@ -29,6 +29,7 @@ namespace Tomahawk
     class Collection;
     class Playlist;
     class PlaylistEntry;
+    class PlaylistInterface;
     class DynamicPlaylist;
     class Query;
     class Result;
@@ -39,6 +40,7 @@ namespace Tomahawk
     typedef QSharedPointer<Collection> collection_ptr;
     typedef QSharedPointer<Playlist> playlist_ptr;
     typedef QSharedPointer<PlaylistEntry> plentry_ptr;
+    typedef QSharedPointer<PlaylistInterface> pliface_ptr;
     typedef QSharedPointer<DynamicPlaylist> dynplaylist_ptr;
     typedef QSharedPointer<Query> query_ptr;
     typedef QSharedPointer<Result> result_ptr;
