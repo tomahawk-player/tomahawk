@@ -88,6 +88,8 @@
     <file>./data/images/music-settings.png</file>
     <file>./data/images/resolvers-settings.png</file>
     <file>./data/images/lastfm-settings.png</file>
+    <file>./data/images/automatic-playlist.png</file>
+    <file>./data/images/station.png</file>
     <file>./data/stylesheets/topbar-radiobuttons.css</file>
     <file>./data/icons/tomahawk-icon-16x16.png</file>
     <file>./data/icons/tomahawk-icon-32x32.png</file>

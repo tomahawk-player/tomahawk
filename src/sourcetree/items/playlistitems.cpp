@@ -320,3 +320,13 @@ DynamicPlaylistItem::willAcceptDrag( const QMimeData* data ) const
 {
     return false;
 }
+
+QIcon
+DynamicPlaylistItem::icon() const
+{
+    if( m_dynplaylist->mode() == OnDemand ) {
+        return QIcon( RESPATH "images/station.png" );
+    } else {
+        return QIcon( RESPATH "images/automatic-playlist.png" );
+    }
+}
