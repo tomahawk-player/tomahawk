@@ -27,6 +27,7 @@ set( libSources
     query.cpp
     result.cpp
     source.cpp
+    sourceplaylistinterface.cpp
     viewpage.cpp
     viewmanager.cpp
     globalactionmanager.cpp
@@ -189,6 +190,7 @@ set( libHeaders
     resolver.h
     result.h
     source.h
+    sourceplaylistinterface.h
     viewpage.h
     viewmanager.h
     globalactionmanager.h

@@ -20,6 +20,7 @@
 
 #include "collection.h"
 #include "sourcelist.h"
+#include "sourceplaylistinterface.h"
 
 #include "network/controlconnection.h"
 #include "database/databasecommand_addsource.h"
@@ -266,6 +267,18 @@ Source::trackCount() const
     return m_stats.value( "numfiles" ).toUInt();
 }
 
+
+Tomahawk::playlistinterface_ptr
+Source::getPlaylistInterface()
+{
+    if ( m_playlistInterface.isNull() )
+    {
+        Tomahawk::source_ptr source = SourceList::instance()->get( id() );
+        m_playlistInterface = Tomahawk::playlistinterface_ptr( new Tomahawk::SourcePlaylistInterface( source ) );
+    }
+
+    return m_playlistInterface;
+}
 
 void
 Source::onPlaybackStarted( const Tomahawk::query_ptr& query )

@@ -77,6 +77,8 @@ public:
     Tomahawk::query_ptr currentTrack() const { return m_currentTrack; }
     QString textStatus() const { return m_textStatus; }
 
+    Tomahawk::playlistinterface_ptr getPlaylistInterface();
+
 signals:
     void syncedWithDatabase();
     void online();
@@ -124,6 +126,8 @@ private:
     ControlConnection* m_cc;
 
     QPixmap* m_avatar;
+
+    Tomahawk::playlistinterface_ptr m_playlistInterface;
 };
 
 };
