@@ -43,7 +43,7 @@ CollectionItem::CollectionItem(  SourcesModel* mdl, SourceTreeItem* parent, cons
         return;
     }
 
-    m_sourceInfoItem = new GenericPageItem( model(), this, tr( "New Additions" ), QIcon(),
+    m_sourceInfoItem = new GenericPageItem( model(), this, tr( "New Additions" ), QIcon( RESPATH "images/new-additions.png" ),
                                             boost::bind( &CollectionItem::sourceInfoClicked, this ),
                                             boost::bind( &CollectionItem::getSourceInfoPage, this )
                                           );
