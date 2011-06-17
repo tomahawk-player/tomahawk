@@ -104,7 +104,7 @@ ViewManager::ViewManager( QObject* parent )
 
     m_superCollectionView = new ArtistView();
     m_superCollectionModel = new TreeModel( m_superCollectionView );
-    m_superCollectionView->setModel( m_superCollectionModel );
+    m_superCollectionView->setTreeModel( m_superCollectionModel );
     m_superCollectionView->setFrameShape( QFrame::NoFrame );
     m_superCollectionView->setAttribute( Qt::WA_MacShowFocusRect, 0 );
     m_superCollectionView->setShowModes( false );
@@ -308,7 +308,7 @@ ViewManager::show( const Tomahawk::collection_ptr& collection )
         {
             view = new ArtistView();
             TreeModel* model = new TreeModel();
-            view->setModel( model );
+            view->setTreeModel( model );
             view->setFrameShape( QFrame::NoFrame );
             view->setAttribute( Qt::WA_MacShowFocusRect, 0 );
 

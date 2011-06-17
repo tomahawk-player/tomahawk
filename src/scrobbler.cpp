@@ -40,7 +40,7 @@ Scrobbler::Scrobbler( QObject* parent )
     connect( Tomahawk::InfoSystem::InfoSystem::instance(),
         SIGNAL( info( QString, Tomahawk::InfoSystem::InfoType, QVariant, QVariant, Tomahawk::InfoSystem::InfoCustomData ) ),
         SLOT( infoSystemInfo( QString, Tomahawk::InfoSystem::InfoType, QVariant, QVariant, Tomahawk::InfoSystem::InfoCustomData ) ) );
-    
+
     connect( AudioEngine::instance(), SIGNAL( started( const Tomahawk::result_ptr& ) ),
              SLOT( trackStarted( const Tomahawk::result_ptr& ) ), Qt::QueuedConnection );
 
@@ -137,6 +137,7 @@ Scrobbler::scrobble()
 void
 Scrobbler::infoSystemInfo( QString caller, Tomahawk::InfoSystem::InfoType type, QVariant input, QVariant output, Tomahawk::InfoSystem::InfoCustomData customData )
 {
+    Q_UNUSED( type );
     Q_UNUSED( input );
     Q_UNUSED( output );
     Q_UNUSED( customData );

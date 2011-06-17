@@ -564,6 +564,7 @@ Tomahawk::EchonestControl::artistTextEdited( const QString& text )
     // if the user is editing an artist field, try to help him out and suggest from echonest
     QLineEdit* l = qobject_cast<QLineEdit*>( m_input.data() );
     Q_ASSERT( l );
+    Q_UNUSED( l );
 //     l->setCompleter( new QCompleter( this ) ); // clear
 
     foreach( QNetworkReply* r, m_suggestWorkers ) {

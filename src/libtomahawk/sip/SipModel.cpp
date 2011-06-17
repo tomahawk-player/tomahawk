@@ -187,6 +187,7 @@ SipModel::flags( const QModelIndex& index ) const
 void
 SipModel::pluginAdded( SipPlugin* p )
 {
+    Q_UNUSED( p );
     // we assume sip plugins are added at the end of the list.
     Q_ASSERT( SipHandler::instance()->allPlugins().last() == p );
     int size = SipHandler::instance()->allPlugins().count() - 1;

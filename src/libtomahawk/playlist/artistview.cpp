@@ -101,7 +101,16 @@ ArtistView::setProxyModel( TreeProxyModel* model )
 
 
 void
-ArtistView::setModel( TreeModel* model )
+ArtistView::setModel( QAbstractItemModel* model )
+{
+    Q_UNUSED( model );
+    qDebug() << "Explicitly use setPlaylistModel instead";
+    Q_ASSERT( false );
+}
+
+
+void
+ArtistView::setTreeModel( TreeModel* model )
 {
     m_model = model;
 

@@ -216,6 +216,7 @@ JabberPlugin::icon() const
 bool
 JabberPlugin::connectPlugin( bool startup )
 {
+    Q_UNUSED( startup );
     qDebug() << Q_FUNC_INFO;
 
     if(m_client->isConnected())

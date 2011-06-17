@@ -103,12 +103,14 @@ ResolversModel::setData( const QModelIndex& index, const QVariant& value, int ro
 int
 ResolversModel::rowCount( const QModelIndex& parent ) const
 {
+    Q_UNUSED( parent );
     return m_allResolvers.size();
 }
 
 int
 ResolversModel::columnCount(const QModelIndex& parent) const
 {
+    Q_UNUSED( parent );
     return 1;
 }
 

@@ -71,6 +71,8 @@ ZeroconfFactory::icon() const
 bool
 ZeroconfPlugin::connectPlugin( bool startup )
 {
+    Q_UNUSED( startup );
+
     delete m_zeroconf;
     m_zeroconf = new TomahawkZeroconf( Servent::instance()->port(), this );
     QObject::connect( m_zeroconf, SIGNAL( tomahawkHostFound( QString, int, QString, QString ) ),

@@ -137,8 +137,8 @@ Playlist::Playlist( const source_ptr& author,
     , m_lastmodified( 0 )
     , m_createdOn( 0 ) // will be set by db command
     , m_shared( shared )
-    , m_busy( false )
     , m_initEntries( entries )
+    , m_busy( false )
 {
     qDebug() << Q_FUNC_INFO << "2";
     init();

@@ -151,7 +151,7 @@ QString AvatarManager::avatarHash(const QString &jid) const
     return m_JidsAvatarHashes.key(jid);
 }
 
-QDir AvatarManager::avatarDir(const QString &avatarHash) const
+QDir AvatarManager::avatarDir(const QString&) const
 {
     return m_cacheDir;
 }
@@ -167,7 +167,7 @@ bool AvatarManager::isCached(const QString &avatarHash) const
     return m_cachedAvatars.contains( avatarHash );
 }
 
-void AvatarManager::onNewAvatar(const QString& jid)
+void AvatarManager::onNewAvatar(const QString&)
 {
 //    qDebug() << Q_FUNC_INFO <<  "Found new Avatar..." << jid;
 }

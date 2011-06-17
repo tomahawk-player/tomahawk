@@ -59,6 +59,8 @@ PlaylistItem::playlist() const
 void
 PlaylistItem::onPlaylistLoaded( Tomahawk::PlaylistRevision revision )
 {
+    Q_UNUSED( revision );
+
     m_loaded = true;
     emit updated();
 }
@@ -118,6 +120,7 @@ PlaylistItem::setLoaded( bool loaded )
 bool
 PlaylistItem::willAcceptDrag( const QMimeData* data ) const
 {
+    Q_UNUSED( data );
     return !m_playlist.isNull() && m_playlist->author()->isLocal();
 }
 
@@ -125,6 +128,8 @@ PlaylistItem::willAcceptDrag( const QMimeData* data ) const
 bool
 PlaylistItem::dropMimeData( const QMimeData* data, Qt::DropAction action )
 {
+    Q_UNUSED( action );
+
     QList< Tomahawk::query_ptr > queries;
 
     if ( data->hasFormat( "application/tomahawk.playlist.id" ) &&
@@ -190,9 +195,12 @@ PlaylistItem::icon() const
 
 
 bool
-PlaylistItem::setData(const QVariant& v, bool role)
+PlaylistItem::setData( const QVariant& v, bool role )
 {
-    if( m_playlist->author()->isLocal() ) {
+    Q_UNUSED( role );
+
+    if ( m_playlist->author()->isLocal() )
+    {
         m_playlist->rename( v.toString() );
 
         return true;
@@ -318,6 +326,7 @@ DynamicPlaylistItem::text() const
 bool
 DynamicPlaylistItem::willAcceptDrag( const QMimeData* data ) const
 {
+    Q_UNUSED( data );
     return false;
 }
 

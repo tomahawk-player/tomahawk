@@ -45,7 +45,8 @@ public:
     TreeProxyModel* proxyModel() const { return m_proxyModel; }
 //    PlaylistItemDelegate* delegate() { return m_delegate; }
 
-    void setModel( TreeModel* model );
+    void setModel( QAbstractItemModel* model );
+    void setTreeModel( TreeModel* model );
 
     virtual QWidget* widget() { return this; }
     virtual Tomahawk::PlaylistInterface* playlistInterface() const { return proxyModel(); }

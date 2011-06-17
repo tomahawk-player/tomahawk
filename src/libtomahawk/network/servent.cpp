@@ -310,7 +310,7 @@ Servent::readyRead()
 
     ControlConnection* cc = 0;
     bool ok;
-    int pport = 0;
+//    int pport; //FIXME?
     QString key, conntype, nodeid, controlid;
     QVariantMap m = parser.parse( sock->_msg->payload(), &ok ).toMap();
     if( !ok )
@@ -320,7 +320,7 @@ Servent::readyRead()
     }
     conntype  = m.value( "conntype" ).toString();
     key       = m.value( "key" ).toString();
-    pport     = m.value( "port" ).toInt();
+//    pport     = m.value( "port" ).toInt();
     nodeid    = m.value( "nodeid" ).toString();
     controlid = m.value( "controlid" ).toString();
 

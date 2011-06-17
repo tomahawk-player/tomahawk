@@ -62,6 +62,7 @@ GenericPageItem::icon() const
 bool
 GenericPageItem::willAcceptDrag(const QMimeData* data) const
 {
+    Q_UNUSED( data );
     return false;
 }
 
