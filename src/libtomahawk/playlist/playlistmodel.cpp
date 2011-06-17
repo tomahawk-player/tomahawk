@@ -371,8 +371,10 @@ PlaylistModel::dropMimeData( const QMimeData* data, Qt::DropAction action, int r
             Tomahawk::result_ptr* result = reinterpret_cast<Tomahawk::result_ptr*>(qptr);
             if ( result && !result->isNull() )
             {
-                qDebug() << "Dropped result item:" << result->data()->artist() << "-" << result->data()->track() << action;
-                queries << result->data()->toQuery();
+                qDebug() << "Dropped result item:" << result->data()->artist() << "-" << result->data()->track();
+                query_ptr q = result->data()->toQuery();
+                q->addResults( QList< result_ptr >() << *result );
+                queries << q;
             }
         }
     }

@@ -16,6 +16,7 @@
 
 #include "playlistitems.h"
 
+#include "query.h"
 #include "utils/tomahawkutils.h"
 #include "viewmanager.h"
 #include "playlist/dynamic/GeneratorInterface.h"
@@ -150,7 +151,9 @@ PlaylistItem::dropMimeData( const QMimeData* data, Qt::DropAction action )
             if ( result && !result->isNull() )
             {
                 qDebug() << "Dropped result item:" << result->data()->artist() << "-" << result->data()->track();
-                queries << result->data()->toQuery();
+                query_ptr q = result->data()->toQuery();
+                q->addResults( QList< result_ptr >() << *result );
+                queries << q;
             }
         }
     }
