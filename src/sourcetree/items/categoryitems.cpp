@@ -114,7 +114,8 @@ bool
 CategoryAddItem::willAcceptDrag( const QMimeData* data ) const
 {
     if( ( m_categoryType == SourcesModel::PlaylistsCategory || m_categoryType == SourcesModel::StationsCategory ) &&
-          data->hasFormat( "application/tomahawk.query.list" ) ) {
+          data->hasFormat( "application/tomahawk.query.list" ) ||
+          data->hasFormat( "application/tomahawk.result.list" ) ) {
         return true;
     }
     return false;
@@ -124,21 +125,43 @@ bool
 CategoryAddItem::dropMimeData( const QMimeData* data, Qt::DropAction )
 {
     // Create a new playlist seeded with these items
-    if( data->hasFormat( "application/tomahawk.query.list" ) ) {
-        QByteArray itemData = data->data( "application/tomahawk.query.list" );
-        QDataStream stream( &itemData, QIODevice::ReadOnly );
+    if( data->hasFormat( "application/tomahawk.query.list" ) || data->hasFormat( "application/tomahawk.result.list" ) ) {
+
         QList< Tomahawk::query_ptr > queries;
 
-        while ( !stream.atEnd() )
-        {
-            qlonglong qptr;
-            stream >> qptr;
+        if( data->hasFormat( "application/tomahawk.query.list" ) ) {
+            QByteArray itemData = data->data( "application/tomahawk.query.list" );
+            QDataStream stream( &itemData, QIODevice::ReadOnly );
 
-            Tomahawk::query_ptr* query = reinterpret_cast<Tomahawk::query_ptr*>(qptr);
-            if ( query && !query->isNull() )
+            while ( !stream.atEnd() )
             {
-                qDebug() << "Dropped query item:" << query->data()->artist() << "-" << query->data()->track();
-                queries << *query;
+                qlonglong qptr;
+                stream >> qptr;
+
+                Tomahawk::query_ptr* query = reinterpret_cast<Tomahawk::query_ptr*>(qptr);
+                if ( query && !query->isNull() )
+                {
+                    qDebug() << "Dropped query item:" << query->data()->artist() << "-" << query->data()->track();
+                    queries << *query;
+                }
+            }
+        } else if( data->hasFormat( "application/tomahawk.result.list" ) ) {
+            QByteArray itemData = data->data( "application/tomahawk.result.list" );
+            QDataStream stream( &itemData, QIODevice::ReadOnly );
+
+            while ( !stream.atEnd() )
+            {
+                qlonglong qptr;
+                stream >> qptr;
+
+                Tomahawk::result_ptr* result = reinterpret_cast<Tomahawk::result_ptr*>(qptr);
+                if ( result && !result->isNull() )
+                {
+                    qDebug() << "Dropped result item:" << result->data()->artist() << "-" << result->data()->track();
+                    query_ptr q = result->data()->toQuery();
+                    q->addResults( QList< result_ptr >() << *result );
+                    queries << q;
+                }
             }
         }
 
