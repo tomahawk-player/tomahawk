@@ -285,6 +285,8 @@ Source::onPlaybackStarted( const Tomahawk::query_ptr& query )
 {
     qDebug() << Q_FUNC_INFO << query->toString();
     m_currentTrack = query;
+    if ( m_playlistInterface.isNull() )
+        getPlaylistInterface();
     emit playbackStarted( query );
 }
 

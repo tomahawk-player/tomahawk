@@ -38,7 +38,6 @@ SourcePlaylistInterface::siblingItem( int itemsAway )
 {
     Q_UNUSED( itemsAway );
     qDebug() << Q_FUNC_INFO;
-    Pipeline::instance()->resolve( m_source->currentTrack(), true );
     if ( m_source->currentTrack()->results().empty() )
     {
         qDebug() << Q_FUNC_INFO << " Results were empty for current track";
@@ -53,7 +52,6 @@ Tomahawk::result_ptr
 SourcePlaylistInterface::nextItem()
 {
     qDebug() << Q_FUNC_INFO;
-    Pipeline::instance()->resolve( m_source->currentTrack(), true );
     if ( m_source->currentTrack()->results().empty() )
     {
         qDebug() << Q_FUNC_INFO << " Results were empty for current track";
@@ -75,5 +73,24 @@ void
 SourcePlaylistInterface::onSourcePlaybackStarted( const Tomahawk::query_ptr& query ) const
 {
     qDebug() << Q_FUNC_INFO;
+    connect( query.data(), SIGNAL( resultsAdded( const QList<Tomahawk::result_ptr>& ) ), SLOT( resolveResultsAdded( const QList<Tomahawk::result_ptr>& ) ) );
+    connect( query.data(), SIGNAL( resolvingFinished( bool ) ), SLOT( resolvingFinished( bool ) ) );
     Pipeline::instance()->resolve( query, true );
+}
+
+
+void
+SourcePlaylistInterface::resolveResultsAdded( const QList<Tomahawk::result_ptr>& results ) const
+{
+    qDebug() << Q_FUNC_INFO;
+    foreach ( Tomahawk::result_ptr ptr, results )
+    {
+        qDebug() << "Found result: " << ptr->track();
+    }
+}
+
+void
+SourcePlaylistInterface::resolvingFinished( bool hasResults ) const
+{
+    qDebug() << Q_FUNC_INFO << " and has results? : " << (hasResults ? "true" : "false");
 }
