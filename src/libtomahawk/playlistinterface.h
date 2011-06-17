@@ -35,7 +35,8 @@ class DLLEXPORT PlaylistInterface
 public:
     enum RepeatMode { NoRepeat, RepeatOne, RepeatAll };
     enum ViewMode { Unknown, Tree, Flat, Album };
-    enum SkipSeekRestrictions { NoRestrictions, NoSkip, NoSeek, NoSkipSeek };
+    enum SeekRestrictions { NoSeekRestrictions, NoSeek };
+    enum SkipRestrictions { NoSkipRestrictions, NoSkipForwards, NoSkipBackwards, NoSkip };
     enum RetryMode { NoRetry, Retry };
 
     PlaylistInterface( QObject* parent = 0 ) : m_object( parent ) {}
@@ -53,7 +54,8 @@ public:
     virtual PlaylistInterface::RepeatMode repeatMode() const = 0;
     virtual bool shuffled() const = 0;
     virtual PlaylistInterface::ViewMode viewMode() const { return Unknown; }
-    virtual PlaylistInterface::SkipSeekRestrictions skipSeekRestrictions() const { return NoRestrictions; }
+    virtual PlaylistInterface::SeekRestrictions seekRestrictions() const { return NoSeekRestrictions; }
+    virtual PlaylistInterface::SkipRestrictions skipRestrictions() const { return NoSkipRestrictions; }
 
     virtual PlaylistInterface::RetryMode retryMode() const { return NoRetry; }
     virtual quint32 retryInterval() const { return 30000; }

@@ -59,6 +59,8 @@ public:
     /* Returns the PlaylistInterface of the current playlist. Note: The currently playing track might still be from a different playlist! */
     Tomahawk::PlaylistInterface* playlist() const { return m_playlist; }
 
+    Tomahawk::result_ptr currentTrack() const { return m_currentTrack; }
+
 public slots:
     void playPause();
     void play();

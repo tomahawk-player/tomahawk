@@ -25,6 +25,7 @@
 #include "sourcetree/items/playlistitems.h"
 #include "sourcetree/items/collectionitem.h"
 #include "audio/audioengine.h"
+#include "sourceplaylistinterface.h"
 
 #include <QAction>
 #include <QApplication>
@@ -141,7 +142,25 @@ SourceTreeView::setupMenus()
         }
     }
 
-    m_followAction = m_followMenu.addAction( tr( "&Follow Music Stream" ) );
+    if ( type == SourcesModel::Collection )
+    {
+        CollectionItem* item = itemFromIndex< CollectionItem >( m_contextMenuIndex );
+        source_ptr source = item->source();
+        if ( !source.isNull() )
+        {
+            PlaylistInterface* pi = AudioEngine::instance()->playlist();
+            if ( pi && dynamic_cast< SourcePlaylistInterface* >( pi ) )
+            {
+                SourcePlaylistInterface* sourcepi = dynamic_cast< SourcePlaylistInterface* >( pi );
+                if ( !sourcepi->source().isNull() && sourcepi->source()->id() == source->id() )
+                    m_followAction = m_followMenu.addAction( tr( "&Catch Up" ) );
+                else
+                    m_followAction = m_followMenu.addAction( tr( "&Listen Along" ) );
+            }
+            else
+                m_followAction = m_followMenu.addAction( tr( "&Listen Along" ) );
+        }
+    }
 
     m_loadPlaylistAction = m_playlistMenu.addAction( tr( "&Load Playlist" ) );
     m_renamePlaylistAction = m_playlistMenu.addAction( tr( "&Rename Playlist" ) );
