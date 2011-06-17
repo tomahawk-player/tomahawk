@@ -24,6 +24,7 @@
 #include "sourcelist.h"
 #include "sourcetree/items/playlistitems.h"
 #include "sourcetree/items/collectionitem.h"
+#include "audio/audioengine.h"
 
 #include <QAction>
 #include <QApplication>
@@ -125,7 +126,8 @@ SourceTreeView::setupMenus()
 {
     m_playlistMenu.clear();
     m_roPlaylistMenu.clear();
-
+    m_followMenu.clear();
+    
     bool readonly = true;
     SourcesModel::RowType type = ( SourcesModel::RowType )model()->data( m_contextMenuIndex, SourcesModel::SourceTreeItemTypeRole ).toInt();
     if ( type == SourcesModel::StaticPlaylist || type == SourcesModel::AutomaticPlaylist || type == SourcesModel::Station )
@@ -138,6 +140,8 @@ SourceTreeView::setupMenus()
             readonly = !playlist->author()->isLocal();
         }
     }
+
+    m_followAction = m_followMenu.addAction( tr( "&Follow Music Stream" ) );
 
     m_loadPlaylistAction = m_playlistMenu.addAction( tr( "&Load Playlist" ) );
     m_renamePlaylistAction = m_playlistMenu.addAction( tr( "&Rename Playlist" ) );
@@ -168,7 +172,8 @@ SourceTreeView::setupMenus()
     connect( m_renamePlaylistAction, SIGNAL( triggered() ), SLOT( renamePlaylist() ) );
     connect( m_deletePlaylistAction, SIGNAL( triggered() ), SLOT( deletePlaylist() ) );
     connect( m_copyPlaylistAction,   SIGNAL( triggered() ), SLOT( copyPlaylistLink() ) );
-    connect( m_addToLocalAction,   SIGNAL( triggered() ), SLOT( addToLocal() ) );
+    connect( m_addToLocalAction,     SIGNAL( triggered() ), SLOT( addToLocal() ) );
+    connect( m_followAction,         SIGNAL( triggered() ), SLOT( follow() ) );
 }
 
 
@@ -305,6 +310,24 @@ void SourceTreeView::addToLocal()
 
 
 void
+SourceTreeView::follow()
+{
+    qDebug() << Q_FUNC_INFO;
+    QModelIndex idx = m_contextMenuIndex;
+    if ( !idx.isValid() )
+        return;
+
+    SourcesModel::RowType type = ( SourcesModel::RowType )model()->data( m_contextMenuIndex, SourcesModel::SourceTreeItemTypeRole ).toInt();
+    if( type == SourcesModel::Collection )
+    {
+        CollectionItem* item = itemFromIndex< CollectionItem >( m_contextMenuIndex );
+        source_ptr source = item->source();
+        AudioEngine::instance()->playItem( source->getPlaylistInterface().data(), source->getPlaylistInterface()->nextItem() );
+    }
+}
+
+
+void
 SourceTreeView::renamePlaylist()
 {
     if( !m_contextMenuIndex.isValid() && !selectionModel()->selectedIndexes().isEmpty() )
@@ -334,6 +357,10 @@ SourceTreeView::onCustomContextMenu( const QPoint& pos )
             m_playlistMenu.exec( mapToGlobal( pos ) );
         else
             m_roPlaylistMenu.exec( mapToGlobal( pos ) );
+    }
+    else if ( model()->data( m_contextMenuIndex, SourcesModel::SourceTreeItemTypeRole ) == SourcesModel::Collection )
+    {
+        m_followMenu.exec( mapToGlobal( pos ) );
     }
 }
 

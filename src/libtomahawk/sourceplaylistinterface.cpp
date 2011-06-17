@@ -37,6 +37,14 @@ Tomahawk::result_ptr
 SourcePlaylistInterface::siblingItem( int itemsAway )
 {
     Q_UNUSED( itemsAway );
+    qDebug() << Q_FUNC_INFO;
+    Pipeline::instance()->resolve( m_source->currentTrack(), true );
+    if ( m_source->currentTrack()->results().empty() )
+    {
+        qDebug() << Q_FUNC_INFO << " Results were empty for current track";
+        return Tomahawk::result_ptr();
+    }
+
     return m_source->currentTrack()->results().first();
 }
 
@@ -44,6 +52,14 @@ SourcePlaylistInterface::siblingItem( int itemsAway )
 Tomahawk::result_ptr
 SourcePlaylistInterface::nextItem()
 {
+    qDebug() << Q_FUNC_INFO;
+    Pipeline::instance()->resolve( m_source->currentTrack(), true );
+    if ( m_source->currentTrack()->results().empty() )
+    {
+        qDebug() << Q_FUNC_INFO << " Results were empty for current track";
+        return Tomahawk::result_ptr();
+    }
+
     return m_source->currentTrack()->results().first();
 }
 
@@ -58,5 +74,6 @@ SourcePlaylistInterface::tracks()
 void
 SourcePlaylistInterface::onSourcePlaybackStarted( const Tomahawk::query_ptr& query ) const
 {
+    qDebug() << Q_FUNC_INFO;
     Pipeline::instance()->resolve( query, true );
 }

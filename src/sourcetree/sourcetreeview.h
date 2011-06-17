@@ -56,6 +56,8 @@ private slots:
     void copyPlaylistLink();
     void addToLocal();
 
+    void follow();
+
     void onCustomContextMenu( const QPoint& pos );
 protected:
 //    void drawBranches( QPainter* painter, const QRect& rect, const QModelIndex& index ) const {}
@@ -81,11 +83,13 @@ private:
 
     QMenu m_playlistMenu;
     QMenu m_roPlaylistMenu;
+    QMenu m_followMenu;
     QAction* m_loadPlaylistAction;
     QAction* m_renamePlaylistAction;
     QAction* m_deletePlaylistAction;
     QAction* m_copyPlaylistAction;
     QAction* m_addToLocalAction;
+    QAction* m_followAction;
 
     bool m_dragging;
     QRect m_dropRect;
