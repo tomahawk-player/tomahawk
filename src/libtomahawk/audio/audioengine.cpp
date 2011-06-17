@@ -146,9 +146,9 @@ void
 AudioEngine::previous()
 {
     qDebug() << Q_FUNC_INFO;
-    if ( !m_playlist->skipSeekRestrictions() == PlaylistInterface::NoSkip &&
-         !m_playlist->skipSeekRestrictions() == PlaylistInterface::NoSkipSeek )
-        loadPreviousTrack();
+    if ( m_playlist->skipSeekRestrictions() != PlaylistInterface::NoSkip &&
+         m_playlist->skipSeekRestrictions() != PlaylistInterface::NoSkipSeek )
+            loadPreviousTrack();
 }
 
 
@@ -156,9 +156,9 @@ void
 AudioEngine::next()
 {
     qDebug() << Q_FUNC_INFO;
-    if ( !m_playlist->skipSeekRestrictions() == PlaylistInterface::NoSkip &&
-         !m_playlist->skipSeekRestrictions() == PlaylistInterface::NoSkipSeek )
-        loadNextTrack();
+    if ( m_playlist->skipSeekRestrictions() != PlaylistInterface::NoSkip &&
+         m_playlist->skipSeekRestrictions() != PlaylistInterface::NoSkipSeek )
+            loadNextTrack();
 }
 
 
@@ -167,7 +167,7 @@ AudioEngine::seek( int ms )
 {
     if ( m_playlist->skipSeekRestrictions() == PlaylistInterface::NoSeek ||
          m_playlist->skipSeekRestrictions() == PlaylistInterface::NoSkipSeek )
-        return;
+            return;
     
     if ( isPlaying() || isPaused() )
     {
