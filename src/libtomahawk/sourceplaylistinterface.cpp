@@ -28,6 +28,7 @@ using namespace Tomahawk;
 SourcePlaylistInterface::SourcePlaylistInterface( Tomahawk::source_ptr& source )
     : PlaylistInterface( this )
     , m_source( source )
+    , m_gotNextSong( false )
 {
     connect( source.data(), SIGNAL( playbackStarted( const Tomahawk::query_ptr& ) ), SLOT( onSourcePlaybackStarted( const Tomahawk::query_ptr& ) ) );
 }
@@ -38,11 +39,13 @@ SourcePlaylistInterface::siblingItem( int itemsAway )
 {
     Q_UNUSED( itemsAway );
     qDebug() << Q_FUNC_INFO;
-    if ( m_source->currentTrack()->results().empty() )
+    if ( !m_gotNextSong || m_source.isNull() || m_source->currentTrack().isNull() || m_source->currentTrack()->results().isEmpty() )
     {
-        qDebug() << Q_FUNC_INFO << " Results were empty for current track";
+        qDebug() << Q_FUNC_INFO << " Results were empty for current track or source no longer valid";
         return Tomahawk::result_ptr();
     }
+
+    m_gotNextSong = false;
 
     return m_source->currentTrack()->results().first();
 }
@@ -52,11 +55,13 @@ Tomahawk::result_ptr
 SourcePlaylistInterface::nextItem()
 {
     qDebug() << Q_FUNC_INFO;
-    if ( m_source->currentTrack()->results().empty() )
+    if ( !m_gotNextSong || m_source.isNull() || m_source->currentTrack().isNull() || m_source->currentTrack()->results().isEmpty() )
     {
-        qDebug() << Q_FUNC_INFO << " Results were empty for current track";
+        qDebug() << Q_FUNC_INFO << " Results were empty for current track or source no longer valid";
         return Tomahawk::result_ptr();
     }
+
+    m_gotNextSong = false;
 
     return m_source->currentTrack()->results().first();
 }
@@ -70,12 +75,13 @@ SourcePlaylistInterface::tracks()
 
 
 void
-SourcePlaylistInterface::onSourcePlaybackStarted( const Tomahawk::query_ptr& query ) const
+SourcePlaylistInterface::onSourcePlaybackStarted( const Tomahawk::query_ptr& query )
 {
     qDebug() << Q_FUNC_INFO;
     connect( query.data(), SIGNAL( resultsAdded( const QList<Tomahawk::result_ptr>& ) ), SLOT( resolveResultsAdded( const QList<Tomahawk::result_ptr>& ) ) );
     connect( query.data(), SIGNAL( resolvingFinished( bool ) ), SLOT( resolvingFinished( bool ) ) );
     Pipeline::instance()->resolve( query, true );
+    m_gotNextSong = true;
 }
 
 

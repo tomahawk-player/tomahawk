@@ -63,12 +63,13 @@ signals:
     void sourceTrackCountChanged( unsigned int tracks );
 
 private slots:
-    void onSourcePlaybackStarted( const Tomahawk::query_ptr& query ) const;
+    void onSourcePlaybackStarted( const Tomahawk::query_ptr& query );
     void resolveResultsAdded( const QList<Tomahawk::result_ptr>& results ) const;
     void resolvingFinished( bool hasResults ) const;
 
 private:
     Tomahawk::source_ptr m_source;
+    bool m_gotNextSong;
 };
 
 }; // ns
