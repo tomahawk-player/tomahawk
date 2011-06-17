@@ -219,7 +219,7 @@ TomahawkApp::init()
     // Register shortcut handler for this platform
 #ifdef Q_WS_MAC
     m_shortcutHandler = QWeakPointer<MacShortcutHandler>( new MacShortcutHandler( this ) );
-    Tomahawk::setShortcutHandler( static_cast<MacShortcutHandler*>( m_shortcutHandler) );
+    Tomahawk::setShortcutHandler( static_cast<MacShortcutHandler*>( m_shortcutHandler.data() ) );
 
     Tomahawk::setApplicationHandler( this );
 
