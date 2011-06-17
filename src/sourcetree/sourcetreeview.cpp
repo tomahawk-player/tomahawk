@@ -360,7 +360,9 @@ SourceTreeView::onCustomContextMenu( const QPoint& pos )
     }
     else if ( model()->data( m_contextMenuIndex, SourcesModel::SourceTreeItemTypeRole ) == SourcesModel::Collection )
     {
-        m_followMenu.exec( mapToGlobal( pos ) );
+        CollectionItem* item = itemFromIndex< CollectionItem >( m_contextMenuIndex );
+        if ( !item->source()->isLocal() )
+            m_followMenu.exec( mapToGlobal( pos ) );
     }
 }
 
