@@ -174,7 +174,7 @@ Pipeline::reportResults( QID qid, const QList< result_ptr >& results )
     const query_ptr& q = m_qids.value( qid );
     if ( !results.isEmpty() )
     {
-        //qDebug() << Q_FUNC_INFO << qid;
+//         qDebug() << Q_FUNC_INFO << qid;
 
         q->addResults( results );
         foreach( const result_ptr& r, q->results() )
@@ -295,6 +295,8 @@ Pipeline::shunt( const query_ptr& q )
     {
         qDebug() << "Reached end of pipeline for:" << q->toString();
         setQIDState( q, 0 );
+
+        q->onResolvingFinished();
     }
 
     shuntNext();
