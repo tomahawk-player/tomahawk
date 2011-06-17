@@ -68,6 +68,11 @@ AudioEngine::AudioEngine()
     connect( m_audioOutput, SIGNAL( volumeChanged( qreal ) ), this, SLOT( onVolumeChanged( qreal ) ) );
 
     onVolumeChanged( m_audioOutput->volume() );
+#ifdef Q_OS_MAC
+    // On mac, phonon volume is independent from system volume, so the onVolumeChanged call above just sets our volume to 100%.
+    // Since it's indendent, we'll set it to 75% since that's nicer
+    setVolume( 75 );
+#endif
 }
 
 
