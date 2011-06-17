@@ -93,7 +93,7 @@ CategoryAddItem::activate()
 Qt::ItemFlags
 CategoryAddItem::flags() const
 {
-    switch( m_categoryType )
+    switch ( m_categoryType )
     {
         case SourcesModel::PlaylistsCategory:
             return Qt::ItemIsEnabled | Qt::ItemIsSelectable | Qt::ItemIsDropEnabled;
@@ -113,9 +113,13 @@ CategoryAddItem::icon() const
 bool
 CategoryAddItem::willAcceptDrag( const QMimeData* data ) const
 {
-    if( ( m_categoryType == SourcesModel::PlaylistsCategory || m_categoryType == SourcesModel::StationsCategory ) &&
-          data->hasFormat( "application/tomahawk.query.list" ) ||
-          data->hasFormat( "application/tomahawk.result.list" ) ) {
+    if ( ( m_categoryType == SourcesModel::PlaylistsCategory || m_categoryType == SourcesModel::StationsCategory ) &&
+             (
+                data->hasFormat( "application/tomahawk.query.list" ) ||
+                data->hasFormat( "application/tomahawk.result.list" )
+             )
+       )
+    {
         return true;
     }
     return false;
@@ -125,11 +129,11 @@ bool
 CategoryAddItem::dropMimeData( const QMimeData* data, Qt::DropAction )
 {
     // Create a new playlist seeded with these items
-    if( data->hasFormat( "application/tomahawk.query.list" ) || data->hasFormat( "application/tomahawk.result.list" ) ) {
+    if ( data->hasFormat( "application/tomahawk.query.list" ) || data->hasFormat( "application/tomahawk.result.list" ) ) {
 
         QList< Tomahawk::query_ptr > queries;
 
-        if( data->hasFormat( "application/tomahawk.query.list" ) ) {
+        if ( data->hasFormat( "application/tomahawk.query.list" ) ) {
             QByteArray itemData = data->data( "application/tomahawk.query.list" );
             QDataStream stream( &itemData, QIODevice::ReadOnly );
 
