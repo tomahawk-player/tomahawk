@@ -279,14 +279,14 @@ AudioEngine::loadTrack( const Tomahawk::result_ptr& result )
             DatabaseCommand_LogPlayback* cmd = new DatabaseCommand_LogPlayback( m_currentTrack, DatabaseCommand_LogPlayback::Started );
             Database::instance()->enqueue( QSharedPointer<DatabaseCommand>(cmd) );
 
-	    Tomahawk::InfoSystem::InfoCriteriaHash trackInfo;
+        Tomahawk::InfoSystem::InfoCriteriaHash trackInfo;
 
-	    trackInfo["title"] = m_currentTrack->track();
-	    trackInfo["artist"] = m_currentTrack->artist()->name();
-	    trackInfo["album"] = m_currentTrack->album()->name();
-	    Tomahawk::InfoSystem::InfoSystem::instance()->pushInfo(
-	       s_aeInfoIdentifier, Tomahawk::InfoSystem::InfoNowPlaying,
-	       QVariant::fromValue< Tomahawk::InfoSystem::InfoCriteriaHash >( trackInfo ) );
+        trackInfo["title"] = m_currentTrack->track();
+        trackInfo["artist"] = m_currentTrack->artist()->name();
+        trackInfo["album"] = m_currentTrack->album()->name();
+        Tomahawk::InfoSystem::InfoSystem::instance()->pushInfo(
+        s_aeInfoIdentifier, Tomahawk::InfoSystem::InfoNowPlaying,
+        QVariant::fromValue< Tomahawk::InfoSystem::InfoCriteriaHash >( trackInfo ) );
 
         }
     }
