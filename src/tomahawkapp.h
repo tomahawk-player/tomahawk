@@ -36,6 +36,7 @@
 
 #include "typedefs.h"
 #include "playlist.h"
+#include "source.h"
 #include "resolver.h"
 #include "network/servent.h"
 
@@ -82,7 +83,7 @@ public:
     void init();
     static TomahawkApp* instance();
 
-    XMPPBot* xmppBot() { return m_xmppBot; }
+    XMPPBot* xmppBot() { return m_xmppBot.data(); }
 
 #ifndef TOMAHAWK_HEADLESS
     AudioControls* audioControls();
@@ -115,13 +116,13 @@ private:
     QList<Tomahawk::collection_ptr> m_collections;
     QHash<QString, Tomahawk::ExternalResolver*> m_scriptResolvers;
 
-    Database* m_database;
-    ScanManager *m_scanManager;
-    AudioEngine* m_audioEngine;
-    Servent* m_servent;
-    Tomahawk::InfoSystem::InfoSystem* m_infoSystem;
-    XMPPBot* m_xmppBot;
-    Tomahawk::ShortcutHandler* m_shortcutHandler;
+    QWeakPointer<Database> m_database;
+    QWeakPointer<ScanManager> m_scanManager;
+    QWeakPointer<AudioEngine> m_audioEngine;
+    QWeakPointer<Servent> m_servent;
+    QWeakPointer<Tomahawk::InfoSystem::InfoSystem> m_infoSystem;
+    QWeakPointer<XMPPBot> m_xmppBot;
+    QWeakPointer<Tomahawk::ShortcutHandler> m_shortcutHandler;
     bool m_scrubFriendlyName;
 
 #ifdef LIBLASTFM_FOUND

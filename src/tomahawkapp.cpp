@@ -151,12 +151,6 @@ using namespace Tomahawk;
 
 TomahawkApp::TomahawkApp( int& argc, char *argv[] )
     : TOMAHAWK_APPLICATION( argc, argv )
-    , m_database( 0 )
-    , m_scanManager( 0 )
-    , m_audioEngine( 0 )
-    , m_servent( 0 )
-    , m_shortcutHandler( 0 )
-    , m_mainwindow( 0 )
 {
     qDebug() << "TomahawkApp thread:" << this->thread();
     setOrganizationName( QLatin1String( TOMAHAWK_ORGANIZATION_NAME ) );
@@ -184,9 +178,9 @@ TomahawkApp::init()
 
     new TomahawkSettings( this );
     TomahawkSettings* s = TomahawkSettings::instance();
-    
+
     TomahawkUtils::NetworkProxyFactory* proxyFactory = new TomahawkUtils::NetworkProxyFactory();
-    
+
     if( s->proxyType() != QNetworkProxy::NoProxy &&
         !s->proxyHost().isEmpty() )
     {
@@ -194,11 +188,11 @@ TomahawkApp::init()
         QNetworkProxy proxy( static_cast<QNetworkProxy::ProxyType>( s->proxyType() ), s->proxyHost(), s->proxyPort(), s->proxyUsername(), s->proxyPassword() );
         proxyFactory->setProxy( proxy );
     }
-    
+
     if ( !s->proxyNoProxyHosts().isEmpty() )
         proxyFactory->setNoProxyHosts( s->proxyNoProxyHosts().split( ',', QString::SkipEmptyParts ) );
     TomahawkUtils::NetworkProxyFactory::setApplicationProxyFactory( proxyFactory );
-    
+
 #ifdef LIBLASTFM_FOUND
     qDebug() << "Setting NAM.";
     TomahawkUtils::setNam( lastfm::nam() );
@@ -209,12 +203,12 @@ TomahawkApp::init()
 
     Echonest::Config::instance()->setAPIKey( "JRIHWEP6GPOER2QQ6" );
 
-    m_audioEngine = new AudioEngine;
-    m_scanManager = new ScanManager( this );
+    m_audioEngine = QWeakPointer<AudioEngine>( new AudioEngine );
+    m_scanManager = QWeakPointer<ScanManager>( new ScanManager( this ) );
     new Pipeline( this );
 
-    m_servent = new Servent( this );
-    connect( m_servent, SIGNAL( ready() ), SLOT( setupSIP() ) );
+    m_servent = QWeakPointer<Servent>( new Servent( this ) );
+    connect( m_servent.data(), SIGNAL( ready() ), SLOT( setupSIP() ) );
 
     qDebug() << "Init Database.";
     setupDatabase();
@@ -224,7 +218,7 @@ TomahawkApp::init()
 
     // Register shortcut handler for this platform
 #ifdef Q_WS_MAC
-    m_shortcutHandler = new MacShortcutHandler( this );
+    m_shortcutHandler = QWeakPointer<MacShortcutHandler>( new MacShortcutHandler( this ) );
     Tomahawk::setShortcutHandler( static_cast<MacShortcutHandler*>( m_shortcutHandler) );
 
     Tomahawk::setApplicationHandler( this );
@@ -249,20 +243,20 @@ TomahawkApp::init()
 #endif
 
     // Connect up shortcuts
-    if ( m_shortcutHandler )
+    if ( !m_shortcutHandler.isNull() )
     {
-        connect( m_shortcutHandler, SIGNAL( playPause() ), m_audioEngine, SLOT( playPause() ) );
-        connect( m_shortcutHandler, SIGNAL( pause() ), m_audioEngine, SLOT( pause() ) );
-        connect( m_shortcutHandler, SIGNAL( stop() ), m_audioEngine, SLOT( stop() ) );
-        connect( m_shortcutHandler, SIGNAL( previous() ), m_audioEngine, SLOT( previous() ) );
-        connect( m_shortcutHandler, SIGNAL( next() ), m_audioEngine, SLOT( next() ) );
-        connect( m_shortcutHandler, SIGNAL( volumeUp() ), m_audioEngine, SLOT( raiseVolume() ) );
-        connect( m_shortcutHandler, SIGNAL( volumeDown() ), m_audioEngine, SLOT( lowerVolume() ) );
-        connect( m_shortcutHandler, SIGNAL( mute() ), m_audioEngine, SLOT( mute() ) );
+        connect( m_shortcutHandler.data(), SIGNAL( playPause() ), m_audioEngine.data(), SLOT( playPause() ) );
+        connect( m_shortcutHandler.data(), SIGNAL( pause() ), m_audioEngine.data(), SLOT( pause() ) );
+        connect( m_shortcutHandler.data(), SIGNAL( stop() ), m_audioEngine.data(), SLOT( stop() ) );
+        connect( m_shortcutHandler.data(), SIGNAL( previous() ), m_audioEngine.data(), SLOT( previous() ) );
+        connect( m_shortcutHandler.data(), SIGNAL( next() ), m_audioEngine.data(), SLOT( next() ) );
+        connect( m_shortcutHandler.data(), SIGNAL( volumeUp() ), m_audioEngine.data(), SLOT( raiseVolume() ) );
+        connect( m_shortcutHandler.data(), SIGNAL( volumeDown() ), m_audioEngine.data(), SLOT( lowerVolume() ) );
+        connect( m_shortcutHandler.data(), SIGNAL( mute() ), m_audioEngine.data(), SLOT( mute() ) );
     }
 
     qDebug() << "Init InfoSystem.";
-    m_infoSystem = new Tomahawk::InfoSystem::InfoSystem( this );
+    m_infoSystem = QWeakPointer<Tomahawk::InfoSystem::InfoSystem>( new Tomahawk::InfoSystem::InfoSystem( this ) );
 
     Echonest::Config::instance()->setAPIKey( "JRIHWEP6GPOER2QQ6" );
     Echonest::Config::instance()->setNetworkAccessManager( TomahawkUtils::nam() );
@@ -317,23 +311,28 @@ TomahawkApp::~TomahawkApp()
     }
     m_scriptResolvers.clear();
 
-    delete m_servent;
-    delete m_scanManager;
+    if( !m_servent.isNull() )
+        delete m_servent.data();
+    if( !m_scanManager.isNull() )
+        delete m_scanManager.data();
 #ifndef TOMAHAWK_HEADLESS
     delete m_mainwindow;
-    delete m_audioEngine;
 #endif
+    if( !m_audioEngine.isNull() )
+        delete m_audioEngine.data();
 
-    delete m_infoSystem;
+    if( !m_infoSystem.isNull() )
+        delete m_infoSystem.data();
 
     //FIXME: delete GeneratorFactory::registerFactory( "echonest", new EchonestFactory ); ?
 
-    delete SipHandler::instance();    
-    delete m_servent;
+    delete SipHandler::instance();
 
-    delete m_scanManager;
-    delete m_database;
-    
+    if( !m_scanManager.isNull() )
+        delete m_scanManager.data();
+    if( !m_database.isNull() )
+        delete m_database.data();
+
     Pipeline::instance()->stop();
     delete Pipeline::instance();
 
@@ -431,7 +430,7 @@ TomahawkApp::setupDatabase()
     }
 
     qDebug() << "Using database:" << dbpath;
-    m_database = new Database( dbpath, this );
+    m_database = QWeakPointer<Database>( new Database( dbpath, this ) );
     Pipeline::instance()->databaseReady();
 }
 
@@ -545,7 +544,7 @@ TomahawkApp::setupSIP()
     if( !arguments().contains( "--nosip" ) )
     {
 #ifdef GLOOX_FOUND
-        m_xmppBot = new XMPPBot( this );
+        m_xmppBot = QWeakPointer<XMPPBot>( new XMPPBot( this ) );
 #endif
 
         qDebug() << "Connecting SIP classes";
