@@ -1,13 +1,12 @@
 <RCC>
   <qresource>
-    <file>./data/images/add-friend-button-pressed.png</file>
-    <file>./data/images/add-friend-button-rest.png</file>
     <file>./data/images/avatar-dude-plus.png</file>
     <file>./data/images/avatar-dude.png</file>
     <file>./data/images/back-pressed.png</file>
     <file>./data/images/back-rest.png</file>
     <file>./data/images/cover-shadow.png</file>
-    <file>./data/images/magnifying-glass.png</file>
+    <file>./data/images/loved.png</file>
+    <file>./data/images/not-loved.png</file>
     <file>./data/images/no-album-art-placeholder.png</file>
     <file>./data/images/now-playing-panel.png</file>
     <file>./data/images/now-playing-speaker.png</file>
@@ -25,7 +24,6 @@
     <file>./data/images/repeat-off-pressed.png</file>
     <file>./data/images/repeat-off-rest.png</file>
     <file>./data/images/search-box-dismiss-x.png</file>
-    <file>./data/images/search-box.png</file>
     <file>./data/images/seek-and-volume-knob-pressed.png</file>
     <file>./data/images/seek-and-volume-knob-rest.png</file>
     <file>./data/images/seek-slider-bkg.png</file>
@@ -36,14 +34,6 @@
     <file>./data/images/shuffle-on-rest.png</file>
     <file>./data/images/skip-pressed.png</file>
     <file>./data/images/skip-rest.png</file>
-    <file>./data/images/source-info.png</file>
-    <file>./data/images/source-off-pressed.png</file>
-    <file>./data/images/source-off-rest.png</file>
-    <file>./data/images/source-on-pressed.png</file>
-    <file>./data/images/source-on-rest.png</file>
-    <file>./data/images/status-alert-icon.png</file>
-    <file>./data/images/status-bar-bkg.png</file>
-    <file>./data/images/status-dismiss-x.png</file>
     <file>./data/images/user-avatar.png</file>
     <file>./data/images/view-toggle-active-centre.png</file>
     <file>./data/images/view-toggle-active-left.png</file>
