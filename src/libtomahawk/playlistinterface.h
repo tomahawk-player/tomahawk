@@ -36,6 +36,7 @@ public:
     enum RepeatMode { NoRepeat, RepeatOne, RepeatAll };
     enum ViewMode { Unknown, Tree, Flat, Album };
     enum SkipSeekRestrictions { NoRestrictions, NoSkip, NoSeek, NoSkipSeek };
+    enum RetryMode { NoRetry, Retry };
 
     PlaylistInterface( QObject* parent = 0 ) : m_object( parent ) {}
     virtual ~PlaylistInterface() {}
@@ -54,6 +55,9 @@ public:
     virtual PlaylistInterface::ViewMode viewMode() const { return Unknown; }
     virtual PlaylistInterface::SkipSeekRestrictions skipSeekRestrictions() const { return NoRestrictions; }
 
+    virtual PlaylistInterface::RetryMode retryMode() const { return NoRetry; }
+    virtual quint32 retryInterval() const { return 30000; }
+    
     virtual QString filter() const { return m_filter; }
     virtual void setFilter( const QString& pattern ) { m_filter = pattern; }
 

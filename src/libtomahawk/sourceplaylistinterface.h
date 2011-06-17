@@ -48,6 +48,8 @@ public:
 
     virtual PlaylistInterface::RepeatMode repeatMode() const { return PlaylistInterface::NoRepeat; }
     virtual PlaylistInterface::SkipSeekRestrictions skipSeekRestrictions() const { return PlaylistInterface::NoSkipSeek; }
+    virtual PlaylistInterface::RetryMode retryMode() const { return Retry; }
+    virtual quint32 retryInterval() const { return 5000; }
 
     virtual bool shuffled() const { return false; }
     virtual void setFilter( const QString& /*pattern*/ ) {}

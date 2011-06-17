@@ -20,6 +20,7 @@
 #define AUDIOENGINE_H
 
 #include <QObject>
+#include <QTimer>
 
 #include <phonon/MediaObject>
 #include <phonon/AudioOutput>
@@ -127,6 +128,8 @@ private:
 
     unsigned int m_timeElapsed;
     bool m_expectStop;
+
+    QTimer m_retryTimer;
 
     static AudioEngine* s_instance;
 };

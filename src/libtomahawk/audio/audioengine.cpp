@@ -73,13 +73,17 @@ AudioEngine::AudioEngine()
     // Since it's indendent, we'll set it to 75% since that's nicer
     setVolume( 75 );
 #endif
+
+    m_retryTimer.setInterval( 10000 );
+    m_retryTimer.setSingleShot( false );
+    connect( &m_retryTimer, SIGNAL( timeout() ), SLOT( loadNextTrack() ) );
 }
 
 
 AudioEngine::~AudioEngine()
 {
     qDebug() << Q_FUNC_INFO;
-
+    m_retryTimer.stop();
     m_mediaObject->stop();
 //    stop();
 
@@ -210,6 +214,9 @@ bool
 AudioEngine::loadTrack( const Tomahawk::result_ptr& result )
 {
     qDebug() << Q_FUNC_INFO << thread() << result;
+
+    m_retryTimer.stop();
+    
     bool err = false;
 
     {
@@ -294,7 +301,9 @@ void
 AudioEngine::loadPreviousTrack()
 {
     qDebug() << Q_FUNC_INFO;
-
+    
+    m_retryTimer.stop();
+    
     if ( !m_playlist )
     {
         stop();
@@ -314,6 +323,8 @@ AudioEngine::loadNextTrack()
 {
     qDebug() << Q_FUNC_INFO;
 
+    m_retryTimer.stop();
+    
     Tomahawk::result_ptr result;
 
     if ( m_queue && m_queue->trackCount() )
@@ -329,7 +340,14 @@ AudioEngine::loadNextTrack()
     if ( !result.isNull() )
         loadTrack( result );
     else
+    {
         stop();
+        if ( m_playlist->retryMode() == Tomahawk::PlaylistInterface::Retry )
+        {
+            m_retryTimer.setInterval( m_playlist->retryInterval() );
+            m_retryTimer.start();
+        }
+    }
 }
 
 
@@ -341,7 +359,13 @@ AudioEngine::playItem( Tomahawk::PlaylistInterface* playlist, const Tomahawk::re
     setPlaylist( playlist );
     m_currentTrackPlaylist = playlist;
 
-    loadTrack( result );
+    if ( result.isNull() )
+    {
+        m_retryTimer.setInterval( playlist->retryInterval() );
+        m_retryTimer.start();
+    }
+    else
+        loadTrack( result );
 }
 
 
