@@ -46,7 +46,7 @@ LastFmPlugin::LastFmPlugin()
     , m_scrobbler( 0 )
 {
     m_supportedGetTypes << InfoAlbumCoverArt << InfoArtistImages << InfoLove;
-    m_supportedPushTypes << InfoSubmitScrobble << InfoSubmitNowPlaying << InfoLove; 
+    m_supportedPushTypes << InfoSubmitScrobble << InfoSubmitNowPlaying << InfoLove;
 
 /*
       Your API Key is 7194b85b6d1f424fe1668173a78c0c4a
@@ -95,7 +95,7 @@ LastFmPlugin::namChangedSlot( QNetworkAccessManager *nam )
     qDebug() << Q_FUNC_INFO;
     if( !nam )
         return;
-    
+
     m_nam = QWeakPointer< QNetworkAccessManager >( nam );
     settingsChanged(); // to get the scrobbler set up
 }
@@ -204,7 +204,7 @@ void
 LastFmPlugin::sendLoveSong( QVariant input )
 {
     qDebug() << Q_FUNC_INFO;
-    
+
     if ( !input.canConvert< Tomahawk::InfoSystem::InfoCriteriaHash >() )
     {
         qDebug() << "LastFmPlugin::nowPlaying cannot convert input!";
@@ -212,7 +212,7 @@ LastFmPlugin::sendLoveSong( QVariant input )
     }
 
     InfoCriteriaHash hash = input.value< Tomahawk::InfoSystem::InfoCriteriaHash >();
-    if ( !hash.contains( "title" ) || !hash.contains( "artist" ) || !hash.contains( "album" ) || !hash.contains( "duration" ) )
+    if ( !hash.contains( "title" ) || !hash.contains( "artist" ) || !hash.contains( "album" ) )
         return;
 
     lastfm::MutableTrack track;
@@ -286,7 +286,7 @@ LastFmPlugin::notInCacheSlot( const QHash<QString, QString> criteria, const QStr
         emit info( caller, type, input, QVariant(), customData );
         return;
     }
-        
+
     switch ( type )
     {
         case InfoAlbumCoverArt:
@@ -327,7 +327,7 @@ LastFmPlugin::notInCacheSlot( const QHash<QString, QString> criteria, const QStr
             qDebug() << "Couldn't figure out what to do with this type of request after cache miss";
             emit info( caller, type, input, QVariant(), customData );
             return;
-        }   
+        }
     }
 }
 
@@ -474,7 +474,7 @@ LastFmPlugin::settingsChanged()
 
 void
 LastFmPlugin::onAuthenticated()
-{    
+{
     qDebug() << Q_FUNC_INFO;
     QNetworkReply* authJob = dynamic_cast<QNetworkReply*>( sender() );
     if( !authJob )
