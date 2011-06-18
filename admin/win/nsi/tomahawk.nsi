@@ -38,7 +38,7 @@
 !ifndef VER_MAJOR && VER_MINOR && VER_BUILD
     !define VER_MAJOR "0"
     !define VER_MINOR "2"
-    !define VER_BUILD "0alpha1"
+    !define VER_BUILD "0prealpha"
 !endif
 
 !define VERSION "${VER_MAJOR}.${VER_MINOR}.${VER_BUILD}"
@@ -54,7 +54,7 @@
 Name "Tomahawk"
 Caption "Tomahawk Installer"
 BrandingText "Tomahawk ${VERSION}  -- ${BUILD_TIME}"
-OutFile "tomahawk-${VERSION}.exe"
+OutFile "${ROOT_PATH}\build\tomahawk-${VERSION}.exe"
 InstallDir "$PROGRAMFILES\Tomahawk"
 InstallDirRegKey HKCU "Software\Tomahawk" ""
 InstType Standard
