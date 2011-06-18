@@ -56,7 +56,8 @@ private slots:
     void copyPlaylistLink();
     void addToLocal();
 
-    void follow();
+    void latchOn();
+    void latchOff();
 
     void onCustomContextMenu( const QPoint& pos );
 protected:
@@ -83,13 +84,14 @@ private:
 
     QMenu m_playlistMenu;
     QMenu m_roPlaylistMenu;
-    QMenu m_followMenu;
+    QMenu m_latchMenu;
     QAction* m_loadPlaylistAction;
     QAction* m_renamePlaylistAction;
     QAction* m_deletePlaylistAction;
     QAction* m_copyPlaylistAction;
     QAction* m_addToLocalAction;
-    QAction* m_followAction;
+    QAction* m_latchOnAction;
+    QAction* m_latchOffAction;
 
     bool m_dragging;
     QRect m_dropRect;

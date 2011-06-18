@@ -127,7 +127,7 @@ SourceTreeView::setupMenus()
 {
     m_playlistMenu.clear();
     m_roPlaylistMenu.clear();
-    m_followMenu.clear();
+    m_latchMenu.clear();
     
     bool readonly = true;
     SourcesModel::RowType type = ( SourcesModel::RowType )model()->data( m_contextMenuIndex, SourcesModel::SourceTreeItemTypeRole ).toInt();
@@ -142,6 +142,8 @@ SourceTreeView::setupMenus()
         }
     }
 
+    m_latchOnAction = m_latchMenu.addAction( tr( "&Listen Along" ) );
+
     if ( type == SourcesModel::Collection )
     {
         CollectionItem* item = itemFromIndex< CollectionItem >( m_contextMenuIndex );
@@ -153,12 +155,13 @@ SourceTreeView::setupMenus()
             {
                 SourcePlaylistInterface* sourcepi = dynamic_cast< SourcePlaylistInterface* >( pi );
                 if ( !sourcepi->source().isNull() && sourcepi->source()->id() == source->id() )
-                    m_followAction = m_followMenu.addAction( tr( "&Catch Up" ) );
-                else
-                    m_followAction = m_followMenu.addAction( tr( "&Listen Along" ) );
+                {
+                    m_latchOnAction->setText( tr( "&Catch Up" ) );
+                    m_latchMenu.addSeparator();
+                    m_latchOffAction = m_latchMenu.addAction( tr( "&Stop Listening Along" ) );
+                    connect( m_latchOffAction,       SIGNAL( triggered() ), SLOT( latchOff() ) );
+                }
             }
-            else
-                m_followAction = m_followMenu.addAction( tr( "&Listen Along" ) );
         }
     }
 
@@ -192,7 +195,7 @@ SourceTreeView::setupMenus()
     connect( m_deletePlaylistAction, SIGNAL( triggered() ), SLOT( deletePlaylist() ) );
     connect( m_copyPlaylistAction,   SIGNAL( triggered() ), SLOT( copyPlaylistLink() ) );
     connect( m_addToLocalAction,     SIGNAL( triggered() ), SLOT( addToLocal() ) );
-    connect( m_followAction,         SIGNAL( triggered() ), SLOT( follow() ) );
+    connect( m_latchOnAction,        SIGNAL( triggered() ), SLOT( latchOn() ) );
 }
 
 
@@ -329,7 +332,7 @@ void SourceTreeView::addToLocal()
 
 
 void
-SourceTreeView::follow()
+SourceTreeView::latchOn()
 {
     qDebug() << Q_FUNC_INFO;
     QModelIndex idx = m_contextMenuIndex;
@@ -337,12 +340,51 @@ SourceTreeView::follow()
         return;
 
     SourcesModel::RowType type = ( SourcesModel::RowType )model()->data( m_contextMenuIndex, SourcesModel::SourceTreeItemTypeRole ).toInt();
-    if( type == SourcesModel::Collection )
+    if( type != SourcesModel::Collection )
+        return;
+
+    CollectionItem* item = itemFromIndex< CollectionItem >( m_contextMenuIndex );
+    source_ptr source = item->source();
+    PlaylistInterface* pi = AudioEngine::instance()->playlist();
+    
+    if ( pi && dynamic_cast< SourcePlaylistInterface* >( pi ) )
     {
-        CollectionItem* item = itemFromIndex< CollectionItem >( m_contextMenuIndex );
-        source_ptr source = item->source();
-        AudioEngine::instance()->playItem( source->getPlaylistInterface().data(), source->getPlaylistInterface()->nextItem() );
+        SourcePlaylistInterface* sourcepi = dynamic_cast< SourcePlaylistInterface* >( pi );
+        if ( !sourcepi->source().isNull() && sourcepi->source()->id() == source->id() )
+        {
+            //it's a catch-up -- if they're trying to catch-up in the same track, don't do anything
+            //so that you don't repeat the track and/or cause the retry timer to fire
+            if ( !AudioEngine::instance()->currentTrack().isNull() &&
+                  AudioEngine::instance()->currentTrack()->id() == sourcepi->currentItem()->id() )
+                    return;
+        }
     }
+
+    AudioEngine::instance()->playItem( source->getPlaylistInterface().data(), source->getPlaylistInterface()->nextItem() );
+}
+
+
+void
+SourceTreeView::latchOff()
+{
+    qDebug() << Q_FUNC_INFO;
+    QModelIndex idx = m_contextMenuIndex;
+    if ( !idx.isValid() )
+        return;
+
+    SourcesModel::RowType type = ( SourcesModel::RowType )model()->data( m_contextMenuIndex, SourcesModel::SourceTreeItemTypeRole ).toInt();
+    if( type != SourcesModel::Collection )
+        return;
+
+    PlaylistInterface* pi = AudioEngine::instance()->playlist();
+    if ( pi && dynamic_cast< SourcePlaylistInterface* >( pi ) )
+    {
+        SourcePlaylistInterface* sourcepi = dynamic_cast< SourcePlaylistInterface* >( pi );
+        sourcepi->reset();
+    }
+    
+    AudioEngine::instance()->stop();
+    AudioEngine::instance()->setPlaylist( 0 );
 }
 
 
@@ -381,7 +423,7 @@ SourceTreeView::onCustomContextMenu( const QPoint& pos )
     {
         CollectionItem* item = itemFromIndex< CollectionItem >( m_contextMenuIndex );
         if ( !item->source()->isLocal() )
-            m_followMenu.exec( mapToGlobal( pos ) );
+            m_latchMenu.exec( mapToGlobal( pos ) );
     }
 }
 

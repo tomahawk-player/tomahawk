@@ -28,6 +28,7 @@ using namespace Tomahawk;
 SourcePlaylistInterface::SourcePlaylistInterface( Tomahawk::source_ptr& source )
     : PlaylistInterface( this )
     , m_source( source )
+    , m_currentItem( 0 )
     , m_gotNextSong( false )
 {
     connect( source.data(), SIGNAL( playbackStarted( const Tomahawk::query_ptr& ) ), SLOT( onSourcePlaybackStarted( const Tomahawk::query_ptr& ) ) );
@@ -39,15 +40,21 @@ SourcePlaylistInterface::siblingItem( int itemsAway )
 {
     Q_UNUSED( itemsAway );
     qDebug() << Q_FUNC_INFO;
-    if ( !m_gotNextSong || m_source.isNull() || m_source->currentTrack().isNull() || m_source->currentTrack()->results().isEmpty() )
+    if ( m_source.isNull() || m_source->currentTrack().isNull() || m_source->currentTrack()->results().isEmpty() )
     {
         qDebug() << Q_FUNC_INFO << " Results were empty for current track or source no longer valid";
+        m_currentItem = Tomahawk::result_ptr();
+        return m_currentItem;
+    }
+    else if ( !m_gotNextSong )
+    {
+        qDebug() << Q_FUNC_INFO << " This song was already fetched";
         return Tomahawk::result_ptr();
     }
 
     m_gotNextSong = false;
-
-    return m_source->currentTrack()->results().first();
+    m_currentItem = m_source->currentTrack()->results().first();
+    return m_currentItem;
 }
 
 
@@ -55,15 +62,21 @@ Tomahawk::result_ptr
 SourcePlaylistInterface::nextItem()
 {
     qDebug() << Q_FUNC_INFO;
-    if ( !m_gotNextSong || m_source.isNull() || m_source->currentTrack().isNull() || m_source->currentTrack()->results().isEmpty() )
+    if ( m_source.isNull() || m_source->currentTrack().isNull() || m_source->currentTrack()->results().isEmpty() )
     {
         qDebug() << Q_FUNC_INFO << " Results were empty for current track or source no longer valid";
+        m_currentItem = Tomahawk::result_ptr();
+        return m_currentItem;
+    }
+    else if ( !m_gotNextSong )
+    {
+        qDebug() << Q_FUNC_INFO << " This song was already fetched";
         return Tomahawk::result_ptr();
     }
 
     m_gotNextSong = false;
-
-    return m_source->currentTrack()->results().first();
+    m_currentItem = m_source->currentTrack()->results().first();
+    return m_currentItem;
 }
 
 
@@ -71,6 +84,16 @@ QList<Tomahawk::query_ptr>
 SourcePlaylistInterface::tracks()
 {
     return m_source->collection()->tracks();
+}
+
+
+void
+SourcePlaylistInterface::reset()
+{
+    if ( !m_currentItem.isNull() )
+        m_gotNextSong = true;
+    else
+        m_gotNextSong = false;
 }
 
 

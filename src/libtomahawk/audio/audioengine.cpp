@@ -111,14 +111,14 @@ AudioEngine::play()
     {
         m_mediaObject->play();
         emit resumed();
-	Tomahawk::InfoSystem::InfoCriteriaHash trackInfo;
+        Tomahawk::InfoSystem::InfoCriteriaHash trackInfo;
 
-	trackInfo["title"] = m_currentTrack->track();
-	trackInfo["artist"] = m_currentTrack->artist()->name();
-	trackInfo["album"] = m_currentTrack->album()->name();
-	Tomahawk::InfoSystem::InfoSystem::instance()->pushInfo(
-	   s_aeInfoIdentifier, Tomahawk::InfoSystem::InfoNowResumed,
-	   QVariant::fromValue< Tomahawk::InfoSystem::InfoCriteriaHash >( trackInfo ) );
+        trackInfo["title"] = m_currentTrack->track();
+        trackInfo["artist"] = m_currentTrack->artist()->name();
+        trackInfo["album"] = m_currentTrack->album()->name();
+        Tomahawk::InfoSystem::InfoSystem::instance()->pushInfo(
+        s_aeInfoIdentifier, Tomahawk::InfoSystem::InfoNowResumed,
+        QVariant::fromValue< Tomahawk::InfoSystem::InfoCriteriaHash >( trackInfo ) );
     }
     else
         loadNextTrack();
@@ -143,7 +143,8 @@ AudioEngine::stop()
     qDebug() << Q_FUNC_INFO;
 
     m_mediaObject->stop();
-
+    m_retryTimer.stop();
+    
     setCurrentTrack( Tomahawk::result_ptr() );
     emit stopped();
     Tomahawk::InfoSystem::InfoSystem::instance()->pushInfo(
@@ -155,6 +156,10 @@ void
 AudioEngine::previous()
 {
     qDebug() << Q_FUNC_INFO;
+
+    if ( !m_playlist )
+        return;
+    
     if ( m_playlist->skipRestrictions() == PlaylistInterface::NoSkip ||
          m_playlist->skipRestrictions() == PlaylistInterface::NoSkipBackwards )
         return;
@@ -167,6 +172,10 @@ void
 AudioEngine::next()
 {
     qDebug() << Q_FUNC_INFO;
+
+    if ( !m_playlist )
+        return;
+    
     if ( m_playlist->skipRestrictions() == PlaylistInterface::NoSkip ||
          m_playlist->skipRestrictions() == PlaylistInterface::NoSkipForwards )
         return;
@@ -178,6 +187,9 @@ AudioEngine::next()
 void
 AudioEngine::seek( int ms )
 {
+    if ( !m_playlist )
+        return;
+    
     if ( m_playlist->seekRestrictions() == PlaylistInterface::NoSeek )
         return;
     
@@ -345,7 +357,7 @@ AudioEngine::loadNextTrack()
     else
     {
         stop();
-        if ( m_playlist->retryMode() == Tomahawk::PlaylistInterface::Retry )
+        if ( m_playlist && m_playlist->retryMode() == Tomahawk::PlaylistInterface::Retry )
         {
             m_retryTimer.setInterval( m_playlist->retryInterval() );
             m_retryTimer.start();

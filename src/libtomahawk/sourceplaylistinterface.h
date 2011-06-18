@@ -45,6 +45,7 @@ public:
 
     virtual Tomahawk::result_ptr siblingItem( int itemsAway );
     virtual Tomahawk::result_ptr nextItem();
+    virtual Tomahawk::result_ptr currentItem() { return m_currentItem; }
 
     virtual PlaylistInterface::RepeatMode repeatMode() const { return PlaylistInterface::NoRepeat; }
     virtual PlaylistInterface::SeekRestrictions seekRestrictions() const { return PlaylistInterface::NoSeek; }
@@ -56,6 +57,8 @@ public:
     virtual void setFilter( const QString& /*pattern*/ ) {}
 
     virtual Tomahawk::source_ptr source() const { return m_source; }
+
+    virtual void reset();
 
 public slots:
     virtual void setRepeatMode( PlaylistInterface::RepeatMode ) {}
@@ -74,6 +77,7 @@ private slots:
 
 private:
     Tomahawk::source_ptr m_source;
+    Tomahawk::result_ptr m_currentItem;
     bool m_gotNextSong;
 };
 
