@@ -25,8 +25,7 @@
 !define QT_DLL_PATH "${MING_BIN}"
 !define SQLITE_DLL_PATH "${MING_LIB}/qt4/plugins/sqldrivers"
 !define IMAGEFORMATS_DLL_PATH "${MING_LIB}/qt4/plugins/imageformats"
-!define VLC_PATH "${ROOT_PATH}\..\vlc"
-!define VLC_PLUGIN_PATH "${VLC_PATH}\plugins"
+!define VLC_PLUGIN_PATH "${MING_LIB}\vlc\plugins"
 
 ;-----------------------------------------------------------------------------
 ; Increment installer revision number as part of this script.
@@ -38,8 +37,8 @@
 
 !ifndef VER_MAJOR && VER_MINOR && VER_BUILD
     !define VER_MAJOR "0"
-    !define VER_MINOR "1"
-    !define VER_BUILD "0rc2"
+    !define VER_MINOR "2"
+    !define VER_BUILD "0alpha1"
 !endif
 
 !define VERSION "${VER_MAJOR}.${VER_MINOR}.${VER_BUILD}"
@@ -337,8 +336,8 @@ Section "Tomahawk Player" SEC_TOMAHAWK_PLAYER
 
    ;VLC
    ;SetOutPath "$INSTDIR\phonon_backend"
-   File "${VLC_PATH}\libvlc.dll"
-   File "${VLC_PATH}\libvlccore.dll"
+   File "${MING_BIN}\libvlc.dll"
+   File "${MING_BIN}\libvlccore.dll"
    SetOutPath "$INSTDIR\plugins"
    File /r "${VLC_PLUGIN_PATH}\*.dll"
    SetOutPath "$INSTDIR"
