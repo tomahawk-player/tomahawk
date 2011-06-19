@@ -21,6 +21,7 @@
 #include <QUrl>
 
 #include "playlistinterface.h"
+#include "sourceplaylistinterface.h"
 
 #include "database/database.h"
 #include "database/databasecommand_logplayback.h"
@@ -179,6 +180,19 @@ AudioEngine::next()
     if ( m_playlist->skipRestrictions() == PlaylistInterface::NoSkip ||
          m_playlist->skipRestrictions() == PlaylistInterface::NoSkipForwards )
         return;
+
+    if ( dynamic_cast< SourcePlaylistInterface* >( m_playlist ) )
+    {
+        SourcePlaylistInterface* sourcepi = dynamic_cast< SourcePlaylistInterface* >( m_playlist );
+        if ( !sourcepi->source().isNull() )
+        {
+            //it's a catch-up -- if they're trying to catch-up in the same track, don't do anything
+            //so that you don't repeat the track and/or cause the retry timer to fire
+            if ( !m_currentTrack.isNull() &&
+                  m_currentTrack->id() == sourcepi->currentItem()->id() )
+                    return;
+        }
+    }
 
     loadNextTrack();
 }
