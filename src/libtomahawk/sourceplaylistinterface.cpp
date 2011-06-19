@@ -39,22 +39,7 @@ Tomahawk::result_ptr
 SourcePlaylistInterface::siblingItem( int itemsAway )
 {
     Q_UNUSED( itemsAway );
-    qDebug() << Q_FUNC_INFO;
-    if ( m_source.isNull() || m_source->currentTrack().isNull() || m_source->currentTrack()->results().isEmpty() )
-    {
-        qDebug() << Q_FUNC_INFO << " Results were empty for current track or source no longer valid";
-        m_currentItem = Tomahawk::result_ptr();
-        return m_currentItem;
-    }
-    else if ( !m_gotNextSong )
-    {
-        qDebug() << Q_FUNC_INFO << " This song was already fetched";
-        return Tomahawk::result_ptr();
-    }
-
-    m_gotNextSong = false;
-    m_currentItem = m_source->currentTrack()->results().first();
-    return m_currentItem;
+    return nextItem();
 }
 
 
