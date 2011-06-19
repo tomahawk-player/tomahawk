@@ -110,7 +110,7 @@ Portfwd::init(unsigned int timeout)
 void
 Portfwd::get_status()
 {
-    Q_ASSERT(urls->controlURL_CIF != NULL);
+//    Q_ASSERT(urls->controlURL_CIF != NULL);
     // get connection speed
     UPNP_GetLinkLayerMaxBitRates(
         urls->controlURL_CIF, data->CIF.servicetype, &m_downbps, &m_upbps);
