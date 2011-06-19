@@ -188,7 +188,7 @@ AudioEngine::next()
         {
             //it's a catch-up -- if they're trying to catch-up in the same track, don't do anything
             //so that you don't repeat the track and/or cause the retry timer to fire
-            if ( !m_currentTrack.isNull() &&
+            if ( !m_currentTrack.isNull() && !sourcepi->hasNextSong() &&
                   m_currentTrack->id() == sourcepi->currentItem()->id() )
                     return;
         }

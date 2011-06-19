@@ -58,6 +58,7 @@ public:
 
     virtual Tomahawk::source_ptr source() const { return m_source; }
 
+    virtual bool hasNextSong() { return m_gotNextSong; }
     virtual void reset();
 
 public slots:
