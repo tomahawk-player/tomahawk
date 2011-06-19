@@ -57,8 +57,8 @@ TrackProxyModel::setSourceTrackModel( TrackModel* sourceModel )
 {
     m_model = sourceModel;
 
-    connect( m_model, SIGNAL( trackCountChanged( unsigned int ) ),
-                      SIGNAL( sourceTrackCountChanged( unsigned int ) ) );
+    if ( m_model && m_model->metaObject()->indexOfSignal( "trackCountChanged(uint)" ) > -1 )
+        connect( m_model, SIGNAL( trackCountChanged( unsigned int ) ), SIGNAL( sourceTrackCountChanged( unsigned int ) ) );
 
     QSortFilterProxyModel::setSourceModel( m_model );
 }

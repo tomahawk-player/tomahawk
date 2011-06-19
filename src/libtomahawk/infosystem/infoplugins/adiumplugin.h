@@ -48,10 +48,9 @@ public slots:
 
 private slots:
     void clearStatus();
-
-private:
     void settingsChanged();
 
+private:
     void audioStarted( const QVariant &input );
     void audioFinished( const QVariant &input );
     void audioStopped();

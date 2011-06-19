@@ -35,8 +35,11 @@ SourcesProxyModel::SourcesProxyModel( SourcesModel* model, QObject* parent )
 
     setSourceModel( model );
 
-    connect( model, SIGNAL( askForExpand( QModelIndex ) ), this, SLOT( askedToExpand( QModelIndex ) ) );
-    connect( model, SIGNAL( selectRequest( QModelIndex ) ), this, SLOT( selectRequested( QModelIndex ) ) );
+
+    if ( model && model->metaObject()->indexOfSignal( "trackCountChanged(QModelIndex)" ) > -1 )
+        connect( model, SIGNAL( askForExpand( QModelIndex ) ), this, SLOT( askedToExpand( QModelIndex ) ) );
+    if ( model && model->metaObject()->indexOfSignal( "selectRequest(QModelIndex)" ) > -1 )
+        connect( model, SIGNAL( selectRequest( QModelIndex ) ), this, SLOT( selectRequested( QModelIndex ) ) );
 }
 
 

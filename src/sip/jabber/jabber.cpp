@@ -232,7 +232,8 @@ JabberPlugin::connectPlugin( bool startup )
     //FIXME: we're badly workarounding some missing reconnection api here, to be fixed soon
     QTimer::singleShot( 1000, m_client, SLOT( connectToServer() ) );
 
-    connect(m_client->connection(), SIGNAL(error(SocketError)), SLOT(onError(SocketError)));
+    if ( m_client->connection() )
+        connect(m_client->connection(), SIGNAL(error(SocketError)), SLOT(onError(SocketError)));
 
     m_state = Connecting;
     emit stateChanged( m_state );

@@ -65,6 +65,9 @@ void
 LoadingSpinner::fadeOut()
 {
     m_showHide->setDirection( QTimeLine::Backward );
+    if( m_showHide->state() == QTimeLine::Running )
+        m_showHide->stop();
+
     m_showHide->start();
 }
 

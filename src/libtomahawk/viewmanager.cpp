@@ -198,8 +198,6 @@ ViewManager::show( const Tomahawk::dynplaylist_ptr& playlist )
     {
        m_dynamicWidgets[ playlist ] = new Tomahawk::DynamicWidget( playlist, m_stack );
 
-       connect( playlist.data(), SIGNAL( deleted( Tomahawk::dynplaylist_ptr ) ), this, SLOT( onDynamicDeleted( Tomahawk::dynplaylist_ptr ) ) );
-
        playlist->resolve();
     }
 
