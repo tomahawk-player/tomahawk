@@ -36,8 +36,8 @@ public:
     virtual TreeModel* sourceModel() const { return m_model; }
     virtual void setSourceModel( TreeModel* sourceModel );
 
-    virtual QPersistentModelIndex currentItem() const { return mapFromSource( m_model->currentItem() ); }
-    virtual void setCurrentItem( const QModelIndex& index ) { m_model->setCurrentItem( mapToSource( index ) ); }
+    virtual QPersistentModelIndex currentIndex() const { return mapFromSource( m_model->currentItem() ); }
+    virtual void setCurrentIndex( const QModelIndex& index ) { m_model->setCurrentItem( mapToSource( index ) ); }
 
     virtual QList<Tomahawk::query_ptr> tracks() { Q_ASSERT( FALSE ); QList<Tomahawk::query_ptr> queries; return queries; }
 
@@ -48,7 +48,10 @@ public:
     virtual void removeIndex( const QModelIndex& index );
     virtual void removeIndexes( const QList<QModelIndex>& indexes );
 
+    virtual bool hasNextItem();
+    virtual Tomahawk::result_ptr currentItem() const;
     virtual Tomahawk::result_ptr siblingItem( int direction );
+    virtual Tomahawk::result_ptr siblingItem( int direction, bool readOnly );
 
     virtual void setFilter( const QString& pattern );
 

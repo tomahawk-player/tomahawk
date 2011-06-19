@@ -52,6 +52,7 @@ Album::Album( unsigned int id, const QString& name, const Tomahawk::artist_ptr& 
     , m_id( id )
     , m_name( name )
     , m_artist( artist )
+    , m_currentItem( 0 )
     , m_currentTrack( 0 )
 {
 }
@@ -80,7 +81,20 @@ Album::siblingItem( int itemsAway )
         return Tomahawk::result_ptr();
 
     m_currentTrack = p;
-    return m_queries.at( p )->results().first();
+    m_currentItem = m_queries.at( p )->results().first();
+    return m_currentItem;
+}
+
+
+bool
+Album::hasNextItem()
+{
+    int p = m_currentTrack;
+    p++;
+    if ( p < 0 || p >= m_queries.count() )
+        return false;
+
+    return true;
 }
 
 

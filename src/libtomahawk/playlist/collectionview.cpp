@@ -132,6 +132,6 @@ CollectionView::onTrackCountChanged( unsigned int tracks )
 bool
 CollectionView::jumpToCurrentTrack()
 {
-    scrollTo( proxyModel()->currentItem(), QAbstractItemView::PositionAtCenter );
+    scrollTo( proxyModel()->currentIndex(), QAbstractItemView::PositionAtCenter );
     return true;
 }

@@ -156,7 +156,7 @@ TrackView::onItemActivated( const QModelIndex& index )
     if ( item && item->query()->numResults() )
     {
         qDebug() << "Result activated:" << item->query()->toString() << item->query()->results().first()->url();
-        m_proxyModel->setCurrentItem( index );
+        m_proxyModel->setCurrentIndex( index );
         AudioEngine::instance()->playItem( m_proxyModel, item->query()->results().first() );
     }
 }

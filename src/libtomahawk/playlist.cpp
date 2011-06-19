@@ -114,6 +114,7 @@ Playlist::Playlist( const source_ptr& src,
     , m_lastmodified( lastmod )
     , m_createdOn( createdOn )
     , m_shared( shared )
+    , m_currentItem( 0 )
     , m_busy( false )
 {
 //    qDebug() << Q_FUNC_INFO << "1";
@@ -137,6 +138,7 @@ Playlist::Playlist( const source_ptr& author,
     , m_lastmodified( 0 )
     , m_createdOn( 0 ) // will be set by db command
     , m_shared( shared )
+    , m_currentItem ( 0 )
     , m_initEntries( entries )
     , m_busy( false )
 {

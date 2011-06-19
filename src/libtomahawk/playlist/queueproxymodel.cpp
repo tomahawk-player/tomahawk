@@ -44,12 +44,12 @@ QueueProxyModel::siblingItem( int itemsAway )
 {
     qDebug() << Q_FUNC_INFO << rowCount( QModelIndex() );
 
-    setCurrentItem( QModelIndex() );
+    setCurrentIndex( QModelIndex() );
     Tomahawk::result_ptr res = PlaylistProxyModel::siblingItem( itemsAway );
 
     qDebug() << "new rowcount:" << rowCount( QModelIndex() );
 
-    removeIndex( currentItem() );
+    removeIndex( currentIndex() );
 
     return res;
 }

@@ -137,12 +137,26 @@ TreeProxyModel::removeIndexes( const QList<QModelIndex>& indexes )
 }
 
 
+bool
+TreeProxyModel::hasNextItem()
+{
+    return !( siblingItem( 1, true ).isNull() );
+}
+
+
 Tomahawk::result_ptr
 TreeProxyModel::siblingItem( int itemsAway )
 {
+    return siblingItem( itemsAway, false );
+}
+
+
+Tomahawk::result_ptr
+TreeProxyModel::siblingItem( int itemsAway, bool readOnly )
+{
     qDebug() << Q_FUNC_INFO;
 
-    QModelIndex idx = currentItem();
+    QModelIndex idx = currentIndex();
 
     // Try to find the next available PlaylistItem (with results)
     if ( idx.isValid() ) do
@@ -155,13 +169,25 @@ TreeProxyModel::siblingItem( int itemsAway )
         if ( item && item->result()->isOnline() )
         {
             qDebug() << "Next PlaylistItem found:" << item->result()->url();
-            setCurrentItem( idx );
+            if ( !readOnly )
+                setCurrentIndex( idx );
             return item->result();
         }
     }
     while ( idx.isValid() );
 
-    setCurrentItem( QModelIndex() );
+    if ( !readOnly )
+        setCurrentIndex( QModelIndex() );
+    return Tomahawk::result_ptr();
+}
+
+
+Tomahawk::result_ptr
+TreeProxyModel::currentItem() const
+{
+    TreeModelItem* item = itemFromIndex( mapToSource( currentIndex() ) );
+    if ( item && item->result()->isOnline() )
+        return item->result();
     return Tomahawk::result_ptr();
 }
 

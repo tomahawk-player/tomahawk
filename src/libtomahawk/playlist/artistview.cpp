@@ -250,6 +250,6 @@ ArtistView::onScrollTimeout()
 bool
 ArtistView::jumpToCurrentTrack()
 {
-    scrollTo( m_proxyModel->currentItem(), QAbstractItemView::PositionAtCenter );
+    scrollTo( m_proxyModel->currentIndex(), QAbstractItemView::PositionAtCenter );
     return true;
 }

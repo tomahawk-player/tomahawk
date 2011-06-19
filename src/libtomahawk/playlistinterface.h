@@ -47,7 +47,9 @@ public:
     virtual int unfilteredTrackCount() const = 0;
     virtual int trackCount() const = 0;
 
+    virtual Tomahawk::result_ptr currentItem() const = 0;
     virtual Tomahawk::result_ptr previousItem() { return siblingItem( -1 ); }
+    virtual bool hasNextItem() { return true; }
     virtual Tomahawk::result_ptr nextItem() { return siblingItem( 1 ); }
     virtual Tomahawk::result_ptr siblingItem( int itemsAway ) = 0;
 

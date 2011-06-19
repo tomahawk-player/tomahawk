@@ -181,17 +181,12 @@ AudioEngine::next()
          m_playlist->skipRestrictions() == PlaylistInterface::NoSkipForwards )
         return;
 
-    if ( dynamic_cast< SourcePlaylistInterface* >( m_playlist ) )
+    if ( !m_currentTrack.isNull() && !m_playlist->hasNextItem() &&
+          m_currentTrack->id() == m_playlist->currentItem()->id() )
     {
-        SourcePlaylistInterface* sourcepi = dynamic_cast< SourcePlaylistInterface* >( m_playlist );
-        if ( !sourcepi->source().isNull() )
-        {
-            //it's a catch-up -- if they're trying to catch-up in the same track, don't do anything
-            //so that you don't repeat the track and/or cause the retry timer to fire
-            if ( !m_currentTrack.isNull() && !sourcepi->hasNextSong() &&
-                  m_currentTrack->id() == sourcepi->currentItem()->id() )
-                    return;
-        }
+        //For instance, when doing a catch-up while listening along, but the person
+        //you're following hasn't started a new track yet...don't do anything
+        return;
     }
 
     loadNextTrack();

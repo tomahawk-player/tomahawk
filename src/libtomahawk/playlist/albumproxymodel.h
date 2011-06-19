@@ -46,6 +46,8 @@ public:
     virtual void removeIndex( const QModelIndex& index );
     virtual void removeIndexes( const QList<QModelIndex>& indexes );
 
+    virtual bool hasNextItem() { return true; }
+    virtual Tomahawk::result_ptr currentItem() const { return Tomahawk::result_ptr(); }
     virtual Tomahawk::result_ptr siblingItem( int direction );
 
     virtual void setFilter( const QString& pattern );

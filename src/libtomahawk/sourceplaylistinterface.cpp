@@ -29,7 +29,7 @@ SourcePlaylistInterface::SourcePlaylistInterface( Tomahawk::source_ptr& source )
     : PlaylistInterface( this )
     , m_source( source )
     , m_currentItem( 0 )
-    , m_gotNextSong( false )
+    , m_gotNextItem( false )
 {
     connect( source.data(), SIGNAL( playbackStarted( const Tomahawk::query_ptr& ) ), SLOT( onSourcePlaybackStarted( const Tomahawk::query_ptr& ) ) );
 }
@@ -53,15 +53,25 @@ SourcePlaylistInterface::nextItem()
         m_currentItem = Tomahawk::result_ptr();
         return m_currentItem;
     }
-    else if ( !m_gotNextSong )
+    else if ( !m_gotNextItem )
     {
         qDebug() << Q_FUNC_INFO << " This song was already fetched";
         return Tomahawk::result_ptr();
     }
 
-    m_gotNextSong = false;
+    m_gotNextItem = false;
     m_currentItem = m_source->currentTrack()->results().first();
     return m_currentItem;
+}
+
+
+bool
+SourcePlaylistInterface::hasNextItem()
+{
+    if ( m_source.isNull() || m_source->currentTrack().isNull() || m_source->currentTrack()->results().isEmpty() )
+        return false;
+    
+    return m_gotNextItem;
 }
 
 
@@ -76,9 +86,9 @@ void
 SourcePlaylistInterface::reset()
 {
     if ( !m_currentItem.isNull() )
-        m_gotNextSong = true;
+        m_gotNextItem = true;
     else
-        m_gotNextSong = false;
+        m_gotNextItem = false;
 }
 
 
@@ -89,7 +99,7 @@ SourcePlaylistInterface::onSourcePlaybackStarted( const Tomahawk::query_ptr& que
     connect( query.data(), SIGNAL( resultsAdded( const QList<Tomahawk::result_ptr>& ) ), SLOT( resolveResultsAdded( const QList<Tomahawk::result_ptr>& ) ) );
     connect( query.data(), SIGNAL( resolvingFinished( bool ) ), SLOT( resolvingFinished( bool ) ) );
     Pipeline::instance()->resolve( query, true );
-    m_gotNextSong = true;
+    m_gotNextItem = true;
 }
 
 

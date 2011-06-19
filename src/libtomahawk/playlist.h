@@ -170,6 +170,9 @@ public:
     virtual int unfilteredTrackCount() const { return m_entries.count(); }
     virtual int trackCount() const { return m_entries.count(); }
 
+    virtual bool hasNextItem() { return false; }
+    virtual Tomahawk::result_ptr currentItem() const { return m_currentItem; }
+
     virtual Tomahawk::result_ptr siblingItem( int /*itemsAway*/ ) { return result_ptr(); }
 
     virtual PlaylistInterface::RepeatMode repeatMode() const { return PlaylistInterface::NoRepeat; }
@@ -268,6 +271,8 @@ private:
     unsigned int m_createdOn;
     bool m_shared;
 
+    result_ptr m_currentItem;
+    
     QList< plentry_ptr > m_initEntries;
     QList< plentry_ptr > m_entries;
 

@@ -168,7 +168,7 @@ PlaylistView::onTrackCountChanged( unsigned int tracks )
 bool
 PlaylistView::jumpToCurrentTrack()
 {
-    scrollTo( proxyModel()->currentItem(), QAbstractItemView::PositionAtCenter );
+    scrollTo( proxyModel()->currentIndex(), QAbstractItemView::PositionAtCenter );
     return true;
 }
 

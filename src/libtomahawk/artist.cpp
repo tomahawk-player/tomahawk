@@ -54,6 +54,7 @@ Artist::Artist( unsigned int id, const QString& name )
     : PlaylistInterface( this )
     , m_id( id )
     , m_name( name )
+    , m_currentItem( 0 )
     , m_currentTrack( 0 )
 {
 }
@@ -82,7 +83,20 @@ Artist::siblingItem( int itemsAway )
         return Tomahawk::result_ptr();
 
     m_currentTrack = p;
-    return m_queries.at( p )->results().first();
+    m_currentItem = m_queries.at( p )->results().first();
+    return m_currentItem;
+}
+
+
+bool
+Artist::hasNextItem()
+{
+    int p = m_currentTrack;
+    p++;
+    if ( p < 0 || p >= m_queries.count() )
+        return false;
+
+    return true;
 }
 
 

@@ -37,8 +37,8 @@ public:
     virtual void setSourceTrackModel( TrackModel* sourceModel );
     virtual void setSourceModel( QAbstractItemModel* model );
 
-    virtual QPersistentModelIndex currentItem() const { return mapFromSource( m_model->currentItem() ); }
-    virtual void setCurrentItem( const QModelIndex& index ) { m_model->setCurrentItem( mapToSource( index ) ); }
+    virtual QPersistentModelIndex currentIndex() const { return mapFromSource( m_model->currentItem() ); }
+    virtual void setCurrentIndex( const QModelIndex& index ) { m_model->setCurrentItem( mapToSource( index ) ); }
 
     virtual QList<Tomahawk::query_ptr> tracks();
 
@@ -49,7 +49,10 @@ public:
     virtual void removeIndexes( const QModelIndexList& indexes );
     virtual void removeIndexes( const QList<QPersistentModelIndex>& indexes );
 
+    virtual Tomahawk::result_ptr currentItem() const;
     virtual Tomahawk::result_ptr siblingItem( int itemsAway );
+    virtual Tomahawk::result_ptr siblingItem( int itemsAway, bool readOnly );
+    virtual bool hasNextItem();
 
     virtual QString filter() const { return filterRegExp().pattern(); }
     virtual void setFilter( const QString& pattern );

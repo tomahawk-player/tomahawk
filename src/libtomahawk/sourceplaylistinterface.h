@@ -44,8 +44,9 @@ public:
     virtual int unfilteredTrackCount() const { return 1; }
 
     virtual Tomahawk::result_ptr siblingItem( int itemsAway );
+    virtual bool hasNextItem();
     virtual Tomahawk::result_ptr nextItem();
-    virtual Tomahawk::result_ptr currentItem() { return m_currentItem; }
+    virtual Tomahawk::result_ptr currentItem() const { return m_currentItem; }
 
     virtual PlaylistInterface::RepeatMode repeatMode() const { return PlaylistInterface::NoRepeat; }
     virtual PlaylistInterface::SeekRestrictions seekRestrictions() const { return PlaylistInterface::NoSeek; }
@@ -58,7 +59,6 @@ public:
 
     virtual Tomahawk::source_ptr source() const { return m_source; }
 
-    virtual bool hasNextSong() { return m_gotNextSong; }
     virtual void reset();
 
 public slots:
@@ -79,7 +79,7 @@ private slots:
 private:
     Tomahawk::source_ptr m_source;
     Tomahawk::result_ptr m_currentItem;
-    bool m_gotNextSong;
+    bool m_gotNextItem;
 };
 
 }; // ns

@@ -95,6 +95,20 @@ TrackProxyModel::tracks()
 Tomahawk::result_ptr
 TrackProxyModel::siblingItem( int itemsAway )
 {
+    return siblingItem( itemsAway, false );
+}
+
+
+bool
+TrackProxyModel::hasNextItem()
+{
+    return !( siblingItem( 1, true ).isNull() );
+}
+
+
+Tomahawk::result_ptr
+TrackProxyModel::siblingItem( int itemsAway, bool readOnly )
+{
     qDebug() << Q_FUNC_INFO;
 
     QModelIndex idx = index( 0, 0 );
@@ -106,9 +120,9 @@ TrackProxyModel::siblingItem( int itemsAway )
             // TODO come up with a clever random logic, that keeps track of previously played items
             idx = index( qrand() % rowCount(), 0 );
         }
-        else if ( currentItem().isValid() )
+        else if ( currentIndex().isValid() )
         {
-            idx = currentItem();
+            idx = currentIndex();
 
             // random mode is disabled
             if ( m_repeatMode == PlaylistInterface::RepeatOne )
@@ -146,7 +160,8 @@ TrackProxyModel::siblingItem( int itemsAway )
         if ( item && item->query()->playable() )
         {
             qDebug() << "Next PlaylistItem found:" << item->query()->toString() << item->query()->results().at( 0 )->url();
-            setCurrentItem( idx );
+            if ( !readOnly )
+                setCurrentIndex( idx );
             return item->query()->results().at( 0 );
         }
 
@@ -154,10 +169,20 @@ TrackProxyModel::siblingItem( int itemsAway )
     }
     while ( idx.isValid() );
 
-    setCurrentItem( QModelIndex() );
+    if ( !readOnly )
+        setCurrentIndex( QModelIndex() );
     return Tomahawk::result_ptr();
 }
 
+
+Tomahawk::result_ptr
+TrackProxyModel::currentItem() const
+{
+    TrackModelItem* item = itemFromIndex( mapToSource( currentIndex() ) );
+    if ( item && item->query()->playable() )
+        return item->query()->results().at( 0 );
+    return Tomahawk::result_ptr();
+}
 
 bool
 TrackProxyModel::filterAcceptsRow( int sourceRow, const QModelIndex& sourceParent ) const
