@@ -2,8 +2,8 @@
 SET(CMAKE_SYSTEM_NAME Windows)
 
 # specify the cross compiler
-SET(CMAKE_C_COMPILER i686-w64-mingw32-gcc)
-SET(CMAKE_CXX_COMPILER i686-w64-mingw32-g++)
+SET(CMAKE_C_COMPILER ccache i686-w64-mingw32-gcc)
+SET(CMAKE_CXX_COMPILER ccache i686-w64-mingw32-g++)
 
 # where is the target environment containing libraries
 SET(CMAKE_FIND_ROOT_PATH  /usr/i686-w64-mingw32/sys-root/mingw)
