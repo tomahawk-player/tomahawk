@@ -65,6 +65,8 @@ public:
     virtual QString filter() const { return m_filter; }
     virtual void setFilter( const QString& pattern ) { m_filter = pattern; }
 
+    virtual void reset() {}
+
     QObject* object() const { return m_object; }
 
 public slots:

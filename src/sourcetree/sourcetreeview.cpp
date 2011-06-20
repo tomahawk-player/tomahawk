@@ -375,13 +375,6 @@ SourceTreeView::latchOff()
     if( type != SourcesModel::Collection )
         return;
 
-    PlaylistInterface* pi = AudioEngine::instance()->playlist();
-    if ( pi && dynamic_cast< SourcePlaylistInterface* >( pi ) )
-    {
-        SourcePlaylistInterface* sourcepi = dynamic_cast< SourcePlaylistInterface* >( pi );
-        sourcepi->reset();
-    }
-    
     AudioEngine::instance()->stop();
     AudioEngine::instance()->setPlaylist( 0 );
 }

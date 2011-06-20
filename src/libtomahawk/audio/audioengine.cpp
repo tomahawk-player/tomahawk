@@ -145,6 +145,9 @@ AudioEngine::stop()
 
     m_mediaObject->stop();
     m_retryTimer.stop();
+
+    if ( m_playlist )
+        m_playlist->reset();
     
     setCurrentTrack( Tomahawk::result_ptr() );
     emit stopped();
@@ -380,6 +383,9 @@ AudioEngine::playItem( Tomahawk::PlaylistInterface* playlist, const Tomahawk::re
 {
     qDebug() << Q_FUNC_INFO;
 
+    if ( m_playlist )
+        m_playlist->reset();
+    
     setPlaylist( playlist );
     m_currentTrackPlaylist = playlist;
 
@@ -452,6 +458,8 @@ AudioEngine::timerTriggered( qint64 time )
 void
 AudioEngine::setPlaylist( PlaylistInterface* playlist )
 {
+    if ( m_playlist )
+        m_playlist->reset();
     m_playlist = playlist;
     emit playlistChanged( playlist );
 }
