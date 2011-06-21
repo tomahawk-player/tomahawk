@@ -20,21 +20,16 @@
 
 #include "utils/tomahawkutils.h"
 
-#include <libnotify/notify.h>
-#include <glib-2.0/glib.h>
+#include <QtDBus/QDBusConnection>
+#include <QtDBus/QDBusMessage>
 
 using namespace Tomahawk::InfoSystem;
 
-// for internal neatness
-
 LibNotifyPlugin::LibNotifyPlugin()
     : InfoPlugin()
-    , m_isInited( false )
 {
     qDebug() << Q_FUNC_INFO;
-    m_supportedGetTypes << Tomahawk::InfoSystem::InfoNotifyUser;
-    gboolean initSuccess = notify_init( "Tomahawk" );
-    m_isInited = ( initSuccess == TRUE );
+    m_supportedPushTypes << Tomahawk::InfoSystem::InfoNotifyUser;
 }
 
 LibNotifyPlugin::~LibNotifyPlugin()
@@ -46,10 +41,30 @@ void
 LibNotifyPlugin::pushInfo( const QString caller, const Tomahawk::InfoSystem::InfoType type, const QVariant data )
 {
     qDebug() << Q_FUNC_INFO;
-    if ( type != Tomahawk::InfoSystem::InfoNotifyUser || !data.canConvert< Tomahawk::InfoSystem::InfoCustomData >() )
+    if ( type != Tomahawk::InfoSystem::InfoNotifyUser || !data.canConvert< Tomahawk::InfoSystem::InfoCriteriaHash >() )
+    {
+        qDebug() << Q_FUNC_INFO << " not the right type or could not convert the hash";
         return;
-    Tomahawk::InfoSystem::InfoCustomData hash = data.value< Tomahawk::InfoSystem::InfoCustomData >();
-    if ( !hash.contains( "message" ) || !(hash["message"].canConvert< QString >() ) )
+    }
+    Tomahawk::InfoSystem::InfoCriteriaHash hash = data.value< Tomahawk::InfoSystem::InfoCriteriaHash >();
+    if ( !hash.contains( "message" ) )
+    {
+        qDebug() << Q_FUNC_INFO << " hash did not contain a message";
         return;
-    QString message = hash["trackName"].toString();
+    }
+
+    QDBusMessage message = QDBusMessage::createMethodCall( "org.freedesktop.Notifications", "/org/freedesktop/Notifications", "org.freedesktop.Notifications", "Notify" );
+    QList<QVariant> arguments;
+    arguments << QString( "Tomahawk" ); //app_name
+    arguments << quint32( 0 ); //notification_id
+    arguments << QString(); //app_icon
+    arguments << caller; //summary
+    arguments << hash["message"]; //body
+    arguments << QStringList(); //actions
+    QMap< QString, QVariant > dict;
+    dict["desktop-entry"] = QString( "tomahawk" );
+    arguments << dict; //hints
+    arguments << quint32( -1 ); //expire_timeout
+    message.setArguments( arguments );
+    QDBusConnection::sessionBus().send( message );
 }

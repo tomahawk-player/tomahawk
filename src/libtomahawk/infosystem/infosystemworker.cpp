@@ -29,6 +29,9 @@
 #ifdef Q_WS_MAC
 #include "infoplugins/mac/adiumplugin.h"
 #endif
+#ifdef Q_WS_X11
+#include "infoplugins/unix/libnotifyplugin.h"
+#endif
 
 #include "lastfm/NetworkAccessManager"
 
@@ -73,6 +76,11 @@ InfoSystemWorker::init( QWeakPointer< Tomahawk::InfoSystem::InfoSystemCache> cac
     InfoPluginPtr admptr( new AdiumPlugin() );
     m_plugins.append( admptr );
     registerInfoTypes( admptr, admptr.data()->supportedGetTypes(), admptr.data()->supportedPushTypes() );
+    #endif
+    #ifdef Q_WS_X11
+    InfoPluginPtr libnotifyptr( new LibNotifyPlugin() );
+    m_plugins.append( libnotifyptr );
+    registerInfoTypes( libnotifyptr, libnotifyptr.data()->supportedGetTypes(), libnotifyptr.data()->supportedPushTypes() );
     #endif
 
     Q_FOREACH( InfoPluginPtr plugin, m_plugins )

@@ -22,8 +22,6 @@
 #include "infosystem/infosystem.h"
 #include "infosystem/infosystemworker.h"
 
-class QNetworkReply;
-
 namespace Tomahawk
 {
 
@@ -37,6 +35,8 @@ class LibNotifyPlugin : public InfoPlugin
 public:
     LibNotifyPlugin();
     virtual ~LibNotifyPlugin();
+
+    virtual void namChangedSlot( QNetworkAccessManager* ) {}
 
 protected slots:
     virtual void getInfo( const QString caller, const Tomahawk::InfoSystem::InfoType type, const QVariant input, const Tomahawk::InfoSystem::InfoCustomData customData )
@@ -57,10 +57,6 @@ protected slots:
         Q_UNUSED( input );
         Q_UNUSED( customData );
     }
-    
-private:
-    bool m_isInited;
-    
 };
 
 }

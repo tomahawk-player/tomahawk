@@ -350,6 +350,7 @@ AudioEngine::loadNextTrack()
 {
     qDebug() << Q_FUNC_INFO;
 
+    bool wasRetrying = m_retryTimer.isActive();
     m_retryTimer.stop();
     
     Tomahawk::result_ptr result;
@@ -371,6 +372,14 @@ AudioEngine::loadNextTrack()
         stop();
         if ( m_playlist && m_playlist->retryMode() == Tomahawk::PlaylistInterface::Retry )
         {
+            if ( !wasRetrying )
+            {
+                Tomahawk::InfoSystem::InfoCriteriaHash retryInfo;
+                retryInfo["message"] = QString( "The current track could not be resolved. Tomahawk will keep trying..." );
+                Tomahawk::InfoSystem::InfoSystem::instance()->pushInfo(
+                    s_aeInfoIdentifier, Tomahawk::InfoSystem::InfoNotifyUser,
+                    QVariant::fromValue< Tomahawk::InfoSystem::InfoCriteriaHash >( retryInfo ) );
+            }
             m_retryTimer.setInterval( m_playlist->retryInterval() );
             m_retryTimer.start();
         }
@@ -389,8 +398,13 @@ AudioEngine::playItem( Tomahawk::PlaylistInterface* playlist, const Tomahawk::re
     setPlaylist( playlist );
     m_currentTrackPlaylist = playlist;
 
-    if ( result.isNull() )
+    if ( result.isNull() && m_playlist->retryMode() == PlaylistInterface::Retry )
     {
+        Tomahawk::InfoSystem::InfoCriteriaHash retryInfo;
+        retryInfo["message"] = QString( "The current track could not be resolved. Tomahawk will keep trying..." );
+        Tomahawk::InfoSystem::InfoSystem::instance()->pushInfo(
+            s_aeInfoIdentifier, Tomahawk::InfoSystem::InfoNotifyUser,
+            QVariant::fromValue< Tomahawk::InfoSystem::InfoCriteriaHash >( retryInfo ) );
         m_retryTimer.setInterval( playlist->retryInterval() );
         m_retryTimer.start();
     }
