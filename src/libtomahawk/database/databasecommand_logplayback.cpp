@@ -40,12 +40,14 @@ DatabaseCommand_LogPlayback::postCommitHook()
 
     // do not auto resolve this track
     Tomahawk::query_ptr q = Tomahawk::Query::get( m_artist, m_track, QString() );
+    q->setPlayedBy( source() );
 
     if ( m_action == Finished )
     {
         emit trackPlayed( q );
     }
-    else if ( m_action == Started && QDateTime::fromTime_t( playtime() ).secsTo( QDateTime::currentDateTime() ) < 600 ) // if the play time is more than 10 minutes in the past, ignore
+    // if the play time is more than 10 minutes in the past, ignore
+    else if ( m_action == Started && QDateTime::fromTime_t( playtime() ).secsTo( QDateTime::currentDateTime() ) < 600 )
     {
         emit trackPlaying( q );
     }
