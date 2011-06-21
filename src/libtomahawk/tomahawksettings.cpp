@@ -493,7 +493,7 @@ TomahawkSettings::recentlyPlayedPlaylistGuids( unsigned int amount ) const
     QStringList p = value( "playlists/recentlyPlayed" ).toStringList();
 
     while ( amount && p.count() > (int)amount )
-        p.removeAt( p.count() - 1 );
+        p.removeAt( 0 );
 
     return p;
 }
