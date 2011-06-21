@@ -16,8 +16,8 @@
  *   along with Tomahawk. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef LIBNOTIFYPLUGIN_H
-#define LIBNOTIFYPLUGIN_H
+#ifndef FDONOTIFYPLUGIN_H
+#define FDONOTIFYPLUGIN_H
 
 #include "infosystem/infosystem.h"
 #include "infosystem/infosystemworker.h"
@@ -28,13 +28,13 @@ namespace Tomahawk
 namespace InfoSystem
 {
 
-class LibNotifyPlugin : public InfoPlugin
+class FdoNotifyPlugin : public InfoPlugin
 {
     Q_OBJECT
 
 public:
-    LibNotifyPlugin();
-    virtual ~LibNotifyPlugin();
+    FdoNotifyPlugin();
+    virtual ~FdoNotifyPlugin();
 
     virtual void namChangedSlot( QNetworkAccessManager* ) {}
 
@@ -63,4 +63,4 @@ protected slots:
 
 }
 
-#endif // LIBNOTIFYPLUGIN_H
+#endif // FDONOTIFYPLUGIN_H

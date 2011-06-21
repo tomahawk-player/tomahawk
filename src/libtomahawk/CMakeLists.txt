@@ -378,10 +378,10 @@ include_directories( . ${CMAKE_CURRENT_BINARY_DIR} ${CMAKE_CURRENT_BINARY_DIR}/.
 
 IF( UNIX AND NOT APPLE )
     SET( libSources ${libSources}
-      infosystem/infoplugins/unix/libnotifyplugin.cpp )
+      infosystem/infoplugins/unix/fdonotifyplugin.cpp )
 
     SET( libHeaders ${libHeaders}
-      infosystem/infoplugins/unix/libnotifyplugin.h )
+      infosystem/infoplugins/unix/fdonotifyplugin.h )
 ENDIF( UNIX AND NOT APPLE )
 
 IF( WIN32 )

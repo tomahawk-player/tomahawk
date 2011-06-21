@@ -16,7 +16,7 @@
  *   along with Tomahawk. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include "libnotifyplugin.h"
+#include "fdonotifyplugin.h"
 
 #include "utils/tomahawkutils.h"
 
@@ -25,20 +25,20 @@
 
 using namespace Tomahawk::InfoSystem;
 
-LibNotifyPlugin::LibNotifyPlugin()
+FdoNotifyPlugin::FdoNotifyPlugin()
     : InfoPlugin()
 {
     qDebug() << Q_FUNC_INFO;
     m_supportedPushTypes << Tomahawk::InfoSystem::InfoNotifyUser;
 }
 
-LibNotifyPlugin::~LibNotifyPlugin()
+FdoNotifyPlugin::~FdoNotifyPlugin()
 {
     qDebug() << Q_FUNC_INFO;
 }
 
 void
-LibNotifyPlugin::pushInfo( const QString caller, const Tomahawk::InfoSystem::InfoType type, const QVariant data )
+FdoNotifyPlugin::pushInfo( const QString caller, const Tomahawk::InfoSystem::InfoType type, const QVariant data )
 {
     qDebug() << Q_FUNC_INFO;
     if ( type != Tomahawk::InfoSystem::InfoNotifyUser || !data.canConvert< Tomahawk::InfoSystem::InfoCriteriaHash >() )
