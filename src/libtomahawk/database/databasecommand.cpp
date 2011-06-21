@@ -1,5 +1,5 @@
 /* === This file is part of Tomahawk Player - <http://tomahawk-player.org> ===
- * 
+ *
  *   Copyright 2010-2011, Christian Muehlhaeuser <muesli@tomahawk-player.org>
  *
  *   Tomahawk is free software: you can redistribute it and/or modify
@@ -52,7 +52,7 @@ DatabaseCommand::DatabaseCommand( const source_ptr& src, QObject* parent )
 
 DatabaseCommand::~DatabaseCommand()
 {
-    //qDebug() << Q_FUNC_INFO;
+//    qDebug() << Q_FUNC_INFO;
 }
 
 
@@ -127,7 +127,7 @@ DatabaseCommand::factory( const QVariant& op, const source_ptr& source )
         cmd->setSource( source );
         QJson::QObjectHelper::qvariant2qobject( op.toMap(), cmd );
         return cmd;
-    }    
+    }
     else if( name == "deletedynamicplaylist" )
     {
         DatabaseCommand_DeleteDynamicPlaylist * cmd = new DatabaseCommand_DeleteDynamicPlaylist;

@@ -100,10 +100,10 @@ DatabaseWorker::doWork()
         cmd = m_commands.takeFirst();
     }
 
-    if( cmd->doesMutates() )
+    if ( cmd->doesMutates() )
     {
         bool transok = m_dbimpl->database().transaction();
-//        Q_ASSERT( transok );
+        Q_ASSERT( transok );
         Q_UNUSED( transok );
     }
     try
@@ -132,14 +132,14 @@ DatabaseWorker::doWork()
                     //
                     if ( !cmd->singletonCmd() )
                     {
-                        qDebug() << "Setting lastop for source" << cmd->source()->id() << "to" << cmd->guid();
+//                        qDebug() << "Setting lastop for source" << cmd->source()->id() << "to" << cmd->guid();
 
                         TomahawkSqlQuery query = m_dbimpl->newquery();
                         query.prepare( "UPDATE source SET lastop = ? WHERE id = ?" );
                         query.addBindValue( cmd->guid() );
                         query.addBindValue( cmd->source()->id() );
 
-                        if( !query.exec() )
+                        if ( !query.exec() )
                         {
                             qDebug() << "Failed to set lastop";
                             throw "Failed to set lastop";
@@ -150,16 +150,12 @@ DatabaseWorker::doWork()
 
             if ( cmd->doesMutates() )
             {
-                qDebug() << "Committing" << cmd->commandname();;
-                if( !m_dbimpl->database().commit() )
+                qDebug() << "Committing" << cmd->commandname() << cmd->guid();
+                if ( !m_dbimpl->database().commit() )
                 {
 
                     qDebug() << "*FAILED TO COMMIT TRANSACTION*";
                     throw "commit failed";
-                }
-                else
-                {
-                    qDebug() << "Committed" << cmd->commandname();
                 }
             }
 
@@ -197,8 +193,7 @@ DatabaseWorker::doWork()
     cmd->emitFinished();
 
     QMutexLocker lock( &m_mut );
-    m_outstanding--;
-    if ( m_outstanding > 0 )
+    if ( --m_outstanding > 0 )
         QTimer::singleShot( 0, this, SLOT( doWork() ) );
 }
 

@@ -35,7 +35,7 @@ using namespace Tomahawk;
 void
 DatabaseCommand_DeleteFiles::postCommitHook()
 {
-    qDebug() << Q_FUNC_INFO;
+//    qDebug() << Q_FUNC_INFO;
 
     if ( !m_files.count() )
         return;
@@ -49,12 +49,6 @@ DatabaseCommand_DeleteFiles::postCommitHook()
 
     emit notify( m_files );
 
-    // also re-calc the collection stats, to updates the "X tracks" in the sidebar etc:
-    DatabaseCommand_CollectionStats* cmd = new DatabaseCommand_CollectionStats( source() );
-    connect( cmd,            SIGNAL( done( QVariantMap ) ),
-             source().data(),  SLOT( setStats( QVariantMap ) ), Qt::QueuedConnection );
-    Database::instance()->enqueue( QSharedPointer<DatabaseCommand>( cmd ) );
-
     if( source()->isLocal() )
         Servent::instance()->triggerDBSync();
 }
@@ -63,7 +57,7 @@ DatabaseCommand_DeleteFiles::postCommitHook()
 void
 DatabaseCommand_DeleteFiles::exec( DatabaseImpl* dbi )
 {
-    qDebug() << Q_FUNC_INFO;
+//    qDebug() << Q_FUNC_INFO;
     Q_ASSERT( !source().isNull() );
 
     int deleted = 0;
@@ -122,7 +116,7 @@ DatabaseCommand_DeleteFiles::exec( DatabaseImpl* dbi )
 
         foreach( const QVariant& id, m_ids )
         {
-            qDebug() << "Deleting" << id.toUInt() << "from db for source" << srcid;
+//            qDebug() << "Deleting" << id.toUInt() << "from db for source" << srcid;
 
             const QString url = QString( "servent://%1\t%2" ).arg( source()->userName() ).arg( id.toString() );
             m_files << url;
@@ -141,7 +135,7 @@ DatabaseCommand_DeleteFiles::exec( DatabaseImpl* dbi )
         }
     }
 
-    qDebug() << "Deleted" << deleted << m_ids << m_files;
+//    qDebug() << "Deleted" << deleted << m_ids << m_files;
 
     emit done( m_files, source()->collection() );
 }

@@ -242,8 +242,9 @@ Collection::delTracks( const QStringList& files )
     int i = 0;
     foreach ( const query_ptr& query, m_tracks )
     {
-        foreach ( QString file, files )
+        foreach ( const QString& file, files )
         {
+            bool found = false;
             foreach ( const result_ptr& result, query->results() )
             {
                 if ( file == result->url() )
@@ -251,8 +252,13 @@ Collection::delTracks( const QStringList& files )
 //                    qDebug() << Q_FUNC_INFO << "Found deleted result:" << file;
                     tracks << query;
                     m_tracks.removeAt( i );
+                    i--;
+                    found = true;
+                    break;
                 }
             }
+            if ( found )
+                break;
         }
 
         i++;
