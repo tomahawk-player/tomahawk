@@ -74,6 +74,9 @@ TopBar::TopBar( QWidget* parent )
 
     ui->radioCloud->hide();
 
+    ui->radioNormal->setToolTip(tr("Artist View"));
+    ui->radioDetailed->setToolTip(tr("Flat View"));
+
     connect( ui->radioNormal, SIGNAL( clicked() ), SIGNAL( artistMode() ) );
     connect( ui->radioDetailed, SIGNAL( clicked() ), SIGNAL( flatMode() ) );
     connect( ui->radioCloud, SIGNAL( clicked() ), SIGNAL( albumMode() ) );
