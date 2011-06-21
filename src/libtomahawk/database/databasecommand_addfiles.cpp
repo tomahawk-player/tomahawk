@@ -1,5 +1,5 @@
 /* === This file is part of Tomahawk Player - <http://tomahawk-player.org> ===
- * 
+ *
  *   Copyright 2010-2011, Christian Muehlhaeuser <muesli@tomahawk-player.org>
  *
  *   Tomahawk is free software: you can redistribute it and/or modify
@@ -68,12 +68,6 @@ DatabaseCommand_AddFiles::postCommitHook()
              Qt::QueuedConnection );
 
     emit notify( m_queries );
-
-    // also re-calc the collection stats, to updates the "X tracks" in the sidebar etc:
-    DatabaseCommand_CollectionStats* cmd = new DatabaseCommand_CollectionStats( source() );
-    connect( cmd,            SIGNAL( done( QVariantMap ) ),
-             source().data(),  SLOT( setStats( QVariantMap ) ), Qt::QueuedConnection );
-    Database::instance()->enqueue( QSharedPointer<DatabaseCommand>( cmd ) );
 
     if( source()->isLocal() )
         Servent::instance()->triggerDBSync();
