@@ -69,12 +69,17 @@ protected:
 private slots:
     void onFilterChanged( const QString& filter );
 
+    void onViewChanged();
+    void onScrollTimeout();
+
 private:
     QPixmap createDragPixmap( int itemCount ) const;
 
     AlbumModel* m_model;
     AlbumProxyModel* m_proxyModel;
 //    PlaylistItemDelegate* m_delegate;
+
+    QTimer m_timer;
 };
 
 #endif // ALBUMVIEW_H

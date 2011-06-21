@@ -294,7 +294,7 @@ LastFmPlugin::notInCacheSlot( const QHash<QString, QString> criteria, const QStr
             QString artistName = criteria["artist"];
             QString albumName = criteria["album"];
 
-            QString imgurl = "http://ws.audioscrobbler.com/2.0/?method=album.imageredirect&artist=%1&album=%2&autocorrect=1&size=medium&api_key=7a90f6672a04b809ee309af169f34b8b";
+            QString imgurl = "http://ws.audioscrobbler.com/2.0/?method=album.imageredirect&artist=%1&album=%2&autocorrect=1&size=large&api_key=7a90f6672a04b809ee309af169f34b8b";
             QNetworkRequest req( imgurl.arg( artistName ).arg( albumName ) );
             QNetworkReply* reply = m_nam.data()->get( req );
             reply->setProperty( "customData", QVariant::fromValue<Tomahawk::InfoSystem::InfoCustomData>( customData ) );

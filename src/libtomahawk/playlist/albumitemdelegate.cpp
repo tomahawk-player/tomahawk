@@ -1,5 +1,5 @@
 /* === This file is part of Tomahawk Player - <http://tomahawk-player.org> ===
- * 
+ *
  *   Copyright 2010-2011, Christian Muehlhaeuser <muesli@tomahawk-player.org>
  *
  *   Tomahawk is free software: you can redistribute it and/or modify
@@ -37,6 +37,7 @@ AlbumItemDelegate::AlbumItemDelegate( QAbstractItemView* parent, AlbumProxyModel
     , m_view( parent )
     , m_model( proxy )
 {
+    m_shadowPixmap = QPixmap( RESPATH "images/cover-shadow.png" );
 }
 
 
@@ -65,10 +66,10 @@ AlbumItemDelegate::paint( QPainter* painter, const QStyleOptionViewItem& option,
     }
 
     painter->save();
-    painter->setRenderHint( QPainter::Antialiasing );
+//    painter->setRenderHint( QPainter::Antialiasing );
     painter->setPen( opt.palette.color( QPalette::Text ) );
 
-    painter->drawPixmap( option.rect.adjusted( 4, 4, -4, -38 ), QPixmap( RESPATH "images/cover-shadow.png" ) );
+//    painter->drawPixmap( option.rect.adjusted( 4, 4, -4, -38 ), m_shadowPixmap );
     painter->drawPixmap( option.rect.adjusted( 6, 4, -6, -41 ), item->cover );
 
     QTextOption to;

@@ -133,7 +133,6 @@ TrackView::setTrackModel( TrackModel* model )
         m_proxyModel->setSourceTrackModel( m_model );
     }
 
-
     if ( m_model && m_model->metaObject()->indexOfSignal( "itemSizeChanged(QModelIndex)" ) > -1 )
         connect( m_model, SIGNAL( itemSizeChanged( QModelIndex ) ), SLOT( onItemResized( QModelIndex ) ) );
 
@@ -145,7 +144,15 @@ TrackView::setTrackModel( TrackModel* model )
     setAcceptDrops( true );
 
     if ( model->style() == TrackModel::Short )
+    {
         setHeaderHidden( true );
+        setHorizontalScrollBarPolicy( Qt::ScrollBarAlwaysOff );
+    }
+    else
+    {
+        setHeaderHidden( false );
+        setHorizontalScrollBarPolicy( Qt::ScrollBarAsNeeded );
+    }
 }
 
 

@@ -33,6 +33,7 @@
 
 #include "dllmacro.h"
 
+class AlbumModel;
 class PlaylistModel;
 class OverlayWidget;
 
@@ -110,6 +111,8 @@ private:
     Ui::WelcomeWidget *ui;
 
     PlaylistModel* m_tracksModel;
+    AlbumModel* m_recentAlbumsModel;
+
     QTimer* m_timer;
 };
 

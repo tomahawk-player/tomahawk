@@ -232,6 +232,9 @@ ArtistView::onScrollTimeout()
     if ( right.isValid() )
         max = right.row() + 1;
 
+    if ( !max )
+        return;
+
     for ( int i = left.row(); i < max; i++ )
     {
         TreeModelItem* item = m_model->itemFromIndex( m_proxyModel->mapToSource( m_proxyModel->index( i, 0 ) ) );

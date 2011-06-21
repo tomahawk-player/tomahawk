@@ -26,6 +26,7 @@
 #include "collection.h"
 #include "playlistinterface.h"
 #include "database/databasecommand_allalbums.h"
+#include "infosystem/infosystem.h"
 
 #include "albumitem.h"
 
@@ -94,8 +95,10 @@ protected:
 
 private slots:
     void onAlbumsAdded( const QList<Tomahawk::album_ptr>& albums );
-    void onCoverArtDownloaded();
     void onDataChanged();
+
+    void infoSystemInfo( QString caller, Tomahawk::InfoSystem::InfoType type, QVariant input, QVariant output, Tomahawk::InfoSystem::InfoCustomData customData );
+    void infoSystemFinished( QString target );
 
 private:
     QPersistentModelIndex m_currentIndex;

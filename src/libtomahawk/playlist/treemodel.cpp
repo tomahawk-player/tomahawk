@@ -59,17 +59,11 @@ void
 TreeModel::setCurrentItem( const QModelIndex& index )
 {
     qDebug() << Q_FUNC_INFO;
-    TreeModelItem* oldEntry = itemFromIndex( m_currentIndex );
-    if ( oldEntry )
-    {
-//        oldEntry->setIsPlaying( false );
-    }
 
     TreeModelItem* entry = itemFromIndex( index );
     if ( entry )
     {
         m_currentIndex = index;
-//        entry->setIsPlaying( true );
     }
     else
     {

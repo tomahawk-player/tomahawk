@@ -23,6 +23,7 @@
 #include "utils/tomahawkutils.h"
 
 #include "viewmanager.h"
+#include "playlist/albummodel.h"
 #include "playlist/playlistmodel.h"
 
 #include "widgets/overlaywidget.h"
@@ -36,6 +37,8 @@
 #define HISTORY_TRACK_ITEMS 25
 #define HISTORY_PLAYLIST_ITEMS 5
 #define HISTORY_RESOLVING_TIMEOUT 2500
+
+using namespace Tomahawk;
 
 
 WelcomeWidget::WelcomeWidget( QWidget* parent )
@@ -57,6 +60,10 @@ WelcomeWidget::WelcomeWidget( QWidget* parent )
     m_tracksModel->setStyle( TrackModel::Short );
     ui->tracksView->overlay()->setEnabled( false );
     ui->tracksView->setPlaylistModel( m_tracksModel );
+
+    m_recentAlbumsModel = new AlbumModel( ui->additionsView );
+    ui->additionsView->setAlbumModel( m_recentAlbumsModel );
+    m_recentAlbumsModel->addFilteredCollection( collection_ptr(), 20, DatabaseCommand_AllAlbums::ModificationTime );
 
     m_timer = new QTimer( this );
     connect( m_timer, SIGNAL( timeout() ), SLOT( checkQueries() ) );

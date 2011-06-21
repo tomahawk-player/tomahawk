@@ -48,7 +48,7 @@ SourceInfoWidget::SourceInfoWidget( const Tomahawk::source_ptr& source, QWidget*
     m_historyModel = new PlaylistModel( ui->historyView );
     m_historyModel->setStyle( TrackModel::Short );
     ui->historyView->setPlaylistModel( m_historyModel );
-    m_historyModel->loadHistory( source );
+    m_historyModel->loadHistory( source, 25 );
 
     connect( source.data(), SIGNAL( playbackFinished( Tomahawk::query_ptr ) ), SLOT( onPlaybackFinished( Tomahawk::query_ptr ) ) );
 

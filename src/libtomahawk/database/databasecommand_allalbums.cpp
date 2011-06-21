@@ -84,7 +84,7 @@ DatabaseCommand_AllAlbums::execForCollection( DatabaseImpl* dbi )
 {
     TomahawkSqlQuery query = dbi->newquery();
     QList<Tomahawk::album_ptr> al;
-    QString orderToken;
+    QString orderToken, sourceToken;
 
     switch ( m_sortOrder )
     {
@@ -95,6 +95,9 @@ DatabaseCommand_AllAlbums::execForCollection( DatabaseImpl* dbi )
             orderToken = "file.mtime";
     }
 
+    if ( !m_collection.isNull() )
+        sourceToken = QString( "AND file.source %1 " ).arg( m_collection->source()->isLocal() ? "IS NULL" : QString( "= %1" ).arg( m_collection->source()->id() ) );
+
     QString sql = QString(
         "SELECT DISTINCT album.id, album.name, album.artist, artist.name "
         "FROM album, file, file_join "
@@ -102,9 +105,9 @@ DatabaseCommand_AllAlbums::execForCollection( DatabaseImpl* dbi )
         "ON album.artist = artist.id "
         "WHERE file.id = file_join.file "
         "AND file_join.album = album.id "
-        "AND file.source %1 "
+        "%1 "
         "%2 %3 %4"
-        ).arg( m_collection->source()->isLocal() ? "IS NULL" : QString( "= %1" ).arg( m_collection->source()->id() ) )
+        ).arg( sourceToken )
          .arg( m_sortOrder > 0 ? QString( "ORDER BY %1" ).arg( orderToken ) : QString() )
          .arg( m_sortDescending ? "DESC" : QString() )
          .arg( m_amount > 0 ? QString( "LIMIT 0, %1" ).arg( m_amount ) : QString() );
