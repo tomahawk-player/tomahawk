@@ -71,6 +71,10 @@ PlaylistModel::headerData( int section, Qt::Orientation orientation, int role ) 
 void
 PlaylistModel::loadPlaylist( const Tomahawk::playlist_ptr& playlist, bool loadEntries )
 {
+    QString currentuuid;
+    if ( currentItem().isValid() )
+        currentuuid = itemFromIndex( currentItem() )->query()->id();
+
     if ( !m_playlist.isNull() )
     {
         disconnect( m_playlist.data(), SIGNAL( revisionLoaded( Tomahawk::PlaylistRevision ) ), this, SLOT( onRevisionLoaded( Tomahawk::PlaylistRevision ) ) );
@@ -113,6 +117,9 @@ PlaylistModel::loadPlaylist( const Tomahawk::playlist_ptr& playlist, bool loadEn
             plitem->index = createIndex( m_rootItem->children.count() - 1, 0, plitem );
 
             connect( plitem, SIGNAL( dataChanged() ), SLOT( onDataChanged() ) );
+
+            if ( entry->query()->id() == currentuuid )
+                setCurrentItem( plitem->index );
 
             if ( !entry->query()->resolvingFinished() && !entry->query()->playable() )
             {
@@ -339,6 +346,7 @@ bool
 PlaylistModel::dropMimeData( const QMimeData* data, Qt::DropAction action, int row, int column, const QModelIndex& parent )
 {
     Q_UNUSED( column );
+
     if ( action == Qt::IgnoreAction || isReadOnly() )
         return true;
 
@@ -355,7 +363,10 @@ PlaylistModel::dropMimeData( const QMimeData* data, Qt::DropAction action, int r
     else
         beginRow = rowCount( QModelIndex() );
 
-    qDebug() << data->formats();
+//    qDebug() << data->formats();
+    QString currentuuid;
+    if ( currentItem().isValid() )
+        currentuuid = itemFromIndex( currentItem() )->query()->id();
 
     QList<Tomahawk::query_ptr> queries;
     if ( data->hasFormat( "application/tomahawk.result.list" ) )
@@ -418,14 +429,15 @@ PlaylistModel::dropMimeData( const QMimeData* data, Qt::DropAction action, int r
             TrackModelItem* plitem = new TrackModelItem( e, m_rootItem, beginRow );
             plitem->index = createIndex( beginRow++, 0, plitem );
 
+            if ( query->id() == currentuuid )
+                setCurrentItem( plitem->index );
+
             connect( plitem, SIGNAL( dataChanged() ), SLOT( onDataChanged() ) );
         }
         emit endInsertRows();
 
         if ( action == Qt::CopyAction )
-        {
-            onPlaylistChanged();
-        }
+            onPlaylistChanged( true );
     }
 
     return true;
@@ -507,7 +519,7 @@ PlaylistModel::removeIndex( const QModelIndex& index, bool moreToCome )
 
     if ( !moreToCome && !m_playlist.isNull() )
     {
-        onPlaylistChanged();
+        onPlaylistChanged( true );
     }
 }
 
