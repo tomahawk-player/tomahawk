@@ -376,6 +376,13 @@ include_directories( . ${CMAKE_CURRENT_BINARY_DIR} ${CMAKE_CURRENT_BINARY_DIR}/.
     ${CMAKE_BINARY_DIR}/thirdparty/liblastfm2/src
 )
 
+IF( UNIX AND NOT APPLE )
+    SET( libSources ${libSources}
+      infosystem/infoplugins/unix/libnotifyplugin.cpp )
+
+    SET( libHeaders ${libHeaders}
+      infosystem/infoplugins/unix/libnotifyplugin.h )
+ENDIF( UNIX AND NOT APPLE )
 
 IF( WIN32 )
     SET( OS_SPECIFIC_LINK_LIBRARIES
