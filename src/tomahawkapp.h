@@ -105,9 +105,10 @@ private slots:
     void setupSIP();
 
 private:
+    void registerMetaTypes();
+
     void initLocalCollection();
     void loadPlugins();
-    void registerMetaTypes();
     void startServent();
     void setupDatabase();
     void setupPipeline();

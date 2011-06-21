@@ -86,7 +86,8 @@
 using namespace std;
 ofstream logfile;
 
-void TomahawkLogHandler( QtMsgType type, const char *msg )
+void
+TomahawkLogHandler( QtMsgType type, const char *msg )
 {
     static QMutex s_mutex;
 
@@ -120,7 +121,8 @@ void TomahawkLogHandler( QtMsgType type, const char *msg )
     logfile.flush();
 }
 
-void setupLogfile()
+void
+setupLogfile()
 {
     if ( QFileInfo( LOGFILE ).size() > LOGFILE_SIZE )
     {
@@ -146,6 +148,28 @@ void setupLogfile()
     qInstallMsgHandler( TomahawkLogHandler );
 }
 
+void
+increaseMaxFileDescriptors()
+{
+#ifdef Q_WS_MAC
+    /// Following code taken from Clementine project, main.cpp. Thanks!
+    // Bump the soft limit for the number of file descriptors from the default of 256 to
+    // the maximum (usually 1024).
+    struct rlimit limit;
+    getrlimit( RLIMIT_NOFILE, &limit );
+
+    // getrlimit() lies about the hard limit so we have to check sysctl.
+    int max_fd = 0;
+    size_t len = sizeof( max_fd );
+    sysctlbyname( "kern.maxfilesperproc", &max_fd, &len, NULL, 0 );
+
+    limit.rlim_cur = max_fd;
+    int ret = setrlimit( RLIMIT_NOFILE, &limit );
+
+    if ( ret == 0 )
+      qDebug() << "Max fd:" << max_fd;
+#endif
+}
 
 using namespace Tomahawk;
 
@@ -158,12 +182,13 @@ TomahawkApp::TomahawkApp( int& argc, char *argv[] )
     setApplicationName( QLatin1String( TOMAHAWK_APPLICATION_NAME ) );
     setApplicationVersion( QLatin1String( TOMAHAWK_VERSION ) );
     registerMetaTypes();
-    setupLogfile();
 }
+
 
 void
 TomahawkApp::init()
 {
+    setupLogfile();
     qsrand( QTime( 0, 0, 0 ).secsTo( QTime::currentTime() ) );
 
 #ifdef TOMAHAWK_HEADLESS
@@ -222,24 +247,7 @@ TomahawkApp::init()
     Tomahawk::setShortcutHandler( static_cast<MacShortcutHandler*>( m_shortcutHandler.data() ) );
 
     Tomahawk::setApplicationHandler( this );
-
-    /// Following code taken from Clementine project, main.cpp. Thanks!
-    // Bump the soft limit for the number of file descriptors from the default of 256 to
-    // the maximum (usually 1024).
-    struct rlimit limit;
-    getrlimit(RLIMIT_NOFILE, &limit);
-
-    // getrlimit() lies about the hard limit so we have to check sysctl.
-    int max_fd = 0;
-    size_t len = sizeof(max_fd);
-    sysctlbyname("kern.maxfilesperproc", &max_fd, &len, NULL, 0);
-
-    limit.rlim_cur = max_fd;
-    int ret = setrlimit(RLIMIT_NOFILE, &limit);
-
-    if (ret == 0) {
-      qDebug() << "Max fd:" << max_fd;
-    }
+    increaseMaxFileDescriptors();
 #endif
 
     // Connect up shortcuts
