@@ -22,10 +22,7 @@
 #include "tomahawksettings.h"
 #include "utils/tomahawkutils.h"
 #include "infosystemcache.h"
-#include "infoplugins/echonestplugin.h"
-#include "infoplugins/musixmatchplugin.h"
-#include "infoplugins/lastfmplugin.h"
-#include "infoplugins/adiumplugin.h"
+#include "infosystemworker.h"
 
 namespace Tomahawk
 {

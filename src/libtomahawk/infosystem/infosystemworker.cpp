@@ -23,11 +23,11 @@
 #include "infosystemworker.h"
 #include "utils/tomahawkutils.h"
 #include "infosystemcache.h"
-#include "infoplugins/echonestplugin.h"
-#include "infoplugins/musixmatchplugin.h"
-#include "infoplugins/lastfmplugin.h"
+#include "infoplugins/generic/echonestplugin.h"
+#include "infoplugins/generic/musixmatchplugin.h"
+#include "infoplugins/generic/lastfmplugin.h"
 #ifdef Q_WS_MAC
-#include "infoplugins/adiumplugin.h"
+#include "infoplugins/mac/adiumplugin.h"
 #endif
 
 #include "lastfm/NetworkAccessManager"
