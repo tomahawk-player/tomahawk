@@ -60,8 +60,10 @@ FdoNotifyPlugin::pushInfo( const QString caller, const Tomahawk::InfoSystem::Inf
     arguments << QString(); //app_icon
     arguments << caller; //summary
     arguments << hash["message"]; //body
-    arguments << QStringList(); //actions
-    QMap< QString, QVariant > dict;
+    QStringList actions;
+    actions << "dosomething" << "Do Something";
+    arguments << actions; //actions
+    QVariantMap dict;
     dict["desktop-entry"] = QString( "tomahawk" );
     arguments << dict; //hints
     arguments << quint32( -1 ); //expire_timeout
