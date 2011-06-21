@@ -86,9 +86,9 @@ set( libSources
     infosystem/infosystemcache.cpp
     infosystem/infosystem.cpp
     infosystem/infosystemworker.cpp
-    infosystem/infoplugins/echonestplugin.cpp
-    infosystem/infoplugins/lastfmplugin.cpp
-    infosystem/infoplugins/musixmatchplugin.cpp
+    infosystem/infoplugins/generic/echonestplugin.cpp
+    infosystem/infoplugins/generic/lastfmplugin.cpp
+    infosystem/infoplugins/generic/musixmatchplugin.cpp
 
     playlist/treemodel.cpp
     playlist/treeproxymodel.cpp
@@ -253,9 +253,9 @@ set( libHeaders
     infosystem/infosystem.h
     infosystem/infosystemworker.h
     infosystem/infosystemcache.h
-    infosystem/infoplugins/echonestplugin.h
-    infosystem/infoplugins/lastfmplugin.h
-    infosystem/infoplugins/musixmatchplugin.h
+    infosystem/infoplugins/generic/echonestplugin.h
+    infosystem/infoplugins/generic/lastfmplugin.h
+    infosystem/infoplugins/generic/musixmatchplugin.h
 
     network/bufferiodevice.h
     network/msgprocessor.h
@@ -398,12 +398,12 @@ IF( APPLE )
     MARK_AS_ADVANCED( COREAUDIO_LIBRARY COREFOUNDATION_LIBRARY FOUNDATION_LIBRARY SCRIPTINGBRIDGE_LIBRARY )
 
     SET( libSources ${libSources} 
-      infosystem/infoplugins/adium.mm
-      infosystem/infoplugins/adiumplugin.cpp )
+      infosystem/infoplugins/mac/adium.mm
+      infosystem/infoplugins/mac/adiumplugin.cpp )
 
     SET( libHeaders ${libHeaders} 
-      infosystem/infoplugins/adium.h
-      infosystem/infoplugins/adiumplugin.h )
+      infosystem/infoplugins/mac/adium.h
+      infosystem/infoplugins/mac/adiumplugin.h )
 
     SET( OS_SPECIFIC_LINK_LIBRARIES
         ${OS_SPECIFIC_LINK_LIBRARIES}

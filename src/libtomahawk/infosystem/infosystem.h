@@ -102,7 +102,9 @@ enum InfoType { // as items are saved in cache, mark them here to not change the
 
     InfoNoInfo = 52,
     InfoLove = 53,
-    InfoUnLove = 54
+    InfoUnLove = 54,
+
+    InfoNotifyUser = 55
 };
 
 typedef QMap< InfoType, QVariant > InfoMap;
