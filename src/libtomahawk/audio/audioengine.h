@@ -65,7 +65,7 @@ public slots:
     void playPause();
     void play();
     void pause();
-    void stop();
+    void stop( bool sendNotification = true );
 
     void previous();
     void next();
