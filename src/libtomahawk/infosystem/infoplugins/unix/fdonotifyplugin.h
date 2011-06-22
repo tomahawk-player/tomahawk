@@ -20,9 +20,6 @@
 #define FDONOTIFYPLUGIN_H
 
 #include "infosystem/infosystem.h"
-#include "infosystem/infosystemworker.h"
-
-#include <QtDBus/QDBusArgument>
 
 namespace Tomahawk
 {
@@ -59,9 +56,6 @@ protected slots:
         Q_UNUSED( input );
         Q_UNUSED( customData );
     }
-
-private:
-    QDBusArgument m_arg;
 };
 
 }

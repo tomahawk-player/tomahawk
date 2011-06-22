@@ -48,7 +48,6 @@ using namespace Tomahawk::InfoSystem;
 
 FdoNotifyPlugin::FdoNotifyPlugin()
     : InfoPlugin()
-    , m_arg()
 {
     qDebug() << Q_FUNC_INFO;
     m_supportedPushTypes << Tomahawk::InfoSystem::InfoNotifyUser;
