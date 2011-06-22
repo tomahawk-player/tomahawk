@@ -46,10 +46,10 @@ DatabaseWorker::~DatabaseWorker()
     qDebug() << Q_FUNC_INFO << m_outstanding;
 
     if ( m_commands.count() )
-        qDebug() << m_commands;
+        qDebug() << "Outstanding db commands to finish:" << m_commands;
 
     quit();
-    wait( 60000 );
+    wait();
 }
 
 

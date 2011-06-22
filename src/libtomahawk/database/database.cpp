@@ -70,9 +70,8 @@ Database::loadIndex()
 void
 Database::enqueue( QSharedPointer<DatabaseCommand> lc )
 {
-    if( lc->doesMutates() )
+    if ( lc->doesMutates() )
     {
-        //qDebug() << Q_FUNC_INFO << "RW" << lc->commandname();
         qDebug() << "Enqueueing command to rw thread:" << lc->commandname();
         m_workerRW->enqueue( lc );
     }
@@ -80,21 +79,20 @@ Database::enqueue( QSharedPointer<DatabaseCommand> lc )
     {
         // find existing amount of worker threads for commandname
         // create new thread if < WORKER_THREADS
-        if ( m_workers.count( lc->commandname() ) < m_maxConcurrentThreads )
+        if ( m_workers.count() < m_maxConcurrentThreads )
         {
             DatabaseWorker* worker = new DatabaseWorker( m_impl, this, false );
             worker->start();
 
-            m_workers.insertMulti( lc->commandname(), worker );
+            m_workers << worker;
         }
 
         // find thread for commandname with lowest amount of outstanding jobs and enqueue job
         int busyThreads = 0;
         DatabaseWorker* happyThread = 0;
-        QList< DatabaseWorker* > workers = m_workers.values( lc->commandname() );
-        for ( int i = 0; i < workers.count(); i++ )
+        for ( int i = 0; i < m_workers.count(); i++ )
         {
-            DatabaseWorker* worker = workers.at( i );
+            DatabaseWorker* worker = m_workers.at( i );
 
             if ( !worker->busy() )
             {

@@ -72,7 +72,7 @@ private:
     bool m_ready;
     DatabaseImpl* m_impl;
     DatabaseWorker* m_workerRW;
-    QHash< QString, DatabaseWorker* > m_workers;
+    QList<DatabaseWorker*> m_workers;
     bool m_indexReady;
     int m_maxConcurrentThreads;
 
