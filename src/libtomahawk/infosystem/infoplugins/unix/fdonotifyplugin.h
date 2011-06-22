@@ -22,6 +22,8 @@
 #include "infosystem/infosystem.h"
 #include "infosystem/infosystemworker.h"
 
+#include <QtDBus/QDBusArgument>
+
 namespace Tomahawk
 {
 
@@ -47,7 +49,7 @@ protected slots:
         Q_UNUSED( customData );
     }
 
-    virtual void pushInfo( const QString caller, const Tomahawk::InfoSystem::InfoType type, const QVariant data );
+    virtual void pushInfo( const QString caller, const Tomahawk::InfoSystem::InfoType type, const QVariant pushData );
 
     virtual void notInCacheSlot( const Tomahawk::InfoSystem::InfoCriteriaHash criteria, const QString caller, const Tomahawk::InfoSystem::InfoType type, const QVariant input, const Tomahawk::InfoSystem::InfoCustomData customData )
     {
@@ -57,6 +59,9 @@ protected slots:
         Q_UNUSED( input );
         Q_UNUSED( customData );
     }
+
+private:
+    QDBusArgument m_arg;
 };
 
 }
