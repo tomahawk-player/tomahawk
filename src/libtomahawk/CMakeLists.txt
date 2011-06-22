@@ -82,6 +82,7 @@ set( libSources
     database/databasecommand_addclientauth.cpp
     database/databasecommand_clientauthvalid.cpp
     database/databasecommand_socialaction.cpp
+    database/databasecommand_loadsocialactions.cpp
     database/database.cpp
 
     infosystem/infosystemcache.cpp
@@ -250,6 +251,7 @@ set( libHeaders
     database/databasecommand_addclientauth.h
     database/databasecommand_clientauthvalid.h
     database/databasecommand_socialaction.h
+    database/databasecommand_loadsocialactions.h
 
     infosystem/infosystem.h
     infosystem/infosystemworker.h

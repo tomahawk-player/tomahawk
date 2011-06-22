@@ -80,6 +80,7 @@ AudioControls::AudioControls( QWidget* parent )
     ui->volumeLowButton->setPixmap( RESPATH "images/volume-icon-muted.png" );
     ui->volumeHighButton->setPixmap( RESPATH "images/volume-icon-full.png" );
     ui->loveButton->setPixmap( RESPATH "images/not-loved.png" );
+    ui->loveButton->setCheckable( true );
 
     ui->ownerLabel->setForegroundRole( QPalette::Dark );
     ui->metaDataArea->setStyleSheet( "QWidget#metaDataArea {\nborder-width: 4px;\nborder-image: url(" RESPATH "images/now-playing-panel.png) 4 4 4 4 stretch stretch; }" );
@@ -151,7 +152,7 @@ AudioControls::AudioControls( QWidget* parent )
     connect( ui->artistTrackLabel, SIGNAL( clickedArtist() ), SLOT( onArtistClicked() ) );
     connect( ui->artistTrackLabel, SIGNAL( clickedTrack() ), SLOT( onTrackClicked() ) );
     connect( ui->albumLabel,       SIGNAL( clickedAlbum() ), SLOT( onAlbumClicked() ) );
-    connect( ui->loveButton,       SIGNAL( clicked() ), SLOT( onLoveButtonClicked() ) );
+    connect( ui->loveButton,       SIGNAL( clicked( bool ) ), SLOT( onLoveButtonClicked( bool ) ) );
 
     // <From AudioEngine>
     connect( AudioEngine::instance(), SIGNAL( loading( Tomahawk::result_ptr ) ), SLOT( onPlaybackLoading( Tomahawk::result_ptr ) ) );
@@ -282,7 +283,6 @@ AudioControls::onPlaybackLoading( const Tomahawk::result_ptr& result )
     ui->albumLabel->setResult( result );
     ui->ownerLabel->setText( result->friendlySource() );
     ui->coverImage->setPixmap( m_defaultCover );
-    ui->loveButton->setVisible( true );
 
     ui->timeLabel->setText( TomahawkUtils::timeToString( 0 ) );
     ui->timeLeftLabel->setText( "-" + TomahawkUtils::timeToString( result->duration() ) );
@@ -298,6 +298,19 @@ AudioControls::onPlaybackLoading( const Tomahawk::result_ptr& result )
     ui->pauseButton->setVisible( true );
     ui->playPauseButton->setVisible( false );
     ui->playPauseButton->setEnabled( false );
+
+    result->loadSocialActions();
+    ui->loveButton->setVisible( true );
+    if ( result->loved() )
+    {
+        ui->loveButton->setPixmap( RESPATH "images/loved.png" );
+        ui->loveButton->setChecked( true );
+    }
+    else 
+    {
+        ui->loveButton->setPixmap( RESPATH "images/not-loved.png" );
+        ui->loveButton->setChecked( false );
+    }
 }
 
 
@@ -346,6 +359,7 @@ AudioControls::onPlaybackStopped()
     ui->pauseButton->setEnabled( false );
     ui->playPauseButton->setEnabled( true );
     ui->playPauseButton->setVisible( true );
+    ui->loveButton->setVisible( false );
 
 /*    m_pauseAction->setEnabled( false );
     m_playAction->setEnabled( true ); */
@@ -489,7 +503,7 @@ AudioControls::onTrackClicked()
 
 
 void
-AudioControls::onLoveButtonClicked()
+AudioControls::onLoveButtonClicked( bool checked )
 {
     Tomahawk::InfoSystem::InfoCriteriaHash trackInfo;
     trackInfo["title"] = m_currentTrack->track();
@@ -500,7 +514,17 @@ AudioControls::onLoveButtonClicked()
        s_acInfoIdentifier, Tomahawk::InfoSystem::InfoLove,
        QVariant::fromValue< Tomahawk::InfoSystem::InfoCriteriaHash >( trackInfo ) );
 
-    DatabaseCommand_SocialAction* cmd = new DatabaseCommand_SocialAction( m_currentTrack, QString( "Love" ) );
-    Database::instance()->enqueue( QSharedPointer<DatabaseCommand>(cmd) );
+    if ( checked )
+    {
+        DatabaseCommand_SocialAction* cmd = new DatabaseCommand_SocialAction( m_currentTrack, QString( "Love" ), QString( "true") );
+        Database::instance()->enqueue( QSharedPointer<DatabaseCommand>(cmd) );
+        ui->loveButton->setPixmap( RESPATH "images/loved.png" );
+    }
+    else
+    {
+        DatabaseCommand_SocialAction* cmd = new DatabaseCommand_SocialAction( m_currentTrack, QString( "Love" ), QString( "false" ) );
+        Database::instance()->enqueue( QSharedPointer<DatabaseCommand>(cmd) );
+        ui->loveButton->setPixmap( RESPATH "images/not-loved.png" );
+    }
 }
 
