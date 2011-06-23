@@ -78,6 +78,7 @@ signals:
 public slots:
     virtual bool connectPlugin( bool startup );
     void disconnectPlugin();
+    virtual void reset();
     void checkSettings();
     void refreshProxy();
     void deletePlugin();

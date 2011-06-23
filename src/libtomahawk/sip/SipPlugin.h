@@ -94,7 +94,8 @@ public slots:
     // so plugins can clean up after themselves
     virtual void deletePlugin();
 
-    virtual void reset() {}
+    //called when there is a new database
+    virtual void reset() = 0;
     
 signals:
     void error( int, const QString& );

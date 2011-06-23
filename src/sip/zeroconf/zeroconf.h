@@ -67,6 +67,8 @@ public slots:
     virtual bool connectPlugin( bool startup );
     void disconnectPlugin();
 
+    virtual void reset() {}
+    
     void sendMsg( const QString& , const QString&  ) {}
     void broadcastMsg( const QString & ) {}
     void addContact( const QString &, const QString&  ) {}

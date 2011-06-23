@@ -785,6 +785,18 @@ TwitterPlugin::checkSettings()
     connectPlugin( false );
 }
 
+
+void
+TwitterPlugin::reset()
+{
+    qDebug() << Q_FUNC_INFO;
+    setTwitterCachedDirectMessagesSinceId( 0 );
+    setTwitterCachedFriendsSinceId( 0 );
+    setTwitterCachedMentionsSinceId( 0 );
+    setTwitterCachedPeers( QHash< QString, QVariant >() );
+}
+
+
 QString
 TwitterPlugin::twitterScreenName() const
 {
