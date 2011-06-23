@@ -292,9 +292,10 @@ Section "Tomahawk Player" SEC_TOMAHAWK_PLAYER
         File "${BUILD_PATH}\libtomahawk_sip*.dll"
    !endif
 
-   ;License & release notes.
+   ;License & release notes & icon (for Growl).
    File "${ROOT_PATH}\LICENSE.txt"
    File /oname=NOTES.txt RELEASE_NOTES.txt
+   File "${ROOT_PATH}\data\icons\tomahawk-icon-128x128.png"
 
    ;QT stuff:
    File "${QT_DLL_PATH}\QtCore4.dll"
