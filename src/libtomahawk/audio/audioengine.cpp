@@ -134,8 +134,7 @@ AudioEngine::pause()
 
     m_mediaObject->pause();
     emit paused();
-    Tomahawk::InfoSystem::InfoSystem::instance()->pushInfo(
-       s_aeInfoIdentifier, Tomahawk::InfoSystem::InfoNowPaused, QVariant() );
+    Tomahawk::InfoSystem::InfoSystem::instance()->pushInfo( s_aeInfoIdentifier, Tomahawk::InfoSystem::InfoNowPaused, QVariant() );
 }
 
 
@@ -165,8 +164,7 @@ AudioEngine::stop( bool sendNotification )
             map[ Tomahawk::InfoSystem::InfoNotifyUser ] = QVariant::fromValue< Tomahawk::InfoSystem::InfoCriteriaHash >( stopInfo );
         }
         
-        Tomahawk::InfoSystem::InfoSystem::instance()->pushInfo(
-            s_aeInfoIdentifier, map );
+        Tomahawk::InfoSystem::InfoSystem::instance()->pushInfo( s_aeInfoIdentifier, map );
     }
 }
 
@@ -336,8 +334,7 @@ AudioEngine::loadTrack( const Tomahawk::result_ptr& result )
                 map[ Tomahawk::InfoSystem::InfoNotifyUser ] = QVariant::fromValue< Tomahawk::InfoSystem::InfoCriteriaHash >( playInfo );
             }
             
-            Tomahawk::InfoSystem::InfoSystem::instance()->pushInfo(
-                s_aeInfoIdentifier, map );
+            Tomahawk::InfoSystem::InfoSystem::instance()->pushInfo( s_aeInfoIdentifier, map );
         }
     }
 
