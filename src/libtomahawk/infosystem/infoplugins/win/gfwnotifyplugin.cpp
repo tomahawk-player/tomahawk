@@ -84,5 +84,7 @@ GfwNotifyPlugin::pushInfo( const QString caller, const Tomahawk::InfoSystem::Inf
     const char* name = "Notification";
     const char* title = "Tomahawk";
     const char* message = strdup( hash["message"].toLocal8Bit().constData() );
-    m_growl->Notify( name, title, message );
+    const char* url = "";
+    const char* icon = "file:///S:/Program%20Files%20(x86)/Tomahawk/tomahawk-icon-128x128.png";
+    m_growl->Notify( name, title, message, url, icon );
 }
