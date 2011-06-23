@@ -258,8 +258,8 @@ PlaylistItemDelegate::paintDetailed( QPainter* painter, const QStyleOptionViewIt
             if ( m_view->header()->visualIndex( index.column() ) == 0 )
             {
                 r.adjust( 0, 0, 0, -3 );
-                painter->drawPixmap( r.adjusted( 3, 3, 18 - r.width(), 0 ), m_nowPlayingIcon );
-                r.adjust( 22, 0, 0, 3 );
+                painter->drawPixmap( r.adjusted( 3, 1, 18 - r.width(), 1 ), m_nowPlayingIcon );
+                r.adjust( 25, 0, 0, 3 );
             }
 
             painter->setPen( opt.palette.text().color() );

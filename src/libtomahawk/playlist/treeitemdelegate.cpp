@@ -22,6 +22,7 @@
 #include <QDebug>
 #include <QPainter>
 #include <QAbstractItemView>
+#include <QHeaderView>
 
 #include "query.h"
 #include "result.h"
@@ -30,13 +31,15 @@
 
 #include "treemodelitem.h"
 #include "treeproxymodel.h"
+#include "artistview.h"
 
 
-TreeItemDelegate::TreeItemDelegate( QAbstractItemView* parent, TreeProxyModel* proxy )
+TreeItemDelegate::TreeItemDelegate( ArtistView* parent, TreeProxyModel* proxy )
     : QStyledItemDelegate( (QObject*)parent )
     , m_view( parent )
     , m_model( proxy )
 {
+    m_nowPlayingIcon = QPixmap( RESPATH "images/now-playing-speaker.png" );
 }
 
 
@@ -82,8 +85,27 @@ TreeItemDelegate::paint( QPainter* painter, const QStyleOptionViewItem& option, 
                 o.state |= QStyle::State_Selected;
             }
 
-            return QStyledItemDelegate::paint( painter, o, index );
+            qApp->style()->drawControl( QStyle::CE_ItemViewItem, &o, painter );
+
+            {
+                QRect r = o.rect.adjusted( 3, 0, 0, 0 );
+
+                // Paint Now Playing Speaker Icon
+                if ( item->isPlaying() && m_view->header()->visualIndex( index.column() ) == 0 )
+                {
+                    r.adjust( 0, 0, 0, -3 );
+                    painter->drawPixmap( r.adjusted( 3, 1, 18 - r.width(), 1 ), m_nowPlayingIcon );
+                    r.adjust( 25, 0, 0, 3 );
+                }
+
+                painter->setPen( o.palette.text().color() );
+
+                QTextOption to( Qt::AlignVCenter );
+                QString text = painter->fontMetrics().elidedText( index.data().toString(), Qt::ElideRight, r.width() - 3 );
+                painter->drawText( r.adjusted( 0, 1, 0, 0 ), text, to );
+            }
         }
+        return;
     }
     else
         return;

@@ -215,12 +215,6 @@ TreeModel::data( const QModelIndex& index, int role ) const
         return QSize( 128, 0 );
     }
 
-    if ( role == Qt::DecorationRole )
-    {
-        if ( entry->isPlaying() && index.column() == 0 )
-            return QPixmap( RESPATH "images/now-playing-speaker.png" );
-    }
-
     if ( role != Qt::DisplayRole ) // && role != Qt::ToolTipRole )
         return QVariant();
 
