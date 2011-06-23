@@ -420,6 +420,20 @@ TomahawkSettings::setMainWindowSplitterState( const QByteArray& state )
 }
 
 
+bool
+TomahawkSettings::verboseNotifications() const
+{
+    return value( "ui/notifications/verbose", false ).toBool();
+}
+
+
+void
+TomahawkSettings::setVerboseNotifications( bool notifications )
+{
+    setValue( "ui/notifications/verbose", notifications );
+}
+
+
 QByteArray
 TomahawkSettings::playlistColumnSizes( const QString& playlistid ) const
 {
