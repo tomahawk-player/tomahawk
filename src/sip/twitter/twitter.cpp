@@ -67,6 +67,19 @@ TwitterPlugin::TwitterPlugin( const QString& pluginId )
     , m_state( Disconnected )
 {
     qDebug() << Q_FUNC_INFO;
+
+    if ( !Database::instance() || Database::instance()->dbid() != twitterSavedDbid() )
+    {
+        if ( !twitterSavedDbid().isEmpty() ) //remove eventually (post 0.2), here for migration purposes
+        {
+            setTwitterCachedDirectMessagesSinceId( 0 );
+            setTwitterCachedFriendsSinceId( 0 );
+            setTwitterCachedMentionsSinceId( 0 );
+            setTwitterCachedPeers( QHash< QString, QVariant >() );
+        }
+        setTwitterSavedDbid( Database::instance()->dbid() );
+    }
+    
     m_checkTimer.setInterval( 150000 );
     m_checkTimer.setSingleShot( false );
     connect( &m_checkTimer, SIGNAL( timeout() ), SLOT( checkTimerFired() ) );
@@ -787,13 +800,16 @@ TwitterPlugin::checkSettings()
 
 
 void
-TwitterPlugin::reset()
+TwitterPlugin::setTwitterSavedDbid( const QString& dbid )
 {
-    qDebug() << Q_FUNC_INFO;
-    setTwitterCachedDirectMessagesSinceId( 0 );
-    setTwitterCachedFriendsSinceId( 0 );
-    setTwitterCachedMentionsSinceId( 0 );
-    setTwitterCachedPeers( QHash< QString, QVariant >() );
+    TomahawkSettings::instance()->setValue( pluginId() + "/saveddbid", dbid );
+}
+
+
+QString
+TwitterPlugin::twitterSavedDbid() const
+{
+    return TomahawkSettings::instance()->value( pluginId() + "/saveddbid", QString() ).toString();
 }
 
 

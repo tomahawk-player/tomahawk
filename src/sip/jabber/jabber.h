@@ -97,8 +97,6 @@ public slots:
     void refreshProxy();
     void showAddFriendDialog();
 
-    virtual void reset() {}
-
 protected:
     virtual QString defaultSuffix() const;
 
