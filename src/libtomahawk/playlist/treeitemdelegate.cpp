@@ -74,6 +74,14 @@ TreeItemDelegate::paint( QPainter* painter, const QStyleOptionViewItem& option, 
         {
             QStyleOptionViewItemV4 o( *vioption );
             o.palette.setColor( QPalette::Text, textColor );
+
+            if ( item->isPlaying() )
+            {
+                o.palette.setColor( QPalette::Highlight, o.palette.color( QPalette::Mid ) );
+                o.palette.setColor( QPalette::Text, o.palette.color( QPalette::HighlightedText ) );
+                o.state |= QStyle::State_Selected;
+            }
+
             return QStyledItemDelegate::paint( painter, o, index );
         }
     }

@@ -91,7 +91,9 @@ public:
     TreeModelItem* itemFromIndex( const QModelIndex& index ) const
     {
         if ( index.isValid() )
+        {
             return static_cast<TreeModelItem*>( index.internalPointer() );
+        }
         else
         {
             return m_rootItem;
@@ -124,6 +126,9 @@ private slots:
 
     void infoSystemInfo( QString caller, Tomahawk::InfoSystem::InfoType type, QVariant input, QVariant output, Tomahawk::InfoSystem::InfoCustomData customData );
     void infoSystemFinished( QString target );
+
+    void onPlaybackFinished( const Tomahawk::result_ptr& result );
+    void onPlaybackStopped();
 
     void onDataChanged();
 

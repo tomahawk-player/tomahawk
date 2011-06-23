@@ -23,6 +23,7 @@
 #include <QMimeData>
 #include <QNetworkReply>
 
+#include "audio/audioengine.h"
 #include "database/databasecommand_allalbums.h"
 #include "database/databasecommand_alltracks.h"
 #include "database/database.h"
@@ -42,6 +43,9 @@ TreeModel::TreeModel( QObject* parent )
     m_defaultCover = QPixmap( RESPATH "images/no-album-art-placeholder.png" )
                      .scaled( QSize( 120, 120 ), Qt::IgnoreAspectRatio, Qt::SmoothTransformation );
 
+    connect( AudioEngine::instance(), SIGNAL( finished( Tomahawk::result_ptr ) ), SLOT( onPlaybackFinished( Tomahawk::result_ptr ) ), Qt::DirectConnection );
+    connect( AudioEngine::instance(), SIGNAL( stopped() ), SLOT( onPlaybackStopped() ), Qt::DirectConnection );
+
     connect( Tomahawk::InfoSystem::InfoSystem::instance(),
              SIGNAL( info( QString, Tomahawk::InfoSystem::InfoType, QVariant, QVariant, Tomahawk::InfoSystem::InfoCustomData ) ),
                SLOT( infoSystemInfo( QString, Tomahawk::InfoSystem::InfoType, QVariant, QVariant, Tomahawk::InfoSystem::InfoCustomData ) ) );
@@ -60,10 +64,17 @@ TreeModel::setCurrentItem( const QModelIndex& index )
 {
     qDebug() << Q_FUNC_INFO;
 
+    TreeModelItem* oldEntry = itemFromIndex( m_currentIndex );
+    if ( oldEntry )
+    {
+        oldEntry->setIsPlaying( false );
+    }
+
     TreeModelItem* entry = itemFromIndex( index );
     if ( entry )
     {
         m_currentIndex = index;
+        entry->setIsPlaying( true );
     }
     else
     {
@@ -202,6 +213,12 @@ TreeModel::data( const QModelIndex& index, int role ) const
         }
 
         return QSize( 128, 0 );
+    }
+
+    if ( role == Qt::DecorationRole )
+    {
+        if ( entry->isPlaying() && index.column() == 0 )
+            return QPixmap( RESPATH "images/now-playing-speaker.png" );
     }
 
     if ( role != Qt::DisplayRole ) // && role != Qt::ToolTipRole )
@@ -615,6 +632,29 @@ TreeModel::infoSystemFinished( QString target )
 {
     Q_UNUSED( target );
     qDebug() << Q_FUNC_INFO;
+}
+
+
+void
+TreeModel::onPlaybackFinished( const Tomahawk::result_ptr& result )
+{
+    TreeModelItem* oldEntry = itemFromIndex( m_currentIndex );
+    qDebug() << oldEntry->result().data() << result.data();
+    if ( oldEntry && !oldEntry->result().isNull() && oldEntry->result().data() == result.data() )
+    {
+        oldEntry->setIsPlaying( false );
+    }
+}
+
+
+void
+TreeModel::onPlaybackStopped()
+{
+    TreeModelItem* oldEntry = itemFromIndex( m_currentIndex );
+    if ( oldEntry )
+    {
+        oldEntry->setIsPlaying( false );
+    }
 }
 
 
