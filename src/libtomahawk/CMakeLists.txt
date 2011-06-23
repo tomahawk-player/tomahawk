@@ -373,15 +373,18 @@ include_directories( . ${CMAKE_CURRENT_BINARY_DIR} ${CMAKE_CURRENT_BINARY_DIR}/.
 
     ${LIBPORTFWD_INCLUDE_DIR}
     ${THIRDPARTY_DIR}/qxt/qxtweb-standalone/qxtweb
+    ${THIRDPARTY_DIR}/gntp-send/gntp-send/headers
     ${CMAKE_BINARY_DIR}/thirdparty/liblastfm2/src
 )
 
 IF( UNIX AND NOT APPLE )
     SET( libSources ${libSources}
+      infosystem/infoplugins/win/gfwnotifyplugin.cpp
       infosystem/infoplugins/unix/fdonotifyplugin.cpp
       infosystem/infoplugins/unix/imageconverter.cpp )
 
     SET( libHeaders ${libHeaders}
+      infosystem/infoplugins/win/gfwnotifyplugin.h
       infosystem/infoplugins/unix/fdonotifyplugin.h
       infosystem/infoplugins/unix/imageconverter.h )
 ENDIF( UNIX AND NOT APPLE )
@@ -438,6 +441,8 @@ add_library( tomahawklib SHARED ${libSources} ${libMoc} )
 target_link_libraries( tomahawklib
     # Thirdparty shipped with tomahawk
     ${LIBPORTFWD_LIBRARIES}
+
+    tomahawk_growl
 
     # External deps
     ${QJSON_LIBRARIES}

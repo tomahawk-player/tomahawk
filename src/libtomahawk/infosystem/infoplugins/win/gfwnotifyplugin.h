@@ -16,13 +16,12 @@
  *   along with Tomahawk. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef FDONOTIFYPLUGIN_H
-#define FDONOTIFYPLUGIN_H
+#ifndef GFWNOTIFYPLUGIN_H
+#define GFWNOTIFYPLUGIN_H
 
 #include "infosystem/infosystem.h"
-#include "infosystem/infosystemworker.h"
 
-#include <QtDBus/QDBusArgument>
+class Growl;
 
 namespace Tomahawk
 {
@@ -30,13 +29,13 @@ namespace Tomahawk
 namespace InfoSystem
 {
 
-class FdoNotifyPlugin : public InfoPlugin
+class GfwNotifyPlugin : public InfoPlugin
 {
     Q_OBJECT
 
 public:
-    FdoNotifyPlugin();
-    virtual ~FdoNotifyPlugin();
+    GfwNotifyPlugin();
+    virtual ~GfwNotifyPlugin();
 
     virtual void namChangedSlot( QNetworkAccessManager* ) {}
 
@@ -61,11 +60,11 @@ protected slots:
     }
 
 private:
-    QDBusArgument m_arg;
+    Growl* m_growl;
 };
 
 }
 
 }
 
-#endif // FDONOTIFYPLUGIN_H
+#endif // GFWNOTIFYPLUGIN_H

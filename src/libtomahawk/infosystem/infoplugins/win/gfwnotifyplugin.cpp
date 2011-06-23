@@ -36,31 +36,36 @@
  *
  */
 
-#include "fdonotifyplugin.h"
+#include "gfwnotifyplugin.h"
 #include "utils/tomahawkutils.h"
-#include "imageconverter.h"
 
-#include <QtDBus/QDBusConnection>
-#include <QtDBus/QDBusMessage>
-#include <QImage>
+#include "growl.h"
+#include "growl++.hpp"
 
 using namespace Tomahawk::InfoSystem;
 
-FdoNotifyPlugin::FdoNotifyPlugin()
+GfwNotifyPlugin::GfwNotifyPlugin()
     : InfoPlugin()
-    , m_arg()
+    , m_growl( 0 )
 {
+    const char* notifications[1];
+    const char* name = "Notification";
+    notifications[0] = name;
+    const char* host = "192.168.10.45";
+    const char* password = "testing";
+    const char* application = "Tomahawk";
+    m_growl = new Growl( GROWL_TCP, host, password, application, notifications, 1 );
     qDebug() << Q_FUNC_INFO;
     m_supportedPushTypes << Tomahawk::InfoSystem::InfoNotifyUser;
 }
 
-FdoNotifyPlugin::~FdoNotifyPlugin()
+GfwNotifyPlugin::~GfwNotifyPlugin()
 {
     qDebug() << Q_FUNC_INFO;
 }
 
 void
-FdoNotifyPlugin::pushInfo( const QString caller, const Tomahawk::InfoSystem::InfoType type, const QVariant pushData )
+GfwNotifyPlugin::pushInfo( const QString caller, const Tomahawk::InfoSystem::InfoType type, const QVariant pushData )
 {
     Q_UNUSED( caller );
     qDebug() << Q_FUNC_INFO;
@@ -76,19 +81,8 @@ FdoNotifyPlugin::pushInfo( const QString caller, const Tomahawk::InfoSystem::Inf
         return;
     }
 
-    QDBusMessage message = QDBusMessage::createMethodCall( "org.freedesktop.Notifications", "/org/freedesktop/Notifications", "org.freedesktop.Notifications", "Notify" );
-    QList<QVariant> arguments;
-    arguments << QString( "Tomahawk" ); //app_name
-    arguments << quint32( 0 ); //notification_id
-    arguments << QString(); //app_icon
-    arguments << QString( "Tomahawk" ); //summary
-    arguments << hash["message"]; //body
-    arguments << QStringList(); //actions
-    QVariantMap dict;
-    dict["desktop-entry"] = QString( "tomahawk" );
-    dict["image_data"] = ImageConverter::variantForImage( QImage( RESPATH "icons/tomahawk-icon-128x128.png" ) );
-    arguments << dict; //hints
-    arguments << qint32( -1 ); //expire_timeout
-    message.setArguments( arguments );
-    QDBusConnection::sessionBus().send( message );
+    const char* name = "Notification";
+    const char* title = "Tomahawk";
+    const char* message = strdup( hash["message"].toLocal8Bit().constData() );
+    m_growl->Notify( name, title, message );
 }
