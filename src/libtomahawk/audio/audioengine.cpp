@@ -52,6 +52,7 @@ AudioEngine::AudioEngine()
     , m_queue( 0 )
     , m_timeElapsed( 0 )
     , m_expectStop( false )
+    , m_waitingOnNewTrack( false )
 {
     s_instance = this;
     qDebug() << "Init AudioEngine";
@@ -75,17 +76,12 @@ AudioEngine::AudioEngine()
     // Since it's indendent, we'll set it to 75% since that's nicer
     setVolume( 75 );
 #endif
-
-    m_retryTimer.setInterval( 10000 );
-    m_retryTimer.setSingleShot( false );
-    connect( &m_retryTimer, SIGNAL( timeout() ), SLOT( loadNextTrack() ) );
 }
 
 
 AudioEngine::~AudioEngine()
 {
     qDebug() << Q_FUNC_INFO;
-    m_retryTimer.stop();
     m_mediaObject->stop();
 //    stop();
 
@@ -144,8 +140,7 @@ AudioEngine::stop( bool sendNotification )
     qDebug() << Q_FUNC_INFO;
 
     m_mediaObject->stop();
-    m_retryTimer.stop();
-
+    
     if ( m_playlist )
         m_playlist->reset();
     
@@ -255,8 +250,6 @@ AudioEngine::loadTrack( const Tomahawk::result_ptr& result )
 {
     qDebug() << Q_FUNC_INFO << thread() << result;
 
-    m_retryTimer.stop();
-    
     bool err = false;
 
     {
@@ -344,6 +337,7 @@ AudioEngine::loadTrack( const Tomahawk::result_ptr& result )
         return false;
     }
 
+    m_waitingOnNewTrack = false;
     return true;
 }
 
@@ -351,8 +345,6 @@ void
 AudioEngine::loadPreviousTrack()
 {
     qDebug() << Q_FUNC_INFO;
-    
-    m_retryTimer.stop();
     
     if ( !m_playlist )
     {
@@ -373,9 +365,6 @@ AudioEngine::loadNextTrack()
 {
     qDebug() << Q_FUNC_INFO;
 
-    bool wasRetrying = m_retryTimer.isActive();
-    m_retryTimer.stop();
-    
     Tomahawk::result_ptr result;
 
     if ( m_queue && m_queue->trackCount() )
@@ -395,16 +384,12 @@ AudioEngine::loadNextTrack()
         stop( false );
         if ( m_playlist && m_playlist->retryMode() == Tomahawk::PlaylistInterface::Retry )
         {
-            if ( !wasRetrying )
-            {
-                Tomahawk::InfoSystem::InfoCriteriaHash retryInfo;
-                retryInfo["message"] = QString( "The current track could not be resolved. Tomahawk will keep trying..." );
-                Tomahawk::InfoSystem::InfoSystem::instance()->pushInfo(
-                    s_aeInfoIdentifier, Tomahawk::InfoSystem::InfoNotifyUser,
-                    QVariant::fromValue< Tomahawk::InfoSystem::InfoCriteriaHash >( retryInfo ) );
-            }
-            m_retryTimer.setInterval( m_playlist->retryInterval() );
-            m_retryTimer.start();
+            m_waitingOnNewTrack = true;
+            Tomahawk::InfoSystem::InfoCriteriaHash retryInfo;
+            retryInfo["message"] = QString( "The current track could not be resolved. Tomahawk will pick back up with the next resolvable track..." );
+            Tomahawk::InfoSystem::InfoSystem::instance()->pushInfo(
+                s_aeInfoIdentifier, Tomahawk::InfoSystem::InfoNotifyUser,
+                QVariant::fromValue< Tomahawk::InfoSystem::InfoCriteriaHash >( retryInfo ) );
         }
     }
 }
@@ -417,7 +402,7 @@ AudioEngine::playItem( Tomahawk::PlaylistInterface* playlist, const Tomahawk::re
 
     if ( m_playlist )
         m_playlist->reset();
-    
+
     setPlaylist( playlist );
     m_currentTrackPlaylist = playlist;
 
@@ -425,14 +410,24 @@ AudioEngine::playItem( Tomahawk::PlaylistInterface* playlist, const Tomahawk::re
         loadTrack( result );
     else if ( m_playlist->retryMode() == PlaylistInterface::Retry )
     {
+        m_waitingOnNewTrack = true;
         Tomahawk::InfoSystem::InfoCriteriaHash retryInfo;
-        retryInfo["message"] = QString( "The current track could not be resolved. Tomahawk will keep trying..." );
+        retryInfo["message"] = QString( "The current track could not be resolved. Tomahawk will pick back up with the next resolvable track..." );
         Tomahawk::InfoSystem::InfoSystem::instance()->pushInfo(
             s_aeInfoIdentifier, Tomahawk::InfoSystem::InfoNotifyUser,
             QVariant::fromValue< Tomahawk::InfoSystem::InfoCriteriaHash >( retryInfo ) );
-        m_retryTimer.setInterval( playlist->retryInterval() );
-        m_retryTimer.start();
     }
+}
+
+
+void
+AudioEngine::playlistNextTrackReady()
+{
+    if ( !m_waitingOnNewTrack )
+        return;
+
+    m_waitingOnNewTrack = false;
+    next();
 }
 
 
@@ -498,6 +493,10 @@ AudioEngine::setPlaylist( PlaylistInterface* playlist )
     if ( m_playlist )
         m_playlist->reset();
     m_playlist = playlist;
+
+    if ( m_playlist->retryMode() == PlaylistInterface::Retry )
+        connect( m_playlist->object(), SIGNAL( nextTrackReady() ), SLOT( playlistNextTrackReady() ) );
+    
     emit playlistChanged( playlist );
 }
 

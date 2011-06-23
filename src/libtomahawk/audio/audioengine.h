@@ -83,6 +83,8 @@ public slots:
 
     void onTrackAboutToFinish();
 
+    void playlistNextTrackReady();
+
 signals:
     void loading( const Tomahawk::result_ptr& track );
     void started( const Tomahawk::result_ptr& track );
@@ -131,7 +133,7 @@ private:
     unsigned int m_timeElapsed;
     bool m_expectStop;
 
-    QTimer m_retryTimer;
+    bool m_waitingOnNewTrack;
 
     static AudioEngine* s_instance;
 };

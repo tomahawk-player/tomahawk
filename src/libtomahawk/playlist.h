@@ -208,6 +208,8 @@ signals:
     void trackCountChanged( unsigned int tracks );
     void sourceTrackCountChanged( unsigned int tracks );
 
+    void nextTrackReady();
+
 public slots:
     // want to update the playlist from the model?
     // generate a newrev using uuid() and call this:

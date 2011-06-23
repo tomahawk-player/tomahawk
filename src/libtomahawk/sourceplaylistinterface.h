@@ -70,11 +70,12 @@ signals:
     void shuffleModeChanged( bool enabled );
     void trackCountChanged( unsigned int tracks );
     void sourceTrackCountChanged( unsigned int tracks );
-
+    void nextTrackReady();
+    
 private slots:
     void onSourcePlaybackStarted( const Tomahawk::query_ptr& query );
     void resolveResultsAdded( const QList<Tomahawk::result_ptr>& results ) const;
-    void resolvingFinished( bool hasResults ) const;
+    void resolvingFinished( bool hasResults );
 
 private:
     Tomahawk::source_ptr m_source;

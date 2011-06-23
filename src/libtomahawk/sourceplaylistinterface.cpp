@@ -114,7 +114,8 @@ SourcePlaylistInterface::resolveResultsAdded( const QList<Tomahawk::result_ptr>&
 }
 
 void
-SourcePlaylistInterface::resolvingFinished( bool hasResults ) const
+SourcePlaylistInterface::resolvingFinished( bool hasResults )
 {
     qDebug() << Q_FUNC_INFO << " and has results? : " << (hasResults ? "true" : "false");
+    emit nextTrackReady();
 }
