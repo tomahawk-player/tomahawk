@@ -202,13 +202,14 @@ PlaylistItemDelegate::paintShort( QPainter* painter, const QStyleOptionViewItem&
 
         r.adjust( ir.width() + 12, 0, 0, 0 );
         QTextOption to( Qt::AlignTop );
-        QString text = painter->fontMetrics().elidedText( upperText, Qt::ElideRight, r.width() - 3 );
+        to.setWrapMode( QTextOption::NoWrap );
         painter->setFont( boldFont );
+        QString text = painter->fontMetrics().elidedText( upperText, Qt::ElideRight, r.width() - 3 );
         painter->drawText( r.adjusted( 0, 1, 0, 0 ), text, to );
 
         to.setAlignment( Qt::AlignBottom );
-        text = painter->fontMetrics().elidedText( lowerText, Qt::ElideRight, r.width() - 3 );
         painter->setFont( opt.font );
+        text = painter->fontMetrics().elidedText( lowerText, Qt::ElideRight, r.width() - 3 );
         painter->drawText( r.adjusted( 0, 1, 0, 0 ), text, to );
     }
     painter->restore();
