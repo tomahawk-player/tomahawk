@@ -195,13 +195,28 @@ Servent::createConnectionKey( const QString& name, const QString &nodeid, const 
 void
 Servent::setExternalAddress( QHostAddress ha, unsigned int port )
 {
-    m_externalAddress = ha;
-    m_externalPort = port;
-
-    if( m_externalPort == 0 || m_externalAddress.toString().isEmpty() )
+    QString ip = ha.toString();
+    if ( !qApp->arguments().contains( "--lanhack" ) )
     {
-        if( !TomahawkSettings::instance()->externalHostname().isEmpty() &&
-            !TomahawkSettings::instance()->externalPort() == 0 )
+        if ( ip.startsWith( "10." ) || ip.startsWith( "172.16." ) || ip.startsWith( "192.168." ) )
+        {
+            qDebug() << Q_FUNC_INFO << "Tried to set an invalid ip as external address!";
+            return;
+        }
+
+        m_externalAddress = ha;
+        m_externalPort = port;
+    }
+    else
+    {
+        m_externalAddress = ha;
+        m_externalPort = port;
+    }
+
+    if ( m_externalPort == 0 || m_externalAddress.toString().isEmpty() )
+    {
+        if ( !TomahawkSettings::instance()->externalHostname().isEmpty() &&
+             !TomahawkSettings::instance()->externalPort() == 0 )
         {
             qDebug() << "UPnP failed, have external address/port -- falling back";
             m_externalHostname = TomahawkSettings::instance()->externalHostname();
