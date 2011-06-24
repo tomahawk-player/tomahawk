@@ -33,6 +33,20 @@
 
 class QtScriptResolver;
 
+class QtScriptResolverHelper : public QObject
+{
+    Q_OBJECT
+
+public:
+    QtScriptResolverHelper(const QString& scriptPath, QObject* parent );
+
+public slots:
+    QString readFile(const QString& fileName);
+
+private:
+    QString m_scriptPath;
+};
+
 class ScriptEngine : public QWebPage
 {
 Q_OBJECT

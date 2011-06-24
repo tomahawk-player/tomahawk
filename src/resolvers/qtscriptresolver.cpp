@@ -24,6 +24,30 @@
 #include "sourcelist.h"
 #include "utils/tomahawkutils.h"
 
+QtScriptResolverHelper::QtScriptResolverHelper( const QString& scriptPath, QObject* parent ): QObject(parent)
+{
+    m_scriptPath = scriptPath;
+}
+
+QString
+QtScriptResolverHelper::readFile( const QString& fileName )
+{
+    QString path = QFileInfo( m_scriptPath ).absolutePath();
+    // remove directories
+    QString cleanedFileName = QFileInfo( fileName ).fileName();
+
+    QString absoluteFilePath = path.append( "/" ).append( cleanedFileName );
+
+    QFile file( absoluteFilePath );
+    if( !file.exists() )
+    {
+        return QString();
+    }
+
+    file.open( QIODevice::ReadOnly );
+    return file.readAll();
+}
+
 
 QtScriptResolver::QtScriptResolver( const QString& scriptPath )
     : Tomahawk::ExternalResolver( scriptPath )
@@ -43,6 +67,7 @@ QtScriptResolver::QtScriptResolver( const QString& scriptPath )
 
     m_engine->mainFrame()->setHtml( "<html><body></body></html>" );
     m_engine->mainFrame()->evaluateJavaScript( scriptFile.readAll() );
+    m_engine->mainFrame()->addToJavaScriptWindowObject( "Tomahawk", new QtScriptResolverHelper( scriptPath, this ) );
     scriptFile.close();
 
     QVariantMap m = m_engine->mainFrame()->evaluateJavaScript( "getSettings();" ).toMap();
