@@ -96,5 +96,6 @@
     <file>./data/www/tomahawk_banner_small.png</file>
     <file>./data/sql/dbmigrate-22_to_23.sql</file>
     <file>./data/sql/dbmigrate-23_to_24.sql</file>
+    <file>./data/sql/dbmigrate-24_to_25.sql</file>
   </qresource>
 </RCC>

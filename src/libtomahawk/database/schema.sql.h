@@ -1,5 +1,5 @@
 /*
-    This file was automatically generated from ./schema.sql on Sun Jun 12 05:17:25 CEST 2011.
+    This file was automatically generated from ./schema.sql on Fri Jun 24 09:10:23 CEST 2011.
 */
 
 static const char * tomahawk_schema_sql = 
@@ -76,7 +76,7 @@ static const char * tomahawk_schema_sql =
 "    previous_revision TEXT REFERENCES playlist_revision(guid) DEFERRABLE INITIALLY DEFERRED"
 ");"
 "CREATE TABLE IF NOT EXISTS dynamic_playlist ("
-"    guid TEXT PRIMARY KEY,"
+"    guid TEXT NOT NULL REFERENCES playlist(guid) ON DELETE CASCADE ON UPDATE CASCADE DEFERRABLE INITIALLY DEFERRED,"
 "    pltype TEXT, "
 "    plmode INTEGER "
 ");"
@@ -183,7 +183,7 @@ static const char * tomahawk_schema_sql =
 "    k TEXT NOT NULL PRIMARY KEY,"
 "    v TEXT NOT NULL DEFAULT ''"
 ");"
-"INSERT INTO settings(k,v) VALUES('schema_version', '24');"
+"INSERT INTO settings(k,v) VALUES('schema_version', '25');"
     ;
 
 const char * get_tomahawk_sql()

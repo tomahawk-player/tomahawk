@@ -38,7 +38,7 @@
 */
 #include "schema.sql.h"
 
-#define CURRENT_SCHEMA_VERSION 24
+#define CURRENT_SCHEMA_VERSION 25
 
 
 DatabaseImpl::DatabaseImpl( const QString& dbname, Database* parent )
