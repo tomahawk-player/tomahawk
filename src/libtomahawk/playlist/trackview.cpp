@@ -394,6 +394,8 @@ TrackView::startDrag( Qt::DropActions supportedActions )
 void
 TrackView::onCustomContextMenu( const QPoint& pos )
 {
+    m_contextMenu->clear();
+
     QModelIndex idx = indexAt( pos );
     idx = idx.sibling( idx.row(), 0 );
     setContextMenuIndex( idx );

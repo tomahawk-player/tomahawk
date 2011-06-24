@@ -45,6 +45,16 @@ public:
     void setQuery( const Tomahawk::query_ptr& query );
     void setQueries( const QList<Tomahawk::query_ptr>& queries );
 
+    void setArtist( const Tomahawk::artist_ptr& artist );
+    void setArtists( const QList<Tomahawk::artist_ptr>& artists );
+
+    void setAlbum( const Tomahawk::album_ptr& album );
+    void setAlbums( const QList<Tomahawk::album_ptr>& albums );
+
+    void clear();
+
+    unsigned int itemCount() const { return m_queries.count() + m_artists.count() + m_albums.count(); }
+
 signals:
     void triggered( int action );
 
@@ -57,7 +67,10 @@ private slots:
 private:
     QSignalMapper* m_sigmap;
     int m_supportedActions;
+
     QList<Tomahawk::query_ptr> m_queries;
+    QList<Tomahawk::artist_ptr> m_artists;
+    QList<Tomahawk::album_ptr> m_albums;
 };
 
 }; // ns

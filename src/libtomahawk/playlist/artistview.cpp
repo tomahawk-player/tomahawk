@@ -257,6 +257,8 @@ ArtistView::onScrollTimeout()
 void
 ArtistView::onCustomContextMenu( const QPoint& pos )
 {
+    m_contextMenu->clear();
+
     QModelIndex idx = indexAt( pos );
     idx = idx.sibling( idx.row(), 0 );
     m_contextMenuIndex = idx;
@@ -265,17 +267,28 @@ ArtistView::onCustomContextMenu( const QPoint& pos )
         return;
 
     QList<query_ptr> queries;
+    QList<artist_ptr> artists;
+    QList<album_ptr> albums;
+
     foreach ( const QModelIndex& index, selectedIndexes() )
     {
-        if ( index.column() )
+        if ( index.column() || selectedIndexes().contains( index.parent() ) )
             continue;
 
         TreeModelItem* item = m_proxyModel->itemFromIndex( m_proxyModel->mapToSource( index ) );
+
         if ( item && !item->result().isNull() )
             queries << item->result()->toQuery();
+        if ( item && !item->artist().isNull() )
+            artists << item->artist();
+        if ( item && !item->album().isNull() )
+            albums << item->album();
     }
 
     m_contextMenu->setQueries( queries );
+    m_contextMenu->setArtists( artists );
+    m_contextMenu->setAlbums( albums );
+
     m_contextMenu->exec( mapToGlobal( pos ) );
 }
 
