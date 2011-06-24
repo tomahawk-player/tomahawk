@@ -70,7 +70,7 @@ SourcePlaylistInterface::hasNextItem()
 {
     if ( m_source.isNull() || m_source->currentTrack().isNull() || m_source->currentTrack()->results().isEmpty() )
         return false;
-    
+
     return m_gotNextItem;
 }
 
@@ -109,7 +109,7 @@ SourcePlaylistInterface::resolveResultsAdded( const QList<Tomahawk::result_ptr>&
     qDebug() << Q_FUNC_INFO;
     foreach ( Tomahawk::result_ptr ptr, results )
     {
-        qDebug() << "Found result: " << ptr->track();
+//        qDebug() << "Found result:" << ptr->track();
     }
 }
 

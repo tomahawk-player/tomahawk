@@ -19,8 +19,6 @@
 #ifndef COLLECTIONVIEW_H
 #define COLLECTIONVIEW_H
 
-#include <QMenu>
-
 #include "trackproxymodel.h"
 #include "trackmodel.h"
 #include "trackview.h"
@@ -52,20 +50,10 @@ public:
     virtual bool jumpToCurrentTrack();
 
 private slots:
-    void onCustomContextMenu( const QPoint& pos );
     void onTrackCountChanged( unsigned int tracks );
 
 protected:
     virtual void dragEnterEvent( QDragEnterEvent* event );
-
-private:
-    void setupMenus();
-
-    QMenu m_itemMenu;
-
-    QAction* m_playItemAction;
-    QAction* m_addItemsToQueueAction;
-    QAction* m_addItemsToPlaylistAction;
 };
 
 #endif // COLLECTIONVIEW_H

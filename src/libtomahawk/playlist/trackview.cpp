@@ -34,7 +34,6 @@
 #include "trackmodel.h"
 #include "trackproxymodel.h"
 #include "track.h"
-#include "globalactionmanager.h"
 
 using namespace Tomahawk;
 
@@ -49,6 +48,7 @@ TrackView::TrackView( QWidget* parent )
     , m_loadingSpinner( new LoadingSpinner( this ) )
     , m_resizing( false )
     , m_dragging( false )
+    , m_contextMenu( new ContextMenu( this ) )
 {
     setAlternatingRowColors( true );
     setSelectionMode( QAbstractItemView::ExtendedSelection );
@@ -67,6 +67,7 @@ TrackView::TrackView( QWidget* parent )
     setHeader( m_header );
     setSortingEnabled( true );
     sortByColumn( -1 );
+    setContextMenuPolicy( Qt::CustomContextMenu );
 
 #ifndef Q_WS_WIN
     QFont f = font();
@@ -79,11 +80,9 @@ TrackView::TrackView( QWidget* parent )
     setFont( f );
 #endif
 
-    QAction* createLinkAction = new QAction( tr( "Copy Track Link" ), this );
-    connect( createLinkAction, SIGNAL( triggered( bool ) ), this, SLOT( copyLink() ) );
-    addAction( createLinkAction );
-
     connect( this, SIGNAL( doubleClicked( QModelIndex ) ), SLOT( onItemActivated( QModelIndex ) ) );
+    connect( this, SIGNAL( customContextMenuRequested( const QPoint& ) ), SLOT( onCustomContextMenu( const QPoint& ) ) );
+    connect( m_contextMenu, SIGNAL( triggered( int ) ), SLOT( onMenuTriggered( int ) ) );
 }
 
 
@@ -197,24 +196,6 @@ void
 TrackView::playItem()
 {
     onItemActivated( m_contextMenuIndex );
-}
-
-
-void
-TrackView::addItemsToQueue()
-{
-    foreach( const QModelIndex& idx, selectedIndexes() )
-    {
-        if ( idx.column() )
-            continue;
-
-        TrackModelItem* item = model()->itemFromIndex( proxyModel()->mapToSource( idx ) );
-        if ( item && item->query()->numResults() )
-        {
-            ViewManager::instance()->queue()->model()->append( item->query() );
-            ViewManager::instance()->showQueue();
-        }
-    }
 }
 
 
@@ -375,17 +356,6 @@ TrackView::onFilterChanged( const QString& )
 
 
 void
-TrackView::copyLink()
-{
-    TrackModelItem* item = model()->itemFromIndex( proxyModel()->mapToSource( contextMenuIndex() ) );
-    if ( item && !item->query().isNull() )
-    {
-        GlobalActionManager::instance()->copyToClipboard( item->query() );
-    }
-}
-
-
-void
 TrackView::startDrag( Qt::DropActions supportedActions )
 {
     QList<QPersistentModelIndex> pindexes;
@@ -417,5 +387,49 @@ TrackView::startDrag( Qt::DropActions supportedActions )
     if ( action == Qt::MoveAction )
     {
         m_proxyModel->removeIndexes( pindexes );
+    }
+}
+
+
+void
+TrackView::onCustomContextMenu( const QPoint& pos )
+{
+    QModelIndex idx = indexAt( pos );
+    idx = idx.sibling( idx.row(), 0 );
+    setContextMenuIndex( idx );
+
+    if ( !idx.isValid() )
+        return;
+
+    if ( model() && !model()->isReadOnly() )
+        m_contextMenu->setSupportedActions( m_contextMenu->supportedActions() | ContextMenu::ActionDelete );
+
+    QList<query_ptr> queries;
+    foreach ( const QModelIndex& index, selectedIndexes() )
+    {
+        if ( index.column() )
+            continue;
+
+        TrackModelItem* item = proxyModel()->itemFromIndex( proxyModel()->mapToSource( index ) );
+        if ( item && !item->query().isNull() )
+            queries << item->query();
+    }
+
+    m_contextMenu->setQueries( queries );
+    m_contextMenu->exec( mapToGlobal( pos ) );
+}
+
+
+void
+TrackView::onMenuTriggered( int action )
+{
+    switch ( action )
+    {
+        case ContextMenu::ActionPlay:
+            onItemActivated( m_contextMenuIndex );
+            break;
+
+        default:
+            break;
     }
 }
