@@ -1,5 +1,5 @@
 /* === This file is part of Tomahawk Player - <http://tomahawk-player.org> ===
- * 
+ *
  *   Copyright 2010-2011, Christian Muehlhaeuser <muesli@tomahawk-player.org>
  *
  *   Tomahawk is free software: you can redistribute it and/or modify
@@ -47,12 +47,11 @@ QueueProxyModel::siblingItem( int itemsAway )
     setCurrentIndex( QModelIndex() );
     Tomahawk::result_ptr res = PlaylistProxyModel::siblingItem( itemsAway );
 
-    qDebug() << "new rowcount:" << rowCount( QModelIndex() );
-
     removeIndex( currentIndex() );
 
     return res;
 }
+
 
 void
 QueueProxyModel::onTrackCountChanged( unsigned int count )

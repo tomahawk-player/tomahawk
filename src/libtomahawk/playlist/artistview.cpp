@@ -120,7 +120,7 @@ ArtistView::setTreeModel( TreeModel* model )
 
     if ( m_proxyModel )
     {
-        m_proxyModel->setSourceModel( model );
+        m_proxyModel->setSourceTreeModel( model );
         m_proxyModel->sort( 0 );
     }
 

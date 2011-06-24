@@ -34,7 +34,8 @@ public:
     explicit TreeProxyModel( QObject* parent = 0 );
 
     virtual TreeModel* sourceModel() const { return m_model; }
-    virtual void setSourceModel( TreeModel* sourceModel );
+    virtual void setSourceTreeModel( TreeModel* sourceModel );
+    virtual void setSourceModel( QAbstractItemModel* sourceModel );
 
     virtual QPersistentModelIndex currentIndex() const { return mapFromSource( m_model->currentItem() ); }
     virtual void setCurrentIndex( const QModelIndex& index ) { m_model->setCurrentItem( mapToSource( index ) ); }

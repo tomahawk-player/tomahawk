@@ -3,8 +3,6 @@
 
 set( googleHeaders
      ../jabber.h
-     ../tomahawksipmessage.h
-     ../tomahawksipmessagefactory.h
      ../avatarmanager.h
      ../xmlconsole.h
      googlewrapper.h )

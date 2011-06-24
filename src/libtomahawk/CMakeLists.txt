@@ -192,7 +192,6 @@ set( libHeaders
     result.h
     source.h
     sourceplaylistinterface.h
-    viewpage.h
     viewmanager.h
     globalactionmanager.h
     contextMenu.h
@@ -306,7 +305,6 @@ set( libHeaders
 
     playlist/dynamic/DynamicPlaylist.h
     playlist/dynamic/DynamicControl.h
-    playlist/dynamic/GeneratorFactory.h
     playlist/dynamic/GeneratorInterface.h
     playlist/dynamic/DynamicView.h
     playlist/dynamic/DynamicModel.h
@@ -322,7 +320,6 @@ set( libHeaders
     playlist/dynamic/widgets/DynamicSetupWidget.h
     playlist/dynamic/widgets/LoadingSpinner.h
 
-    utils/tomahawkutils.h
     utils/querylabel.h
     utils/elidedlabel.h
     utils/animatedcounterlabel.h
@@ -342,14 +339,19 @@ set( libHeaders
     widgets/infowidgets/sourceinfowidget.h
 
     kdsingleapplicationguard/kdsingleapplicationguard.h
-    kdsingleapplicationguard/kdsharedmemorylocker.h
-    kdsingleapplicationguard/kdtoolsglobal.h
-    kdsingleapplicationguard/kdlockedsharedmemorypointer.h
 )
 
 set( libHeaders_NoMOC
-		playlist/dynamic/GeneratorInterface.h
+    viewpage.h
+
+    infosystem/infoplugins/unix/imageconverter.h
+
+    playlist/dynamic/GeneratorInterface.h
+    playlist/dynamic/GeneratorFactory.h
+
+    utils/tomahawkutils.h
 )
+
 set( libUI ${libUI}
     widgets/playlisttypeselectordlg.ui
     widgets/newplaylistwidget.ui
@@ -384,8 +386,7 @@ IF( UNIX AND NOT APPLE )
       infosystem/infoplugins/unix/imageconverter.cpp )
 
     SET( libHeaders ${libHeaders}
-      infosystem/infoplugins/unix/fdonotifyplugin.h
-      infosystem/infoplugins/unix/imageconverter.h )
+      infosystem/infoplugins/unix/fdonotifyplugin.h )
 ENDIF( UNIX AND NOT APPLE )
 
 IF( WIN32 )

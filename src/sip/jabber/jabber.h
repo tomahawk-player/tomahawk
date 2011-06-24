@@ -133,6 +133,8 @@ private:
     bool presenceMeansOnline( Jreen::Presence::Type p );
     void handlePeerStatus( const Jreen::JID &jid, Jreen::Presence::Type presenceType );
 
+    using SipPlugin::errorMessage;
+
     QMenu* m_menu;
     XmlConsole* m_xmlConsole;
     QString m_currentUsername;
