@@ -140,10 +140,10 @@ AudioEngine::stop( bool sendNotification )
     qDebug() << Q_FUNC_INFO;
 
     m_mediaObject->stop();
-    
+
     if ( m_playlist )
         m_playlist->reset();
-    
+
     setCurrentTrack( Tomahawk::result_ptr() );
     emit stopped();
 
@@ -158,7 +158,7 @@ AudioEngine::stop( bool sendNotification )
             stopInfo["message"] = QString( "Tomahawk is stopped." );
             map[ Tomahawk::InfoSystem::InfoNotifyUser ] = QVariant::fromValue< Tomahawk::InfoSystem::InfoCriteriaHash >( stopInfo );
         }
-        
+
         Tomahawk::InfoSystem::InfoSystem::instance()->pushInfo( s_aeInfoIdentifier, map );
     }
 }
@@ -171,7 +171,7 @@ AudioEngine::previous()
 
     if ( !m_playlist )
         return;
-    
+
     if ( m_playlist->skipRestrictions() == PlaylistInterface::NoSkip ||
          m_playlist->skipRestrictions() == PlaylistInterface::NoSkipBackwards )
         return;
@@ -187,7 +187,7 @@ AudioEngine::next()
 
     if ( !m_playlist )
         return;
-    
+
     if ( m_playlist->skipRestrictions() == PlaylistInterface::NoSkip ||
          m_playlist->skipRestrictions() == PlaylistInterface::NoSkipForwards )
         return;
@@ -209,10 +209,10 @@ AudioEngine::seek( int ms )
 {
     if ( !m_playlist )
         return;
-    
+
     if ( m_playlist->seekRestrictions() == PlaylistInterface::NoSeek )
         return;
-    
+
     if ( isPlaying() || isPaused() )
     {
         qDebug() << Q_FUNC_INFO << ms;
@@ -316,7 +316,7 @@ AudioEngine::loadTrack( const Tomahawk::result_ptr& result )
             trackInfo["artist"] = m_currentTrack->artist()->name();
             trackInfo["album"] = m_currentTrack->album()->name();
             map[ Tomahawk::InfoSystem::InfoNowPlaying ] = QVariant::fromValue< Tomahawk::InfoSystem::InfoCriteriaHash >( trackInfo );
-            
+
             if ( TomahawkSettings::instance()->verboseNotifications() )
             {
                 Tomahawk::InfoSystem::InfoCriteriaHash playInfo;
@@ -326,7 +326,7 @@ AudioEngine::loadTrack( const Tomahawk::result_ptr& result )
                     .arg( m_currentTrack->album()->name() );
                 map[ Tomahawk::InfoSystem::InfoNotifyUser ] = QVariant::fromValue< Tomahawk::InfoSystem::InfoCriteriaHash >( playInfo );
             }
-            
+
             Tomahawk::InfoSystem::InfoSystem::instance()->pushInfo( s_aeInfoIdentifier, map );
         }
     }
@@ -345,7 +345,7 @@ void
 AudioEngine::loadPreviousTrack()
 {
     qDebug() << Q_FUNC_INFO;
-    
+
     if ( !m_playlist )
     {
         stop();
@@ -492,11 +492,12 @@ AudioEngine::setPlaylist( PlaylistInterface* playlist )
 {
     if ( m_playlist )
         m_playlist->reset();
+
     m_playlist = playlist;
 
-    if ( m_playlist->retryMode() == PlaylistInterface::Retry )
+    if ( m_playlist && m_playlist->retryMode() == PlaylistInterface::Retry )
         connect( m_playlist->object(), SIGNAL( nextTrackReady() ), SLOT( playlistNextTrackReady() ) );
-    
+
     emit playlistChanged( playlist );
 }
 
