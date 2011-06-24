@@ -38,10 +38,11 @@ class QtScriptResolverHelper : public QObject
     Q_OBJECT
 
 public:
-    QtScriptResolverHelper(const QString& scriptPath, QObject* parent );
+    QtScriptResolverHelper( const QString& scriptPath, QObject* parent );
 
 public slots:
-    QString readFile(const QString& fileName);
+    QString readFile( const QString& fileName );
+    QString compress( const QString& data );
 
 private:
     QString m_scriptPath;

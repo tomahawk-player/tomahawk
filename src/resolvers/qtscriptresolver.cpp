@@ -48,6 +48,14 @@ QtScriptResolverHelper::readFile( const QString& fileName )
     return file.readAll();
 }
 
+QString
+QtScriptResolverHelper::compress( const QString& data )
+{
+    QByteArray comp = qCompress( data.toLatin1(), 9 );
+    return comp.toBase64();
+}
+
+
 
 QtScriptResolver::QtScriptResolver( const QString& scriptPath )
     : Tomahawk::ExternalResolver( scriptPath )
