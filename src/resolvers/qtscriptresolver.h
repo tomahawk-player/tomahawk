@@ -35,7 +35,7 @@ class QtScriptResolver;
 
 class QtScriptResolverHelper : public QObject
 {
-    Q_OBJECT
+Q_OBJECT
 
 public:
     QtScriptResolverHelper( const QString& scriptPath, QObject* parent );
@@ -87,12 +87,13 @@ public:
     explicit QtScriptResolver( const QString& scriptPath );
     virtual ~QtScriptResolver();
 
-    virtual QString name() const            { return m_name; }
-    virtual unsigned int weight() const     { return m_weight; }
-    virtual unsigned int timeout() const    { return m_timeout; }
+    virtual QString name() const         { return m_name; }
+    virtual unsigned int weight() const  { return m_weight; }
+    virtual unsigned int timeout() const { return m_timeout; }
 
     virtual QWidget* configUI() const { return 0; } // TODO support properly for qtscript resolvers too!
     virtual void saveConfig() {}
+
 public slots:
     virtual void resolve( const Tomahawk::query_ptr& query );
     virtual void stop();
