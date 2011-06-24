@@ -58,7 +58,7 @@ ContextMenu::setQueries( const QList<Tomahawk::query_ptr>& queries )
     m_queries.clear();
     m_queries << queries;
 
-    if ( m_supportedActions & ActionPlay )
+    if ( m_supportedActions & ActionPlay && itemCount() == 1 )
         m_sigmap->setMapping( addAction( tr( "&Play" ) ), ActionPlay );
 
     if ( m_supportedActions & ActionQueue )
@@ -102,7 +102,7 @@ ContextMenu::setAlbums( const QList<Tomahawk::album_ptr>& albums )
     m_albums.clear();
     m_albums << albums;
 
-    if ( m_supportedActions & ActionPlay )
+    if ( m_supportedActions & ActionPlay && itemCount() == 1 )
         m_sigmap->setMapping( addAction( tr( "&Play" ) ), ActionPlay );
 
     if ( m_supportedActions & ActionQueue )
@@ -141,7 +141,7 @@ ContextMenu::setArtists( const QList<Tomahawk::artist_ptr>& artists )
     m_artists.clear();
     m_artists << artists;
 
-    if ( m_supportedActions & ActionPlay )
+    if ( m_supportedActions & ActionPlay && itemCount() == 1 )
         m_sigmap->setMapping( addAction( tr( "&Play" ) ), ActionPlay );
 
     if ( m_supportedActions & ActionQueue )
