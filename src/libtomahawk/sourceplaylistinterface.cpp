@@ -117,5 +117,6 @@ void
 SourcePlaylistInterface::resolvingFinished( bool hasResults )
 {
     qDebug() << Q_FUNC_INFO << " and has results? : " << (hasResults ? "true" : "false");
-    emit nextTrackReady();
+    if ( hasResults )
+        emit nextTrackReady();
 }
