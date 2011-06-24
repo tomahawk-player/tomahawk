@@ -24,10 +24,13 @@
 #include "sourcelist.h"
 #include "utils/tomahawkutils.h"
 
-QtScriptResolverHelper::QtScriptResolverHelper( const QString& scriptPath, QObject* parent ): QObject(parent)
+
+QtScriptResolverHelper::QtScriptResolverHelper( const QString& scriptPath, QObject* parent )
+    : QObject( parent )
 {
     m_scriptPath = scriptPath;
 }
+
 
 QString
 QtScriptResolverHelper::readFile( const QString& fileName )
@@ -35,11 +38,10 @@ QtScriptResolverHelper::readFile( const QString& fileName )
     QString path = QFileInfo( m_scriptPath ).absolutePath();
     // remove directories
     QString cleanedFileName = QFileInfo( fileName ).fileName();
-
     QString absoluteFilePath = path.append( "/" ).append( cleanedFileName );
 
     QFile file( absoluteFilePath );
-    if( !file.exists() )
+    if ( !file.exists() )
     {
         return QString();
     }
