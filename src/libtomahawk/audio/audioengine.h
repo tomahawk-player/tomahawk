@@ -60,12 +60,12 @@ public:
     Tomahawk::PlaylistInterface* playlist() const { return m_playlist; }
 
     Tomahawk::result_ptr currentTrack() const { return m_currentTrack; }
-
+    
 public slots:
     void playPause();
     void play();
     void pause();
-    void stop( bool sendNotification = true );
+    void stop();
 
     void previous();
     void next();
@@ -117,6 +117,7 @@ private slots:
 private:
     bool isHttpResult( const QString& ) const;
     bool isLocalResult( const QString& ) const;
+    void sendWaitingNotification() const;
 
     bool m_isPlayingHttp;
     QSharedPointer<QIODevice> m_input;

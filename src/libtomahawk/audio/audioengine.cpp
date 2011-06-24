@@ -135,7 +135,7 @@ AudioEngine::pause()
 
 
 void
-AudioEngine::stop( bool sendNotification )
+AudioEngine::stop()
 {
     qDebug() << Q_FUNC_INFO;
 
@@ -147,20 +147,19 @@ AudioEngine::stop( bool sendNotification )
     setCurrentTrack( Tomahawk::result_ptr() );
     emit stopped();
 
-    if ( sendNotification )
+    Tomahawk::InfoSystem::InfoMap map;
+    map[ Tomahawk::InfoSystem::InfoNowStopped ] = QVariant();
+
+    if ( m_waitingOnNewTrack )
+        sendWaitingNotification();
+    else if ( TomahawkSettings::instance()->verboseNotifications() )
     {
-        Tomahawk::InfoSystem::InfoMap map;
-        map[ Tomahawk::InfoSystem::InfoNowStopped ] = QVariant();
-
-        if ( TomahawkSettings::instance()->verboseNotifications() )
-        {
-            Tomahawk::InfoSystem::InfoCriteriaHash stopInfo;
-            stopInfo["message"] = QString( "Tomahawk is stopped." );
-            map[ Tomahawk::InfoSystem::InfoNotifyUser ] = QVariant::fromValue< Tomahawk::InfoSystem::InfoCriteriaHash >( stopInfo );
-        }
-
-        Tomahawk::InfoSystem::InfoSystem::instance()->pushInfo( s_aeInfoIdentifier, map );
+        Tomahawk::InfoSystem::InfoCriteriaHash stopInfo;
+        stopInfo["message"] = QString( "Tomahawk is stopped." );
+        map[ Tomahawk::InfoSystem::InfoNotifyUser ] = QVariant::fromValue< Tomahawk::InfoSystem::InfoCriteriaHash >( stopInfo );
     }
+
+    Tomahawk::InfoSystem::InfoSystem::instance()->pushInfo( s_aeInfoIdentifier, map );
 }
 
 
@@ -235,6 +234,17 @@ void
 AudioEngine::mute()
 {
     setVolume( 0 );
+}
+
+
+void
+AudioEngine::sendWaitingNotification() const
+{
+    Tomahawk::InfoSystem::InfoCriteriaHash retryInfo;
+    retryInfo["message"] = QString( "The current track could not be resolved. Tomahawk will pick back up with the next resolvable track from this source." );
+    Tomahawk::InfoSystem::InfoSystem::instance()->pushInfo(
+        s_aeInfoIdentifier, Tomahawk::InfoSystem::InfoNotifyUser,
+        QVariant::fromValue< Tomahawk::InfoSystem::InfoCriteriaHash >( retryInfo ) );
 }
 
 
@@ -381,16 +391,9 @@ AudioEngine::loadNextTrack()
         loadTrack( result );
     else
     {
-        stop( false );
         if ( m_playlist && m_playlist->retryMode() == Tomahawk::PlaylistInterface::Retry )
-        {
             m_waitingOnNewTrack = true;
-            Tomahawk::InfoSystem::InfoCriteriaHash retryInfo;
-            retryInfo["message"] = QString( "The current track could not be resolved. Tomahawk will pick back up with the next resolvable track..." );
-            Tomahawk::InfoSystem::InfoSystem::instance()->pushInfo(
-                s_aeInfoIdentifier, Tomahawk::InfoSystem::InfoNotifyUser,
-                QVariant::fromValue< Tomahawk::InfoSystem::InfoCriteriaHash >( retryInfo ) );
-        }
+        stop();
     }
 }
 
@@ -408,14 +411,10 @@ AudioEngine::playItem( Tomahawk::PlaylistInterface* playlist, const Tomahawk::re
 
     if ( !result.isNull() )
         loadTrack( result );
-    else if ( m_playlist->retryMode() == PlaylistInterface::Retry )
+    else if ( m_playlist && m_playlist->retryMode() == PlaylistInterface::Retry )
     {
         m_waitingOnNewTrack = true;
-        Tomahawk::InfoSystem::InfoCriteriaHash retryInfo;
-        retryInfo["message"] = QString( "The current track could not be resolved. Tomahawk will pick back up with the next resolvable track..." );
-        Tomahawk::InfoSystem::InfoSystem::instance()->pushInfo(
-            s_aeInfoIdentifier, Tomahawk::InfoSystem::InfoNotifyUser,
-            QVariant::fromValue< Tomahawk::InfoSystem::InfoCriteriaHash >( retryInfo ) );
+        stop();
     }
 }
 
