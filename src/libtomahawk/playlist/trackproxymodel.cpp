@@ -300,8 +300,6 @@ TrackProxyModel::removeIndexes( const QList<QPersistentModelIndex>& indexes )
 bool
 TrackProxyModel::lessThan( const QModelIndex& left, const QModelIndex& right ) const
 {
-    qDebug() << Q_FUNC_INFO;
-
     TrackModelItem* p1 = itemFromIndex( left );
     TrackModelItem* p2 = itemFromIndex( right );
 
