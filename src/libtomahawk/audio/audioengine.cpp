@@ -495,7 +495,7 @@ AudioEngine::setPlaylist( PlaylistInterface* playlist )
 
     m_playlist = playlist;
 
-    if ( m_playlist && m_playlist->retryMode() == PlaylistInterface::Retry )
+    if ( m_playlist && m_playlist->object() && m_playlist->retryMode() == PlaylistInterface::Retry )
         connect( m_playlist->object(), SIGNAL( nextTrackReady() ), SLOT( playlistNextTrackReady() ) );
 
     emit playlistChanged( playlist );
