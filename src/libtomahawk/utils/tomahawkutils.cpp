@@ -219,11 +219,9 @@ ageToString( const QDateTime& time )
     {
         if ( mins > 1 )
             return QObject::tr( "%1 minutes" ).arg( mins );
-        else
-            return QObject::tr( "%1 minute" ).arg( mins );
     }
 
-    return QString();
+    return QObject::tr( "1 minute" );
 }
 
 
