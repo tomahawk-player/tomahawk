@@ -202,6 +202,14 @@ Query::id() const
 }
 
 
+void
+Query::setPlayedBy( const Tomahawk::source_ptr& source, unsigned int playtime )
+{
+    m_playedBy.first = source;
+    m_playedBy.second = playtime;
+}
+
+
 bool
 Query::resultSorter( const result_ptr& left, const result_ptr& right )
 {

@@ -162,6 +162,7 @@ timeToString( int seconds )
                                .arg( secs < 10 ? "0" + QString::number( secs ) : QString::number( secs ) );
 }
 
+
 QString
 ageToString( const QDateTime& time )
 {
@@ -177,49 +178,49 @@ ageToString( const QDateTime& time )
     if ( years )
     {
         if ( years > 1 )
-            return QString( "%1 years" ).arg( years );
+            return QObject::tr( "%1 years" ).arg( years );
         else
-            return QString( "%1 year" ).arg( years );
+            return QObject::tr( "%1 year" ).arg( years );
     }
 
     if ( months )
     {
         if ( months > 1 )
-           return QString( "%1 months" ).arg( months );
+            return QObject::tr( "%1 months" ).arg( months );
         else
-            return QString( "%1 month" ).arg( months );
+            return QObject::tr( "%1 month" ).arg( months );
     }
 
     if ( weeks )
     {
         if ( weeks > 1 )
-            return QString( "%1 weeks" ).arg( weeks );
+            return QObject::tr( "%1 weeks" ).arg( weeks );
         else
-            return QString( "%1 week" ).arg( weeks );
+            return QObject::tr( "%1 week" ).arg( weeks );
     }
 
     if ( days )
     {
         if ( days > 1 )
-            return QString( "%1 days" ).arg( days );
+            return QObject::tr( "%1 days" ).arg( days );
         else
-            return QString( "%1 day" ).arg( days );
+            return QObject::tr( "%1 day" ).arg( days );
     }
 
     if ( hours )
     {
         if ( hours > 1 )
-            return QString( "%1 hours" ).arg( hours );
+            return QObject::tr( "%1 hours" ).arg( hours );
         else
-            return QString( "%1 hour" ).arg( hours );
+            return QObject::tr( "%1 hour" ).arg( hours );
     }
 
     if ( mins )
     {
         if ( mins > 1 )
-            return QString( "%1 minutes" ).arg( mins );
+            return QObject::tr( "%1 minutes" ).arg( mins );
         else
-            return QString( "%1 minute" ).arg( mins );
+            return QObject::tr( "%1 minute" ).arg( mins );
     }
 
     return QString();
@@ -397,10 +398,10 @@ NetworkProxyFactory*
 proxyFactory()
 {
     // Don't use this anywhere! It's provided here for access reasons, but QNAM deletes this at will!
-    
+
     if ( !s_proxyFactory )
         s_proxyFactory = new NetworkProxyFactory();
-    
+
     return s_proxyFactory;
 }
 

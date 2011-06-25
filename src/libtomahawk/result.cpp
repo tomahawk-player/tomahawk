@@ -91,7 +91,9 @@ Result::score() const
 RID
 Result::id() const
 {
-    Q_ASSERT( !m_rid.isEmpty() );
+    if ( m_rid.isEmpty() )
+        m_rid = uuid();
+
     return m_rid;
 }
 
