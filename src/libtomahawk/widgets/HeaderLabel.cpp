@@ -38,7 +38,6 @@ HeaderLabel::HeaderLabel( QWidget* parent )
 
     setFont( f );
     setFixedHeight( sizeHint().height() + 6 );
-    qDebug() << "FOOBAR:" << minimumSize();
 }
 
 
@@ -80,7 +79,7 @@ HeaderLabel::paintEvent( QPaintEvent* event )
         p.drawLine( line );
     }
 
-    r.adjust( 8, 3, -8, -3 );
+    r.adjust( 8, 2, -8, -2 );
     p.setPen( Qt::white );
     p.drawText( r, text() );
 }
