@@ -306,7 +306,7 @@ AudioControls::onPlaybackLoading( const Tomahawk::result_ptr& result )
         ui->loveButton->setPixmap( RESPATH "images/loved.png" );
         ui->loveButton->setChecked( true );
     }
-    else 
+    else
     {
         ui->loveButton->setPixmap( RESPATH "images/not-loved.png" );
         ui->loveButton->setChecked( false );
@@ -353,12 +353,12 @@ AudioControls::onPlaybackStopped()
     ui->timeLeftLabel->setText( "" );
     ui->coverImage->setPixmap( QPixmap() );
     ui->seekSlider->setVisible( false );
-    ui->loveButton->setVisible( false );
 
     ui->pauseButton->setVisible( false );
     ui->pauseButton->setEnabled( false );
     ui->playPauseButton->setEnabled( true );
     ui->playPauseButton->setVisible( true );
+    ui->loveButton->setEnabled( false );
     ui->loveButton->setVisible( false );
 
 /*    m_pauseAction->setEnabled( false );
@@ -525,7 +525,7 @@ AudioControls::onLoveButtonClicked( bool checked )
         Tomahawk::InfoSystem::InfoSystem::instance()->pushInfo(
             s_acInfoIdentifier, Tomahawk::InfoSystem::InfoUnLove,
             QVariant::fromValue< Tomahawk::InfoSystem::InfoCriteriaHash >( trackInfo ) );
-        
+
         DatabaseCommand_SocialAction* cmd = new DatabaseCommand_SocialAction( m_currentTrack, QString( "Love" ), QString( "false" ) );
         Database::instance()->enqueue( QSharedPointer<DatabaseCommand>(cmd) );
         ui->loveButton->setPixmap( RESPATH "images/not-loved.png" );
