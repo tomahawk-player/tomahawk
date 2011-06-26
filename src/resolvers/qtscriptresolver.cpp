@@ -34,8 +34,8 @@ QtScriptResolverHelper::QtScriptResolverHelper( const QString& scriptPath, QObje
 }
 
 
-QString
-QtScriptResolverHelper::readFile( const QString& fileName )
+QByteArray
+QtScriptResolverHelper::readRaw( const QString& fileName )
 {
     QString path = QFileInfo( m_scriptPath ).absolutePath();
     // remove directories
@@ -45,7 +45,8 @@ QtScriptResolverHelper::readFile( const QString& fileName )
     QFile file( absoluteFilePath );
     if ( !file.exists() )
     {
-        return QString();
+        Q_ASSERT(false);
+        return QByteArray();
     }
 
     file.open( QIODevice::ReadOnly );
@@ -58,6 +59,20 @@ QtScriptResolverHelper::compress( const QString& data )
 {
     QByteArray comp = qCompress( data.toLatin1(), 9 );
     return comp.toBase64();
+}
+
+
+QString
+QtScriptResolverHelper::readCompressed(const QString& fileName)
+{
+    return compress( readRaw( fileName ) );
+}
+
+
+QString
+QtScriptResolverHelper::readBase64(const QString& fileName)
+{
+    return readRaw( fileName ).toBase64();
 }
 
 
@@ -224,18 +239,27 @@ QtScriptResolver::loadUi()
 
 
     bool compressed = m.value( "compressed", "false" ).toBool();
-    bool base64 = m.value( "base64", "false" ).toBool();
-
     qDebug() << "Resolver has a preferences widget! compressed?" << compressed << m;
 
     QByteArray uiData = m[ "widget" ].toByteArray();
-    if( base64 && compressed )
+
+    if( compressed )
         uiData = qUncompress( QByteArray::fromBase64( uiData ) );
-    else if( base64 )
+    else
         uiData = QByteArray::fromBase64( uiData );
 
+    QVariantMap images;
+    foreach(const QVariant& item, m[ "images" ].toList())
+    {
+        QString key = item.toMap().keys().first();
+        QVariant value = item.toMap().value(key);
+        images[key] = value;
+    }
+
     if( m.contains( "images" ) )
-        uiData = fixDataImagePaths( uiData, compressed, m[ "images" ].toMap() );
+        uiData = fixDataImagePaths( uiData, compressed, images );
+
+
 
     m_configWidget = QWeakPointer< QWidget >( widgetFromData( uiData, 0 ) );
 

@@ -42,7 +42,10 @@ public:
     void setResolverConfig( QVariantMap config );
 
 public slots:
-    QString readFile( const QString& fileName );
+    QByteArray readRaw( const QString& fileName );
+    QString readBase64( const QString& fileName );
+    QString readCompressed( const QString& fileName );
+
     QString compress( const QString& data );
     QVariantMap resolverData();
 
