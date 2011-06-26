@@ -261,6 +261,9 @@
                 <verstretch>0</verstretch>
                </sizepolicy>
               </property>
+              <property name="cursor">
+               <cursorShape>PointingHandCursor</cursorShape>
+              </property>
               <property name="text">
                <string>love</string>
               </property>
