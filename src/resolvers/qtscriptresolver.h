@@ -44,7 +44,7 @@ public:
 public slots:
     QString readFile( const QString& fileName );
     QString compress( const QString& data );
-    QVariantMap resolver();
+    QVariantMap resolverData();
 
 private:
     QString m_scriptPath;
@@ -75,7 +75,7 @@ public slots:
 
 protected:
     virtual void javaScriptConsoleMessage( const QString & message, int lineNumber, const QString & sourceID )
-    { qDebug() << "JAVASCRIPT ERROR:" << message << lineNumber << sourceID; }
+    { qDebug() << "JAVASCRIPT:" << message << lineNumber << sourceID; }
 
 private:
     QtScriptResolver* m_parent;
@@ -111,6 +111,10 @@ private:
     QVariant widgetData( QWidget* widget, const QString& property );
     QVariantMap loadDataFromWidgets();
     void fillDataInWidgets( const QVariantMap& data );
+
+    // encapsulate javascript calls
+    QVariantMap resolverSettings();
+    QVariantMap resolverUserConfig();
 
     ScriptEngine* m_engine;
 

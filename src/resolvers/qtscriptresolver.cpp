@@ -62,7 +62,7 @@ QtScriptResolverHelper::compress( const QString& data )
 
 
 QVariantMap
-QtScriptResolverHelper::resolver()
+QtScriptResolverHelper::resolverData()
 {
     QVariantMap resolver;
     resolver["config"] = m_resolverConfig;
@@ -96,18 +96,18 @@ QtScriptResolver::QtScriptResolver( const QString& scriptPath )
     }
 
     m_engine->mainFrame()->setHtml( "<html><body></body></html>" );
-    m_engine->mainFrame()->evaluateJavaScript( scriptFile.readAll() );
     m_engine->mainFrame()->addToJavaScriptWindowObject( "Tomahawk", m_resolverHelper );
+    m_engine->mainFrame()->evaluateJavaScript( scriptFile.readAll() );
     scriptFile.close();
 
-    QVariantMap m = m_engine->mainFrame()->evaluateJavaScript( "getSettings();" ).toMap();
+    QVariantMap m = resolverSettings();
     m_name       = m.value( "name" ).toString();
     m_weight     = m.value( "weight", 0 ).toUInt();
     m_timeout    = m.value( "timeout", 25 ).toUInt() * 1000;
 
     // load config widget and apply settings
     loadUi();
-    QVariantMap config =  m_engine->mainFrame()->evaluateJavaScript( "getConfig();" ).toMap();
+    QVariantMap config =  resolverUserConfig();
     fillDataInWidgets( config );
 
     qDebug() << Q_FUNC_INFO << m_name << m_weight << m_timeout;
@@ -139,7 +139,7 @@ QtScriptResolver::resolve( const Tomahawk::query_ptr& query )
 
     if ( !query->isFullTextQuery() )
     {
-        eval = QString( "resolve( '%1', '%2', '%3', '%4' );" )
+        eval = QString( "Tomahawk.resolver.instance.resolve( '%1', '%2', '%3', '%4' );" )
             .arg( query->id().replace( "'", "\\'" ) )
             .arg( query->artist().replace( "'", "\\'" ) )
             .arg( query->album().replace( "'", "\\'" ) )
@@ -147,7 +147,7 @@ QtScriptResolver::resolve( const Tomahawk::query_ptr& query )
     }
     else
     {
-        eval = QString( "resolve( '%1', '%2', '%3', '%4' );" )
+        eval = QString( "Tomahawk.resolver.instance.resolve( '%1', '%2', '%3', '%4' );" )
             .arg( query->id().replace( "'", "\\'" ) )
             .arg( query->fullTextQuery().replace( "'", "\\'" ) )
             .arg( QString() )
@@ -219,7 +219,9 @@ QtScriptResolver::loadUi()
 {
     qDebug() << Q_FUNC_INFO;
 
-    QVariantMap m = m_engine->mainFrame()->evaluateJavaScript( "getConfigUi();" ).toMap();
+    QVariantMap m = m_engine->mainFrame()->evaluateJavaScript( "Tomahawk.resolver.instance.getConfigUi();" ).toMap();
+    m_dataWidgets = m["fields"].toList();
+
 
     bool compressed = m.value( "compressed", "false" ).toBool();
     bool base64 = m.value( "base64", "false" ).toBool();
@@ -236,8 +238,6 @@ QtScriptResolver::loadUi()
         uiData = fixDataImagePaths( uiData, compressed, m[ "images" ].toMap() );
 
     m_configWidget = QWeakPointer< QWidget >( widgetFromData( uiData, 0 ) );
-
-    m_dataWidgets = m_engine->mainFrame()->evaluateJavaScript( "getDataWidgets();" ).toList();
 
     emit changed();
 }
@@ -260,17 +260,17 @@ QtScriptResolver::saveConfig()
     qDebug() << Q_FUNC_INFO << saveData;
 
     m_resolverHelper->setResolverConfig( saveData.toMap() );
-    m_engine->mainFrame()->evaluateJavaScript( "saveConfig();" );
+    m_engine->mainFrame()->evaluateJavaScript( "Tomahawk.resolver.instance.saveUserConfig();" );
 }
 
 
 QWidget*
 QtScriptResolver::findWidget(QWidget* widget, const QStringList& widgetPath)
 {
-    qDebug() << Q_FUNC_INFO << widget->objectName() << widgetPath;
-
     if( !widget || !widget->isWidgetType() )
         return 0;
+
+    qDebug() << Q_FUNC_INFO << widget->objectName() << widgetPath;
 
     if( widgetPath.isEmpty() )
         return widget;
@@ -372,4 +372,18 @@ QtScriptResolver::fillDataInWidgets( const QVariantMap& data )
 
         setWidgetData( data[ name ], widget, propertyName );
     }
+}
+
+
+QVariantMap
+QtScriptResolver::resolverSettings()
+{
+    return m_engine->mainFrame()->evaluateJavaScript( "Tomahawk.resolver.instance.getSettings();" ).toMap();
+}
+
+
+QVariantMap
+QtScriptResolver::resolverUserConfig()
+{
+    return m_engine->mainFrame()->evaluateJavaScript( "Tomahawk.resolver.instance.getUserConfig();" ).toMap();
 }
