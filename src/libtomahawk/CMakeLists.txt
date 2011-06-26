@@ -364,7 +364,7 @@ set( libUI ${libUI}
     widgets/searchwidget.ui
     widgets/welcomewidget.ui
     widgets/infowidgets/sourceinfowidget.ui
-    widgets/infowidgets/ArtistInfoWidget.ui
+#    widgets/infowidgets/ArtistInfoWidget.ui
     playlist/topbar/topbar.ui
     playlist/infobar/infobar.ui
 )
