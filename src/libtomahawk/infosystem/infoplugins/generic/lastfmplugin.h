@@ -67,7 +67,7 @@ private:
     void scrobble();
 
     void dataError( const QString &caller, const Tomahawk::InfoSystem::InfoType type, const QVariant &input, const Tomahawk::InfoSystem::InfoCustomData &customData );
-    void sendLoveSong( QVariant input );
+    void sendLoveSong( const InfoType type, QVariant input );
 
     lastfm::MutableTrack m_track;
     lastfm::Audioscrobbler* m_scrobbler;

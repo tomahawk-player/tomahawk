@@ -510,18 +510,22 @@ AudioControls::onLoveButtonClicked( bool checked )
     trackInfo["artist"] = m_currentTrack->artist()->name();
     trackInfo["album"] = m_currentTrack->album()->name();
 
-    Tomahawk::InfoSystem::InfoSystem::instance()->pushInfo(
-       s_acInfoIdentifier, Tomahawk::InfoSystem::InfoLove,
-       QVariant::fromValue< Tomahawk::InfoSystem::InfoCriteriaHash >( trackInfo ) );
-
     if ( checked )
     {
+        Tomahawk::InfoSystem::InfoSystem::instance()->pushInfo(
+            s_acInfoIdentifier, Tomahawk::InfoSystem::InfoLove,
+            QVariant::fromValue< Tomahawk::InfoSystem::InfoCriteriaHash >( trackInfo ) );
+
         DatabaseCommand_SocialAction* cmd = new DatabaseCommand_SocialAction( m_currentTrack, QString( "Love" ), QString( "true") );
         Database::instance()->enqueue( QSharedPointer<DatabaseCommand>(cmd) );
         ui->loveButton->setPixmap( RESPATH "images/loved.png" );
     }
     else
     {
+        Tomahawk::InfoSystem::InfoSystem::instance()->pushInfo(
+            s_acInfoIdentifier, Tomahawk::InfoSystem::InfoUnLove,
+            QVariant::fromValue< Tomahawk::InfoSystem::InfoCriteriaHash >( trackInfo ) );
+        
         DatabaseCommand_SocialAction* cmd = new DatabaseCommand_SocialAction( m_currentTrack, QString( "Love" ), QString( "false" ) );
         Database::instance()->enqueue( QSharedPointer<DatabaseCommand>(cmd) );
         ui->loveButton->setPixmap( RESPATH "images/not-loved.png" );

@@ -45,8 +45,8 @@ LastFmPlugin::LastFmPlugin()
     : InfoPlugin()
     , m_scrobbler( 0 )
 {
-    m_supportedGetTypes << InfoAlbumCoverArt << InfoArtistImages << InfoLove;
-    m_supportedPushTypes << InfoSubmitScrobble << InfoSubmitNowPlaying << InfoLove;
+    m_supportedGetTypes << InfoAlbumCoverArt << InfoArtistImages;
+    m_supportedPushTypes << InfoSubmitScrobble << InfoSubmitNowPlaying << InfoLove << InfoUnLove;
 
 /*
       Your API Key is 7194b85b6d1f424fe1668173a78c0c4a
@@ -146,7 +146,8 @@ LastFmPlugin::pushInfo( const QString caller, const Tomahawk::InfoSystem::InfoTy
             break;
 
         case InfoLove:
-            sendLoveSong( input );
+        case InfoUnLove:
+            sendLoveSong( type, input );
             break;
 
         default:
@@ -201,7 +202,7 @@ LastFmPlugin::scrobble()
 
 
 void
-LastFmPlugin::sendLoveSong( QVariant input )
+LastFmPlugin::sendLoveSong( const InfoType type, QVariant input )
 {
     qDebug() << Q_FUNC_INFO;
 
@@ -224,7 +225,15 @@ LastFmPlugin::sendLoveSong( QVariant input )
     bool ok;
     track.setDuration( hash["duration"].toUInt( &ok ) );
     track.setSource( lastfm::Track::Player );
-    track.love();
+    
+    if ( type == Tomahawk::InfoSystem::InfoLove )
+    {
+        track.love();
+    }
+    else if ( type == Tomahawk::InfoSystem::InfoUnLove )
+    {
+        track.unlove();
+    }
 }
 
 
