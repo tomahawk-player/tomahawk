@@ -26,6 +26,7 @@
 
 #include <QApplication>
 #include <QDebug>
+#include <QDir>
 #include <QFile>
 #include <QThread>
 #include <QtWebKit/QWebPage>

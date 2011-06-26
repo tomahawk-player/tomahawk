@@ -24,7 +24,6 @@
 #include <QThread>
 #include <QNetworkProxy>
 #include <QStringList>
-#include <QDir>
 
 #define RESPATH ":/data/"
 
@@ -33,8 +32,8 @@ class QDir;
 class QDateTime;
 class QString;
 class QPixmap;
+class QLayout;
 class QNetworkAccessManager;
-class QNetworkProxy;
 
 namespace TomahawkUtils
 {
@@ -71,6 +70,8 @@ namespace TomahawkUtils
 
     DLLEXPORT QColor alphaBlend( const QColor& colorFrom, const QColor& colorTo, float opacity );
     DLLEXPORT QPixmap createDragPixmap( int itemCount = 1 );
+
+    DLLEXPORT void unmarginLayout( QLayout* layout );
 
     DLLEXPORT NetworkProxyFactory* proxyFactory();
     DLLEXPORT QNetworkAccessManager* nam();

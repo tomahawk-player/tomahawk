@@ -45,22 +45,7 @@ SourceInfoWidget::SourceInfoWidget( const Tomahawk::source_ptr& source, QWidget*
     ui->recentCollectionView->setFrameShape( QFrame::NoFrame );
     ui->recentCollectionView->setAttribute( Qt::WA_MacShowFocusRect, 0 );
 
-    ui->horizontalLayout->setContentsMargins( 0, 0, 0, 0 );
-    ui->horizontalLayout->setMargin( 0 );
-    ui->horizontalLayout->setSpacing( 0 );
-
-    ui->verticalLayout->setContentsMargins( 0, 0, 0, 0 );
-    ui->verticalLayout->setMargin( 0 );
-    ui->verticalLayout->setSpacing( 0 );
-    ui->verticalLayout_2->setContentsMargins( 0, 0, 0, 0 );
-    ui->verticalLayout_2->setMargin( 0 );
-    ui->verticalLayout_2->setSpacing( 0 );
-    ui->verticalLayout_3->setContentsMargins( 0, 0, 0, 0 );
-    ui->verticalLayout_3->setMargin( 0 );
-    ui->verticalLayout_3->setSpacing( 0 );
-    ui->verticalLayout_4->setContentsMargins( 0, 0, 0, 0 );
-    ui->verticalLayout_4->setMargin( 0 );
-    ui->verticalLayout_4->setSpacing( 0 );
+    TomahawkUtils::unmarginLayout( layout() );
 
     ui->historyView->overlay()->setEnabled( false );
 

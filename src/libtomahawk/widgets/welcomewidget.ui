@@ -10,68 +10,73 @@
     <height>513</height>
    </rect>
   </property>
-  <layout class="QHBoxLayout" name="horizontalLayout" stretch="2,1">
+  <layout class="QVBoxLayout" name="verticalLayout_4">
    <item>
-    <widget class="QSplitter" name="splitter">
+    <widget class="QSplitter" name="splitter_2">
      <property name="orientation">
-      <enum>Qt::Vertical</enum>
+      <enum>Qt::Horizontal</enum>
      </property>
-     <widget class="QWidget" name="layoutWidget1">
-      <layout class="QVBoxLayout" name="verticalLayout">
-       <item>
-        <widget class="HeaderLabel" name="label_4">
-         <property name="text">
-          <string>Recent Additions</string>
-         </property>
-        </widget>
-       </item>
-       <item>
-        <widget class="AlbumView" name="additionsView"/>
-       </item>
-      </layout>
+     <widget class="QSplitter" name="splitter">
+      <property name="orientation">
+       <enum>Qt::Vertical</enum>
+      </property>
+      <widget class="QWidget" name="layoutWidget1">
+       <layout class="QVBoxLayout" name="verticalLayout">
+        <item>
+         <widget class="HeaderLabel" name="label_4">
+          <property name="text">
+           <string>Recent Additions</string>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="AlbumView" name="additionsView"/>
+        </item>
+       </layout>
+      </widget>
+      <widget class="QWidget" name="layoutWidget2">
+       <layout class="QVBoxLayout" name="verticalLayout_3">
+        <item>
+         <widget class="HeaderLabel" name="label_2">
+          <property name="text">
+           <string>Newest Stations &amp; Playlists</string>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="PlaylistWidget" name="playlistWidget"/>
+        </item>
+       </layout>
+      </widget>
      </widget>
-     <widget class="QWidget" name="layoutWidget2">
-      <layout class="QVBoxLayout" name="verticalLayout_3">
+     <widget class="QWidget" name="">
+      <layout class="QVBoxLayout" name="verticalLayout_2">
        <item>
-        <widget class="HeaderLabel" name="label_2">
+        <widget class="HeaderLabel" name="label_3">
+         <property name="maximumSize">
+          <size>
+           <width>16777215</width>
+           <height>16777215</height>
+          </size>
+         </property>
          <property name="text">
-          <string>Newest Stations &amp; Playlists</string>
+          <string>Recently Played Tracks</string>
          </property>
         </widget>
        </item>
        <item>
-        <widget class="PlaylistWidget" name="playlistWidget"/>
+        <widget class="PlaylistView" name="tracksView">
+         <property name="maximumSize">
+          <size>
+           <width>16777215</width>
+           <height>16777215</height>
+          </size>
+         </property>
+        </widget>
        </item>
       </layout>
      </widget>
     </widget>
-   </item>
-   <item>
-    <layout class="QVBoxLayout" name="verticalLayout_2">
-     <item>
-      <widget class="HeaderLabel" name="label_3">
-       <property name="maximumSize">
-        <size>
-         <width>16777215</width>
-         <height>16777215</height>
-        </size>
-       </property>
-       <property name="text">
-        <string>Recently Played Tracks</string>
-       </property>
-      </widget>
-     </item>
-     <item>
-      <widget class="PlaylistView" name="tracksView">
-       <property name="maximumSize">
-        <size>
-         <width>16777215</width>
-         <height>16777215</height>
-        </size>
-       </property>
-      </widget>
-     </item>
-    </layout>
    </item>
   </layout>
  </widget>
@@ -87,14 +92,14 @@
    <header>playlist/playlistview.h</header>
   </customwidget>
   <customwidget>
-   <class>PlaylistWidget</class>
-   <extends>QListWidget</extends>
-   <header>widgets/welcomewidget.h</header>
-  </customwidget>
-  <customwidget>
    <class>AlbumView</class>
    <extends>QListView</extends>
    <header>playlist/albumview.h</header>
+  </customwidget>
+  <customwidget>
+   <class>PlaylistWidget</class>
+   <extends>QListWidget</extends>
+   <header>widgets/welcomewidget.h</header>
   </customwidget>
  </customwidgets>
  <resources/>

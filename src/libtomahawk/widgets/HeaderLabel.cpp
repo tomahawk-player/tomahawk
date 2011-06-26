@@ -74,7 +74,7 @@ HeaderLabel::paintEvent( QPaintEvent* event )
         p.drawLine( line );
     }
     {
-        QColor lineColor( 63, 63, 63 );
+        QColor lineColor( 30, 30, 30 );
         QLine line( 0, r.height() - 1, r.width(), r.height() - 1 );
         p.setPen( lineColor );
         p.drawLine( line );

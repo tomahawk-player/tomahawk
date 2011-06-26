@@ -48,6 +48,9 @@ WelcomeWidget::WelcomeWidget( QWidget* parent )
     ui->setupUi( this );
 
     ui->splitter->setHandleWidth( 1 );
+    ui->splitter_2->setHandleWidth( 1 );
+    ui->splitter_2->setStretchFactor( 0, 3 );
+    ui->splitter_2->setStretchFactor( 0, 2 );
 
     WelcomePlaylistModel* model = new WelcomePlaylistModel( this );
     model->setMaxPlaylists( HISTORY_PLAYLIST_ITEMS );
@@ -59,19 +62,11 @@ WelcomeWidget::WelcomeWidget( QWidget* parent )
     ui->additionsView->setFrameShape( QFrame::NoFrame );
     ui->additionsView->setAttribute( Qt::WA_MacShowFocusRect, 0 );
 
-    ui->horizontalLayout->setContentsMargins( 0, 0, 0, 0 );
-    ui->horizontalLayout->setMargin( 0 );
-    ui->horizontalLayout->setSpacing( 0 );
-
-    ui->verticalLayout->setContentsMargins( 0, 0, 0, 0 );
-    ui->verticalLayout->setMargin( 0 );
-    ui->verticalLayout->setSpacing( 0 );
-    ui->verticalLayout_2->setContentsMargins( 0, 0, 0, 0 );
-    ui->verticalLayout_2->setMargin( 0 );
-    ui->verticalLayout_2->setSpacing( 0 );
-    ui->verticalLayout_3->setContentsMargins( 0, 0, 0, 0 );
-    ui->verticalLayout_3->setMargin( 0 );
-    ui->verticalLayout_3->setSpacing( 0 );
+    TomahawkUtils::unmarginLayout( layout() );
+    TomahawkUtils::unmarginLayout( ui->verticalLayout->layout() );
+    TomahawkUtils::unmarginLayout( ui->verticalLayout_2->layout() );
+    TomahawkUtils::unmarginLayout( ui->verticalLayout_3->layout() );
+    TomahawkUtils::unmarginLayout( ui->verticalLayout_4->layout() );
 
     ui->playlistWidget->setItemDelegate( new PlaylistDelegate() );
     ui->playlistWidget->setModel( model );
