@@ -104,16 +104,6 @@ SourcePlaylistInterface::onSourcePlaybackStarted( const Tomahawk::query_ptr& que
 
 
 void
-SourcePlaylistInterface::resolveResultsAdded( const QList<Tomahawk::result_ptr>& results ) const
-{
-    qDebug() << Q_FUNC_INFO;
-    foreach ( Tomahawk::result_ptr ptr, results )
-    {
-//        qDebug() << "Found result:" << ptr->track();
-    }
-}
-
-void
 SourcePlaylistInterface::resolvingFinished( bool hasResults )
 {
     qDebug() << Q_FUNC_INFO << " and has results? : " << (hasResults ? "true" : "false");

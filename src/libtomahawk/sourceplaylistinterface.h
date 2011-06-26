@@ -74,7 +74,6 @@ signals:
     
 private slots:
     void onSourcePlaybackStarted( const Tomahawk::query_ptr& query );
-    void resolveResultsAdded( const QList<Tomahawk::result_ptr>& results ) const;
     void resolvingFinished( bool hasResults );
 
 private:
