@@ -38,6 +38,30 @@ SourceInfoWidget::SourceInfoWidget( const Tomahawk::source_ptr& source, QWidget*
 {
     ui->setupUi( this );
 
+    ui->historyView->setFrameShape( QFrame::NoFrame );
+    ui->historyView->setAttribute( Qt::WA_MacShowFocusRect, 0 );
+    ui->recentAlbumView->setFrameShape( QFrame::NoFrame );
+    ui->recentAlbumView->setAttribute( Qt::WA_MacShowFocusRect, 0 );
+    ui->recentCollectionView->setFrameShape( QFrame::NoFrame );
+    ui->recentCollectionView->setAttribute( Qt::WA_MacShowFocusRect, 0 );
+
+    ui->horizontalLayout->setContentsMargins( 0, 0, 0, 0 );
+    ui->horizontalLayout->setMargin( 0 );
+    ui->horizontalLayout->setSpacing( 0 );
+
+    ui->verticalLayout->setContentsMargins( 0, 0, 0, 0 );
+    ui->verticalLayout->setMargin( 0 );
+    ui->verticalLayout->setSpacing( 0 );
+    ui->verticalLayout_2->setContentsMargins( 0, 0, 0, 0 );
+    ui->verticalLayout_2->setMargin( 0 );
+    ui->verticalLayout_2->setSpacing( 0 );
+    ui->verticalLayout_3->setContentsMargins( 0, 0, 0, 0 );
+    ui->verticalLayout_3->setMargin( 0 );
+    ui->verticalLayout_3->setSpacing( 0 );
+    ui->verticalLayout_4->setContentsMargins( 0, 0, 0, 0 );
+    ui->verticalLayout_4->setMargin( 0 );
+    ui->verticalLayout_4->setSpacing( 0 );
+
     ui->historyView->overlay()->setEnabled( false );
 
     m_recentCollectionModel = new CollectionFlatModel( ui->recentCollectionView );

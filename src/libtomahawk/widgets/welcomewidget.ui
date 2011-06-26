@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>985</width>
-    <height>459</height>
+    <width>875</width>
+    <height>513</height>
    </rect>
   </property>
   <layout class="QHBoxLayout" name="horizontalLayout" stretch="2,1">
@@ -16,15 +16,10 @@
      <property name="orientation">
       <enum>Qt::Vertical</enum>
      </property>
-     <widget class="QWidget" name="">
+     <widget class="QWidget" name="layoutWidget1">
       <layout class="QVBoxLayout" name="verticalLayout">
        <item>
-        <widget class="QLabel" name="label_4">
-         <property name="font">
-          <font>
-           <pointsize>14</pointsize>
-          </font>
-         </property>
+        <widget class="HeaderLabel" name="label_4">
          <property name="text">
           <string>Recent Additions</string>
          </property>
@@ -35,15 +30,10 @@
        </item>
       </layout>
      </widget>
-     <widget class="QWidget" name="">
+     <widget class="QWidget" name="layoutWidget2">
       <layout class="QVBoxLayout" name="verticalLayout_3">
        <item>
-        <widget class="QLabel" name="label_2">
-         <property name="font">
-          <font>
-           <pointsize>14</pointsize>
-          </font>
-         </property>
+        <widget class="HeaderLabel" name="label_2">
          <property name="text">
           <string>Newest Stations &amp; Playlists</string>
          </property>
@@ -59,17 +49,12 @@
    <item>
     <layout class="QVBoxLayout" name="verticalLayout_2">
      <item>
-      <widget class="QLabel" name="label_3">
+      <widget class="HeaderLabel" name="label_3">
        <property name="maximumSize">
         <size>
          <width>16777215</width>
          <height>16777215</height>
         </size>
-       </property>
-       <property name="font">
-        <font>
-         <pointsize>14</pointsize>
-        </font>
        </property>
        <property name="text">
         <string>Recently Played Tracks</string>
@@ -91,6 +76,11 @@
   </layout>
  </widget>
  <customwidgets>
+  <customwidget>
+   <class>HeaderLabel</class>
+   <extends>QLabel</extends>
+   <header location="global">widgets/HeaderLabel.h</header>
+  </customwidget>
   <customwidget>
    <class>PlaylistView</class>
    <extends>QTreeView</extends>
