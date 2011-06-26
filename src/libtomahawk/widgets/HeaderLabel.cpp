@@ -37,7 +37,7 @@ HeaderLabel::HeaderLabel( QWidget* parent )
 #endif
 
     setFont( f );
-    setFixedHeight( sizeHint().height() + 6 );
+    setFixedHeight( sizeHint().height() + 8 );
 }
 
 
@@ -79,7 +79,8 @@ HeaderLabel::paintEvent( QPaintEvent* event )
         p.drawLine( line );
     }
 
-    r.adjust( 8, 2, -8, -2 );
+    QTextOption to( Qt::AlignVCenter );
+    r.adjust( 8, 0, -8, 0 );
     p.setPen( Qt::white );
-    p.drawText( r, text() );
+    p.drawText( r, text(), to );
 }
