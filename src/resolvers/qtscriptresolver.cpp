@@ -52,12 +52,14 @@ QtScriptResolverHelper::readFile( const QString& fileName )
     return file.readAll();
 }
 
+
 QString
 QtScriptResolverHelper::compress( const QString& data )
 {
     QByteArray comp = qCompress( data.toLatin1(), 9 );
     return comp.toBase64();
 }
+
 
 QVariantMap
 QtScriptResolverHelper::resolver()
@@ -67,6 +69,7 @@ QtScriptResolverHelper::resolver()
     resolver["scriptPath"] = m_scriptPath;
     return resolver;
 }
+
 
 void
 QtScriptResolverHelper::setResolverConfig( QVariantMap config )
@@ -210,7 +213,9 @@ QtScriptResolver::stop()
     emit finished();
 }
 
-void QtScriptResolver::loadUi()
+
+void
+QtScriptResolver::loadUi()
 {
     qDebug() << Q_FUNC_INFO;
 
@@ -238,7 +243,8 @@ void QtScriptResolver::loadUi()
 }
 
 
-QWidget* QtScriptResolver::configUI() const
+QWidget*
+QtScriptResolver::configUI() const
 {
     if( m_configWidget.isNull() )
         return 0;
@@ -246,7 +252,9 @@ QWidget* QtScriptResolver::configUI() const
         return m_configWidget.data();
 }
 
-void QtScriptResolver::saveConfig()
+
+void
+QtScriptResolver::saveConfig()
 {
     QVariant saveData = loadDataFromWidgets();
     qDebug() << Q_FUNC_INFO << saveData;
@@ -254,6 +262,7 @@ void QtScriptResolver::saveConfig()
     m_resolverHelper->setResolverConfig( saveData.toMap() );
     m_engine->mainFrame()->evaluateJavaScript( "saveConfig();" );
 }
+
 
 QWidget*
 QtScriptResolver::findWidget(QWidget* widget, const QStringList& widgetPath)
@@ -282,7 +291,8 @@ QtScriptResolver::findWidget(QWidget* widget, const QStringList& widgetPath)
 }
 
 
-QVariant QtScriptResolver::widgetData(QWidget* widget, const QString& property)
+QVariant
+QtScriptResolver::widgetData(QWidget* widget, const QString& property)
 {
     for( int i = 0; i < widget->metaObject()->propertyCount(); i++ )
     {
@@ -295,7 +305,9 @@ QVariant QtScriptResolver::widgetData(QWidget* widget, const QString& property)
     return QVariant();
 }
 
-void QtScriptResolver::setWidgetData(const QVariant& value, QWidget* widget, const QString& property)
+
+void
+QtScriptResolver::setWidgetData(const QVariant& value, QWidget* widget, const QString& property)
 {
     for( int i = 0; i < widget->metaObject()->propertyCount(); i++ )
     {
@@ -308,7 +320,8 @@ void QtScriptResolver::setWidgetData(const QVariant& value, QWidget* widget, con
 }
 
 
-QVariantMap QtScriptResolver::loadDataFromWidgets()
+QVariantMap
+QtScriptResolver::loadDataFromWidgets()
 {
     QVariantMap saveData;
     foreach(const QVariant& dataWidget, m_dataWidgets)
@@ -333,7 +346,9 @@ QVariantMap QtScriptResolver::loadDataFromWidgets()
     return saveData;
 }
 
-void QtScriptResolver::fillDataInWidgets( const QVariantMap& data )
+
+void
+QtScriptResolver::fillDataInWidgets( const QVariantMap& data )
 {
     qDebug() << Q_FUNC_INFO << data;
     foreach(const QVariant& dataWidget, m_dataWidgets)
