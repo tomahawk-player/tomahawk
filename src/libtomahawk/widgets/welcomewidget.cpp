@@ -49,8 +49,8 @@ WelcomeWidget::WelcomeWidget( QWidget* parent )
 
     ui->splitter->setHandleWidth( 1 );
     ui->splitter_2->setHandleWidth( 1 );
-    ui->splitter_2->setStretchFactor( 0, 3 );
     ui->splitter_2->setStretchFactor( 0, 2 );
+    ui->splitter_2->setStretchFactor( 0, 1 );
 
     WelcomePlaylistModel* model = new WelcomePlaylistModel( this );
     model->setMaxPlaylists( HISTORY_PLAYLIST_ITEMS );

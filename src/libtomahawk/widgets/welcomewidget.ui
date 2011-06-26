@@ -53,12 +53,6 @@
       <layout class="QVBoxLayout" name="verticalLayout_2">
        <item>
         <widget class="HeaderLabel" name="label_3">
-         <property name="maximumSize">
-          <size>
-           <width>16777215</width>
-           <height>16777215</height>
-          </size>
-         </property>
          <property name="text">
           <string>Recently Played Tracks</string>
          </property>
@@ -66,10 +60,10 @@
        </item>
        <item>
         <widget class="PlaylistView" name="tracksView">
-         <property name="maximumSize">
+         <property name="minimumSize">
           <size>
-           <width>16777215</width>
-           <height>16777215</height>
+           <width>320</width>
+           <height>0</height>
           </size>
          </property>
         </widget>
