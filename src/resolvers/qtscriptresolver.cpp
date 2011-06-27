@@ -111,9 +111,20 @@ QtScriptResolver::QtScriptResolver( const QString& scriptPath )
     }
 
     m_engine->mainFrame()->setHtml( "<html><body></body></html>" );
+
+    // add c++ part of tomahawk javascript library
     m_engine->mainFrame()->addToJavaScriptWindowObject( "Tomahawk", m_resolverHelper );
+
+    // add rest of it
+    QFile jslib( RESPATH "js/tomahawk.js" );
+    jslib.open( QIODevice::ReadOnly );
+    m_engine->mainFrame()->evaluateJavaScript( jslib.readAll() );
+    jslib.close();
+
+    // execute resolver
     m_engine->mainFrame()->evaluateJavaScript( scriptFile.readAll() );
     scriptFile.close();
+
 
     QVariantMap m = resolverSettings();
     m_name       = m.value( "name" ).toString();
