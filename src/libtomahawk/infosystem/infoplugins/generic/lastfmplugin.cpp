@@ -21,6 +21,7 @@
 #include <QDir>
 #include <QSettings>
 #include <QCryptographicHash>
+#include <QNetworkConfiguration>
 
 #include "album.h"
 #include "typedefs.h"
@@ -93,10 +94,30 @@ void
 LastFmPlugin::namChangedSlot( QNetworkAccessManager *nam )
 {
     qDebug() << Q_FUNC_INFO;
-    if( !nam )
+    
+    if ( !nam )
         return;
+    
+    QNetworkAccessManager* currNam = lastfm::nam();
+    TomahawkUtils::NetworkProxyFactory* oldProxyFactory = dynamic_cast< TomahawkUtils::NetworkProxyFactory* >( nam->proxyFactory() );
 
-    m_nam = QWeakPointer< QNetworkAccessManager >( nam );
+    if ( !oldProxyFactory )
+    {
+        qDebug() << "Could not get old proxyFactory!";
+        return;
+    }
+    
+    currNam->setConfiguration( nam->configuration() );
+    currNam->setNetworkAccessible( nam->networkAccessible() );
+    TomahawkUtils::NetworkProxyFactory* newProxyFactory = new TomahawkUtils::NetworkProxyFactory();
+    newProxyFactory->setNoProxyHosts( oldProxyFactory->noProxyHosts() );
+    newProxyFactory->setProxy( oldProxyFactory->proxy() );
+    currNam->setProxyFactory( newProxyFactory );
+    //FIXME: on Mac/Win as liblastfm's network access manager also sets its overriding application proxy
+    //may have to do a QNetworkProxy::setApplicationProxy and clobber our own factory to override it
+
+    m_nam = QWeakPointer< QNetworkAccessManager >( currNam );
+
     settingsChanged(); // to get the scrobbler set up
 }
 
@@ -172,7 +193,6 @@ LastFmPlugin::nowPlaying( const QVariant &input )
     if ( !hash.contains( "title" ) || !hash.contains( "artist" ) || !hash.contains( "album" ) || !hash.contains( "duration" ) )
         return;
 
-    qDebug() << "LastFmPlugin::nowPlaying valid criteria hash";
     m_track = lastfm::MutableTrack();
     m_track.stamp();
 
@@ -350,6 +370,14 @@ LastFmPlugin::coverArtReturned()
     if ( redir.isEmpty() )
     {
         QByteArray ba = reply->readAll();
+        if ( ba.isNull() || !ba.length() )
+        {
+            qDebug() << "Uh oh, null byte array";
+            InfoType type = (Tomahawk::InfoSystem::InfoType)(reply->property( "type" ).toUInt());
+            InfoCustomData customData = reply->property( "customData" ).value< Tomahawk::InfoSystem::InfoCustomData >();
+            emit info( reply->property( "caller" ).toString(), type, reply->property( "origData" ), QVariant(), customData );
+            return;
+        }
         foreach ( const QUrl& url, m_badUrls )
         {
             if ( reply->url().toString().startsWith( url.toString() ) )
@@ -409,12 +437,19 @@ LastFmPlugin::artistImagesReturned()
     if ( redir.isEmpty() )
     {
         QByteArray ba = reply->readAll();
+        if ( ba.isNull() || !ba.length() )
+        {
+            qDebug() << "Uh oh, null byte array";
+            InfoType type = (Tomahawk::InfoSystem::InfoType)(reply->property( "type" ).toUInt());
+            InfoCustomData customData = reply->property( "customData" ).value< Tomahawk::InfoSystem::InfoCustomData >();
+            emit info( reply->property( "caller" ).toString(), type, reply->property( "origData" ), QVariant(), customData );
+            return;
+        }
         foreach ( const QUrl& url, m_badUrls )
         {
             if ( reply->url().toString().startsWith( url.toString() ) )
                 ba = QByteArray();
         }
-
         InfoCustomData returnedData;
         returnedData["imgbytes"] = ba;
         returnedData["url"] = reply->url().toString();

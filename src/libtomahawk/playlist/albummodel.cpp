@@ -314,7 +314,7 @@ void
 AlbumModel::infoSystemInfo( QString caller, Tomahawk::InfoSystem::InfoType type, QVariant input, QVariant output, Tomahawk::InfoSystem::InfoCustomData customData )
 {
     Q_UNUSED( customData );
-    qDebug() << Q_FUNC_INFO;
+    qDebug() << Q_FUNC_INFO << " with caller " << caller;
 
     if ( caller != s_tmInfoIdentifier ||
        ( type != Tomahawk::InfoSystem::InfoAlbumCoverArt && type != Tomahawk::InfoSystem::InfoArtistImages ) )

@@ -20,6 +20,10 @@
 #include <echonest/Artist.h>
 #include <echonest/ArtistTypes.h>
 
+#include "utils/tomahawkutils.h"
+
+#include <QNetworkConfiguration>
+
 using namespace Tomahawk::InfoSystem;
 using namespace Echonest;
 
@@ -43,9 +47,23 @@ EchoNestPlugin::namChangedSlot( QNetworkAccessManager *nam )
     qDebug() << Q_FUNC_INFO;
     if( !nam )
         return;
+
+    QNetworkAccessManager* currNam = Echonest::Config::instance()->nam();
+    TomahawkUtils::NetworkProxyFactory* oldProxyFactory = dynamic_cast< TomahawkUtils::NetworkProxyFactory* >( nam->proxyFactory() );
+
+    if ( !oldProxyFactory )
+    {
+        qDebug() << "Could not get old proxyFactory!";
+        return;
+    }
     
-    m_nam = QWeakPointer< QNetworkAccessManager >( nam );
-    Echonest::Config::instance()->setNetworkAccessManager( nam );
+    currNam->setConfiguration( nam->configuration() );
+    currNam->setNetworkAccessible( nam->networkAccessible() );
+    TomahawkUtils::NetworkProxyFactory* newProxyFactory = new TomahawkUtils::NetworkProxyFactory();
+    newProxyFactory->setNoProxyHosts( oldProxyFactory->noProxyHosts() );
+    newProxyFactory->setProxy( oldProxyFactory->proxy() );
+    currNam->setProxyFactory( newProxyFactory );
+    m_nam = QWeakPointer< QNetworkAccessManager >( currNam );
 }
 
 void

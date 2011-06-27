@@ -602,11 +602,11 @@ TreeModel::infoSystemInfo( QString caller, Tomahawk::InfoSystem::InfoType type, 
     Tomahawk::InfoSystem::InfoCriteriaHash pptr = input.value< Tomahawk::InfoSystem::InfoCriteriaHash >();
     Tomahawk::InfoSystem::InfoCustomData returnedData = output.value< Tomahawk::InfoSystem::InfoCustomData >();
     const QByteArray ba = returnedData["imgbytes"].toByteArray();
+    qDebug() << "ba.length = " << ba.length();
     if ( ba.length() )
     {
         QPixmap pm;
         pm.loadFromData( ba );
-
         bool ok;
         qlonglong p = pptr["pptr"].toLongLong( &ok );
         TreeModelItem* ai = reinterpret_cast<TreeModelItem*>(p);

@@ -159,13 +159,15 @@ InfoSystemCache::getCachedInfoSlot( const Tomahawk::InfoSystem::InfoCriteriaHash
     if ( !m_dataCache.contains( criteriaHashVal ) )
     {
         QSettings cachedSettings( fileLocationHash[criteriaHashVal], QSettings::IniFormat );
-        QVariant output = cachedSettings.value( "data" );   
+        QVariant output = cachedSettings.value( "data" );
         m_dataCache.insert( criteriaHashVal, new QVariant( output ) );
         
         emit info( caller, type, input, output, customData );
     }
     else
+    {
         emit info( caller, type, input, QVariant( *(m_dataCache[criteriaHashVal]) ), customData );
+    }
 }
 
 
