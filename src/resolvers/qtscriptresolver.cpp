@@ -116,12 +116,14 @@ QtScriptResolver::QtScriptResolver( const QString& scriptPath )
     m_engine->mainFrame()->addToJavaScriptWindowObject( "Tomahawk", m_resolverHelper );
 
     // add rest of it
+    m_engine->setScriptPath( "tomahawk.js" );
     QFile jslib( RESPATH "js/tomahawk.js" );
     jslib.open( QIODevice::ReadOnly );
     m_engine->mainFrame()->evaluateJavaScript( jslib.readAll() );
     jslib.close();
 
     // execute resolver
+    m_engine->setScriptPath( scriptPath );
     m_engine->mainFrame()->evaluateJavaScript( scriptFile.readAll() );
     scriptFile.close();
 

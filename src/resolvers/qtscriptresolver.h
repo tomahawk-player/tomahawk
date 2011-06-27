@@ -70,6 +70,11 @@ public:
         settings()->setAttribute( QWebSettings::LocalStorageDatabaseEnabled, true );
     }
 
+    void setScriptPath( const QString& scriptPath )
+    {
+        m_scriptPath = scriptPath;
+    }
+
 public slots:
     bool shouldInterruptJavaScript()
     {
@@ -78,10 +83,11 @@ public slots:
 
 protected:
     virtual void javaScriptConsoleMessage( const QString & message, int lineNumber, const QString & sourceID )
-    { qDebug() << "JAVASCRIPT:" << message << lineNumber << sourceID; }
+    { qDebug() << "JAVASCRIPT:" << m_scriptPath << message << lineNumber << sourceID; Q_ASSERT(false);}
 
 private:
     QtScriptResolver* m_parent;
+    QString m_scriptPath;
 };
 
 
