@@ -298,9 +298,11 @@ AudioControls::onPlaybackLoading( const Tomahawk::result_ptr& result )
     ui->pauseButton->setVisible( true );
     ui->playPauseButton->setVisible( false );
     ui->playPauseButton->setEnabled( false );
+    ui->loveButton->setEnabled( true );
+    ui->loveButton->setVisible( true );
 
     result->loadSocialActions();
-    ui->loveButton->setVisible( true );
+
     if ( result->loved() )
     {
         ui->loveButton->setPixmap( RESPATH "images/loved.png" );

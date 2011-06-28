@@ -24,6 +24,7 @@
 #include <QDateTime>
 #include <QDebug>
 #include <QDir>
+#include <QLayout>
 #include <QPainter>
 #include <QPixmap>
 #include <QNetworkAccessManager>
@@ -335,6 +336,22 @@ createDragPixmap( int itemCount )
     }
 
     return dragPixmap;
+}
+
+
+void
+unmarginLayout( QLayout* layout )
+{
+    layout->setContentsMargins( 0, 0, 0, 0 );
+    layout->setMargin( 0 );
+    layout->setSpacing( 0 );
+
+    for ( int i = 0; i < layout->count(); i++ )
+    {
+        QLayout* childLayout = layout->itemAt( i )->layout();
+        if ( childLayout )
+            unmarginLayout( childLayout );
+    }
 }
 
 

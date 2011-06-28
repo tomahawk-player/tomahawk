@@ -48,9 +48,25 @@ WelcomeWidget::WelcomeWidget( QWidget* parent )
     ui->setupUi( this );
 
     ui->splitter->setHandleWidth( 1 );
+    ui->splitter_2->setHandleWidth( 1 );
+    ui->splitter_2->setStretchFactor( 0, 2 );
+    ui->splitter_2->setStretchFactor( 0, 1 );
 
     WelcomePlaylistModel* model = new WelcomePlaylistModel( this );
     model->setMaxPlaylists( HISTORY_PLAYLIST_ITEMS );
+
+    ui->playlistWidget->setFrameShape( QFrame::NoFrame );
+    ui->playlistWidget->setAttribute( Qt::WA_MacShowFocusRect, 0 );
+    ui->tracksView->setFrameShape( QFrame::NoFrame );
+    ui->tracksView->setAttribute( Qt::WA_MacShowFocusRect, 0 );
+    ui->additionsView->setFrameShape( QFrame::NoFrame );
+    ui->additionsView->setAttribute( Qt::WA_MacShowFocusRect, 0 );
+
+    TomahawkUtils::unmarginLayout( layout() );
+    TomahawkUtils::unmarginLayout( ui->verticalLayout->layout() );
+    TomahawkUtils::unmarginLayout( ui->verticalLayout_2->layout() );
+    TomahawkUtils::unmarginLayout( ui->verticalLayout_3->layout() );
+    TomahawkUtils::unmarginLayout( ui->verticalLayout_4->layout() );
 
     ui->playlistWidget->setItemDelegate( new PlaylistDelegate() );
     ui->playlistWidget->setModel( model );

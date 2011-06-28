@@ -38,6 +38,15 @@ SourceInfoWidget::SourceInfoWidget( const Tomahawk::source_ptr& source, QWidget*
 {
     ui->setupUi( this );
 
+    ui->historyView->setFrameShape( QFrame::NoFrame );
+    ui->historyView->setAttribute( Qt::WA_MacShowFocusRect, 0 );
+    ui->recentAlbumView->setFrameShape( QFrame::NoFrame );
+    ui->recentAlbumView->setAttribute( Qt::WA_MacShowFocusRect, 0 );
+    ui->recentCollectionView->setFrameShape( QFrame::NoFrame );
+    ui->recentCollectionView->setAttribute( Qt::WA_MacShowFocusRect, 0 );
+
+    TomahawkUtils::unmarginLayout( layout() );
+
     ui->historyView->overlay()->setEnabled( false );
 
     m_recentCollectionModel = new CollectionFlatModel( ui->recentCollectionView );
