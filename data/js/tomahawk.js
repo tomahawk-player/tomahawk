@@ -48,20 +48,31 @@ var TomahawkResolver = {
     },
     getUserConfig: function()
     {
-        var configJson = window.localStorage[this.scriptPath()];
-        if(configJson === undefined)
+        var configJson = window.localStorage[ this.scriptPath() ];
+        if( configJson === undefined )
             configJson = "{}";
 
-        var config = JSON.parse(configJson);
+        var config = JSON.parse( configJson );
 
         return config;
     },
     saveUserConfig: function()
     {
         var config = Tomahawk.resolverData().config;
-        var configJson = JSON.stringify(config);
+        var configJson = JSON.stringify( config );
 
-        window.localStorage[this.scriptPath()] = configJson;
+        window.localStorage[ this.scriptPath() ] = configJson;
+    },
+    resolve: function( qid, artist, album, title )
+    {
+        return {
+            qid: qid,
+            results: []
+        };
+    },
+    search: function( qid, searchString )
+    {
+        return this.resolve( qid, "", "", searchString );
     }
 };
 
