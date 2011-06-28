@@ -86,6 +86,12 @@ QtScriptResolverHelper::resolverData()
 }
 
 
+void QtScriptResolverHelper::log(const QString& message)
+{
+    qDebug() << m_scriptPath << ":" << message;
+}
+
+
 void
 QtScriptResolverHelper::setResolverConfig( QVariantMap config )
 {
@@ -122,10 +128,13 @@ QtScriptResolver::QtScriptResolver( const QString& scriptPath )
     m_engine->mainFrame()->evaluateJavaScript( jslib.readAll() );
     jslib.close();
 
-    // execute resolver
+    // add resolver
     m_engine->setScriptPath( scriptPath );
     m_engine->mainFrame()->evaluateJavaScript( scriptFile.readAll() );
     scriptFile.close();
+
+    // init resolver
+    resolverInit();
 
 
     QVariantMap m = resolverSettings();
@@ -167,7 +176,7 @@ QtScriptResolver::resolve( const Tomahawk::query_ptr& query )
 
     if ( !query->isFullTextQuery() )
     {
-        eval = QString( "Tomahawk.resolver.instance.resolve( '%1', '%2', '%3', '%4' );" )
+        eval = QString( "Tomahawk.resolver.instance.resolve( '%1', '%4', '%3', '%4' );" )
             .arg( query->id().replace( "'", "\\'" ) )
             .arg( query->artist().replace( "'", "\\'" ) )
             .arg( query->album().replace( "'", "\\'" ) )
@@ -175,11 +184,9 @@ QtScriptResolver::resolve( const Tomahawk::query_ptr& query )
     }
     else
     {
-        eval = QString( "Tomahawk.resolver.instance.resolve( '%1', '%2', '%3', '%4' );" )
+        eval = QString( "Tomahawk.resolver.instance.search( '%1', '%2' );" )
             .arg( query->id().replace( "'", "\\'" ) )
-            .arg( query->fullTextQuery().replace( "'", "\\'" ) )
-            .arg( QString() )
-            .arg( QString() );
+            .arg( query->fullTextQuery().replace( "'", "\\'" ) );
     }
 
     QList< Tomahawk::result_ptr > results;
@@ -415,7 +422,7 @@ QtScriptResolver::fillDataInWidgets( const QVariantMap& data )
 QVariantMap
 QtScriptResolver::resolverSettings()
 {
-    return m_engine->mainFrame()->evaluateJavaScript( "Tomahawk.resolver.instance.getSettings();" ).toMap();
+    return m_engine->mainFrame()->evaluateJavaScript( "Tomahawk.resolver.instance.settings;" ).toMap();
 }
 
 
@@ -424,3 +431,11 @@ QtScriptResolver::resolverUserConfig()
 {
     return m_engine->mainFrame()->evaluateJavaScript( "Tomahawk.resolver.instance.getUserConfig();" ).toMap();
 }
+
+
+QVariantMap
+QtScriptResolver::resolverInit()
+{
+    return m_engine->mainFrame()->evaluateJavaScript( "Tomahawk.resolver.instance.init();" ).toMap();
+}
+

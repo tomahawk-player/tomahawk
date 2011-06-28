@@ -4,6 +4,10 @@ if(window.Tomahawk === undefined)
 {
     alert("PHANTOMJS ENVIRONMENT");
     var Tomahawk = {
+        fakeEnv: function()
+        {
+            return true;
+        },
         resolverData: function()
         {
             return {
@@ -12,14 +16,34 @@ if(window.Tomahawk === undefined)
                     return "/home/tomahawk/resolver.js";
                 }
             };
+        },
+        log: function( message )
+        {
+            console.log( message );
         }
     };
 }
+
 
 Tomahawk.resolver = {
     scriptPath: Tomahawk.resolverData().scriptPath
 };
 
+Tomahawk.timestamp = function() {
+    return Math.round( new Date()/1000 );
+}
+
+Tomahawk.dumpResult = function( result ) {
+    var results = result.results;
+    Tomahawk.log("Dumping " + results.length + " results for query " + result.qid + "...");
+    for(var i=0; i<results.length;i++)
+    {
+        var result = results[i];
+        Tomahawk.log( result.artist + " - " + result.track + " | " + result.url );
+    }
+
+    Tomahawk.log("Done.");
+}
 
 // javascript part of Tomahawk-Object API
 Tomahawk.extend = function(object, members) {
@@ -38,6 +62,9 @@ Tomahawk.extend = function(object, members) {
 
 // Resolver BaseObject, inherit it to implement your own resolver
 var TomahawkResolver = {
+    init: function()
+    {
+    },
     scriptPath: function()
     {
         return Tomahawk.resolverData().scriptPath;
@@ -129,7 +156,11 @@ Tomahawk.valueForSubNode = function(node, tag)
     if(node === undefined)
         throw new Error("Tomahawk.valueForSubnode: node is undefined!");
 
-    return node.getElementsByTagName(tag)[0].textContent;
+    var element = node.getElementsByTagName(tag)[0];
+    if( element === undefined )
+        return undefined;
+
+    return element.textContent;
 };
 
 

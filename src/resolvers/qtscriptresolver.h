@@ -49,6 +49,9 @@ public slots:
     QString compress( const QString& data );
     QVariantMap resolverData();
 
+    void log( const QString& message);
+    bool fakeEnv() { return false; }
+
 private:
     QString m_scriptPath;
     QVariantMap m_resolverConfig;
@@ -124,6 +127,7 @@ private:
     // encapsulate javascript calls
     QVariantMap resolverSettings();
     QVariantMap resolverUserConfig();
+    QVariantMap resolverInit();
 
     ScriptEngine* m_engine;
 
