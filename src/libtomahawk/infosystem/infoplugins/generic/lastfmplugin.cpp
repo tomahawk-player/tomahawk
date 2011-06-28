@@ -115,9 +115,6 @@ LastFmPlugin::namChangedSlot( QNetworkAccessManager *nam )
     currNam->setProxyFactory( newProxyFactory );
     //FIXME: on Mac/Win as liblastfm's network access manager also sets its overriding application proxy
     //may have to do a QNetworkProxy::setApplicationProxy and clobber our own factory to override it
-
-    m_nam = QWeakPointer< QNetworkAccessManager >( currNam );
-
     settingsChanged(); // to get the scrobbler set up
 }
 
@@ -309,7 +306,7 @@ LastFmPlugin::notInCacheSlot( const QHash<QString, QString> criteria, const QStr
 {
     qDebug() << Q_FUNC_INFO;
 
-    if ( m_nam.isNull() )
+    if ( !lastfm::nam() )
     {
         qDebug() << "Have a null QNAM, uh oh";
         emit info( caller, type, input, QVariant(), customData );
@@ -325,7 +322,7 @@ LastFmPlugin::notInCacheSlot( const QHash<QString, QString> criteria, const QStr
 
             QString imgurl = "http://ws.audioscrobbler.com/2.0/?method=album.imageredirect&artist=%1&album=%2&autocorrect=1&size=large&api_key=7a90f6672a04b809ee309af169f34b8b";
             QNetworkRequest req( imgurl.arg( artistName ).arg( albumName ) );
-            QNetworkReply* reply = m_nam.data()->get( req );
+            QNetworkReply* reply = lastfm::nam()->get( req );
             reply->setProperty( "customData", QVariant::fromValue<Tomahawk::InfoSystem::InfoCustomData>( customData ) );
             reply->setProperty( "origData", input );
             reply->setProperty( "caller", caller );
@@ -341,7 +338,7 @@ LastFmPlugin::notInCacheSlot( const QHash<QString, QString> criteria, const QStr
 
             QString imgurl = "http://ws.audioscrobbler.com/2.0/?method=artist.imageredirect&artist=%1&autocorrect=1&size=medium&api_key=7a90f6672a04b809ee309af169f34b8b";
             QNetworkRequest req( imgurl.arg( artistName ) );
-            QNetworkReply* reply = m_nam.data()->get( req );
+            QNetworkReply* reply = lastfm::nam()->get( req );
             reply->setProperty( "customData", QVariant::fromValue<Tomahawk::InfoSystem::InfoCustomData>( customData ) );
             reply->setProperty( "origData", input );
             reply->setProperty( "caller", caller );
@@ -406,7 +403,7 @@ LastFmPlugin::coverArtReturned()
     }
     else
     {
-        if ( m_nam.isNull() )
+        if ( !lastfm::nam() )
         {
             qDebug() << "Uh oh, nam is null";
             InfoType type = (Tomahawk::InfoSystem::InfoType)(reply->property( "type" ).toUInt());
@@ -416,7 +413,7 @@ LastFmPlugin::coverArtReturned()
         }
         // Follow HTTP redirect
         QNetworkRequest req( redir );
-        QNetworkReply* newReply = m_nam.data()->get( req );
+        QNetworkReply* newReply = lastfm::nam()->get( req );
         newReply->setProperty( "origData", reply->property( "origData" ) );
         newReply->setProperty( "customData", reply->property( "customData" ) );
         newReply->setProperty( "caller", reply->property( "caller" ) );
@@ -465,7 +462,7 @@ LastFmPlugin::artistImagesReturned()
     }
     else
     {
-        if ( m_nam.isNull() )
+        if ( !lastfm::nam() )
         {
             qDebug() << "Uh oh, nam is null";
             InfoType type = (Tomahawk::InfoSystem::InfoType)(reply->property( "type" ).toUInt());
@@ -475,7 +472,7 @@ LastFmPlugin::artistImagesReturned()
         }
         // Follow HTTP redirect
         QNetworkRequest req( redir );
-        QNetworkReply* newReply = m_nam.data()->get( req );
+        QNetworkReply* newReply = lastfm::nam()->get( req );
         newReply->setProperty( "origData", reply->property( "origData" ) );
         newReply->setProperty( "customData", reply->property( "customData" ) );
         newReply->setProperty( "caller", reply->property( "caller" ) );

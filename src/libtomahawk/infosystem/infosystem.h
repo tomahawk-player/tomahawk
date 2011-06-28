@@ -107,7 +107,7 @@ enum InfoType { // as items are saved in cache, mark them here to not change the
     InfoNotifyUser = 55
 };
 
-typedef QMap< InfoType, QVariant > InfoMap;
+typedef QMap< InfoType, QVariant > InfoTypeMap;
 typedef QMap< QString, QMap< QString, QString > > InfoGenericMap;
 typedef QHash< QString, QVariant > InfoCustomData;
 typedef QHash< QString, QString > InfoCriteriaHash;
@@ -159,9 +159,9 @@ public:
     ~InfoSystem();
 
     void getInfo( const QString &caller, const InfoType type, const QVariant &input, InfoCustomData customData );
-    void getInfo( const QString &caller, const InfoMap &input, InfoCustomData customData );
+    void getInfo( const QString &caller, const InfoTypeMap &input, InfoCustomData customData );
     void pushInfo( const QString &caller, const InfoType type, const QVariant &input );
-    void pushInfo( const QString &caller, const InfoMap &input );
+    void pushInfo( const QString &caller, const InfoTypeMap &input );
 
 signals:
     void info( QString caller, Tomahawk::InfoSystem::InfoType, QVariant input, QVariant output, Tomahawk::InfoSystem::InfoCustomData customData );

@@ -127,7 +127,7 @@ InfoSystem::getInfo( const QString &caller, const InfoType type, const QVariant&
 
 
 void
-InfoSystem::getInfo( const QString &caller, const InfoMap &input, InfoCustomData customData )
+InfoSystem::getInfo( const QString &caller, const InfoTypeMap &input, InfoCustomData customData )
 {
     Q_FOREACH( InfoType type, input.keys() )
         getInfo( caller, type, input[type], customData );
@@ -144,7 +144,7 @@ InfoSystem::pushInfo( const QString &caller, const InfoType type, const QVariant
 
 
 void
-InfoSystem::pushInfo( const QString &caller, const InfoMap &input )
+InfoSystem::pushInfo( const QString &caller, const InfoTypeMap &input )
 {
     Q_FOREACH( InfoType type, input.keys() )
         pushInfo( caller, type, input[type] );

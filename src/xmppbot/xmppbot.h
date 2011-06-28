@@ -87,7 +87,7 @@ private slots:
 private:
     QWeakPointer<XMPPBotClient> m_client;
     Tomahawk::result_ptr m_currTrack;
-    Tomahawk::InfoSystem::InfoMap m_currInfoMap;
+    Tomahawk::InfoSystem::InfoTypeMap m_currInfoMap;
     QString m_currReturnMessage;
     QString m_currReturnJid;
 };

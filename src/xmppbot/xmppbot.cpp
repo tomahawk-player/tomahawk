@@ -201,7 +201,7 @@ void XMPPBot::handleMessage(const Message& msg, MessageSession* session)
         return;
     }
 
-    InfoMap infoMap;
+    InfoTypeMap infoMap;
     Q_FOREACH(QString token, tokens)
     {
         if (token == "biography")

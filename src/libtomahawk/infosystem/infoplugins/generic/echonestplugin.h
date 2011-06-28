@@ -83,11 +83,6 @@ private slots:
     void getArtistHotttnesssSlot();
     void getArtistTermsSlot();
     void getMiscTopSlot();
-
-private:
-    QHash< QNetworkReply*, InfoCustomData > m_replyMap;
-    QHash< QNetworkReply*, QString > m_callerMap;
-    QWeakPointer< QNetworkAccessManager > m_nam;
 };
 
 }

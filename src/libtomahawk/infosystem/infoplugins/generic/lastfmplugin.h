@@ -74,8 +74,6 @@ private:
     QString m_pw;
 
     QList< QUrl > m_badUrls;
-
-    QWeakPointer< QNetworkAccessManager > m_nam;
 };
 
 }

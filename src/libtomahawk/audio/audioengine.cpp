@@ -147,7 +147,7 @@ AudioEngine::stop()
     setCurrentTrack( Tomahawk::result_ptr() );
     emit stopped();
 
-    Tomahawk::InfoSystem::InfoMap map;
+    Tomahawk::InfoSystem::InfoTypeMap map;
     map[ Tomahawk::InfoSystem::InfoNowStopped ] = QVariant();
 
     if ( m_waitingOnNewTrack )
@@ -319,7 +319,7 @@ AudioEngine::loadTrack( const Tomahawk::result_ptr& result )
             DatabaseCommand_LogPlayback* cmd = new DatabaseCommand_LogPlayback( m_currentTrack, DatabaseCommand_LogPlayback::Started );
             Database::instance()->enqueue( QSharedPointer<DatabaseCommand>(cmd) );
 
-            Tomahawk::InfoSystem::InfoMap map;
+            Tomahawk::InfoSystem::InfoTypeMap map;
 
             Tomahawk::InfoSystem::InfoCriteriaHash trackInfo;
             trackInfo["title"] = m_currentTrack->track();
