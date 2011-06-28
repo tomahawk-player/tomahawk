@@ -25,6 +25,8 @@
 #include <phonon/MediaObject>
 #include <phonon/AudioOutput>
 
+#include "infosystem/infosystem.h"
+
 #include "result.h"
 #include "typedefs.h"
 
@@ -85,6 +87,9 @@ public slots:
 
     void playlistNextTrackReady();
 
+    void infoSystemInfo( QString caller, Tomahawk::InfoSystem::InfoType type, QVariant input, QVariant output, Tomahawk::InfoSystem::InfoCustomData customData );
+    void infoSystemFinished( QString caller );
+
 signals:
     void loading( const Tomahawk::result_ptr& track );
     void started( const Tomahawk::result_ptr& track );
@@ -118,6 +123,7 @@ private:
     bool isHttpResult( const QString& ) const;
     bool isLocalResult( const QString& ) const;
     void sendWaitingNotification() const;
+    void sendNowPlayingNotification();
 
     bool m_isPlayingHttp;
     QSharedPointer<QIODevice> m_input;
@@ -133,8 +139,8 @@ private:
 
     unsigned int m_timeElapsed;
     bool m_expectStop;
-
     bool m_waitingOnNewTrack;
+    bool m_infoSystemConnected;
 
     static AudioEngine* s_instance;
 };

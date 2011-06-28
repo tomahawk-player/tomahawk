@@ -26,7 +26,6 @@
 
 #include "database/database.h"
 #include "database/databasecommand_logplayback.h"
-#include "infosystem/infosystem.h"
 #include "network/servent.h"
 
 #include "album.h"
@@ -53,6 +52,7 @@ AudioEngine::AudioEngine()
     , m_timeElapsed( 0 )
     , m_expectStop( false )
     , m_waitingOnNewTrack( false )
+    , m_infoSystemConnected( false )
 {
     s_instance = this;
     qDebug() << "Init AudioEngine";
@@ -249,6 +249,79 @@ AudioEngine::sendWaitingNotification() const
 
 
 void
+AudioEngine::sendNowPlayingNotification()
+{
+    qDebug() << Q_FUNC_INFO;
+
+    if ( ! m_infoSystemConnected )
+    {
+        connect( Tomahawk::InfoSystem::InfoSystem::instance(),
+             SIGNAL( info( QString, Tomahawk::InfoSystem::InfoType, QVariant, QVariant, Tomahawk::InfoSystem::InfoCustomData ) ),
+             SLOT( infoSystemInfo( QString, Tomahawk::InfoSystem::InfoType, QVariant, QVariant, Tomahawk::InfoSystem::InfoCustomData ) ) );
+    
+        connect( Tomahawk::InfoSystem::InfoSystem::instance(), SIGNAL( finished( QString ) ), SLOT( infoSystemFinished( QString ) ) );
+
+        m_infoSystemConnected = true;
+    }
+    
+    Tomahawk::InfoSystem::InfoCriteriaHash trackInfo;
+    trackInfo["artist"] = m_currentTrack->album()->artist()->name();
+    trackInfo["album"] = m_currentTrack->album()->name();
+    
+    Tomahawk::InfoSystem::InfoSystem::instance()->getInfo(
+        s_aeInfoIdentifier, Tomahawk::InfoSystem::InfoAlbumCoverArt,
+        QVariant::fromValue< Tomahawk::InfoSystem::InfoCriteriaHash >( trackInfo ), Tomahawk::InfoSystem::InfoCustomData() );
+}
+
+
+void
+AudioEngine::infoSystemInfo( QString caller, Tomahawk::InfoSystem::InfoType type, QVariant input, QVariant output, Tomahawk::InfoSystem::InfoCustomData customData )
+{
+    qDebug() << Q_FUNC_INFO;
+    Q_UNUSED( input );
+    Q_UNUSED( customData );
+    
+    if ( caller != s_aeInfoIdentifier ||
+       ( type != Tomahawk::InfoSystem::InfoAlbumCoverArt ) )
+    {
+        qDebug() << Q_FUNC_INFO << " not desgined for us, caller is " << caller;
+        return;
+    }
+
+    Tomahawk::InfoSystem::InfoCustomData playInfo;
+    playInfo["message"] = QString( "Tomahawk is playing \"%1\" by %2 on album %3." )
+                                    .arg( m_currentTrack->track() )
+                                    .arg( m_currentTrack->artist()->name() )
+                                     .arg( m_currentTrack->album()->name() );
+    if ( !output.isNull() && output.isValid() )
+    {
+        qDebug() << Q_FUNC_INFO << " output is valid";
+        Tomahawk::InfoSystem::InfoCustomData returnedData = output.value< Tomahawk::InfoSystem::InfoCustomData >();
+        const QByteArray ba = returnedData["imgbytes"].toByteArray();
+        qDebug() << "ba.length = " << ba.length();
+        if ( ba.length() )
+        {
+            QPixmap pm;
+            pm.loadFromData( ba );
+            playInfo["image"] = QVariant( pm.toImage() );
+        }
+    }
+    
+    Tomahawk::InfoSystem::InfoSystem::instance()->pushInfo(
+        s_aeInfoIdentifier, Tomahawk::InfoSystem::InfoNotifyUser,
+        QVariant::fromValue< Tomahawk::InfoSystem::InfoCustomData >( playInfo ) );
+}
+
+
+void
+AudioEngine::infoSystemFinished( QString caller )
+{
+    Q_UNUSED( caller );
+    qDebug() << Q_FUNC_INFO;
+}
+
+
+void
 AudioEngine::onTrackAboutToFinish()
 {
     qDebug() << Q_FUNC_INFO;
@@ -319,26 +392,18 @@ AudioEngine::loadTrack( const Tomahawk::result_ptr& result )
             DatabaseCommand_LogPlayback* cmd = new DatabaseCommand_LogPlayback( m_currentTrack, DatabaseCommand_LogPlayback::Started );
             Database::instance()->enqueue( QSharedPointer<DatabaseCommand>(cmd) );
 
-            Tomahawk::InfoSystem::InfoTypeMap map;
-
             Tomahawk::InfoSystem::InfoCriteriaHash trackInfo;
             trackInfo["title"] = m_currentTrack->track();
             trackInfo["artist"] = m_currentTrack->artist()->name();
             trackInfo["album"] = m_currentTrack->album()->name();
-            map[ Tomahawk::InfoSystem::InfoNowPlaying ] = QVariant::fromValue< Tomahawk::InfoSystem::InfoCriteriaHash >( trackInfo );
-
+            
             if ( TomahawkSettings::instance()->verboseNotifications() )
-            {
-                Tomahawk::InfoSystem::InfoCustomData playInfo;
-                playInfo["message"] = QString( "Tomahawk is playing \"%1\" by %2 on album %3." )
-                    .arg( m_currentTrack->track() )
-                    .arg( m_currentTrack->artist()->name() )
-                    .arg( m_currentTrack->album()->name() );
-                playInfo["image"] = QVariant( m_currentTrack->collection()->source()->avatar().toImage() );
-                map[ Tomahawk::InfoSystem::InfoNotifyUser ] = QVariant::fromValue< Tomahawk::InfoSystem::InfoCustomData >( playInfo );
-            }
+                sendNowPlayingNotification();
 
-            Tomahawk::InfoSystem::InfoSystem::instance()->pushInfo( s_aeInfoIdentifier, map );
+            Tomahawk::InfoSystem::InfoSystem::instance()->pushInfo(
+                s_aeInfoIdentifier,
+                Tomahawk::InfoSystem::InfoNowPlaying,
+                QVariant::fromValue< Tomahawk::InfoSystem::InfoCriteriaHash >( trackInfo ) );
         }
     }
 
