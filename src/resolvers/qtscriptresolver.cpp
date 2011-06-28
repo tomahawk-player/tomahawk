@@ -26,6 +26,7 @@
 
 #include <QMetaProperty>
 
+#define RESOLVER_LEGACY_CODE "var resolver = Tomahawk.resolver.instance ? Tomahawk.resolver.instance : TomahawkResolver;"
 
 QtScriptResolverHelper::QtScriptResolverHelper( const QString& scriptPath, QObject* parent )
     : QObject( parent )
@@ -176,7 +177,7 @@ QtScriptResolver::resolve( const Tomahawk::query_ptr& query )
 
     if ( !query->isFullTextQuery() )
     {
-        eval = QString( "Tomahawk.resolver.instance.resolve( '%1', '%4', '%3', '%4' );" )
+        eval = QString( RESOLVER_LEGACY_CODE "resolver.resolve( '%1', '%2', '%3', '%4' );" )
             .arg( query->id().replace( "'", "\\'" ) )
             .arg( query->artist().replace( "'", "\\'" ) )
             .arg( query->album().replace( "'", "\\'" ) )
@@ -184,7 +185,12 @@ QtScriptResolver::resolve( const Tomahawk::query_ptr& query )
     }
     else
     {
-        eval = QString( "Tomahawk.resolver.instance.search( '%1', '%2' );" )
+        eval = QString( "if(Tomahawk.resolver.instance !== undefined) {"
+                        "   resolver.search( '%1', '%2' );"
+                        "} else {"
+                        "   resolve( '%1', '', '', '%2' );"
+                        "}"
+            )
             .arg( query->id().replace( "'", "\\'" ) )
             .arg( query->fullTextQuery().replace( "'", "\\'" ) );
     }
@@ -254,7 +260,7 @@ QtScriptResolver::loadUi()
 {
     qDebug() << Q_FUNC_INFO;
 
-    QVariantMap m = m_engine->mainFrame()->evaluateJavaScript( "Tomahawk.resolver.instance.getConfigUi();" ).toMap();
+    QVariantMap m = m_engine->mainFrame()->evaluateJavaScript( RESOLVER_LEGACY_CODE  "resolver.getConfigUi();" ).toMap();
     m_dataWidgets = m["fields"].toList();
 
 
@@ -304,7 +310,7 @@ QtScriptResolver::saveConfig()
     qDebug() << Q_FUNC_INFO << saveData;
 
     m_resolverHelper->setResolverConfig( saveData.toMap() );
-    m_engine->mainFrame()->evaluateJavaScript( "Tomahawk.resolver.instance.saveUserConfig();" );
+    m_engine->mainFrame()->evaluateJavaScript( RESOLVER_LEGACY_CODE "resolver.saveUserConfig();" );
 }
 
 
@@ -422,20 +428,20 @@ QtScriptResolver::fillDataInWidgets( const QVariantMap& data )
 QVariantMap
 QtScriptResolver::resolverSettings()
 {
-    return m_engine->mainFrame()->evaluateJavaScript( "Tomahawk.resolver.instance.settings;" ).toMap();
+    return m_engine->mainFrame()->evaluateJavaScript( RESOLVER_LEGACY_CODE "if(resolver.settings) resolver.settings; else getSettings(); " ).toMap();
 }
 
 
 QVariantMap
 QtScriptResolver::resolverUserConfig()
 {
-    return m_engine->mainFrame()->evaluateJavaScript( "Tomahawk.resolver.instance.getUserConfig();" ).toMap();
+    return m_engine->mainFrame()->evaluateJavaScript( RESOLVER_LEGACY_CODE "resolver.getUserConfig();" ).toMap();
 }
 
 
 QVariantMap
 QtScriptResolver::resolverInit()
 {
-    return m_engine->mainFrame()->evaluateJavaScript( "Tomahawk.resolver.instance.init();" ).toMap();
+    return m_engine->mainFrame()->evaluateJavaScript( RESOLVER_LEGACY_CODE "resolver.init();" ).toMap();
 }
 
