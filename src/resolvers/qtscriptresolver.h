@@ -119,7 +119,7 @@ signals:
 
 private:
     virtual void loadUi();
-    QWidget* findWidget( QWidget* widget, const QStringList& widgetPath );
+    QWidget* findWidget( QWidget* widget, const QString& objectName );
     void setWidgetData( const QVariant& value, QWidget* widget, const QString& property );
     QVariant widgetData( QWidget* widget, const QString& property );
     QVariantMap loadDataFromWidgets();

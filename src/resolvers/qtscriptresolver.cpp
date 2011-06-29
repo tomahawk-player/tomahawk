@@ -315,26 +315,21 @@ QtScriptResolver::saveConfig()
 
 
 QWidget*
-QtScriptResolver::findWidget(QWidget* widget, const QStringList& widgetPath)
+QtScriptResolver::findWidget(QWidget* widget, const QString& objectName)
 {
     if( !widget || !widget->isWidgetType() )
         return 0;
 
-    qDebug() << Q_FUNC_INFO << widget->objectName() << widgetPath;
-
-    if( widgetPath.isEmpty() )
+    if( widget->objectName() == objectName )
         return widget;
 
-    QString searchName = widgetPath.first();
 
     foreach( QObject* child, widget->children() )
     {
-        if( child->isWidgetType() && child->objectName() == searchName )
-        {
-            QStringList newWidgetPath = widgetPath;
-            newWidgetPath.removeFirst();
-            return findWidget(qobject_cast< QWidget* >( child ), newWidgetPath);
-        }
+        QWidget* found = findWidget(qobject_cast< QWidget* >( child ), objectName);
+
+        if( found )
+            return found;
     }
 
     return 0;
@@ -378,13 +373,8 @@ QtScriptResolver::loadDataFromWidgets()
     {
         QVariantMap data = dataWidget.toMap();
 
-        QStringList widgetPath;
-        foreach(const QVariant& pathItem, data["widget"].toList())
-        {
-            widgetPath << pathItem.toString();
-        }
-
-        QWidget* widget= findWidget( m_configWidget.data(), widgetPath );
+        QString widgetName = data["widget"].toString();
+        QWidget* widget= findWidget( m_configWidget.data(), widgetName );
 
         QString value = widgetData( widget, data["property"].toString() ).toString();
 
@@ -403,16 +393,11 @@ QtScriptResolver::fillDataInWidgets( const QVariantMap& data )
     qDebug() << Q_FUNC_INFO << data;
     foreach(const QVariant& dataWidget, m_dataWidgets)
     {
-        QStringList widgetPath;
-        foreach(const QVariant& pathItem, dataWidget.toMap()["widget"].toList())
-        {
-            widgetPath << pathItem.toString();
-        }
-
-        QWidget* widget= findWidget( m_configWidget.data(), widgetPath );
+        QString widgetName = dataWidget.toMap()["widget"].toString();
+        QWidget* widget= findWidget( m_configWidget.data(), widgetName );
         if( !widget )
         {
-            qDebug() << Q_FUNC_INFO << "widget specified in resolver was not found:" << widgetPath;
+            qDebug() << Q_FUNC_INFO << "widget specified in resolver was not found:" << widgetName;
             Q_ASSERT(false);
             return;
         }
