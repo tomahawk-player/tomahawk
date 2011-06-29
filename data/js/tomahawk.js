@@ -93,8 +93,7 @@ var TomahawkResolver = {
     resolve: function( qid, artist, album, title )
     {
         return {
-            qid: qid,
-            results: []
+            qid: qid
         };
     },
     search: function( qid, searchString )
