@@ -85,6 +85,7 @@ public:
     virtual void deletePlugin();
 
 signals:
+    void dataError( bool exists );
     void jidChanged( const QString& );
 
 public slots:
@@ -118,6 +119,7 @@ private slots:
     }
     void onNewIq( const Jreen::IQ &iq );
     void onNewAvatar( const QString &jid );
+    void onCheckJidExists( QString jid );
 
 private:
     bool readXmlConsoleEnabled();

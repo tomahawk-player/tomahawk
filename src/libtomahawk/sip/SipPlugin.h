@@ -113,6 +113,8 @@ signals:
 
     void addMenu( QMenu* menu );
     void removeMenu( QMenu* menu );
+    
+    void dataError( bool );
 
 private slots:
     void onError( int, const QString& );
