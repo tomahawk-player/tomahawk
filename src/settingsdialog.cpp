@@ -604,7 +604,7 @@ SettingsDialog::sipFactoryClicked( SipPluginFactory* factory )
 #else
         DelegateConfigWrapper dialog( p->configWidget(), QString("%1 Config" ).arg( p->friendlyName() ), this );
         QWeakPointer< DelegateConfigWrapper > watcher( &dialog );
-        connect( p, SIGNAL( dataError( bool ) ), dialog, SLOT( toggleOkButton( bool ) ) );
+        connect( p, SIGNAL( dataError( bool ) ), &dialog, SLOT( toggleOkButton( bool ) ) );
         int ret = dialog.exec();
         if( !watcher.isNull() && ret == QDialog::Accepted ) {
             // send changed config to resolver
