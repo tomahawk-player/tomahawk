@@ -16,6 +16,16 @@
  *   along with Tomahawk. If not, see <http://www.gnu.org/licenses/>.
  */
 
+/**
+ * \class ArtistInfoWidget
+ * \brief A ViewPage class, which displays top-hits, related artists and albums.
+ *
+ * This Tomahawk ViewPage displays top-hits, related artists and known albums
+ * for any given artist. It is our default ViewPage when showing an artist
+ * via ViewManager.
+ *
+ */
+
 #ifndef ARTISTINFOWIDGET_H
 #define ARTISTINFOWIDGET_H
 
@@ -45,6 +55,14 @@ public:
     ArtistInfoWidget( const Tomahawk::artist_ptr& artist, QWidget* parent = 0 );
     ~ArtistInfoWidget();
 
+    /** \brief Load information for a given artist.
+     *  \param artist The artist that you want to load information for.
+     *
+     *  Calling this method will make ArtistInfoWidget load information about
+     *  an artist's top hits, related artists and all available albums. It is
+     *  automatically called by the constructor, but you can use it to load
+     *  another artist's information at any point.
+     */
     void load( const Tomahawk::artist_ptr& artist );
 
     virtual QWidget* widget() { return this; }

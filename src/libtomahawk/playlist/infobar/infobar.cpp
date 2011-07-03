@@ -57,7 +57,7 @@ InfoBar::InfoBar( QWidget* parent )
 
     ui->captionLabel->setMargin( 6 );
     ui->descriptionLabel->setMargin( 6 );
-    ui->longDescriptionLabel->setMargin( 6 );
+    ui->longDescriptionLabel->setMargin( 4 );
 
     ui->captionLabel->setText( QString() );
     ui->descriptionLabel->setText( QString() );
