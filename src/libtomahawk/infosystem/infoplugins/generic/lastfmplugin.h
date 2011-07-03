@@ -49,6 +49,8 @@ public slots:
     void onAuthenticated();
     void coverArtReturned();
     void artistImagesReturned();
+    void similarArtistsReturned();
+    void topTracksReturned();
 
     void namChangedSlot( QNetworkAccessManager *nam );
 
@@ -57,17 +59,19 @@ protected slots:
     virtual void notInCacheSlot( const Tomahawk::InfoSystem::InfoCriteriaHash criteria, const QString caller, const Tomahawk::InfoSystem::InfoType type, const QVariant input, const Tomahawk::InfoSystem::InfoCustomData customData );
 
     virtual void pushInfo( const QString caller, const Tomahawk::InfoSystem::InfoType type, const QVariant data );
-    
+
 private:
     void fetchCoverArt( const QString &caller, const Tomahawk::InfoSystem::InfoType type, const QVariant &input, const Tomahawk::InfoSystem::InfoCustomData &customData );
     void fetchArtistImages( const QString &caller, const Tomahawk::InfoSystem::InfoType type, const QVariant &input, const Tomahawk::InfoSystem::InfoCustomData &customData );
+    void fetchSimilarArtists( const QString &caller, const Tomahawk::InfoSystem::InfoType type, const QVariant &input, const Tomahawk::InfoSystem::InfoCustomData &customData );
+    void fetchTopTracks( const QString &caller, const Tomahawk::InfoSystem::InfoType type, const QVariant &input, const Tomahawk::InfoSystem::InfoCustomData &customData );
 
     void createScrobbler();
     void nowPlaying( const QVariant &input );
     void scrobble();
+    void sendLoveSong( const InfoType type, QVariant input );
 
     void dataError( const QString &caller, const Tomahawk::InfoSystem::InfoType type, const QVariant &input, const Tomahawk::InfoSystem::InfoCustomData &customData );
-    void sendLoveSong( const InfoType type, QVariant input );
 
     lastfm::MutableTrack m_track;
     lastfm::Audioscrobbler* m_scrobbler;

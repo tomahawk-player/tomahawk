@@ -1,5 +1,5 @@
 /* === This file is part of Tomahawk Player - <http://tomahawk-player.org> ===
- * 
+ *
  *   Copyright 2010-2011, Christian Muehlhaeuser <muesli@tomahawk-player.org>
  *
  *   Tomahawk is free software: you can redistribute it and/or modify
@@ -36,6 +36,7 @@ class DLLEXPORT Artist : public QObject, public PlaylistInterface
 Q_OBJECT
 
 public:
+    static artist_ptr get( const QString& name, bool autoCreate = false );
     static artist_ptr get( unsigned int id, const QString& name );
     Artist( unsigned int id, const QString& name );
 
@@ -54,7 +55,7 @@ public:
 
     virtual bool hasNextItem();
     virtual Tomahawk::result_ptr currentItem() const { return m_currentItem; }
-    
+
     virtual PlaylistInterface::RepeatMode repeatMode() const { return PlaylistInterface::NoRepeat; }
     virtual bool shuffled() const { return false; }
 
@@ -72,7 +73,7 @@ signals:
     void sourceTrackCountChanged( unsigned int tracks );
 
     void nextTrackReady();
-    
+
 private slots:
     void onTracksAdded( const QList<Tomahawk::query_ptr>& tracks );
 

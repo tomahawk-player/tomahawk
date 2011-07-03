@@ -33,31 +33,32 @@ DatabaseCommand_LoadSocialActions::exec( DatabaseImpl* dbi )
 {
     qDebug() << Q_FUNC_INFO;
     Q_ASSERT( !source().isNull() );
-    
+
     TomahawkSqlQuery query = dbi->newquery();
-    
+
     QVariant srcid = source()->isLocal() ? QVariant( QVariant::Int ) : source()->id();
 
-    bool isnew;
-    int artid = dbi->artistId( m_artist, isnew );
+    bool autoCreate = true;
+    int artid = dbi->artistId( m_artist, autoCreate );
     if( artid < 1 )
         return;
 
-    int trkid = dbi->trackId( artid, m_track, isnew );
+    autoCreate = true; // artistId overwrites autoCreate (reference)
+    int trkid = dbi->trackId( artid, m_track, autoCreate );
     if( trkid < 1 )
         return;
-    
+
     QString whereToken;
     whereToken = QString( "WHERE id IS %1"  ).arg( trkid );
-    
+
     QString sql = QString(
             "SELECT k, v, timestamp, source "
             "FROM social_attributes %1 "
             "ORDER BY timestamp ASC" ).arg( whereToken );
-    
+
     query.prepare( sql );
     query.exec();
-    
+
     QList< Tomahawk::SocialAction > allSocialActions;
     while ( query.next() ) {
         Tomahawk::SocialAction action;
@@ -65,10 +66,10 @@ DatabaseCommand_LoadSocialActions::exec( DatabaseImpl* dbi )
         action.value     = query.value( 1 );  // comment
         action.timestamp = query.value( 2 );    // timestamp
         action.source    = query.value( 3 );  // source
-        
+
         allSocialActions.append( action );
     }
-    
+
     m_result->setAllSocialActions( allSocialActions );
 }
 

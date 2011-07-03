@@ -1,5 +1,5 @@
 /* === This file is part of Tomahawk Player - <http://tomahawk-player.org> ===
- * 
+ *
  *   Copyright 2010-2011, Christian Muehlhaeuser <muesli@tomahawk-player.org>
  *
  *   Tomahawk is free software: you can redistribute it and/or modify
@@ -98,16 +98,26 @@ ElidedLabel::setElideMode( Qt::TextElideMode mode )
     }
 }
 
-void 
+
+void
 ElidedLabel::setMargin( int margin )
 {
     m_margin = margin;
 }
 
-int 
+
+int
 ElidedLabel::margin() const
 {
     return m_margin;
+}
+
+
+void
+ElidedLabel::setFont( const QFont& font )
+{
+    QWidget::setFont( font );
+    updateLabel();
 }
 
 
@@ -134,8 +144,7 @@ QSize
 ElidedLabel::sizeHint() const
 {
     const QFontMetrics& fm = fontMetrics();
-    QSize size( fm.width( m_text ), fm.height() );
-    return size;
+    return QSize( fm.width( m_text ) + m_margin * 2, fm.height() + m_margin * 2 );
 }
 
 
@@ -164,7 +173,7 @@ ElidedLabel::paintEvent( QPaintEvent* event )
     QPainter p( this );
     QRect r = contentsRect();
     r.adjust( m_margin, m_margin, -m_margin, -m_margin );
-    
+
     const QString elidedText = fontMetrics().elidedText( m_text, m_mode, r.width() );
     p.drawText( r, m_align, elidedText );
 }

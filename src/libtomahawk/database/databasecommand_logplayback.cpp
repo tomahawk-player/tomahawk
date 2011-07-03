@@ -80,12 +80,13 @@ DatabaseCommand_LogPlayback::exec( DatabaseImpl* dbi )
 
     query.bindValue( 0, srcid );
 
-    bool isnew;
-    int artid = dbi->artistId( m_artist, isnew );
+    bool autoCreate = true;
+    int artid = dbi->artistId( m_artist, autoCreate );
     if( artid < 1 )
         return;
 
-    int trkid = dbi->trackId( artid, m_track, isnew );
+    autoCreate = true; // artistId overwrites autoCreate (reference)
+    int trkid = dbi->trackId( artid, m_track, autoCreate );
     if( trkid < 1 )
         return;
 

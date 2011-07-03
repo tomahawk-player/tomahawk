@@ -26,9 +26,27 @@
 
 using namespace Tomahawk;
 
-Artist::Artist() {}
 
-Artist::~Artist() {}
+Artist::Artist()
+{
+}
+
+
+Artist::~Artist()
+{
+}
+
+
+artist_ptr
+Artist::get( const QString& name, bool autoCreate )
+{
+    int artid = Database::instance()->impl()->artistId( name, autoCreate );
+    if ( artid < 1 )
+        return artist_ptr();
+
+    return Artist::get( artid, name );
+}
+
 
 artist_ptr
 Artist::get( unsigned int id, const QString& name )

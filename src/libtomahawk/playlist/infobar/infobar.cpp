@@ -1,5 +1,5 @@
 /* === This file is part of Tomahawk Player - <http://tomahawk-player.org> ===
- * 
+ *
  *   Copyright 2010-2011, Christian Muehlhaeuser <muesli@tomahawk-player.org>
  *
  *   Tomahawk is free software: you can redistribute it and/or modify
@@ -43,18 +43,25 @@ InfoBar::InfoBar( QWidget* parent )
 
     boldFont.setPixelSize( 12 );
     ui->descriptionLabel->setFont( boldFont );
-    ui->descriptionLabel->setMargin( 10 );
+
+    QFont regFont = ui->longDescriptionLabel->font();
+    regFont.setPixelSize( 11 );
+    ui->longDescriptionLabel->setFont( regFont );
 
     QPalette whitePal = ui->captionLabel->palette();
     whitePal.setColor( QPalette::Foreground, Qt::white );
 
     ui->captionLabel->setPalette( whitePal );
     ui->descriptionLabel->setPalette( whitePal );
+    ui->longDescriptionLabel->setPalette( whitePal );
+
+    ui->captionLabel->setMargin( 6 );
+    ui->descriptionLabel->setMargin( 6 );
+    ui->longDescriptionLabel->setMargin( 6 );
 
     ui->captionLabel->setText( QString() );
-    ui->captionLabel->setMargin( 6 );
-    
     ui->descriptionLabel->setText( QString() );
+    ui->longDescriptionLabel->setText( QString() );
     ui->imageLabel->setText( QString() );
 
     setAutoFillBackground( true );
@@ -78,6 +85,13 @@ void
 InfoBar::setDescription( const QString& s )
 {
     ui->descriptionLabel->setText( s );
+}
+
+
+void
+InfoBar::setLongDescription( const QString& s )
+{
+    ui->longDescriptionLabel->setText( s );
 }
 
 

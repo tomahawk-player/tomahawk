@@ -33,6 +33,7 @@
 class AnimatedSplitter;
 class AlbumModel;
 class AlbumView;
+class ArtistInfoWidget;
 class ArtistView;
 class CollectionModel;
 class CollectionFlatModel;
@@ -190,7 +191,7 @@ private:
     QHash< Tomahawk::collection_ptr, CollectionView* > m_collectionViews;
     QHash< Tomahawk::collection_ptr, ArtistView* > m_treeViews;
     QHash< Tomahawk::collection_ptr, AlbumView* > m_collectionAlbumViews;
-    QHash< Tomahawk::artist_ptr, PlaylistView* > m_artistViews;
+    QHash< Tomahawk::artist_ptr, ArtistInfoWidget* > m_artistViews;
     QHash< Tomahawk::album_ptr, PlaylistView* > m_albumViews;
     QHash< Tomahawk::playlist_ptr, PlaylistView* > m_playlistViews;
     QHash< Tomahawk::source_ptr, SourceInfoWidget* > m_sourceViews;

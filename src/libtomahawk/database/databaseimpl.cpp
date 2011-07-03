@@ -224,7 +224,7 @@ DatabaseImpl::file( int fid )
                          "WHERE file.id = file_join.file AND file.id = %1" )
                 .arg( fid ) );
 
-    if( query.next() )
+    if ( query.next() )
     {
         Tomahawk::source_ptr s;
 
@@ -266,10 +266,10 @@ DatabaseImpl::file( int fid )
 
 
 int
-DatabaseImpl::artistId( const QString& name_orig, bool& isnew )
+DatabaseImpl::artistId( const QString& name_orig, bool& autoCreate )
 {
-    isnew = false;
-    if( m_lastart == name_orig )
+    bool isnew = false;
+    if ( m_lastart == name_orig )
         return m_lastartid;
 
     int id = 0;
@@ -279,31 +279,36 @@ DatabaseImpl::artistId( const QString& name_orig, bool& isnew )
     query.prepare( "SELECT id FROM artist WHERE sortname = ?" );
     query.addBindValue( sortname );
     query.exec();
-    if( query.next() )
+    if ( query.next() )
     {
         id = query.value( 0 ).toInt();
     }
-    if( id )
+    if ( id )
     {
         m_lastart = name_orig;
         m_lastartid = id;
         return id;
     }
 
-    // not found, insert it.
-    query.prepare( "INSERT INTO artist(id,name,sortname) VALUES(NULL,?,?)" );
-    query.addBindValue( name_orig );
-    query.addBindValue( sortname );
-    if( !query.exec() )
+    if ( autoCreate )
     {
-        qDebug() << "Failed to insert artist:" << name_orig;
-        return 0;
+        // not found, insert it.
+        query.prepare( "INSERT INTO artist(id,name,sortname) VALUES(NULL,?,?)" );
+        query.addBindValue( name_orig );
+        query.addBindValue( sortname );
+        if ( !query.exec() )
+        {
+            qDebug() << "Failed to insert artist:" << name_orig;
+            return 0;
+        }
+
+        id = query.lastInsertId().toInt();
+        isnew = true;
+        m_lastart = name_orig;
+        m_lastartid = id;
     }
 
-    id = query.lastInsertId().toInt();
-    isnew = true;
-    m_lastart = name_orig;
-    m_lastartid = id;
+    autoCreate = isnew;
     return id;
 }
 

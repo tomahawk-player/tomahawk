@@ -379,6 +379,22 @@ TreeModel::addAllCollections()
 
 
 void
+TreeModel::addArtists( const artist_ptr& artist )
+{
+    qDebug() << Q_FUNC_INFO;
+
+    if ( artist.isNull() )
+        return;
+
+    emit loadingStarted();
+
+    QList<Tomahawk::artist_ptr> artists;
+    artists << artist;
+    onArtistsAdded( artists );
+}
+
+
+void
 TreeModel::addAlbums( const artist_ptr& artist, const QModelIndex& parent )
 {
     qDebug() << Q_FUNC_INFO;
@@ -494,21 +510,24 @@ TreeModel::onArtistsAdded( const QList<Tomahawk::artist_ptr>& artists )
 void
 TreeModel::onAlbumsAdded( const QList<Tomahawk::album_ptr>& albums, const QVariant& data )
 {
-    qDebug() << Q_FUNC_INFO << albums.count();
+    qDebug() << Q_FUNC_INFO << albums.count() << data.toInt();
     if ( !albums.count() )
         return;
 
-    QModelIndex parent = index( data.toUInt(), 0, QModelIndex() );
+    QModelIndex parent = index( data.toInt(), 0, QModelIndex() );
     TreeModelItem* parentItem = itemFromIndex( parent );
 
-    // the -1 is because we fake a rowCount of 1 to trigger Qt calling fetchMore()
-    int c = rowCount( parent ) - 1;
     QPair< int, int > crows;
+    int c = rowCount( parent );
     crows.first = c;
     crows.second = c + albums.count() - 1;
 
-    if ( crows.second > 0 )
-        emit beginInsertRows( parent, crows.first + 1, crows.second );
+    if ( parent.isValid() )
+        crows.second -= 1;
+
+    qDebug() << crows.first << crows.second;
+    if ( !parent.isValid() || crows.second > 0 )
+        emit beginInsertRows( parent, crows.first, crows.second );
 
     TreeModelItem* albumitem = 0;
     foreach( const album_ptr& album, albums )
@@ -528,7 +547,7 @@ TreeModel::onAlbumsAdded( const QList<Tomahawk::album_ptr>& albums, const QVaria
             QVariant::fromValue< Tomahawk::InfoSystem::InfoCriteriaHash >( trackInfo ), Tomahawk::InfoSystem::InfoCustomData() );
     }
 
-    if ( crows.second > 0 )
+    if ( !parent.isValid() || crows.second > 0 )
         emit endInsertRows();
     else
         emit dataChanged( albumitem->index, albumitem->index.sibling( albumitem->index.row(), columnCount( QModelIndex() ) - 1 ) );

@@ -80,6 +80,7 @@ public:
     void addCollection( const Tomahawk::collection_ptr& collection );
     void addFilteredCollection( const Tomahawk::collection_ptr& collection, unsigned int amount, DatabaseCommand_AllArtists::SortOrder order );
 
+    void addArtists( const Tomahawk::artist_ptr& artist );
     void addAlbums( const Tomahawk::artist_ptr& artist, const QModelIndex& parent );
     void addTracks( const Tomahawk::album_ptr& album, const QModelIndex& parent );
 

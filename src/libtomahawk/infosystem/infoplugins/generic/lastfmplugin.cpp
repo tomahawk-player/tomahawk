@@ -46,7 +46,7 @@ LastFmPlugin::LastFmPlugin()
     : InfoPlugin()
     , m_scrobbler( 0 )
 {
-    m_supportedGetTypes << InfoAlbumCoverArt << InfoArtistImages;
+    m_supportedGetTypes << InfoAlbumCoverArt << InfoArtistImages << InfoArtistSimilars << InfoArtistSongs;
     m_supportedPushTypes << InfoSubmitScrobble << InfoSubmitNowPlaying << InfoLove << InfoUnLove;
 
 /*
@@ -94,10 +94,10 @@ void
 LastFmPlugin::namChangedSlot( QNetworkAccessManager *nam )
 {
     qDebug() << Q_FUNC_INFO;
-    
+
     if ( !nam )
         return;
-    
+
     QNetworkAccessManager* currNam = lastfm::nam();
     TomahawkUtils::NetworkProxyFactory* oldProxyFactory = dynamic_cast< TomahawkUtils::NetworkProxyFactory* >( nam->proxyFactory() );
 
@@ -106,7 +106,7 @@ LastFmPlugin::namChangedSlot( QNetworkAccessManager *nam )
         qDebug() << "Could not get old proxyFactory!";
         return;
     }
-    
+
     currNam->setConfiguration( nam->configuration() );
     currNam->setNetworkAccessible( nam->networkAccessible() );
     TomahawkUtils::NetworkProxyFactory* newProxyFactory = new TomahawkUtils::NetworkProxyFactory();
@@ -140,6 +140,14 @@ LastFmPlugin::getInfo( const QString caller, const Tomahawk::InfoSystem::InfoTyp
 
         case InfoAlbumCoverArt:
             fetchCoverArt( caller, type, input, customData );
+            break;
+
+        case InfoArtistSimilars:
+            fetchSimilarArtists( caller, type, input, customData );
+            break;
+
+        case InfoArtistSongs:
+            fetchTopTracks( caller, type, input, customData );
             break;
 
         default:
@@ -242,7 +250,7 @@ LastFmPlugin::sendLoveSong( const InfoType type, QVariant input )
     bool ok;
     track.setDuration( hash["duration"].toUInt( &ok ) );
     track.setSource( lastfm::Track::Player );
-    
+
     if ( type == Tomahawk::InfoSystem::InfoLove )
     {
         track.love();
@@ -251,6 +259,52 @@ LastFmPlugin::sendLoveSong( const InfoType type, QVariant input )
     {
         track.unlove();
     }
+}
+
+
+void
+LastFmPlugin::fetchSimilarArtists( const QString &caller, const InfoType type, const QVariant &input, const Tomahawk::InfoSystem::InfoCustomData &customData )
+{
+    qDebug() << Q_FUNC_INFO;
+    if ( !input.canConvert< Tomahawk::InfoSystem::InfoCriteriaHash >() )
+    {
+        dataError( caller, type, input, customData );
+        return;
+    }
+    InfoCriteriaHash hash = input.value< Tomahawk::InfoSystem::InfoCriteriaHash >();
+    if ( !hash.contains( "artist" ) )
+    {
+        dataError( caller, type, input, customData );
+        return;
+    }
+
+    Tomahawk::InfoSystem::InfoCriteriaHash criteria;
+    criteria["artist"] = hash["artist"];
+
+    emit getCachedInfo( criteria, 2419200000, caller, type, input, customData );
+}
+
+
+void
+LastFmPlugin::fetchTopTracks( const QString &caller, const InfoType type, const QVariant &input, const Tomahawk::InfoSystem::InfoCustomData &customData )
+{
+    qDebug() << Q_FUNC_INFO;
+    if ( !input.canConvert< Tomahawk::InfoSystem::InfoCriteriaHash >() )
+    {
+        dataError( caller, type, input, customData );
+        return;
+    }
+    InfoCriteriaHash hash = input.value< Tomahawk::InfoSystem::InfoCriteriaHash >();
+    if ( !hash.contains( "artist" ) )
+    {
+        dataError( caller, type, input, customData );
+        return;
+    }
+
+    Tomahawk::InfoSystem::InfoCriteriaHash criteria;
+    criteria["artist"] = hash["artist"];
+
+    emit getCachedInfo( criteria, 2419200000, caller, type, input, customData );
 }
 
 
@@ -315,6 +369,32 @@ LastFmPlugin::notInCacheSlot( const QHash<QString, QString> criteria, const QStr
 
     switch ( type )
     {
+        case InfoArtistSimilars:
+        {
+            lastfm::Artist a( criteria["artist"] );
+            QNetworkReply* reply = a.getSimilar();
+            reply->setProperty( "customData", QVariant::fromValue<Tomahawk::InfoSystem::InfoCustomData>( customData ) );
+            reply->setProperty( "origData", input );
+            reply->setProperty( "caller", caller );
+            reply->setProperty( "type", (uint)(type) );
+
+            connect( reply, SIGNAL( finished() ), SLOT( similarArtistsReturned() ) );
+            return;
+        }
+
+        case InfoArtistSongs:
+        {
+            lastfm::Artist a( criteria["artist"] );
+            QNetworkReply* reply = a.getTopTracks();
+            reply->setProperty( "customData", QVariant::fromValue<Tomahawk::InfoSystem::InfoCustomData>( customData ) );
+            reply->setProperty( "origData", input );
+            reply->setProperty( "caller", caller );
+            reply->setProperty( "type", (uint)(type) );
+
+            connect( reply, SIGNAL( finished() ), SLOT( topTracksReturned() ) );
+            return;
+        }
+
         case InfoAlbumCoverArt:
         {
             QString artistName = criteria["artist"];
@@ -336,7 +416,7 @@ LastFmPlugin::notInCacheSlot( const QHash<QString, QString> criteria, const QStr
         {
             QString artistName = criteria["artist"];
 
-            QString imgurl = "http://ws.audioscrobbler.com/2.0/?method=artist.imageredirect&artist=%1&autocorrect=1&size=medium&api_key=7a90f6672a04b809ee309af169f34b8b";
+            QString imgurl = "http://ws.audioscrobbler.com/2.0/?method=artist.imageredirect&artist=%1&autocorrect=1&size=large&api_key=7a90f6672a04b809ee309af169f34b8b";
             QNetworkRequest req( imgurl.arg( artistName ) );
             QNetworkReply* reply = lastfm::nam()->get( req );
             reply->setProperty( "customData", QVariant::fromValue<Tomahawk::InfoSystem::InfoCustomData>( customData ) );
@@ -355,6 +435,75 @@ LastFmPlugin::notInCacheSlot( const QHash<QString, QString> criteria, const QStr
             return;
         }
     }
+}
+
+
+void
+LastFmPlugin::similarArtistsReturned()
+{
+    qDebug() << Q_FUNC_INFO;
+    QNetworkReply* reply = qobject_cast<QNetworkReply*>( sender() );
+
+    QMap< int, QString > similarArtists = lastfm::Artist::getSimilar( reply );
+    QStringList al;
+    QStringList sl;
+
+    foreach ( const QString& a, similarArtists.values() )
+    {
+        qDebug() << "Got sim-artist:" << a;
+        al << a;
+    }
+
+    InfoCustomData returnedData;
+    returnedData["artists"] = al;
+    returnedData["score"] = sl;
+
+    InfoCustomData customData = reply->property( "customData" ).value< Tomahawk::InfoSystem::InfoCustomData >();
+    InfoType type = (Tomahawk::InfoSystem::InfoType)(reply->property( "type" ).toUInt());
+    emit info(
+        reply->property( "caller" ).toString(),
+        type,
+        reply->property( "origData" ),
+        returnedData,
+        customData
+    );
+
+    InfoCriteriaHash origData = reply->property( "origData" ).value< Tomahawk::InfoSystem::InfoCriteriaHash >();
+    Tomahawk::InfoSystem::InfoCriteriaHash criteria;
+    criteria["artist"] = origData["artist"];
+//    emit updateCache( criteria, 2419200000, type, returnedData );
+}
+
+
+void
+LastFmPlugin::topTracksReturned()
+{
+    qDebug() << Q_FUNC_INFO;
+    QNetworkReply* reply = qobject_cast<QNetworkReply*>( sender() );
+
+    QStringList topTracks = lastfm::Artist::getTopTracks( reply );
+    foreach ( const QString& t, topTracks )
+    {
+        qDebug() << "Got top-track:" << t;
+    }
+
+    InfoCustomData returnedData;
+    returnedData["tracks"] = topTracks;
+
+    InfoCustomData customData = reply->property( "customData" ).value< Tomahawk::InfoSystem::InfoCustomData >();
+    InfoType type = (Tomahawk::InfoSystem::InfoType)(reply->property( "type" ).toUInt());
+    emit info(
+        reply->property( "caller" ).toString(),
+        type,
+        reply->property( "origData" ),
+        returnedData,
+        customData
+    );
+
+    InfoCriteriaHash origData = reply->property( "origData" ).value< Tomahawk::InfoSystem::InfoCriteriaHash >();
+    Tomahawk::InfoSystem::InfoCriteriaHash criteria;
+    criteria["artist"] = origData["artist"];
+    //emit updateCache( criteria, 2419200000, type, returnedData );
 }
 
 
