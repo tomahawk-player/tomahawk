@@ -40,13 +40,22 @@ Q_OBJECT
 
 public:
     QtScriptResolverHelper( const QString& scriptPath, QObject* parent );
+    void setResolverConfig( QVariantMap config );
 
 public slots:
-    QString readFile( const QString& fileName );
+    QByteArray readRaw( const QString& fileName );
+    QString readBase64( const QString& fileName );
+    QString readCompressed( const QString& fileName );
+
     QString compress( const QString& data );
+    QVariantMap resolverData();
+
+    void log( const QString& message);
+    bool fakeEnv() { return false; }
 
 private:
     QString m_scriptPath;
+    QVariantMap m_resolverConfig;
 };
 
 class ScriptEngine : public QWebPage
@@ -65,6 +74,11 @@ public:
         settings()->setAttribute( QWebSettings::LocalStorageDatabaseEnabled, true );
     }
 
+    void setScriptPath( const QString& scriptPath )
+    {
+        m_scriptPath = scriptPath;
+    }
+
 public slots:
     bool shouldInterruptJavaScript()
     {
@@ -73,10 +87,11 @@ public slots:
 
 protected:
     virtual void javaScriptConsoleMessage( const QString & message, int lineNumber, const QString & sourceID )
-    { qDebug() << "JAVASCRIPT ERROR:" << message << lineNumber << sourceID; }
+    { qDebug() << "JAVASCRIPT:" << m_scriptPath << message << lineNumber << sourceID; Q_ASSERT(false);}
 
 private:
     QtScriptResolver* m_parent;
+    QString m_scriptPath;
 };
 
 
@@ -92,8 +107,8 @@ public:
     virtual unsigned int weight() const  { return m_weight; }
     virtual unsigned int timeout() const { return m_timeout; }
 
-    virtual QWidget* configUI() const { return 0; } // TODO support properly for qtscript resolvers too!
-    virtual void saveConfig() {}
+    virtual QWidget* configUI() const;
+    virtual void saveConfig();
 
 public slots:
     virtual void resolve( const Tomahawk::query_ptr& query );
@@ -103,12 +118,28 @@ signals:
     void finished();
 
 private:
+    virtual void loadUi();
+    QWidget* findWidget( QWidget* widget, const QString& objectName );
+    void setWidgetData( const QVariant& value, QWidget* widget, const QString& property );
+    QVariant widgetData( QWidget* widget, const QString& property );
+    QVariantMap loadDataFromWidgets();
+    void fillDataInWidgets( const QVariantMap& data );
+
+    // encapsulate javascript calls
+    QVariantMap resolverSettings();
+    QVariantMap resolverUserConfig();
+    QVariantMap resolverInit();
+
     ScriptEngine* m_engine;
 
     QString m_name;
     unsigned int m_weight, m_timeout;
 
     bool m_ready, m_stopped;
+
+    QtScriptResolverHelper* m_resolverHelper;
+    QWeakPointer< QWidget > m_configWidget;
+    QList< QVariant > m_dataWidgets;
 };
 
 #endif // QTSCRIPTRESOLVER_H

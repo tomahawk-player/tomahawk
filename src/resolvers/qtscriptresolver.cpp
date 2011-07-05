@@ -24,6 +24,9 @@
 #include "sourcelist.h"
 #include "utils/tomahawkutils.h"
 
+#include <QMetaProperty>
+
+#define RESOLVER_LEGACY_CODE "var resolver = Tomahawk.resolver.instance ? Tomahawk.resolver.instance : TomahawkResolver;"
 
 QtScriptResolverHelper::QtScriptResolverHelper( const QString& scriptPath, QObject* parent )
     : QObject( parent )
@@ -32,8 +35,8 @@ QtScriptResolverHelper::QtScriptResolverHelper( const QString& scriptPath, QObje
 }
 
 
-QString
-QtScriptResolverHelper::readFile( const QString& fileName )
+QByteArray
+QtScriptResolverHelper::readRaw( const QString& fileName )
 {
     QString path = QFileInfo( m_scriptPath ).absolutePath();
     // remove directories
@@ -43,12 +46,14 @@ QtScriptResolverHelper::readFile( const QString& fileName )
     QFile file( absoluteFilePath );
     if ( !file.exists() )
     {
-        return QString();
+        Q_ASSERT(false);
+        return QByteArray();
     }
 
     file.open( QIODevice::ReadOnly );
     return file.readAll();
 }
+
 
 QString
 QtScriptResolverHelper::compress( const QString& data )
@@ -58,11 +63,48 @@ QtScriptResolverHelper::compress( const QString& data )
 }
 
 
+QString
+QtScriptResolverHelper::readCompressed(const QString& fileName)
+{
+    return compress( readRaw( fileName ) );
+}
+
+
+QString
+QtScriptResolverHelper::readBase64(const QString& fileName)
+{
+    return readRaw( fileName ).toBase64();
+}
+
+
+QVariantMap
+QtScriptResolverHelper::resolverData()
+{
+    QVariantMap resolver;
+    resolver["config"] = m_resolverConfig;
+    resolver["scriptPath"] = m_scriptPath;
+    return resolver;
+}
+
+
+void QtScriptResolverHelper::log(const QString& message)
+{
+    qDebug() << m_scriptPath << ":" << message;
+}
+
+
+void
+QtScriptResolverHelper::setResolverConfig( QVariantMap config )
+{
+    m_resolverConfig = config;
+}
+
 
 QtScriptResolver::QtScriptResolver( const QString& scriptPath )
     : Tomahawk::ExternalResolver( scriptPath )
     , m_ready( false )
     , m_stopped( false )
+    , m_resolverHelper( new QtScriptResolverHelper( scriptPath, this ) )
 {
     qDebug() << Q_FUNC_INFO << scriptPath;
 
@@ -76,14 +118,35 @@ QtScriptResolver::QtScriptResolver( const QString& scriptPath )
     }
 
     m_engine->mainFrame()->setHtml( "<html><body></body></html>" );
+
+    // add c++ part of tomahawk javascript library
+    m_engine->mainFrame()->addToJavaScriptWindowObject( "Tomahawk", m_resolverHelper );
+
+    // add rest of it
+    m_engine->setScriptPath( "tomahawk.js" );
+    QFile jslib( RESPATH "js/tomahawk.js" );
+    jslib.open( QIODevice::ReadOnly );
+    m_engine->mainFrame()->evaluateJavaScript( jslib.readAll() );
+    jslib.close();
+
+    // add resolver
+    m_engine->setScriptPath( scriptPath );
     m_engine->mainFrame()->evaluateJavaScript( scriptFile.readAll() );
-    m_engine->mainFrame()->addToJavaScriptWindowObject( "Tomahawk", new QtScriptResolverHelper( scriptPath, this ) );
     scriptFile.close();
 
-    QVariantMap m = m_engine->mainFrame()->evaluateJavaScript( "getSettings();" ).toMap();
+    // init resolver
+    resolverInit();
+
+
+    QVariantMap m = resolverSettings();
     m_name       = m.value( "name" ).toString();
     m_weight     = m.value( "weight", 0 ).toUInt();
     m_timeout    = m.value( "timeout", 25 ).toUInt() * 1000;
+
+    // load config widget and apply settings
+    loadUi();
+    QVariantMap config =  resolverUserConfig();
+    fillDataInWidgets( config );
 
     qDebug() << Q_FUNC_INFO << m_name << m_weight << m_timeout;
 
@@ -114,7 +177,7 @@ QtScriptResolver::resolve( const Tomahawk::query_ptr& query )
 
     if ( !query->isFullTextQuery() )
     {
-        eval = QString( "resolve( '%1', '%2', '%3', '%4' );" )
+        eval = QString( RESOLVER_LEGACY_CODE "resolver.resolve( '%1', '%2', '%3', '%4' );" )
             .arg( query->id().replace( "'", "\\'" ) )
             .arg( query->artist().replace( "'", "\\'" ) )
             .arg( query->album().replace( "'", "\\'" ) )
@@ -122,11 +185,14 @@ QtScriptResolver::resolve( const Tomahawk::query_ptr& query )
     }
     else
     {
-        eval = QString( "resolve( '%1', '%2', '%3', '%4' );" )
+        eval = QString( "if(Tomahawk.resolver.instance !== undefined) {"
+                        "   resolver.search( '%1', '%2' );"
+                        "} else {"
+                        "   resolve( '%1', '', '', '%2' );"
+                        "}"
+            )
             .arg( query->id().replace( "'", "\\'" ) )
-            .arg( query->fullTextQuery().replace( "'", "\\'" ) )
-            .arg( QString() )
-            .arg( QString() );
+            .arg( query->fullTextQuery().replace( "'", "\\'" ) );
     }
 
     QList< Tomahawk::result_ptr > results;
@@ -187,3 +253,180 @@ QtScriptResolver::stop()
     m_stopped = true;
     emit finished();
 }
+
+
+void
+QtScriptResolver::loadUi()
+{
+    qDebug() << Q_FUNC_INFO;
+
+    QVariantMap m = m_engine->mainFrame()->evaluateJavaScript( RESOLVER_LEGACY_CODE  "resolver.getConfigUi();" ).toMap();
+    m_dataWidgets = m["fields"].toList();
+
+
+    bool compressed = m.value( "compressed", "false" ).toBool();
+    qDebug() << "Resolver has a preferences widget! compressed?" << compressed << m;
+
+    QByteArray uiData = m[ "widget" ].toByteArray();
+
+    if( compressed )
+        uiData = qUncompress( QByteArray::fromBase64( uiData ) );
+    else
+        uiData = QByteArray::fromBase64( uiData );
+
+    QVariantMap images;
+    foreach(const QVariant& item, m[ "images" ].toList())
+    {
+        QString key = item.toMap().keys().first();
+        QVariant value = item.toMap().value(key);
+        images[key] = value;
+    }
+
+    if( m.contains( "images" ) )
+        uiData = fixDataImagePaths( uiData, compressed, images );
+
+
+
+    m_configWidget = QWeakPointer< QWidget >( widgetFromData( uiData, 0 ) );
+
+    emit changed();
+}
+
+
+QWidget*
+QtScriptResolver::configUI() const
+{
+    if( m_configWidget.isNull() )
+        return 0;
+    else
+        return m_configWidget.data();
+}
+
+
+void
+QtScriptResolver::saveConfig()
+{
+    QVariant saveData = loadDataFromWidgets();
+    qDebug() << Q_FUNC_INFO << saveData;
+
+    m_resolverHelper->setResolverConfig( saveData.toMap() );
+    m_engine->mainFrame()->evaluateJavaScript( RESOLVER_LEGACY_CODE "resolver.saveUserConfig();" );
+}
+
+
+QWidget*
+QtScriptResolver::findWidget(QWidget* widget, const QString& objectName)
+{
+    if( !widget || !widget->isWidgetType() )
+        return 0;
+
+    if( widget->objectName() == objectName )
+        return widget;
+
+
+    foreach( QObject* child, widget->children() )
+    {
+        QWidget* found = findWidget(qobject_cast< QWidget* >( child ), objectName);
+
+        if( found )
+            return found;
+    }
+
+    return 0;
+}
+
+
+QVariant
+QtScriptResolver::widgetData(QWidget* widget, const QString& property)
+{
+    for( int i = 0; i < widget->metaObject()->propertyCount(); i++ )
+    {
+        if( widget->metaObject()->property( i ).name() == property )
+        {
+            return widget->property( property.toLatin1() );
+        }
+    }
+
+    return QVariant();
+}
+
+
+void
+QtScriptResolver::setWidgetData(const QVariant& value, QWidget* widget, const QString& property)
+{
+    for( int i = 0; i < widget->metaObject()->propertyCount(); i++ )
+    {
+        if( widget->metaObject()->property( i ).name() == property )
+        {
+            widget->metaObject()->property( i ).write( widget, value);
+            return;
+        }
+    }
+}
+
+
+QVariantMap
+QtScriptResolver::loadDataFromWidgets()
+{
+    QVariantMap saveData;
+    foreach(const QVariant& dataWidget, m_dataWidgets)
+    {
+        QVariantMap data = dataWidget.toMap();
+
+        QString widgetName = data["widget"].toString();
+        QWidget* widget= findWidget( m_configWidget.data(), widgetName );
+
+        QString value = widgetData( widget, data["property"].toString() ).toString();
+
+        saveData[ data["name"].toString() ] = value;
+    }
+
+    qDebug() << saveData;
+
+    return saveData;
+}
+
+
+void
+QtScriptResolver::fillDataInWidgets( const QVariantMap& data )
+{
+    qDebug() << Q_FUNC_INFO << data;
+    foreach(const QVariant& dataWidget, m_dataWidgets)
+    {
+        QString widgetName = dataWidget.toMap()["widget"].toString();
+        QWidget* widget= findWidget( m_configWidget.data(), widgetName );
+        if( !widget )
+        {
+            qDebug() << Q_FUNC_INFO << "widget specified in resolver was not found:" << widgetName;
+            Q_ASSERT(false);
+            return;
+        }
+
+        QString propertyName = dataWidget.toMap()["property"].toString();
+        QString name = dataWidget.toMap()["name"].toString();
+
+        setWidgetData( data[ name ], widget, propertyName );
+    }
+}
+
+
+QVariantMap
+QtScriptResolver::resolverSettings()
+{
+    return m_engine->mainFrame()->evaluateJavaScript( RESOLVER_LEGACY_CODE "if(resolver.settings) resolver.settings; else getSettings(); " ).toMap();
+}
+
+
+QVariantMap
+QtScriptResolver::resolverUserConfig()
+{
+    return m_engine->mainFrame()->evaluateJavaScript( RESOLVER_LEGACY_CODE "resolver.getUserConfig();" ).toMap();
+}
+
+
+QVariantMap
+QtScriptResolver::resolverInit()
+{
+    return m_engine->mainFrame()->evaluateJavaScript( RESOLVER_LEGACY_CODE "resolver.init();" ).toMap();
+}
+

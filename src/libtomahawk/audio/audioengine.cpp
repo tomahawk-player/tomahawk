@@ -586,7 +586,7 @@ AudioEngine::setCurrentTrack( const Tomahawk::result_ptr& result )
 bool
 AudioEngine::isHttpResult( const QString& url ) const
 {
-    return url.startsWith( "http://" );
+    return url.startsWith( "http://" ) || url.startsWith( "https://" );
 }
 
 
