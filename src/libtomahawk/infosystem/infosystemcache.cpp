@@ -84,7 +84,7 @@ InfoSystemCache::pruneTimerFired()
 
 
 void
-InfoSystemCache::getCachedInfoSlot( const Tomahawk::InfoSystem::InfoCriteriaHash criteria, const qint64 newMaxAge, const QString caller, const Tomahawk::InfoSystem::InfoType type, const QVariant input, const Tomahawk::InfoSystem::InfoCustomData customData )
+InfoSystemCache::getCachedInfoSlot( const Tomahawk::InfoSystem::InfoCriteriaHash criteria, const qint64 newMaxAge, const QString caller, const Tomahawk::InfoSystem::InfoType type, const QVariant input, const QVariantMap customData )
 {
     qDebug() << Q_FUNC_INFO;
     const QString criteriaHashVal = criteriaMd5( criteria );

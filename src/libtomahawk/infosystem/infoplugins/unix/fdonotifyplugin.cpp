@@ -63,12 +63,12 @@ FdoNotifyPlugin::pushInfo( const QString caller, const Tomahawk::InfoSystem::Inf
 {
     Q_UNUSED( caller );
     qDebug() << Q_FUNC_INFO;
-    if ( type != Tomahawk::InfoSystem::InfoNotifyUser || !pushData.canConvert< Tomahawk::InfoSystem::InfoCustomData >() )
+    if ( type != Tomahawk::InfoSystem::InfoNotifyUser || !pushData.canConvert< QVariantMap >() )
     {
         qDebug() << Q_FUNC_INFO << " not the right type or could not convert the hash";
         return;
     }
-    Tomahawk::InfoSystem::InfoCustomData hash = pushData.value< Tomahawk::InfoSystem::InfoCustomData >();
+    QVariantMap hash = pushData.value< QVariantMap >();
     if ( !hash.contains( "message" ) )
     {
         qDebug() << Q_FUNC_INFO << " hash did not contain a message";

@@ -38,7 +38,7 @@ public:
     virtual void namChangedSlot( QNetworkAccessManager* ) {}
 
 protected slots:
-    virtual void getInfo( const QString caller, const Tomahawk::InfoSystem::InfoType type, const QVariant input, const Tomahawk::InfoSystem::InfoCustomData customData )
+    virtual void getInfo( const QString caller, const Tomahawk::InfoSystem::InfoType type, const QVariant input, const QVariantMap customData )
     {
         Q_UNUSED( caller );
         Q_UNUSED( type );
@@ -48,7 +48,7 @@ protected slots:
 
     virtual void pushInfo( const QString caller, const Tomahawk::InfoSystem::InfoType type, const QVariant pushData );
 
-    virtual void notInCacheSlot( const Tomahawk::InfoSystem::InfoCriteriaHash criteria, const QString caller, const Tomahawk::InfoSystem::InfoType type, const QVariant input, const Tomahawk::InfoSystem::InfoCustomData customData )
+    virtual void notInCacheSlot( const Tomahawk::InfoSystem::InfoCriteriaHash criteria, const QString caller, const Tomahawk::InfoSystem::InfoType type, const QVariant input, const QVariantMap customData )
     {
         Q_UNUSED( criteria );
         Q_UNUSED( caller );

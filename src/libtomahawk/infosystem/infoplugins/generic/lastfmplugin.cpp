@@ -120,7 +120,7 @@ LastFmPlugin::namChangedSlot( QNetworkAccessManager *nam )
 
 
 void
-LastFmPlugin::dataError( const QString &caller, const Tomahawk::InfoSystem::InfoType type, const QVariant &input, const Tomahawk::InfoSystem::InfoCustomData &customData )
+LastFmPlugin::dataError( const QString &caller, const Tomahawk::InfoSystem::InfoType type, const QVariant &input, const QVariantMap &customData )
 {
     emit info( caller, type, input, QVariant(), customData );
     return;
@@ -128,7 +128,7 @@ LastFmPlugin::dataError( const QString &caller, const Tomahawk::InfoSystem::Info
 
 
 void
-LastFmPlugin::getInfo( const QString caller, const Tomahawk::InfoSystem::InfoType type, const QVariant input, const Tomahawk::InfoSystem::InfoCustomData customData )
+LastFmPlugin::getInfo( const QString caller, const Tomahawk::InfoSystem::InfoType type, const QVariant input, const QVariantMap customData )
 {
     qDebug() << Q_FUNC_INFO;
 
@@ -263,7 +263,7 @@ LastFmPlugin::sendLoveSong( const InfoType type, QVariant input )
 
 
 void
-LastFmPlugin::fetchSimilarArtists( const QString &caller, const InfoType type, const QVariant &input, const Tomahawk::InfoSystem::InfoCustomData &customData )
+LastFmPlugin::fetchSimilarArtists( const QString &caller, const InfoType type, const QVariant &input, const QVariantMap &customData )
 {
     qDebug() << Q_FUNC_INFO;
     if ( !input.canConvert< Tomahawk::InfoSystem::InfoCriteriaHash >() )
@@ -286,7 +286,7 @@ LastFmPlugin::fetchSimilarArtists( const QString &caller, const InfoType type, c
 
 
 void
-LastFmPlugin::fetchTopTracks( const QString &caller, const InfoType type, const QVariant &input, const Tomahawk::InfoSystem::InfoCustomData &customData )
+LastFmPlugin::fetchTopTracks( const QString &caller, const InfoType type, const QVariant &input, const QVariantMap &customData )
 {
     qDebug() << Q_FUNC_INFO;
     if ( !input.canConvert< Tomahawk::InfoSystem::InfoCriteriaHash >() )
@@ -309,7 +309,7 @@ LastFmPlugin::fetchTopTracks( const QString &caller, const InfoType type, const 
 
 
 void
-LastFmPlugin::fetchCoverArt( const QString &caller, const InfoType type, const QVariant &input, const Tomahawk::InfoSystem::InfoCustomData &customData )
+LastFmPlugin::fetchCoverArt( const QString &caller, const InfoType type, const QVariant &input, const QVariantMap &customData )
 {
     qDebug() << Q_FUNC_INFO;
     if ( !input.canConvert< Tomahawk::InfoSystem::InfoCriteriaHash >() )
@@ -333,7 +333,7 @@ LastFmPlugin::fetchCoverArt( const QString &caller, const InfoType type, const Q
 
 
 void
-LastFmPlugin::fetchArtistImages( const QString &caller, const InfoType type, const QVariant &input, const Tomahawk::InfoSystem::InfoCustomData &customData )
+LastFmPlugin::fetchArtistImages( const QString &caller, const InfoType type, const QVariant &input, const QVariantMap &customData )
 {
     qDebug() << Q_FUNC_INFO;
     if ( !input.canConvert< Tomahawk::InfoSystem::InfoCriteriaHash >() )
@@ -356,7 +356,7 @@ LastFmPlugin::fetchArtistImages( const QString &caller, const InfoType type, con
 
 
 void
-LastFmPlugin::notInCacheSlot( const QHash<QString, QString> criteria, const QString caller, const Tomahawk::InfoSystem::InfoType type, const QVariant input, const Tomahawk::InfoSystem::InfoCustomData customData )
+LastFmPlugin::notInCacheSlot( const QHash<QString, QString> criteria, const QString caller, const Tomahawk::InfoSystem::InfoType type, const QVariant input, const QVariantMap customData )
 {
     qDebug() << Q_FUNC_INFO;
 
@@ -373,7 +373,7 @@ LastFmPlugin::notInCacheSlot( const QHash<QString, QString> criteria, const QStr
         {
             lastfm::Artist a( criteria["artist"] );
             QNetworkReply* reply = a.getSimilar();
-            reply->setProperty( "customData", QVariant::fromValue<Tomahawk::InfoSystem::InfoCustomData>( customData ) );
+            reply->setProperty( "customData", QVariant::fromValue<QVariantMap>( customData ) );
             reply->setProperty( "origData", input );
             reply->setProperty( "caller", caller );
             reply->setProperty( "type", (uint)(type) );
@@ -386,7 +386,7 @@ LastFmPlugin::notInCacheSlot( const QHash<QString, QString> criteria, const QStr
         {
             lastfm::Artist a( criteria["artist"] );
             QNetworkReply* reply = a.getTopTracks();
-            reply->setProperty( "customData", QVariant::fromValue<Tomahawk::InfoSystem::InfoCustomData>( customData ) );
+            reply->setProperty( "customData", QVariant::fromValue<QVariantMap>( customData ) );
             reply->setProperty( "origData", input );
             reply->setProperty( "caller", caller );
             reply->setProperty( "type", (uint)(type) );
@@ -403,7 +403,7 @@ LastFmPlugin::notInCacheSlot( const QHash<QString, QString> criteria, const QStr
             QString imgurl = "http://ws.audioscrobbler.com/2.0/?method=album.imageredirect&artist=%1&album=%2&autocorrect=1&size=large&api_key=7a90f6672a04b809ee309af169f34b8b";
             QNetworkRequest req( imgurl.arg( artistName ).arg( albumName ) );
             QNetworkReply* reply = lastfm::nam()->get( req );
-            reply->setProperty( "customData", QVariant::fromValue<Tomahawk::InfoSystem::InfoCustomData>( customData ) );
+            reply->setProperty( "customData", QVariant::fromValue<QVariantMap>( customData ) );
             reply->setProperty( "origData", input );
             reply->setProperty( "caller", caller );
             reply->setProperty( "type", (uint)(type) );
@@ -419,7 +419,7 @@ LastFmPlugin::notInCacheSlot( const QHash<QString, QString> criteria, const QStr
             QString imgurl = "http://ws.audioscrobbler.com/2.0/?method=artist.imageredirect&artist=%1&autocorrect=1&size=large&api_key=7a90f6672a04b809ee309af169f34b8b";
             QNetworkRequest req( imgurl.arg( artistName ) );
             QNetworkReply* reply = lastfm::nam()->get( req );
-            reply->setProperty( "customData", QVariant::fromValue<Tomahawk::InfoSystem::InfoCustomData>( customData ) );
+            reply->setProperty( "customData", QVariant::fromValue<QVariantMap>( customData ) );
             reply->setProperty( "origData", input );
             reply->setProperty( "caller", caller );
             reply->setProperty( "type", (uint)(type) );
@@ -454,11 +454,11 @@ LastFmPlugin::similarArtistsReturned()
         al << a;
     }
 
-    InfoCustomData returnedData;
+    QVariantMap returnedData;
     returnedData["artists"] = al;
     returnedData["score"] = sl;
 
-    InfoCustomData customData = reply->property( "customData" ).value< Tomahawk::InfoSystem::InfoCustomData >();
+    QVariantMap customData = reply->property( "customData" ).value< QVariantMap >();
     InfoType type = (Tomahawk::InfoSystem::InfoType)(reply->property( "type" ).toUInt());
     emit info(
         reply->property( "caller" ).toString(),
@@ -487,10 +487,10 @@ LastFmPlugin::topTracksReturned()
         qDebug() << "Got top-track:" << t;
     }
 
-    InfoCustomData returnedData;
+    QVariantMap returnedData;
     returnedData["tracks"] = topTracks;
 
-    InfoCustomData customData = reply->property( "customData" ).value< Tomahawk::InfoSystem::InfoCustomData >();
+    QVariantMap customData = reply->property( "customData" ).value< QVariantMap >();
     InfoType type = (Tomahawk::InfoSystem::InfoType)(reply->property( "type" ).toUInt());
     emit info(
         reply->property( "caller" ).toString(),
@@ -520,7 +520,7 @@ LastFmPlugin::coverArtReturned()
         {
             qDebug() << "Uh oh, null byte array";
             InfoType type = (Tomahawk::InfoSystem::InfoType)(reply->property( "type" ).toUInt());
-            InfoCustomData customData = reply->property( "customData" ).value< Tomahawk::InfoSystem::InfoCustomData >();
+            QVariantMap customData = reply->property( "customData" ).value< QVariantMap >();
             emit info( reply->property( "caller" ).toString(), type, reply->property( "origData" ), QVariant(), customData );
             return;
         }
@@ -530,11 +530,11 @@ LastFmPlugin::coverArtReturned()
                 ba = QByteArray();
         }
 
-        InfoCustomData returnedData;
+        QVariantMap returnedData;
         returnedData["imgbytes"] = ba;
         returnedData["url"] = reply->url().toString();
 
-        InfoCustomData customData = reply->property( "customData" ).value< Tomahawk::InfoSystem::InfoCustomData >();
+        QVariantMap customData = reply->property( "customData" ).value< QVariantMap >();
         InfoType type = (Tomahawk::InfoSystem::InfoType)(reply->property( "type" ).toUInt());
         emit info(
             reply->property( "caller" ).toString(),
@@ -556,7 +556,7 @@ LastFmPlugin::coverArtReturned()
         {
             qDebug() << "Uh oh, nam is null";
             InfoType type = (Tomahawk::InfoSystem::InfoType)(reply->property( "type" ).toUInt());
-            InfoCustomData customData = reply->property( "customData" ).value< Tomahawk::InfoSystem::InfoCustomData >();
+            QVariantMap customData = reply->property( "customData" ).value< QVariantMap >();
             emit info( reply->property( "caller" ).toString(), type, reply->property( "origData" ), QVariant(), customData );
             return;
         }
@@ -587,7 +587,7 @@ LastFmPlugin::artistImagesReturned()
         {
             qDebug() << "Uh oh, null byte array";
             InfoType type = (Tomahawk::InfoSystem::InfoType)(reply->property( "type" ).toUInt());
-            InfoCustomData customData = reply->property( "customData" ).value< Tomahawk::InfoSystem::InfoCustomData >();
+            QVariantMap customData = reply->property( "customData" ).value< QVariantMap >();
             emit info( reply->property( "caller" ).toString(), type, reply->property( "origData" ), QVariant(), customData );
             return;
         }
@@ -596,12 +596,12 @@ LastFmPlugin::artistImagesReturned()
             if ( reply->url().toString().startsWith( url.toString() ) )
                 ba = QByteArray();
         }
-        InfoCustomData returnedData;
+        QVariantMap returnedData;
         returnedData["imgbytes"] = ba;
         returnedData["url"] = reply->url().toString();
 
         InfoType type = (Tomahawk::InfoSystem::InfoType)(reply->property( "type" ).toUInt());
-        InfoCustomData customData = reply->property( "customData" ).value< Tomahawk::InfoSystem::InfoCustomData >();
+        QVariantMap customData = reply->property( "customData" ).value< QVariantMap >();
         emit info( reply->property( "caller" ).toString(), type, reply->property( "origData" ), returnedData, customData );
 
         InfoCriteriaHash origData = reply->property( "origData" ).value< Tomahawk::InfoSystem::InfoCriteriaHash >();
@@ -615,7 +615,7 @@ LastFmPlugin::artistImagesReturned()
         {
             qDebug() << "Uh oh, nam is null";
             InfoType type = (Tomahawk::InfoSystem::InfoType)(reply->property( "type" ).toUInt());
-            InfoCustomData customData = reply->property( "customData" ).value< Tomahawk::InfoSystem::InfoCustomData >();
+            QVariantMap customData = reply->property( "customData" ).value< QVariantMap >();
             emit info( reply->property( "caller" ).toString(), type, reply->property( "origData" ), QVariant(), customData );
             return;
         }

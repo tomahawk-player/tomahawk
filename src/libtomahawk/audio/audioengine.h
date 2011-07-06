@@ -87,7 +87,7 @@ public slots:
 
     void playlistNextTrackReady();
 
-    void infoSystemInfo( QString caller, Tomahawk::InfoSystem::InfoType type, QVariant input, QVariant output, Tomahawk::InfoSystem::InfoCustomData customData );
+    void infoSystemInfo( QString caller, Tomahawk::InfoSystem::InfoType type, QVariant input, QVariant output, QVariantMap customData );
     void infoSystemFinished( QString caller );
 
 signals:

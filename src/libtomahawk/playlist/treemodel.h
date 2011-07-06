@@ -125,7 +125,7 @@ private slots:
     void onAlbumsAdded( const QList<Tomahawk::album_ptr>& albums, const QVariant& data );
     void onTracksAdded( const QList<Tomahawk::query_ptr>& tracks, const QVariant& data );
 
-    void infoSystemInfo( QString caller, Tomahawk::InfoSystem::InfoType type, QVariant input, QVariant output, Tomahawk::InfoSystem::InfoCustomData customData );
+    void infoSystemInfo( QString caller, Tomahawk::InfoSystem::InfoType type, QVariant input, QVariant output, QVariantMap customData );
     void infoSystemFinished( QString target );
 
     void onPlaybackFinished( const Tomahawk::result_ptr& result );

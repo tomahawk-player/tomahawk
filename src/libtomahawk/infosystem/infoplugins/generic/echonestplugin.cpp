@@ -66,7 +66,7 @@ EchoNestPlugin::namChangedSlot( QNetworkAccessManager *nam )
 }
 
 void
-EchoNestPlugin::getInfo(const QString caller, const Tomahawk::InfoSystem::InfoType type, const QVariant input, const Tomahawk::InfoSystem::InfoCustomData customData)
+EchoNestPlugin::getInfo(const QString caller, const Tomahawk::InfoSystem::InfoType type, const QVariant input, const QVariantMap customData)
 {
     switch (type)
     {
@@ -91,7 +91,7 @@ EchoNestPlugin::getInfo(const QString caller, const Tomahawk::InfoSystem::InfoTy
 }
 
 void
-EchoNestPlugin::getSongProfile(const QString &caller, const QVariant &input, const InfoCustomData &customData, const QString &item)
+EchoNestPlugin::getSongProfile(const QString &caller, const QVariant &input, const QVariantMap &customData, const QString &item)
 {
     //WARNING: Totally not implemented yet
     Q_UNUSED( item );
@@ -108,7 +108,7 @@ EchoNestPlugin::getSongProfile(const QString &caller, const QVariant &input, con
 }
 
 void
-EchoNestPlugin::getArtistBiography(const QString &caller, const QVariant &input, const InfoCustomData &customData)
+EchoNestPlugin::getArtistBiography(const QString &caller, const QVariant &input, const QVariantMap &customData)
 {
     if( !isValidArtistData( caller, input, customData ) )
         return;
@@ -123,7 +123,7 @@ EchoNestPlugin::getArtistBiography(const QString &caller, const QVariant &input,
 }
 
 void
-EchoNestPlugin::getArtistFamiliarity(const QString &caller, const QVariant &input, const InfoCustomData &customData)
+EchoNestPlugin::getArtistFamiliarity(const QString &caller, const QVariant &input, const QVariantMap &customData)
 {
     if( !isValidArtistData( caller, input, customData ) )
         return;
@@ -139,7 +139,7 @@ EchoNestPlugin::getArtistFamiliarity(const QString &caller, const QVariant &inpu
 }
 
 void
-EchoNestPlugin::getArtistHotttnesss(const QString &caller, const QVariant &input, const InfoCustomData &customData)
+EchoNestPlugin::getArtistHotttnesss(const QString &caller, const QVariant &input, const QVariantMap &customData)
 {
     if( !isValidArtistData( caller, input, customData ) )
         return;
@@ -154,7 +154,7 @@ EchoNestPlugin::getArtistHotttnesss(const QString &caller, const QVariant &input
 }
 
 void
-EchoNestPlugin::getArtistTerms(const QString &caller, const QVariant &input, const InfoCustomData &customData)
+EchoNestPlugin::getArtistTerms(const QString &caller, const QVariant &input, const QVariantMap &customData)
 {
     if( !isValidArtistData( caller, input, customData ) )
         return;
@@ -169,7 +169,7 @@ EchoNestPlugin::getArtistTerms(const QString &caller, const QVariant &input, con
 }
 
 void
-EchoNestPlugin::getMiscTopTerms(const QString &caller, const QVariant &input, const InfoCustomData& customData)
+EchoNestPlugin::getMiscTopTerms(const QString &caller, const QVariant &input, const QVariantMap& customData)
 {
     Q_UNUSED( input );
     QNetworkReply* reply = Echonest::Artist::topTerms( 20 );
@@ -200,7 +200,7 @@ EchoNestPlugin::getArtistBiographySlot()
                Tomahawk::InfoSystem::InfoArtistBiography,
                reply->property( "input" ),
                QVariant::fromValue< Tomahawk::InfoSystem::InfoGenericMap >( biographyMap ),
-               reply->property( "customData" ).value< Tomahawk::InfoSystem::InfoCustomData >() );
+               reply->property( "customData" ).value< QVariantMap >() );
     reply->deleteLater();
 }
 
@@ -214,7 +214,7 @@ EchoNestPlugin::getArtistFamiliaritySlot()
                Tomahawk::InfoSystem::InfoArtistFamiliarity,
                reply->property( "input" ),
                familiarity,
-               reply->property( "customData" ).value< Tomahawk::InfoSystem::InfoCustomData >() );
+               reply->property( "customData" ).value< QVariantMap >() );
     reply->deleteLater();
 }
 
@@ -228,7 +228,7 @@ EchoNestPlugin::getArtistHotttnesssSlot()
                Tomahawk::InfoSystem::InfoArtistHotttness,
                reply->property( "input" ),
                hotttnesss,
-               reply->property( "customData" ).value< Tomahawk::InfoSystem::InfoCustomData >() );
+               reply->property( "customData" ).value< QVariantMap >() );
     reply->deleteLater();
 }
 
@@ -249,7 +249,7 @@ EchoNestPlugin::getArtistTermsSlot()
                Tomahawk::InfoSystem::InfoArtistTerms,
                reply->property( "input" ),
                QVariant::fromValue< Tomahawk::InfoSystem::InfoGenericMap >( termsMap ),
-               reply->property( "customData" ).value< Tomahawk::InfoSystem::InfoCustomData >() );
+               reply->property( "customData" ).value< QVariantMap >() );
     reply->deleteLater();
 }
 
@@ -269,12 +269,12 @@ EchoNestPlugin::getMiscTopSlot()
                Tomahawk::InfoSystem::InfoMiscTopTerms,
                QVariant(),
                QVariant::fromValue< Tomahawk::InfoSystem::InfoGenericMap >( termsMap ),
-               reply->property( "customData" ).value< Tomahawk::InfoSystem::InfoCustomData >() );
+               reply->property( "customData" ).value< QVariantMap >() );
     reply->deleteLater();
 }
 
 bool
-EchoNestPlugin::isValidArtistData(const QString &caller, const QVariant &input, const InfoCustomData &customData)
+EchoNestPlugin::isValidArtistData(const QString &caller, const QVariant &input, const QVariantMap &customData)
 {
     if (input.isNull() || !input.isValid() || !input.canConvert<QString>())
     {
@@ -291,7 +291,7 @@ EchoNestPlugin::isValidArtistData(const QString &caller, const QVariant &input, 
 }
 
 bool
-EchoNestPlugin::isValidTrackData(const QString &caller, const QVariant &input, const InfoCustomData &customData)
+EchoNestPlugin::isValidTrackData(const QString &caller, const QVariant &input, const QVariantMap &customData)
 {
     if (input.isNull() || !input.isValid() || !input.canConvert<QString>())
     {

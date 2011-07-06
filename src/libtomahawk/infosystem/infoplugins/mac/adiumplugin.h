@@ -39,12 +39,12 @@ public:
     virtual ~AdiumPlugin();
 
 protected slots:
-    void getInfo( const QString caller, const InfoType type, const QVariant data, InfoCustomData customData );
+    void getInfo( const QString caller, const InfoType type, const QVariant data, QVariantMap customData );
     void pushInfo( const QString caller, const Tomahawk::InfoSystem::InfoType type, const QVariant input );
 
 public slots:
     void namChangedSlot( QNetworkAccessManager* /*nam*/ ) {} // unused
-    void notInCacheSlot( const Tomahawk::InfoSystem::InfoCriteriaHash /*criteria*/, const QString /*caller*/, const Tomahawk::InfoSystem::InfoType /*type*/, const QVariant /*input*/, const Tomahawk::InfoSystem::InfoCustomData /*customData*/ ) {} // unused
+    void notInCacheSlot( const Tomahawk::InfoSystem::InfoCriteriaHash /*criteria*/, const QString /*caller*/, const Tomahawk::InfoSystem::InfoType /*type*/, const QVariant /*input*/, const QVariantMap /*customData*/ ) {} // unused
 
 private slots:
     void clearStatus();

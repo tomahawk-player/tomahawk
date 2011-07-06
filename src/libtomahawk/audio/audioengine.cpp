@@ -154,9 +154,9 @@ AudioEngine::stop()
         sendWaitingNotification();
     else if ( TomahawkSettings::instance()->verboseNotifications() )
     {
-        Tomahawk::InfoSystem::InfoCustomData stopInfo;
+        QVariantMap stopInfo;
         stopInfo["message"] = QString( "Tomahawk is stopped." );
-        map[ Tomahawk::InfoSystem::InfoNotifyUser ] = QVariant::fromValue< Tomahawk::InfoSystem::InfoCustomData >( stopInfo );
+        map[ Tomahawk::InfoSystem::InfoNotifyUser ] = QVariant::fromValue< QVariantMap >( stopInfo );
     }
 
     Tomahawk::InfoSystem::InfoSystem::instance()->pushInfo( s_aeInfoIdentifier, map );
@@ -240,11 +240,11 @@ AudioEngine::mute()
 void
 AudioEngine::sendWaitingNotification() const
 {
-    Tomahawk::InfoSystem::InfoCustomData retryInfo;
+    QVariantMap retryInfo;
     retryInfo["message"] = QString( "The current track could not be resolved. Tomahawk will pick back up with the next resolvable track from this source." );
     Tomahawk::InfoSystem::InfoSystem::instance()->pushInfo(
         s_aeInfoIdentifier, Tomahawk::InfoSystem::InfoNotifyUser,
-        QVariant::fromValue< Tomahawk::InfoSystem::InfoCustomData >( retryInfo ) );
+        QVariant::fromValue< QVariantMap >( retryInfo ) );
 }
 
 
@@ -256,8 +256,8 @@ AudioEngine::sendNowPlayingNotification()
     if ( ! m_infoSystemConnected )
     {
         connect( Tomahawk::InfoSystem::InfoSystem::instance(),
-             SIGNAL( info( QString, Tomahawk::InfoSystem::InfoType, QVariant, QVariant, Tomahawk::InfoSystem::InfoCustomData ) ),
-             SLOT( infoSystemInfo( QString, Tomahawk::InfoSystem::InfoType, QVariant, QVariant, Tomahawk::InfoSystem::InfoCustomData ) ) );
+             SIGNAL( info( QString, Tomahawk::InfoSystem::InfoType, QVariant, QVariant, QVariantMap ) ),
+             SLOT( infoSystemInfo( QString, Tomahawk::InfoSystem::InfoType, QVariant, QVariant, QVariantMap ) ) );
     
         connect( Tomahawk::InfoSystem::InfoSystem::instance(), SIGNAL( finished( QString ) ), SLOT( infoSystemFinished( QString ) ) );
 
@@ -270,12 +270,12 @@ AudioEngine::sendNowPlayingNotification()
     
     Tomahawk::InfoSystem::InfoSystem::instance()->getInfo(
         s_aeInfoIdentifier, Tomahawk::InfoSystem::InfoAlbumCoverArt,
-        QVariant::fromValue< Tomahawk::InfoSystem::InfoCriteriaHash >( trackInfo ), Tomahawk::InfoSystem::InfoCustomData() );
+        QVariant::fromValue< Tomahawk::InfoSystem::InfoCriteriaHash >( trackInfo ), QVariantMap() );
 }
 
 
 void
-AudioEngine::infoSystemInfo( QString caller, Tomahawk::InfoSystem::InfoType type, QVariant input, QVariant output, Tomahawk::InfoSystem::InfoCustomData customData )
+AudioEngine::infoSystemInfo( QString caller, Tomahawk::InfoSystem::InfoType type, QVariant input, QVariant output, QVariantMap customData )
 {
     qDebug() << Q_FUNC_INFO;
     Q_UNUSED( input );
@@ -288,7 +288,7 @@ AudioEngine::infoSystemInfo( QString caller, Tomahawk::InfoSystem::InfoType type
         return;
     }
 
-    Tomahawk::InfoSystem::InfoCustomData playInfo;
+    QVariantMap playInfo;
     playInfo["message"] = QString( "Tomahawk is playing \"%1\" by %2 on album %3." )
                                     .arg( m_currentTrack->track() )
                                     .arg( m_currentTrack->artist()->name() )
@@ -296,7 +296,7 @@ AudioEngine::infoSystemInfo( QString caller, Tomahawk::InfoSystem::InfoType type
     if ( !output.isNull() && output.isValid() )
     {
         qDebug() << Q_FUNC_INFO << " output is valid";
-        Tomahawk::InfoSystem::InfoCustomData returnedData = output.value< Tomahawk::InfoSystem::InfoCustomData >();
+        QVariantMap returnedData = output.value< QVariantMap >();
         const QByteArray ba = returnedData["imgbytes"].toByteArray();
         qDebug() << "ba.length = " << ba.length();
         if ( ba.length() )
@@ -309,7 +309,7 @@ AudioEngine::infoSystemInfo( QString caller, Tomahawk::InfoSystem::InfoType type
     
     Tomahawk::InfoSystem::InfoSystem::instance()->pushInfo(
         s_aeInfoIdentifier, Tomahawk::InfoSystem::InfoNotifyUser,
-        QVariant::fromValue< Tomahawk::InfoSystem::InfoCustomData >( playInfo ) );
+        QVariant::fromValue< QVariantMap >( playInfo ) );
 }
 
 

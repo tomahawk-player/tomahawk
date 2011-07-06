@@ -167,8 +167,8 @@ AudioControls::AudioControls( QWidget* parent )
                      .scaled( ui->coverImage->size(), Qt::IgnoreAspectRatio, Qt::SmoothTransformation );
 
     connect( Tomahawk::InfoSystem::InfoSystem::instance(),
-        SIGNAL( info( QString, Tomahawk::InfoSystem::InfoType, QVariant, QVariant, Tomahawk::InfoSystem::InfoCustomData ) ),
-        SLOT( infoSystemInfo( QString, Tomahawk::InfoSystem::InfoType, QVariant, QVariant, Tomahawk::InfoSystem::InfoCustomData ) ) );
+        SIGNAL( info( QString, Tomahawk::InfoSystem::InfoType, QVariant, QVariant, QVariantMap ) ),
+        SLOT( infoSystemInfo( QString, Tomahawk::InfoSystem::InfoType, QVariant, QVariant, QVariantMap ) ) );
 
     connect( Tomahawk::InfoSystem::InfoSystem::instance(), SIGNAL( finished( QString ) ), SLOT( infoSystemFinished( QString ) ) );
 
@@ -220,12 +220,12 @@ AudioControls::onPlaybackStarted( const Tomahawk::result_ptr& result )
 
     Tomahawk::InfoSystem::InfoSystem::instance()->getInfo(
         s_acInfoIdentifier, Tomahawk::InfoSystem::InfoAlbumCoverArt,
-        QVariant::fromValue< Tomahawk::InfoSystem::InfoCriteriaHash >( trackInfo ), Tomahawk::InfoSystem::InfoCustomData() );
+        QVariant::fromValue< Tomahawk::InfoSystem::InfoCriteriaHash >( trackInfo ), QVariantMap() );
 }
 
 
 void
-AudioControls::infoSystemInfo( QString caller, Tomahawk::InfoSystem::InfoType type, QVariant input, QVariant output, Tomahawk::InfoSystem::InfoCustomData customData )
+AudioControls::infoSystemInfo( QString caller, Tomahawk::InfoSystem::InfoType type, QVariant input, QVariant output, QVariantMap customData )
 {
     Q_UNUSED( input );
     Q_UNUSED( customData );
@@ -243,13 +243,13 @@ AudioControls::infoSystemInfo( QString caller, Tomahawk::InfoSystem::InfoType ty
         return;
     }
 
-    if ( !output.canConvert< Tomahawk::InfoSystem::InfoCustomData >() )
+    if ( !output.canConvert< QVariantMap >() )
     {
         qDebug() << "Cannot convert fetched art from a QByteArray";
         return;
     }
 
-    Tomahawk::InfoSystem::InfoCustomData returnedData = output.value< Tomahawk::InfoSystem::InfoCustomData >();
+    QVariantMap returnedData = output.value< QVariantMap >();
     const QByteArray ba = returnedData["imgbytes"].toByteArray();
     if ( ba.length() )
     {

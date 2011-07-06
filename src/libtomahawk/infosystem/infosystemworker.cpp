@@ -87,23 +87,23 @@ InfoSystemWorker::init( QWeakPointer< Tomahawk::InfoSystem::InfoSystemCache> cac
     {
         connect(
                 plugin.data(),
-                SIGNAL( info( QString, Tomahawk::InfoSystem::InfoType, QVariant, QVariant, Tomahawk::InfoSystem::InfoCustomData ) ),
+                SIGNAL( info( QString, Tomahawk::InfoSystem::InfoType, QVariant, QVariant, QVariantMap ) ),
                 InfoSystem::instance(),
-                SLOT( infoSlot( QString, Tomahawk::InfoSystem::InfoType, QVariant, QVariant, Tomahawk::InfoSystem::InfoCustomData ) ),
+                SLOT( infoSlot( QString, Tomahawk::InfoSystem::InfoType, QVariant, QVariant, QVariantMap ) ),
                 Qt::UniqueConnection
             );
 
         connect(
                 plugin.data(),
-                SIGNAL( getCachedInfo( Tomahawk::InfoSystem::InfoCriteriaHash, qint64, QString, Tomahawk::InfoSystem::InfoType, QVariant, Tomahawk::InfoSystem::InfoCustomData ) ),
+                SIGNAL( getCachedInfo( Tomahawk::InfoSystem::InfoCriteriaHash, qint64, QString, Tomahawk::InfoSystem::InfoType, QVariant, QVariantMap ) ),
                 cache.data(),
-                SLOT( getCachedInfoSlot( Tomahawk::InfoSystem::InfoCriteriaHash, qint64, QString, Tomahawk::InfoSystem::InfoType, QVariant, Tomahawk::InfoSystem::InfoCustomData ) )
+                SLOT( getCachedInfoSlot( Tomahawk::InfoSystem::InfoCriteriaHash, qint64, QString, Tomahawk::InfoSystem::InfoType, QVariant, QVariantMap ) )
             );
         connect(
                 cache.data(),
-                SIGNAL( notInCache( Tomahawk::InfoSystem::InfoCriteriaHash, QString, Tomahawk::InfoSystem::InfoType, QVariant, Tomahawk::InfoSystem::InfoCustomData ) ),
+                SIGNAL( notInCache( Tomahawk::InfoSystem::InfoCriteriaHash, QString, Tomahawk::InfoSystem::InfoType, QVariant, QVariantMap ) ),
                 plugin.data(),
-                SLOT( notInCacheSlot( Tomahawk::InfoSystem::InfoCriteriaHash, QString, Tomahawk::InfoSystem::InfoType, QVariant, Tomahawk::InfoSystem::InfoCustomData ) )
+                SLOT( notInCacheSlot( Tomahawk::InfoSystem::InfoCriteriaHash, QString, Tomahawk::InfoSystem::InfoType, QVariant, QVariantMap ) )
             );
         connect(
                 plugin.data(),
@@ -147,7 +147,7 @@ InfoSystemWorker::determineOrderedMatches( const InfoType type ) const
 
 
 void
-InfoSystemWorker::getInfo( QString caller, InfoType type, QVariant input, InfoCustomData customData )
+InfoSystemWorker::getInfo( QString caller, InfoType type, QVariant input, QVariantMap customData )
 {
     qDebug() << Q_FUNC_INFO;
     QLinkedList< InfoPluginPtr > providers = determineOrderedMatches(type);
@@ -164,7 +164,7 @@ InfoSystemWorker::getInfo( QString caller, InfoType type, QVariant input, InfoCu
         return;
     }
 
-    QMetaObject::invokeMethod( ptr.data(), "getInfo", Qt::QueuedConnection, Q_ARG( QString, caller ), Q_ARG( Tomahawk::InfoSystem::InfoType, type ), Q_ARG( QVariant, input ), Q_ARG( Tomahawk::InfoSystem::InfoCustomData, customData ) );
+    QMetaObject::invokeMethod( ptr.data(), "getInfo", Qt::QueuedConnection, Q_ARG( QString, caller ), Q_ARG( Tomahawk::InfoSystem::InfoType, type ), Q_ARG( QVariant, input ), Q_ARG( QVariantMap, customData ) );
 }
 
 

@@ -44,8 +44,8 @@ AlbumModel::AlbumModel( QObject* parent )
                      .scaled( QSize( 120, 120 ), Qt::IgnoreAspectRatio, Qt::SmoothTransformation );
 
     connect( Tomahawk::InfoSystem::InfoSystem::instance(),
-             SIGNAL( info( QString, Tomahawk::InfoSystem::InfoType, QVariant, QVariant, Tomahawk::InfoSystem::InfoCustomData ) ),
-               SLOT( infoSystemInfo( QString, Tomahawk::InfoSystem::InfoType, QVariant, QVariant, Tomahawk::InfoSystem::InfoCustomData ) ) );
+             SIGNAL( info( QString, Tomahawk::InfoSystem::InfoType, QVariant, QVariant, QVariantMap ) ),
+               SLOT( infoSystemInfo( QString, Tomahawk::InfoSystem::InfoType, QVariant, QVariant, QVariantMap ) ) );
 
     connect( Tomahawk::InfoSystem::InfoSystem::instance(), SIGNAL( finished( QString ) ), SLOT( infoSystemFinished( QString ) ) );
 }
@@ -311,7 +311,7 @@ AlbumModel::onAlbumsAdded( const QList<Tomahawk::album_ptr>& albums )
 
 
 void
-AlbumModel::infoSystemInfo( QString caller, Tomahawk::InfoSystem::InfoType type, QVariant input, QVariant output, Tomahawk::InfoSystem::InfoCustomData customData )
+AlbumModel::infoSystemInfo( QString caller, Tomahawk::InfoSystem::InfoType type, QVariant input, QVariant output, QVariantMap customData )
 {
     Q_UNUSED( customData );
     qDebug() << Q_FUNC_INFO << " with caller " << caller;
@@ -323,14 +323,14 @@ AlbumModel::infoSystemInfo( QString caller, Tomahawk::InfoSystem::InfoType type,
         return;
     }
 
-    if ( !output.canConvert< Tomahawk::InfoSystem::InfoCustomData >() )
+    if ( !output.canConvert< QVariantMap >() )
     {
         qDebug() << "Cannot convert fetched art from a QByteArray";
         return;
     }
 
     Tomahawk::InfoSystem::InfoCriteriaHash pptr = input.value< Tomahawk::InfoSystem::InfoCriteriaHash >();
-    Tomahawk::InfoSystem::InfoCustomData returnedData = output.value< Tomahawk::InfoSystem::InfoCustomData >();
+    QVariantMap returnedData = output.value< QVariantMap >();
     const QByteArray ba = returnedData["imgbytes"].toByteArray();
     if ( ba.length() )
     {

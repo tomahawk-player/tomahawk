@@ -47,8 +47,8 @@ TreeModel::TreeModel( QObject* parent )
     connect( AudioEngine::instance(), SIGNAL( stopped() ), SLOT( onPlaybackStopped() ), Qt::DirectConnection );
 
     connect( Tomahawk::InfoSystem::InfoSystem::instance(),
-             SIGNAL( info( QString, Tomahawk::InfoSystem::InfoType, QVariant, QVariant, Tomahawk::InfoSystem::InfoCustomData ) ),
-               SLOT( infoSystemInfo( QString, Tomahawk::InfoSystem::InfoType, QVariant, QVariant, Tomahawk::InfoSystem::InfoCustomData ) ) );
+             SIGNAL( info( QString, Tomahawk::InfoSystem::InfoType, QVariant, QVariant, QVariantMap ) ),
+               SLOT( infoSystemInfo( QString, Tomahawk::InfoSystem::InfoType, QVariant, QVariant, QVariantMap ) ) );
 
     connect( Tomahawk::InfoSystem::InfoSystem::instance(), SIGNAL( finished( QString ) ), SLOT( infoSystemFinished( QString ) ) );
 }
@@ -544,7 +544,7 @@ TreeModel::onAlbumsAdded( const QList<Tomahawk::album_ptr>& albums, const QVaria
 
         Tomahawk::InfoSystem::InfoSystem::instance()->getInfo(
             s_tmInfoIdentifier, Tomahawk::InfoSystem::InfoAlbumCoverArt,
-            QVariant::fromValue< Tomahawk::InfoSystem::InfoCriteriaHash >( trackInfo ), Tomahawk::InfoSystem::InfoCustomData() );
+            QVariant::fromValue< Tomahawk::InfoSystem::InfoCriteriaHash >( trackInfo ), QVariantMap() );
     }
 
     if ( !parent.isValid() || crows.second > 0 )
@@ -600,7 +600,7 @@ TreeModel::onTracksAdded( const QList<Tomahawk::query_ptr>& tracks, const QVaria
 
 
 void
-TreeModel::infoSystemInfo( QString caller, Tomahawk::InfoSystem::InfoType type, QVariant input, QVariant output, Tomahawk::InfoSystem::InfoCustomData customData )
+TreeModel::infoSystemInfo( QString caller, Tomahawk::InfoSystem::InfoType type, QVariant input, QVariant output, QVariantMap customData )
 {
     Q_UNUSED( customData );
     qDebug() << Q_FUNC_INFO;
@@ -612,14 +612,14 @@ TreeModel::infoSystemInfo( QString caller, Tomahawk::InfoSystem::InfoType type, 
         return;
     }
 
-    if ( !output.canConvert< Tomahawk::InfoSystem::InfoCustomData >() )
+    if ( !output.canConvert< QVariantMap >() )
     {
         qDebug() << "Cannot convert fetched art from a QByteArray";
         return;
     }
 
     Tomahawk::InfoSystem::InfoCriteriaHash pptr = input.value< Tomahawk::InfoSystem::InfoCriteriaHash >();
-    Tomahawk::InfoSystem::InfoCustomData returnedData = output.value< Tomahawk::InfoSystem::InfoCustomData >();
+    QVariantMap returnedData = output.value< QVariantMap >();
     const QByteArray ba = returnedData["imgbytes"].toByteArray();
     qDebug() << "ba.length = " << ba.length();
     if ( ba.length() )

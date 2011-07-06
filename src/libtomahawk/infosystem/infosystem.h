@@ -109,7 +109,6 @@ enum InfoType { // as items are saved in cache, mark them here to not change the
 
 typedef QMap< InfoType, QVariant > InfoTypeMap;
 typedef QMap< QString, QMap< QString, QString > > InfoGenericMap;
-typedef QHash< QString, QVariant > InfoCustomData;
 typedef QHash< QString, QString > InfoCriteriaHash;
 
 class DLLEXPORT InfoPlugin : public QObject
@@ -125,15 +124,15 @@ public:
     QSet< InfoType > supportedPushTypes() const { return m_supportedPushTypes; }
 
 signals:
-    void getCachedInfo( Tomahawk::InfoSystem::InfoCriteriaHash criteria, qint64 newMaxAge, QString caller, Tomahawk::InfoSystem::InfoType type, QVariant input, Tomahawk::InfoSystem::InfoCustomData customData );
+    void getCachedInfo( Tomahawk::InfoSystem::InfoCriteriaHash criteria, qint64 newMaxAge, QString caller, Tomahawk::InfoSystem::InfoType type, QVariant input, QVariantMap customData );
     void updateCache( Tomahawk::InfoSystem::InfoCriteriaHash criteria, qint64, Tomahawk::InfoSystem::InfoType type, QVariant output );
-    void info( QString caller, Tomahawk::InfoSystem::InfoType type, QVariant input, QVariant output, Tomahawk::InfoSystem::InfoCustomData customData );
+    void info( QString caller, Tomahawk::InfoSystem::InfoType type, QVariant input, QVariant output, QVariantMap customData );
     void finished( QString, Tomahawk::InfoSystem::InfoType );
 
 protected slots:
-    virtual void getInfo( const QString caller, const Tomahawk::InfoSystem::InfoType type, const QVariant data, const Tomahawk::InfoSystem::InfoCustomData customData ) = 0;
+    virtual void getInfo( const QString caller, const Tomahawk::InfoSystem::InfoType type, const QVariant data, const QVariantMap customData ) = 0;
     virtual void pushInfo( const QString caller, const Tomahawk::InfoSystem::InfoType type, const QVariant data ) = 0;
-    virtual void notInCacheSlot( const Tomahawk::InfoSystem::InfoCriteriaHash criteria, const QString caller, const Tomahawk::InfoSystem::InfoType type, const QVariant input, const Tomahawk::InfoSystem::InfoCustomData customData ) = 0;
+    virtual void notInCacheSlot( const Tomahawk::InfoSystem::InfoCriteriaHash criteria, const QString caller, const Tomahawk::InfoSystem::InfoType type, const QVariant input, const QVariantMap customData ) = 0;
 
     virtual void namChangedSlot( QNetworkAccessManager *nam ) = 0;
     
@@ -158,17 +157,17 @@ public:
     InfoSystem( QObject *parent );
     ~InfoSystem();
 
-    void getInfo( const QString &caller, const InfoType type, const QVariant &input, InfoCustomData customData );
-    void getInfo( const QString &caller, const InfoTypeMap &input, InfoCustomData customData );
+    void getInfo( const QString &caller, const InfoType type, const QVariant &input, QVariantMap customData );
+    void getInfo( const QString &caller, const InfoTypeMap &input, QVariantMap customData );
     void pushInfo( const QString &caller, const InfoType type, const QVariant &input );
     void pushInfo( const QString &caller, const InfoTypeMap &input );
 
 signals:
-    void info( QString caller, Tomahawk::InfoSystem::InfoType, QVariant input, QVariant output, Tomahawk::InfoSystem::InfoCustomData customData );
+    void info( QString caller, Tomahawk::InfoSystem::InfoType, QVariant input, QVariant output, QVariantMap customData );
     void finished( QString target );
 
 public slots:
-    void infoSlot( const QString target, const Tomahawk::InfoSystem::InfoType type, const QVariant input, const QVariant output, const Tomahawk::InfoSystem::InfoCustomData customData );
+    void infoSlot( const QString target, const Tomahawk::InfoSystem::InfoType type, const QVariant input, const QVariant output, const QVariantMap customData );
 
     void newNam() const;
 
@@ -206,7 +205,6 @@ inline uint qHash( Tomahawk::InfoSystem::InfoCriteriaHash hash )
 }
 
 Q_DECLARE_METATYPE( Tomahawk::InfoSystem::InfoGenericMap );
-Q_DECLARE_METATYPE( Tomahawk::InfoSystem::InfoCustomData );
 Q_DECLARE_METATYPE( Tomahawk::InfoSystem::InfoCriteriaHash );
 Q_DECLARE_METATYPE( QWeakPointer< Tomahawk::InfoSystem::InfoSystemCache > );
 

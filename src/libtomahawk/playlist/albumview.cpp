@@ -164,7 +164,7 @@ AlbumView::onScrollTimeout()
 
             Tomahawk::InfoSystem::InfoSystem::instance()->getInfo(
                 s_tmInfoIdentifier, Tomahawk::InfoSystem::InfoAlbumCoverArt,
-                QVariant::fromValue< Tomahawk::InfoSystem::InfoCriteriaHash >( trackInfo ), Tomahawk::InfoSystem::InfoCustomData() );
+                QVariant::fromValue< Tomahawk::InfoSystem::InfoCriteriaHash >( trackInfo ), QVariantMap() );
         }
     }
 }

@@ -97,7 +97,7 @@ AdiumPlugin::settingsChanged()
 }
 
 void
-AdiumPlugin::getInfo( const QString caller, const InfoType type, const QVariant data, InfoCustomData customData )
+AdiumPlugin::getInfo( const QString caller, const InfoType type, const QVariant data, QVariantMap customData )
 {
     switch (type)
     {
