@@ -358,7 +358,7 @@ LastFmPlugin::fetchArtistImages( uint requestId, const QString &caller, const In
 void
 LastFmPlugin::notInCacheSlot( uint requestId, const QHash<QString, QString> criteria, const QString caller, const Tomahawk::InfoSystem::InfoType type, const QVariant input, const QVariantMap customData )
 {
-    qDebug() << Q_FUNC_INFO;
+    qDebug() << Q_FUNC_INFO << " for requestId " << requestId;
 
     if ( !lastfm::nam() )
     {
@@ -476,7 +476,7 @@ LastFmPlugin::similarArtistsReturned()
     InfoCriteriaHash origData = reply->property( "origData" ).value< Tomahawk::InfoSystem::InfoCriteriaHash >();
     Tomahawk::InfoSystem::InfoCriteriaHash criteria;
     criteria["artist"] = origData["artist"];
-//    emit updateCache( criteria, 2419200000, type, returnedData );
+    emit updateCache( criteria, 2419200000, type, returnedData );
 }
 
 
@@ -509,7 +509,7 @@ LastFmPlugin::topTracksReturned()
     InfoCriteriaHash origData = reply->property( "origData" ).value< Tomahawk::InfoSystem::InfoCriteriaHash >();
     Tomahawk::InfoSystem::InfoCriteriaHash criteria;
     criteria["artist"] = origData["artist"];
-    //emit updateCache( criteria, 2419200000, type, returnedData );
+    emit updateCache( criteria, 2419200000, type, returnedData );
 }
 
 

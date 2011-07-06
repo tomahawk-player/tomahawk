@@ -180,7 +180,7 @@ InfoSystemWorker::getInfo( QString caller, InfoType type, QVariant input, QVaria
         qint64 currMs = QDateTime::currentMSecsSinceEpoch();
         m_timeRequestMapper.insert( currMs + timeoutMillis, requestId );
     }
-    qDebug() << "assigning request with requestId " << requestId;
+    qDebug() << "assigning request with requestId " << requestId << " and type " << type;
     m_dataTracker[ caller ][ type ] = m_dataTracker[ caller ][ type ] + 1;
     qDebug() << "current count in dataTracker for type" << type << "is" << m_dataTracker[ caller ][ type ];
 

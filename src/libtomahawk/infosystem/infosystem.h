@@ -75,8 +75,8 @@ enum InfoType { // as items are saved in cache, mark them here to not change the
     InfoArtistNews = 29,
     InfoArtistProfile = 30,
     InfoArtistReviews = 31,
-    InfoArtistSongs = 32,
-    InfoArtistSimilars = 33,
+    InfoArtistSongs = 32, //cached -- do not change
+    InfoArtistSimilars = 33, //cached -- do not change
     InfoArtistTerms = 34,
     InfoArtistLinks = 35,
     InfoArtistVideos = 36,
