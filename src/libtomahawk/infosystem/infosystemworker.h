@@ -37,13 +37,7 @@ namespace Tomahawk {
 
 namespace InfoSystem {
 
-struct SavedRequestData {
-    QString caller;
-    Tomahawk::InfoSystem::InfoType type;
-    QVariant input;
-    QVariantMap customData;
-};
-    
+   
 class DLLEXPORT InfoSystemWorker : public QObject
 {
     Q_OBJECT
@@ -80,7 +74,7 @@ private:
     QHash< QString, QHash< InfoType, int > > m_dataTracker;
     QMultiMap< qint64, uint > m_timeRequestMapper;
     QHash< uint, bool > m_requestSatisfiedMap;
-    QHash< uint, SavedRequestData* > m_savedRequestMap; 
+    QHash< uint, InfoRequestData* > m_savedRequestMap;
     
     QLinkedList< InfoPluginPtr > determineOrderedMatches( const InfoType type ) const;
     

@@ -107,6 +107,13 @@ enum InfoType { // as items are saved in cache, mark them here to not change the
     InfoNotifyUser = 55
 };
 
+struct InfoRequestData {
+    QString caller;
+    Tomahawk::InfoSystem::InfoType type;
+    QVariant input;
+    QVariantMap customData;
+};
+
 typedef QMap< InfoType, QVariant > InfoTypeMap;
 typedef QMap< InfoType, uint > InfoTimeoutMap;
 typedef QMap< QString, QMap< QString, QString > > InfoGenericMap;

@@ -184,7 +184,7 @@ InfoSystemWorker::getInfo( QString caller, InfoType type, QVariant input, QVaria
     m_dataTracker[ caller ][ type ] = m_dataTracker[ caller ][ type ] + 1;
     qDebug() << "current count in dataTracker for type" << type << "is" << m_dataTracker[ caller ][ type ];
 
-    SavedRequestData* data = new SavedRequestData;
+    InfoRequestData* data = new InfoRequestData;
     data->caller = caller;
     data->type = type;
     data->input = input;
@@ -271,7 +271,7 @@ InfoSystemWorker::checkTimeoutsTimerFired()
 
                 //doh, timed out
                 qDebug() << Q_FUNC_INFO << " doh, timed out for requestId " << requestId;
-                SavedRequestData *savedData = m_savedRequestMap[ requestId ];
+                InfoRequestData *savedData = m_savedRequestMap[ requestId ];
                 QString target = savedData->caller;
                 InfoType type = savedData->type;
                 emit info( target, type, savedData->input, QVariant(), savedData->customData );
