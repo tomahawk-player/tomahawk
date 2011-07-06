@@ -48,16 +48,23 @@ public:
     QNetworkAccessManager* nam() const;
     
 signals:
-    void info( uint requestId, QString target, Tomahawk::InfoSystem::InfoType, QVariant input, QVariant output, QVariantMap customData );
+    void info( QString target, Tomahawk::InfoSystem::InfoType, QVariant input, QVariant output, QVariantMap customData );
+    void finished( QString target );
+    
     void namChanged( QNetworkAccessManager* );
 
 public slots:
     void init( QWeakPointer< Tomahawk::InfoSystem::InfoSystemCache > cache );
-    void getInfo( uint requestId, const QString caller, const Tomahawk::InfoSystem::InfoType type, const QVariant input, const QVariantMap customData );
+    void getInfo( const QString caller, const Tomahawk::InfoSystem::InfoType type, const QVariant input, const QVariantMap customData );
     void pushInfo( const QString caller, const Tomahawk::InfoSystem::InfoType type, const QVariant input );
+
+    void infoSlot( uint requestId, const QString target, const Tomahawk::InfoSystem::InfoType type, const QVariant input, const QVariant output, const QVariantMap customData );
+    
     void newNam();
     
 private:
+    QHash< QString, QHash< InfoType, int > > m_dataTracker;
+    
     QLinkedList< InfoPluginPtr > determineOrderedMatches( const InfoType type ) const;
     
     // For now, statically instantiate plugins; this is just somewhere to keep them
@@ -67,6 +74,8 @@ private:
     QMap< InfoType, QLinkedList< InfoPluginPtr > > m_infoPushMap;
 
     QWeakPointer< QNetworkAccessManager> m_nam;
+
+    uint m_nextRequest;
 };
 
 }

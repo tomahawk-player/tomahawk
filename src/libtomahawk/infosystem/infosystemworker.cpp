@@ -42,6 +42,8 @@ namespace InfoSystem
 {
 
 InfoSystemWorker::InfoSystemWorker()
+    : QObject()
+    , m_nextRequest( 0 )
 {
     qDebug() << Q_FUNC_INFO;
 }
@@ -88,7 +90,7 @@ InfoSystemWorker::init( QWeakPointer< Tomahawk::InfoSystem::InfoSystemCache> cac
         connect(
                 plugin.data(),
                 SIGNAL( info( uint, QString, Tomahawk::InfoSystem::InfoType, QVariant, QVariant, QVariantMap ) ),
-                InfoSystem::instance(),
+                this,
                 SLOT( infoSlot( uint, QString, Tomahawk::InfoSystem::InfoType, QVariant, QVariant, QVariantMap ) ),
                 Qt::UniqueConnection
             );
@@ -147,24 +149,29 @@ InfoSystemWorker::determineOrderedMatches( const InfoType type ) const
 
 
 void
-InfoSystemWorker::getInfo( uint requestId, QString caller, InfoType type, QVariant input, QVariantMap customData )
+InfoSystemWorker::getInfo( QString caller, InfoType type, QVariant input, QVariantMap customData )
 {
     qDebug() << Q_FUNC_INFO;
-    QLinkedList< InfoPluginPtr > providers = determineOrderedMatches(type);
+    QLinkedList< InfoPluginPtr > providers = determineOrderedMatches( type );
     if ( providers.isEmpty() )
     {
-        emit info( requestId, caller, type, QVariant(), QVariant(), customData );
+        emit info( caller, type, QVariant(), QVariant(), customData );
         return;
     }
 
     InfoPluginPtr ptr = providers.first();
     if ( !ptr )
     {
-        emit info( requestId, caller, type, QVariant(), QVariant(), customData );
+        emit info( caller, type, QVariant(), QVariant(), customData );
         return;
     }
 
-    QMetaObject::invokeMethod( ptr.data(), "getInfo", Qt::QueuedConnection, Q_ARG( uint, requestId ), Q_ARG( QString, caller ), Q_ARG( Tomahawk::InfoSystem::InfoType, type ), Q_ARG( QVariant, input ), Q_ARG( QVariantMap, customData ) );
+    uint requestnum = ++m_nextRequest;
+    qDebug() << "assigning request with requestId " << requestnum;
+    m_dataTracker[ caller ][ type ] = m_dataTracker[ caller ][ type ] + 1;
+    qDebug() << "current count in dataTracker for type" << type << "is" << m_dataTracker[ caller ][ type ];
+
+    QMetaObject::invokeMethod( ptr.data(), "getInfo", Qt::QueuedConnection, Q_ARG( uint, requestnum ), Q_ARG( QString, caller ), Q_ARG( Tomahawk::InfoSystem::InfoType, type ), Q_ARG( QVariant, input ), Q_ARG( QVariantMap, customData ) );
 }
 
 
@@ -178,6 +185,33 @@ InfoSystemWorker::pushInfo( const QString caller, const InfoType type, const QVa
         if( ptr )
             QMetaObject::invokeMethod( ptr.data(), "pushInfo", Qt::QueuedConnection, Q_ARG( QString, caller ), Q_ARG( Tomahawk::InfoSystem::InfoType, type ), Q_ARG( QVariant, input ) );
     }
+}
+
+
+void
+InfoSystemWorker::infoSlot( uint requestId, QString target, InfoType type, QVariant input, QVariant output, QVariantMap customData )
+{
+    qDebug() << Q_FUNC_INFO << " with requestId " << requestId;
+    qDebug() << "current count in dataTracker for target " << target << " is " << m_dataTracker[ target ][ type ];
+    if ( m_dataTracker[ target ][ type ] == 0 )
+    {
+        qDebug() << "Caller was not waiting for that type of data!";
+        return;
+    }
+    emit info( target, type, input, output, customData );
+    
+    m_dataTracker[ target ][ type ] = m_dataTracker[ target ][ type ] - 1;
+    qDebug() << "current count in dataTracker for target " << target << " is " << m_dataTracker[ target ][ type ];
+    Q_FOREACH( InfoType testtype, m_dataTracker[ target ].keys() )
+    {
+        if ( m_dataTracker[ target ][ testtype ] != 0)
+        {
+            qDebug() << "found outstanding request of type" << testtype;
+            return;
+        }
+    }
+    qDebug() << "emitting finished with target" << target;
+    emit finished( target );
 }
 
 
@@ -234,7 +268,6 @@ InfoSystemWorker::newNam()
 
     //FIXME: Currently leaking nam/proxyfactory above -- how to change in a thread-safe way?
 }
-
 
 } //namespace InfoSystem
 

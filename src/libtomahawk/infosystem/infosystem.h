@@ -163,23 +163,17 @@ public:
     void pushInfo( const QString &caller, const InfoTypeMap &input );
 
 signals:
-    void info( QString caller, Tomahawk::InfoSystem::InfoType, QVariant input, QVariant output, QVariantMap customData );
+    void info( QString target, Tomahawk::InfoSystem::InfoType, QVariant input, QVariant output, QVariantMap customData );
     void finished( QString target );
 
 public slots:
-    void infoSlot( uint requestId, const QString target, const Tomahawk::InfoSystem::InfoType type, const QVariant input, const QVariant output, const QVariantMap customData );
-
     void newNam() const;
 
 private:
-    QHash< QString, QHash< InfoType, int > > m_dataTracker;
-
     QWeakPointer< InfoSystemCache > m_cache;
     QWeakPointer< InfoSystemWorker > m_worker;
     QThread* m_infoSystemCacheThreadController;
     QThread* m_infoSystemWorkerThreadController;
-
-    uint m_nextRequest;
 
     static InfoSystem* s_instance;
 };
