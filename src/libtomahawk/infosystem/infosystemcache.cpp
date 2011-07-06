@@ -84,7 +84,7 @@ InfoSystemCache::pruneTimerFired()
 
 
 void
-InfoSystemCache::getCachedInfoSlot( const Tomahawk::InfoSystem::InfoCriteriaHash criteria, const qint64 newMaxAge, const QString caller, const Tomahawk::InfoSystem::InfoType type, const QVariant input, const QVariantMap customData )
+InfoSystemCache::getCachedInfoSlot( uint requestId, const Tomahawk::InfoSystem::InfoCriteriaHash criteria, const qint64 newMaxAge, const QString caller, const Tomahawk::InfoSystem::InfoType type, const QVariant input, const QVariantMap customData )
 {
     qDebug() << Q_FUNC_INFO;
     const QString criteriaHashVal = criteriaMd5( criteria );
@@ -94,7 +94,7 @@ InfoSystemCache::getCachedInfoSlot( const Tomahawk::InfoSystem::InfoCriteriaHash
         if ( !fileLocationHash.isEmpty() )
         {
             //We already know of some values, so no need to re-read the directory again as it's already happened
-            emit notInCache( criteria, caller, type, input, customData );
+            emit notInCache( requestId, criteria, caller, type, input, customData );
             return;
         }
             
@@ -103,7 +103,7 @@ InfoSystemCache::getCachedInfoSlot( const Tomahawk::InfoSystem::InfoCriteriaHash
         if ( !dir.exists() )
         {
             //Dir doesn't exist so clearly not in cache
-            emit notInCache( criteria, caller, type, input, customData );
+            emit notInCache( requestId, criteria, caller, type, input, customData );
             return;
         }
         
@@ -119,7 +119,7 @@ InfoSystemCache::getCachedInfoSlot( const Tomahawk::InfoSystem::InfoCriteriaHash
         if ( !fileLocationHash.contains( criteriaHashVal ) )
         {
             //Still didn't fine it? It's really not in the cache then
-            emit notInCache( criteria, caller, type, input, customData );
+            emit notInCache( requestId, criteria, caller, type, input, customData );
             return;
         }
     }
@@ -138,7 +138,7 @@ InfoSystemCache::getCachedInfoSlot( const Tomahawk::InfoSystem::InfoCriteriaHash
         m_fileLocationCache[type] = fileLocationHash;
         m_dataCache.remove( criteriaHashVal );
         
-        emit notInCache( criteria, caller, type, input, customData );
+        emit notInCache( requestId, criteria, caller, type, input, customData );
         return;
     }
     else if ( newMaxAge > 0 )
@@ -148,7 +148,7 @@ InfoSystemCache::getCachedInfoSlot( const Tomahawk::InfoSystem::InfoCriteriaHash
         if ( !QFile::rename( file.canonicalFilePath(), newFilePath ) )
         {
             qDebug() << "Failed to move old cache file to new location!";
-            emit notInCache( criteria, caller, type, input, customData );
+            emit notInCache( requestId, criteria, caller, type, input, customData );
             return;
         }
         
@@ -162,11 +162,11 @@ InfoSystemCache::getCachedInfoSlot( const Tomahawk::InfoSystem::InfoCriteriaHash
         QVariant output = cachedSettings.value( "data" );
         m_dataCache.insert( criteriaHashVal, new QVariant( output ) );
         
-        emit info( caller, type, input, output, customData );
+        emit info( requestId, caller, type, input, output, customData );
     }
     else
     {
-        emit info( caller, type, input, QVariant( *(m_dataCache[criteriaHashVal]) ), customData );
+        emit info( requestId, caller, type, input, QVariant( *(m_dataCache[criteriaHashVal]) ), customData );
     }
 }
 

@@ -43,11 +43,11 @@ public:
     virtual ~InfoSystemCache();
 
 signals:
-    void notInCache( Tomahawk::InfoSystem::InfoCriteriaHash criteria, QString caller, Tomahawk::InfoSystem::InfoType type, QVariant input, QVariantMap customData );
-    void info( QString caller, Tomahawk::InfoSystem::InfoType type, QVariant input, QVariant output, QVariantMap customData );
+    void notInCache( uint requestId, Tomahawk::InfoSystem::InfoCriteriaHash criteria, QString caller, Tomahawk::InfoSystem::InfoType type, QVariant input, QVariantMap customData );
+    void info( uint requestId, QString caller, Tomahawk::InfoSystem::InfoType type, QVariant input, QVariant output, QVariantMap customData );
 
 public slots:
-    void getCachedInfoSlot( const Tomahawk::InfoSystem::InfoCriteriaHash criteria, const qint64 newMaxAge, const QString caller, const Tomahawk::InfoSystem::InfoType type, const QVariant input, const QVariantMap customData );
+    void getCachedInfoSlot( uint requestId, const Tomahawk::InfoSystem::InfoCriteriaHash criteria, const qint64 newMaxAge, const QString caller, const Tomahawk::InfoSystem::InfoType type, const QVariant input, const QVariantMap customData );
     void updateCacheSlot( const Tomahawk::InfoSystem::InfoCriteriaHash criteria, const qint64 maxAge, const Tomahawk::InfoSystem::InfoType type, const QVariant output );
 
 private slots:

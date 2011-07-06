@@ -124,15 +124,15 @@ public:
     QSet< InfoType > supportedPushTypes() const { return m_supportedPushTypes; }
 
 signals:
-    void getCachedInfo( Tomahawk::InfoSystem::InfoCriteriaHash criteria, qint64 newMaxAge, QString caller, Tomahawk::InfoSystem::InfoType type, QVariant input, QVariantMap customData );
+    void getCachedInfo( uint requestId, Tomahawk::InfoSystem::InfoCriteriaHash criteria, qint64 newMaxAge, QString caller, Tomahawk::InfoSystem::InfoType type, QVariant input, QVariantMap customData );
+    void info( uint requestId, QString caller, Tomahawk::InfoSystem::InfoType type, QVariant input, QVariant output, QVariantMap customData );
+
     void updateCache( Tomahawk::InfoSystem::InfoCriteriaHash criteria, qint64, Tomahawk::InfoSystem::InfoType type, QVariant output );
-    void info( QString caller, Tomahawk::InfoSystem::InfoType type, QVariant input, QVariant output, QVariantMap customData );
-    void finished( QString, Tomahawk::InfoSystem::InfoType );
 
 protected slots:
-    virtual void getInfo( const QString caller, const Tomahawk::InfoSystem::InfoType type, const QVariant data, const QVariantMap customData ) = 0;
+    virtual void getInfo( uint requestId, const QString caller, const Tomahawk::InfoSystem::InfoType type, const QVariant data, const QVariantMap customData ) = 0;
     virtual void pushInfo( const QString caller, const Tomahawk::InfoSystem::InfoType type, const QVariant data ) = 0;
-    virtual void notInCacheSlot( const Tomahawk::InfoSystem::InfoCriteriaHash criteria, const QString caller, const Tomahawk::InfoSystem::InfoType type, const QVariant input, const QVariantMap customData ) = 0;
+    virtual void notInCacheSlot( uint requestId, const Tomahawk::InfoSystem::InfoCriteriaHash criteria, const QString caller, const Tomahawk::InfoSystem::InfoType type, const QVariant input, const QVariantMap customData ) = 0;
 
     virtual void namChangedSlot( QNetworkAccessManager *nam ) = 0;
     
@@ -167,7 +167,7 @@ signals:
     void finished( QString target );
 
 public slots:
-    void infoSlot( const QString target, const Tomahawk::InfoSystem::InfoType type, const QVariant input, const QVariant output, const QVariantMap customData );
+    void infoSlot( uint requestId, const QString target, const Tomahawk::InfoSystem::InfoType type, const QVariant input, const QVariant output, const QVariantMap customData );
 
     void newNam() const;
 
@@ -178,6 +178,8 @@ private:
     QWeakPointer< InfoSystemWorker > m_worker;
     QThread* m_infoSystemCacheThreadController;
     QThread* m_infoSystemWorkerThreadController;
+
+    uint m_nextRequest;
 
     static InfoSystem* s_instance;
 };

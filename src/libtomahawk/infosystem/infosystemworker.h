@@ -48,12 +48,12 @@ public:
     QNetworkAccessManager* nam() const;
     
 signals:
-    void info( QString target, Tomahawk::InfoSystem::InfoType, QVariant input, QVariant output, QVariantMap customData );
+    void info( uint requestId, QString target, Tomahawk::InfoSystem::InfoType, QVariant input, QVariant output, QVariantMap customData );
     void namChanged( QNetworkAccessManager* );
 
 public slots:
     void init( QWeakPointer< Tomahawk::InfoSystem::InfoSystemCache > cache );
-    void getInfo( const QString caller, const Tomahawk::InfoSystem::InfoType type, const QVariant input, const QVariantMap customData );
+    void getInfo( uint requestId, const QString caller, const Tomahawk::InfoSystem::InfoType type, const QVariant input, const QVariantMap customData );
     void pushInfo( const QString caller, const Tomahawk::InfoSystem::InfoType type, const QVariant input );
     void newNam();
     

@@ -66,37 +66,37 @@ EchoNestPlugin::namChangedSlot( QNetworkAccessManager *nam )
 }
 
 void
-EchoNestPlugin::getInfo(const QString caller, const Tomahawk::InfoSystem::InfoType type, const QVariant input, const QVariantMap customData)
+EchoNestPlugin::getInfo( uint requestId, const QString caller, const Tomahawk::InfoSystem::InfoType type, const QVariant input, const QVariantMap customData )
 {
-    switch (type)
+    switch ( type )
     {
         case Tomahawk::InfoSystem::InfoArtistBiography:
-            return getArtistBiography(caller, input, customData);
+            return getArtistBiography( requestId, caller, input, customData );
         case Tomahawk::InfoSystem::InfoArtistFamiliarity:
-            return getArtistFamiliarity(caller, input, customData);
+            return getArtistFamiliarity( requestId, caller, input, customData );
         case Tomahawk::InfoSystem::InfoArtistHotttness:
-            return getArtistHotttnesss(caller, input, customData);
+            return getArtistHotttnesss( requestId, caller, input, customData );
         case Tomahawk::InfoSystem::InfoArtistTerms:
-            return getArtistTerms(caller, input, customData);
+            return getArtistTerms( requestId, caller, input, customData );
         case Tomahawk::InfoSystem::InfoTrackEnergy:
-            return getSongProfile(caller, input, customData, "energy");
+            return getSongProfile( requestId, caller, input, customData, "energy" );
         case Tomahawk::InfoSystem::InfoMiscTopTerms:
-            return getMiscTopTerms(caller, input, customData);
+            return getMiscTopTerms( requestId, caller, input, customData );
         default:
         {
-            emit info(caller, Tomahawk::InfoSystem::InfoNoInfo, QVariant(), QVariant(), customData);
+            emit info( requestId, caller, Tomahawk::InfoSystem::InfoNoInfo, QVariant(), QVariant(), customData );
             return;
         }
     }
 }
 
 void
-EchoNestPlugin::getSongProfile(const QString &caller, const QVariant &input, const QVariantMap &customData, const QString &item)
+EchoNestPlugin::getSongProfile( uint requestId, const QString &caller, const QVariant &input, const QVariantMap &customData, const QString &item )
 {
     //WARNING: Totally not implemented yet
     Q_UNUSED( item );
     
-    if( !isValidTrackData( caller, input, customData ) )
+    if( !isValidTrackData( requestId, caller, input, customData ) )
         return;
 
 //     Track track( input.toString() );
@@ -108,9 +108,9 @@ EchoNestPlugin::getSongProfile(const QString &caller, const QVariant &input, con
 }
 
 void
-EchoNestPlugin::getArtistBiography(const QString &caller, const QVariant &input, const QVariantMap &customData)
+EchoNestPlugin::getArtistBiography( uint requestId, const QString &caller, const QVariant &input, const QVariantMap &customData )
 {
-    if( !isValidArtistData( caller, input, customData ) )
+    if( !isValidArtistData( requestId, caller, input, customData ) )
         return;
 
     Echonest::Artist artist( input.toString() );
@@ -119,62 +119,67 @@ EchoNestPlugin::getArtistBiography(const QString &caller, const QVariant &input,
     reply->setProperty( "input", input );
     reply->setProperty( "customData", customData );
     reply->setProperty( "caller", caller );
-    connect(reply, SIGNAL(finished()), SLOT(getArtistBiographySlot()));
+    reply->setProperty( "requestId", requestId );
+    connect( reply, SIGNAL( finished() ), SLOT( getArtistBiographySlot() ) );
 }
 
 void
-EchoNestPlugin::getArtistFamiliarity(const QString &caller, const QVariant &input, const QVariantMap &customData)
+EchoNestPlugin::getArtistFamiliarity( uint requestId, const QString &caller, const QVariant &input, const QVariantMap &customData )
 {
-    if( !isValidArtistData( caller, input, customData ) )
+    if( !isValidArtistData( requestId, caller, input, customData ) )
         return;
 
     qDebug() << "Fetching artist familiarity!" << input;
     Echonest::Artist artist( input.toString() );
     QNetworkReply* reply = artist.fetchFamiliarity();
-    reply->setProperty( "artist", QVariant::fromValue<Echonest::Artist>(artist));
+    reply->setProperty( "artist", QVariant::fromValue< Echonest::Artist >( artist ) );
     reply->setProperty( "input", input );
     reply->setProperty( "customData", customData );
     reply->setProperty( "caller", caller );
-    connect(reply, SIGNAL(finished()), SLOT(getArtistFamiliaritySlot()));
+    reply->setProperty( "requestId", requestId );
+    connect( reply, SIGNAL( finished() ), SLOT( getArtistFamiliaritySlot() ) );
 }
 
 void
-EchoNestPlugin::getArtistHotttnesss(const QString &caller, const QVariant &input, const QVariantMap &customData)
+EchoNestPlugin::getArtistHotttnesss( uint requestId, const QString &caller, const QVariant &input, const QVariantMap &customData )
 {
-    if( !isValidArtistData( caller, input, customData ) )
+    if( !isValidArtistData( requestId, caller, input, customData ) )
         return;
 
     Echonest::Artist artist( input.toString() );
     QNetworkReply* reply = artist.fetchHotttnesss();
-    reply->setProperty( "artist", QVariant::fromValue<Echonest::Artist>(artist));
+    reply->setProperty( "artist", QVariant::fromValue< Echonest::Artist >( artist ) );
     reply->setProperty( "input", input );
     reply->setProperty( "customData", customData );
     reply->setProperty( "caller", caller );
-    connect(reply, SIGNAL(finished()), SLOT(getArtistHotttnesssSlot()));
+    reply->setProperty( "requestId", requestId );
+    connect( reply, SIGNAL( finished() ), SLOT( getArtistHotttnesssSlot() ) );
 }
 
 void
-EchoNestPlugin::getArtistTerms(const QString &caller, const QVariant &input, const QVariantMap &customData)
+EchoNestPlugin::getArtistTerms( uint requestId, const QString &caller, const QVariant &input, const QVariantMap &customData )
 {
-    if( !isValidArtistData( caller, input, customData ) )
+    if( !isValidArtistData( requestId, caller, input, customData ) )
         return;
 
     Echonest::Artist artist( input.toString() );
     QNetworkReply* reply = artist.fetchTerms( Echonest::Artist::Weight );
-    reply->setProperty( "artist", QVariant::fromValue<Echonest::Artist>(artist));
+    reply->setProperty( "artist", QVariant::fromValue< Echonest::Artist >( artist ) );
     reply->setProperty( "input", input );
     reply->setProperty( "customData", customData );
     reply->setProperty( "caller", caller );
-    connect(reply, SIGNAL( finished() ), SLOT( getArtistTermsSlot() ) );
+    reply->setProperty( "requestId", requestId );
+    connect( reply, SIGNAL( finished() ), SLOT( getArtistTermsSlot() ) );
 }
 
 void
-EchoNestPlugin::getMiscTopTerms(const QString &caller, const QVariant &input, const QVariantMap& customData)
+EchoNestPlugin::getMiscTopTerms( uint requestId, const QString &caller, const QVariant &input, const QVariantMap& customData )
 {
     Q_UNUSED( input );
     QNetworkReply* reply = Echonest::Artist::topTerms( 20 );
     reply->setProperty( "customData", customData );
     reply->setProperty( "caller", caller );
+    reply->setProperty( "requestId", requestId );
     connect( reply, SIGNAL( finished() ), SLOT( getMiscTopSlot() ) );
 }
 
@@ -196,7 +201,8 @@ EchoNestPlugin::getArtistBiographySlot()
         biographyMap[biography.site()]["attribution"] = biography.license().url.toString();
 
     }
-    emit info( reply->property( "caller" ).toString(),
+    emit info( reply->property( "requestId" ).toUInt(),
+               reply->property( "caller" ).toString(),
                Tomahawk::InfoSystem::InfoArtistBiography,
                reply->property( "input" ),
                QVariant::fromValue< Tomahawk::InfoSystem::InfoGenericMap >( biographyMap ),
@@ -210,7 +216,8 @@ EchoNestPlugin::getArtistFamiliaritySlot()
     QNetworkReply* reply = qobject_cast<QNetworkReply*>( sender() );
     Echonest::Artist artist = artistFromReply( reply );
     qreal familiarity = artist.familiarity();
-    emit info( reply->property( "caller" ).toString(),
+    emit info( reply->property( "requestId" ).toUInt(),
+               reply->property( "caller" ).toString(),
                Tomahawk::InfoSystem::InfoArtistFamiliarity,
                reply->property( "input" ),
                familiarity,
@@ -224,7 +231,8 @@ EchoNestPlugin::getArtistHotttnesssSlot()
     QNetworkReply* reply = qobject_cast<QNetworkReply*>( sender() );
     Echonest::Artist artist = artistFromReply( reply );
     qreal hotttnesss = artist.hotttnesss();
-    emit info( reply->property( "caller" ).toString(),
+    emit info( reply->property( "requestId" ).toUInt(),
+               reply->property( "caller" ).toString(),
                Tomahawk::InfoSystem::InfoArtistHotttness,
                reply->property( "input" ),
                hotttnesss,
@@ -245,7 +253,8 @@ EchoNestPlugin::getArtistTermsSlot()
         termMap[ "frequency" ] = QString::number(term.frequency());
         termsMap[ term.name() ] = termMap;
     }
-    emit info( reply->property( "caller" ).toString(),
+    emit info( reply->property( "requestId" ).toUInt(),
+               reply->property( "caller" ).toString(),
                Tomahawk::InfoSystem::InfoArtistTerms,
                reply->property( "input" ),
                QVariant::fromValue< Tomahawk::InfoSystem::InfoGenericMap >( termsMap ),
@@ -265,7 +274,8 @@ EchoNestPlugin::getMiscTopSlot()
         termMap[ "frequency" ] = QString::number( term.frequency() );
         termsMap[ term.name().toLower() ] = termMap;
     }
-    emit info( reply->property( "caller" ).toString(),
+    emit info( reply->property( "requestId" ).toUInt(),
+               reply->property( "caller" ).toString(),
                Tomahawk::InfoSystem::InfoMiscTopTerms,
                QVariant(),
                QVariant::fromValue< Tomahawk::InfoSystem::InfoGenericMap >( termsMap ),
@@ -274,50 +284,53 @@ EchoNestPlugin::getMiscTopSlot()
 }
 
 bool
-EchoNestPlugin::isValidArtistData(const QString &caller, const QVariant &input, const QVariantMap &customData)
+EchoNestPlugin::isValidArtistData( uint requestId, const QString &caller, const QVariant &input, const QVariantMap &customData )
 {
-    if (input.isNull() || !input.isValid() || !input.canConvert<QString>())
+    if ( input.isNull() || !input.isValid() || !input.canConvert< QString >() )
     {
-        emit info(caller, Tomahawk::InfoSystem::InfoNoInfo, QVariant(), QVariant(), customData);
+        emit info( requestId, caller, Tomahawk::InfoSystem::InfoNoInfo, QVariant(), QVariant(), customData );
         return false;
     }
     QString artistName = input.toString();
-    if (artistName.isEmpty() )
+    if ( artistName.isEmpty() )
     {
-        emit info(caller, Tomahawk::InfoSystem::InfoNoInfo, QVariant(), QVariant(), customData);
+        emit info( requestId, caller, Tomahawk::InfoSystem::InfoNoInfo, QVariant(), QVariant(), customData );
         return false;
     }
     return true;
 }
 
 bool
-EchoNestPlugin::isValidTrackData(const QString &caller, const QVariant &input, const QVariantMap &customData)
+EchoNestPlugin::isValidTrackData( uint requestId, const QString &caller, const QVariant &input, const QVariantMap &customData )
 {
-    if (input.isNull() || !input.isValid() || !input.canConvert<QString>())
+    if ( input.isNull() || !input.isValid() || !input.canConvert< QString >() )
     {
-        emit info(caller, Tomahawk::InfoSystem::InfoNoInfo, QVariant(), QVariant(), customData);
+        emit info( requestId, caller, Tomahawk::InfoSystem::InfoNoInfo, QVariant(), QVariant(), customData );
         return false;
     }
     QString trackName = input.toString();
-    if (trackName.isEmpty() )
+    if ( trackName.isEmpty() )
     {
-        emit info(caller, Tomahawk::InfoSystem::InfoNoInfo, QVariant(), QVariant(), customData);
+        emit info( requestId, caller, Tomahawk::InfoSystem::InfoNoInfo, QVariant(), QVariant(), customData );
         return false;
     }
-    if (!customData.contains("artistName") ||
-         customData["artistName"].toString().isEmpty())
+    if ( !customData.contains( "artistName" ) || customData[ "artistName" ].toString().isEmpty() )
+    {
+        emit info( requestId, caller, Tomahawk::InfoSystem::InfoNoInfo, QVariant(), QVariant(), customData );
         return false;
+    }
     return true;
 }
 
 Artist
-EchoNestPlugin::artistFromReply(QNetworkReply* reply)
+EchoNestPlugin::artistFromReply( QNetworkReply* reply )
 {
     Echonest::Artist artist = reply->property("artist").value<Echonest::Artist>();
     try {
-        artist.parseProfile(reply);
+        artist.parseProfile( reply );
     } catch( const Echonest::ParseError& e ) {
         qWarning() << "Caught parser error from echonest!" << e.what();
     }
     return artist;
 }
+// 

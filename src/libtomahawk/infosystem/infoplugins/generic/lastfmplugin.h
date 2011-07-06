@@ -55,23 +55,23 @@ public slots:
     void namChangedSlot( QNetworkAccessManager *nam );
 
 protected slots:
-    virtual void getInfo( const QString caller, const Tomahawk::InfoSystem::InfoType type, const QVariant input, const QVariantMap customData );
-    virtual void notInCacheSlot( const Tomahawk::InfoSystem::InfoCriteriaHash criteria, const QString caller, const Tomahawk::InfoSystem::InfoType type, const QVariant input, const QVariantMap customData );
+    virtual void getInfo( uint requestId, const QString caller, const Tomahawk::InfoSystem::InfoType type, const QVariant input, const QVariantMap customData );
+    virtual void notInCacheSlot( uint requestId, const Tomahawk::InfoSystem::InfoCriteriaHash criteria, const QString caller, const Tomahawk::InfoSystem::InfoType type, const QVariant input, const QVariantMap customData );
 
     virtual void pushInfo( const QString caller, const Tomahawk::InfoSystem::InfoType type, const QVariant data );
 
 private:
-    void fetchCoverArt( const QString &caller, const Tomahawk::InfoSystem::InfoType type, const QVariant &input, const QVariantMap &customData );
-    void fetchArtistImages( const QString &caller, const Tomahawk::InfoSystem::InfoType type, const QVariant &input, const QVariantMap &customData );
-    void fetchSimilarArtists( const QString &caller, const Tomahawk::InfoSystem::InfoType type, const QVariant &input, const QVariantMap &customData );
-    void fetchTopTracks( const QString &caller, const Tomahawk::InfoSystem::InfoType type, const QVariant &input, const QVariantMap &customData );
+    void fetchCoverArt( uint requestId, const QString &caller, const Tomahawk::InfoSystem::InfoType type, const QVariant &input, const QVariantMap &customData );
+    void fetchArtistImages( uint requestId, const QString &caller, const Tomahawk::InfoSystem::InfoType type, const QVariant &input, const QVariantMap &customData );
+    void fetchSimilarArtists( uint requestId, const QString &caller, const Tomahawk::InfoSystem::InfoType type, const QVariant &input, const QVariantMap &customData );
+    void fetchTopTracks( uint requestId, const QString &caller, const Tomahawk::InfoSystem::InfoType type, const QVariant &input, const QVariantMap &customData );
 
     void createScrobbler();
     void nowPlaying( const QVariant &input );
     void scrobble();
     void sendLoveSong( const InfoType type, QVariant input );
 
-    void dataError( const QString &caller, const Tomahawk::InfoSystem::InfoType type, const QVariant &input, const QVariantMap &customData );
+    void dataError( uint requestId, const QString &caller, const Tomahawk::InfoSystem::InfoType type, const QVariant &input, const QVariantMap &customData );
 
     lastfm::MutableTrack m_track;
     lastfm::Audioscrobbler* m_scrobbler;

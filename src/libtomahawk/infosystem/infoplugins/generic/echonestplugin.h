@@ -44,7 +44,7 @@ public:
     virtual ~EchoNestPlugin();
 
 protected slots:
-    virtual void getInfo( const QString caller, const Tomahawk::InfoSystem::InfoType type, const QVariant input, const QVariantMap customData );
+    virtual void getInfo( uint requestId, const QString caller, const Tomahawk::InfoSystem::InfoType type, const QVariant input, const QVariantMap customData );
 
     virtual void pushInfo( const QString caller, const Tomahawk::InfoSystem::InfoType type, const QVariant data )
     {
@@ -53,8 +53,9 @@ protected slots:
         Q_UNUSED( data );
     }
 
-    virtual void notInCacheSlot( const Tomahawk::InfoSystem::InfoCriteriaHash criteria, const QString caller, const Tomahawk::InfoSystem::InfoType type, const QVariant input, const QVariantMap customData )
+    virtual void notInCacheSlot( uint requestId, const Tomahawk::InfoSystem::InfoCriteriaHash criteria, const QString caller, const Tomahawk::InfoSystem::InfoType type, const QVariant input, const QVariantMap customData )
     {
+        Q_UNUSED( requestId );
         Q_UNUSED( criteria );
         Q_UNUSED( caller );
         Q_UNUSED( type );
@@ -66,15 +67,15 @@ public slots:
     void namChangedSlot( QNetworkAccessManager *nam );
 
 private:
-    void getSongProfile( const QString &caller, const QVariant &input, const QVariantMap &customData, const QString &item = QString() );
-    void getArtistBiography ( const QString &caller, const QVariant &input, const QVariantMap &customData );
-    void getArtistFamiliarity( const QString &caller, const QVariant &input, const QVariantMap &customData );
-    void getArtistHotttnesss( const QString &caller, const QVariant &input, const QVariantMap &customData );
-    void getArtistTerms( const QString &caller, const QVariant &input, const QVariantMap &customData );
-    void getMiscTopTerms( const QString &caller, const QVariant &input, const QVariantMap &customData );
+    void getSongProfile( uint requestId, const QString &caller, const QVariant &input, const QVariantMap &customData, const QString &item = QString() );
+    void getArtistBiography ( uint requestId, const QString &caller, const QVariant &input, const QVariantMap &customData );
+    void getArtistFamiliarity( uint requestId, const QString &caller, const QVariant &input, const QVariantMap &customData );
+    void getArtistHotttnesss( uint requestId, const QString &caller, const QVariant &input, const QVariantMap &customData );
+    void getArtistTerms( uint requestId, const QString &caller, const QVariant &input, const QVariantMap &customData );
+    void getMiscTopTerms( uint requestId, const QString &caller, const QVariant &input, const QVariantMap &customData );
 
-    bool isValidArtistData( const QString &caller, const QVariant &input, const QVariantMap& customData );
-    bool isValidTrackData( const QString &caller, const QVariant &input, const QVariantMap& customData );
+    bool isValidArtistData( uint requestId, const QString &caller, const QVariant &input, const QVariantMap& customData );
+    bool isValidTrackData( uint requestId, const QString &caller, const QVariant &input, const QVariantMap& customData );
     Echonest::Artist artistFromReply( QNetworkReply* );
 
 private slots:
