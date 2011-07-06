@@ -29,6 +29,7 @@
 #include <QtCore/QSet>
 #include <QtCore/QLinkedList>
 #include <QtCore/QVariant>
+#include <QtCore/QTimer>
 
 #include "dllmacro.h"
 
@@ -55,15 +56,23 @@ signals:
 
 public slots:
     void init( QWeakPointer< Tomahawk::InfoSystem::InfoSystemCache > cache );
-    void getInfo( const QString caller, const Tomahawk::InfoSystem::InfoType type, const QVariant input, const QVariantMap customData );
+    void getInfo( const QString caller, const Tomahawk::InfoSystem::InfoType type, const QVariant input, const QVariantMap customData, uint timeoutMillis );
     void pushInfo( const QString caller, const Tomahawk::InfoSystem::InfoType type, const QVariant input );
 
     void infoSlot( uint requestId, const QString target, const Tomahawk::InfoSystem::InfoType type, const QVariant input, const QVariant output, const QVariantMap customData );
     
     void newNam();
+
+private slots:
+    void checkTimeoutsTimerFired();
     
 private:
+
+    void checkFinished( const QString &target );
+    
     QHash< QString, QHash< InfoType, int > > m_dataTracker;
+    QMultiMap< qint64, uint > m_timeRequestMapper;
+    QHash< uint, bool > m_requestSatisfiedMap;
     
     QLinkedList< InfoPluginPtr > determineOrderedMatches( const InfoType type ) const;
     
@@ -76,6 +85,8 @@ private:
     QWeakPointer< QNetworkAccessManager> m_nam;
 
     uint m_nextRequest;
+
+    QTimer m_checkTimeoutsTimer;
 };
 
 }

@@ -108,6 +108,7 @@ enum InfoType { // as items are saved in cache, mark them here to not change the
 };
 
 typedef QMap< InfoType, QVariant > InfoTypeMap;
+typedef QMap< InfoType, uint > InfoTimeoutMap;
 typedef QMap< QString, QMap< QString, QString > > InfoGenericMap;
 typedef QHash< QString, QString > InfoCriteriaHash;
 
@@ -157,8 +158,8 @@ public:
     InfoSystem( QObject *parent );
     ~InfoSystem();
 
-    void getInfo( const QString &caller, const InfoType type, const QVariant &input, QVariantMap customData );
-    void getInfo( const QString &caller, const InfoTypeMap &input, QVariantMap customData );
+    void getInfo( const QString &caller, const InfoType type, const QVariant &input, QVariantMap customData, uint timeoutSeconds = 3000 );
+    void getInfo( const QString &caller, const InfoTypeMap &inputMap, QVariantMap customData, const InfoTimeoutMap &timeoutMap = InfoTimeoutMap() );
     void pushInfo( const QString &caller, const InfoType type, const QVariant &input );
     void pushInfo( const QString &caller, const InfoTypeMap &input );
 

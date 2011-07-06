@@ -46,6 +46,11 @@ InfoSystemWorker::InfoSystemWorker()
     , m_nextRequest( 0 )
 {
     qDebug() << Q_FUNC_INFO;
+
+    m_checkTimeoutsTimer.setInterval( 1000 );
+    m_checkTimeoutsTimer.setSingleShot( false );
+    connect( &m_checkTimeoutsTimer, SIGNAL( timeout() ), SLOT( checkTimeoutsTimerFired() ) );
+    m_checkTimeoutsTimer.start();
 }
 
 
@@ -149,13 +154,14 @@ InfoSystemWorker::determineOrderedMatches( const InfoType type ) const
 
 
 void
-InfoSystemWorker::getInfo( QString caller, InfoType type, QVariant input, QVariantMap customData )
+InfoSystemWorker::getInfo( QString caller, InfoType type, QVariant input, QVariantMap customData, uint timeoutMillis )
 {
     qDebug() << Q_FUNC_INFO;
     QLinkedList< InfoPluginPtr > providers = determineOrderedMatches( type );
     if ( providers.isEmpty() )
     {
         emit info( caller, type, QVariant(), QVariant(), customData );
+        checkFinished( caller );
         return;
     }
 
@@ -163,15 +169,22 @@ InfoSystemWorker::getInfo( QString caller, InfoType type, QVariant input, QVaria
     if ( !ptr )
     {
         emit info( caller, type, QVariant(), QVariant(), customData );
+        checkFinished( caller );
         return;
     }
 
-    uint requestnum = ++m_nextRequest;
-    qDebug() << "assigning request with requestId " << requestnum;
+    uint requestId = ++m_nextRequest;
+    m_requestSatisfiedMap[ requestId ] = false;
+    if ( timeoutMillis != 0 )
+    {
+        qint64 currMs = QDateTime::currentMSecsSinceEpoch();
+        m_timeRequestMapper.insert( currMs + timeoutMillis, requestId );
+    }
+    qDebug() << "assigning request with requestId " << requestId;
     m_dataTracker[ caller ][ type ] = m_dataTracker[ caller ][ type ] + 1;
     qDebug() << "current count in dataTracker for type" << type << "is" << m_dataTracker[ caller ][ type ];
 
-    QMetaObject::invokeMethod( ptr.data(), "getInfo", Qt::QueuedConnection, Q_ARG( uint, requestnum ), Q_ARG( QString, caller ), Q_ARG( Tomahawk::InfoSystem::InfoType, type ), Q_ARG( QVariant, input ), Q_ARG( QVariantMap, customData ) );
+    QMetaObject::invokeMethod( ptr.data(), "getInfo", Qt::QueuedConnection, Q_ARG( uint, requestId ), Q_ARG( QString, caller ), Q_ARG( Tomahawk::InfoSystem::InfoType, type ), Q_ARG( QVariant, input ), Q_ARG( QVariantMap, customData ) );
 }
 
 
@@ -192,16 +205,23 @@ void
 InfoSystemWorker::infoSlot( uint requestId, QString target, InfoType type, QVariant input, QVariant output, QVariantMap customData )
 {
     qDebug() << Q_FUNC_INFO << " with requestId " << requestId;
-    qDebug() << "current count in dataTracker for target " << target << " is " << m_dataTracker[ target ][ type ];
     if ( m_dataTracker[ target ][ type ] == 0 )
     {
         qDebug() << "Caller was not waiting for that type of data!";
         return;
     }
+    m_requestSatisfiedMap[ requestId ] = true;
     emit info( target, type, input, output, customData );
     
     m_dataTracker[ target ][ type ] = m_dataTracker[ target ][ type ] - 1;
     qDebug() << "current count in dataTracker for target " << target << " is " << m_dataTracker[ target ][ type ];
+    checkFinished( target );
+}
+
+
+void
+InfoSystemWorker::checkFinished( const QString &target )
+{    
     Q_FOREACH( InfoType testtype, m_dataTracker[ target ].keys() )
     {
         if ( m_dataTracker[ target ][ testtype ] != 0)
@@ -212,6 +232,42 @@ InfoSystemWorker::infoSlot( uint requestId, QString target, InfoType type, QVari
     }
     qDebug() << "emitting finished with target" << target;
     emit finished( target );
+}
+
+
+void
+InfoSystemWorker::checkTimeoutsTimerFired()
+{
+    qint64 currTime = QDateTime::currentMSecsSinceEpoch();
+    Q_FOREACH( qint64 time, m_timeRequestMapper.keys() )
+    {
+        Q_FOREACH( uint requestId, m_timeRequestMapper.values( time ) )
+        {
+            if ( time < currTime )
+            {
+                if ( m_requestSatisfiedMap[ requestId ] )
+                {
+                    qDebug() << Q_FUNC_INFO << " removing mapping of " << requestId << " which expired at time " << time << " and was already satisfied";
+                    m_timeRequestMapper.remove( time, requestId );
+                    if ( !m_timeRequestMapper.count( time ) )
+                        m_timeRequestMapper.remove( time );
+                    continue;
+                }
+
+                //doh, timed out
+                //FIXME: do something
+                //m_requestSatisfiedMap[ requestId ] = true;
+                //m_timeRequestMapper.remove( time, requestId );
+                //if ( !m_timeRequestMapper.count( time ) )
+                //    m_timeRequestMapper.remove( time );
+            }
+            else
+            {
+                //we've caught up, the remaining requets still have time to work
+                return;
+            }
+        }
+    }
 }
 
 

@@ -119,18 +119,18 @@ InfoSystem::newNam() const
 
 
 void
-InfoSystem::getInfo( const QString &caller, const InfoType type, const QVariant& input, QVariantMap customData )
+InfoSystem::getInfo( const QString &caller, const InfoType type, const QVariant& input, QVariantMap customData, uint timeoutMillis )
 {
     qDebug() << Q_FUNC_INFO;
-    QMetaObject::invokeMethod( m_worker.data(), "getInfo", Qt::QueuedConnection, Q_ARG( QString, caller ), Q_ARG( Tomahawk::InfoSystem::InfoType, type ), Q_ARG( QVariant, input ), Q_ARG( QVariantMap, customData ) );
+    QMetaObject::invokeMethod( m_worker.data(), "getInfo", Qt::QueuedConnection, Q_ARG( QString, caller ), Q_ARG( Tomahawk::InfoSystem::InfoType, type ), Q_ARG( QVariant, input ), Q_ARG( QVariantMap, customData ), Q_ARG( uint, timeoutMillis ) );
 }
 
 
 void
-InfoSystem::getInfo( const QString &caller, const InfoTypeMap &input, QVariantMap customData )
+InfoSystem::getInfo( const QString &caller, const InfoTypeMap &inputMap, QVariantMap customData, const InfoTimeoutMap &timeoutMap )
 {
-    Q_FOREACH( InfoType type, input.keys() )
-        QMetaObject::invokeMethod( m_worker.data(), "getInfo", Qt::QueuedConnection, Q_ARG( QString, caller ), Q_ARG( Tomahawk::InfoSystem::InfoType, type ), Q_ARG( QVariant, input[ type ] ), Q_ARG( QVariantMap, customData ) );
+    Q_FOREACH( InfoType type, inputMap.keys() )
+        QMetaObject::invokeMethod( m_worker.data(), "getInfo", Qt::QueuedConnection, Q_ARG( QString, caller ), Q_ARG( Tomahawk::InfoSystem::InfoType, type ), Q_ARG( QVariant, inputMap[ type ] ), Q_ARG( QVariantMap, customData ), Q_ARG( uint, ( timeoutMap.contains( type ) ? timeoutMap[ type ] : 3000 ) ) );
 }
 
 
