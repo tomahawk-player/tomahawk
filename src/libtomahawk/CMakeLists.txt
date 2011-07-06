@@ -91,6 +91,7 @@ set( libSources
     infosystem/infoplugins/generic/echonestplugin.cpp
     infosystem/infoplugins/generic/lastfmplugin.cpp
     infosystem/infoplugins/generic/musixmatchplugin.cpp
+    infosystem/infoplugins/generic/musicbrainzPlugin.cpp
 
     playlist/treemodel.cpp
     playlist/treeproxymodel.cpp
@@ -261,6 +262,7 @@ set( libHeaders
     infosystem/infoplugins/generic/echonestplugin.h
     infosystem/infoplugins/generic/lastfmplugin.h
     infosystem/infoplugins/generic/musixmatchplugin.h
+    infosystem/infoplugins/generic/musicbrainzPlugin.h
 
     network/bufferiodevice.h
     network/msgprocessor.h

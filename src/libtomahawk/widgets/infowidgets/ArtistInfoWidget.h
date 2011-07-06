@@ -18,7 +18,7 @@
 
 /**
  * \class ArtistInfoWidget
- * \brief A ViewPage class, which displays top-hits, related artists and albums.
+ * \brief ViewPage, which displays top-hits, related artists and albums for an artist.
  *
  * This Tomahawk ViewPage displays top-hits, related artists and known albums
  * for any given artist. It is our default ViewPage when showing an artist
@@ -55,7 +55,7 @@ public:
     ArtistInfoWidget( const Tomahawk::artist_ptr& artist, QWidget* parent = 0 );
     ~ArtistInfoWidget();
 
-    /** \brief Load information for a given artist.
+    /** \brief Loads information for a given artist.
      *  \param artist The artist that you want to load information for.
      *
      *  Calling this method will make ArtistInfoWidget load information about
