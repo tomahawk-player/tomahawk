@@ -184,6 +184,13 @@ InfoSystemWorker::getInfo( QString caller, InfoType type, QVariant input, QVaria
     m_dataTracker[ caller ][ type ] = m_dataTracker[ caller ][ type ] + 1;
     qDebug() << "current count in dataTracker for type" << type << "is" << m_dataTracker[ caller ][ type ];
 
+    SavedRequestData* data = new SavedRequestData;
+    data->caller = caller;
+    data->type = type;
+    data->input = input;
+    data->customData = customData;
+    m_savedRequestMap[ requestId ] = data;
+    
     QMetaObject::invokeMethod( ptr.data(), "getInfo", Qt::QueuedConnection, Q_ARG( uint, requestId ), Q_ARG( QString, caller ), Q_ARG( Tomahawk::InfoSystem::InfoType, type ), Q_ARG( QVariant, input ), Q_ARG( QVariantMap, customData ) );
 }
 
@@ -207,14 +214,22 @@ InfoSystemWorker::infoSlot( uint requestId, QString target, InfoType type, QVari
     qDebug() << Q_FUNC_INFO << " with requestId " << requestId;
     if ( m_dataTracker[ target ][ type ] == 0 )
     {
-        qDebug() << "Caller was not waiting for that type of data!";
+        qDebug() << Q_FUNC_INFO << " caller was not waiting for that type of data!";
         return;
     }
+    if ( !m_requestSatisfiedMap.contains( requestId ) || m_requestSatisfiedMap[ requestId ] )
+    {
+        qDebug() << Q_FUNC_INFO << " request was already taken care of!";
+        return;
+    }
+    
     m_requestSatisfiedMap[ requestId ] = true;
     emit info( target, type, input, output, customData );
-    
+
     m_dataTracker[ target ][ type ] = m_dataTracker[ target ][ type ] - 1;
     qDebug() << "current count in dataTracker for target " << target << " is " << m_dataTracker[ target ][ type ];
+    delete m_savedRequestMap[ requestId ];
+    m_savedRequestMap.remove( requestId );
     checkFinished( target );
 }
 
@@ -255,11 +270,24 @@ InfoSystemWorker::checkTimeoutsTimerFired()
                 }
 
                 //doh, timed out
-                //FIXME: do something
-                //m_requestSatisfiedMap[ requestId ] = true;
-                //m_timeRequestMapper.remove( time, requestId );
-                //if ( !m_timeRequestMapper.count( time ) )
-                //    m_timeRequestMapper.remove( time );
+                qDebug() << Q_FUNC_INFO << " doh, timed out for requestId " << requestId;
+                SavedRequestData *savedData = m_savedRequestMap[ requestId ];
+                QString target = savedData->caller;
+                InfoType type = savedData->type;
+                emit info( target, type, savedData->input, QVariant(), savedData->customData );
+
+                delete savedData;
+                m_savedRequestMap.remove( requestId );
+
+                m_dataTracker[ target ][ type ] = m_dataTracker[ target ][ type ] - 1;
+                qDebug() << "current count in dataTracker for target " << target << " is " << m_dataTracker[ target ][ type ];
+                
+                m_requestSatisfiedMap[ requestId ] = true;
+                m_timeRequestMapper.remove( time, requestId );
+                if ( !m_timeRequestMapper.count( time ) )
+                    m_timeRequestMapper.remove( time );
+
+                checkFinished( target );
             }
             else
             {
