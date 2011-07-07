@@ -67,7 +67,7 @@ private slots:
     void onTrackClicked();
     void onLoveButtonClicked( bool );
 
-    void infoSystemInfo( QString caller, Tomahawk::InfoSystem::InfoType type, QVariant input, QVariant output, QVariantMap customData );
+    void infoSystemInfo( Tomahawk::InfoSystem::InfoRequestData requestData, QVariant output );
     void infoSystemFinished( QString target );
 
 private:

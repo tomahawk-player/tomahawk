@@ -47,8 +47,8 @@ TreeModel::TreeModel( QObject* parent )
     connect( AudioEngine::instance(), SIGNAL( stopped() ), SLOT( onPlaybackStopped() ), Qt::DirectConnection );
 
     connect( Tomahawk::InfoSystem::InfoSystem::instance(),
-             SIGNAL( info( QString, Tomahawk::InfoSystem::InfoType, QVariant, QVariant, QVariantMap ) ),
-               SLOT( infoSystemInfo( QString, Tomahawk::InfoSystem::InfoType, QVariant, QVariant, QVariantMap ) ) );
+             SIGNAL( info( Tomahawk::InfoSystem::InfoRequestData, QVariant ) ),
+               SLOT( infoSystemInfo( Tomahawk::InfoSystem::InfoRequestData, QVariant ) ) );
 
     connect( Tomahawk::InfoSystem::InfoSystem::instance(), SIGNAL( finished( QString ) ), SLOT( infoSystemFinished( QString ) ) );
 }
@@ -542,9 +542,13 @@ TreeModel::onAlbumsAdded( const QList<Tomahawk::album_ptr>& albums, const QVaria
         trackInfo["album"] = album->name();
         trackInfo["pptr"] = QString::number( (qlonglong)albumitem );
 
-        Tomahawk::InfoSystem::InfoSystem::instance()->getInfo(
-            s_tmInfoIdentifier, Tomahawk::InfoSystem::InfoAlbumCoverArt,
-            QVariant::fromValue< Tomahawk::InfoSystem::InfoCriteriaHash >( trackInfo ), QVariantMap() );
+        Tomahawk::InfoSystem::InfoRequestData requestData;
+        requestData.caller = s_tmInfoIdentifier;
+        requestData.type = Tomahawk::InfoSystem::InfoAlbumCoverArt;
+        requestData.input = QVariant::fromValue< Tomahawk::InfoSystem::InfoCriteriaHash >( trackInfo );
+        requestData.customData = QVariantMap();
+        
+        Tomahawk::InfoSystem::InfoSystem::instance()->getInfo( requestData );
     }
 
     if ( !parent.isValid() || crows.second > 0 )
@@ -600,13 +604,12 @@ TreeModel::onTracksAdded( const QList<Tomahawk::query_ptr>& tracks, const QVaria
 
 
 void
-TreeModel::infoSystemInfo( QString caller, Tomahawk::InfoSystem::InfoType type, QVariant input, QVariant output, QVariantMap customData )
+TreeModel::infoSystemInfo( Tomahawk::InfoSystem::InfoRequestData requestData, QVariant output )
 {
-    Q_UNUSED( customData );
     qDebug() << Q_FUNC_INFO;
 
-    if ( caller != s_tmInfoIdentifier ||
-       ( type != Tomahawk::InfoSystem::InfoAlbumCoverArt && type != Tomahawk::InfoSystem::InfoArtistImages ) )
+    if ( requestData.caller != s_tmInfoIdentifier ||
+       ( requestData.type != Tomahawk::InfoSystem::InfoAlbumCoverArt && requestData.type != Tomahawk::InfoSystem::InfoArtistImages ) )
     {
         qDebug() << "Info of wrong type or not with our identifier";
         return;
@@ -618,7 +621,7 @@ TreeModel::infoSystemInfo( QString caller, Tomahawk::InfoSystem::InfoType type, 
         return;
     }
 
-    Tomahawk::InfoSystem::InfoCriteriaHash pptr = input.value< Tomahawk::InfoSystem::InfoCriteriaHash >();
+    Tomahawk::InfoSystem::InfoCriteriaHash pptr = requestData.input.value< Tomahawk::InfoSystem::InfoCriteriaHash >();
     QVariantMap returnedData = output.value< QVariantMap >();
     const QByteArray ba = returnedData["imgbytes"].toByteArray();
     qDebug() << "ba.length = " << ba.length();

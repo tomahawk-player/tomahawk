@@ -256,8 +256,8 @@ AudioEngine::sendNowPlayingNotification()
     if ( ! m_infoSystemConnected )
     {
         connect( Tomahawk::InfoSystem::InfoSystem::instance(),
-             SIGNAL( info( QString, Tomahawk::InfoSystem::InfoType, QVariant, QVariant, QVariantMap ) ),
-             SLOT( infoSystemInfo( QString, Tomahawk::InfoSystem::InfoType, QVariant, QVariant, QVariantMap ) ) );
+             SIGNAL( info( Tomahawk::InfoSystem::InfoRequestData, QVariant ) ),
+             SLOT( infoSystemInfo( Tomahawk::InfoSystem::InfoRequestData, QVariant ) ) );
     
         connect( Tomahawk::InfoSystem::InfoSystem::instance(), SIGNAL( finished( QString ) ), SLOT( infoSystemFinished( QString ) ) );
 
@@ -267,24 +267,26 @@ AudioEngine::sendNowPlayingNotification()
     Tomahawk::InfoSystem::InfoCriteriaHash trackInfo;
     trackInfo["artist"] = m_currentTrack->album()->artist()->name();
     trackInfo["album"] = m_currentTrack->album()->name();
+
+    Tomahawk::InfoSystem::InfoRequestData requestData;
+    requestData.caller = s_aeInfoIdentifier;
+    requestData.type = Tomahawk::InfoSystem::InfoAlbumCoverArt;
+    requestData.input = QVariant::fromValue< Tomahawk::InfoSystem::InfoCriteriaHash >( trackInfo );
+    requestData.customData = QVariantMap();
     
-    Tomahawk::InfoSystem::InfoSystem::instance()->getInfo(
-        s_aeInfoIdentifier, Tomahawk::InfoSystem::InfoAlbumCoverArt,
-        QVariant::fromValue< Tomahawk::InfoSystem::InfoCriteriaHash >( trackInfo ), QVariantMap() );
+    Tomahawk::InfoSystem::InfoSystem::instance()->getInfo( requestData );
 }
 
 
 void
-AudioEngine::infoSystemInfo( QString caller, Tomahawk::InfoSystem::InfoType type, QVariant input, QVariant output, QVariantMap customData )
+AudioEngine::infoSystemInfo( Tomahawk::InfoSystem::InfoRequestData requestData, QVariant output )
 {
     qDebug() << Q_FUNC_INFO;
-    Q_UNUSED( input );
-    Q_UNUSED( customData );
     
-    if ( caller != s_aeInfoIdentifier ||
-       ( type != Tomahawk::InfoSystem::InfoAlbumCoverArt ) )
+    if ( requestData.caller != s_aeInfoIdentifier ||
+         requestData.type != Tomahawk::InfoSystem::InfoAlbumCoverArt )
     {
-        qDebug() << Q_FUNC_INFO << " not desgined for us, caller is " << caller;
+        qDebug() << Q_FUNC_INFO << " not destined for us or wrong type, caller is " << requestData.caller << " and type is " << requestData.type;
         return;
     }
 

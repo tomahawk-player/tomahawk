@@ -59,7 +59,7 @@ FdoNotifyPlugin::~FdoNotifyPlugin()
 }
 
 void
-FdoNotifyPlugin::pushInfo( const QString caller, const Tomahawk::InfoSystem::InfoType type, const QVariant pushData )
+FdoNotifyPlugin::pushInfo( QString caller, Tomahawk::InfoSystem::InfoType type, QVariant pushData )
 {
     Q_UNUSED( caller );
     qDebug() << Q_FUNC_INFO;

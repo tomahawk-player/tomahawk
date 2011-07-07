@@ -162,9 +162,13 @@ AlbumView::onScrollTimeout()
             trackInfo["album"] = item->album()->name();
             trackInfo["pptr"] = QString::number( (qlonglong)item );
 
-            Tomahawk::InfoSystem::InfoSystem::instance()->getInfo(
-                s_tmInfoIdentifier, Tomahawk::InfoSystem::InfoAlbumCoverArt,
-                QVariant::fromValue< Tomahawk::InfoSystem::InfoCriteriaHash >( trackInfo ), QVariantMap() );
+            Tomahawk::InfoSystem::InfoRequestData requestData;
+            requestData.caller = s_tmInfoIdentifier;
+            requestData.type = Tomahawk::InfoSystem::InfoAlbumCoverArt;
+            requestData.input = QVariant::fromValue< Tomahawk::InfoSystem::InfoCriteriaHash >( trackInfo );
+            requestData.customData = QVariantMap();
+            
+            Tomahawk::InfoSystem::InfoSystem::instance()->getInfo( requestData );
         }
     }
 }

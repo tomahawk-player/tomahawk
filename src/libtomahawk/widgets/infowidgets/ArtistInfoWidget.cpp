@@ -64,8 +64,8 @@ ArtistInfoWidget::ArtistInfoWidget( const Tomahawk::artist_ptr& artist, QWidget*
     m_pixmap = QPixmap( RESPATH "images/no-album-art-placeholder.png" ).scaledToWidth( 48, Qt::SmoothTransformation );
 
     connect( Tomahawk::InfoSystem::InfoSystem::instance(),
-             SIGNAL( info( QString, Tomahawk::InfoSystem::InfoType, QVariant, QVariant, QVariantMap ) ),
-             SLOT( infoSystemInfo( QString, Tomahawk::InfoSystem::InfoType, QVariant, QVariant, QVariantMap ) ) );
+             SIGNAL( info( Tomahawk::InfoSystem::InfoRequestData, QVariant ) ),
+             SLOT( infoSystemInfo( Tomahawk::InfoSystem::InfoRequestData, QVariant ) ) );
 
     connect( Tomahawk::InfoSystem::InfoSystem::instance(), SIGNAL( finished( QString ) ), SLOT( infoSystemFinished( QString ) ) );
 
@@ -88,42 +88,39 @@ ArtistInfoWidget::load( const artist_ptr& artist )
     Tomahawk::InfoSystem::InfoCriteriaHash artistInfo;
     artistInfo["artist"] = artist->name();
 
-    InfoSystem::InfoTypeMap infoMap;
-    QVariantMap hash;
-    infoMap[InfoSystem::InfoArtistBiography] = artist->name();
+    Tomahawk::InfoSystem::InfoRequestData requestData;
+    requestData.caller = s_aiInfoIdentifier;
+    requestData.customData = QVariantMap();
 
-    Tomahawk::InfoSystem::InfoSystem::instance()->getInfo(
-        s_aiInfoIdentifier, infoMap, hash );
+    requestData.input = artist->name();
+    requestData.type = Tomahawk::InfoSystem::InfoArtistBiography;
+    Tomahawk::InfoSystem::InfoSystem::instance()->getInfo( requestData );
+    
+    requestData.input = QVariant::fromValue< Tomahawk::InfoSystem::InfoCriteriaHash >( artistInfo );
+   
+    requestData.type = Tomahawk::InfoSystem::InfoArtistImages;
+    Tomahawk::InfoSystem::InfoSystem::instance()->getInfo( requestData );
 
-    Tomahawk::InfoSystem::InfoSystem::instance()->getInfo(
-        s_aiInfoIdentifier, Tomahawk::InfoSystem::InfoArtistImages,
-        QVariant::fromValue< Tomahawk::InfoSystem::InfoCriteriaHash >( artistInfo ), QVariantMap() );
+    requestData.type = Tomahawk::InfoSystem::InfoArtistSimilars;
+    Tomahawk::InfoSystem::InfoSystem::instance()->getInfo( requestData );
 
-    Tomahawk::InfoSystem::InfoSystem::instance()->getInfo(
-        s_aiInfoIdentifier, Tomahawk::InfoSystem::InfoArtistSimilars,
-        QVariant::fromValue< Tomahawk::InfoSystem::InfoCriteriaHash >( artistInfo ), QVariantMap() );
-
-    Tomahawk::InfoSystem::InfoSystem::instance()->getInfo(
-        s_aiInfoIdentifier, Tomahawk::InfoSystem::InfoArtistSongs,
-        QVariant::fromValue< Tomahawk::InfoSystem::InfoCriteriaHash >( artistInfo ), QVariantMap() );
+    requestData.type = Tomahawk::InfoSystem::InfoArtistSongs;
+    Tomahawk::InfoSystem::InfoSystem::instance()->getInfo( requestData );
 }
 
 
 void
-ArtistInfoWidget::infoSystemInfo( QString caller, Tomahawk::InfoSystem::InfoType type, QVariant input, QVariant output, QVariantMap customData )
+ArtistInfoWidget::infoSystemInfo( Tomahawk::InfoSystem::InfoRequestData requestData, QVariant output )
 {
-    Q_UNUSED( input );
-    Q_UNUSED( customData );
-
-    if ( caller != s_aiInfoIdentifier )
+    if ( requestData.caller != s_aiInfoIdentifier )
     {
 //        qDebug() << "Info of wrong type or not with our identifier";
         return;
     }
-    qDebug() << Q_FUNC_INFO << caller << type << s_aiInfoIdentifier;
+    qDebug() << Q_FUNC_INFO << requestData.caller << requestData.type << s_aiInfoIdentifier;
 
     InfoSystem::InfoCriteriaHash trackInfo;
-    trackInfo = input.value< InfoSystem::InfoCriteriaHash >();
+    trackInfo = requestData.input.value< InfoSystem::InfoCriteriaHash >();
 
     if ( output.canConvert< QVariantMap >() )
     {
@@ -135,7 +132,7 @@ ArtistInfoWidget::infoSystemInfo( QString caller, Tomahawk::InfoSystem::InfoType
     }
 
     QVariantMap returnedData = output.value< QVariantMap >();
-    switch ( type )
+    switch ( requestData.type )
     {
         case InfoSystem::InfoArtistBiography:
         {

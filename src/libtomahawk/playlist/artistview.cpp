@@ -249,9 +249,13 @@ ArtistView::onScrollTimeout()
         trackInfo["artist"] = item->artist()->name();
         trackInfo["pptr"] = QString::number( (qlonglong)item );
 
-        Tomahawk::InfoSystem::InfoSystem::instance()->getInfo(
-            s_tmInfoIdentifier, Tomahawk::InfoSystem::InfoArtistImages,
-            QVariant::fromValue< Tomahawk::InfoSystem::InfoCriteriaHash >( trackInfo ), QVariantMap() );
+        Tomahawk::InfoSystem::InfoRequestData requestData;
+        requestData.caller = s_tmInfoIdentifier;
+        requestData.type = Tomahawk::InfoSystem::InfoArtistImages;
+        requestData.input = QVariant::fromValue< Tomahawk::InfoSystem::InfoCriteriaHash >( trackInfo );
+        requestData.customData = QVariantMap();
+
+        Tomahawk::InfoSystem::InfoSystem::instance()->getInfo( requestData );
     }
 }
 

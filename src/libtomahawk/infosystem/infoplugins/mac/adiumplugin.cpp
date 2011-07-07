@@ -101,7 +101,7 @@ AdiumPlugin::settingsChanged()
 
 
 void
-AdiumPlugin::pushInfo( const QString caller, const Tomahawk::InfoSystem::InfoType type, const QVariant input )
+AdiumPlugin::pushInfo( QString caller, Tomahawk::InfoSystem::InfoType type, QVariant input )
 {
     qDebug() << Q_FUNC_INFO;
 

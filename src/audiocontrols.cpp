@@ -167,8 +167,8 @@ AudioControls::AudioControls( QWidget* parent )
                      .scaled( ui->coverImage->size(), Qt::IgnoreAspectRatio, Qt::SmoothTransformation );
 
     connect( Tomahawk::InfoSystem::InfoSystem::instance(),
-        SIGNAL( info( QString, Tomahawk::InfoSystem::InfoType, QVariant, QVariant, QVariantMap ) ),
-        SLOT( infoSystemInfo( QString, Tomahawk::InfoSystem::InfoType, QVariant, QVariant, QVariantMap ) ) );
+        SIGNAL( info( Tomahawk::InfoSystem::InfoRequestData, QVariant ) ),
+        SLOT( infoSystemInfo( Tomahawk::InfoSystem::InfoRequestData, QVariant ) ) );
 
     connect( Tomahawk::InfoSystem::InfoSystem::instance(), SIGNAL( finished( QString ) ), SLOT( infoSystemFinished( QString ) ) );
 
@@ -218,20 +218,21 @@ AudioControls::onPlaybackStarted( const Tomahawk::result_ptr& result )
     trackInfo["artist"] = result->artist()->name();
     trackInfo["album"] = result->album()->name();
 
-    Tomahawk::InfoSystem::InfoSystem::instance()->getInfo(
-        s_acInfoIdentifier, Tomahawk::InfoSystem::InfoAlbumCoverArt,
-        QVariant::fromValue< Tomahawk::InfoSystem::InfoCriteriaHash >( trackInfo ), QVariantMap() );
+    Tomahawk::InfoSystem::InfoRequestData requestData;
+    requestData.caller = s_acInfoIdentifier;
+    requestData.type = Tomahawk::InfoSystem::InfoAlbumCoverArt;
+    requestData.input = QVariant::fromValue< Tomahawk::InfoSystem::InfoCriteriaHash >( trackInfo );
+    requestData.customData = QVariantMap();
+    
+    Tomahawk::InfoSystem::InfoSystem::instance()->getInfo( requestData );
 }
 
 
 void
-AudioControls::infoSystemInfo( QString caller, Tomahawk::InfoSystem::InfoType type, QVariant input, QVariant output, QVariantMap customData )
+AudioControls::infoSystemInfo( Tomahawk::InfoSystem::InfoRequestData requestData, QVariant output )
 {
-    Q_UNUSED( input );
-    Q_UNUSED( customData );
-
-    qDebug() << Q_FUNC_INFO << caller << type << s_acInfoIdentifier << Tomahawk::InfoSystem::InfoAlbumCoverArt;
-    if ( caller != s_acInfoIdentifier || type != Tomahawk::InfoSystem::InfoAlbumCoverArt )
+    qDebug() << Q_FUNC_INFO << requestData.caller << requestData.type << s_acInfoIdentifier << Tomahawk::InfoSystem::InfoAlbumCoverArt;
+    if ( requestData.caller != s_acInfoIdentifier || requestData.type != Tomahawk::InfoSystem::InfoAlbumCoverArt )
     {
         qDebug() << "Info of wrong type or not with our identifier";
         return;
