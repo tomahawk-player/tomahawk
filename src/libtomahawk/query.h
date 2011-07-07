@@ -74,7 +74,7 @@ public:
     bool isFullTextQuery() const { return !m_fullTextQuery.isEmpty(); }
     bool resolvingFinished() const { return m_resolveFinished; }
 
-    Tomahawk::source_ptr playedBy() const { return m_playedBy; }
+    QPair< Tomahawk::source_ptr, unsigned int > playedBy() const { return m_playedBy; }
     Tomahawk::Resolver* currentResolver() const;
     QList< QWeakPointer< Tomahawk::Resolver > > resolvedBy() const { return m_resolvers; }
 
@@ -94,7 +94,7 @@ public:
     int duration() const { return m_duration; }
 
     void setResolveFinished( bool resolved ) { m_resolveFinished = resolved; }
-    void setPlayedBy( const Tomahawk::source_ptr& source ) { m_playedBy = source; }
+    void setPlayedBy( const Tomahawk::source_ptr& source, unsigned int playtime );
 
 signals:
     void resultsAdded( const QList<Tomahawk::result_ptr>& );
@@ -139,7 +139,7 @@ private:
     int m_duration;
     QString m_resultHint;
 
-    Tomahawk::source_ptr m_playedBy;
+    QPair< Tomahawk::source_ptr, unsigned int > m_playedBy;
     QList< QWeakPointer< Tomahawk::Resolver > > m_resolvers;
 
     mutable QMutex m_mutex;

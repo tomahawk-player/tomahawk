@@ -25,6 +25,8 @@
 #include <phonon/MediaObject>
 #include <phonon/AudioOutput>
 
+#include "infosystem/infosystem.h"
+
 #include "result.h"
 #include "typedefs.h"
 
@@ -60,12 +62,12 @@ public:
     Tomahawk::PlaylistInterface* playlist() const { return m_playlist; }
 
     Tomahawk::result_ptr currentTrack() const { return m_currentTrack; }
-
+    
 public slots:
     void playPause();
     void play();
     void pause();
-    void stop( bool sendNotification = true );
+    void stop();
 
     void previous();
     void next();
@@ -82,6 +84,11 @@ public slots:
     void setQueue( Tomahawk::PlaylistInterface* queue ) { m_queue = queue; }
 
     void onTrackAboutToFinish();
+
+    void playlistNextTrackReady();
+
+    void infoSystemInfo( Tomahawk::InfoSystem::InfoRequestData requestData, QVariant output );
+    void infoSystemFinished( QString caller );
 
 signals:
     void loading( const Tomahawk::result_ptr& track );
@@ -115,6 +122,8 @@ private slots:
 private:
     bool isHttpResult( const QString& ) const;
     bool isLocalResult( const QString& ) const;
+    void sendWaitingNotification() const;
+    void sendNowPlayingNotification();
 
     bool m_isPlayingHttp;
     QSharedPointer<QIODevice> m_input;
@@ -130,8 +139,8 @@ private:
 
     unsigned int m_timeElapsed;
     bool m_expectStop;
-
-    QTimer m_retryTimer;
+    bool m_waitingOnNewTrack;
+    bool m_infoSystemConnected;
 
     static AudioEngine* s_instance;
 };

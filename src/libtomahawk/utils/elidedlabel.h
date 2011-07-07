@@ -1,5 +1,5 @@
 /* === This file is part of Tomahawk Player - <http://tomahawk-player.org> ===
- * 
+ *
  *   Copyright 2010-2011, Christian Muehlhaeuser <muesli@tomahawk-player.org>
  *
  *   Tomahawk is free software: you can redistribute it and/or modify
@@ -44,9 +44,11 @@ public:
     Qt::TextElideMode elideMode() const;
     void setElideMode( Qt::TextElideMode mode );
 
+    void setFont( const QFont& font );
+
     void setMargin( int margin );
     int margin() const;
-    
+
     virtual QSize sizeHint() const;
     virtual QSize minimumSizeHint() const;
 
@@ -65,7 +67,7 @@ protected:
     virtual void mousePressEvent( QMouseEvent* event );
     virtual void mouseReleaseEvent( QMouseEvent* event );
     virtual void paintEvent( QPaintEvent* event );
-    
+
 private:
     QTime m_time;
     QString m_text;

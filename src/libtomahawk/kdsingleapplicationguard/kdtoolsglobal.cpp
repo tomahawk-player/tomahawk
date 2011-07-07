@@ -19,7 +19,7 @@ namespace {
 }
 
 static Version kdParseQtVersion( const char * const version ) {
-    if ( !version || qstrlen( version ) < 5 || version[1] != '.' || version[3] != '.' || version[5] != 0 && version[5] != '.' && version[5] != '-' )
+    if ( !version || qstrlen( version ) < 5 || version[1] != '.' || version[3] != '.' || ( version[5] != 0 && version[5] != '.' && version[5] != '-' ) )
 	return Version(); // parse error
     const Version result = { { version[0] - '0', version[2] - '0', version[4] - '0' } };
     return result;

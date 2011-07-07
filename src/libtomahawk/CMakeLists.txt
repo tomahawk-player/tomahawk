@@ -31,6 +31,7 @@ set( libSources
     viewpage.cpp
     viewmanager.cpp
     globalactionmanager.cpp
+    contextMenu.cpp
 
     sip/SipPlugin.cpp
     sip/SipHandler.cpp
@@ -81,6 +82,7 @@ set( libSources
     database/databasecommand_addclientauth.cpp
     database/databasecommand_clientauthvalid.cpp
     database/databasecommand_socialaction.cpp
+    database/databasecommand_loadsocialactions.cpp
     database/database.cpp
 
     infosystem/infosystemcache.cpp
@@ -169,7 +171,9 @@ set( libSources
     widgets/welcomewidget.cpp
     widgets/welcomeplaylistmodel.cpp
     widgets/overlaywidget.cpp
+    widgets/HeaderLabel.cpp
     widgets/infowidgets/sourceinfowidget.cpp
+    widgets/infowidgets/ArtistInfoWidget.cpp
 
     kdsingleapplicationguard/kdsingleapplicationguard.cpp
     kdsingleapplicationguard/kdsharedmemorylocker.cpp
@@ -191,9 +195,9 @@ set( libHeaders
     result.h
     source.h
     sourceplaylistinterface.h
-    viewpage.h
     viewmanager.h
     globalactionmanager.h
+    contextMenu.h
 
     artist.h
     album.h
@@ -249,6 +253,7 @@ set( libHeaders
     database/databasecommand_addclientauth.h
     database/databasecommand_clientauthvalid.h
     database/databasecommand_socialaction.h
+    database/databasecommand_loadsocialactions.h
 
     infosystem/infosystem.h
     infosystem/infosystemworker.h
@@ -304,7 +309,6 @@ set( libHeaders
 
     playlist/dynamic/DynamicPlaylist.h
     playlist/dynamic/DynamicControl.h
-    playlist/dynamic/GeneratorFactory.h
     playlist/dynamic/GeneratorInterface.h
     playlist/dynamic/DynamicView.h
     playlist/dynamic/DynamicModel.h
@@ -320,7 +324,6 @@ set( libHeaders
     playlist/dynamic/widgets/DynamicSetupWidget.h
     playlist/dynamic/widgets/LoadingSpinner.h
 
-    utils/tomahawkutils.h
     utils/querylabel.h
     utils/elidedlabel.h
     utils/animatedcounterlabel.h
@@ -337,23 +340,31 @@ set( libHeaders
     widgets/welcomewidget.h
     widgets/welcomeplaylistmodel.h
     widgets/overlaywidget.h
+    widgets/HeaderLabel.h
     widgets/infowidgets/sourceinfowidget.h
+    widgets/infowidgets/ArtistInfoWidget.h
 
     kdsingleapplicationguard/kdsingleapplicationguard.h
-    kdsingleapplicationguard/kdsharedmemorylocker.h
-    kdsingleapplicationguard/kdtoolsglobal.h
-    kdsingleapplicationguard/kdlockedsharedmemorypointer.h
 )
 
 set( libHeaders_NoMOC
-		playlist/dynamic/GeneratorInterface.h
+    viewpage.h
+
+    infosystem/infoplugins/unix/imageconverter.h
+
+    playlist/dynamic/GeneratorInterface.h
+    playlist/dynamic/GeneratorFactory.h
+
+    utils/tomahawkutils.h
 )
+
 set( libUI ${libUI}
     widgets/playlisttypeselectordlg.ui
     widgets/newplaylistwidget.ui
     widgets/searchwidget.ui
     widgets/welcomewidget.ui
     widgets/infowidgets/sourceinfowidget.ui
+    widgets/infowidgets/ArtistInfoWidget.ui
     playlist/topbar/topbar.ui
     playlist/infobar/infobar.ui
 )
@@ -379,17 +390,21 @@ include_directories( . ${CMAKE_CURRENT_BINARY_DIR} ${CMAKE_CURRENT_BINARY_DIR}/.
 
 IF( UNIX AND NOT APPLE )
     SET( libSources ${libSources}
-      infosystem/infoplugins/win/gfwnotifyplugin.cpp
       infosystem/infoplugins/unix/fdonotifyplugin.cpp
       infosystem/infoplugins/unix/imageconverter.cpp )
 
     SET( libHeaders ${libHeaders}
-      infosystem/infoplugins/win/gfwnotifyplugin.h
       infosystem/infoplugins/unix/fdonotifyplugin.h
       infosystem/infoplugins/unix/imageconverter.h )
 ENDIF( UNIX AND NOT APPLE )
 
 IF( WIN32 )
+    SET( libSources ${libSources}
+      infosystem/infoplugins/win/gfwnotifyplugin.cpp )
+
+    SET( libHeaders ${libHeaders}
+      infosystem/infoplugins/win/gfwnotifyplugin.h )
+
     SET( OS_SPECIFIC_LINK_LIBRARIES
         ${OS_SPECIFIC_LINK_LIBRARIES}
     # System

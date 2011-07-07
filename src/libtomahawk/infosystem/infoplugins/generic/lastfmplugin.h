@@ -49,33 +49,35 @@ public slots:
     void onAuthenticated();
     void coverArtReturned();
     void artistImagesReturned();
+    void similarArtistsReturned();
+    void topTracksReturned();
 
     void namChangedSlot( QNetworkAccessManager *nam );
 
 protected slots:
-    virtual void getInfo( const QString caller, const Tomahawk::InfoSystem::InfoType type, const QVariant input, const Tomahawk::InfoSystem::InfoCustomData customData );
-    virtual void notInCacheSlot( const Tomahawk::InfoSystem::InfoCriteriaHash criteria, const QString caller, const Tomahawk::InfoSystem::InfoType type, const QVariant input, const Tomahawk::InfoSystem::InfoCustomData customData );
+    virtual void getInfo( uint requestId, Tomahawk::InfoSystem::InfoRequestData requestData );
+    virtual void notInCacheSlot( uint requestId, Tomahawk::InfoSystem::InfoCriteriaHash criteria, Tomahawk::InfoSystem::InfoRequestData requestData );
 
-    virtual void pushInfo( const QString caller, const Tomahawk::InfoSystem::InfoType type, const QVariant data );
-    
+    virtual void pushInfo( QString caller, Tomahawk::InfoSystem::InfoType type, QVariant data );
+
 private:
-    void fetchCoverArt( const QString &caller, const Tomahawk::InfoSystem::InfoType type, const QVariant &input, const Tomahawk::InfoSystem::InfoCustomData &customData );
-    void fetchArtistImages( const QString &caller, const Tomahawk::InfoSystem::InfoType type, const QVariant &input, const Tomahawk::InfoSystem::InfoCustomData &customData );
+    void fetchCoverArt( uint requestId, Tomahawk::InfoSystem::InfoRequestData requestData );
+    void fetchArtistImages( uint requestId, Tomahawk::InfoSystem::InfoRequestData requestData );
+    void fetchSimilarArtists( uint requestId, Tomahawk::InfoSystem::InfoRequestData requestData );
+    void fetchTopTracks( uint requestId, Tomahawk::InfoSystem::InfoRequestData requestData );
 
     void createScrobbler();
     void nowPlaying( const QVariant &input );
     void scrobble();
+    void sendLoveSong( const InfoType type, QVariant input );
 
-    void dataError( const QString &caller, const Tomahawk::InfoSystem::InfoType type, const QVariant &input, const Tomahawk::InfoSystem::InfoCustomData &customData );
-    void sendLoveSong( QVariant input );
+    void dataError( uint requestId, Tomahawk::InfoSystem::InfoRequestData requestData );
 
     lastfm::MutableTrack m_track;
     lastfm::Audioscrobbler* m_scrobbler;
     QString m_pw;
 
     QList< QUrl > m_badUrls;
-
-    QWeakPointer< QNetworkAccessManager > m_nam;
 };
 
 }

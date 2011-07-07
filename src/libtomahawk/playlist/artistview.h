@@ -22,6 +22,7 @@
 #include <QTreeView>
 #include <QSortFilterProxyModel>
 
+#include "contextMenu.h"
 #include "treemodel.h"
 #include "treeproxymodel.h"
 #include "viewpage.h"
@@ -79,6 +80,9 @@ private slots:
     void onViewChanged();
     void onScrollTimeout();
 
+    void onCustomContextMenu( const QPoint& pos );
+    void onMenuTriggered( int action );
+
 private:
     TreeHeader* m_header;
     TreeModel* m_model;
@@ -86,6 +90,8 @@ private:
 //    PlaylistItemDelegate* m_delegate;
 
     LoadingSpinner* m_loadingSpinner;
+    QModelIndex m_contextMenuIndex;
+    Tomahawk::ContextMenu* m_contextMenu;
 
     bool m_showModes;
     QTimer m_timer;

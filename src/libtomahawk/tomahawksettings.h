@@ -66,6 +66,9 @@ public:
     QByteArray mainWindowSplitterState() const;
     void setMainWindowSplitterState( const QByteArray& state );
 
+    bool verboseNotifications() const;
+    void setVerboseNotifications( bool notifications );
+
     /// Playlist stuff
     QByteArray playlistColumnSizes( const QString& playlistid ) const;
     void setPlaylistColumnSizes( const QString& playlistid, const QByteArray& state );

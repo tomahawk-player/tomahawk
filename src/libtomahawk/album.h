@@ -70,6 +70,8 @@ signals:
     void tracksAdded( const QList<Tomahawk::query_ptr>& tracks );
     void trackCountChanged( unsigned int tracks );
     void sourceTrackCountChanged( unsigned int tracks );
+    
+    void nextTrackReady();
 
 private slots:
     void onTracksAdded( const QList<Tomahawk::query_ptr>& tracks );

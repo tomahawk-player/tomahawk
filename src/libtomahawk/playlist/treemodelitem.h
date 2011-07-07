@@ -44,6 +44,9 @@ public:
     const Tomahawk::album_ptr& album() const { return m_album; };
     const Tomahawk::result_ptr& result() const { return m_result; };
 
+    bool isPlaying() { return m_isPlaying; }
+    void setIsPlaying( bool b ) { m_isPlaying = b; emit dataChanged(); }
+
     void setCover( const QPixmap& cover ) { this->cover = cover; emit dataChanged(); }
 
     TreeModelItem* parent;
@@ -64,6 +67,8 @@ private:
     Tomahawk::artist_ptr m_artist;
     Tomahawk::album_ptr m_album;
     Tomahawk::result_ptr m_result;
+
+    bool m_isPlaying;
 };
 
 #endif // TREEMODELITEM_H

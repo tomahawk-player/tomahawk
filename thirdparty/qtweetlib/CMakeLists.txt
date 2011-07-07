@@ -94,17 +94,14 @@ set(TOMAHAWK_QTWEETLIB_HEADERS
     QTweetLib/src/oauth.h
     QTweetLib/src/oauthtwitter.h
     QTweetLib/src/qtweetfriendstimeline.h
-    QTweetLib/src/qtweetlib_global.h
     QTweetLib/src/qtweethometimeline.h
     QTweetLib/src/qtweetmentions.h
     QTweetLib/src/qtweetnetbase.h
     QTweetLib/src/qtweetretweetbyme.h
     QTweetLib/src/qtweetretweetsofme.h
     QTweetLib/src/qtweetretweettome.h
-    QTweetLib/src/qtweetstatus.h
     QTweetLib/src/qtweetstatusshow.h
     QTweetLib/src/qtweetstatusupdate.h
-    QTweetLib/src/qtweetuser.h
     QTweetLib/src/qtweetusertimeline.h
     QTweetLib/src/qtweetstatusdestroy.h
     QTweetLib/src/qtweetstatusretweet.h
@@ -113,11 +110,9 @@ set(TOMAHAWK_QTWEETLIB_HEADERS
     QTweetLib/src/qtweetuserlookup.h
     QTweetLib/src/qtweetdirectmessages.h
     QTweetLib/src/qtweetuserstream.h
-    QTweetLib/src/qtweetdmstatus.h
     QTweetLib/src/qtweetusersearch.h
     QTweetLib/src/qtweetuserstatusesfriends.h
     QTweetLib/src/qtweetuserstatusesfollowers.h
-    QTweetLib/src/qtweetlist.h
     QTweetLib/src/qtweetlistcreate.h
     QTweetLib/src/qtweetlistupdate.h
     QTweetLib/src/qtweetlistgetlists.h
@@ -145,20 +140,11 @@ set(TOMAHAWK_QTWEETLIB_HEADERS
     QTweetLib/src/qtweetfavoritescreate.h
     QTweetLib/src/qtweetfavoritesdestroy.h
     QTweetLib/src/qtweetsearch.h
-    QTweetLib/src/qtweetsearchresult.h
-    QTweetLib/src/qtweetsearchpageresults.h
-    QTweetLib/src/qtweetplace.h
     QTweetLib/src/qtweetgeoreversegeocode.h
     QTweetLib/src/qtweetgeosearch.h
     QTweetLib/src/qtweetgeosimilarplaces.h
     QTweetLib/src/qtweetgeoplaceid.h
     QTweetLib/src/qtweetgeoplacecreate.h
-    QTweetLib/src/qtweetgeocoord.h
-    QTweetLib/src/qtweetgeoboundingbox.h
-    QTweetLib/src/qtweetconvert.h
-    QTweetLib/src/qtweetentityurl.h
-    QTweetLib/src/qtweetentityhashtag.h
-    QTweetLib/src/qtweetentityusermentions.h
     QTweetLib/src/qtweetblocksblocking.h
     QTweetLib/src/qtweetblocksblockingids.h
     QTweetLib/src/qtweetblockscreate.h

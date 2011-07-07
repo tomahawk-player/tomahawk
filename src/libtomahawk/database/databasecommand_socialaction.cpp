@@ -45,21 +45,22 @@ DatabaseCommand_SocialAction::exec( DatabaseImpl* dbi )
     Q_ASSERT( !source().isNull() );
 
     TomahawkSqlQuery query = dbi->newquery();
-    
+
     query.prepare( "INSERT INTO social_attributes(id, source, k, v, timestamp) "
                    "VALUES (?, ?, ?, ?, ?)" );
-                   
+
     QVariant srcid = source()->isLocal() ? QVariant( QVariant::Int ) : source()->id();
 
-    bool isnew;
-    int artid = dbi->artistId( m_artist, isnew );
+    bool autoCreate = true;
+    int artid = dbi->artistId( m_artist, autoCreate );
     if( artid < 1 )
         return;
 
-    int trkid = dbi->trackId( artid, m_track, isnew );
+    autoCreate = true; // artistId overwrites autoCreate (reference)
+    int trkid = dbi->trackId( artid, m_track, autoCreate );
     if( trkid < 1 )
         return;
-    
+
     query.bindValue( 0, trkid );
     query.bindValue( 1, srcid );
     query.bindValue( 2, m_action );

@@ -94,8 +94,6 @@ public slots:
     // so plugins can clean up after themselves
     virtual void deletePlugin();
 
-    virtual void reset() {}
-    
 signals:
     void error( int, const QString& );
     void stateChanged( SipPlugin::ConnectionState state );
@@ -115,6 +113,8 @@ signals:
 
     void addMenu( QMenu* menu );
     void removeMenu( QMenu* menu );
+    
+    void dataError( bool );
 
 private slots:
     void onError( int, const QString& );

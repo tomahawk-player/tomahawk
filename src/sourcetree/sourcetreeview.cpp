@@ -127,7 +127,7 @@ SourceTreeView::setupMenus()
     m_playlistMenu.clear();
     m_roPlaylistMenu.clear();
     m_latchMenu.clear();
-    
+
     bool readonly = true;
     SourcesModel::RowType type = ( SourcesModel::RowType )model()->data( m_contextMenuIndex, SourcesModel::SourceTreeItemTypeRole ).toInt();
     if ( type == SourcesModel::StaticPlaylist || type == SourcesModel::AutomaticPlaylist || type == SourcesModel::Station )
@@ -345,7 +345,7 @@ SourceTreeView::latchOn()
     CollectionItem* item = itemFromIndex< CollectionItem >( m_contextMenuIndex );
     source_ptr source = item->source();
     PlaylistInterface* pi = AudioEngine::instance()->playlist();
-    
+
     if ( pi && dynamic_cast< SourcePlaylistInterface* >( pi ) )
     {
         SourcePlaylistInterface* sourcepi = dynamic_cast< SourcePlaylistInterface* >( pi );
@@ -414,7 +414,7 @@ SourceTreeView::onCustomContextMenu( const QPoint& pos )
     else if ( model()->data( m_contextMenuIndex, SourcesModel::SourceTreeItemTypeRole ) == SourcesModel::Collection )
     {
         CollectionItem* item = itemFromIndex< CollectionItem >( m_contextMenuIndex );
-        if ( !item->source()->isLocal() )
+        if ( !item->source().isNull() && !item->source()->isLocal() )
             m_latchMenu.exec( mapToGlobal( pos ) );
     }
 }

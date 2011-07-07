@@ -69,6 +69,8 @@ private slots:
     void setIsReadyTrue() { m_ready = true; }
 
 private:
+    DatabaseImpl* impl() const { return m_impl; }
+
     bool m_ready;
     DatabaseImpl* m_impl;
     DatabaseWorker* m_workerRW;
@@ -77,6 +79,8 @@ private:
     int m_maxConcurrentThreads;
 
     static Database* s_instance;
+
+    friend class Tomahawk::Artist;
 };
 
 #endif // DATABASE_H

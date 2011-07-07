@@ -148,14 +148,16 @@ DatabaseCommand_AddFiles::exec( DatabaseImpl* dbi )
         if( !source()->isLocal() )
             url = QString( "servent://%1\t%2" ).arg( source()->userName() ).arg( url );
 
-        bool isnew;
-        artistid = dbi->artistId( artist, isnew );
+        bool autoCreate = true;
+        artistid = dbi->artistId( artist, autoCreate );
         if ( artistid < 1 )
             continue;
-        trackid = dbi->trackId( artistid, track, isnew );
+        autoCreate = true; // artistId overwrites autoCreate (reference)
+        trackid = dbi->trackId( artistid, track, autoCreate );
         if ( trackid < 1 )
             continue;
-        albumid = dbi->albumId( artistid, album, isnew );
+        autoCreate = true; // trackId overwrites autoCreate (reference)
+        albumid = dbi->albumId( artistid, album, autoCreate );
 
         // Now add the association
         query_filejoin.bindValue( 0, fileid );

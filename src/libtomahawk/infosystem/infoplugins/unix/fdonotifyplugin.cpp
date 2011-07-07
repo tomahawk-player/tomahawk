@@ -59,16 +59,16 @@ FdoNotifyPlugin::~FdoNotifyPlugin()
 }
 
 void
-FdoNotifyPlugin::pushInfo( const QString caller, const Tomahawk::InfoSystem::InfoType type, const QVariant pushData )
+FdoNotifyPlugin::pushInfo( QString caller, Tomahawk::InfoSystem::InfoType type, QVariant pushData )
 {
     Q_UNUSED( caller );
     qDebug() << Q_FUNC_INFO;
-    if ( type != Tomahawk::InfoSystem::InfoNotifyUser || !pushData.canConvert< Tomahawk::InfoSystem::InfoCriteriaHash >() )
+    if ( type != Tomahawk::InfoSystem::InfoNotifyUser || !pushData.canConvert< QVariantMap >() )
     {
         qDebug() << Q_FUNC_INFO << " not the right type or could not convert the hash";
         return;
     }
-    Tomahawk::InfoSystem::InfoCriteriaHash hash = pushData.value< Tomahawk::InfoSystem::InfoCriteriaHash >();
+    QVariantMap hash = pushData.value< QVariantMap >();
     if ( !hash.contains( "message" ) )
     {
         qDebug() << Q_FUNC_INFO << " hash did not contain a message";
@@ -81,11 +81,18 @@ FdoNotifyPlugin::pushInfo( const QString caller, const Tomahawk::InfoSystem::Inf
     arguments << quint32( 0 ); //notification_id
     arguments << QString(); //app_icon
     arguments << QString( "Tomahawk" ); //summary
-    arguments << hash["message"]; //body
+    arguments << hash["message"].toString(); //body
     arguments << QStringList(); //actions
     QVariantMap dict;
     dict["desktop-entry"] = QString( "tomahawk" );
-    dict["image_data"] = ImageConverter::variantForImage( QImage( RESPATH "icons/tomahawk-icon-128x128.png" ) );
+    if ( hash.contains( "image" ) )
+    {
+        QVariant tempVariant = hash["image"];
+        QImage tempImage = tempVariant.value< QImage >();
+        dict["image_data"] = ImageConverter::variantForImage( tempImage );
+    }
+    else
+        dict["image_data"] = ImageConverter::variantForImage( QImage( RESPATH "icons/tomahawk-icon-128x128.png" ) );
     arguments << dict; //hints
     arguments << qint32( -1 ); //expire_timeout
     message.setArguments( arguments );

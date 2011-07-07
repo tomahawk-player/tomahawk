@@ -66,8 +66,8 @@ XMPPBot::XMPPBot(QObject *parent)
             SLOT(newTrackSlot(const Tomahawk::result_ptr &)));
 
     connect(InfoSystem::instance(),
-        SIGNAL(info(QString, Tomahawk::InfoSystem::InfoType, QVariant, QVariant, Tomahawk::InfoSystem::InfoCustomData)),
-        SLOT(infoReturnedSlot(QString, Tomahawk::InfoSystem::InfoType, QVariant, QVariant, Tomahawk::InfoSystem::InfoCustomData)));
+        SIGNAL(info(QString, Tomahawk::InfoSystem::InfoType, QVariant, QVariant, QVariantMap)),
+        SLOT(infoReturnedSlot(QString, Tomahawk::InfoSystem::InfoType, QVariant, QVariant, QVariantMap)));
 
     connect(InfoSystem::instance(), SIGNAL(finished(QString)), SLOT(infoFinishedSlot(QString)));
 
@@ -201,7 +201,7 @@ void XMPPBot::handleMessage(const Message& msg, MessageSession* session)
         return;
     }
 
-    InfoMap infoMap;
+    InfoTypeMap infoMap;
     Q_FOREACH(QString token, tokens)
     {
         if (token == "biography")
@@ -214,10 +214,10 @@ void XMPPBot::handleMessage(const Message& msg, MessageSession* session)
             infoMap[InfoArtistFamiliarity] = m_currTrack.data()->artist()->name();
         if (token == "lyrics")
         {
-            InfoCustomData myhash;
+            QVariantMap myhash;
             myhash["trackName"] = QVariant::fromValue<QString>(m_currTrack.data()->track());
             myhash["artistName"] = QVariant::fromValue<QString>(m_currTrack.data()->artist()->name());
-            infoMap[InfoTrackLyrics] = QVariant::fromValue<Tomahawk::InfoSystem::InfoCustomData>(myhash);
+            infoMap[InfoTrackLyrics] = QVariant::fromValue<QVariantMap>(myhash);
         }
     }
 
@@ -234,12 +234,12 @@ void XMPPBot::handleMessage(const Message& msg, MessageSession* session)
     QString waitMsg("Please wait...");
     Message retMsg(Message::Chat, JID(originatingJid.toStdString()), waitMsg.toStdString());
     m_client.data()->send(retMsg);
-    Tomahawk::InfoSystem::InfoCustomData hash;
+    QVariantMap hash;
     hash["XMPPBotSendToJID"] = originatingJid;
     InfoSystem::instance()->getInfo(s_botInfoIdentifier, infoMap, hash);
 }
 
-void XMPPBot::infoReturnedSlot(QString caller, Tomahawk::InfoSystem::InfoType type, QVariant input, QVariant output, Tomahawk::InfoSystem::InfoCustomData customData)
+void XMPPBot::infoReturnedSlot(QString caller, Tomahawk::InfoSystem::InfoType type, QVariant input, QVariant output, QVariantMap customData)
 {
     qDebug() << Q_FUNC_INFO;
 
@@ -363,13 +363,13 @@ void XMPPBot::infoReturnedSlot(QString caller, Tomahawk::InfoSystem::InfoType ty
         {
             qDebug() << "Lyrics requested";
             if (!output.canConvert<QString>() ||
-                !input.canConvert<Tomahawk::InfoSystem::InfoCustomData>()
+                !input.canConvert<QVariantMap>()
                )
             {
                 qDebug() << "Variants failed to be valid";
                 break;
             }
-            InfoCustomData inHash = input.value<InfoCustomData>();
+            QVariantMap inHash = input.value<QVariantMap>();
             QString artist = inHash["artistName"].toString();
             QString track = inHash["trackName"].toString();
             QString lyrics = output.toString();

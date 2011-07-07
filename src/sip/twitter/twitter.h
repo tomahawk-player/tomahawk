@@ -122,6 +122,8 @@ private:
     bool refreshTwitterAuth();
     void parseGotTomahawk( const QRegExp &regex, const QString &screenName, const QString &text );
     // handle per-plugin config
+    QString twitterSavedDbid() const;
+    void setTwitterSavedDbid( const QString& dbid );
     QString twitterScreenName() const;
     void setTwitterScreenName( const QString& screenName );
     QString twitterOAuthToken() const;

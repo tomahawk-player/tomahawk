@@ -74,6 +74,7 @@ AdiumPlugin::AdiumPlugin()
              this, SLOT( clearStatus() ) );
 }
 
+
 AdiumPlugin::~AdiumPlugin()
 {
     qDebug() << Q_FUNC_INFO;
@@ -81,12 +82,14 @@ AdiumPlugin::~AdiumPlugin()
       setStatus( "" );
 }
 
+
 void
 AdiumPlugin::clearStatus()
 {
     qDebug() << Q_FUNC_INFO;
     setStatus( "" );
 }
+
 
 void
 AdiumPlugin::settingsChanged()
@@ -96,21 +99,9 @@ AdiumPlugin::settingsChanged()
         setStatus( "" );
 }
 
-void
-AdiumPlugin::getInfo( const QString caller, const InfoType type, const QVariant data, InfoCustomData customData )
-{
-    switch (type)
-    {
-        default:
-        {
-            emit info(caller, Tomahawk::InfoSystem::InfoNoInfo, QVariant(), QVariant(), customData);
-            return;
-        }
-    }
-}
 
 void
-AdiumPlugin::pushInfo( const QString caller, const Tomahawk::InfoSystem::InfoType type, const QVariant input )
+AdiumPlugin::pushInfo( QString caller, Tomahawk::InfoSystem::InfoType type, QVariant input )
 {
     qDebug() << Q_FUNC_INFO;
 

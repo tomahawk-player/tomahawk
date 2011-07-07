@@ -85,6 +85,7 @@ public:
     virtual void deletePlugin();
 
 signals:
+    void dataError( bool exists );
     void jidChanged( const QString& );
 
 public slots:
@@ -118,6 +119,7 @@ private slots:
     }
     void onNewIq( const Jreen::IQ &iq );
     void onNewAvatar( const QString &jid );
+    void onCheckJidExists( QString jid );
 
 private:
     bool readXmlConsoleEnabled();
@@ -132,6 +134,8 @@ private:
 
     bool presenceMeansOnline( Jreen::Presence::Type p );
     void handlePeerStatus( const Jreen::JID &jid, Jreen::Presence::Type presenceType );
+
+    using SipPlugin::errorMessage;
 
     QMenu* m_menu;
     XmlConsole* m_xmlConsole;

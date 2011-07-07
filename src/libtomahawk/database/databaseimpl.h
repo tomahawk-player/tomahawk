@@ -53,7 +53,7 @@ public:
     TomahawkSqlQuery newquery() { return TomahawkSqlQuery( db ); }
     QSqlDatabase& database() { return db; }
 
-    int artistId( const QString& name_orig, bool& isnew );
+    int artistId( const QString& name_orig, bool& autoCreate );
     int trackId( int artistid, const QString& name_orig, bool& isnew );
     int albumId( int artistid, const QString& name_orig, bool& isnew );
 

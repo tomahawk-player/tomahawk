@@ -32,6 +32,7 @@ namespace Tomahawk
 
 class DLLEXPORT PlaylistInterface
 {
+
 public:
     enum RepeatMode { NoRepeat, RepeatOne, RepeatAll };
     enum ViewMode { Unknown, Tree, Flat, Album };
@@ -78,6 +79,7 @@ signals:
     virtual void shuffleModeChanged( bool enabled ) = 0;
     virtual void trackCountChanged( unsigned int tracks ) = 0;
     virtual void sourceTrackCountChanged( unsigned int tracks ) = 0;
+    virtual void nextTrackReady() = 0;
 
 private:
     QObject* m_object;

@@ -67,11 +67,11 @@ DatabaseCommand_PlaybackHistory::exec( DatabaseImpl* dbi )
 
             if ( query.value( 3 ).toUInt() == 0 )
             {
-                q->setPlayedBy( SourceList::instance()->getLocal() );
+                q->setPlayedBy( SourceList::instance()->getLocal(), query.value( 1 ).toUInt() );
             }
             else
             {
-                q->setPlayedBy( SourceList::instance()->get( query.value( 3 ).toUInt() ) );
+                q->setPlayedBy( SourceList::instance()->get( query.value( 3 ).toUInt() ), query.value( 1 ).toUInt() );
             }
 
             ql << q;

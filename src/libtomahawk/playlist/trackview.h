@@ -22,6 +22,7 @@
 #include <QTreeView>
 #include <QSortFilterProxyModel>
 
+#include "contextMenu.h"
 #include "playlistitemdelegate.h"
 
 #include "dllmacro.h"
@@ -53,6 +54,7 @@ explicit TrackView( QWidget* parent = 0 );
     PlaylistItemDelegate* delegate() const { return m_delegate; }
     TrackHeader* header() const { return m_header; }
     OverlayWidget* overlay() const { return m_overlay; }
+    Tomahawk::ContextMenu* contextMenu() const { return m_contextMenu; }
 
     QModelIndex contextMenuIndex() const { return m_contextMenuIndex; }
     void setContextMenuIndex( const QModelIndex& idx ) { m_contextMenuIndex = idx; }
@@ -61,7 +63,7 @@ public slots:
     void onItemActivated( const QModelIndex& index );
 
     void playItem();
-    void addItemsToQueue();
+    void onMenuTriggered( int action );
 
 protected:
     virtual void resizeEvent( QResizeEvent* event );
@@ -77,10 +79,9 @@ protected:
 
 private slots:
     void onItemResized( const QModelIndex& index );
-
     void onFilterChanged( const QString& filter );
 
-    void copyLink();
+    void onCustomContextMenu( const QPoint& pos );
 
 private:
     QString m_guid;
@@ -96,6 +97,7 @@ private:
     QRect m_dropRect;
 
     QModelIndex m_contextMenuIndex;
+    Tomahawk::ContextMenu* m_contextMenu;
 };
 
 #endif // TRACKVIEW_H

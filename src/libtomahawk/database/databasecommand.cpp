@@ -31,6 +31,7 @@
 #include "databasecommand_deletedynamicplaylist.h"
 #include "databasecommand_setdynamicplaylistrevision.h"
 #include "databasecommand_socialaction.h"
+#include "databasecommand_loadsocialactions.h"
 
 
 DatabaseCommand::DatabaseCommand( QObject* parent )

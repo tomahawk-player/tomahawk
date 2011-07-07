@@ -48,6 +48,7 @@ TreeModelItem::TreeModelItem( TreeModelItem* parent, QAbstractItemModel* model )
     childCount = 0;
     toberemoved = false;
     fetchingMore = false;
+    m_isPlaying = false;
 
     if ( parent )
     {
@@ -62,6 +63,7 @@ TreeModelItem::TreeModelItem( const Tomahawk::album_ptr& album, TreeModelItem* p
 {
     this->parent = parent;
     fetchingMore = false;
+    m_isPlaying = false;
 
     if ( parent )
     {
@@ -88,6 +90,7 @@ TreeModelItem::TreeModelItem( const Tomahawk::artist_ptr& artist, TreeModelItem*
 {
     this->parent = parent;
     fetchingMore = false;
+    m_isPlaying = false;
 
     if ( parent )
     {
@@ -114,6 +117,7 @@ TreeModelItem::TreeModelItem( const Tomahawk::result_ptr& result, TreeModelItem*
 {
     this->parent = parent;
     fetchingMore = false;
+    m_isPlaying = false;
 
     if ( parent )
     {

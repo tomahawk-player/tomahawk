@@ -19,8 +19,6 @@
 #ifndef PLAYLISTVIEW_H
 #define PLAYLISTVIEW_H
 
-#include <QMenu>
-
 #include "playlist/trackproxymodel.h"
 #include "playlist/playlistmodel.h"
 #include "trackview.h"
@@ -62,26 +60,19 @@ protected:
     void keyPressEvent( QKeyEvent* event );
 
 private slots:
-    void onCustomContextMenu( const QPoint& pos );
     void onTrackCountChanged( unsigned int tracks );
 
+    void onMenuTriggered( int action );
     void deleteItems();
 
     void onDeleted();
     void onChanged();
-private:
-    void setupMenus();
 
+private:
     PlaylistModel* m_model;
 
-    QMenu m_itemMenu;
     QString m_customTitle;
     QString m_customDescripton;
-
-    QAction* m_playItemAction;
-    QAction* m_addItemsToQueueAction;
-    QAction* m_addItemsToPlaylistAction;
-    QAction* m_deleteItemsAction;
 };
 
 #endif // PLAYLISTVIEW_H

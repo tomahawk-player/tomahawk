@@ -27,7 +27,6 @@ namespace Tomahawk
 
 class StationModelItem;
 
-
 /**
  * Extends PlaylistModel with support for handling stations
  */
@@ -55,6 +54,9 @@ public:
 
     // a batchof static tracks wre generated
     void tracksGenerated( const QList< query_ptr > entries, int limitResolvedTo = -1 );
+
+    using PlaylistModel::loadPlaylist;
+
 signals:
     void collapseFromTo( int startRow, int num );
     void checkForOverflow();
@@ -62,6 +64,7 @@ signals:
     void trackGenerationFailure( const QString& msg );
 
     void tracksAdded();
+
 private slots:
     void newTrackGenerated( const Tomahawk::query_ptr& query );
 
@@ -69,6 +72,7 @@ private slots:
     void newTrackLoading();
 
     void filteringTrackResolved( bool successful );
+
 private:
     void filterUnresolved( const QList< query_ptr >& entries );
     void addToPlaylist( const QList< query_ptr >& entries, bool clearFirst );

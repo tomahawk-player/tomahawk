@@ -204,6 +204,14 @@ TomahawkApp::init()
     new TomahawkSettings( this );
     TomahawkSettings* s = TomahawkSettings::instance();
 
+    #ifdef LIBLASTFM_FOUND
+    qDebug() << "Setting NAM.";
+    TomahawkUtils::setNam( lastfm::nam() );
+    #else
+    qDebug() << "Setting NAM.";
+    TomahawkUtils::setNam( new QNetworkAccessManager() );
+    #endif
+    
     TomahawkUtils::NetworkProxyFactory* proxyFactory = new TomahawkUtils::NetworkProxyFactory();
 
     if( s->proxyType() != QNetworkProxy::NoProxy &&
@@ -212,20 +220,15 @@ TomahawkApp::init()
         qDebug() << "Setting proxy to saved values";
         QNetworkProxy proxy( static_cast<QNetworkProxy::ProxyType>( s->proxyType() ), s->proxyHost(), s->proxyPort(), s->proxyUsername(), s->proxyPassword() );
         proxyFactory->setProxy( proxy );
+        //TODO: On Windows and Mac because liblastfm sets an application level proxy it may override our factory, so may need to explicitly do
+        //a QNetworkProxy::setApplicationProxy with our own proxy (but then also overriding our own factory :-( )
     }
 
     if ( !s->proxyNoProxyHosts().isEmpty() )
         proxyFactory->setNoProxyHosts( s->proxyNoProxyHosts().split( ',', QString::SkipEmptyParts ) );
-    TomahawkUtils::NetworkProxyFactory::setApplicationProxyFactory( proxyFactory );
-
-#ifdef LIBLASTFM_FOUND
-    qDebug() << "Setting NAM.";
-    TomahawkUtils::setNam( lastfm::nam() );
-#else
-    qDebug() << "Setting NAM.";
-    TomahawkUtils::setNam( new QNetworkAccessManager() );
-#endif
-
+    
+    TomahawkUtils::setProxyFactory( proxyFactory );
+    
     Echonest::Config::instance()->setAPIKey( "JRIHWEP6GPOER2QQ6" );
 
     m_audioEngine = QWeakPointer<AudioEngine>( new AudioEngine );
@@ -415,9 +418,9 @@ TomahawkApp::registerMetaTypes()
     qRegisterMetaType< AudioErrorCode >("AudioErrorCode");
 
     qRegisterMetaType< QMap< QString, QMap< QString, QString > > >( "Tomahawk::InfoSystem::InfoGenericMap" );
-    qRegisterMetaType< QHash< QString, QVariant > >( "Tomahawk::InfoSystem::InfoCustomData" );
     qRegisterMetaType< QHash< QString, QString > >( "Tomahawk::InfoSystem::InfoCriteriaHash" );
     qRegisterMetaType< Tomahawk::InfoSystem::InfoType >( "Tomahawk::InfoSystem::InfoType" );
+    qRegisterMetaType< Tomahawk::InfoSystem::InfoRequestData >( "Tomahawk::InfoSystem::InfoRequestData" );
     qRegisterMetaType< QWeakPointer< Tomahawk::InfoSystem::InfoSystemCache > >( "QWeakPointer< Tomahawk::InfoSystem::InfoSystemCache >" );
 
     qRegisterMetaType< DirLister::Mode >("DirLister::Mode");

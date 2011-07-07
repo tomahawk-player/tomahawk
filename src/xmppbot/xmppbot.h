@@ -66,7 +66,7 @@ public:
 
 public slots:
     virtual void newTrackSlot(const Tomahawk::result_ptr &track);
-    virtual void infoReturnedSlot(QString caller, Tomahawk::InfoSystem::InfoType type, QVariant input, QVariant output, Tomahawk::InfoSystem::InfoCustomData customData);
+    virtual void infoReturnedSlot(QString caller, Tomahawk::InfoSystem::InfoType type, QVariant input, QVariant output, QVariantMap customData);
     virtual void infoFinishedSlot(QString caller);
 
 protected:
@@ -87,7 +87,7 @@ private slots:
 private:
     QWeakPointer<XMPPBotClient> m_client;
     Tomahawk::result_ptr m_currTrack;
-    Tomahawk::InfoSystem::InfoMap m_currInfoMap;
+    Tomahawk::InfoSystem::InfoTypeMap m_currInfoMap;
     QString m_currReturnMessage;
     QString m_currReturnJid;
 };

@@ -38,7 +38,7 @@
 */
 #include "schema.sql.h"
 
-#define CURRENT_SCHEMA_VERSION 24
+#define CURRENT_SCHEMA_VERSION 25
 
 
 DatabaseImpl::DatabaseImpl( const QString& dbname, Database* parent )
@@ -149,10 +149,10 @@ DatabaseImpl::updateSchema( int oldVersion )
         QStringList statements = sql.split( ";", QString::SkipEmptyParts );
         db.transaction();
 
-        foreach( const QString& sl, statements )
+        foreach ( const QString& sl, statements )
         {
             QString s( sl.trimmed() );
-            if( s.length() == 0 )
+            if ( s.length() == 0 )
                 continue;
 
             qDebug() << "Executing:" << s;
@@ -173,18 +173,18 @@ DatabaseImpl::updateSchema( int oldVersion )
 
             QString path = QString( RESPATH "sql/dbmigrate-%1_to_%2.sql" ).arg( cur - 1 ).arg( cur );
             QFile script( path );
-            if( !script.exists() || !script.open( QIODevice::ReadOnly ) )
+            if ( !script.exists() || !script.open( QIODevice::ReadOnly ) )
             {
-                qWarning() << "Failed to find or open upgrade script from" << (cur-1) << "to" << cur << " (" << path << ")! Aborting upgrade..";
+                qWarning() << "Failed to find or open upgrade script from" << (cur-1) << "to" << cur << " (" << path << ")! Aborting upgrade...";
                 return false;
             }
 
             QString sql = QString::fromUtf8( script.readAll() ).trimmed();
             QStringList statements = sql.split( ";", QString::SkipEmptyParts );
-            foreach( const QString& sql, statements )
+            foreach ( const QString& sql, statements )
             {
                 QString clean = cleanSql( sql ).trimmed();
-                if( clean.isEmpty() )
+                if ( clean.isEmpty() )
                     continue;
 
                 qDebug() << "Executing upgrade statement:" << clean;
@@ -224,7 +224,7 @@ DatabaseImpl::file( int fid )
                          "WHERE file.id = file_join.file AND file.id = %1" )
                 .arg( fid ) );
 
-    if( query.next() )
+    if ( query.next() )
     {
         Tomahawk::source_ptr s;
 
@@ -266,10 +266,10 @@ DatabaseImpl::file( int fid )
 
 
 int
-DatabaseImpl::artistId( const QString& name_orig, bool& isnew )
+DatabaseImpl::artistId( const QString& name_orig, bool& autoCreate )
 {
-    isnew = false;
-    if( m_lastart == name_orig )
+    bool isnew = false;
+    if ( m_lastart == name_orig )
         return m_lastartid;
 
     int id = 0;
@@ -279,31 +279,36 @@ DatabaseImpl::artistId( const QString& name_orig, bool& isnew )
     query.prepare( "SELECT id FROM artist WHERE sortname = ?" );
     query.addBindValue( sortname );
     query.exec();
-    if( query.next() )
+    if ( query.next() )
     {
         id = query.value( 0 ).toInt();
     }
-    if( id )
+    if ( id )
     {
         m_lastart = name_orig;
         m_lastartid = id;
         return id;
     }
 
-    // not found, insert it.
-    query.prepare( "INSERT INTO artist(id,name,sortname) VALUES(NULL,?,?)" );
-    query.addBindValue( name_orig );
-    query.addBindValue( sortname );
-    if( !query.exec() )
+    if ( autoCreate )
     {
-        qDebug() << "Failed to insert artist:" << name_orig;
-        return 0;
+        // not found, insert it.
+        query.prepare( "INSERT INTO artist(id,name,sortname) VALUES(NULL,?,?)" );
+        query.addBindValue( name_orig );
+        query.addBindValue( sortname );
+        if ( !query.exec() )
+        {
+            qDebug() << "Failed to insert artist:" << name_orig;
+            return 0;
+        }
+
+        id = query.lastInsertId().toInt();
+        isnew = true;
+        m_lastart = name_orig;
+        m_lastartid = id;
     }
 
-    id = query.lastInsertId().toInt();
-    isnew = true;
-    m_lastart = name_orig;
-    m_lastartid = id;
+    autoCreate = isnew;
     return id;
 }
 

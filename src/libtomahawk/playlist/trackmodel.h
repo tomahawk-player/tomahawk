@@ -89,6 +89,8 @@ public:
     virtual void ensureResolved();
 
     virtual void append( const Tomahawk::query_ptr& query ) = 0;
+    virtual void append( const Tomahawk::artist_ptr& artist ) = 0;
+    virtual void append( const Tomahawk::album_ptr& album ) = 0;
 
     TrackModelItem* itemFromIndex( const QModelIndex& index ) const;
 

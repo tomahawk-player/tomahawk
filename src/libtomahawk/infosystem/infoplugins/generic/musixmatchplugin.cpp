@@ -51,53 +51,52 @@ MusixMatchPlugin::namChangedSlot( QNetworkAccessManager *nam )
 }
 
 void
-MusixMatchPlugin::getInfo( const QString caller, const Tomahawk::InfoSystem::InfoType type, const QVariant input, const Tomahawk::InfoSystem::InfoCustomData customData )
+MusixMatchPlugin::getInfo( uint requestId, Tomahawk::InfoSystem::InfoRequestData requestData )
 {
     qDebug() << Q_FUNC_INFO;
-    if( !isValidTrackData(caller, input, customData) || !input.canConvert<Tomahawk::InfoSystem::InfoCustomData>() || m_nam.isNull() || type != Tomahawk::InfoSystem::InfoTrackLyrics )
+    if( !isValidTrackData( requestId, requestData ) || !requestData.input.canConvert< QVariantMap >() || m_nam.isNull() || requestData.type != Tomahawk::InfoSystem::InfoTrackLyrics )
         return;
-    Tomahawk::InfoSystem::InfoCustomData hash = input.value<Tomahawk::InfoSystem::InfoCustomData>();
+    QVariantMap hash = requestData.input.value< QVariantMap >();
     QString artist = hash["artistName"].toString();
     QString track = hash["trackName"].toString();
     if( artist.isEmpty() || track.isEmpty() )
     {
-        emit info(caller, Tomahawk::InfoSystem::InfoTrackLyrics, input, QVariant(), customData);
+        emit info( requestId, requestData, QVariant() );
         return;
     }
     qDebug() << "artist is " << artist << ", track is " << track;
-    QString requestString("http://api.musixmatch.com/ws/1.1/track.search?format=xml&page_size=1&f_has_lyrics=1");
-    QUrl url(requestString);
-    url.addQueryItem("apikey", m_apiKey);
-    url.addQueryItem("q_artist", artist);
-    url.addQueryItem("q_track", track);
-    QNetworkReply* reply = m_nam.data()->get(QNetworkRequest(url));
-    reply->setProperty("customData", QVariant::fromValue<Tomahawk::InfoSystem::InfoCustomData>(customData));
-    reply->setProperty("origData", input);
-    reply->setProperty("caller", caller);
+    QString requestString( "http://api.musixmatch.com/ws/1.1/track.search?format=xml&page_size=1&f_has_lyrics=1" );
+    QUrl url( requestString );
+    url.addQueryItem( "apikey", m_apiKey );
+    url.addQueryItem( "q_artist", artist );
+    url.addQueryItem( "q_track", track );
+    QNetworkReply* reply = m_nam.data()->get( QNetworkRequest( url ) );
+    reply->setProperty( "requestId", requestId );
+    reply->setProperty( "requestData", QVariant::fromValue< Tomahawk::InfoSystem::InfoRequestData >( requestData ) );
 
-    connect(reply, SIGNAL(finished()), SLOT(trackSearchSlot()));
+    connect( reply, SIGNAL( finished() ), SLOT( trackSearchSlot() ) );
 }
 
 bool
-MusixMatchPlugin::isValidTrackData( const QString &caller, const QVariant &input, const Tomahawk::InfoSystem::InfoCustomData &customData )
+MusixMatchPlugin::isValidTrackData( uint requestId, Tomahawk::InfoSystem::InfoRequestData requestData )
 {
     qDebug() << Q_FUNC_INFO;
-    if (input.isNull() || !input.isValid() || !input.canConvert<Tomahawk::InfoSystem::InfoCustomData>())
+    if ( requestData.input.isNull() || !requestData.input.isValid() || !requestData.input.canConvert< QVariantMap >() )
     {
-        emit info(caller, Tomahawk::InfoSystem::InfoTrackLyrics, input, QVariant(), customData);
+        emit info( requestId, requestData, QVariant() );
         qDebug() << "MusixMatchPlugin::isValidTrackData: Data null, invalid, or can't convert";
         return false;
     }
-    InfoCustomData hash = input.value<Tomahawk::InfoSystem::InfoCustomData>();
-    if (hash["trackName"].toString().isEmpty() )
+    QVariantMap hash = requestData.input.value< QVariantMap >();
+    if ( hash[ "trackName" ].toString().isEmpty() )
     {
-        emit info(caller, Tomahawk::InfoSystem::InfoTrackLyrics, input, QVariant(), customData);
+        emit info( requestId, requestData, QVariant() );
         qDebug() << "MusixMatchPlugin::isValidTrackData: Track name is empty";
         return false;
     }
-    if (hash["artistName"].toString().isEmpty() )
+    if ( hash[ "artistName" ].toString().isEmpty() )
     {
-        emit info(caller, Tomahawk::InfoSystem::InfoTrackLyrics, input, QVariant(), customData);
+        emit info( requestId, requestData, QVariant() );
         qDebug() << "MusixMatchPlugin::isValidTrackData: No artist name found";
         return false;
     }
@@ -109,51 +108,46 @@ MusixMatchPlugin::trackSearchSlot()
 {
     qDebug() << Q_FUNC_INFO;
     QNetworkReply* oldReply = qobject_cast<QNetworkReply*>( sender() );
-    if ( !oldReply || m_nam.isNull() )
-    {
-        emit info(QString(), Tomahawk::InfoSystem::InfoTrackLyrics, QVariant(), QVariant(), Tomahawk::InfoSystem::InfoCustomData());
-        return;
-    }
+    if ( !oldReply )
+        return; //timeout will handle it
+    
     QDomDocument doc;
     doc.setContent(oldReply->readAll());
     qDebug() << doc.toString();
     QDomNodeList domNodeList = doc.elementsByTagName("track_id");
-    if (domNodeList.isEmpty())
+    if ( domNodeList.isEmpty() )
     {
-        emit info(oldReply->property("caller").toString(), Tomahawk::InfoSystem::InfoTrackLyrics, oldReply->property("origData"), QVariant(), oldReply->property("customData").value<Tomahawk::InfoSystem::InfoCustomData>());
+        emit info( oldReply->property( "requestId" ).toUInt(), oldReply->property( "requestData" ).value< Tomahawk::InfoSystem::InfoRequestData >(), QVariant() );
         return;
     }
     QString track_id = domNodeList.at(0).toElement().text();
-    QString requestString("http://api.musixmatch.com/ws/1.1/track.lyrics.get?track_id=%1&format=xml&apikey=%2");
-    QUrl url(requestString);
-    url.addQueryItem("apikey", m_apiKey);
-    url.addQueryItem("track_id", track_id);
-    QNetworkReply* newReply = m_nam.data()->get(QNetworkRequest(url));
-    newReply->setProperty("origData", oldReply->property("origData"));
-    newReply->setProperty("customData", oldReply->property("customData"));
-    newReply->setProperty("caller", oldReply->property("caller"));
-    connect(newReply, SIGNAL(finished()), SLOT(trackLyricsSlot()));
+    QString requestString( "http://api.musixmatch.com/ws/1.1/track.lyrics.get?track_id=%1&format=xml&apikey=%2" );
+    QUrl url( requestString );
+    url.addQueryItem( "apikey", m_apiKey );
+    url.addQueryItem( "track_id", track_id );
+    QNetworkReply* newReply = m_nam.data()->get( QNetworkRequest( url ) );
+    newReply->setProperty( "requestId", oldReply->property( "requestId" ) );
+    newReply->setProperty( "requestData", oldReply->property( "requestData" ) );
+    connect( newReply, SIGNAL( finished() ), SLOT( trackLyricsSlot() ) );
 }
 
 void
 MusixMatchPlugin::trackLyricsSlot()
 {
     qDebug() << Q_FUNC_INFO;
-    QNetworkReply* reply = qobject_cast<QNetworkReply*>( sender() );
-    if (!reply)
-    {
-        emit info(QString(), Tomahawk::InfoSystem::InfoTrackLyrics, QVariant(), QVariant(), Tomahawk::InfoSystem::InfoCustomData());
-        return;
-    }
+    QNetworkReply* reply = qobject_cast< QNetworkReply* >( sender() );
+    if ( !reply )
+        return; //timeout will handle it
+
     QDomDocument doc;
-    doc.setContent(reply->readAll());
-    QDomNodeList domNodeList = doc.elementsByTagName("lyrics_body");
-    if (domNodeList.isEmpty())
+    doc.setContent( reply->readAll() );
+    QDomNodeList domNodeList = doc.elementsByTagName( "lyrics_body" );
+    if ( domNodeList.isEmpty() )
     {
-        emit info(reply->property("caller").toString(), Tomahawk::InfoSystem::InfoTrackLyrics, reply->property("origData"), QVariant(), reply->property("customData").value<Tomahawk::InfoSystem::InfoCustomData>());
+        emit info( reply->property( "requestId" ).toUInt(), reply->property( "requestData" ).value< Tomahawk::InfoSystem::InfoRequestData >(), QVariant() );
         return;
     }
     QString lyrics = domNodeList.at(0).toElement().text();
     qDebug() << "Emitting lyrics: " << lyrics;
-    emit info(reply->property("caller").toString(), Tomahawk::InfoSystem::InfoTrackLyrics, reply->property("origData"), QVariant(lyrics), reply->property("customData").value<Tomahawk::InfoSystem::InfoCustomData>());
+    emit info( reply->property( "requestId" ).toUInt(), reply->property( "requestData" ).value< Tomahawk::InfoSystem::InfoRequestData >(), QVariant( lyrics ) );
 }

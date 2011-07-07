@@ -37,18 +37,26 @@ TreeProxyModel::TreeProxyModel( QObject* parent )
     setSortCaseSensitivity( Qt::CaseInsensitive );
     setDynamicSortFilter( true );
 
-    setSourceModel( 0 );
+    setSourceTreeModel( 0 );
 }
 
 
 void
-TreeProxyModel::setSourceModel( TreeModel* sourceModel )
+TreeProxyModel::setSourceModel( QAbstractItemModel* sourceModel )
+{
+    Q_UNUSED( sourceModel );
+    qDebug() << "Explicitly use setSourceTreeModel instead";
+    Q_ASSERT( false );
+}
+
+
+void
+TreeProxyModel::setSourceTreeModel( TreeModel* sourceModel )
 {
     m_model = sourceModel;
 
     if ( m_model && m_model->metaObject()->indexOfSignal( "trackCountChanged(uint)" ) > -1 )
         connect( m_model, SIGNAL( trackCountChanged( unsigned int ) ), SIGNAL( sourceTrackCountChanged( unsigned int ) ) );
-
 
     QSortFilterProxyModel::setSourceModel( sourceModel );
 }

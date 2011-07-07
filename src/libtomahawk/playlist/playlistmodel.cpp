@@ -23,7 +23,7 @@
 #include <QTreeView>
 
 #include "album.h"
-
+#include "pipeline.h"
 #include "database/database.h"
 #include "database/databasecommand_playbackhistory.h"
 #include "dynamic/GeneratorInterface.h"
@@ -188,6 +188,9 @@ PlaylistModel::append( const Tomahawk::query_ptr& query )
     QList< Tomahawk::query_ptr > ql;
     ql << query;
 
+    if ( !query->resolvingFinished() )
+        Pipeline::instance()->resolve( query );
+
     onTracksAdded( ql );
 }
 
@@ -201,7 +204,8 @@ PlaylistModel::append( const Tomahawk::album_ptr& album )
     connect( album.data(), SIGNAL( tracksAdded( QList<Tomahawk::query_ptr> ) ),
                              SLOT( onTracksAdded( QList<Tomahawk::query_ptr> ) ) );
 
-    if( rowCount( QModelIndex() ) == 0 ) {
+    if ( rowCount( QModelIndex() ) == 0 )
+    {
         setTitle( album->name() );
         setDescription( tr( "All tracks by %1 on album %2" ).arg( album->artist()->name() ).arg( album->name() ) );
         m_isTemporary = true;
@@ -220,7 +224,8 @@ PlaylistModel::append( const Tomahawk::artist_ptr& artist )
     connect( artist.data(), SIGNAL( tracksAdded( QList<Tomahawk::query_ptr> ) ),
                               SLOT( onTracksAdded( QList<Tomahawk::query_ptr> ) ) );
 
-    if( rowCount( QModelIndex() ) == 0 ) {
+    if ( rowCount( QModelIndex() ) == 0 )
+    {
         setTitle( artist->name() );
         setDescription( tr( "All tracks by %1" ).arg( artist->name() ) );
         m_isTemporary = true;

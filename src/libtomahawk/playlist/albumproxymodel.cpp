@@ -40,6 +40,7 @@ AlbumProxyModel::AlbumProxyModel( QObject* parent )
     setSourceAlbumModel( 0 );
 }
 
+
 void
 AlbumProxyModel::setSourceModel( QAbstractItemModel* sourceModel )
 {
@@ -47,6 +48,7 @@ AlbumProxyModel::setSourceModel( QAbstractItemModel* sourceModel )
     qDebug() << "Explicitly use setSourceAlbumModel instead";
     Q_ASSERT( false );
 }
+
 
 void
 AlbumProxyModel::setSourceAlbumModel( AlbumModel* sourceModel )

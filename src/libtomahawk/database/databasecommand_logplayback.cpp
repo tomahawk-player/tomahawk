@@ -40,7 +40,7 @@ DatabaseCommand_LogPlayback::postCommitHook()
 
     // do not auto resolve this track
     Tomahawk::query_ptr q = Tomahawk::Query::get( m_artist, m_track, QString() );
-    q->setPlayedBy( source() );
+    q->setPlayedBy( source(), m_playtime );
 
     if ( m_action == Finished )
     {
@@ -80,12 +80,13 @@ DatabaseCommand_LogPlayback::exec( DatabaseImpl* dbi )
 
     query.bindValue( 0, srcid );
 
-    bool isnew;
-    int artid = dbi->artistId( m_artist, isnew );
+    bool autoCreate = true;
+    int artid = dbi->artistId( m_artist, autoCreate );
     if( artid < 1 )
         return;
 
-    int trkid = dbi->trackId( artid, m_track, isnew );
+    autoCreate = true; // artistId overwrites autoCreate (reference)
+    int trkid = dbi->trackId( artid, m_track, autoCreate );
     if( trkid < 1 )
         return;
 

@@ -70,7 +70,7 @@ SourcePlaylistInterface::hasNextItem()
 {
     if ( m_source.isNull() || m_source->currentTrack().isNull() || m_source->currentTrack()->results().isEmpty() )
         return false;
-    
+
     return m_gotNextItem;
 }
 
@@ -96,7 +96,6 @@ void
 SourcePlaylistInterface::onSourcePlaybackStarted( const Tomahawk::query_ptr& query )
 {
     qDebug() << Q_FUNC_INFO;
-    connect( query.data(), SIGNAL( resultsAdded( const QList<Tomahawk::result_ptr>& ) ), SLOT( resolveResultsAdded( const QList<Tomahawk::result_ptr>& ) ) );
     connect( query.data(), SIGNAL( resolvingFinished( bool ) ), SLOT( resolvingFinished( bool ) ) );
     Pipeline::instance()->resolve( query, true );
     m_gotNextItem = true;
@@ -104,17 +103,9 @@ SourcePlaylistInterface::onSourcePlaybackStarted( const Tomahawk::query_ptr& que
 
 
 void
-SourcePlaylistInterface::resolveResultsAdded( const QList<Tomahawk::result_ptr>& results ) const
-{
-    qDebug() << Q_FUNC_INFO;
-    foreach ( Tomahawk::result_ptr ptr, results )
-    {
-        qDebug() << "Found result: " << ptr->track();
-    }
-}
-
-void
-SourcePlaylistInterface::resolvingFinished( bool hasResults ) const
+SourcePlaylistInterface::resolvingFinished( bool hasResults )
 {
     qDebug() << Q_FUNC_INFO << " and has results? : " << (hasResults ? "true" : "false");
+    if ( hasResults )
+        emit nextTrackReady();
 }

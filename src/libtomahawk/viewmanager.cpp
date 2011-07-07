@@ -25,8 +25,6 @@
 #include "utils/animatedsplitter.h"
 #include "infobar/infobar.h"
 #include "topbar/topbar.h"
-#include "widgets/infowidgets/sourceinfowidget.h"
-#include "widgets/welcomewidget.h"
 
 #include "treemodel.h"
 #include "collectionflatmodel.h"
@@ -47,6 +45,7 @@
 
 #include "widgets/welcomewidget.h"
 #include "widgets/infowidgets/sourceinfowidget.h"
+#include "widgets/infowidgets/ArtistInfoWidget.h"
 #include "widgets/newplaylistwidget.h"
 
 #define FILTER_TIMEOUT 280
@@ -217,28 +216,19 @@ ViewManager::show( const Tomahawk::dynplaylist_ptr& playlist )
 Tomahawk::ViewPage*
 ViewManager::show( const Tomahawk::artist_ptr& artist )
 {
-    PlaylistView* view;
-
+    ArtistInfoWidget* swidget;
     if ( !m_artistViews.contains( artist ) )
     {
-        view = new PlaylistView();
-        PlaylistModel* model = new PlaylistModel();
-        view->setPlaylistModel( model );
-        view->setFrameShape( QFrame::NoFrame );
-        view->setAttribute( Qt::WA_MacShowFocusRect, 0 );
-        model->append( artist );
-
-        m_artistViews.insert( artist, view );
+        swidget = new ArtistInfoWidget( artist );
+        m_artistViews.insert( artist, swidget );
     }
     else
     {
-        view = m_artistViews.value( artist );
+        swidget = m_artistViews.value( artist );
     }
 
-    setPage( view );
-    emit numSourcesChanged( 1 );
-
-    return view;
+    setPage( swidget );
+    return swidget;
 }
 
 
@@ -367,8 +357,6 @@ ViewManager::show( const Tomahawk::source_ptr& source )
     }
 
     setPage( swidget );
-    emit numSourcesChanged( 1 );
-
     return swidget;
 }
 
@@ -617,8 +605,14 @@ ViewManager::setPage( ViewPage* page, bool trackHistory )
         if( obj->metaObject()->indexOfSignal( "descriptionChanged(QString)" ) > -1 )
             connect( obj, SIGNAL( descriptionChanged( QString ) ), m_infobar, SLOT( setDescription( QString ) ), Qt::UniqueConnection );
 
+        if( obj->metaObject()->indexOfSignal( "longDescriptionChanged(QString)" ) > -1 )
+            connect( obj, SIGNAL( longDescriptionChanged( QString ) ), m_infobar, SLOT( setLongDescription( QString ) ), Qt::UniqueConnection );
+
         if( obj->metaObject()->indexOfSignal( "nameChanged(QString)" ) > -1 )
             connect( obj, SIGNAL( nameChanged( QString ) ), m_infobar, SLOT( setCaption( QString ) ), Qt::UniqueConnection );
+
+        if( obj->metaObject()->indexOfSignal( "pixmapChanged(QPixmap)" ) > -1 )
+            connect( obj, SIGNAL( pixmapChanged( QPixmap ) ), m_infobar, SLOT( setPixmap( QPixmap ) ), Qt::UniqueConnection );
 
         if( obj->metaObject()->indexOfSignal( "destroyed(QWidget*)" ) > -1 )
             connect( obj, SIGNAL( destroyed( QWidget* ) ), SLOT( onWidgetDestroyed( QWidget* ) ), Qt::UniqueConnection );
@@ -724,6 +718,7 @@ ViewManager::updateView()
 
     m_infobar->setCaption( currentPage()->title() );
     m_infobar->setDescription( currentPage()->description() );
+    m_infobar->setLongDescription( currentPage()->longDescription() );
     m_infobar->setPixmap( currentPage()->pixmap() );
 
     // turn on shuffle/repeat mode for the new playlist view if specified in config

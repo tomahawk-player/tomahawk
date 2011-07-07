@@ -29,6 +29,7 @@
 #include <QtCore/QSet>
 #include <QtCore/QLinkedList>
 #include <QtCore/QVariant>
+#include <QtCore/QTimer>
 
 #include "dllmacro.h"
 
@@ -36,6 +37,7 @@ namespace Tomahawk {
 
 namespace InfoSystem {
 
+   
 class DLLEXPORT InfoSystemWorker : public QObject
 {
     Q_OBJECT
@@ -48,16 +50,32 @@ public:
     QNetworkAccessManager* nam() const;
     
 signals:
-    void info( QString target, Tomahawk::InfoSystem::InfoType, QVariant input, QVariant output, Tomahawk::InfoSystem::InfoCustomData customData );
+    void info( Tomahawk::InfoSystem::InfoRequestData requestData, QVariant output );
+    void finished( QString target );
+    
     void namChanged( QNetworkAccessManager* );
 
 public slots:
     void init( QWeakPointer< Tomahawk::InfoSystem::InfoSystemCache > cache );
-    void getInfo( const QString caller, const Tomahawk::InfoSystem::InfoType type, const QVariant input, const Tomahawk::InfoSystem::InfoCustomData customData );
-    void pushInfo( const QString caller, const Tomahawk::InfoSystem::InfoType type, const QVariant input );
+    void getInfo( Tomahawk::InfoSystem::InfoRequestData requestData, uint timeoutMillis );
+    void pushInfo( QString caller, Tomahawk::InfoSystem::InfoType type, QVariant input );
+
+    void infoSlot( uint requestId, Tomahawk::InfoSystem::InfoRequestData requestData, QVariant output );
+    
     void newNam();
+
+private slots:
+    void checkTimeoutsTimerFired();
     
 private:
+
+    void checkFinished( const QString &target );
+    
+    QHash< QString, QHash< InfoType, int > > m_dataTracker;
+    QMultiMap< qint64, uint > m_timeRequestMapper;
+    QHash< uint, bool > m_requestSatisfiedMap;
+    QHash< uint, InfoRequestData* > m_savedRequestMap;
+    
     QLinkedList< InfoPluginPtr > determineOrderedMatches( const InfoType type ) const;
     
     // For now, statically instantiate plugins; this is just somewhere to keep them
@@ -67,6 +85,10 @@ private:
     QMap< InfoType, QLinkedList< InfoPluginPtr > > m_infoPushMap;
 
     QWeakPointer< QNetworkAccessManager> m_nam;
+
+    uint m_nextRequest;
+
+    QTimer m_checkTimeoutsTimer;
 };
 
 }

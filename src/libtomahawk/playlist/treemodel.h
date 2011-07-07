@@ -80,6 +80,7 @@ public:
     void addCollection( const Tomahawk::collection_ptr& collection );
     void addFilteredCollection( const Tomahawk::collection_ptr& collection, unsigned int amount, DatabaseCommand_AllArtists::SortOrder order );
 
+    void addArtists( const Tomahawk::artist_ptr& artist );
     void addAlbums( const Tomahawk::artist_ptr& artist, const QModelIndex& parent );
     void addTracks( const Tomahawk::album_ptr& album, const QModelIndex& parent );
 
@@ -91,7 +92,9 @@ public:
     TreeModelItem* itemFromIndex( const QModelIndex& index ) const
     {
         if ( index.isValid() )
+        {
             return static_cast<TreeModelItem*>( index.internalPointer() );
+        }
         else
         {
             return m_rootItem;
@@ -122,8 +125,11 @@ private slots:
     void onAlbumsAdded( const QList<Tomahawk::album_ptr>& albums, const QVariant& data );
     void onTracksAdded( const QList<Tomahawk::query_ptr>& tracks, const QVariant& data );
 
-    void infoSystemInfo( QString caller, Tomahawk::InfoSystem::InfoType type, QVariant input, QVariant output, Tomahawk::InfoSystem::InfoCustomData customData );
+    void infoSystemInfo( Tomahawk::InfoSystem::InfoRequestData requestData, QVariant output );
     void infoSystemFinished( QString target );
+
+    void onPlaybackFinished( const Tomahawk::result_ptr& result );
+    void onPlaybackStopped();
 
     void onDataChanged();
 

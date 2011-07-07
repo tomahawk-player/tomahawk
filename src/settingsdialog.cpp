@@ -598,11 +598,13 @@ SettingsDialog::sipFactoryClicked( SipPluginFactory* factory )
         DelegateConfigWrapper* dialog = new DelegateConfigWrapper( p->configWidget(), QString("%1 Config" ).arg( p->friendlyName() ), this, Qt::Sheet );
         dialog->setProperty( "sipplugin", QVariant::fromValue< QObject* >( p ) );
         connect( dialog, SIGNAL( finished( int ) ), this, SLOT( sipCreateConfigClosed( int ) ) );
+        connect( p, SIGNAL( datatError( bool ) ), dialog, SLOT( toggleOkButton( bool ) ) );
 
         dialog->show();
 #else
         DelegateConfigWrapper dialog( p->configWidget(), QString("%1 Config" ).arg( p->friendlyName() ), this );
         QWeakPointer< DelegateConfigWrapper > watcher( &dialog );
+        connect( p, SIGNAL( dataError( bool ) ), &dialog, SLOT( toggleOkButton( bool ) ) );
         int ret = dialog.exec();
         if( !watcher.isNull() && ret == QDialog::Accepted ) {
             // send changed config to resolver

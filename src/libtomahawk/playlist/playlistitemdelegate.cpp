@@ -37,6 +37,8 @@
 
 #define PLAYING_ICON QString( RESPATH "images/now-playing-speaker.png" )
 
+using namespace Tomahawk;
+
 
 PlaylistItemDelegate::PlaylistItemDelegate( TrackView* parent, TrackProxyModel* proxy )
     : QStyledItemDelegate( (QObject*)parent )
@@ -147,6 +149,8 @@ PlaylistItemDelegate::paintShort( QPainter* painter, const QStyleOptionViewItem&
 
     QPixmap pixmap;
     QString artist, track, upperText, lowerText;
+    source_ptr source = item->query()->playedBy().first;
+
     if ( item->query()->results().count() )
     {
         artist = item->query()->results().first()->artist()->name();
@@ -158,7 +162,7 @@ PlaylistItemDelegate::paintShort( QPainter* painter, const QStyleOptionViewItem&
         track = item->query()->track();
     }
 
-    if ( item->query()->playedBy().isNull() )
+    if ( source.isNull() )
     {
         upperText = artist;
         lowerText = track;
@@ -166,13 +170,14 @@ PlaylistItemDelegate::paintShort( QPainter* painter, const QStyleOptionViewItem&
     else
     {
         upperText = QString( "%1 - %2" ).arg( artist ).arg( track );
+        QString playtime = TomahawkUtils::ageToString( QDateTime::fromTime_t( item->query()->playedBy().second ) );
 
-        if ( item->query()->playedBy() == SourceList::instance()->getLocal() )
-            lowerText = QString( "played by you" );
+        if ( source == SourceList::instance()->getLocal() )
+            lowerText = QString( "played %1 ago by you" ).arg( playtime );
         else
-            lowerText = QString( "played by %1" ).arg( item->query()->playedBy()->friendlyName() );
+            lowerText = QString( "played %1 ago by %2" ).arg( playtime ).arg( source->friendlyName() );
 
-        pixmap = item->query()->playedBy()->avatar();
+        pixmap = source->avatar();
     }
 
     if ( pixmap.isNull() )
@@ -200,15 +205,16 @@ PlaylistItemDelegate::paintShort( QPainter* painter, const QStyleOptionViewItem&
         QFont boldFont = opt.font;
         boldFont.setBold( true );
 
-        r.adjust( ir.width() + 12, 0, 0, 0 );
+        r.adjust( ir.width() + 12, 0, -12, 0 );
         QTextOption to( Qt::AlignTop );
-        QString text = painter->fontMetrics().elidedText( upperText, Qt::ElideRight, r.width() - 3 );
+        to.setWrapMode( QTextOption::NoWrap );
         painter->setFont( boldFont );
+        QString text = painter->fontMetrics().elidedText( upperText, Qt::ElideRight, r.width() );
         painter->drawText( r.adjusted( 0, 1, 0, 0 ), text, to );
 
         to.setAlignment( Qt::AlignBottom );
-        text = painter->fontMetrics().elidedText( lowerText, Qt::ElideRight, r.width() - 3 );
         painter->setFont( opt.font );
+        text = painter->fontMetrics().elidedText( lowerText, Qt::ElideRight, r.width() );
         painter->drawText( r.adjusted( 0, 1, 0, 0 ), text, to );
     }
     painter->restore();
@@ -257,8 +263,8 @@ PlaylistItemDelegate::paintDetailed( QPainter* painter, const QStyleOptionViewIt
             if ( m_view->header()->visualIndex( index.column() ) == 0 )
             {
                 r.adjust( 0, 0, 0, -3 );
-                painter->drawPixmap( r.adjusted( 3, 3, 18 - r.width(), 0 ), m_nowPlayingIcon );
-                r.adjust( 22, 0, 0, 3 );
+                painter->drawPixmap( r.adjusted( 3, 1, 18 - r.width(), 1 ), m_nowPlayingIcon );
+                r.adjust( 25, 0, 0, 3 );
             }
 
             painter->setPen( opt.palette.text().color() );

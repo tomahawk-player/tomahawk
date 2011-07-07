@@ -80,11 +80,13 @@ JabberPlugin::JabberPlugin( const QString& pluginId )
     m_ui->jabberPassword->setText( readPassword() );
     m_ui->jabberServer->setText( readServer() );
     m_ui->jabberPort->setValue( readPort() );
+    m_ui->jidExistsLabel->hide();
     m_currentUsername = accountName();
     m_currentServer = readServer();
     m_currentPassword = readPassword();
     m_currentPort = readPort();
 
+    connect( m_ui->jabberUsername, SIGNAL( textChanged( QString ) ), SLOT( onCheckJidExists( QString ) ) );
     // setup JID object
     Jreen::JID jid = Jreen::JID( accountName() );
 
@@ -998,6 +1000,33 @@ JabberPlugin::readServer()
 {
     return TomahawkSettings::instance()->value( pluginId() + "/server" ).toString();
 }
+
+
+void
+JabberPlugin::onCheckJidExists( QString jid )
+{
+    for ( int i=0; i<TomahawkSettings::instance()->sipPlugins().count(); i++ )
+    {
+        QString savedUsername = TomahawkSettings::instance()->value( 
+                TomahawkSettings::instance()->sipPlugins().at( i ) + "/username" ).toString();
+        QStringList splitUserName = TomahawkSettings::instance()->value(
+                TomahawkSettings::instance()->sipPlugins().at( i ) + "/username" ).toString().split("@");
+        QString server = TomahawkSettings::instance()->value(
+                TomahawkSettings::instance()->sipPlugins().at( i ) + "/server" ).toString();
+                
+        if ( ( savedUsername == jid || splitUserName.contains( jid ) ) && 
+               server == m_ui->jabberServer->text() && !jid.trimmed().isEmpty() )
+        {
+            m_ui->jidExistsLabel->show();
+            // the already jid exists
+            emit dataError( true );
+            return;
+        }
+    }
+    m_ui->jidExistsLabel->hide();
+    emit dataError( false );
+}
+
 
 void
 JabberPlugin::saveConfig()
