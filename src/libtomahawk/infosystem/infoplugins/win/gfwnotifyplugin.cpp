@@ -38,6 +38,7 @@
 
 #include "gfwnotifyplugin.h"
 #include "utils/tomahawkutils.h"
+#include "headlesscheck.h"
 
 #include "growl.h"
 #include "growl++.hpp"
@@ -51,8 +52,8 @@ GfwNotifyPlugin::GfwNotifyPlugin()
     const char* notifications[1];
     const char* name = "Notification";
     notifications[0] = name;
-    const char* host = "192.168.10.45";
-    const char* password = "testing";
+    const char* host = "127.0.0.1";
+    const char* password = "";
     const char* application = "Tomahawk";
     m_growl = new Growl( GROWL_TCP, host, password, application, notifications, 1 );
     qDebug() << Q_FUNC_INFO;
@@ -85,6 +86,6 @@ GfwNotifyPlugin::pushInfo( const QString caller, const Tomahawk::InfoSystem::Inf
     const char* title = "Tomahawk";
     const char* message = strdup( hash["message"].toLocal8Bit().constData() );
     const char* url = "";
-    const char* icon = "file:///S:/Program%20Files%20(x86)/Tomahawk/tomahawk-icon-128x128.png";
+    const char* icon = QString( "file:///" + TOMAHAWK_APPLICATION::applicationDirPath() + "/tomahawk-icon-128x128.png" ).toLocal8Bit().constData();
     m_growl->Notify( name, title, message, url, icon );
 }
