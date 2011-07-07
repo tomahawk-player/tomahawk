@@ -12,3 +12,6 @@ moc_*
 thirdparty/qtweetlib/WARNING-twitter-api-keys
 .kdev4
 tomahawk.kdev4
+clang/
+win/
+gcc/
