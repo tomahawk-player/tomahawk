@@ -37,7 +37,7 @@
  * networking API's such as LastFm, Facebook, or Twitter to allow the user
  * to sync these actions with their accounts on these sites.
  * 
- * \see DatabaseCommand_LoadSocialAction
+ * \see DatabaseCommand_LoadSocialActions
  */
 class DLLEXPORT DatabaseCommand_SocialAction : public DatabaseCommand
 {
