@@ -60,7 +60,10 @@ void
 CollectionView::setTrackModel( TrackModel* model )
 {
     TrackView::setTrackModel( model );
-    setColumnHidden( TrackModel::Score, true ); // Hide age column per default
+
+    setColumnHidden( TrackModel::Score, true ); // Hide score column per default
+    setColumnHidden( TrackModel::Origin, true ); // Hide origin column per default
+
     setGuid( QString( "collectionview/%1" ).arg( model->columnCount() ) );
 
     setSortingEnabled( true );
