@@ -258,12 +258,12 @@ AudioEngine::sendNowPlayingNotification()
         connect( Tomahawk::InfoSystem::InfoSystem::instance(),
              SIGNAL( info( Tomahawk::InfoSystem::InfoRequestData, QVariant ) ),
              SLOT( infoSystemInfo( Tomahawk::InfoSystem::InfoRequestData, QVariant ) ) );
-    
+
         connect( Tomahawk::InfoSystem::InfoSystem::instance(), SIGNAL( finished( QString ) ), SLOT( infoSystemFinished( QString ) ) );
 
         m_infoSystemConnected = true;
     }
-    
+
     Tomahawk::InfoSystem::InfoCriteriaHash trackInfo;
     trackInfo["artist"] = m_currentTrack->album()->artist()->name();
     trackInfo["album"] = m_currentTrack->album()->name();
@@ -273,7 +273,7 @@ AudioEngine::sendNowPlayingNotification()
     requestData.type = Tomahawk::InfoSystem::InfoAlbumCoverArt;
     requestData.input = QVariant::fromValue< Tomahawk::InfoSystem::InfoCriteriaHash >( trackInfo );
     requestData.customData = QVariantMap();
-    
+
     Tomahawk::InfoSystem::InfoSystem::instance()->getInfo( requestData );
 }
 
@@ -281,12 +281,12 @@ AudioEngine::sendNowPlayingNotification()
 void
 AudioEngine::infoSystemInfo( Tomahawk::InfoSystem::InfoRequestData requestData, QVariant output )
 {
-    qDebug() << Q_FUNC_INFO;
-    
+//    qDebug() << Q_FUNC_INFO;
+
     if ( requestData.caller != s_aeInfoIdentifier ||
          requestData.type != Tomahawk::InfoSystem::InfoAlbumCoverArt )
     {
-        qDebug() << Q_FUNC_INFO << " not destined for us or wrong type, caller is " << requestData.caller << " and type is " << requestData.type;
+//        qDebug() << Q_FUNC_INFO << " not destined for us or wrong type, caller is " << requestData.caller << " and type is " << requestData.type;
         return;
     }
 
@@ -297,10 +297,10 @@ AudioEngine::infoSystemInfo( Tomahawk::InfoSystem::InfoRequestData requestData, 
                                      .arg( m_currentTrack->album()->name() );
     if ( !output.isNull() && output.isValid() )
     {
-        qDebug() << Q_FUNC_INFO << " output is valid";
+//        qDebug() << Q_FUNC_INFO << " output is valid";
         QVariantMap returnedData = output.value< QVariantMap >();
         const QByteArray ba = returnedData["imgbytes"].toByteArray();
-        qDebug() << "ba.length = " << ba.length();
+//        qDebug() << "ba.length = " << ba.length();
         if ( ba.length() )
         {
             QPixmap pm;
@@ -308,7 +308,7 @@ AudioEngine::infoSystemInfo( Tomahawk::InfoSystem::InfoRequestData requestData, 
             playInfo["image"] = QVariant( pm.toImage() );
         }
     }
-    
+
     Tomahawk::InfoSystem::InfoSystem::instance()->pushInfo(
         s_aeInfoIdentifier, Tomahawk::InfoSystem::InfoNotifyUser,
         QVariant::fromValue< QVariantMap >( playInfo ) );
@@ -319,7 +319,7 @@ void
 AudioEngine::infoSystemFinished( QString caller )
 {
     Q_UNUSED( caller );
-    qDebug() << Q_FUNC_INFO;
+//    qDebug() << Q_FUNC_INFO;
 }
 
 
@@ -398,7 +398,7 @@ AudioEngine::loadTrack( const Tomahawk::result_ptr& result )
             trackInfo["title"] = m_currentTrack->track();
             trackInfo["artist"] = m_currentTrack->artist()->name();
             trackInfo["album"] = m_currentTrack->album()->name();
-            
+
             if ( TomahawkSettings::instance()->verboseNotifications() )
                 sendNowPlayingNotification();
 

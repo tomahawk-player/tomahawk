@@ -600,12 +600,12 @@ TreeModel::onTracksAdded( const QList<Tomahawk::query_ptr>& tracks, const QVaria
 void
 TreeModel::infoSystemInfo( Tomahawk::InfoSystem::InfoRequestData requestData, QVariant output )
 {
-    qDebug() << Q_FUNC_INFO;
+//    qDebug() << Q_FUNC_INFO;
 
     if ( requestData.caller != s_tmInfoIdentifier ||
        ( requestData.type != Tomahawk::InfoSystem::InfoAlbumCoverArt && requestData.type != Tomahawk::InfoSystem::InfoArtistImages ) )
     {
-        qDebug() << "Info of wrong type or not with our identifier";
+//        qDebug() << "Info of wrong type or not with our identifier";
         return;
     }
 
@@ -618,7 +618,6 @@ TreeModel::infoSystemInfo( Tomahawk::InfoSystem::InfoRequestData requestData, QV
     Tomahawk::InfoSystem::InfoCriteriaHash pptr = requestData.input.value< Tomahawk::InfoSystem::InfoCriteriaHash >();
     QVariantMap returnedData = output.value< QVariantMap >();
     const QByteArray ba = returnedData["imgbytes"].toByteArray();
-    qDebug() << "ba.length = " << ba.length();
     if ( ba.length() )
     {
         QPixmap pm;
@@ -639,7 +638,7 @@ void
 TreeModel::infoSystemFinished( QString target )
 {
     Q_UNUSED( target );
-    qDebug() << Q_FUNC_INFO;
+//    qDebug() << Q_FUNC_INFO;
 }
 
 

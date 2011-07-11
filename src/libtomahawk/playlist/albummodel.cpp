@@ -307,12 +307,12 @@ AlbumModel::onAlbumsAdded( const QList<Tomahawk::album_ptr>& albums )
 void
 AlbumModel::infoSystemInfo( Tomahawk::InfoSystem::InfoRequestData requestData, QVariant output )
 {
-    qDebug() << Q_FUNC_INFO << " with caller " << requestData.caller;
+//    qDebug() << Q_FUNC_INFO << " with caller " << requestData.caller;
 
     if ( requestData.caller != s_tmInfoIdentifier ||
        ( requestData.type != Tomahawk::InfoSystem::InfoAlbumCoverArt && requestData.type != Tomahawk::InfoSystem::InfoArtistImages ) )
     {
-        qDebug() << "Info of wrong type or not with our identifier";
+//        qDebug() << "Info of wrong type or not with our identifier";
         return;
     }
 
@@ -346,7 +346,7 @@ void
 AlbumModel::infoSystemFinished( QString target )
 {
     Q_UNUSED( target );
-    qDebug() << Q_FUNC_INFO;
+//    qDebug() << Q_FUNC_INFO;
 }
 
 

@@ -223,7 +223,7 @@ AudioControls::onPlaybackStarted( const Tomahawk::result_ptr& result )
     requestData.type = Tomahawk::InfoSystem::InfoAlbumCoverArt;
     requestData.input = QVariant::fromValue< Tomahawk::InfoSystem::InfoCriteriaHash >( trackInfo );
     requestData.customData = QVariantMap();
-    
+
     Tomahawk::InfoSystem::InfoSystem::instance()->getInfo( requestData );
 }
 
@@ -231,10 +231,11 @@ AudioControls::onPlaybackStarted( const Tomahawk::result_ptr& result )
 void
 AudioControls::infoSystemInfo( Tomahawk::InfoSystem::InfoRequestData requestData, QVariant output )
 {
-    qDebug() << Q_FUNC_INFO << requestData.caller << requestData.type << s_acInfoIdentifier << Tomahawk::InfoSystem::InfoAlbumCoverArt;
+//    qDebug() << Q_FUNC_INFO << requestData.caller << requestData.type << s_acInfoIdentifier << Tomahawk::InfoSystem::InfoAlbumCoverArt;
+
     if ( requestData.caller != s_acInfoIdentifier || requestData.type != Tomahawk::InfoSystem::InfoAlbumCoverArt )
     {
-        qDebug() << "Info of wrong type or not with our identifier";
+//        qDebug() << "Info of wrong type or not with our identifier";
         return;
     }
 
@@ -269,7 +270,7 @@ void
 AudioControls::infoSystemFinished( QString target )
 {
     Q_UNUSED( target );
-    qDebug() << Q_FUNC_INFO;
+//    qDebug() << Q_FUNC_INFO;
 }
 
 
