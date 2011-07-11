@@ -33,9 +33,6 @@ CollectionView::CollectionView( QWidget* parent )
 {
     setProxyModel( new CollectionProxyModel( this ) );
 
-    setSortingEnabled( true );
-    sortByColumn( 0, Qt::AscendingOrder );
-
     setDragDropMode( QAbstractItemView::DragOnly );
     setAcceptDrops( false );
 }
@@ -65,9 +62,7 @@ CollectionView::setTrackModel( TrackModel* model )
     setColumnHidden( TrackModel::Origin, true ); // Hide origin column per default
 
     setGuid( QString( "collectionview/%1" ).arg( model->columnCount() ) );
-
-    setSortingEnabled( true );
-    sortByColumn( 0, Qt::AscendingOrder );
+    sortByColumn( TrackModel::Artist, Qt::AscendingOrder );
 
     connect( model, SIGNAL( trackCountChanged( unsigned int ) ), SLOT( onTrackCountChanged( unsigned int ) ) );
 }

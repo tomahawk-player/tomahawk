@@ -449,6 +449,9 @@ TrackView::updateHoverIndex( const QPoint& pos )
         repaint();
     }
 
+    if ( m_model->style() == TrackModel::Short )
+        return;
+
     if ( idx.column() == TrackModel::Artist || idx.column() == TrackModel::Album )
     {
         if ( pos.x() > header()->sectionViewportPosition( idx.column() ) + header()->sectionSize( idx.column() ) - 16 &&

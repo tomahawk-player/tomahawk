@@ -81,8 +81,9 @@ TrackHeader::checkState()
     if ( !state.isEmpty() )
     {
         restoreState( state );
-        setSortIndicatorShown( true );
-        setSortIndicator( -1, Qt::AscendingOrder );
+
+        if ( m_parent->guid().startsWith( "playlistview" ) ) // HACK
+            setSortIndicator( -1, Qt::AscendingOrder );
     }
     else
     {
