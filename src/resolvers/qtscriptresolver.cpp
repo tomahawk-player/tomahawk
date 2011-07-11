@@ -26,7 +26,11 @@
 
 #include <QMetaProperty>
 
+// FIXME: bloody hack, remove this for 0.3
+// this one adds new functionality to old resolvers
 #define RESOLVER_LEGACY_CODE "var resolver = Tomahawk.resolver.instance ? Tomahawk.resolver.instance : TomahawkResolver;"
+// this one keeps old code invokable
+#define RESOLVER_LEGACY_CODE2 "var resolver = Tomahawk.resolver.instance ? Tomahawk.resolver.instance : window;"
 
 QtScriptResolverHelper::QtScriptResolverHelper( const QString& scriptPath, QObject* parent )
     : QObject( parent )
@@ -177,7 +181,7 @@ QtScriptResolver::resolve( const Tomahawk::query_ptr& query )
 
     if ( !query->isFullTextQuery() )
     {
-        eval = QString( RESOLVER_LEGACY_CODE "resolver.resolve( '%1', '%2', '%3', '%4' );" )
+        eval = QString( RESOLVER_LEGACY_CODE2 "resolver.resolve( '%1', '%2', '%3', '%4' );" )
             .arg( query->id().replace( "'", "\\'" ) )
             .arg( query->artist().replace( "'", "\\'" ) )
             .arg( query->album().replace( "'", "\\'" ) )
