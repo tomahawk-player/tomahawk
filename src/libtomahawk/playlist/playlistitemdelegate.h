@@ -53,6 +53,7 @@ private:
 
     unsigned int m_removalProgress;
     QPixmap m_nowPlayingIcon;
+    QPixmap m_arrowIcon;
 
     TrackView* m_view;
     TrackProxyModel* m_model;

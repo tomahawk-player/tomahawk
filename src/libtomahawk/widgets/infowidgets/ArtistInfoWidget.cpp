@@ -95,9 +95,9 @@ ArtistInfoWidget::load( const artist_ptr& artist )
     requestData.input = artist->name();
     requestData.type = Tomahawk::InfoSystem::InfoArtistBiography;
     Tomahawk::InfoSystem::InfoSystem::instance()->getInfo( requestData );
-    
+
     requestData.input = QVariant::fromValue< Tomahawk::InfoSystem::InfoCriteriaHash >( artistInfo );
-   
+
     requestData.type = Tomahawk::InfoSystem::InfoArtistImages;
     Tomahawk::InfoSystem::InfoSystem::instance()->getInfo( requestData );
 
@@ -105,6 +105,9 @@ ArtistInfoWidget::load( const artist_ptr& artist )
     Tomahawk::InfoSystem::InfoSystem::instance()->getInfo( requestData );
 
     requestData.type = Tomahawk::InfoSystem::InfoArtistSongs;
+    Tomahawk::InfoSystem::InfoSystem::instance()->getInfo( requestData );
+
+    requestData.type = Tomahawk::InfoSystem::InfoArtistReleases;
     Tomahawk::InfoSystem::InfoSystem::instance()->getInfo( requestData );
 }
 

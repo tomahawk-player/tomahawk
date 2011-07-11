@@ -36,6 +36,7 @@
 #include "utils/tomahawkutils.h"
 
 #define PLAYING_ICON QString( RESPATH "images/now-playing-speaker.png" )
+#define ARROW_ICON QString( RESPATH "images/forward.png" )
 
 using namespace Tomahawk;
 
@@ -46,6 +47,7 @@ PlaylistItemDelegate::PlaylistItemDelegate( TrackView* parent, TrackProxyModel* 
     , m_model( proxy )
 {
     m_nowPlayingIcon = QPixmap( PLAYING_ICON );
+    m_arrowIcon = QPixmap( ARROW_ICON );
 }
 
 
@@ -93,9 +95,6 @@ PlaylistItemDelegate::prepareStyleOption( QStyleOptionViewItemV4* option, const 
         option->palette.setColor( QPalette::Highlight, option->palette.color( QPalette::Mid ) );
         option->state |= QStyle::State_Selected;
     }
-
-    if ( item->isPlaying() || index.column() == TrackModel::Score )
-        option->text.clear();
 
     if ( option->state & QStyle::State_Selected )
     {
@@ -229,10 +228,19 @@ PlaylistItemDelegate::paintDetailed( QPainter* painter, const QStyleOptionViewIt
 
     QStyleOptionViewItemV4 opt = option;
     prepareStyleOption( &opt, index );
-
+    opt.text.clear();
     qApp->style()->drawControl( QStyle::CE_ItemViewItem, &opt, painter );
 
+    if ( m_view->hoveredIndex().row() == index.row() && m_view->hoveredIndex().column() == index.column() &&
+       ( index.column() == TrackModel::Artist || index.column() == TrackModel::Album ) )
+    {
+        opt.rect.setWidth( opt.rect.width() - 16 );
+        QRect arrowRect( opt.rect.x() + opt.rect.width(), opt.rect.y(), 14, opt.rect.height() );
+        painter->drawPixmap( arrowRect, m_arrowIcon );
+    }
+
     painter->save();
+
     if ( index.column() == TrackModel::Score )
     {
         if ( opt.state & QStyle::State_Selected )
@@ -274,5 +282,14 @@ PlaylistItemDelegate::paintDetailed( QPainter* painter, const QStyleOptionViewIt
             painter->drawText( r.adjusted( 0, 1, 0, 0 ), text, to );
         }
     }
+    else
+    {
+        painter->setPen( opt.palette.text().color() );
+
+        QTextOption to( Qt::AlignVCenter );
+        QString text = painter->fontMetrics().elidedText( index.data().toString(), Qt::ElideRight, opt.rect.width() - 3 );
+        painter->drawText( opt.rect.adjusted( 3, 1, 0, 0 ), text, to );
+    }
+
     painter->restore();
 }

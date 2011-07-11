@@ -65,46 +65,48 @@ enum InfoType { // as items are saved in cache, mark them here to not change the
     InfoTrackTempo = 20,
     InfoTrackLoudness = 21,
 
-    InfoArtistID = 22,
-    InfoArtistName = 23,
-    InfoArtistBiography = 24,
-    InfoArtistBlog = 25,
-    InfoArtistFamiliarity = 26,
-    InfoArtistHotttness = 27,
+    InfoArtistID = 25,
+    InfoArtistName = 26,
+    InfoArtistBiography = 27,
     InfoArtistImages = 28, //cached -- do not change
-    InfoArtistNews = 29,
-    InfoArtistProfile = 30,
-    InfoArtistReviews = 31,
+    InfoArtistBlog = 29,
+    InfoArtistFamiliarity = 30,
+    InfoArtistHotttness = 31,
     InfoArtistSongs = 32, //cached -- do not change
     InfoArtistSimilars = 33, //cached -- do not change
-    InfoArtistTerms = 34,
-    InfoArtistLinks = 35,
-    InfoArtistVideos = 36,
+    InfoArtistNews = 34,
+    InfoArtistProfile = 35,
+    InfoArtistReviews = 36,
+    InfoArtistTerms = 37,
+    InfoArtistLinks = 38,
+    InfoArtistVideos = 39,
+    InfoArtistReleases = 40,
 
-    InfoAlbumID = 37,
-    InfoAlbumName = 38,
-    InfoAlbumArtist = 39,
-    InfoAlbumDate = 40,
-    InfoAlbumGenre = 41,
-    InfoAlbumComposer = 42,
+    InfoAlbumID = 42,
     InfoAlbumCoverArt = 43, //cached -- do not change
+    InfoAlbumName = 44,
+    InfoAlbumArtist = 45,
+    InfoAlbumDate = 46,
+    InfoAlbumGenre = 47,
+    InfoAlbumComposer = 48,
+    InfoAlbumSongs = 49,
 
-    InfoMiscTopHotttness = 44,
-    InfoMiscTopTerms = 45,
+    InfoMiscTopHotttness = 60,
+    InfoMiscTopTerms = 61,
 
-    InfoSubmitNowPlaying = 46,
-    InfoSubmitScrobble = 47,
+    InfoSubmitNowPlaying = 70,
+    InfoSubmitScrobble = 71,
 
-    InfoNowPlaying = 48,
-    InfoNowPaused = 49,
-    InfoNowResumed = 50,
-    InfoNowStopped = 51,
+    InfoNowPlaying = 80,
+    InfoNowPaused = 81,
+    InfoNowResumed = 82,
+    InfoNowStopped = 83,
 
-    InfoNoInfo = 52,
-    InfoLove = 53,
-    InfoUnLove = 54,
+    InfoNoInfo = 90,
+    InfoLove = 91,
+    InfoUnLove = 92,
 
-    InfoNotifyUser = 55
+    InfoNotifyUser = 100
 };
 
 struct InfoRequestData {
@@ -143,7 +145,7 @@ protected slots:
     virtual void notInCacheSlot( uint requestId, Tomahawk::InfoSystem::InfoCriteriaHash criteria, Tomahawk::InfoSystem::InfoRequestData requestData ) = 0;
 
     virtual void namChangedSlot( QNetworkAccessManager *nam ) = 0;
-    
+
 protected:
     InfoType m_type;
     QSet< InfoType > m_supportedGetTypes;

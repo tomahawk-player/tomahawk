@@ -26,6 +26,8 @@
 #include "infoplugins/generic/echonestplugin.h"
 #include "infoplugins/generic/musixmatchplugin.h"
 #include "infoplugins/generic/lastfmplugin.h"
+#include "infoplugins/generic/musicbrainzPlugin.h"
+
 #ifdef Q_WS_MAC
 #include "infoplugins/mac/adiumplugin.h"
 #endif
@@ -76,9 +78,13 @@ InfoSystemWorker::init( QWeakPointer< Tomahawk::InfoSystem::InfoSystemCache> cac
     InfoPluginPtr mmptr( new MusixMatchPlugin() );
     m_plugins.append( mmptr );
     registerInfoTypes( mmptr, mmptr.data()->supportedGetTypes(), mmptr.data()->supportedPushTypes() );
+    InfoPluginPtr mbptr( new MusicBrainzPlugin() );
+    m_plugins.append( mbptr );
+    registerInfoTypes( mbptr, mbptr.data()->supportedGetTypes(), mbptr.data()->supportedPushTypes() );
     InfoPluginPtr lfmptr( new LastFmPlugin() );
     m_plugins.append( lfmptr );
     registerInfoTypes( lfmptr, lfmptr.data()->supportedGetTypes(), lfmptr.data()->supportedPushTypes() );
+
     #ifdef Q_WS_MAC
     InfoPluginPtr admptr( new AdiumPlugin() );
     m_plugins.append( admptr );
@@ -190,7 +196,7 @@ InfoSystemWorker::getInfo( Tomahawk::InfoSystem::InfoRequestData requestData, ui
     data->input = requestData.input;
     data->customData = requestData.customData;
     m_savedRequestMap[ requestId ] = data;
-    
+
     QMetaObject::invokeMethod( ptr.data(), "getInfo", Qt::QueuedConnection, Q_ARG( uint, requestId ), Q_ARG( Tomahawk::InfoSystem::InfoRequestData, requestData ) );
 }
 
@@ -222,7 +228,7 @@ InfoSystemWorker::infoSlot( uint requestId, Tomahawk::InfoSystem::InfoRequestDat
         qDebug() << Q_FUNC_INFO << " request was already taken care of!";
         return;
     }
-    
+
     m_requestSatisfiedMap[ requestId ] = true;
     emit info( requestData, output );
 
@@ -236,7 +242,7 @@ InfoSystemWorker::infoSlot( uint requestId, Tomahawk::InfoSystem::InfoRequestDat
 
 void
 InfoSystemWorker::checkFinished( const QString &target )
-{    
+{
     Q_FOREACH( InfoType testtype, m_dataTracker[ target ].keys() )
     {
         if ( m_dataTracker[ target ][ testtype ] != 0)
@@ -272,7 +278,7 @@ InfoSystemWorker::checkTimeoutsTimerFired()
                 //doh, timed out
                 qDebug() << Q_FUNC_INFO << " doh, timed out for requestId " << requestId;
                 InfoRequestData *savedData = m_savedRequestMap[ requestId ];
-                
+
                 InfoRequestData returnData;
                 returnData.caller = savedData->caller;
                 returnData.type = savedData->type;
@@ -285,7 +291,7 @@ InfoSystemWorker::checkTimeoutsTimerFired()
 
                 m_dataTracker[ returnData.caller ][ returnData.type ] = m_dataTracker[ returnData.caller ][ returnData.type ] - 1;
                 qDebug() << "current count in dataTracker for target " << returnData.caller << " is " << m_dataTracker[ returnData.caller ][ returnData.type ];
-                
+
                 m_requestSatisfiedMap[ requestId ] = true;
                 m_timeRequestMapper.remove( time, requestId );
                 if ( !m_timeRequestMapper.count( time ) )

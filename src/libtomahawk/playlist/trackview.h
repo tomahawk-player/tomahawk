@@ -56,6 +56,7 @@ explicit TrackView( QWidget* parent = 0 );
     OverlayWidget* overlay() const { return m_overlay; }
     Tomahawk::ContextMenu* contextMenu() const { return m_contextMenu; }
 
+    QModelIndex hoveredIndex() const { return m_hoveredIndex; }
     QModelIndex contextMenuIndex() const { return m_contextMenuIndex; }
     void setContextMenuIndex( const QModelIndex& idx ) { m_contextMenuIndex = idx; }
 
@@ -74,6 +75,9 @@ protected:
     virtual void dragMoveEvent( QDragMoveEvent* event );
     virtual void dropEvent( QDropEvent* event );
 
+    void mouseMoveEvent( QMouseEvent* event );
+    void mousePressEvent( QMouseEvent* event );
+    void leaveEvent( QEvent* event );
     void paintEvent( QPaintEvent* event );
     void keyPressEvent( QKeyEvent* event );
 
@@ -96,6 +100,7 @@ private:
     bool m_dragging;
     QRect m_dropRect;
 
+    QModelIndex m_hoveredIndex;
     QModelIndex m_contextMenuIndex;
     Tomahawk::ContextMenu* m_contextMenu;
 };

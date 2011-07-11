@@ -50,6 +50,7 @@ TrackView::TrackView( QWidget* parent )
     , m_dragging( false )
     , m_contextMenu( new ContextMenu( this ) )
 {
+    setMouseTracking( true );
     setAlternatingRowColors( true );
     setSelectionMode( QAbstractItemView::ExtendedSelection );
     setSelectionBehavior( QAbstractItemView::SelectRows );
@@ -433,5 +434,77 @@ TrackView::onMenuTriggered( int action )
 
         default:
             break;
+    }
+}
+
+
+void
+TrackView::leaveEvent( QEvent* event )
+{
+    m_hoveredIndex = QModelIndex();
+    setCursor( Qt::ArrowCursor );
+}
+
+
+void
+TrackView::mouseMoveEvent( QMouseEvent* event )
+{
+    QModelIndex idx = indexAt( event->pos() );
+    m_hoveredIndex = idx;
+
+    if ( idx.column() == TrackModel::Artist || idx.column() == TrackModel::Album )
+    {
+        if ( event->pos().x() > header()->sectionViewportPosition( idx.column() ) + header()->sectionSize( idx.column() ) - 16 &&
+             event->pos().x() < header()->sectionViewportPosition( idx.column() ) + header()->sectionSize( idx.column() ) )
+        {
+            setCursor( Qt::PointingHandCursor );
+            return;
+        }
+    }
+
+    setCursor( Qt::ArrowCursor );
+}
+
+
+void
+TrackView::mousePressEvent( QMouseEvent* event )
+{
+    QModelIndex idx = indexAt( event->pos() );
+
+    if ( event->pos().x() > header()->sectionViewportPosition( idx.column() ) + header()->sectionSize( idx.column() ) - 16 &&
+         event->pos().x() < header()->sectionViewportPosition( idx.column() ) + header()->sectionSize( idx.column() ) )
+    {
+        TrackModelItem* item = proxyModel()->itemFromIndex( proxyModel()->mapToSource( idx ) );
+        switch ( idx.column() )
+        {
+            case TrackModel::Artist:
+            {
+                if ( item->query()->results().count() )
+                {
+                    ViewManager::instance()->show( item->query()->results().first()->artist() );
+                }
+                else
+                {
+                    ViewManager::instance()->show( Artist::get( item->query()->artist() ) );
+                }
+                break;
+            }
+
+            case TrackModel::Album:
+            {
+                if ( item->query()->results().count() )
+                {
+                    ViewManager::instance()->show( item->query()->results().first()->album() );
+                }
+                else
+                {
+                    //TODO
+                }
+                break;
+            }
+
+            default:
+                break;
+        }
     }
 }
