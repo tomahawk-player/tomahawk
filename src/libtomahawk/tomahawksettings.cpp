@@ -147,6 +147,34 @@ TomahawkSettings::doUpgrade( int oldVersion, int newVersion )
 }
 
 
+void
+TomahawkSettings::setAcceptedLegalWarning( bool accept )
+{
+    setValue( "acceptedLegalWarning", accept );
+}
+
+
+bool
+TomahawkSettings::acceptedLegalWarning() const
+{
+    return value( "acceptedLegalWarning", false ).toBool();
+}
+
+
+void
+TomahawkSettings::setInfoSystemCacheVersion( uint version )
+{
+    setValue( "infosystemcacheversion", version );
+}
+
+
+uint
+TomahawkSettings::infoSystemCacheVersion() const
+{
+    return value( "infosystemcacheversion", 0 ).toUInt();
+}
+
+
 QStringList
 TomahawkSettings::scannerPaths()
 {
@@ -235,20 +263,6 @@ void
 TomahawkSettings::setWatchForChanges( bool watch )
 {
     setValue( "scanner/watchforchanges", watch );
-}
-
-
-void
-TomahawkSettings::setAcceptedLegalWarning( bool accept )
-{
-    setValue( "acceptedLegalWarning", accept );
-}
-
-
-bool
-TomahawkSettings::acceptedLegalWarning() const
-{
-    return value( "acceptedLegalWarning", false ).toBool();
 }
 
 

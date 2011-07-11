@@ -102,11 +102,13 @@ enum InfoType { // as items are saved in cache, mark them here to not change the
     InfoNowResumed = 82,
     InfoNowStopped = 83,
 
-    InfoNoInfo = 90,
-    InfoLove = 91,
-    InfoUnLove = 92,
+    
+    InfoLove = 90,
+    InfoUnLove = 91,
 
-    InfoNotifyUser = 100
+    InfoNotifyUser = 100,
+
+    InfoNoInfo = 101 //WARNING: *ALWAYS* keep this last!
 };
 
 struct InfoRequestData {

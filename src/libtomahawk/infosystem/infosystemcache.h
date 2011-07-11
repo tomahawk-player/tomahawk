@@ -54,12 +54,15 @@ private slots:
     void pruneTimerFired();
 
 private:
+    void doUpgrade( uint oldVersion, uint newVersion );
     const QString criteriaMd5( const Tomahawk::InfoSystem::InfoCriteriaHash &criteria ) const;
     
     QString m_cacheBaseDir;
     QHash< InfoType, QHash< QString, QString > > m_fileLocationCache;
     QTimer m_pruneTimer;
     QCache< QString, QVariant > m_dataCache;
+
+    uint m_cacheVersion;
 };
 
 } //namespace InfoSystem

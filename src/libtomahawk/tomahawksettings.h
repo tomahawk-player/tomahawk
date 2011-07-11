@@ -49,6 +49,8 @@ public:
     void setScannerMode( ScannerMode mode );
     uint scannerTime() const;
     void setScannerTime( uint time );
+    uint infoSystemCacheVersion() const;
+    void setInfoSystemCacheVersion( uint version );
 
     bool watchForChanges() const;
     void setWatchForChanges( bool watch );
