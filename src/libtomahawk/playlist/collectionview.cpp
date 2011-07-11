@@ -61,7 +61,7 @@ CollectionView::setTrackModel( TrackModel* model )
 {
     TrackView::setTrackModel( model );
     setColumnHidden( TrackModel::Score, true ); // Hide age column per default
-    setGuid( "collectionview" );
+    setGuid( QString( "collectionview/%1" ).arg( model->columnCount() ) );
 
     setSortingEnabled( true );
     sortByColumn( 0, Qt::AscendingOrder );
