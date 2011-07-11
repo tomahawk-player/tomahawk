@@ -136,7 +136,6 @@ private slots:
 private:
     QPersistentModelIndex m_currentIndex;
     TreeModelItem* m_rootItem;
-    QPixmap m_defaultCover;
 
     QString m_title;
     QString m_description;

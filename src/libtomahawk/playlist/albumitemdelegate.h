@@ -43,6 +43,7 @@ private:
     AlbumProxyModel* m_model;
 
     QPixmap m_shadowPixmap;
+    QPixmap m_defaultCover;
 };
 
 #endif // ALBUMITEMDELEGATE_H

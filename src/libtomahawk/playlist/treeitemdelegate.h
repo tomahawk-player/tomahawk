@@ -44,6 +44,7 @@ private:
     TreeProxyModel* m_model;
 
     QPixmap m_nowPlayingIcon;
+    QPixmap m_defaultCover;
 };
 
 #endif // TREEITEMDELEGATE_H

@@ -244,6 +244,8 @@ ArtistView::onScrollTimeout()
         TreeModelItem* item = m_model->itemFromIndex( m_proxyModel->mapToSource( m_proxyModel->index( i, 0 ) ) );
         if ( item->artist().isNull() )
             continue;
+        if ( !item->cover.isNull() )
+            continue;
 
         Tomahawk::InfoSystem::InfoCriteriaHash trackInfo;
         trackInfo["artist"] = item->artist()->name();

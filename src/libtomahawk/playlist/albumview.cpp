@@ -145,18 +145,32 @@ AlbumView::onScrollTimeout()
     int rowHeight = m_proxyModel->data( QModelIndex(), Qt::SizeHintRole ).toSize().height();
     viewRect.adjust( 0, -rowHeight, 0, rowHeight );
 
+    bool started = false;
+    bool done = false;
     for ( int i = 0; i < m_proxyModel->rowCount(); i++ )
     {
+        if ( started && done )
+            break;
+
         for ( int j = 0; j < m_proxyModel->columnCount(); j++ )
         {
             QModelIndex idx = m_proxyModel->index( i, j );
             if ( !viewRect.contains( visualRect( idx ) ) )
+            {
+                done = true;
                 break;
+            }
+
+            started = true;
+            done = false;
 
             AlbumItem* item = m_model->itemFromIndex( m_proxyModel->mapToSource( idx ) );
             if ( !item )
                 break;
+            if ( !item->cover.isNull() )
+                break;
 
+            qDebug() << "Need cover for:" << item->album()->artist()->name() << item->album()->name();
             Tomahawk::InfoSystem::InfoCriteriaHash trackInfo;
             trackInfo["artist"] = item->album()->artist()->name();
             trackInfo["album"] = item->album()->name();
@@ -167,7 +181,7 @@ AlbumView::onScrollTimeout()
             requestData.type = Tomahawk::InfoSystem::InfoAlbumCoverArt;
             requestData.input = QVariant::fromValue< Tomahawk::InfoSystem::InfoCriteriaHash >( trackInfo );
             requestData.customData = QVariantMap();
-            
+
             Tomahawk::InfoSystem::InfoSystem::instance()->getInfo( requestData );
         }
     }

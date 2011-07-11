@@ -40,9 +40,6 @@ TreeModel::TreeModel( QObject* parent )
 {
     qDebug() << Q_FUNC_INFO;
 
-    m_defaultCover = QPixmap( RESPATH "images/no-album-art-placeholder.png" )
-                     .scaled( QSize( 120, 120 ), Qt::IgnoreAspectRatio, Qt::SmoothTransformation );
-
     connect( AudioEngine::instance(), SIGNAL( finished( Tomahawk::result_ptr ) ), SLOT( onPlaybackFinished( Tomahawk::result_ptr ) ), Qt::DirectConnection );
     connect( AudioEngine::instance(), SIGNAL( stopped() ), SLOT( onPlaybackStopped() ), Qt::DirectConnection );
 
@@ -496,7 +493,6 @@ TreeModel::onArtistsAdded( const QList<Tomahawk::artist_ptr>& artists )
     foreach( const artist_ptr& artist, artists )
     {
         artistitem = new TreeModelItem( artist, m_rootItem );
-        artistitem->cover = m_defaultCover;
         artistitem->index = createIndex( m_rootItem->children.count() - 1, 0, artistitem );
         connect( artistitem, SIGNAL( dataChanged() ), SLOT( onDataChanged() ) );
     }
@@ -533,7 +529,6 @@ TreeModel::onAlbumsAdded( const QList<Tomahawk::album_ptr>& albums, const QVaria
     foreach( const album_ptr& album, albums )
     {
         albumitem = new TreeModelItem( album, parentItem );
-        albumitem->cover = m_defaultCover;
         albumitem->index = createIndex( parentItem->children.count() - 1, 0, albumitem );
         connect( albumitem, SIGNAL( dataChanged() ), SLOT( onDataChanged() ) );
 
@@ -547,7 +542,7 @@ TreeModel::onAlbumsAdded( const QList<Tomahawk::album_ptr>& albums, const QVaria
         requestData.type = Tomahawk::InfoSystem::InfoAlbumCoverArt;
         requestData.input = QVariant::fromValue< Tomahawk::InfoSystem::InfoCriteriaHash >( trackInfo );
         requestData.customData = QVariantMap();
-        
+
         Tomahawk::InfoSystem::InfoSystem::instance()->getInfo( requestData );
     }
 
@@ -587,7 +582,6 @@ TreeModel::onTracksAdded( const QList<Tomahawk::query_ptr>& tracks, const QVaria
     {
         qDebug() << query->toString();
         item = new TreeModelItem( query->results().first(), parentItem );
-        item->cover = m_defaultCover;
         item->index = createIndex( parentItem->children.count() - 1, 0, item );
 
         connect( item, SIGNAL( dataChanged() ), SLOT( onDataChanged() ) );
@@ -633,9 +627,7 @@ TreeModel::infoSystemInfo( Tomahawk::InfoSystem::InfoRequestData requestData, QV
         qlonglong p = pptr["pptr"].toLongLong( &ok );
         TreeModelItem* ai = reinterpret_cast<TreeModelItem*>(p);
 
-        if ( pm.isNull() )
-            ai->cover = m_defaultCover;
-        else
+        if ( !pm.isNull() )
             ai->cover = pm;
 
         emit dataChanged( ai->index, ai->index.sibling( ai->index.row(), columnCount( QModelIndex() ) - 1 ) );

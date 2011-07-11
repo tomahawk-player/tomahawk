@@ -38,6 +38,8 @@ AlbumItemDelegate::AlbumItemDelegate( QAbstractItemView* parent, AlbumProxyModel
     , m_model( proxy )
 {
     m_shadowPixmap = QPixmap( RESPATH "images/cover-shadow.png" );
+    m_defaultCover = QPixmap( RESPATH "images/no-album-art-placeholder.png" )
+                     .scaled( QSize( 120, 120 ), Qt::IgnoreAspectRatio, Qt::SmoothTransformation );
 }
 
 
@@ -66,22 +68,44 @@ AlbumItemDelegate::paint( QPainter* painter, const QStyleOptionViewItem& option,
     }
 
     painter->save();
+
 //    painter->setRenderHint( QPainter::Antialiasing );
+//    painter->drawPixmap( option.rect.adjusted( 4, 4, -4, -38 ), m_shadowPixmap );
+
+    QPixmap cover = item->cover.isNull() ? m_defaultCover : item->cover;
+    painter->drawPixmap( option.rect.adjusted( 6, 4, -6, -41 ), cover );
     painter->setPen( opt.palette.color( QPalette::Text ) );
 
-//    painter->drawPixmap( option.rect.adjusted( 4, 4, -4, -38 ), m_shadowPixmap );
-    painter->drawPixmap( option.rect.adjusted( 6, 4, -6, -41 ), item->cover );
-
     QTextOption to;
-    to.setAlignment( Qt::AlignHCenter );
+    to.setWrapMode( QTextOption::NoWrap );
+
+    QString text;
     QFont font = opt.font;
     QFont boldFont = opt.font;
     boldFont.setBold( true );
 
-    painter->drawText( option.rect.adjusted( 0, option.rect.height() - 16, 0, -2 ), item->album()->artist()->name(), to );
+    QRect textRect = option.rect.adjusted( 0, option.rect.height() - 32, 0, -2 );
 
-    painter->setFont( boldFont );
-    painter->drawText( option.rect.adjusted( 0, option.rect.height() - 32, 0, -18 ), item->album()->name(), to );
+    bool oneLiner = ( textRect.height() / 2 < painter->fontMetrics().boundingRect( item->album()->name() ).height() ||
+                      textRect.height() / 2 < painter->fontMetrics().boundingRect( item->album()->artist()->name() ).height() );
+
+    if ( oneLiner )
+    {
+        to.setAlignment( Qt::AlignHCenter | Qt::AlignVCenter );
+        text = painter->fontMetrics().elidedText( item->album()->name(), Qt::ElideRight, textRect.width() - 3 );
+        painter->drawText( textRect, text, to );
+    }
+    else
+    {
+        to.setAlignment( Qt::AlignHCenter | Qt::AlignTop );
+        text = painter->fontMetrics().elidedText( item->album()->name(), Qt::ElideRight, textRect.width() - 3 );
+        painter->drawText( textRect, text, to );
+
+        painter->setFont( boldFont );
+        to.setAlignment( Qt::AlignHCenter | Qt::AlignBottom );
+        text = painter->fontMetrics().elidedText( item->album()->artist()->name(), Qt::ElideRight, textRect.width() - 3 );
+        painter->drawText( textRect, text, to );
+    }
 
     painter->restore();
 }

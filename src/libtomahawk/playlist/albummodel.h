@@ -103,7 +103,6 @@ private slots:
 private:
     QPersistentModelIndex m_currentIndex;
     AlbumItem* m_rootItem;
-    QPixmap m_defaultCover;
 
     QString m_title;
     QString m_description;

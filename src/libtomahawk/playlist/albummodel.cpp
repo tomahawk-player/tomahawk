@@ -27,8 +27,6 @@
 
 #include "utils/tomahawkutils.h"
 
-#define LASTFM_DEFAULT_COVER "http://cdn.last.fm/flatness/catalogue/noimage"
-
 static QString s_tmInfoIdentifier = QString( "ALBUMMODEL" );
 
 using namespace Tomahawk;
@@ -39,9 +37,6 @@ AlbumModel::AlbumModel( QObject* parent )
     , m_rootItem( new AlbumItem( 0, this ) )
 {
     qDebug() << Q_FUNC_INFO;
-
-    m_defaultCover = QPixmap( RESPATH "images/no-album-art-placeholder.png" )
-                     .scaled( QSize( 120, 120 ), Qt::IgnoreAspectRatio, Qt::SmoothTransformation );
 
     connect( Tomahawk::InfoSystem::InfoSystem::instance(),
              SIGNAL( info( Tomahawk::InfoSystem::InfoRequestData, QVariant ) ),
@@ -299,7 +294,6 @@ AlbumModel::onAlbumsAdded( const QList<Tomahawk::album_ptr>& albums )
     foreach( const album_ptr& album, albums )
     {
         albumitem = new AlbumItem( album, m_rootItem );
-        albumitem->cover = m_defaultCover;
         albumitem->index = createIndex( m_rootItem->children.count() - 1, 0, albumitem );
 
         connect( albumitem, SIGNAL( dataChanged() ), SLOT( onDataChanged() ) );
@@ -340,9 +334,7 @@ AlbumModel::infoSystemInfo( Tomahawk::InfoSystem::InfoRequestData requestData, Q
         qlonglong p = pptr["pptr"].toLongLong( &ok );
         AlbumItem* ai = reinterpret_cast<AlbumItem*>(p);
 
-        if ( pm.isNull() )
-            ai->cover = m_defaultCover;
-        else
+        if ( !pm.isNull() )
             ai->cover = pm;
 
         emit dataChanged( ai->index, ai->index.sibling( ai->index.row(), columnCount( QModelIndex() ) - 1 ) );
