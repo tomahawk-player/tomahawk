@@ -128,8 +128,6 @@ MusicBrainzPlugin::artistSearchSlot()
     }
 
     QString artist_id = domNodeList.at( 0 ).toElement().attribute( "id" );
-    qDebug() << Q_FUNC_INFO << "FOOBAR:" << artist_id;
-
     QString requestString( "http://musicbrainz.org/ws/2/release?status=official&type=album|ep" );
     QUrl url( requestString );
     url.addQueryItem( "artist", artist_id );

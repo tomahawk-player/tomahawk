@@ -439,23 +439,20 @@ TrackView::onMenuTriggered( int action )
 
 
 void
-TrackView::leaveEvent( QEvent* event )
+TrackView::updateHoverIndex( const QPoint& pos )
 {
-    m_hoveredIndex = QModelIndex();
-    setCursor( Qt::ArrowCursor );
-}
+    QModelIndex idx = indexAt( pos );
 
-
-void
-TrackView::mouseMoveEvent( QMouseEvent* event )
-{
-    QModelIndex idx = indexAt( event->pos() );
-    m_hoveredIndex = idx;
+    if ( idx != m_hoveredIndex )
+    {
+        m_hoveredIndex = idx;
+        repaint();
+    }
 
     if ( idx.column() == TrackModel::Artist || idx.column() == TrackModel::Album )
     {
-        if ( event->pos().x() > header()->sectionViewportPosition( idx.column() ) + header()->sectionSize( idx.column() ) - 16 &&
-             event->pos().x() < header()->sectionViewportPosition( idx.column() ) + header()->sectionSize( idx.column() ) )
+        if ( pos.x() > header()->sectionViewportPosition( idx.column() ) + header()->sectionSize( idx.column() ) - 16 &&
+             pos.x() < header()->sectionViewportPosition( idx.column() ) + header()->sectionSize( idx.column() ) )
         {
             setCursor( Qt::PointingHandCursor );
             return;
@@ -467,8 +464,33 @@ TrackView::mouseMoveEvent( QMouseEvent* event )
 
 
 void
+TrackView::wheelEvent( QWheelEvent* event )
+{
+    QTreeView::wheelEvent( event );
+    updateHoverIndex( event->pos() );
+}
+
+
+void
+TrackView::leaveEvent( QEvent* event )
+{
+    QTreeView::leaveEvent( event );
+    updateHoverIndex( QPoint( -1, -1 ) );
+}
+
+
+void
+TrackView::mouseMoveEvent( QMouseEvent* event )
+{
+    QTreeView::mouseMoveEvent( event );
+    updateHoverIndex( event->pos() );
+}
+
+
+void
 TrackView::mousePressEvent( QMouseEvent* event )
 {
+    QTreeView::mousePressEvent( event );
     QModelIndex idx = indexAt( event->pos() );
 
     if ( event->pos().x() > header()->sectionViewportPosition( idx.column() ) + header()->sectionSize( idx.column() ) - 16 &&

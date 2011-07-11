@@ -75,6 +75,7 @@ protected:
     virtual void dragMoveEvent( QDragMoveEvent* event );
     virtual void dropEvent( QDropEvent* event );
 
+    void wheelEvent( QWheelEvent* event );
     void mouseMoveEvent( QMouseEvent* event );
     void mousePressEvent( QMouseEvent* event );
     void leaveEvent( QEvent* event );
@@ -88,6 +89,8 @@ private slots:
     void onCustomContextMenu( const QPoint& pos );
 
 private:
+    void updateHoverIndex( const QPoint& pos );
+
     QString m_guid;
     TrackModel* m_model;
     TrackProxyModel* m_proxyModel;
