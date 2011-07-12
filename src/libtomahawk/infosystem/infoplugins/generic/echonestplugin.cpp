@@ -61,7 +61,8 @@ EchoNestPlugin::namChangedSlot( QNetworkAccessManager *nam )
     currNam->setNetworkAccessible( nam->networkAccessible() );
     TomahawkUtils::NetworkProxyFactory* newProxyFactory = new TomahawkUtils::NetworkProxyFactory();
     newProxyFactory->setNoProxyHosts( oldProxyFactory->noProxyHosts() );
-    newProxyFactory->setProxy( oldProxyFactory->proxy() );
+    QNetworkProxy newProxy( oldProxyFactory->proxy() );
+    newProxyFactory->setProxy( newProxy );
     currNam->setProxyFactory( newProxyFactory );
 }
 

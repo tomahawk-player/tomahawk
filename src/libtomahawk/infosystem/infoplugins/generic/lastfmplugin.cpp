@@ -111,7 +111,8 @@ LastFmPlugin::namChangedSlot( QNetworkAccessManager *nam )
     currNam->setNetworkAccessible( nam->networkAccessible() );
     TomahawkUtils::NetworkProxyFactory* newProxyFactory = new TomahawkUtils::NetworkProxyFactory();
     newProxyFactory->setNoProxyHosts( oldProxyFactory->noProxyHosts() );
-    newProxyFactory->setProxy( oldProxyFactory->proxy() );
+    QNetworkProxy newProxy( oldProxyFactory->proxy() );
+    newProxyFactory->setProxy( newProxy );
     currNam->setProxyFactory( newProxyFactory );
     //FIXME: on Mac/Win as liblastfm's network access manager also sets its overriding application proxy
     //may have to do a QNetworkProxy::setApplicationProxy and clobber our own factory to override it
