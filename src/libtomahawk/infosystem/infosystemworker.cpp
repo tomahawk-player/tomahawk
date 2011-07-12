@@ -188,7 +188,7 @@ InfoSystemWorker::getInfo( Tomahawk::InfoSystem::InfoRequestData requestData, ui
     }
     qDebug() << "assigning request with requestId " << requestId << " and type " << requestData.type;
     m_dataTracker[ requestData.caller ][ requestData.type ] = m_dataTracker[ requestData.caller ][ requestData.type ] + 1;
-    qDebug() << "current count in dataTracker for type" << requestData.type << "is" << m_dataTracker[ requestData.caller ][ requestData.type ];
+    qDebug() << "current count in dataTracker for target " << requestData.caller << " and type" << requestData.type << "is" << m_dataTracker[ requestData.caller ][ requestData.type ];
 
     InfoRequestData* data = new InfoRequestData;
     data->caller = requestData.caller;
@@ -233,7 +233,7 @@ InfoSystemWorker::infoSlot( uint requestId, Tomahawk::InfoSystem::InfoRequestDat
     emit info( requestData, output );
 
     m_dataTracker[ requestData.caller ][ requestData.type ] = m_dataTracker[ requestData.caller ][ requestData.type ] - 1;
-    qDebug() << "current count in dataTracker for target " << requestData.caller << " is " << m_dataTracker[ requestData.caller ][ requestData.type ];
+    qDebug() << "current count in dataTracker for target " << requestData.caller << " and type " << requestData.type << " is " << m_dataTracker[ requestData.caller ][ requestData.type ];
     delete m_savedRequestMap[ requestId ];
     m_savedRequestMap.remove( requestId );
     checkFinished( requestData.caller );

@@ -55,7 +55,7 @@ private slots:
 
 private:
     void doUpgrade( uint oldVersion, uint newVersion );
-    const QString criteriaMd5( const Tomahawk::InfoSystem::InfoCriteriaHash &criteria ) const;
+    const QString criteriaMd5( const Tomahawk::InfoSystem::InfoCriteriaHash &criteria, Tomahawk::InfoSystem::InfoType type = Tomahawk::InfoSystem::InfoNoInfo ) const;
     
     QString m_cacheBaseDir;
     QHash< InfoType, QHash< QString, QString > > m_fileLocationCache;
