@@ -29,6 +29,7 @@
 #include <QtCore/QUrl>
 #include <QtCore/QVariant>
 #include <QtCore/QThread>
+#include <QtCore/QStringList>
 
 #include "dllmacro.h"
 
@@ -197,10 +198,13 @@ private:
 inline uint qHash( Tomahawk::InfoSystem::InfoCriteriaHash hash )
 {
     QCryptographicHash md5( QCryptographicHash::Md5 );
-    foreach( QString key, hash.keys()  )
+    QStringList keys = hash.keys();
+    keys.sort();
+    foreach( QString key, keys )
+    {
         md5.addData( key.toUtf8() );
-    foreach( QString value, hash.values()  )
-        md5.addData( value.toUtf8() );
+        md5.addData( hash[key].toUtf8() );
+    }
 
     QString hexData = md5.result();
 

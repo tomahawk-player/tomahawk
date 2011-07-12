@@ -36,7 +36,7 @@ namespace InfoSystem
 InfoSystemCache::InfoSystemCache( QObject* parent )
     : QObject( parent )
     , m_cacheBaseDir( QDesktopServices::storageLocation( QDesktopServices::CacheLocation ) + "/InfoSystemCache/" )
-    , m_cacheVersion( 1 )
+    , m_cacheVersion( 2 )
 {
     qDebug() << Q_FUNC_INFO;
 
@@ -73,7 +73,7 @@ InfoSystemCache::doUpgrade( uint oldVersion, uint newVersion )
 {
     Q_UNUSED( newVersion );
     qDebug() << Q_FUNC_INFO;
-    if ( oldVersion == 0 )
+    if ( oldVersion == 0 || oldVersion == 1  )
     {
         qDebug() << Q_FUNC_INFO << "Wiping cache";
         
@@ -274,14 +274,17 @@ InfoSystemCache::updateCacheSlot( Tomahawk::InfoSystem::InfoCriteriaHash criteri
 const QString
 InfoSystemCache::criteriaMd5( const Tomahawk::InfoSystem::InfoCriteriaHash &criteria, Tomahawk::InfoSystem::InfoType type ) const
 {
-    QCryptographicHash hash( QCryptographicHash::Md5 );
-    foreach( QString key, criteria.keys() )
-        hash.addData( key.toUtf8() );
-    foreach( QString value, criteria.values() )
-        hash.addData( value.toUtf8() );
+    QCryptographicHash md5( QCryptographicHash::Md5 );
+    QStringList keys = criteria.keys();
+    keys.sort();
+    foreach( QString key, keys )
+    {
+        md5.addData( key.toUtf8() );
+        md5.addData( criteria[key].toUtf8() );
+    }
     if ( type != Tomahawk::InfoSystem::InfoNoInfo )
-        hash.addData( QString::number( (int)type ).toUtf8() );
-    return hash.result().toHex();
+        md5.addData( QString::number( (int)type ).toUtf8() );
+    return md5.result().toHex();
 }
 
 
