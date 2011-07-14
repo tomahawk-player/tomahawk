@@ -136,7 +136,7 @@ InfoSystem::getInfo( const QString &caller, const InfoTypeMap &inputMap, const Q
     {
         requestData.type = type;
         requestData.input = inputMap[ type ];
-        QMetaObject::invokeMethod( m_worker.data(), "getInfo", Qt::QueuedConnection, Q_ARG( Tomahawk::InfoSystem::InfoRequestData, requestData ), Q_ARG( uint, ( timeoutMap.contains( type ) ? timeoutMap[ type ] : 3000 ) ) );
+        QMetaObject::invokeMethod( m_worker.data(), "getInfo", Qt::QueuedConnection, Q_ARG( Tomahawk::InfoSystem::InfoRequestData, requestData ), Q_ARG( uint, ( timeoutMap.contains( type ) ? timeoutMap[ type ] : 0 ) ) );
     }
 }
 

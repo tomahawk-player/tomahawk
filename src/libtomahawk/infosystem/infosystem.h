@@ -170,7 +170,8 @@ public:
     InfoSystem( QObject *parent );
     ~InfoSystem();
 
-    void getInfo( const InfoRequestData &requestData, uint timeoutMillis = 3000 );
+    void getInfo( const InfoRequestData &requestData, uint timeoutMillis = 0 );
+    //WARNING: if changing timeoutMillis above, also change in below function in .cpp file
     void getInfo( const QString &caller, const InfoTypeMap &inputMap, const QVariantMap &customData, const InfoTimeoutMap &timeoutMap = InfoTimeoutMap() );
     void pushInfo( const QString &caller, const InfoType type, const QVariant &input );
     void pushInfo( const QString &caller, const InfoTypeMap &input );
