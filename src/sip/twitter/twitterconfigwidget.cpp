@@ -46,18 +46,13 @@ TwitterConfigWidget::TwitterConfigWidget( TwitterPlugin* plugin, QWidget *parent
             this, SLOT( tweetComboBoxIndexChanged( int ) ) );
 
     ui->twitterTweetComboBox->setCurrentIndex( 0 );
-    ui->twitterUserTweetLineEdit->setReadOnly( true );
-    ui->twitterUserTweetLineEdit->setEnabled( false );
+    ui->twitterTweetGotTomahawkButton->setText( tr( "Tweet!" ) );
 
     if ( m_plugin->twitterOAuthToken().isEmpty() || m_plugin->twitterOAuthTokenSecret().isEmpty() || m_plugin->twitterScreenName().isEmpty() )
     {
         ui->twitterStatusLabel->setText( tr( "Status: No saved credentials" ) );
         ui->twitterAuthenticateButton->setText( tr( "Authenticate" ) );
-        ui->twitterInstructionsInfoLabel->setVisible( false );
-        ui->twitterGlobalTweetLabel->setVisible( false );
-        ui->twitterTweetGotTomahawkButton->setVisible( false );
-        ui->twitterUserTweetLineEdit->setVisible( false );
-        ui->twitterTweetComboBox->setVisible( false );
+        ui->twitterSyncGroupBox->setVisible( false );
 
         emit twitterAuthed( false );
     }
@@ -65,11 +60,8 @@ TwitterConfigWidget::TwitterConfigWidget( TwitterPlugin* plugin, QWidget *parent
     {
         ui->twitterStatusLabel->setText( tr( "Status: Credentials saved for %1" ).arg( m_plugin->twitterScreenName() ) );
         ui->twitterAuthenticateButton->setText( tr( "De-authenticate" ) );
-        ui->twitterInstructionsInfoLabel->setVisible( true );
-        ui->twitterGlobalTweetLabel->setVisible( true );
-        ui->twitterTweetGotTomahawkButton->setVisible( true );
-        ui->twitterUserTweetLineEdit->setVisible( true );
-        ui->twitterTweetComboBox->setVisible( true );
+        ui->twitterSyncGroupBox->setVisible( true );
+        ui->twitterUserTweetLineEdit->setVisible( false );
 
         emit twitterAuthed( true );
     }
@@ -123,11 +115,10 @@ TwitterConfigWidget::authenticateVerifyReply( const QTweetUser &user )
 
     ui->twitterStatusLabel->setText( tr( "Status: Credentials saved for %1" ).arg( m_plugin->twitterScreenName() ) );
     ui->twitterAuthenticateButton->setText( tr( "De-authenticate" ) );
-    ui->twitterInstructionsInfoLabel->setVisible( true );
-    ui->twitterGlobalTweetLabel->setVisible( true );
-    ui->twitterTweetGotTomahawkButton->setVisible( true );
-    ui->twitterUserTweetLineEdit->setVisible( true );
-    ui->twitterTweetComboBox->setVisible( true );
+    ui->twitterSyncGroupBox->setVisible( true );
+    ui->twitterTweetComboBox->setCurrentIndex( 0 );
+    ui->twitterUserTweetLineEdit->setVisible( false );
+    ui->twitterTweetGotTomahawkButton->setText( tr( "Tweet!" ) );
 
     m_plugin->connectPlugin( false );
 
@@ -155,11 +146,7 @@ TwitterConfigWidget::deauthenticateTwitter()
 
     ui->twitterStatusLabel->setText(tr("Status: No saved credentials"));
     ui->twitterAuthenticateButton->setText( tr( "Authenticate" ) );
-    ui->twitterInstructionsInfoLabel->setVisible( false );
-    ui->twitterGlobalTweetLabel->setVisible( false );
-    ui->twitterTweetGotTomahawkButton->setVisible( false );
-    ui->twitterUserTweetLineEdit->setVisible( false );
-    ui->twitterTweetComboBox->setVisible( false );
+    ui->twitterSyncGroupBox->setVisible( false );
 
     emit twitterAuthed( false );
     emit sizeHintChanged();
@@ -169,19 +156,15 @@ void
 TwitterConfigWidget::tweetComboBoxIndexChanged( int index )
 {
     Q_UNUSED( index );
-    if( ui->twitterTweetComboBox->currentText() == tr( "Global Tweet" ) ) //FIXME: use data!
-    {
-        ui->twitterUserTweetLineEdit->setReadOnly( true );
-        ui->twitterUserTweetLineEdit->setEnabled( false );
-    }
+    if ( ui->twitterTweetComboBox->currentText() == tr( "Global Tweet" ) ) //FIXME: use data!
+        ui->twitterUserTweetLineEdit->setVisible( false );
     else
-    {
-        ui->twitterUserTweetLineEdit->setReadOnly( false );
-        ui->twitterUserTweetLineEdit->setEnabled( true );
-    }
+        ui->twitterUserTweetLineEdit->setVisible( true );
 
-    if( ui->twitterTweetComboBox->currentText() == tr( "Direct Message" ) ) //FIXME: use data!
+    if ( ui->twitterTweetComboBox->currentText() == tr( "Direct Message" ) ) //FIXME: use data!
         ui->twitterTweetGotTomahawkButton->setText( tr( "Send Message!" ) );
+    else if ( ui->twitterTweetComboBox->currentText() == tr( "@Mention" ) )
+        ui->twitterTweetGotTomahawkButton->setText( tr( "Send Mention!" ) );
     else
         ui->twitterTweetGotTomahawkButton->setText( tr( "Tweet!" ) );
 }
