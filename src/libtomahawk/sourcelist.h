@@ -37,6 +37,8 @@ public:
 
     explicit SourceList( QObject* parent = 0 );
 
+    bool isReady() const { return m_isReady; }
+
     const Tomahawk::source_ptr& getLocal();
     void setLocal( const Tomahawk::source_ptr& localSrc );
 
@@ -68,6 +70,7 @@ private:
     QMap< QString, Tomahawk::source_ptr > m_sources;
     QMap< int, QString > m_sources_id2name;
 
+    bool m_isReady;
     Tomahawk::source_ptr m_local;
     Tomahawk::source_ptr m_dummy;
     mutable QMutex m_mut; // mutable so const methods can use a lock

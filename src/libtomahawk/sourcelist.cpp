@@ -44,6 +44,7 @@ SourceList::instance()
 
 SourceList::SourceList( QObject* parent )
     : QObject( parent )
+    , m_isReady( false )
 {
 }
 
@@ -85,6 +86,7 @@ SourceList::setSources( const QList<Tomahawk::source_ptr>& sources )
 {
     QMutexLocker lock( &m_mut );
 
+    m_isReady = true;
     foreach( const source_ptr& src, sources )
     {
         add( src );
@@ -116,6 +118,8 @@ SourceList::setLocal( const Tomahawk::source_ptr& localSrc )
 void
 SourceList::add( const source_ptr& source )
 {
+    Q_ASSERT( m_isReady );
+
     qDebug() << "Adding to sources:" << source->userName() << source->id();
     m_sources.insert( source->userName(), source );
 
@@ -125,7 +129,6 @@ SourceList::add( const source_ptr& source )
 
     collection_ptr coll( new RemoteCollection( source ) );
     source->addCollection( coll );
-//    source->collection()->tracks();
 
     emit sourceAdded( source );
 }
@@ -134,8 +137,11 @@ SourceList::add( const source_ptr& source )
 void
 SourceList::removeAllRemote()
 {
+    Q_ASSERT( m_isReady );
+
     foreach( const source_ptr& s, m_sources )
     {
+        qDebug() << "Disconnecting" << s->friendlyName() << s->isLocal() << s->controlConnection() << s->isOnline();
         if ( !s->isLocal() && s->controlConnection() )
         {
             s->controlConnection()->shutdown( true );

@@ -211,11 +211,10 @@ TomahawkApp::init()
     qDebug() << "Setting NAM.";
     TomahawkUtils::setNam( new QNetworkAccessManager() );
     #endif
-    
+
     TomahawkUtils::NetworkProxyFactory* proxyFactory = new TomahawkUtils::NetworkProxyFactory();
 
-    if( s->proxyType() != QNetworkProxy::NoProxy &&
-        !s->proxyHost().isEmpty() )
+    if ( s->proxyType() != QNetworkProxy::NoProxy && !s->proxyHost().isEmpty() )
     {
         qDebug() << "Setting proxy to saved values";
         QNetworkProxy proxy( static_cast<QNetworkProxy::ProxyType>( s->proxyType() ), s->proxyHost(), s->proxyPort(), s->proxyUsername(), s->proxyPassword() );
@@ -226,9 +225,9 @@ TomahawkApp::init()
 
     if ( !s->proxyNoProxyHosts().isEmpty() )
         proxyFactory->setNoProxyHosts( s->proxyNoProxyHosts().split( ',', QString::SkipEmptyParts ) );
-    
+
     TomahawkUtils::setProxyFactory( proxyFactory );
-    
+
     Echonest::Config::instance()->setAPIKey( "JRIHWEP6GPOER2QQ6" );
 
     m_audioEngine = QWeakPointer<AudioEngine>( new AudioEngine );
@@ -236,10 +235,10 @@ TomahawkApp::init()
     new Pipeline( this );
 
     m_servent = QWeakPointer<Servent>( new Servent( this ) );
-    connect( m_servent.data(), SIGNAL( ready() ), SLOT( setupSIP() ) );
+    connect( m_servent.data(), SIGNAL( ready() ), SLOT( initSIP() ) );
 
     qDebug() << "Init Database.";
-    setupDatabase();
+    initDatabase();
 
     qDebug() << "Init Echonest Factory.";
     GeneratorFactory::registerFactory( "echonest", new EchonestFactory );
@@ -272,8 +271,6 @@ TomahawkApp::init()
     Echonest::Config::instance()->setAPIKey( "JRIHWEP6GPOER2QQ6" );
     Echonest::Config::instance()->setNetworkAccessManager( TomahawkUtils::nam() );
 
-    qDebug() << "Init SIP system.";
-
 #ifndef TOMAHAWK_HEADLESS
     if ( !m_headless )
     {
@@ -287,14 +284,12 @@ TomahawkApp::init()
     qDebug() << "Init Local Collection.";
     initLocalCollection();
     qDebug() << "Init Pipeline.";
-    setupPipeline();
-    qDebug() << "Init Servent.";
-    startServent();
+    initPipeline();
 
-    if( arguments().contains( "--http" ) || TomahawkSettings::instance()->value( "network/http", true ).toBool() )
+    if ( arguments().contains( "--http" ) || TomahawkSettings::instance()->value( "network/http", true ).toBool() )
     {
         qDebug() << "Init HTTP Server.";
-        startHTTP();
+        initHTTP();
     }
 
 #ifndef TOMAHAWK_HEADLESS
@@ -322,26 +317,28 @@ TomahawkApp::~TomahawkApp()
     }
     m_scriptResolvers.clear();
 
-    if( !m_servent.isNull() )
+    if ( !m_servent.isNull() )
         delete m_servent.data();
-    if( !m_scanManager.isNull() )
+    if ( !m_scanManager.isNull() )
         delete m_scanManager.data();
+
 #ifndef TOMAHAWK_HEADLESS
     delete m_mainwindow;
 #endif
-    if( !m_audioEngine.isNull() )
+
+    if ( !m_audioEngine.isNull() )
         delete m_audioEngine.data();
 
-    if( !m_infoSystem.isNull() )
+    if ( !m_infoSystem.isNull() )
         delete m_infoSystem.data();
 
     //FIXME: delete GeneratorFactory::registerFactory( "echonest", new EchonestFactory ); ?
 
     delete SipHandler::instance();
 
-    if( !m_scanManager.isNull() )
+    if ( !m_scanManager.isNull() )
         delete m_scanManager.data();
-    if( !m_database.isNull() )
+    if ( !m_database.isNull() )
         delete m_database.data();
 
     Pipeline::instance()->stop();
@@ -428,10 +425,10 @@ TomahawkApp::registerMetaTypes()
 
 
 void
-TomahawkApp::setupDatabase()
+TomahawkApp::initDatabase()
 {
     QString dbpath;
-    if( arguments().contains( "--testdb" ) )
+    if ( arguments().contains( "--testdb" ) )
     {
         dbpath = QDir::currentPath() + "/test.db";
     }
@@ -447,7 +444,7 @@ TomahawkApp::setupDatabase()
 
 
 void
-TomahawkApp::startHTTP()
+TomahawkApp::initHTTP()
 {
     m_session.setPort( 60210 ); //TODO config
     m_session.setListenInterface( QHostAddress::LocalHost );
@@ -463,7 +460,7 @@ TomahawkApp::startHTTP()
 
 
 void
-TomahawkApp::setupPipeline()
+TomahawkApp::initPipeline()
 {
     // setup resolvers for local content, and (cached) remote collection content
     Pipeline::instance()->addResolver( new DatabaseResolver( 100 ) );
@@ -488,7 +485,7 @@ TomahawkApp::enableScriptResolver( const QString& path )
 void
 TomahawkApp::disableScriptResolver( const QString& path )
 {
-    if( m_scriptResolvers.contains( path ) )
+    if ( m_scriptResolvers.contains( path ) )
     {
         Tomahawk::ExternalResolver* r = m_scriptResolvers.take( path );
 
@@ -509,6 +506,8 @@ TomahawkApp::resolverForPath( const QString& scriptPath )
 void
 TomahawkApp::initLocalCollection()
 {
+    connect( SourceList::instance(), SIGNAL( ready() ), SLOT( initServent() ) );
+
     source_ptr src( new Source( 0, "My Collection" ) );
     collection_ptr coll( new LocalCollection( src ) );
 
@@ -534,8 +533,10 @@ TomahawkApp::initLocalCollection()
 
 
 void
-TomahawkApp::startServent()
+TomahawkApp::initServent()
 {
+    qDebug() << "Init Servent.";
+
     bool upnp = !arguments().contains( "--noupnp" ) && TomahawkSettings::instance()->value( "network/upnp", true ).toBool() && !TomahawkSettings::instance()->preferStaticHostPort();
     int port = TomahawkSettings::instance()->externalPort();
     if ( !Servent::instance()->startListening( QHostAddress( QHostAddress::Any ), upnp, port ) )
@@ -547,12 +548,12 @@ TomahawkApp::startServent()
 
 
 void
-TomahawkApp::setupSIP()
+TomahawkApp::initSIP()
 {
     qDebug() << Q_FUNC_INFO;
 
     //FIXME: jabber autoconnect is really more, now that there is sip -- should be renamed and/or split out of jabber-specific settings
-    if( !arguments().contains( "--nosip" ) )
+    if ( !arguments().contains( "--nosip" ) )
     {
 #ifdef GLOOX_FOUND
         m_xmppBot = QWeakPointer<XMPPBot>( new XMPPBot( this ) );
@@ -577,13 +578,13 @@ TomahawkApp::activate()
 bool
 TomahawkApp::loadUrl( const QString& url )
 {
-    if( url.startsWith( "tomahawk://" ) )
+    if ( url.startsWith( "tomahawk://" ) )
         return GlobalActionManager::instance()->parseTomahawkLink( url );
     else
     {
         QFile f( url );
         QFileInfo info( f );
-        if( f.exists() && info.suffix() == "xspf" ) {
+        if ( f.exists() && info.suffix() == "xspf" ) {
             XSPFLoader* l = new XSPFLoader( true, this );
             qDebug() << "Loading spiff:" << url;
             l->load( QUrl::fromUserInput( url ) );
@@ -601,7 +602,7 @@ TomahawkApp::instanceStarted( KDSingleApplicationGuard::Instance instance )
 {
     qDebug() << "INSTANCE STARTED!" << instance.pid << instance.arguments;
 
-    if( instance.arguments.size() < 2 )
+    if ( instance.arguments.size() < 2 )
     {
         return;
     }

@@ -168,6 +168,7 @@ Source::removeCollection( const collection_ptr& c )
 void
 Source::setOffline()
 {
+    qDebug() << Q_FUNC_INFO << friendlyName();
     if ( !m_online )
         return;
 
@@ -183,17 +184,18 @@ Source::setOffline()
 void
 Source::setOnline()
 {
+    qDebug() << Q_FUNC_INFO << friendlyName();
     if ( m_online )
         return;
+
     m_online = true;
+    emit online();
 
     // ensure username is in the database
     DatabaseCommand_addSource* cmd = new DatabaseCommand_addSource( m_username, m_friendlyname );
     connect( cmd, SIGNAL( done( unsigned int, QString ) ),
                     SLOT( dbLoaded( unsigned int, const QString& ) ) );
     Database::instance()->enqueue( QSharedPointer<DatabaseCommand>(cmd) );
-
-    emit online();
 }
 
 

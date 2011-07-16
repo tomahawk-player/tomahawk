@@ -102,17 +102,20 @@ public slots:
     void instanceStarted( KDSingleApplicationGuard::Instance );
 
 private slots:
-    void setupSIP();
+    void initServent();
+    void initSIP();
 
 private:
     void registerMetaTypes();
 
+    // Start-up order: database, collection, pipeline, servent, http
+    void initDatabase();
     void initLocalCollection();
+    void initPipeline();
+
+    void initHTTP();
+
     void loadPlugins();
-    void startServent();
-    void setupDatabase();
-    void setupPipeline();
-    void startHTTP();
 
     QList<Tomahawk::collection_ptr> m_collections;
     QHash<QString, Tomahawk::ExternalResolver*> m_scriptResolvers;
