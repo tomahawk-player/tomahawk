@@ -105,7 +105,7 @@ Database::enqueue( QSharedPointer<DatabaseCommand> lc )
                 happyThread = worker;
         }
 
-        qDebug() << "Enqueueing command to thread:" << happyThread << busyThreads << lc->commandname();
+//        qDebug() << "Enqueueing command to thread:" << happyThread << busyThreads << lc->commandname();
         happyThread->enqueue( lc );
     }
 }
