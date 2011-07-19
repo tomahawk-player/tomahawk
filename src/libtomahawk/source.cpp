@@ -282,6 +282,7 @@ Source::getPlaylistInterface()
     return m_playlistInterface;
 }
 
+
 void
 Source::onPlaybackStarted( const Tomahawk::query_ptr& query )
 {

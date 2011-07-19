@@ -19,6 +19,7 @@
 #ifndef PLAYLISTINTERFACE_H
 #define PLAYLISTINTERFACE_H
 
+#include <QDebug>
 #include <QModelIndex>
 #include <QWidget>
 
@@ -62,13 +63,27 @@ public:
 
     virtual PlaylistInterface::RetryMode retryMode() const { return NoRetry; }
     virtual quint32 retryInterval() const { return 30000; }
-    
+
     virtual QString filter() const { return m_filter; }
     virtual void setFilter( const QString& pattern ) { m_filter = pattern; }
 
     virtual void reset() {}
 
     QObject* object() const { return m_object; }
+
+    static void dontDelete( Tomahawk::PlaylistInterface* obj )
+    {
+        qDebug() << Q_FUNC_INFO << obj;
+    }
+    virtual Tomahawk::playlistinterface_ptr getSharedPointer()
+    {
+        if ( m_sharedPtr.isNull() )
+        {
+            m_sharedPtr = Tomahawk::playlistinterface_ptr( this, dontDelete );
+        }
+
+        return m_sharedPtr;
+    }
 
 public slots:
     virtual void setRepeatMode( RepeatMode mode ) = 0;
@@ -83,6 +98,7 @@ signals:
 
 private:
     QObject* m_object;
+    Tomahawk::playlistinterface_ptr m_sharedPtr;
 
     QString m_filter;
 };

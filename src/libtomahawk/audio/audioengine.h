@@ -56,13 +56,13 @@ public:
     bool isPaused() const { return m_mediaObject->state() == Phonon::PausedState; }
 
     /* Returns the PlaylistInterface of the currently playing track. Note: This might be different to the current playlist! */
-    Tomahawk::PlaylistInterface* currentTrackPlaylist() const { return m_currentTrackPlaylist; }
+    Tomahawk::PlaylistInterface* currentTrackPlaylist() const { return m_currentTrackPlaylist.data(); }
 
     /* Returns the PlaylistInterface of the current playlist. Note: The currently playing track might still be from a different playlist! */
-    Tomahawk::PlaylistInterface* playlist() const { return m_playlist; }
+    Tomahawk::PlaylistInterface* playlist() const { return m_playlist.data(); }
 
     Tomahawk::result_ptr currentTrack() const { return m_currentTrack; }
-    
+
 public slots:
     void playPause();
     void play();
@@ -130,8 +130,8 @@ private:
 
     Tomahawk::result_ptr m_currentTrack;
     Tomahawk::result_ptr m_lastTrack;
-    Tomahawk::PlaylistInterface* m_playlist;
-    Tomahawk::PlaylistInterface* m_currentTrackPlaylist;
+    QWeakPointer< Tomahawk::PlaylistInterface > m_playlist;
+    QWeakPointer< Tomahawk::PlaylistInterface > m_currentTrackPlaylist;
     Tomahawk::PlaylistInterface* m_queue;
 
     Phonon::MediaObject* m_mediaObject;

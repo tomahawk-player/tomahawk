@@ -46,8 +46,8 @@ AudioEngine::instance()
 AudioEngine::AudioEngine()
     : QObject()
     , m_isPlayingHttp( false )
-    , m_playlist( 0 )
-    , m_currentTrackPlaylist( 0 )
+//    , m_playlist( 0 )
+//    , m_currentTrackPlaylist( 0 )
     , m_queue( 0 )
     , m_timeElapsed( 0 )
     , m_expectStop( false )
@@ -141,8 +141,8 @@ AudioEngine::stop()
 
     m_mediaObject->stop();
 
-    if ( m_playlist )
-        m_playlist->reset();
+    if ( !m_playlist.isNull() )
+        m_playlist.data()->reset();
 
     setCurrentTrack( Tomahawk::result_ptr() );
     emit stopped();
@@ -168,11 +168,11 @@ AudioEngine::previous()
 {
     qDebug() << Q_FUNC_INFO;
 
-    if ( !m_playlist )
+    if ( m_playlist.isNull() )
         return;
 
-    if ( m_playlist->skipRestrictions() == PlaylistInterface::NoSkip ||
-         m_playlist->skipRestrictions() == PlaylistInterface::NoSkipBackwards )
+    if ( m_playlist.data()->skipRestrictions() == PlaylistInterface::NoSkip ||
+         m_playlist.data()->skipRestrictions() == PlaylistInterface::NoSkipBackwards )
         return;
 
     loadPreviousTrack();
@@ -184,15 +184,15 @@ AudioEngine::next()
 {
     qDebug() << Q_FUNC_INFO;
 
-    if ( !m_playlist )
+    if ( m_playlist.isNull() )
         return;
 
-    if ( m_playlist->skipRestrictions() == PlaylistInterface::NoSkip ||
-         m_playlist->skipRestrictions() == PlaylistInterface::NoSkipForwards )
+    if ( m_playlist.data()->skipRestrictions() == PlaylistInterface::NoSkip ||
+         m_playlist.data()->skipRestrictions() == PlaylistInterface::NoSkipForwards )
         return;
 
-    if ( !m_currentTrack.isNull() && !m_playlist->hasNextItem() &&
-          m_currentTrack->id() == m_playlist->currentItem()->id() )
+    if ( !m_currentTrack.isNull() && !m_playlist.data()->hasNextItem() &&
+         m_currentTrack->id() == m_playlist.data()->currentItem()->id() )
     {
         //For instance, when doing a catch-up while listening along, but the person
         //you're following hasn't started a new track yet...don't do anything
@@ -206,10 +206,7 @@ AudioEngine::next()
 void
 AudioEngine::seek( int ms )
 {
-    if ( !m_playlist )
-        return;
-
-    if ( m_playlist->seekRestrictions() == PlaylistInterface::NoSeek )
+    if ( !m_playlist.isNull() && m_playlist.data()->seekRestrictions() == PlaylistInterface::NoSeek )
         return;
 
     if ( isPlaying() || isPaused() )
@@ -424,13 +421,13 @@ AudioEngine::loadPreviousTrack()
 {
     qDebug() << Q_FUNC_INFO;
 
-    if ( !m_playlist )
+    if ( m_playlist.isNull() )
     {
         stop();
         return;
     }
 
-    Tomahawk::result_ptr result = m_playlist->previousItem();
+    Tomahawk::result_ptr result = m_playlist.data()->previousItem();
     if ( !result.isNull() )
         loadTrack( result );
     else
@@ -450,16 +447,16 @@ AudioEngine::loadNextTrack()
         result = m_queue->nextItem();
     }
 
-    if ( m_playlist && result.isNull() )
+    if ( !m_playlist.isNull() && result.isNull() )
     {
-        result = m_playlist->nextItem();
+        result = m_playlist.data()->nextItem();
     }
 
     if ( !result.isNull() )
         loadTrack( result );
     else
     {
-        if ( m_playlist && m_playlist->retryMode() == Tomahawk::PlaylistInterface::Retry )
+        if ( !m_playlist.isNull() && m_playlist.data()->retryMode() == Tomahawk::PlaylistInterface::Retry )
             m_waitingOnNewTrack = true;
         stop();
     }
@@ -471,15 +468,15 @@ AudioEngine::playItem( Tomahawk::PlaylistInterface* playlist, const Tomahawk::re
 {
     qDebug() << Q_FUNC_INFO;
 
-    if ( m_playlist )
-        m_playlist->reset();
+    if ( !m_playlist.isNull() )
+        m_playlist.data()->reset();
 
     setPlaylist( playlist );
-    m_currentTrackPlaylist = playlist;
+    m_currentTrackPlaylist = playlist->getSharedPointer();
 
     if ( !result.isNull() )
         loadTrack( result );
-    else if ( m_playlist && m_playlist->retryMode() == PlaylistInterface::Retry )
+    else if ( !m_playlist.isNull() && m_playlist.data()->retryMode() == PlaylistInterface::Retry )
     {
         m_waitingOnNewTrack = true;
         stop();
@@ -557,13 +554,15 @@ AudioEngine::timerTriggered( qint64 time )
 void
 AudioEngine::setPlaylist( PlaylistInterface* playlist )
 {
-    if ( m_playlist )
-        m_playlist->reset();
+    if ( !m_playlist.isNull() )
+        m_playlist.data()->reset();
 
-    m_playlist = playlist;
+    if ( !playlist )
+        return;
+    m_playlist = playlist->getSharedPointer();
 
-    if ( m_playlist && m_playlist->object() && m_playlist->retryMode() == PlaylistInterface::Retry )
-        connect( m_playlist->object(), SIGNAL( nextTrackReady() ), SLOT( playlistNextTrackReady() ) );
+    if ( m_playlist.data()->object() && m_playlist.data()->retryMode() == PlaylistInterface::Retry )
+        connect( m_playlist.data()->object(), SIGNAL( nextTrackReady() ), SLOT( playlistNextTrackReady() ) );
 
     emit playlistChanged( playlist );
 }
