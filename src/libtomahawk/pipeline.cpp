@@ -191,6 +191,8 @@ Pipeline::reportResults( QID qid, const QList< result_ptr >& results )
             q->onResolvingFinished();
 
             setQIDState( q, 0 );
+            if ( !m_queries_temporary.contains( q ) )
+                m_qids.remove( q->id() );
             if ( m_qidsTimeout.contains( q->id() ) )
                 m_qidsTimeout.remove( q->id() );
 
@@ -204,6 +206,8 @@ Pipeline::reportResults( QID qid, const QList< result_ptr >& results )
         if ( !q->solved() || q->isFullTextQuery() )
             q->onResolvingFinished();
 
+        if ( !m_queries_temporary.contains( q ) )
+            m_qids.remove( q->id() );
         if ( m_qidsTimeout.contains( q->id() ) )
             m_qidsTimeout.remove( q->id() );
 
