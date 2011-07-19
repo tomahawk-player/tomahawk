@@ -20,6 +20,8 @@
 
 #include <QHash>
 
+using namespace Tomahawk;
+
 void
 Api_v1::auth_1( QxtWebRequestEvent* event, QString arg )
 {
@@ -67,7 +69,9 @@ Api_v1::auth_2( QxtWebRequestEvent* event, QString arg )
     params = params.mid( params.indexOf( '?' ) );
     QStringList pieces = params.split( '&' );
     QHash< QString, QString > queryItems;
-    foreach( const QString& part, pieces ) {
+
+    foreach ( const QString& part, pieces )
+    {
         QStringList keyval = part.split( '=' );
         if( keyval.size() == 2 )
             queryItems.insert( keyval.first(), keyval.last() );
@@ -149,7 +153,7 @@ void
 Api_v1::sid( QxtWebRequestEvent* event, QString unused )
 {
     Q_UNUSED( unused );
-    using namespace Tomahawk;
+
     RID rid = event->url.path().mid( 5 );
     qDebug() << "Request for sid " << rid;
 
@@ -240,7 +244,8 @@ Api_v1::resolve( QxtWebRequestEvent* event )
     else
         qid = uuid();
 
-    Tomahawk::query_ptr qry = Tomahawk::Query::get( event->url.queryItemValue( "artist" ), event->url.queryItemValue( "track" ), event->url.queryItemValue( "album" ), qid );
+    query_ptr qry = Query::get( event->url.queryItemValue( "artist" ), event->url.queryItemValue( "track" ), event->url.queryItemValue( "album" ), qid, false );
+    Pipeline::instance()->resolve( qry, true, true );
 
     QVariantMap r;
     r.insert( "qid", qid );
@@ -273,7 +278,6 @@ Api_v1::get_results( QxtWebRequestEvent* event )
         send404(event);
     }
 
-    using namespace Tomahawk;
     query_ptr qry = Pipeline::instance()->query( event->url.queryItemValue( "qid" ) );
     if( qry.isNull() )
     {
@@ -290,7 +294,7 @@ Api_v1::get_results( QxtWebRequestEvent* event )
     r.insert( "query", qry->toVariant() );
 
     QVariantList res;
-    foreach( Tomahawk::result_ptr rp, qry->results() )
+    foreach( const result_ptr& rp, qry->results() )
     {
         res << rp->toVariant();
     }

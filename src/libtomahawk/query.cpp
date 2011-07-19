@@ -33,11 +33,11 @@ using namespace Tomahawk;
 
 
 query_ptr
-Query::get( const QString& artist, const QString& track, const QString& album, const QID& qid )
+Query::get( const QString& artist, const QString& track, const QString& album, const QID& qid, bool autoResolve )
 {
-    query_ptr q = query_ptr( new Query( artist, track, album, qid ) );
+    query_ptr q = query_ptr( new Query( artist, track, album, qid, autoResolve ) );
 
-    if ( !qid.isEmpty() )
+    if ( autoResolve && !qid.isEmpty() )
         Pipeline::instance()->resolve( q );
     return q;
 }
@@ -54,7 +54,7 @@ Query::get( const QString& query, const QID& qid )
 }
 
 
-Query::Query( const QString& artist, const QString& track, const QString& album, const QID& qid )
+Query::Query( const QString& artist, const QString& track, const QString& album, const QID& qid, bool autoResolve )
     : m_solved( false )
     , m_playable( false )
     , m_resolveFinished( false )
@@ -64,7 +64,7 @@ Query::Query( const QString& artist, const QString& track, const QString& album,
     , m_track( track )
     , m_duration( -1 )
 {
-    if ( !qid.isEmpty() )
+    if ( autoResolve )
     {
         connect( Database::instance(), SIGNAL( indexReady() ), SLOT( refreshResults() ), Qt::QueuedConnection );
     }
@@ -88,6 +88,12 @@ Query::Query( const QString& query, const QID& qid )
     {
         connect( Database::instance(), SIGNAL( indexReady() ), SLOT( refreshResults() ), Qt::QueuedConnection );
     }
+}
+
+
+Query::~Query()
+{
+    qDebug() << Q_FUNC_INFO << toString();
 }
 
 

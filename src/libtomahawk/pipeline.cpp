@@ -27,6 +27,7 @@
 
 #define DEFAULT_CONCURRENT_QUERIES 4
 #define MAX_CONCURRENT_QUERIES 16
+#define CLEANUP_TIMEOUT 5 * 60 * 1000
 
 using namespace Tomahawk;
 
@@ -48,6 +49,9 @@ Pipeline::Pipeline( QObject* parent )
 
     m_maxConcurrentQueries = qBound( DEFAULT_CONCURRENT_QUERIES, QThread::idealThreadCount(), MAX_CONCURRENT_QUERIES );
     qDebug() << Q_FUNC_INFO << "Using" << m_maxConcurrentQueries << "threads";
+
+    m_temporaryQueryTimer.setInterval( CLEANUP_TIMEOUT );
+    connect( &m_temporaryQueryTimer, SIGNAL( timeout() ), SLOT( onTemporaryQueryTimer() ) );
 }
 
 
@@ -104,7 +108,7 @@ Pipeline::addResolver( Resolver* r )
 
 
 void
-Pipeline::resolve( const QList<query_ptr>& qlist, bool prioritized )
+Pipeline::resolve( const QList<query_ptr>& qlist, bool prioritized, bool temporaryQuery )
 {
     {
         QMutexLocker lock( &m_mut );
@@ -112,25 +116,24 @@ Pipeline::resolve( const QList<query_ptr>& qlist, bool prioritized )
         int i = 0;
         foreach( const query_ptr& q, qlist )
         {
-//            qDebug() << Q_FUNC_INFO << (qlonglong)q.data() << q->toString();
             if ( !m_qids.contains( q->id() ) )
-            {
                 m_qids.insert( q->id(), q );
-            }
 
             if ( m_queries_pending.contains( q ) )
-            {
-//                qDebug() << "Already queued for resolving:" << q->toString();
                 continue;
-            }
 
             if ( prioritized )
-            {
                 m_queries_pending.insert( i++, q );
-            }
             else
+                m_queries_pending << q;
+
+            if ( temporaryQuery )
             {
-                m_queries_pending.append( q );
+                m_queries_temporary << q;
+
+                if ( m_temporaryQueryTimer.isActive() )
+                    m_temporaryQueryTimer.stop();
+                m_temporaryQueryTimer.start();
             }
         }
     }
@@ -140,21 +143,21 @@ Pipeline::resolve( const QList<query_ptr>& qlist, bool prioritized )
 
 
 void
-Pipeline::resolve( const query_ptr& q, bool prioritized )
+Pipeline::resolve( const query_ptr& q, bool prioritized, bool temporaryQuery )
 {
     if ( q.isNull() )
         return;
 
     QList< query_ptr > qlist;
     qlist << q;
-    resolve( qlist, prioritized );
+    resolve( qlist, prioritized, temporaryQuery );
 }
 
 
 void
-Pipeline::resolve( QID qid, bool prioritized )
+Pipeline::resolve( QID qid, bool prioritized, bool temporaryQuery )
 {
-    resolve( query( qid ), prioritized );
+    resolve( query( qid ), prioritized, temporaryQuery );
 }
 
 
@@ -386,4 +389,19 @@ Pipeline::decQIDState( const Tomahawk::query_ptr& query )
     }
 
     return state;
+}
+
+
+void
+Pipeline::onTemporaryQueryTimer()
+{
+    QMutexLocker lock( &m_mut );
+    qDebug() << Q_FUNC_INFO;
+
+    for ( int i = m_queries_temporary.count() - 1; i >= 0; i-- )
+    {
+        query_ptr q = m_queries_temporary.takeAt( i );
+        m_qids.remove( q->id() );
+        qDebug() << "Cleaning up:" << q->toString();
+    }
 }

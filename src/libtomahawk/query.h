@@ -48,11 +48,13 @@ friend class ::DatabaseCommand_LoadPlaylistEntries;
 friend class Pipeline;
 
 public:
-    static query_ptr get( const QString& artist, const QString& track, const QString& album, const QID& qid = QString() );
+    static query_ptr get( const QString& artist, const QString& track, const QString& album, const QID& qid = QString(), bool autoResolve = true );
     static query_ptr get( const QString& query, const QID& qid );
 
-    explicit Query( const QString& artist, const QString& track, const QString& album, const QID& qid );
+    explicit Query( const QString& artist, const QString& track, const QString& album, const QID& qid, bool autoResolve );
     explicit Query( const QString& query, const QID& qid );
+
+    virtual ~Query();
 
     /// returns list of all results so far
     QList< result_ptr > results() const;

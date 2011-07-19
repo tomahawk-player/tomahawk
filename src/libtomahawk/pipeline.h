@@ -23,6 +23,7 @@
 #include <QList>
 #include <QMap>
 #include <QMutex>
+#include <QTimer>
 
 #include "typedefs.h"
 #include "query.h"
@@ -65,9 +66,9 @@ public:
     }
 
 public slots:
-    void resolve( const query_ptr& q, bool prioritized = false );
-    void resolve( const QList<query_ptr>& qlist, bool prioritized = false );
-    void resolve( QID qid, bool prioritized = false );
+    void resolve( const query_ptr& q, bool prioritized = false, bool temporaryQuery = false );
+    void resolve( const QList<query_ptr>& qlist, bool prioritized = false, bool temporaryQuery = false );
+    void resolve( QID qid, bool prioritized = false, bool temporaryQuery = false );
 
     void start();
     void stop();
@@ -84,6 +85,8 @@ private slots:
     void timeoutShunt( const query_ptr& q );
     void shunt( const query_ptr& q );
     void shuntNext();
+
+    void onTemporaryQueryTimer();
 
 private:
     Tomahawk::Resolver* nextResolver( const Tomahawk::query_ptr& query ) const;
@@ -103,8 +106,12 @@ private:
 
     // store queries here until DB index is loaded, then shunt them all
     QList< query_ptr > m_queries_pending;
+    // store temporary queries here and clean up after timeout threshold
+    QList< query_ptr > m_queries_temporary;
+
     int m_maxConcurrentQueries;
     bool m_running;
+    QTimer m_temporaryQueryTimer;
 
     static Pipeline* s_instance;
 };
