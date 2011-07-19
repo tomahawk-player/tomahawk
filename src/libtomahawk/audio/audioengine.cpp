@@ -46,18 +46,18 @@ AudioEngine::instance()
 AudioEngine::AudioEngine()
     : QObject()
     , m_isPlayingHttp( false )
-//    , m_playlist( 0 )
-//    , m_currentTrackPlaylist( 0 )
     , m_queue( 0 )
     , m_timeElapsed( 0 )
     , m_expectStop( false )
     , m_waitingOnNewTrack( false )
     , m_infoSystemConnected( false )
+    , m_state( Stopped )
 {
     s_instance = this;
     qDebug() << "Init AudioEngine";
 
     qRegisterMetaType< AudioErrorCode >("AudioErrorCode");
+    qRegisterMetaType< AudioState >("AudioState");
 
     m_mediaObject = new Phonon::MediaObject( this );
     m_audioOutput = new Phonon::AudioOutput( Phonon::MusicCategory, this );
@@ -130,6 +130,7 @@ AudioEngine::pause()
 
     m_mediaObject->pause();
     emit paused();
+
     Tomahawk::InfoSystem::InfoSystem::instance()->pushInfo( s_aeInfoIdentifier, Tomahawk::InfoSystem::InfoNowPaused, QVariant() );
 }
 
@@ -139,6 +140,7 @@ AudioEngine::stop()
 {
     qDebug() << Q_FUNC_INFO;
 
+    setState( Stopped );
     m_mediaObject->stop();
 
     if ( !m_playlist.isNull() )
@@ -226,6 +228,7 @@ AudioEngine::setVolume( int percentage )
     m_audioOutput->setVolume( (qreal)percentage / 100.0 );
     emit volumeChanged( percentage );
 }
+
 
 void
 AudioEngine::mute()
@@ -416,6 +419,7 @@ AudioEngine::loadTrack( const Tomahawk::result_ptr& result )
     return true;
 }
 
+
 void
 AudioEngine::loadPreviousTrack()
 {
@@ -513,6 +517,8 @@ AudioEngine::onStateChanged( Phonon::State newState, Phonon::State oldState )
         qDebug() << "Phonon Error:" << m_mediaObject->errorString() << m_mediaObject->errorType();
         return;
     }
+    if ( newState == Phonon::PlayingState )
+        setState( Playing );
 
     if ( !m_expectStop )
         return;
@@ -527,6 +533,10 @@ AudioEngine::onStateChanged( Phonon::State newState, Phonon::State oldState )
             case Phonon::PausedState:
             {
                 stopped = ( duration - 1000 < m_mediaObject->currentTime() );
+
+                if ( !stopped )
+                    setState( Paused );
+
                 break;
             }
             case Phonon::StoppedState:
@@ -613,4 +623,14 @@ bool
 AudioEngine::isLocalResult( const QString& url ) const
 {
     return url.startsWith( "file://" );
+}
+
+
+void
+AudioEngine::setState( AudioState state )
+{
+    AudioState oldState = m_state;
+    m_state = state;
+
+    emit stateChanged( state, oldState );
 }

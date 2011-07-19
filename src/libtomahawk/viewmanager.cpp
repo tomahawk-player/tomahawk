@@ -410,6 +410,7 @@ ViewManager::showSuperCollection()
     return shown;
 }
 
+
 void
 ViewManager::playlistInterfaceChanged( Tomahawk::PlaylistInterface* interface )
 {
@@ -570,7 +571,6 @@ ViewManager::setPage( ViewPage* page, bool trackHistory )
 
     // save the old playlist shuffle state in config before we change playlists
     saveCurrentPlaylistSettings();
-
     unlinkPlaylist();
 
     if ( !m_pageHistory.contains( page ) )
@@ -592,11 +592,11 @@ ViewManager::setPage( ViewPage* page, bool trackHistory )
     qDebug() << "View page shown:" << page->title();
     emit viewPageActivated( page );
 
-    if( page->isTemporaryPage() )
+    if ( page->isTemporaryPage() )
         emit tempPageActivated( page );
 
-    if ( !AudioEngine::instance()->playlist() )
-        AudioEngine::instance()->setPlaylist( currentPlaylistInterface() );
+    if ( AudioEngine::instance()->state() == AudioEngine::Stopped )
+        AudioEngine::instance()->setPlaylist( page->playlistInterface() );
 
     // UGH!
     if ( QObject* obj = dynamic_cast< QObject* >( currentPage() ) )
@@ -648,6 +648,7 @@ ViewManager::unlinkPlaylist()
                     this,                                 SIGNAL( shuffleModeChanged( bool ) ) );
     }
 }
+
 
 void
 ViewManager::saveCurrentPlaylistSettings()
@@ -725,6 +726,7 @@ ViewManager::updateView()
     loadCurrentPlaylistSettings();
 }
 
+
 void
 ViewManager::loadCurrentPlaylistSettings()
 {
@@ -740,6 +742,7 @@ ViewManager::loadCurrentPlaylistSettings()
         }
     }
 }
+
 
 void
 ViewManager::onWidgetDestroyed( QWidget* widget )
@@ -815,17 +818,20 @@ ViewManager::createDynamicPlaylist( const Tomahawk::source_ptr& src,
     p->reportCreated( p );
 }
 
+
 ViewPage*
 ViewManager::pageForCollection( const collection_ptr& col ) const
 {
     return m_collectionViews.value( col, 0 );
 }
 
+
 ViewPage*
 ViewManager::pageForDynPlaylist(const dynplaylist_ptr& pl) const
 {
     return m_dynamicWidgets.value( pl, 0 );
 }
+
 
 ViewPage*
 ViewManager::pageForPlaylist(const playlist_ptr& pl) const

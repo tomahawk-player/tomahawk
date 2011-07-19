@@ -45,6 +45,7 @@ Q_OBJECT
 
 public:
     enum AudioErrorCode { StreamReadError, AudioDeviceError, DecodeError };
+    enum AudioState { Stopped, Playing, Paused };
 
     static AudioEngine* instance();
 
@@ -52,8 +53,11 @@ public:
     ~AudioEngine();
 
     unsigned int volume() const { return m_audioOutput->volume() * 100.0; } // in percent
-    bool isPlaying() const { return m_mediaObject->state() == Phonon::PlayingState; }
-    bool isPaused() const { return m_mediaObject->state() == Phonon::PausedState; }
+
+    AudioState state() const { return m_state; }
+    bool isPlaying() const { return m_state == Playing; }
+    bool isPaused() const { return m_state == Paused; }
+    bool isStopped() const { return m_state == Stopped; }
 
     /* Returns the PlaylistInterface of the currently playing track. Note: This might be different to the current playlist! */
     Tomahawk::PlaylistInterface* currentTrackPlaylist() const { return m_currentTrackPlaylist.data(); }
@@ -98,6 +102,7 @@ signals:
     void paused();
     void resumed();
 
+    void stateChanged( AudioState newState, AudioState oldState );
     void volumeChanged( int volume /* in percent */ );
 
     void timerMilliSeconds( qint64 msElapsed );
@@ -120,8 +125,11 @@ private slots:
     void setCurrentTrack( const Tomahawk::result_ptr& result );
 
 private:
+    void setState( AudioState state );
+
     bool isHttpResult( const QString& ) const;
     bool isLocalResult( const QString& ) const;
+
     void sendWaitingNotification() const;
     void sendNowPlayingNotification();
 
@@ -141,6 +149,8 @@ private:
     bool m_expectStop;
     bool m_waitingOnNewTrack;
     bool m_infoSystemConnected;
+
+    AudioState m_state;
 
     static AudioEngine* s_instance;
 };

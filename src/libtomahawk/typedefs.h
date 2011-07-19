@@ -55,7 +55,6 @@ namespace Tomahawk
     typedef QString QID; //query id
     typedef QString RID; //result id
 
-
     enum GeneratorMode {
         OnDemand = 0,
         Static
@@ -64,6 +63,7 @@ namespace Tomahawk
 }; // ns
 
 typedef int AudioErrorCode;
+typedef int AudioState;
 
 // creates 36char ascii guid without {} around it
 inline static QString uuid()
