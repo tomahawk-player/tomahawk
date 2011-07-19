@@ -251,11 +251,12 @@ ScriptResolver::doSetup( const QVariantMap& m )
     Tomahawk::Pipeline::instance()->addResolver( this );
 }
 
+
 void
 ScriptResolver::setupConfWidget( const QVariantMap& m )
 {
     bool compressed = m.value( "compressed", "false" ).toString() == "true";
-    qDebug() << "Resolver has a preferences widget! compressed?" << compressed << m;
+    qDebug() << "Resolver has a preferences widget! compressed?" << compressed;
 
     QByteArray uiData = m[ "widget" ].toByteArray();
     if( compressed )

@@ -103,7 +103,8 @@ Tomahawk::ExternalResolver::fixDataImagePaths( const QByteArray& data, bool comp
             continue;
         }
         QByteArray data = images[ filename ].toByteArray();
-        qDebug() << "expanding data:" << data << compressed;
+
+//        qDebug() << "expanding data:" << data << compressed;
         data = compressed ? qUncompress( QByteArray::fromBase64( data ) ) : QByteArray::fromBase64( data );
         imgF.write( data );
         imgF.close();

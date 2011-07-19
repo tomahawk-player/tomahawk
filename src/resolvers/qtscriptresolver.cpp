@@ -141,7 +141,6 @@ QtScriptResolver::QtScriptResolver( const QString& scriptPath )
     // init resolver
     resolverInit();
 
-
     QVariantMap m = resolverSettings();
     m_name       = m.value( "name" ).toString();
     m_weight     = m.value( "weight", 0 ).toUInt();
@@ -267,9 +266,8 @@ QtScriptResolver::loadUi()
     QVariantMap m = m_engine->mainFrame()->evaluateJavaScript( RESOLVER_LEGACY_CODE  "resolver.getConfigUi();" ).toMap();
     m_dataWidgets = m["fields"].toList();
 
-
     bool compressed = m.value( "compressed", "false" ).toBool();
-    qDebug() << "Resolver has a preferences widget! compressed?" << compressed << m;
+    qDebug() << "Resolver has a preferences widget! compressed?" << compressed;
 
     QByteArray uiData = m[ "widget" ].toByteArray();
 
@@ -288,8 +286,6 @@ QtScriptResolver::loadUi()
 
     if( m.contains( "images" ) )
         uiData = fixDataImagePaths( uiData, compressed, images );
-
-
 
     m_configWidget = QWeakPointer< QWidget >( widgetFromData( uiData, 0 ) );
 
