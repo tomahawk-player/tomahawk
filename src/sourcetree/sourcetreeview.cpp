@@ -276,6 +276,7 @@ SourceTreeView::deletePlaylist( const QModelIndex& idxIn )
     }
 }
 
+
 void
 SourceTreeView::copyPlaylistLink()
 {
@@ -299,6 +300,7 @@ SourceTreeView::copyPlaylistLink()
     }
 }
 
+
 void SourceTreeView::addToLocal()
 {
     QModelIndex idx = m_contextMenuIndex;
@@ -315,7 +317,8 @@ void SourceTreeView::addToLocal()
         // this way we cheaply regenerate the needed controls
         QString link = GlobalActionManager::instance()->copyPlaylistToClipboard( playlist );
         dynplaylist_ptr p = GlobalActionManager::instance()->loadDynamicPlaylist( link, type == SourcesModel::Station );
-    } else if ( type == SourcesModel::StaticPlaylist )
+    }
+    else if ( type == SourcesModel::StaticPlaylist )
     {
         PlaylistItem* item = itemFromIndex< PlaylistItem >( m_contextMenuIndex );
         playlist_ptr playlist = item->playlist();
@@ -440,6 +443,16 @@ SourceTreeView::dragEnterEvent( QDragEnterEvent* event )
 
 
 void
+SourceTreeView::dragLeaveEvent( QDragLeaveEvent* event )
+{
+    QTreeView::dragLeaveEvent( event );
+
+    m_dragging = false;
+    setDirtyRegion( m_dropRect );
+}
+
+
+void
 SourceTreeView::dragMoveEvent( QDragMoveEvent* event )
 {
     bool accept = false;
@@ -486,6 +499,7 @@ SourceTreeView::dropEvent( QDropEvent* event )
     m_dragging = false;
 }
 
+
 void
 SourceTreeView::keyPressEvent( QKeyEvent *event )
 {
@@ -505,6 +519,7 @@ SourceTreeView::keyPressEvent( QKeyEvent *event )
         }
     }
 }
+
 
 void
 SourceTreeView::paintEvent( QPaintEvent* event )

@@ -67,7 +67,7 @@ protected:
     virtual void paintEvent( QPaintEvent* event );
 
     virtual void dragEnterEvent( QDragEnterEvent* event );
-    virtual void dragLeaveEvent( QDragLeaveEvent* event ) { Q_UNUSED( event ); m_dragging = false; setDirtyRegion( m_dropRect ); }
+    virtual void dragLeaveEvent( QDragLeaveEvent* event );
     virtual void dragMoveEvent( QDragMoveEvent* event );
     virtual void dropEvent( QDropEvent* event );
     virtual void keyPressEvent( QKeyEvent* event );
