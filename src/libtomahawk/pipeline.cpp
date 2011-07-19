@@ -347,8 +347,8 @@ Pipeline::setQIDState( const Tomahawk::query_ptr& query, int state )
     else
     {
 //        qDebug() << Q_FUNC_INFO << "removing" << query->id() << state;
-        if ( m_qidsState.remove( query->id() ) )
-            qDebug() << "Queries running:" << m_qidsState.count();
+        m_qidsState.remove( query->id() );
+//        qDebug() << "Queries running:" << m_qidsState.count();
     }
 }
 
