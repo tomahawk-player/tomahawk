@@ -39,9 +39,6 @@
 #include "artist.h"
 
 #include "audio/audioengine.h"
-#include "database/database.h"
-#include "database/databasecommand_collectionstats.h"
-#include "network/controlconnection.h"
 #include "viewmanager.h"
 #include "sip/SipHandler.h"
 #include "sourcetree/sourcetreeview.h"
