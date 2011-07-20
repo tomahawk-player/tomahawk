@@ -59,6 +59,8 @@ namespace TomahawkUtils
         QNetworkProxy m_proxy;
     };
 
+    DLLEXPORT QString appFriendlyVersion();
+
     DLLEXPORT QDir appConfigDir();
     DLLEXPORT QDir appDataDir();
     DLLEXPORT QDir appLogDir();

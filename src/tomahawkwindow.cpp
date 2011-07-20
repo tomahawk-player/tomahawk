@@ -20,8 +20,6 @@
 #include "ui_tomahawkwindow.h"
 #include "ui_searchbox.h"
 
-#include "config.h"
-
 #include <QAction>
 #include <QCloseEvent>
 #include <QShowEvent>
@@ -171,7 +169,7 @@ TomahawkWindow::TomahawkWindow( QWidget* parent )
 #endif
 
 #if defined( Q_OS_DARWIN ) && defined( HAVE_SPARKLE )
-    QAction* checkForUpdates = ui->menu_Help->addAction( tr( "Check For Updates...") );
+    QAction* checkForUpdates = ui->menu_Help->addAction( tr( "Check For Updates..." ) );
     checkForUpdates->setMenuRole( QAction::ApplicationSpecificRole );
     connect( checkForUpdates, SIGNAL( triggered( bool ) ), SLOT( checkForUpdates() ) );
 #elif defined( WIN32 )
@@ -185,10 +183,10 @@ TomahawkWindow::TomahawkWindow( QWidget* parent )
     qtsparkle::Updater* updater = new qtsparkle::Updater( updaterUrl, this );
     Q_ASSERT( TomahawkUtils::nam() != 0 );
     updater->SetNetworkAccessManager( TomahawkUtils::nam() );
-    updater->SetVersion( TOMAHAWK_VERSION );
+    updater->SetVersion( TomahawkUtils::appFriendlyVersion() );
 
     ui->menu_Help->addSeparator();
-    QAction* checkForUpdates = ui->menu_Help->addAction( tr( "Check For Updates...") );
+    QAction* checkForUpdates = ui->menu_Help->addAction( tr( "Check For Updates..." ) );
     connect( checkForUpdates, SIGNAL( triggered() ), updater, SLOT( CheckNow() ) );
 #endif
 
@@ -639,8 +637,9 @@ void
 TomahawkWindow::showAboutTomahawk()
 {
     QMessageBox::about( this, tr( "About Tomahawk" ),
-                        tr( "<h2><b>Tomahawk %1</h2>Copyright 2010, 2011<br/>Christian Muehlhaeuser &lt;muesli@tomahawk-player.org&gt;<br/><br/>"
+                        tr( "<h2><b>Tomahawk %1<br/>(%2)</h2>Copyright 2010, 2011<br/>Christian Muehlhaeuser &lt;muesli@tomahawk-player.org&gt;<br/><br/>"
                             "Thanks to: Leo Franchi, Jeff Mitchell, Dominik Schmidt, Jason Herskowitz, Alejandro Wainzinger, Harald Sitter and Steve Robertson" )
+                        .arg( TomahawkUtils::appFriendlyVersion() )
                         .arg( qApp->applicationVersion() ) );
 }
 

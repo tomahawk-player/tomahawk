@@ -17,7 +17,9 @@
  */
 
 #include "tomahawkutils.h"
+
 #include <tomahawksettings.h>
+#include "config.h"
 
 #include <QCoreApplication>
 #include <QColor>
@@ -53,6 +55,17 @@ appSupportFolderPath()
 }
 
 #endif // Q_WS_MAC
+
+
+QString
+appFriendlyVersion()
+{
+    QStringList l = QString( TOMAHAWK_VERSION ).split( ".", QString::SkipEmptyParts );
+    while ( l.count() > 3 )
+        l.removeLast();
+
+    return l.join( "." );
+}
 
 
 QDir
