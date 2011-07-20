@@ -651,10 +651,11 @@ SourceDelegate::paint( QPainter* painter, const QStyleOptionViewItem& option, co
         if ( desc.isEmpty() )
             desc = tr( "Online" );
 
-        textRect = option.rect.adjusted( iconRect.width() + 8, painter->fontMetrics().height() + 10, -figWidth - 24, 0 );
+        textRect = option.rect.adjusted( iconRect.width() + 8, painter->fontMetrics().height() + 6, -figWidth - 24, -4 );
         painter->setFont( normal );
         text = painter->fontMetrics().elidedText( desc, Qt::ElideRight, textRect.width() );
-        painter->drawText( textRect, text );
+        QTextOption to( Qt::AlignBottom );
+        painter->drawText( textRect, text, to );
 
         if ( status )
         {
