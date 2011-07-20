@@ -21,7 +21,7 @@
 #define RESOLVERCONFIGDELEGATE_H
 
 #include "configdelegatebase.h"
-
+#include "source.h"
 
 class ResolverConfigDelegate : public ConfigDelegateBase
 {

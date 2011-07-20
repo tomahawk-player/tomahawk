@@ -97,13 +97,13 @@ ConfigDelegateBase::editorEvent ( QEvent* event, QAbstractItemModel* model, cons
             return false;
 
         // eat the double click events inside the check rect
-            if( event->type() == QEvent::MouseButtonDblClick ) {
-                return true;
-            }
+        if( event->type() == QEvent::MouseButtonDblClick ) {
+            return true;
+        }
 
-            Qt::CheckState curState = static_cast< Qt::CheckState >( index.data( Qt::CheckStateRole ).toInt() );
-            Qt::CheckState newState = curState == Qt::Checked ? Qt::Unchecked : Qt::Checked;
-            return model->setData( index, newState, Qt::CheckStateRole );
+        Qt::CheckState curState = static_cast< Qt::CheckState >( index.data( Qt::CheckStateRole ).toInt() );
+        Qt::CheckState newState = curState == Qt::Checked ? Qt::Unchecked : Qt::Checked;
+        return model->setData( index, newState, Qt::CheckStateRole );
 
     } else if( event->type() == QEvent::MouseButtonPress ) {
         QMouseEvent* me = static_cast< QMouseEvent* >( event );

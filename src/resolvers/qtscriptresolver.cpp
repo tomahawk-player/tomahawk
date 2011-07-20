@@ -108,18 +108,53 @@ QtScriptResolver::QtScriptResolver( const QString& scriptPath )
     : Tomahawk::ExternalResolver( scriptPath )
     , m_ready( false )
     , m_stopped( false )
+    , m_error( Tomahawk::ExternalResolver::NoError )
     , m_resolverHelper( new QtScriptResolverHelper( scriptPath, this ) )
 {
     qDebug() << Q_FUNC_INFO << scriptPath;
 
     m_engine = new ScriptEngine( this );
-    QFile scriptFile( scriptPath );
-    if ( !scriptFile.open( QIODevice::ReadOnly ) )
+    if ( !QFile::exists( filePath() ) )
     {
         qDebug() << Q_FUNC_INFO << "Failed loading JavaScript resolver:" << scriptPath;
-        deleteLater();
+        m_error = Tomahawk::ExternalResolver::FileNotFound;
+    } else
+    {
+        init();
+    }
+
+}
+
+
+QtScriptResolver::~QtScriptResolver()
+{
+    Tomahawk::Pipeline::instance()->removeResolver( this );
+    delete m_engine;
+}
+
+void
+QtScriptResolver::reload()
+{
+    if ( QFile::exists( filePath() ) )
+    {
+        init();
+        m_error = Tomahawk::ExternalResolver::NoError;
+    } else
+    {
+        m_error = Tomahawk::ExternalResolver::FileNotFound;
+    }
+}
+
+void
+QtScriptResolver::init()
+{
+    QFile scriptFile( filePath() );
+    if( !scriptFile.open( QIODevice::ReadOnly ) )
+    {
+        qWarning() << "Failed to read contents of file:" << filePath() << scriptFile.errorString();
         return;
     }
+    const QByteArray scriptContents = scriptFile.readAll();
 
     m_engine->mainFrame()->setHtml( "<html><body></body></html>" );
 
@@ -134,9 +169,8 @@ QtScriptResolver::QtScriptResolver( const QString& scriptPath )
     jslib.close();
 
     // add resolver
-    m_engine->setScriptPath( scriptPath );
-    m_engine->mainFrame()->evaluateJavaScript( scriptFile.readAll() );
-    scriptFile.close();
+    m_engine->setScriptPath( filePath() );
+    m_engine->mainFrame()->evaluateJavaScript( scriptContents );
 
     // init resolver
     resolverInit();
@@ -157,13 +191,11 @@ QtScriptResolver::QtScriptResolver( const QString& scriptPath )
     Tomahawk::Pipeline::instance()->addResolver( this );
 }
 
-
-QtScriptResolver::~QtScriptResolver()
+Tomahawk::ExternalResolver::ErrorState
+QtScriptResolver::error() const
 {
-    Tomahawk::Pipeline::instance()->removeResolver( this );
-    delete m_engine;
+    return m_error;
 }
-
 
 void
 QtScriptResolver::resolve( const Tomahawk::query_ptr& query )

@@ -31,7 +31,8 @@ public:
     enum Roles {
         ResolverName = Qt::UserRole + 15,
         ResolverPath = Qt::UserRole + 16,
-        HasConfig = Qt::UserRole + 17
+        HasConfig = Qt::UserRole + 17,
+        ErrorState = Qt::UserRole + 18
     };
 
     explicit ResolversModel( const QStringList& allResolvers, const QStringList& enabledResolvers, QObject* parent = 0 );

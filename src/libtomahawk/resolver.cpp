@@ -27,6 +27,13 @@
 #include <QDir>
 #include <QIcon>
 
+
+Tomahawk::ExternalResolver::ErrorState
+Tomahawk::ExternalResolver::error() const
+{
+    return NoError;
+}
+
 QVariant
 Tomahawk::ExternalResolver::configMsgFromWidget( QWidget* w )
 {

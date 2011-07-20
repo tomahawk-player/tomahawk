@@ -20,8 +20,9 @@
 
 #include <QFileInfo>
 
-#include <tomahawksettings.h>
-#include <tomahawkapp.h>
+#include "tomahawksettings.h"
+#include "tomahawkapp.h"
+#include "resolver.h"
 
 
 ResolversModel::ResolversModel( const QStringList& allResolvers, const QStringList& enabledResolvers, QObject* parent )
@@ -69,8 +70,16 @@ ResolversModel::data( const QModelIndex& index, int role ) const
         if( Tomahawk::ExternalResolver* r = TomahawkApp::instance()->resolverForPath( m_allResolvers.at( index.row() ) ) ) // if we have one, it means we are loaded too!
             return r->configUI() != 0;
         return false;
+    case ResolversModel::ErrorState:
+        if( Tomahawk::ExternalResolver* r = TomahawkApp::instance()->resolverForPath( m_allResolvers.at( index.row() ) ) ) // if we have one, it means we are loaded too!
+            return r->error();
+        else if( !QFile::exists( m_allResolvers.at( index.row() ) ) )
+            return Tomahawk::ExternalResolver::FileNotFound;
+        return Tomahawk::ExternalResolver::NoError;
     case Qt::CheckStateRole:
         return m_enabledResolvers.contains( m_allResolvers.at( index.row() ) ) ? Qt::Checked : Qt::Unchecked;
+    case Qt::ToolTipRole:
+        return m_allResolvers.at( index.row() );
     default:
         return QVariant();
     }
@@ -79,6 +88,17 @@ ResolversModel::data( const QModelIndex& index, int role ) const
 bool
 ResolversModel::setData( const QModelIndex& index, const QVariant& value, int role )
 {
+    Tomahawk::ExternalResolver* r = TomahawkApp::instance()->resolverForPath( m_allResolvers.at( index.row() ) );
+    if( r && r->error() == Tomahawk::ExternalResolver::FileNotFound )  // give it a shot to see if the user manually fixed paths
+    {
+        r->reload();
+
+        if( r->error() == Tomahawk::ExternalResolver::FileNotFound ) // Nope, no luck. Doesn't exist on disk, don't let user mess with it
+            return false;
+    } else if( !r && !QFile::exists( index.data( ResolverPath ).toString() ) ) {
+        return false;
+    }
+
     if( role == Qt::CheckStateRole ) {
         Qt::CheckState state = static_cast< Qt::CheckState >( value.toInt() );
         QString resolver = m_allResolvers.at( index.row() );

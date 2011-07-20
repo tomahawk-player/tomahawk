@@ -20,6 +20,7 @@
 #include "resolverconfigdelegate.h"
 
 #include "resolversmodel.h"
+#include "resolver.h"
 
 #include <QApplication>
 #include <QPainter>
@@ -50,6 +51,7 @@ ResolverConfigDelegate::paint( QPainter* painter, const QStyleOptionViewItem& op
     path.setItalic( true );
     path.setPointSize( path.pointSize() - 1 );
 
+    const bool fileFound = (Tomahawk::ExternalResolver::ErrorState)index.data( ResolversModel::ErrorState ).toInt() == Tomahawk::ExternalResolver::FileNotFound;
 
     QFontMetrics bfm( name );
     QFontMetrics sfm( path );
@@ -92,9 +94,17 @@ ResolverConfigDelegate::paint( QPainter* painter, const QStyleOptionViewItem& op
 
     painter->save();
     painter->setFont( path );
-    painter->setBrush( Qt::gray );
+    QString pathStr = index.data( ResolversModel::ResolverPath ).toString();
+    if( fileFound )
+    {
+        painter->setPen( QColor( Qt::red ).lighter( 150 ) );
+        pathStr = tr( "Not found: %1" ).arg( pathStr );
+    } else
+    {
+        painter->setPen( Qt::gray );
+    }
     textRect.moveTop(  itemRect.height() / 2 + top );
-    QString pathStr = sfm.elidedText( index.data( ResolversModel::ResolverPath ).toString(),Qt::ElideMiddle, textRect.width() );
+    pathStr = sfm.elidedText( pathStr, Qt::ElideMiddle, textRect.width() );
     painter->drawText( textRect, pathStr );
     painter->restore();
 

@@ -110,6 +110,9 @@ public:
     virtual QWidget* configUI() const;
     virtual void saveConfig();
 
+    virtual ExternalResolver::ErrorState error() const;
+    virtual void reload();
+
 public slots:
     virtual void resolve( const Tomahawk::query_ptr& query );
     virtual void stop();
@@ -118,7 +121,9 @@ signals:
     void finished();
 
 private:
-    virtual void loadUi();
+    void init();
+
+    void loadUi();
     QWidget* findWidget( QWidget* widget, const QString& objectName );
     void setWidgetData( const QVariant& value, QWidget* widget, const QString& property );
     QVariant widgetData( QWidget* widget, const QString& property );
@@ -136,6 +141,7 @@ private:
     unsigned int m_weight, m_timeout;
 
     bool m_ready, m_stopped;
+    ExternalResolver::ErrorState m_error;
 
     QtScriptResolverHelper* m_resolverHelper;
     QWeakPointer< QWidget > m_configWidget;

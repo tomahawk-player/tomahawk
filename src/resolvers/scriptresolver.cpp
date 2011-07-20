@@ -33,19 +33,22 @@ ScriptResolver::ScriptResolver( const QString& exe )
     , m_msgsize( 0 )
     , m_ready( false )
     , m_stopped( false )
+    , m_error( Tomahawk::ExternalResolver::NoError )
 {
     qDebug() << Q_FUNC_INFO << exe;
     connect( &m_proc, SIGNAL( readyReadStandardError() ), SLOT( readStderr() ) );
     connect( &m_proc, SIGNAL( readyReadStandardOutput() ), SLOT( readStdout() ) );
     connect( &m_proc, SIGNAL( finished( int, QProcess::ExitStatus ) ), SLOT( cmdExited( int, QProcess::ExitStatus ) ) );
 
-    QString filepath = filePath();
 #ifdef WIN32
     // have to enclose in quotes if path contains spaces on windows...
-    filepath = QString( "\"%1\"" ).arg( filepath );
+    setFilePath( QString( "\"%1\"" ).arg( filePath() ) );
 #endif
 
-    m_proc.start( filepath );
+    if( !QFile::exists( filePath() ) )
+        m_error = Tomahawk::ExternalResolver::FileNotFound;
+    else
+        m_proc.start( filePath() );
 }
 
 
@@ -61,11 +64,28 @@ ScriptResolver::~ScriptResolver()
 
 
 void
+ScriptResolver::reload()
+{
+    if( !QFile::exists( filePath() ) )
+        m_error = Tomahawk::ExternalResolver::FileNotFound;
+    else
+    {
+        m_proc.start( filePath() );
+        m_error = Tomahawk::ExternalResolver::NoError;
+    }
+}
+
+void
 ScriptResolver::readStderr()
 {
     qDebug() << "SCRIPT_STDERR" << filePath() << m_proc.readAllStandardError();
 }
 
+ScriptResolver::ErrorState
+ScriptResolver::error() const
+{
+    return m_error;
+}
 
 void
 ScriptResolver::readStdout()
@@ -102,6 +122,8 @@ void
 ScriptResolver::sendMsg( const QByteArray& msg )
 {
 //    qDebug() << Q_FUNC_INFO << m_ready << msg << msg.length();
+    if( !m_proc.isOpen() )
+        return;
 
     quint32 len;
     qToBigEndian( msg.length(), (uchar*) &len );
