@@ -329,12 +329,10 @@ Pipeline::setQIDState( const Tomahawk::query_ptr& query, int state )
 
     if ( state > 0 )
     {
-//        qDebug() << Q_FUNC_INFO << "inserting to qidsstate:" << query->id() << state;
         m_qidsState.insert( query->id(), state );
     }
     else
     {
-//        qDebug() << Q_FUNC_INFO << "removing" << query->id() << state;
         m_qidsState.remove( query->id() );
 //        qDebug() << "Queries running:" << m_qidsState.count();
     }
@@ -351,8 +349,6 @@ Pipeline::incQIDState( const Tomahawk::query_ptr& query )
     {
         state = m_qidsState.value( query->id() ) + 1;
     }
-
-//    qDebug() << Q_FUNC_INFO << "inserting to qidsstate:" << query->id() << state;
     m_qidsState.insert( query->id(), state );
 
     return state;
@@ -370,12 +366,10 @@ Pipeline::decQIDState( const Tomahawk::query_ptr& query )
     int state = m_qidsState.value( query->id() ) - 1;
     if ( state )
     {
-//        qDebug() << Q_FUNC_INFO << "replacing" << query->id() << state;
         m_qidsState.insert( query->id(), state );
     }
     else
     {
-//        qDebug() << Q_FUNC_INFO << "removing" << query->id() << state;
         m_qidsState.remove( query->id() );
 //        qDebug() << "Queries running:" << m_qidsState.count();
     }
@@ -389,11 +383,11 @@ Pipeline::onTemporaryQueryTimer()
 {
     QMutexLocker lock( &m_mut );
     qDebug() << Q_FUNC_INFO;
+    m_temporaryQueryTimer.stop();
 
     for ( int i = m_queries_temporary.count() - 1; i >= 0; i-- )
     {
         query_ptr q = m_queries_temporary.takeAt( i );
         m_qids.remove( q->id() );
-        qDebug() << "Cleaning up:" << q->toString();
     }
 }
