@@ -262,10 +262,6 @@ Pipeline::timeoutShunt( const query_ptr& q )
         m_qidsTimeout.remove( q->id() );
         shunt( q );
     }
-    else
-    {
-        setQIDState( q, 0 );
-    }
 }
 
 
@@ -380,8 +376,8 @@ Pipeline::decQIDState( const Tomahawk::query_ptr& query )
     else
     {
 //        qDebug() << Q_FUNC_INFO << "removing" << query->id() << state;
-        if ( m_qidsState.remove( query->id() ) )
-            qDebug() << "Queries running:" << m_qidsState.count();
+        m_qidsState.remove( query->id() );
+//        qDebug() << "Queries running:" << m_qidsState.count();
     }
 
     return state;
