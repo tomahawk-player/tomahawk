@@ -5,7 +5,7 @@ if(EXISTS ${CMAKE_SOURCE_DIR}/.git/HEAD)
   mark_as_advanced(GIT_EXECUTABLE)
   if(GIT_EXECUTABLE)
     execute_process(
-      COMMAND ${GIT_EXECUTABLE} rev-parse --verify -q --short=6 HEAD
+      COMMAND ${GIT_EXECUTABLE} rev-parse --verify -q --short=7 HEAD
       OUTPUT_VARIABLE head
       OUTPUT_STRIP_TRAILING_WHITESPACE
       WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}
