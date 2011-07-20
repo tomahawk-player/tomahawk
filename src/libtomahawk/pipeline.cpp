@@ -191,8 +191,6 @@ Pipeline::reportResults( QID qid, const QList< result_ptr >& results )
             q->onResolvingFinished();
 
             setQIDState( q, 0 );
-            if ( !m_queries_temporary.contains( q ) )
-                m_qids.remove( q->id() );
             if ( m_qidsTimeout.contains( q->id() ) )
                 m_qidsTimeout.remove( q->id() );
 
@@ -273,6 +271,8 @@ Pipeline::timeoutShunt( const query_ptr& q )
     {
         qDebug() << "Reached end of pipeline for:" << q->toString();
         setQIDState( q, 0 );
+        if ( !m_queries_temporary.contains( q ) )
+            m_qids.remove( q->id() );
     }
 }
 
@@ -302,6 +302,8 @@ Pipeline::shunt( const query_ptr& q )
     {
         qDebug() << "Reached end of pipeline for:" << q->toString();
         setQIDState( q, 0 );
+        if ( !m_queries_temporary.contains( q ) )
+            m_qids.remove( q->id() );
 
         q->onResolvingFinished();
     }
