@@ -20,7 +20,6 @@
 
 #include <QDebug>
 #include <QMutexLocker>
-#include <QTimer>
 
 #include "functimeout.h"
 #include "database/database.h"
@@ -72,7 +71,7 @@ Pipeline::databaseReady()
 void
 Pipeline::start()
 {
-    qDebug() << Q_FUNC_INFO << "shunting this many pending queries:" << m_queries_pending.size();
+    qDebug() << Q_FUNC_INFO << "Shunting this many pending queries:" << m_queries_pending.size();
     m_running = true;
 
     shuntNext();
@@ -177,8 +176,6 @@ Pipeline::reportResults( QID qid, const QList< result_ptr >& results )
     const query_ptr& q = m_qids.value( qid );
     if ( !results.isEmpty() )
     {
-//         qDebug() << Q_FUNC_INFO << qid;
-
         q->addResults( results );
         foreach( const result_ptr& r, q->results() )
         {
@@ -187,7 +184,6 @@ Pipeline::reportResults( QID qid, const QList< result_ptr >& results )
 
         if ( q->solved() && !q->isFullTextQuery() )
         {
-//            qDebug() << "FINISHED RESOLVING EARLY" << q->toString();
             q->onResolvingFinished();
 
             setQIDState( q, 0 );
@@ -237,7 +233,6 @@ Pipeline::shuntNext()
             return;
         }
 
-//        qDebug() << Q_FUNC_INFO << m_qidsState.count();
         // Check if we are ready to dispatch more queries
         if ( m_qidsState.count() >= m_maxConcurrentQueries )
             return;
@@ -269,7 +264,6 @@ Pipeline::timeoutShunt( const query_ptr& q )
     }
     else
     {
-        qDebug() << "Reached end of pipeline for:" << q->toString();
         setQIDState( q, 0 );
     }
 }
