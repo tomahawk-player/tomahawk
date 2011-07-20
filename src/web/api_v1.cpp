@@ -244,7 +244,7 @@ Api_v1::resolve( QxtWebRequestEvent* event )
     else
         qid = uuid();
 
-    query_ptr qry = Query::get( event->url.queryItemValue( "artist" ), event->url.queryItemValue( "track" ), event->url.queryItemValue( "album" ), qid, false );
+    query_ptr qry = Query::get( QUrl::fromPercentEncoding( event->url.queryItemValue( "artist" ).toUtf8() ), QUrl::fromPercentEncoding( event->url.queryItemValue( "track" ).toUtf8() ), QUrl::fromPercentEncoding( event->url.queryItemValue( "album" ).toUtf8() ), qid, false );
     Pipeline::instance()->resolve( qry, true, true );
 
     QVariantMap r;
