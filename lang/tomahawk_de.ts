@@ -1126,7 +1126,7 @@ Bitte ändere den Filter oder versuche es erneut.</translation>
     <message>
         <location filename="src/tomahawkwindow.ui" line="93"/>
         <source>Ctrl+Q</source>
-        <translation type="unfinished">Strg+Q</translation>
+        <translation type="unfinished">Ctrl+Q</translation>
     </message>
     <message>
         <location filename="src/tomahawkwindow.ui" line="101"/>
