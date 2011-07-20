@@ -68,14 +68,14 @@ QtScriptResolverHelper::compress( const QString& data )
 
 
 QString
-QtScriptResolverHelper::readCompressed(const QString& fileName)
+QtScriptResolverHelper::readCompressed( const QString& fileName )
 {
     return compress( readRaw( fileName ) );
 }
 
 
 QString
-QtScriptResolverHelper::readBase64(const QString& fileName)
+QtScriptResolverHelper::readBase64( const QString& fileName )
 {
     return readRaw( fileName ).toBase64();
 }
@@ -91,7 +91,8 @@ QtScriptResolverHelper::resolverData()
 }
 
 
-void QtScriptResolverHelper::log(const QString& message)
+void
+QtScriptResolverHelper::log( const QString& message )
 {
     qDebug() << m_scriptPath << ":" << message;
 }
@@ -101,6 +102,14 @@ void
 QtScriptResolverHelper::setResolverConfig( QVariantMap config )
 {
     m_resolverConfig = config;
+}
+
+
+void
+ScriptEngine::javaScriptConsoleMessage( const QString& message, int lineNumber, const QString& sourceID )
+{
+    qDebug() << "JAVASCRIPT:" << m_scriptPath << message << lineNumber << sourceID;
+    Q_ASSERT( false );
 }
 
 
@@ -118,7 +127,8 @@ QtScriptResolver::QtScriptResolver( const QString& scriptPath )
     {
         qDebug() << Q_FUNC_INFO << "Failed loading JavaScript resolver:" << scriptPath;
         m_error = Tomahawk::ExternalResolver::FileNotFound;
-    } else
+    }
+    else
     {
         init();
     }
@@ -132,6 +142,7 @@ QtScriptResolver::~QtScriptResolver()
     delete m_engine;
 }
 
+
 void
 QtScriptResolver::reload()
 {
@@ -144,6 +155,7 @@ QtScriptResolver::reload()
         m_error = Tomahawk::ExternalResolver::FileNotFound;
     }
 }
+
 
 void
 QtScriptResolver::init()
@@ -191,11 +203,13 @@ QtScriptResolver::init()
     Tomahawk::Pipeline::instance()->addResolver( this );
 }
 
+
 Tomahawk::ExternalResolver::ErrorState
 QtScriptResolver::error() const
 {
     return m_error;
 }
+
 
 void
 QtScriptResolver::resolve( const Tomahawk::query_ptr& query )
@@ -207,7 +221,7 @@ QtScriptResolver::resolve( const Tomahawk::query_ptr& query )
         return;
     }
 
-//    qDebug() << Q_FUNC_INFO << query->toString();
+    qDebug() << Q_FUNC_INFO << "Resolving now with" << m_name << "-" << query->toString();
     QString eval;
 
     if ( !query->isFullTextQuery() )
@@ -225,7 +239,7 @@ QtScriptResolver::resolve( const Tomahawk::query_ptr& query )
                         "} else {"
                         "   resolve( '%1', '', '', '%2' );"
                         "}"
-            )
+                      )
             .arg( query->id().replace( "'", "\\'" ) )
             .arg( query->fullTextQuery().replace( "'", "\\'" ) );
     }

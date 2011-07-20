@@ -50,7 +50,7 @@ public slots:
     QString compress( const QString& data );
     QVariantMap resolverData();
 
-    void log( const QString& message);
+    void log( const QString& message );
     bool fakeEnv() { return false; }
 
 private:
@@ -86,8 +86,7 @@ public slots:
     }
 
 protected:
-    virtual void javaScriptConsoleMessage( const QString & message, int lineNumber, const QString & sourceID )
-    { qDebug() << "JAVASCRIPT:" << m_scriptPath << message << lineNumber << sourceID; Q_ASSERT(false);}
+    virtual void javaScriptConsoleMessage( const QString& message, int lineNumber, const QString& sourceID );
 
 private:
     QtScriptResolver* m_parent;
