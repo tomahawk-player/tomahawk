@@ -20,6 +20,7 @@
 #include <QNetworkConfiguration>
 #include <QNetworkProxy>
 
+#include "config.h"
 #include "infosystemworker.h"
 #include "utils/tomahawkutils.h"
 #include "infosystemcache.h"
