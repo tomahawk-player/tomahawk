@@ -53,10 +53,10 @@ INCLUDE( CPack.cmake )
 # Check if we need qtgui:
 IF( "${gui}" STREQUAL "no" )
     ADD_DEFINITIONS( -DENABLE_HEADLESS )
-    MESSAGE( STATUS "Building in HEADLESS mode ***" )
+    MESSAGE( STATUS "Building Tomahawk ${TOMAHAWK_VERSION} in HEADLESS mode ***" )
 	FIND_PACKAGE( Qt4 4.7.0 COMPONENTS QtCore QtXml QtNetwork REQUIRED )
 ELSE()
-    MESSAGE( STATUS "Building full GUI version ***" )
+    MESSAGE( STATUS "Building Tomahawk ${TOMAHAWK_VERSION} full GUI version ***" )
 	FIND_PACKAGE( Qt4 4.7.0 COMPONENTS QtGui QtCore QtXml QtNetwork REQUIRED )
 ENDIF()
 
