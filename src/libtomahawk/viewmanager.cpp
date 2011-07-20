@@ -970,16 +970,3 @@ ViewManager::showCurrentTrack()
     }
 }
 
-
-void
-ViewManager::onPlayClicked()
-{
-    emit playClicked();
-}
-
-
-void
-ViewManager::onPauseClicked()
-{
-    emit pauseClicked();
-}

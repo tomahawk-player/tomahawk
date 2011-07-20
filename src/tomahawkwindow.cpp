@@ -78,38 +78,108 @@ TomahawkWindow::TomahawkWindow( QWidget* parent )
     , m_searchWidget( new Ui::GlobalSearchWidget )
     , m_audioControls( new AudioControls( this ) )
     , m_trayIcon( new TomahawkTrayIcon( this ) )
-    , m_sourcetree( 0 )
 {
-    // HACK QtCurve causes an infinite loop on startup. This is because setStyle calls setPalette, which calls ensureBaseStyle,
-    // which loads QtCurve. QtCurve calls setPalette, which creates an infinite loop. The UI will look like CRAP with QtCurve, but
-    // the user is asking for it explicitly... so he's gonna be stuck with an ugly UI.
-    if ( !QString( qApp->style()->metaObject()->className() ).toLower().contains( "qtcurve" ) )
-        qApp->setStyle( new ProxyStyle() );
-
     setWindowIcon( QIcon( RESPATH "icons/tomahawk-icon-128x128.png" ) );
 
-#ifdef Q_WS_MAC
-    setUnifiedTitleAndToolBarOnMac( true );
-#endif
-
-    ViewManager* pm = new ViewManager( this );
-    connect( pm, SIGNAL( historyBackAvailable( bool ) ), SLOT( onHistoryBackAvailable( bool ) ) );
-    connect( pm, SIGNAL( historyForwardAvailable( bool ) ), SLOT( onHistoryForwardAvailable( bool ) ) );
-
-    connect( m_audioControls, SIGNAL( playPressed() ), pm, SLOT( onPlayClicked() ) );
-    connect( m_audioControls, SIGNAL( pausePressed() ), pm, SLOT( onPauseClicked() ) );
-
-    m_searchBox = new QWidget();
+    new ViewManager( this );
     ui->setupUi( this );
-    m_searchWidget->setupUi( m_searchBox );
-
     delete ui->sidebarWidget;
     delete ui->playlistWidget;
+
+    applyPlatformTweaks();
 
     ui->centralWidget->setContentsMargins( 0, 0, 0, 0 );
     ui->centralWidget->layout()->setContentsMargins( 0, 0, 0, 0 );
     ui->centralWidget->layout()->setMargin( 0 );
 
+    setupSideBar();
+    setupToolBar();
+    statusBar()->addPermanentWidget( m_audioControls, 1 );
+
+    setupUpdateCheck();
+    loadSettings();
+    setupSignals();
+
+    // set initial state
+    onSipDisconnected();
+    ViewManager::instance()->showWelcomePage();
+}
+
+
+TomahawkWindow::~TomahawkWindow()
+{
+    saveSettings();
+    delete ui;
+}
+
+
+void
+TomahawkWindow::loadSettings()
+{
+    TomahawkSettings* s = TomahawkSettings::instance();
+
+    // Workaround for broken window geometry restoring on Qt Cocoa when setUnifiedTitleAndToolBarOnMac is true.
+    // See http://bugreports.qt.nokia.com/browse/QTBUG-3116 and
+    // http://lists.qt.nokia.com/pipermail/qt-interest/2009-August/011491.html
+    // for the 'fix'
+#ifdef QT_MAC_USE_COCOA
+     bool workaround = !isVisible();
+     if ( workaround )
+     {
+       // make "invisible"
+       setWindowOpacity( 0 );
+       // let Qt update its frameStruts
+       show();
+     }
+#endif
+
+    if ( !s->mainWindowGeometry().isEmpty() )
+        restoreGeometry( s->mainWindowGeometry() );
+    if ( !s->mainWindowState().isEmpty() )
+        restoreState( s->mainWindowState() );
+    if ( !s->mainWindowSplitterState().isEmpty() )
+        ui->splitter->restoreState( s->mainWindowSplitterState() );
+
+#ifdef QT_MAC_USE_COCOA
+     if ( workaround )
+     {
+       // Make it visible again
+       setWindowOpacity( 1 );
+     }
+#endif
+}
+
+
+void
+TomahawkWindow::saveSettings()
+{
+    TomahawkSettings* s = TomahawkSettings::instance();
+    s->setMainWindowGeometry( saveGeometry() );
+    s->setMainWindowState( saveState() );
+    s->setMainWindowSplitterState( ui->splitter->saveState() );
+}
+
+
+void
+TomahawkWindow::applyPlatformTweaks()
+{
+#ifdef Q_WS_X11
+    // HACK QtCurve causes an infinite loop on startup. This is because setStyle calls setPalette, which calls ensureBaseStyle,
+    // which loads QtCurve. QtCurve calls setPalette, which creates an infinite loop. The UI will look like CRAP with QtCurve, but
+    // the user is asking for it explicitly... so he's gonna be stuck with an ugly UI.
+    if ( !QString( qApp->style()->metaObject()->className() ).toLower().contains( "qtcurve" ) )
+        qApp->setStyle( new ProxyStyle() );
+#endif
+
+#ifdef Q_WS_MAC
+    setUnifiedTitleAndToolBarOnMac( true );
+#endif
+}
+
+
+void
+TomahawkWindow::setupSideBar()
+{
     QWidget* sidebarWidget = new QWidget();
     sidebarWidget->setLayout( new QVBoxLayout() );
 
@@ -122,31 +192,17 @@ TomahawkWindow::TomahawkWindow( QWidget* parent )
     TransferView* transferView = new TransferView( sidebar );
     PipelineStatusView* pipelineView = new PipelineStatusView( sidebar );
 
-    connect( ui->actionHideOfflineSources, SIGNAL( triggered() ), m_sourcetree, SLOT( hideOfflineSources() ) );
-    connect( ui->actionShowOfflineSources, SIGNAL( triggered() ), m_sourcetree, SLOT( showOfflineSources() ) );
-
     sidebar->addWidget( m_sourcetree );
     sidebar->addWidget( transferView );
     sidebar->addWidget( pipelineView );
     sidebar->hide( 1, false );
     sidebar->hide( 2, false );
 
-/*    QWidget* buttonWidget = new QWidget();
-    buttonWidget->setLayout( new QVBoxLayout() );
-    m_statusButton = new QPushButton();
-    buttonWidget->layout()->addWidget( m_statusButton );*/
-
     sidebarWidget->layout()->addWidget( sidebar );
-//    sidebarWidget->layout()->addWidget( buttonWidget );
-
     sidebarWidget->setContentsMargins( 0, 0, 0, 0 );
     sidebarWidget->layout()->setContentsMargins( 0, 0, 0, 0 );
     sidebarWidget->layout()->setMargin( 0 );
     sidebarWidget->layout()->setSpacing( 0 );
-/*    buttonWidget->setContentsMargins( 0, 0, 0, 0 );
-    buttonWidget->layout()->setContentsMargins( 0, 0, 0, 0 );
-    buttonWidget->layout()->setMargin( 0 );
-    buttonWidget->layout()->setSpacing( 0 );*/
 
     ui->splitter->addWidget( sidebarWidget );
     ui->splitter->addWidget( ViewManager::instance()->widget() );
@@ -155,6 +211,14 @@ TomahawkWindow::TomahawkWindow( QWidget* parent )
     ui->splitter->setStretchFactor( 1, 3 );
     ui->splitter->setCollapsible( 1, false );
     ui->splitter->setHandleWidth( 1 );
+}
+
+
+void
+TomahawkWindow::setupToolBar()
+{
+    m_searchBox = new QWidget();
+    m_searchWidget->setupUi( m_searchBox );
 
     QToolBar* toolbar = addToolBar( "TomahawkToolbar" );
     toolbar->setObjectName( "TomahawkToolbar" );
@@ -164,6 +228,24 @@ TomahawkWindow::TomahawkWindow( QWidget* parent )
     toolbar->setToolButtonStyle( Qt::ToolButtonFollowStyle );
     toolbar->installEventFilter( new WidgetDragFilter( toolbar ) );
 
+    m_backAvailable = toolbar->addAction( QIcon( RESPATH "images/back.png" ), tr( "Back" ), ViewManager::instance(), SLOT( historyBack() ) );
+    m_backAvailable->setToolTip( tr( "Go back one page" ) );
+    m_forwardAvailable = toolbar->addAction( QIcon( RESPATH "images/forward.png" ), tr( "Forward" ), ViewManager::instance(), SLOT( historyForward() ) );
+    m_forwardAvailable->setToolTip( tr( "Go forward one page" ) );
+
+    m_searchWidget->searchEdit->setStyleSheet( "QLineEdit { border: 1px solid gray; border-radius: 6px; margin-right: 2px; }" );
+#ifdef Q_WS_MAC
+    m_searchWidget->searchEdit->setAttribute( Qt::WA_MacShowFocusRect, 0 );
+#endif
+
+    connect( m_searchWidget->searchEdit, SIGNAL( returnPressed() ), SLOT( onSearch() ) );
+    toolbar->addWidget( m_searchBox );
+}
+
+
+void
+TomahawkWindow::setupUpdateCheck()
+{
 #ifndef Q_WS_MAC
     ui->menu_Help->insertSeparator( ui->actionAboutTomahawk );
 #endif
@@ -189,85 +271,6 @@ TomahawkWindow::TomahawkWindow( QWidget* parent )
     QAction* checkForUpdates = ui->menu_Help->addAction( tr( "Check For Updates..." ) );
     connect( checkForUpdates, SIGNAL( triggered() ), updater, SLOT( CheckNow() ) );
 #endif
-
-    m_backAvailable = toolbar->addAction( QIcon( RESPATH "images/back.png" ), tr( "Back" ), ViewManager::instance(), SLOT( historyBack() ) );
-    m_backAvailable->setToolTip( tr( "Go back one page" ) );
-    m_forwardAvailable = toolbar->addAction( QIcon( RESPATH "images/forward.png" ), tr( "Forward" ), ViewManager::instance(), SLOT( historyForward() ) );
-    m_forwardAvailable->setToolTip( tr( "Go forward one page" ) );
-
-    m_searchWidget->searchEdit->setStyleSheet( "QLineEdit { border: 1px solid gray; border-radius: 6px; margin-right: 2px; }" );
-#ifdef Q_WS_MAC
-    m_searchWidget->searchEdit->setAttribute( Qt::WA_MacShowFocusRect, 0 );
-#endif
-
-    connect( m_searchWidget->searchEdit, SIGNAL( returnPressed() ), SLOT( onSearch() ) );
-    toolbar->addWidget( m_searchBox );
-
-    statusBar()->addPermanentWidget( m_audioControls, 1 );
-
-    // propagate sip menu
-    connect( SipHandler::instance(), SIGNAL( pluginAdded( SipPlugin* ) ), this, SLOT( onSipPluginAdded( SipPlugin* ) ) );
-    connect( SipHandler::instance(), SIGNAL( pluginRemoved( SipPlugin* ) ), this, SLOT( onSipPluginRemoved( SipPlugin* ) ) );
-    foreach( SipPlugin *plugin, SipHandler::instance()->allPlugins() )
-    {
-        connect( plugin, SIGNAL( addMenu( QMenu* ) ), this, SLOT( pluginMenuAdded( QMenu* ) ) );
-        connect( plugin, SIGNAL( removeMenu( QMenu* ) ), this, SLOT( pluginMenuRemoved( QMenu* ) ) );
-    }
-
-    loadSettings();
-    setupSignals();
-    ViewManager::instance()->showWelcomePage();
-}
-
-
-TomahawkWindow::~TomahawkWindow()
-{
-    saveSettings();
-    delete ui;
-}
-
-
-void
-TomahawkWindow::loadSettings()
-{
-    TomahawkSettings* s = TomahawkSettings::instance();
-
-    // Workaround for broken window geometry restoring on Qt Cocoa when setUnifiedTitleAndToolBarOnMac is true.
-    // See http://bugreports.qt.nokia.com/browse/QTBUG-3116 and
-    // http://lists.qt.nokia.com/pipermail/qt-interest/2009-August/011491.html
-    // for the 'fix'
-#ifdef QT_MAC_USE_COCOA
-     bool workaround = !isVisible();
-     if( workaround ) {
-       // make "invisible"
-       setWindowOpacity( 0 );
-       // let Qt update its frameStruts
-       show();
-     }
-#endif
-
-    if ( !s->mainWindowGeometry().isEmpty() )
-        restoreGeometry( s->mainWindowGeometry() );
-    if ( !s->mainWindowState().isEmpty() )
-        restoreState( s->mainWindowState() );
-    if ( !s->mainWindowSplitterState().isEmpty() )
-        ui->splitter->restoreState( s->mainWindowSplitterState() );
-#ifdef QT_MAC_USE_COCOA
-     if( workaround ) {
-       // Make it visible again
-       setWindowOpacity( 1 );
-     }
-#endif
-}
-
-
-void
-TomahawkWindow::saveSettings()
-{
-    TomahawkSettings* s = TomahawkSettings::instance();
-    s->setMainWindowGeometry( saveGeometry() );
-    s->setMainWindowState( saveState() );
-    s->setMainWindowSplitterState( ui->splitter->saveState() );
 }
 
 
@@ -276,20 +279,23 @@ TomahawkWindow::setupSignals()
 {
     // <From PlaylistManager>
     connect( ViewManager::instance(), SIGNAL( repeatModeChanged( Tomahawk::PlaylistInterface::RepeatMode ) ),
-             m_audioControls,     SLOT( onRepeatModeChanged( Tomahawk::PlaylistInterface::RepeatMode ) ) );
-
+             m_audioControls,           SLOT( onRepeatModeChanged( Tomahawk::PlaylistInterface::RepeatMode ) ) );
     connect( ViewManager::instance(), SIGNAL( shuffleModeChanged( bool ) ),
-             m_audioControls,     SLOT( onShuffleModeChanged( bool ) ) );
+             m_audioControls,           SLOT( onShuffleModeChanged( bool ) ) );
 
     // <From AudioEngine>
     connect( AudioEngine::instance(), SIGNAL( loading( const Tomahawk::result_ptr& ) ),
                                         SLOT( onPlaybackLoading( const Tomahawk::result_ptr& ) ) );
+    connect( AudioEngine::instance(), SIGNAL( started( Tomahawk::result_ptr ) ), SLOT( audioStarted() ) );
+    connect( AudioEngine::instance(), SIGNAL( resumed()), SLOT( audioStarted() ) );
+    connect( AudioEngine::instance(), SIGNAL( paused() ), SLOT( audioStopped() ) );
+    connect( AudioEngine::instance(), SIGNAL( stopped() ), SLOT( audioStopped() ) );
 
     // <Menu Items>
+    //    connect( ui->actionAddPeerManually, SIGNAL( triggered() ), SLOT( addPeerManually() ) );
     connect( ui->actionPreferences, SIGNAL( triggered() ), SLOT( showSettingsDialog() ) );
     connect( ui->actionDiagnostics, SIGNAL( triggered() ), SLOT( showDiagnosticsDialog() ) );
     connect( ui->actionToggleConnect, SIGNAL( triggered() ), SipHandler::instance(), SLOT( toggleConnect() ) );
-//    connect( ui->actionAddPeerManually, SIGNAL( triggered() ), SLOT( addPeerManually() ) );
     connect( ui->actionUpdateCollection, SIGNAL( triggered() ), SLOT( updateCollectionManually() ) );
     connect( ui->actionRescanCollection, SIGNAL( triggered() ), SLOT( rescanCollectionManually() ) );
     connect( ui->actionLoadXSPF, SIGNAL( triggered() ), SLOT( loadSpiff() ));
@@ -297,15 +303,12 @@ TomahawkWindow::setupSignals()
     connect( ui->actionCreate_New_Station, SIGNAL( triggered() ), SLOT( createStation() ));
     connect( ui->actionAboutTomahawk, SIGNAL( triggered() ), SLOT( showAboutTomahawk() ) );
     connect( ui->actionExit, SIGNAL( triggered() ), qApp, SLOT( quit() ) );
+    connect( ui->actionHideOfflineSources, SIGNAL( triggered() ), m_sourcetree, SLOT( hideOfflineSources() ) );
+    connect( ui->actionShowOfflineSources, SIGNAL( triggered() ), m_sourcetree, SLOT( showOfflineSources() ) );
 
     connect( ui->actionPlay, SIGNAL( triggered() ), AudioEngine::instance(), SLOT( playPause() ) );
     connect( ui->actionNext, SIGNAL( triggered() ), AudioEngine::instance(), SLOT( previous() ) );
     connect( ui->actionPrevious, SIGNAL( triggered() ), AudioEngine::instance(), SLOT( next() ) );
-
-    connect( AudioEngine::instance(), SIGNAL( started( Tomahawk::result_ptr ) ), this, SLOT( audioStarted() ) );
-    connect( AudioEngine::instance(), SIGNAL( resumed()), this, SLOT( audioStarted() ) );
-    connect( AudioEngine::instance(), SIGNAL( paused() ), this, SLOT( audioStopped() ) );
-    connect( AudioEngine::instance(), SIGNAL( stopped() ), this, SLOT( audioStopped() ) );
 
 #if defined( Q_OS_DARWIN )
     connect( ui->actionMinimize, SIGNAL( triggered() ), SLOT( minimize() ) );
@@ -320,8 +323,18 @@ TomahawkWindow::setupSignals()
     connect( SipHandler::instance(), SIGNAL( disconnected( SipPlugin* ) ), SLOT( onSipDisconnected() ) );
     connect( SipHandler::instance(), SIGNAL( authError( SipPlugin* ) ), SLOT( onSipError() ) );
 
-    // set initial connection state
-    onSipDisconnected();
+    // <SipMenu>
+    connect( SipHandler::instance(), SIGNAL( pluginAdded( SipPlugin* ) ), this, SLOT( onSipPluginAdded( SipPlugin* ) ) );
+    connect( SipHandler::instance(), SIGNAL( pluginRemoved( SipPlugin* ) ), this, SLOT( onSipPluginRemoved( SipPlugin* ) ) );
+    foreach( SipPlugin *plugin, SipHandler::instance()->allPlugins() )
+    {
+        connect( plugin, SIGNAL( addMenu( QMenu* ) ), this, SLOT( pluginMenuAdded( QMenu* ) ) );
+        connect( plugin, SIGNAL( removeMenu( QMenu* ) ), this, SLOT( pluginMenuRemoved( QMenu* ) ) );
+    }
+
+    // <ViewManager>
+    connect( ViewManager::instance(), SIGNAL( historyBackAvailable( bool ) ), SLOT( onHistoryBackAvailable( bool ) ) );
+    connect( ViewManager::instance(), SIGNAL( historyForwardAvailable( bool ) ), SLOT( onHistoryForwardAvailable( bool ) ) );
 }
 
 
@@ -541,11 +554,13 @@ TomahawkWindow::createPlaylist()
     }
 }
 
+
 void
 TomahawkWindow::audioStarted()
 {
     ui->actionPlay->setText( tr( "Pause" ) );
 }
+
 
 void
 TomahawkWindow::audioStopped()

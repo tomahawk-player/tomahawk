@@ -100,7 +100,12 @@ private slots:
 private:
     void loadSettings();
     void saveSettings();
+
+    void applyPlatformTweaks();
     void setupSignals();
+    void setupToolBar();
+    void setupSideBar();
+    void setupUpdateCheck();
 
     Ui::TomahawkWindow* ui;
     Ui::GlobalSearchWidget* m_searchWidget;
