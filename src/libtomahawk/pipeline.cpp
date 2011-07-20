@@ -271,8 +271,6 @@ Pipeline::timeoutShunt( const query_ptr& q )
     {
         qDebug() << "Reached end of pipeline for:" << q->toString();
         setQIDState( q, 0 );
-        if ( !m_queries_temporary.contains( q ) )
-            m_qids.remove( q->id() );
     }
 }
 
@@ -302,8 +300,6 @@ Pipeline::shunt( const query_ptr& q )
     {
         qDebug() << "Reached end of pipeline for:" << q->toString();
         setQIDState( q, 0 );
-        if ( !m_queries_temporary.contains( q ) )
-            m_qids.remove( q->id() );
 
         q->onResolvingFinished();
     }
