@@ -5,13 +5,21 @@ if(EXISTS ${CMAKE_SOURCE_DIR}/.git/HEAD)
   mark_as_advanced(GIT_EXECUTABLE)
   if(GIT_EXECUTABLE)
     execute_process(
-      COMMAND ${GIT_EXECUTABLE} rev-parse --verify -q --short=4 HEAD
+      COMMAND ${GIT_EXECUTABLE} rev-parse --verify -q --short=6 HEAD
       OUTPUT_VARIABLE head
       OUTPUT_STRIP_TRAILING_WHITESPACE
       WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}
       )
     if(head)
-      set(CMAKE_VERSION_SOURCE "g${head}")
+      set(branch "")
+      execute_process(
+        COMMAND ${GIT_EXECUTABLE} name-rev HEAD
+        OUTPUT_VARIABLE branch
+        OUTPUT_STRIP_TRAILING_WHITESPACE
+        WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}
+        )
+      string(REGEX REPLACE "HEAD " "" branch "${branch}")
+      set(CMAKE_VERSION_SOURCE "git-${branch}-${head}")
       execute_process(
         COMMAND ${GIT_EXECUTABLE} update-index -q --refresh
         WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}
