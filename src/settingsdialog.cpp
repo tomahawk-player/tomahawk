@@ -805,7 +805,7 @@ ProxyDialog::saveSettings()
     s->setProxyNoProxyHosts( ui->noHostLineEdit->text() );
     s->setProxyUsername( ui->userLineEdit->text() );
     s->setProxyPassword( ui->passwordLineEdit->text() );
-    s->setProxyType( ui->typeBox->itemData( ui->typeBox->currentIndex() ).toInt() );
+    s->setProxyType( m_backwardMap[ ui->typeBox->itemData( ui->typeBox->currentIndex() ).toInt() ] );
     s->setProxyDns( ui->checkBoxUseProxyForDns->checkState() == Qt::Checked );
 
     if( s->proxyHost().isEmpty() )
