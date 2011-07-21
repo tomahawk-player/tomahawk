@@ -95,10 +95,10 @@ public:
     Tomahawk::ExternalResolver* resolverForPath( const QString& scriptPath );
 
     // PlatformInterface
-    virtual void activate();
     virtual bool loadUrl( const QString& url );
 
 public slots:
+    virtual void activate();
     void instanceStarted( KDSingleApplicationGuard::Instance );
 
 private slots:

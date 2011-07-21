@@ -33,12 +33,15 @@ public:
     TomahawkTrayIcon( QObject* parent );
     virtual bool event( QEvent* e );
 
+    void setShowHideWindow( bool show = true );
+
 public slots:
     void setResult( const Tomahawk::result_ptr& result );
 
 private slots:
     void onAnimationTimer();
     void onActivated( QSystemTrayIcon::ActivationReason reason );
+    void showWindow();
 
 private:
     void refreshToolTip();
@@ -57,6 +60,10 @@ private:
     QAction* m_prevAction;
     QAction* m_nextAction;
     QAction* m_quitAction;
+
+#ifdef Q_OS_MAC
+    QAction* m_showWindowAction;
+#endif
 };
 
 #endif // TOMAHAWK_TRAYICON_H

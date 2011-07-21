@@ -7,7 +7,6 @@ namespace TomahawkUtils
 
 void
 bringToFront() {
-    qDebug() << "foo";
     [NSApp activateIgnoringOtherApps:YES];
 }
 

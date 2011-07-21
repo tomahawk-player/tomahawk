@@ -250,6 +250,8 @@ TomahawkApp::init()
 
     Tomahawk::setApplicationHandler( this );
     increaseMaxFileDescriptors();
+
+    setQuitOnLastWindowClosed( false );
 #endif
 
     // Connect up shortcuts

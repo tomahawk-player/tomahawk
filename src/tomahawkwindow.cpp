@@ -362,6 +362,8 @@ TomahawkWindow::closeEvent( QCloseEvent* e )
         e->ignore();
         return;
     }
+#else
+    m_trayIcon->setShowHideWindow( false );
 #endif
 
     e->accept();
