@@ -520,10 +520,6 @@ AudioEngine::onStateChanged( Phonon::State newState, Phonon::State oldState )
     if ( newState == Phonon::PlayingState )
         setState( Playing );
 
-    if ( !m_expectStop )
-        return;
-    m_expectStop = false;
-
     if ( oldState == Phonon::PlayingState )
     {
         qint64 duration = m_mediaObject->totalTime() > 0 ? m_mediaObject->totalTime() : m_currentTrack->duration() * 1000;
@@ -533,7 +529,6 @@ AudioEngine::onStateChanged( Phonon::State newState, Phonon::State oldState )
             case Phonon::PausedState:
             {
                 stopped = ( duration - 1000 < m_mediaObject->currentTime() );
-
                 if ( !stopped )
                     setState( Paused );
 
@@ -548,8 +543,9 @@ AudioEngine::onStateChanged( Phonon::State newState, Phonon::State oldState )
                 break;
         }
 
-        if ( stopped )
+        if ( stopped && m_expectStop )
         {
+            m_expectStop = false;
             qDebug() << "Loading next track.";
             loadNextTrack();
         }
