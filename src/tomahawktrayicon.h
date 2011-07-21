@@ -61,9 +61,7 @@ private:
     QAction* m_nextAction;
     QAction* m_quitAction;
 
-#ifdef Q_OS_MAC
     QAction* m_showWindowAction;
-#endif
 };
 
 #endif // TOMAHAWK_TRAYICON_H
