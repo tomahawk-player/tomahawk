@@ -447,6 +447,17 @@ TomahawkSettings::setVerboseNotifications( bool notifications )
     setValue( "ui/notifications/verbose", notifications );
 }
 
+bool
+TomahawkSettings::showOfflineSources() const
+{
+    return value( "collection/sources/showoffline", false ).toBool();
+}
+
+void
+TomahawkSettings::setShowOfflineSources( bool show )
+{
+    setValue( "collection/sources/showoffline", show );
+}
 
 QByteArray
 TomahawkSettings::playlistColumnSizes( const QString& playlistid ) const

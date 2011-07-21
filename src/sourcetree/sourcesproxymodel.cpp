@@ -44,20 +44,11 @@ SourcesProxyModel::SourcesProxyModel( SourcesModel* model, QObject* parent )
 
 
 void
-SourcesProxyModel::showOfflineSources()
+SourcesProxyModel::showOfflineSources( bool offlineSourcesShown )
 {
-    m_filtered = false;
+    m_filtered = !offlineSourcesShown;
     invalidateFilter();
 }
-
-
-void
-SourcesProxyModel::hideOfflineSources()
-{
-    m_filtered = true;
-    invalidateFilter();
-}
-
 
 bool
 SourcesProxyModel::filterAcceptsRow( int sourceRow, const QModelIndex& sourceParent ) const

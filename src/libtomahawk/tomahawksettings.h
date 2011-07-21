@@ -71,6 +71,10 @@ public:
     bool verboseNotifications() const;
     void setVerboseNotifications( bool notifications );
 
+    // Collection Stuff
+    bool showOfflineSources() const;
+    void setShowOfflineSources( bool show );
+
     /// Playlist stuff
     QByteArray playlistColumnSizes( const QString& playlistid ) const;
     void setPlaylistColumnSizes( const QString& playlistid, const QByteArray& state );

@@ -206,6 +206,9 @@ TomahawkWindow::setupSideBar()
     ui->splitter->setStretchFactor( 1, 3 );
     ui->splitter->setCollapsible( 1, false );
     ui->splitter->setHandleWidth( 1 );
+
+    ui->actionShowOfflineSources->setChecked( TomahawkSettings::instance()->showOfflineSources() );
+
 }
 
 
@@ -298,8 +301,7 @@ TomahawkWindow::setupSignals()
     connect( ui->actionCreate_New_Station, SIGNAL( triggered() ), SLOT( createStation() ));
     connect( ui->actionAboutTomahawk, SIGNAL( triggered() ), SLOT( showAboutTomahawk() ) );
     connect( ui->actionExit, SIGNAL( triggered() ), qApp, SLOT( quit() ) );
-    connect( ui->actionHideOfflineSources, SIGNAL( triggered() ), m_sourcetree, SLOT( hideOfflineSources() ) );
-    connect( ui->actionShowOfflineSources, SIGNAL( triggered() ), m_sourcetree, SLOT( showOfflineSources() ) );
+    connect( ui->actionShowOfflineSources, SIGNAL( triggered() ), SLOT( showOfflineSources() ) );
 
     connect( ui->actionPlay, SIGNAL( triggered() ), AudioEngine::instance(), SLOT( playPause() ) );
     connect( ui->actionNext, SIGNAL( triggered() ), AudioEngine::instance(), SLOT( previous() ) );
@@ -472,6 +474,13 @@ TomahawkWindow::pluginMenuRemoved( QMenu* menu )
             return;
         }
     }
+}
+
+void
+TomahawkWindow::showOfflineSources()
+{
+    m_sourcetree->showOfflineSources( ui->actionShowOfflineSources->isChecked() );
+    TomahawkSettings::instance()->setShowOfflineSources( ui->actionShowOfflineSources->isChecked() );
 }
 
 

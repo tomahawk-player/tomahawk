@@ -31,8 +31,7 @@ public:
     explicit SourcesProxyModel( SourcesModel* model, QObject* parent = 0 );
 
 public slots:
-    void showOfflineSources();
-    void hideOfflineSources();
+    void showOfflineSources( bool offlineSourcesShown );
 
     void selectRequested( const QModelIndex& );
 

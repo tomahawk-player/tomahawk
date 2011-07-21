@@ -26,6 +26,7 @@
 #include "sourcetree/items/collectionitem.h"
 #include "audio/audioengine.h"
 #include "sourceplaylistinterface.h"
+#include "tomahawksettings.h"
 
 #include <QAction>
 #include <QApplication>
@@ -110,7 +111,7 @@ SourceTreeView::SourceTreeView( QWidget* parent )
     connect( this, SIGNAL( expanded( QModelIndex ) ), this, SLOT( onItemExpanded( QModelIndex ) ) );
 //     connect( selectionModel(), SIGNAL( selectionChanged( QItemSelection, QItemSelection ) ), SLOT( onSelectionChanged() ) );
 
-    hideOfflineSources();
+    showOfflineSources( TomahawkSettings::instance()->showOfflineSources() );
 
     // Light-blue sourcetree on osx
 #ifdef Q_WS_MAC
@@ -199,18 +200,10 @@ SourceTreeView::setupMenus()
 
 
 void
-SourceTreeView::showOfflineSources()
+SourceTreeView::showOfflineSources( bool offlineSourcesShown )
 {
-    m_proxyModel->showOfflineSources();
+    m_proxyModel->showOfflineSources( offlineSourcesShown );
 }
-
-
-void
-SourceTreeView::hideOfflineSources()
-{
-    m_proxyModel->hideOfflineSources();
-}
-
 
 void
 SourceTreeView::onItemActivated( const QModelIndex& index )
