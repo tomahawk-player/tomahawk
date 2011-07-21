@@ -570,7 +570,7 @@ void
 TomahawkApp::activate()
 {
 #ifndef TOMAHAWK_HEADLESS
-    mainWindow()->show();
+    TomahawkUtils::bringToFront();
 #endif
 }
 
@@ -578,6 +578,7 @@ TomahawkApp::activate()
 bool
 TomahawkApp::loadUrl( const QString& url )
 {
+    activate();
     if ( url.startsWith( "tomahawk://" ) )
         return GlobalActionManager::instance()->parseTomahawkLink( url );
     else

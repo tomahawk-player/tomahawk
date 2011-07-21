@@ -460,5 +460,11 @@ setNam( QNetworkAccessManager* nam )
     s_nam = QWeakPointer< QNetworkAccessManager >( nam );
 }
 
+#ifndef Q_OS_MAC
+void
+bringToFront() {
+
+}
+#endif
 
 } // ns
