@@ -676,7 +676,7 @@ void
 TomahawkWindow::onSearch()
 {
     ViewManager::instance()->show( new SearchWidget( m_searchWidget->searchEdit->text(), this ) );
-    m_searchWidget->searchEdit->setText( QString() );
+    m_searchWidget->searchEdit->clear();
 }
 
 
