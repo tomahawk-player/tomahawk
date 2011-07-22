@@ -38,8 +38,7 @@ AlbumItemDelegate::AlbumItemDelegate( QAbstractItemView* parent, AlbumProxyModel
     , m_model( proxy )
 {
     m_shadowPixmap = QPixmap( RESPATH "images/cover-shadow.png" );
-    m_defaultCover = QPixmap( RESPATH "images/no-album-art-placeholder.png" )
-                     .scaled( QSize( 120, 120 ), Qt::IgnoreAspectRatio, Qt::SmoothTransformation );
+    m_defaultCover = QPixmap( RESPATH "images/no-album-art-placeholder.png" );
 }
 
 
@@ -73,7 +72,8 @@ AlbumItemDelegate::paint( QPainter* painter, const QStyleOptionViewItem& option,
 //    painter->drawPixmap( option.rect.adjusted( 4, 4, -4, -38 ), m_shadowPixmap );
 
     QPixmap cover = item->cover.isNull() ? m_defaultCover : item->cover;
-    painter->drawPixmap( option.rect.adjusted( 6, 4, -6, -41 ), cover );
+    QRect r = option.rect.adjusted( 6, 4, -6, -41 );
+    painter->drawPixmap( r, cover.scaled( r.size(), Qt::KeepAspectRatio, Qt::SmoothTransformation ) );
     painter->setPen( opt.palette.color( QPalette::Text ) );
 
     QTextOption to;
