@@ -209,7 +209,7 @@ Pipeline::reportResults( QID qid, const QList< result_ptr >& results )
     }
     else
     {
-        new FuncTimeout( 500, boost::bind( &Pipeline::timeoutShunt, this, q ), this );
+        new FuncTimeout( 50, boost::bind( &Pipeline::timeoutShunt, this, q ), this );
     }
 }
 
@@ -246,7 +246,7 @@ Pipeline::shuntNext()
     }
 
     setQIDState( q, rc );
-    new FuncTimeout( 500, boost::bind( &Pipeline::shunt, this, q ), this );
+    new FuncTimeout( 50, boost::bind( &Pipeline::shunt, this, q ), this );
 }
 
 
