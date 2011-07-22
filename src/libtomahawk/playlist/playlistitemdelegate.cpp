@@ -67,7 +67,7 @@ PlaylistItemDelegate::sizeHint( const QStyleOptionViewItem& option, const QModel
     {
         int style = index.data( TrackModel::StyleRole ).toInt();
         if ( style == TrackModel::Short )
-            size.setHeight( 48 );
+            size.setHeight( 44 );
     }
 
     return size;
