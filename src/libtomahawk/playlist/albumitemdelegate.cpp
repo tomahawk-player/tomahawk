@@ -61,11 +61,12 @@ AlbumItemDelegate::paint( QPainter* painter, const QStyleOptionViewItem& option,
     initStyleOption( &opt, QModelIndex() );
     qApp->style()->drawControl( QStyle::CE_ItemViewItem, &opt, painter );
 
+#ifndef Q_OS_MAC
     if ( option.state & QStyle::State_Selected )
     {
         opt.palette.setColor( QPalette::Text, opt.palette.color( QPalette::HighlightedText ) );
     }
-
+#endif
     painter->save();
 
 //    painter->setRenderHint( QPainter::Antialiasing );
