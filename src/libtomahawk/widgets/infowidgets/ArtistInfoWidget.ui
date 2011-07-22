@@ -25,7 +25,7 @@
      <property name="handleWidth">
       <number>1</number>
      </property>
-     <widget class="QWidget" name="">
+     <widget class="QWidget" name="layoutWidget">
       <layout class="QVBoxLayout" name="verticalLayout_2">
        <item>
         <widget class="HeaderLabel" name="label">
@@ -39,7 +39,7 @@
        </item>
       </layout>
      </widget>
-     <widget class="QWidget" name="">
+     <widget class="QWidget" name="layoutWidget">
       <layout class="QVBoxLayout" name="verticalLayout_3">
        <item>
         <widget class="HeaderLabel" name="label_2">
@@ -49,7 +49,11 @@
         </widget>
        </item>
        <item>
-        <widget class="ArtistView" name="relatedArtists"/>
+        <widget class="ArtistView" name="relatedArtists">
+         <property name="headerHidden">
+          <bool>true</bool>
+         </property>
+        </widget>
        </item>
       </layout>
      </widget>
