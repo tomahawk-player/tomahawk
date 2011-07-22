@@ -35,7 +35,11 @@
         </widget>
        </item>
        <item>
-        <widget class="PlaylistView" name="topHits"/>
+        <widget class="PlaylistView" name="topHits">
+         <property name="headerHidden">
+          <bool>true</bool>
+         </property>
+        </widget>
        </item>
       </layout>
      </widget>
