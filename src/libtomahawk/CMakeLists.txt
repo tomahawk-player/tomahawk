@@ -420,7 +420,8 @@ IF( APPLE )
 
     SET( libSources ${libSources} 
       infosystem/infoplugins/mac/adium.mm
-      infosystem/infoplugins/mac/adiumplugin.cpp )
+      infosystem/infoplugins/mac/adiumplugin.cpp
+      utils/tomahawkutils_mac.mm )
 
     SET( libHeaders ${libHeaders} 
       infosystem/infoplugins/mac/adium.h
@@ -433,6 +434,8 @@ IF( APPLE )
         ${COREFOUNDATION_LIBRARY}
 	${FOUNDATION_LIBRARY}
 	${SCRIPTINGBRIDGE_LIBRARY}
+
+        /System/Library/Frameworks/AppKit.framework
     )
 ENDIF( APPLE )
 

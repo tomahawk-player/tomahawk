@@ -250,6 +250,8 @@ TomahawkApp::init()
 
     Tomahawk::setApplicationHandler( this );
     increaseMaxFileDescriptors();
+
+    setQuitOnLastWindowClosed( false );
 #endif
 
     // Connect up shortcuts
@@ -570,7 +572,7 @@ void
 TomahawkApp::activate()
 {
 #ifndef TOMAHAWK_HEADLESS
-    mainWindow()->show();
+    TomahawkUtils::bringToFront();
 #endif
 }
 
@@ -578,6 +580,7 @@ TomahawkApp::activate()
 bool
 TomahawkApp::loadUrl( const QString& url )
 {
+    activate();
     if ( url.startsWith( "tomahawk://" ) )
         return GlobalActionManager::instance()->parseTomahawkLink( url );
     else

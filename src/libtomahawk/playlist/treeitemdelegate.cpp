@@ -40,8 +40,7 @@ TreeItemDelegate::TreeItemDelegate( ArtistView* parent, TreeProxyModel* proxy )
     , m_model( proxy )
 {
     m_nowPlayingIcon = QPixmap( RESPATH "images/now-playing-speaker.png" );
-    m_defaultCover = QPixmap( RESPATH "images/no-album-art-placeholder.png" )
-                     .scaled( QSize( 120, 120 ), Qt::IgnoreAspectRatio, Qt::SmoothTransformation );
+    m_defaultCover = QPixmap( RESPATH "images/no-album-art-placeholder.png" );
 }
 
 
@@ -135,7 +134,7 @@ TreeItemDelegate::paint( QPainter* painter, const QStyleOptionViewItem& option, 
 //    painter->drawPixmap( r, QPixmap( RESPATH "images/cover-shadow.png" ) );
 
     QPixmap cover = item->cover.isNull() ? m_defaultCover : item->cover;
-    painter->drawPixmap( r, cover );
+    painter->drawPixmap( r, cover.scaled( r.size(), Qt::KeepAspectRatio, Qt::SmoothTransformation ) );
 
     QTextOption to;
     to.setAlignment( Qt::AlignVCenter );

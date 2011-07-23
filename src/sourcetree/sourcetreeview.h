@@ -38,8 +38,7 @@ public:
     explicit SourceTreeView( QWidget* parent = 0 );
 
 public slots:
-    void showOfflineSources();
-    void hideOfflineSources();
+    void showOfflineSources( bool offlineSourcesShown );
 
     void renamePlaylist();
 signals:

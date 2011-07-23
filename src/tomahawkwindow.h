@@ -71,6 +71,7 @@ public slots:
     void rescanCollectionManually();
     void pluginMenuAdded(QMenu*);
     void pluginMenuRemoved(QMenu*);
+    void showOfflineSources();
 
 private slots:
     void onSipConnected();

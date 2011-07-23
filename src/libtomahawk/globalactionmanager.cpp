@@ -668,12 +668,18 @@ GlobalActionManager::showPlaylist()
 void
 GlobalActionManager::waitingForResolved( bool success )
 {
+    if(  m_waitingToPlay.data() != sender() )
+    {
+        m_waitingToPlay.clear();
+        return;
+    }
+
     if( success && !m_waitingToPlay.isNull() && !m_waitingToPlay->results().isEmpty() ) { // play it!
 //         AudioEngine::instance()->playItem( AudioEngine::instance()->playlist(), m_waitingToPlay->results().first() );
         AudioEngine::instance()->play();
-    }
 
-    m_waitingToPlay.clear();
+        m_waitingToPlay.clear();
+    }
 }
 
 QString

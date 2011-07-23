@@ -67,7 +67,7 @@ PlaylistItemDelegate::sizeHint( const QStyleOptionViewItem& option, const QModel
     {
         int style = index.data( TrackModel::StyleRole ).toInt();
         if ( style == TrackModel::Short )
-            size.setHeight( 48 );
+            size.setHeight( 44 );
     }
 
     return size;
@@ -198,7 +198,7 @@ PlaylistItemDelegate::paintShort( QPainter* painter, const QStyleOptionViewItem&
         painter->setPen( opt.palette.text().color() );
 
         QRect ir = r.adjusted( 4, 0, -option.rect.width() + option.rect.height() - 8 + r.left(), 0 );
-        painter->drawPixmap( ir, pixmap );
+        painter->drawPixmap( ir, pixmap.scaled( ir.size(), Qt::KeepAspectRatio, Qt::SmoothTransformation ) );
         //painter->drawPixmap( ir, item->cover );
 
         QFont boldFont = opt.font;

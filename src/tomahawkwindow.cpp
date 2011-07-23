@@ -160,13 +160,11 @@ TomahawkWindow::saveSettings()
 void
 TomahawkWindow::applyPlatformTweaks()
 {
-#ifdef Q_WS_X11
     // HACK QtCurve causes an infinite loop on startup. This is because setStyle calls setPalette, which calls ensureBaseStyle,
     // which loads QtCurve. QtCurve calls setPalette, which creates an infinite loop. The UI will look like CRAP with QtCurve, but
     // the user is asking for it explicitly... so he's gonna be stuck with an ugly UI.
     if ( !QString( qApp->style()->metaObject()->className() ).toLower().contains( "qtcurve" ) )
         qApp->setStyle( new ProxyStyle() );
-#endif
 
 #ifdef Q_WS_MAC
     setUnifiedTitleAndToolBarOnMac( true );
@@ -208,6 +206,9 @@ TomahawkWindow::setupSideBar()
     ui->splitter->setStretchFactor( 1, 3 );
     ui->splitter->setCollapsible( 1, false );
     ui->splitter->setHandleWidth( 1 );
+
+    ui->actionShowOfflineSources->setChecked( TomahawkSettings::instance()->showOfflineSources() );
+
 }
 
 
@@ -300,8 +301,7 @@ TomahawkWindow::setupSignals()
     connect( ui->actionCreate_New_Station, SIGNAL( triggered() ), SLOT( createStation() ));
     connect( ui->actionAboutTomahawk, SIGNAL( triggered() ), SLOT( showAboutTomahawk() ) );
     connect( ui->actionExit, SIGNAL( triggered() ), qApp, SLOT( quit() ) );
-    connect( ui->actionHideOfflineSources, SIGNAL( triggered() ), m_sourcetree, SLOT( hideOfflineSources() ) );
-    connect( ui->actionShowOfflineSources, SIGNAL( triggered() ), m_sourcetree, SLOT( showOfflineSources() ) );
+    connect( ui->actionShowOfflineSources, SIGNAL( triggered() ), SLOT( showOfflineSources() ) );
 
     connect( ui->actionPlay, SIGNAL( triggered() ), AudioEngine::instance(), SLOT( playPause() ) );
     connect( ui->actionNext, SIGNAL( triggered() ), AudioEngine::instance(), SLOT( previous() ) );
@@ -362,6 +362,8 @@ TomahawkWindow::closeEvent( QCloseEvent* e )
         e->ignore();
         return;
     }
+#else
+    m_trayIcon->setShowHideWindow( false );
 #endif
 
     e->accept();
@@ -474,6 +476,13 @@ TomahawkWindow::pluginMenuRemoved( QMenu* menu )
             return;
         }
     }
+}
+
+void
+TomahawkWindow::showOfflineSources()
+{
+    m_sourcetree->showOfflineSources( ui->actionShowOfflineSources->isChecked() );
+    TomahawkSettings::instance()->setShowOfflineSources( ui->actionShowOfflineSources->isChecked() );
 }
 
 
@@ -669,7 +678,7 @@ void
 TomahawkWindow::onSearch()
 {
     ViewManager::instance()->show( new SearchWidget( m_searchWidget->searchEdit->text(), this ) );
-    m_searchWidget->searchEdit->setText( QString() );
+    m_searchWidget->searchEdit->clear();
 }
 
 

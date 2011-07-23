@@ -240,10 +240,10 @@ ViewManager::show( const Tomahawk::album_ptr& album )
     {
         view = new PlaylistView();
         PlaylistModel* model = new PlaylistModel();
+        model->append( album );
         view->setPlaylistModel( model );
         view->setFrameShape( QFrame::NoFrame );
         view->setAttribute( Qt::WA_MacShowFocusRect, 0 );
-        model->append( album );
 
         m_albumViews.insert( album, view );
     }
