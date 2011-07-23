@@ -794,6 +794,8 @@ TwitterPlugin::profilePicReply()
 void
 TwitterPlugin::checkSettings()
 {
+    if ( m_state == Disconnected )
+        return;
     disconnectPlugin();
     connectPlugin( false );
 }
