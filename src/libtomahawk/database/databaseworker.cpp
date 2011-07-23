@@ -111,7 +111,7 @@ DatabaseWorker::doWork()
         {
             cmd->_exec( m_dbimpl ); // runs actual SQL stuff
 
-            if ( cmd->loggable() && !cmd->localOnly() )
+            if ( cmd->loggable() )
             {
                 // We only save our own ops to the oplog, since incoming ops from peers
                 // are applied immediately.
@@ -119,7 +119,7 @@ DatabaseWorker::doWork()
                 // Crazy idea: if peers had keypairs and could sign ops/msgs, in theory it
                 // would be safe to sync ops for friend A from friend B's cache, if he saved them,
                 // which would mean you could get updates even if a peer was offline.
-                if ( cmd->source()->isLocal() )
+                if ( cmd->source()->isLocal() && !cmd->localOnly() )
                 {
                     // save to op-log
                     DatabaseCommandLoggable* command = (DatabaseCommandLoggable*)cmd.data();
