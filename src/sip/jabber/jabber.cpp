@@ -524,12 +524,12 @@ JabberPlugin::checkSettings()
         reconnect = true;
 
     QNetworkProxy proxyToUse = TomahawkUtils::proxyFactory()->queryProxy( QNetworkProxyQuery( m_currentServer, m_currentPort ) ).first();
-    qDebug() << "proxyToUse host: " << proxyToUse.hostName() << ", usedProxy host: " << m_usedProxy.hostName();
-    qDebug() << "proxyToUse port: " << proxyToUse.port() << ", usedProxy port: " << m_usedProxy.port();
-    qDebug() << "proxyToUse user: " << proxyToUse.user() << ", usedProxy user: " << m_usedProxy.user();
-    qDebug() << "proxyToUse pass: " << proxyToUse.password() << ", usedProxy pass: " << m_usedProxy.password();
-    qDebug() << "proxyToUse type: " << proxyToUse.type() << ", usedProxy type: " << m_usedProxy.type();
-    qDebug() << "proxyToUse caps: " << proxyToUse.capabilities() << ", usedProxy caps: " << m_usedProxy.capabilities();
+    qDebug() << Q_FUNC_INFO << "proxyToUse host: " << proxyToUse.hostName() << ", usedProxy host: " << m_usedProxy.hostName();
+    qDebug() << Q_FUNC_INFO << "proxyToUse port: " << proxyToUse.port() << ", usedProxy port: " << m_usedProxy.port();
+    qDebug() << Q_FUNC_INFO << "proxyToUse user: " << proxyToUse.user() << ", usedProxy user: " << m_usedProxy.user();
+    qDebug() << Q_FUNC_INFO << "proxyToUse pass: " << proxyToUse.password() << ", usedProxy pass: " << m_usedProxy.password();
+    qDebug() << Q_FUNC_INFO << "proxyToUse type: " << proxyToUse.type() << ", usedProxy type: " << m_usedProxy.type();
+    qDebug() << Q_FUNC_INFO << "proxyToUse caps: " << proxyToUse.capabilities() << ", usedProxy caps: " << m_usedProxy.capabilities();
     if ( proxyToUse.hostName() != m_usedProxy.hostName() ||
             proxyToUse.port() != m_usedProxy.port() ||
             proxyToUse.user() != m_usedProxy.user() ||
