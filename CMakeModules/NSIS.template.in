@@ -21,10 +21,16 @@
 !define MING_BIN "${MING_PATH}/bin"
 !define MING_LIB "${MING_PATH}/lib"
 !define BUILD_PATH "@CMAKE_BINARY_DIR@"
+!define SOURCE_PATH "@CMAKE_SOURCE_DIR@"
 !define QT_DLL_PATH "${MING_BIN}"
 !define SQLITE_DLL_PATH "${MING_LIB}/qt4/plugins/sqldrivers"
 !define IMAGEFORMATS_DLL_PATH "${MING_LIB}/qt4/plugins/imageformats"
-!define VLC_PLUGIN_PATH "${MING_LIB}\vlc\plugins"
+
+; We use official release plugins
+; mingw32-vlc from obs misses a lot and has even broken ones probably
+!define VLC_PATH "${SOURCE_PATH}\admin\win\vlc" ; SIC! ^
+!define VLC_PLUGIN_PATH "${VLC_PATH}\plugins"
+
 !define NSI_PATH "@CMAKE_SOURCE_DIR@/admin/win/nsi"
 
 ;-----------------------------------------------------------------------------

@@ -3,6 +3,10 @@
 # in this file.
 
 if(CPACK_GENERATOR MATCHES "NSIS")
+  if( NOT EXISTS "@CMAKE_SOURCE_DIR@/admin/win/vlc/")
+    MESSAGE(FATAL_ERROR "\n You don't have vlc in your admin/win/ dir. \n Please change into that dir and execute 'sh update-vlc.sh'" )
+  endif()
+
   #SET(CPACK_NSIS_INSTALL_ROOT "@CPACK_NSIS_INSTALL_ROOT@")
 
   # set the install/unistall icon used for the installer itself
