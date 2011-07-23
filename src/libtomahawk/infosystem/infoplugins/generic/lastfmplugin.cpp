@@ -98,7 +98,6 @@ LastFmPlugin::namChangedSlot( QNetworkAccessManager *nam )
     if ( !nam )
         return;
 
-    QNetworkAccessManager* currNam = lastfm::nam();
     TomahawkUtils::NetworkProxyFactory* oldProxyFactory = dynamic_cast< TomahawkUtils::NetworkProxyFactory* >( nam->proxyFactory() );
 
     if ( !oldProxyFactory )
@@ -107,6 +106,10 @@ LastFmPlugin::namChangedSlot( QNetworkAccessManager *nam )
         return;
     }
 
+    //WARNING: there's a chance liblastfm2 will clobber the application proxy factory it if it constructs a nam due to the below call
+    //but it is unsafe to re-set it here
+    QNetworkAccessManager* currNam = lastfm::nam();
+
     currNam->setConfiguration( nam->configuration() );
     currNam->setNetworkAccessible( nam->networkAccessible() );
     TomahawkUtils::NetworkProxyFactory* newProxyFactory = new TomahawkUtils::NetworkProxyFactory();
@@ -114,8 +117,6 @@ LastFmPlugin::namChangedSlot( QNetworkAccessManager *nam )
     QNetworkProxy newProxy( oldProxyFactory->proxy() );
     newProxyFactory->setProxy( newProxy );
     currNam->setProxyFactory( newProxyFactory );
-    //FIXME: on Mac/Win as liblastfm's network access manager also sets its overriding application proxy
-    //may have to do a QNetworkProxy::setApplicationProxy and clobber our own factory to override it
     settingsChanged(); // to get the scrobbler set up
 }
 

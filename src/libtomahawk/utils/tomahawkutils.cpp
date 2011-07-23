@@ -425,8 +425,6 @@ NetworkProxyFactory::setProxy( const QNetworkProxy& proxy )
 NetworkProxyFactory*
 proxyFactory()
 {
-    // Don't use this anywhere! It's provided here for access reasons, but QNAM deletes this at will!
-
     if ( !s_proxyFactory )
         s_proxyFactory = new NetworkProxyFactory();
 
@@ -440,6 +438,15 @@ setProxyFactory( NetworkProxyFactory* factory )
     Q_ASSERT( factory );
     s_proxyFactory = factory;
     NetworkProxyFactory::setApplicationProxyFactory( s_proxyFactory );
+    //nam takes ownership so set a copy, not the global one
+    if ( s_nam )
+    {
+        TomahawkUtils::NetworkProxyFactory* newProxyFactory = new TomahawkUtils::NetworkProxyFactory();
+        newProxyFactory->setNoProxyHosts( factory->noProxyHosts() );
+        QNetworkProxy newProxy( factory->proxy() );
+        newProxyFactory->setProxy( newProxy );
+        s_nam.data()->setProxyFactory( newProxyFactory );
+    }
 }
 
 
