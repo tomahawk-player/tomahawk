@@ -153,30 +153,6 @@ JabberPlugin::~JabberPlugin()
     delete m_ui;
 }
 
-void
-JabberPlugin::refreshProxy()
-{
-    qDebug() << Q_FUNC_INFO;
-
-    if( !m_client->connection() )
-        return;
-
-    QNetworkProxy proxyToUse = TomahawkUtils::proxyFactory()->queryProxy( QNetworkProxyQuery( m_currentServer, m_currentPort ) ).first();
-    m_usedProxy = proxyToUse;
-
-    if( proxyToUse.type() != QNetworkProxy::NoProxy && ( m_currentServer.isEmpty() || !(m_currentPort > 0) ) )
-    {
-        qDebug() << Q_FUNC_INFO << " proxy type is not noproxy but no server/port set";
-        // patches are welcome in Jreen that implement jdns through proxy
-        emit error( SipPlugin::ConnectionError,
-                    tr( "You need to set hostname and port of your jabber server, if you want to use it through a proxy" ) );
-        return;
-    }
-
-    qDebug() << Q_FUNC_INFO << " proxy type is NoProxy ? " << (proxyToUse.type() == QNetworkProxy::NoProxy ? "true" : "false" );
-    qobject_cast<Jreen::DirectConnection*>( m_client->connection() )->setProxy( proxyToUse );
-}
-
 
 const QString
 JabberPlugin::name() const
@@ -226,8 +202,6 @@ JabberPlugin::connectPlugin( bool startup )
         qDebug() << Q_FUNC_INFO << "Already connected to server, not connecting again...";
         return true; //FIXME: should i return false here?!
     }
-
-    refreshProxy();
 
     qDebug() << "Connecting to the XMPP server..." << m_client->jid().full();
 
@@ -522,22 +496,6 @@ JabberPlugin::checkSettings()
         reconnect = true;
     if ( m_currentPort != readPort() )
         reconnect = true;
-
-    QNetworkProxy proxyToUse = TomahawkUtils::proxyFactory()->queryProxy( QNetworkProxyQuery( m_currentServer, m_currentPort ) ).first();
-    qDebug() << Q_FUNC_INFO << "proxyToUse host: " << proxyToUse.hostName() << ", usedProxy host: " << m_usedProxy.hostName();
-    qDebug() << Q_FUNC_INFO << "proxyToUse port: " << proxyToUse.port() << ", usedProxy port: " << m_usedProxy.port();
-    qDebug() << Q_FUNC_INFO << "proxyToUse user: " << proxyToUse.user() << ", usedProxy user: " << m_usedProxy.user();
-    qDebug() << Q_FUNC_INFO << "proxyToUse pass: " << proxyToUse.password() << ", usedProxy pass: " << m_usedProxy.password();
-    qDebug() << Q_FUNC_INFO << "proxyToUse type: " << proxyToUse.type() << ", usedProxy type: " << m_usedProxy.type();
-    qDebug() << Q_FUNC_INFO << "proxyToUse caps: " << proxyToUse.capabilities() << ", usedProxy caps: " << m_usedProxy.capabilities();
-    if ( proxyToUse.hostName() != m_usedProxy.hostName() ||
-            proxyToUse.port() != m_usedProxy.port() ||
-            proxyToUse.user() != m_usedProxy.user() ||
-            proxyToUse.password() != m_usedProxy.password() ||
-            proxyToUse.type() != m_usedProxy.type() ||
-            proxyToUse.capabilities() != m_usedProxy.capabilities()
-       )
-            reconnect = true;
 
     m_currentUsername = accountName();
     m_currentPassword = readPassword();

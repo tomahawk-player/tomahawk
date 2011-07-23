@@ -359,15 +359,6 @@ InfoSystemWorker::newNam()
     newNam->setProxyFactory( newProxyFactory );
     m_nam = QWeakPointer< QNetworkAccessManager >( newNam );
 
-    QNetworkProxy m_usedProxy = oldProxyFactory->queryProxy( QNetworkProxyQuery( "www.google.com", 5522 ) ).first();
-    QNetworkProxy proxyToUse = newProxyFactory->queryProxy( QNetworkProxyQuery( "www.google.com", 5522 ) ).first();
-    qDebug() << Q_FUNC_INFO << "proxyToUse host: " << proxyToUse.hostName() << ", usedProxy host: " << m_usedProxy.hostName();
-    qDebug() << Q_FUNC_INFO << "proxyToUse port: " << proxyToUse.port() << ", usedProxy port: " << m_usedProxy.port();
-    qDebug() << Q_FUNC_INFO << "proxyToUse user: " << proxyToUse.user() << ", usedProxy user: " << m_usedProxy.user();
-    qDebug() << Q_FUNC_INFO << "proxyToUse pass: " << proxyToUse.password() << ", usedProxy pass: " << m_usedProxy.password();
-    qDebug() << Q_FUNC_INFO << "proxyToUse type: " << proxyToUse.type() << ", usedProxy type: " << m_usedProxy.type();
-    qDebug() << Q_FUNC_INFO << "proxyToUse caps: " << proxyToUse.capabilities() << ", usedProxy caps: " << m_usedProxy.capabilities();
-    
     emit namChanged( m_nam.data() );
 
     //FIXME: Currently leaking nam/proxyfactory above -- how to change in a thread-safe way?

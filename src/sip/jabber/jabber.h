@@ -38,7 +38,6 @@
 #include <jreen/connection.h>
 #include <jreen/mucroom.h>
 
-#include <QNetworkProxy>
 #include <QMessageBox>
 
 #define MYNAME "SIPJREEN"
@@ -95,7 +94,6 @@ public slots:
     void sendMsg( const QString& to, const QString& msg );
     void broadcastMsg( const QString &msg );
     void addContact( const QString &jid, const QString& msg = QString() );
-    void refreshProxy();
     void showAddFriendDialog();
 
 protected:
@@ -159,8 +157,6 @@ private:
     enum IqContext { NoContext, RequestDisco, RequestedDisco, SipMessageSent, RequestedVCard, RequestVersion, RequestedVersion };
     QStringList m_legacy_peers;
     AvatarManager *m_avatarManager;
-
-    QNetworkProxy m_usedProxy;
 };
 
 #endif
