@@ -21,6 +21,7 @@
 #include <iostream>
 #include <fstream>
 
+#include <QCoreApplication>
 #include <QDir>
 #include <QFileInfo>
 #include <QMutex>
@@ -33,10 +34,11 @@
 #define LOGFILE_SIZE 1024 * 512
 
 #define RELEASE_LEVEL_THRESHOLD 0
-#define DEBUG_LEVEL_THRESHOLD 5
+#define DEBUG_LEVEL_THRESHOLD LOGEXTRA
 
 using namespace std;
 ofstream logfile;
+static int s_threshold = -1;
 
 namespace Logger
 {
@@ -44,6 +46,18 @@ namespace Logger
 static void
 log( const char *msg, unsigned int debugLevel, bool toDisk = true )
 {
+    if ( s_threshold < 0 )
+    {
+        if ( qApp->arguments().contains( "--verbose" ) )
+            s_threshold = LOGTHIRDPARTY;
+        else
+            #ifdef QT_NO_DEBUG
+            s_threshold = RELEASE_LEVEL_THRESHOLD;
+            #else
+            s_threshold = DEBUG_LEVEL_THRESHOLD;
+            #endif
+    }
+
     #ifdef QT_NO_DEBUG
     if ( debugLevel > RELEASE_LEVEL_THRESHOLD )
         toDisk = false;
@@ -52,14 +66,17 @@ log( const char *msg, unsigned int debugLevel, bool toDisk = true )
         toDisk = false;
     #endif
 
-    if ( toDisk )
+    if ( toDisk || (int)debugLevel <= s_threshold )
     {
         logfile << QTime::currentTime().toString().toAscii().data() << " [" << QString::number( debugLevel ).toAscii().data() << "]: " << msg << endl;
         logfile.flush();
     }
 
-    cout << msg << endl;
-    cout.flush();
+    if ( debugLevel <= LOGVERBOSE || (int)debugLevel <= s_threshold )
+    {
+        cout << msg << endl;
+        cout.flush();
+    }
 }
 
 
