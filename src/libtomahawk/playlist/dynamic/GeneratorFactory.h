@@ -1,5 +1,5 @@
 /* === This file is part of Tomahawk Player - <http://tomahawk-player.org> ===
- * 
+ *
  *   Copyright 2010-2011, Christian Muehlhaeuser <muesli@tomahawk-player.org>
  *
  *   Tomahawk is free software: you can redistribute it and/or modify
@@ -27,8 +27,9 @@
 
 #include "dllmacro.h"
 
-namespace Tomahawk {
-    
+namespace Tomahawk
+{
+
 /**
   * Generators should subclass this and have it create the custom Generator
   */
@@ -38,14 +39,14 @@ public:
     GeneratorFactoryInterface() {}
 
     virtual ~GeneratorFactoryInterface() {}
-    
+
     virtual GeneratorInterface* create() = 0;
     /**
      * Create a control for this generator, not tied to this generator itself. Used when loading dynamic
      *  playlists from a dbcmd.
      */
     virtual dyncontrol_ptr createControl( const QString& controlType = QString() ) = 0;
-    
+
     virtual QStringList typeSelectors() const = 0;
 };
 
@@ -58,16 +59,15 @@ public:
     static geninterface_ptr create( const QString& type );
     // only used when loading from dbcmd
     static dyncontrol_ptr createControl( const QString& generatorType, const QString& controlType = QString() );
-    
+
     static void registerFactory( const QString& type, GeneratorFactoryInterface* interface );
     static QStringList types();
     static QStringList typeSelectors( const QString& type );
-    
+
 private:
     static QHash<QString, GeneratorFactoryInterface*> s_factories;
-    
-};
 
+};
 
 };
 

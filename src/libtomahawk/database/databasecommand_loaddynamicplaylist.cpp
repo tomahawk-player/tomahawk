@@ -1,5 +1,5 @@
 /* === This file is part of Tomahawk Player - <http://tomahawk-player.org> ===
- * 
+ *
  *   Copyright 2010-2011, Christian Muehlhaeuser <muesli@tomahawk-player.org>
  *
  *   Tomahawk is free software: you can redistribute it and/or modify
@@ -26,6 +26,7 @@
 #include "dynamic/DynamicControl.h"
 #include "dynamic/GeneratorInterface.h"
 #include <dynamic/GeneratorFactory.h>
+#include "utils/logger.h"
 
 using namespace Tomahawk;
 
@@ -34,39 +35,40 @@ void
 DatabaseCommand_LoadDynamicPlaylist::exec( DatabaseImpl* dbi )
 {
     qDebug() << "Loading dynamic playlist guid" << guid();
-    // load the entries first    
+    // load the entries first
     generateEntries( dbi );
-    
+
     // now load the controls etc
-    
+
     TomahawkSqlQuery controlsQuery = dbi->newquery();
     controlsQuery.prepare("SELECT playlist_revision.playlist, controls, plmode, pltype "
                           "FROM dynamic_playlist_revision, playlist_revision "
                           "WHERE dynamic_playlist_revision.guid = ? AND playlist_revision.guid = dynamic_playlist_revision.guid");
     controlsQuery.addBindValue( revisionGuid() );
     controlsQuery.exec();
-    
+
     QString type;
     GeneratorMode mode;
-    
+
     QList< QVariantMap > controls;
     QString playlist_guid;
     qDebug() << "Loading controls..." << revisionGuid();
 //    qDebug() << "SELECT playlist_revision.playlist, controls, plmode, pltype "
 //    "FROM dynamic_playlist_revision, playlist_revision "
 //    "WHERE dynamic_playlist_revision.guid = "<< revisionGuid() << " AND playlist_revision.guid = dynamic_playlist_revision.guid";
-    if( controlsQuery.first() ) 
+
+    if( controlsQuery.first() )
     {
         playlist_guid = controlsQuery.value( 0 ).toString();
         QJson::Parser parser;
         bool ok;
         QVariant v = parser.parse( controlsQuery.value(1).toByteArray(), &ok );
         Q_ASSERT( ok && v.type() == QVariant::List ); //TODO
-        
-        
+
+
         type = controlsQuery.value( 3 ).toString();
         mode = static_cast<GeneratorMode>( controlsQuery.value( 2 ).toInt() );
-        
+
         QStringList controlIds = v.toStringList();
         qDebug() << "Got controls in dynamic playlist, loading:" << controlIds << controlsQuery.value(1);
         foreach( const QString& controlId, controlIds )
@@ -88,7 +90,9 @@ DatabaseCommand_LoadDynamicPlaylist::exec( DatabaseImpl* dbi )
                 controls << c;
             }
         }
-    } else {
+    }
+    else
+    {
         // No controls, lets load the info we need directly from the playlist table
         TomahawkSqlQuery info = dbi->newquery();
         info.prepare( QString( "SELECT dynamic_playlist.pltype, dynamic_playlist.plmode FROM playlist, dynamic_playlist WHERE playlist.guid = \"%1\" AND playlist.guid = dynamic_playlist.guid" ).arg( playlist_guid ) );
@@ -102,12 +106,15 @@ DatabaseCommand_LoadDynamicPlaylist::exec( DatabaseImpl* dbi )
         type = info.value( 0 ).toString();
         mode = static_cast<GeneratorMode>( info.value( 1 ).toInt() );
     }
-   
-    if( mode == OnDemand ) { 
+
+    if( mode == OnDemand )
+    {
         Q_ASSERT( m_entrymap.isEmpty() ); // ondemand should have no entry
-        
+
         emit done( revisionGuid(), m_islatest, type, controls, true );
-    } else {
+    }
+    else
+    {
         emit done( revisionGuid(), m_guids, m_oldentries, type, controls, m_islatest, m_entrymap, true );
     }
 }

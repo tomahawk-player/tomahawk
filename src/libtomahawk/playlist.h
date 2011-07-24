@@ -21,7 +21,6 @@
 
 #include <QObject>
 #include <QList>
-#include <QDebug>
 #include <QVariant>
 #include <QSharedPointer>
 
@@ -274,7 +273,7 @@ private:
     bool m_shared;
 
     result_ptr m_currentItem;
-    
+
     QList< plentry_ptr > m_initEntries;
     QList< plentry_ptr > m_entries;
 

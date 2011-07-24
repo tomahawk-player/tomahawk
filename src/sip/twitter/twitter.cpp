@@ -37,8 +37,10 @@
 #include <database/database.h>
 #include <network/servent.h>
 
+#include "utils/logger.h"
 
 static QString s_gotTomahawkRegex = QString( "^(@[a-zA-Z0-9]+ )?(Got Tomahawk\\?) (\\{[a-fA-F0-9\\-]+\\}) (.*)$" );
+
 
 SipPlugin*
 TwitterFactory::createPlugin( const QString& pluginId )
@@ -79,7 +81,7 @@ TwitterPlugin::TwitterPlugin( const QString& pluginId )
         }
         setTwitterSavedDbid( Database::instance()->dbid() );
     }
-    
+
     m_checkTimer.setInterval( 150000 );
     m_checkTimer.setSingleShot( false );
     connect( &m_checkTimer, SIGNAL( timeout() ), SLOT( checkTimerFired() ) );

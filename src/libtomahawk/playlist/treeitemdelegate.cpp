@@ -19,7 +19,6 @@
 #include "treeitemdelegate.h"
 
 #include <QApplication>
-#include <QDebug>
 #include <QPainter>
 #include <QAbstractItemView>
 #include <QHeaderView>
@@ -28,6 +27,7 @@
 #include "result.h"
 
 #include "utils/tomahawkutils.h"
+#include "utils/logger.h"
 
 #include "treemodelitem.h"
 #include "treeproxymodel.h"

@@ -20,8 +20,10 @@
 #include "GeneratorInterface.h"
 #include "audio/audioengine.h"
 #include <pipeline.h>
+#include "utils/logger.h"
 
 using namespace Tomahawk;
+
 
 DynamicModel::DynamicModel( QObject* parent )
     : PlaylistModel( parent )
@@ -36,10 +38,12 @@ DynamicModel::DynamicModel( QObject* parent )
 
 }
 
+
 DynamicModel::~DynamicModel()
 {
 
 }
+
 
 void
 DynamicModel::loadPlaylist( const Tomahawk::dynplaylist_ptr& playlist, bool loadEntries )
@@ -61,6 +65,7 @@ DynamicModel::loadPlaylist( const Tomahawk::dynplaylist_ptr& playlist, bool load
         emit trackCountChanged( rowCount( QModelIndex() ) );
 }
 
+
 QString
 DynamicModel::description() const
 {
@@ -80,6 +85,7 @@ DynamicModel::startOnDemand()
 
     m_onDemandRunning = true;
 }
+
 
 void
 DynamicModel::newTrackGenerated( const Tomahawk::query_ptr& query )
@@ -102,6 +108,7 @@ DynamicModel::newTrackGenerated( const Tomahawk::query_ptr& query )
     }
 }
 
+
 void
 DynamicModel::stopOnDemand( bool stopPlaying )
 {
@@ -112,6 +119,7 @@ DynamicModel::stopOnDemand( bool stopPlaying )
     disconnect( AudioEngine::instance(), SIGNAL( loading( Tomahawk::result_ptr ) ), this, SLOT( newTrackLoading() ) );
 }
 
+
 void
 DynamicModel::changeStation()
 {
@@ -120,6 +128,7 @@ DynamicModel::changeStation()
     else // if we're not running, just start
         m_playlist->generator()->startOnDemand();
 }
+
 
 void
 DynamicModel::trackResolveFinished( bool success )
@@ -177,6 +186,7 @@ DynamicModel::newTrackLoading()
     }
 }
 
+
 void
 DynamicModel::tracksGenerated( const QList< query_ptr > entries, int limitResolvedTo )
 {
@@ -192,6 +202,7 @@ DynamicModel::tracksGenerated( const QList< query_ptr > entries, int limitResolv
     }
 }
 
+
 void
 DynamicModel::filterUnresolved( const QList< query_ptr >& entries )
 {
@@ -202,6 +213,7 @@ DynamicModel::filterUnresolved( const QList< query_ptr >& entries )
     }
     Pipeline::instance()->resolve( entries, true );
 }
+
 
 void
 DynamicModel::filteringTrackResolved( bool successful )

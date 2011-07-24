@@ -23,6 +23,8 @@
 #include "databaseimpl.h"
 #include "sourcelist.h"
 
+#include "utils/logger.h"
+
 
 void
 DatabaseCommand_PlaybackHistory::exec( DatabaseImpl* dbi )

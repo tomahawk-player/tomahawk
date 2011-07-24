@@ -18,7 +18,6 @@
 
 #include "playlistmodel.h"
 
-#include <QDebug>
 #include <QMimeData>
 #include <QTreeView>
 
@@ -27,6 +26,7 @@
 #include "database/database.h"
 #include "database/databasecommand_playbackhistory.h"
 #include "dynamic/GeneratorInterface.h"
+#include "utils/logger.h"
 
 using namespace Tomahawk;
 

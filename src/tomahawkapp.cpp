@@ -40,7 +40,6 @@
 #include "sip/SipHandler.h"
 #include "playlist/dynamic/GeneratorFactory.h"
 #include "playlist/dynamic/echonest/EchonestGenerator.h"
-#include "utils/tomahawkutils.h"
 #include "web/api_v1.h"
 #include "resolvers/scriptresolver.h"
 #include "resolvers/qtscriptresolver.h"
@@ -55,6 +54,8 @@
 
 #include "audio/audioengine.h"
 #include "utils/xspfloader.h"
+#include "utils/logger.h"
+#include "utils/tomahawkutils.h"
 
 #include <lastfm/ws.h>
 #include "config.h"
@@ -77,76 +78,6 @@
 #include <sys/sysctl.h>
 #endif
 
-#include <iostream>
-#include <fstream>
-
-#define LOGFILE TomahawkUtils::appLogDir().filePath( "Tomahawk.log" ).toLocal8Bit()
-#define LOGFILE_SIZE 1024 * 512
-
-using namespace std;
-ofstream logfile;
-
-void
-TomahawkLogHandler( QtMsgType type, const char *msg )
-{
-    static QMutex s_mutex;
-
-    QMutexLocker locker( &s_mutex );
-    switch( type )
-    {
-        case QtDebugMsg:
-            logfile << QTime::currentTime().toString().toAscii().data() << " Debug: " << msg << "\n";
-            break;
-
-        case QtCriticalMsg:
-            logfile << QTime::currentTime().toString().toAscii().data() << " Critical: " << msg << "\n";
-            break;
-
-        case QtWarningMsg:
-            logfile << QTime::currentTime().toString().toAscii().data() << " Warning: " << msg << "\n";
-            break;
-
-        case QtFatalMsg:
-            logfile << QTime::currentTime().toString().toAscii().data() << " Fatal: " << msg << "\n";
-            logfile.flush();
-
-            cout << msg << "\n";
-            cout.flush();
-            abort();
-            break;
-    }
-
-    cout << msg << "\n";
-    cout.flush();
-    logfile.flush();
-}
-
-void
-setupLogfile()
-{
-    if ( QFileInfo( LOGFILE ).size() > LOGFILE_SIZE )
-    {
-        QByteArray lc;
-        {
-            QFile f( LOGFILE );
-            f.open( QIODevice::ReadOnly | QIODevice::Text );
-            lc = f.readAll();
-            f.close();
-        }
-
-        QFile::remove( LOGFILE );
-
-        {
-            QFile f( LOGFILE );
-            f.open( QIODevice::WriteOnly | QIODevice::Text );
-            f.write( lc.right( LOGFILE_SIZE - (LOGFILE_SIZE / 4) ) );
-            f.close();
-        }
-    }
-
-    logfile.open( LOGFILE, ios::app );
-    qInstallMsgHandler( TomahawkLogHandler );
-}
 
 void
 increaseMaxFileDescriptors()
@@ -171,6 +102,7 @@ increaseMaxFileDescriptors()
 #endif
 }
 
+
 using namespace Tomahawk;
 
 TomahawkApp::TomahawkApp( int& argc, char *argv[] )
@@ -188,8 +120,10 @@ TomahawkApp::TomahawkApp( int& argc, char *argv[] )
 void
 TomahawkApp::init()
 {
-    setupLogfile();
+    Logger::setupLogfile();
     qsrand( QTime( 0, 0, 0 ).secsTo( QTime::currentTime() ) );
+
+    tLog() << "Starting Tomahawk...";
 
 #ifdef TOMAHAWK_HEADLESS
     m_headless = true;

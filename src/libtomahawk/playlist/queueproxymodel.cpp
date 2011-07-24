@@ -18,9 +18,8 @@
 
 #include "queueproxymodel.h"
 
-#include <QDebug>
-
 #include "viewmanager.h"
+#include "utils/logger.h"
 
 using namespace Tomahawk;
 

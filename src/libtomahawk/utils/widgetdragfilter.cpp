@@ -1,5 +1,5 @@
 /* === This file is part of Tomahawk Player - <http://tomahawk-player.org> ===
- * 
+ *
  *   Copyright 2010-2011, Christian Muehlhaeuser <muesli@tomahawk-player.org>
  *
  *   Tomahawk is free software: you can redistribute it and/or modify
@@ -17,13 +17,15 @@
  */
 
 #include "widgetdragfilter.h"
-#include <qcoreevent.h>
+
 #include <QMouseEvent>
 #include <QApplication>
-#include <QDebug>
 #include <QMenuBar>
 
-WidgetDragFilter::WidgetDragFilter(QObject* parent)
+#include "utils/logger.h"
+
+
+WidgetDragFilter::WidgetDragFilter( QObject* parent )
     : QObject( parent )
     , m_dragStarted( false )
 {
@@ -32,11 +34,13 @@ WidgetDragFilter::WidgetDragFilter(QObject* parent)
     m_target.data()->installEventFilter( this );
 }
 
-bool WidgetDragFilter::eventFilter(QObject* obj, QEvent* event)
+
+bool
+WidgetDragFilter::eventFilter( QObject* obj, QEvent* event )
 {
-    if( m_target.isNull() || m_target.data() != obj ) 
+    if( m_target.isNull() || m_target.data() != obj )
         return false;
-    
+
     if( event->type() == QEvent::MouseButtonPress ) {
         QMouseEvent *mouseEvent = static_cast<QMouseEvent*>( event );
         if( !canDrag( obj, mouseEvent ) )
@@ -52,7 +56,7 @@ bool WidgetDragFilter::eventFilter(QObject* obj, QEvent* event)
         QMouseEvent* e = static_cast<QMouseEvent* >(event);
         if( !canDrag( obj, e ) ) {
             m_dragStarted = false;
-            
+
             return false;
         }
         if( e->buttons().testFlag( Qt::LeftButton ) ) {
@@ -65,34 +69,36 @@ bool WidgetDragFilter::eventFilter(QObject* obj, QEvent* event)
     return false;
 }
 
+
 /**
  * Make sure we can really drag this widget. Checks inspired by Oxygen's oxygenwindowmanager.cpp
  */
-bool WidgetDragFilter::canDrag(QObject* obj, QMouseEvent* ev) const
+bool
+WidgetDragFilter::canDrag( QObject* obj, QMouseEvent* ev ) const
 {
     if( !obj->isWidgetType() )
         return false;
-    
+
     QWidget* w = static_cast< QWidget* >( obj );
-    
+
     if( QWidget::mouseGrabber() )
         return false;
-    
+
     if( w->cursor().shape() != Qt::ArrowCursor )
         return false;
-    
+
     // Now we check various things about the child position and mouse
     QPoint position( ev->pos() );
     QWidget* child = w->childAt( position );
-    
+
     if( child && child->cursor().shape() != Qt::ArrowCursor ) return false;
-    
-    // Don't want to drag menubars when selecting an action    
+
+    // Don't want to drag menubars when selecting an action
     if( QMenuBar* menuBar = qobject_cast<QMenuBar*>( w ) )
     {
         // check if there is an active action
         if( menuBar->activeAction() && menuBar->activeAction()->isEnabled() ) return false;
-        
+
         // check if action at position exists and is enabled
         if( QAction* action = menuBar->actionAt( position ) )
         {
@@ -101,8 +107,8 @@ bool WidgetDragFilter::canDrag(QObject* obj, QMouseEvent* ev) const
         }
         // return true in all other cases
         return true;
-        
-    } 
-    
+
+    }
+
     return true;
 }

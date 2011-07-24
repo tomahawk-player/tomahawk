@@ -19,14 +19,15 @@
 #include "ArtistInfoWidget.h"
 #include "ui_ArtistInfoWidget.h"
 
-#include "utils/tomahawkutils.h"
-
 #include "viewmanager.h"
 #include "playlist/treemodel.h"
 #include "playlist/playlistmodel.h"
 
 #include "database/databasecommand_alltracks.h"
 #include "database/databasecommand_allalbums.h"
+
+#include "utils/tomahawkutils.h"
+#include "utils/logger.h"
 
 #include "widgets/overlaywidget.h"
 

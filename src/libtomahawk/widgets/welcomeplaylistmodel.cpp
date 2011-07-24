@@ -19,11 +19,14 @@
 
 
 #include "welcomeplaylistmodel.h"
+
 #include <tomahawksettings.h>
 #include <audio/audioengine.h>
 #include <sourcelist.h>
+#include "utils/logger.h"
 
 using namespace Tomahawk;
+
 
 WelcomePlaylistModel::WelcomePlaylistModel( QObject* parent )
     : QAbstractListModel( parent )
@@ -38,6 +41,7 @@ WelcomePlaylistModel::WelcomePlaylistModel( QObject* parent )
 
     emit emptinessChanged( m_recplaylists.isEmpty() );
 }
+
 
 void
 WelcomePlaylistModel::loadFromSettings()
@@ -72,7 +76,6 @@ WelcomePlaylistModel::loadFromSettings()
 
     emit emptinessChanged( m_recplaylists.isEmpty() );
 }
-
 
 
 QVariant
@@ -112,12 +115,14 @@ WelcomePlaylistModel::data( const QModelIndex& index, int role ) const
     }
 }
 
+
 void
 WelcomePlaylistModel::onSourceAdded( const Tomahawk::source_ptr& source )
 {
     connect( source->collection().data(), SIGNAL( playlistsAdded( QList<Tomahawk::playlist_ptr> ) ), SLOT( loadFromSettings() ) );
     connect( source->collection().data(), SIGNAL( playlistsDeleted( QList<Tomahawk::playlist_ptr> ) ), SLOT( onPlaylistsRemoved( QList<Tomahawk::playlist_ptr> ) ) );
 }
+
 
 void
 WelcomePlaylistModel::onPlaylistsRemoved( QList< playlist_ptr > playlists )
@@ -144,6 +149,7 @@ WelcomePlaylistModel::rowCount( const QModelIndex& ) const
     return m_recplaylists.count();
 }
 
+
 void
 WelcomePlaylistModel::plAdded( const playlist_ptr& pl )
 {
@@ -155,6 +161,7 @@ WelcomePlaylistModel::plAdded( const playlist_ptr& pl )
 
     emit emptinessChanged( m_recplaylists.isEmpty() );
 }
+
 
 void
 WelcomePlaylistModel::playlistChanged( Tomahawk::PlaylistInterface* pli )

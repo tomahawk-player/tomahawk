@@ -9,9 +9,11 @@
 #include <jreen/iqreply.h>
 
 #include <QDir>
-#include <QDebug>
 #include <QCryptographicHash>
 #include <QPixmap>
+
+#include "utils/logger.h"
+
 
 AvatarManager::AvatarManager(Jreen::Client *client) :
     m_cacheDir(TomahawkUtils::appDataDir().absolutePath().append("/jreen/"))

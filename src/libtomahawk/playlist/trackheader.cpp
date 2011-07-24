@@ -19,12 +19,12 @@
 #include "trackheader.h"
 
 #include <QContextMenuEvent>
-#include <QDebug>
 #include <QMenu>
 
 #include "tomahawksettings.h"
 #include "playlist/trackmodel.h"
 #include "playlist/trackview.h"
+#include "utils/logger.h"
 
 
 TrackHeader::TrackHeader( TrackView* parent )

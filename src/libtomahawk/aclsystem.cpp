@@ -18,11 +18,13 @@
 
 #include "aclsystem.h"
 
-#include <QtDebug>
 #include <QMutexLocker>
 #include <QVariant>
 
 #include <tomahawksettings.h>
+
+#include "utils/logger.h"
+
 
 ACLSystem* ACLSystem::s_instance = 0;
 

@@ -24,6 +24,8 @@
 #include "tomahawkapp.h"
 #include "resolver.h"
 
+#include "utils/logger.h"
+
 
 ResolversModel::ResolversModel( const QStringList& allResolvers, const QStringList& enabledResolvers, QObject* parent )
     : QAbstractListModel( parent )

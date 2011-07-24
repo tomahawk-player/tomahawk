@@ -18,10 +18,11 @@
 
 
 #include "googlewrapper.h"
-#include <QtPlugin>
-
 #include "ui_configwidget.h"
+
+#include <QtPlugin>
 #include <QInputDialog>
+
 
 SipPlugin*
 GoogleWrapperFactory::createPlugin( const QString& pluginId )
@@ -29,11 +30,13 @@ GoogleWrapperFactory::createPlugin( const QString& pluginId )
     return new GoogleWrapper( pluginId.isEmpty() ? generateId() : pluginId );
 }
 
+
 QIcon
 GoogleWrapperFactory::icon() const
 {
     return QIcon( ":/gmail-logo.png" );
 }
+
 
 GoogleWrapper::GoogleWrapper ( const QString& pluginID )
     : JabberPlugin ( pluginID )
@@ -47,11 +50,13 @@ GoogleWrapper::GoogleWrapper ( const QString& pluginID )
     m_ui->groupBoxJabberAdvanced->hide();
 }
 
+
 QIcon
 GoogleWrapper::icon() const
 {
     return QIcon( ":/gmail-logo.png" );
 }
+
 
 QString
 GoogleWrapper::defaultSuffix() const
@@ -73,6 +78,7 @@ GoogleWrapper::showAddFriendDialog()
     qDebug() << "Attempting to add google contact to roster:" << id;
     addContact( id );
 }
+
 
 #ifdef GOOGLE_WRAPPER
 Q_EXPORT_PLUGIN2( sipfactory, GoogleWrapperFactory )

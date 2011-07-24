@@ -44,7 +44,10 @@
 #include <QtDBus/QDBusMessage>
 #include <QImage>
 
+#include "utils/logger.h"
+
 using namespace Tomahawk::InfoSystem;
+
 
 FdoNotifyPlugin::FdoNotifyPlugin()
     : InfoPlugin()

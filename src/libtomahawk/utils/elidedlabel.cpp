@@ -24,6 +24,8 @@
 #include <QApplication>
 #include <QRect>
 
+#include "utils/logger.h"
+
 
 ElidedLabel::ElidedLabel( QWidget* parent, Qt::WindowFlags flags )
     : QFrame( parent, flags )

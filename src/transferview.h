@@ -19,7 +19,6 @@
 #ifndef TRANSFERVIEW_H
 #define TRANSFERVIEW_H
 
-#include <QDebug>
 #include <QTreeWidget>
 
 #include "typedefs.h"
@@ -35,7 +34,6 @@ public:
     explicit TransferView( AnimatedSplitter* parent );
     virtual ~TransferView()
     {
-        qDebug() << Q_FUNC_INFO;
     }
 
     QSize sizeHint() const;

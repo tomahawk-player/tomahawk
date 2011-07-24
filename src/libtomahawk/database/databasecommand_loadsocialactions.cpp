@@ -24,6 +24,7 @@
 #include "databaseimpl.h"
 #include "network/servent.h"
 #include "result.h"
+#include "utils/logger.h"
 
 using namespace Tomahawk;
 
@@ -60,7 +61,8 @@ DatabaseCommand_LoadSocialActions::exec( DatabaseImpl* dbi )
     query.exec();
 
     QList< Tomahawk::SocialAction > allSocialActions;
-    while ( query.next() ) {
+    while ( query.next() )
+    {
         Tomahawk::SocialAction action;
         action.action    = query.value( 0 );  // action
         action.value     = query.value( 1 );  // comment

@@ -1,5 +1,5 @@
 /* === This file is part of Tomahawk Player - <http://tomahawk-player.org> ===
- * 
+ *
  *   Copyright 2010-2011, Christian Muehlhaeuser <muesli@tomahawk-player.org>
  *
  *   Tomahawk is free software: you can redistribute it and/or modify
@@ -26,6 +26,8 @@
 #include "tomahawkapp.h"
 #include "tomahawkwindow.h"
 
+#include "utils/logger.h"
+
 
 TomahawkTrayIcon::TomahawkTrayIcon( QObject* parent )
     : QSystemTrayIcon( parent )
@@ -39,7 +41,7 @@ TomahawkTrayIcon::TomahawkTrayIcon( QObject* parent )
 
     m_contextMenu = new QMenu();
     setContextMenu( m_contextMenu );
-    
+
     m_playAction = m_contextMenu->addAction( tr( "Play" ) );
     m_pauseAction = m_contextMenu->addAction( tr( "Pause" ) );
     m_stopAction = m_contextMenu->addAction( tr( "Stop" ) );
@@ -57,7 +59,7 @@ TomahawkTrayIcon::TomahawkTrayIcon( QObject* parent )
 
     m_contextMenu->addSeparator();
     m_quitAction = m_contextMenu->addAction( tr( "Quit" ) );
-    
+
     connect( AudioEngine::instance(), SIGNAL( loading( Tomahawk::result_ptr ) ), SLOT( setResult( Tomahawk::result_ptr ) ) );
 
     connect( m_playAction,  SIGNAL( triggered() ), AudioEngine::instance(), SLOT( play() ) );
@@ -66,7 +68,7 @@ TomahawkTrayIcon::TomahawkTrayIcon( QObject* parent )
     connect( m_prevAction,  SIGNAL( triggered() ), AudioEngine::instance(), SLOT( previous() ) );
     connect( m_nextAction,  SIGNAL( triggered() ), AudioEngine::instance(), SLOT( next() ) );
     connect( m_quitAction,  SIGNAL( triggered() ), (QObject*)APP, SLOT( quit() ) );
-    
+
     connect( &m_animationTimer, SIGNAL( timeout() ), SLOT( onAnimationTimer() ) );
     connect( this, SIGNAL( activated( QSystemTrayIcon::ActivationReason ) ), SLOT( onActivated( QSystemTrayIcon::ActivationReason ) ) );
 
@@ -152,7 +154,7 @@ TomahawkTrayIcon::onAnimationTimer()
         Q_ASSERT( !"Animation should not be started without frames being loaded" );
         return;
     }
-    
+
     m_currentAnimationFrame++;
     if( m_currentAnimationFrame >= m_animationPixmaps.count() )
         m_currentAnimationFrame = 0;

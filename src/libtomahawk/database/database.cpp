@@ -18,6 +18,8 @@
 
 #include "database.h"
 
+#include "utils/logger.h"
+
 #define DEFAULT_WORKER_THREADS 4
 #define MAX_WORKER_THREADS 16
 

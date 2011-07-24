@@ -27,6 +27,8 @@
 #include "database/databasecommand_loadfile.h"
 #include "database/databasecommand_loadsocialactions.h"
 
+#include "utils/logger.h"
+
 using namespace Tomahawk;
 
 
@@ -204,7 +206,7 @@ Result::parseSocialActions()
 {
     QListIterator< Tomahawk::SocialAction > it( m_allSocialActions );
     unsigned int highestTimestamp = 0;
-    
+
     while ( it.hasNext() )
     {
         Tomahawk::SocialAction socialAction;

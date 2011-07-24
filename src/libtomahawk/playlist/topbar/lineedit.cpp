@@ -34,8 +34,6 @@
 #include <qstyleoption.h>
 #include <qpainter.h>
 
-#include <qdebug.h>
-
 SideWidget::SideWidget(QWidget *parent)
     : QWidget(parent)
 {

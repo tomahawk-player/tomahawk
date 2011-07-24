@@ -19,7 +19,6 @@
 #include "albumitemdelegate.h"
 
 #include <QApplication>
-#include <QDebug>
 #include <QPainter>
 #include <QAbstractItemView>
 
@@ -27,6 +26,7 @@
 #include "result.h"
 
 #include "utils/tomahawkutils.h"
+#include "utils/logger.h"
 
 #include "playlist/albumitem.h"
 #include "playlist/albumproxymodel.h"

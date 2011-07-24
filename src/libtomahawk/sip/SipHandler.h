@@ -22,7 +22,6 @@
 #include "sip/SipPlugin.h"
 #include "dllmacro.h"
 
-#include <QDebug>
 #include <QObject>
 #include <QHash>
 #include <QPixmap>

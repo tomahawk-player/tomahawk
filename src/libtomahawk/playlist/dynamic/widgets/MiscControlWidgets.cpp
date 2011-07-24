@@ -1,5 +1,5 @@
 /* === This file is part of Tomahawk Player - <http://tomahawk-player.org> ===
- * 
+ *
  *   Copyright 2010-2011, Christian Muehlhaeuser <muesli@tomahawk-player.org>
  *
  *   Tomahawk is free software: you can redistribute it and/or modify
@@ -22,20 +22,23 @@
 #include <QLabel>
 #include <QHBoxLayout>
 
+#include "utils/logger.h"
+
 using namespace Tomahawk;
+
 
 LabeledSlider::LabeledSlider( const QString& leftT, const QString& rightT, QWidget* parent )
     : QWidget( parent )
 {
     setLayout( new QHBoxLayout );
     layout()->setMargin( 0 );
-    
+
     m_leftLabel = new QLabel( leftT, this );
     layout()->addWidget( m_leftLabel );
-    
+
     m_slider = new QSlider( Qt::Horizontal, this );
     layout()->addWidget( m_slider );
-    
+
     m_rightLabel = new QLabel( rightT, this );
     layout()->addWidget( m_rightLabel );
 }

@@ -19,7 +19,6 @@
 #ifndef ANIMATEDSPLITTER_H
 #define ANIMATEDSPLITTER_H
 
-#include <QDebug>
 #include <QSplitter>
 #include <QTimeLine>
 

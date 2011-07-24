@@ -18,11 +18,11 @@
 
 #include "artist.h"
 
-#include <QDebug>
-
 #include "collection.h"
 #include "database/database.h"
 #include "database/databasecommand_alltracks.h"
+
+#include "utils/logger.h"
 
 using namespace Tomahawk;
 

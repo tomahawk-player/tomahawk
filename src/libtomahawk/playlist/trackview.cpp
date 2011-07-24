@@ -18,15 +18,9 @@
 
 #include "trackview.h"
 
-#include <QDebug>
 #include <QKeyEvent>
 #include <QPainter>
 #include <QScrollBar>
-
-#include "audio/audioengine.h"
-#include "utils/tomahawkutils.h"
-#include "widgets/overlaywidget.h"
-#include "dynamic/widgets/LoadingSpinner.h"
 
 #include "trackheader.h"
 #include "viewmanager.h"
@@ -34,6 +28,12 @@
 #include "trackmodel.h"
 #include "trackproxymodel.h"
 #include "track.h"
+
+#include "audio/audioengine.h"
+#include "widgets/overlaywidget.h"
+#include "dynamic/widgets/LoadingSpinner.h"
+#include "utils/tomahawkutils.h"
+#include "utils/logger.h"
 
 using namespace Tomahawk;
 

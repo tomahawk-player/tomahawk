@@ -18,14 +18,14 @@
 
 #include "musicbrainzPlugin.h"
 
-#include "utils/tomahawkutils.h"
-
 #include <QNetworkReply>
 #include <QDomDocument>
 
+#include "utils/tomahawkutils.h"
+#include "utils/logger.h"
+
 using namespace Tomahawk::InfoSystem;
 
-// for internal neatness
 
 MusicBrainzPlugin::MusicBrainzPlugin()
     : InfoPlugin()

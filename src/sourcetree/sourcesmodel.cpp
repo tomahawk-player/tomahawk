@@ -17,6 +17,11 @@
 
 #include "sourcetree/sourcesmodel.h"
 
+#include <boost/bind.hpp>
+
+#include <QMimeData>
+#include <QSize>
+
 #include "sourcetree/items/sourcetreeitem.h"
 #include "sourcetree/items/collectionitem.h"
 #include "sourcetree/items/genericpageitems.h"
@@ -26,12 +31,10 @@
 #include "source.h"
 #include "viewmanager.h"
 
-#include <boost/bind.hpp>
-
-#include <QMimeData>
-#include <QSize>
+#include "utils/logger.h"
 
 using namespace Tomahawk;
+
 
 SourcesModel::SourcesModel( QObject* parent )
     : QAbstractItemModel( parent )
@@ -390,6 +393,7 @@ SourcesModel::linkSourceItemToPage( SourceTreeItem* item, ViewPage* p )
     m_viewPageDelayedCacheItem = 0;
 }
 
+
 SourceTreeItem*
 SourcesModel::itemFromIndex( const QModelIndex& idx ) const
 {
@@ -448,6 +452,7 @@ SourcesModel::rowForItem( SourceTreeItem* item ) const
 {
     return item->parent()->children().indexOf( item );
 }
+
 
 void
 SourcesModel::itemSelectRequest( SourceTreeItem* item )

@@ -17,9 +17,9 @@
  */
 
 #include "tomahawkapp_mac.h"
+
 #include "macdelegate.h"
 #include "macshortcuthandler.h"
-#include <QDebug>
 
 #import <AppKit/NSApplication.h>
 #import <Foundation/NSAutoreleasePool.h>

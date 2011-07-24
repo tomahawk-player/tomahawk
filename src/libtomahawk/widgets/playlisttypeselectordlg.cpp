@@ -16,13 +16,15 @@
  *   along with Tomahawk. If not, see <http://www.gnu.org/licenses/>.
  */
 
+#include "playlisttypeselectordlg.h"
+#include "ui_playlisttypeselectordlg.h"
+
 #include "widgets/newplaylistwidget.h"
 #include "viewmanager.h"
 #include "viewpage.h"
 #include "sourcelist.h"
 
-#include "playlisttypeselectordlg.h"
-#include "ui_playlisttypeselectordlg.h"
+#include "utils/logger.h"
 
 
 PlaylistTypeSelectorDlg::PlaylistTypeSelectorDlg( QWidget* parent, Qt::WindowFlags f )
@@ -51,10 +53,12 @@ PlaylistTypeSelectorDlg::PlaylistTypeSelectorDlg( QWidget* parent, Qt::WindowFla
              this, SLOT( enableAutoPlaylistButton( const QString& )));
 }
 
+
 PlaylistTypeSelectorDlg::~PlaylistTypeSelectorDlg()
 {
     delete ui;
 }
+
 
 void
 PlaylistTypeSelectorDlg::createNormalPlaylist()
@@ -63,10 +67,15 @@ PlaylistTypeSelectorDlg::createNormalPlaylist()
     done( QDialog::Accepted ); // return code is used to vaidate we did not exit out of the Dialog
 }
 
-void PlaylistTypeSelectorDlg::createAutomaticPlaylist() { m_isAutoPlaylist = true;
+
+void
+PlaylistTypeSelectorDlg::createAutomaticPlaylist()
+{
+    m_isAutoPlaylist = true;
     m_playlistName = ui->autoPlaylistNameLine->text();
     done( QDialog::Accepted ); // return code is used to vaidate we did not exit out of the Dialog successfully
 }
+
 
 QString
 PlaylistTypeSelectorDlg::playlistName() const
@@ -74,11 +83,13 @@ PlaylistTypeSelectorDlg::playlistName() const
     return m_playlistName;
 }
 
+
 bool
 PlaylistTypeSelectorDlg::playlistTypeIsAuto() const
 {
     return m_isAutoPlaylist;
 }
+
 
 void
 PlaylistTypeSelectorDlg::enableAutoPlaylistButton( const QString &text )

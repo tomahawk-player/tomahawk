@@ -18,7 +18,6 @@
 
 #include "artistview.h"
 
-#include <QDebug>
 #include <QHeaderView>
 #include <QKeyEvent>
 #include <QPainter>
@@ -31,6 +30,7 @@
 #include "treeheader.h"
 #include "treeitemdelegate.h"
 #include "viewmanager.h"
+#include "utils/logger.h"
 
 static QString s_tmInfoIdentifier = QString( "TREEMODEL" );
 

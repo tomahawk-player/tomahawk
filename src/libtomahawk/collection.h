@@ -30,7 +30,6 @@
 #include <QDir>
 #include <QList>
 #include <QSharedPointer>
-#include <QDebug>
 
 #include "functimeout.h"
 #include "playlist.h"

@@ -18,8 +18,6 @@
 
 #include "databasecommand.h"
 
-#include <QDebug>
-
 #include "databasecommand_addfiles.h"
 #include "databasecommand_createplaylist.h"
 #include "databasecommand_deletefiles.h"
@@ -31,7 +29,8 @@
 #include "databasecommand_deletedynamicplaylist.h"
 #include "databasecommand_setdynamicplaylistrevision.h"
 #include "databasecommand_socialaction.h"
-#include "databasecommand_loadsocialactions.h"
+
+#include "utils/logger.h"
 
 
 DatabaseCommand::DatabaseCommand( QObject* parent )

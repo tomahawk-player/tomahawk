@@ -1,5 +1,5 @@
 /* === This file is part of Tomahawk Player - <http://tomahawk-player.org> ===
- * 
+ *
  *   Copyright 2010-2011, Christian Muehlhaeuser <muesli@tomahawk-player.org>
  *
  *   Tomahawk is free software: you can redistribute it and/or modify
@@ -18,9 +18,12 @@
 
 #include "databasecommand_addclientauth.h"
 
-DatabaseCommand_AddClientAuth::DatabaseCommand_AddClientAuth( const QString& clientToken, 
-                                                              const QString& website, 
-                                                              const QString& name, 
+#include "utils/logger.h"
+
+
+DatabaseCommand_AddClientAuth::DatabaseCommand_AddClientAuth( const QString& clientToken,
+                                                              const QString& website,
+                                                              const QString& name,
                                                               const QString& userAgent,
                                                               QObject* parent )
     : DatabaseCommand( parent )
@@ -31,7 +34,8 @@ DatabaseCommand_AddClientAuth::DatabaseCommand_AddClientAuth( const QString& cli
 {
 }
 
-void DatabaseCommand_AddClientAuth::exec(DatabaseImpl* lib)
+
+void DatabaseCommand_AddClientAuth::exec( DatabaseImpl* lib )
 {
     TomahawkSqlQuery q = lib->newquery();
     q.prepare( "INSERT INTO http_client_auth (token, website, name, ua, mtime, permissions) VALUES (?, ?, ?, ?, ?, ?)" );
@@ -41,8 +45,9 @@ void DatabaseCommand_AddClientAuth::exec(DatabaseImpl* lib)
     q.addBindValue( m_userAgent );
     q.addBindValue( 0 );
     q.addBindValue( "*" );
-    
-    if( !q.exec() ) {
+
+    if ( !q.exec() )
+    {
         qWarning() << "Failed to insert http client into auth table!";
     }
 }

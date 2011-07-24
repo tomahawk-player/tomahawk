@@ -18,18 +18,18 @@
 
 #include "DynamicView.h"
 
-#include "widgets/overlaywidget.h"
+#include <QApplication>
+#include <QPainter>
+#include <QPaintEvent>
+#include <QPaintEngine>
+#include <QScrollBar>
+
 #include "playlistmodel.h"
 #include "trackproxymodel.h"
 #include "trackheader.h"
-
-#include <QPainter>
-#include <QPaintEvent>
-#include <QtGui/qpaintengine.h>
-#include <QScrollBar>
-
 #include "DynamicModel.h"
-#include <QApplication>
+#include "widgets/overlaywidget.h"
+#include "utils/logger.h"
 
 using namespace Tomahawk;
 
@@ -37,6 +37,7 @@ using namespace Tomahawk;
 #define SLIDE_LENGTH 300
 #define SLIDE_OFFSET 500
 #define LONG_MULT 0 // to avoid superfast slides when the length is long, make it longer incrementally
+
 
 DynamicView::DynamicView( QWidget* parent )
         : PlaylistView( parent )
@@ -65,10 +66,12 @@ DynamicView::DynamicView( QWidget* parent )
     connect( &m_fadeOutAnim, SIGNAL( finished() ), this, SLOT( animFinished() ) );
 }
 
+
 DynamicView::~DynamicView()
 {
 
 }
+
 
 void
 DynamicView::setDynamicModel( DynamicModel* model)
@@ -79,6 +82,7 @@ DynamicView::setDynamicModel( DynamicModel* model)
     connect( m_model, SIGNAL( trackCountChanged( unsigned int ) ), SLOT( onTrackCountChanged( unsigned int ) ) );
     connect( m_model, SIGNAL( checkForOverflow() ), this, SLOT( checkForOverflow() ) );
 }
+
 
 void
 DynamicView::setOnDemand( bool onDemand )
@@ -91,11 +95,13 @@ DynamicView::setOnDemand( bool onDemand )
         setVerticalScrollBarPolicy( Qt::ScrollBarAsNeeded );
 }
 
+
 void
 DynamicView::setReadOnly( bool readOnly )
 {
     m_readOnly = readOnly;
 }
+
 
 void
 DynamicView::showMessageTimeout( const QString& title, const QString& body )
@@ -107,15 +113,17 @@ DynamicView::showMessageTimeout( const QString& title, const QString& body )
     overlay()->show( 10 );
 }
 
+
 void
-DynamicView::showMessage(const QString& message)
+DynamicView::showMessage( const QString& message )
 {
     overlay()->setText( message );
     overlay()->show();
 }
 
+
 void
-DynamicView::setDynamicWorking(bool working)
+DynamicView::setDynamicWorking( bool working )
 {
     m_working = working;
     if( working )
@@ -148,6 +156,7 @@ DynamicView::onTrackCountChanged( unsigned int tracks )
     }
 }
 
+
 void
 DynamicView::checkForOverflow()
 {
@@ -172,6 +181,7 @@ DynamicView::checkForOverflow()
         collapseEntries( 0, toRemove, proxyModel()->rowCount( QModelIndex() ) - toRemove );
     }
 }
+
 
 void
 DynamicView::collapseEntries( int startRow, int num, int numToKeep )
@@ -257,6 +267,7 @@ DynamicView::collapseEntries( int startRow, int num, int numToKeep )
     proxyModel()->removeIndexes( todel );
 }
 
+
 QPixmap
 DynamicView::backgroundBetween( QRect rect, int rowStart )
 {
@@ -286,6 +297,7 @@ DynamicView::backgroundBetween( QRect rect, int rowStart )
     return bg;
 }
 
+
 void
 DynamicView::animFinished()
 {
@@ -293,6 +305,7 @@ DynamicView::animFinished()
         checkForOverflow();
     m_checkOnCollapse = false;
 }
+
 
 void
 DynamicView::paintEvent( QPaintEvent* event )
@@ -326,4 +339,3 @@ DynamicView::paintEvent( QPaintEvent* event )
         }
     }
 }
-

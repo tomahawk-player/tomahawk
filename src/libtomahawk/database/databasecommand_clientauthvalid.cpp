@@ -1,5 +1,5 @@
 /* === This file is part of Tomahawk Player - <http://tomahawk-player.org> ===
- * 
+ *
  *   Copyright 2010-2011, Christian Muehlhaeuser <muesli@tomahawk-player.org>
  *
  *   Tomahawk is free software: you can redistribute it and/or modify
@@ -18,27 +18,36 @@
 
 #include "databasecommand_clientauthvalid.h"
 
+#include "utils/logger.h"
+
+
 DatabaseCommand_ClientAuthValid::DatabaseCommand_ClientAuthValid( const QString& clientToken, QObject* parent )
     : DatabaseCommand( parent )
     , m_clientToken( clientToken )
 {
-
 }
 
-void DatabaseCommand_ClientAuthValid::exec(DatabaseImpl* lib)
+
+void DatabaseCommand_ClientAuthValid::exec( DatabaseImpl* lib )
 {
     TomahawkSqlQuery q = lib->newquery();
-    q.prepare(  "SELECT name FROM http_client_auth WHERE token = ?" );
+    q.prepare( "SELECT name FROM http_client_auth WHERE token = ?" );
     q.addBindValue( m_clientToken );
-    
-    if( q.exec() ) {
-        if( q.next() ) {
+
+    if ( q.exec() )
+    {
+        if ( q.next() )
+        {
             QString name = q.value( 0 ).toString();
             emit authValid( m_clientToken, name, true );
-        } else {
+        }
+        else
+        {
             emit authValid( m_clientToken, QString(), false );
         }
-    } else {
+    }
+    else
+    {
         qWarning() << "Failed to query http auth table for client:" << m_clientToken;
     }
 }

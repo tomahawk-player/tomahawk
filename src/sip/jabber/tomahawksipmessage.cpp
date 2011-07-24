@@ -16,6 +16,9 @@
 
 #include "tomahawksipmessage.h"
 
+#include "utils/logger.h"
+
+
 class TomahawkSipMessagePrivate
 {
 public:

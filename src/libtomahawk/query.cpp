@@ -18,16 +18,18 @@
 
 #include "query.h"
 
-#include "collection.h"
 #include <QtAlgorithms>
 
 #include "database/database.h"
 #include "database/databasecommand_logplayback.h"
 #include "database/databasecommand_playbackhistory.h"
 #include "database/databasecommand_loadplaylistentries.h"
+#include "collection.h"
 #include "pipeline.h"
 #include "resolver.h"
 #include "sourcelist.h"
+
+#include "utils/logger.h"
 
 using namespace Tomahawk;
 

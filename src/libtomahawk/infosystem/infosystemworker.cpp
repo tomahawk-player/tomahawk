@@ -22,12 +22,13 @@
 
 #include "config.h"
 #include "infosystemworker.h"
-#include "utils/tomahawkutils.h"
 #include "infosystemcache.h"
 #include "infoplugins/generic/echonestplugin.h"
 #include "infoplugins/generic/musixmatchplugin.h"
 #include "infoplugins/generic/lastfmplugin.h"
 #include "infoplugins/generic/musicbrainzPlugin.h"
+#include "utils/tomahawkutils.h"
+#include "utils/logger.h"
 
 #ifdef Q_WS_MAC
 #include "infoplugins/mac/adiumplugin.h"

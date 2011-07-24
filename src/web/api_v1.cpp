@@ -20,7 +20,10 @@
 
 #include <QHash>
 
+#include "utils/logger.h"
+
 using namespace Tomahawk;
+
 
 void
 Api_v1::auth_1( QxtWebRequestEvent* event, QString arg )

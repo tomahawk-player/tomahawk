@@ -25,6 +25,7 @@
 #include "result.h"
 #include "tomahawksettings.h"
 #include "globalactionmanager.h"
+#include "utils/logger.h"
 
 #include "adiumplugin.h"
 #include "adium.h"
@@ -178,21 +179,21 @@ AdiumPlugin::audioFinished( const QVariant &input )
     //qDebug() << Q_FUNC_INFO;
 }
 
-void 
+void
 AdiumPlugin::audioStopped()
 {
     qDebug() << Q_FUNC_INFO;
     setStatus( "" );
 }
 
-void 
+void
 AdiumPlugin::audioPaused()
 {
     qDebug() << Q_FUNC_INFO;
     m_pauseTimer->start( 60 * 1000 );
 }
 
-void 
+void
 AdiumPlugin::audioResumed( const QVariant &input )
 {
     qDebug() << Q_FUNC_INFO;

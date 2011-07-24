@@ -19,7 +19,6 @@
 #include "playlistitemdelegate.h"
 
 #include <QApplication>
-#include <QDebug>
 #include <QPainter>
 
 #include "query.h"
@@ -34,6 +33,7 @@
 #include "trackheader.h"
 
 #include "utils/tomahawkutils.h"
+#include "utils/logger.h"
 
 #define PLAYING_ICON QString( RESPATH "images/now-playing-speaker.png" )
 #define ARROW_ICON QString( RESPATH "images/forward.png" )

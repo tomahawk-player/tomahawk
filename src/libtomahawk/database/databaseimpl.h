@@ -27,7 +27,6 @@
 #include <QSqlDatabase>
 #include <QSqlError>
 #include <QSqlQuery>
-#include <QDebug>
 #include <QHash>
 #include <QThread>
 

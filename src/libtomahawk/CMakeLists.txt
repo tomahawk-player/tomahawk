@@ -159,6 +159,7 @@ set( libSources
     utils/querylabel.cpp
     utils/elidedlabel.cpp
     utils/imagebutton.cpp
+    utils/logger.cpp
     utils/progresstreeview.cpp
     utils/proxystyle.cpp
     utils/widgetdragfilter.cpp

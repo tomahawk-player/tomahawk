@@ -18,7 +18,6 @@
 
 #include "albummodel.h"
 
-#include <QDebug>
 #include <QListView>
 #include <QMimeData>
 #include <QNetworkReply>
@@ -26,6 +25,7 @@
 #include "database/database.h"
 
 #include "utils/tomahawkutils.h"
+#include "utils/logger.h"
 
 static QString s_tmInfoIdentifier = QString( "ALBUMMODEL" );
 

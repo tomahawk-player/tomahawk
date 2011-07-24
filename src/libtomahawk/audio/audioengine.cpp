@@ -30,11 +30,14 @@
 
 #include "album.h"
 
+#include "utils/logger.h"
+
 using namespace Tomahawk;
 
 AudioEngine* AudioEngine::s_instance = 0;
 
 static QString s_aeInfoIdentifier = QString( "AUDIOENGINE" );
+
 
 AudioEngine*
 AudioEngine::instance()

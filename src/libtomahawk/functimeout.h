@@ -21,7 +21,6 @@
 
 #include <QObject>
 #include <QTimer>
-#include <QDebug>
 #include <QWeakPointer>
 
 #include "boost/function.hpp"

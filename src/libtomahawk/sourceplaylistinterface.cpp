@@ -18,12 +18,13 @@
 
 #include "sourceplaylistinterface.h"
 
-#include <QDebug>
-
 #include "source.h"
 #include "pipeline.h"
 
+#include "utils/logger.h"
+
 using namespace Tomahawk;
+
 
 SourcePlaylistInterface::SourcePlaylistInterface( Tomahawk::source_ptr& source )
     : PlaylistInterface( this )

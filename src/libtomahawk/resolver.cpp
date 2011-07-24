@@ -21,12 +21,11 @@
 #include <QWidget>
 #include <QtUiTools/QUiLoader>
 #include <QMetaProperty>
-#include <QDebug>
 #include <QBuffer>
-#include <qtemporaryfile.h>
 #include <QDir>
 #include <QIcon>
 
+#include "utils/logger.h"
 
 Tomahawk::ExternalResolver::ErrorState
 Tomahawk::ExternalResolver::error() const

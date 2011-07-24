@@ -16,7 +16,6 @@
  *   along with Tomahawk. If not, see <http://www.gnu.org/licenses/>.
  */
 
-
 #include "resolverconfigdelegate.h"
 
 #include "resolversmodel.h"
@@ -26,8 +25,11 @@
 #include <QPainter>
 #include <QMouseEvent>
 
+#include "utils/logger.h"
+
 #define PADDING 4
 #define ICONSIZE 24
+
 
 ResolverConfigDelegate::ResolverConfigDelegate( QObject* parent )
     : ConfigDelegateBase( parent )

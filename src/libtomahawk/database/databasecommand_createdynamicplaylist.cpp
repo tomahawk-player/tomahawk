@@ -27,6 +27,7 @@
 
 #include "network/servent.h"
 #include "viewmanager.h"
+#include "utils/logger.h"
 
 using namespace Tomahawk;
 

@@ -24,6 +24,7 @@
 #include <QFile>
 
 #include "utils/tomahawkutils.h"
+#include "utils/logger.h"
 
 #define MAXDUDES 3
 #define DUDEWIDTH 10

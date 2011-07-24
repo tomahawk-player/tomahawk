@@ -22,11 +22,13 @@
 
 #include "dynamic/DynamicPlaylist.h"
 #include "databaseimpl.h"
+#include "utils/logger.h"
 
 using namespace Tomahawk;
 
 
-void DatabaseCommand_LoadAllAutoPlaylists::exec( DatabaseImpl* dbi )
+void
+DatabaseCommand_LoadAllAutoPlaylists::exec( DatabaseImpl* dbi )
 {
     TomahawkSqlQuery query = dbi->newquery();
 

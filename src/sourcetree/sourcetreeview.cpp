@@ -18,6 +18,16 @@
 
 #include "sourcetreeview.h"
 
+#include <QAction>
+#include <QApplication>
+#include <QContextMenuEvent>
+#include <QDragEnterEvent>
+#include <QHeaderView>
+#include <QPainter>
+#include <QStyledItemDelegate>
+#include <QSize>
+#include <QFileDialog>
+
 #include "playlist.h"
 #include "viewmanager.h"
 #include "sourcesproxymodel.h"
@@ -27,21 +37,14 @@
 #include "audio/audioengine.h"
 #include "sourceplaylistinterface.h"
 #include "tomahawksettings.h"
-
-#include <QAction>
-#include <QApplication>
-#include <QContextMenuEvent>
-#include <QDragEnterEvent>
-#include <QHeaderView>
-#include <QPainter>
-#include <QStyledItemDelegate>
-#include <QSize>
 #include <globalactionmanager.h>
-#include <QFileDialog>
+
+#include "utils/logger.h"
 
 using namespace Tomahawk;
 
 #define TREEVIEW_INDENT_ADD -7
+
 
 class SourceDelegate : public QStyledItemDelegate
 {
@@ -205,6 +208,7 @@ SourceTreeView::showOfflineSources( bool offlineSourcesShown )
     m_proxyModel->showOfflineSources( offlineSourcesShown );
 }
 
+
 void
 SourceTreeView::onItemActivated( const QModelIndex& index )
 {
@@ -294,7 +298,8 @@ SourceTreeView::copyPlaylistLink()
 }
 
 
-void SourceTreeView::addToLocal()
+void
+SourceTreeView::addToLocal()
 {
     QModelIndex idx = m_contextMenuIndex;
     if ( !idx.isValid() )

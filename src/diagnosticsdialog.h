@@ -20,7 +20,6 @@
 #define DIAGNOSTICSDIALOG_H
 
 #include <QDialog>
-#include <QDebug>
 
 namespace Ui
 {

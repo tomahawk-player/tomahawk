@@ -18,7 +18,6 @@
 
 #include "albumview.h"
 
-#include <QDebug>
 #include <QHeaderView>
 #include <QKeyEvent>
 #include <QPainter>
@@ -29,6 +28,7 @@
 #include "tomahawksettings.h"
 #include "albumitemdelegate.h"
 #include "viewmanager.h"
+#include "utils/logger.h"
 
 static QString s_tmInfoIdentifier = QString( "ALBUMMODEL" );
 

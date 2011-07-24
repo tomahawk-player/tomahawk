@@ -20,9 +20,10 @@
 
 #include "infosystem.h"
 #include "tomahawksettings.h"
-#include "utils/tomahawkutils.h"
 #include "infosystemcache.h"
 #include "infosystemworker.h"
+#include "utils/tomahawkutils.h"
+#include "utils/logger.h"
 
 namespace Tomahawk
 {

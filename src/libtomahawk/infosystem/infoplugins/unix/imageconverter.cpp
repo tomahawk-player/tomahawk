@@ -22,6 +22,8 @@
 #include <QtDBus/QDBusMetaType>
 #include <QImage>
 
+#include "utils/logger.h"
+
 namespace ImageConverter
 {
 

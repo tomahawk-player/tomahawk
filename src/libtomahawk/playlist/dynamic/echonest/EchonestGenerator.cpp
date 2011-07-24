@@ -21,16 +21,21 @@
 #include "dynamic/echonest/EchonestSteerer.h"
 #include "query.h"
 #include "utils/tomahawkutils.h"
+#include "utils/logger.h"
 
 using namespace Tomahawk;
+
 
 QVector< QString > EchonestGenerator::s_moods = QVector< QString >();
 QVector< QString > EchonestGenerator::s_styles = QVector< QString >();
 QNetworkReply* EchonestGenerator::s_moodsJob = 0;
 QNetworkReply* EchonestGenerator::s_stylesJob = 0;
 
+
 EchonestFactory::EchonestFactory()
-{}
+{
+}
+
 
 GeneratorInterface*
 EchonestFactory::create()
@@ -38,11 +43,13 @@ EchonestFactory::create()
     return new EchonestGenerator();
 }
 
+
 dyncontrol_ptr
 EchonestFactory::createControl( const QString& controlType )
 {
     return dyncontrol_ptr( new EchonestControl( controlType, typeSelectors() ) );
 }
+
 
 QStringList
 EchonestFactory::typeSelectors() const
@@ -51,6 +58,7 @@ EchonestFactory::typeSelectors() const
                           << "Danceability" << "Energy" << "Artist Familiarity" << "Artist Hotttnesss" << "Song Hotttnesss"
                           << "Longitude" << "Latitude" <<  "Mode" << "Key" << "Sorting";
 }
+
 
 EchonestGenerator::EchonestGenerator ( QObject* parent )
     : GeneratorInterface ( parent )
@@ -73,10 +81,12 @@ EchonestGenerator::EchonestGenerator ( QObject* parent )
 //    qDebug() << "ECHONEST:" << m_logo.size();
 }
 
+
 EchonestGenerator::~EchonestGenerator()
 {
     delete m_dynPlaylist;
 }
+
 
 dyncontrol_ptr
 EchonestGenerator::createControl( const QString& type )
@@ -84,6 +94,7 @@ EchonestGenerator::createControl( const QString& type )
     m_controls << dyncontrol_ptr( new EchonestControl( type, GeneratorFactory::typeSelectors( m_type ) ) );
     return m_controls.last();
 }
+
 
 QPixmap EchonestGenerator::logo()
 {
@@ -112,6 +123,7 @@ EchonestGenerator::generate( int number )
     }
 }
 
+
 void
 EchonestGenerator::startOnDemand()
 {
@@ -123,6 +135,7 @@ EchonestGenerator::startOnDemand()
         emit error( "Filters are not valid", e.what() );
     }
 }
+
 
 void
 EchonestGenerator::doGenerate( const Echonest::DynamicPlaylist::PlaylistParams& paramsIn )
@@ -138,6 +151,7 @@ EchonestGenerator::doGenerate( const Echonest::DynamicPlaylist::PlaylistParams& 
     qDebug() << "Generating a static playlist from echonest!" << reply->url().toString();
     connect( reply, SIGNAL( finished() ), this, SLOT( staticFinished() ) );
 }
+
 
 void
 EchonestGenerator::doStartOnDemand( const Echonest::DynamicPlaylist::PlaylistParams& params )
@@ -199,6 +213,7 @@ EchonestGenerator::staticFinished()
     emit generated( queries );
 }
 
+
 void
 EchonestGenerator::getParams() throw( std::runtime_error )
 {
@@ -240,6 +255,7 @@ EchonestGenerator::getParams() throw( std::runtime_error )
         emit paramsGenerated( params );
     }
 }
+
 
 void
 EchonestGenerator::songLookupFinished()
@@ -295,6 +311,7 @@ EchonestGenerator::dynamicStarted()
     }
 }
 
+
 void
 EchonestGenerator::dynamicFetched()
 {
@@ -318,6 +335,7 @@ EchonestGenerator::dynamicFetched()
     }
 }
 
+
 void
 EchonestGenerator::steerDescription( const QString& desc )
 {
@@ -326,6 +344,7 @@ EchonestGenerator::steerDescription( const QString& desc )
     m_steerData.second = desc;
 }
 
+
 void
 EchonestGenerator::steerField( const QString& field )
 {
@@ -333,6 +352,7 @@ EchonestGenerator::steerField( const QString& field )
     m_steerData.first = Echonest::DynamicPlaylist::Steer;
     m_steerData.second = field;
 }
+
 
 void
 EchonestGenerator::resetSteering()
@@ -365,6 +385,7 @@ EchonestGenerator::onlyThisArtistType( Echonest::DynamicPlaylist::ArtistTypeEnum
     return false;
 }
 
+
 Echonest::DynamicPlaylist::ArtistTypeEnum
 EchonestGenerator::appendRadioType( Echonest::DynamicPlaylist::PlaylistParams& params ) const throw( std::runtime_error )
 {
@@ -392,12 +413,14 @@ EchonestGenerator::appendRadioType( Echonest::DynamicPlaylist::PlaylistParams& p
     return static_cast< Echonest::DynamicPlaylist::ArtistTypeEnum >( params.last().second.toInt() );
 }
 
+
 query_ptr
-EchonestGenerator::queryFromSong(const Echonest::Song& song)
+EchonestGenerator::queryFromSong( const Echonest::Song& song )
 {
     //         track[ "album" ] = song.release(); // TODO should we include it? can be quite specific
     return Query::get( song.artistName(), song.title(), QString(), uuid() );
 }
+
 
 QWidget*
 EchonestGenerator::steeringWidget()
@@ -517,11 +540,13 @@ EchonestGenerator::sentenceSummary()
     return sentence;
 }
 
+
 QVector< QString >
 EchonestGenerator::moods()
 {
     return s_moods;
 }
+
 
 void
 EchonestGenerator::moodsReceived()
@@ -537,11 +562,13 @@ EchonestGenerator::moodsReceived()
     s_moodsJob = 0;
 }
 
+
 QVector< QString >
 EchonestGenerator::styles()
 {
     return s_styles;
 }
+
 
 void
 EchonestGenerator::stylesReceived()

@@ -24,7 +24,9 @@
 #include "album.h"
 #include "pipeline.h"
 #include "sourcelist.h"
+
 #include "utils/tomahawkutils.h"
+#include "utils/logger.h"
 
 
 ScriptResolver::ScriptResolver( const QString& exe )

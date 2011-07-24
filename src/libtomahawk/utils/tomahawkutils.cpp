@@ -18,13 +18,9 @@
 
 #include "tomahawkutils.h"
 
-#include <tomahawksettings.h>
-#include "config.h"
-
 #include <QCoreApplication>
 #include <QColor>
 #include <QDateTime>
-#include <QDebug>
 #include <QDir>
 #include <QLayout>
 #include <QPainter>
@@ -42,18 +38,20 @@
     #include <sys/sysctl.h>
 #endif
 
+#include <tomahawksettings.h>
+#include "utils/logger.h"
+#include "config.h"
+
 namespace TomahawkUtils
 {
 
 #ifdef Q_WS_MAC
-
 QString
 appSupportFolderPath()
 {
     // honestly, it is *always* this --mxcl
     return QDir::home().filePath( "Library/Application Support" );
 }
-
 #endif // Q_WS_MAC
 
 
@@ -406,7 +404,7 @@ NetworkProxyFactory::setNoProxyHosts( const QStringList& hosts )
         newList << munge;
         //TODO: wildcard support
     }
-    qDebug() << Q_FUNC_INFO << " No-proxy hosts: " << newList;
+    qDebug() << Q_FUNC_INFO << "No-proxy hosts:" << newList;
     m_noProxyHosts = newList;
 }
 
@@ -417,8 +415,8 @@ NetworkProxyFactory::setProxy( const QNetworkProxy& proxy )
     m_proxy = proxy;
     if ( !TomahawkSettings::instance()->proxyDns() )
         m_proxy.setCapabilities( QNetworkProxy::TunnelingCapability | QNetworkProxy::ListeningCapability | QNetworkProxy::UdpTunnelingCapability );
-    qDebug() << Q_FUNC_INFO << " Proxy using host " << proxy.hostName() << " and port " << proxy.port();
-    qDebug() << Q_FUNC_INFO << " setting proxy to use proxy DNS?" << (TomahawkSettings::instance()->proxyDns() ? "true" : "false");
+    qDebug() << Q_FUNC_INFO << "Proxy using host" << proxy.hostName() << "and port" << proxy.port();
+    qDebug() << Q_FUNC_INFO << "setting proxy to use proxy DNS?" << (TomahawkSettings::instance()->proxyDns() ? "true" : "false");
 }
 
 

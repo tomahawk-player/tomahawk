@@ -18,23 +18,25 @@
 
 #include "globalactionmanager.h"
 
-#include "audio/audioengine.h"
-#include "utils/xspfloader.h"
-#include "sourcelist.h"
-#include "playlist/dynamic/GeneratorInterface.h"
-#include "viewmanager.h"
-#include "playlist/topbar/topbar.h"
-#include "pipeline.h"
-#include "database/localcollection.h"
-#include "playlist/playlistview.h"
-#include "echonest/Playlist.h"
-#include "album.h"
-
+#include <QApplication>
+#include <QClipboard>
 #include <QUrl>
-#include <Playlist.h>
-#include <qclipboard.h>
-#include <qapplication.h>
+
+#include "album.h"
+#include "sourcelist.h"
+#include "pipeline.h"
+#include "viewmanager.h"
+#include "audio/audioengine.h"
+#include "database/localcollection.h"
+#include "playlist/dynamic/GeneratorInterface.h"
+#include "playlist/topbar/topbar.h"
+#include "playlist/playlistview.h"
+
+#include "echonest/Playlist.h"
+
+#include "utils/xspfloader.h"
 #include "utils/xspfgenerator.h"
+#include "utils/logger.h"
 
 GlobalActionManager* GlobalActionManager::s_instance = 0;
 

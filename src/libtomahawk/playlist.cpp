@@ -33,6 +33,8 @@
 #include "source.h"
 #include "sourcelist.h"
 
+#include "utils/logger.h"
+
 using namespace Tomahawk;
 
 

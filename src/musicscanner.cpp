@@ -30,6 +30,8 @@
 #include "database/databasecommand_addfiles.h"
 #include "database/databasecommand_deletefiles.h"
 
+#include "utils/logger.h"
+
 using namespace Tomahawk;
 
 

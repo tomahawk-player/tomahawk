@@ -19,7 +19,6 @@
 #ifndef PIPELINESTATUSVIEW_H
 #define PIPELINESTATUSVIEW_H
 
-#include <QDebug>
 #include <QTreeWidget>
 
 #include "typedefs.h"
@@ -35,7 +34,6 @@ public:
     explicit PipelineStatusView( AnimatedSplitter* parent );
     virtual ~PipelineStatusView()
     {
-        qDebug() << Q_FUNC_INFO;
     }
 
     QSize sizeHint() const;

@@ -16,12 +16,13 @@
 
 #include "collectionitem.h"
 
-#include "utils/tomahawkutils.h"
 #include "categoryitems.h"
 #include "playlistitems.h"
 #include "viewmanager.h"
 #include "playlist.h"
 #include "genericpageitems.h"
+#include "utils/tomahawkutils.h"
+#include "utils/logger.h"
 
 /// CollectionItem
 
@@ -280,6 +281,7 @@ CollectionItem::onStationDeleted( const dynplaylist_ptr& station )
     playlistDeletedInternal( m_stations, station );
 }
 
+
 void
 CollectionItem::tempPageActivated( Tomahawk::ViewPage* v )
 {
@@ -300,6 +302,7 @@ CollectionItem::tempPageActivated( Tomahawk::ViewPage* v )
     emit selectRequest( m_tempItem );
 }
 
+
 ViewPage*
 CollectionItem::tempItemClicked()
 {
@@ -311,11 +314,13 @@ CollectionItem::tempItemClicked()
     return 0;
 }
 
+
 ViewPage*
 CollectionItem::getTempPage() const
 {
     return m_curTempPage;
 }
+
 
 ViewPage*
 CollectionItem::sourceInfoClicked()
@@ -326,6 +331,7 @@ CollectionItem::sourceInfoClicked()
     m_sourceInfoPage = ViewManager::instance()->show( m_source );
     return m_sourceInfoPage;
 }
+
 
 ViewPage*
 CollectionItem::getSourceInfoPage() const

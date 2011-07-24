@@ -21,6 +21,7 @@
 #include <echonest/ArtistTypes.h>
 
 #include "utils/tomahawkutils.h"
+#include "utils/logger.h"
 
 #include <QNetworkConfiguration>
 
@@ -56,7 +57,7 @@ EchoNestPlugin::namChangedSlot( QNetworkAccessManager *nam )
         qDebug() << "Could not get old proxyFactory!";
         return;
     }
-    
+
     currNam->setConfiguration( nam->configuration() );
     currNam->setNetworkAccessible( nam->networkAccessible() );
     TomahawkUtils::NetworkProxyFactory* newProxyFactory = new TomahawkUtils::NetworkProxyFactory();
@@ -96,7 +97,7 @@ EchoNestPlugin::getSongProfile( uint requestId, const Tomahawk::InfoSystem::Info
 {
     //WARNING: Totally not implemented yet
     Q_UNUSED( item );
-    
+
     if( !isValidTrackData( requestId, requestData ) )
         return;
 
@@ -314,4 +315,4 @@ EchoNestPlugin::artistFromReply( QNetworkReply* reply )
     }
     return artist;
 }
-// 
+//

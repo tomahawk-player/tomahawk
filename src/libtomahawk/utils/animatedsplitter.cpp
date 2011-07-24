@@ -18,6 +18,8 @@
 
 #include "animatedsplitter.h"
 
+#include "utils/logger.h"
+
 #define ANIMATION_TIME 400
 
 

@@ -18,11 +18,10 @@
 
 #include "trackmodelitem.h"
 
-#include "utils/tomahawkutils.h"
 #include "playlist.h"
 #include "query.h"
-
-#include <QDebug>
+#include "utils/tomahawkutils.h"
+#include "utils/logger.h"
 
 using namespace Tomahawk;
 

@@ -18,12 +18,12 @@
 
 #include "sourcelist.h"
 
-#include <QDebug>
-
 #include "database/database.h"
 #include "database/databasecommand_loadallsources.h"
 #include "network/remotecollection.h"
 #include "network/controlconnection.h"
+
+#include "utils/logger.h"
 
 using namespace Tomahawk;
 

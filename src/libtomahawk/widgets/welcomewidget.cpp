@@ -19,20 +19,19 @@
 #include "welcomewidget.h"
 #include "ui_welcomewidget.h"
 
-#include "audio/audioengine.h"
-#include "utils/tomahawkutils.h"
+#include <QPainter>
 
 #include "viewmanager.h"
-#include "playlist/albummodel.h"
-#include "playlist/playlistmodel.h"
-
-#include "widgets/overlaywidget.h"
-
 #include "sourcelist.h"
 #include "tomahawksettings.h"
-
-#include <QPainter>
 #include "welcomeplaylistmodel.h"
+
+#include "audio/audioengine.h"
+#include "playlist/albummodel.h"
+#include "playlist/playlistmodel.h"
+#include "widgets/overlaywidget.h"
+#include "utils/tomahawkutils.h"
+#include "utils/logger.h"
 
 #define HISTORY_TRACK_ITEMS 25
 #define HISTORY_PLAYLIST_ITEMS 5

@@ -16,19 +16,21 @@
 
 #include "categoryitems.h"
 
+#include <QMimeData>
+
 #include "tomahawkapp.h"
-#include "utils/tomahawkutils.h"
-#include "widgets/newplaylistwidget.h"
-#include "widgets/playlisttypeselectordlg.h"
 #include "viewmanager.h"
 #include "viewpage.h"
 #include "sourcelist.h"
 #include "sourcetreeview.h"
-
-#include <QMimeData>
+#include "utils/tomahawkutils.h"
+#include "widgets/newplaylistwidget.h"
+#include "widgets/playlisttypeselectordlg.h"
 #include <playlist/dynamic/GeneratorInterface.h>
+#include "utils/logger.h"
 
 using namespace Tomahawk;
+
 
 /// CategoryAddItem
 
@@ -38,9 +40,11 @@ CategoryAddItem::CategoryAddItem( SourcesModel* model, SourceTreeItem* parent, S
 {
 }
 
+
 CategoryAddItem::~CategoryAddItem()
 {
 }
+
 
 QString
 CategoryAddItem::text() const
@@ -54,6 +58,7 @@ CategoryAddItem::text() const
 
     return QString();
 }
+
 
 void
 CategoryAddItem::activate()
@@ -90,6 +95,7 @@ CategoryAddItem::activate()
     }
 }
 
+
 Qt::ItemFlags
 CategoryAddItem::flags() const
 {
@@ -104,11 +110,13 @@ CategoryAddItem::flags() const
     }
 }
 
+
 QIcon
 CategoryAddItem::icon() const
 {
     return QIcon( RESPATH "images/add.png" );
 }
+
 
 bool
 CategoryAddItem::willAcceptDrag( const QMimeData* data ) const
@@ -124,6 +132,7 @@ CategoryAddItem::willAcceptDrag( const QMimeData* data ) const
     }
     return false;
 }
+
 
 bool
 CategoryAddItem::dropMimeData( const QMimeData* data, Qt::DropAction )
@@ -203,6 +212,7 @@ CategoryAddItem::dropMimeData( const QMimeData* data, Qt::DropAction )
     return false;
 }
 
+
 int
 CategoryAddItem::peerSortValue() const
 {
@@ -226,11 +236,13 @@ CategoryItem::CategoryItem( SourcesModel* model, SourceTreeItem* parent, Sources
     //     endRowsAdded();
 }
 
+
 void
 CategoryItem::insertItem( SourceTreeItem* item )
 {
     insertItems( QList< SourceTreeItem* >() << item );
 }
+
 
 void
 CategoryItem::insertItems( QList< SourceTreeItem* > items )
@@ -246,6 +258,7 @@ CategoryItem::insertItems( QList< SourceTreeItem* > items )
     endRowsAdded();
 }
 
+
 int
 CategoryItem::peerSortValue() const
 {
@@ -256,6 +269,7 @@ CategoryItem::peerSortValue() const
     else
         return 0;
 }
+
 
 void
 CategoryItem::activate()

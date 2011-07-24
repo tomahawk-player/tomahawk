@@ -31,6 +31,7 @@
 #include "artist.h"
 #include "album.h"
 #include "utils/tomahawkutils.h"
+#include "utils/logger.h"
 
 /* !!!! You need to manually generate schema.sql.h when the schema changes:
     cd src/libtomahawk/database

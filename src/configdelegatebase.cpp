@@ -18,11 +18,12 @@
 
 #include "configdelegatebase.h"
 
-#include "utils/tomahawkutils.h"
-
 #include <QPainter>
 #include <QApplication>
 #include <QMouseEvent>
+
+#include "utils/tomahawkutils.h"
+#include "utils/logger.h"
 
 ConfigDelegateBase::ConfigDelegateBase ( QObject* parent )
     : QStyledItemDelegate ( parent )

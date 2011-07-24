@@ -18,12 +18,16 @@
 
 
 #include "xspfgenerator.h"
+
 #include <QXmlStreamWriter>
-#include <playlist.h>
 #include <QDateTime>
 #include <QTimer>
 
+#include <playlist.h>
+#include "utils/logger.h"
+
 using namespace Tomahawk;
+
 
 XSPFGenerator::XSPFGenerator( const playlist_ptr& pl, QObject* parent )
     : QObject( parent )
@@ -32,9 +36,9 @@ XSPFGenerator::XSPFGenerator( const playlist_ptr& pl, QObject* parent )
      QTimer::singleShot( 0, this, SLOT( generate() ) );
 }
 
+
 XSPFGenerator::~XSPFGenerator()
 {
-
 }
 
 

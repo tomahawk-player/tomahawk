@@ -32,10 +32,13 @@
 
 #include <QtCore/QStringList>
 
+#include "utils/logger.h"
+
 using namespace gloox;
 using namespace Tomahawk::InfoSystem;
 
 static QString s_botInfoIdentifier = QString( "XMPPBot" );
+
 
 XMPPBot::XMPPBot(QObject *parent)
     : QObject(parent)

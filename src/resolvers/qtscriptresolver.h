@@ -25,7 +25,6 @@
 #include "utils/tomahawkutils.h"
 
 #include <QApplication>
-#include <QDebug>
 #include <QDir>
 #include <QFile>
 #include <QThread>

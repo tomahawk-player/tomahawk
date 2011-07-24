@@ -31,6 +31,9 @@
 
 #include <QMessageBox>
 
+#include "utils/logger.h"
+
+
 TwitterConfigWidget::TwitterConfigWidget( TwitterPlugin* plugin, QWidget *parent ) :
     QWidget( parent ),
     ui( new Ui::TwitterConfigWidget ),

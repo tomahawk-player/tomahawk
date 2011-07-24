@@ -18,11 +18,12 @@
 
 #include "pipeline.h"
 
-#include <QDebug>
 #include <QMutexLocker>
 
 #include "functimeout.h"
 #include "database/database.h"
+
+#include "utils/logger.h"
 
 #define DEFAULT_CONCURRENT_QUERIES 4
 #define MAX_CONCURRENT_QUERIES 16

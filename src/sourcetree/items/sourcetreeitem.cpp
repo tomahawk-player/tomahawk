@@ -14,10 +14,12 @@
     51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 */
 
-
 #include "sourcetreeitem.h"
 
+#include "utils/logger.h"
+
 using namespace Tomahawk;
+
 
 SourceTreeItem::SourceTreeItem( SourcesModel* model, SourceTreeItem* parent, SourcesModel::RowType thisType, int index )
     : QObject()

@@ -18,11 +18,12 @@
 
 #include "sourcesproxymodel.h"
 
-#include <QDebug>
 #include <QTreeView>
 
 #include "sourcesmodel.h"
 #include "sourcetree/items/collectionitem.h"
+
+#include "utils/logger.h"
 
 
 SourcesProxyModel::SourcesProxyModel( SourcesModel* model, QObject* parent )

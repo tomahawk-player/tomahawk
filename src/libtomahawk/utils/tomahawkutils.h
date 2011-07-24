@@ -20,6 +20,7 @@
 #define TOMAHAWKUTILS_H
 
 #include "dllmacro.h"
+
 #include <QObject>
 #include <QThread>
 #include <QNetworkProxy>

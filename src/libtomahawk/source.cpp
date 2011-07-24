@@ -29,6 +29,8 @@
 
 #include <QCoreApplication>
 
+#include "utils/logger.h"
+
 using namespace Tomahawk;
 
 

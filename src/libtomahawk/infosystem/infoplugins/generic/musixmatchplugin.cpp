@@ -18,12 +18,14 @@
 
 #include "musixmatchplugin.h"
 
-#include "utils/tomahawkutils.h"
-
 #include <QNetworkReply>
 #include <QDomDocument>
 
+#include "utils/tomahawkutils.h"
+#include "utils/logger.h"
+
 using namespace Tomahawk::InfoSystem;
+
 
 // for internal neatness
 
@@ -46,7 +48,7 @@ MusixMatchPlugin::namChangedSlot( QNetworkAccessManager *nam )
     qDebug() << Q_FUNC_INFO;
     if( !nam )
         return;
-    
+
     m_nam = QWeakPointer< QNetworkAccessManager >( nam );
 }
 
@@ -110,7 +112,7 @@ MusixMatchPlugin::trackSearchSlot()
     QNetworkReply* oldReply = qobject_cast<QNetworkReply*>( sender() );
     if ( !oldReply )
         return; //timeout will handle it
-    
+
     QDomDocument doc;
     doc.setContent(oldReply->readAll());
     qDebug() << doc.toString();

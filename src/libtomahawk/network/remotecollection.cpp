@@ -1,5 +1,5 @@
 /* === This file is part of Tomahawk Player - <http://tomahawk-player.org> ===
- * 
+ *
  *   Copyright 2010-2011, Christian Muehlhaeuser <muesli@tomahawk-player.org>
  *
  *   Tomahawk is free software: you can redistribute it and/or modify
@@ -18,7 +18,10 @@
 
 #include "remotecollection.h"
 
+#include "utils/logger.h"
+
 using namespace Tomahawk;
+
 
 RemoteCollection::RemoteCollection( source_ptr source, QObject* parent )
     :  DatabaseCollection( source, parent )
@@ -29,7 +32,8 @@ RemoteCollection::RemoteCollection( source_ptr source, QObject* parent )
 
 // adding/removing is done by dbsyncconnection, and the dbcmd objects that modify
 // the database will make us emit the appropriate signals (tracksAdded etc.)
-void RemoteCollection::addTracks( const QList<QVariant>& newitems )
+void
+RemoteCollection::addTracks( const QList<QVariant>& newitems )
 {
     Q_UNUSED( newitems );
     qDebug() << Q_FUNC_INFO;
@@ -37,7 +41,8 @@ void RemoteCollection::addTracks( const QList<QVariant>& newitems )
 }
 
 
-void RemoteCollection::removeTracks( const QDir& dir )
+void
+RemoteCollection::removeTracks( const QDir& dir )
 {
     Q_UNUSED( dir );
     qDebug() << Q_FUNC_INFO;

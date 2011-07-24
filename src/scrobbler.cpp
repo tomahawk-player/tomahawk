@@ -28,7 +28,10 @@
 #include "tomahawksettings.h"
 #include "infosystem/infosystem.h"
 
+#include "utils/logger.h"
+
 static QString s_scInfoIdentifier = QString( "SCROBBLER" );
+
 
 Scrobbler::Scrobbler( QObject* parent )
     : QObject( parent )

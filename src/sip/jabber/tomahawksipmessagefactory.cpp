@@ -2,8 +2,9 @@
 
 #include <QStringList>
 #include <QXmlStreamWriter>
-#include <QDebug>
 #include <QVariant>
+
+#include "utils/logger.h"
 
 using namespace Jreen;
 

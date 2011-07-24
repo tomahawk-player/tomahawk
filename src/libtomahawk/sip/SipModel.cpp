@@ -22,6 +22,9 @@
 #include "sip/SipHandler.h"
 #include "sip/SipPlugin.h"
 
+#include "utils/logger.h"
+
+
 SipModel::SipModel( QObject* parent )
     : QAbstractItemModel( parent )
 {
@@ -41,8 +44,8 @@ SipModel::SipModel( QObject* parent )
 
 SipModel::~SipModel()
 {
-
 }
+
 
 QVariant
 SipModel::data( const QModelIndex& index, int role ) const
@@ -105,6 +108,7 @@ SipModel::data( const QModelIndex& index, int role ) const
     return QVariant();
 }
 
+
 bool
 SipModel::setData( const QModelIndex& index, const QVariant& value, int role )
 {
@@ -127,6 +131,7 @@ SipModel::setData( const QModelIndex& index, const QVariant& value, int role )
     return false;
 }
 
+
 QModelIndex
 SipModel::index( int row, int column, const QModelIndex& parent ) const
 {
@@ -142,6 +147,7 @@ SipModel::index( int row, int column, const QModelIndex& parent ) const
     return QModelIndex();
 }
 
+
 QModelIndex
 SipModel::parent( const QModelIndex& child ) const
 {
@@ -154,6 +160,7 @@ SipModel::parent( const QModelIndex& child ) const
 
     return QModelIndex();
 }
+
 
 int
 SipModel::rowCount( const QModelIndex& parent ) const
@@ -169,12 +176,14 @@ SipModel::rowCount( const QModelIndex& parent ) const
     return 0;
 }
 
+
 int
 SipModel::columnCount(const QModelIndex& parent) const
 {
     Q_UNUSED( parent );
     return 1;
 }
+
 
 Qt::ItemFlags
 SipModel::flags( const QModelIndex& index ) const
@@ -183,6 +192,7 @@ SipModel::flags( const QModelIndex& index ) const
         return QAbstractItemModel::flags( index ) & ~Qt::ItemIsSelectable;
     return QAbstractItemModel::flags( index ) | Qt::ItemIsUserCheckable;
 }
+
 
 void
 SipModel::pluginAdded( SipPlugin* p )
@@ -195,6 +205,7 @@ SipModel::pluginAdded( SipPlugin* p )
     endInsertRows();
 }
 
+
 void
 SipModel::pluginRemoved( SipPlugin* p )
 {
@@ -202,6 +213,7 @@ SipModel::pluginRemoved( SipPlugin* p )
     beginRemoveRows( QModelIndex(), idx, idx );
     endRemoveRows();
 }
+
 
 void
 SipModel::pluginStateChanged( SipPlugin* p )

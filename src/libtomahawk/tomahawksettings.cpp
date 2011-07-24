@@ -24,9 +24,11 @@
 #endif
 
 #include <QDir>
-#include <QDebug>
+
 #include "sip/SipHandler.h"
 #include "playlistinterface.h"
+
+#include "utils/logger.h"
 
 #define VERSION 3
 

@@ -18,12 +18,12 @@
 
 #include "collectionview.h"
 
-#include <QDebug>
 #include <QDragEnterEvent>
 #include <QPainter>
 
 #include "playlist/collectionproxymodel.h"
 #include "widgets/overlaywidget.h"
+#include "utils/logger.h"
 
 using namespace Tomahawk;
 

@@ -30,6 +30,7 @@
 #include "network/controlconnection.h"
 #include "sourcelist.h"
 #include "tomahawksettings.h"
+#include "utils/logger.h"
 
 #include "config.h"
 

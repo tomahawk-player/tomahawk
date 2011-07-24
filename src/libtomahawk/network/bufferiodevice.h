@@ -1,5 +1,5 @@
 /* === This file is part of Tomahawk Player - <http://tomahawk-player.org> ===
- * 
+ *
  *   Copyright 2010-2011, Christian Muehlhaeuser <muesli@tomahawk-player.org>
  *
  *   Tomahawk is free software: you can redistribute it and/or modify
@@ -21,7 +21,6 @@
 
 #include <QIODevice>
 #include <QMutexLocker>
-#include <QDebug>
 #include <QFile>
 
 class BufferIODevice : public QIODevice
@@ -40,12 +39,12 @@ public:
     virtual qint64 bytesAvailable() const;
     virtual qint64 size() const;
     virtual bool atEnd() const;
-    virtual qint64 pos() const { qDebug() << Q_FUNC_INFO << m_pos; return m_pos; }
+    virtual qint64 pos() const { return m_pos; }
 
     void addData( int block, const QByteArray& ba );
     void clear();
 
-    OpenMode openMode() const { qDebug() << "openMode"; return QIODevice::ReadOnly | QIODevice::Unbuffered; }
+    OpenMode openMode() const { return QIODevice::ReadOnly | QIODevice::Unbuffered; }
 
     void inputComplete( const QString& errmsg = "" );
 

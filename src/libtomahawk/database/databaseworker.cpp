@@ -24,6 +24,7 @@
 
 #include "database/database.h"
 #include "database/databasecommandloggable.h"
+#include "utils/logger.h"
 
 
 DatabaseWorker::DatabaseWorker( DatabaseImpl* lib, Database* db, bool mutates )

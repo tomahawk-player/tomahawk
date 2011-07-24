@@ -24,6 +24,8 @@
 #include "dynamic/DynamicPlaylist.h"
 #include "playlist.h"
 
+#include "utils/logger.h"
+
 using namespace Tomahawk;
 
 

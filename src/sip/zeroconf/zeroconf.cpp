@@ -18,9 +18,11 @@
 
 #include "zeroconf.h"
 
-#include "tomahawksettings.h"
-
 #include <QtPlugin>
+
+#include "tomahawksettings.h"
+#include "utils/logger.h"
+
 
 SipPlugin*
 ZeroconfFactory::createPlugin( const QString& pluginId )

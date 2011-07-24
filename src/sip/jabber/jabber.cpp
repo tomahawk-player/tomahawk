@@ -47,7 +47,9 @@
 #include <QMessageBox>
 #include <QDateTime>
 #include <QTimer>
+
 #include <utils/tomahawkutils.h>
+#include "utils/logger.h"
 
 SipPlugin*
 JabberFactory::createPlugin( const QString& pluginId )
@@ -647,7 +649,7 @@ void JabberPlugin::onPresenceReceived( const Jreen::RosterItem::Ptr &item, const
     */
     if( caps )
     {
-        qDebug() << Q_FUNC_INFO << fulljid << "Running tomahawk: maybe" << "caps " << caps->node() << "requesting disco..";
+        qDebug() << Q_FUNC_INFO << fulljid << "Running tomahawk: maybe" << "caps " << caps->node() << "requesting disco...";
 
         // request disco features
         QString node = caps->node() + '#' + caps->ver();
@@ -971,14 +973,14 @@ JabberPlugin::onCheckJidExists( QString jid )
 {
     for ( int i=0; i<TomahawkSettings::instance()->sipPlugins().count(); i++ )
     {
-        QString savedUsername = TomahawkSettings::instance()->value( 
+        QString savedUsername = TomahawkSettings::instance()->value(
                 TomahawkSettings::instance()->sipPlugins().at( i ) + "/username" ).toString();
         QStringList splitUserName = TomahawkSettings::instance()->value(
                 TomahawkSettings::instance()->sipPlugins().at( i ) + "/username" ).toString().split("@");
         QString server = TomahawkSettings::instance()->value(
                 TomahawkSettings::instance()->sipPlugins().at( i ) + "/server" ).toString();
-                
-        if ( ( savedUsername == jid || splitUserName.contains( jid ) ) && 
+
+        if ( ( savedUsername == jid || splitUserName.contains( jid ) ) &&
                server == m_ui->jabberServer->text() && !jid.trimmed().isEmpty() )
         {
             m_ui->jidExistsLabel->show();

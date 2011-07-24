@@ -18,7 +18,6 @@
 
 #include "trackmodel.h"
 
-#include <QDebug>
 #include <QMimeData>
 #include <QTreeView>
 
@@ -27,6 +26,7 @@
 
 #include "album.h"
 #include "pipeline.h"
+#include "utils/logger.h"
 
 using namespace Tomahawk;
 

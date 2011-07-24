@@ -1,5 +1,5 @@
 /* === This file is part of Tomahawk Player - <http://tomahawk-player.org> ===
- * 
+ *
  *   Copyright 2010-2011, Christian Muehlhaeuser <muesli@tomahawk-player.org>
  *
  *   Tomahawk is free software: you can redistribute it and/or modify
@@ -30,8 +30,10 @@
 #include "DynamicControlWrapper.h"
 #include "dynamic/GeneratorInterface.h"
 #include "utils/tomahawkutils.h"
+#include "utils/logger.h"
 
 using namespace Tomahawk;
+
 
 DynamicControlList::DynamicControlList( QWidget* parent )
     : QWidget( parent )
@@ -39,6 +41,7 @@ DynamicControlList::DynamicControlList( QWidget* parent )
 {
     init();
 }
+
 
 DynamicControlList::DynamicControlList( const geninterface_ptr& generator, const QList< dyncontrol_ptr >& controls, QWidget* parent )
     : QWidget( parent )
@@ -49,12 +52,14 @@ DynamicControlList::DynamicControlList( const geninterface_ptr& generator, const
     setControls(  generator, controls );
 }
 
+
 DynamicControlList::~DynamicControlList()
 {
 
 }
 
-void 
+
+void
 DynamicControlList::init()
 {
     qDebug() << "GRIDLAYOUT: " << m_layout->rowCount();
@@ -69,7 +74,7 @@ DynamicControlList::init()
     m_layout->setContentsMargins( 0, 0, 0, 0 );
 #endif
     m_layout->setSizeConstraint( QLayout::SetMinimumSize );
-    
+
     m_collapseLayout = new QHBoxLayout();
     m_collapseLayout->setContentsMargins( 0, 0, 0, 0 );
     m_collapseLayout->setMargin( 0 );
@@ -87,14 +92,15 @@ DynamicControlList::init()
     m_addControl->setContentsMargins( 0, 0, 0, 0 );
     m_collapseLayout->addWidget( m_addControl );
     m_collapse->setSizePolicy( QSizePolicy::Expanding, QSizePolicy::Fixed );
-    
+
     connect( m_collapse, SIGNAL( clicked() ), this, SIGNAL( toggleCollapse() ) );
     connect( m_addControl, SIGNAL( clicked() ), this, SLOT( addNewControl() ) );
-    
+
     setSizePolicy( QSizePolicy::Expanding, QSizePolicy::Fixed );
 }
 
-void 
+
+void
 DynamicControlList::setControls( const geninterface_ptr& generator, const QList< dyncontrol_ptr >& controls )
 {
     if( m_controls.size() == controls.size() && controls.size() > 0 ) { // check if we're setting the same controls we already have, and exit if we are
@@ -109,14 +115,14 @@ DynamicControlList::setControls( const geninterface_ptr& generator, const QList<
             return;
         }
     }
-    
+
     if( !m_controls.isEmpty() ) {
         qDeleteAll( m_controls );
         m_controls.clear();
     }
-    
+
     m_layout->removeItem( m_collapseLayout );
-    
+
     m_generator = generator;
     if( controls.isEmpty() ) {
         qDebug() << "CREATING DEFAULT CONTROL";
@@ -124,50 +130,56 @@ DynamicControlList::setControls( const geninterface_ptr& generator, const QList<
         connect( ctrlW, SIGNAL( removeControl() ), this, SLOT( removeControl() ) );
         connect( ctrlW, SIGNAL( changed() ), this, SLOT( controlChanged() ) );
         m_controls << ctrlW;
-    } else 
+    } else
     {
         foreach( const dyncontrol_ptr& control, controls ) {
             DynamicControlWrapper* ctrlW = new DynamicControlWrapper( control, m_layout, m_controls.size(), this );
             connect( ctrlW, SIGNAL( removeControl() ), this, SLOT( removeControl() ) );
             connect( ctrlW, SIGNAL( changed() ), this, SLOT( controlChanged() ) );
-            
+
             m_controls << ctrlW;
         }
     }
     m_layout->addItem( m_collapseLayout, m_layout->rowCount(), 0, 1, 4, Qt::AlignCenter );
-    
+
 }
 
-void DynamicControlList::addNewControl()
+
+void
+DynamicControlList::addNewControl()
 {
     m_layout->removeItem( m_collapseLayout );
-    
+
     dyncontrol_ptr control = m_generator->createControl();
     m_controls.append( new DynamicControlWrapper( control, m_layout, m_layout->rowCount(), this ) );
     connect( m_controls.last(), SIGNAL( removeControl() ), this, SLOT( removeControl() ) );
     connect( m_controls.last(), SIGNAL( changed() ), this, SLOT( controlChanged() ) );
-    
+
     m_layout->addItem( m_collapseLayout, m_layout->rowCount(), 0, 1, 4, Qt::AlignCenter );
     emit controlsChanged();
 }
 
-void DynamicControlList::removeControl()
+
+void
+DynamicControlList::removeControl()
 {
     DynamicControlWrapper* w = qobject_cast<DynamicControlWrapper*>( sender() );
     w->removeFromLayout();
     m_controls.removeAll( w );
-    
+
     m_generator->removeControl( w->control() );
     delete w;
-    
+
     emit controlsChanged();
 }
 
-void DynamicControlList::controlChanged()
+
+void
+DynamicControlList::controlChanged()
 {
     Q_ASSERT( sender() && qobject_cast<DynamicControlWrapper*>(sender()) );
     DynamicControlWrapper* widget = qobject_cast<DynamicControlWrapper*>(sender());
-    
+
     qDebug() << "control changed!";
     foreach( DynamicControlWrapper* c, m_controls )
         qDebug() << c->control()->id() << c->control()->selectedType() << c->control()->match() << c->control()->input();

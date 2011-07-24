@@ -18,8 +18,9 @@
 
 #include "HeaderLabel.h"
 
-#include <QDebug>
 #include <QPainter>
+
+#include "utils/logger.h"
 
 #define FONT_SIZE 16
 
@@ -54,7 +55,7 @@ HeaderLabel::sizeHint() const
 
 
 void
-HeaderLabel::paintEvent( QPaintEvent* event )
+HeaderLabel::paintEvent( QPaintEvent* /* event */ )
 {
     QPainter p( this );
     QRect r = contentsRect();

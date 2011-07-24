@@ -21,12 +21,16 @@
 
 #include <QUuid>
 
+#include "utils/logger.h"
+
+
 QString
 SipPluginFactory::generateId()
 {
     QString uniq = QUuid::createUuid().toString().mid( 1, 8 );
     return factoryId() + "_" + uniq;
 }
+
 
 SipPlugin::SipPlugin( const QString& pluginId, QObject* parent )
     : QObject( parent )
@@ -38,7 +42,9 @@ SipPlugin::SipPlugin( const QString& pluginId, QObject* parent )
     connect( this, SIGNAL( peerOffline( QString ) ), this, SLOT( onPeerOffline( QString ) ) );
 }
 
-QString SipPlugin::pluginId() const
+
+QString
+SipPlugin::pluginId() const
 {
     return m_pluginId;
 }
@@ -57,17 +63,20 @@ SipPlugin::configWidget()
     return 0;
 }
 
+
 QString
 SipPlugin::errorMessage() const
 {
     return m_cachedError;
 }
 
+
 QIcon
 SipPlugin::icon() const
 {
     return QIcon();
 }
+
 
 const QStringList
 SipPlugin::peersOnline() const
@@ -82,12 +91,14 @@ SipPlugin::refreshProxy()
     qDebug() << Q_FUNC_INFO << "Not implemented";
 }
 
+
 void
 SipPlugin::onError( int code, const QString& error )
 {
     Q_UNUSED( code );
     m_cachedError = error;
 }
+
 
 void
 SipPlugin::onStateChange( SipPlugin::ConnectionState state )
@@ -96,8 +107,9 @@ SipPlugin::onStateChange( SipPlugin::ConnectionState state )
     m_cachedError.clear();
 }
 
+
 void
-SipPlugin::onPeerOnline(const QString& peerId)
+SipPlugin::onPeerOnline( const QString& peerId )
 {
    if( !m_peersOnline.contains( peerId ) )
    {
@@ -105,15 +117,15 @@ SipPlugin::onPeerOnline(const QString& peerId)
    }
 }
 
+
 void
-SipPlugin::onPeerOffline(const QString& peerId)
+SipPlugin::onPeerOffline( const QString& peerId )
 {
     m_peersOnline.removeAll( peerId );
 }
 
+
 void
 SipPlugin::deletePlugin()
 {
-
 }
-

@@ -19,9 +19,8 @@
 #include "treemodelitem.h"
 
 #include "utils/tomahawkutils.h"
+#include "utils/logger.h"
 #include "album.h"
-
-#include <QDebug>
 
 using namespace Tomahawk;
 

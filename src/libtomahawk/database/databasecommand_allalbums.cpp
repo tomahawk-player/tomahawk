@@ -21,6 +21,7 @@
 #include <QSqlQuery>
 
 #include "databaseimpl.h"
+#include "utils/logger.h"
 
 
 void

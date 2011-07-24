@@ -77,16 +77,15 @@ public:
 
     /// Generate an empty dynamic playlist with default generator
     static Tomahawk::dynplaylist_ptr create( const source_ptr& author,
-                                          const QString& guid,
-                                          const QString& title,
-                                          const QString& info,
-                                          const QString& creator,
-                                          GeneratorMode mode,
-                                          bool shared,
-                                          const QString& type = QString()
-                                          );
-    static bool remove( const dynplaylist_ptr& playlist );
+                                             const QString& guid,
+                                             const QString& title,
+                                             const QString& info,
+                                             const QString& creator,
+                                             GeneratorMode mode,
+                                             bool shared,
+                                             const QString& type = QString() );
 
+    static bool remove( const dynplaylist_ptr& playlist );
     virtual void loadRevision( const QString& rev = "" );
 
     // :-( int becuase qjson chokes on my enums
@@ -107,7 +106,7 @@ public:
     // maybe friend QObjectHelper and make them private?
     explicit DynamicPlaylist( const source_ptr& author, const QString& type );
     void setMode( int mode );
-    void setType( const QString& /*type*/ )           { /** TODO */; }
+    void setType( const QString& /*type*/ ) { /** TODO */; }
     void setGenerator( const geninterface_ptr& gen_ptr );
     // </IGNORE>
 
@@ -165,31 +164,29 @@ public slots:
 private:
     // called from loadAllPlaylists DB cmd via databasecollection (in GUI thread)
     explicit DynamicPlaylist( const source_ptr& src,
-                       const QString& currentrevision,
-                       const QString& title,
-                       const QString& info,
-                       const QString& creator,
-                       uint createdOn,
-                       const QString& type,
-                       GeneratorMode mode,
-                       bool shared,
-                       int lastmod,
-                       const QString& guid = "" ); // populate db
+                              const QString& currentrevision,
+                              const QString& title,
+                              const QString& info,
+                              const QString& creator,
+                              uint createdOn,
+                              const QString& type,
+                              GeneratorMode mode,
+                              bool shared,
+                              int lastmod,
+                              const QString& guid = "" ); // populate db
 
     // called when creating new playlist
     explicit DynamicPlaylist( const source_ptr& author,
-                       const QString& guid,
-                       const QString& title,
-                       const QString& info,
-                       const QString& creator,
-                       const QString& type,
-                       GeneratorMode mode,
-                       bool shared );
+                              const QString& guid,
+                              const QString& title,
+                              const QString& info,
+                              const QString& creator,
+                              const QString& type,
+                              GeneratorMode mode,
+                              bool shared );
 
-private:
     QList< dyncontrol_ptr > variantsToControl( const QList< QVariantMap >& controlsV );
     geninterface_ptr m_generator;
-
 };
 
 }; // namespace

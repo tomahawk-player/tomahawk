@@ -30,8 +30,6 @@
 
 #include "dbsyncconnection.h"
 
-#include <QDebug>
-
 #include "database/database.h"
 #include "database/databasecommand.h"
 #include "database/databasecommand_collectionstats.h"
@@ -39,6 +37,7 @@
 #include "remotecollection.h"
 #include "source.h"
 #include "sourcelist.h"
+#include "utils/logger.h"
 
 // close the dbsync connection after this much inactivity.
 // it's automatically reestablished as needed.

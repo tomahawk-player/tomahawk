@@ -66,6 +66,8 @@
 #include <qtsparkle/Updater>
 #endif
 
+#include "utils/logger.h"
+
 using namespace Tomahawk;
 
 

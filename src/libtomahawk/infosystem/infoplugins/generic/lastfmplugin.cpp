@@ -28,6 +28,7 @@
 #include "audio/audioengine.h"
 #include "tomahawksettings.h"
 #include "utils/tomahawkutils.h"
+#include "utils/logger.h"
 
 #include <lastfm/ws.h>
 #include <lastfm/XmlQuery>
@@ -483,7 +484,7 @@ LastFmPlugin::topTracksReturned()
     returnedData["tracks"] = topTracks;
 
     Tomahawk::InfoSystem::InfoRequestData requestData = reply->property( "requestData" ).value< Tomahawk::InfoSystem::InfoRequestData >();
-    
+
     emit info(
         reply->property( "requestId" ).toUInt(),
         requestData,
@@ -523,7 +524,7 @@ LastFmPlugin::coverArtReturned()
         returnedData["url"] = reply->url().toString();
 
         Tomahawk::InfoSystem::InfoRequestData requestData = reply->property( "requestData" ).value< Tomahawk::InfoSystem::InfoRequestData >();
-        
+
         emit info(
             reply->property( "requestId" ).toUInt(),
             requestData,
@@ -581,7 +582,7 @@ LastFmPlugin::artistImagesReturned()
         returnedData["url"] = reply->url().toString();
 
         Tomahawk::InfoSystem::InfoRequestData requestData = reply->property( "requestData" ).value< Tomahawk::InfoSystem::InfoRequestData >();
-        
+
         emit info( reply->property( "requestId" ).toUInt(), requestData, returnedData );
 
         Tomahawk::InfoSystem::InfoCriteriaHash origData = requestData.input.value< Tomahawk::InfoSystem::InfoCriteriaHash>();

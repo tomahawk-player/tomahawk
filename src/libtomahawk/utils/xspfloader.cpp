@@ -23,11 +23,13 @@
 #include <QMessageBox>
 
 #include "utils/tomahawkutils.h"
+#include "utils/logger.h"
 
 #include "sourcelist.h"
 #include "playlist.h"
 
 using namespace Tomahawk;
+
 
 void
 XSPFLoader::setOverrideTitle( const QString& newTitle )

@@ -1,5 +1,5 @@
 /* === This file is part of Tomahawk Player - <http://tomahawk-player.org> ===
- * 
+ *
  *   Copyright 2010-2011, Christian Muehlhaeuser <muesli@tomahawk-player.org>
  *
  *   Tomahawk is free software: you can redistribute it and/or modify
@@ -23,8 +23,11 @@
 #include "tomahawk/query.h"
 #include "tomahawk/playlist.h"
 #include "databaseimpl.h"
+#include "utils/logger.h"
 
-void DatabaseCommand_ImportPlaylist::exec(DatabaseImpl * dbi)
+
+void
+DatabaseCommand_ImportPlaylist::exec( DatabaseImpl * dbi )
 {
     /*
     qDebug() << "Importing playlist of" << m_playlist->length() << "tracks";

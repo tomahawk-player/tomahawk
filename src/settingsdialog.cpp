@@ -19,7 +19,6 @@
 #include "config.h"
 
 #include <QCryptographicHash>
-#include <QDebug>
 #include <QDesktopServices>
 #include <QFileDialog>
 #include <QMessageBox>
@@ -46,6 +45,8 @@
 #include "delegateconfigwrapper.h"
 #include "sip/SipModel.h"
 #include "sipconfigdelegate.h"
+
+#include "utils/logger.h"
 
 #include "ui_proxydialog.h"
 #include "ui_stackedsettingsdialog.h"
@@ -143,7 +144,7 @@ SettingsDialog::SettingsDialog( QWidget *parent )
         ui->scanInformationLabelFiles->hide();
         ui->scanInformationLabelDirs->hide();
     }
-    
+
     // NOW PLAYING
 #ifdef Q_WS_MAC
     ui->checkBoxEnableAdium->setChecked( s->nowPlayingEnabled() );

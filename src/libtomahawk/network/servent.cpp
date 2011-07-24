@@ -40,8 +40,9 @@
 
 #include "portfwdthread.h"
 #include "tomahawksettings.h"
-#include "utils/tomahawkutils.h"
 #include <aclsystem.h>
+#include "utils/tomahawkutils.h"
+#include "utils/logger.h"
 
 using namespace Tomahawk;
 
@@ -287,8 +288,8 @@ Servent::incomingConnection( int sd )
         return;
     }
 
-    connect( sock, SIGNAL( readyRead() ), SLOT( readyRead() ), Qt::QueuedConnection );
-    connect( sock, SIGNAL( disconnected() ), sock, SLOT( deleteLater() ), Qt::QueuedConnection );
+    connect( sock, SIGNAL( readyRead() ), SLOT( readyRead() ) );
+    connect( sock, SIGNAL( disconnected() ), sock, SLOT( deleteLater() ) );
 //    qDebug() << "connection accepted.";
 }
 
@@ -541,9 +542,9 @@ Servent::connectToPeer( const QString& ha, int port, const QString &key, Connect
     sock->_outbound = true;
     //qDebug() << "connectToPeer, sock:" << sock->thread();
 
-    connect( sock, SIGNAL( connected() ), SLOT( socketConnected() ), Qt::QueuedConnection );
+    connect( sock, SIGNAL( connected() ), SLOT( socketConnected() ) );
     connect( sock, SIGNAL( error( QAbstractSocket::SocketError ) ),
-                     SLOT( socketError( QAbstractSocket::SocketError ) ), Qt::QueuedConnection );
+                     SLOT( socketError( QAbstractSocket::SocketError ) ) );
 
     //qDebug() << "About to connectToHost...";
     sock->connectToHost( ha, port, QTcpSocket::ReadWrite );
@@ -553,7 +554,7 @@ Servent::connectToPeer( const QString& ha, int port, const QString &key, Connect
 
 
 void
-Servent::reverseOfferRequest( ControlConnection* orig_conn, const QString &theirdbid, const QString& key, const QString& theirkey )
+Servent::reverseOfferRequest( ControlConnection* orig_conn, const QString& theirdbid, const QString& key, const QString& theirkey )
 {
     Q_ASSERT( this->thread() == QThread::currentThread() );
 

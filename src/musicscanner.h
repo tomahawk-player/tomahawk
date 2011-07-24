@@ -1,5 +1,5 @@
 /* === This file is part of Tomahawk Player - <http://tomahawk-player.org> ===
- * 
+ *
  *   Copyright 2010-2011, Christian Muehlhaeuser <muesli@tomahawk-player.org>
  *
  *   Tomahawk is free software: you can redistribute it and/or modify
@@ -29,7 +29,6 @@
 #include <QDir>
 #include <QFileInfo>
 #include <QString>
-#include <QDebug>
 #include <QDateTime>
 #include <QTimer>
 #include <QWeakPointer>
@@ -42,13 +41,13 @@ class DirLister : public QObject
 Q_OBJECT
 
 public:
-    
+
     enum Mode {
         NonRecursive,
         Recursive,
         MTimeOnly
     };
-    
+
     DirLister( const QStringList& dirs, const QMap<QString, unsigned int>& dirmtimes, TomahawkSettings::ScannerMode mode, bool manualFull, bool recursive )
         : QObject(), m_dirs( dirs ), m_dirmtimes( dirmtimes ), m_mode( mode ), m_manualFull( manualFull ), m_recursive( recursive ), m_opcount( 0 ), m_deleting( false )
     {
@@ -77,7 +76,7 @@ private:
     TomahawkSettings::ScannerMode m_mode;
     bool m_manualFull;
     bool m_recursive;
-    
+
     QMap<QString, unsigned int> m_newdirmtimes;
 
     uint m_opcount;

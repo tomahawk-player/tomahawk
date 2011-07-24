@@ -23,12 +23,14 @@
 
 #include "audio/audioengine.h"
 #include "viewmanager.h"
-#include "utils/imagebutton.h"
-#include "utils/tomahawkutils.h"
 #include "database/database.h"
 #include "database/databasecommand_socialaction.h"
 
 #include "album.h"
+
+#include "utils/imagebutton.h"
+#include "utils/tomahawkutils.h"
+#include "utils/logger.h"
 
 using namespace Tomahawk;
 

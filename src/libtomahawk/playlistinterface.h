@@ -19,7 +19,6 @@
 #ifndef PLAYLISTINTERFACE_H
 #define PLAYLISTINTERFACE_H
 
-#include <QDebug>
 #include <QModelIndex>
 #include <QWidget>
 
@@ -27,6 +26,7 @@
 
 #include "dllmacro.h"
 #include "result.h"
+#include "utils/logger.h"
 
 namespace Tomahawk
 {

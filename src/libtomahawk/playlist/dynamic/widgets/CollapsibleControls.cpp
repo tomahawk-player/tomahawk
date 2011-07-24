@@ -1,5 +1,5 @@
 /* === This file is part of Tomahawk Player - <http://tomahawk-player.org> ===
- * 
+ *
  *   Copyright 2010-2011, Christian Muehlhaeuser <muesli@tomahawk-player.org>
  *
  *   Tomahawk is free software: you can redistribute it and/or modify
@@ -34,7 +34,10 @@
 #include <QPaintEvent>
 #include <QPainter>
 
+#include "utils/logger.h"
+
 using namespace Tomahawk;
+
 
 CollapsibleControls::CollapsibleControls( QWidget* parent )
     : QWidget( parent )
@@ -42,6 +45,7 @@ CollapsibleControls::CollapsibleControls( QWidget* parent )
 {
     init();
 }
+
 
 CollapsibleControls::CollapsibleControls( const dynplaylist_ptr& playlist, bool isLocal, QWidget* parent )
     : QWidget( parent )
@@ -52,31 +56,33 @@ CollapsibleControls::CollapsibleControls( const dynplaylist_ptr& playlist, bool 
     setControls( m_dynplaylist, m_isLocal );
 }
 
+
 Tomahawk::CollapsibleControls::~CollapsibleControls()
 {
 
 }
 
-void 
+
+void
 CollapsibleControls::init()
 {
     m_timeline = new QTimeLine( 250, this );
     m_timeline->setUpdateInterval( 5 );
     m_animHeight = -1;
     m_collapseAnimation = false;
-    
+
     connect( m_timeline, SIGNAL( frameChanged( int ) ), this, SLOT( onAnimationStep( int ) ) );
     connect( m_timeline, SIGNAL( finished() ), this, SLOT( onAnimationFinished() ) );
-    
+
     m_layout = new QStackedLayout;
     setContentsMargins( 0, 0, 0, 0 );
     m_layout->setContentsMargins( 0, 0, 0, 0 );
     m_layout->setSpacing( 0 );
-    
+
     m_controls = new Tomahawk::DynamicControlList( this );
     m_layout->addWidget( m_controls );
     connect( m_controls, SIGNAL( toggleCollapse() ), this, SLOT( toggleCollapse() ) );
-    
+
     m_summaryWidget = new QWidget( this );
     m_summaryWidget->setMinimumHeight( 24 );
     m_summaryWidget->setMaximumHeight( 24 );
@@ -85,7 +91,7 @@ CollapsibleControls::init()
     m_summaryWidget->setLayout( m_summaryLayout );
     m_summaryLayout->setMargin( 0 );
     m_summaryWidget->setContentsMargins( 3, 0, 0, 0 );
-    
+
     m_summary = new ElidedLabel( m_summaryWidget );
     QFont f = m_summary->font();
     f.setPointSize( f.pointSize() + 1 );
@@ -104,37 +110,38 @@ CollapsibleControls::init()
         m_expandL->setCurrentIndex( 0 );
     else
         m_expandL->setCurrentIndex( 1 );
-    
+
     m_layout->addWidget( m_summaryWidget );
     connect( m_summaryExpand, SIGNAL( clicked( bool ) ), this, SLOT( toggleCollapse() ) );
-    
+
     if( m_isLocal )
         m_layout->setCurrentWidget( m_controls );
     else
         m_layout->setCurrentWidget( m_summary );
-    
+
     connect( m_controls, SIGNAL( controlChanged( Tomahawk::dyncontrol_ptr ) ), SIGNAL( controlChanged( Tomahawk::dyncontrol_ptr ) ) );
     connect( m_controls, SIGNAL( controlsChanged() ), SIGNAL( controlsChanged() ) );
-    
+
     setLayout( m_layout );
-    
+
     setSizePolicy( QSizePolicy::Expanding, QSizePolicy::Fixed );
 }
 
 
-QList< DynamicControlWrapper* > 
+QList< DynamicControlWrapper* >
 Tomahawk::CollapsibleControls::controls() const
 {
     return m_controls->controls();
 }
 
-void 
+
+void
 CollapsibleControls::setControls( const dynplaylist_ptr& playlist, bool isLocal )
 {
     m_dynplaylist = playlist;
     m_isLocal = isLocal;
     m_controls->setControls( m_dynplaylist->generator(), m_dynplaylist->generator()->controls() );
-    
+
     if( !m_isLocal ) {
         m_expandL->setCurrentIndex( 1 );
         m_summary->setText( m_dynplaylist->generator()->sentenceSummary() );
@@ -145,7 +152,8 @@ CollapsibleControls::setControls( const dynplaylist_ptr& playlist, bool isLocal 
     }
 }
 
-void 
+
+void
 CollapsibleControls::toggleCollapse()
 {
 //     qDebug() << "TOGGLING SIZEHINTS:" << m_controls->height() << m_summaryWidget->sizeHint();
@@ -154,23 +162,24 @@ CollapsibleControls::toggleCollapse()
     if( m_layout->currentWidget() == m_controls ) {
         m_summary->setText( m_dynplaylist->generator()->sentenceSummary() );
         m_controls->setSizePolicy( QSizePolicy::Ignored, QSizePolicy::Ignored );
-        
+
         m_timeline->setDirection( QTimeLine::Backward );
         m_timeline->start();
-        
+
         m_collapseAnimation = true;
     } else {
         m_summaryWidget->setSizePolicy( QSizePolicy::Ignored, QSizePolicy::Ignored );
         m_layout->setCurrentWidget( m_controls );
-        
+
         m_timeline->setDirection( QTimeLine::Forward );
         m_timeline->start();
-        
+
         m_collapseAnimation = false;
     }
 }
 
-void 
+
+void
 CollapsibleControls::onAnimationStep( int step )
 {
 //     qDebug() << "ANIMATION STEP:" << step;
@@ -179,13 +188,14 @@ CollapsibleControls::onAnimationStep( int step )
     setMaximumHeight( m_animHeight );
 }
 
-void 
+
+void
 CollapsibleControls::onAnimationFinished()
 {
 //     qDebug() << "ANIMATION DONE:" << m_animHeight;
     setMaximumHeight( m_animHeight );
     m_animHeight = -1;
-    
+
     if( m_collapseAnimation ) {
         m_layout->setCurrentWidget( m_summaryWidget );
     } else {
@@ -193,7 +203,9 @@ CollapsibleControls::onAnimationFinished()
     }
 }
 
-QSize CollapsibleControls::sizeHint() const
+
+QSize
+CollapsibleControls::sizeHint() const
 {
     if( m_animHeight >= 0 ) {
         return QSize( QWidget::sizeHint().width(), m_animHeight );

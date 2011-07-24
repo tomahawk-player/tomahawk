@@ -18,12 +18,12 @@
 
 #include "collectionflatmodel.h"
 
-#include <QDebug>
 #include <QMimeData>
 #include <QTreeView>
 
 #include "database/database.h"
 #include "sourcelist.h"
+#include "utils/logger.h"
 
 using namespace Tomahawk;
 

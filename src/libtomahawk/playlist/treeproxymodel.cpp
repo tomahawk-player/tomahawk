@@ -18,10 +18,10 @@
 
 #include "treeproxymodel.h"
 
-#include <QDebug>
 #include <QListView>
 
 #include "query.h"
+#include "utils/logger.h"
 
 
 TreeProxyModel::TreeProxyModel( QObject* parent )

@@ -22,14 +22,13 @@
 #include <QPushButton>
 #include <QDialogButtonBox>
 
-#include "utils/tomahawkutils.h"
-
+#include "sourcelist.h"
 #include "viewmanager.h"
 #include "playlist/playlistmodel.h"
-
 #include "widgets/overlaywidget.h"
 
-#include "sourcelist.h"
+#include "utils/tomahawkutils.h"
+#include "utils/logger.h"
 
 
 SearchWidget::SearchWidget( const QString& search, QWidget* parent )

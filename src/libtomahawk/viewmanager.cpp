@@ -48,6 +48,8 @@
 #include "widgets/infowidgets/ArtistInfoWidget.h"
 #include "widgets/newplaylistwidget.h"
 
+#include "utils/logger.h"
+
 #define FILTER_TIMEOUT 280
 
 using namespace Tomahawk;

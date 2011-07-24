@@ -27,6 +27,7 @@
 #include "databasecommand_collectionstats.h"
 #include "databaseimpl.h"
 #include "network/controlconnection.h"
+#include "utils/logger.h"
 
 using namespace Tomahawk;
 

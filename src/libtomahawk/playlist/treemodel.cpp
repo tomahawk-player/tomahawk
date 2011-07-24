@@ -18,7 +18,6 @@
 
 #include "treemodel.h"
 
-#include <QDebug>
 #include <QListView>
 #include <QMimeData>
 #include <QNetworkReply>
@@ -28,6 +27,7 @@
 #include "database/databasecommand_alltracks.h"
 #include "database/database.h"
 #include "utils/tomahawkutils.h"
+#include "utils/logger.h"
 
 static QString s_tmInfoIdentifier = QString( "TREEMODEL" );
 

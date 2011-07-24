@@ -18,11 +18,11 @@
 
 #include "queueview.h"
 
-#include <QDebug>
 #include <QVBoxLayout>
 
 #include "playlist/queueproxymodel.h"
 #include "widgets/overlaywidget.h"
+#include "utils/logger.h"
 
 #ifdef Q_WS_MAC
 #define MINIMUM_HEIGHT 38

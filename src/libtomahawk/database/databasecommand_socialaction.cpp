@@ -23,6 +23,7 @@
 #include "database/database.h"
 #include "databaseimpl.h"
 #include "network/servent.h"
+#include "utils/logger.h"
 
 using namespace Tomahawk;
 

@@ -24,6 +24,7 @@
 #include <QPixmap>
 
 #include "utils/tomahawkutils.h"
+#include "utils/logger.h"
 
 #define IMAGE_HEIGHT 64
 

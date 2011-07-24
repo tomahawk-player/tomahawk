@@ -18,10 +18,10 @@
 
 #include "albumproxymodel.h"
 
-#include <QDebug>
 #include <QListView>
 
 #include "query.h"
+#include "utils/logger.h"
 
 
 AlbumProxyModel::AlbumProxyModel( QObject* parent )

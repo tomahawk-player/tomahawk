@@ -18,7 +18,6 @@
 
 #include "scanmanager.h"
 
-#include <QDebug>
 #include <QThread>
 #include <QCoreApplication>
 #include <QFileSystemWatcher>
@@ -30,6 +29,8 @@
 
 #include "database/database.h"
 #include "database/databasecommand_dirmtimes.h"
+
+#include "utils/logger.h"
 
 ScanManager* ScanManager::s_instance = 0;
 
@@ -89,7 +90,7 @@ ScanManager::onSettingsChanged()
         m_scanTimer->stop();
 
     m_scanTimer->setInterval( TomahawkSettings::instance()->scannerTime() * 1000 );
-    
+
     if ( TomahawkSettings::instance()->hasScannerPaths() &&
         m_currScannerPaths != TomahawkSettings::instance()->scannerPaths() )
     {

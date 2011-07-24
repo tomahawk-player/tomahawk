@@ -16,14 +16,15 @@
 
 #include "playlistitems.h"
 
+#include <QMimeData>
+
 #include "query.h"
-#include "utils/tomahawkutils.h"
 #include "viewmanager.h"
 #include "playlist/dynamic/GeneratorInterface.h"
 #include "categoryitems.h"
 #include "collectionitem.h"
-
-#include <QMimeData>
+#include "utils/tomahawkutils.h"
+#include "utils/logger.h"
 
 using namespace Tomahawk;
 
@@ -332,6 +333,7 @@ DynamicPlaylistItem::willAcceptDrag( const QMimeData* data ) const
     Q_UNUSED( data );
     return false;
 }
+
 
 QIcon
 DynamicPlaylistItem::icon() const

@@ -18,11 +18,11 @@
 
 #include "trackproxymodel.h"
 
-#include <QDebug>
 #include <QTreeView>
 
 #include "album.h"
 #include "query.h"
+#include "utils/logger.h"
 
 
 TrackProxyModel::TrackProxyModel( QObject* parent )

@@ -20,17 +20,18 @@
 #include "xmlconsole.h"
 #include "ui_xmlconsole.h"
 
-
 #include <QMenu>
 #include <QActionGroup>
 #include <QStringBuilder>
-#include <QDebug>
 #include <QTextLayout>
 #include <QPlainTextDocumentLayout>
 #include <QFileDialog>
 #include <QTextDocumentWriter>
 
+#include "utils/logger.h"
+
 using namespace Jreen;
+
 
 XmlConsole::XmlConsole(Client* client, QWidget *parent) :
 	QWidget(parent),
@@ -160,7 +161,7 @@ void XmlConsole::stackProcess(const QByteArray &data, bool incoming)
 //	debug() << incoming << data;
 //	debug() << "==================================================================";
 	while (d->reader.readNext() > QXmlStreamReader::Invalid) {
-//		QDebug dbg = debug() << incoming << d->reader.tokenString();
+//		qDebug() << incoming << d->reader.tokenString();
 		switch(d->reader.tokenType()) {
 		case QXmlStreamReader::StartElement:
 //			dbg << d->reader.name().toString() << d->depth
@@ -282,7 +283,7 @@ void XmlConsole::stackProcess(const QByteArray &data, bool incoming)
 			break;
 		}
 	}
-//	QDebug dbg = debug() << d->reader.tokenString();
+//	qDebug() << d->reader.tokenString();
 //	if (d->reader.tokenType() == QXmlStreamReader::Invalid)
 //		dbg << d->reader.error() << d->reader.errorString();
 	if (!incoming && d->depth > 1) {

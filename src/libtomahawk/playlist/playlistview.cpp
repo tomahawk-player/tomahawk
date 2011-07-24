@@ -18,13 +18,13 @@
 
 #include "playlistview.h"
 
-#include <QDebug>
 #include <QKeyEvent>
 #include <QPainter>
 
 #include "playlist/playlistproxymodel.h"
 #include "widgets/overlaywidget.h"
 #include "viewmanager.h"
+#include "utils/logger.h"
 
 using namespace Tomahawk;
 

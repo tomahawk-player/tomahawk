@@ -1,5 +1,5 @@
 /* === This file is part of Tomahawk Player - <http://tomahawk-player.org> ===
- * 
+ *
  *   Copyright 2010-2011, Christian Muehlhaeuser <muesli@tomahawk-player.org>
  *
  *   Tomahawk is free software: you can redistribute it and/or modify
@@ -20,7 +20,9 @@
 
 #include <QLabel>
 #include <QStackedLayout>
-#include <QDebug>
+
+#include "utils/logger.h"
+
 
 ReadOrWriteWidget::ReadOrWriteWidget( QWidget* writableWidget, bool writable, QWidget* parent)
     : QWidget( parent )
@@ -30,22 +32,23 @@ ReadOrWriteWidget::ReadOrWriteWidget( QWidget* writableWidget, bool writable, QW
     , m_writable( writable )
 {
     m_label = new QLabel( QString(), this );
-    
+
     m_layout = new QStackedLayout( this );
     if( writableWidget )
         m_layout->addWidget( writableWidget );
-    
+
     m_layout->addWidget( m_label );
-    
+
     setWritable( m_writable );
-    
+
     setSizePolicy( QSizePolicy::Expanding, QSizePolicy::Fixed );
     setContentsMargins( 0, 0, 0, 0 );
     m_layout->setContentsMargins( 0, 0, 0, 0 );
     m_layout->setSpacing( 0 );
 }
 
-void 
+
+void
 ReadOrWriteWidget::setWritable( bool write )
 {
     m_writable = write;
@@ -55,42 +58,49 @@ ReadOrWriteWidget::setWritable( bool write )
         m_layout->setCurrentWidget( m_label );
 }
 
-void 
+
+void
 ReadOrWriteWidget::setWritableWidget( QWidget* w )
 {
     if( m_writableWidget ) {
         m_layout->removeWidget( m_writableWidget );
     }
-    
+
     m_writableWidget = w;
     m_layout->insertWidget( 0, m_writableWidget );
 }
 
-bool 
+
+bool
 ReadOrWriteWidget::writable() const
 {
     return m_writable;
 }
 
-QWidget* 
+
+QWidget*
 ReadOrWriteWidget::writableWidget() const
 {
     return m_writableWidget;
 }
 
-QString 
+
+QString
 ReadOrWriteWidget::label() const
 {
     return m_label->text();
 }
 
-void 
+
+void
 ReadOrWriteWidget::setLabel( const QString& label )
 {
     m_label->setText( label );
 }
 
-QSize ReadOrWriteWidget::sizeHint() const
+
+QSize
+ReadOrWriteWidget::sizeHint() const
 {
     if( m_writableWidget ) {
         return m_writableWidget->sizeHint();

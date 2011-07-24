@@ -18,11 +18,11 @@
 
 #include "collectionproxymodel.h"
 
-#include <QDebug>
 #include <QTreeView>
 
 #include "album.h"
 #include "query.h"
+#include "utils/logger.h"
 
 
 CollectionProxyModel::CollectionProxyModel( QObject* parent )
