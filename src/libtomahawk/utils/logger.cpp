@@ -32,6 +32,9 @@
 #define LOGFILE TomahawkUtils::appLogDir().filePath( "Tomahawk.log" ).toLocal8Bit()
 #define LOGFILE_SIZE 1024 * 512
 
+#define RELEASE_LEVEL_THRESHOLD 0
+#define DEBUG_LEVEL_THRESHOLD 5
+
 using namespace std;
 ofstream logfile;
 
@@ -41,6 +44,14 @@ namespace Logger
 static void
 log( const char *msg, unsigned int debugLevel, bool toDisk = true )
 {
+    #ifdef QT_NO_DEBUG
+    if ( debugLevel > RELEASE_LEVEL_THRESHOLD )
+        toDisk = false;
+    #else
+    if ( debugLevel > DEBUG_LEVEL_THRESHOLD )
+        toDisk = false;
+    #endif
+
     if ( toDisk )
     {
         logfile << QTime::currentTime().toString().toAscii().data() << " [" << QString::number( debugLevel ).toAscii().data() << "]: " << msg << endl;
@@ -61,9 +72,7 @@ TomahawkLogHandler( QtMsgType type, const char *msg )
     switch( type )
     {
         case QtDebugMsg:
-            #ifndef QT_NO_DEBUG
-            log( msg, 2, false );
-            #endif
+            log( msg, LOGTHIRDPARTY );
             break;
 
         case QtCriticalMsg:

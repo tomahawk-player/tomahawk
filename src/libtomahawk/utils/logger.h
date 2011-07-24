@@ -54,4 +54,10 @@ namespace Logger
 #define tLog Logger::TLog
 #define tDebug Logger::TDebug
 
+#define LOGDEBUG 1
+#define LOGINFO 2
+#define LOGEXTRA 5
+#define LOGVERBOSE 8
+#define LOGTHIRDPARTY 9
+
 #endif
