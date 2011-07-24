@@ -109,10 +109,12 @@ TomahawkApp::TomahawkApp( int& argc, char *argv[] )
     : TOMAHAWK_APPLICATION( argc, argv )
 {
     qDebug() << "TomahawkApp thread:" << this->thread();
+
     setOrganizationName( QLatin1String( TOMAHAWK_ORGANIZATION_NAME ) );
     setOrganizationDomain( QLatin1String( TOMAHAWK_ORGANIZATION_DOMAIN ) );
     setApplicationName( QLatin1String( TOMAHAWK_APPLICATION_NAME ) );
     setApplicationVersion( QLatin1String( TOMAHAWK_VERSION ) );
+
     registerMetaTypes();
 }
 
