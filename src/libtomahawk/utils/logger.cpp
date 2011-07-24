@@ -7,6 +7,7 @@
 #include <QFileInfo>
 #include <QMutex>
 #include <QTime>
+#include <QVariant>
 
 #include "utils/tomahawkutils.h"
 
@@ -19,6 +20,25 @@ ofstream logfile;
 namespace Logger
 {
 
+tLog&
+tLog::operator<<( const QVariant& v )
+{
+    QString const s = v.toString();
+    if ( !s.isEmpty() )
+        log( s.toAscii().data() );
+
+    return *this;
+}
+
+
+void
+tLog::log( const char *msg )
+{
+    logfile << QTime::currentTime().toString().toAscii().data() << " " << msg << endl;
+    logfile.flush();
+}
+
+
 void
 TomahawkLogHandler( QtMsgType type, const char *msg )
 {
@@ -28,30 +48,27 @@ TomahawkLogHandler( QtMsgType type, const char *msg )
     switch( type )
     {
         case QtDebugMsg:
-//            logfile << QTime::currentTime().toString().toAscii().data() << " Debug: " << msg << "\n";
+            // Disable debug logging in release builds:
+            #ifndef QT_NO_DEBUG
+            tLog::log( msg );
+            #endif
             break;
 
         case QtCriticalMsg:
-            logfile << QTime::currentTime().toString().toAscii().data() << " Critical: " << msg << endl;
+            tLog::log( msg );
             break;
 
         case QtWarningMsg:
-            logfile << QTime::currentTime().toString().toAscii().data() << " Warning: " << msg << endl;
+            tLog::log( msg );
             break;
 
         case QtFatalMsg:
-            logfile << QTime::currentTime().toString().toAscii().data() << " Fatal: " << msg << endl;
-            logfile.flush();
-
-            cout << msg << endl;
-            cout.flush();
-            abort();
+            tLog::log( msg );
             break;
     }
 
-    cout << msg << "\n";
+    cout << msg << endl;
     cout.flush();
-    logfile.flush();
 }
 
 

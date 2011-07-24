@@ -138,16 +138,14 @@ TomahawkApp::init()
     new TomahawkSettings( this );
     TomahawkSettings* s = TomahawkSettings::instance();
 
-    #ifdef LIBLASTFM_FOUND
     qDebug() << "Setting NAM.";
+#ifdef LIBLASTFM_FOUND
     TomahawkUtils::setNam( lastfm::nam() );
-    #else
-    qDebug() << "Setting NAM.";
+#else
     TomahawkUtils::setNam( new QNetworkAccessManager() );
-    #endif
+#endif
 
     TomahawkUtils::NetworkProxyFactory* proxyFactory = new TomahawkUtils::NetworkProxyFactory();
-
     if ( s->proxyType() != QNetworkProxy::NoProxy && !s->proxyHost().isEmpty() )
     {
         qDebug() << "Setting proxy to saved values";
@@ -156,7 +154,6 @@ TomahawkApp::init()
         //TODO: On Windows and Mac because liblastfm sets an application level proxy it may override our factory, so may need to explicitly do
         //a QNetworkProxy::setApplicationProxy with our own proxy (but then also overriding our own factory :-( )
     }
-
     if ( !s->proxyNoProxyHosts().isEmpty() )
         proxyFactory->setNoProxyHosts( s->proxyNoProxyHosts().split( ',', QString::SkipEmptyParts ) );
 
@@ -244,7 +241,7 @@ TomahawkApp::init()
 
 TomahawkApp::~TomahawkApp()
 {
-    qDebug() << Q_FUNC_INFO;
+    tLog() << "Shutting down Tomahawk...";
 
     // stop script resolvers
     foreach( Tomahawk::ExternalResolver* r, m_scriptResolvers.values() )
@@ -280,7 +277,7 @@ TomahawkApp::~TomahawkApp()
     Pipeline::instance()->stop();
     delete Pipeline::instance();
 
-    qDebug() << "Finished shutdown.";
+    tLog() << "Finished shutdown.";
 }
 
 
@@ -323,6 +320,7 @@ TomahawkApp::registerMetaTypes()
 
     qRegisterMetaType< GeneratorMode>("GeneratorMode");
     qRegisterMetaType<Tomahawk::GeneratorMode>("Tomahawk::GeneratorMode");
+
     // Extra definition for namespaced-versions of signals/slots required
     qRegisterMetaType< Tomahawk::source_ptr >("Tomahawk::source_ptr");
     qRegisterMetaType< Tomahawk::collection_ptr >("Tomahawk::collection_ptr");
@@ -389,7 +387,7 @@ TomahawkApp::initHTTP()
     Api_v1* api = new Api_v1( &m_session );
     m_session.setStaticContentService( api );
 
-    qDebug() << "Starting HTTPd on" << m_session.listenInterface().toString() << m_session.port();
+    tLog() << "Starting HTTPd on" << m_session.listenInterface().toString() << m_session.port();
     m_session.start();
 
 }
@@ -477,7 +475,7 @@ TomahawkApp::initServent()
     int port = TomahawkSettings::instance()->externalPort();
     if ( !Servent::instance()->startListening( QHostAddress( QHostAddress::Any ), upnp, port ) )
     {
-        qDebug() << "Failed to start listening with servent";
+        tLog() << "Failed to start listening with servent";
         exit( 1 );
     }
 }
@@ -486,8 +484,6 @@ TomahawkApp::initServent()
 void
 TomahawkApp::initSIP()
 {
-    qDebug() << Q_FUNC_INFO;
-
     //FIXME: jabber autoconnect is really more, now that there is sip -- should be renamed and/or split out of jabber-specific settings
     if ( !arguments().contains( "--nosip" ) )
     {
