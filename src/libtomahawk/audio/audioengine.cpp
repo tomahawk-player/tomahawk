@@ -57,7 +57,7 @@ AudioEngine::AudioEngine()
     , m_state( Stopped )
 {
     s_instance = this;
-    qDebug() << "Init AudioEngine";
+    tDebug() << "Init AudioEngine";
 
     qRegisterMetaType< AudioErrorCode >("AudioErrorCode");
     qRegisterMetaType< AudioState >("AudioState");
@@ -84,7 +84,7 @@ AudioEngine::AudioEngine()
 
 AudioEngine::~AudioEngine()
 {
-    qDebug() << Q_FUNC_INFO;
+    tDebug() << Q_FUNC_INFO;
     m_mediaObject->stop();
 //    stop();
 
@@ -106,7 +106,7 @@ AudioEngine::playPause()
 void
 AudioEngine::play()
 {
-    qDebug() << Q_FUNC_INFO;
+    tDebug( LOGEXTRA ) << Q_FUNC_INFO;
 
     if ( isPaused() )
     {
@@ -129,7 +129,7 @@ AudioEngine::play()
 void
 AudioEngine::pause()
 {
-    qDebug() << Q_FUNC_INFO;
+    tDebug( LOGEXTRA ) << Q_FUNC_INFO;
 
     m_mediaObject->pause();
     emit paused();
@@ -141,7 +141,7 @@ AudioEngine::pause()
 void
 AudioEngine::stop()
 {
-    qDebug() << Q_FUNC_INFO;
+    tDebug( LOGEXTRA ) << Q_FUNC_INFO;
 
     setState( Stopped );
     m_mediaObject->stop();
@@ -171,7 +171,7 @@ AudioEngine::stop()
 void
 AudioEngine::previous()
 {
-    qDebug() << Q_FUNC_INFO;
+    tDebug( LOGEXTRA ) << Q_FUNC_INFO;
 
     if ( m_playlist.isNull() )
         return;
@@ -187,7 +187,7 @@ AudioEngine::previous()
 void
 AudioEngine::next()
 {
-    qDebug() << Q_FUNC_INFO;
+    tDebug( LOGEXTRA ) << Q_FUNC_INFO;
 
     if ( m_playlist.isNull() )
         return;
@@ -216,7 +216,7 @@ AudioEngine::seek( int ms )
 
     if ( isPlaying() || isPaused() )
     {
-        qDebug() << Q_FUNC_INFO << ms;
+        tDebug( LOGVERBOSE ) << Q_FUNC_INFO << ms;
         m_mediaObject->seek( ms );
     }
 }
@@ -225,7 +225,7 @@ AudioEngine::seek( int ms )
 void
 AudioEngine::setVolume( int percentage )
 {
-    //qDebug() << Q_FUNC_INFO;
+    tDebug( LOGVERBOSE ) << Q_FUNC_INFO << percentage;
 
     percentage = qBound( 0, percentage, 100 );
     m_audioOutput->setVolume( (qreal)percentage / 100.0 );
@@ -254,7 +254,7 @@ AudioEngine::sendWaitingNotification() const
 void
 AudioEngine::sendNowPlayingNotification()
 {
-    qDebug() << Q_FUNC_INFO;
+    tDebug( LOGEXTRA ) << Q_FUNC_INFO;
 
     if ( ! m_infoSystemConnected )
     {
@@ -284,12 +284,9 @@ AudioEngine::sendNowPlayingNotification()
 void
 AudioEngine::infoSystemInfo( Tomahawk::InfoSystem::InfoRequestData requestData, QVariant output )
 {
-//    qDebug() << Q_FUNC_INFO;
-
     if ( requestData.caller != s_aeInfoIdentifier ||
          requestData.type != Tomahawk::InfoSystem::InfoAlbumCoverArt )
     {
-//        qDebug() << Q_FUNC_INFO << " not destined for us or wrong type, caller is " << requestData.caller << " and type is " << requestData.type;
         return;
     }
 
@@ -300,10 +297,8 @@ AudioEngine::infoSystemInfo( Tomahawk::InfoSystem::InfoRequestData requestData, 
                                      .arg( m_currentTrack->album()->name() );
     if ( !output.isNull() && output.isValid() )
     {
-//        qDebug() << Q_FUNC_INFO << " output is valid";
         QVariantMap returnedData = output.value< QVariantMap >();
         const QByteArray ba = returnedData["imgbytes"].toByteArray();
-//        qDebug() << "ba.length = " << ba.length();
         if ( ba.length() )
         {
             QPixmap pm;
@@ -322,24 +317,13 @@ void
 AudioEngine::infoSystemFinished( QString caller )
 {
     Q_UNUSED( caller );
-//    qDebug() << Q_FUNC_INFO;
-}
-
-
-void
-AudioEngine::onTrackAboutToFinish()
-{
-    qDebug() << Q_FUNC_INFO;
 }
 
 
 bool
 AudioEngine::loadTrack( const Tomahawk::result_ptr& result )
 {
-    qDebug() << Q_FUNC_INFO << thread() << result;
-
     bool err = false;
-
     {
         QSharedPointer<QIODevice> io;
 
@@ -355,7 +339,7 @@ AudioEngine::loadTrack( const Tomahawk::result_ptr& result )
 
                 if ( !io || io.isNull() )
                 {
-                    qDebug() << "Error getting iodevice for item";
+                    tLog() << "Error getting iodevice for" << result->url();
                     err = true;
                 }
             }
@@ -363,7 +347,7 @@ AudioEngine::loadTrack( const Tomahawk::result_ptr& result )
 
         if ( !err )
         {
-            qDebug() << "Starting new song from url:" << m_currentTrack->url();
+            tLog() << "Starting new song:" << m_currentTrack->url();
             emit loading( m_currentTrack );
 
             if ( !isHttpResult( m_currentTrack->url() ) && !isLocalResult( m_currentTrack->url() ) )
@@ -426,7 +410,7 @@ AudioEngine::loadTrack( const Tomahawk::result_ptr& result )
 void
 AudioEngine::loadPreviousTrack()
 {
-    qDebug() << Q_FUNC_INFO;
+    tDebug( LOGEXTRA ) << Q_FUNC_INFO;
 
     if ( m_playlist.isNull() )
     {
@@ -445,7 +429,7 @@ AudioEngine::loadPreviousTrack()
 void
 AudioEngine::loadNextTrack()
 {
-    qDebug() << Q_FUNC_INFO;
+    tDebug( LOGEXTRA ) << Q_FUNC_INFO;
 
     Tomahawk::result_ptr result;
 
@@ -473,7 +457,7 @@ AudioEngine::loadNextTrack()
 void
 AudioEngine::playItem( Tomahawk::PlaylistInterface* playlist, const Tomahawk::result_ptr& result )
 {
-    qDebug() << Q_FUNC_INFO;
+    tDebug( LOGEXTRA ) << Q_FUNC_INFO << result->url();
 
     if ( !m_playlist.isNull() )
         m_playlist.data()->reset();
@@ -505,7 +489,7 @@ AudioEngine::playlistNextTrackReady()
 void
 AudioEngine::onAboutToFinish()
 {
-    qDebug() << Q_FUNC_INFO;
+    tDebug( LOGVERBOSE ) << Q_FUNC_INFO;
     m_expectStop = true;
 }
 
@@ -513,11 +497,11 @@ AudioEngine::onAboutToFinish()
 void
 AudioEngine::onStateChanged( Phonon::State newState, Phonon::State oldState )
 {
-    qDebug() << Q_FUNC_INFO << oldState << newState << m_expectStop;
+    tDebug( LOGVERBOSE ) << Q_FUNC_INFO << oldState << newState << m_expectStop;
 
     if ( newState == Phonon::ErrorState )
     {
-        qDebug() << "Phonon Error:" << m_mediaObject->errorString() << m_mediaObject->errorType();
+        tLog() << "Phonon Error:" << m_mediaObject->errorString() << m_mediaObject->errorType();
         return;
     }
     if ( newState == Phonon::PlayingState )
@@ -549,7 +533,7 @@ AudioEngine::onStateChanged( Phonon::State newState, Phonon::State oldState )
         if ( stopped && m_expectStop )
         {
             m_expectStop = false;
-            qDebug() << "Loading next track.";
+            tDebug( LOGEXTRA ) << "Finding next track.";
             loadNextTrack();
         }
     }

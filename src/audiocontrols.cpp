@@ -212,7 +212,7 @@ AudioControls::onVolumeChanged( int volume )
 void
 AudioControls::onPlaybackStarted( const Tomahawk::result_ptr& result )
 {
-    qDebug() << Q_FUNC_INFO;
+    tDebug( LOGEXTRA ) << Q_FUNC_INFO;
 
     onPlaybackLoading( result );
 
@@ -233,23 +233,20 @@ AudioControls::onPlaybackStarted( const Tomahawk::result_ptr& result )
 void
 AudioControls::infoSystemInfo( Tomahawk::InfoSystem::InfoRequestData requestData, QVariant output )
 {
-//    qDebug() << Q_FUNC_INFO << requestData.caller << requestData.type << s_acInfoIdentifier << Tomahawk::InfoSystem::InfoAlbumCoverArt;
-
     if ( requestData.caller != s_acInfoIdentifier || requestData.type != Tomahawk::InfoSystem::InfoAlbumCoverArt )
     {
-//        qDebug() << "Info of wrong type or not with our identifier";
         return;
     }
 
     if ( m_currentTrack.isNull() )
     {
-        qDebug() << "Current track is null when trying to apply fetched cover art";
+        tLog() << "Current track is null when trying to apply fetched cover art";
         return;
     }
 
     if ( !output.canConvert< QVariantMap >() )
     {
-        qDebug() << "Cannot convert fetched art from a QByteArray";
+        tDebug( LOGINFO ) << "Cannot convert fetched art from a QByteArray";
         return;
     }
 
@@ -272,14 +269,13 @@ void
 AudioControls::infoSystemFinished( QString target )
 {
     Q_UNUSED( target );
-//    qDebug() << Q_FUNC_INFO;
 }
 
 
 void
 AudioControls::onPlaybackLoading( const Tomahawk::result_ptr& result )
 {
-    qDebug() << Q_FUNC_INFO;
+    tDebug( LOGEXTRA ) << Q_FUNC_INFO;
 
     m_currentTrack = result;
 

@@ -159,7 +159,6 @@ Result::updateAttributes()
 void
 Result::onOnline()
 {
-//    qDebug() << Q_FUNC_INFO << toString();
     emit statusChanged();
 }
 
@@ -167,7 +166,6 @@ Result::onOnline()
 void
 Result::onOffline()
 {
-//    qDebug() << Q_FUNC_INFO << toString();
     emit statusChanged();
 }
 

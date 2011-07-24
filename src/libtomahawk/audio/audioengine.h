@@ -87,8 +87,6 @@ public slots:
     void setPlaylist( Tomahawk::PlaylistInterface* playlist );
     void setQueue( Tomahawk::PlaylistInterface* queue ) { m_queue = queue; }
 
-    void onTrackAboutToFinish();
-
     void playlistNextTrackReady();
 
     void infoSystemInfo( Tomahawk::InfoSystem::InfoRequestData requestData, QVariant output );
