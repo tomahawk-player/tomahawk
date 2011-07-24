@@ -124,10 +124,11 @@ SourcesModel::columnCount( const QModelIndex& ) const
 int
 SourcesModel::rowCount( const QModelIndex& parent ) const
 {
-    if( !parent.isValid() ) {
+    if( !parent.isValid() )
+    {
         return m_rootItem->children().count();
     }
-//     qDebug() << "ASKING FOR AND RETURNING ROWCOUNT:" << parent.row() << parent.column() << parent.internalPointer() << itemFromIndex( parent )->children().count() << itemFromIndex( parent )->text();
+
     return itemFromIndex( parent )->children().count();
 }
 
@@ -135,8 +136,8 @@ SourcesModel::rowCount( const QModelIndex& parent ) const
 QModelIndex
 SourcesModel::parent( const QModelIndex& child ) const
 {
-//     qDebug() << Q_FUNC_INFO << child;
-    if( !child.isValid() ) {
+    if( !child.isValid() )
+    {
         return QModelIndex();
     }
 
@@ -152,14 +153,13 @@ SourcesModel::parent( const QModelIndex& child ) const
 QModelIndex
 SourcesModel::index( int row, int column, const QModelIndex& parent ) const
 {
-//     qDebug() << "INDEX:" << row << column << parent;
     if( row < 0 || column < 0 )
         return QModelIndex();
 
-    if( hasIndex( row, column, parent ) ) {
+    if( hasIndex( row, column, parent ) )
+    {
         SourceTreeItem *parentNode = itemFromIndex( parent );
         SourceTreeItem *childNode = parentNode->children().at( row );
-//         qDebug() << "Making index with parent:" << parentNode->text() << "and index:" << childNode->text();
         return createIndex( row, column, childNode );
     }
 
@@ -198,7 +198,7 @@ bool
 SourcesModel::dropMimeData( const QMimeData* data, Qt::DropAction action, int row, int column, const QModelIndex& parent )
 {
     SourceTreeItem* item = 0;
-    qDebug() << "Got mime data dropped:" << row << column << parent << itemFromIndex( parent )->text();
+//    qDebug() << "Got mime data dropped:" << row << column << parent << itemFromIndex( parent )->text();
     if( row == -1 && column == -1 )
         item = itemFromIndex( parent );
     else if( column == 0 )
@@ -208,7 +208,7 @@ SourcesModel::dropMimeData( const QMimeData* data, Qt::DropAction action, int ro
 
     Q_ASSERT( item );
 
-    qDebug() << "Dropping on:" << item->text();
+//    qDebug() << "Dropping on:" << item->text();
     return item->dropMimeData( data, action );
 }
 
@@ -245,7 +245,7 @@ SourcesModel::appendItem( const Tomahawk::source_ptr& source )
 bool
 SourcesModel::removeItem( const Tomahawk::source_ptr& source )
 {
-    qDebug() << "Removing source item from SourceTree:" << source->friendlyName();
+//    qDebug() << "Removing source item from SourceTree:" << source->friendlyName();
 
     QModelIndex idx;
     int rows = rowCount();
@@ -255,7 +255,7 @@ SourcesModel::removeItem( const Tomahawk::source_ptr& source )
         CollectionItem* item = static_cast< CollectionItem* >( idx.internalPointer() );
         if ( item && item->source() == source )
         {
-            qDebug() << "Found removed source item:" << item->source()->userName();
+//            qDebug() << "Found removed source item:" << item->source()->userName();
             beginRemoveRows( QModelIndex(), row, row );
             m_rootItem->removeChild( item );
             endRemoveRows();
@@ -277,12 +277,14 @@ SourcesModel::viewPageActivated( Tomahawk::ViewPage* page )
     if ( m_sourceTreeLinks.contains( page ) )
     {
         Q_ASSERT( m_sourceTreeLinks[ page ] );
-        qDebug() << "Got view page activated for itemL:" << m_sourceTreeLinks[ page ]->text();
+//        qDebug() << "Got view page activated for item:" << m_sourceTreeLinks[ page ]->text();
         QModelIndex idx = indexFromItem( m_sourceTreeLinks[ page ] );
         Q_ASSERT( idx.isValid() );
 
         emit selectRequest( idx );
-    } else {
+    }
+    else
+    {
         m_viewPageDelayedCacheItem = page;
     }
 }

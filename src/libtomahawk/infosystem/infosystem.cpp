@@ -34,12 +34,10 @@ namespace InfoSystem
 InfoPlugin::InfoPlugin()
     : QObject()
 {
-    qDebug() << Q_FUNC_INFO;
 }
 
 InfoPlugin::~InfoPlugin()
 {
-    qDebug() << Q_FUNC_INFO;
 }
 
 InfoSystem* InfoSystem::s_instance = 0;

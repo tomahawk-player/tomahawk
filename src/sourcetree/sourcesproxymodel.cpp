@@ -73,7 +73,6 @@ SourcesProxyModel::filterAcceptsRow( int sourceRow, const QModelIndex& sourcePar
 void
 SourcesProxyModel::selectRequested( const QModelIndex& idx )
 {
-    qDebug() << "asking for select from idx:" << idx << idx.model()->metaObject()->className();
     emit selectRequest( mapFromSource( idx ) );
 }
 

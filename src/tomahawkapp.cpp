@@ -223,7 +223,6 @@ TomahawkApp::init()
 
     if ( arguments().contains( "--http" ) || TomahawkSettings::instance()->value( "network/http", true ).toBool() )
     {
-        qDebug() << "Init HTTP Server.";
         initHTTP();
     }
 
@@ -535,7 +534,7 @@ TomahawkApp::loadUrl( const QString& url )
 void
 TomahawkApp::instanceStarted( KDSingleApplicationGuard::Instance instance )
 {
-    qDebug() << "INSTANCE STARTED!" << instance.pid << instance.arguments;
+    qDebug() << "Instance started!" << instance.pid << instance.arguments;
 
     if ( instance.arguments.size() < 2 )
     {
