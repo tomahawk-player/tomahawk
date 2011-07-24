@@ -335,13 +335,13 @@ Section "Tomahawk Player" SEC_TOMAHAWK_PLAYER
 
    File "${MING_BIN}\libphonon.dll"
    SetOutPath "$INSTDIR\phonon_backend"
-   File "${MING_BIN}\phonon_backend\phonon_vlc.dll"
+   File "${VLC_PATH}\phonon_backend\phonon_vlc.dll"
    SetOutPath "$INSTDIR"
 
    ;VLC
    ;SetOutPath "$INSTDIR\phonon_backend"
-   File "${MING_BIN}\libvlc.dll"
-   File "${MING_BIN}\libvlccore.dll"
+   File "${VLC_PATH}\libvlc.dll"
+   File "${VLC_PATH}\libvlccore.dll"
    SetOutPath "$INSTDIR\plugins"
    File /r "${VLC_PLUGIN_PATH}\*.dll"
    SetOutPath "$INSTDIR"
