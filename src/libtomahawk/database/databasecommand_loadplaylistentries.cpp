@@ -29,7 +29,7 @@ using namespace Tomahawk;
 void
 DatabaseCommand_LoadPlaylistEntries::exec( DatabaseImpl* dbi )
 {
-    qDebug() << "Loading playlist entries for revision" << m_revguid;
+//    qDebug() << "Loading playlist entries for revision" << m_revguid;
     generateEntries( dbi );
 
     emit done( m_revguid, m_guids, m_oldentries, m_islatest, m_entrymap, true );
@@ -88,7 +88,7 @@ DatabaseCommand_LoadPlaylistEntries::generateEntries( DatabaseImpl* dbi )
     }
     else
     {
-        qDebug() << "Playlist has no current revision data";
+//        qDebug() << "Playlist has no current revision data";
     }
 
     if( prevrev.length() )

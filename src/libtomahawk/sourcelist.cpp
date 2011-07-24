@@ -71,7 +71,6 @@ source_ptr SourceList::webSource() const
 void
 SourceList::loadSources()
 {
-    qDebug() << Q_FUNC_INFO;
     DatabaseCommand_LoadAllSources* cmd = new DatabaseCommand_LoadAllSources();
 
     connect( cmd, SIGNAL( done( QList<Tomahawk::source_ptr> ) ),
@@ -92,7 +91,7 @@ SourceList::setSources( const QList<Tomahawk::source_ptr>& sources )
         add( src );
     }
 
-    qDebug() << Q_FUNC_INFO << "- Total sources now:" << m_sources.size();
+    tLog() << Q_FUNC_INFO << "- Total sources now:" << m_sources.size();
     emit ready();
 }
 
@@ -107,8 +106,6 @@ SourceList::setLocal( const Tomahawk::source_ptr& localSrc )
         QMutexLocker lock( &m_mut );
         m_sources.insert( localSrc->userName(), localSrc );
         m_local = localSrc;
-
-        qDebug() << Q_FUNC_INFO << localSrc->userName();
     }
 
     emit sourceAdded( localSrc );
@@ -120,7 +117,7 @@ SourceList::add( const source_ptr& source )
 {
     Q_ASSERT( m_isReady );
 
-    qDebug() << "Adding to sources:" << source->userName() << source->id();
+//    qDebug() << "Adding to sources:" << source->userName() << source->id();
     m_sources.insert( source->userName(), source );
 
     if ( source->id() > 0 )

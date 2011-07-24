@@ -88,7 +88,7 @@ DBSyncConnection::changeState( State newstate )
 
     State s = m_state;
     m_state = newstate;
-    qDebug() << "DBSYNC State changed from" << s << "to" << newstate;
+    qDebug() << "DBSYNC State changed from" << s << "to" << newstate << "- source:" << m_source->id();
     emit stateChanged( newstate, s, "" );
 }
 
@@ -96,7 +96,7 @@ DBSyncConnection::changeState( State newstate )
 void
 DBSyncConnection::setup()
 {
-    qDebug() << Q_FUNC_INFO;
+//    qDebug() << Q_FUNC_INFO;
     setId( QString( "DBSyncConnection/%1" ).arg( socket()->peerAddress().toString() ) );
     check();
 }
@@ -105,7 +105,7 @@ DBSyncConnection::setup()
 void
 DBSyncConnection::trigger()
 {
-    qDebug() << Q_FUNC_INFO;
+//    qDebug() << Q_FUNC_INFO;
 
     // if we're still setting up the connection, do nothing - we sync on first connect anyway:
     if ( !isRunning() )
@@ -179,7 +179,7 @@ DBSyncConnection::gotThemCache( const QVariantMap& m )
     m_themcache = m;
     changeState( FETCHING );
 
-    qDebug() << "Sending a FETCHOPS cmd since:" << m_themcache.value( "lastop" ).toString();
+    tLog() << "Sending a FETCHOPS cmd since:" << m_themcache.value( "lastop" ).toString();
 
     QVariantMap msg;
     msg.insert( "method", "fetchops" );
@@ -217,7 +217,7 @@ DBSyncConnection::handleMsg( msg_ptr msg )
     QVariantMap m = msg->json().toMap();
     if ( m.empty() )
     {
-        qDebug() << "Failed to parse msg in dbsync" << m_source->id() << m_source->friendlyName();
+        tLog() << "Failed to parse msg in dbsync" << m_source->id() << m_source->friendlyName();
         Q_ASSERT( false );
         return;
     }
@@ -235,7 +235,7 @@ DBSyncConnection::handleMsg( msg_ptr msg )
             return;
         }
 
-        qDebug() << "APPLYING CMD" << cmd->commandname() << cmd->guid();
+//        qDebug() << "APPLYING CMD" << cmd->commandname() << cmd->guid();
 
         if ( !msg->is( Msg::FRAGMENT ) ) // last msg in this batch
         {
@@ -260,12 +260,12 @@ DBSyncConnection::handleMsg( msg_ptr msg )
 
     if ( m.value( "method" ).toString() == "trigger" )
     {
-        qDebug() << "Got trigger msg on dbsyncconnection, checking for new stuff.";
+//        qDebug() << "Got trigger msg on dbsyncconnection, checking for new stuff.";
         check();
         return;
     }
 
-    qDebug() << Q_FUNC_INFO << "Unhandled msg:" << msg->payload();
+    tLog() << Q_FUNC_INFO << "Unhandled msg:" << msg->payload();
     Q_ASSERT( false );
 }
 
@@ -273,7 +273,6 @@ DBSyncConnection::handleMsg( msg_ptr msg )
 void
 DBSyncConnection::lastOpApplied()
 {
-    qDebug() << Q_FUNC_INFO;
     changeState( SYNCED );
     // check again, until peer responds we have no new ops to process
     check();
@@ -284,8 +283,7 @@ DBSyncConnection::lastOpApplied()
 void
 DBSyncConnection::sendOps()
 {
-    qDebug() << Q_FUNC_INFO;
-    qDebug() << "Will send peer all ops since" << m_uscache.value( "lastop" ).toString();
+    tLog() << "Will send peer all ops since" << m_uscache.value( "lastop" ).toString();
 
     source_ptr src = SourceList::instance()->getLocal();
 

@@ -39,15 +39,15 @@ void
 DirLister::go()
 {
     qDebug() << Q_FUNC_INFO;
-    qDebug() << "Recursive? : " << (m_recursive ? "true" : "false");
-    qDebug() << "Manual full? : " << (m_manualFull ? "true" : "false");
+    qDebug() << "Recursive? :" << (m_recursive ? "true" : "false");
+    qDebug() << "Manual full? :" << (m_manualFull ? "true" : "false");
     if( !m_recursive )
     {
         foreach( QString dir, m_dirs )
         {
             if( m_dirmtimes.contains( dir ) )
             {
-                qDebug() << "Removing " << dir << " from m_dirmtimes because it's specifically requested";
+                qDebug() << "Removing" << dir << "from m_dirmtimes because it's specifically requested";
                 m_dirmtimes.remove( dir );
             }
             QStringList filtered = QStringList( m_dirmtimes.keys() ).filter( dir );
@@ -55,7 +55,7 @@ DirLister::go()
             {
                 if( !QDir( filteredDir ).exists() )
                 {
-                    qDebug() << "Removing " << filteredDir << " from m_dirmtimes because it does not exist";
+                    qDebug() << "Removing" << filteredDir << "from m_dirmtimes because it does not exist";
                     m_dirmtimes.remove( filteredDir );
                 }
             }
@@ -111,7 +111,7 @@ DirLister::scanDir( QDir dir, int depth, DirLister::Mode mode )
                     && ( m_dirmtimes.contains( dir.canonicalPath() ) || !m_recursive )
                     && mtime != m_dirmtimes.value( dir.canonicalPath() ) ) )
         {
-            qDebug() << "Deleting database file entries from " << dir;
+            qDebug() << "Deleting database file entries from" << dir;
             Database::instance()->enqueue( QSharedPointer<DatabaseCommand>( new DatabaseCommand_DeleteFiles( dir, SourceList::instance()->getLocal() ) ) );
         }
 
@@ -127,7 +127,7 @@ DirLister::scanDir( QDir dir, int depth, DirLister::Mode mode )
     foreach( const QFileInfo& di, dirs )
     {
         const QString canonical = di.canonicalFilePath();
-        //qDebug() << "Considering dir " << canonical;
+        //qDebug() << "Considering dir" << canonical;
         const bool haveDi = m_dirmtimes.contains( canonical );
         //qDebug() << "m_dirmtimes contains it?" << haveDi;
         if( !m_newdirmtimes.contains( canonical ) && ( mode == DirLister::Recursive || !haveDi ) ) {
@@ -312,7 +312,7 @@ MusicScanner::commitBatch( const QVariantList& tracks, const QVariantList& delet
 {
     if ( deletethese.length() )
     {
-        qDebug() << Q_FUNC_INFO << " deleting " << deletethese.length() << " tracks ";
+        qDebug() << Q_FUNC_INFO << "deleting" << deletethese.length() << "tracks";
         source_ptr localsrc = SourceList::instance()->getLocal();
         Database::instance()->enqueue(
             QSharedPointer<DatabaseCommand>( new DatabaseCommand_DeleteFiles( deletethese, SourceList::instance()->getLocal() ) )
@@ -320,7 +320,7 @@ MusicScanner::commitBatch( const QVariantList& tracks, const QVariantList& delet
     }
     if ( tracks.length() )
     {
-        qDebug() << Q_FUNC_INFO << " adding " << tracks.length() << " tracks ";
+        qDebug() << Q_FUNC_INFO << "adding" << tracks.length() << "tracks";
         source_ptr localsrc = SourceList::instance()->getLocal();
         Database::instance()->enqueue(
             QSharedPointer<DatabaseCommand>( new DatabaseCommand_AddFiles( tracks, localsrc ) )

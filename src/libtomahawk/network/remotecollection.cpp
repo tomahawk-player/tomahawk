@@ -26,7 +26,6 @@ using namespace Tomahawk;
 RemoteCollection::RemoteCollection( source_ptr source, QObject* parent )
     :  DatabaseCollection( source, parent )
 {
-    qDebug() << Q_FUNC_INFO;
 }
 
 
@@ -36,7 +35,6 @@ void
 RemoteCollection::addTracks( const QList<QVariant>& newitems )
 {
     Q_UNUSED( newitems );
-    qDebug() << Q_FUNC_INFO;
     Q_ASSERT( false );
 }
 
@@ -45,6 +43,5 @@ void
 RemoteCollection::removeTracks( const QDir& dir )
 {
     Q_UNUSED( dir );
-    qDebug() << Q_FUNC_INFO;
     Q_ASSERT( false );
 }

@@ -144,7 +144,7 @@ Playlist::Playlist( const source_ptr& author,
     , m_initEntries( entries )
     , m_busy( false )
 {
-    qDebug() << Q_FUNC_INFO << "2";
+//    qDebug() << Q_FUNC_INFO << "2";
     init();
 }
 
@@ -249,7 +249,6 @@ Playlist::rename( const QString& title )
 void
 Playlist::reportCreated( const playlist_ptr& self )
 {
-    qDebug() << Q_FUNC_INFO;
     Q_ASSERT( self.data() == this );
     m_source->collection()->addPlaylist( self );
 }
@@ -258,7 +257,6 @@ Playlist::reportCreated( const playlist_ptr& self )
 void
 Playlist::reportDeleted( const Tomahawk::playlist_ptr& self )
 {
-    qDebug() << Q_FUNC_INFO;
     Q_ASSERT( self.data() == this );
     m_source->collection()->deletePlaylist( self );
 
@@ -269,7 +267,7 @@ Playlist::reportDeleted( const Tomahawk::playlist_ptr& self )
 void
 Playlist::loadRevision( const QString& rev )
 {
-    qDebug() << Q_FUNC_INFO << currentrevision() << rev << m_title;
+//    qDebug() << Q_FUNC_INFO << currentrevision() << rev << m_title;
 
     setBusy( true );
     DatabaseCommand_LoadPlaylistEntries* cmd =
@@ -382,7 +380,7 @@ Playlist::setNewRevision( const QString& rev,
                           bool is_newest_rev,
                           const QMap< QString, Tomahawk::plentry_ptr >& addedmap )
 {
-    qDebug() << Q_FUNC_INFO << rev << is_newest_rev << m_title << addedmap.count() << neworderedguids.count() << oldorderedguids.count();
+//    qDebug() << Q_FUNC_INFO << rev << is_newest_rev << m_title << addedmap.count() << neworderedguids.count() << oldorderedguids.count();
 
     // build up correctly ordered new list of plentry_ptrs from
     // existing ones, and the ones that have been added
@@ -414,8 +412,6 @@ Playlist::setNewRevision( const QString& rev,
             Q_ASSERT( false ); // XXX
         }
     }
-
-    //qDebug() << Q_FUNC_INFO << rev << entries.length() << applied;
 
     PlaylistRevision pr;
     pr.oldrevisionguid = m_currentrevision;

@@ -134,7 +134,6 @@ AlbumView::onViewChanged()
 void
 AlbumView::onScrollTimeout()
 {
-    qDebug() << Q_FUNC_INFO;
     if ( m_timer.isActive() )
         m_timer.stop();
 
@@ -170,7 +169,7 @@ AlbumView::onScrollTimeout()
             if ( !item->cover.isNull() )
                 break;
 
-            qDebug() << "Need cover for:" << item->album()->artist()->name() << item->album()->name();
+//            qDebug() << "Need cover for:" << item->album()->artist()->name() << item->album()->name();
             Tomahawk::InfoSystem::InfoCriteriaHash trackInfo;
             trackInfo["artist"] = item->album()->artist()->name();
             trackInfo["album"] = item->album()->name();
@@ -191,7 +190,6 @@ AlbumView::onScrollTimeout()
 void
 AlbumView::dragEnterEvent( QDragEnterEvent* event )
 {
-    qDebug() << Q_FUNC_INFO;
     QListView::dragEnterEvent( event );
 }
 

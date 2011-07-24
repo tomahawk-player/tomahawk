@@ -37,7 +37,7 @@ ScriptResolver::ScriptResolver( const QString& exe )
     , m_stopped( false )
     , m_error( Tomahawk::ExternalResolver::NoError )
 {
-    qDebug() << Q_FUNC_INFO << exe;
+    tLog() << Q_FUNC_INFO << "Loading script resolver:" << exe;
     connect( &m_proc, SIGNAL( readyReadStandardError() ), SLOT( readStderr() ) );
     connect( &m_proc, SIGNAL( readyReadStandardOutput() ), SLOT( readStdout() ) );
     connect( &m_proc, SIGNAL( finished( int, QProcess::ExitStatus ) ), SLOT( cmdExited( int, QProcess::ExitStatus ) ) );
@@ -80,7 +80,7 @@ ScriptResolver::reload()
 void
 ScriptResolver::readStderr()
 {
-    qDebug() << "SCRIPT_STDERR" << filePath() << m_proc.readAllStandardError();
+    tLog() << "SCRIPT_STDERR" << filePath() << m_proc.readAllStandardError();
 }
 
 ScriptResolver::ErrorState
@@ -209,12 +209,12 @@ void
 ScriptResolver::cmdExited( int code, QProcess::ExitStatus status )
 {
     m_ready = false;
-    qDebug() << Q_FUNC_INFO << "SCRIPT EXITED, code" << code << "status" << status << filePath();
+    tLog() << Q_FUNC_INFO << "SCRIPT EXITED, code" << code << "status" << status << filePath();
     Tomahawk::Pipeline::instance()->removeResolver( this );
 
     if( m_stopped )
     {
-        qDebug() << "*** Script resolver stopped ";
+        tLog() << "*** Script resolver stopped ";
         emit finished();
 
         return;
@@ -223,12 +223,12 @@ ScriptResolver::cmdExited( int code, QProcess::ExitStatus status )
     if( m_num_restarts < 10 )
     {
         m_num_restarts++;
-        qDebug() << "*** Restart num" << m_num_restarts;
+        tLog() << "*** Restart num" << m_num_restarts;
         m_proc.start( filePath() );
     }
     else
     {
-        qDebug() << "*** Reached max restarts, not restarting.";
+        tLog() << "*** Reached max restarts, not restarting.";
     }
 }
 
@@ -263,13 +263,10 @@ ScriptResolver::doSetup( const QVariantMap& m )
 {
 //    qDebug() << Q_FUNC_INFO << m;
 
-    m_name       = m.value( "name" ).toString();
-    m_weight     = m.value( "weight", 0 ).toUInt();
-    m_timeout    = m.value( "timeout", 25 ).toUInt() * 1000;
-    qDebug() << "SCRIPT" << filePath() << "READY," << endl
-             << "name" << m_name << endl
-             << "weight" << m_weight << endl
-             << "timeout" << m_timeout;
+    m_name    = m.value( "name" ).toString();
+    m_weight  = m.value( "weight", 0 ).toUInt();
+    m_timeout = m.value( "timeout", 25 ).toUInt() * 1000;
+    qDebug() << "SCRIPT" << filePath() << "READY," << "name" << m_name << "weight" << m_weight << "timeout" << m_timeout;
 
     m_ready = true;
     Tomahawk::Pipeline::instance()->addResolver( this );
@@ -324,6 +321,6 @@ void
 ScriptResolver::stop()
 {
     m_stopped = true;
-    qDebug() << "KILLING PROCESS!";
+//    qDebug() << "KILLING PROCESS!";
     m_proc.kill();
 }

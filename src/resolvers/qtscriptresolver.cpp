@@ -97,7 +97,7 @@ QtScriptResolverHelper::resolverData()
 void
 QtScriptResolverHelper::log( const QString& message )
 {
-    qDebug() << m_scriptPath << ":" << message;
+    tLog() << m_scriptPath << ":" << message;
 }
 
 
@@ -111,7 +111,7 @@ QtScriptResolverHelper::setResolverConfig( QVariantMap config )
 void
 ScriptEngine::javaScriptConsoleMessage( const QString& message, int lineNumber, const QString& sourceID )
 {
-    qDebug() << "JAVASCRIPT:" << m_scriptPath << message << lineNumber << sourceID;
+    tLog() << "JAVASCRIPT:" << m_scriptPath << message << lineNumber << sourceID;
     Q_ASSERT( false );
 }
 
@@ -123,12 +123,12 @@ QtScriptResolver::QtScriptResolver( const QString& scriptPath )
     , m_error( Tomahawk::ExternalResolver::NoError )
     , m_resolverHelper( new QtScriptResolverHelper( scriptPath, this ) )
 {
-    qDebug() << Q_FUNC_INFO << scriptPath;
+    tLog() << Q_FUNC_INFO << "Loading JS resolver:" << scriptPath;
 
     m_engine = new ScriptEngine( this );
     if ( !QFile::exists( filePath() ) )
     {
-        qDebug() << Q_FUNC_INFO << "Failed loading JavaScript resolver:" << scriptPath;
+        tLog() << Q_FUNC_INFO << "Failed loading JavaScript resolver:" << scriptPath;
         m_error = Tomahawk::ExternalResolver::FileNotFound;
     }
     else
@@ -200,7 +200,7 @@ QtScriptResolver::init()
     QVariantMap config = resolverUserConfig();
     fillDataInWidgets( config );
 
-    qDebug() << Q_FUNC_INFO << m_name << m_weight << m_timeout;
+    qDebug() << "JS" << filePath() << "READY," << "name" << m_name << "weight" << m_weight << "timeout" << m_timeout;
 
     m_ready = true;
     Tomahawk::Pipeline::instance()->addResolver( this );
@@ -307,8 +307,6 @@ QtScriptResolver::stop()
 void
 QtScriptResolver::loadUi()
 {
-    qDebug() << Q_FUNC_INFO;
-
     QVariantMap m = m_engine->mainFrame()->evaluateJavaScript( RESOLVER_LEGACY_CODE  "resolver.getConfigUi();" ).toMap();
     m_dataWidgets = m["fields"].toList();
 
@@ -353,7 +351,7 @@ void
 QtScriptResolver::saveConfig()
 {
     QVariant saveData = loadDataFromWidgets();
-    qDebug() << Q_FUNC_INFO << saveData;
+//    qDebug() << Q_FUNC_INFO << saveData;
 
     m_resolverHelper->setResolverConfig( saveData.toMap() );
     m_engine->mainFrame()->evaluateJavaScript( RESOLVER_LEGACY_CODE "resolver.saveUserConfig();" );
@@ -427,8 +425,6 @@ QtScriptResolver::loadDataFromWidgets()
         saveData[ data["name"].toString() ] = value;
     }
 
-    qDebug() << saveData;
-
     return saveData;
 }
 
@@ -436,14 +432,13 @@ QtScriptResolver::loadDataFromWidgets()
 void
 QtScriptResolver::fillDataInWidgets( const QVariantMap& data )
 {
-    qDebug() << Q_FUNC_INFO << data;
     foreach(const QVariant& dataWidget, m_dataWidgets)
     {
         QString widgetName = dataWidget.toMap()["widget"].toString();
         QWidget* widget= findWidget( m_configWidget.data(), widgetName );
         if( !widget )
         {
-            qDebug() << Q_FUNC_INFO << "widget specified in resolver was not found:" << widgetName;
+            tLog() << Q_FUNC_INFO << "Widget specified in resolver was not found:" << widgetName;
             Q_ASSERT(false);
             return;
         }

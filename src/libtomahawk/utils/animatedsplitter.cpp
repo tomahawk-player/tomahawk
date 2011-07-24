@@ -57,7 +57,6 @@ AnimatedSplitter::addWidget( QWidget* widget )
 void
 AnimatedSplitter::addWidget( AnimatedWidget* widget )
 {
-    qDebug() << Q_FUNC_INFO << widget;
     QSplitter::addWidget( widget );
 
     connect( widget, SIGNAL( showWidget() ), SLOT( onShowRequest() ) );
@@ -70,8 +69,6 @@ AnimatedSplitter::addWidget( AnimatedWidget* widget )
 void
 AnimatedSplitter::onShowRequest()
 {
-    qDebug() << Q_FUNC_INFO << sender();
-
     AnimatedWidget* w = (AnimatedWidget*)(sender());
     if ( indexOf( w ) > 0 )
         show( indexOf( w ) );
@@ -111,8 +108,6 @@ AnimatedWidget::AnimatedWidget( AnimatedSplitter* parent )
     : m_parent( parent )
     , m_isHidden( false )
 {
-    qDebug() << Q_FUNC_INFO;
-
     m_timeLine = new QTimeLine( ANIMATION_TIME, this );
     m_timeLine->setUpdateInterval( 5 );
     m_timeLine->setEasingCurve( QEasingCurve::OutBack );
@@ -132,8 +127,6 @@ AnimatedWidget::onShown( QWidget* widget, bool animated )
 {
     if ( widget != this )
         return;
-
-    qDebug() << Q_FUNC_INFO << this;
 
     m_animateForward = true;
     if ( animated )
@@ -160,8 +153,6 @@ AnimatedWidget::onHidden( QWidget* widget, bool animated )
 {
     if ( widget != this )
         return;
-
-    qDebug() << Q_FUNC_INFO << this;
 
     m_animateForward = false;
     int minHeight = hiddenSize().height();
@@ -195,8 +186,6 @@ AnimatedWidget::onAnimationStep( int frame )
 void
 AnimatedWidget::onAnimationFinished()
 {
-    qDebug() << Q_FUNC_INFO;
-
     if ( m_animateForward )
     {
         setMinimumHeight( hiddenSize().height() );

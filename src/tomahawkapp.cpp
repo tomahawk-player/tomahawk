@@ -108,7 +108,7 @@ using namespace Tomahawk;
 TomahawkApp::TomahawkApp( int& argc, char *argv[] )
     : TOMAHAWK_APPLICATION( argc, argv )
 {
-    qDebug() << "TomahawkApp thread:" << this->thread();
+    qDebug() << "TomahawkApp thread:" << thread();
 
     setOrganizationName( QLatin1String( TOMAHAWK_ORGANIZATION_NAME ) );
     setOrganizationDomain( QLatin1String( TOMAHAWK_ORGANIZATION_DOMAIN ) );
@@ -140,7 +140,7 @@ TomahawkApp::init()
     new TomahawkSettings( this );
     TomahawkSettings* s = TomahawkSettings::instance();
 
-    qDebug() << "Setting NAM.";
+    tDebug( LOGINFO ) << "Setting NAM.";
 #ifdef LIBLASTFM_FOUND
     TomahawkUtils::setNam( lastfm::nam() );
 #else
@@ -150,7 +150,7 @@ TomahawkApp::init()
     TomahawkUtils::NetworkProxyFactory* proxyFactory = new TomahawkUtils::NetworkProxyFactory();
     if ( s->proxyType() != QNetworkProxy::NoProxy && !s->proxyHost().isEmpty() )
     {
-        qDebug() << "Setting proxy to saved values";
+        tDebug( LOGEXTRA ) << "Setting proxy to saved values";
         QNetworkProxy proxy( static_cast<QNetworkProxy::ProxyType>( s->proxyType() ), s->proxyHost(), s->proxyPort(), s->proxyUsername(), s->proxyPassword() );
         proxyFactory->setProxy( proxy );
         //TODO: On Windows and Mac because liblastfm sets an application level proxy it may override our factory, so may need to explicitly do
@@ -170,10 +170,10 @@ TomahawkApp::init()
     m_servent = QWeakPointer<Servent>( new Servent( this ) );
     connect( m_servent.data(), SIGNAL( ready() ), SLOT( initSIP() ) );
 
-    qDebug() << "Init Database.";
+    tDebug() << "Init Database.";
     initDatabase();
 
-    qDebug() << "Init Echonest Factory.";
+    tDebug() << "Init Echonest Factory.";
     GeneratorFactory::registerFactory( "echonest", new EchonestFactory );
 
     // Register shortcut handler for this platform
@@ -200,7 +200,7 @@ TomahawkApp::init()
         connect( m_shortcutHandler.data(), SIGNAL( mute() ), m_audioEngine.data(), SLOT( mute() ) );
     }
 
-    qDebug() << "Init InfoSystem.";
+    tDebug() << "Init InfoSystem.";
     m_infoSystem = QWeakPointer<Tomahawk::InfoSystem::InfoSystem>( new Tomahawk::InfoSystem::InfoSystem( this ) );
 
     Echonest::Config::instance()->setAPIKey( "JRIHWEP6GPOER2QQ6" );
@@ -209,16 +209,16 @@ TomahawkApp::init()
 #ifndef TOMAHAWK_HEADLESS
     if ( !m_headless )
     {
-        qDebug() << "Init MainWindow.";
+        tDebug() << "Init MainWindow.";
         m_mainwindow = new TomahawkWindow();
         m_mainwindow->setWindowTitle( "Tomahawk" );
         m_mainwindow->show();
     }
 #endif
 
-    qDebug() << "Init Local Collection.";
+    tDebug() << "Init Local Collection.";
     initLocalCollection();
-    qDebug() << "Init Pipeline.";
+    tDebug() << "Init Pipeline.";
     initPipeline();
 
     if ( arguments().contains( "--http" ) || TomahawkSettings::instance()->value( "network/http", true ).toBool() )
@@ -234,7 +234,7 @@ TomahawkApp::init()
 #endif
 
 #ifdef LIBLASTFM_FOUND
-    qDebug() << "Init Scrobbler.";
+    tDebug() << "Init Scrobbler.";
     m_scrobbler = new Scrobbler( this );
 #endif
 }
@@ -372,7 +372,7 @@ TomahawkApp::initDatabase()
         dbpath = TomahawkUtils::appDataDir().absoluteFilePath( "tomahawk.db" );
     }
 
-    qDebug() << "Using database:" << dbpath;
+    tDebug( LOGEXTRA ) << "Using database:" << dbpath;
     m_database = QWeakPointer<Database>( new Database( dbpath, this ) );
     Pipeline::instance()->databaseReady();
 }
@@ -470,7 +470,7 @@ TomahawkApp::initLocalCollection()
 void
 TomahawkApp::initServent()
 {
-    qDebug() << "Init Servent.";
+    tDebug() << "Init Servent.";
 
     bool upnp = !arguments().contains( "--noupnp" ) && TomahawkSettings::instance()->value( "network/upnp", true ).toBool() && !TomahawkSettings::instance()->preferStaticHostPort();
     int port = TomahawkSettings::instance()->externalPort();
@@ -492,7 +492,7 @@ TomahawkApp::initSIP()
         m_xmppBot = QWeakPointer<XMPPBot>( new XMPPBot( this ) );
 #endif
 
-        qDebug() << "Connecting SIP classes";
+        tDebug( LOGINFO ) << "Connecting SIP classes";
         //SipHandler::instance()->refreshProxy();
         SipHandler::instance()->loadFromConfig( true );
     }
@@ -520,7 +520,7 @@ TomahawkApp::loadUrl( const QString& url )
         QFileInfo info( f );
         if ( f.exists() && info.suffix() == "xspf" ) {
             XSPFLoader* l = new XSPFLoader( true, this );
-            qDebug() << "Loading spiff:" << url;
+            tDebug( LOGINFO ) << "Loading spiff:" << url;
             l->load( QUrl::fromUserInput( url ) );
 
             return true;
@@ -534,7 +534,7 @@ TomahawkApp::loadUrl( const QString& url )
 void
 TomahawkApp::instanceStarted( KDSingleApplicationGuard::Instance instance )
 {
-    qDebug() << "Instance started!" << instance.pid << instance.arguments;
+    tDebug( LOGINFO ) << "Instance started!" << instance.pid << instance.arguments;
 
     if ( instance.arguments.size() < 2 )
     {

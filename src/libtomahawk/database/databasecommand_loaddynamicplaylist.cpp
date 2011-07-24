@@ -34,7 +34,7 @@ using namespace Tomahawk;
 void
 DatabaseCommand_LoadDynamicPlaylist::exec( DatabaseImpl* dbi )
 {
-    qDebug() << "Loading dynamic playlist guid" << guid();
+//    qDebug() << "Loading dynamic playlist guid" << guid();
     // load the entries first
     generateEntries( dbi );
 
@@ -52,7 +52,7 @@ DatabaseCommand_LoadDynamicPlaylist::exec( DatabaseImpl* dbi )
 
     QList< QVariantMap > controls;
     QString playlist_guid;
-    qDebug() << "Loading controls..." << revisionGuid();
+//    qDebug() << "Loading controls..." << revisionGuid();
 //    qDebug() << "SELECT playlist_revision.playlist, controls, plmode, pltype "
 //    "FROM dynamic_playlist_revision, playlist_revision "
 //    "WHERE dynamic_playlist_revision.guid = "<< revisionGuid() << " AND playlist_revision.guid = dynamic_playlist_revision.guid";
@@ -70,7 +70,7 @@ DatabaseCommand_LoadDynamicPlaylist::exec( DatabaseImpl* dbi )
         mode = static_cast<GeneratorMode>( controlsQuery.value( 2 ).toInt() );
 
         QStringList controlIds = v.toStringList();
-        qDebug() << "Got controls in dynamic playlist, loading:" << controlIds << controlsQuery.value(1);
+//        qDebug() << "Got controls in dynamic playlist, loading:" << controlIds << controlsQuery.value(1);
         foreach( const QString& controlId, controlIds )
         {
             TomahawkSqlQuery controlQuery = dbi->newquery();

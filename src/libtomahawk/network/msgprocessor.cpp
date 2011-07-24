@@ -105,7 +105,7 @@ MsgProcessor::process( msg_ptr msg, quint32 mode, quint32 threshold )
     // uncompress if needed
     if( (mode & UNCOMPRESS_ALL) && msg->is( Msg::COMPRESSED ) )
     {
-        qDebug() << "MsgProcessor::UNCOMPRESSING";
+//        qDebug() << "MsgProcessor::UNCOMPRESSING";
         msg->m_payload = qUncompress( msg->payload() );
         msg->m_length  = msg->m_payload.length();
         msg->m_flags ^= Msg::COMPRESSED;
@@ -116,7 +116,7 @@ MsgProcessor::process( msg_ptr msg, quint32 mode, quint32 threshold )
         msg->is( Msg::JSON ) &&
         msg->m_json_parsed == false )
     {
-        qDebug() << "MsgProcessor::PARSING JSON";
+//        qDebug() << "MsgProcessor::PARSING JSON";
         bool ok;
         QJson::Parser parser;
         msg->m_json = parser.parse( msg->payload(), &ok );
@@ -128,7 +128,7 @@ MsgProcessor::process( msg_ptr msg, quint32 mode, quint32 threshold )
         !msg->is( Msg::COMPRESSED )
         && msg->length() > threshold )
     {
-        qDebug() << "MsgProcessor::COMPRESSING";
+//        qDebug() << "MsgProcessor::COMPRESSING";
         msg->m_payload = qCompress( msg->payload(), 9 );
         msg->m_length  = msg->m_payload.length();
         msg->m_flags |= Msg::COMPRESSED;

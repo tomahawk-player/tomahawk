@@ -39,14 +39,12 @@ InfoSystemCache::InfoSystemCache( QObject* parent )
     , m_cacheBaseDir( QDesktopServices::storageLocation( QDesktopServices::CacheLocation ) + "/InfoSystemCache/" )
     , m_cacheVersion( 2 )
 {
-    qDebug() << Q_FUNC_INFO;
-
     TomahawkSettings *s = TomahawkSettings::instance();
     if( s->infoSystemCacheVersion() != m_cacheVersion )
     {
-        qDebug() << "Cache version outdated, old:" << s->infoSystemCacheVersion()
-        << "new:" << m_cacheVersion
-        << "Doing upgrade, if any...";
+        tLog() << "Cache version outdated, old:" << s->infoSystemCacheVersion()
+               << "new:" << m_cacheVersion
+               << "Doing upgrade, if any...";
 
         uint current = s->infoSystemCacheVersion();
         while( current < m_cacheVersion )
@@ -66,7 +64,6 @@ InfoSystemCache::InfoSystemCache( QObject* parent )
 
 InfoSystemCache::~InfoSystemCache()
 {
-    qDebug() << Q_FUNC_INFO;
 }
 
 void
@@ -86,7 +83,7 @@ InfoSystemCache::doUpgrade( uint oldVersion, uint newVersion )
             foreach ( QFileInfo file, fileList )
             {
                 if ( !QFile::remove( file.canonicalFilePath() ) )
-                    qDebug() << "During upgrade, failed to remove cache file " << file.canonicalFilePath();
+                    tLog() << "During upgrade, failed to remove cache file " << file.canonicalFilePath();
             }
         }
     }
@@ -96,9 +93,7 @@ InfoSystemCache::doUpgrade( uint oldVersion, uint newVersion )
 void
 InfoSystemCache::pruneTimerFired()
 {
-    qDebug() << Q_FUNC_INFO;
-
-    qDebug() << "Pruning infosystemcache";
+    qDebug() << Q_FUNC_INFO << "Pruning infosystemcache";
     qlonglong currentMSecsSinceEpoch = QDateTime::currentMSecsSinceEpoch();
 
     for ( int i = 0; i <= InfoNoInfo; i++ )
@@ -113,9 +108,9 @@ InfoSystemCache::pruneTimerFired()
             if ( file.suffix().toLongLong() < currentMSecsSinceEpoch )
             {
                 if ( !QFile::remove( file.canonicalFilePath() ) )
-                    qDebug() << "Failed to remove stale cache file " << file.canonicalFilePath();
+                    tLog() << "Failed to remove stale cache file" << file.canonicalFilePath();
                 else
-                    qDebug() << "Removed stale cache file " << file.canonicalFilePath();
+                    qDebug() << "Removed stale cache file" << file.canonicalFilePath();
             }
             if ( fileLocationHash.contains( baseName ) )
                 fileLocationHash.remove( baseName );
@@ -128,7 +123,6 @@ InfoSystemCache::pruneTimerFired()
 void
 InfoSystemCache::getCachedInfoSlot( uint requestId, Tomahawk::InfoSystem::InfoCriteriaHash criteria, qint64 newMaxAge, Tomahawk::InfoSystem::InfoRequestData requestData )
 {
-    qDebug() << Q_FUNC_INFO;
     const QString criteriaHashVal = criteriaMd5( criteria );
     const QString criteriaHashValWithType = criteriaMd5( criteria, requestData.type );
     QHash< QString, QString > fileLocationHash = m_fileLocationCache[ requestData.type ];
@@ -137,7 +131,7 @@ InfoSystemCache::getCachedInfoSlot( uint requestId, Tomahawk::InfoSystem::InfoCr
         if ( !fileLocationHash.isEmpty() )
         {
             //We already know of some values, so no need to re-read the directory again as it's already happened
-            qDebug() << Q_FUNC_INFO << " notInCache -- filelocationhash empty";
+            qDebug() << Q_FUNC_INFO << "notInCache -- filelocationhash empty";
             emit notInCache( requestId, criteria, requestData );
             return;
         }
@@ -147,7 +141,7 @@ InfoSystemCache::getCachedInfoSlot( uint requestId, Tomahawk::InfoSystem::InfoCr
         if ( !dir.exists() )
         {
             //Dir doesn't exist so clearly not in cache
-            qDebug() << Q_FUNC_INFO << " notInCache -- dir doesn't exist";
+            qDebug() << Q_FUNC_INFO << "notInCache -- dir doesn't exist";
             emit notInCache( requestId, criteria, requestData );
             return;
         }
@@ -164,7 +158,7 @@ InfoSystemCache::getCachedInfoSlot( uint requestId, Tomahawk::InfoSystem::InfoCr
         if ( !fileLocationHash.contains( criteriaHashVal ) )
         {
             //Still didn't find it? It's really not in the cache then
-            qDebug() << Q_FUNC_INFO << " notInCache -- filelocationhash doesn't contain criteria val";
+            qDebug() << Q_FUNC_INFO << "notInCache -- filelocationhash doesn't contain criteria val";
             emit notInCache( requestId, criteria, requestData );
             return;
         }
@@ -176,15 +170,15 @@ InfoSystemCache::getCachedInfoSlot( uint requestId, Tomahawk::InfoSystem::InfoCr
     if ( currMaxAge < QDateTime::currentMSecsSinceEpoch() )
     {
         if ( !QFile::remove( file.canonicalFilePath() ) )
-            qDebug() << "Failed to remove stale cache file " << file.canonicalFilePath();
+            tLog() << "Failed to remove stale cache file" << file.canonicalFilePath();
         else
-            qDebug() << "Removed stale cache file " << file.canonicalFilePath();
+            qDebug() << "Removed stale cache file" << file.canonicalFilePath();
 
         fileLocationHash.remove( criteriaHashVal );
         m_fileLocationCache[ requestData.type ] = fileLocationHash;
         m_dataCache.remove( criteriaHashValWithType );
 
-        qDebug() << Q_FUNC_INFO << " notInCache -- file was stale";
+        qDebug() << Q_FUNC_INFO << "notInCache -- file was stale";
         emit notInCache( requestId, criteria, requestData );
         return;
     }
@@ -194,7 +188,7 @@ InfoSystemCache::getCachedInfoSlot( uint requestId, Tomahawk::InfoSystem::InfoCr
 
         if ( !QFile::rename( file.canonicalFilePath(), newFilePath ) )
         {
-            qDebug() << Q_FUNC_INFO << " notInCache -- failed to move old cache file to new location";
+            qDebug() << Q_FUNC_INFO << "notInCache -- failed to move old cache file to new location";
             emit notInCache( requestId, criteria, requestData );
             return;
         }
@@ -221,8 +215,6 @@ InfoSystemCache::getCachedInfoSlot( uint requestId, Tomahawk::InfoSystem::InfoCr
 void
 InfoSystemCache::updateCacheSlot( Tomahawk::InfoSystem::InfoCriteriaHash criteria, qint64 maxAge, Tomahawk::InfoSystem::InfoType type, QVariant output )
 {
-    qDebug() << Q_FUNC_INFO;
-
     const QString criteriaHashVal = criteriaMd5( criteria );
     const QString criteriaHashValWithType = criteriaMd5( criteria, type );
     const QString cacheDir = m_cacheBaseDir + QString::number( (int)type );
@@ -233,7 +225,7 @@ InfoSystemCache::updateCacheSlot( Tomahawk::InfoSystem::InfoCriteriaHash criteri
     {
         if ( !QFile::rename( fileLocationHash[ criteriaHashVal ], settingsFilePath ) )
         {
-            qDebug() << "Failed to move old cache file to new location!";
+            tLog() << "Failed to move old cache file to new location!";
             return;
         }
         fileLocationHash[ criteriaHashVal ] = settingsFilePath;
@@ -253,7 +245,7 @@ InfoSystemCache::updateCacheSlot( Tomahawk::InfoSystem::InfoCriteriaHash criteri
         qDebug() << "Creating cache directory " << cacheDir;
         if( !dir.mkpath( cacheDir ) )
         {
-            qDebug() << "Failed to create cache dir! Bailing...";
+            tLog() << "Failed to create cache dir! Bailing...";
             return;
         }
     }
