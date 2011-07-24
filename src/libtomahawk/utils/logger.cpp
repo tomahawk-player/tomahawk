@@ -38,22 +38,17 @@ ofstream logfile;
 namespace Logger
 {
 
-tLog&
-tLog::operator<<( const QVariant& v )
+static void
+log( const char *msg, unsigned int debugLevel, bool toDisk = true )
 {
-    QString const s = v.toString();
-    if ( !s.isEmpty() )
-        log( s.toAscii().data() );
+    if ( toDisk )
+    {
+        logfile << QTime::currentTime().toString().toAscii().data() << " [" << QString::number( debugLevel ).toAscii().data() << "]: " << msg << endl;
+        logfile.flush();
+    }
 
-    return *this;
-}
-
-
-void
-tLog::log( const char *msg )
-{
-    logfile << QTime::currentTime().toString().toAscii().data() << " " << msg << endl;
-    logfile.flush();
+    cout << msg << endl;
+    cout.flush();
 }
 
 
@@ -66,27 +61,23 @@ TomahawkLogHandler( QtMsgType type, const char *msg )
     switch( type )
     {
         case QtDebugMsg:
-            // Disable debug logging in release builds:
             #ifndef QT_NO_DEBUG
-            tLog::log( msg );
+            log( msg, 2, false );
             #endif
             break;
 
         case QtCriticalMsg:
-            tLog::log( msg );
+            log( msg, 0 );
             break;
 
         case QtWarningMsg:
-            tLog::log( msg );
+            log( msg, 0 );
             break;
 
         case QtFatalMsg:
-            tLog::log( msg );
+            log( msg, 0 );
             break;
     }
-
-    cout << msg << endl;
-    cout.flush();
 }
 
 
@@ -117,4 +108,29 @@ setupLogfile()
     qInstallMsgHandler( TomahawkLogHandler );
 }
 
-} // ns
+}
+
+using namespace Logger;
+
+TLog::TLog( unsigned int debugLevel )
+    : m_debugLevel( debugLevel )
+{
+}
+
+
+TLog::~TLog()
+{
+    log( m_msgs.join( " " ).toAscii().data(), m_debugLevel );
+}
+
+
+TLog&
+TLog::operator<<( const QVariant& v )
+{
+    QString const s = v.toString();
+    if ( !s.isEmpty() )
+        m_msgs << s;
+
+    return *this;
+}
+

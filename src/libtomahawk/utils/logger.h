@@ -20,22 +20,38 @@
 #define LOGGER_H
 
 #include <QDebug>
+#include <QStringList>
 
 #include "dllmacro.h"
 
 namespace Logger
 {
-    class DLLEXPORT tLog
+    class DLLEXPORT TLog
     {
     public:
-        tLog& operator<<( const QVariant& v );
-        static void log( const char *msg );
+        TLog( unsigned int debugLevel = 0 );
+        virtual ~TLog();
+
+        TLog& operator<<( const QVariant& v );
+
+    private:
+        QStringList m_msgs;
+        unsigned int m_debugLevel;
+    };
+
+    class DLLEXPORT TDebug : public TLog
+    {
+    public:
+        TDebug( unsigned int debugLevel = 1 ) : TLog( debugLevel )
+        {
+        }
     };
 
     DLLEXPORT void TomahawkLogHandler( QtMsgType type, const char *msg );
     DLLEXPORT void setupLogfile();
 }
 
-#define tLog Logger::tLog
+#define tLog Logger::TLog
+#define tDebug Logger::TDebug
 
 #endif
