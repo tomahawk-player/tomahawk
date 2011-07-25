@@ -52,7 +52,6 @@ LoadingSpinner::LoadingSpinner( QWidget* parent )
 
 LoadingSpinner::~LoadingSpinner()
 {
-
 }
 
 
@@ -60,9 +59,12 @@ void
 LoadingSpinner::fadeIn()
 {
     show();
+
     m_anim->start();
     m_showHide->setDirection( QTimeLine::Forward );
-    m_showHide->start();
+
+    if ( m_showHide->state() != QTimeLine::Running )
+        m_showHide->start();
 }
 
 
@@ -70,17 +72,17 @@ void
 LoadingSpinner::fadeOut()
 {
     m_showHide->setDirection( QTimeLine::Backward );
-    if( m_showHide->state() == QTimeLine::Running )
-        m_showHide->stop();
 
-    m_showHide->start();
+    if ( m_showHide->state() != QTimeLine::Running )
+        m_showHide->start();
 }
 
 
 void
 LoadingSpinner::hideFinished()
 {
-    if( m_showHide->direction() == QTimeLine::Backward ) {
+    if ( m_showHide->direction() == QTimeLine::Backward )
+    {
         hide();
         m_anim->stop();
     }
