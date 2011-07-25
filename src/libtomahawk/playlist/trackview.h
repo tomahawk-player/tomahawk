@@ -22,7 +22,7 @@
 #include <QTreeView>
 #include <QSortFilterProxyModel>
 
-#include "contextMenu.h"
+#include "contextmenu.h"
 #include "playlistitemdelegate.h"
 
 #include "dllmacro.h"

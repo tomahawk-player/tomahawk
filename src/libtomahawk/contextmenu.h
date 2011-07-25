@@ -23,7 +23,8 @@
 #include <QMenu>
 
 #include "typedefs.h"
-
+#include "album.h"
+#include "artist.h"
 #include "dllmacro.h"
 
 namespace Tomahawk
