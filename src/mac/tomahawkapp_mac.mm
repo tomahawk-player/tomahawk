@@ -101,7 +101,6 @@
 }
 
 - (void) setShortcutHandler: (Tomahawk::MacShortcutHandler*)handler {
-    qDebug() << "Setting shortcut handler of MacApp";
     // should be the same as MacApplication's
   shortcut_handler_ = handler;
 }
@@ -134,7 +133,6 @@
 }
 
 - (BOOL) application: (NSApplication*)app openFile:(NSString*)filename {
-  qDebug() << "Wants to open:" << [filename UTF8String];
 
   if (application_handler_->loadUrl(QString::fromUtf8([filename UTF8String]))) {
     return YES;
