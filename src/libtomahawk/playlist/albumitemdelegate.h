@@ -42,6 +42,7 @@ private:
     QAbstractItemView* m_view;
     AlbumProxyModel* m_model;
 
+    mutable QHash< qint64, QPixmap > m_cache;
     QPixmap m_shadowPixmap;
     QPixmap m_defaultCover;
 };

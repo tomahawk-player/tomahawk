@@ -52,6 +52,8 @@ private:
     void paintShort( QPainter* painter, const QStyleOptionViewItem& option, const QModelIndex& index ) const;
 
     unsigned int m_removalProgress;
+
+    mutable QHash< qint64, QPixmap > m_cache;
     QPixmap m_nowPlayingIcon;
     QPixmap m_arrowIcon;
 

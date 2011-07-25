@@ -74,9 +74,20 @@ AlbumItemDelegate::paint( QPainter* painter, const QStyleOptionViewItem& option,
 
     QPixmap cover = item->cover.isNull() ? m_defaultCover : item->cover;
     QRect r = option.rect.adjusted( 6, 4, -6, -41 );
-    painter->drawPixmap( r, cover.scaled( r.size(), Qt::KeepAspectRatio, Qt::SmoothTransformation ) );
-    painter->setPen( opt.palette.color( QPalette::Text ) );
 
+    QPixmap scover;
+    if ( m_cache.contains( cover.cacheKey() ) )
+    {
+        scover = m_cache.value( cover.cacheKey() );
+    }
+    else
+    {
+        scover = cover.scaled( r.size(), Qt::KeepAspectRatio, Qt::SmoothTransformation );
+        m_cache.insert( cover.cacheKey(), scover );
+    }
+    painter->drawPixmap( r, scover );
+
+    painter->setPen( opt.palette.color( QPalette::Text ) );
     QTextOption to;
     to.setWrapMode( QTextOption::NoWrap );
 

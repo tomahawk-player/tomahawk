@@ -198,8 +198,18 @@ PlaylistItemDelegate::paintShort( QPainter* painter, const QStyleOptionViewItem&
         painter->setPen( opt.palette.text().color() );
 
         QRect ir = r.adjusted( 4, 0, -option.rect.width() + option.rect.height() - 8 + r.left(), 0 );
-        painter->drawPixmap( ir, pixmap.scaled( ir.size(), Qt::KeepAspectRatio, Qt::SmoothTransformation ) );
-        //painter->drawPixmap( ir, item->cover );
+
+        QPixmap scover;
+        if ( m_cache.contains( pixmap.cacheKey() ) )
+        {
+            scover = m_cache.value( pixmap.cacheKey() );
+        }
+        else
+        {
+            scover = pixmap.scaled( ir.size(), Qt::KeepAspectRatio, Qt::SmoothTransformation );
+            m_cache.insert( pixmap.cacheKey(), scover );
+        }
+        painter->drawPixmap( ir, scover );
 
         QFont boldFont = opt.font;
         boldFont.setBold( true );
