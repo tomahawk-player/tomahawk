@@ -42,12 +42,13 @@ ScriptResolver::ScriptResolver( const QString& exe )
     connect( &m_proc, SIGNAL( readyReadStandardOutput() ), SLOT( readStdout() ) );
     connect( &m_proc, SIGNAL( finished( int, QProcess::ExitStatus ) ), SLOT( cmdExited( int, QProcess::ExitStatus ) ) );
 
+    QString pathToCheck = filePath();
 #ifdef WIN32
     // have to enclose in quotes if path contains spaces on windows...
     setFilePath( QString( "\"%1\"" ).arg( filePath() ) );
 #endif
 
-    if( !QFile::exists( filePath() ) )
+    if( !QFile::exists( pathToCheck ) )
         m_error = Tomahawk::ExternalResolver::FileNotFound;
     else
         m_proc.start( filePath() );
