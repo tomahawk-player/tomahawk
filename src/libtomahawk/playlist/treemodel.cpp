@@ -589,10 +589,9 @@ TreeModel::onTracksAdded( const QList<Tomahawk::query_ptr>& tracks, const QVaria
 
     if ( crows.second > 0 )
         emit endInsertRows();
-    else
-        emit dataChanged( item->index, item->index.sibling( item->index.row(), columnCount( QModelIndex() ) - 1 ) );
 
-    qDebug() << rowCount( parent );
+    emit dataChanged( item->index.sibling( 0, 0 ), item->index.sibling( item->index.row(), columnCount( QModelIndex() ) - 1 ) );
+
     emit loadingFinished();
 }
 

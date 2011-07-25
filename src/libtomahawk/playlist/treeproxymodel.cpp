@@ -75,15 +75,42 @@ TreeProxyModel::setFilter( const QString& pattern )
 bool
 TreeProxyModel::filterAcceptsRow( int sourceRow, const QModelIndex& sourceParent ) const
 {
+    TreeModelItem* pi = sourceModel()->itemFromIndex( sourceModel()->index( sourceRow, 0, sourceParent ) );
+    Q_ASSERT( pi );
+
+    if ( !pi->result().isNull() )
+    {
+        QList< Tomahawk::result_ptr > rl = m_cache.values( sourceParent );
+        foreach ( const Tomahawk::result_ptr& result, rl )
+        {
+            if ( result->track() == pi->result()->track() )
+                return ( result.data() == pi->result().data() );
+        }
+
+        for ( int i = 0; i < sourceModel()->rowCount( sourceParent ); i++ )
+        {
+            if ( i == sourceRow )
+                continue;
+
+            TreeModelItem* ti = sourceModel()->itemFromIndex( sourceModel()->index( i, 0, sourceParent ) );
+            if ( ti->result()->track() == pi->result()->track() )
+            {
+                if ( !pi->result()->isOnline() && ti->result()->isOnline() )
+                    return false;
+
+                if ( ti->result()->collection()->source()->isLocal() )
+                    return false;
+            }
+        }
+
+        tDebug() << "Accepting:" << pi->result()->toString() << pi->result()->collection()->source()->id();
+        m_cache.insertMulti( sourceParent, pi->result() );
+    }
+
     if ( filterRegExp().isEmpty() )
         return true;
 
-    TreeModelItem* pi = sourceModel()->itemFromIndex( sourceModel()->index( sourceRow, 0, sourceParent ) );
-    if ( !pi )
-        return false;
-
     QStringList sl = filterRegExp().pattern().split( " ", QString::SkipEmptyParts );
-
     bool found = true;
     foreach( const QString& s, sl )
     {

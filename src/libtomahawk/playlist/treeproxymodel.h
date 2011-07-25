@@ -84,6 +84,8 @@ protected:
 private:
     QString textForItem( TreeModelItem* item ) const;
 
+    mutable QMap< QPersistentModelIndex, Tomahawk::result_ptr > m_cache;
+
     TreeModel* m_model;
     RepeatMode m_repeatMode;
     bool m_shuffled;
