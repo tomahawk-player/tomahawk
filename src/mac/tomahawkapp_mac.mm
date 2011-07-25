@@ -38,6 +38,8 @@
 #import <Sparkle/SUUpdater.h>
 #endif
 
+#include <QDebug>
+
 // Capture global media keys on Mac (Cocoa only!)
 // See: http://www.rogueamoeba.com/utm/2007/09/29/apple-keyboard-media-key-event-handling/
 
