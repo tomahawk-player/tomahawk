@@ -83,6 +83,7 @@ set( libSources
     database/databasecommand_clientauthvalid.cpp
     database/databasecommand_socialaction.cpp
     database/databasecommand_loadsocialactions.cpp
+    database/databasecommand_genericselect.cpp
     database/database.cpp
 
     infosystem/infosystemcache.cpp
@@ -144,6 +145,8 @@ set( libSources
     playlist/dynamic/widgets/CollapsibleControls.cpp
     playlist/dynamic/widgets/DynamicSetupWidget.cpp
     playlist/dynamic/widgets/LoadingSpinner.cpp
+    playlist/dynamic/database/DatabaseControl.cpp
+    playlist/dynamic/database/DatabaseGenerator.cpp
 
     network/bufferiodevice.cpp
     network/msgprocessor.cpp
@@ -256,6 +259,7 @@ set( libHeaders
     database/databasecommand_clientauthvalid.h
     database/databasecommand_socialaction.h
     database/databasecommand_loadsocialactions.h
+    database/databasecommand_genericselect.h
 
     infosystem/infosystem.h
     infosystem/infosystemworker.h
@@ -326,6 +330,8 @@ set( libHeaders
     playlist/dynamic/widgets/CollapsibleControls.h
     playlist/dynamic/widgets/DynamicSetupWidget.h
     playlist/dynamic/widgets/LoadingSpinner.h
+    playlist/dynamic/database/DatabaseControl.h
+    playlist/dynamic/database/DatabaseGenerator.h
 
     utils/querylabel.h
     utils/elidedlabel.h
@@ -419,12 +425,12 @@ IF( APPLE )
     FIND_LIBRARY( SCRIPTINGBRIDGE_LIBRARY ScriptingBridge )
     MARK_AS_ADVANCED( COREAUDIO_LIBRARY COREFOUNDATION_LIBRARY FOUNDATION_LIBRARY SCRIPTINGBRIDGE_LIBRARY )
 
-    SET( libSources ${libSources} 
+    SET( libSources ${libSources}
       infosystem/infoplugins/mac/adium.mm
       infosystem/infoplugins/mac/adiumplugin.cpp
       utils/tomahawkutils_mac.mm )
 
-    SET( libHeaders ${libHeaders} 
+    SET( libHeaders ${libHeaders}
       infosystem/infoplugins/mac/adium.h
       infosystem/infoplugins/mac/adiumplugin.h )
 
