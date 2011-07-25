@@ -133,8 +133,18 @@ TreeItemDelegate::paint( QPainter* painter, const QStyleOptionViewItem& option, 
     QRect r = option.rect.adjusted( 4, 4, -option.rect.width() + option.rect.height() - 4, -4 );
 //    painter->drawPixmap( r, QPixmap( RESPATH "images/cover-shadow.png" ) );
 
+    QPixmap scover;
     QPixmap cover = item->cover.isNull() ? m_defaultCover : item->cover;
-    painter->drawPixmap( r, cover.scaled( r.size(), Qt::KeepAspectRatio, Qt::SmoothTransformation ) );
+    if ( m_cache.contains( cover.cacheKey() ) )
+    {
+        scover = m_cache.value( cover.cacheKey() );
+    }
+    else
+    {
+        scover = cover.scaled( r.size(), Qt::KeepAspectRatio, Qt::SmoothTransformation );
+        m_cache.insert( cover.cacheKey(), scover );
+    }
+    painter->drawPixmap( r, scover );
 
     QTextOption to;
     to.setAlignment( Qt::AlignVCenter );

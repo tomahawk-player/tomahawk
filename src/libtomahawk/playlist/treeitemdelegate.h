@@ -43,6 +43,8 @@ private:
     ArtistView* m_view;
     TreeProxyModel* m_model;
 
+    mutable QHash< qint64, QPixmap > m_cache;
+
     QPixmap m_nowPlayingIcon;
     QPixmap m_defaultCover;
 };
