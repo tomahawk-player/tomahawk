@@ -71,8 +71,6 @@ JabberPlugin::JabberPlugin( const QString& pluginId )
 {
     qDebug() << Q_FUNC_INFO;
 
-    qsrand(QDateTime::currentDateTime().toTime_t());
-
     m_configWidget = QWeakPointer< QWidget >( new QWidget );
     m_ui = new Ui_JabberConfig;
     m_ui->setupUi( m_configWidget.data() );

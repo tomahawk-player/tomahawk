@@ -33,8 +33,6 @@ TrackProxyModel::TrackProxyModel( QObject* parent )
     , m_shuffled( false )
     , m_showOfflineResults( true )
 {
-    qsrand( QTime( 0, 0, 0 ).secsTo( QTime::currentTime() ) );
-
     setFilterCaseSensitivity( Qt::CaseInsensitive );
     setSortCaseSensitivity( Qt::CaseInsensitive );
     setDynamicSortFilter( true );

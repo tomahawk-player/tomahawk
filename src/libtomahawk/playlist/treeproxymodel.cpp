@@ -31,8 +31,6 @@ TreeProxyModel::TreeProxyModel( QObject* parent )
     , m_repeatMode( PlaylistInterface::NoRepeat )
     , m_shuffled( false )
 {
-    qsrand( QTime( 0, 0, 0 ).secsTo( QTime::currentTime() ) );
-
     setFilterCaseSensitivity( Qt::CaseInsensitive );
     setSortCaseSensitivity( Qt::CaseInsensitive );
     setDynamicSortFilter( true );
