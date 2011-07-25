@@ -93,6 +93,16 @@ void
 InfoBar::setLongDescription( const QString& s )
 {
     ui->longDescriptionLabel->setText( s );
+
+    if ( s.isEmpty() )
+    {
+        ui->horizontalLayout->setStretchFactor( ui->verticalLayout, 1 );
+        ui->horizontalLayout->setStretchFactor( ui->verticalLayout_2, 0 );
+    } else
+    {
+        ui->horizontalLayout->setStretchFactor( ui->verticalLayout, 0 );
+        ui->horizontalLayout->setStretchFactor( ui->verticalLayout_2, 99 );
+    }
 }
 
 
