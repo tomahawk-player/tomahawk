@@ -1,7 +1,6 @@
 -- Script to migate from db version 24 to 25.
 -- Added the social_attributes table.
 --
--- Separate each command with %%
 
 ALTER TABLE dynamic_playlist RENAME TO tmp_dynamic_playlist;
 

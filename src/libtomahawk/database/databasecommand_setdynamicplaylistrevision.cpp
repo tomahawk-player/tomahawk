@@ -1,6 +1,6 @@
 /* === This file is part of Tomahawk Player - <http://tomahawk-player.org> ===
  *
- *   Copyright 2010-2011, Christian Muehlhaeuser <muesli@tomahawk-player.org>
+ *   Copyright 2010-2011, Leo Franchi <lfranchi@kde.org>
  *
  *   Tomahawk is free software: you can redistribute it and/or modify
  *   it under the terms of the GNU General Public License as published by
@@ -82,10 +82,9 @@ DatabaseCommand_SetDynamicPlaylistRevision::controlsV()
 void
 DatabaseCommand_SetDynamicPlaylistRevision::postCommitHook()
 {
-    qDebug() << Q_FUNC_INFO;
     if ( source().isNull() || source()->collection().isNull() )
     {
-        qDebug() << "Source has gone offline, not emitting to GUI.";
+        tDebug() << "Source has gone offline, not emitting to GUI.";
         return;
     }
 
@@ -95,7 +94,7 @@ DatabaseCommand_SetDynamicPlaylistRevision::postCommitHook()
 
     Q_ASSERT( !source().isNull() );
     Q_ASSERT( !source()->collection().isNull() );
-    qDebug() << "Postcommitting this playlist:" << playlistguid() << source().isNull() << source().data();
+    tLog() << "Postcommitting this playlist:" << playlistguid() << source().isNull();
 
     // private, but we are a friend. will recall itself in its own thread:
     dynplaylist_ptr playlist = source()->collection()->autoPlaylist( playlistguid() );
@@ -106,7 +105,7 @@ DatabaseCommand_SetDynamicPlaylistRevision::postCommitHook()
     // now that we separate them, if we get them as one and then get a changed mode, the playlist ends up in the wrong bucket in Collection.
     // so here we fix it if we have to.
     // HACK
-    qDebug() << "Does this need FIXING?" << playlist->mode() << source()->collection()->autoPlaylist( playlistguid() ).isNull() << source()->collection()->station( playlistguid() ).isNull();
+    tDebug() << "Does this need FIXING?" << playlist->mode() << source()->collection()->autoPlaylist( playlistguid() ).isNull() << source()->collection()->station( playlistguid() ).isNull();
     if( playlist->mode() == Static && source()->collection()->autoPlaylist( playlistguid() ).isNull() ) // should be here
         source()->collection()->moveStationToAuto( playlistguid() );
     else if ( playlist->mode() == OnDemand && source()->collection()->station( playlistguid() ).isNull() ) // should be here
@@ -114,7 +113,7 @@ DatabaseCommand_SetDynamicPlaylistRevision::postCommitHook()
 
     if ( playlist.isNull() )
     {
-        qDebug() <<"Got null playlist with guid:" << playlistguid() << "from source and collection:" << source()->friendlyName() << source()->collection()->name() << "and mode is static?:" << (m_mode == Static);
+        tLog() <<"Got null playlist with guid:" << playlistguid() << "from source and collection:" << source()->friendlyName() << source()->collection()->name() << "and mode is static?:" << (m_mode == Static);
         Q_ASSERT( !playlist.isNull() );
         return;
     }
@@ -205,7 +204,7 @@ DatabaseCommand_SetDynamicPlaylistRevision::exec( DatabaseImpl* lib )
     delQuery.prepare( "DELETE FROM dynamic_playlist_controls WHERE playlist = ?" );
     delQuery.addBindValue( m_playlistguid );
     if ( !delQuery.exec() )
-        qWarning() << "Failed to delete controls from dynamic playlist controls table";
+        tLog() << "Failed to delete controls from dynamic playlist controls table";
 
     TomahawkSqlQuery controlsQuery = lib->newquery();
     controlsQuery.prepare( "INSERT INTO dynamic_playlist_controls( id, playlist, selectedType, match, input ) "
@@ -242,7 +241,7 @@ DatabaseCommand_SetDynamicPlaylistRevision::exec( DatabaseImpl* lib )
     }
     if ( m_applied )
     {
-        qDebug() << "updating dynamic playlist, optimistic locking okay";
+        tLog() << "updating dynamic playlist, optimistic locking okay";
 
         TomahawkSqlQuery query2 = lib->newquery();
         query2.prepare( "UPDATE dynamic_playlist SET pltype = ?, plmode = ? WHERE guid = ?" );

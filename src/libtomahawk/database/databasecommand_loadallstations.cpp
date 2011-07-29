@@ -1,6 +1,6 @@
 /* === This file is part of Tomahawk Player - <http://tomahawk-player.org> ===
  *
- *   Copyright 2010-2011, Christian Muehlhaeuser <muesli@tomahawk-player.org>
+ *   Copyright 2010-2011, Leo Franchi <lfranchi@kde.org>
  *
  *   Tomahawk is free software: you can redistribute it and/or modify
  *   it under the terms of the GNU General Public License as published by
@@ -33,7 +33,7 @@ DatabaseCommand_LoadAllStations::exec( DatabaseImpl* dbi )
     TomahawkSqlQuery query = dbi->newquery();
 
     query.exec( QString( "SELECT playlist.guid as guid, title, info, creator, createdOn, lastmodified, shared, currentrevision, dynamic_playlist.pltype, dynamic_playlist.plmode "
-                         "FROM playlist, dynamic_playlist WHERE source %1 AND dynplaylist = 'true' AND playlist.guid = dynamic_playlist.guid AND dynamic_playlist.plmode = %2" )
+                         "FROM playlist, dynamic_playlist WHERE source %1 AND dynplaylist = 'true' AND playlist.guid = dynamic_playlist.guid AND dynamic_playlist.plmode = %2 AND dynamic_playlist.autoload = 'true'" )
     .arg( source()->isLocal() ? "IS NULL" : QString( "=%1" ).arg( source()->id() ) )
     .arg( OnDemand ) );
 

@@ -39,7 +39,7 @@
 */
 #include "schema.sql.h"
 
-#define CURRENT_SCHEMA_VERSION 25
+#define CURRENT_SCHEMA_VERSION 26
 
 
 DatabaseImpl::DatabaseImpl( const QString& dbname, Database* parent )
@@ -54,11 +54,11 @@ DatabaseImpl::DatabaseImpl( const QString& dbname, Database* parent )
     if ( version > 0 && version != CURRENT_SCHEMA_VERSION )
     {
         QString newname = QString( "%1.v%2" ).arg( dbname ).arg( version );
-        qDebug() << endl << "****************************" << endl;
-        qDebug() << "Schema version too old: " << version << ". Current version is:" << CURRENT_SCHEMA_VERSION;
-        qDebug() << "Moving" << dbname << newname;
-        qDebug() << "If the migration fails, you can recover your DB by copying" << newname << "back to" << dbname;
-        qDebug() << endl << "****************************" << endl;
+        tLog() << endl << "****************************" << endl;
+        tLog() << "Schema version too old: " << version << ". Current version is:" << CURRENT_SCHEMA_VERSION;
+        tLog() << "Moving" << dbname << newname;
+        tLog() << "If the migration fails, you can recover your DB by copying" << newname << "back to" << dbname;
+        tLog() << endl << "****************************" << endl;
 
         QFile::copy( dbname, newname );
         {
@@ -84,7 +84,7 @@ DatabaseImpl::DatabaseImpl( const QString& dbname, Database* parent )
         db.setDatabaseName( dbname );
         if ( !db.open() )
         {
-            qDebug() << "Failed to open database" << dbname;
+            tLog() << "Failed to open database" << dbname;
             throw "failed to open db"; // TODO
         }
 
@@ -103,7 +103,7 @@ DatabaseImpl::DatabaseImpl( const QString& dbname, Database* parent )
         m_dbid = uuid();
         query.exec( QString( "INSERT INTO settings(k,v) VALUES('dbid','%1')" ).arg( m_dbid ) );
     }
-    qDebug() << "Database ID:" << m_dbid;
+    tLog() << "Database ID:" << m_dbid;
 
      // make sqlite behave how we want:
     query.exec( "PRAGMA synchronous  = ON" );
@@ -145,7 +145,7 @@ DatabaseImpl::updateSchema( int oldVersion )
     // we are called here with the old database. we must migrate it to the CURRENT_SCHEMA_VERSION from the oldVersion
     if ( oldVersion == 0 ) // empty database, so create our tables and stuff
     {
-        qDebug() << "Create tables... old version is" << oldVersion;
+        tLog() << "Create tables... old version is" << oldVersion;
         QString sql( get_tomahawk_sql() );
         QStringList statements = sql.split( ";", QString::SkipEmptyParts );
         db.transaction();
@@ -156,7 +156,7 @@ DatabaseImpl::updateSchema( int oldVersion )
             if ( s.length() == 0 )
                 continue;
 
-            qDebug() << "Executing:" << s;
+            tLog() << "Executing:" << s;
             TomahawkSqlQuery query = newquery();
             query.exec( s );
         }
@@ -176,7 +176,7 @@ DatabaseImpl::updateSchema( int oldVersion )
             QFile script( path );
             if ( !script.exists() || !script.open( QIODevice::ReadOnly ) )
             {
-                qWarning() << "Failed to find or open upgrade script from" << (cur-1) << "to" << cur << " (" << path << ")! Aborting upgrade...";
+                tLog() << "Failed to find or open upgrade script from" << (cur-1) << "to" << cur << " (" << path << ")! Aborting upgrade...";
                 return false;
             }
 
@@ -188,13 +188,13 @@ DatabaseImpl::updateSchema( int oldVersion )
                 if ( clean.isEmpty() )
                     continue;
 
-                qDebug() << "Executing upgrade statement:" << clean;
+                tLog() << "Executing upgrade statement:" << clean;
                 TomahawkSqlQuery q = newquery();
                 q.exec( clean );
             }
         }
         db.commit();
-        qDebug() << "DB Upgrade successful!";
+        tLog() << "DB Upgrade successful!";
         return true;
     }
 }
@@ -299,7 +299,7 @@ DatabaseImpl::artistId( const QString& name_orig, bool& autoCreate )
         query.addBindValue( sortname );
         if ( !query.exec() )
         {
-            qDebug() << "Failed to insert artist:" << name_orig;
+            tDebug() << "Failed to insert artist:" << name_orig;
             return 0;
         }
 
@@ -345,7 +345,7 @@ DatabaseImpl::trackId( int artistid, const QString& name_orig, bool& isnew )
     query.addBindValue( sortname );
     if( !query.exec() )
     {
-        qDebug() << "Failed to insert track:" << name_orig ;
+        tDebug() << "Failed to insert track:" << name_orig ;
         return 0;
     }
 
@@ -396,7 +396,7 @@ DatabaseImpl::albumId( int artistid, const QString& name_orig, bool& isnew )
     query.addBindValue( sortname );
     if( !query.exec() )
     {
-        qDebug() << "Failed to insert album: " << name_orig ;
+        tDebug() << "Failed to insert album: " << name_orig ;
         return 0;
     }
 
@@ -533,7 +533,7 @@ DatabaseImpl::resultFromHint( const Tomahawk::query_ptr& origquery )
     else
     {
 //        Q_ASSERT( false );
-        qDebug() << "We don't support non-servent / non-file result-hints yet.";
+        tDebug() << "We don't support non-servent / non-file result-hints yet.";
 /*        res = Tomahawk::result_ptr( new Tomahawk::Result() );
         s = SourceList::instance()->webSource();
         res->setUrl( url );
@@ -630,7 +630,7 @@ DatabaseImpl::getDatabaseVersion( const QString& dbname )
         db.setDatabaseName( dbname );
         if ( !db.open() )
         {
-            qDebug() << "Failed to open database" << dbname;
+            tLog() << "Failed to open database" << dbname;
             throw "failed to open db"; // TODO
         }
 
@@ -639,7 +639,7 @@ DatabaseImpl::getDatabaseVersion( const QString& dbname )
         if ( qry.next() )
         {
             version = qry.value( 0 ).toInt();
-            qDebug() << "Database schema of" << dbname << "is" << version;
+            tLog() << "Database schema of" << dbname << "is" << version;
         }
     }
 

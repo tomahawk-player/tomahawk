@@ -23,6 +23,7 @@
 #include "genericpageitems.h"
 #include "utils/tomahawkutils.h"
 #include "utils/logger.h"
+#include <widgets/SocialPlaylistWidget.h>
 
 /// CollectionItem
 
@@ -35,11 +36,20 @@ CollectionItem::CollectionItem(  SourcesModel* mdl, SourceTreeItem* parent, cons
     , m_stations( 0 )
     , m_tempItem( 0 )
     , m_sourceInfoItem( 0   )
+    , m_coolPlaylistsItem( 0 )
     , m_curTempPage( 0 )
     , m_sourceInfoPage( 0 )
+    , m_coolPlaylistsPage( 0 )
 {
     if( m_source.isNull() ) { // super collection
         connect( ViewManager::instance(), SIGNAL( tempPageActivated( Tomahawk::ViewPage*) ), this, SLOT( tempPageActivated( Tomahawk::ViewPage* ) ) );
+
+        m_coolPlaylistsItem = new GenericPageItem( model(), this, tr( "Cool Stuff" ), QIcon( RESPATH "images/new-additions.png" ),
+                                                   boost::bind( &CollectionItem::coolPlaylistsClicked, this ),
+                                                   boost::bind( &CollectionItem::getCoolPlaylistsPage, this )
+                                                 );
+        m_coolPlaylistsItem->setSortValue( 200 );
+
 
         return;
     }
@@ -49,6 +59,8 @@ CollectionItem::CollectionItem(  SourcesModel* mdl, SourceTreeItem* parent, cons
                                             boost::bind( &CollectionItem::getSourceInfoPage, this )
                                           );
     m_sourceInfoItem->setSortValue( -300 );
+
+
 
     // create category items if there are playlists to show, or stations to show
     QList< playlist_ptr > playlists = source->collection()->playlists();
@@ -337,4 +349,21 @@ ViewPage*
 CollectionItem::getSourceInfoPage() const
 {
     return m_sourceInfoPage;
+}
+
+ViewPage*
+CollectionItem::coolPlaylistsClicked()
+{
+    if( !m_source.isNull() )
+        return 0;
+
+    m_coolPlaylistsPage = new SocialPlaylistWidget( ViewManager::instance()->widget() );
+    ViewManager::instance()->show( m_coolPlaylistsPage );
+    return m_coolPlaylistsPage;
+}
+
+ViewPage*
+CollectionItem::getCoolPlaylistsPage() const
+{
+    return m_coolPlaylistsPage;
 }

@@ -32,7 +32,7 @@
  *  that match.
  *
  * In order for the conversion to query_ptr to work, the SELECT command should select the following items:
- * artist.name, album.name, track.name, file.size, file.duration, file.bitrate, file.url, file.source, file.mimetype, track.id
+ * track.name, artist.name, album.name
  *
  */
 class DLLEXPORT DatabaseCommand_GenericSelect : public DatabaseCommand

@@ -59,7 +59,7 @@ DatabaseCommand_CreatePlaylist::postCommitHook()
     if ( m_report == false )
         return;
 
-    qDebug() << Q_FUNC_INFO << "reporting...";
+    tDebug() << Q_FUNC_INFO << "reporting...";
     if ( m_playlist.isNull() )
     {
         source_ptr src = source();
@@ -82,7 +82,6 @@ DatabaseCommand_CreatePlaylist::postCommitHook()
 void
 DatabaseCommand_CreatePlaylist::createPlaylist( DatabaseImpl* lib, bool dynamic)
 {
-    qDebug() << Q_FUNC_INFO;
     Q_ASSERT( !( m_playlist.isNull() && m_v.isNull() ) );
     Q_ASSERT( !source().isNull() );
 
@@ -123,7 +122,7 @@ DatabaseCommand_CreatePlaylist::createPlaylist( DatabaseImpl* lib, bool dynamic)
         cre.bindValue( ":creator", m.value( "creator" ) );
         cre.bindValue( ":lastmodified", m.value( "lastmodified", 0 ) );
     }
-    qDebug() << "CREATE PLAYLIST:" << cre.boundValues();
+    tDebug() << "CREATE PLAYLIST:" << cre.boundValues();
 
     cre.exec();
 }

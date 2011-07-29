@@ -52,48 +52,11 @@ DatabaseCommand_GenericSelect::exec( DatabaseImpl* dbi )
         Tomahawk::source_ptr s;
 
         QString artist, track, album;
-        artist = query.value( 0 ).toString();
-        album = query.value( 1 ).toString();
-        track = query.value( 2 ).toString();
+        track = query.value( 0 ).toString();
+        artist = query.value( 1 ).toString();
+        album = query.value( 2 ).toString();
 
-        Tomahawk::query_ptr qry = Tomahawk::Query::get( artist, track, album, uuid(), (query.value( 7 ).toUInt() != 0) ); // Only auto-resolve non-local results
-        Tomahawk::artist_ptr artistptr = Tomahawk::Artist::get( query.value( 12 ).toUInt(), artist );
-        Tomahawk::album_ptr albumptr = Tomahawk::Album::get( query.value( 13 ).toUInt(), album, artistptr );
-
-        // If it's a local track, set to the local source and url in the result and we're done. otherwise, we get resolved
-        if( query.value( 7 ).toUInt() == 0 )
-        {
-            s = SourceList::instance()->getLocal();
-            result->setUrl( query.value( 7 ).toString() );
-
-            result->setId( query.value( 9 ).toUInt() );
-            result->setArtist( artistptr );
-            result->setAlbum( albumptr );
-            result->setTrack( query.value( 2 ).toString() );
-            result->setSize( query.value( 3 ).toUInt() );
-            result->setDuration( query.value( 4 ).toUInt() );
-            result->setBitrate( query.value( 5 ).toUInt() );
-            result->setMimetype( query.value( 8 ).toString() );
-            result->setScore( 1.0 );
-            result->setCollection( s->collection() );
-
-            TomahawkSqlQuery attrQuery = dbi->newquery();
-            QVariantMap attr;
-
-            attrQuery.prepare( "SELECT k, v FROM track_attributes WHERE id = ?" );
-            attrQuery.bindValue( 0, result->dbid() );
-            attrQuery.exec();
-            while ( attrQuery.next() )
-            {
-                attr[ attrQuery.value( 0 ).toString() ] = attrQuery.value( 1 ).toString();
-            }
-
-            result->setAttributes( attr );
-
-            qry->addResults( QList<Tomahawk::result_ptr>() << result );
-            qry->setResolveFinished( true );
-        }
-
+        Tomahawk::query_ptr qry = Tomahawk::Query::get( artist, track, album, uuid(), true ); // Only auto-resolve non-local results
         queries << qry;
     }
 

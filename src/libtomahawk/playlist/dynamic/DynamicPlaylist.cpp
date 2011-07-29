@@ -24,7 +24,7 @@
 #include "database/databasecommand.h"
 #include "database/databasecommand_createdynamicplaylist.h"
 #include "database/databasecommand_setdynamicplaylistrevision.h"
-#include "database/databasecommand_loaddynamicplaylist.h"
+#include "database/databasecommand_loaddynamicplaylistentries.h"
 #include "database/databasecommand_deletedynamicplaylist.h"
 #include "tomahawksettings.h"
 #include "utils/logger.h"
@@ -221,7 +221,7 @@ DynamicPlaylist::loadRevision( const QString& rev )
 //    qDebug() << Q_FUNC_INFO << "Loading with:" << ( rev.isEmpty() ? currentrevision() : rev );
 
     setBusy( true );
-    DatabaseCommand_LoadDynamicPlaylist* cmd = new DatabaseCommand_LoadDynamicPlaylist( rev.isEmpty() ? currentrevision() : rev );
+    DatabaseCommand_LoadDynamicPlaylistEntries* cmd = new DatabaseCommand_LoadDynamicPlaylistEntries( rev.isEmpty() ? currentrevision() : rev );
 
     if( m_generator->mode() == OnDemand ) {
         connect( cmd, SIGNAL( done( QString,

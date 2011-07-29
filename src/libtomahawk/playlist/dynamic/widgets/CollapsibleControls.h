@@ -1,5 +1,5 @@
 /* === This file is part of Tomahawk Player - <http://tomahawk-player.org> ===
- * 
+ *
  *   Copyright 2010-2011, Christian Muehlhaeuser <muesli@tomahawk-player.org>
  *
  *   Tomahawk is free software: you can redistribute it and/or modify
@@ -20,6 +20,7 @@
 #define COLLAPSIBLE_CONTROLS_H
 
 #include "typedefs.h"
+#include "source.h"
 
 #include <QWidget>
 
@@ -42,35 +43,35 @@ public:
     CollapsibleControls( QWidget* parent );
     CollapsibleControls( const dynplaylist_ptr& playlist, bool isLocal, QWidget* parent = 0 );
     virtual ~CollapsibleControls();
-    
+
     void setControls( const dynplaylist_ptr& playlist, bool isLocal );
     QList< DynamicControlWrapper* > controls() const;
-    
+
     virtual QSize sizeHint() const;
 signals:
     void controlsChanged();
     void controlChanged( const Tomahawk::dyncontrol_ptr& control );
-    
+
 private slots:
     void toggleCollapse();
-    
+
     void onAnimationStep( int );
     void onAnimationFinished();
-    
+
 private:
     void init();
-    
+
     dynplaylist_ptr m_dynplaylist;
     QStackedLayout* m_layout;
     DynamicControlList* m_controls;
     bool m_isLocal;
-    
+
     QWidget* m_summaryWidget;
     QHBoxLayout* m_summaryLayout;
     ElidedLabel* m_summary;
     QStackedLayout* m_expandL;
     QToolButton* m_summaryExpand;
-    
+
     // animations!
     QTimeLine* m_timeline;
     int m_animHeight;

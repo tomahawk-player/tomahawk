@@ -76,6 +76,7 @@ set( libSources
     database/databasecommand_setdynamicplaylistrevision.cpp
     database/databasecommand_createdynamicplaylist.cpp
     database/databasecommand_loaddynamicplaylist.cpp
+    database/databasecommand_loaddynamicplaylistentries.cpp
     database/databasecommand_loadallautoplaylists.cpp
     database/databasecommand_loadallstations.cpp
     database/databasecommand_deletedynamicplaylist.cpp
@@ -177,6 +178,7 @@ set( libSources
     widgets/welcomeplaylistmodel.cpp
     widgets/overlaywidget.cpp
     widgets/HeaderLabel.cpp
+    widgets/SocialPlaylistWidget.cpp
     widgets/infowidgets/sourceinfowidget.cpp
     widgets/infowidgets/ArtistInfoWidget.cpp
 
@@ -252,6 +254,7 @@ set( libHeaders
     database/databasecommand_setdynamicplaylistrevision.h
     database/databasecommand_createdynamicplaylist.h
     database/databasecommand_loaddynamicplaylist.h
+    database/databasecommand_loaddynamicplaylistentries.h
     database/databasecommand_deletedynamicplaylist.h
     database/databasecommand_loadallautoplaylists.h
     database/databasecommand_loadallstations.h
@@ -350,6 +353,7 @@ set( libHeaders
     widgets/welcomeplaylistmodel.h
     widgets/overlaywidget.h
     widgets/HeaderLabel.h
+    widgets/SocialPlaylistWidget.h
     widgets/infowidgets/sourceinfowidget.h
     widgets/infowidgets/ArtistInfoWidget.h
 
@@ -372,6 +376,7 @@ set( libUI ${libUI}
     widgets/newplaylistwidget.ui
     widgets/searchwidget.ui
     widgets/welcomewidget.ui
+    widgets/SocialPlaylistWidget.ui
     widgets/infowidgets/sourceinfowidget.ui
     widgets/infowidgets/ArtistInfoWidget.ui
     playlist/topbar/topbar.ui

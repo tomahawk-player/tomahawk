@@ -36,6 +36,8 @@ class DatabaseCollection;
 
 namespace Tomahawk {
 
+class DatabaseCommand_LoadDynamicPlaylist;
+
 /**
  * Subclass of playlist that adds the information needed to store a dynamic playlist.
  *  It uses normal PlaylistEntries but also has a mode, a generator, and a list of controls
@@ -70,6 +72,7 @@ class DLLEXPORT DynamicPlaylist : public Playlist
 
     friend class ::DatabaseCommand_SetDynamicPlaylistRevision;
     friend class ::DatabaseCommand_CreateDynamicPlaylist;
+    friend class Tomahawk::DatabaseCommand_LoadDynamicPlaylist;
     friend class ::DatabaseCollection; /// :-(
 
 public:
