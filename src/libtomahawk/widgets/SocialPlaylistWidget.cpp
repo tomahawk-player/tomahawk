@@ -25,6 +25,7 @@
 #include "dynamic/GeneratorInterface.h"
 #include "dynamic/database/DatabaseGenerator.h"
 #include "utils/logger.h"
+#include "database/databasecommand_genericselect.h"
 
 #define COOLPLAYLIST_GUID "TOMAHAWK_COOLPLAYLISTOHAI_GUID"
 
@@ -119,7 +120,7 @@ SocialPlaylistWidget::playlist1Created()
 
     QString sql = "select track.name, artist.name, count(*) as counter from (select track from playback_log group by track, source), track, artist where track.id = track and artist.id = track.artist group by track order by counter desc limit 0,100;";
 
-    dyncontrol_ptr control = m_coolQuery1->generator().dynamicCast< DatabaseGenerator >()->createControl( sql, "This is a cool playlist!" );
+    dyncontrol_ptr control = m_coolQuery1->generator().dynamicCast< DatabaseGenerator >()->createControl( sql, DatabaseCommand_GenericSelect::Track, "This is a cool playlist!" );
     m_coolQuery1->createNewRevision( uuid() );
 
     connect( m_coolQuery1.data(), SIGNAL( dynamicRevisionLoaded( Tomahawk::DynamicPlaylistRevision ) ), this, SLOT( playlistRevisionLoaded( Tomahawk::DynamicPlaylistRevision ) ) );

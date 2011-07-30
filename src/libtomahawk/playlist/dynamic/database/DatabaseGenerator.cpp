@@ -38,9 +38,11 @@ DatabaseFactory::createControl ( const QString& controlType )
 }
 
 dyncontrol_ptr
-DatabaseFactory::createControl ( const QString& sql, const QString& summary )
+DatabaseFactory::createControl ( const QString& sql, DatabaseCommand_GenericSelect::QueryType type, const QString& summary )
 {
-    return dyncontrol_ptr( new DatabaseControl( sql, summary, typeSelectors() ) );
+    dyncontrol_ptr control = dyncontrol_ptr( new DatabaseControl( sql, summary, typeSelectors() ) );
+    control->setMatch( QString::number( type ) );
+    return control;
 }
 
 
@@ -122,7 +124,8 @@ DatabaseGenerator::generate( int number )
         dyncontrol_ptr control = m_controls.first();
 
         tDebug() << "Generated sql query:" << control.dynamicCast< DatabaseControl >()->sql();
-        DatabaseCommand_GenericSelect* cmd = new DatabaseCommand_GenericSelect( control.dynamicCast< DatabaseControl >()->sql() );
+        DatabaseCommand_GenericSelect* cmd = new DatabaseCommand_GenericSelect( control.dynamicCast< DatabaseControl >()->sql(),
+                                                                                static_cast< DatabaseCommand_GenericSelect::QueryType >( control->match().toInt() ) );
         m_curCountRequested = number; // Can't set count on dbcmd itself as sender() in slot is 0
 
         connect( cmd, SIGNAL( tracks( QList<Tomahawk::query_ptr> ) ), this, SLOT( tracksGenerated( QList<Tomahawk::query_ptr> ) ) );
@@ -156,9 +159,10 @@ DatabaseGenerator::createControl( const QString& type )
 }
 
 dyncontrol_ptr
-DatabaseGenerator::createControl ( const QString& sql, const QString& summary )
+DatabaseGenerator::createControl ( const QString& sql, DatabaseCommand_GenericSelect::QueryType type, const QString& summary )
 {
     m_controls << dyncontrol_ptr( new DatabaseControl( sql, summary, GeneratorFactory::typeSelectors( m_type ) ) );
+    m_controls.last()->setMatch( QString::number( type ) );
     return m_controls.last();
 }
 

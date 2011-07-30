@@ -27,9 +27,10 @@
 using namespace Tomahawk;
 
 
-DatabaseCommand_GenericSelect::DatabaseCommand_GenericSelect( const QString& sqlSelect, QObject* parent )
+DatabaseCommand_GenericSelect::DatabaseCommand_GenericSelect( const QString& sqlSelect, QueryType type, QObject* parent )
     : DatabaseCommand( parent )
     , m_sqlSelect( sqlSelect )
+    , m_queryType( type )
 {
 }
 
@@ -43,19 +44,40 @@ DatabaseCommand_GenericSelect::exec( DatabaseImpl* dbi )
     query.exec();
 
     QList< query_ptr > queries;
+    QList< artist_ptr > arts;
+    QList< album_ptr > albs;
 
     // Expecting
     while ( query.next() )
     {
-        Tomahawk::result_ptr result = Tomahawk::result_ptr( new Tomahawk::Result() );
-        Tomahawk::source_ptr s;
+        query_ptr qry;
+        artist_ptr artist;
+        album_ptr album;
 
-        QString artist, track, album;
-        track = query.value( 0 ).toString();
-        artist = query.value( 1 ).toString();
+        if ( m_queryType == Track )
+        {
+            QString artist, track;
+            track = query.value( 0 ).toString();
+            artist = query.value( 1 ).toString();
 
 
-        Tomahawk::query_ptr qry = Tomahawk::Query::get( artist, track, QString(), uuid(), true ); // Only auto-resolve non-local results
+            qry = Tomahawk::Query::get( artist, track, QString(), uuid(), true ); // Only auto-resolve non-local results
+        } else if ( m_queryType == Artist )
+        {
+            int artistId = query.value( 0 ).toInt();
+            QString artistName = query.value( 1 ).toString();
+
+            artist = Tomahawk::Artist::get( artistId, artistName );
+        } else if ( m_queryType == Album )
+        {
+            int albumId = query.value( 0 ).toInt();
+            QString albumName = query.value( 1 ).toString();
+            int artistId = query.value( 2 ).toInt();
+            QString artistName = query.value( 3 ).toString();
+
+            artist = Tomahawk::Artist::get( artistId, artistName );
+            album = Tomahawk::Album::get( albumId, albumName, artist );
+        }
 
         QVariantList extraData;
         int count = 2;
@@ -64,11 +86,29 @@ DatabaseCommand_GenericSelect::exec( DatabaseImpl* dbi )
             extraData << query.value( count );
             count++;
         }
-        if( !extraData.isEmpty() )
-            qry->setProperty( "data", extraData );
 
-        queries << qry;
+        if ( m_queryType == Track )
+        {
+            if ( !extraData.isEmpty() )
+                qry->setProperty( "data", extraData );
+            queries << qry;
+        } else if ( m_queryType == Artist )
+        {
+            if ( !extraData.isEmpty() )
+                artist->setProperty( "data", extraData );
+            arts << artist;
+        } else if ( m_queryType == Album )
+        {
+            if ( !extraData.isEmpty() )
+                album->setProperty( "data", extraData );
+            albs << album;
+        }
     }
 
-    emit tracks( queries );
+    if ( m_queryType == Track )
+        emit tracks( queries );
+    else if ( m_queryType == Artist )
+        emit artists( arts );
+    else if ( m_queryType == Album )
+        emit albums( albs );
 }

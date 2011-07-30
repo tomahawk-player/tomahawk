@@ -32,7 +32,15 @@
  *  that match.
  *
  * In order for the conversion to query_ptr to work, the SELECT command should select the following items:
- * track.name, artist.name [, optional extra values ]
+ *
+ * track query:
+ *      track.name, artist.name [, optional extra values ]
+ *
+ *  artist query:
+ *      artist.id, artist.name [, optional extra values ]
+ *
+ *  album query:
+ *      album.id, album.name, artist.id, artist.name [, optional extra values ]
  *
  * Any extra values in the resultset will be returned as a QVariantList attached to the "data" property of each query_ptr
  *
@@ -42,7 +50,13 @@ class DLLEXPORT DatabaseCommand_GenericSelect : public DatabaseCommand
     Q_OBJECT
 
 public:
-    explicit DatabaseCommand_GenericSelect( const QString& sqlSelect, QObject* parent = 0 );
+    enum QueryType {
+        Track,
+        Artist,
+        Album
+    };
+
+    explicit DatabaseCommand_GenericSelect( const QString& sqlSelect, QueryType type, QObject* parent = 0 );
     virtual void exec( DatabaseImpl* lib );
     virtual bool doesMutates() const { return false; }
 
@@ -50,9 +64,12 @@ public:
 
 signals:
     void tracks( const QList< Tomahawk::query_ptr >& tracks );
+    void artists( const QList< Tomahawk::artist_ptr >& artists );
+    void albums( const QList< Tomahawk::album_ptr >& albums );
 
 private:
     QString m_sqlSelect;
+    QueryType m_queryType;
 };
 
 #endif // DATABASECOMMAND_GENERICSELECT_H

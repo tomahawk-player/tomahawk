@@ -24,7 +24,7 @@
 #include "playlist/dynamic/GeneratorInterface.h"
 #include "playlist/dynamic/GeneratorFactory.h"
 #include "playlist/dynamic/DynamicControl.h"
-
+#include "database/databasecommand_genericselect.h"
 #include "dllmacro.h"
 
 namespace Tomahawk
@@ -39,7 +39,7 @@ namespace Tomahawk
         virtual dyncontrol_ptr createControl( const QString& controlType = QString() );
 
         // TO create a special SQL resolver that consists of a pre-baked SQL query and a description of it
-        virtual dyncontrol_ptr createControl( const QString& sql, const QString& summary );
+        virtual dyncontrol_ptr createControl( const QString& sql, DatabaseCommand_GenericSelect::QueryType type, const QString& summary );
 
         virtual QStringList typeSelectors() const;
     };
@@ -56,7 +56,7 @@ namespace Tomahawk
         virtual ~DatabaseGenerator();
 
         virtual dyncontrol_ptr createControl( const QString& type = QString() );
-        virtual dyncontrol_ptr createControl( const QString& sql, const QString& summary );
+        virtual dyncontrol_ptr createControl( const QString& sql, DatabaseCommand_GenericSelect::QueryType type, const QString& summary );
 
         virtual QPixmap logo();
         virtual void generate ( int number = -1 );
