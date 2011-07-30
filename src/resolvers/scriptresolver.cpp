@@ -19,6 +19,8 @@
 #include "scriptresolver.h"
 
 #include <QtEndian>
+#include <QtNetwork/QNetworkAccessManager>
+#include <QtNetwork/QNetworkProxy>
 
 #include "artist.h"
 #include "album.h"
@@ -52,6 +54,25 @@ ScriptResolver::ScriptResolver( const QString& exe )
         m_error = Tomahawk::ExternalResolver::FileNotFound;
     else
         m_proc.start( filePath() );
+
+    if ( !TomahawkUtils::nam() )
+        return;
+
+    // Send a configutaion message with any information the resolver might need
+    // For now, only the proxy information is sent
+    QVariantMap m;
+    m.insert( "_msgtype", "config" );
+    TomahawkUtils::NetworkProxyFactory* factory = dynamic_cast<TomahawkUtils::NetworkProxyFactory*>( TomahawkUtils::nam()->proxyFactory() );
+    QNetworkProxy proxy = factory->proxy();
+    QString proxyType = ( proxy.type() == QNetworkProxy::Socks5Proxy ? "socks5" : "none" );
+    m.insert( "proxytype", proxyType );
+    m.insert( "proxyhost", proxy.hostName() );
+    m.insert( "proxyport", proxy.port() );
+    m.insert( "proxyuser", proxy.user() );
+    m.insert( "proxypass", proxy.password() );
+    m.insert( "noproxyhosts", factory->noProxyHosts() );
+    QByteArray data = m_serializer.serialize( m );
+    sendMsg( data );
 }
 
 
