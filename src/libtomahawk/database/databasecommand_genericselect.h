@@ -44,6 +44,10 @@
  *
  * Any extra values in the resultset will be returned as a QVariantList attached to the "data" property of each query_ptr
  *
+ * Notes:
+ *      * Do not trail your SQL command with ;
+ *      * Do not use the LIMIT command if you pass limitResults > -1
+ *
  */
 class DLLEXPORT DatabaseCommand_GenericSelect : public DatabaseCommand
 {
@@ -56,7 +60,7 @@ public:
         Album
     };
 
-    explicit DatabaseCommand_GenericSelect( const QString& sqlSelect, QueryType type, QObject* parent = 0 );
+    explicit DatabaseCommand_GenericSelect( const QString& sqlSelect, QueryType type, int limitResults = -1, QObject* parent = 0 );
     virtual void exec( DatabaseImpl* lib );
     virtual bool doesMutates() const { return false; }
 
@@ -70,6 +74,7 @@ signals:
 private:
     QString m_sqlSelect;
     QueryType m_queryType;
+    int m_limit;
 };
 
 #endif // DATABASECOMMAND_GENERICSELECT_H

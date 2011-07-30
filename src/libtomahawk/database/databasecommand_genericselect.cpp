@@ -27,10 +27,11 @@
 using namespace Tomahawk;
 
 
-DatabaseCommand_GenericSelect::DatabaseCommand_GenericSelect( const QString& sqlSelect, QueryType type, QObject* parent )
+DatabaseCommand_GenericSelect::DatabaseCommand_GenericSelect( const QString& sqlSelect, QueryType type, int limit, QObject* parent )
     : DatabaseCommand( parent )
     , m_sqlSelect( sqlSelect )
     , m_queryType( type )
+    , m_limit( limit )
 {
 }
 
@@ -40,7 +41,7 @@ DatabaseCommand_GenericSelect::exec( DatabaseImpl* dbi )
 {
     TomahawkSqlQuery query = dbi->newquery();
 
-    query.prepare( m_sqlSelect );
+    query.prepare( QString( "%1 %2;" ).arg( m_sqlSelect ).arg( m_limit > -1 ? QString( " LIMIT %1" ).arg( m_limit ) : QString() ) );
     query.exec();
 
     QList< query_ptr > queries;

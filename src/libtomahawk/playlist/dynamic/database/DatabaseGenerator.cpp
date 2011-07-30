@@ -55,7 +55,6 @@ DatabaseFactory::typeSelectors() const
 
 DatabaseGenerator::DatabaseGenerator ( QObject* parent )
     : GeneratorInterface ( parent )
-    , m_curCountRequested( 0 )
 {
     // defaults
     m_type = "database";
@@ -125,8 +124,9 @@ DatabaseGenerator::generate( int number )
 
         tDebug() << "Generated sql query:" << control.dynamicCast< DatabaseControl >()->sql();
         DatabaseCommand_GenericSelect* cmd = new DatabaseCommand_GenericSelect( control.dynamicCast< DatabaseControl >()->sql(),
-                                                                                static_cast< DatabaseCommand_GenericSelect::QueryType >( control->match().toInt() ) );
-        m_curCountRequested = number; // Can't set count on dbcmd itself as sender() in slot is 0
+                                                                                static_cast< DatabaseCommand_GenericSelect::QueryType >( control->match().toInt() ),
+                                                                                number
+                                                                              );
 
         connect( cmd, SIGNAL( tracks( QList<Tomahawk::query_ptr> ) ), this, SLOT( tracksGenerated( QList<Tomahawk::query_ptr> ) ) );
         Database::instance()->enqueue( QSharedPointer< DatabaseCommand >( cmd ) );
@@ -139,15 +139,7 @@ DatabaseGenerator::generate( int number )
 void
 DatabaseGenerator::tracksGenerated ( const QList< query_ptr >& tracks )
 {
-    if( m_curCountRequested == 0 )
-        return;
-
-    if ( m_curCountRequested < tracks.size() )
-        emit generated( tracks.mid( 0, m_curCountRequested ) );
-    else
-        emit generated( tracks );
-
-    m_curCountRequested = 0;
+    emit generated( tracks );
 }
 
 

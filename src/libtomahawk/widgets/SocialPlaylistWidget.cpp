@@ -118,7 +118,7 @@ SocialPlaylistWidget::playlist1Created()
 {
     Q_ASSERT( m_coolQuery1->generator().dynamicCast< DatabaseGenerator >() );
 
-    QString sql = "select track.name, artist.name, count(*) as counter from (select track from playback_log group by track, source), track, artist where track.id = track and artist.id = track.artist group by track order by counter desc limit 0,100;";
+    QString sql = "select track.name, artist.name, count(*) as counter from (select track from playback_log group by track, source), track, artist where track.id = track and artist.id = track.artist group by track order by counter desc";
 
     dyncontrol_ptr control = m_coolQuery1->generator().dynamicCast< DatabaseGenerator >()->createControl( sql, DatabaseCommand_GenericSelect::Track, "This is a cool playlist!" );
     m_coolQuery1->createNewRevision( uuid() );
