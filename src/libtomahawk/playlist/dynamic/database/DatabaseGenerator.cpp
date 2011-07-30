@@ -53,7 +53,11 @@ DatabaseFactory::typeSelectors() const
 
 DatabaseGenerator::DatabaseGenerator ( QObject* parent )
     : GeneratorInterface ( parent )
+    , m_curCountRequested( 0 )
 {
+    // defaults
+    m_type = "database";
+    m_mode = Static;
 //     m_logo.load( RESPATH "images )
 }
 
@@ -85,41 +89,62 @@ void
 DatabaseGenerator::generate( int number )
 {
     tLog() << "Generating" << number << "tracks for this database dynamic playlist with" << m_controls.size() <<  "controls:";
+    if ( m_controls.isEmpty() )
+    {
+        qWarning() << "No controls, can't generate...!";
+        emit error( "Failed to generate tracks", "No controls!" );
+        return;
+    }
+
     foreach ( const dyncontrol_ptr& ctrl, m_controls )
         qDebug() << ctrl->selectedType() << ctrl->match() << ctrl->input();
 
     // TODO for now, we just support the special "SQL" control, not meant to be shown to the user. Just does a raw query.
-    bool isSql = false;
+    bool hasSql = false;
+    bool hasOther = false;
     foreach ( const dyncontrol_ptr& ctrl, m_controls )
     {
-        if( ctrl->selectedType() == "SQL" )
-            isSql = true;
-        else if( !isSql )
-        {
-            qWarning() << "Cannot mix sql and non-sql controls!";
-            emit error( "Failed to generate tracks", "Cannot mix sql and non-sql controls" );
-        }
+        if ( ctrl->selectedType() == "SQL" )
+            hasSql = true;
+        else
+            hasOther = true;
+    }
+    if ( hasSql == hasOther )
+    {
+        qWarning() << "Cannot mix sql and non-sql controls!";
+        emit error( "Failed to generate tracks", "Cannot mix sql and non-sql controls" );
+        return;
     }
 
     // TODO for now we just support 1 sql query if we're a sql type
-    if ( isSql )
+    if ( hasSql )
     {
         dyncontrol_ptr control = m_controls.first();
 
-        DatabaseCommand_GenericSelect* cmd = new DatabaseCommand_GenericSelect( control.dynamicCast< DatabaseControl >()->sql(), this );
-        connect( cmd, SIGNAL( tracks( QList<Tomahawk::query_ptr> ) ), this, SIGNAL( tracksGenerated( QList<Tomahawk::query_ptr> ) ) );
+        tDebug() << "Generated sql query:" << control.dynamicCast< DatabaseControl >()->sql();
+        DatabaseCommand_GenericSelect* cmd = new DatabaseCommand_GenericSelect( control.dynamicCast< DatabaseControl >()->sql() );
+        m_curCountRequested = number; // Can't set count on dbcmd itself as sender() in slot is 0
+
+        connect( cmd, SIGNAL( tracks( QList<Tomahawk::query_ptr> ) ), this, SLOT( tracksGenerated( QList<Tomahawk::query_ptr> ) ) );
         Database::instance()->enqueue( QSharedPointer< DatabaseCommand >( cmd ) );
 
         return;
     }
-
 
 }
 
 void
 DatabaseGenerator::tracksGenerated ( const QList< query_ptr >& tracks )
 {
-    emit generated( tracks );
+    if( m_curCountRequested == 0 )
+        return;
+
+    if ( m_curCountRequested < tracks.size() )
+        emit generated( tracks.mid( 0, m_curCountRequested ) );
+    else
+        emit generated( tracks );
+
+    m_curCountRequested = 0;
 }
 
 

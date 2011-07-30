@@ -31,7 +31,6 @@ DatabaseCommand_CreatePlaylist::DatabaseCommand_CreatePlaylist( QObject* parent 
     : DatabaseCommandLoggable( parent )
     , m_report( true )
 {
-    qDebug() << Q_FUNC_INFO << "def";
 }
 
 
@@ -41,7 +40,6 @@ DatabaseCommand_CreatePlaylist::DatabaseCommand_CreatePlaylist( const source_ptr
     , m_playlist( playlist )
     , m_report( false ) //this ctor used when creating locally, reporting done elsewhere
 {
-    qDebug() << Q_FUNC_INFO;
 }
 
 
@@ -55,7 +53,6 @@ DatabaseCommand_CreatePlaylist::exec( DatabaseImpl* lib )
 void
 DatabaseCommand_CreatePlaylist::postCommitHook()
 {
-    qDebug() << Q_FUNC_INFO;
     if ( m_report == false )
         return;
 
@@ -122,7 +119,6 @@ DatabaseCommand_CreatePlaylist::createPlaylist( DatabaseImpl* lib, bool dynamic)
         cre.bindValue( ":creator", m.value( "creator" ) );
         cre.bindValue( ":lastmodified", m.value( "lastmodified", 0 ) );
     }
-    tDebug() << "CREATE PLAYLIST:" << cre.boundValues();
 
     cre.exec();
 }

@@ -36,7 +36,7 @@ DatabaseControl::DatabaseControl( const QString& selectedType, const QStringList
 }
 
 DatabaseControl::DatabaseControl( const QString& sql, const QString& summary, const QStringList& typeSelectors, QObject* parent )
-    : DynamicControl ( typeSelectors )
+    : DynamicControl ( "SQL", typeSelectors )
     , m_sql( sql )
     , m_sqlSummary( summary )
 {

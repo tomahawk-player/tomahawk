@@ -32,7 +32,9 @@
  *  that match.
  *
  * In order for the conversion to query_ptr to work, the SELECT command should select the following items:
- * track.name, artist.name, album.name
+ * track.name, artist.name [, optional extra values ]
+ *
+ * Any extra values in the resultset will be returned as a QVariantList attached to the "data" property of each query_ptr
  *
  */
 class DLLEXPORT DatabaseCommand_GenericSelect : public DatabaseCommand

@@ -74,7 +74,10 @@ signals:
 private slots:
     void dynamicPlaylistLoaded( const Tomahawk::dynplaylist_ptr& ptr );
     void playlistRevisionLoaded ( Tomahawk::DynamicPlaylistRevision );
+    void tracksGenerated ( QList<Tomahawk::query_ptr> );
     void dynamicPlaylistLoadDone();
+
+    void playlist1Created();
 
 private:
     void load();

@@ -69,6 +69,7 @@ class DLLEXPORT DynamicPlaylist : public Playlist
     // :-( int becuase qjson chokes on my enums
     Q_PROPERTY( int     mode                  WRITE setMode   READ mode )
     Q_PROPERTY( QString type                  WRITE setType   READ type )
+    Q_PROPERTY( bool    autoLoad                              READ autoLoad )
 
     friend class ::DatabaseCommand_SetDynamicPlaylistRevision;
     friend class ::DatabaseCommand_CreateDynamicPlaylist;
@@ -86,7 +87,9 @@ public:
                                              const QString& creator,
                                              GeneratorMode mode,
                                              bool shared,
-                                             const QString& type = QString() );
+                                             const QString& type = QString(),
+                                             bool autoLoad = true
+                                           );
 
     static bool remove( const dynplaylist_ptr& playlist );
     virtual void loadRevision( const QString& rev = "" );
@@ -95,6 +98,7 @@ public:
     int mode() const;
     QString type() const;
     geninterface_ptr generator() const;
+    bool autoLoad() const  { return m_autoLoad; }
 
     // Creates a new revision from the playlist in memory. Use this is you change the controls or
     // mode of a playlist and want to save it to db/others.
@@ -186,10 +190,13 @@ private:
                               const QString& creator,
                               const QString& type,
                               GeneratorMode mode,
-                              bool shared );
+                              bool shared,
+                              bool autoLoad = true );
 
     QList< dyncontrol_ptr > variantsToControl( const QList< QVariantMap >& controlsV );
+
     geninterface_ptr m_generator;
+    bool m_autoLoad;
 };
 
 }; // namespace

@@ -22,6 +22,9 @@
 #include "database/databasecommand_loaddynamicplaylist.h"
 #include "database/database.h"
 #include "sourcelist.h"
+#include "dynamic/GeneratorInterface.h"
+#include "dynamic/database/DatabaseGenerator.h"
+#include "utils/logger.h"
 
 #define COOLPLAYLIST_GUID "TOMAHAWK_COOLPLAYLISTOHAI_GUID"
 
@@ -68,6 +71,9 @@ SocialPlaylistWidget::dynamicPlaylistLoaded ( const dynplaylist_ptr& ptr )
     m_coolQuery1 = ptr;
     tLog() << "SocialPlaylistWidget got dynplaylist loaded with currev: " << m_coolQuery1->currentrevision();
     connect( m_coolQuery1.data(), SIGNAL( dynamicRevisionLoaded( Tomahawk::DynamicPlaylistRevision ) ), this, SLOT( playlistRevisionLoaded( Tomahawk::DynamicPlaylistRevision ) ) );
+    connect( m_coolQuery1->generator().data(), SIGNAL(generated( QList<Tomahawk::query_ptr> ) ), this, SLOT( tracksGenerated( QList<Tomahawk::query_ptr> ) ) );
+
+    connect( m_coolQuery1->generator().data(), SIGNAL(generated( QList<Tomahawk::query_ptr> ) ), this, SLOT( tracksGenerated( QList<Tomahawk::query_ptr> ) ) );
     m_coolQuery1->loadRevision( m_coolQuery1->currentrevision() );
 }
 
@@ -75,6 +81,11 @@ void
 SocialPlaylistWidget::playlistRevisionLoaded( Tomahawk::DynamicPlaylistRevision )
 {
     m_coolQuery1Model->loadPlaylist( m_coolQuery1 );
+    m_coolQuery1->resolve();
+
+    if ( m_coolQuery1->entries().isEmpty() ) // Generate some
+        m_coolQuery1->generator()->generate( 30 );
+
 }
 
 void
@@ -90,5 +101,38 @@ SocialPlaylistWidget::dynamicPlaylistLoadDone()
 void
 SocialPlaylistWidget::createPlaylist()
 {
-    // TODO
+    // Ok, lets create our playlist
+    /**
+     * select count(*) as counter, track.name, artist.name from (select track from playback_log group by track, source), track, artist where track.id = track and artist.id = track.artist group by track order by counter desc limit 0,20;
+     s elect count(*) as counter, playback_log.track, track.name, artist.name from playback_log, track, artist where track.id = playback_log.track and artist.id = track.artist group by playback_log.track order by counter desc limit 0,10;              *
+     select count(*) as counter, track.name, artist.name from (select track from playback_log group by track, source), track, artist where track not in (select track from playback_log where source is null group by track) and track.id = track and artist.id = track.artist group by track order by counter desc limit 0,20;
+     select count(*) as counter, track.name, artist.name from (select track from playback_log where source > 0 group by track, source), track, artist where track.id = track and artist.id = track.artist group by track order by counter desc limit 0,20;
+     */
+    m_coolQuery1 = DynamicPlaylist::create( SourceList::instance()->getLocal(), COOLPLAYLIST_GUID, "Cool Playlist!", QString(), QString(), Static, false, "database", false );
+    connect( m_coolQuery1.data(), SIGNAL( created() ), this, SLOT( playlist1Created() ) );
+}
+
+void
+SocialPlaylistWidget::playlist1Created()
+{
+    Q_ASSERT( m_coolQuery1->generator().dynamicCast< DatabaseGenerator >() );
+
+    QString sql = "select track.name, artist.name, count(*) as counter from (select track from playback_log group by track, source), track, artist where track.id = track and artist.id = track.artist group by track order by counter desc limit 0,100;";
+
+    dyncontrol_ptr control = m_coolQuery1->generator().dynamicCast< DatabaseGenerator >()->createControl( sql, "This is a cool playlist!" );
+    m_coolQuery1->createNewRevision( uuid() );
+
+    connect( m_coolQuery1.data(), SIGNAL( dynamicRevisionLoaded( Tomahawk::DynamicPlaylistRevision ) ), this, SLOT( playlistRevisionLoaded( Tomahawk::DynamicPlaylistRevision ) ) );
+    connect( m_coolQuery1->generator().data(), SIGNAL(generated( QList<Tomahawk::query_ptr> ) ), this, SLOT( tracksGenerated( QList<Tomahawk::query_ptr> ) ) );
+}
+
+void
+SocialPlaylistWidget::tracksGenerated( QList< query_ptr > queries )
+{
+    if ( sender() == m_coolQuery1->generator().data() )
+    {
+        tDebug() << "Got generated tracks from playlist, adding" << queries.size() << "tracks";
+        m_coolQuery1Model->clear();
+        m_coolQuery1->addEntries( queries, m_coolQuery1->currentrevision() );
+    }
 }

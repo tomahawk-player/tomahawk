@@ -37,13 +37,12 @@ DatabaseCommand_GenericSelect::DatabaseCommand_GenericSelect( const QString& sql
 void
 DatabaseCommand_GenericSelect::exec( DatabaseImpl* dbi )
 {
-    Q_ASSERT( source()->isLocal() || source()->id() >= 1 );
     TomahawkSqlQuery query = dbi->newquery();
 
-    query.exec( m_sqlSelect );
+    query.prepare( m_sqlSelect );
+    query.exec();
 
     QList< query_ptr > queries;
-
 
     // Expecting
     while ( query.next() )
@@ -54,9 +53,20 @@ DatabaseCommand_GenericSelect::exec( DatabaseImpl* dbi )
         QString artist, track, album;
         track = query.value( 0 ).toString();
         artist = query.value( 1 ).toString();
-        album = query.value( 2 ).toString();
 
-        Tomahawk::query_ptr qry = Tomahawk::Query::get( artist, track, album, uuid(), true ); // Only auto-resolve non-local results
+
+        Tomahawk::query_ptr qry = Tomahawk::Query::get( artist, track, QString(), uuid(), true ); // Only auto-resolve non-local results
+
+        QVariantList extraData;
+        int count = 2;
+        while ( query.value( count ).isValid() )
+        {
+            extraData << query.value( count );
+            count++;
+        }
+        if( !extraData.isEmpty() )
+            qry->setProperty( "data", extraData );
+
         queries << qry;
     }
 

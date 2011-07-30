@@ -78,11 +78,16 @@ public:
     void setType( const QString& type ) { m_type = type; }
     void setMode( int mode ) { m_mode = (GeneratorMode)mode; }
 
+    void setPlaylist( DynamicPlaylist* pl ); // raw pointer b/c we don't have the shared pointer from inside the shared pointer
+
 private:
     QString m_type;
     GeneratorMode m_mode;
     QList< dyncontrol_ptr > m_controls;
     QList< QVariant > m_controlsV;
+
+    // ARG i hate sharedpointers sometimes
+    DynamicPlaylist* m_playlist; // Only used if setting revision of a non-autoloaded playlist, as those aren't able to be looked up by guid
 };
 
 #endif // DATABASECOMMAND_SETDYNAMICPLAYLISTREVISION_H

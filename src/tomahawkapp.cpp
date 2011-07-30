@@ -40,6 +40,7 @@
 #include "sip/SipHandler.h"
 #include "playlist/dynamic/GeneratorFactory.h"
 #include "playlist/dynamic/echonest/EchonestGenerator.h"
+#include "playlist/dynamic/database/DatabaseGenerator.h"
 #include "web/api_v1.h"
 #include "resolvers/scriptresolver.h"
 #include "resolvers/qtscriptresolver.h"
@@ -175,6 +176,8 @@ TomahawkApp::init()
 
     tDebug() << "Init Echonest Factory.";
     GeneratorFactory::registerFactory( "echonest", new EchonestFactory );
+    tDebug() << "Init Database Factory.";
+    GeneratorFactory::registerFactory( "database", new DatabaseFactory );
 
     // Register shortcut handler for this platform
 #ifdef Q_WS_MAC

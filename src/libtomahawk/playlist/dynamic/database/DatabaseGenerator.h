@@ -73,6 +73,7 @@ namespace Tomahawk
 
     private:
         QPixmap m_logo;
+        int m_curCountRequested;
     };
 
 };

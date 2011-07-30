@@ -59,6 +59,7 @@ DynamicPlaylist::DynamicPlaylist ( const Tomahawk::source_ptr& src,
                                    int lastmod,
                                    const QString& guid )
     : Playlist( src, currentrevision, title, info, creator, createdOn, shared, lastmod, guid )
+    , m_autoLoad( false )
 {
 //    qDebug() << "Creating Dynamic Playlist 1";
     // TODO instantiate generator
@@ -75,8 +76,10 @@ DynamicPlaylist::DynamicPlaylist ( const Tomahawk::source_ptr& author,
                                    const QString& creator,
                                    const QString& type,
                                    GeneratorMode mode,
-                                   bool shared )
+                                   bool shared,
+                                   bool autoLoad )
     : Playlist ( author, guid, title, info, creator, shared )
+    , m_autoLoad( autoLoad )
 {
 //    qDebug() << "Creating Dynamic Playlist 2";
     m_generator = geninterface_ptr( GeneratorFactory::create( type ) );
@@ -127,14 +130,17 @@ DynamicPlaylist::create( const Tomahawk::source_ptr& author,
                          const QString& creator,
                          GeneratorMode mode,
                          bool shared,
-                         const QString& type )
+                         const QString& type,
+                         bool autoLoad
+                       )
 {
-    dynplaylist_ptr dynplaylist = dynplaylist_ptr( new DynamicPlaylist( author, guid, title, info, creator, type, mode, shared ) );
+    dynplaylist_ptr dynplaylist = dynplaylist_ptr( new DynamicPlaylist( author, guid, title, info, creator, type, mode, shared, autoLoad ) );
 
-    DatabaseCommand_CreateDynamicPlaylist* cmd = new DatabaseCommand_CreateDynamicPlaylist( author, dynplaylist );
+    DatabaseCommand_CreateDynamicPlaylist* cmd = new DatabaseCommand_CreateDynamicPlaylist( author, dynplaylist, autoLoad );
     connect( cmd, SIGNAL(finished()), dynplaylist.data(), SIGNAL(created()) );
     Database::instance()->enqueue( QSharedPointer<DatabaseCommand>(cmd) );
-    dynplaylist->reportCreated( dynplaylist );
+    if( autoLoad )
+        dynplaylist->reportCreated( dynplaylist );
     return dynplaylist;
 }
 
@@ -187,6 +193,9 @@ DynamicPlaylist::createNewRevision( const QString& newrev,
                                                     type,
                                                     Static,
                                                     controls );
+    if( !m_autoLoad )
+        cmd->setPlaylist( this );
+
     Database::instance()->enqueue( QSharedPointer<DatabaseCommand>( cmd ) );
 }
 
@@ -211,6 +220,9 @@ DynamicPlaylist::createNewRevision( const QString& newrev,
                                                     type,
                                                     OnDemand,
                                                     controls );
+    if( !m_autoLoad )
+        cmd->setPlaylist( this );
+
     Database::instance()->enqueue( QSharedPointer<DatabaseCommand>( cmd ) );
 }
 

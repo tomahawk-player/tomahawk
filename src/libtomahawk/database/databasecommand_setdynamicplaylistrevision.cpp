@@ -40,6 +40,7 @@ DatabaseCommand_SetDynamicPlaylistRevision::DatabaseCommand_SetDynamicPlaylistRe
     , m_type( type )
     , m_mode( mode )
     , m_controls( controls )
+    , m_playlist( 0 )
 {
 
 }
@@ -56,6 +57,7 @@ DatabaseCommand_SetDynamicPlaylistRevision::DatabaseCommand_SetDynamicPlaylistRe
     , m_type( type )
     , m_mode( mode )
     , m_controls( controls )
+    , m_playlist( 0 )
 {
 
 }
@@ -100,21 +102,28 @@ DatabaseCommand_SetDynamicPlaylistRevision::postCommitHook()
     dynplaylist_ptr playlist = source()->collection()->autoPlaylist( playlistguid() );
     if ( playlist.isNull() )
         playlist = source()->collection()->station( playlistguid() );
+    // UGH we don't have a sharedptr from DynamicPlaylist+
+
+    DynamicPlaylist* rawPl = playlist.data();
+    if( playlist.isNull() ) // if it's neither an auto or station, it must not be auto-loaded, so we MUST have been told about it directly
+        rawPl = m_playlist;
 
     // workaround a bug in pre-0.1.0 tomahawks. they created dynamic playlists in OnDemand mode *always*, and then set the mode to the real one.
     // now that we separate them, if we get them as one and then get a changed mode, the playlist ends up in the wrong bucket in Collection.
     // so here we fix it if we have to.
     // HACK
-    tDebug() << "Does this need FIXING?" << playlist->mode() << source()->collection()->autoPlaylist( playlistguid() ).isNull() << source()->collection()->station( playlistguid() ).isNull();
-    if( playlist->mode() == Static && source()->collection()->autoPlaylist( playlistguid() ).isNull() ) // should be here
+        tDebug() << "Does this need the 0.3->0.1 playlist category hack fix?" << ( rawPl->mode() == Static && source()->collection()->autoPlaylist( playlistguid() ).isNull() )
+        <<  ( rawPl->mode() == OnDemand && source()->collection()->station( playlistguid() ).isNull() )
+                    << rawPl->mode() << source()->collection()->autoPlaylist( playlistguid() ).isNull() << source()->collection()->station( playlistguid() ).isNull();
+    if( rawPl->mode() == Static && source()->collection()->autoPlaylist( playlistguid() ).isNull() ) // should be here
         source()->collection()->moveStationToAuto( playlistguid() );
-    else if ( playlist->mode() == OnDemand && source()->collection()->station( playlistguid() ).isNull() ) // should be here
+    else if ( rawPl->mode() == OnDemand && source()->collection()->station( playlistguid() ).isNull() ) // should be here
         source()->collection()->moveAutoToStation( playlistguid() );
 
-    if ( playlist.isNull() )
+    if ( rawPl == 0 )
     {
         tLog() <<"Got null playlist with guid:" << playlistguid() << "from source and collection:" << source()->friendlyName() << source()->collection()->name() << "and mode is static?:" << (m_mode == Static);
-        Q_ASSERT( !playlist.isNull() );
+        Q_ASSERT( false );
         return;
     }
     if ( !m_controlsV.isEmpty() && m_controls.isEmpty() )
@@ -124,13 +133,13 @@ DatabaseCommand_SetDynamicPlaylistRevision::postCommitHook()
             controlMap << v.toMap();
 
         if ( m_mode == OnDemand )
-            playlist->setRevision(  newrev(),
+            rawPl->setRevision(  newrev(),
                                     true, // this *is* the newest revision so far
                                     m_type,
                                     controlMap,
                                     m_applied );
         else
-            playlist->setRevision(  newrev(),
+            rawPl->setRevision(  newrev(),
                                     orderedentriesguids,
                                     m_previous_rev_orderedguids,
                                     m_type,
@@ -142,13 +151,13 @@ DatabaseCommand_SetDynamicPlaylistRevision::postCommitHook()
     else
     {
         if ( m_mode == OnDemand )
-            playlist->setRevision(  newrev(),
+            rawPl->setRevision(  newrev(),
                                     true, // this *is* the newest revision so far
                                     m_type,
                                     m_controls,
                                     m_applied );
         else
-            playlist->setRevision(  newrev(),
+            rawPl->setRevision(  newrev(),
                                     orderedentriesguids,
                                     m_previous_rev_orderedguids,
                                     m_type,
@@ -250,4 +259,10 @@ DatabaseCommand_SetDynamicPlaylistRevision::exec( DatabaseImpl* lib )
         query2.bindValue( 2, m_playlistguid );
         query2.exec();
     }
+}
+
+void
+DatabaseCommand_SetDynamicPlaylistRevision::setPlaylist( DynamicPlaylist* pl )
+{
+    m_playlist = pl;
 }
