@@ -22,7 +22,7 @@
 #include <QTreeView>
 #include <QSortFilterProxyModel>
 
-#include "contextMenu.h"
+#include "contextmenu.h"
 #include "treemodel.h"
 #include "treeproxymodel.h"
 #include "viewpage.h"

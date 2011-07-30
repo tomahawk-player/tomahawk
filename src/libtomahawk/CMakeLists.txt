@@ -31,7 +31,7 @@ set( libSources
     viewpage.cpp
     viewmanager.cpp
     globalactionmanager.cpp
-    contextMenu.cpp
+    contextmenu.cpp
 
     sip/SipPlugin.cpp
     sip/SipHandler.cpp
@@ -204,7 +204,7 @@ set( libHeaders
     sourceplaylistinterface.h
     viewmanager.h
     globalactionmanager.h
-    contextMenu.h
+    contextmenu.h
 
     artist.h
     album.h

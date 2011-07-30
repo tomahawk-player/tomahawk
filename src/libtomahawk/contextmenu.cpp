@@ -16,7 +16,7 @@
  *   along with Tomahawk. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include "contextMenu.h"
+#include "contextmenu.h"
 
 #include "globalactionmanager.h"
 #include "playlistview.h"

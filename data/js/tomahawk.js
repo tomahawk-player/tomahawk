@@ -31,19 +31,19 @@ Tomahawk.resolver = {
 
 Tomahawk.timestamp = function() {
     return Math.round( new Date()/1000 );
-}
+};
 
 Tomahawk.dumpResult = function( result ) {
     var results = result.results;
     Tomahawk.log("Dumping " + results.length + " results for query " + result.qid + "...");
     for(var i=0; i<results.length;i++)
     {
-        var result = results[i];
-        Tomahawk.log( result.artist + " - " + result.track + " | " + result.url );
+        var result1 = results[i];
+        Tomahawk.log( result1.artist + " - " + result1.track + " | " + result1.url );
     }
 
     Tomahawk.log("Done.");
-}
+};
 
 // javascript part of Tomahawk-Object API
 Tomahawk.extend = function(object, members) {
@@ -57,7 +57,7 @@ Tomahawk.extend = function(object, members) {
     }
 
     return newObject;
-}
+};
 
 
 // Resolver BaseObject, inherit it to implement your own resolver
@@ -77,7 +77,9 @@ var TomahawkResolver = {
     {
         var configJson = window.localStorage[ this.scriptPath() ];
         if( configJson === undefined )
+	{
             configJson = "{}";
+	}
 
         var config = JSON.parse( configJson );
 
@@ -153,11 +155,15 @@ var TomahawkResolver = {
 Tomahawk.valueForSubNode = function(node, tag)
 {
     if(node === undefined)
+    {
         throw new Error("Tomahawk.valueForSubnode: node is undefined!");
+    }
 
     var element = node.getElementsByTagName(tag)[0];
     if( element === undefined )
+    {
         return undefined;
+    }
 
     return element.textContent;
 };
@@ -165,11 +171,13 @@ Tomahawk.valueForSubNode = function(node, tag)
 
 Tomahawk.syncRequest = function(url)
 {
-    var xmlHttpRequest = new XMLHttpRequest();
-    xmlHttpRequest.open('GET', url, false);
-    xmlHttpRequest.send(null);
-    return xmlHttpRequest.responseText;
-}
+	var xmlHttpRequest = new XMLHttpRequest();
+	xmlHttpRequest.open('GET', url, false);
+	xmlHttpRequest.send(null);
+	if (xmlHttpRequest.status == 200){
+		return xmlHttpRequest.responseText;
+	}
+};
 
 /**
 *
@@ -210,7 +218,7 @@ Tomahawk.sha256=function(s){
         m[l >> 5] |= 0x80 << (24 - l % 32);
         m[((l + 64 >> 9) << 4) + 15] = l;
 
-        for ( var i = 0; i<m.length; i+=16 ) {
+        for ( i = 0; i<m.length; i+=16 ) {
             a = HASH[0];
             b = HASH[1];
             c = HASH[2];
@@ -220,9 +228,15 @@ Tomahawk.sha256=function(s){
             g = HASH[6];
             h = HASH[7];
 
-            for ( var j = 0; j<64; j++) {
-                if (j < 16) W[j] = m[j + i];
-                else W[j] = safe_add(safe_add(safe_add(Gamma1256(W[j - 2]), W[j - 7]), Gamma0256(W[j - 15])), W[j - 16]);
+            for ( j = 0; j<64; j++) {
+                if (j < 16)
+		{
+			W[j] = m[j + i];
+		}
+                else
+		{
+			W[j] = safe_add(safe_add(safe_add(Gamma1256(W[j - 2]), W[j - 7]), Gamma0256(W[j - 15])), W[j - 16]);
+		}
 
                 T1 = safe_add(safe_add(safe_add(safe_add(h, Sigma1256(e)), Ch(e, f, g)), K[j]), W[j]);
                 T2 = safe_add(Sigma0256(a), Maj(a, b, c));
@@ -297,4 +311,4 @@ Tomahawk.sha256=function(s){
     s = Utf8Encode(s);
     return binb2hex(core_sha256(str2binb(s), s.length * chrsz));
 
-}
+};
