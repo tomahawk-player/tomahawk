@@ -158,11 +158,19 @@ CollectionItem::playlistsAddedInternal( SourceTreeItem* parent, const QList< dyn
         items << plItem;
 
         if( p->mode() == Static ) {
-            connect( p.data(), SIGNAL( aboutToBeDeleted( Tomahawk::dynplaylist_ptr ) ),
-                     SLOT( onAutoPlaylistDeleted( Tomahawk::dynplaylist_ptr ) ), Qt::QueuedConnection );
+            if( m_source->isLocal() )
+                connect( p.data(), SIGNAL( aboutToBeDeleted( Tomahawk::dynplaylist_ptr ) ),
+                        SLOT( onAutoPlaylistDeleted( Tomahawk::dynplaylist_ptr ) ), Qt::QueuedConnection );
+            else
+                connect( p.data(), SIGNAL( deleted( Tomahawk::dynplaylist_ptr ) ),
+                        SLOT( onAutoPlaylistDeleted( Tomahawk::dynplaylist_ptr ) ), Qt::QueuedConnection );
         } else {
-            connect( p.data(), SIGNAL( aboutToBeDeleted( Tomahawk::dynplaylist_ptr ) ),
-                     SLOT( onStationDeleted( Tomahawk::dynplaylist_ptr ) ), Qt::QueuedConnection );
+            if( m_source->isLocal() )
+                connect( p.data(), SIGNAL( aboutToBeDeleted( Tomahawk::dynplaylist_ptr ) ),
+                        SLOT( onStationDeleted( Tomahawk::dynplaylist_ptr ) ), Qt::QueuedConnection );
+            else
+                connect( p.data(), SIGNAL( deleted( Tomahawk::dynplaylist_ptr ) ),
+                        SLOT( onStationDeleted( Tomahawk::dynplaylist_ptr ) ), Qt::QueuedConnection );
         }
     }
     parent->endRowsAdded();
@@ -216,8 +224,12 @@ CollectionItem::onPlaylistsAdded( const QList< playlist_ptr >& playlists )
         p->loadRevision();
         items << plItem;
 
-        connect( p.data(), SIGNAL( aboutToBeDeleted( Tomahawk::playlist_ptr ) ),
-                 SLOT( onPlaylistDeleted( Tomahawk::playlist_ptr ) ), Qt::QueuedConnection );
+        if( m_source->isLocal() )
+            connect( p.data(), SIGNAL( aboutToBeDeleted( Tomahawk::playlist_ptr ) ),
+                    SLOT( onPlaylistDeleted( Tomahawk::playlist_ptr ) ), Qt::QueuedConnection );
+        else
+            connect( p.data(), SIGNAL( deleted( Tomahawk::playlist_ptr ) ),
+                    SLOT( onPlaylistDeleted( Tomahawk::playlist_ptr ) ), Qt::QueuedConnection );
 
     }
     m_playlists->endRowsAdded();
