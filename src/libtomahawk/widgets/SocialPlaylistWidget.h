@@ -38,6 +38,7 @@
 #include "playlist/dynamic/DynamicPlaylist.h"
 #include "source.h"
 
+class AlbumModel;
 class PlaylistModel;
 class TreeModel;
 
@@ -72,26 +73,25 @@ signals:
     void pixmapChanged( const QPixmap& pixmap );
 
 private slots:
-    void dynamicPlaylistLoaded( const Tomahawk::dynplaylist_ptr& ptr );
-    void playlistRevisionLoaded ( Tomahawk::DynamicPlaylistRevision );
-    void tracksGenerated ( QList<Tomahawk::query_ptr> );
-    void dynamicPlaylistLoadDone();
-
-    void playlist1Created();
+    void popularAlbumsFetched( QList<Tomahawk::album_ptr> );
+    void topForeignTracksFetched( QList<Tomahawk::query_ptr> );
 
 private:
-    void load();
-    void createPlaylist();
+    void fetchFromDB();
 
     Ui_SocialPlaylistWidget *ui;
+    PlaylistModel* m_topForeignTracksModel;
+    AlbumModel* m_popularNewAlbumsModel;
 
-    Tomahawk::dynplaylist_ptr m_coolQuery1;
-    PlaylistModel* m_coolQuery1Model;
 
     QString m_title;
     QString m_description;
     QString m_longDescription;
     QPixmap m_pixmap;
+
+    static QString s_popularAlbumsQuery;
+    static QString s_mostPlayedPlaylistsQuery;
+    static QString s_topForeignTracksQuery;
 };
 
 }

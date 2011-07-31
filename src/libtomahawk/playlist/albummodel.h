@@ -66,6 +66,8 @@ public:
     void addCollection( const Tomahawk::collection_ptr& collection );
     void addFilteredCollection( const Tomahawk::collection_ptr& collection, unsigned int amount, DatabaseCommand_AllAlbums::SortOrder order );
 
+    void clear();
+
     virtual QString title() const { return m_title; }
     virtual QString description() const { return m_description; }
     virtual void setTitle( const QString& title ) { m_title = title; }
@@ -85,6 +87,8 @@ public slots:
     virtual void setRepeatMode( Tomahawk::PlaylistInterface::RepeatMode /*mode*/ ) {}
     virtual void setShuffled( bool /*shuffled*/ ) {}
 
+    void addAlbums( const QList<Tomahawk::album_ptr>& albums );
+
 signals:
     void repeatModeChanged( Tomahawk::PlaylistInterface::RepeatMode mode );
     void shuffleModeChanged( bool enabled );
@@ -94,7 +98,6 @@ signals:
 protected:
 
 private slots:
-    void onAlbumsAdded( const QList<Tomahawk::album_ptr>& albums );
     void onDataChanged();
 
     void infoSystemInfo( Tomahawk::InfoSystem::InfoRequestData requestData, QVariant output );
