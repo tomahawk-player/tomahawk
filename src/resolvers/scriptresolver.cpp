@@ -58,21 +58,7 @@ ScriptResolver::ScriptResolver( const QString& exe )
     if ( !TomahawkUtils::nam() )
         return;
 
-    // Send a configutaion message with any information the resolver might need
-    // For now, only the proxy information is sent
-    QVariantMap m;
-    m.insert( "_msgtype", "config" );
-    TomahawkUtils::NetworkProxyFactory* factory = dynamic_cast<TomahawkUtils::NetworkProxyFactory*>( TomahawkUtils::nam()->proxyFactory() );
-    QNetworkProxy proxy = factory->proxy();
-    QString proxyType = ( proxy.type() == QNetworkProxy::Socks5Proxy ? "socks5" : "none" );
-    m.insert( "proxytype", proxyType );
-    m.insert( "proxyhost", proxy.hostName() );
-    m.insert( "proxyport", proxy.port() );
-    m.insert( "proxyuser", proxy.user() );
-    m.insert( "proxypass", proxy.password() );
-    m.insert( "noproxyhosts", factory->noProxyHosts() );
-    QByteArray data = m_serializer.serialize( m );
-    sendMsg( data );
+    sendConfig();
 }
 
 
@@ -86,6 +72,31 @@ ScriptResolver::~ScriptResolver()
         delete m_configWidget.data();
 }
 
+void
+ScriptResolver::sendConfig()
+{
+
+    // Send a configutaion message with any information the resolver might need
+    // For now, only the proxy information is sent
+    QVariantMap m;
+    m.insert( "_msgtype", "config" );
+    TomahawkUtils::NetworkProxyFactory* factory = dynamic_cast<TomahawkUtils::NetworkProxyFactory*>( TomahawkUtils::nam()->proxyFactory() );
+    QNetworkProxy proxy = factory->proxy();
+    QString proxyType = ( proxy.type() == QNetworkProxy::Socks5Proxy ? "socks5" : "none" );
+    m.insert( "proxytype", proxyType );
+    m.insert( "proxyhost", proxy.hostName() );
+    m.insert( "proxyport", proxy.port() );
+    m.insert( "proxyuser", proxy.user() );
+    m.insert( "proxypass", proxy.password() );
+    // QJson sucks
+    QVariantList hosts;
+    foreach ( const QString& host, factory->noProxyHosts() )
+        hosts << host;
+    m.insert( "noproxyhosts", hosts );
+    QByteArray data = m_serializer.serialize( m );
+    sendMsg( data );
+}
+
 
 void
 ScriptResolver::reload()
@@ -96,6 +107,8 @@ ScriptResolver::reload()
     {
         m_proc.start( filePath() );
         m_error = Tomahawk::ExternalResolver::NoError;
+
+        sendConfig();
     }
 }
 
@@ -145,7 +158,7 @@ ScriptResolver::readStdout()
 void
 ScriptResolver::sendMsg( const QByteArray& msg )
 {
-//    qDebug() << Q_FUNC_INFO << m_ready << msg << msg.length();
+//     qDebug() << Q_FUNC_INFO << m_ready << msg << msg.length();
     if( !m_proc.isOpen() )
         return;
 
@@ -247,6 +260,7 @@ ScriptResolver::cmdExited( int code, QProcess::ExitStatus status )
         m_num_restarts++;
         tLog() << "*** Restart num" << m_num_restarts;
         m_proc.start( filePath() );
+        sendConfig();
     }
     else
     {
