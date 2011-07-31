@@ -296,7 +296,12 @@ Playlist::createNewRevision( const QString& newrev, const QString& oldrev, const
 {
     qDebug() << Q_FUNC_INFO << newrev << oldrev << entries.count();
 
-    Q_ASSERT( !busy() );
+    if ( busy() )
+    {
+        m_revisionQueue.enqueue( RevisionQueueItem( newrev, oldrev, entries, oldrev == currentrevision() ) );
+        return;
+    }
+
     if ( newrev != oldrev )
         setBusy( true );
 
@@ -370,6 +375,8 @@ Playlist::setRevision( const QString& rev,
     }
     else
         emit revisionLoaded( pr );
+
+    checkRevisionQueue();
 }
 
 
@@ -568,4 +575,18 @@ Playlist::setBusy( bool b )
 {
     m_busy = b;
     emit changed();
+}
+
+void
+Playlist::checkRevisionQueue()
+{
+    if ( !m_revisionQueue.isEmpty() )
+    {
+        RevisionQueueItem item = m_revisionQueue.dequeue();
+        if ( item.oldRev != currentrevision() && item.applyToTip ) // this was applied to the then-latest, but the already-running operation changed it so it's out of date now. fix it
+        {
+            item.oldRev = currentrevision();
+        }
+        createNewRevision( item.newRev, item.oldRev, item.entries );
+    }
 }
