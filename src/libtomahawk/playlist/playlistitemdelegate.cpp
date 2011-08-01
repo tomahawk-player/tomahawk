@@ -36,7 +36,7 @@
 #include "utils/logger.h"
 
 #define PLAYING_ICON QString( RESPATH "images/now-playing-speaker.png" )
-#define ARROW_ICON QString( RESPATH "images/forward.png" )
+#define ARROW_ICON QString( RESPATH "images/info.png" )
 
 using namespace Tomahawk;
 
@@ -47,7 +47,7 @@ PlaylistItemDelegate::PlaylistItemDelegate( TrackView* parent, TrackProxyModel* 
     , m_model( proxy )
 {
     m_nowPlayingIcon = QPixmap( PLAYING_ICON );
-    m_arrowIcon = QPixmap( ARROW_ICON );
+    m_arrowIcon = QPixmap( ARROW_ICON ).scaled( 14, 14, Qt::KeepAspectRatio, Qt::SmoothTransformation );
 }
 
 
@@ -245,7 +245,7 @@ PlaylistItemDelegate::paintDetailed( QPainter* painter, const QStyleOptionViewIt
        ( index.column() == TrackModel::Artist || index.column() == TrackModel::Album ) )
     {
         opt.rect.setWidth( opt.rect.width() - 16 );
-        QRect arrowRect( opt.rect.x() + opt.rect.width(), opt.rect.y(), 14, opt.rect.height() );
+        QRect arrowRect( opt.rect.x() + opt.rect.width(), opt.rect.y() + 1, opt.rect.height() - 2, opt.rect.height() - 2 );
         painter->drawPixmap( arrowRect, m_arrowIcon );
     }
 
