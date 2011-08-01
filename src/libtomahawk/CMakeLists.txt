@@ -425,7 +425,6 @@ IF( APPLE )
       utils/tomahawkutils_mac.mm )
 
     SET( libHeaders ${libHeaders} 
-      infosystem/infoplugins/mac/adium.h
       infosystem/infoplugins/mac/adiumplugin.h )
 
     SET( OS_SPECIFIC_LINK_LIBRARIES

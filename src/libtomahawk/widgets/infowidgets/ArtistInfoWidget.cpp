@@ -51,6 +51,8 @@ ArtistInfoWidget::ArtistInfoWidget( const Tomahawk::artist_ptr& artist, QWidget*
     ui->topHits->setAttribute( Qt::WA_MacShowFocusRect, 0 );
 
     TomahawkUtils::unmarginLayout( layout() );
+    TomahawkUtils::unmarginLayout( ui->layoutWidget->layout() );
+    TomahawkUtils::unmarginLayout( ui->layoutWidget1->layout() );
 
     m_albumsModel = new TreeModel( ui->albums );
     ui->albums->setTreeModel( m_albumsModel );
