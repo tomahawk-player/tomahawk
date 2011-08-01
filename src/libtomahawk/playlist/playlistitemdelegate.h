@@ -46,7 +46,7 @@ protected:
     QWidget* createEditor( QWidget* parent, const QStyleOptionViewItem& option, const QModelIndex& index ) const;
 
 private:
-    void prepareStyleOption( QStyleOptionViewItemV4* option, const QModelIndex& index ) const;
+    void prepareStyleOption( QStyleOptionViewItemV4* option, const QModelIndex& index, TrackModelItem* item ) const;
 
     void paintDetailed( QPainter* painter, const QStyleOptionViewItem& option, const QModelIndex& index ) const;
     void paintShort( QPainter* painter, const QStyleOptionViewItem& option, const QModelIndex& index ) const;

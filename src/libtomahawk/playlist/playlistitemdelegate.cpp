@@ -85,11 +85,10 @@ PlaylistItemDelegate::createEditor( QWidget* parent, const QStyleOptionViewItem&
 
 
 void
-PlaylistItemDelegate::prepareStyleOption( QStyleOptionViewItemV4* option, const QModelIndex& index ) const
+PlaylistItemDelegate::prepareStyleOption( QStyleOptionViewItemV4* option, const QModelIndex& index, TrackModelItem* item ) const
 {
     initStyleOption( option, index );
 
-    TrackModelItem* item = m_model->itemFromIndex( m_model->mapToSource( index ) );
     if ( item->isPlaying() )
     {
         option->palette.setColor( QPalette::Highlight, option->palette.color( QPalette::Mid ) );
@@ -138,7 +137,7 @@ PlaylistItemDelegate::paintShort( QPainter* painter, const QStyleOptionViewItem&
     Q_ASSERT( item );
 
     QStyleOptionViewItemV4 opt = option;
-    prepareStyleOption( &opt, index );
+    prepareStyleOption( &opt, index, item );
     opt.text.clear();
 
     qApp->style()->drawControl( QStyle::CE_ItemViewItem, &opt, painter );
@@ -237,7 +236,7 @@ PlaylistItemDelegate::paintDetailed( QPainter* painter, const QStyleOptionViewIt
     Q_ASSERT( item );
 
     QStyleOptionViewItemV4 opt = option;
-    prepareStyleOption( &opt, index );
+    prepareStyleOption( &opt, index, item );
     opt.text.clear();
     qApp->style()->drawControl( QStyle::CE_ItemViewItem, &opt, painter );
 
