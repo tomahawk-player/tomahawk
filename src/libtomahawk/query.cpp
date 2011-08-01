@@ -28,6 +28,7 @@
 #include "pipeline.h"
 #include "resolver.h"
 #include "sourcelist.h"
+#include "audio/audioengine.h"
 
 #include "utils/logger.h"
 
@@ -104,7 +105,17 @@ Query::addResults( const QList< Tomahawk::result_ptr >& newresults )
 {
     {
         QMutexLocker lock( &m_mutex );
-        m_results.append( newresults );
+
+        const QStringList smt = AudioEngine::instance()->supportedMimeTypes();
+        foreach ( const Tomahawk::result_ptr& result, newresults )
+        {
+            if ( !smt.contains( result->mimetype() ) )
+            {
+                tDebug() << "Won't accept result, unsupported mimetype" << result->toString() << result->mimetype();
+            }
+            else
+                m_results.append( result );
+        }
         qStableSort( m_results.begin(), m_results.end(), Query::resultSorter );
 
         // hook up signals, and check solved status

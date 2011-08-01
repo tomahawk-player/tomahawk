@@ -93,6 +93,21 @@ AudioEngine::~AudioEngine()
 }
 
 
+QStringList
+AudioEngine::supportedMimeTypes() const
+{
+    if ( m_supportedMimeTypes.isEmpty() )
+    {
+        m_supportedMimeTypes = Phonon::BackendCapabilities::availableMimeTypes();
+        m_supportedMimeTypes << "audio/basic";
+
+        return m_supportedMimeTypes;
+    }
+    else
+        return m_supportedMimeTypes;
+}
+
+
 void
 AudioEngine::playPause()
 {

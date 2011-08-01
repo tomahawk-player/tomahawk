@@ -24,6 +24,7 @@
 
 #include <phonon/MediaObject>
 #include <phonon/AudioOutput>
+#include <phonon/BackendCapabilities>
 
 #include "infosystem/infosystem.h"
 
@@ -52,6 +53,7 @@ public:
     explicit AudioEngine();
     ~AudioEngine();
 
+    QStringList supportedMimeTypes() const;
     unsigned int volume() const { return m_audioOutput->volume() * 100.0; } // in percent
 
     AudioState state() const { return m_state; }
@@ -148,6 +150,7 @@ private:
     bool m_waitingOnNewTrack;
     bool m_infoSystemConnected;
 
+    mutable QStringList m_supportedMimeTypes;
     AudioState m_state;
 
     static AudioEngine* s_instance;
