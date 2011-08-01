@@ -106,7 +106,7 @@ Query::addResults( const QList< Tomahawk::result_ptr >& newresults )
     {
         QMutexLocker lock( &m_mutex );
 
-        const QStringList smt = AudioEngine::instance()->supportedMimeTypes();
+/*        const QStringList smt = AudioEngine::instance()->supportedMimeTypes();
         foreach ( const Tomahawk::result_ptr& result, newresults )
         {
             if ( !smt.contains( result->mimetype() ) )
@@ -115,7 +115,9 @@ Query::addResults( const QList< Tomahawk::result_ptr >& newresults )
             }
             else
                 m_results.append( result );
-        }
+        }*/
+
+        m_results << newresults;
         qStableSort( m_results.begin(), m_results.end(), Query::resultSorter );
 
         // hook up signals, and check solved status
