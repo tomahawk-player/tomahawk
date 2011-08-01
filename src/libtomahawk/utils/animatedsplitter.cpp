@@ -61,6 +61,8 @@ AnimatedSplitter::addWidget( AnimatedWidget* widget )
 
     connect( widget, SIGNAL( showWidget() ), SLOT( onShowRequest() ) );
     connect( widget, SIGNAL( hideWidget() ), SLOT( onHideRequest() ) );
+    connect( widget, SIGNAL( sizeChanged( QSize) ), SLOT( onSizeChanged( QSize ) ) );
+
     connect( this, SIGNAL( shown( QWidget*, bool ) ), widget, SLOT( onShown( QWidget*, bool ) ) );
     connect( this, SIGNAL( hidden( QWidget*, bool ) ), widget, SLOT( onHidden( QWidget*, bool ) ) );
 }
@@ -89,16 +91,50 @@ AnimatedSplitter::onHideRequest()
 
 
 void
+AnimatedSplitter::onSizeChanged( const QSize& size )
+{
+    AnimatedWidget* w = (AnimatedWidget*)(sender());
+    int wi = indexOf( w );
+
+    QList< int > sizes;
+    for ( int i = 0; i < count(); i ++ )
+    {
+        int j = 0;
+
+        if ( i == m_greedyIndex )
+        {
+            j = height() - size.height();
+        }
+        else if ( i == wi )
+        {
+            j = size.height();
+        }
+        else
+        {
+            j = widget( i )->height();
+        }
+
+        sizes << j;
+    }
+
+    setSizes( sizes );
+}
+
+
+void
 AnimatedSplitter::setGreedyWidget( int index )
 {
-    m_greedyIndex = index;
     if( !widget( index ) )
         return;
+
+    m_greedyIndex = index;
+
     QSizePolicy policy = widget( m_greedyIndex )->sizePolicy();
     if( orientation() == Qt::Horizontal )
         policy.setHorizontalStretch( 1 );
     else
         policy.setVerticalStretch( 1 );
+
     widget( m_greedyIndex )->setSizePolicy( policy );
 
 }
@@ -180,6 +216,9 @@ void
 AnimatedWidget::onAnimationStep( int frame )
 {
     setFixedHeight( frame );
+
+    QSize s( 0, frame ); //FIXME
+    emit sizeChanged( s );
 }
 
 
