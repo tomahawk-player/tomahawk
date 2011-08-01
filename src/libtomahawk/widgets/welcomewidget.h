@@ -87,6 +87,7 @@ public:
     virtual QString description() const { return QString(); }
 
     virtual bool showStatsBar() const { return false; }
+    virtual bool showInfoBar() const { return false; }
 
     virtual bool jumpToCurrentTrack() { return false; }
 
