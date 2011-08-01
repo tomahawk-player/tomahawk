@@ -46,7 +46,8 @@ private:
     mutable QHash< qint64, QPixmap > m_cache;
 
     QPixmap m_nowPlayingIcon;
-    QPixmap m_defaultCover;
+    QPixmap m_defaultAlbumCover;
+    QPixmap m_defaultArtistImage;
 };
 
 #endif // TREEITEMDELEGATE_H
