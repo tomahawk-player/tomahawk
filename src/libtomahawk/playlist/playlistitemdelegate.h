@@ -20,6 +20,7 @@
 #define PLAYLISTITEMDELEGATE_H
 
 #include <QStyledItemDelegate>
+#include <QTextOption>
 
 #include "trackmodel.h"
 
@@ -56,6 +57,10 @@ private:
     mutable QHash< qint64, QPixmap > m_cache;
     QPixmap m_nowPlayingIcon;
     QPixmap m_arrowIcon;
+
+    QTextOption m_topOption;
+    QTextOption m_centerOption;
+    QTextOption m_bottomOption;
 
     TrackView* m_view;
     TrackProxyModel* m_model;
