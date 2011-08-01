@@ -196,6 +196,9 @@ CollectionItem::playlistDeletedInternal( SourceTreeItem* parent, const T& p )
     if( parent->children().isEmpty() && parent->parent() ) // Don't leave an empty Playlist or Station category
     {
         int idx = parent->parent()->children().indexOf( parent );
+        if( idx < 0 )
+            return;
+
         parent->parent()->beginRowsRemoved( idx, idx );
         parent->parent()->removeChild( parent );
         parent->parent()->endRowsRemoved();
