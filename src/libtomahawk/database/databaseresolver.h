@@ -1,5 +1,5 @@
 /* === This file is part of Tomahawk Player - <http://tomahawk-player.org> ===
- * 
+ *
  *   Copyright 2010-2011, Christian Muehlhaeuser <muesli@tomahawk-player.org>
  *
  *   Tomahawk is free software: you can redistribute it and/or modify
@@ -36,7 +36,7 @@ public:
     virtual QString name() const;
     virtual unsigned int weight() const { return m_weight; }
     virtual unsigned int preference() const { return 100; }
-    virtual unsigned int timeout() const { return 2500; }
+    virtual unsigned int timeout() const { return 0; }
 
 public slots:
     virtual void resolve( const Tomahawk::query_ptr& query );
