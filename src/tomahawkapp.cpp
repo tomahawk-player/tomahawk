@@ -514,6 +514,8 @@ TomahawkApp::loadUrl( const QString& url )
     activate();
     if ( url.startsWith( "tomahawk://" ) )
         return GlobalActionManager::instance()->parseTomahawkLink( url );
+    else if ( url.contains( "open.spotify.com" ) || url.contains( "spotify:track" ) )
+        return GlobalActionManager::instance()->parseSpotifyLink( url );
     else
     {
         QFile f( url );
