@@ -101,12 +101,13 @@ struct PlaylistRevision
 
 struct RevisionQueueItem
 {
+public:
     QString newRev;
     QString oldRev;
     QList< plentry_ptr > entries;
     bool applyToTip;
 
-    RevisionQueueItem( const QString& nRev, const QString& oRev, QList< plentry_ptr > e, bool latest ) :
+    RevisionQueueItem( const QString& nRev, const QString& oRev, const QList< plentry_ptr >& e, bool latest ) :
         newRev( nRev ), oldRev( oRev), entries( e ), applyToTip( latest ) {}
 };
 

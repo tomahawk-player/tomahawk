@@ -43,6 +43,8 @@ namespace Tomahawk {
 
 struct DLLEXPORT DynamicPlaylistRevision : PlaylistRevision
 {
+public:
+
     QList< dyncontrol_ptr > controls;
     Tomahawk::GeneratorMode mode;
     QString type;
@@ -58,6 +60,16 @@ struct DLLEXPORT DynamicPlaylistRevision : PlaylistRevision
     }
 
     DynamicPlaylistRevision() {}
+};
+
+struct DynQueueItem : RevisionQueueItem
+{
+    QString type;
+    QList <dyncontrol_ptr> controls;
+    int mode;
+
+    DynQueueItem( const QString& nRev, const QString& oRev, const QString& typ, const QList< dyncontrol_ptr >& ctrls,  int m, const QList< plentry_ptr >& e, bool latest ) :
+        RevisionQueueItem( nRev, oRev, e, latest ), type( typ ), controls( ctrls ), mode( m ) {}
 };
 
 class DLLEXPORT DynamicPlaylist : public Playlist
@@ -185,8 +197,12 @@ private:
                               GeneratorMode mode,
                               bool shared );
 
+    void checkRevisionQueue();
+
     QList< dyncontrol_ptr > variantsToControl( const QList< QVariantMap >& controlsV );
     geninterface_ptr m_generator;
+
+    QQueue<DynQueueItem> m_revisionQueue;
 };
 
 }; // namespace
