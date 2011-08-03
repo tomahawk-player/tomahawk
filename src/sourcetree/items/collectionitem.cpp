@@ -193,7 +193,8 @@ CollectionItem::playlistDeletedInternal( SourceTreeItem* parent, const T& p )
         }
     }
 
-    if( parent->children().isEmpty() && parent->parent() ) // Don't leave an empty Playlist or Station category
+    if( ( parent == m_playlists || parent == m_stations ) &&
+         parent->children().isEmpty() && parent->parent() ) // Don't leave an empty Playlist or Station category
     {
         int idx = parent->parent()->children().indexOf( parent );
         if( idx < 0 )
@@ -202,6 +203,12 @@ CollectionItem::playlistDeletedInternal( SourceTreeItem* parent, const T& p )
         parent->parent()->beginRowsRemoved( idx, idx );
         parent->parent()->removeChild( parent );
         parent->parent()->endRowsRemoved();
+
+        if( parent == m_playlists )
+            m_playlists = 0;
+        else if( parent == m_stations )
+            m_stations = 0;
+        delete parent;
     }
 }
 
