@@ -374,11 +374,12 @@ AudioEngine::loadTrack( const Tomahawk::result_ptr& result )
             else
             {
                 QUrl furl = m_currentTrack->url();
-                if ( m_currentTrack->url().contains( "?" ) )
+                if ( !isLocalResult( m_currentTrack->url() ) && m_currentTrack->url().contains( "?" ) )
                 {
                     furl = QUrl( m_currentTrack->url().left( m_currentTrack->url().indexOf( '?' ) ) );
                     furl.setEncodedQuery( QString( m_currentTrack->url().mid( m_currentTrack->url().indexOf( '?' ) + 1 ) ).toLocal8Bit() );
                 }
+
                 m_mediaObject->setCurrentSource( furl );
                 m_mediaObject->currentSource().setAutoDelete( true );
                 m_isPlayingHttp = true;
