@@ -473,7 +473,7 @@ AudioEngine::loadNextTrack()
 void
 AudioEngine::playItem( Tomahawk::PlaylistInterface* playlist, const Tomahawk::result_ptr& result )
 {
-    tDebug( LOGEXTRA ) << Q_FUNC_INFO << result->url();
+    tDebug( LOGEXTRA ) << Q_FUNC_INFO << ( result.isNull() ? QString() : result->url() );
 
     if ( !m_playlist.isNull() )
         m_playlist.data()->reset();
