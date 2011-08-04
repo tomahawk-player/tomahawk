@@ -30,6 +30,7 @@
 #include "playlistinterface.h"
 
 #include "dllmacro.h"
+#include <QQueue>
 
 class DatabaseCommand_LoadAllPlaylists;
 class DatabaseCommand_SetPlaylistRevision;
@@ -96,6 +97,18 @@ struct PlaylistRevision
     QList<plentry_ptr> added;
     QList<plentry_ptr> removed;
     bool applied; // false if conflict
+};
+
+struct RevisionQueueItem
+{
+public:
+    QString newRev;
+    QString oldRev;
+    QList< plentry_ptr > entries;
+    bool applyToTip;
+
+    RevisionQueueItem( const QString& nRev, const QString& oRev, const QList< plentry_ptr >& e, bool latest ) :
+        newRev( nRev ), oldRev( oRev), entries( e ), applyToTip( latest ) {}
 };
 
 
@@ -264,6 +277,7 @@ private:
     void init();
 
     void setBusy( bool b );
+    void checkRevisionQueue();
 
     source_ptr m_source;
     QString m_currentrevision;
@@ -276,6 +290,8 @@ private:
 
     QList< plentry_ptr > m_initEntries;
     QList< plentry_ptr > m_entries;
+
+    QQueue<RevisionQueueItem> m_revisionQueue;
 
     bool m_locallyChanged;
     bool m_busy;

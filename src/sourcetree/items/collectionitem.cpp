@@ -170,11 +170,19 @@ CollectionItem::playlistsAddedInternal( SourceTreeItem* parent, const QList< dyn
         items << plItem;
 
         if( p->mode() == Static ) {
-            connect( p.data(), SIGNAL( aboutToBeDeleted( Tomahawk::dynplaylist_ptr ) ),
-                     SLOT( onAutoPlaylistDeleted( Tomahawk::dynplaylist_ptr ) ), Qt::QueuedConnection );
+            if( m_source->isLocal() )
+                connect( p.data(), SIGNAL( aboutToBeDeleted( Tomahawk::dynplaylist_ptr ) ),
+                        SLOT( onAutoPlaylistDeleted( Tomahawk::dynplaylist_ptr ) ), Qt::QueuedConnection );
+            else
+                connect( p.data(), SIGNAL( deleted( Tomahawk::dynplaylist_ptr ) ),
+                        SLOT( onAutoPlaylistDeleted( Tomahawk::dynplaylist_ptr ) ), Qt::QueuedConnection );
         } else {
-            connect( p.data(), SIGNAL( aboutToBeDeleted( Tomahawk::dynplaylist_ptr ) ),
-                     SLOT( onStationDeleted( Tomahawk::dynplaylist_ptr ) ), Qt::QueuedConnection );
+            if( m_source->isLocal() )
+                connect( p.data(), SIGNAL( aboutToBeDeleted( Tomahawk::dynplaylist_ptr ) ),
+                        SLOT( onStationDeleted( Tomahawk::dynplaylist_ptr ) ), Qt::QueuedConnection );
+            else
+                connect( p.data(), SIGNAL( deleted( Tomahawk::dynplaylist_ptr ) ),
+                        SLOT( onStationDeleted( Tomahawk::dynplaylist_ptr ) ), Qt::QueuedConnection );
         }
     }
     parent->endRowsAdded();
@@ -195,6 +203,24 @@ CollectionItem::playlistDeletedInternal( SourceTreeItem* parent, const T& p )
             parent->endRowsRemoved();
             break;
         }
+    }
+
+    if( ( parent == m_playlists || parent == m_stations ) &&
+         parent->children().isEmpty() && parent->parent() ) // Don't leave an empty Playlist or Station category
+    {
+        int idx = parent->parent()->children().indexOf( parent );
+        if( idx < 0 )
+            return;
+
+        parent->parent()->beginRowsRemoved( idx, idx );
+        parent->parent()->removeChild( parent );
+        parent->parent()->endRowsRemoved();
+
+        if( parent == m_playlists )
+            m_playlists = 0;
+        else if( parent == m_stations )
+            m_stations = 0;
+        delete parent;
     }
 }
 
@@ -228,8 +254,12 @@ CollectionItem::onPlaylistsAdded( const QList< playlist_ptr >& playlists )
         p->loadRevision();
         items << plItem;
 
-        connect( p.data(), SIGNAL( aboutToBeDeleted( Tomahawk::playlist_ptr ) ),
-                 SLOT( onPlaylistDeleted( Tomahawk::playlist_ptr ) ), Qt::QueuedConnection );
+        if( m_source->isLocal() )
+            connect( p.data(), SIGNAL( aboutToBeDeleted( Tomahawk::playlist_ptr ) ),
+                    SLOT( onPlaylistDeleted( Tomahawk::playlist_ptr ) ), Qt::QueuedConnection );
+        else
+            connect( p.data(), SIGNAL( deleted( Tomahawk::playlist_ptr ) ),
+                    SLOT( onPlaylistDeleted( Tomahawk::playlist_ptr ) ), Qt::QueuedConnection );
 
     }
     m_playlists->endRowsAdded();

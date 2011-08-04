@@ -51,6 +51,7 @@ TopBar::TopBar( QWidget* parent )
 #ifdef Q_WS_MAC
     ui->filterEdit->setAttribute( Qt::WA_MacShowFocusRect, 0 );
 #endif
+    ui->filterEdit->setInactiveText( tr( "Filter" ) );
 
     // initialise dudes
     for( int i = 0; i < MAXDUDES; ++i )

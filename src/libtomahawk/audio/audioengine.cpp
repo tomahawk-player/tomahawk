@@ -93,6 +93,21 @@ AudioEngine::~AudioEngine()
 }
 
 
+QStringList
+AudioEngine::supportedMimeTypes() const
+{
+    if ( m_supportedMimeTypes.isEmpty() )
+    {
+        m_supportedMimeTypes = Phonon::BackendCapabilities::availableMimeTypes();
+        m_supportedMimeTypes << "audio/basic";
+
+        return m_supportedMimeTypes;
+    }
+    else
+        return m_supportedMimeTypes;
+}
+
+
 void
 AudioEngine::playPause()
 {
@@ -358,13 +373,19 @@ AudioEngine::loadTrack( const Tomahawk::result_ptr& result )
             }
             else
             {
-                QUrl furl = m_currentTrack->url();
-                if ( m_currentTrack->url().contains( "?" ) )
+                if ( !isLocalResult( m_currentTrack->url() ) )
                 {
-                    furl = QUrl( m_currentTrack->url().left( m_currentTrack->url().indexOf( '?' ) ) );
-                    furl.setEncodedQuery( QString( m_currentTrack->url().mid( m_currentTrack->url().indexOf( '?' ) + 1 ) ).toLocal8Bit() );
+                    QUrl furl = m_currentTrack->url();
+                    if ( m_currentTrack->url().contains( "?" ) )
+                    {
+                        furl = QUrl( m_currentTrack->url().left( m_currentTrack->url().indexOf( '?' ) ) );
+                        furl.setEncodedQuery( QString( m_currentTrack->url().mid( m_currentTrack->url().indexOf( '?' ) + 1 ) ).toLocal8Bit() );
+                    }
+                    m_mediaObject->setCurrentSource( furl );
                 }
-                m_mediaObject->setCurrentSource( furl );
+                else
+                    m_mediaObject->setCurrentSource( m_currentTrack->url() );
+
                 m_mediaObject->currentSource().setAutoDelete( true );
                 m_isPlayingHttp = true;
             }
@@ -457,7 +478,7 @@ AudioEngine::loadNextTrack()
 void
 AudioEngine::playItem( Tomahawk::PlaylistInterface* playlist, const Tomahawk::result_ptr& result )
 {
-    tDebug( LOGEXTRA ) << Q_FUNC_INFO << result->url();
+    tDebug( LOGEXTRA ) << Q_FUNC_INFO << ( result.isNull() ? QString() : result->url() );
 
     if ( !m_playlist.isNull() )
         m_playlist.data()->reset();
@@ -509,12 +530,12 @@ AudioEngine::onStateChanged( Phonon::State newState, Phonon::State oldState )
 
     if ( oldState == Phonon::PlayingState )
     {
-        qint64 duration = m_mediaObject->totalTime() > 0 ? m_mediaObject->totalTime() : m_currentTrack->duration() * 1000;
         bool stopped = false;
         switch ( newState )
         {
             case Phonon::PausedState:
             {
+                qint64 duration = m_mediaObject->totalTime() > 0 ? m_mediaObject->totalTime() : m_currentTrack->duration() * 1000;
                 stopped = ( duration - 1000 < m_mediaObject->currentTime() );
                 if ( !stopped )
                     setState( Paused );

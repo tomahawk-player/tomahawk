@@ -33,6 +33,7 @@
 
 class ClearButton;
 class SearchButton;
+
 class DLLEXPORT SearchLineEdit : public LineEdit
 {
     Q_OBJECT
@@ -47,7 +48,6 @@ private:
     void init();
     ClearButton *m_clearButton;
     SearchButton *m_searchButton;
-
 };
 
 #endif // SEARCHLINEEDIT_H

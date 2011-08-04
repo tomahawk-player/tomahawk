@@ -36,7 +36,7 @@
 #include "utils/logger.h"
 
 #define PLAYING_ICON QString( RESPATH "images/now-playing-speaker.png" )
-#define ARROW_ICON QString( RESPATH "images/forward.png" )
+#define ARROW_ICON QString( RESPATH "images/info.png" )
 
 using namespace Tomahawk;
 
@@ -47,7 +47,16 @@ PlaylistItemDelegate::PlaylistItemDelegate( TrackView* parent, TrackProxyModel* 
     , m_model( proxy )
 {
     m_nowPlayingIcon = QPixmap( PLAYING_ICON );
-    m_arrowIcon = QPixmap( ARROW_ICON );
+    m_arrowIcon = QPixmap( ARROW_ICON ).scaled( 14, 14, Qt::KeepAspectRatio, Qt::SmoothTransformation );
+
+    m_topOption = QTextOption( Qt::AlignTop );
+    m_topOption.setWrapMode( QTextOption::NoWrap );
+
+    m_bottomOption = QTextOption( Qt::AlignBottom );
+    m_bottomOption.setWrapMode( QTextOption::NoWrap );
+
+    m_centerOption = QTextOption( Qt::AlignVCenter );
+    m_centerOption.setWrapMode( QTextOption::NoWrap );
 }
 
 
@@ -85,11 +94,10 @@ PlaylistItemDelegate::createEditor( QWidget* parent, const QStyleOptionViewItem&
 
 
 void
-PlaylistItemDelegate::prepareStyleOption( QStyleOptionViewItemV4* option, const QModelIndex& index ) const
+PlaylistItemDelegate::prepareStyleOption( QStyleOptionViewItemV4* option, const QModelIndex& index, TrackModelItem* item ) const
 {
     initStyleOption( option, index );
 
-    TrackModelItem* item = m_model->itemFromIndex( m_model->mapToSource( index ) );
     if ( item->isPlaying() )
     {
         option->palette.setColor( QPalette::Highlight, option->palette.color( QPalette::Mid ) );
@@ -138,7 +146,7 @@ PlaylistItemDelegate::paintShort( QPainter* painter, const QStyleOptionViewItem&
     Q_ASSERT( item );
 
     QStyleOptionViewItemV4 opt = option;
-    prepareStyleOption( &opt, index );
+    prepareStyleOption( &opt, index, item );
     opt.text.clear();
 
     qApp->style()->drawControl( QStyle::CE_ItemViewItem, &opt, painter );
@@ -215,16 +223,13 @@ PlaylistItemDelegate::paintShort( QPainter* painter, const QStyleOptionViewItem&
         boldFont.setBold( true );
 
         r.adjust( ir.width() + 12, 0, -12, 0 );
-        QTextOption to( Qt::AlignTop );
-        to.setWrapMode( QTextOption::NoWrap );
         painter->setFont( boldFont );
         QString text = painter->fontMetrics().elidedText( upperText, Qt::ElideRight, r.width() );
-        painter->drawText( r.adjusted( 0, 1, 0, 0 ), text, to );
+        painter->drawText( r.adjusted( 0, 1, 0, 0 ), text, m_topOption );
 
-        to.setAlignment( Qt::AlignBottom );
         painter->setFont( opt.font );
         text = painter->fontMetrics().elidedText( lowerText, Qt::ElideRight, r.width() );
-        painter->drawText( r.adjusted( 0, 1, 0, 0 ), text, to );
+        painter->drawText( r.adjusted( 0, 1, 0, 0 ), text, m_bottomOption );
     }
     painter->restore();
 }
@@ -237,7 +242,7 @@ PlaylistItemDelegate::paintDetailed( QPainter* painter, const QStyleOptionViewIt
     Q_ASSERT( item );
 
     QStyleOptionViewItemV4 opt = option;
-    prepareStyleOption( &opt, index );
+    prepareStyleOption( &opt, index, item );
     opt.text.clear();
     qApp->style()->drawControl( QStyle::CE_ItemViewItem, &opt, painter );
 
@@ -245,7 +250,7 @@ PlaylistItemDelegate::paintDetailed( QPainter* painter, const QStyleOptionViewIt
        ( index.column() == TrackModel::Artist || index.column() == TrackModel::Album ) )
     {
         opt.rect.setWidth( opt.rect.width() - 16 );
-        QRect arrowRect( opt.rect.x() + opt.rect.width(), opt.rect.y(), 14, opt.rect.height() );
+        QRect arrowRect( opt.rect.x() + opt.rect.width(), opt.rect.y() + 1, opt.rect.height() - 2, opt.rect.height() - 2 );
         painter->drawPixmap( arrowRect, m_arrowIcon );
     }
 
@@ -286,19 +291,15 @@ PlaylistItemDelegate::paintDetailed( QPainter* painter, const QStyleOptionViewIt
             }
 
             painter->setPen( opt.palette.text().color() );
-
-            QTextOption to( Qt::AlignVCenter );
             QString text = painter->fontMetrics().elidedText( index.data().toString(), Qt::ElideRight, r.width() - 3 );
-            painter->drawText( r.adjusted( 0, 1, 0, 0 ), text, to );
+            painter->drawText( r.adjusted( 0, 1, 0, 0 ), text, m_centerOption );
         }
     }
     else
     {
         painter->setPen( opt.palette.text().color() );
-
-        QTextOption to( Qt::AlignVCenter );
         QString text = painter->fontMetrics().elidedText( index.data().toString(), Qt::ElideRight, opt.rect.width() - 3 );
-        painter->drawText( opt.rect.adjusted( 3, 1, 0, 0 ), text, to );
+        painter->drawText( opt.rect.adjusted( 3, 1, 0, 0 ), text, m_centerOption );
     }
 
     painter->restore();

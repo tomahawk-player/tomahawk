@@ -170,6 +170,7 @@ set( libSources
     utils/animatedsplitter.cpp
     utils/xspfloader.cpp
     utils/xspfgenerator.cpp
+    utils/jspfloader.cpp
 
     widgets/newplaylistwidget.cpp
     widgets/searchwidget.cpp
@@ -345,6 +346,7 @@ set( libHeaders
     utils/animatedsplitter.h
     utils/xspfloader.h
     utils/xspfgenerator.h
+    utils/jspfloader.h
 
     widgets/newplaylistwidget.h
     widgets/searchwidget.h
@@ -433,6 +435,7 @@ IF( APPLE )
     SET( libSources ${libSources}
       infosystem/infoplugins/mac/adium.mm
       infosystem/infoplugins/mac/adiumplugin.cpp
+      widgets/maclineedit.mm
       utils/tomahawkutils_mac.mm )
 
     SET( libHeaders ${libHeaders}

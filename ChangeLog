@@ -1,3 +1,12 @@
+Version 0.2.0:
+    * Spotify resolver now honors SOCKS5 proxy settings.
+    * Fixed a few crashes that could occur when fetching data from Last.fm.
+    * Made Twitter dialog more readable/understandable.
+    * Twitter checks for updates less often now, saving user API calls from
+      running out when using multiple clients.
+    * Collection scanner now can now run automatically, watching files and
+      directories for changes. On by default.
+
 Version 0.1.0:
     * Fixed stations so they resolve against all available sources instead of
       only local and friend's collections.

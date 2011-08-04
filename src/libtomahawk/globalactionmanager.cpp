@@ -37,6 +37,11 @@
 #include "utils/xspfloader.h"
 #include "utils/xspfgenerator.h"
 #include "utils/logger.h"
+#include "utils/tomahawkutils.h"
+
+#include <QtNetwork/QNetworkAccessManager>
+#include <QtNetwork/QNetworkReply>
+#include "utils/jspfloader.h"
 
 GlobalActionManager* GlobalActionManager::s_instance = 0;
 
@@ -100,7 +105,7 @@ GlobalActionManager::copyPlaylistToClipboard( const Tomahawk::dynplaylist_ptr& p
     QUrl link( QString( "%1/%2/create/" ).arg( hostname() ).arg( playlist->mode() == Tomahawk::OnDemand ? "station" : "autoplaylist" ) );
 
     if( playlist->generator()->type() != "echonest" ) {
-        qDebug() << "Only echonest generators are supported";
+        tLog() << "Only echonest generators are supported";
         return QString();
     }
 
@@ -177,7 +182,7 @@ GlobalActionManager::parseTomahawkLink( const QString& url )
     if( url.contains( "tomahawk://" ) ) {
         QString cmd = url.mid( 11 );
         cmd.replace( "%2B", "%20" );
-        qDebug() << "Parsing tomahawk link command" << cmd;
+        tLog() << "Parsing tomahawk link command" << cmd;
 
         QString cmdType = cmd.split( "/" ).first();
         QUrl u = QUrl::fromEncoded( cmd.toUtf8() );
@@ -187,8 +192,16 @@ GlobalActionManager::parseTomahawkLink( const QString& url )
             if( u.hasQueryItem( "xspf" ) ) {
                 QUrl xspf = QUrl::fromUserInput( u.queryItemValue( "xspf" ) );
                 XSPFLoader* l = new XSPFLoader( true, this );
-                qDebug() << "Loading spiff:" << xspf.toString();
+                tDebug() << "Loading spiff:" << xspf.toString();
                 l->load( xspf );
+                connect( l, SIGNAL( ok( Tomahawk::playlist_ptr ) ), ViewManager::instance(), SLOT( show( Tomahawk::playlist_ptr ) ) );
+
+                return true;
+            } else if( u.hasQueryItem( "jspf" ) ) {
+                QUrl jspf = QUrl::fromUserInput( u.queryItemValue( "jspf" ) );
+                Tomahawk::JSPFLoader* l = new Tomahawk::JSPFLoader( true, this );
+                tDebug() << "Loading jspiff:" << jspf.toString();
+                l->load( jspf );
                 connect( l, SIGNAL( ok( Tomahawk::playlist_ptr ) ), ViewManager::instance(), SLOT( show( Tomahawk::playlist_ptr ) ) );
 
                 return true;
@@ -214,11 +227,11 @@ GlobalActionManager::parseTomahawkLink( const QString& url )
         } else if( cmdType == "open" ) {
             return handleOpenCommand( u );
         } else {
-            qDebug() << "Tomahawk link not supported, command not known!" << cmdType << u.path();
+            tLog() << "Tomahawk link not supported, command not known!" << cmdType << u.path();
             return false;
         }
     } else {
-        qDebug() << "Not a tomahawk:// link!";
+        tLog() << "Not a tomahawk:// link!";
         return false;
     }
 }
@@ -228,13 +241,13 @@ GlobalActionManager::handlePlaylistCommand( const QUrl& url )
 {
     QStringList parts = url.path().split( "/" ).mid( 1 ); // get the rest of the command
     if( parts.isEmpty() ) {
-        qDebug() << "No specific playlist command:" << url.toString();
+        tLog() << "No specific playlist command:" << url.toString();
         return false;
     }
 
     if( parts[ 0 ] == "import" ) {
         if( !url.hasQueryItem( "xspf" ) ) {
-            qDebug() << "No xspf to load...";
+            tDebug() << "No xspf to load...";
             return false;
         }
         QUrl xspf = QUrl( url.queryItemValue( "xspf" ) );
@@ -246,14 +259,14 @@ GlobalActionManager::handlePlaylistCommand( const QUrl& url )
 
     } else if( parts [ 0 ] == "new" ) {
         if( !url.hasQueryItem( "title" ) ) {
-            qDebug() << "New playlist command needs a title...";
+            tLog() << "New playlist command needs a title...";
             return false;
         }
         Tomahawk::playlist_ptr pl = Tomahawk::Playlist::create( SourceList::instance()->getLocal(), uuid(), url.queryItemValue( "title" ), QString(), QString(), false );
         ViewManager::instance()->show( pl );
     } else if( parts[ 0 ] == "add" ) {
         if( !url.hasQueryItem( "playlistid" ) || !url.hasQueryItem( "title" ) || !url.hasQueryItem( "artist" ) ) {
-            qDebug() << "Add to playlist command needs playlistid, track, and artist..." << url.toString();
+            tLog() << "Add to playlist command needs playlistid, track, and artist..." << url.toString();
             return false;
         }
         // TODO implement. Let the user select what playlist to add to
@@ -268,7 +281,7 @@ GlobalActionManager::handleCollectionCommand( const QUrl& url )
 {
     QStringList parts = url.path().split( "/" ).mid( 1 ); // get the rest of the command
     if( parts.isEmpty() ) {
-        qDebug() << "No specific collection command:" << url.toString();
+        tLog() << "No specific collection command:" << url.toString();
         return false;
     }
 
@@ -284,11 +297,23 @@ GlobalActionManager::handleOpenCommand(const QUrl& url)
 {
     QStringList parts = url.path().split( "/" ).mid( 1 );
     if( parts.isEmpty() ) {
-        qDebug() << "No specific type to open:" << url.toString();
+        tLog() << "No specific type to open:" << url.toString();
         return false;
     }
     // TODO user configurable in the UI
     return doQueueAdd( parts, url.queryItems() );
+}
+
+void
+GlobalActionManager::handleOpenTrack ( const Tomahawk::query_ptr& q )
+{
+    ViewManager::instance()->queue()->model()->append( q );
+    ViewManager::instance()->showQueue();
+
+    if( !AudioEngine::instance()->isPlaying() ) {
+        connect( q.data(), SIGNAL( resolvingFinished( bool ) ), this, SLOT( waitingForResolved( bool ) ) );
+        m_waitingToPlay = q;
+    }
 }
 
 
@@ -297,14 +322,14 @@ GlobalActionManager::handleQueueCommand( const QUrl& url )
 {
     QStringList parts = url.path().split( "/" ).mid( 1 ); // get the rest of the command
     if( parts.isEmpty() ) {
-        qDebug() << "No specific queue command:" << url.toString();
+        tLog() << "No specific queue command:" << url.toString();
         return false;
     }
 
     if( parts[ 0 ] == "add" ) {
         doQueueAdd( parts.mid( 1 ), url.queryItems() );
     } else {
-        qDebug() << "Only queue/add/track is support at the moment, got:" << parts;
+        tLog() << "Only queue/add/track is support at the moment, got:" << parts;
         return false;
     }
 
@@ -330,18 +355,12 @@ GlobalActionManager::doQueueAdd( const QStringList& parts, const QList< QPair< Q
         }
 
         if( !title.isEmpty() || !artist.isEmpty() || !album.isEmpty() ) { // an individual; query to add to queue
-            Tomahawk::query_ptr q = Tomahawk::Query::get( artist, title, album );
+            Tomahawk::query_ptr q = Tomahawk::Query::get( artist, title, album, uuid(), false );
             if( !urlStr.isEmpty() )
                 q->setResultHint( urlStr );
             Tomahawk::Pipeline::instance()->resolve( q, true );
 
-            ViewManager::instance()->queue()->model()->append( q );
-            ViewManager::instance()->showQueue();
-
-            if( !AudioEngine::instance()->isPlaying() ) {
-                connect( q.data(), SIGNAL( resolvingFinished( bool ) ), this, SLOT( waitingForResolved( bool ) ) );
-                m_waitingToPlay = q;
-            }
+            handleOpenTrack( q );
             return true;
 
         } else { // a list of urls to add to the queue
@@ -354,8 +373,9 @@ GlobalActionManager::doQueueAdd( const QStringList& parts, const QList< QPair< Q
                     // TODO
                 } else { // give it a web result hint
                     QFileInfo info( track.path() );
-                    Tomahawk::query_ptr q = Tomahawk::Query::get( QString(), info.baseName(), QString() );
+                    Tomahawk::query_ptr q = Tomahawk::Query::get( QString(), info.baseName(), QString(), uuid(), false );
                     q->setResultHint( track.toString() );
+
                     Tomahawk::Pipeline::instance()->resolve( q, true );
 
                     ViewManager::instance()->queue()->model()->append( q );
@@ -400,13 +420,13 @@ GlobalActionManager::loadDynamicPlaylist( const QUrl& url, bool station )
 {
     QStringList parts = url.path().split( "/" ).mid( 1 ); // get the rest of the command
     if( parts.isEmpty() ) {
-        qDebug() << "No specific station command:" << url.toString();
+        tLog() << "No specific station command:" << url.toString();
         return Tomahawk::dynplaylist_ptr();
     }
 
     if( parts[ 0 ] == "create" ) {
         if( !url.hasQueryItem( "title" ) || !url.hasQueryItem( "type" ) ) {
-            qDebug() << "Station create command needs title and type..." << url.toString();
+            tLog() << "Station create command needs title and type..." << url.toString();
             return Tomahawk::dynplaylist_ptr();
         }
         QString title = url.queryItemValue( "title" );
@@ -550,7 +570,7 @@ GlobalActionManager::handlePlayCommand( const QUrl& url )
 {
     QStringList parts = url.path().split( "/" ).mid( 1 ); // get the rest of the command
     if( parts.isEmpty() ) {
-        qDebug() << "No specific play command:" << url.toString();
+        tLog() << "No specific play command:" << url.toString();
         return false;
     }
 
@@ -585,7 +605,7 @@ bool GlobalActionManager::handleBookmarkCommand(const QUrl& url)
 {
     QStringList parts = url.path().split( "/" ).mid( 1 ); // get the rest of the command
     if( parts.isEmpty() ) {
-        qDebug() << "No specific bookmark command:" << url.toString();
+        tLog() << "No specific bookmark command:" << url.toString();
         return false;
     }
 
@@ -676,7 +696,7 @@ GlobalActionManager::waitingForResolved( bool success )
         return;
     }
 
-    if( success && !m_waitingToPlay.isNull() && !m_waitingToPlay->results().isEmpty() ) { // play it!
+    if( !m_waitingToPlay.isNull() && m_waitingToPlay->playable() ) { // play it!
 //         AudioEngine::instance()->playItem( AudioEngine::instance()->playlist(), m_waitingToPlay->results().first() );
         AudioEngine::instance()->play();
 
@@ -689,3 +709,83 @@ GlobalActionManager::hostname() const
 {
     return QString( "http://toma.hk" );
 }
+
+/// SPOTIFY URL HANDLING
+
+bool
+GlobalActionManager::parseSpotifyLink( const QString& link )
+{
+    if( !link.contains( "track" ) ) // we only support track links atm
+        return false;
+
+    // we need Spotify URIs such as spotify:track:XXXXXX, so if we by chance get a http://open.spotify.com url, convert it
+    QString uri = link;
+    if( link.contains( "open.spotify.com" ) )
+    {
+        QString hash = link;
+        hash.replace( "http://open.spotify.com/track/", "" );
+        uri = QString( "spotify:track:%1" ).arg( hash );
+    }
+
+    tLog() << "Parsing Spotify Track URI:" << uri;
+
+    QUrl url = QUrl( QString( "http://ws.spotify.com/lookup/1/.json?uri=%1" ).arg( uri ) );
+    tDebug() << "Looking up..." << url.toString();
+
+    QNetworkReply* reply = TomahawkUtils::nam()->get( QNetworkRequest( url ) );
+    connect( reply, SIGNAL( finished() ), this, SLOT( spotifyTrackLookupFinished() ) );
+
+    return true; // all we know now
+}
+
+
+
+void
+GlobalActionManager::spotifyTrackLookupFinished()
+{
+    QNetworkReply* r = qobject_cast< QNetworkReply* >( sender() );
+    Q_ASSERT( r );
+
+    if( r->error() == QNetworkReply::NoError )
+    {
+        QJson::Parser p;
+        bool ok;
+        QVariantMap res = p.parse( r, &ok ).toMap();
+
+        if( !ok )
+        {
+            tLog() << "Failed to parse json from Spotify track lookup:" << p.errorString() << "On line" << p.errorLine();
+            return;
+        } else if( !res.contains( "track" ) )
+        {
+            tLog() << "No 'track' item in the spotify track lookup result... not doing anything";
+            return;
+        }
+
+        // lets parse this baby
+        QVariantMap t = res.value( "track" ).toMap();
+
+        QString title, artist, album;
+
+        title = t.value( "name", QString() ).toString();
+        // TODO for now only take the first artist
+        if( t.contains( "artists" ) && t[ "artists" ].canConvert< QVariantList >() && t[ "artists" ].toList().size() > 0 )
+            artist = t[ "artists" ].toList().first().toMap().value( "name", QString() ).toString();
+        if( t.contains( "album" ) && t[ "album" ].canConvert< QVariantMap >() )
+            album = t[ "album" ].toMap().value( "name", QString() ).toString();
+
+        if( title.isEmpty() && artist.isEmpty() ) // don't have enough...
+        {
+            tLog() << "Didn't get an artist and track name from spotify, not enough to build a query on. Aborting" << title << artist << album;
+            return;
+        }
+
+        Tomahawk::query_ptr q = Tomahawk::Query::get( artist, title, album, uuid(), true );
+        handleOpenTrack( q );
+
+    } else
+    {
+        tLog() << "Error in network request to Spotify for track decoding:" << r->errorString();
+    }
+}
+

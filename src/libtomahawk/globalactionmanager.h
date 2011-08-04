@@ -38,6 +38,9 @@ public:
     QUrl openLinkFromQuery( const Tomahawk::query_ptr& query ) const;
     QUrl openLink( const QString& title, const QString& artist, const QString& album ) const;
 
+    // spotify
+    bool parseSpotifyLink( const QString& link );
+
     void copyToClipboard( const Tomahawk::query_ptr& query ) const;
     QString copyPlaylistToClipboard( const Tomahawk::dynplaylist_ptr& playlist );
     void savePlaylistToFile( const Tomahawk::playlist_ptr& playlist, const QString& filename );
@@ -47,11 +50,15 @@ public slots:
     void waitingForResolved( bool );
 
     Tomahawk::dynplaylist_ptr loadDynamicPlaylist( const QUrl& url, bool station );
+
 private slots:
     void bookmarkPlaylistCreated( const Tomahawk::playlist_ptr& pl );
     void showPlaylist();
 
     void xspfCreated( const QByteArray& xspf );
+
+    // SPOTIFY
+    void spotifyTrackLookupFinished();
 
 private:
     explicit GlobalActionManager( QObject* parent = 0 );
@@ -66,6 +73,8 @@ private:
     bool handlePlayCommand(const QUrl& url );
     bool handleBookmarkCommand(const QUrl& url );
     bool handleOpenCommand(const QUrl& url );
+
+    void handleOpenTrack( const Tomahawk::query_ptr& qry );
 
     bool doQueueAdd( const QStringList& parts, const QList< QPair< QString, QString > >& queryItems );
     QString hostname() const;

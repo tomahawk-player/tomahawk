@@ -65,6 +65,9 @@
 #ifdef Q_OS_WIN32
 #include <qtsparkle/Updater>
 #endif
+#ifdef Q_OS_MAC
+#include "widgets/maclineedit.h"
+#endif
 
 #include "utils/logger.h"
 
@@ -210,35 +213,50 @@ TomahawkWindow::setupSideBar()
     ui->splitter->setHandleWidth( 1 );
 
     ui->actionShowOfflineSources->setChecked( TomahawkSettings::instance()->showOfflineSources() );
-
 }
 
 
 void
 TomahawkWindow::setupToolBar()
 {
-    m_searchBox = new QWidget();
-    m_searchWidget->setupUi( m_searchBox );
-
     QToolBar* toolbar = addToolBar( "TomahawkToolbar" );
     toolbar->setObjectName( "TomahawkToolbar" );
     toolbar->setMovable( false );
     toolbar->setFloatable( false );
-    toolbar->setIconSize( QSize( 32, 32 ) );
+    toolbar->setIconSize( QSize( 28, 28 ) );
     toolbar->setToolButtonStyle( Qt::ToolButtonFollowStyle );
     toolbar->installEventFilter( new WidgetDragFilter( toolbar ) );
+    toolbar->setSizePolicy( QSizePolicy::Expanding, QSizePolicy::Minimum );
 
     m_backAvailable = toolbar->addAction( QIcon( RESPATH "images/back.png" ), tr( "Back" ), ViewManager::instance(), SLOT( historyBack() ) );
     m_backAvailable->setToolTip( tr( "Go back one page" ) );
     m_forwardAvailable = toolbar->addAction( QIcon( RESPATH "images/forward.png" ), tr( "Forward" ), ViewManager::instance(), SLOT( historyForward() ) );
     m_forwardAvailable->setToolTip( tr( "Go forward one page" ) );
 
+    m_searchBox = new QWidget( toolbar );
+
+#ifdef Q_OS_MAC
+    QWidget *spacerWidget = new QWidget( this );
+    spacerWidget->setSizePolicy( QSizePolicy::Expanding, QSizePolicy::Preferred );
+    spacerWidget->setVisible( true );
+    toolbar->addWidget( spacerWidget );
+
+    m_searchBox->setLayout( new QHBoxLayout() );
+
+    MacLineEdit* lineEdit = new MacLineEdit( m_searchBox );
+    lineEdit->setFixedSize( 256, 28 );
+    lineEdit->set_hint( tr( "Search" ) );
+    lineEdit->setVisible( true );
+    m_searchBox->layout()->addWidget( lineEdit );
+
+    connect( lineEdit, SIGNAL( textChanged( QString ) ), SLOT( onSearch( QString ) ) );
+#else
+    m_searchWidget->setupUi( m_searchBox );
     m_searchWidget->searchEdit->setStyleSheet( "QLineEdit { border: 1px solid gray; border-radius: 6px; margin-right: 2px; }" );
-#ifdef Q_WS_MAC
-    m_searchWidget->searchEdit->setAttribute( Qt::WA_MacShowFocusRect, 0 );
+
+    connect( m_searchWidget->searchEdit, SIGNAL( returnPressed() ), SLOT( onFilterEdited() ) );
 #endif
 
-    connect( m_searchWidget->searchEdit, SIGNAL( returnPressed() ), SLOT( onSearch() ) );
     toolbar->addWidget( m_searchBox );
 }
 
@@ -677,9 +695,17 @@ TomahawkWindow::checkForUpdates()
 
 
 void
-TomahawkWindow::onSearch()
+TomahawkWindow::onSearch( const QString& search )
 {
-    ViewManager::instance()->show( new SearchWidget( m_searchWidget->searchEdit->text(), this ) );
+    if ( !search.trimmed().isEmpty() )
+        ViewManager::instance()->show( new SearchWidget( search, this ) );
+}
+
+
+void
+TomahawkWindow::onFilterEdited()
+{
+    onSearch( m_searchWidget->searchEdit->text() );
     m_searchWidget->searchEdit->clear();
 }
 

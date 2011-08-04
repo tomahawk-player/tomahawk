@@ -462,7 +462,8 @@ TrackView::updateHoverIndex( const QPoint& pos )
         }
     }
 
-    setCursor( Qt::ArrowCursor );
+    if ( cursor().shape() != Qt::ArrowCursor )
+        setCursor( Qt::ArrowCursor );
 }
 
 
@@ -470,7 +471,12 @@ void
 TrackView::wheelEvent( QWheelEvent* event )
 {
     QTreeView::wheelEvent( event );
-    updateHoverIndex( event->pos() );
+
+    if ( m_hoveredIndex.isValid() )
+    {
+        m_hoveredIndex = QModelIndex();
+        repaint();
+    }
 }
 
 

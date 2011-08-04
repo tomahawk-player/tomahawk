@@ -53,6 +53,11 @@ DatabaseCommand_CreatePlaylist::exec( DatabaseImpl* lib )
 void
 DatabaseCommand_CreatePlaylist::postCommitHook()
 {
+    qDebug() << Q_FUNC_INFO;
+
+    if ( source()->isLocal() )
+        Servent::instance()->triggerDBSync();
+
     if ( m_report == false )
         return;
 
@@ -70,9 +75,6 @@ DatabaseCommand_CreatePlaylist::postCommitHook()
     {
         m_playlist->reportCreated( m_playlist );
     }
-
-    if ( source()->isLocal() )
-        Servent::instance()->triggerDBSync();
 }
 
 

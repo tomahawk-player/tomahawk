@@ -67,4 +67,3 @@ SearchButton *SearchLineEdit::searchButton() const
 {
     return m_searchButton;
 }
-

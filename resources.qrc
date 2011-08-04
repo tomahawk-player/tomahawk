@@ -8,6 +8,7 @@
     <file>./data/images/loved.png</file>
     <file>./data/images/not-loved.png</file>
     <file>./data/images/no-album-art-placeholder.png</file>
+    <file>./data/images/no-artist-image-placeholder.png</file>
     <file>./data/images/now-playing-panel.png</file>
     <file>./data/images/now-playing-speaker.png</file>
     <file>./data/images/pause-pressed.png</file>
@@ -62,6 +63,7 @@
     <file>./data/images/volume-slider-level.png</file>
     <file>./data/images/echonest_logo.png</file>
     <file>./data/images/loading-animation.gif</file>
+    <file>./data/images/info.png</file>
     <file>./data/images/home.png</file>
     <file>./data/images/back.png</file>
     <file>./data/images/forward.png</file>

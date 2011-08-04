@@ -210,7 +210,7 @@ Pipeline::reportResults( QID qid, const QList< result_ptr >& results )
     }
     else
     {
-        new FuncTimeout( 100, boost::bind( &Pipeline::timeoutShunt, this, q ), this );
+        new FuncTimeout( 0, boost::bind( &Pipeline::timeoutShunt, this, q ), this );
     }
 }
 
@@ -247,7 +247,7 @@ Pipeline::shuntNext()
     }
 
     setQIDState( q, rc );
-    new FuncTimeout( 100, boost::bind( &Pipeline::shunt, this, q ), this );
+    new FuncTimeout( 0, boost::bind( &Pipeline::shunt, this, q ), this );
 }
 
 
@@ -285,7 +285,9 @@ Pipeline::shunt( const query_ptr& q )
         emit resolving( q );
 
         m_qidsTimeout.insert( q->id(), true );
-        new FuncTimeout( r->timeout(), boost::bind( &Pipeline::timeoutShunt, this, q ), this );
+
+        if ( r->timeout() > 0 )
+            new FuncTimeout( r->timeout(), boost::bind( &Pipeline::timeoutShunt, this, q ), this );
     }
     else
     {

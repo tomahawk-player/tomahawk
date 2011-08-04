@@ -63,6 +63,8 @@ private slots:
     void cmdExited( int code, QProcess::ExitStatus status );
 
 private:
+    void sendConfig();
+
     void handleMsg( const QByteArray& msg );
     void sendMsg( const QByteArray& msg );
     void doSetup( const QVariantMap& m );

@@ -719,6 +719,7 @@ ViewManager::updateView()
     else
         m_topbar->setVisible( true );
 
+    m_infobar->setVisible( currentPage()->showInfoBar() );
     m_infobar->setCaption( currentPage()->title() );
     m_infobar->setDescription( currentPage()->description() );
     m_infobar->setLongDescription( currentPage()->longDescription() );

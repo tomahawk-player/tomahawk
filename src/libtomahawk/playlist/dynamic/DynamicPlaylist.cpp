@@ -167,7 +167,12 @@ DynamicPlaylist::createNewRevision( const QString& newrev,
                                     const QList< dyncontrol_ptr>& controls,
                                     const QList< plentry_ptr >& entries )
 {
-    Q_ASSERT( !busy() );
+    if ( busy() )
+    {
+        m_revisionQueue.enqueue( DynQueueItem( newrev, oldrev, type, controls, (int)Static, entries, oldrev == currentrevision() ) );
+        return;
+    }
+
     setBusy( true );
 
     // get the newly added tracks
@@ -207,6 +212,12 @@ DynamicPlaylist::createNewRevision( const QString& newrev,
                                     const QString& type,
                                     const QList< dyncontrol_ptr>& controls )
 {
+    if ( busy() )
+    {
+        m_revisionQueue.enqueue( DynQueueItem( newrev, oldrev, type, controls, (int)OnDemand, QList< plentry_ptr >(), oldrev == currentrevision() ) );
+        return;
+    }
+
     setBusy( true );
 
     // can skip the entry stuff. just overwrite with new info
@@ -496,3 +507,20 @@ DynamicPlaylist::variantsToControl( const QList< QVariantMap >& controlsV )
     return realControls;
 }
 
+
+void
+DynamicPlaylist::checkRevisionQueue()
+{
+    if ( !m_revisionQueue.isEmpty() )
+    {
+        DynQueueItem item = m_revisionQueue.dequeue();
+        if ( item.oldRev != currentrevision() && item.applyToTip ) // this was applied to the then-latest, but the already-running operation changed it so it's out of date now. fix it
+        {
+            item.oldRev = currentrevision();
+        }
+        if( item.mode == Static )
+            createNewRevision( item.newRev, item.oldRev, item.type, item.controls, item.entries );
+        else
+            createNewRevision( item.newRev, item.oldRev, item.type, item.controls );
+    }
+}
