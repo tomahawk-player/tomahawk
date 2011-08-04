@@ -688,15 +688,17 @@ GlobalActionManager::showPlaylist()
 }
 
 void
-GlobalActionManager::waitingForResolved( bool success )
+GlobalActionManager::waitingForResolved( bool /* success */ )
 {
-    if(  m_waitingToPlay.data() != sender() )
+    if ( m_waitingToPlay.data() != sender() )
     {
         m_waitingToPlay.clear();
         return;
     }
 
-    if( !m_waitingToPlay.isNull() && m_waitingToPlay->playable() ) { // play it!
+    if ( !m_waitingToPlay.isNull() && m_waitingToPlay->playable() )
+    {
+        // play it!
 //         AudioEngine::instance()->playItem( AudioEngine::instance()->playlist(), m_waitingToPlay->results().first() );
         AudioEngine::instance()->play();
 
