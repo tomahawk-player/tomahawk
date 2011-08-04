@@ -431,8 +431,7 @@ SourceTreeView::dragEnterEvent( QDragEnterEvent* event )
     qDebug() << Q_FUNC_INFO;
     QTreeView::dragEnterEvent( event );
 
-    if ( event->mimeData()->hasFormat( "application/tomahawk.query.list" )
-      || event->mimeData()->hasFormat( "application/tomahawk.result.list" ) )
+    if ( GlobalActionManager::instance()->acceptsMimeData( event->mimeData() ) )
     {
         m_dragging = true;
         m_dropRect = QRect();
@@ -460,8 +459,7 @@ SourceTreeView::dragMoveEvent( QDragMoveEvent* event )
     bool accept = false;
     QTreeView::dragMoveEvent( event );
 
-    if ( event->mimeData()->hasFormat( "application/tomahawk.query.list" )
-      || event->mimeData()->hasFormat( "application/tomahawk.result.list" ) )
+    if ( GlobalActionManager::instance()->acceptsMimeData( event->mimeData() ) )
     {
         setDirtyRegion( m_dropRect );
         const QPoint pos = event->pos();

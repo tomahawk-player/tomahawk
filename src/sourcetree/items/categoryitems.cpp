@@ -28,6 +28,7 @@
 #include "widgets/playlisttypeselectordlg.h"
 #include <playlist/dynamic/GeneratorInterface.h>
 #include "utils/logger.h"
+#include <globalactionmanager.h>
 
 using namespace Tomahawk;
 
@@ -121,12 +122,7 @@ CategoryAddItem::icon() const
 bool
 CategoryAddItem::willAcceptDrag( const QMimeData* data ) const
 {
-    if ( ( m_categoryType == SourcesModel::PlaylistsCategory || m_categoryType == SourcesModel::StationsCategory ) &&
-             (
-                data->hasFormat( "application/tomahawk.query.list" ) ||
-                data->hasFormat( "application/tomahawk.result.list" )
-             )
-       )
+    if ( ( m_categoryType == SourcesModel::PlaylistsCategory || m_categoryType == SourcesModel::StationsCategory ) && GlobalActionManager::instance()->acceptsMimeData( data ) )
     {
         return true;
     }
@@ -138,78 +134,43 @@ bool
 CategoryAddItem::dropMimeData( const QMimeData* data, Qt::DropAction )
 {
     // Create a new playlist seeded with these items
-    if ( data->hasFormat( "application/tomahawk.query.list" ) || data->hasFormat( "application/tomahawk.result.list" ) ) {
+    connect( GlobalActionManager::instance(), SIGNAL( tracks( QList< Tomahawk::query_ptr > ) ), this, SLOT( parsedDroppedTracks( QList< Tomahawk::query_ptr > ) ) );
+    GlobalActionManager::instance()->tracksFromMimeData( data );
 
-        QList< Tomahawk::query_ptr > queries;
+    return true;
+}
 
-        if ( data->hasFormat( "application/tomahawk.query.list" ) ) {
-            QByteArray itemData = data->data( "application/tomahawk.query.list" );
-            QDataStream stream( &itemData, QIODevice::ReadOnly );
+void
+CategoryAddItem::parsedDroppedTracks( const QList< query_ptr >& tracks )
+{
+    disconnect( GlobalActionManager::instance(), SIGNAL( tracks( QList< Tomahawk::query_ptr > ) ), this, SLOT( parsedDroppedTracks( QList< Tomahawk::query_ptr > ) ) );
+    if( m_categoryType == SourcesModel::PlaylistsCategory ) {
 
-            while ( !stream.atEnd() )
-            {
-                qlonglong qptr;
-                stream >> qptr;
+        playlist_ptr newpl = Playlist::create( SourceList::instance()->getLocal(), uuid(), "New Playlist", "", SourceList::instance()->getLocal()->friendlyName(), false, tracks );
+        ViewManager::instance()->show( newpl );
 
-                Tomahawk::query_ptr* query = reinterpret_cast<Tomahawk::query_ptr*>(qptr);
-                if ( query && !query->isNull() )
-                {
-                    qDebug() << "Dropped query item:" << query->data()->artist() << "-" << query->data()->track();
-                    queries << *query;
-                }
-            }
-        } else if( data->hasFormat( "application/tomahawk.result.list" ) ) {
-            QByteArray itemData = data->data( "application/tomahawk.result.list" );
-            QDataStream stream( &itemData, QIODevice::ReadOnly );
+        // Give a shot to try to rename it. The playlist has to be created first. ugly.
+        QTimer::singleShot( 300, APP->mainWindow()->sourceTreeView(), SLOT( renamePlaylist() ) );
+    } else if( m_categoryType == SourcesModel::StationsCategory ) {
+        // seed the playlist with these song filters
+        QString name = tracks.isEmpty() ? tr( "New Station" ) : tr( "%1 Station" ).arg( tracks.first()->track() );
+        dynplaylist_ptr newpl = DynamicPlaylist::create( SourceList::instance()->getLocal(), uuid(), name, "", SourceList::instance()->getLocal()->friendlyName(), OnDemand, false );
+        newpl->setMode( OnDemand );
 
-            while ( !stream.atEnd() )
-            {
-                qlonglong qptr;
-                stream >> qptr;
-
-                Tomahawk::result_ptr* result = reinterpret_cast<Tomahawk::result_ptr*>(qptr);
-                if ( result && !result->isNull() )
-                {
-                    qDebug() << "Dropped result item:" << result->data()->artist() << "-" << result->data()->track();
-                    query_ptr q = result->data()->toQuery();
-                    q->addResults( QList< result_ptr >() << *result );
-                    queries << q;
-                }
-            }
+        // now we want to add each query as a song filter...
+        QList< dyncontrol_ptr > contrls;
+        foreach( const Tomahawk::query_ptr& q, tracks ) {
+            dyncontrol_ptr c = newpl->generator()->createControl( "Song" );
+            c->setInput( QString( "%1 %2" ).arg( q->track() ).arg( q->artist() ) );
+            contrls << c;
         }
 
-        if( m_categoryType == SourcesModel::PlaylistsCategory ) {
+        newpl->createNewRevision( uuid(), newpl->currentrevision(), newpl->type(), contrls );
 
-            playlist_ptr newpl = Playlist::create( SourceList::instance()->getLocal(), uuid(), "New Playlist", "", SourceList::instance()->getLocal()->friendlyName(), false, queries );
-            ViewManager::instance()->show( newpl );
-
-            // Give a shot to try to rename it. The playlist has to be created first. ugly.
-            QTimer::singleShot( 300, APP->mainWindow()->sourceTreeView(), SLOT( renamePlaylist() ) );
-        } else if( m_categoryType == SourcesModel::StationsCategory ) {
-            // seed the playlist with these song filters
-            QString name = queries.isEmpty() ? tr( "New Station" ) : tr( "%1 Station" ).arg( queries.first()->track() );
-            dynplaylist_ptr newpl = DynamicPlaylist::create( SourceList::instance()->getLocal(), uuid(), name, "", SourceList::instance()->getLocal()->friendlyName(), OnDemand, false );
-            newpl->setMode( OnDemand );
-
-            // now we want to add each query as a song filter...
-            QList< dyncontrol_ptr > contrls;
-            foreach( const Tomahawk::query_ptr& q, queries ) {
-                dyncontrol_ptr c = newpl->generator()->createControl( "Song" );
-                c->setInput( QString( "%1 %2" ).arg( q->track() ).arg( q->artist() ) );
-                contrls << c;
-            }
-
-            newpl->createNewRevision( uuid(), newpl->currentrevision(), newpl->type(), contrls );
-
-
-            ViewManager::instance()->show( newpl );
-            // Give a shot to try to rename it. The playlist has to be created first. ugly.
-            QTimer::singleShot( 300, APP->mainWindow()->sourceTreeView(), SLOT( renamePlaylist() ) );
-        }
-
-        return true;
+        ViewManager::instance()->show( newpl );
+        // Give a shot to try to rename it. The playlist has to be created first. ugly.
+        QTimer::singleShot( 300, APP->mainWindow()->sourceTreeView(), SLOT( renamePlaylist() ) );
     }
-    return false;
 }
 
 

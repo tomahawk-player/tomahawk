@@ -43,6 +43,7 @@ protected:
 private slots:
     void onPlaylistLoaded( Tomahawk::PlaylistRevision revision );
     void onPlaylistChanged();
+    void parsedDroppedTracks( const QList<Tomahawk::query_ptr>& tracks );
 
 private:
     bool m_loaded;

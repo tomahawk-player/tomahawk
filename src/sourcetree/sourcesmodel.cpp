@@ -32,6 +32,7 @@
 #include "viewmanager.h"
 
 #include "utils/logger.h"
+#include "globalactionmanager.h"
 
 using namespace Tomahawk;
 
@@ -179,10 +180,7 @@ SourcesModel::setData( const QModelIndex& index, const QVariant& value, int role
 QStringList
 SourcesModel::mimeTypes() const
 {
-    QStringList types;
-    types << "application/tomahawk.query.list";
-    types << "application/tomahawk.result.list";
-    return types;
+    return GlobalActionManager::instance()->mimeTypes();
 }
 
 
