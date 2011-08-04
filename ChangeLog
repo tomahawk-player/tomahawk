@@ -7,6 +7,7 @@ Version 0.2.0:
     * Scroll per pixel to making scrolling feel more natural
     * Filter out duplicate tracks in Collection tree view
     * Spotify resolver now honors SOCKS5 proxy settings.
+    * Added desktop notifications (Linux)
     * On OS X don't quit on window close to conform to best practices
     * Made "show offline sources" option in menu be a toggle instead of two different entries
     * Properly decode escaped characters coming from HTTP API
@@ -31,7 +32,6 @@ Version 0.2.0:
     * Optimize resolver pipeline
     * Added "love" feature - also "loves" track on Last.fm (if last.fm account is available/set)
     * Twitter checks for updates less often now, saving user API calls from running out when using multiple clients.
-    * Ship with libpng to ensure compatibility with certain OS X builds
     * Added score column and score bars to indicate resolver match certainty
     * Fix a bunch of playlist deletion bugs
     * Created "New Additions" page for each source
