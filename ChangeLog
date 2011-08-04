@@ -6,6 +6,7 @@ Version 0.2.0:
       running out when using multiple clients.
     * Collection scanner now can now run automatically, watching files and
       directories for changes. On by default.
+    * Lots of new icons and design tweaks
 
 Version 0.1.0:
     * Fixed stations so they resolve against all available sources instead of
