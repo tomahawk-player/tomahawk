@@ -246,6 +246,7 @@ TomahawkWindow::setupToolBar()
     MacLineEdit* lineEdit = new MacLineEdit( m_searchBox );
     lineEdit->setFixedSize( 256, 28 );
     lineEdit->set_hint( tr( "Search" ) );
+    lineEdit->setVisible( true );
     m_searchBox->layout()->addWidget( lineEdit );
 
     connect( lineEdit, SIGNAL( textChanged( QString ) ), SLOT( onSearch( QString ) ) );
