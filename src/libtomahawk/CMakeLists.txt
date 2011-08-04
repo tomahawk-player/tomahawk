@@ -422,10 +422,12 @@ IF( APPLE )
     SET( libSources ${libSources} 
       infosystem/infoplugins/mac/adium.mm
       infosystem/infoplugins/mac/adiumplugin.cpp
+      widgets/maclineedit.mm
       utils/tomahawkutils_mac.mm )
 
     SET( libHeaders ${libHeaders} 
-      infosystem/infoplugins/mac/adiumplugin.h )
+      infosystem/infoplugins/mac/adiumplugin.h
+      widgets/maclineedit.h )
 
     SET( OS_SPECIFIC_LINK_LIBRARIES
         ${OS_SPECIFIC_LINK_LIBRARIES}

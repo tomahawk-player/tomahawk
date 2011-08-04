@@ -93,7 +93,8 @@ private slots:
     void onSipPluginAdded( SipPlugin* p );
     void onSipPluginRemoved( SipPlugin* p );
 
-    void onSearch();
+    void onSearch( const QString& search );
+    void onFilterEdited();
 
     void minimize();
     void maximize();
