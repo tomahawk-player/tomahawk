@@ -54,6 +54,7 @@
 
 #include "audio/audioengine.h"
 #include "utils/xspfloader.h"
+#include "utils/jspfloader.h"
 #include "utils/logger.h"
 #include "utils/tomahawkutils.h"
 
@@ -520,9 +521,17 @@ TomahawkApp::loadUrl( const QString& url )
     {
         QFile f( url );
         QFileInfo info( f );
-        if ( f.exists() && info.suffix() == "xspf" ) {
+        if ( info.suffix() == "xspf" )
+        {
             XSPFLoader* l = new XSPFLoader( true, this );
             tDebug( LOGINFO ) << "Loading spiff:" << url;
+            l->load( QUrl::fromUserInput( url ) );
+
+            return true;
+        } else if ( info.suffix() == "jspf" )
+        {
+            JSPFLoader* l = new JSPFLoader( true, this );
+            tDebug( LOGINFO ) << "Loading j-spiff:" << url;
             l->load( QUrl::fromUserInput( url ) );
 
             return true;
