@@ -41,6 +41,7 @@
 
 #include <QtNetwork/QNetworkAccessManager>
 #include <QtNetwork/QNetworkReply>
+#include "utils/jspfloader.h"
 
 GlobalActionManager* GlobalActionManager::s_instance = 0;
 
@@ -193,6 +194,14 @@ GlobalActionManager::parseTomahawkLink( const QString& url )
                 XSPFLoader* l = new XSPFLoader( true, this );
                 tDebug() << "Loading spiff:" << xspf.toString();
                 l->load( xspf );
+                connect( l, SIGNAL( ok( Tomahawk::playlist_ptr ) ), ViewManager::instance(), SLOT( show( Tomahawk::playlist_ptr ) ) );
+
+                return true;
+            } else if( u.hasQueryItem( "jspf" ) ) {
+                QUrl jspf = QUrl::fromUserInput( u.queryItemValue( "jspf" ) );
+                Tomahawk::JSPFLoader* l = new Tomahawk::JSPFLoader( true, this );
+                tDebug() << "Loading jspiff:" << jspf.toString();
+                l->load( jspf );
                 connect( l, SIGNAL( ok( Tomahawk::playlist_ptr ) ), ViewManager::instance(), SLOT( show( Tomahawk::playlist_ptr ) ) );
 
                 return true;

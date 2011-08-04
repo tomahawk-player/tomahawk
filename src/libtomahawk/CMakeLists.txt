@@ -166,6 +166,7 @@ set( libSources
     utils/animatedsplitter.cpp
     utils/xspfloader.cpp
     utils/xspfgenerator.cpp
+    utils/jspfloader.cpp
 
     widgets/newplaylistwidget.cpp
     widgets/searchwidget.cpp
@@ -336,6 +337,7 @@ set( libHeaders
     utils/animatedsplitter.h
     utils/xspfloader.h
     utils/xspfgenerator.h
+    utils/jspfloader.h
 
     widgets/newplaylistwidget.h
     widgets/searchwidget.h
@@ -419,7 +421,7 @@ IF( APPLE )
     FIND_LIBRARY( SCRIPTINGBRIDGE_LIBRARY ScriptingBridge )
     MARK_AS_ADVANCED( COREAUDIO_LIBRARY COREFOUNDATION_LIBRARY FOUNDATION_LIBRARY SCRIPTINGBRIDGE_LIBRARY )
 
-    SET( libSources ${libSources} 
+    SET( libSources ${libSources}
       infosystem/infoplugins/mac/adium.mm
       infosystem/infoplugins/mac/adiumplugin.cpp
       widgets/maclineedit.mm
