@@ -15,7 +15,9 @@ Version 0.2.0:
     * Fixed track skipping-on-pause bug when using Gstreamer backend
     * Fixed a few crashes that could occur when fetching data from Last.fm.
     * Made Twitter dialog more readable/understandable.
-    * Added Artist pages (and links to them from now playing metadata and from collection track list views) with artist bio snippet, related artists, top tracks and view of all tracks/albums from that artist in user's Super Collection 
+    * Added Artist pages (and links to them from now playing metadata and from collection track list views) 
+      with artist bio snippet, related artists, top tracks and view of all tracks/albums from that 
+      artist in user's Super Collection 
     * Fixed streaming from https:// links
     * Desktop notifications for now playing (Linux only)
     * Implement new javascript resolver API and ability to present configuration options for resolvers
