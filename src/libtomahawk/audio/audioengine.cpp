@@ -384,7 +384,14 @@ AudioEngine::loadTrack( const Tomahawk::result_ptr& result )
                     m_mediaObject->setCurrentSource( furl );
                 }
                 else
-                    m_mediaObject->setCurrentSource( m_currentTrack->url() );
+                {
+                    QString furl = m_currentTrack->url();
+#ifdef Q_OS_WIN32
+                    if ( furl.startsWith( "file://" ) )
+                        furl = furl.right( furl.length() - 7 );
+#endif
+                    m_mediaObject->setCurrentSource( furl );
+                }
 
                 m_mediaObject->currentSource().setAutoDelete( true );
                 m_isPlayingHttp = true;

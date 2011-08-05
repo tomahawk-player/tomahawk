@@ -748,7 +748,7 @@ Tomahawk::EchonestControl::checkForMoodsOrStylesFetched()
 bool
 Tomahawk::EchonestControl::insertMoodsAndStyles()
 {
-    QVector< QString > src = selectedType() == "Mood" ? EchonestGenerator::moods() : EchonestGenerator::styles();
+    QStringList src = selectedType() == "Mood" ? EchonestGenerator::moods() : EchonestGenerator::styles();
     QComboBox* combo = qobject_cast< QComboBox* >( m_input.data() );
     if( !combo )
         return false;

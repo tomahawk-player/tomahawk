@@ -27,6 +27,7 @@
 #include "database/databasecommand_playbackhistory.h"
 #include "dynamic/GeneratorInterface.h"
 #include "utils/logger.h"
+#include "globalactionmanager.h"
 
 using namespace Tomahawk;
 
@@ -37,6 +38,9 @@ PlaylistModel::PlaylistModel( QObject* parent )
     , m_isTemporary( false )
 {
     qDebug() << Q_FUNC_INFO;
+
+    m_dropStorage.parent = QPersistentModelIndex();
+    m_dropStorage.row = -10;
 
     setReadOnly( false );
 }
@@ -168,7 +172,7 @@ PlaylistModel::clear()
 {
     if ( rowCount( QModelIndex() ) )
     {
-        emit loadingFinished();;
+        emit loadingFinished();
 
         emit beginResetModel();
         delete m_rootItem;
@@ -355,16 +359,32 @@ PlaylistModel::dropMimeData( const QMimeData* data, Qt::DropAction action, int r
     if ( action == Qt::IgnoreAction || isReadOnly() )
         return true;
 
-    if ( !data->hasFormat( "application/tomahawk.query.list" )
-        && !data->hasFormat( "application/tomahawk.plentry.list" )
-        && !data->hasFormat( "application/tomahawk.result.list" ) )
+    if ( !GlobalActionManager::instance()->acceptsMimeData( data ) )
         return false;
 
+    m_dropStorage.row = row;
+    m_dropStorage.parent = QPersistentModelIndex( parent );
+    m_dropStorage.action = action;
+    connect( GlobalActionManager::instance(), SIGNAL( tracks( QList< Tomahawk::query_ptr > ) ), this, SLOT( parsedDroppedTracks( QList< Tomahawk::query_ptr > ) ) );
+    GlobalActionManager::instance()->tracksFromMimeData( data );
+
+    return true;
+}
+
+void
+PlaylistModel::parsedDroppedTracks( QList< query_ptr > tracks )
+{
+
+    if ( m_dropStorage.row == -10  ) // nope
+        return;
+
+    disconnect( GlobalActionManager::instance(), SIGNAL( tracks( QList< Tomahawk::query_ptr > ) ), this, SLOT( parsedDroppedTracks( QList< Tomahawk::query_ptr > ) ) );
+
     int beginRow;
-    if ( row != -1 )
-        beginRow = row;
-    else if ( parent.isValid() )
-        beginRow = parent.row();
+    if ( m_dropStorage.row != -1 )
+        beginRow = m_dropStorage.row;
+    else if ( m_dropStorage.parent.isValid() )
+        beginRow = m_dropStorage.parent.row();
     else
         beginRow = rowCount( QModelIndex() );
 
@@ -373,51 +393,10 @@ PlaylistModel::dropMimeData( const QMimeData* data, Qt::DropAction action, int r
     if ( currentItem().isValid() )
         currentuuid = itemFromIndex( currentItem() )->query()->id();
 
-    QList<Tomahawk::query_ptr> queries;
-    if ( data->hasFormat( "application/tomahawk.result.list" ) )
+    if ( tracks.count() )
     {
-        QByteArray itemData = data->data( "application/tomahawk.result.list" );
-        QDataStream stream( &itemData, QIODevice::ReadOnly );
-
-        while ( !stream.atEnd() )
-        {
-            qlonglong qptr;
-            stream >> qptr;
-
-            Tomahawk::result_ptr* result = reinterpret_cast<Tomahawk::result_ptr*>(qptr);
-            if ( result && !result->isNull() )
-            {
-                qDebug() << "Dropped result item:" << result->data()->artist() << "-" << result->data()->track();
-                query_ptr q = result->data()->toQuery();
-                q->addResults( QList< result_ptr >() << *result );
-                queries << q;
-            }
-        }
-    }
-
-    if ( data->hasFormat( "application/tomahawk.query.list" ) )
-    {
-        QByteArray itemData = data->data( "application/tomahawk.query.list" );
-        QDataStream stream( &itemData, QIODevice::ReadOnly );
-
-        while ( !stream.atEnd() )
-        {
-            qlonglong qptr;
-            stream >> qptr;
-
-            Tomahawk::query_ptr* query = reinterpret_cast<Tomahawk::query_ptr*>(qptr);
-            if ( query && !query->isNull() )
-            {
-                qDebug() << "Dropped query item:" << query->data()->artist() << "-" << query->data()->track() << action;
-                queries << *query;
-            }
-        }
-    }
-
-    if ( queries.count() )
-    {
-        emit beginInsertRows( QModelIndex(), beginRow, beginRow + queries.count() - 1 );
-        foreach( const Tomahawk::query_ptr& query, queries )
+        emit beginInsertRows( QModelIndex(), beginRow, beginRow + tracks.count() - 1 );
+        foreach( const Tomahawk::query_ptr& query, tracks )
         {
             plentry_ptr e( new PlaylistEntry() );
             e->setGuid( uuid() );
@@ -441,11 +420,22 @@ PlaylistModel::dropMimeData( const QMimeData* data, Qt::DropAction action, int r
         }
         emit endInsertRows();
 
-        if ( action == Qt::CopyAction )
+        // Work around Qt-on-mac bug where drags from outside the app are Qt::MoveAction
+        // instead of Qt::CopyAction
+#ifdef Q_OS_MAC
+        if ( m_dropStorage.action & Qt::CopyAction || m_dropStorage.action & Qt::MoveAction )
+#else
+        if ( m_dropStorage.action & Qt::CopyAction )
+#endif
+        {
             onPlaylistChanged( true );
+            emit trackCountChanged( rowCount( QModelIndex() ) );
+        }
+
     }
 
-    return true;
+    m_dropStorage.parent = QPersistentModelIndex();
+    m_dropStorage.row = -10;
 }
 
 

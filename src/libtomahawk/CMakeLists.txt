@@ -171,6 +171,8 @@ set( libSources
     utils/xspfloader.cpp
     utils/xspfgenerator.cpp
     utils/jspfloader.cpp
+    utils/spotifyparser.cpp
+    utils/shortenedlinkparser.cpp
 
     widgets/newplaylistwidget.cpp
     widgets/searchwidget.cpp
@@ -347,6 +349,8 @@ set( libHeaders
     utils/xspfloader.h
     utils/xspfgenerator.h
     utils/jspfloader.h
+    utils/spotifyparser.h
+    utils/shortenedlinkparser.h
 
     widgets/newplaylistwidget.h
     widgets/searchwidget.h
@@ -439,8 +443,13 @@ IF( APPLE )
       utils/tomahawkutils_mac.mm )
 
     SET( libHeaders ${libHeaders}
+<<<<<<< HEAD
       infosystem/infoplugins/mac/adium.h
       infosystem/infoplugins/mac/adiumplugin.h )
+=======
+      infosystem/infoplugins/mac/adiumplugin.h
+      widgets/maclineedit.h )
+>>>>>>> master
 
     SET( OS_SPECIFIC_LINK_LIBRARIES
         ${OS_SPECIFIC_LINK_LIBRARIES}

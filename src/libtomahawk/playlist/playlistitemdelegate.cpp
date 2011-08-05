@@ -47,7 +47,7 @@ PlaylistItemDelegate::PlaylistItemDelegate( TrackView* parent, TrackProxyModel* 
     , m_model( proxy )
 {
     m_nowPlayingIcon = QPixmap( PLAYING_ICON );
-    m_arrowIcon = QPixmap( ARROW_ICON ).scaled( 14, 14, Qt::KeepAspectRatio, Qt::SmoothTransformation );
+    m_arrowIcon = QPixmap( ARROW_ICON );
 
     m_topOption = QTextOption( Qt::AlignTop );
     m_topOption.setWrapMode( QTextOption::NoWrap );
@@ -251,6 +251,9 @@ PlaylistItemDelegate::paintDetailed( QPainter* painter, const QStyleOptionViewIt
     {
         opt.rect.setWidth( opt.rect.width() - 16 );
         QRect arrowRect( opt.rect.x() + opt.rect.width(), opt.rect.y() + 1, opt.rect.height() - 2, opt.rect.height() - 2 );
+
+        if ( m_arrowIcon.height() != arrowRect.height() )
+            m_arrowIcon = m_arrowIcon.scaled( arrowRect.size(), Qt::KeepAspectRatio, Qt::SmoothTransformation );
         painter->drawPixmap( arrowRect, m_arrowIcon );
     }
 

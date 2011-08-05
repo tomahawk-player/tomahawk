@@ -22,12 +22,14 @@
 #include "query.h"
 #include "utils/tomahawkutils.h"
 #include "utils/logger.h"
+#include <QFile>
+#include <QDir>
 
 using namespace Tomahawk;
 
 
-QVector< QString > EchonestGenerator::s_moods = QVector< QString >();
-QVector< QString > EchonestGenerator::s_styles = QVector< QString >();
+QStringList EchonestGenerator::s_moods = QStringList();
+QStringList EchonestGenerator::s_styles = QStringList();
 QNetworkReply* EchonestGenerator::s_moodsJob = 0;
 QNetworkReply* EchonestGenerator::s_stylesJob = 0;
 
@@ -69,15 +71,7 @@ EchonestGenerator::EchonestGenerator ( QObject* parent )
     m_mode = OnDemand;
     m_logo.load( RESPATH "/images/echonest_logo.png" );
 
-    if( !s_stylesJob && s_styles.isEmpty() ) {
-        // fetch style and moods
-        s_stylesJob = Echonest::Artist::listTerms( "style" );
-        connect( s_stylesJob, SIGNAL( finished() ), this, SLOT( stylesReceived() ) );
-    } else if( !s_moodsJob && s_moods.isEmpty() ) {
-        s_moodsJob = Echonest::Artist::listTerms( "mood" );
-        connect( s_moodsJob, SIGNAL( finished() ), this, SLOT( moodsReceived() ) );
-    }
-
+    loadStylesAndMoods();
 //    qDebug() << "ECHONEST:" << m_logo.size();
 }
 
@@ -540,8 +534,56 @@ EchonestGenerator::sentenceSummary()
     return sentence;
 }
 
+void
+EchonestGenerator::loadStylesAndMoods()
+{
+    if( !s_styles.isEmpty() || !s_moods.isEmpty() )
+        return;
 
-QVector< QString >
+    QFile dataFile( TomahawkUtils::appDataDir().absoluteFilePath( "echonest_stylesandmoods.dat" ) );
+    if( !dataFile.exists() ) // load
+    {
+        s_stylesJob = Echonest::Artist::listTerms( "style" );
+        connect( s_stylesJob, SIGNAL( finished() ), this, SLOT( stylesReceived() ) );
+        s_moodsJob = Echonest::Artist::listTerms( "mood" );
+        connect( s_moodsJob, SIGNAL( finished() ), this, SLOT( moodsReceived() ) );
+    } else
+    {
+        if( !dataFile.open( QIODevice::ReadOnly ) )
+        {
+            tLog() << "Failed to open for reading styles/moods db file:" << dataFile.fileName();
+            return;
+        }
+
+        QString allData = QString::fromUtf8( dataFile.readAll() );
+        QStringList parts = allData.split( "\n" );
+        if( parts.size() != 2 )
+        {
+            tLog() << "Didn't get both moods and styles in file...:" << allData;
+            return;
+        }
+        s_moods = parts[ 0 ].split( "|" );
+        s_styles = parts[ 1 ].split( "|" );
+    }
+}
+
+void
+EchonestGenerator::saveStylesAndMoods()
+{
+    QFile dataFile( TomahawkUtils::appDataDir().absoluteFilePath( "echonest_stylesandmoods.dat" ) );
+    if( !dataFile.open( QIODevice::WriteOnly ) )
+    {
+        tLog() << "Failed to open styles and moods data file for saving:" << dataFile.errorString() << dataFile.fileName();
+        return;
+    }
+
+    QByteArray data = QString( "%1\n%2" ).arg( s_moods.join( "|" ) ).arg( s_styles.join( "|" ) ).toUtf8();
+    dataFile.write( data );
+}
+
+
+
+QStringList
 EchonestGenerator::moods()
 {
     return s_moods;
@@ -555,15 +597,18 @@ EchonestGenerator::moodsReceived()
     Q_ASSERT( r );
 
     try {
-        s_moods = Echonest::Artist::parseTermList( r );
+        s_moods = Echonest::Artist::parseTermList( r ).toList();
     } catch( Echonest::ParseError& e ) {
         qWarning() << "Echonest failed to parse moods list";
     }
     s_moodsJob = 0;
+
+    if( !s_styles.isEmpty() )
+        saveStylesAndMoods();
 }
 
 
-QVector< QString >
+QStringList
 EchonestGenerator::styles()
 {
     return s_styles;
@@ -577,9 +622,12 @@ EchonestGenerator::stylesReceived()
     Q_ASSERT( r );
 
     try {
-        s_styles = Echonest::Artist::parseTermList( r );
+        s_styles = Echonest::Artist::parseTermList( r ).toList();
     } catch( Echonest::ParseError& e ) {
         qWarning() << "Echonest failed to parse styles list";
     }
     s_stylesJob = 0;
+
+    if( !s_moods.isEmpty() )
+        saveStylesAndMoods();
 }

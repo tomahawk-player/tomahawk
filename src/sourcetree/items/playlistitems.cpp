@@ -25,6 +25,7 @@
 #include "collectionitem.h"
 #include "utils/tomahawkutils.h"
 #include "utils/logger.h"
+#include "globalactionmanager.h"
 
 using namespace Tomahawk;
 
@@ -138,56 +139,23 @@ PlaylistItem::dropMimeData( const QMimeData* data, Qt::DropAction action )
         data->data( "application/tomahawk.playlist.id" ) == m_playlist->guid() )
         return false; // don't allow dropping on ourselves
 
-    if ( data->hasFormat( "application/tomahawk.result.list" ) )
-    {
-        QByteArray itemData = data->data( "application/tomahawk.result.list" );
-        QDataStream stream( &itemData, QIODevice::ReadOnly );
+    connect( GlobalActionManager::instance(), SIGNAL( tracks( QList< Tomahawk::query_ptr > ) ), this, SLOT( parsedDroppedTracks( QList< Tomahawk::query_ptr > ) ) );
+    GlobalActionManager::instance()->tracksFromMimeData( data );
 
-        while ( !stream.atEnd() )
-        {
-            qlonglong qptr;
-            stream >> qptr;
+    // TODO cant' know if it works or not yet...
+    return true;
+}
 
-            Tomahawk::result_ptr* result = reinterpret_cast<Tomahawk::result_ptr*>(qptr);
-            if ( result && !result->isNull() )
-            {
-                qDebug() << "Dropped result item:" << result->data()->artist() << "-" << result->data()->track();
-                query_ptr q = result->data()->toQuery();
-                q->addResults( QList< result_ptr >() << *result );
-                queries << q;
-            }
-        }
-    }
-
-    if ( data->hasFormat( "application/tomahawk.query.list" ) )
-    {
-        QByteArray itemData = data->data( "application/tomahawk.query.list" );
-        QDataStream stream( &itemData, QIODevice::ReadOnly );
-
-        while ( !stream.atEnd() )
-        {
-            qlonglong qptr;
-            stream >> qptr;
-
-            Tomahawk::query_ptr* query = reinterpret_cast<Tomahawk::query_ptr*>(qptr);
-            if ( query && !query->isNull() )
-            {
-                qDebug() << "Dropped query item:" << query->data()->artist() << "-" << query->data()->track();
-                queries << *query;
-            }
-        }
-    }
-
-    if ( queries.count() && !m_playlist.isNull() && m_playlist->author()->isLocal() )
+void
+PlaylistItem::parsedDroppedTracks( const QList< query_ptr >& tracks)
+{
+    disconnect( GlobalActionManager::instance(), SIGNAL( tracks( QList< Tomahawk::query_ptr > ) ), this, SLOT( parsedDroppedTracks( QList< Tomahawk::query_ptr > ) ) );
+    if ( tracks.count() && !m_playlist.isNull() && m_playlist->author()->isLocal() )
     {
         qDebug() << "on playlist:" << m_playlist->title() << m_playlist->guid() << m_playlist->currentrevision();
 
-        m_playlist->addEntries( queries, m_playlist->currentrevision() );
-
-        return true;
+        m_playlist->addEntries( tracks, m_playlist->currentrevision() );
     }
-
-    return false;
 }
 
 

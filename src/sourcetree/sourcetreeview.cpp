@@ -431,11 +431,11 @@ SourceTreeView::dragEnterEvent( QDragEnterEvent* event )
     qDebug() << Q_FUNC_INFO;
     QTreeView::dragEnterEvent( event );
 
-    if ( event->mimeData()->hasFormat( "application/tomahawk.query.list" )
-      || event->mimeData()->hasFormat( "application/tomahawk.result.list" ) )
+    if ( GlobalActionManager::instance()->acceptsMimeData( event->mimeData() ) )
     {
         m_dragging = true;
         m_dropRect = QRect();
+        m_dropIndex = QPersistentModelIndex();
 
         qDebug() << "Accepting Drag Event";
         event->setDropAction( Qt::CopyAction );
@@ -451,6 +451,8 @@ SourceTreeView::dragLeaveEvent( QDragLeaveEvent* event )
 
     m_dragging = false;
     setDirtyRegion( m_dropRect );
+
+    m_dropIndex = QPersistentModelIndex();
 }
 
 
@@ -460,12 +462,12 @@ SourceTreeView::dragMoveEvent( QDragMoveEvent* event )
     bool accept = false;
     QTreeView::dragMoveEvent( event );
 
-    if ( event->mimeData()->hasFormat( "application/tomahawk.query.list" )
-      || event->mimeData()->hasFormat( "application/tomahawk.result.list" ) )
+    if ( GlobalActionManager::instance()->acceptsMimeData( event->mimeData() ) )
     {
         setDirtyRegion( m_dropRect );
         const QPoint pos = event->pos();
         const QModelIndex index = indexAt( pos );
+        m_dropIndex = QPersistentModelIndex( index );
 
         if ( index.isValid() )
         {
@@ -499,6 +501,7 @@ SourceTreeView::dropEvent( QDropEvent* event )
 {
     QTreeView::dropEvent( event );
     m_dragging = false;
+    m_dropIndex = QPersistentModelIndex();
 }
 
 
@@ -529,8 +532,7 @@ SourceTreeView::paintEvent( QPaintEvent* event )
     if ( m_dragging && !m_dropRect.isEmpty() )
     {
         QPainter painter( viewport() );
-        const QModelIndex index = indexAt( m_dropRect.topLeft() );
-        const QRect itemRect = visualRect( index );
+        const QRect itemRect = visualRect( m_dropIndex );
 
         QStyleOptionViewItemV4 opt;
         opt.initFrom( this );

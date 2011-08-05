@@ -34,6 +34,7 @@
 #include "dynamic/widgets/LoadingSpinner.h"
 #include "utils/tomahawkutils.h"
 #include "utils/logger.h"
+#include <globalactionmanager.h>
 
 using namespace Tomahawk;
 
@@ -214,9 +215,7 @@ TrackView::dragEnterEvent( QDragEnterEvent* event )
     qDebug() << Q_FUNC_INFO;
     QTreeView::dragEnterEvent( event );
 
-    if ( event->mimeData()->hasFormat( "application/tomahawk.query.list" )
-        || event->mimeData()->hasFormat( "application/tomahawk.plentry.list" )
-        || event->mimeData()->hasFormat( "application/tomahawk.result.list" ) )
+    if ( GlobalActionManager::instance()->acceptsMimeData( event->mimeData() ) )
     {
         m_dragging = true;
         m_dropRect = QRect();
@@ -238,13 +237,18 @@ TrackView::dragMoveEvent( QDragMoveEvent* event )
         return;
     }
 
-    if ( event->mimeData()->hasFormat( "application/tomahawk.query.list" )
-        || event->mimeData()->hasFormat( "application/tomahawk.plentry.list" )
-        || event->mimeData()->hasFormat( "application/tomahawk.result.list" ) )
+    if ( GlobalActionManager::instance()->acceptsMimeData( event->mimeData() ) )
     {
         setDirtyRegion( m_dropRect );
         const QPoint pos = event->pos();
-        const QModelIndex index = indexAt( pos );
+        QModelIndex index = indexAt( pos );
+        bool pastLast = false;
+
+        if ( !index.isValid() && proxyModel()->rowCount( QModelIndex() ) > 0 )
+        {
+            index = proxyModel()->index( proxyModel()->rowCount( QModelIndex() ) - 1, 0, QModelIndex() );
+            pastLast = true;
+        }
 
         if ( index.isValid() )
         {
@@ -253,7 +257,8 @@ TrackView::dragMoveEvent( QDragMoveEvent* event )
 
             // indicate that the item will be inserted above the current place
             const int gap = 5; // FIXME constant
-            m_dropRect = QRect( rect.left(), rect.top() - gap / 2, rect.width(), gap );
+            int yHeight = ( pastLast ? rect.bottom() : rect.top() ) - gap / 2;
+            m_dropRect = QRect( 0, yHeight, width(), gap );
 
             event->acceptProposedAction();
         }
@@ -274,20 +279,7 @@ TrackView::dropEvent( QDropEvent* event )
     }
     else
     {
-        if ( event->mimeData()->hasFormat( "application/tomahawk.query.list" ) )
-        {
-            const QPoint pos = event->pos();
-            const QModelIndex index = indexAt( pos );
-
-            qDebug() << "Drop Event accepted at row:" << index.row();
-            event->acceptProposedAction();
-
-            if ( !model()->isReadOnly() )
-            {
-                model()->dropMimeData( event->mimeData(), event->proposedAction(), index.row(), 0, index.parent() );
-            }
-        }
-        else if ( event->mimeData()->hasFormat( "application/tomahawk.result.list" ) )
+        if ( GlobalActionManager::instance()->acceptsMimeData( event->mimeData() ) )
         {
             const QPoint pos = event->pos();
             const QModelIndex index = indexAt( pos );

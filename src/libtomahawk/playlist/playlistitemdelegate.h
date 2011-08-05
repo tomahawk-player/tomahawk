@@ -56,7 +56,7 @@ private:
 
     mutable QHash< qint64, QPixmap > m_cache;
     QPixmap m_nowPlayingIcon;
-    QPixmap m_arrowIcon;
+    mutable QPixmap m_arrowIcon;
 
     QTextOption m_topOption;
     QTextOption m_centerOption;
