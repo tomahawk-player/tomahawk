@@ -35,6 +35,9 @@ public:
     virtual bool willAcceptDrag(const QMimeData* data) const;
     virtual bool dropMimeData(const QMimeData* data, Qt::DropAction action);
 
+private slots:
+    void parsedDroppedTracks( const QList< Tomahawk::query_ptr >& tracks );
+
 private:
     SourcesModel::CategoryType m_categoryType;
 };

@@ -167,6 +167,7 @@ set( libSources
     utils/xspfloader.cpp
     utils/xspfgenerator.cpp
     utils/jspfloader.cpp
+    utils/spotifyparser.cpp
 
     widgets/newplaylistwidget.cpp
     widgets/searchwidget.cpp
@@ -338,6 +339,7 @@ set( libHeaders
     utils/xspfloader.h
     utils/xspfgenerator.h
     utils/jspfloader.h
+    utils/spotifyparser.h
 
     widgets/newplaylistwidget.h
     widgets/searchwidget.h
@@ -427,7 +429,7 @@ IF( APPLE )
       widgets/maclineedit.mm
       utils/tomahawkutils_mac.mm )
 
-    SET( libHeaders ${libHeaders} 
+    SET( libHeaders ${libHeaders}
       infosystem/infoplugins/mac/adiumplugin.h
       widgets/maclineedit.h )
 
