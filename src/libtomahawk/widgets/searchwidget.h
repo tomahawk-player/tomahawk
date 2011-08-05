@@ -46,6 +46,7 @@ public:
 
     virtual QWidget* widget() { return this; }
     virtual Tomahawk::PlaylistInterface* playlistInterface() const { return 0; }
+    virtual bool isTemporaryPage() const { return true; }
 
     virtual QString title() const { return tr( "Search" ); }
     virtual QString description() const { return tr( "Results for '%1'" ).arg( m_search ); }
@@ -62,8 +63,6 @@ signals:
 
 private slots:
     void onResultsFound( const QList<Tomahawk::result_ptr>& results );
-
-    void cancel();
 
 private:
     Ui::SearchWidget *ui;

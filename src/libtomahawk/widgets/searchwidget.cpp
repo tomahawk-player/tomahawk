@@ -43,14 +43,17 @@ SearchWidget::SearchWidget( const QString& search, QWidget* parent )
     ui->resultsView->overlay()->setEnabled( false );
     ui->resultsView->sortByColumn( PlaylistModel::Score, Qt::DescendingOrder );
 
+    TomahawkUtils::unmarginLayout( ui->verticalLayout );
+    ui->resultsView->setContentsMargins( 0, 0, 0, 0 );
+    ui->resultsView->setFrameShape( QFrame::NoFrame );
+    ui->resultsView->setAttribute( Qt::WA_MacShowFocusRect, 0 );
+
     m_queries << Tomahawk::Query::get( search, uuid() );
 
     foreach ( const Tomahawk::query_ptr& query, m_queries )
     {
         connect( query.data(), SIGNAL( resultsAdded( QList<Tomahawk::result_ptr> ) ), SLOT( onResultsFound( QList<Tomahawk::result_ptr> ) ) );
     }
-
-    connect( ui->buttonBox, SIGNAL( rejected() ), SLOT( cancel() ) );
 }
 
 
@@ -93,12 +96,4 @@ SearchWidget::onResultsFound( const QList<Tomahawk::result_ptr>& results )
 
         m_resultsModel->append( q );
     }
-}
-
-
-void
-SearchWidget::cancel()
-{
-    emit destroyed( this );
-    deleteLater();
 }
