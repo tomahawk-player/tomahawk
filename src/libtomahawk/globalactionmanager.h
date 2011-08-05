@@ -66,6 +66,7 @@ public slots:
 
     Tomahawk::dynplaylist_ptr loadDynamicPlaylist( const QUrl& url, bool station );
 
+    void handleOpenTrack( const Tomahawk::query_ptr& qry );
 signals:
     /// QMimeData parsing results
     void tracks( const QList< Tomahawk::query_ptr >& tracks );
@@ -75,8 +76,6 @@ private slots:
     void showPlaylist();
 
     void xspfCreated( const QByteArray& xspf );
-
-    void handleOpenTrack( const Tomahawk::query_ptr& qry );
 private:
     explicit GlobalActionManager( QObject* parent = 0 );
     void doBookmark( const Tomahawk::playlist_ptr& pl, const Tomahawk::query_ptr& q );

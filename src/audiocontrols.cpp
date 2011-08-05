@@ -20,9 +20,12 @@
 #include "ui_audiocontrols.h"
 
 #include <QNetworkReply>
+#include <QDropEvent>
+#include <QMouseEvent>
 
 #include "audio/audioengine.h"
 #include "viewmanager.h"
+#include "playlist/playlistview.h"
 #include "database/database.h"
 #include "database/databasecommand_socialaction.h"
 
@@ -31,6 +34,7 @@
 #include "utils/imagebutton.h"
 #include "utils/tomahawkutils.h"
 #include "utils/logger.h"
+#include <globalactionmanager.h>
 
 using namespace Tomahawk;
 
@@ -44,6 +48,7 @@ AudioControls::AudioControls( QWidget* parent )
     , m_shuffled( false )
 {
     ui->setupUi( this );
+    setAcceptDrops( true );
 
     ui->buttonAreaLayout->setSpacing( 2 );
 
@@ -501,6 +506,51 @@ void
 AudioControls::onTrackClicked()
 {
     ViewManager::instance()->showCurrentTrack();
+}
+
+void
+AudioControls::dragEnterEvent( QDragEnterEvent* e )
+{
+    if ( GlobalActionManager::instance()->acceptsMimeData( e->mimeData() ) )
+        e->acceptProposedAction();
+}
+
+void
+AudioControls::dragMoveEvent( QDragMoveEvent* e )
+{
+//     if ( GlobalActionManager::instance()->acceptsMimeData( e->mimeData() ) )
+//         e->acceptProposedAction();
+}
+
+void
+AudioControls::dropEvent( QDropEvent* e )
+{
+    tDebug() << "AudioControls got drop:" << e->mimeData()->formats();
+    if ( GlobalActionManager::instance()->acceptsMimeData( e->mimeData() ) )
+    {
+        connect( GlobalActionManager::instance(), SIGNAL( tracks( QList<Tomahawk::query_ptr> ) ), this, SLOT( droppedTracks( QList<Tomahawk::query_ptr> ) ) );
+        GlobalActionManager::instance()->tracksFromMimeData( e->mimeData() );
+
+        e->accept();
+    }
+}
+
+void
+AudioControls::droppedTracks( QList< query_ptr > tracks )
+{
+    disconnect( GlobalActionManager::instance(), SIGNAL( tracks( QList<Tomahawk::query_ptr> ) ), this, SLOT( droppedTracks( QList<Tomahawk::query_ptr> ) ) );
+
+    if ( !tracks.isEmpty() )
+    {
+        // queue and play the first if nothign is playing
+        GlobalActionManager::instance()->handleOpenTrack( tracks.first() );
+
+        // just queue the rest
+        for ( int i = 1; i < tracks.size(); i++ )
+        {
+            ViewManager::instance()->queue()->model()->append( tracks[ i ] );
+        }
+    }
 }
 
 
