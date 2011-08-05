@@ -246,6 +246,7 @@ TrackView::dragMoveEvent( QDragMoveEvent* event )
         if ( index.isValid() )
         {
             const QRect rect = visualRect( index );
+            m_dropRect = rect;
 
             // indicate that the item will be inserted above the current place
             const int gap = 5; // FIXME constant
