@@ -118,7 +118,7 @@ EchonestSteerer::EchonestSteerer( QWidget* parent )
     m_fadeAnim = new QPropertyAnimation( this, "opacity", this );
     m_fadeAnim->setDuration( ANIM_DURATION );
     m_fadeAnim->setStartValue( 0 );
-    m_fadeAnim->setEndValue( .86 );
+    m_fadeAnim->setEndValue( .7 );
     resize( sizeHint() );
 }
 

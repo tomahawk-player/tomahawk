@@ -90,7 +90,7 @@ DynamicSetupWidget::DynamicSetupWidget( const Tomahawk::dynplaylist_ptr& playlis
     m_fadeAnim = new QPropertyAnimation( this, "opacity" );
     m_fadeAnim->setDuration( 250 );
     m_fadeAnim->setStartValue( 0.00 );
-    m_fadeAnim->setEndValue( .86 );
+    m_fadeAnim->setEndValue( .70 );
 
     setSizePolicy( QSizePolicy::Expanding, QSizePolicy::Fixed );
     resize( sizeHint() );

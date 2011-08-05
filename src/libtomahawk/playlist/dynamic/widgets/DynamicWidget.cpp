@@ -413,9 +413,11 @@ DynamicWidget::paintRoundedFilledRect( QPainter& p, QPalette& pal, QRect& r, qre
     p.setRenderHint( QPainter::Antialiasing );
     p.setOpacity( opacity );
 
-    QPen pen( pal.dark().color(), .5 );
+    QColor c( 30, 30, 30 );
+
+    QPen pen( c.darker(), .5 );
     p.setPen( pen );
-    p.setBrush( pal.highlight() );
+    p.setBrush( c );
 
     p.drawRoundedRect( r, 10, 10 );
 
