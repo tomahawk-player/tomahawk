@@ -324,8 +324,8 @@ TomahawkWindow::setupSignals()
     connect( ui->actionShowOfflineSources, SIGNAL( triggered() ), SLOT( showOfflineSources() ) );
 
     connect( ui->actionPlay, SIGNAL( triggered() ), AudioEngine::instance(), SLOT( playPause() ) );
-    connect( ui->actionNext, SIGNAL( triggered() ), AudioEngine::instance(), SLOT( previous() ) );
-    connect( ui->actionPrevious, SIGNAL( triggered() ), AudioEngine::instance(), SLOT( next() ) );
+    connect( ui->actionNext, SIGNAL( triggered() ), AudioEngine::instance(), SLOT( next() ) );
+    connect( ui->actionPrevious, SIGNAL( triggered() ), AudioEngine::instance(), SLOT( previous() ) );
 
 #if defined( Q_OS_DARWIN )
     connect( ui->actionMinimize, SIGNAL( triggered() ), SLOT( minimize() ) );
