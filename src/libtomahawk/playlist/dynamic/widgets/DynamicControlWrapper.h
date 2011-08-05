@@ -1,6 +1,6 @@
 /* === This file is part of Tomahawk Player - <http://tomahawk-player.org> ===
- * 
- *   Copyright 2010-2011, Christian Muehlhaeuser <muesli@tomahawk-player.org>
+ *
+ *   Copyright 2010-2011, Leo Franchi <lfranchi@kde.org>
  *
  *   Tomahawk is free software: you can redistribute it and/or modify
  *   it under the terms of the GNU General Public License as published by
@@ -39,42 +39,42 @@ namespace Tomahawk
 */
 class DynamicControlWrapper : public QObject
 {
-    Q_OBJECT 
+    Q_OBJECT
 public:
     explicit DynamicControlWrapper( const dyncontrol_ptr& control, QGridLayout* layout, int row, QWidget* parent = 0 );
     virtual ~DynamicControlWrapper();
-           
+
 //     virtual void enterEvent(QEvent* );
 //     virtual void leaveEvent(QEvent* );
-    
+
     dyncontrol_ptr control() const;
-    
+
     void removeFromLayout();
-    
-    
+
+
     static QToolButton* initButton( QWidget* parent );
     static QWidget* createDummy( QWidget* fromW, QWidget* parent );
 signals:
     void collapse();
     void removeControl();
     void changed();
-    
+
 private slots:
     void typeSelectorChanged( const QString& selectedType, bool firstLoad = false );
-    
+
 private:
     QWidget* m_parent;
     int m_row;
     QStackedLayout* m_plusL;
     QToolButton* m_minusButton;
-    
+
     dyncontrol_ptr m_control;
     QComboBox* m_typeSelector;
     QWeakPointer<QWidget> m_matchSelector;
     QWeakPointer<QWidget> m_entryWidget;
     QWeakPointer<QGridLayout> m_layout;
 };
-    
+
 };
 
 #endif
