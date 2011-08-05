@@ -72,9 +72,6 @@ public:
     virtual QIcon icon() const;
     virtual QWidget* configWidget();
 
-signals:
-    void avatarReceived( QString, QPixmap );
-
 public slots:
     virtual bool connectPlugin( bool startup );
     void disconnectPlugin();
