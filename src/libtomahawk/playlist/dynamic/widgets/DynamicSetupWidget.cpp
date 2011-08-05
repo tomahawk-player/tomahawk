@@ -59,6 +59,9 @@ DynamicSetupWidget::DynamicSetupWidget( const Tomahawk::dynplaylist_ptr& playlis
     m_generatorCombo->setLabel( playlist->generator()->type().replace( 0, 1, playlist->generator()->type().at( 0 ).toUpper() ) );
 
     m_layout->addWidget( m_generatorCombo );
+    // TODO until there are more... no point in choices
+    m_headerText->hide();
+    m_generatorCombo->hide();
 
     m_generateButton = new QPushButton( tr( "Generate" ), this );
     m_generateButton->setAttribute( Qt::WA_LayoutUsesWidgetRect );
@@ -76,7 +79,8 @@ DynamicSetupWidget::DynamicSetupWidget( const Tomahawk::dynplaylist_ptr& playlis
     else
         m_layout->addWidget( m_genNumber );
 
-    m_layout->addSpacing( 30 );
+    if( m_playlist->mode() == Static )
+        m_layout->addSpacing( 30 );
 
     m_logo = new QLabel( this );
     if( !m_playlist->generator()->logo().isNull() ) {
