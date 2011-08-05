@@ -241,7 +241,14 @@ TrackView::dragMoveEvent( QDragMoveEvent* event )
     {
         setDirtyRegion( m_dropRect );
         const QPoint pos = event->pos();
-        const QModelIndex index = indexAt( pos );
+        QModelIndex index = indexAt( pos );
+        bool pastLast = false;
+
+        if ( !index.isValid() && proxyModel()->rowCount( QModelIndex() ) > 0 )
+        {
+            index = proxyModel()->index( proxyModel()->rowCount( QModelIndex() ) - 1, 0, QModelIndex() );
+            pastLast = true;
+        }
 
         if ( index.isValid() )
         {
@@ -250,7 +257,8 @@ TrackView::dragMoveEvent( QDragMoveEvent* event )
 
             // indicate that the item will be inserted above the current place
             const int gap = 5; // FIXME constant
-            m_dropRect = QRect( 0, rect.top() - gap / 2, width(), gap );
+            int yHeight = ( pastLast ? rect.bottom() : rect.top() ) - gap / 2;
+            m_dropRect = QRect( 0, yHeight, width(), gap );
 
             event->acceptProposedAction();
         }
