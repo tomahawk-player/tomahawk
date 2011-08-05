@@ -56,7 +56,7 @@ public:
      *
      * Connect to tracks( QList< query_ptr> ); for the extracted tracks.
      */
-    bool acceptsMimeData( const QMimeData* data );
+    bool acceptsMimeData( const QMimeData* data, bool tracksOnly = true );
     void tracksFromMimeData( const QMimeData* data );
     QStringList mimeTypes() const;
 

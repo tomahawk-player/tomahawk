@@ -726,7 +726,7 @@ GlobalActionManager::mimeTypes() const
 
 
 bool
-GlobalActionManager::acceptsMimeData( const QMimeData* data )
+GlobalActionManager::acceptsMimeData( const QMimeData* data, bool tracksOnly )
 {
     if ( data->hasFormat( "application/tomahawk.query.list" )
         || data->hasFormat( "application/tomahawk.plentry.list" )
@@ -735,8 +735,9 @@ GlobalActionManager::acceptsMimeData( const QMimeData* data )
         return true;
     }
 
-    // crude check for spotify data
-    if ( data->hasFormat( "text/plain" ) && data->data( "text/plain" ).contains( "spotify" ) )
+    // crude check for spotify tracks
+    if ( data->hasFormat( "text/plain" ) && data->data( "text/plain" ).contains( "spotify" ) &&
+         ( tracksOnly ? data->data( "text/plain" ).contains( "track" ) : true ) )
         return true;
 
     return false;
@@ -754,7 +755,7 @@ GlobalActionManager::tracksFromMimeData( const QMimeData* data )
     {
         QString plainData = QString::fromUtf8( data->data( "text/plain" ).constData() );
         tDebug() << "Got text/plain mime data:" << data->data( "text/plain" ) << "decoded to:" << plainData;
-        if( plainData.contains( "open.spotify.com") ||
+        if( plainData.contains( "open.spotify.com/track") ||
             plainData.contains( "spotify:track" ) )
         {
             QStringList tracks = plainData.split( "\n" );
