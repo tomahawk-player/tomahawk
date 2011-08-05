@@ -76,6 +76,7 @@ private slots:
     void showPlaylist();
 
     void xspfCreated( const QByteArray& xspf );
+    void expandedUrls( QStringList );
 private:
     explicit GlobalActionManager( QObject* parent = 0 );
     void doBookmark( const Tomahawk::playlist_ptr& pl, const Tomahawk::query_ptr& q );

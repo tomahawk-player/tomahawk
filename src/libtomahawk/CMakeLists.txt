@@ -168,6 +168,7 @@ set( libSources
     utils/xspfgenerator.cpp
     utils/jspfloader.cpp
     utils/spotifyparser.cpp
+    utils/shortenedlinkparser.cpp
 
     widgets/newplaylistwidget.cpp
     widgets/searchwidget.cpp
@@ -340,6 +341,7 @@ set( libHeaders
     utils/xspfgenerator.h
     utils/jspfloader.h
     utils/spotifyparser.h
+    utils/shortenedlinkparser.h
 
     widgets/newplaylistwidget.h
     widgets/searchwidget.h
