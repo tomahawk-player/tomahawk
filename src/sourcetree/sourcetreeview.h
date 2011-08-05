@@ -94,6 +94,7 @@ private:
 
     bool m_dragging;
     QRect m_dropRect;
+    QPersistentModelIndex m_dropIndex;
 };
 
 #endif // SOURCETREEVIEW_H
