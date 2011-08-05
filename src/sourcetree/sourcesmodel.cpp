@@ -214,7 +214,11 @@ SourcesModel::dropMimeData( const QMimeData* data, Qt::DropAction action, int ro
 Qt::DropActions
 SourcesModel::supportedDropActions() const
 {
+#ifdef Q_OS_MAC
+    return Qt::CopyAction | Qt::MoveAction;
+#else
     return Qt::CopyAction;
+#endif
 }
 
 
