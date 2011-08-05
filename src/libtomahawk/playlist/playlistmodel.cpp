@@ -420,8 +420,18 @@ PlaylistModel::parsedDroppedTracks( QList< query_ptr > tracks )
         }
         emit endInsertRows();
 
-        if ( m_dropStorage.action == Qt::CopyAction )
+        // Work around Qt-on-mac bug where drags from outside the app are Qt::MoveAction
+        // instead of Qt::CopyAction
+#ifdef Q_OS_MAC
+        if ( m_dropStorage.action & Qt::CopyAction || m_dropStorage.action & Qt::MoveAction )
+#else
+        if ( m_dropStorage.action & Qt::CopyAction )
+#endif
+        {
             onPlaylistChanged( true );
+            emit trackCountChanged( rowCount( QModelIndex() ) );
+        }
+
     }
 
     m_dropStorage.parent = QPersistentModelIndex();
