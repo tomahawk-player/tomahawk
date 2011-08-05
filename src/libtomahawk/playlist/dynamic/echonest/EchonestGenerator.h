@@ -59,8 +59,8 @@ public:
     virtual bool onDemandSteerable() const { return true; }
     virtual QWidget* steeringWidget();
 
-    static QVector< QString > styles();
-    static QVector< QString > moods();
+    static QStringList styles();
+    static QStringList moods();
 
 signals:
     void paramsGenerated( const Echonest::DynamicPlaylist::PlaylistParams& );
@@ -90,11 +90,14 @@ private:
     Echonest::DynamicPlaylist::ArtistTypeEnum appendRadioType( Echonest::DynamicPlaylist::PlaylistParams& params ) const throw( std::runtime_error );
     bool onlyThisArtistType( Echonest::DynamicPlaylist::ArtistTypeEnum type ) const throw( std::runtime_error );
 
+    void loadStylesAndMoods();
+    void saveStylesAndMoods();
+
     Echonest::DynamicPlaylist* m_dynPlaylist;
     QPixmap m_logo;
 
-    static QVector< QString > s_styles;
-    static QVector< QString > s_moods;
+    static QStringList s_styles;
+    static QStringList s_moods;
     static QNetworkReply* s_stylesJob;
     static QNetworkReply* s_moodsJob;
 
