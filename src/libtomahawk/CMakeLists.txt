@@ -443,13 +443,8 @@ IF( APPLE )
       utils/tomahawkutils_mac.mm )
 
     SET( libHeaders ${libHeaders}
-<<<<<<< HEAD
       infosystem/infoplugins/mac/adium.h
       infosystem/infoplugins/mac/adiumplugin.h )
-=======
-      infosystem/infoplugins/mac/adiumplugin.h
-      widgets/maclineedit.h )
->>>>>>> master
 
     SET( OS_SPECIFIC_LINK_LIBRARIES
         ${OS_SPECIFIC_LINK_LIBRARIES}
