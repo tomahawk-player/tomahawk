@@ -1,5 +1,8 @@
 Version 0.2.0:
-    * Added support for "playing" Spotify track URLs (does metadata lookup then resolves to available sources)
+    * Show search and artist page temporary navigation in sidebar when on those pages
+    * Fixed bug where drop indicator wouldn't show under last track if that was drop zone
+    * Fixed cross-wiring of Previous and Next song in "Music Player" menu (OS X)
+    * Added support for "playing" Spotify track URLs (and t.co and bit.ly shortened track URLs/URIs) and ability to drag/drop them into Tomahawk
     * Added support for JSPF playlists (XSPF via JSON)
     * Removed big "Welcome to Tomahawk" info bar from welcome screen
     * Clean up some bugs around deleted playlists and stations
