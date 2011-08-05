@@ -120,6 +120,7 @@ set( libSources
     playlist/albumitemdelegate.cpp
     playlist/albumview.cpp
     playlist/artistview.cpp
+    playlist/customplaylistview.cpp
 
     playlist/topbar/topbar.cpp
     playlist/topbar/clearbutton.cpp
@@ -310,6 +311,7 @@ set( libHeaders
     playlist/albumitemdelegate.h
     playlist/albumview.h
     playlist/artistview.h
+    playlist/customplaylistview.h
 
     playlist/topbar/topbar.h
     playlist/topbar/clearbutton.h
