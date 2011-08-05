@@ -25,6 +25,9 @@
 #include "playlistinterface.h"
 #include "infosystem/infosystem.h"
 
+class QDropEvent;
+class QDragEnterEvent;
+class QDragMoveEvent;
 namespace Ui
 {
     class AudioControls;
@@ -48,6 +51,9 @@ public slots:
 
 protected:
     void changeEvent( QEvent* e );
+    void dragEnterEvent ( QDragEnterEvent* );
+    void dragMoveEvent ( QDragMoveEvent* );
+    void dropEvent ( QDropEvent* );
 
 private slots:
     void onPlaybackStarted( const Tomahawk::result_ptr& result );
@@ -70,6 +76,7 @@ private slots:
     void infoSystemInfo( Tomahawk::InfoSystem::InfoRequestData requestData, QVariant output );
     void infoSystemFinished( QString target );
 
+    void droppedTracks ( QList<Tomahawk::query_ptr> );
 private:
     Ui::AudioControls *ui;
 
