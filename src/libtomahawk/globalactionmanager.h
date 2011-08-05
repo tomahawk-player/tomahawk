@@ -94,6 +94,7 @@ private:
     bool doQueueAdd( const QStringList& parts, const QList< QPair< QString, QString > >& queryItems );
 
     /// handle parsing mime data
+    void handleTrackUrls( const QString& urls );
     QList< Tomahawk::query_ptr > tracksFromQueryList( const QMimeData* d );
     QList< Tomahawk::query_ptr > tracksFromResultList( const QMimeData* d );
 

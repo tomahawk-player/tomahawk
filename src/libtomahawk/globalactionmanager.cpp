@@ -763,39 +763,38 @@ GlobalActionManager::tracksFromMimeData( const QMimeData* data )
     {
         QString plainData = QString::fromUtf8( data->data( "text/plain" ).constData() );
         tDebug() << "Got text/plain mime data:" << data->data( "text/plain" ) << "decoded to:" << plainData;
-        if ( plainData.contains( "open.spotify.com/track") ||
-            plainData.contains( "spotify:track" ) )
-        {
-            QStringList tracks = plainData.split( "\n" );
-
-            tDebug() << "Got a list of spotify urls!" << tracks;
-            SpotifyParser* spot = new SpotifyParser( tracks, this );
-            connect( spot, SIGNAL( tracks( QList<Tomahawk::query_ptr> ) ), this, SIGNAL( tracks( QList<Tomahawk::query_ptr> ) ) );
-        } else if ( plainData.contains( "bit.ly" ) ||
-                    plainData.contains( "j.mp" ) ||
-                    plainData.contains( "t.co" ) )
-        {
-            QStringList tracks = plainData.split( "\n" );
-
-            tDebug() << "Got a list of shortened urls!" << tracks;
-            ShortenedLinkParser* parser = new ShortenedLinkParser( tracks, this );
-            connect( parser, SIGNAL( urls( QStringList ) ), this, SLOT( expandedUrls( QStringList ) ) );
-        }
+        handleTrackUrls ( plainData );
     }
 }
 
 void
+GlobalActionManager::handleTrackUrls( const QString& urls )
+{
+    if ( urls.contains( "open.spotify.com/track") ||
+         urls.contains( "spotify:track" ) )
+    {
+        QStringList tracks = urls.split( "\n" );
+
+        tDebug() << "Got a list of spotify urls!" << tracks;
+        SpotifyParser* spot = new SpotifyParser( tracks, this );
+        connect( spot, SIGNAL( tracks( QList<Tomahawk::query_ptr> ) ), this, SIGNAL( tracks( QList<Tomahawk::query_ptr> ) ) );
+    } else if ( urls.contains( "bit.ly" ) ||
+                urls.contains( "j.mp" ) ||
+                urls.contains( "t.co" ) )
+    {
+        QStringList tracks = urls.split( "\n" );
+
+        tDebug() << "Got a list of shortened urls!" << tracks;
+        ShortenedLinkParser* parser = new ShortenedLinkParser( tracks, this );
+        connect( parser, SIGNAL( urls( QStringList ) ), this, SLOT( expandedUrls( QStringList ) ) );
+    }
+}
+
+
+void
 GlobalActionManager::expandedUrls( QStringList urls )
 {
-    QStringList spotifyUrls;
-    foreach ( const QString& url, urls )
-    {
-        if( url.contains( "open.spotify.com/track") || url.contains( "spotify:track" ) )
-            spotifyUrls << url;
-    }
-
-    SpotifyParser* spot = new SpotifyParser( spotifyUrls, this );
-    connect( spot, SIGNAL( tracks( QList<Tomahawk::query_ptr> ) ), this, SIGNAL( tracks( QList<Tomahawk::query_ptr> ) ) );
+    handleTrackUrls( urls.join( "\n" ) );
 }
 
 
