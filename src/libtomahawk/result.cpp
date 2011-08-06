@@ -182,6 +182,8 @@ Result::loadSocialActions()
 void Result::onSocialActionsLoaded()
 {
     parseSocialActions();
+
+    emit socialActionsLoaded();
 }
 
 

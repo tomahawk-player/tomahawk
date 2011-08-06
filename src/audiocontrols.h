@@ -76,7 +76,9 @@ private slots:
     void infoSystemInfo( Tomahawk::InfoSystem::InfoRequestData requestData, QVariant output );
     void infoSystemFinished( QString target );
 
-    void droppedTracks ( QList<Tomahawk::query_ptr> );
+    void droppedTracks( QList<Tomahawk::query_ptr> );
+
+    void socialActionsLoaded();
 private:
     Ui::AudioControls *ui;
 

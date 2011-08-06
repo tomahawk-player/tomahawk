@@ -308,15 +308,27 @@ AudioControls::onPlaybackLoading( const Tomahawk::result_ptr& result )
 
     result->loadSocialActions();
 
-    if ( result->loved() )
+    connect( result.data(), SIGNAL( socialActionsLoaded() ), this, SLOT( socialActionsLoaded() ) );
+}
+
+void
+AudioControls::socialActionsLoaded()
+{
+    Result* r = qobject_cast< Result* >( sender() );
+    Q_ASSERT( r );
+
+    if ( m_currentTrack.data() == r )
     {
-        ui->loveButton->setPixmap( RESPATH "images/loved.png" );
-        ui->loveButton->setChecked( true );
-    }
-    else
-    {
-        ui->loveButton->setPixmap( RESPATH "images/not-loved.png" );
-        ui->loveButton->setChecked( false );
+        if ( m_currentTrack->loved() )
+        {
+            ui->loveButton->setPixmap( RESPATH "images/loved.png" );
+            ui->loveButton->setChecked( true );
+        }
+        else
+        {
+            ui->loveButton->setPixmap( RESPATH "images/not-loved.png" );
+            ui->loveButton->setChecked( false );
+        }
     }
 }
 

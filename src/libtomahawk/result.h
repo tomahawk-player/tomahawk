@@ -36,7 +36,7 @@ class DatabaseCommand_LoadFile;
 namespace Tomahawk
 {
 
-    
+
 struct SocialAction
 {
     QVariant action;
@@ -102,7 +102,7 @@ public:
     void setYear( unsigned int year ) { m_year = year; }
     void setLoved( bool loved ) { m_currentSocialActions[ "Loved" ] = loved; }
     void setAllSocialActions( QList< Tomahawk::SocialAction > socialActions );
-    
+
     void loadSocialActions();
     QVariantMap attributes() const { return m_attributes; }
     void setAttributes( const QVariantMap& map ) { m_attributes = map; updateAttributes(); }
@@ -111,10 +111,13 @@ public:
 
 public slots:
     void onSocialActionsLoaded();
-    
+
 signals:
     // emitted when the collection this result comes from is going offline/online:
     void statusChanged();
+
+    // emitted when social actions are loaded
+    void socialActionsLoaded();
 
 private slots:
     void onOffline();
@@ -145,7 +148,7 @@ private:
     QVariantMap m_attributes;
 
     unsigned int m_id;
-    
+
     QHash< QString, QVariant > m_currentSocialActions;
     QList< SocialAction > m_allSocialActions;
 };
