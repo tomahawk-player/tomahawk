@@ -3,6 +3,6 @@
 --
 
 
-ALTER TABLE dynamic_playlist ADD COLUMN autoload BOOLEAN DEFAULT 1;
+ALTER TABLE dynamic_playlist ADD COLUMN autoload BOOLEAN DEFAULT 'true';
 
 UPDATE settings SET v = '26' WHERE k == 'schema_version';
