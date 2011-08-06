@@ -20,9 +20,11 @@
 
 #include <QMacCocoaViewContainer>
 
+#include "dllmacro.h"
+
 class SearchTargetWrapper;
 
-class LineEditInterface {
+class DLLEXPORT LineEditInterface {
 public:
   LineEditInterface(QWidget* widget) : widget_(widget) {}
 
@@ -45,7 +47,7 @@ protected:
   QWidget* widget_;
 };
 
-class MacLineEdit : public QMacCocoaViewContainer, public LineEditInterface {
+class DLLEXPORT MacLineEdit : public QMacCocoaViewContainer, public LineEditInterface {
   Q_OBJECT
   Q_PROPERTY(QString hint READ hint WRITE set_hint);
 
