@@ -48,10 +48,18 @@ CustomPlaylistView::generateTracks()
     {
         // TODO
         case SourceLovedTracks:
-            sql = "SELECT track.name, artist.name FROM track, artist WHERE track.artist = artist.id";
+            sql = QString( "SELECT track.name, artist.name, COUNT(*) as counter "
+                           "FROM social_attributes, track, artist "
+                           "WHERE social_attributes.id = track.id AND artist.id = track.artist AND social_attributes.k = 'Love' AND source IS NULL "
+                           "GROUP BY track.id "
+                           "ORDER BY counter DESC " );
             break;
         case AllLovedTracks:
-            sql = "select track.name, artist.name, count(*) as counter from (select track from playback_log group by track, source), track, artist where track not in (select track from playback_log where source is null group by track) and track.id = track and artist.id = track.artist group by track order by counter desc";
+            sql = QString( "SELECT track.name, artist.name, source, COUNT(*) as counter "
+                           "FROM social_attributes, track, artist "
+                           "WHERE social_attributes.id = track.id AND artist.id = track.artist AND social_attributes.k = 'Love' "
+                           "GROUP BY track.id "
+                           "ORDER BY counter DESC " );
             break;
     }
 
