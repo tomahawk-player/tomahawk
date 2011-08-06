@@ -445,6 +445,7 @@ IF( APPLE )
       utils/tomahawkutils_mac.mm )
 
     SET( libHeaders ${libHeaders}
+      widgets/maclineedit.h
       infosystem/infoplugins/mac/adium.h
       infosystem/infoplugins/mac/adiumplugin.h )
 
