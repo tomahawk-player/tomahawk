@@ -33,18 +33,20 @@ using namespace Tomahawk;
 
 
 DatabaseCommand_CreateDynamicPlaylist::DatabaseCommand_CreateDynamicPlaylist( QObject* parent )
-: DatabaseCommand_CreatePlaylist( parent )
+    : DatabaseCommand_CreatePlaylist( parent )
+    , m_autoLoad( true )
 {
-    qDebug() << Q_FUNC_INFO << "creating dynamiccreatecommand 1";
+    tDebug() << Q_FUNC_INFO << "creating dynamiccreatecommand 1";
 }
 
 
 DatabaseCommand_CreateDynamicPlaylist::DatabaseCommand_CreateDynamicPlaylist( const source_ptr& author,
-                                                                const dynplaylist_ptr& playlist )
+                                                                const dynplaylist_ptr& playlist, bool autoLoad )
     : DatabaseCommand_CreatePlaylist( author, playlist.staticCast<Playlist>() )
     , m_playlist( playlist )
+    , m_autoLoad( autoLoad )
 {
-    qDebug() << Q_FUNC_INFO << "creating dynamiccreatecommand 2";
+    tDebug() << Q_FUNC_INFO << "creating dynamiccreatecommand 2";
 }
 
 
@@ -61,8 +63,8 @@ DatabaseCommand_CreateDynamicPlaylist::exec( DatabaseImpl* lib )
     qDebug() << "Create dynamic execing!" << m_playlist << m_v;
     TomahawkSqlQuery cre = lib->newquery();
 
-    cre.prepare( "INSERT INTO dynamic_playlist( guid, pltype, plmode ) "
-                 "VALUES( ?, ?, ? )" );
+    cre.prepare( "INSERT INTO dynamic_playlist( guid, pltype, plmode, autoload ) "
+                 "VALUES( ?, ?, ?, ? )" );
 
     if( m_playlist.isNull() ) {
         QVariantMap m = m_v.toMap();
@@ -74,6 +76,7 @@ DatabaseCommand_CreateDynamicPlaylist::exec( DatabaseImpl* lib )
         cre.addBindValue( m_playlist->type() );
         cre.addBindValue( m_playlist->mode() );
     }
+    cre.addBindValue( m_autoLoad );
     cre.exec();
 }
 
@@ -88,7 +91,7 @@ DatabaseCommand_CreateDynamicPlaylist::postCommitHook()
         return;
     }
 
-    if( report() == false )
+    if(  !DatabaseCommand_CreatePlaylist::report() || report() == false )
         return;
 
     qDebug() << Q_FUNC_INFO << "..reporting..";

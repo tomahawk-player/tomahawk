@@ -83,6 +83,7 @@
     <file>./data/images/automatic-playlist.png</file>
     <file>./data/images/station.png</file>
     <file>./data/images/new-additions.png</file>
+    <file>./data/images/loved_playlist.png</file>
     <file>./data/stylesheets/topbar-radiobuttons.css</file>
     <file>./data/icons/tomahawk-icon-16x16.png</file>
     <file>./data/icons/tomahawk-icon-32x32.png</file>
@@ -99,6 +100,7 @@
     <file>./data/sql/dbmigrate-22_to_23.sql</file>
     <file>./data/sql/dbmigrate-23_to_24.sql</file>
     <file>./data/sql/dbmigrate-24_to_25.sql</file>
+    <file>./data/sql/dbmigrate-25_to_26.sql</file>
     <file>./data/js/tomahawk.js</file>
   </qresource>
 </RCC>

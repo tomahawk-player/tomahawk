@@ -59,7 +59,7 @@ public:
 
         int e = t.elapsed();
         if ( e >= TOMAHAWK_QUERY_THRESHOLD )
-            qDebug() << "TomahawkSqlQuery (" << lastQuery() << ") finished in" << t.elapsed() << "ms";
+            tLog() << "TomahawkSqlQuery (" << lastQuery() << ") finished in" << t.elapsed() << "ms";
 
         return ret;
     }
@@ -67,11 +67,10 @@ public:
 private:
     void showError()
     {
-        qDebug()
-                << endl << "*** DATABASE ERROR ***" << endl
-                << this->lastQuery() << endl
-                << "boundValues:" << this->boundValues() << endl
-                << this->lastError().text() << endl
+        tLog() << "\n" << "*** DATABASE ERROR ***" << "\n"
+                << this->lastQuery() << "\n"
+                << "boundValues:" << this->boundValues() << "\n"
+                << this->lastError().text() << "\n"
                 ;
         Q_ASSERT( false );
     }

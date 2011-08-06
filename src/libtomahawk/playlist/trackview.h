@@ -24,6 +24,7 @@
 
 #include "contextmenu.h"
 #include "playlistitemdelegate.h"
+#include "album.h"
 
 #include "dllmacro.h"
 

@@ -1,6 +1,6 @@
 /* === This file is part of Tomahawk Player - <http://tomahawk-player.org> ===
- * 
- *   Copyright 2010-2011, Christian Muehlhaeuser <muesli@tomahawk-player.org>
+ *
+ *   Copyright 2010-2011, Leo Franchi <lfranchi@kde.org>
  *
  *   Tomahawk is free software: you can redistribute it and/or modify
  *   it under the terms of the GNU General Public License as published by
@@ -44,39 +44,39 @@ class DynamicSetupWidget : public QWidget
 public:
     DynamicSetupWidget( const Tomahawk::dynplaylist_ptr& playlist, QWidget* parent = 0 );
     virtual ~DynamicSetupWidget();
-    
+
     void setPlaylist( const dynplaylist_ptr& playlist );
-    
+
     qreal opacity() const { return m_opacity; }
     void setOpacity( qreal opacity );
-    
+
     virtual void paintEvent( QPaintEvent* );
-    
-public slots:        
+
+public slots:
     void fadeIn();
     void fadeOut();
-    
+
 signals:
     void generatePressed( int num );
     void typeChanged( const QString& playlistType );
-    
+
 private slots:
     void generatePressed( bool );
-    
+
 private:
     dynplaylist_ptr m_playlist;
-    
+
     QLabel* m_headerText;
     QHBoxLayout* m_layout;
     ReadOrWriteWidget* m_generatorCombo;
     QLabel* m_logo;
     QPushButton* m_generateButton;
     QSpinBox* m_genNumber;
-    
+
     QPropertyAnimation* m_fadeAnim;
     qreal m_opacity;
 };
-    
+
 };
 
 #endif

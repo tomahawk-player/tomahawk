@@ -244,7 +244,7 @@ AlbumModel::addCollection( const collection_ptr& collection )
     DatabaseCommand_AllAlbums* cmd = new DatabaseCommand_AllAlbums( collection );
 
     connect( cmd, SIGNAL( albums( QList<Tomahawk::album_ptr>, QVariant ) ),
-                    SLOT( onAlbumsAdded( QList<Tomahawk::album_ptr> ) ) );
+                    SLOT( addAlbums( QList<Tomahawk::album_ptr> ) ) );
 
     Database::instance()->enqueue( QSharedPointer<DatabaseCommand>( cmd ) );
 
@@ -266,7 +266,7 @@ AlbumModel::addFilteredCollection( const collection_ptr& collection, unsigned in
     cmd->setSortDescending( true );
 
     connect( cmd, SIGNAL( albums( QList<Tomahawk::album_ptr>, QVariant ) ),
-                    SLOT( onAlbumsAdded( QList<Tomahawk::album_ptr> ) ) );
+                    SLOT( addAlbums( QList<Tomahawk::album_ptr> ) ) );
 
     Database::instance()->enqueue( QSharedPointer<DatabaseCommand>( cmd ) );
 
@@ -278,7 +278,7 @@ AlbumModel::addFilteredCollection( const collection_ptr& collection, unsigned in
 
 
 void
-AlbumModel::onAlbumsAdded( const QList<Tomahawk::album_ptr>& albums )
+AlbumModel::addAlbums( const QList<Tomahawk::album_ptr>& albums )
 {
     if ( !albums.count() )
         return;
@@ -301,6 +301,15 @@ AlbumModel::onAlbumsAdded( const QList<Tomahawk::album_ptr>& albums )
 
     emit endInsertRows();
     qDebug() << rowCount( QModelIndex() );
+}
+
+void
+AlbumModel::clear()
+{
+    beginResetModel();
+    delete m_rootItem;
+    m_rootItem = new AlbumItem( 0, this );
+    endResetModel();
 }
 
 

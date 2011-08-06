@@ -76,6 +76,7 @@ set( libSources
     database/databasecommand_setdynamicplaylistrevision.cpp
     database/databasecommand_createdynamicplaylist.cpp
     database/databasecommand_loaddynamicplaylist.cpp
+    database/databasecommand_loaddynamicplaylistentries.cpp
     database/databasecommand_loadallautoplaylists.cpp
     database/databasecommand_loadallstations.cpp
     database/databasecommand_deletedynamicplaylist.cpp
@@ -83,6 +84,7 @@ set( libSources
     database/databasecommand_clientauthvalid.cpp
     database/databasecommand_socialaction.cpp
     database/databasecommand_loadsocialactions.cpp
+    database/databasecommand_genericselect.cpp
     database/database.cpp
 
     infosystem/infosystemcache.cpp
@@ -118,6 +120,7 @@ set( libSources
     playlist/albumitemdelegate.cpp
     playlist/albumview.cpp
     playlist/artistview.cpp
+    playlist/customplaylistview.cpp
 
     playlist/topbar/topbar.cpp
     playlist/topbar/clearbutton.cpp
@@ -144,6 +147,8 @@ set( libSources
     playlist/dynamic/widgets/CollapsibleControls.cpp
     playlist/dynamic/widgets/DynamicSetupWidget.cpp
     playlist/dynamic/widgets/LoadingSpinner.cpp
+    playlist/dynamic/database/DatabaseControl.cpp
+    playlist/dynamic/database/DatabaseGenerator.cpp
 
     network/bufferiodevice.cpp
     network/msgprocessor.cpp
@@ -177,6 +182,7 @@ set( libSources
     widgets/welcomeplaylistmodel.cpp
     widgets/overlaywidget.cpp
     widgets/HeaderLabel.cpp
+    widgets/SocialPlaylistWidget.cpp
     widgets/infowidgets/sourceinfowidget.cpp
     widgets/infowidgets/ArtistInfoWidget.cpp
 
@@ -252,6 +258,7 @@ set( libHeaders
     database/databasecommand_setdynamicplaylistrevision.h
     database/databasecommand_createdynamicplaylist.h
     database/databasecommand_loaddynamicplaylist.h
+    database/databasecommand_loaddynamicplaylistentries.h
     database/databasecommand_deletedynamicplaylist.h
     database/databasecommand_loadallautoplaylists.h
     database/databasecommand_loadallstations.h
@@ -259,6 +266,7 @@ set( libHeaders
     database/databasecommand_clientauthvalid.h
     database/databasecommand_socialaction.h
     database/databasecommand_loadsocialactions.h
+    database/databasecommand_genericselect.h
 
     infosystem/infosystem.h
     infosystem/infosystemworker.h
@@ -303,6 +311,7 @@ set( libHeaders
     playlist/albumitemdelegate.h
     playlist/albumview.h
     playlist/artistview.h
+    playlist/customplaylistview.h
 
     playlist/topbar/topbar.h
     playlist/topbar/clearbutton.h
@@ -329,6 +338,8 @@ set( libHeaders
     playlist/dynamic/widgets/CollapsibleControls.h
     playlist/dynamic/widgets/DynamicSetupWidget.h
     playlist/dynamic/widgets/LoadingSpinner.h
+    playlist/dynamic/database/DatabaseControl.h
+    playlist/dynamic/database/DatabaseGenerator.h
 
     utils/querylabel.h
     utils/elidedlabel.h
@@ -350,6 +361,7 @@ set( libHeaders
     widgets/welcomeplaylistmodel.h
     widgets/overlaywidget.h
     widgets/HeaderLabel.h
+    widgets/SocialPlaylistWidget.h
     widgets/infowidgets/sourceinfowidget.h
     widgets/infowidgets/ArtistInfoWidget.h
 
@@ -372,6 +384,7 @@ set( libUI ${libUI}
     widgets/newplaylistwidget.ui
     widgets/searchwidget.ui
     widgets/welcomewidget.ui
+    widgets/SocialPlaylistWidget.ui
     widgets/infowidgets/sourceinfowidget.ui
     widgets/infowidgets/ArtistInfoWidget.ui
     playlist/topbar/topbar.ui
@@ -432,8 +445,8 @@ IF( APPLE )
       utils/tomahawkutils_mac.mm )
 
     SET( libHeaders ${libHeaders}
-      infosystem/infoplugins/mac/adiumplugin.h
-      widgets/maclineedit.h )
+      infosystem/infoplugins/mac/adium.h
+      infosystem/infoplugins/mac/adiumplugin.h )
 
     SET( OS_SPECIFIC_LINK_LIBRARIES
         ${OS_SPECIFIC_LINK_LIBRARIES}

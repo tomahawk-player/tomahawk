@@ -20,7 +20,10 @@
 
 #include <QApplication>
 #include <QClipboard>
+#include <QMimeData>
 #include <QUrl>
+#include <QtNetwork/QNetworkAccessManager>
+#include <QtNetwork/QNetworkReply>
 
 #include "artist.h"
 #include "album.h"
@@ -40,10 +43,7 @@
 #include "utils/logger.h"
 #include "utils/tomahawkutils.h"
 
-#include <QtNetwork/QNetworkAccessManager>
-#include <QtNetwork/QNetworkReply>
 #include "utils/jspfloader.h"
-#include <QMimeData>
 #include "utils/spotifyparser.h"
 #include "utils/shortenedlinkparser.h"
 
@@ -205,6 +205,7 @@ GlobalActionManager::parseTomahawkLink( const QString& url )
             } else if( u.hasQueryItem( "jspf" ) ) {
                 QUrl jspf = QUrl::fromUserInput( u.queryItemValue( "jspf" ) );
                 JSPFLoader* l = new JSPFLoader( true, this );
+
                 tDebug() << "Loading jspiff:" << jspf.toString();
                 l->load( jspf );
                 connect( l, SIGNAL( ok( Tomahawk::playlist_ptr ) ), ViewManager::instance(), SLOT( show( Tomahawk::playlist_ptr ) ) );
