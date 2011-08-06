@@ -22,6 +22,7 @@
 #include "database/databasecommand_genericselect.h"
 #include "database/database.h"
 #include "utils/tomahawkutils.h"
+#include <sourcelist.h>
 
 using namespace Tomahawk;
 
@@ -37,6 +38,16 @@ CustomPlaylistView::CustomPlaylistView( CustomPlaylistView::PlaylistType type, c
 
     setPlaylistModel( m_model );
     generateTracks();
+
+    if ( m_type == SourceLovedTracks )
+        connect( m_source.data(), SIGNAL( socialAttributesChanged() ), this, SLOT( reload() ) );
+    else if ( m_type == AllLovedTracks )
+    {
+        foreach ( const source_ptr& s, SourceList::instance()->sources( true ) )
+            connect( s.data(), SIGNAL( socialAttributesChanged() ), this, SLOT( reload() ) );
+
+        connect( SourceList::instance(), SIGNAL( sourceAdded( Tomahawk::source_ptr ) ), this, SLOT( sourceAdded( Tomahawk::source_ptr ) ) );
+    }
 }
 
 
@@ -104,4 +115,18 @@ QPixmap
 CustomPlaylistView::pixmap() const
 {
     return QPixmap( RESPATH "images/loved_playlist.png" );
+}
+
+void
+CustomPlaylistView::reload()
+{
+    m_model->clear();
+    generateTracks();
+}
+
+
+void
+CustomPlaylistView::sourceAdded( const source_ptr& s)
+{
+    connect( s.data(), SIGNAL( socialAttributesChanged() ), this, SLOT( reload() ) );
 }

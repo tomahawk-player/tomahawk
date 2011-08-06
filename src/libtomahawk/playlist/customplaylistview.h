@@ -51,6 +51,9 @@ public:
 private slots:
     void tracksGenerated( QList<Tomahawk::query_ptr> tracks );
 
+    void reload();
+    void sourceAdded( const Tomahawk::source_ptr& );
+
 private:
     void generateTracks();
 

@@ -312,3 +312,10 @@ Source::trackTimerFired()
 
     emit stateChanged();
 }
+
+void
+Source::reportSocialAttributesChanged()
+{
+    emit socialAttributesChanged();
+}
+

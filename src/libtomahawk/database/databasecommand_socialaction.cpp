@@ -36,6 +36,8 @@ DatabaseCommand_SocialAction::postCommitHook()
     {
         Servent::instance()->triggerDBSync();
     }
+
+    source()->reportSocialAttributesChanged();
 }
 
 
