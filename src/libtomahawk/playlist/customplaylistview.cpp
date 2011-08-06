@@ -63,7 +63,7 @@ CustomPlaylistView::generateTracks()
             break;
     }
 
-    DatabaseCommand_GenericSelect* cmd = new DatabaseCommand_GenericSelect( sql, DatabaseCommand_GenericSelect::Track, 30, 0 );
+    DatabaseCommand_GenericSelect* cmd = new DatabaseCommand_GenericSelect( sql, DatabaseCommand_GenericSelect::Track, 60, 0 );
     connect( cmd, SIGNAL( tracks( QList<Tomahawk::query_ptr> ) ), this, SLOT( tracksGenerated( QList<Tomahawk::query_ptr> ) ) );
     Database::instance()->enqueue( QSharedPointer<DatabaseCommand>( cmd ) );
 }
