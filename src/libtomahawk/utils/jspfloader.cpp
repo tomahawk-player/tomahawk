@@ -127,9 +127,9 @@ JSPFLoader::gotBody()
         QVariantList tracks = pl.value( "track" ).toList();
 
         bool shownError = false;
-        foreach ( const QVariant& track, tracks )
+        foreach ( const QVariant& currentTrack, tracks )
         {
-            QVariantMap tM = track.toMap();
+            QVariantMap tM = currentTrack.toMap();
             QString artist, album, track, duration, annotation, url;
 
             artist = tM.value( "creator" ).toString();
