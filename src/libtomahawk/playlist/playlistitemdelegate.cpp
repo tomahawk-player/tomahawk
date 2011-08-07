@@ -188,7 +188,7 @@ PlaylistItemDelegate::paintShort( QPainter* painter, const QStyleOptionViewItem&
     }
 
     if ( pixmap.isNull() )
-        pixmap = QPixmap( RESPATH "images/no-album-art-placeholder.png" );
+        pixmap = QPixmap( RESPATH "images/user-avatar.png" );
 
     painter->save();
     {
