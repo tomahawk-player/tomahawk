@@ -198,7 +198,7 @@ PlaylistItemDelegate::paintShort( QPainter* painter, const QStyleOptionViewItem&
         if ( item->isPlaying() )
         {
             r.adjust( 0, 0, 0, 0 );
-            QRect npr = r.adjusted( 3, r.height() / 2 - m_nowPlayingIcon.height() / 2, 18 - r.width(), -r.height() + m_nowPlayingIcon.height() / 2 );
+            QRect npr = r.adjusted( 3, r.height() / 2 - m_nowPlayingIcon.height() / 2, 18 - r.width(), -r.height() / 2 + m_nowPlayingIcon.height() / 2  );
             painter->drawPixmap( npr, m_nowPlayingIcon );
             r.adjust( 22, 0, 0, 0 );
         }
