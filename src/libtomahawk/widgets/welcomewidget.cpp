@@ -205,7 +205,7 @@ PlaylistDelegate::paint( QPainter* painter, const QStyleOptionViewItem& option, 
     initStyleOption( &opt, QModelIndex() );
     qApp->style()->drawControl( QStyle::CE_ItemViewItem, &opt, painter );
 
-    if ( option.state & QStyle::State_Selected )
+    if ( option.state & QStyle::State_Selected && option.state & QStyle::State_Active )
     {
         opt.palette.setColor( QPalette::Text, opt.palette.color( QPalette::HighlightedText ) );
     }
@@ -219,13 +219,21 @@ PlaylistDelegate::paint( QPainter* painter, const QStyleOptionViewItem& option, 
     QFont font = opt.font;
     QFont boldFont = opt.font;
     boldFont.setBold( true );
+    QFont italicFont = opt.font;
+    italicFont.setItalic( true );
 
     painter->drawPixmap( option.rect.adjusted( 10, 13, -option.rect.width() + 48, -13 ), m_playlistIcon );
 
     painter->drawText( option.rect.adjusted( 56, 26, -100, -8 ), index.data( WelcomePlaylistModel::ArtistRole ).toString() );
 
     QString trackCount = tr( "%1 tracks" ).arg( index.data( WelcomePlaylistModel::TrackCountRole ).toString() );
-    painter->drawText( option.rect.adjusted( option.rect.width() - 96, 2, 0, -2 ), trackCount, to );
+    painter->drawText( option.rect.adjusted( option.rect.width() - 96, 12, 0, -2 - opt.rect.height() / 2 ), trackCount, to );
+
+    QString author = index.data( WelcomePlaylistModel::PlaylistRole ).value< Tomahawk::playlist_ptr >()->author()->friendlyName();
+    QRect r = option.rect.adjusted( option.rect.width() - 96, 2 + opt.rect.height() / 2, 0, -12);
+    painter->setFont( italicFont );
+    author = painter->fontMetrics().elidedText( author, Qt::ElideRight, r.width() );
+    painter->drawText( r, author, to );
 
     painter->setFont( boldFont );
     painter->drawText( option.rect.adjusted( 56, 6, -100, -option.rect.height() + 20 ), index.data().toString() );
