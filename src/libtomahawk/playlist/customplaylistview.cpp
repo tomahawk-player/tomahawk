@@ -74,7 +74,7 @@ CustomPlaylistView::generateTracks()
             break;
     }
 
-    DatabaseCommand_GenericSelect* cmd = new DatabaseCommand_GenericSelect( sql, DatabaseCommand_GenericSelect::Track, 60, 0 );
+    DatabaseCommand_GenericSelect* cmd = new DatabaseCommand_GenericSelect( sql, DatabaseCommand_GenericSelect::Track, -1, 0 );
     connect( cmd, SIGNAL( tracks( QList<Tomahawk::query_ptr> ) ), this, SLOT( tracksGenerated( QList<Tomahawk::query_ptr> ) ) );
     Database::instance()->enqueue( QSharedPointer<DatabaseCommand>( cmd ) );
 }
@@ -92,7 +92,12 @@ CustomPlaylistView::title() const
     if ( m_source.isNull() )
         return tr( "Top Loved Tracks" );
     else
-        return tr( "Your Loved Tracks" );
+    {
+        if ( m_source->isLocal() )
+            return tr( "Your loved tracks" );
+        else
+            return tr( "%1's loved tracks" ).arg( m_source->friendlyName() );
+    }
 }
 
 
@@ -102,7 +107,12 @@ CustomPlaylistView::description() const
     if ( m_source.isNull() )
         return tr( "The most loved tracks from all your friends" );
     else
-        return tr( "Your top loved tracks" );
+    {
+        if ( m_source->isLocal() )
+            return tr( "All of your loved tracks" );
+        else
+            return tr( "All of %1's loved tracks" ).arg( m_source->friendlyName() );
+    }
 }
 
 QString
