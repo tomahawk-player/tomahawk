@@ -121,6 +121,24 @@ DynamicPlaylist::setMode( int mode )
     m_generator->setMode( (GeneratorMode)mode );
 }
 
+dynplaylist_ptr
+DynamicPlaylist::load( const QString& guid )
+{
+    dynplaylist_ptr p;
+
+    foreach( const Tomahawk::source_ptr& source, SourceList::instance()->sources() )
+    {
+        p = source->collection()->autoPlaylist( guid );
+        if ( p.isNull() )
+            p = source->collection()->station( guid );
+
+        if( !p.isNull() )
+            return p;
+    }
+
+    return p;
+}
+
 
 dynplaylist_ptr
 DynamicPlaylist::create( const Tomahawk::source_ptr& author,

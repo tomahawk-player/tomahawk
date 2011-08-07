@@ -1,6 +1,5 @@
 /*
-    <one line to give the program's name and a brief idea of what it does.>
-    Copyright (C) 2011  Leo Franchi <leo.franchi@kdab.com>
+    Copyright (C) 2011  Leo Franchi <lfranchi@kde.org>
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
