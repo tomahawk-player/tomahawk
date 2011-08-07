@@ -72,9 +72,11 @@ ArtistInfoWidget::ArtistInfoWidget( const Tomahawk::artist_ptr& artist, QWidget*
 
     connect( Tomahawk::InfoSystem::InfoSystem::instance(), SIGNAL( finished( QString ) ), SLOT( infoSystemFinished( QString ) ) );
 
+    // Apparently headers can only be removed when it's already visible / layed-out
+    QTimer::singleShot( 0, this ,SLOT( removeHeaders() ) );
+
     load( artist );
 }
-
 
 ArtistInfoWidget::~ArtistInfoWidget()
 {
@@ -222,4 +224,11 @@ ArtistInfoWidget::changeEvent( QEvent* e )
         default:
             break;
     }
+}
+
+void
+ArtistInfoWidget::removeHeaders()
+{
+    for ( int i = 1; i < ui->relatedArtists->header()->count(); i++ )
+        ui->relatedArtists->header()->hideSection( ui->relatedArtists->header()->logicalIndex( i ) );
 }

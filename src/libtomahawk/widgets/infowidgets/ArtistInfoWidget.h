@@ -90,6 +90,7 @@ private slots:
     void infoSystemInfo( Tomahawk::InfoSystem::InfoRequestData requestData, QVariant output );
     void infoSystemFinished( QString target );
 
+    void removeHeaders();
 private:
     Ui::ArtistInfoWidget *ui;
 
