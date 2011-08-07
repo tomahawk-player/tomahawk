@@ -261,10 +261,15 @@ PlaylistItemDelegate::paintDetailed( QPainter* painter, const QStyleOptionViewIt
 
     if ( index.column() == TrackModel::Score )
     {
+#ifdef Q_OS_MAC // On Mac, highlight color is very bright and stands out a lot
+        QColor barColor( 167, 183, 211 ); // This matches the sidebar (sourcetreeview.cpp:672)
+#else
+        QColor barColor = opt.palette.highlight().color();
+#endif
         if ( opt.state & QStyle::State_Selected )
             painter->setPen( opt.palette.brightText().color() );
         else
-            painter->setPen( opt.palette.highlight().color() );
+            painter->setPen( barColor );
 
         QRect r = opt.rect.adjusted( 3, 3, -6, -4 );
         painter->drawRect( r );
@@ -276,7 +281,7 @@ PlaylistItemDelegate::paintDetailed( QPainter* painter, const QStyleOptionViewIt
         if ( opt.state & QStyle::State_Selected )
             painter->setBrush( opt.palette.brightText().color() );
         else
-            painter->setBrush( opt.palette.highlight().color() );
+            painter->setBrush( barColor );
 
         painter->drawRect( fillR );
     }
