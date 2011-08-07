@@ -1,5 +1,5 @@
 /* === This file is part of Tomahawk Player - <http://tomahawk-player.org> ===
- * 
+ *
  *   Copyright 2010-2011, Christian Muehlhaeuser <muesli@tomahawk-player.org>
  *
  *   Tomahawk is free software: you can redistribute it and/or modify
@@ -21,6 +21,9 @@
 #include <QSqlQuery>
 
 #include "databaseimpl.h"
+#include "sourcelist.h"
+
+#include "utils/logger.h"
 
 
 void
@@ -36,7 +39,7 @@ DatabaseCommand_PlaybackHistory::exec( DatabaseImpl* dbi )
     }
 
     QString sql = QString(
-            "SELECT track, playtime, secs_played "
+            "SELECT track, playtime, secs_played, source "
             "FROM playback_log "
             "%1 "
             "ORDER BY playtime DESC "
@@ -63,6 +66,16 @@ DatabaseCommand_PlaybackHistory::exec( DatabaseImpl* dbi )
         if ( query_track.next() )
         {
             Tomahawk::query_ptr q = Tomahawk::Query::get( query_track.value( 1 ).toString(), query_track.value( 0 ).toString(), QString(), uuid() );
+
+            if ( query.value( 3 ).toUInt() == 0 )
+            {
+                q->setPlayedBy( SourceList::instance()->getLocal(), query.value( 1 ).toUInt() );
+            }
+            else
+            {
+                q->setPlayedBy( SourceList::instance()->get( query.value( 3 ).toUInt() ), query.value( 1 ).toUInt() );
+            }
+
             ql << q;
         }
     }

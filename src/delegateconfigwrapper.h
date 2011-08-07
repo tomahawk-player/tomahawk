@@ -21,6 +21,7 @@
 #include <QDialog>
 #include <QDialogButtonBox>
 #include <QVBoxLayout>
+#include <QPushButton>
 
 class DelegateConfigWrapper : public QDialog
 {
@@ -39,6 +40,7 @@ public:
         v->addWidget( m_widget );
 
         QDialogButtonBox* buttons = new QDialogButtonBox( QDialogButtonBox::Ok | QDialogButtonBox::Cancel, Qt::Horizontal, this );
+        m_okButton = buttons->button( QDialogButtonBox::Ok );
         connect( buttons, SIGNAL( clicked( QAbstractButton*)  ), this, SLOT( closed( QAbstractButton* ) ) );
         connect( this, SIGNAL( rejected() ), this, SLOT( rejected() ) );
         v->addWidget( buttons );
@@ -57,6 +59,11 @@ public:
 
     }
 public slots:
+    void toggleOkButton( bool dataError )
+    {
+        // if dataError is True we want to set the button enabled to false
+        m_okButton->setEnabled( !dataError );
+    }
     void closed( QAbstractButton* b )
     {
         // let the config widget live to see another day
@@ -90,6 +97,7 @@ public slots:
 
 private:
     QWidget* m_widget;
+    QPushButton* m_okButton;
 };
 
 #endif

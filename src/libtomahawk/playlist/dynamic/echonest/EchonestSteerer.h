@@ -1,6 +1,6 @@
 /* === This file is part of Tomahawk Player - <http://tomahawk-player.org> ===
- * 
- *   Copyright 2010-2011, Christian Muehlhaeuser <muesli@tomahawk-player.org>
+ *
+ *   Copyright 2010-2011, Leo Franchi <lfranchi@kde.org>
  *
  *   Tomahawk is free software: you can redistribute it and/or modify
  *   it under the terms of the GNU General Public License as published by
@@ -30,22 +30,22 @@ class QVBoxLayout;
 class QLineEdit;
 class QHBoxLayout;
 
-namespace Tomahawk 
+namespace Tomahawk
 {
-    
+
 class EchonestSteerer : public QWidget
 {
     Q_OBJECT
     Q_PROPERTY( qreal opacity READ opacity WRITE setOpacity )
-    
+
 public:
     EchonestSteerer( QWidget*  parent = 0 );
-    
+
     virtual void paintEvent(QPaintEvent* );
-    
+
 public slots:
     void resetSteering( bool automatic = false );
-    
+
     void fadeIn();
     void fadeOut();
     qreal opacity() const { return m_opacity; }
@@ -54,39 +54,39 @@ signals:
     void steerField( const QString& field );
     void steerDescription( const QString& desc );
     void reset();
-    
+
     void resized();
 private slots:
     void changed();
-    
+
     void resizeFrame( int );
-    
+
 private:
     QToolButton* initButton( QWidget* parent );
-    
+
     QHBoxLayout* m_layout;
-    
+
     QComboBox* m_amplifier;
     QComboBox* m_field;
-    
+
     QLineEdit* m_description;
-    
+
     // text on the left
     QVBoxLayout* m_textL;
     QLabel* m_steerTop;
     QLabel* m_steerBottom;
-    
+
     // icons on the right
     QToolButton* m_reset;
-   
+
     // animations
     QTimeLine m_resizeAnim;
     bool m_expanding;
-    
+
     QPropertyAnimation* m_fadeAnim;
     qreal m_opacity;
 };
-    
+
 };
 
 #endif

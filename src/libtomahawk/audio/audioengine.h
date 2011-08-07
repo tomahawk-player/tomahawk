@@ -20,9 +20,13 @@
 #define AUDIOENGINE_H
 
 #include <QObject>
+#include <QTimer>
 
 #include <phonon/MediaObject>
 #include <phonon/AudioOutput>
+#include <phonon/BackendCapabilities>
+
+#include "infosystem/infosystem.h"
 
 #include "result.h"
 #include "typedefs.h"
@@ -31,7 +35,10 @@
 
 #define AUDIO_VOLUME_STEP 5
 
-class PlaylistInterface;
+namespace Tomahawk
+{
+    class PlaylistInterface;
+}
 
 class DLLEXPORT AudioEngine : public QObject
 {
@@ -39,21 +46,28 @@ Q_OBJECT
 
 public:
     enum AudioErrorCode { StreamReadError, AudioDeviceError, DecodeError };
+    enum AudioState { Stopped, Playing, Paused };
 
     static AudioEngine* instance();
 
     explicit AudioEngine();
     ~AudioEngine();
 
+    QStringList supportedMimeTypes() const;
     unsigned int volume() const { return m_audioOutput->volume() * 100.0; } // in percent
-    bool isPlaying() const { return m_mediaObject->state() == Phonon::PlayingState; }
-    bool isPaused() const { return m_mediaObject->state() == Phonon::PausedState; }
+
+    AudioState state() const { return m_state; }
+    bool isPlaying() const { return m_state == Playing; }
+    bool isPaused() const { return m_state == Paused; }
+    bool isStopped() const { return m_state == Stopped; }
 
     /* Returns the PlaylistInterface of the currently playing track. Note: This might be different to the current playlist! */
-    PlaylistInterface* currentTrackPlaylist() const { return m_currentTrackPlaylist; }
+    Tomahawk::PlaylistInterface* currentTrackPlaylist() const { return m_currentTrackPlaylist.data(); }
 
     /* Returns the PlaylistInterface of the current playlist. Note: The currently playing track might still be from a different playlist! */
-    PlaylistInterface* playlist() const { return m_playlist; }
+    Tomahawk::PlaylistInterface* playlist() const { return m_playlist.data(); }
+
+    Tomahawk::result_ptr currentTrack() const { return m_currentTrack; }
 
 public slots:
     void playPause();
@@ -71,11 +85,14 @@ public slots:
     void onVolumeChanged( qreal volume ) { emit volumeChanged( volume * 100 ); }
     void mute();
 
-    void playItem( PlaylistInterface* playlist, const Tomahawk::result_ptr& result );
-    void setPlaylist( PlaylistInterface* playlist );
-    void setQueue( PlaylistInterface* queue ) { m_queue = queue; }
+    void playItem( Tomahawk::PlaylistInterface* playlist, const Tomahawk::result_ptr& result );
+    void setPlaylist( Tomahawk::PlaylistInterface* playlist );
+    void setQueue( Tomahawk::PlaylistInterface* queue ) { m_queue = queue; }
 
-    void onTrackAboutToFinish();
+    void playlistNextTrackReady();
+
+    void infoSystemInfo( Tomahawk::InfoSystem::InfoRequestData requestData, QVariant output );
+    void infoSystemFinished( QString caller );
 
 signals:
     void loading( const Tomahawk::result_ptr& track );
@@ -85,13 +102,14 @@ signals:
     void paused();
     void resumed();
 
+    void stateChanged( AudioState newState, AudioState oldState );
     void volumeChanged( int volume /* in percent */ );
 
     void timerMilliSeconds( qint64 msElapsed );
     void timerSeconds( unsigned int secondsElapsed );
     void timerPercentage( unsigned int percentage );
 
-    void playlistChanged( PlaylistInterface* playlist );
+    void playlistChanged( Tomahawk::PlaylistInterface* playlist );
 
     void error( AudioErrorCode errorCode );
 
@@ -107,23 +125,33 @@ private slots:
     void setCurrentTrack( const Tomahawk::result_ptr& result );
 
 private:
+    void setState( AudioState state );
+
     bool isHttpResult( const QString& ) const;
     bool isLocalResult( const QString& ) const;
+
+    void sendWaitingNotification() const;
+    void sendNowPlayingNotification();
 
     bool m_isPlayingHttp;
     QSharedPointer<QIODevice> m_input;
 
     Tomahawk::result_ptr m_currentTrack;
     Tomahawk::result_ptr m_lastTrack;
-    PlaylistInterface* m_playlist;
-    PlaylistInterface* m_currentTrackPlaylist;
-    PlaylistInterface* m_queue;
+    QWeakPointer< Tomahawk::PlaylistInterface > m_playlist;
+    QWeakPointer< Tomahawk::PlaylistInterface > m_currentTrackPlaylist;
+    Tomahawk::PlaylistInterface* m_queue;
 
     Phonon::MediaObject* m_mediaObject;
     Phonon::AudioOutput* m_audioOutput;
 
     unsigned int m_timeElapsed;
     bool m_expectStop;
+    bool m_waitingOnNewTrack;
+    bool m_infoSystemConnected;
+
+    mutable QStringList m_supportedMimeTypes;
+    AudioState m_state;
 
     static AudioEngine* s_instance;
 };

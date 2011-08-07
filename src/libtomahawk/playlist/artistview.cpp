@@ -18,7 +18,6 @@
 
 #include "artistview.h"
 
-#include <QDebug>
 #include <QHeaderView>
 #include <QKeyEvent>
 #include <QPainter>
@@ -31,6 +30,7 @@
 #include "treeheader.h"
 #include "treeitemdelegate.h"
 #include "viewmanager.h"
+#include "utils/logger.h"
 
 static QString s_tmInfoIdentifier = QString( "TREEMODEL" );
 
@@ -46,6 +46,7 @@ ArtistView::ArtistView( QWidget* parent )
     , m_proxyModel( 0 )
 //    , m_delegate( 0 )
     , m_loadingSpinner( new LoadingSpinner( this ) )
+    , m_contextMenu( new ContextMenu( this ) )
     , m_showModes( true )
 {
     setAlternatingRowColors( true );
@@ -59,6 +60,7 @@ ArtistView::ArtistView( QWidget* parent )
     setAllColumnsShowFocus( true );
     setSelectionMode( QAbstractItemView::ExtendedSelection );
     setSelectionBehavior( QAbstractItemView::SelectRows );
+    setContextMenuPolicy( Qt::CustomContextMenu );
 
     setHeader( m_header );
     setProxyModel( new TreeProxyModel( this ) );
@@ -81,6 +83,8 @@ ArtistView::ArtistView( QWidget* parent )
     connect( &m_timer, SIGNAL( timeout() ), SLOT( onScrollTimeout() ) );
 
     connect( this, SIGNAL( doubleClicked( QModelIndex ) ), SLOT( onItemActivated( QModelIndex ) ) );
+    connect( this, SIGNAL( customContextMenuRequested( const QPoint& ) ), SLOT( onCustomContextMenu( const QPoint& ) ) );
+    connect( m_contextMenu, SIGNAL( triggered( int ) ), SLOT( onMenuTriggered( int ) ) );
 }
 
 
@@ -101,13 +105,22 @@ ArtistView::setProxyModel( TreeProxyModel* model )
 
 
 void
-ArtistView::setModel( TreeModel* model )
+ArtistView::setModel( QAbstractItemModel* model )
+{
+    Q_UNUSED( model );
+    qDebug() << "Explicitly use setPlaylistModel instead";
+    Q_ASSERT( false );
+}
+
+
+void
+ArtistView::setTreeModel( TreeModel* model )
 {
     m_model = model;
 
     if ( m_proxyModel )
     {
-        m_proxyModel->setSourceModel( model );
+        m_proxyModel->setSourceTreeModel( model );
         m_proxyModel->sort( 0 );
     }
 
@@ -223,17 +236,82 @@ ArtistView::onScrollTimeout()
     if ( right.isValid() )
         max = right.row() + 1;
 
+    if ( !max )
+        return;
+
     for ( int i = left.row(); i < max; i++ )
     {
         TreeModelItem* item = m_model->itemFromIndex( m_proxyModel->mapToSource( m_proxyModel->index( i, 0 ) ) );
+        if ( item->artist().isNull() )
+            continue;
+        if ( !item->cover.isNull() )
+            continue;
 
         Tomahawk::InfoSystem::InfoCriteriaHash trackInfo;
         trackInfo["artist"] = item->artist()->name();
         trackInfo["pptr"] = QString::number( (qlonglong)item );
 
-        Tomahawk::InfoSystem::InfoSystem::instance()->getInfo(
-            s_tmInfoIdentifier, Tomahawk::InfoSystem::InfoArtistImages,
-            QVariant::fromValue< Tomahawk::InfoSystem::InfoCriteriaHash >( trackInfo ), Tomahawk::InfoSystem::InfoCustomData() );
+        Tomahawk::InfoSystem::InfoRequestData requestData;
+        requestData.caller = s_tmInfoIdentifier;
+        requestData.type = Tomahawk::InfoSystem::InfoArtistImages;
+        requestData.input = QVariant::fromValue< Tomahawk::InfoSystem::InfoCriteriaHash >( trackInfo );
+        requestData.customData = QVariantMap();
+
+        Tomahawk::InfoSystem::InfoSystem::instance()->getInfo( requestData );
+    }
+}
+
+
+void
+ArtistView::onCustomContextMenu( const QPoint& pos )
+{
+    m_contextMenu->clear();
+
+    QModelIndex idx = indexAt( pos );
+    idx = idx.sibling( idx.row(), 0 );
+    m_contextMenuIndex = idx;
+
+    if ( !idx.isValid() )
+        return;
+
+    QList<query_ptr> queries;
+    QList<artist_ptr> artists;
+    QList<album_ptr> albums;
+
+    foreach ( const QModelIndex& index, selectedIndexes() )
+    {
+        if ( index.column() || selectedIndexes().contains( index.parent() ) )
+            continue;
+
+        TreeModelItem* item = m_proxyModel->itemFromIndex( m_proxyModel->mapToSource( index ) );
+
+        if ( item && !item->result().isNull() )
+            queries << item->result()->toQuery();
+        if ( item && !item->artist().isNull() )
+            artists << item->artist();
+        if ( item && !item->album().isNull() )
+            albums << item->album();
+    }
+
+    m_contextMenu->setQueries( queries );
+    m_contextMenu->setArtists( artists );
+    m_contextMenu->setAlbums( albums );
+
+    m_contextMenu->exec( mapToGlobal( pos ) );
+}
+
+
+void
+ArtistView::onMenuTriggered( int action )
+{
+    switch ( action )
+    {
+        case ContextMenu::ActionPlay:
+            onItemActivated( m_contextMenuIndex );
+            break;
+
+        default:
+            break;
     }
 }
 
@@ -241,6 +319,6 @@ ArtistView::onScrollTimeout()
 bool
 ArtistView::jumpToCurrentTrack()
 {
-    scrollTo( m_proxyModel->currentItem(), QAbstractItemView::PositionAtCenter );
+    scrollTo( m_proxyModel->currentIndex(), QAbstractItemView::PositionAtCenter );
     return true;
 }

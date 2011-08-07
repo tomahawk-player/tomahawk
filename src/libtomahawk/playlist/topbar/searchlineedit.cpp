@@ -52,6 +52,8 @@ void SearchLineEdit::init()
     addWidget(m_clearButton, RightSide);
     m_clearButton->hide();
 
+    setWidgetSpacing(5);
+
     updateTextMargins();
     setInactiveText(tr("Search"));
 }
@@ -65,4 +67,3 @@ SearchButton *SearchLineEdit::searchButton() const
 {
     return m_searchButton;
 }
-

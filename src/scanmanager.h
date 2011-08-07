@@ -26,6 +26,7 @@
 #include <QWeakPointer>
 
 #include "dllmacro.h"
+#include <QSet>
 
 class MusicScanner;
 class QThread;
@@ -46,17 +47,14 @@ signals:
     void finished();
     
 public slots:
-    void runManualScan( const QStringList& paths, bool recursive = true );
-    void handleChangedDir( const QString& path );
-    void addWatchedDirs( const QStringList& paths );
-    void removeWatchedDir( const QString& path );
+    void runScan( bool manualFull = false );
+    void runDirScan( const QStringList& paths, bool manualFull );
 
 private slots:
     void scannerFinished();
     
     void runStartupScan();
-    void queuedScanTimeout();
-    void deferredScanTimeout();
+    void scanTimerTimeout();
 
     void onSettingsChanged();
     
@@ -66,12 +64,8 @@ private:
     QWeakPointer< MusicScanner > m_scanner;
     QThread* m_musicScannerThreadController;
     QStringList m_currScannerPaths;
-    QFileSystemWatcher* m_dirWatcher;
     
-    QTimer* m_queuedScanTimer;
-    QTimer* m_deferredScanTimer;
-    QStringList m_queuedChangedDirs;
-    QHash< bool, QStringList > m_deferredDirs;
+    QTimer* m_scanTimer;
 };
 
 #endif

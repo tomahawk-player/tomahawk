@@ -20,6 +20,7 @@
 
 #include "collection.h"
 #include "sourcelist.h"
+#include "sourceplaylistinterface.h"
 
 #include "network/controlconnection.h"
 #include "database/databasecommand_addsource.h"
@@ -27,6 +28,8 @@
 #include "database/database.h"
 
 #include <QCoreApplication>
+
+#include "utils/logger.h"
 
 using namespace Tomahawk;
 
@@ -167,6 +170,7 @@ Source::removeCollection( const collection_ptr& c )
 void
 Source::setOffline()
 {
+    qDebug() << Q_FUNC_INFO << friendlyName();
     if ( !m_online )
         return;
 
@@ -182,17 +186,18 @@ Source::setOffline()
 void
 Source::setOnline()
 {
+    qDebug() << Q_FUNC_INFO << friendlyName();
     if ( m_online )
         return;
+
     m_online = true;
+    emit online();
 
     // ensure username is in the database
     DatabaseCommand_addSource* cmd = new DatabaseCommand_addSource( m_username, m_friendlyname );
     connect( cmd, SIGNAL( done( unsigned int, QString ) ),
                     SLOT( dbLoaded( unsigned int, const QString& ) ) );
     Database::instance()->enqueue( QSharedPointer<DatabaseCommand>(cmd) );
-
-    emit online();
 }
 
 
@@ -267,11 +272,26 @@ Source::trackCount() const
 }
 
 
+Tomahawk::playlistinterface_ptr
+Source::getPlaylistInterface()
+{
+    if ( m_playlistInterface.isNull() )
+    {
+        Tomahawk::source_ptr source = SourceList::instance()->get( id() );
+        m_playlistInterface = Tomahawk::playlistinterface_ptr( new Tomahawk::SourcePlaylistInterface( source ) );
+    }
+
+    return m_playlistInterface;
+}
+
+
 void
 Source::onPlaybackStarted( const Tomahawk::query_ptr& query )
 {
     qDebug() << Q_FUNC_INFO << query->toString();
     m_currentTrack = query;
+    if ( m_playlistInterface.isNull() )
+        getPlaylistInterface();
     emit playbackStarted( query );
 }
 
@@ -292,3 +312,10 @@ Source::trackTimerFired()
 
     emit stateChanged();
 }
+
+void
+Source::reportSocialAttributesChanged()
+{
+    emit socialAttributesChanged();
+}
+

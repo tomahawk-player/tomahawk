@@ -22,6 +22,8 @@
 #include <QHeaderView>
 #include <QSignalMapper>
 
+#include "source.h"
+
 #include "dllmacro.h"
 
 class TrackView;

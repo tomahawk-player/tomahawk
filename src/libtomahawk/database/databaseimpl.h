@@ -27,7 +27,6 @@
 #include <QSqlDatabase>
 #include <QSqlError>
 #include <QSqlQuery>
-#include <QDebug>
 #include <QHash>
 #include <QThread>
 
@@ -45,13 +44,15 @@ friend class FuzzyIndex;
 friend class DatabaseCommand_UpdateSearchIndex;
 
 public:
+    static int getDatabaseVersion( const QString& dbname );
+
     DatabaseImpl( const QString& dbname, Database* parent = 0 );
     ~DatabaseImpl();
 
     TomahawkSqlQuery newquery() { return TomahawkSqlQuery( db ); }
     QSqlDatabase& database() { return db; }
 
-    int artistId( const QString& name_orig, bool& isnew );
+    int artistId( const QString& name_orig, bool& autoCreate );
     int trackId( int artistid, const QString& name_orig, bool& isnew );
     int albumId( int artistid, const QString& name_orig, bool& isnew );
 
@@ -84,8 +85,6 @@ signals:
 public slots:
 
 private:
-    static int getDatabaseVersion( const QString& dbname );
-
     QString cleanSql( const QString& sql );
     bool updateSchema( int oldVersion );
 

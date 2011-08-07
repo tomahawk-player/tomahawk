@@ -23,12 +23,15 @@
 #include "sourcelist.h"
 #include "viewmanager.h"
 #include <tomahawksettings.h>
+#include "utils/logger.h"
+
 
 LocalCollection::LocalCollection( const Tomahawk::source_ptr& source, QObject* parent )
     : DatabaseCollection( source, parent )
 {
 
 }
+
 
 Tomahawk::playlist_ptr
 LocalCollection::bookmarksPlaylist()
@@ -38,6 +41,7 @@ LocalCollection::bookmarksPlaylist()
 
     return playlist( TomahawkSettings::instance()->bookmarkPlaylist() );
 }
+
 
 void
 LocalCollection::createBookmarksPlaylist()
@@ -53,6 +57,7 @@ LocalCollection::createBookmarksPlaylist()
 //         p->createNewRevision( uuid(), p->currentrevision(), QList< Tomahawk::plentry_ptr >() );
     }
 }
+
 
 void
 LocalCollection::created()

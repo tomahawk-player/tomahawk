@@ -1,5 +1,5 @@
 /* === This file is part of Tomahawk Player - <http://tomahawk-player.org> ===
- * 
+ *
  *   Copyright 2010-2011, Christian Muehlhaeuser <muesli@tomahawk-player.org>
  *
  *   Tomahawk is free software: you can redistribute it and/or modify
@@ -29,6 +29,7 @@ namespace Tomahawk
     class Collection;
     class Playlist;
     class PlaylistEntry;
+    class PlaylistInterface;
     class DynamicPlaylist;
     class Query;
     class Result;
@@ -39,21 +40,21 @@ namespace Tomahawk
     typedef QSharedPointer<Collection> collection_ptr;
     typedef QSharedPointer<Playlist> playlist_ptr;
     typedef QSharedPointer<PlaylistEntry> plentry_ptr;
+    typedef QSharedPointer<PlaylistInterface> playlistinterface_ptr;
     typedef QSharedPointer<DynamicPlaylist> dynplaylist_ptr;
     typedef QSharedPointer<Query> query_ptr;
     typedef QSharedPointer<Result> result_ptr;
     typedef QSharedPointer<Source> source_ptr;
     typedef QSharedPointer<Artist> artist_ptr;
     typedef QSharedPointer<Album> album_ptr;
-    
+
     typedef QSharedPointer<DynamicControl> dyncontrol_ptr;
     typedef QSharedPointer<GeneratorInterface> geninterface_ptr;
-    
+
     // let's keep these typesafe, they are different kinds of GUID:
     typedef QString QID; //query id
     typedef QString RID; //result id
-    
-    
+
     enum GeneratorMode {
         OnDemand = 0,
         Static
@@ -62,6 +63,7 @@ namespace Tomahawk
 }; // ns
 
 typedef int AudioErrorCode;
+typedef int AudioState;
 
 // creates 36char ascii guid without {} around it
 inline static QString uuid()

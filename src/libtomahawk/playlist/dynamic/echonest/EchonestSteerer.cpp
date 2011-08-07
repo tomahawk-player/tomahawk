@@ -1,6 +1,6 @@
 /* === This file is part of Tomahawk Player - <http://tomahawk-player.org> ===
- * 
- *   Copyright 2010-2011, Christian Muehlhaeuser <muesli@tomahawk-player.org>
+ *
+ *   Copyright 2010-2011, Leo Franchi <lfranchi@kde.org>
  *
  *   Tomahawk is free software: you can redistribute it and/or modify
  *   it under the terms of the GNU General Public License as published by
@@ -18,22 +18,25 @@
 
 #include "dynamic/echonest/EchonestSteerer.h"
 
-#include "utils/tomahawkutils.h"
-
 #include <QPaintEvent>
 #include <QHBoxLayout>
 #include <QLineEdit>
 #include <QComboBox>
 #include <QLabel>
-#include <echonest/Playlist.h>
 #include <QPainter>
 #include <QToolButton>
-#include <dynamic/widgets/DynamicWidget.h>
 #include <QPropertyAnimation>
+
+#include <echonest/Playlist.h>
+#include <dynamic/widgets/DynamicWidget.h>
+
+#include "utils/tomahawkutils.h"
+#include "utils/logger.h"
 
 using namespace Tomahawk;
 
 #define ANIM_DURATION 300
+
 
 EchonestSteerer::EchonestSteerer( QWidget* parent )
     : QWidget( parent )
@@ -46,10 +49,10 @@ EchonestSteerer::EchonestSteerer( QWidget* parent )
     , m_steerBottom( 0 )
     , m_reset( 0 )
     , m_expanding( true )
-    
+
 {
     m_layout->setContentsMargins( 8, 8, 8, 8 );
-    
+
     m_textL->setSpacing( 0 );
     m_steerTop = new QLabel( tr( "Steer this station:" ), this );
     QFont f = m_steerTop->font();
@@ -61,9 +64,9 @@ EchonestSteerer::EchonestSteerer( QWidget* parent )
     f.setPointSize( f.pointSize() - 3 );
     m_steerBottom->setFont( f );
     m_textL->addWidget( m_steerBottom );
-    
+
     m_layout->addLayout( m_textL, 1 );
-    
+
     m_amplifier = new QComboBox( this );
     m_amplifier->addItem( tr( "Much less" ), "^.1" );
     m_amplifier->addItem( tr( "Less" ), "^.5" );
@@ -84,52 +87,54 @@ EchonestSteerer::EchonestSteerer( QWidget* parent )
     m_field->addItem( tr( "By Description" ), "desc");
     m_layout->addWidget( m_amplifier );
     m_layout->addWidget( m_field );
-    
+
     connect( m_amplifier, SIGNAL( currentIndexChanged( int ) ), this, SLOT( changed() ) );
     connect( m_field, SIGNAL( currentIndexChanged( int ) ), this, SLOT( changed() ) );
-    
+
     m_description = new QLineEdit( this );
     m_description->setPlaceholderText( tr( "Enter a description" ) );
     m_description->hide();
-    
+
     connect( m_description, SIGNAL( textChanged( QString ) ), this, SLOT( changed() ) );
-    
+
     m_reset = initButton( this );
     m_reset->setIcon( QIcon( RESPATH "images/view-refresh.png" ) );
     m_reset->setToolTip( tr( "Reset all steering commands" ) );
     m_layout->addWidget( m_reset );
-        
+
     connect( m_reset, SIGNAL( clicked( bool ) ), this, SLOT( resetSteering( bool ) ) );
-    
+
     setLayout( m_layout );
     setSizePolicy( QSizePolicy::Fixed, QSizePolicy::Fixed );
-    
+
     m_resizeAnim.setDuration( ANIM_DURATION );
     m_resizeAnim.setEasingCurve( QEasingCurve::InOutQuad );
     m_resizeAnim.setDirection( QTimeLine::Forward );
     m_resizeAnim.setUpdateInterval( 8 );
-    
+
     connect( &m_resizeAnim, SIGNAL( frameChanged( int ) ), this, SLOT( resizeFrame( int ) ) );
-    
-    
+
+
     m_fadeAnim = new QPropertyAnimation( this, "opacity", this );
     m_fadeAnim->setDuration( ANIM_DURATION );
     m_fadeAnim->setStartValue( 0 );
-    m_fadeAnim->setEndValue( .86 );
+    m_fadeAnim->setEndValue( .7 );
     resize( sizeHint() );
 }
 
-void 
+
+void
 EchonestSteerer::paintEvent( QPaintEvent* )
 {
     QPainter p( this );
     QRect r = contentsRect();
     QPalette pal = palette();
-    
+
     DynamicWidget::paintRoundedFilledRect( p, pal, r, m_opacity );
 }
 
-void 
+
+void
 EchonestSteerer::setOpacity( qreal opacity )
 {
     m_opacity = opacity;
@@ -138,16 +143,18 @@ EchonestSteerer::setOpacity( qreal opacity )
     repaint();
 }
 
-void 
+
+void
 EchonestSteerer::fadeIn()
 {
     m_fadeAnim->setDirection( QAbstractAnimation::Forward );
     m_fadeAnim->start();
-    
+
     show();
 }
 
-void 
+
+void
 EchonestSteerer::fadeOut()
 {
     m_fadeAnim->setDirection( QAbstractAnimation::Backward );
@@ -155,35 +162,35 @@ EchonestSteerer::fadeOut()
 }
 
 
-void 
+void
 EchonestSteerer::changed()
 {
     bool keep = false;
     if( m_amplifier->itemData( m_amplifier->currentIndex() ).toString().isEmpty() ) { // Keep Current
         keep = true;
-        
+
         emit reset();
     }
-    
+
     if( m_field->itemData( m_field->currentIndex() ).toString() != "desc" ) {
         if( !keep ) {
             QString steer = m_field->itemData( m_field->currentIndex() ).toString() + m_amplifier->itemData( m_amplifier->currentIndex() ).toString();
             emit steerField( steer );
         }
-        
+
         // if description was shown, animate to shrink
         if( m_layout->indexOf( m_description ) > 0 ) {
             m_expanding = false;
             int start = width();
             int end = start - m_layout->spacing() - m_description->sizeHint().width();;
-            
+
             m_layout->removeWidget( m_description );
             m_description->hide();
             m_layout->setStretchFactor(  m_textL, 1 );
-            
+
             m_resizeAnim.setFrameRange( start, end );
             m_resizeAnim.start();
-            
+
             qDebug() << "COLLAPSING FROM" << start << "TO" << end;
         }
     } else { // description, so put in the description field
@@ -191,39 +198,41 @@ EchonestSteerer::changed()
             QString steer = m_description->text() + m_amplifier->itemData( m_amplifier->currentIndex() ).toString();
             emit steerDescription( steer );
         }
-        
+
         if( m_layout->indexOf( m_description ) == -1 ) {
             // animate to expand
             m_layout->insertWidget( m_layout->count() - 1, m_description, 1 );
             m_layout->setStretchFactor( m_textL, 0 );
             m_description->show();
-            
+
             m_expanding = true;
             int start = width();
             int end = start + m_layout->spacing() + m_description->sizeHint().width();
             m_resizeAnim.setFrameRange( start, end );
             m_resizeAnim.start();
-            
+
             qDebug() << "EXPANDING FROM" << start << "TO" << end;
         }
     }
 }
 
-void 
+
+void
 EchonestSteerer::resizeFrame( int width )
 {
 //     qDebug() << "RESIZING TO:" << width;
     resize( width, sizeHint().height() );
     repaint();
-    
+
     emit resized();
 }
 
-void 
+
+void
 EchonestSteerer::resetSteering( bool automatic )
 {
     m_amplifier->setCurrentIndex( 3 );
-    
+
     if( !automatic ) {
         m_description->clear();
         m_field->setCurrentIndex( 0 );
@@ -232,7 +241,7 @@ EchonestSteerer::resetSteering( bool automatic )
 }
 
 
-QToolButton* 
+QToolButton*
 EchonestSteerer::initButton( QWidget* parent )
 {
     QToolButton* btn = new QToolButton( parent );

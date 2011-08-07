@@ -18,17 +18,35 @@
 
 #include "artist.h"
 
-#include <QDebug>
-
 #include "collection.h"
 #include "database/database.h"
 #include "database/databasecommand_alltracks.h"
 
+#include "utils/logger.h"
+
 using namespace Tomahawk;
 
-Artist::Artist() {}
 
-Artist::~Artist() {}
+Artist::Artist()
+{
+}
+
+
+Artist::~Artist()
+{
+}
+
+
+artist_ptr
+Artist::get( const QString& name, bool autoCreate )
+{
+    int artid = Database::instance()->impl()->artistId( name, autoCreate );
+    if ( artid < 1 )
+        return artist_ptr();
+
+    return Artist::get( artid, name );
+}
+
 
 artist_ptr
 Artist::get( unsigned int id, const QString& name )
@@ -54,6 +72,7 @@ Artist::Artist( unsigned int id, const QString& name )
     : PlaylistInterface( this )
     , m_id( id )
     , m_name( name )
+    , m_currentItem( 0 )
     , m_currentTrack( 0 )
 {
 }
@@ -82,7 +101,20 @@ Artist::siblingItem( int itemsAway )
         return Tomahawk::result_ptr();
 
     m_currentTrack = p;
-    return m_queries.at( p )->results().first();
+    m_currentItem = m_queries.at( p )->results().first();
+    return m_currentItem;
+}
+
+
+bool
+Artist::hasNextItem()
+{
+    int p = m_currentTrack;
+    p++;
+    if ( p < 0 || p >= m_queries.count() )
+        return false;
+
+    return true;
 }
 
 

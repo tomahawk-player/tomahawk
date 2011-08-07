@@ -21,7 +21,6 @@
 
 #include <QObject>
 #include <QList>
-#include <QDebug>
 #include <QVariant>
 #include <QSharedPointer>
 
@@ -31,6 +30,7 @@
 #include "playlistinterface.h"
 
 #include "dllmacro.h"
+#include <QQueue>
 
 class DatabaseCommand_LoadAllPlaylists;
 class DatabaseCommand_SetPlaylistRevision;
@@ -97,6 +97,18 @@ struct PlaylistRevision
     QList<plentry_ptr> added;
     QList<plentry_ptr> removed;
     bool applied; // false if conflict
+};
+
+struct RevisionQueueItem
+{
+public:
+    QString newRev;
+    QString oldRev;
+    QList< plentry_ptr > entries;
+    bool applyToTip;
+
+    RevisionQueueItem( const QString& nRev, const QString& oRev, const QList< plentry_ptr >& e, bool latest ) :
+        newRev( nRev ), oldRev( oRev), entries( e ), applyToTip( latest ) {}
 };
 
 
@@ -170,6 +182,9 @@ public:
     virtual int unfilteredTrackCount() const { return m_entries.count(); }
     virtual int trackCount() const { return m_entries.count(); }
 
+    virtual bool hasNextItem() { return false; }
+    virtual Tomahawk::result_ptr currentItem() const { return m_currentItem; }
+
     virtual Tomahawk::result_ptr siblingItem( int /*itemsAway*/ ) { return result_ptr(); }
 
     virtual PlaylistInterface::RepeatMode repeatMode() const { return PlaylistInterface::NoRepeat; }
@@ -204,6 +219,8 @@ signals:
 
     void trackCountChanged( unsigned int tracks );
     void sourceTrackCountChanged( unsigned int tracks );
+
+    void nextTrackReady();
 
 public slots:
     // want to update the playlist from the model?
@@ -260,6 +277,7 @@ private:
     void init();
 
     void setBusy( bool b );
+    void checkRevisionQueue();
 
     source_ptr m_source;
     QString m_currentrevision;
@@ -268,8 +286,12 @@ private:
     unsigned int m_createdOn;
     bool m_shared;
 
+    result_ptr m_currentItem;
+
     QList< plentry_ptr > m_initEntries;
     QList< plentry_ptr > m_entries;
+
+    QQueue<RevisionQueueItem> m_revisionQueue;
 
     bool m_locallyChanged;
     bool m_busy;

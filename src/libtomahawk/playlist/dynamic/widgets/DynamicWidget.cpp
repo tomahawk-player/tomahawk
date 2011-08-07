@@ -1,6 +1,6 @@
 /* === This file is part of Tomahawk Player - <http://tomahawk-player.org> ===
  *
- *   Copyright 2010-2011, Christian Muehlhaeuser <muesli@tomahawk-player.org>
+ *   Copyright 2010-2011, Leo Franchi <lfranchi@kde.org>
  *
  *   Tomahawk is free software: you can redistribute it and/or modify
  *   it under the terms of the GNU General Public License as published by
@@ -23,6 +23,8 @@
 #include <QComboBox>
 #include <QPushButton>
 #include <QSpinBox>
+#include <QEvent>
+#include <QPainter>
 
 #include "DynamicControlList.h"
 #include "dynamic/DynamicModel.h"
@@ -36,17 +38,16 @@
 #include "DynamicControlWrapper.h"
 #include "viewmanager.h"
 #include "dynamic/DynamicView.h"
-#include <qevent.h>
 #include "DynamicSetupWidget.h"
-#include <QPainter>
-
 #include "audiocontrols.h"
 #include "LoadingSpinner.h"
+#include "utils/logger.h"
 
 using namespace Tomahawk;
 
+
 DynamicWidget::DynamicWidget( const Tomahawk::dynplaylist_ptr& playlist, QWidget* parent )
-    : QWidget(parent)
+    : QWidget( parent )
     , m_layout( new QVBoxLayout )
     , m_resolveOnNextLoad( false )
     , m_seqRevLaunched( 0 )
@@ -96,12 +97,14 @@ DynamicWidget::DynamicWidget( const Tomahawk::dynplaylist_ptr& playlist, QWidget
     connect( m_controls, SIGNAL( controlsChanged() ), this, SLOT( controlsChanged() ), Qt::QueuedConnection );
 
     connect( AudioEngine::instance(), SIGNAL( started( Tomahawk::result_ptr ) ), this, SLOT( trackStarted() ) );
-    connect( AudioEngine::instance(), SIGNAL( playlistChanged( PlaylistInterface* ) ), this, SLOT( playlistChanged( PlaylistInterface* ) ) );
+    connect( AudioEngine::instance(), SIGNAL( playlistChanged( Tomahawk::PlaylistInterface* ) ), this, SLOT( playlistChanged( Tomahawk::PlaylistInterface* ) ) );
 }
+
 
 DynamicWidget::~DynamicWidget()
 {
 }
+
 
 void
 DynamicWidget::loadDynamicPlaylist( const Tomahawk::dynplaylist_ptr& playlist )
@@ -183,11 +186,13 @@ DynamicWidget::onRevisionLoaded( const Tomahawk::DynamicPlaylistRevision& rev )
     }
 }
 
+
 PlaylistInterface*
 DynamicWidget::playlistInterface() const
 {
     return m_view->proxyModel();
 }
+
 
 QSize
 DynamicWidget::sizeHint() const
@@ -197,11 +202,13 @@ DynamicWidget::sizeHint() const
     return QSize( 5000, 5000 );
 }
 
+
 void
 DynamicWidget::resizeEvent(QResizeEvent* )
 {
     layoutFloatingWidgets();
 }
+
 
 void
 DynamicWidget::layoutFloatingWidgets()
@@ -219,6 +226,7 @@ DynamicWidget::layoutFloatingWidgets()
     }
 }
 
+
 void
 DynamicWidget::playlistChanged( PlaylistInterface* pl )
 {
@@ -233,6 +241,7 @@ DynamicWidget::playlistChanged( PlaylistInterface* pl )
         }
     }
 }
+
 
 void
 DynamicWidget::showEvent(QShowEvent* )
@@ -252,6 +261,7 @@ DynamicWidget::generate( int num )
     m_playlist->generator()->generate( num );
 }
 
+
 void
 DynamicWidget::stationFailed( const QString& msg )
 {
@@ -262,6 +272,7 @@ DynamicWidget::stationFailed( const QString& msg )
     stopStation( false );
 }
 
+
 void
 DynamicWidget::trackStarted()
 {
@@ -271,6 +282,7 @@ DynamicWidget::trackStarted()
         startStation();
     }
 }
+
 
 void
 DynamicWidget::tracksAdded()
@@ -290,6 +302,7 @@ DynamicWidget::stopStation( bool stopPlaying )
     QMetaObject::invokeMethod( m_steering, "fadeOut", Qt::DirectConnection );
     m_setup->fadeIn();
 }
+
 
 void
 DynamicWidget::startStation()
@@ -317,11 +330,13 @@ DynamicWidget::startStation()
     }
 }
 
+
 void
 DynamicWidget::playlistTypeChanged( QString )
 {
     // TODO
 }
+
 
 void
 DynamicWidget::tracksGenerated( const QList< query_ptr >& queries )
@@ -354,6 +369,7 @@ DynamicWidget::controlsChanged()
     emit descriptionChanged( m_playlist->generator()->sentenceSummary() );
 }
 
+
 void
 DynamicWidget::controlChanged( const Tomahawk::dyncontrol_ptr& control )
 {
@@ -367,6 +383,7 @@ DynamicWidget::controlChanged( const Tomahawk::dyncontrol_ptr& control )
 
     emit descriptionChanged( m_playlist->generator()->sentenceSummary() );
 }
+
 
 void
 DynamicWidget::showPreview()
@@ -388,6 +405,7 @@ DynamicWidget::generatorError( const QString& title, const QString& content )
     m_view->showMessageTimeout( title, content );
 }
 
+
 void
 DynamicWidget::paintRoundedFilledRect( QPainter& p, QPalette& pal, QRect& r, qreal opacity )
 {
@@ -395,9 +413,11 @@ DynamicWidget::paintRoundedFilledRect( QPainter& p, QPalette& pal, QRect& r, qre
     p.setRenderHint( QPainter::Antialiasing );
     p.setOpacity( opacity );
 
-    QPen pen( pal.dark().color(), .5 );
+    QColor c( 30, 30, 30 );
+
+    QPen pen( c.darker(), .5 );
     p.setPen( pen );
-    p.setBrush( pal.highlight() );
+    p.setBrush( c );
 
     p.drawRoundedRect( r, 10, 10 );
 
@@ -407,12 +427,14 @@ DynamicWidget::paintRoundedFilledRect( QPainter& p, QPalette& pal, QRect& r, qre
     p.drawRoundedRect( r, 10, 10 );
 }
 
+
 bool
 DynamicWidget::jumpToCurrentTrack()
 {
-    m_view->scrollTo( m_view->proxyModel()->currentItem(), QAbstractItemView::PositionAtCenter );
+    m_view->scrollTo( m_view->proxyModel()->currentIndex(), QAbstractItemView::PositionAtCenter );
     return true;
 }
+
 
 void
 DynamicWidget::onDeleted()
@@ -420,6 +442,7 @@ DynamicWidget::onDeleted()
     emit destroyed( widget() );
     deleteLater();
 }
+
 
 void
 DynamicWidget::onChanged()

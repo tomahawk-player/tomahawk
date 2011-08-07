@@ -28,7 +28,10 @@
 #include "tomahawksettings.h"
 #include "infosystem/infosystem.h"
 
+#include "utils/logger.h"
+
 static QString s_scInfoIdentifier = QString( "SCROBBLER" );
+
 
 Scrobbler::Scrobbler( QObject* parent )
     : QObject( parent )
@@ -38,9 +41,9 @@ Scrobbler::Scrobbler( QObject* parent )
                                         SLOT( engineTick( unsigned int ) ), Qt::QueuedConnection );
 
     connect( Tomahawk::InfoSystem::InfoSystem::instance(),
-        SIGNAL( info( QString, Tomahawk::InfoSystem::InfoType, QVariant, QVariant, Tomahawk::InfoSystem::InfoCustomData ) ),
-        SLOT( infoSystemInfo( QString, Tomahawk::InfoSystem::InfoType, QVariant, QVariant, Tomahawk::InfoSystem::InfoCustomData ) ) );
-    
+        SIGNAL( info( Tomahawk::InfoSystem::InfoRequestData, QVariant ) ),
+        SLOT( infoSystemInfo( Tomahawk::InfoSystem::InfoRequestData, QVariant ) ) );
+
     connect( AudioEngine::instance(), SIGNAL( started( const Tomahawk::result_ptr& ) ),
              SLOT( trackStarted( const Tomahawk::result_ptr& ) ), Qt::QueuedConnection );
 
@@ -80,6 +83,7 @@ Scrobbler::trackStarted( const Tomahawk::result_ptr& track )
     trackInfo["artist"] = track->artist()->name();
     trackInfo["album"] = track->album()->name();
     trackInfo["duration"] = QString::number( track->duration() );
+
     Tomahawk::InfoSystem::InfoSystem::instance()->pushInfo(
         s_scInfoIdentifier, Tomahawk::InfoSystem::InfoSubmitNowPlaying,
         QVariant::fromValue< Tomahawk::InfoSystem::InfoCriteriaHash >( trackInfo ) );
@@ -135,12 +139,10 @@ Scrobbler::scrobble()
 
 
 void
-Scrobbler::infoSystemInfo( QString caller, Tomahawk::InfoSystem::InfoType type, QVariant input, QVariant output, Tomahawk::InfoSystem::InfoCustomData customData )
+Scrobbler::infoSystemInfo( Tomahawk::InfoSystem::InfoRequestData requestData, QVariant output )
 {
-    Q_UNUSED( input );
     Q_UNUSED( output );
-    Q_UNUSED( customData );
-    if ( caller == s_scInfoIdentifier )
+    if ( requestData.caller == s_scInfoIdentifier )
         qDebug() << Q_FUNC_INFO;
 }
 

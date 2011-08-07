@@ -18,25 +18,29 @@
 
 #include "query.h"
 
-#include "collection.h"
 #include <QtAlgorithms>
 
 #include "database/database.h"
 #include "database/databasecommand_logplayback.h"
 #include "database/databasecommand_playbackhistory.h"
 #include "database/databasecommand_loadplaylistentries.h"
+#include "collection.h"
 #include "pipeline.h"
+#include "resolver.h"
 #include "sourcelist.h"
+#include "audio/audioengine.h"
+
+#include "utils/logger.h"
 
 using namespace Tomahawk;
 
 
 query_ptr
-Query::get( const QString& artist, const QString& track, const QString& album, const QID& qid )
+Query::get( const QString& artist, const QString& track, const QString& album, const QID& qid, bool autoResolve )
 {
-    query_ptr q = query_ptr( new Query( artist, track, album, qid ) );
+    query_ptr q = query_ptr( new Query( artist, track, album, qid, autoResolve ) );
 
-    if ( !qid.isEmpty() )
+    if ( autoResolve && !qid.isEmpty() )
         Pipeline::instance()->resolve( q );
     return q;
 }
@@ -53,7 +57,7 @@ Query::get( const QString& query, const QID& qid )
 }
 
 
-Query::Query( const QString& artist, const QString& track, const QString& album, const QID& qid )
+Query::Query( const QString& artist, const QString& track, const QString& album, const QID& qid, bool autoResolve )
     : m_solved( false )
     , m_playable( false )
     , m_resolveFinished( false )
@@ -63,7 +67,7 @@ Query::Query( const QString& artist, const QString& track, const QString& album,
     , m_track( track )
     , m_duration( -1 )
 {
-    if ( !qid.isEmpty() )
+    if ( autoResolve )
     {
         connect( Database::instance(), SIGNAL( indexReady() ), SLOT( refreshResults() ), Qt::QueuedConnection );
     }
@@ -90,12 +94,30 @@ Query::Query( const QString& query, const QID& qid )
 }
 
 
+Query::~Query()
+{
+    qDebug() << Q_FUNC_INFO << toString();
+}
+
+
 void
 Query::addResults( const QList< Tomahawk::result_ptr >& newresults )
 {
     {
         QMutexLocker lock( &m_mutex );
-        m_results.append( newresults );
+
+/*        const QStringList smt = AudioEngine::instance()->supportedMimeTypes();
+        foreach ( const Tomahawk::result_ptr& result, newresults )
+        {
+            if ( !smt.contains( result->mimetype() ) )
+            {
+                tDebug() << "Won't accept result, unsupported mimetype" << result->toString() << result->mimetype();
+            }
+            else
+                m_results.append( result );
+        }*/
+
+        m_results << newresults;
         qStableSort( m_results.begin(), m_results.end(), Query::resultSorter );
 
         // hook up signals, and check solved status
@@ -201,6 +223,14 @@ Query::id() const
 }
 
 
+void
+Query::setPlayedBy( const Tomahawk::source_ptr& source, unsigned int playtime )
+{
+    m_playedBy.first = source;
+    m_playedBy.second = playtime;
+}
+
+
 bool
 Query::resultSorter( const result_ptr& left, const result_ptr& right )
 {
@@ -216,6 +246,30 @@ Query::resultSorter( const result_ptr& left, const result_ptr& right )
     }
 
     return ls > rs;
+}
+
+
+void
+Query::setCurrentResolver( Tomahawk::Resolver* resolver )
+{
+    m_resolvers << resolver;
+}
+
+
+Tomahawk::Resolver*
+Query::currentResolver() const
+{
+    int x = m_resolvers.count();
+    while ( --x )
+    {
+        QWeakPointer< Resolver > r = m_resolvers.at( x );
+        if ( r.isNull() )
+            continue;
+
+        return r.data();
+    }
+
+    return 0;
 }
 
 

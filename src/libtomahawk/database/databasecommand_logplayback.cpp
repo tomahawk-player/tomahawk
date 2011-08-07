@@ -24,6 +24,7 @@
 #include "database/database.h"
 #include "databaseimpl.h"
 #include "network/servent.h"
+#include "utils/logger.h"
 
 using namespace Tomahawk;
 
@@ -40,12 +41,14 @@ DatabaseCommand_LogPlayback::postCommitHook()
 
     // do not auto resolve this track
     Tomahawk::query_ptr q = Tomahawk::Query::get( m_artist, m_track, QString() );
+    q->setPlayedBy( source(), m_playtime );
 
     if ( m_action == Finished )
     {
         emit trackPlayed( q );
     }
-    else if ( m_action == Started && QDateTime::fromTime_t( playtime() ).secsTo( QDateTime::currentDateTime() ) < 600 ) // if the play time is more than 10 minutes in the past, ignore
+    // if the play time is more than 10 minutes in the past, ignore
+    else if ( m_action == Started && QDateTime::fromTime_t( playtime() ).secsTo( QDateTime::currentDateTime() ) < 600 )
     {
         emit trackPlaying( q );
     }
@@ -78,12 +81,13 @@ DatabaseCommand_LogPlayback::exec( DatabaseImpl* dbi )
 
     query.bindValue( 0, srcid );
 
-    bool isnew;
-    int artid = dbi->artistId( m_artist, isnew );
+    bool autoCreate = true;
+    int artid = dbi->artistId( m_artist, autoCreate );
     if( artid < 1 )
         return;
 
-    int trkid = dbi->trackId( artid, m_track, isnew );
+    autoCreate = true; // artistId overwrites autoCreate (reference)
+    int trkid = dbi->trackId( artid, m_track, autoCreate );
     if( trkid < 1 )
         return;
 

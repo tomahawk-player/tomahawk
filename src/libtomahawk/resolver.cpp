@@ -21,11 +21,17 @@
 #include <QWidget>
 #include <QtUiTools/QUiLoader>
 #include <QMetaProperty>
-#include <QDebug>
 #include <QBuffer>
-#include <qtemporaryfile.h>
 #include <QDir>
 #include <QIcon>
+
+#include "utils/logger.h"
+
+Tomahawk::ExternalResolver::ErrorState
+Tomahawk::ExternalResolver::error() const
+{
+    return NoError;
+}
 
 QVariant
 Tomahawk::ExternalResolver::configMsgFromWidget( QWidget* w )
@@ -54,14 +60,14 @@ Tomahawk::ExternalResolver::addChildProperties( QObject* widget, QVariantMap& m 
 //         qDebug() << "Adding properties for this:" << widget->metaObject()->className();
         // add this widget's properties
         QVariantMap props;
-        for( int i = widget->metaObject()->propertyOffset(); i < widget->metaObject()->propertyCount(); i++ )
+        for( int i = 0; i < widget->metaObject()->propertyCount(); i++ )
         {
             QString prop = widget->metaObject()->property( i ).name();
             QVariant val = widget->property( prop.toLatin1() );
             // clean up for QJson....
             if( val.canConvert< QPixmap >() || val.canConvert< QImage >() || val.canConvert< QIcon >() )
                 continue;
-            props[ prop ] = val;
+            props[ prop ] = val.toString();
 //             qDebug() << QString( "%1: %2" ).arg( prop ).arg( props[ prop ].toString() );
         }
         m[ widget->objectName() ] = props;
@@ -103,7 +109,8 @@ Tomahawk::ExternalResolver::fixDataImagePaths( const QByteArray& data, bool comp
             continue;
         }
         QByteArray data = images[ filename ].toByteArray();
-        qDebug() << "expanding data:" << data << compressed;
+
+//        qDebug() << "expanding data:" << data << compressed;
         data = compressed ? qUncompress( QByteArray::fromBase64( data ) ) : QByteArray::fromBase64( data );
         imgF.write( data );
         imgF.close();

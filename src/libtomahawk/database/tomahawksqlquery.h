@@ -1,5 +1,5 @@
 /* === This file is part of Tomahawk Player - <http://tomahawk-player.org> ===
- * 
+ *
  *   Copyright 2010-2011, Christian Muehlhaeuser <muesli@tomahawk-player.org>
  *
  *   Tomahawk is free software: you can redistribute it and/or modify
@@ -23,6 +23,8 @@
 #include <QSqlQuery>
 #include <QSqlError>
 #include <QTime>
+
+#include "utils/logger.h"
 
 #define TOMAHAWK_QUERY_THRESHOLD 60
 
@@ -57,7 +59,7 @@ public:
 
         int e = t.elapsed();
         if ( e >= TOMAHAWK_QUERY_THRESHOLD )
-            qDebug() << "TomahawkSqlQuery (" << lastQuery() << ") finished in" << t.elapsed() << "ms";
+            tLog() << "TomahawkSqlQuery (" << lastQuery() << ") finished in" << t.elapsed() << "ms";
 
         return ret;
     }
@@ -65,11 +67,10 @@ public:
 private:
     void showError()
     {
-        qDebug()
-                << endl << "*** DATABASE ERROR ***" << endl
-                << this->lastQuery() << endl
-                << "boundValues:" << this->boundValues() << endl
-                << this->lastError().text() << endl
+        tLog() << "\n" << "*** DATABASE ERROR ***" << "\n"
+                << this->lastQuery() << "\n"
+                << "boundValues:" << this->boundValues() << "\n"
+                << this->lastError().text() << "\n"
                 ;
         Q_ASSERT( false );
     }

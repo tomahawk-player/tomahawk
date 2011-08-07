@@ -1,5 +1,5 @@
 /* === This file is part of Tomahawk Player - <http://tomahawk-player.org> ===
- * 
+ *
  *   Copyright 2010-2011, Christian Muehlhaeuser <muesli@tomahawk-player.org>
  *
  *   Tomahawk is free software: you can redistribute it and/or modify
@@ -18,21 +18,23 @@
 
 #include "DynamicControl.h"
 
+#include "utils/logger.h"
+
+
 Tomahawk::DynamicControl::DynamicControl( const QStringList& typeSelectors )
     : m_typeSelectors( typeSelectors )
 {
-
 }
+
 
 Tomahawk::DynamicControl::~DynamicControl()
 {
-
 }
+
 
 Tomahawk::DynamicControl::DynamicControl(const QString& selectedType, const QStringList& typeSelectors, QObject* parent)
     : QObject(parent)
     , m_selectedType( selectedType )
     , m_typeSelectors( typeSelectors )
 {
-
 }

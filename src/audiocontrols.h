@@ -25,6 +25,9 @@
 #include "playlistinterface.h"
 #include "infosystem/infosystem.h"
 
+class QDropEvent;
+class QDragEnterEvent;
+class QDragMoveEvent;
 namespace Ui
 {
     class AudioControls;
@@ -43,11 +46,14 @@ signals:
     void pausePressed();
 
 public slots:
-    void onRepeatModeChanged( PlaylistInterface::RepeatMode mode );
+    void onRepeatModeChanged( Tomahawk::PlaylistInterface::RepeatMode mode );
     void onShuffleModeChanged( bool enabled );
 
 protected:
     void changeEvent( QEvent* e );
+    void dragEnterEvent ( QDragEnterEvent* );
+    void dragMoveEvent ( QDragMoveEvent* );
+    void dropEvent ( QDropEvent* );
 
 private slots:
     void onPlaybackStarted( const Tomahawk::result_ptr& result );
@@ -65,10 +71,14 @@ private slots:
     void onArtistClicked();
     void onAlbumClicked();
     void onTrackClicked();
+    void onLoveButtonClicked( bool );
 
-    void infoSystemInfo( QString caller, Tomahawk::InfoSystem::InfoType type, QVariant input, QVariant output, Tomahawk::InfoSystem::InfoCustomData customData );
+    void infoSystemInfo( Tomahawk::InfoSystem::InfoRequestData requestData, QVariant output );
     void infoSystemFinished( QString target );
 
+    void droppedTracks( QList<Tomahawk::query_ptr> );
+
+    void socialActionsLoaded();
 private:
     Ui::AudioControls *ui;
 
@@ -80,7 +90,7 @@ private:
     QPixmap m_defaultCover;
 
     Tomahawk::result_ptr m_currentTrack;
-    PlaylistInterface::RepeatMode m_repeatMode;
+    Tomahawk::PlaylistInterface::RepeatMode m_repeatMode;
     bool m_shuffled;
 };
 

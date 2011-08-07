@@ -18,10 +18,10 @@
 
 #include "albumproxymodel.h"
 
-#include <QDebug>
 #include <QListView>
 
 #include "query.h"
+#include "utils/logger.h"
 
 
 AlbumProxyModel::AlbumProxyModel( QObject* parent )
@@ -31,14 +31,13 @@ AlbumProxyModel::AlbumProxyModel( QObject* parent )
     , m_repeatMode( PlaylistInterface::NoRepeat )
     , m_shuffled( false )
 {
-    qsrand( QTime( 0, 0, 0 ).secsTo( QTime::currentTime() ) );
-
     setFilterCaseSensitivity( Qt::CaseInsensitive );
     setSortCaseSensitivity( Qt::CaseInsensitive );
     setDynamicSortFilter( true );
 
     setSourceAlbumModel( 0 );
 }
+
 
 void
 AlbumProxyModel::setSourceModel( QAbstractItemModel* sourceModel )
@@ -48,13 +47,14 @@ AlbumProxyModel::setSourceModel( QAbstractItemModel* sourceModel )
     Q_ASSERT( false );
 }
 
+
 void
 AlbumProxyModel::setSourceAlbumModel( AlbumModel* sourceModel )
 {
     m_model = sourceModel;
 
-    connect( m_model, SIGNAL( trackCountChanged( unsigned int ) ),
-                      SIGNAL( sourceTrackCountChanged( unsigned int ) ) );
+    if ( m_model && m_model->metaObject()->indexOfSignal( "trackCountChanged(uint)" ) > -1 )
+        connect( m_model, SIGNAL( trackCountChanged( unsigned int ) ), SIGNAL( sourceTrackCountChanged( unsigned int ) ) );
 
     QSortFilterProxyModel::setSourceModel( sourceModel );
 }

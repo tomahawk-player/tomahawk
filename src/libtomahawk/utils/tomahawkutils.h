@@ -20,11 +20,11 @@
 #define TOMAHAWKUTILS_H
 
 #include "dllmacro.h"
+
 #include <QObject>
 #include <QThread>
 #include <QNetworkProxy>
 #include <QStringList>
-#include <QDir>
 
 #define RESPATH ":/data/"
 
@@ -33,8 +33,8 @@ class QDir;
 class QDateTime;
 class QString;
 class QPixmap;
+class QLayout;
 class QNetworkAccessManager;
-class QNetworkProxy;
 
 namespace TomahawkUtils
 {
@@ -60,6 +60,8 @@ namespace TomahawkUtils
         QNetworkProxy m_proxy;
     };
 
+    DLLEXPORT QString appFriendlyVersion();
+
     DLLEXPORT QDir appConfigDir();
     DLLEXPORT QDir appDataDir();
     DLLEXPORT QDir appLogDir();
@@ -72,11 +74,16 @@ namespace TomahawkUtils
     DLLEXPORT QColor alphaBlend( const QColor& colorFrom, const QColor& colorTo, float opacity );
     DLLEXPORT QPixmap createDragPixmap( int itemCount = 1 );
 
+    DLLEXPORT void unmarginLayout( QLayout* layout );
+
     DLLEXPORT NetworkProxyFactory* proxyFactory();
     DLLEXPORT QNetworkAccessManager* nam();
 
     DLLEXPORT void setProxyFactory( TomahawkUtils::NetworkProxyFactory* factory );
     DLLEXPORT void setNam( QNetworkAccessManager* nam );
+
+    /// Platform-specific bringing tomahawk mainwindow to front, b/c qt's activate() and such don't seem to work well enough for us
+    DLLEXPORT void bringToFront();
 }
 
 #endif // TOMAHAWKUTILS_H

@@ -1,6 +1,9 @@
 #include "tomahawkoauthtwitter.h"
+
 #include <QInputDialog>
-#include <QDebug>
+
+#include "utils/logger.h"
+
 
 TomahawkOAuthTwitter::TomahawkOAuthTwitter( QNetworkAccessManager *nam, QObject* parent )
     : OAuthTwitter( QByteArray( "C4v4Wfa21rfIDck4HMR3A" ), QByteArray( "zXSjU6bjrvg6UVMJX4JufqHyjj3iextY14SR9uBEAo" ), parent )
@@ -16,7 +19,7 @@ TomahawkOAuthTwitter::authorizationWidget()
     int i = QInputDialog::getInt(0, tr( "Twitter PIN" ), tr( "After authenticating on Twitter's web site,\nenter the displayed PIN number here:" ), 0, 0, 2147483647, 1, &ok);
     if (ok)
         return i;
-    
+
     return 0;
 }
 

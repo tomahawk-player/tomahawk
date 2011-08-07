@@ -29,6 +29,7 @@
 #include <QtCore/QUrl>
 #include <QtCore/QVariant>
 #include <QtCore/QThread>
+#include <QtCore/QStringList>
 
 #include "dllmacro.h"
 
@@ -65,47 +66,62 @@ enum InfoType { // as items are saved in cache, mark them here to not change the
     InfoTrackTempo = 20,
     InfoTrackLoudness = 21,
 
-    InfoArtistID = 22,
-    InfoArtistName = 23,
-    InfoArtistBiography = 24,
-    InfoArtistBlog = 25,
-    InfoArtistFamiliarity = 26,
-    InfoArtistHotttness = 27,
+    InfoArtistID = 25,
+    InfoArtistName = 26,
+    InfoArtistBiography = 27,
     InfoArtistImages = 28, //cached -- do not change
-    InfoArtistNews = 29,
-    InfoArtistProfile = 30,
-    InfoArtistReviews = 31,
-    InfoArtistSongs = 32,
-    InfoArtistSimilars = 33,
-    InfoArtistTerms = 34,
-    InfoArtistLinks = 35,
-    InfoArtistVideos = 36,
+    InfoArtistBlog = 29,
+    InfoArtistFamiliarity = 30,
+    InfoArtistHotttness = 31,
+    InfoArtistSongs = 32, //cached -- do not change
+    InfoArtistSimilars = 33, //cached -- do not change
+    InfoArtistNews = 34,
+    InfoArtistProfile = 35,
+    InfoArtistReviews = 36,
+    InfoArtistTerms = 37,
+    InfoArtistLinks = 38,
+    InfoArtistVideos = 39,
+    InfoArtistReleases = 40,
 
-    InfoAlbumID = 37,
-    InfoAlbumName = 38,
-    InfoAlbumArtist = 39,
-    InfoAlbumDate = 40,
-    InfoAlbumGenre = 41,
-    InfoAlbumComposer = 42,
+    InfoAlbumID = 42,
     InfoAlbumCoverArt = 43, //cached -- do not change
+    InfoAlbumName = 44,
+    InfoAlbumArtist = 45,
+    InfoAlbumDate = 46,
+    InfoAlbumGenre = 47,
+    InfoAlbumComposer = 48,
+    InfoAlbumSongs = 49,
 
-    InfoMiscTopHotttness = 44,
-    InfoMiscTopTerms = 45,
+    InfoMiscTopHotttness = 60,
+    InfoMiscTopTerms = 61,
 
-    InfoSubmitNowPlaying = 46,
-    InfoSubmitScrobble = 47,
+    InfoSubmitNowPlaying = 70,
+    InfoSubmitScrobble = 71,
 
-    InfoNowPlaying = 48,
-    InfoNowPaused = 49,
-    InfoNowResumed = 50,
-    InfoNowStopped = 51,
+    InfoNowPlaying = 80,
+    InfoNowPaused = 81,
+    InfoNowResumed = 82,
+    InfoNowStopped = 83,
 
-    InfoNoInfo = 52
+    
+    InfoLove = 90,
+    InfoUnLove = 91,
+
+    InfoNotifyUser = 100,
+
+    InfoNoInfo = 101 //WARNING: *ALWAYS* keep this last!
 };
 
-typedef QMap< InfoType, QVariant > InfoMap;
+struct InfoRequestData {
+    QString caller;
+    Tomahawk::InfoSystem::InfoType type;
+    QVariant input;
+    QVariantMap customData;
+};
+
+typedef QMap< InfoType, QVariant > InfoTypeMap;
+typedef QMap< InfoType, uint > InfoTimeoutMap;
 typedef QMap< QString, QMap< QString, QString > > InfoGenericMap;
-typedef QHash< QString, QVariant > InfoCustomData;
 typedef QHash< QString, QString > InfoCriteriaHash;
 
 class DLLEXPORT InfoPlugin : public QObject
@@ -121,18 +137,18 @@ public:
     QSet< InfoType > supportedPushTypes() const { return m_supportedPushTypes; }
 
 signals:
-    void getCachedInfo( Tomahawk::InfoSystem::InfoCriteriaHash criteria, qint64 newMaxAge, QString caller, Tomahawk::InfoSystem::InfoType type, QVariant input, Tomahawk::InfoSystem::InfoCustomData customData );
-    void updateCache( Tomahawk::InfoSystem::InfoCriteriaHash criteria, qint64, Tomahawk::InfoSystem::InfoType type, QVariant output );
-    void info( QString caller, Tomahawk::InfoSystem::InfoType type, QVariant input, QVariant output, Tomahawk::InfoSystem::InfoCustomData customData );
-    void finished( QString, Tomahawk::InfoSystem::InfoType );
+    void getCachedInfo( uint requestId, Tomahawk::InfoSystem::InfoCriteriaHash criteria, qint64 newMaxAge, Tomahawk::InfoSystem::InfoRequestData requestData );
+    void info( uint requestId, Tomahawk::InfoSystem::InfoRequestData requestData, QVariant output );
+
+    void updateCache( Tomahawk::InfoSystem::InfoCriteriaHash criteria, qint64 maxAge, Tomahawk::InfoSystem::InfoType type, QVariant output );
 
 protected slots:
-    virtual void getInfo( const QString caller, const Tomahawk::InfoSystem::InfoType type, const QVariant data, const Tomahawk::InfoSystem::InfoCustomData customData ) = 0;
-    virtual void pushInfo( const QString caller, const Tomahawk::InfoSystem::InfoType type, const QVariant data ) = 0;
-    virtual void notInCacheSlot( const Tomahawk::InfoSystem::InfoCriteriaHash criteria, const QString caller, const Tomahawk::InfoSystem::InfoType type, const QVariant input, const Tomahawk::InfoSystem::InfoCustomData customData ) = 0;
+    virtual void getInfo( uint requestId, Tomahawk::InfoSystem::InfoRequestData requestData ) = 0;
+    virtual void pushInfo( QString caller, Tomahawk::InfoSystem::InfoType type, QVariant data ) = 0;
+    virtual void notInCacheSlot( uint requestId, Tomahawk::InfoSystem::InfoCriteriaHash criteria, Tomahawk::InfoSystem::InfoRequestData requestData ) = 0;
 
     virtual void namChangedSlot( QNetworkAccessManager *nam ) = 0;
-    
+
 protected:
     InfoType m_type;
     QSet< InfoType > m_supportedGetTypes;
@@ -154,23 +170,20 @@ public:
     InfoSystem( QObject *parent );
     ~InfoSystem();
 
-    void getInfo( const QString &caller, const InfoType type, const QVariant &input, InfoCustomData customData );
-    void getInfo( const QString &caller, const InfoMap &input, InfoCustomData customData );
+    void getInfo( const InfoRequestData &requestData, uint timeoutMillis = 0 );
+    //WARNING: if changing timeoutMillis above, also change in below function in .cpp file
+    void getInfo( const QString &caller, const InfoTypeMap &inputMap, const QVariantMap &customData, const InfoTimeoutMap &timeoutMap = InfoTimeoutMap() );
     void pushInfo( const QString &caller, const InfoType type, const QVariant &input );
-    void pushInfo( const QString &caller, const InfoMap &input );
+    void pushInfo( const QString &caller, const InfoTypeMap &input );
 
 signals:
-    void info( QString caller, Tomahawk::InfoSystem::InfoType, QVariant input, QVariant output, Tomahawk::InfoSystem::InfoCustomData customData );
+    void info( Tomahawk::InfoSystem::InfoRequestData requestData, QVariant output );
     void finished( QString target );
 
 public slots:
-    void infoSlot( const QString target, const Tomahawk::InfoSystem::InfoType type, const QVariant input, const QVariant output, const Tomahawk::InfoSystem::InfoCustomData customData );
-
     void newNam() const;
 
 private:
-    QHash< QString, QHash< InfoType, int > > m_dataTracker;
-
     QWeakPointer< InfoSystemCache > m_cache;
     QWeakPointer< InfoSystemWorker > m_worker;
     QThread* m_infoSystemCacheThreadController;
@@ -186,10 +199,13 @@ private:
 inline uint qHash( Tomahawk::InfoSystem::InfoCriteriaHash hash )
 {
     QCryptographicHash md5( QCryptographicHash::Md5 );
-    foreach( QString key, hash.keys()  )
+    QStringList keys = hash.keys();
+    keys.sort();
+    foreach( QString key, keys )
+    {
         md5.addData( key.toUtf8() );
-    foreach( QString value, hash.values()  )
-        md5.addData( value.toUtf8() );
+        md5.addData( hash[key].toUtf8() );
+    }
 
     QString hexData = md5.result();
 
@@ -201,8 +217,8 @@ inline uint qHash( Tomahawk::InfoSystem::InfoCriteriaHash hash )
     return returnval;
 }
 
+Q_DECLARE_METATYPE( Tomahawk::InfoSystem::InfoRequestData );
 Q_DECLARE_METATYPE( Tomahawk::InfoSystem::InfoGenericMap );
-Q_DECLARE_METATYPE( Tomahawk::InfoSystem::InfoCustomData );
 Q_DECLARE_METATYPE( Tomahawk::InfoSystem::InfoCriteriaHash );
 Q_DECLARE_METATYPE( QWeakPointer< Tomahawk::InfoSystem::InfoSystemCache > );
 

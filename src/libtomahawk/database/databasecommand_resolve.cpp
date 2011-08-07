@@ -20,6 +20,7 @@
 
 #include "album.h"
 #include "sourcelist.h"
+#include "utils/logger.h"
 
 #define MINSCORE 0.5
 

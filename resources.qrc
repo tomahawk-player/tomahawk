@@ -1,14 +1,14 @@
 <RCC>
   <qresource>
-    <file>./data/images/add-friend-button-pressed.png</file>
-    <file>./data/images/add-friend-button-rest.png</file>
     <file>./data/images/avatar-dude-plus.png</file>
     <file>./data/images/avatar-dude.png</file>
     <file>./data/images/back-pressed.png</file>
     <file>./data/images/back-rest.png</file>
     <file>./data/images/cover-shadow.png</file>
-    <file>./data/images/magnifying-glass.png</file>
+    <file>./data/images/loved.png</file>
+    <file>./data/images/not-loved.png</file>
     <file>./data/images/no-album-art-placeholder.png</file>
+    <file>./data/images/no-artist-image-placeholder.png</file>
     <file>./data/images/now-playing-panel.png</file>
     <file>./data/images/now-playing-speaker.png</file>
     <file>./data/images/pause-pressed.png</file>
@@ -25,7 +25,6 @@
     <file>./data/images/repeat-off-pressed.png</file>
     <file>./data/images/repeat-off-rest.png</file>
     <file>./data/images/search-box-dismiss-x.png</file>
-    <file>./data/images/search-box.png</file>
     <file>./data/images/seek-and-volume-knob-pressed.png</file>
     <file>./data/images/seek-and-volume-knob-rest.png</file>
     <file>./data/images/seek-slider-bkg.png</file>
@@ -36,14 +35,6 @@
     <file>./data/images/shuffle-on-rest.png</file>
     <file>./data/images/skip-pressed.png</file>
     <file>./data/images/skip-rest.png</file>
-    <file>./data/images/source-info.png</file>
-    <file>./data/images/source-off-pressed.png</file>
-    <file>./data/images/source-off-rest.png</file>
-    <file>./data/images/source-on-pressed.png</file>
-    <file>./data/images/source-on-rest.png</file>
-    <file>./data/images/status-alert-icon.png</file>
-    <file>./data/images/status-bar-bkg.png</file>
-    <file>./data/images/status-dismiss-x.png</file>
     <file>./data/images/user-avatar.png</file>
     <file>./data/images/view-toggle-active-centre.png</file>
     <file>./data/images/view-toggle-active-left.png</file>
@@ -72,6 +63,7 @@
     <file>./data/images/volume-slider-level.png</file>
     <file>./data/images/echonest_logo.png</file>
     <file>./data/images/loading-animation.gif</file>
+    <file>./data/images/info.png</file>
     <file>./data/images/home.png</file>
     <file>./data/images/back.png</file>
     <file>./data/images/forward.png</file>
@@ -88,6 +80,10 @@
     <file>./data/images/music-settings.png</file>
     <file>./data/images/resolvers-settings.png</file>
     <file>./data/images/lastfm-settings.png</file>
+    <file>./data/images/automatic-playlist.png</file>
+    <file>./data/images/station.png</file>
+    <file>./data/images/new-additions.png</file>
+    <file>./data/images/loved_playlist.png</file>
     <file>./data/stylesheets/topbar-radiobuttons.css</file>
     <file>./data/icons/tomahawk-icon-16x16.png</file>
     <file>./data/icons/tomahawk-icon-32x32.png</file>
@@ -103,5 +99,8 @@
     <file>./data/www/tomahawk_banner_small.png</file>
     <file>./data/sql/dbmigrate-22_to_23.sql</file>
     <file>./data/sql/dbmigrate-23_to_24.sql</file>
+    <file>./data/sql/dbmigrate-24_to_25.sql</file>
+    <file>./data/sql/dbmigrate-25_to_26.sql</file>
+    <file>./data/js/tomahawk.js</file>
   </qresource>
 </RCC>

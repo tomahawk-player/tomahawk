@@ -33,6 +33,8 @@
 #include "source.h"
 #include "sourcelist.h"
 
+#include "utils/logger.h"
+
 using namespace Tomahawk;
 
 
@@ -114,6 +116,7 @@ Playlist::Playlist( const source_ptr& src,
     , m_lastmodified( lastmod )
     , m_createdOn( createdOn )
     , m_shared( shared )
+    , m_currentItem( 0 )
     , m_busy( false )
 {
 //    qDebug() << Q_FUNC_INFO << "1";
@@ -137,10 +140,11 @@ Playlist::Playlist( const source_ptr& author,
     , m_lastmodified( 0 )
     , m_createdOn( 0 ) // will be set by db command
     , m_shared( shared )
-    , m_busy( false )
+    , m_currentItem ( 0 )
     , m_initEntries( entries )
+    , m_busy( false )
 {
-    qDebug() << Q_FUNC_INFO << "2";
+//    qDebug() << Q_FUNC_INFO << "2";
     init();
 }
 
@@ -245,7 +249,6 @@ Playlist::rename( const QString& title )
 void
 Playlist::reportCreated( const playlist_ptr& self )
 {
-    qDebug() << Q_FUNC_INFO;
     Q_ASSERT( self.data() == this );
     m_source->collection()->addPlaylist( self );
 }
@@ -254,7 +257,6 @@ Playlist::reportCreated( const playlist_ptr& self )
 void
 Playlist::reportDeleted( const Tomahawk::playlist_ptr& self )
 {
-    qDebug() << Q_FUNC_INFO;
     Q_ASSERT( self.data() == this );
     m_source->collection()->deletePlaylist( self );
 
@@ -265,7 +267,7 @@ Playlist::reportDeleted( const Tomahawk::playlist_ptr& self )
 void
 Playlist::loadRevision( const QString& rev )
 {
-    qDebug() << Q_FUNC_INFO << currentrevision() << rev << m_title;
+//    qDebug() << Q_FUNC_INFO << currentrevision() << rev << m_title;
 
     setBusy( true );
     DatabaseCommand_LoadPlaylistEntries* cmd =
@@ -294,7 +296,12 @@ Playlist::createNewRevision( const QString& newrev, const QString& oldrev, const
 {
     qDebug() << Q_FUNC_INFO << newrev << oldrev << entries.count();
 
-    Q_ASSERT( !busy() );
+    if ( busy() )
+    {
+        m_revisionQueue.enqueue( RevisionQueueItem( newrev, oldrev, entries, oldrev == currentrevision() ) );
+        return;
+    }
+
     if ( newrev != oldrev )
         setBusy( true );
 
@@ -368,6 +375,8 @@ Playlist::setRevision( const QString& rev,
     }
     else
         emit revisionLoaded( pr );
+
+    checkRevisionQueue();
 }
 
 
@@ -378,7 +387,7 @@ Playlist::setNewRevision( const QString& rev,
                           bool is_newest_rev,
                           const QMap< QString, Tomahawk::plentry_ptr >& addedmap )
 {
-    qDebug() << Q_FUNC_INFO << rev << is_newest_rev << m_title << addedmap.count() << neworderedguids.count() << oldorderedguids.count();
+//    qDebug() << Q_FUNC_INFO << rev << is_newest_rev << m_title << addedmap.count() << neworderedguids.count() << oldorderedguids.count();
 
     // build up correctly ordered new list of plentry_ptrs from
     // existing ones, and the ones that have been added
@@ -410,8 +419,6 @@ Playlist::setNewRevision( const QString& rev,
             Q_ASSERT( false ); // XXX
         }
     }
-
-    //qDebug() << Q_FUNC_INFO << rev << entries.length() << applied;
 
     PlaylistRevision pr;
     pr.oldrevisionguid = m_currentrevision;
@@ -568,4 +575,18 @@ Playlist::setBusy( bool b )
 {
     m_busy = b;
     emit changed();
+}
+
+void
+Playlist::checkRevisionQueue()
+{
+    if ( !m_revisionQueue.isEmpty() )
+    {
+        RevisionQueueItem item = m_revisionQueue.dequeue();
+        if ( item.oldRev != currentrevision() && item.applyToTip ) // this was applied to the then-latest, but the already-running operation changed it so it's out of date now. fix it
+        {
+            item.oldRev = currentrevision();
+        }
+        createNewRevision( item.newRev, item.oldRev, item.entries );
+    }
 }

@@ -18,13 +18,6 @@
 
 #include "sourcetreeview.h"
 
-#include "playlist.h"
-#include "viewmanager.h"
-#include "sourcesproxymodel.h"
-#include "sourcelist.h"
-#include "sourcetree/items/playlistitems.h"
-#include "sourcetree/items/collectionitem.h"
-
 #include <QAction>
 #include <QApplication>
 #include <QContextMenuEvent>
@@ -33,12 +26,25 @@
 #include <QPainter>
 #include <QStyledItemDelegate>
 #include <QSize>
-#include <globalactionmanager.h>
 #include <QFileDialog>
+
+#include "playlist.h"
+#include "viewmanager.h"
+#include "sourcesproxymodel.h"
+#include "sourcelist.h"
+#include "sourcetree/items/playlistitems.h"
+#include "sourcetree/items/collectionitem.h"
+#include "audio/audioengine.h"
+#include "sourceplaylistinterface.h"
+#include "tomahawksettings.h"
+#include <globalactionmanager.h>
+
+#include "utils/logger.h"
 
 using namespace Tomahawk;
 
 #define TREEVIEW_INDENT_ADD -7
+
 
 class SourceDelegate : public QStyledItemDelegate
 {
@@ -86,6 +92,10 @@ SourceTreeView::SourceTreeView( QWidget* parent )
     setSortingEnabled( true );
     sortByColumn( 0, Qt::AscendingOrder );
 
+#ifdef Q_OS_MAC
+    setVerticalScrollMode( QTreeView::ScrollPerPixel );
+#endif
+
     // TODO animation conflicts with the expanding-playlists-when-collection-is-null
     // so investigate
 //     setAnimated( true );
@@ -104,12 +114,11 @@ SourceTreeView::SourceTreeView( QWidget* parent )
     header()->setStretchLastSection( false );
     header()->setResizeMode( 0, QHeaderView::Stretch );
 
-    connect( m_model, SIGNAL( clicked( QModelIndex ) ), SIGNAL( clicked( QModelIndex ) ) );
     connect( this, SIGNAL( clicked( QModelIndex ) ), SLOT( onItemActivated( QModelIndex ) ) );
     connect( this, SIGNAL( expanded( QModelIndex ) ), this, SLOT( onItemExpanded( QModelIndex ) ) );
 //     connect( selectionModel(), SIGNAL( selectionChanged( QItemSelection, QItemSelection ) ), SLOT( onSelectionChanged() ) );
 
-    hideOfflineSources();
+    showOfflineSources( TomahawkSettings::instance()->showOfflineSources() );
 
     // Light-blue sourcetree on osx
 #ifdef Q_WS_MAC
@@ -125,6 +134,7 @@ SourceTreeView::setupMenus()
 {
     m_playlistMenu.clear();
     m_roPlaylistMenu.clear();
+    m_latchMenu.clear();
 
     bool readonly = true;
     SourcesModel::RowType type = ( SourcesModel::RowType )model()->data( m_contextMenuIndex, SourcesModel::SourceTreeItemTypeRole ).toInt();
@@ -136,6 +146,29 @@ SourceTreeView::setupMenus()
         if ( !playlist.isNull() )
         {
             readonly = !playlist->author()->isLocal();
+        }
+    }
+
+    m_latchOnAction = m_latchMenu.addAction( tr( "&Listen Along" ) );
+
+    if ( type == SourcesModel::Collection )
+    {
+        CollectionItem* item = itemFromIndex< CollectionItem >( m_contextMenuIndex );
+        source_ptr source = item->source();
+        if ( !source.isNull() )
+        {
+            PlaylistInterface* pi = AudioEngine::instance()->playlist();
+            if ( pi && dynamic_cast< SourcePlaylistInterface* >( pi ) )
+            {
+                SourcePlaylistInterface* sourcepi = dynamic_cast< SourcePlaylistInterface* >( pi );
+                if ( !sourcepi->source().isNull() && sourcepi->source()->id() == source->id() )
+                {
+                    m_latchOnAction->setText( tr( "&Catch Up" ) );
+                    m_latchMenu.addSeparator();
+                    m_latchOffAction = m_latchMenu.addAction( tr( "&Stop Listening Along" ) );
+                    connect( m_latchOffAction,       SIGNAL( triggered() ), SLOT( latchOff() ) );
+                }
+            }
         }
     }
 
@@ -168,21 +201,15 @@ SourceTreeView::setupMenus()
     connect( m_renamePlaylistAction, SIGNAL( triggered() ), SLOT( renamePlaylist() ) );
     connect( m_deletePlaylistAction, SIGNAL( triggered() ), SLOT( deletePlaylist() ) );
     connect( m_copyPlaylistAction,   SIGNAL( triggered() ), SLOT( copyPlaylistLink() ) );
-    connect( m_addToLocalAction,   SIGNAL( triggered() ), SLOT( addToLocal() ) );
+    connect( m_addToLocalAction,     SIGNAL( triggered() ), SLOT( addToLocal() ) );
+    connect( m_latchOnAction,        SIGNAL( triggered() ), SLOT( latchOn() ) );
 }
 
 
 void
-SourceTreeView::showOfflineSources()
+SourceTreeView::showOfflineSources( bool offlineSourcesShown )
 {
-    m_proxyModel->showOfflineSources();
-}
-
-
-void
-SourceTreeView::hideOfflineSources()
-{
-    m_proxyModel->hideOfflineSources();
+    m_proxyModel->showOfflineSources( offlineSourcesShown );
 }
 
 
@@ -250,6 +277,7 @@ SourceTreeView::deletePlaylist( const QModelIndex& idxIn )
     }
 }
 
+
 void
 SourceTreeView::copyPlaylistLink()
 {
@@ -273,7 +301,9 @@ SourceTreeView::copyPlaylistLink()
     }
 }
 
-void SourceTreeView::addToLocal()
+
+void
+SourceTreeView::addToLocal()
 {
     QModelIndex idx = m_contextMenuIndex;
     if ( !idx.isValid() )
@@ -289,7 +319,8 @@ void SourceTreeView::addToLocal()
         // this way we cheaply regenerate the needed controls
         QString link = GlobalActionManager::instance()->copyPlaylistToClipboard( playlist );
         dynplaylist_ptr p = GlobalActionManager::instance()->loadDynamicPlaylist( link, type == SourcesModel::Station );
-    } else if ( type == SourcesModel::StaticPlaylist )
+    }
+    else if ( type == SourcesModel::StaticPlaylist )
     {
         PlaylistItem* item = itemFromIndex< PlaylistItem >( m_contextMenuIndex );
         playlist_ptr playlist = item->playlist();
@@ -301,6 +332,56 @@ void SourceTreeView::addToLocal()
 
         playlist_ptr newpl = Playlist::create( SourceList::instance()->getLocal(), uuid(), playlist->title(), playlist->info(), playlist->creator(), playlist->shared(), queries );
     }
+}
+
+
+void
+SourceTreeView::latchOn()
+{
+    qDebug() << Q_FUNC_INFO;
+    QModelIndex idx = m_contextMenuIndex;
+    if ( !idx.isValid() )
+        return;
+
+    SourcesModel::RowType type = ( SourcesModel::RowType )model()->data( m_contextMenuIndex, SourcesModel::SourceTreeItemTypeRole ).toInt();
+    if( type != SourcesModel::Collection )
+        return;
+
+    CollectionItem* item = itemFromIndex< CollectionItem >( m_contextMenuIndex );
+    source_ptr source = item->source();
+    PlaylistInterface* pi = AudioEngine::instance()->playlist();
+
+    if ( pi && dynamic_cast< SourcePlaylistInterface* >( pi ) )
+    {
+        SourcePlaylistInterface* sourcepi = dynamic_cast< SourcePlaylistInterface* >( pi );
+        if ( !sourcepi->source().isNull() && sourcepi->source()->id() == source->id() )
+        {
+            //it's a catch-up -- if they're trying to catch-up in the same track, don't do anything
+            //so that you don't repeat the track and/or cause the retry timer to fire
+            if ( !AudioEngine::instance()->currentTrack().isNull() && !sourcepi->hasNextItem() &&
+                  AudioEngine::instance()->currentTrack()->id() == sourcepi->currentItem()->id() )
+                    return;
+        }
+    }
+
+    AudioEngine::instance()->playItem( source->getPlaylistInterface().data(), source->getPlaylistInterface()->nextItem() );
+}
+
+
+void
+SourceTreeView::latchOff()
+{
+    qDebug() << Q_FUNC_INFO;
+    QModelIndex idx = m_contextMenuIndex;
+    if ( !idx.isValid() )
+        return;
+
+    SourcesModel::RowType type = ( SourcesModel::RowType )model()->data( m_contextMenuIndex, SourcesModel::SourceTreeItemTypeRole ).toInt();
+    if( type != SourcesModel::Collection )
+        return;
+
+    AudioEngine::instance()->stop();
+    AudioEngine::instance()->setPlaylist( 0 );
 }
 
 
@@ -335,6 +416,12 @@ SourceTreeView::onCustomContextMenu( const QPoint& pos )
         else
             m_roPlaylistMenu.exec( mapToGlobal( pos ) );
     }
+    else if ( model()->data( m_contextMenuIndex, SourcesModel::SourceTreeItemTypeRole ) == SourcesModel::Collection )
+    {
+        CollectionItem* item = itemFromIndex< CollectionItem >( m_contextMenuIndex );
+        if ( !item->source().isNull() && !item->source()->isLocal() )
+            m_latchMenu.exec( mapToGlobal( pos ) );
+    }
 }
 
 
@@ -344,11 +431,11 @@ SourceTreeView::dragEnterEvent( QDragEnterEvent* event )
     qDebug() << Q_FUNC_INFO;
     QTreeView::dragEnterEvent( event );
 
-    if ( event->mimeData()->hasFormat( "application/tomahawk.query.list" )
-      || event->mimeData()->hasFormat( "application/tomahawk.result.list" ) )
+    if ( GlobalActionManager::instance()->acceptsMimeData( event->mimeData() ) )
     {
         m_dragging = true;
         m_dropRect = QRect();
+        m_dropIndex = QPersistentModelIndex();
 
         qDebug() << "Accepting Drag Event";
         event->setDropAction( Qt::CopyAction );
@@ -358,17 +445,29 @@ SourceTreeView::dragEnterEvent( QDragEnterEvent* event )
 
 
 void
+SourceTreeView::dragLeaveEvent( QDragLeaveEvent* event )
+{
+    QTreeView::dragLeaveEvent( event );
+
+    m_dragging = false;
+    setDirtyRegion( m_dropRect );
+
+    m_dropIndex = QPersistentModelIndex();
+}
+
+
+void
 SourceTreeView::dragMoveEvent( QDragMoveEvent* event )
 {
     bool accept = false;
     QTreeView::dragMoveEvent( event );
 
-    if ( event->mimeData()->hasFormat( "application/tomahawk.query.list" )
-      || event->mimeData()->hasFormat( "application/tomahawk.result.list" ) )
+    if ( GlobalActionManager::instance()->acceptsMimeData( event->mimeData() ) )
     {
         setDirtyRegion( m_dropRect );
         const QPoint pos = event->pos();
         const QModelIndex index = indexAt( pos );
+        m_dropIndex = QPersistentModelIndex( index );
 
         if ( index.isValid() )
         {
@@ -402,7 +501,9 @@ SourceTreeView::dropEvent( QDropEvent* event )
 {
     QTreeView::dropEvent( event );
     m_dragging = false;
+    m_dropIndex = QPersistentModelIndex();
 }
+
 
 void
 SourceTreeView::keyPressEvent( QKeyEvent *event )
@@ -424,14 +525,14 @@ SourceTreeView::keyPressEvent( QKeyEvent *event )
     }
 }
 
+
 void
 SourceTreeView::paintEvent( QPaintEvent* event )
 {
     if ( m_dragging && !m_dropRect.isEmpty() )
     {
         QPainter painter( viewport() );
-        const QModelIndex index = indexAt( m_dropRect.topLeft() );
-        const QRect itemRect = visualRect( index );
+        const QRect itemRect = visualRect( m_dropIndex );
 
         QStyleOptionViewItemV4 opt;
         opt.initFrom( this );
@@ -554,10 +655,11 @@ SourceDelegate::paint( QPainter* painter, const QStyleOptionViewItem& option, co
         if ( desc.isEmpty() )
             desc = tr( "Online" );
 
-        textRect = option.rect.adjusted( iconRect.width() + 8, painter->fontMetrics().height() + 10, -figWidth - 24, 0 );
+        textRect = option.rect.adjusted( iconRect.width() + 8, painter->fontMetrics().height() + 6, -figWidth - 24, -4 );
         painter->setFont( normal );
         text = painter->fontMetrics().elidedText( desc, Qt::ElideRight, textRect.width() );
-        painter->drawText( textRect, text );
+        QTextOption to( Qt::AlignBottom );
+        painter->drawText( textRect, text, to );
 
         if ( status )
         {

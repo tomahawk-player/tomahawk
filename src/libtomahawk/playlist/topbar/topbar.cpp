@@ -24,6 +24,7 @@
 #include <QFile>
 
 #include "utils/tomahawkutils.h"
+#include "utils/logger.h"
 
 #define MAXDUDES 3
 #define DUDEWIDTH 10
@@ -50,6 +51,7 @@ TopBar::TopBar( QWidget* parent )
 #ifdef Q_WS_MAC
     ui->filterEdit->setAttribute( Qt::WA_MacShowFocusRect, 0 );
 #endif
+    ui->filterEdit->setInactiveText( tr( "Filter" ) );
 
     // initialise dudes
     for( int i = 0; i < MAXDUDES; ++i )
@@ -73,6 +75,9 @@ TopBar::TopBar( QWidget* parent )
     ui->radioCloud->setFocusPolicy( Qt::NoFocus );
 
     ui->radioCloud->hide();
+
+    ui->radioNormal->setToolTip( tr( "Artist View" ) );
+    ui->radioDetailed->setToolTip( tr("Flat View" ) );
 
     connect( ui->radioNormal, SIGNAL( clicked() ), SIGNAL( artistMode() ) );
     connect( ui->radioDetailed, SIGNAL( clicked() ), SIGNAL( flatMode() ) );
@@ -106,8 +111,8 @@ TopBar::TopBar( QWidget* parent )
     connect( ViewManager::instance(), SIGNAL( filterAvailable( bool ) ),
                                         SLOT( setFilterVisible( bool ) ) );
 
-    connect( ViewManager::instance(), SIGNAL( modeChanged( PlaylistInterface::ViewMode ) ),
-                                        SLOT( onModeChanged( PlaylistInterface::ViewMode ) ) );
+    connect( ViewManager::instance(), SIGNAL( modeChanged( Tomahawk::PlaylistInterface::ViewMode ) ),
+                                        SLOT( onModeChanged( Tomahawk::PlaylistInterface::ViewMode ) ) );
 }
 
 
@@ -290,20 +295,20 @@ TopBar::setFilter( const QString& filter )
 
 
 void
-TopBar::onModeChanged( PlaylistInterface::ViewMode mode )
+TopBar::onModeChanged( Tomahawk::PlaylistInterface::ViewMode mode )
 {
     qDebug() << Q_FUNC_INFO << mode;
     switch ( mode )
     {
-        case PlaylistInterface::Flat:
+        case Tomahawk::PlaylistInterface::Flat:
             onFlatMode();
             break;
 
-        case PlaylistInterface::Tree:
+        case Tomahawk::PlaylistInterface::Tree:
             onArtistMode();
             break;
 
-        case PlaylistInterface::Album:
+        case Tomahawk::PlaylistInterface::Album:
             onAlbumMode();
             break;
 

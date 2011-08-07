@@ -19,24 +19,29 @@
 #include "treeitemdelegate.h"
 
 #include <QApplication>
-#include <QDebug>
 #include <QPainter>
 #include <QAbstractItemView>
+#include <QHeaderView>
 
 #include "query.h"
 #include "result.h"
 
 #include "utils/tomahawkutils.h"
+#include "utils/logger.h"
 
 #include "treemodelitem.h"
 #include "treeproxymodel.h"
+#include "artistview.h"
 
 
-TreeItemDelegate::TreeItemDelegate( QAbstractItemView* parent, TreeProxyModel* proxy )
+TreeItemDelegate::TreeItemDelegate( ArtistView* parent, TreeProxyModel* proxy )
     : QStyledItemDelegate( (QObject*)parent )
     , m_view( parent )
     , m_model( proxy )
 {
+    m_nowPlayingIcon = QPixmap( RESPATH "images/now-playing-speaker.png" );
+    m_defaultAlbumCover = QPixmap( RESPATH "images/no-album-art-placeholder.png" );
+    m_defaultArtistImage = QPixmap( RESPATH "images/no-artist-image-placeholder.png" );
 }
 
 
@@ -74,8 +79,35 @@ TreeItemDelegate::paint( QPainter* painter, const QStyleOptionViewItem& option, 
         {
             QStyleOptionViewItemV4 o( *vioption );
             o.palette.setColor( QPalette::Text, textColor );
-            return QStyledItemDelegate::paint( painter, o, index );
+
+            if ( item->isPlaying() )
+            {
+                o.palette.setColor( QPalette::Highlight, o.palette.color( QPalette::Mid ) );
+                o.palette.setColor( QPalette::Text, o.palette.color( QPalette::HighlightedText ) );
+                o.state |= QStyle::State_Selected;
+            }
+
+            qApp->style()->drawControl( QStyle::CE_ItemViewItem, &o, painter );
+
+            {
+                QRect r = o.rect.adjusted( 3, 0, 0, 0 );
+
+                // Paint Now Playing Speaker Icon
+                if ( item->isPlaying() && m_view->header()->visualIndex( index.column() ) == 0 )
+                {
+                    r.adjust( 0, 0, 0, -3 );
+                    painter->drawPixmap( r.adjusted( 3, 1, 18 - r.width(), 1 ), m_nowPlayingIcon );
+                    r.adjust( 25, 0, 0, 3 );
+                }
+
+                painter->setPen( o.palette.text().color() );
+
+                QTextOption to( Qt::AlignVCenter );
+                QString text = painter->fontMetrics().elidedText( index.data().toString(), Qt::ElideRight, r.width() - 3 );
+                painter->drawText( r.adjusted( 0, 1, 0, 0 ), text, to );
+            }
         }
+        return;
     }
     else
         return;
@@ -100,20 +132,35 @@ TreeItemDelegate::paint( QPainter* painter, const QStyleOptionViewItem& option, 
     painter->setPen( opt.palette.color( QPalette::Text ) );
 
     QRect r = option.rect.adjusted( 4, 4, -option.rect.width() + option.rect.height() - 4, -4 );
-//    painter->drawPixmap( option.rect.adjusted( 4, 4, -4, -38 ), QPixmap( RESPATH "images/cover-shadow.png" ) );
-    painter->drawPixmap( r, item->cover );
+//    painter->drawPixmap( r, QPixmap( RESPATH "images/cover-shadow.png" ) );
+
+    QPixmap scover;
+    QPixmap cover = item->cover;
+    if ( cover.isNull() )
+    {
+        if ( !item->artist().isNull() )
+            cover = m_defaultArtistImage;
+        else
+            cover = m_defaultAlbumCover;
+    }
+
+    if ( m_cache.contains( cover.cacheKey() ) )
+    {
+        scover = m_cache.value( cover.cacheKey() );
+    }
+    else
+    {
+        scover = cover.scaled( r.size(), Qt::KeepAspectRatio, Qt::SmoothTransformation );
+        m_cache.insert( cover.cacheKey(), scover );
+    }
+    painter->drawPixmap( r, scover );
 
     QTextOption to;
     to.setAlignment( Qt::AlignVCenter );
-    QFont font = opt.font;
-    QFont boldFont = opt.font;
-    boldFont.setBold( true );
 
     r = option.rect.adjusted( option.rect.height(), 6, -4, -option.rect.height() + 22 );
     text = painter->fontMetrics().elidedText( text, Qt::ElideRight, r.width() );
     painter->drawText( r, text, to );
-
-//    painter->setFont( boldFont );
 
     painter->restore();
 }

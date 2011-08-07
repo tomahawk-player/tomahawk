@@ -26,12 +26,20 @@
 
 #include "dllmacro.h"
 #include "result.h"
+#include "utils/logger.h"
+
+namespace Tomahawk
+{
 
 class DLLEXPORT PlaylistInterface
 {
+
 public:
     enum RepeatMode { NoRepeat, RepeatOne, RepeatAll };
     enum ViewMode { Unknown, Tree, Flat, Album };
+    enum SeekRestrictions { NoSeekRestrictions, NoSeek };
+    enum SkipRestrictions { NoSkipRestrictions, NoSkipForwards, NoSkipBackwards, NoSkip };
+    enum RetryMode { NoRetry, Retry };
 
     PlaylistInterface( QObject* parent = 0 ) : m_object( parent ) {}
     virtual ~PlaylistInterface() {}
@@ -41,18 +49,41 @@ public:
     virtual int unfilteredTrackCount() const = 0;
     virtual int trackCount() const = 0;
 
+    virtual Tomahawk::result_ptr currentItem() const = 0;
     virtual Tomahawk::result_ptr previousItem() { return siblingItem( -1 ); }
+    virtual bool hasNextItem() { return true; }
     virtual Tomahawk::result_ptr nextItem() { return siblingItem( 1 ); }
     virtual Tomahawk::result_ptr siblingItem( int itemsAway ) = 0;
 
     virtual PlaylistInterface::RepeatMode repeatMode() const = 0;
     virtual bool shuffled() const = 0;
     virtual PlaylistInterface::ViewMode viewMode() const { return Unknown; }
+    virtual PlaylistInterface::SeekRestrictions seekRestrictions() const { return NoSeekRestrictions; }
+    virtual PlaylistInterface::SkipRestrictions skipRestrictions() const { return NoSkipRestrictions; }
+
+    virtual PlaylistInterface::RetryMode retryMode() const { return NoRetry; }
+    virtual quint32 retryInterval() const { return 30000; }
 
     virtual QString filter() const { return m_filter; }
     virtual void setFilter( const QString& pattern ) { m_filter = pattern; }
 
+    virtual void reset() {}
+
     QObject* object() const { return m_object; }
+
+    static void dontDelete( Tomahawk::PlaylistInterface* obj )
+    {
+        qDebug() << Q_FUNC_INFO << obj;
+    }
+    virtual Tomahawk::playlistinterface_ptr getSharedPointer()
+    {
+        if ( m_sharedPtr.isNull() )
+        {
+            m_sharedPtr = Tomahawk::playlistinterface_ptr( this, dontDelete );
+        }
+
+        return m_sharedPtr;
+    }
 
 public slots:
     virtual void setRepeatMode( RepeatMode mode ) = 0;
@@ -63,11 +94,15 @@ signals:
     virtual void shuffleModeChanged( bool enabled ) = 0;
     virtual void trackCountChanged( unsigned int tracks ) = 0;
     virtual void sourceTrackCountChanged( unsigned int tracks ) = 0;
+    virtual void nextTrackReady() = 0;
 
 private:
     QObject* m_object;
+    Tomahawk::playlistinterface_ptr m_sharedPtr;
 
     QString m_filter;
+};
+
 };
 
 #endif // PLAYLISTINTERFACE_H

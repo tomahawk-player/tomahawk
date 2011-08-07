@@ -1,5 +1,5 @@
 /* === This file is part of Tomahawk Player - <http://tomahawk-player.org> ===
- * 
+ *
  *   Copyright 2010-2011, Christian Muehlhaeuser <muesli@tomahawk-player.org>
  *
  *   Tomahawk is free software: you can redistribute it and/or modify
@@ -19,6 +19,7 @@
 #include "msgprocessor.h"
 
 #include "network/servent.h"
+#include "utils/logger.h"
 
 
 MsgProcessor::MsgProcessor( quint32 mode, quint32 t ) :
@@ -104,7 +105,7 @@ MsgProcessor::process( msg_ptr msg, quint32 mode, quint32 threshold )
     // uncompress if needed
     if( (mode & UNCOMPRESS_ALL) && msg->is( Msg::COMPRESSED ) )
     {
-        qDebug() << "MsgProcessor::UNCOMPRESSING";
+//        qDebug() << "MsgProcessor::UNCOMPRESSING";
         msg->m_payload = qUncompress( msg->payload() );
         msg->m_length  = msg->m_payload.length();
         msg->m_flags ^= Msg::COMPRESSED;
@@ -115,7 +116,7 @@ MsgProcessor::process( msg_ptr msg, quint32 mode, quint32 threshold )
         msg->is( Msg::JSON ) &&
         msg->m_json_parsed == false )
     {
-        qDebug() << "MsgProcessor::PARSING JSON";
+//        qDebug() << "MsgProcessor::PARSING JSON";
         bool ok;
         QJson::Parser parser;
         msg->m_json = parser.parse( msg->payload(), &ok );
@@ -127,7 +128,7 @@ MsgProcessor::process( msg_ptr msg, quint32 mode, quint32 threshold )
         !msg->is( Msg::COMPRESSED )
         && msg->length() > threshold )
     {
-        qDebug() << "MsgProcessor::COMPRESSING";
+//        qDebug() << "MsgProcessor::COMPRESSING";
         msg->m_payload = qCompress( msg->payload(), 9 );
         msg->m_length  = msg->m_payload.length();
         msg->m_flags |= Msg::COMPRESSED;

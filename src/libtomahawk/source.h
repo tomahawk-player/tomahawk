@@ -31,6 +31,7 @@
 
 class DatabaseCommand_LogPlayback;
 class ControlConnection;
+class DatabaseCommand_SocialAction;
 
 namespace Tomahawk
 {
@@ -41,6 +42,7 @@ Q_OBJECT
 
 friend class ::DatabaseCommand_LogPlayback;
 friend class ::DBSyncConnection;
+friend class ::DatabaseCommand_SocialAction;
 
 public:
     explicit Source( int id, const QString& username = QString() );
@@ -77,6 +79,8 @@ public:
     Tomahawk::query_ptr currentTrack() const { return m_currentTrack; }
     QString textStatus() const { return m_textStatus; }
 
+    Tomahawk::playlistinterface_ptr getPlaylistInterface();
+
 signals:
     void syncedWithDatabase();
     void online();
@@ -93,6 +97,8 @@ signals:
 
     void stateChanged();
 
+    void socialAttributesChanged();
+
 public slots:
     void setStats( const QVariantMap& m );
 
@@ -108,6 +114,8 @@ private slots:
     void trackTimerFired();
 
 private:
+    void reportSocialAttributesChanged();
+
     bool m_isLocal;
     bool m_online;
     QString m_username, m_friendlyname;
@@ -124,6 +132,8 @@ private:
     ControlConnection* m_cc;
 
     QPixmap* m_avatar;
+
+    Tomahawk::playlistinterface_ptr m_playlistInterface;
 };
 
 };

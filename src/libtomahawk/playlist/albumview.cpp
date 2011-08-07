@@ -1,5 +1,5 @@
 /* === This file is part of Tomahawk Player - <http://tomahawk-player.org> ===
- * 
+ *
  *   Copyright 2010-2011, Christian Muehlhaeuser <muesli@tomahawk-player.org>
  *
  *   Tomahawk is free software: you can redistribute it and/or modify
@@ -18,7 +18,6 @@
 
 #include "albumview.h"
 
-#include <QDebug>
 #include <QHeaderView>
 #include <QKeyEvent>
 #include <QPainter>
@@ -29,6 +28,11 @@
 #include "tomahawksettings.h"
 #include "albumitemdelegate.h"
 #include "viewmanager.h"
+#include "utils/logger.h"
+
+static QString s_tmInfoIdentifier = QString( "ALBUMMODEL" );
+
+#define SCROLL_TIMEOUT 280
 
 using namespace Tomahawk;
 
@@ -50,6 +54,12 @@ AlbumView::AlbumView( QWidget* parent )
     setVerticalScrollMode( QAbstractItemView::ScrollPerPixel );
 
     setProxyModel( new AlbumProxyModel( this ) );
+
+    m_timer.setInterval( SCROLL_TIMEOUT );
+
+    connect( verticalScrollBar(), SIGNAL( rangeChanged( int, int ) ), SLOT( onViewChanged() ) );
+    connect( verticalScrollBar(), SIGNAL( valueChanged( int ) ), SLOT( onViewChanged() ) );
+    connect( &m_timer, SIGNAL( timeout() ), SLOT( onScrollTimeout() ) );
 
     connect( this, SIGNAL( doubleClicked( QModelIndex ) ), SLOT( onItemActivated( QModelIndex ) ) );
 }
@@ -112,9 +122,74 @@ AlbumView::onItemActivated( const QModelIndex& index )
 
 
 void
+AlbumView::onViewChanged()
+{
+    if ( m_timer.isActive() )
+        m_timer.stop();
+
+    m_timer.start();
+}
+
+
+void
+AlbumView::onScrollTimeout()
+{
+    if ( m_timer.isActive() )
+        m_timer.stop();
+
+    if ( !m_proxyModel->rowCount() )
+        return;
+
+    QRect viewRect = viewport()->rect();
+    int rowHeight = m_proxyModel->data( QModelIndex(), Qt::SizeHintRole ).toSize().height();
+    viewRect.adjust( 0, -rowHeight, 0, rowHeight );
+
+    bool started = false;
+    bool done = false;
+    for ( int i = 0; i < m_proxyModel->rowCount(); i++ )
+    {
+        if ( started && done )
+            break;
+
+        for ( int j = 0; j < m_proxyModel->columnCount(); j++ )
+        {
+            QModelIndex idx = m_proxyModel->index( i, j );
+            if ( !viewRect.contains( visualRect( idx ) ) )
+            {
+                done = true;
+                break;
+            }
+
+            started = true;
+            done = false;
+
+            AlbumItem* item = m_model->itemFromIndex( m_proxyModel->mapToSource( idx ) );
+            if ( !item )
+                break;
+            if ( !item->cover.isNull() )
+                break;
+
+//            qDebug() << "Need cover for:" << item->album()->artist()->name() << item->album()->name();
+            Tomahawk::InfoSystem::InfoCriteriaHash trackInfo;
+            trackInfo["artist"] = item->album()->artist()->name();
+            trackInfo["album"] = item->album()->name();
+            trackInfo["pptr"] = QString::number( (qlonglong)item );
+
+            Tomahawk::InfoSystem::InfoRequestData requestData;
+            requestData.caller = s_tmInfoIdentifier;
+            requestData.type = Tomahawk::InfoSystem::InfoAlbumCoverArt;
+            requestData.input = QVariant::fromValue< Tomahawk::InfoSystem::InfoCriteriaHash >( trackInfo );
+            requestData.customData = QVariantMap();
+
+            Tomahawk::InfoSystem::InfoSystem::instance()->getInfo( requestData );
+        }
+    }
+}
+
+
+void
 AlbumView::dragEnterEvent( QDragEnterEvent* event )
 {
-    qDebug() << Q_FUNC_INFO;
     QListView::dragEnterEvent( event );
 }
 

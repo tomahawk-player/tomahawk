@@ -19,12 +19,12 @@
 #include "trackheader.h"
 
 #include <QContextMenuEvent>
-#include <QDebug>
 #include <QMenu>
 
 #include "tomahawksettings.h"
 #include "playlist/trackmodel.h"
 #include "playlist/trackview.h"
+#include "utils/logger.h"
 
 
 TrackHeader::TrackHeader( TrackView* parent )
@@ -81,13 +81,14 @@ TrackHeader::checkState()
     if ( !state.isEmpty() )
     {
         restoreState( state );
-        setSortIndicatorShown( true );
-        setSortIndicator( -1, Qt::AscendingOrder );
+
+        if ( m_parent->guid().startsWith( "playlistview" ) ) // HACK
+            setSortIndicator( -1, Qt::AscendingOrder );
     }
     else
     {
         QList< double > m_columnWeights;
-        m_columnWeights << 0.20 << 0.20 << 0.18 << 0.05 << 0.05 << 0.05 << 0.05 << 0.05 << 0.12; // << 0.05;
+        m_columnWeights << 0.20 << 0.20 << 0.18 << 0.05 << 0.05 << 0.05 << 0.05 << 0.05 << 0.10; // << 0.05;
 
         for ( int i = 0; i < count() - 1; i++ )
         {

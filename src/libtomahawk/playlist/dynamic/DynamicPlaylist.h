@@ -36,6 +36,8 @@ class DatabaseCollection;
 
 namespace Tomahawk {
 
+class DatabaseCommand_LoadDynamicPlaylist;
+
 /**
  * Subclass of playlist that adds the information needed to store a dynamic playlist.
  *  It uses normal PlaylistEntries but also has a mode, a generator, and a list of controls
@@ -43,6 +45,8 @@ namespace Tomahawk {
 
 struct DLLEXPORT DynamicPlaylistRevision : PlaylistRevision
 {
+public:
+
     QList< dyncontrol_ptr > controls;
     Tomahawk::GeneratorMode mode;
     QString type;
@@ -60,6 +64,16 @@ struct DLLEXPORT DynamicPlaylistRevision : PlaylistRevision
     DynamicPlaylistRevision() {}
 };
 
+struct DynQueueItem : RevisionQueueItem
+{
+    QString type;
+    QList <dyncontrol_ptr> controls;
+    int mode;
+
+    DynQueueItem( const QString& nRev, const QString& oRev, const QString& typ, const QList< dyncontrol_ptr >& ctrls,  int m, const QList< plentry_ptr >& e, bool latest ) :
+        RevisionQueueItem( nRev, oRev, e, latest ), type( typ ), controls( ctrls ), mode( m ) {}
+};
+
 class DLLEXPORT DynamicPlaylist : public Playlist
 {
     Q_OBJECT
@@ -67,32 +81,39 @@ class DLLEXPORT DynamicPlaylist : public Playlist
     // :-( int becuase qjson chokes on my enums
     Q_PROPERTY( int     mode                  WRITE setMode   READ mode )
     Q_PROPERTY( QString type                  WRITE setType   READ type )
+    Q_PROPERTY( bool    autoLoad                              READ autoLoad )
 
     friend class ::DatabaseCommand_SetDynamicPlaylistRevision;
     friend class ::DatabaseCommand_CreateDynamicPlaylist;
+    friend class Tomahawk::DatabaseCommand_LoadDynamicPlaylist;
     friend class ::DatabaseCollection; /// :-(
 
 public:
     virtual ~DynamicPlaylist();
 
+
+    static Tomahawk::dynplaylist_ptr load( const QString& guid );
+
     /// Generate an empty dynamic playlist with default generator
     static Tomahawk::dynplaylist_ptr create( const source_ptr& author,
-                                          const QString& guid,
-                                          const QString& title,
-                                          const QString& info,
-                                          const QString& creator,
-                                          GeneratorMode mode,
-                                          bool shared,
-                                          const QString& type = QString()
-                                          );
-    static bool remove( const dynplaylist_ptr& playlist );
+                                             const QString& guid,
+                                             const QString& title,
+                                             const QString& info,
+                                             const QString& creator,
+                                             GeneratorMode mode,
+                                             bool shared,
+                                             const QString& type = QString(),
+                                             bool autoLoad = true
+                                           );
 
+    static bool remove( const dynplaylist_ptr& playlist );
     virtual void loadRevision( const QString& rev = "" );
 
     // :-( int becuase qjson chokes on my enums
     int mode() const;
     QString type() const;
     geninterface_ptr generator() const;
+    bool autoLoad() const  { return m_autoLoad; }
 
     // Creates a new revision from the playlist in memory. Use this is you change the controls or
     // mode of a playlist and want to save it to db/others.
@@ -107,7 +128,7 @@ public:
     // maybe friend QObjectHelper and make them private?
     explicit DynamicPlaylist( const source_ptr& author, const QString& type );
     void setMode( int mode );
-    void setType( const QString& /*type*/ )           { /** TODO */; }
+    void setType( const QString& /*type*/ ) { /** TODO */; }
     void setGenerator( const geninterface_ptr& gen_ptr );
     // </IGNORE>
 
@@ -165,31 +186,36 @@ public slots:
 private:
     // called from loadAllPlaylists DB cmd via databasecollection (in GUI thread)
     explicit DynamicPlaylist( const source_ptr& src,
-                       const QString& currentrevision,
-                       const QString& title,
-                       const QString& info,
-                       const QString& creator,
-                       uint createdOn,
-                       const QString& type,
-                       GeneratorMode mode,
-                       bool shared,
-                       int lastmod,
-                       const QString& guid = "" ); // populate db
+                              const QString& currentrevision,
+                              const QString& title,
+                              const QString& info,
+                              const QString& creator,
+                              uint createdOn,
+                              const QString& type,
+                              GeneratorMode mode,
+                              bool shared,
+                              int lastmod,
+                              const QString& guid = "" ); // populate db
 
     // called when creating new playlist
     explicit DynamicPlaylist( const source_ptr& author,
-                       const QString& guid,
-                       const QString& title,
-                       const QString& info,
-                       const QString& creator,
-                       const QString& type,
-                       GeneratorMode mode,
-                       bool shared );
+                              const QString& guid,
+                              const QString& title,
+                              const QString& info,
+                              const QString& creator,
+                              const QString& type,
+                              GeneratorMode mode,
+                              bool shared,
+                              bool autoLoad = true );
 
-private:
+    void checkRevisionQueue();
+
     QList< dyncontrol_ptr > variantsToControl( const QList< QVariantMap >& controlsV );
-    geninterface_ptr m_generator;
 
+    geninterface_ptr m_generator;
+    bool m_autoLoad;
+
+    QQueue<DynQueueItem> m_revisionQueue;
 };
 
 }; // namespace

@@ -27,6 +27,7 @@
 #include "database/databasecommand_loadfile.h"
 #include "database/database.h"
 #include "sourcelist.h"
+#include "utils/logger.h"
 
 using namespace Tomahawk;
 

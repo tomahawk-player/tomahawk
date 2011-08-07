@@ -18,13 +18,13 @@
 
 #include "playlistview.h"
 
-#include <QDebug>
 #include <QKeyEvent>
 #include <QPainter>
 
 #include "playlist/playlistproxymodel.h"
 #include "widgets/overlaywidget.h"
 #include "viewmanager.h"
+#include "utils/logger.h"
 
 using namespace Tomahawk;
 
@@ -32,16 +32,10 @@ using namespace Tomahawk;
 PlaylistView::PlaylistView( QWidget* parent )
     : TrackView( parent )
     , m_model( 0 )
-    , m_itemMenu( 0 )
-    , m_playItemAction( 0 )
-    , m_addItemsToQueueAction( 0 )
-    , m_addItemsToPlaylistAction( 0 )
-    , m_deleteItemsAction( 0 )
 {
     setProxyModel( new PlaylistProxyModel( this ) );
 
-    setContextMenuPolicy( Qt::CustomContextMenu );
-    connect( this, SIGNAL( customContextMenuRequested( const QPoint& ) ), SLOT( onCustomContextMenu( const QPoint& ) ) );
+    connect( contextMenu(), SIGNAL( triggered( int ) ), SLOT( onMenuTriggered( int ) ) );
 }
 
 
@@ -72,60 +66,12 @@ PlaylistView::setPlaylistModel( PlaylistModel* model )
         setGuid( QString( "playlistview/%1" ).arg( m_model->playlist()->guid() ) );
     else
     {
-        setGuid( "playlistview" );
+        setGuid( QString( "playlistview/%1" ).arg( m_model->columnCount() ) );
     }
 
     connect( m_model, SIGNAL( trackCountChanged( unsigned int ) ), SLOT( onTrackCountChanged( unsigned int ) ) );
     connect( m_model, SIGNAL( playlistDeleted() ), SLOT( onDeleted() ) );
     connect( m_model, SIGNAL( playlistChanged() ), SLOT( onChanged() ) );
-}
-
-
-void
-PlaylistView::setupMenus()
-{
-    m_itemMenu.clear();
-
-    unsigned int i = 0;
-    foreach( const QModelIndex& idx, selectedIndexes() )
-        if ( idx.column() == 0 )
-            i++;
-
-    m_playItemAction = m_itemMenu.addAction( tr( "&Play" ) );
-    m_addItemsToQueueAction = m_itemMenu.addAction( tr( "Add to &Queue" ) );
-    m_itemMenu.addSeparator();
-
-    foreach( QAction* a, actions() )
-        m_itemMenu.addAction( a );
-
-//    m_addItemsToPlaylistAction = m_itemMenu.addAction( tr( "&Add to Playlist" ) );
-//    m_itemMenu.addSeparator();
-    m_deleteItemsAction = m_itemMenu.addAction( i > 1 ? tr( "&Delete Items" ) : tr( "&Delete Item" ) );
-
-    if ( model() )
-        m_deleteItemsAction->setEnabled( !model()->isReadOnly() );
-
-    connect( m_playItemAction,           SIGNAL( triggered() ), SLOT( playItem() ) );
-    connect( m_addItemsToQueueAction,    SIGNAL( triggered() ), SLOT( addItemsToQueue() ) );
-//    connect( m_addItemsToPlaylistAction, SIGNAL( triggered() ), SLOT( addItemsToPlaylist() ) );
-    connect( m_deleteItemsAction,        SIGNAL( triggered() ), SLOT( deleteItems() ) );
-}
-
-
-void
-PlaylistView::onCustomContextMenu( const QPoint& pos )
-{
-    qDebug() << Q_FUNC_INFO;
-    setupMenus();
-
-    QModelIndex idx = indexAt( pos );
-    idx = idx.sibling( idx.row(), 0 );
-    setContextMenuIndex( idx );
-
-    if ( !idx.isValid() )
-        return;
-
-    m_itemMenu.exec( mapToGlobal( pos ) );
 }
 
 
@@ -152,6 +98,7 @@ PlaylistView::deleteItems()
     proxyModel()->removeIndexes( selectedIndexes() );
 }
 
+
 void
 PlaylistView::onTrackCountChanged( unsigned int tracks )
 {
@@ -168,7 +115,7 @@ PlaylistView::onTrackCountChanged( unsigned int tracks )
 bool
 PlaylistView::jumpToCurrentTrack()
 {
-    scrollTo( proxyModel()->currentItem(), QAbstractItemView::PositionAtCenter );
+    scrollTo( proxyModel()->currentIndex(), QAbstractItemView::PositionAtCenter );
     return true;
 }
 
@@ -195,4 +142,20 @@ bool
 PlaylistView::isTemporaryPage() const
 {
     return ( m_model && m_model->isTemporary() );
+}
+
+
+void
+PlaylistView::onMenuTriggered( int action )
+{
+    switch ( action )
+    {
+        case ContextMenu::ActionDelete:
+            deleteItems();
+            break;
+
+        default:
+            TrackView::onMenuTriggered( action );
+            break;
+    }
 }

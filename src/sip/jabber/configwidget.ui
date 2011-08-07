@@ -6,17 +6,14 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>433</width>
-    <height>260</height>
+    <width>451</width>
+    <height>335</height>
    </rect>
   </property>
   <property name="windowTitle">
    <string>Jabber Configuration</string>
   </property>
   <layout class="QVBoxLayout" name="verticalLayout_2">
-   <property name="topMargin">
-    <number>0</number>
-   </property>
    <item>
     <layout class="QHBoxLayout" name="horizontalLayout">
      <item>
@@ -184,6 +181,16 @@
          </widget>
         </item>
        </layout>
+      </item>
+      <item>
+       <widget class="QLabel" name="jidExistsLabel">
+        <property name="text">
+         <string>An account with this name already exists!</string>
+        </property>
+        <property name="alignment">
+         <set>Qt::AlignCenter</set>
+        </property>
+       </widget>
       </item>
      </layout>
     </widget>

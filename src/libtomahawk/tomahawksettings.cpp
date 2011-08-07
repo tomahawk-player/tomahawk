@@ -24,11 +24,15 @@
 #endif
 
 #include <QDir>
-#include <QDebug>
+
 #include "sip/SipHandler.h"
 #include "playlistinterface.h"
 
+#include "utils/logger.h"
+
 #define VERSION 3
+
+using namespace Tomahawk;
 
 TomahawkSettings* TomahawkSettings::s_instance = 0;
 
@@ -73,6 +77,7 @@ TomahawkSettings::~TomahawkSettings()
 {
     s_instance = 0;
 }
+
 
 void
 TomahawkSettings::doInitialSetup()
@@ -144,18 +149,64 @@ TomahawkSettings::doUpgrade( int oldVersion, int newVersion )
 }
 
 
+void
+TomahawkSettings::setAcceptedLegalWarning( bool accept )
+{
+    setValue( "acceptedLegalWarning", accept );
+}
+
+
+bool
+TomahawkSettings::acceptedLegalWarning() const
+{
+    return value( "acceptedLegalWarning", false ).toBool();
+}
+
+
+void
+TomahawkSettings::setInfoSystemCacheVersion( uint version )
+{
+    setValue( "infosystemcacheversion", version );
+}
+
+
+uint
+TomahawkSettings::infoSystemCacheVersion() const
+{
+    return value( "infosystemcacheversion", 0 ).toUInt();
+}
+
+
 QStringList
 TomahawkSettings::scannerPaths()
 {
     //FIXME: After enough time, remove this hack (and make const)
     #ifndef TOMAHAWK_HEADLESS
-    if( value( "scannerpaths" ).isNull() )
-        setValue( "scannerpaths", value( "scannerpath" ) );
-    return value( "scannerpaths", QDesktopServices::storageLocation( QDesktopServices::MusicLocation ) ).toStringList();
+    if( value( "scanner/paths" ).isNull() )
+    {
+        if ( !value( "scannerpath" ).isNull() )
+            setValue( "scanner/paths", QStringList( value( "scannerpath" ).toString() ) );
+        else if ( !value( "scannerpaths" ).isNull() )
+            setValue( "scanner/paths", value( "scannerpaths" ) );
+        sync();
+        remove( "scannerpath" );
+        remove( "scannerpaths" );
+        sync();
+    }
+    return value( "scanner/paths", QDesktopServices::storageLocation( QDesktopServices::MusicLocation ) ).toStringList();
     #else
-    if( value( "scannerpaths" ).isNull() )
-        setValue( "scannerpaths", value( "scannerpath" ) );
-    return value( "scannerpaths", "" ).toStringList();
+    if( value( "scanner/paths" ).isNull() )
+    {
+        if ( !value( "scannerpath" ).isNull() )
+            setValue( "scanner/paths", QStringList( value( "scannerpath" ).toString() ) );
+        else if ( !value( "scannerpaths" ).isNull() )
+            setValue( "scanner/paths", value( "scannerpaths" ) );
+        sync();
+        remove( "scannerpath" );
+        remove( "scannerpaths" );
+        sync();
+    }
+    return value( "scanner/paths", "" ).toStringList();
     #endif
 }
 
@@ -163,7 +214,7 @@ TomahawkSettings::scannerPaths()
 void
 TomahawkSettings::setScannerPaths( const QStringList& paths )
 {
-    setValue( "scannerpaths", paths );
+    setValue( "scanner/paths", paths );
 }
 
 
@@ -171,34 +222,51 @@ bool
 TomahawkSettings::hasScannerPaths() const
 {
     //FIXME: After enough time, remove this hack
-    return contains( "scannerpaths" ) || contains( "scannerpath" );
+    return contains( "scanner/paths" ) || contains( "scannerpath" ) || contains( "scannerpaths" );
+}
+
+
+TomahawkSettings::ScannerMode
+TomahawkSettings::scannerMode() const
+{
+    return (TomahawkSettings::ScannerMode) value( "scanner/mode", TomahawkSettings::Files ).toInt();
+}
+
+
+void
+TomahawkSettings::setScannerMode( ScannerMode mode )
+{
+    setValue( "scanner/mode", mode );
+}
+
+
+uint
+TomahawkSettings::scannerTime() const
+{
+    return value( "scanner/intervaltime", 60 ).toUInt();
+}
+
+
+void
+TomahawkSettings::setScannerTime( uint time )
+{
+    setValue( "scanner/intervaltime", time );
 }
 
 
 bool
 TomahawkSettings::watchForChanges() const
 {
-    return value( "watchForChanges", false ).toBool();
+    return value( "scanner/watchforchanges", false ).toBool();
 }
 
 
 void
 TomahawkSettings::setWatchForChanges( bool watch )
 {
-    setValue( "watchForChanges", watch );
+    setValue( "scanner/watchforchanges", watch );
 }
 
-void
-TomahawkSettings::setAcceptedLegalWarning( bool accept )
-{
-    setValue( "acceptedLegalWarning", accept );
-}
-
-bool
-TomahawkSettings::acceptedLegalWarning() const
-{
-    return value( "acceptedLegalWarning", false ).toBool();
-}
 
 bool
 TomahawkSettings::httpEnabled() const
@@ -287,7 +355,7 @@ TomahawkSettings::setProxyPassword( const QString& password )
 int
 TomahawkSettings::proxyType() const
 {
-    return value( "network/proxy/type", 0 ).toInt();
+    return value( "network/proxy/type", QNetworkProxy::NoProxy ).toInt();
 }
 
 
@@ -368,6 +436,31 @@ TomahawkSettings::setMainWindowSplitterState( const QByteArray& state )
 }
 
 
+bool
+TomahawkSettings::verboseNotifications() const
+{
+    return value( "ui/notifications/verbose", false ).toBool();
+}
+
+
+void
+TomahawkSettings::setVerboseNotifications( bool notifications )
+{
+    setValue( "ui/notifications/verbose", notifications );
+}
+
+bool
+TomahawkSettings::showOfflineSources() const
+{
+    return value( "collection/sources/showoffline", false ).toBool();
+}
+
+void
+TomahawkSettings::setShowOfflineSources( bool show )
+{
+    setValue( "collection/sources/showoffline", show );
+}
+
 QByteArray
 TomahawkSettings::playlistColumnSizes( const QString& playlistid ) const
 {
@@ -381,17 +474,20 @@ TomahawkSettings::setPlaylistColumnSizes( const QString& playlistid, const QByte
     setValue( QString( "ui/playlist/%1/columnSizes" ).arg( playlistid ), state );
 }
 
+
 bool
 TomahawkSettings::shuffleState( const QString& playlistid ) const
 {
     return value( QString( "ui/playlist/%1/shuffleState" ).arg( playlistid )).toBool();
 }
 
+
 void
 TomahawkSettings::setShuffleState( const QString& playlistid, bool state)
 {
     setValue( QString( "ui/playlist/%1/shuffleState" ).arg( playlistid ), state );
 }
+
 
 void
 TomahawkSettings::removePlaylistSettings( const QString& playlistid )
@@ -400,27 +496,30 @@ TomahawkSettings::removePlaylistSettings( const QString& playlistid )
     remove( QString( "ui/playlist/%1/repeatMode" ).arg( playlistid ) );
 }
 
+
 void
-TomahawkSettings::setRepeatMode( const QString& playlistid, PlaylistInterface::RepeatMode mode )
+TomahawkSettings::setRepeatMode( const QString& playlistid, Tomahawk::PlaylistInterface::RepeatMode mode )
 {
     setValue( QString( "ui/playlist/%1/repeatMode" ).arg( playlistid ), (int)mode );
 }
 
-PlaylistInterface::RepeatMode
+
+Tomahawk::PlaylistInterface::RepeatMode
 TomahawkSettings::repeatMode( const QString& playlistid )
 {
     return (PlaylistInterface::RepeatMode)value( QString( "ui/playlist/%1/repeatMode" ).arg( playlistid )).toInt();
 }
+
 
 QList<Tomahawk::playlist_ptr>
 TomahawkSettings::recentlyPlayedPlaylists() const
 {
     QStringList playlist_guids = value( "playlists/recentlyPlayed" ).toStringList();
 
-    QList<Tomahawk::playlist_ptr> playlists;
+    QList<playlist_ptr> playlists;
     foreach( const QString& guid, playlist_guids )
     {
-        Tomahawk::playlist_ptr pl = Tomahawk::Playlist::load( guid );
+        playlist_ptr pl = Playlist::load( guid );
         if ( !pl.isNull() )
             playlists << pl;
     }
@@ -428,13 +527,14 @@ TomahawkSettings::recentlyPlayedPlaylists() const
     return playlists;
 }
 
+
 QStringList
 TomahawkSettings::recentlyPlayedPlaylistGuids( unsigned int amount ) const
 {
     QStringList p = value( "playlists/recentlyPlayed" ).toStringList();
 
     while ( amount && p.count() > (int)amount )
-        p.removeAt( p.count() - 1 );
+        p.removeAt( 0 );
 
     return p;
 }
@@ -453,11 +553,13 @@ TomahawkSettings::appendRecentlyPlayedPlaylist( const Tomahawk::playlist_ptr& pl
     emit recentlyPlayedPlaylistAdded( playlist );
 }
 
+
 QString
 TomahawkSettings::bookmarkPlaylist() const
 {
     return value( "playlists/bookmark", QString() ).toString();
 }
+
 
 void
 TomahawkSettings::setBookmarkPlaylist( const QString& guid )
@@ -465,11 +567,13 @@ TomahawkSettings::setBookmarkPlaylist( const QString& guid )
     setValue( "playlists/bookmark", guid );
 }
 
+
 QStringList
 TomahawkSettings::sipPlugins() const
 {
     return value( "sip/allplugins", QStringList() ).toStringList();
 }
+
 
 void
 TomahawkSettings::setSipPlugins( const QStringList& plugins )
@@ -477,17 +581,20 @@ TomahawkSettings::setSipPlugins( const QStringList& plugins )
     setValue( "sip/allplugins", plugins );
 }
 
+
 QStringList
 TomahawkSettings::enabledSipPlugins() const
 {
     return value( "sip/enabledplugins", QStringList() ).toStringList();
 }
 
+
 void
 TomahawkSettings::setEnabledSipPlugins( const QStringList& list )
 {
     setValue( "sip/enabledplugins", list );
 }
+
 
 void
 TomahawkSettings::enableSipPlugin( const QString& pluginId )
@@ -497,6 +604,7 @@ TomahawkSettings::enableSipPlugin( const QString& pluginId )
     setEnabledSipPlugins( list );
 }
 
+
 void
 TomahawkSettings::disableSipPlugin( const QString& pluginId )
 {
@@ -504,6 +612,7 @@ TomahawkSettings::disableSipPlugin( const QString& pluginId )
     list.removeAll( pluginId );
     setEnabledSipPlugins( list );
 }
+
 
 void
 TomahawkSettings::addSipPlugin( const QString& pluginId, bool enable )
@@ -515,6 +624,7 @@ TomahawkSettings::addSipPlugin( const QString& pluginId, bool enable )
     if ( enable )
         enableSipPlugin( pluginId );
 }
+
 
 void
 TomahawkSettings::removeSipPlugin( const QString& pluginId )
@@ -541,15 +651,18 @@ TomahawkSettings::setExternalAddressMode( ExternalAddressMode externalAddressMod
     setValue( "network/external-address-mode", externalAddressMode );
 }
 
+
 bool TomahawkSettings::preferStaticHostPort() const
 {
     return value( "network/prefer-static-host-and-port" ).toBool();
 }
 
+
 void TomahawkSettings::setPreferStaticHostPort( bool prefer )
 {
     setValue( "network/prefer-static-host-and-port", prefer );
 }
+
 
 QString
 TomahawkSettings::externalHostname() const
@@ -557,11 +670,13 @@ TomahawkSettings::externalHostname() const
     return value( "network/external-hostname" ).toString();
 }
 
+
 void
 TomahawkSettings::setExternalHostname(const QString& externalHostname)
 {
     setValue( "network/external-hostname", externalHostname );
 }
+
 
 int
 TomahawkSettings::defaultPort() const
@@ -569,11 +684,13 @@ TomahawkSettings::defaultPort() const
     return 50210;
 }
 
+
 int
 TomahawkSettings::externalPort() const
 {
     return value( "network/external-port", 50210 ).toInt();
 }
+
 
 void
 TomahawkSettings::setExternalPort(int externalPort)
@@ -625,6 +742,7 @@ TomahawkSettings::setLastFmUsername( const QString& username )
 {
     setValue( "lastfm/username", username );
 }
+
 
 bool
 TomahawkSettings::scrobblingEnabled() const
@@ -695,17 +813,20 @@ TomahawkSettings::setXmppBotPort( const int port )
     setValue( "xmppBot/port", port );
 }
 
+
 void
 TomahawkSettings::addScriptResolver(const QString& resolver)
 {
     setValue( "script/resolvers", allScriptResolvers() << resolver );
 }
 
+
 QStringList
 TomahawkSettings::allScriptResolvers() const
 {
     return value( "script/resolvers" ).toStringList();
 }
+
 
 void
 TomahawkSettings::setAllScriptResolvers( const QStringList& resolver )
@@ -720,11 +841,13 @@ TomahawkSettings::enabledScriptResolvers() const
     return value( "script/loadedresolvers" ).toStringList();
 }
 
+
 void
 TomahawkSettings::setEnabledScriptResolvers( const QStringList& resolvers )
 {
     setValue( "script/loadedresolvers", resolvers );
 }
+
 
 bool
 TomahawkSettings::nowPlayingEnabled() const

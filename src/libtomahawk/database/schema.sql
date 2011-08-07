@@ -106,9 +106,10 @@ CREATE TABLE IF NOT EXISTS playlist_revision (
 --      VALUES('revisionguid-11', 'dynamic_playlist-guid-2', '[]');
 
 CREATE TABLE IF NOT EXISTS dynamic_playlist (
-    guid TEXT PRIMARY KEY,
+    guid TEXT NOT NULL REFERENCES playlist(guid) ON DELETE CASCADE ON UPDATE CASCADE DEFERRABLE INITIALLY DEFERRED,
     pltype TEXT, -- the generator type
-    plmode INTEGER -- the mode of this playlist
+    plmode INTEGER, -- the mode of this playlist
+    autoload BOOLEAN DEFAULT true -- if this playlist should be autoloaded or not. true except for the case of special playlists we want to display elsewhere
 );
 
 --INSERT INTO dynamic_playlist(guid, pltype, plmode)
@@ -282,4 +283,4 @@ CREATE TABLE IF NOT EXISTS settings (
     v TEXT NOT NULL DEFAULT ''
 );
 
-INSERT INTO settings(k,v) VALUES('schema_version', '24');
+INSERT INTO settings(k,v) VALUES('schema_version', '26');

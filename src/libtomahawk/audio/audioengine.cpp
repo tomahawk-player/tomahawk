@@ -21,17 +21,23 @@
 #include <QUrl>
 
 #include "playlistinterface.h"
+#include "sourceplaylistinterface.h"
+#include "tomahawksettings.h"
 
 #include "database/database.h"
 #include "database/databasecommand_logplayback.h"
-#include "infosystem/infosystem.h"
 #include "network/servent.h"
 
 #include "album.h"
 
+#include "utils/logger.h"
+
+using namespace Tomahawk;
+
 AudioEngine* AudioEngine::s_instance = 0;
 
 static QString s_aeInfoIdentifier = QString( "AUDIOENGINE" );
+
 
 AudioEngine*
 AudioEngine::instance()
@@ -43,16 +49,18 @@ AudioEngine::instance()
 AudioEngine::AudioEngine()
     : QObject()
     , m_isPlayingHttp( false )
-    , m_playlist( 0 )
-    , m_currentTrackPlaylist( 0 )
     , m_queue( 0 )
     , m_timeElapsed( 0 )
     , m_expectStop( false )
+    , m_waitingOnNewTrack( false )
+    , m_infoSystemConnected( false )
+    , m_state( Stopped )
 {
     s_instance = this;
-    qDebug() << "Init AudioEngine";
+    tDebug() << "Init AudioEngine";
 
     qRegisterMetaType< AudioErrorCode >("AudioErrorCode");
+    qRegisterMetaType< AudioState >("AudioState");
 
     m_mediaObject = new Phonon::MediaObject( this );
     m_audioOutput = new Phonon::AudioOutput( Phonon::MusicCategory, this );
@@ -66,18 +74,37 @@ AudioEngine::AudioEngine()
     connect( m_audioOutput, SIGNAL( volumeChanged( qreal ) ), this, SLOT( onVolumeChanged( qreal ) ) );
 
     onVolumeChanged( m_audioOutput->volume() );
+#ifdef Q_OS_MAC
+    // On mac, phonon volume is independent from system volume, so the onVolumeChanged call above just sets our volume to 100%.
+    // Since it's indendent, we'll set it to 75% since that's nicer
+    setVolume( 75 );
+#endif
 }
 
 
 AudioEngine::~AudioEngine()
 {
-    qDebug() << Q_FUNC_INFO;
-
+    tDebug() << Q_FUNC_INFO;
     m_mediaObject->stop();
 //    stop();
 
     delete m_audioOutput;
     delete m_mediaObject;
+}
+
+
+QStringList
+AudioEngine::supportedMimeTypes() const
+{
+    if ( m_supportedMimeTypes.isEmpty() )
+    {
+        m_supportedMimeTypes = Phonon::BackendCapabilities::availableMimeTypes();
+        m_supportedMimeTypes << "audio/basic";
+
+        return m_supportedMimeTypes;
+    }
+    else
+        return m_supportedMimeTypes;
 }
 
 
@@ -94,20 +121,20 @@ AudioEngine::playPause()
 void
 AudioEngine::play()
 {
-    qDebug() << Q_FUNC_INFO;
+    tDebug( LOGEXTRA ) << Q_FUNC_INFO;
 
     if ( isPaused() )
     {
         m_mediaObject->play();
         emit resumed();
-	Tomahawk::InfoSystem::InfoCriteriaHash trackInfo;
+        Tomahawk::InfoSystem::InfoCriteriaHash trackInfo;
 
-	trackInfo["title"] = m_currentTrack->track();
-	trackInfo["artist"] = m_currentTrack->artist()->name();
-	trackInfo["album"] = m_currentTrack->album()->name();
-	Tomahawk::InfoSystem::InfoSystem::instance()->pushInfo(
-	   s_aeInfoIdentifier, Tomahawk::InfoSystem::InfoNowResumed,
-	   QVariant::fromValue< Tomahawk::InfoSystem::InfoCriteriaHash >( trackInfo ) );
+        trackInfo["title"] = m_currentTrack->track();
+        trackInfo["artist"] = m_currentTrack->artist()->name();
+        trackInfo["album"] = m_currentTrack->album()->name();
+        Tomahawk::InfoSystem::InfoSystem::instance()->pushInfo(
+        s_aeInfoIdentifier, Tomahawk::InfoSystem::InfoNowResumed,
+        QVariant::fromValue< Tomahawk::InfoSystem::InfoCriteriaHash >( trackInfo ) );
     }
     else
         loadNextTrack();
@@ -117,33 +144,57 @@ AudioEngine::play()
 void
 AudioEngine::pause()
 {
-    qDebug() << Q_FUNC_INFO;
+    tDebug( LOGEXTRA ) << Q_FUNC_INFO;
 
     m_mediaObject->pause();
     emit paused();
-    Tomahawk::InfoSystem::InfoSystem::instance()->pushInfo(
-       s_aeInfoIdentifier, Tomahawk::InfoSystem::InfoNowPaused, QVariant() );
+
+    Tomahawk::InfoSystem::InfoSystem::instance()->pushInfo( s_aeInfoIdentifier, Tomahawk::InfoSystem::InfoNowPaused, QVariant() );
 }
 
 
 void
 AudioEngine::stop()
 {
-    qDebug() << Q_FUNC_INFO;
+    tDebug( LOGEXTRA ) << Q_FUNC_INFO;
 
+    setState( Stopped );
     m_mediaObject->stop();
+
+    if ( !m_playlist.isNull() )
+        m_playlist.data()->reset();
 
     setCurrentTrack( Tomahawk::result_ptr() );
     emit stopped();
-    Tomahawk::InfoSystem::InfoSystem::instance()->pushInfo(
-       s_aeInfoIdentifier, Tomahawk::InfoSystem::InfoNowStopped, QVariant() );
+
+    Tomahawk::InfoSystem::InfoTypeMap map;
+    map[ Tomahawk::InfoSystem::InfoNowStopped ] = QVariant();
+
+    if ( m_waitingOnNewTrack )
+        sendWaitingNotification();
+    else if ( TomahawkSettings::instance()->verboseNotifications() )
+    {
+        QVariantMap stopInfo;
+        stopInfo["message"] = QString( "Tomahawk is stopped." );
+        map[ Tomahawk::InfoSystem::InfoNotifyUser ] = QVariant::fromValue< QVariantMap >( stopInfo );
+    }
+
+    Tomahawk::InfoSystem::InfoSystem::instance()->pushInfo( s_aeInfoIdentifier, map );
 }
 
 
 void
 AudioEngine::previous()
 {
-    qDebug() << Q_FUNC_INFO;
+    tDebug( LOGEXTRA ) << Q_FUNC_INFO;
+
+    if ( m_playlist.isNull() )
+        return;
+
+    if ( m_playlist.data()->skipRestrictions() == PlaylistInterface::NoSkip ||
+         m_playlist.data()->skipRestrictions() == PlaylistInterface::NoSkipBackwards )
+        return;
+
     loadPreviousTrack();
 }
 
@@ -151,7 +202,23 @@ AudioEngine::previous()
 void
 AudioEngine::next()
 {
-    qDebug() << Q_FUNC_INFO;
+    tDebug( LOGEXTRA ) << Q_FUNC_INFO;
+
+    if ( m_playlist.isNull() )
+        return;
+
+    if ( m_playlist.data()->skipRestrictions() == PlaylistInterface::NoSkip ||
+         m_playlist.data()->skipRestrictions() == PlaylistInterface::NoSkipForwards )
+        return;
+
+    if ( !m_currentTrack.isNull() && !m_playlist.data()->hasNextItem() &&
+         m_currentTrack->id() == m_playlist.data()->currentItem()->id() )
+    {
+        //For instance, when doing a catch-up while listening along, but the person
+        //you're following hasn't started a new track yet...don't do anything
+        return;
+    }
+
     loadNextTrack();
 }
 
@@ -159,9 +226,12 @@ AudioEngine::next()
 void
 AudioEngine::seek( int ms )
 {
+    if ( !m_playlist.isNull() && m_playlist.data()->seekRestrictions() == PlaylistInterface::NoSeek )
+        return;
+
     if ( isPlaying() || isPaused() )
     {
-        qDebug() << Q_FUNC_INFO << ms;
+        tDebug( LOGVERBOSE ) << Q_FUNC_INFO << ms;
         m_mediaObject->seek( ms );
     }
 }
@@ -170,12 +240,13 @@ AudioEngine::seek( int ms )
 void
 AudioEngine::setVolume( int percentage )
 {
-    //qDebug() << Q_FUNC_INFO;
+    tDebug( LOGVERBOSE ) << Q_FUNC_INFO << percentage;
 
     percentage = qBound( 0, percentage, 100 );
     m_audioOutput->setVolume( (qreal)percentage / 100.0 );
     emit volumeChanged( percentage );
 }
+
 
 void
 AudioEngine::mute()
@@ -185,18 +256,89 @@ AudioEngine::mute()
 
 
 void
-AudioEngine::onTrackAboutToFinish()
+AudioEngine::sendWaitingNotification() const
 {
-    qDebug() << Q_FUNC_INFO;
+    QVariantMap retryInfo;
+    retryInfo["message"] = QString( "The current track could not be resolved. Tomahawk will pick back up with the next resolvable track from this source." );
+    Tomahawk::InfoSystem::InfoSystem::instance()->pushInfo(
+        s_aeInfoIdentifier, Tomahawk::InfoSystem::InfoNotifyUser,
+        QVariant::fromValue< QVariantMap >( retryInfo ) );
+}
+
+
+void
+AudioEngine::sendNowPlayingNotification()
+{
+    tDebug( LOGEXTRA ) << Q_FUNC_INFO;
+
+    if ( ! m_infoSystemConnected )
+    {
+        connect( Tomahawk::InfoSystem::InfoSystem::instance(),
+             SIGNAL( info( Tomahawk::InfoSystem::InfoRequestData, QVariant ) ),
+             SLOT( infoSystemInfo( Tomahawk::InfoSystem::InfoRequestData, QVariant ) ) );
+
+        connect( Tomahawk::InfoSystem::InfoSystem::instance(), SIGNAL( finished( QString ) ), SLOT( infoSystemFinished( QString ) ) );
+
+        m_infoSystemConnected = true;
+    }
+
+    Tomahawk::InfoSystem::InfoCriteriaHash trackInfo;
+    trackInfo["artist"] = m_currentTrack->album()->artist()->name();
+    trackInfo["album"] = m_currentTrack->album()->name();
+
+    Tomahawk::InfoSystem::InfoRequestData requestData;
+    requestData.caller = s_aeInfoIdentifier;
+    requestData.type = Tomahawk::InfoSystem::InfoAlbumCoverArt;
+    requestData.input = QVariant::fromValue< Tomahawk::InfoSystem::InfoCriteriaHash >( trackInfo );
+    requestData.customData = QVariantMap();
+
+    Tomahawk::InfoSystem::InfoSystem::instance()->getInfo( requestData );
+}
+
+
+void
+AudioEngine::infoSystemInfo( Tomahawk::InfoSystem::InfoRequestData requestData, QVariant output )
+{
+    if ( requestData.caller != s_aeInfoIdentifier ||
+         requestData.type != Tomahawk::InfoSystem::InfoAlbumCoverArt )
+    {
+        return;
+    }
+
+    QVariantMap playInfo;
+    playInfo["message"] = QString( "Tomahawk is playing \"%1\" by %2 on album %3." )
+                                    .arg( m_currentTrack->track() )
+                                    .arg( m_currentTrack->artist()->name() )
+                                     .arg( m_currentTrack->album()->name() );
+    if ( !output.isNull() && output.isValid() )
+    {
+        QVariantMap returnedData = output.value< QVariantMap >();
+        const QByteArray ba = returnedData["imgbytes"].toByteArray();
+        if ( ba.length() )
+        {
+            QPixmap pm;
+            pm.loadFromData( ba );
+            playInfo["image"] = QVariant( pm.toImage() );
+        }
+    }
+
+    Tomahawk::InfoSystem::InfoSystem::instance()->pushInfo(
+        s_aeInfoIdentifier, Tomahawk::InfoSystem::InfoNotifyUser,
+        QVariant::fromValue< QVariantMap >( playInfo ) );
+}
+
+
+void
+AudioEngine::infoSystemFinished( QString caller )
+{
+    Q_UNUSED( caller );
 }
 
 
 bool
 AudioEngine::loadTrack( const Tomahawk::result_ptr& result )
 {
-    qDebug() << Q_FUNC_INFO << thread() << result;
     bool err = false;
-
     {
         QSharedPointer<QIODevice> io;
 
@@ -212,7 +354,7 @@ AudioEngine::loadTrack( const Tomahawk::result_ptr& result )
 
                 if ( !io || io.isNull() )
                 {
-                    qDebug() << "Error getting iodevice for item";
+                    tLog() << "Error getting iodevice for" << result->url();
                     err = true;
                 }
             }
@@ -220,7 +362,7 @@ AudioEngine::loadTrack( const Tomahawk::result_ptr& result )
 
         if ( !err )
         {
-            qDebug() << "Starting new song from url:" << m_currentTrack->url();
+            tLog() << "Starting new song:" << m_currentTrack->url();
             emit loading( m_currentTrack );
 
             if ( !isHttpResult( m_currentTrack->url() ) && !isLocalResult( m_currentTrack->url() ) )
@@ -231,13 +373,26 @@ AudioEngine::loadTrack( const Tomahawk::result_ptr& result )
             }
             else
             {
-                QUrl furl = m_currentTrack->url();
-                if ( m_currentTrack->url().contains( "?" ) )
+                if ( !isLocalResult( m_currentTrack->url() ) )
                 {
-                    furl = QUrl( m_currentTrack->url().left( m_currentTrack->url().indexOf( '?' ) ) );
-                    furl.setEncodedQuery( QString( m_currentTrack->url().mid( m_currentTrack->url().indexOf( '?' ) + 1 ) ).toLocal8Bit() );
+                    QUrl furl = m_currentTrack->url();
+                    if ( m_currentTrack->url().contains( "?" ) )
+                    {
+                        furl = QUrl( m_currentTrack->url().left( m_currentTrack->url().indexOf( '?' ) ) );
+                        furl.setEncodedQuery( QString( m_currentTrack->url().mid( m_currentTrack->url().indexOf( '?' ) + 1 ) ).toLocal8Bit() );
+                    }
+                    m_mediaObject->setCurrentSource( furl );
                 }
-                m_mediaObject->setCurrentSource( furl );
+                else
+                {
+                    QString furl = m_currentTrack->url();
+#ifdef Q_OS_WIN32
+                    if ( furl.startsWith( "file://" ) )
+                        furl = furl.right( furl.length() - 7 );
+#endif
+                    m_mediaObject->setCurrentSource( furl );
+                }
+
                 m_mediaObject->currentSource().setAutoDelete( true );
                 m_isPlayingHttp = true;
             }
@@ -254,15 +409,18 @@ AudioEngine::loadTrack( const Tomahawk::result_ptr& result )
             DatabaseCommand_LogPlayback* cmd = new DatabaseCommand_LogPlayback( m_currentTrack, DatabaseCommand_LogPlayback::Started );
             Database::instance()->enqueue( QSharedPointer<DatabaseCommand>(cmd) );
 
-	    Tomahawk::InfoSystem::InfoCriteriaHash trackInfo;
+            Tomahawk::InfoSystem::InfoCriteriaHash trackInfo;
+            trackInfo["title"] = m_currentTrack->track();
+            trackInfo["artist"] = m_currentTrack->artist()->name();
+            trackInfo["album"] = m_currentTrack->album()->name();
 
-	    trackInfo["title"] = m_currentTrack->track();
-	    trackInfo["artist"] = m_currentTrack->artist()->name();
-	    trackInfo["album"] = m_currentTrack->album()->name();
-	    Tomahawk::InfoSystem::InfoSystem::instance()->pushInfo(
-	       s_aeInfoIdentifier, Tomahawk::InfoSystem::InfoNowPlaying,
-	       QVariant::fromValue< Tomahawk::InfoSystem::InfoCriteriaHash >( trackInfo ) );
+            if ( TomahawkSettings::instance()->verboseNotifications() )
+                sendNowPlayingNotification();
 
+            Tomahawk::InfoSystem::InfoSystem::instance()->pushInfo(
+                s_aeInfoIdentifier,
+                Tomahawk::InfoSystem::InfoNowPlaying,
+                QVariant::fromValue< Tomahawk::InfoSystem::InfoCriteriaHash >( trackInfo ) );
         }
     }
 
@@ -272,21 +430,23 @@ AudioEngine::loadTrack( const Tomahawk::result_ptr& result )
         return false;
     }
 
+    m_waitingOnNewTrack = false;
     return true;
 }
+
 
 void
 AudioEngine::loadPreviousTrack()
 {
-    qDebug() << Q_FUNC_INFO;
+    tDebug( LOGEXTRA ) << Q_FUNC_INFO;
 
-    if ( !m_playlist )
+    if ( m_playlist.isNull() )
     {
         stop();
         return;
     }
 
-    Tomahawk::result_ptr result = m_playlist->previousItem();
+    Tomahawk::result_ptr result = m_playlist.data()->previousItem();
     if ( !result.isNull() )
         loadTrack( result );
     else
@@ -297,7 +457,7 @@ AudioEngine::loadPreviousTrack()
 void
 AudioEngine::loadNextTrack()
 {
-    qDebug() << Q_FUNC_INFO;
+    tDebug( LOGEXTRA ) << Q_FUNC_INFO;
 
     Tomahawk::result_ptr result;
 
@@ -306,34 +466,58 @@ AudioEngine::loadNextTrack()
         result = m_queue->nextItem();
     }
 
-    if ( m_playlist && result.isNull() )
+    if ( !m_playlist.isNull() && result.isNull() )
     {
-        result = m_playlist->nextItem();
+        result = m_playlist.data()->nextItem();
     }
 
     if ( !result.isNull() )
         loadTrack( result );
     else
+    {
+        if ( !m_playlist.isNull() && m_playlist.data()->retryMode() == Tomahawk::PlaylistInterface::Retry )
+            m_waitingOnNewTrack = true;
         stop();
+    }
 }
 
 
 void
-AudioEngine::playItem( PlaylistInterface* playlist, const Tomahawk::result_ptr& result )
+AudioEngine::playItem( Tomahawk::PlaylistInterface* playlist, const Tomahawk::result_ptr& result )
 {
-    qDebug() << Q_FUNC_INFO;
+    tDebug( LOGEXTRA ) << Q_FUNC_INFO << ( result.isNull() ? QString() : result->url() );
+
+    if ( !m_playlist.isNull() )
+        m_playlist.data()->reset();
 
     setPlaylist( playlist );
-    m_currentTrackPlaylist = playlist;
+    m_currentTrackPlaylist = playlist->getSharedPointer();
 
-    loadTrack( result );
+    if ( !result.isNull() )
+        loadTrack( result );
+    else if ( !m_playlist.isNull() && m_playlist.data()->retryMode() == PlaylistInterface::Retry )
+    {
+        m_waitingOnNewTrack = true;
+        stop();
+    }
+}
+
+
+void
+AudioEngine::playlistNextTrackReady()
+{
+    if ( !m_waitingOnNewTrack )
+        return;
+
+    m_waitingOnNewTrack = false;
+    next();
 }
 
 
 void
 AudioEngine::onAboutToFinish()
 {
-    qDebug() << Q_FUNC_INFO;
+    tDebug( LOGVERBOSE ) << Q_FUNC_INFO;
     m_expectStop = true;
 }
 
@@ -341,23 +525,43 @@ AudioEngine::onAboutToFinish()
 void
 AudioEngine::onStateChanged( Phonon::State newState, Phonon::State oldState )
 {
-    qDebug() << Q_FUNC_INFO << oldState << newState << m_expectStop;
+    tDebug( LOGVERBOSE ) << Q_FUNC_INFO << oldState << newState << m_expectStop;
 
     if ( newState == Phonon::ErrorState )
     {
-        qDebug() << "Phonon Error:" << m_mediaObject->errorString() << m_mediaObject->errorType();
+        tLog() << "Phonon Error:" << m_mediaObject->errorString() << m_mediaObject->errorType();
         return;
     }
-
-    if ( !m_expectStop )
-        return;
-    m_expectStop = false;
+    if ( newState == Phonon::PlayingState )
+        setState( Playing );
 
     if ( oldState == Phonon::PlayingState )
     {
-        if ( newState == Phonon::PausedState || newState == Phonon::StoppedState )
+        bool stopped = false;
+        switch ( newState )
         {
-            qDebug() << "Loading next track.";
+            case Phonon::PausedState:
+            {
+                qint64 duration = m_mediaObject->totalTime() > 0 ? m_mediaObject->totalTime() : m_currentTrack->duration() * 1000;
+                stopped = ( duration - 1000 < m_mediaObject->currentTime() );
+                if ( !stopped )
+                    setState( Paused );
+
+                break;
+            }
+            case Phonon::StoppedState:
+            {
+                stopped = true;
+                break;
+            }
+            default:
+                break;
+        }
+
+        if ( stopped && m_expectStop )
+        {
+            m_expectStop = false;
+            tDebug( LOGEXTRA ) << "Finding next track.";
             loadNextTrack();
         }
     }
@@ -389,7 +593,16 @@ AudioEngine::timerTriggered( qint64 time )
 void
 AudioEngine::setPlaylist( PlaylistInterface* playlist )
 {
-    m_playlist = playlist;
+    if ( !m_playlist.isNull() )
+        m_playlist.data()->reset();
+
+    if ( !playlist )
+        return;
+    m_playlist = playlist->getSharedPointer();
+
+    if ( m_playlist.data()->object() && m_playlist.data()->retryMode() == PlaylistInterface::Retry )
+        connect( m_playlist.data()->object(), SIGNAL( nextTrackReady() ), SLOT( playlistNextTrackReady() ) );
+
     emit playlistChanged( playlist );
 }
 
@@ -413,7 +626,7 @@ AudioEngine::setCurrentTrack( const Tomahawk::result_ptr& result )
 bool
 AudioEngine::isHttpResult( const QString& url ) const
 {
-    return url.startsWith( "http://" );
+    return url.startsWith( "http://" ) || url.startsWith( "https://" );
 }
 
 
@@ -421,4 +634,14 @@ bool
 AudioEngine::isLocalResult( const QString& url ) const
 {
     return url.startsWith( "file://" );
+}
+
+
+void
+AudioEngine::setState( AudioState state )
+{
+    AudioState oldState = m_state;
+    m_state = state;
+
+    emit stateChanged( state, oldState );
 }

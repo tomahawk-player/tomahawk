@@ -1,5 +1,5 @@
 /* === This file is part of Tomahawk Player - <http://tomahawk-player.org> ===
- * 
+ *
  *   Copyright 2010-2011, Christian Muehlhaeuser <muesli@tomahawk-player.org>
  *
  *   Tomahawk is free software: you can redistribute it and/or modify
@@ -22,6 +22,7 @@
 #include <QThread>
 
 #include "network/servent.h"
+#include "utils/logger.h"
 
 #define PROTOVER "4" // must match remote peer, or we can't talk.
 
@@ -226,19 +227,17 @@ Connection::doSetup()
 
     m_sock->moveToThread( thread() );
 
-    qsrand( QTime( 0, 0, 0 ).secsTo( QTime::currentTime() ) );
+    connect( m_sock.data(), SIGNAL( bytesWritten( qint64 ) ),
+                              SLOT( bytesWritten( qint64 ) ), Qt::QueuedConnection );
 
-    connect( m_sock.data(), SIGNAL(bytesWritten(qint64)),
-             SLOT(bytesWritten(qint64)), Qt::QueuedConnection);
+    connect( m_sock.data(), SIGNAL( disconnected() ),
+                              SLOT( socketDisconnected() ), Qt::QueuedConnection );
 
-    connect( m_sock.data(), SIGNAL(disconnected()),
-             SLOT(socketDisconnected()), Qt::QueuedConnection);
+    connect( m_sock.data(), SIGNAL( error( QAbstractSocket::SocketError ) ),
+                              SLOT( socketDisconnectedError( QAbstractSocket::SocketError ) ), Qt::QueuedConnection );
 
-    connect( m_sock.data(), SIGNAL(error(QAbstractSocket::SocketError)),
-             SLOT(socketDisconnectedError(QAbstractSocket::SocketError)), Qt::QueuedConnection );
-
-    connect( m_sock.data(), SIGNAL(readyRead()),
-             SLOT(readyRead()), Qt::QueuedConnection);
+    connect( m_sock.data(), SIGNAL( readyRead() ),
+                              SLOT( readyRead() ), Qt::QueuedConnection );
 
     // if connection not authed/setup fast enough, kill it:
     QTimer::singleShot( AUTH_TIMEOUT, this, SLOT( authCheckTimeout() ) );

@@ -19,12 +19,12 @@
 #include "treeheader.h"
 
 #include <QContextMenuEvent>
-#include <QDebug>
 #include <QMenu>
 
 #include "tomahawksettings.h"
 #include "playlist/treemodel.h"
 #include "playlist/artistview.h"
+#include "utils/logger.h"
 
 
 TreeHeader::TreeHeader( ArtistView* parent )

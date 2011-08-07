@@ -1,5 +1,5 @@
 /* === This file is part of Tomahawk Player - <http://tomahawk-player.org> ===
- * 
+ *
  *   Copyright 2010-2011, Christian Muehlhaeuser <muesli@tomahawk-player.org>
  *
  *   Tomahawk is free software: you can redistribute it and/or modify
@@ -18,14 +18,15 @@
 
 #include "overlaywidget.h"
 
-#include <QDebug>
 #include <QPainter>
 #include <QPropertyAnimation>
 
-#define CORNER_ROUNDNESS 16.0
+#include "utils/logger.h"
+
+#define CORNER_ROUNDNESS 8.0
 #define FADING_DURATION 500
 #define FONT_SIZE 16
-#define OPACITY 0.86
+#define OPACITY 0.70
 
 
 OverlayWidget::OverlayWidget( QWidget* parent )
@@ -87,7 +88,7 @@ OverlayWidget::show( int timeoutSecs )
 
     QPropertyAnimation* animation = new QPropertyAnimation( this, "opacity" );
     animation->setDuration( FADING_DURATION );
-    animation->setEndValue( OPACITY );
+    animation->setEndValue( 1.0 );
     animation->start();
 
     if( timeoutSecs > 0 )
@@ -108,7 +109,7 @@ OverlayWidget::hide()
 }
 
 
-bool 
+bool
 OverlayWidget::shown() const
 {
     if ( !isEnabled() )
@@ -134,7 +135,7 @@ OverlayWidget::paintEvent( QPaintEvent* event )
 
     QPen pen( palette().dark().color(), .5 );
     p.setPen( pen );
-    p.setBrush( palette().highlight() );
+    p.setBrush( QColor( 30, 30, 30, 255.0 * OPACITY ) );
 
     p.drawRoundedRect( r, CORNER_ROUNDNESS, CORNER_ROUNDNESS );
 
@@ -160,6 +161,7 @@ OverlayWidget::paintEvent( QPaintEvent* event )
         fm = QFontMetricsF( f );
         textHeight = fm.boundingRect( textRect, Qt::AlignCenter | Qt::TextWordWrap, text() ).height();
     }
+
     p.setFont( f );
     p.setPen( palette().highlightedText().color() );
     p.drawText( r.adjusted( 8, 8, -8, -8 ), text(), to );

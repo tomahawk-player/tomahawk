@@ -18,15 +18,9 @@
 
 #include "trackview.h"
 
-#include <QDebug>
 #include <QKeyEvent>
 #include <QPainter>
 #include <QScrollBar>
-
-#include "audio/audioengine.h"
-#include "utils/tomahawkutils.h"
-#include "widgets/overlaywidget.h"
-#include "dynamic/widgets/LoadingSpinner.h"
 
 #include "trackheader.h"
 #include "viewmanager.h"
@@ -34,7 +28,13 @@
 #include "trackmodel.h"
 #include "trackproxymodel.h"
 #include "track.h"
-#include "globalactionmanager.h"
+
+#include "audio/audioengine.h"
+#include "widgets/overlaywidget.h"
+#include "dynamic/widgets/LoadingSpinner.h"
+#include "utils/tomahawkutils.h"
+#include "utils/logger.h"
+#include <globalactionmanager.h>
 
 using namespace Tomahawk;
 
@@ -49,7 +49,9 @@ TrackView::TrackView( QWidget* parent )
     , m_loadingSpinner( new LoadingSpinner( this ) )
     , m_resizing( false )
     , m_dragging( false )
+    , m_contextMenu( new ContextMenu( this ) )
 {
+    setMouseTracking( true );
     setAlternatingRowColors( true );
     setSelectionMode( QAbstractItemView::ExtendedSelection );
     setSelectionBehavior( QAbstractItemView::SelectRows );
@@ -67,6 +69,7 @@ TrackView::TrackView( QWidget* parent )
     setHeader( m_header );
     setSortingEnabled( true );
     sortByColumn( -1 );
+    setContextMenuPolicy( Qt::CustomContextMenu );
 
 #ifndef Q_WS_WIN
     QFont f = font();
@@ -79,11 +82,9 @@ TrackView::TrackView( QWidget* parent )
     setFont( f );
 #endif
 
-    QAction* createLinkAction = new QAction( tr( "Copy Track Link" ), this );
-    connect( createLinkAction, SIGNAL( triggered( bool ) ), this, SLOT( copyLink() ) );
-    addAction( createLinkAction );
-
     connect( this, SIGNAL( doubleClicked( QModelIndex ) ), SLOT( onItemActivated( QModelIndex ) ) );
+    connect( this, SIGNAL( customContextMenuRequested( const QPoint& ) ), SLOT( onCustomContextMenu( const QPoint& ) ) );
+    connect( m_contextMenu, SIGNAL( triggered( int ) ), SLOT( onMenuTriggered( int ) ) );
 }
 
 
@@ -133,13 +134,26 @@ TrackView::setTrackModel( TrackModel* model )
         m_proxyModel->setSourceTrackModel( m_model );
     }
 
-    connect( m_model, SIGNAL( itemSizeChanged( QModelIndex ) ), SLOT( onItemResized( QModelIndex ) ) );
+    if ( m_model && m_model->metaObject()->indexOfSignal( "itemSizeChanged(QModelIndex)" ) > -1 )
+        connect( m_model, SIGNAL( itemSizeChanged( QModelIndex ) ), SLOT( onItemResized( QModelIndex ) ) );
+
     connect( m_model, SIGNAL( loadingStarted() ), m_loadingSpinner, SLOT( fadeIn() ) );
     connect( m_model, SIGNAL( loadingFinished() ), m_loadingSpinner, SLOT( fadeOut() ) );
 
     connect( m_proxyModel, SIGNAL( filterChanged( QString ) ), SLOT( onFilterChanged( QString ) ) );
 
     setAcceptDrops( true );
+
+    if ( model->style() == TrackModel::Short )
+    {
+        setHeaderHidden( true );
+        setHorizontalScrollBarPolicy( Qt::ScrollBarAlwaysOff );
+    }
+    else
+    {
+        setHeaderHidden( false );
+        setHorizontalScrollBarPolicy( Qt::ScrollBarAsNeeded );
+    }
 }
 
 
@@ -150,7 +164,7 @@ TrackView::onItemActivated( const QModelIndex& index )
     if ( item && item->query()->numResults() )
     {
         qDebug() << "Result activated:" << item->query()->toString() << item->query()->results().first()->url();
-        m_proxyModel->setCurrentItem( index );
+        m_proxyModel->setCurrentIndex( index );
         AudioEngine::instance()->playItem( m_proxyModel, item->query()->results().first() );
     }
 }
@@ -179,28 +193,11 @@ TrackView::onItemResized( const QModelIndex& index )
     m_delegate->updateRowSize( index );
 }
 
+
 void
 TrackView::playItem()
 {
     onItemActivated( m_contextMenuIndex );
-}
-
-
-void
-TrackView::addItemsToQueue()
-{
-    foreach( const QModelIndex& idx, selectedIndexes() )
-    {
-        if ( idx.column() )
-            continue;
-
-        TrackModelItem* item = model()->itemFromIndex( proxyModel()->mapToSource( idx ) );
-        if ( item && item->query()->numResults() )
-        {
-            ViewManager::instance()->queue()->model()->append( item->query() );
-            ViewManager::instance()->showQueue();
-        }
-    }
 }
 
 
@@ -218,9 +215,7 @@ TrackView::dragEnterEvent( QDragEnterEvent* event )
     qDebug() << Q_FUNC_INFO;
     QTreeView::dragEnterEvent( event );
 
-    if ( event->mimeData()->hasFormat( "application/tomahawk.query.list" )
-        || event->mimeData()->hasFormat( "application/tomahawk.plentry.list" )
-        || event->mimeData()->hasFormat( "application/tomahawk.result.list" ) )
+    if ( GlobalActionManager::instance()->acceptsMimeData( event->mimeData() ) )
     {
         m_dragging = true;
         m_dropRect = QRect();
@@ -242,13 +237,18 @@ TrackView::dragMoveEvent( QDragMoveEvent* event )
         return;
     }
 
-    if ( event->mimeData()->hasFormat( "application/tomahawk.query.list" )
-        || event->mimeData()->hasFormat( "application/tomahawk.plentry.list" )
-        || event->mimeData()->hasFormat( "application/tomahawk.result.list" ) )
+    if ( GlobalActionManager::instance()->acceptsMimeData( event->mimeData() ) )
     {
         setDirtyRegion( m_dropRect );
         const QPoint pos = event->pos();
-        const QModelIndex index = indexAt( pos );
+        QModelIndex index = indexAt( pos );
+        bool pastLast = false;
+
+        if ( !index.isValid() && proxyModel()->rowCount( QModelIndex() ) > 0 )
+        {
+            index = proxyModel()->index( proxyModel()->rowCount( QModelIndex() ) - 1, 0, QModelIndex() );
+            pastLast = true;
+        }
 
         if ( index.isValid() )
         {
@@ -257,7 +257,8 @@ TrackView::dragMoveEvent( QDragMoveEvent* event )
 
             // indicate that the item will be inserted above the current place
             const int gap = 5; // FIXME constant
-            m_dropRect = QRect( rect.left(), rect.top() - gap / 2, rect.width(), gap );
+            int yHeight = ( pastLast ? rect.bottom() : rect.top() ) - gap / 2;
+            m_dropRect = QRect( 0, yHeight, width(), gap );
 
             event->acceptProposedAction();
         }
@@ -278,20 +279,7 @@ TrackView::dropEvent( QDropEvent* event )
     }
     else
     {
-        if ( event->mimeData()->hasFormat( "application/tomahawk.query.list" ) )
-        {
-            const QPoint pos = event->pos();
-            const QModelIndex index = indexAt( pos );
-
-            qDebug() << "Drop Event accepted at row:" << index.row();
-            event->acceptProposedAction();
-
-            if ( !model()->isReadOnly() )
-            {
-                model()->dropMimeData( event->mimeData(), event->proposedAction(), index.row(), 0, index.parent() );
-            }
-        }
-        else if ( event->mimeData()->hasFormat( "application/tomahawk.result.list" ) )
+        if ( GlobalActionManager::instance()->acceptsMimeData( event->mimeData() ) )
         {
             const QPoint pos = event->pos();
             const QModelIndex index = indexAt( pos );
@@ -361,17 +349,6 @@ TrackView::onFilterChanged( const QString& )
 
 
 void
-TrackView::copyLink()
-{
-    TrackModelItem* item = model()->itemFromIndex( proxyModel()->mapToSource( contextMenuIndex() ) );
-    if ( item && !item->query().isNull() )
-    {
-        GlobalActionManager::instance()->copyToClipboard( item->query() );
-    }
-}
-
-
-void
 TrackView::startDrag( Qt::DropActions supportedActions )
 {
     QList<QPersistentModelIndex> pindexes;
@@ -403,5 +380,154 @@ TrackView::startDrag( Qt::DropActions supportedActions )
     if ( action == Qt::MoveAction )
     {
         m_proxyModel->removeIndexes( pindexes );
+    }
+}
+
+
+void
+TrackView::onCustomContextMenu( const QPoint& pos )
+{
+    m_contextMenu->clear();
+
+    QModelIndex idx = indexAt( pos );
+    idx = idx.sibling( idx.row(), 0 );
+    setContextMenuIndex( idx );
+
+    if ( !idx.isValid() )
+        return;
+
+    if ( model() && !model()->isReadOnly() )
+        m_contextMenu->setSupportedActions( m_contextMenu->supportedActions() | ContextMenu::ActionDelete );
+
+    QList<query_ptr> queries;
+    foreach ( const QModelIndex& index, selectedIndexes() )
+    {
+        if ( index.column() )
+            continue;
+
+        TrackModelItem* item = proxyModel()->itemFromIndex( proxyModel()->mapToSource( index ) );
+        if ( item && !item->query().isNull() )
+            queries << item->query();
+    }
+
+    m_contextMenu->setQueries( queries );
+    m_contextMenu->exec( mapToGlobal( pos ) );
+}
+
+
+void
+TrackView::onMenuTriggered( int action )
+{
+    switch ( action )
+    {
+        case ContextMenu::ActionPlay:
+            onItemActivated( m_contextMenuIndex );
+            break;
+
+        default:
+            break;
+    }
+}
+
+
+void
+TrackView::updateHoverIndex( const QPoint& pos )
+{
+    QModelIndex idx = indexAt( pos );
+
+    if ( idx != m_hoveredIndex )
+    {
+        m_hoveredIndex = idx;
+        repaint();
+    }
+
+    if ( m_model->style() == TrackModel::Short )
+        return;
+
+    if ( idx.column() == TrackModel::Artist || idx.column() == TrackModel::Album )
+    {
+        if ( pos.x() > header()->sectionViewportPosition( idx.column() ) + header()->sectionSize( idx.column() ) - 16 &&
+             pos.x() < header()->sectionViewportPosition( idx.column() ) + header()->sectionSize( idx.column() ) )
+        {
+            setCursor( Qt::PointingHandCursor );
+            return;
+        }
+    }
+
+    if ( cursor().shape() != Qt::ArrowCursor )
+        setCursor( Qt::ArrowCursor );
+}
+
+
+void
+TrackView::wheelEvent( QWheelEvent* event )
+{
+    QTreeView::wheelEvent( event );
+
+    if ( m_hoveredIndex.isValid() )
+    {
+        m_hoveredIndex = QModelIndex();
+        repaint();
+    }
+}
+
+
+void
+TrackView::leaveEvent( QEvent* event )
+{
+    QTreeView::leaveEvent( event );
+    updateHoverIndex( QPoint( -1, -1 ) );
+}
+
+
+void
+TrackView::mouseMoveEvent( QMouseEvent* event )
+{
+    QTreeView::mouseMoveEvent( event );
+    updateHoverIndex( event->pos() );
+}
+
+
+void
+TrackView::mousePressEvent( QMouseEvent* event )
+{
+    QTreeView::mousePressEvent( event );
+    QModelIndex idx = indexAt( event->pos() );
+
+    if ( event->pos().x() > header()->sectionViewportPosition( idx.column() ) + header()->sectionSize( idx.column() ) - 16 &&
+         event->pos().x() < header()->sectionViewportPosition( idx.column() ) + header()->sectionSize( idx.column() ) )
+    {
+        TrackModelItem* item = proxyModel()->itemFromIndex( proxyModel()->mapToSource( idx ) );
+        switch ( idx.column() )
+        {
+            case TrackModel::Artist:
+            {
+                if ( item->query()->results().count() )
+                {
+                    ViewManager::instance()->show( item->query()->results().first()->artist() );
+                }
+                else
+                {
+                    ViewManager::instance()->show( Artist::get( item->query()->artist() ) );
+                }
+                break;
+            }
+
+            case TrackModel::Album:
+            {
+                if ( item->query()->results().count() )
+                {
+                    ViewManager::instance()->show( item->query()->results().first()->album() );
+                }
+                else
+                {
+                    //TODO
+                }
+                break;
+            }
+
+            default:
+                break;
+        }
     }
 }

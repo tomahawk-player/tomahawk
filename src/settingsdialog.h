@@ -92,6 +92,8 @@ private slots:
     void sipPluginDeleted( bool );
     void sipPluginRowDeleted( bool );
 
+    void updateScanOptionsView();
+    
     // dialog slots
     void resolverConfigClosed( int value );
     void sipConfigClosed( int value );

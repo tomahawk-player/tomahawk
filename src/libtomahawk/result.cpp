@@ -20,10 +20,14 @@
 
 #include "album.h"
 #include "collection.h"
+#include "database/database.h"
 #include "database/databasecommand_resolve.h"
 #include "database/databasecommand_alltracks.h"
 #include "database/databasecommand_addfiles.h"
 #include "database/databasecommand_loadfile.h"
+#include "database/databasecommand_loadsocialactions.h"
+
+#include "utils/logger.h"
 
 using namespace Tomahawk;
 
@@ -89,7 +93,9 @@ Result::score() const
 RID
 Result::id() const
 {
-    Q_ASSERT( !m_rid.isEmpty() );
+    if ( m_rid.isEmpty() )
+        m_rid = uuid();
+
     return m_rid;
 }
 
@@ -153,7 +159,6 @@ Result::updateAttributes()
 void
 Result::onOnline()
 {
-//    qDebug() << Q_FUNC_INFO << toString();
     emit statusChanged();
 }
 
@@ -161,8 +166,56 @@ Result::onOnline()
 void
 Result::onOffline()
 {
-//    qDebug() << Q_FUNC_INFO << toString();
     emit statusChanged();
+}
+
+
+void
+Result::loadSocialActions()
+{
+    DatabaseCommand_LoadSocialActions* cmd = new DatabaseCommand_LoadSocialActions( this );
+    connect( cmd, SIGNAL( finished() ), SLOT( onSocialActionsLoaded() ));
+    Database::instance()->enqueue( QSharedPointer<DatabaseCommand>(cmd) );
+}
+
+
+void Result::onSocialActionsLoaded()
+{
+    parseSocialActions();
+
+    emit socialActionsLoaded();
+}
+
+
+void
+Result::setAllSocialActions(QList< SocialAction > socialActions)
+{
+    m_allSocialActions = socialActions;
+}
+
+
+QList< SocialAction >
+Result::allSocialActions()
+{
+    return m_allSocialActions;
+}
+
+
+void
+Result::parseSocialActions()
+{
+    QListIterator< Tomahawk::SocialAction > it( m_allSocialActions );
+    unsigned int highestTimestamp = 0;
+
+    while ( it.hasNext() )
+    {
+        Tomahawk::SocialAction socialAction;
+        socialAction = it.next();
+        if ( socialAction.timestamp.toUInt() > highestTimestamp )
+        {
+            m_currentSocialActions[ socialAction.action.toString() ] = socialAction.value.toBool();
+        }
+    }
 }
 
 

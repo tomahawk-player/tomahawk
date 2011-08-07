@@ -1,5 +1,5 @@
 /* === This file is part of Tomahawk Player - <http://tomahawk-player.org> ===
- * 
+ *
  *   Copyright 2010-2011, Christian Muehlhaeuser <muesli@tomahawk-player.org>
  *
  *   Tomahawk is free software: you can redistribute it and/or modify
@@ -46,15 +46,15 @@ public:
     ~SourceInfoWidget();
 
     virtual QWidget* widget() { return this; }
-    virtual PlaylistInterface* playlistInterface() const { return 0; }
-    
+    virtual Tomahawk::PlaylistInterface* playlistInterface() const { return 0; }
+
     virtual QString title() const { return m_title; }
     virtual QString description() const { return m_description; }
 
     virtual bool showStatsBar() const { return false; }
 
     virtual bool jumpToCurrentTrack() { return false; }
-    
+
 protected:
     void changeEvent( QEvent* e );
 

@@ -19,10 +19,10 @@
 #include "config.h"
 
 #include <QCryptographicHash>
-#include <QDebug>
 #include <QDesktopServices>
 #include <QFileDialog>
 #include <QMessageBox>
+#include <QNetworkConfiguration>
 #include <QNetworkProxy>
 #include <QVBoxLayout>
 #include <QSizeGrip>
@@ -45,6 +45,8 @@
 #include "delegateconfigwrapper.h"
 #include "sip/SipModel.h"
 #include "sipconfigdelegate.h"
+
+#include "utils/logger.h"
 
 #include "ui_proxydialog.h"
 #include "ui_stackedsettingsdialog.h"
@@ -115,10 +117,33 @@ SettingsDialog::SettingsDialog( QWidget *parent )
         ui->lineEditMusicPath_2->setText( QDesktopServices::storageLocation( QDesktopServices::MusicLocation ) );
     }
 
-    // WATCH CHANGES
-    // FIXME: QFileSystemWatcher is broken (as we know) and deprecated. Find another way.
     ui->checkBoxWatchForChanges->setChecked( s->watchForChanges() );
-    ui->checkBoxWatchForChanges->setVisible( false );
+    ui->scannerTimeSpinBox->setValue( s->scannerTime() );
+    connect( ui->checkBoxWatchForChanges, SIGNAL( clicked( bool ) ), SLOT( updateScanOptionsView() ) );
+    connect( ui->scannerDirModeButton, SIGNAL( clicked( bool ) ), SLOT( updateScanOptionsView() ) );
+    connect( ui->scannerFileModeButton, SIGNAL( clicked( bool ) ), SLOT( updateScanOptionsView() ) );
+    if ( s->scannerMode() == TomahawkSettings::Files )
+        ui->scannerFileModeButton->setChecked( true );
+    else
+        ui->scannerDirModeButton->setChecked( true );
+    if ( ui->checkBoxWatchForChanges->isChecked() )
+    {
+        ui->scanTimeLabel->show();
+        ui->scannerTimeSpinBox->show();
+        ui->scannerDirModeButton->show();
+        ui->scannerFileModeButton->show();
+        ui->scanInformationLabelFiles->show();
+        ui->scanInformationLabelDirs->show();
+    }
+    else
+    {
+        ui->scanTimeLabel->hide();
+        ui->scannerTimeSpinBox->hide();
+        ui->scannerDirModeButton->hide();
+        ui->scannerFileModeButton->hide();
+        ui->scanInformationLabelFiles->hide();
+        ui->scanInformationLabelDirs->hide();
+    }
 
     // NOW PLAYING
 #ifdef Q_WS_MAC
@@ -172,6 +197,8 @@ SettingsDialog::~SettingsDialog()
 
         s->setScannerPaths( QStringList( ui->lineEditMusicPath_2->text() ) );
         s->setWatchForChanges( ui->checkBoxWatchForChanges->isChecked() );
+        s->setScannerTime( ui->scannerTimeSpinBox->value() );
+        s->setScannerMode( ui->scannerFileModeButton->isChecked() ? TomahawkSettings::Files : TomahawkSettings::Dirs );
 
 	s->setNowPlayingEnabled( ui->checkBoxEnableAdium->isChecked() );
 
@@ -189,6 +216,7 @@ SettingsDialog::~SettingsDialog()
 
     delete ui;
 }
+
 
 void
 SettingsDialog::createIcons()
@@ -337,6 +365,34 @@ SettingsDialog::toggleUpnp( bool preferStaticEnabled )
 
 
 void
+SettingsDialog::updateScanOptionsView()
+{
+    if ( ui->checkBoxWatchForChanges->isChecked() )
+    {
+        ui->scanTimeLabel->show();
+        ui->scannerTimeSpinBox->show();
+        ui->scannerDirModeButton->show();
+        ui->scannerFileModeButton->show();
+        ui->scanInformationLabelFiles->show();
+        ui->scanInformationLabelDirs->show();
+        if ( sender() == ui->scannerFileModeButton || ( sender() == ui->checkBoxWatchForChanges && TomahawkSettings::instance()->scannerMode() == TomahawkSettings::Files ) )
+            ui->scannerFileModeButton->setChecked( true );
+        else
+            ui->scannerDirModeButton->setChecked( true );
+    }
+    else
+    {
+        ui->scanTimeLabel->hide();
+        ui->scannerTimeSpinBox->hide();
+        ui->scannerDirModeButton->hide();
+        ui->scannerFileModeButton->hide();
+        ui->scanInformationLabelFiles->hide();
+        ui->scanInformationLabelDirs->hide();
+    }
+}
+
+
+void
 SettingsDialog::testLastFmLogin()
 {
 #ifdef LIBLASTFM_FOUND
@@ -350,6 +406,22 @@ SettingsDialog::testLastFmLogin()
     query[ "method" ] = "auth.getMobileSession";
     query[ "username" ] =  ui->lineEditLastfmUsername->text().toLower();
     query[ "authToken" ] = authToken;
+
+    TomahawkUtils::NetworkProxyFactory* oldProxyFactory = TomahawkUtils::proxyFactory();
+    QNetworkAccessManager* nam = TomahawkUtils::nam();
+
+    //WARNING: there's a chance liblastfm2 will clobber the application proxy factory it if it constructs a nam due to the below call
+    //but it is unsafe to re-set it here
+    QNetworkAccessManager* currNam = lastfm::nam();
+
+    currNam->setConfiguration( nam->configuration() );
+    currNam->setNetworkAccessible( nam->networkAccessible() );
+    TomahawkUtils::NetworkProxyFactory* newProxyFactory = new TomahawkUtils::NetworkProxyFactory();
+    newProxyFactory->setNoProxyHosts( oldProxyFactory->noProxyHosts() );
+    QNetworkProxy newProxy( oldProxyFactory->proxy() );
+    newProxyFactory->setProxy( newProxy );
+    currNam->setProxyFactory( newProxyFactory );
+    
     QNetworkReply* authJob = lastfm::ws::post( query );
 
     connect( authJob, SIGNAL( finished() ), SLOT( onLastFmFinished() ) );
@@ -544,11 +616,13 @@ SettingsDialog::sipFactoryClicked( SipPluginFactory* factory )
         DelegateConfigWrapper* dialog = new DelegateConfigWrapper( p->configWidget(), QString("%1 Config" ).arg( p->friendlyName() ), this, Qt::Sheet );
         dialog->setProperty( "sipplugin", QVariant::fromValue< QObject* >( p ) );
         connect( dialog, SIGNAL( finished( int ) ), this, SLOT( sipCreateConfigClosed( int ) ) );
+        connect( p, SIGNAL( datatError( bool ) ), dialog, SLOT( toggleOkButton( bool ) ) );
 
         dialog->show();
 #else
         DelegateConfigWrapper dialog( p->configWidget(), QString("%1 Config" ).arg( p->friendlyName() ), this );
         QWeakPointer< DelegateConfigWrapper > watcher( &dialog );
+        connect( p, SIGNAL( dataError( bool ) ), &dialog, SLOT( toggleOkButton( bool ) ) );
         int ret = dialog.exec();
         if( !watcher.isNull() && ret == QDialog::Accepted ) {
             // send changed config to resolver
@@ -749,7 +823,7 @@ ProxyDialog::saveSettings()
     s->setProxyNoProxyHosts( ui->noHostLineEdit->text() );
     s->setProxyUsername( ui->userLineEdit->text() );
     s->setProxyPassword( ui->passwordLineEdit->text() );
-    s->setProxyType( ui->typeBox->itemData( ui->typeBox->currentIndex() ).toInt() );
+    s->setProxyType( m_backwardMap[ ui->typeBox->itemData( ui->typeBox->currentIndex() ).toInt() ] );
     s->setProxyDns( ui->checkBoxUseProxyForDns->checkState() == Qt::Checked );
 
     if( s->proxyHost().isEmpty() )

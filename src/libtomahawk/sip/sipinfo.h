@@ -19,13 +19,13 @@
 #ifndef SIPINFO_H
 #define SIPINFO_H
 
-#include <QDebug>
 #include <QSharedPointer>
 #include <QHostInfo>
 
-class SipInfoPrivate;
-
+#include "utils/logger.h"
 #include "../dllmacro.h"
+
+class SipInfoPrivate;
 
 class DLLEXPORT SipInfo : public QObject
 {

@@ -19,7 +19,6 @@
 #ifndef ANIMATEDSPLITTER_H
 #define ANIMATEDSPLITTER_H
 
-#include <QDebug>
 #include <QSplitter>
 #include <QTimeLine>
 
@@ -50,6 +49,8 @@ private slots:
     void onShowRequest();
     void onHideRequest();
 
+    void onSizeChanged( const QSize& size );
+
 private:
     int m_greedyIndex;
 };
@@ -74,6 +75,7 @@ signals:
     void showWidget();
     void hideWidget();
 
+    void sizeChanged( const QSize& size );
     void hiddenSizeChanged();
 
 private slots:

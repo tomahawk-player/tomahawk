@@ -86,6 +86,9 @@ namespace lastfm
         /** use Tag::list to get the tag list out of the finished reply */
         QNetworkReply* getTags() const;
         QNetworkReply* getTopTags() const;
+        
+        QNetworkReply* getTopTracks() const;
+        static QStringList getTopTracks( QNetworkReply* );
     
         /** Last.fm dictates that you may submit at most 10 of these */
         QNetworkReply* addTags( const QStringList& ) const;

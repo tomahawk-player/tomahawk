@@ -21,6 +21,8 @@
 #include <QSqlQuery>
 
 #include "databaseimpl.h"
+#include "utils/logger.h"
+
 
 void
 DatabaseCommand_AllArtists::exec( DatabaseImpl* dbi )

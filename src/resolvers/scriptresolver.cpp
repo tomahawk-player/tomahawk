@@ -19,12 +19,16 @@
 #include "scriptresolver.h"
 
 #include <QtEndian>
+#include <QtNetwork/QNetworkAccessManager>
+#include <QtNetwork/QNetworkProxy>
 
 #include "artist.h"
 #include "album.h"
 #include "pipeline.h"
 #include "sourcelist.h"
+
 #include "utils/tomahawkutils.h"
+#include "utils/logger.h"
 
 
 ScriptResolver::ScriptResolver( const QString& exe )
@@ -33,19 +37,28 @@ ScriptResolver::ScriptResolver( const QString& exe )
     , m_msgsize( 0 )
     , m_ready( false )
     , m_stopped( false )
+    , m_error( Tomahawk::ExternalResolver::NoError )
 {
-    qDebug() << Q_FUNC_INFO << exe;
+    tLog() << Q_FUNC_INFO << "Loading script resolver:" << exe;
     connect( &m_proc, SIGNAL( readyReadStandardError() ), SLOT( readStderr() ) );
     connect( &m_proc, SIGNAL( readyReadStandardOutput() ), SLOT( readStdout() ) );
     connect( &m_proc, SIGNAL( finished( int, QProcess::ExitStatus ) ), SLOT( cmdExited( int, QProcess::ExitStatus ) ) );
 
-    QString filepath = filePath();
+    QString pathToCheck = filePath();
 #ifdef WIN32
     // have to enclose in quotes if path contains spaces on windows...
-    filepath = QString( "\"%1\"" ).arg( filepath );
+    setFilePath( QString( "\"%1\"" ).arg( filePath() ) );
 #endif
 
-    m_proc.start( filepath );
+    if( !QFile::exists( pathToCheck ) )
+        m_error = Tomahawk::ExternalResolver::FileNotFound;
+    else
+        m_proc.start( filePath() );
+
+    if ( !TomahawkUtils::nam() )
+        return;
+
+    sendConfig();
 }
 
 
@@ -59,13 +72,57 @@ ScriptResolver::~ScriptResolver()
         delete m_configWidget.data();
 }
 
+void
+ScriptResolver::sendConfig()
+{
+
+    // Send a configutaion message with any information the resolver might need
+    // For now, only the proxy information is sent
+    QVariantMap m;
+    m.insert( "_msgtype", "config" );
+    TomahawkUtils::NetworkProxyFactory* factory = dynamic_cast<TomahawkUtils::NetworkProxyFactory*>( TomahawkUtils::nam()->proxyFactory() );
+    QNetworkProxy proxy = factory->proxy();
+    QString proxyType = ( proxy.type() == QNetworkProxy::Socks5Proxy ? "socks5" : "none" );
+    m.insert( "proxytype", proxyType );
+    m.insert( "proxyhost", proxy.hostName() );
+    m.insert( "proxyport", proxy.port() );
+    m.insert( "proxyuser", proxy.user() );
+    m.insert( "proxypass", proxy.password() );
+    // QJson sucks
+    QVariantList hosts;
+    foreach ( const QString& host, factory->noProxyHosts() )
+        hosts << host;
+    m.insert( "noproxyhosts", hosts );
+    QByteArray data = m_serializer.serialize( m );
+    sendMsg( data );
+}
+
+
+void
+ScriptResolver::reload()
+{
+    if( !QFile::exists( filePath() ) )
+        m_error = Tomahawk::ExternalResolver::FileNotFound;
+    else
+    {
+        m_proc.start( filePath() );
+        m_error = Tomahawk::ExternalResolver::NoError;
+
+        sendConfig();
+    }
+}
 
 void
 ScriptResolver::readStderr()
 {
-    qDebug() << "SCRIPT_STDERR" << filePath() << m_proc.readAllStandardError();
+    tLog() << "SCRIPT_STDERR" << filePath() << m_proc.readAllStandardError();
 }
 
+ScriptResolver::ErrorState
+ScriptResolver::error() const
+{
+    return m_error;
+}
 
 void
 ScriptResolver::readStdout()
@@ -101,7 +158,9 @@ ScriptResolver::readStdout()
 void
 ScriptResolver::sendMsg( const QByteArray& msg )
 {
-//    qDebug() << Q_FUNC_INFO << m_ready << msg << msg.length();
+//     qDebug() << Q_FUNC_INFO << m_ready << msg << msg.length();
+    if( !m_proc.isOpen() )
+        return;
 
     quint32 len;
     qToBigEndian( msg.length(), (uchar*) &len );
@@ -185,12 +244,12 @@ void
 ScriptResolver::cmdExited( int code, QProcess::ExitStatus status )
 {
     m_ready = false;
-    qDebug() << Q_FUNC_INFO << "SCRIPT EXITED, code" << code << "status" << status << filePath();
+    tLog() << Q_FUNC_INFO << "SCRIPT EXITED, code" << code << "status" << status << filePath();
     Tomahawk::Pipeline::instance()->removeResolver( this );
 
     if( m_stopped )
     {
-        qDebug() << "*** Script resolver stopped ";
+        tLog() << "*** Script resolver stopped ";
         emit finished();
 
         return;
@@ -199,12 +258,13 @@ ScriptResolver::cmdExited( int code, QProcess::ExitStatus status )
     if( m_num_restarts < 10 )
     {
         m_num_restarts++;
-        qDebug() << "*** Restart num" << m_num_restarts;
+        tLog() << "*** Restart num" << m_num_restarts;
         m_proc.start( filePath() );
+        sendConfig();
     }
     else
     {
-        qDebug() << "*** Reached max restarts, not restarting.";
+        tLog() << "*** Reached max restarts, not restarting.";
     }
 }
 
@@ -239,23 +299,21 @@ ScriptResolver::doSetup( const QVariantMap& m )
 {
 //    qDebug() << Q_FUNC_INFO << m;
 
-    m_name       = m.value( "name" ).toString();
-    m_weight     = m.value( "weight", 0 ).toUInt();
-    m_timeout    = m.value( "timeout", 25 ).toUInt() * 1000;
-    qDebug() << "SCRIPT" << filePath() << "READY," << endl
-             << "name" << m_name << endl
-             << "weight" << m_weight << endl
-             << "timeout" << m_timeout;
+    m_name    = m.value( "name" ).toString();
+    m_weight  = m.value( "weight", 0 ).toUInt();
+    m_timeout = m.value( "timeout", 5 ).toUInt() * 1000;
+    qDebug() << "SCRIPT" << filePath() << "READY," << "name" << m_name << "weight" << m_weight << "timeout" << m_timeout;
 
     m_ready = true;
     Tomahawk::Pipeline::instance()->addResolver( this );
 }
 
+
 void
 ScriptResolver::setupConfWidget( const QVariantMap& m )
 {
     bool compressed = m.value( "compressed", "false" ).toString() == "true";
-    qDebug() << "Resolver has a preferences widget! compressed?" << compressed << m;
+    qDebug() << "Resolver has a preferences widget! compressed?" << compressed;
 
     QByteArray uiData = m[ "widget" ].toByteArray();
     if( compressed )
@@ -281,6 +339,7 @@ ScriptResolver::saveConfig()
     QVariant widgets = configMsgFromWidget( m_configWidget.data() );
     m.insert( "widgets", widgets );
     QByteArray data = m_serializer.serialize( m );
+//     qDebug() << "Got widgets and data;" << widgets << data;
     sendMsg( data );
 }
 
@@ -298,6 +357,6 @@ void
 ScriptResolver::stop()
 {
     m_stopped = true;
-    qDebug() << "KILLING PROCESS!";
+//    qDebug() << "KILLING PROCESS!";
     m_proc.kill();
 }

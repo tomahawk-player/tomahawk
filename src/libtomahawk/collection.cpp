@@ -24,6 +24,8 @@
 #include "dynamic/DynamicPlaylist.h"
 #include "playlist.h"
 
+#include "utils/logger.h"
+
 using namespace Tomahawk;
 
 
@@ -61,19 +63,17 @@ source_ptr& Collection::source() const
 void
 Collection::addPlaylist( const Tomahawk::playlist_ptr& p )
 {
-//    qDebug() << Q_FUNC_INFO;
-
     if ( m_playlists.contains( p->guid() ) )
         return;
 
     QList<playlist_ptr> toadd;
     toadd << p;
-    qDebug() << "Inserted playlist with guid:" << p->guid();
+//    qDebug() << "Inserted playlist with guid:" << p->guid();
     m_playlists.insert( p->guid(), p );
 
-    qDebug() << Q_FUNC_INFO << "Collection name" << name()
+/*    qDebug() << Q_FUNC_INFO << "Collection name" << name()
                             << "from source id" << source()->id()
-                            << "numplaylists:" << m_playlists.count();
+                            << "numplaylists:" << m_playlists.count();*/
     emit playlistsAdded( toadd );
 }
 
@@ -81,16 +81,14 @@ Collection::addPlaylist( const Tomahawk::playlist_ptr& p )
 void
 Collection::addAutoPlaylist( const Tomahawk::dynplaylist_ptr& p )
 {
-//    qDebug() << Q_FUNC_INFO;
-
     QList<dynplaylist_ptr> toadd;
     toadd << p;
-    qDebug() << "Inserted dynamic playlist with guid:" << p->guid();
+//    qDebug() << "Inserted dynamic playlist with guid:" << p->guid();
     m_autoplaylists.insert( p->guid(), p );
 
-    qDebug() << Q_FUNC_INFO << "Collection name" << name()
+/*    qDebug() << Q_FUNC_INFO << "Collection name" << name()
                             << "from source id" << source()->id()
-                            << "numplaylists:" << m_playlists.count();
+                            << "numplaylists:" << m_playlists.count();*/
     emit autoPlaylistsAdded( toadd );
 }
 
@@ -98,16 +96,14 @@ Collection::addAutoPlaylist( const Tomahawk::dynplaylist_ptr& p )
 void
 Collection::addStation( const dynplaylist_ptr& s )
 {
-//    qDebug() << Q_FUNC_INFO;
-
     QList<dynplaylist_ptr> toadd;
     toadd << s;
-    qDebug() << "Inserted station with guid:" << s->guid();
+//    qDebug() << "Inserted station with guid:" << s->guid();
     m_stations.insert( s->guid(), s );
 
-    qDebug() << Q_FUNC_INFO << "Collection name" << name()
+/*    qDebug() << Q_FUNC_INFO << "Collection name" << name()
                             << "from source id" << source()->id()
-                            << "numplaylists:" << m_playlists.count();
+                            << "numplaylists:" << m_playlists.count();*/
     emit stationsAdded( toadd );
 }
 
@@ -115,15 +111,13 @@ Collection::addStation( const dynplaylist_ptr& s )
 void
 Collection::deletePlaylist( const Tomahawk::playlist_ptr& p )
 {
-//    qDebug() << Q_FUNC_INFO;
-
     QList<playlist_ptr> todelete;
     todelete << p;
     m_playlists.remove( p->guid() );
 
-    qDebug() << Q_FUNC_INFO << "Collection name" << name()
+/*    qDebug() << Q_FUNC_INFO << "Collection name" << name()
                             << "from source id" << source()->id()
-                            << "numplaylists:" << m_playlists.count();
+                            << "numplaylists:" << m_playlists.count();*/
     emit playlistsDeleted( todelete );
 }
 
@@ -131,15 +125,13 @@ Collection::deletePlaylist( const Tomahawk::playlist_ptr& p )
 void
 Collection::deleteAutoPlaylist( const Tomahawk::dynplaylist_ptr& p )
 {
-//    qDebug() << Q_FUNC_INFO;
-
     QList<dynplaylist_ptr> todelete;
     todelete << p;
     m_autoplaylists.remove( p->guid() );
 
-    qDebug() << Q_FUNC_INFO << "Collection name" << name()
+/*    qDebug() << Q_FUNC_INFO << "Collection name" << name()
                             << "from source id" << source()->id()
-                            << "numplaylists:" << m_playlists.count();
+                            << "numplaylists:" << m_playlists.count();*/
     emit autoPlaylistsDeleted( todelete );
 }
 
@@ -147,15 +139,13 @@ Collection::deleteAutoPlaylist( const Tomahawk::dynplaylist_ptr& p )
 void
 Collection::deleteStation( const dynplaylist_ptr& s )
 {
-//    qDebug() << Q_FUNC_INFO;
-
     QList<dynplaylist_ptr> todelete;
     todelete << s;
     m_stations.remove( s->guid() );
 
-    qDebug() << Q_FUNC_INFO << "Collection name" << name()
+/*    qDebug() << Q_FUNC_INFO << "Collection name" << name()
                             << "from source id" << source()->id()
-                            << "numplaylists:" << m_playlists.count();
+                            << "numplaylists:" << m_playlists.count();*/
     emit stationsDeleted( todelete );
 }
 
@@ -242,8 +232,9 @@ Collection::delTracks( const QStringList& files )
     int i = 0;
     foreach ( const query_ptr& query, m_tracks )
     {
-        foreach ( QString file, files )
+        foreach ( const QString& file, files )
         {
+            bool found = false;
             foreach ( const result_ptr& result, query->results() )
             {
                 if ( file == result->url() )
@@ -251,8 +242,13 @@ Collection::delTracks( const QStringList& files )
 //                    qDebug() << Q_FUNC_INFO << "Found deleted result:" << file;
                     tracks << query;
                     m_tracks.removeAt( i );
+                    i--;
+                    found = true;
+                    break;
                 }
             }
+            if ( found )
+                break;
         }
 
         i++;

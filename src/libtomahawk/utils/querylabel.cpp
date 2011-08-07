@@ -1,5 +1,5 @@
 /* === This file is part of Tomahawk Player - <http://tomahawk-player.org> ===
- * 
+ *
  *   Copyright 2010-2011, Christian Muehlhaeuser <muesli@tomahawk-player.org>
  *
  *   Tomahawk is free software: you can redistribute it and/or modify
@@ -24,14 +24,15 @@
 #include <QMouseEvent>
 #include <QPainter>
 
-#include "tomahawkutils.h"
 #include "artist.h"
 #include "album.h"
 #include "query.h"
-
+#include "tomahawkutils.h"
+#include "utils/logger.h"
 
 #define BOXMARGIN 2
 #define DASH "  -  "
+
 
 QueryLabel::QueryLabel( QWidget* parent, Qt::WindowFlags flags )
     : QFrame( parent, flags )

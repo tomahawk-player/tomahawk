@@ -18,7 +18,6 @@
 
 #include "albummodel.h"
 
-#include <QDebug>
 #include <QListView>
 #include <QMimeData>
 #include <QNetworkReply>
@@ -26,8 +25,9 @@
 #include "database/database.h"
 
 #include "utils/tomahawkutils.h"
+#include "utils/logger.h"
 
-#define LASTFM_DEFAULT_COVER "http://cdn.last.fm/flatness/catalogue/noimage"
+static QString s_tmInfoIdentifier = QString( "ALBUMMODEL" );
 
 using namespace Tomahawk;
 
@@ -38,8 +38,11 @@ AlbumModel::AlbumModel( QObject* parent )
 {
     qDebug() << Q_FUNC_INFO;
 
-    m_defaultCover = QPixmap( RESPATH "images/no-album-art-placeholder.png" )
-                     .scaled( QSize( 120, 120 ), Qt::IgnoreAspectRatio, Qt::SmoothTransformation );
+    connect( Tomahawk::InfoSystem::InfoSystem::instance(),
+             SIGNAL( info( Tomahawk::InfoSystem::InfoRequestData, QVariant ) ),
+               SLOT( infoSystemInfo( Tomahawk::InfoSystem::InfoRequestData, QVariant ) ) );
+
+    connect( Tomahawk::InfoSystem::InfoSystem::instance(), SIGNAL( finished( QString ) ), SLOT( infoSystemFinished( QString ) ) );
 }
 
 
@@ -109,6 +112,11 @@ AlbumModel::parent( const QModelIndex& child ) const
 QVariant
 AlbumModel::data( const QModelIndex& index, int role ) const
 {
+    if ( role == Qt::SizeHintRole )
+    {
+        return QSize( 116, 150 );
+    }
+
     AlbumItem* entry = itemFromIndex( index );
     if ( !entry )
         return QVariant();
@@ -116,11 +124,6 @@ AlbumModel::data( const QModelIndex& index, int role ) const
     if ( role == Qt::DecorationRole )
     {
         return entry->cover;
-    }
-
-    if ( role == Qt::SizeHintRole )
-    {
-        return QSize( 116, 150 );
     }
 
     if ( role != Qt::DisplayRole ) // && role != Qt::ToolTipRole )
@@ -241,7 +244,7 @@ AlbumModel::addCollection( const collection_ptr& collection )
     DatabaseCommand_AllAlbums* cmd = new DatabaseCommand_AllAlbums( collection );
 
     connect( cmd, SIGNAL( albums( QList<Tomahawk::album_ptr>, QVariant ) ),
-                    SLOT( onAlbumsAdded( QList<Tomahawk::album_ptr> ) ) );
+                    SLOT( addAlbums( QList<Tomahawk::album_ptr> ) ) );
 
     Database::instance()->enqueue( QSharedPointer<DatabaseCommand>( cmd ) );
 
@@ -252,10 +255,10 @@ AlbumModel::addCollection( const collection_ptr& collection )
 void
 AlbumModel::addFilteredCollection( const collection_ptr& collection, unsigned int amount, DatabaseCommand_AllAlbums::SortOrder order )
 {
-    qDebug() << Q_FUNC_INFO << collection->name()
+/*    qDebug() << Q_FUNC_INFO << collection->name()
                             << collection->source()->id()
                             << collection->source()->userName()
-                            << amount << order;
+                            << amount << order;*/
 
     DatabaseCommand_AllAlbums* cmd = new DatabaseCommand_AllAlbums( collection );
     cmd->setLimit( amount );
@@ -263,16 +266,19 @@ AlbumModel::addFilteredCollection( const collection_ptr& collection, unsigned in
     cmd->setSortDescending( true );
 
     connect( cmd, SIGNAL( albums( QList<Tomahawk::album_ptr>, QVariant ) ),
-                    SLOT( onAlbumsAdded( QList<Tomahawk::album_ptr> ) ) );
+                    SLOT( addAlbums( QList<Tomahawk::album_ptr> ) ) );
 
     Database::instance()->enqueue( QSharedPointer<DatabaseCommand>( cmd ) );
 
-    m_title = tr( "All albums from %1" ).arg( collection->source()->friendlyName() );
+    if ( !collection.isNull() )
+        m_title = tr( "All albums from %1" ).arg( collection->source()->friendlyName() );
+    else
+        m_title = tr( "All albums" );
 }
 
 
 void
-AlbumModel::onAlbumsAdded( const QList<Tomahawk::album_ptr>& albums )
+AlbumModel::addAlbums( const QList<Tomahawk::album_ptr>& albums )
 {
     if ( !albums.count() )
         return;
@@ -288,14 +294,7 @@ AlbumModel::onAlbumsAdded( const QList<Tomahawk::album_ptr>& albums )
     foreach( const album_ptr& album, albums )
     {
         albumitem = new AlbumItem( album, m_rootItem );
-        albumitem->cover = m_defaultCover;
         albumitem->index = createIndex( m_rootItem->children.count() - 1, 0, albumitem );
-
-/*        QString imgurl = "http://ws.audioscrobbler.com/2.0/?method=album.imageredirect&artist=%1&album=%2&size=large&api_key=7a90f6672a04b809ee309af169f34b8b";
-        QNetworkRequest req( imgurl.arg( album->artist()->name() ).arg( album->name() ) );
-        req.setAttribute( QNetworkRequest::User, (qlonglong)albumitem );
-        QNetworkReply* reply = TomahawkUtils::nam()->get( req );
-        connect( reply, SIGNAL( finished() ), SLOT( onCoverArtDownloaded() ) );*/
 
         connect( albumitem, SIGNAL( dataChanged() ), SLOT( onDataChanged() ) );
     }
@@ -304,45 +303,59 @@ AlbumModel::onAlbumsAdded( const QList<Tomahawk::album_ptr>& albums )
     qDebug() << rowCount( QModelIndex() );
 }
 
+void
+AlbumModel::clear()
+{
+    beginResetModel();
+    delete m_rootItem;
+    m_rootItem = new AlbumItem( 0, this );
+    endResetModel();
+}
+
 
 void
-AlbumModel::onCoverArtDownloaded()
+AlbumModel::infoSystemInfo( Tomahawk::InfoSystem::InfoRequestData requestData, QVariant output )
 {
-    QNetworkReply* reply = qobject_cast<QNetworkReply*>( sender() );
+//    qDebug() << Q_FUNC_INFO << " with caller " << requestData.caller;
 
-    QUrl redir = reply->attribute( QNetworkRequest::RedirectionTargetAttribute ).toUrl();
-    if ( redir.isEmpty() )
+    if ( requestData.caller != s_tmInfoIdentifier ||
+       ( requestData.type != Tomahawk::InfoSystem::InfoAlbumCoverArt && requestData.type != Tomahawk::InfoSystem::InfoArtistImages ) )
     {
-        const QByteArray ba = reply->readAll();
-        if ( ba.length() )
-        {
-            QPixmap pm;
-            pm.loadFromData( ba );
-
-            qlonglong pptr = reply->request().attribute( QNetworkRequest::User ).toLongLong();
-            AlbumItem* ai = reinterpret_cast<AlbumItem*>(pptr);
-
-            if ( pm.isNull() || reply->url().toString().startsWith( LASTFM_DEFAULT_COVER ) )
-            {
-                ai->cover = m_defaultCover;
-            }
-            else
-            {
-                ai->setCover( pm.scaled( QSize( 150, 150 ), Qt::IgnoreAspectRatio, Qt::SmoothTransformation ) );
-            }
-        }
-    }
-    else
-    {
-        // Follow HTTP redirect
-        QNetworkRequest req( redir );
-        req.setAttribute( QNetworkRequest::User, reply->request().attribute( QNetworkRequest::User ) );
-        Q_ASSERT( TomahawkUtils::nam() != 0 );
-        QNetworkReply* reply = TomahawkUtils::nam()->get( req );
-        connect( reply, SIGNAL( finished() ), SLOT( onCoverArtDownloaded() ) );
+//        qDebug() << "Info of wrong type or not with our identifier";
+        return;
     }
 
-    reply->deleteLater();
+    if ( !output.canConvert< QVariantMap >() )
+    {
+        qDebug() << "Cannot convert fetched art from a QByteArray";
+        return;
+    }
+
+    Tomahawk::InfoSystem::InfoCriteriaHash pptr = requestData.input.value< Tomahawk::InfoSystem::InfoCriteriaHash >();
+    QVariantMap returnedData = output.value< QVariantMap >();
+    const QByteArray ba = returnedData["imgbytes"].toByteArray();
+    if ( ba.length() )
+    {
+        QPixmap pm;
+        pm.loadFromData( ba );
+
+        bool ok;
+        qlonglong p = pptr["pptr"].toLongLong( &ok );
+        AlbumItem* ai = reinterpret_cast<AlbumItem*>(p);
+
+        if ( !pm.isNull() )
+            ai->cover = pm;
+
+        emit dataChanged( ai->index, ai->index.sibling( ai->index.row(), columnCount( QModelIndex() ) - 1 ) );
+    }
+}
+
+
+void
+AlbumModel::infoSystemFinished( QString target )
+{
+    Q_UNUSED( target );
+//    qDebug() << Q_FUNC_INFO;
 }
 
 

@@ -18,11 +18,12 @@
 
 #include "sourcesproxymodel.h"
 
-#include <QDebug>
 #include <QTreeView>
 
 #include "sourcesmodel.h"
 #include "sourcetree/items/collectionitem.h"
+
+#include "utils/logger.h"
 
 
 SourcesProxyModel::SourcesProxyModel( SourcesModel* model, QObject* parent )
@@ -35,26 +36,20 @@ SourcesProxyModel::SourcesProxyModel( SourcesModel* model, QObject* parent )
 
     setSourceModel( model );
 
-    connect( model, SIGNAL( askForExpand( QModelIndex ) ), this, SLOT( askedToExpand( QModelIndex ) ) );
-    connect( model, SIGNAL( selectRequest( QModelIndex ) ), this, SLOT( selectRequested( QModelIndex ) ) );
+
+    if ( model && model->metaObject()->indexOfSignal( "trackCountChanged(QModelIndex)" ) > -1 )
+        connect( model, SIGNAL( askForExpand( QModelIndex ) ), this, SLOT( askedToExpand( QModelIndex ) ) );
+    if ( model && model->metaObject()->indexOfSignal( "selectRequest(QModelIndex)" ) > -1 )
+        connect( model, SIGNAL( selectRequest( QModelIndex ) ), this, SLOT( selectRequested( QModelIndex ) ) );
 }
 
 
 void
-SourcesProxyModel::showOfflineSources()
+SourcesProxyModel::showOfflineSources( bool offlineSourcesShown )
 {
-    m_filtered = false;
+    m_filtered = !offlineSourcesShown;
     invalidateFilter();
 }
-
-
-void
-SourcesProxyModel::hideOfflineSources()
-{
-    m_filtered = true;
-    invalidateFilter();
-}
-
 
 bool
 SourcesProxyModel::filterAcceptsRow( int sourceRow, const QModelIndex& sourceParent ) const
@@ -78,7 +73,6 @@ SourcesProxyModel::filterAcceptsRow( int sourceRow, const QModelIndex& sourcePar
 void
 SourcesProxyModel::selectRequested( const QModelIndex& idx )
 {
-    qDebug() << "asking for select from idx:" << idx << idx.model()->metaObject()->className();
     emit selectRequest( mapFromSource( idx ) );
 }
 

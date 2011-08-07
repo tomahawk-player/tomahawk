@@ -1,6 +1,6 @@
 /*
-    <one line to give the program's name and a brief idea of what it does.>
-    Copyright (C) 2011  Leo Franchi <leo.franchi@kdab.com>
+
+    Copyright (C) 2011  Leo Franchi <lfranchi@kde.org>
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -19,25 +19,30 @@
 
 
 #include "welcomeplaylistmodel.h"
+
 #include <tomahawksettings.h>
 #include <audio/audioengine.h>
 #include <sourcelist.h>
+#include "utils/logger.h"
+#include <dynamic/DynamicPlaylist.h>
 
 using namespace Tomahawk;
 
+
 WelcomePlaylistModel::WelcomePlaylistModel( QObject* parent )
     : QAbstractListModel( parent )
-    , m_waitingForSome( true )
     , m_maxPlaylists( 0 )
+    , m_waitingForSome( true )
 {
     loadFromSettings();
 
     connect( SourceList::instance(), SIGNAL( sourceAdded( Tomahawk::source_ptr ) ), this, SLOT( onSourceAdded( Tomahawk::source_ptr ) ), Qt::QueuedConnection );
     connect( TomahawkSettings::instance(), SIGNAL( recentlyPlayedPlaylistAdded( Tomahawk::playlist_ptr ) ), this, SLOT( plAdded( Tomahawk::playlist_ptr ) ) );
-    connect( AudioEngine::instance(),SIGNAL( playlistChanged( PlaylistInterface* ) ), this, SLOT( playlistChanged( PlaylistInterface* ) ), Qt::QueuedConnection );
+    connect( AudioEngine::instance(),SIGNAL( playlistChanged( Tomahawk::PlaylistInterface* ) ), this, SLOT( playlistChanged( Tomahawk::PlaylistInterface* ) ), Qt::QueuedConnection );
 
     emit emptinessChanged( m_recplaylists.isEmpty() );
 }
+
 
 void
 WelcomePlaylistModel::loadFromSettings()
@@ -59,6 +64,8 @@ WelcomePlaylistModel::loadFromSettings()
         playlist_ptr pl = m_cached.value( playlist_guids[i], playlist_ptr() );
         if( pl.isNull() )
             pl = Tomahawk::Playlist::load( playlist_guids[i] );
+        if( pl.isNull() )
+            pl = Tomahawk::DynamicPlaylist::load( playlist_guids[i] );
 
         if ( !pl.isNull() ) {
             m_recplaylists << pl;
@@ -72,7 +79,6 @@ WelcomePlaylistModel::loadFromSettings()
 
     emit emptinessChanged( m_recplaylists.isEmpty() );
 }
-
 
 
 QVariant
@@ -112,12 +118,14 @@ WelcomePlaylistModel::data( const QModelIndex& index, int role ) const
     }
 }
 
+
 void
 WelcomePlaylistModel::onSourceAdded( const Tomahawk::source_ptr& source )
 {
     connect( source->collection().data(), SIGNAL( playlistsAdded( QList<Tomahawk::playlist_ptr> ) ), SLOT( loadFromSettings() ) );
     connect( source->collection().data(), SIGNAL( playlistsDeleted( QList<Tomahawk::playlist_ptr> ) ), SLOT( onPlaylistsRemoved( QList<Tomahawk::playlist_ptr> ) ) );
 }
+
 
 void
 WelcomePlaylistModel::onPlaylistsRemoved( QList< playlist_ptr > playlists )
@@ -144,6 +152,7 @@ WelcomePlaylistModel::rowCount( const QModelIndex& ) const
     return m_recplaylists.count();
 }
 
+
 void
 WelcomePlaylistModel::plAdded( const playlist_ptr& pl )
 {
@@ -156,8 +165,9 @@ WelcomePlaylistModel::plAdded( const playlist_ptr& pl )
     emit emptinessChanged( m_recplaylists.isEmpty() );
 }
 
+
 void
-WelcomePlaylistModel::playlistChanged( PlaylistInterface* pli )
+WelcomePlaylistModel::playlistChanged( Tomahawk::PlaylistInterface* pli )
 {
     // ARG
     if( Playlist* pl = dynamic_cast< Playlist* >( pli ) ) {

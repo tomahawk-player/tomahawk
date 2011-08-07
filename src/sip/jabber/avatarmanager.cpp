@@ -1,5 +1,22 @@
-#include "avatarmanager.h"
+/* === This file is part of Tomahawk Player - <http://tomahawk-player.org> ===
+ *
+ *   Copyright 2010-2011, Christian Muehlhaeuser <muesli@tomahawk-player.org>
+ *
+ *   Tomahawk is free software: you can redistribute it and/or modify
+ *   it under the terms of the GNU General Public License as published by
+ *   the Free Software Foundation, either version 3 of the License, or
+ *   (at your option) any later version.
+ *
+ *   Tomahawk is distributed in the hope that it will be useful,
+ *   but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *   GNU General Public License for more details.
+ *
+ *   You should have received a copy of the GNU General Public License
+ *   along with Tomahawk. If not, see <http://www.gnu.org/licenses/>.
+ */
 
+#include "avatarmanager.h"
 
 #include "utils/tomahawkutils.h"
 
@@ -9,9 +26,11 @@
 #include <jreen/iqreply.h>
 
 #include <QDir>
-#include <QDebug>
 #include <QCryptographicHash>
 #include <QPixmap>
+
+#include "utils/logger.h"
+
 
 AvatarManager::AvatarManager(Jreen::Client *client) :
     m_cacheDir(TomahawkUtils::appDataDir().absolutePath().append("/jreen/"))
@@ -151,7 +170,7 @@ QString AvatarManager::avatarHash(const QString &jid) const
     return m_JidsAvatarHashes.key(jid);
 }
 
-QDir AvatarManager::avatarDir(const QString &avatarHash) const
+QDir AvatarManager::avatarDir(const QString&) const
 {
     return m_cacheDir;
 }
@@ -167,7 +186,7 @@ bool AvatarManager::isCached(const QString &avatarHash) const
     return m_cachedAvatars.contains( avatarHash );
 }
 
-void AvatarManager::onNewAvatar(const QString& jid)
+void AvatarManager::onNewAvatar(const QString&)
 {
 //    qDebug() << Q_FUNC_INFO <<  "Found new Avatar..." << jid;
 }

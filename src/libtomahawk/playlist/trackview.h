@@ -22,13 +22,14 @@
 #include <QTreeView>
 #include <QSortFilterProxyModel>
 
+#include "contextmenu.h"
 #include "playlistitemdelegate.h"
+#include "album.h"
 
 #include "dllmacro.h"
 
 class QAction;
 class LoadingSpinner;
-class PlaylistInterface;
 class TrackHeader;
 class TrackModel;
 class TrackProxyModel;
@@ -39,7 +40,7 @@ class DLLEXPORT TrackView : public QTreeView
 Q_OBJECT
 
 public:
-    explicit TrackView( QWidget* parent = 0 );
+explicit TrackView( QWidget* parent = 0 );
     ~TrackView();
 
     virtual QString guid() const { return m_guid; }
@@ -54,7 +55,9 @@ public:
     PlaylistItemDelegate* delegate() const { return m_delegate; }
     TrackHeader* header() const { return m_header; }
     OverlayWidget* overlay() const { return m_overlay; }
+    Tomahawk::ContextMenu* contextMenu() const { return m_contextMenu; }
 
+    QModelIndex hoveredIndex() const { return m_hoveredIndex; }
     QModelIndex contextMenuIndex() const { return m_contextMenuIndex; }
     void setContextMenuIndex( const QModelIndex& idx ) { m_contextMenuIndex = idx; }
 
@@ -62,7 +65,7 @@ public slots:
     void onItemActivated( const QModelIndex& index );
 
     void playItem();
-    void addItemsToQueue();
+    void onMenuTriggered( int action );
 
 protected:
     virtual void resizeEvent( QResizeEvent* event );
@@ -73,17 +76,22 @@ protected:
     virtual void dragMoveEvent( QDragMoveEvent* event );
     virtual void dropEvent( QDropEvent* event );
 
+    void wheelEvent( QWheelEvent* event );
+    void mouseMoveEvent( QMouseEvent* event );
+    void mousePressEvent( QMouseEvent* event );
+    void leaveEvent( QEvent* event );
     void paintEvent( QPaintEvent* event );
     void keyPressEvent( QKeyEvent* event );
 
 private slots:
     void onItemResized( const QModelIndex& index );
-
     void onFilterChanged( const QString& filter );
 
-    void copyLink();
+    void onCustomContextMenu( const QPoint& pos );
 
 private:
+    void updateHoverIndex( const QPoint& pos );
+
     QString m_guid;
     TrackModel* m_model;
     TrackProxyModel* m_proxyModel;
@@ -96,7 +104,9 @@ private:
     bool m_dragging;
     QRect m_dropRect;
 
+    QModelIndex m_hoveredIndex;
     QModelIndex m_contextMenuIndex;
+    Tomahawk::ContextMenu* m_contextMenu;
 };
 
 #endif // TRACKVIEW_H

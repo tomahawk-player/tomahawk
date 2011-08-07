@@ -26,7 +26,7 @@
 
 #include "dllmacro.h"
 
-class DLLEXPORT TreeProxyModel : public QSortFilterProxyModel, public PlaylistInterface
+class DLLEXPORT TreeProxyModel : public QSortFilterProxyModel, public Tomahawk::PlaylistInterface
 {
 Q_OBJECT
 
@@ -34,10 +34,11 @@ public:
     explicit TreeProxyModel( QObject* parent = 0 );
 
     virtual TreeModel* sourceModel() const { return m_model; }
-    virtual void setSourceModel( TreeModel* sourceModel );
+    virtual void setSourceTreeModel( TreeModel* sourceModel );
+    virtual void setSourceModel( QAbstractItemModel* sourceModel );
 
-    virtual QPersistentModelIndex currentItem() const { return mapFromSource( m_model->currentItem() ); }
-    virtual void setCurrentItem( const QModelIndex& index ) { m_model->setCurrentItem( mapToSource( index ) ); }
+    virtual QPersistentModelIndex currentIndex() const { return mapFromSource( m_model->currentItem() ); }
+    virtual void setCurrentIndex( const QModelIndex& index ) { m_model->setCurrentItem( mapToSource( index ) ); }
 
     virtual QList<Tomahawk::query_ptr> tracks() { Q_ASSERT( FALSE ); QList<Tomahawk::query_ptr> queries; return queries; }
 
@@ -48,7 +49,10 @@ public:
     virtual void removeIndex( const QModelIndex& index );
     virtual void removeIndexes( const QList<QModelIndex>& indexes );
 
+    virtual bool hasNextItem();
+    virtual Tomahawk::result_ptr currentItem() const;
     virtual Tomahawk::result_ptr siblingItem( int direction );
+    virtual Tomahawk::result_ptr siblingItem( int direction, bool readOnly );
 
     virtual void setFilter( const QString& pattern );
 
@@ -59,13 +63,15 @@ public:
     TreeModelItem* itemFromIndex( const QModelIndex& index ) const { return sourceModel()->itemFromIndex( index ); }
 
 signals:
-    void repeatModeChanged( PlaylistInterface::RepeatMode mode );
+    void repeatModeChanged( Tomahawk::PlaylistInterface::RepeatMode mode );
     void shuffleModeChanged( bool enabled );
 
     void trackCountChanged( unsigned int tracks );
     void sourceTrackCountChanged( unsigned int tracks );
 
     void filterChanged( const QString& filter );
+
+    void nextTrackReady();
 
 public slots:
     virtual void setRepeatMode( RepeatMode mode ) { m_repeatMode = mode; emit repeatModeChanged( mode ); }
@@ -77,6 +83,8 @@ protected:
 
 private:
     QString textForItem( TreeModelItem* item ) const;
+
+    mutable QMap< QPersistentModelIndex, Tomahawk::result_ptr > m_cache;
 
     TreeModel* m_model;
     RepeatMode m_repeatMode;

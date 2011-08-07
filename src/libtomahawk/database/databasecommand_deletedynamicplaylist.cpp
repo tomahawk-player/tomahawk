@@ -18,10 +18,11 @@
 
 #include "databasecommand_deletedynamicplaylist.h"
 
+#include <QSqlQuery>
+
 #include "dynamic/DynamicPlaylist.h"
 #include "network/servent.h"
-
-#include <QSqlQuery>
+#include "utils/logger.h"
 
 using namespace Tomahawk;
 

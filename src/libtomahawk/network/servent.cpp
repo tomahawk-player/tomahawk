@@ -40,8 +40,9 @@
 
 #include "portfwdthread.h"
 #include "tomahawksettings.h"
-#include "utils/tomahawkutils.h"
 #include <aclsystem.h>
+#include "utils/tomahawkutils.h"
+#include "utils/logger.h"
 
 using namespace Tomahawk;
 
@@ -195,13 +196,28 @@ Servent::createConnectionKey( const QString& name, const QString &nodeid, const 
 void
 Servent::setExternalAddress( QHostAddress ha, unsigned int port )
 {
-    m_externalAddress = ha;
-    m_externalPort = port;
-
-    if( m_externalPort == 0 || m_externalAddress.toString().isEmpty() )
+    QString ip = ha.toString();
+    if ( !qApp->arguments().contains( "--lanhack" ) )
     {
-        if( !TomahawkSettings::instance()->externalHostname().isEmpty() &&
-            !TomahawkSettings::instance()->externalPort() == 0 )
+        if ( ip.startsWith( "10." ) || ip.startsWith( "172.16." ) || ip.startsWith( "192.168." ) )
+        {
+            qDebug() << Q_FUNC_INFO << "Tried to set an invalid ip as external address!";
+            return;
+        }
+
+        m_externalAddress = ha;
+        m_externalPort = port;
+    }
+    else
+    {
+        m_externalAddress = ha;
+        m_externalPort = port;
+    }
+
+    if ( m_externalPort == 0 || m_externalAddress.toString().isEmpty() )
+    {
+        if ( !TomahawkSettings::instance()->externalHostname().isEmpty() &&
+             !TomahawkSettings::instance()->externalPort() == 0 )
         {
             qDebug() << "UPnP failed, have external address/port -- falling back";
             m_externalHostname = TomahawkSettings::instance()->externalHostname();
@@ -272,8 +288,8 @@ Servent::incomingConnection( int sd )
         return;
     }
 
-    connect( sock, SIGNAL( readyRead() ), SLOT( readyRead() ), Qt::QueuedConnection );
-    connect( sock, SIGNAL( disconnected() ), sock, SLOT( deleteLater() ), Qt::QueuedConnection );
+    connect( sock, SIGNAL( readyRead() ), SLOT( readyRead() ) );
+    connect( sock, SIGNAL( disconnected() ), sock, SLOT( deleteLater() ) );
 //    qDebug() << "connection accepted.";
 }
 
@@ -310,7 +326,7 @@ Servent::readyRead()
 
     ControlConnection* cc = 0;
     bool ok;
-    int pport = 0;
+//    int pport; //FIXME?
     QString key, conntype, nodeid, controlid;
     QVariantMap m = parser.parse( sock->_msg->payload(), &ok ).toMap();
     if( !ok )
@@ -320,7 +336,7 @@ Servent::readyRead()
     }
     conntype  = m.value( "conntype" ).toString();
     key       = m.value( "key" ).toString();
-    pport     = m.value( "port" ).toInt();
+//    pport     = m.value( "port" ).toInt();
     nodeid    = m.value( "nodeid" ).toString();
     controlid = m.value( "controlid" ).toString();
 
@@ -526,9 +542,9 @@ Servent::connectToPeer( const QString& ha, int port, const QString &key, Connect
     sock->_outbound = true;
     //qDebug() << "connectToPeer, sock:" << sock->thread();
 
-    connect( sock, SIGNAL( connected() ), SLOT( socketConnected() ), Qt::QueuedConnection );
+    connect( sock, SIGNAL( connected() ), SLOT( socketConnected() ) );
     connect( sock, SIGNAL( error( QAbstractSocket::SocketError ) ),
-                     SLOT( socketError( QAbstractSocket::SocketError ) ), Qt::QueuedConnection );
+                     SLOT( socketError( QAbstractSocket::SocketError ) ) );
 
     //qDebug() << "About to connectToHost...";
     sock->connectToHost( ha, port, QTcpSocket::ReadWrite );
@@ -538,7 +554,7 @@ Servent::connectToPeer( const QString& ha, int port, const QString &key, Connect
 
 
 void
-Servent::reverseOfferRequest( ControlConnection* orig_conn, const QString &theirdbid, const QString& key, const QString& theirkey )
+Servent::reverseOfferRequest( ControlConnection* orig_conn, const QString& theirdbid, const QString& key, const QString& theirkey )
 {
     Q_ASSERT( this->thread() == QThread::currentThread() );
 

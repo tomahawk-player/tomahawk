@@ -17,13 +17,12 @@
  */
 
 #include "tomahawkutils.h"
-#include <tomahawksettings.h>
 
 #include <QCoreApplication>
 #include <QColor>
 #include <QDateTime>
-#include <QDebug>
 #include <QDir>
+#include <QLayout>
 #include <QPainter>
 #include <QPixmap>
 #include <QNetworkAccessManager>
@@ -39,19 +38,32 @@
     #include <sys/sysctl.h>
 #endif
 
+#include <tomahawksettings.h>
+#include "utils/logger.h"
+#include "config.h"
+
 namespace TomahawkUtils
 {
 
 #ifdef Q_WS_MAC
-
 QString
 appSupportFolderPath()
 {
     // honestly, it is *always* this --mxcl
     return QDir::home().filePath( "Library/Application Support" );
 }
-
 #endif // Q_WS_MAC
+
+
+QString
+appFriendlyVersion()
+{
+    QStringList l = QString( TOMAHAWK_VERSION ).split( ".", QString::SkipEmptyParts );
+    while ( l.count() > 3 )
+        l.removeLast();
+
+    return l.join( "." );
+}
 
 
 QDir
@@ -162,6 +174,7 @@ timeToString( int seconds )
                                .arg( secs < 10 ? "0" + QString::number( secs ) : QString::number( secs ) );
 }
 
+
 QString
 ageToString( const QDateTime& time )
 {
@@ -177,52 +190,50 @@ ageToString( const QDateTime& time )
     if ( years )
     {
         if ( years > 1 )
-            return QString( "%1 years" ).arg( years );
+            return QObject::tr( "%1 years" ).arg( years );
         else
-            return QString( "%1 year" ).arg( years );
+            return QObject::tr( "%1 year" ).arg( years );
     }
 
     if ( months )
     {
         if ( months > 1 )
-           return QString( "%1 months" ).arg( months );
+            return QObject::tr( "%1 months" ).arg( months );
         else
-            return QString( "%1 month" ).arg( months );
+            return QObject::tr( "%1 month" ).arg( months );
     }
 
     if ( weeks )
     {
         if ( weeks > 1 )
-            return QString( "%1 weeks" ).arg( weeks );
+            return QObject::tr( "%1 weeks" ).arg( weeks );
         else
-            return QString( "%1 week" ).arg( weeks );
+            return QObject::tr( "%1 week" ).arg( weeks );
     }
 
     if ( days )
     {
         if ( days > 1 )
-            return QString( "%1 days" ).arg( days );
+            return QObject::tr( "%1 days" ).arg( days );
         else
-            return QString( "%1 day" ).arg( days );
+            return QObject::tr( "%1 day" ).arg( days );
     }
 
     if ( hours )
     {
         if ( hours > 1 )
-            return QString( "%1 hours" ).arg( hours );
+            return QObject::tr( "%1 hours" ).arg( hours );
         else
-            return QString( "%1 hour" ).arg( hours );
+            return QObject::tr( "%1 hour" ).arg( hours );
     }
 
     if ( mins )
     {
         if ( mins > 1 )
-            return QString( "%1 minutes" ).arg( mins );
-        else
-            return QString( "%1 minute" ).arg( mins );
+            return QObject::tr( "%1 minutes" ).arg( mins );
     }
 
-    return QString();
+    return QObject::tr( "1 minute" );
 }
 
 
@@ -339,6 +350,22 @@ createDragPixmap( int itemCount )
 }
 
 
+void
+unmarginLayout( QLayout* layout )
+{
+    layout->setContentsMargins( 0, 0, 0, 0 );
+    layout->setMargin( 0 );
+    layout->setSpacing( 0 );
+
+    for ( int i = 0; i < layout->count(); i++ )
+    {
+        QLayout* childLayout = layout->itemAt( i )->layout();
+        if ( childLayout )
+            unmarginLayout( childLayout );
+    }
+}
+
+
 QWeakPointer< QNetworkAccessManager > s_nam;
 NetworkProxyFactory* s_proxyFactory = 0;
 
@@ -377,7 +404,7 @@ NetworkProxyFactory::setNoProxyHosts( const QStringList& hosts )
         newList << munge;
         //TODO: wildcard support
     }
-    qDebug() << Q_FUNC_INFO << " No-proxy hosts: " << newList;
+    qDebug() << Q_FUNC_INFO << "No-proxy hosts:" << newList;
     m_noProxyHosts = newList;
 }
 
@@ -388,19 +415,17 @@ NetworkProxyFactory::setProxy( const QNetworkProxy& proxy )
     m_proxy = proxy;
     if ( !TomahawkSettings::instance()->proxyDns() )
         m_proxy.setCapabilities( QNetworkProxy::TunnelingCapability | QNetworkProxy::ListeningCapability | QNetworkProxy::UdpTunnelingCapability );
-    qDebug() << Q_FUNC_INFO << " Proxy using host " << proxy.hostName() << " and port " << proxy.port();
-    qDebug() << Q_FUNC_INFO << " setting proxy to use proxy DNS?" << (TomahawkSettings::instance()->proxyDns() ? "true" : "false");
+    qDebug() << Q_FUNC_INFO << "Proxy using host" << proxy.hostName() << "and port" << proxy.port();
+    qDebug() << Q_FUNC_INFO << "setting proxy to use proxy DNS?" << (TomahawkSettings::instance()->proxyDns() ? "true" : "false");
 }
 
 
 NetworkProxyFactory*
 proxyFactory()
 {
-    // Don't use this anywhere! It's provided here for access reasons, but QNAM deletes this at will!
-    
     if ( !s_proxyFactory )
         s_proxyFactory = new NetworkProxyFactory();
-    
+
     return s_proxyFactory;
 }
 
@@ -411,6 +436,15 @@ setProxyFactory( NetworkProxyFactory* factory )
     Q_ASSERT( factory );
     s_proxyFactory = factory;
     NetworkProxyFactory::setApplicationProxyFactory( s_proxyFactory );
+    //nam takes ownership so set a copy, not the global one
+    if ( s_nam )
+    {
+        TomahawkUtils::NetworkProxyFactory* newProxyFactory = new TomahawkUtils::NetworkProxyFactory();
+        newProxyFactory->setNoProxyHosts( factory->noProxyHosts() );
+        QNetworkProxy newProxy( factory->proxy() );
+        newProxyFactory->setProxy( newProxy );
+        s_nam.data()->setProxyFactory( newProxyFactory );
+    }
 }
 
 
@@ -431,5 +465,11 @@ setNam( QNetworkAccessManager* nam )
     s_nam = QWeakPointer< QNetworkAccessManager >( nam );
 }
 
+#ifndef Q_OS_MAC
+void
+bringToFront() {
+
+}
+#endif
 
 } // ns

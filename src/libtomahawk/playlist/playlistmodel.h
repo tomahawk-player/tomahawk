@@ -39,6 +39,12 @@ class DLLEXPORT PlaylistModel : public TrackModel
 {
 Q_OBJECT
 
+typedef struct {
+    int row;
+    QPersistentModelIndex parent;
+    Qt::DropAction action;
+} DropStorageData;
+
 public:
     explicit PlaylistModel( QObject* parent = 0 );
     ~PlaylistModel();
@@ -69,7 +75,7 @@ public:
 
     bool isTemporary() const;
 signals:
-    void repeatModeChanged( PlaylistInterface::RepeatMode mode );
+    void repeatModeChanged( Tomahawk::PlaylistInterface::RepeatMode mode );
     void shuffleModeChanged( bool enabled );
 
     void itemSizeChanged( const QModelIndex& index );
@@ -84,6 +90,7 @@ private slots:
 
     void onTracksAdded( const QList<Tomahawk::query_ptr>& tracks );
     void onTracksInserted( unsigned int row, const QList<Tomahawk::query_ptr>& tracks );
+    void parsedDroppedTracks( QList<Tomahawk::query_ptr> );
 
     void trackResolved( bool );
 
@@ -93,6 +100,8 @@ private:
     Tomahawk::playlist_ptr m_playlist;
     bool m_waitForUpdate, m_isTemporary;
     QList< Tomahawk::Query* > m_waitingForResolved;
+
+    DropStorageData m_dropStorage;
 };
 
 #endif // PLAYLISTMODEL_H

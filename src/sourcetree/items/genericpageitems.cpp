@@ -17,9 +17,11 @@
 #include "genericpageitems.h"
 
 #include "utils/tomahawkutils.h"
+#include "utils/logger.h"
 #include "viewmanager.h"
 
 using namespace Tomahawk;
+
 
 /// Generic page item
 GenericPageItem::GenericPageItem( SourcesModel* model, SourceTreeItem* parent, const QString& text, const QIcon& icon, boost::function< ViewPage* () > show, boost::function< ViewPage* () > get )
@@ -34,10 +36,11 @@ GenericPageItem::GenericPageItem( SourcesModel* model, SourceTreeItem* parent, c
         model->linkSourceItemToPage( this, p );
 }
 
+
 GenericPageItem::~GenericPageItem()
 {
-
 }
+
 
 void
 GenericPageItem::activate()
@@ -46,11 +49,13 @@ GenericPageItem::activate()
     model()->linkSourceItemToPage( this, p );
 }
 
+
 QString
 GenericPageItem::text() const
 {
     return m_text;
 }
+
 
 QIcon
 GenericPageItem::icon() const
@@ -62,8 +67,10 @@ GenericPageItem::icon() const
 bool
 GenericPageItem::willAcceptDrag(const QMimeData* data) const
 {
+    Q_UNUSED( data );
     return false;
 }
+
 
 void
 GenericPageItem::setText( const QString &text )

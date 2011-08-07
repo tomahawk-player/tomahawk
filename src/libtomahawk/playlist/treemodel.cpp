@@ -18,15 +18,16 @@
 
 #include "treemodel.h"
 
-#include <QDebug>
 #include <QListView>
 #include <QMimeData>
 #include <QNetworkReply>
 
+#include "audio/audioengine.h"
 #include "database/databasecommand_allalbums.h"
 #include "database/databasecommand_alltracks.h"
 #include "database/database.h"
 #include "utils/tomahawkutils.h"
+#include "utils/logger.h"
 
 static QString s_tmInfoIdentifier = QString( "TREEMODEL" );
 
@@ -39,12 +40,12 @@ TreeModel::TreeModel( QObject* parent )
 {
     qDebug() << Q_FUNC_INFO;
 
-    m_defaultCover = QPixmap( RESPATH "images/no-album-art-placeholder.png" )
-                     .scaled( QSize( 120, 120 ), Qt::IgnoreAspectRatio, Qt::SmoothTransformation );
+    connect( AudioEngine::instance(), SIGNAL( finished( Tomahawk::result_ptr ) ), SLOT( onPlaybackFinished( Tomahawk::result_ptr ) ), Qt::DirectConnection );
+    connect( AudioEngine::instance(), SIGNAL( stopped() ), SLOT( onPlaybackStopped() ), Qt::DirectConnection );
 
     connect( Tomahawk::InfoSystem::InfoSystem::instance(),
-             SIGNAL( info( QString, Tomahawk::InfoSystem::InfoType, QVariant, QVariant, Tomahawk::InfoSystem::InfoCustomData ) ),
-               SLOT( infoSystemInfo( QString, Tomahawk::InfoSystem::InfoType, QVariant, QVariant, Tomahawk::InfoSystem::InfoCustomData ) ) );
+             SIGNAL( info( Tomahawk::InfoSystem::InfoRequestData, QVariant ) ),
+               SLOT( infoSystemInfo( Tomahawk::InfoSystem::InfoRequestData, QVariant ) ) );
 
     connect( Tomahawk::InfoSystem::InfoSystem::instance(), SIGNAL( finished( QString ) ), SLOT( infoSystemFinished( QString ) ) );
 }
@@ -59,17 +60,18 @@ void
 TreeModel::setCurrentItem( const QModelIndex& index )
 {
     qDebug() << Q_FUNC_INFO;
+
     TreeModelItem* oldEntry = itemFromIndex( m_currentIndex );
     if ( oldEntry )
     {
-//        oldEntry->setIsPlaying( false );
+        oldEntry->setIsPlaying( false );
     }
 
     TreeModelItem* entry = itemFromIndex( index );
     if ( entry )
     {
         m_currentIndex = index;
-//        entry->setIsPlaying( true );
+        entry->setIsPlaying( true );
     }
     else
     {
@@ -374,6 +376,22 @@ TreeModel::addAllCollections()
 
 
 void
+TreeModel::addArtists( const artist_ptr& artist )
+{
+    qDebug() << Q_FUNC_INFO;
+
+    if ( artist.isNull() )
+        return;
+
+    emit loadingStarted();
+
+    QList<Tomahawk::artist_ptr> artists;
+    artists << artist;
+    onArtistsAdded( artists );
+}
+
+
+void
 TreeModel::addAlbums( const artist_ptr& artist, const QModelIndex& parent )
 {
     qDebug() << Q_FUNC_INFO;
@@ -475,7 +493,6 @@ TreeModel::onArtistsAdded( const QList<Tomahawk::artist_ptr>& artists )
     foreach( const artist_ptr& artist, artists )
     {
         artistitem = new TreeModelItem( artist, m_rootItem );
-        artistitem->cover = m_defaultCover;
         artistitem->index = createIndex( m_rootItem->children.count() - 1, 0, artistitem );
         connect( artistitem, SIGNAL( dataChanged() ), SLOT( onDataChanged() ) );
     }
@@ -489,27 +506,29 @@ TreeModel::onArtistsAdded( const QList<Tomahawk::artist_ptr>& artists )
 void
 TreeModel::onAlbumsAdded( const QList<Tomahawk::album_ptr>& albums, const QVariant& data )
 {
-    qDebug() << Q_FUNC_INFO << albums.count();
+    qDebug() << Q_FUNC_INFO << albums.count() << data.toInt();
     if ( !albums.count() )
         return;
 
-    QModelIndex parent = index( data.toUInt(), 0, QModelIndex() );
+    QModelIndex parent = index( data.toInt(), 0, QModelIndex() );
     TreeModelItem* parentItem = itemFromIndex( parent );
 
-    // the -1 is because we fake a rowCount of 1 to trigger Qt calling fetchMore()
-    int c = rowCount( parent ) - 1;
     QPair< int, int > crows;
+    int c = rowCount( parent );
     crows.first = c;
     crows.second = c + albums.count() - 1;
 
-    if ( crows.second > 0 )
-        emit beginInsertRows( parent, crows.first + 1, crows.second );
+    if ( parent.isValid() )
+        crows.second -= 1;
+
+    qDebug() << crows.first << crows.second;
+    if ( !parent.isValid() || crows.second > 0 )
+        emit beginInsertRows( parent, crows.first, crows.second );
 
     TreeModelItem* albumitem = 0;
     foreach( const album_ptr& album, albums )
     {
         albumitem = new TreeModelItem( album, parentItem );
-        albumitem->cover = m_defaultCover;
         albumitem->index = createIndex( parentItem->children.count() - 1, 0, albumitem );
         connect( albumitem, SIGNAL( dataChanged() ), SLOT( onDataChanged() ) );
 
@@ -518,12 +537,16 @@ TreeModel::onAlbumsAdded( const QList<Tomahawk::album_ptr>& albums, const QVaria
         trackInfo["album"] = album->name();
         trackInfo["pptr"] = QString::number( (qlonglong)albumitem );
 
-        Tomahawk::InfoSystem::InfoSystem::instance()->getInfo(
-            s_tmInfoIdentifier, Tomahawk::InfoSystem::InfoAlbumCoverArt,
-            QVariant::fromValue< Tomahawk::InfoSystem::InfoCriteriaHash >( trackInfo ), Tomahawk::InfoSystem::InfoCustomData() );
+        Tomahawk::InfoSystem::InfoRequestData requestData;
+        requestData.caller = s_tmInfoIdentifier;
+        requestData.type = Tomahawk::InfoSystem::InfoAlbumCoverArt;
+        requestData.input = QVariant::fromValue< Tomahawk::InfoSystem::InfoCriteriaHash >( trackInfo );
+        requestData.customData = QVariantMap();
+
+        Tomahawk::InfoSystem::InfoSystem::instance()->getInfo( requestData );
     }
 
-    if ( crows.second > 0 )
+    if ( !parent.isValid() || crows.second > 0 )
         emit endInsertRows();
     else
         emit dataChanged( albumitem->index, albumitem->index.sibling( albumitem->index.row(), columnCount( QModelIndex() ) - 1 ) );
@@ -559,7 +582,6 @@ TreeModel::onTracksAdded( const QList<Tomahawk::query_ptr>& tracks, const QVaria
     {
         qDebug() << query->toString();
         item = new TreeModelItem( query->results().first(), parentItem );
-        item->cover = m_defaultCover;
         item->index = createIndex( parentItem->children.count() - 1, 0, item );
 
         connect( item, SIGNAL( dataChanged() ), SLOT( onDataChanged() ) );
@@ -567,48 +589,43 @@ TreeModel::onTracksAdded( const QList<Tomahawk::query_ptr>& tracks, const QVaria
 
     if ( crows.second > 0 )
         emit endInsertRows();
-    else
-        emit dataChanged( item->index, item->index.sibling( item->index.row(), columnCount( QModelIndex() ) - 1 ) );
 
-    qDebug() << rowCount( parent );
+    emit dataChanged( item->index.sibling( 0, 0 ), item->index.sibling( item->index.row(), columnCount( QModelIndex() ) - 1 ) );
+
     emit loadingFinished();
 }
 
 
 void
-TreeModel::infoSystemInfo( QString caller, Tomahawk::InfoSystem::InfoType type, QVariant input, QVariant output, Tomahawk::InfoSystem::InfoCustomData customData )
+TreeModel::infoSystemInfo( Tomahawk::InfoSystem::InfoRequestData requestData, QVariant output )
 {
-    Q_UNUSED( customData );
-    qDebug() << Q_FUNC_INFO;
+//    qDebug() << Q_FUNC_INFO;
 
-    if ( caller != s_tmInfoIdentifier ||
-       ( type != Tomahawk::InfoSystem::InfoAlbumCoverArt && type != Tomahawk::InfoSystem::InfoArtistImages ) )
+    if ( requestData.caller != s_tmInfoIdentifier ||
+       ( requestData.type != Tomahawk::InfoSystem::InfoAlbumCoverArt && requestData.type != Tomahawk::InfoSystem::InfoArtistImages ) )
     {
-        qDebug() << "Info of wrong type or not with our identifier";
+//        qDebug() << "Info of wrong type or not with our identifier";
         return;
     }
 
-    if ( !output.canConvert< Tomahawk::InfoSystem::InfoCustomData >() )
+    if ( !output.canConvert< QVariantMap >() )
     {
         qDebug() << "Cannot convert fetched art from a QByteArray";
         return;
     }
 
-    Tomahawk::InfoSystem::InfoCriteriaHash pptr = input.value< Tomahawk::InfoSystem::InfoCriteriaHash >();
-    Tomahawk::InfoSystem::InfoCustomData returnedData = output.value< Tomahawk::InfoSystem::InfoCustomData >();
+    Tomahawk::InfoSystem::InfoCriteriaHash pptr = requestData.input.value< Tomahawk::InfoSystem::InfoCriteriaHash >();
+    QVariantMap returnedData = output.value< QVariantMap >();
     const QByteArray ba = returnedData["imgbytes"].toByteArray();
     if ( ba.length() )
     {
         QPixmap pm;
         pm.loadFromData( ba );
-
         bool ok;
         qlonglong p = pptr["pptr"].toLongLong( &ok );
         TreeModelItem* ai = reinterpret_cast<TreeModelItem*>(p);
 
-        if ( pm.isNull() )
-            ai->cover = m_defaultCover;
-        else
+        if ( !pm.isNull() )
             ai->cover = pm;
 
         emit dataChanged( ai->index, ai->index.sibling( ai->index.row(), columnCount( QModelIndex() ) - 1 ) );
@@ -620,7 +637,30 @@ void
 TreeModel::infoSystemFinished( QString target )
 {
     Q_UNUSED( target );
-    qDebug() << Q_FUNC_INFO;
+//    qDebug() << Q_FUNC_INFO;
+}
+
+
+void
+TreeModel::onPlaybackFinished( const Tomahawk::result_ptr& result )
+{
+    TreeModelItem* oldEntry = itemFromIndex( m_currentIndex );
+    qDebug() << oldEntry->result().data() << result.data();
+    if ( oldEntry && !oldEntry->result().isNull() && oldEntry->result().data() == result.data() )
+    {
+        oldEntry->setIsPlaying( false );
+    }
+}
+
+
+void
+TreeModel::onPlaybackStopped()
+{
+    TreeModelItem* oldEntry = itemFromIndex( m_currentIndex );
+    if ( oldEntry )
+    {
+        oldEntry->setIsPlaying( false );
+    }
 }
 
 

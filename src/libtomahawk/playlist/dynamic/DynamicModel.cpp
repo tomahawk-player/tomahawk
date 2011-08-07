@@ -1,6 +1,6 @@
 /* === This file is part of Tomahawk Player - <http://tomahawk-player.org> ===
  *
- *   Copyright 2010-2011, Christian Muehlhaeuser <muesli@tomahawk-player.org>
+ *   Copyright 2010-2011, Leo Franchi <lfranchi@kde.org>
  *
  *   Tomahawk is free software: you can redistribute it and/or modify
  *   it under the terms of the GNU General Public License as published by
@@ -20,8 +20,10 @@
 #include "GeneratorInterface.h"
 #include "audio/audioengine.h"
 #include <pipeline.h>
+#include "utils/logger.h"
 
 using namespace Tomahawk;
+
 
 DynamicModel::DynamicModel( QObject* parent )
     : PlaylistModel( parent )
@@ -36,10 +38,12 @@ DynamicModel::DynamicModel( QObject* parent )
 
 }
 
+
 DynamicModel::~DynamicModel()
 {
 
 }
+
 
 void
 DynamicModel::loadPlaylist( const Tomahawk::dynplaylist_ptr& playlist, bool loadEntries )
@@ -61,6 +65,7 @@ DynamicModel::loadPlaylist( const Tomahawk::dynplaylist_ptr& playlist, bool load
         emit trackCountChanged( rowCount( QModelIndex() ) );
 }
 
+
 QString
 DynamicModel::description() const
 {
@@ -81,16 +86,28 @@ DynamicModel::startOnDemand()
     m_onDemandRunning = true;
 }
 
+
 void
 DynamicModel::newTrackGenerated( const Tomahawk::query_ptr& query )
 {
     if( m_onDemandRunning ) {
+        if( m_deduper.contains( QPair< QString, QString >( query->track(), query->artist() ) ) ) {
+            m_playlist->generator()->fetchNext();
+
+            return;
+        } else {
+            if( m_deduper.size() > 30 )
+                m_deduper.pop_front();
+            m_deduper.append( QPair< QString, QString >( query->track(), query->artist() ) );
+        }
+
         connect( query.data(), SIGNAL( resolvingFinished( bool ) ), this, SLOT( trackResolveFinished( bool ) ) );
 
         m_waitingFor << query.data();
         append( query );
     }
 }
+
 
 void
 DynamicModel::stopOnDemand( bool stopPlaying )
@@ -102,6 +119,7 @@ DynamicModel::stopOnDemand( bool stopPlaying )
     disconnect( AudioEngine::instance(), SIGNAL( loading( Tomahawk::result_ptr ) ), this, SLOT( newTrackLoading() ) );
 }
 
+
 void
 DynamicModel::changeStation()
 {
@@ -110,6 +128,7 @@ DynamicModel::changeStation()
     else // if we're not running, just start
         m_playlist->generator()->startOnDemand();
 }
+
 
 void
 DynamicModel::trackResolveFinished( bool success )
@@ -167,6 +186,7 @@ DynamicModel::newTrackLoading()
     }
 }
 
+
 void
 DynamicModel::tracksGenerated( const QList< query_ptr > entries, int limitResolvedTo )
 {
@@ -182,6 +202,7 @@ DynamicModel::tracksGenerated( const QList< query_ptr > entries, int limitResolv
     }
 }
 
+
 void
 DynamicModel::filterUnresolved( const QList< query_ptr >& entries )
 {
@@ -192,6 +213,7 @@ DynamicModel::filterUnresolved( const QList< query_ptr >& entries )
     }
     Pipeline::instance()->resolve( entries, true );
 }
+
 
 void
 DynamicModel::filteringTrackResolved( bool successful )

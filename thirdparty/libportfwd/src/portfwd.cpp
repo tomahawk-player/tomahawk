@@ -82,10 +82,22 @@ Portfwd::init(unsigned int timeout)
            free (descXML); descXML = 0;
            GetUPNPUrls (urls, data, dev->descURL);
        }
+       else
+       {
+           printf("couldn't get the UPnP device description XML (descXML is null)");
+           freeUPNPDevlist(devlist);
+           return false;
+       }
        // get lan IP:
        char lanaddr[16];
-       int i;
-       i = UPNP_GetValidIGD(devlist, urls, data, (char*)&lanaddr, 16);
+       int idg_was_found = UPNP_GetValidIGD(devlist, urls, data, (char*)&lanaddr, 16);
+       printf("UPNP_GetValidIGD returned %d", idg_was_found);
+       if (!idg_was_found)
+       {
+           printf("NO IGD was found (function UPNP_GetValidIGD())");
+           freeUPNPDevlist(devlist);
+           return false;
+       }
        m_lanip = std::string(lanaddr);
        
        freeUPNPDevlist(devlist);
@@ -98,6 +110,7 @@ Portfwd::init(unsigned int timeout)
 void
 Portfwd::get_status()
 {
+//    Q_ASSERT(urls->controlURL_CIF != NULL);
     // get connection speed
     UPNP_GetLinkLayerMaxBitRates(
         urls->controlURL_CIF, data->CIF.servicetype, &m_downbps, &m_upbps);

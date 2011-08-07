@@ -20,13 +20,23 @@
 #include "ui_audiocontrols.h"
 
 #include <QNetworkReply>
+#include <QDropEvent>
+#include <QMouseEvent>
 
 #include "audio/audioengine.h"
 #include "viewmanager.h"
-#include "utils/imagebutton.h"
-#include "utils/tomahawkutils.h"
+#include "playlist/playlistview.h"
+#include "database/database.h"
+#include "database/databasecommand_socialaction.h"
 
 #include "album.h"
+
+#include "utils/imagebutton.h"
+#include "utils/tomahawkutils.h"
+#include "utils/logger.h"
+#include <globalactionmanager.h>
+
+using namespace Tomahawk;
 
 static QString s_acInfoIdentifier = QString( "AUDIOCONTROLS" );
 
@@ -38,12 +48,13 @@ AudioControls::AudioControls( QWidget* parent )
     , m_shuffled( false )
 {
     ui->setupUi( this );
+    setAcceptDrops( true );
 
     QFont font( ui->artistTrackLabel->font() );
     font.setPixelSize( 12 );
 
 #ifdef Q_WS_MAC
-    font.setPointSize( font.pointSize() - 2 );
+    font.setPixelSize( font.pixelSize() - 2 );
 #endif
 
     ui->artistTrackLabel->setFont( font );
@@ -73,6 +84,8 @@ AudioControls::AudioControls( QWidget* parent )
     ui->repeatButton->setPixmap( RESPATH "images/repeat-off-pressed.png", QIcon::Off, QIcon::Active );
     ui->volumeLowButton->setPixmap( RESPATH "images/volume-icon-muted.png" );
     ui->volumeHighButton->setPixmap( RESPATH "images/volume-icon-full.png" );
+    ui->loveButton->setPixmap( RESPATH "images/not-loved.png" );
+    ui->loveButton->setCheckable( true );
 
     ui->ownerLabel->setForegroundRole( QPalette::Dark );
     ui->metaDataArea->setStyleSheet( "QWidget#metaDataArea {\nborder-width: 4px;\nborder-image: url(" RESPATH "images/now-playing-panel.png) 4 4 4 4 stretch stretch; }" );
@@ -135,7 +148,6 @@ AudioControls::AudioControls( QWidget* parent )
     connect( ui->volumeLowButton,  SIGNAL( clicked() ), AudioEngine::instance(), SLOT( lowerVolume() ) );
     connect( ui->volumeHighButton, SIGNAL( clicked() ), AudioEngine::instance(), SLOT( raiseVolume() ) );
 
-
     connect( ui->playPauseButton,  SIGNAL( clicked() ), this, SIGNAL( playPressed() ) );
     connect( ui->pauseButton,  SIGNAL( clicked() ), this,     SIGNAL( pausePressed() ) );
 
@@ -145,6 +157,7 @@ AudioControls::AudioControls( QWidget* parent )
     connect( ui->artistTrackLabel, SIGNAL( clickedArtist() ), SLOT( onArtistClicked() ) );
     connect( ui->artistTrackLabel, SIGNAL( clickedTrack() ), SLOT( onTrackClicked() ) );
     connect( ui->albumLabel,       SIGNAL( clickedAlbum() ), SLOT( onAlbumClicked() ) );
+    connect( ui->loveButton,       SIGNAL( clicked( bool ) ), SLOT( onLoveButtonClicked( bool ) ) );
 
     // <From AudioEngine>
     connect( AudioEngine::instance(), SIGNAL( loading( Tomahawk::result_ptr ) ), SLOT( onPlaybackLoading( Tomahawk::result_ptr ) ) );
@@ -159,8 +172,8 @@ AudioControls::AudioControls( QWidget* parent )
                      .scaled( ui->coverImage->size(), Qt::IgnoreAspectRatio, Qt::SmoothTransformation );
 
     connect( Tomahawk::InfoSystem::InfoSystem::instance(),
-        SIGNAL( info( QString, Tomahawk::InfoSystem::InfoType, QVariant, QVariant, Tomahawk::InfoSystem::InfoCustomData ) ),
-        SLOT( infoSystemInfo( QString, Tomahawk::InfoSystem::InfoType, QVariant, QVariant, Tomahawk::InfoSystem::InfoCustomData ) ) );
+        SIGNAL( info( Tomahawk::InfoSystem::InfoRequestData, QVariant ) ),
+        SLOT( infoSystemInfo( Tomahawk::InfoSystem::InfoRequestData, QVariant ) ) );
 
     connect( Tomahawk::InfoSystem::InfoSystem::instance(), SIGNAL( finished( QString ) ), SLOT( infoSystemFinished( QString ) ) );
 
@@ -211,7 +224,7 @@ AudioControls::onVolumeChanged( int volume )
 void
 AudioControls::onPlaybackStarted( const Tomahawk::result_ptr& result )
 {
-    qDebug() << Q_FUNC_INFO;
+    tDebug( LOGEXTRA ) << Q_FUNC_INFO;
 
     onPlaybackLoading( result );
 
@@ -219,38 +232,37 @@ AudioControls::onPlaybackStarted( const Tomahawk::result_ptr& result )
     trackInfo["artist"] = result->artist()->name();
     trackInfo["album"] = result->album()->name();
 
-    Tomahawk::InfoSystem::InfoSystem::instance()->getInfo(
-        s_acInfoIdentifier, Tomahawk::InfoSystem::InfoAlbumCoverArt,
-        QVariant::fromValue< Tomahawk::InfoSystem::InfoCriteriaHash >( trackInfo ), Tomahawk::InfoSystem::InfoCustomData() );
+    Tomahawk::InfoSystem::InfoRequestData requestData;
+    requestData.caller = s_acInfoIdentifier;
+    requestData.type = Tomahawk::InfoSystem::InfoAlbumCoverArt;
+    requestData.input = QVariant::fromValue< Tomahawk::InfoSystem::InfoCriteriaHash >( trackInfo );
+    requestData.customData = QVariantMap();
+
+    Tomahawk::InfoSystem::InfoSystem::instance()->getInfo( requestData );
 }
 
 
 void
-AudioControls::infoSystemInfo( QString caller, Tomahawk::InfoSystem::InfoType type, QVariant input, QVariant output, Tomahawk::InfoSystem::InfoCustomData customData )
+AudioControls::infoSystemInfo( Tomahawk::InfoSystem::InfoRequestData requestData, QVariant output )
 {
-    Q_UNUSED( input );
-    Q_UNUSED( customData );
-
-    qDebug() << Q_FUNC_INFO << caller << type << s_acInfoIdentifier << Tomahawk::InfoSystem::InfoAlbumCoverArt;
-    if ( caller != s_acInfoIdentifier || type != Tomahawk::InfoSystem::InfoAlbumCoverArt )
+    if ( requestData.caller != s_acInfoIdentifier || requestData.type != Tomahawk::InfoSystem::InfoAlbumCoverArt )
     {
-        qDebug() << "Info of wrong type or not with our identifier";
         return;
     }
 
     if ( m_currentTrack.isNull() )
     {
-        qDebug() << "Current track is null when trying to apply fetched cover art";
+        tLog() << "Current track is null when trying to apply fetched cover art";
         return;
     }
 
-    if ( !output.canConvert< Tomahawk::InfoSystem::InfoCustomData >() )
+    if ( !output.canConvert< QVariantMap >() )
     {
-        qDebug() << "Cannot convert fetched art from a QByteArray";
+        tDebug( LOGINFO ) << "Cannot convert fetched art from a QByteArray";
         return;
     }
 
-    Tomahawk::InfoSystem::InfoCustomData returnedData = output.value< Tomahawk::InfoSystem::InfoCustomData >();
+    QVariantMap returnedData = output.value< QVariantMap >();
     const QByteArray ba = returnedData["imgbytes"].toByteArray();
     if ( ba.length() )
     {
@@ -269,14 +281,13 @@ void
 AudioControls::infoSystemFinished( QString target )
 {
     Q_UNUSED( target );
-    qDebug() << Q_FUNC_INFO;
 }
 
 
 void
 AudioControls::onPlaybackLoading( const Tomahawk::result_ptr& result )
 {
-    qDebug() << Q_FUNC_INFO;
+    tDebug( LOGEXTRA ) << Q_FUNC_INFO;
 
     m_currentTrack = result;
 
@@ -296,6 +307,38 @@ AudioControls::onPlaybackLoading( const Tomahawk::result_ptr& result )
     m_pauseAction->setEnabled( true ); */
 
     ui->stackedLayout->setCurrentWidget( ui->pauseButton );
+
+    ui->pauseButton->setEnabled( true );
+    ui->pauseButton->setVisible( true );
+    ui->playPauseButton->setVisible( false );
+    ui->playPauseButton->setEnabled( false );
+    ui->loveButton->setEnabled( true );
+    ui->loveButton->setVisible( true );
+
+    result->loadSocialActions();
+
+    connect( result.data(), SIGNAL( socialActionsLoaded() ), this, SLOT( socialActionsLoaded() ) );
+}
+
+void
+AudioControls::socialActionsLoaded()
+{
+    Result* r = qobject_cast< Result* >( sender() );
+    Q_ASSERT( r );
+
+    if ( m_currentTrack.data() == r )
+    {
+        if ( m_currentTrack->loved() )
+        {
+            ui->loveButton->setPixmap( RESPATH "images/loved.png" );
+            ui->loveButton->setChecked( true );
+        }
+        else
+        {
+            ui->loveButton->setPixmap( RESPATH "images/not-loved.png" );
+            ui->loveButton->setChecked( false );
+        }
+    }
 }
 
 
@@ -315,6 +358,7 @@ AudioControls::onPlaybackResumed()
     m_pauseAction->setEnabled( true ); */
 
     ui->stackedLayout->setCurrentWidget( ui->pauseButton );
+    ui->loveButton->setVisible( true );
 }
 
 
@@ -332,6 +376,8 @@ AudioControls::onPlaybackStopped()
     ui->seekSlider->setVisible( false );
 
     ui->stackedLayout->setCurrentWidget( ui->playPauseButton );
+    ui->loveButton->setEnabled( false );
+    ui->loveButton->setVisible( false );
 
 /*    m_pauseAction->setEnabled( false );
     m_playAction->setEnabled( true ); */
@@ -472,3 +518,80 @@ AudioControls::onTrackClicked()
 {
     ViewManager::instance()->showCurrentTrack();
 }
+
+void
+AudioControls::dragEnterEvent( QDragEnterEvent* e )
+{
+    if ( GlobalActionManager::instance()->acceptsMimeData( e->mimeData() ) )
+        e->acceptProposedAction();
+}
+
+void
+AudioControls::dragMoveEvent( QDragMoveEvent* e )
+{
+//     if ( GlobalActionManager::instance()->acceptsMimeData( e->mimeData() ) )
+//         e->acceptProposedAction();
+}
+
+void
+AudioControls::dropEvent( QDropEvent* e )
+{
+    tDebug() << "AudioControls got drop:" << e->mimeData()->formats();
+    if ( GlobalActionManager::instance()->acceptsMimeData( e->mimeData() ) )
+    {
+        connect( GlobalActionManager::instance(), SIGNAL( tracks( QList<Tomahawk::query_ptr> ) ), this, SLOT( droppedTracks( QList<Tomahawk::query_ptr> ) ) );
+        GlobalActionManager::instance()->tracksFromMimeData( e->mimeData() );
+
+        e->accept();
+    }
+}
+
+void
+AudioControls::droppedTracks( QList< query_ptr > tracks )
+{
+    disconnect( GlobalActionManager::instance(), SIGNAL( tracks( QList<Tomahawk::query_ptr> ) ), this, SLOT( droppedTracks( QList<Tomahawk::query_ptr> ) ) );
+
+    if ( !tracks.isEmpty() )
+    {
+        // queue and play the first if nothign is playing
+        GlobalActionManager::instance()->handleOpenTrack( tracks.first() );
+
+        // just queue the rest
+        for ( int i = 1; i < tracks.size(); i++ )
+        {
+            ViewManager::instance()->queue()->model()->append( tracks[ i ] );
+        }
+    }
+}
+
+
+void
+AudioControls::onLoveButtonClicked( bool checked )
+{
+    Tomahawk::InfoSystem::InfoCriteriaHash trackInfo;
+    trackInfo["title"] = m_currentTrack->track();
+    trackInfo["artist"] = m_currentTrack->artist()->name();
+    trackInfo["album"] = m_currentTrack->album()->name();
+
+    if ( checked )
+    {
+        Tomahawk::InfoSystem::InfoSystem::instance()->pushInfo(
+            s_acInfoIdentifier, Tomahawk::InfoSystem::InfoLove,
+            QVariant::fromValue< Tomahawk::InfoSystem::InfoCriteriaHash >( trackInfo ) );
+
+        DatabaseCommand_SocialAction* cmd = new DatabaseCommand_SocialAction( m_currentTrack, QString( "Love" ), QString( "true") );
+        Database::instance()->enqueue( QSharedPointer<DatabaseCommand>(cmd) );
+        ui->loveButton->setPixmap( RESPATH "images/loved.png" );
+    }
+    else
+    {
+        Tomahawk::InfoSystem::InfoSystem::instance()->pushInfo(
+            s_acInfoIdentifier, Tomahawk::InfoSystem::InfoUnLove,
+            QVariant::fromValue< Tomahawk::InfoSystem::InfoCriteriaHash >( trackInfo ) );
+
+        DatabaseCommand_SocialAction* cmd = new DatabaseCommand_SocialAction( m_currentTrack, QString( "Love" ), QString( "false" ) );
+        Database::instance()->enqueue( QSharedPointer<DatabaseCommand>(cmd) );
+        ui->loveButton->setPixmap( RESPATH "images/not-loved.png" );
+    }
+}
+

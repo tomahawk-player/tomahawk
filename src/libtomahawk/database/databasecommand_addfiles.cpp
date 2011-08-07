@@ -1,5 +1,5 @@
 /* === This file is part of Tomahawk Player - <http://tomahawk-player.org> ===
- * 
+ *
  *   Copyright 2010-2011, Christian Muehlhaeuser <muesli@tomahawk-player.org>
  *
  *   Tomahawk is free software: you can redistribute it and/or modify
@@ -27,6 +27,8 @@
 #include "databasecommand_collectionstats.h"
 #include "databaseimpl.h"
 #include "network/controlconnection.h"
+
+#include "utils/logger.h"
 
 using namespace Tomahawk;
 
@@ -68,12 +70,6 @@ DatabaseCommand_AddFiles::postCommitHook()
              Qt::QueuedConnection );
 
     emit notify( m_queries );
-
-    // also re-calc the collection stats, to updates the "X tracks" in the sidebar etc:
-    DatabaseCommand_CollectionStats* cmd = new DatabaseCommand_CollectionStats( source() );
-    connect( cmd,            SIGNAL( done( QVariantMap ) ),
-             source().data(),  SLOT( setStats( QVariantMap ) ), Qt::QueuedConnection );
-    Database::instance()->enqueue( QSharedPointer<DatabaseCommand>( cmd ) );
 
     if( source()->isLocal() )
         Servent::instance()->triggerDBSync();
@@ -154,14 +150,16 @@ DatabaseCommand_AddFiles::exec( DatabaseImpl* dbi )
         if( !source()->isLocal() )
             url = QString( "servent://%1\t%2" ).arg( source()->userName() ).arg( url );
 
-        bool isnew;
-        artistid = dbi->artistId( artist, isnew );
+        bool autoCreate = true;
+        artistid = dbi->artistId( artist, autoCreate );
         if ( artistid < 1 )
             continue;
-        trackid = dbi->trackId( artistid, track, isnew );
+        autoCreate = true; // artistId overwrites autoCreate (reference)
+        trackid = dbi->trackId( artistid, track, autoCreate );
         if ( trackid < 1 )
             continue;
-        albumid = dbi->albumId( artistid, album, isnew );
+        autoCreate = true; // trackId overwrites autoCreate (reference)
+        albumid = dbi->albumId( artistid, album, autoCreate );
 
         // Now add the association
         query_filejoin.bindValue( 0, fileid );

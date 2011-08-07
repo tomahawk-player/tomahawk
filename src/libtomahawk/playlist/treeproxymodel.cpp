@@ -18,10 +18,10 @@
 
 #include "treeproxymodel.h"
 
-#include <QDebug>
 #include <QListView>
 
 #include "query.h"
+#include "utils/logger.h"
 
 
 TreeProxyModel::TreeProxyModel( QObject* parent )
@@ -31,23 +31,30 @@ TreeProxyModel::TreeProxyModel( QObject* parent )
     , m_repeatMode( PlaylistInterface::NoRepeat )
     , m_shuffled( false )
 {
-    qsrand( QTime( 0, 0, 0 ).secsTo( QTime::currentTime() ) );
-
     setFilterCaseSensitivity( Qt::CaseInsensitive );
     setSortCaseSensitivity( Qt::CaseInsensitive );
     setDynamicSortFilter( true );
 
-    setSourceModel( 0 );
+    setSourceTreeModel( 0 );
 }
 
 
 void
-TreeProxyModel::setSourceModel( TreeModel* sourceModel )
+TreeProxyModel::setSourceModel( QAbstractItemModel* sourceModel )
+{
+    Q_UNUSED( sourceModel );
+    qDebug() << "Explicitly use setSourceTreeModel instead";
+    Q_ASSERT( false );
+}
+
+
+void
+TreeProxyModel::setSourceTreeModel( TreeModel* sourceModel )
 {
     m_model = sourceModel;
 
-    connect( m_model, SIGNAL( trackCountChanged( unsigned int ) ),
-                      SIGNAL( sourceTrackCountChanged( unsigned int ) ) );
+    if ( m_model && m_model->metaObject()->indexOfSignal( "trackCountChanged(uint)" ) > -1 )
+        connect( m_model, SIGNAL( trackCountChanged( unsigned int ) ), SIGNAL( sourceTrackCountChanged( unsigned int ) ) );
 
     QSortFilterProxyModel::setSourceModel( sourceModel );
 }
@@ -66,15 +73,42 @@ TreeProxyModel::setFilter( const QString& pattern )
 bool
 TreeProxyModel::filterAcceptsRow( int sourceRow, const QModelIndex& sourceParent ) const
 {
+    TreeModelItem* pi = sourceModel()->itemFromIndex( sourceModel()->index( sourceRow, 0, sourceParent ) );
+    Q_ASSERT( pi );
+
+    if ( !pi->result().isNull() )
+    {
+        QList< Tomahawk::result_ptr > rl = m_cache.values( sourceParent );
+        foreach ( const Tomahawk::result_ptr& result, rl )
+        {
+            if ( result->track() == pi->result()->track() )
+                return ( result.data() == pi->result().data() );
+        }
+
+        for ( int i = 0; i < sourceModel()->rowCount( sourceParent ); i++ )
+        {
+            if ( i == sourceRow )
+                continue;
+
+            TreeModelItem* ti = sourceModel()->itemFromIndex( sourceModel()->index( i, 0, sourceParent ) );
+            if ( ti->result()->track() == pi->result()->track() )
+            {
+                if ( !pi->result()->isOnline() && ti->result()->isOnline() )
+                    return false;
+
+                if ( ti->result()->collection()->source()->isLocal() )
+                    return false;
+            }
+        }
+
+        tDebug() << "Accepting:" << pi->result()->toString() << pi->result()->collection()->source()->id();
+        m_cache.insertMulti( sourceParent, pi->result() );
+    }
+
     if ( filterRegExp().isEmpty() )
         return true;
 
-    TreeModelItem* pi = sourceModel()->itemFromIndex( sourceModel()->index( sourceRow, 0, sourceParent ) );
-    if ( !pi )
-        return false;
-
     QStringList sl = filterRegExp().pattern().split( " ", QString::SkipEmptyParts );
-
     bool found = true;
     foreach( const QString& s, sl )
     {
@@ -136,12 +170,26 @@ TreeProxyModel::removeIndexes( const QList<QModelIndex>& indexes )
 }
 
 
+bool
+TreeProxyModel::hasNextItem()
+{
+    return !( siblingItem( 1, true ).isNull() );
+}
+
+
 Tomahawk::result_ptr
 TreeProxyModel::siblingItem( int itemsAway )
 {
+    return siblingItem( itemsAway, false );
+}
+
+
+Tomahawk::result_ptr
+TreeProxyModel::siblingItem( int itemsAway, bool readOnly )
+{
     qDebug() << Q_FUNC_INFO;
 
-    QModelIndex idx = currentItem();
+    QModelIndex idx = currentIndex();
 
     // Try to find the next available PlaylistItem (with results)
     if ( idx.isValid() ) do
@@ -154,13 +202,25 @@ TreeProxyModel::siblingItem( int itemsAway )
         if ( item && item->result()->isOnline() )
         {
             qDebug() << "Next PlaylistItem found:" << item->result()->url();
-            setCurrentItem( idx );
+            if ( !readOnly )
+                setCurrentIndex( idx );
             return item->result();
         }
     }
     while ( idx.isValid() );
 
-    setCurrentItem( QModelIndex() );
+    if ( !readOnly )
+        setCurrentIndex( QModelIndex() );
+    return Tomahawk::result_ptr();
+}
+
+
+Tomahawk::result_ptr
+TreeProxyModel::currentItem() const
+{
+    TreeModelItem* item = itemFromIndex( mapToSource( currentIndex() ) );
+    if ( item && item->result()->isOnline() )
+        return item->result();
     return Tomahawk::result_ptr();
 }
 

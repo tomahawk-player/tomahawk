@@ -16,19 +16,22 @@
 
 #include "categoryitems.h"
 
+#include <QMimeData>
+
 #include "tomahawkapp.h"
-#include "utils/tomahawkutils.h"
-#include "widgets/newplaylistwidget.h"
-#include "widgets/playlisttypeselectordlg.h"
 #include "viewmanager.h"
 #include "viewpage.h"
 #include "sourcelist.h"
 #include "sourcetreeview.h"
-
-#include <QMimeData>
+#include "utils/tomahawkutils.h"
+#include "widgets/newplaylistwidget.h"
+#include "widgets/playlisttypeselectordlg.h"
 #include <playlist/dynamic/GeneratorInterface.h>
+#include "utils/logger.h"
+#include <globalactionmanager.h>
 
 using namespace Tomahawk;
+
 
 /// CategoryAddItem
 
@@ -38,9 +41,11 @@ CategoryAddItem::CategoryAddItem( SourcesModel* model, SourceTreeItem* parent, S
 {
 }
 
+
 CategoryAddItem::~CategoryAddItem()
 {
 }
+
 
 QString
 CategoryAddItem::text() const
@@ -54,6 +59,7 @@ CategoryAddItem::text() const
 
     return QString();
 }
+
 
 void
 CategoryAddItem::activate()
@@ -90,10 +96,11 @@ CategoryAddItem::activate()
     }
 }
 
+
 Qt::ItemFlags
 CategoryAddItem::flags() const
 {
-    switch( m_categoryType )
+    switch ( m_categoryType )
     {
         case SourcesModel::PlaylistsCategory:
             return Qt::ItemIsEnabled | Qt::ItemIsSelectable | Qt::ItemIsDropEnabled;
@@ -104,77 +111,68 @@ CategoryAddItem::flags() const
     }
 }
 
+
 QIcon
 CategoryAddItem::icon() const
 {
     return QIcon( RESPATH "images/add.png" );
 }
 
+
 bool
 CategoryAddItem::willAcceptDrag( const QMimeData* data ) const
 {
-    if( ( m_categoryType == SourcesModel::PlaylistsCategory || m_categoryType == SourcesModel::StationsCategory ) &&
-          data->hasFormat( "application/tomahawk.query.list" ) ) {
+    if ( ( m_categoryType == SourcesModel::PlaylistsCategory || m_categoryType == SourcesModel::StationsCategory ) && GlobalActionManager::instance()->acceptsMimeData( data ) )
+    {
         return true;
     }
     return false;
 }
+
 
 bool
 CategoryAddItem::dropMimeData( const QMimeData* data, Qt::DropAction )
 {
     // Create a new playlist seeded with these items
-    if( data->hasFormat( "application/tomahawk.query.list" ) ) {
-        QByteArray itemData = data->data( "application/tomahawk.query.list" );
-        QDataStream stream( &itemData, QIODevice::ReadOnly );
-        QList< Tomahawk::query_ptr > queries;
+    connect( GlobalActionManager::instance(), SIGNAL( tracks( QList< Tomahawk::query_ptr > ) ), this, SLOT( parsedDroppedTracks( QList< Tomahawk::query_ptr > ) ) );
+    GlobalActionManager::instance()->tracksFromMimeData( data );
 
-        while ( !stream.atEnd() )
-        {
-            qlonglong qptr;
-            stream >> qptr;
-
-            Tomahawk::query_ptr* query = reinterpret_cast<Tomahawk::query_ptr*>(qptr);
-            if ( query && !query->isNull() )
-            {
-                qDebug() << "Dropped query item:" << query->data()->artist() << "-" << query->data()->track();
-                queries << *query;
-            }
-        }
-
-        if( m_categoryType == SourcesModel::PlaylistsCategory ) {
-
-            playlist_ptr newpl = Playlist::create( SourceList::instance()->getLocal(), uuid(), "New Playlist", "", SourceList::instance()->getLocal()->friendlyName(), false, queries );
-            ViewManager::instance()->show( newpl );
-
-            // Give a shot to try to rename it. The playlist has to be created first. ugly.
-            QTimer::singleShot( 300, APP->mainWindow()->sourceTreeView(), SLOT( renamePlaylist() ) );
-        } else if( m_categoryType == SourcesModel::StationsCategory ) {
-            // seed the playlist with these song filters
-            QString name = queries.isEmpty() ? tr( "New Station" ) : tr( "%1 Station" ).arg( queries.first()->track() );
-            dynplaylist_ptr newpl = DynamicPlaylist::create( SourceList::instance()->getLocal(), uuid(), name, "", SourceList::instance()->getLocal()->friendlyName(), OnDemand, false );
-            newpl->setMode( OnDemand );
-
-            // now we want to add each query as a song filter...
-            QList< dyncontrol_ptr > contrls;
-            foreach( const Tomahawk::query_ptr& q, queries ) {
-                dyncontrol_ptr c = newpl->generator()->createControl( "Song" );
-                c->setInput( QString( "%1 %2" ).arg( q->track() ).arg( q->artist() ) );
-                contrls << c;
-            }
-
-            newpl->createNewRevision( uuid(), newpl->currentrevision(), newpl->type(), contrls );
-
-
-            ViewManager::instance()->show( newpl );
-            // Give a shot to try to rename it. The playlist has to be created first. ugly.
-            QTimer::singleShot( 300, APP->mainWindow()->sourceTreeView(), SLOT( renamePlaylist() ) );
-        }
-
-        return true;
-    }
-    return false;
+    return true;
 }
+
+void
+CategoryAddItem::parsedDroppedTracks( const QList< query_ptr >& tracks )
+{
+    disconnect( GlobalActionManager::instance(), SIGNAL( tracks( QList< Tomahawk::query_ptr > ) ), this, SLOT( parsedDroppedTracks( QList< Tomahawk::query_ptr > ) ) );
+    if( m_categoryType == SourcesModel::PlaylistsCategory ) {
+
+        playlist_ptr newpl = Playlist::create( SourceList::instance()->getLocal(), uuid(), "New Playlist", "", SourceList::instance()->getLocal()->friendlyName(), false, tracks );
+        ViewManager::instance()->show( newpl );
+
+        // Give a shot to try to rename it. The playlist has to be created first. ugly.
+        QTimer::singleShot( 300, APP->mainWindow()->sourceTreeView(), SLOT( renamePlaylist() ) );
+    } else if( m_categoryType == SourcesModel::StationsCategory ) {
+        // seed the playlist with these song filters
+        QString name = tracks.isEmpty() ? tr( "New Station" ) : tr( "%1 Station" ).arg( tracks.first()->track() );
+        dynplaylist_ptr newpl = DynamicPlaylist::create( SourceList::instance()->getLocal(), uuid(), name, "", SourceList::instance()->getLocal()->friendlyName(), OnDemand, false );
+        newpl->setMode( OnDemand );
+
+        // now we want to add each query as a song filter...
+        QList< dyncontrol_ptr > contrls;
+        foreach( const Tomahawk::query_ptr& q, tracks ) {
+            dyncontrol_ptr c = newpl->generator()->createControl( "Song" );
+            c->setInput( QString( "%1 %2" ).arg( q->track() ).arg( q->artist() ) );
+            contrls << c;
+        }
+
+        newpl->createNewRevision( uuid(), newpl->currentrevision(), newpl->type(), contrls );
+
+        ViewManager::instance()->show( newpl );
+        // Give a shot to try to rename it. The playlist has to be created first. ugly.
+        QTimer::singleShot( 300, APP->mainWindow()->sourceTreeView(), SLOT( renamePlaylist() ) );
+    }
+}
+
 
 int
 CategoryAddItem::peerSortValue() const
@@ -199,11 +197,13 @@ CategoryItem::CategoryItem( SourcesModel* model, SourceTreeItem* parent, Sources
     //     endRowsAdded();
 }
 
+
 void
 CategoryItem::insertItem( SourceTreeItem* item )
 {
     insertItems( QList< SourceTreeItem* >() << item );
 }
+
 
 void
 CategoryItem::insertItems( QList< SourceTreeItem* > items )
@@ -219,6 +219,7 @@ CategoryItem::insertItems( QList< SourceTreeItem* > items )
     endRowsAdded();
 }
 
+
 int
 CategoryItem::peerSortValue() const
 {
@@ -229,6 +230,7 @@ CategoryItem::peerSortValue() const
     else
         return 0;
 }
+
 
 void
 CategoryItem::activate()

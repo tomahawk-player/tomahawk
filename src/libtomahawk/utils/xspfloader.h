@@ -23,7 +23,6 @@
 #ifndef XSPFLOADER_H
 #define XSPFLOADER_H
 
-#include <QDebug>
 #include <QObject>
 #include <QUrl>
 #include <QFile>

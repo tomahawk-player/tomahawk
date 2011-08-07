@@ -117,6 +117,13 @@ Artist::getTopTags() const
 
 
 QNetworkReply* 
+Artist::getTopTracks() const
+{
+    return ws::get( params("getTopTracks") );
+}
+
+
+QNetworkReply* 
 Artist::getSimilar() const
 {
     return ws::get( params("getSimilar") );
@@ -153,6 +160,25 @@ Artist::getSimilar( QNetworkReply* r )
     return artists;
 }
 
+
+QStringList /* static */
+Artist::getTopTracks( QNetworkReply* r )
+{
+    QStringList tracks;
+    try
+    {
+        XmlQuery lfm = ws::parse(r);        
+        foreach (XmlQuery e, lfm.children( "track" ))
+        {
+            tracks << e["name"].text();
+        }
+    }
+    catch (ws::ParseError& e)
+    {
+        qWarning() << e.what();
+    }
+    return tracks;
+}
 
 
 QList<Artist> /* static */

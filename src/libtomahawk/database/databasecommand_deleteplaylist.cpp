@@ -1,5 +1,5 @@
 /* === This file is part of Tomahawk Player - <http://tomahawk-player.org> ===
- * 
+ *
  *   Copyright 2010-2011, Christian Muehlhaeuser <muesli@tomahawk-player.org>
  *
  *   Tomahawk is free software: you can redistribute it and/or modify
@@ -21,6 +21,7 @@
 #include <QSqlQuery>
 
 #include "network/servent.h"
+#include "utils/logger.h"
 
 using namespace Tomahawk;
 
@@ -57,7 +58,7 @@ DatabaseCommand_DeletePlaylist::postCommitHook()
         qDebug() << "Source has gone offline, not emitting to GUI.";
         return;
     }
-    
+
     playlist_ptr playlist = source()->collection()->playlist( m_playlistguid );
     Q_ASSERT( !playlist.isNull() );
 

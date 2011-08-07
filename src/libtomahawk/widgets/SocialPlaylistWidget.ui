@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>SocialPlaylistWidget</class>
+ <widget class="QWidget" name="SocialPlaylistWidget">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>875</width>
+    <height>513</height>
+   </rect>
+  </property>
+  <layout class="QVBoxLayout" name="verticalLayout_4">
+   <item>
+    <widget class="QSplitter" name="splitter_2">
+     <property name="orientation">
+      <enum>Qt::Horizontal</enum>
+     </property>
+     <widget class="QSplitter" name="splitter">
+      <property name="orientation">
+       <enum>Qt::Vertical</enum>
+      </property>
+      <widget class="QWidget" name="layoutWidget1">
+       <layout class="QVBoxLayout" name="verticalLayout">
+        <item>
+         <widget class="HeaderLabel" name="label_4">
+          <property name="text">
+           <string>Popular New Albums From Your Friends</string>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="AlbumView" name="newAlbumsView"/>
+        </item>
+       </layout>
+      </widget>
+      <widget class="QWidget" name="layoutWidget2">
+       <layout class="QVBoxLayout" name="verticalLayout_3">
+        <item>
+         <widget class="HeaderLabel" name="label_2">
+          <property name="text">
+           <string>Most Played Playlists</string>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="PlaylistWidget" name="mostPlayedPlaylists"/>
+        </item>
+       </layout>
+      </widget>
+     </widget>
+     <widget class="QWidget" name="layoutWidget">
+      <layout class="QVBoxLayout" name="verticalLayout_2">
+       <item>
+        <widget class="HeaderLabel" name="label_3">
+         <property name="text">
+          <string>Most Played Tracks You Don't Have</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="PlaylistView" name="newTracksView">
+         <property name="minimumSize">
+          <size>
+           <width>320</width>
+           <height>0</height>
+          </size>
+         </property>
+        </widget>
+       </item>
+      </layout>
+     </widget>
+    </widget>
+   </item>
+  </layout>
+ </widget>
+ <customwidgets>
+  <customwidget>
+   <class>PlaylistView</class>
+   <extends>QTreeView</extends>
+   <header>playlist/playlistview.h</header>
+  </customwidget>
+  <customwidget>
+   <class>HeaderLabel</class>
+   <extends>QLabel</extends>
+   <header location="global">widgets/HeaderLabel.h</header>
+  </customwidget>
+  <customwidget>
+   <class>AlbumView</class>
+   <extends>QListView</extends>
+   <header location="global">playlist/albumview.h</header>
+  </customwidget>
+  <customwidget>
+   <class>PlaylistWidget</class>
+   <extends>QListWidget</extends>
+   <header>widgets/welcomewidget.h</header>
+  </customwidget>
+ </customwidgets>
+ <resources/>
+ <connections/>
+</ui>

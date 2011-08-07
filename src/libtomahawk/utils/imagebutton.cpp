@@ -1,5 +1,5 @@
 /* === This file is part of Tomahawk Player - <http://tomahawk-player.org> ===
- * 
+ *
  *   Copyright 2010-2011, Christian Muehlhaeuser <muesli@tomahawk-player.org>
  *
  *   Tomahawk is free software: you can redistribute it and/or modify
@@ -25,7 +25,8 @@
 #include <QPixmap>
 #include <QIcon>
 #include <QString>
-#include <QDebug>
+
+#include "utils/logger.h"
 
 
 ImageButton::ImageButton( QWidget* parent )
@@ -76,24 +77,24 @@ ImageButton::paintEvent( QPaintEvent* event )
 {
     QPainter p( this );
     p.setClipRect( event->rect() );
-    
+
     QIcon::Mode mode = isDown()
         ? QIcon::Active
-        : isEnabled() 
-            ? QIcon::Normal 
+        : isEnabled()
+            ? QIcon::Normal
             : QIcon::Disabled;
-    
+
     QIcon::State state = isChecked()
-        ? QIcon::On 
+        ? QIcon::On
         : QIcon::Off;
-    
+
     icon().paint( &p, rect(), Qt::AlignCenter, mode, state );
 }
 
 
 void
 ImageButton::setPixmap( const QString& path, const QIcon::State state, const QIcon::Mode mode )
-{      
+{
     setPixmap( QPixmap( path ), state, mode );
 }
 

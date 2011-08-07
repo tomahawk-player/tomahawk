@@ -55,9 +55,11 @@ public:
     void addFilteredCollection( const Tomahawk::collection_ptr& collection, unsigned int amount, DatabaseCommand_AllTracks::SortOrder order );
 
     virtual void append( const Tomahawk::query_ptr& /*query*/ ) {}
+    virtual void append( const Tomahawk::artist_ptr& /*artist*/ ) {}
+    virtual void append( const Tomahawk::album_ptr& /*album*/ ) {}
 
 signals:
-    void repeatModeChanged( PlaylistInterface::RepeatMode mode );
+    void repeatModeChanged( Tomahawk::PlaylistInterface::RepeatMode mode );
     void shuffleModeChanged( bool enabled );
 
     void loadingStarted();

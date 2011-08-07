@@ -1,6 +1,6 @@
 /* === This file is part of Tomahawk Player - <http://tomahawk-player.org> ===
- * 
- *   Copyright 2010-2011, Christian Muehlhaeuser <muesli@tomahawk-player.org>
+ *
+ *   Copyright 2010-2011, Leo Franchi <lfranchi@kde.org>
  *
  *   Tomahawk is free software: you can redistribute it and/or modify
  *   it under the terms of the GNU General Public License as published by
@@ -19,95 +19,59 @@
 #include "databasecommand_loaddynamicplaylist.h"
 
 #include <QSqlQuery>
-#include <QString>
 
+#include "dynamic/DynamicPlaylist.h"
 #include "databaseimpl.h"
-#include "tomahawksqlquery.h"
-#include "dynamic/DynamicControl.h"
-#include "dynamic/GeneratorInterface.h"
-#include <dynamic/GeneratorFactory.h>
+#include "utils/logger.h"
 
 using namespace Tomahawk;
 
+Tomahawk::DatabaseCommand_LoadDynamicPlaylist::DatabaseCommand_LoadDynamicPlaylist( const source_ptr& s, const QString& guid, QObject* parent )
+    : DatabaseCommand( s, parent )
+    , m_plid( guid )
+{
+
+}
+
 
 void
-DatabaseCommand_LoadDynamicPlaylist::exec( DatabaseImpl* dbi )
+Tomahawk::DatabaseCommand_LoadDynamicPlaylist::exec( DatabaseImpl* dbi )
 {
-    qDebug() << "Loading dynamic playlist guid" << guid();
-    // load the entries first    
-    generateEntries( dbi );
-    
-    // now load the controls etc
-    
-    TomahawkSqlQuery controlsQuery = dbi->newquery();
-    controlsQuery.prepare("SELECT playlist_revision.playlist, controls, plmode, pltype "
-                          "FROM dynamic_playlist_revision, playlist_revision "
-                          "WHERE dynamic_playlist_revision.guid = ? AND playlist_revision.guid = dynamic_playlist_revision.guid");
-    controlsQuery.addBindValue( revisionGuid() );
-    controlsQuery.exec();
-    
-    QString type;
-    GeneratorMode mode;
-    
-    QList< QVariantMap > controls;
-    QString playlist_guid;
-    qDebug() << "Loading controls..." << revisionGuid();
-//    qDebug() << "SELECT playlist_revision.playlist, controls, plmode, pltype "
-//    "FROM dynamic_playlist_revision, playlist_revision "
-//    "WHERE dynamic_playlist_revision.guid = "<< revisionGuid() << " AND playlist_revision.guid = dynamic_playlist_revision.guid";
-    if( controlsQuery.first() ) 
+    TomahawkSqlQuery query = dbi->newquery();
+
+    query.exec( QString( "SELECT playlist.guid as guid, title, info, creator, createdOn, lastmodified, shared, currentrevision, dynamic_playlist.pltype, dynamic_playlist.plmode "
+                         "FROM playlist, dynamic_playlist WHERE source %1 AND dynplaylist = 'true' AND playlist.guid = dynamic_playlist.guid AND playlist.guid = '%2'" )
+    .arg( source()->isLocal() ? "IS NULL" : QString( "=%1" ).arg( source()->id() ) ).arg( m_plid ) );
+
+    QList<dynplaylist_ptr> plists;
+    if( query.next() )
     {
-        playlist_guid = controlsQuery.value( 0 ).toString();
-        QJson::Parser parser;
-        bool ok;
-        QVariant v = parser.parse( controlsQuery.value(1).toByteArray(), &ok );
-        Q_ASSERT( ok && v.type() == QVariant::List ); //TODO
-        
-        
-        type = controlsQuery.value( 3 ).toString();
-        mode = static_cast<GeneratorMode>( controlsQuery.value( 2 ).toInt() );
-        
-        QStringList controlIds = v.toStringList();
-        qDebug() << "Got controls in dynamic playlist, loading:" << controlIds << controlsQuery.value(1);
-        foreach( const QString& controlId, controlIds )
-        {
-            TomahawkSqlQuery controlQuery = dbi->newquery();
-            controlQuery.prepare( "SELECT selectedType, match, input "
-                                  "FROM dynamic_playlist_controls "
-                                  "WHERE id = :id" );
-            controlQuery.bindValue( ":id", controlId );
-            controlQuery.exec();
-            if( controlQuery.next() )
-            {
-                QVariantMap c;
-                c[ "type" ] = type;
-                c[ "id" ] = controlId;
-                c[ "selectedType" ] = controlQuery.value( 0 ).toString();
-                c[ "match" ] = controlQuery.value( 1 ).toString();
-                c[ "input" ] = controlQuery.value( 2 ).toString();
-                controls << c;
-            }
-        }
-    } else {
-        // No controls, lets load the info we need directly from the playlist table
-        TomahawkSqlQuery info = dbi->newquery();
-        info.prepare( QString( "SELECT dynamic_playlist.pltype, dynamic_playlist.plmode FROM playlist, dynamic_playlist WHERE playlist.guid = \"%1\" AND playlist.guid = dynamic_playlist.guid" ).arg( playlist_guid ) );
-        if( !info.exec()  ) {
-            qWarning() << "Failed to load dynplaylist info..";
-            return;
-        } else if( !info.first() ) {
-            qWarning() << "Noo results for queryL:" << info.lastQuery();
-            return;
-        }
-        type = info.value( 0 ).toString();
-        mode = static_cast<GeneratorMode>( info.value( 1 ).toInt() );
+        dynplaylist_ptr p( new DynamicPlaylist( source(),
+                                                query.value(7).toString(),  //current rev
+                                                query.value(1).toString(),  //title
+                                                query.value(2).toString(),  //info
+                                                query.value(3).toString(),  //creator
+                                                query.value(4).toUInt(),  //createdOn
+                                                query.value(8).toString(),  // dynamic type
+                                                static_cast<GeneratorMode>(query.value(9).toInt()),  // dynamic mode
+                                                query.value(6).toBool(),    //shared
+                                                query.value(5).toInt(),     //lastmod
+                                                query.value(0).toString() ) );  //GUID
+
+        tLog() << "Loaded individual dynamic playlist:" <<      query.value(7).toString()  //current rev
+        <<      query.value(1).toString()  //title
+        <<      query.value(2).toString()  //info
+        <<      query.value(3).toString()  //creator
+        <<      query.value(4).toString()  //createdOn
+        <<      query.value(8).toString()  // dynamic type
+        <<      static_cast<GeneratorMode>(query.value(9).toInt())  // dynamic mode
+        <<      query.value(6).toBool()    //shared
+        <<      query.value(5).toInt()     //lastmod
+        <<      query.value(0).toString();  //GUID
+
+        emit dynamicPlaylistLoaded( p );
     }
-   
-    if( mode == OnDemand ) { 
-        Q_ASSERT( m_entrymap.isEmpty() ); // ondemand should have no entry
-        
-        emit done( revisionGuid(), m_islatest, type, controls, true );
-    } else {
-        emit done( revisionGuid(), m_guids, m_oldentries, type, controls, m_islatest, m_entrymap, true );
-    }
+
+    emit done();
 }
+

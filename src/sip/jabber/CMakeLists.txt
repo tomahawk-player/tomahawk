@@ -16,8 +16,6 @@ set( jabberSources
 
 set( jabberHeaders
     jabber.h
-    tomahawksipmessage.h
-    tomahawksipmessagefactory.h
     avatarmanager.h
     xmlconsole.h
 )

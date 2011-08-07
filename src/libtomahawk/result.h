@@ -36,6 +36,16 @@ class DatabaseCommand_LoadFile;
 namespace Tomahawk
 {
 
+
+struct SocialAction
+{
+    QVariant action;
+    QVariant value;
+    QVariant timestamp;
+    QVariant source;
+};
+
+
 class DLLEXPORT Result : public QObject
 {
 Q_OBJECT
@@ -71,6 +81,8 @@ public:
     unsigned int albumpos() const { return m_albumpos; }
     unsigned int modificationTime() const { return m_modtime; }
     int year() const { return m_year; }
+    bool loved() { return m_currentSocialActions[ "Love" ].toBool(); }
+    QList< Tomahawk::SocialAction > allSocialActions();
 
     void setScore( float score ) { m_score = score; }
     void setId( unsigned int id ) { m_id = id; }
@@ -88,15 +100,24 @@ public:
     void setAlbumPos( unsigned int albumpos ) { m_albumpos = albumpos; }
     void setModificationTime( unsigned int modtime ) { m_modtime = modtime; }
     void setYear( unsigned int year ) { m_year = year; }
+    void setLoved( bool loved ) { m_currentSocialActions[ "Loved" ] = loved; }
+    void setAllSocialActions( QList< Tomahawk::SocialAction > socialActions );
 
+    void loadSocialActions();
     QVariantMap attributes() const { return m_attributes; }
     void setAttributes( const QVariantMap& map ) { m_attributes = map; updateAttributes(); }
 
     unsigned int dbid() const { return m_id; }
 
+public slots:
+    void onSocialActionsLoaded();
+
 signals:
     // emitted when the collection this result comes from is going offline/online:
     void statusChanged();
+
+    // emitted when social actions are loaded
+    void socialActionsLoaded();
 
 private slots:
     void onOffline();
@@ -104,6 +125,7 @@ private slots:
 
 private:
     void updateAttributes();
+    void parseSocialActions();
 
     mutable RID m_rid;
     collection_ptr m_collection;
@@ -126,6 +148,9 @@ private:
     QVariantMap m_attributes;
 
     unsigned int m_id;
+
+    QHash< QString, QVariant > m_currentSocialActions;
+    QList< SocialAction > m_allSocialActions;
 };
 
 }; //ns

@@ -17,9 +17,9 @@
  */
 
 #include "tomahawkapp_mac.h"
+
 #include "macdelegate.h"
 #include "macshortcuthandler.h"
-#include <QDebug>
 
 #import <AppKit/NSApplication.h>
 #import <Foundation/NSAutoreleasePool.h>
@@ -37,6 +37,8 @@
 #ifdef HAVE_SPARKLE
 #import <Sparkle/SUUpdater.h>
 #endif
+
+#include <QDebug>
 
 // Capture global media keys on Mac (Cocoa only!)
 // See: http://www.rogueamoeba.com/utm/2007/09/29/apple-keyboard-media-key-event-handling/
@@ -99,7 +101,6 @@
 }
 
 - (void) setShortcutHandler: (Tomahawk::MacShortcutHandler*)handler {
-    qDebug() << "Setting shortcut handler of MacApp";
     // should be the same as MacApplication's
   shortcut_handler_ = handler;
 }
@@ -132,7 +133,6 @@
 }
 
 - (BOOL) application: (NSApplication*)app openFile:(NSString*)filename {
-  qDebug() << "Wants to open:" << [filename UTF8String];
 
   if (application_handler_->loadUrl(QString::fromUtf8([filename UTF8String]))) {
     return YES;

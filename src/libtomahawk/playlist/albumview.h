@@ -46,7 +46,7 @@ public:
     void setModel( QAbstractItemModel* model );
 
     virtual QWidget* widget() { return this; }
-    virtual PlaylistInterface* playlistInterface() const { return proxyModel(); }
+    virtual Tomahawk::PlaylistInterface* playlistInterface() const { return proxyModel(); }
 
     virtual QString title() const { return m_model->title(); }
     virtual QString description() const { return m_model->description(); }
@@ -69,12 +69,17 @@ protected:
 private slots:
     void onFilterChanged( const QString& filter );
 
+    void onViewChanged();
+    void onScrollTimeout();
+
 private:
     QPixmap createDragPixmap( int itemCount ) const;
 
     AlbumModel* m_model;
     AlbumProxyModel* m_proxyModel;
 //    PlaylistItemDelegate* m_delegate;
+
+    QTimer m_timer;
 };
 
 #endif // ALBUMVIEW_H

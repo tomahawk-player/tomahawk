@@ -68,8 +68,10 @@ public slots:
     void showSettingsDialog();
     void showDiagnosticsDialog();
     void updateCollectionManually();
+    void rescanCollectionManually();
     void pluginMenuAdded(QMenu*);
     void pluginMenuRemoved(QMenu*);
+    void showOfflineSources();
 
 private slots:
     void onSipConnected();
@@ -91,7 +93,8 @@ private slots:
     void onSipPluginAdded( SipPlugin* p );
     void onSipPluginRemoved( SipPlugin* p );
 
-    void onSearch();
+    void onSearch( const QString& search );
+    void onFilterEdited();
 
     void minimize();
     void maximize();
@@ -99,7 +102,12 @@ private slots:
 private:
     void loadSettings();
     void saveSettings();
+
+    void applyPlatformTweaks();
     void setupSignals();
+    void setupToolBar();
+    void setupSideBar();
+    void setupUpdateCheck();
 
     Ui::TomahawkWindow* ui;
     Ui::GlobalSearchWidget* m_searchWidget;

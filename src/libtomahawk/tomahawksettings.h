@@ -17,7 +17,7 @@
  */
 
 #ifndef TOMAHAWK_SETTINGS_H
-#define TOMAHAWK_SETTINGS_h
+#define TOMAHAWK_SETTINGS_H
 
 #include <QSettings>
 
@@ -41,9 +41,16 @@ public:
     void applyChanges() { emit changed(); }
 
     /// General settings
+    enum ScannerMode { Dirs, Files };
     QStringList scannerPaths(); /// QDesktopServices::MusicLocation by default
     void setScannerPaths( const QStringList& paths );
     bool hasScannerPaths() const;
+    ScannerMode scannerMode() const;
+    void setScannerMode( ScannerMode mode );
+    uint scannerTime() const;
+    void setScannerTime( uint time );
+    uint infoSystemCacheVersion() const;
+    void setInfoSystemCacheVersion( uint version );
 
     bool watchForChanges() const;
     void setWatchForChanges( bool watch );
@@ -61,6 +68,13 @@ public:
     QByteArray mainWindowSplitterState() const;
     void setMainWindowSplitterState( const QByteArray& state );
 
+    bool verboseNotifications() const;
+    void setVerboseNotifications( bool notifications );
+
+    // Collection Stuff
+    bool showOfflineSources() const;
+    void setShowOfflineSources( bool show );
+
     /// Playlist stuff
     QByteArray playlistColumnSizes( const QString& playlistid ) const;
     void setPlaylistColumnSizes( const QString& playlistid, const QByteArray& state );
@@ -68,11 +82,11 @@ public:
     QList<Tomahawk::playlist_ptr> recentlyPlayedPlaylists() const;
     QStringList recentlyPlayedPlaylistGuids( unsigned int amount = 0 ) const;
     void appendRecentlyPlayedPlaylist( const Tomahawk::playlist_ptr& playlist );
-    
+
     bool shuffleState( const QString& playlistid ) const;
     void setShuffleState( const QString& playlistid, bool state );
-    PlaylistInterface::RepeatMode repeatMode( const QString& playlistid );
-    void setRepeatMode( const QString& playlistid, PlaylistInterface::RepeatMode mode);
+    Tomahawk::PlaylistInterface::RepeatMode repeatMode( const QString& playlistid );
+    void setRepeatMode( const QString& playlistid, Tomahawk::PlaylistInterface::RepeatMode mode );
 
     // remove shuffle state and repeat state
     void removePlaylistSettings( const QString& playlistid );
@@ -114,10 +128,10 @@ public:
 
     QString proxyHost() const;
     void setProxyHost( const QString &host );
-    
+
     QString proxyNoProxyHosts() const;
     void setProxyNoProxyHosts( const QString &hosts );
-    
+
     qulonglong proxyPort() const;
     void setProxyPort( const qulonglong port );
 

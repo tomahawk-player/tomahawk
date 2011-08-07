@@ -1,5 +1,5 @@
 /* === This file is part of Tomahawk Player - <http://tomahawk-player.org> ===
- * 
+ *
  *   Copyright 2010-2011, Christian Muehlhaeuser <muesli@tomahawk-player.org>
  *
  *   Tomahawk is free software: you can redistribute it and/or modify
@@ -18,7 +18,10 @@
 
 #include "database.h"
 
-#define WORKER_THREADS 5
+#include "utils/logger.h"
+
+#define DEFAULT_WORKER_THREADS 4
+#define MAX_WORKER_THREADS 16
 
 Database* Database::s_instance = 0;
 
@@ -37,6 +40,9 @@ Database::Database( const QString& dbname, QObject* parent )
     , m_workerRW( new DatabaseWorker( m_impl, this, true ) )
 {
     s_instance = this;
+
+    m_maxConcurrentThreads = qBound( DEFAULT_WORKER_THREADS, QThread::idealThreadCount(), MAX_WORKER_THREADS );
+    qDebug() << Q_FUNC_INFO << "Using" << m_maxConcurrentThreads << "threads";
 
     connect( m_impl, SIGNAL( indexReady() ), SIGNAL( indexReady() ) );
     connect( m_impl, SIGNAL( indexReady() ), SIGNAL( ready() ) );
@@ -66,9 +72,8 @@ Database::loadIndex()
 void
 Database::enqueue( QSharedPointer<DatabaseCommand> lc )
 {
-    if( lc->doesMutates() )
+    if ( lc->doesMutates() )
     {
-        //qDebug() << Q_FUNC_INFO << "RW" << lc->commandname();
         qDebug() << "Enqueueing command to rw thread:" << lc->commandname();
         m_workerRW->enqueue( lc );
     }
@@ -76,21 +81,20 @@ Database::enqueue( QSharedPointer<DatabaseCommand> lc )
     {
         // find existing amount of worker threads for commandname
         // create new thread if < WORKER_THREADS
-        if ( m_workers.count( lc->commandname() ) < WORKER_THREADS )
+        if ( m_workers.count() < m_maxConcurrentThreads )
         {
             DatabaseWorker* worker = new DatabaseWorker( m_impl, this, false );
             worker->start();
 
-            m_workers.insertMulti( lc->commandname(), worker );
+            m_workers << worker;
         }
 
         // find thread for commandname with lowest amount of outstanding jobs and enqueue job
         int busyThreads = 0;
         DatabaseWorker* happyThread = 0;
-        QList< DatabaseWorker* > workers = m_workers.values( lc->commandname() );
-        for ( int i = 0; i < workers.count(); i++ )
+        for ( int i = 0; i < m_workers.count(); i++ )
         {
-            DatabaseWorker* worker = workers.at( i );
+            DatabaseWorker* worker = m_workers.at( i );
 
             if ( !worker->busy() )
             {
@@ -103,7 +107,7 @@ Database::enqueue( QSharedPointer<DatabaseCommand> lc )
                 happyThread = worker;
         }
 
-        qDebug() << "Enqueueing command to thread:" << happyThread << busyThreads << lc->commandname();
+//        qDebug() << "Enqueueing command to thread:" << happyThread << busyThreads << lc->commandname();
         happyThread->enqueue( lc );
     }
 }

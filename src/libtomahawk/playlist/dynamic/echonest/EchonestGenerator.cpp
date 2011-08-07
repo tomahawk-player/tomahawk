@@ -1,6 +1,6 @@
 /* === This file is part of Tomahawk Player - <http://tomahawk-player.org> ===
  *
- *   Copyright 2010-2011, Christian Muehlhaeuser <muesli@tomahawk-player.org>
+ *   Copyright 2010-2011, Leo Franchi <lfranchi@kde.org>
  *
  *   Tomahawk is free software: you can redistribute it and/or modify
  *   it under the terms of the GNU General Public License as published by
@@ -21,16 +21,23 @@
 #include "dynamic/echonest/EchonestSteerer.h"
 #include "query.h"
 #include "utils/tomahawkutils.h"
+#include "utils/logger.h"
+#include <QFile>
+#include <QDir>
 
 using namespace Tomahawk;
 
-QVector< QString > EchonestGenerator::s_moods = QVector< QString >();
-QVector< QString > EchonestGenerator::s_styles = QVector< QString >();
+
+QStringList EchonestGenerator::s_moods = QStringList();
+QStringList EchonestGenerator::s_styles = QStringList();
 QNetworkReply* EchonestGenerator::s_moodsJob = 0;
 QNetworkReply* EchonestGenerator::s_stylesJob = 0;
 
+
 EchonestFactory::EchonestFactory()
-{}
+{
+}
+
 
 GeneratorInterface*
 EchonestFactory::create()
@@ -38,11 +45,13 @@ EchonestFactory::create()
     return new EchonestGenerator();
 }
 
+
 dyncontrol_ptr
 EchonestFactory::createControl( const QString& controlType )
 {
     return dyncontrol_ptr( new EchonestControl( controlType, typeSelectors() ) );
 }
+
 
 QStringList
 EchonestFactory::typeSelectors() const
@@ -51,6 +60,7 @@ EchonestFactory::typeSelectors() const
                           << "Danceability" << "Energy" << "Artist Familiarity" << "Artist Hotttnesss" << "Song Hotttnesss"
                           << "Longitude" << "Latitude" <<  "Mode" << "Key" << "Sorting";
 }
+
 
 EchonestGenerator::EchonestGenerator ( QObject* parent )
     : GeneratorInterface ( parent )
@@ -61,22 +71,16 @@ EchonestGenerator::EchonestGenerator ( QObject* parent )
     m_mode = OnDemand;
     m_logo.load( RESPATH "/images/echonest_logo.png" );
 
-    if( !s_stylesJob && s_styles.isEmpty() ) {
-        // fetch style and moods
-        s_stylesJob = Echonest::Artist::listTerms( "style" );
-        connect( s_stylesJob, SIGNAL( finished() ), this, SLOT( stylesReceived() ) );
-    } else if( !s_moodsJob && s_moods.isEmpty() ) {
-        s_moodsJob = Echonest::Artist::listTerms( "mood" );
-        connect( s_moodsJob, SIGNAL( finished() ), this, SLOT( moodsReceived() ) );
-    }
-
+    loadStylesAndMoods();
 //    qDebug() << "ECHONEST:" << m_logo.size();
 }
+
 
 EchonestGenerator::~EchonestGenerator()
 {
     delete m_dynPlaylist;
 }
+
 
 dyncontrol_ptr
 EchonestGenerator::createControl( const QString& type )
@@ -84,6 +88,7 @@ EchonestGenerator::createControl( const QString& type )
     m_controls << dyncontrol_ptr( new EchonestControl( type, GeneratorFactory::typeSelectors( m_type ) ) );
     return m_controls.last();
 }
+
 
 QPixmap EchonestGenerator::logo()
 {
@@ -112,6 +117,7 @@ EchonestGenerator::generate( int number )
     }
 }
 
+
 void
 EchonestGenerator::startOnDemand()
 {
@@ -123,6 +129,7 @@ EchonestGenerator::startOnDemand()
         emit error( "Filters are not valid", e.what() );
     }
 }
+
 
 void
 EchonestGenerator::doGenerate( const Echonest::DynamicPlaylist::PlaylistParams& paramsIn )
@@ -138,6 +145,7 @@ EchonestGenerator::doGenerate( const Echonest::DynamicPlaylist::PlaylistParams& 
     qDebug() << "Generating a static playlist from echonest!" << reply->url().toString();
     connect( reply, SIGNAL( finished() ), this, SLOT( staticFinished() ) );
 }
+
 
 void
 EchonestGenerator::doStartOnDemand( const Echonest::DynamicPlaylist::PlaylistParams& params )
@@ -199,6 +207,7 @@ EchonestGenerator::staticFinished()
     emit generated( queries );
 }
 
+
 void
 EchonestGenerator::getParams() throw( std::runtime_error )
 {
@@ -240,6 +249,7 @@ EchonestGenerator::getParams() throw( std::runtime_error )
         emit paramsGenerated( params );
     }
 }
+
 
 void
 EchonestGenerator::songLookupFinished()
@@ -295,6 +305,7 @@ EchonestGenerator::dynamicStarted()
     }
 }
 
+
 void
 EchonestGenerator::dynamicFetched()
 {
@@ -318,6 +329,7 @@ EchonestGenerator::dynamicFetched()
     }
 }
 
+
 void
 EchonestGenerator::steerDescription( const QString& desc )
 {
@@ -326,6 +338,7 @@ EchonestGenerator::steerDescription( const QString& desc )
     m_steerData.second = desc;
 }
 
+
 void
 EchonestGenerator::steerField( const QString& field )
 {
@@ -333,6 +346,7 @@ EchonestGenerator::steerField( const QString& field )
     m_steerData.first = Echonest::DynamicPlaylist::Steer;
     m_steerData.second = field;
 }
+
 
 void
 EchonestGenerator::resetSteering()
@@ -365,6 +379,7 @@ EchonestGenerator::onlyThisArtistType( Echonest::DynamicPlaylist::ArtistTypeEnum
     return false;
 }
 
+
 Echonest::DynamicPlaylist::ArtistTypeEnum
 EchonestGenerator::appendRadioType( Echonest::DynamicPlaylist::PlaylistParams& params ) const throw( std::runtime_error )
 {
@@ -392,12 +407,14 @@ EchonestGenerator::appendRadioType( Echonest::DynamicPlaylist::PlaylistParams& p
     return static_cast< Echonest::DynamicPlaylist::ArtistTypeEnum >( params.last().second.toInt() );
 }
 
+
 query_ptr
-EchonestGenerator::queryFromSong(const Echonest::Song& song)
+EchonestGenerator::queryFromSong( const Echonest::Song& song )
 {
     //         track[ "album" ] = song.release(); // TODO should we include it? can be quite specific
     return Query::get( song.artistName(), song.title(), QString(), uuid() );
 }
+
 
 QWidget*
 EchonestGenerator::steeringWidget()
@@ -517,11 +534,61 @@ EchonestGenerator::sentenceSummary()
     return sentence;
 }
 
-QVector< QString >
+void
+EchonestGenerator::loadStylesAndMoods()
+{
+    if( !s_styles.isEmpty() || !s_moods.isEmpty() )
+        return;
+
+    QFile dataFile( TomahawkUtils::appDataDir().absoluteFilePath( "echonest_stylesandmoods.dat" ) );
+    if( !dataFile.exists() ) // load
+    {
+        s_stylesJob = Echonest::Artist::listTerms( "style" );
+        connect( s_stylesJob, SIGNAL( finished() ), this, SLOT( stylesReceived() ) );
+        s_moodsJob = Echonest::Artist::listTerms( "mood" );
+        connect( s_moodsJob, SIGNAL( finished() ), this, SLOT( moodsReceived() ) );
+    } else
+    {
+        if( !dataFile.open( QIODevice::ReadOnly ) )
+        {
+            tLog() << "Failed to open for reading styles/moods db file:" << dataFile.fileName();
+            return;
+        }
+
+        QString allData = QString::fromUtf8( dataFile.readAll() );
+        QStringList parts = allData.split( "\n" );
+        if( parts.size() != 2 )
+        {
+            tLog() << "Didn't get both moods and styles in file...:" << allData;
+            return;
+        }
+        s_moods = parts[ 0 ].split( "|" );
+        s_styles = parts[ 1 ].split( "|" );
+    }
+}
+
+void
+EchonestGenerator::saveStylesAndMoods()
+{
+    QFile dataFile( TomahawkUtils::appDataDir().absoluteFilePath( "echonest_stylesandmoods.dat" ) );
+    if( !dataFile.open( QIODevice::WriteOnly ) )
+    {
+        tLog() << "Failed to open styles and moods data file for saving:" << dataFile.errorString() << dataFile.fileName();
+        return;
+    }
+
+    QByteArray data = QString( "%1\n%2" ).arg( s_moods.join( "|" ) ).arg( s_styles.join( "|" ) ).toUtf8();
+    dataFile.write( data );
+}
+
+
+
+QStringList
 EchonestGenerator::moods()
 {
     return s_moods;
 }
+
 
 void
 EchonestGenerator::moodsReceived()
@@ -530,18 +597,23 @@ EchonestGenerator::moodsReceived()
     Q_ASSERT( r );
 
     try {
-        s_moods = Echonest::Artist::parseTermList( r );
+        s_moods = Echonest::Artist::parseTermList( r ).toList();
     } catch( Echonest::ParseError& e ) {
         qWarning() << "Echonest failed to parse moods list";
     }
     s_moodsJob = 0;
+
+    if( !s_styles.isEmpty() )
+        saveStylesAndMoods();
 }
 
-QVector< QString >
+
+QStringList
 EchonestGenerator::styles()
 {
     return s_styles;
 }
+
 
 void
 EchonestGenerator::stylesReceived()
@@ -550,9 +622,12 @@ EchonestGenerator::stylesReceived()
     Q_ASSERT( r );
 
     try {
-        s_styles = Echonest::Artist::parseTermList( r );
+        s_styles = Echonest::Artist::parseTermList( r ).toList();
     } catch( Echonest::ParseError& e ) {
         qWarning() << "Echonest failed to parse styles list";
     }
     s_stylesJob = 0;
+
+    if( !s_moods.isEmpty() )
+        saveStylesAndMoods();
 }

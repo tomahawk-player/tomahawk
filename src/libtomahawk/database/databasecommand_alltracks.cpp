@@ -24,6 +24,7 @@
 #include "artist.h"
 #include "album.h"
 #include "sourcelist.h"
+#include "utils/logger.h"
 
 
 void

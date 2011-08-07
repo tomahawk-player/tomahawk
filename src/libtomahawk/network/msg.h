@@ -1,5 +1,5 @@
 /* === This file is part of Tomahawk Player - <http://tomahawk-player.org> ===
- * 
+ *
  *   Copyright 2010-2011, Christian Muehlhaeuser <muesli@tomahawk-player.org>
  *
  *   Tomahawk is free software: you can redistribute it and/or modify
@@ -26,13 +26,14 @@
 
     Use static factory method to create, pass around shared pointers: msp_ptr
 */
+
 #ifndef MSG_H
 #define MSG_H
+
 #include <QByteArray>
 #include <QSharedPointer>
 #include <QtEndian>
 #include <QIODevice>
-#include <QDebug>
 
 #include <qjson/parser.h>
 #include <qjson/serializer.h>
@@ -154,6 +155,5 @@ private:
     QVariant m_json;
     bool m_json_parsed;
 };
-
 
 #endif // MSG_H

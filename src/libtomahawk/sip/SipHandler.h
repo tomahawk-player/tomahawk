@@ -22,7 +22,6 @@
 #include "sip/SipPlugin.h"
 #include "dllmacro.h"
 
-#include <QDebug>
 #include <QObject>
 #include <QHash>
 #include <QPixmap>
@@ -103,7 +102,6 @@ private slots:
 
     // set data for other sources
     void onAvatarReceived( const QString& from, const QPixmap& avatar );
-
 
 private:
     static SipHandler *s_instance;

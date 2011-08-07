@@ -25,13 +25,37 @@
 #include "utils/tomahawkutils.h"
 
 #include <QApplication>
-#include <QDebug>
+#include <QDir>
 #include <QFile>
 #include <QThread>
 #include <QtWebKit/QWebPage>
 #include <QtWebKit/QWebFrame>
 
 class QtScriptResolver;
+
+class QtScriptResolverHelper : public QObject
+{
+Q_OBJECT
+
+public:
+    QtScriptResolverHelper( const QString& scriptPath, QObject* parent );
+    void setResolverConfig( QVariantMap config );
+
+public slots:
+    QByteArray readRaw( const QString& fileName );
+    QString readBase64( const QString& fileName );
+    QString readCompressed( const QString& fileName );
+
+    QString compress( const QString& data );
+    QVariantMap resolverData();
+
+    void log( const QString& message );
+    bool fakeEnv() { return false; }
+
+private:
+    QString m_scriptPath;
+    QVariantMap m_resolverConfig;
+};
 
 class ScriptEngine : public QWebPage
 {
@@ -49,6 +73,11 @@ public:
         settings()->setAttribute( QWebSettings::LocalStorageDatabaseEnabled, true );
     }
 
+    void setScriptPath( const QString& scriptPath )
+    {
+        m_scriptPath = scriptPath;
+    }
+
 public slots:
     bool shouldInterruptJavaScript()
     {
@@ -56,11 +85,11 @@ public slots:
     }
 
 protected:
-    virtual void javaScriptConsoleMessage( const QString & message, int lineNumber, const QString & sourceID )
-    { qDebug() << "JAVASCRIPT ERROR:" << message << lineNumber << sourceID; }
+    virtual void javaScriptConsoleMessage( const QString& message, int lineNumber, const QString& sourceID );
 
 private:
     QtScriptResolver* m_parent;
+    QString m_scriptPath;
 };
 
 
@@ -72,12 +101,16 @@ public:
     explicit QtScriptResolver( const QString& scriptPath );
     virtual ~QtScriptResolver();
 
-    virtual QString name() const            { return m_name; }
-    virtual unsigned int weight() const     { return m_weight; }
-    virtual unsigned int timeout() const    { return m_timeout; }
+    virtual QString name() const         { return m_name; }
+    virtual unsigned int weight() const  { return m_weight; }
+    virtual unsigned int timeout() const { return m_timeout; }
 
-    virtual QWidget* configUI() const { return 0; } // TODO support properly for qtscript resolvers too!
-    virtual void saveConfig() {}
+    virtual QWidget* configUI() const;
+    virtual void saveConfig();
+
+    virtual ExternalResolver::ErrorState error() const;
+    virtual void reload();
+
 public slots:
     virtual void resolve( const Tomahawk::query_ptr& query );
     virtual void stop();
@@ -86,12 +119,31 @@ signals:
     void finished();
 
 private:
+    void init();
+
+    void loadUi();
+    QWidget* findWidget( QWidget* widget, const QString& objectName );
+    void setWidgetData( const QVariant& value, QWidget* widget, const QString& property );
+    QVariant widgetData( QWidget* widget, const QString& property );
+    QVariantMap loadDataFromWidgets();
+    void fillDataInWidgets( const QVariantMap& data );
+
+    // encapsulate javascript calls
+    QVariantMap resolverSettings();
+    QVariantMap resolverUserConfig();
+    QVariantMap resolverInit();
+
     ScriptEngine* m_engine;
 
     QString m_name;
     unsigned int m_weight, m_timeout;
 
     bool m_ready, m_stopped;
+    ExternalResolver::ErrorState m_error;
+
+    QtScriptResolverHelper* m_resolverHelper;
+    QWeakPointer< QWidget > m_configWidget;
+    QList< QVariant > m_dataWidgets;
 };
 
 #endif // QTSCRIPTRESOLVER_H

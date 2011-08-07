@@ -1,5 +1,5 @@
 /* === This file is part of Tomahawk Player - <http://tomahawk-player.org> ===
- * 
+ *
  *   Copyright 2010-2011, Christian Muehlhaeuser <muesli@tomahawk-player.org>
  *
  *   Tomahawk is free software: you can redistribute it and/or modify
@@ -18,8 +18,6 @@
 
 #include "databasecommand.h"
 
-#include <QDebug>
-
 #include "databasecommand_addfiles.h"
 #include "databasecommand_createplaylist.h"
 #include "databasecommand_deletefiles.h"
@@ -30,6 +28,9 @@
 #include "databasecommand_createdynamicplaylist.h"
 #include "databasecommand_deletedynamicplaylist.h"
 #include "databasecommand_setdynamicplaylistrevision.h"
+#include "databasecommand_socialaction.h"
+
+#include "utils/logger.h"
 
 
 DatabaseCommand::DatabaseCommand( QObject* parent )
@@ -51,7 +52,7 @@ DatabaseCommand::DatabaseCommand( const source_ptr& src, QObject* parent )
 
 DatabaseCommand::~DatabaseCommand()
 {
-    //qDebug() << Q_FUNC_INFO;
+//    qDebug() << Q_FUNC_INFO;
 }
 
 
@@ -126,7 +127,7 @@ DatabaseCommand::factory( const QVariant& op, const source_ptr& source )
         cmd->setSource( source );
         QJson::QObjectHelper::qvariant2qobject( op.toMap(), cmd );
         return cmd;
-    }    
+    }
     else if( name == "deletedynamicplaylist" )
     {
         DatabaseCommand_DeleteDynamicPlaylist * cmd = new DatabaseCommand_DeleteDynamicPlaylist;
@@ -138,6 +139,13 @@ DatabaseCommand::factory( const QVariant& op, const source_ptr& source )
     {
         qDebug() << "SETDYN CONTENT:" << op;
         DatabaseCommand_SetDynamicPlaylistRevision * cmd = new DatabaseCommand_SetDynamicPlaylistRevision;
+        cmd->setSource( source );
+        QJson::QObjectHelper::qvariant2qobject( op.toMap(), cmd );
+        return cmd;
+    }
+    else if( name == "socialaction" )
+    {
+        DatabaseCommand_SocialAction * cmd = new DatabaseCommand_SocialAction;
         cmd->setSource( source );
         QJson::QObjectHelper::qvariant2qobject( op.toMap(), cmd );
         return cmd;

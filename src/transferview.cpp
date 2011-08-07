@@ -26,6 +26,8 @@
 #include "network/streamconnection.h"
 #include "network/servent.h"
 
+#include "utils/logger.h"
+
 
 TransferView::TransferView( AnimatedSplitter* parent )
     : AnimatedWidget( parent )

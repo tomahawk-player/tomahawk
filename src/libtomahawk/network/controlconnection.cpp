@@ -24,6 +24,7 @@
 #include "dbsyncconnection.h"
 #include "sourcelist.h"
 #include <sip/SipHandler.h>
+#include "utils/logger.h"
 
 #define TCP_TIMEOUT 600
 

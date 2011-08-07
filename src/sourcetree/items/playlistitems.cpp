@@ -16,13 +16,16 @@
 
 #include "playlistitems.h"
 
-#include "utils/tomahawkutils.h"
+#include <QMimeData>
+
+#include "query.h"
 #include "viewmanager.h"
 #include "playlist/dynamic/GeneratorInterface.h"
 #include "categoryitems.h"
 #include "collectionitem.h"
-
-#include <QMimeData>
+#include "utils/tomahawkutils.h"
+#include "utils/logger.h"
+#include "globalactionmanager.h"
 
 using namespace Tomahawk;
 
@@ -59,6 +62,8 @@ PlaylistItem::playlist() const
 void
 PlaylistItem::onPlaylistLoaded( Tomahawk::PlaylistRevision revision )
 {
+    Q_UNUSED( revision );
+
     m_loaded = true;
     emit updated();
 }
@@ -118,6 +123,7 @@ PlaylistItem::setLoaded( bool loaded )
 bool
 PlaylistItem::willAcceptDrag( const QMimeData* data ) const
 {
+    Q_UNUSED( data );
     return !m_playlist.isNull() && m_playlist->author()->isLocal();
 }
 
@@ -125,60 +131,31 @@ PlaylistItem::willAcceptDrag( const QMimeData* data ) const
 bool
 PlaylistItem::dropMimeData( const QMimeData* data, Qt::DropAction action )
 {
+    Q_UNUSED( action );
+
     QList< Tomahawk::query_ptr > queries;
 
     if ( data->hasFormat( "application/tomahawk.playlist.id" ) &&
         data->data( "application/tomahawk.playlist.id" ) == m_playlist->guid() )
         return false; // don't allow dropping on ourselves
 
-    if ( data->hasFormat( "application/tomahawk.result.list" ) )
-    {
-        QByteArray itemData = data->data( "application/tomahawk.result.list" );
-        QDataStream stream( &itemData, QIODevice::ReadOnly );
+    connect( GlobalActionManager::instance(), SIGNAL( tracks( QList< Tomahawk::query_ptr > ) ), this, SLOT( parsedDroppedTracks( QList< Tomahawk::query_ptr > ) ) );
+    GlobalActionManager::instance()->tracksFromMimeData( data );
 
-        while ( !stream.atEnd() )
-        {
-            qlonglong qptr;
-            stream >> qptr;
+    // TODO cant' know if it works or not yet...
+    return true;
+}
 
-            Tomahawk::result_ptr* result = reinterpret_cast<Tomahawk::result_ptr*>(qptr);
-            if ( result && !result->isNull() )
-            {
-                qDebug() << "Dropped result item:" << result->data()->artist() << "-" << result->data()->track();
-                queries << result->data()->toQuery();
-            }
-        }
-    }
-
-    if ( data->hasFormat( "application/tomahawk.query.list" ) )
-    {
-        QByteArray itemData = data->data( "application/tomahawk.query.list" );
-        QDataStream stream( &itemData, QIODevice::ReadOnly );
-
-        while ( !stream.atEnd() )
-        {
-            qlonglong qptr;
-            stream >> qptr;
-
-            Tomahawk::query_ptr* query = reinterpret_cast<Tomahawk::query_ptr*>(qptr);
-            if ( query && !query->isNull() )
-            {
-                qDebug() << "Dropped query item:" << query->data()->artist() << "-" << query->data()->track();
-                queries << *query;
-            }
-        }
-    }
-
-    if ( queries.count() && !m_playlist.isNull() && m_playlist->author()->isLocal() )
+void
+PlaylistItem::parsedDroppedTracks( const QList< query_ptr >& tracks)
+{
+    disconnect( GlobalActionManager::instance(), SIGNAL( tracks( QList< Tomahawk::query_ptr > ) ), this, SLOT( parsedDroppedTracks( QList< Tomahawk::query_ptr > ) ) );
+    if ( tracks.count() && !m_playlist.isNull() && m_playlist->author()->isLocal() )
     {
         qDebug() << "on playlist:" << m_playlist->title() << m_playlist->guid() << m_playlist->currentrevision();
 
-        m_playlist->addEntries( queries, m_playlist->currentrevision() );
-
-        return true;
+        m_playlist->addEntries( tracks, m_playlist->currentrevision() );
     }
-
-    return false;
 }
 
 
@@ -190,9 +167,12 @@ PlaylistItem::icon() const
 
 
 bool
-PlaylistItem::setData(const QVariant& v, bool role)
+PlaylistItem::setData( const QVariant& v, bool role )
 {
-    if( m_playlist->author()->isLocal() ) {
+    Q_UNUSED( role );
+
+    if ( m_playlist->author()->isLocal() )
+    {
         m_playlist->rename( v.toString() );
 
         return true;
@@ -318,5 +298,17 @@ DynamicPlaylistItem::text() const
 bool
 DynamicPlaylistItem::willAcceptDrag( const QMimeData* data ) const
 {
+    Q_UNUSED( data );
     return false;
+}
+
+
+QIcon
+DynamicPlaylistItem::icon() const
+{
+    if( m_dynplaylist->mode() == OnDemand ) {
+        return QIcon( RESPATH "images/station.png" );
+    } else {
+        return QIcon( RESPATH "images/automatic-playlist.png" );
+    }
 }

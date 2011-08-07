@@ -36,6 +36,8 @@ class DatabaseCommand_LoadPlaylistEntries;
 namespace Tomahawk
 {
 
+class Resolver;
+
 class DLLEXPORT Query : public QObject
 {
 Q_OBJECT
@@ -43,13 +45,16 @@ Q_OBJECT
 friend class ::DatabaseCommand_LogPlayback;
 friend class ::DatabaseCommand_PlaybackHistory;
 friend class ::DatabaseCommand_LoadPlaylistEntries;
+friend class Pipeline;
 
 public:
-    static query_ptr get( const QString& artist, const QString& track, const QString& album, const QID& qid = QString() );
+    static query_ptr get( const QString& artist, const QString& track, const QString& album, const QID& qid = QString(), bool autoResolve = true );
     static query_ptr get( const QString& query, const QID& qid );
 
-    explicit Query( const QString& artist, const QString& track, const QString& album, const QID& qid );
+    explicit Query( const QString& artist, const QString& track, const QString& album, const QID& qid, bool autoResolve );
     explicit Query( const QString& query, const QID& qid );
+
+    virtual ~Query();
 
     /// returns list of all results so far
     QList< result_ptr > results() const;
@@ -67,18 +72,19 @@ public:
     /// true when any result has been found (score may be less than 1.0)
     bool playable() const { return m_playable; }
 
+    QString fullTextQuery() const { return m_fullTextQuery; }
     bool isFullTextQuery() const { return !m_fullTextQuery.isEmpty(); }
     bool resolvingFinished() const { return m_resolveFinished; }
 
-    unsigned int lastPipelineWeight() const { return m_lastpipelineweight; }
-    void setLastPipelineWeight( unsigned int w ) { m_lastpipelineweight = w; }
+    QPair< Tomahawk::source_ptr, unsigned int > playedBy() const { return m_playedBy; }
+    Tomahawk::Resolver* currentResolver() const;
+    QList< QWeakPointer< Tomahawk::Resolver > > resolvedBy() const { return m_resolvers; }
 
     void setArtist( const QString& artist ) { m_artist = artist; }
     void setAlbum( const QString& album ) { m_album = album; }
     void setTrack( const QString& track ) { m_track = track; }
     void setResultHint( const QString& resultHint ) { m_resultHint = resultHint; }
     void setDuration( int duration ) { m_duration = duration; }
-    void setResolveFinished( bool resolved ) { m_resolveFinished = resolved; }
 
     QVariant toVariant() const;
     QString toString() const;
@@ -87,8 +93,10 @@ public:
     QString artist() const { return m_artist; }
     QString album() const { return m_album; }
     QString track() const { return m_track; }
-    QString fullTextQuery() const { return m_fullTextQuery; }
     int duration() const { return m_duration; }
+
+    void setResolveFinished( bool resolved ) { m_resolveFinished = resolved; }
+    void setPlayedBy( const Tomahawk::source_ptr& source, unsigned int playtime );
 
 signals:
     void resultsAdded( const QList<Tomahawk::result_ptr>& );
@@ -114,6 +122,8 @@ private slots:
     void refreshResults();
 
 private:
+    void setCurrentResolver( Tomahawk::Resolver* resolver );
+
     void clearResults();
     void checkResults();
 
@@ -122,7 +132,6 @@ private:
     bool m_playable;
     bool m_resolveFinished;
     mutable QID m_qid;
-    unsigned int m_lastpipelineweight;
 
     QString m_artist;
     QString m_album;
@@ -131,6 +140,9 @@ private:
 
     int m_duration;
     QString m_resultHint;
+
+    QPair< Tomahawk::source_ptr, unsigned int > m_playedBy;
+    QList< QWeakPointer< Tomahawk::Resolver > > m_resolvers;
 
     mutable QMutex m_mutex;
 };

@@ -1,5 +1,5 @@
 /* === This file is part of Tomahawk Player - <http://tomahawk-player.org> ===
- * 
+ *
  *   Copyright 2010-2011, Christian Muehlhaeuser <muesli@tomahawk-player.org>
  *
  *   Tomahawk is free software: you can redistribute it and/or modify
@@ -26,10 +26,13 @@
 #include "tomahawkapp.h"
 #include "tomahawkwindow.h"
 
+#include "utils/logger.h"
+
 
 TomahawkTrayIcon::TomahawkTrayIcon( QObject* parent )
     : QSystemTrayIcon( parent )
     , m_currentAnimationFrame( 0 )
+    , m_showWindowAction( 0 )
 {
     QIcon icon( RESPATH "icons/tomahawk-icon-128x128.png" );
     setIcon( icon );
@@ -38,16 +41,25 @@ TomahawkTrayIcon::TomahawkTrayIcon( QObject* parent )
 
     m_contextMenu = new QMenu();
     setContextMenu( m_contextMenu );
-    
+
     m_playAction = m_contextMenu->addAction( tr( "Play" ) );
     m_pauseAction = m_contextMenu->addAction( tr( "Pause" ) );
     m_stopAction = m_contextMenu->addAction( tr( "Stop" ) );
     m_contextMenu->addSeparator();
     m_prevAction = m_contextMenu->addAction( tr( "Previous Track" ) );
     m_nextAction = m_contextMenu->addAction( tr( "Next Track" ) );
+
+#ifdef Q_OS_MAC
+    // On mac you can close the windows while leaving the app open. We then need a way to show the main window again
+    m_contextMenu->addSeparator();
+    m_showWindowAction = m_contextMenu->addAction( tr( "Hide Tomahawk Window" ) );
+    m_showWindowAction->setData( true );
+    connect( m_showWindowAction, SIGNAL( triggered() ), this, SLOT( showWindow() ) );
+#endif
+
     m_contextMenu->addSeparator();
     m_quitAction = m_contextMenu->addAction( tr( "Quit" ) );
-    
+
     connect( AudioEngine::instance(), SIGNAL( loading( Tomahawk::result_ptr ) ), SLOT( setResult( Tomahawk::result_ptr ) ) );
 
     connect( m_playAction,  SIGNAL( triggered() ), AudioEngine::instance(), SLOT( play() ) );
@@ -56,7 +68,7 @@ TomahawkTrayIcon::TomahawkTrayIcon( QObject* parent )
     connect( m_prevAction,  SIGNAL( triggered() ), AudioEngine::instance(), SLOT( previous() ) );
     connect( m_nextAction,  SIGNAL( triggered() ), AudioEngine::instance(), SLOT( next() ) );
     connect( m_quitAction,  SIGNAL( triggered() ), (QObject*)APP, SLOT( quit() ) );
-    
+
     connect( &m_animationTimer, SIGNAL( timeout() ), SLOT( onAnimationTimer() ) );
     connect( this, SIGNAL( activated( QSystemTrayIcon::ActivationReason ) ), SLOT( onActivated( QSystemTrayIcon::ActivationReason ) ) );
 
@@ -69,6 +81,33 @@ TomahawkTrayIcon::~TomahawkTrayIcon()
     delete m_contextMenu;
 }
 
+void
+TomahawkTrayIcon::setShowHideWindow( bool show )
+{
+    if ( show )
+    {
+        m_showWindowAction->setText( tr( "Hide Tomahawk Window" ) );
+        m_showWindowAction->setData( show );
+    } else {
+        m_showWindowAction->setText( tr( "Show Tomahawk Window" ) );
+    }
+    m_showWindowAction->setData( show );
+}
+
+void
+TomahawkTrayIcon::showWindow()
+{
+    if( !m_showWindowAction->data().toBool() )
+    {
+        APP->mainWindow()->show();
+        APP->mainWindow()->raise();
+
+        setShowHideWindow( true );
+    } else {
+        APP->mainWindow()->hide();
+        setShowHideWindow( false );
+    }
+}
 
 void
 TomahawkTrayIcon::setResult( const Tomahawk::result_ptr& result )
@@ -115,7 +154,7 @@ TomahawkTrayIcon::onAnimationTimer()
         Q_ASSERT( !"Animation should not be started without frames being loaded" );
         return;
     }
-    
+
     m_currentAnimationFrame++;
     if( m_currentAnimationFrame >= m_animationPixmaps.count() )
         m_currentAnimationFrame = 0;

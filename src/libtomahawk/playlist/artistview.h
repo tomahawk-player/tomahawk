@@ -22,6 +22,7 @@
 #include <QTreeView>
 #include <QSortFilterProxyModel>
 
+#include "contextmenu.h"
 #include "treemodel.h"
 #include "treeproxymodel.h"
 #include "viewpage.h"
@@ -45,10 +46,11 @@ public:
     TreeProxyModel* proxyModel() const { return m_proxyModel; }
 //    PlaylistItemDelegate* delegate() { return m_delegate; }
 
-    void setModel( TreeModel* model );
+    void setModel( QAbstractItemModel* model );
+    void setTreeModel( TreeModel* model );
 
     virtual QWidget* widget() { return this; }
-    virtual PlaylistInterface* playlistInterface() const { return proxyModel(); }
+    virtual Tomahawk::PlaylistInterface* playlistInterface() const { return proxyModel(); }
 
     virtual QString title() const { return m_model->title(); }
     virtual QString description() const { return m_model->description(); }
@@ -78,6 +80,9 @@ private slots:
     void onViewChanged();
     void onScrollTimeout();
 
+    void onCustomContextMenu( const QPoint& pos );
+    void onMenuTriggered( int action );
+
 private:
     TreeHeader* m_header;
     TreeModel* m_model;
@@ -85,6 +90,8 @@ private:
 //    PlaylistItemDelegate* m_delegate;
 
     LoadingSpinner* m_loadingSpinner;
+    QModelIndex m_contextMenuIndex;
+    Tomahawk::ContextMenu* m_contextMenu;
 
     bool m_showModes;
     QTimer m_timer;

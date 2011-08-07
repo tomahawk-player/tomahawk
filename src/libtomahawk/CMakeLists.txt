@@ -27,9 +27,11 @@ set( libSources
     query.cpp
     result.cpp
     source.cpp
+    sourceplaylistinterface.cpp
     viewpage.cpp
     viewmanager.cpp
     globalactionmanager.cpp
+    contextmenu.cpp
 
     sip/SipPlugin.cpp
     sip/SipHandler.cpp
@@ -54,6 +56,7 @@ set( libSources
     database/databasecommand_addfiles.cpp
     database/databasecommand_deletefiles.cpp
     database/databasecommand_dirmtimes.cpp
+    database/databasecommand_filemtimes.cpp
     database/databasecommand_loadfile.cpp
     database/databasecommand_logplayback.cpp
     database/databasecommand_addsource.cpp
@@ -73,19 +76,24 @@ set( libSources
     database/databasecommand_setdynamicplaylistrevision.cpp
     database/databasecommand_createdynamicplaylist.cpp
     database/databasecommand_loaddynamicplaylist.cpp
+    database/databasecommand_loaddynamicplaylistentries.cpp
     database/databasecommand_loadallautoplaylists.cpp
     database/databasecommand_loadallstations.cpp
     database/databasecommand_deletedynamicplaylist.cpp
     database/databasecommand_addclientauth.cpp
     database/databasecommand_clientauthvalid.cpp
+    database/databasecommand_socialaction.cpp
+    database/databasecommand_loadsocialactions.cpp
+    database/databasecommand_genericselect.cpp
     database/database.cpp
 
     infosystem/infosystemcache.cpp
     infosystem/infosystem.cpp
     infosystem/infosystemworker.cpp
-    infosystem/infoplugins/echonestplugin.cpp
-    infosystem/infoplugins/lastfmplugin.cpp
-    infosystem/infoplugins/musixmatchplugin.cpp
+    infosystem/infoplugins/generic/echonestplugin.cpp
+    infosystem/infoplugins/generic/lastfmplugin.cpp
+    infosystem/infoplugins/generic/musixmatchplugin.cpp
+    infosystem/infoplugins/generic/musicbrainzPlugin.cpp
 
     playlist/treemodel.cpp
     playlist/treeproxymodel.cpp
@@ -112,6 +120,7 @@ set( libSources
     playlist/albumitemdelegate.cpp
     playlist/albumview.cpp
     playlist/artistview.cpp
+    playlist/customplaylistview.cpp
 
     playlist/topbar/topbar.cpp
     playlist/topbar/clearbutton.cpp
@@ -138,6 +147,8 @@ set( libSources
     playlist/dynamic/widgets/CollapsibleControls.cpp
     playlist/dynamic/widgets/DynamicSetupWidget.cpp
     playlist/dynamic/widgets/LoadingSpinner.cpp
+    playlist/dynamic/database/DatabaseControl.cpp
+    playlist/dynamic/database/DatabaseGenerator.cpp
 
     network/bufferiodevice.cpp
     network/msgprocessor.cpp
@@ -153,12 +164,16 @@ set( libSources
     utils/querylabel.cpp
     utils/elidedlabel.cpp
     utils/imagebutton.cpp
+    utils/logger.cpp
     utils/progresstreeview.cpp
     utils/proxystyle.cpp
     utils/widgetdragfilter.cpp
     utils/animatedsplitter.cpp
     utils/xspfloader.cpp
     utils/xspfgenerator.cpp
+    utils/jspfloader.cpp
+    utils/spotifyparser.cpp
+    utils/shortenedlinkparser.cpp
 
     widgets/newplaylistwidget.cpp
     widgets/searchwidget.cpp
@@ -166,7 +181,10 @@ set( libSources
     widgets/welcomewidget.cpp
     widgets/welcomeplaylistmodel.cpp
     widgets/overlaywidget.cpp
+    widgets/HeaderLabel.cpp
+    widgets/SocialPlaylistWidget.cpp
     widgets/infowidgets/sourceinfowidget.cpp
+    widgets/infowidgets/ArtistInfoWidget.cpp
 
     kdsingleapplicationguard/kdsingleapplicationguard.cpp
     kdsingleapplicationguard/kdsharedmemorylocker.cpp
@@ -187,9 +205,10 @@ set( libHeaders
     resolver.h
     result.h
     source.h
-    viewpage.h
+    sourceplaylistinterface.h
     viewmanager.h
     globalactionmanager.h
+    contextmenu.h
 
     artist.h
     album.h
@@ -217,6 +236,7 @@ set( libHeaders
     database/databasecommand_addfiles.h
     database/databasecommand_deletefiles.h
     database/databasecommand_dirmtimes.h
+    database/databasecommand_filemtimes.h
     database/databasecommand_loadfile.h
     database/databasecommand_logplayback.h
     database/databasecommand_addsource.h
@@ -238,18 +258,23 @@ set( libHeaders
     database/databasecommand_setdynamicplaylistrevision.h
     database/databasecommand_createdynamicplaylist.h
     database/databasecommand_loaddynamicplaylist.h
+    database/databasecommand_loaddynamicplaylistentries.h
     database/databasecommand_deletedynamicplaylist.h
     database/databasecommand_loadallautoplaylists.h
     database/databasecommand_loadallstations.h
     database/databasecommand_addclientauth.h
     database/databasecommand_clientauthvalid.h
+    database/databasecommand_socialaction.h
+    database/databasecommand_loadsocialactions.h
+    database/databasecommand_genericselect.h
 
     infosystem/infosystem.h
     infosystem/infosystemworker.h
     infosystem/infosystemcache.h
-    infosystem/infoplugins/echonestplugin.h
-    infosystem/infoplugins/lastfmplugin.h
-    infosystem/infoplugins/musixmatchplugin.h
+    infosystem/infoplugins/generic/echonestplugin.h
+    infosystem/infoplugins/generic/lastfmplugin.h
+    infosystem/infoplugins/generic/musixmatchplugin.h
+    infosystem/infoplugins/generic/musicbrainzPlugin.h
 
     network/bufferiodevice.h
     network/msgprocessor.h
@@ -286,6 +311,7 @@ set( libHeaders
     playlist/albumitemdelegate.h
     playlist/albumview.h
     playlist/artistview.h
+    playlist/customplaylistview.h
 
     playlist/topbar/topbar.h
     playlist/topbar/clearbutton.h
@@ -298,7 +324,6 @@ set( libHeaders
 
     playlist/dynamic/DynamicPlaylist.h
     playlist/dynamic/DynamicControl.h
-    playlist/dynamic/GeneratorFactory.h
     playlist/dynamic/GeneratorInterface.h
     playlist/dynamic/DynamicView.h
     playlist/dynamic/DynamicModel.h
@@ -313,8 +338,9 @@ set( libHeaders
     playlist/dynamic/widgets/CollapsibleControls.h
     playlist/dynamic/widgets/DynamicSetupWidget.h
     playlist/dynamic/widgets/LoadingSpinner.h
+    playlist/dynamic/database/DatabaseControl.h
+    playlist/dynamic/database/DatabaseGenerator.h
 
-    utils/tomahawkutils.h
     utils/querylabel.h
     utils/elidedlabel.h
     utils/animatedcounterlabel.h
@@ -324,6 +350,9 @@ set( libHeaders
     utils/animatedsplitter.h
     utils/xspfloader.h
     utils/xspfgenerator.h
+    utils/jspfloader.h
+    utils/spotifyparser.h
+    utils/shortenedlinkparser.h
 
     widgets/newplaylistwidget.h
     widgets/searchwidget.h
@@ -331,23 +360,33 @@ set( libHeaders
     widgets/welcomewidget.h
     widgets/welcomeplaylistmodel.h
     widgets/overlaywidget.h
+    widgets/HeaderLabel.h
+    widgets/SocialPlaylistWidget.h
     widgets/infowidgets/sourceinfowidget.h
+    widgets/infowidgets/ArtistInfoWidget.h
 
     kdsingleapplicationguard/kdsingleapplicationguard.h
-    kdsingleapplicationguard/kdsharedmemorylocker.h
-    kdsingleapplicationguard/kdtoolsglobal.h
-    kdsingleapplicationguard/kdlockedsharedmemorypointer.h
 )
 
 set( libHeaders_NoMOC
-		playlist/dynamic/GeneratorInterface.h
+    viewpage.h
+
+    infosystem/infoplugins/unix/imageconverter.h
+
+    playlist/dynamic/GeneratorInterface.h
+    playlist/dynamic/GeneratorFactory.h
+
+    utils/tomahawkutils.h
 )
+
 set( libUI ${libUI}
     widgets/playlisttypeselectordlg.ui
     widgets/newplaylistwidget.ui
     widgets/searchwidget.ui
     widgets/welcomewidget.ui
+    widgets/SocialPlaylistWidget.ui
     widgets/infowidgets/sourceinfowidget.ui
+    widgets/infowidgets/ArtistInfoWidget.ui
     playlist/topbar/topbar.ui
     playlist/infobar/infobar.ui
 )
@@ -370,6 +409,14 @@ include_directories( . ${CMAKE_CURRENT_BINARY_DIR} ${CMAKE_CURRENT_BINARY_DIR}/.
     ${CMAKE_BINARY_DIR}/thirdparty/liblastfm2/src
 )
 
+IF( UNIX AND NOT APPLE )
+    SET( libSources ${libSources}
+      infosystem/infoplugins/unix/fdonotifyplugin.cpp
+      infosystem/infoplugins/unix/imageconverter.cpp )
+
+    SET( libHeaders ${libHeaders}
+      infosystem/infoplugins/unix/fdonotifyplugin.h )
+ENDIF( UNIX AND NOT APPLE )
 
 IF( WIN32 )
     SET( OS_SPECIFIC_LINK_LIBRARIES
@@ -391,13 +438,16 @@ IF( APPLE )
     FIND_LIBRARY( SCRIPTINGBRIDGE_LIBRARY ScriptingBridge )
     MARK_AS_ADVANCED( COREAUDIO_LIBRARY COREFOUNDATION_LIBRARY FOUNDATION_LIBRARY SCRIPTINGBRIDGE_LIBRARY )
 
-    SET( libSources ${libSources} 
-      infosystem/infoplugins/adium.mm
-      infosystem/infoplugins/adiumplugin.cpp )
+    SET( libSources ${libSources}
+      infosystem/infoplugins/mac/adium.mm
+      infosystem/infoplugins/mac/adiumplugin.cpp
+      widgets/maclineedit.mm
+      utils/tomahawkutils_mac.mm )
 
-    SET( libHeaders ${libHeaders} 
-      infosystem/infoplugins/adium.h
-      infosystem/infoplugins/adiumplugin.h )
+    SET( libHeaders ${libHeaders}
+      widgets/maclineedit.h
+      infosystem/infoplugins/mac/adium.h
+      infosystem/infoplugins/mac/adiumplugin.h )
 
     SET( OS_SPECIFIC_LINK_LIBRARIES
         ${OS_SPECIFIC_LINK_LIBRARIES}
@@ -406,6 +456,8 @@ IF( APPLE )
         ${COREFOUNDATION_LIBRARY}
 	${FOUNDATION_LIBRARY}
 	${SCRIPTINGBRIDGE_LIBRARY}
+
+        /System/Library/Frameworks/AppKit.framework
     )
 ENDIF( APPLE )
 

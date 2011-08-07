@@ -23,7 +23,9 @@
 
 #include <QVariant>
 
-class SipInfoPrivate : public QSharedData {
+
+class SipInfoPrivate : public QSharedData
+{
 public:
     SipInfoPrivate()
         : port( -1 )
@@ -47,22 +49,24 @@ public:
     QString key;
 };
 
+
 SipInfo::SipInfo()
 {
     d = new SipInfoPrivate;
 }
 
+
 SipInfo::SipInfo(const SipInfo& other)
     : QObject()
     , d( other.d )
 {
-
 }
+
 
 SipInfo::~SipInfo()
 {
-
 }
+
 
 SipInfo&
 SipInfo::operator=( const SipInfo& other )
@@ -70,6 +74,7 @@ SipInfo::operator=( const SipInfo& other )
     d = other.d;
     return *this;
 }
+
 
 void
 SipInfo::clear()
@@ -80,6 +85,7 @@ SipInfo::clear()
     d->uniqname = QString();
     d->key = QString();
 }
+
 
 bool
 SipInfo::isValid() const
@@ -99,11 +105,13 @@ SipInfo::isValid() const
     return false;
 }
 
+
 void
-SipInfo::setVisible(bool visible)
+SipInfo::setVisible( bool visible )
 {
     d->visible.setValue(visible);
 }
+
 
 bool
 SipInfo::isVisible() const
@@ -113,11 +121,13 @@ SipInfo::isVisible() const
     return d->visible.toBool();
 }
 
+
 void
 SipInfo::setHost( const QHostInfo& host )
 {
     d->host = host;
 }
+
 
 const QHostInfo
 SipInfo::host() const
@@ -127,11 +137,13 @@ SipInfo::host() const
     return d->host;
 }
 
+
 void
 SipInfo::setPort( int port )
 {
     d->port = port;
 }
+
 
 int
 SipInfo::port() const
@@ -141,11 +153,13 @@ SipInfo::port() const
     return d->port;
 }
 
+
 void
 SipInfo::setUniqname( const QString& uniqname )
 {
     d->uniqname = uniqname;
 }
+
 
 const QString
 SipInfo::uniqname() const
@@ -155,11 +169,13 @@ SipInfo::uniqname() const
     return d->uniqname;
 }
 
+
 void
 SipInfo::setKey( const QString& key )
 {
     d->key = key;
 }
+
 
 const QString
 SipInfo::key() const
@@ -168,6 +184,7 @@ SipInfo::key() const
 
     return d->key;
 }
+
 
 const QString
 SipInfo::toJson() const
@@ -189,6 +206,7 @@ SipInfo::toJson() const
 
     return QString::fromAscii( ba );
 }
+
 
 const SipInfo
 SipInfo::fromJson( QString json )

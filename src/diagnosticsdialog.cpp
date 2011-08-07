@@ -24,11 +24,13 @@
 #include <sourcelist.h>
 
 #include <QTextEdit>
-#include <QDebug>
 #include <QDialogButtonBox>
 #include <QPushButton>
 #include <QApplication>
 #include <QClipboard>
+
+#include "utils/logger.h"
+
 
 DiagnosticsDialog::DiagnosticsDialog( QWidget *parent )
     : QDialog( parent )

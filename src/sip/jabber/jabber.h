@@ -38,7 +38,6 @@
 #include <jreen/connection.h>
 #include <jreen/mucroom.h>
 
-#include <QNetworkProxy>
 #include <QMessageBox>
 
 #define MYNAME "SIPJREEN"
@@ -85,6 +84,7 @@ public:
     virtual void deletePlugin();
 
 signals:
+    void dataError( bool exists );
     void jidChanged( const QString& );
 
 public slots:
@@ -94,7 +94,6 @@ public slots:
     void sendMsg( const QString& to, const QString& msg );
     void broadcastMsg( const QString &msg );
     void addContact( const QString &jid, const QString& msg = QString() );
-    void refreshProxy();
     void showAddFriendDialog();
 
 protected:
@@ -118,6 +117,7 @@ private slots:
     }
     void onNewIq( const Jreen::IQ &iq );
     void onNewAvatar( const QString &jid );
+    void onCheckJidExists( QString jid );
 
 private:
     bool readXmlConsoleEnabled();
@@ -132,6 +132,8 @@ private:
 
     bool presenceMeansOnline( Jreen::Presence::Type p );
     void handlePeerStatus( const Jreen::JID &jid, Jreen::Presence::Type presenceType );
+
+    using SipPlugin::errorMessage;
 
     QMenu* m_menu;
     XmlConsole* m_xmlConsole;
@@ -155,8 +157,6 @@ private:
     enum IqContext { NoContext, RequestDisco, RequestedDisco, SipMessageSent, RequestedVCard, RequestVersion, RequestedVersion };
     QStringList m_legacy_peers;
     AvatarManager *m_avatarManager;
-
-    QNetworkProxy m_usedProxy;
 };
 
 #endif

@@ -38,8 +38,7 @@ public:
     explicit SourceTreeView( QWidget* parent = 0 );
 
 public slots:
-    void showOfflineSources();
-    void hideOfflineSources();
+    void showOfflineSources( bool offlineSourcesShown );
 
     void renamePlaylist();
 signals:
@@ -56,6 +55,9 @@ private slots:
     void copyPlaylistLink();
     void addToLocal();
 
+    void latchOn();
+    void latchOff();
+
     void onCustomContextMenu( const QPoint& pos );
 protected:
 //    void drawBranches( QPainter* painter, const QRect& rect, const QModelIndex& index ) const {}
@@ -64,7 +66,7 @@ protected:
     virtual void paintEvent( QPaintEvent* event );
 
     virtual void dragEnterEvent( QDragEnterEvent* event );
-    virtual void dragLeaveEvent( QDragLeaveEvent* event ) { Q_UNUSED( event ); m_dragging = false; setDirtyRegion( m_dropRect ); }
+    virtual void dragLeaveEvent( QDragLeaveEvent* event );
     virtual void dragMoveEvent( QDragMoveEvent* event );
     virtual void dropEvent( QDropEvent* event );
     virtual void keyPressEvent( QKeyEvent* event );
@@ -81,14 +83,18 @@ private:
 
     QMenu m_playlistMenu;
     QMenu m_roPlaylistMenu;
+    QMenu m_latchMenu;
     QAction* m_loadPlaylistAction;
     QAction* m_renamePlaylistAction;
     QAction* m_deletePlaylistAction;
     QAction* m_copyPlaylistAction;
     QAction* m_addToLocalAction;
+    QAction* m_latchOnAction;
+    QAction* m_latchOffAction;
 
     bool m_dragging;
     QRect m_dropRect;
+    QPersistentModelIndex m_dropIndex;
 };
 
 #endif // SOURCETREEVIEW_H

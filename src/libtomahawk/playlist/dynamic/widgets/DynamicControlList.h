@@ -1,6 +1,6 @@
 /* === This file is part of Tomahawk Player - <http://tomahawk-player.org> ===
- * 
- *   Copyright 2010-2011, Christian Muehlhaeuser <muesli@tomahawk-player.org>
+ *
+ *   Copyright 2010-2011, Leo Franchi <lfranchi@kde.org>
  *
  *   Tomahawk is free software: you can redistribute it and/or modify
  *   it under the terms of the GNU General Public License as published by
@@ -36,44 +36,44 @@ namespace Tomahawk
 
 class DynamicControlWrapper;
 
-  
+
 /**
  * This widget encapsulates the list of dynamic controls. It can hide or show the controls.
  */
 
 class DynamicControlList : public QWidget
 {
-    Q_OBJECT    
+    Q_OBJECT
 public:
     DynamicControlList( QWidget* parent = 0 );
     explicit DynamicControlList( const geninterface_ptr& generator, const QList< dyncontrol_ptr >& controls, QWidget* parent = 0 );
     virtual ~DynamicControlList();
-    
+
     void setControls( const geninterface_ptr& generator, const QList< dyncontrol_ptr >& controls );
     QList< DynamicControlWrapper* > controls() const { return m_controls; }
-    
+
 signals:
     void controlsChanged();
     void controlChanged( const Tomahawk::dyncontrol_ptr& control );
     void toggleCollapse();
-    
+
 public slots:
     void addNewControl();
     void removeControl();
     void controlChanged();
-    
+
 private:
     void init();
-        
+
     geninterface_ptr m_generator;
-    
+
     QGridLayout* m_layout;
     QList< DynamicControlWrapper* > m_controls;
-    
+
     QHBoxLayout* m_collapseLayout;
     QPushButton* m_collapse;
     QToolButton* m_addControl;
-    
+
 };
 
 };

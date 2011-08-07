@@ -24,6 +24,7 @@
 
 #include "database/database.h"
 #include "database/databasecommandloggable.h"
+#include "utils/logger.h"
 
 
 DatabaseWorker::DatabaseWorker( DatabaseImpl* lib, Database* db, bool mutates )
@@ -46,10 +47,10 @@ DatabaseWorker::~DatabaseWorker()
     qDebug() << Q_FUNC_INFO << m_outstanding;
 
     if ( m_commands.count() )
-        qDebug() << m_commands;
+        qDebug() << "Outstanding db commands to finish:" << m_commands;
 
     quit();
-    wait( 60000 );
+    wait();
 }
 
 
@@ -100,10 +101,10 @@ DatabaseWorker::doWork()
         cmd = m_commands.takeFirst();
     }
 
-    if( cmd->doesMutates() )
+    if ( cmd->doesMutates() )
     {
         bool transok = m_dbimpl->database().transaction();
-//        Q_ASSERT( transok );
+        Q_ASSERT( transok );
         Q_UNUSED( transok );
     }
     try
@@ -111,7 +112,7 @@ DatabaseWorker::doWork()
         {
             cmd->_exec( m_dbimpl ); // runs actual SQL stuff
 
-            if ( cmd->loggable() && !cmd->localOnly() )
+            if ( cmd->loggable() )
             {
                 // We only save our own ops to the oplog, since incoming ops from peers
                 // are applied immediately.
@@ -119,7 +120,7 @@ DatabaseWorker::doWork()
                 // Crazy idea: if peers had keypairs and could sign ops/msgs, in theory it
                 // would be safe to sync ops for friend A from friend B's cache, if he saved them,
                 // which would mean you could get updates even if a peer was offline.
-                if ( cmd->source()->isLocal() )
+                if ( cmd->source()->isLocal() && !cmd->localOnly() )
                 {
                     // save to op-log
                     DatabaseCommandLoggable* command = (DatabaseCommandLoggable*)cmd.data();
@@ -132,14 +133,14 @@ DatabaseWorker::doWork()
                     //
                     if ( !cmd->singletonCmd() )
                     {
-                        qDebug() << "Setting lastop for source" << cmd->source()->id() << "to" << cmd->guid();
+//                        qDebug() << "Setting lastop for source" << cmd->source()->id() << "to" << cmd->guid();
 
                         TomahawkSqlQuery query = m_dbimpl->newquery();
                         query.prepare( "UPDATE source SET lastop = ? WHERE id = ?" );
                         query.addBindValue( cmd->guid() );
                         query.addBindValue( cmd->source()->id() );
 
-                        if( !query.exec() )
+                        if ( !query.exec() )
                         {
                             qDebug() << "Failed to set lastop";
                             throw "Failed to set lastop";
@@ -150,16 +151,12 @@ DatabaseWorker::doWork()
 
             if ( cmd->doesMutates() )
             {
-                qDebug() << "Committing" << cmd->commandname();;
-                if( !m_dbimpl->database().commit() )
+                qDebug() << "Committing" << cmd->commandname() << cmd->guid();
+                if ( !m_dbimpl->database().commit() )
                 {
 
                     qDebug() << "*FAILED TO COMMIT TRANSACTION*";
                     throw "commit failed";
-                }
-                else
-                {
-                    qDebug() << "Committed" << cmd->commandname();
                 }
             }
 
@@ -197,8 +194,7 @@ DatabaseWorker::doWork()
     cmd->emitFinished();
 
     QMutexLocker lock( &m_mut );
-    m_outstanding--;
-    if ( m_outstanding > 0 )
+    if ( --m_outstanding > 0 )
         QTimer::singleShot( 0, this, SLOT( doWork() ) );
 }
 

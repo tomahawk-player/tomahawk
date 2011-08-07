@@ -1,5 +1,5 @@
 /* === This file is part of Tomahawk Player - <http://tomahawk-player.org> ===
- * 
+ *
  *   Copyright 2010-2011, Christian Muehlhaeuser <muesli@tomahawk-player.org>
  *
  *   Tomahawk is free software: you can redistribute it and/or modify
@@ -19,8 +19,6 @@
 #include "sourceinfowidget.h"
 #include "ui_sourceinfowidget.h"
 
-#include "utils/tomahawkutils.h"
-
 #include "viewmanager.h"
 #include "playlist/albummodel.h"
 #include "playlist/collectionflatmodel.h"
@@ -28,6 +26,9 @@
 
 #include "database/databasecommand_alltracks.h"
 #include "database/databasecommand_allalbums.h"
+
+#include "utils/tomahawkutils.h"
+#include "utils/logger.h"
 
 #include "widgets/overlaywidget.h"
 
@@ -38,25 +39,28 @@ SourceInfoWidget::SourceInfoWidget( const Tomahawk::source_ptr& source, QWidget*
 {
     ui->setupUi( this );
 
+    ui->historyView->setFrameShape( QFrame::NoFrame );
+    ui->historyView->setAttribute( Qt::WA_MacShowFocusRect, 0 );
+    ui->recentAlbumView->setFrameShape( QFrame::NoFrame );
+    ui->recentAlbumView->setAttribute( Qt::WA_MacShowFocusRect, 0 );
+    ui->recentCollectionView->setFrameShape( QFrame::NoFrame );
+    ui->recentCollectionView->setAttribute( Qt::WA_MacShowFocusRect, 0 );
+
+    TomahawkUtils::unmarginLayout( layout() );
+
     ui->historyView->overlay()->setEnabled( false );
 
     m_recentCollectionModel = new CollectionFlatModel( ui->recentCollectionView );
+    m_recentCollectionModel->setStyle( TrackModel::Short );
     ui->recentCollectionView->setTrackModel( m_recentCollectionModel );
     m_recentCollectionModel->addFilteredCollection( source->collection(), 250, DatabaseCommand_AllTracks::ModificationTime );
 
     m_historyModel = new PlaylistModel( ui->historyView );
+    m_historyModel->setStyle( TrackModel::Short );
     ui->historyView->setPlaylistModel( m_historyModel );
-    m_historyModel->loadHistory( source );
+    m_historyModel->loadHistory( source, 25 );
 
     connect( source.data(), SIGNAL( playbackFinished( Tomahawk::query_ptr ) ), SLOT( onPlaybackFinished( Tomahawk::query_ptr ) ) );
-
-    ui->recentCollectionView->setColumnHidden( TrackModel::Bitrate, true );
-    ui->recentCollectionView->setColumnHidden( TrackModel::Origin, true );
-    ui->recentCollectionView->setColumnHidden( TrackModel::Filesize, true );
-
-    ui->historyView->setColumnHidden( TrackModel::Bitrate, true );
-    ui->historyView->setColumnHidden( TrackModel::Origin, true );
-    ui->historyView->setColumnHidden( TrackModel::Filesize, true );
 
     m_recentAlbumModel = new AlbumModel( ui->recentAlbumView );
     ui->recentAlbumView->setAlbumModel( m_recentAlbumModel );

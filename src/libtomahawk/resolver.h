@@ -59,12 +59,20 @@ class DLLEXPORT ExternalResolver : public Resolver
 Q_OBJECT
 
 public:
+    enum ErrorState {
+        NoError,
+        FileNotFound
+    };
+
     ExternalResolver( const QString& filePath ) { m_filePath = filePath; }
 
     virtual QString filePath() const { return m_filePath; }
 
     virtual QWidget* configUI() const = 0;
     virtual void saveConfig() = 0;
+
+    virtual void reload() {} // Reloads from file (especially useful to check if file now exists)
+    virtual ErrorState error() const;
 
 public slots:
     virtual void stop() = 0;
@@ -76,6 +84,9 @@ protected:
     QWidget* widgetFromData( QByteArray& data, QWidget* parent = 0 );
     QVariant configMsgFromWidget( QWidget* w );
     QByteArray fixDataImagePaths( const QByteArray& data, bool compressed, const QVariantMap& images );
+
+    void setFilePath( const QString& path ) { m_filePath = path; }
+
 private:
     void addChildProperties( QObject* parent, QVariantMap& m );
 

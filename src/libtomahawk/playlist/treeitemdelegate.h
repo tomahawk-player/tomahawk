@@ -23,6 +23,7 @@
 
 #include "dllmacro.h"
 
+class ArtistView;
 class TreeProxyModel;
 
 class DLLEXPORT TreeItemDelegate : public QStyledItemDelegate
@@ -30,7 +31,7 @@ class DLLEXPORT TreeItemDelegate : public QStyledItemDelegate
 Q_OBJECT
 
 public:
-    TreeItemDelegate( QAbstractItemView* parent = 0, TreeProxyModel* proxy = 0 );
+    TreeItemDelegate( ArtistView* parent = 0, TreeProxyModel* proxy = 0 );
 
 protected:
     void paint( QPainter* painter, const QStyleOptionViewItem& option, const QModelIndex& index ) const;
@@ -39,8 +40,14 @@ protected:
 //    QWidget* createEditor( QWidget* parent, const QStyleOptionViewItem& option, const QModelIndex& index ) const;
 
 private:
-    QAbstractItemView* m_view;
+    ArtistView* m_view;
     TreeProxyModel* m_model;
+
+    mutable QHash< qint64, QPixmap > m_cache;
+
+    QPixmap m_nowPlayingIcon;
+    QPixmap m_defaultAlbumCover;
+    QPixmap m_defaultArtistImage;
 };
 
 #endif // TREEITEMDELEGATE_H

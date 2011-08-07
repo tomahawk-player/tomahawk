@@ -1,5 +1,5 @@
 /* === This file is part of Tomahawk Player - <http://tomahawk-player.org> ===
- * 
+ *
  *   Copyright 2010-2011, Christian Muehlhaeuser <muesli@tomahawk-player.org>
  *
  *   Tomahawk is free software: you can redistribute it and/or modify
@@ -21,6 +21,8 @@
 #include "network/servent.h"
 #include "database/database.h"
 #include "database/databasecommand_resolve.h"
+
+#include "utils/logger.h"
 
 
 DatabaseResolver::DatabaseResolver( int weight )

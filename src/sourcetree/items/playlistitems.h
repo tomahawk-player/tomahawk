@@ -43,6 +43,7 @@ protected:
 private slots:
     void onPlaylistLoaded( Tomahawk::PlaylistRevision revision );
     void onPlaylistChanged();
+    void parsedDroppedTracks( const QList<Tomahawk::query_ptr>& tracks );
 
 private:
     bool m_loaded;
@@ -62,6 +63,7 @@ public:
     virtual bool willAcceptDrag( const QMimeData* data ) const;
     virtual void activate();
     virtual int peerSortValue() const;
+    virtual QIcon icon() const;
 
 private slots:
     void onDynamicPlaylistLoaded( Tomahawk::DynamicPlaylistRevision revision );

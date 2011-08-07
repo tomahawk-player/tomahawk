@@ -1,5 +1,5 @@
 /* === This file is part of Tomahawk Player - <http://tomahawk-player.org> ===
- * 
+ *
  *   Copyright 2010-2011, Christian Muehlhaeuser <muesli@tomahawk-player.org>
  *
  *   Tomahawk is free software: you can redistribute it and/or modify
@@ -18,6 +18,8 @@
 
 #include "databasecommand_modifyplaylist.h"
 
+#include "utils/logger.h"
+
 using namespace Tomahawk;
 
 
@@ -30,7 +32,8 @@ DatabaseCommand_ModifyPlaylist::DatabaseCommand_ModifyPlaylist( Playlist* playli
 }
 
 
-void DatabaseCommand_ModifyPlaylist::exec( DatabaseImpl* lib )
+void
+DatabaseCommand_ModifyPlaylist::exec( DatabaseImpl* lib )
 {
     Q_UNUSED( lib );
 }

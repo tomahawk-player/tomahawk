@@ -47,7 +47,9 @@
 #include <QMessageBox>
 #include <QDateTime>
 #include <QTimer>
+
 #include <utils/tomahawkutils.h>
+#include "utils/logger.h"
 
 SipPlugin*
 JabberFactory::createPlugin( const QString& pluginId )
@@ -69,8 +71,6 @@ JabberPlugin::JabberPlugin( const QString& pluginId )
 {
     qDebug() << Q_FUNC_INFO;
 
-    qsrand(QDateTime::currentDateTime().toTime_t());
-
     m_configWidget = QWeakPointer< QWidget >( new QWidget );
     m_ui = new Ui_JabberConfig;
     m_ui->setupUi( m_configWidget.data() );
@@ -80,11 +80,13 @@ JabberPlugin::JabberPlugin( const QString& pluginId )
     m_ui->jabberPassword->setText( readPassword() );
     m_ui->jabberServer->setText( readServer() );
     m_ui->jabberPort->setValue( readPort() );
+    m_ui->jidExistsLabel->hide();
     m_currentUsername = accountName();
     m_currentServer = readServer();
     m_currentPassword = readPassword();
     m_currentPort = readPort();
 
+    connect( m_ui->jabberUsername, SIGNAL( textChanged( QString ) ), SLOT( onCheckJidExists( QString ) ) );
     // setup JID object
     Jreen::JID jid = Jreen::JID( accountName() );
 
@@ -151,30 +153,6 @@ JabberPlugin::~JabberPlugin()
     delete m_ui;
 }
 
-void
-JabberPlugin::refreshProxy()
-{
-    qDebug() << Q_FUNC_INFO;
-
-    if( !m_client->connection() )
-        return;
-
-    QNetworkProxy proxyToUse = TomahawkUtils::proxyFactory()->queryProxy( QNetworkProxyQuery( m_currentServer, m_currentPort ) ).first();
-    m_usedProxy = proxyToUse;
-
-    if( proxyToUse.type() != QNetworkProxy::NoProxy && ( m_currentServer.isEmpty() || !(m_currentPort > 0) ) )
-    {
-        qDebug() << Q_FUNC_INFO << " proxy type is not noproxy but no server/port set";
-        // patches are welcome in Jreen that implement jdns through proxy
-        emit error( SipPlugin::ConnectionError,
-                    tr( "You need to set hostname and port of your jabber server, if you want to use it through a proxy" ) );
-        return;
-    }
-
-    qDebug() << Q_FUNC_INFO << " proxy type is NoProxy ? " << (proxyToUse.type() == QNetworkProxy::NoProxy ? "true" : "false" );
-    qobject_cast<Jreen::DirectConnection*>( m_client->connection() )->setProxy( proxyToUse );
-}
-
 
 const QString
 JabberPlugin::name() const
@@ -216,6 +194,7 @@ JabberPlugin::icon() const
 bool
 JabberPlugin::connectPlugin( bool startup )
 {
+    Q_UNUSED( startup );
     qDebug() << Q_FUNC_INFO;
 
     if(m_client->isConnected())
@@ -224,14 +203,13 @@ JabberPlugin::connectPlugin( bool startup )
         return true; //FIXME: should i return false here?!
     }
 
-    refreshProxy();
-
     qDebug() << "Connecting to the XMPP server..." << m_client->jid().full();
 
     //FIXME: we're badly workarounding some missing reconnection api here, to be fixed soon
     QTimer::singleShot( 1000, m_client, SLOT( connectToServer() ) );
 
-    connect(m_client->connection(), SIGNAL(error(SocketError)), SLOT(onError(SocketError)));
+    if ( m_client->connection() )
+        connect(m_client->connection(), SIGNAL(error(SocketError)), SLOT(onError(SocketError)));
 
     m_state = Connecting;
     emit stateChanged( m_state );
@@ -519,16 +497,6 @@ JabberPlugin::checkSettings()
     if ( m_currentPort != readPort() )
         reconnect = true;
 
-    QNetworkProxy proxyToUse = TomahawkUtils::proxyFactory()->queryProxy( QNetworkProxyQuery( m_currentServer, m_currentPort ) ).first();
-    if ( proxyToUse.hostName() != m_usedProxy.hostName() ||
-            proxyToUse.port() != m_usedProxy.port() ||
-            proxyToUse.user() != m_usedProxy.user() ||
-            proxyToUse.password() != m_usedProxy.password() ||
-            proxyToUse.type() != m_usedProxy.type() ||
-            proxyToUse.capabilities() != m_usedProxy.capabilities()
-       )
-    reconnect = true;
-
     m_currentUsername = accountName();
     m_currentPassword = readPassword();
     m_currentServer = readServer();
@@ -622,7 +590,8 @@ void JabberPlugin::onNewMessage(const Jreen::Message& message)
 
     if( message.subtype() == Jreen::Message::Error )
     {
-        qDebug() << Q_FUNC_INFO << "Received error message from " << from << ", not answering... (Condition: " << message.error()->condition() << ")";
+        qDebug() << Q_FUNC_INFO << "Received error message from " << from << ", not answering... (Condition: "
+                 << ( message.error().isNull() ? -1 : message.error()->condition() ) << ")";
         return;
     }
 
@@ -678,7 +647,7 @@ void JabberPlugin::onPresenceReceived( const Jreen::RosterItem::Ptr &item, const
     */
     if( caps )
     {
-        qDebug() << Q_FUNC_INFO << fulljid << "Running tomahawk: maybe" << "caps " << caps->node() << "requesting disco..";
+        qDebug() << Q_FUNC_INFO << fulljid << "Running tomahawk: maybe" << "caps " << caps->node() << "requesting disco...";
 
         // request disco features
         QString node = caps->node() + '#' + caps->ver();
@@ -995,6 +964,33 @@ JabberPlugin::readServer()
 {
     return TomahawkSettings::instance()->value( pluginId() + "/server" ).toString();
 }
+
+
+void
+JabberPlugin::onCheckJidExists( QString jid )
+{
+    for ( int i=0; i<TomahawkSettings::instance()->sipPlugins().count(); i++ )
+    {
+        QString savedUsername = TomahawkSettings::instance()->value(
+                TomahawkSettings::instance()->sipPlugins().at( i ) + "/username" ).toString();
+        QStringList splitUserName = TomahawkSettings::instance()->value(
+                TomahawkSettings::instance()->sipPlugins().at( i ) + "/username" ).toString().split("@");
+        QString server = TomahawkSettings::instance()->value(
+                TomahawkSettings::instance()->sipPlugins().at( i ) + "/server" ).toString();
+
+        if ( ( savedUsername == jid || splitUserName.contains( jid ) ) &&
+               server == m_ui->jabberServer->text() && !jid.trimmed().isEmpty() )
+        {
+            m_ui->jidExistsLabel->show();
+            // the already jid exists
+            emit dataError( true );
+            return;
+        }
+    }
+    m_ui->jidExistsLabel->hide();
+    emit dataError( false );
+}
+
 
 void
 JabberPlugin::saveConfig()

@@ -28,6 +28,7 @@
 #include "resolver.h"
 #include "query.h"
 #include "result.h"
+#include "source.h"
 
 class QWidget;
 class ScriptResolver : public Tomahawk::ExternalResolver
@@ -46,6 +47,9 @@ public:
     virtual QWidget* configUI() const;
     virtual void saveConfig();
 
+    virtual ExternalResolver::ErrorState error() const;
+    virtual void reload();
+
 signals:
     void finished();
 
@@ -59,6 +63,8 @@ private slots:
     void cmdExited( int code, QProcess::ExitStatus status );
 
 private:
+    void sendConfig();
+
     void handleMsg( const QByteArray& msg );
     void sendMsg( const QByteArray& msg );
     void doSetup( const QVariantMap& m );
@@ -73,6 +79,7 @@ private:
     QByteArray m_msg;
 
     bool m_ready, m_stopped;
+    ExternalResolver::ErrorState m_error;
 
     QJson::Parser m_parser;
     QJson::Serializer m_serializer;

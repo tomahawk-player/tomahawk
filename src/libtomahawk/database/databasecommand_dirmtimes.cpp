@@ -21,6 +21,7 @@
 #include <QSqlQuery>
 
 #include "databaseimpl.h"
+#include "utils/logger.h"
 
 
 void
@@ -39,7 +40,11 @@ DatabaseCommand_DirMtimes::execSelect( DatabaseImpl* dbi )
     QMap<QString,unsigned int> mtimes;
     TomahawkSqlQuery query = dbi->newquery();
     if( m_prefix.isEmpty() && m_prefixes.isEmpty() )
+    {
         query.exec( "SELECT name, mtime FROM dirs_scanned" );
+        while( query.next() )
+            mtimes.insert( query.value( 0 ).toString(), query.value( 1 ).toUInt() );
+    }
     else if( m_prefixes.isEmpty() )
         execSelectPath( dbi, m_prefix, mtimes );
     else
@@ -64,9 +69,7 @@ DatabaseCommand_DirMtimes::execSelectPath( DatabaseImpl *dbi, const QDir& path, 
     query.exec();
 
     while( query.next() )
-    {
         mtimes.insert( query.value( 0 ).toString(), query.value( 1 ).toUInt() );
-    }
 }
 
 

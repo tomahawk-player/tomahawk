@@ -1,6 +1,6 @@
 /* === This file is part of Tomahawk Player - <http://tomahawk-player.org> ===
  *
- *   Copyright 2010-2011, Christian Muehlhaeuser <muesli@tomahawk-player.org>
+ *   Copyright 2010-2011, Leo Franchi <lfranchi@kde.org>
  *
  *   Tomahawk is free software: you can redistribute it and/or modify
  *   it under the terms of the GNU General Public License as published by
@@ -18,20 +18,23 @@
 
 #include "dynamic/echonest/EchonestControl.h"
 
-#include "dynamic/widgets/MiscControlWidgets.h"
-
-#include <echonest/Playlist.h>
-
 #include <QComboBox>
 #include <QLineEdit>
 #include <QLabel>
+#include <QCompleter>
+#include <QStringListModel>
+
+#include "dynamic/widgets/MiscControlWidgets.h"
+#include <echonest/Playlist.h>
 #include "EchonestGenerator.h"
-#include <qcompleter.h>
-#include <qstringlistmodel.h>
+
+#include "utils/logger.h"
+
 
 QHash< QString, QStringList > Tomahawk::EchonestControl::s_suggestCache = QHash< QString, QStringList >();
 bool Tomahawk::EchonestControl::s_fetchingMoodsAndStyles = false;
 int Tomahawk::EchonestControl::s_stylePollCount = 0;
+
 
 Tomahawk::EchonestControl::EchonestControl( const QString& selectedType, const QStringList& typeSelectors, QObject* parent )
     : DynamicControl ( selectedType.isEmpty() ? "Artist" : selectedType, typeSelectors, parent )
@@ -48,17 +51,20 @@ Tomahawk::EchonestControl::EchonestControl( const QString& selectedType, const Q
     updateWidgets();
 }
 
+
 QWidget*
 Tomahawk::EchonestControl::inputField()
 {
     return m_input.data();
 }
 
+
 QWidget*
 Tomahawk::EchonestControl::matchSelector()
 {
     return m_match.data();
 }
+
 
 void
 Tomahawk::EchonestControl::setSelectedType ( const QString& type )
@@ -76,6 +82,7 @@ Tomahawk::EchonestControl::setSelectedType ( const QString& type )
     }
 }
 
+
 Echonest::DynamicPlaylist::PlaylistParamData
 Tomahawk::EchonestControl::toENParam() const
 {
@@ -87,11 +94,13 @@ Tomahawk::EchonestControl::toENParam() const
     return m_data;
 }
 
+
 QString
 Tomahawk::EchonestControl::input() const
 {
     return m_data.second.toString();
 }
+
 
 QString
 Tomahawk::EchonestControl::match() const
@@ -99,11 +108,13 @@ Tomahawk::EchonestControl::match() const
     return m_matchData;
 }
 
+
 QString
 Tomahawk::EchonestControl::matchString() const
 {
     return m_matchString;
 }
+
 
 QString
 Tomahawk::EchonestControl::summary() const
@@ -114,19 +125,22 @@ Tomahawk::EchonestControl::summary() const
     return m_summary;
 }
 
+
 void
-Tomahawk::EchonestControl::setInput(const QString& input)
+Tomahawk::EchonestControl::setInput( const QString& input )
 {
     m_data.second = input;
     updateWidgetsFromData();
 }
 
+
 void
-Tomahawk::EchonestControl::setMatch(const QString& match)
+Tomahawk::EchonestControl::setMatch( const QString& match )
 {
     m_matchData = match;
     updateWidgetsFromData();
 }
+
 
 void
 Tomahawk::EchonestControl::updateWidgets()
@@ -378,6 +392,7 @@ Tomahawk::EchonestControl::updateWidgets()
     calculateSummary();
 }
 
+
 void
 Tomahawk::EchonestControl::setupMinMaxWidgets( Echonest::DynamicPlaylist::PlaylistParam min, Echonest::DynamicPlaylist::PlaylistParam max, const QString& leftL, const QString& rightL, int maxRange )
 {
@@ -455,6 +470,7 @@ Tomahawk::EchonestControl::updateData()
     calculateSummary();
 }
 
+
 void
 Tomahawk::EchonestControl::updateFromComboAndSlider( bool smooth )
 {
@@ -469,6 +485,7 @@ Tomahawk::EchonestControl::updateFromComboAndSlider( bool smooth )
         m_data.second = ls->slider()->value() / ( smooth ? 10000. : 1.0 );
     }
 }
+
 
 void
 Tomahawk::EchonestControl::updateFromLabelAndCombo()
@@ -521,6 +538,7 @@ Tomahawk::EchonestControl::updateWidgetsFromData()
     calculateSummary();
 }
 
+
 void
 Tomahawk::EchonestControl::updateToComboAndSlider( bool smooth )
 {
@@ -532,7 +550,9 @@ Tomahawk::EchonestControl::updateToComboAndSlider( bool smooth )
         ls->slider()->setValue( m_data.second.toDouble() * ( smooth ? 10000. : 1 ) );
 }
 
-void Tomahawk::EchonestControl::updateToLabelAndCombo()
+
+void
+Tomahawk::EchonestControl::updateToLabelAndCombo()
 {
     QComboBox* s = qobject_cast< QComboBox* >( m_input.data() );
     if( s ) {
@@ -540,12 +560,14 @@ void Tomahawk::EchonestControl::updateToLabelAndCombo()
     }
 }
 
+
 void
 Tomahawk::EchonestControl::editingFinished()
 {
 //    qDebug() << Q_FUNC_INFO;
     m_editingTimer.start();
 }
+
 
 void
 Tomahawk::EchonestControl::editTimerFired()
@@ -558,12 +580,14 @@ Tomahawk::EchonestControl::editTimerFired()
     m_cacheData = m_data.second;
 }
 
+
 void
 Tomahawk::EchonestControl::artistTextEdited( const QString& text )
 {
     // if the user is editing an artist field, try to help him out and suggest from echonest
     QLineEdit* l = qobject_cast<QLineEdit*>( m_input.data() );
     Q_ASSERT( l );
+    Q_UNUSED( l );
 //     l->setCompleter( new QCompleter( this ) ); // clear
 
     foreach( QNetworkReply* r, m_suggestWorkers ) {
@@ -585,6 +609,7 @@ Tomahawk::EchonestControl::artistTextEdited( const QString& text )
         }
     }
 }
+
 
 void
 Tomahawk::EchonestControl::suggestFinished()
@@ -620,6 +645,7 @@ Tomahawk::EchonestControl::suggestFinished()
     addArtistSuggestions( suggestions );
 }
 
+
 void
 Tomahawk::EchonestControl::addArtistSuggestions( const QStringList& suggestions )
 {
@@ -630,6 +656,7 @@ Tomahawk::EchonestControl::addArtistSuggestions( const QStringList& suggestions 
     l->completer()->setModel( new QStringListModel( suggestions, l->completer() ) );
     l->completer()->complete();
 }
+
 
 void
 Tomahawk::EchonestControl::calculateSummary()
@@ -703,6 +730,7 @@ Tomahawk::EchonestControl::calculateSummary()
     m_summary = summary;
 }
 
+
 void
 Tomahawk::EchonestControl::checkForMoodsOrStylesFetched()
 {
@@ -716,10 +744,11 @@ Tomahawk::EchonestControl::checkForMoodsOrStylesFetched()
     }
 }
 
+
 bool
 Tomahawk::EchonestControl::insertMoodsAndStyles()
 {
-    QVector< QString > src = selectedType() == "Mood" ? EchonestGenerator::moods() : EchonestGenerator::styles();
+    QStringList src = selectedType() == "Mood" ? EchonestGenerator::moods() : EchonestGenerator::styles();
     QComboBox* combo = qobject_cast< QComboBox* >( m_input.data() );
     if( !combo )
         return false;

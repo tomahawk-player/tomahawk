@@ -18,14 +18,19 @@
 
 #include "sipconfigdelegate.h"
 
-#include "sip/SipModel.h"
-#include "sip/SipPlugin.h"
-#include "utils/tomahawkutils.h"
 #include <QApplication>
 #include <QPainter>
 
+#include "sip/SipModel.h"
+#include "sip/SipPlugin.h"
+
+#include "utils/tomahawkutils.h"
+#include "utils/logger.h"
+
 #define ICONSIZE 24
 #define CHECK_LEFT_EDGE 8
+
+
 SipConfigDelegate::SipConfigDelegate( QObject* parent )
     : ConfigDelegateBase ( parent )
 {

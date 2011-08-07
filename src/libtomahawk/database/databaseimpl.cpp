@@ -31,6 +31,7 @@
 #include "artist.h"
 #include "album.h"
 #include "utils/tomahawkutils.h"
+#include "utils/logger.h"
 
 /* !!!! You need to manually generate schema.sql.h when the schema changes:
     cd src/libtomahawk/database
@@ -38,7 +39,7 @@
 */
 #include "schema.sql.h"
 
-#define CURRENT_SCHEMA_VERSION 24
+#define CURRENT_SCHEMA_VERSION 26
 
 
 DatabaseImpl::DatabaseImpl( const QString& dbname, Database* parent )
@@ -53,11 +54,11 @@ DatabaseImpl::DatabaseImpl( const QString& dbname, Database* parent )
     if ( version > 0 && version != CURRENT_SCHEMA_VERSION )
     {
         QString newname = QString( "%1.v%2" ).arg( dbname ).arg( version );
-        qDebug() << endl << "****************************" << endl;
-        qDebug() << "Schema version too old: " << version << ". Current version is:" << CURRENT_SCHEMA_VERSION;
-        qDebug() << "Moving" << dbname << newname;
-        qDebug() << "If the migration fails, you can recover your DB by copying" << newname << "back to" << dbname;
-        qDebug() << endl << "****************************" << endl;
+        tLog() << endl << "****************************" << endl;
+        tLog() << "Schema version too old: " << version << ". Current version is:" << CURRENT_SCHEMA_VERSION;
+        tLog() << "Moving" << dbname << newname;
+        tLog() << "If the migration fails, you can recover your DB by copying" << newname << "back to" << dbname;
+        tLog() << endl << "****************************" << endl;
 
         QFile::copy( dbname, newname );
         {
@@ -83,7 +84,7 @@ DatabaseImpl::DatabaseImpl( const QString& dbname, Database* parent )
         db.setDatabaseName( dbname );
         if ( !db.open() )
         {
-            qDebug() << "Failed to open database" << dbname;
+            tLog() << "Failed to open database" << dbname;
             throw "failed to open db"; // TODO
         }
 
@@ -102,7 +103,7 @@ DatabaseImpl::DatabaseImpl( const QString& dbname, Database* parent )
         m_dbid = uuid();
         query.exec( QString( "INSERT INTO settings(k,v) VALUES('dbid','%1')" ).arg( m_dbid ) );
     }
-    qDebug() << "Database ID:" << m_dbid;
+    tLog() << "Database ID:" << m_dbid;
 
      // make sqlite behave how we want:
     query.exec( "PRAGMA synchronous  = ON" );
@@ -144,18 +145,18 @@ DatabaseImpl::updateSchema( int oldVersion )
     // we are called here with the old database. we must migrate it to the CURRENT_SCHEMA_VERSION from the oldVersion
     if ( oldVersion == 0 ) // empty database, so create our tables and stuff
     {
-        qDebug() << "Create tables... old version is" << oldVersion;
+        tLog() << "Create tables... old version is" << oldVersion;
         QString sql( get_tomahawk_sql() );
         QStringList statements = sql.split( ";", QString::SkipEmptyParts );
         db.transaction();
 
-        foreach( const QString& sl, statements )
+        foreach ( const QString& sl, statements )
         {
             QString s( sl.trimmed() );
-            if( s.length() == 0 )
+            if ( s.length() == 0 )
                 continue;
 
-            qDebug() << "Executing:" << s;
+            tLog() << "Executing:" << s;
             TomahawkSqlQuery query = newquery();
             query.exec( s );
         }
@@ -173,27 +174,27 @@ DatabaseImpl::updateSchema( int oldVersion )
 
             QString path = QString( RESPATH "sql/dbmigrate-%1_to_%2.sql" ).arg( cur - 1 ).arg( cur );
             QFile script( path );
-            if( !script.exists() || !script.open( QIODevice::ReadOnly ) )
+            if ( !script.exists() || !script.open( QIODevice::ReadOnly ) )
             {
-                qWarning() << "Failed to find or open upgrade script from" << (cur-1) << "to" << cur << " (" << path << ")! Aborting upgrade..";
+                tLog() << "Failed to find or open upgrade script from" << (cur-1) << "to" << cur << " (" << path << ")! Aborting upgrade...";
                 return false;
             }
 
             QString sql = QString::fromUtf8( script.readAll() ).trimmed();
             QStringList statements = sql.split( ";", QString::SkipEmptyParts );
-            foreach( const QString& sql, statements )
+            foreach ( const QString& sql, statements )
             {
                 QString clean = cleanSql( sql ).trimmed();
-                if( clean.isEmpty() )
+                if ( clean.isEmpty() )
                     continue;
 
-                qDebug() << "Executing upgrade statement:" << clean;
+                tLog() << "Executing upgrade statement:" << clean;
                 TomahawkSqlQuery q = newquery();
                 q.exec( clean );
             }
         }
         db.commit();
-        qDebug() << "DB Upgrade successful!";
+        tLog() << "DB Upgrade successful!";
         return true;
     }
 }
@@ -224,7 +225,7 @@ DatabaseImpl::file( int fid )
                          "WHERE file.id = file_join.file AND file.id = %1" )
                 .arg( fid ) );
 
-    if( query.next() )
+    if ( query.next() )
     {
         Tomahawk::source_ptr s;
 
@@ -266,10 +267,10 @@ DatabaseImpl::file( int fid )
 
 
 int
-DatabaseImpl::artistId( const QString& name_orig, bool& isnew )
+DatabaseImpl::artistId( const QString& name_orig, bool& autoCreate )
 {
-    isnew = false;
-    if( m_lastart == name_orig )
+    bool isnew = false;
+    if ( m_lastart == name_orig )
         return m_lastartid;
 
     int id = 0;
@@ -279,31 +280,36 @@ DatabaseImpl::artistId( const QString& name_orig, bool& isnew )
     query.prepare( "SELECT id FROM artist WHERE sortname = ?" );
     query.addBindValue( sortname );
     query.exec();
-    if( query.next() )
+    if ( query.next() )
     {
         id = query.value( 0 ).toInt();
     }
-    if( id )
+    if ( id )
     {
         m_lastart = name_orig;
         m_lastartid = id;
         return id;
     }
 
-    // not found, insert it.
-    query.prepare( "INSERT INTO artist(id,name,sortname) VALUES(NULL,?,?)" );
-    query.addBindValue( name_orig );
-    query.addBindValue( sortname );
-    if( !query.exec() )
+    if ( autoCreate )
     {
-        qDebug() << "Failed to insert artist:" << name_orig;
-        return 0;
+        // not found, insert it.
+        query.prepare( "INSERT INTO artist(id,name,sortname) VALUES(NULL,?,?)" );
+        query.addBindValue( name_orig );
+        query.addBindValue( sortname );
+        if ( !query.exec() )
+        {
+            tDebug() << "Failed to insert artist:" << name_orig;
+            return 0;
+        }
+
+        id = query.lastInsertId().toInt();
+        isnew = true;
+        m_lastart = name_orig;
+        m_lastartid = id;
     }
 
-    id = query.lastInsertId().toInt();
-    isnew = true;
-    m_lastart = name_orig;
-    m_lastartid = id;
+    autoCreate = isnew;
     return id;
 }
 
@@ -339,7 +345,7 @@ DatabaseImpl::trackId( int artistid, const QString& name_orig, bool& isnew )
     query.addBindValue( sortname );
     if( !query.exec() )
     {
-        qDebug() << "Failed to insert track:" << name_orig ;
+        tDebug() << "Failed to insert track:" << name_orig ;
         return 0;
     }
 
@@ -390,7 +396,7 @@ DatabaseImpl::albumId( int artistid, const QString& name_orig, bool& isnew )
     query.addBindValue( sortname );
     if( !query.exec() )
     {
-        qDebug() << "Failed to insert album: " << name_orig ;
+        tDebug() << "Failed to insert album: " << name_orig ;
         return 0;
     }
 
@@ -527,7 +533,7 @@ DatabaseImpl::resultFromHint( const Tomahawk::query_ptr& origquery )
     else
     {
 //        Q_ASSERT( false );
-        qDebug() << "We don't support non-servent / non-file result-hints yet.";
+        tDebug() << "We don't support non-servent / non-file result-hints yet.";
 /*        res = Tomahawk::result_ptr( new Tomahawk::Result() );
         s = SourceList::instance()->webSource();
         res->setUrl( url );
@@ -624,7 +630,7 @@ DatabaseImpl::getDatabaseVersion( const QString& dbname )
         db.setDatabaseName( dbname );
         if ( !db.open() )
         {
-            qDebug() << "Failed to open database" << dbname;
+            tLog() << "Failed to open database" << dbname;
             throw "failed to open db"; // TODO
         }
 
@@ -633,7 +639,7 @@ DatabaseImpl::getDatabaseVersion( const QString& dbname )
         if ( qry.next() )
         {
             version = qry.value( 0 ).toInt();
-            qDebug() << "Database schema of" << dbname << "is" << version;
+            tLog() << "Database schema of" << dbname << "is" << version;
         }
     }
 

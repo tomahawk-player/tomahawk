@@ -1,6 +1,6 @@
 /* === This file is part of Tomahawk Player - <http://tomahawk-player.org> ===
  *
- *   Copyright 2010-2011, Christian Muehlhaeuser <muesli@tomahawk-player.org>
+ *   Copyright 2010-2011, Leo Franchi <lfranchi@kde.org>
  *
  *   Tomahawk is free software: you can redistribute it and/or modify
  *   it under the terms of the GNU General Public License as published by
@@ -22,45 +22,31 @@
 #include <QObject>
 #include <QVariantMap>
 
-#include "typedefs.h"
 #include "databasecommand.h"
-#include "databasecommand_loadplaylistentries.h"
-#include "playlist.h"
-#include "dynamic/DynamicControl.h"
+#include "typedefs.h"
 
-class DatabaseCommand_LoadDynamicPlaylist : public DatabaseCommand_LoadPlaylistEntries
+namespace Tomahawk
+{
+
+class DatabaseCommand_LoadDynamicPlaylist : public DatabaseCommand
 {
     Q_OBJECT
 
 public:
-    explicit DatabaseCommand_LoadDynamicPlaylist( QString revision_guid, QObject* parent = 0 )
-    : DatabaseCommand_LoadPlaylistEntries( revision_guid, parent )
-    {
-//        qDebug() << "loaded with:" << revision_guid << guid();
-    }
+    explicit DatabaseCommand_LoadDynamicPlaylist( const source_ptr& s, const QString& guid, QObject* parent = 0 );
 
     virtual void exec( DatabaseImpl* );
     virtual bool doesMutates() const { return false; }
-    virtual QString commandname() const { return "loaddynamicplaylist"; }
+    virtual QString commandname() const { return "loadsingledynamicplaylist"; }
 
 signals:
-    // used if loading an ondemand playlist
-    void done( QString,
-                     bool,
-                     QString,
-                     QList< QVariantMap>,
-                     bool );
-    // used when loading a static playlist
-    void done( QString,
-               QList< QString >,
-               QList< QString >,
-               QString,
-               QList< QVariantMap>,
-               bool,
-               QMap< QString, Tomahawk::plentry_ptr >,
-               bool );
+    void dynamicPlaylistLoaded( const Tomahawk::dynplaylist_ptr& pl );
+    void done();
 
 private:
+    QString m_plid;
 };
 
-#endif // DATABASECOMMAND_LOADDYNAMICPLAYLIST_H
+}
+
+#endif

@@ -23,6 +23,7 @@
 #include <QList>
 #include <QMap>
 #include <QMutex>
+#include <QTimer>
 
 #include "typedefs.h"
 #include "query.h"
@@ -51,10 +52,7 @@ public:
 
     void reportResults( QID qid, const QList< result_ptr >& results );
 
-    /// sorter to rank resolver priority
-    static bool resolverSorter( const Resolver* left, const Resolver* right );
-
-    void addResolver( Resolver* r, bool sort = true );
+    void addResolver( Resolver* r );
     void removeResolver( Resolver* r );
 
     query_ptr query( const QID& qid ) const
@@ -68,9 +66,9 @@ public:
     }
 
 public slots:
-    void resolve( const query_ptr& q, bool prioritized = false );
-    void resolve( const QList<query_ptr>& qlist, bool prioritized = false );
-    void resolve( QID qid, bool prioritized = false );
+    void resolve( const query_ptr& q, bool prioritized = false, bool temporaryQuery = false );
+    void resolve( const QList<query_ptr>& qlist, bool prioritized = false, bool temporaryQuery = false );
+    void resolve( QID qid, bool prioritized = false, bool temporaryQuery = false );
 
     void start();
     void stop();
@@ -79,7 +77,7 @@ public slots:
 signals:
     void idle();
     void resolving( const Tomahawk::query_ptr& query );
-    
+
     void resolverAdded( Resolver* );
     void resolverRemoved( Resolver* );
 
@@ -88,7 +86,11 @@ private slots:
     void shunt( const query_ptr& q );
     void shuntNext();
 
+    void onTemporaryQueryTimer();
+
 private:
+    Tomahawk::Resolver* nextResolver( const Tomahawk::query_ptr& query ) const;
+
     void setQIDState( const Tomahawk::query_ptr& query, int state );
     int incQIDState( const Tomahawk::query_ptr& query );
     int decQIDState( const Tomahawk::query_ptr& query );
@@ -104,7 +106,12 @@ private:
 
     // store queries here until DB index is loaded, then shunt them all
     QList< query_ptr > m_queries_pending;
+    // store temporary queries here and clean up after timeout threshold
+    QList< query_ptr > m_queries_temporary;
+
+    int m_maxConcurrentQueries;
     bool m_running;
+    QTimer m_temporaryQueryTimer;
 
     static Pipeline* s_instance;
 };

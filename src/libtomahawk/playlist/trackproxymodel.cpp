@@ -18,11 +18,11 @@
 
 #include "trackproxymodel.h"
 
-#include <QDebug>
 #include <QTreeView>
 
 #include "album.h"
 #include "query.h"
+#include "utils/logger.h"
 
 
 TrackProxyModel::TrackProxyModel( QObject* parent )
@@ -33,8 +33,6 @@ TrackProxyModel::TrackProxyModel( QObject* parent )
     , m_shuffled( false )
     , m_showOfflineResults( true )
 {
-    qsrand( QTime( 0, 0, 0 ).secsTo( QTime::currentTime() ) );
-
     setFilterCaseSensitivity( Qt::CaseInsensitive );
     setSortCaseSensitivity( Qt::CaseInsensitive );
     setDynamicSortFilter( true );
@@ -57,8 +55,8 @@ TrackProxyModel::setSourceTrackModel( TrackModel* sourceModel )
 {
     m_model = sourceModel;
 
-    connect( m_model, SIGNAL( trackCountChanged( unsigned int ) ),
-                      SIGNAL( sourceTrackCountChanged( unsigned int ) ) );
+    if ( m_model && m_model->metaObject()->indexOfSignal( "trackCountChanged(uint)" ) > -1 )
+        connect( m_model, SIGNAL( trackCountChanged( unsigned int ) ), SIGNAL( sourceTrackCountChanged( unsigned int ) ) );
 
     QSortFilterProxyModel::setSourceModel( m_model );
 }
@@ -95,6 +93,20 @@ TrackProxyModel::tracks()
 Tomahawk::result_ptr
 TrackProxyModel::siblingItem( int itemsAway )
 {
+    return siblingItem( itemsAway, false );
+}
+
+
+bool
+TrackProxyModel::hasNextItem()
+{
+    return !( siblingItem( 1, true ).isNull() );
+}
+
+
+Tomahawk::result_ptr
+TrackProxyModel::siblingItem( int itemsAway, bool readOnly )
+{
     qDebug() << Q_FUNC_INFO;
 
     QModelIndex idx = index( 0, 0 );
@@ -106,9 +118,9 @@ TrackProxyModel::siblingItem( int itemsAway )
             // TODO come up with a clever random logic, that keeps track of previously played items
             idx = index( qrand() % rowCount(), 0 );
         }
-        else if ( currentItem().isValid() )
+        else if ( currentIndex().isValid() )
         {
-            idx = currentItem();
+            idx = currentIndex();
 
             // random mode is disabled
             if ( m_repeatMode == PlaylistInterface::RepeatOne )
@@ -146,7 +158,8 @@ TrackProxyModel::siblingItem( int itemsAway )
         if ( item && item->query()->playable() )
         {
             qDebug() << "Next PlaylistItem found:" << item->query()->toString() << item->query()->results().at( 0 )->url();
-            setCurrentItem( idx );
+            if ( !readOnly )
+                setCurrentIndex( idx );
             return item->query()->results().at( 0 );
         }
 
@@ -154,10 +167,20 @@ TrackProxyModel::siblingItem( int itemsAway )
     }
     while ( idx.isValid() );
 
-    setCurrentItem( QModelIndex() );
+    if ( !readOnly )
+        setCurrentIndex( QModelIndex() );
     return Tomahawk::result_ptr();
 }
 
+
+Tomahawk::result_ptr
+TrackProxyModel::currentItem() const
+{
+    TrackModelItem* item = itemFromIndex( mapToSource( currentIndex() ) );
+    if ( item && item->query()->playable() )
+        return item->query()->results().at( 0 );
+    return Tomahawk::result_ptr();
+}
 
 bool
 TrackProxyModel::filterAcceptsRow( int sourceRow, const QModelIndex& sourceParent ) const
@@ -275,8 +298,6 @@ TrackProxyModel::removeIndexes( const QList<QPersistentModelIndex>& indexes )
 bool
 TrackProxyModel::lessThan( const QModelIndex& left, const QModelIndex& right ) const
 {
-    qDebug() << Q_FUNC_INFO;
-
     TrackModelItem* p1 = itemFromIndex( left );
     TrackModelItem* p2 = itemFromIndex( right );
 

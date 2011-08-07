@@ -22,6 +22,7 @@
 
 #include "tomahawksqlquery.h"
 #include "network/servent.h"
+#include "utils/logger.h"
 
 
 DatabaseCommand_SetPlaylistRevision::DatabaseCommand_SetPlaylistRevision(

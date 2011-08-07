@@ -18,12 +18,12 @@
 
 #include "sourcelist.h"
 
-#include <QDebug>
-
 #include "database/database.h"
 #include "database/databasecommand_loadallsources.h"
 #include "network/remotecollection.h"
 #include "network/controlconnection.h"
+
+#include "utils/logger.h"
 
 using namespace Tomahawk;
 
@@ -44,6 +44,7 @@ SourceList::instance()
 
 SourceList::SourceList( QObject* parent )
     : QObject( parent )
+    , m_isReady( false )
 {
 }
 
@@ -70,7 +71,6 @@ source_ptr SourceList::webSource() const
 void
 SourceList::loadSources()
 {
-    qDebug() << Q_FUNC_INFO;
     DatabaseCommand_LoadAllSources* cmd = new DatabaseCommand_LoadAllSources();
 
     connect( cmd, SIGNAL( done( QList<Tomahawk::source_ptr> ) ),
@@ -85,12 +85,14 @@ SourceList::setSources( const QList<Tomahawk::source_ptr>& sources )
 {
     QMutexLocker lock( &m_mut );
 
+    m_isReady = true;
     foreach( const source_ptr& src, sources )
     {
         add( src );
     }
 
-    qDebug() << Q_FUNC_INFO << "- Total sources now:" << m_sources.size();
+    tLog() << Q_FUNC_INFO << "- Total sources now:" << m_sources.size();
+    emit ready();
 }
 
 
@@ -104,8 +106,6 @@ SourceList::setLocal( const Tomahawk::source_ptr& localSrc )
         QMutexLocker lock( &m_mut );
         m_sources.insert( localSrc->userName(), localSrc );
         m_local = localSrc;
-
-        qDebug() << Q_FUNC_INFO << localSrc->userName();
     }
 
     emit sourceAdded( localSrc );
@@ -115,7 +115,9 @@ SourceList::setLocal( const Tomahawk::source_ptr& localSrc )
 void
 SourceList::add( const source_ptr& source )
 {
-    qDebug() << "Adding to sources:" << source->userName() << source->id();
+    Q_ASSERT( m_isReady );
+
+//    qDebug() << "Adding to sources:" << source->userName() << source->id();
     m_sources.insert( source->userName(), source );
 
     if ( source->id() > 0 )
@@ -124,7 +126,6 @@ SourceList::add( const source_ptr& source )
 
     collection_ptr coll( new RemoteCollection( source ) );
     source->addCollection( coll );
-//    source->collection()->tracks();
 
     emit sourceAdded( source );
 }
@@ -133,8 +134,11 @@ SourceList::add( const source_ptr& source )
 void
 SourceList::removeAllRemote()
 {
+    Q_ASSERT( m_isReady );
+
     foreach( const source_ptr& s, m_sources )
     {
+        qDebug() << "Disconnecting" << s->friendlyName() << s->isLocal() << s->controlConnection() << s->isOnline();
         if ( !s->isLocal() && s->controlConnection() )
         {
             s->controlConnection()->shutdown( true );

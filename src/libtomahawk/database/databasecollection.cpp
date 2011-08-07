@@ -26,6 +26,8 @@
 #include "databasecommand_loadallautoplaylists.h"
 #include "databasecommand_loadallstations.h"
 
+#include "utils/logger.h"
+
 using namespace Tomahawk;
 
 

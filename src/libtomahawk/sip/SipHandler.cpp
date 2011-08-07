@@ -30,6 +30,7 @@
 #include "network/controlconnection.h"
 #include "sourcelist.h"
 #include "tomahawksettings.h"
+#include "utils/logger.h"
 
 #include "config.h"
 
@@ -69,7 +70,7 @@ SipHandler::~SipHandler()
 const QPixmap
 SipHandler::avatar( const QString& name ) const
 {
-    qDebug() << Q_FUNC_INFO << "Getting avatar" << name; // << m_usernameAvatars.keys();
+//    qDebug() << Q_FUNC_INFO << "Getting avatar" << name; // << m_usernameAvatars.keys();
     if( m_usernameAvatars.contains( name ) )
     {
 //        qDebug() << Q_FUNC_INFO << "Getting avatar and avatar != null ";
@@ -78,7 +79,7 @@ SipHandler::avatar( const QString& name ) const
     }
     else
     {
-        qDebug() << Q_FUNC_INFO << "Getting avatar and avatar == null :-(";
+//        qDebug() << Q_FUNC_INFO << "Getting avatar and avatar == null :-(";
         return QPixmap();
     }
 }

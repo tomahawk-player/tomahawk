@@ -1,6 +1,6 @@
 /* === This file is part of Tomahawk Player - <http://tomahawk-player.org> ===
  *
- *   Copyright 2010-2011, Christian Muehlhaeuser <muesli@tomahawk-player.org>
+ *   Copyright 2010-2011, Leo Franchi <lfranchi@kde.org>
  *
  *   Tomahawk is free software: you can redistribute it and/or modify
  *   it under the terms of the GNU General Public License as published by
@@ -36,7 +36,6 @@ class QVBoxLayout;
 class QHBoxLayout;
 class QPushButton;
 class QComboBox;
-class PlaylistInterface;
 class PlaylistModel;
 class PlaylistView;
 class AnimatedSplitter;
@@ -91,7 +90,7 @@ public slots:
     void trackStarted();
     void stationFailed( const QString& );
 
-    void playlistChanged( PlaylistInterface* );
+    void playlistChanged( Tomahawk::PlaylistInterface* );
     void tracksAdded();
 
 signals:
