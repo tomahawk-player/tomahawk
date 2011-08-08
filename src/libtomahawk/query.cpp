@@ -169,6 +169,7 @@ Query::removeResult( const Tomahawk::result_ptr& result )
 void
 Query::onResolvingFinished()
 {
+    tDebug() << "Finished resolving:" << toString();
     if ( !m_resolveFinished )
     {
         m_resolveFinished = true;

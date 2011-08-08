@@ -289,6 +289,10 @@ Pipeline::shunt( const query_ptr& q )
         if ( r->timeout() > 0 )
             new FuncTimeout( r->timeout(), boost::bind( &Pipeline::timeoutShunt, this, q ), this );
     }
+    else
+    {
+        setQIDState( q, 0 );
+    }
 
     shuntNext();
 }
