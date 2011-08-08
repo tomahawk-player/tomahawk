@@ -74,6 +74,7 @@ protected:
     virtual void resizeEvent( QResizeEvent* event );
 
     void paintEvent( QPaintEvent* event );
+    void keyPressEvent( QKeyEvent* event );
 
 private slots:
     void onFilterChanged( const QString& filter );
