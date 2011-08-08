@@ -127,8 +127,8 @@ Query::addResults( const QList< Tomahawk::result_ptr >& newresults )
         }
     }
 
-    emit resultsAdded( newresults );
     checkResults();
+    emit resultsAdded( newresults );
 }
 
 
@@ -326,7 +326,7 @@ Query::checkResults()
         emit solvedStateChanged( false );
     }
 
-    if( becameSolved )
+    if ( becameSolved )
         emit solvedStateChanged( true );
 }
 
