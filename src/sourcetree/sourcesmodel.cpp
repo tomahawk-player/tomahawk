@@ -328,7 +328,8 @@ SourcesModel::itemUpdated()
         return;
 
     QModelIndex idx = indexFromItem( item );
-    emit dataChanged( idx, idx );
+    if( idx.isValid() )
+        emit dataChanged( idx, idx );
 }
 
 
@@ -429,7 +430,11 @@ SourcesModel::indexFromItem( SourceTreeItem* item ) const
     QList< int > childIndexList;
     SourceTreeItem* curItem = item;
     while( curItem != m_rootItem ) {
-        childIndexList << rowForItem( curItem );
+        int row  = rowForItem( curItem );
+        if( row < 0 ) // something went wrong, bail
+            return QModelIndex();
+
+        childIndexList << row;
 
         curItem = curItem->parent();
     }
@@ -448,6 +453,9 @@ SourcesModel::indexFromItem( SourceTreeItem* item ) const
 int
 SourcesModel::rowForItem( SourceTreeItem* item ) const
 {
+    if( !item || !item->parent() || !item->parent()->children().contains( item ) )
+        return -1;
+
     return item->parent()->children().indexOf( item );
 }
 
