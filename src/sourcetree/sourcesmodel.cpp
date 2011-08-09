@@ -33,6 +33,7 @@
 
 #include "utils/logger.h"
 #include "globalactionmanager.h"
+#include "items/playlistitems.h"
 
 using namespace Tomahawk;
 
@@ -281,8 +282,35 @@ SourcesModel::viewPageActivated( Tomahawk::ViewPage* page )
     }
     else
     {
-        m_viewPageDelayedCacheItem = page;
+        // HACK
+        // try to find it if it is a playlist. not pretty at all.... but this happens when ViewManager loads a playlist or dynplaylist NOT from the sidebar but from somewhere else
+        // we don't know which sourcetreeitem is related to it, so we have to find it. we also don't know if this page is a playlist or dynplaylist or not, but we can't check as we can't
+        // include DynamicWidget.h here (so can't dynamic_cast).
+        // this could also be fixed by keeping a master list of playlists/sourcetreeitems... but that's even uglier i think. this is only called the first time a certain viewpage is clicked from external
+        // sources.
+        if( activatePlaylistPage( page, m_rootItem ) )
+            m_viewPageDelayedCacheItem = page;
     }
+}
+
+bool
+SourcesModel::activatePlaylistPage( ViewPage* p, SourceTreeItem* i )
+{
+    if( !i )
+        return false;
+
+    if( qobject_cast< PlaylistItem* >( i ) &&
+        qobject_cast< PlaylistItem* >( i )->activateCurrent() )
+        return true;
+
+    bool ret = false;
+    for( int k = 0; k < i->children().size(); k++ )
+    {
+        if( activatePlaylistPage( p, i->children().at( k ) ) )
+            ret = true;
+    }
+
+    return ret;
 }
 
 
@@ -328,7 +356,8 @@ SourcesModel::itemUpdated()
         return;
 
     QModelIndex idx = indexFromItem( item );
-    emit dataChanged( idx, idx );
+    if( idx.isValid() )
+        emit dataChanged( idx, idx );
 }
 
 
@@ -429,7 +458,11 @@ SourcesModel::indexFromItem( SourceTreeItem* item ) const
     QList< int > childIndexList;
     SourceTreeItem* curItem = item;
     while( curItem != m_rootItem ) {
-        childIndexList << rowForItem( curItem );
+        int row  = rowForItem( curItem );
+        if( row < 0 ) // something went wrong, bail
+            return QModelIndex();
+
+        childIndexList << row;
 
         curItem = curItem->parent();
     }
@@ -448,6 +481,9 @@ SourcesModel::indexFromItem( SourceTreeItem* item ) const
 int
 SourcesModel::rowForItem( SourceTreeItem* item ) const
 {
+    if( !item || !item->parent() || !item->parent()->children().contains( item ) )
+        return -1;
+
     return item->parent()->children().indexOf( item );
 }
 

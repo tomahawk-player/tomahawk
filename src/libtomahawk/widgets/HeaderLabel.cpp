@@ -31,11 +31,7 @@ HeaderLabel::HeaderLabel( QWidget* parent )
 {
     QFont f( font() );
     f.setBold( true );
-    f.setPointSize( 11 );
-
-#ifdef Q_WS_MAC
-    f.setPointSize( f.pointSize() - 2 );
-#endif
+    f.setPixelSize( 12 );
 
     setFont( f );
     setFixedHeight( sizeHint().height() + 8 );

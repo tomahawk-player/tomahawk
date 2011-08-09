@@ -291,10 +291,7 @@ Pipeline::shunt( const query_ptr& q )
     }
     else
     {
-        qDebug() << "Reached end of pipeline for:" << q->toString();
         setQIDState( q, 0 );
-
-        q->onResolvingFinished();
     }
 
     shuntNext();

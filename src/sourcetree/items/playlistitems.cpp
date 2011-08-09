@@ -180,6 +180,20 @@ PlaylistItem::setData( const QVariant& v, bool role )
     return false;
 }
 
+bool
+PlaylistItem::activateCurrent()
+{
+    if( ViewManager::instance()->pageForPlaylist( m_playlist ) == ViewManager::instance()->currentPage() )
+    {
+        model()->linkSourceItemToPage( this, ViewManager::instance()->currentPage() );
+        emit selectRequest( this );
+
+        return true;
+    }
+
+    return false;
+}
+
 
 DynamicPlaylistItem::DynamicPlaylistItem( SourcesModel* mdl, SourceTreeItem* parent, const dynplaylist_ptr& pl, int index )
     : PlaylistItem( mdl, parent, pl.staticCast< Playlist >(), index )
@@ -312,3 +326,18 @@ DynamicPlaylistItem::icon() const
         return QIcon( RESPATH "images/automatic-playlist.png" );
     }
 }
+
+bool
+DynamicPlaylistItem::activateCurrent()
+{
+    if( ViewManager::instance()->pageForDynPlaylist( m_dynplaylist ) == ViewManager::instance()->currentPage() )
+    {
+        model()->linkSourceItemToPage( this, ViewManager::instance()->currentPage() );
+        emit selectRequest( this );
+
+        return true;
+    }
+
+    return false;
+}
+

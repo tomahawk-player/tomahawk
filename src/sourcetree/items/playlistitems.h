@@ -37,6 +37,8 @@ public:
     virtual bool setData(const QVariant& v, bool role);
     virtual int peerSortValue() const;
 
+    virtual bool activateCurrent();
+
 protected:
     void setLoaded( bool loaded );
 
@@ -65,6 +67,7 @@ public:
     virtual int peerSortValue() const;
     virtual QIcon icon() const;
 
+    virtual bool activateCurrent();
 private slots:
     void onDynamicPlaylistLoaded( Tomahawk::DynamicPlaylistRevision revision );
 

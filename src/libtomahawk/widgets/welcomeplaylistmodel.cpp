@@ -1,5 +1,4 @@
 /*
-
     Copyright (C) 2011  Leo Franchi <lfranchi@kde.org>
 
     This program is free software; you can redistribute it and/or modify
@@ -20,11 +19,11 @@
 
 #include "welcomeplaylistmodel.h"
 
-#include <tomahawksettings.h>
-#include <audio/audioengine.h>
-#include <sourcelist.h>
+#include "tomahawksettings.h"
+#include "audio/audioengine.h"
+#include "sourcelist.h"
 #include "utils/logger.h"
-#include <dynamic/DynamicPlaylist.h>
+#include "dynamic/DynamicPlaylist.h"
 
 using namespace Tomahawk;
 

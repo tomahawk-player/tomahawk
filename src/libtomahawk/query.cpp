@@ -127,8 +127,8 @@ Query::addResults( const QList< Tomahawk::result_ptr >& newresults )
         }
     }
 
-    emit resultsAdded( newresults );
     checkResults();
+    emit resultsAdded( newresults );
 }
 
 
@@ -169,9 +169,12 @@ Query::removeResult( const Tomahawk::result_ptr& result )
 void
 Query::onResolvingFinished()
 {
-//    qDebug() << Q_FUNC_INFO << "Finished resolving." << toString();
-    m_resolveFinished = true;
-    emit resolvingFinished( m_solved );
+    tDebug() << "Finished resolving:" << toString();
+    if ( !m_resolveFinished )
+    {
+        m_resolveFinished = true;
+        emit resolvingFinished( m_solved );
+    }
 }
 
 
@@ -324,7 +327,7 @@ Query::checkResults()
         emit solvedStateChanged( false );
     }
 
-    if( becameSolved )
+    if ( becameSolved )
         emit solvedStateChanged( true );
 }
 

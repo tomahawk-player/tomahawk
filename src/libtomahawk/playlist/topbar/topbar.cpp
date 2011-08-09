@@ -19,6 +19,8 @@
 #include "topbar.h"
 #include "ui_topbar.h"
 
+#include "searchbutton.h"
+
 #include <QPropertyAnimation>
 #include <QRadioButton>
 #include <QFile>
@@ -48,10 +50,12 @@ TopBar::TopBar( QWidget* parent )
     connect( ui->filterEdit, SIGNAL( textChanged( QString ) ), SIGNAL( filterTextChanged( QString ) ) );
 
     ui->filterEdit->setStyleSheet( "QLineEdit { border: 1px solid gray; border-radius: 6px; margin-right: 2px; }" );
+    ui->filterEdit->setInactiveText( tr( "Filter" ) );
 #ifdef Q_WS_MAC
     ui->filterEdit->setAttribute( Qt::WA_MacShowFocusRect, 0 );
 #endif
-    ui->filterEdit->setInactiveText( tr( "Filter" ) );
+
+    ui->filterEdit->searchButton()->setImage( QImage( RESPATH "images/filter.png" ) );
 
     // initialise dudes
     for( int i = 0; i < MAXDUDES; ++i )

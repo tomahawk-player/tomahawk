@@ -77,6 +77,8 @@ private slots:
 
     void xspfCreated( const QByteArray& xspf );
     void expandedUrls( QStringList );
+
+    void spotifyToPlay( const Tomahawk::query_ptr& );
 private:
     explicit GlobalActionManager( QObject* parent = 0 );
     void doBookmark( const Tomahawk::playlist_ptr& pl, const Tomahawk::query_ptr& q );
@@ -92,6 +94,9 @@ private:
     bool handleBookmarkCommand(const QUrl& url );
     bool handleOpenCommand(const QUrl& url );
     bool doQueueAdd( const QStringList& parts, const QList< QPair< QString, QString > >& queryItems );
+
+    bool playSpotify( const QUrl& url );
+    bool queueSpotify( const QStringList& parts, const QList< QPair< QString, QString > >& queryItems );
 
     /// handle parsing mime data
     void handleTrackUrls( const QString& urls );

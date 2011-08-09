@@ -346,6 +346,10 @@ bool
 GlobalActionManager::doQueueAdd( const QStringList& parts, const QList< QPair< QString, QString > >& queryItems )
 {
     if( parts.size() && parts[ 0 ] == "track" ) {
+
+        if( queueSpotify( parts, queryItems ) )
+            return true;
+
         QPair< QString, QString > pair;
 
         QString title, artist, album, urlStr;
@@ -393,6 +397,28 @@ GlobalActionManager::doQueueAdd( const QStringList& parts, const QList< QPair< Q
     }
     return false;
 }
+
+bool
+GlobalActionManager::queueSpotify( const QStringList& , const QList< QPair< QString, QString > >& queryItems )
+{
+    QString url;
+
+    QPair< QString, QString > pair;
+    foreach( pair, queryItems ) {
+        if( pair.first == "spotifyURL" )
+            url = pair.second;
+        else if( pair.first == "spotifyURI" )
+            url = pair.second;
+    }
+
+    if( url.isEmpty() )
+        return false;
+
+    openSpotifyLink( url );
+
+    return true;
+}
+
 
 bool
 GlobalActionManager::handleSearchCommand( const QUrl& url )
@@ -581,6 +607,9 @@ GlobalActionManager::handlePlayCommand( const QUrl& url )
     }
 
     if( parts[ 0 ] == "track" ) {
+        if( playSpotify( url ) )
+            return true;
+
         QPair< QString, QString > pair;
         QString title, artist, album, urlStr;
         foreach( pair, url.queryItems() ) {
@@ -606,6 +635,29 @@ GlobalActionManager::handlePlayCommand( const QUrl& url )
 
     return false;
 }
+
+bool
+GlobalActionManager::playSpotify( const QUrl& url )
+{
+    if( !url.hasQueryItem( "spotifyURI" ) && !url.hasQueryItem( "spotifyURL" ) )
+        return false;
+
+    QString spotifyUrl = url.hasQueryItem( "spotifyURI" ) ? url.queryItemValue( "spotifyURI" ) : url.queryItemValue( "spotifyURL" );
+    SpotifyParser* p = new SpotifyParser( spotifyUrl, this );
+    connect( p, SIGNAL( track( Tomahawk::query_ptr ) ), this, SLOT( spotifyToPlay( Tomahawk::query_ptr ) ) );
+
+    return true;
+}
+
+void
+GlobalActionManager::spotifyToPlay( const query_ptr& q )
+{
+    Pipeline::instance()->resolve( q, true );
+
+    m_waitingToPlay = q;
+    connect( q.data(), SIGNAL( resolvingFinished( bool ) ), this, SLOT( waitingForResolved( bool ) ) );
+}
+
 
 bool GlobalActionManager::handleBookmarkCommand(const QUrl& url)
 {

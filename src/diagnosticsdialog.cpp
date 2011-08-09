@@ -19,6 +19,8 @@
 #include "diagnosticsdialog.h"
 #include "ui_diagnosticsdialog.h"
 
+#include "config.h"
+
 #include <sip/SipHandler.h>
 #include <network/servent.h>
 #include <sourcelist.h>
@@ -52,6 +54,11 @@ void DiagnosticsDialog::updateLogView()
     log.append(
         QString("TOMAHAWK DIAGNOSTICS LOG -%1 \n\n")
             .arg( QDateTime::currentDateTime().toString() )
+    );
+
+    // network
+    log.append(
+        "TOMAHAWK-VERSION: " TOMAHAWK_VERSION "\n\n\n"
     );
 
     // network

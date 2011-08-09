@@ -20,6 +20,12 @@ SET( TOMAHAWK_VERSION_PATCH 0 )
 
 # SET( TOMAHAWK_VERSION_RC 0 )
 
+
+# build options
+option(BUILD_GUI "Build Tomahawk with GUI" ON)
+
+
+# generate version string
 IF( NOT CMAKE_BUILD_TYPE STREQUAL "Release" )
   # Use the date as the tweak level.
   INCLUDE( ${CMAKE_MODULE_PATH}/CMakeDateStamp.cmake )
@@ -50,31 +56,27 @@ SET( CMAKE_ARCHIVE_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}" )
 # installer creation
 INCLUDE( CPack.cmake )
 
-# Check if we need qtgui:
-IF( "${gui}" STREQUAL "no" )
-    ADD_DEFINITIONS( -DENABLE_HEADLESS )
-    MESSAGE( STATUS "Building Tomahawk ${TOMAHAWK_VERSION} in HEADLESS mode ***" )
-	FIND_PACKAGE( Qt4 4.7.0 COMPONENTS QtCore QtXml QtNetwork REQUIRED )
-ELSE()
-    MESSAGE( STATUS "Building Tomahawk ${TOMAHAWK_VERSION} full GUI version ***" )
-	FIND_PACKAGE( Qt4 4.7.0 COMPONENTS QtGui QtCore QtXml QtNetwork REQUIRED )
-ENDIF()
-
 #deps
 INCLUDE( MacroOptionalFindPackage )
 INCLUDE( MacroLogFeature )
 
-# required
-#While we distribute our own liblastfm2, don't need to look for it
-#macro_optional_find_package(LibLastFm 0.3.3)
-#macro_log_feature(LIBLASTFM_FOUND "LastFm" "Qt library for the Last.fm webservices" "https://github.com/mxcl/liblastfm" FALSE "" "liblastfm is needed for scrobbling tracks to Last.fm and fetching cover artwork")
-set(LIBLASTFM_FOUND true)
+# Check if we need qtgui:
+SET(NEEDED_QT4_COMPONENTS QtCore QtXml QtNetwork )
+IF( NOT BUILD_GUI )
+    ADD_DEFINITIONS( -DENABLE_HEADLESS )
+    MESSAGE( STATUS "Building Tomahawk ${TOMAHAWK_VERSION} in HEADLESS mode ***" )
+ELSE()
+    MESSAGE( STATUS "Building Tomahawk ${TOMAHAWK_VERSION} full GUI version ***" )
+    LIST(APPEND NEEDED_QT4_COMPONENTS "QtGui")
+ENDIF()
 
-find_package(Phonon REQUIRED)
-if(PHONON_VERSION STRLESS "4.5.0")
-	message(FATAL_ERROR "Phonon version 4.5.0 or higher is required, you have version ${PHONON_VERSION}")
-else()
-	message(STATUS "Phonon found; ensure that phonon-vlc is at least 0.4")
+macro_optional_find_package(Qt4 4.7.0 COMPONENTS ${NEEDED_QT4_COMPONENTS} )
+macro_log_feature(QT4_FOUND "Qt" "A cross-platform application and UI framework" "http://qt.nokia.com" TRUE "" "")
+
+macro_optional_find_package(Phonon 4.5.0)
+macro_log_feature(PHONON_FOUND "Phonon" "The Phonon multimedia library" "http://phonon.kde.org" TRUE "" "")
+if(PHONON_FOUND)
+    message(STATUS "Phonon found; ensure that phonon-vlc is at least 0.4")
 endif()
 
 macro_optional_find_package(LibEchonest 1.1.7)
@@ -88,6 +90,15 @@ macro_log_feature(QJSON_FOUND "QJson" "Qt library that maps JSON data to QVarian
 
 macro_optional_find_package(Taglib 1.6.0)
 macro_log_feature(TAGLIB_FOUND "TagLib" "Audio Meta-Data Library" "http://developer.kde.org/~wheeler/taglib.html" TRUE "" "taglib is needed for reading meta data from audio files")
+include( CheckTagLibFileName )
+check_taglib_filename( COMPLEX_TAGLIB_FILENAME )
+
+# required
+#While we distribute our own liblastfm2, don't need to look for it
+#macro_optional_find_package(LibLastFm 0.3.3)
+#macro_log_feature(LIBLASTFM_FOUND "LastFm" "Qt library for the Last.fm webservices" "https://github.com/mxcl/liblastfm" FALSE "" "liblastfm is needed for scrobbling tracks to Last.fm and fetching cover artwork")
+set(LIBLASTFM_FOUND true)
+
 
 # this installs headers and such and should really be handled in a separate package by packagers
 IF( INTERNAL_JREEN )
@@ -124,20 +135,22 @@ SET( LIBPORTFWD_LIBRARIES ${LIBPORTFWD_LIBRARY} )
 ADD_SUBDIRECTORY( ${THIRDPARTY_DIR}/libportfwd )
 
 # we need pthreads too
-find_package(Threads)
+macro_optional_find_package(Threads)
+macro_log_feature(THREADS_FOUND "Threads" "Threading Library" "" TRUE "" "Platform specific library for threading")
 
-find_package(KDE4Installed)
-find_package(KDE4)
-IF(KDE4_FOUND)
-    #KDE4 adds and removes some compiler flags that we don't like
-    STRING( REPLACE "-std=iso9899:1990" "" CLEAN_C_FLAGS ${CMAKE_C_FLAGS} )
-    SET( CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fexceptions" )
-ELSE()
-    SET( CLEAN_C_FLAGS ${CMAKE_C_FLAGS} )
-ENDIF()
+macro_optional_find_package(KDE4Installed)
 
-include( CheckTagLibFileName )
-check_taglib_filename( COMPLEX_TAGLIB_FILENAME )
+# this was used before we had FindKDE4Installed, just leaving it here to keep the flags
+# for future kde integration
+
+# macro_optional_find_package(KDE4)
+# IF(KDE4_FOUND)
+#     #KDE4 adds and removes some compiler flags that we don't like
+#     STRING( REPLACE "-std=iso9899:1990" "" CLEAN_C_FLAGS ${CMAKE_C_FLAGS} )
+#     SET( CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fexceptions" )
+# ELSE()
+#     SET( CLEAN_C_FLAGS ${CMAKE_C_FLAGS} )
+# ENDIF()
 
 IF( WIN32 )
   find_library(QTSPARKLE_LIBRARIES qtsparkle)

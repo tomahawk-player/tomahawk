@@ -104,6 +104,11 @@ AnimatedSplitter::onSizeChanged( const QSize& size )
         if ( i == m_greedyIndex )
         {
             j = height() - size.height();
+            for ( int x = 0; x < count(); x++ )
+            {
+                if ( x != i && x != wi )
+                    j -= widget( x )->height();
+            }
         }
         else if ( i == wi )
         {
@@ -145,7 +150,7 @@ AnimatedWidget::AnimatedWidget( AnimatedSplitter* parent )
     , m_isHidden( false )
 {
     m_timeLine = new QTimeLine( ANIMATION_TIME, this );
-    m_timeLine->setUpdateInterval( 5 );
+    m_timeLine->setUpdateInterval( 20 );
     m_timeLine->setEasingCurve( QEasingCurve::OutBack );
 
     connect( m_timeLine, SIGNAL( frameChanged( int ) ), SLOT( onAnimationStep( int ) ) );
