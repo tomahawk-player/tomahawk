@@ -104,6 +104,11 @@ AnimatedSplitter::onSizeChanged( const QSize& size )
         if ( i == m_greedyIndex )
         {
             j = height() - size.height();
+            for ( int x = 0; x < count(); x++ )
+            {
+                if ( x != i && x != wi )
+                    j -= widget( x )->height();
+            }
         }
         else if ( i == wi )
         {

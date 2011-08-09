@@ -56,6 +56,8 @@ NewPlaylistWidget::NewPlaylistWidget( QWidget* parent )
     ui->suggestionsView->overlay()->setEnabled( false );
 
     connect( &m_filterTimer, SIGNAL( timeout() ), SLOT( updateSuggestions() ) );
+
+    ui->titleEdit->setFocus();
 }
 
 
