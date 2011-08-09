@@ -27,6 +27,7 @@
 
 #include "mprisplugin.h"
 #include "mprispluginrootadaptor.h"
+#include "mprispluginplayeradaptor.h"
 
 using namespace Tomahawk::InfoSystem;
 
@@ -38,6 +39,7 @@ MprisPlugin::MprisPlugin()
     m_supportedPushTypes << InfoNowPlaying << InfoNowPaused << InfoNowResumed << InfoNowStopped;
 
     new MprisPluginRootAdaptor( this );
+    new MprisPluginPlayerAdaptor( this );
     QDBusConnection dbus = QDBusConnection::sessionBus();
     dbus.registerObject("/org/mpris/MediaPlayer2", this);
     dbus.registerService("org.mpris.MediaPlayer2.tomahawk");
@@ -53,54 +55,211 @@ MprisPlugin::~MprisPlugin()
 // org.mpris.MediaPlayer2
 
 bool
-MprisPlugin::canQuit()
+MprisPlugin::canQuit() const
 {
     qDebug() << Q_FUNC_INFO;
-    return true;
+    return false;
 }
 
 bool
-MprisPlugin::canRaise()
+MprisPlugin::canRaise() const
 {
+    qDebug() << Q_FUNC_INFO;
     return false;
 }
 
 bool 
-MprisPlugin::hasTrackList()
+MprisPlugin::hasTrackList() const
 {
+    qDebug() << Q_FUNC_INFO;
     return false;
 }
+
 QString
-MprisPlugin::identity()
+MprisPlugin::identity() const
 {
-    return QString("Tomahawk Music Player");
+    return QString("Tomahawk");
 }
 
 QString 
-MprisPlugin::desktopEntry()
+MprisPlugin::desktopEntry() const
 {
     return QString("tomahawk");
 }
 
 QStringList
-MprisPlugin::supportedUriSchemes()
+MprisPlugin::supportedUriSchemes() const
 {
-    return QStringList();
+    QStringList uriSchemes;
+    uriSchemes << "tomahawk" << "spotify";
+    return uriSchemes;
 }
 
 QStringList
-MprisPlugin::supportedMimeTypes()
+MprisPlugin::supportedMimeTypes() const
 {
     return QStringList();
 }
 
 void
-MprisPlugin::raise()
+MprisPlugin::Raise()
 {
 }
 
 void
-MprisPlugin::quit()
+MprisPlugin::Quit()
+{
+}
+
+// org.mpris.MediaPlayer2.Player
+
+bool
+MprisPlugin::canControl() const
+{
+    return false;
+}
+
+bool
+MprisPlugin::canGoNext() const
+{
+    return false;
+}
+
+bool
+MprisPlugin::canGoPrevious() const
+{
+    return false;
+}
+
+bool
+MprisPlugin::canPause() const
+{
+    return false;
+}
+
+bool 
+MprisPlugin::canPlay() const
+{
+    return false;
+}
+
+bool
+MprisPlugin::canSeek() const
+{
+    return false;
+}
+
+QString
+MprisPlugin::loopStatus() const
+{
+    return QString("");
+}
+
+void
+MprisPlugin::setLoopStatus(const QString &value)
+{
+}
+
+double
+MprisPlugin::maximumRate() const
+{
+    return 0.0;
+}
+
+QVariantMap
+MprisPlugin::metadata() const
+{
+    return QVariantMap();
+}
+
+double
+MprisPlugin::minimumRate() const
+{
+    return 0.0;
+}
+
+QString
+MprisPlugin::playbackStatus() const
+{
+    return QString("");
+}
+
+qlonglong
+MprisPlugin::position() const
+{
+    return 0;
+}
+
+double
+MprisPlugin::rate() const
+{
+    return 0.0;
+}
+
+void
+MprisPlugin::setRate( double value )
+{
+}
+
+bool
+MprisPlugin::shuffle() const
+{
+    return false;
+}
+
+void
+MprisPlugin::setShuffle( bool value )
+{
+}
+
+double
+MprisPlugin::volume() const
+{
+    return 0.0;
+}
+
+void
+MprisPlugin::Next()
+{
+}
+
+void 
+MprisPlugin::OpenUri(const QString &Uri)
+{
+}
+
+void
+MprisPlugin::Pause()
+{
+}
+
+void
+MprisPlugin::Play()
+{
+}
+
+void 
+MprisPlugin::PlayPause()
+{
+}
+
+void
+MprisPlugin::Previous()
+{
+}
+
+void
+MprisPlugin::Seek( qlonglong Offset )
+{
+}
+
+void
+MprisPlugin::SetPosition( const QDBusObjectPath &TrackId, qlonglong Position )
+{
+}
+
+void
+MprisPlugin::Stop()
 {
 }
 

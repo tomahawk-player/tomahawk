@@ -23,6 +23,7 @@
 
 #include <QObject>
 #include <QVariant>
+#include <QtDBus/QtDBus>
 
 namespace Tomahawk {
 
@@ -36,28 +37,82 @@ public:
     MprisPlugin();
     virtual ~MprisPlugin();
 
-protected slots:
-    void getInfo( uint requestId, Tomahawk::InfoSystem::InfoRequestData requestData );
-    void pushInfo( QString caller, Tomahawk::InfoSystem::InfoType type, QVariant input );
-
-public slots:
     // MPRIS DBus Methods
 
     // org.mpris.MediaPlayer2
-    bool canQuit();
-    bool canRaise();
-    bool hasTrackList();
-    QString identity();
-    QString desktopEntry();
-    QStringList supportedUriSchemes();
-    QStringList supportedMimeTypes();
+    
+    Q_PROPERTY(bool CanQuit READ canQuit)
+    bool canQuit() const;
 
-    void raise();
-    void quit();
+    Q_PROPERTY(bool CanRaise READ canRaise)
+    bool canRaise() const;
 
-    // org.mpris.MediaPlayer2.player
-    // TODO: player methods/properties
+    Q_PROPERTY(QString DesktopEntry READ desktopEntry)
+    QString desktopEntry() const;
 
+    Q_PROPERTY(bool HasTrackList READ hasTrackList)
+    bool hasTrackList() const;
+
+    Q_PROPERTY(QString Identity READ identity)
+    QString identity() const;
+
+    Q_PROPERTY(QStringList SupportedMimeTypes READ supportedMimeTypes)
+    QStringList supportedMimeTypes() const;
+
+    Q_PROPERTY(QStringList SupportedUriSchemes READ supportedUriSchemes)
+    QStringList supportedUriSchemes() const;
+
+    // org.mpris.MediaPlayer2.Player
+
+    Q_PROPERTY(bool CanControl READ canControl)
+    bool canControl() const;
+
+    Q_PROPERTY(bool CanGoNext READ canGoNext)
+    bool canGoNext() const;
+
+    Q_PROPERTY(bool CanGoPrevious READ canGoPrevious)
+    bool canGoPrevious() const;
+
+    Q_PROPERTY(bool CanPause READ canPause)
+    bool canPause() const;
+
+    Q_PROPERTY(bool CanPlay READ canPlay)
+    bool canPlay() const;
+
+    Q_PROPERTY(bool CanSeek READ canSeek)
+    bool canSeek() const;
+
+    Q_PROPERTY(QString LoopStatus READ loopStatus WRITE setLoopStatus)
+    QString loopStatus() const;
+    void setLoopStatus(const QString &value);
+
+    Q_PROPERTY(double MaximumRate READ maximumRate)
+    double maximumRate() const;
+
+    Q_PROPERTY(QVariantMap Metadata READ metadata)
+    QVariantMap metadata() const;
+
+    Q_PROPERTY(double MinimumRate READ minimumRate)
+    double minimumRate() const;
+
+    Q_PROPERTY(QString PlaybackStatus READ playbackStatus)
+    QString playbackStatus() const;
+
+    Q_PROPERTY(qlonglong Position READ position)
+    qlonglong position() const;
+
+    Q_PROPERTY(double Rate READ rate WRITE setRate)
+    double rate() const;
+    void setRate(double value);
+
+    Q_PROPERTY(bool Shuffle READ shuffle WRITE setShuffle)
+    bool shuffle() const;
+    void setShuffle(bool value);
+
+    Q_PROPERTY(double Volume READ volume)
+    double volume() const;
+
+public slots:
     void namChangedSlot( QNetworkAccessManager* /*nam*/ ) {} // unused
 
     virtual void notInCacheSlot( uint requestId, const Tomahawk::InfoSystem::InfoCriteriaHash criteria, Tomahawk::InfoSystem::InfoRequestData requestData )
@@ -66,6 +121,26 @@ public slots:
         Q_UNUSED( criteria );
         Q_UNUSED( requestData );
     }
+
+    // org.mpris.MediaPlayer2
+    void Raise();
+    void Quit();
+
+    // org.mpris.MediaPlayer2.Player
+    void Next();
+    void OpenUri(const QString &Uri);
+    void Pause();
+    void Play();
+    void PlayPause();
+    void Previous();
+    void Seek(qlonglong Offset);
+    void SetPosition(const QDBusObjectPath &TrackId, qlonglong Position);
+    void Stop();
+
+
+protected slots:
+    void getInfo( uint requestId, Tomahawk::InfoSystem::InfoRequestData requestData );
+    void pushInfo( QString caller, Tomahawk::InfoSystem::InfoType type, QVariant input );
 
 private:
     // Get Info

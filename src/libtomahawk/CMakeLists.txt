@@ -412,12 +412,14 @@ include_directories( . ${CMAKE_CURRENT_BINARY_DIR} ${CMAKE_CURRENT_BINARY_DIR}/.
 IF( UNIX AND NOT APPLE )
     SET( libSources ${libSources}
       infosystem/infoplugins/unix/mprispluginrootadaptor.cpp
+      infosystem/infoplugins/unix/mprispluginplayeradaptor.cpp
       infosystem/infoplugins/unix/mprisplugin.cpp
       infosystem/infoplugins/unix/fdonotifyplugin.cpp
       infosystem/infoplugins/unix/imageconverter.cpp )
 
     SET( libHeaders ${libHeaders}
       infosystem/infoplugins/unix/mprispluginrootadaptor.h
+      infosystem/infoplugins/unix/mprispluginplayeradaptor.h
       infosystem/infoplugins/unix/mprisplugin.h
       infosystem/infoplugins/unix/fdonotifyplugin.h )
 ENDIF( UNIX AND NOT APPLE )
