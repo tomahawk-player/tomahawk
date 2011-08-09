@@ -113,6 +113,7 @@ private slots:
 private:
     SourceTreeItem* itemFromIndex( const QModelIndex& idx ) const;
     int rowForItem( SourceTreeItem* item ) const;
+    bool activatePlaylistPage( Tomahawk::ViewPage* p, SourceTreeItem* i );
 
     SourceTreeItem* m_rootItem;
 
