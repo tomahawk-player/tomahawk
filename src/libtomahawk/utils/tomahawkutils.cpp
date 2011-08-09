@@ -472,4 +472,16 @@ bringToFront() {
 }
 #endif
 
+QPixmap
+createAvatarFrame( const QPixmap &avatar )
+{
+    QPixmap frame( ":/data/images/avatar_frame.png" );
+    QPixmap scaledAvatar = avatar.scaled( frame.height() * 80 / 100, frame.width() * 80 / 100, Qt::KeepAspectRatio, Qt::SmoothTransformation );
+
+    QPainter painter( &frame );
+    painter.drawPixmap( (frame.height() - scaledAvatar.height()) / 2, (frame.width() - scaledAvatar.width()) / 2, scaledAvatar );
+
+    return frame;
+}
+
 } // ns
