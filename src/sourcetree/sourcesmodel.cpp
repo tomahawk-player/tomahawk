@@ -299,7 +299,6 @@ SourcesModel::activatePlaylistPage( ViewPage* p, SourceTreeItem* i )
     if( !i )
         return false;
 
-    qDebug() << "Doing an activation check on:" << p << i;
     if( qobject_cast< PlaylistItem* >( i ) &&
         qobject_cast< PlaylistItem* >( i )->activateCurrent() )
         return true;
