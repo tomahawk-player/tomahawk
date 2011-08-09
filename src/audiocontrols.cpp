@@ -106,6 +106,7 @@ AudioControls::AudioControls( QWidget* parent )
 
                                    "QSlider::handle::horizontal {"
                                    "margin-bottom: -7px; margin-top: -7px;"
+                                   "margin-left: -4px; margin-right: -4px;"
                                    "height: 17px; width: 16px;"
                                    "background-image: url(" RESPATH "images/seek-and-volume-knob-rest.png);"
                                    "background-repeat: no-repeat;"
@@ -126,6 +127,7 @@ AudioControls::AudioControls( QWidget* parent )
 
                                      "QSlider::handle::horizontal {"
                                      "margin-bottom: -7px; margin-top: -7px;"
+                                     "margin-left: -4px; margin-right: -4px;"
                                      "height: 17px; width: 16px;"
                                      "background-image: url(" RESPATH "images/seek-and-volume-knob-rest.png);"
                                      "background-repeat: no-repeat;"
