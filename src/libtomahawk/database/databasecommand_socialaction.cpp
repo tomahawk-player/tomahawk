@@ -49,26 +49,45 @@ DatabaseCommand_SocialAction::exec( DatabaseImpl* dbi )
 
     TomahawkSqlQuery query = dbi->newquery();
 
-    query.prepare( "INSERT INTO social_attributes(id, source, k, v, timestamp) "
-                   "VALUES (?, ?, ?, ?, ?)" );
 
     QVariant srcid = source()->isLocal() ? QVariant( QVariant::Int ) : source()->id();
 
     bool autoCreate = true;
     int artid = dbi->artistId( m_artist, autoCreate );
-    if( artid < 1 )
+    if ( artid < 1 )
         return;
 
     autoCreate = true; // artistId overwrites autoCreate (reference)
     int trkid = dbi->trackId( artid, m_track, autoCreate );
-    if( trkid < 1 )
+    if ( trkid < 1 )
         return;
 
-    query.bindValue( 0, trkid );
-    query.bindValue( 1, srcid );
-    query.bindValue( 2, m_action );
-    query.bindValue( 3, m_comment );
-    query.bindValue( 4, m_timestamp );
+
+    // update if it already exists
+    TomahawkSqlQuery find = dbi->newquery();
+    find.prepare( QString( "SELECT id, k, v FROM social_attributes WHERE social_attributes.id = ? AND social_attributes.source %1 AND social_attributes.k = ?" ).arg( source()->isLocal() ? "IS NULL" : QString( "=%1" ).arg( source()->id() ) ) );
+    find.addBindValue( trkid );
+    find.addBindValue( m_action );
+    if ( find.exec() && find.next() )
+    {
+        // update
+        query.prepare( QString( "UPDATE social_attributes SET v = '%1', timestamp = %2 WHERE social_attributes.id = %3 AND social_attributes.source %4 AND social_attributes.k = '%5'" )
+                               .arg( m_comment )
+                               .arg( m_timestamp )
+                               .arg( trkid )
+                               .arg( source()->isLocal() ? "IS NULL" : QString( "=%1" ).arg( source()->id() ) )
+                               .arg( m_action ) );
+    } else
+    {
+        query.prepare( "INSERT  INTO social_attributes(id, source, k, v, timestamp) "
+                       "VALUES (?, ?, ?, ?, ?)" );
+
+        query.bindValue( 0, trkid );
+        query.bindValue( 1, srcid );
+        query.bindValue( 2, m_action );
+        query.bindValue( 3, m_comment );
+        query.bindValue( 4, m_timestamp );
+    }
 
     query.exec();
 }

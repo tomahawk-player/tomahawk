@@ -61,14 +61,14 @@ CustomPlaylistView::generateTracks()
         case SourceLovedTracks:
             sql = QString( "SELECT track.name, artist.name, COUNT(*) as counter "
                            "FROM social_attributes, track, artist "
-                           "WHERE social_attributes.id = track.id AND artist.id = track.artist AND social_attributes.k = 'Love' AND social_attributes.source %1 "
+                           "WHERE social_attributes.id = track.id AND artist.id = track.artist AND social_attributes.k = 'Love' AND social_attributes.v = 'true' AND social_attributes.source %1 "
                            "GROUP BY track.id "
                            "ORDER BY counter DESC, social_attributes.timestamp DESC " ).arg( m_source->isLocal() ? "IS NULL" : QString( "=%1" ).arg( m_source->id() ) );
             break;
         case AllLovedTracks:
             sql = QString( "SELECT track.name, artist.name, source, COUNT(*) as counter "
                            "FROM social_attributes, track, artist "
-                           "WHERE social_attributes.id = track.id AND artist.id = track.artist AND social_attributes.k = 'Love' "
+                           "WHERE social_attributes.id = track.id AND artist.id = track.artist AND social_attributes.k = 'Love' AND social_attributes.v = 'true'"
                            "GROUP BY track.id "
                            "ORDER BY counter DESC, social_attributes.timestamp DESC " );
             break;
