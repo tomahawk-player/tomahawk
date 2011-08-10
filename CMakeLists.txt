@@ -111,7 +111,7 @@ IF( INTERNAL_JREEN )
 ELSE( INTERNAL_JREEN )
     macro_optional_find_package(Jreen)
 ENDIF( INTERNAL_JREEN )
-macro_log_feature(LIBJREEN_FOUND "Jreen" "Qt XMPP Library" "http://gitorious.org/jreen/jreen" FALSE "" "Jreen is needed for the Jabber SIP plugin. \n\n     Use -DINTERNAL_JREEN=ON to build the git submodule inside Tomahawk \n     Be aware this installs a full jreen with headers and everything!\n")
+macro_log_feature(LIBJREEN_FOUND "Jreen" "Qt XMPP Library" "https://github.com/euroelessar/jreen" FALSE "" "Jreen is needed for the Jabber SIP plugin. \n\n     Use -DINTERNAL_JREEN=ON to build the git submodule inside Tomahawk \n     Be aware this installs a full jreen with headers and everything!\n")
 
 # this installs headers and such and should really be handled in a separate package by packagers
 IF( INTERNAL_QTWEETLIB )
