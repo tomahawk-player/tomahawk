@@ -37,8 +37,8 @@ SourcesProxyModel::SourcesProxyModel( SourcesModel* model, QObject* parent )
     setSourceModel( model );
 
 
-    if ( model && model->metaObject()->indexOfSignal( "trackCountChanged(QModelIndex)" ) > -1 )
-        connect( model, SIGNAL( askForExpand( QModelIndex ) ), this, SLOT( askedToExpand( QModelIndex ) ) );
+    if ( model && model->metaObject()->indexOfSignal( "expandRequest(QModelIndex)" ) > -1 )
+        connect( model, SIGNAL( expandRequest( QModelIndex ) ), this, SLOT( expandRequested( QModelIndex ) ) );
     if ( model && model->metaObject()->indexOfSignal( "selectRequest(QModelIndex)" ) > -1 )
         connect( model, SIGNAL( selectRequest( QModelIndex ) ), this, SLOT( selectRequested( QModelIndex ) ) );
 }
@@ -73,6 +73,14 @@ SourcesProxyModel::filterAcceptsRow( int sourceRow, const QModelIndex& sourcePar
 void
 SourcesProxyModel::selectRequested( const QModelIndex& idx )
 {
+    qDebug() << "selectRequested for idx" << idx << idx.data(Qt::DisplayRole).toString() << mapFromSource( idx );
     emit selectRequest( mapFromSource( idx ) );
+}
+
+void
+SourcesProxyModel::expandRequested( const QModelIndex& idx )
+{
+    qDebug() << "emitting expand for idx" << idx << idx.data(Qt::DisplayRole).toString() << mapFromSource( idx );
+    emit expandRequest( mapFromSource( idx ) );
 }
 

@@ -51,6 +51,8 @@ private slots:
     void onStationsAdded( const QList<Tomahawk::dynplaylist_ptr>& stations );
     void onStationDeleted( const Tomahawk::dynplaylist_ptr& stations );
 
+    void requestExpanding();
+
     void tempPageActivated( Tomahawk::ViewPage* );
     Tomahawk::ViewPage* tempItemClicked();
     Tomahawk::ViewPage* getTempPage() const;

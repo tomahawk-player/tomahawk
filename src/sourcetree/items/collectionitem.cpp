@@ -114,6 +114,9 @@ CollectionItem::CollectionItem(  SourcesModel* mdl, SourceTreeItem* parent, cons
              SLOT( onAutoPlaylistsAdded( QList<Tomahawk::dynplaylist_ptr> ) ), Qt::QueuedConnection );
     connect( source->collection().data(), SIGNAL( stationsAdded( QList<Tomahawk::dynplaylist_ptr> ) ),
              SLOT( onStationsAdded( QList<Tomahawk::dynplaylist_ptr> ) ), Qt::QueuedConnection );
+
+    if ( m_source->isLocal() )
+        QTimer::singleShot(0, this, SLOT(requestExpanding()));
 }
 
 
@@ -340,6 +343,13 @@ void
 CollectionItem::onStationDeleted( const dynplaylist_ptr& station )
 {
     playlistDeletedInternal( m_stations, station );
+}
+
+
+void
+CollectionItem::requestExpanding()
+{
+    emit expandRequest(this);
 }
 
 

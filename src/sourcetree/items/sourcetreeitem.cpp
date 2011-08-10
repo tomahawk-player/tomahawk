@@ -33,6 +33,7 @@ SourceTreeItem::SourceTreeItem( SourcesModel* model, SourceTreeItem* parent, Sou
     connect( this, SIGNAL( childRowsRemoved() ), m_model, SLOT( onItemRowsRemovedDone() ) );
     connect( this, SIGNAL( updated() ), m_model, SLOT( itemUpdated() ) );
     connect( this, SIGNAL( selectRequest( SourceTreeItem* ) ), m_model, SLOT( itemSelectRequest( SourceTreeItem* ) ) );
+    connect( this, SIGNAL( expandRequest( SourceTreeItem* ) ), m_model, SLOT( itemExpandRequest( SourceTreeItem* ) ) );
     if( !m_parent )
         return;
 

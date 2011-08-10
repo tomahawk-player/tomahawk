@@ -108,6 +108,7 @@ SourceTreeView::SourceTreeView( QWidget* parent )
     m_model = new SourcesModel( this );
     m_proxyModel = new SourcesProxyModel( m_model, this );
     connect( m_proxyModel, SIGNAL( selectRequest( QModelIndex ) ), this, SLOT( selectRequest( QModelIndex ) ), Qt::QueuedConnection );
+    connect( m_proxyModel, SIGNAL( expandRequest( QModelIndex ) ), this, SLOT( expandRequest( QModelIndex ) ), Qt::QueuedConnection );
 
     setModel( m_proxyModel );
 
@@ -244,6 +245,13 @@ SourceTreeView::selectRequest( const QModelIndex& idx )
         scrollTo( idx, QTreeView::EnsureVisible );
         selectionModel()->select( idx, QItemSelectionModel::ClearAndSelect | QItemSelectionModel::Current );
     }
+}
+
+void
+SourceTreeView::expandRequest( const QModelIndex &idx )
+{
+    qDebug() << "Expanding idx" << idx;
+    expand( idx );
 }
 
 
