@@ -138,19 +138,20 @@ ADD_SUBDIRECTORY( ${THIRDPARTY_DIR}/libportfwd )
 macro_optional_find_package(Threads)
 macro_log_feature(THREADS_FOUND "Threads" "Threading Library" "" TRUE "" "Platform specific library for threading")
 
+macro_optional_find_package(KDE4)
 macro_optional_find_package(KDE4Installed)
 
 # this was used before we had FindKDE4Installed, just leaving it here to keep the flags
 # for future kde integration
 
 # macro_optional_find_package(KDE4)
-# IF(KDE4_FOUND)
-#     #KDE4 adds and removes some compiler flags that we don't like
-#     STRING( REPLACE "-std=iso9899:1990" "" CLEAN_C_FLAGS ${CMAKE_C_FLAGS} )
-#     SET( CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fexceptions" )
-# ELSE()
-#     SET( CLEAN_C_FLAGS ${CMAKE_C_FLAGS} )
-# ENDIF()
+IF(KDE4_FOUND)
+    #KDE4 adds and removes some compiler flags that we don't like
+    STRING( REPLACE "-std=iso9899:1990" "" CLEAN_C_FLAGS ${CMAKE_C_FLAGS} )
+    SET( CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fexceptions" )
+ELSE()
+    SET( CLEAN_C_FLAGS ${CMAKE_C_FLAGS} )
+ENDIF()
 
 IF( WIN32 )
   find_library(QTSPARKLE_LIBRARIES qtsparkle)
