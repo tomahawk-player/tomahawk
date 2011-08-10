@@ -45,6 +45,7 @@
 #include "delegateconfigwrapper.h"
 #include "sip/SipModel.h"
 #include "sipconfigdelegate.h"
+#include "settingslistdelegate.h"
 
 #include "utils/logger.h"
 
@@ -181,6 +182,7 @@ SettingsDialog::SettingsDialog( QWidget *parent )
     connect( this,             SIGNAL( rejected() ), SLOT( onRejected() ) );
 
     ui->listWidget->setCurrentRow( 0 );
+    ui->listWidget->setItemDelegate(new SettingsListDelegate());
 }
 
 
