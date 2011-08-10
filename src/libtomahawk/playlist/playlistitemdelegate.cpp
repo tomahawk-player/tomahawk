@@ -190,6 +190,8 @@ PlaylistItemDelegate::paintShort( QPainter* painter, const QStyleOptionViewItem&
     if ( pixmap.isNull() )
         pixmap = QPixmap( RESPATH "images/user-avatar.png" );
 
+    pixmap = TomahawkUtils::createAvatarFrame( pixmap );
+
     painter->save();
     {
         QRect r = opt.rect.adjusted( 3, 6, 0, -6 );
