@@ -159,15 +159,17 @@ CollectionItem::activate()
 QIcon
 CollectionItem::icon() const
 {
+    QPixmap pixmap;
     if( m_source.isNull() )
-        return QIcon( RESPATH "images/supercollection.png" );
+        pixmap = QPixmap( RESPATH "images/supercollection.png" );
     else
     {
         if( m_source->avatar().isNull() )
-            return QIcon( RESPATH "images/user-avatar.png" );
+            pixmap = QPixmap( RESPATH "images/user-avatar.png" );
         else
-            return QIcon( m_source->avatar() );
+            pixmap = m_source->avatar();
     }
+    return QIcon( TomahawkUtils::createAvatarFrame( pixmap ) );
 }
 
 

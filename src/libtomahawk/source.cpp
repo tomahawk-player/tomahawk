@@ -30,7 +30,6 @@
 #include <QCoreApplication>
 
 #include "utils/logger.h"
-#include "utils/tomahawkutils.h"
 
 using namespace Tomahawk;
 
@@ -130,7 +129,7 @@ QPixmap
 Source::avatar() const
 {
     if( !m_avatar.isNull() )
-        return TomahawkUtils::createAvatarFrame( m_avatar );
+        return m_avatar;
     else
         return QPixmap();
 }
