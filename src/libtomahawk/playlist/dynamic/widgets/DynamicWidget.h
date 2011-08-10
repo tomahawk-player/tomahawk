@@ -63,6 +63,7 @@ public:
     virtual ~DynamicWidget();
 
     void loadDynamicPlaylist( const dynplaylist_ptr& playlist );
+    dynplaylist_ptr playlist() { return m_playlist; }
 
     virtual PlaylistInterface* playlistInterface() const;
 

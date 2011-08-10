@@ -66,7 +66,7 @@ PipelineStatusView::PipelineStatusView( AnimatedSplitter* parent )
 void
 PipelineStatusView::onPipelineUpdate( const query_ptr& query )
 {
-    qDebug() << Q_FUNC_INFO;
+    tDebug() << Q_FUNC_INFO << query.isNull();
 
     QTreeWidgetItem* ti = m_tree->invisibleRootItem()->child( 0 );
 

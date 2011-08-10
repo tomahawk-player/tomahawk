@@ -30,6 +30,7 @@
 #include <QCoreApplication>
 
 #include "utils/logger.h"
+#include "utils/tomahawkutils.h"
 
 using namespace Tomahawk;
 
@@ -41,7 +42,6 @@ Source::Source( int id, const QString& username )
     , m_username( username )
     , m_id( id )
     , m_cc( 0 )
-    , m_avatar( 0 )
 {
     qDebug() << Q_FUNC_INFO << id << username;
 
@@ -62,7 +62,6 @@ Source::Source( int id, const QString& username )
 Source::~Source()
 {
     qDebug() << Q_FUNC_INFO << friendlyName();
-    delete m_avatar;
 }
 
 
@@ -123,18 +122,15 @@ Source::friendlyName() const
 void
 Source::setAvatar( const QPixmap& avatar )
 {
-    //FIXME: use a proper pixmap store that's thread-safe
-    delete m_avatar;
-    m_avatar = new QPixmap( avatar );
+    m_avatar = avatar;
 }
 
 
 QPixmap
 Source::avatar() const
 {
-    //FIXME: use a proper pixmap store that's thread-safe
-    if ( m_avatar )
-        return QPixmap( *m_avatar );
+    if( !m_avatar.isNull() )
+        return TomahawkUtils::createAvatarFrame( m_avatar );
     else
         return QPixmap();
 }

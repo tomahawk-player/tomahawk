@@ -48,7 +48,7 @@ public:
     virtual Tomahawk::PlaylistInterface* playlistInterface() const { return 0; }
     virtual bool isTemporaryPage() const { return true; }
 
-    virtual QString title() const { return tr( "Search" ); }
+    virtual QString title() const { return QString( tr( "Search: %1" ) ).arg( m_search ); }
     virtual QString description() const { return tr( "Results for '%1'" ).arg( m_search ); }
 
     virtual bool showStatsBar() const { return false; }

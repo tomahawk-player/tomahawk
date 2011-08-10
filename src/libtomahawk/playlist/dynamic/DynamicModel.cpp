@@ -137,12 +137,13 @@ DynamicModel::trackResolveFinished( bool success )
 
     Query* q = qobject_cast<Query*>( sender() );
 
-    qDebug() << "Got resolveFinished in DynamicModel" << q->track() << q->artist();
-    if( !m_waitingFor.contains( q ) )
+    tDebug() << "Got resolveFinished in DynamicModel" << q->track() << q->artist();
+    if ( !m_waitingFor.contains( q ) )
         return;
 
-    if( !q->playable() ) {
-        qDebug() << "Got not playable or resolved track:" << q->track() << q->artist() << m_lastResolvedRow << m_currentAttempts;
+    if ( !q->playable() )
+    {
+        tDebug() << "Got not playable or resolved track:" << q->track() << q->artist() << m_lastResolvedRow << m_currentAttempts;
         m_currentAttempts++;
 
         int curAttempts = m_startingAfterFailed ? m_currentAttempts - 20 : m_currentAttempts; // if we just failed, m_currentAttempts includes those failures
@@ -154,7 +155,8 @@ DynamicModel::trackResolveFinished( bool success )
             emit trackGenerationFailure( tr( "Could not find a playable track.\n\nPlease change the filters or try again." ) );
         }
     }
-    else {
+    else
+    {
         qDebug() << "Got successful resolved track:" << q->track() << q->artist() << m_lastResolvedRow << m_currentAttempts;
 
         if( m_currentAttempts > 0 ) {

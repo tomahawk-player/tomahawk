@@ -28,6 +28,17 @@ using namespace Tomahawk;
 
 
 album_ptr
+Album::get( const Tomahawk::artist_ptr& artist, const QString& name, bool autoCreate )
+{
+    int albid = Database::instance()->impl()->albumId( artist->id(), name, autoCreate );
+    if ( albid < 1 )
+        return album_ptr();
+
+    return Album::get( albid, name, artist );
+}
+
+
+album_ptr
 Album::get( unsigned int id, const QString& name, const Tomahawk::artist_ptr& artist )
 {
     static QHash< unsigned int, album_ptr > s_albums;

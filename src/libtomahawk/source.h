@@ -131,7 +131,7 @@ private:
 
     ControlConnection* m_cc;
 
-    QPixmap* m_avatar;
+    QPixmap m_avatar;
 
     Tomahawk::playlistinterface_ptr m_playlistInterface;
 };

@@ -72,6 +72,7 @@ SET( tomahawkSourcesGui ${tomahawkSourcesGui}
      configdelegatebase.cpp
      sipconfigdelegate.cpp
      resolverconfigdelegate.cpp
+     settingslistdelegate.cpp
      resolversmodel.cpp
      tomahawkwindow.cpp
 )
@@ -115,6 +116,7 @@ SET( tomahawkHeadersGui ${tomahawkHeadersGui}
      configdelegatebase.h
      resolverconfigdelegate.h
      sipconfigdelegate.h
+     settingslistdelegate.h
      resolversmodel.h
      delegateconfigwrapper.h
      tomahawkwindow.h

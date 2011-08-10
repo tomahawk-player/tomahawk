@@ -124,7 +124,10 @@ ControlConnection::registerSource()
     Q_ASSERT( source == m_source.data() );
 
 //    qDebug() << Q_FUNC_INFO << "Setting avatar ... " << name() << !SipHandler::instance()->avatar( name() ).isNull();
-    source->setAvatar( SipHandler::instance()->avatar( name() ) );
+    if( !SipHandler::instance()->avatar( name() ).isNull() )
+    {
+        source->setAvatar( SipHandler::instance()->avatar( name() ) );
+    }
 
     m_registered = true;
     m_servent->registerControlConnection( this );

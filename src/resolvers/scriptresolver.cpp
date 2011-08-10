@@ -72,6 +72,7 @@ ScriptResolver::~ScriptResolver()
         delete m_configWidget.data();
 }
 
+
 void
 ScriptResolver::sendConfig()
 {
@@ -112,17 +113,20 @@ ScriptResolver::reload()
     }
 }
 
+
 void
 ScriptResolver::readStderr()
 {
     tLog() << "SCRIPT_STDERR" << filePath() << m_proc.readAllStandardError();
 }
 
+
 ScriptResolver::ErrorState
 ScriptResolver::error() const
 {
     return m_error;
 }
+
 
 void
 ScriptResolver::readStdout()
@@ -344,7 +348,8 @@ ScriptResolver::saveConfig()
 }
 
 
-QWidget* ScriptResolver::configUI() const
+QWidget*
+ScriptResolver::configUI() const
 {
     if( m_configWidget.isNull() )
         return 0;
