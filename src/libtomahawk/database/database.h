@@ -81,6 +81,7 @@ private:
     static Database* s_instance;
 
     friend class Tomahawk::Artist;
+    friend class Tomahawk::Album;
 };
 
 #endif // DATABASE_H

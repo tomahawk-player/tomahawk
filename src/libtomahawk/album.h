@@ -37,6 +37,7 @@ class DLLEXPORT Album : public QObject, public PlaylistInterface
 Q_OBJECT
 
 public:
+    static album_ptr get( const Tomahawk::artist_ptr& artist, const QString& name, bool autoCreate = false );
     static album_ptr get( unsigned int id, const QString& name, const Tomahawk::artist_ptr& artist );
 
     Album( unsigned int id, const QString& name, const Tomahawk::artist_ptr& artist );
