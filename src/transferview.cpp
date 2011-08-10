@@ -47,6 +47,7 @@ TransferView::TransferView( AnimatedSplitter* parent )
     headers << tr( "Peer" ) << tr( "Rate" ) << tr( "Track" );
     m_tree->setHeaderLabels( headers );
 
+    m_tree->setHorizontalScrollBarPolicy( Qt::ScrollBarAlwaysOff );
     m_tree->setSizePolicy( QSizePolicy::Preferred, QSizePolicy::Ignored );
     m_tree->setColumnCount( 3 );
     m_tree->setColumnWidth( 0, 80 );
