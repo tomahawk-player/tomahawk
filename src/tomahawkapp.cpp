@@ -241,6 +241,11 @@ TomahawkApp::init()
     tDebug() << "Init Scrobbler.";
     m_scrobbler = new Scrobbler( this );
 #endif
+
+    if ( arguments().contains( "--filescan" ) )
+    {
+        m_scanManager.data()->runScan( true );
+    }
 }
 
 
