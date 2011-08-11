@@ -224,7 +224,7 @@ AudioEngine::next()
 
 
 void
-AudioEngine::seek( int ms )
+AudioEngine::seek( qint64 ms )
 {
     if ( !m_playlist.isNull() && m_playlist.data()->seekRestrictions() == PlaylistInterface::NoSeek )
         return;
@@ -236,6 +236,11 @@ AudioEngine::seek( int ms )
     }
 }
 
+void
+AudioEngine::seek( int ms )
+{
+    seek( (qint64) ms );
+}
 
 void
 AudioEngine::setVolume( int percentage )

@@ -9,8 +9,8 @@
  * before re-generating it.
  */
 
-#ifndef MPRISPLUGINPLAYERADAPTOR_H_1312900500
-#define MPRISPLUGINPLAYERADAPTOR_H_1312900500
+#ifndef MPRISPLUGINPLAYERADAPTOR_H_1313089554
+#define MPRISPLUGINPLAYERADAPTOR_H_1313089554
 
 #include <QtCore/QObject>
 #include <QtDBus/QtDBus>
@@ -37,17 +37,17 @@ class MprisPluginPlayerAdaptor: public QDBusAbstractAdaptor
 "    <method name=\"Stop\"/>\n"
 "    <method name=\"Play\"/>\n"
 "    <method name=\"Seek\">\n"
-"      <arg type=\"x\" name=\"Offset\"/>\n"
+"      <arg direction=\"in\" type=\"x\" name=\"Offset\"/>\n"
 "    </method>\n"
 "    <method name=\"SetPosition\">\n"
-"      <arg type=\"o\" name=\"TrackId\"/>\n"
-"      <arg type=\"x\" name=\"Position\"/>\n"
+"      <arg direction=\"in\" type=\"o\" name=\"TrackId\"/>\n"
+"      <arg direction=\"in\" type=\"x\" name=\"Position\"/>\n"
 "    </method>\n"
 "    <method name=\"OpenUri\">\n"
-"      <arg type=\"s\" name=\"Uri\"/>\n"
+"      <arg direction=\"in\" type=\"s\" name=\"Uri\"/>\n"
 "    </method>\n"
 "    <signal name=\"Seeked\">\n"
-"      <arg type=\"x\" name=\"Position\"/>\n"
+"      <arg direction=\"out\" type=\"x\" name=\"Position\"/>\n"
 "    </signal>\n"
 "    <property access=\"read\" type=\"s\" name=\"PlaybackStatus\"/>\n"
 "    <property access=\"readwrite\" type=\"s\" name=\"LoopStatus\"/>\n"
@@ -56,7 +56,7 @@ class MprisPluginPlayerAdaptor: public QDBusAbstractAdaptor
 "    <property access=\"read\" type=\"a{sv}\" name=\"Metadata\">\n"
 "      <annotation value=\"QVariantMap\" name=\"com.trolltech.QtDBus.QtTypeName\"/>\n"
 "    </property>\n"
-"    <property access=\"read\" type=\"d\" name=\"Volume\"/>\n"
+"    <property access=\"readwrite\" type=\"d\" name=\"Volume\"/>\n"
 "    <property access=\"read\" type=\"x\" name=\"Position\"/>\n"
 "    <property access=\"read\" type=\"d\" name=\"MinimumRate\"/>\n"
 "    <property access=\"read\" type=\"d\" name=\"MaximumRate\"/>\n"
@@ -118,8 +118,9 @@ public: // PROPERTIES
     bool shuffle() const;
     void setShuffle(bool value);
 
-    Q_PROPERTY(double Volume READ volume)
+    Q_PROPERTY(double Volume READ volume WRITE setVolume)
     double volume() const;
+    void setVolume(double value);
 
 public Q_SLOTS: // METHODS
     void Next();

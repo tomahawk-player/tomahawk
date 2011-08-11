@@ -16,8 +16,10 @@
  *   along with Tomahawk. If not, see <http://www.gnu.org/licenses/>.
  */
 
+#include <QApplication>
 #include <QtDBus/QtDBus>
 
+#include "audio/audioengine.h"
 #include "infosystem/infosystemworker.h"
 #include "artist.h"
 #include "result.h"
@@ -58,7 +60,7 @@ bool
 MprisPlugin::canQuit() const
 {
     qDebug() << Q_FUNC_INFO;
-    return false;
+    return true;
 }
 
 bool
@@ -109,6 +111,7 @@ MprisPlugin::Raise()
 void
 MprisPlugin::Quit()
 {
+    QApplication::quit();
 }
 
 // org.mpris.MediaPlayer2.Player
@@ -116,54 +119,83 @@ MprisPlugin::Quit()
 bool
 MprisPlugin::canControl() const
 {
-    return false;
+    return true;
 }
 
 bool
 MprisPlugin::canGoNext() const
 {
-    return false;
+    return true;
 }
 
 bool
 MprisPlugin::canGoPrevious() const
 {
-    return false;
+    return true;
 }
 
 bool
 MprisPlugin::canPause() const
 {
-    return false;
+    return true;
 }
 
 bool 
 MprisPlugin::canPlay() const
 {
-    return false;
+    return true;
 }
 
 bool
 MprisPlugin::canSeek() const
 {
-    return false;
+    return true;
 }
 
 QString
 MprisPlugin::loopStatus() const
 {
-    return QString("");
+    PlaylistInterface *p = AudioEngine::instance()->playlist();
+    if (!p)
+        return "None";
+    PlaylistInterface::RepeatMode mode = p->repeatMode();
+    switch( mode )
+    {
+        case PlaylistInterface::RepeatOne:
+            return "Track";
+            break;
+        case PlaylistInterface::RepeatAll:
+            return "Playlist";
+            break;
+        case PlaylistInterface::NoRepeat:
+            return "None";
+            break;
+        default:
+            return QString("None");
+            break;
+    }
+
+    return QString("None");
 }
 
 void
-MprisPlugin::setLoopStatus(const QString &value)
+MprisPlugin::setLoopStatus( const QString &value )
 {
+    PlaylistInterface *p = AudioEngine::instance()->playlist();
+    if (!p)
+        return;
+    if( value == "Track")
+        p->setRepeatMode( PlaylistInterface::RepeatOne );
+    else if( value == "Playlist" )
+        p->setRepeatMode( PlaylistInterface::RepeatAll );
+    else if( value == "None" )
+        p->setRepeatMode( PlaylistInterface::NoRepeat );
 }
 
 double
 MprisPlugin::maximumRate() const
 {
-    return 0.0;
+    return 1.0;
 }
 
 QVariantMap
@@ -175,92 +207,131 @@ MprisPlugin::metadata() const
 double
 MprisPlugin::minimumRate() const
 {
-    return 0.0;
+    return 1.0;
 }
 
 QString
 MprisPlugin::playbackStatus() const
 {
+    if( AudioEngine::instance()->state() == AudioEngine::Playing )
+        return "Playing";
+    else if( AudioEngine::instance()->state() == AudioEngine::Paused )
+        return "Paused";
+    else if( AudioEngine::instance()->state() == AudioEngine::Stopped )
+        return "Stopped";
     return QString("");
 }
 
 qlonglong
 MprisPlugin::position() const
 {
-    return 0;
+    // Convert Tomahawk's milliseconds to microseconds
+    return (qlonglong) ( AudioEngine::instance()->currentTime() * 1000 );
 }
 
 double
 MprisPlugin::rate() const
 {
-    return 0.0;
+    return 1.0;
 }
 
 void
 MprisPlugin::setRate( double value )
 {
+    Q_UNUSED( value );
 }
 
 bool
 MprisPlugin::shuffle() const
 {
-    return false;
+    PlaylistInterface *p = AudioEngine::instance()->playlist();
+    if (!p)
+        return false;
+    return p->shuffled();
 }
 
 void
 MprisPlugin::setShuffle( bool value )
 {
+    PlaylistInterface *p = AudioEngine::instance()->playlist();
+    if (!p)
+        return;
+    return p->setShuffled( value );
 }
 
 double
 MprisPlugin::volume() const
 {
-    return 0.0;
+    return AudioEngine::instance()->volume();
+}
+
+void
+MprisPlugin::setVolume( double value )
+{
+    AudioEngine::instance()->setVolume( value );
 }
 
 void
 MprisPlugin::Next()
 {
+    AudioEngine::instance()->next();
 }
 
 void 
 MprisPlugin::OpenUri(const QString &Uri)
 {
+    // TODO
 }
 
 void
 MprisPlugin::Pause()
 {
+    AudioEngine::instance()->pause();
 }
 
 void
 MprisPlugin::Play()
 {
+    AudioEngine::instance()->play();
 }
 
 void 
 MprisPlugin::PlayPause()
 {
+    AudioEngine::instance()->playPause();
 }
 
 void
 MprisPlugin::Previous()
 {
+    AudioEngine::instance()->previous();
 }
 
 void
 MprisPlugin::Seek( qlonglong Offset )
 {
+    qlonglong seekTime = position() + Offset;
+    if( seekTime < 0 )
+        AudioEngine::instance()->seek( 0 );
+    else if( seekTime > AudioEngine::instance()->currentTrackTotalTime() )
+        Next();
+    // seekTime is in microseconds, but we work internally in milliseconds
+    else
+        AudioEngine::instance()->seek( (qint64) ( seekTime / 1000 ) );
+
+
 }
 
 void
 MprisPlugin::SetPosition( const QDBusObjectPath &TrackId, qlonglong Position )
 {
+    // TODO
 }
 
 void
 MprisPlugin::Stop()
 {
+    AudioEngine::instance()->stop();
 }
 
 // InfoPlugin Methods

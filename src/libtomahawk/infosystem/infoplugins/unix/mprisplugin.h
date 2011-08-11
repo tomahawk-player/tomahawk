@@ -109,8 +109,9 @@ public:
     bool shuffle() const;
     void setShuffle(bool value);
 
-    Q_PROPERTY(double Volume READ volume)
+    Q_PROPERTY(double Volume READ volume WRITE setVolume)
     double volume() const;
+    void setVolume(double value);
 
 public slots:
     void namChangedSlot( QNetworkAccessManager* /*nam*/ ) {} // unused

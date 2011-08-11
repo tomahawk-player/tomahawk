@@ -141,6 +141,12 @@ double MprisPluginPlayerAdaptor::volume() const
     return qvariant_cast< double >(parent()->property("Volume"));
 }
 
+void MprisPluginPlayerAdaptor::setVolume(double value)
+{
+    // set the value of property Volume
+    parent()->setProperty("Volume", qVariantFromValue(value));
+}
+
 void MprisPluginPlayerAdaptor::Next()
 {
     // handle method call org.mpris.MediaPlayer2.Player.Next

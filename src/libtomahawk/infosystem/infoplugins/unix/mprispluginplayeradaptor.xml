@@ -8,17 +8,17 @@
     <method name="Stop"/>
     <method name="Play"/>
     <method name="Seek">
-      <arg name="Offset" type="x"/>
+      <arg type="x" name="Offset" direction="in" />
     </method>
     <method name="SetPosition">
-      <arg name="TrackId" type="o"/>
-      <arg name="Position" type="x"/>
+      <arg type="o" name="TrackId" direction="in" />
+      <arg type="x" name="Position" direction="in" />
     </method>
     <method name="OpenUri">
-      <arg name="Uri" type="s"/>
+      <arg type="s" name="Uri" direction="in" />
     </method>
     <signal name="Seeked">
-      <arg name="Position" type="x"/>
+      <arg type="x" name="Position" direction="out" />
     </signal>
     <property name="PlaybackStatus" type="s" access="read"/>
     <property name="LoopStatus" type="s" access="readwrite"/>
@@ -27,7 +27,7 @@
     <property name="Metadata" type="a{sv}" access="read">
       <annotation name="com.trolltech.QtDBus.QtTypeName" value="QVariantMap"/>
     </property>
-    <property name="Volume" type="d" access="read"/>
+    <property name="Volume" type="d" access="readwrite"/>
     <property name="Position" type="x" access="read"/>
     <property name="MinimumRate" type="d" access="read"/>
     <property name="MaximumRate" type="d" access="read"/>
