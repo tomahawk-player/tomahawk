@@ -427,6 +427,17 @@ DynamicWidget::paintRoundedFilledRect( QPainter& p, QPalette& pal, QRect& r, qre
     p.drawRoundedRect( r, 10, 10 );
 }
 
+QPixmap
+DynamicWidget::pixmap() const
+{
+    if ( m_playlist->mode() == OnDemand )
+        return QPixmap( RESPATH "images/station.png" );
+    else if ( m_playlist->mode() == Static )
+        return QPixmap( RESPATH "images/automatic-playlist.png" );
+    else
+        return QPixmap();
+}
+
 
 bool
 DynamicWidget::jumpToCurrentTrack()

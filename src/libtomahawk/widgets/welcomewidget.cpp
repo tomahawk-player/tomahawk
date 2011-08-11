@@ -32,6 +32,7 @@
 #include "widgets/overlaywidget.h"
 #include "utils/tomahawkutils.h"
 #include "utils/logger.h"
+#include <dynamic/GeneratorInterface.h>
 
 #define HISTORY_TRACK_ITEMS 25
 #define HISTORY_PLAYLIST_ITEMS 5
@@ -222,9 +223,29 @@ PlaylistDelegate::paint( QPainter* painter, const QStyleOptionViewItem& option, 
     QFont italicFont = opt.font;
     italicFont.setItalic( true );
 
-    painter->drawPixmap( option.rect.adjusted( 10, 13, -option.rect.width() + 48, -13 ), m_playlistIcon );
+    QPixmap icon;
+    WelcomePlaylistModel::PlaylistTypes type = (WelcomePlaylistModel::PlaylistTypes)index.data( WelcomePlaylistModel::PlaylistTypeRole ).toInt();
+    if( type == WelcomePlaylistModel::StaticPlaylist )
+        icon = m_playlistIcon;
+    else if( type == WelcomePlaylistModel::AutoPlaylist )
+        icon = m_autoIcon;
+    else if( type == WelcomePlaylistModel::Station )
+        icon = m_stationIcon;
 
-    painter->drawText( option.rect.adjusted( 56, 26, -100, -8 ), index.data( WelcomePlaylistModel::ArtistRole ).toString() );
+    QRect pixmapRect = option.rect.adjusted( 10, 13, -option.rect.width() + 48, -13 );
+    icon = icon.scaled( pixmapRect.size(), Qt::KeepAspectRatio, Qt::SmoothTransformation );
+
+    painter->drawPixmap( pixmapRect, icon );
+
+    QString descText;
+    if ( type == WelcomePlaylistModel::Station )
+    {
+        descText = index.data( WelcomePlaylistModel::DynamicPlaylistRole ).value< Tomahawk::dynplaylist_ptr >()->generator()->sentenceSummary();
+    } else
+    {
+        descText = index.data( WelcomePlaylistModel::ArtistRole ).toString();
+    }
+    painter->drawText( option.rect.adjusted( 56, 26, -100, -8 ), descText );
 
     QString trackCount = tr( "%1 tracks" ).arg( index.data( WelcomePlaylistModel::TrackCountRole ).toString() );
     painter->drawText( option.rect.adjusted( option.rect.width() - 96, 12, 0, -2 - opt.rect.height() / 2 ), trackCount, to );

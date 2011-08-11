@@ -30,7 +30,9 @@ class WelcomePlaylistModel : public QAbstractListModel
     Q_OBJECT
 public:
     enum ItemRoles
-    { ArtistRole = Qt::UserRole, TrackCountRole, PlaylistRole };
+    { ArtistRole = Qt::UserRole, TrackCountRole, PlaylistRole, PlaylistTypeRole, DynamicPlaylistRole };
+    enum PlaylistTypes
+    { StaticPlaylist, AutoPlaylist, Station };
 
     explicit WelcomePlaylistModel( QObject* parent = 0 );
 

@@ -50,6 +50,8 @@ public:
     PlaylistDelegate()
     {
         m_playlistIcon = QPixmap( RESPATH "images/playlist-icon.png" );
+        m_autoIcon = QPixmap( RESPATH "images/automatic-playlist.png" );
+        m_stationIcon = QPixmap( RESPATH "images/station.png" );
     }
 
 protected:
@@ -57,7 +59,7 @@ protected:
     QSize sizeHint( const QStyleOptionViewItem& option, const QModelIndex& index ) const;
 
 private:
-    QPixmap m_playlistIcon;
+    QPixmap m_playlistIcon, m_autoIcon, m_stationIcon;
 };
 
 class DLLEXPORT PlaylistWidget : public QListView

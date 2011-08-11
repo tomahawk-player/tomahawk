@@ -110,8 +110,32 @@ WelcomePlaylistModel::data( const QModelIndex& index, int role ) const
 
         return m_artists[pl];
     }
+    case PlaylistTypeRole:
+    {
+        if ( !pl.dynamicCast< Tomahawk::DynamicPlaylist >().isNull() )
+        {
+            dynplaylist_ptr dynp = pl.dynamicCast< Tomahawk::DynamicPlaylist >();
+            if ( dynp->mode() == Static )
+                return AutoPlaylist;
+            else if ( dynp->mode() == OnDemand )
+                return Station;
+        } else
+        {
+            return StaticPlaylist;
+        }
+    }
+    case DynamicPlaylistRole:
+    {
+        dynplaylist_ptr dynp = pl.dynamicCast< Tomahawk::DynamicPlaylist >();
+        return QVariant::fromValue< Tomahawk::dynplaylist_ptr >( dynp );
+    }
     case TrackCountRole:
-        return pl->entries().count();
+    {
+        if ( !pl.dynamicCast< Tomahawk::DynamicPlaylist >().isNull() )
+            return QString( QChar( 0x221E ) );
+        else
+            return pl->entries().count();
+    }
     default:
         return QVariant();
     }
