@@ -131,7 +131,7 @@ WelcomePlaylistModel::data( const QModelIndex& index, int role ) const
     }
     case TrackCountRole:
     {
-        if ( !pl.dynamicCast< Tomahawk::DynamicPlaylist >().isNull() )
+        if ( !pl.dynamicCast< Tomahawk::DynamicPlaylist >().isNull() && pl.dynamicCast< Tomahawk::DynamicPlaylist >()->mode() == OnDemand )
             return QString( QChar( 0x221E ) );
         else
             return pl->entries().count();
