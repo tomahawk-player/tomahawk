@@ -43,6 +43,7 @@ PipelineStatusView::PipelineStatusView( AnimatedSplitter* parent )
     headers << tr( "Searching For" ) << tr( "Pending" );
     m_tree->setHeaderLabels( headers );
 
+    m_tree->setHorizontalScrollBarPolicy( Qt::ScrollBarAlwaysOff );
     m_tree->setSizePolicy( QSizePolicy::Preferred, QSizePolicy::Ignored );
     m_tree->setColumnCount( 2 );
     m_tree->setColumnWidth( 0, 200 );
@@ -58,6 +59,17 @@ PipelineStatusView::PipelineStatusView( AnimatedSplitter* parent )
 
     connect( Pipeline::instance(), SIGNAL( resolving( Tomahawk::query_ptr ) ), SLOT( onPipelineUpdate( Tomahawk::query_ptr ) ) );
     connect( Pipeline::instance(), SIGNAL( idle() ), SLOT( onPipelineUpdate() ) );
+
+#ifndef Q_WS_WIN
+    QFont f = font();
+    f.setPointSize( f.pointSize() - 1 );
+    setFont( f );
+#endif
+
+#ifdef Q_WS_MAC
+    f.setPointSize( f.pointSize() - 2 );
+    setFont( f );
+#endif
 
     onPipelineUpdate();
 }
