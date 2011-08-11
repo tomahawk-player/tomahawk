@@ -44,6 +44,9 @@ public:
     /// Takes a spotify link and performs the default open action on it
     bool openSpotifyLink( const QString& link );
 
+    /// Takes a spotify link and performs the default open action on it
+    bool openRdioLink( const QString& link );
+
     void copyToClipboard( const Tomahawk::query_ptr& query ) const;
     QString copyPlaylistToClipboard( const Tomahawk::dynplaylist_ptr& playlist );
     void savePlaylistToFile( const Tomahawk::playlist_ptr& playlist, const QString& filename );

@@ -909,3 +909,13 @@ GlobalActionManager::openSpotifyLink( const QString& link )
 
     return true;
 }
+
+bool
+GlobalActionManager::openRdioLink( const QString& link )
+{
+//     RdioParser* rdio = new RdioParser( link, this );
+//     connect( spot, SIGNAL( track( Tomahawk::query_ptr ) ), this, SLOT( handleOpenTrack( Tomahawk::query_ptr ) ) );
+
+    return true;
+}
+
