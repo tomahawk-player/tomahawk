@@ -76,9 +76,9 @@ macro (KDE4_ADD_APP_ICON appsources pattern)
             file(GLOB_RECURSE files  "${pattern}")
             # we can only test for the 128-icon like that - we don't use patterns anymore
             foreach (it ${files})
-                if (it MATCHES ".*512.*" )
+                if (it MATCHES ".*128.*" )
                     set (_icon ${it})
-                endif (it MATCHES ".*512.*")
+                endif (it MATCHES ".*128.*")
             endforeach (it)
 
             if (_icon)
@@ -101,8 +101,8 @@ macro (KDE4_ADD_APP_ICON appsources pattern)
                 set_source_files_properties(${_outfilename}.icns PROPERTIES MACOSX_PACKAGE_LOCATION Resources)
 
             else(_icon)
-                # TODO - try to scale a non-512 icon...? Try to convert an SVG on the fly?
-                message(STATUS "Unable to find an 512x512 icon that matches pattern ${pattern} for variable ${appsources} - application will not have an application icon!")
+                # TODO - try to scale a non-128 icon...? Try to convert an SVG on the fly?
+                message(STATUS "Unable to find an 128x128 icon that matches pattern ${pattern} for variable ${appsources} - application will not have an application icon!")
             endif(_icon)
 
         else(SIPS_EXECUTABLE AND TIFF2ICNS_EXECUTABLE)
