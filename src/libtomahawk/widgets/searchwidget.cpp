@@ -94,6 +94,7 @@ SearchWidget::onResultsFound( const QList<Tomahawk::result_ptr>& results )
         rl << result;
 
         Tomahawk::query_ptr q = result->toQuery();
+        q->setResolveFinished( true );
         q->addResults( rl );
         qDebug() << result->toString();
 
