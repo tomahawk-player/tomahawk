@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>939</width>
+    <width>929</width>
     <height>80</height>
    </rect>
   </property>
@@ -60,7 +60,7 @@
      </property>
      <layout class="QHBoxLayout" name="buttonAreaLayout">
       <item>
-       <spacer name="horizontalSpacer">
+       <spacer name="horizontalSpacer_2">
         <property name="orientation">
          <enum>Qt::Horizontal</enum>
         </property>
@@ -80,18 +80,25 @@
        </widget>
       </item>
       <item>
-       <widget class="ImageButton" name="playPauseButton">
-        <property name="text">
-         <string>Play</string>
+       <layout class="QStackedLayout" name="stackedLayout">
+        <property name="spacing">
+         <number>0</number>
         </property>
-       </widget>
-      </item>
-      <item>
-       <widget class="ImageButton" name="pauseButton">
-        <property name="text">
-         <string>Pause</string>
-        </property>
-       </widget>
+        <item>
+         <widget class="ImageButton" name="playPauseButton">
+          <property name="text">
+           <string>Play</string>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="ImageButton" name="pauseButton">
+          <property name="text">
+           <string>Pause</string>
+          </property>
+         </widget>
+        </item>
+       </layout>
       </item>
       <item>
        <widget class="ImageButton" name="nextButton">
@@ -101,7 +108,7 @@
        </widget>
       </item>
       <item>
-       <spacer name="horizontalSpacer_2">
+       <spacer name="horizontalSpacer">
         <property name="orientation">
          <enum>Qt::Horizontal</enum>
         </property>

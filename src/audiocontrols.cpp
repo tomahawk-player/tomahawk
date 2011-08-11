@@ -50,8 +50,6 @@ AudioControls::AudioControls( QWidget* parent )
     ui->setupUi( this );
     setAcceptDrops( true );
 
-    ui->buttonAreaLayout->setSpacing( 2 );
-
     QFont font( ui->artistTrackLabel->font() );
     font.setPixelSize( 12 );
 
@@ -181,6 +179,15 @@ AudioControls::AudioControls( QWidget* parent )
 
     connect( Tomahawk::InfoSystem::InfoSystem::instance(), SIGNAL( finished( QString ) ), SLOT( infoSystemFinished( QString ) ) );
 
+
+    ui->buttonAreaLayout->setSpacing( 0 );
+    ui->stackedLayout->setSpacing( 0 );
+    ui->stackedLayout->setContentsMargins( 0, 0, 0, 0 );
+    ui->stackedLayout->setMargin( 0 );
+    ui->playPauseButton->setContentsMargins( 0, 0, 0, 0 );
+    ui->pauseButton->setContentsMargins( 0, 0, 0, 0 );
+    ui->stackedLayout->setSizeConstraint( QLayout::SetFixedSize );
+
     onPlaybackStopped(); // initial state
 }
 
@@ -301,6 +308,8 @@ AudioControls::onPlaybackLoading( const Tomahawk::result_ptr& result )
 /*    m_playAction->setEnabled( false );
     m_pauseAction->setEnabled( true ); */
 
+    ui->stackedLayout->setCurrentWidget( ui->pauseButton );
+
     ui->pauseButton->setEnabled( true );
     ui->pauseButton->setVisible( true );
     ui->playPauseButton->setVisible( false );
@@ -341,12 +350,8 @@ AudioControls::onPlaybackPaused()
 /*    m_pauseAction->setEnabled( false );
     m_playAction->setEnabled( true ); */
 
-    ui->pauseButton->setVisible( false );
-    ui->pauseButton->setEnabled( false );
-    ui->playPauseButton->setEnabled( true );
-    ui->playPauseButton->setVisible( true );
+    ui->stackedLayout->setCurrentWidget( ui->playPauseButton );
 }
-
 
 void
 AudioControls::onPlaybackResumed()
@@ -354,10 +359,7 @@ AudioControls::onPlaybackResumed()
 /*    m_playAction->setEnabled( false );
     m_pauseAction->setEnabled( true ); */
 
-    ui->playPauseButton->setVisible( false );
-    ui->playPauseButton->setEnabled( false );
-    ui->pauseButton->setVisible( true );
-    ui->pauseButton->setEnabled( true );
+    ui->stackedLayout->setCurrentWidget( ui->pauseButton );
     ui->loveButton->setVisible( true );
 }
 
@@ -375,10 +377,7 @@ AudioControls::onPlaybackStopped()
     ui->coverImage->setPixmap( QPixmap() );
     ui->seekSlider->setVisible( false );
 
-    ui->pauseButton->setVisible( false );
-    ui->pauseButton->setEnabled( false );
-    ui->playPauseButton->setEnabled( true );
-    ui->playPauseButton->setVisible( true );
+    ui->stackedLayout->setCurrentWidget( ui->playPauseButton );
     ui->loveButton->setEnabled( false );
     ui->loveButton->setVisible( false );
 
