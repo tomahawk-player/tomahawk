@@ -74,7 +74,6 @@ protected:
 
 private:
     void setupMenus();
-    int totalSize(const QModelIndex &parentIndex);
 
     template< typename T >
     T* itemFromIndex( const QModelIndex& index ) const;
