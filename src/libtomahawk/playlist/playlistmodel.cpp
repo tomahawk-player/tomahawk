@@ -116,7 +116,7 @@ PlaylistModel::loadPlaylist( const Tomahawk::playlist_ptr& playlist, bool loadEn
         m_waitingForResolved.clear();
         foreach( const plentry_ptr& entry, entries )
         {
-            qDebug() << entry->query()->toString();
+//            qDebug() << entry->query()->toString();
             plitem = new TrackModelItem( entry, m_rootItem );
             plitem->index = createIndex( m_rootItem->children.count() - 1, 0, plitem );
 

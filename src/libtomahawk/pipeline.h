@@ -66,9 +66,9 @@ public:
     }
 
 public slots:
-    void resolve( const query_ptr& q, bool prioritized = false, bool temporaryQuery = false );
-    void resolve( const QList<query_ptr>& qlist, bool prioritized = false, bool temporaryQuery = false );
-    void resolve( QID qid, bool prioritized = false, bool temporaryQuery = false );
+    void resolve( const query_ptr& q, bool prioritized = true, bool temporaryQuery = false );
+    void resolve( const QList<query_ptr>& qlist, bool prioritized = true, bool temporaryQuery = false );
+    void resolve( QID qid, bool prioritized = true, bool temporaryQuery = false );
 
     void start();
     void stop();
