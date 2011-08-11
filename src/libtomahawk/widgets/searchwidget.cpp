@@ -24,6 +24,7 @@
 
 #include "sourcelist.h"
 #include "viewmanager.h"
+#include "dynamic/widgets/LoadingSpinner.h"
 #include "playlist/playlistmodel.h"
 #include "widgets/overlaywidget.h"
 
@@ -48,11 +49,13 @@ SearchWidget::SearchWidget( const QString& search, QWidget* parent )
     ui->resultsView->setFrameShape( QFrame::NoFrame );
     ui->resultsView->setAttribute( Qt::WA_MacShowFocusRect, 0 );
 
+    ui->resultsView->loadingSpinner()->fadeIn();
     m_queries << Tomahawk::Query::get( search, uuid() );
 
     foreach ( const Tomahawk::query_ptr& query, m_queries )
     {
         connect( query.data(), SIGNAL( resultsAdded( QList<Tomahawk::result_ptr> ) ), SLOT( onResultsFound( QList<Tomahawk::result_ptr> ) ) );
+        connect( query.data(), SIGNAL( resolvingFinished( bool ) ), SLOT( onQueryFinished() ) );
     }
 }
 
@@ -96,4 +99,11 @@ SearchWidget::onResultsFound( const QList<Tomahawk::result_ptr>& results )
 
         m_resultsModel->append( q );
     }
+}
+
+
+void
+SearchWidget::onQueryFinished()
+{
+    ui->resultsView->loadingSpinner()->fadeOut();
 }
