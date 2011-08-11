@@ -310,10 +310,6 @@ AudioControls::onPlaybackLoading( const Tomahawk::result_ptr& result )
 
     ui->stackedLayout->setCurrentWidget( ui->pauseButton );
 
-    ui->pauseButton->setEnabled( true );
-    ui->pauseButton->setVisible( true );
-    ui->playPauseButton->setVisible( false );
-    ui->playPauseButton->setEnabled( false );
     ui->loveButton->setEnabled( true );
     ui->loveButton->setVisible( true );
 
