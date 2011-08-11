@@ -37,6 +37,7 @@ VERSION=$1
 
     header "Renaming icon"
     mv Contents/Resources/tomahawkSources.icns Contents/Resources/Tomahawk.icns
+    cp $ROOT/../admin/mac/Info.plist Contents/Info.plist
 
 
     header "Creating DMG"
