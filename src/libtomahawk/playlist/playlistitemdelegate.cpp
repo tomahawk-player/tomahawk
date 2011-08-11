@@ -184,7 +184,7 @@ PlaylistItemDelegate::paintShort( QPainter* painter, const QStyleOptionViewItem&
         else
             lowerText = QString( "played %1 ago by %2" ).arg( playtime ).arg( source->friendlyName() );
 
-//        pixmap = source->avatar();
+        pixmap = source->avatar();
     }
 
     if ( pixmap.isNull() )
