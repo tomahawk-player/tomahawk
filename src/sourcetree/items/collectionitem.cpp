@@ -58,7 +58,7 @@ CollectionItem::CollectionItem(  SourcesModel* mdl, SourceTreeItem* parent, cons
         connect( ViewManager::instance(), SIGNAL( tempPageActivated( Tomahawk::ViewPage*) ), this, SLOT( tempPageActivated( Tomahawk::ViewPage* ) ) );
 
                 // add misc children of root node
-        GenericPageItem* recent = new GenericPageItem( model(), this, tr( "Recently Played" ), QIcon( RESPATH "images/recently-played.png" ),
+        GenericPageItem* recent = new GenericPageItem( model(), this, tr( "Dashboard" ), QIcon( RESPATH "images/dashboard.png" ),
                              boost::bind( &ViewManager::showWelcomePage, ViewManager::instance() ),
                              boost::bind( &ViewManager::welcomeWidget, ViewManager::instance() )
                                                     );
