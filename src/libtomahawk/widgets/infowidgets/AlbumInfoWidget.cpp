@@ -64,9 +64,6 @@ AlbumInfoWidget::AlbumInfoWidget( const Tomahawk::album_ptr& album, QWidget* par
 
     connect( Tomahawk::InfoSystem::InfoSystem::instance(), SIGNAL( finished( QString ) ), SLOT( infoSystemFinished( QString ) ) );
 
-    // Apparently headers can only be removed when it's already visible / layed-out
-    QTimer::singleShot( 0, this, SLOT( removeHeaders() ) );
-
     load( album );
 }
 
@@ -162,10 +159,4 @@ AlbumInfoWidget::changeEvent( QEvent* e )
         default:
             break;
     }
-}
-
-
-void
-AlbumInfoWidget::removeHeaders()
-{
 }
