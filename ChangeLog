@@ -1,4 +1,5 @@
 Version 0.2.0:
+    * Fix inability to create Echonest playlists based solely on style or mood.
     * Created new Album page (that shows other albums from that artist available in your Super Collection)
     * Updated playlists when revision info is recieved
     * Added support for "playing" Rdio track URLs and ability to drag/drop them into Tomahawk
