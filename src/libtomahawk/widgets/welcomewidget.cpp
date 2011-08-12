@@ -221,8 +221,6 @@ PlaylistDelegate::paint( QPainter* painter, const QStyleOptionViewItem& option, 
     QFont font = opt.font;
     QFont boldFont = opt.font;
     boldFont.setBold( true );
-    QFont italicFont = opt.font;
-    italicFont.setItalic( true );
 
     QPixmap icon;
     WelcomePlaylistModel::PlaylistTypes type = (WelcomePlaylistModel::PlaylistTypes)index.data( WelcomePlaylistModel::PlaylistTypeRole ).toInt();
@@ -246,16 +244,40 @@ PlaylistDelegate::paint( QPainter* painter, const QStyleOptionViewItem& option, 
     {
         descText = index.data( WelcomePlaylistModel::ArtistRole ).toString();
     }
-    painter->drawText( option.rect.adjusted( 56, 26, -100, -8 ), descText );
+    QColor c = painter->pen().color();
+    painter->setPen( QColor( Qt::gray ).darker() );
+    painter->drawText( option.rect.adjusted( 66, 19, -100, -8 ), descText );
+    painter->setPen( c );
 
-    QString trackCount = tr( "%1 tracks" ).arg( index.data( WelcomePlaylistModel::TrackCountRole ).toString() );
-    painter->drawText( option.rect.adjusted( option.rect.width() - 96, 12, 0, -2 - opt.rect.height() / 2 ), trackCount, to );
+    if ( type != WelcomePlaylistModel::Station )
+    {
+        painter->save();
+        QString tracks = index.data( WelcomePlaylistModel::TrackCountRole ).toString();
+        int width = painter->fontMetrics().width( tracks );
+//         int bottomEdge = pixmapRect
+        // right edge 10px past right edge of pixmapRect
+        // bottom edge flush with bottom of pixmap
+        QRect rect( pixmapRect.right() - width, 0, width - 8, 0 );
+        rect.adjust( 0, 0, -1, 0 );
+        rect.setTop( pixmapRect.bottom() - painter->fontMetrics().height() - 1 );
+        rect.setBottom( pixmapRect.bottom() + 1 );
 
-    QString author = index.data( WelcomePlaylistModel::PlaylistRole ).value< Tomahawk::playlist_ptr >()->author()->friendlyName();
-    QRect r = option.rect.adjusted( option.rect.width() - 96, 2 + opt.rect.height() / 2, 0, -12);
-    painter->setFont( italicFont );
-    author = painter->fontMetrics().elidedText( author, Qt::ElideRight, r.width() );
-    painter->drawText( r, author, to );
+        QColor figColor( 191, 191, 191 );
+        painter->setPen( figColor );
+        painter->setBrush( figColor );
+        painter->setFont( boldFont );
+
+        TomahawkUtils::drawBackgroundAndNumbers( painter, tracks, rect );
+        painter->restore();
+    }
+
+
+    QPixmap avatar = index.data( WelcomePlaylistModel::PlaylistRole ).value< Tomahawk::playlist_ptr >()->author()->avatar();
+    if ( avatar.isNull() )
+        avatar = m_defaultAvatar;
+    avatar = TomahawkUtils::createAvatarFrame( avatar );
+    QRect r( option.rect.width() - avatar.width() - 10, option.rect.top() + option.rect.height()/2 - avatar.height()/2, avatar.width(), avatar.height() );
+    painter->drawPixmap( r, avatar );
 
     painter->setFont( boldFont );
     painter->drawText( option.rect.adjusted( 56, 6, -100, -option.rect.height() + 20 ), index.data().toString() );

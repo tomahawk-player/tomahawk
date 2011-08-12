@@ -60,6 +60,8 @@ private:
 
     unsigned int m_maxPlaylists;
     bool m_waitingForSome;
+    public slots:
+     void sourceOnline();
 };
 
 #endif // WELCOMEPLAYLISTMODEL_H

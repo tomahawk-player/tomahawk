@@ -25,9 +25,11 @@
 #include <QThread>
 #include <QNetworkProxy>
 #include <QStringList>
+#include <QRect>
 
 #define RESPATH ":/data/"
 
+class QPainter;
 class QColor;
 class QDir;
 class QDateTime;
@@ -73,6 +75,8 @@ namespace TomahawkUtils
 
     DLLEXPORT QColor alphaBlend( const QColor& colorFrom, const QColor& colorTo, float opacity );
     DLLEXPORT QPixmap createDragPixmap( int itemCount = 1 );
+
+    DLLEXPORT void drawBackgroundAndNumbers( QPainter* p, const QString& text, const QRect& rect );
 
     DLLEXPORT void unmarginLayout( QLayout* layout );
 

@@ -673,34 +673,16 @@ SourceDelegate::paint( QPainter* painter, const QStyleOptionViewItem& option, co
         {
             painter->setRenderHint( QPainter::Antialiasing );
 
-            QRect figRect = o.rect.adjusted( o.rect.width() - figWidth - 18, 0, -10, -o.rect.height() + 16 );
+            QRect figRect = o.rect.adjusted( o.rect.width() - figWidth - 6, 0, -15, -o.rect.height() + 16 );
             int hd = ( option.rect.height() - figRect.height() ) / 2;
             figRect.adjust( 0, hd, 0, hd );
+            painter->setFont( bold );
 
             QColor figColor( 167, 183, 211 );
             painter->setPen( figColor );
             painter->setBrush( figColor );
 
-            QPen origpen = painter->pen();
-            QPen pen = origpen;
-            pen.setWidth( 1.0 );
-            painter->setPen( pen );
-            painter->drawRect( figRect );
-
-            QPainterPath ppath;
-            ppath.moveTo( QPoint( figRect.x(), figRect.y() ) );
-            ppath.quadTo( QPoint( figRect.x() - 8, figRect.y() + figRect.height() / 2 ), QPoint( figRect.x(), figRect.y() + figRect.height() ) );
-            painter->drawPath( ppath );
-            ppath.moveTo( QPoint( figRect.x() + figRect.width(), figRect.y() ) );
-            ppath.quadTo( QPoint( figRect.x() + figRect.width() + 8, figRect.y() + figRect.height() / 2 ), QPoint( figRect.x() + figRect.width(), figRect.y() + figRect.height() ) );
-            painter->drawPath( ppath );
-
-            painter->setPen( origpen );
-
-            QTextOption to( Qt::AlignCenter );
-            painter->setFont( bold );
-            painter->setPen( Qt::white );
-            painter->drawText( figRect, tracks, to );
+            TomahawkUtils::drawBackgroundAndNumbers( painter, tracks, figRect );
         }
 
         painter->restore();

@@ -167,8 +167,25 @@ WelcomePlaylistModel::playlistRevisionLoaded()
 void
 WelcomePlaylistModel::onSourceAdded( const Tomahawk::source_ptr& source )
 {
+    connect( source.data(), SIGNAL( online() ), this, SLOT( sourceOnline() ) );
     connect( source->collection().data(), SIGNAL( playlistsAdded( QList<Tomahawk::playlist_ptr> ) ), SLOT( loadFromSettings() ) );
     connect( source->collection().data(), SIGNAL( playlistsDeleted( QList<Tomahawk::playlist_ptr> ) ), SLOT( onPlaylistsRemoved( QList<Tomahawk::playlist_ptr> ) ) );
+}
+
+void
+WelcomePlaylistModel::sourceOnline()
+{
+    Source* s = qobject_cast< Source* >( sender() );
+    Q_ASSERT( s );
+
+    for ( int i = 0; i < m_recplaylists.size(); i++ )
+    {
+        if ( m_recplaylists[ i ]->author().data() == s )
+        {
+            QModelIndex idx = index( i, 0, QModelIndex() );
+            emit dataChanged( idx, idx );
+        }
+    }
 }
 
 
