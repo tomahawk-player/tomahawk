@@ -1,4 +1,18 @@
 Version 0.2.0:
+    * Created new Album page (that shows other albums from that artist available in your Super Collection)
+    * Updated playlists when revision info is recieved
+    * Added support for "playing" Rdio track URLs and ability to drag/drop them into Tomahawk
+    * Change "Recently Played" page to "Dashboard"
+    * Prioritize resolving newer queries to make GUI more responsive
+    * Display spinner animation while searching for tracks
+    * Fix for occasionally flashing play control buttons
+    * Remove horizontal scrollbars when they aren't needed
+    * Let headless users trigger a rescan with --filescan
+    * Removed "test login" button from Last.fm settings
+    * Fix font and image sizes from being too big/small on some OSes
+    * Include Stations and Automatic Playlists in News Stations and Playlists widget
+    * When click through to station or playlist ensure that sidebar navigation reflects it
+    * Even more design tweaks, new placeholder icons (and use them in right places)
     * Show search and artist page temporary navigation in sidebar when on those pages
     * Fixed bug where drop indicator wouldn't show under last track if that was drop zone
     * Fixed cross-wiring of Previous and Next song in "Music Player" menu (OS X)
