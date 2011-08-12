@@ -46,6 +46,7 @@
 #include "utils/jspfloader.h"
 #include "utils/spotifyparser.h"
 #include "utils/shortenedlinkparser.h"
+#include "utils/rdioparser.h"
 
 GlobalActionManager* GlobalActionManager::s_instance = 0;
 
@@ -791,8 +792,13 @@ GlobalActionManager::acceptsMimeData( const QMimeData* data, bool tracksOnly )
 
     // crude check for spotify tracks
     if ( data->hasFormat( "text/plain" ) && data->data( "text/plain" ).contains( "spotify" ) &&
-         ( tracksOnly ? data->data( "text/plain" ).contains( "track" ) : true ) )
+       ( tracksOnly ? data->data( "text/plain" ).contains( "track" ) : true ) )
         return true;
+
+    // crude check for rdio tracks
+        if ( data->hasFormat( "text/plain" ) && data->data( "text/plain" ).contains( "rdio.com" ) &&
+           ( tracksOnly ? data->data( "text/plain" ).contains( "track" ) : true ) )
+            return true;
 
     // We whitelist t.co and bit.ly (and j.mp) since they do some link checking. Often playable (e.g. spotify..) links hide behind them,
     //  so we do an extra level of lookup
@@ -831,6 +837,14 @@ GlobalActionManager::handleTrackUrls( const QString& urls )
         tDebug() << "Got a list of spotify urls!" << tracks;
         SpotifyParser* spot = new SpotifyParser( tracks, this );
         connect( spot, SIGNAL( tracks( QList<Tomahawk::query_ptr> ) ), this, SIGNAL( tracks( QList<Tomahawk::query_ptr> ) ) );
+    } else if ( urls.contains( "rdio.com" ) )
+    {
+        QStringList tracks = urls.split( "\n" );
+
+        tDebug() << "Got a list of rdio urls!" << tracks;
+        RdioParser* rdio = new RdioParser( this );
+        connect( rdio, SIGNAL( tracks( QList<Tomahawk::query_ptr> ) ), this, SIGNAL( tracks( QList<Tomahawk::query_ptr> ) ) );
+        rdio->parse( tracks );
     } else if ( urls.contains( "bit.ly" ) ||
                 urls.contains( "j.mp" ) ||
                 urls.contains( "t.co" ) )
@@ -913,8 +927,9 @@ GlobalActionManager::openSpotifyLink( const QString& link )
 bool
 GlobalActionManager::openRdioLink( const QString& link )
 {
-//     RdioParser* rdio = new RdioParser( link, this );
-//     connect( spot, SIGNAL( track( Tomahawk::query_ptr ) ), this, SLOT( handleOpenTrack( Tomahawk::query_ptr ) ) );
+    RdioParser* rdio = new RdioParser( this );
+    connect( rdio, SIGNAL( track( Tomahawk::query_ptr ) ), this, SLOT( handleOpenTrack( Tomahawk::query_ptr ) ) );
+    rdio->parse( link );
 
     return true;
 }
