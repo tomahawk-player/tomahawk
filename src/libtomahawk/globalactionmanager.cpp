@@ -796,15 +796,16 @@ GlobalActionManager::acceptsMimeData( const QMimeData* data, bool tracksOnly )
         return true;
 
     // crude check for rdio tracks
-        if ( data->hasFormat( "text/plain" ) && data->data( "text/plain" ).contains( "rdio.com" ) &&
-           ( tracksOnly ? data->data( "text/plain" ).contains( "track" ) : true ) )
-            return true;
+    if ( data->hasFormat( "text/plain" ) && data->data( "text/plain" ).contains( "rdio.com" ) &&
+        ( tracksOnly ? data->data( "text/plain" ).contains( "track" ) : true ) )
+        return true;
 
     // We whitelist t.co and bit.ly (and j.mp) since they do some link checking. Often playable (e.g. spotify..) links hide behind them,
     //  so we do an extra level of lookup
     if ( ( data->hasFormat( "text/plain" ) && data->data( "text/plain" ).contains( "bit.ly" ) ) ||
          ( data->hasFormat( "text/plain" ) && data->data( "text/plain" ).contains( "j.mp" ) ) ||
-         ( data->hasFormat( "text/plain" ) && data->data( "text/plain" ).contains( "t.co" ) ) )
+         ( data->hasFormat( "text/plain" ) && data->data( "text/plain" ).contains( "t.co" ) ) ||
+         ( data->hasFormat( "text/plain" ) && data->data( "text/plain" ).contains( "rd.io" ) ) )
         return true;
 
     return false;
@@ -847,7 +848,8 @@ GlobalActionManager::handleTrackUrls( const QString& urls )
         rdio->parse( tracks );
     } else if ( urls.contains( "bit.ly" ) ||
                 urls.contains( "j.mp" ) ||
-                urls.contains( "t.co" ) )
+                urls.contains( "t.co" ) ||
+                urls.contains( "rd.io" ) )
     {
         QStringList tracks = urls.split( "\n" );
 

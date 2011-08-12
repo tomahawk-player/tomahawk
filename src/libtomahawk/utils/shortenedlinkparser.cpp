@@ -44,7 +44,8 @@ ShortenedLinkParser::lengthenUrl( const QString& url )
     // Whitelisted links
     if ( !( url.contains( "t.co" ) ||
             url.contains( "bit.ly" ) ||
-            url.contains( "j.mp" ) ) )
+            url.contains( "j.mp" ) ||
+            url.contains( "rd.io" ) ) )
         return;
 
     tDebug() << "Looking up..." << url;
