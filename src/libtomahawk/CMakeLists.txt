@@ -482,13 +482,14 @@ target_link_libraries( tomahawklib
     ${LIBPORTFWD_LIBRARIES}
 
     # External deps
-    ${QT_QTUITOOLS_LIBRARY}
     ${QJSON_LIBRARIES}
     ${PHONON_LIBS}
     ${TAGLIB_LIBRARIES}
     ${CLUCENE_LIBRARIES}
     ${LIBECHONEST_LIBRARY}
+    ${QT_QTUITOOLS_LIBRARY}
     ${QT_LIBRARIES}
+    ${QT_QTUITOOLS_LIBRARY} # We really need to link twice against it for windows, maybe QTBUG-20498 is related
     ${OS_SPECIFIC_LINK_LIBRARIES}
     ${CMAKE_THREAD_LIBS_INIT}
     ${LINK_LIBRARIES}
