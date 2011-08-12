@@ -39,6 +39,8 @@ MprisPlugin::MprisPlugin()
 {
     qDebug() << Q_FUNC_INFO;
 
+    m_playbackStatus = "Stopped";
+
     m_supportedPushTypes << InfoNowPlaying << InfoNowPaused << InfoNowResumed << InfoNowStopped;
 
     new MprisPluginRootAdaptor( this );
@@ -225,13 +227,7 @@ MprisPlugin::minimumRate() const
 QString
 MprisPlugin::playbackStatus() const
 {
-    if( AudioEngine::instance()->state() == AudioEngine::Playing )
-        return "Playing";
-    else if( AudioEngine::instance()->state() == AudioEngine::Paused )
-        return "Paused";
-    else if( AudioEngine::instance()->state() == AudioEngine::Stopped )
-        return "Stopped";
-    return QString("");
+    return m_playbackStatus;
 }
 
 qlonglong
@@ -365,25 +361,39 @@ void
 MprisPlugin::pushInfo( QString caller, Tomahawk::InfoSystem::InfoType type, QVariant input )
 {
     qDebug() << Q_FUNC_INFO;
+    bool isPlayingInfo = false;
 
     switch ( type )
     {
         case InfoNowPlaying:
+          isPlayingInfo = true;
           audioStarted( input );
           break;
         case InfoNowPaused:
+          isPlayingInfo = true;
           audioPaused();
-          return;
+          break;
         case InfoNowResumed:
+          isPlayingInfo = true;
           audioResumed( input );
           break;
         case InfoNowStopped:
+          isPlayingInfo = true;
           audioStopped();
           break;
 
         default:
-          return;
+          break;
     }
+
+    if( isPlayingInfo )
+        notifyPropertyChanged( "org.mpris.MediaPlayer2.Player", "PlaybackStatus");
+
+}
+
+void
+MprisPlugin::stateChanged( AudioState newState, AudioState oldState )
+{
 
 }
 
@@ -392,6 +402,8 @@ void
 MprisPlugin::audioStarted( const QVariant &input )
 {
     qDebug() << Q_FUNC_INFO;
+
+    m_playbackStatus = "Playing";
 
     if ( !input.canConvert< Tomahawk::InfoSystem::InfoCriteriaHash >() )
         return;
@@ -416,12 +428,14 @@ void
 MprisPlugin::audioStopped()
 {
     qDebug() << Q_FUNC_INFO;
+    m_playbackStatus = "Stopped";
 }
 
 void
 MprisPlugin::audioPaused()
 {
     qDebug() << Q_FUNC_INFO;
+    m_playbackStatus = "Paused";
 }
 
 void
@@ -430,3 +444,20 @@ MprisPlugin::audioResumed( const QVariant &input )
     qDebug() << Q_FUNC_INFO;
     audioStarted( input );
 }
+
+void
+MprisPlugin::notifyPropertyChanged( const QString& interface,
+                            const QString& propertyName )
+{
+    QDBusMessage signal = QDBusMessage::createSignal(
+        "/org/mpris/MediaPlayer2",
+        "org.freedesktop.DBus.Properties",
+        "PropertiesChanged");
+    signal << interface;
+    QVariantMap changedProps;
+    changedProps.insert(propertyName, property(propertyName.toAscii()));
+    signal << changedProps;
+    signal << QStringList();
+    QDBusConnection::sessionBus().send(signal);
+}
+

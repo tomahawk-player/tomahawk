@@ -19,6 +19,7 @@
 #ifndef MPRISPLUGIN_H
 #define MPRISPLUGIN_H
 
+#include "audio/audioengine.h"
 #include "infosystem/infosystem.h"
 
 #include <QObject>
@@ -143,6 +144,9 @@ protected slots:
     void getInfo( uint requestId, Tomahawk::InfoSystem::InfoRequestData requestData );
     void pushInfo( QString caller, Tomahawk::InfoSystem::InfoType type, QVariant input );
 
+private slots:
+    void stateChanged( AudioState newState, AudioState oldState );
+
 private:
     // Get Info
     
@@ -152,6 +156,10 @@ private:
     void audioStopped();
     void audioPaused();
     void audioResumed( const QVariant &input );
+
+    // DBus
+    void notifyPropertyChanged( const QString& interface, const QString& propertyName );
+    QString m_playbackStatus;
 
 };
 
