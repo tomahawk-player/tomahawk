@@ -93,6 +93,11 @@ macro_log_feature(TAGLIB_FOUND "TagLib" "Audio Meta-Data Library" "http://develo
 include( CheckTagLibFileName )
 check_taglib_filename( COMPLEX_TAGLIB_FILENAME )
 
+macro_optional_find_package(Boost)
+macro_log_feature(Boost_FOUND "Boost" "Provides free peer-reviewed portable C++ source libraries" "http://www.boost.org" TRUE "" "") #FIXME: give useful explaination
+
+
+
 # required
 #While we distribute our own liblastfm2, don't need to look for it
 #macro_optional_find_package(LibLastFm 0.3.3)
