@@ -380,6 +380,10 @@ drawBackgroundAndNumbers( QPainter* painter, const QString& text, const QRect& f
 
     painter->setPen( origpen );
 
+#ifdef Q_OS_MAC
+    figRect.adjust( -1, 0, 0, 0 );
+#endif
+
     QTextOption to( Qt::AlignCenter );
     painter->setPen( Qt::white );
     painter->drawText( figRect.adjusted( -5, 0, 6, 0 ), text, to );

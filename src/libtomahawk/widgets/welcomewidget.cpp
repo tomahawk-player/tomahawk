@@ -71,6 +71,9 @@ WelcomeWidget::WelcomeWidget( QWidget* parent )
     ui->playlistWidget->setItemDelegate( new PlaylistDelegate() );
     ui->playlistWidget->setModel( model );
     ui->playlistWidget->overlay()->resize( 380, 86 );
+#ifdef Q_OS_MAC
+    ui->playlistWidget->setVerticalScrollMode( QAbstractItemView::ScrollPerPixel );
+#endif
 
     connect( model, SIGNAL( emptinessChanged( bool) ), this, SLOT( updatePlaylists() ) );
 
@@ -219,7 +222,11 @@ PlaylistDelegate::paint( QPainter* painter, const QStyleOptionViewItem& option, 
     QTextOption to;
     to.setAlignment( Qt::AlignCenter );
     QFont font = opt.font;
-    QFont boldFont = opt.font;
+#ifdef Q_OS_MAC
+    font.setPointSize( font.pointSize() - 2 );
+#endif
+
+    QFont boldFont = font;
     boldFont.setBold( true );
 
     QPixmap icon;
@@ -246,8 +253,20 @@ PlaylistDelegate::paint( QPainter* painter, const QStyleOptionViewItem& option, 
     }
     QColor c = painter->pen().color();
     painter->setPen( QColor( Qt::gray ).darker() );
-    painter->drawText( option.rect.adjusted( 66, 19, -100, -8 ), descText );
+    QFont font2 = font;
+#ifdef Q_OS_MAC
+    font2.setPointSize( font2.pointSize() - 1 );
+#endif
+    painter->setFont( font2 );
+
+    QRect rectText = option.rect.adjusted( 66, 20, -100, -8 );
+#ifdef Q_OS_MAC
+    rectText.adjust( 0, 1, 0, 0 );
+#endif
+
+    painter->drawText( rectText, descText );
     painter->setPen( c );
+    painter->setFont( font );
 
     if ( type != WelcomePlaylistModel::Station )
     {
