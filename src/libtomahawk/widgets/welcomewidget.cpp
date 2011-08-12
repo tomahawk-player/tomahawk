@@ -246,8 +246,7 @@ PlaylistDelegate::paint( QPainter* painter, const QStyleOptionViewItem& option, 
     {
         descText = index.data( WelcomePlaylistModel::ArtistRole ).toString();
     }
-    painter->setFont( italicFont );
-    painter->drawText( option.rect.adjusted( 66, 26, -100, -8 ), descText );
+    painter->drawText( option.rect.adjusted( 56, 26, -100, -8 ), descText );
 
     QString trackCount = tr( "%1 tracks" ).arg( index.data( WelcomePlaylistModel::TrackCountRole ).toString() );
     painter->drawText( option.rect.adjusted( option.rect.width() - 96, 12, 0, -2 - opt.rect.height() / 2 ), trackCount, to );
