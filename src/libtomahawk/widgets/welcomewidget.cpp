@@ -81,6 +81,7 @@ WelcomeWidget::WelcomeWidget( QWidget* parent )
     m_tracksModel->setStyle( TrackModel::ShortWithAvatars );
     ui->tracksView->overlay()->setEnabled( false );
     ui->tracksView->setPlaylistModel( m_tracksModel );
+    ui->tracksView->setHeaderHidden( true );
     ui->tracksView->setHorizontalScrollBarPolicy( Qt::ScrollBarAlwaysOff );
 
     m_recentAlbumsModel = new AlbumModel( ui->additionsView );
