@@ -37,7 +37,7 @@ VERSION=$1
 
     header "Renaming icon"
     mv Contents/Resources/tomahawkSources.icns Contents/Resources/Tomahawk.icns
-    cp $ROOT/../admin/mac/qt.conf Contents/Resources/Info.plist
+    cp $ROOT/../admin/mac/qt.conf Contents/Resources/qt.conf
 
 
     header "Creating DMG"
