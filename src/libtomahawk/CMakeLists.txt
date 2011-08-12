@@ -482,6 +482,7 @@ target_link_libraries( tomahawklib
     ${LIBPORTFWD_LIBRARIES}
 
     # External deps
+    ${QT_QTUITOOLS_LIBRARY}
     ${QJSON_LIBRARIES}
     ${PHONON_LIBS}
     ${TAGLIB_LIBRARIES}

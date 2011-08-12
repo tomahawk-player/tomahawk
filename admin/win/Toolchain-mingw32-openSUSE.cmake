@@ -1,20 +1,27 @@
+SET(MINGW_PREFIX  "i686-w64-mingw32")
+
 # this one is important
 SET(CMAKE_SYSTEM_NAME Windows)
 
 # specify the cross compiler
-SET(CMAKE_C_COMPILER ccache i686-w64-mingw32-gcc)
-SET(CMAKE_CXX_COMPILER ccache i686-w64-mingw32-g++)
+SET(CMAKE_C_COMPILER ccache ${MINGW_PREFIX}-gcc)
+SET(CMAKE_CXX_COMPILER ccache ${MINGW_PREFIX}-g++)
+SET(CMAKE_RC_COMPILER /usr/bin/${MINGW_PREFIX}-windres)
 
 # where is the target environment containing libraries
-SET(CMAKE_FIND_ROOT_PATH  /usr/i686-w64-mingw32/sys-root/mingw)
+SET(CMAKE_FIND_ROOT_PATH  /usr/${MINGW_PREFIX}/sys-root/mingw)
 SET(CMAKE_FIND_ROOT_PATH_MODE_LIBRARY  ONLY)
 SET(CMAKE_FIND_ROOT_PATH_MODE_INCLUDE  ONLY)
 SET(CMAKE_FIND_ROOT_PATH_MODE_PROGRAM  NEVER)
 
-# windres executable for application icon support
-SET(WINDRES_EXECUTABLE /usr/bin/i686-w64-mingw32-windres)
+
 
 # libs with broken find modules
 SET(TAGLIB_FOUND true)
 SET(TAGLIB_LIBRARIES  ${CMAKE_FIND_ROOT_PATH}/lib/libtag.dll.a)
 SET(TAGLIB_INCLUDES   ${CMAKE_FIND_ROOT_PATH}/include/taglib)
+
+SET(QT_PLUGINS_DIR  ${CMAKE_FIND_ROOT_PATH}/lib/qt4/plugins/)
+SET(QT_QTUITOOLS_LIBRARY_RELEASE  ${CMAKE_FIND_ROOT_PATH}/lib/libQtUiTools.a)
+SET(QT_QTUITOOLS_LIBRARY_DEBUG  ${CMAKE_FIND_ROOT_PATH}/lib/libQtUiToolsd.a)
+SET(QT_QTUITOOLS_LIBRARY  ${QT_QTUITOOLS_LIBRARY_RELEASE})

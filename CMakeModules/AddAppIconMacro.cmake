@@ -1,3 +1,5 @@
+SET(WINDRES_EXECUTABLE  ${CMAKE_RC_COMPILER})
+
 # This macro is taken from kdelibs/cmake/modules/KDE4Macros.cmake.
 #
 # Copyright (c) 2006-2009 Alexander Neundorf, <neundorf@kde.org>
