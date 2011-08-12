@@ -1,15 +1,16 @@
 Version 0.2.0:
     * Fix inability to create Echonest playlists based solely on style or mood.
     * Created new Album page (that shows other albums from that artist available in your Super Collection)
-    * Updated playlists when revision info is recieved
+    * Update playlists in dashboard to keep them in sync
     * Added support for "playing" Rdio track URLs and ability to drag/drop them into Tomahawk
     * Change "Recently Played" page to "Dashboard"
     * Prioritize resolving newer queries to make GUI more responsive
+    * Automatically expand local collection node in sidebar on launch
     * Display spinner animation while searching for tracks
     * Fix for occasionally flashing play control buttons
     * Remove horizontal scrollbars when they aren't needed
-    * Let headless users trigger a rescan with --filescan
-    * Removed "test login" button from Last.fm settings
+    * Let headless-Tomahawk users trigger a rescan with --filescan
+    * Removed "test login" button from Last.fm settings (OS X only)
     * Fix font and image sizes from being too big/small on some OSes
     * Include Stations and Automatic Playlists in News Stations and Playlists widget
     * When click through to station or playlist ensure that sidebar navigation reflects it
@@ -34,8 +35,7 @@ Version 0.2.0:
     * Fixed a few crashes that could occur when fetching data from Last.fm.
     * Made Twitter dialog more readable/understandable.
     * Added Artist pages (and links to them from now playing metadata and from collection track list views) 
-      with artist bio snippet, related artists, top tracks and view of all tracks/albums from that 
-      artist in user's Super Collection 
+       with artist bio snippet, related artists, top tracks and view of all tracks/albums from that artist in user's Super Collection 
     * Fixed streaming from https:// links
     * Desktop notifications for now playing (Linux only)
     * Implement new javascript resolver API and ability to present configuration options for resolvers
@@ -62,11 +62,11 @@ Version 0.2.0:
     * Don't require @foo.com domains for jabber and google
     * Added global search function that searches all available sources (super collection and all enabled resolvers)
     * Cleaned up Preference Window and styling
-    * Collection scanner now can now run automatically, watching files and
+    * Collection scanner now can run automatically, watching files and
       directories for changes. On by default.
     * Added Pipeline view window
     * Allow seeking in songs - if possible
-    * Added ability to make a copy of a sources' playlists and add to your own playlists
+    * Added ability to make a copy of a peer's playlists and add to your own playlists
     * Added MediaKey support on OS X
     * Shuffle and Repeat settings are stored on a playlist by playlist basis
 
