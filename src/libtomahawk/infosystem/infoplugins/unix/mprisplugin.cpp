@@ -21,6 +21,7 @@
 
 #include "audio/audioengine.h"
 #include "infosystem/infosystemworker.h"
+#include "album.h"
 #include "artist.h"
 #include "result.h"
 #include "tomahawksettings.h"
@@ -149,7 +150,7 @@ MprisPlugin::canPlay() const
 bool
 MprisPlugin::canSeek() const
 {
-    return true;
+    return false;
 }
 
 QString
@@ -201,7 +202,18 @@ MprisPlugin::maximumRate() const
 QVariantMap
 MprisPlugin::metadata() const
 {
-    return QVariantMap();
+    QVariantMap metadataMap;
+    Tomahawk::result_ptr track = AudioEngine::instance()->currentTrack();
+    if( track )
+    {
+        metadataMap.insert( "mpris:trackid", track->id() );
+        metadataMap.insert( "mpris:length", track->duration() );
+        metadataMap.insert( "xesam:album", track->album()->name() );
+        metadataMap.insert( "xesam:artist", track->artist()->name() );
+        metadataMap.insert( "xesam:title", track->track() );
+    }
+
+    return metadataMap;
 }
 
 double
@@ -278,9 +290,12 @@ MprisPlugin::Next()
 }
 
 void 
-MprisPlugin::OpenUri(const QString &Uri)
+MprisPlugin::OpenUri( const QString &Uri )
 {
-    // TODO
+    if( Uri.contains( "tomahawk://" ) )
+        GlobalActionManager::instance()->parseTomahawkLink( Uri );
+    else if( Uri.contains( "spotify:" ) )
+        GlobalActionManager::instance()->openSpotifyLink( Uri );
 }
 
 void
@@ -310,7 +325,10 @@ MprisPlugin::Previous()
 void
 MprisPlugin::Seek( qlonglong Offset )
 {
+    qDebug() << Q_FUNC_INFO;
+    /*
     qlonglong seekTime = position() + Offset;
+    qDebug() << "seekTime: " << seekTime;
     if( seekTime < 0 )
         AudioEngine::instance()->seek( 0 );
     else if( seekTime > AudioEngine::instance()->currentTrackTotalTime() )
@@ -318,8 +336,7 @@ MprisPlugin::Seek( qlonglong Offset )
     // seekTime is in microseconds, but we work internally in milliseconds
     else
         AudioEngine::instance()->seek( (qint64) ( seekTime / 1000 ) );
-
-
+    */
 }
 
 void

@@ -185,12 +185,14 @@ void MprisPluginPlayerAdaptor::Previous()
 
 void MprisPluginPlayerAdaptor::Seek(qlonglong Offset)
 {
+    qDebug() << Q_FUNC_INFO;
     // handle method call org.mpris.MediaPlayer2.Player.Seek
     QMetaObject::invokeMethod(parent(), "Seek", Q_ARG(qlonglong, Offset));
 }
 
 void MprisPluginPlayerAdaptor::SetPosition(const QDBusObjectPath &TrackId, qlonglong Position)
 {
+    qDebug() << Q_FUNC_INFO;
     // handle method call org.mpris.MediaPlayer2.Player.SetPosition
     QMetaObject::invokeMethod(parent(), "SetPosition", Q_ARG(QDBusObjectPath, TrackId), Q_ARG(qlonglong, Position));
 }
