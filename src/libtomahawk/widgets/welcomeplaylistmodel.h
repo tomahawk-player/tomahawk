@@ -51,6 +51,7 @@ private slots:
     void loadFromSettings();
 
     void plAdded( const Tomahawk::playlist_ptr& );
+    void playlistRevisionLoaded();
 
 private:
     QList< Tomahawk::playlist_ptr > m_recplaylists;

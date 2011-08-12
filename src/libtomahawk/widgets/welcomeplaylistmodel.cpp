@@ -70,7 +70,13 @@ WelcomePlaylistModel::loadFromSettings()
             m_recplaylists << pl;
 
             if( !m_cached.contains( playlist_guids[i] ) )
+            {
+                if ( pl.dynamicCast< DynamicPlaylist >().isNull() )
+                    connect( pl.data(), SIGNAL(revisionLoaded(Tomahawk::PlaylistRevision)), this, SLOT(playlistRevisionLoaded()) );
+                else
+                    connect( pl.data(), SIGNAL(dynamicRevisionLoaded(Tomahawk::DynamicPlaylistRevision)), this, SLOT(playlistRevisionLoaded()) );
                 m_cached[playlist_guids[i]] = pl;
+            }
         } else
             m_waitingForSome = true;
     }
@@ -138,6 +144,22 @@ WelcomePlaylistModel::data( const QModelIndex& index, int role ) const
     }
     default:
         return QVariant();
+    }
+}
+
+void
+WelcomePlaylistModel::playlistRevisionLoaded()
+{
+    Playlist* p = qobject_cast< Playlist* >( sender() );
+    Q_ASSERT( p );
+
+    for ( int i = 0; i < m_recplaylists.size(); i++ )
+    {
+        if ( m_recplaylists[ i ]->guid() == p->guid() )
+        {
+            QModelIndex idx = index( i, 0, QModelIndex() );
+            emit dataChanged( idx, idx );
+        }
     }
 }
 
