@@ -59,6 +59,8 @@ ArtistInfoWidget::ArtistInfoWidget( const Tomahawk::artist_ptr& artist, QWidget*
 
     m_relatedModel = new TreeModel( ui->relatedArtists );
     ui->relatedArtists->setTreeModel( m_relatedModel );
+    ui->relatedArtists->setHorizontalScrollBarPolicy( Qt::ScrollBarAlwaysOff );
+    ui->relatedArtists->header()->setVisible( false );
 
     m_topHitsModel = new PlaylistModel( ui->topHits );
     m_topHitsModel->setStyle( TrackModel::Short );
@@ -72,11 +74,9 @@ ArtistInfoWidget::ArtistInfoWidget( const Tomahawk::artist_ptr& artist, QWidget*
 
     connect( Tomahawk::InfoSystem::InfoSystem::instance(), SIGNAL( finished( QString ) ), SLOT( infoSystemFinished( QString ) ) );
 
-    // Apparently headers can only be removed when it's already visible / layed-out
-    QTimer::singleShot( 0, this ,SLOT( removeHeaders() ) );
-
     load( artist );
 }
+
 
 ArtistInfoWidget::~ArtistInfoWidget()
 {
@@ -125,7 +125,6 @@ ArtistInfoWidget::infoSystemInfo( Tomahawk::InfoSystem::InfoRequestData requestD
 //        qDebug() << "Info of wrong type or not with our identifier";
         return;
     }
-    qDebug() << Q_FUNC_INFO << requestData.caller << requestData.type << s_aiInfoIdentifier;
 
     InfoSystem::InfoCriteriaHash trackInfo;
     trackInfo = requestData.input.value< InfoSystem::InfoCriteriaHash >();
@@ -207,7 +206,6 @@ void
 ArtistInfoWidget::infoSystemFinished( QString target )
 {
     Q_UNUSED( target );
-    qDebug() << Q_FUNC_INFO;
 }
 
 
@@ -224,11 +222,4 @@ ArtistInfoWidget::changeEvent( QEvent* e )
         default:
             break;
     }
-}
-
-void
-ArtistInfoWidget::removeHeaders()
-{
-    for ( int i = 1; i < ui->relatedArtists->header()->count(); i++ )
-        ui->relatedArtists->header()->hideSection( ui->relatedArtists->header()->logicalIndex( i ) );
 }

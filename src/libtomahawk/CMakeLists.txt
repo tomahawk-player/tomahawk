@@ -186,6 +186,7 @@ set( libSources
     widgets/SocialPlaylistWidget.cpp
     widgets/infowidgets/sourceinfowidget.cpp
     widgets/infowidgets/ArtistInfoWidget.cpp
+    widgets/infowidgets/AlbumInfoWidget.cpp
 
     kdsingleapplicationguard/kdsingleapplicationguard.cpp
     kdsingleapplicationguard/kdsharedmemorylocker.cpp
@@ -366,6 +367,7 @@ set( libHeaders
     widgets/SocialPlaylistWidget.h
     widgets/infowidgets/sourceinfowidget.h
     widgets/infowidgets/ArtistInfoWidget.h
+    widgets/infowidgets/AlbumInfoWidget.h
 
     kdsingleapplicationguard/kdsingleapplicationguard.h
 )
@@ -389,6 +391,7 @@ set( libUI ${libUI}
     widgets/SocialPlaylistWidget.ui
     widgets/infowidgets/sourceinfowidget.ui
     widgets/infowidgets/ArtistInfoWidget.ui
+    widgets/infowidgets/AlbumInfoWidget.ui
     playlist/topbar/topbar.ui
     playlist/infobar/infobar.ui
 )

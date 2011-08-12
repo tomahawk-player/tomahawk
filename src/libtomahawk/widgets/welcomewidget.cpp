@@ -190,6 +190,7 @@ WelcomeWidget::changeEvent( QEvent* e )
     }
 }
 
+
 QSize
 PlaylistDelegate::sizeHint( const QStyleOptionViewItem& option, const QModelIndex& index ) const
 {

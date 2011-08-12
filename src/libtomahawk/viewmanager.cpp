@@ -46,6 +46,7 @@
 #include "widgets/welcomewidget.h"
 #include "widgets/infowidgets/sourceinfowidget.h"
 #include "widgets/infowidgets/ArtistInfoWidget.h"
+#include "widgets/infowidgets/AlbumInfoWidget.h"
 #include "widgets/newplaylistwidget.h"
 
 #include "utils/logger.h"
@@ -237,27 +238,19 @@ ViewManager::show( const Tomahawk::artist_ptr& artist )
 Tomahawk::ViewPage*
 ViewManager::show( const Tomahawk::album_ptr& album )
 {
-    PlaylistView* view;
+    AlbumInfoWidget* swidget;
     if ( !m_albumViews.contains( album ) )
     {
-        view = new PlaylistView();
-        PlaylistModel* model = new PlaylistModel();
-        model->append( album );
-        view->setPlaylistModel( model );
-        view->setFrameShape( QFrame::NoFrame );
-        view->setAttribute( Qt::WA_MacShowFocusRect, 0 );
-
-        m_albumViews.insert( album, view );
+        swidget = new AlbumInfoWidget( album );
+        m_albumViews.insert( album, swidget );
     }
     else
     {
-        view = m_albumViews.value( album );
+        swidget = m_albumViews.value( album );
     }
 
-    setPage( view );
-    emit numSourcesChanged( 1 );
-
-    return view;
+    setPage( swidget );
+    return swidget;
 }
 
 
