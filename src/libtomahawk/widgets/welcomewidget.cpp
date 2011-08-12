@@ -35,7 +35,7 @@
 #include <dynamic/GeneratorInterface.h>
 
 #define HISTORY_TRACK_ITEMS 25
-#define HISTORY_PLAYLIST_ITEMS 5
+#define HISTORY_PLAYLIST_ITEMS 10
 #define HISTORY_RESOLVING_TIMEOUT 2500
 
 using namespace Tomahawk;
@@ -78,7 +78,7 @@ WelcomeWidget::WelcomeWidget( QWidget* parent )
     connect( model, SIGNAL( emptinessChanged( bool) ), this, SLOT( updatePlaylists() ) );
 
     m_tracksModel = new PlaylistModel( ui->tracksView );
-    m_tracksModel->setStyle( TrackModel::Short );
+    m_tracksModel->setStyle( TrackModel::ShortWithAvatars );
     ui->tracksView->overlay()->setEnabled( false );
     ui->tracksView->setPlaylistModel( m_tracksModel );
 
@@ -262,6 +262,8 @@ PlaylistDelegate::paint( QPainter* painter, const QStyleOptionViewItem& option, 
     QRect rectText = option.rect.adjusted( 66, 20, -100, -8 );
 #ifdef Q_OS_MAC
     rectText.adjust( 0, 1, 0, 0 );
+#elif Q_OS_WIN
+    rectText.adjust( 0, 2, 0, 0 );
 #endif
 
     painter->drawText( rectText, descText );
@@ -276,12 +278,12 @@ PlaylistDelegate::paint( QPainter* painter, const QStyleOptionViewItem& option, 
 //         int bottomEdge = pixmapRect
         // right edge 10px past right edge of pixmapRect
         // bottom edge flush with bottom of pixmap
-        QRect rect( pixmapRect.right() - width, 0, width - 8, 0 );
-        rect.adjust( 0, 0, -1, 0 );
+        QRect rect( pixmapRect.right() - width , 0, width - 8, 0 );
+        rect.adjust( -1, 0, 0, 0 );
         rect.setTop( pixmapRect.bottom() - painter->fontMetrics().height() - 1 );
         rect.setBottom( pixmapRect.bottom() + 1 );
 
-        QColor figColor( 191, 191, 191 );
+        QColor figColor( 153, 153, 153 );
         painter->setPen( figColor );
         painter->setBrush( figColor );
         painter->setFont( boldFont );
@@ -291,10 +293,9 @@ PlaylistDelegate::paint( QPainter* painter, const QStyleOptionViewItem& option, 
     }
 
 
-    QPixmap avatar = index.data( WelcomePlaylistModel::PlaylistRole ).value< Tomahawk::playlist_ptr >()->author()->avatar();
+    QPixmap avatar = index.data( WelcomePlaylistModel::PlaylistRole ).value< Tomahawk::playlist_ptr >()->author()->avatar( Source::FancyStyle );
     if ( avatar.isNull() )
         avatar = m_defaultAvatar;
-    avatar = TomahawkUtils::createAvatarFrame( avatar );
     QRect r( option.rect.width() - avatar.width() - 10, option.rect.top() + option.rect.height()/2 - avatar.height()/2, avatar.width(), avatar.height() );
     painter->drawPixmap( r, avatar );
 
