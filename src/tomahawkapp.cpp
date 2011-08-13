@@ -20,6 +20,8 @@
 
 #include "config.h"
 
+#include <iostream>
+
 #include <QPluginLoader>
 #include <QDir>
 #include <QMetaType>
@@ -303,6 +305,7 @@ TomahawkApp::instance()
     return (TomahawkApp*)TOMAHAWK_APPLICATION::instance();
 }
 
+
 void
 TomahawkApp::printHelp()
 {
@@ -317,6 +320,7 @@ TomahawkApp::printHelp()
     std::cout << QString( "\nurl is a tomahawk:// command or alternatively a url that Tomahawk can recognize.\n" ).toAscii().data();
     std::cout << QString( "For more documentation, see http://wiki.tomahawk-player.org/mediawiki/index.php/Tomahawk://_Links\n" ).toAscii().data();
 }
+
 
 #ifndef TOMAHAWK_HEADLESS
 AudioControls*
