@@ -29,11 +29,11 @@ void SettingsListDelegate::paint(QPainter *painter, const QStyleOptionViewItem &
         QPainterPath p;
         p.addRoundedRect( opt.rect.adjusted( 2, 1, -1, -1 ), 5, 5 );
 
-        QColor c  = opt.palette.color( QPalette::Highlight );
-        painter->setPen( c.darker( 150 ) );
+        QColor fill( 214, 214, 214 );
+        QColor border( 107, 107, 107 );
+        painter->setPen( border );
         painter->drawPath( p );
-        c.setAlpha( 200 );
-        painter->fillPath( p, c.lighter( 150 ) );
+        painter->fillPath( p, fill );
 
         painter->restore();
     }
