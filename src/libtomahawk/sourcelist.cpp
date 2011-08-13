@@ -134,8 +134,6 @@ SourceList::add( const source_ptr& source )
 void
 SourceList::removeAllRemote()
 {
-    Q_ASSERT( m_isReady );
-
     foreach( const source_ptr& s, m_sources )
     {
         qDebug() << "Disconnecting" << s->friendlyName() << s->isLocal() << s->controlConnection() << s->isOnline();
