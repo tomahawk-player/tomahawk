@@ -211,7 +211,10 @@ TomahawkWindow::setupSideBar()
     sidebarWidget->setContentsMargins( 0, 0, 0, 0 );
     sidebarWidget->layout()->setContentsMargins( 0, 0, 0, 0 );
     sidebarWidget->layout()->setMargin( 0 );
+
+#ifndef Q_OS_MAC
     sidebarWidget->layout()->setSpacing( 0 );
+#endif
 
     ui->splitter->addWidget( sidebarWidget );
     ui->splitter->addWidget( ViewManager::instance()->widget() );
