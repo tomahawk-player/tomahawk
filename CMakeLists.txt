@@ -54,7 +54,7 @@ SET( CMAKE_LIBRARY_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}" )
 SET( CMAKE_ARCHIVE_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}" )
 
 # installer creation
-INCLUDE( CPack )
+INCLUDE( TomahawkCPack.cmake )
 
 #deps
 INCLUDE( MacroOptionalFindPackage )
