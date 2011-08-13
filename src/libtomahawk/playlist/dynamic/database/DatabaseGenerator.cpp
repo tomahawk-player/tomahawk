@@ -25,17 +25,20 @@
 
 using namespace Tomahawk;
 
+
 GeneratorInterface*
 DatabaseFactory::create()
 {
     return new DatabaseGenerator();
 }
 
+
 dyncontrol_ptr
 DatabaseFactory::createControl ( const QString& controlType )
 {
     return dyncontrol_ptr( new DatabaseControl( controlType, typeSelectors() ) );
 }
+
 
 dyncontrol_ptr
 DatabaseFactory::createControl ( const QString& sql, DatabaseCommand_GenericSelect::QueryType type, const QString& summary )
@@ -62,10 +65,11 @@ DatabaseGenerator::DatabaseGenerator ( QObject* parent )
 //     m_logo.load( RESPATH "images )
 }
 
+
 DatabaseGenerator::~DatabaseGenerator()
 {
-
 }
+
 
 QPixmap
 DatabaseGenerator::logo()
@@ -77,14 +81,14 @@ DatabaseGenerator::logo()
 void
 DatabaseGenerator::dynamicFetched()
 {
-
 }
+
 
 void
 DatabaseGenerator::dynamicStarted()
 {
-
 }
+
 
 void
 DatabaseGenerator::generate( int number )
@@ -136,6 +140,7 @@ DatabaseGenerator::generate( int number )
 
 }
 
+
 void
 DatabaseGenerator::tracksGenerated ( const QList< query_ptr >& tracks )
 {
@@ -150,6 +155,7 @@ DatabaseGenerator::createControl( const QString& type )
     return m_controls.last();
 }
 
+
 dyncontrol_ptr
 DatabaseGenerator::createControl ( const QString& sql, DatabaseCommand_GenericSelect::QueryType type, const QString& summary )
 {
@@ -160,9 +166,10 @@ DatabaseGenerator::createControl ( const QString& sql, DatabaseCommand_GenericSe
 
 
 void
-DatabaseGenerator::fetchNext( int rating )
+DatabaseGenerator::fetchNext( int /* rating */ )
 {
 }
+
 
 QString
 DatabaseGenerator::sentenceSummary()
@@ -174,8 +181,8 @@ DatabaseGenerator::sentenceSummary()
     return QString();
 }
 
+
 void
 DatabaseGenerator::startOnDemand()
 {
-
 }
