@@ -20,6 +20,8 @@
 
 #include "config.h"
 
+#include <iostream>
+
 #include <QPluginLoader>
 #include <QDir>
 #include <QMetaType>
@@ -110,8 +112,6 @@ using namespace Tomahawk;
 TomahawkApp::TomahawkApp( int& argc, char *argv[] )
     : TOMAHAWK_APPLICATION( argc, argv )
 {
-    qDebug() << "TomahawkApp thread:" << thread();
-
     setOrganizationName( QLatin1String( TOMAHAWK_ORGANIZATION_NAME ) );
     setOrganizationDomain( QLatin1String( TOMAHAWK_ORGANIZATION_DOMAIN ) );
     setApplicationName( QLatin1String( TOMAHAWK_APPLICATION_NAME ) );
@@ -130,6 +130,7 @@ TomahawkApp::init()
         ::exit(0);
     }
 
+    qDebug() << "TomahawkApp thread:" << thread();
     Logger::setupLogfile();
     qsrand( QTime( 0, 0, 0 ).secsTo( QTime::currentTime() ) );
 
@@ -303,20 +304,24 @@ TomahawkApp::instance()
     return (TomahawkApp*)TOMAHAWK_APPLICATION::instance();
 }
 
+
 void
 TomahawkApp::printHelp()
 {
-    std::cout << QString( "usage: " + arguments().at( 0 ) + " [options] [url]\n" ).toAscii().data();
-    std::cout << QString( "options are:\n" ).toAscii().data();
-    std::cout << QString( "  --help         Show this help\n" ).toAscii().data();
-    std::cout << QString( "  --http         Initialize HTTP server\n" ).toAscii().data();
-    std::cout << QString( "  --filescan     Scan for files on startup\n" ).toAscii().data();
-    std::cout << QString( "  --testdb       Use a test database instead of real collection\n" ).toAscii().data();
-    std::cout << QString( "  --noupnp       Disable UPNP\n" ).toAscii().data();
-    std::cout << QString( "  --nosip        Disable SIP\n" ).toAscii().data();
-    std::cout << QString( "\nurl is a tomahawk:// command or alternatively a url that Tomahawk can recognize.\n" ).toAscii().data();
-    std::cout << QString( "For more documentation, see http://wiki.tomahawk-player.org/mediawiki/index.php/Tomahawk://_Links\n" ).toAscii().data();
+    #define echo( X ) std::cout << QString( X ).toAscii().data()
+
+    echo( "Usage: " + arguments().at( 0 ) + " [options] [url]\n" );
+    echo( "Options are:\n" );
+    echo( "  --help         Show this help\n" );
+    echo( "  --http         Initialize HTTP server\n" );
+    echo( "  --filescan     Scan for files on startup\n" );
+    echo( "  --testdb       Use a test database instead of real collection\n" );
+    echo( "  --noupnp       Disable UPNP\n" );
+    echo( "  --nosip        Disable SIP\n" );
+    echo( "\nurl is a tomahawk:// command or alternatively a url that Tomahawk can recognize.\n" );
+    echo( "For more documentation, see http://wiki.tomahawk-player.org/mediawiki/index.php/Tomahawk://_Links\n" );
 }
+
 
 #ifndef TOMAHAWK_HEADLESS
 AudioControls*

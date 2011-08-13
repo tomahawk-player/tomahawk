@@ -521,7 +521,6 @@ TreeModel::onAlbumsAdded( const QList<Tomahawk::album_ptr>& albums, const QVaria
     if ( parent.isValid() )
         crows.second -= 1;
 
-    qDebug() << crows.first << crows.second;
     if ( !parent.isValid() || crows.second > 0 )
         emit beginInsertRows( parent, crows.first, crows.second );
 
@@ -551,7 +550,6 @@ TreeModel::onAlbumsAdded( const QList<Tomahawk::album_ptr>& albums, const QVaria
     else
         emit dataChanged( albumitem->index, albumitem->index.sibling( albumitem->index.row(), columnCount( QModelIndex() ) - 1 ) );
 
-    qDebug() << rowCount( parent );
     emit loadingFinished();
 }
 
@@ -568,14 +566,16 @@ TreeModel::onTracksAdded( const QList<Tomahawk::query_ptr>& tracks, const QVaria
     QModelIndex parent = index( rows.first().toUInt(), 0, index( rows.at( 1 ).toUInt(), 0, QModelIndex() ) );
     TreeModelItem* parentItem = itemFromIndex( parent );
 
-    // the -1 is because we fake a rowCount of 1 to trigger Qt calling fetchMore()
-    int c = rowCount( parent ) - 1;
     QPair< int, int > crows;
+    int c = rowCount( parent );
     crows.first = c;
     crows.second = c + tracks.count() - 1;
 
-    if ( crows.second > 0 )
-        emit beginInsertRows( parent, crows.first + 1, crows.second );
+    if ( parent.isValid() )
+        crows.second -= 1;
+
+    if ( !parent.isValid() || crows.second > 0 )
+        emit beginInsertRows( parent, crows.first, crows.second );
 
     TreeModelItem* item = 0;
     foreach( const query_ptr& query, tracks )
@@ -587,7 +587,7 @@ TreeModel::onTracksAdded( const QList<Tomahawk::query_ptr>& tracks, const QVaria
         connect( item, SIGNAL( dataChanged() ), SLOT( onDataChanged() ) );
     }
 
-    if ( crows.second > 0 )
+    if ( !parent.isValid() || crows.second > 0 )
         emit endInsertRows();
 
     emit dataChanged( item->index.sibling( 0, 0 ), item->index.sibling( item->index.row(), columnCount( QModelIndex() ) - 1 ) );

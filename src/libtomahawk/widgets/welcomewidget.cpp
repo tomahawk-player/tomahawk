@@ -264,7 +264,7 @@ PlaylistDelegate::paint( QPainter* painter, const QStyleOptionViewItem& option, 
     QRect rectText = option.rect.adjusted( 66, 20, -100, -8 );
 #ifdef Q_OS_MAC
     rectText.adjust( 0, 1, 0, 0 );
-#elif Q_OS_WIN
+#elif defined Q_OS_WIN
     rectText.adjust( 0, 2, 0, 0 );
 #endif
 

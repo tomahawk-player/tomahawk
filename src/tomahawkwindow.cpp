@@ -177,10 +177,8 @@ TomahawkWindow::applyPlatformTweaks()
 #endif
 
 #ifdef Q_OS_MAC
-    ui->hline1->setMaximumHeight( 0 );
-    ui->hline2->setMaximumHeight( 0 );
-    ui->hline1->hide();
-    ui->hline2->hide();
+    delete ui->hline1;
+    delete ui->hline2;
 #else
     ui->hline1->setStyleSheet( "border: 1px solid gray;" );
     ui->hline2->setStyleSheet( "border: 1px solid gray;" );
@@ -213,7 +211,10 @@ TomahawkWindow::setupSideBar()
     sidebarWidget->setContentsMargins( 0, 0, 0, 0 );
     sidebarWidget->layout()->setContentsMargins( 0, 0, 0, 0 );
     sidebarWidget->layout()->setMargin( 0 );
+
+#ifndef Q_OS_MAC
     sidebarWidget->layout()->setSpacing( 0 );
+#endif
 
     ui->splitter->addWidget( sidebarWidget );
     ui->splitter->addWidget( ViewManager::instance()->widget() );
