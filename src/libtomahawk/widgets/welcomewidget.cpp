@@ -256,9 +256,7 @@ PlaylistDelegate::paint( QPainter* painter, const QStyleOptionViewItem& option, 
     QColor c = painter->pen().color();
     painter->setPen( QColor( Qt::gray ).darker() );
     QFont font2 = font;
-#ifdef Q_OS_MAC
     font2.setPointSize( font2.pointSize() - 1 );
-#endif
     painter->setFont( font2 );
 
     QRect rectText = option.rect.adjusted( 66, 20, -100, -8 );
