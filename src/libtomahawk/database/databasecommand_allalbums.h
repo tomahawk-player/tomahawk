@@ -38,7 +38,7 @@ public:
         ModificationTime = 1
     };
 
-    explicit DatabaseCommand_AllAlbums( const Tomahawk::collection_ptr& collection, const Tomahawk::artist_ptr& artist = Tomahawk::artist_ptr(), QObject* parent = 0 )
+    explicit DatabaseCommand_AllAlbums( const Tomahawk::collection_ptr& collection = Tomahawk::collection_ptr(), const Tomahawk::artist_ptr& artist = Tomahawk::artist_ptr(), QObject* parent = 0 )
         : DatabaseCommand( parent )
         , m_collection( collection )
         , m_artist( artist )
@@ -55,6 +55,7 @@ public:
     void execForCollection( DatabaseImpl* );
     void execForArtist( DatabaseImpl* );
 
+    void setArtist( const Tomahawk::artist_ptr& artist ) { m_artist = artist; }
     void setLimit( unsigned int amount ) { m_amount = amount; }
     void setSortOrder( DatabaseCommand_AllAlbums::SortOrder order ) { m_sortOrder = order; }
     void setSortDescending( bool descending ) { m_sortDescending = descending; }

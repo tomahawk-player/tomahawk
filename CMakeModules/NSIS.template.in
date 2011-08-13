@@ -28,10 +28,11 @@
 
 ; We use official release plugins
 ; mingw32-vlc from obs misses a lot and has even broken ones probably
-!define VLC_PATH "${SOURCE_PATH}\admin\win\vlc" ; SIC! ^
-!define VLC_PLUGIN_PATH "${VLC_PATH}\plugins"
+!define VLC_PATH "${SOURCE_PATH}\admin\win\vlc\prefix" ; SIC! ^
+!define VLC_BIN "${VLC_PATH}\bin"
+!define VLC_PLUGIN_PATH "${VLC_BIN}\plugins"
 
-!define NSI_PATH "@CMAKE_SOURCE_DIR@/admin/win/nsi"
+!define NSI_PATH "${SOURCE_PATH}/admin/win/nsi"
 
 ;-----------------------------------------------------------------------------
 ; Increment installer revision number as part of this script.
@@ -333,15 +334,15 @@ Section "Tomahawk Player" SEC_TOMAHAWK_PLAYER
    File "${MING_BIN}\libdbus-1-3.dll"
    File "${MING_BIN}\dbus-daemon.exe"
 
-   File "${MING_BIN}\libphonon.dll"
+   File "${VLC_BIN}\libphonon.dll"
    SetOutPath "$INSTDIR\phonon_backend"
-   File "${VLC_PATH}\phonon_backend\phonon_vlc.dll"
+   File "${VLC_BIN}\phonon_backend\phonon_vlc.dll"
    SetOutPath "$INSTDIR"
 
    ;VLC
    ;SetOutPath "$INSTDIR\phonon_backend"
-   File "${VLC_PATH}\libvlc.dll"
-   File "${VLC_PATH}\libvlccore.dll"
+   File "${VLC_BIN}\libvlc.dll"
+   File "${VLC_BIN}\libvlccore.dll"
    SetOutPath "$INSTDIR\plugins"
    File /r "${VLC_PLUGIN_PATH}\*.dll"
    SetOutPath "$INSTDIR"

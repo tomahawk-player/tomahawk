@@ -20,6 +20,7 @@
 #include "ui_AlbumInfoWidget.h"
 
 #include "viewmanager.h"
+#include "database/database.h"
 #include "playlist/treemodel.h"
 #include "playlist/albummodel.h"
 
@@ -39,7 +40,6 @@ using namespace Tomahawk;
 AlbumInfoWidget::AlbumInfoWidget( const Tomahawk::album_ptr& album, QWidget* parent )
     : QWidget( parent )
     , ui( new Ui::AlbumInfoWidget )
-    , m_album( album )
 {
     ui->setupUi( this );
 
@@ -77,13 +77,18 @@ AlbumInfoWidget::~AlbumInfoWidget()
 void
 AlbumInfoWidget::load( const album_ptr& album )
 {
+    m_album = album;
     m_title = album->name();
     m_description = album->artist()->name();
     m_tracksModel->addTracks( album, QModelIndex() );
 
-    QList<album_ptr> al;
-    al << album;
-    m_albumsModel->addAlbums( al );
+    DatabaseCommand_AllAlbums* cmd = new DatabaseCommand_AllAlbums();
+    cmd->setArtist( album->artist() );
+
+    connect( cmd, SIGNAL( albums( QList<Tomahawk::album_ptr>, QVariant ) ),
+                    SLOT( gotAlbums( QList<Tomahawk::album_ptr> ) ) );
+
+    Database::instance()->enqueue( QSharedPointer<DatabaseCommand>( cmd ) );
 
     Tomahawk::InfoSystem::InfoCriteriaHash trackInfo;
     trackInfo["artist"] = album->artist()->name();
@@ -96,6 +101,17 @@ AlbumInfoWidget::load( const album_ptr& album )
     requestData.customData = QVariantMap();
 
     Tomahawk::InfoSystem::InfoSystem::instance()->getInfo( requestData );
+}
+
+
+void
+AlbumInfoWidget::gotAlbums( const QList<Tomahawk::album_ptr>& albums )
+{
+    QList<Tomahawk::album_ptr> al = albums;
+    if ( al.contains( m_album ) )
+        al.removeAll( m_album );
+
+    m_albumsModel->addAlbums( al );
 }
 
 

@@ -294,7 +294,6 @@ PlaylistDelegate::paint( QPainter* painter, const QStyleOptionViewItem& option, 
         painter->restore();
     }
 
-
     QPixmap avatar = index.data( WelcomePlaylistModel::PlaylistRole ).value< Tomahawk::playlist_ptr >()->author()->avatar( Source::FancyStyle );
     if ( avatar.isNull() )
         avatar = m_defaultAvatar;

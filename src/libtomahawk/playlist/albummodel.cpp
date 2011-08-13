@@ -355,7 +355,6 @@ void
 AlbumModel::infoSystemFinished( QString target )
 {
     Q_UNUSED( target );
-//    qDebug() << Q_FUNC_INFO;
 }
 
 

@@ -86,6 +86,8 @@ protected:
     void changeEvent( QEvent* e );
 
 private slots:
+    void gotAlbums( const QList<Tomahawk::album_ptr>& albums );
+
     void infoSystemInfo( Tomahawk::InfoSystem::InfoRequestData requestData, QVariant output );
     void infoSystemFinished( QString target );
 
