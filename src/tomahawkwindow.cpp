@@ -93,6 +93,7 @@ TomahawkWindow::TomahawkWindow( QWidget* parent )
     ui->centralWidget->setContentsMargins( 0, 0, 0, 0 );
     ui->centralWidget->layout()->setContentsMargins( 0, 0, 0, 0 );
     ui->centralWidget->layout()->setMargin( 0 );
+    ui->centralWidget->layout()->setSpacing( 0 );
 
     setupSideBar();
     setupToolBar();
@@ -173,6 +174,16 @@ TomahawkWindow::applyPlatformTweaks()
 
 #ifdef Q_WS_MAC
     setUnifiedTitleAndToolBarOnMac( true );
+#endif
+
+#ifdef Q_OS_MAC
+    ui->hline1->setMaximumHeight( 0 );
+    ui->hline2->setMaximumHeight( 0 );
+    ui->hline1->hide();
+    ui->hline2->hide();
+#else
+    ui->hline1->setStyleSheet( "border: 1px solid gray;" );
+    ui->hline2->setStyleSheet( "border: 1px solid gray;" );
 #endif
 }
 
