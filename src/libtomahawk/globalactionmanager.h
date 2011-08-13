@@ -105,6 +105,8 @@ private:
     void handleTrackUrls( const QString& urls );
     QList< Tomahawk::query_ptr > tracksFromQueryList( const QMimeData* d );
     QList< Tomahawk::query_ptr > tracksFromResultList( const QMimeData* d );
+    QList< Tomahawk::query_ptr > tracksFromArtistMetaData( const QMimeData* d );
+    QList< Tomahawk::query_ptr > tracksFromAlbumMetaData( const QMimeData* d );
 
     QString hostname() const;
 
