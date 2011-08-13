@@ -93,7 +93,14 @@ TreeItemDelegate::paint( QPainter* painter, const QStyleOptionViewItem& option, 
                 o.state |= QStyle::State_Selected;
             }
 
+#ifdef Q_OS_MAC
+            int oldX = o.rect.x();
+            o.rect.setX( 0 );
+#endif
             qApp->style()->drawControl( QStyle::CE_ItemViewItem, &o, painter );
+#ifdef Q_OS_MAC
+            o.rect.setX( oldX );
+#endif
 
             {
                 QRect r = o.rect.adjusted( 3, 0, 0, 0 );
