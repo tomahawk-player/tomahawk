@@ -81,6 +81,9 @@ public slots:
     void previous();
     void next();
 
+    bool canGoPrevious();
+    bool canGoNext();
+
     void seek( qint64 ms );
     void seek( int ms ); // for compatibility with seekbar in audiocontrols
     void setVolume( int percentage );

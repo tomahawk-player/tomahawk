@@ -49,6 +49,19 @@ MprisPlugin::MprisPlugin()
     dbus.registerObject("/org/mpris/MediaPlayer2", this);
     dbus.registerService("org.mpris.MediaPlayer2.tomahawk");
 
+    connect( AudioEngine::instance(), SIGNAL( volumeChanged( int ) ),
+            SLOT( onVolumeChanged( int ) ) );
+
+    // When the playlist changes, signals for several properties are sent
+    connect( AudioEngine::instance(), SIGNAL( playlistChanged( Tomahawk::PlaylistInterface* ) ),
+            SLOT( onPlaylistChanged( Tomahawk::PlaylistInterface* ) ) );
+
+    // When a track is added or removed, CanGoNext updated signal is sent
+    PlaylistInterface *playlist = AudioEngine::instance()->playlist();
+    if( playlist )
+        connect( playlist->object(), SIGNAL( trackCountChanged( unsigned int ) ),
+                SLOT( onTrackCountChanged( unsigned int ) ) );
+
 }
 
 
@@ -128,31 +141,33 @@ MprisPlugin::canControl() const
 bool
 MprisPlugin::canGoNext() const
 {
-    return true;
+    return AudioEngine::instance()->canGoNext();
 }
 
 bool
 MprisPlugin::canGoPrevious() const
 {
-    return true;
+    return AudioEngine::instance()->canGoPrevious();
 }
 
 bool
 MprisPlugin::canPause() const
 {
-    return true;
+    return AudioEngine::instance()->currentTrack();
 }
 
 bool 
 MprisPlugin::canPlay() const
 {
-    return true;
+    // If there is a currently playing track, or if there is a playlist with at least 1 track, you can hit play
+    PlaylistInterface *p = AudioEngine::instance()->playlist();
+    return AudioEngine::instance()->currentTrack() || ( p && p->trackCount() );
 }
 
 bool
 MprisPlugin::canSeek() const
 {
-    return false;
+    return true;
 }
 
 QString
@@ -208,7 +223,7 @@ MprisPlugin::metadata() const
     Tomahawk::result_ptr track = AudioEngine::instance()->currentTrack();
     if( track )
     {
-        metadataMap.insert( "mpris:trackid", track->id() );
+        metadataMap.insert( "mpris:trackid", QString( "/track/" ) + track->id().replace( "-", "" ) );
         metadataMap.insert( "mpris:length", track->duration() );
         metadataMap.insert( "xesam:album", track->album()->name() );
         metadataMap.insert( "xesam:artist", track->artist()->name() );
@@ -322,23 +337,37 @@ void
 MprisPlugin::Seek( qlonglong Offset )
 {
     qDebug() << Q_FUNC_INFO;
-    /*
+
     qlonglong seekTime = position() + Offset;
     qDebug() << "seekTime: " << seekTime;
     if( seekTime < 0 )
         AudioEngine::instance()->seek( 0 );
-    else if( seekTime > AudioEngine::instance()->currentTrackTotalTime() )
+    else if( seekTime > AudioEngine::instance()->currentTrackTotalTime()*1000 )
         Next();
     // seekTime is in microseconds, but we work internally in milliseconds
     else
         AudioEngine::instance()->seek( (qint64) ( seekTime / 1000 ) );
-    */
+
 }
 
 void
 MprisPlugin::SetPosition( const QDBusObjectPath &TrackId, qlonglong Position )
 {
     // TODO
+    qDebug() << Q_FUNC_INFO;
+    qDebug() << "path: " << TrackId.path();
+    qDebug() << "position: " << Position;
+
+    if( TrackId.path() != QString("/track/") + AudioEngine::instance()->currentTrack()->id().replace( "-", "" ) )
+        return;
+
+    if( ( Position < 0) || ( Position > AudioEngine::instance()->currentTrackTotalTime()*1000 )  )
+        return;
+
+    qDebug() << "seeking to: " << Position/1000 << "ms";
+
+    AudioEngine::instance()->seek( (qint64) (Position / 1000 ) );
+
 }
 
 void
@@ -403,8 +432,6 @@ MprisPlugin::audioStarted( const QVariant &input )
 {
     qDebug() << Q_FUNC_INFO;
 
-    m_playbackStatus = "Playing";
-
     if ( !input.canConvert< Tomahawk::InfoSystem::InfoCriteriaHash >() )
         return;
 
@@ -412,10 +439,13 @@ MprisPlugin::audioStarted( const QVariant &input )
     if ( !hash.contains( "title" ) || !hash.contains( "artist" ) )
         return;
 
+    m_playbackStatus = "Playing";
+    notifyPropertyChanged( "org.mpris.MediaPlayer2.Player", "Metadata");
+
     //hash["artist"];
     //hash["title"];
-    QString nowPlaying = "";
-    qDebug() << "nowPlaying: " << nowPlaying;
+    //QString nowPlaying = "";
+    //qDebug() << "nowPlaying: " << nowPlaying;
 }
 
 void
@@ -443,6 +473,43 @@ MprisPlugin::audioResumed( const QVariant &input )
 {
     qDebug() << Q_FUNC_INFO;
     audioStarted( input );
+}
+
+void
+MprisPlugin::onVolumeChanged( int volume )
+{
+    Q_UNUSED( volume );
+    notifyPropertyChanged( "org.mpris.MediaPlayer2.Player", "Volume");
+}
+
+void
+MprisPlugin::onPlaylistChanged( Tomahawk::PlaylistInterface* playlist )
+{
+    qDebug() << Q_FUNC_INFO;
+    disconnect( this, SLOT( onTrackCountChanged( unsigned int ) ) );
+    qDebug() << "disconnected";
+    if( playlist )
+        qDebug() << "playlist not null";
+
+    if( playlist )
+        connect( playlist->object(), SIGNAL( trackCountChanged( unsigned int ) ),
+            SLOT( onTrackCountChanged( unsigned int ) ) );
+
+    qDebug() << "connected new playlist";
+
+    // Notify relevant changes
+    notifyPropertyChanged( "org.mpris.MediaPlayer2.Player", "LoopStatus" );
+    notifyPropertyChanged( "org.mpris.MediaPlayer2.Player", "Shuffle" );
+    onTrackCountChanged( 0 );
+}
+
+void
+MprisPlugin::onTrackCountChanged( unsigned int tracks )
+{
+    Q_UNUSED( tracks );
+    notifyPropertyChanged( "org.mpris.MediaPlayer2.Player", "CanGoNext" );
+    notifyPropertyChanged( "org.mpris.MediaPlayer2.Player", "CanGoPrevious" );
+
 }
 
 void
