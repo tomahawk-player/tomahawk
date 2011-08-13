@@ -128,6 +128,7 @@ ArtistView::setTreeModel( TreeModel* model )
     connect( m_model, SIGNAL( loadingFinished() ), m_loadingSpinner, SLOT( fadeOut() ) );
 
     connect( m_proxyModel, SIGNAL( filterChanged( QString ) ), SLOT( onFilterChanged( QString ) ) );
+    connect( m_proxyModel, SIGNAL( rowsInserted( QModelIndex, int, int ) ), SLOT( onViewChanged() ) );
 
     setAcceptDrops( false );
 }
@@ -165,6 +166,7 @@ ArtistView::keyPressEvent( QKeyEvent* event )
         onItemActivated( currentIndex() );
     }
 }
+
 
 void
 ArtistView::paintEvent( QPaintEvent* event )
