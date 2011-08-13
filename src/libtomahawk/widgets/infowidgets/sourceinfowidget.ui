@@ -51,7 +51,7 @@
        <item>
         <widget class="HeaderLabel" name="label">
          <property name="text">
-          <string>Latest Additions to their Collection</string>
+          <string>Latest Additions</string>
          </property>
         </widget>
        </item>
@@ -65,7 +65,7 @@
        <item>
         <widget class="HeaderLabel" name="label_3">
          <property name="text">
-          <string>Recently played Tracks</string>
+          <string>Recently Played Tracks</string>
          </property>
         </widget>
        </item>

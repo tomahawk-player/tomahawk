@@ -57,6 +57,8 @@ PlaylistItemDelegate::PlaylistItemDelegate( TrackView* parent, TrackProxyModel* 
 
     m_centerOption = QTextOption( Qt::AlignVCenter );
     m_centerOption.setWrapMode( QTextOption::NoWrap );
+
+    m_defaultAvatar = TomahawkUtils::createAvatarFrame( QPixmap( RESPATH "images/user-avatar.png" ) );
 }
 
 
@@ -75,7 +77,7 @@ PlaylistItemDelegate::sizeHint( const QStyleOptionViewItem& option, const QModel
     if ( index.isValid() )
     {
         int style = index.data( TrackModel::StyleRole ).toInt();
-        if ( style == TrackModel::Short )
+        if ( style == TrackModel::Short || style == TrackModel::ShortWithAvatars )
             size.setHeight( 44 );
     }
 
@@ -135,12 +137,14 @@ PlaylistItemDelegate::paint( QPainter* painter, const QStyleOptionViewItem& opti
         case TrackModel::Short:
             paintShort( painter, option, index );
             break;
+        case TrackModel::ShortWithAvatars:
+            paintShort( painter, option, index, true );
     }
 }
 
 
 void
-PlaylistItemDelegate::paintShort( QPainter* painter, const QStyleOptionViewItem& option, const QModelIndex& index ) const
+PlaylistItemDelegate::paintShort( QPainter* painter, const QStyleOptionViewItem& option, const QModelIndex& index, bool useAvatars ) const
 {
     TrackModelItem* item = m_model->itemFromIndex( m_model->mapToSource( index ) );
     Q_ASSERT( item );
@@ -184,11 +188,14 @@ PlaylistItemDelegate::paintShort( QPainter* painter, const QStyleOptionViewItem&
         else
             lowerText = QString( "played %1 ago by %2" ).arg( playtime ).arg( source->friendlyName() );
 
-        pixmap = source->avatar();
+        if ( useAvatars )
+            pixmap = source->avatar( Source::FancyStyle );
     }
 
-    if ( pixmap.isNull() )
-        pixmap = QPixmap( RESPATH "images/user-avatar.png" );
+    if ( pixmap.isNull() && !useAvatars )
+        pixmap = QPixmap( RESPATH "images/track-placeholder.png" );
+    else if ( pixmap.isNull() && useAvatars )
+        pixmap = m_defaultAvatar;
 
     painter->save();
     {
@@ -227,7 +234,8 @@ PlaylistItemDelegate::paintShort( QPainter* painter, const QStyleOptionViewItem&
         QString text = painter->fontMetrics().elidedText( upperText, Qt::ElideRight, r.width() );
         painter->drawText( r.adjusted( 0, 1, 0, 0 ), text, m_topOption );
 
-        painter->setFont( opt.font );
+
+        painter->setFont( opt.font);
         text = painter->fontMetrics().elidedText( lowerText, Qt::ElideRight, r.width() );
         painter->drawText( r.adjusted( 0, 1, 0, 0 ), text, m_bottomOption );
     }
@@ -261,11 +269,7 @@ PlaylistItemDelegate::paintDetailed( QPainter* painter, const QStyleOptionViewIt
 
     if ( index.column() == TrackModel::Score )
     {
-#ifdef Q_OS_MAC // On Mac, highlight color is very bright and stands out a lot
         QColor barColor( 167, 183, 211 ); // This matches the sidebar (sourcetreeview.cpp:672)
-#else
-        QColor barColor = opt.palette.highlight().color();
-#endif
         if ( opt.state & QStyle::State_Selected )
             painter->setPen( opt.palette.brightText().color() );
         else

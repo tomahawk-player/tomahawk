@@ -47,6 +47,7 @@ TransferView::TransferView( AnimatedSplitter* parent )
     headers << tr( "Peer" ) << tr( "Rate" ) << tr( "Track" );
     m_tree->setHeaderLabels( headers );
 
+    m_tree->setHorizontalScrollBarPolicy( Qt::ScrollBarAlwaysOff );
     m_tree->setSizePolicy( QSizePolicy::Preferred, QSizePolicy::Ignored );
     m_tree->setColumnCount( 3 );
     m_tree->setColumnWidth( 0, 80 );
@@ -58,6 +59,17 @@ TransferView::TransferView( AnimatedSplitter* parent )
 
     m_tree->setFrameShape( QFrame::NoFrame );
     m_tree->setAttribute( Qt::WA_MacShowFocusRect, 0 );
+
+#ifndef Q_WS_WIN
+    QFont f = font();
+    f.setPointSize( f.pointSize() - 1 );
+    setFont( f );
+#endif
+
+#ifdef Q_WS_MAC
+    f.setPointSize( f.pointSize() - 2 );
+    setFont( f );
+#endif
 }
 
 

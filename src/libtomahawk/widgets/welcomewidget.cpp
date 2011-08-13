@@ -32,9 +32,10 @@
 #include "widgets/overlaywidget.h"
 #include "utils/tomahawkutils.h"
 #include "utils/logger.h"
+#include <dynamic/GeneratorInterface.h>
 
 #define HISTORY_TRACK_ITEMS 25
-#define HISTORY_PLAYLIST_ITEMS 5
+#define HISTORY_PLAYLIST_ITEMS 10
 #define HISTORY_RESOLVING_TIMEOUT 2500
 
 using namespace Tomahawk;
@@ -70,13 +71,18 @@ WelcomeWidget::WelcomeWidget( QWidget* parent )
     ui->playlistWidget->setItemDelegate( new PlaylistDelegate() );
     ui->playlistWidget->setModel( model );
     ui->playlistWidget->overlay()->resize( 380, 86 );
+#ifdef Q_OS_MAC
+    ui->playlistWidget->setVerticalScrollMode( QAbstractItemView::ScrollPerPixel );
+#endif
 
     connect( model, SIGNAL( emptinessChanged( bool) ), this, SLOT( updatePlaylists() ) );
 
     m_tracksModel = new PlaylistModel( ui->tracksView );
-    m_tracksModel->setStyle( TrackModel::Short );
+    m_tracksModel->setStyle( TrackModel::ShortWithAvatars );
     ui->tracksView->overlay()->setEnabled( false );
     ui->tracksView->setPlaylistModel( m_tracksModel );
+    ui->tracksView->setHeaderHidden( true );
+    ui->tracksView->setHorizontalScrollBarPolicy( Qt::ScrollBarAlwaysOff );
 
     m_recentAlbumsModel = new AlbumModel( ui->additionsView );
     ui->additionsView->setAlbumModel( m_recentAlbumsModel );
@@ -189,6 +195,7 @@ WelcomeWidget::changeEvent( QEvent* e )
     }
 }
 
+
 QSize
 PlaylistDelegate::sizeHint( const QStyleOptionViewItem& option, const QModelIndex& index ) const
 {
@@ -217,23 +224,82 @@ PlaylistDelegate::paint( QPainter* painter, const QStyleOptionViewItem& option, 
     QTextOption to;
     to.setAlignment( Qt::AlignCenter );
     QFont font = opt.font;
-    QFont boldFont = opt.font;
+#ifdef Q_OS_MAC
+    font.setPointSize( font.pointSize() - 2 );
+#endif
+
+    QFont boldFont = font;
     boldFont.setBold( true );
-    QFont italicFont = opt.font;
-    italicFont.setItalic( true );
 
-    painter->drawPixmap( option.rect.adjusted( 10, 13, -option.rect.width() + 48, -13 ), m_playlistIcon );
+    QPixmap icon;
+    WelcomePlaylistModel::PlaylistTypes type = (WelcomePlaylistModel::PlaylistTypes)index.data( WelcomePlaylistModel::PlaylistTypeRole ).toInt();
+    if( type == WelcomePlaylistModel::StaticPlaylist )
+        icon = m_playlistIcon;
+    else if( type == WelcomePlaylistModel::AutoPlaylist )
+        icon = m_autoIcon;
+    else if( type == WelcomePlaylistModel::Station )
+        icon = m_stationIcon;
 
-    painter->drawText( option.rect.adjusted( 56, 26, -100, -8 ), index.data( WelcomePlaylistModel::ArtistRole ).toString() );
+    QRect pixmapRect = option.rect.adjusted( 10, 13, -option.rect.width() + 48, -13 );
+    icon = icon.scaled( pixmapRect.size(), Qt::KeepAspectRatio, Qt::SmoothTransformation );
 
-    QString trackCount = tr( "%1 tracks" ).arg( index.data( WelcomePlaylistModel::TrackCountRole ).toString() );
-    painter->drawText( option.rect.adjusted( option.rect.width() - 96, 12, 0, -2 - opt.rect.height() / 2 ), trackCount, to );
+    painter->drawPixmap( pixmapRect, icon );
 
-    QString author = index.data( WelcomePlaylistModel::PlaylistRole ).value< Tomahawk::playlist_ptr >()->author()->friendlyName();
-    QRect r = option.rect.adjusted( option.rect.width() - 96, 2 + opt.rect.height() / 2, 0, -12);
-    painter->setFont( italicFont );
-    author = painter->fontMetrics().elidedText( author, Qt::ElideRight, r.width() );
-    painter->drawText( r, author, to );
+    QString descText;
+    if ( type == WelcomePlaylistModel::Station )
+    {
+        descText = index.data( WelcomePlaylistModel::DynamicPlaylistRole ).value< Tomahawk::dynplaylist_ptr >()->generator()->sentenceSummary();
+    } else
+    {
+        descText = index.data( WelcomePlaylistModel::ArtistRole ).toString();
+    }
+    QColor c = painter->pen().color();
+    painter->setPen( QColor( Qt::gray ).darker() );
+    QFont font2 = font;
+#ifdef Q_OS_MAC
+    font2.setPointSize( font2.pointSize() - 1 );
+#endif
+    painter->setFont( font2 );
+
+    QRect rectText = option.rect.adjusted( 66, 20, -100, -8 );
+#ifdef Q_OS_MAC
+    rectText.adjust( 0, 1, 0, 0 );
+#elif Q_OS_WIN
+    rectText.adjust( 0, 2, 0, 0 );
+#endif
+
+    painter->drawText( rectText, descText );
+    painter->setPen( c );
+    painter->setFont( font );
+
+    if ( type != WelcomePlaylistModel::Station )
+    {
+        painter->save();
+        QString tracks = index.data( WelcomePlaylistModel::TrackCountRole ).toString();
+        int width = painter->fontMetrics().width( tracks );
+//         int bottomEdge = pixmapRect
+        // right edge 10px past right edge of pixmapRect
+        // bottom edge flush with bottom of pixmap
+        QRect rect( pixmapRect.right() - width , 0, width - 8, 0 );
+        rect.adjust( -1, 0, 0, 0 );
+        rect.setTop( pixmapRect.bottom() - painter->fontMetrics().height() - 1 );
+        rect.setBottom( pixmapRect.bottom() + 1 );
+
+        QColor figColor( 153, 153, 153 );
+        painter->setPen( figColor );
+        painter->setBrush( figColor );
+        painter->setFont( boldFont );
+
+        TomahawkUtils::drawBackgroundAndNumbers( painter, tracks, rect );
+        painter->restore();
+    }
+
+
+    QPixmap avatar = index.data( WelcomePlaylistModel::PlaylistRole ).value< Tomahawk::playlist_ptr >()->author()->avatar( Source::FancyStyle );
+    if ( avatar.isNull() )
+        avatar = m_defaultAvatar;
+    QRect r( option.rect.width() - avatar.width() - 10, option.rect.top() + option.rect.height()/2 - avatar.height()/2, avatar.width(), avatar.height() );
+    painter->drawPixmap( r, avatar );
 
     painter->setFont( boldFont );
     painter->drawText( option.rect.adjusted( 56, 6, -100, -option.rect.height() + 20 ), index.data().toString() );

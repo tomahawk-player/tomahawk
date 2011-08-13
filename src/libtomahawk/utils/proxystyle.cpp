@@ -80,6 +80,13 @@ ProxyStyle::drawControl( ControlElement ce, const QStyleOption* opt, QPainter* p
             p->setPen( QColor( 0x8c, 0x8c, 0x8c ) );
             p->drawLine( opt->rect.topLeft(), opt->rect.bottomRight() );
         }
+#ifndef Q_WS_MAC
+        else
+        {
+            p->setPen( QColor( 0xff, 0xff, 0xff ) );
+            p->drawLine( opt->rect.topLeft(), opt->rect.bottomRight() );
+        }
+#endif
     }
     else
         QProxyStyle::drawControl( ce, opt, p, w );

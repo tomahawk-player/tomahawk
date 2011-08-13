@@ -173,6 +173,7 @@ set( libSources
     utils/xspfgenerator.cpp
     utils/jspfloader.cpp
     utils/spotifyparser.cpp
+    utils/rdioparser.cpp
     utils/shortenedlinkparser.cpp
 
     widgets/newplaylistwidget.cpp
@@ -185,6 +186,7 @@ set( libSources
     widgets/SocialPlaylistWidget.cpp
     widgets/infowidgets/sourceinfowidget.cpp
     widgets/infowidgets/ArtistInfoWidget.cpp
+    widgets/infowidgets/AlbumInfoWidget.cpp
 
     kdsingleapplicationguard/kdsingleapplicationguard.cpp
     kdsingleapplicationguard/kdsharedmemorylocker.cpp
@@ -352,6 +354,7 @@ set( libHeaders
     utils/xspfgenerator.h
     utils/jspfloader.h
     utils/spotifyparser.h
+    utils/rdioparser.h
     utils/shortenedlinkparser.h
 
     widgets/newplaylistwidget.h
@@ -364,6 +367,7 @@ set( libHeaders
     widgets/SocialPlaylistWidget.h
     widgets/infowidgets/sourceinfowidget.h
     widgets/infowidgets/ArtistInfoWidget.h
+    widgets/infowidgets/AlbumInfoWidget.h
 
     kdsingleapplicationguard/kdsingleapplicationguard.h
 )
@@ -387,6 +391,7 @@ set( libUI ${libUI}
     widgets/SocialPlaylistWidget.ui
     widgets/infowidgets/sourceinfowidget.ui
     widgets/infowidgets/ArtistInfoWidget.ui
+    widgets/infowidgets/AlbumInfoWidget.ui
     playlist/topbar/topbar.ui
     playlist/infobar/infobar.ui
 )
@@ -488,7 +493,9 @@ target_link_libraries( tomahawklib
     ${TAGLIB_LIBRARIES}
     ${CLUCENE_LIBRARIES}
     ${LIBECHONEST_LIBRARY}
+    ${QT_QTUITOOLS_LIBRARY}
     ${QT_LIBRARIES}
+    ${QT_QTUITOOLS_LIBRARY} # We really need to link twice against it for windows, maybe QTBUG-20498 is related
     ${OS_SPECIFIC_LINK_LIBRARIES}
     ${CMAKE_THREAD_LIBS_INIT}
     ${LINK_LIBRARIES}

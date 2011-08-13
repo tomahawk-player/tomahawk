@@ -17,17 +17,16 @@
  */
 
 /**
- * \class ArtistInfoWidget
- * \brief ViewPage, which displays top-hits, related artists and albums for an artist.
+ * \class AlbumInfoWidget
+ * \brief ViewPage, which displays an album for an artist and recommends others.
  *
- * This Tomahawk ViewPage displays top-hits, related artists and known albums
- * for any given artist. It is our default ViewPage when showing an artist
- * via ViewManager.
+ * This Tomahawk ViewPage displays the tracks of any given album
+ * It is our default ViewPage when showing an artist via ViewManager.
  *
  */
 
-#ifndef ARTISTINFOWIDGET_H
-#define ARTISTINFOWIDGET_H
+#ifndef ALBUMINFOWIDGET_H
+#define ALBUMINFOWIDGET_H
 
 #include <QWidget>
 
@@ -39,31 +38,31 @@
 
 #include "dllmacro.h"
 
-class PlaylistModel;
+class AlbumModel;
 class TreeModel;
 
 namespace Ui
 {
-    class ArtistInfoWidget;
+    class AlbumInfoWidget;
 }
 
-class DLLEXPORT ArtistInfoWidget : public QWidget, public Tomahawk::ViewPage
+class DLLEXPORT AlbumInfoWidget : public QWidget, public Tomahawk::ViewPage
 {
 Q_OBJECT
 
 public:
-    ArtistInfoWidget( const Tomahawk::artist_ptr& artist, QWidget* parent = 0 );
-    ~ArtistInfoWidget();
+    AlbumInfoWidget( const Tomahawk::album_ptr& album, QWidget* parent = 0 );
+    ~AlbumInfoWidget();
 
-    /** \brief Loads information for a given artist.
-     *  \param artist The artist that you want to load information for.
+    /** \brief Loads information for a given album.
+     *  \param album The album that you want to load information for.
      *
-     *  Calling this method will make ArtistInfoWidget load information about
-     *  an artist's top hits, related artists and all available albums. It is
-     *  automatically called by the constructor, but you can use it to load
-     *  another artist's information at any point.
+     *  Calling this method will make AlbumInfoWidget load information about
+     *  an album, and related other albums. This method will be automatically
+     *  called by the constructor, but you can use it to load another album's
+     *  information at any point.
      */
-    void load( const Tomahawk::artist_ptr& artist );
+    void load( const Tomahawk::album_ptr& album );
 
     virtual QWidget* widget() { return this; }
     virtual Tomahawk::PlaylistInterface* playlistInterface() const { return 0; }
@@ -91,13 +90,12 @@ private slots:
     void infoSystemFinished( QString target );
 
 private:
-    Ui::ArtistInfoWidget *ui;
+    Ui::AlbumInfoWidget *ui;
 
-    Tomahawk::artist_ptr m_artist;
+    Tomahawk::album_ptr m_album;
 
-    TreeModel* m_relatedModel;
-    TreeModel* m_albumsModel;
-    PlaylistModel* m_topHitsModel;
+    AlbumModel* m_albumsModel;
+    TreeModel* m_tracksModel;
 
     QString m_title;
     QString m_description;
@@ -105,4 +103,4 @@ private:
     QPixmap m_pixmap;
 };
 
-#endif // ARTISTINFOWIDGET_H
+#endif // ALBUMINFOWIDGET_H

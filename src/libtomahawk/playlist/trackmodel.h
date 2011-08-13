@@ -34,7 +34,7 @@ Q_OBJECT
 
 public:
     enum TrackItemStyle
-    { Detailed = 0, Short = 1 };
+    { Detailed = 0, Short = 1, ShortWithAvatars = 2 };
 
     enum TrackModelRole
     { StyleRole = Qt::UserRole + 1 };

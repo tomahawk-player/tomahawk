@@ -49,4 +49,8 @@ if (APPLE)
           )
   ENDIF()
   FILE( WRITE ${CMAKE_BINARY_DIR}/Info.plist "${edited_plist}" )
+
+  FILE(COPY ${CMAKE_SOURCE_DIR}/admin/mac/sparkle_pub.pem
+    DESTINATION "${CMAKE_BINARY_DIR}/tomahawk.app/Contents/Resources")
+
 endif (APPLE)

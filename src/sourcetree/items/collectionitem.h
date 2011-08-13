@@ -1,4 +1,6 @@
 /*
+ *    Copyright 2010-2011, Leo Franchi <lfranchi@kde.org>
+ *
  *    This program is free software; you can redistribute it and/or modify
  *    it under the terms of the GNU General Public License as published by
  *    the Free Software Foundation; either version 2 of the License, or
@@ -51,6 +53,8 @@ private slots:
     void onStationsAdded( const QList<Tomahawk::dynplaylist_ptr>& stations );
     void onStationDeleted( const Tomahawk::dynplaylist_ptr& stations );
 
+    void requestExpanding();
+
     void tempPageActivated( Tomahawk::ViewPage* );
     Tomahawk::ViewPage* tempItemClicked();
     Tomahawk::ViewPage* getTempPage() const;
@@ -70,6 +74,7 @@ private:
     void playlistDeletedInternal( SourceTreeItem* parent, const T& playlists );
 
     Tomahawk::source_ptr m_source;
+    QPixmap m_superCol, m_defaultAvatar;
     CategoryItem* m_playlists;
     CategoryItem* m_stations;
 

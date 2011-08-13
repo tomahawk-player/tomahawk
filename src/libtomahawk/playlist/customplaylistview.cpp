@@ -43,6 +43,7 @@ CustomPlaylistView::CustomPlaylistView( CustomPlaylistView::PlaylistType type, c
         connect( m_source.data(), SIGNAL( socialAttributesChanged() ), this, SLOT( reload() ) );
     else if ( m_type == AllLovedTracks )
     {
+        connect( SourceList::instance()->getLocal().data(), SIGNAL( socialAttributesChanged() ), this, SLOT( reload() ) );
         foreach ( const source_ptr& s, SourceList::instance()->sources( true ) )
             connect( s.data(), SIGNAL( socialAttributesChanged() ), this, SLOT( reload() ) );
 

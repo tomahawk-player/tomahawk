@@ -127,10 +127,17 @@ Source::setAvatar( const QPixmap& avatar )
 
 
 QPixmap
-Source::avatar() const
+Source::avatar( AvatarStyle style ) const
 {
-    if( !m_avatar.isNull() )
-        return TomahawkUtils::createAvatarFrame( m_avatar );
+    if ( style == FancyStyle &&
+         !m_avatar.isNull() &&
+          m_fancyAvatar.isNull() )
+        m_fancyAvatar = TomahawkUtils::createAvatarFrame( m_avatar );
+
+    if ( style == Original && !m_avatar.isNull() )
+        return m_avatar;
+    else if ( style == FancyStyle && !m_fancyAvatar.isNull() )
+        return m_fancyAvatar;
     else
         return QPixmap();
 }

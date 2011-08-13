@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>AlbumInfoWidget</class>
+ <widget class="QWidget" name="AlbumInfoWidget">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>902</width>
+    <height>696</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>Form</string>
+  </property>
+  <layout class="QVBoxLayout" name="verticalLayout_2">
+   <item>
+    <widget class="ArtistView" name="tracksView"/>
+   </item>
+   <item>
+    <layout class="QVBoxLayout" name="verticalLayout">
+     <item>
+      <widget class="HeaderLabel" name="albumsLabel">
+       <property name="text">
+        <string>Other Albums by Artist</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="AlbumView" name="albumsView"/>
+     </item>
+    </layout>
+   </item>
+  </layout>
+ </widget>
+ <customwidgets>
+  <customwidget>
+   <class>HeaderLabel</class>
+   <extends>QLabel</extends>
+   <header location="global">widgets/HeaderLabel.h</header>
+  </customwidget>
+  <customwidget>
+   <class>ArtistView</class>
+   <extends>QTreeView</extends>
+   <header location="global">artistview.h</header>
+  </customwidget>
+  <customwidget>
+   <class>AlbumView</class>
+   <extends>QListView</extends>
+   <header>playlist/albumview.h</header>
+  </customwidget>
+ </customwidgets>
+ <resources/>
+ <connections/>
+</ui>

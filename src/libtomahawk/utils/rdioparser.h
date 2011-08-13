@@ -16,37 +16,47 @@
  *   along with Tomahawk. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef SOURCESPROXYMODEL_H
-#define SOURCESPROXYMODEL_H
+#ifndef RDIOPARSER_H
+#define RDIOPARSER_H
 
-#include <QSortFilterProxyModel>
+#include <QtCore/QObject>
+#include <QStringList>
 
-class SourcesModel;
+#include "query.h"
+#include "source.h"
 
-class SourcesProxyModel : public QSortFilterProxyModel
+class QNetworkReply;
+namespace Tomahawk
 {
-Q_OBJECT
 
+/**
+ * Small class to parse spotify links into query_ptrs
+ *
+ * Connect to the signals to get the results
+ */
+
+class RdioParser : public QObject
+{
+    Q_OBJECT
 public:
-    explicit SourcesProxyModel( SourcesModel* model, QObject* parent = 0 );
+    explicit RdioParser( QObject* parent = 0 );
+    virtual ~RdioParser();
 
-public slots:
-    void showOfflineSources( bool offlineSourcesShown );
-
-    void selectRequested( const QModelIndex& );
-    void expandRequested( const QModelIndex& );
+    void parse( const QString& url );
+    void parse( const QStringList& urls );
 
 signals:
-    void selectRequest( const QModelIndex& idx );
-    void expandRequest( const QModelIndex& idx );
-
-protected:
-    bool filterAcceptsRow( int sourceRow, const QModelIndex& sourceParent ) const;
+    void track( const Tomahawk::query_ptr& track );
+    void tracks( const QList< Tomahawk::query_ptr > tracks );
 
 private:
-    SourcesModel* m_model;
+    void parseUrl( const QString& url );
 
-    bool m_filtered;
+    bool m_multi;
+    int m_count, m_total;
+    QList< query_ptr > m_queries;
 };
 
-#endif // SOURCESPROXYMODEL_H
+}
+
+#endif // RDIOPARSER_H

@@ -63,6 +63,7 @@ signals:
 
 private slots:
     void onResultsFound( const QList<Tomahawk::result_ptr>& results );
+    void onQueryFinished();
 
 private:
     Ui::SearchWidget *ui;

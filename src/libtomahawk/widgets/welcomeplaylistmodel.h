@@ -30,7 +30,9 @@ class WelcomePlaylistModel : public QAbstractListModel
     Q_OBJECT
 public:
     enum ItemRoles
-    { ArtistRole = Qt::UserRole, TrackCountRole, PlaylistRole };
+    { ArtistRole = Qt::UserRole, TrackCountRole, PlaylistRole, PlaylistTypeRole, DynamicPlaylistRole };
+    enum PlaylistTypes
+    { StaticPlaylist, AutoPlaylist, Station };
 
     explicit WelcomePlaylistModel( QObject* parent = 0 );
 
@@ -49,6 +51,7 @@ private slots:
     void loadFromSettings();
 
     void plAdded( const Tomahawk::playlist_ptr& );
+    void playlistRevisionLoaded();
 
 private:
     QList< Tomahawk::playlist_ptr > m_recplaylists;
@@ -57,6 +60,8 @@ private:
 
     unsigned int m_maxPlaylists;
     bool m_waitingForSome;
+    public slots:
+     void sourceOnline();
 };
 
 #endif // WELCOMEPLAYLISTMODEL_H

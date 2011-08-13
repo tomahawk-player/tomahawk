@@ -219,4 +219,6 @@ private:
 
 }; // namespace
 
+Q_DECLARE_METATYPE( QSharedPointer< Tomahawk::DynamicPlaylist > )
+
 #endif

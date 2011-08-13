@@ -70,7 +70,13 @@ WelcomePlaylistModel::loadFromSettings()
             m_recplaylists << pl;
 
             if( !m_cached.contains( playlist_guids[i] ) )
+            {
+                if ( pl.dynamicCast< DynamicPlaylist >().isNull() )
+                    connect( pl.data(), SIGNAL(revisionLoaded(Tomahawk::PlaylistRevision)), this, SLOT(playlistRevisionLoaded()) );
+                else
+                    connect( pl.data(), SIGNAL(dynamicRevisionLoaded(Tomahawk::DynamicPlaylistRevision)), this, SLOT(playlistRevisionLoaded()) );
                 m_cached[playlist_guids[i]] = pl;
+            }
         } else
             m_waitingForSome = true;
     }
@@ -110,10 +116,50 @@ WelcomePlaylistModel::data( const QModelIndex& index, int role ) const
 
         return m_artists[pl];
     }
+    case PlaylistTypeRole:
+    {
+        if ( !pl.dynamicCast< Tomahawk::DynamicPlaylist >().isNull() )
+        {
+            dynplaylist_ptr dynp = pl.dynamicCast< Tomahawk::DynamicPlaylist >();
+            if ( dynp->mode() == Static )
+                return AutoPlaylist;
+            else if ( dynp->mode() == OnDemand )
+                return Station;
+        } else
+        {
+            return StaticPlaylist;
+        }
+    }
+    case DynamicPlaylistRole:
+    {
+        dynplaylist_ptr dynp = pl.dynamicCast< Tomahawk::DynamicPlaylist >();
+        return QVariant::fromValue< Tomahawk::dynplaylist_ptr >( dynp );
+    }
     case TrackCountRole:
-        return pl->entries().count();
+    {
+        if ( !pl.dynamicCast< Tomahawk::DynamicPlaylist >().isNull() && pl.dynamicCast< Tomahawk::DynamicPlaylist >()->mode() == OnDemand )
+            return QString( QChar( 0x221E ) );
+        else
+            return pl->entries().count();
+    }
     default:
         return QVariant();
+    }
+}
+
+void
+WelcomePlaylistModel::playlistRevisionLoaded()
+{
+    Playlist* p = qobject_cast< Playlist* >( sender() );
+    Q_ASSERT( p );
+
+    for ( int i = 0; i < m_recplaylists.size(); i++ )
+    {
+        if ( m_recplaylists[ i ]->guid() == p->guid() )
+        {
+            QModelIndex idx = index( i, 0, QModelIndex() );
+            emit dataChanged( idx, idx );
+        }
     }
 }
 
@@ -121,8 +167,25 @@ WelcomePlaylistModel::data( const QModelIndex& index, int role ) const
 void
 WelcomePlaylistModel::onSourceAdded( const Tomahawk::source_ptr& source )
 {
+    connect( source.data(), SIGNAL( online() ), this, SLOT( sourceOnline() ) );
     connect( source->collection().data(), SIGNAL( playlistsAdded( QList<Tomahawk::playlist_ptr> ) ), SLOT( loadFromSettings() ) );
     connect( source->collection().data(), SIGNAL( playlistsDeleted( QList<Tomahawk::playlist_ptr> ) ), SLOT( onPlaylistsRemoved( QList<Tomahawk::playlist_ptr> ) ) );
+}
+
+void
+WelcomePlaylistModel::sourceOnline()
+{
+    Source* s = qobject_cast< Source* >( sender() );
+    Q_ASSERT( s );
+
+    for ( int i = 0; i < m_recplaylists.size(); i++ )
+    {
+        if ( m_recplaylists[ i ]->author().data() == s )
+        {
+            QModelIndex idx = index( i, 0, QModelIndex() );
+            emit dataChanged( idx, idx );
+        }
+    }
 }
 
 

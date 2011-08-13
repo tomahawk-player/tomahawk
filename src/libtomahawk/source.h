@@ -45,6 +45,8 @@ friend class ::DBSyncConnection;
 friend class ::DatabaseCommand_SocialAction;
 
 public:
+    enum AvatarStyle { Original, FancyStyle };
+
     explicit Source( int id, const QString& username = QString() );
     virtual ~Source();
 
@@ -58,7 +60,7 @@ public:
     void setFriendlyName( const QString& fname );
 
     void setAvatar( const QPixmap& avatar );
-    QPixmap avatar() const;
+    QPixmap avatar( AvatarStyle style = Original ) const;
 
     collection_ptr collection() const;
     void addCollection( const Tomahawk::collection_ptr& c );
@@ -132,6 +134,7 @@ private:
     ControlConnection* m_cc;
 
     QPixmap m_avatar;
+    mutable QPixmap m_fancyAvatar;
 
     Tomahawk::playlistinterface_ptr m_playlistInterface;
 };

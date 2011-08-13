@@ -50,12 +50,12 @@ private:
     void prepareStyleOption( QStyleOptionViewItemV4* option, const QModelIndex& index, TrackModelItem* item ) const;
 
     void paintDetailed( QPainter* painter, const QStyleOptionViewItem& option, const QModelIndex& index ) const;
-    void paintShort( QPainter* painter, const QStyleOptionViewItem& option, const QModelIndex& index ) const;
+    void paintShort( QPainter* painter, const QStyleOptionViewItem& option, const QModelIndex& index, bool useAvatars = false ) const;
 
     unsigned int m_removalProgress;
 
     mutable QHash< qint64, QPixmap > m_cache;
-    QPixmap m_nowPlayingIcon;
+    QPixmap m_nowPlayingIcon, m_defaultAvatar;
     mutable QPixmap m_arrowIcon;
 
     QTextOption m_topOption;

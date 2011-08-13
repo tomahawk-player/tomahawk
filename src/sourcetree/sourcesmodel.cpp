@@ -493,3 +493,10 @@ SourcesModel::itemSelectRequest( SourceTreeItem* item )
 {
     emit selectRequest( indexFromItem( item ) );
 }
+
+void
+SourcesModel::itemExpandRequest( SourceTreeItem *item )
+{
+    qDebug() << "expanding source" << indexFromItem( item ) << item;
+    emit expandRequest( indexFromItem( item ) );
+}

@@ -401,8 +401,8 @@ EchonestGenerator::appendRadioType( Echonest::DynamicPlaylist::PlaylistParams& p
         params.append( Echonest::DynamicPlaylist::PlaylistParamData( Echonest::DynamicPlaylist::Type, Echonest::DynamicPlaylist::ArtistRadioType ) );
     else if( onlyThisArtistType( Echonest::DynamicPlaylist::SongRadioType ) )
         params.append( Echonest::DynamicPlaylist::PlaylistParamData( Echonest::DynamicPlaylist::Type, Echonest::DynamicPlaylist::SongRadioType ) );
-    else // no artist or song or description types. default to song-radio
-        params.append( Echonest::DynamicPlaylist::PlaylistParamData( Echonest::DynamicPlaylist::Type, Echonest::DynamicPlaylist::SongRadioType ) );
+    else // no artist or song or description types. default to artist-description
+        params.append( Echonest::DynamicPlaylist::PlaylistParamData( Echonest::DynamicPlaylist::Type, Echonest::DynamicPlaylist::ArtistDescriptionType ) );
 
     return static_cast< Echonest::DynamicPlaylist::ArtistTypeEnum >( params.last().second.toInt() );
 }

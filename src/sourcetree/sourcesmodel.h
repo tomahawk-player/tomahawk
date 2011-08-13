@@ -102,8 +102,11 @@ public slots:
     void viewPageActivated( Tomahawk::ViewPage* );
 
     void itemSelectRequest( SourceTreeItem* item );
+    void itemExpandRequest( SourceTreeItem* item );
+
 signals:
     void selectRequest( const QModelIndex& idx );
+    void expandRequest( const QModelIndex& idx );
 
 private slots:
     void onSourcesAdded( const QList<Tomahawk::source_ptr>& sources );

@@ -38,9 +38,12 @@ using namespace Tomahawk;
 query_ptr
 Query::get( const QString& artist, const QString& track, const QString& album, const QID& qid, bool autoResolve )
 {
+    if ( qid.isEmpty() )
+        autoResolve = false;
+
     query_ptr q = query_ptr( new Query( artist, track, album, qid, autoResolve ) );
 
-    if ( autoResolve && !qid.isEmpty() )
+    if ( autoResolve )
         Pipeline::instance()->resolve( q );
     return q;
 }

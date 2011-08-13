@@ -111,10 +111,7 @@ private slots:
     void onSubscriptionRequestConfirmed( int result );
 
     void onNewMessage( const Jreen::Message& message );
-    void onError( const Jreen::Connection::SocketError& e )
-    {
-        qDebug() << e;
-    }
+    void onError( const Jreen::Connection::SocketError& e );
     void onNewIq( const Jreen::IQ &iq );
     void onNewAvatar( const QString &jid );
     void onCheckJidExists( QString jid );

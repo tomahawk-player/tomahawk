@@ -325,6 +325,12 @@ JabberPlugin::onDisconnect( Jreen::Client::DisconnectReason reason )
     }
 }
 
+void
+JabberPlugin::onError( const Jreen::Connection::SocketError& e )
+{
+    tLog() << "JABBER error:" << e;
+}
+
 QString
 JabberPlugin::errorMessage( Jreen::Client::DisconnectReason reason )
 {

@@ -1,6 +1,6 @@
 PROJECT( tomahawk )
 CMAKE_MINIMUM_REQUIRED( VERSION 2.8 )
-SET( CMAKE_MODULE_PATH "${CMAKE_MODULE_PATH}" "${CMAKE_SOURCE_DIR}/CMakeModules" )
+SET( CMAKE_MODULE_PATH  "${CMAKE_CURRENT_SOURCE_DIR}/CMakeModules" )
 
 IF( ${CMAKE_VERSION} VERSION_GREATER 2.8.3 )
   CMAKE_POLICY(SET CMP0017 NEW)
@@ -15,10 +15,10 @@ SET( TOMAHAWK_APPLICATION_NAME  "Tomahawk" )
 SET( TOMAHAWK_DESCRIPTION_SUMMARY "The social media player" )
 
 SET( TOMAHAWK_VERSION_MAJOR 0 )
-SET( TOMAHAWK_VERSION_MINOR 1 )
+SET( TOMAHAWK_VERSION_MINOR 2 )
 SET( TOMAHAWK_VERSION_PATCH 0 )
 
-# SET( TOMAHAWK_VERSION_RC 0 )
+SET( TOMAHAWK_VERSION_RC 1 )
 
 
 # build options
@@ -28,9 +28,9 @@ option(BUILD_GUI "Build Tomahawk with GUI" ON)
 # generate version string
 IF( NOT CMAKE_BUILD_TYPE STREQUAL "Release" )
   # Use the date as the tweak level.
-  INCLUDE( ${CMAKE_MODULE_PATH}/CMakeDateStamp.cmake )
+  INCLUDE( CMakeDateStamp )
   SET( TOMAHAWK_VERSION_TWEAK "${CMAKE_DATESTAMP_YEAR}${CMAKE_DATESTAMP_MONTH}${CMAKE_DATESTAMP_DAY}" )
-  INCLUDE( ${CMAKE_MODULE_PATH}/CMakeVersionSource.cmake )
+  INCLUDE( CMakeVersionSource )
 ENDIF()
 
 SET( TOMAHAWK_VERSION ${TOMAHAWK_VERSION_MAJOR}.${TOMAHAWK_VERSION_MINOR}.${TOMAHAWK_VERSION_PATCH} )
@@ -54,7 +54,7 @@ SET( CMAKE_LIBRARY_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}" )
 SET( CMAKE_ARCHIVE_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}" )
 
 # installer creation
-INCLUDE( CPack.cmake )
+INCLUDE( CPack )
 
 #deps
 INCLUDE( MacroOptionalFindPackage )
@@ -67,11 +67,11 @@ IF( NOT BUILD_GUI )
     MESSAGE( STATUS "Building Tomahawk ${TOMAHAWK_VERSION} in HEADLESS mode ***" )
 ELSE()
     MESSAGE( STATUS "Building Tomahawk ${TOMAHAWK_VERSION} full GUI version ***" )
-    LIST(APPEND NEEDED_QT4_COMPONENTS "QtGui")
+    LIST(APPEND NEEDED_QT4_COMPONENTS "QtGui" "QtWebkit" )
 ENDIF()
 
 macro_optional_find_package(Qt4 4.7.0 COMPONENTS ${NEEDED_QT4_COMPONENTS} )
-macro_log_feature(QT4_FOUND "Qt" "A cross-platform application and UI framework" "http://qt.nokia.com" TRUE "" "")
+macro_log_feature(QT4_FOUND "Qt" "A cross-platform application and UI framework" "http://qt.nokia.com" TRUE "" "If you see this, although libqt4-devel is installed, check whether \n     the qtwebkit-devel package is installed as well")
 
 macro_optional_find_package(Phonon 4.5.0)
 macro_log_feature(PHONON_FOUND "Phonon" "The Phonon multimedia library" "http://phonon.kde.org" TRUE "" "")
@@ -93,6 +93,11 @@ macro_log_feature(TAGLIB_FOUND "TagLib" "Audio Meta-Data Library" "http://develo
 include( CheckTagLibFileName )
 check_taglib_filename( COMPLEX_TAGLIB_FILENAME )
 
+macro_optional_find_package(Boost)
+macro_log_feature(Boost_FOUND "Boost" "Provides free peer-reviewed portable C++ source libraries" "http://www.boost.org" TRUE "" "") #FIXME: give useful explaination
+
+
+
 # required
 #While we distribute our own liblastfm2, don't need to look for it
 #macro_optional_find_package(LibLastFm 0.3.3)
@@ -111,7 +116,7 @@ IF( INTERNAL_JREEN )
 ELSE( INTERNAL_JREEN )
     macro_optional_find_package(Jreen)
 ENDIF( INTERNAL_JREEN )
-macro_log_feature(LIBJREEN_FOUND "Jreen" "Qt XMPP Library" "http://gitorious.org/jreen/jreen" FALSE "" "Jreen is needed for the Jabber SIP plugin. \n\n     Use -DINTERNAL_JREEN=ON to build the git submodule inside Tomahawk \n     Be aware this installs a full jreen with headers and everything!\n")
+macro_log_feature(LIBJREEN_FOUND "Jreen" "Qt XMPP Library" "https://github.com/euroelessar/jreen" FALSE "" "Jreen is needed for the Jabber SIP plugin. \n\n     Use -DINTERNAL_JREEN=ON to build the git submodule inside Tomahawk \n     Be aware this installs a full jreen with headers and everything!\n")
 
 # this installs headers and such and should really be handled in a separate package by packagers
 IF( INTERNAL_QTWEETLIB )

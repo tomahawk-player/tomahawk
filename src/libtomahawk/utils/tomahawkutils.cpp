@@ -349,6 +349,46 @@ createDragPixmap( int itemCount )
     return dragPixmap;
 }
 
+void
+drawBackgroundAndNumbers( QPainter* painter, const QString& text, const QRect& figRectIn )
+{
+    QRect figRect = figRectIn;
+    if ( text.length() == 1 )
+        figRect.adjust( -painter->fontMetrics().averageCharWidth(), 0, 0, 0 );
+
+    QPen origpen = painter->pen();
+    QPen pen = origpen;
+    pen.setWidth( 1.0 );
+    painter->setPen( pen );
+    painter->drawRect( figRect );
+
+    // circles look bad. make it an oval. (thanks, apple)
+    const int bulgeWidth = 8;
+    const int offset = 0; // number of pixels to begin, counting inwards from figRect.x() and figRect.width(). 0 means start at each end, negative means start inside the rect.
+
+    QPainterPath ppath;
+    ppath.moveTo( QPoint( figRect.x() + offset, figRect.y() + figRect.height() / 2 ) );
+    QRect leftArcRect( figRect.x() + offset - bulgeWidth, figRect.y(), 2*bulgeWidth, figRect.height() );
+    ppath.arcTo( leftArcRect, 90, 180 );
+    painter->drawPath( ppath );
+
+    ppath = QPainterPath();
+    ppath.moveTo( figRect.x() + figRect.width() - offset, figRect.y() + figRect.height() / 2 );
+    leftArcRect = QRect( figRect.x() + figRect.width() - offset - bulgeWidth, figRect.y(), 2*bulgeWidth, figRect.height() );
+    ppath.arcTo( leftArcRect, 270, 180 );
+    painter->drawPath( ppath );
+
+    painter->setPen( origpen );
+
+#ifdef Q_OS_MAC
+    figRect.adjust( -1, 0, 0, 0 );
+#endif
+
+    QTextOption to( Qt::AlignCenter );
+    painter->setPen( Qt::white );
+    painter->drawText( figRect.adjusted( -5, 0, 6, 0 ), text, to );
+}
+
 
 void
 unmarginLayout( QLayout* layout )

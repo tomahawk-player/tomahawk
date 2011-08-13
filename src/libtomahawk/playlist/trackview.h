@@ -56,6 +56,7 @@ explicit TrackView( QWidget* parent = 0 );
     TrackHeader* header() const { return m_header; }
     OverlayWidget* overlay() const { return m_overlay; }
     Tomahawk::ContextMenu* contextMenu() const { return m_contextMenu; }
+    LoadingSpinner* loadingSpinner() const { return m_loadingSpinner; }
 
     QModelIndex hoveredIndex() const { return m_hoveredIndex; }
     QModelIndex contextMenuIndex() const { return m_contextMenuIndex; }

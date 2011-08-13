@@ -1,4 +1,6 @@
 /*
+ *    Copyright 2010-2011, Leo Franchi <lfranchi@kde.org>
+ *
  *    This program is free software; you can redistribute it and/or modify
  *    it under the terms of the GNU General Public License as published by
  *    the Free Software Foundation; either version 2 of the License, or
@@ -56,7 +58,7 @@ CollectionItem::CollectionItem(  SourcesModel* mdl, SourceTreeItem* parent, cons
         connect( ViewManager::instance(), SIGNAL( tempPageActivated( Tomahawk::ViewPage*) ), this, SLOT( tempPageActivated( Tomahawk::ViewPage* ) ) );
 
                 // add misc children of root node
-        GenericPageItem* recent = new GenericPageItem( model(), this, tr( "Recently Played" ), QIcon( RESPATH "images/recently-played.png" ),
+        GenericPageItem* recent = new GenericPageItem( model(), this, tr( "Dashboard" ), QIcon( RESPATH "images/dashboard.png" ),
                              boost::bind( &ViewManager::showWelcomePage, ViewManager::instance() ),
                              boost::bind( &ViewManager::welcomeWidget, ViewManager::instance() )
                                                     );
@@ -69,6 +71,7 @@ CollectionItem::CollectionItem(  SourcesModel* mdl, SourceTreeItem* parent, cons
 //                                                  );
 //         m_coolPlaylistsItem->setSortValue( 200 );
 
+        m_superCol = TomahawkUtils::createAvatarFrame( QPixmap( RESPATH "images/supercollection.png" ) );
 
         return;
     }
@@ -99,6 +102,8 @@ CollectionItem::CollectionItem(  SourcesModel* mdl, SourceTreeItem* parent, cons
     if( ViewManager::instance()->pageForCollection( source->collection() ) )
         model()->linkSourceItemToPage( this, ViewManager::instance()->pageForCollection( source->collection() ) );
 
+    m_defaultAvatar = TomahawkUtils::createAvatarFrame( QPixmap( RESPATH "images/user-avatar.png" ) );
+
     // load auto playlists and stations!
 
     connect( source.data(), SIGNAL( stats( QVariantMap ) ), this, SIGNAL( updated() ) );
@@ -114,6 +119,9 @@ CollectionItem::CollectionItem(  SourcesModel* mdl, SourceTreeItem* parent, cons
              SLOT( onAutoPlaylistsAdded( QList<Tomahawk::dynplaylist_ptr> ) ), Qt::QueuedConnection );
     connect( source->collection().data(), SIGNAL( stationsAdded( QList<Tomahawk::dynplaylist_ptr> ) ),
              SLOT( onStationsAdded( QList<Tomahawk::dynplaylist_ptr> ) ), Qt::QueuedConnection );
+
+    if ( m_source->isLocal() )
+        QTimer::singleShot(0, this, SLOT(requestExpanding()));
 }
 
 
@@ -160,13 +168,13 @@ QIcon
 CollectionItem::icon() const
 {
     if( m_source.isNull() )
-        return QIcon( RESPATH "images/supercollection.png" );
+       return m_superCol;
     else
     {
         if( m_source->avatar().isNull() )
-            return QIcon( RESPATH "images/user-avatar.png" );
+            return m_defaultAvatar;
         else
-            return QIcon( m_source->avatar() );
+            return m_source->avatar( Source::FancyStyle );
     }
 }
 
@@ -338,6 +346,13 @@ void
 CollectionItem::onStationDeleted( const dynplaylist_ptr& station )
 {
     playlistDeletedInternal( m_stations, station );
+}
+
+
+void
+CollectionItem::requestExpanding()
+{
+    emit expandRequest(this);
 }
 
 

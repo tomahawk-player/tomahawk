@@ -46,6 +46,7 @@
 #include "widgets/welcomewidget.h"
 #include "widgets/infowidgets/sourceinfowidget.h"
 #include "widgets/infowidgets/ArtistInfoWidget.h"
+#include "widgets/infowidgets/AlbumInfoWidget.h"
 #include "widgets/newplaylistwidget.h"
 
 #include "utils/logger.h"
@@ -79,10 +80,12 @@ ViewManager::ViewManager( QObject* parent )
     m_infobar = new InfoBar();
     m_stack = new QStackedWidget();
 
+#ifdef Q_OS_MAC
     QFrame* line = new QFrame();
     line->setFrameStyle( QFrame::HLine );
     line->setStyleSheet( "border: 1px solid gray;" );
     line->setMaximumHeight( 1 );
+#endif
 
     m_splitter = new AnimatedSplitter();
     m_splitter->setOrientation( Qt::Vertical );
@@ -100,7 +103,9 @@ ViewManager::ViewManager( QObject* parent )
 
     m_widget->layout()->addWidget( m_infobar );
     m_widget->layout()->addWidget( m_topbar );
+#ifdef Q_OS_MAC
     m_widget->layout()->addWidget( line );
+#endif
     m_widget->layout()->addWidget( m_splitter );
 
     m_superCollectionView = new ArtistView();
@@ -237,27 +242,19 @@ ViewManager::show( const Tomahawk::artist_ptr& artist )
 Tomahawk::ViewPage*
 ViewManager::show( const Tomahawk::album_ptr& album )
 {
-    PlaylistView* view;
+    AlbumInfoWidget* swidget;
     if ( !m_albumViews.contains( album ) )
     {
-        view = new PlaylistView();
-        PlaylistModel* model = new PlaylistModel();
-        model->append( album );
-        view->setPlaylistModel( model );
-        view->setFrameShape( QFrame::NoFrame );
-        view->setAttribute( Qt::WA_MacShowFocusRect, 0 );
-
-        m_albumViews.insert( album, view );
+        swidget = new AlbumInfoWidget( album );
+        m_albumViews.insert( album, swidget );
     }
     else
     {
-        view = m_albumViews.value( album );
+        swidget = m_albumViews.value( album );
     }
 
-    setPage( view );
-    emit numSourcesChanged( 1 );
-
-    return view;
+    setPage( swidget );
+    return swidget;
 }
 
 
