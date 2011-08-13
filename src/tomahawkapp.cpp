@@ -306,14 +306,16 @@ TomahawkApp::instance()
 void
 TomahawkApp::printHelp()
 {
-    std::cout << QString( "usage: " + arguments().at( 0 ) + " [options]" ).toAscii().data();
-    std::cout << QString( "options are:" ).toAscii().data();
-    std::cout << QString( "  --help         Show this help" ).toAscii().data();
-    std::cout << QString( "  --http         Initialize HTTP server" ).toAscii().data();
-    std::cout << QString( "  --filescan     Scan for files on startup" ).toAscii().data();
-    std::cout << QString( "  --testdb       Use a test database instead of real collection" ).toAscii().data();
-    std::cout << QString( "  --noupnp       Disable UPNP" ).toAscii().data();
-    std::cout << QString( "  --nosip        Disable SIP" ).toAscii().data();
+    std::cout << QString( "usage: " + arguments().at( 0 ) + " [options] [url]\n" ).toAscii().data();
+    std::cout << QString( "options are:\n" ).toAscii().data();
+    std::cout << QString( "  --help         Show this help\n" ).toAscii().data();
+    std::cout << QString( "  --http         Initialize HTTP server\n" ).toAscii().data();
+    std::cout << QString( "  --filescan     Scan for files on startup\n" ).toAscii().data();
+    std::cout << QString( "  --testdb       Use a test database instead of real collection\n" ).toAscii().data();
+    std::cout << QString( "  --noupnp       Disable UPNP\n" ).toAscii().data();
+    std::cout << QString( "  --nosip        Disable SIP\n" ).toAscii().data();
+    std::cout << QString( "\nurl is a tomahawk:// command or alternatively a url that Tomahawk can recognize.\n" ).toAscii().data();
+    std::cout << QString( "For more documentation, see http://wiki.tomahawk-player.org/mediawiki/index.php/Tomahawk://_Links\n" ).toAscii().data();
 }
 
 #ifndef TOMAHAWK_HEADLESS
