@@ -793,7 +793,9 @@ GlobalActionManager::acceptsMimeData( const QMimeData* data, bool tracksOnly )
 {
     if ( data->hasFormat( "application/tomahawk.query.list" )
         || data->hasFormat( "application/tomahawk.plentry.list" )
-        || data->hasFormat( "application/tomahawk.result.list" ) )
+        || data->hasFormat( "application/tomahawk.result.list" )
+        || data->hasFormat( "application/tomahawk.metadata.album" )
+        || data->hasFormat( "application/tomahawk.metadata.artist" ) )
     {
         return true;
     }
@@ -827,6 +829,10 @@ GlobalActionManager::tracksFromMimeData( const QMimeData* data )
         emit tracks( tracksFromQueryList( data ) );
     else if ( data->hasFormat( "application/tomahawk.result.list" ) )
         emit tracks( tracksFromResultList( data ) );
+    else if ( data->hasFormat( "application/tomahawk.metadata.album" ) )
+        emit tracks( tracksFromAlbumMetaData( data ) );
+    else if ( data->hasFormat( "application/tomahawk.metadata.artist" ) )
+        emit tracks( tracksFromArtistMetaData( data ) );
     else if ( data->hasFormat( "text/plain" ) )
     {
         QString plainData = QString::fromUtf8( data->data( "text/plain" ).constData() );
@@ -920,6 +926,45 @@ GlobalActionManager::tracksFromResultList( const QMimeData* data )
         }
     }
 
+    return queries;
+}
+
+QList< query_ptr >
+GlobalActionManager::tracksFromAlbumMetaData( const QMimeData *data )
+{
+    QList<query_ptr> queries;
+    QByteArray itemData = data->data( "application/tomahawk.metadata.album" );
+    QDataStream stream( &itemData, QIODevice::ReadOnly );
+
+    while ( !stream.atEnd() )
+    {
+        QString artist;
+        stream >> artist;
+        QString album;
+        stream >> album;
+
+        artist_ptr artistPtr = Artist::get( artist );
+        album_ptr albumPtr = Album::get( artistPtr, album );
+        queries << albumPtr->tracks();
+    }
+    return queries;
+}
+
+QList< query_ptr >
+GlobalActionManager::tracksFromArtistMetaData( const QMimeData *data )
+{
+    QList<query_ptr> queries;
+    QByteArray itemData = data->data( "application/tomahawk.metadata.artist" );
+    QDataStream stream( &itemData, QIODevice::ReadOnly );
+
+    while ( !stream.atEnd() )
+    {
+        QString artist;
+        stream >> artist;
+
+        artist_ptr artistPtr = Artist::get( artist );
+        queries << artistPtr->tracks();
+    }
     return queries;
 }
 

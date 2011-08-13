@@ -293,6 +293,8 @@ TreeModel::flags( const QModelIndex& index ) const
         TreeModelItem* item = itemFromIndex( index );
         if ( item && !item->result().isNull() )
             return Qt::ItemIsDragEnabled | Qt::ItemIsDropEnabled | defaultFlags;
+        if ( item && ( !item->album().isNull() || !item->artist().isNull() ) )
+            return Qt::ItemIsDragEnabled | defaultFlags;
     }
 
     return defaultFlags;
@@ -314,7 +316,11 @@ TreeModel::mimeData( const QModelIndexList &indexes ) const
     qDebug() << Q_FUNC_INFO;
 
     QByteArray resultData;
+    QByteArray albumData;
+    QByteArray artistData;
     QDataStream resultStream( &resultData, QIODevice::WriteOnly );
+    QDataStream albumStream( &albumData, QIODevice::WriteOnly );
+    QDataStream artistStream( &artistData, QIODevice::WriteOnly );
 
     foreach ( const QModelIndex& i, indexes )
     {
@@ -328,10 +334,25 @@ TreeModel::mimeData( const QModelIndexList &indexes ) const
             const result_ptr& result = item->result();
             resultStream << qlonglong( &result );
         }
+        if ( item && !item->album().isNull() )
+        {
+            const album_ptr& album = item->album();
+            albumStream << album->artist()->name() << album->name();
+        }
+        if ( item && !item->artist().isNull() )
+        {
+            const artist_ptr& artist = item->artist();
+            artistStream << artist->name();
+        }
     }
 
     QMimeData* mimeData = new QMimeData();
-    mimeData->setData( "application/tomahawk.result.list", resultData );
+    if ( !artistData.isEmpty() )
+        mimeData->setData( "application/tomahawk.metadata.artist", artistData );
+    else if ( !albumData.isEmpty() )
+        mimeData->setData( "application/tomahawk.metadata.album", albumData );
+    else
+        mimeData->setData( "application/tomahawk.result.list", resultData );
 
     return mimeData;
 }
