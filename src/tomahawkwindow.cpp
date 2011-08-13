@@ -177,10 +177,8 @@ TomahawkWindow::applyPlatformTweaks()
 #endif
 
 #ifdef Q_OS_MAC
-    ui->hline1->setMaximumHeight( 0 );
-    ui->hline2->setMaximumHeight( 0 );
-    ui->hline1->hide();
-    ui->hline2->hide();
+    delete ui->hline1;
+    delete ui->hline2;
 #else
     ui->hline1->setStyleSheet( "border: 1px solid gray;" );
     ui->hline2->setStyleSheet( "border: 1px solid gray;" );

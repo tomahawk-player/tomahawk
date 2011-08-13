@@ -80,13 +80,6 @@ ViewManager::ViewManager( QObject* parent )
     m_infobar = new InfoBar();
     m_stack = new QStackedWidget();
 
-#ifdef Q_OS_MAC
-    QFrame* line = new QFrame();
-    line->setFrameStyle( QFrame::HLine );
-    line->setStyleSheet( "border: 1px solid gray;" );
-    line->setMaximumHeight( 1 );
-#endif
-
     m_splitter = new AnimatedSplitter();
     m_splitter->setOrientation( Qt::Vertical );
     m_splitter->setChildrenCollapsible( false );
@@ -103,9 +96,6 @@ ViewManager::ViewManager( QObject* parent )
 
     m_widget->layout()->addWidget( m_infobar );
     m_widget->layout()->addWidget( m_topbar );
-#ifdef Q_OS_MAC
-    m_widget->layout()->addWidget( line );
-#endif
     m_widget->layout()->addWidget( m_splitter );
 
     m_superCollectionView = new ArtistView();
