@@ -498,7 +498,6 @@ TreeModel::onArtistsAdded( const QList<Tomahawk::artist_ptr>& artists )
     }
 
     emit endInsertRows();
-    qDebug() << rowCount( QModelIndex() );
     emit loadingFinished();
 }
 
@@ -599,12 +598,9 @@ TreeModel::onTracksAdded( const QList<Tomahawk::query_ptr>& tracks, const QVaria
 void
 TreeModel::infoSystemInfo( Tomahawk::InfoSystem::InfoRequestData requestData, QVariant output )
 {
-//    qDebug() << Q_FUNC_INFO;
-
     if ( requestData.caller != s_tmInfoIdentifier ||
        ( requestData.type != Tomahawk::InfoSystem::InfoAlbumCoverArt && requestData.type != Tomahawk::InfoSystem::InfoArtistImages ) )
     {
-//        qDebug() << "Info of wrong type or not with our identifier";
         return;
     }
 
