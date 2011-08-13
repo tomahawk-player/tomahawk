@@ -42,7 +42,7 @@ PlaylistModel::PlaylistModel( QObject* parent )
     m_dropStorage.parent = QPersistentModelIndex();
     m_dropStorage.row = -10;
 
-    setReadOnly( false );
+    setReadOnly( true );
 }
 
 
@@ -155,7 +155,6 @@ PlaylistModel::loadHistory( const Tomahawk::source_ptr& source, unsigned int amo
     }
 
     m_playlist.clear();
-    setReadOnly( true );
 
     DatabaseCommand_PlaybackHistory* cmd = new DatabaseCommand_PlaybackHistory( source );
     cmd->setLimit( amount );
@@ -371,10 +370,10 @@ PlaylistModel::dropMimeData( const QMimeData* data, Qt::DropAction action, int r
     return true;
 }
 
+
 void
 PlaylistModel::parsedDroppedTracks( QList< query_ptr > tracks )
 {
-
     if ( m_dropStorage.row == -10  ) // nope
         return;
 
