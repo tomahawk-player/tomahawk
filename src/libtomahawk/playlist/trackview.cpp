@@ -27,7 +27,6 @@
 #include "queueview.h"
 #include "trackmodel.h"
 #include "trackproxymodel.h"
-#include "track.h"
 
 #include "audio/audioengine.h"
 #include "widgets/overlaywidget.h"

@@ -165,7 +165,6 @@ set( libSources
     utils/elidedlabel.cpp
     utils/imagebutton.cpp
     utils/logger.cpp
-    utils/progresstreeview.cpp
     utils/proxystyle.cpp
     utils/widgetdragfilter.cpp
     utils/animatedsplitter.cpp
@@ -214,7 +213,6 @@ set( libHeaders
 
     artist.h
     album.h
-    track.h
     playlist.h
 
     sip/SipPlugin.h
@@ -347,7 +345,6 @@ set( libHeaders
     utils/elidedlabel.h
     utils/animatedcounterlabel.h
     utils/imagebutton.h
-    utils/progresstreeview.h
     utils/widgetdragfilter.h
     utils/animatedsplitter.h
     utils/xspfloader.h
