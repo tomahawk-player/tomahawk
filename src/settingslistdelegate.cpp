@@ -44,9 +44,11 @@ void SettingsListDelegate::paint(QPainter *painter, const QStyleOptionViewItem &
     }
 #endif
 
-    QRect iconRect = option.rect.adjusted( 23, 6, -option.rect.width() + option.decorationSize.width() + 7, -option.rect.height() + option.decorationSize.height() + 2 - 12 );
+
+    int horizontalOffset = ( option.rect.width() - option.decorationSize.width() ) /2;
+    QRect iconRect = option.rect.adjusted( horizontalOffset, 6, -horizontalOffset, -option.rect.height() + 6 + option.decorationSize.height() );
     QPixmap avatar = index.data( Qt::DecorationRole ).value<QIcon>().pixmap( iconRect.size() );
-    painter->drawPixmap( iconRect, avatar.scaledToHeight( iconRect.height(), Qt::SmoothTransformation ) );
+    painter->drawPixmap( iconRect, avatar );
 
     QRect textRect = option.rect.adjusted( 6, iconRect.height() + 8, -6, 0 );
     QString text = painter->fontMetrics().elidedText( index.data( Qt::DisplayRole ).toString(), Qt::ElideRight, textRect.width() );
