@@ -75,19 +75,35 @@ TreeItemDelegate::paint( QPainter* painter, const QStyleOptionViewItem& option, 
         opacity = qMax( (float)0.3, opacity );
         QColor textColor = TomahawkUtils::alphaBlend( option.palette.color( QPalette::Foreground ), option.palette.color( QPalette::Background ), opacity );
 
-        if ( const QStyleOptionViewItem *vioption = qstyleoption_cast<const QStyleOptionViewItem *>(&option))
         {
-            QStyleOptionViewItemV4 o( *vioption );
+            QStyleOptionViewItemV4 o = option;
+            initStyleOption( &o, QModelIndex() );
+
+            painter->save();
             o.palette.setColor( QPalette::Text, textColor );
+
+            if ( o.state & QStyle::State_Selected && o.state & QStyle::State_Active )
+            {
+                o.palette.setColor( QPalette::Text, o.palette.color( QPalette::HighlightedText ) );
+            }
 
             if ( item->isPlaying() )
             {
                 o.palette.setColor( QPalette::Highlight, o.palette.color( QPalette::Mid ) );
-                o.palette.setColor( QPalette::Text, o.palette.color( QPalette::HighlightedText ) );
+                if ( o.state & QStyle::State_Selected )
+                    o.palette.setColor( QPalette::Text, textColor );
                 o.state |= QStyle::State_Selected;
             }
 
+            int oldX = 0;
+            if ( m_view->header()->visualIndex( index.column() ) == 0 )
+            {
+                oldX = o.rect.x();
+                o.rect.setX( 0 );
+            }
             qApp->style()->drawControl( QStyle::CE_ItemViewItem, &o, painter );
+            if ( oldX > 0 )
+                o.rect.setX( oldX );
 
             {
                 QRect r = o.rect.adjusted( 3, 0, 0, 0 );
@@ -106,7 +122,9 @@ TreeItemDelegate::paint( QPainter* painter, const QStyleOptionViewItem& option, 
                 QString text = painter->fontMetrics().elidedText( index.data().toString(), Qt::ElideRight, r.width() - 3 );
                 painter->drawText( r.adjusted( 0, 1, 0, 0 ), text, to );
             }
+            painter->restore();
         }
+
         return;
     }
     else

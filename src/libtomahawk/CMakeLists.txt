@@ -21,7 +21,6 @@ set( libSources
     artist.cpp
     album.cpp
     collection.cpp
-    webcollection.cpp
     playlist.cpp
     resolver.cpp
     query.cpp
@@ -165,7 +164,6 @@ set( libSources
     utils/elidedlabel.cpp
     utils/imagebutton.cpp
     utils/logger.cpp
-    utils/progresstreeview.cpp
     utils/proxystyle.cpp
     utils/widgetdragfilter.cpp
     utils/animatedsplitter.cpp
@@ -202,7 +200,6 @@ set( libHeaders
 
     aclsystem.h
     collection.h
-    webcollection.h
     query.h
     resolver.h
     result.h
@@ -214,7 +211,6 @@ set( libHeaders
 
     artist.h
     album.h
-    track.h
     playlist.h
 
     sip/SipPlugin.h
@@ -347,7 +343,6 @@ set( libHeaders
     utils/elidedlabel.h
     utils/animatedcounterlabel.h
     utils/imagebutton.h
-    utils/progresstreeview.h
     utils/widgetdragfilter.h
     utils/animatedsplitter.h
     utils/xspfloader.h

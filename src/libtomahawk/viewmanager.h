@@ -51,6 +51,7 @@ class SourceInfoWidget;
 class InfoBar;
 class TopBar;
 class WelcomeWidget;
+class QPushButton;
 
 namespace Tomahawk
 {
@@ -170,6 +171,7 @@ private:
     QWidget* m_widget;
     InfoBar* m_infobar;
     TopBar* m_topbar;
+    QPushButton* m_queueButton;
     QStackedWidget* m_stack;
     AnimatedSplitter* m_splitter;
 

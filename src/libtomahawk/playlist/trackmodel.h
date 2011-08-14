@@ -62,6 +62,7 @@ public:
     virtual QModelIndex parent( const QModelIndex& child ) const;
 
     virtual bool isReadOnly() const { return m_readOnly; }
+    virtual void setReadOnly( bool b ) { m_readOnly = b; }
 
     virtual QString title() const { return m_title; }
     virtual void setTitle( const QString& title ) { m_title = title; }
@@ -113,9 +114,6 @@ public slots:
 
     virtual void setRepeatMode( Tomahawk::PlaylistInterface::RepeatMode /*mode*/ ) {}
     virtual void setShuffled( bool /*shuffled*/ ) {}
-
-protected:
-    virtual void setReadOnly( bool b ) { m_readOnly = b; }
 
 private slots:
     void onPlaybackFinished( const Tomahawk::result_ptr& result );

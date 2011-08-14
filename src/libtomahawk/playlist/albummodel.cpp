@@ -300,8 +300,8 @@ AlbumModel::addAlbums( const QList<Tomahawk::album_ptr>& albums )
     }
 
     emit endInsertRows();
-    qDebug() << rowCount( QModelIndex() );
 }
+
 
 void
 AlbumModel::clear()
@@ -355,7 +355,6 @@ void
 AlbumModel::infoSystemFinished( QString target )
 {
     Q_UNUSED( target );
-//    qDebug() << Q_FUNC_INFO;
 }
 
 

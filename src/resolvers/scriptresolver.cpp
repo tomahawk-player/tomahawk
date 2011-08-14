@@ -65,6 +65,7 @@ ScriptResolver::ScriptResolver( const QString& exe )
 ScriptResolver::~ScriptResolver()
 {
     stop();
+    m_proc.waitForFinished();
 
     Tomahawk::Pipeline::instance()->removeResolver( this );
 

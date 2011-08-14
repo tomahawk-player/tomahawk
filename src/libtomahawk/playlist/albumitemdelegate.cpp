@@ -61,19 +61,32 @@ AlbumItemDelegate::paint( QPainter* painter, const QStyleOptionViewItem& option,
     initStyleOption( &opt, QModelIndex() );
     qApp->style()->drawControl( QStyle::CE_ItemViewItem, &opt, painter );
 
-#ifndef Q_OS_MAC
-    if ( option.state & QStyle::State_Selected )
-    {
-        opt.palette.setColor( QPalette::Text, opt.palette.color( QPalette::HighlightedText ) );
-    }
-#endif
     painter->save();
 
 //    painter->setRenderHint( QPainter::Antialiasing );
 //    painter->drawPixmap( option.rect.adjusted( 4, 4, -4, -38 ), m_shadowPixmap );
 
     QPixmap cover = item->cover.isNull() ? m_defaultCover : item->cover;
-    QRect r = option.rect.adjusted( 6, 4, -6, -41 );
+    QRect r = option.rect.adjusted( 6, 5, -6, -41 );
+
+    if ( option.state & QStyle::State_Selected )
+    {
+#ifndef Q_OS_MAC
+        opt.palette.setColor( QPalette::Text, opt.palette.color( QPalette::HighlightedText ) );
+#else
+        painter->save();
+        painter->setRenderHint( QPainter::Antialiasing );
+
+        QPainterPath border;
+        border.addRoundedRect( r.adjusted( -2, -2, 2, 2 ), 3, 3 );
+        QPen borderPen( QColor( 86, 170, 243 ) );
+        borderPen.setWidth( 5 );
+        painter->setPen( borderPen );
+        painter->drawPath( border );
+
+        painter->restore();
+#endif
+    }
 
     QPixmap scover;
     if ( m_cache.contains( cover.cacheKey() ) )

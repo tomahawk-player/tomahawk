@@ -87,6 +87,7 @@ TrackModel::columnCount( const QModelIndex& parent ) const
     switch ( m_style )
     {
         case Short:
+        case ShortWithAvatars:
             return 1;
             break;
 

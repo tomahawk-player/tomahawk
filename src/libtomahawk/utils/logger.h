@@ -26,16 +26,14 @@
 
 namespace Logger
 {
-    class DLLEXPORT TLog
+    class DLLEXPORT TLog : public QDebug
     {
     public:
         TLog( unsigned int debugLevel = 0 );
         virtual ~TLog();
 
-        TLog& operator<<( const QVariant& v );
-
     private:
-        QStringList m_msgs;
+        QString m_msg;
         unsigned int m_debugLevel;
     };
 

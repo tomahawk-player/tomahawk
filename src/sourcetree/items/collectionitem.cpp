@@ -46,7 +46,6 @@ CollectionItem::CollectionItem(  SourcesModel* mdl, SourceTreeItem* parent, cons
     , m_coolPlaylistsPage( 0 )
     , m_lovedTracksPage( 0 )
 {
-
     m_lovedTracksItem = new GenericPageItem( model(), this, ( m_source.isNull() ? tr( "Top Loved Tracks" ) : tr( "Loved Tracks" ) ), QIcon( RESPATH "images/loved_playlist.png" ),
                                              boost::bind( &CollectionItem::lovedTracksClicked, this ),
                                              boost::bind( &CollectionItem::getLovedTracksPage, this )

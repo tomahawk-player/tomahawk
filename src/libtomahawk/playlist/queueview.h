@@ -44,7 +44,6 @@ public slots:
 
 private:
     PlaylistView* m_queue;
-    QPushButton* m_button;
 };
 
 #endif // QUEUEVIEW_H

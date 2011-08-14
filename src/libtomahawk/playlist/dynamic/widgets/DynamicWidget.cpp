@@ -407,7 +407,7 @@ DynamicWidget::generatorError( const QString& title, const QString& content )
 
 
 void
-DynamicWidget::paintRoundedFilledRect( QPainter& p, QPalette& pal, QRect& r, qreal opacity )
+DynamicWidget::paintRoundedFilledRect( QPainter& p, QPalette& /* pal */, QRect& r, qreal opacity )
 {
     p.setBackgroundMode( Qt::TransparentMode );
     p.setRenderHint( QPainter::Antialiasing );
@@ -426,6 +426,7 @@ DynamicWidget::paintRoundedFilledRect( QPainter& p, QPalette& pal, QRect& r, qre
     p.setPen( pen );
     p.drawRoundedRect( r, 10, 10 );
 }
+
 
 QPixmap
 DynamicWidget::pixmap() const

@@ -86,9 +86,14 @@ ViewManager::ViewManager( QObject* parent )
     m_splitter->setGreedyWidget( 0 );
     m_splitter->addWidget( m_stack );
 
+    m_queueButton = new QPushButton();
+    m_queueButton->setSizePolicy( QSizePolicy::Preferred, QSizePolicy::Fixed );
+    m_queueButton->setText( tr( "Click to show queue" ) );
+
     m_queueView = new QueueView( m_splitter );
     m_queueModel = new PlaylistModel( m_queueView );
     m_queueView->queue()->setPlaylistModel( m_queueModel );
+    m_queueView->queue()->playlistModel()->setReadOnly( false );
     AudioEngine::instance()->setQueue( m_queueView->queue()->proxyModel() );
 
     m_splitter->addWidget( m_queueView );
@@ -97,6 +102,7 @@ ViewManager::ViewManager( QObject* parent )
     m_widget->layout()->addWidget( m_infobar );
     m_widget->layout()->addWidget( m_topbar );
     m_widget->layout()->addWidget( m_splitter );
+    m_widget->layout()->addWidget( m_queueButton );
 
     m_superCollectionView = new ArtistView();
     m_superCollectionModel = new TreeModel( m_superCollectionView );
@@ -121,18 +127,12 @@ ViewManager::ViewManager( QObject* parent )
     connect( AudioEngine::instance(), SIGNAL( playlistChanged( Tomahawk::PlaylistInterface* ) ), this, SLOT( playlistInterfaceChanged( Tomahawk::PlaylistInterface* ) ) );
 
     connect( &m_filterTimer, SIGNAL( timeout() ), SLOT( applyFilter() ) );
+    connect( m_queueButton, SIGNAL( clicked() ), SLOT( showQueue() ) );
 
-    connect( m_topbar, SIGNAL( filterTextChanged( QString ) ),
-                         SLOT( setFilter( QString ) ) );
-
-    connect( m_topbar, SIGNAL( flatMode() ),
-                         SLOT( setTableMode() ) );
-
-    connect( m_topbar, SIGNAL( artistMode() ),
-                         SLOT( setTreeMode() ) );
-
-    connect( m_topbar, SIGNAL( albumMode() ),
-                         SLOT( setAlbumMode() ) );
+    connect( m_topbar, SIGNAL( filterTextChanged( QString ) ), SLOT( setFilter( QString ) ) );
+    connect( m_topbar, SIGNAL( flatMode() ), SLOT( setTableMode() ) );
+    connect( m_topbar, SIGNAL( artistMode() ), SLOT( setTreeMode() ) );
+    connect( m_topbar, SIGNAL( albumMode() ), SLOT( setAlbumMode() ) );
 }
 
 
@@ -475,6 +475,10 @@ ViewManager::showQueue()
         return;
     }
 
+    m_queueButton->setText( tr( "Click to hide queue" ) );
+    disconnect( m_queueButton, SIGNAL( clicked() ), this, SLOT( showQueue() ) );
+    connect( m_queueButton, SIGNAL( clicked() ), SLOT( hideQueue() ) );
+
     m_splitter->show( 1 );
 }
 
@@ -488,6 +492,10 @@ ViewManager::hideQueue()
         QMetaObject::invokeMethod( this, "hideQueue", Qt::QueuedConnection );
         return;
     }
+
+    m_queueButton->setText( tr( "Click to show queue" ) );
+    disconnect( m_queueButton, SIGNAL( clicked() ), this, SLOT( hideQueue() ) );
+    connect( m_queueButton, SIGNAL( clicked() ), SLOT( showQueue() ) );
 
     m_splitter->hide( 1 );
 }

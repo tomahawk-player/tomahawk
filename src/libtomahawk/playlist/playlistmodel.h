@@ -74,6 +74,7 @@ public:
     virtual void removeIndex( const QModelIndex& index, bool moreToCome = false );
 
     bool isTemporary() const;
+
 signals:
     void repeatModeChanged( Tomahawk::PlaylistInterface::RepeatMode mode );
     void shuffleModeChanged( bool enabled );
