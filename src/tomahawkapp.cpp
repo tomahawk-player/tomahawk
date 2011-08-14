@@ -482,14 +482,13 @@ TomahawkApp::initLocalCollection()
 
     src->addCollection( coll );
     SourceList::instance()->setLocal( src );
-//    src->collection()->tracks();
 
     // dummy source/collection for web-based result-hints.
-    source_ptr dummy( new Source( -1, "" ) );
+/*    source_ptr dummy( new Source( -1, "" ) );
     dummy->setOnline();
     collection_ptr dummycol( new WebCollection( dummy ) );
     dummy->addCollection( dummycol );
-    SourceList::instance()->setWebSource( dummy );
+    SourceList::instance()->setWebSource( dummy );*/
     SourceList::instance()->loadSources();
 
     // to make the stats signal be emitted by our local source
