@@ -142,7 +142,9 @@ GlobalActionManager::copyPlaylistToClipboard( const dynplaylist_ptr& playlist )
     }
 
     QClipboard* cb = QApplication::clipboard();
-    cb->setText( link.toEncoded() );
+    QByteArray data = link.toEncoded();
+    data.replace( "'", "%27" ); // QUrl doesn't encode ', which it doesn't have to. Some apps don't like ' though, and want %27. Both are valid.
+    cb->setText( data );
 
     return link.toString();
 }
@@ -178,7 +180,9 @@ void
 GlobalActionManager::copyToClipboard( const query_ptr& query ) const
 {
     QClipboard* cb = QApplication::clipboard();
-    cb->setText( openLinkFromQuery( query ).toEncoded() );
+    QByteArray data = openLinkFromQuery( query ).toEncoded();
+    data.replace( "'", "%27" ); // QUrl doesn't encode ', which it doesn't have to. Some apps don't like ' though, and want %27. Both are valid.
+    cb->setText( data );
 }
 
 
