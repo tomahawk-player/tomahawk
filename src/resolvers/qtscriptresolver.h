@@ -38,8 +38,8 @@ class QtScriptResolverHelper : public QObject
 Q_OBJECT
 
 public:
-    QtScriptResolverHelper( const QString& scriptPath, QObject* parent );
-    void setResolverConfig( QVariantMap config );
+    QtScriptResolverHelper( const QString& scriptPath, QtScriptResolver* parent );
+    void setResolverConfig( const QVariantMap& config );
 
 public slots:
     QByteArray readRaw( const QString& fileName );
@@ -52,9 +52,12 @@ public slots:
     void log( const QString& message );
     bool fakeEnv() { return false; }
 
+    void addTrackResults( const QVariantMap& results );
+
 private:
     QString m_scriptPath;
     QVariantMap m_resolverConfig;
+    QtScriptResolver* m_resolver;
 };
 
 class ScriptEngine : public QWebPage
@@ -96,6 +99,8 @@ private:
 class QtScriptResolver : public Tomahawk::ExternalResolver
 {
 Q_OBJECT
+
+friend class QtScriptResolverHelper;
 
 public:
     explicit QtScriptResolver( const QString& scriptPath );

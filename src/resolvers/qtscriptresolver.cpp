@@ -35,10 +35,11 @@
 #define RESOLVER_LEGACY_CODE2 "var resolver = Tomahawk.resolver.instance ? Tomahawk.resolver.instance : window;"
 
 
-QtScriptResolverHelper::QtScriptResolverHelper( const QString& scriptPath, QObject* parent )
+QtScriptResolverHelper::QtScriptResolverHelper( const QString& scriptPath, QtScriptResolver* parent )
     : QObject( parent )
 {
     m_scriptPath = scriptPath;
+    m_resolver = parent;
 }
 
 
@@ -102,7 +103,18 @@ QtScriptResolverHelper::log( const QString& message )
 
 
 void
-QtScriptResolverHelper::setResolverConfig( QVariantMap config )
+QtScriptResolverHelper::addTrackResults( const QVariantMap& results )
+{
+    QList< Tomahawk::result_ptr > tracks = m_resolver->parseResultVariantList( results.value("results").toList() );
+
+    QString qid = results.value("qid").toString();
+
+    Tomahawk::Pipeline::instance()->reportResults( qid, tracks );
+}
+
+
+void
+QtScriptResolverHelper::setResolverConfig( const QVariantMap& config )
 {
     m_resolverConfig = config;
 }
@@ -245,6 +257,14 @@ QtScriptResolver::resolve( const Tomahawk::query_ptr& query )
     }
 
     QVariantMap m = m_engine->mainFrame()->evaluateJavaScript( eval ).toMap();
+
+    if( m.isEmpty() )
+    {
+        // if the resolver doesn't return anything, async api is used
+        return;
+    }
+
+    return;
     qDebug() << "JavaScript Result:" << m;
 
     const QString qid = query->id();
@@ -264,11 +284,6 @@ QtScriptResolver::parseResultVariantList( const QVariantList& reslist )
     foreach( const QVariant& rv, reslist )
     {
         QVariantMap m = rv.toMap();
-
-        qDebug() << "artist: " << m.value("artist").toString();
-        qDebug() << "track: " << m.value( "track" ).toString();
-
-        //Q_ASSERT(false);
 
         Tomahawk::result_ptr rp( new Tomahawk::Result() );
         Tomahawk::artist_ptr ap = Tomahawk::Artist::get( m.value( "artist" ).toString(), true );
