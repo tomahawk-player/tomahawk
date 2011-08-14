@@ -58,14 +58,14 @@ InfoSystem::InfoSystem( QObject *parent )
 
     qDebug() << Q_FUNC_INFO;
 
-    m_infoSystemCacheThreadController = new QThread( this );
-    m_cache = QWeakPointer< InfoSystemCache >( new InfoSystemCache() );
-    m_cache.data()->moveToThread( m_infoSystemCacheThreadController );
+    m_infoSystemCacheThreadController = new InfoSystemCacheThread( this );
+    m_cache = m_infoSystemCacheThreadController->cache();
+    //m_cache.data()->moveToThread( m_infoSystemCacheThreadController );
     m_infoSystemCacheThreadController->start( QThread::IdlePriority );
 
-    m_infoSystemWorkerThreadController = new QThread( this );
-    m_worker = QWeakPointer< InfoSystemWorker>( new InfoSystemWorker() );
-    m_worker.data()->moveToThread( m_infoSystemWorkerThreadController );
+    m_infoSystemWorkerThreadController = new InfoSystemWorkerThread( this );
+    m_worker = m_infoSystemWorkerThreadController->worker();
+    //m_worker.data()->moveToThread( m_infoSystemWorkerThreadController );
     m_infoSystemWorkerThreadController->start();
 
     QMetaObject::invokeMethod( m_worker.data(), "init", Qt::QueuedConnection, Q_ARG( QWeakPointer< Tomahawk::InfoSystem::InfoSystemCache >, m_cache ) );
@@ -89,7 +89,7 @@ InfoSystem::~InfoSystem()
         m_infoSystemWorkerThreadController->quit();
         m_infoSystemWorkerThreadController->wait( 60000 );
 
-        delete m_worker.data();
+        //delete m_worker.data();
         delete m_infoSystemWorkerThreadController;
         m_infoSystemWorkerThreadController = 0;
     }
@@ -100,7 +100,7 @@ InfoSystem::~InfoSystem()
         m_infoSystemCacheThreadController->quit();
         m_infoSystemCacheThreadController->wait( 60000 );
 
-        delete m_cache.data();
+        //delete m_cache.data();
         delete m_infoSystemCacheThreadController;
         m_infoSystemCacheThreadController = 0;
     }
@@ -154,6 +154,54 @@ InfoSystem::pushInfo( const QString &caller, const InfoTypeMap &input )
     Q_FOREACH( InfoType type, input.keys() )
         QMetaObject::invokeMethod( m_worker.data(), "pushInfo", Qt::QueuedConnection, Q_ARG( QString, caller ), Q_ARG( Tomahawk::InfoSystem::InfoType, type ), Q_ARG( QVariant, input[ type ] ) );
 }
+
+
+InfoSystemCacheThread::InfoSystemCacheThread( QObject *parent )
+    : QThread( parent )
+{
+    m_cache = QWeakPointer< InfoSystemCache >( new InfoSystemCache() );
+}
+
+InfoSystemCacheThread::~InfoSystemCacheThread()
+{
+    delete m_cache.data();
+}
+
+void
+InfoSystemCacheThread::InfoSystemCacheThread::run()
+{
+    exec();
+}
+
+QWeakPointer< InfoSystemCache >
+InfoSystemCacheThread::cache() const
+{
+    return m_cache;
+}
+
+InfoSystemWorkerThread::InfoSystemWorkerThread( QObject *parent )
+    : QThread( parent )
+{
+    m_worker = QWeakPointer< InfoSystemWorker >( new InfoSystemWorker() );
+}
+
+InfoSystemWorkerThread::~InfoSystemWorkerThread()
+{
+    delete m_worker.data();
+}
+
+void
+InfoSystemWorkerThread::InfoSystemWorkerThread::run()
+{
+    exec();
+}
+
+QWeakPointer< InfoSystemWorker >
+InfoSystemWorkerThread::worker() const
+{
+    return m_worker;
+}
+
 
 } //namespace InfoSystem
 
