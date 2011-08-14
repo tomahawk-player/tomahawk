@@ -78,8 +78,6 @@ PipelineStatusView::PipelineStatusView( AnimatedSplitter* parent )
 void
 PipelineStatusView::onPipelineUpdate( const query_ptr& query )
 {
-    tDebug() << Q_FUNC_INFO << query.isNull();
-
     QTreeWidgetItem* ti = m_tree->invisibleRootItem()->child( 0 );
 
     if ( Pipeline::instance()->activeQueryCount() && !query.isNull() )

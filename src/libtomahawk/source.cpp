@@ -42,6 +42,8 @@ Source::Source( int id, const QString& username )
     , m_username( username )
     , m_id( id )
     , m_cc( 0 )
+    , m_avatar( 0 )
+    , m_fancyAvatar( 0 )
 {
     qDebug() << Q_FUNC_INFO << id << username;
 
@@ -62,6 +64,8 @@ Source::Source( int id, const QString& username )
 Source::~Source()
 {
     qDebug() << Q_FUNC_INFO << friendlyName();
+    delete m_avatar;
+    delete m_fancyAvatar;
 }
 
 
@@ -122,22 +126,21 @@ Source::friendlyName() const
 void
 Source::setAvatar( const QPixmap& avatar )
 {
-    m_avatar = avatar;
+    delete m_avatar;
+    m_avatar = new QPixmap( avatar );
 }
 
 
 QPixmap
 Source::avatar( AvatarStyle style ) const
 {
-    if ( style == FancyStyle &&
-         !m_avatar.isNull() &&
-          m_fancyAvatar.isNull() )
-        m_fancyAvatar = TomahawkUtils::createAvatarFrame( m_avatar );
+    if ( style == FancyStyle && m_avatar && !m_fancyAvatar )
+        m_fancyAvatar = new QPixmap( TomahawkUtils::createAvatarFrame( QPixmap( *m_avatar ) ) );
 
-    if ( style == Original && !m_avatar.isNull() )
-        return m_avatar;
-    else if ( style == FancyStyle && !m_fancyAvatar.isNull() )
-        return m_fancyAvatar;
+    if ( style == Original && m_avatar )
+        return QPixmap( *m_avatar );
+    else if ( style == FancyStyle && m_fancyAvatar )
+        return QPixmap( *m_fancyAvatar );
     else
         return QPixmap();
 }
