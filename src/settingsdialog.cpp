@@ -242,7 +242,7 @@ SettingsDialog::createIcons()
 
     QListWidgetItem *musicButton = new QListWidgetItem( ui->listWidget );
     musicButton->setIcon( QIcon( RESPATH "images/music-settings.png" ) );
-    musicButton->setText( tr( "Music" ) );
+    musicButton->setText( tr( "Collection" ) );
     musicButton->setTextAlignment( Qt::AlignHCenter );
     musicButton->setFlags( Qt::ItemIsSelectable | Qt::ItemIsEnabled );
     maxlen = qMax( fm.width( musicButton->text() ), maxlen );
@@ -427,7 +427,7 @@ SettingsDialog::testLastFmLogin()
     QNetworkProxy newProxy( oldProxyFactory->proxy() );
     newProxyFactory->setProxy( newProxy );
     currNam->setProxyFactory( newProxyFactory );
-    
+
     QNetworkReply* authJob = lastfm::ws::post( query );
 
     connect( authJob, SIGNAL( finished() ), SLOT( onLastFmFinished() ) );
