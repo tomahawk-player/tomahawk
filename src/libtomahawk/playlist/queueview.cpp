@@ -24,19 +24,13 @@
 #include "widgets/overlaywidget.h"
 #include "utils/logger.h"
 
-#ifdef Q_WS_MAC
-#define MINIMUM_HEIGHT 38
-#else
-#define MINIMUM_HEIGHT 27
-#endif
-
 using namespace Tomahawk;
 
 
 QueueView::QueueView( AnimatedSplitter* parent )
     : AnimatedWidget( parent )
 {
-    setHiddenSize( QSize( 0, MINIMUM_HEIGHT ) );
+    setHiddenSize( QSize( 0, 0 ) );
     setLayout( new QVBoxLayout() );
 
     m_queue = new PlaylistView( this );
@@ -46,14 +40,8 @@ QueueView::QueueView( AnimatedSplitter* parent )
     m_queue->setAttribute( Qt::WA_MacShowFocusRect, 0 );
     m_queue->overlay()->setEnabled( false );
 
-    m_button = new QPushButton();
-    m_button->setSizePolicy( QSizePolicy::Preferred, QSizePolicy::Fixed );
-    m_button->setText( tr( "Click to show queue" ) );
-    connect( m_button, SIGNAL( clicked() ), SIGNAL( showWidget() ) );
-
     layout()->setMargin( 0 );
     layout()->addWidget( m_queue );
-    layout()->addWidget( m_button );
 }
 
 
@@ -71,10 +59,6 @@ QueueView::onShown( QWidget* widget, bool animated )
         return;
 
     AnimatedWidget::onShown( widget, animated );
-
-    m_button->setText( tr( "Click to hide queue" ) );
-    disconnect( m_button, SIGNAL( clicked() ), this, SIGNAL( showWidget() ) );
-    connect( m_button, SIGNAL( clicked() ), SIGNAL( hideWidget() ) );
 }
 
 
@@ -86,8 +70,4 @@ QueueView::onHidden( QWidget* widget, bool animated )
         return;
 
     AnimatedWidget::onHidden( widget, animated );
-
-    m_button->setText( tr( "Click to show queue" ) );
-    disconnect( m_button, SIGNAL( clicked() ), this, SIGNAL( hideWidget() ) );
-    connect( m_button, SIGNAL( clicked() ), SIGNAL( showWidget() ) );
 }
