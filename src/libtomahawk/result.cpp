@@ -211,7 +211,7 @@ Result::parseSocialActions()
     {
         Tomahawk::SocialAction socialAction;
         socialAction = it.next();
-        if ( socialAction.timestamp.toUInt() > highestTimestamp )
+        if ( socialAction.timestamp.toUInt() > highestTimestamp && socialAction.source.toInt() == SourceList::instance()->getLocal()->id() )
         {
             m_currentSocialActions[ socialAction.action.toString() ] = socialAction.value.toBool();
         }
