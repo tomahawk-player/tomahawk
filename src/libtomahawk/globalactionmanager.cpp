@@ -64,7 +64,14 @@ GlobalActionManager::instance()
 GlobalActionManager::GlobalActionManager( QObject* parent )
     : QObject( parent )
 {
-    m_mimeTypes << "application/tomahawk.query.list" << "application/tomahawk.plentry.list" << "application/tomahawk.result.list" << "text/plain";
+    m_mimeTypes << "application/tomahawk.query.list"
+                << "application/tomahawk.plentry.list"
+                << "application/tomahawk.result.list"
+                << "application/tomahawk.result"
+                << "application/tomahawk.metadata.artist"
+                << "application/tomahawk.metadata.album"
+                << "application/tomahawk.mixed"
+                << "text/plain";
 }
 
 GlobalActionManager::~GlobalActionManager()
@@ -794,6 +801,8 @@ GlobalActionManager::acceptsMimeData( const QMimeData* data, bool tracksOnly )
     if ( data->hasFormat( "application/tomahawk.query.list" )
         || data->hasFormat( "application/tomahawk.plentry.list" )
         || data->hasFormat( "application/tomahawk.result.list" )
+        || data->hasFormat( "application/tomahawk.result" )
+        || data->hasFormat( "application/tomahawk.mixed" )
         || data->hasFormat( "application/tomahawk.metadata.album" )
         || data->hasFormat( "application/tomahawk.metadata.artist" ) )
     {
@@ -833,6 +842,8 @@ GlobalActionManager::tracksFromMimeData( const QMimeData* data )
         emit tracks( tracksFromAlbumMetaData( data ) );
     else if ( data->hasFormat( "application/tomahawk.metadata.artist" ) )
         emit tracks( tracksFromArtistMetaData( data ) );
+    else if ( data->hasFormat( "application/tomahawk.mixed" ) )
+        tracksFromMixedData( data );
     else if ( data->hasFormat( "text/plain" ) )
     {
         QString plainData = QString::fromUtf8( data->data( "text/plain" ).constData() );
@@ -964,6 +975,54 @@ GlobalActionManager::tracksFromArtistMetaData( const QMimeData *data )
 
         artist_ptr artistPtr = Artist::get( artist );
         queries << artistPtr->tracks();
+    }
+    return queries;
+}
+
+QList< query_ptr >
+GlobalActionManager::tracksFromMixedData( const QMimeData *data )
+{
+    QList< query_ptr > queries;
+    QByteArray itemData = data->data( "application/tomahawk.mixed" );
+    QDataStream stream( &itemData, QIODevice::ReadOnly );
+
+    QString mimeType;
+
+    while ( !stream.atEnd() )
+    {
+        stream >> mimeType;
+        qDebug() << "mimetype is" << mimeType;
+
+        QByteArray singleData;
+        QDataStream singleStream( &singleData, QIODevice::WriteOnly );
+
+        QMimeData singleMimeData;
+        if ( mimeType == "application/tomahawk.query.list" || mimeType == "application/tomahawk.result.list" )
+        {
+            qlonglong query;
+            stream >> query;
+            singleStream << query;
+        }
+        else if ( mimeType == "application/tomahawk.metadata.album" )
+        {
+            QString artist;
+            stream >> artist;
+            singleStream << artist;
+            QString album;
+            stream >> album;
+            singleStream << album;
+            qDebug() << "got artist" << artist << "and album" << album;
+        }
+        else if ( mimeType == "application/tomahawk.metadata.artist" )
+        {
+            QString artist;
+            stream >> artist;
+            singleStream << artist;
+            qDebug() << "got artist" << artist;
+        }
+
+        singleMimeData.setData( mimeType, singleData );
+        tracksFromMimeData( &singleMimeData );
     }
     return queries;
 }
