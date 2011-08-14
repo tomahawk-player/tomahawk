@@ -37,6 +37,7 @@ using namespace Tomahawk;
 TreeModel::TreeModel( QObject* parent )
     : QAbstractItemModel( parent )
     , m_rootItem( new TreeModelItem( 0, this ) )
+    , m_columnStyle( AllColumns )
 {
     qDebug() << Q_FUNC_INFO;
 
@@ -163,7 +164,13 @@ int
 TreeModel::columnCount( const QModelIndex& parent ) const
 {
     Q_UNUSED( parent );
-    return 7;
+    if ( m_columnStyle == AllColumns )
+        return 7;
+    else if ( m_columnStyle == TrackOnly )
+        return 1;
+
+    // UH..
+    return 0;
 }
 
 
@@ -665,4 +672,10 @@ TreeModel::onDataChanged()
 {
     TreeModelItem* p = (TreeModelItem*)sender();
     emit dataChanged( p->index, p->index.sibling( p->index.row(), columnCount( QModelIndex() ) - 1 ) );
+}
+
+void
+TreeModel::setColumnStyle( TreeModel::ColumnStyle style )
+{
+    m_columnStyle = style;
 }
