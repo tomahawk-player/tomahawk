@@ -971,6 +971,19 @@ ViewManager::showCurrentTrack()
     {
         setPage( page );
         page->jumpToCurrentTrack();
+
+        // reset the correct mode, if the user has changed it since
+
+        if ( dynamic_cast< CollectionView* >( page ) )
+            m_currentMode = PlaylistInterface::Flat;
+        else if ( dynamic_cast< AlbumView* >( page ) )
+            m_currentMode = PlaylistInterface::Album;
+        else if ( dynamic_cast< ArtistView* >( page ) )
+            m_currentMode = PlaylistInterface::Tree;
+        else
+            return;
+
+        emit modeChanged( (PlaylistInterface::ViewMode)m_currentMode );
     }
 }
 
