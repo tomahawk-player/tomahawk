@@ -35,12 +35,8 @@
 !define NSI_PATH "${SOURCE_PATH}/admin/win/nsi"
 
 ;-----------------------------------------------------------------------------
-; Increment installer revision number as part of this script.
+; Installer version
 ;-----------------------------------------------------------------------------
-!define /file REVISION_LAST ${NSI_PATH}/revision.txt
-!define /math REVISION ${REVISION_LAST} + 1
-!delfile revision.txt
-!appendfile revision.txt ${REVISION}
 
 !define VER_MAJOR "@CPACK_PACKAGE_VERSION_MAJOR@"
 !define VER_MINOR "@CPACK_PACKAGE_VERSION_MINOR@"
