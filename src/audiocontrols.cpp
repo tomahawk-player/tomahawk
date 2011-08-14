@@ -517,6 +517,7 @@ AudioControls::onTrackClicked()
     ViewManager::instance()->showCurrentTrack();
 }
 
+
 void
 AudioControls::dragEnterEvent( QDragEnterEvent* e )
 {
@@ -524,12 +525,14 @@ AudioControls::dragEnterEvent( QDragEnterEvent* e )
         e->acceptProposedAction();
 }
 
+
 void
-AudioControls::dragMoveEvent( QDragMoveEvent* e )
+AudioControls::dragMoveEvent( QDragMoveEvent* /* e */ )
 {
 //     if ( GlobalActionManager::instance()->acceptsMimeData( e->mimeData() ) )
 //         e->acceptProposedAction();
 }
+
 
 void
 AudioControls::dropEvent( QDropEvent* e )
@@ -543,6 +546,7 @@ AudioControls::dropEvent( QDropEvent* e )
         e->accept();
     }
 }
+
 
 void
 AudioControls::droppedTracks( QList< query_ptr > tracks )

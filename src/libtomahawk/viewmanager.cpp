@@ -89,6 +89,7 @@ ViewManager::ViewManager( QObject* parent )
     m_queueView = new QueueView( m_splitter );
     m_queueModel = new PlaylistModel( m_queueView );
     m_queueView->queue()->setPlaylistModel( m_queueModel );
+    m_queueView->queue()->playlistModel()->setReadOnly( false );
     AudioEngine::instance()->setQueue( m_queueView->queue()->proxyModel() );
 
     m_splitter->addWidget( m_queueView );
