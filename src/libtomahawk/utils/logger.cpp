@@ -139,24 +139,14 @@ setupLogfile()
 using namespace Logger;
 
 TLog::TLog( unsigned int debugLevel )
-    : m_debugLevel( debugLevel )
+    : QDebug( &m_msg )
+    , m_debugLevel( debugLevel )
 {
 }
 
 
 TLog::~TLog()
 {
-    log( m_msgs.join( " " ).toAscii().data(), m_debugLevel );
-}
-
-
-TLog&
-TLog::operator<<( const QVariant& v )
-{
-    QString const s = v.toString();
-    if ( !s.isEmpty() )
-        m_msgs << s;
-
-    return *this;
+    log( m_msg.toAscii().data(), m_debugLevel );
 }
 
