@@ -85,9 +85,6 @@ TomahawkLogHandler( QtMsgType type, const char *msg )
 {
     static QMutex s_mutex;
 
-    if ( strstr( msg, "Pixmap" ) )
-        Q_ASSERT( false );
-
     QMutexLocker locker( &s_mutex );
     switch( type )
     {
