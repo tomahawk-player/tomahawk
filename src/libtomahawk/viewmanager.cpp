@@ -89,6 +89,10 @@ ViewManager::ViewManager( QObject* parent )
     m_queueButton = new QPushButton();
     m_queueButton->setSizePolicy( QSizePolicy::Preferred, QSizePolicy::Fixed );
     m_queueButton->setText( tr( "Click to show queue" ) );
+#ifdef Q_OS_MAC
+    // QPushButtons on mac have lots of weird layouting issues. Fix them by forcing the widget rect for layout calculations
+    m_queueButton->setAttribute( Qt::WA_LayoutUsesWidgetRect  );
+#endif
 
     m_queueView = new QueueView( m_splitter );
     m_queueModel = new PlaylistModel( m_queueView );
