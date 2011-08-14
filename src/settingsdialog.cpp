@@ -70,6 +70,11 @@ SettingsDialog::SettingsDialog( QWidget *parent )
     ui->setupUi( this );
     TomahawkSettings* s = TomahawkSettings::instance();
 
+    ui->addSipButton->setFixedWidth( 42 );
+    ui->removeSipButton->setFixedWidth( ui->addSipButton->width() );
+    ui->addScript->setFixedWidth( 42 );
+    ui->removeScript->setFixedWidth( ui->addScript->width() );
+
     ui->checkBoxHttp->setChecked( s->httpEnabled() );
     ui->checkBoxStaticPreferred->setChecked( s->preferStaticHostPort() );
     ui->checkBoxUpnp->setChecked( s->externalAddressMode() == TomahawkSettings::Upnp );
@@ -283,11 +288,14 @@ SettingsDialog::createIcons()
     connect( ui->listWidget, SIGNAL( currentItemChanged( QListWidgetItem* ,QListWidgetItem* ) ), this, SLOT( changePage( QListWidgetItem*, QListWidgetItem* ) ) );
 }
 
+
 void
 SettingsDialog::setupSipButtons()
 {
-    foreach( SipPluginFactory* f, SipHandler::instance()->pluginFactories() ) {
-        if( f->isUnique() && SipHandler::instance()->hasPluginType( f->factoryId() ) ) {
+    foreach( SipPluginFactory* f, SipHandler::instance()->pluginFactories() )
+    {
+        if( f->isUnique() && SipHandler::instance()->hasPluginType( f->factoryId() ) )
+        {
             continue;
         }
 
