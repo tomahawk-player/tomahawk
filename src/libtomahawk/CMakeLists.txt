@@ -21,7 +21,6 @@ set( libSources
     artist.cpp
     album.cpp
     collection.cpp
-    webcollection.cpp
     playlist.cpp
     resolver.cpp
     query.cpp
@@ -201,7 +200,6 @@ set( libHeaders
 
     aclsystem.h
     collection.h
-    webcollection.h
     query.h
     resolver.h
     result.h

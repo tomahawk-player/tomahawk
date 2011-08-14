@@ -51,7 +51,6 @@
 #include "scanmanager.h"
 #include "tomahawksettings.h"
 #include "globalactionmanager.h"
-#include "webcollection.h"
 #include "database/localcollection.h"
 #include "musicscanner.h"
 
@@ -482,13 +481,6 @@ TomahawkApp::initLocalCollection()
 
     src->addCollection( coll );
     SourceList::instance()->setLocal( src );
-
-    // dummy source/collection for web-based result-hints.
-/*    source_ptr dummy( new Source( -1, "" ) );
-    dummy->setOnline();
-    collection_ptr dummycol( new WebCollection( dummy ) );
-    dummy->addCollection( dummycol );
-    SourceList::instance()->setWebSource( dummy );*/
     SourceList::instance()->loadSources();
 
     // to make the stats signal be emitted by our local source
