@@ -55,6 +55,7 @@ AlbumInfoWidget::AlbumInfoWidget( const Tomahawk::album_ptr& album, QWidget* par
 
     m_tracksModel = new TreeModel( ui->tracksView );
     ui->tracksView->setTreeModel( m_tracksModel );
+    ui->tracksView->setRootIsDecorated( false );
 
     m_pixmap = QPixmap( RESPATH "images/no-album-art-placeholder.png" ).scaledToWidth( 48, Qt::SmoothTransformation );
 
