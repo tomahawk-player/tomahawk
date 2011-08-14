@@ -75,9 +75,11 @@ TreeItemDelegate::paint( QPainter* painter, const QStyleOptionViewItem& option, 
         opacity = qMax( (float)0.3, opacity );
         QColor textColor = TomahawkUtils::alphaBlend( option.palette.color( QPalette::Foreground ), option.palette.color( QPalette::Background ), opacity );
 
-        if ( const QStyleOptionViewItem *vioption = qstyleoption_cast<const QStyleOptionViewItem *>(&option))
         {
-            QStyleOptionViewItemV4 o( *vioption );
+            QStyleOptionViewItemV4 o = option;
+            initStyleOption( &o, QModelIndex() );
+
+            painter->save();
             o.palette.setColor( QPalette::Text, textColor );
 
             if ( o.state & QStyle::State_Selected && o.state & QStyle::State_Active )
@@ -93,14 +95,15 @@ TreeItemDelegate::paint( QPainter* painter, const QStyleOptionViewItem& option, 
                 o.state |= QStyle::State_Selected;
             }
 
-#ifdef Q_OS_MAC
-            int oldX = o.rect.x();
-            o.rect.setX( 0 );
-#endif
+            int oldX = 0;
+            if ( m_view->header()->visualIndex( index.column() ) == 0 )
+            {
+                oldX = o.rect.x();
+                o.rect.setX( 0 );
+            }
             qApp->style()->drawControl( QStyle::CE_ItemViewItem, &o, painter );
-#ifdef Q_OS_MAC
-            o.rect.setX( oldX );
-#endif
+            if ( oldX > 0 )
+                o.rect.setX( oldX );
 
             {
                 QRect r = o.rect.adjusted( 3, 0, 0, 0 );
@@ -113,14 +116,15 @@ TreeItemDelegate::paint( QPainter* painter, const QStyleOptionViewItem& option, 
                     r.adjust( 25, 0, 0, 3 );
                 }
 
-
                 painter->setPen( o.palette.text().color() );
 
                 QTextOption to( Qt::AlignVCenter );
                 QString text = painter->fontMetrics().elidedText( index.data().toString(), Qt::ElideRight, r.width() - 3 );
                 painter->drawText( r.adjusted( 0, 1, 0, 0 ), text, to );
             }
+            painter->restore();
         }
+
         return;
     }
     else
