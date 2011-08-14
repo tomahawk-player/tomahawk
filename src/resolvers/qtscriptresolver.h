@@ -133,6 +133,8 @@ private:
     QVariantMap resolverUserConfig();
     QVariantMap resolverInit();
 
+    QList< Tomahawk::result_ptr > parseResultVariantList( const QVariantList& reslist );
+
     ScriptEngine* m_engine;
 
     QString m_name;
