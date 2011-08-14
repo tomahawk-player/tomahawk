@@ -305,7 +305,7 @@ QStringList
 TreeModel::mimeTypes() const
 {
     QStringList types;
-    types << "application/tomahawk.result.list";
+    types << "application/tomahawk.mixed";
     return types;
 }
 
@@ -316,44 +316,36 @@ TreeModel::mimeData( const QModelIndexList &indexes ) const
     qDebug() << Q_FUNC_INFO;
 
     QByteArray resultData;
-    QByteArray albumData;
-    QByteArray artistData;
     QDataStream resultStream( &resultData, QIODevice::WriteOnly );
-    QDataStream albumStream( &albumData, QIODevice::WriteOnly );
-    QDataStream artistStream( &artistData, QIODevice::WriteOnly );
 
     foreach ( const QModelIndex& i, indexes )
     {
-        if ( i.column() > 0 )
+        if ( i.column() > 0 || indexes.contains( i.parent() ) )
             continue;
 
-        QModelIndex idx = index( i.row(), 0, i.parent() );
-        TreeModelItem* item = itemFromIndex( idx );
-        if ( item && !item->result().isNull() )
-        {
-            const result_ptr& result = item->result();
-            resultStream << qlonglong( &result );
-        }
-        if ( item && !item->album().isNull() )
-        {
-            const album_ptr& album = item->album();
-            albumStream << album->artist()->name() << album->name();
-        }
-        if ( item && !item->artist().isNull() )
+        TreeModelItem* item = itemFromIndex( i );
+        if ( !item )
+            continue;
+
+        if ( !item->artist().isNull() )
         {
             const artist_ptr& artist = item->artist();
-            artistStream << artist->name();
+            resultStream << QString( "application/tomahawk.metadata.artist" ) << artist->name();
+        }
+        else if ( !item->album().isNull() )
+        {
+            const album_ptr& album = item->album();
+            resultStream << QString( "application/tomahawk.metadata.album" ) << album->artist()->name() << album->name();
+        }
+        else if ( !item->result().isNull() )
+        {
+            const result_ptr& result = item->result();
+            resultStream << QString( "application/tomahawk.result.list" ) << qlonglong( &result );
         }
     }
 
     QMimeData* mimeData = new QMimeData();
-    if ( !artistData.isEmpty() )
-        mimeData->setData( "application/tomahawk.metadata.artist", artistData );
-    else if ( !albumData.isEmpty() )
-        mimeData->setData( "application/tomahawk.metadata.album", albumData );
-    else
-        mimeData->setData( "application/tomahawk.result.list", resultData );
-
+    mimeData->setData( "application/tomahawk.mixed", resultData );
     return mimeData;
 }
 

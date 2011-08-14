@@ -107,6 +107,7 @@ private:
     QList< Tomahawk::query_ptr > tracksFromResultList( const QMimeData* d );
     QList< Tomahawk::query_ptr > tracksFromArtistMetaData( const QMimeData* d );
     QList< Tomahawk::query_ptr > tracksFromAlbumMetaData( const QMimeData* d );
+    QList< Tomahawk::query_ptr > tracksFromMixedData( const QMimeData* d );
 
     QString hostname() const;
 
