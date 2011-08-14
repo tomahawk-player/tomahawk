@@ -80,6 +80,8 @@ AlbumInfoWidget::load( const album_ptr& album )
     m_album = album;
     m_title = album->name();
     m_description = album->artist()->name();
+    ui->albumsLabel->setText( tr( "Other Albums by %1" ).arg( album->artist()->name() ) );
+
     m_tracksModel->addTracks( album, QModelIndex() );
 
     DatabaseCommand_AllAlbums* cmd = new DatabaseCommand_AllAlbums();
