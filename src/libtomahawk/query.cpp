@@ -327,7 +327,10 @@ Query::checkResults()
     if ( m_solved && becameUnsolved )
     {
         m_solved = false;
+        m_resolveFinished = false;
         emit solvedStateChanged( false );
+
+        refreshResults();
     }
 
     if ( becameSolved )
