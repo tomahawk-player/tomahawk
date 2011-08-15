@@ -312,3 +312,9 @@ Tomahawk.sha256=function(s){
     return binb2hex(core_sha256(str2binb(s), s.length * chrsz));
 
 };
+
+
+
+// some aliases
+Tomahawk.setTimeout = window.setTimeout;
+Tomahawk.setInterval = window.setInterval;

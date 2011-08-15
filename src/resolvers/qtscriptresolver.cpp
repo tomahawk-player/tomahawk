@@ -35,10 +35,11 @@
 #define RESOLVER_LEGACY_CODE2 "var resolver = Tomahawk.resolver.instance ? Tomahawk.resolver.instance : window;"
 
 
-QtScriptResolverHelper::QtScriptResolverHelper( const QString& scriptPath, QObject* parent )
+QtScriptResolverHelper::QtScriptResolverHelper( const QString& scriptPath, QtScriptResolver* parent )
     : QObject( parent )
 {
     m_scriptPath = scriptPath;
+    m_resolver = parent;
 }
 
 
@@ -102,7 +103,18 @@ QtScriptResolverHelper::log( const QString& message )
 
 
 void
-QtScriptResolverHelper::setResolverConfig( QVariantMap config )
+QtScriptResolverHelper::addTrackResults( const QVariantMap& results )
+{
+    QList< Tomahawk::result_ptr > tracks = m_resolver->parseResultVariantList( results.value("results").toList() );
+
+    QString qid = results.value("qid").toString();
+
+    Tomahawk::Pipeline::instance()->reportResults( qid, tracks );
+}
+
+
+void
+QtScriptResolverHelper::setResolverConfig( const QVariantMap& config )
 {
     m_resolverConfig = config;
 }
@@ -244,22 +256,39 @@ QtScriptResolver::resolve( const Tomahawk::query_ptr& query )
                   .arg( query->fullTextQuery().replace( "'", "\\'" ) );
     }
 
-    QList< Tomahawk::result_ptr > results;
-
     QVariantMap m = m_engine->mainFrame()->evaluateJavaScript( eval ).toMap();
+
+    if( m.isEmpty() )
+    {
+        // if the resolver doesn't return anything, async api is used
+        return;
+    }
+
+    return;
     qDebug() << "JavaScript Result:" << m;
 
     const QString qid = query->id();
     const QVariantList reslist = m.value( "results" ).toList();
+
+    QList< Tomahawk::result_ptr > results = parseResultVariantList( reslist );
+
+    Tomahawk::Pipeline::instance()->reportResults( qid, results );
+}
+
+
+QList< Tomahawk::result_ptr >
+QtScriptResolver::parseResultVariantList( const QVariantList& reslist )
+{
+    QList< Tomahawk::result_ptr > results;
 
     foreach( const QVariant& rv, reslist )
     {
         QVariantMap m = rv.toMap();
 
         Tomahawk::result_ptr rp( new Tomahawk::Result() );
-        Tomahawk::artist_ptr ap = Tomahawk::Artist::get( 0, m.value( "artist" ).toString() );
+        Tomahawk::artist_ptr ap = Tomahawk::Artist::get( m.value( "artist" ).toString(), true );
         rp->setArtist( ap );
-        rp->setAlbum( Tomahawk::Album::get( 0, m.value( "album" ).toString(), ap ) );
+        rp->setAlbum( Tomahawk::Album::get( ap, m.value( "album" ).toString(), true ) );
         rp->setTrack( m.value( "track" ).toString() );
         rp->setBitrate( m.value( "bitrate" ).toUInt() );
         rp->setUrl( m.value( "url" ).toString() );
@@ -292,7 +321,7 @@ QtScriptResolver::resolve( const Tomahawk::query_ptr& query )
         results << rp;
     }
 
-    Tomahawk::Pipeline::instance()->reportResults( qid, results );
+    return results;
 }
 
 
