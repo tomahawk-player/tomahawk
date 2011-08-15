@@ -264,7 +264,6 @@ QtScriptResolver::resolve( const Tomahawk::query_ptr& query )
         return;
     }
 
-    return;
     qDebug() << "JavaScript Result:" << m;
 
     const QString qid = query->id();
