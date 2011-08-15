@@ -28,6 +28,8 @@
     <string>http://download.tomahawk-player.org/sparkle</string>
     <key>SUPublicDSAKeyFile</key>
     <string>sparkle_pub.pem</string>
+    <key>SUEnableSystemProfiling</key>
+    <string>YES</string>
     <key>CFBundleURLTypes</key>
         <array>
             <dict>
