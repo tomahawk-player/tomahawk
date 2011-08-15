@@ -36,12 +36,16 @@ class DLLEXPORT PlaylistInterface
 
 public:
     enum RepeatMode { NoRepeat, RepeatOne, RepeatAll };
+    Q_ENUMS( RepeatMode )
     enum ViewMode { Unknown, Tree, Flat, Album };
     enum SeekRestrictions { NoSeekRestrictions, NoSeek };
     enum SkipRestrictions { NoSkipRestrictions, NoSkipForwards, NoSkipBackwards, NoSkip };
     enum RetryMode { NoRetry, Retry };
 
-    PlaylistInterface( QObject* parent = 0 ) : m_object( parent ) {}
+    PlaylistInterface( QObject* parent = 0 ) : m_object( parent )
+    {
+        qRegisterMetaType<Tomahawk::PlaylistInterface::RepeatMode>( "Tomahawk::PlaylistInterface::RepeatMode" );
+    }
     virtual ~PlaylistInterface() {}
 
     virtual QList< Tomahawk::query_ptr > tracks() = 0;

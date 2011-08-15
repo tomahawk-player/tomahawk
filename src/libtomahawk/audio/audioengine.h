@@ -69,6 +69,9 @@ public:
 
     Tomahawk::result_ptr currentTrack() const { return m_currentTrack; }
 
+    qint64 currentTime() const { return m_mediaObject->currentTime(); }
+    qint64 currentTrackTotalTime() const { return m_mediaObject->totalTime(); }
+
 public slots:
     void playPause();
     void play();
@@ -78,7 +81,11 @@ public slots:
     void previous();
     void next();
 
-    void seek( int ms );
+    bool canGoPrevious();
+    bool canGoNext();
+
+    void seek( qint64 ms );
+    void seek( int ms ); // for compatibility with seekbar in audiocontrols
     void setVolume( int percentage );
     void lowerVolume() { setVolume( volume() - AUDIO_VOLUME_STEP ); }
     void raiseVolume() { setVolume( volume() + AUDIO_VOLUME_STEP ); }

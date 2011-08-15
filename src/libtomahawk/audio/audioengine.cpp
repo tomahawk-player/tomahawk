@@ -188,43 +188,55 @@ AudioEngine::previous()
 {
     tDebug( LOGEXTRA ) << Q_FUNC_INFO;
 
-    if ( m_playlist.isNull() )
-        return;
-
-    if ( m_playlist.data()->skipRestrictions() == PlaylistInterface::NoSkip ||
-         m_playlist.data()->skipRestrictions() == PlaylistInterface::NoSkipBackwards )
-        return;
-
-    loadPreviousTrack();
+    if( canGoPrevious() )
+        loadPreviousTrack();
 }
-
 
 void
 AudioEngine::next()
 {
     tDebug( LOGEXTRA ) << Q_FUNC_INFO;
 
+    if( canGoNext() )
+        loadNextTrack();
+}
+
+bool
+AudioEngine::canGoNext()
+{
     if ( m_playlist.isNull() )
-        return;
+        return false;
 
     if ( m_playlist.data()->skipRestrictions() == PlaylistInterface::NoSkip ||
          m_playlist.data()->skipRestrictions() == PlaylistInterface::NoSkipForwards )
-        return;
+        return false;
 
     if ( !m_currentTrack.isNull() && !m_playlist.data()->hasNextItem() &&
          m_currentTrack->id() == m_playlist.data()->currentItem()->id() )
     {
         //For instance, when doing a catch-up while listening along, but the person
         //you're following hasn't started a new track yet...don't do anything
-        return;
+        return false;
     }
 
-    loadNextTrack();
+    return true;
 }
 
+bool
+AudioEngine::canGoPrevious()
+{
+    if ( m_playlist.isNull() )
+        return false;
+
+    if ( m_playlist.data()->skipRestrictions() == PlaylistInterface::NoSkip ||
+         m_playlist.data()->skipRestrictions() == PlaylistInterface::NoSkipBackwards )
+        return false;
+
+    return true;
+}
 
 void
-AudioEngine::seek( int ms )
+AudioEngine::seek( qint64 ms )
 {
     if ( !m_playlist.isNull() && m_playlist.data()->seekRestrictions() == PlaylistInterface::NoSeek )
         return;
@@ -236,6 +248,11 @@ AudioEngine::seek( int ms )
     }
 }
 
+void
+AudioEngine::seek( int ms )
+{
+    seek( (qint64) ms );
+}
 
 void
 AudioEngine::setVolume( int percentage )

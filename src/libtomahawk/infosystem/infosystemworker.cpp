@@ -35,6 +35,7 @@
 #endif
 #ifdef Q_WS_X11
 #include "infoplugins/unix/fdonotifyplugin.h"
+#include "infoplugins/unix/mprisplugin.h"
 #endif
 
 #include "lastfm/NetworkAccessManager"
@@ -97,6 +98,9 @@ InfoSystemWorker::init( QWeakPointer< Tomahawk::InfoSystem::InfoSystemCache> cac
     InfoPluginPtr fdonotifyptr( new FdoNotifyPlugin() );
     m_plugins.append( fdonotifyptr );
     registerInfoTypes( fdonotifyptr, fdonotifyptr.data()->supportedGetTypes(), fdonotifyptr.data()->supportedPushTypes() );
+    InfoPluginPtr mprisptr( new MprisPlugin() );
+    m_plugins.append( mprisptr );
+    registerInfoTypes( mprisptr, mprisptr.data()->supportedGetTypes(), mprisptr.data()->supportedPushTypes() );    
     #endif
 
     Q_FOREACH( InfoPluginPtr plugin, m_plugins )

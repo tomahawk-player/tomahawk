@@ -102,7 +102,6 @@ enum InfoType { // as items are saved in cache, mark them here to not change the
     InfoNowPaused = 81,
     InfoNowResumed = 82,
     InfoNowStopped = 83,
-
     
     InfoLove = 90,
     InfoUnLove = 91,
@@ -160,6 +159,38 @@ private:
 
 typedef QWeakPointer< InfoPlugin > InfoPluginPtr;
 
+class InfoSystemCacheThread : public QThread
+{
+    Q_OBJECT
+
+public:
+    InfoSystemCacheThread( QObject *parent );
+    virtual ~InfoSystemCacheThread();
+
+    void run();
+    QWeakPointer< InfoSystemCache > cache() const;
+    void setCache( QWeakPointer< InfoSystemCache >  cache );
+
+private:
+    QWeakPointer< InfoSystemCache > m_cache;
+};
+
+class InfoSystemWorkerThread : public QThread
+{
+    Q_OBJECT
+
+public:
+    InfoSystemWorkerThread( QObject *parent );
+    virtual ~InfoSystemWorkerThread();
+
+    void run();
+    QWeakPointer< InfoSystemWorker > worker() const;
+    void setWorker( QWeakPointer< InfoSystemWorker >  worker );
+
+private:
+    QWeakPointer< InfoSystemWorker > m_worker;
+};
+
 class DLLEXPORT InfoSystem : public QObject
 {
     Q_OBJECT
@@ -186,8 +217,8 @@ public slots:
 private:
     QWeakPointer< InfoSystemCache > m_cache;
     QWeakPointer< InfoSystemWorker > m_worker;
-    QThread* m_infoSystemCacheThreadController;
-    QThread* m_infoSystemWorkerThreadController;
+    InfoSystemCacheThread* m_infoSystemCacheThreadController;
+    InfoSystemWorkerThread* m_infoSystemWorkerThreadController;
 
     static InfoSystem* s_instance;
 };
@@ -195,6 +226,8 @@ private:
 }
 
 }
+
+
 
 inline uint qHash( Tomahawk::InfoSystem::InfoCriteriaHash hash )
 {
