@@ -326,7 +326,7 @@ SourceTreeView::addToLocal()
         // copy to a link and then generate a new playlist from that
         // this way we cheaply regenerate the needed controls
         QString link = GlobalActionManager::instance()->copyPlaylistToClipboard( playlist );
-        dynplaylist_ptr p = GlobalActionManager::instance()->loadDynamicPlaylist( link, type == SourcesModel::Station );
+        GlobalActionManager::instance()->parseTomahawkLink( link );
     }
     else if ( type == SourcesModel::StaticPlaylist )
     {

@@ -187,8 +187,12 @@ GlobalActionManager::copyToClipboard( const query_ptr& query ) const
 
 
 bool
-GlobalActionManager::parseTomahawkLink( const QString& url )
+GlobalActionManager::parseTomahawkLink( const QString& urlIn )
 {
+    QString url = urlIn;
+    if( urlIn.startsWith( "http://toma.hk" ) )
+        url.replace( "http://toma.hk/", "tomahawk://" );
+
     if( url.contains( "tomahawk://" ) ) {
         QString cmd = url.mid( 11 );
         cmd.replace( "%2B", "%20" );
