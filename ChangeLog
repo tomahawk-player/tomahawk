@@ -1,4 +1,9 @@
 Version 0.2.0:
+    * Re-resolve queries when their resolved-to result goes offline
+    * Rename "Music" in settings to "Collection" to better match main app UI
+    * Fix for queue not allowing items to be removed from it, and flickering queue button
+    * Cleanup formatting of Preference/Configure and Diagnostics windows
+    * Add selection indicator on album art
     * Fix inability to create Echonest playlists based solely on style or mood.
     * Created new Album page (that shows other albums from that artist available in your Super Collection)
     * Update playlists in dashboard to keep them in sync
