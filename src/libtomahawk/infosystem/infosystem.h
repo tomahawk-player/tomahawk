@@ -169,6 +169,7 @@ public:
 
     void run();
     QWeakPointer< InfoSystemCache > cache() const;
+    void setCache( QWeakPointer< InfoSystemCache >  cache );
 
 private:
     QWeakPointer< InfoSystemCache > m_cache;
@@ -184,6 +185,7 @@ public:
 
     void run();
     QWeakPointer< InfoSystemWorker > worker() const;
+    void setWorker( QWeakPointer< InfoSystemWorker >  worker );
 
 private:
     QWeakPointer< InfoSystemWorker > m_worker;

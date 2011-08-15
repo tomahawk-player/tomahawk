@@ -59,13 +59,15 @@ InfoSystem::InfoSystem( QObject *parent )
     qDebug() << Q_FUNC_INFO;
 
     m_infoSystemCacheThreadController = new InfoSystemCacheThread( this );
-    m_cache = m_infoSystemCacheThreadController->cache();
-    //m_cache.data()->moveToThread( m_infoSystemCacheThreadController );
+    m_cache = QWeakPointer< InfoSystemCache >( new InfoSystemCache() );
+    m_cache.data()->moveToThread( m_infoSystemCacheThreadController );
+    m_infoSystemCacheThreadController->setCache( m_cache );
     m_infoSystemCacheThreadController->start( QThread::IdlePriority );
 
     m_infoSystemWorkerThreadController = new InfoSystemWorkerThread( this );
-    m_worker = m_infoSystemWorkerThreadController->worker();
-    //m_worker.data()->moveToThread( m_infoSystemWorkerThreadController );
+    m_worker = QWeakPointer< InfoSystemWorker >( new InfoSystemWorker() );
+    m_worker.data()->moveToThread( m_infoSystemWorkerThreadController );
+    m_infoSystemWorkerThreadController->setWorker( m_worker );
     m_infoSystemWorkerThreadController->start();
 
     QMetaObject::invokeMethod( m_worker.data(), "init", Qt::QueuedConnection, Q_ARG( QWeakPointer< Tomahawk::InfoSystem::InfoSystemCache >, m_cache ) );
@@ -159,7 +161,6 @@ InfoSystem::pushInfo( const QString &caller, const InfoTypeMap &input )
 InfoSystemCacheThread::InfoSystemCacheThread( QObject *parent )
     : QThread( parent )
 {
-    m_cache = QWeakPointer< InfoSystemCache >( new InfoSystemCache() );
 }
 
 InfoSystemCacheThread::~InfoSystemCacheThread()
@@ -179,27 +180,39 @@ InfoSystemCacheThread::cache() const
     return m_cache;
 }
 
+void
+InfoSystemCacheThread::setCache( QWeakPointer< InfoSystemCache >  cache )
+{
+    m_cache = cache;
+}
+
 InfoSystemWorkerThread::InfoSystemWorkerThread( QObject *parent )
     : QThread( parent )
 {
-    m_worker = QWeakPointer< InfoSystemWorker >( new InfoSystemWorker() );
 }
 
 InfoSystemWorkerThread::~InfoSystemWorkerThread()
 {
-    delete m_worker.data();
 }
 
 void
 InfoSystemWorkerThread::InfoSystemWorkerThread::run()
 {
     exec();
+    if( m_worker )
+        delete m_worker.data();
 }
 
 QWeakPointer< InfoSystemWorker >
 InfoSystemWorkerThread::worker() const
 {
     return m_worker;
+}
+
+void
+InfoSystemWorkerThread::setWorker( QWeakPointer< InfoSystemWorker >  worker )
+{
+    m_worker = worker;
 }
 
 
