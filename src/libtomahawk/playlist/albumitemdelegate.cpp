@@ -71,9 +71,7 @@ AlbumItemDelegate::paint( QPainter* painter, const QStyleOptionViewItem& option,
 
     if ( option.state & QStyle::State_Selected )
     {
-#ifndef Q_OS_MAC
-        opt.palette.setColor( QPalette::Text, opt.palette.color( QPalette::HighlightedText ) );
-#else
+#if defined(Q_WS_MAC) || defined(Q_WS_WIN)
         painter->save();
         painter->setRenderHint( QPainter::Antialiasing );
 
@@ -85,6 +83,8 @@ AlbumItemDelegate::paint( QPainter* painter, const QStyleOptionViewItem& option,
         painter->drawPath( border );
 
         painter->restore();
+#else
+        opt.palette.setColor( QPalette::Text, opt.palette.color( QPalette::HighlightedText ) );
 #endif
     }
 
