@@ -338,3 +338,10 @@ ArtistView::jumpToCurrentTrack()
     scrollTo( m_proxyModel->currentIndex(), QAbstractItemView::PositionAtCenter );
     return true;
 }
+
+
+QString
+ArtistView::guid() const
+{
+    return QString( "artistview/%1" ).arg( m_model->columnCount( QModelIndex() ) );
+}
