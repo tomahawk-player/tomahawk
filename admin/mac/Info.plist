@@ -25,7 +25,7 @@
 	<key>LSMinimumSystemVersion</key>
     <string>10.5.0</string>
     <key>SUFeedURL</key>
-    <string>http://download.tomahawk-player.org/sparkle</string>
+    <string>http://download.tomahawk-player.org/sparkle/update.php</string>
     <key>SUPublicDSAKeyFile</key>
     <string>sparkle_pub.pem</string>
     <key>SUEnableSystemProfiling</key>
@@ -59,6 +59,6 @@
           <key>CFBundleTypeRole</key>
           <string>Viewer</string>
         </dict>
-      </array>        
+      </array>
 </dict>
 </plist>

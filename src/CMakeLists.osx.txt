@@ -41,13 +41,14 @@ if (APPLE)
               edited_plist # save in this variable
               "${plist}" # from the contents of this var
           )
-  IF( NOT CMAKE_BUILD_TYPE STREQUAL "Release" )
-    STRING( REPLACE "http://download.tomahawk-player.org/sparkle" # match this
-              "http://download.tomahawk-player.org/sparkle-debug"  #replace with debug url
-              edited_plist # save in this variable
-              "${edited_plist}" # from the contents of this var
-          )
-  ENDIF()
+  # Disable non-release sparkle for now. We haven't used it yet.
+#  IF( NOT CMAKE_BUILD_TYPE STREQUAL "Release" )
+#    STRING( REPLACE "http://download.tomahawk-player.org/sparkle" # match this
+#              "http://download.tomahawk-player.org/sparkle-debug"  #replace with debug url
+#              edited_plist # save in this variable
+#              "${edited_plist}" # from the contents of this var
+#          )
+#  ENDIF()
   FILE( WRITE ${CMAKE_BINARY_DIR}/Info.plist "${edited_plist}" )
 
   FILE(COPY ${CMAKE_SOURCE_DIR}/admin/mac/sparkle_pub.pem
