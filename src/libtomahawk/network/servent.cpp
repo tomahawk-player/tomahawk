@@ -109,31 +109,30 @@ Servent::startListening( QHostAddress ha, bool upnp, int port )
             defPortAlso = listen( ha, defPort );
         if( !defPortAlso )
         {
-            qDebug() << "Failed to listen on both port" << m_port << "and port" << defPort;
-            qDebug() << "Error string is" << errorString();
+            tLog() << "Failed to listen on both port" << m_port << "and port" << defPort;
+            tLog() << "Error string is" << errorString();
             return false;
         }
         else
-            qDebug() << "Servent listening on port" << defPort << "servent thread:" << thread();
+            tLog() << "Servent listening on port" << defPort << "servent thread:" << thread();
     }
     else
     {
         bool defPortAlso = listen( ha, defPort );
-        qDebug() << "Servent listening on port" << m_port << "servent thread:" << thread();
+        tLog() << "Servent listening on port" << m_port << "servent thread:" << thread();
         if( defPortAlso )
-            qDebug() << "Servent also listening on port" << defPort << "servent thread:" << thread();
+            tLog() << "Servent also listening on port" << defPort << "servent thread:" << thread();
     }
 
     // --lanhack means to advertise your LAN IP over jabber as if it were externallyVisible
-    qDebug() << "Address mode =" << (int)(TomahawkSettings::instance()->externalAddressMode());
-    qDebug() << "Static host/port preferred =" << ( TomahawkSettings::instance()->preferStaticHostPort() ? "true" : "false" );
+    tLog() << "Address mode =" << (int)(TomahawkSettings::instance()->externalAddressMode());
+    tLog() << "Static host/port preferred =" << ( TomahawkSettings::instance()->preferStaticHostPort() ? "true" : "false" );
 
     if( TomahawkSettings::instance()->preferStaticHostPort() )
     {
-        qDebug() << "Forcing static preferred host and port";
+        tLog() << "Forcing static preferred host and port";
         m_externalHostname = TomahawkSettings::instance()->externalHostname();
         m_externalPort = TomahawkSettings::instance()->externalPort();
-//        qDebug() << m_externalHostname << m_externalPort;
         emit ready();
         return true;
     }
@@ -163,7 +162,7 @@ Servent::startListening( QHostAddress ha, bool upnp, int port )
 
         case TomahawkSettings::Upnp:
             // TODO check if we have a public/internet IP on this machine directly
-            qDebug() << "External address mode set to upnp....";
+            tLog() << "External address mode set to upnp....";
             m_portfwd = new PortFwdThread( m_port );
             connect( m_portfwd, SIGNAL( externalAddressDetected( QHostAddress, unsigned int ) ),
                                   SLOT( setExternalAddress( QHostAddress, unsigned int ) ) );
