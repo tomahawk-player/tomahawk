@@ -162,7 +162,7 @@ Portfwd::remove( unsigned short port )
        return false;
    }
    sprintf(port_str, "%d", port);
-   int r = UPNP_DeletePortMapping(urls->controlURL, data->CIF.servicetype, port_str, "TCP", NULL);
+   int r = UPNP_DeletePortMapping(urls->controlURL, data->first.servicetype, port_str, "TCP", NULL);
    return r == 0;
 }
 
