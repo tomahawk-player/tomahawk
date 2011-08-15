@@ -64,7 +64,7 @@ public:
 
     virtual bool jumpToCurrentTrack();
 
-    QString guid() const { return QString( "ArtistView" ); }
+    QString guid() const;
 
 public slots:
     void onItemActivated( const QModelIndex& index );

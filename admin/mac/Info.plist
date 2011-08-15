@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE plist PUBLIC "-//Apple Computer//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
 	<key>CFBundleDevelopmentRegion</key>
@@ -23,40 +23,42 @@
 	<key>CFBundleName</key>
 	<string>Tomahawk</string>
 	<key>LSMinimumSystemVersion</key>
-    <string>10.5.0</string>
-    <key>SUFeedURL</key>
-    <string>http://download.tomahawk-player.org/sparkle</string>
-    <key>SUPublicDSAKeyFile</key>
-    <string>sparkle_pub.pem</string>
-    <key>CFBundleURLTypes</key>
-        <array>
-            <dict>
-                <key>CFBundleURLName</key>
-                <string>Tomahawk URL</string>
-                <key>CFBundleURLSchemes</key>
-                <array>
-                    <string>tomahawk</string>
-                </array>
-            </dict>
-        </array>
-    <key>CFBundleDocumentTypes</key>
-      <array>
-        <dict>
-          <key>CFBundleTypeExtensions</key>
-          <array>
-            <string>xspf</string>
-          </array>
-          <key>CFBundleTypeIconFile</key>
-          <string>Generic.icns</string>
-          <key>CFBundleTypeMIMETypes</key>
-          <array>
-            <string>application/xspf+xml</string>
-          </array>
-          <key>CFBundleTypeName</key>
-          <string>XSPF Playlist</string>
-          <key>CFBundleTypeRole</key>
-          <string>Viewer</string>
-        </dict>
-      </array>        
+	<string>10.5.0</string>
+	<key>SUFeedURL</key>
+	<string>http://download.tomahawk-player.org/sparkle/update.php</string>
+	<key>SUPublicDSAKeyFile</key>
+	<string>sparkle_pub.pem</string>
+	<key>SUEnableSystemProfiling</key>
+	<true/>
+	<key>CFBundleURLTypes</key>
+	<array>
+		<dict>
+			<key>CFBundleURLName</key>
+			<string>Tomahawk URL</string>
+			<key>CFBundleURLSchemes</key>
+			<array>
+				<string>tomahawk</string>
+			</array>
+		</dict>
+	</array>
+	<key>CFBundleDocumentTypes</key>
+	<array>
+		<dict>
+			<key>CFBundleTypeExtensions</key>
+			<array>
+				<string>xspf</string>
+			</array>
+			<key>CFBundleTypeIconFile</key>
+			<string>Generic.icns</string>
+			<key>CFBundleTypeMIMETypes</key>
+			<array>
+				<string>application/xspf+xml</string>
+			</array>
+			<key>CFBundleTypeName</key>
+			<string>XSPF Playlist</string>
+			<key>CFBundleTypeRole</key>
+			<string>Viewer</string>
+		</dict>
+	</array>
 </dict>
 </plist>

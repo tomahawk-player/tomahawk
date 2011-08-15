@@ -50,6 +50,9 @@ public:
         AlbumPosition
     };
 
+    enum ColumnStyle // Default style is AllColumns
+    { AllColumns = 0, TrackOnly };
+
     explicit TreeModel( QObject* parent = 0 );
     virtual ~TreeModel();
 
@@ -83,6 +86,8 @@ public:
     void addArtists( const Tomahawk::artist_ptr& artist );
     void addAlbums( const Tomahawk::artist_ptr& artist, const QModelIndex& parent );
     void addTracks( const Tomahawk::album_ptr& album, const QModelIndex& parent );
+
+    void setColumnStyle( ColumnStyle style );
 
     virtual QString title() const { return m_title; }
     virtual QString description() const { return m_description; }
@@ -139,6 +144,7 @@ private:
 
     QString m_title;
     QString m_description;
+    ColumnStyle m_columnStyle;
 
     Tomahawk::collection_ptr m_collection;
 };

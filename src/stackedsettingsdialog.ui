@@ -58,8 +58,8 @@
          </property>
          <property name="iconSize">
           <size>
-           <width>48</width>
-           <height>48</height>
+           <width>32</width>
+           <height>32</height>
           </size>
          </property>
          <property name="movement">
@@ -113,6 +113,9 @@
             <string>Accounts</string>
            </property>
            <layout class="QVBoxLayout" name="verticalLayout_14">
+            <property name="margin">
+             <number>2</number>
+            </property>
             <item>
              <widget class="QLabel" name="label_2">
               <property name="text">
@@ -203,12 +206,6 @@
          </property>
          <item>
           <widget class="QGroupBox" name="groupBox_2">
-           <property name="font">
-            <font>
-             <weight>50</weight>
-             <bold>false</bold>
-            </font>
-           </property>
            <property name="title">
             <string>Local Music Information</string>
            </property>

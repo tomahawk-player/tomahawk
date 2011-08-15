@@ -41,7 +41,7 @@ InfoBar::InfoBar( QWidget* parent )
     boldFont.setPixelSize( 18 );
     boldFont.setBold( true );
     ui->captionLabel->setFont( boldFont );
-    ui->captionLabel->setElideMode( Qt::ElideNone );
+    ui->captionLabel->setElideMode( Qt::ElideRight );
 
     boldFont.setPixelSize( 12 );
     ui->descriptionLabel->setFont( boldFont );

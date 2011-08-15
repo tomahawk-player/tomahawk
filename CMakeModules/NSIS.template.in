@@ -46,7 +46,7 @@
 ;-----------------------------------------------------------------------------
 ; Installer build timestamp.
 ;-----------------------------------------------------------------------------
-!define /date BUILD_TIME "built on %Y/%m/%d at %I:%M %p  (rev. ${REVISION})"
+!define /date BUILD_TIME "built on %Y/%m/%d at %I:%M %p"
 
 ;-----------------------------------------------------------------------------
 ; Initial installer setup and definitions.
@@ -93,7 +93,7 @@ ReserveFile "${NSISDIR}\Plugins\InstallOptions.dll"
 !define MUI_ICON ${NSI_PATH}\installer.ico
 !define MUI_UNICON ${NSI_PATH}\installer.ico
 !define MUI_WELCOMEFINISHPAGE_BITMAP ${NSI_PATH}\welcome.bmp
-!define MUI_WELCOMEPAGE_TITLE "@CPACK_PACKAGE_NAME@ ${VERSION} Setup$\r$\nInstaller Build Revision ${REVISION}"
+!define MUI_WELCOMEPAGE_TITLE "@CPACK_PACKAGE_NAME@ ${VERSION} Setup$\r$\nInstaller"
 !define MUI_WELCOMEPAGE_TEXT "This wizard will guide you through the installation.$\r$\n$\r$\n$_CLICK"
 !define MUI_HEADERIMAGE
 !define MUI_HEADERIMAGE_BITMAP ${NSI_PATH}\page_header.bmp
@@ -203,10 +203,7 @@ Function PageReinstall
       IntCmp $R0 ${VER_MINOR} build_check new_version older_version
    build_check:
       ReadRegDWORD $R0 HKLM "Software\Tomahawk" "VersionBuild"
-      IntCmp $R0 ${VER_BUILD} revision_check new_version older_version
-   revision_check:
-      ReadRegDWORD $R0 HKLM "Software\Tomahawk" "VersionRevision"
-      IntCmp $R0 ${REVISION} same_version new_version older_version
+      IntCmp $R0 ${VER_BUILD} new_version older_version
 
    new_version:
       !insertmacro INSTALLOPTIONS_WRITE "NSIS.InstallOptions.ini" "Field 1" "Text" "An older version of Tomahawk is installed on your system. It is recommended that you uninstall the current version before installing. Select the operation you want to perform and click Next to continue."

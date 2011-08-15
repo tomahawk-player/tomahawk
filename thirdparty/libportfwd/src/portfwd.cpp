@@ -99,7 +99,7 @@ Portfwd::init(unsigned int timeout)
            return false;
        }
        m_lanip = std::string(lanaddr);
-       
+
        freeUPNPDevlist(devlist);
        get_status();
        return true;
@@ -117,8 +117,8 @@ Portfwd::get_status()
 
     // get external IP adress
     char ip[16];
-    if( 0 != UPNP_GetExternalIPAddress( urls->controlURL, 
-                                        data->CIF.servicetype, 
+    if( 0 != UPNP_GetExternalIPAddress( urls->controlURL,
+                                        data->CIF.servicetype,
                                         (char*)&ip ) )
     {
         m_externalip = ""; //failed
@@ -141,7 +141,7 @@ Portfwd::add( unsigned short port, unsigned short internal_port )
    sprintf(port_str, "%d", port);
    sprintf(port_str_internal, "%d", internal_port);
 
-   r = UPNP_AddPortMapping(urls->controlURL, data->CIF.servicetype,
+   r = UPNP_AddPortMapping(urls->controlURL, data->first.servicetype,
                            port_str, port_str_internal, m_lanip.c_str(), "tomahawk", "TCP", NULL);
    if(r!=0)
    {
@@ -162,7 +162,7 @@ Portfwd::remove( unsigned short port )
        return false;
    }
    sprintf(port_str, "%d", port);
-   int r = UPNP_DeletePortMapping(urls->controlURL, data->CIF.servicetype, port_str, "TCP", NULL);
+   int r = UPNP_DeletePortMapping(urls->controlURL, data->first.servicetype, port_str, "TCP", NULL);
    return r == 0;
 }
 
