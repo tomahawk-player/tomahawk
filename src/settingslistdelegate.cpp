@@ -19,7 +19,7 @@ void SettingsListDelegate::paint(QPainter *painter, const QStyleOptionViewItem &
     initStyleOption( &opt, QModelIndex() );
     qApp->style()->drawControl( QStyle::CE_ItemViewItem, &opt, painter );
 
-#ifdef Q_OS_MAC
+#if defined(Q_WS_MAC) || defined(Q_WS_WIN)
     // On mac draw our own selection rect as we don't get one from osx (around the whole icon or around just text)
     if ( opt.state & QStyle::State_Selected )
     {
