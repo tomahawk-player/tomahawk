@@ -113,7 +113,7 @@ Portfwd::get_status()
 //    Q_ASSERT(urls->controlURL_CIF != NULL);
     // get connection speed
     UPNP_GetLinkLayerMaxBitRates(
-        urls->controlURL_CIF, data->CIF.servicetype, &m_downbps, &m_upbps);
+        urls->controlURL_CIF, data->first.servicetype, &m_downbps, &m_upbps);
 
     // get external IP adress
     char ip[16];

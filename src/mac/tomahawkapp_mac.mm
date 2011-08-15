@@ -20,6 +20,7 @@
 
 #include "macdelegate.h"
 #include "macshortcuthandler.h"
+#include "config.h"
 
 #import <AppKit/NSApplication.h>
 #import <Foundation/NSAutoreleasePool.h>
