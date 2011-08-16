@@ -20,6 +20,7 @@
 
 #include <QTreeView>
 
+#include "sourcelist.h"
 #include "sourcesmodel.h"
 #include "sourcetree/items/collectionitem.h"
 
@@ -51,12 +52,12 @@ SourcesProxyModel::showOfflineSources( bool offlineSourcesShown )
     invalidateFilter();
 }
 
+
 bool
 SourcesProxyModel::filterAcceptsRow( int sourceRow, const QModelIndex& sourceParent ) const
 {
     if ( !m_filtered )
         return true;
-
 
     CollectionItem* sti = qobject_cast< CollectionItem* >( m_model->data( sourceModel()->index( sourceRow, 0, sourceParent ), SourcesModel::SourceTreeItemRole ).value< SourceTreeItem* >() );
     if ( sti )
@@ -70,12 +71,14 @@ SourcesProxyModel::filterAcceptsRow( int sourceRow, const QModelIndex& sourcePar
     return true;
 }
 
+
 void
 SourcesProxyModel::selectRequested( const QModelIndex& idx )
 {
     qDebug() << "selectRequested for idx" << idx << idx.data(Qt::DisplayRole).toString() << mapFromSource( idx );
     emit selectRequest( mapFromSource( idx ) );
 }
+
 
 void
 SourcesProxyModel::expandRequested( const QModelIndex& idx )
@@ -84,3 +87,28 @@ SourcesProxyModel::expandRequested( const QModelIndex& idx )
     emit expandRequest( mapFromSource( idx ) );
 }
 
+
+bool
+SourcesProxyModel::lessThan( const QModelIndex& left, const QModelIndex& right ) const
+{
+    CollectionItem* ciL = qobject_cast< CollectionItem* >( m_model->data( left, SourcesModel::SourceTreeItemRole ).value< SourceTreeItem* >() );
+    CollectionItem* ciR = qobject_cast< CollectionItem* >( m_model->data( right, SourcesModel::SourceTreeItemRole ).value< SourceTreeItem* >() );
+
+    if ( ciL && ciR )
+    {
+        if ( ciL->source().isNull() )
+            return true;
+        if ( ciR->source().isNull() )
+            return false;
+
+        if ( ciL->source() == SourceList::instance()->getLocal() )
+            return true;
+        if ( ciR->source() == SourceList::instance()->getLocal() )
+            return false;
+    }
+
+    if ( m_model->data( left, SourcesModel::SortRole ) != m_model->data( right, SourcesModel::SortRole ) )
+        return ( m_model->data( left, SourcesModel::SortRole ).toInt() < m_model->data( right, SourcesModel::SortRole ).toInt() );
+
+    return QString::localeAwareCompare( left.data().toString().toLower(), right.data().toString().toLower() ) < 0;
+}

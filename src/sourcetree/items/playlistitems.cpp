@@ -82,7 +82,8 @@ PlaylistItem::onPlaylistChanged()
 int
 PlaylistItem::peerSortValue() const
 {
-    return m_playlist->createdOn();
+//    return m_playlist->createdOn();
+    return 0;
 }
 
 
@@ -238,7 +239,8 @@ DynamicPlaylistItem::onDynamicPlaylistLoaded( DynamicPlaylistRevision revision )
 int
 DynamicPlaylistItem::peerSortValue() const
 {
-    return m_dynplaylist->createdOn();
+//    return m_dynplaylist->createdOn();
+    return 0;
 }
 
 
