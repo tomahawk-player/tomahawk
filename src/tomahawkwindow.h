@@ -89,7 +89,6 @@ private slots:
 
     void showAboutTomahawk();
     void checkForUpdates();
-    void enablePreferences();
 
     void onSipPluginAdded( SipPlugin* p );
     void onSipPluginRemoved( SipPlugin* p );
