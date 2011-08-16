@@ -63,6 +63,7 @@ private:
     QList< Tomahawk::query_ptr > tracksFromAlbumMetaData( const QMimeData* d );
     QList< Tomahawk::query_ptr > tracksFromMixedData( const QMimeData* d );
 
+    int m_queryCount;
 };
 
 #endif // DROPJOB_H
