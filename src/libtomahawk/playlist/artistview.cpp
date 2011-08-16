@@ -144,7 +144,7 @@ ArtistView::onItemActivated( const QModelIndex& index )
             ViewManager::instance()->show( item->artist() );
         else if ( !item->album().isNull() )
             ViewManager::instance()->show( item->album() );
-        else if ( !item->result().isNull() )
+        else if ( !item->result().isNull() && item->result()->isOnline() )
         {
             m_model->setCurrentItem( item->index );
             AudioEngine::instance()->playItem( m_proxyModel, item->result() );
