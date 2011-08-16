@@ -35,6 +35,7 @@
 #include "utils/tomahawkutils.h"
 #include "utils/logger.h"
 #include <globalactionmanager.h>
+#include "dropjob.h"
 
 using namespace Tomahawk;
 
@@ -521,7 +522,7 @@ AudioControls::onTrackClicked()
 void
 AudioControls::dragEnterEvent( QDragEnterEvent* e )
 {
-    if ( GlobalActionManager::instance()->acceptsMimeData( e->mimeData() ) )
+    if ( DropJob::acceptsMimeData( e->mimeData() ) )
         e->acceptProposedAction();
 }
 
@@ -538,10 +539,11 @@ void
 AudioControls::dropEvent( QDropEvent* e )
 {
     tDebug() << "AudioControls got drop:" << e->mimeData()->formats();
-    if ( GlobalActionManager::instance()->acceptsMimeData( e->mimeData() ) )
+    if ( DropJob::acceptsMimeData( e->mimeData() ) )
     {
-        connect( GlobalActionManager::instance(), SIGNAL( tracks( QList<Tomahawk::query_ptr> ) ), this, SLOT( droppedTracks( QList<Tomahawk::query_ptr> ) ) );
-        GlobalActionManager::instance()->tracksFromMimeData( e->mimeData() );
+        DropJob *dj = new DropJob();
+        connect( dj, SIGNAL( tracks( QList<Tomahawk::query_ptr> ) ), this, SLOT( droppedTracks( QList<Tomahawk::query_ptr> ) ) );
+        dj->tracksFromMimeData( e->mimeData() );
 
         e->accept();
     }
@@ -551,8 +553,6 @@ AudioControls::dropEvent( QDropEvent* e )
 void
 AudioControls::droppedTracks( QList< query_ptr > tracks )
 {
-    disconnect( GlobalActionManager::instance(), SIGNAL( tracks( QList<Tomahawk::query_ptr> ) ), this, SLOT( droppedTracks( QList<Tomahawk::query_ptr> ) ) );
-
     if ( !tracks.isEmpty() )
     {
         // queue and play the first if nothign is playing

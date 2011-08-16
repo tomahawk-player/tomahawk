@@ -28,7 +28,7 @@
 #include "collectionitem.h"
 #include "utils/tomahawkutils.h"
 #include "utils/logger.h"
-#include "globalactionmanager.h"
+#include "dropjob.h"
 
 using namespace Tomahawk;
 
@@ -142,8 +142,9 @@ PlaylistItem::dropMimeData( const QMimeData* data, Qt::DropAction action )
         data->data( "application/tomahawk.playlist.id" ) == m_playlist->guid() )
         return false; // don't allow dropping on ourselves
 
-    connect( GlobalActionManager::instance(), SIGNAL( tracks( QList< Tomahawk::query_ptr > ) ), this, SLOT( parsedDroppedTracks( QList< Tomahawk::query_ptr > ) ) );
-    GlobalActionManager::instance()->tracksFromMimeData( data );
+    DropJob *dj = new DropJob();
+    connect( dj, SIGNAL( tracks( QList< Tomahawk::query_ptr > ) ), this, SLOT( parsedDroppedTracks( QList< Tomahawk::query_ptr > ) ) );
+    dj->tracksFromMimeData( data );
 
     // TODO cant' know if it works or not yet...
     return true;
@@ -152,7 +153,6 @@ PlaylistItem::dropMimeData( const QMimeData* data, Qt::DropAction action )
 void
 PlaylistItem::parsedDroppedTracks( const QList< query_ptr >& tracks)
 {
-    disconnect( GlobalActionManager::instance(), SIGNAL( tracks( QList< Tomahawk::query_ptr > ) ), this, SLOT( parsedDroppedTracks( QList< Tomahawk::query_ptr > ) ) );
     if ( tracks.count() && !m_playlist.isNull() && m_playlist->author()->isLocal() )
     {
         qDebug() << "on playlist:" << m_playlist->title() << m_playlist->guid() << m_playlist->currentrevision();

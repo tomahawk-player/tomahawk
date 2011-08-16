@@ -27,7 +27,7 @@
 #include "database/databasecommand_playbackhistory.h"
 #include "dynamic/GeneratorInterface.h"
 #include "utils/logger.h"
-#include "globalactionmanager.h"
+#include "dropjob.h"
 
 using namespace Tomahawk;
 
@@ -358,14 +358,15 @@ PlaylistModel::dropMimeData( const QMimeData* data, Qt::DropAction action, int r
     if ( action == Qt::IgnoreAction || isReadOnly() )
         return true;
 
-    if ( !GlobalActionManager::instance()->acceptsMimeData( data ) )
+    if ( !DropJob::acceptsMimeData( data ) )
         return false;
 
     m_dropStorage.row = row;
     m_dropStorage.parent = QPersistentModelIndex( parent );
     m_dropStorage.action = action;
-    connect( GlobalActionManager::instance(), SIGNAL( tracks( QList< Tomahawk::query_ptr > ) ), this, SLOT( parsedDroppedTracks( QList< Tomahawk::query_ptr > ) ) );
-    GlobalActionManager::instance()->tracksFromMimeData( data );
+    DropJob *dj = new DropJob();
+    connect( dj, SIGNAL( tracks( QList< Tomahawk::query_ptr > ) ), this, SLOT( parsedDroppedTracks( QList< Tomahawk::query_ptr > ) ) );
+    dj->tracksFromMimeData( data );
 
     return true;
 }
@@ -376,8 +377,6 @@ PlaylistModel::parsedDroppedTracks( QList< query_ptr > tracks )
 {
     if ( m_dropStorage.row == -10  ) // nope
         return;
-
-    disconnect( GlobalActionManager::instance(), SIGNAL( tracks( QList< Tomahawk::query_ptr > ) ), this, SLOT( parsedDroppedTracks( QList< Tomahawk::query_ptr > ) ) );
 
     int beginRow;
     if ( m_dropStorage.row != -1 )

@@ -33,6 +33,7 @@
 
 #include "utils/logger.h"
 #include "globalactionmanager.h"
+#include "dropjob.h"
 #include "items/playlistitems.h"
 
 using namespace Tomahawk;
@@ -175,7 +176,7 @@ SourcesModel::setData( const QModelIndex& index, const QVariant& value, int role
 QStringList
 SourcesModel::mimeTypes() const
 {
-    return GlobalActionManager::instance()->mimeTypes();
+    return DropJob::mimeTypes();
 }
 
 
