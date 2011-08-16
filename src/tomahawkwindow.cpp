@@ -347,6 +347,12 @@ TomahawkWindow::setupSignals()
     ui->menuWindow->menuAction()->setVisible( false );
 #endif
 
+    if ( !Servent::instance()->isReady() )
+    {
+        ui->actionPreferences->setEnabled( false );
+        connect( Servent::instance(), SIGNAL( ready() ), this, SLOT( enablePreferences() ) );
+    }
+
     // <SipHandler>
     connect( SipHandler::instance(), SIGNAL( connected( SipPlugin* ) ), SLOT( onSipConnected() ) );
     connect( SipHandler::instance(), SIGNAL( disconnected( SipPlugin* ) ), SLOT( onSipDisconnected() ) );
@@ -703,6 +709,12 @@ TomahawkWindow::checkForUpdates()
 #ifdef Q_WS_MAC
     Tomahawk::checkForUpdates();
 #endif
+}
+
+void
+TomahawkWindow::enablePreferences()
+{
+    ui->actionPreferences->setEnabled( true );
 }
 
 

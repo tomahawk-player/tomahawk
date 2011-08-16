@@ -22,6 +22,7 @@
 #include <QDialog>
 #include <QModelIndex>
 
+class LoadingSpinner;
 class QListWidgetItem;
 class Ui_StackedSettingsDialog;
 class SipPluginFactory;
@@ -112,6 +113,7 @@ private:
     bool m_rejected;
     SipModel* m_sipModel;
     ResolversModel* m_resolversModel;
+    LoadingSpinner* m_sipSpinner;
 };
 
 #endif // SETTINGSDIALOG_H

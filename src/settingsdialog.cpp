@@ -51,6 +51,7 @@
 
 #include "ui_proxydialog.h"
 #include "ui_stackedsettingsdialog.h"
+#include <playlist/dynamic/widgets/LoadingSpinner.h>
 
 static QString
 md5( const QByteArray& src )
@@ -66,6 +67,7 @@ SettingsDialog::SettingsDialog( QWidget *parent )
     , m_rejected( false )
     , m_sipModel( 0 )
     , m_resolversModel( 0 )
+    , m_sipSpinner( 0 )
 {
     ui->setupUi( this );
     TomahawkSettings* s = TomahawkSettings::instance();
@@ -106,6 +108,13 @@ SettingsDialog::SettingsDialog( QWidget *parent )
     connect( ui->accountsView, SIGNAL( customContextMenuRequested( QPoint ) ), this, SLOT( sipContextMenuRequest( QPoint ) ) );
     m_sipModel = new SipModel( this );
     ui->accountsView->setModel( m_sipModel );
+
+    if ( !Servent::instance()->isReady() )
+    {
+        m_sipSpinner = new LoadingSpinner( ui->accountsView );
+        m_sipSpinner->fadeIn();
+        connect( Servent::instance(), SIGNAL( ready() ),m_sipSpinner, SLOT( fadeOut() ) );
+    }
 
     setupSipButtons();
 

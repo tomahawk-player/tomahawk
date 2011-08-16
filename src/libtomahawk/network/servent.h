@@ -1,5 +1,5 @@
 /* === This file is part of Tomahawk Player - <http://tomahawk-player.org> ===
- * 
+ *
  *   Copyright 2010-2011, Christian Muehlhaeuser <muesli@tomahawk-player.org>
  *
  *   Tomahawk is free software: you can redistribute it and/or modify
@@ -123,6 +123,8 @@ public:
     QSharedPointer<QIODevice> localFileIODeviceFactory( const Tomahawk::result_ptr& result );
     QSharedPointer<QIODevice> httpIODeviceFactory( const Tomahawk::result_ptr& result );
 
+    bool isReady() const { return m_ready; };
+
 signals:
     void streamStarted( StreamConnection* );
     void streamFinished( StreamConnection* );
@@ -159,6 +161,7 @@ private:
     int m_port, m_externalPort;
     QHostAddress m_externalAddress;
     QString m_externalHostname;
+    bool m_ready;
 
     // currently active file transfers:
     QList< StreamConnection* > m_scsessions;
