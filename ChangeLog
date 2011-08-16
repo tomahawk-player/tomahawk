@@ -1,4 +1,5 @@
 Version 0.2.1:
+    * Fixed crashing trying to play an unavailable track.
     * Fixed a crash caused by using Javascript resolvers.
     * Fixed searching with Javascript resolvers.
 
