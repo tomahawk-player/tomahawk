@@ -60,6 +60,7 @@ Servent::Servent( QObject* parent )
     : QTcpServer( parent )
     , m_port( 0 )
     , m_externalPort( 0 )
+    , m_ready( false )
     , m_portfwd( 0 )
 {
     s_instance = this;
@@ -133,6 +134,7 @@ Servent::startListening( QHostAddress ha, bool upnp, int port )
         tLog() << "Forcing static preferred host and port";
         m_externalHostname = TomahawkSettings::instance()->externalHostname();
         m_externalPort = TomahawkSettings::instance()->externalPort();
+        m_ready = true;
         emit ready();
         return true;
     }
@@ -155,7 +157,10 @@ Servent::startListening( QHostAddress ha, bool upnp, int port )
                     QMetaObject::invokeMethod( this, "setExternalAddress", Qt::QueuedConnection, Q_ARG( QHostAddress, ha ), Q_ARG( unsigned int, m_port ) );
                 }
                 else
+                {
+                    m_ready = true;
                     emit ready();
+                }
                 break;
             }
             break;
@@ -227,6 +232,7 @@ Servent::setExternalAddress( QHostAddress ha, unsigned int port )
             qDebug() << "No external access, LAN and outbound connections only!";
     }
 
+    m_ready = true;
     emit ready();
 }
 

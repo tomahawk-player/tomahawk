@@ -1,5 +1,5 @@
 /* === This file is part of Tomahawk Player - <http://tomahawk-player.org> ===
- * 
+ *
  *   Copyright 2010-2011, Christian Muehlhaeuser <muesli@tomahawk-player.org>
  *
  *   Tomahawk is free software: you can redistribute it and/or modify
@@ -21,31 +21,33 @@
 
 #include <QWidget>
 
+#include "dllmacro.h"
+
 class QMovie;
 class QTimeLine;
 /**
  * A small widget that displays an animated loading spinner
  */
-class LoadingSpinner : public QWidget {
+class DLLEXPORT LoadingSpinner : public QWidget {
     Q_OBJECT
 public:
     LoadingSpinner( QWidget* parent );
     virtual ~LoadingSpinner();
-    
+
     virtual QSize sizeHint() const;
     virtual void paintEvent( QPaintEvent* );
     virtual void resizeEvent( QResizeEvent* );
-    
-public slots:        
+
+public slots:
     void fadeIn();
     void fadeOut();
-    
+
 private slots:
     void hideFinished();
-    
+
 private:
     void reposition();
-    
+
     QTimeLine* m_showHide;
     QMovie* m_anim;
 };
