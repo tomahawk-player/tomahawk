@@ -96,8 +96,6 @@ void
 AdiumPlugin::settingsChanged()
 {
     m_active = TomahawkSettings::instance()->nowPlayingEnabled();
-    if( !m_active )
-        setStatus( "" );
 }
 
 
