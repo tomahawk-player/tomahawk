@@ -37,7 +37,8 @@
 #include "audio/audioengine.h"
 #include "sourceplaylistinterface.h"
 #include "tomahawksettings.h"
-#include <globalactionmanager.h>
+#include "globalactionmanager.h"
+#include "dropjob.h"
 
 #include "utils/logger.h"
 
@@ -439,7 +440,7 @@ SourceTreeView::dragEnterEvent( QDragEnterEvent* event )
     qDebug() << Q_FUNC_INFO;
     QTreeView::dragEnterEvent( event );
 
-    if ( GlobalActionManager::instance()->acceptsMimeData( event->mimeData() ) )
+    if ( DropJob::acceptsMimeData( event->mimeData() ) )
     {
         m_dragging = true;
         m_dropRect = QRect();
@@ -470,7 +471,7 @@ SourceTreeView::dragMoveEvent( QDragMoveEvent* event )
     bool accept = false;
     QTreeView::dragMoveEvent( event );
 
-    if ( GlobalActionManager::instance()->acceptsMimeData( event->mimeData() ) )
+    if ( DropJob::acceptsMimeData( event->mimeData() ) )
     {
         setDirtyRegion( m_dropRect );
         const QPoint pos = event->pos();

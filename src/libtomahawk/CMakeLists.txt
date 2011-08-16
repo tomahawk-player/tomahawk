@@ -31,6 +31,7 @@ set( libSources
     viewmanager.cpp
     globalactionmanager.cpp
     contextmenu.cpp
+    dropjob.cpp
 
     sip/SipPlugin.cpp
     sip/SipHandler.cpp
@@ -208,6 +209,7 @@ set( libHeaders
     viewmanager.h
     globalactionmanager.h
     contextmenu.h
+    dropjob.h
 
     artist.h
     album.h
