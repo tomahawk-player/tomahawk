@@ -504,8 +504,6 @@ AudioEngine::playItem( Tomahawk::PlaylistInterface* playlist, const Tomahawk::re
 {
     tDebug( LOGEXTRA ) << Q_FUNC_INFO << ( result.isNull() ? QString() : result->url() );
 
-    if ( !result->isOnline() )
-        return;
     if ( !m_playlist.isNull() )
         m_playlist.data()->reset();
 
