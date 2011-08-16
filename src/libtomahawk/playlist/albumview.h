@@ -60,9 +60,6 @@ public slots:
 
 protected:
     virtual void startDrag( Qt::DropActions supportedActions );
-    virtual void dragEnterEvent( QDragEnterEvent* event );
-    virtual void dragMoveEvent( QDragMoveEvent* event );
-    virtual void dropEvent( QDropEvent* event );
 
     void paintEvent( QPaintEvent* event );
 
@@ -73,8 +70,6 @@ private slots:
     void onScrollTimeout();
 
 private:
-    QPixmap createDragPixmap( int itemCount ) const;
-
     AlbumModel* m_model;
     AlbumProxyModel* m_proxyModel;
 //    PlaylistItemDelegate* m_delegate;

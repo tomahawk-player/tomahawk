@@ -189,27 +189,6 @@ AlbumView::onScrollTimeout()
 
 
 void
-AlbumView::dragEnterEvent( QDragEnterEvent* event )
-{
-    QListView::dragEnterEvent( event );
-}
-
-
-void
-AlbumView::dragMoveEvent( QDragMoveEvent* event )
-{
-    QListView::dragMoveEvent( event );
-}
-
-
-void
-AlbumView::dropEvent( QDropEvent* event )
-{
-    QListView::dropEvent( event );
-}
-
-
-void
 AlbumView::paintEvent( QPaintEvent* event )
 {
     QListView::paintEvent( event );
@@ -227,14 +206,30 @@ AlbumView::onFilterChanged( const QString& )
 void
 AlbumView::startDrag( Qt::DropActions supportedActions )
 {
-    Q_UNUSED( supportedActions );
-}
+    QList<QPersistentModelIndex> pindexes;
+    QModelIndexList indexes;
+    foreach( const QModelIndex& idx, selectedIndexes() )
+    {
+        if ( ( m_proxyModel->flags( idx ) & Qt::ItemIsDragEnabled ) )
+        {
+            indexes << idx;
+            pindexes << idx;
+        }
+    }
 
+    if ( indexes.count() == 0 )
+        return;
 
-// Inspired from dolphin's draganddrophelper.cpp
-QPixmap
-AlbumView::createDragPixmap( int itemCount ) const
-{
-    Q_UNUSED( itemCount );
-    return QPixmap();
+    qDebug() << "Dragging" << indexes.count() << "indexes";
+    QMimeData* data = m_proxyModel->mimeData( indexes );
+    if ( !data )
+        return;
+
+    QDrag* drag = new QDrag( this );
+    drag->setMimeData( data );
+    const QPixmap p = TomahawkUtils::createDragPixmap( indexes.count() );
+    drag->setPixmap( p );
+    drag->setHotSpot( QPoint( -20, -20 ) );
+
+    Qt::DropAction action = drag->exec( supportedActions, Qt::CopyAction );
 }

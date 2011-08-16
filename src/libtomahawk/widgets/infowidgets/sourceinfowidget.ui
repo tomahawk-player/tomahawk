@@ -40,6 +40,15 @@
          <height>192</height>
         </size>
        </property>
+       <property name="dragEnabled">
+        <bool>true</bool>
+       </property>
+       <property name="dragDropMode">
+        <enum>QAbstractItemView::DragDrop</enum>
+       </property>
+       <property name="selectionMode">
+        <enum>QAbstractItemView::ExtendedSelection</enum>
+       </property>
       </widget>
      </item>
     </layout>
@@ -85,14 +94,14 @@
    <header location="global">widgets/HeaderLabel.h</header>
   </customwidget>
   <customwidget>
-   <class>PlaylistView</class>
-   <extends>QTreeView</extends>
-   <header>playlist/playlistview.h</header>
-  </customwidget>
-  <customwidget>
    <class>AlbumView</class>
    <extends>QListView</extends>
    <header>playlist/albumview.h</header>
+  </customwidget>
+  <customwidget>
+   <class>PlaylistView</class>
+   <extends>QTreeView</extends>
+   <header>playlist/playlistview.h</header>
   </customwidget>
   <customwidget>
    <class>CollectionView</class>

@@ -159,6 +159,7 @@ AlbumModel::headerData( int section, Qt::Orientation orientation, int role ) con
 Qt::ItemFlags
 AlbumModel::flags( const QModelIndex& index ) const
 {
+    qDebug() << "asking for flags for index" << index;
     Qt::ItemFlags defaultFlags = QAbstractItemModel::flags( index );
 
     if ( index.isValid() && index.column() == 0 )
@@ -195,12 +196,13 @@ AlbumModel::mimeData( const QModelIndexList &indexes ) const
         if ( item )
         {
             const album_ptr& album = item->album();
-            queryStream << qlonglong( &album );
+            queryStream << album->artist()->name();
+            queryStream << album->name();
         }
     }
 
     QMimeData* mimeData = new QMimeData();
-    mimeData->setData( "application/tomahawk.query.list", queryData );
+    mimeData->setData( "application/tomahawk.metadata.album", queryData );
 
     return mimeData;
 }

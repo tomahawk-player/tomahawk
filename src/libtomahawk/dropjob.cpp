@@ -32,6 +32,7 @@ using namespace Tomahawk;
 
 DropJob::DropJob( QObject *parent )
     : QObject( parent )
+    , m_queryCount( 0 )
 {
 }
 
@@ -187,8 +188,11 @@ DropJob::tracksFromAlbumMetaData( const QMimeData *data )
         artist_ptr artistPtr = Artist::get( artist );
         album_ptr albumPtr = Album::get( artistPtr, album );
         if ( albumPtr->tracks().isEmpty() )
+        {
             connect( albumPtr.data(), SIGNAL( tracksAdded( QList<Tomahawk::query_ptr> ) ),
                                      SLOT( onTracksAdded( QList<Tomahawk::query_ptr> ) ) );
+            m_queryCount++;
+        }
         else
             queries << albumPtr->tracks();
     }
@@ -209,8 +213,11 @@ DropJob::tracksFromArtistMetaData( const QMimeData *data )
 
         artist_ptr artistPtr = Artist::get( artist );
         if ( artistPtr->tracks().isEmpty() )
+        {
             connect( artistPtr.data(), SIGNAL( tracksAdded( QList<Tomahawk::query_ptr> ) ),
                                      SLOT( onTracksAdded( QList<Tomahawk::query_ptr> ) ) );
+            m_queryCount++;
+        }
         else
             queries << artistPtr->tracks();
     }
@@ -309,5 +316,6 @@ DropJob::onTracksAdded( const QList<Tomahawk::query_ptr>& tracksList )
 {
     qDebug() << "here i am with" << tracksList.count() << "tracks";
     emit tracks( tracksList );
-    deleteLater();
+    if ( --m_queryCount == 0 )
+        deleteLater();
 }
