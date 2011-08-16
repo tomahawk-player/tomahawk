@@ -91,22 +91,6 @@ SourcesProxyModel::expandRequested( const QModelIndex& idx )
 bool
 SourcesProxyModel::lessThan( const QModelIndex& left, const QModelIndex& right ) const
 {
-    CollectionItem* ciL = qobject_cast< CollectionItem* >( m_model->data( left, SourcesModel::SourceTreeItemRole ).value< SourceTreeItem* >() );
-    CollectionItem* ciR = qobject_cast< CollectionItem* >( m_model->data( right, SourcesModel::SourceTreeItemRole ).value< SourceTreeItem* >() );
-
-    if ( ciL && ciR )
-    {
-        if ( ciL->source().isNull() )
-            return true;
-        if ( ciR->source().isNull() )
-            return false;
-
-        if ( ciL->source() == SourceList::instance()->getLocal() )
-            return true;
-        if ( ciR->source() == SourceList::instance()->getLocal() )
-            return false;
-    }
-
     if ( m_model->data( left, SourcesModel::SortRole ) != m_model->data( right, SourcesModel::SortRole ) )
         return ( m_model->data( left, SourcesModel::SortRole ).toInt() < m_model->data( right, SourcesModel::SortRole ).toInt() );
 
