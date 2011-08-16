@@ -33,7 +33,7 @@
 #include "dynamic/widgets/LoadingSpinner.h"
 #include "utils/tomahawkutils.h"
 #include "utils/logger.h"
-#include <globalactionmanager.h>
+#include "dropjob.h"
 
 using namespace Tomahawk;
 
@@ -214,7 +214,7 @@ TrackView::dragEnterEvent( QDragEnterEvent* event )
     qDebug() << Q_FUNC_INFO;
     QTreeView::dragEnterEvent( event );
 
-    if ( GlobalActionManager::instance()->acceptsMimeData( event->mimeData() ) )
+    if ( DropJob::acceptsMimeData( event->mimeData() ) )
     {
         m_dragging = true;
         m_dropRect = QRect();
@@ -236,7 +236,7 @@ TrackView::dragMoveEvent( QDragMoveEvent* event )
         return;
     }
 
-    if ( GlobalActionManager::instance()->acceptsMimeData( event->mimeData() ) )
+    if ( DropJob::acceptsMimeData( event->mimeData() ) )
     {
         setDirtyRegion( m_dropRect );
         const QPoint pos = event->pos();
@@ -278,7 +278,7 @@ TrackView::dropEvent( QDropEvent* event )
     }
     else
     {
-        if ( GlobalActionManager::instance()->acceptsMimeData( event->mimeData() ) )
+        if ( DropJob::acceptsMimeData( event->mimeData() ) )
         {
             const QPoint pos = event->pos();
             const QModelIndex index = indexAt( pos );

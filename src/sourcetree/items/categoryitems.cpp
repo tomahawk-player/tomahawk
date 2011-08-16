@@ -28,7 +28,7 @@
 #include "widgets/playlisttypeselectordlg.h"
 #include <playlist/dynamic/GeneratorInterface.h>
 #include "utils/logger.h"
-#include <globalactionmanager.h>
+#include "dropjob.h"
 
 using namespace Tomahawk;
 
@@ -122,7 +122,7 @@ CategoryAddItem::icon() const
 bool
 CategoryAddItem::willAcceptDrag( const QMimeData* data ) const
 {
-    if ( ( m_categoryType == SourcesModel::PlaylistsCategory || m_categoryType == SourcesModel::StationsCategory ) && GlobalActionManager::instance()->acceptsMimeData( data ) )
+    if ( ( m_categoryType == SourcesModel::PlaylistsCategory || m_categoryType == SourcesModel::StationsCategory ) && DropJob::acceptsMimeData( data ) )
     {
         return true;
     }
@@ -134,8 +134,9 @@ bool
 CategoryAddItem::dropMimeData( const QMimeData* data, Qt::DropAction )
 {
     // Create a new playlist seeded with these items
-    connect( GlobalActionManager::instance(), SIGNAL( tracks( QList< Tomahawk::query_ptr > ) ), this, SLOT( parsedDroppedTracks( QList< Tomahawk::query_ptr > ) ) );
-    GlobalActionManager::instance()->tracksFromMimeData( data );
+    DropJob *dj = new DropJob();
+    connect( dj, SIGNAL( tracks( QList< Tomahawk::query_ptr > ) ), this, SLOT( parsedDroppedTracks( QList< Tomahawk::query_ptr > ) ) );
+    dj->tracksFromMimeData( data );
 
     return true;
 }
@@ -143,7 +144,6 @@ CategoryAddItem::dropMimeData( const QMimeData* data, Qt::DropAction )
 void
 CategoryAddItem::parsedDroppedTracks( const QList< query_ptr >& tracks )
 {
-    disconnect( GlobalActionManager::instance(), SIGNAL( tracks( QList< Tomahawk::query_ptr > ) ), this, SLOT( parsedDroppedTracks( QList< Tomahawk::query_ptr > ) ) );
     if( m_categoryType == SourcesModel::PlaylistsCategory ) {
 
         playlist_ptr newpl = Playlist::create( SourceList::instance()->getLocal(), uuid(), "New Playlist", "", SourceList::instance()->getLocal()->friendlyName(), false, tracks );

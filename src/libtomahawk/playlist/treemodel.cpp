@@ -293,6 +293,8 @@ TreeModel::flags( const QModelIndex& index ) const
         TreeModelItem* item = itemFromIndex( index );
         if ( item && !item->result().isNull() )
             return Qt::ItemIsDragEnabled | Qt::ItemIsDropEnabled | defaultFlags;
+        if ( item && ( !item->album().isNull() || !item->artist().isNull() ) )
+            return Qt::ItemIsDragEnabled | defaultFlags;
     }
 
     return defaultFlags;
@@ -303,7 +305,7 @@ QStringList
 TreeModel::mimeTypes() const
 {
     QStringList types;
-    types << "application/tomahawk.result.list";
+    types << "application/tomahawk.mixed";
     return types;
 }
 
@@ -318,21 +320,32 @@ TreeModel::mimeData( const QModelIndexList &indexes ) const
 
     foreach ( const QModelIndex& i, indexes )
     {
-        if ( i.column() > 0 )
+        if ( i.column() > 0 || indexes.contains( i.parent() ) )
             continue;
 
-        QModelIndex idx = index( i.row(), 0, i.parent() );
-        TreeModelItem* item = itemFromIndex( idx );
-        if ( item && !item->result().isNull() )
+        TreeModelItem* item = itemFromIndex( i );
+        if ( !item )
+            continue;
+
+        if ( !item->artist().isNull() )
+        {
+            const artist_ptr& artist = item->artist();
+            resultStream << QString( "application/tomahawk.metadata.artist" ) << artist->name();
+        }
+        else if ( !item->album().isNull() )
+        {
+            const album_ptr& album = item->album();
+            resultStream << QString( "application/tomahawk.metadata.album" ) << album->artist()->name() << album->name();
+        }
+        else if ( !item->result().isNull() )
         {
             const result_ptr& result = item->result();
-            resultStream << qlonglong( &result );
+            resultStream << QString( "application/tomahawk.result.list" ) << qlonglong( &result );
         }
     }
 
     QMimeData* mimeData = new QMimeData();
-    mimeData->setData( "application/tomahawk.result.list", resultData );
-
+    mimeData->setData( "application/tomahawk.mixed", resultData );
     return mimeData;
 }
 
