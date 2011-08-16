@@ -101,6 +101,7 @@ private slots:
     void sipCreateConfigClosed( int value );
 
     void changePage( QListWidgetItem*, QListWidgetItem* );
+    void serventReady();
 
 private:
     void createIcons();

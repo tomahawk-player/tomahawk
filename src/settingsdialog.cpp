@@ -113,7 +113,10 @@ SettingsDialog::SettingsDialog( QWidget *parent )
     {
         m_sipSpinner = new LoadingSpinner( ui->accountsView );
         m_sipSpinner->fadeIn();
-        connect( Servent::instance(), SIGNAL( ready() ),m_sipSpinner, SLOT( fadeOut() ) );
+
+        ui->addSipButton->setEnabled( false );
+        ui->removeSipButton->setEnabled( false );
+        connect( Servent::instance(), SIGNAL( ready() ), this, SLOT( serventReady() ) );
     }
 
     setupSipButtons();
@@ -237,6 +240,13 @@ SettingsDialog::~SettingsDialog()
     delete ui;
 }
 
+void
+SettingsDialog::serventReady()
+{
+    m_sipSpinner->fadeOut();
+    ui->addSipButton->setEnabled( true );
+    ui->removeSipButton->setEnabled( true );
+}
 
 void
 SettingsDialog::createIcons()
