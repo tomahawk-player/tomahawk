@@ -1,3 +1,7 @@
+Version 0.2.1:
+    * Fixed a crash caused by using Javascript resolvers.
+    * Fixed searching with Javascript resolvers.
+
 Version 0.2.0:
     * Re-resolve queries when their resolved-to source goes offline.
     * Cleanup formatting of Preference/Configure and Diagnostics windows.
