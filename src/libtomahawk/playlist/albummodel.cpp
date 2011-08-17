@@ -159,7 +159,6 @@ AlbumModel::headerData( int section, Qt::Orientation orientation, int role ) con
 Qt::ItemFlags
 AlbumModel::flags( const QModelIndex& index ) const
 {
-    qDebug() << "asking for flags for index" << index;
     Qt::ItemFlags defaultFlags = QAbstractItemModel::flags( index );
 
     if ( index.isValid() && index.column() == 0 )
