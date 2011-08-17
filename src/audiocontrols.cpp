@@ -132,16 +132,6 @@ AudioControls::AudioControls( QWidget* parent )
                                      "background-repeat: no-repeat;"
                                      "}" );
 
-/*    m_playAction  = new QAction( this );
-    m_pauseAction = new QAction( this );
-    m_prevAction  = new QAction( this );
-    m_nextAction  = new QAction( this );
-
-    connect( m_playAction,  SIGNAL( triggered() ), (QObject*)APP->audioEngine(), SLOT( play() ) );
-    connect( m_pauseAction, SIGNAL( triggered() ), (QObject*)APP->audioEngine(), SLOT( pause() ) );
-    connect( m_prevAction,  SIGNAL( triggered() ), (QObject*)APP->audioEngine(), SLOT( previous() ) );
-    connect( m_nextAction,  SIGNAL( triggered() ), (QObject*)APP->audioEngine(), SLOT( next() ) ); */
-
     connect( ui->seekSlider,       SIGNAL( valueChanged( int ) ), AudioEngine::instance(), SLOT( seek( int ) ) );
     connect( ui->volumeSlider,     SIGNAL( valueChanged( int ) ), AudioEngine::instance(), SLOT( setVolume( int ) ) );
     connect( ui->prevButton,       SIGNAL( clicked() ), AudioEngine::instance(), SLOT( previous() ) );
@@ -179,7 +169,6 @@ AudioControls::AudioControls( QWidget* parent )
         SLOT( infoSystemInfo( Tomahawk::InfoSystem::InfoRequestData, QVariant ) ) );
 
     connect( Tomahawk::InfoSystem::InfoSystem::instance(), SIGNAL( finished( QString ) ), SLOT( infoSystemFinished( QString ) ) );
-
 
     ui->buttonAreaLayout->setSpacing( 0 );
     ui->stackedLayout->setSpacing( 0 );
@@ -306,9 +295,6 @@ AudioControls::onPlaybackLoading( const Tomahawk::result_ptr& result )
     ui->seekSlider->setValue( 0 );
     ui->seekSlider->setVisible( true );
 
-/*    m_playAction->setEnabled( false );
-    m_pauseAction->setEnabled( true ); */
-
     ui->stackedLayout->setCurrentWidget( ui->pauseButton );
 
     ui->loveButton->setEnabled( true );
@@ -344,18 +330,12 @@ AudioControls::socialActionsLoaded()
 void
 AudioControls::onPlaybackPaused()
 {
-/*    m_pauseAction->setEnabled( false );
-    m_playAction->setEnabled( true ); */
-
     ui->stackedLayout->setCurrentWidget( ui->playPauseButton );
 }
 
 void
 AudioControls::onPlaybackResumed()
 {
-/*    m_playAction->setEnabled( false );
-    m_pauseAction->setEnabled( true ); */
-
     ui->stackedLayout->setCurrentWidget( ui->pauseButton );
     ui->loveButton->setVisible( true );
 }
@@ -377,9 +357,6 @@ AudioControls::onPlaybackStopped()
     ui->stackedLayout->setCurrentWidget( ui->playPauseButton );
     ui->loveButton->setEnabled( false );
     ui->loveButton->setVisible( false );
-
-/*    m_pauseAction->setEnabled( false );
-    m_playAction->setEnabled( true ); */
 }
 
 

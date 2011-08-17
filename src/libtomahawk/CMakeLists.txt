@@ -177,6 +177,7 @@ set( libSources
 
     widgets/newplaylistwidget.cpp
     widgets/searchwidget.cpp
+    widgets/SeekSlider.cpp
     widgets/playlisttypeselectordlg.cpp
     widgets/welcomewidget.cpp
     widgets/welcomeplaylistmodel.cpp
@@ -356,6 +357,7 @@ set( libHeaders
 
     widgets/newplaylistwidget.h
     widgets/searchwidget.h
+    widgets/SeekSlider.h
     widgets/playlisttypeselectordlg.h
     widgets/welcomewidget.h
     widgets/welcomeplaylistmodel.h

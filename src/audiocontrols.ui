@@ -337,7 +337,7 @@
            </widget>
           </item>
           <item>
-           <widget class="QSlider" name="seekSlider">
+           <widget class="SeekSlider" name="seekSlider">
             <property name="minimumSize">
              <size>
               <width>0</width>
@@ -489,7 +489,7 @@
           </widget>
          </item>
          <item>
-          <widget class="QSlider" name="volumeSlider">
+          <widget class="SeekSlider" name="volumeSlider">
            <property name="minimumSize">
             <size>
              <width>0</width>
@@ -529,6 +529,11 @@
   </layout>
  </widget>
  <customwidgets>
+  <customwidget>
+   <class>SeekSlider</class>
+   <extends>QSlider</extends>
+   <header location="global">widgets/SeekSlider.h</header>
+  </customwidget>
   <customwidget>
    <class>ImageButton</class>
    <extends>QPushButton</extends>
