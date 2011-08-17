@@ -566,12 +566,25 @@ MprisPlugin::infoSystemInfo( Tomahawk::InfoSystem::InfoRequestData requestData, 
         return;
     }
 
+    // Pull image data into byte array
     QVariantMap returnedData = output.value< QVariantMap >();
     const QByteArray ba = returnedData["imgbytes"].toByteArray();
     if ( ba.length() )
     {
+        // Load from byte array to image
         QImage image;
         image.loadFromData( ba );
+
+        // delete the old tempfile and make new one, to avoid caching of filename by mpris clients
+        delete m_coverTempFile;
+        m_coverTempFile = new QTemporaryFile( "tomahawk_curtrack_cover.png" );
+        if( !m_coverTempFile->open() )
+        {
+            qDebug() << "WARNING: could not write temporary file for cover art!";
+        }
+        m_coverTempFile->close();
+
+        // Finally, save the image to the new temp file
         if( image.save( QFileInfo( *m_coverTempFile ).absoluteFilePath(), "PNG" ) )
         {
             qDebug() << Q_FUNC_INFO << "Image saving successful, notifying";
