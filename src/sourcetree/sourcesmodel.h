@@ -50,7 +50,8 @@ public:
         AutomaticPlaylist = 4,
         Station = 5,
 
-        GenericPage = 6
+        GenericPage = 6,
+        TemporaryPage = 7
     };
 
     enum CategoryType {

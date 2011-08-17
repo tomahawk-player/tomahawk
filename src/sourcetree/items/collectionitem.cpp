@@ -27,6 +27,7 @@
 #include "utils/logger.h"
 #include <widgets/SocialPlaylistWidget.h>
 #include <playlist/customplaylistview.h>
+#include "temporarypageitem.h"
 
 /// CollectionItem
 
@@ -40,7 +41,6 @@ CollectionItem::CollectionItem(  SourcesModel* mdl, SourceTreeItem* parent, cons
     , m_sourceInfoItem( 0   )
     , m_coolPlaylistsItem( 0 )
     , m_lovedTracksItem()
-    , m_curTempPage( 0 )
     , m_sourceInfoPage( 0 )
     , m_coolPlaylistsPage( 0 )
     , m_lovedTracksPage( 0 )
@@ -369,50 +369,23 @@ CollectionItem::requestExpanding()
 void
 CollectionItem::tempPageActivated( Tomahawk::ViewPage* v )
 {
-    QString name = v->title();
-    m_curTempPage = v;
-    if( m_tempItem.isNull() ) {
-        emit beginRowsAdded( children().count(), children().count() );
-        m_tempItem = QWeakPointer< GenericPageItem >( new GenericPageItem( model(), this, name, QIcon( RESPATH "images/playlist-icon.png" ),
-                                                        boost::bind( &CollectionItem::tempItemClicked, this ),
-                                                        boost::bind( &CollectionItem::getTempPage, this ) ) );
-        m_tempItem.data()->setDeleteFunc( boost::bind( &CollectionItem::deleteTempPage, this ) );
-        m_tempItem.data()->setIsTemp( true );
-        emit endRowsAdded();
-    } else {
-        m_tempItem.data()->setText( name );
+    int idx = children().count();
+
+    foreach ( TemporaryPageItem* page, m_tempItems )
+    {
+        if ( page->page() == v )
+        {
+            emit selectRequest( page );
+            return;
+        }
     }
 
-    model()->linkSourceItemToPage( m_tempItem.data(), v );
-    emit selectRequest( m_tempItem.data() );
+    emit beginRowsAdded( idx, idx );
+    TemporaryPageItem* tempPage = new TemporaryPageItem( model(), this, v, idx );
+    m_tempItems << tempPage;
+    endRowsAdded();
+    emit selectRequest( tempPage );
 }
-
-void
-CollectionItem::deleteTempPage()
-{
-    model()->removeSourceItemLink( m_tempItem.data() );
-    ViewManager::instance()->removeFromHistory( m_curTempPage );
-}
-
-
-ViewPage*
-CollectionItem::tempItemClicked()
-{
-    if( m_curTempPage ) {
-        // show the last temporary page the user displayed
-        return ViewManager::instance()->show( m_curTempPage );
-    }
-
-    return 0;
-}
-
-
-ViewPage*
-CollectionItem::getTempPage() const
-{
-    return m_curTempPage;
-}
-
 
 ViewPage*
 CollectionItem::sourceInfoClicked()

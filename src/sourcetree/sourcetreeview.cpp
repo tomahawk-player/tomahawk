@@ -42,6 +42,7 @@
 
 #include "utils/logger.h"
 #include "items/genericpageitems.h"
+#include "items/temporarypageitem.h"
 
 using namespace Tomahawk;
 
@@ -698,12 +699,12 @@ SourceDelegate::paint( QPainter* painter, const QStyleOptionViewItem& option, co
     {
         QStyledItemDelegate::paint( painter, o, index );
 
-        if ( type == SourcesModel::GenericPage )
+        if ( type == SourcesModel::TemporaryPage )
         {
-            GenericPageItem* gpi = qobject_cast< GenericPageItem* >( item );
+            TemporaryPageItem* gpi = qobject_cast< TemporaryPageItem* >( item );
             Q_ASSERT( gpi );
 
-            if ( gpi->isTempItem() && o3.state & QStyle::State_MouseOver )
+            if ( gpi && o3.state & QStyle::State_MouseOver )
             {
                 // draw close icon
                 int padding = 3;
@@ -745,24 +746,19 @@ SourceDelegate::editorEvent ( QEvent* event, QAbstractItemModel* model, const QS
     if ( event->type() == QEvent::MouseButtonRelease )
     {
         SourcesModel::RowType type = static_cast< SourcesModel::RowType >( index.data( SourcesModel::SourceTreeItemTypeRole ).toInt() );
-        if ( type == SourcesModel::GenericPage )
+        if ( type == SourcesModel::TemporaryPage )
         {
-            GenericPageItem* gpi = qobject_cast< GenericPageItem* >( index.data( SourcesModel::SourceTreeItemRole ).value< SourceTreeItem* >() );
+            TemporaryPageItem* gpi = qobject_cast< TemporaryPageItem* >( index.data( SourcesModel::SourceTreeItemRole ).value< SourceTreeItem* >() );
             Q_ASSERT( gpi );
-            if ( gpi->isTempItem() )
-            {
-                QMouseEvent* ev = static_cast< QMouseEvent* >( event );
+            QMouseEvent* ev = static_cast< QMouseEvent* >( event );
 
-                QStyleOptionViewItemV4 o = option;
-                initStyleOption( &o, index );
-                int padding = 3;
-                QRect r ( o.rect.right() - padding - m_iconHeight, padding + o.rect.y(), m_iconHeight, m_iconHeight );
+            QStyleOptionViewItemV4 o = option;
+            initStyleOption( &o, index );
+            int padding = 3;
+            QRect r ( o.rect.right() - padding - m_iconHeight, padding + o.rect.y(), m_iconHeight, m_iconHeight );
 
-                if ( r.contains( ev->pos() ) )
-                {
-                    gpi->deleteTempPage();
-                }
-            }
+            if ( r.contains( ev->pos() ) )
+                gpi->removeFromList();
         }
     }
 

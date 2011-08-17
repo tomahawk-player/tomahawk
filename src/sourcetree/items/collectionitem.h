@@ -21,6 +21,7 @@
 
 #include "sourcetreeitem.h"
 
+class TemporaryPageItem;
 class GenericPageItem;
 class CategoryItem;
 namespace Tomahawk {
@@ -57,9 +58,6 @@ private slots:
     void requestExpanding();
 
     void tempPageActivated( Tomahawk::ViewPage* );
-    Tomahawk::ViewPage* tempItemClicked();
-    Tomahawk::ViewPage* getTempPage() const;
-    void deleteTempPage();
 
     Tomahawk::ViewPage* sourceInfoClicked();
     Tomahawk::ViewPage* getSourceInfoPage() const;
@@ -80,12 +78,11 @@ private:
     CategoryItem* m_playlists;
     CategoryItem* m_stations;
 
-    QWeakPointer<GenericPageItem> m_tempItem;
+    QList< TemporaryPageItem* > m_tempItems;
     GenericPageItem* m_sourceInfoItem;
     GenericPageItem* m_coolPlaylistsItem;
     GenericPageItem* m_lovedTracksItem;
 
-    Tomahawk::ViewPage* m_curTempPage;
     Tomahawk::ViewPage* m_sourceInfoPage;
     Tomahawk::ViewPage* m_coolPlaylistsPage;
     Tomahawk::ViewPage* m_lovedTracksPage;
