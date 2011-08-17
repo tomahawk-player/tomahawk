@@ -283,7 +283,7 @@ DBSyncConnection::lastOpApplied()
 void
 DBSyncConnection::sendOps()
 {
-    tLog() << "Will send peer all ops since" << m_uscache.value( "lastop" ).toString();
+    tLog() << "Will send peer" << m_source->id() << "all ops since" << m_uscache.value( "lastop" ).toString();
 
     source_ptr src = SourceList::instance()->getLocal();
 
