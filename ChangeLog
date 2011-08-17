@@ -1,3 +1,8 @@
+Version 0.2.2:
+    * Fixed sidebar & track sorting issues.
+    * Seek- & volume sliders now directly jump to the position you clicked on.
+    * Fixed dragging artists and albums within Tomahawk.
+
 Version 0.2.1:
     * Fixed crashing trying to play an unavailable track.
     * Fixed a crash caused by using Javascript resolvers.
