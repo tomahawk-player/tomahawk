@@ -1,3 +1,6 @@
+Version 0.3.0:
+    * Added MPRIS 2.1 support.
+
 Version 0.2.2:
     * Fixed sidebar & track sorting issues.
     * Seek- & volume sliders now directly jump to the position you clicked on.
