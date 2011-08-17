@@ -239,10 +239,30 @@ MprisPlugin::metadata() const
     {
         metadataMap.insert( "mpris:trackid", QString( "/track/" ) + track->id().replace( "-", "" ) );
         metadataMap.insert( "mpris:length", track->duration() );
-        metadataMap.insert( "mpris:artUrl", QFileInfo( *m_coverTempFile ).absoluteFilePath() );
         metadataMap.insert( "xesam:album", track->album()->name() );
         metadataMap.insert( "xesam:artist", track->artist()->name() );
         metadataMap.insert( "xesam:title", track->track() );
+
+        // Only return art if tempfile exists, and if its name contains the same "artist_album"
+        if( m_coverTempFile && m_coverTempFile->exists() &&
+                m_coverTempFile->fileName().contains( track->artist()->name() + "_" + track->album()->name() ) )
+            metadataMap.insert( "mpris:artUrl", QFileInfo( *m_coverTempFile ).absoluteFilePath() );
+        else
+        {
+            // Need to fetch the album cover
+
+            Tomahawk::InfoSystem::InfoCriteriaHash trackInfo;
+            trackInfo["artist"] = track->artist()->name();
+            trackInfo["album"] = track->album()->name();
+
+            Tomahawk::InfoSystem::InfoRequestData requestData;
+            requestData.caller = s_mpInfoIdentifier;
+            requestData.type = Tomahawk::InfoSystem::InfoAlbumCoverArt;
+            requestData.input = QVariant::fromValue< Tomahawk::InfoSystem::InfoCriteriaHash >( trackInfo );
+            requestData.customData = QVariantMap();
+
+            Tomahawk::InfoSystem::InfoSystem::instance()->getInfo( requestData );
+        }
 
     }
 
@@ -458,20 +478,6 @@ MprisPlugin::audioStarted( const QVariant &input )
     m_playbackStatus = "Playing";
     //notifyPropertyChanged( "org.mpris.MediaPlayer2.Player", "Metadata");
 
-    // Need to fetch the album cover
-
-    Tomahawk::InfoSystem::InfoCriteriaHash trackInfo;
-    trackInfo["artist"] = hash["artist"];
-    trackInfo["album"] = hash["album"];
-
-    Tomahawk::InfoSystem::InfoRequestData requestData;
-    requestData.caller = s_mpInfoIdentifier;
-    requestData.type = Tomahawk::InfoSystem::InfoAlbumCoverArt;
-    requestData.input = QVariant::fromValue< Tomahawk::InfoSystem::InfoCriteriaHash >( trackInfo );
-    requestData.customData = QVariantMap();
-
-    Tomahawk::InfoSystem::InfoSystem::instance()->getInfo( requestData );
-
     //hash["artist"];
     //hash["title"];
     //QString nowPlaying = "";
@@ -567,15 +573,23 @@ MprisPlugin::infoSystemInfo( Tomahawk::InfoSystem::InfoRequestData requestData, 
         QImage image;
         image.loadFromData( ba );
 
+        // Pull out request data for album+artist
+        if( !requestData.input.canConvert< Tomahawk::InfoSystem::InfoCriteriaHash >() )
+        {
+            qDebug() << "Cannot convert metadata input to album cover retrieval";
+            return;
+        }
+
+        Tomahawk::InfoSystem::InfoCriteriaHash hash = requestData.input.value< Tomahawk::InfoSystem::InfoCriteriaHash>();
+
         // delete the old tempfile and make new one, to avoid caching of filename by mpris clients
         if( m_coverTempFile )
             delete m_coverTempFile;
-        m_coverTempFile = new QTemporaryFile( "tomahawk_curtrack_cover.png" );
+        m_coverTempFile = new QTemporaryFile( hash["artist"] + "_" + hash["album"] + "_tomahawk_cover.png" );
         if( !m_coverTempFile->open() )
         {
             qDebug() << "WARNING: could not write temporary file for cover art!";
         }
-
 
         // Finally, save the image to the new temp file
         //if( image.save( QFileInfo( *m_coverTempFile ).absoluteFilePath(), "PNG" ) )
