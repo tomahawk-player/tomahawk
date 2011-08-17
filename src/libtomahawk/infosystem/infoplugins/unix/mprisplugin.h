@@ -150,6 +150,9 @@ private slots:
     void onPlaylistChanged( Tomahawk::PlaylistInterface* playlist);
     void onTrackCountChanged( unsigned int tracks );
 
+    void infoSystemInfo( Tomahawk::InfoSystem::InfoRequestData requestData, QVariant output );
+    void infoSystemFinished( QString target );
+
 private:
     // Get Info
     
@@ -163,6 +166,7 @@ private:
     // DBus
     void notifyPropertyChanged( const QString& interface, const QString& propertyName );
     QString m_playbackStatus;
+    QTemporaryFile *m_coverTempFile;
 
 };
 

@@ -17,6 +17,7 @@
  */
 
 #include <QApplication>
+#include <QImage>
 #include <QtDBus/QtDBus>
 
 #include "audio/audioengine.h"
@@ -27,12 +28,15 @@
 #include "tomahawksettings.h"
 #include "globalactionmanager.h"
 #include "utils/logger.h"
+#include "utils/tomahawkutils.h"
 
 #include "mprisplugin.h"
 #include "mprispluginrootadaptor.h"
 #include "mprispluginplayeradaptor.h"
 
 using namespace Tomahawk::InfoSystem;
+
+static QString s_mpInfoIdentifier = QString( "MPRISPLUGIN" );
 
 MprisPlugin::MprisPlugin()
     : InfoPlugin()
@@ -62,12 +66,30 @@ MprisPlugin::MprisPlugin()
         connect( playlist->object(), SIGNAL( trackCountChanged( unsigned int ) ),
                 SLOT( onTrackCountChanged( unsigned int ) ) );
 
+    // We store the currently playing track's cover in a temporary file
+    // for the mpris:artUrl property.
+    m_coverTempFile = new QTemporaryFile( "tomahawk_curtrack_cover.png" );
+    if( !m_coverTempFile->open() )
+    {
+        qDebug() << "WARNING: could not write temporary file for cover art!";
+    }
+    m_coverTempFile->close();
+
+    // Connect to the InfoSystem (we need to get album covers via getInfo)
+
+    connect( Tomahawk::InfoSystem::InfoSystem::instance(),
+            SIGNAL( info( Tomahawk::InfoSystem::InfoRequestData, QVariant ) ),
+            SLOT( infoSystemInfo( Tomahawk::InfoSystem::InfoRequestData, QVariant ) ) );
+
+    connect( Tomahawk::InfoSystem::InfoSystem::instance(), SIGNAL( finished( QString ) ), SLOT( infoSystemFinished( QString ) ) );
+
 }
 
 
 MprisPlugin::~MprisPlugin()
 {
     qDebug() << Q_FUNC_INFO;
+    delete m_coverTempFile;
 }
 
 // org.mpris.MediaPlayer2
@@ -225,9 +247,11 @@ MprisPlugin::metadata() const
     {
         metadataMap.insert( "mpris:trackid", QString( "/track/" ) + track->id().replace( "-", "" ) );
         metadataMap.insert( "mpris:length", track->duration() );
+        metadataMap.insert( "mpris:artUrl", QFileInfo( *m_coverTempFile ).absoluteFilePath() );
         metadataMap.insert( "xesam:album", track->album()->name() );
         metadataMap.insert( "xesam:artist", track->artist()->name() );
         metadataMap.insert( "xesam:title", track->track() );
+
     }
 
     return metadataMap;
@@ -436,11 +460,25 @@ MprisPlugin::audioStarted( const QVariant &input )
         return;
 
     InfoCriteriaHash hash = input.value< Tomahawk::InfoSystem::InfoCriteriaHash >();
-    if ( !hash.contains( "title" ) || !hash.contains( "artist" ) )
+    if ( !hash.contains( "title" ) || !hash.contains( "artist" ) || !hash.contains( "album" ) )
         return;
 
     m_playbackStatus = "Playing";
-    notifyPropertyChanged( "org.mpris.MediaPlayer2.Player", "Metadata");
+    //notifyPropertyChanged( "org.mpris.MediaPlayer2.Player", "Metadata");
+
+    // Need to fetch the album cover
+
+    Tomahawk::InfoSystem::InfoCriteriaHash trackInfo;
+    trackInfo["artist"] = hash["artist"];
+    trackInfo["album"] = hash["album"];
+
+    Tomahawk::InfoSystem::InfoRequestData requestData;
+    requestData.caller = s_mpInfoIdentifier;
+    requestData.type = Tomahawk::InfoSystem::InfoAlbumCoverArt;
+    requestData.input = QVariant::fromValue< Tomahawk::InfoSystem::InfoCriteriaHash >( trackInfo );
+    requestData.customData = QVariantMap();
+
+    Tomahawk::InfoSystem::InfoSystem::instance()->getInfo( requestData );
 
     //hash["artist"];
     //hash["title"];
@@ -510,6 +548,57 @@ MprisPlugin::onTrackCountChanged( unsigned int tracks )
     notifyPropertyChanged( "org.mpris.MediaPlayer2.Player", "CanGoNext" );
     notifyPropertyChanged( "org.mpris.MediaPlayer2.Player", "CanGoPrevious" );
 
+}
+
+void
+MprisPlugin::infoSystemInfo( Tomahawk::InfoSystem::InfoRequestData requestData, QVariant output )
+{
+    if ( requestData.caller != s_mpInfoIdentifier || requestData.type != Tomahawk::InfoSystem::InfoAlbumCoverArt )
+    {
+        notifyPropertyChanged( "org.mpris.MediaPlayer2.Player", "Metadata" );
+        return;
+    }
+
+    if ( !output.canConvert< QVariantMap >() )
+    {
+        notifyPropertyChanged( "org.mpris.MediaPlayer2.Player", "Metadata" );
+        tDebug( LOGINFO ) << "Cannot convert fetched art from a QByteArray";
+        return;
+    }
+
+    QVariantMap returnedData = output.value< QVariantMap >();
+    const QByteArray ba = returnedData["imgbytes"].toByteArray();
+    if ( ba.length() )
+    {
+        QImage image;
+        image.loadFromData( ba );
+        if( image.save( QFileInfo( *m_coverTempFile ).absoluteFilePath(), "PNG" ) )
+        {
+            qDebug() << Q_FUNC_INFO << "Image saving successful, notifying";
+            qDebug() << "Saving to: " << QFileInfo( *m_coverTempFile ).absoluteFilePath();
+        }
+        else
+            qDebug() << Q_FUNC_INFO << " failed to save image!";
+
+        /*
+        if( m_coverTempFile->open() )
+        {
+            QTextStream out( m_coverTempFile );
+            out << ba;
+            m_coverTempFile->close();
+            notifyPropertyChanged( "org.mpris.MediaPlayer2.Player", "Metadata" );
+        }
+                */
+    }
+
+    notifyPropertyChanged( "org.mpris.MediaPlayer2.Player", "Metadata" );
+}
+
+
+void
+MprisPlugin::infoSystemFinished( QString target )
+{
+    Q_UNUSED( target );
 }
 
 void
