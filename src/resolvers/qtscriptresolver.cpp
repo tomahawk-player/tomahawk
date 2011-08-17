@@ -183,7 +183,7 @@ QtScriptResolver::init()
     }
     const QByteArray scriptContents = scriptFile.readAll();
 
-    m_engine->mainFrame()->setHtml( "<html><body></body></html>" );
+    m_engine->mainFrame()->setHtml( "<html><body></body></html>", QUrl( "file:///invalid/file/for/security/policy" ) );
 
     // add c++ part of tomahawk javascript library
     m_engine->mainFrame()->addToJavaScriptWindowObject( "Tomahawk", m_resolverHelper );
