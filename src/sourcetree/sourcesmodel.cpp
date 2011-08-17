@@ -106,6 +106,8 @@ SourcesModel::data( const QModelIndex& index, int role ) const
         return itemFromIndex( index )->icon();
     case SourcesModel::SortRole:
         return itemFromIndex( index )->peerSortValue();
+    case SourcesModel::IDRole:
+        return itemFromIndex( index )->IDValue();
     }
     return QVariant();
 }

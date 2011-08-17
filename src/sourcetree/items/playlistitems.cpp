@@ -87,6 +87,13 @@ PlaylistItem::peerSortValue() const
 }
 
 
+int
+PlaylistItem::IDValue() const
+{
+    return m_playlist->createdOn();
+}
+
+
 Qt::ItemFlags
 PlaylistItem::flags() const
 {
@@ -241,6 +248,13 @@ DynamicPlaylistItem::peerSortValue() const
 {
 //    return m_dynplaylist->createdOn();
     return 0;
+}
+
+
+int
+DynamicPlaylistItem::IDValue() const
+{
+    return m_dynplaylist->createdOn();
 }
 
 

@@ -94,5 +94,11 @@ SourcesProxyModel::lessThan( const QModelIndex& left, const QModelIndex& right )
     if ( m_model->data( left, SourcesModel::SortRole ) != m_model->data( right, SourcesModel::SortRole ) )
         return ( m_model->data( left, SourcesModel::SortRole ).toInt() < m_model->data( right, SourcesModel::SortRole ).toInt() );
 
-    return QString::localeAwareCompare( left.data().toString().toLower(), right.data().toString().toLower() ) < 0;
+    const QString& lefts = left.data().toString().toLower();
+    const QString& rights = right.data().toString().toLower();
+
+    if ( lefts == rights )
+        return ( m_model->data( left, SourcesModel::IDRole ).toInt() < m_model->data( right, SourcesModel::IDRole ).toInt() );
+    else
+        return QString::localeAwareCompare( lefts, rights ) < 0;
 }

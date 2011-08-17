@@ -55,6 +55,7 @@ public:
     virtual bool dropMimeData( const QMimeData*, Qt::DropAction ) { return false; }
     virtual bool setData( const QVariant&, bool ) { return false; }
     virtual int peerSortValue() const { return 0; } // How to sort relative to peers in the tree.
+    virtual int IDValue() const { return 0; }
 
     /// don't call me unless you are a sourcetreeitem. i prefer this to making everyone a friend
     void beginRowsAdded( int from, int to ) { emit beginChildRowsAdded( from, to ); }

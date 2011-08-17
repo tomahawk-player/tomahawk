@@ -37,6 +37,7 @@ public:
     virtual void activate();
     virtual QIcon icon() const;
     virtual int peerSortValue() const;
+    virtual int IDValue() const;
 
     Tomahawk::source_ptr source() const;
 

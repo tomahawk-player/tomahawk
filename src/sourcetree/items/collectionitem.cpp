@@ -139,6 +139,18 @@ CollectionItem::text() const
 
 
 int
+CollectionItem::IDValue() const
+{
+    if( m_source.isNull() )
+        return -1;
+    if( m_source->isLocal() )
+        return 0;
+
+    return m_source->id();
+}
+
+
+int
 CollectionItem::peerSortValue() const
 {
     if( m_source.isNull() )

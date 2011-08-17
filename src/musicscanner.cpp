@@ -82,7 +82,7 @@ DirLister::scanDir( QDir dir, int depth, DirLister::Mode mode )
         return;
     }
 
-    tDebug( LOGVERBOSE ) << "DirLister::scanDir scanning: " << dir.canonicalPath() << " with mode " << mode;
+    tDebug( LOGVERBOSE ) << "DirLister::scanDir scanning:" << dir.canonicalPath() << "with mode" << mode;
     if( !dir.exists() )
     {
         tDebug( LOGVERBOSE ) << "Dir no longer exists, not scanning";
