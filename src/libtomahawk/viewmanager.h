@@ -133,6 +133,7 @@ public slots:
     void historyBack();
     void historyForward();
     void showHistory( int historyPosition );
+    void removeFromHistory( Tomahawk::ViewPage* p );
 
     void setTreeMode();
     void setTableMode();

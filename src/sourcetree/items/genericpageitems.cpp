@@ -31,6 +31,7 @@ GenericPageItem::GenericPageItem( SourcesModel* model, SourceTreeItem* parent, c
     , m_icon( icon )
     , m_text( text )
     , m_sortValue( 0 )
+    , m_temp( false )
     , m_show( show )
     , m_get( get )
 {
@@ -80,3 +81,24 @@ GenericPageItem::setText( const QString &text )
     m_text = text;
     emit updated();
 }
+
+void
+GenericPageItem::deleteTempPage()
+{
+    Q_ASSERT( m_temp );
+
+    if ( ViewManager::instance()->currentPage() == m_get() )
+    {
+        ViewManager::instance()->historyBack();
+    }
+
+    m_delete();
+
+    int idx = parent()->children().indexOf( this );
+    parent()->beginRowsRemoved( idx, idx );
+    parent()->removeChild( this );
+    parent()->endRowsRemoved();
+
+    deleteLater();
+}
+

@@ -279,9 +279,11 @@ SourcesModel::viewPageActivated( Tomahawk::ViewPage* page )
         Q_ASSERT( m_sourceTreeLinks[ page ] );
 //        qDebug() << "Got view page activated for item:" << m_sourceTreeLinks[ page ]->text();
         QModelIndex idx = indexFromItem( m_sourceTreeLinks[ page ] );
-        Q_ASSERT( idx.isValid() );
 
-        emit selectRequest( idx );
+        if ( !idx.isValid() )
+            m_sourceTreeLinks.remove( page );
+        else
+            emit selectRequest( idx );
     }
     else
     {
@@ -420,7 +422,28 @@ SourcesModel::linkSourceItemToPage( SourceTreeItem* item, ViewPage* p )
     if( m_viewPageDelayedCacheItem == p )
         emit selectRequest( indexFromItem( item ) );
 
+    if ( QObject* obj = dynamic_cast< QObject* >( p ) )
+    {
+        if( obj->metaObject()->indexOfSignal( "destroyed(QWidget*)" ) > -1 )
+            connect( obj, SIGNAL( destroyed( QWidget* ) ), SLOT( onWidgetDestroyed( QWidget* ) ), Qt::UniqueConnection );
+    }
     m_viewPageDelayedCacheItem = 0;
+}
+
+void
+SourcesModel::onWidgetDestroyed( QWidget* w )
+{
+    int ret = m_sourceTreeLinks.remove( dynamic_cast< Tomahawk::ViewPage* > ( w ) );
+    qDebug() << "REMOVED STALE SOURCE PAGE?" << ret;
+}
+
+
+void
+SourcesModel::removeSourceItemLink( SourceTreeItem* item )
+{
+    QList< ViewPage* > pages = m_sourceTreeLinks.keys( item );
+    foreach( ViewPage* p, pages )
+        m_sourceTreeLinks.remove( p );
 }
 
 

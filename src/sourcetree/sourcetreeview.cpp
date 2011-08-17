@@ -41,6 +41,7 @@
 #include "dropjob.h"
 
 #include "utils/logger.h"
+#include "items/genericpageitems.h"
 
 using namespace Tomahawk;
 
@@ -64,9 +65,11 @@ protected:
 
         editor->setGeometry( editor->geometry().adjusted( 2*TREEVIEW_INDENT_ADD, 0, 0, 0 ) );
     }
+    virtual bool editorEvent( QEvent* event, QAbstractItemModel* model, const QStyleOptionViewItem& option, const QModelIndex& index );
 
 private:
     QAbstractItemView* m_parent;
+    mutable int m_iconHeight;
 };
 
 
@@ -694,8 +697,26 @@ SourceDelegate::paint( QPainter* painter, const QStyleOptionViewItem& option, co
     else
     {
         QStyledItemDelegate::paint( painter, o, index );
+
+        if ( type == SourcesModel::GenericPage )
+        {
+            GenericPageItem* gpi = qobject_cast< GenericPageItem* >( item );
+            Q_ASSERT( gpi );
+
+//             initStyleOption( &o3, index );
+            if ( gpi->isTempItem() && o3.state & QStyle::State_MouseOver )
+            {
+                // draw close icon
+                int padding = 3;
+                m_iconHeight = ( o3.rect.height() - 2*padding );
+                QPixmap p( RESPATH "images/list-remove.png" );
+                p = p.scaledToHeight( m_iconHeight, Qt::SmoothTransformation );
+
+                QRect r ( o3.rect.right() - padding - m_iconHeight, padding + o3.rect.y(), m_iconHeight, m_iconHeight );
+                painter->drawPixmap( r, p );
+            }
+        }
         /*QStyleOptionViewItemV4 opt = o;
-        initStyleOption( &opt, index );
 
         // shrink the indentations. count how indented this item is and remove it
         int indentMult = 0;
@@ -716,4 +737,35 @@ SourceDelegate::paint( QPainter* painter, const QStyleOptionViewItem& option, co
 #ifdef Q_WS_MAC
     painter->setFont( savedFont );
 #endif
+}
+
+bool
+SourceDelegate::editorEvent ( QEvent* event, QAbstractItemModel* model, const QStyleOptionViewItem& option, const QModelIndex& index )
+{
+
+    if ( event->type() == QEvent::MouseButtonRelease )
+    {
+        SourcesModel::RowType type = static_cast< SourcesModel::RowType >( index.data( SourcesModel::SourceTreeItemTypeRole ).toInt() );
+        if ( type == SourcesModel::GenericPage )
+        {
+            GenericPageItem* gpi = qobject_cast< GenericPageItem* >( index.data( SourcesModel::SourceTreeItemRole ).value< SourceTreeItem* >() );
+            Q_ASSERT( gpi );
+            if ( gpi->isTempItem() )
+            {
+                QMouseEvent* ev = static_cast< QMouseEvent* >( event );
+
+                QStyleOptionViewItemV4 o = option;
+                initStyleOption( &o, index );
+                int padding = 3;
+                QRect r ( o.rect.right() - padding - m_iconHeight, padding + o.rect.y(), m_iconHeight, m_iconHeight );
+
+                if ( r.contains( ev->pos() ) )
+                {
+                    gpi->deleteTempPage();
+                }
+            }
+        }
+    }
+
+    return QStyledItemDelegate::editorEvent ( event, model, option, index );
 }

@@ -541,6 +541,18 @@ ViewManager::showHistory( int historyPosition )
     setPage( page, false );
 }
 
+void
+ViewManager::removeFromHistory ( ViewPage* p )
+{
+    if ( currentPage() == p )
+    {
+        historyBack();
+        m_pageHistory.removeAll( p );
+    } else
+        if ( m_pageHistory.removeAll( p ) )
+            setHistoryPosition( m_historyPosition - 1 );
+
+}
 
 void
 ViewManager::setFilter( const QString& filter )

@@ -41,6 +41,12 @@ public:
 
     void setText( const QString& text );
     void setSortValue( int value ) { m_sortValue = value; }
+
+    void setIsTemp( bool temp ) { m_temp = temp; }
+    bool isTempItem() { return m_temp; }
+
+    void setDeleteFunc( boost::function<void()> deleter ) { m_delete = deleter; };
+    void deleteTempPage();
 signals:
     void activated();
 
@@ -48,8 +54,10 @@ private:
     QIcon m_icon;
     QString m_text;
     int m_sortValue;
+    bool m_temp;
     boost::function< Tomahawk::ViewPage*() > m_show;
     boost::function< Tomahawk::ViewPage*() > m_get;
+    boost::function< void() > m_delete;
 };
 
 #endif

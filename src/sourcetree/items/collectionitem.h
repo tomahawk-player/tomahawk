@@ -59,6 +59,7 @@ private slots:
     void tempPageActivated( Tomahawk::ViewPage* );
     Tomahawk::ViewPage* tempItemClicked();
     Tomahawk::ViewPage* getTempPage() const;
+    void deleteTempPage();
 
     Tomahawk::ViewPage* sourceInfoClicked();
     Tomahawk::ViewPage* getSourceInfoPage() const;
@@ -79,7 +80,7 @@ private:
     CategoryItem* m_playlists;
     CategoryItem* m_stations;
 
-    GenericPageItem* m_tempItem;
+    QWeakPointer<GenericPageItem> m_tempItem;
     GenericPageItem* m_sourceInfoItem;
     GenericPageItem* m_coolPlaylistsItem;
     GenericPageItem* m_lovedTracksItem;

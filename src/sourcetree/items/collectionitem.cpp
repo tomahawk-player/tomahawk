@@ -37,7 +37,6 @@ CollectionItem::CollectionItem(  SourcesModel* mdl, SourceTreeItem* parent, cons
     , m_source( source )
     , m_playlists( 0 )
     , m_stations( 0 )
-    , m_tempItem( 0 )
     , m_sourceInfoItem( 0   )
     , m_coolPlaylistsItem( 0 )
     , m_lovedTracksItem()
@@ -372,19 +371,27 @@ CollectionItem::tempPageActivated( Tomahawk::ViewPage* v )
 {
     QString name = v->title();
     m_curTempPage = v;
-    if( !m_tempItem ) {
+    if( m_tempItem.isNull() ) {
         emit beginRowsAdded( children().count(), children().count() );
-        m_tempItem = new GenericPageItem( model(), this, name, QIcon( RESPATH "images/playlist-icon.png" ),
-                                          boost::bind( &CollectionItem::tempItemClicked, this ),
-                                          boost::bind( &CollectionItem::getTempPage, this )
-                                        );
+        m_tempItem = QWeakPointer< GenericPageItem >( new GenericPageItem( model(), this, name, QIcon( RESPATH "images/playlist-icon.png" ),
+                                                        boost::bind( &CollectionItem::tempItemClicked, this ),
+                                                        boost::bind( &CollectionItem::getTempPage, this ) ) );
+        m_tempItem.data()->setDeleteFunc( boost::bind( &CollectionItem::deleteTempPage, this ) );
+        m_tempItem.data()->setIsTemp( true );
         emit endRowsAdded();
     } else {
-        m_tempItem->setText( name );
+        m_tempItem.data()->setText( name );
     }
 
-    model()->linkSourceItemToPage( m_tempItem, v );
-    emit selectRequest( m_tempItem );
+    model()->linkSourceItemToPage( m_tempItem.data(), v );
+    emit selectRequest( m_tempItem.data() );
+}
+
+void
+CollectionItem::deleteTempPage()
+{
+    model()->removeSourceItemLink( m_tempItem.data() );
+    ViewManager::instance()->removeFromHistory( m_curTempPage );
 }
 
 

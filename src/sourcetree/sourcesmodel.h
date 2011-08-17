@@ -88,6 +88,7 @@ public:
     bool removeItem( const Tomahawk::source_ptr& source );
 
     void linkSourceItemToPage( SourceTreeItem* item, Tomahawk::ViewPage* p );
+    void removeSourceItemLink( SourceTreeItem* item );
 
     QModelIndex indexFromItem( SourceTreeItem* item ) const;
 
@@ -114,6 +115,7 @@ private slots:
     void onSourceAdded( const Tomahawk::source_ptr& source );
     void onSourceRemoved( const Tomahawk::source_ptr& source );
 
+    void onWidgetDestroyed( QWidget* w );
 private:
     SourceTreeItem* itemFromIndex( const QModelIndex& idx ) const;
     int rowForItem( SourceTreeItem* item ) const;
