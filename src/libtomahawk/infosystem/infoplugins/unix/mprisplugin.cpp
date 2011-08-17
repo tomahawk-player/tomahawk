@@ -40,6 +40,7 @@ static QString s_mpInfoIdentifier = QString( "MPRISPLUGIN" );
 
 MprisPlugin::MprisPlugin()
     : InfoPlugin()
+    , m_coverTempFile( 0 )
 {
     qDebug() << Q_FUNC_INFO;
 
@@ -65,15 +66,6 @@ MprisPlugin::MprisPlugin()
     if( playlist )
         connect( playlist->object(), SIGNAL( trackCountChanged( unsigned int ) ),
                 SLOT( onTrackCountChanged( unsigned int ) ) );
-
-    // We store the currently playing track's cover in a temporary file
-    // for the mpris:artUrl property.
-    m_coverTempFile = new QTemporaryFile( "tomahawk_curtrack_cover.png" );
-    if( !m_coverTempFile->open() )
-    {
-        qDebug() << "WARNING: could not write temporary file for cover art!";
-    }
-    m_coverTempFile->close();
 
     // Connect to the InfoSystem (we need to get album covers via getInfo)
 
@@ -576,22 +568,26 @@ MprisPlugin::infoSystemInfo( Tomahawk::InfoSystem::InfoRequestData requestData, 
         image.loadFromData( ba );
 
         // delete the old tempfile and make new one, to avoid caching of filename by mpris clients
-        delete m_coverTempFile;
+        if( m_coverTempFile )
+            delete m_coverTempFile;
         m_coverTempFile = new QTemporaryFile( "tomahawk_curtrack_cover.png" );
         if( !m_coverTempFile->open() )
         {
             qDebug() << "WARNING: could not write temporary file for cover art!";
         }
-        m_coverTempFile->close();
+
 
         // Finally, save the image to the new temp file
-        if( image.save( QFileInfo( *m_coverTempFile ).absoluteFilePath(), "PNG" ) )
+        //if( image.save( QFileInfo( *m_coverTempFile ).absoluteFilePath(), "PNG" ) )
+        if( image.save( m_coverTempFile, "PNG") )
         {
             qDebug() << Q_FUNC_INFO << "Image saving successful, notifying";
             qDebug() << "Saving to: " << QFileInfo( *m_coverTempFile ).absoluteFilePath();
         }
         else
             qDebug() << Q_FUNC_INFO << " failed to save image!";
+
+        m_coverTempFile->close();
 
         /*
         if( m_coverTempFile->open() )
