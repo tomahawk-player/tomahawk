@@ -191,7 +191,7 @@ MprisPlugin::canSeek() const
 {
     PlaylistInterface *p = AudioEngine::instance()->playlist();
     if (!p)
-        return "None";
+        return false;
     return p->seekRestrictions() != PlaylistInterface::NoSeek;
 
 }
