@@ -240,6 +240,7 @@ SettingsDialog::~SettingsDialog()
     delete ui;
 }
 
+
 void
 SettingsDialog::serventReady()
 {
@@ -247,6 +248,7 @@ SettingsDialog::serventReady()
     ui->addSipButton->setEnabled( true );
     ui->removeSipButton->setEnabled( true );
 }
+
 
 void
 SettingsDialog::createIcons()
@@ -512,10 +514,13 @@ SettingsDialog::onLastFmFinished()
 void
 SettingsDialog::addScriptResolver()
 {
-    QString resolver = QFileDialog::getOpenFileName( this, tr( "Load script resolver file" ), qApp->applicationDirPath() );
-    if( !resolver.isEmpty() ) {
+    QString resolver = QFileDialog::getOpenFileName( this, tr( "Load script resolver file" ), TomahawkSettings::instance()->scriptDefaultPath() );
+    if( !resolver.isEmpty() )
+    {
         TomahawkApp::instance()->enableScriptResolver( resolver );
         m_resolversModel->addResolver( resolver, true );
+        QFileInfo resolverAbsoluteFilePath = resolver;
+        TomahawkSettings::instance()->setScriptDefaultPath( resolverAbsoluteFilePath.absolutePath() );
     }
 }
 
@@ -524,7 +529,8 @@ void
 SettingsDialog::removeScriptResolver()
 {
     // only one selection
-    if( !ui->scriptList->selectionModel()->selectedIndexes().isEmpty() ) {
+    if( !ui->scriptList->selectionModel()->selectedIndexes().isEmpty() )
+    {
         QString resolver = ui->scriptList->selectionModel()->selectedIndexes().first().data( ResolversModel::ResolverPath ).toString();
         m_resolversModel->removeResolver( resolver );
 
@@ -532,26 +538,33 @@ SettingsDialog::removeScriptResolver()
     }
 }
 
+
 void
 SettingsDialog::scriptSelectionChanged()
 {
-    if( !ui->scriptList->selectionModel()->selectedIndexes().isEmpty() ) {
+    if( !ui->scriptList->selectionModel()->selectedIndexes().isEmpty() )
+    {
         ui->removeScript->setEnabled( true );
-    } else {
+    }
+    else
+    {
         ui->removeScript->setEnabled( false );
     }
 }
+
 
 void
 SettingsDialog::openResolverConfig( const QString& resolver )
 {
     Tomahawk::ExternalResolver* r = TomahawkApp::instance()->resolverForPath( resolver );
-    if( r && r->configUI() ) {
+    if( r && r->configUI() )
+    {
 #ifndef Q_OS_MAC
         DelegateConfigWrapper dialog( r->configUI(), "Resolver Configuration", this );
         QWeakPointer< DelegateConfigWrapper > watcher( &dialog );
         int ret = dialog.exec();
-        if( !watcher.isNull() && ret == QDialog::Accepted ) {
+        if( !watcher.isNull() && ret == QDialog::Accepted )
+        {
             // send changed config to resolver
             r->saveConfig();
         }
@@ -567,15 +580,18 @@ SettingsDialog::openResolverConfig( const QString& resolver )
     }
 }
 
+
 void
 SettingsDialog::resolverConfigClosed( int value )
 {
-    if( value == QDialog::Accepted ) {
+    if( value == QDialog::Accepted )
+    {
         DelegateConfigWrapper* dialog = qobject_cast< DelegateConfigWrapper* >( sender() );
         Tomahawk::ExternalResolver* r = qobject_cast< Tomahawk::ExternalResolver* >( dialog->property( "resolver" ).value< QObject* >() );
         r->saveConfig();
     }
 }
+
 
 void
 SettingsDialog::sipItemClicked( const QModelIndex& item )
@@ -589,15 +605,18 @@ SettingsDialog::sipItemClicked( const QModelIndex& item )
         sipFactoryClicked( qobject_cast<SipPluginFactory* >( item.data( SipModel::SipPluginFactoryData ).value< QObject* >() ) );
 }
 
+
 void
 SettingsDialog::openSipConfig( SipPlugin* p )
 {
-    if( p->configWidget() ) {
+    if( p->configWidget() )
+    {
 #ifndef Q_OS_MAC
         DelegateConfigWrapper dialog( p->configWidget(), QString("%1 Configuration" ).arg( p->friendlyName() ), this );
         QWeakPointer< DelegateConfigWrapper > watcher( &dialog );
         int ret = dialog.exec();
-        if( !watcher.isNull() && ret == QDialog::Accepted ) {
+        if( !watcher.isNull() && ret == QDialog::Accepted )
+        {
             // send changed config to resolver
             p->saveConfig();
         }
@@ -616,12 +635,14 @@ SettingsDialog::openSipConfig( SipPlugin* p )
 void
 SettingsDialog::sipConfigClosed( int value )
 {
-    if( value == QDialog::Accepted ) {
+    if( value == QDialog::Accepted )
+    {
         DelegateConfigWrapper* dialog = qobject_cast< DelegateConfigWrapper* >( sender() );
         SipPlugin* p = qobject_cast< SipPlugin* >( dialog->property( "sipplugin" ).value< QObject* >() );
         p->saveConfig();
     }
 }
+
 
 void
 SettingsDialog::factoryActionTriggered( bool )
@@ -642,8 +663,8 @@ SettingsDialog::sipFactoryClicked( SipPluginFactory* factory )
     //if exited with OK, create it, if not, delete it immediately!
     SipPlugin* p = factory->createPlugin();
     bool added = false;
-    if( p->configWidget() ) {
-
+    if( p->configWidget() )
+    {
 #ifdef Q_OS_MAC
         // on osx a sheet needs to be non-modal
         DelegateConfigWrapper* dialog = new DelegateConfigWrapper( p->configWidget(), QString("%1 Config" ).arg( p->friendlyName() ), this, Qt::Sheet );
@@ -657,7 +678,8 @@ SettingsDialog::sipFactoryClicked( SipPluginFactory* factory )
         QWeakPointer< DelegateConfigWrapper > watcher( &dialog );
         connect( p, SIGNAL( dataError( bool ) ), &dialog, SLOT( toggleOkButton( bool ) ) );
         int ret = dialog.exec();
-        if( !watcher.isNull() && ret == QDialog::Accepted ) {
+        if( !watcher.isNull() && ret == QDialog::Accepted )
+        {
             // send changed config to resolver
             p->saveConfig();
 
@@ -666,14 +688,17 @@ SettingsDialog::sipFactoryClicked( SipPluginFactory* factory )
             SipHandler::instance()->addSipPlugin( p );
 
             added = true;
-        } else {
+        }
+        else
+        {
             // canceled, delete it
             added = false;
         }
 
         handleSipPluginAdded( p, added );
 #endif
-    } else {
+    } else
+    {
         // no config, so just add it
         added = true;
         TomahawkSettings::instance()->addSipPlugin( p->pluginId() );
@@ -681,8 +706,8 @@ SettingsDialog::sipFactoryClicked( SipPluginFactory* factory )
 
         handleSipPluginAdded( p, added );
     }
-
 }
+
 
 void
 SettingsDialog::sipCreateConfigClosed( int finished )
@@ -692,7 +717,8 @@ SettingsDialog::sipCreateConfigClosed( int finished )
     Q_ASSERT( p );
 
     bool added = false;
-    if( finished == QDialog::Accepted ) {
+    if( finished == QDialog::Accepted )
+    {
 
         p->saveConfig();
         TomahawkSettings::instance()->addSipPlugin( p->pluginId() );
@@ -709,7 +735,8 @@ void
 SettingsDialog::handleSipPluginAdded( SipPlugin* p, bool added )
 {
     SipPluginFactory* f = SipHandler::instance()->factoryFromPlugin( p );
-    if( added && f && f->isUnique() ) {
+    if( added && f && f->isUnique() )
+    {
         // remove from actions list
         QAction* toremove = 0;
         foreach( QAction* a, ui->addSipButton->actions() )
@@ -722,7 +749,9 @@ SettingsDialog::handleSipPluginAdded( SipPlugin* p, bool added )
         }
         if( toremove )
             ui->addSipButton->removeAction( toremove );
-    } else if( added == false ) { // user pressed cancel
+    }
+    else if( added == false )
+    { // user pressed cancel
         delete p;
     }
 }
@@ -743,12 +772,14 @@ SettingsDialog::sipContextMenuRequest( const QPoint& p )
     }
 }
 
+
 void
 SettingsDialog::sipPluginRowDeleted( bool )
 {
     SipPlugin* p = qobject_cast< SipPlugin* >( qobject_cast< QAction* >( sender() )->property( "sipplugin" ).value< QObject* >() );
     SipHandler::instance()->removeSipPlugin( p );
 }
+
 
 void
 SettingsDialog::sipPluginDeleted( bool )
@@ -819,6 +850,7 @@ ProxyDialog::ProxyDialog( QWidget *parent )
     connect( ui->typeBox, SIGNAL( currentIndexChanged( int ) ), SLOT( proxyTypeChangedSlot( int ) ) );
 }
 
+
 void
 ProxyDialog::proxyTypeChangedSlot( int index )
 {
@@ -841,6 +873,7 @@ ProxyDialog::proxyTypeChangedSlot( int index )
         ui->noHostLineEdit->setEnabled( true );
     }
 }
+
 
 void
 ProxyDialog::saveSettings()

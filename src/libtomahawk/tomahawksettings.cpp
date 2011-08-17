@@ -849,6 +849,20 @@ TomahawkSettings::setEnabledScriptResolvers( const QStringList& resolvers )
 }
 
 
+QString
+TomahawkSettings::scriptDefaultPath() const
+{
+    return value( "script/defaultpath", QDir::homePath() ).toString();
+}
+
+
+void
+TomahawkSettings::setScriptDefaultPath( const QString& path )
+{
+    setValue( "script/defaultpath", path );
+}
+
+
 bool
 TomahawkSettings::nowPlayingEnabled() const
 {

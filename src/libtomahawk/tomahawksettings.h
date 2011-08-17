@@ -184,6 +184,9 @@ public:
     QStringList enabledScriptResolvers() const;
     void setEnabledScriptResolvers( const QStringList& resolvers );
 
+    QString scriptDefaultPath() const;
+    void setScriptDefaultPath( const QString& path );
+
     // Now-Playing Settings
     // For now, just Adium. Soon, the world!
     bool nowPlayingEnabled() const; // false by default
