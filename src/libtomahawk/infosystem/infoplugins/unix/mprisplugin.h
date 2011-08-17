@@ -149,6 +149,7 @@ private slots:
     void onVolumeChanged( int volume );
     void onPlaylistChanged( Tomahawk::PlaylistInterface* playlist);
     void onTrackCountChanged( unsigned int tracks );
+    void onSeeked( qint64 ms );
 
     void infoSystemInfo( Tomahawk::InfoSystem::InfoRequestData requestData, QVariant output );
     void infoSystemFinished( QString target );

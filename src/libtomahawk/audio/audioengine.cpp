@@ -245,6 +245,7 @@ AudioEngine::seek( qint64 ms )
     {
         tDebug( LOGVERBOSE ) << Q_FUNC_INFO << ms;
         m_mediaObject->seek( ms );
+        emit seeked( ms );
     }
 }
 

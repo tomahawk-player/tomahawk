@@ -44,16 +44,20 @@ MprisPlugin::MprisPlugin()
 {
     qDebug() << Q_FUNC_INFO;
 
+    // init
     m_playbackStatus = "Stopped";
 
+    // Types of pushInfo we care about
     m_supportedPushTypes << InfoNowPlaying << InfoNowPaused << InfoNowResumed << InfoNowStopped;
 
+    // DBus connection
     new MprisPluginRootAdaptor( this );
     new MprisPluginPlayerAdaptor( this );
     QDBusConnection dbus = QDBusConnection::sessionBus();
     dbus.registerObject("/org/mpris/MediaPlayer2", this);
     dbus.registerService("org.mpris.MediaPlayer2.tomahawk");
 
+    // Listen to volume changes
     connect( AudioEngine::instance(), SIGNAL( volumeChanged( int ) ),
             SLOT( onVolumeChanged( int ) ) );
 
@@ -547,6 +551,18 @@ MprisPlugin::onTrackCountChanged( unsigned int tracks )
     notifyPropertyChanged( "org.mpris.MediaPlayer2.Player", "CanGoPrevious" );
 
 }
+
+ void
+ MprisPlugin::onSeeked( qint64 ms )
+ {
+    QDBusMessage signal = QDBusMessage::createSignal(
+        "/org/mpris/MediaPlayer2",
+        "org.mpris.MediaPlayer2.Player",
+        "Seeked");
+    qlonglong us = ms*1000;
+    signal << us;
+    QDBusConnection::sessionBus().send(signal);
+ }
 
 void
 MprisPlugin::infoSystemInfo( Tomahawk::InfoSystem::InfoRequestData requestData, QVariant output )

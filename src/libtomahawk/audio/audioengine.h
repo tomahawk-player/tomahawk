@@ -109,6 +109,8 @@ signals:
     void paused();
     void resumed();
 
+    void seeked( qint64 ms );
+
     void stateChanged( AudioState newState, AudioState oldState );
     void volumeChanged( int volume /* in percent */ );
 
