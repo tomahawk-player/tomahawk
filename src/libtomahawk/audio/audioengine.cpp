@@ -235,13 +235,22 @@ AudioEngine::canGoPrevious()
     return true;
 }
 
+bool
+AudioEngine::canSeek()
+{
+    return !m_playlist.isNull() && (m_playlist.data()->seekRestrictions() != PlaylistInterface::NoSeek) && m_mediaObject->isSeekable();
+}
+
 void
 AudioEngine::seek( qint64 ms )
 {
-    if ( !m_playlist.isNull() && m_playlist.data()->seekRestrictions() == PlaylistInterface::NoSeek )
+    if( !canSeek() )
+    {
+        qDebug() << "Could not seek!";
         return;
+    }
 
-    if ( isPlaying() || isPaused() )
+    if( isPlaying() || isPaused() )
     {
         tDebug( LOGVERBOSE ) << Q_FUNC_INFO << ms;
         m_mediaObject->seek( ms );

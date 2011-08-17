@@ -83,6 +83,7 @@ public slots:
 
     bool canGoPrevious();
     bool canGoNext();
+    bool canSeek();
 
     void seek( qint64 ms );
     void seek( int ms ); // for compatibility with seekbar in audiocontrols
