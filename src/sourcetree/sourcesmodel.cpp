@@ -293,7 +293,7 @@ SourcesModel::viewPageActivated( Tomahawk::ViewPage* page )
         // include DynamicWidget.h here (so can't dynamic_cast).
         // this could also be fixed by keeping a master list of playlists/sourcetreeitems... but that's even uglier i think. this is only called the first time a certain viewpage is clicked from external
         // sources.
-        activatePlaylistPage( page, m_rootItem )
+        activatePlaylistPage( page, m_rootItem );
         m_viewPageDelayedCacheItem = page;
     }
 }
