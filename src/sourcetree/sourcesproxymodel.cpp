@@ -37,7 +37,6 @@ SourcesProxyModel::SourcesProxyModel( SourcesModel* model, QObject* parent )
 
     setSourceModel( model );
 
-
     if ( model && model->metaObject()->indexOfSignal( "expandRequest(QModelIndex)" ) > -1 )
         connect( model, SIGNAL( expandRequest( QModelIndex ) ), this, SLOT( expandRequested( QModelIndex ) ) );
     if ( model && model->metaObject()->indexOfSignal( "selectRequest(QModelIndex)" ) > -1 )

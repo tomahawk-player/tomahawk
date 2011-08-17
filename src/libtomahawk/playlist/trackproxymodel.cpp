@@ -396,6 +396,11 @@ TrackProxyModel::lessThan( const QModelIndex& left, const QModelIndex& right ) c
 
         return size1 < size2;
     }
-    return QString::localeAwareCompare( sourceModel()->data( left ).toString(),
-                                        sourceModel()->data( right ).toString() ) < 0;
+
+    const QString& lefts = sourceModel()->data( left ).toString();
+    const QString& rights = sourceModel()->data( right ).toString();
+    if ( lefts == rights )
+        return id1 < id2;
+
+    return QString::localeAwareCompare( lefts, rights ) < 0;
 }
