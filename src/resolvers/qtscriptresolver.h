@@ -74,6 +74,8 @@ public:
         settings()->setAttribute(QWebSettings::LocalStorageEnabled, true);
         settings()->setLocalStoragePath( TomahawkUtils::appDataDir().path() );
         settings()->setAttribute( QWebSettings::LocalStorageDatabaseEnabled, true );
+        settings()->setAttribute( QWebSettings::LocalContentCanAccessFileUrls, true );
+        settings()->setAttribute( QWebSettings::LocalContentCanAccessRemoteUrls, true );
     }
 
     void setScriptPath( const QString& scriptPath )
