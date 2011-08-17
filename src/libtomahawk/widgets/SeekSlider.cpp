@@ -28,7 +28,6 @@ SeekSlider::SeekSlider( QWidget* parent )
     : QSlider( parent )
     , m_parent( parent )
 {
-    setMouseTracking( true );
 }
 
 
