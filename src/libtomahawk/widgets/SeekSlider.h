@@ -33,9 +33,6 @@ public:
 
 protected:
     void mousePressEvent( QMouseEvent* event );
-
-private:
-    QWidget* m_parent;
 };
 
 #endif // SEEKSLIDER_H
