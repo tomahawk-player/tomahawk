@@ -91,46 +91,9 @@ AudioControls::AudioControls( QWidget* parent )
     ui->ownerLabel->setForegroundRole( QPalette::Dark );
     ui->metaDataArea->setStyleSheet( "QWidget#metaDataArea {\nborder-width: 4px;\nborder-image: url(" RESPATH "images/now-playing-panel.png) 4 4 4 4 stretch stretch; }" );
 
-    ui->seekSlider->setFixedHeight( 20 );
     ui->seekSlider->setEnabled( true );
-    ui->seekSlider->setStyleSheet( "QSlider::groove::horizontal {"
-                                   "margin: 5px; border-width: 3px;"
-                                   "border-image: url(" RESPATH "images/seek-slider-bkg.png) 3 3 3 3 stretch stretch;"
-                                   "}"
-
-                                   "QSlider::sub-page:horizontal {"
-                                   "margin: 5px; border-width: 3px;"
-                                   "border-image: url(" RESPATH "images/seek-slider-level.png) 3 3 3 3 stretch stretch;"
-                                   "}"
-
-                                   "QSlider::handle::horizontal {"
-                                   "margin-bottom: -7px; margin-top: -7px;"
-                                   "margin-left: -4px; margin-right: -4px;"
-                                   "height: 17px; width: 16px;"
-                                   "background-image: url(" RESPATH "images/seek-and-volume-knob-rest.png);"
-                                   "background-repeat: no-repeat;"
-                                   "}" );
-
-    ui->volumeSlider->setFixedHeight( 20 );
     ui->volumeSlider->setRange( 0, 100 );
     ui->volumeSlider->setValue( AudioEngine::instance()->volume() );
-    ui->volumeSlider->setStyleSheet( "QSlider::groove::horizontal {"
-                                     "margin: 5px; border-width: 3px;"
-                                     "border-image: url(" RESPATH "images/volume-slider-bkg.png) 3 3 3 3 stretch stretch;"
-                                     "}"
-
-                                     "QSlider::sub-page:horizontal {"
-                                     "margin: 5px; border-width: 3px;"
-                                     "border-image: url(" RESPATH "images/seek-slider-level.png) 3 3 3 3 stretch stretch;"
-                                     "}"
-
-                                     "QSlider::handle::horizontal {"
-                                     "margin-bottom: -7px; margin-top: -7px;"
-                                     "margin-left: -4px; margin-right: -4px;"
-                                     "height: 17px; width: 16px;"
-                                     "background-image: url(" RESPATH "images/seek-and-volume-knob-rest.png);"
-                                     "background-repeat: no-repeat;"
-                                     "}" );
 
     connect( ui->seekSlider,       SIGNAL( valueChanged( int ) ), AudioEngine::instance(), SLOT( seek( int ) ) );
     connect( ui->volumeSlider,     SIGNAL( valueChanged( int ) ), AudioEngine::instance(), SLOT( setVolume( int ) ) );

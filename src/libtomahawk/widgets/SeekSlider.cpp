@@ -19,15 +19,32 @@
 #include "SeekSlider.h"
 
 #include <QMouseEvent>
-#include <QTimer>
 
+#include "utils/tomahawkutils.h"
 #include "utils/logger.h"
 
 
 SeekSlider::SeekSlider( QWidget* parent )
     : QSlider( parent )
-    , m_parent( parent )
 {
+    setFixedHeight( 20 );
+    setStyleSheet( "QSlider::groove::horizontal {"
+                   "margin: 5px; border-width: 3px;"
+                   "border-image: url(" RESPATH "images/seek-slider-bkg.png) 3 3 3 3 stretch stretch;"
+                   "}"
+
+                   "QSlider::sub-page:horizontal {"
+                   "margin: 5px; border-width: 3px;"
+                   "border-image: url(" RESPATH "images/seek-slider-level.png) 3 3 3 3 stretch stretch;"
+                   "}"
+
+                   "QSlider::handle::horizontal {"
+                   "margin-bottom: -7px; margin-top: -7px;"
+                   "margin-left: -4px; margin-right: -4px;"
+                   "height: 17px; width: 16px;"
+                   "background-image: url(" RESPATH "images/seek-and-volume-knob-rest.png);"
+                   "background-repeat: no-repeat;"
+                   "}" );
 }
 
 
