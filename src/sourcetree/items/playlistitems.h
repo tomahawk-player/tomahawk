@@ -38,6 +38,7 @@ public:
     virtual QIcon icon() const;
     virtual bool setData(const QVariant& v, bool role);
     virtual int peerSortValue() const;
+    virtual int IDValue() const;
 
     virtual bool activateCurrent();
 
@@ -67,6 +68,7 @@ public:
     virtual bool willAcceptDrag( const QMimeData* data ) const;
     virtual void activate();
     virtual int peerSortValue() const;
+    virtual int IDValue() const;
     virtual QIcon icon() const;
 
     virtual bool activateCurrent();
