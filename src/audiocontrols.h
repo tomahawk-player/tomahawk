@@ -82,11 +82,6 @@ private slots:
 private:
     Ui::AudioControls *ui;
 
-    QAction* m_playAction;
-    QAction* m_pauseAction;
-    QAction* m_prevAction;
-    QAction* m_nextAction;
-
     QPixmap m_defaultCover;
 
     Tomahawk::result_ptr m_currentTrack;
