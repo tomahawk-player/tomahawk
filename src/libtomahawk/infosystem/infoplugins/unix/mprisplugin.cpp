@@ -71,6 +71,10 @@ MprisPlugin::MprisPlugin()
         connect( playlist->object(), SIGNAL( trackCountChanged( unsigned int ) ),
                 SLOT( onTrackCountChanged( unsigned int ) ) );
 
+    // Connect to AudioEngine's seeked signal
+    connect( AudioEngine::instance(), SIGNAL( seeked( qint64 ) ),
+            SLOT( onSeeked( qint64 ) ) );
+
     // Connect to the InfoSystem (we need to get album covers via getInfo)
 
     connect( Tomahawk::InfoSystem::InfoSystem::instance(),
@@ -185,7 +189,11 @@ MprisPlugin::canPlay() const
 bool
 MprisPlugin::canSeek() const
 {
-    return true;
+    PlaylistInterface *p = AudioEngine::instance()->playlist();
+    if (!p)
+        return "None";
+    return p->seekRestrictions() != PlaylistInterface::NoSeek;
+
 }
 
 QString
@@ -378,6 +386,9 @@ MprisPlugin::Seek( qlonglong Offset )
 {
     qDebug() << Q_FUNC_INFO;
 
+    if( !canSeek() )
+        return;
+
     qlonglong seekTime = position() + Offset;
     qDebug() << "seekTime: " << seekTime;
     if( seekTime < 0 )
@@ -393,8 +404,10 @@ MprisPlugin::Seek( qlonglong Offset )
 void
 MprisPlugin::SetPosition( const QDBusObjectPath &TrackId, qlonglong Position )
 {
-    // TODO
     qDebug() << Q_FUNC_INFO;
+    if( !canSeek() )
+        return;
+
     qDebug() << "path: " << TrackId.path();
     qDebug() << "position: " << Position;
 
@@ -540,6 +553,7 @@ MprisPlugin::onPlaylistChanged( Tomahawk::PlaylistInterface* playlist )
     // Notify relevant changes
     notifyPropertyChanged( "org.mpris.MediaPlayer2.Player", "LoopStatus" );
     notifyPropertyChanged( "org.mpris.MediaPlayer2.Player", "Shuffle" );
+    notifyPropertyChanged( "org.mpris.MediaPlayer2.Player", "CanSeek" );
     onTrackCountChanged( 0 );
 }
 
@@ -555,13 +569,8 @@ MprisPlugin::onTrackCountChanged( unsigned int tracks )
  void
  MprisPlugin::onSeeked( qint64 ms )
  {
-    QDBusMessage signal = QDBusMessage::createSignal(
-        "/org/mpris/MediaPlayer2",
-        "org.mpris.MediaPlayer2.Player",
-        "Seeked");
-    qlonglong us = ms*1000;
-    signal << us;
-    QDBusConnection::sessionBus().send(signal);
+    qlonglong us = (qlonglong) ( ms*1000 );
+    emit Seeked( us );
  }
 
 void

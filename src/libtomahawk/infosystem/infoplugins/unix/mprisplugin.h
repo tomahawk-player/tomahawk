@@ -154,6 +154,9 @@ private slots:
     void infoSystemInfo( Tomahawk::InfoSystem::InfoRequestData requestData, QVariant output );
     void infoSystemFinished( QString target );
 
+signals:
+    void Seeked( qlonglong Position );
+
 private:
     // Get Info
     
