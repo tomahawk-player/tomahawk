@@ -703,7 +703,6 @@ SourceDelegate::paint( QPainter* painter, const QStyleOptionViewItem& option, co
             GenericPageItem* gpi = qobject_cast< GenericPageItem* >( item );
             Q_ASSERT( gpi );
 
-//             initStyleOption( &o3, index );
             if ( gpi->isTempItem() && o3.state & QStyle::State_MouseOver )
             {
                 // draw close icon
