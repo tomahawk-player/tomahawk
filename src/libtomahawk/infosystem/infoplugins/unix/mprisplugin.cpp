@@ -610,7 +610,8 @@ MprisPlugin::infoSystemInfo( Tomahawk::InfoSystem::InfoRequestData requestData, 
         // delete the old tempfile and make new one, to avoid caching of filename by mpris clients
         if( m_coverTempFile )
             delete m_coverTempFile;
-        m_coverTempFile = new QTemporaryFile( hash["artist"] + "_" + hash["album"] + "_tomahawk_cover.png" );
+        m_coverTempFile = new QTemporaryFile( QDir::toNativeSeparators(
+                                                 QDir::tempPath() + "/" + hash["artist"] + "_" + hash["album"] + "_tomahawk_cover.png" ) );
         if( !m_coverTempFile->open() )
         {
             qDebug() << "WARNING: could not write temporary file for cover art!";
