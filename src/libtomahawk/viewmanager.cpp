@@ -73,7 +73,6 @@ ViewManager::ViewManager( QObject* parent )
 {
     s_instance = this;
 
-    setHistoryPosition( -1 );
     m_widget->setLayout( new QVBoxLayout() );
 
     m_topbar = new TopBar();
@@ -174,13 +173,14 @@ Tomahawk::ViewPage*
 ViewManager::show( const Tomahawk::playlist_ptr& playlist )
 {
     PlaylistView* view;
-    if ( !m_playlistViews.contains( playlist ) )
+
+    if ( !m_playlistViews.contains( playlist ) || !m_playlistViews.value( playlist ).isNull() )
     {
         view = createPageForPlaylist( playlist );
     }
     else
     {
-        view = m_playlistViews.value( playlist );
+        view = m_playlistViews.value( playlist ).data();
     }
 
     setPage( view );
@@ -194,14 +194,14 @@ ViewManager::show( const Tomahawk::playlist_ptr& playlist )
 Tomahawk::ViewPage*
 ViewManager::show( const Tomahawk::dynplaylist_ptr& playlist )
 {
-    if ( !m_dynamicWidgets.contains( playlist ) )
+    if ( !m_dynamicWidgets.contains( playlist ) || m_dynamicWidgets.value( playlist ).isNull() )
     {
        m_dynamicWidgets[ playlist ] = new Tomahawk::DynamicWidget( playlist, m_stack );
 
        playlist->resolve();
     }
 
-    setPage( m_dynamicWidgets.value( playlist ) );
+    setPage( m_dynamicWidgets.value( playlist ).data() );
 
     if ( playlist->mode() == Tomahawk::OnDemand )
         m_queueView->hide();
@@ -210,7 +210,7 @@ ViewManager::show( const Tomahawk::dynplaylist_ptr& playlist )
 
     emit numSourcesChanged( SourceList::instance()->count() );
 
-    return m_dynamicWidgets.value( playlist );
+    return m_dynamicWidgets.value( playlist ).data();
 }
 
 
@@ -218,14 +218,14 @@ Tomahawk::ViewPage*
 ViewManager::show( const Tomahawk::artist_ptr& artist )
 {
     ArtistInfoWidget* swidget;
-    if ( !m_artistViews.contains( artist ) )
+    if ( !m_artistViews.contains( artist ) || m_artistViews.value( artist ).isNull() )
     {
         swidget = new ArtistInfoWidget( artist );
         m_artistViews.insert( artist, swidget );
     }
     else
     {
-        swidget = m_artistViews.value( artist );
+        swidget = m_artistViews.value( artist ).data();
     }
 
     setPage( swidget );
@@ -237,14 +237,14 @@ Tomahawk::ViewPage*
 ViewManager::show( const Tomahawk::album_ptr& album )
 {
     AlbumInfoWidget* swidget;
-    if ( !m_albumViews.contains( album ) )
+    if ( !m_albumViews.contains( album ) || m_albumViews.value( album ).isNull() )
     {
         swidget = new AlbumInfoWidget( album );
         m_albumViews.insert( album, swidget );
     }
     else
     {
-        swidget = m_albumViews.value( album );
+        swidget = m_albumViews.value( album ).data();
     }
 
     setPage( swidget );
@@ -261,7 +261,7 @@ ViewManager::show( const Tomahawk::collection_ptr& collection )
     if ( m_currentMode == PlaylistInterface::Flat )
     {
         CollectionView* view;
-        if ( !m_collectionViews.contains( collection ) )
+        if ( !m_collectionViews.contains( collection ) || m_collectionViews.value( collection ).isNull() )
         {
             view = new CollectionView();
             CollectionFlatModel* model = new CollectionFlatModel();
@@ -275,7 +275,7 @@ ViewManager::show( const Tomahawk::collection_ptr& collection )
         }
         else
         {
-            view = m_collectionViews.value( collection );
+            view = m_collectionViews.value( collection ).data();
         }
 
         shown = view;
@@ -285,7 +285,7 @@ ViewManager::show( const Tomahawk::collection_ptr& collection )
     if ( m_currentMode == PlaylistInterface::Tree )
     {
         ArtistView* view;
-        if ( !m_treeViews.contains( collection ) )
+        if ( !m_treeViews.contains( collection ) || m_treeViews.value( collection ).isNull() )
         {
             view = new ArtistView();
             TreeModel* model = new TreeModel();
@@ -299,7 +299,7 @@ ViewManager::show( const Tomahawk::collection_ptr& collection )
         }
         else
         {
-            view = m_treeViews.value( collection );
+            view = m_treeViews.value( collection ).data();
         }
 
         shown = view;
@@ -309,7 +309,7 @@ ViewManager::show( const Tomahawk::collection_ptr& collection )
     if ( m_currentMode == PlaylistInterface::Album )
     {
         AlbumView* aview;
-        if ( !m_collectionAlbumViews.contains( collection ) )
+        if ( !m_collectionAlbumViews.contains( collection ) || m_collectionAlbumViews.value( collection ).isNull() )
         {
             aview = new AlbumView();
             AlbumModel* amodel = new AlbumModel( aview );
@@ -322,7 +322,7 @@ ViewManager::show( const Tomahawk::collection_ptr& collection )
         }
         else
         {
-            aview = m_collectionAlbumViews.value( collection );
+            aview = m_collectionAlbumViews.value( collection ).data();
         }
 
         shown = aview;
@@ -339,14 +339,14 @@ Tomahawk::ViewPage*
 ViewManager::show( const Tomahawk::source_ptr& source )
 {
     SourceInfoWidget* swidget;
-    if ( !m_sourceViews.contains( source ) )
+    if ( !m_sourceViews.contains( source ) || m_sourceViews.value( source ).isNull() )
     {
         swidget = new SourceInfoWidget( source );
         m_sourceViews.insert( source, swidget );
     }
     else
     {
-        swidget = m_sourceViews.value( source );
+        swidget = m_sourceViews.value( source ).data();
     }
 
     setPage( swidget );
@@ -508,37 +508,13 @@ ViewManager::hideQueue()
 void
 ViewManager::historyBack()
 {
-    if ( m_historyPosition < 1 )
-        return;
+    ViewPage* oldPage = m_pageHistory.takeFirst();
 
-    showHistory( m_historyPosition - 1 );
-}
+    ViewPage* newPage = m_pageHistory.first();
+    qDebug() << "Showing page after moving backwards in history:" << newPage->widget()->metaObject()->className();
+    setPage( newPage, false );
 
-
-void
-ViewManager::historyForward()
-{
-    if ( m_historyPosition >= m_pageHistory.count() - 1 )
-        return;
-
-    showHistory( m_historyPosition + 1 );
-}
-
-
-void
-ViewManager::showHistory( int historyPosition )
-{
-    if ( historyPosition < 0 || historyPosition >= m_pageHistory.count() )
-    {
-        qDebug() << "History position out of bounds!" << historyPosition << m_pageHistory.count();
-        Q_ASSERT( false );
-        return;
-    }
-
-    setHistoryPosition( historyPosition );
-    ViewPage* page = m_pageHistory.at( historyPosition );
-    qDebug() << "Showing page after a deleting:" << page->widget()->metaObject()->className();
-    setPage( page, false );
+    delete oldPage;
 }
 
 void
@@ -547,10 +523,11 @@ ViewManager::removeFromHistory ( ViewPage* p )
     if ( currentPage() == p )
     {
         historyBack();
-        m_pageHistory.removeAll( p );
     } else
-        if ( m_pageHistory.removeAll( p ) )
-            setHistoryPosition( m_historyPosition - 1 );
+    {
+        m_pageHistory.removeAll( p );
+        delete p;
+    }
 
 }
 
@@ -598,8 +575,7 @@ ViewManager::setPage( ViewPage* page, bool trackHistory )
 
     if ( trackHistory )
     {
-        m_pageHistory << page;
-        setHistoryPosition( m_pageHistory.count() - 1 );
+        m_pageHistory.insert( 0, page );
     }
 
     qDebug() << "View page shown:" << page->title();
@@ -780,12 +756,9 @@ ViewManager::onWidgetDestroyed( QWidget* widget )
             m_dynamicWidgets.remove( dynamicPlaylistForInterface( page->playlistInterface() ) );
         }
 
-        if ( page->widget() == widget )
+        if ( page->widget() == widget && !resetWidget )
         {
             m_pageHistory.removeAt( i );
-            if ( m_historyPosition > i )
-                m_historyPosition--;
-            break;
         }
     }
 
@@ -793,8 +766,7 @@ ViewManager::onWidgetDestroyed( QWidget* widget )
 
     if ( resetWidget )
     {
-        if ( m_pageHistory.count() )
-            showHistory( m_pageHistory.count() - 1 );
+        historyBack();
     }
 }
 
@@ -838,21 +810,21 @@ ViewManager::createDynamicPlaylist( const Tomahawk::source_ptr& src,
 ViewPage*
 ViewManager::pageForCollection( const collection_ptr& col ) const
 {
-    return m_collectionViews.value( col, 0 );
+    return m_collectionViews.value( col ).data();
 }
 
 
 ViewPage*
 ViewManager::pageForDynPlaylist(const dynplaylist_ptr& pl) const
 {
-    return m_dynamicWidgets.value( pl, 0 );
+    return m_dynamicWidgets.value( pl ).data();
 }
 
 
 ViewPage*
 ViewManager::pageForPlaylist(const playlist_ptr& pl) const
 {
-    return m_playlistViews.value( pl, 0 );
+    return m_playlistViews.value( pl ).data();
 }
 
 
@@ -869,20 +841,6 @@ ViewManager::pageForInterface( Tomahawk::PlaylistInterface* interface ) const
     return 0;
 }
 
-
-int
-ViewManager::positionInHistory( ViewPage* page ) const
-{
-    for ( int i = 0; i < m_pageHistory.count(); i++ )
-    {
-        if ( page == m_pageHistory.at( i ) )
-            return i;
-    }
-
-    return -1;
-}
-
-
 PlaylistInterface*
 ViewManager::currentPlaylistInterface() const
 {
@@ -896,29 +854,15 @@ ViewManager::currentPlaylistInterface() const
 Tomahawk::ViewPage*
 ViewManager::currentPage() const
 {
-    if ( m_historyPosition >= 0 )
-        return m_pageHistory.at( m_historyPosition );
-    else
-        return 0;
+    return m_pageHistory.isEmpty() ? 0 : m_pageHistory.front();
 }
-
-
-void
-ViewManager::setHistoryPosition( int position )
-{
-    m_historyPosition = position;
-
-    emit historyBackAvailable( m_historyPosition > 0 );
-    emit historyForwardAvailable( m_historyPosition < m_pageHistory.count() - 1 );
-}
-
 
 Tomahawk::playlist_ptr
 ViewManager::playlistForInterface( Tomahawk::PlaylistInterface* interface ) const
 {
-    foreach ( PlaylistView* view, m_playlistViews.values() )
+    foreach ( QWeakPointer<PlaylistView> view, m_playlistViews.values() )
     {
-        if ( view->playlistInterface() == interface )
+        if ( view.data()->playlistInterface() == interface )
         {
             return m_playlistViews.key( view );
         }
@@ -931,9 +875,9 @@ ViewManager::playlistForInterface( Tomahawk::PlaylistInterface* interface ) cons
 Tomahawk::dynplaylist_ptr
 ViewManager::dynamicPlaylistForInterface( Tomahawk::PlaylistInterface* interface ) const
 {
-    foreach ( DynamicWidget* view, m_dynamicWidgets.values() )
+    foreach ( QWeakPointer<DynamicWidget> view, m_dynamicWidgets.values() )
     {
-        if ( view->playlistInterface() == interface )
+        if ( view.data()->playlistInterface() == interface )
         {
             return m_dynamicWidgets.key( view );
         }
@@ -946,16 +890,16 @@ ViewManager::dynamicPlaylistForInterface( Tomahawk::PlaylistInterface* interface
 Tomahawk::collection_ptr
 ViewManager::collectionForInterface( Tomahawk::PlaylistInterface* interface ) const
 {
-    foreach ( CollectionView* view, m_collectionViews.values() )
+    foreach ( QWeakPointer<CollectionView> view, m_collectionViews.values() )
     {
-        if ( view->playlistInterface() == interface )
+        if ( view.data()->playlistInterface() == interface )
         {
             return m_collectionViews.key( view );
         }
     }
-    foreach ( AlbumView* view, m_collectionAlbumViews.values() )
+    foreach ( QWeakPointer<AlbumView> view, m_collectionAlbumViews.values() )
     {
-        if ( view->playlistInterface() == interface )
+        if ( view.data()->playlistInterface() == interface )
         {
             return m_collectionAlbumViews.key( view );
         }

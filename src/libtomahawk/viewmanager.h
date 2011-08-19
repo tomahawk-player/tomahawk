@@ -78,7 +78,6 @@ public:
     Tomahawk::PlaylistInterface* currentPlaylistInterface() const;
     Tomahawk::ViewPage* currentPage() const;
     Tomahawk::ViewPage* pageForInterface( Tomahawk::PlaylistInterface* interface ) const;
-    int positionInHistory( Tomahawk::ViewPage* page ) const;
 
     Tomahawk::ViewPage* show( Tomahawk::ViewPage* page );
 
@@ -111,9 +110,6 @@ signals:
     void playClicked();
     void pauseClicked();
 
-    void historyBackAvailable( bool avail );
-    void historyForwardAvailable( bool avail );
-
     void tempPageActivated( Tomahawk::ViewPage* );
     void viewPageActivated( Tomahawk::ViewPage* );
 
@@ -131,8 +127,6 @@ public slots:
     Tomahawk::ViewPage* show( const Tomahawk::source_ptr& source );
 
     void historyBack();
-    void historyForward();
-    void showHistory( int historyPosition );
     void removeFromHistory( Tomahawk::ViewPage* p );
 
     void setTreeMode();
@@ -158,7 +152,6 @@ private slots:
     void onWidgetDestroyed( QWidget* widget );
 
 private:
-    void setHistoryPosition( int position );
     void setPage( Tomahawk::ViewPage* page, bool trackHistory = true );
     void updateView();
     void unlinkPlaylist();
@@ -187,17 +180,16 @@ private:
 
     QList< Tomahawk::collection_ptr > m_superCollections;
 
-    QHash< Tomahawk::dynplaylist_ptr, Tomahawk::DynamicWidget* > m_dynamicWidgets;
-    QHash< Tomahawk::collection_ptr, CollectionView* > m_collectionViews;
-    QHash< Tomahawk::collection_ptr, ArtistView* > m_treeViews;
-    QHash< Tomahawk::collection_ptr, AlbumView* > m_collectionAlbumViews;
-    QHash< Tomahawk::artist_ptr, ArtistInfoWidget* > m_artistViews;
-    QHash< Tomahawk::album_ptr, AlbumInfoWidget* > m_albumViews;
-    QHash< Tomahawk::playlist_ptr, PlaylistView* > m_playlistViews;
-    QHash< Tomahawk::source_ptr, SourceInfoWidget* > m_sourceViews;
+    QHash< Tomahawk::dynplaylist_ptr, QWeakPointer<Tomahawk::DynamicWidget> > m_dynamicWidgets;
+    QHash< Tomahawk::collection_ptr, QWeakPointer<CollectionView> > m_collectionViews;
+    QHash< Tomahawk::collection_ptr, QWeakPointer<ArtistView> > m_treeViews;
+    QHash< Tomahawk::collection_ptr, QWeakPointer<AlbumView> > m_collectionAlbumViews;
+    QHash< Tomahawk::artist_ptr, QWeakPointer<ArtistInfoWidget> > m_artistViews;
+    QHash< Tomahawk::album_ptr, QWeakPointer<AlbumInfoWidget> > m_albumViews;
+    QHash< Tomahawk::playlist_ptr, QWeakPointer<PlaylistView> > m_playlistViews;
+    QHash< Tomahawk::source_ptr, QWeakPointer<SourceInfoWidget> > m_sourceViews;
 
     QList<Tomahawk::ViewPage*> m_pageHistory;
-    int m_historyPosition;
 
     Tomahawk::collection_ptr m_currentCollection;
     int m_currentMode;

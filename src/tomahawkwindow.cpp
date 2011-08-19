@@ -65,11 +65,9 @@
 #ifdef Q_OS_WIN32
 #include <qtsparkle/Updater>
 #endif
-#ifdef Q_OS_MAC
-#include "widgets/maclineedit.h"
-#endif
 
 #include "utils/logger.h"
+#include "Qocoa/qsearchfield.h"
 
 using namespace Tomahawk;
 
@@ -77,7 +75,7 @@ using namespace Tomahawk;
 TomahawkWindow::TomahawkWindow( QWidget* parent )
     : QMainWindow( parent )
     , ui( new Ui::TomahawkWindow )
-    , m_searchWidget( new Ui::GlobalSearchWidget )
+    , m_searchWidget( 0 )
     , m_audioControls( new AudioControls( this ) )
     , m_trayIcon( new TomahawkTrayIcon( this ) )
 {
@@ -96,7 +94,6 @@ TomahawkWindow::TomahawkWindow( QWidget* parent )
     ui->centralWidget->layout()->setSpacing( 0 );
 
     setupSideBar();
-    setupToolBar();
     statusBar()->addPermanentWidget( m_audioControls, 1 );
 
     setupUpdateCheck();
@@ -195,15 +192,21 @@ TomahawkWindow::setupSideBar()
     AnimatedSplitter* sidebar = new AnimatedSplitter();
     sidebar->setOrientation( Qt::Vertical );
     sidebar->setChildrenCollapsible( false );
-    sidebar->setGreedyWidget( 0 );
+
+    m_searchWidget = new QSearchField( sidebar );
+    m_searchWidget->setPlaceholderText( "Global Search..." );
+    connect( m_searchWidget, SIGNAL( returnPressed() ), this, SLOT( onFilterEdited() ) );
 
     m_sourcetree = new SourceTreeView();
     TransferView* transferView = new TransferView( sidebar );
     PipelineStatusView* pipelineView = new PipelineStatusView( sidebar );
 
+    sidebar->addWidget( m_searchWidget );
     sidebar->addWidget( m_sourcetree );
     sidebar->addWidget( transferView );
     sidebar->addWidget( pipelineView );
+
+    sidebar->setGreedyWidget( 1 );
     sidebar->hide( 1, false );
     sidebar->hide( 2, false );
 
@@ -226,52 +229,6 @@ TomahawkWindow::setupSideBar()
 
     ui->actionShowOfflineSources->setChecked( TomahawkSettings::instance()->showOfflineSources() );
 }
-
-
-void
-TomahawkWindow::setupToolBar()
-{
-    QToolBar* toolbar = addToolBar( "TomahawkToolbar" );
-    toolbar->setObjectName( "TomahawkToolbar" );
-    toolbar->setMovable( false );
-    toolbar->setFloatable( false );
-    toolbar->setIconSize( QSize( 28, 28 ) );
-    toolbar->setToolButtonStyle( Qt::ToolButtonFollowStyle );
-    toolbar->installEventFilter( new WidgetDragFilter( toolbar ) );
-    toolbar->setSizePolicy( QSizePolicy::Expanding, QSizePolicy::Minimum );
-
-    m_backAvailable = toolbar->addAction( QIcon( RESPATH "images/back.png" ), tr( "Back" ), ViewManager::instance(), SLOT( historyBack() ) );
-    m_backAvailable->setToolTip( tr( "Go back one page" ) );
-    m_forwardAvailable = toolbar->addAction( QIcon( RESPATH "images/forward.png" ), tr( "Forward" ), ViewManager::instance(), SLOT( historyForward() ) );
-    m_forwardAvailable->setToolTip( tr( "Go forward one page" ) );
-
-    m_searchBox = new QWidget( toolbar );
-
-#ifdef Q_OS_MAC
-    QWidget *spacerWidget = new QWidget( this );
-    spacerWidget->setSizePolicy( QSizePolicy::Expanding, QSizePolicy::Preferred );
-    spacerWidget->setVisible( true );
-    toolbar->addWidget( spacerWidget );
-
-    m_searchBox->setLayout( new QHBoxLayout() );
-
-    MacLineEdit* lineEdit = new MacLineEdit( m_searchBox );
-    lineEdit->setFixedSize( 256, 28 );
-    lineEdit->set_hint( tr( "Search" ) );
-    lineEdit->setVisible( true );
-    m_searchBox->layout()->addWidget( lineEdit );
-
-    connect( lineEdit, SIGNAL( textChanged( QString ) ), SLOT( onSearch( QString ) ) );
-#else
-    m_searchWidget->setupUi( m_searchBox );
-    m_searchWidget->searchEdit->setStyleSheet( "QLineEdit { border: 1px solid gray; border-radius: 6px; margin-right: 2px; }" );
-
-    connect( m_searchWidget->searchEdit, SIGNAL( returnPressed() ), SLOT( onFilterEdited() ) );
-#endif
-
-    toolbar->addWidget( m_searchBox );
-}
-
 
 void
 TomahawkWindow::setupUpdateCheck()
@@ -360,10 +317,6 @@ TomahawkWindow::setupSignals()
         connect( plugin, SIGNAL( addMenu( QMenu* ) ), this, SLOT( pluginMenuAdded( QMenu* ) ) );
         connect( plugin, SIGNAL( removeMenu( QMenu* ) ), this, SLOT( pluginMenuRemoved( QMenu* ) ) );
     }
-
-    // <ViewManager>
-    connect( ViewManager::instance(), SIGNAL( historyBackAvailable( bool ) ), SLOT( onHistoryBackAvailable( bool ) ) );
-    connect( ViewManager::instance(), SIGNAL( historyForwardAvailable( bool ) ), SLOT( onHistoryForwardAvailable( bool ) ) );
 }
 
 
@@ -615,21 +568,6 @@ TomahawkWindow::onPlaybackLoading( const Tomahawk::result_ptr& result )
     setWindowTitle( m_windowTitle );
 }
 
-
-void
-TomahawkWindow::onHistoryBackAvailable( bool avail )
-{
-    m_backAvailable->setEnabled( avail );
-}
-
-
-void
-TomahawkWindow::onHistoryForwardAvailable( bool avail )
-{
-    m_forwardAvailable->setEnabled( avail );
-}
-
-
 void
 TomahawkWindow::onSipConnected()
 {
@@ -717,8 +655,8 @@ TomahawkWindow::onSearch( const QString& search )
 void
 TomahawkWindow::onFilterEdited()
 {
-    onSearch( m_searchWidget->searchEdit->text() );
-    m_searchWidget->searchEdit->clear();
+    onSearch( m_searchWidget->text() );
+    m_searchWidget->clear();
 }
 
 
