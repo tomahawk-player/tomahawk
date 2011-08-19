@@ -103,6 +103,7 @@ signals:
 public slots:
     void updateRecentTracks();
     void updatePlaylists();
+    void updateRecentAdditions();
 
 private slots:
     void onSourceAdded( const Tomahawk::source_ptr& source );
