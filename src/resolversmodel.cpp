@@ -109,6 +109,11 @@ ResolversModel::setData( const QModelIndex& index, const QVariant& value, int ro
             m_enabledResolvers.append( resolver );
 
             TomahawkApp::instance()->enableScriptResolver( resolver );
+            emit dataChanged( index, index );
+
+            if( Tomahawk::ExternalResolver* res = TomahawkApp::instance()->resolverForPath( resolver ) ) {
+                connect( res, SIGNAL( changed() ), this, SLOT( resolverChanged() ) );
+            }
         } else if( state == Qt::Unchecked ) {
             m_enabledResolvers.removeAll( resolver );
 
