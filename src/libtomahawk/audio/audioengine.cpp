@@ -212,7 +212,7 @@ AudioEngine::next()
         return;
 
     if ( !m_currentTrack.isNull() && !m_playlist.data()->hasNextItem() &&
-         m_currentTrack->id() == m_playlist.data()->currentItem()->id() )
+         ( m_playlist.data()->currentItem().isNull() || ( m_currentTrack->id() == m_playlist.data()->currentItem()->id() ) ) )
     {
         //For instance, when doing a catch-up while listening along, but the person
         //you're following hasn't started a new track yet...don't do anything

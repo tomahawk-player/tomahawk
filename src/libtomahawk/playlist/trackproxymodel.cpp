@@ -177,7 +177,7 @@ Tomahawk::result_ptr
 TrackProxyModel::currentItem() const
 {
     TrackModelItem* item = itemFromIndex( mapToSource( currentIndex() ) );
-    if ( item && item->query()->playable() )
+    if ( item && !item->query().isNull() && item->query()->playable() )
         return item->query()->results().at( 0 );
     return Tomahawk::result_ptr();
 }
