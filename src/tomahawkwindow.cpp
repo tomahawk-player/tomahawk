@@ -18,7 +18,6 @@
 
 #include "tomahawkwindow.h"
 #include "ui_tomahawkwindow.h"
-#include "ui_searchbox.h"
 
 #include <QAction>
 #include <QCloseEvent>
