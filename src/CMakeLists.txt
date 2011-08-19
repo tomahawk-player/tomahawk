@@ -180,7 +180,7 @@ IF( APPLE )
         SET( tomahawkHeaders ${tomahawkHeaders} ${SPARKLE}/Headers )
     ENDIF(HAVE_SPARKLE)
 ELSE( APPLE )
-    SET( tomahawkSources ${tomahawkSources} mac/tomahawkapp_mac.mm  mac/macshortcuthandler.cpp Qocoa/qsearchfield.mm )
+    SET( tomahawkSources ${tomahawkSources} Qocoa/qsearchfield.cpp )
 ENDIF( APPLE )
 
 IF(GLOOX_FOUND)

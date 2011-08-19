@@ -48,10 +48,13 @@ QSearchField::QSearchField(QWidget *parent) : QWidget(parent)
 
     QVBoxLayout *layout = new QVBoxLayout(this);
     layout->addWidget(lineEdit);
-//     TomahawkUtils::unmarginLayout(layout);
+    TomahawkUtils::unmarginLayout(layout);
+    setContentsMargins(0, 0, 0, 0);
 
     lineEdit->setStyleSheet( "QLineEdit { border: 1px solid gray; border-radius: 6px; margin-right: 2px; }" );
     lineEdit->setContentsMargins(0, 0, 0, 0);
+    lineEdit->setMinimumHeight(27);
+    setFixedHeight(27);
 }
 
 void QSearchField::setText(const QString &text)
@@ -59,9 +62,9 @@ void QSearchField::setText(const QString &text)
     pimpl->lineEdit->setText(text);
 }
 
-void QSearchField::setInputHint(const QString& text)
+void QSearchField::setPlaceholderText(const QString& text)
 {
-    pimpl->lineEdit->setPlaceholderText( text );
+    pimpl->lineEdit->setInactiveText( text );
 }
 
 void QSearchField::clear()
