@@ -108,6 +108,15 @@ void
 WelcomeWidget::updateRecentTracks()
 {
     m_tracksModel->loadHistory( Tomahawk::source_ptr(), HISTORY_TRACK_ITEMS );
+
+    connect( SourceList::instance()->getLocal().data(), SIGNAL( stats( QVariantMap ) ), this, SLOT( updateRecentAdditions() ) );
+}
+
+void
+WelcomeWidget::updateRecentAdditions()
+{
+    m_recentAlbumsModel->clear();
+    m_recentAlbumsModel->addFilteredCollection( collection_ptr(), 20, DatabaseCommand_AllAlbums::ModificationTime );
 }
 
 
