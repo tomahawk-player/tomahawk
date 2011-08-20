@@ -501,11 +501,11 @@ SourceTreeView::dropEvent( QDropEvent* event )
 
     item->setDropType( m_delegate->hoveredDropType() );
     qDebug() << "dropType is " << m_delegate->hoveredDropType();
-    m_delegate->setDropHoverIndex( QModelIndex() );
-    dataChanged( index, index );
     QTreeView::dropEvent( event );
     m_dragging = false;
     m_dropIndex = QPersistentModelIndex();
+    m_delegate->setDropHoverIndex( QModelIndex() );
+    dataChanged( index, index );
 }
 
 

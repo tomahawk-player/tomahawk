@@ -68,6 +68,7 @@ public:
     virtual int IDValue() const { return 0; }
     virtual DropTypes supportedDropTypes() const { return DropTypesNone; }
     virtual void setDropType( DropType type ) { m_dropType = type; }
+    virtual DropType dropType() const { return m_dropType; }
 
     /// don't call me unless you are a sourcetreeitem. i prefer this to making everyone a friend
     void beginRowsAdded( int from, int to ) { emit beginChildRowsAdded( from, to ); }

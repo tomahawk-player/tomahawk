@@ -43,7 +43,7 @@ public:
      */
     static bool acceptsMimeData( const QMimeData* data, bool tracksOnly = true );
     static QStringList mimeTypes();
-    void tracksFromMimeData( const QMimeData* data, bool allowDuplicates = false );
+    void tracksFromMimeData( const QMimeData* data, bool allowDuplicates = false, bool onlyLocal = false );
 
 signals:
     /// QMimeData parsing results
@@ -66,9 +66,11 @@ private:
     QList< Tomahawk::query_ptr > tracksFromMixedData( const QMimeData* d );
 
     void removeDuplicates();
+    void removeRemoteSources();
 
     int m_queryCount;
     bool m_allowDuplicates;
+    bool m_onlyLocal;
 
     QList< Tomahawk::query_ptr > m_resultList;
 };

@@ -96,9 +96,10 @@ DropJob::acceptsMimeData( const QMimeData* data, bool tracksOnly )
 
 
 void
-DropJob::tracksFromMimeData( const QMimeData* data, bool allowDuplicates )
+DropJob::tracksFromMimeData( const QMimeData* data, bool allowDuplicates, bool onlyLocal )
 {
     m_allowDuplicates = allowDuplicates;
+    m_onlyLocal = onlyLocal;
 
     parseMimeData( data );
 
@@ -106,6 +107,9 @@ DropJob::tracksFromMimeData( const QMimeData* data, bool allowDuplicates )
     {
         if ( !allowDuplicates )
             removeDuplicates();
+
+        if ( onlyLocal )
+            removeRemoteSources();
 
         emit tracks( m_resultList );
         deleteLater();
@@ -339,6 +343,9 @@ DropJob::onTracksAdded( const QList<Tomahawk::query_ptr>& tracksList )
         if ( !m_allowDuplicates )
             removeDuplicates();
 
+        if ( m_onlyLocal )
+            removeRemoteSources();
+
         emit tracks( m_resultList );
         deleteLater();
     }
@@ -358,6 +365,19 @@ DropJob::removeDuplicates()
                 contains = true;
         if ( !contains )
             list.append( item );
+    }
+    m_resultList = list;
+}
+
+void
+DropJob::removeRemoteSources()
+{
+    QList< Tomahawk::query_ptr > list;
+    foreach ( const Tomahawk::query_ptr& item, m_resultList )
+    {
+        if ( !item->results().isEmpty() && item->results().first()->collection()->source() )
+            if ( item->results().first()->collection()->source()->isLocal() )
+                list.append( item );
     }
     m_resultList = list;
 }

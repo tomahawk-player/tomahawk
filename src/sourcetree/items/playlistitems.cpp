@@ -158,7 +158,11 @@ PlaylistItem::dropMimeData( const QMimeData* data, Qt::DropAction action )
 
     DropJob *dj = new DropJob();
     connect( dj, SIGNAL( tracks( QList< Tomahawk::query_ptr > ) ), this, SLOT( parsedDroppedTracks( QList< Tomahawk::query_ptr > ) ) );
-    dj->tracksFromMimeData( data );
+
+    if ( dropType() == DropTypeLocalItems )
+        dj->tracksFromMimeData( data, false, true );
+    else
+        dj->tracksFromMimeData( data, false, false );
 
     // TODO cant' know if it works or not yet...
     return true;
