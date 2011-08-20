@@ -347,7 +347,8 @@ AlbumModel::infoSystemInfo( Tomahawk::InfoSystem::InfoRequestData requestData, Q
         if ( !pm.isNull() )
             ai->cover = pm;
 
-        emit dataChanged( ai->index, ai->index.sibling( ai->index.row(), columnCount( QModelIndex() ) - 1 ) );
+        if ( ai->index.isValid() )
+            emit dataChanged( ai->index, ai->index.sibling( ai->index.row(), columnCount( QModelIndex() ) - 1 ) );
     }
 }
 
