@@ -746,12 +746,14 @@ ViewManager::onWidgetDestroyed( QWidget* widget )
     for ( int i = 0; i < m_pageHistory.count(); i++ )
     {
         ViewPage* page = m_pageHistory.at( i );
+        if ( page->widget() != widget )
+            continue;
 
-        if ( playlistForInterface( page->playlistInterface() ).isNull() )
+        if ( !playlistForInterface( page->playlistInterface() ).isNull() )
         {
             m_playlistViews.remove( playlistForInterface( page->playlistInterface() ) );
         }
-        if ( dynamicPlaylistForInterface( page->playlistInterface() ).isNull() )
+        if ( !dynamicPlaylistForInterface( page->playlistInterface() ).isNull() )
         {
             m_dynamicWidgets.remove( dynamicPlaylistForInterface( page->playlistInterface() ) );
         }
