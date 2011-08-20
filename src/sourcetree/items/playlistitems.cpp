@@ -138,6 +138,12 @@ PlaylistItem::willAcceptDrag( const QMimeData* data ) const
     return !m_playlist.isNull() && m_playlist->author()->isLocal();
 }
 
+PlaylistItem::DropTypes
+PlaylistItem::supportedDropTypes() const
+{
+    return DropTypeAllItems | DropTypeLocalItems | DropTypeTop10;
+}
+
 
 bool
 PlaylistItem::dropMimeData( const QMimeData* data, Qt::DropAction action )

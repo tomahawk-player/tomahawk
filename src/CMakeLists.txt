@@ -57,6 +57,7 @@ SET( tomahawkSourcesGui ${tomahawkSourcesGui}
      sourcetree/sourcesmodel.cpp
      sourcetree/sourcesproxymodel.cpp
      sourcetree/sourcetreeview.cpp
+     sourcetree/sourcedelegate.cpp
      sourcetree/items/sourcetreeitem.cpp
      sourcetree/items/collectionitem.cpp
      sourcetree/items/playlistitems.cpp
