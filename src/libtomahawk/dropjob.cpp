@@ -27,6 +27,7 @@
 #include "utils/shortenedlinkparser.h"
 #include "utils/logger.h"
 #include "globalactionmanager.h"
+#include "infosystem/infosystem.h"
 
 using namespace Tomahawk;
 
@@ -96,20 +97,21 @@ DropJob::acceptsMimeData( const QMimeData* data, bool tracksOnly )
 
 
 void
-DropJob::tracksFromMimeData( const QMimeData* data, bool allowDuplicates, bool onlyLocal )
+DropJob::tracksFromMimeData( const QMimeData* data, bool allowDuplicates, bool onlyLocal, bool top10 )
 {
     m_allowDuplicates = allowDuplicates;
     m_onlyLocal = onlyLocal;
+    m_top10 = top10;
 
     parseMimeData( data );
 
     if ( m_queryCount == 0 )
     {
-        if ( !allowDuplicates )
-            removeDuplicates();
-
         if ( onlyLocal )
             removeRemoteSources();
+
+        if ( !allowDuplicates )
+            removeDuplicates();
 
         emit tracks( m_resultList );
         deleteLater();
@@ -228,15 +230,38 @@ DropJob::tracksFromArtistMetaData( const QMimeData *data )
         QString artist;
         stream >> artist;
 
-        artist_ptr artistPtr = Artist::get( artist );
-        if ( artistPtr->tracks().isEmpty() )
+        if ( !m_top10 )
         {
-            connect( artistPtr.data(), SIGNAL( tracksAdded( QList<Tomahawk::query_ptr> ) ),
-                                     SLOT( onTracksAdded( QList<Tomahawk::query_ptr> ) ) );
-            m_queryCount++;
+            artist_ptr artistPtr = Artist::get( artist );
+            if ( artistPtr->tracks().isEmpty() )
+            {
+                connect( artistPtr.data(), SIGNAL( tracksAdded( QList<Tomahawk::query_ptr> ) ),
+                                         SLOT( onTracksAdded( QList<Tomahawk::query_ptr> ) ) );
+                m_queryCount++;
+            }
+            else
+                queries << artistPtr->tracks();
         }
         else
-            queries << artistPtr->tracks();
+        {
+            connect( Tomahawk::InfoSystem::InfoSystem::instance(),
+                     SIGNAL( info( Tomahawk::InfoSystem::InfoRequestData, QVariant ) ),
+                     SLOT( infoSystemInfo( Tomahawk::InfoSystem::InfoRequestData, QVariant ) ) );
+
+            Tomahawk::InfoSystem::InfoCriteriaHash artistInfo;
+            artistInfo["artist"] = artist;
+
+            Tomahawk::InfoSystem::InfoRequestData requestData;
+            requestData.caller = "changeme";
+            requestData.customData = QVariantMap();
+
+            requestData.input = QVariant::fromValue< Tomahawk::InfoSystem::InfoCriteriaHash >( artistInfo );
+
+            requestData.type = Tomahawk::InfoSystem::InfoArtistSongs;
+            Tomahawk::InfoSystem::InfoSystem::instance()->getInfo( requestData );
+
+            m_queryCount++;
+        }
     }
     return queries;
 }
@@ -340,11 +365,11 @@ DropJob::onTracksAdded( const QList<Tomahawk::query_ptr>& tracksList )
 
     if ( --m_queryCount == 0 )
     {
-        if ( !m_allowDuplicates )
-            removeDuplicates();
-
         if ( m_onlyLocal )
             removeRemoteSources();
+
+        if ( !m_allowDuplicates )
+            removeDuplicates();
 
         emit tracks( m_resultList );
         deleteLater();
@@ -375,9 +400,38 @@ DropJob::removeRemoteSources()
     QList< Tomahawk::query_ptr > list;
     foreach ( const Tomahawk::query_ptr& item, m_resultList )
     {
-        if ( !item->results().isEmpty() && item->results().first()->collection()->source() )
-            if ( item->results().first()->collection()->source()->isLocal() )
-                list.append( item );
+        bool hasLocalSource = false;
+        foreach ( const Tomahawk::result_ptr& result, item->results() )
+        {
+            if ( result->collection()->source() && result->collection()->source()->isLocal() )
+                hasLocalSource = true;
+        }
+        if ( hasLocalSource )
+            list.append( item );
     }
     m_resultList = list;
+}
+
+void
+DropJob::infoSystemInfo( Tomahawk::InfoSystem::InfoRequestData requestData, QVariant output )
+{
+    if ( requestData.caller == "changeme" )
+    {
+        Tomahawk::InfoSystem::InfoCriteriaHash artistInfo;
+
+        artistInfo = requestData.input.value< Tomahawk::InfoSystem::InfoCriteriaHash >();
+
+        QString artist = artistInfo["artist"];
+
+        qDebug() << "Got requestData response for artist" << artist << output;
+
+        QList< query_ptr > results;
+        foreach ( const QVariant& title, output.toMap().value( "tracks" ).toList() )
+        {
+            qDebug() << "got title" << title;
+            results << Query::get( artist, title.toString(), QString() );
+        }
+
+        onTracksAdded( results );
+    }
 }

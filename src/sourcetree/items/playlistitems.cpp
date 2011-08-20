@@ -161,6 +161,8 @@ PlaylistItem::dropMimeData( const QMimeData* data, Qt::DropAction action )
 
     if ( dropType() == DropTypeLocalItems )
         dj->tracksFromMimeData( data, false, true );
+    else if ( dropType() == DropTypeTop10 )
+        dj->tracksFromMimeData( data, false, false, true );
     else
         dj->tracksFromMimeData( data, false, false );
 
@@ -171,6 +173,7 @@ PlaylistItem::dropMimeData( const QMimeData* data, Qt::DropAction action )
 void
 PlaylistItem::parsedDroppedTracks( const QList< query_ptr >& tracks)
 {
+    qDebug() << "adding" << tracks.count() << "tracks";
     if ( tracks.count() && !m_playlist.isNull() && m_playlist->author()->isLocal() )
     {
         qDebug() << "on playlist:" << m_playlist->title() << m_playlist->guid() << m_playlist->currentrevision();
