@@ -20,9 +20,11 @@ protected:
     virtual void paint( QPainter* painter, const QStyleOptionViewItem& option, const QModelIndex& index ) const;
     virtual void updateEditorGeometry( QWidget* editor, const QStyleOptionViewItem& option, const QModelIndex& index ) const;
     virtual int dropTypeCount( SourceTreeItem* item ) const;
+    virtual bool editorEvent( QEvent* event, QAbstractItemModel* model, const QStyleOptionViewItem& option, const QModelIndex& index );
 
 private:
     QAbstractItemView* m_parent;
+    mutable int m_iconHeight;
     QModelIndex m_dropHoverIndex;
     mutable SourceTreeItem::DropType m_hoveredDropType; // Hack to keep easily track of the current highlighted DropType in paint()
 };

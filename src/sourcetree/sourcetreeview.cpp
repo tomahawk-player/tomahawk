@@ -439,11 +439,6 @@ SourceTreeView::dragLeaveEvent( QDragLeaveEvent* event )
     m_dragging = false;
     setDirtyRegion( m_dropRect );
 
-//    SourceTreeItem* oldItem = m_dropIndex.data( SourcesModel::SourceTreeItemRole ).value< SourceTreeItem* >();
-//    if ( oldItem )
-//    {
-//        oldItem->setDropHovering( false );
-//    }
     m_delegate->setDropHoverIndex( QModelIndex() );
     dataChanged(m_dropIndex, m_dropIndex);
     m_dropIndex = QPersistentModelIndex();
@@ -461,11 +456,6 @@ SourceTreeView::dragMoveEvent( QDragMoveEvent* event )
         setDirtyRegion( m_dropRect );
         const QPoint pos = event->pos();
         const QModelIndex index = indexAt( pos );
-//        SourceTreeItem* oldItem = m_dropIndex.data( SourcesModel::SourceTreeItemRole ).value< SourceTreeItem* >();
-//        if ( oldItem )
-//        {
-//            oldItem->setDropHovering( false );
-//        }
         m_delegate->setDropHoverIndex( QModelIndex() );
         dataChanged(m_dropIndex, m_dropIndex);
         m_dropIndex = QPersistentModelIndex( index );
@@ -479,7 +469,6 @@ SourceTreeView::dragMoveEvent( QDragMoveEvent* event )
             if( item->willAcceptDrag( event->mimeData() ) )
             {
                 accept = true;
-//                item->setDropHovering( true );
                 m_delegate->setDropHoverIndex( index );
                 dataChanged(index, index);
             }

@@ -5,9 +5,11 @@
 #include "items/playlistitems.h"
 
 #include "utils/tomahawkutils.h"
+#include "items/temporarypageitem.h"
 
 #include <QApplication>
 #include <QPainter>
+#include <QMouseEvent>
 
 #define TREEVIEW_INDENT_ADD -7
 
@@ -289,6 +291,32 @@ SourceDelegate::updateEditorGeometry( QWidget* editor, const QStyleOptionViewIte
         QStyledItemDelegate::updateEditorGeometry( editor, option, index );
 
     editor->setGeometry( editor->geometry().adjusted( 2*TREEVIEW_INDENT_ADD, 0, 0, 0 ) );
+}
+
+bool
+SourceDelegate::editorEvent ( QEvent* event, QAbstractItemModel* model, const QStyleOptionViewItem& option, const QModelIndex& index )
+{
+
+    if ( event->type() == QEvent::MouseButtonRelease )
+    {
+        SourcesModel::RowType type = static_cast< SourcesModel::RowType >( index.data( SourcesModel::SourceTreeItemTypeRole ).toInt() );
+        if ( type == SourcesModel::TemporaryPage )
+        {
+            TemporaryPageItem* gpi = qobject_cast< TemporaryPageItem* >( index.data( SourcesModel::SourceTreeItemRole ).value< SourceTreeItem* >() );
+            Q_ASSERT( gpi );
+            QMouseEvent* ev = static_cast< QMouseEvent* >( event );
+
+            QStyleOptionViewItemV4 o = option;
+            initStyleOption( &o, index );
+            int padding = 3;
+            QRect r ( o.rect.right() - padding - m_iconHeight, padding + o.rect.y(), m_iconHeight, m_iconHeight );
+
+            if ( r.contains( ev->pos() ) )
+                gpi->removeFromList();
+        }
+    }
+
+    return QStyledItemDelegate::editorEvent ( event, model, option, index );
 }
 
 int

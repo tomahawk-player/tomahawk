@@ -66,8 +66,6 @@ public:
     virtual bool setData( const QVariant&, bool ) { return false; }
     virtual int peerSortValue() const { return 0; } // How to sort relative to peers in the tree.
     virtual int IDValue() const { return 0; }
-//    virtual bool dropHovering() const { return m_dropHovering; }
-//    virtual void setDropHovering( bool dropHovering ) { m_dropHovering = dropHovering; emit updated(); }
     virtual DropTypes supportedDropTypes() const { return DropTypesNone; }
     virtual void setDropType( DropType type ) { m_dropType = type; }
 
