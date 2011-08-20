@@ -148,14 +148,10 @@ SourceDelegate::paint( QPainter* painter, const QStyleOptionViewItem& option, co
         PlaylistItem* plItem = qobject_cast< PlaylistItem* >( item );
         Q_ASSERT( plItem );
 
-//        QString tracks;
         QString name = index.data().toString();
-//        int figWidth = 0;
 
         if ( plItem && !plItem->playlist().isNull() )
         {
-//            tracks = QString::number( plItem->source()->trackCount() );
-//            figWidth = painter->fontMetrics().width( tracks );
             name = plItem->playlist()->title();
         }
 
@@ -180,8 +176,6 @@ SourceDelegate::paint( QPainter* painter, const QStyleOptionViewItem& option, co
         if ( index == m_dropHoverIndex )
         {
             QPoint cursorPos = m_parent->mapFromGlobal( QCursor::pos() );
-            qDebug() << "cursorpos is" << cursorPos;
-
             int hoveredDropTypeIndex = ( cursorPos.y() - o.rect.y() ) / height;
             int verticalOffset = height * hoveredDropTypeIndex;
             QRect selectionRect = o.rect.adjusted( 0, verticalOffset, 0, -o.rect.height() + height + verticalOffset );
@@ -190,7 +184,7 @@ SourceDelegate::paint( QPainter* painter, const QStyleOptionViewItem& option, co
             int count = 1;
             if ( item->supportedDropTypes().testFlag( SourceTreeItem::DropTypeAllItems ) )
             {
-                text = "All items";
+                text = tr( "All items" );
                 textRect = option.rect.adjusted( iconRect.width() + 8, 2 + ( count * height ), 0, 0 );
                 painter->drawText( textRect, text );
                 if ( count == hoveredDropTypeIndex )
@@ -199,7 +193,7 @@ SourceDelegate::paint( QPainter* painter, const QStyleOptionViewItem& option, co
             }
             if ( item->supportedDropTypes().testFlag( SourceTreeItem::DropTypeLocalItems ) )
             {
-                text = "Local items";
+                text = tr( "Local items" );
                 textRect = option.rect.adjusted( iconRect.width() + 8, 2 + ( count * height ), 0, 0 );
                 painter->drawText( textRect, text );
                 if ( count == hoveredDropTypeIndex )
@@ -208,49 +202,14 @@ SourceDelegate::paint( QPainter* painter, const QStyleOptionViewItem& option, co
             }
             if ( item->supportedDropTypes().testFlag( SourceTreeItem::DropTypeTop10 ) )
             {
-                text = "Top 10";
+                text = tr( "Top 10" );
                 textRect = option.rect.adjusted( iconRect.width() + 8, 2 + ( count * height ), 0, 0 );
                 painter->drawText( textRect, text );
                 if ( count == hoveredDropTypeIndex )
                     m_hoveredDropType = SourceTreeItem::DropTypeTop10;
                 count++;
             }
-
-            qDebug() << "***************+ verticaloffset:" << hoveredDropTypeIndex << count;
         }
-
-//        QString desc = status ? colItem->source()->textStatus() : tr( "Offline" );
-//        if ( colItem->source().isNull() )
-//            desc = tr( "All available tracks" );
-//        if ( status && desc.isEmpty() && !colItem->source()->currentTrack().isNull() )
-//            desc = colItem->source()->currentTrack()->artist() + " - " + colItem->source()->currentTrack()->track();
-//        if ( desc.isEmpty() )
-//            desc = tr( "Online" );
-
-//        textRect = option.rect.adjusted( iconRect.width() + 8, painter->fontMetrics().height() + 6, -figWidth - 24, -4 );
-//        painter->setFont( normal );
-//        text = painter->fontMetrics().elidedText( desc, Qt::ElideRight, textRect.width() );
-//        QTextOption to( Qt::AlignBottom );
-//        painter->drawText( textRect, text, to );
-
-//        if ( status )
-//        {
-//            painter->setRenderHint( QPainter::Antialiasing );
-
-//            QRect figRect = o.rect.adjusted( o.rect.width() - figWidth - 8, 0, -13, -o.rect.height() + 16 );
-//            int hd = ( option.rect.height() - figRect.height() ) / 2;
-//            figRect.adjust( 0, hd, 0, hd );
-//#ifdef Q_OS_WIN
-//            figRect.adjust( -3, 0, 3, 0 );
-//#endif
-//            painter->setFont( bold );
-
-//            QColor figColor( 167, 183, 211 );
-//            painter->setPen( figColor );
-//            painter->setBrush( figColor );
-
-//            TomahawkUtils::drawBackgroundAndNumbers( painter, tracks, figRect );
-//        }
 
         painter->restore();
 
