@@ -403,7 +403,7 @@ DropJob::removeRemoteSources()
         bool hasLocalSource = false;
         foreach ( const Tomahawk::result_ptr& result, item->results() )
         {
-            if ( result->collection()->source() && result->collection()->source()->isLocal() )
+            if ( !result->collection()->source().isNull() && result->collection()->source()->isLocal() )
                 hasLocalSource = true;
         }
         if ( hasLocalSource )
