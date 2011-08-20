@@ -174,7 +174,7 @@ ViewManager::show( const Tomahawk::playlist_ptr& playlist )
 {
     PlaylistView* view;
 
-    if ( !m_playlistViews.contains( playlist ) || !m_playlistViews.value( playlist ).isNull() )
+    if ( !m_playlistViews.contains( playlist ) || m_playlistViews.value( playlist ).isNull() )
     {
         view = createPageForPlaylist( playlist );
     }
@@ -747,11 +747,11 @@ ViewManager::onWidgetDestroyed( QWidget* widget )
     {
         ViewPage* page = m_pageHistory.at( i );
 
-        if ( !playlistForInterface( page->playlistInterface() ).isNull() )
+        if ( playlistForInterface( page->playlistInterface() ).isNull() )
         {
             m_playlistViews.remove( playlistForInterface( page->playlistInterface() ) );
         }
-        if ( !dynamicPlaylistForInterface( page->playlistInterface() ).isNull() )
+        if ( dynamicPlaylistForInterface( page->playlistInterface() ).isNull() )
         {
             m_dynamicWidgets.remove( dynamicPlaylistForInterface( page->playlistInterface() ) );
         }

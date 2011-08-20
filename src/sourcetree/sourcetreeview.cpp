@@ -112,8 +112,8 @@ SourceTreeView::SourceTreeView( QWidget* parent )
 
     m_model = new SourcesModel( this );
     m_proxyModel = new SourcesProxyModel( m_model, this );
-    connect( m_proxyModel, SIGNAL( selectRequest( QModelIndex ) ), this, SLOT( selectRequest( QModelIndex ) ), Qt::QueuedConnection );
-    connect( m_proxyModel, SIGNAL( expandRequest( QModelIndex ) ), this, SLOT( expandRequest( QModelIndex ) ), Qt::QueuedConnection );
+    connect( m_proxyModel, SIGNAL( selectRequest( QPersistentModelIndex ) ), this, SLOT( selectRequest( QPersistentModelIndex ) ) );
+    connect( m_proxyModel, SIGNAL( expandRequest( QPersistentModelIndex ) ), this, SLOT( expandRequest( QPersistentModelIndex ) ) );
 
     setModel( m_proxyModel );
 
@@ -243,8 +243,9 @@ SourceTreeView::onItemExpanded( const QModelIndex& idx )
 
 
 void
-SourceTreeView::selectRequest( const QModelIndex& idx )
+SourceTreeView::selectRequest( const QPersistentModelIndex& idx )
 {
+    qDebug() << "Select request for:" << idx << idx.data().toString() << selectionModel()->selectedIndexes().contains( idx );
     if ( !selectionModel()->selectedIndexes().contains( idx ) )
     {
         scrollTo( idx, QTreeView::EnsureVisible );
@@ -253,9 +254,9 @@ SourceTreeView::selectRequest( const QModelIndex& idx )
 }
 
 void
-SourceTreeView::expandRequest( const QModelIndex &idx )
+SourceTreeView::expandRequest( const QPersistentModelIndex &idx )
 {
-    qDebug() << "Expanding idx" << idx;
+    qDebug() << "Expanding idx" << idx << idx.data( Qt::DisplayRole ).toString();
     expand( idx );
 }
 

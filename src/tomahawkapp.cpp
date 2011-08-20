@@ -389,6 +389,7 @@ TomahawkApp::registerMetaTypes()
     qRegisterMetaType< QWeakPointer< Tomahawk::InfoSystem::InfoSystemCache > >( "QWeakPointer< Tomahawk::InfoSystem::InfoSystemCache >" );
 
     qRegisterMetaType< DirLister::Mode >("DirLister::Mode");
+    qRegisterMetaType< QPersistentModelIndex >( "QPersistentModelIndex" );
 }
 
 
