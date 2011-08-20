@@ -429,7 +429,7 @@ DropJob::infoSystemInfo( Tomahawk::InfoSystem::InfoRequestData requestData, QVar
         foreach ( const QVariant& title, output.toMap().value( "tracks" ).toList() )
         {
             qDebug() << "got title" << title;
-            results << Query::get( artist, title.toString(), QString() );
+            results << Query::get( artist, title.toString(), QString(), uuid() );
         }
 
         onTracksAdded( results );
