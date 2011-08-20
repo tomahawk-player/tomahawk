@@ -862,7 +862,7 @@ ViewManager::playlistForInterface( Tomahawk::PlaylistInterface* interface ) cons
 {
     foreach ( QWeakPointer<PlaylistView> view, m_playlistViews.values() )
     {
-        if ( view.data()->playlistInterface() == interface )
+        if ( !view.isNull() && view.data()->playlistInterface() == interface )
         {
             return m_playlistViews.key( view );
         }
@@ -877,7 +877,7 @@ ViewManager::dynamicPlaylistForInterface( Tomahawk::PlaylistInterface* interface
 {
     foreach ( QWeakPointer<DynamicWidget> view, m_dynamicWidgets.values() )
     {
-        if ( view.data()->playlistInterface() == interface )
+        if ( !view.isNull() && view.data()->playlistInterface() == interface )
         {
             return m_dynamicWidgets.key( view );
         }
