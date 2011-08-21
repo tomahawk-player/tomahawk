@@ -86,6 +86,7 @@ private:
     Tomahawk::ViewPage* m_sourceInfoPage;
     Tomahawk::ViewPage* m_coolPlaylistsPage;
     Tomahawk::ViewPage* m_lovedTracksPage;
+    Tomahawk::ViewPage* m_whatsHotPage;
 };
 
 

@@ -181,6 +181,7 @@ set( libSources
     widgets/playlisttypeselectordlg.cpp
     widgets/welcomewidget.cpp
     widgets/welcomeplaylistmodel.cpp
+    widgets/whatshotwidget.cpp
     widgets/overlaywidget.cpp
     widgets/HeaderLabel.cpp
     widgets/SocialPlaylistWidget.cpp
@@ -360,6 +361,7 @@ set( libHeaders
     widgets/SeekSlider.h
     widgets/playlisttypeselectordlg.h
     widgets/welcomewidget.h
+    widgets/whatshotwidget.h
     widgets/welcomeplaylistmodel.h
     widgets/overlaywidget.h
     widgets/HeaderLabel.h
@@ -387,6 +389,7 @@ set( libUI ${libUI}
     widgets/newplaylistwidget.ui
     widgets/searchwidget.ui
     widgets/welcomewidget.ui
+    widgets/whatshotwidget.ui
     widgets/SocialPlaylistWidget.ui
     widgets/infowidgets/sourceinfowidget.ui
     widgets/infowidgets/ArtistInfoWidget.ui
