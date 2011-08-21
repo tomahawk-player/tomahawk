@@ -74,8 +74,7 @@ DatabaseCommand_AllAlbums::execForArtist( DatabaseImpl* dbi )
         al << album;
     }
 
-    if ( al.count() )
-        emit albums( al, data() );
+    emit albums( al, data() );
     emit done();
 }
 
@@ -124,8 +123,7 @@ DatabaseCommand_AllAlbums::execForCollection( DatabaseImpl* dbi )
         al << album;
     }
 
-    if ( al.count() )
-        emit albums( al, data() );
+    emit albums( al, data() );
     emit done();
 }
 
