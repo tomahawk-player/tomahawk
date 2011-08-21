@@ -526,6 +526,8 @@ void
 TreeModel::onAlbumsAdded( const QList<Tomahawk::album_ptr>& albums, const QVariant& data )
 {
     qDebug() << Q_FUNC_INFO << albums.count() << data.toInt();
+
+    emit loadingFinished();
     if ( !albums.count() )
         return;
 
@@ -568,8 +570,6 @@ TreeModel::onAlbumsAdded( const QList<Tomahawk::album_ptr>& albums, const QVaria
         emit endInsertRows();
     else
         emit dataChanged( albumitem->index, albumitem->index.sibling( albumitem->index.row(), columnCount( QModelIndex() ) - 1 ) );
-
-    emit loadingFinished();
 }
 
 
@@ -577,6 +577,8 @@ void
 TreeModel::onTracksAdded( const QList<Tomahawk::query_ptr>& tracks, const QVariant& data )
 {
     qDebug() << Q_FUNC_INFO << tracks.count();
+
+    emit loadingFinished();
     if ( !tracks.count() )
         return;
 
@@ -610,8 +612,6 @@ TreeModel::onTracksAdded( const QList<Tomahawk::query_ptr>& tracks, const QVaria
         emit endInsertRows();
 
     emit dataChanged( item->index.sibling( 0, 0 ), item->index.sibling( item->index.row(), columnCount( QModelIndex() ) - 1 ) );
-
-    emit loadingFinished();
 }
 
 
