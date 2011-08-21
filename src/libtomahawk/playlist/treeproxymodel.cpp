@@ -94,7 +94,9 @@ TreeProxyModel::filterAcceptsRow( int sourceRow, const QModelIndex& sourceParent
                 continue;
 
             TreeModelItem* ti = sourceModel()->itemFromIndex( sourceModel()->index( i, 0, sourceParent ) );
-            if ( ti->result()->track() == pi->result()->track() )
+
+            if ( ti->result()->track() == pi->result()->track() &&
+               ( ti->result()->albumpos() == pi->result()->albumpos() || ti->result()->albumpos() == 0 ) )
             {
                 if ( !pi->result()->isOnline() && ti->result()->isOnline() )
                     return false;
