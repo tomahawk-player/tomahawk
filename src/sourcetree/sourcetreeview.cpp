@@ -496,11 +496,16 @@ SourceTreeView::dropEvent( QDropEvent* event )
 {
     const QPoint pos = event->pos();
     const QModelIndex index = indexAt( pos );
-    PlaylistItem* item = itemFromIndex< PlaylistItem >( index );
-    Q_ASSERT( item );
 
-    item->setDropType( m_delegate->hoveredDropType() );
-    qDebug() << "dropType is " << m_delegate->hoveredDropType();
+    if ( model()->data( index, SourcesModel::SourceTreeItemTypeRole ).toInt() == SourcesModel::PlaylistsCategory )
+    {
+        PlaylistItem* item = itemFromIndex< PlaylistItem >( index );
+        Q_ASSERT( item );
+
+        item->setDropType( m_delegate->hoveredDropType() );
+        qDebug() << "dropType is " << m_delegate->hoveredDropType();
+    }
+
     QTreeView::dropEvent( event );
     m_dragging = false;
     m_dropIndex = QPersistentModelIndex();
