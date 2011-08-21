@@ -145,7 +145,7 @@ TreeProxyModel::lessThan( const QModelIndex& left, const QModelIndex& right ) co
             return p1->result()->albumpos() < p2->result()->albumpos();
 
         if ( lefts == rights )
-            return p1->result()->dbid() < p2->result()->dbid();
+            return (qint64)&p1 < (qint64)&p2;
     }
 
     return QString::localeAwareCompare( lefts, rights ) < 0;
