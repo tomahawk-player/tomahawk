@@ -122,6 +122,11 @@ struct InfoRequestData {
     QVariantMap customData;
 };
 
+struct ArtistTrackPair {
+    QString artist;
+    QString track;
+};
+
 typedef QMap< InfoType, QVariant > InfoTypeMap;
 typedef QMap< InfoType, uint > InfoTimeoutMap;
 typedef QMap< QString, QMap< QString, QString > > InfoGenericMap;
@@ -258,5 +263,7 @@ Q_DECLARE_METATYPE( Tomahawk::InfoSystem::InfoRequestData );
 Q_DECLARE_METATYPE( Tomahawk::InfoSystem::InfoGenericMap );
 Q_DECLARE_METATYPE( Tomahawk::InfoSystem::InfoCriteriaHash );
 Q_DECLARE_METATYPE( QWeakPointer< Tomahawk::InfoSystem::InfoSystemCache > );
+Q_DECLARE_METATYPE( Tomahawk::InfoSystem::ArtistTrackPair );
+Q_DECLARE_METATYPE( QList<Tomahawk::InfoSystem::ArtistTrackPair> );
 
 #endif // TOMAHAWK_INFOSYSTEM_H

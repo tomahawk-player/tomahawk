@@ -56,9 +56,10 @@ WhatsHotWidget::WhatsHotWidget( QWidget* parent )
 
 
     m_tracksModel = new PlaylistModel( ui->tracksView );
-    m_tracksModel->setStyle( TrackModel::ShortWithAvatars );
+    m_tracksModel->setStyle( TrackModel::Short );
+
     ui->tracksView->overlay()->setEnabled( false );
-    ui->tracksView->setPlaylistModel( m_tracksModel );
+    ui->tracksView->setTrackModel( m_tracksModel );
     ui->tracksView->setHeaderHidden( true );
     ui->tracksView->setHorizontalScrollBarPolicy( Qt::ScrollBarAlwaysOff );
 
@@ -99,7 +100,11 @@ WhatsHotWidget::WhatsHotWidget( QWidget* parent )
 
     requestData.type = Tomahawk::InfoSystem::InfoChartArtists;
     Tomahawk::InfoSystem::InfoSystem::instance()->getInfo( requestData );
-    tDebug() << "WhatsHot: requested InfoChartArtists";
+
+    requestData.type = Tomahawk::InfoSystem::InfoChartTracks;
+    Tomahawk::InfoSystem::InfoSystem::instance()->getInfo( requestData );
+
+    tDebug() << "WhatsHot: requested InfoChartArtists+Tracks";
 }
 
 
@@ -113,7 +118,7 @@ void
 WhatsHotWidget::checkQueries()
 {
     m_timer->stop();
-//    m_tracksModel->ensureResolved();
+    m_tracksModel->ensureResolved();
 }
 
 
@@ -141,7 +146,17 @@ WhatsHotWidget::infoSystemInfo( Tomahawk::InfoSystem::InfoRequestData requestDat
             }
             break;
         }
-
+        case InfoSystem::InfoChartTracks:
+        {
+            const QList<Tomahawk::InfoSystem::ArtistTrackPair> tracks = returnedData["tracks"].value<QList<Tomahawk::InfoSystem::ArtistTrackPair> >();
+            tDebug() << "WhatsHot: got tracks! " << tracks.size();
+            foreach ( const Tomahawk::InfoSystem::ArtistTrackPair& track, tracks )
+            {
+                query_ptr query = Query::get( track.artist, track.track, QString(), uuid() );
+                m_tracksModel->append( query );
+            }
+            break;
+        }
         default:
             return;
     }

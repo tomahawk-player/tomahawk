@@ -389,6 +389,8 @@ TomahawkApp::registerMetaTypes()
     qRegisterMetaType< QWeakPointer< Tomahawk::InfoSystem::InfoSystemCache > >( "QWeakPointer< Tomahawk::InfoSystem::InfoSystemCache >" );
 
     qRegisterMetaType< DirLister::Mode >("DirLister::Mode");
+    qRegisterMetaType< Tomahawk::InfoSystem::ArtistTrackPair >("Tomahawk::InfoSystem::ArtistTrackPair");
+    qRegisterMetaType< QList<Tomahawk::InfoSystem::ArtistTrackPair> >("QList<Tomahawk::InfoSystem::ArtistTrackPair>");
 }
 
 
