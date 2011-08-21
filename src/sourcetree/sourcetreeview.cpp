@@ -439,7 +439,7 @@ SourceTreeView::dragLeaveEvent( QDragLeaveEvent* event )
     m_dragging = false;
     setDirtyRegion( m_dropRect );
 
-    m_delegate->setDropHoverIndex( QModelIndex() );
+    m_delegate->setDropHoverIndex( QModelIndex(), 0 );
     dataChanged(m_dropIndex, m_dropIndex);
     m_dropIndex = QPersistentModelIndex();
 }
@@ -456,7 +456,7 @@ SourceTreeView::dragMoveEvent( QDragMoveEvent* event )
         setDirtyRegion( m_dropRect );
         const QPoint pos = event->pos();
         const QModelIndex index = indexAt( pos );
-        m_delegate->setDropHoverIndex( QModelIndex() );
+        m_delegate->setDropHoverIndex( QModelIndex(), event->mimeData() );
         dataChanged(m_dropIndex, m_dropIndex);
         m_dropIndex = QPersistentModelIndex( index );
 
@@ -469,7 +469,7 @@ SourceTreeView::dragMoveEvent( QDragMoveEvent* event )
             if( item->willAcceptDrag( event->mimeData() ) )
             {
                 accept = true;
-                m_delegate->setDropHoverIndex( index );
+                m_delegate->setDropHoverIndex( index, event->mimeData() );
                 dataChanged(index, index);
             }
         }
@@ -504,7 +504,7 @@ SourceTreeView::dropEvent( QDropEvent* event )
     QTreeView::dropEvent( event );
     m_dragging = false;
     m_dropIndex = QPersistentModelIndex();
-    m_delegate->setDropHoverIndex( QModelIndex() );
+    m_delegate->setDropHoverIndex( QModelIndex(), 0 );
     dataChanged( index, index );
 }
 

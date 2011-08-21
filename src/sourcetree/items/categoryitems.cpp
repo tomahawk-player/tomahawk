@@ -139,6 +139,12 @@ CategoryAddItem::willAcceptDrag( const QMimeData* data ) const
     return false;
 }
 
+SourceTreeItem::DropTypes
+CategoryAddItem::supportedDropTypes( const QMimeData* data ) const
+{
+    return DropTypesNone;
+}
+
 
 bool
 CategoryAddItem::dropMimeData( const QMimeData* data, Qt::DropAction )

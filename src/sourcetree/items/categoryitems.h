@@ -33,6 +33,7 @@ public:
     virtual int peerSortValue() const;
 
     virtual bool willAcceptDrag(const QMimeData* data) const;
+    virtual DropTypes supportedDropTypes(const QMimeData* data) const;
     virtual bool dropMimeData(const QMimeData* data, Qt::DropAction action);
 
 private slots:

@@ -34,7 +34,7 @@ public:
     virtual Qt::ItemFlags flags() const;
     virtual void activate();
     virtual bool willAcceptDrag( const QMimeData* data ) const;
-    virtual DropTypes supportedDropTypes() const;
+    virtual DropTypes supportedDropTypes( const QMimeData* data ) const;
     virtual bool dropMimeData( const QMimeData* data, Qt::DropAction action );
     virtual QIcon icon() const;
     virtual bool setData(const QVariant& v, bool role);

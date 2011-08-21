@@ -11,7 +11,7 @@ class SourceDelegate : public QStyledItemDelegate
 public:
     SourceDelegate( QAbstractItemView* parent = 0 ) : QStyledItemDelegate( parent ), m_parent( parent ) {}
 
-    void setDropHoverIndex( const QModelIndex &index ) { m_dropHoverIndex = index; }
+    void setDropHoverIndex( const QModelIndex &index, const QMimeData *mimeData ) { m_dropHoverIndex = index; m_dropMimeData = const_cast< QMimeData* >( mimeData ); }
 
     SourceTreeItem::DropType hoveredDropType() const;
 
@@ -26,6 +26,7 @@ private:
     QAbstractItemView* m_parent;
     mutable int m_iconHeight;
     QModelIndex m_dropHoverIndex;
+    QMimeData *m_dropMimeData;
     mutable SourceTreeItem::DropType m_hoveredDropType; // Hack to keep easily track of the current highlighted DropType in paint()
 };
 

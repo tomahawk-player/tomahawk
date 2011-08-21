@@ -139,9 +139,25 @@ PlaylistItem::willAcceptDrag( const QMimeData* data ) const
 }
 
 PlaylistItem::DropTypes
-PlaylistItem::supportedDropTypes() const
+PlaylistItem::supportedDropTypes( const QMimeData* data ) const
 {
-    return DropTypeAllItems | DropTypeLocalItems | DropTypeTop10;
+    if ( data->hasFormat( "application/tomahawk.query.list" ) )
+        return DropTypeThisTrack | DropTypeThisAlbum | DropTypeAllFromArtist | DropTypeLocalItems | DropTypeTop50;
+    else if ( data->hasFormat( "application/tomahawk.result.list" ) )
+        return DropTypeThisTrack | DropTypeThisAlbum | DropTypeAllFromArtist | DropTypeLocalItems | DropTypeTop50;
+    else if ( data->hasFormat( "application/tomahawk.metadata.album" ) )
+        return DropTypeThisAlbum | DropTypeAllFromArtist | DropTypeLocalItems | DropTypeTop50;
+    else if ( data->hasFormat( "application/tomahawk.metadata.artist" ) )
+        return DropTypeAllFromArtist | DropTypeLocalItems | DropTypeTop50;
+    else if ( data->hasFormat( "application/tomahawk.mixed" ) )
+    {
+        return DropTypesNone;
+    }
+    else if ( data->hasFormat( "text/plain" ) )
+    {
+        return DropTypesNone;
+    }
+    return DropTypesNone;
 }
 
 
@@ -159,10 +175,21 @@ PlaylistItem::dropMimeData( const QMimeData* data, Qt::DropAction action )
     DropJob *dj = new DropJob();
     connect( dj, SIGNAL( tracks( QList< Tomahawk::query_ptr > ) ), this, SLOT( parsedDroppedTracks( QList< Tomahawk::query_ptr > ) ) );
 
+    if ( dropType() == DropTypeAllFromArtist )
+        dj->setGetWholeArtists( true );
+    if ( dropType() == DropTypeThisAlbum )
+        dj->setGetWholeAlbums( true );
+
     if ( dropType() == DropTypeLocalItems )
+    {
+        dj->setGetWholeArtists( true );
         dj->tracksFromMimeData( data, false, true );
-    else if ( dropType() == DropTypeTop10 )
+    }
+    else if ( dropType() == DropTypeTop50 )
+    {
+        dj->setGetWholeArtists( true );
         dj->tracksFromMimeData( data, false, false, true );
+    }
     else
         dj->tracksFromMimeData( data, false, false );
 

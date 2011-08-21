@@ -45,6 +45,9 @@ public:
      */
     static bool acceptsMimeData( const QMimeData* data, bool tracksOnly = true );
     static QStringList mimeTypes();
+
+    void setGetWholeArtists( bool getWholeArtists );
+    void setGetWholeAlbums( bool getWholeAlbums );
     void tracksFromMimeData( const QMimeData* data, bool allowDuplicates = false, bool onlyLocal = false, bool top10 = false );
 
 signals:
@@ -69,12 +72,17 @@ private:
     QList< Tomahawk::query_ptr > tracksFromAlbumMetaData( const QMimeData* d );
     QList< Tomahawk::query_ptr > tracksFromMixedData( const QMimeData* d );
 
+    QList< Tomahawk::query_ptr > getArtist( const QString& artist );
+    QList< Tomahawk::query_ptr > getAlbum( const QString& artist, const QString& album );
+
     void removeDuplicates();
     void removeRemoteSources();
 
     int m_queryCount;
     bool m_allowDuplicates;
     bool m_onlyLocal;
+    bool m_getWholeArtists;
+    bool m_getWholeAlbums;
     bool m_top10;
 
     QList< Tomahawk::query_ptr > m_resultList;

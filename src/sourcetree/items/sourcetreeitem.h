@@ -34,11 +34,13 @@ class SourceTreeItem : public QObject
 public:
     enum DropType
     {
-        DropTypesNone = 0x00,
-        DropTypeAllItems = 0x01,
-        DropTypeLocalItems = 0x02,
-        DropTypeTop10 = 0x04,
-        DropTypesAllTypes = 0xff
+        DropTypesNone =         0x00,
+        DropTypeThisTrack =     0x01,
+        DropTypeThisAlbum =     0x02,
+        DropTypeAllFromArtist = 0x04,
+        DropTypeLocalItems =    0x08,
+        DropTypeTop50 =         0x10,
+        DropTypesAllTypes =     0xff
     };
     Q_DECLARE_FLAGS( DropTypes, DropType )
 
@@ -66,7 +68,7 @@ public:
     virtual bool setData( const QVariant&, bool ) { return false; }
     virtual int peerSortValue() const { return 0; } // How to sort relative to peers in the tree.
     virtual int IDValue() const { return 0; }
-    virtual DropTypes supportedDropTypes() const { return DropTypesNone; }
+    virtual DropTypes supportedDropTypes( const QMimeData* mimeData ) const { Q_UNUSED( mimeData ); return DropTypesNone; }
     virtual void setDropType( DropType type ) { m_dropType = type; }
     virtual DropType dropType() const { return m_dropType; }
 

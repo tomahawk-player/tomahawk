@@ -3,6 +3,7 @@
 #include "items/sourcetreeitem.h"
 #include "items/collectionitem.h"
 #include "items/playlistitems.h"
+#include "items/categoryitems.h"
 
 #include "utils/tomahawkutils.h"
 #include "items/temporarypageitem.h"
@@ -23,6 +24,7 @@ SourceDelegate::sizeHint( const QStyleOptionViewItem& option, const QModelIndex&
     else if ( index == m_dropHoverIndex )
     {
         QSize originalSize = QStyledItemDelegate::sizeHint( option, index );
+        qDebug() << "droptypecount is" << dropTypeCount( item );
         return originalSize + QSize( 0, originalSize.height() * dropTypeCount( item ) );
     }
     else
@@ -137,22 +139,31 @@ SourceDelegate::paint( QPainter* painter, const QStyleOptionViewItem& option, co
 
         painter->restore();
     }
-    else if ( type == SourcesModel::StaticPlaylist )
+    else if ( type == SourcesModel::StaticPlaylist || type == SourcesModel::CategoryAdd )
     {
         painter->save();
 
-        QFont normal = painter->font();
         QFont bold = painter->font();
         bold.setBold( true );
 
-        PlaylistItem* plItem = qobject_cast< PlaylistItem* >( item );
-        Q_ASSERT( plItem );
-
         QString name = index.data().toString();
-
-        if ( plItem && !plItem->playlist().isNull() )
+        if ( type == SourcesModel::StaticPlaylist )
         {
-            name = plItem->playlist()->title();
+            PlaylistItem* plItem = qobject_cast< PlaylistItem* >( item );
+            Q_ASSERT( plItem );
+
+
+            if ( plItem && !plItem->playlist().isNull() )
+            {
+                name = plItem->playlist()->title();
+            }
+        }
+        else if ( type == SourcesModel::CategoryAdd )
+        {
+            CategoryAddItem* cItem = qobject_cast< CategoryAddItem* >( item );
+            Q_ASSERT( cItem );
+
+            name = cItem->text();
         }
 
         int height = option.rect.height();
@@ -182,31 +193,50 @@ SourceDelegate::paint( QPainter* painter, const QStyleOptionViewItem& option, co
             painter->drawRoundedRect( selectionRect, 5, 5 );
 
             int count = 1;
-            if ( item->supportedDropTypes().testFlag( SourceTreeItem::DropTypeAllItems ) )
+            SourceTreeItem::DropTypes dropTypes = item->supportedDropTypes( m_dropMimeData );
+            if ( dropTypes.testFlag( SourceTreeItem::DropTypeThisTrack ) )
             {
-                text = tr( "All items" );
+                text = tr( "This track" );
                 textRect = option.rect.adjusted( iconRect.width() + 8, 2 + ( count * height ), 0, 0 );
                 painter->drawText( textRect, text );
                 if ( count == hoveredDropTypeIndex )
-                    m_hoveredDropType = SourceTreeItem::DropTypeAllItems;
+                    m_hoveredDropType = SourceTreeItem::DropTypeThisTrack;
                 count++;
             }
-            if ( item->supportedDropTypes().testFlag( SourceTreeItem::DropTypeLocalItems ) )
+            if ( dropTypes.testFlag( SourceTreeItem::DropTypeThisAlbum ) )
             {
-                text = tr( "Local items" );
+                text = tr( "This album" );
+                textRect = option.rect.adjusted( iconRect.width() + 8, 2 + ( count * height ), 0, 0 );
+                painter->drawText( textRect, text );
+                if ( count == hoveredDropTypeIndex )
+                    m_hoveredDropType = SourceTreeItem::DropTypeThisAlbum;
+                count++;
+            }
+            if ( dropTypes.testFlag( SourceTreeItem::DropTypeAllFromArtist ) )
+            {
+                text = tr( "All from artist" );
+                textRect = option.rect.adjusted( iconRect.width() + 8, 2 + ( count * height ), 0, 0 );
+                painter->drawText( textRect, text );
+                if ( count == hoveredDropTypeIndex )
+                    m_hoveredDropType = SourceTreeItem::DropTypeAllFromArtist;
+                count++;
+            }
+            if ( dropTypes.testFlag( SourceTreeItem::DropTypeLocalItems ) )
+            {
+                text = tr( "All local from Artist" );
                 textRect = option.rect.adjusted( iconRect.width() + 8, 2 + ( count * height ), 0, 0 );
                 painter->drawText( textRect, text );
                 if ( count == hoveredDropTypeIndex )
                     m_hoveredDropType = SourceTreeItem::DropTypeLocalItems;
                 count++;
             }
-            if ( item->supportedDropTypes().testFlag( SourceTreeItem::DropTypeTop10 ) )
+            if ( dropTypes.testFlag( SourceTreeItem::DropTypeTop50 ) )
             {
-                text = tr( "Top 10" );
+                text = tr( "Top 50" );
                 textRect = option.rect.adjusted( iconRect.width() + 8, 2 + ( count * height ), 0, 0 );
                 painter->drawText( textRect, text );
                 if ( count == hoveredDropTypeIndex )
-                    m_hoveredDropType = SourceTreeItem::DropTypeTop10;
+                    m_hoveredDropType = SourceTreeItem::DropTypeTop50;
                 count++;
             }
         }
@@ -282,13 +312,19 @@ int
 SourceDelegate::dropTypeCount( SourceTreeItem* item ) const
 {
     int menuCount = 0;
-    if ( item->supportedDropTypes().testFlag( SourceTreeItem::DropTypeAllItems ) )
+    if ( item->supportedDropTypes( m_dropMimeData ).testFlag( SourceTreeItem::DropTypeThisTrack ) )
         menuCount++;
 
-    if ( item->supportedDropTypes().testFlag( SourceTreeItem::DropTypeLocalItems ) )
+    if ( item->supportedDropTypes( m_dropMimeData ).testFlag( SourceTreeItem::DropTypeThisAlbum ) )
         menuCount++;
 
-    if ( item->supportedDropTypes().testFlag( SourceTreeItem::DropTypeTop10 ) )
+    if ( item->supportedDropTypes( m_dropMimeData ).testFlag( SourceTreeItem::DropTypeAllFromArtist ) )
+        menuCount++;
+
+    if ( item->supportedDropTypes( m_dropMimeData ).testFlag( SourceTreeItem::DropTypeLocalItems ) )
+        menuCount++;
+
+    if ( item->supportedDropTypes( m_dropMimeData ).testFlag( SourceTreeItem::DropTypeTop50 ) )
         menuCount++;
 
     return menuCount;
