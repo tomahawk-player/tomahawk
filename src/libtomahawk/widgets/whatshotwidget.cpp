@@ -28,6 +28,7 @@
 
 #include "audio/audioengine.h"
 #include "playlist/playlistmodel.h"
+#include "playlist/treeproxymodel.h"
 #include "widgets/overlaywidget.h"
 #include "utils/tomahawkutils.h"
 #include "utils/logger.h"
@@ -62,9 +63,18 @@ WhatsHotWidget::WhatsHotWidget( QWidget* parent )
     ui->tracksView->setHorizontalScrollBarPolicy( Qt::ScrollBarAlwaysOff );
 
 
-    m_artistsModel = new TreeModel( ui->artistsView);
+    m_artistsModel = new TreeModel( ui->artistsView );
     m_artistsModel->setColumnStyle( TreeModel::TrackOnly );
+
+    m_artistsProxy = new TreeProxyModel( ui->artistsView );
+    m_artistsProxy->setFilterCaseSensitivity( Qt::CaseInsensitive );
+    m_artistsProxy->setDynamicSortFilter( true );
+
+    ui->artistsView->setProxyModel( m_artistsProxy );
     ui->artistsView->setTreeModel( m_artistsModel );
+
+    m_artistsProxy->sort( -1 ); // disable sorting, must be called after artistsView->setTreeModel
+
     ui->artistsView->setHorizontalScrollBarPolicy( Qt::ScrollBarAlwaysOff );
     ui->artistsView->header()->setVisible( false );
 

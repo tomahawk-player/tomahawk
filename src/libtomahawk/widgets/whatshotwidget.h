@@ -36,6 +36,7 @@
 class TreeModel;
 class PlaylistModel;
 class OverlayWidget;
+class TreeProxyModel;
 
 namespace Ui
 {
@@ -79,6 +80,7 @@ private:
 
     PlaylistModel* m_tracksModel;
     TreeModel* m_artistsModel;
+    TreeProxyModel* m_artistsProxy;
 
     QTimer* m_timer;
 };
