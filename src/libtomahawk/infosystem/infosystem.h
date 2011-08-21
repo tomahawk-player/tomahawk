@@ -92,6 +92,10 @@ enum InfoType { // as items are saved in cache, mark them here to not change the
     InfoAlbumComposer = 48,
     InfoAlbumSongs = 49,
 
+    InfoChartArtists = 50,
+    InfoChartAlbums = 51,
+    InfoChartTracks = 52,
+
     InfoMiscTopHotttness = 60,
     InfoMiscTopTerms = 61,
 
