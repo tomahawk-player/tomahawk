@@ -52,6 +52,7 @@ public slots:
     void artistImagesReturned();
     void similarArtistsReturned();
     void topTracksReturned();
+    void chartTopArtistsReturned();
 
     void namChangedSlot( QNetworkAccessManager *nam );
 
@@ -66,6 +67,7 @@ private:
     void fetchArtistImages( uint requestId, Tomahawk::InfoSystem::InfoRequestData requestData );
     void fetchSimilarArtists( uint requestId, Tomahawk::InfoSystem::InfoRequestData requestData );
     void fetchTopTracks( uint requestId, Tomahawk::InfoSystem::InfoRequestData requestData );
+    void fetchChartArtists( uint requestId, Tomahawk::InfoSystem::InfoRequestData requestData );
 
     void createScrobbler();
     void nowPlaying( const QVariant &input );
