@@ -109,5 +109,8 @@
         <file>data/sql/dbmigrate-25_to_26.sql</file>
         <file>data/js/tomahawk.js</file>
         <file>data/images/avatar_frame.png</file>
+        <file>data/images/drop-all-songs.png</file>
+        <file>data/images/drop-local-songs.png</file>
+        <file>data/images/drop-top-songs.png</file>
     </qresource>
 </RCC>

@@ -203,7 +203,7 @@ SourceDelegate::paint( QPainter* painter, const QStyleOptionViewItem& option, co
 
         QString text;
         QRect textRect;
-        QPixmap icon = QPixmap( ":/data/images/new-additions.png" ).scaledToHeight( 32, Qt::SmoothTransformation );
+        QPixmap icon;
 
         QMap< int, SourceTreeItem::DropType > dropTypeMap;
         dropTypeMap.insert( 0, SourceTreeItem::DropTypeThisTrack );
@@ -218,6 +218,13 @@ SourceDelegate::paint( QPainter* painter, const QStyleOptionViewItem& option, co
         dropTypeTextMap.insert( 2, "Artist" );
         dropTypeTextMap.insert( 3, "Local" );
         dropTypeTextMap.insert( 4, "Top 10" );
+
+        QMap< int, QString > dropTypeImageMap;
+        dropTypeImageMap.insert( 0, ":/data/images/new-additions.png" );
+        dropTypeImageMap.insert( 1, ":/data/images/new-additions.png" );
+        dropTypeImageMap.insert( 2, ":/data/images/drop-all-songs.png" );
+        dropTypeImageMap.insert( 3, ":/data/images/drop-local-songs.png" );
+        dropTypeImageMap.insert( 4, ":/data/images/drop-top-songs.png" );
 
         SourceTreeItem::DropTypes dropTypes = item->supportedDropTypes( m_dropMimeData );
 
@@ -241,114 +248,13 @@ SourceDelegate::paint( QPainter* painter, const QStyleOptionViewItem& option, co
                 painter->setFont( font );
 
             textRect = itemsRect.adjusted( 0, 4, 0, 0 );
-            painter->drawPixmap( textRect.x() + iconSpacing, textRect.y(), icon );
+            painter->drawPixmap( textRect.x() + iconSpacing, textRect.y(), QPixmap( dropTypeImageMap.value( i ) ).scaledToWidth( 32, Qt::SmoothTransformation ) );
 
             int textSpacing = ( itemWidth - painter->fontMetrics().width( text ) ) / 2;
             textRect.adjust( textSpacing, 32 + 4, 0, 0 );
             painter->drawText( textRect, text );
             count++;
         }
-
-
-//        if ( dropTypes.testFlag( SourceTreeItem::DropTypeThisTrack ) )
-//        {
-//            text = tr( "Track" );
-
-//            itemsRect.adjust( itemWidth * count, 0, itemWidth * count, 0 );
-//            if ( itemRect.contains( cursorPos ) )
-//            {
-//                painter->setFont( fontBold );
-//                m_hoveredDropType = SourceTreeItem::DropTypeThisTrack;
-//            }
-//            else
-//                painter->setFont( font );
-
-//            textRect = itemsRect.adjusted( 0, 4, 0, 0 );
-//            painter->drawPixmap( textRect.x() + iconSpacing, textRect.y(), icon );
-
-//            int textSpacing = ( itemWidth - painter->fontMetrics().width( text ) ) / 2;
-//            textRect.adjust( textSpacing, 32 + 4, 0, 0 );
-//            painter->drawText( textRect, text );
-//            count++;
-//        }
-//        if ( dropTypes.testFlag( SourceTreeItem::DropTypeThisAlbum ) )
-//        {
-//            text = tr( "Album" );
-//            itemsRect.adjust( itemWidth * count, 0, itemWidth * count, 0 );
-//            if ( itemRect.contains( cursorPos ) )
-//            {
-//                painter->setFont( fontBold );
-//                m_hoveredDropType = SourceTreeItem::DropTypeThisTrack;
-//            }
-//            else
-//                painter->setFont( font );
-
-//            textRect = itemsRect.adjusted( 0, 4, 0, 0 );
-//            painter->drawPixmap( textRect.x() + iconSpacing, textRect.y(), icon );
-
-//            int textSpacing = ( itemWidth - painter->fontMetrics().width( text ) ) / 2;
-//            textRect.adjust( textSpacing, 32 + 4, 0, 0 );
-//            painter->drawText( textRect, text );
-//            count++;
-//        }
-//        if ( dropTypes.testFlag( SourceTreeItem::DropTypeAllFromArtist ) )
-//        {
-//            text = tr( "Artist" );
-//            textRect = itemsRect.adjusted( itemWidth * count, 4, itemWidth * count, 0 );
-//            painter->drawPixmap( textRect.x() + iconSpacing, textRect.y(), icon );
-
-//            if ( itemRect.contains( cursorPos ) )
-//            {
-//                painter->setFont( fontBold );
-//                m_hoveredDropType = SourceTreeItem::DropTypeAllFromArtist;
-//            }
-//            else
-//                painter->setFont( font );
-
-//            int textSpacing = ( itemWidth - painter->fontMetrics().width( text ) ) / 2;
-//            textRect.adjust( textSpacing, 32 + 4, 0, 0 );
-//            painter->drawText( textRect, text );
-//            count++;
-//        }
-//        if ( dropTypes.testFlag( SourceTreeItem::DropTypeLocalItems ) )
-//        {
-//            text = tr( "Local" );
-//            textRect = itemsRect.adjusted( itemWidth * count, 4, itemWidth * count, 0 );
-//            painter->drawPixmap( textRect.x() + iconSpacing, textRect.y(), icon );
-
-//            if ( itemRect.contains( cursorPos ) )
-//            {
-//                painter->setFont( fontBold );
-//                m_hoveredDropType = SourceTreeItem::DropTypeLocalItems;
-//            }
-//            else
-//                painter->setFont( font );
-
-//            int textSpacing = ( itemWidth - painter->fontMetrics().width( text ) ) / 2;
-//            textRect.adjust( textSpacing, 32 + 4, 0, 0 );
-//            painter->drawText( textRect, text );
-//            count++;
-//        }
-//        if ( dropTypes.testFlag( SourceTreeItem::DropTypeTop50 ) )
-//        {
-//            text = tr( "Top 10" );
-//            textRect = itemsRect.adjusted( itemWidth * count, 4, itemWidth * count, 0 );
-//            painter->drawPixmap( textRect.x() + iconSpacing, textRect.y(), icon );
-
-//            if ( itemRect.contains( cursorPos ) )
-//            {
-//                painter->setFont( fontBold );
-//                m_hoveredDropType = SourceTreeItem::DropTypeTop50;
-//            }
-//            else
-//                painter->setFont( font );
-
-//            int textSpacing = ( itemWidth - painter->fontMetrics().width( text ) ) / 2;
-//            textRect.adjust( textSpacing, 32 + 4, 0, 0 );
-//            painter->drawText( textRect, text );
-//            count++;
-//        }
-
 
 
 //        QFont bold = painter->font();
