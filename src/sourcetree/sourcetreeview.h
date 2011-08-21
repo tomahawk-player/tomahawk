@@ -24,6 +24,7 @@
 
 #include "source.h"
 #include "sourcetree/sourcesmodel.h"
+#include "sourcetree/sourcedelegate.h"
 
 class CollectionModel;
 class PlaylistModel;
@@ -42,6 +43,9 @@ public slots:
     void showOfflineSources( bool offlineSourcesShown );
 
     void renamePlaylist();
+
+    void update( const QModelIndex &index );
+
 signals:
     void onOnline( const QModelIndex& index );
     void onOffline( const QModelIndex& index );

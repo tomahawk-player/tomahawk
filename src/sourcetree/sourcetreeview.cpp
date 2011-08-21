@@ -439,7 +439,7 @@ SourceTreeView::dragLeaveEvent( QDragLeaveEvent* event )
     m_dragging = false;
     setDirtyRegion( m_dropRect );
 
-    m_delegate->setDropHoverIndex( QModelIndex(), 0 );
+    m_delegate->dragLeaveEvent();
     dataChanged(m_dropIndex, m_dropIndex);
     m_dropIndex = QPersistentModelIndex();
 }
@@ -456,7 +456,6 @@ SourceTreeView::dragMoveEvent( QDragMoveEvent* event )
         setDirtyRegion( m_dropRect );
         const QPoint pos = event->pos();
         const QModelIndex index = indexAt( pos );
-        m_delegate->setDropHoverIndex( QModelIndex(), event->mimeData() );
         dataChanged(m_dropIndex, m_dropIndex);
         m_dropIndex = QPersistentModelIndex( index );
 
@@ -469,7 +468,7 @@ SourceTreeView::dragMoveEvent( QDragMoveEvent* event )
             if( item->willAcceptDrag( event->mimeData() ) )
             {
                 accept = true;
-                m_delegate->setDropHoverIndex( index, event->mimeData() );
+                m_delegate->hovered( index, event->mimeData() );
                 dataChanged(index, index);
             }
         }
@@ -497,7 +496,7 @@ SourceTreeView::dropEvent( QDropEvent* event )
     const QPoint pos = event->pos();
     const QModelIndex index = indexAt( pos );
 
-    if ( model()->data( index, SourcesModel::SourceTreeItemTypeRole ).toInt() == SourcesModel::PlaylistsCategory )
+    if ( model()->data( index, SourcesModel::SourceTreeItemTypeRole ).toInt() == SourcesModel::StaticPlaylist )
     {
         PlaylistItem* item = itemFromIndex< PlaylistItem >( index );
         Q_ASSERT( item );
@@ -506,10 +505,21 @@ SourceTreeView::dropEvent( QDropEvent* event )
         qDebug() << "dropType is " << m_delegate->hoveredDropType();
     }
 
-    QTreeView::dropEvent( event );
+    // Need to fake the dropevent because the treeview would reject it if it is outside the item (on the tree)
+    if ( pos.x() < 100 )
+    {
+        QDropEvent* newEvent = new QDropEvent( pos + QPoint( 100, 0 ), event->possibleActions(), event->mimeData(), event->mouseButtons(), event->keyboardModifiers(), event->type() );
+        QTreeView::dropEvent( newEvent );
+        delete newEvent;
+    }
+    else
+    {
+        QTreeView::dropEvent( event );
+    }
+
     m_dragging = false;
     m_dropIndex = QPersistentModelIndex();
-    m_delegate->setDropHoverIndex( QModelIndex(), 0 );
+    m_delegate->dragLeaveEvent();
     dataChanged( index, index );
 }
 
@@ -573,3 +583,8 @@ SourceTreeView::itemFromIndex( const QModelIndex& index ) const
     return item;
 }
 
+void
+SourceTreeView::update( const QModelIndex &index )
+{
+    dataChanged( index, index );
+}

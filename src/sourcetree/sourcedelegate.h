@@ -5,13 +5,18 @@
 #include "items/sourcetreeitem.h"
 
 #include <QStyledItemDelegate>
+#include <QPropertyAnimation>
+
+class AnimationHelper;
 
 class SourceDelegate : public QStyledItemDelegate
 {
+    Q_OBJECT
 public:
-    SourceDelegate( QAbstractItemView* parent = 0 ) : QStyledItemDelegate( parent ), m_parent( parent ) {}
+    SourceDelegate( QAbstractItemView* parent = 0 );
 
-    void setDropHoverIndex( const QModelIndex &index, const QMimeData *mimeData ) { m_dropHoverIndex = index; m_dropMimeData = const_cast< QMimeData* >( mimeData ); }
+    void hovered( const QModelIndex &index, const QMimeData *mimeData );
+    void dragLeaveEvent();
 
     SourceTreeItem::DropType hoveredDropType() const;
 
@@ -22,12 +27,16 @@ protected:
     virtual int dropTypeCount( SourceTreeItem* item ) const;
     virtual bool editorEvent( QEvent* event, QAbstractItemModel* model, const QStyleOptionViewItem& option, const QModelIndex& index );
 
+private slots:
+    void animationFinished( const QModelIndex& );
 private:
     QAbstractItemView* m_parent;
     mutable int m_iconHeight;
     QModelIndex m_dropHoverIndex;
+    QModelIndex m_newDropHoverIndex;
     QMimeData *m_dropMimeData;
     mutable SourceTreeItem::DropType m_hoveredDropType; // Hack to keep easily track of the current highlighted DropType in paint()
+    QMap< QModelIndex, AnimationHelper* > m_expandedMap;
 };
 
 #endif // SOURCEDELEGATE_H

@@ -7,12 +7,19 @@
 
 #include "utils/tomahawkutils.h"
 #include "items/temporarypageitem.h"
+#include "animationhelper.h"
 
 #include <QApplication>
 #include <QPainter>
 #include <QMouseEvent>
 
 #define TREEVIEW_INDENT_ADD -7
+
+SourceDelegate::SourceDelegate( QAbstractItemView* parent )
+    : QStyledItemDelegate( parent )
+    , m_parent( parent )
+{
+}
 
 QSize
 SourceDelegate::sizeHint( const QStyleOptionViewItem& option, const QModelIndex& index ) const
@@ -21,11 +28,19 @@ SourceDelegate::sizeHint( const QStyleOptionViewItem& option, const QModelIndex&
 
     if ( index.data( SourcesModel::SourceTreeItemTypeRole ).toInt() == SourcesModel::Collection )
         return QSize( option.rect.width(), 44 );
-    else if ( index == m_dropHoverIndex )
+    else if ( m_expandedMap.contains( index ) )
     {
-        QSize originalSize = QStyledItemDelegate::sizeHint( option, index );
-        qDebug() << "droptypecount is" << dropTypeCount( item );
-        return originalSize + QSize( 0, originalSize.height() * dropTypeCount( item ) );
+        if ( !m_expandedMap.value( index )->initialized() )
+        {
+            qDebug() << "droptypecount is " << dropTypeCount( item );
+            QSize originalSize = QStyledItemDelegate::sizeHint( option, index );
+//            QSize targetSize = originalSize + QSize( 0, originalSize.height() * dropTypeCount( item ) ); // useful for vertical menu
+            QSize targetSize = originalSize + QSize( 0, 56 );
+            m_expandedMap.value( index )->initialize( originalSize, targetSize, 500 );
+            m_expandedMap.value( index )->expand();
+        }
+        QMetaObject::invokeMethod( m_parent, "update", Qt::QueuedConnection, Q_ARG( QModelIndex, index ) );
+        return m_expandedMap.value( index )->size();
     }
     else
         return QStyledItemDelegate::sizeHint( option, index );
@@ -141,105 +156,298 @@ SourceDelegate::paint( QPainter* painter, const QStyleOptionViewItem& option, co
     }
     else if ( type == SourcesModel::StaticPlaylist || type == SourcesModel::CategoryAdd )
     {
+        if ( !( m_expandedMap.contains( index) && m_expandedMap.value( index )->partlyExpanded() && dropTypeCount( item ) > 0 ) )
+        {
+            QStyledItemDelegate::paint( painter, option, index );
+            return;
+        }
+
+        // Let Qt paint the original item. We add our stuff after it
+        QStyleOptionViewItem o = option;
+        o.rect.adjust( 0, 0, 0, - option.rect.height() + m_expandedMap.value( index )->originalSize().height() + 2 );
+        QStyledItemDelegate::paint( painter, o, index );
+
         painter->save();
 
-        QFont bold = painter->font();
-        bold.setBold( true );
 
-        QString name = index.data().toString();
-        if ( type == SourcesModel::StaticPlaylist )
+        // Get whole rect for the menu
+        QRect itemsRect = option.rect.adjusted( -option.rect.x(), m_expandedMap.value( index )->originalSize().height(), 0, 0 );
+
+        // draw the background
+
+        QLinearGradient linearGradient( 0, 0, 0, itemsRect.height() );
+        linearGradient.setColorAt( 0.0, QColor( 0xdb, 0x1b, 0x06 ) );
+        linearGradient.setColorAt( 1.0, QColor( 0xf4, 0x17, 0x05 ) );
+        painter->setBrush( linearGradient );
+        painter->drawRect( itemsRect );
+
+        int totalCount = dropTypeCount( item );
+        int itemWidth = itemsRect.width() / totalCount;
+        int iconSpacing = ( itemWidth - 32 ) / 2;
+
+        // adjust to one single entry
+        itemsRect.adjust( 0, 0, -itemsRect.width() + itemWidth, 0 );
+
+        int count = 0;
+
+        QPoint cursorPos = m_parent->mapFromGlobal( QCursor::pos() );
+
+        QPen pen(Qt::white);
+        painter->setPen(pen);
+
+        QFont font = painter->font();
+        font.setPixelSize( 10 );
+        painter->setFont( font );
+        QFont fontBold = painter->font();
+        fontBold.setBold( true );
+
+        QString text;
+        QRect textRect;
+        QPixmap icon = QPixmap( ":/data/images/new-additions.png" ).scaledToHeight( 32, Qt::SmoothTransformation );
+
+        QMap< int, SourceTreeItem::DropType > dropTypeMap;
+        dropTypeMap.insert( 0, SourceTreeItem::DropTypeThisTrack );
+        dropTypeMap.insert( 1, SourceTreeItem::DropTypeThisAlbum );
+        dropTypeMap.insert( 2, SourceTreeItem::DropTypeAllFromArtist );
+        dropTypeMap.insert( 3, SourceTreeItem::DropTypeLocalItems );
+        dropTypeMap.insert( 4, SourceTreeItem::DropTypeTop50 );
+
+        QMap< int, QString > dropTypeTextMap;
+        dropTypeTextMap.insert( 0, "Track" );
+        dropTypeTextMap.insert( 1, "Album" );
+        dropTypeTextMap.insert( 2, "Artist" );
+        dropTypeTextMap.insert( 3, "Local" );
+        dropTypeTextMap.insert( 4, "Top 10" );
+
+        SourceTreeItem::DropTypes dropTypes = item->supportedDropTypes( m_dropMimeData );
+
+        for ( int i = 0; i < 5; ++i )
         {
-            PlaylistItem* plItem = qobject_cast< PlaylistItem* >( item );
-            Q_ASSERT( plItem );
+            if ( !dropTypes.testFlag( dropTypeMap.value( i ) ) )
+                continue;
 
 
-            if ( plItem && !plItem->playlist().isNull() )
+            text = dropTypeTextMap.value( i );
+
+            if ( count > 0 )
+                itemsRect.adjust( itemWidth, 0, itemWidth, 0 );
+
+            if ( itemsRect.contains( cursorPos ) )
             {
-                name = plItem->playlist()->title();
+                painter->setFont( fontBold );
+                m_hoveredDropType = dropTypeMap.value( i );
             }
-        }
-        else if ( type == SourcesModel::CategoryAdd )
-        {
-            CategoryAddItem* cItem = qobject_cast< CategoryAddItem* >( item );
-            Q_ASSERT( cItem );
+            else
+                painter->setFont( font );
 
-            name = cItem->text();
-        }
+            textRect = itemsRect.adjusted( 0, 4, 0, 0 );
+            painter->drawPixmap( textRect.x() + iconSpacing, textRect.y(), icon );
 
-        int height = option.rect.height();
-        if ( index == m_dropHoverIndex )
-            height /= ( dropTypeCount( item ) + 1 );
-
-        QRect iconRect = option.rect.adjusted( 4, 1, -option.rect.width() + height - 2 + 4, -option.rect.height() + height -1 );
-
-        QPixmap avatar = index.data( Qt::DecorationRole ).value< QIcon >().pixmap( iconRect.width(), iconRect.height() );
-        painter->drawPixmap( iconRect, avatar.scaledToHeight( iconRect.height(), Qt::SmoothTransformation ) );
-
-        if ( ( option.state & QStyle::State_Selected ) == QStyle::State_Selected )
-        {
-            painter->setPen( o.palette.color( QPalette::HighlightedText ) );
+            int textSpacing = ( itemWidth - painter->fontMetrics().width( text ) ) / 2;
+            textRect.adjust( textSpacing, 32 + 4, 0, 0 );
+            painter->drawText( textRect, text );
+            count++;
         }
 
-        QRect textRect = option.rect.adjusted( iconRect.width() + 8, 2, /*-figWidth - 24*/ 0, 0 );
-        QString text = painter->fontMetrics().elidedText( name, Qt::ElideRight, textRect.width() );
-        painter->drawText( textRect, text );
 
-        if ( index == m_dropHoverIndex )
-        {
-            QPoint cursorPos = m_parent->mapFromGlobal( QCursor::pos() );
-            int hoveredDropTypeIndex = ( cursorPos.y() - o.rect.y() ) / height;
-            int verticalOffset = height * hoveredDropTypeIndex;
-            QRect selectionRect = o.rect.adjusted( 0, verticalOffset, 0, -o.rect.height() + height + verticalOffset );
-            painter->drawRoundedRect( selectionRect, 5, 5 );
+//        if ( dropTypes.testFlag( SourceTreeItem::DropTypeThisTrack ) )
+//        {
+//            text = tr( "Track" );
 
-            int count = 1;
-            SourceTreeItem::DropTypes dropTypes = item->supportedDropTypes( m_dropMimeData );
-            if ( dropTypes.testFlag( SourceTreeItem::DropTypeThisTrack ) )
-            {
-                text = tr( "This track" );
-                textRect = option.rect.adjusted( iconRect.width() + 8, 2 + ( count * height ), 0, 0 );
-                painter->drawText( textRect, text );
-                if ( count == hoveredDropTypeIndex )
-                    m_hoveredDropType = SourceTreeItem::DropTypeThisTrack;
-                count++;
-            }
-            if ( dropTypes.testFlag( SourceTreeItem::DropTypeThisAlbum ) )
-            {
-                text = tr( "This album" );
-                textRect = option.rect.adjusted( iconRect.width() + 8, 2 + ( count * height ), 0, 0 );
-                painter->drawText( textRect, text );
-                if ( count == hoveredDropTypeIndex )
-                    m_hoveredDropType = SourceTreeItem::DropTypeThisAlbum;
-                count++;
-            }
-            if ( dropTypes.testFlag( SourceTreeItem::DropTypeAllFromArtist ) )
-            {
-                text = tr( "All from artist" );
-                textRect = option.rect.adjusted( iconRect.width() + 8, 2 + ( count * height ), 0, 0 );
-                painter->drawText( textRect, text );
-                if ( count == hoveredDropTypeIndex )
-                    m_hoveredDropType = SourceTreeItem::DropTypeAllFromArtist;
-                count++;
-            }
-            if ( dropTypes.testFlag( SourceTreeItem::DropTypeLocalItems ) )
-            {
-                text = tr( "All local from Artist" );
-                textRect = option.rect.adjusted( iconRect.width() + 8, 2 + ( count * height ), 0, 0 );
-                painter->drawText( textRect, text );
-                if ( count == hoveredDropTypeIndex )
-                    m_hoveredDropType = SourceTreeItem::DropTypeLocalItems;
-                count++;
-            }
-            if ( dropTypes.testFlag( SourceTreeItem::DropTypeTop50 ) )
-            {
-                text = tr( "Top 50" );
-                textRect = option.rect.adjusted( iconRect.width() + 8, 2 + ( count * height ), 0, 0 );
-                painter->drawText( textRect, text );
-                if ( count == hoveredDropTypeIndex )
-                    m_hoveredDropType = SourceTreeItem::DropTypeTop50;
-                count++;
-            }
-        }
+//            itemsRect.adjust( itemWidth * count, 0, itemWidth * count, 0 );
+//            if ( itemRect.contains( cursorPos ) )
+//            {
+//                painter->setFont( fontBold );
+//                m_hoveredDropType = SourceTreeItem::DropTypeThisTrack;
+//            }
+//            else
+//                painter->setFont( font );
+
+//            textRect = itemsRect.adjusted( 0, 4, 0, 0 );
+//            painter->drawPixmap( textRect.x() + iconSpacing, textRect.y(), icon );
+
+//            int textSpacing = ( itemWidth - painter->fontMetrics().width( text ) ) / 2;
+//            textRect.adjust( textSpacing, 32 + 4, 0, 0 );
+//            painter->drawText( textRect, text );
+//            count++;
+//        }
+//        if ( dropTypes.testFlag( SourceTreeItem::DropTypeThisAlbum ) )
+//        {
+//            text = tr( "Album" );
+//            itemsRect.adjust( itemWidth * count, 0, itemWidth * count, 0 );
+//            if ( itemRect.contains( cursorPos ) )
+//            {
+//                painter->setFont( fontBold );
+//                m_hoveredDropType = SourceTreeItem::DropTypeThisTrack;
+//            }
+//            else
+//                painter->setFont( font );
+
+//            textRect = itemsRect.adjusted( 0, 4, 0, 0 );
+//            painter->drawPixmap( textRect.x() + iconSpacing, textRect.y(), icon );
+
+//            int textSpacing = ( itemWidth - painter->fontMetrics().width( text ) ) / 2;
+//            textRect.adjust( textSpacing, 32 + 4, 0, 0 );
+//            painter->drawText( textRect, text );
+//            count++;
+//        }
+//        if ( dropTypes.testFlag( SourceTreeItem::DropTypeAllFromArtist ) )
+//        {
+//            text = tr( "Artist" );
+//            textRect = itemsRect.adjusted( itemWidth * count, 4, itemWidth * count, 0 );
+//            painter->drawPixmap( textRect.x() + iconSpacing, textRect.y(), icon );
+
+//            if ( itemRect.contains( cursorPos ) )
+//            {
+//                painter->setFont( fontBold );
+//                m_hoveredDropType = SourceTreeItem::DropTypeAllFromArtist;
+//            }
+//            else
+//                painter->setFont( font );
+
+//            int textSpacing = ( itemWidth - painter->fontMetrics().width( text ) ) / 2;
+//            textRect.adjust( textSpacing, 32 + 4, 0, 0 );
+//            painter->drawText( textRect, text );
+//            count++;
+//        }
+//        if ( dropTypes.testFlag( SourceTreeItem::DropTypeLocalItems ) )
+//        {
+//            text = tr( "Local" );
+//            textRect = itemsRect.adjusted( itemWidth * count, 4, itemWidth * count, 0 );
+//            painter->drawPixmap( textRect.x() + iconSpacing, textRect.y(), icon );
+
+//            if ( itemRect.contains( cursorPos ) )
+//            {
+//                painter->setFont( fontBold );
+//                m_hoveredDropType = SourceTreeItem::DropTypeLocalItems;
+//            }
+//            else
+//                painter->setFont( font );
+
+//            int textSpacing = ( itemWidth - painter->fontMetrics().width( text ) ) / 2;
+//            textRect.adjust( textSpacing, 32 + 4, 0, 0 );
+//            painter->drawText( textRect, text );
+//            count++;
+//        }
+//        if ( dropTypes.testFlag( SourceTreeItem::DropTypeTop50 ) )
+//        {
+//            text = tr( "Top 10" );
+//            textRect = itemsRect.adjusted( itemWidth * count, 4, itemWidth * count, 0 );
+//            painter->drawPixmap( textRect.x() + iconSpacing, textRect.y(), icon );
+
+//            if ( itemRect.contains( cursorPos ) )
+//            {
+//                painter->setFont( fontBold );
+//                m_hoveredDropType = SourceTreeItem::DropTypeTop50;
+//            }
+//            else
+//                painter->setFont( font );
+
+//            int textSpacing = ( itemWidth - painter->fontMetrics().width( text ) ) / 2;
+//            textRect.adjust( textSpacing, 32 + 4, 0, 0 );
+//            painter->drawText( textRect, text );
+//            count++;
+//        }
+
+
+
+//        QFont bold = painter->font();
+//        bold.setBold( true );
+
+//        QString name = index.data().toString();
+//        if ( type == SourcesModel::StaticPlaylist )
+//        {
+//            PlaylistItem* plItem = qobject_cast< PlaylistItem* >( item );
+//            Q_ASSERT( plItem );
+
+
+//            if ( plItem && !plItem->playlist().isNull() )
+//            {
+//                name = plItem->playlist()->title();
+//            }
+//        }
+//        else if ( type == SourcesModel::CategoryAdd )
+//        {
+//            CategoryAddItem* cItem = qobject_cast< CategoryAddItem* >( item );
+//            Q_ASSERT( cItem );
+
+//            name = cItem->text();
+//        }
+
+//        int height = option.rect.height();
+//        if ( m_expandedMap.contains( index ) && m_expandedMap.value( index )->partlyExpanded() )
+//            height /= ( dropTypeCount( item ) + 1 );
+
+//        QRect iconRect = option.rect.adjusted( 4, 1, -option.rect.width() + option.decorationSize.width() - 2 + 4, -option.rect.height() + option.decorationSize.height() -1 );
+
+//        QPixmap avatar = index.data( Qt::DecorationRole ).value< QIcon >().pixmap( iconRect.width(), iconRect.height() );
+//        painter->drawPixmap( iconRect, avatar.scaledToHeight( iconRect.height(), Qt::SmoothTransformation ) );
+
+//        if ( ( option.state & QStyle::State_Selected ) == QStyle::State_Selected )
+//        {
+//            painter->setPen( o.palette.color( QPalette::HighlightedText ) );
+//        }
+
+//        QRect textRect = option.rect.adjusted( iconRect.width() + 8, 2, /*-figWidth - 24*/ 0, 0 );
+//        QString text = painter->fontMetrics().elidedText( name, Qt::ElideRight, textRect.width() );
+//        painter->drawText( textRect, text );
+
+//        if ( m_expandedMap.contains( index ) && m_expandedMap.value( index )->partlyExpanded() )
+//        {
+//            QPoint cursorPos = m_parent->mapFromGlobal( QCursor::pos() );
+//            int hoveredDropTypeIndex = ( cursorPos.y() - o.rect.y() ) / height;
+//            int verticalOffset = height * hoveredDropTypeIndex;
+//            QRect selectionRect = o.rect.adjusted( 0, verticalOffset, 0, -o.rect.height() + height + verticalOffset );
+//            painter->drawRoundedRect( selectionRect, 5, 5 );
+
+//            int count = 1;
+//            SourceTreeItem::DropTypes dropTypes = item->supportedDropTypes( m_dropMimeData );
+//            if ( dropTypes.testFlag( SourceTreeItem::DropTypeThisTrack ) )
+//            {
+//                text = tr( "This track" );
+//                textRect = option.rect.adjusted( iconRect.width() + 8, 2 + ( count * height ), 0, 0 );
+//                painter->drawText( textRect, text );
+//                if ( count == hoveredDropTypeIndex )
+//                    m_hoveredDropType = SourceTreeItem::DropTypeThisTrack;
+//                count++;
+//            }
+//            if ( dropTypes.testFlag( SourceTreeItem::DropTypeThisAlbum ) )
+//            {
+//                text = tr( "This album" );
+//                textRect = option.rect.adjusted( iconRect.width() + 8, 2 + ( count * height ), 0, 0 );
+//                painter->drawText( textRect, text );
+//                if ( count == hoveredDropTypeIndex )
+//                    m_hoveredDropType = SourceTreeItem::DropTypeThisAlbum;
+//                count++;
+//            }
+//            if ( dropTypes.testFlag( SourceTreeItem::DropTypeAllFromArtist ) )
+//            {
+//                text = tr( "All from artist" );
+//                textRect = option.rect.adjusted( iconRect.width() + 8, 2 + ( count * height ), 0, 0 );
+//                painter->drawText( textRect, text );
+//                if ( count == hoveredDropTypeIndex )
+//                    m_hoveredDropType = SourceTreeItem::DropTypeAllFromArtist;
+//                count++;
+//            }
+//            if ( dropTypes.testFlag( SourceTreeItem::DropTypeLocalItems ) )
+//            {
+//                text = tr( "All local from Artist" );
+//                textRect = option.rect.adjusted( iconRect.width() + 8, 2 + ( count * height ), 0, 0 );
+//                painter->drawText( textRect, text );
+//                if ( count == hoveredDropTypeIndex )
+//                    m_hoveredDropType = SourceTreeItem::DropTypeLocalItems;
+//                count++;
+//            }
+//            if ( dropTypes.testFlag( SourceTreeItem::DropTypeTop50 ) )
+//            {
+//                text = tr( "Top 50" );
+//                textRect = option.rect.adjusted( iconRect.width() + 8, 2 + ( count * height ), 0, 0 );
+//                painter->drawText( textRect, text );
+//                if ( count == hoveredDropTypeIndex )
+//                    m_hoveredDropType = SourceTreeItem::DropTypeTop50;
+//                count++;
+//            }
+//        }
 
         painter->restore();
 
@@ -334,4 +542,41 @@ SourceTreeItem::DropType
 SourceDelegate::hoveredDropType() const
 {
     return m_hoveredDropType;
+}
+
+void
+SourceDelegate::hovered(const QModelIndex &index, const QMimeData *mimeData)
+{
+    if ( !index.isValid() )
+    {
+        return;
+    }
+    if ( !m_expandedMap.contains( index ) )
+    {
+        foreach ( AnimationHelper *helper, m_expandedMap )
+        {
+            helper->collapse();
+        }
+
+        m_newDropHoverIndex = index;
+        m_dropMimeData = const_cast< QMimeData* >( mimeData );
+        m_expandedMap.insert( m_newDropHoverIndex, new AnimationHelper( m_newDropHoverIndex ) );
+        connect( m_expandedMap.value( m_newDropHoverIndex ), SIGNAL( finished( QModelIndex ) ), SLOT( animationFinished( QModelIndex ) ) );
+
+    }
+}
+
+void
+SourceDelegate::dragLeaveEvent()
+{
+    foreach ( AnimationHelper *helper, m_expandedMap )
+    {
+        helper->collapse( true );
+    }
+}
+
+void
+SourceDelegate::animationFinished( const QModelIndex& index )
+{
+    delete m_expandedMap.take( index );
 }

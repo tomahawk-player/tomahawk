@@ -58,6 +58,7 @@ SET( tomahawkSourcesGui ${tomahawkSourcesGui}
      sourcetree/sourcesproxymodel.cpp
      sourcetree/sourcetreeview.cpp
      sourcetree/sourcedelegate.cpp
+     sourcetree/animationhelper.cpp
      sourcetree/items/sourcetreeitem.cpp
      sourcetree/items/collectionitem.cpp
      sourcetree/items/playlistitems.cpp
@@ -103,6 +104,8 @@ SET( tomahawkHeadersGui ${tomahawkHeadersGui}
      sourcetree/sourcesmodel.h
      sourcetree/sourcesproxymodel.h
      sourcetree/sourcetreeview.h
+     sourcetree/sourcedelegate.h
+     sourcetree/animationhelper.h
      sourcetree/items/sourcetreeitem.h
      sourcetree/items/collectionitem.h
      sourcetree/items/playlistitems.h
