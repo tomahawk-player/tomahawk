@@ -196,22 +196,7 @@ Pipeline::reportResults( QID qid, const QList< result_ptr >& results )
         }
     }
 
-    if ( decQIDState( q ) == 0 )
-    {
-        if ( !q->solved() || q->isFullTextQuery() )
-            q->onResolvingFinished();
-
-        if ( !m_queries_temporary.contains( q ) )
-            m_qids.remove( q->id() );
-        if ( m_qidsTimeout.contains( q->id() ) )
-            m_qidsTimeout.remove( q->id() );
-
-        shuntNext();
-    }
-    else
-    {
-        new FuncTimeout( 0, boost::bind( &Pipeline::timeoutShunt, this, q ), this );
-    }
+    decQIDState( q );
 }
 
 
@@ -260,8 +245,7 @@ Pipeline::timeoutShunt( const query_ptr& q )
     // are we still waiting for a timeout?
     if ( m_qidsTimeout.contains( q->id() ) )
     {
-        m_qidsTimeout.remove( q->id() );
-        shunt( q );
+        decQIDState( q );
     }
 }
 
@@ -278,7 +262,7 @@ Pipeline::shunt( const query_ptr& q )
 
     if ( r )
     {
-        qDebug() << "Dispatching to resolver" << r->name() << q->toString() << q->solved() << q->id();
+        tDebug() << "Dispatching to resolver" << r->name() << q->toString() << q->solved() << q->id();
 
         q->setCurrentResolver( r );
         r->resolve( q );
@@ -372,6 +356,25 @@ Pipeline::decQIDState( const Tomahawk::query_ptr& query )
     {
         m_qidsState.remove( query->id() );
 //        qDebug() << "Queries running:" << m_qidsState.count();
+    }
+
+    if ( state == 0 )
+    {
+        if ( !query->solved() || query->isFullTextQuery() )
+            query->onResolvingFinished();
+
+        if ( !m_queries_temporary.contains( query ) )
+            m_qids.remove( query->id() );
+        if ( m_qidsTimeout.contains( query->id() ) )
+            m_qidsTimeout.remove( query->id() );
+
+        new FuncTimeout( 0, boost::bind( &Pipeline::shuntNext, this ), this );
+    }
+    else
+    {
+        if ( m_qidsTimeout.contains( query->id() ) )
+            m_qidsTimeout.remove( query->id() );
+        new FuncTimeout( 0, boost::bind( &Pipeline::shunt, this, query ), this );
     }
 
     return state;
