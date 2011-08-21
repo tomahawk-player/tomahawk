@@ -81,8 +81,11 @@ TreeProxyModel::filterAcceptsRow( int sourceRow, const QModelIndex& sourceParent
         QList< Tomahawk::result_ptr > rl = m_cache.values( sourceParent );
         foreach ( const Tomahawk::result_ptr& result, rl )
         {
-            if ( result->track() == pi->result()->track() )
+            if ( result->track() == pi->result()->track() &&
+               ( result->albumpos() == pi->result()->albumpos() || result->albumpos() == 0 ) )
+            {
                 return ( result.data() == pi->result().data() );
+            }
         }
 
         for ( int i = 0; i < sourceModel()->rowCount( sourceParent ); i++ )
