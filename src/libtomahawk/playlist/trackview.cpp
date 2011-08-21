@@ -378,7 +378,7 @@ TrackView::startDrag( Qt::DropActions supportedActions )
 
     QDrag* drag = new QDrag( this );
     drag->setMimeData( data );
-    const QPixmap p = TomahawkUtils::createDragPixmap( indexes.count() );
+    const QPixmap p = TomahawkUtils::createDragPixmap( TomahawkUtils::MediaTypeTrack, indexes.count() );
     drag->setPixmap( p );
     drag->setHotSpot( QPoint( -20, -20 ) );
 

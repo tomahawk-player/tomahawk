@@ -307,7 +307,7 @@ alphaBlend( const QColor& colorFrom, const QColor& colorTo, float opacity )
 
 
 QPixmap
-createDragPixmap( int itemCount )
+createDragPixmap( MediaType type, int itemCount )
 {
     // If more than one item is dragged, align the items inside a
     // rectangular grid. The maximum grid size is limited to 5 x 5 items.
@@ -344,11 +344,26 @@ createDragPixmap( int itemCount )
 
     QPainter painter( &dragPixmap );
     painter.setRenderHint( QPainter::Antialiasing );
+
+    QPixmap pixmap;
+    switch ( type )
+    {
+    case MediaTypeArtist:
+        pixmap = QPixmap( ":/data/images/artist-icon.png" ).scaledToWidth( size, Qt::SmoothTransformation );
+        break;
+    case MediaTypeAlbum:
+        pixmap = QPixmap( ":/data/images/album-icon.png" ).scaledToWidth( size, Qt::SmoothTransformation );
+        break;
+    case MediaTypeTrack:
+        pixmap = QPixmap( QString( ":/data/images/track-icon-%2x%2.png" ).arg( size ) );
+        break;
+    }
+
     int x = 0;
     int y = 0;
     for( int i = 0; i < itemCount; ++i )
     {
-        const QPixmap pixmap = QPixmap( QString( ":/data/images/track-icon-%2x%2.png" ).arg( size ) );
+
         painter.drawPixmap( x, y, pixmap );
 
         x += size + 1;

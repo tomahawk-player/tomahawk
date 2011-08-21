@@ -349,6 +349,7 @@ TreeModel::mimeData( const QModelIndexList &indexes ) const
 
     // lets try with album only
     fail = false;
+    resultData.clear();
     foreach ( const QModelIndex& i, indexes)
     {
         if ( i.column() > 0 || indexes.contains( i.parent() ) )
@@ -380,6 +381,7 @@ TreeModel::mimeData( const QModelIndexList &indexes ) const
 
     // lets try with tracks only
     fail = false;
+    resultData.clear();
     foreach ( const QModelIndex& i, indexes)
     {
         if ( i.column() > 0 || indexes.contains( i.parent() ) )
@@ -408,6 +410,7 @@ TreeModel::mimeData( const QModelIndexList &indexes ) const
     }
 
     // Ok... we have to use mixed
+    resultData.clear();
     foreach ( const QModelIndex& i, indexes )
     {
         if ( i.column() > 0 || indexes.contains( i.parent() ) )

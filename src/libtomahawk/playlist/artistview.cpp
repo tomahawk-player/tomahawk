@@ -215,7 +215,15 @@ ArtistView::startDrag( Qt::DropActions supportedActions )
 
     QDrag* drag = new QDrag( this );
     drag->setMimeData( data );
-    const QPixmap p = TomahawkUtils::createDragPixmap( indexes.count() );
+
+    QPixmap p;
+    if ( data->hasFormat( "application/tomahawk.metadata.artist" ) )
+        p = TomahawkUtils::createDragPixmap( TomahawkUtils::MediaTypeArtist, indexes.count() );
+    else if ( data->hasFormat( "application/tomahawk.metadata.album" ) )
+        p = TomahawkUtils::createDragPixmap( TomahawkUtils::MediaTypeAlbum, indexes.count() );
+    else
+        p = TomahawkUtils::createDragPixmap( TomahawkUtils::MediaTypeTrack, indexes.count() );
+
     drag->setPixmap( p );
     drag->setHotSpot( QPoint( -20, -20 ) );
 
