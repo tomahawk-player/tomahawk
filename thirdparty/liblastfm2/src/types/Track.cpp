@@ -51,11 +51,32 @@ lastfm::Track::Track( const QDomElement& e )
     d = new TrackData;
 
     if (e.isNull()) { d->null = true; return; }
-    
-    d->artist = e.namedItem( "artist" ).toElement().text();
+
+    //TODO: not sure of lastfm's xml changed, but <track> nodes have
+    // <artist><name>Artist Name</name><mbid>..<url></artist>
+    // as children isntead of <artist>Artist Name<artist>
+    // we detect both here.
+    QDomNode artistName = e.namedItem( "artist" ).namedItem( "name" );
+    if( artistName.isNull() ) {
+        d->artist = e.namedItem( "artist" ).toElement().text();
+    } else {
+        d->artist = artistName.toElement().text();
+    }
+
     d->albumArtist = e.namedItem( "albumArtist" ).toElement().text();
     d->album =  e.namedItem( "album" ).toElement().text();
-    d->title = e.namedItem( "track" ).toElement().text();
+
+
+    //TODO: not sure if lastfm xml's changed, or if chart.getTopTracks uses
+    //a different format, but the title is stored at
+    //<track><name>Title</name>...
+    //we detect both here.
+    QDomNode trackTitle = e.namedItem( "name" );
+    if( trackTitle.isNull() )
+        d->title = e.namedItem( "track" ).toElement().text();
+    else
+        d->title = trackTitle.toElement().text();
+
     d->correctedArtist = e.namedItem( "correctedArtist" ).toElement().text();
     d->correctedAlbumArtist = e.namedItem( "correctedAlbumArtist" ).toElement().text();
     d->correctedAlbum =  e.namedItem( "correctedAlbum" ).toElement().text();
