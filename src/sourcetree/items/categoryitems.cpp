@@ -133,6 +133,92 @@ CategoryAddItem::willAcceptDrag( const QMimeData* data ) const
 bool
 CategoryAddItem::dropMimeData( const QMimeData* data, Qt::DropAction )
 {
+    // As DropJob always converts dropped items to query_ptrs for all tracks we need to extract album/artist metadata ourselves for stations
+    if ( m_categoryType == SourcesModel::StationsCategory &&
+         ( data->hasFormat( "application/tomahawk.metadata.artist" ) || data->hasFormat( "application/tomahawk.metadata.album" ) ) )
+    {
+        QByteArray mimeData;
+        if ( data->hasFormat( "application/tomahawk.metadata.artist" ) )
+            mimeData = data->data( "application/tomahawk.metadata.artist" );
+        else if ( data->hasFormat( "application/tomahawk.metadata.album" ) )
+            mimeData = data->data( "application/tomahawk.metadata.album" );
+
+        QDataStream stream( &mimeData, QIODevice::ReadOnly );
+
+        dynplaylist_ptr newpl = DynamicPlaylist::create( SourceList::instance()->getLocal(), uuid(), QString(), "", SourceList::instance()->getLocal()->friendlyName(), OnDemand, false );
+        newpl->setMode( OnDemand );
+
+        QString firstArtist;
+        // now we want to add each artist as a filter...
+        QList< dyncontrol_ptr > contrls;
+        while ( !stream.atEnd() )
+        {
+            QString artist;
+            stream >> artist;
+            if ( firstArtist.isEmpty() )
+                firstArtist = artist;
+
+            QString album;
+            if ( data->hasFormat( "application/tomahawk.metadata.album" ) )
+                stream >> album; // throw away album title... we only create artists filters for now
+
+            dyncontrol_ptr c = newpl->generator()->createControl( "Artist" );
+            c->setInput( QString( "%1" ).arg( artist ) );
+            contrls << c;
+        }
+
+        QString name = firstArtist.isEmpty() ? tr( "New Station" ) : tr( "%1 Station" ).arg( firstArtist );
+        newpl->rename( name );
+        newpl->createNewRevision( uuid(), newpl->currentrevision(), newpl->type(), contrls );
+
+        ViewManager::instance()->show( newpl );
+        return true;
+    }
+
+    // This could be needed once echonest supports filtering by album.
+    // If they never will, or if they do and this code still is not used, throw it away!
+    // If you enable this, make sure to remove the checks for album above.
+
+    /* if ( m_categoryType == SourcesModel::StationsCategory && data->hasFormat( "application/tomahawk.metadata.album" ) )
+    {
+        QByteArray mimeData = data->data( "application/tomahawk.metadata.album" );
+        QDataStream stream( &mimeData, QIODevice::ReadOnly );
+
+        dynplaylist_ptr newpl = DynamicPlaylist::create( SourceList::instance()->getLocal(), uuid(), QString(), "", SourceList::instance()->getLocal()->friendlyName(), OnDemand, false );
+        newpl->setMode( OnDemand );
+
+        QString firstAlbum;
+        // now we want to add each artist as a filter...
+        QList< dyncontrol_ptr > contrls;
+        while ( !stream.atEnd() )
+        {
+            QString artist;
+            stream >> artist;
+            QString album;
+            stream >> album;
+
+            if ( firstAlbum.isEmpty() )
+            {
+                firstAlbum = album;
+            }
+
+            dyncontrol_ptr c = newpl->generator()->createControl( "Album" );
+            c->setInput( QString( "%1" ).arg( artist ) );
+            contrls << c;
+        }
+
+        QString name = firstAlbum.isEmpty() ? tr( "New Station" ) : tr( "%1 Station" ).arg( firstAlbum );
+        newpl->rename( name );
+        newpl->createNewRevision( uuid(), newpl->currentrevision(), newpl->type(), contrls );
+
+        ViewManager::instance()->show( newpl );
+        // Give a shot to try to rename it. The playlist has to be created first. ugly.
+        QTimer::singleShot( 300, APP->mainWindow()->sourceTreeView(), SLOT( renamePlaylist() ) );
+        return true;
+
+    } */
+
+
     // Create a new playlist seeded with these items
     DropJob *dj = new DropJob();
     connect( dj, SIGNAL( tracks( QList< Tomahawk::query_ptr > ) ), this, SLOT( parsedDroppedTracks( QList< Tomahawk::query_ptr > ) ) );
