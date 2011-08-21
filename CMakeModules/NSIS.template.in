@@ -203,7 +203,7 @@ Function PageReinstall
       IntCmp $R0 ${VER_MINOR} build_check new_version older_version
    build_check:
       ReadRegDWORD $R0 HKLM "Software\Tomahawk" "VersionBuild"
-      IntCmp $R0 ${VER_BUILD} new_version older_version
+      IntCmp $R0 ${VER_BUILD} same_version new_version older_version
 
    new_version:
       !insertmacro INSTALLOPTIONS_WRITE "NSIS.InstallOptions.ini" "Field 1" "Text" "An older version of Tomahawk is installed on your system. It is recommended that you uninstall the current version before installing. Select the operation you want to perform and click Next to continue."
