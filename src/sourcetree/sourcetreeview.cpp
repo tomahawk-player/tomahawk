@@ -498,9 +498,10 @@ SourceTreeView::dropEvent( QDropEvent* event )
     const QPoint pos = event->pos();
     const QModelIndex index = indexAt( pos );
 
-    if ( model()->data( index, SourcesModel::SourceTreeItemTypeRole ).toInt() == SourcesModel::StaticPlaylist )
+    if ( model()->data( index, SourcesModel::SourceTreeItemTypeRole ).toInt() == SourcesModel::StaticPlaylist
+         || model()->data( index, SourcesModel::SourceTreeItemTypeRole ).toInt() == SourcesModel::CategoryAdd )
     {
-        PlaylistItem* item = itemFromIndex< PlaylistItem >( index );
+        SourceTreeItem* item = itemFromIndex< SourceTreeItem >( index );
         Q_ASSERT( item );
 
         item->setDropType( m_delegate->hoveredDropType() );

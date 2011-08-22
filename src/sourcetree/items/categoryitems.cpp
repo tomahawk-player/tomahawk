@@ -142,7 +142,21 @@ CategoryAddItem::willAcceptDrag( const QMimeData* data ) const
 SourceTreeItem::DropTypes
 CategoryAddItem::supportedDropTypes( const QMimeData* data ) const
 {
-    return DropTypesNone;
+    SourceTreeItem::DropTypes types = DropTypesNone;
+
+    if ( m_categoryType == SourcesModel::PlaylistsCategory )
+    {
+        if ( data->hasFormat( "application/tomahawk.query.list" ) )
+            return types | DropTypeThisTrack | DropTypeThisAlbum | DropTypeAllFromArtist | DropTypeLocalItems | DropTypeTop50;
+        else if ( data->hasFormat( "application/tomahawk.result.list" ) )
+            return types | DropTypeThisTrack | DropTypeThisAlbum | DropTypeAllFromArtist | DropTypeLocalItems | DropTypeTop50;
+        else if ( data->hasFormat( "application/tomahawk.metadata.album" ) )
+            return types | DropTypeThisAlbum | DropTypeAllFromArtist | DropTypeLocalItems | DropTypeTop50;
+        else if ( data->hasFormat( "application/tomahawk.metadata.artist" ) )
+            return types | DropTypeAllFromArtist | DropTypeLocalItems | DropTypeTop50;
+    }
+
+    return types;
 }
 
 
@@ -237,7 +251,23 @@ CategoryAddItem::dropMimeData( const QMimeData* data, Qt::DropAction )
     // Create a new playlist seeded with these items
     DropJob *dj = new DropJob();
     connect( dj, SIGNAL( tracks( QList< Tomahawk::query_ptr > ) ), this, SLOT( parsedDroppedTracks( QList< Tomahawk::query_ptr > ) ) );
-    dj->tracksFromMimeData( data );
+    if ( dropType() == DropTypeAllFromArtist )
+        dj->setGetWholeArtists( true );
+    if ( dropType() == DropTypeThisAlbum )
+        dj->setGetWholeAlbums( true );
+
+    if ( dropType() == DropTypeLocalItems )
+    {
+        dj->setGetWholeArtists( true );
+        dj->tracksFromMimeData( data, false, true );
+    }
+    else if ( dropType() == DropTypeTop50 )
+    {
+        dj->setGetWholeArtists( true );
+        dj->tracksFromMimeData( data, false, false, true );
+    }
+    else
+        dj->tracksFromMimeData( data, false, false );
 
     return true;
 }

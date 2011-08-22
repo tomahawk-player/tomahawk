@@ -49,10 +49,11 @@ SourceDelegate::sizeHint( const QStyleOptionViewItem& option, const QModelIndex&
     {
         if ( !m_expandedMap.value( index )->initialized() )
         {
-            qDebug() << "droptypecount is " << dropTypeCount( item );
+            int dropTypes = dropTypeCount( item );
+            qDebug() << "droptypecount is " << dropTypes;
             QSize originalSize = QStyledItemDelegate::sizeHint( option, index );
 //            QSize targetSize = originalSize + QSize( 0, originalSize.height() * dropTypeCount( item ) ); // useful for vertical menu
-            QSize targetSize = originalSize + QSize( 0, 56 );
+            QSize targetSize = originalSize + QSize( 0, dropTypes == 0 ? 0 : 56 );
             m_expandedMap.value( index )->initialize( originalSize, targetSize, 500 );
             m_expandedMap.value( index )->expand();
         }
