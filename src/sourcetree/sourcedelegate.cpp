@@ -19,6 +19,23 @@ SourceDelegate::SourceDelegate( QAbstractItemView* parent )
     : QStyledItemDelegate( parent )
     , m_parent( parent )
 {
+    m_dropTypeMap.insert( 0, SourceTreeItem::DropTypeThisTrack );
+    m_dropTypeMap.insert( 1, SourceTreeItem::DropTypeThisAlbum );
+    m_dropTypeMap.insert( 2, SourceTreeItem::DropTypeAllFromArtist );
+    m_dropTypeMap.insert( 3, SourceTreeItem::DropTypeLocalItems );
+    m_dropTypeMap.insert( 4, SourceTreeItem::DropTypeTop50 );
+
+    m_dropTypeTextMap.insert( 0, "Track" );
+    m_dropTypeTextMap.insert( 1, "Album" );
+    m_dropTypeTextMap.insert( 2, "Artist" );
+    m_dropTypeTextMap.insert( 3, "Local" );
+    m_dropTypeTextMap.insert( 4, "Top 10" );
+
+    m_dropTypeImageMap.insert( 0, QPixmap( ":/data/images/new-additions.png" ).scaledToWidth( 32, Qt::SmoothTransformation ) );
+    m_dropTypeImageMap.insert( 1, QPixmap( ":/data/images/new-additions.png" ).scaledToWidth( 32, Qt::SmoothTransformation ) );
+    m_dropTypeImageMap.insert( 2, QPixmap( ":/data/images/drop-all-songs.png" ).scaledToWidth( 32, Qt::SmoothTransformation ) );
+    m_dropTypeImageMap.insert( 3, QPixmap( ":/data/images/drop-local-songs.png" ).scaledToWidth( 32, Qt::SmoothTransformation ) );
+    m_dropTypeImageMap.insert( 4, QPixmap( ":/data/images/drop-top-songs.png" ).scaledToWidth( 32, Qt::SmoothTransformation ) );
 }
 
 QSize
@@ -169,18 +186,24 @@ SourceDelegate::paint( QPainter* painter, const QStyleOptionViewItem& option, co
 
         painter->save();
 
-
         // Get whole rect for the menu
         QRect itemsRect = option.rect.adjusted( -option.rect.x(), m_expandedMap.value( index )->originalSize().height(), 0, 0 );
 
+        QPoint cursorPos = m_parent->mapFromGlobal( QCursor::pos() );
+        bool cursorInRect = false;
+        if ( itemsRect.contains( cursorPos ) )
+            cursorInRect = true;
+
         // draw the background
 
-        QLinearGradient linearGradient( 0, 0, 0, itemsRect.height() );
+        QLinearGradient linearGradient( itemsRect.topLeft(), itemsRect.bottomLeft() );
         linearGradient.setColorAt( 0.0, QColor( 0xdb, 0x1b, 0x06 ) );
-        linearGradient.setColorAt( 1.0, QColor( 0xf4, 0x17, 0x05 ) );
+//        linearGradient.setColorAt( 1.0, QColor( 0xf4, 0x17, 0x05 ) );
+        linearGradient.setColorAt( 1.0, Qt::black );
         painter->setBrush( linearGradient );
         painter->drawRect( itemsRect );
 
+        // calculate sizes for the icons
         int totalCount = dropTypeCount( item );
         int itemWidth = itemsRect.width() / totalCount;
         int iconSpacing = ( itemWidth - 32 ) / 2;
@@ -189,8 +212,6 @@ SourceDelegate::paint( QPainter* painter, const QStyleOptionViewItem& option, co
         itemsRect.adjust( 0, 0, -itemsRect.width() + itemWidth, 0 );
 
         int count = 0;
-
-        QPoint cursorPos = m_parent->mapFromGlobal( QCursor::pos() );
 
         QPen pen(Qt::white);
         painter->setPen(pen);
@@ -201,58 +222,34 @@ SourceDelegate::paint( QPainter* painter, const QStyleOptionViewItem& option, co
         QFont fontBold = painter->font();
         fontBold.setBold( true );
 
-        QString text;
         QRect textRect;
-        QPixmap icon;
-
-        QMap< int, SourceTreeItem::DropType > dropTypeMap;
-        dropTypeMap.insert( 0, SourceTreeItem::DropTypeThisTrack );
-        dropTypeMap.insert( 1, SourceTreeItem::DropTypeThisAlbum );
-        dropTypeMap.insert( 2, SourceTreeItem::DropTypeAllFromArtist );
-        dropTypeMap.insert( 3, SourceTreeItem::DropTypeLocalItems );
-        dropTypeMap.insert( 4, SourceTreeItem::DropTypeTop50 );
-
-        QMap< int, QString > dropTypeTextMap;
-        dropTypeTextMap.insert( 0, "Track" );
-        dropTypeTextMap.insert( 1, "Album" );
-        dropTypeTextMap.insert( 2, "Artist" );
-        dropTypeTextMap.insert( 3, "Local" );
-        dropTypeTextMap.insert( 4, "Top 10" );
-
-        QMap< int, QString > dropTypeImageMap;
-        dropTypeImageMap.insert( 0, ":/data/images/new-additions.png" );
-        dropTypeImageMap.insert( 1, ":/data/images/new-additions.png" );
-        dropTypeImageMap.insert( 2, ":/data/images/drop-all-songs.png" );
-        dropTypeImageMap.insert( 3, ":/data/images/drop-local-songs.png" );
-        dropTypeImageMap.insert( 4, ":/data/images/drop-top-songs.png" );
 
         SourceTreeItem::DropTypes dropTypes = item->supportedDropTypes( m_dropMimeData );
 
         for ( int i = 0; i < 5; ++i )
         {
-            if ( !dropTypes.testFlag( dropTypeMap.value( i ) ) )
+            if ( !dropTypes.testFlag( m_dropTypeMap.value( i ) ) )
                 continue;
 
-
-            text = dropTypeTextMap.value( i );
 
             if ( count > 0 )
                 itemsRect.adjust( itemWidth, 0, itemWidth, 0 );
 
-            if ( itemsRect.contains( cursorPos ) )
+            if ( itemsRect.contains( cursorPos ) | !cursorInRect )
             {
                 painter->setFont( fontBold );
-                m_hoveredDropType = dropTypeMap.value( i );
+                m_hoveredDropType = m_dropTypeMap.value( i );
+                cursorInRect = true;
             }
             else
                 painter->setFont( font );
 
             textRect = itemsRect.adjusted( 0, 4, 0, 0 );
-            painter->drawPixmap( textRect.x() + iconSpacing, textRect.y(), QPixmap( dropTypeImageMap.value( i ) ).scaledToWidth( 32, Qt::SmoothTransformation ) );
+            painter->drawPixmap( textRect.x() + iconSpacing, textRect.y(), m_dropTypeImageMap.value( i ) );
 
-            int textSpacing = ( itemWidth - painter->fontMetrics().width( text ) ) / 2;
-            textRect.adjust( textSpacing, 32 + 4, 0, 0 );
-            painter->drawText( textRect, text );
+            int textSpacing = ( itemWidth - painter->fontMetrics().width( m_dropTypeTextMap.value( i ) ) ) / 2;
+            textRect.adjust( textSpacing, 32 + 6, 0, 0 );
+            painter->drawText( textRect, m_dropTypeTextMap.value( i ) );
             count++;
         }
 
@@ -455,6 +452,10 @@ SourceDelegate::hovered(const QModelIndex &index, const QMimeData *mimeData)
 {
     if ( !index.isValid() )
     {
+        foreach ( AnimationHelper *helper, m_expandedMap )
+        {
+            helper->collapse();
+        }
         return;
     }
     if ( !m_expandedMap.contains( index ) )
@@ -470,6 +471,8 @@ SourceDelegate::hovered(const QModelIndex &index, const QMimeData *mimeData)
         connect( m_expandedMap.value( m_newDropHoverIndex ), SIGNAL( finished( QModelIndex ) ), SLOT( animationFinished( QModelIndex ) ) );
 
     }
+    else
+        qDebug() << "expandedMap already contains index" << index;
 }
 
 void

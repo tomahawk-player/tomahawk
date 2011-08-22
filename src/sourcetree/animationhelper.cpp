@@ -61,17 +61,19 @@ void AnimationHelper::expand()
 
 void AnimationHelper::collapse( bool immediately )
 {
+    m_fullyExpanded = false;
+    m_expandTimer.stop();
+
     if ( immediately )
     {
-        m_fullyExpanded = false;
         m_forceClosing = true;
-        m_collapseAnimation->start();
+        if ( m_size != m_startSize )
+            m_collapseAnimation->start();
     }
     else
     {
-        //m_fullyExpanded = false;
-        m_expandTimer.stop();
-        m_collapseTimer.start();
+        if ( m_size != m_startSize )
+            m_collapseTimer.start();
     }
 }
 

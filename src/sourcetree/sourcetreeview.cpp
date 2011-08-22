@@ -471,6 +471,8 @@ SourceTreeView::dragMoveEvent( QDragMoveEvent* event )
                 m_delegate->hovered( index, event->mimeData() );
                 dataChanged(index, index);
             }
+            else
+                m_delegate->hovered( QModelIndex(), 0 );
         }
         else
         {
@@ -586,5 +588,7 @@ SourceTreeView::itemFromIndex( const QModelIndex& index ) const
 void
 SourceTreeView::update( const QModelIndex &index )
 {
+//    updateGeometries();
+//    QTreeView::update( index );
     dataChanged( index, index );
 }
