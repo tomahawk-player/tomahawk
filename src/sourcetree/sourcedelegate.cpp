@@ -246,7 +246,7 @@ SourceDelegate::paint( QPainter* painter, const QStyleOptionViewItem& option, co
                 painter->setFont( font );
 
             textRect = itemsRect.adjusted( 0, 4, 0, 0 );
-            painter->drawPixmap( textRect.x() + iconSpacing, textRect.y(), m_dropTypeImageMap.value( i ) );
+            painter->drawPixmap( textRect.x() + iconSpacing, textRect.y(), m_dropTypeImageMap.value( i ).copy( 0, 0, 32, qMax( 4, textRect.height() ) ) );
 
             int textSpacing = ( itemWidth - painter->fontMetrics().width( m_dropTypeTextMap.value( i ) ) ) / 2;
             textRect.adjust( textSpacing, 32 + 6, 0, 0 );

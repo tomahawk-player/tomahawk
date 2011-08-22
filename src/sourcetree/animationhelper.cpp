@@ -83,9 +83,10 @@ bool AnimationHelper::partlyExpanded()
     if ( m_forceClosing )
         return false;
 
-    return m_fullyExpanded
-            || ( m_expandAnimation->state() == QPropertyAnimation::Running && m_expandAnimation->currentTime() > 250 )
-            || ( m_collapseAnimation->state() == QPropertyAnimation::Running && m_collapseAnimation->currentTime() < 100 );
+    return m_size != m_startSize;
+//    return m_fullyExpanded
+//            || ( m_expandAnimation->state() == QPropertyAnimation::Running && m_expandAnimation->currentTime() > 250 )
+//            || ( m_collapseAnimation->state() == QPropertyAnimation::Running && m_collapseAnimation->currentTime() < 100 );
 }
 
 bool AnimationHelper::fullyExpanded()
