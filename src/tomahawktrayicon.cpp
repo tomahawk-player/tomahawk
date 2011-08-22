@@ -42,8 +42,8 @@ TomahawkTrayIcon::TomahawkTrayIcon( QObject* parent )
     m_contextMenu = new QMenu();
     setContextMenu( m_contextMenu );
 
-    m_playAction = m_contextMenu->addAction( tr( "Play" ) );
-    m_pauseAction = m_contextMenu->addAction( tr( "Pause" ) );
+    m_playPauseAction = m_contextMenu->addAction( tr( "Play" ) );
+    //m_pauseAction = m_contextMenu->addAction( tr( "Pause" ) );
     m_stopAction = m_contextMenu->addAction( tr( "Stop" ) );
     m_contextMenu->addSeparator();
     m_prevAction = m_contextMenu->addAction( tr( "Previous Track" ) );
@@ -62,13 +62,16 @@ TomahawkTrayIcon::TomahawkTrayIcon( QObject* parent )
 
     connect( AudioEngine::instance(), SIGNAL( loading( Tomahawk::result_ptr ) ), SLOT( setResult( Tomahawk::result_ptr ) ) );
 
-    connect( m_playAction,  SIGNAL( triggered() ), AudioEngine::instance(), SLOT( play() ) );
-    connect( m_pauseAction, SIGNAL( triggered() ), AudioEngine::instance(), SLOT( pause() ) );
+    connect( m_playPauseAction,  SIGNAL( triggered() ), AudioEngine::instance(), SLOT( playPause() ) );
     connect( m_stopAction,  SIGNAL( triggered() ), AudioEngine::instance(), SLOT( stop() ) );
     connect( m_prevAction,  SIGNAL( triggered() ), AudioEngine::instance(), SLOT( previous() ) );
     connect( m_nextAction,  SIGNAL( triggered() ), AudioEngine::instance(), SLOT( next() ) );
     connect( m_quitAction,  SIGNAL( triggered() ), (QObject*)APP, SLOT( quit() ) );
-
+    
+    connect( AudioEngine::instance(), SIGNAL( paused() ), this, SLOT( onPause() ) );
+    connect( AudioEngine::instance(), SIGNAL( stopped()), this, SLOT( onPause() ) );
+    connect( AudioEngine::instance(), SIGNAL( resumed()), this, SLOT( onResume() ) );
+    
     connect( &m_animationTimer, SIGNAL( timeout() ), SLOT( onAnimationTimer() ) );
     connect( this, SIGNAL( activated( QSystemTrayIcon::ActivationReason ) ), SLOT( onActivated( QSystemTrayIcon::ActivationReason ) ) );
 
@@ -191,6 +194,17 @@ TomahawkTrayIcon::onActivated( QSystemTrayIcon::ActivationReason reason )
     }
 }
 
+void
+TomahawkTrayIcon::onPause()
+{
+    m_playPauseAction->setText( tr( "Play" ) );
+}
+
+void
+TomahawkTrayIcon::onResume()
+{
+    m_playPauseAction->setText( tr( "Pause" ) );
+}
 
 bool
 TomahawkTrayIcon::event( QEvent* e )

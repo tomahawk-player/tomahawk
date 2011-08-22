@@ -41,6 +41,8 @@ public slots:
 private slots:
     void onAnimationTimer();
     void onActivated( QSystemTrayIcon::ActivationReason reason );
+    void onPause();
+    void onResume();
     void showWindow();
 
 private:
@@ -54,8 +56,8 @@ private:
     int m_currentAnimationFrame;
     
     QMenu* m_contextMenu;
-    QAction* m_playAction;
-    QAction* m_pauseAction;
+    QAction* m_playPauseAction;
+    //QAction* m_pauseAction;
     QAction* m_stopAction;
     QAction* m_prevAction;
     QAction* m_nextAction;
