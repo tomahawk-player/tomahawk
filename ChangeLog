@@ -5,7 +5,7 @@ Version 0.2.2:
     * Fixed omitting a few tracks in the Collection tree-view.
     * Fixed sidebar & track sorting issues.
     * Seek- & volume sliders now directly jump to the position you clicked on.
-    * Fixed dragging artists and albums within Tomahawk.
+    * Added ability to drag artists and albums within Tomahawk (to playlists, queue, etc.).
 
 Version 0.2.1:
     * Fixed crashing trying to play an unavailable track.
