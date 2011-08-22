@@ -448,10 +448,15 @@ DropJob::infoSystemInfo( Tomahawk::InfoSystem::InfoRequestData requestData, QVar
         qDebug() << "Got requestData response for artist" << artist << output;
 
         QList< query_ptr > results;
+
+        int i = 0;
         foreach ( const QVariant& title, output.toMap().value( "tracks" ).toList() )
         {
             qDebug() << "got title" << title;
             results << Query::get( artist, title.toString(), QString(), uuid() );
+
+            if ( ++i == 10 ) // Only getting top ten for now. Would make sense to make it configurable
+                break;
         }
 
         onTracksAdded( results );
