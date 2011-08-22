@@ -61,20 +61,21 @@ void AnimationHelper::expand()
 
 void AnimationHelper::collapse( bool immediately )
 {
-    m_fullyExpanded = false;
-    m_expandTimer.stop();
+    if ( m_expandTimer.isActive() )
+    {
+        m_expandTimer.stop();
+        emit finished( m_index );
+        return;
+    }
 
     if ( immediately )
     {
         m_forceClosing = true;
-        if ( m_size != m_startSize )
-            m_collapseAnimation->start();
+        m_fullyExpanded = false;
+        m_collapseAnimation->start();
     }
     else
-    {
-        if ( m_size != m_startSize )
-            m_collapseTimer.start();
-    }
+        m_collapseTimer.start();
 }
 
 bool AnimationHelper::partlyExpanded()
@@ -95,14 +96,11 @@ bool AnimationHelper::fullyExpanded()
 void AnimationHelper::expandTimeout()
 {
     m_expandAnimation->start();
-//        m_fullyExpanded = true;
 }
 
 void AnimationHelper::collapseTimeout()
 {
-//        m_size = m_startSize;
-        m_fullyExpanded = false;
-//        emit finished( m_index );
+    m_fullyExpanded = false;
     m_collapseAnimation->start();
 }
 
@@ -113,6 +111,5 @@ void AnimationHelper::expandAnimationFinished()
 
 void AnimationHelper::collapseAnimationFinished()
 {
-    m_fullyExpanded = false;
     emit finished( m_index );
 }
