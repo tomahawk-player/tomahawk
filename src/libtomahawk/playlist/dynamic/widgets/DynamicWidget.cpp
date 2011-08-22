@@ -452,7 +452,6 @@ void
 DynamicWidget::onDeleted()
 {
     emit destroyed( widget() );
-    deleteLater();
 }
 
 
