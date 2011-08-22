@@ -61,17 +61,17 @@ TomahawkTrayIcon::TomahawkTrayIcon( QObject* parent )
     m_quitAction = m_contextMenu->addAction( tr( "Quit" ) );
 
     connect( AudioEngine::instance(), SIGNAL( loading( Tomahawk::result_ptr ) ), SLOT( setResult( Tomahawk::result_ptr ) ) );
+    connect( AudioEngine::instance(), SIGNAL( started( Tomahawk::result_ptr ) ), SLOT( enablePause() ) );
+    connect( AudioEngine::instance(), SIGNAL( resumed() ), this, SLOT( enablePause() ) );
+    connect( AudioEngine::instance(), SIGNAL( stopped() ), this, SLOT( enablePlay() ) );
+    connect( AudioEngine::instance(), SIGNAL( paused() ),  this, SLOT( enablePlay() ) );
 
-    connect( m_playPauseAction,  SIGNAL( triggered() ), AudioEngine::instance(), SLOT( playPause() ) );
-    connect( m_stopAction,  SIGNAL( triggered() ), AudioEngine::instance(), SLOT( stop() ) );
-    connect( m_prevAction,  SIGNAL( triggered() ), AudioEngine::instance(), SLOT( previous() ) );
-    connect( m_nextAction,  SIGNAL( triggered() ), AudioEngine::instance(), SLOT( next() ) );
-    connect( m_quitAction,  SIGNAL( triggered() ), (QObject*)APP, SLOT( quit() ) );
-    
-    connect( AudioEngine::instance(), SIGNAL( paused() ), this, SLOT( onPause() ) );
-    connect( AudioEngine::instance(), SIGNAL( stopped()), this, SLOT( onPause() ) );
-    connect( AudioEngine::instance(), SIGNAL( resumed()), this, SLOT( onResume() ) );
-    
+    connect( m_playPauseAction, SIGNAL( triggered() ), AudioEngine::instance(), SLOT( playPause() ) );
+    connect( m_stopAction,      SIGNAL( triggered() ), AudioEngine::instance(), SLOT( stop() ) );
+    connect( m_prevAction,      SIGNAL( triggered() ), AudioEngine::instance(), SLOT( previous() ) );
+    connect( m_nextAction,      SIGNAL( triggered() ), AudioEngine::instance(), SLOT( next() ) );
+    connect( m_quitAction,      SIGNAL( triggered() ), (QObject*)APP,           SLOT( quit() ) );
+
     connect( &m_animationTimer, SIGNAL( timeout() ), SLOT( onAnimationTimer() ) );
     connect( this, SIGNAL( activated( QSystemTrayIcon::ActivationReason ) ), SLOT( onActivated( QSystemTrayIcon::ActivationReason ) ) );
 
@@ -84,6 +84,7 @@ TomahawkTrayIcon::~TomahawkTrayIcon()
     delete m_contextMenu;
 }
 
+
 void
 TomahawkTrayIcon::setShowHideWindow( bool show )
 {
@@ -91,11 +92,15 @@ TomahawkTrayIcon::setShowHideWindow( bool show )
     {
         m_showWindowAction->setText( tr( "Hide Tomahawk Window" ) );
         m_showWindowAction->setData( show );
-    } else {
+    }
+    else
+    {
         m_showWindowAction->setText( tr( "Show Tomahawk Window" ) );
     }
+
     m_showWindowAction->setData( show );
 }
+
 
 void
 TomahawkTrayIcon::showWindow()
@@ -106,11 +111,15 @@ TomahawkTrayIcon::showWindow()
         APP->mainWindow()->raise();
 
         setShowHideWindow( true );
-    } else {
+    }
+    else
+    {
         APP->mainWindow()->hide();
+
         setShowHideWindow( false );
     }
 }
+
 
 void
 TomahawkTrayIcon::setResult( const Tomahawk::result_ptr& result )
@@ -151,14 +160,7 @@ TomahawkTrayIcon::refreshToolTip()
 void
 TomahawkTrayIcon::onAnimationTimer()
 {
-    /*if( m_animationPixmaps.isEmpty() )
-    {
-        stopIpodScrobblingAnimation();
-        Q_ASSERT( !"Animation should not be started without frames being loaded" );
-        return;
-    }
-
-    m_currentAnimationFrame++;
+/*    m_currentAnimationFrame++;
     if( m_currentAnimationFrame >= m_animationPixmaps.count() )
         m_currentAnimationFrame = 0;
 
@@ -194,17 +196,20 @@ TomahawkTrayIcon::onActivated( QSystemTrayIcon::ActivationReason reason )
     }
 }
 
+
 void
-TomahawkTrayIcon::onPause()
+TomahawkTrayIcon::enablePlay()
 {
     m_playPauseAction->setText( tr( "Play" ) );
 }
 
+
 void
-TomahawkTrayIcon::onResume()
+TomahawkTrayIcon::enablePause()
 {
     m_playPauseAction->setText( tr( "Pause" ) );
 }
+
 
 bool
 TomahawkTrayIcon::event( QEvent* e )
