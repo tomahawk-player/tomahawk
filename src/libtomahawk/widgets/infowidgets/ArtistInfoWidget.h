@@ -102,6 +102,7 @@ private:
     QString m_title;
     QString m_description;
     QString m_longDescription;
+    QString m_infoId;
     QPixmap m_pixmap;
 };
 
