@@ -2,6 +2,7 @@ Version 0.3.0:
     * Added MPRIS 2.1 support.
 
 Version 0.2.2:
+    * Fixed crash when pressing previous and next when playing a song from the Queue.
     * Fixed issue where wrench for newly added resolvers would not show up immediately.
     * Fixed sidebar statistics not updating after collection scan finished.
     * Fixed omitting a few tracks in the Collection tree-view.
