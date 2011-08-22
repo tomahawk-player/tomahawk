@@ -1,4 +1,6 @@
 Version 0.2.2:
+    * Fixed issue where wrench for newly added resolvers would not show up immediately.
+    * Fixed sidebar statistics not updating after collection scan finished.
     * Fixed omitting a few tracks in the Collection tree-view.
     * Fixed sidebar & track sorting issues.
     * Seek- & volume sliders now directly jump to the position you clicked on.
