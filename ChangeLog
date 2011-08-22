@@ -1,6 +1,9 @@
 Version 0.3.0:
     * Added MPRIS 2.1 support.
 
+Version 0.2.3:
+    * Fixed issue where artist bio could be referring to a different artist.
+
 Version 0.2.2:
     * Fixed crash when pressing previous and next when playing a song from the Queue.
     * Fixed issue where wrench for newly added resolvers would not show up immediately.
