@@ -169,8 +169,7 @@ Pipeline::reportResults( QID qid, const QList< result_ptr >& results )
 
     if ( !m_qids.contains( qid ) )
     {
-        qDebug() << "reportResults called for unknown QID" << qid;
-        Q_ASSERT( false );
+        qDebug() << "Result arrived too late for:" << qid;
         return;
     }
 
