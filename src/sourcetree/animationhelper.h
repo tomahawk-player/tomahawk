@@ -49,7 +49,6 @@ private:
     QTimer m_collapseTimer;
 
     bool m_fullyExpanded;
-    bool m_forceClosing;
 
     QPropertyAnimation *m_expandAnimation;
     QPropertyAnimation *m_collapseAnimation;

@@ -36,6 +36,13 @@ SourceDelegate::SourceDelegate( QAbstractItemView* parent )
     m_dropTypeImageMap.insert( 2, QPixmap( ":/data/images/drop-all-songs.png" ).scaledToHeight( 32, Qt::SmoothTransformation ) );
     m_dropTypeImageMap.insert( 3, QPixmap( ":/data/images/drop-local-songs.png" ).scaledToWidth( 32, Qt::SmoothTransformation ) );
     m_dropTypeImageMap.insert( 4, QPixmap( ":/data/images/drop-top-songs.png" ).scaledToWidth( 32, Qt::SmoothTransformation ) );
+
+    m_dropMimeData = new QMimeData();
+}
+
+SourceDelegate::~SourceDelegate()
+{
+    delete m_dropMimeData;
 }
 
 QSize
@@ -53,7 +60,7 @@ SourceDelegate::sizeHint( const QStyleOptionViewItem& option, const QModelIndex&
             qDebug() << "droptypecount is " << dropTypes;
             QSize originalSize = QStyledItemDelegate::sizeHint( option, index );
             QSize targetSize = originalSize + QSize( 0, dropTypes == 0 ? 0 : 56 );
-            m_expandedMap.value( index )->initialize( originalSize, targetSize, 500 );
+            m_expandedMap.value( index )->initialize( originalSize, targetSize, 300 );
             m_expandedMap.value( index )->expand();
         }
         QMetaObject::invokeMethod( m_parent, "update", Qt::QueuedConnection, Q_ARG( QModelIndex, index ) );
@@ -380,7 +387,12 @@ SourceDelegate::hovered(const QModelIndex &index, const QMimeData *mimeData)
         }
 
         m_newDropHoverIndex = index;
-        m_dropMimeData = const_cast< QMimeData* >( mimeData );
+        m_dropMimeData->clear();
+        foreach ( const QString &mimeDataFormat, mimeData->formats() )
+        {
+            m_dropMimeData->setData( mimeDataFormat, mimeData->data( mimeDataFormat ) );
+        }
+
         m_expandedMap.insert( m_newDropHoverIndex, new AnimationHelper( m_newDropHoverIndex ) );
         connect( m_expandedMap.value( m_newDropHoverIndex ), SIGNAL( finished( QModelIndex ) ), SLOT( animationFinished( QModelIndex ) ) );
 

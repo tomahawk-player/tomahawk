@@ -7,14 +7,13 @@ AnimationHelper::AnimationHelper( const QModelIndex& index, QObject *parent )
     , m_index( index )
     , m_fullyExpanded( false )
     , m_expandAnimation( 0 )
-    , m_forceClosing( false )
 {
     m_expandTimer.setSingleShot( true );
-    m_expandTimer.setInterval( 1000 );
+    m_expandTimer.setInterval( 600 );
     connect( &m_expandTimer, SIGNAL(timeout()), SLOT(expandTimeout()));
 
     m_collapseTimer.setSingleShot( true );
-    m_collapseTimer.setInterval( 1000 );
+    m_collapseTimer.setInterval( 600 );
     connect( &m_collapseTimer, SIGNAL(timeout()), SLOT(collapseTimeout()));
 }
 
@@ -70,7 +69,6 @@ void AnimationHelper::collapse( bool immediately )
 
     if ( immediately )
     {
-        m_forceClosing = true;
         m_fullyExpanded = false;
         m_collapseAnimation->start();
     }
@@ -80,9 +78,6 @@ void AnimationHelper::collapse( bool immediately )
 
 bool AnimationHelper::partlyExpanded()
 {
-    if ( m_forceClosing )
-        return false;
-
     return m_size != m_startSize;
 //    return m_fullyExpanded
 //            || ( m_expandAnimation->state() == QPropertyAnimation::Running && m_expandAnimation->currentTime() > 250 )

@@ -14,6 +14,7 @@ class SourceDelegate : public QStyledItemDelegate
     Q_OBJECT
 public:
     SourceDelegate( QAbstractItemView* parent = 0 );
+    ~SourceDelegate();
 
     void hovered( const QModelIndex &index, const QMimeData *mimeData );
     void dragLeaveEvent();
