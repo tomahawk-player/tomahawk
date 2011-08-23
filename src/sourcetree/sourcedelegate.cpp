@@ -31,8 +31,8 @@ SourceDelegate::SourceDelegate( QAbstractItemView* parent )
     m_dropTypeTextMap.insert( 3, "Local" );
     m_dropTypeTextMap.insert( 4, "Top 10" );
 
-    m_dropTypeImageMap.insert( 0, QPixmap( ":/data/images/new-additions.png" ).scaledToWidth( 32, Qt::SmoothTransformation ) );
-    m_dropTypeImageMap.insert( 1, QPixmap( ":/data/images/new-additions.png" ).scaledToWidth( 32, Qt::SmoothTransformation ) );
+    m_dropTypeImageMap.insert( 0, QPixmap( ":/data/images/drop-song.png" ).scaledToWidth( 32, Qt::SmoothTransformation ) );
+    m_dropTypeImageMap.insert( 1, QPixmap( ":/data/images/drop-album.png" ).scaledToWidth( 32, Qt::SmoothTransformation ) );
     m_dropTypeImageMap.insert( 2, QPixmap( ":/data/images/drop-all-songs.png" ).scaledToWidth( 32, Qt::SmoothTransformation ) );
     m_dropTypeImageMap.insert( 3, QPixmap( ":/data/images/drop-local-songs.png" ).scaledToWidth( 32, Qt::SmoothTransformation ) );
     m_dropTypeImageMap.insert( 4, QPixmap( ":/data/images/drop-top-songs.png" ).scaledToWidth( 32, Qt::SmoothTransformation ) );

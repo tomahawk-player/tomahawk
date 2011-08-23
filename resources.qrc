@@ -112,5 +112,7 @@
         <file>data/images/drop-all-songs.png</file>
         <file>data/images/drop-local-songs.png</file>
         <file>data/images/drop-top-songs.png</file>
+        <file>data/images/drop-song.png</file>
+        <file>data/images/drop-album.png</file>
     </qresource>
 </RCC>
