@@ -33,7 +33,7 @@ SourceDelegate::SourceDelegate( QAbstractItemView* parent )
 
     m_dropTypeImageMap.insert( 0, QPixmap( ":/data/images/drop-song.png" ).scaledToWidth( 32, Qt::SmoothTransformation ) );
     m_dropTypeImageMap.insert( 1, QPixmap( ":/data/images/drop-album.png" ).scaledToWidth( 32, Qt::SmoothTransformation ) );
-    m_dropTypeImageMap.insert( 2, QPixmap( ":/data/images/drop-all-songs.png" ).scaledToWidth( 32, Qt::SmoothTransformation ) );
+    m_dropTypeImageMap.insert( 2, QPixmap( ":/data/images/drop-all-songs.png" ).scaledToHeight( 32, Qt::SmoothTransformation ) );
     m_dropTypeImageMap.insert( 3, QPixmap( ":/data/images/drop-local-songs.png" ).scaledToWidth( 32, Qt::SmoothTransformation ) );
     m_dropTypeImageMap.insert( 4, QPixmap( ":/data/images/drop-top-songs.png" ).scaledToWidth( 32, Qt::SmoothTransformation ) );
 }
@@ -52,7 +52,6 @@ SourceDelegate::sizeHint( const QStyleOptionViewItem& option, const QModelIndex&
             int dropTypes = dropTypeCount( item );
             qDebug() << "droptypecount is " << dropTypes;
             QSize originalSize = QStyledItemDelegate::sizeHint( option, index );
-//            QSize targetSize = originalSize + QSize( 0, originalSize.height() * dropTypeCount( item ) ); // useful for vertical menu
             QSize targetSize = originalSize + QSize( 0, dropTypes == 0 ? 0 : 56 );
             m_expandedMap.value( index )->initialize( originalSize, targetSize, 500 );
             m_expandedMap.value( index )->expand();
@@ -227,6 +226,7 @@ SourceDelegate::paint( QPainter* painter, const QStyleOptionViewItem& option, co
         fontBold.setBold( true );
 
         QRect textRect;
+        QRect imageRect;
 
         SourceTreeItem::DropTypes dropTypes = item->supportedDropTypes( m_dropMimeData );
 
@@ -248,113 +248,21 @@ SourceDelegate::paint( QPainter* painter, const QStyleOptionViewItem& option, co
             else
                 painter->setFont( font );
 
-            textRect = itemsRect.adjusted( 0, 4, 0, 0 );
-            painter->drawPixmap( textRect.x() + iconSpacing, textRect.y(), m_dropTypeImageMap.value( i ).copy( 0, 0, 32, qMax( 4, textRect.height() ) ) );
-
             int textSpacing = ( itemWidth - painter->fontMetrics().width( m_dropTypeTextMap.value( i ) ) ) / 2;
-            textRect.adjust( textSpacing, 32 + 6, 0, 0 );
+            textRect = itemsRect.adjusted( textSpacing - 1, itemsRect.height() - painter->fontMetrics().height() - 4, 0, 0 );
             painter->drawText( textRect, m_dropTypeTextMap.value( i ) );
+
+            int maxHeight = itemsRect.height() - textRect.height() - 4;
+            int verticalOffset = qMax( 0, maxHeight - 32 );
+            if ( itemsRect.bottom() - textRect.height() - 2 > itemsRect.top() )
+            {
+                imageRect = itemsRect.adjusted( iconSpacing, verticalOffset, -iconSpacing, -textRect.height() - 2 );
+                painter->drawPixmap( imageRect.x(), imageRect.y(), m_dropTypeImageMap.value( i ).copy( 0, 32 - imageRect.height(), 32, imageRect.height() ) );
+            }
+
             count++;
         }
 
-
-//        QFont bold = painter->font();
-//        bold.setBold( true );
-
-//        QString name = index.data().toString();
-//        if ( type == SourcesModel::StaticPlaylist )
-//        {
-//            PlaylistItem* plItem = qobject_cast< PlaylistItem* >( item );
-//            Q_ASSERT( plItem );
-
-
-//            if ( plItem && !plItem->playlist().isNull() )
-//            {
-//                name = plItem->playlist()->title();
-//            }
-//        }
-//        else if ( type == SourcesModel::CategoryAdd )
-//        {
-//            CategoryAddItem* cItem = qobject_cast< CategoryAddItem* >( item );
-//            Q_ASSERT( cItem );
-
-//            name = cItem->text();
-//        }
-
-//        int height = option.rect.height();
-//        if ( m_expandedMap.contains( index ) && m_expandedMap.value( index )->partlyExpanded() )
-//            height /= ( dropTypeCount( item ) + 1 );
-
-//        QRect iconRect = option.rect.adjusted( 4, 1, -option.rect.width() + option.decorationSize.width() - 2 + 4, -option.rect.height() + option.decorationSize.height() -1 );
-
-//        QPixmap avatar = index.data( Qt::DecorationRole ).value< QIcon >().pixmap( iconRect.width(), iconRect.height() );
-//        painter->drawPixmap( iconRect, avatar.scaledToHeight( iconRect.height(), Qt::SmoothTransformation ) );
-
-//        if ( ( option.state & QStyle::State_Selected ) == QStyle::State_Selected )
-//        {
-//            painter->setPen( o.palette.color( QPalette::HighlightedText ) );
-//        }
-
-//        QRect textRect = option.rect.adjusted( iconRect.width() + 8, 2, /*-figWidth - 24*/ 0, 0 );
-//        QString text = painter->fontMetrics().elidedText( name, Qt::ElideRight, textRect.width() );
-//        painter->drawText( textRect, text );
-
-//        if ( m_expandedMap.contains( index ) && m_expandedMap.value( index )->partlyExpanded() )
-//        {
-//            QPoint cursorPos = m_parent->mapFromGlobal( QCursor::pos() );
-//            int hoveredDropTypeIndex = ( cursorPos.y() - o.rect.y() ) / height;
-//            int verticalOffset = height * hoveredDropTypeIndex;
-//            QRect selectionRect = o.rect.adjusted( 0, verticalOffset, 0, -o.rect.height() + height + verticalOffset );
-//            painter->drawRoundedRect( selectionRect, 5, 5 );
-
-//            int count = 1;
-//            SourceTreeItem::DropTypes dropTypes = item->supportedDropTypes( m_dropMimeData );
-//            if ( dropTypes.testFlag( SourceTreeItem::DropTypeThisTrack ) )
-//            {
-//                text = tr( "This track" );
-//                textRect = option.rect.adjusted( iconRect.width() + 8, 2 + ( count * height ), 0, 0 );
-//                painter->drawText( textRect, text );
-//                if ( count == hoveredDropTypeIndex )
-//                    m_hoveredDropType = SourceTreeItem::DropTypeThisTrack;
-//                count++;
-//            }
-//            if ( dropTypes.testFlag( SourceTreeItem::DropTypeThisAlbum ) )
-//            {
-//                text = tr( "This album" );
-//                textRect = option.rect.adjusted( iconRect.width() + 8, 2 + ( count * height ), 0, 0 );
-//                painter->drawText( textRect, text );
-//                if ( count == hoveredDropTypeIndex )
-//                    m_hoveredDropType = SourceTreeItem::DropTypeThisAlbum;
-//                count++;
-//            }
-//            if ( dropTypes.testFlag( SourceTreeItem::DropTypeAllFromArtist ) )
-//            {
-//                text = tr( "All from artist" );
-//                textRect = option.rect.adjusted( iconRect.width() + 8, 2 + ( count * height ), 0, 0 );
-//                painter->drawText( textRect, text );
-//                if ( count == hoveredDropTypeIndex )
-//                    m_hoveredDropType = SourceTreeItem::DropTypeAllFromArtist;
-//                count++;
-//            }
-//            if ( dropTypes.testFlag( SourceTreeItem::DropTypeLocalItems ) )
-//            {
-//                text = tr( "All local from Artist" );
-//                textRect = option.rect.adjusted( iconRect.width() + 8, 2 + ( count * height ), 0, 0 );
-//                painter->drawText( textRect, text );
-//                if ( count == hoveredDropTypeIndex )
-//                    m_hoveredDropType = SourceTreeItem::DropTypeLocalItems;
-//                count++;
-//            }
-//            if ( dropTypes.testFlag( SourceTreeItem::DropTypeTop50 ) )
-//            {
-//                text = tr( "Top 50" );
-//                textRect = option.rect.adjusted( iconRect.width() + 8, 2 + ( count * height ), 0, 0 );
-//                painter->drawText( textRect, text );
-//                if ( count == hoveredDropTypeIndex )
-//                    m_hoveredDropType = SourceTreeItem::DropTypeTop50;
-//                count++;
-//            }
-//        }
 
         painter->restore();
 
