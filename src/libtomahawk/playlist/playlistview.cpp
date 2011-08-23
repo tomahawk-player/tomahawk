@@ -125,7 +125,6 @@ PlaylistView::onDeleted()
 {
     qDebug() << Q_FUNC_INFO;
     emit destroyed( widget() );
-    deleteLater();
 }
 
 
