@@ -33,7 +33,7 @@ void AnimationHelper::initialize( const QSize& startValue, const QSize& endValue
     m_expandAnimation->setStartValue( startValue );
     m_expandAnimation->setEndValue( endValue );
     m_expandAnimation->setDuration( duration );
-    m_expandAnimation->setEasingCurve( QEasingCurve::OutBounce );
+    m_expandAnimation->setEasingCurve( QEasingCurve::OutExpo );
     qDebug() << "starting animation" << startValue << endValue << duration;
     connect( m_expandAnimation, SIGNAL( finished() ), SLOT(expandAnimationFinished()));
 
@@ -41,7 +41,7 @@ void AnimationHelper::initialize( const QSize& startValue, const QSize& endValue
     m_collapseAnimation->setStartValue( endValue );
     m_collapseAnimation->setEndValue( startValue );
     m_collapseAnimation->setDuration( duration );
-    m_collapseAnimation->setEasingCurve( QEasingCurve::OutBounce );
+    m_collapseAnimation->setEasingCurve( QEasingCurve::InExpo );
     connect( m_collapseAnimation, SIGNAL( finished() ), SLOT(collapseAnimationFinished()));
 
 }
