@@ -9,7 +9,7 @@ Version 0.2.2:
     * Fixed sidebar & track sorting issues.
     * Seek- & volume sliders now directly jump to the position you clicked on.
     * Added ability to drag artists and albums within Tomahawk (to playlists, queue, etc.).
-    * (OS X) Added Ogg Vorbis support
+    * (OS X) Fixed Ogg Vorbis support
 
 Version 0.2.1:
     * Fixed crashing trying to play an unavailable track.
