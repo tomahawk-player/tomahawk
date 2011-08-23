@@ -295,15 +295,17 @@ DropJob::handleTrackUrls( const QString& urls )
 
         tDebug() << "Got a list of spotify urls!" << tracks;
         SpotifyParser* spot = new SpotifyParser( tracks, this );
-        connect( spot, SIGNAL( tracks( QList<Tomahawk::query_ptr> ) ), this, SIGNAL( tracks( QList<Tomahawk::query_ptr> ) ) );
+        connect( spot, SIGNAL( tracks( QList<Tomahawk::query_ptr> ) ), this, SLOT( onTracksAdded( QList< Tomahawk::query_ptr > ) ) );
+        m_queryCount++;
     } else if ( urls.contains( "rdio.com" ) )
     {
         QStringList tracks = urls.split( "\n" );
 
         tDebug() << "Got a list of rdio urls!" << tracks;
         RdioParser* rdio = new RdioParser( this );
-        connect( rdio, SIGNAL( tracks( QList<Tomahawk::query_ptr> ) ), this, SIGNAL( tracks( QList<Tomahawk::query_ptr> ) ) );
+        connect( rdio, SIGNAL( tracks( QList<Tomahawk::query_ptr> ) ), this, SLOT( onTracksAdded( QList< Tomahawk::query_ptr > ) ) );
         rdio->parse( tracks );
+        m_queryCount++;
     } else if ( urls.contains( "bit.ly" ) ||
                 urls.contains( "j.mp" ) ||
                 urls.contains( "t.co" ) ||
@@ -314,6 +316,7 @@ DropJob::handleTrackUrls( const QString& urls )
         tDebug() << "Got a list of shortened urls!" << tracks;
         ShortenedLinkParser* parser = new ShortenedLinkParser( tracks, this );
         connect( parser, SIGNAL( urls( QStringList ) ), this, SLOT( expandedUrls( QStringList ) ) );
+        m_queryCount++;
     }
 }
 
@@ -321,6 +324,7 @@ DropJob::handleTrackUrls( const QString& urls )
 void
 DropJob::expandedUrls( QStringList urls )
 {
+    m_queryCount--;
     handleTrackUrls( urls.join( "\n" ) );
 }
 
