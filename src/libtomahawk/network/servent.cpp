@@ -153,7 +153,7 @@ Servent::startListening( QHostAddress ha, bool upnp, int port )
 
                 if ( qApp->arguments().contains( "--lanhack" ) )
                 {
-                    qDebug() << "LANHACK: set external address to lan address" << ha.toString();
+                    tLog() << "LANHACK: set external address to lan address" << ha.toString();
                     QMetaObject::invokeMethod( this, "setExternalAddress", Qt::QueuedConnection, Q_ARG( QHostAddress, ha ), Q_ARG( unsigned int, m_port ) );
                 }
                 else
@@ -191,7 +191,7 @@ Servent::createConnectionKey( const QString& name, const QString &nodeid, const 
         cc->setId( nodeid );
     cc->setOnceOnly( onceOnly );
 
-    qDebug() << "Creating connection key with name of " << cc->name() << " and id of " << cc->id() << " and key of " << _key << "; key is once only? : " << (onceOnly ? "true" : "false");
+    qDebug() << "Creating connection key with name of" << cc->name() << "and id of" << cc->id() << "and key of" << _key << "; key is once only? :" << (onceOnly ? "true" : "false");
     registerOffer( _key, cc );
     return _key;
 }
@@ -229,7 +229,7 @@ Servent::setExternalAddress( QHostAddress ha, unsigned int port )
             qDebug() << m_externalHostname << m_externalPort;
         }
         else
-            qDebug() << "No external access, LAN and outbound connections only!";
+            tLog() << "No external access, LAN and outbound connections only!";
     }
 
     m_ready = true;
@@ -354,7 +354,7 @@ Servent::readyRead()
 //            qDebug() << con->socket() << sock;
             if( con->id() == nodeid )
             {
-                qDebug() << "Duplicate control connection detected, dropping:" << nodeid << conntype;
+                tLog() << "Duplicate control connection detected, dropping:" << nodeid << conntype;
                 goto closeconnection;
             }
         }
@@ -378,7 +378,7 @@ Servent::readyRead()
         Connection* conn = claimOffer( cc, nodeid, key, sock->peerAddress() );
         if( !conn )
         {
-            qDebug() << "claimOffer FAILED, key:" << key;
+            tLog() << "claimOffer FAILED, key:" << key;
             goto closeconnection;
         }
         qDebug() << "claimOffer OK:" << key;
@@ -396,7 +396,7 @@ Servent::readyRead()
 
     // fallthru to cleanup:
 closeconnection:
-    qDebug() << "Closing incoming connection, something was wrong.";
+    tLog() << "Closing incoming connection, something was wrong.";
     sock->_msg.clear();
     sock->disconnectFromHost();
 }
@@ -411,7 +411,7 @@ Servent::createParallelConnection( Connection* orig_conn, Connection* new_conn, 
     // if we can connect to them directly:
     if( orig_conn && orig_conn->outbound() )
     {
-        qDebug() << "Connecting directly";
+        tLog() << "Connecting directly";
         connectToPeer( orig_conn->socket()->peerAddress().toString(),
                        orig_conn->peerPort(),
                        key,
@@ -420,7 +420,7 @@ Servent::createParallelConnection( Connection* orig_conn, Connection* new_conn, 
     else // ask them to connect to us:
     {
         QString tmpkey = uuid();
-        qDebug() << "Asking them to connect to us using" << tmpkey ;
+        tLog() << "Asking them to connect to us using" << tmpkey ;
         registerOffer( tmpkey, new_conn );
 
         QVariantMap m;
@@ -476,12 +476,12 @@ Servent::socketError( QAbstractSocket::SocketError e )
     QTcpSocketExtra* sock = (QTcpSocketExtra*)sender();
     if( !sock )
     {
-        qDebug() << "SocketError, sock is null";
+        tLog() << "SocketError, sock is null";
         return;
     }
 
     Connection* conn = sock->_conn;
-    qDebug() << "Servent::SocketError:" << e << conn->id() << conn->name();
+    tLog() << "Servent::SocketError:" << e << conn->id() << conn->name();
     if( !sock->_disowned )
     {
         // connection will delete if we already transferred ownership, otherwise:
@@ -607,7 +607,7 @@ Servent::claimOffer( ControlConnection* cc, const QString &nodeid, const QString
             }
             if( !authed )
             {
-                qDebug() << "File transfer request rejected, invalid source IP";
+                tLog() << "File transfer request rejected, invalid source IP";
                 return NULL;
             }
         }
@@ -641,7 +641,7 @@ Servent::claimOffer( ControlConnection* cc, const QString &nodeid, const QString
             // This can happen if it's a streamconnection, but the audioengine has
             // already closed the iodevice, causing the connection to be deleted before
             // the peer connects and provides the first byte
-            qDebug() << Q_FUNC_INFO << "invalid/expired offer:" << key;
+            tLog() << Q_FUNC_INFO << "invalid/expired offer:" << key;
             return NULL;
         }
 
@@ -650,12 +650,12 @@ Servent::claimOffer( ControlConnection* cc, const QString &nodeid, const QString
             // If there isn't a nodeid it's not the first connection and will already have been stopped
             if( !checkACL( conn, nodeid, true ) )
             {
-                qDebug() << "Connection not allowed due to ACL";
+                tLog() << "Connection not allowed due to ACL";
                 return NULL;
             }
         }
 
-        qDebug() << "ACL has allowed the connection";
+        tLog() << "ACL has allowed the connection";
 
         if( conn->onceOnly() )
         {
@@ -676,7 +676,7 @@ Servent::claimOffer( ControlConnection* cc, const QString &nodeid, const QString
     }
     else
     {
-        qDebug() << "Invalid offer key:" << key;
+        tLog() << "Invalid offer key:" << key;
         return NULL;
     }
 }
@@ -829,7 +829,6 @@ Servent::isIPWhitelisted( QHostAddress ip )
 bool
 Servent::connectedToSession( const QString& session )
 {
-    qDebug() << Q_FUNC_INFO;
 //    qDebug() << "Checking against" << session;
     foreach( ControlConnection* cc, m_controlconnections )
     {
@@ -845,8 +844,6 @@ Servent::connectedToSession( const QString& session )
 void
 Servent::triggerDBSync()
 {
-    qDebug() << Q_FUNC_INFO;
-
     // tell peers we have new stuff they should sync
     QList<source_ptr> sources = SourceList::instance()->sources();
     foreach( const source_ptr& src, sources )
@@ -872,7 +869,6 @@ Servent::registerIODeviceFactory( const QString &proto, boost::function<QSharedP
 QSharedPointer<QIODevice>
 Servent::getIODeviceForUrl( const Tomahawk::result_ptr& result )
 {
-    qDebug() << Q_FUNC_INFO << thread();
     QSharedPointer<QIODevice> sp;
 
     QRegExp rx( "^([a-zA-Z0-9]+)://(.+)$" );
@@ -903,7 +899,6 @@ Servent::localFileIODeviceFactory( const Tomahawk::result_ptr& result )
 QSharedPointer<QIODevice>
 Servent::httpIODeviceFactory( const Tomahawk::result_ptr& result )
 {
-    qDebug() << Q_FUNC_INFO << result->url();
     QNetworkRequest req( result->url() );
     QNetworkReply* reply = TomahawkUtils::nam()->get( req );
     return QSharedPointer<QIODevice>( reply, &QObject::deleteLater );
