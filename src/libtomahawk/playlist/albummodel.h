@@ -63,8 +63,8 @@ public:
     virtual QStringList mimeTypes() const;
     virtual Qt::ItemFlags flags( const QModelIndex& index ) const;
 
-    void addCollection( const Tomahawk::collection_ptr& collection );
-    void addFilteredCollection( const Tomahawk::collection_ptr& collection, unsigned int amount, DatabaseCommand_AllAlbums::SortOrder order );
+    void addCollection( const Tomahawk::collection_ptr& collection, bool overwrite = false );
+    void addFilteredCollection( const Tomahawk::collection_ptr& collection, unsigned int amount, DatabaseCommand_AllAlbums::SortOrder order, bool overwrite = false );
 
     void clear();
 
