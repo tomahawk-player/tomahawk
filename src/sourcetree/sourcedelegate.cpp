@@ -178,23 +178,14 @@ SourceDelegate::paint( QPainter* painter, const QStyleOptionViewItem& option, co
 
         painter->restore();
     }
-    else if ( type == SourcesModel::StaticPlaylist || type == SourcesModel::CategoryAdd )
+    else if ( (type == SourcesModel::StaticPlaylist || type == SourcesModel::CategoryAdd )
+              && m_expandedMap.contains( index ) && m_expandedMap.value( index )->partlyExpanded() && dropTypeCount( item ) > 0 )
     {
+        // Let Qt paint the original item. We add our stuff after it
         o.state &= QStyle::State_Selected;
         o.showDecorationSelected = false;
-        if ( !m_expandedMap.contains( index) )
-        {
-            QStyledItemDelegate::paint( painter, o, index );
-            return;
-        }
-
-        // Let Qt paint the original item. We add our stuff after it
-//        QStyleOptionViewItem o = option;
         o.rect.adjust( 0, 0, 0, - option.rect.height() + m_expandedMap.value( index )->originalSize().height() );
         QStyledItemDelegate::paint( painter, o, index );
-
-         if ( !( m_expandedMap.value( index )->partlyExpanded() && dropTypeCount( item ) > 0 ) )
-             return;
 
         painter->save();
 
