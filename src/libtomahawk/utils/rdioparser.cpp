@@ -20,6 +20,7 @@
 
 #include <QUrl>
 #include <QStringList>
+#include "shortenedlinkparser.h"
 
 using namespace Tomahawk;
 
@@ -55,6 +56,13 @@ RdioParser::parse( const QStringList& urls )
 void
 RdioParser::parseUrl( const QString& url )
 {
+    if ( url.contains( "rd.io" ) ) // shortened
+    {
+        ShortenedLinkParser* p = new ShortenedLinkParser( QStringList() << url, this );
+        connect( p, SIGNAL( urls( QStringList ) ), this, SLOT( expandedLinks( QStringList ) ) );
+        return;
+    }
+
     query_ptr query;
     m_count++;
 
@@ -97,5 +105,15 @@ RdioParser::parseUrl( const QString& url )
     }
     if ( !m_multi && !query.isNull() )
         emit track( query );
+}
+
+void
+RdioParser::expandedLinks( const QStringList& urls )
+{
+    foreach( const QString& url, urls )
+    {
+        if ( url.contains( "rdio.com" ) || url.contains( "rd.io" ) )
+            parseUrl( url );
+    }
 }
 
