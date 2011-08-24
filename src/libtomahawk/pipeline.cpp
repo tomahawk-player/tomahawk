@@ -275,6 +275,8 @@ Pipeline::shunt( const query_ptr& q )
     else
     {
         setQIDState( q, 0 );
+        if ( !q->solved() || q->isFullTextQuery() )
+            q->onResolvingFinished();
     }
 
     shuntNext();
