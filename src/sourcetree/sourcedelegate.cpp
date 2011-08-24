@@ -200,9 +200,15 @@ SourceDelegate::paint( QPainter* painter, const QStyleOptionViewItem& option, co
         // draw the background
 
         QLinearGradient linearGradient( itemsRect.topLeft(), itemsRect.bottomLeft() );
-        linearGradient.setColorAt( 0.0, QColor( 0xdb, 0x1b, 0x06 ) );
-//        linearGradient.setColorAt( 1.0, QColor( 0xf4, 0x17, 0x05 ) );
-        linearGradient.setColorAt( 1.0, Qt::black );
+        linearGradient.setColorAt( 0.0, Qt::white );
+//        linearGradient.setColorAt( 0.8, QColor( 0xd6, 0xd6, 0xd6 ) ); // light grey
+//        linearGradient.setColorAt( 1.0, QColor( 0xf4, 0x17, 0x05 ) ); // dark red
+//        linearGradient.setColorAt( 1.0, QColor( 0xb1, 0xb1, 0xb1 ) ); // not so light but still not dark grey
+        linearGradient.setColorAt( 0.9, QColor( 0x88, 0x88, 0x88 ) );
+        linearGradient.setColorAt( 1.0, QColor( 0x99, 0x99, 0x99 ) ); // dark grey
+
+        QPen pen = painter->pen();
+        painter->setPen( QPen( Qt::NoPen ) );
         painter->setBrush( linearGradient );
         painter->drawRect( itemsRect );
 
@@ -216,8 +222,8 @@ SourceDelegate::paint( QPainter* painter, const QStyleOptionViewItem& option, co
 
         int count = 0;
 
-        QPen pen(Qt::white);
-        painter->setPen(pen);
+        pen.setColor( Qt::white );
+        painter->setPen( pen );
 
         QFont font = painter->font();
         font.setPixelSize( 12 );
