@@ -220,7 +220,7 @@ SourceDelegate::paint( QPainter* painter, const QStyleOptionViewItem& option, co
         painter->setPen(pen);
 
         QFont font = painter->font();
-        font.setPixelSize( 10 );
+        font.setPixelSize( 12 );
         painter->setFont( font );
         QFont fontBold = painter->font();
         fontBold.setBold( true );
@@ -249,10 +249,10 @@ SourceDelegate::paint( QPainter* painter, const QStyleOptionViewItem& option, co
                 painter->setFont( font );
 
             int textSpacing = ( itemWidth - painter->fontMetrics().width( m_dropTypeTextMap.value( i ) ) ) / 2;
-            textRect = itemsRect.adjusted( textSpacing - 1, itemsRect.height() - painter->fontMetrics().height() - 4, 0, 0 );
+            textRect = itemsRect.adjusted( textSpacing - 1, itemsRect.height() - painter->fontMetrics().height() - 2, 0, 0 );
             painter->drawText( textRect, m_dropTypeTextMap.value( i ) );
 
-            int maxHeight = itemsRect.height() - textRect.height() - 4;
+            int maxHeight = itemsRect.height() - textRect.height() - 2;
             int verticalOffset = qMax( 0, maxHeight - 32 );
             if ( itemsRect.bottom() - textRect.height() - 2 > itemsRect.top() )
             {
