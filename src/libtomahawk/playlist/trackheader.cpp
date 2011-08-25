@@ -71,11 +71,11 @@ TrackHeader::visibleSectionCount() const
 }
 
 
-void
+bool
 TrackHeader::checkState()
 {
     if ( !count() || m_init )
-        return;
+        return false;
 
     QByteArray state = TomahawkSettings::instance()->playlistColumnSizes( m_parent->guid() );
     if ( !state.isEmpty() )
@@ -102,6 +102,7 @@ TrackHeader::checkState()
     }
 
     m_init = true;
+    return true;
 }
 
 
