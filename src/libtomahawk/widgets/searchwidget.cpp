@@ -39,6 +39,7 @@ SearchWidget::SearchWidget( const QString& search, QWidget* parent )
 {
     ui->setupUi( this );
 
+    ui->resultsView->setGuid( "searchwidget" );
     m_resultsModel = new PlaylistModel( ui->resultsView );
     ui->resultsView->setPlaylistModel( m_resultsModel );
     ui->resultsView->overlay()->setEnabled( false );
@@ -96,7 +97,6 @@ SearchWidget::onResultsFound( const QList<Tomahawk::result_ptr>& results )
         Tomahawk::query_ptr q = result->toQuery();
         q->setResolveFinished( true );
         q->addResults( rl );
-        qDebug() << result->toString();
 
         m_resultsModel->append( q );
     }
