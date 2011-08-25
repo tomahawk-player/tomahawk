@@ -119,10 +119,9 @@ JabberPlugin::JabberPlugin( const QString& pluginId )
     m_client->disco()->addIdentity( Jreen::Disco::Identity( "client", "type", "tomahawk", "en" ) );
     m_client->disco()->addFeature( TOMAHAWK_FEATURE );
 
-    // setup caps node, legacy peer detection - used before 0.1
+    // setup caps node
     Jreen::Capabilities::Ptr caps = m_client->presence().payload<Jreen::Capabilities>();
     caps->setNode( TOMAHAWK_CAP_NODE_NAME );
-    //FIXME: caps->setVersion( TOMAHAWK_VERSION );
 
     // print connection parameters
     qDebug() << "Our JID set to:" << m_client->jid().full();
@@ -235,7 +234,6 @@ JabberPlugin::disconnectPlugin()
     //m_room = 0;
 
     m_peers.clear();
-    m_legacy_peers.clear();
 
     m_client->disconnectFromServer( true );
     m_state = Disconnecting;
@@ -388,16 +386,6 @@ JabberPlugin::sendMsg(const QString& to, const QString& msg)
     if ( !m_client ) {
         return;
     }
-
-    if( m_legacy_peers.contains( to ) )
-    {
-        qDebug() << Q_FUNC_INFO << to << "Send legacy message" << msg;
-        Jreen::Message m( Jreen::Message::Chat, Jreen::JID(to), msg);
-        m_client->send( m );
-
-        return;
-    }
-
 
     /*******************************************************
      * Obsolete this by a SipMessage class
@@ -643,14 +631,6 @@ void JabberPlugin::onPresenceReceived( const Jreen::RosterItem::Ptr &item, const
 
     // ignore anyone not Running tomahawk:
     Jreen::Capabilities::Ptr caps = presence.payload<Jreen::Capabilities>();
-    /* Disabled this, because it's somewhat ugly and we should rely on nothing but the features
-    if ( caps && ( caps->node() == TOMAHAWK_CAP_NODE_NAME ) )
-    {
-        // must be a jreen resource, implementation in gloox was broken
-        qDebug() << Q_FUNC_INFO << fulljid << "Running tomahawk: yes" << "caps " << caps->node();
-        handlePeerStatus( jid, presence.subtype() );
-    } else
-    */
     if( caps )
     {
         qDebug() << Q_FUNC_INFO << fulljid << "Running tomahawk: maybe" << "caps " << caps->node() << "requesting disco...";
@@ -784,21 +764,6 @@ void JabberPlugin::onNewIq(const Jreen::IQ& iq)
             // the actual presence doesn't matter, it just needs to be "online"
             handlePeerStatus( jid, Jreen::Presence::Available );
         }
-        else
-        {
-//            qDebug() << Q_FUNC_INFO << jid.full() << "Running tomahawk/feature enabled: no";
-
-            //LEGACY: accept resources starting with tomahawk too
-            if( jid.resource().startsWith("tomahawk") )
-            {
-                qDebug() << Q_FUNC_INFO << jid.full() << "Detected legacy tomahawk..";
-
-                // add to legacy peers, so we can send text messages instead of iqs
-                m_legacy_peers.append( jid );
-
-                handlePeerStatus( jid, Jreen::Presence::Available );
-            }
-        }
     }
     else if(context == RequestVersion)
     {
@@ -880,12 +845,6 @@ void JabberPlugin::handlePeerStatus(const Jreen::JID& jid, Jreen::Presence::Type
     {
         m_peers[ jid ] = presenceType;
         qDebug() << Q_FUNC_INFO << "* Peer goes offline:" << fulljid;
-
-        // remove peer from legacy peers
-        if( m_legacy_peers.contains( jid ) )
-        {
-            m_legacy_peers.removeAll( jid );
-        }
 
         emit peerOffline( fulljid );
         return;
