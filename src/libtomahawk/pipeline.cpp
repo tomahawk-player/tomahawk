@@ -116,11 +116,13 @@ Pipeline::resolve( const QList<query_ptr>& qlist, bool prioritized, bool tempora
         int i = 0;
         foreach( const query_ptr& q, qlist )
         {
-            if ( !m_qids.contains( q->id() ) )
-                m_qids.insert( q->id(), q );
-
             if ( m_queries_pending.contains( q ) )
                 continue;
+            if ( m_qidsState.contains( q->id() ) )
+                continue;
+
+            if ( !m_qids.contains( q->id() ) )
+                m_qids.insert( q->id(), q );
 
             if ( prioritized )
                 m_queries_pending.insert( i++, q );
