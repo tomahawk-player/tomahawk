@@ -174,6 +174,7 @@ Pipeline::reportResults( QID qid, const QList< result_ptr >& results )
     }
 
     const query_ptr& q = m_qids.value( qid );
+    tDebug() << q->toString() << results.count();
     if ( !results.isEmpty() )
     {
         q->addResults( results );
