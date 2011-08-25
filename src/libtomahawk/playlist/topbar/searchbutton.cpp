@@ -110,6 +110,7 @@ void SearchButton::paintEvent(QPaintEvent *event)
     if (m_cache.isNull())
         m_cache = generateSearchImage(m_showMenuTriangle);
     QPainter painter(this);
+    painter.setRenderHint(QPainter::SmoothPixmapTransform);
     painter.drawImage(QPoint(0, 0), m_cache);
 }
 
