@@ -370,11 +370,9 @@ SourceTreeView::latchOn()
         SourcePlaylistInterface* sourcepi = dynamic_cast< SourcePlaylistInterface* >( pi );
         if ( !sourcepi->source().isNull() && sourcepi->source()->id() == source->id() )
         {
-            //it's a catch-up -- if they're trying to catch-up in the same track, don't do anything
-            //so that you don't repeat the track and/or cause the retry timer to fire
-            if ( !AudioEngine::instance()->currentTrack().isNull() && !sourcepi->hasNextItem() &&
-                  AudioEngine::instance()->currentTrack()->id() == sourcepi->currentItem()->id() )
-                    return;
+            //it's a catch-up -- logic in audioengine should take care of it
+            AudioEngine::instance()->next();
+            return;
         }
     }
 
