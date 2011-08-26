@@ -10,64 +10,166 @@
     <height>513</height>
    </rect>
   </property>
-  <layout class="QHBoxLayout" name="horizontalLayout">
+  <layout class="QHBoxLayout" name="horizontalLayout_2">
    <item>
-    <widget class="QSplitter" name="splitter">
-     <property name="orientation">
-      <enum>Qt::Horizontal</enum>
-     </property>
-     <widget class="QWidget" name="">
-      <layout class="QVBoxLayout" name="verticalLayout_2">
-       <item>
-        <widget class="HeaderLabel" name="tracksLabel">
-         <property name="text">
-          <string>Top Tracks</string>
-         </property>
-        </widget>
-       </item>
-       <item>
-        <widget class="PlaylistView" name="tracksView">
-         <property name="minimumSize">
-          <size>
-           <width>320</width>
-           <height>0</height>
-          </size>
-         </property>
-        </widget>
-       </item>
-      </layout>
-     </widget>
-     <widget class="QWidget" name="">
-      <layout class="QVBoxLayout" name="verticalLayout_4">
-       <item>
-        <widget class="HeaderLabel" name="artistsLabel">
-         <property name="text">
-          <string>Top Artists</string>
-         </property>
-        </widget>
-       </item>
-       <item>
-        <widget class="ArtistView" name="artistsView">
-         <property name="minimumSize">
-          <size>
-           <width>320</width>
-           <height>0</height>
-          </size>
-         </property>
-        </widget>
-       </item>
-      </layout>
-     </widget>
-    </widget>
+    <layout class="QVBoxLayout" name="verticalLayout">
+     <item>
+      <widget class="HeaderWidget" name="bg1">
+       <layout class="QHBoxLayout" name="horizontalLayout">
+        <item>
+         <widget class="ComboBox" name="sourceComobLeft">
+          <property name="sizeAdjustPolicy">
+           <enum>QComboBox::AdjustToContentsOnFirstShow</enum>
+          </property>
+          <property name="iconSize">
+           <size>
+            <width>0</width>
+            <height>0</height>
+           </size>
+          </property>
+          <item>
+           <property name="text">
+            <string>Billboard</string>
+           </property>
+          </item>
+          <item>
+           <property name="text">
+            <string>Last.fm</string>
+           </property>
+          </item>
+          <item>
+           <property name="text">
+            <string>iTunes</string>
+           </property>
+          </item>
+          <item>
+           <property name="text">
+            <string/>
+           </property>
+          </item>
+         </widget>
+        </item>
+        <item>
+         <spacer name="horizontalSpacer">
+          <property name="orientation">
+           <enum>Qt::Horizontal</enum>
+          </property>
+          <property name="sizeHint" stdset="0">
+           <size>
+            <width>40</width>
+            <height>5</height>
+           </size>
+          </property>
+         </spacer>
+        </item>
+        <item>
+         <widget class="ComboBox" name="typeComboLeft">
+          <property name="sizeAdjustPolicy">
+           <enum>QComboBox::AdjustToContentsOnFirstShow</enum>
+          </property>
+          <item>
+           <property name="text">
+            <string>Top 100 Tracks</string>
+           </property>
+          </item>
+         </widget>
+        </item>
+       </layout>
+      </widget>
+     </item>
+     <item>
+      <widget class="PlaylistView" name="tracksView">
+       <property name="minimumSize">
+        <size>
+         <width>320</width>
+         <height>0</height>
+        </size>
+       </property>
+      </widget>
+     </item>
+    </layout>
+   </item>
+   <item>
+    <layout class="QVBoxLayout" name="verticalLayout_2">
+     <item>
+      <widget class="HeaderWidget" name="bg2" native="true">
+       <layout class="QHBoxLayout" name="horizontalLayout_3">
+        <item>
+         <widget class="ComboBox" name="sourceComboRight">
+          <property name="sizeAdjustPolicy">
+           <enum>QComboBox::AdjustToContentsOnFirstShow</enum>
+          </property>
+          <property name="iconSize">
+           <size>
+            <width>0</width>
+            <height>0</height>
+           </size>
+          </property>
+          <item>
+           <property name="text">
+            <string>Billboard</string>
+           </property>
+          </item>
+          <item>
+           <property name="text">
+            <string>Last.fm</string>
+           </property>
+          </item>
+          <item>
+           <property name="text">
+            <string>iTunes</string>
+           </property>
+          </item>
+          <item>
+           <property name="text">
+            <string/>
+           </property>
+          </item>
+         </widget>
+        </item>
+        <item>
+         <spacer name="horizontalSpacer_3">
+          <property name="orientation">
+           <enum>Qt::Horizontal</enum>
+          </property>
+          <property name="sizeHint" stdset="0">
+           <size>
+            <width>40</width>
+            <height>5</height>
+           </size>
+          </property>
+         </spacer>
+        </item>
+        <item>
+         <widget class="ComboBox" name="typeComboRight">
+          <property name="sizeAdjustPolicy">
+           <enum>QComboBox::AdjustToContentsOnFirstShow</enum>
+          </property>
+          <item>
+           <property name="text">
+            <string>Top 100 Tracks</string>
+           </property>
+          </item>
+         </widget>
+        </item>
+       </layout>
+      </widget>
+     </item>
+     <item>
+      <widget class="ArtistView" name="artistsView">
+       <property name="minimumSize">
+        <size>
+         <width>320</width>
+         <height>0</height>
+        </size>
+       </property>
+      </widget>
+     </item>
+    </layout>
    </item>
   </layout>
  </widget>
  <customwidgets>
-  <customwidget>
-   <class>HeaderLabel</class>
-   <extends>QLabel</extends>
-   <header location="global">widgets/HeaderLabel.h</header>
-  </customwidget>
   <customwidget>
    <class>PlaylistView</class>
    <extends>QTreeView</extends>
@@ -77,6 +179,16 @@
    <class>ArtistView</class>
    <extends>QTreeView</extends>
    <header location="global">artistview.h</header>
+  </customwidget>
+  <customwidget>
+   <class>ComboBox</class>
+   <extends>QComboBox</extends>
+   <header location="global">widgets/combobox.h</header>
+  </customwidget>
+  <customwidget>
+   <class>HeaderWidget</class>
+   <extends>QWidget</extends>
+   <header location="global">widgets/HeaderWidget.h</header>
   </customwidget>
  </customwidgets>
  <resources/>

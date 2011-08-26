@@ -46,18 +46,20 @@ WhatsHotWidget::WhatsHotWidget( QWidget* parent )
     : QWidget( parent )
     , ui( new Ui::WhatsHotWidget )
 {
-    tDebug() << "WhatsHot: Hello world!";
     ui->setupUi( this );
-    ui->tracksView->setFrameShape( QFrame::NoFrame );
-    ui->tracksView->setAttribute( Qt::WA_MacShowFocusRect, 0 );
 
     TomahawkUtils::unmarginLayout( layout() );
+    TomahawkUtils::unmarginLayout( ui->verticalLayout->layout() );
     TomahawkUtils::unmarginLayout( ui->verticalLayout_2->layout() );
+    TomahawkUtils::unmarginLayout( ui->horizontalLayout->layout() );
+    TomahawkUtils::unmarginLayout( ui->horizontalLayout_3->layout() );
 
 
     m_tracksModel = new PlaylistModel( ui->tracksView );
     m_tracksModel->setStyle( TrackModel::Short );
 
+    ui->tracksView->setFrameShape( QFrame::NoFrame );
+    ui->tracksView->setAttribute( Qt::WA_MacShowFocusRect, 0 );
     ui->tracksView->overlay()->setEnabled( false );
     ui->tracksView->setTrackModel( m_tracksModel );
     ui->tracksView->setHeaderHidden( true );
@@ -73,6 +75,9 @@ WhatsHotWidget::WhatsHotWidget( QWidget* parent )
 
     ui->artistsView->setProxyModel( m_artistsProxy );
     ui->artistsView->setTreeModel( m_artistsModel );
+    ui->artistsView->setFrameShape( QFrame::NoFrame );
+    ui->artistsView->setAttribute( Qt::WA_MacShowFocusRect, 0 );
+
 
     m_artistsProxy->sort( -1 ); // disable sorting, must be called after artistsView->setTreeModel
 
