@@ -213,7 +213,7 @@ AudioEngine::canGoNext()
         return false;
 
     tDebug( LOGEXTRA ) << Q_FUNC_INFO << "playlist has next item? " << m_playlist.data()->hasNextItem();
-    
+
     return m_playlist.data()->hasNextItem();
 }
 
@@ -328,16 +328,15 @@ AudioEngine::infoSystemInfo( Tomahawk::InfoSystem::InfoRequestData requestData, 
     }
 
     if ( m_currentTrack.isNull() ||
-         m_currentTrack.data()->track().isNull() ||
-         m_currentTrack.data()->artist().isNull() ||
-         m_currentTrack.data()->album().isNull() )
+         m_currentTrack->track().isNull() ||
+         m_currentTrack->artist().isNull() )
         return;
 
     QVariantMap playInfo;
-    playInfo["message"] = QString( "Tomahawk is playing \"%1\" by %2 on album %3." )
-                                    .arg( m_currentTrack->track() )
-                                    .arg( m_currentTrack->artist()->name() )
-                                    .arg( m_currentTrack->album()->name() );
+    playInfo["message"] = tr( "Tomahawk is playing \"%1\" by %2%3." )
+                        .arg( m_currentTrack->track() )
+                        .arg( m_currentTrack->artist()->name() )
+                        .arg( m_currentTrack->album().isNull() ? QString() : tr( " on album %1" ).arg( m_currentTrack->album()->name() ) );
     if ( !output.isNull() && output.isValid() )
     {
         QVariantMap returnedData = output.value< QVariantMap >();
@@ -634,7 +633,7 @@ AudioEngine::setPlaylist( PlaylistInterface* playlist )
 
     if ( !playlist )
         return;
-    
+
     m_playlist = playlist->getSharedPointer();
 
     if ( m_playlist.data()->object() && m_playlist.data()->retryMode() == PlaylistInterface::Retry )
