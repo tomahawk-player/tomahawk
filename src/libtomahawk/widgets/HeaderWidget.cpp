@@ -1,6 +1,6 @@
 /* === This file is part of Tomahawk Player - <http://tomahawk-player.org> ===
  *
- *   Copyright 2010-2011, Christian Muehlhaeuser <muesli@tomahawk-player.org>
+ *   Copyright 2011, Casey Link <unnamedrambler@gmail.com>
  *
  *   Tomahawk is free software: you can redistribute it and/or modify
  *   it under the terms of the GNU General Public License as published by
@@ -16,50 +16,27 @@
  *   along with Tomahawk. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include "HeaderLabel.h"
+#include "HeaderWidget.h"
 
-#include <QPainter>
 
-#include "utils/logger.h"
 #include "utils/stylehelper.h"
 
-#define FONT_SIZE 16
+#include <QStyle>
+#include <QStylePainter>
+#include <QStyleOption>
 
-
-HeaderLabel::HeaderLabel( QWidget* parent )
-    : QLabel( parent )
-    , m_parent( parent )
-{
-    QFont f( font() );
-    f.setBold( true );
-    f.setPixelSize( 12 );
-
-    setFont( f );
-    setFixedHeight( sizeHint().height() + 8 );
-}
-
-
-HeaderLabel::~HeaderLabel()
+HeaderWidget::HeaderWidget(QWidget *parent) : QWidget(parent)
 {
 }
 
-
-QSize
-HeaderLabel::sizeHint() const
+HeaderWidget::~HeaderWidget()
 {
-    return QLabel::sizeHint();
 }
 
-
-void
-HeaderLabel::paintEvent( QPaintEvent* /* event */ )
+void HeaderWidget::paintEvent(QPaintEvent *e)
 {
-    QPainter p( this );
-    QRect r = contentsRect();
+    QStylePainter p(this);
+    QRect r = e->rect();
+
     StyleHelper::horizontalHeader(&p, r);
-
-    QTextOption to( Qt::AlignVCenter );
-    r.adjust( 8, 0, -8, 0 );
-    p.setPen( StyleHelper::headerTextColor() );
-    p.drawText( r, text(), to );
 }

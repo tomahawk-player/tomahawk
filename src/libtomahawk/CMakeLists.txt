@@ -174,6 +174,7 @@ set( libSources
     utils/spotifyparser.cpp
     utils/rdioparser.cpp
     utils/shortenedlinkparser.cpp
+    utils/stylehelper.cpp
 
     widgets/newplaylistwidget.cpp
     widgets/searchwidget.cpp
@@ -184,6 +185,8 @@ set( libSources
     widgets/whatshotwidget.cpp
     widgets/overlaywidget.cpp
     widgets/HeaderLabel.cpp
+    widgets/HeaderWidget.cpp
+    widgets/combobox.cpp
     widgets/SocialPlaylistWidget.cpp
     widgets/infowidgets/sourceinfowidget.cpp
     widgets/infowidgets/ArtistInfoWidget.cpp
@@ -355,6 +358,7 @@ set( libHeaders
     utils/spotifyparser.h
     utils/rdioparser.h
     utils/shortenedlinkparser.h
+    utils/stylehelper.h
 
     widgets/newplaylistwidget.h
     widgets/searchwidget.h
@@ -365,6 +369,8 @@ set( libHeaders
     widgets/welcomeplaylistmodel.h
     widgets/overlaywidget.h
     widgets/HeaderLabel.h
+    widgets/HeaderWidget.h
+    widgets/combobox.h
     widgets/SocialPlaylistWidget.h
     widgets/infowidgets/sourceinfowidget.h
     widgets/infowidgets/ArtistInfoWidget.h
