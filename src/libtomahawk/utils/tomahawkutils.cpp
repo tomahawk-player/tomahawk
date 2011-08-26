@@ -506,6 +506,13 @@ setNam( QNetworkAccessManager* nam )
 }
 
 
+#ifdef Q_WS_X11
+void
+bringToFront()
+{
+}
+#else
+
 #ifndef Q_OS_MAC
 void
 bringToFront()
@@ -513,6 +520,7 @@ bringToFront()
 }
 #endif
 
+#endif
 
 QPixmap
 createAvatarFrame( const QPixmap &avatar )
