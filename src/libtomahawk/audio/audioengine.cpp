@@ -600,7 +600,7 @@ AudioEngine::onStateChanged( Phonon::State newState, Phonon::State oldState )
         {
             m_expectStop = false;
             tDebug( LOGEXTRA ) << "Finding next track.";
-            loadNextTrack();
+            next();
         }
     }
 }
