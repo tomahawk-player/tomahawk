@@ -18,15 +18,17 @@
 
 #include "tomahawkutils.h"
 
-#include <QCoreApplication>
-#include <QColor>
-#include <QDateTime>
-#include <QDir>
-#include <QLayout>
-#include <QPainter>
-#include <QPixmap>
-#include <QNetworkAccessManager>
-#include <QNetworkProxy>
+#include "headlesscheck.h"
+#include <QtCore/QCoreApplication>
+
+#include <QtGui/QColor>
+#include <QtCore/QDateTime>
+#include <QtCore/QDir>
+#include <QtGui/QLayout>
+#include <QtGui/QPainter>
+#include <QtGui/QPixmap>
+#include <QtNetwork/QNetworkAccessManager>
+#include <QtNetwork/QNetworkProxy>
 
 #ifdef WIN32
     #include <windows.h>
@@ -37,6 +39,18 @@
     #include <Carbon/Carbon.h>
     #include <sys/sysctl.h>
 #endif
+
+#ifndef TOMAHAWK_HEADLESS
+    #include <QtGui/QApplication>
+    #if defined(Q_WS_X11)
+        #include "tomahawkapp.h"
+        #include "tomahawkwindow.h"
+    #elif defined(Q_WS_WIN)
+        #include "tomahawkapp.h"
+        #include "tomahawkwindow.h"
+    #endif
+#endif
+
 
 #include <tomahawksettings.h>
 #include "utils/logger.h"
@@ -506,20 +520,30 @@ setNam( QNetworkAccessManager* nam )
 }
 
 
-#ifdef Q_WS_X11
-void
-bringToFront()
-{
-}
+#ifndef TOMAHAWK_HEADLESS
+    #if defined(Q_WS_X11)
+        void
+        bringToFront()
+        {
+        }
+    #elif defined(Q_WS_WIN)
+        void
+        bringToFront()
+        {
+        }
+    #else
+        #ifndef Q_OS_MAC
+            void
+            bringToFront()
+            {
+            }
+        #endif
+    #endif
 #else
-
-#ifndef Q_OS_MAC
-void
-bringToFront()
-{
-}
-#endif
-
+    void
+    bringToFront()
+    {
+    }
 #endif
 
 QPixmap
