@@ -137,7 +137,7 @@ AudioEngine::play()
         QVariant::fromValue< Tomahawk::InfoSystem::InfoCriteriaHash >( trackInfo ) );
     }
     else
-        loadNextTrack();
+        next();
 }
 
 
@@ -205,6 +205,10 @@ bool
 AudioEngine::canGoNext()
 {
     tDebug( LOGEXTRA ) << Q_FUNC_INFO;
+
+    if ( m_queue && m_queue->trackCount() )
+        return true;
+    
     if ( m_playlist.isNull() )
         return false;
 
