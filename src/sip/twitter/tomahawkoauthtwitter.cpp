@@ -6,7 +6,7 @@
 
 
 TomahawkOAuthTwitter::TomahawkOAuthTwitter( QNetworkAccessManager *nam, QObject* parent )
-    : OAuthTwitter( QByteArray( "C4v4Wfa21rfIDck4HMR3A" ), QByteArray( "zXSjU6bjrvg6UVMJX4JufqHyjj3iextY14SR9uBEAo" ), parent )
+    : OAuthTwitter( QByteArray::fromBase64( "QzR2NFdmYTIxcmZJRGNrNEhNUjNB" ), QByteArray::fromBase64( "elhTalU2Ympydmc2VVZNSlg0SnVmcUh5amozaWV4dFkxNFNSOXVCRUFv" ), parent )
 {
     setNetworkAccessManager( nam );
 }
