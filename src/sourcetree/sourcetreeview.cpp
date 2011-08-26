@@ -167,7 +167,7 @@ SourceTreeView::setupMenus()
             if ( pi && dynamic_cast< SourcePlaylistInterface* >( pi ) )
             {
                 SourcePlaylistInterface* sourcepi = dynamic_cast< SourcePlaylistInterface* >( pi );
-                if ( !sourcepi->source().isNull() && sourcepi->source()->id() == source->id() )
+                if ( !sourcepi->source().isNull() && sourcepi->source()->id() == source->id() && !AudioEngine::instance()->state() == AudioEngine::Stopped )
                 {
                     m_latchOnAction->setText( tr( "&Catch Up" ) );
                     m_latchMenu.addSeparator();
