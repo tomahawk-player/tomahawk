@@ -35,6 +35,7 @@ using namespace Tomahawk;
 AlbumModel::AlbumModel( QObject* parent )
     : QAbstractItemModel( parent )
     , m_rootItem( new AlbumItem( 0, this ) )
+    , m_overwriteOnAdd( false )
 {
     qDebug() << Q_FUNC_INFO;
 
@@ -243,7 +244,7 @@ AlbumModel::addCollection( const collection_ptr& collection, bool overwrite )
                             << collection->source()->userName();
 
     DatabaseCommand_AllAlbums* cmd = new DatabaseCommand_AllAlbums( collection );
-    cmd->setProperty( "overwrite", overwrite );
+    m_overwriteOnAdd = overwrite;
 
     connect( cmd, SIGNAL( albums( QList<Tomahawk::album_ptr>, QVariant ) ),
                     SLOT( addAlbums( QList<Tomahawk::album_ptr> ) ) );
@@ -266,7 +267,7 @@ AlbumModel::addFilteredCollection( const collection_ptr& collection, unsigned in
     cmd->setLimit( amount );
     cmd->setSortOrder( order );
     cmd->setSortDescending( true );
-    cmd->setProperty( "overwrite", overwrite );
+    m_overwriteOnAdd = overwrite;
 
     connect( cmd, SIGNAL( albums( QList<Tomahawk::album_ptr>, QVariant ) ),
                     SLOT( addAlbums( QList<Tomahawk::album_ptr> ) ) );
@@ -286,7 +287,7 @@ AlbumModel::addAlbums( const QList<Tomahawk::album_ptr>& albums )
     if ( !albums.count() )
         return;
 
-    if ( sender() && sender()->property( "overwrite" ).toBool() )
+    if ( m_overwriteOnAdd )
         clear();
 
     int c = rowCount( QModelIndex() );
