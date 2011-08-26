@@ -327,11 +327,16 @@ AudioEngine::infoSystemInfo( Tomahawk::InfoSystem::InfoRequestData requestData, 
         return;
     }
 
+    if ( ! m_currentTrack ||
+         !m_currentTrack->track() ||
+         !m_currentTrack->artist()||
+         !m_currentTrack->album() )
+
     QVariantMap playInfo;
     playInfo["message"] = QString( "Tomahawk is playing \"%1\" by %2 on album %3." )
                                     .arg( m_currentTrack->track() )
                                     .arg( m_currentTrack->artist()->name() )
-                                     .arg( m_currentTrack->album()->name() );
+                                    .arg( m_currentTrack->album()->name() );
     if ( !output.isNull() && output.isValid() )
     {
         QVariantMap returnedData = output.value< QVariantMap >();
