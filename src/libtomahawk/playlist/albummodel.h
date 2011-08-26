@@ -109,6 +109,7 @@ private:
 
     QString m_title;
     QString m_description;
+    bool m_overwriteOnAdd;
 };
 
 #endif // ALBUMMODEL_H
