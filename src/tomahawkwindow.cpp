@@ -524,26 +524,34 @@ TomahawkWindow::createStation()
 void
 TomahawkWindow::createPlaylist()
 {
-    PlaylistTypeSelectorDlg playlistSelectorDlg;
-    int successfulReturn = playlistSelectorDlg.exec();
+    PlaylistTypeSelectorDlg* playlistSelectorDlg = new PlaylistTypeSelectorDlg( TomahawkApp::instance()->mainWindow(), Qt::Sheet );
+#ifndef Q_OS_MAC
+    playlistSelectorDlg->setModal( true );
+#endif
+    connect( playlistSelectorDlg, SIGNAL( finished( int ) ), this, SLOT( playlistCreateDialogFinished( int ) ) );
 
-    if ( !playlistSelectorDlg.playlistTypeIsAuto() && successfulReturn )
-    {
-        // only show if none is shown yet
-        if ( !ViewManager::instance()->isNewPlaylistPageVisible() )
-        {
-            ViewManager::instance()->show( new NewPlaylistWidget() );
-        }
-
-    }
-    else if ( playlistSelectorDlg.playlistTypeIsAuto() && successfulReturn )
-    {
-           // create Auto Playlist
-           QString playlistName = playlistSelectorDlg.playlistName();
-           APP->mainWindow()->createAutomaticPlaylist( playlistName );
-    }
+    playlistSelectorDlg->show();
 }
 
+void TomahawkWindow::playlistCreateDialogFinished( int ret )
+{
+    PlaylistTypeSelectorDlg* playlistSelectorDlg = qobject_cast< PlaylistTypeSelectorDlg* >( sender() );
+    Q_ASSERT( playlistSelectorDlg );
+
+    QString playlistName = playlistSelectorDlg->playlistName();
+    if ( playlistName.isEmpty() )
+        playlistName = tr( "New Playlist" );
+
+    if ( !playlistSelectorDlg->playlistTypeIsAuto() && ret ) {
+
+        playlist_ptr playlist = Tomahawk::Playlist::create( SourceList::instance()->getLocal(), uuid(), playlistName, "", "", false, QList< query_ptr>() );
+        ViewManager::instance()->show( playlist );
+    } else if ( playlistSelectorDlg->playlistTypeIsAuto() && ret ) {
+       // create Auto Playlist
+       createAutomaticPlaylist( playlistName );
+    }
+    playlistSelectorDlg->deleteLater();
+}
 
 void
 TomahawkWindow::audioStarted()

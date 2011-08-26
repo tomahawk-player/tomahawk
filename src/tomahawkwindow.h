@@ -98,6 +98,7 @@ private slots:
     void minimize();
     void maximize();
 
+    void playlistCreateDialogFinished( int ret );
 private:
     void loadSettings();
     void saveSettings();

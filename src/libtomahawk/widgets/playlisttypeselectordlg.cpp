@@ -35,22 +35,24 @@ PlaylistTypeSelectorDlg::PlaylistTypeSelectorDlg( QWidget* parent, Qt::WindowFla
 
 #ifdef Q_WS_MAC
 //    ui->
-    ui->horizontalLayout_2->setContentsMargins( 4, 4, 4, 4 );
+    ui->verticalLayout->setContentsMargins( 4, 0, 4, 4 );
 
     setSizeGripEnabled( false );
+    resize( width(), 150 );
     setMinimumSize( size() );
     setMaximumSize( size() ); // to remove the resize grip on osx this is the only way
+#else
+    ui->verticalLayout->setContentsMargins( 9, 0, 9, 9 );
 #endif
 
+    ui->line->setMaximumHeight( ui->label->height() );
+    ui->line->setContentsMargins( 0, 0, 0, 0 );
     m_isAutoPlaylist = false;
-    m_playlistName = "";
 
     connect( ui->manualPlaylistButton, SIGNAL( clicked() ),
              this, SLOT( createNormalPlaylist() ));
     connect( ui->autoPlaylistButton, SIGNAL( clicked() ),
              this, SLOT( createAutomaticPlaylist() ));
-    connect( ui->autoPlaylistNameLine, SIGNAL( textChanged( const QString& )),
-             this, SLOT( enableAutoPlaylistButton( const QString& )));
 }
 
 
@@ -72,7 +74,6 @@ void
 PlaylistTypeSelectorDlg::createAutomaticPlaylist()
 {
     m_isAutoPlaylist = true;
-    m_playlistName = ui->autoPlaylistNameLine->text();
     done( QDialog::Accepted ); // return code is used to vaidate we did not exit out of the Dialog successfully
 }
 
@@ -80,7 +81,7 @@ PlaylistTypeSelectorDlg::createAutomaticPlaylist()
 QString
 PlaylistTypeSelectorDlg::playlistName() const
 {
-    return m_playlistName;
+    return ui->playlistNameLine->text();
 }
 
 
@@ -89,11 +90,3 @@ PlaylistTypeSelectorDlg::playlistTypeIsAuto() const
 {
     return m_isAutoPlaylist;
 }
-
-
-void
-PlaylistTypeSelectorDlg::enableAutoPlaylistButton( const QString &text )
-{
-    ui->autoPlaylistButton->setEnabled( !text.isEmpty() );
-}
-
