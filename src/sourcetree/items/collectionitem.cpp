@@ -237,6 +237,8 @@ CollectionItem::playlistDeletedInternal( SourceTreeItem* parent, const T& p )
             parent->beginRowsRemoved( i, i );
             parent->removeChild( pl );
             parent->endRowsRemoved();
+
+            delete pl;
             break;
         }
     }
