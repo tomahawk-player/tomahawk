@@ -42,12 +42,12 @@
 
 #ifndef TOMAHAWK_HEADLESS
     #include <QtGui/QApplication>
-    #if defined(Q_WS_X11)
-        #include "tomahawkapp.h"
-        #include "tomahawkwindow.h"
-    #elif defined(Q_WS_WIN)
-        #include "tomahawkapp.h"
-        #include "tomahawkwindow.h"
+    #include <QtGui/QWidget>
+
+    #ifdef Q_WS_X11
+        extern "C" {
+            #include <X11/Xlib.h>
+        }
     #endif
 #endif
 
@@ -519,12 +519,30 @@ setNam( QNetworkAccessManager* nam )
     s_nam = QWeakPointer< QNetworkAccessManager >( nam );
 }
 
-
 #ifndef TOMAHAWK_HEADLESS
     #if defined(Q_WS_X11)
         void
         bringToFront()
         {
+            qDebug() << Q_FUNC_INFO;
+            QWidgetList widgetList = qApp->topLevelWidgets();
+            int i = 0;
+            while( !widgetList.at( i )->isWindow() )
+                i++;
+            QWidget *widget = widgetList.at( i );
+
+            WId winId = widget->winId();
+            Display *display = XOpenDisplay( NULL );
+            if ( !display )
+            {
+                qDebug() << Q_FUNC_INFO << "Could not find display to raise";
+                return;
+            }
+            
+            XRaiseWindow( display, winId );
+            XSetInputFocus( display, winId, RevertToNone, CurrentTime );
+            //widget->activateWindow();
+            //widget->raise();
         }
     #elif defined(Q_WS_WIN)
         void

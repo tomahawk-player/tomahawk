@@ -426,6 +426,10 @@ IF( UNIX AND NOT APPLE )
       infosystem/infoplugins/unix/mprispluginplayeradaptor.h
       infosystem/infoplugins/unix/mprisplugin.h
       infosystem/infoplugins/unix/fdonotifyplugin.h )
+
+    IF( BUILD_GUI AND X11_FOUND )
+        SET( LINK_LIBRARIES ${LINK_LIBRARIES} ${X11_LIBRARIES} )
+    ENDIF()
 ENDIF( UNIX AND NOT APPLE )
 
 IF( WIN32 )

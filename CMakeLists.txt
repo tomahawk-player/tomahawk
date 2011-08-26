@@ -72,6 +72,10 @@ ELSE()
     LIST(APPEND NEEDED_QT4_COMPONENTS "QtGui" "QtWebkit" )
 ENDIF()
 
+IF( BUILD_GUI AND UNIX AND NOT APPLE )
+    FIND_PACKAGE( X11 )
+ENDIF()
+
 macro_optional_find_package(Qt4 4.7.0 COMPONENTS ${NEEDED_QT4_COMPONENTS} )
 macro_log_feature(QT4_FOUND "Qt" "A cross-platform application and UI framework" "http://qt.nokia.com" TRUE "" "If you see this, although libqt4-devel is installed, check whether \n     the qtwebkit-devel package is installed as well")
 

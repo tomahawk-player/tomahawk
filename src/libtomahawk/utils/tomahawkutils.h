@@ -21,11 +21,11 @@
 
 #include "dllmacro.h"
 
-#include <QObject>
-#include <QThread>
-#include <QNetworkProxy>
-#include <QStringList>
-#include <QRect>
+#include <QtCore/QObject>
+#include <QtCore/QThread>
+#include <QtNetwork/QNetworkProxy>
+#include <QtCore/QStringList>
+#include <QtCore/QRect>
 
 #define RESPATH ":/data/"
 
