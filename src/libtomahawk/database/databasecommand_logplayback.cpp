@@ -45,11 +45,13 @@ DatabaseCommand_LogPlayback::postCommitHook()
 
     if ( m_action == Finished )
     {
+        tDebug( LOGEXTRA ) << Q_FUNC_INFO << " logging finished from source " << source().data()->id();
         emit trackPlayed( q );
     }
     // if the play time is more than 10 minutes in the past, ignore
     else if ( m_action == Started && QDateTime::fromTime_t( playtime() ).secsTo( QDateTime::currentDateTime() ) < 600 )
     {
+        tDebug( LOGEXTRA ) << Q_FUNC_INFO << " logging started from source " << source().data()->id();
         emit trackPlaying( q );
     }
 
