@@ -83,15 +83,17 @@ SourceList::loadSources()
 void
 SourceList::setSources( const QList<Tomahawk::source_ptr>& sources )
 {
-    QMutexLocker lock( &m_mut );
-
-    m_isReady = true;
-    foreach( const source_ptr& src, sources )
     {
-        add( src );
-    }
+        QMutexLocker lock( &m_mut );
 
-    tLog() << Q_FUNC_INFO << "- Total sources now:" << m_sources.size();
+        m_isReady = true;
+        foreach( const source_ptr& src, sources )
+        {
+            add( src );
+        }
+
+        tLog() << Q_FUNC_INFO << "- Total sources now:" << m_sources.size();
+    }
     emit ready();
 }
 

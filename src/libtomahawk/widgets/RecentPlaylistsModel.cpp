@@ -36,11 +36,7 @@ RecentPlaylistsModel::RecentPlaylistsModel( unsigned int maxPlaylists, QObject* 
     : QAbstractListModel( parent )
     , m_maxPlaylists( maxPlaylists )
 {
-
-    if ( Servent::instance()->isReady() )
-        onReady();
-    else
-        connect( Servent::instance(), SIGNAL( ready() ), this, SLOT( onReady() ) );
+    connect( SourceList::instance(), SIGNAL( ready() ), SLOT( onReady() ) );
 
     // Load recent playlists initially
     refresh();
