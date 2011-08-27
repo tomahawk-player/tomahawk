@@ -171,7 +171,11 @@ DropJob::tracksFromQueryList( const QMimeData* data )
         {
             tDebug() << "Dropped query item:" << query->data()->artist() << "-" << query->data()->track();
 
-            if ( m_getWholeArtists )
+            if ( m_top10 )
+            {
+                getTopTen( query->data()->artist() );
+            }
+            else if ( m_getWholeArtists )
             {
                 queries << getArtist( query->data()->artist() );
             }
@@ -211,21 +215,18 @@ DropJob::tracksFromResultList( const QMimeData* data )
             {
                 getTopTen( q->artist() );
             }
+            else if ( m_getWholeArtists )
+            {
+                queries << getArtist( q->artist() );
+            }
+            else if ( m_getWholeAlbums )
+            {
+                queries << getAlbum( q->artist(), q->album() );
+            }
             else
             {
-                if ( m_getWholeArtists )
-                {
-                    queries << getArtist( q->artist() );
-                }
-                else if ( m_getWholeAlbums )
-                {
-                    queries << getAlbum( q->artist(), q->album() );
-                }
-                else
-                {
-                    q->addResults( QList< result_ptr >() << *result );
-                    queries << q;
-                }
+                q->addResults( QList< result_ptr >() << *result );
+                queries << q;
             }
         }
     }
@@ -248,16 +249,11 @@ DropJob::tracksFromAlbumMetaData( const QMimeData *data )
         stream >> album;
 
         if ( m_top10 )
-        {
             getTopTen( artist );
-        }
+        else if ( m_getWholeArtists )
+            queries << getArtist( artist );
         else
-        {
-            if ( m_getWholeArtists )
-                queries << getArtist( artist );
-            else
-                queries << getAlbum( artist, album );
-        }
+            queries << getAlbum( artist, album );
     }
     return queries;
 }
