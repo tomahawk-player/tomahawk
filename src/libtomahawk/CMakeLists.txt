@@ -414,7 +414,9 @@ include_directories( . ${CMAKE_CURRENT_BINARY_DIR} ${CMAKE_CURRENT_BINARY_DIR}/.
 
     ${LIBPORTFWD_INCLUDE_DIR}
     ${THIRDPARTY_DIR}/qxt/qxtweb-standalone/qxtweb
-    ${CMAKE_CURRENT_SOURCE_DIR}/../../thirdparty/libqnetwm
+
+    # For thirdparty/
+    ${CMAKE_CURRENT_SOURCE_DIR}/../..
 )
 
 IF( UNIX AND NOT APPLE )

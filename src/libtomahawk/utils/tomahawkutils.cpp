@@ -46,7 +46,7 @@
 
     #ifdef Q_WS_X11
         #include <QtGui/QX11Info>
-        #include <netwm.h>
+        #include "thirdparty/libqnetwm/netwm.h"
     #endif
 
     #ifdef Q_WS_WIN
