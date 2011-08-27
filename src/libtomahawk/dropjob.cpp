@@ -477,6 +477,10 @@ DropJob::getAlbum(const QString &artist, const QString &album)
 {
     artist_ptr artistPtr = Artist::get( artist );
     album_ptr albumPtr = Album::get( artistPtr, album );
+
+    if ( albumPtr.isNull() )
+        return QList< query_ptr >();
+
     if ( albumPtr->tracks().isEmpty() )
     {
         connect( albumPtr.data(), SIGNAL( tracksAdded( QList<Tomahawk::query_ptr> ) ),
