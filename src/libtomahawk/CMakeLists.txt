@@ -411,8 +411,6 @@ include_directories( . ${CMAKE_CURRENT_BINARY_DIR} ${CMAKE_CURRENT_BINARY_DIR}/.
     ${LIBPORTFWD_INCLUDE_DIR}
     ${THIRDPARTY_DIR}/qxt/qxtweb-standalone/qxtweb
 
-    # For thirdparty/
-    ${CMAKE_CURRENT_SOURCE_DIR}/../..
 )
 
 IF( UNIX AND NOT APPLE )
@@ -424,7 +422,8 @@ IF( UNIX AND NOT APPLE )
       infosystem/infoplugins/unix/fdonotifyplugin.h )
 
     IF( BUILD_GUI AND X11_FOUND )
-        SET( libSources ${libSources} ${CMAKE_CURRENT_SOURCE_DIR}/../../thirdparty/libqnetwm/netwm.cpp )
+        INCLUDE_DIRECTORIES( ${THIRDPARTY_DIR}/libqnetwm )
+        SET( libSources ${libSources} ${THIRDPARTY_DIR}/libqnetwm/libqnetwm/netwm.cpp )
         SET( LINK_LIBRARIES ${LINK_LIBRARIES} ${X11_LIBRARIES} Xcomposite )
     ENDIF()
 ENDIF( UNIX AND NOT APPLE )
