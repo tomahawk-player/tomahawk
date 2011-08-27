@@ -74,7 +74,6 @@ void ComboBox::paintEvent(QPaintEvent *)
 
     QStyleOption arrowOpt = cb;
     arrowOpt.rect = arrowRect;
-    //p.drawPrimitive(QStyle::PE_IndicatorArrowDown, arrowOpt);
-    //Utils::StyleHelper::drawArrow(QStyle::PE_IndicatorArrowDown, &p, &arrowOpt);
+    StyleHelper::drawArrow(QStyle::PE_IndicatorArrowDown, &p, &arrowOpt);
 
 }

@@ -22,6 +22,7 @@
 
 #include <QColor>
 #include <QStyle>
+#include <QStyleOption>
 
 class QPalette;
 class QPainter;
@@ -36,6 +37,7 @@ public:
     static QColor headerHighlightColor();
 
     static void horizontalHeader(QPainter *painter, const QRect &rect);
+    static void drawArrow(QStyle::PrimitiveElement, QPainter *painter, const QStyleOption *opt);
 private:
     static QColor m_baseColor;
     static QColor m_requestedBaseColor;
