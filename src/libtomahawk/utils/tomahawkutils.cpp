@@ -45,12 +45,15 @@
     #include <QtGui/QWidget>
 
     #ifdef Q_WS_X11
-        extern "C" {
-            #include <X11/Xlib.h>
-        }
+        #include <QtGui/QX11Info>
+        #include <netwm.h>
+    #endif
+
+    #ifdef Q_WS_WIN
+        #include <windows.h>
+        #include <windowsx.h>
     #endif
 #endif
-
 
 #include <tomahawksettings.h>
 #include "utils/logger.h"
@@ -531,23 +534,41 @@ setNam( QNetworkAccessManager* nam )
                 i++;
             QWidget *widget = widgetList.at( i );
 
-            WId winId = widget->winId();
-            Display *display = XOpenDisplay( NULL );
-            if ( !display )
-            {
-                qDebug() << Q_FUNC_INFO << "Could not find display to raise";
-                return;
-            }
+            widget->show();
+            widget->activateWindow();
+            widget->raise();
+
+            WId wid = widget->winId();
             
-            XRaiseWindow( display, winId );
-            XSetInputFocus( display, winId, RevertToNone, CurrentTime );
-            //widget->activateWindow();
-            //widget->raise();
+            NETWM::init();
+
+            XEvent e;
+
+            e.xclient.type = ClientMessage;
+            e.xclient.message_type = NETWM::NET_ACTIVE_WINDOW;
+            e.xclient.display = QX11Info::display();
+            e.xclient.window = wid;
+            e.xclient.format = 32;
+            e.xclient.data.l[0] = 2;
+            e.xclient.data.l[1] = QX11Info::appTime();
+            e.xclient.data.l[2] = 0;
+            e.xclient.data.l[3] = 0l;
+            e.xclient.data.l[4] = 0l;
+
+            XSendEvent( QX11Info::display(), RootWindow( QX11Info::display(), DefaultScreen( QX11Info::display() ) ), False, SubstructureRedirectMask | SubstructureNotifyMask, &e );
         }
     #elif defined(Q_WS_WIN)
         void
         bringToFront()
         {
+            HWND hwndActiveWin = GetForegroundWindow();
+            int  idActive      = GetWindowThreadProcessId(hwndActiveWin, NULL);
+            if ( AttachThreadInput(GetCurrentThreadId(), idActive, TRUE) )
+            {
+                SetForegroundWindow( win );
+                SetFocus( win );
+                AttachThreadInput(GetCurrentThreadId(), idActive, FALSE);
+            }
         }
     #else
         #ifndef Q_OS_MAC
