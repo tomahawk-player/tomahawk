@@ -207,18 +207,25 @@ DropJob::tracksFromResultList( const QMimeData* data )
             tDebug() << "Dropped result item:" << result->data()->artist()->name() << "-" << result->data()->track();
             query_ptr q = result->data()->toQuery();
 
-            if ( m_getWholeArtists )
+            if ( m_top10 )
             {
-                queries << getArtist( q->artist() );
-            }
-            else if ( m_getWholeAlbums )
-            {
-                queries << getAlbum( q->artist(), q->album() );
+                getTopTen( q->artist() );
             }
             else
             {
-                q->addResults( QList< result_ptr >() << *result );
-                queries << q;
+                if ( m_getWholeArtists )
+                {
+                    queries << getArtist( q->artist() );
+                }
+                else if ( m_getWholeAlbums )
+                {
+                    queries << getAlbum( q->artist(), q->album() );
+                }
+                else
+                {
+                    q->addResults( QList< result_ptr >() << *result );
+                    queries << q;
+                }
             }
         }
     }
@@ -240,10 +247,17 @@ DropJob::tracksFromAlbumMetaData( const QMimeData *data )
         QString album;
         stream >> album;
 
-        if ( m_getWholeArtists )
-            queries << getArtist( artist );
+        if ( m_top10 )
+        {
+            getTopTen( artist );
+        }
         else
-            queries << getAlbum( artist, album );
+        {
+            if ( m_getWholeArtists )
+                queries << getArtist( artist );
+            else
+                queries << getAlbum( artist, album );
+        }
     }
     return queries;
 }
@@ -266,23 +280,7 @@ DropJob::tracksFromArtistMetaData( const QMimeData *data )
         }
         else
         {
-            connect( Tomahawk::InfoSystem::InfoSystem::instance(),
-                     SIGNAL( info( Tomahawk::InfoSystem::InfoRequestData, QVariant ) ),
-                     SLOT( infoSystemInfo( Tomahawk::InfoSystem::InfoRequestData, QVariant ) ) );
-
-            Tomahawk::InfoSystem::InfoCriteriaHash artistInfo;
-            artistInfo["artist"] = artist;
-
-            Tomahawk::InfoSystem::InfoRequestData requestData;
-            requestData.caller = "changeme";
-            requestData.customData = QVariantMap();
-
-            requestData.input = QVariant::fromValue< Tomahawk::InfoSystem::InfoCriteriaHash >( artistInfo );
-
-            requestData.type = Tomahawk::InfoSystem::InfoArtistSongs;
-            Tomahawk::InfoSystem::InfoSystem::instance()->getInfo( requestData );
-
-            m_queryCount++;
+            getTopTen( artist );
         }
     }
     return queries;
@@ -492,4 +490,27 @@ DropJob::getAlbum(const QString &artist, const QString &album)
     }
     else
         return albumPtr->tracks();
+}
+
+void
+DropJob::getTopTen( const QString &artist )
+{
+    connect( Tomahawk::InfoSystem::InfoSystem::instance(),
+             SIGNAL( info( Tomahawk::InfoSystem::InfoRequestData, QVariant ) ),
+             SLOT( infoSystemInfo( Tomahawk::InfoSystem::InfoRequestData, QVariant ) ) );
+
+    Tomahawk::InfoSystem::InfoCriteriaHash artistInfo;
+    artistInfo["artist"] = artist;
+
+    Tomahawk::InfoSystem::InfoRequestData requestData;
+    requestData.caller = "changeme";
+    requestData.customData = QVariantMap();
+
+    requestData.input = QVariant::fromValue< Tomahawk::InfoSystem::InfoCriteriaHash >( artistInfo );
+
+    requestData.type = Tomahawk::InfoSystem::InfoArtistSongs;
+    Tomahawk::InfoSystem::InfoSystem::instance()->getInfo( requestData );
+
+    m_queryCount++;
+
 }

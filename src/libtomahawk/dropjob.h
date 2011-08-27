@@ -75,6 +75,8 @@ private:
     QList< Tomahawk::query_ptr > getArtist( const QString& artist );
     QList< Tomahawk::query_ptr > getAlbum( const QString& artist, const QString& album );
 
+    void getTopTen( const QString& artist );
+
     void removeDuplicates();
     void removeRemoteSources();
 
