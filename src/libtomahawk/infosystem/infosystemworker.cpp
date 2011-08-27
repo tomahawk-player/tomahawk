@@ -153,12 +153,12 @@ InfoSystemWorker::registerInfoTypes( const InfoPluginPtr &plugin, const QSet< In
 }
 
 
-QLinkedList< InfoPluginPtr >
+QList< InfoPluginPtr >
 InfoSystemWorker::determineOrderedMatches( const InfoType type ) const
 {
     //Dummy function for now that returns the various items in the QSet; at some point this will
     //probably need to support ordering based on the data source
-    QLinkedList< InfoPluginPtr > providers;
+    QList< InfoPluginPtr > providers;
     Q_FOREACH( InfoPluginPtr ptr, m_infoGetMap[type] )
         providers << ptr;
     return providers;
@@ -166,11 +166,11 @@ InfoSystemWorker::determineOrderedMatches( const InfoType type ) const
 
 
 void
-InfoSystemWorker::getInfo( Tomahawk::InfoSystem::InfoRequestData requestData, uint timeoutMillis )
+InfoSystemWorker::getInfo( Tomahawk::InfoSystem::InfoRequestData requestData, uint timeoutMillis, bool allSources )
 {
 //    qDebug() << Q_FUNC_INFO;
 
-    QLinkedList< InfoPluginPtr > providers = determineOrderedMatches( requestData.type );
+    QList< InfoPluginPtr > providers = determineOrderedMatches( requestData.type );
     if ( providers.isEmpty() )
     {
         emit info( requestData, QVariant() );
@@ -178,33 +178,42 @@ InfoSystemWorker::getInfo( Tomahawk::InfoSystem::InfoRequestData requestData, ui
         return;
     }
 
-    InfoPluginPtr ptr = providers.first();
-    if ( !ptr )
+    if ( !allSources )
+        providers = QList< InfoPluginPtr >( providers.mid( 0, 1 ) );
+
+    bool foundOne = false;
+    foreach ( InfoPluginPtr ptr, providers )
+    {
+        if ( !ptr )
+            continue;
+
+        foundOne = true;
+        uint requestId = ++m_nextRequest;
+        m_requestSatisfiedMap[ requestId ] = false;
+        if ( timeoutMillis != 0 )
+        {
+            qint64 currMs = QDateTime::currentMSecsSinceEpoch();
+            m_timeRequestMapper.insert( currMs + timeoutMillis, requestId );
+        }
+    //    qDebug() << "Assigning request with requestId" << requestId << "and type" << requestData.type;
+        m_dataTracker[ requestData.caller ][ requestData.type ] = m_dataTracker[ requestData.caller ][ requestData.type ] + 1;
+    //    qDebug() << "Current count in dataTracker for target" << requestData.caller << "and type" << requestData.type << "is" << m_dataTracker[ requestData.caller ][ requestData.type ];
+
+        InfoRequestData* data = new InfoRequestData;
+        data->caller = requestData.caller;
+        data->type = requestData.type;
+        data->input = requestData.input;
+        data->customData = requestData.customData;
+        m_savedRequestMap[ requestId ] = data;
+
+        QMetaObject::invokeMethod( ptr.data(), "getInfo", Qt::QueuedConnection, Q_ARG( uint, requestId ), Q_ARG( Tomahawk::InfoSystem::InfoRequestData, requestData ) );
+    }
+
+    if ( !foundOne )
     {
         emit info( requestData, QVariant() );
         checkFinished( requestData.caller );
-        return;
     }
-
-    uint requestId = ++m_nextRequest;
-    m_requestSatisfiedMap[ requestId ] = false;
-    if ( timeoutMillis != 0 )
-    {
-        qint64 currMs = QDateTime::currentMSecsSinceEpoch();
-        m_timeRequestMapper.insert( currMs + timeoutMillis, requestId );
-    }
-//    qDebug() << "Assigning request with requestId" << requestId << "and type" << requestData.type;
-    m_dataTracker[ requestData.caller ][ requestData.type ] = m_dataTracker[ requestData.caller ][ requestData.type ] + 1;
-//    qDebug() << "Current count in dataTracker for target" << requestData.caller << "and type" << requestData.type << "is" << m_dataTracker[ requestData.caller ][ requestData.type ];
-
-    InfoRequestData* data = new InfoRequestData;
-    data->caller = requestData.caller;
-    data->type = requestData.type;
-    data->input = requestData.input;
-    data->customData = requestData.customData;
-    m_savedRequestMap[ requestId ] = data;
-
-    QMetaObject::invokeMethod( ptr.data(), "getInfo", Qt::QueuedConnection, Q_ARG( uint, requestId ), Q_ARG( Tomahawk::InfoSystem::InfoRequestData, requestData ) );
 }
 
 
