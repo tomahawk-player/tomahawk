@@ -33,6 +33,7 @@
 #include <QQueue>
 
 class DatabaseCommand_LoadAllPlaylists;
+class DatabaseCommand_LoadAllSortedPlaylists;
 class DatabaseCommand_SetPlaylistRevision;
 class DatabaseCommand_CreatePlaylist;
 
@@ -124,6 +125,7 @@ Q_PROPERTY( unsigned int createdon  READ createdOn          WRITE setCreatedOn )
 Q_PROPERTY( bool    shared          READ shared             WRITE setShared )
 
 friend class ::DatabaseCommand_LoadAllPlaylists;
+friend class ::DatabaseCommand_LoadAllSortedPlaylists;
 friend class ::DatabaseCommand_SetPlaylistRevision;
 friend class ::DatabaseCommand_CreatePlaylist;
 friend class DynamicPlaylist;

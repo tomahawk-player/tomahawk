@@ -24,6 +24,7 @@
 
 #include "databasecommand.h"
 #include "typedefs.h"
+#include "databasecommand_loadallplaylists.h"
 
 class DatabaseCommand_LoadAllAutoPlaylists : public DatabaseCommand
 {
@@ -32,15 +33,27 @@ class DatabaseCommand_LoadAllAutoPlaylists : public DatabaseCommand
 public:
     explicit DatabaseCommand_LoadAllAutoPlaylists( const Tomahawk::source_ptr& s, QObject* parent = 0 )
     : DatabaseCommand( s, parent )
+    , m_limitAmount( 0 )
+    , m_sortOrder( DatabaseCommand_LoadAllPlaylists::None )
+    , m_sortDescending( false )
     {}
 
     virtual void exec( DatabaseImpl* );
     virtual bool doesMutates() const { return false; }
     virtual QString commandname() const { return "loadallautoplaylists"; }
 
+    void setLimit( unsigned int limit ) { m_limitAmount = limit; }
+    void setSortOrder( DatabaseCommand_LoadAllPlaylists::SortOrder order ) { m_sortOrder = order; }
+    void setSortDescending( bool descending ) { m_sortDescending = descending; }
+
 signals:
     void autoPlaylistLoaded( const Tomahawk::source_ptr& source, const QVariantList& data );
     void done();
+
+private:
+    unsigned int m_limitAmount;
+    DatabaseCommand_LoadAllPlaylists::SortOrder m_sortOrder;
+    bool m_sortDescending;
 };
 
 #endif

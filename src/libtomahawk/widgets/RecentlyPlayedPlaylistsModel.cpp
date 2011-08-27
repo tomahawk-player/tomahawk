@@ -17,7 +17,7 @@
 */
 
 
-#include "welcomeplaylistmodel.h"
+#include "RecentlyPlayedPlaylistsModel.h"
 
 #include "tomahawksettings.h"
 #include "audio/audioengine.h"
@@ -28,7 +28,7 @@
 using namespace Tomahawk;
 
 
-WelcomePlaylistModel::WelcomePlaylistModel( QObject* parent )
+RecentlyPlayedPlaylistsModel::RecentlyPlayedPlaylistsModel( QObject* parent )
     : QAbstractListModel( parent )
     , m_maxPlaylists( 0 )
     , m_waitingForSome( true )
@@ -44,7 +44,7 @@ WelcomePlaylistModel::WelcomePlaylistModel( QObject* parent )
 
 
 void
-WelcomePlaylistModel::loadFromSettings()
+RecentlyPlayedPlaylistsModel::loadFromSettings()
 {
 //    qDebug() << Q_FUNC_INFO;
     if( !m_waitingForSome )
@@ -87,7 +87,7 @@ WelcomePlaylistModel::loadFromSettings()
 
 
 QVariant
-WelcomePlaylistModel::data( const QModelIndex& index, int role ) const
+RecentlyPlayedPlaylistsModel::data( const QModelIndex& index, int role ) const
 {
     if( !index.isValid() || !hasIndex( index.row(), index.column(), index.parent() ) )
         return QVariant();
@@ -148,7 +148,7 @@ WelcomePlaylistModel::data( const QModelIndex& index, int role ) const
 }
 
 void
-WelcomePlaylistModel::playlistRevisionLoaded()
+RecentlyPlayedPlaylistsModel::playlistRevisionLoaded()
 {
     Playlist* p = qobject_cast< Playlist* >( sender() );
     Q_ASSERT( p );
@@ -165,7 +165,7 @@ WelcomePlaylistModel::playlistRevisionLoaded()
 
 
 void
-WelcomePlaylistModel::onSourceAdded( const Tomahawk::source_ptr& source )
+RecentlyPlayedPlaylistsModel::onSourceAdded( const Tomahawk::source_ptr& source )
 {
     connect( source.data(), SIGNAL( online() ), this, SLOT( sourceOnline() ) );
     connect( source->collection().data(), SIGNAL( playlistsAdded( QList<Tomahawk::playlist_ptr> ) ), SLOT( loadFromSettings() ) );
@@ -173,7 +173,7 @@ WelcomePlaylistModel::onSourceAdded( const Tomahawk::source_ptr& source )
 }
 
 void
-WelcomePlaylistModel::sourceOnline()
+RecentlyPlayedPlaylistsModel::sourceOnline()
 {
     Source* s = qobject_cast< Source* >( sender() );
     Q_ASSERT( s );
@@ -190,7 +190,7 @@ WelcomePlaylistModel::sourceOnline()
 
 
 void
-WelcomePlaylistModel::onPlaylistsRemoved( QList< playlist_ptr > playlists )
+RecentlyPlayedPlaylistsModel::onPlaylistsRemoved( QList< playlist_ptr > playlists )
 {
     foreach( const playlist_ptr& pl, playlists ) {
         if( m_recplaylists.contains( pl ) ) {
@@ -209,14 +209,14 @@ WelcomePlaylistModel::onPlaylistsRemoved( QList< playlist_ptr > playlists )
 
 
 int
-WelcomePlaylistModel::rowCount( const QModelIndex& ) const
+RecentlyPlayedPlaylistsModel::rowCount( const QModelIndex& ) const
 {
     return m_recplaylists.count();
 }
 
 
 void
-WelcomePlaylistModel::plAdded( const playlist_ptr& pl )
+RecentlyPlayedPlaylistsModel::plAdded( const playlist_ptr& pl )
 {
     onPlaylistsRemoved( QList< playlist_ptr >() << pl );
 
@@ -229,7 +229,7 @@ WelcomePlaylistModel::plAdded( const playlist_ptr& pl )
 
 
 void
-WelcomePlaylistModel::playlistChanged( Tomahawk::PlaylistInterface* pli )
+RecentlyPlayedPlaylistsModel::playlistChanged( Tomahawk::PlaylistInterface* pli )
 {
     // ARG
     if( Playlist* pl = dynamic_cast< Playlist* >( pli ) ) {

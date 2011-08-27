@@ -35,6 +35,8 @@
 #include "globalactionmanager.h"
 #include "dropjob.h"
 #include "items/playlistitems.h"
+#include "playlist/playlistview.h"
+#include "playlist/dynamic/widgets/DynamicWidget.h"
 
 using namespace Tomahawk;
 
@@ -274,6 +276,19 @@ SourcesModel::removeItem( const Tomahawk::source_ptr& source )
 void
 SourcesModel::viewPageActivated( Tomahawk::ViewPage* page )
 {
+    if ( !m_sourcesWithViewPage.isEmpty() )
+    {
+        // Hide again any offline sources we exposed, since we're showing a different page now. they'll be re-shown if the user selects a playlist that is from an offline user
+        QList< source_ptr > temp = m_sourcesWithViewPage;
+        m_sourcesWithViewPage.clear();
+        foreach ( const source_ptr& s, temp )
+        {
+            QModelIndex idx = indexFromItem( m_sourcesWithViewPageItems.value( s ) );
+            emit dataChanged( idx, idx );
+        }
+        m_sourcesWithViewPageItems.clear();
+    }
+
     if ( m_sourceTreeLinks.contains( page ) )
     {
         Q_ASSERT( m_sourceTreeLinks[ page ] );
@@ -287,32 +302,62 @@ SourcesModel::viewPageActivated( Tomahawk::ViewPage* page )
     }
     else
     {
+        playlist_ptr p = ViewManager::instance()->playlistForPage( page );
         // HACK
         // try to find it if it is a playlist. not pretty at all.... but this happens when ViewManager loads a playlist or dynplaylist NOT from the sidebar but from somewhere else
         // we don't know which sourcetreeitem is related to it, so we have to find it. we also don't know if this page is a playlist or dynplaylist or not, but we can't check as we can't
         // include DynamicWidget.h here (so can't dynamic_cast).
         // this could also be fixed by keeping a master list of playlists/sourcetreeitems... but that's even uglier i think. this is only called the first time a certain viewpage is clicked from external
         // sources.
-        activatePlaylistPage( page, m_rootItem );
+        SourceTreeItem* item = activatePlaylistPage( page, m_rootItem );
         m_viewPageDelayedCacheItem = page;
+
+        if ( !p.isNull() )
+        {
+            source_ptr s= p->author();
+            if ( !s.isNull() && !s->isOnline() && item )
+            {
+                m_sourcesWithViewPage << s;
+
+                // show the collection now... yeah.
+                if ( !item->parent() || !item->parent()->parent() )
+                {
+                    tLog() << "Found playlist item with no category parent or collection parent!" << item->text();
+                    return;
+                }
+
+                SourceTreeItem* collectionOfPlaylist = item->parent()->parent();
+                if ( !m_rootItem->children().contains( collectionOfPlaylist ) ) // verification to make sure we're not stranded
+                {
+                    tLog() << "Got what we assumed to be a parent col of a playlist not as a child of our root node...:" << collectionOfPlaylist;
+                    return;
+                }
+
+                QModelIndex idx = indexFromItem( collectionOfPlaylist );
+                m_sourcesWithViewPageItems[ s ] = collectionOfPlaylist;
+                tDebug() << "Emitting dataChanged for offline source:" << idx << idx.isValid() << collectionOfPlaylist << collectionOfPlaylist->text();
+                emit dataChanged( idx, idx );
+
+            }
+        }
     }
 }
 
-bool
+SourceTreeItem*
 SourcesModel::activatePlaylistPage( ViewPage* p, SourceTreeItem* i )
 {
     if( !i )
-        return false;
+        return 0;
 
     if( qobject_cast< PlaylistItem* >( i ) &&
         qobject_cast< PlaylistItem* >( i )->activateCurrent() )
-        return true;
+        return i;
 
-    bool ret = false;
+    SourceTreeItem* ret = 0;
     for( int k = 0; k < i->children().size(); k++ )
     {
-        if( activatePlaylistPage( p, i->children().at( k ) ) )
-            ret = true;
+        if( SourceTreeItem* retItem = activatePlaylistPage( p, i->children().at( k ) ) )
+            ret = retItem;
     }
 
     return ret;

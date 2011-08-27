@@ -26,12 +26,14 @@
 #include "playlist.h"
 #include "typedefs.h"
 #include "playlist/dynamic/DynamicControl.h"
+#include "playlist/dynamic/DynamicPlaylistRevision.h"
 
 #include "dllmacro.h"
 
 class DatabaseCommand_LoadAllDynamicPlaylists;
 class DatabaseCommand_SetDynamicPlaylistRevision;
 class DatabaseCommand_CreateDynamicPlaylist;
+class DatabaseCommand_LoadAllSortedPlaylists;
 class DatabaseCollection;
 
 namespace Tomahawk {
@@ -42,27 +44,6 @@ class DatabaseCommand_LoadDynamicPlaylist;
  * Subclass of playlist that adds the information needed to store a dynamic playlist.
  *  It uses normal PlaylistEntries but also has a mode, a generator, and a list of controls
 */
-
-struct DLLEXPORT DynamicPlaylistRevision : PlaylistRevision
-{
-public:
-
-    QList< dyncontrol_ptr > controls;
-    Tomahawk::GeneratorMode mode;
-    QString type;
-
-    DynamicPlaylistRevision( const PlaylistRevision& other )
-    {
-        revisionguid = other.revisionguid;
-        oldrevisionguid = other.oldrevisionguid;
-        newlist = other.newlist;
-        added = other.added;
-        removed = other.removed;
-        applied = other.applied;
-    }
-
-    DynamicPlaylistRevision() {}
-};
 
 struct DynQueueItem : RevisionQueueItem
 {
@@ -86,6 +67,7 @@ class DLLEXPORT DynamicPlaylist : public Playlist
     friend class ::DatabaseCommand_SetDynamicPlaylistRevision;
     friend class ::DatabaseCommand_CreateDynamicPlaylist;
     friend class Tomahawk::DatabaseCommand_LoadDynamicPlaylist;
+    friend class ::DatabaseCommand_LoadAllSortedPlaylists;
     friend class ::DatabaseCollection; /// :-(
 
 public:

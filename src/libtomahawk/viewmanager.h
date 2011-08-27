@@ -89,6 +89,10 @@ public:
     Tomahawk::ViewPage* pageForDynPlaylist( const Tomahawk::dynplaylist_ptr& pl ) const;
     Tomahawk::ViewPage* pageForCollection( const Tomahawk::collection_ptr& pl ) const;
 
+    /// Get a playlist (or dynamic playlist ) from a ViewPage* if the page is PlaylistView or DynamicWidget.
+    /// Lives here but used by SourcesModel
+    Tomahawk::playlist_ptr playlistForPage( Tomahawk::ViewPage* ) const;
+
     // only use this is you need to create a playlist and show it directly and want it to be
     // linked to the sidebar. call it right after creating the playlist
     PlaylistView* createPageForPlaylist( const Tomahawk::playlist_ptr& pl );

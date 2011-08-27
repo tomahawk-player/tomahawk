@@ -93,6 +93,8 @@ public:
 
     QModelIndex indexFromItem( SourceTreeItem* item ) const;
 
+    QList< Tomahawk::source_ptr > sourcesWithViewPage() const { return m_sourcesWithViewPage; }
+
 public slots:
     void loadSources();
 
@@ -120,9 +122,12 @@ private slots:
 private:
     SourceTreeItem* itemFromIndex( const QModelIndex& idx ) const;
     int rowForItem( SourceTreeItem* item ) const;
-    bool activatePlaylistPage( Tomahawk::ViewPage* p, SourceTreeItem* i );
+    SourceTreeItem* activatePlaylistPage( Tomahawk::ViewPage* p, SourceTreeItem* i );
 
     SourceTreeItem* m_rootItem;
+
+    QList< Tomahawk::source_ptr > m_sourcesWithViewPage;
+    QHash< Tomahawk::source_ptr, SourceTreeItem* > m_sourcesWithViewPageItems;
 
     QHash< Tomahawk::ViewPage*, SourceTreeItem* > m_sourceTreeLinks;
     Tomahawk::ViewPage* m_viewPageDelayedCacheItem;

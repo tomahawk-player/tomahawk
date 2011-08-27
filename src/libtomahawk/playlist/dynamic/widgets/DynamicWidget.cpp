@@ -105,6 +105,12 @@ DynamicWidget::~DynamicWidget()
 {
 }
 
+dynplaylist_ptr
+DynamicWidget::playlist()
+{
+    return m_playlist;
+}
+
 
 void
 DynamicWidget::loadDynamicPlaylist( const Tomahawk::dynplaylist_ptr& playlist )
@@ -427,6 +433,17 @@ DynamicWidget::paintRoundedFilledRect( QPainter& p, QPalette& /* pal */, QRect& 
     p.drawRoundedRect( r, 10, 10 );
 }
 
+QString
+DynamicWidget::description() const
+{
+    return m_model->description();
+}
+
+QString
+DynamicWidget::title() const
+{
+    return m_model->title();
+}
 
 QPixmap
 DynamicWidget::pixmap() const

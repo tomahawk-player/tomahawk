@@ -31,11 +31,31 @@ void
 DatabaseCommand_LoadAllAutoPlaylists::exec( DatabaseImpl* dbi )
 {
     TomahawkSqlQuery query = dbi->newquery();
+    QString orderToken, sourceToken;
+
+    switch ( m_sortOrder )
+    {
+        case 0:
+            break;
+
+        case DatabaseCommand_LoadAllPlaylists::ModificationTime:
+            orderToken = "playlist.createdOn";
+    }
+
+    if ( !source().isNull() )
+        sourceToken = QString( "AND source %1 " ).arg( source()->isLocal() ? "IS NULL" : QString( "= %1" ).arg( source()->id() ) );
+
 
     query.exec( QString( "SELECT playlist.guid as guid, title, info, creator, createdOn, lastmodified, shared, currentrevision, dynamic_playlist.pltype, dynamic_playlist.plmode "
-                         "FROM playlist, dynamic_playlist WHERE source %1 AND dynplaylist = 'true' AND playlist.guid = dynamic_playlist.guid AND dynamic_playlist.plmode = %2 AND dynamic_playlist.autoload = 'true'" )
-    .arg( source()->isLocal() ? "IS NULL" : QString( "=%1" ).arg( source()->id() ) )
-    .arg( Static ) );
+                         "FROM playlist, dynamic_playlist WHERE dynplaylist = 'true' AND playlist.guid = dynamic_playlist.guid AND dynamic_playlist.plmode = %1 AND dynamic_playlist.autoload = 'true' "
+                         "%2"
+                         "%3 %4 %5"
+                       )
+                       .arg( Static )
+                       .arg( sourceToken )
+                       .arg( m_sortOrder > 0 ? QString( "ORDER BY %1" ).arg( orderToken ) : QString() )
+                       .arg( m_sortDescending ? "DESC" : QString() )
+                       .arg( m_limitAmount > 0 ? QString( "LIMIT 0, %1" ).arg( m_limitAmount ) : QString() ) );
 
     QList<dynplaylist_ptr> plists;
     while ( query.next() )

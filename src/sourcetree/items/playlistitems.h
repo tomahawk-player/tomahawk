@@ -41,7 +41,7 @@ public:
     virtual int peerSortValue() const;
     virtual int IDValue() const;
 
-    virtual bool activateCurrent();
+    virtual SourceTreeItem* activateCurrent();
 
 protected:
     void setLoaded( bool loaded );
@@ -73,7 +73,7 @@ public:
     virtual int IDValue() const;
     virtual QIcon icon() const;
 
-    virtual bool activateCurrent();
+    virtual SourceTreeItem* activateCurrent();
 private slots:
     void onDynamicPlaylistLoaded( Tomahawk::DynamicPlaylistRevision revision );
 

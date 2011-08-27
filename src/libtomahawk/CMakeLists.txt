@@ -67,6 +67,7 @@ set( libSources
     database/databasecommand_playbackhistory.cpp
     database/databasecommand_setplaylistrevision.cpp
     database/databasecommand_loadallplaylists.cpp
+    database/databasecommand_loadallsortedplaylists.cpp
     database/databasecommand_loadallsources.cpp
     database/databasecommand_createplaylist.cpp
     database/databasecommand_deleteplaylist.cpp
@@ -180,7 +181,8 @@ set( libSources
     widgets/SeekSlider.cpp
     widgets/playlisttypeselectordlg.cpp
     widgets/welcomewidget.cpp
-    widgets/welcomeplaylistmodel.cpp
+    widgets/RecentlyPlayedPlaylistsModel.cpp
+    widgets/RecentPlaylistsModel.cpp
     widgets/overlaywidget.cpp
     widgets/HeaderLabel.cpp
     widgets/SocialPlaylistWidget.cpp
@@ -248,6 +250,7 @@ set( libHeaders
     database/databasecommand_playbackhistory.h
     database/databasecommand_setplaylistrevision.h
     database/databasecommand_loadallplaylists.h
+    database/databasecommand_loadallsortedplaylists.h
     database/databasecommand_loadallsources.h
     database/databasecommand_createplaylist.h
     database/databasecommand_deleteplaylist.h
@@ -360,7 +363,8 @@ set( libHeaders
     widgets/SeekSlider.h
     widgets/playlisttypeselectordlg.h
     widgets/welcomewidget.h
-    widgets/welcomeplaylistmodel.h
+    widgets/RecentlyPlayedPlaylistsModel.h
+    widgets/RecentPlaylistsModel.h
     widgets/overlaywidget.h
     widgets/HeaderLabel.h
     widgets/SocialPlaylistWidget.h

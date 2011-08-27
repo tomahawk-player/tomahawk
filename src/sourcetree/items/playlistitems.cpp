@@ -231,7 +231,7 @@ PlaylistItem::setData( const QVariant& v, bool role )
     return false;
 }
 
-bool
+SourceTreeItem*
 PlaylistItem::activateCurrent()
 {
     if( ViewManager::instance()->pageForPlaylist( m_playlist ) == ViewManager::instance()->currentPage() )
@@ -239,10 +239,10 @@ PlaylistItem::activateCurrent()
         model()->linkSourceItemToPage( this, ViewManager::instance()->currentPage() );
         emit selectRequest( this );
 
-        return true;
+        return this;
     }
 
-    return false;
+    return 0;
 }
 
 
@@ -386,7 +386,7 @@ DynamicPlaylistItem::icon() const
     }
 }
 
-bool
+SourceTreeItem*
 DynamicPlaylistItem::activateCurrent()
 {
     if( ViewManager::instance()->pageForDynPlaylist( m_dynplaylist ) == ViewManager::instance()->currentPage() )
@@ -394,9 +394,9 @@ DynamicPlaylistItem::activateCurrent()
         model()->linkSourceItemToPage( this, ViewManager::instance()->currentPage() );
         emit selectRequest( this );
 
-        return true;
+        return this;
     }
 
-    return false;
+    return 0;
 }
 

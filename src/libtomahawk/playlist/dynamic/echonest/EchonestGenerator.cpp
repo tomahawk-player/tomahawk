@@ -524,12 +524,10 @@ EchonestGenerator::sentenceSummary()
             suffix = ", ";
         sentence += prefix + allcontrols.value( i ).dynamicCast< EchonestControl >()->summary() + suffix;
     }
-    qDebug() << "Got artists and contents:" << sentence;
 
     if( !sorting.isNull() ) {
         sentence += "and " + sorting.dynamicCast< EchonestControl >()->summary() + ".";
     }
-    qDebug() << "Got full summary:" << sentence;
 
     return sentence;
 }

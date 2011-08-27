@@ -1,6 +1,7 @@
 /* === This file is part of Tomahawk Player - <http://tomahawk-player.org> ===
  *
  *   Copyright 2010-2011, Christian Muehlhaeuser <muesli@tomahawk-player.org>
+ *   Copyright 2011, Leo Franchi <lfranchi@kde.org>
  *
  *   Tomahawk is free software: you can redistribute it and/or modify
  *   it under the terms of the GNU General Public License as published by
@@ -31,12 +32,31 @@ void
 DatabaseCommand_LoadAllPlaylists::exec( DatabaseImpl* dbi )
 {
     TomahawkSqlQuery query = dbi->newquery();
+    QString orderToken, sourceToken;
+
+    switch ( m_sortOrder )
+    {
+        case 0:
+            break;
+
+        case ModificationTime:
+            orderToken = "playlist.createdOn";
+    }
+
+    if ( !source().isNull() )
+        sourceToken = QString( "AND source %1 " ).arg( source()->isLocal() ? "IS NULL" : QString( "= %1" ).arg( source()->id() ) );
+
 
     query.exec( QString( "SELECT guid, title, info, creator, lastmodified, shared, currentrevision, createdOn "
-                         "FROM playlist WHERE source %1 AND dynplaylist = 'false'" )
-                   .arg( source()->isLocal() ? "IS NULL" :
-                         QString( "= %1" ).arg( source()->id() )
-                       ) );
+                         "FROM playlist "
+                         "WHERE dynplaylist = 'false' "
+                         "%1 "
+                         "%2 %3 %4"
+                       )
+                       .arg( sourceToken )
+                       .arg( m_sortOrder > 0 ? QString( "ORDER BY %1" ).arg( orderToken ) : QString() )
+                       .arg( m_sortDescending ? "DESC" : QString() )
+                       .arg( m_limitAmount > 0 ? QString( "LIMIT 0, %1" ).arg( m_limitAmount ) : QString() ) );
 
     QList<playlist_ptr> plists;
     while ( query.next() )
