@@ -63,7 +63,7 @@ CollectionItem::CollectionItem(  SourcesModel* mdl, SourceTreeItem* parent, cons
                                                     );
         recent->setSortValue( -300 );
 
-        GenericPageItem* hot = new GenericPageItem( model(), this, tr( "What's Hot" ), QIcon( RESPATH "images/whats-hot.png" ),
+        GenericPageItem* hot = new GenericPageItem( model(), this, tr( "Charts" ), QIcon( RESPATH "images/charts.png" ),
                              boost::bind( &ViewManager::showWhatsHotPage, ViewManager::instance() ),
                              boost::bind( &ViewManager::whatsHotWidget, ViewManager::instance() )
                                                     );

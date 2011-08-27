@@ -54,7 +54,7 @@ public:
     virtual QWidget* widget() { return this; }
     virtual Tomahawk::PlaylistInterface* playlistInterface() const { return 0; }
 
-    virtual QString title() const { return tr( "What's Hot" ); }
+    virtual QString title() const { return tr( "Charts" ); }
     virtual QString description() const { return QString(); }
 
     virtual bool showStatsBar() const { return false; }
