@@ -530,8 +530,14 @@ setNam( QNetworkAccessManager* nam )
             qDebug() << Q_FUNC_INFO;
             QWidgetList widgetList = qApp->topLevelWidgets();
             int i = 0;
-            while( !widgetList.at( i )->isWindow() )
+            while( i < widgetList.count() && widgetList.at( i )->objectName() != "TH_Main_Window" )
                 i++;
+            if ( i == widgetList.count() )
+            {
+                qDebug() << Q_FUNC_INFO << " could not find main TH window";
+                return;
+            }
+            
             QWidget *widget = widgetList.at( i );
 
             widget->show();
@@ -564,8 +570,14 @@ setNam( QNetworkAccessManager* nam )
             qDebug() << Q_FUNC_INFO;
             QWidgetList widgetList = qApp->topLevelWidgets();
             int i = 0;
-            while( !widgetList.at( i )->isWindow() )
+            while( i < widgetList.count() && widgetList.at( i )->objectName() != "TH_Main_Window" )
                 i++;
+            if ( i == widgetList.count() )
+            {
+                qDebug() << Q_FUNC_INFO << " could not find main TH window";
+                return;
+            }
+            
             QWidget *widget = widgetList.at( i );
 
             widget->show();
