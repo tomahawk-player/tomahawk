@@ -40,15 +40,13 @@ public:
     QString playlistName() const;
 
 private slots:
-	void createNormalPlaylist();
-	void createAutomaticPlaylist();
-    void enableAutoPlaylistButton( const QString& );
+    void createNormalPlaylist();
+    void createAutomaticPlaylist();
 
 private:
     bool m_isAutoPlaylist; // if not an auto playlist then its a normal playlist
 
     Ui::PlaylistTypeSelectorDlg *ui;
-    QString m_playlistName;
 
 };
 

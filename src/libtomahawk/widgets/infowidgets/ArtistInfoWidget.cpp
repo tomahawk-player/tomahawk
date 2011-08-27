@@ -31,15 +31,13 @@
 
 #include "widgets/overlaywidget.h"
 
-static QString s_aiInfoIdentifier = QString( "ArtistInfoWidget" );
-
 using namespace Tomahawk;
-
 
 ArtistInfoWidget::ArtistInfoWidget( const Tomahawk::artist_ptr& artist, QWidget* parent )
     : QWidget( parent )
     , ui( new Ui::ArtistInfoWidget )
     , m_artist( artist )
+    , m_infoId( uuid() )
 {
     ui->setupUi( this );
 
@@ -95,7 +93,7 @@ ArtistInfoWidget::load( const artist_ptr& artist )
     artistInfo["artist"] = artist->name();
 
     Tomahawk::InfoSystem::InfoRequestData requestData;
-    requestData.caller = s_aiInfoIdentifier;
+    requestData.caller = m_infoId;
     requestData.customData = QVariantMap();
 
     requestData.input = artist->name();
@@ -121,7 +119,7 @@ ArtistInfoWidget::load( const artist_ptr& artist )
 void
 ArtistInfoWidget::infoSystemInfo( Tomahawk::InfoSystem::InfoRequestData requestData, QVariant output )
 {
-    if ( requestData.caller != s_aiInfoIdentifier )
+    if ( requestData.caller != m_infoId )
     {
 //        qDebug() << "Info of wrong type or not with our identifier";
         return;
@@ -139,6 +137,7 @@ ArtistInfoWidget::infoSystemInfo( Tomahawk::InfoSystem::InfoRequestData requestD
         }
     }
 
+qDebug() << "ARTISTINFOWIDGET got infosystem info for:" << m_title << output.value< Tomahawk::InfoSystem::InfoGenericMap >();
     QVariantMap returnedData = output.value< QVariantMap >();
     switch ( requestData.type )
     {

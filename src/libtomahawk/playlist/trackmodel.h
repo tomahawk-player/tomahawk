@@ -49,7 +49,8 @@ public:
         Year = 6,
         Filesize = 7,
         Origin = 8,
-        Score = 9
+        Score = 9,
+        AlbumPos = 10
     };
 
     explicit TrackModel( QObject* parent = 0 );

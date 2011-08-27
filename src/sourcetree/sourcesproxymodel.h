@@ -33,12 +33,12 @@ public:
 public slots:
     void showOfflineSources( bool offlineSourcesShown );
 
-    void selectRequested( const QModelIndex& );
-    void expandRequested( const QModelIndex& );
+    void selectRequested( const QPersistentModelIndex& );
+    void expandRequested( const QPersistentModelIndex& );
 
 signals:
-    void selectRequest( const QModelIndex& idx );
-    void expandRequest( const QModelIndex& idx );
+    void selectRequest( const QPersistentModelIndex& idx );
+    void expandRequest( const QPersistentModelIndex& idx );
 
 protected:
     bool filterAcceptsRow( int sourceRow, const QModelIndex& sourceParent ) const;

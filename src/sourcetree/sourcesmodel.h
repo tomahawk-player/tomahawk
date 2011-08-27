@@ -108,8 +108,8 @@ public slots:
     void itemExpandRequest( SourceTreeItem* item );
 
 signals:
-    void selectRequest( const QModelIndex& idx );
-    void expandRequest( const QModelIndex& idx );
+    void selectRequest( const QPersistentModelIndex& idx );
+    void expandRequest( const QPersistentModelIndex& idx );
 
 private slots:
     void onSourcesAdded( const QList<Tomahawk::source_ptr>& sources );

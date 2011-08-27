@@ -116,11 +116,13 @@ Pipeline::resolve( const QList<query_ptr>& qlist, bool prioritized, bool tempora
         int i = 0;
         foreach( const query_ptr& q, qlist )
         {
-            if ( !m_qids.contains( q->id() ) )
-                m_qids.insert( q->id(), q );
-
             if ( m_queries_pending.contains( q ) )
                 continue;
+            if ( m_qidsState.contains( q->id() ) )
+                continue;
+
+            if ( !m_qids.contains( q->id() ) )
+                m_qids.insert( q->id(), q );
 
             if ( prioritized )
                 m_queries_pending.insert( i++, q );
@@ -169,8 +171,7 @@ Pipeline::reportResults( QID qid, const QList< result_ptr >& results )
 
     if ( !m_qids.contains( qid ) )
     {
-        qDebug() << "reportResults called for unknown QID" << qid;
-        Q_ASSERT( false );
+        tDebug() << "Result arrived too late for:" << qid;
         return;
     }
 
@@ -183,35 +184,14 @@ Pipeline::reportResults( QID qid, const QList< result_ptr >& results )
             m_rids.insert( r->id(), r );
         }
 
-        if ( q->solved() && !q->isFullTextQuery() )
+        if ( q->playable() && !q->isFullTextQuery() )
         {
-            q->onResolvingFinished();
-
             setQIDState( q, 0 );
-            if ( m_qidsTimeout.contains( q->id() ) )
-                m_qidsTimeout.remove( q->id() );
-
-            shuntNext();
             return;
         }
     }
 
-    if ( decQIDState( q ) == 0 )
-    {
-        if ( !q->solved() || q->isFullTextQuery() )
-            q->onResolvingFinished();
-
-        if ( !m_queries_temporary.contains( q ) )
-            m_qids.remove( q->id() );
-        if ( m_qidsTimeout.contains( q->id() ) )
-            m_qidsTimeout.remove( q->id() );
-
-        shuntNext();
-    }
-    else
-    {
-        new FuncTimeout( 0, boost::bind( &Pipeline::timeoutShunt, this, q ), this );
-    }
+    decQIDState( q );
 }
 
 
@@ -247,7 +227,6 @@ Pipeline::shuntNext()
     }
 
     setQIDState( q, rc );
-    new FuncTimeout( 0, boost::bind( &Pipeline::shunt, this, q ), this );
 }
 
 
@@ -260,8 +239,7 @@ Pipeline::timeoutShunt( const query_ptr& q )
     // are we still waiting for a timeout?
     if ( m_qidsTimeout.contains( q->id() ) )
     {
-        m_qidsTimeout.remove( q->id() );
-        shunt( q );
+        decQIDState( q );
     }
 }
 
@@ -278,7 +256,7 @@ Pipeline::shunt( const query_ptr& q )
 
     if ( r )
     {
-        qDebug() << "Dispatching to resolver" << r->name() << q->toString() << q->solved() << q->id();
+        tDebug() << "Dispatching to resolver" << r->name() << q->toString() << q->solved() << q->id();
 
         q->setCurrentResolver( r );
         r->resolve( q );
@@ -291,7 +269,9 @@ Pipeline::shunt( const query_ptr& q )
     }
     else
     {
+        // we get here if we disable a resolver while a query is resolving
         setQIDState( q, 0 );
+        return;
     }
 
     shuntNext();
@@ -327,14 +307,24 @@ Pipeline::setQIDState( const Tomahawk::query_ptr& query, int state )
 {
     QMutexLocker lock( &m_mut );
 
+    if ( m_qidsTimeout.contains( query->id() ) )
+        m_qidsTimeout.remove( query->id() );
+
     if ( state > 0 )
     {
         m_qidsState.insert( query->id(), state );
+
+        new FuncTimeout( 0, boost::bind( &Pipeline::shunt, this, query ), this );
     }
     else
     {
         m_qidsState.remove( query->id() );
-//        qDebug() << "Queries running:" << m_qidsState.count();
+        query->onResolvingFinished();
+
+        if ( !m_queries_temporary.contains( query ) )
+            m_qids.remove( query->id() );
+
+        new FuncTimeout( 0, boost::bind( &Pipeline::shuntNext, this ), this );
     }
 }
 
@@ -358,22 +348,17 @@ Pipeline::incQIDState( const Tomahawk::query_ptr& query )
 int
 Pipeline::decQIDState( const Tomahawk::query_ptr& query )
 {
-    QMutexLocker lock( &m_mut );
-
-    if ( !m_qidsState.contains( query->id() ) )
-        return 0;
-
-    int state = m_qidsState.value( query->id() ) - 1;
-    if ( state )
+    int state = 0;
     {
-        m_qidsState.insert( query->id(), state );
-    }
-    else
-    {
-        m_qidsState.remove( query->id() );
-//        qDebug() << "Queries running:" << m_qidsState.count();
+        QMutexLocker lock( &m_mut );
+
+        if ( !m_qidsState.contains( query->id() ) )
+            return 0;
+
+        state = m_qidsState.value( query->id() ) - 1;
     }
 
+    setQIDState( query, state );
     return state;
 }
 

@@ -86,7 +86,7 @@ WelcomeWidget::WelcomeWidget( QWidget* parent )
 
     m_recentAlbumsModel = new AlbumModel( ui->additionsView );
     ui->additionsView->setAlbumModel( m_recentAlbumsModel );
-    m_recentAlbumsModel->addFilteredCollection( collection_ptr(), 20, DatabaseCommand_AllAlbums::ModificationTime );
+    m_recentAlbumsModel->addFilteredCollection( collection_ptr(), 20, DatabaseCommand_AllAlbums::ModificationTime, true );
 
     m_timer = new QTimer( this );
     connect( m_timer, SIGNAL( timeout() ), SLOT( checkQueries() ) );
@@ -108,6 +108,14 @@ void
 WelcomeWidget::updateRecentTracks()
 {
     m_tracksModel->loadHistory( Tomahawk::source_ptr(), HISTORY_TRACK_ITEMS );
+
+    connect( SourceList::instance()->getLocal().data(), SIGNAL( stats( QVariantMap ) ), this, SLOT( updateRecentAdditions() ) );
+}
+
+void
+WelcomeWidget::updateRecentAdditions()
+{
+    m_recentAlbumsModel->addFilteredCollection( collection_ptr(), 20, DatabaseCommand_AllAlbums::ModificationTime, true );
 }
 
 

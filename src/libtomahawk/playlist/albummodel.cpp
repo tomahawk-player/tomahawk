@@ -35,6 +35,7 @@ using namespace Tomahawk;
 AlbumModel::AlbumModel( QObject* parent )
     : QAbstractItemModel( parent )
     , m_rootItem( new AlbumItem( 0, this ) )
+    , m_overwriteOnAdd( false )
 {
     qDebug() << Q_FUNC_INFO;
 
@@ -236,13 +237,14 @@ AlbumModel::removeIndexes( const QList<QModelIndex>& indexes )
 
 
 void
-AlbumModel::addCollection( const collection_ptr& collection )
+AlbumModel::addCollection( const collection_ptr& collection, bool overwrite )
 {
     qDebug() << Q_FUNC_INFO << collection->name()
                             << collection->source()->id()
                             << collection->source()->userName();
 
     DatabaseCommand_AllAlbums* cmd = new DatabaseCommand_AllAlbums( collection );
+    m_overwriteOnAdd = overwrite;
 
     connect( cmd, SIGNAL( albums( QList<Tomahawk::album_ptr>, QVariant ) ),
                     SLOT( addAlbums( QList<Tomahawk::album_ptr> ) ) );
@@ -254,7 +256,7 @@ AlbumModel::addCollection( const collection_ptr& collection )
 
 
 void
-AlbumModel::addFilteredCollection( const collection_ptr& collection, unsigned int amount, DatabaseCommand_AllAlbums::SortOrder order )
+AlbumModel::addFilteredCollection( const collection_ptr& collection, unsigned int amount, DatabaseCommand_AllAlbums::SortOrder order, bool overwrite )
 {
 /*    qDebug() << Q_FUNC_INFO << collection->name()
                             << collection->source()->id()
@@ -265,6 +267,7 @@ AlbumModel::addFilteredCollection( const collection_ptr& collection, unsigned in
     cmd->setLimit( amount );
     cmd->setSortOrder( order );
     cmd->setSortDescending( true );
+    m_overwriteOnAdd = overwrite;
 
     connect( cmd, SIGNAL( albums( QList<Tomahawk::album_ptr>, QVariant ) ),
                     SLOT( addAlbums( QList<Tomahawk::album_ptr> ) ) );
@@ -283,6 +286,9 @@ AlbumModel::addAlbums( const QList<Tomahawk::album_ptr>& albums )
 {
     if ( !albums.count() )
         return;
+
+    if ( m_overwriteOnAdd )
+        clear();
 
     int c = rowCount( QModelIndex() );
     QPair< int, int > crows;
@@ -347,7 +353,8 @@ AlbumModel::infoSystemInfo( Tomahawk::InfoSystem::InfoRequestData requestData, Q
         if ( !pm.isNull() )
             ai->cover = pm;
 
-        emit dataChanged( ai->index, ai->index.sibling( ai->index.row(), columnCount( QModelIndex() ) - 1 ) );
+        if ( ai->index.isValid() )
+            emit dataChanged( ai->index, ai->index.sibling( ai->index.row(), columnCount( QModelIndex() ) - 1 ) );
     }
 }
 

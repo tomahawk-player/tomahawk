@@ -137,7 +137,7 @@ AudioEngine::play()
         QVariant::fromValue< Tomahawk::InfoSystem::InfoCriteriaHash >( trackInfo ) );
     }
     else
-        loadNextTrack();
+        next();
 }
 
 
@@ -204,6 +204,11 @@ AudioEngine::next()
 bool
 AudioEngine::canGoNext()
 {
+    tDebug( LOGEXTRA ) << Q_FUNC_INFO;
+
+    if ( m_queue && m_queue->trackCount() )
+        return true;
+    
     if ( m_playlist.isNull() )
         return false;
 
@@ -212,14 +217,15 @@ AudioEngine::canGoNext()
         return false;
 
     if ( !m_currentTrack.isNull() && !m_playlist.data()->hasNextItem() &&
-         m_currentTrack->id() == m_playlist.data()->currentItem()->id() )
+         ( m_playlist.data()->currentItem().isNull() || ( m_currentTrack->id() == m_playlist.data()->currentItem()->id() ) ) )
     {
         //For instance, when doing a catch-up while listening along, but the person
         //you're following hasn't started a new track yet...don't do anything
+        tDebug( LOGEXTRA ) << Q_FUNC_INFO << "catch up";
         return false;
     }
-
-    return true;
+    
+    return m_playlist.data()->hasNextItem();
 }
 
 bool
@@ -332,11 +338,16 @@ AudioEngine::infoSystemInfo( Tomahawk::InfoSystem::InfoRequestData requestData, 
         return;
     }
 
+    if ( m_currentTrack.isNull() ||
+         m_currentTrack->track().isNull() ||
+         m_currentTrack->artist().isNull() )
+        return;
+
     QVariantMap playInfo;
-    playInfo["message"] = QString( "Tomahawk is playing \"%1\" by %2 on album %3." )
-                                    .arg( m_currentTrack->track() )
-                                    .arg( m_currentTrack->artist()->name() )
-                                     .arg( m_currentTrack->album()->name() );
+    playInfo["message"] = tr( "Tomahawk is playing \"%1\" by %2%3." )
+                        .arg( m_currentTrack->track() )
+                        .arg( m_currentTrack->artist()->name() )
+                        .arg( m_currentTrack->album().isNull() ? QString() : tr( " on album %1" ).arg( m_currentTrack->album()->name() ) );
     if ( !output.isNull() && output.isValid() )
     {
         QVariantMap returnedData = output.value< QVariantMap >();
@@ -495,11 +506,15 @@ AudioEngine::loadNextTrack()
 
     if ( !m_playlist.isNull() && result.isNull() )
     {
+        tDebug( LOGEXTRA ) << Q_FUNC_INFO << " loading playlist's next item";
         result = m_playlist.data()->nextItem();
     }
 
     if ( !result.isNull() )
+    {
+        tDebug( LOGEXTRA ) << Q_FUNC_INFO << " got next item, loading track";
         loadTrack( result );
+    }
     else
     {
         if ( !m_playlist.isNull() && m_playlist.data()->retryMode() == Tomahawk::PlaylistInterface::Retry )
@@ -589,7 +604,7 @@ AudioEngine::onStateChanged( Phonon::State newState, Phonon::State oldState )
         {
             m_expectStop = false;
             tDebug( LOGEXTRA ) << "Finding next track.";
-            loadNextTrack();
+            next();
         }
     }
 }
@@ -621,10 +636,15 @@ void
 AudioEngine::setPlaylist( PlaylistInterface* playlist )
 {
     if ( !m_playlist.isNull() )
+    {
+        if ( m_playlist.data()->object() && m_playlist.data()->retryMode() == PlaylistInterface::Retry )
+            disconnect( m_playlist.data()->object(), SIGNAL( nextTrackReady() ) );
         m_playlist.data()->reset();
+    }
 
     if ( !playlist )
         return;
+
     m_playlist = playlist->getSharedPointer();
 
     if ( m_playlist.data()->object() && m_playlist.data()->retryMode() == PlaylistInterface::Retry )

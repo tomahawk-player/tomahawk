@@ -27,6 +27,7 @@
 
 #include "result.h"
 
+class QSearchField;
 class SipPlugin;
 class SourceTreeView;
 class QAction;
@@ -81,8 +82,6 @@ private slots:
     void addPeerManually();
 
     void onPlaybackLoading( const Tomahawk::result_ptr& result );
-    void onHistoryBackAvailable( bool avail );
-    void onHistoryForwardAvailable( bool avail );
 
     void audioStarted();
     void audioStopped();
@@ -99,26 +98,22 @@ private slots:
     void minimize();
     void maximize();
 
+    void playlistCreateDialogFinished( int ret );
 private:
     void loadSettings();
     void saveSettings();
 
     void applyPlatformTweaks();
     void setupSignals();
-    void setupToolBar();
     void setupSideBar();
     void setupUpdateCheck();
 
     Ui::TomahawkWindow* ui;
-    Ui::GlobalSearchWidget* m_searchWidget;
-    QWidget* m_searchBox;
+    QSearchField* m_searchWidget;
     AudioControls* m_audioControls;
     TomahawkTrayIcon* m_trayIcon;
     SourceTreeView* m_sourcetree;
     QPushButton* m_statusButton;
-
-    QAction* m_backAvailable;
-    QAction* m_forwardAvailable;
 
     Tomahawk::result_ptr m_currentTrack;
     QString m_windowTitle;

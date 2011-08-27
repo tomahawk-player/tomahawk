@@ -149,6 +149,6 @@ NewPlaylistWidget::savePlaylist()
 void
 NewPlaylistWidget::cancel()
 {
+    // will be deleted by viewmanager
     emit destroyed( this );
-    deleteLater();
 }

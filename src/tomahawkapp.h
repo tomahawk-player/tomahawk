@@ -145,5 +145,7 @@ private:
     QxtHttpSessionManager m_session;
 };
 
+Q_DECLARE_METATYPE( QPersistentModelIndex );
+
 #endif // TOMAHAWKAPP_H
 

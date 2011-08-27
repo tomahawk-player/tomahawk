@@ -283,14 +283,6 @@ MusicScanner::listerFinished( const QMap<QString, unsigned int>& newmtimes  )
         Database::instance()->enqueue( QSharedPointer<DatabaseCommand>(cmd) );
     }
 
-    // re-calculate source stats
-    {
-        DatabaseCommand_CollectionStats* cmd = new DatabaseCommand_CollectionStats( SourceList::instance()->getLocal() );
-        connect( cmd, SIGNAL( done( QVariantMap ) ),
-                SourceList::instance()->getLocal().data(), SLOT( setStats( QVariantMap ) ), Qt::QueuedConnection );
-        Database::instance()->enqueue( QSharedPointer<DatabaseCommand>( cmd ) );
-    }
-
     if ( !m_dirLister.isNull() )
     {
         m_dirListerThreadController->quit();;

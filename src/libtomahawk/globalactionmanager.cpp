@@ -357,6 +357,8 @@ GlobalActionManager::doQueueAdd( const QStringList& parts, const QList< QPair< Q
 
         if( queueSpotify( parts, queryItems ) )
             return true;
+        else if( queueRdio( parts, queryItems ) )
+            return true;
 
         QPair< QString, QString > pair;
 
@@ -427,6 +429,26 @@ GlobalActionManager::queueSpotify( const QStringList& , const QList< QPair< QStr
     return true;
 }
 
+bool
+GlobalActionManager::queueRdio( const QStringList& , const QList< QPair< QString, QString > >& queryItems )
+{
+    QString url;
+
+    QPair< QString, QString > pair;
+    foreach( pair, queryItems ) {
+        if( pair.first == "rdioURL" )
+            url = pair.second;
+        else if( pair.first == "rdioURI" )
+            url = pair.second;
+    }
+
+    if( url.isEmpty() )
+        return false;
+
+    openRdioLink( url );
+
+    return true;
+}
 
 bool
 GlobalActionManager::handleSearchCommand( const QUrl& url )
@@ -617,6 +639,8 @@ GlobalActionManager::handlePlayCommand( const QUrl& url )
     if( parts[ 0 ] == "track" ) {
         if( playSpotify( url ) )
             return true;
+        else if( playRdio( url ) )
+            return true;
 
         QPair< QString, QString > pair;
         QString title, artist, album, urlStr;
@@ -652,18 +676,33 @@ GlobalActionManager::playSpotify( const QUrl& url )
 
     QString spotifyUrl = url.hasQueryItem( "spotifyURI" ) ? url.queryItemValue( "spotifyURI" ) : url.queryItemValue( "spotifyURL" );
     SpotifyParser* p = new SpotifyParser( spotifyUrl, this );
-    connect( p, SIGNAL( track( Tomahawk::query_ptr ) ), this, SLOT( spotifyToPlay( Tomahawk::query_ptr ) ) );
+    connect( p, SIGNAL( track( Tomahawk::query_ptr ) ), this, SLOT( playNow( Tomahawk::query_ptr ) ) );
 
     return true;
 }
 
 void
-GlobalActionManager::spotifyToPlay( const query_ptr& q )
+GlobalActionManager::playNow( const query_ptr& q )
 {
     Pipeline::instance()->resolve( q, true );
 
     m_waitingToPlay = q;
     connect( q.data(), SIGNAL( resolvingFinished( bool ) ), this, SLOT( waitingForResolved( bool ) ) );
+}
+
+bool
+GlobalActionManager::playRdio( const QUrl& url )
+{
+    if( !url.hasQueryItem( "rdioURI" ) && !url.hasQueryItem( "rdioURL" ) )
+        return false;
+
+
+    QString rdioUrl = url.hasQueryItem( "rdioURI" ) ? url.queryItemValue( "spotifyURI" ) : url.queryItemValue( "rdioURL" );
+    RdioParser* p = new RdioParser( this );
+    p->parse( rdioUrl );
+    connect( p, SIGNAL( track( Tomahawk::query_ptr ) ), this, SLOT( playNow( Tomahawk::query_ptr ) ) );
+
+    return true;
 }
 
 

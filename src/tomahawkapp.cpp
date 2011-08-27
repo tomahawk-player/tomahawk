@@ -391,6 +391,7 @@ TomahawkApp::registerMetaTypes()
     qRegisterMetaType< DirLister::Mode >("DirLister::Mode");
     qRegisterMetaType< Tomahawk::InfoSystem::ArtistTrackPair >("Tomahawk::InfoSystem::ArtistTrackPair");
     qRegisterMetaType< QList<Tomahawk::InfoSystem::ArtistTrackPair> >("QList<Tomahawk::InfoSystem::ArtistTrackPair>");
+    qRegisterMetaType< QPersistentModelIndex >( "QPersistentModelIndex" );
 }
 
 

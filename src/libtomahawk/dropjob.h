@@ -43,7 +43,7 @@ public:
      */
     static bool acceptsMimeData( const QMimeData* data, bool tracksOnly = true );
     static QStringList mimeTypes();
-    void tracksFromMimeData( const QMimeData* data );
+    void tracksFromMimeData( const QMimeData* data, bool allowDuplicates = false );
 
 signals:
     /// QMimeData parsing results
@@ -56,6 +56,8 @@ private slots:
 
 private:
     /// handle parsing mime data
+    void parseMimeData( const QMimeData* data );
+
     void handleTrackUrls( const QString& urls );
     QList< Tomahawk::query_ptr > tracksFromQueryList( const QMimeData* d );
     QList< Tomahawk::query_ptr > tracksFromResultList( const QMimeData* d );
@@ -63,7 +65,12 @@ private:
     QList< Tomahawk::query_ptr > tracksFromAlbumMetaData( const QMimeData* d );
     QList< Tomahawk::query_ptr > tracksFromMixedData( const QMimeData* d );
 
+    void removeDuplicates();
+
     int m_queryCount;
+    bool m_allowDuplicates;
+
+    QList< Tomahawk::query_ptr > m_resultList;
 };
 
 #endif // DROPJOB_H

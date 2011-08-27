@@ -18,15 +18,17 @@
 
 #include "tomahawkutils.h"
 
-#include <QCoreApplication>
-#include <QColor>
-#include <QDateTime>
-#include <QDir>
-#include <QLayout>
-#include <QPainter>
-#include <QPixmap>
-#include <QNetworkAccessManager>
-#include <QNetworkProxy>
+#include "headlesscheck.h"
+#include <QtCore/QCoreApplication>
+
+#include <QtGui/QColor>
+#include <QtCore/QDateTime>
+#include <QtCore/QDir>
+#include <QtGui/QLayout>
+#include <QtGui/QPainter>
+#include <QtGui/QPixmap>
+#include <QtNetwork/QNetworkAccessManager>
+#include <QtNetwork/QNetworkProxy>
 
 #ifdef WIN32
     #include <windows.h>
@@ -37,6 +39,18 @@
     #include <Carbon/Carbon.h>
     #include <sys/sysctl.h>
 #endif
+
+#ifndef TOMAHAWK_HEADLESS
+    #include <QtGui/QApplication>
+    #include <QtGui/QWidget>
+
+    #ifdef Q_WS_X11
+        extern "C" {
+            #include <X11/Xlib.h>
+        }
+    #endif
+#endif
+
 
 #include <tomahawksettings.h>
 #include "utils/logger.h"
@@ -331,7 +345,7 @@ createDragPixmap( int itemCount )
     int y = 0;
     for( int i = 0; i < itemCount; ++i )
     {
-        const QPixmap pixmap = QPixmap( QString( ":/data/icons/audio-x-generic-%2x%2.png" ).arg( size ) );
+        const QPixmap pixmap = QPixmap( QString( ":/data/images/track-icon-%2x%2.png" ).arg( size ) );
         painter.drawPixmap( x, y, pixmap );
 
         x += size + 1;
@@ -505,14 +519,50 @@ setNam( QNetworkAccessManager* nam )
     s_nam = QWeakPointer< QNetworkAccessManager >( nam );
 }
 
+#ifndef TOMAHAWK_HEADLESS
+    #if defined(Q_WS_X11)
+        void
+        bringToFront()
+        {
+            qDebug() << Q_FUNC_INFO;
+            QWidgetList widgetList = qApp->topLevelWidgets();
+            int i = 0;
+            while( !widgetList.at( i )->isWindow() )
+                i++;
+            QWidget *widget = widgetList.at( i );
 
-#ifndef Q_OS_MAC
-void
-bringToFront()
-{
-}
+            WId winId = widget->winId();
+            Display *display = XOpenDisplay( NULL );
+            if ( !display )
+            {
+                qDebug() << Q_FUNC_INFO << "Could not find display to raise";
+                return;
+            }
+            
+            XRaiseWindow( display, winId );
+            XSetInputFocus( display, winId, RevertToNone, CurrentTime );
+            //widget->activateWindow();
+            //widget->raise();
+        }
+    #elif defined(Q_WS_WIN)
+        void
+        bringToFront()
+        {
+        }
+    #else
+        #ifndef Q_OS_MAC
+            void
+            bringToFront()
+            {
+            }
+        #endif
+    #endif
+#else
+    void
+    bringToFront()
+    {
+    }
 #endif
-
 
 QPixmap
 createAvatarFrame( const QPixmap &avatar )

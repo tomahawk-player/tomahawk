@@ -122,6 +122,8 @@ SET( tomahawkHeadersGui ${tomahawkHeadersGui}
      resolversmodel.h
      delegateconfigwrapper.h
      tomahawkwindow.h
+
+     Qocoa/qsearchfield.h
 )
 
 SET( tomahawkUI ${tomahawkUI}
@@ -129,7 +131,6 @@ SET( tomahawkUI ${tomahawkUI}
      diagnosticsdialog.ui
      stackedsettingsdialog.ui
      proxydialog.ui
-     searchbox.ui
 
      audiocontrols.ui
 )
@@ -173,12 +174,13 @@ IF( APPLE )
     INCLUDE_DIRECTORIES( ${CMAKE_SOURCE_DIR}/thirdparty/SPMediaKeyTap )
 
     SET( tomahawkHeaders ${tomahawkHeaders} mac/tomahawkapp_mac.h mac/macshortcuthandler.h  )
-    SET( tomahawkSources ${tomahawkSources} mac/tomahawkapp_mac.mm  mac/macshortcuthandler.cpp )
+    SET( tomahawkSources ${tomahawkSources} mac/tomahawkapp_mac.mm  mac/macshortcuthandler.cpp Qocoa/qsearchfield_mac.mm )
 
     IF(HAVE_SPARKLE)
         SET( tomahawkHeaders ${tomahawkHeaders} ${SPARKLE}/Headers )
     ENDIF(HAVE_SPARKLE)
-
+ELSE( APPLE )
+    SET( tomahawkSources ${tomahawkSources} Qocoa/qsearchfield.cpp )
 ENDIF( APPLE )
 
 IF(GLOOX_FOUND)

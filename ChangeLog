@@ -1,10 +1,17 @@
 Version 0.3.0:
     * Added MPRIS 2.1 support.
 
+Version 0.2.3:
+    * Fixed issue where artist bio could be referring to a different artist.
+
 Version 0.2.2:
+    * Fixed crash when pressing previous and next when playing a song from the Queue.
+    * Fixed issue where wrench for newly added resolvers would not show up immediately.
+    * Fixed sidebar statistics not updating after collection scan finished.
+    * Fixed omitting a few tracks in the Collection tree-view.
     * Fixed sidebar & track sorting issues.
     * Seek- & volume sliders now directly jump to the position you clicked on.
-    * Fixed dragging artists and albums within Tomahawk.
+    * Added ability to drag artists and albums within Tomahawk (to playlists, queue, etc.).
 
 Version 0.2.1:
     * Fixed crashing trying to play an unavailable track.

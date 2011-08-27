@@ -37,10 +37,10 @@ SourcesProxyModel::SourcesProxyModel( SourcesModel* model, QObject* parent )
 
     setSourceModel( model );
 
-    if ( model && model->metaObject()->indexOfSignal( "expandRequest(QModelIndex)" ) > -1 )
-        connect( model, SIGNAL( expandRequest( QModelIndex ) ), this, SLOT( expandRequested( QModelIndex ) ) );
-    if ( model && model->metaObject()->indexOfSignal( "selectRequest(QModelIndex)" ) > -1 )
-        connect( model, SIGNAL( selectRequest( QModelIndex ) ), this, SLOT( selectRequested( QModelIndex ) ) );
+    if ( model && model->metaObject()->indexOfSignal( "expandRequest(QPersistentModelIndex)" ) > -1 )
+        connect( model, SIGNAL( expandRequest( QPersistentModelIndex ) ), this, SLOT( expandRequested( QPersistentModelIndex ) ), Qt::QueuedConnection );
+    if ( model && model->metaObject()->indexOfSignal( "selectRequest(QPersistentModelIndex)" ) > -1 )
+        connect( model, SIGNAL( selectRequest( QPersistentModelIndex ) ), this, SLOT( selectRequested( QPersistentModelIndex ) ), Qt::QueuedConnection );
 }
 
 
@@ -72,18 +72,18 @@ SourcesProxyModel::filterAcceptsRow( int sourceRow, const QModelIndex& sourcePar
 
 
 void
-SourcesProxyModel::selectRequested( const QModelIndex& idx )
+SourcesProxyModel::selectRequested( const QPersistentModelIndex& idx )
 {
-    qDebug() << "selectRequested for idx" << idx << idx.data(Qt::DisplayRole).toString() << mapFromSource( idx );
-    emit selectRequest( mapFromSource( idx ) );
+    qDebug() << "selectRequested for idx" << idx << idx.data(Qt::DisplayRole).toString() << mapFromSource( idx ) << mapFromSource( idx ).data(Qt::DisplayRole).toString();
+    emit selectRequest( QPersistentModelIndex( mapFromSource( idx ) ) );
 }
 
 
 void
-SourcesProxyModel::expandRequested( const QModelIndex& idx )
+SourcesProxyModel::expandRequested( const QPersistentModelIndex& idx )
 {
-    qDebug() << "emitting expand for idx" << idx << idx.data(Qt::DisplayRole).toString() << mapFromSource( idx );
-    emit expandRequest( mapFromSource( idx ) );
+    qDebug() << "emitting expand for idx" << idx << idx.data(Qt::DisplayRole).toString() << mapFromSource( idx ) << mapFromSource( idx ).data(Qt::DisplayRole).toString();
+    emit expandRequest( QPersistentModelIndex( mapFromSource( idx ) ) );
 }
 
 

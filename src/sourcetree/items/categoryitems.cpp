@@ -68,34 +68,44 @@ CategoryAddItem::activate()
     {
         case SourcesModel::PlaylistsCategory: {
 
-            PlaylistTypeSelectorDlg playlistSelectorDlg( TomahawkApp::instance()->mainWindow() );
-            int successfulReturn = playlistSelectorDlg.exec();
+            PlaylistTypeSelectorDlg* playlistSelectorDlg = new PlaylistTypeSelectorDlg( TomahawkApp::instance()->mainWindow(), Qt::Sheet );
+#ifndef Q_OS_MAC
+            playlistSelectorDlg->setModal( true );
+#endif
+            connect( playlistSelectorDlg, SIGNAL( finished( int ) ), this, SLOT( dialogClosed( int ) ) );
 
-            if ( !playlistSelectorDlg.playlistTypeIsAuto() && successfulReturn ) {
-
-                // only show if none is shown yet
-                if( !ViewManager::instance()->isNewPlaylistPageVisible() ) {
-                    //fix this namespace resolution problem, was not there before
-                    Tomahawk::ViewPage* p = ViewManager::instance()->show( new NewPlaylistWidget() );
-                    model()->linkSourceItemToPage( this, p );
-                }
-
-            } else if ( playlistSelectorDlg.playlistTypeIsAuto() && successfulReturn ) {
-               // create Auto Playlist
-               QString playlistName = playlistSelectorDlg.playlistName();
-               APP->mainWindow()->createAutomaticPlaylist( playlistName );
-            } else if ( !successfulReturn ) {
-                model()->viewPageActivated( ViewManager::instance()->currentPage() );
-            }
-
+            playlistSelectorDlg->show();
             break;
-                }
+        }
         case SourcesModel::StationsCategory:
             APP->mainWindow()->createStation();
             break;
     }
 }
 
+void
+CategoryAddItem::dialogClosed( int ret )
+{
+    PlaylistTypeSelectorDlg* playlistSelectorDlg = qobject_cast< PlaylistTypeSelectorDlg* >( sender() );
+    Q_ASSERT( playlistSelectorDlg );
+
+    QString playlistName = playlistSelectorDlg->playlistName();
+    if ( playlistName.isEmpty() )
+        playlistName = tr( "New Playlist" );
+
+    if ( !playlistSelectorDlg->playlistTypeIsAuto() && ret ) {
+
+        playlist_ptr playlist = Tomahawk::Playlist::create( SourceList::instance()->getLocal(), uuid(), playlistName, "", "", false, QList< query_ptr>() );
+        ViewManager::instance()->show( playlist );
+
+    } else if ( playlistSelectorDlg->playlistTypeIsAuto() && ret ) {
+       // create Auto Playlist
+       APP->mainWindow()->createAutomaticPlaylist( playlistName );
+    } else if ( !ret ) {
+        model()->viewPageActivated( ViewManager::instance()->currentPage() );
+    }
+    playlistSelectorDlg->deleteLater();
+}
 
 Qt::ItemFlags
 CategoryAddItem::flags() const

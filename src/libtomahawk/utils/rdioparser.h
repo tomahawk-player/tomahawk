@@ -49,6 +49,9 @@ signals:
     void track( const Tomahawk::query_ptr& track );
     void tracks( const QList< Tomahawk::query_ptr > tracks );
 
+private slots:
+    void expandedLinks( const QStringList& );
+
 private:
     void parseUrl( const QString& url );
 

@@ -62,8 +62,7 @@ TrackView::TrackView( QWidget* parent )
     setVerticalScrollMode( QAbstractItemView::ScrollPerPixel );
     setRootIsDecorated( false );
     setUniformRowHeights( true );
-    setMinimumWidth( 300 );
-    //    setVerticalScrollBarPolicy( Qt::ScrollBarAlwaysOn );
+    setMinimumWidth( 200 );
 
     setHeader( m_header );
     setSortingEnabled( true );
@@ -204,7 +203,15 @@ void
 TrackView::resizeEvent( QResizeEvent* event )
 {
     QTreeView::resizeEvent( event );
-    m_header->checkState();
+
+    int sortSection = m_header->sortIndicatorSection();
+    Qt::SortOrder sortOrder = m_header->sortIndicatorOrder();
+
+    if ( m_header->checkState() && sortSection >= 0 )
+    {
+        // restoreState keeps overwriting our previous sort-order
+        sortByColumn( sortSection, sortOrder );
+    }
 }
 
 

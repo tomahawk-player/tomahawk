@@ -177,7 +177,7 @@ Tomahawk::result_ptr
 TrackProxyModel::currentItem() const
 {
     TrackModelItem* item = itemFromIndex( mapToSource( currentIndex() ) );
-    if ( item && item->query()->playable() )
+    if ( item && !item->query().isNull() && item->query()->playable() )
         return item->query()->results().at( 0 );
     return Tomahawk::result_ptr();
 }
@@ -318,8 +318,8 @@ TrackProxyModel::lessThan( const QModelIndex& left, const QModelIndex& right ) c
     unsigned int albumpos1 = 0, albumpos2 = 0;
     unsigned int bitrate1 = 0, bitrate2 = 0;
     unsigned int mtime1 = 0, mtime2 = 0;
-    unsigned int id1 = 0, id2 = 0;
     unsigned int size1 = 0, size2 = 0;
+    qint64 id1 = 0, id2 = 0;
 
     if ( q1->numResults() )
     {
@@ -344,6 +344,13 @@ TrackProxyModel::lessThan( const QModelIndex& left, const QModelIndex& right ) c
         mtime2 = r->modificationTime();
         id2 = r->dbid();
         size2 = r->size();
+    }
+
+    // This makes it a stable sorter and prevents items from randomly jumping about.
+    if ( id1 == id2 )
+    {
+        id1 = (qint64)&q1;
+        id2 = (qint64)&q2;
     }
 
     if ( left.column() == TrackModel::Artist ) // sort by artist

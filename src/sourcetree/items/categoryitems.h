@@ -37,6 +37,7 @@ public:
 
 private slots:
     void parsedDroppedTracks( const QList< Tomahawk::query_ptr >& tracks );
+    void dialogClosed( int ret );
 
 private:
     SourcesModel::CategoryType m_categoryType;

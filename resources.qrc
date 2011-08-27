@@ -88,6 +88,12 @@
         <file>data/images/whats-hot.png</file>
         <file>data/images/loved_playlist.png</file>
         <file>data/images/dashboard.png</file>
+        <file>data/images/artist-icon.png</file>
+        <file>data/images/album-icon.png</file>
+        <file>data/images/search-icon.png</file>
+        <file>data/images/track-icon-22x22.png</file>
+        <file>data/images/track-icon-32x32.png</file>
+        <file>data/images/track-icon-16x16.png</file>
         <file>data/stylesheets/topbar-radiobuttons.css</file>
         <file>data/icons/tomahawk-icon-16x16.png</file>
         <file>data/icons/tomahawk-icon-32x32.png</file>
@@ -95,9 +101,6 @@
         <file>data/icons/tomahawk-icon-128x128.png</file>
         <file>data/icons/tomahawk-icon-256x256.png</file>
         <file>data/icons/tomahawk-icon-512x512.png</file>
-        <file>data/icons/audio-x-generic-22x22.png</file>
-        <file>data/icons/audio-x-generic-32x32.png</file>
-        <file>data/icons/audio-x-generic-16x16.png</file>
         <file>data/www/auth.html</file>
         <file>data/www/auth.na.html</file>
         <file>data/www/tomahawk_banner_small.png</file>

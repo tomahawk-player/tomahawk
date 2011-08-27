@@ -71,11 +71,11 @@ TrackHeader::visibleSectionCount() const
 }
 
 
-void
+bool
 TrackHeader::checkState()
 {
     if ( !count() || m_init )
-        return;
+        return false;
 
     QByteArray state = TomahawkSettings::instance()->playlistColumnSizes( m_parent->guid() );
     if ( !state.isEmpty() )
@@ -88,7 +88,7 @@ TrackHeader::checkState()
     else
     {
         QList< double > m_columnWeights;
-        m_columnWeights << 0.20 << 0.20 << 0.18 << 0.05 << 0.05 << 0.05 << 0.05 << 0.05 << 0.10; // << 0.05;
+        m_columnWeights << 0.18 << 0.18 << 0.17 << 0.05 << 0.05 << 0.05 << 0.05 << 0.05 << 0.10 << 0.05; // << 0.05;
 
         for ( int i = 0; i < count() - 1; i++ )
         {
@@ -102,6 +102,7 @@ TrackHeader::checkState()
     }
 
     m_init = true;
+    return true;
 }
 
 

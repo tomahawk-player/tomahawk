@@ -493,7 +493,7 @@ MprisPlugin::audioStarted( const QVariant &input )
         return;
 
     m_playbackStatus = "Playing";
-    //notifyPropertyChanged( "org.mpris.MediaPlayer2.Player", "Metadata");
+    notifyPropertyChanged( "org.mpris.MediaPlayer2.Player", "Metadata");
 
     //hash["artist"];
     //hash["title"];
@@ -576,15 +576,16 @@ MprisPlugin::onTrackCountChanged( unsigned int tracks )
 void
 MprisPlugin::infoSystemInfo( Tomahawk::InfoSystem::InfoRequestData requestData, QVariant output )
 {
+    // If the caller for the request was not us, or not the type of info we are seeking, ignore it
     if ( requestData.caller != s_mpInfoIdentifier || requestData.type != Tomahawk::InfoSystem::InfoAlbumCoverArt )
     {
-        notifyPropertyChanged( "org.mpris.MediaPlayer2.Player", "Metadata" );
+        //notifyPropertyChanged( "org.mpris.MediaPlayer2.Player", "Metadata" );
         return;
     }
 
     if ( !output.canConvert< QVariantMap >() )
     {
-        notifyPropertyChanged( "org.mpris.MediaPlayer2.Player", "Metadata" );
+        //notifyPropertyChanged( "org.mpris.MediaPlayer2.Player", "Metadata" );
         tDebug( LOGINFO ) << "Cannot convert fetched art from a QByteArray";
         return;
     }
@@ -610,7 +611,8 @@ MprisPlugin::infoSystemInfo( Tomahawk::InfoSystem::InfoRequestData requestData, 
         // delete the old tempfile and make new one, to avoid caching of filename by mpris clients
         if( m_coverTempFile )
             delete m_coverTempFile;
-        m_coverTempFile = new QTemporaryFile( hash["artist"] + "_" + hash["album"] + "_tomahawk_cover.png" );
+        m_coverTempFile = new QTemporaryFile( QDir::toNativeSeparators(
+                                                 QDir::tempPath() + "/" + hash["artist"] + "_" + hash["album"] + "_tomahawk_cover.png" ) );
         if( !m_coverTempFile->open() )
         {
             qDebug() << "WARNING: could not write temporary file for cover art!";
@@ -622,11 +624,16 @@ MprisPlugin::infoSystemInfo( Tomahawk::InfoSystem::InfoRequestData requestData, 
         {
             qDebug() << Q_FUNC_INFO << "Image saving successful, notifying";
             qDebug() << "Saving to: " << QFileInfo( *m_coverTempFile ).absoluteFilePath();
+            m_coverTempFile->close();
+            notifyPropertyChanged( "org.mpris.MediaPlayer2.Player", "Metadata" );
         }
         else
+        {
             qDebug() << Q_FUNC_INFO << " failed to save image!";
+            m_coverTempFile->close();
+        }
 
-        m_coverTempFile->close();
+
 
         /*
         if( m_coverTempFile->open() )
@@ -638,8 +645,6 @@ MprisPlugin::infoSystemInfo( Tomahawk::InfoSystem::InfoRequestData requestData, 
         }
                 */
     }
-
-    notifyPropertyChanged( "org.mpris.MediaPlayer2.Player", "Metadata" );
 }
 
 

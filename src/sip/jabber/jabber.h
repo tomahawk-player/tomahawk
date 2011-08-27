@@ -152,7 +152,6 @@ private:
     QHash<Jreen::JID, Jreen::Presence::Type> m_peers;
     QHash<Jreen::JID, QMessageBox*> m_subscriptionConfirmBoxes;
     enum IqContext { NoContext, RequestDisco, RequestedDisco, SipMessageSent, RequestedVCard, RequestVersion, RequestedVersion };
-    QStringList m_legacy_peers;
     AvatarManager *m_avatarManager;
 };
 

@@ -119,7 +119,7 @@ Playlist::Playlist( const source_ptr& src,
     , m_currentItem( 0 )
     , m_busy( false )
 {
-//    qDebug() << Q_FUNC_INFO << "1";
+    qDebug() << Q_FUNC_INFO << "1" << title;
     init();
 }
 
@@ -144,7 +144,7 @@ Playlist::Playlist( const source_ptr& author,
     , m_initEntries( entries )
     , m_busy( false )
 {
-//    qDebug() << Q_FUNC_INFO << "2";
+    qDebug() << Q_FUNC_INFO << "2" << title;
     init();
 }
 

@@ -176,6 +176,8 @@ Query::onResolvingFinished()
     if ( !m_resolveFinished )
     {
         m_resolveFinished = true;
+        m_resolvers.clear();
+
         emit resolvingFinished( m_solved );
     }
 }

@@ -81,8 +81,11 @@ TreeProxyModel::filterAcceptsRow( int sourceRow, const QModelIndex& sourceParent
         QList< Tomahawk::result_ptr > rl = m_cache.values( sourceParent );
         foreach ( const Tomahawk::result_ptr& result, rl )
         {
-            if ( result->track() == pi->result()->track() )
+            if ( result->track() == pi->result()->track() &&
+               ( result->albumpos() == pi->result()->albumpos() || result->albumpos() == 0 ) )
+            {
                 return ( result.data() == pi->result().data() );
+            }
         }
 
         for ( int i = 0; i < sourceModel()->rowCount( sourceParent ); i++ )
@@ -91,7 +94,9 @@ TreeProxyModel::filterAcceptsRow( int sourceRow, const QModelIndex& sourceParent
                 continue;
 
             TreeModelItem* ti = sourceModel()->itemFromIndex( sourceModel()->index( i, 0, sourceParent ) );
-            if ( ti->result()->track() == pi->result()->track() )
+
+            if ( ti->result()->track() == pi->result()->track() &&
+               ( ti->result()->albumpos() == pi->result()->albumpos() || ti->result()->albumpos() == 0 ) )
             {
                 if ( !pi->result()->isOnline() && ti->result()->isOnline() )
                     return false;
@@ -142,7 +147,7 @@ TreeProxyModel::lessThan( const QModelIndex& left, const QModelIndex& right ) co
             return p1->result()->albumpos() < p2->result()->albumpos();
 
         if ( lefts == rights )
-            return p1->result()->dbid() < p2->result()->dbid();
+            return (qint64)&p1 < (qint64)&p2;
     }
 
     return QString::localeAwareCompare( lefts, rights ) < 0;

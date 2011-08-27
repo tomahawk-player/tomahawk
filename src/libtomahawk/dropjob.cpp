@@ -96,7 +96,24 @@ DropJob::acceptsMimeData( const QMimeData* data, bool tracksOnly )
 
 
 void
-DropJob::tracksFromMimeData( const QMimeData* data )
+DropJob::tracksFromMimeData( const QMimeData* data, bool allowDuplicates )
+{
+    m_allowDuplicates = allowDuplicates;
+
+    parseMimeData( data );
+
+    if ( m_queryCount == 0 )
+    {
+        if ( !allowDuplicates )
+            removeDuplicates();
+
+        emit tracks( m_resultList );
+        deleteLater();
+    }
+}
+
+void
+DropJob::parseMimeData( const QMimeData *data )
 {
     QList< query_ptr > results;
     if ( data->hasFormat( "application/tomahawk.query.list" ) )
@@ -116,11 +133,7 @@ DropJob::tracksFromMimeData( const QMimeData* data )
         handleTrackUrls ( plainData );
     }
 
-    if ( !results.isEmpty() )
-    {
-        emit tracks( results );
-        deleteLater();
-    }
+    m_resultList.append( results );
 }
 
 QList< query_ptr >
@@ -267,7 +280,7 @@ DropJob::tracksFromMixedData( const QMimeData *data )
         }
 
         singleMimeData.setData( mimeType, singleData );
-        tracksFromMimeData( &singleMimeData );
+        parseMimeData( &singleMimeData );
     }
     return queries;
 }
@@ -282,14 +295,17 @@ DropJob::handleTrackUrls( const QString& urls )
 
         tDebug() << "Got a list of spotify urls!" << tracks;
         SpotifyParser* spot = new SpotifyParser( tracks, this );
-        connect( spot, SIGNAL( tracks( QList<Tomahawk::query_ptr> ) ), this, SIGNAL( tracks( QList<Tomahawk::query_ptr> ) ) );
+        connect( spot, SIGNAL( tracks( QList<Tomahawk::query_ptr> ) ), this, SLOT( onTracksAdded( QList< Tomahawk::query_ptr > ) ) );
+        m_queryCount++;
     } else if ( urls.contains( "rdio.com" ) )
     {
         QStringList tracks = urls.split( "\n" );
 
         tDebug() << "Got a list of rdio urls!" << tracks;
         RdioParser* rdio = new RdioParser( this );
-        connect( rdio, SIGNAL( tracks( QList<Tomahawk::query_ptr> ) ), this, SIGNAL( tracks( QList<Tomahawk::query_ptr> ) ) );
+        connect( rdio, SIGNAL( tracks( QList<Tomahawk::query_ptr> ) ), this, SLOT( onTracksAdded( QList< Tomahawk::query_ptr > ) ) );
+        m_queryCount++;
+
         rdio->parse( tracks );
     } else if ( urls.contains( "bit.ly" ) ||
                 urls.contains( "j.mp" ) ||
@@ -301,6 +317,7 @@ DropJob::handleTrackUrls( const QString& urls )
         tDebug() << "Got a list of shortened urls!" << tracks;
         ShortenedLinkParser* parser = new ShortenedLinkParser( tracks, this );
         connect( parser, SIGNAL( urls( QStringList ) ), this, SLOT( expandedUrls( QStringList ) ) );
+        m_queryCount++;
     }
 }
 
@@ -308,14 +325,39 @@ DropJob::handleTrackUrls( const QString& urls )
 void
 DropJob::expandedUrls( QStringList urls )
 {
+    m_queryCount--;
     handleTrackUrls( urls.join( "\n" ) );
 }
 
 void
 DropJob::onTracksAdded( const QList<Tomahawk::query_ptr>& tracksList )
 {
-    qDebug() << "here i am with" << tracksList.count() << "tracks";
-    emit tracks( tracksList );
+    m_resultList.append( tracksList );
+
     if ( --m_queryCount == 0 )
+    {
+        if ( !m_allowDuplicates )
+            removeDuplicates();
+
+        emit tracks( m_resultList );
         deleteLater();
+    }
+}
+
+void
+DropJob::removeDuplicates()
+{
+    QList< Tomahawk::query_ptr > list;
+    foreach ( const Tomahawk::query_ptr& item, m_resultList )
+    {
+        bool contains = false;
+        foreach( const Tomahawk::query_ptr &tmpItem, list )
+            if ( item->album() == tmpItem->album()
+                 && item->artist() == tmpItem->artist()
+                 && item->track() == tmpItem->track() )
+                contains = true;
+        if ( !contains )
+            list.append( item );
+    }
+    m_resultList = list;
 }

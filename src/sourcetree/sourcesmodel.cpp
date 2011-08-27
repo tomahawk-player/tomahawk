@@ -283,7 +283,7 @@ SourcesModel::viewPageActivated( Tomahawk::ViewPage* page )
         if ( !idx.isValid() )
             m_sourceTreeLinks.remove( page );
         else
-            emit selectRequest( idx );
+            emit selectRequest( QPersistentModelIndex( idx ) );
     }
     else
     {
@@ -420,7 +420,7 @@ SourcesModel::linkSourceItemToPage( SourceTreeItem* item, ViewPage* p )
     m_sourceTreeLinks[ p ] = item;
 
     if( m_viewPageDelayedCacheItem == p )
-        emit selectRequest( indexFromItem( item ) );
+        emit selectRequest( QPersistentModelIndex( indexFromItem( item ) ) );
 
     if ( QObject* obj = dynamic_cast< QObject* >( p ) )
     {
@@ -517,12 +517,12 @@ SourcesModel::rowForItem( SourceTreeItem* item ) const
 void
 SourcesModel::itemSelectRequest( SourceTreeItem* item )
 {
-    emit selectRequest( indexFromItem( item ) );
+    emit selectRequest( QPersistentModelIndex( indexFromItem( item ) ) );
 }
 
 void
 SourcesModel::itemExpandRequest( SourceTreeItem *item )
 {
     qDebug() << "expanding source" << indexFromItem( item ) << item;
-    emit expandRequest( indexFromItem( item ) );
+    emit expandRequest( QPersistentModelIndex( indexFromItem( item ) ) );
 }

@@ -47,16 +47,16 @@ SourcePlaylistInterface::siblingItem( int itemsAway )
 Tomahawk::result_ptr
 SourcePlaylistInterface::nextItem()
 {
-    qDebug() << Q_FUNC_INFO;
+    tDebug( LOGEXTRA ) << Q_FUNC_INFO;
     if ( m_source.isNull() || m_source->currentTrack().isNull() || m_source->currentTrack()->results().isEmpty() )
     {
-        qDebug() << Q_FUNC_INFO << " Results were empty for current track or source no longer valid";
+        tDebug( LOGEXTRA ) << Q_FUNC_INFO << " Results were empty for current track or source no longer valid";
         m_currentItem = Tomahawk::result_ptr();
         return m_currentItem;
     }
     else if ( !m_gotNextItem )
     {
-        qDebug() << Q_FUNC_INFO << " This song was already fetched";
+        tDebug( LOGEXTRA ) << Q_FUNC_INFO << " This song was already fetched";
         return Tomahawk::result_ptr();
     }
 
@@ -69,6 +69,7 @@ SourcePlaylistInterface::nextItem()
 bool
 SourcePlaylistInterface::hasNextItem()
 {
+    tDebug( LOGEXTRA ) << Q_FUNC_INFO;
     if ( m_source.isNull() || m_source->currentTrack().isNull() || m_source->currentTrack()->results().isEmpty() )
         return false;
 
@@ -96,7 +97,7 @@ SourcePlaylistInterface::reset()
 void
 SourcePlaylistInterface::onSourcePlaybackStarted( const Tomahawk::query_ptr& query )
 {
-    qDebug() << Q_FUNC_INFO;
+    tDebug( LOGEXTRA ) << Q_FUNC_INFO;
     connect( query.data(), SIGNAL( resolvingFinished( bool ) ), SLOT( resolvingFinished( bool ) ) );
     Pipeline::instance()->resolve( query, true );
     m_gotNextItem = true;
@@ -106,7 +107,7 @@ SourcePlaylistInterface::onSourcePlaybackStarted( const Tomahawk::query_ptr& que
 void
 SourcePlaylistInterface::resolvingFinished( bool hasResults )
 {
-    qDebug() << Q_FUNC_INFO << " and has results? : " << (hasResults ? "true" : "false");
+    tDebug( LOGEXTRA ) << Q_FUNC_INFO << " and has results? : " << (hasResults ? "true" : "false");
     if ( hasResults )
         emit nextTrackReady();
 }
