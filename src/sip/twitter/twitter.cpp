@@ -72,15 +72,13 @@ TwitterPlugin::TwitterPlugin( const QString& pluginId )
 
     if ( !Database::instance() || Database::instance()->dbid() != twitterSavedDbid() )
     {
-        if ( !twitterSavedDbid().isEmpty() ) //remove eventually (post 0.2), here for migration purposes
-        {
-            setTwitterCachedDirectMessagesSinceId( 0 );
-            setTwitterCachedFriendsSinceId( 0 );
-            setTwitterCachedMentionsSinceId( 0 );
-            setTwitterCachedPeers( QHash< QString, QVariant >() );
-        }
-        setTwitterSavedDbid( Database::instance()->dbid() );
+        setTwitterCachedDirectMessagesSinceId( 0 );
+        setTwitterCachedFriendsSinceId( 0 );
+        setTwitterCachedMentionsSinceId( 0 );
+        setTwitterCachedPeers( QHash< QString, QVariant >() );
     }
+
+    setTwitterSavedDbid( Database::instance()->dbid() );
 
     m_checkTimer.setInterval( 150000 );
     m_checkTimer.setSingleShot( false );
