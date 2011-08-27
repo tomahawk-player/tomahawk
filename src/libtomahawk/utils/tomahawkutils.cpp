@@ -561,12 +561,25 @@ setNam( QNetworkAccessManager* nam )
         void
         bringToFront()
         {
+            qDebug() << Q_FUNC_INFO;
+            QWidgetList widgetList = qApp->topLevelWidgets();
+            int i = 0;
+            while( !widgetList.at( i )->isWindow() )
+                i++;
+            QWidget *widget = widgetList.at( i );
+
+            widget->show();
+            widget->activateWindow();
+            widget->raise();
+
+            WId wid = widget->winId();
+
             HWND hwndActiveWin = GetForegroundWindow();
             int  idActive      = GetWindowThreadProcessId(hwndActiveWin, NULL);
             if ( AttachThreadInput(GetCurrentThreadId(), idActive, TRUE) )
             {
-                SetForegroundWindow( win );
-                SetFocus( win );
+                SetForegroundWindow( wid );
+                SetFocus( wid );
                 AttachThreadInput(GetCurrentThreadId(), idActive, FALSE);
             }
         }
