@@ -222,6 +222,7 @@ TomahawkApp::init()
         tDebug() << "Init MainWindow.";
         m_mainwindow = new TomahawkWindow();
         m_mainwindow->setWindowTitle( "Tomahawk" );
+        m_mainwindow->setObjectName( "TH_Main_Window" );
         m_mainwindow->show();
     }
 #endif
