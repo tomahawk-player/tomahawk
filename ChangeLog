@@ -3,19 +3,23 @@ Version 0.3.0:
 
 Version 0.2.3:
     * Fixed an issue where the Twitter plugin could get out of sync if the
-      database was cleared, leading to eventual crashes when connecting to peers.
+      database was cleared, leading to eventual crashes when re-connecting.
+    * Fixed duplicate albums showing up on Dashboard.
+    * Automatically sort search results by score.
+    * Fixed stations being stuck not fetching more songs.
     * Fixed issue where artist bio could be referring to a different artist.
     * Opening a "tomahawk" URL (or other URL with Tomahawk) brings the Tomahawk
       window to the foreground.
 
 Version 0.2.2:
-    * Fixed crash when pressing previous and next when playing a song from the Queue.
-    * Fixed issue where wrench for newly added resolvers would not show up immediately.
+    * Fixed crash pressing previous and next when playing a song from the Queue.
+    * Fixed issue where wrench for newly added resolvers would not show up.
     * Fixed sidebar statistics not updating after collection scan finished.
     * Fixed omitting a few tracks in the Collection tree-view.
     * Fixed sidebar & track sorting issues.
     * Seek- & volume sliders now directly jump to the position you clicked on.
-    * Added ability to drag artists and albums within Tomahawk (to playlists, queue, etc.).
+    * Added ability to drag artists and albums within Tomahawk.
+    * (OS X) Fixed Ogg Vorbis support.
 
 Version 0.2.1:
     * Fixed crashing trying to play an unavailable track.

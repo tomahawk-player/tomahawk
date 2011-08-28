@@ -134,27 +134,23 @@ DBSyncConnection::check()
     }
 
     m_uscache.clear();
-    m_themcache.clear();
     m_us.clear();
 
     changeState( CHECKING );
 
     // load last-modified etc data for our collection and theirs from our DB:
-    DatabaseCommand_CollectionStats* cmd_us =
-            new DatabaseCommand_CollectionStats( SourceList::instance()->getLocal() );
-
-    DatabaseCommand_CollectionStats* cmd_them =
-            new DatabaseCommand_CollectionStats( m_source );
-
-    connect( cmd_us, SIGNAL( done( QVariantMap ) ),
-                       SLOT( gotUs( QVariantMap ) ) );
-
-    connect( cmd_them, SIGNAL( done( QVariantMap ) ),
-                         SLOT( gotThemCache( QVariantMap ) ) );
-
-
+    DatabaseCommand_CollectionStats* cmd_us = new DatabaseCommand_CollectionStats( SourceList::instance()->getLocal() );
+    connect( cmd_us, SIGNAL( done( QVariantMap ) ), SLOT( gotUs( QVariantMap ) ) );
     Database::instance()->enqueue( QSharedPointer<DatabaseCommand>(cmd_us) );
-    Database::instance()->enqueue( QSharedPointer<DatabaseCommand>(cmd_them) );
+
+    if ( m_lastop.isEmpty() )
+    {
+        DatabaseCommand_CollectionStats* cmd_them = new DatabaseCommand_CollectionStats( m_source );
+        connect( cmd_them, SIGNAL( done( QVariantMap ) ), SLOT( gotThem( QVariantMap ) ) );
+        Database::instance()->enqueue( QSharedPointer<DatabaseCommand>(cmd_them) );
+    }
+    else
+        fetchOpsData( m_lastop );
 
     // restarts idle countdown
     m_timer.start();
@@ -174,16 +170,24 @@ DBSyncConnection::gotUs( const QVariantMap& m )
 
 /// Called once we've loaded our cached data about their collection
 void
-DBSyncConnection::gotThemCache( const QVariantMap& m )
+DBSyncConnection::gotThem( const QVariantMap& m )
 {
-    m_themcache = m;
+    m_lastop = m.value( "lastop" ).toString();
+
+    fetchOpsData( m_lastop );
+}
+
+
+void
+DBSyncConnection::fetchOpsData( const QString& sinceguid )
+{
     changeState( FETCHING );
 
-    tLog() << "Sending a FETCHOPS cmd since:" << m_themcache.value( "lastop" ).toString();
+    tLog() << "Sending a FETCHOPS cmd since:" << sinceguid;
 
     QVariantMap msg;
     msg.insert( "method", "fetchops" );
-    msg.insert( "lastop", m_themcache.value( "lastop" ).toString() );
+    msg.insert( "lastop", sinceguid );
     sendMsg( msg );
 }
 
@@ -234,8 +238,7 @@ DBSyncConnection::handleMsg( msg_ptr msg )
                 lastOpApplied();
             return;
         }
-
-//        qDebug() << "APPLYING CMD" << cmd->commandname() << cmd->guid();
+        QSharedPointer<DatabaseCommand> cmdsp = QSharedPointer<DatabaseCommand>(cmd);
 
         if ( !msg->is( Msg::FRAGMENT ) ) // last msg in this batch
         {
@@ -243,10 +246,21 @@ DBSyncConnection::handleMsg( msg_ptr msg )
             connect( cmd, SIGNAL( finished() ), SLOT( lastOpApplied() ) );
         }
 
-        if ( !cmd->singletonCmd() )
-            m_source->setLastOpGuid( cmd->guid() );
+        if ( m_recentTempOps.contains( cmd->guid() ) )
+        {
+            qDebug() << "Ignoring dupe temporary command:" << cmd->guid();
+            return;
+        }
 
-        Database::instance()->enqueue( QSharedPointer<DatabaseCommand>( cmd ) );
+        if ( !cmd->singletonCmd() )
+        {
+            m_lastop = cmd->guid();
+            m_recentTempOps.clear();
+        }
+        else
+            m_recentTempOps << cmd->guid();
+
+        Database::instance()->enqueue( cmdsp );
         return;
     }
 
