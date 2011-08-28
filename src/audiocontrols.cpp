@@ -333,7 +333,7 @@ AudioControls::onPlaybackResumed()
 void
 AudioControls::onPlaybackSeeked( qint64 msec )
 {
-    //tDebug( LOGEXTRA ) << Q_FUNC_INFO << " setting current timer to " << msec;
+    tDebug( LOGEXTRA ) << Q_FUNC_INFO << " setting current timer to " << msec;
     m_sliderTimeLine.setPaused( true );
     m_sliderTimeLine.setCurrentTime( msec );
     m_seekMsecs = msec;
@@ -375,12 +375,13 @@ AudioControls::onPlaybackTimer( qint64 msElapsed )
     ui->timeLabel->setText( TomahawkUtils::timeToString( seconds ) );
     ui->timeLeftLabel->setText( "-" + TomahawkUtils::timeToString( m_currentTrack->duration() - seconds ) );
     
-    if ( m_sliderTimeLine.currentTime() > msElapsed || ( m_seekMsecs != -1 && m_sliderTimeLine.currentTime() < msElapsed ) )
+    if ( m_sliderTimeLine.currentTime() > msElapsed || m_seekMsecs != -1 )
     {
         m_sliderTimeLine.setPaused( true );
         m_sliderTimeLine.setCurrentTime( msElapsed );
         m_seekMsecs = -1;
-        m_sliderTimeLine.resume();
+        if ( AudioEngine::instance()->state() != AudioEngine::Paused )
+            m_sliderTimeLine.resume();
     }
     else if ( m_sliderTimeLine.duration() > msElapsed && m_sliderTimeLine.state() == QTimeLine::NotRunning )
     {
