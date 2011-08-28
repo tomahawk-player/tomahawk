@@ -245,8 +245,10 @@ bool
 AudioEngine::canSeek()
 {
     bool phononCanSeek = true;
+    /* TODO: When phonon properly reports this, re-enable it
     if ( m_mediaObject && m_mediaObject->isValid() )
         phononCanSeek = m_mediaObject->isSeekable();
+    */
     return !m_playlist.isNull() && ( m_playlist.data()->seekRestrictions() != PlaylistInterface::NoSeek ) && phononCanSeek;
 }
 
