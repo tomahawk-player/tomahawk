@@ -184,7 +184,7 @@ AudioControls::onVolumeChanged( int volume )
 void
 AudioControls::onPlaybackStarted( const Tomahawk::result_ptr& result )
 {
-    tDebug() << Q_FUNC_INFO;
+    tDebug( LOGEXTRA ) << Q_FUNC_INFO;
 
     if ( result.isNull() )
         return;
@@ -199,9 +199,6 @@ AudioControls::onPlaybackStarted( const Tomahawk::result_ptr& result )
     
     ui->seekSlider->setRange( 0, duration );
     ui->seekSlider->setValue( 0 );
-
-    tLog() << Q_FUNC_INFO << " setting sliderTimeLine duration to  " << (duration);
-    tLog() << Q_FUNC_INFO << " setting sliderTimeLine frames to  " << (duration);
 
     m_sliderTimeLine.stop();
     m_sliderTimeLine.setDuration( duration );
@@ -269,7 +266,7 @@ AudioControls::infoSystemFinished( QString target )
 void
 AudioControls::onPlaybackLoading( const Tomahawk::result_ptr& result )
 {
-    tDebug() << Q_FUNC_INFO;
+    tDebug( LOGEXTRA ) << Q_FUNC_INFO;
 
     m_currentTrack = result;
 
@@ -316,7 +313,7 @@ AudioControls::socialActionsLoaded()
 void
 AudioControls::onPlaybackPaused()
 {
-    tDebug() << Q_FUNC_INFO;
+    tDebug( LOGEXTRA ) << Q_FUNC_INFO;
     ui->stackedLayout->setCurrentWidget( ui->playPauseButton );
     m_sliderTimeLine.setPaused( true );
 }
@@ -324,7 +321,7 @@ AudioControls::onPlaybackPaused()
 void
 AudioControls::onPlaybackResumed()
 {
-    tDebug() << Q_FUNC_INFO;
+    tDebug( LOGEXTRA ) << Q_FUNC_INFO;
     ui->stackedLayout->setCurrentWidget( ui->pauseButton );
     ui->loveButton->setVisible( true );
     m_sliderTimeLine.resume();
@@ -334,7 +331,7 @@ AudioControls::onPlaybackResumed()
 void
 AudioControls::onPlaybackStopped()
 {
-    tDebug() << Q_FUNC_INFO;
+    tDebug( LOGEXTRA ) << Q_FUNC_INFO;
     m_currentTrack.clear();
 
     ui->artistTrackLabel->setText( "" );
@@ -356,7 +353,6 @@ AudioControls::onPlaybackStopped()
 void
 AudioControls::onPlaybackTimer( qint64 msElapsed )
 {
-    tDebug() << Q_FUNC_INFO;
     if ( m_currentTrack.isNull() )
         return;
 
@@ -365,7 +361,6 @@ AudioControls::onPlaybackTimer( qint64 msElapsed )
     const int seconds = msElapsed / 1000;
     ui->timeLabel->setText( TomahawkUtils::timeToString( seconds ) );
     ui->timeLeftLabel->setText( "-" + TomahawkUtils::timeToString( m_currentTrack->duration() - seconds ) );
-    tLog() << Q_FUNC_INFO << " setting sliderTimeLine elapsed time to " << msElapsed;
     
     if ( m_sliderTimeLine.currentTime() > msElapsed )
         m_sliderTimeLine.setCurrentTime( msElapsed );
