@@ -35,9 +35,6 @@ public:
 
     void setTimeLine( QTimeLine* timeline ) { m_timeLine = timeline; }
 
-    void setNeedsUpdate( bool needsUpdate ) { m_needsUpdate = needsUpdate; }
-    bool needsUpdate() { return m_needsUpdate; }
-
 public slots:
     void setValue( int value );
     
@@ -46,7 +43,6 @@ protected:
 
 private:
     QTimeLine* m_timeLine;
-    bool m_needsUpdate;
 };
 
 #endif // SEEKSLIDER_H

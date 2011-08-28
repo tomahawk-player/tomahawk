@@ -28,7 +28,6 @@
 SeekSlider::SeekSlider( QWidget* parent )
     : QSlider( parent )
     , m_timeLine( 0 )
-    , m_needsUpdate( false )
 {
     setFixedHeight( 20 );
     setStyleSheet( "QSlider::groove::horizontal {"

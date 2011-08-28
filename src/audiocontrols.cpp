@@ -186,8 +186,30 @@ AudioControls::onPlaybackStarted( const Tomahawk::result_ptr& result )
 {
     tDebug() << Q_FUNC_INFO;
 
-    onPlaybackLoading( result );
+    if ( result.isNull() )
+        return;
+    
+    if ( m_currentTrack.isNull() || ( !m_currentTrack.isNull() && m_currentTrack.data()->id() != result.data()->id() ) )
+        onPlaybackLoading( result );
 
+    qint64 duration = AudioEngine::instance()->currentTrackTotalTime();
+
+    if ( duration == -1 )
+        duration = result.data()->duration() * 1000;
+    
+    ui->seekSlider->setRange( 0, duration );
+    ui->seekSlider->setValue( 0 );
+
+    tLog() << Q_FUNC_INFO << " setting sliderTimeLine duration to  " << (duration);
+    tLog() << Q_FUNC_INFO << " setting sliderTimeLine frames to  " << (duration);
+
+    m_sliderTimeLine.stop();
+    m_sliderTimeLine.setDuration( duration );
+    m_sliderTimeLine.setFrameRange( 0, duration );
+    m_sliderTimeLine.setCurrentTime( 0 );
+
+    ui->seekSlider->setVisible( true );
+    
     Tomahawk::InfoSystem::InfoCriteriaHash trackInfo;
     trackInfo["artist"] = result->artist()->name();
     trackInfo["album"] = result->album()->name();
@@ -257,19 +279,7 @@ AudioControls::onPlaybackLoading( const Tomahawk::result_ptr& result )
     ui->coverImage->setPixmap( m_defaultCover );
 
     ui->timeLabel->setText( TomahawkUtils::timeToString( 0 ) );
-    ui->timeLeftLabel->setText( "-" + TomahawkUtils::timeToString( result->duration() ) );
-
-    ui->seekSlider->setRange( 0, result->duration() * 1000 );
-    ui->seekSlider->setValue( 0 );
-
-    tLog() << Q_FUNC_INFO << " setting sliderTimeLine duration to  " << (result->duration() * 1000);
-    tLog() << Q_FUNC_INFO << " setting sliderTimeLine frames to  " << (result->duration() * 1000);
-    
-    m_sliderTimeLine.setDuration( result->duration() * 1000 );
-    m_sliderTimeLine.setFrameRange( 0, result->duration() * 1000 );
-    m_sliderTimeLine.setCurrentTime( 0 );
-
-    ui->seekSlider->setVisible( true );
+    ui->timeLeftLabel->setText( "-" + TomahawkUtils::timeToString( result.data()->duration() ) );
 
     ui->stackedLayout->setCurrentWidget( ui->pauseButton );
 
@@ -317,7 +327,6 @@ AudioControls::onPlaybackResumed()
     tDebug() << Q_FUNC_INFO;
     ui->stackedLayout->setCurrentWidget( ui->pauseButton );
     ui->loveButton->setVisible( true );
-    ui->seekSlider->setNeedsUpdate( true );
     m_sliderTimeLine.resume();
 }
 
@@ -358,13 +367,10 @@ AudioControls::onPlaybackTimer( qint64 msElapsed )
     ui->timeLeftLabel->setText( "-" + TomahawkUtils::timeToString( m_currentTrack->duration() - seconds ) );
     tLog() << Q_FUNC_INFO << " setting sliderTimeLine elapsed time to " << msElapsed;
     
-    if ( ui->seekSlider->needsUpdate() )
-    {
+    if ( m_sliderTimeLine.currentTime() > msElapsed )
         m_sliderTimeLine.setCurrentTime( msElapsed );
-        ui->seekSlider->setNeedsUpdate( false );
-    }
-    else if ( m_sliderTimeLine.state() == QTimeLine::NotRunning )
-        m_sliderTimeLine.start();
+    else if ( m_sliderTimeLine.duration() > msElapsed && m_sliderTimeLine.state() == QTimeLine::NotRunning )
+        m_sliderTimeLine.resume();
 
     ui->seekSlider->blockSignals( false );
 }
