@@ -59,13 +59,12 @@ TwitterPlugin::TwitterPlugin( const QString& pluginId )
     , m_isAuthed( false )
     , m_checkTimer( this )
     , m_connectTimer( this )
+    , m_dmPollTimer( this )
     , m_cachedFriendsSinceId( 0 )
     , m_cachedMentionsSinceId( 0 )
     , m_cachedDirectMessagesSinceId( 0 )
     , m_cachedPeers()
     , m_keyCache()
-    , m_finishedFriends( false )
-    , m_finishedMentions( false )
     , m_state( Disconnected )
 {
     qDebug() << Q_FUNC_INFO;
@@ -83,6 +82,10 @@ TwitterPlugin::TwitterPlugin( const QString& pluginId )
     m_checkTimer.setInterval( 150000 );
     m_checkTimer.setSingleShot( false );
     connect( &m_checkTimer, SIGNAL( timeout() ), SLOT( checkTimerFired() ) );
+
+    m_dmPollTimer.setInterval( 60000 );
+    m_dmPollTimer.setSingleShot( false );
+    connect( &m_dmPollTimer, SIGNAL( timeout() ), SLOT( pollDirectMessages() ) );
 
     m_connectTimer.setInterval( 150000 );
     m_connectTimer.setSingleShot( false );
@@ -226,6 +229,7 @@ TwitterPlugin::disconnectPlugin()
     qDebug() << Q_FUNC_INFO;
     m_checkTimer.stop();
     m_connectTimer.stop();
+    m_dmPollTimer.stop();
     if( !m_friendsTimeline.isNull() )
         delete m_friendsTimeline.data();
     if( !m_mentions.isNull() )
@@ -255,6 +259,7 @@ TwitterPlugin::connectAuthVerifyReply( const QTweetUser &user )
         m_state = Disconnected;
         m_connectTimer.stop();
         m_checkTimer.stop();
+        m_dmPollTimer.stop();
         emit stateChanged( m_state );
     }
     else
@@ -279,6 +284,7 @@ TwitterPlugin::connectAuthVerifyReply( const QTweetUser &user )
             emit stateChanged( m_state );
             m_connectTimer.start();
             m_checkTimer.start();
+            m_dmPollTimer.start();
             QMetaObject::invokeMethod( this, "checkTimerFired", Qt::AutoConnection );
             QTimer::singleShot( 20000, this, SLOT( connectTimerFired() ) );
         }
@@ -297,6 +303,7 @@ TwitterPlugin::connectAuthVerifyReply( const QTweetUser &user )
                 m_state = Disconnected;
                 m_connectTimer.stop();
                 m_checkTimer.stop();
+                m_dmPollTimer.stop();
                 emit stateChanged( m_state );
             }
         }
@@ -438,7 +445,6 @@ TwitterPlugin::friendsTimelineStatuses( const QList< QTweetStatus > &statuses )
 {
     qDebug() << Q_FUNC_INFO;
     QRegExp regex( s_gotTomahawkRegex, Qt::CaseSensitive, QRegExp::RegExp2 );
-    QString myScreenName = twitterScreenName();
 
     QHash< QString, QTweetStatus > latestHash;
     foreach ( QTweetStatus status, statuses )
@@ -465,9 +471,6 @@ TwitterPlugin::friendsTimelineStatuses( const QList< QTweetStatus > &statuses )
     }
 
     setTwitterCachedFriendsSinceId( m_cachedFriendsSinceId );
-
-    m_finishedFriends = true;
-    QMetaObject::invokeMethod( this, "pollDirectMessages", Qt::AutoConnection );
 }
 
 void
@@ -501,20 +504,11 @@ TwitterPlugin::mentionsStatuses( const QList< QTweetStatus > &statuses )
     }
 
     setTwitterCachedMentionsSinceId( m_cachedMentionsSinceId );
-
-    m_finishedMentions = true;
-    QMetaObject::invokeMethod( this, "pollDirectMessages", Qt::AutoConnection );
 }
 
 void
 TwitterPlugin::pollDirectMessages()
 {
-    if ( !m_finishedMentions || !m_finishedFriends )
-        return;
-
-    m_finishedFriends = false;
-    m_finishedMentions = false;
-
     if ( !isValid() )
         return;
 
@@ -721,6 +715,14 @@ TwitterPlugin::makeConnection( const QString &screenName, const QVariantHash &pe
         qDebug() << "TwitterPlugin could not find host and/or port and/or pkey and/or node for peer " << screenName;
         return;
     }
+
+    if ( peerData["host"].toString() == Servent::instance()->externalAddress() &&
+         peerData["port"].toInt() == Servent::instance()->externalPort() )
+    {
+        qDebug() << "TwitterPlugin asked to make connection to our own host and port, ignoring " << screenName;
+        return;
+    }
+    
     QString friendlyName = QString( '@' + screenName );
     if ( !Servent::instance()->connectedToSession( peerData["node"].toString() ) )
         Servent::instance()->connectToPeer( peerData["host"].toString(),
