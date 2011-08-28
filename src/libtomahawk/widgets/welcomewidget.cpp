@@ -138,7 +138,7 @@ WelcomeWidget::updatePlaylists()
     int num = ui->playlistWidget->model()->rowCount( QModelIndex() );
     if ( num == 0 )
     {
-        ui->playlistWidget->overlay()->setText( tr( "You have not played any playlists yet." ) );
+        ui->playlistWidget->overlay()->setText( tr( "No recently created playlists in your network." ) );
         ui->playlistWidget->overlay()->show();
     }
     else
