@@ -57,11 +57,7 @@ DatabaseCommand_CollectionStats::exec( DatabaseImpl* dbi )
     {
         m.insert( "numfiles", query.value( 0 ).toInt() );
         m.insert( "lastmodified", query.value( 1 ).toInt() );
-
-        if ( !source()->isLocal() && !source()->lastOpGuid().isEmpty() )
-            m.insert( "lastop", source()->lastOpGuid() );
-        else
-            m.insert( "lastop", query.value( 2 ).toString() );
+        m.insert( "lastop", query.value( 2 ).toString() );
     }
 
     emit done( m );

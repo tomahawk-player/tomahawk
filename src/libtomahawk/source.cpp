@@ -74,7 +74,7 @@ Source::setControlConnection( ControlConnection* cc )
 {
     m_cc = cc;
     if ( cc )
-        connect( cc, SIGNAL( finished() ), SLOT( remove() ), Qt::QueuedConnection );
+        connect( cc, SIGNAL( finished() ), SLOT( setOffline() ), Qt::QueuedConnection );
 }
 
 
@@ -94,15 +94,6 @@ Source::setStats( const QVariantMap& m )
 {
     m_stats = m;
     emit stats( m_stats );
-}
-
-
-void
-Source::remove()
-{
-    qDebug() << Q_FUNC_INFO;
-
-    setOffline();
 }
 
 
