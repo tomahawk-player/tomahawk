@@ -79,7 +79,7 @@ TwitterPlugin::TwitterPlugin( const QString& pluginId )
 
     setTwitterSavedDbid( Database::instance()->dbid() );
 
-    m_checkTimer.setInterval( 150000 );
+    m_checkTimer.setInterval( 180000 );
     m_checkTimer.setSingleShot( false );
     connect( &m_checkTimer, SIGNAL( timeout() ), SLOT( checkTimerFired() ) );
 
@@ -87,7 +87,7 @@ TwitterPlugin::TwitterPlugin( const QString& pluginId )
     m_dmPollTimer.setSingleShot( false );
     connect( &m_dmPollTimer, SIGNAL( timeout() ), SLOT( pollDirectMessages() ) );
 
-    m_connectTimer.setInterval( 150000 );
+    m_connectTimer.setInterval( 180000 );
     m_connectTimer.setSingleShot( false );
     connect( &m_connectTimer, SIGNAL( timeout() ), SLOT( connectTimerFired() ) );
 
