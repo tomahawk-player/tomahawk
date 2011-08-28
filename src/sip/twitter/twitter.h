@@ -147,14 +147,13 @@ private:
     bool m_isAuthed;
     QTimer m_checkTimer;
     QTimer m_connectTimer;
+    QTimer m_dmPollTimer;
     qint64 m_cachedFriendsSinceId;
     qint64 m_cachedMentionsSinceId;
     qint64 m_cachedDirectMessagesSinceId;
     QVariantHash m_cachedPeers;
     QHash< QString, QPixmap > m_cachedAvatars;
     QSet<QString> m_keyCache;
-    bool m_finishedFriends;
-    bool m_finishedMentions;
     ConnectionState m_state;
 
     QWeakPointer<TwitterConfigWidget > m_configWidget;
