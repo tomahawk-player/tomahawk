@@ -552,7 +552,7 @@ AudioEngine::playlistNextTrackReady()
         return;
 
     m_waitingOnNewTrack = false;
-    next();
+    loadNextTrack();
 }
 
 
@@ -604,7 +604,14 @@ AudioEngine::onStateChanged( Phonon::State newState, Phonon::State oldState )
         {
             m_expectStop = false;
             tDebug( LOGEXTRA ) << "Finding next track.";
-            next();
+            if ( canGoNext() )
+                loadNextTrack();
+            else
+            {
+                if ( !m_playlist.isNull() && m_playlist.data()->retryMode() == Tomahawk::PlaylistInterface::Retry )
+                    m_waitingOnNewTrack = true;
+                stop();
+            }
         }
     }
 }
