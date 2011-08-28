@@ -244,7 +244,10 @@ AudioEngine::canGoPrevious()
 bool
 AudioEngine::canSeek()
 {
-    return !m_playlist.isNull() && ( m_playlist.data()->seekRestrictions() != PlaylistInterface::NoSeek );
+    bool phononCanSeek = true;
+    if ( m_mediaObject && m_mediaObject->isValid() )
+        phononCanSeek = m_mediaObject->isSeekable();
+    return !m_playlist.isNull() && ( m_playlist.data()->seekRestrictions() != PlaylistInterface::NoSeek ) && phononCanSeek;
 }
 
 void

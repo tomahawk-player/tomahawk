@@ -61,6 +61,7 @@ private slots:
     void onPlaybackLoading( const Tomahawk::result_ptr& result );
     void onPlaybackPaused();
     void onPlaybackResumed();
+    void onPlaybackSeeked( qint64 msec );
     void onPlaybackStopped();
 
     void onPlaybackTimer( qint64 msElapsed );
@@ -91,6 +92,7 @@ private:
     bool m_shuffled;
 
     QTimeLine m_sliderTimeLine;
+    qint64 m_seekMsecs;
 };
 
 #endif // AUDIOCONTROLS_H
