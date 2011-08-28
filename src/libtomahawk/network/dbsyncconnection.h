@@ -84,6 +84,7 @@ private:
 
     QString m_lastop;
     QString m_lastSentOp;
+    QStringList m_recentTempOps;
 
     State m_state;
     QTimer m_timer;

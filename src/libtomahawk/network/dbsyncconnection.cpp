@@ -238,6 +238,7 @@ DBSyncConnection::handleMsg( msg_ptr msg )
                 lastOpApplied();
             return;
         }
+        QSharedPointer<DatabaseCommand> cmdsp = QSharedPointer<DatabaseCommand>(cmd);
 
         if ( !msg->is( Msg::FRAGMENT ) ) // last msg in this batch
         {
@@ -245,10 +246,21 @@ DBSyncConnection::handleMsg( msg_ptr msg )
             connect( cmd, SIGNAL( finished() ), SLOT( lastOpApplied() ) );
         }
 
-        if ( !cmd->singletonCmd() )
-            m_lastop = cmd->guid();
+        if ( m_recentTempOps.contains( cmd->guid() ) )
+        {
+            qDebug() << "Ignoring dupe temporary command:" << cmd->guid();
+            return;
+        }
 
-        Database::instance()->enqueue( QSharedPointer<DatabaseCommand>( cmd ) );
+        if ( !cmd->singletonCmd() )
+        {
+            m_lastop = cmd->guid();
+            m_recentTempOps.clear();
+        }
+        else
+            m_recentTempOps << cmd->guid();
+
+        Database::instance()->enqueue( cmdsp );
         return;
     }
 
