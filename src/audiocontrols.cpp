@@ -90,11 +90,16 @@ AudioControls::AudioControls( QWidget* parent )
 
     ui->ownerLabel->setForegroundRole( QPalette::Dark );
     ui->metaDataArea->setStyleSheet( "QWidget#metaDataArea {\nborder-width: 4px;\nborder-image: url(" RESPATH "images/now-playing-panel.png) 4 4 4 4 stretch stretch; }" );
-
+    
     ui->seekSlider->setEnabled( true );
     ui->volumeSlider->setRange( 0, 100 );
     ui->volumeSlider->setValue( AudioEngine::instance()->volume() );
 
+    m_sliderTimeLine.setCurveShape( QTimeLine::LinearCurve );
+    ui->seekSlider->setTimeLine( &m_sliderTimeLine );
+
+    connect( &m_sliderTimeLine,    SIGNAL( frameChanged( int ) ), ui->seekSlider, SLOT( setValue( int ) ) );
+    
     connect( ui->seekSlider,       SIGNAL( valueChanged( int ) ), AudioEngine::instance(), SLOT( seek( int ) ) );
     connect( ui->volumeSlider,     SIGNAL( valueChanged( int ) ), AudioEngine::instance(), SLOT( setVolume( int ) ) );
     connect( ui->prevButton,       SIGNAL( clicked() ), AudioEngine::instance(), SLOT( previous() ) );
@@ -179,7 +184,7 @@ AudioControls::onVolumeChanged( int volume )
 void
 AudioControls::onPlaybackStarted( const Tomahawk::result_ptr& result )
 {
-    tDebug( LOGEXTRA ) << Q_FUNC_INFO;
+    tDebug() << Q_FUNC_INFO;
 
     onPlaybackLoading( result );
 
@@ -242,7 +247,7 @@ AudioControls::infoSystemFinished( QString target )
 void
 AudioControls::onPlaybackLoading( const Tomahawk::result_ptr& result )
 {
-    tDebug( LOGEXTRA ) << Q_FUNC_INFO;
+    tDebug() << Q_FUNC_INFO;
 
     m_currentTrack = result;
 
@@ -254,8 +259,16 @@ AudioControls::onPlaybackLoading( const Tomahawk::result_ptr& result )
     ui->timeLabel->setText( TomahawkUtils::timeToString( 0 ) );
     ui->timeLeftLabel->setText( "-" + TomahawkUtils::timeToString( result->duration() ) );
 
-    ui->seekSlider->setRange( 0, m_currentTrack->duration() * 1000 );
+    ui->seekSlider->setRange( 0, result->duration() * 1000 );
     ui->seekSlider->setValue( 0 );
+
+    tLog() << Q_FUNC_INFO << " setting sliderTimeLine duration to  " << (result->duration() * 1000);
+    tLog() << Q_FUNC_INFO << " setting sliderTimeLine frames to  " << (result->duration() * 1000);
+    
+    m_sliderTimeLine.setDuration( result->duration() * 1000 );
+    m_sliderTimeLine.setFrameRange( 0, result->duration() * 1000 );
+    m_sliderTimeLine.setCurrentTime( 0 );
+
     ui->seekSlider->setVisible( true );
 
     ui->stackedLayout->setCurrentWidget( ui->pauseButton );
@@ -293,20 +306,26 @@ AudioControls::socialActionsLoaded()
 void
 AudioControls::onPlaybackPaused()
 {
+    tDebug() << Q_FUNC_INFO;
     ui->stackedLayout->setCurrentWidget( ui->playPauseButton );
+    m_sliderTimeLine.setPaused( true );
 }
 
 void
 AudioControls::onPlaybackResumed()
 {
+    tDebug() << Q_FUNC_INFO;
     ui->stackedLayout->setCurrentWidget( ui->pauseButton );
     ui->loveButton->setVisible( true );
+    ui->seekSlider->setNeedsUpdate( true );
+    m_sliderTimeLine.resume();
 }
 
 
 void
 AudioControls::onPlaybackStopped()
 {
+    tDebug() << Q_FUNC_INFO;
     m_currentTrack.clear();
 
     ui->artistTrackLabel->setText( "" );
@@ -316,6 +335,8 @@ AudioControls::onPlaybackStopped()
     ui->timeLeftLabel->setText( "" );
     ui->coverImage->setPixmap( QPixmap() );
     ui->seekSlider->setVisible( false );
+    m_sliderTimeLine.stop();
+    m_sliderTimeLine.setCurrentTime( 0 );
 
     ui->stackedLayout->setCurrentWidget( ui->playPauseButton );
     ui->loveButton->setEnabled( false );
@@ -326,6 +347,7 @@ AudioControls::onPlaybackStopped()
 void
 AudioControls::onPlaybackTimer( qint64 msElapsed )
 {
+    tDebug() << Q_FUNC_INFO;
     if ( m_currentTrack.isNull() )
         return;
 
@@ -334,7 +356,15 @@ AudioControls::onPlaybackTimer( qint64 msElapsed )
     const int seconds = msElapsed / 1000;
     ui->timeLabel->setText( TomahawkUtils::timeToString( seconds ) );
     ui->timeLeftLabel->setText( "-" + TomahawkUtils::timeToString( m_currentTrack->duration() - seconds ) );
-    ui->seekSlider->setValue( msElapsed );
+    tLog() << Q_FUNC_INFO << " setting sliderTimeLine elapsed time to " << msElapsed;
+    
+    if ( ui->seekSlider->needsUpdate() )
+    {
+        m_sliderTimeLine.setCurrentTime( msElapsed );
+        ui->seekSlider->setNeedsUpdate( false );
+    }
+    else if ( m_sliderTimeLine.state() == QTimeLine::NotRunning )
+        m_sliderTimeLine.start();
 
     ui->seekSlider->blockSignals( false );
 }

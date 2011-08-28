@@ -20,6 +20,7 @@
 #define AUDIOCONTROLS_H
 
 #include <QWidget>
+#include <QTimeLine>
 
 #include "result.h"
 #include "playlistinterface.h"
@@ -79,6 +80,7 @@ private slots:
     void droppedTracks( QList<Tomahawk::query_ptr> );
 
     void socialActionsLoaded();
+
 private:
     Ui::AudioControls *ui;
 
@@ -87,6 +89,8 @@ private:
     Tomahawk::result_ptr m_currentTrack;
     Tomahawk::PlaylistInterface::RepeatMode m_repeatMode;
     bool m_shuffled;
+
+    QTimeLine m_sliderTimeLine;
 };
 
 #endif // AUDIOCONTROLS_H
