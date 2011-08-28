@@ -108,14 +108,15 @@ private slots:
     void directMessagePosted( const QTweetDMStatus &message );
     void directMessagePostError( QTweetNetBase::ErrorCode errorCode, const QString &message );
     void directMessageDestroyed( const QTweetDMStatus &message );
-    void registerOffer( const QString &screenName, const QHash< QString, QVariant > &peerdata );
-    void sendOffer( const QString &screenName, const QHash< QString, QVariant > &peerdata );
-    void makeConnection( const QString &screenName, const QHash< QString, QVariant > &peerdata );
+    void registerOffer( const QString &screenName, const QVariantHash &peerdata );
+    void sendOffer( const QString &screenName, const QVariantHash &peerdata );
+    void makeConnection( const QString &screenName, const QVariantHash &peerdata );
     void fetchAvatar( const QString &screenName );
     void avatarUserDataSlot( const QTweetUser &user );
     void profilePicReply();
 
 private:
+    inline void syncConfig() { setTwitterCachedPeers( m_cachedPeers ); }
     bool refreshTwitterAuth();
     void parseGotTomahawk( const QRegExp &regex, const QString &screenName, const QString &text );
     // handle per-plugin config
@@ -133,8 +134,8 @@ private:
     void setTwitterCachedMentionsSinceId( qint64 sinceid );
     qint64 twitterCachedDirectMessagesSinceId() const;
     void setTwitterCachedDirectMessagesSinceId( qint64 sinceid );
-    QHash<QString, QVariant> twitterCachedPeers() const;
-    void setTwitterCachedPeers( const QHash<QString, QVariant> &cachedPeers );
+    QVariantHash twitterCachedPeers() const;
+    void setTwitterCachedPeers( const QVariantHash &cachedPeers );
 
     QWeakPointer< TomahawkOAuthTwitter > m_twitterAuth;
     QWeakPointer< QTweetFriendsTimeline > m_friendsTimeline;
@@ -149,7 +150,7 @@ private:
     qint64 m_cachedFriendsSinceId;
     qint64 m_cachedMentionsSinceId;
     qint64 m_cachedDirectMessagesSinceId;
-    QHash< QString, QVariant > m_cachedPeers;
+    QVariantHash m_cachedPeers;
     QHash< QString, QPixmap > m_cachedAvatars;
     QSet<QString> m_keyCache;
     bool m_finishedFriends;
