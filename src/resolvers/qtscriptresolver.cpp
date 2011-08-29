@@ -123,6 +123,7 @@ QtScriptResolverHelper::setResolverConfig( const QVariantMap& config )
 QString
 QtScriptResolverHelper::hmac( const QByteArray& key, const QByteArray &input )
 {
+#ifdef QCA2_FOUND
     if ( !QCA::isSupported( "hmac(md5)" ) )
     {
         tLog() << "HMAC(md5) not supported with qca-ossl plugin, or qca-ossl plugin is not installed! Unable to generate signature!";
@@ -138,6 +139,10 @@ QtScriptResolverHelper::hmac( const QByteArray& key, const QByteArray &input )
 
     QString result = QCA::arrayToHex( resultArray.toByteArray() );
     return result.toUtf8();
+#else
+    tLog() << "Tomahawk compiled without QCA support, cannot generate HMAC signature";
+    return QString();
+#endif
 }
 
 QString

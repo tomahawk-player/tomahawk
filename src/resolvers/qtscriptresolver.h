@@ -23,6 +23,7 @@
 #include "query.h"
 #include "result.h"
 #include "utils/tomahawkutils.h"
+#include "config.h"
 
 #include <QApplication>
 #include <QDir>
@@ -30,7 +31,10 @@
 #include <QThread>
 #include <QtWebKit/QWebPage>
 #include <QtWebKit/QWebFrame>
+
+#ifdef QCA2_FOUND
 #include <QtCrypto>
+#endif
 
 class QtScriptResolver;
 
@@ -63,7 +67,9 @@ private:
     QString m_scriptPath;
     QVariantMap m_resolverConfig;
     QtScriptResolver* m_resolver;
+#ifdef QCA2_FOUND
     QCA::Initializer m_qcaInit;
+#endif
 };
 
 class ScriptEngine : public QWebPage
