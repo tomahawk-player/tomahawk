@@ -26,6 +26,21 @@ DatabaseCommand_loadOps::exec( DatabaseImpl* dbi )
 {
     QList< dbop_ptr > ops;
 
+    {
+        TomahawkSqlQuery query = dbi->newquery();
+        query.prepare( QString( "SELECT id FROM oplog WHERE guid = ?" ) );
+        query.addBindValue( m_since );
+        query.exec();
+
+        if ( !query.next() )
+        {
+            tLog() << "Unknown oplog guid, requested, not replying:" << m_since;
+            Q_ASSERT( false );
+            emit done( m_since, m_since, ops );
+            return;
+        }
+    }
+
     TomahawkSqlQuery query = dbi->newquery();
     query.prepare( QString(
                    "SELECT guid, command, json, compressed, singleton "

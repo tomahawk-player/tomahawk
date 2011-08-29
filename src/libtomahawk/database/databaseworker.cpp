@@ -110,6 +110,7 @@ DatabaseWorker::doWork()
     try
     {
         {
+            tDebug() << "Executing cmd:" << cmd->guid();
             cmd->_exec( m_dbimpl ); // runs actual SQL stuff
 
             if ( cmd->loggable() )

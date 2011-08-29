@@ -82,8 +82,8 @@ void AvatarManager::onNewPresence(const Jreen::Presence& presence)
 //            qDebug() << presence.from().full() << "vcard: photo already cached no request necessary " << update->photoHash();
             m_JidsAvatarHashes.insert( update->photoHash(), presence.from().bare() );
 
-            Q_ASSERT(!this->avatar(presence.from().bare()).isNull());
-            emit newAvatar(presence.from().bare());
+            if ( !this->avatar( presence.from().bare() ).isNull() )
+                emit newAvatar(presence.from().bare());
         }
     }
     else
