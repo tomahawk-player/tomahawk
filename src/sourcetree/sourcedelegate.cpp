@@ -1,3 +1,23 @@
+/* === This file is part of Tomahawk Player - <http://tomahawk-player.org> ===
+ *
+ *   Copyright 2010-2011, Christian Muehlhaeuser <muesli@tomahawk-player.org>
+ *   Copyright 2011, Leo Franchi <lfranchi@kde.org>
+ *   Copyright 2011, Michael Zanetti <mzanetti@kde.org>
+ *
+ *   Tomahawk is free software: you can redistribute it and/or modify
+ *   it under the terms of the GNU General Public License as published by
+ *   the Free Software Foundation, either version 3 of the License, or
+ *   (at your option) any later version.
+ *
+ *   Tomahawk is distributed in the hope that it will be useful,
+ *   but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ *   GNU General Public License for more details.
+ *
+ *   You should have received a copy of the GNU General Public License
+ *   along with Tomahawk. If not, see <http://www.gnu.org/licenses/>.
+ */
+
 #include "sourcedelegate.h"
 
 #include "items/sourcetreeitem.h"
@@ -276,6 +296,24 @@ SourceDelegate::paint( QPainter* painter, const QStyleOptionViewItem& option, co
     else
     {
         QStyledItemDelegate::paint( painter, o, index );
+        if ( type == SourcesModel::TemporaryPage )
+        {
+            TemporaryPageItem* gpi = qobject_cast< TemporaryPageItem* >( item );
+            Q_ASSERT( gpi );
+
+            if ( gpi && o3.state & QStyle::State_MouseOver )
+            {
+                // draw close icon
+                int padding = 3;
+                m_iconHeight = ( o3.rect.height() - 2*padding );
+                QPixmap p( RESPATH "images/list-remove.png" );
+                p = p.scaledToHeight( m_iconHeight, Qt::SmoothTransformation );
+
+                QRect r ( o3.rect.right() - padding - m_iconHeight, padding + o3.rect.y(), m_iconHeight, m_iconHeight );
+                painter->drawPixmap( r, p );
+            }
+        }
+
         /*QStyleOptionViewItemV4 opt = o;
         initStyleOption( &opt, index );
 
