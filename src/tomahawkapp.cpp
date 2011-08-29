@@ -141,6 +141,7 @@ TomahawkApp::init()
     m_mainwindow = 0;
     m_headless = arguments().contains( "--headless" );
     setWindowIcon( QIcon( RESPATH "icons/tomahawk-icon-128x128.png" ) );
+    setQuitOnLastWindowClosed( false );
 #endif
 
     registerMetaTypes();
@@ -193,8 +194,6 @@ TomahawkApp::init()
 
     Tomahawk::setApplicationHandler( this );
     increaseMaxFileDescriptors();
-
-    setQuitOnLastWindowClosed( false );
 #endif
 
     // Connect up shortcuts
