@@ -26,6 +26,7 @@ DatabaseCommand_loadOps::exec( DatabaseImpl* dbi )
 {
     QList< dbop_ptr > ops;
 
+    if ( !m_since.isEmpty() )
     {
         TomahawkSqlQuery query = dbi->newquery();
         query.prepare( QString( "SELECT id FROM oplog WHERE guid = ?" ) );
