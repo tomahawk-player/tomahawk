@@ -92,6 +92,10 @@ enum InfoType { // as items are saved in cache, mark them here to not change the
     InfoAlbumComposer = 48,
     InfoAlbumSongs = 49,
 
+    InfoChartArtists = 50,
+    InfoChartAlbums = 51,
+    InfoChartTracks = 52,
+
     InfoMiscTopHotttness = 60,
     InfoMiscTopTerms = 61,
 
@@ -116,6 +120,11 @@ struct InfoRequestData {
     Tomahawk::InfoSystem::InfoType type;
     QVariant input;
     QVariantMap customData;
+};
+
+struct ArtistTrackPair {
+    QString artist;
+    QString track;
 };
 
 typedef QMap< InfoType, QVariant > InfoTypeMap;
@@ -254,5 +263,7 @@ Q_DECLARE_METATYPE( Tomahawk::InfoSystem::InfoRequestData );
 Q_DECLARE_METATYPE( Tomahawk::InfoSystem::InfoGenericMap );
 Q_DECLARE_METATYPE( Tomahawk::InfoSystem::InfoCriteriaHash );
 Q_DECLARE_METATYPE( QWeakPointer< Tomahawk::InfoSystem::InfoSystemCache > );
+Q_DECLARE_METATYPE( Tomahawk::InfoSystem::ArtistTrackPair );
+Q_DECLARE_METATYPE( QList<Tomahawk::InfoSystem::ArtistTrackPair> );
 
 #endif // TOMAHAWK_INFOSYSTEM_H

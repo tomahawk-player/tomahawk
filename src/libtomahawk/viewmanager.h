@@ -27,6 +27,7 @@
 #include "playlistinterface.h"
 #include "viewpage.h"
 #include "widgets/welcomewidget.h"
+#include "widgets/whatshotwidget.h"
 
 #include "dllmacro.h"
 
@@ -51,6 +52,7 @@ class SourceInfoWidget;
 class InfoBar;
 class TopBar;
 class WelcomeWidget;
+class WhatsHotWidget;
 class QPushButton;
 
 namespace Tomahawk
@@ -82,6 +84,7 @@ public:
     Tomahawk::ViewPage* show( Tomahawk::ViewPage* page );
 
     Tomahawk::ViewPage* welcomeWidget() const { return m_welcomeWidget; }
+    Tomahawk::ViewPage* whatsHotWidget() const { return m_whatsHotWidget; }
     ArtistView* superCollectionView() const { return m_superCollectionView; }
 
     /// Get the view page for the given item. Not pretty...
@@ -120,6 +123,7 @@ signals:
 public slots:
     Tomahawk::ViewPage* showSuperCollection();
     Tomahawk::ViewPage* showWelcomePage();
+    Tomahawk::ViewPage* showWhatsHotPage();
     void showCurrentTrack();
 
     // Returns the shown viewpage
@@ -181,6 +185,7 @@ private:
     TreeModel* m_superCollectionModel;
     ArtistView* m_superCollectionView;
     WelcomeWidget* m_welcomeWidget;
+    WhatsHotWidget* m_whatsHotWidget;
 
     QList< Tomahawk::collection_ptr > m_superCollections;
 

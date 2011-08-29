@@ -175,16 +175,20 @@ set( libSources
     utils/spotifyparser.cpp
     utils/rdioparser.cpp
     utils/shortenedlinkparser.cpp
+    utils/stylehelper.cpp
 
     widgets/newplaylistwidget.cpp
     widgets/searchwidget.cpp
     widgets/SeekSlider.cpp
     widgets/playlisttypeselectordlg.cpp
     widgets/welcomewidget.cpp
+    widgets/whatshotwidget.cpp
     widgets/RecentlyPlayedPlaylistsModel.cpp
     widgets/RecentPlaylistsModel.cpp
     widgets/overlaywidget.cpp
     widgets/HeaderLabel.cpp
+    widgets/HeaderWidget.cpp
+    widgets/combobox.cpp
     widgets/SocialPlaylistWidget.cpp
     widgets/infowidgets/sourceinfowidget.cpp
     widgets/infowidgets/ArtistInfoWidget.cpp
@@ -357,16 +361,20 @@ set( libHeaders
     utils/spotifyparser.h
     utils/rdioparser.h
     utils/shortenedlinkparser.h
+    utils/stylehelper.h
 
     widgets/newplaylistwidget.h
     widgets/searchwidget.h
     widgets/SeekSlider.h
     widgets/playlisttypeselectordlg.h
     widgets/welcomewidget.h
+    widgets/whatshotwidget.h
     widgets/RecentlyPlayedPlaylistsModel.h
     widgets/RecentPlaylistsModel.h
     widgets/overlaywidget.h
     widgets/HeaderLabel.h
+    widgets/HeaderWidget.h
+    widgets/combobox.h
     widgets/SocialPlaylistWidget.h
     widgets/infowidgets/sourceinfowidget.h
     widgets/infowidgets/ArtistInfoWidget.h
@@ -391,6 +399,7 @@ set( libUI ${libUI}
     widgets/newplaylistwidget.ui
     widgets/searchwidget.ui
     widgets/welcomewidget.ui
+    widgets/whatshotwidget.ui
     widgets/SocialPlaylistWidget.ui
     widgets/infowidgets/sourceinfowidget.ui
     widgets/infowidgets/ArtistInfoWidget.ui

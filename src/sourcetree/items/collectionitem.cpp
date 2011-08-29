@@ -44,6 +44,7 @@ CollectionItem::CollectionItem(  SourcesModel* mdl, SourceTreeItem* parent, cons
     , m_sourceInfoPage( 0 )
     , m_coolPlaylistsPage( 0 )
     , m_lovedTracksPage( 0 )
+    , m_whatsHotPage( 0 )
 {
     m_lovedTracksItem = new GenericPageItem( model(), this, ( m_source.isNull() ? tr( "Top Loved Tracks" ) : tr( "Loved Tracks" ) ), QIcon( RESPATH "images/loved_playlist.png" ),
                                              boost::bind( &CollectionItem::lovedTracksClicked, this ),
@@ -61,6 +62,13 @@ CollectionItem::CollectionItem(  SourcesModel* mdl, SourceTreeItem* parent, cons
                              boost::bind( &ViewManager::welcomeWidget, ViewManager::instance() )
                                                     );
         recent->setSortValue( -300 );
+
+        GenericPageItem* hot = new GenericPageItem( model(), this, tr( "Charts" ), QIcon( RESPATH "images/charts.png" ),
+                             boost::bind( &ViewManager::showWhatsHotPage, ViewManager::instance() ),
+                             boost::bind( &ViewManager::whatsHotWidget, ViewManager::instance() )
+                                                    );
+        hot->setSortValue( -300 );
+
 
         // TODO finish implementing and making pretty
 //         m_coolPlaylistsItem = new GenericPageItem( model(), this, tr( "Cool Stuff" ), QIcon( RESPATH "images/new-additions.png" ),

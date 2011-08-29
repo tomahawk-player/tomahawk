@@ -44,6 +44,7 @@
 #include "dynamic/widgets/DynamicWidget.h"
 
 #include "widgets/welcomewidget.h"
+#include "widgets/whatshotwidget.h"
 #include "widgets/infowidgets/sourceinfowidget.h"
 #include "widgets/infowidgets/ArtistInfoWidget.h"
 #include "widgets/infowidgets/AlbumInfoWidget.h"
@@ -69,6 +70,7 @@ ViewManager::ViewManager( QObject* parent )
     : QObject( parent )
     , m_widget( new QWidget() )
     , m_welcomeWidget( new WelcomeWidget() )
+    , m_whatsHotWidget( new WhatsHotWidget() )
     , m_currentMode( PlaylistInterface::Tree )
 {
     s_instance = this;
@@ -438,6 +440,13 @@ ViewManager::showWelcomePage()
 {
     return show( m_welcomeWidget );
 }
+
+Tomahawk::ViewPage*
+ViewManager::showWhatsHotPage()
+{
+    return show( m_whatsHotWidget );
+}
+
 
 
 void

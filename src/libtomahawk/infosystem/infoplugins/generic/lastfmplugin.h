@@ -52,6 +52,8 @@ public slots:
     void artistImagesReturned();
     void similarArtistsReturned();
     void topTracksReturned();
+    void chartTopArtistsReturned();
+    void chartTopTracksReturned();
 
     void namChangedSlot( QNetworkAccessManager *nam );
 
@@ -66,6 +68,8 @@ private:
     void fetchArtistImages( uint requestId, Tomahawk::InfoSystem::InfoRequestData requestData );
     void fetchSimilarArtists( uint requestId, Tomahawk::InfoSystem::InfoRequestData requestData );
     void fetchTopTracks( uint requestId, Tomahawk::InfoSystem::InfoRequestData requestData );
+    void fetchChartArtists( uint requestId, Tomahawk::InfoSystem::InfoRequestData requestData );
+    void fetchChartTracks( uint requestId, Tomahawk::InfoSystem::InfoRequestData requestData );
 
     void createScrobbler();
     void nowPlaying( const QVariant &input );
@@ -73,6 +77,8 @@ private:
     void sendLoveSong( const InfoType type, QVariant input );
 
     void dataError( uint requestId, Tomahawk::InfoSystem::InfoRequestData requestData );
+
+    QList<lastfm::Track> parseTrackList( QNetworkReply * reply );
 
     lastfm::MutableTrack m_track;
     lastfm::Audioscrobbler* m_scrobbler;
