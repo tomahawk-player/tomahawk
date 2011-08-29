@@ -1,5 +1,6 @@
 Version 0.2.3:
     * Fixed potential crash in sidebar during syncing of sources.
+    * When Listening Along, the last song a peer plays is no longer duplicated.
     * Fixed an issue where the Twitter plugin could get out of sync if the
       database was cleared, leading to eventual crashes when re-connecting.
     * Fixed duplicate albums showing up on Dashboard.
