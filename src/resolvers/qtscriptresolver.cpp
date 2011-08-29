@@ -25,6 +25,7 @@
 #include "utils/tomahawkutils.h"
 
 #include <QMetaProperty>
+#include <QCryptographicHash>
 
 #include "utils/logger.h"
 
@@ -119,6 +120,32 @@ QtScriptResolverHelper::setResolverConfig( const QVariantMap& config )
     m_resolverConfig = config;
 }
 
+QString
+QtScriptResolverHelper::hmac( const QByteArray& key, const QByteArray &input )
+{
+    if ( !QCA::isSupported( "hmac(md5)" ) )
+    {
+        tLog() << "HMAC(md5) not supported with qca-ossl plugin, or qca-ossl plugin is not installed! Unable to generate signature!";
+        return QByteArray();
+    }
+
+    QCA::MessageAuthenticationCode md5hmac1( "hmac(md5)", QCA::SecureArray() );
+    QCA::SymmetricKey keyObject( key );
+    md5hmac1.setup( keyObject );
+
+    md5hmac1.update( QCA::SecureArray( input ) );
+    QCA::SecureArray resultArray = md5hmac1.final();
+
+    QString result = QCA::arrayToHex( resultArray.toByteArray() );
+    return result.toUtf8();
+}
+
+QString
+QtScriptResolverHelper::md5( const QByteArray& input )
+{
+    QByteArray const digest = QCryptographicHash::hash( input, QCryptographicHash::Md5 );
+    return QString::fromLatin1( digest.toHex() );
+}
 
 void
 ScriptEngine::javaScriptConsoleMessage( const QString& message, int lineNumber, const QString& sourceID )
