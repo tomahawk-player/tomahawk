@@ -424,7 +424,7 @@ IF( UNIX AND NOT APPLE )
     IF( BUILD_GUI AND X11_FOUND )
         INCLUDE_DIRECTORIES( ${THIRDPARTY_DIR}/libqnetwm )
         SET( libSources ${libSources} ${THIRDPARTY_DIR}/libqnetwm/libqnetwm/netwm.cpp )
-        SET( LINK_LIBRARIES ${LINK_LIBRARIES} ${X11_LIBRARIES} Xcomposite )
+        SET( LINK_LIBRARIES ${LINK_LIBRARIES} ${X11_LIBRARIES} )
     ENDIF()
 ENDIF( UNIX AND NOT APPLE )
 

@@ -82,7 +82,9 @@ public:
 
     static void transset(Window, double);
 
+#if 0
     static bool isComposite();
+#endif
 
     static int setProperty(Window, Atom, long, uchar *, int);
 

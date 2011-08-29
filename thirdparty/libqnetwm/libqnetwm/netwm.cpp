@@ -30,7 +30,10 @@
 #include <unistd.h>
 
 #include <X11/Xutil.h>
+
+#if 0
 #include <X11/extensions/Xcomposite.h>
+#endif
 
 #include "netwm.h"
 
@@ -703,6 +706,7 @@ void NETWM::transset(Window window, double d)
     XSync(dpy, False);
 }
 
+#if 0
 bool NETWM::isComposite()
 {
     int event_base, error_base;
@@ -722,6 +726,7 @@ bool NETWM::isComposite()
 
     return (owner != None);
 }
+#endif
 
 void NETWM::checkInit()
 {
