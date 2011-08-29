@@ -481,6 +481,12 @@ Servent::socketError( QAbstractSocket::SocketError e )
     }
 
     Connection* conn = sock->_conn;
+    if ( !conn )
+    {
+        tLog() << "SocketError, connection is null";
+        return;
+    }
+
     tLog() << "Servent::SocketError:" << e << conn->id() << conn->name();
     if( !sock->_disowned )
     {
