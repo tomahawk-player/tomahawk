@@ -304,8 +304,8 @@ DropJob::handleTrackUrls( const QString& urls )
         tDebug() << "Got a list of rdio urls!" << tracks;
         RdioParser* rdio = new RdioParser( this );
         connect( rdio, SIGNAL( tracks( QList<Tomahawk::query_ptr> ) ), this, SLOT( onTracksAdded( QList< Tomahawk::query_ptr > ) ) );
-        rdio->parse( tracks );
         m_queryCount++;
+        rdio->parse( tracks );
     } else if ( urls.contains( "bit.ly" ) ||
                 urls.contains( "j.mp" ) ||
                 urls.contains( "t.co" ) ||
