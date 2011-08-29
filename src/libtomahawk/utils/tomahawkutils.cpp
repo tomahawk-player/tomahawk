@@ -537,93 +537,89 @@ setNam( QNetworkAccessManager* nam )
     s_nam = QWeakPointer< QNetworkAccessManager >( nam );
 }
 
+
 #ifndef TOMAHAWK_HEADLESS
-    #if defined(Q_WS_X11)
-        void
-        bringToFront()
-        {
-            qDebug() << Q_FUNC_INFO;
-            QWidgetList widgetList = qApp->topLevelWidgets();
-            int i = 0;
-            while( i < widgetList.count() && widgetList.at( i )->objectName() != "TH_Main_Window" )
-                i++;
-            if ( i == widgetList.count() )
-            {
-                qDebug() << Q_FUNC_INFO << " could not find main TH window";
-                return;
-            }
-            
-            QWidget *widget = widgetList.at( i );
 
-            widget->show();
-            widget->activateWindow();
-            widget->raise();
+QWidget*
+tomahawkWindow()
+{
+    QWidgetList widgetList = qApp->topLevelWidgets();
+    int i = 0;
+    while( i < widgetList.count() && widgetList.at( i )->objectName() != "TH_Main_Window" )
+        i++;
 
-            WId wid = widget->winId();
-            
-            NETWM::init();
-
-            XEvent e;
-
-            e.xclient.type = ClientMessage;
-            e.xclient.message_type = NETWM::NET_ACTIVE_WINDOW;
-            e.xclient.display = QX11Info::display();
-            e.xclient.window = wid;
-            e.xclient.format = 32;
-            e.xclient.data.l[0] = 2;
-            e.xclient.data.l[1] = QX11Info::appTime();
-            e.xclient.data.l[2] = 0;
-            e.xclient.data.l[3] = 0l;
-            e.xclient.data.l[4] = 0l;
-
-            XSendEvent( QX11Info::display(), RootWindow( QX11Info::display(), DefaultScreen( QX11Info::display() ) ), False, SubstructureRedirectMask | SubstructureNotifyMask, &e );
-        }
-    #elif defined(Q_WS_WIN)
-        void
-        bringToFront()
-        {
-            qDebug() << Q_FUNC_INFO;
-            QWidgetList widgetList = qApp->topLevelWidgets();
-            int i = 0;
-            while( i < widgetList.count() && widgetList.at( i )->objectName() != "TH_Main_Window" )
-                i++;
-            if ( i == widgetList.count() )
-            {
-                qDebug() << Q_FUNC_INFO << " could not find main TH window";
-                return;
-            }
-            
-            QWidget *widget = widgetList.at( i );
-
-            widget->show();
-            widget->activateWindow();
-            widget->raise();
-
-            WId wid = widget->winId();
-
-            HWND hwndActiveWin = GetForegroundWindow();
-            int  idActive      = GetWindowThreadProcessId(hwndActiveWin, NULL);
-            if ( AttachThreadInput(GetCurrentThreadId(), idActive, TRUE) )
-            {
-                SetForegroundWindow( wid );
-                SetFocus( wid );
-                AttachThreadInput(GetCurrentThreadId(), idActive, FALSE);
-            }
-        }
-    #else
-        #ifndef Q_OS_MAC
-            void
-            bringToFront()
-            {
-            }
-        #endif
-    #endif
-#else
-    void
-    bringToFront()
+    if ( i == widgetList.count() )
     {
+        qDebug() << Q_FUNC_INFO << "could not find main Tomahawk mainwindow";
+        Q_ASSERT( false );
+        return 0;
+    }
+
+    QWidget *widget = widgetList.at( i );
+    return widget;
+}
+
+
+void
+bringToFront()
+{
+#if defined(Q_WS_X11)
+    {
+        qDebug() << Q_FUNC_INFO;
+
+        QWidget* widget = tomahawkWindow();
+        if ( !widget )
+            return;
+
+        widget->show();
+        widget->activateWindow();
+        widget->raise();
+
+        WId wid = widget->winId();
+        NETWM::init();
+
+        XEvent e;
+        e.xclient.type = ClientMessage;
+        e.xclient.message_type = NETWM::NET_ACTIVE_WINDOW;
+        e.xclient.display = QX11Info::display();
+        e.xclient.window = wid;
+        e.xclient.format = 32;
+        e.xclient.data.l[0] = 2;
+        e.xclient.data.l[1] = QX11Info::appTime();
+        e.xclient.data.l[2] = 0;
+        e.xclient.data.l[3] = 0l;
+        e.xclient.data.l[4] = 0l;
+
+        XSendEvent( QX11Info::display(), RootWindow( QX11Info::display(), DefaultScreen( QX11Info::display() ) ), False, SubstructureRedirectMask | SubstructureNotifyMask, &e );
+    }
+#elif defined(Q_WS_WIN)
+    {
+        qDebug() << Q_FUNC_INFO;
+
+        QWidget* widget = tomahawkWindow();
+        if ( !widget )
+            return;
+
+        widget->show();
+        widget->activateWindow();
+        widget->raise();
+
+        WId wid = widget->winId();
+
+        HWND hwndActiveWin = GetForegroundWindow();
+        int  idActive      = GetWindowThreadProcessId(hwndActiveWin, NULL);
+        if ( AttachThreadInput(GetCurrentThreadId(), idActive, TRUE) )
+        {
+            SetForegroundWindow( wid );
+            SetFocus( wid );
+            AttachThreadInput(GetCurrentThreadId(), idActive, FALSE);
+        }
     }
 #endif
+}
+
+#endif
+
 
 QPixmap
 createAvatarFrame( const QPixmap &avatar )

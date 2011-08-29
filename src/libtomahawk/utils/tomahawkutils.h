@@ -93,6 +93,7 @@ namespace TomahawkUtils
     DLLEXPORT void setProxyFactory( TomahawkUtils::NetworkProxyFactory* factory );
     DLLEXPORT void setNam( QNetworkAccessManager* nam );
 
+    DLLEXPORT QWidget* tomahawkWindow();
     /// Platform-specific bringing tomahawk mainwindow to front, b/c qt's activate() and such don't seem to work well enough for us
     DLLEXPORT void bringToFront();
 

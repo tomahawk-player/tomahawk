@@ -20,6 +20,8 @@
 #include "googlewrapper.h"
 #include "ui_configwidget.h"
 
+#include "utils/tomahawkutils.h"
+
 #include <QtPlugin>
 #include <QInputDialog>
 
@@ -69,9 +71,8 @@ void
 GoogleWrapper::showAddFriendDialog()
 {
     bool ok;
-    QString id = QInputDialog::getText( 0, tr( "Add Friend" ),
-                                        tr( "Enter Google Address:" ), QLineEdit::Normal,
-                                            "", &ok );
+    QString id = QInputDialog::getText( TomahawkUtils::tomahawkWindow(), tr( "Add Friend" ),
+                                        tr( "Enter Google Address:" ), QLineEdit::Normal, "", &ok );
     if ( !ok )
         return;
 
