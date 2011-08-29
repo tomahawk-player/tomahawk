@@ -1,5 +1,6 @@
 Version 0.3.0:
-    * Show recently added playlists in dashoard rather than recently opened playlists.
+    * Show recently added playlists in dashoard rather than recently opened
+      playlists.
     * Added MPRIS 2.1 support.
 
 Version 0.2.3:
