@@ -63,6 +63,8 @@ SourcesProxyModel::filterAcceptsRow( int sourceRow, const QModelIndex& sourcePar
     {
         if ( sti->source().isNull() || sti->source()->isOnline() )
             return true;
+        else if ( m_model->sourcesWithViewPage().contains( sti->source() ) )
+            return true;
         else
             return false;
     }

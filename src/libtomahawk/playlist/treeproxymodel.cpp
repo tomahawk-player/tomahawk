@@ -230,7 +230,7 @@ Tomahawk::result_ptr
 TreeProxyModel::currentItem() const
 {
     TreeModelItem* item = itemFromIndex( mapToSource( currentIndex() ) );
-    if ( item && item->result()->isOnline() )
+    if ( item && !item->result().isNull() && item->result()->isOnline() )
         return item->result();
     return Tomahawk::result_ptr();
 }
@@ -239,6 +239,9 @@ TreeProxyModel::currentItem() const
 QString
 TreeProxyModel::textForItem( TreeModelItem* item ) const
 {
+    if ( !item )
+        return QString();
+    
     if ( !item->artist().isNull() )
     {
         return item->artist()->name();

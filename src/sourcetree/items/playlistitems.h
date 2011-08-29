@@ -34,13 +34,14 @@ public:
     virtual Qt::ItemFlags flags() const;
     virtual void activate();
     virtual bool willAcceptDrag( const QMimeData* data ) const;
+    virtual DropTypes supportedDropTypes( const QMimeData* data ) const;
     virtual bool dropMimeData( const QMimeData* data, Qt::DropAction action );
     virtual QIcon icon() const;
     virtual bool setData(const QVariant& v, bool role);
     virtual int peerSortValue() const;
     virtual int IDValue() const;
 
-    virtual bool activateCurrent();
+    virtual SourceTreeItem* activateCurrent();
 
 protected:
     void setLoaded( bool loaded );
@@ -54,6 +55,7 @@ private:
     bool m_loaded;
     Tomahawk::playlist_ptr m_playlist;
 };
+Q_DECLARE_OPERATORS_FOR_FLAGS(PlaylistItem::DropTypes)
 
 // can be a station or an auto playlist
 class DynamicPlaylistItem : public PlaylistItem
@@ -71,7 +73,7 @@ public:
     virtual int IDValue() const;
     virtual QIcon icon() const;
 
-    virtual bool activateCurrent();
+    virtual SourceTreeItem* activateCurrent();
 private slots:
     void onDynamicPlaylistLoaded( Tomahawk::DynamicPlaylistRevision revision );
 

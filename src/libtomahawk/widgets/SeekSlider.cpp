@@ -19,6 +19,7 @@
 #include "SeekSlider.h"
 
 #include <QMouseEvent>
+#include <QTimeLine>
 
 #include "utils/tomahawkutils.h"
 #include "utils/logger.h"
@@ -26,6 +27,7 @@
 
 SeekSlider::SeekSlider( QWidget* parent )
     : QSlider( parent )
+    , m_timeLine( 0 )
 {
     setFixedHeight( 20 );
     setStyleSheet( "QSlider::groove::horizontal {"
@@ -63,4 +65,25 @@ SeekSlider::mousePressEvent( QMouseEvent* event )
     }
     else
         QSlider::mousePressEvent( event );
+}
+
+
+void
+SeekSlider::setValue( int value )
+{
+    int newVal = value;
+    if ( value > maximum() )
+        newVal = maximum();
+    if ( value < minimum() )
+        newVal = minimum();
+    
+    if ( !m_timeLine || sender() != m_timeLine ) 
+    {
+        QSlider::setValue( newVal );
+        return;
+    }
+
+    blockSignals( true );
+    QSlider::setValue( newVal );
+    blockSignals( false );
 }

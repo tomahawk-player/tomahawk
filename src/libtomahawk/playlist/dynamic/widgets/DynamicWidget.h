@@ -23,10 +23,7 @@
 
 #include "typedefs.h"
 #include "viewpage.h"
-
-#include "dynamic/DynamicPlaylist.h"
-#include "dynamic/DynamicControl.h"
-#include "dynamic/DynamicModel.h"
+#include "playlist/dynamic/DynamicPlaylistRevision.h"
 
 class LoadingSpinner;
 class QShowEvent;
@@ -45,10 +42,10 @@ class ReadOrWriteWidget;
 namespace Tomahawk
 {
 
+class DynamicModel;
+
 class DynamicSetupWidget;
-
 class DynamicView;
-
 class CollapsibleControls;
 
 
@@ -63,7 +60,7 @@ public:
     virtual ~DynamicWidget();
 
     void loadDynamicPlaylist( const dynplaylist_ptr& playlist );
-    dynplaylist_ptr playlist() { return m_playlist; }
+    dynplaylist_ptr playlist();
 
     virtual PlaylistInterface* playlistInterface() const;
 
@@ -75,8 +72,8 @@ public:
 
     virtual QWidget* widget() { return this; }
 
-    virtual QString title() const { return m_model->title(); }
-    virtual QString description() const { return m_model->description(); }
+    virtual QString title() const;
+    virtual QString description() const;
     virtual QPixmap pixmap() const;
 
     virtual bool jumpToCurrentTrack();

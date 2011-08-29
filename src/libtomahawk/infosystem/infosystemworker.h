@@ -21,13 +21,13 @@
 
 #include "infosystem/infosystem.h"
 
-#include <QNetworkAccessManager>
+#include <QtNetwork/QNetworkAccessManager>
 #include <QtCore/QObject>
 #include <QtCore/QtDebug>
 #include <QtCore/QMap>
 #include <QtCore/QWeakPointer>
 #include <QtCore/QSet>
-#include <QtCore/QLinkedList>
+#include <QtCore/QList>
 #include <QtCore/QVariant>
 #include <QtCore/QTimer>
 
@@ -57,7 +57,7 @@ signals:
 
 public slots:
     void init( QWeakPointer< Tomahawk::InfoSystem::InfoSystemCache > cache );
-    void getInfo( Tomahawk::InfoSystem::InfoRequestData requestData, uint timeoutMillis );
+    void getInfo( Tomahawk::InfoSystem::InfoRequestData requestData, uint timeoutMillis, bool allSources );
     void pushInfo( QString caller, Tomahawk::InfoSystem::InfoType type, QVariant input );
 
     void infoSlot( uint requestId, Tomahawk::InfoSystem::InfoRequestData requestData, QVariant output );
@@ -76,13 +76,13 @@ private:
     QHash< uint, bool > m_requestSatisfiedMap;
     QHash< uint, InfoRequestData* > m_savedRequestMap;
     
-    QLinkedList< InfoPluginPtr > determineOrderedMatches( const InfoType type ) const;
+    QList< InfoPluginPtr > determineOrderedMatches( const InfoType type ) const;
     
     // For now, statically instantiate plugins; this is just somewhere to keep them
-    QLinkedList< InfoPluginPtr > m_plugins;
+    QList< InfoPluginPtr > m_plugins;
 
-    QMap< InfoType, QLinkedList< InfoPluginPtr > > m_infoGetMap;
-    QMap< InfoType, QLinkedList< InfoPluginPtr > > m_infoPushMap;
+    QMap< InfoType, QList< InfoPluginPtr > > m_infoGetMap;
+    QMap< InfoType, QList< InfoPluginPtr > > m_infoPushMap;
 
     QWeakPointer< QNetworkAccessManager> m_nam;
 

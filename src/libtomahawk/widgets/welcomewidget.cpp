@@ -24,7 +24,7 @@
 #include "viewmanager.h"
 #include "sourcelist.h"
 #include "tomahawksettings.h"
-#include "welcomeplaylistmodel.h"
+#include "RecentPlaylistsModel.h"
 
 #include "audio/audioengine.h"
 #include "playlist/albummodel.h"
@@ -33,6 +33,7 @@
 #include "utils/tomahawkutils.h"
 #include "utils/logger.h"
 #include <dynamic/GeneratorInterface.h>
+#include "RecentlyPlayedPlaylistsModel.h"
 
 #define HISTORY_TRACK_ITEMS 25
 #define HISTORY_PLAYLIST_ITEMS 10
@@ -52,8 +53,7 @@ WelcomeWidget::WelcomeWidget( QWidget* parent )
     ui->splitter_2->setStretchFactor( 0, 2 );
     ui->splitter_2->setStretchFactor( 0, 1 );
 
-    WelcomePlaylistModel* model = new WelcomePlaylistModel( this );
-    model->setMaxPlaylists( HISTORY_PLAYLIST_ITEMS );
+    RecentPlaylistsModel* model = new RecentPlaylistsModel( HISTORY_PLAYLIST_ITEMS, this );
 
     ui->playlistWidget->setFrameShape( QFrame::NoFrame );
     ui->playlistWidget->setAttribute( Qt::WA_MacShowFocusRect, 0 );
@@ -138,7 +138,7 @@ WelcomeWidget::updatePlaylists()
     int num = ui->playlistWidget->model()->rowCount( QModelIndex() );
     if ( num == 0 )
     {
-        ui->playlistWidget->overlay()->setText( tr( "You have not played any playlists yet." ) );
+        ui->playlistWidget->overlay()->setText( tr( "No recently created playlists in your network." ) );
         ui->playlistWidget->overlay()->show();
     }
     else
@@ -180,7 +180,7 @@ WelcomeWidget::onPlaylistActivated( const QModelIndex& item )
 {
     qDebug() << Q_FUNC_INFO;
 
-    Tomahawk::playlist_ptr pl = item.data( WelcomePlaylistModel::PlaylistRole ).value< Tomahawk::playlist_ptr >();
+    Tomahawk::playlist_ptr pl = item.data( RecentlyPlayedPlaylistsModel::PlaylistRole ).value< Tomahawk::playlist_ptr >();
     if( Tomahawk::dynplaylist_ptr dynplaylist = pl.dynamicCast< Tomahawk::DynamicPlaylist >() )
         ViewManager::instance()->show( dynplaylist );
     else
@@ -240,12 +240,12 @@ PlaylistDelegate::paint( QPainter* painter, const QStyleOptionViewItem& option, 
     boldFont.setBold( true );
 
     QPixmap icon;
-    WelcomePlaylistModel::PlaylistTypes type = (WelcomePlaylistModel::PlaylistTypes)index.data( WelcomePlaylistModel::PlaylistTypeRole ).toInt();
-    if( type == WelcomePlaylistModel::StaticPlaylist )
+    RecentlyPlayedPlaylistsModel::PlaylistTypes type = (RecentlyPlayedPlaylistsModel::PlaylistTypes)index.data( RecentlyPlayedPlaylistsModel::PlaylistTypeRole ).toInt();
+    if( type == RecentlyPlayedPlaylistsModel::StaticPlaylist )
         icon = m_playlistIcon;
-    else if( type == WelcomePlaylistModel::AutoPlaylist )
+    else if( type == RecentlyPlayedPlaylistsModel::AutoPlaylist )
         icon = m_autoIcon;
-    else if( type == WelcomePlaylistModel::Station )
+    else if( type == RecentlyPlayedPlaylistsModel::Station )
         icon = m_stationIcon;
 
     QRect pixmapRect = option.rect.adjusted( 10, 13, -option.rect.width() + 48, -13 );
@@ -254,12 +254,12 @@ PlaylistDelegate::paint( QPainter* painter, const QStyleOptionViewItem& option, 
     painter->drawPixmap( pixmapRect, icon );
 
     QString descText;
-    if ( type == WelcomePlaylistModel::Station )
+    if ( type == RecentlyPlayedPlaylistsModel::Station )
     {
-        descText = index.data( WelcomePlaylistModel::DynamicPlaylistRole ).value< Tomahawk::dynplaylist_ptr >()->generator()->sentenceSummary();
+        descText = index.data( RecentlyPlayedPlaylistsModel::DynamicPlaylistRole ).value< Tomahawk::dynplaylist_ptr >()->generator()->sentenceSummary();
     } else
     {
-        descText = index.data( WelcomePlaylistModel::ArtistRole ).toString();
+        descText = index.data( RecentlyPlayedPlaylistsModel::ArtistRole ).toString();
     }
     QColor c = painter->pen().color();
     painter->setPen( QColor( Qt::gray ).darker() );
@@ -278,10 +278,10 @@ PlaylistDelegate::paint( QPainter* painter, const QStyleOptionViewItem& option, 
     painter->setPen( c );
     painter->setFont( font );
 
-    if ( type != WelcomePlaylistModel::Station )
+    if ( type != RecentlyPlayedPlaylistsModel::Station )
     {
         painter->save();
-        QString tracks = index.data( WelcomePlaylistModel::TrackCountRole ).toString();
+        QString tracks = index.data( RecentlyPlayedPlaylistsModel::TrackCountRole ).toString();
         int width = painter->fontMetrics().width( tracks );
 //         int bottomEdge = pixmapRect
         // right edge 10px past right edge of pixmapRect
@@ -300,7 +300,7 @@ PlaylistDelegate::paint( QPainter* painter, const QStyleOptionViewItem& option, 
         painter->restore();
     }
 
-    QPixmap avatar = index.data( WelcomePlaylistModel::PlaylistRole ).value< Tomahawk::playlist_ptr >()->author()->avatar( Source::FancyStyle );
+    QPixmap avatar = index.data( RecentlyPlayedPlaylistsModel::PlaylistRole ).value< Tomahawk::playlist_ptr >()->author()->avatar( Source::FancyStyle );
     if ( avatar.isNull() )
         avatar = m_defaultAvatar;
     QRect r( option.rect.width() - avatar.width() - 10, option.rect.top() + option.rect.height()/2 - avatar.height()/2, avatar.width(), avatar.height() );

@@ -23,6 +23,7 @@
 #include "query.h"
 #include "result.h"
 #include "utils/tomahawkutils.h"
+#include "config.h"
 
 #include <QApplication>
 #include <QDir>
@@ -30,6 +31,10 @@
 #include <QThread>
 #include <QtWebKit/QWebPage>
 #include <QtWebKit/QWebFrame>
+
+#ifdef QCA2_FOUND
+#include <QtCrypto>
+#endif
 
 class QtScriptResolver;
 
@@ -41,6 +46,10 @@ public:
     QtScriptResolverHelper( const QString& scriptPath, QtScriptResolver* parent );
     void setResolverConfig( const QVariantMap& config );
 
+
+    // Return a HMAC (md5) signature of the input text with the desired key
+    Q_INVOKABLE QString hmac( const QByteArray& key, const QByteArray& input );
+    Q_INVOKABLE QString md5( const QByteArray& input );
 public slots:
     QByteArray readRaw( const QString& fileName );
     QString readBase64( const QString& fileName );
@@ -58,6 +67,9 @@ private:
     QString m_scriptPath;
     QVariantMap m_resolverConfig;
     QtScriptResolver* m_resolver;
+#ifdef QCA2_FOUND
+    QCA::Initializer m_qcaInit;
+#endif
 };
 
 class ScriptEngine : public QWebPage

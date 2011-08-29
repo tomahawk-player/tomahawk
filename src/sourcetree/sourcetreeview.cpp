@@ -32,6 +32,7 @@
 #include "viewmanager.h"
 #include "sourcesproxymodel.h"
 #include "sourcelist.h"
+#include "sourcedelegate.h"
 #include "sourcetree/items/playlistitems.h"
 #include "sourcetree/items/collectionitem.h"
 #include "audio/audioengine.h"
@@ -45,33 +46,6 @@
 #include "items/temporarypageitem.h"
 
 using namespace Tomahawk;
-
-#define TREEVIEW_INDENT_ADD -7
-
-
-class SourceDelegate : public QStyledItemDelegate
-{
-public:
-    SourceDelegate( QAbstractItemView* parent = 0 ) : QStyledItemDelegate( parent ), m_parent( parent ) {}
-
-protected:
-    virtual QSize sizeHint( const QStyleOptionViewItem& option, const QModelIndex& index ) const;
-    virtual void paint( QPainter* painter, const QStyleOptionViewItem& option, const QModelIndex& index ) const;
-    virtual void updateEditorGeometry( QWidget* editor, const QStyleOptionViewItem& option, const QModelIndex& index ) const
-    {
-        if ( index.data( SourcesModel::SourceTreeItemTypeRole ).toInt() == SourcesModel::StaticPlaylist )
-            editor->setGeometry( option.rect.adjusted( 20, 0, 0, 0 ) );
-        else
-            QStyledItemDelegate::updateEditorGeometry( editor, option, index );
-
-        editor->setGeometry( editor->geometry().adjusted( 2*TREEVIEW_INDENT_ADD, 0, 0, 0 ) );
-    }
-    virtual bool editorEvent( QEvent* event, QAbstractItemModel* model, const QStyleOptionViewItem& option, const QModelIndex& index );
-
-private:
-    QAbstractItemView* m_parent;
-    mutable int m_iconHeight;
-};
 
 
 SourceTreeView::SourceTreeView( QWidget* parent )
@@ -105,7 +79,8 @@ SourceTreeView::SourceTreeView( QWidget* parent )
     // so investigate
 //     setAnimated( true );
 
-    setItemDelegate( new SourceDelegate( this ) );
+    m_delegate = new SourceDelegate( this );
+    setItemDelegate( m_delegate );
 
     setContextMenuPolicy( Qt::CustomContextMenu );
     connect( this, SIGNAL( customContextMenuRequested( QPoint ) ), SLOT( onCustomContextMenu( QPoint ) ) );
@@ -464,6 +439,8 @@ SourceTreeView::dragLeaveEvent( QDragLeaveEvent* event )
     m_dragging = false;
     setDirtyRegion( m_dropRect );
 
+    m_delegate->dragLeaveEvent();
+    dataChanged(m_dropIndex, m_dropIndex);
     m_dropIndex = QPersistentModelIndex();
 }
 
@@ -479,6 +456,7 @@ SourceTreeView::dragMoveEvent( QDragMoveEvent* event )
         setDirtyRegion( m_dropRect );
         const QPoint pos = event->pos();
         const QModelIndex index = indexAt( pos );
+        dataChanged(m_dropIndex, m_dropIndex);
         m_dropIndex = QPersistentModelIndex( index );
 
         if ( index.isValid() )
@@ -486,9 +464,15 @@ SourceTreeView::dragMoveEvent( QDragMoveEvent* event )
             const QRect rect = visualRect( index );
             m_dropRect = rect;
 
-            const SourceTreeItem* item = itemFromIndex< SourceTreeItem >( index );
+            SourceTreeItem* item = itemFromIndex< SourceTreeItem >( index );
             if( item->willAcceptDrag( event->mimeData() ) )
+            {
                 accept = true;
+                m_delegate->hovered( index, event->mimeData() );
+                dataChanged(index, index);
+            }
+            else
+                m_delegate->hovered( QModelIndex(), 0 );
         }
         else
         {
@@ -511,9 +495,35 @@ SourceTreeView::dragMoveEvent( QDragMoveEvent* event )
 void
 SourceTreeView::dropEvent( QDropEvent* event )
 {
-    QTreeView::dropEvent( event );
+    const QPoint pos = event->pos();
+    const QModelIndex index = indexAt( pos );
+
+    if ( model()->data( index, SourcesModel::SourceTreeItemTypeRole ).toInt() == SourcesModel::StaticPlaylist
+         || model()->data( index, SourcesModel::SourceTreeItemTypeRole ).toInt() == SourcesModel::CategoryAdd )
+    {
+        SourceTreeItem* item = itemFromIndex< SourceTreeItem >( index );
+        Q_ASSERT( item );
+
+        item->setDropType( m_delegate->hoveredDropType() );
+        qDebug() << "dropType is " << m_delegate->hoveredDropType();
+    }
+
+    // Need to fake the dropevent because the treeview would reject it if it is outside the item (on the tree)
+    if ( pos.x() < 100 )
+    {
+        QDropEvent* newEvent = new QDropEvent( pos + QPoint( 100, 0 ), event->possibleActions(), event->mimeData(), event->mouseButtons(), event->keyboardModifiers(), event->type() );
+        QTreeView::dropEvent( newEvent );
+        delete newEvent;
+    }
+    else
+    {
+        QTreeView::dropEvent( event );
+    }
+
     m_dragging = false;
     m_dropIndex = QPersistentModelIndex();
+    m_delegate->dragLeaveEvent();
+    dataChanged( index, index );
 }
 
 
@@ -576,190 +586,10 @@ SourceTreeView::itemFromIndex( const QModelIndex& index ) const
     return item;
 }
 
-
-QSize
-SourceDelegate::sizeHint( const QStyleOptionViewItem& option, const QModelIndex& index ) const
-{
-    if ( index.data( SourcesModel::SourceTreeItemTypeRole ).toInt() == SourcesModel::Collection )
-        return QSize( option.rect.width(), 44 );
-    else
-        return QStyledItemDelegate::sizeHint( option, index );
-}
-
-
 void
-SourceDelegate::paint( QPainter* painter, const QStyleOptionViewItem& option, const QModelIndex& index ) const
+SourceTreeView::update( const QModelIndex &index )
 {
-    QStyleOptionViewItem o = option;
-
-#ifdef Q_WS_MAC
-    QFont savedFont = painter->font();
-    QFont smaller = savedFont;
-    smaller.setPointSize( smaller.pointSize() - 2 );
-    painter->setFont( smaller );
-    o.font = smaller;
-#endif
-
-    if ( ( option.state & QStyle::State_Enabled ) == QStyle::State_Enabled )
-    {
-        o.state = QStyle::State_Enabled;
-
-        if ( ( option.state & QStyle::State_Selected ) == QStyle::State_Selected )
-        {
-            o.palette.setColor( QPalette::Text, o.palette.color( QPalette::HighlightedText ) );
-        }
-    }
-
-    SourcesModel::RowType type = static_cast< SourcesModel::RowType >( index.data( SourcesModel::SourceTreeItemTypeRole ).toInt() );
-    SourceTreeItem* item = index.data( SourcesModel::SourceTreeItemRole ).value< SourceTreeItem* >();
-    Q_ASSERT( item );
-
-    QStyleOptionViewItemV4 o3 = option;
-    if ( type != SourcesModel::Collection && type != SourcesModel::Category )
-        o3.rect.setX( 0 );
-
-    QApplication::style()->drawControl( QStyle::CE_ItemViewItem, &o3, painter );
-
-    if ( type == SourcesModel::Collection )
-    {
-        painter->save();
-
-        QFont normal = painter->font();
-        QFont bold = painter->font();
-        bold.setBold( true );
-
-        CollectionItem* colItem = qobject_cast< CollectionItem* >( item );
-        Q_ASSERT( colItem );
-        bool status = !( !colItem || colItem->source().isNull() || !colItem->source()->isOnline() );
-
-        QString tracks;
-        QString name = index.data().toString();
-        int figWidth = 0;
-
-        if ( status && colItem && !colItem->source().isNull() )
-        {
-            tracks = QString::number( colItem->source()->trackCount() );
-            figWidth = painter->fontMetrics().width( tracks );
-            name = colItem->source()->friendlyName();
-        }
-
-        QRect iconRect = option.rect.adjusted( 4, 6, -option.rect.width() + option.rect.height() - 12 + 4, -6 );
-
-        QPixmap avatar = colItem->icon().pixmap( iconRect.size() );
-        painter->drawPixmap( iconRect, avatar.scaledToHeight( iconRect.height(), Qt::SmoothTransformation ) );
-
-        if ( ( option.state & QStyle::State_Selected ) == QStyle::State_Selected )
-        {
-            painter->setPen( o.palette.color( QPalette::HighlightedText ) );
-        }
-
-        QRect textRect = option.rect.adjusted( iconRect.width() + 8, 6, -figWidth - 24, 0 );
-        if ( status || colItem->source().isNull() )
-            painter->setFont( bold );
-        QString text = painter->fontMetrics().elidedText( name, Qt::ElideRight, textRect.width() );
-        painter->drawText( textRect, text );
-
-        QString desc = status ? colItem->source()->textStatus() : tr( "Offline" );
-        if ( colItem->source().isNull() )
-            desc = tr( "All available tracks" );
-        if ( status && desc.isEmpty() && !colItem->source()->currentTrack().isNull() )
-            desc = colItem->source()->currentTrack()->artist() + " - " + colItem->source()->currentTrack()->track();
-        if ( desc.isEmpty() )
-            desc = tr( "Online" );
-
-        textRect = option.rect.adjusted( iconRect.width() + 8, painter->fontMetrics().height() + 6, -figWidth - 24, -4 );
-        painter->setFont( normal );
-        text = painter->fontMetrics().elidedText( desc, Qt::ElideRight, textRect.width() );
-        QTextOption to( Qt::AlignBottom );
-        painter->drawText( textRect, text, to );
-
-        if ( status )
-        {
-            painter->setRenderHint( QPainter::Antialiasing );
-
-            QRect figRect = o.rect.adjusted( o.rect.width() - figWidth - 8, 0, -13, -o.rect.height() + 16 );
-            int hd = ( option.rect.height() - figRect.height() ) / 2;
-            figRect.adjust( 0, hd, 0, hd );
-#ifdef Q_OS_WIN
-            figRect.adjust( -3, 0, 3, 0 );
-#endif
-            painter->setFont( bold );
-
-            QColor figColor( 167, 183, 211 );
-            painter->setPen( figColor );
-            painter->setBrush( figColor );
-
-            TomahawkUtils::drawBackgroundAndNumbers( painter, tracks, figRect );
-        }
-
-        painter->restore();
-    }
-    else
-    {
-        QStyledItemDelegate::paint( painter, o, index );
-
-        if ( type == SourcesModel::TemporaryPage )
-        {
-            TemporaryPageItem* gpi = qobject_cast< TemporaryPageItem* >( item );
-            Q_ASSERT( gpi );
-
-            if ( gpi && o3.state & QStyle::State_MouseOver )
-            {
-                // draw close icon
-                int padding = 3;
-                m_iconHeight = ( o3.rect.height() - 2*padding );
-                QPixmap p( RESPATH "images/list-remove.png" );
-                p = p.scaledToHeight( m_iconHeight, Qt::SmoothTransformation );
-
-                QRect r ( o3.rect.right() - padding - m_iconHeight, padding + o3.rect.y(), m_iconHeight, m_iconHeight );
-                painter->drawPixmap( r, p );
-            }
-        }
-        /*QStyleOptionViewItemV4 opt = o;
-
-        // shrink the indentations. count how indented this item is and remove it
-        int indentMult = 0;
-        QModelIndex counter = index;
-        while ( counter.parent().isValid() )
-        {
-            indentMult++;
-            counter = counter.parent();
-        }
-        int realX = opt.rect.x() + indentMult * TREEVIEW_INDENT_ADD;
-
-        opt.rect.setX( realX );
-        const QWidget *widget = opt.widget;
-        QStyle *style = widget ? widget->style() : QApplication::style();
-        style->drawControl( QStyle::CE_ItemViewItem, &opt, painter, widget ); */
-    }
-
-#ifdef Q_WS_MAC
-    painter->setFont( savedFont );
-#endif
-}
-
-bool
-SourceDelegate::editorEvent ( QEvent* event, QAbstractItemModel* model, const QStyleOptionViewItem& option, const QModelIndex& index )
-{
-
-    if ( event->type() == QEvent::MouseButtonRelease )
-    {
-        SourcesModel::RowType type = static_cast< SourcesModel::RowType >( index.data( SourcesModel::SourceTreeItemTypeRole ).toInt() );
-        if ( type == SourcesModel::TemporaryPage )
-        {
-            TemporaryPageItem* gpi = qobject_cast< TemporaryPageItem* >( index.data( SourcesModel::SourceTreeItemRole ).value< SourceTreeItem* >() );
-            Q_ASSERT( gpi );
-            QMouseEvent* ev = static_cast< QMouseEvent* >( event );
-
-            QStyleOptionViewItemV4 o = option;
-            initStyleOption( &o, index );
-            int padding = 3;
-            QRect r ( o.rect.right() - padding - m_iconHeight, padding + o.rect.y(), m_iconHeight, m_iconHeight );
-
-            if ( r.contains( ev->pos() ) )
-                gpi->removeFromList();
-        }
-    }
-
-    return QStyledItemDelegate::editorEvent ( event, model, option, index );
+//    updateGeometries();
+//    QTreeView::update( index );
+    dataChanged( index, index );
 }

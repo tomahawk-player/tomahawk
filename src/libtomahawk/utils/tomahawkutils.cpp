@@ -45,12 +45,15 @@
     #include <QtGui/QWidget>
 
     #ifdef Q_WS_X11
-        extern "C" {
-            #include <X11/Xlib.h>
-        }
+        #include <QtGui/QX11Info>
+        #include <libqnetwm/netwm.h>
+    #endif
+
+    #ifdef Q_WS_WIN
+        #include <windows.h>
+        #include <windowsx.h>
     #endif
 #endif
-
 
 #include <tomahawksettings.h>
 #include "utils/logger.h"
@@ -304,7 +307,7 @@ alphaBlend( const QColor& colorFrom, const QColor& colorTo, float opacity )
 
 
 QPixmap
-createDragPixmap( int itemCount )
+createDragPixmap( MediaType type, int itemCount )
 {
     // If more than one item is dragged, align the items inside a
     // rectangular grid. The maximum grid size is limited to 5 x 5 items.
@@ -341,11 +344,26 @@ createDragPixmap( int itemCount )
 
     QPainter painter( &dragPixmap );
     painter.setRenderHint( QPainter::Antialiasing );
+
+    QPixmap pixmap;
+    switch ( type )
+    {
+    case MediaTypeArtist:
+        pixmap = QPixmap( ":/data/images/artist-icon.png" ).scaledToWidth( size, Qt::SmoothTransformation );
+        break;
+    case MediaTypeAlbum:
+        pixmap = QPixmap( ":/data/images/album-icon.png" ).scaledToWidth( size, Qt::SmoothTransformation );
+        break;
+    case MediaTypeTrack:
+        pixmap = QPixmap( QString( ":/data/images/track-icon-%2x%2.png" ).arg( size ) );
+        break;
+    }
+
     int x = 0;
     int y = 0;
     for( int i = 0; i < itemCount; ++i )
     {
-        const QPixmap pixmap = QPixmap( QString( ":/data/images/track-icon-%2x%2.png" ).arg( size ) );
+
         painter.drawPixmap( x, y, pixmap );
 
         x += size + 1;
@@ -527,27 +545,70 @@ setNam( QNetworkAccessManager* nam )
             qDebug() << Q_FUNC_INFO;
             QWidgetList widgetList = qApp->topLevelWidgets();
             int i = 0;
-            while( !widgetList.at( i )->isWindow() )
+            while( i < widgetList.count() && widgetList.at( i )->objectName() != "TH_Main_Window" )
                 i++;
-            QWidget *widget = widgetList.at( i );
-
-            WId winId = widget->winId();
-            Display *display = XOpenDisplay( NULL );
-            if ( !display )
+            if ( i == widgetList.count() )
             {
-                qDebug() << Q_FUNC_INFO << "Could not find display to raise";
+                qDebug() << Q_FUNC_INFO << " could not find main TH window";
                 return;
             }
             
-            XRaiseWindow( display, winId );
-            XSetInputFocus( display, winId, RevertToNone, CurrentTime );
-            //widget->activateWindow();
-            //widget->raise();
+            QWidget *widget = widgetList.at( i );
+
+            widget->show();
+            widget->activateWindow();
+            widget->raise();
+
+            WId wid = widget->winId();
+            
+            NETWM::init();
+
+            XEvent e;
+
+            e.xclient.type = ClientMessage;
+            e.xclient.message_type = NETWM::NET_ACTIVE_WINDOW;
+            e.xclient.display = QX11Info::display();
+            e.xclient.window = wid;
+            e.xclient.format = 32;
+            e.xclient.data.l[0] = 2;
+            e.xclient.data.l[1] = QX11Info::appTime();
+            e.xclient.data.l[2] = 0;
+            e.xclient.data.l[3] = 0l;
+            e.xclient.data.l[4] = 0l;
+
+            XSendEvent( QX11Info::display(), RootWindow( QX11Info::display(), DefaultScreen( QX11Info::display() ) ), False, SubstructureRedirectMask | SubstructureNotifyMask, &e );
         }
     #elif defined(Q_WS_WIN)
         void
         bringToFront()
         {
+            qDebug() << Q_FUNC_INFO;
+            QWidgetList widgetList = qApp->topLevelWidgets();
+            int i = 0;
+            while( i < widgetList.count() && widgetList.at( i )->objectName() != "TH_Main_Window" )
+                i++;
+            if ( i == widgetList.count() )
+            {
+                qDebug() << Q_FUNC_INFO << " could not find main TH window";
+                return;
+            }
+            
+            QWidget *widget = widgetList.at( i );
+
+            widget->show();
+            widget->activateWindow();
+            widget->raise();
+
+            WId wid = widget->winId();
+
+            HWND hwndActiveWin = GetForegroundWindow();
+            int  idActive      = GetWindowThreadProcessId(hwndActiveWin, NULL);
+            if ( AttachThreadInput(GetCurrentThreadId(), idActive, TRUE) )
+            {
+                SetForegroundWindow( wid );
+                SetFocus( wid );
+                AttachThreadInput(GetCurrentThreadId(), idActive, FALSE);
+            }
         }
     #else
         #ifndef Q_OS_MAC

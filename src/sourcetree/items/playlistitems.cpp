@@ -138,6 +138,28 @@ PlaylistItem::willAcceptDrag( const QMimeData* data ) const
     return !m_playlist.isNull() && m_playlist->author()->isLocal();
 }
 
+PlaylistItem::DropTypes
+PlaylistItem::supportedDropTypes( const QMimeData* data ) const
+{
+    if ( data->hasFormat( "application/tomahawk.query.list" ) )
+        return DropTypeThisTrack | DropTypeThisAlbum | DropTypeAllFromArtist | DropTypeLocalItems | DropTypeTop50;
+    else if ( data->hasFormat( "application/tomahawk.result.list" ) )
+        return DropTypeThisTrack | DropTypeThisAlbum | DropTypeAllFromArtist | DropTypeLocalItems | DropTypeTop50;
+    else if ( data->hasFormat( "application/tomahawk.metadata.album" ) )
+        return DropTypeThisAlbum | DropTypeAllFromArtist | DropTypeLocalItems | DropTypeTop50;
+    else if ( data->hasFormat( "application/tomahawk.metadata.artist" ) )
+        return DropTypeAllFromArtist | DropTypeLocalItems | DropTypeTop50;
+    else if ( data->hasFormat( "application/tomahawk.mixed" ) )
+    {
+        return DropTypesNone;
+    }
+    else if ( data->hasFormat( "text/plain" ) )
+    {
+        return DropTypesNone;
+    }
+    return DropTypesNone;
+}
+
 
 bool
 PlaylistItem::dropMimeData( const QMimeData* data, Qt::DropAction action )
@@ -152,7 +174,24 @@ PlaylistItem::dropMimeData( const QMimeData* data, Qt::DropAction action )
 
     DropJob *dj = new DropJob();
     connect( dj, SIGNAL( tracks( QList< Tomahawk::query_ptr > ) ), this, SLOT( parsedDroppedTracks( QList< Tomahawk::query_ptr > ) ) );
-    dj->tracksFromMimeData( data );
+
+    if ( dropType() == DropTypeAllFromArtist )
+        dj->setGetWholeArtists( true );
+    if ( dropType() == DropTypeThisAlbum )
+        dj->setGetWholeAlbums( true );
+
+    if ( dropType() == DropTypeLocalItems )
+    {
+        dj->setGetWholeArtists( true );
+        dj->tracksFromMimeData( data, false, true );
+    }
+    else if ( dropType() == DropTypeTop50 )
+    {
+        dj->setGetWholeArtists( true );
+        dj->tracksFromMimeData( data, false, false, true );
+    }
+    else
+        dj->tracksFromMimeData( data, false, false );
 
     // TODO cant' know if it works or not yet...
     return true;
@@ -161,6 +200,7 @@ PlaylistItem::dropMimeData( const QMimeData* data, Qt::DropAction action )
 void
 PlaylistItem::parsedDroppedTracks( const QList< query_ptr >& tracks)
 {
+    qDebug() << "adding" << tracks.count() << "tracks";
     if ( tracks.count() && !m_playlist.isNull() && m_playlist->author()->isLocal() )
     {
         qDebug() << "on playlist:" << m_playlist->title() << m_playlist->guid() << m_playlist->currentrevision();
@@ -191,7 +231,7 @@ PlaylistItem::setData( const QVariant& v, bool role )
     return false;
 }
 
-bool
+SourceTreeItem*
 PlaylistItem::activateCurrent()
 {
     if( ViewManager::instance()->pageForPlaylist( m_playlist ) == ViewManager::instance()->currentPage() )
@@ -199,10 +239,10 @@ PlaylistItem::activateCurrent()
         model()->linkSourceItemToPage( this, ViewManager::instance()->currentPage() );
         emit selectRequest( this );
 
-        return true;
+        return this;
     }
 
-    return false;
+    return 0;
 }
 
 
@@ -346,7 +386,7 @@ DynamicPlaylistItem::icon() const
     }
 }
 
-bool
+SourceTreeItem*
 DynamicPlaylistItem::activateCurrent()
 {
     if( ViewManager::instance()->pageForDynPlaylist( m_dynplaylist ) == ViewManager::instance()->currentPage() )
@@ -354,9 +394,9 @@ DynamicPlaylistItem::activateCurrent()
         model()->linkSourceItemToPage( this, ViewManager::instance()->currentPage() );
         emit selectRequest( this );
 
-        return true;
+        return this;
     }
 
-    return false;
+    return 0;
 }
 

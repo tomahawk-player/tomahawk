@@ -318,6 +318,99 @@ TreeModel::mimeData( const QModelIndexList &indexes ) const
     QByteArray resultData;
     QDataStream resultStream( &resultData, QIODevice::WriteOnly );
 
+    // lets try with artist only
+    bool fail = false;
+    foreach ( const QModelIndex& i, indexes)
+    {
+        if ( i.column() > 0 || indexes.contains( i.parent() ) )
+            continue;
+
+        TreeModelItem* item = itemFromIndex( i );
+        if ( !item )
+            continue;
+
+        if ( !item->artist().isNull() )
+        {
+            const artist_ptr& artist = item->artist();
+            resultStream << artist->name();
+        }
+        else
+        {
+            fail = true;
+            break;
+        }
+    }
+    if ( !fail )
+    {
+        QMimeData* mimeData = new QMimeData();
+        mimeData->setData( "application/tomahawk.metadata.artist", resultData );
+        return mimeData;
+    }
+
+    // lets try with album only
+    fail = false;
+    resultData.clear();
+    foreach ( const QModelIndex& i, indexes)
+    {
+        if ( i.column() > 0 || indexes.contains( i.parent() ) )
+            continue;
+
+        TreeModelItem* item = itemFromIndex( i );
+        if ( !item )
+            continue;
+
+        if ( !item->album().isNull() )
+        {
+            const album_ptr& album = item->album();
+            resultStream << album->artist()->name();
+            resultStream << album->name();
+        }
+        else
+        {
+            fail = true;
+            break;
+        }
+    }
+    if ( !fail )
+    {
+        QMimeData* mimeData = new QMimeData();
+        mimeData->setData( "application/tomahawk.metadata.album", resultData );
+        return mimeData;
+    }
+
+
+    // lets try with tracks only
+    fail = false;
+    resultData.clear();
+    foreach ( const QModelIndex& i, indexes)
+    {
+        if ( i.column() > 0 || indexes.contains( i.parent() ) )
+            continue;
+
+        TreeModelItem* item = itemFromIndex( i );
+        if ( !item )
+            continue;
+
+        if ( !item->result().isNull() )
+        {
+            const result_ptr& result = item->result();
+            resultStream << qlonglong( &result );
+        }
+        else
+        {
+            fail = true;
+            break;
+        }
+    }
+    if ( !fail )
+    {
+        QMimeData* mimeData = new QMimeData();
+        mimeData->setData( "application/tomahawk.result.list", resultData );
+        return mimeData;
+    }
+
+    // Ok... we have to use mixed
+    resultData.clear();
     foreach ( const QModelIndex& i, indexes )
     {
         if ( i.column() > 0 || indexes.contains( i.parent() ) )

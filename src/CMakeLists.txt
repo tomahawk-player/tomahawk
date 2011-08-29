@@ -57,6 +57,8 @@ SET( tomahawkSourcesGui ${tomahawkSourcesGui}
      sourcetree/sourcesmodel.cpp
      sourcetree/sourcesproxymodel.cpp
      sourcetree/sourcetreeview.cpp
+     sourcetree/sourcedelegate.cpp
+     sourcetree/animationhelper.cpp
      sourcetree/items/sourcetreeitem.cpp
      sourcetree/items/collectionitem.cpp
      sourcetree/items/playlistitems.cpp
@@ -102,6 +104,8 @@ SET( tomahawkHeadersGui ${tomahawkHeadersGui}
      sourcetree/sourcesmodel.h
      sourcetree/sourcesproxymodel.h
      sourcetree/sourcetreeview.h
+     sourcetree/sourcedelegate.h
+     sourcetree/animationhelper.h
      sourcetree/items/sourcetreeitem.h
      sourcetree/items/collectionitem.h
      sourcetree/items/playlistitems.h
@@ -190,6 +194,10 @@ IF(GLOOX_FOUND)
 ENDIF(GLOOX_FOUND)
 ADD_SUBDIRECTORY( sip )
 
+IF(QCA2_FOUND)
+    INCLUDE_DIRECTORIES( ${QCA2_INCLUDE_DIR} )
+ENDIF(QCA2_FOUND)
+
 kde4_add_app_icon( tomahawkSources "${CMAKE_SOURCE_DIR}/data/icons/tomahawk-icon-*.png" )
 qt4_add_resources( RC_SRCS "../resources.qrc" )
 qt4_wrap_cpp( tomahawkMoc ${tomahawkHeaders} )
@@ -230,6 +238,10 @@ IF(GLOOX_FOUND)
     SET(LINK_LIBRARIES ${LINK_LIBRARIES} ${GLOOX_LIBRARIES} )
 ENDIF(GLOOX_FOUND)
 
+IF(QCA2_FOUND)
+    SET(LINK_LIBRARIES ${LINK_LIBRARIES} ${QCA2_LIBRARIES} )
+ENDIF(QCA2_FOUND)
+
 TARGET_LINK_LIBRARIES( tomahawk
     ${LINK_LIBRARIES}
     ${TOMAHAWK_LIBRARIES}
@@ -242,7 +254,6 @@ TARGET_LINK_LIBRARIES( tomahawk
     ${QJSON_LIBRARIES}
     ${TAGLIB_LIBRARIES}
 )
-
 
 IF( APPLE )
   IF(HAVE_SPARKLE)

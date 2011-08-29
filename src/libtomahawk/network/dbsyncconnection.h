@@ -64,9 +64,13 @@ public slots:
 
 private slots:
     void gotUs( const QVariantMap& m );
-    void gotThemCache( const QVariantMap& m );
-    void lastOpApplied();
+    void gotThem( const QVariantMap& m );
+
+    void fetchOpsData( const QString& sinceguid );
     void sendOpsData( QString sinceguid, QString lastguid, QList< dbop_ptr > ops );
+
+    void lastOpApplied();
+
     void check();
     void idleTimeout();
 
@@ -76,11 +80,13 @@ private:
     void changeState( State newstate );
 
     Tomahawk::source_ptr m_source;
-    QVariantMap m_us, m_uscache, m_themcache;
-    State m_state;
+    QVariantMap m_us, m_uscache;
 
+    QString m_lastop;
     QString m_lastSentOp;
+    QStringList m_recentTempOps;
 
+    State m_state;
     QTimer m_timer;
 };
 

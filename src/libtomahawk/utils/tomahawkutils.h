@@ -40,6 +40,13 @@ class QNetworkAccessManager;
 
 namespace TomahawkUtils
 {
+    enum MediaType
+    {
+        MediaTypeArtist,
+        MediaTypeAlbum,
+        MediaTypeTrack
+    };
+
     class DLLEXPORT NetworkProxyFactory : public QNetworkProxyFactory
     {
     public:
@@ -74,7 +81,7 @@ namespace TomahawkUtils
     DLLEXPORT QString extensionToMimetype( const QString& extension );
 
     DLLEXPORT QColor alphaBlend( const QColor& colorFrom, const QColor& colorTo, float opacity );
-    DLLEXPORT QPixmap createDragPixmap( int itemCount = 1 );
+    DLLEXPORT QPixmap createDragPixmap( MediaType type, int itemCount = 1 );
 
     DLLEXPORT void drawBackgroundAndNumbers( QPainter* p, const QString& text, const QRect& rect );
 

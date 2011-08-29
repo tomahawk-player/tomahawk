@@ -170,6 +170,19 @@ ViewManager::createPageForPlaylist( const playlist_ptr& pl )
     return view;
 }
 
+playlist_ptr
+ViewManager::playlistForPage( ViewPage* page ) const
+{
+    playlist_ptr p;
+    if ( dynamic_cast< PlaylistView* >( page ) && dynamic_cast< PlaylistView* >( page )->playlistModel() &&
+        !dynamic_cast< PlaylistView* >( page )->playlistModel()->playlist().isNull() )
+        p = dynamic_cast< PlaylistView* >( page )->playlistModel()->playlist();
+    else if ( dynamic_cast< DynamicWidget* >( page ) )
+        p = dynamic_cast< DynamicWidget* >( page )->playlist();
+
+    return p;
+}
+
 
 Tomahawk::ViewPage*
 ViewManager::show( const Tomahawk::playlist_ptr& playlist )

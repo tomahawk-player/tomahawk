@@ -91,6 +91,11 @@ var TomahawkResolver = {
         var configJson = JSON.stringify( config );
 
         window.localStorage[ this.scriptPath() ] = configJson;
+
+        this.newConfigSaved();
+    },
+    newConfigSaved: function()
+    {
     },
     resolve: function( qid, artist, album, title )
     {

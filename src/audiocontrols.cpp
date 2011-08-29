@@ -90,11 +90,16 @@ AudioControls::AudioControls( QWidget* parent )
 
     ui->ownerLabel->setForegroundRole( QPalette::Dark );
     ui->metaDataArea->setStyleSheet( "QWidget#metaDataArea {\nborder-width: 4px;\nborder-image: url(" RESPATH "images/now-playing-panel.png) 4 4 4 4 stretch stretch; }" );
-
+    
     ui->seekSlider->setEnabled( true );
     ui->volumeSlider->setRange( 0, 100 );
     ui->volumeSlider->setValue( AudioEngine::instance()->volume() );
 
+    m_sliderTimeLine.setCurveShape( QTimeLine::LinearCurve );
+    ui->seekSlider->setTimeLine( &m_sliderTimeLine );
+
+    connect( &m_sliderTimeLine,    SIGNAL( frameChanged( int ) ), ui->seekSlider, SLOT( setValue( int ) ) );
+    
     connect( ui->seekSlider,       SIGNAL( valueChanged( int ) ), AudioEngine::instance(), SLOT( seek( int ) ) );
     connect( ui->volumeSlider,     SIGNAL( valueChanged( int ) ), AudioEngine::instance(), SLOT( setVolume( int ) ) );
     connect( ui->prevButton,       SIGNAL( clicked() ), AudioEngine::instance(), SLOT( previous() ) );
@@ -121,6 +126,7 @@ AudioControls::AudioControls( QWidget* parent )
     connect( AudioEngine::instance(), SIGNAL( paused() ), SLOT( onPlaybackPaused() ) );
     connect( AudioEngine::instance(), SIGNAL( resumed() ), SLOT( onPlaybackResumed() ) );
     connect( AudioEngine::instance(), SIGNAL( stopped() ), SLOT( onPlaybackStopped() ) );
+    connect( AudioEngine::instance(), SIGNAL( seeked( qint64 ) ), SLOT( onPlaybackSeeked( qint64 ) ) );
     connect( AudioEngine::instance(), SIGNAL( timerMilliSeconds( qint64 ) ), SLOT( onPlaybackTimer( qint64 ) ) );
     connect( AudioEngine::instance(), SIGNAL( volumeChanged( int ) ), SLOT( onVolumeChanged( int ) ) );
 
@@ -181,8 +187,28 @@ AudioControls::onPlaybackStarted( const Tomahawk::result_ptr& result )
 {
     tDebug( LOGEXTRA ) << Q_FUNC_INFO;
 
-    onPlaybackLoading( result );
+    if ( result.isNull() )
+        return;
+    
+    if ( m_currentTrack.isNull() || ( !m_currentTrack.isNull() && m_currentTrack.data()->id() != result.data()->id() ) )
+        onPlaybackLoading( result );
 
+    qint64 duration = AudioEngine::instance()->currentTrackTotalTime();
+
+    if ( duration == -1 )
+        duration = result.data()->duration() * 1000;
+    
+    ui->seekSlider->setRange( 0, duration );
+    ui->seekSlider->setValue( 0 );
+
+    m_sliderTimeLine.stop();
+    m_sliderTimeLine.setDuration( duration );
+    m_sliderTimeLine.setFrameRange( 0, duration );
+    m_sliderTimeLine.setCurrentTime( 0 );
+    m_seekMsecs = -1;
+
+    ui->seekSlider->setVisible( true );
+    
     Tomahawk::InfoSystem::InfoCriteriaHash trackInfo;
     trackInfo["artist"] = result->artist()->name();
     trackInfo["album"] = result->album()->name();
@@ -252,11 +278,7 @@ AudioControls::onPlaybackLoading( const Tomahawk::result_ptr& result )
     ui->coverImage->setPixmap( m_defaultCover );
 
     ui->timeLabel->setText( TomahawkUtils::timeToString( 0 ) );
-    ui->timeLeftLabel->setText( "-" + TomahawkUtils::timeToString( result->duration() ) );
-
-    ui->seekSlider->setRange( 0, m_currentTrack->duration() * 1000 );
-    ui->seekSlider->setValue( 0 );
-    ui->seekSlider->setVisible( true );
+    ui->timeLeftLabel->setText( "-" + TomahawkUtils::timeToString( result.data()->duration() ) );
 
     ui->stackedLayout->setCurrentWidget( ui->pauseButton );
 
@@ -293,20 +315,35 @@ AudioControls::socialActionsLoaded()
 void
 AudioControls::onPlaybackPaused()
 {
+    tDebug( LOGEXTRA ) << Q_FUNC_INFO;
     ui->stackedLayout->setCurrentWidget( ui->playPauseButton );
+    m_sliderTimeLine.setPaused( true );
 }
 
 void
 AudioControls::onPlaybackResumed()
 {
+    tDebug( LOGEXTRA ) << Q_FUNC_INFO;
     ui->stackedLayout->setCurrentWidget( ui->pauseButton );
     ui->loveButton->setVisible( true );
+    m_sliderTimeLine.resume();
+}
+
+
+void
+AudioControls::onPlaybackSeeked( qint64 msec )
+{
+    tDebug( LOGEXTRA ) << Q_FUNC_INFO << " setting current timer to " << msec;
+    m_sliderTimeLine.setPaused( true );
+    m_sliderTimeLine.setCurrentTime( msec );
+    m_seekMsecs = msec;
 }
 
 
 void
 AudioControls::onPlaybackStopped()
 {
+    tDebug( LOGEXTRA ) << Q_FUNC_INFO;
     m_currentTrack.clear();
 
     ui->artistTrackLabel->setText( "" );
@@ -316,6 +353,8 @@ AudioControls::onPlaybackStopped()
     ui->timeLeftLabel->setText( "" );
     ui->coverImage->setPixmap( QPixmap() );
     ui->seekSlider->setVisible( false );
+    m_sliderTimeLine.stop();
+    m_sliderTimeLine.setCurrentTime( 0 );
 
     ui->stackedLayout->setCurrentWidget( ui->playPauseButton );
     ui->loveButton->setEnabled( false );
@@ -326,6 +365,7 @@ AudioControls::onPlaybackStopped()
 void
 AudioControls::onPlaybackTimer( qint64 msElapsed )
 {
+    //tDebug( LOGEXTRA ) << Q_FUNC_INFO << " msElapsed = " << msElapsed << " and timer current time = " << m_sliderTimeLine.currentTime() << " and m_seekMsecs = " << m_seekMsecs;
     if ( m_currentTrack.isNull() )
         return;
 
@@ -334,7 +374,25 @@ AudioControls::onPlaybackTimer( qint64 msElapsed )
     const int seconds = msElapsed / 1000;
     ui->timeLabel->setText( TomahawkUtils::timeToString( seconds ) );
     ui->timeLeftLabel->setText( "-" + TomahawkUtils::timeToString( m_currentTrack->duration() - seconds ) );
-    ui->seekSlider->setValue( msElapsed );
+    
+    if ( m_sliderTimeLine.currentTime() > msElapsed || m_seekMsecs != -1 )
+    {
+        m_sliderTimeLine.setPaused( true );
+        m_sliderTimeLine.setCurrentTime( msElapsed );
+        m_seekMsecs = -1;
+        if ( AudioEngine::instance()->state() != AudioEngine::Paused )
+            m_sliderTimeLine.resume();
+    }
+    else if ( m_sliderTimeLine.duration() > msElapsed && m_sliderTimeLine.state() == QTimeLine::NotRunning )
+    {
+        ui->seekSlider->setEnabled( AudioEngine::instance()->canSeek() );
+        m_sliderTimeLine.resume();
+    }
+    else if ( m_sliderTimeLine.state() == QTimeLine::Paused && AudioEngine::instance()->state() != AudioEngine::Paused )
+    {
+        ui->seekSlider->setEnabled( AudioEngine::instance()->canSeek() );
+        m_sliderTimeLine.resume();
+    }
 
     ui->seekSlider->blockSignals( false );
 }

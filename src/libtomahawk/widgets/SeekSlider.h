@@ -23,6 +23,8 @@
 
 #include "dllmacro.h"
 
+class QTimeLine;
+
 class DLLEXPORT SeekSlider : public QSlider
 {
 Q_OBJECT
@@ -31,8 +33,16 @@ public:
     SeekSlider( QWidget* parent = 0 );
     ~SeekSlider();
 
+    void setTimeLine( QTimeLine* timeline ) { m_timeLine = timeline; }
+
+public slots:
+    void setValue( int value );
+    
 protected:
     void mousePressEvent( QMouseEvent* event );
+
+private:
+    QTimeLine* m_timeLine;
 };
 
 #endif // SEEKSLIDER_H

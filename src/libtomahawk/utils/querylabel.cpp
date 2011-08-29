@@ -568,7 +568,7 @@ QueryLabel::startDrag()
     mimeData->setData( "application/tomahawk.query.list", queryData );
     QDrag *drag = new QDrag( this );
     drag->setMimeData( mimeData );
-    drag->setPixmap( TomahawkUtils::createDragPixmap() );
+    drag->setPixmap( TomahawkUtils::createDragPixmap( TomahawkUtils::MediaTypeTrack ) );
 
 //    QPoint hotSpot = event->pos() - child->pos();
 //    drag->setHotSpot( hotSpot );

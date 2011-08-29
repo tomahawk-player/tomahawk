@@ -67,6 +67,7 @@ set( libSources
     database/databasecommand_playbackhistory.cpp
     database/databasecommand_setplaylistrevision.cpp
     database/databasecommand_loadallplaylists.cpp
+    database/databasecommand_loadallsortedplaylists.cpp
     database/databasecommand_loadallsources.cpp
     database/databasecommand_createplaylist.cpp
     database/databasecommand_deleteplaylist.cpp
@@ -181,8 +182,9 @@ set( libSources
     widgets/SeekSlider.cpp
     widgets/playlisttypeselectordlg.cpp
     widgets/welcomewidget.cpp
-    widgets/welcomeplaylistmodel.cpp
     widgets/whatshotwidget.cpp
+    widgets/RecentlyPlayedPlaylistsModel.cpp
+    widgets/RecentPlaylistsModel.cpp
     widgets/overlaywidget.cpp
     widgets/HeaderLabel.cpp
     widgets/HeaderWidget.cpp
@@ -252,6 +254,7 @@ set( libHeaders
     database/databasecommand_playbackhistory.h
     database/databasecommand_setplaylistrevision.h
     database/databasecommand_loadallplaylists.h
+    database/databasecommand_loadallsortedplaylists.h
     database/databasecommand_loadallsources.h
     database/databasecommand_createplaylist.h
     database/databasecommand_deleteplaylist.h
@@ -365,8 +368,13 @@ set( libHeaders
     widgets/SeekSlider.h
     widgets/playlisttypeselectordlg.h
     widgets/welcomewidget.h
+<<<<<<< HEAD
     widgets/whatshotwidget.h
     widgets/welcomeplaylistmodel.h
+=======
+    widgets/RecentlyPlayedPlaylistsModel.h
+    widgets/RecentPlaylistsModel.h
+>>>>>>> master
     widgets/overlaywidget.h
     widgets/HeaderLabel.h
     widgets/HeaderWidget.h
@@ -419,7 +427,7 @@ include_directories( . ${CMAKE_CURRENT_BINARY_DIR} ${CMAKE_CURRENT_BINARY_DIR}/.
 
     ${LIBPORTFWD_INCLUDE_DIR}
     ${THIRDPARTY_DIR}/qxt/qxtweb-standalone/qxtweb
-    ${CMAKE_BINARY_DIR}/thirdparty/liblastfm2/src
+
 )
 
 IF( UNIX AND NOT APPLE )
@@ -437,6 +445,8 @@ IF( UNIX AND NOT APPLE )
       infosystem/infoplugins/unix/fdonotifyplugin.h )
 
     IF( BUILD_GUI AND X11_FOUND )
+        INCLUDE_DIRECTORIES( ${THIRDPARTY_DIR}/libqnetwm )
+        SET( libSources ${libSources} ${THIRDPARTY_DIR}/libqnetwm/libqnetwm/netwm.cpp )
         SET( LINK_LIBRARIES ${LINK_LIBRARIES} ${X11_LIBRARIES} )
     ENDIF()
 ENDIF( UNIX AND NOT APPLE )

@@ -244,7 +244,12 @@ AudioEngine::canGoPrevious()
 bool
 AudioEngine::canSeek()
 {
-    return !m_playlist.isNull() && ( m_playlist.data()->seekRestrictions() != PlaylistInterface::NoSeek );
+    bool phononCanSeek = true;
+    /* TODO: When phonon properly reports this, re-enable it
+    if ( m_mediaObject && m_mediaObject->isValid() )
+        phononCanSeek = m_mediaObject->isSeekable();
+    */
+    return !m_playlist.isNull() && ( m_playlist.data()->seekRestrictions() != PlaylistInterface::NoSeek ) && phononCanSeek;
 }
 
 void
@@ -552,7 +557,7 @@ AudioEngine::playlistNextTrackReady()
         return;
 
     m_waitingOnNewTrack = false;
-    next();
+    loadNextTrack();
 }
 
 
@@ -604,7 +609,14 @@ AudioEngine::onStateChanged( Phonon::State newState, Phonon::State oldState )
         {
             m_expectStop = false;
             tDebug( LOGEXTRA ) << "Finding next track.";
-            next();
+            if ( canGoNext() )
+                loadNextTrack();
+            else
+            {
+                if ( !m_playlist.isNull() && m_playlist.data()->retryMode() == Tomahawk::PlaylistInterface::Retry )
+                    m_waitingOnNewTrack = true;
+                stop();
+            }
         }
     }
 }

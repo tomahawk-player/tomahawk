@@ -40,8 +40,9 @@ class DLLEXPORT Source : public QObject
 {
 Q_OBJECT
 
-friend class ::DatabaseCommand_LogPlayback;
 friend class ::DBSyncConnection;
+friend class ::ControlConnection;
+friend class ::DatabaseCommand_LogPlayback;
 friend class ::DatabaseCommand_SocialAction;
 
 public:
@@ -52,8 +53,6 @@ public:
 
     bool isLocal() const { return m_isLocal; }
     bool isOnline() const { return m_online; }
-
-    QString lastOpGuid() const { return m_lastOpGuid; }
 
     QString userName() const { return m_username; }
     QString friendlyName() const;
@@ -72,9 +71,6 @@ public:
 
     void scanningProgress( unsigned int files );
     void scanningFinished( unsigned int files );
-
-    void setOffline();
-    void setOnline();
 
     unsigned int trackCount() const;
 
@@ -105,10 +101,10 @@ public slots:
     void setStats( const QVariantMap& m );
 
 private slots:
-    void setLastOpGuid( const QString& guid ) { m_lastOpGuid = guid; }
-
     void dbLoaded( unsigned int id, const QString& fname );
-    void remove();
+
+    void setOffline();
+    void setOnline();
 
     void onStateChanged( DBSyncConnection::State newstate, DBSyncConnection::State oldstate, const QString& info );
     void onPlaybackStarted( const Tomahawk::query_ptr& query );
@@ -124,7 +120,6 @@ private:
     int m_id;
     QList< QSharedPointer<Collection> > m_collections;
     QVariantMap m_stats;
-    QString m_lastOpGuid;
     bool m_scrubFriendlyName;
 
     Tomahawk::query_ptr m_currentTrack;

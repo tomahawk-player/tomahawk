@@ -27,6 +27,7 @@
 #include "utils/shortenedlinkparser.h"
 #include "utils/logger.h"
 #include "globalactionmanager.h"
+#include "infosystem/infosystem.h"
 
 using namespace Tomahawk;
 
@@ -94,16 +95,33 @@ DropJob::acceptsMimeData( const QMimeData* data, bool tracksOnly )
     return false;
 }
 
+void
+DropJob::setGetWholeArtists( bool getWholeArtists )
+{
+    m_getWholeArtists = getWholeArtists;
+}
 
 void
-DropJob::tracksFromMimeData( const QMimeData* data, bool allowDuplicates )
+DropJob::setGetWholeAlbums( bool getWholeAlbums )
+{
+    m_getWholeAlbums = getWholeAlbums;
+}
+
+
+void
+DropJob::tracksFromMimeData( const QMimeData* data, bool allowDuplicates, bool onlyLocal, bool top10 )
 {
     m_allowDuplicates = allowDuplicates;
+    m_onlyLocal = onlyLocal;
+    m_top10 = top10;
 
     parseMimeData( data );
 
     if ( m_queryCount == 0 )
     {
+        if ( onlyLocal )
+            removeRemoteSources();
+
         if ( !allowDuplicates )
             removeDuplicates();
 
@@ -152,7 +170,23 @@ DropJob::tracksFromQueryList( const QMimeData* data )
         if ( query && !query->isNull() )
         {
             tDebug() << "Dropped query item:" << query->data()->artist() << "-" << query->data()->track();
-            queries << *query;
+
+            if ( m_top10 )
+            {
+                getTopTen( query->data()->artist() );
+            }
+            else if ( m_getWholeArtists )
+            {
+                queries << getArtist( query->data()->artist() );
+            }
+            else if ( m_getWholeAlbums )
+            {
+                queries << getAlbum( query->data()->artist(), query->data()->album() );
+            }
+            else
+            {
+                queries << *query;
+            }
         }
     }
 
@@ -176,8 +210,24 @@ DropJob::tracksFromResultList( const QMimeData* data )
         {
             tDebug() << "Dropped result item:" << result->data()->artist()->name() << "-" << result->data()->track();
             query_ptr q = result->data()->toQuery();
-            q->addResults( QList< result_ptr >() << *result );
-            queries << q;
+
+            if ( m_top10 )
+            {
+                getTopTen( q->artist() );
+            }
+            else if ( m_getWholeArtists )
+            {
+                queries << getArtist( q->artist() );
+            }
+            else if ( m_getWholeAlbums )
+            {
+                queries << getAlbum( q->artist(), q->album() );
+            }
+            else
+            {
+                q->addResults( QList< result_ptr >() << *result );
+                queries << q;
+            }
         }
     }
 
@@ -198,16 +248,12 @@ DropJob::tracksFromAlbumMetaData( const QMimeData *data )
         QString album;
         stream >> album;
 
-        artist_ptr artistPtr = Artist::get( artist );
-        album_ptr albumPtr = Album::get( artistPtr, album );
-        if ( albumPtr->tracks().isEmpty() )
-        {
-            connect( albumPtr.data(), SIGNAL( tracksAdded( QList<Tomahawk::query_ptr> ) ),
-                                     SLOT( onTracksAdded( QList<Tomahawk::query_ptr> ) ) );
-            m_queryCount++;
-        }
+        if ( m_top10 )
+            getTopTen( artist );
+        else if ( m_getWholeArtists )
+            queries << getArtist( artist );
         else
-            queries << albumPtr->tracks();
+            queries << getAlbum( artist, album );
     }
     return queries;
 }
@@ -224,15 +270,14 @@ DropJob::tracksFromArtistMetaData( const QMimeData *data )
         QString artist;
         stream >> artist;
 
-        artist_ptr artistPtr = Artist::get( artist );
-        if ( artistPtr->tracks().isEmpty() )
+        if ( !m_top10 )
         {
-            connect( artistPtr.data(), SIGNAL( tracksAdded( QList<Tomahawk::query_ptr> ) ),
-                                     SLOT( onTracksAdded( QList<Tomahawk::query_ptr> ) ) );
-            m_queryCount++;
+            queries << getArtist( artist );
         }
         else
-            queries << artistPtr->tracks();
+        {
+            getTopTen( artist );
+        }
     }
     return queries;
 }
@@ -336,6 +381,9 @@ DropJob::onTracksAdded( const QList<Tomahawk::query_ptr>& tracksList )
 
     if ( --m_queryCount == 0 )
     {
+        if ( m_onlyLocal )
+            removeRemoteSources();
+
         if ( !m_allowDuplicates )
             removeDuplicates();
 
@@ -360,4 +408,109 @@ DropJob::removeDuplicates()
             list.append( item );
     }
     m_resultList = list;
+}
+
+void
+DropJob::removeRemoteSources()
+{
+    QList< Tomahawk::query_ptr > list;
+    foreach ( const Tomahawk::query_ptr& item, m_resultList )
+    {
+        bool hasLocalSource = false;
+        foreach ( const Tomahawk::result_ptr& result, item->results() )
+        {
+            if ( !result->collection()->source().isNull() && result->collection()->source()->isLocal() )
+                hasLocalSource = true;
+        }
+        if ( hasLocalSource )
+            list.append( item );
+    }
+    m_resultList = list;
+}
+
+void
+DropJob::infoSystemInfo( Tomahawk::InfoSystem::InfoRequestData requestData, QVariant output )
+{
+    if ( requestData.caller == "changeme" )
+    {
+        Tomahawk::InfoSystem::InfoCriteriaHash artistInfo;
+
+        artistInfo = requestData.input.value< Tomahawk::InfoSystem::InfoCriteriaHash >();
+
+        QString artist = artistInfo["artist"];
+
+        qDebug() << "Got requestData response for artist" << artist << output;
+
+        QList< query_ptr > results;
+
+        int i = 0;
+        foreach ( const QVariant& title, output.toMap().value( "tracks" ).toList() )
+        {
+            qDebug() << "got title" << title;
+            results << Query::get( artist, title.toString(), QString(), uuid() );
+
+            if ( ++i == 10 ) // Only getting top ten for now. Would make sense to make it configurable
+                break;
+        }
+
+        onTracksAdded( results );
+    }
+}
+
+QList< query_ptr >
+DropJob::getArtist( const QString &artist )
+{
+    artist_ptr artistPtr = Artist::get( artist );
+    if ( artistPtr->tracks().isEmpty() )
+    {
+        connect( artistPtr.data(), SIGNAL( tracksAdded( QList<Tomahawk::query_ptr> ) ),
+                                 SLOT( onTracksAdded( QList<Tomahawk::query_ptr> ) ) );
+        m_queryCount++;
+        return QList< query_ptr >();
+    }
+    else
+        return artistPtr->tracks();
+}
+
+QList< query_ptr >
+DropJob::getAlbum(const QString &artist, const QString &album)
+{
+    artist_ptr artistPtr = Artist::get( artist );
+    album_ptr albumPtr = Album::get( artistPtr, album );
+
+    if ( albumPtr.isNull() )
+        return QList< query_ptr >();
+
+    if ( albumPtr->tracks().isEmpty() )
+    {
+        connect( albumPtr.data(), SIGNAL( tracksAdded( QList<Tomahawk::query_ptr> ) ),
+                                 SLOT( onTracksAdded( QList<Tomahawk::query_ptr> ) ) );
+        m_queryCount++;
+        return QList< query_ptr >();
+    }
+    else
+        return albumPtr->tracks();
+}
+
+void
+DropJob::getTopTen( const QString &artist )
+{
+    connect( Tomahawk::InfoSystem::InfoSystem::instance(),
+             SIGNAL( info( Tomahawk::InfoSystem::InfoRequestData, QVariant ) ),
+             SLOT( infoSystemInfo( Tomahawk::InfoSystem::InfoRequestData, QVariant ) ) );
+
+    Tomahawk::InfoSystem::InfoCriteriaHash artistInfo;
+    artistInfo["artist"] = artist;
+
+    Tomahawk::InfoSystem::InfoRequestData requestData;
+    requestData.caller = "changeme";
+    requestData.customData = QVariantMap();
+
+    requestData.input = QVariant::fromValue< Tomahawk::InfoSystem::InfoCriteriaHash >( artistInfo );
+
+    requestData.type = Tomahawk::InfoSystem::InfoArtistSongs;
+    Tomahawk::InfoSystem::InfoSystem::instance()->getInfo( requestData );
+
+    m_queryCount++;
+
 }

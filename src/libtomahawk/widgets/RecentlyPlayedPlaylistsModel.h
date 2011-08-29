@@ -17,15 +17,15 @@
 */
 
 
-#ifndef WELCOMEPLAYLISTMODEL_H
-#define WELCOMEPLAYLISTMODEL_H
+#ifndef RECENTLYPLAYEDPLAYLISTSMODEL_H
+#define RECENTLYPLAYEDPLAYLISTSMODEL_H
 
 #include <QModelIndex>
 
 #include "playlist.h"
 
 
-class WelcomePlaylistModel : public QAbstractListModel
+class RecentlyPlayedPlaylistsModel : public QAbstractListModel
 {
     Q_OBJECT
 public:
@@ -34,7 +34,7 @@ public:
     enum PlaylistTypes
     { StaticPlaylist, AutoPlaylist, Station };
 
-    explicit WelcomePlaylistModel( QObject* parent = 0 );
+    explicit RecentlyPlayedPlaylistsModel( QObject* parent = 0 );
 
     void setMaxPlaylists( unsigned int max ) { m_maxPlaylists = max; }
 
@@ -64,4 +64,4 @@ private:
      void sourceOnline();
 };
 
-#endif // WELCOMEPLAYLISTMODEL_H
+#endif // RECENTLYPLAYEDPLAYLISTSMODEL_H

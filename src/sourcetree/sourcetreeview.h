@@ -24,11 +24,13 @@
 
 #include "source.h"
 #include "sourcetree/sourcesmodel.h"
+#include "sourcetree/sourcedelegate.h"
 
 class CollectionModel;
 class PlaylistModel;
 class SourcesModel;
 class SourcesProxyModel;
+class SourceDelegate;
 
 class SourceTreeView : public QTreeView
 {
@@ -41,6 +43,9 @@ public slots:
     void showOfflineSources( bool offlineSourcesShown );
 
     void renamePlaylist();
+
+    void update( const QModelIndex &index );
+
 signals:
     void onOnline( const QModelIndex& index );
     void onOffline( const QModelIndex& index );
@@ -81,6 +86,7 @@ private:
     SourcesModel* m_model;
     SourcesProxyModel* m_proxyModel;
     QModelIndex m_contextMenuIndex;
+    SourceDelegate* m_delegate;
 
     QMenu m_playlistMenu;
     QMenu m_roPlaylistMenu;

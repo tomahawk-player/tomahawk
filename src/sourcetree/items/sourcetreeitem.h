@@ -32,6 +32,18 @@ class SourceTreeItem : public QObject
 {
     Q_OBJECT
 public:
+    enum DropType
+    {
+        DropTypesNone =         0x00,
+        DropTypeThisTrack =     0x01,
+        DropTypeThisAlbum =     0x02,
+        DropTypeAllFromArtist = 0x04,
+        DropTypeLocalItems =    0x08,
+        DropTypeTop50 =         0x10,
+        DropTypesAllTypes =     0xff
+    };
+    Q_DECLARE_FLAGS( DropTypes, DropType )
+
     SourceTreeItem() : m_type( SourcesModel::Invalid ), m_parent( 0 ), m_model( 0 ) {}
     SourceTreeItem( SourcesModel* model, SourceTreeItem* parent, SourcesModel::RowType thisType, int index = -1 ); // if index is -1, append at end of parent's child list
     virtual ~SourceTreeItem();
@@ -56,6 +68,9 @@ public:
     virtual bool setData( const QVariant&, bool ) { return false; }
     virtual int peerSortValue() const { return 0; } // How to sort relative to peers in the tree.
     virtual int IDValue() const { return 0; }
+    virtual DropTypes supportedDropTypes( const QMimeData* mimeData ) const { Q_UNUSED( mimeData ); return DropTypesNone; }
+    virtual void setDropType( DropType type ) { m_dropType = type; }
+    virtual DropType dropType() const { return m_dropType; }
 
     /// don't call me unless you are a sourcetreeitem. i prefer this to making everyone a friend
     void beginRowsAdded( int from, int to ) { emit beginChildRowsAdded( from, to ); }
@@ -83,6 +98,8 @@ private:
     SourceTreeItem* m_parent;
     QList< SourceTreeItem* > m_children;
     SourcesModel* m_model;
+
+    DropType m_dropType;
 };
 
 Q_DECLARE_METATYPE( SourceTreeItem* );
