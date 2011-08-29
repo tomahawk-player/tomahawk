@@ -207,7 +207,9 @@ TrackModel::data( const QModelIndex& index, int role ) const
                 break;
 
             case AlbumPos:
-                return query->results().first()->albumpos();
+                if ( query->results().first()->albumpos() == 0 )
+                    return QString();
+                return QString::number( query->results().first()->albumpos() );
                 break;
         }
     }
