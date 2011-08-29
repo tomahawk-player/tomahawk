@@ -368,13 +368,9 @@ set( libHeaders
     widgets/SeekSlider.h
     widgets/playlisttypeselectordlg.h
     widgets/welcomewidget.h
-<<<<<<< HEAD
     widgets/whatshotwidget.h
-    widgets/welcomeplaylistmodel.h
-=======
     widgets/RecentlyPlayedPlaylistsModel.h
     widgets/RecentPlaylistsModel.h
->>>>>>> master
     widgets/overlaywidget.h
     widgets/HeaderLabel.h
     widgets/HeaderWidget.h

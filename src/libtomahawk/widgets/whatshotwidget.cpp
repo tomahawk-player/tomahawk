@@ -24,7 +24,7 @@
 #include "viewmanager.h"
 #include "sourcelist.h"
 #include "tomahawksettings.h"
-#include "welcomeplaylistmodel.h"
+#include "RecentPlaylistsModel.h"
 
 #include "audio/audioengine.h"
 #include "playlist/playlistmodel.h"
