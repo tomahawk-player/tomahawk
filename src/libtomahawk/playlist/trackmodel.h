@@ -43,14 +43,14 @@ public:
         Artist = 0,
         Track = 1,
         Album = 2,
-        Duration = 3,
-        Bitrate = 4,
-        Age = 5,
-        Year = 6,
-        Filesize = 7,
-        Origin = 8,
-        Score = 9,
-        AlbumPos = 10
+        AlbumPos = 3,
+        Duration = 4,
+        Bitrate = 5,
+        Age = 6,
+        Year = 7,
+        Filesize = 8,
+        Origin = 9,
+        Score = 10,
     };
 
     explicit TrackModel( QObject* parent = 0 );

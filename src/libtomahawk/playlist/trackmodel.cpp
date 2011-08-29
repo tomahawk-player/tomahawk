@@ -221,7 +221,7 @@ TrackModel::headerData( int section, Qt::Orientation orientation, int role ) con
 {
     Q_UNUSED( orientation );
     QStringList headers;
-    headers << tr( "Artist" ) << tr( "Title" ) << tr( "Album" ) << tr( "Duration" ) << tr( "Bitrate" ) << tr( "Age" ) << tr( "Year" ) << tr( "Size" ) << tr( "Origin" ) << tr( "Score" ) << tr( "Track" );
+    headers << tr( "Artist" ) << tr( "Title" ) << tr( "Album" ) << tr( "Track" ) << tr( "Duration" ) << tr( "Bitrate" ) << tr( "Age" ) << tr( "Year" ) << tr( "Size" ) << tr( "Origin" ) << tr( "Score" );
     if ( role == Qt::DisplayRole && section >= 0 )
     {
         return headers.at( section );
