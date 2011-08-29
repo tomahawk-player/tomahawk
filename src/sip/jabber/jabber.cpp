@@ -467,9 +467,8 @@ void
 JabberPlugin::showAddFriendDialog()
 {
     bool ok;
-    QString id = QInputDialog::getText( 0, tr( "Add Friend" ),
-                                              tr( "Enter Jabber ID:" ), QLineEdit::Normal,
-                                              "", &ok );
+    QString id = QInputDialog::getText( TomahawkUtils::tomahawkWindow(), tr( "Add Friend" ),
+                                        tr( "Enter Jabber ID:" ), QLineEdit::Normal, "", &ok );
     if ( !ok )
         return;
 
@@ -712,7 +711,7 @@ void JabberPlugin::onSubscriptionReceived(const Jreen::RosterItem::Ptr& item, co
                                 tr( "Authorize User" ),
                                 QString( tr( "Do you want to grant <b>%1</b> access to your Collection?" ) ).arg(presence.from().bare()),
                                 QMessageBox::Yes | QMessageBox::No,
-                                0
+                                TomahawkUtils::tomahawkWindow()
                               );
 
     // add confirmBox to m_subscriptionConfirmBoxes
