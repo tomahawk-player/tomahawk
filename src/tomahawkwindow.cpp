@@ -82,15 +82,10 @@ TomahawkWindow::TomahawkWindow( QWidget* parent )
 
     new ViewManager( this );
     ui->setupUi( this );
-    delete ui->sidebarWidget;
-    delete ui->playlistWidget;
-
     applyPlatformTweaks();
 
     ui->centralWidget->setContentsMargins( 0, 0, 0, 0 );
-    ui->centralWidget->layout()->setContentsMargins( 0, 0, 0, 0 );
-    ui->centralWidget->layout()->setMargin( 0 );
-    ui->centralWidget->layout()->setSpacing( 0 );
+    TomahawkUtils::unmarginLayout( ui->centralWidget->layout() );
 
     setupSideBar();
     statusBar()->addPermanentWidget( m_audioControls, 1 );
@@ -168,11 +163,8 @@ TomahawkWindow::applyPlatformTweaks()
     if ( !QString( qApp->style()->metaObject()->className() ).toLower().contains( "qtcurve" ) )
         qApp->setStyle( new ProxyStyle() );
 
-#ifdef Q_WS_MAC
-    setUnifiedTitleAndToolBarOnMac( true );
-#endif
-
 #ifdef Q_OS_MAC
+    setUnifiedTitleAndToolBarOnMac( true );
     delete ui->hline1;
     delete ui->hline2;
 #else
@@ -185,6 +177,10 @@ TomahawkWindow::applyPlatformTweaks()
 void
 TomahawkWindow::setupSideBar()
 {
+    // Delete fake designer widgets
+    delete ui->sidebarWidget;
+    delete ui->playlistWidget;
+
     QWidget* sidebarWidget = new QWidget();
     sidebarWidget->setLayout( new QVBoxLayout() );
 
