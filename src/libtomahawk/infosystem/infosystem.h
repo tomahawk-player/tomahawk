@@ -95,8 +95,10 @@ enum InfoType { // as items are saved in cache, mark them here to not change the
 /** \var Tomahawk::InfoSystem::InfoType Tomahawk::InfoSystem::InfoType::InfoChartCapabilities
  * Documentation for InfoChartCapabilities
  *
+ * Clients of this InfoType expect a QVariant
+ *
  */
-    InfoChartCapabilities = 50
+    InfoChartCapabilities = 50,
     /**
      * Documentation for InfoChartArtists
      */
