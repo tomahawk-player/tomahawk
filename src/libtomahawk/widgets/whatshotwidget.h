@@ -75,6 +75,7 @@ signals:
 public slots:
 
 private slots:
+    void fetchData();
     void checkQueries();
     void infoSystemInfo( Tomahawk::InfoSystem::InfoRequestData requestData, QVariant output );
     void infoSystemFinished( QString target );

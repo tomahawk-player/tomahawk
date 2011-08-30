@@ -96,6 +96,18 @@ WhatsHotWidget::WhatsHotWidget( QWidget* parent )
     connect( Tomahawk::InfoSystem::InfoSystem::instance(), SIGNAL( finished( QString ) ), SLOT( infoSystemFinished( QString ) ) );
 
 
+    QTimer::singleShot(0, this, SLOT(fetchData()));
+}
+
+
+WhatsHotWidget::~WhatsHotWidget()
+{
+    delete ui;
+}
+
+void
+WhatsHotWidget::fetchData()
+{
     Tomahawk::InfoSystem::InfoCriteriaHash artistInfo;
 
     Tomahawk::InfoSystem::InfoRequestData requestData;
@@ -108,14 +120,7 @@ WhatsHotWidget::WhatsHotWidget( QWidget* parent )
 
     requestData.type = Tomahawk::InfoSystem::InfoChartTracks;
     Tomahawk::InfoSystem::InfoSystem::instance()->getInfo( requestData );
-
     tDebug() << "WhatsHot: requested InfoChartArtists+Tracks";
-}
-
-
-WhatsHotWidget::~WhatsHotWidget()
-{
-    delete ui;
 }
 
 
