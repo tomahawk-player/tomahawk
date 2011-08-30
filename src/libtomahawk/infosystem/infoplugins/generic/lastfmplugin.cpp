@@ -87,6 +87,7 @@ LastFmPlugin::~LastFmPlugin()
 {
     qDebug() << Q_FUNC_INFO;
     delete m_scrobbler;
+    m_scrobbler = 0;
 }
 
 
@@ -753,7 +754,10 @@ LastFmPlugin::settingsChanged()
         m_pw = TomahawkSettings::instance()->lastFmPassword();
         // credentials have changed, have to re-create scrobbler for them to take effect
         if( m_scrobbler )
+        {
             delete m_scrobbler;
+            m_scrobbler = 0;
+        }
 
         createScrobbler();
     }
