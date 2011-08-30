@@ -560,6 +560,7 @@ tomahawkWindow()
 }
 
 
+#ifndef Q_OS_MAC
 void
 bringToFront()
 {
@@ -617,6 +618,7 @@ bringToFront()
     }
 #endif
 }
+#endif
 
 #endif
 
