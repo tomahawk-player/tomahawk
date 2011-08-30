@@ -92,9 +92,17 @@ enum InfoType { // as items are saved in cache, mark them here to not change the
     InfoAlbumComposer = 48,
     InfoAlbumSongs = 49,
 
-    InfoChartArtists = 50,
-    InfoChartAlbums = 51,
-    InfoChartTracks = 52,
+/** \var Tomahawk::InfoSystem::InfoType Tomahawk::InfoSystem::InfoType::InfoChartCapabilities
+ * Documentation for InfoChartCapabilities
+ *
+ */
+    InfoChartCapabilities = 50
+    /**
+     * Documentation for InfoChartArtists
+     */
+    InfoChartArtists = 51,
+    InfoChartAlbums = 52, /*!< Documentation for InfoChartAlbums */
+    InfoChartTracks = 53,
 
     InfoMiscTopHotttness = 60,
     InfoMiscTopTerms = 61,
@@ -106,7 +114,7 @@ enum InfoType { // as items are saved in cache, mark them here to not change the
     InfoNowPaused = 81,
     InfoNowResumed = 82,
     InfoNowStopped = 83,
-    
+
     InfoLove = 90,
     InfoUnLove = 91,
 
