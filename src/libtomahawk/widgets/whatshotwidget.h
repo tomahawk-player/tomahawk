@@ -43,6 +43,10 @@ namespace Ui
     class WhatsHotWidget;
 }
 
+/**
+ * \class
+ * \brief The tomahawk page that shows music charts.
+ */
 class DLLEXPORT WhatsHotWidget : public QWidget, public Tomahawk::ViewPage
 {
 Q_OBJECT

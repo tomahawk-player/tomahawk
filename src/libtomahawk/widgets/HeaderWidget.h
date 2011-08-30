@@ -25,6 +25,11 @@
 
 #include "dllmacro.h"
 
+
+/**
+ * \class HeaderWidget
+ * \brief A QWidget subclass with a background for use in headers.
+ */
 class DLLEXPORT HeaderWidget : public QWidget
 {
 Q_OBJECT

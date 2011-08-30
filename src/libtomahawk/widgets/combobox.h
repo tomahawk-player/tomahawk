@@ -24,6 +24,10 @@
 
 #include "dllmacro.h"
 
+/**
+ * \class ComboBox
+ * \brief A styled combo box that has a header background.
+ */
 class DLLEXPORT ComboBox : public QComboBox
 {
 Q_OBJECT

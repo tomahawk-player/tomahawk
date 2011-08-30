@@ -23,6 +23,10 @@
 
 #include "dllmacro.h"
 
+/**
+ * \class HeaderLabel
+ * \brief A styled label for use in headers.
+ */
 class DLLEXPORT HeaderLabel : public QLabel
 {
 Q_OBJECT
