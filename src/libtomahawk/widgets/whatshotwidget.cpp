@@ -96,7 +96,7 @@ WhatsHotWidget::WhatsHotWidget( QWidget* parent )
     connect( Tomahawk::InfoSystem::InfoSystem::instance(), SIGNAL( finished( QString ) ), SLOT( infoSystemFinished( QString ) ) );
 
 
-    QTimer::singleShot(0, this, SLOT(fetchData()));
+    QTimer::singleShot( 0, this, SLOT( fetchData() ) );
 }
 
 
