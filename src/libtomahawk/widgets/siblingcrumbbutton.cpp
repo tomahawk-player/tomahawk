@@ -39,8 +39,6 @@ SiblingCrumbButton::SiblingCrumbButton(
 {
 
     setIndex(index);
-    connect(this, SIGNAL(clicked()),
-        this, SLOT(updateNavigatorCurrentIndex()));
     connect(m_combo, SIGNAL(activated(int)), SLOT(comboboxActivated(int)));
 
 //    QTimer::singleShot(0, this, SLOT(activateSelf()));
