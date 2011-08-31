@@ -193,6 +193,11 @@ set( libSources
     widgets/infowidgets/sourceinfowidget.cpp
     widgets/infowidgets/ArtistInfoWidget.cpp
     widgets/infowidgets/AlbumInfoWidget.cpp
+    widgets/kbreadcrumbselectionmodel.cpp
+    widgets/breadcrumbbar.cpp
+    widgets/breadcrumbbuttonbase.cpp
+    widgets/headerbreadcrumb.cpp
+    widgets/siblingcrumbbutton.cpp
 
     kdsingleapplicationguard/kdsingleapplicationguard.cpp
     kdsingleapplicationguard/kdsharedmemorylocker.cpp
@@ -379,6 +384,12 @@ set( libHeaders
     widgets/infowidgets/sourceinfowidget.h
     widgets/infowidgets/ArtistInfoWidget.h
     widgets/infowidgets/AlbumInfoWidget.h
+    widgets/kbreadcrumbselectionmodel.h
+    widgets/kbreadcrumbselectionmodel_p.h
+    widgets/breadcrumbbar.h
+    widgets/breadcrumbbuttonbase.h
+    widgets/headerbreadcrumb.h
+    widgets/siblingcrumbbutton.h
 
     kdsingleapplicationguard/kdsingleapplicationguard.h
 )
