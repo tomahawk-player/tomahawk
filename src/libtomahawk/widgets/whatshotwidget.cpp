@@ -30,6 +30,7 @@
 #include "playlist/playlistmodel.h"
 #include "playlist/treeproxymodel.h"
 #include "widgets/overlaywidget.h"
+#include "widgets/siblingcrumbbutton.h"
 #include "utils/tomahawkutils.h"
 #include "utils/logger.h"
 #include <dynamic/GeneratorInterface.h>
@@ -51,8 +52,14 @@ WhatsHotWidget::WhatsHotWidget( QWidget* parent )
     TomahawkUtils::unmarginLayout( layout() );
     TomahawkUtils::unmarginLayout( ui->verticalLayout->layout() );
     TomahawkUtils::unmarginLayout( ui->verticalLayout_2->layout() );
-    TomahawkUtils::unmarginLayout( ui->horizontalLayout->layout() );
-    TomahawkUtils::unmarginLayout( ui->horizontalLayout_3->layout() );
+
+    SiblingCrumbButtonFactory * crumbFactory = new SiblingCrumbButtonFactory;
+
+    ui->breadCrumbLeft->setButtonFactory(crumbFactory);
+    ui->breadCrumbLeft->setRootIcon(QIcon( RESPATH "images/charts.png" ));
+
+    ui->breadCrumbRight->setButtonFactory(crumbFactory);
+    ui->breadCrumbRight->setRootIcon(QIcon( RESPATH "images/charts.png" ));
 
 
     m_tracksModel = new PlaylistModel( ui->tracksView );
