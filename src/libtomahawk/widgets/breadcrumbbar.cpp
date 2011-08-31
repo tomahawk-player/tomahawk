@@ -27,7 +27,7 @@
 #include <QLabel>
 #include <QPropertyAnimation>
 
-#include <QDebug>
+#include "utils/logger.h"
 
 BreadcrumbBar::BreadcrumbBar(BreadcrumbButtonFactory *buttonFactory, QWidget *parent)
     : QWidget(parent)
@@ -78,6 +78,7 @@ BreadcrumbBar::~BreadcrumbBar()
 }
 void BreadcrumbBar::setButtonFactory(BreadcrumbButtonFactory *buttonFactory)
 {
+    tDebug() << "Breadcrumbbar:: got me some button factory!";
     m_buttonFactory = buttonFactory;
 }
 
@@ -143,8 +144,13 @@ void BreadcrumbBar::deleteButton(BreadcrumbButtonBase *widget)
 }
 void BreadcrumbBar::updateButtons()
 {
-    if (!m_buttonFactory || !m_selectionModel || !m_selectionModel->currentIndex().isValid())
+    tDebug() << "Breadcrumbbar:: updateButtons" << m_buttonFactory << m_selectionModel ;
+    if(m_selectionModel )
+        tDebug() <<"Breadcrumbbar:: update buttoms current index"<< m_selectionModel->currentIndex().isValid();
+    if (!m_buttonFactory || !m_selectionModel || !m_selectionModel->currentIndex().isValid()) {
+        tDebug() << "Breadcrumb:: updatebuttons failed!";
         return;
+    }
 
     QLinkedList<BreadcrumbButtonBase*>::iterator it = m_navButtons.begin();
     QLinkedList<BreadcrumbButtonBase*>::const_iterator const itEnd = m_navButtons.end();
@@ -157,7 +163,7 @@ void BreadcrumbBar::updateButtons()
         indexes.prepend(index);
         index = index.parent();
     }
-    qDebug() << index.data().toString();
+    tDebug() << "BreadcrumbBar::updateButtons:: " << index.data().toString();
     indexes.prepend(index);
 
     int count = indexes.size(), i = 0;
@@ -258,6 +264,7 @@ QAbstractItemModel* BreadcrumbBar::model()
 void BreadcrumbBar::setSelectionModel(QItemSelectionModel *selectionModel)
 {
     m_selectionModel = selectionModel;
+    m_selectionModel->setCurrentIndex(m_model->index(0,0), QItemSelectionModel::SelectCurrent);
     connect(m_selectionModel,
         SIGNAL(currentChanged(QModelIndex const&, QModelIndex const&)),
         this, SLOT(currentIndexChanged()));
