@@ -94,6 +94,8 @@ TreeModel::getCover( const QModelIndex& index )
         trackInfo["album"] = item->album()->name();
         requestData.type = Tomahawk::InfoSystem::InfoAlbumCoverArt;
     }
+    else
+        return;
 
     trackInfo["pptr"] = QString::number( (qlonglong)item );
     m_coverHash.insert( (qlonglong)item, index );
