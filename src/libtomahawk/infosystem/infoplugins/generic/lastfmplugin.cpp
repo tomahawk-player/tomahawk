@@ -33,6 +33,8 @@
 #include <lastfm/ws.h>
 #include <lastfm/XmlQuery>
 
+#include <qjson/parser.h>
+
 using namespace Tomahawk::InfoSystem;
 
 static QString
@@ -47,7 +49,7 @@ LastFmPlugin::LastFmPlugin()
     : InfoPlugin()
     , m_scrobbler( 0 )
 {
-    m_supportedGetTypes << InfoAlbumCoverArt << InfoArtistImages << InfoArtistSimilars << InfoArtistSongs << InfoChartArtists << InfoChartTracks;
+    m_supportedGetTypes << InfoAlbumCoverArt << InfoArtistImages << InfoArtistSimilars << InfoArtistSongs << InfoChartArtists << InfoChartTracks << InfoChartCapabilities;
     m_supportedPushTypes << InfoSubmitScrobble << InfoSubmitNowPlaying << InfoLove << InfoUnLove;
 
 /*
@@ -155,7 +157,9 @@ LastFmPlugin::getInfo( uint requestId, Tomahawk::InfoSystem::InfoRequestData req
         case InfoChartTracks:
             fetchChartTracks( requestId, requestData );
             break;
-
+        case InfoChartCapabilities:
+            fetchChartCapabilities( requestId, requestData );
+            break;
         default:
             dataError( requestId, requestData );
     }
@@ -346,6 +350,20 @@ LastFmPlugin::fetchChartTracks( uint requestId, Tomahawk::InfoSystem::InfoReques
 
 
 void
+LastFmPlugin::fetchChartCapabilities( uint requestId, Tomahawk::InfoSystem::InfoRequestData requestData )
+{
+    if ( !requestData.input.canConvert< Tomahawk::InfoSystem::InfoCriteriaHash >() )
+    {
+        dataError( requestId, requestData );
+        return;
+    }
+    InfoCriteriaHash hash = requestData.input.value< Tomahawk::InfoSystem::InfoCriteriaHash >();
+    Tomahawk::InfoSystem::InfoCriteriaHash criteria;
+
+    emit getCachedInfo( requestId, criteria, 2419200000, requestData );
+}
+
+void
 LastFmPlugin::fetchCoverArt( uint requestId, Tomahawk::InfoSystem::InfoRequestData requestData )
 {
     if ( !requestData.input.canConvert< Tomahawk::InfoSystem::InfoCriteriaHash >() )
@@ -437,6 +455,27 @@ LastFmPlugin::notInCacheSlot( uint requestId, QHash<QString, QString> criteria, 
             reply->setProperty( "requestData", QVariant::fromValue< Tomahawk::InfoSystem::InfoRequestData >( requestData ) );
 
             connect( reply, SIGNAL( finished() ), SLOT( chartTopTracksReturned() ) );
+            return;
+        }
+
+        case InfoChartCapabilities:
+        {
+            tDebug() << "LastfmPlugin: InfoChartCapabilities not in cache, fetching";
+            QString json("{'Last.fm': {'Tracks': ['Top Tracks','Hyped Tracks','Most Loved Tracks'],"
+                         "'Artists': ['Top Artists', 'Hyped Artists']}}");
+            json.replace("'", "\"");
+            QJson::Parser parser;
+            bool ok = false;
+            QVariantMap result = parser.parse (json.toUtf8(), &ok).toMap();
+            if(!ok) {
+                tDebug() << "Lastfm Plugin: parsing json failed";
+                return;
+            }
+            emit info(
+                requestId,
+                requestData,
+                result
+            );
             return;
         }
 

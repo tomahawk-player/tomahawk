@@ -70,6 +70,7 @@ private:
     void fetchTopTracks( uint requestId, Tomahawk::InfoSystem::InfoRequestData requestData );
     void fetchChartArtists( uint requestId, Tomahawk::InfoSystem::InfoRequestData requestData );
     void fetchChartTracks( uint requestId, Tomahawk::InfoSystem::InfoRequestData requestData );
+    void fetchChartCapabilities( uint requestId, Tomahawk::InfoSystem::InfoRequestData requestData );
 
     void createScrobbler();
     void nowPlaying( const QVariant &input );
