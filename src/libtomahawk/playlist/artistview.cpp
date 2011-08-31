@@ -32,8 +32,6 @@
 #include "viewmanager.h"
 #include "utils/logger.h"
 
-static QString s_tmInfoIdentifier = QString( "TREEMODEL" );
-
 #define SCROLL_TIMEOUT 280
 
 using namespace Tomahawk;
@@ -265,23 +263,7 @@ ArtistView::onScrollTimeout()
 
     for ( int i = left.row(); i < max; i++ )
     {
-        TreeModelItem* item = m_model->itemFromIndex( m_proxyModel->mapToSource( m_proxyModel->index( i, 0 ) ) );
-        if ( item->artist().isNull() )
-            continue;
-        if ( !item->cover.isNull() )
-            continue;
-
-        Tomahawk::InfoSystem::InfoCriteriaHash trackInfo;
-        trackInfo["artist"] = item->artist()->name();
-        trackInfo["pptr"] = QString::number( (qlonglong)item );
-
-        Tomahawk::InfoSystem::InfoRequestData requestData;
-        requestData.caller = s_tmInfoIdentifier;
-        requestData.type = Tomahawk::InfoSystem::InfoArtistImages;
-        requestData.input = QVariant::fromValue< Tomahawk::InfoSystem::InfoCriteriaHash >( trackInfo );
-        requestData.customData = QVariantMap();
-
-        Tomahawk::InfoSystem::InfoSystem::instance()->getInfo( requestData );
+        m_model->getCover( m_proxyModel->mapToSource( m_proxyModel->index( i, 0 ) ) );
     }
 }
 

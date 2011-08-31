@@ -30,8 +30,6 @@
 #include "viewmanager.h"
 #include "utils/logger.h"
 
-static QString s_tmInfoIdentifier = QString( "ALBUMMODEL" );
-
 #define SCROLL_TIMEOUT 280
 
 using namespace Tomahawk;
@@ -164,25 +162,8 @@ AlbumView::onScrollTimeout()
             started = true;
             done = false;
 
-            AlbumItem* item = m_model->itemFromIndex( m_proxyModel->mapToSource( idx ) );
-            if ( !item )
+            if ( !m_model->getCover( m_proxyModel->mapToSource( idx ) ) )
                 break;
-            if ( !item->cover.isNull() )
-                break;
-
-//            qDebug() << "Need cover for:" << item->album()->artist()->name() << item->album()->name();
-            Tomahawk::InfoSystem::InfoCriteriaHash trackInfo;
-            trackInfo["artist"] = item->album()->artist()->name();
-            trackInfo["album"] = item->album()->name();
-            trackInfo["pptr"] = QString::number( (qlonglong)item );
-
-            Tomahawk::InfoSystem::InfoRequestData requestData;
-            requestData.caller = s_tmInfoIdentifier;
-            requestData.type = Tomahawk::InfoSystem::InfoAlbumCoverArt;
-            requestData.input = QVariant::fromValue< Tomahawk::InfoSystem::InfoCriteriaHash >( trackInfo );
-            requestData.customData = QVariantMap();
-
-            Tomahawk::InfoSystem::InfoSystem::instance()->getInfo( requestData );
         }
     }
 }

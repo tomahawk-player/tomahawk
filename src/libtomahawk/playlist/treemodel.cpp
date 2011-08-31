@@ -58,6 +58,54 @@ TreeModel::~TreeModel()
 
 
 void
+TreeModel::clear()
+{
+    if ( rowCount( QModelIndex() ) )
+    {
+        emit loadingFinished();
+
+        emit beginResetModel();
+        delete m_rootItem;
+        m_rootItem = 0;
+        m_rootItem = new TreeModelItem( 0, this );
+        emit endResetModel();
+    }
+}
+
+
+void
+TreeModel::getCover( const QModelIndex& index )
+{
+    TreeModelItem* item = itemFromIndex( index );
+    if ( !item->cover.isNull() )
+        return;
+
+    Tomahawk::InfoSystem::InfoCriteriaHash trackInfo;
+    Tomahawk::InfoSystem::InfoRequestData requestData;
+
+    if ( !item->artist().isNull() )
+    {
+        trackInfo["artist"] = item->artist()->name();
+        requestData.type = Tomahawk::InfoSystem::InfoArtistImages;
+    }
+    else if ( !item->album().isNull() )
+    {
+        trackInfo["artist"] = item->album()->artist()->name();
+        trackInfo["album"] = item->album()->name();
+        requestData.type = Tomahawk::InfoSystem::InfoAlbumCoverArt;
+    }
+
+    trackInfo["pptr"] = QString::number( (qlonglong)item );
+    m_coverHash.insert( (qlonglong)item, index );
+
+    requestData.caller = s_tmInfoIdentifier;
+    requestData.input = QVariant::fromValue< Tomahawk::InfoSystem::InfoCriteriaHash >( trackInfo );
+    requestData.customData = QVariantMap();
+    Tomahawk::InfoSystem::InfoSystem::instance()->getInfo( requestData );
+}
+
+
+void
 TreeModel::setCurrentItem( const QModelIndex& index )
 {
     qDebug() << Q_FUNC_INFO;
@@ -645,18 +693,7 @@ TreeModel::onAlbumsAdded( const QList<Tomahawk::album_ptr>& albums, const QVaria
         albumitem->index = createIndex( parentItem->children.count() - 1, 0, albumitem );
         connect( albumitem, SIGNAL( dataChanged() ), SLOT( onDataChanged() ) );
 
-        Tomahawk::InfoSystem::InfoCriteriaHash trackInfo;
-        trackInfo["artist"] = album->artist()->name();
-        trackInfo["album"] = album->name();
-        trackInfo["pptr"] = QString::number( (qlonglong)albumitem );
-
-        Tomahawk::InfoSystem::InfoRequestData requestData;
-        requestData.caller = s_tmInfoIdentifier;
-        requestData.type = Tomahawk::InfoSystem::InfoAlbumCoverArt;
-        requestData.input = QVariant::fromValue< Tomahawk::InfoSystem::InfoCriteriaHash >( trackInfo );
-        requestData.customData = QVariantMap();
-
-        Tomahawk::InfoSystem::InfoSystem::instance()->getInfo( requestData );
+        getCover( albumitem->index );
     }
 
     if ( !parent.isValid() || crows.second > 0 )
@@ -732,7 +769,9 @@ TreeModel::infoSystemInfo( Tomahawk::InfoSystem::InfoRequestData requestData, QV
         pm.loadFromData( ba );
         bool ok;
         qlonglong p = pptr["pptr"].toLongLong( &ok );
-        TreeModelItem* ai = reinterpret_cast<TreeModelItem*>(p);
+        TreeModelItem* ai = itemFromIndex( m_coverHash.take( p ) );
+        if ( !ai )
+            return;
 
         if ( !pm.isNull() )
             ai->cover = pm;

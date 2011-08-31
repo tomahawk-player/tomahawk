@@ -63,10 +63,11 @@ public:
     virtual QStringList mimeTypes() const;
     virtual Qt::ItemFlags flags( const QModelIndex& index ) const;
 
+    void clear();
     void addCollection( const Tomahawk::collection_ptr& collection, bool overwrite = false );
     void addFilteredCollection( const Tomahawk::collection_ptr& collection, unsigned int amount, DatabaseCommand_AllAlbums::SortOrder order, bool overwrite = false );
 
-    void clear();
+    bool getCover( const QModelIndex& index );
 
     virtual QString title() const { return m_title; }
     virtual QString description() const { return m_description; }
@@ -95,8 +96,6 @@ signals:
 
     void trackCountChanged( unsigned int tracks );
 
-protected:
-
 private slots:
     void onDataChanged();
 
@@ -110,6 +109,8 @@ private:
     QString m_title;
     QString m_description;
     bool m_overwriteOnAdd;
+
+    QHash<qlonglong, QPersistentModelIndex> m_coverHash;
 };
 
 #endif // ALBUMMODEL_H

@@ -67,6 +67,8 @@ public:
     virtual int rowCount( const QModelIndex& parent ) const;
     virtual int columnCount( const QModelIndex& parent ) const;
 
+    virtual void clear();
+
     virtual QVariant data( const QModelIndex& index, int role = Qt::DisplayRole ) const;
     virtual QVariant headerData( int section, Qt::Orientation orientation, int role ) const;
 
@@ -86,6 +88,8 @@ public:
     void addArtists( const Tomahawk::artist_ptr& artist );
     void addAlbums( const Tomahawk::artist_ptr& artist, const QModelIndex& parent );
     void addTracks( const Tomahawk::album_ptr& album, const QModelIndex& parent );
+
+    void getCover( const QModelIndex& index );
 
     void setColumnStyle( ColumnStyle style );
 
@@ -147,6 +151,7 @@ private:
     ColumnStyle m_columnStyle;
 
     Tomahawk::collection_ptr m_collection;
+    QHash<qlonglong, QPersistentModelIndex> m_coverHash;
 };
 
 #endif // ALBUMMODEL_H
