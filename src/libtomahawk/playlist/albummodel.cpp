@@ -349,6 +349,8 @@ AlbumModel::infoSystemInfo( Tomahawk::InfoSystem::InfoRequestData requestData, Q
         bool ok;
         qlonglong p = pptr["pptr"].toLongLong( &ok );
         AlbumItem* ai = reinterpret_cast<AlbumItem*>(p);
+        if ( !ai )
+            return;
 
         if ( !pm.isNull() )
             ai->cover = pm;
