@@ -71,6 +71,8 @@ private slots:
     void activateSelf();
 
 private:
+    bool hasChildren() const;
+
     QModelIndex m_index; /*!< our current index */
     ComboBox *m_combo; /*!< our combobox! */
 

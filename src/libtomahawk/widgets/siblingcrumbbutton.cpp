@@ -71,7 +71,8 @@ bool SiblingCrumbButton::isActive() const
 QSize SiblingCrumbButton::sizeHint() const
 {
     // our width = width of combo + 20px for right-arrow and spacing
-    return m_combo->sizeHint() + QSize(20,0);
+    const int padding = hasChildren() ? 20 : 5;
+    return m_combo->sizeHint() + QSize(padding,0);
 }
 
 void SiblingCrumbButton::paintEvent(QPaintEvent *event)
@@ -84,6 +85,9 @@ void SiblingCrumbButton::paintEvent(QPaintEvent *event)
     QRect r = opt.rect;
 
     StyleHelper::horizontalHeader(&p, r); // draw the background
+
+    if( !hasChildren() )
+        return;
 
     bool reverse = opt.direction == Qt::RightToLeft;
     int menuButtonWidth = 12;
@@ -146,4 +150,9 @@ void SiblingCrumbButton::comboboxActivated(int i)
 void SiblingCrumbButton::activateSelf()
 {
     comboboxActivated(m_index.row());
+}
+
+bool SiblingCrumbButton::hasChildren() const
+{
+    return m_index.model()->hasChildren(m_index);
 }

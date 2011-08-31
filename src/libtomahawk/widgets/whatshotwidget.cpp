@@ -55,6 +55,8 @@ WhatsHotWidget::WhatsHotWidget( QWidget* parent )
     TomahawkUtils::unmarginLayout( layout() );
     TomahawkUtils::unmarginLayout( ui->verticalLayout->layout() );
     TomahawkUtils::unmarginLayout( ui->verticalLayout_2->layout() );
+    TomahawkUtils::unmarginLayout( ui->breadCrumbLeft->layout() );
+    TomahawkUtils::unmarginLayout( ui->breadCrumbRight->layout() );
 
 
     //set crumb widgets
