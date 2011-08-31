@@ -183,6 +183,9 @@ WhatsHotWidget::infoSystemInfo( Tomahawk::InfoSystem::InfoRequestData requestDat
             KBreadcrumbSelectionModel *selectionModelLeft = new KBreadcrumbSelectionModel(new QItemSelectionModel(m_crumbModelLeft, this), this);
             ui->breadCrumbLeft->setSelectionModel(selectionModelLeft);
             ui->breadCrumbRight->setSelectionModel(selectionModelLeft);
+            //HACK ALERT - we want the second crumb to expand right away, so we
+            //force it here. We should find a more elegant want to do this
+            ui->breadCrumbLeft->currentChangedTriggered(m_crumbModelLeft->index(0,0).child(0,0));
             break;
         }
         case InfoSystem::InfoChartArtists:
