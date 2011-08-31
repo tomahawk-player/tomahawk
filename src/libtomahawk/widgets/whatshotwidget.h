@@ -33,6 +33,8 @@
 
 #include "dllmacro.h"
 
+class QStandardItemModel;
+class QStandardItem;
 class TreeModel;
 class PlaylistModel;
 class OverlayWidget;
@@ -81,11 +83,13 @@ private slots:
     void infoSystemFinished( QString target );
 
 private:
+    QStandardItem* parseNode(QStandardItem* parentItem, const QString &label, const QVariant &data);
     Ui::WhatsHotWidget *ui;
 
     PlaylistModel* m_tracksModel;
     TreeModel* m_artistsModel;
     TreeProxyModel* m_artistsProxy;
+    QStandardItemModel* m_crumbModelLeft;
 
     QTimer* m_timer;
 };

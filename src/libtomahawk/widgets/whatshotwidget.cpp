@@ -20,6 +20,8 @@
 #include "ui_whatshotwidget.h"
 
 #include <QPainter>
+#include <QStandardItemModel>
+#include <QStandardItem>
 
 #include "viewmanager.h"
 #include "sourcelist.h"
@@ -31,6 +33,7 @@
 #include "playlist/treeproxymodel.h"
 #include "widgets/overlaywidget.h"
 #include "widgets/siblingcrumbbutton.h"
+#include "widgets/kbreadcrumbselectionmodel.h"
 #include "utils/tomahawkutils.h"
 #include "utils/logger.h"
 #include <dynamic/GeneratorInterface.h>
@@ -53,13 +56,22 @@ WhatsHotWidget::WhatsHotWidget( QWidget* parent )
     TomahawkUtils::unmarginLayout( ui->verticalLayout->layout() );
     TomahawkUtils::unmarginLayout( ui->verticalLayout_2->layout() );
 
+
+    //set crumb widgets
     SiblingCrumbButtonFactory * crumbFactory = new SiblingCrumbButtonFactory;
 
+    m_crumbModelLeft = new QStandardItemModel(this);
+
     ui->breadCrumbLeft->setButtonFactory(crumbFactory);
+    ui->breadCrumbLeft->setModel(m_crumbModelLeft);
     ui->breadCrumbLeft->setRootIcon(QIcon( RESPATH "images/charts.png" ));
+    //ui->breadCrumbLeft->setSelectionModel(selectionModelLeft);
+    ui->breadCrumbLeft->setUseAnimation(true);
 
     ui->breadCrumbRight->setButtonFactory(crumbFactory);
     ui->breadCrumbRight->setRootIcon(QIcon( RESPATH "images/charts.png" ));
+    ui->breadCrumbRight->setModel(m_crumbModelLeft);
+    ui->breadCrumbRight->setUseAnimation(true);
 
 
     m_tracksModel = new PlaylistModel( ui->tracksView );
@@ -122,11 +134,15 @@ WhatsHotWidget::fetchData()
     requestData.customData = QVariantMap();
     requestData.input = QVariant::fromValue< Tomahawk::InfoSystem::InfoCriteriaHash >( artistInfo );
 
-    requestData.type = Tomahawk::InfoSystem::InfoChartArtists;
+    requestData.type = Tomahawk::InfoSystem::InfoChartCapabilities;
+    Tomahawk::InfoSystem::InfoSystem::instance()->getInfo( requestData );
+
+    /*requestData.type = Tomahawk::InfoSystem::InfoChartArtists;
     Tomahawk::InfoSystem::InfoSystem::instance()->getInfo( requestData );
 
     requestData.type = Tomahawk::InfoSystem::InfoChartTracks;
     Tomahawk::InfoSystem::InfoSystem::instance()->getInfo( requestData );
+    */
     tDebug() << "WhatsHot: requested InfoChartArtists+Tracks";
 }
 
@@ -149,9 +165,26 @@ WhatsHotWidget::infoSystemInfo( Tomahawk::InfoSystem::InfoRequestData requestDat
     }
 
     tDebug() << "WhatsHot: got something...";
-    QVariantMap returnedData = output.value< QVariantMap >();
+    QVariantMap returnedData = output.toMap();
     switch ( requestData.type )
     {
+        case InfoSystem::InfoChartCapabilities:
+        {
+            tDebug() << "WhatsHot:: info chart capabilities";
+            QStandardItem *rootItem= m_crumbModelLeft->invisibleRootItem();
+            tDebug() << "WhatsHot:: " << returnedData.keys();
+
+            foreach(const QString label, returnedData.keys()) {
+                tDebug() << "WhatsHot:: parsing " << label;
+                QStandardItem *childItem = parseNode( rootItem, label, returnedData[label] );
+                tDebug() << "WhatsHot:: appending" << childItem->text();
+                rootItem->appendRow(childItem);
+            }
+            KBreadcrumbSelectionModel *selectionModelLeft = new KBreadcrumbSelectionModel(new QItemSelectionModel(m_crumbModelLeft, this), this);
+            ui->breadCrumbLeft->setSelectionModel(selectionModelLeft);
+            ui->breadCrumbRight->setSelectionModel(selectionModelLeft);
+            break;
+        }
         case InfoSystem::InfoChartArtists:
         {
             const QStringList artists = returnedData["artists"].toStringList();
@@ -203,3 +236,28 @@ WhatsHotWidget::changeEvent( QEvent* e )
 }
 
 
+QStandardItem*
+WhatsHotWidget::parseNode(QStandardItem* parentItem, const QString &label, const QVariant &data)
+{
+    tDebug() << "WhatsHot:: parsing " << label;
+    QStandardItem *sourceItem = new QStandardItem(label);
+
+    if( data.canConvert<QVariantMap>() ) {
+        QVariantMap dataMap = data.toMap();
+        foreach(const QString childLabel,dataMap.keys()) {
+            QStandardItem *childItem  = parseNode( sourceItem, childLabel, dataMap[childLabel] );
+            sourceItem->appendRow(childItem);
+        }
+    } else if ( data.canConvert<QVariantList>() ) {
+        QVariantList dataList = data.toList();
+
+        foreach(const QVariant value, dataList) {
+            QStandardItem *childItem= new QStandardItem(value.toString());
+            sourceItem->appendRow(childItem);
+        }
+    } else {
+        QStandardItem *childItem= new QStandardItem(data.toString());
+        sourceItem->appendRow(childItem);
+    }
+    return sourceItem;
+}
