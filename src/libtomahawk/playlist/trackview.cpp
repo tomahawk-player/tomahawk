@@ -62,7 +62,6 @@ TrackView::TrackView( QWidget* parent )
     setVerticalScrollMode( QAbstractItemView::ScrollPerPixel );
     setRootIsDecorated( false );
     setUniformRowHeights( true );
-    setMinimumWidth( 200 );
 
     setHeader( m_header );
     setSortingEnabled( true );
@@ -158,8 +157,11 @@ TrackView::setTrackModel( TrackModel* model )
 void
 TrackView::onItemActivated( const QModelIndex& index )
 {
+    if ( !index.isValid() )
+        return;
+
     TrackModelItem* item = m_model->itemFromIndex( m_proxyModel->mapToSource( index ) );
-    if ( item && item->query()->numResults() )
+    if ( item && !item->query().isNull() && item->query()->numResults() )
     {
         qDebug() << "Result activated:" << item->query()->toString() << item->query()->results().first()->url();
         m_proxyModel->setCurrentIndex( index );
@@ -171,7 +173,6 @@ TrackView::onItemActivated( const QModelIndex& index )
 void
 TrackView::keyPressEvent( QKeyEvent* event )
 {
-    qDebug() << Q_FUNC_INFO;
     QTreeView::keyPressEvent( event );
 
     if ( !model() )
