@@ -241,12 +241,15 @@ void BreadcrumbBar::currentIndexChanged()
 
 void BreadcrumbBar::setRootIcon(const QIcon &icon)
 {
+
     m_rootIcon = icon;
-    QLabel *label= new QLabel(this);
-    label->setPixmap(icon.pixmap(16,16));
-    m_layout->insertWidget(0, label);
+    QPushButton* button = new QPushButton(icon, "", this);
+    button->setFlat(true);
+    button->setStyleSheet( "QPushButton{ background-color: transparent; border: none; width:16px; height:16px;}" );
+    m_layout->insertWidget(0, button);
     m_layout->insertSpacing(0,5);
     m_layout->insertSpacing(2,5);
+    connect(button, SIGNAL(clicked()), this, SIGNAL(rootClicked()));
 }
 
 void BreadcrumbBar::setRootText(const QString &text)

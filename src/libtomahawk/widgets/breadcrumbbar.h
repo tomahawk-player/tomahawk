@@ -129,6 +129,9 @@ public:
      */
     void currentChangedTriggered(QModelIndex const& index);
 
+signals:
+    void rootClicked();
+
 protected:
     /**
      *	\brief append a crumb widget
