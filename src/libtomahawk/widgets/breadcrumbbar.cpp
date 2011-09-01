@@ -26,6 +26,8 @@
 #include <QItemSelectionModel>
 #include <QLabel>
 #include <QPropertyAnimation>
+#include <QResizeEvent>
+#include <QPushButton>
 
 #include "utils/logger.h"
 
@@ -198,10 +200,28 @@ void BreadcrumbBar::updateButtons()
     }
     m_navButtons.erase(itBegin, m_navButtons.end());
 
-    foreach (BreadcrumbButtonBase *button, m_navButtons)
-        button->show();
+    collapseButtons();
 
     adjustSize();
+}
+
+void BreadcrumbBar::collapseButtons()
+{
+    foreach (BreadcrumbButtonBase *button, m_navButtons) {
+        button->show();
+    }
+
+    const int desired_width = size().width();
+    int current_width = sizeHint().width();
+
+    QLinkedList<BreadcrumbButtonBase*>::iterator it = m_navButtons.begin();
+    QLinkedList<BreadcrumbButtonBase*>::const_iterator const itEnd = m_navButtons.end();
+    it = m_navButtons.begin();
+    while( current_width > desired_width && it != itEnd ) {
+        (*it)->hide();
+        ++it;
+        current_width = sizeHint().width();
+    }
 }
 
 void BreadcrumbBar::clearButtons()
@@ -287,3 +307,7 @@ void BreadcrumbBar::currentChangedTriggered(QModelIndex const& index)
     m_selectionModel->setCurrentIndex( index, QItemSelectionModel::SelectCurrent);
 }
 
+void BreadcrumbBar::resizeEvent ( QResizeEvent * event )
+{
+    collapseButtons();
+}

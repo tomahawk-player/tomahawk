@@ -34,6 +34,7 @@ class QAbstractItemModel;
 class QAbstractProxyModel;
 class QHBoxLayout;
 class QItemSelectionModel;
+class QResizeEvent;
 
 /**
  * \brief A breadcrumb view for a QAbstractItemModel
@@ -143,6 +144,17 @@ protected:
      *	Respects the useAnimation() setting.
      */
     void deleteButton(BreadcrumbButtonBase *button);
+
+    /**
+     * \brief collapses crumbs when there isnt enough room for all of them
+     * Starts hiding from the left until we can fit all the buttons.
+     */
+    void collapseButtons();
+    /**
+     * \brief reimpl from QWidget
+     */
+    void resizeEvent ( QResizeEvent * event );
+
 
 protected slots:
 
