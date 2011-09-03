@@ -39,7 +39,7 @@ public:
     virtual ~GlobalActionManager();
 
     QUrl openLinkFromQuery( const Tomahawk::query_ptr& query ) const;
-    QUrl openLink( const QString& title, const QString& artist, const QString& album ) const;
+    Q_INVOKABLE QUrl openLink( const QString& title, const QString& artist, const QString& album ) const;
 
     /// Takes a spotify link and performs the default open action on it
     bool openSpotifyLink( const QString& link );
