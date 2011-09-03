@@ -29,6 +29,8 @@
 #include "infosystem/infosystem.h"
 
 #include "result.h"
+#include "album.h"
+#include "artist.h"
 #include "typedefs.h"
 
 #include "dllmacro.h"
@@ -42,7 +44,12 @@ namespace Tomahawk
 
 class DLLEXPORT AudioEngine : public QObject
 {
-Q_OBJECT
+  Q_OBJECT
+  Q_ENUMS( AudioState )
+  Q_PROPERTY(AudioState audioState READ state NOTIFY stateChanged)
+  Q_PROPERTY(QString currentArtist READ currentArtist NOTIFY currentTrackChanged)
+  Q_PROPERTY(QString currentAlbum READ currentAlbum NOTIFY currentTrackChanged)
+  Q_PROPERTY(QString currentTitle READ currentTitle NOTIFY currentTrackChanged)
 
 public:
     enum AudioErrorCode { StreamReadError, AudioDeviceError, DecodeError };
@@ -102,7 +109,13 @@ public slots:
     void infoSystemInfo( Tomahawk::InfoSystem::InfoRequestData requestData, QVariant output );
     void infoSystemFinished( QString caller );
 
+    const QString currentArtist() const { return  !m_currentTrack.isNull() ? m_currentTrack->artist()->name() : QString(); }
+    const QString currentAlbum() const { return !m_currentTrack.isNull() ? currentTrack()->album()->name() : QString(); }
+    const QString currentTitle() const { return !m_currentTrack.isNull() ? currentTrack()->track() : QString(); }
+
 signals:
+    void currentTrackChanged();
+
     void loading( const Tomahawk::result_ptr& track );
     void started( const Tomahawk::result_ptr& track );
     void finished( const Tomahawk::result_ptr& track );
