@@ -21,6 +21,7 @@
 
 #include <QWidget>
 #include <QTimeLine>
+#include <QPropertyAnimation>
 
 #include "result.h"
 #include "playlistinterface.h"
@@ -37,6 +38,7 @@ namespace Ui
 class AudioControls : public QWidget
 {
 Q_OBJECT
+Q_PROPERTY( int dropAreaSize READ dropAreaSize WRITE setDropAreaSize )
 
 public:
     AudioControls( QWidget* parent = 0 );
@@ -54,7 +56,11 @@ protected:
     void changeEvent( QEvent* e );
     void dragEnterEvent ( QDragEnterEvent* );
     void dragMoveEvent ( QDragMoveEvent* );
+    void dragLeaveEvent( QDragLeaveEvent * );
     void dropEvent ( QDropEvent* );
+
+    int dropAreaSize();
+    void setDropAreaSize( int size );
 
 private slots:
     void onPlaybackStarted( const Tomahawk::result_ptr& result );
@@ -82,6 +88,8 @@ private slots:
 
     void socialActionsLoaded();
 
+    void dragAnimationFinished();
+
 private:
     Ui::AudioControls *ui;
 
@@ -93,6 +101,8 @@ private:
 
     QTimeLine m_sliderTimeLine;
     qint64 m_seekMsecs;
+
+    QPropertyAnimation *m_dragAnimation;
 };
 
 #endif // AUDIOCONTROLS_H

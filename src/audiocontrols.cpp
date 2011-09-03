@@ -148,6 +148,61 @@ AudioControls::AudioControls( QWidget* parent )
     ui->stackedLayout->setSizeConstraint( QLayout::SetFixedSize );
 
     onPlaybackStopped(); // initial state
+
+
+    m_dragAnimation = new QPropertyAnimation( this, "dropAreaSize", this );
+    m_dragAnimation->setDuration( 500 );
+    m_dragAnimation->setEasingCurve( QEasingCurve::OutExpo );
+    connect( m_dragAnimation, SIGNAL( finished() ), SLOT(dragAnimationFinished()));
+
+    QGridLayout *dropMenuLayout = new QGridLayout;
+    ui->metaDataDropArea->setLayout( dropMenuLayout );
+
+    QLabel* dropTrackImage = new QLabel;
+    dropTrackImage->setAlignment( Qt::AlignHCenter );
+    dropTrackImage->setPixmap( QPixmap(":/data/images/drop-song.png" ).scaledToWidth( 32, Qt::SmoothTransformation ) );
+    dropMenuLayout->addWidget( dropTrackImage, 0, 0 );
+
+    QLabel* dropAlbumImage = new QLabel;
+    dropAlbumImage->setAlignment( Qt::AlignHCenter );
+    dropAlbumImage->setPixmap( QPixmap( ":/data/images/drop-album.png" ).scaledToWidth( 32, Qt::SmoothTransformation ) );
+    dropMenuLayout->addWidget( dropAlbumImage, 0, 1 );
+
+    QLabel* dropArtistImage = new QLabel;
+    dropArtistImage->setAlignment( Qt::AlignHCenter );
+    dropArtistImage->setPixmap( QPixmap( ":/data/images/drop-all-songs.png" ).scaledToWidth( 32, Qt::SmoothTransformation ) );
+    dropMenuLayout->addWidget( dropArtistImage, 0, 2 );
+
+    QLabel* dropLocalImage = new QLabel;
+    dropLocalImage->setAlignment( Qt::AlignHCenter );
+    dropLocalImage->setPixmap( QPixmap( ":/data/images/drop-local-songs.png" ).scaledToWidth( 32, Qt::SmoothTransformation ) );
+    dropMenuLayout->addWidget( dropLocalImage, 0, 3 );
+
+    QLabel* dropTop10Image = new QLabel;
+    dropTop10Image->setAlignment( Qt::AlignHCenter );
+    dropTop10Image->setPixmap( QPixmap( ":/data/images/drop-top-songs.png" ).scaledToWidth( 32, Qt::SmoothTransformation ) );
+    dropMenuLayout->addWidget( dropTop10Image, 0, 4 );
+
+    QLabel* dropAllText = new QLabel( "Track" );
+    dropAllText->setAlignment( Qt::AlignHCenter );
+    dropMenuLayout->addWidget( dropAllText, 1, 0 );
+
+    QLabel* dropAlbumText = new QLabel( "Album" );
+    dropAlbumText->setAlignment( Qt::AlignHCenter );
+    dropMenuLayout->addWidget( dropAlbumText, 1, 1 );
+
+    QLabel* dropArtistText = new QLabel( "Artist" );
+    dropArtistText->setAlignment( Qt::AlignHCenter );
+    dropMenuLayout->addWidget( dropArtistText, 1, 2 );
+
+    QLabel* dropLocalText = new QLabel( "Local" );
+    dropLocalText->setAlignment( Qt::AlignHCenter );
+    dropMenuLayout->addWidget( dropLocalText, 1, 3 );
+
+    QLabel* dropTop10Text = new QLabel( "Top 10" );
+    dropTop10Text->setAlignment( Qt::AlignHCenter );
+    dropMenuLayout->addWidget( dropTop10Text, 1, 4 );
+
 }
 
 
@@ -521,7 +576,14 @@ void
 AudioControls::dragEnterEvent( QDragEnterEvent* e )
 {
     if ( DropJob::acceptsMimeData( e->mimeData() ) )
+    {
         e->acceptProposedAction();
+
+        m_dragAnimation->setStartValue( 0 );
+        m_dragAnimation->setEndValue( ui->metaDataArea->height() );
+        m_dragAnimation->setDirection( QAbstractAnimation::Forward );
+        m_dragAnimation->start();
+    }
 }
 
 
@@ -530,6 +592,18 @@ AudioControls::dragMoveEvent( QDragMoveEvent* /* e */ )
 {
 //     if ( GlobalActionManager::instance()->acceptsMimeData( e->mimeData() ) )
 //         e->acceptProposedAction();
+}
+
+
+void
+AudioControls::dragLeaveEvent( QDragLeaveEvent * )
+{
+    ui->metaDataInfoArea->setMaximumHeight( 1000 );
+    ui->metaDataDropArea->setMaximumHeight( 0 );
+
+    m_dragAnimation->setDirection( QAbstractAnimation::Backward );
+    m_dragAnimation->start();
+
 }
 
 
@@ -595,3 +669,22 @@ AudioControls::onLoveButtonClicked( bool checked )
     }
 }
 
+
+void
+AudioControls::dragAnimationFinished()
+{
+
+}
+
+int
+AudioControls::dropAreaSize()
+{
+    return ui->metaDataDropArea->maximumHeight();
+}
+
+void
+AudioControls::setDropAreaSize( int size )
+{
+    ui->metaDataDropArea->setMaximumHeight( size );
+    ui->metaDataInfoArea->setMaximumHeight( ui->metaDataArea->height() - size );
+}
