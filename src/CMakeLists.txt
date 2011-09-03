@@ -238,7 +238,7 @@ IF(QCA2_FOUND)
     SET(LINK_LIBRARIES ${LINK_LIBRARIES} ${QCA2_LIBRARIES} )
 ENDIF(QCA2_FOUND)
 
-TARGET_LINK_LIBRARIES( tomahawk
+SET( tomahawkLinkLibraries
     ${LINK_LIBRARIES}
     ${TOMAHAWK_LIBRARIES}
     ${PHONON_LIBS}
@@ -250,6 +250,13 @@ TARGET_LINK_LIBRARIES( tomahawk
     ${QJSON_LIBRARIES}
     ${TAGLIB_LIBRARIES}
 )
+
+TARGET_LINK_LIBRARIES( tomahawk ${tomahawkLinkLibraries} )
+
+IF( BUILD_GUI_QML )
+  # sic! add_subdirectory would make it harder to reuse ${final_src}
+  INCLUDE( active/CMakeLists.txt )
+ENDIF()
 
 IF( APPLE )
   IF(HAVE_SPARKLE)

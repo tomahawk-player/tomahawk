@@ -42,6 +42,11 @@ TomahawkTrayIcon::TomahawkTrayIcon( QObject* parent )
     m_contextMenu = new QMenu();
     setContextMenu( m_contextMenu );
 
+#ifdef TOUCHMAHAWK
+    connect(m_contextMenu->addAction( tr("Show Desktop Gui") ), SIGNAL( triggered() ), parent, SLOT( show() ) );
+    m_contextMenu->addSeparator();
+#endif TOUCHMAHAWK
+
     m_playPauseAction = m_contextMenu->addAction( tr( "Play" ) );
     //m_pauseAction = m_contextMenu->addAction( tr( "Pause" ) );
     m_stopAction = m_contextMenu->addAction( tr( "Stop" ) );
@@ -179,7 +184,14 @@ TomahawkTrayIcon::onActivated( QSystemTrayIcon::ActivationReason reason )
     {
         case QSystemTrayIcon::Trigger:
         {
-            TomahawkWindow* mainwindow = APP->mainWindow();
+            QMainWindow* mainwindow = 0;
+
+            #ifndef TOUCHMAHAWK
+                mainwindow = APP->mainWindow();
+            #else
+                mainwindow = (QMainWindow*) APP->declarativeWindow();
+            #endif
+
             if ( mainwindow->isVisible() )
             {
                 mainwindow->hide();

@@ -68,6 +68,10 @@ namespace Tomahawk
 class TomahawkWindow;
 #endif
 
+#ifdef TOUCHMAHAWK
+class TomahawkWindowDeclarative;
+#endif
+
 
 // this also acts as a a container for important top-level objects
 // that other parts of the app need to find
@@ -88,6 +92,10 @@ public:
 #ifndef TOMAHAWK_HEADLESS
     AudioControls* audioControls();
     TomahawkWindow* mainWindow() const { return m_mainwindow; }
+#endif
+
+#ifdef TOUCHMAHAWK
+    TomahawkWindowDeclarative* declarativeWindow() const { return m_declarativeWindow; }
 #endif
 
     void enableScriptResolver( const QString& scriptPath );
@@ -137,6 +145,10 @@ private:
 
 #ifndef TOMAHAWK_HEADLESS
     TomahawkWindow* m_mainwindow;
+#endif
+
+#ifdef TOUCHMAHAWK
+    TomahawkWindowDeclarative* m_declarativeWindow;
 #endif
 
     bool m_headless;

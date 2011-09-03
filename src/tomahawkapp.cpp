@@ -69,6 +69,10 @@
     #include <QMessageBox>
 #endif
 
+#ifdef TOUCHMAHAWK
+    #include "active/tomahawkwindowdeclarative.h"
+#endif
+
 // should go to a plugin actually
 #ifdef GLOOX_FOUND
     #include "xmppbot/xmppbot.h"
@@ -222,7 +226,15 @@ TomahawkApp::init()
         m_mainwindow = new TomahawkWindow();
         m_mainwindow->setWindowTitle( "Tomahawk" );
         m_mainwindow->setObjectName( "TH_Main_Window" );
+
+#ifndef TOUCHMAHAWK
         m_mainwindow->show();
+#else
+        m_declarativeWindow = new TomahawkWindowDeclarative();
+        m_declarativeWindow->setWindowTitle( "Touch-ma-hawk" );
+        m_declarativeWindow->show();
+#endif // TOUCHMAHAWK
+
     }
 #endif
 

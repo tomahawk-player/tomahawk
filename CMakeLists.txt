@@ -24,6 +24,8 @@ SET( TOMAHAWK_VERSION_PATCH 99 )
 # build options
 option(BUILD_GUI "Build Tomahawk with GUI" ON)
 option(BUILD_RELEASE "Generate TOMAHAWK_VERSION without GIT info" OFF)
+option(BUILD_GUI_QML"Build Tomahawk with QML Support" OFF)
+
 
 # generate version string
 
@@ -71,6 +73,11 @@ ELSE()
     MESSAGE( STATUS "Building Tomahawk ${TOMAHAWK_VERSION} full GUI version ***" )
     LIST(APPEND NEEDED_QT4_COMPONENTS "QtGui" "QtWebkit" )
 ENDIF()
+IF( BUILD_GUI_QML )
+    MESSAGE( STATUS "Building Tomahawk QML version ***" )
+    LIST(APPEND NEEDED_QT4_COMPONENTS "QtDeclarative" )
+ENDIF()
+
 
 IF( BUILD_GUI AND UNIX AND NOT APPLE )
     FIND_PACKAGE( X11 )

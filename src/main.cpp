@@ -42,6 +42,10 @@ main( int argc, char *argv[] )
       AEInstallEventHandler( 'GURL', 'GURL', h, 0, false );
 #endif
 
+#ifdef TOUCHMAHAWK
+    QApplication::setGraphicsSystem( "raster" );
+#endif
+
     TomahawkApp a( argc, argv );
     KDSingleApplicationGuard guard( &a, KDSingleApplicationGuard::AutoKillOtherInstances );
     QObject::connect( &guard, SIGNAL( instanceStarted( KDSingleApplicationGuard::Instance ) ), &a, SLOT( instanceStarted( KDSingleApplicationGuard::Instance )  ) );
