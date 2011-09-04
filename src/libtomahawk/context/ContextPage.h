@@ -16,56 +16,76 @@
  *   along with Tomahawk. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef VIEWPAGE_H
-#define VIEWPAGE_H
+#ifndef CONTEXTPAGE_H
+#define CONTEXTPAGE_H
 
-#include <QObject>
+#include <QGraphicsProxyWidget>
+#include <QGraphicsWebView>
+#include <QStyleOptionGraphicsItem>
 
 #include "typedefs.h"
 #include "playlistinterface.h"
+#include "utils/stylehelper.h"
 #include "utils/tomahawkutils.h"
 
 #include "dllmacro.h"
+#include <signal.h>
 
 namespace Tomahawk
 {
 
-class DLLEXPORT ViewPage
+class DLLEXPORT ContextPage : public QObject
 {
-public:
-    ViewPage() {}
-    virtual ~ViewPage() {}
+    Q_OBJECT
 
-    virtual QWidget* widget() = 0;
+public:
+    ContextPage() {}
+    virtual ~ContextPage() {}
+
+    virtual QGraphicsWidget* widget() = 0;
     virtual Tomahawk::PlaylistInterface* playlistInterface() const = 0;
 
     virtual QString title() const = 0;
     virtual QString description() const = 0;
-    virtual QString longDescription() const { return QString(); }
     virtual QPixmap pixmap() const { return QPixmap( RESPATH "icons/tomahawk-icon-128x128.png" ); }
-
-    virtual bool showStatsBar() const { return true; }
-    virtual bool showInfoBar() const { return true; }
-    virtual bool showModes() const { return false; }
-    virtual bool showFilter() const { return false; }
-    virtual bool queueVisible() const { return true; }
 
     virtual bool jumpToCurrentTrack() = 0;
 
-    virtual bool isTemporaryPage() const { return false; }
+public slots:
+    virtual void setQuery( const Tomahawk::query_ptr& query ) = 0;
 
-    /** subclasses implementing ViewPage can emit the following signals:
-     * nameChanged( const QString& )
-     * descriptionChanged( const QString& )
-     * longDescriptionChanged( const QString& )
-     * pixmapChanged( const QPixmap& )
-     * destroyed( QWidget* widget );
-     *
-     * See DynamicWidget for an example
-     */
+signals:
+    void nameChanged( const QString& );
+    void descriptionChanged( const QString& );
+    void pixmapChanged( const QPixmap& );
+    void destroyed( QWidget* widget );
+};
+
+
+class DLLEXPORT ContextProxyPage : public QGraphicsWidget
+{
+    Q_OBJECT
+
+public:
+    ContextProxyPage() : QGraphicsWidget()
+    {}
+
+    Tomahawk::ContextPage* page() const { return m_page; }
+    void setPage( Tomahawk::ContextPage* page );
+
+    virtual bool eventFilter( QObject* watched, QEvent* event );
+
+signals:
+    void focused();
+
+protected:
+    virtual void paint( QPainter* painter, const QStyleOptionGraphicsItem* option, QWidget* widget );
+    virtual bool sceneEvent( QEvent* event );
+
 private:
+    Tomahawk::ContextPage* m_page;
 };
 
 }; // ns
 
-#endif //VIEWPAGE_H
+#endif //CONTEXTPAGE_H

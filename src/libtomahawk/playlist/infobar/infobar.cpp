@@ -20,13 +20,16 @@
 #include "ui_infobar.h"
 
 #include <QLabel>
-#include <QPropertyAnimation>
 #include <QPixmap>
 
+#include "context/ContextWidget.h"
 #include "utils/tomahawkutils.h"
 #include "utils/logger.h"
 
+#define ANIMATION_TIME 400
 #define IMAGE_HEIGHT 64
+
+using namespace Tomahawk;
 
 
 InfoBar::InfoBar( QWidget* parent )
@@ -34,8 +37,8 @@ InfoBar::InfoBar( QWidget* parent )
     , ui( new Ui::InfoBar )
 {
     ui->setupUi( this );
-    layout()->setSpacing( 0 );
-    layout()->setContentsMargins( 0, 0, 0, 0 );
+    TomahawkUtils::unmarginLayout( layout() );
+    layout()->setContentsMargins( 8, 4, 8, 4 );
 
     QFont boldFont = ui->captionLabel->font();
     boldFont.setPixelSize( 18 );

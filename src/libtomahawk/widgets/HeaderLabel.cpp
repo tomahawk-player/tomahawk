@@ -18,6 +18,7 @@
 
 #include "HeaderLabel.h"
 
+#include <QApplication>
 #include <QPainter>
 
 #include "utils/logger.h"
@@ -52,13 +53,30 @@ HeaderLabel::sizeHint() const
 
 
 void
+HeaderLabel::mousePressEvent( QMouseEvent* event )
+{
+    QFrame::mousePressEvent( event );
+    m_time.start();
+}
+
+
+void
+HeaderLabel::mouseReleaseEvent( QMouseEvent* event )
+{
+    QFrame::mouseReleaseEvent( event );
+    if ( m_time.elapsed() < qApp->doubleClickInterval() )
+        emit clicked();
+}
+
+
+void
 HeaderLabel::paintEvent( QPaintEvent* /* event */ )
 {
     QPainter p( this );
     QRect r = contentsRect();
     StyleHelper::horizontalHeader(&p, r);
 
-    QTextOption to( Qt::AlignVCenter );
+    QTextOption to( alignment() | Qt::AlignVCenter );
     r.adjust( 8, 0, -8, 0 );
     p.setPen( StyleHelper::headerTextColor() );
     p.drawText( r, text(), to );

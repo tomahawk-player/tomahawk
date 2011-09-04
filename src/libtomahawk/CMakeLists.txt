@@ -40,6 +40,13 @@ set( libSources
 
     audio/audioengine.cpp
 
+    context/ContextPage.cpp
+    context/ContextWidget.cpp
+    context/pages/TopTracksContext.cpp
+    context/pages/RelatedArtistsContext.cpp
+    context/pages/WikipediaContext.cpp
+    context/pages/WebContext.cpp
+
     database/database.cpp
     database/fuzzyindex.cpp
     database/databasecollection.cpp
@@ -234,6 +241,13 @@ set( libHeaders
 
     audio/audioengine.h
 
+    context/ContextPage.h
+    context/ContextWidget.h
+    context/pages/TopTracksContext.h
+    context/pages/RelatedArtistsContext.h
+    context/pages/WikipediaContext.h
+    context/pages/WebContext.h
+
     database/database.h
     database/fuzzyindex.h
     database/databaseworker.h
@@ -417,6 +431,7 @@ set( libUI ${libUI}
     widgets/infowidgets/AlbumInfoWidget.ui
     playlist/topbar/topbar.ui
     playlist/infobar/infobar.ui
+    context/ContextWidget.ui
 )
 
 include_directories( . ${CMAKE_CURRENT_BINARY_DIR} ${CMAKE_CURRENT_BINARY_DIR}/.. ..

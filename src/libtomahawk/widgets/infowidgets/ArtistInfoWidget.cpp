@@ -33,6 +33,7 @@
 
 using namespace Tomahawk;
 
+
 ArtistInfoWidget::ArtistInfoWidget( const Tomahawk::artist_ptr& artist, QWidget* parent )
     : QWidget( parent )
     , ui( new Ui::ArtistInfoWidget )
@@ -120,10 +121,7 @@ void
 ArtistInfoWidget::infoSystemInfo( Tomahawk::InfoSystem::InfoRequestData requestData, QVariant output )
 {
     if ( requestData.caller != m_infoId )
-    {
-//        qDebug() << "Info of wrong type or not with our identifier";
         return;
-    }
 
     InfoSystem::InfoCriteriaHash trackInfo;
     trackInfo = requestData.input.value< InfoSystem::InfoCriteriaHash >();
@@ -137,7 +135,6 @@ ArtistInfoWidget::infoSystemInfo( Tomahawk::InfoSystem::InfoRequestData requestD
         }
     }
 
-qDebug() << "ARTISTINFOWIDGET got infosystem info for:" << m_title << output.value< Tomahawk::InfoSystem::InfoGenericMap >();
     QVariantMap returnedData = output.value< QVariantMap >();
     switch ( requestData.type )
     {

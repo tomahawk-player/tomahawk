@@ -117,7 +117,7 @@ PlaylistItemDelegate::prepareStyleOption( QStyleOptionViewItemV4* option, const 
             opacity = item->query()->results().first()->score();
 
         opacity = qMax( (float)0.3, opacity );
-        QColor textColor = TomahawkUtils::alphaBlend( option->palette.color( QPalette::Foreground ), option->palette.color( QPalette::Background ), opacity );
+        QColor textColor = TomahawkUtils::alphaBlend( option->palette.color( QPalette::Text ), option->palette.color( QPalette::BrightText ), opacity );
 
         option->palette.setColor( QPalette::Text, textColor );
     }

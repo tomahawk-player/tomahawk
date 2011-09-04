@@ -16,43 +16,71 @@
  *   along with Tomahawk. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef INFOBAR_H
-#define INFOBAR_H
+#ifndef CONTEXTWIDGET_H
+#define CONTEXTWIDGET_H
 
-#include <QWidget>
+#include <QGraphicsView>
 
 #include "dllmacro.h"
 
 #include "query.h"
 
+class QGraphicsScene;
+class QGraphicsWebView;
+class QGraphicsWidget;
 class QTimeLine;
-class ContextWidget;
+
+namespace Tomahawk
+{
+    class ContextPage;
+    class ContextProxyPage;
+}
 
 namespace Ui
 {
-    class InfoBar;
+    class ContextWidget;
 }
 
-class DLLEXPORT InfoBar : public QWidget
+class DLLEXPORT ContextWidget : public QWidget
 {
 Q_OBJECT
 
 public:
-    InfoBar( QWidget* parent = 0 );
-    ~InfoBar();
+    ContextWidget( QWidget* parent = 0 );
+    ~ContextWidget();
 
 public slots:
-    void setCaption( const QString& s );
-    void setDescription( const QString& s );
-    void setLongDescription( const QString& s );
-    void setPixmap( const QPixmap& p );
+    void setQuery( const Tomahawk::query_ptr& query, bool force = false );
+
+    void toggleSize();
+
+private slots:
+    void onPageFocused();
+
+    void onAnimationStep( int frame );
+    void onAnimationFinished();
 
 protected:
-    void changeEvent( QEvent* e );
     void resizeEvent( QResizeEvent* e );
 
 private:
-    Ui::InfoBar* ui;
+    void fadeOut( bool animate );
+
+    void layoutViews( bool animate = true );
+
+    Ui::ContextWidget* ui;
+
+    int m_minHeight;
+    int m_maxHeight;
+    QTimeLine* m_timeLine;
+
+    QGraphicsScene* m_scene;
+    QList<Tomahawk::ContextPage*> m_views;
+    QList<Tomahawk::ContextProxyPage*> m_pages;
+
+    int m_currentView;
+
+    Tomahawk::query_ptr m_query;
 };
 
-#endif // INFOBAR_H
+#endif // CONTEXTWIDGET_H

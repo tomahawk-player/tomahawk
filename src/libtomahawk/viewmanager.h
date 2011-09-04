@@ -25,6 +25,7 @@
 
 #include "collection.h"
 #include "playlistinterface.h"
+#include "playlist/queueview.h"
 #include "viewpage.h"
 #include "widgets/welcomewidget.h"
 #include "widgets/whatshotwidget.h"
@@ -40,9 +41,9 @@ class ArtistView;
 class CollectionModel;
 class CollectionFlatModel;
 class CollectionView;
+class ContextWidget;
 class PlaylistModel;
 class PlaylistView;
-class QueueView;
 class TrackProxyModel;
 class TrackModel;
 class TreeProxyModel;
@@ -71,8 +72,11 @@ public:
     ~ViewManager();
 
     QWidget* widget() const { return m_widget; }
-    PlaylistView* queue() const;
-    TopBar* topbar() const { return m_topbar; }
+    InfoBar* infobar() const { return m_infobar; }
+    ContextWidget* context() const { return m_contextWidget; }
+
+    PlaylistView* queue() const { return m_queue->queue(); }
+    void setQueue( QueueView* queue ) { m_queue = queue; }
 
     bool isSuperCollectionVisible() const;
     bool isNewPlaylistPageVisible() const;
@@ -120,6 +124,9 @@ signals:
     void tempPageActivated( Tomahawk::ViewPage* );
     void viewPageActivated( Tomahawk::ViewPage* );
 
+    void showQueueRequested();
+    void hideQueueRequested();
+
 public slots:
     Tomahawk::ViewPage* showSuperCollection();
     Tomahawk::ViewPage* showWelcomePage();
@@ -137,12 +144,12 @@ public slots:
     void historyBack();
     void removeFromHistory( Tomahawk::ViewPage* p );
 
+    void showQueue() { emit showQueueRequested(); }
+    void hideQueue() { emit hideQueueRequested(); }
+
     void setTreeMode();
     void setTableMode();
     void setAlbumMode();
-
-    void showQueue();
-    void hideQueue();
 
     void setRepeatMode( Tomahawk::PlaylistInterface::RepeatMode mode );
     void setShuffled( bool enabled );
@@ -172,18 +179,15 @@ private:
 
     QWidget* m_widget;
     InfoBar* m_infobar;
-    TopBar* m_topbar;
-    QPushButton* m_queueButton;
+    ContextWidget* m_contextWidget;
     QStackedWidget* m_stack;
     AnimatedSplitter* m_splitter;
-
-    PlaylistModel* m_queueModel;
-    QueueView* m_queueView;
 
     AlbumModel* m_superAlbumModel;
     AlbumView* m_superAlbumView;
     TreeModel* m_superCollectionModel;
     ArtistView* m_superCollectionView;
+    QueueView* m_queue;
     WelcomeWidget* m_welcomeWidget;
     WhatsHotWidget* m_whatsHotWidget;
 

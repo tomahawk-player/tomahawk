@@ -24,11 +24,11 @@
 
 #include "trackheader.h"
 #include "viewmanager.h"
-#include "queueview.h"
 #include "trackmodel.h"
 #include "trackproxymodel.h"
 
 #include "audio/audioengine.h"
+#include "context/ContextWidget.h"
 #include "widgets/overlaywidget.h"
 #include "dynamic/widgets/LoadingSpinner.h"
 #include "utils/tomahawkutils.h"
@@ -48,6 +48,7 @@ TrackView::TrackView( QWidget* parent )
     , m_loadingSpinner( new LoadingSpinner( this ) )
     , m_resizing( false )
     , m_dragging( false )
+    , m_updateContextView( true )
     , m_contextMenu( new ContextMenu( this ) )
 {
     setMouseTracking( true );
@@ -150,6 +151,20 @@ TrackView::setTrackModel( TrackModel* model )
     {
         setHeaderHidden( false );
         setHorizontalScrollBarPolicy( Qt::ScrollBarAsNeeded );
+    }
+}
+
+
+void
+TrackView::currentChanged( const QModelIndex& current, const QModelIndex& /* previous */ )
+{
+    if ( !m_updateContextView )
+        return;
+
+    TrackModelItem* item = m_model->itemFromIndex( m_proxyModel->mapToSource( current ) );
+    if ( item )
+    {
+        ViewManager::instance()->context()->setQuery( item->query() );
     }
 }
 

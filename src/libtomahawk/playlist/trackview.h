@@ -62,6 +62,9 @@ explicit TrackView( QWidget* parent = 0 );
     QModelIndex contextMenuIndex() const { return m_contextMenuIndex; }
     void setContextMenuIndex( const QModelIndex& idx ) { m_contextMenuIndex = idx; }
 
+    bool updatesContextView() const { return m_updateContextView; }
+    void setUpdatesContextView( bool b ) { m_updateContextView = b; }
+
 public slots:
     void onItemActivated( const QModelIndex& index );
 
@@ -84,6 +87,9 @@ protected:
     void paintEvent( QPaintEvent* event );
     void keyPressEvent( QKeyEvent* event );
 
+protected slots:
+    virtual void currentChanged( const QModelIndex& current, const QModelIndex& previous );
+
 private slots:
     void onItemResized( const QModelIndex& index );
     void onFilterChanged( const QString& filter );
@@ -104,6 +110,8 @@ private:
     bool m_resizing;
     bool m_dragging;
     QRect m_dropRect;
+
+    bool m_updateContextView;
 
     QModelIndex m_hoveredIndex;
     QModelIndex m_contextMenuIndex;

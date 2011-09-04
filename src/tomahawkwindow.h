@@ -35,6 +35,9 @@ class QAction;
 class MusicScanner;
 class AudioControls;
 class TomahawkTrayIcon;
+class PlaylistModel;
+class QueueView;
+class AnimatedSplitter;
 
 namespace Ui
 {
@@ -95,6 +98,9 @@ private slots:
     void onSearch( const QString& search );
     void onFilterEdited();
 
+    void showQueue();
+    void hideQueue();
+
     void minimize();
     void maximize();
 
@@ -114,6 +120,10 @@ private:
     TomahawkTrayIcon* m_trayIcon;
     SourceTreeView* m_sourcetree;
     QPushButton* m_statusButton;
+    QPushButton* m_queueButton;
+    PlaylistModel* m_queueModel;
+    QueueView* m_queueView;
+    AnimatedSplitter* m_sidebar;
 
     Tomahawk::result_ptr m_currentTrack;
     QString m_windowTitle;

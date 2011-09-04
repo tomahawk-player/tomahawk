@@ -16,42 +16,22 @@
  *   along with Tomahawk. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef HEADERLABEL_H
-#define HEADERLABEL_H
+#include "WebContext.h"
 
-#include <QLabel>
-#include <QTime>
+using namespace Tomahawk;
 
-#include "dllmacro.h"
 
-/**
- * \class HeaderLabel
- * \brief A styled label for use in headers.
- */
-class DLLEXPORT HeaderLabel : public QLabel
+WebContext::WebContext()
+    : ContextPage()
 {
-Q_OBJECT
+    m_webView = new QGraphicsWebView();
 
-public:
-    HeaderLabel( QWidget* parent );
-    ~HeaderLabel();
+    QPalette pal = m_webView->palette();
+    pal.setColor( QPalette::Window, QColor( 0, 0, 0, 0 ) );
+    m_webView->setPalette( pal );
+}
 
-    QSize minimumSizeHint() const { return sizeHint(); }
-    QSize sizeHint() const;
 
-signals:
-    void clicked();
-
-protected:
-//    void changeEvent( QEvent* e );
-    void paintEvent( QPaintEvent* event );
-
-    void mousePressEvent( QMouseEvent* event );
-    void mouseReleaseEvent( QMouseEvent* event );
-
-private:
-    QWidget* m_parent;
-    QTime m_time;
-};
-
-#endif // HEADERLABEL_H
+WebContext::~WebContext()
+{
+}
