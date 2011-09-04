@@ -228,6 +228,11 @@ TrackView::resizeEvent( QResizeEvent* event )
         // restoreState keeps overwriting our previous sort-order
         sortByColumn( sortSection, sortOrder );
     }
+
+    if ( model()->columnCount() == 1 )
+    {
+        m_header->resizeSection( 0, event->size().width() );
+    }
 }
 
 

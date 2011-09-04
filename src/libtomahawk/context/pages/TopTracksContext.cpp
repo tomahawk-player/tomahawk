@@ -20,6 +20,7 @@
 
 #include "playlist/playlistmodel.h"
 #include "playlist/playlistview.h"
+#include "playlist/trackheader.h"
 
 using namespace Tomahawk;
 
@@ -29,12 +30,14 @@ TopTracksContext::TopTracksContext()
     , m_infoId( uuid() )
 {
     m_topHitsView = new PlaylistView();
+    m_topHitsView->setGuid( "TopTracksContext" );
     m_topHitsView->setUpdatesContextView( false );
     m_topHitsModel = new PlaylistModel( m_topHitsView );
     m_topHitsModel->setStyle( TrackModel::Short );
-    m_topHitsView->setTrackModel( m_topHitsModel );
+    m_topHitsView->setPlaylistModel( m_topHitsModel );
     m_topHitsView->setVerticalScrollBarPolicy( Qt::ScrollBarAlwaysOff );
-    m_topHitsView->setSizePolicy( QSizePolicy::Expanding, QSizePolicy::Expanding );
+    m_topHitsView->setHorizontalScrollBarPolicy( Qt::ScrollBarAlwaysOff );
+    m_topHitsView->setHeaderHidden( true );
 
     QPalette pal = m_topHitsView->palette();
     pal.setColor( QPalette::Window, QColor( 0, 0, 0, 0 ) );

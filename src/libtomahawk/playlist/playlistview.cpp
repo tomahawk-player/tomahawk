@@ -62,13 +62,16 @@ PlaylistView::setPlaylistModel( PlaylistModel* model )
     TrackView::setTrackModel( m_model );
     setColumnHidden( TrackModel::Age, true ); // Hide age column per default
 
-    if ( guid().isEmpty() && !m_model->playlist().isNull() )
+    if ( guid().isEmpty() )
     {
-        setGuid( QString( "playlistview/%1/%2" ).arg( m_model->columnCount() ).arg( m_model->playlist()->guid() ) );
-    }
-    else
-    {
-        setGuid( QString( "playlistview/%1" ).arg( m_model->columnCount() ) );
+        if ( !m_model->playlist().isNull() )
+        {
+            setGuid( QString( "playlistview/%1/%2" ).arg( m_model->columnCount() ).arg( m_model->playlist()->guid() ) );
+        }
+        else
+        {
+            setGuid( QString( "playlistview/%1" ).arg( m_model->columnCount() ) );
+        }
     }
 
     connect( m_model, SIGNAL( trackCountChanged( unsigned int ) ), SLOT( onTrackCountChanged( unsigned int ) ) );

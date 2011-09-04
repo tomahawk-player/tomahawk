@@ -40,6 +40,9 @@ public:
     explicit ArtistView( QWidget* parent = 0 );
     ~ArtistView();
 
+    virtual QString guid() const;
+    virtual void setGuid( const QString& guid ) { m_guid = guid; }
+
     void setProxyModel( TreeProxyModel* model );
 
     TreeModel* model() const { return m_model; }
@@ -63,8 +66,6 @@ public:
     virtual bool showModes() const { return m_showModes; }
 
     virtual bool jumpToCurrentTrack();
-
-    QString guid() const;
 
 public slots:
     void onItemActivated( const QModelIndex& index );
@@ -96,6 +97,7 @@ private:
 
     bool m_showModes;
     QTimer m_timer;
+    mutable QString m_guid;
 };
 
 #endif // ARTISTVIEW_H
