@@ -34,7 +34,7 @@ Q_OBJECT
 
 public:
     explicit SourceTreeView( QWidget* parent = 0 );
-
+    //static bool acceptsMimeData( const QMimeData* data, bool playlistOnly = true );
 public slots:
     void showOfflineSources( bool offlineSourcesShown );
 
@@ -79,7 +79,7 @@ private:
 
     template< typename T >
     T* itemFromIndex( const QModelIndex& index ) const;
-
+    //void parseMimeData( const QMimeData* data );
     SourcesModel* m_model;
     SourcesProxyModel* m_proxyModel;
     QModelIndex m_contextMenuIndex;

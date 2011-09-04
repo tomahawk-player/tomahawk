@@ -36,7 +36,7 @@ ContextMenu::ContextMenu( QWidget* parent )
     m_sigmap = new QSignalMapper( this );
     connect( m_sigmap, SIGNAL( mapped( int ) ), SLOT( onTriggered( int ) ) );
 
-    m_supportedActions = ActionPlay | ActionQueue | ActionCopyLink;
+    m_supportedActions = ActionPlay | ActionQueue | ActionCopyLink | ActionAddToPlaylist | ActionAddTrackToPl;
 }
 
 ContextMenu::~ContextMenu()
@@ -50,6 +50,7 @@ ContextMenu::clear()
     m_queries.clear();
     m_albums.clear();
     m_artists.clear();
+
 }
 
 unsigned int
@@ -61,8 +62,10 @@ ContextMenu::itemCount() const
 void
 ContextMenu::setQueries( const QList<Tomahawk::query_ptr>& queries )
 {
+
     if ( queries.isEmpty() )
         return;
+
 
     QMenu::clear();
     m_queries.clear();
@@ -74,7 +77,24 @@ ContextMenu::setQueries( const QList<Tomahawk::query_ptr>& queries )
     if ( m_supportedActions & ActionQueue )
         m_sigmap->setMapping( addAction( tr( "Add to &Queue" ) ), ActionQueue );
 
-    //m_sigmap->setMapping( addAction( tr( "&Add to Playlist" ) ), ActionAddToPlaylist );
+
+
+    if ( m_supportedActions & ActionAddToPlaylist ){
+
+        QList<playlist_ptr> p = SourceList::instance()->getLocal()->collection()->playlists();
+        QMenu *addTo = new QMenu("Add to");
+            for(int i = 0; i< p.count(); i++){
+                m_sigmap->setMapping( addTo->addAction( p[i]->title() ), p[i]->guid() );
+                m_sigmap->setMapping( addMenu( addTo ), ActionAddToPlaylist );
+            }
+
+            foreach ( QAction* action, addTo->actions() )
+                connect( action, SIGNAL( triggered() ), m_sigmap, SLOT( map() ) );
+
+            connect(m_sigmap, SIGNAL(mapped(QString)),
+                     this, SLOT(onAction(QString)));
+
+    }
 
     addSeparator();
 
@@ -86,8 +106,11 @@ ContextMenu::setQueries( const QList<Tomahawk::query_ptr>& queries )
     if ( m_supportedActions & ActionDelete )
         m_sigmap->setMapping( addAction( queries.count() > 1 ? tr( "&Delete Items" ) : tr( "&Delete Item" ) ), ActionDelete );
 
+
+
     foreach ( QAction* action, actions() )
     {
+
         connect( action, SIGNAL( triggered() ), m_sigmap, SLOT( map() ) );
     }
 }
@@ -96,10 +119,12 @@ ContextMenu::setQueries( const QList<Tomahawk::query_ptr>& queries )
 void
 ContextMenu::setQuery( const Tomahawk::query_ptr& query )
 {
+
     QList<query_ptr> queries;
     queries << query;
     setQueries( queries );
 }
+
 
 
 void
@@ -181,6 +206,21 @@ ContextMenu::setArtist( const Tomahawk::artist_ptr& artist )
 
 
 void
+ContextMenu::onClicked( int action )
+{
+    qDebug() << Q_FUNC_INFO << "Action:" << action;
+}
+
+void
+ContextMenu::onAction( const QString& what )
+{
+    playlist_ptr p = SourceList::instance()->getLocal()->collection()->playlist( what );
+    p->addEntries( m_queries, p->currentrevision());
+    qDebug() << Q_FUNC_INFO << "Adding track to guid" << what << "With title" << p->title();
+}
+
+
+void
 ContextMenu::onTriggered( int action )
 {
     switch ( action )
@@ -197,6 +237,7 @@ ContextMenu::onTriggered( int action )
             emit triggered( action );
     }
 }
+
 
 
 void ContextMenu::addToQueue()
@@ -221,6 +262,7 @@ void ContextMenu::addToQueue()
 void
 ContextMenu::copyLink()
 {
+    qDebug() << Q_FUNC_INFO;
     if ( m_queries.count() )
     {
         GlobalActionManager::instance()->copyToClipboard( m_queries.first() );

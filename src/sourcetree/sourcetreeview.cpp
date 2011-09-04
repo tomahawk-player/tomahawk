@@ -426,16 +426,16 @@ SourceTreeView::dragEnterEvent( QDragEnterEvent* event )
     qDebug() << Q_FUNC_INFO;
     QTreeView::dragEnterEvent( event );
 
-    if ( DropJob::acceptsMimeData( event->mimeData() ) )
+    if ( DropJob::acceptsMimeData( event->mimeData(), DropJob::Track | DropJob::Playlist,  DropJob::Create ) )
     {
-        m_dragging = true;
-        m_dropRect = QRect();
-        m_dropIndex = QPersistentModelIndex();
+           m_dragging = true;
+           m_dropRect = QRect();
+           m_dropIndex = QPersistentModelIndex();
 
-        qDebug() << "Accepting Drag Event";
-        event->setDropAction( Qt::CopyAction );
-        event->accept();
-    }
+           qDebug() << Q_FUNC_INFO << "Accepting Drag Event";
+           event->setDropAction( Qt::CopyAction );
+           event->acceptProposedAction();
+     }
 }
 
 
@@ -459,7 +459,7 @@ SourceTreeView::dragMoveEvent( QDragMoveEvent* event )
     bool accept = false;
     QTreeView::dragMoveEvent( event );
 
-    if ( DropJob::acceptsMimeData( event->mimeData() ) )
+    if ( DropJob::acceptsMimeData( event->mimeData(),  DropJob::Track, DropJob::Append ) )
     {
         setDirtyRegion( m_dropRect );
         const QPoint pos = event->pos();
@@ -475,6 +475,7 @@ SourceTreeView::dragMoveEvent( QDragMoveEvent* event )
             SourceTreeItem* item = itemFromIndex< SourceTreeItem >( index );
             if( item->willAcceptDrag( event->mimeData() ) )
             {
+
                 accept = true;
                 m_delegate->hovered( index, event->mimeData() );
                 dataChanged(index, index);
@@ -489,14 +490,24 @@ SourceTreeView::dragMoveEvent( QDragMoveEvent* event )
 
         if ( accept )
         {
+            //qDebug() << Q_FUNC_INFO << "Accepting";
             event->setDropAction( Qt::CopyAction );
             event->accept();
         }
-        else
-            event->ignore();
+        else{
 
-        setDirtyRegion( m_dropRect );
-    }
+                qDebug() << Q_FUNC_INFO << "Ignoring";
+                event->ignore();
+            }
+        }else if ( DropJob::acceptsMimeData( event->mimeData(),  DropJob::Playlist, DropJob::Create ) )
+
+        {
+            // Should maybe ignore, but we are just dropping
+            // a playlist in the container, not on a specific playlist
+            event->setDropAction( Qt::CopyAction );
+            event->accept();
+        }
+     setDirtyRegion( m_dropRect );
 }
 
 
@@ -513,18 +524,25 @@ SourceTreeView::dropEvent( QDropEvent* event )
         Q_ASSERT( item );
 
         item->setDropType( m_delegate->hoveredDropType() );
-        qDebug() << "dropType is " << m_delegate->hoveredDropType();
+        qDebug() << Q_FUNC_INFO << "dropType is " << m_delegate->hoveredDropType();
     }
 
     // Need to fake the dropevent because the treeview would reject it if it is outside the item (on the tree)
     if ( pos.x() < 100 )
     {
+        qDebug() << Q_FUNC_INFO << "New Event";
         QDropEvent* newEvent = new QDropEvent( pos + QPoint( 100, 0 ), event->possibleActions(), event->mimeData(), event->mouseButtons(), event->keyboardModifiers(), event->type() );
         QTreeView::dropEvent( newEvent );
         delete newEvent;
     }
     else
     {
+        // In current event, parse sourceTreeView mime instead of playlistitems
+        qDebug() << Q_FUNC_INFO << "Current Event";
+        DropJob *dropThis = new DropJob;
+        dropThis->setDropTypes( DropJob::Playlist );
+        dropThis->setDropAction( DropJob::Create );
+        dropThis->parseMimeData( event->mimeData() );
         QTreeView::dropEvent( event );
     }
 

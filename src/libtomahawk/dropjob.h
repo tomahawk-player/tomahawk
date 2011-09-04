@@ -43,12 +43,41 @@ public:
      *
      * Connect to tracks( QList< query_ptr> ); for the extracted tracks.
      */
-    static bool acceptsMimeData( const QMimeData* data, bool tracksOnly = true );
+
+    enum DropType {
+
+                None =      0x00,
+                Playlist =  0x01,
+                Track =     0x02,
+                Album =     0x04,
+                Artist =    0x08,
+                All =       0x10
+            };
+
+        Q_DECLARE_FLAGS(DropTypes, DropType)
+
+        enum DropAction {
+
+                  Append =     0x0,
+                  Create =     0x1
+
+              };
+        Q_DECLARE_FLAGS(DropActions, DropAction)
+
+
+    static bool acceptsMimeData( const QMimeData* data, DropJob::DropTypes type = All, DropJob::DropActions action = Append );
     static QStringList mimeTypes();
 
+    virtual void setDropTypes( DropTypes types ) { m_dropTypes = types; }
+    virtual void setDropAction( DropAction action ) { m_dropAction = action; }
+    virtual DropTypes dropTypes() const { return m_dropTypes; }
+    virtual DropAction dropAction() const { return m_dropAction; }
+    void parseMimeData( const QMimeData* data );
     void setGetWholeArtists( bool getWholeArtists );
     void setGetWholeAlbums( bool getWholeAlbums );
     void tracksFromMimeData( const QMimeData* data, bool allowDuplicates = false, bool onlyLocal = false, bool top10 = false );
+    void handleXspf( const QString& file, bool createNewPlaylist = false );
+    void handleSpPlaylist( const QString& url, bool createNewPlaylist = false );
 
 signals:
     /// QMimeData parsing results
@@ -63,7 +92,7 @@ private slots:
 
 private:
     /// handle parsing mime data
-    void parseMimeData( const QMimeData* data );
+
 
     void handleTrackUrls( const QString& urls );
     QList< Tomahawk::query_ptr > tracksFromQueryList( const QMimeData* d );
@@ -86,8 +115,11 @@ private:
     bool m_getWholeArtists;
     bool m_getWholeAlbums;
     bool m_top10;
+    DropTypes m_dropTypes;
+    DropAction m_dropAction;
+    bool DropAction();
 
     QList< Tomahawk::query_ptr > m_resultList;
 };
-
+Q_DECLARE_OPERATORS_FOR_FLAGS(DropJob::DropTypes)
 #endif // DROPJOB_H

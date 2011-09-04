@@ -29,7 +29,7 @@
 #include "utils/logger.h"
 #include "globalactionmanager.h"
 #include "infosystem/infosystem.h"
-
+#include "utils/xspfloader.h"
 using namespace Tomahawk;
 
 DropJob::DropJob( QObject *parent )
@@ -60,10 +60,40 @@ DropJob::mimeTypes()
     return mimeTypes;
 }
 
+bool
+DropJob::DropAction()
+{
+
+    if ( dropAction() == DropJob::Create )
+        return true;
+    return false;
+
+}
+
 
 bool
-DropJob::acceptsMimeData( const QMimeData* data, bool tracksOnly )
+DropJob::acceptsMimeData( const QMimeData* data, DropJob::DropTypes acceptedType, DropJob::DropActions acceptedAction)
 {
+
+
+    if (acceptedType.testFlag(DropJob::None))
+          qDebug() << Q_FUNC_INFO << "AcceptedType is None";
+
+    if (acceptedType.testFlag(DropJob::All))
+          qDebug() << Q_FUNC_INFO << "AcceptedType is All";
+
+    if (acceptedType.testFlag(DropJob::Playlist))
+          qDebug() << Q_FUNC_INFO << "AcceptedType is Playlist";
+
+    if (acceptedType.testFlag(DropJob::Track))
+          qDebug() << Q_FUNC_INFO << "AcceptedType is Track";
+
+    if (acceptedAction.testFlag(DropJob::Append))
+          qDebug() << Q_FUNC_INFO << "AcceptedAction is Append";
+
+    if (acceptedAction.testFlag(DropJob::Create))
+          qDebug() << Q_FUNC_INFO << "AcceptedAction is Create";
+
     if ( data->hasFormat( "application/tomahawk.query.list" )
         || data->hasFormat( "application/tomahawk.plentry.list" )
         || data->hasFormat( "application/tomahawk.result.list" )
@@ -75,22 +105,42 @@ DropJob::acceptsMimeData( const QMimeData* data, bool tracksOnly )
         return true;
     }
 
+    if( data->hasFormat( "text/plain" )
+        && data->data( "text/plain" ).contains( "xspf" )
+        && ( acceptedType.testFlag(DropJob::Playlist) || acceptedType.testFlag(DropJob::All) )
+        && acceptedAction.testFlag(DropJob::Create)
+      )
+        return true;
+
     // crude check for spotify tracks
-    if ( data->hasFormat( "text/plain" ) && data->data( "text/plain" ).contains( "spotify" ) &&
-       ( tracksOnly ? data->data( "text/plain" ).contains( "track" ) : true ) )
+    if ( data->hasFormat( "text/plain" ) && data->data( "text/plain" ).contains( "spotify" )
+         && data->data( "text/plain" ).contains( "playlist" )
+         && ( acceptedType.testFlag(DropJob::Playlist) || acceptedType.testFlag(DropJob::All) )
+       )
+              return true;
+
+    // crude check for spotify tracks
+    if ( data->hasFormat( "text/plain" ) && data->data( "text/plain" ).contains( "spotify" )
+         && data->data( "text/plain" ).contains( "track" )
+         && ( acceptedType.testFlag(DropJob::Track) || acceptedType.testFlag(DropJob::All) )
+       )
         return true;
 
     // crude check for rdio tracks
-    if ( data->hasFormat( "text/plain" ) && data->data( "text/plain" ).contains( "rdio.com" ) &&
-        ( tracksOnly ? data->data( "text/plain" ).contains( "track" ) : true ) )
+    if ( data->hasFormat( "text/plain" ) && data->data( "text/plain" ).contains( "rdio.com" )
+         && data->data( "text/plain" ).contains( "track" )
+         && ( acceptedType.testFlag(DropJob::Track) || acceptedType.testFlag(DropJob::All) )
+       )
         return true;
+
 
     // We whitelist t.co and bit.ly (and j.mp) since they do some link checking. Often playable (e.g. spotify..) links hide behind them,
     //  so we do an extra level of lookup
     if ( ( data->hasFormat( "text/plain" ) && data->data( "text/plain" ).contains( "bit.ly" ) ) ||
          ( data->hasFormat( "text/plain" ) && data->data( "text/plain" ).contains( "j.mp" ) ) ||
          ( data->hasFormat( "text/plain" ) && data->data( "text/plain" ).contains( "t.co" ) ) ||
-         ( data->hasFormat( "text/plain" ) && data->data( "text/plain" ).contains( "rd.io" ) ) )
+         ( data->hasFormat( "text/plain" ) && data->data( "text/plain" ).contains( "rd.io" ) )
+         && ( acceptedType.testFlag(DropJob::Track) || acceptedType.testFlag(DropJob::All) ) )
         return true;
 
     return false;
@@ -134,6 +184,26 @@ DropJob::tracksFromMimeData( const QMimeData* data, bool allowDuplicates, bool o
 void
 DropJob::parseMimeData( const QMimeData *data )
 {
+
+
+    if(dropTypes() & DropJob::Playlist)
+        qDebug() << Q_FUNC_INFO << "DropType is Playlist";
+    if(dropTypes() & DropJob::All)
+        qDebug() << Q_FUNC_INFO << "DropType is All";
+    if(dropTypes() & DropJob::Track)
+        qDebug() << Q_FUNC_INFO << "DropType is Track";
+    if(dropTypes() & DropJob::Artist)
+        qDebug() << Q_FUNC_INFO << "DropType is Artist";
+    if(DropTypes() & DropJob::None)
+        qDebug() << Q_FUNC_INFO << "DropType is None";
+    else qDebug() << "DropType is I DONT KNOW!";
+
+    if(dropAction() == DropJob::Append)
+            qDebug() << Q_FUNC_INFO << "DropAction is Append";
+    if(dropAction() == DropJob::Create)
+            qDebug() << Q_FUNC_INFO << "DropAction is Create";
+
+
     QList< query_ptr > results;
     if ( data->hasFormat( "application/tomahawk.query.list" ) )
         results = tracksFromQueryList( data );
@@ -148,8 +218,14 @@ DropJob::parseMimeData( const QMimeData *data )
     else if ( data->hasFormat( "text/plain" ) )
     {
         QString plainData = QString::fromUtf8( data->data( "text/plain" ).constData() );
-        tDebug() << "Got text/plain mime data:" << data->data( "text/plain" ) << "decoded to:" << plainData;
-        handleTrackUrls ( plainData );
+        qDebug() << Q_FUNC_INFO << "Got text/plain mime data:" << data->data( "text/plain" ) << "decoded to:" << plainData.trimmed();
+
+        if ( data->hasFormat( "text/plain" ) &&  data->data( "text/plain" ).contains( "xspf" ) )
+            handleXspf( data->data( "text/plain" ).trimmed(), DropAction() );
+        else if ( plainData.contains( "spotify" ) && plainData.contains( "playlist" ) )
+            handleSpPlaylist( plainData, DropAction() );
+        else
+            handleTrackUrls ( plainData );
     }
 
     m_resultList.append( results );
@@ -332,12 +408,71 @@ DropJob::tracksFromMixedData( const QMimeData *data )
 }
 
 void
+DropJob::handleXspf( const QString& fileUrl, bool createNewPlaylist )
+{
+    qDebug() << Q_FUNC_INFO << "Got xspf playlist!!" << fileUrl;
+
+        // Doing like so on *nix, dont know really how files are
+        // passed on others.
+        qDebug() << "Got xspf playlist!!";
+        QString newFile = fileUrl;
+        newFile.replace("file://", "");
+        QFile xspfFile(newFile);
+        XSPFLoader* l = new XSPFLoader( createNewPlaylist, this );
+        tDebug( LOGINFO ) << "Loading local xspf:" << newFile;
+        l->load( xspfFile );
+
+}
+
+void
+DropJob::handleSpPlaylist( const QString& url, bool createNewPlaylist)
+{
+
+    qDebug() << "Got spotify playlist!!" << url;
+
+       if ( url.contains( "open.spotify.com/user") ||
+            url.contains( "spotify:user" ) )
+       {
+         // Lets create a valid playlist uri
+         QString playlistUri = url;
+         QString validUri;
+
+         if(url.contains( "open.spotify.com/user")){
+             playlistUri.replace("http://open.spotify.com/", "");
+             QStringList playlist = playlistUri.split( "/" );
+             validUri = "spotify:" + playlist.join(":");
+         }else validUri = playlistUri;
+
+         tDebug() << "Got a spotify playlist in dropjob!" << validUri;
+         SpotifyParser* spot = new SpotifyParser( validUri, this, createNewPlaylist);
+
+         //This currently supports draging and dropping a spotify playlist
+         if(createNewPlaylist){
+             qDebug() << Q_FUNC_INFO << "Got spotify playlist!! Create new" << url;
+         }else{
+              qDebug() << Q_FUNC_INFO << "Got spotify playlist!!" << url;
+              connect( spot, SIGNAL( tracks( QList<Tomahawk::query_ptr> ) ), this, SLOT( onTracksAdded( QList< Tomahawk::query_ptr > ) ) );
+         }
+
+         m_queryCount++;
+       }
+
+}
+
+void
 DropJob::handleTrackUrls( const QString& urls )
 {
-    if ( urls.contains( "open.spotify.com/track") ||
+    qDebug() << Q_FUNC_INFO << urls;
+
+
+    if ( urls.contains( "open.spotify.com/user") ||
+         urls.contains( "spotify:user" ) )
+            handleSpPlaylist( urls, dropAction() );
+
+    else if ( urls.contains( "open.spotify.com/track") ||
          urls.contains( "spotify:track" ) )
     {
-        QStringList tracks = urls.split( "\n" );
+        QStringList tracks = urls.split(QRegExp("\\s+"), QString::SkipEmptyParts);
 
         tDebug() << "Got a list of spotify urls!" << tracks;
         SpotifyParser* spot = new SpotifyParser( tracks, this );
@@ -366,7 +501,6 @@ DropJob::handleTrackUrls( const QString& urls )
         m_queryCount++;
     }
 }
-
 
 void
 DropJob::expandedUrls( QStringList urls )
