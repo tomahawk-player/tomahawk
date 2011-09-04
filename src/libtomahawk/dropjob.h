@@ -28,10 +28,48 @@
 #include <QStringList>
 #include <QMimeData>
 
+/** @class DropJob
+  * Allows you to process dropped mimedata in different ways:
+  * Configure the DropJob using setDropFlags() or the set*() functions to do
+  * what you want and then feed it with MimeMata. Connect to the tracks() signal
+  * to receive the results.
+  *
+  * Possible configuration flags are:
+  * - DropFlagTrack: Get the dropped track (only valid if the dropped item is acutally a track)
+  * - DropFlagAlbum: Get this album (only valid if the dropped item is an album or a track with album information)
+  * - DropFlagArtist: Get this artist
+  * - DropFlagTop10: Query the Top 10 for this artist in the Network
+  * - DropFlagLocal: Only get local items (Filters out all remote ones)
+  * - DropFlagAllowDuplicates: Allow duplicate results, e.g. same song from different sources.
+  *
+  * Note: The largest possible set of the configured Flags applies. E.g. Artist is greater than Album.
+  * If you set both of them only the album will be fetched. Requesting the Top 10 items always results in a
+  * query for the whole artist. It is not possible to e.g. request the Top 10 tracks of a given album.
+  *
+  * If you configure nothing or dropping incompatible data (e.g. configured DropTrack but dropping an album),
+  * the DropJob will do this default actions:
+  * - Get this track for dropped tracks
+  * - Get whole album for dropped albums
+  * - Get whole artist for dropped artists
+  */
+
 class DLLEXPORT DropJob : public QObject
 {
     Q_OBJECT
 public:
+    enum DropFlag
+    {
+        DropFlagsNone = 0x00,
+        DropFlagTrack = 0x01,
+        DropFlagAlbum = 0x02,
+        DropFlagArtist = 0x04,
+        DropFlagTop10 = 0x08,
+        DropFlagLocal = 0x10,
+        DropFlagAllowDuplicates = 0x20,
+        DropFlagsAll = 0xff
+    };
+    Q_DECLARE_FLAGS( DropFlags, DropFlag )
+
     explicit DropJob( QObject *parent = 0 );
     ~DropJob();
 
@@ -46,9 +84,15 @@ public:
     static bool acceptsMimeData( const QMimeData* data, bool tracksOnly = true );
     static QStringList mimeTypes();
 
+    void setDropFlags( DropFlags flags );
+
     void setGetWholeArtists( bool getWholeArtists );
     void setGetWholeAlbums( bool getWholeAlbums );
-    void tracksFromMimeData( const QMimeData* data, bool allowDuplicates = false, bool onlyLocal = false, bool top10 = false );
+    void setGetTop10( bool top10 );
+    void setOnlyLocal( bool onlyLocal );
+    void setAllowDuplicates( bool allowDuplicates );
+
+    void tracksFromMimeData( const QMimeData* data );
 
 signals:
     /// QMimeData parsing results
@@ -81,13 +125,10 @@ private:
     void removeRemoteSources();
 
     int m_queryCount;
-    bool m_allowDuplicates;
-    bool m_onlyLocal;
-    bool m_getWholeArtists;
-    bool m_getWholeAlbums;
-    bool m_top10;
+    DropFlags m_dropFlags;
 
     QList< Tomahawk::query_ptr > m_resultList;
 };
+Q_DECLARE_OPERATORS_FOR_FLAGS( DropJob::DropFlags )
 
 #endif // DROPJOB_H

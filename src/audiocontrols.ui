@@ -130,7 +130,7 @@
        <number>0</number>
       </property>
       <item>
-       <widget class="QWidget" name="metaDataDropArea" native="true">
+       <widget class="DropMenu" name="metaDataDropArea" native="true">
         <property name="maximumSize">
          <size>
           <width>16777215</width>
@@ -564,6 +564,12 @@
    <class>QueryLabel</class>
    <extends>QLabel</extends>
    <header>utils/querylabel.h</header>
+  </customwidget>
+  <customwidget>
+   <class>DropMenu</class>
+   <extends>QWidget</extends>
+   <header>utils/dropmenu.h</header>
+   <container>1</container>
   </customwidget>
  </customwidgets>
  <resources/>

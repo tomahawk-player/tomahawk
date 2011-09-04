@@ -259,15 +259,14 @@ CategoryAddItem::dropMimeData( const QMimeData* data, Qt::DropAction )
     if ( dropType() == DropTypeLocalItems )
     {
         dj->setGetWholeArtists( true );
-        dj->tracksFromMimeData( data, false, true );
+        dj->setOnlyLocal( true );
     }
     else if ( dropType() == DropTypeTop50 )
     {
-        dj->setGetWholeArtists( true );
-        dj->tracksFromMimeData( data, false, false, true );
+        dj->setGetTop10( true );
     }
-    else
-        dj->tracksFromMimeData( data, false, false );
+
+    dj->tracksFromMimeData( data );
 
     return true;
 }

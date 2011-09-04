@@ -47,6 +47,7 @@ AudioControls::AudioControls( QWidget* parent )
     , ui( new Ui::AudioControls )
     , m_repeatMode( PlaylistInterface::NoRepeat )
     , m_shuffled( false )
+    , m_dropAreaExpanded( false )
 {
     ui->setupUi( this );
     setAcceptDrops( true );
@@ -151,57 +152,86 @@ AudioControls::AudioControls( QWidget* parent )
 
 
     m_dragAnimation = new QPropertyAnimation( this, "dropAreaSize", this );
+    m_dragAnimation->setStartValue( 0 );
     m_dragAnimation->setDuration( 500 );
-    m_dragAnimation->setEasingCurve( QEasingCurve::OutExpo );
+    m_dragAnimation->setEasingCurve( QEasingCurve::Linear );
     connect( m_dragAnimation, SIGNAL( finished() ), SLOT(dragAnimationFinished()));
 
-    QGridLayout *dropMenuLayout = new QGridLayout;
-    ui->metaDataDropArea->setLayout( dropMenuLayout );
+    m_dropAreaCollapseTimer.setInterval( 500 );
+    m_dropAreaCollapseTimer.setSingleShot( true );
+    connect( &m_dropAreaCollapseTimer, SIGNAL( timeout() ), this, SLOT( collapseDropMenu() ) );
 
-    QLabel* dropTrackImage = new QLabel;
-    dropTrackImage->setAlignment( Qt::AlignHCenter );
-    dropTrackImage->setPixmap( QPixmap(":/data/images/drop-song.png" ).scaledToWidth( 32, Qt::SmoothTransformation ) );
-    dropMenuLayout->addWidget( dropTrackImage, 0, 0 );
+    connect( ui->metaDataDropArea, SIGNAL( dropReceived( QDropEvent* ) ), this, SLOT( dropReceived( QDropEvent* ) ) );
 
-    QLabel* dropAlbumImage = new QLabel;
-    dropAlbumImage->setAlignment( Qt::AlignHCenter );
-    dropAlbumImage->setPixmap( QPixmap( ":/data/images/drop-album.png" ).scaledToWidth( 32, Qt::SmoothTransformation ) );
-    dropMenuLayout->addWidget( dropAlbumImage, 0, 1 );
+    DropMenuEntry *trackEntry = new DropMenuEntry( QPixmap(":/data/images/drop-song.png" ).scaledToWidth( 32, Qt::SmoothTransformation ),
+                                                   "Track",
+                                                   DropJob::DropFlagTrack );
+    ui->metaDataDropArea->addEntry( trackEntry, true );
 
-    QLabel* dropArtistImage = new QLabel;
-    dropArtistImage->setAlignment( Qt::AlignHCenter );
-    dropArtistImage->setPixmap( QPixmap( ":/data/images/drop-all-songs.png" ).scaledToWidth( 32, Qt::SmoothTransformation ) );
-    dropMenuLayout->addWidget( dropArtistImage, 0, 2 );
+    DropMenuEntry *albumEntry = new DropMenuEntry( QPixmap(":/data/images/drop-album.png" ).scaledToWidth( 32, Qt::SmoothTransformation ),
+                                                   "Album",
+                                                   DropJob::DropFlagAlbum );
+    ui->metaDataDropArea->addEntry( albumEntry );
 
-    QLabel* dropLocalImage = new QLabel;
-    dropLocalImage->setAlignment( Qt::AlignHCenter );
-    dropLocalImage->setPixmap( QPixmap( ":/data/images/drop-local-songs.png" ).scaledToWidth( 32, Qt::SmoothTransformation ) );
-    dropMenuLayout->addWidget( dropLocalImage, 0, 3 );
+    DropMenuEntry *artistEntry = new DropMenuEntry( QPixmap(":/data/images/drop-all-songs.png" ).scaledToWidth( 32, Qt::SmoothTransformation ),
+                                                    "Artist",
+                                                    DropJob::DropFlagArtist );
+    ui->metaDataDropArea->addEntry( artistEntry );
 
-    QLabel* dropTop10Image = new QLabel;
-    dropTop10Image->setAlignment( Qt::AlignHCenter );
-    dropTop10Image->setPixmap( QPixmap( ":/data/images/drop-top-songs.png" ).scaledToWidth( 32, Qt::SmoothTransformation ) );
-    dropMenuLayout->addWidget( dropTop10Image, 0, 4 );
+    DropMenuEntry *localEntry = new DropMenuEntry( QPixmap(":/data/images/drop-local-songs.png" ).scaledToWidth( 32, Qt::SmoothTransformation ),
+                                                   "Local",
+                                                   DropJob::DropFlagAlbum | DropJob::DropFlagLocal );
+    ui->metaDataDropArea->addEntry( localEntry );
 
-    QLabel* dropAllText = new QLabel( "Track" );
-    dropAllText->setAlignment( Qt::AlignHCenter );
-    dropMenuLayout->addWidget( dropAllText, 1, 0 );
+    DropMenuEntry *top10Entry = new DropMenuEntry( QPixmap(":/data/images/drop-top-songs.png" ).scaledToWidth( 32, Qt::SmoothTransformation ),
+                                                   "Top 10",
+                                                   DropJob::DropFlagArtist | DropJob::DropFlagTop10 );
+    ui->metaDataDropArea->addEntry( top10Entry );
 
-    QLabel* dropAlbumText = new QLabel( "Album" );
-    dropAlbumText->setAlignment( Qt::AlignHCenter );
-    dropMenuLayout->addWidget( dropAlbumText, 1, 1 );
+//    QLabel* dropTrackImage = new QLabel;
+//    dropTrackImage->setAlignment( Qt::AlignHCenter );
+//    dropTrackImage->setPixmap( QPixmap(":/data/images/drop-song.png" ).scaledToWidth( 32, Qt::SmoothTransformation ) );
+//    dropMenuLayout->addWidget( dropTrackImage, 0, 0 );
 
-    QLabel* dropArtistText = new QLabel( "Artist" );
-    dropArtistText->setAlignment( Qt::AlignHCenter );
-    dropMenuLayout->addWidget( dropArtistText, 1, 2 );
+//    QLabel* dropAlbumImage = new QLabel;
+//    dropAlbumImage->setAlignment( Qt::AlignHCenter );
+//    dropAlbumImage->setPixmap( QPixmap( ":/data/images/drop-album.png" ).scaledToWidth( 32, Qt::SmoothTransformation ) );
+//    dropMenuLayout->addWidget( dropAlbumImage, 0, 1 );
 
-    QLabel* dropLocalText = new QLabel( "Local" );
-    dropLocalText->setAlignment( Qt::AlignHCenter );
-    dropMenuLayout->addWidget( dropLocalText, 1, 3 );
+//    QLabel* dropArtistImage = new QLabel;
+//    dropArtistImage->setAlignment( Qt::AlignHCenter );
+//    dropArtistImage->setPixmap( QPixmap( ":/data/images/drop-all-songs.png" ).scaledToWidth( 32, Qt::SmoothTransformation ) );
+//    dropMenuLayout->addWidget( dropArtistImage, 0, 2 );
 
-    QLabel* dropTop10Text = new QLabel( "Top 10" );
-    dropTop10Text->setAlignment( Qt::AlignHCenter );
-    dropMenuLayout->addWidget( dropTop10Text, 1, 4 );
+//    QLabel* dropLocalImage = new QLabel;
+//    dropLocalImage->setAlignment( Qt::AlignHCenter );
+//    dropLocalImage->setPixmap( QPixmap( ":/data/images/drop-local-songs.png" ).scaledToWidth( 32, Qt::SmoothTransformation ) );
+//    dropMenuLayout->addWidget( dropLocalImage, 0, 3 );
+
+//    QLabel* dropTop10Image = new QLabel;
+//    dropTop10Image->setAlignment( Qt::AlignHCenter );
+//    dropTop10Image->setPixmap( QPixmap( ":/data/images/drop-top-songs.png" ).scaledToWidth( 32, Qt::SmoothTransformation ) );
+//    dropMenuLayout->addWidget( dropTop10Image, 0, 4 );
+
+//    QLabel* dropAllText = new QLabel( "Track" );
+//    dropAllText->setAlignment( Qt::AlignHCenter );
+//    dropMenuLayout->addWidget( dropAllText, 1, 0 );
+
+//    QLabel* dropAlbumText = new QLabel( "Album" );
+//    dropAlbumText->setAlignment( Qt::AlignHCenter );
+//    dropMenuLayout->addWidget( dropAlbumText, 1, 1 );
+
+//    QLabel* dropArtistText = new QLabel( "Artist" );
+//    dropArtistText->setAlignment( Qt::AlignHCenter );
+//    dropMenuLayout->addWidget( dropArtistText, 1, 2 );
+
+//    QLabel* dropLocalText = new QLabel( "Local" );
+//    dropLocalText->setAlignment( Qt::AlignHCenter );
+//    dropMenuLayout->addWidget( dropLocalText, 1, 3 );
+
+//    QLabel* dropTop10Text = new QLabel( "Top 10" );
+//    dropTop10Text->setAlignment( Qt::AlignHCenter );
+//    dropMenuLayout->addWidget( dropTop10Text, 1, 4 );
 
 }
 
@@ -579,10 +609,17 @@ AudioControls::dragEnterEvent( QDragEnterEvent* e )
     {
         e->acceptProposedAction();
 
-        m_dragAnimation->setStartValue( 0 );
-        m_dragAnimation->setEndValue( ui->metaDataArea->height() );
-        m_dragAnimation->setDirection( QAbstractAnimation::Forward );
-        m_dragAnimation->start();
+        m_dropAreaCollapseTimer.stop();
+
+        if( !m_dropAreaExpanded )
+        {
+            m_dragAnimation->stop();
+            m_dragAnimation->setDirection( QAbstractAnimation::Forward );
+            m_dragAnimation->setStartValue( dropAreaSize() );
+            m_dragAnimation->setEndValue( ui->metaDataArea->height() );
+            m_dragAnimation->start();
+            m_dropAreaExpanded = true;
+        }
     }
 }
 
@@ -598,12 +635,21 @@ AudioControls::dragMoveEvent( QDragMoveEvent* /* e */ )
 void
 AudioControls::dragLeaveEvent( QDragLeaveEvent * )
 {
-    ui->metaDataInfoArea->setMaximumHeight( 1000 );
-    ui->metaDataDropArea->setMaximumHeight( 0 );
+    if( !ui->metaDataDropArea->hovered() )
+        m_dropAreaCollapseTimer.start();
+}
 
-    m_dragAnimation->setDirection( QAbstractAnimation::Backward );
+
+void
+AudioControls::collapseDropMenu()
+{
+    m_dropAreaExpanded = false;
+
+    m_dragAnimation->stop();
+//    m_dragAnimation->setDirection( QAbstractAnimation::Backward );
+    m_dragAnimation->setStartValue( dropAreaSize() );
+    m_dragAnimation->setEndValue( 0 );
     m_dragAnimation->start();
-
 }
 
 
@@ -615,7 +661,10 @@ AudioControls::dropEvent( QDropEvent* e )
     {
         DropJob *dj = new DropJob();
         connect( dj, SIGNAL( tracks( QList<Tomahawk::query_ptr> ) ), this, SLOT( droppedTracks( QList<Tomahawk::query_ptr> ) ) );
+        dj->setDropFlags( ui->metaDataDropArea->activeEntry()->dropFlags() );
         dj->tracksFromMimeData( e->mimeData() );
+
+        QTimer::singleShot( 0, this, SLOT( collapseDropMenu() ) );
 
         e->accept();
     }
@@ -687,4 +736,10 @@ AudioControls::setDropAreaSize( int size )
 {
     ui->metaDataDropArea->setMaximumHeight( size );
     ui->metaDataInfoArea->setMaximumHeight( ui->metaDataArea->height() - size );
+}
+
+void
+AudioControls::dropReceived( QDropEvent *event )
+{
+    dropEvent( event );
 }

@@ -22,10 +22,12 @@
 #include <QWidget>
 #include <QTimeLine>
 #include <QPropertyAnimation>
+#include <QTimer>
 
 #include "result.h"
 #include "playlistinterface.h"
 #include "infosystem/infosystem.h"
+#include "utils/dropmenu.h"
 
 class QDropEvent;
 class QDragEnterEvent;
@@ -88,7 +90,9 @@ private slots:
 
     void socialActionsLoaded();
 
+    void collapseDropMenu();
     void dragAnimationFinished();
+    void dropReceived( QDropEvent *event );
 
 private:
     Ui::AudioControls *ui;
@@ -103,6 +107,8 @@ private:
     qint64 m_seekMsecs;
 
     QPropertyAnimation *m_dragAnimation;
+    bool m_dropAreaExpanded;
+    QTimer m_dropAreaCollapseTimer;
 };
 
 #endif // AUDIOCONTROLS_H

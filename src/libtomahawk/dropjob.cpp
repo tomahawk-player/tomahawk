@@ -34,6 +34,7 @@ using namespace Tomahawk;
 DropJob::DropJob( QObject *parent )
     : QObject( parent )
     , m_queryCount( 0 )
+    , m_dropFlags( DropFlagsNone )
 {
 }
 
@@ -98,31 +99,72 @@ DropJob::acceptsMimeData( const QMimeData* data, bool tracksOnly )
 void
 DropJob::setGetWholeArtists( bool getWholeArtists )
 {
-    m_getWholeArtists = getWholeArtists;
+    if( getWholeArtists )
+        m_dropFlags |= DropFlagArtist;
+    else
+        m_dropFlags &= !DropFlagArtist;
 }
 
 void
 DropJob::setGetWholeAlbums( bool getWholeAlbums )
 {
-    m_getWholeAlbums = getWholeAlbums;
+    if ( getWholeAlbums )
+        m_dropFlags |= DropFlagAlbum;
+    else
+        m_dropFlags &= !DropFlagAlbum;
 }
 
 
 void
-DropJob::tracksFromMimeData( const QMimeData* data, bool allowDuplicates, bool onlyLocal, bool top10 )
+DropJob::setGetTop10( bool top10 )
 {
-    m_allowDuplicates = allowDuplicates;
-    m_onlyLocal = onlyLocal;
-    m_top10 = top10;
+    if( top10 )
+        m_dropFlags |= DropFlagTop10;
+    else
+        m_dropFlags &= !DropFlagTop10;
+}
+
+
+void
+DropJob::setOnlyLocal( bool onlyLocal )
+{
+    if( onlyLocal )
+        m_dropFlags |= DropFlagLocal;
+    else
+        m_dropFlags &= !DropFlagLocal;
+}
+
+
+void
+DropJob::setAllowDuplicates( bool allowDuplicates )
+{
+    if( allowDuplicates )
+        m_dropFlags |= DropFlagAllowDuplicates;
+    else
+        m_dropFlags &= !DropFlagAllowDuplicates;
+}
+
+
+void
+DropJob::setDropFlags( DropFlags flags )
+{
+    m_dropFlags = flags;
+}
+
+
+void
+DropJob::tracksFromMimeData( const QMimeData* data )
+{
+
 
     parseMimeData( data );
 
     if ( m_queryCount == 0 )
     {
-        if ( onlyLocal )
+        if ( m_dropFlags.testFlag( DropFlagLocal ) )
             removeRemoteSources();
 
-        if ( !allowDuplicates )
+        if ( !m_dropFlags.testFlag( DropFlagAllowDuplicates ) )
             removeDuplicates();
 
         emit tracks( m_resultList );
@@ -171,15 +213,15 @@ DropJob::tracksFromQueryList( const QMimeData* data )
         {
             tDebug() << "Dropped query item:" << query->data()->artist() << "-" << query->data()->track();
 
-            if ( m_top10 )
+            if ( m_dropFlags.testFlag( DropFlagTop10 ) )
             {
                 getTopTen( query->data()->artist() );
             }
-            else if ( m_getWholeArtists )
+            else if ( m_dropFlags.testFlag( DropFlagArtist ) )
             {
                 queries << getArtist( query->data()->artist() );
             }
-            else if ( m_getWholeAlbums )
+            else if ( m_dropFlags.testFlag( DropFlagAlbum ) )
             {
                 queries << getAlbum( query->data()->artist(), query->data()->album() );
             }
@@ -211,15 +253,15 @@ DropJob::tracksFromResultList( const QMimeData* data )
             tDebug() << "Dropped result item:" << result->data()->artist()->name() << "-" << result->data()->track();
             query_ptr q = result->data()->toQuery();
 
-            if ( m_top10 )
+            if ( m_dropFlags.testFlag( DropFlagTop10 ) )
             {
                 getTopTen( q->artist() );
             }
-            else if ( m_getWholeArtists )
+            else if ( m_dropFlags.testFlag( DropFlagArtist ) )
             {
                 queries << getArtist( q->artist() );
             }
-            else if ( m_getWholeAlbums )
+            else if ( m_dropFlags.testFlag( DropFlagAlbum ) )
             {
                 queries << getAlbum( q->artist(), q->album() );
             }
@@ -248,9 +290,9 @@ DropJob::tracksFromAlbumMetaData( const QMimeData *data )
         QString album;
         stream >> album;
 
-        if ( m_top10 )
+        if ( m_dropFlags.testFlag( DropFlagTop10 ) )
             getTopTen( artist );
-        else if ( m_getWholeArtists )
+        else if ( m_dropFlags.testFlag( DropFlagArtist ) )
             queries << getArtist( artist );
         else
             queries << getAlbum( artist, album );
@@ -270,14 +312,10 @@ DropJob::tracksFromArtistMetaData( const QMimeData *data )
         QString artist;
         stream >> artist;
 
-        if ( !m_top10 )
-        {
-            queries << getArtist( artist );
-        }
-        else
-        {
+        if ( m_dropFlags.testFlag( DropFlagTop10 ) )
             getTopTen( artist );
-        }
+        else
+            queries << getArtist( artist );
     }
     return queries;
 }
@@ -381,10 +419,10 @@ DropJob::onTracksAdded( const QList<Tomahawk::query_ptr>& tracksList )
 
     if ( --m_queryCount == 0 )
     {
-        if ( m_onlyLocal )
+        if ( m_dropFlags.testFlag( DropFlagLocal ) )
             removeRemoteSources();
 
-        if ( !m_allowDuplicates )
+        if ( !m_dropFlags.testFlag( DropFlagAllowDuplicates ) )
             removeDuplicates();
 
         emit tracks( m_resultList );

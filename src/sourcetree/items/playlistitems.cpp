@@ -183,15 +183,12 @@ PlaylistItem::dropMimeData( const QMimeData* data, Qt::DropAction action )
     if ( dropType() == DropTypeLocalItems )
     {
         dj->setGetWholeArtists( true );
-        dj->tracksFromMimeData( data, false, true );
+        dj->setOnlyLocal( true );
     }
     else if ( dropType() == DropTypeTop50 )
-    {
-        dj->setGetWholeArtists( true );
-        dj->tracksFromMimeData( data, false, false, true );
-    }
-    else
-        dj->tracksFromMimeData( data, false, false );
+        dj->setGetTop10( true );
+
+    dj->tracksFromMimeData( data);
 
     // TODO cant' know if it works or not yet...
     return true;

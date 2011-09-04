@@ -183,6 +183,7 @@ set( libSources
     utils/rdioparser.cpp
     utils/shortenedlinkparser.cpp
     utils/stylehelper.cpp
+    utils/dropmenu.cpp
 
     widgets/newplaylistwidget.cpp
     widgets/searchwidget.cpp
@@ -381,6 +382,7 @@ set( libHeaders
     utils/rdioparser.h
     utils/shortenedlinkparser.h
     utils/stylehelper.h
+    utils/dropmenu.h
 
     widgets/newplaylistwidget.h
     widgets/searchwidget.h
