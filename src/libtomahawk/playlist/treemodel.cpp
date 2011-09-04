@@ -821,6 +821,7 @@ TreeModel::onDataChanged()
     emit dataChanged( p->index, p->index.sibling( p->index.row(), columnCount( QModelIndex() ) - 1 ) );
 }
 
+
 void
 TreeModel::setColumnStyle( TreeModel::ColumnStyle style )
 {

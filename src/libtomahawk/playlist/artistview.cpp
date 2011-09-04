@@ -178,6 +178,11 @@ ArtistView::resizeEvent( QResizeEvent* event )
 {
     QTreeView::resizeEvent( event );
     m_header->checkState();
+
+    if ( model()->columnCount( QModelIndex() ) == 1 )
+    {
+        m_header->resizeSection( 0, event->size().width() );
+    }
 }
 
 
@@ -333,5 +338,8 @@ ArtistView::jumpToCurrentTrack()
 QString
 ArtistView::guid() const
 {
-    return QString( "artistview/%1" ).arg( m_model->columnCount( QModelIndex() ) );
+    if ( m_guid.isEmpty() )
+        m_guid = QString( "artistview/%1" ).arg( m_model->columnCount( QModelIndex() ) );
+
+    return m_guid;
 }

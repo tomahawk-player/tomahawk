@@ -31,6 +31,7 @@ RelatedArtistsContext::RelatedArtistsContext()
     , m_infoId( uuid() )
 {
     m_relatedView = new ArtistView();
+    m_relatedView->setGuid( "RelatedArtistsContext" );
     m_relatedModel = new TreeModel( m_relatedView );
     m_relatedModel->setColumnStyle( TreeModel::TrackOnly );
     m_relatedView->setTreeModel( m_relatedModel );
