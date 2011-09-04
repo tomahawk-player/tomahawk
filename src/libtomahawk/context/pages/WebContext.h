@@ -16,42 +16,30 @@
  *   along with Tomahawk. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef HEADERLABEL_H
-#define HEADERLABEL_H
+#ifndef WEBCONTEXT_H
+#define WEBCONTEXT_H
 
-#include <QLabel>
-#include <QTime>
+#include <QGraphicsWebView>
 
 #include "dllmacro.h"
 
-/**
- * \class HeaderLabel
- * \brief A styled label for use in headers.
- */
-class DLLEXPORT HeaderLabel : public QLabel
+#include "query.h"
+#include "context/ContextPage.h"
+
+class DLLEXPORT WebContext : public Tomahawk::ContextPage
 {
 Q_OBJECT
 
 public:
-    HeaderLabel( QWidget* parent );
-    ~HeaderLabel();
+    WebContext();
+    ~WebContext();
 
-    QSize minimumSizeHint() const { return sizeHint(); }
-    QSize sizeHint() const;
-
-signals:
-    void clicked();
-
-protected:
-//    void changeEvent( QEvent* e );
-    void paintEvent( QPaintEvent* event );
-
-    void mousePressEvent( QMouseEvent* event );
-    void mouseReleaseEvent( QMouseEvent* event );
+    QGraphicsWebView* webView() const { return m_webView; }
+    virtual QGraphicsWidget* widget() { return m_webView; }
 
 private:
-    QWidget* m_parent;
-    QTime m_time;
+    QGraphicsWebView* m_webView;
+    Tomahawk::query_ptr m_query;
 };
 
-#endif // HEADERLABEL_H
+#endif // WEBCONTEXT_H

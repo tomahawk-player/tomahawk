@@ -467,7 +467,7 @@ GlobalActionManager::handleSearchCommand( const QUrl& url )
         return false;
 
     ViewManager::instance()->showSuperCollection();
-    ViewManager::instance()->topbar()->setFilter( queryStr );
+//    ViewManager::instance()->topbar()->setFilter( queryStr );
     return true;
 }
 

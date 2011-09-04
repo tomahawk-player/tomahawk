@@ -22,6 +22,7 @@
 #include <QMetaMethod>
 
 #include "audio/audioengine.h"
+#include "context/ContextWidget.h"
 #include "utils/animatedsplitter.h"
 #include "infobar/infobar.h"
 #include "topbar/topbar.h"
@@ -31,7 +32,6 @@
 #include "collectionview.h"
 #include "playlistmodel.h"
 #include "playlistview.h"
-#include "queueview.h"
 #include "trackproxymodel.h"
 #include "trackmodel.h"
 #include "artistview.h"
@@ -77,37 +77,27 @@ ViewManager::ViewManager( QObject* parent )
 
     m_widget->setLayout( new QVBoxLayout() );
 
-    m_topbar = new TopBar();
+//    m_topbar = new TopBar();
     m_infobar = new InfoBar();
     m_stack = new QStackedWidget();
 
-    m_splitter = new AnimatedSplitter();
+/*    m_splitter = new AnimatedSplitter();
     m_splitter->setOrientation( Qt::Vertical );
     m_splitter->setChildrenCollapsible( false );
     m_splitter->setGreedyWidget( 0 );
-    m_splitter->addWidget( m_stack );
+    m_splitter->addWidget( m_stack );*/
 
-    m_queueButton = new QPushButton();
-    m_queueButton->setSizePolicy( QSizePolicy::Preferred, QSizePolicy::Fixed );
-    m_queueButton->setText( tr( "Click to show queue" ) );
-#ifdef Q_OS_MAC
-    // QPushButtons on mac have lots of weird layouting issues. Fix them by forcing the widget rect for layout calculations
-    m_queueButton->setAttribute( Qt::WA_LayoutUsesWidgetRect  );
-#endif
+//    m_splitter->addWidget( m_queueView );
+//    m_splitter->hide( 1, false );
 
-    m_queueView = new QueueView( m_splitter );
-    m_queueModel = new PlaylistModel( m_queueView );
-    m_queueView->queue()->setPlaylistModel( m_queueModel );
-    m_queueView->queue()->playlistModel()->setReadOnly( false );
-    AudioEngine::instance()->setQueue( m_queueView->queue()->proxyModel() );
-
-    m_splitter->addWidget( m_queueView );
-    m_splitter->hide( 1, false );
+    m_contextWidget = new ContextWidget();
 
     m_widget->layout()->addWidget( m_infobar );
-    m_widget->layout()->addWidget( m_topbar );
-    m_widget->layout()->addWidget( m_splitter );
-    m_widget->layout()->addWidget( m_queueButton );
+//    m_widget->layout()->addWidget( m_topbar );
+//    m_widget->layout()->addWidget( m_splitter );
+    m_widget->layout()->addWidget( m_stack );
+    m_widget->layout()->addWidget( m_contextWidget );
+//    m_widget->layout()->addWidget( m_queueButton );
 
     m_superCollectionView = new ArtistView();
     m_superCollectionModel = new TreeModel( m_superCollectionView );
@@ -132,12 +122,11 @@ ViewManager::ViewManager( QObject* parent )
     connect( AudioEngine::instance(), SIGNAL( playlistChanged( Tomahawk::PlaylistInterface* ) ), this, SLOT( playlistInterfaceChanged( Tomahawk::PlaylistInterface* ) ) );
 
     connect( &m_filterTimer, SIGNAL( timeout() ), SLOT( applyFilter() ) );
-    connect( m_queueButton, SIGNAL( clicked() ), SLOT( showQueue() ) );
 
-    connect( m_topbar, SIGNAL( filterTextChanged( QString ) ), SLOT( setFilter( QString ) ) );
+/*    connect( m_topbar, SIGNAL( filterTextChanged( QString ) ), SLOT( setFilter( QString ) ) );
     connect( m_topbar, SIGNAL( flatMode() ), SLOT( setTableMode() ) );
     connect( m_topbar, SIGNAL( artistMode() ), SLOT( setTreeMode() ) );
-    connect( m_topbar, SIGNAL( albumMode() ), SLOT( setAlbumMode() ) );
+    connect( m_topbar, SIGNAL( albumMode() ), SLOT( setAlbumMode() ) );*/
 }
 
 
@@ -145,13 +134,6 @@ ViewManager::~ViewManager()
 {
     saveCurrentPlaylistSettings();
     delete m_widget;
-}
-
-
-PlaylistView*
-ViewManager::queue() const
-{
-    return m_queueView->queue();
 }
 
 
@@ -218,10 +200,10 @@ ViewManager::show( const Tomahawk::dynplaylist_ptr& playlist )
 
     setPage( m_dynamicWidgets.value( playlist ).data() );
 
-    if ( playlist->mode() == Tomahawk::OnDemand )
-        m_queueView->hide();
+/*    if ( playlist->mode() == Tomahawk::OnDemand )
+        hideQueue();
     else
-        m_queueView->show();
+        showQueue();*/
 
     emit numSourcesChanged( SourceList::instance()->count() );
 
@@ -492,42 +474,6 @@ ViewManager::setAlbumMode()
 
 
 void
-ViewManager::showQueue()
-{
-    if ( QThread::currentThread() != thread() )
-    {
-        qDebug() << "Reinvoking in correct thread:" << Q_FUNC_INFO;
-        QMetaObject::invokeMethod( this, "showQueue", Qt::QueuedConnection );
-        return;
-    }
-
-    m_queueButton->setText( tr( "Click to hide queue" ) );
-    disconnect( m_queueButton, SIGNAL( clicked() ), this, SLOT( showQueue() ) );
-    connect( m_queueButton, SIGNAL( clicked() ), SLOT( hideQueue() ) );
-
-    m_splitter->show( 1 );
-}
-
-
-void
-ViewManager::hideQueue()
-{
-    if ( QThread::currentThread() != thread() )
-    {
-        qDebug() << "Reinvoking in correct thread:" << Q_FUNC_INFO;
-        QMetaObject::invokeMethod( this, "hideQueue", Qt::QueuedConnection );
-        return;
-    }
-
-    m_queueButton->setText( tr( "Click to show queue" ) );
-    disconnect( m_queueButton, SIGNAL( clicked() ), this, SLOT( hideQueue() ) );
-    connect( m_queueButton, SIGNAL( clicked() ), SLOT( showQueue() ) );
-
-    m_splitter->hide( 1 );
-}
-
-
-void
 ViewManager::historyBack()
 {
     ViewPage* oldPage = m_pageHistory.takeFirst();
@@ -699,7 +645,7 @@ ViewManager::updateView()
         connect( currentPlaylistInterface()->object(), SIGNAL( shuffleModeChanged( bool ) ),
                                                        SIGNAL( shuffleModeChanged( bool ) ) );
 
-        m_topbar->setFilter( currentPlaylistInterface()->filter() );
+//        m_topbar->setFilter( currentPlaylistInterface()->filter() );
     }
 
     if ( currentPage()->showStatsBar() && currentPlaylistInterface() )
@@ -716,19 +662,19 @@ ViewManager::updateView()
         emit modeChanged( currentPlaylistInterface()->viewMode() );
     }
 
-    if ( currentPage()->queueVisible() )
-        m_queueView->show();
+/*    if ( currentPage()->queueVisible() )
+        showQueue();
     else
-        m_queueView->hide();
+        hideQueue();*/
 
     emit statsAvailable( currentPage()->showStatsBar() );
     emit modesAvailable( currentPage()->showModes() );
     emit filterAvailable( currentPage()->showFilter() );
 
-    if ( !currentPage()->showStatsBar() && !currentPage()->showModes() && !currentPage()->showFilter() )
+/*    if ( !currentPage()->showStatsBar() && !currentPage()->showModes() && !currentPage()->showFilter() )
         m_topbar->setVisible( false );
     else
-        m_topbar->setVisible( true );
+        m_topbar->setVisible( true );*/
 
     m_infobar->setVisible( currentPage()->showInfoBar() );
     m_infobar->setCaption( currentPage()->title() );

@@ -16,42 +16,28 @@
  *   along with Tomahawk. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef HEADERLABEL_H
-#define HEADERLABEL_H
+#include "WikipediaContext.h"
 
-#include <QLabel>
-#include <QTime>
+using namespace Tomahawk;
 
-#include "dllmacro.h"
 
-/**
- * \class HeaderLabel
- * \brief A styled label for use in headers.
- */
-class DLLEXPORT HeaderLabel : public QLabel
+void
+WikipediaContext::setQuery( const Tomahawk::query_ptr& query )
 {
-Q_OBJECT
+    if ( !m_query.isNull() && query->artist() == m_query->artist() )
+        return;
 
-public:
-    HeaderLabel( QWidget* parent );
-    ~HeaderLabel();
+    m_query = query;
+    webView()->load( QString( "http://en.wikipedia.org/w/index.php?printable=yes&title=%1" ).arg( query->artist() ) );
+}
 
-    QSize minimumSizeHint() const { return sizeHint(); }
-    QSize sizeHint() const;
 
-signals:
-    void clicked();
+void
+LastfmContext::setQuery( const Tomahawk::query_ptr& query )
+{
+    if ( !m_query.isNull() && query->artist() == m_query->artist() )
+        return;
 
-protected:
-//    void changeEvent( QEvent* e );
-    void paintEvent( QPaintEvent* event );
-
-    void mousePressEvent( QMouseEvent* event );
-    void mouseReleaseEvent( QMouseEvent* event );
-
-private:
-    QWidget* m_parent;
-    QTime m_time;
-};
-
-#endif // HEADERLABEL_H
+    m_query = query;
+    webView()->load( QString( "http://last.fm/music/%1" ).arg( query->artist() ) );
+}

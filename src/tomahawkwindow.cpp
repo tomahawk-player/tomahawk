@@ -43,7 +43,6 @@
 #include "sourcetree/sourcetreeview.h"
 #include "utils/animatedsplitter.h"
 #include "utils/proxystyle.h"
-#include "utils/widgetdragfilter.h"
 #include "utils/xspfloader.h"
 #include "widgets/newplaylistwidget.h"
 #include "widgets/searchwidget.h"
@@ -59,6 +58,7 @@
 #include "tomahawktrayicon.h"
 #include "playlist/dynamic/GeneratorInterface.h"
 #include "scanmanager.h"
+#include "playlist/queueview.h"
 #include "tomahawkapp.h"
 
 #ifdef Q_OS_WIN32
@@ -80,7 +80,10 @@ TomahawkWindow::TomahawkWindow( QWidget* parent )
 {
     setWindowIcon( QIcon( RESPATH "icons/tomahawk-icon-128x128.png" ) );
 
-    new ViewManager( this );
+    ViewManager* vm = new ViewManager( this );
+    connect( vm, SIGNAL( showQueueRequested() ), SLOT( showQueue() ) );
+    connect( vm, SIGNAL( hideQueueRequested() ), SLOT( hideQueue() ) );
+
     ui->setupUi( this );
     applyPlatformTweaks();
 
@@ -96,7 +99,8 @@ TomahawkWindow::TomahawkWindow( QWidget* parent )
 
     // set initial state
     onSipDisconnected();
-    ViewManager::instance()->showWelcomePage();
+    vm->setQueue( m_queueView );
+    vm->showWelcomePage();
 }
 
 
@@ -184,28 +188,49 @@ TomahawkWindow::setupSideBar()
     QWidget* sidebarWidget = new QWidget();
     sidebarWidget->setLayout( new QVBoxLayout() );
 
-    AnimatedSplitter* sidebar = new AnimatedSplitter();
-    sidebar->setOrientation( Qt::Vertical );
-    sidebar->setChildrenCollapsible( false );
+    m_sidebar = new AnimatedSplitter();
+    m_sidebar->setOrientation( Qt::Vertical );
+    m_sidebar->setChildrenCollapsible( false );
 
-    m_searchWidget = new QSearchField( sidebar );
+    m_searchWidget = new QSearchField( m_sidebar );
     m_searchWidget->setPlaceholderText( "Global Search..." );
     connect( m_searchWidget, SIGNAL( returnPressed() ), this, SLOT( onFilterEdited() ) );
 
     m_sourcetree = new SourceTreeView();
-    TransferView* transferView = new TransferView( sidebar );
-    PipelineStatusView* pipelineView = new PipelineStatusView( sidebar );
+    TransferView* transferView = new TransferView( m_sidebar );
+    PipelineStatusView* pipelineView = new PipelineStatusView( m_sidebar );
 
-    sidebar->addWidget( m_searchWidget );
-    sidebar->addWidget( m_sourcetree );
-    sidebar->addWidget( transferView );
-    sidebar->addWidget( pipelineView );
+    m_queueButton = new QPushButton();
+    m_queueButton->setSizePolicy( QSizePolicy::Preferred, QSizePolicy::Fixed );
+    m_queueButton->setText( tr( "Click to show queue" ) );
+    #ifdef Q_OS_MAC
+    // QPushButtons on mac have lots of weird layouting issues. Fix them by forcing the widget rect for layout calculations
+    m_queueButton->setAttribute( Qt::WA_LayoutUsesWidgetRect );
+    #endif
 
-    sidebar->setGreedyWidget( 1 );
-    sidebar->hide( 1, false );
-    sidebar->hide( 2, false );
+    connect( m_queueButton, SIGNAL( clicked() ), SLOT( showQueue() ) );
 
-    sidebarWidget->layout()->addWidget( sidebar );
+    m_queueView = new QueueView( m_sidebar );
+    m_queueModel = new PlaylistModel( m_queueView );
+    m_queueModel->setStyle( PlaylistModel::Short );
+    m_queueView->queue()->setPlaylistModel( m_queueModel );
+    m_queueView->queue()->playlistModel()->setReadOnly( false );
+    AudioEngine::instance()->setQueue( m_queueView->queue()->proxyModel() );
+
+    m_sidebar->addWidget( m_searchWidget );
+    m_sidebar->addWidget( m_sourcetree );
+    m_sidebar->addWidget( transferView );
+    m_sidebar->addWidget( pipelineView );
+    m_sidebar->addWidget( m_queueView );
+
+    m_sidebar->setGreedyWidget( 1 );
+    m_sidebar->hide( 1, false );
+    m_sidebar->hide( 2, false );
+    m_sidebar->hide( 3, false );
+    m_sidebar->hide( 4, false );
+
+    sidebarWidget->layout()->addWidget( m_sidebar );
+    sidebarWidget->layout()->addWidget( m_queueButton );
     sidebarWidget->setContentsMargins( 0, 0, 0, 0 );
     sidebarWidget->layout()->setContentsMargins( 0, 0, 0, 0 );
     sidebarWidget->layout()->setMargin( 0 );
@@ -224,6 +249,7 @@ TomahawkWindow::setupSideBar()
 
     ui->actionShowOfflineSources->setChecked( TomahawkSettings::instance()->showOfflineSources() );
 }
+
 
 void
 TomahawkWindow::setupUpdateCheck()
@@ -660,6 +686,42 @@ TomahawkWindow::onFilterEdited()
 {
     onSearch( m_searchWidget->text() );
     m_searchWidget->clear();
+}
+
+
+void
+TomahawkWindow::showQueue()
+{
+    if ( QThread::currentThread() != thread() )
+    {
+        qDebug() << "Reinvoking in correct thread:" << Q_FUNC_INFO;
+        QMetaObject::invokeMethod( this, "showQueue", Qt::QueuedConnection );
+        return;
+    }
+
+    m_queueButton->setText( tr( "Click to hide queue" ) );
+    disconnect( m_queueButton, SIGNAL( clicked() ), this, SLOT( showQueue() ) );
+    connect( m_queueButton, SIGNAL( clicked() ), SLOT( hideQueue() ) );
+
+    m_sidebar->show( 4 );
+}
+
+
+void
+TomahawkWindow::hideQueue()
+{
+    if ( QThread::currentThread() != thread() )
+    {
+        qDebug() << "Reinvoking in correct thread:" << Q_FUNC_INFO;
+        QMetaObject::invokeMethod( this, "hideQueue", Qt::QueuedConnection );
+        return;
+    }
+
+    m_queueButton->setText( tr( "Click to show queue" ) );
+    disconnect( m_queueButton, SIGNAL( clicked() ), this, SLOT( hideQueue() ) );
+    connect( m_queueButton, SIGNAL( clicked() ), SLOT( showQueue() ) );
+
+    m_sidebar->hide( 4 );
 }
 
 
