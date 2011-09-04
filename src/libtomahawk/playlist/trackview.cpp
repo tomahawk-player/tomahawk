@@ -142,7 +142,7 @@ TrackView::setTrackModel( TrackModel* model )
 
     setAcceptDrops( true );
 
-    if ( model->style() == TrackModel::Short )
+    if ( model->style() == TrackModel::Short || model->style() == TrackModel::ShortWithAvatars )
     {
         setHeaderHidden( true );
         setHorizontalScrollBarPolicy( Qt::ScrollBarAlwaysOff );
@@ -520,7 +520,7 @@ TrackView::mousePressEvent( QMouseEvent* event )
 {
     QTreeView::mousePressEvent( event );
 
-    if ( m_model->style() == TrackModel::Short || m_model->style() == TrackModel::ShortWithAvatars )
+    if ( m_model->style() != TrackModel::Detailed )
         return;
 
     QModelIndex idx = indexAt( event->pos() );

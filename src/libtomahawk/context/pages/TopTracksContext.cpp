@@ -36,8 +36,6 @@ TopTracksContext::TopTracksContext()
     m_topHitsModel->setStyle( TrackModel::Short );
     m_topHitsView->setPlaylistModel( m_topHitsModel );
     m_topHitsView->setVerticalScrollBarPolicy( Qt::ScrollBarAlwaysOff );
-    m_topHitsView->setHorizontalScrollBarPolicy( Qt::ScrollBarAlwaysOff );
-    m_topHitsView->setHeaderHidden( true );
 
     QPalette pal = m_topHitsView->palette();
     pal.setColor( QPalette::Window, QColor( 0, 0, 0, 0 ) );
