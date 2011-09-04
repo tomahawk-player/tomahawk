@@ -59,8 +59,6 @@ ArtistInfoWidget::ArtistInfoWidget( const Tomahawk::artist_ptr& artist, QWidget*
     m_relatedModel = new TreeModel( ui->relatedArtists );
     m_relatedModel->setColumnStyle( TreeModel::TrackOnly );
     ui->relatedArtists->setTreeModel( m_relatedModel );
-    ui->relatedArtists->setHorizontalScrollBarPolicy( Qt::ScrollBarAlwaysOff );
-    ui->relatedArtists->header()->setVisible( false );
 
     m_topHitsModel = new PlaylistModel( ui->topHits );
     m_topHitsModel->setStyle( TrackModel::Short );

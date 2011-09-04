@@ -129,6 +129,17 @@ ArtistView::setTreeModel( TreeModel* model )
     connect( m_proxyModel, SIGNAL( rowsInserted( QModelIndex, int, int ) ), SLOT( onViewChanged() ) );
 
     setAcceptDrops( false );
+
+    if ( model->columnStyle() == TreeModel::TrackOnly )
+    {
+        setHeaderHidden( true );
+        setHorizontalScrollBarPolicy( Qt::ScrollBarAlwaysOff );
+    }
+    else
+    {
+        setHeaderHidden( false );
+        setHorizontalScrollBarPolicy( Qt::ScrollBarAsNeeded );
+    }
 }
 
 

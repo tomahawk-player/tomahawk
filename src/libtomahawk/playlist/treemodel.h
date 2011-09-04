@@ -91,6 +91,7 @@ public:
 
     void getCover( const QModelIndex& index );
 
+    ColumnStyle columnStyle() const { return m_columnStyle; }
     void setColumnStyle( ColumnStyle style );
 
     virtual QString title() const { return m_title; }
