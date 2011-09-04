@@ -61,6 +61,7 @@ private slots:
     void onAnimationFinished();
 
 protected:
+    void paintEvent( QPaintEvent* e );
     void resizeEvent( QResizeEvent* e );
 
 private:
@@ -81,6 +82,7 @@ private:
     int m_currentView;
 
     Tomahawk::query_ptr m_query;
+    bool m_visible;
 };
 
 #endif // CONTEXTWIDGET_H

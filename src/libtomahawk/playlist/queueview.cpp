@@ -17,9 +17,11 @@
  */
 
 #include "queueview.h"
+#include "ui_queueview.h"
 
 #include <QVBoxLayout>
 
+#include "widgets/HeaderLabel.h"
 #include "playlist/queueproxymodel.h"
 #include "widgets/overlaywidget.h"
 #include "utils/logger.h"
@@ -29,19 +31,21 @@ using namespace Tomahawk;
 
 QueueView::QueueView( AnimatedSplitter* parent )
     : AnimatedWidget( parent )
+    , ui( new Ui::QueueView )
 {
-    setHiddenSize( QSize( 0, 0 ) );
-    setLayout( new QVBoxLayout() );
+    ui->setupUi( this );
+    TomahawkUtils::unmarginLayout( layout() );
+    setContentsMargins( 0, 0, 0, 0 );
 
-    m_queue = new PlaylistView( this );
-    m_queue->setProxyModel( new QueueProxyModel( this ) );
-    m_queue->setSizePolicy( QSizePolicy::Preferred, QSizePolicy::Ignored );
-    m_queue->setFrameShape( QFrame::NoFrame );
-    m_queue->setAttribute( Qt::WA_MacShowFocusRect, 0 );
-    m_queue->overlay()->setEnabled( false );
+    setHiddenSize( QSize( 0, 22 ) );
 
-    layout()->setMargin( 0 );
-    layout()->addWidget( m_queue );
+    ui->queue->setProxyModel( new QueueProxyModel( this ) );
+    ui->queue->setSizePolicy( QSizePolicy::Preferred, QSizePolicy::Ignored );
+    ui->queue->setFrameShape( QFrame::NoFrame );
+    ui->queue->setAttribute( Qt::WA_MacShowFocusRect, 0 );
+    ui->queue->overlay()->setEnabled( false );
+
+    connect( ui->toggleButton, SIGNAL( clicked() ), SLOT( show() ) );
 }
 
 
@@ -51,10 +55,36 @@ QueueView::~QueueView()
 }
 
 
+PlaylistView*
+QueueView::queue() const
+{
+    return ui->queue;
+}
+
+
+void
+QueueView::hide()
+{
+    disconnect( ui->toggleButton, SIGNAL( clicked() ), this, SLOT( hide() ) );
+    connect( ui->toggleButton, SIGNAL( clicked() ), SLOT( show() ) );
+    ui->toggleButton->setText( tr( "Show Queue" ) );
+    emit hideWidget();
+}
+
+
+void
+QueueView::show()
+{
+    disconnect( ui->toggleButton, SIGNAL( clicked() ), this, SLOT( show() ) );
+    connect( ui->toggleButton, SIGNAL( clicked() ), SLOT( hide() ) );
+    ui->toggleButton->setText( tr( "Hide Queue" ) );
+    emit showWidget();
+}
+
+
 void
 QueueView::onShown( QWidget* widget, bool animated )
 {
-    qDebug() << Q_FUNC_INFO << widget;
     if ( widget != this )
         return;
 
@@ -65,7 +95,6 @@ QueueView::onShown( QWidget* widget, bool animated )
 void
 QueueView::onHidden( QWidget* widget, bool animated )
 {
-    qDebug() << Q_FUNC_INFO << widget;
     if ( widget != this )
         return;
 

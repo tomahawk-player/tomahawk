@@ -26,6 +26,11 @@
 
 #include "dllmacro.h"
 
+namespace Ui
+{
+    class QueueView;
+}
+
 class DLLEXPORT QueueView : public AnimatedWidget
 {
 Q_OBJECT
@@ -34,7 +39,7 @@ public:
     explicit QueueView( AnimatedSplitter* parent );
     ~QueueView();
 
-    PlaylistView* queue() const { return m_queue; }
+    PlaylistView* queue() const;
 
     QSize sizeHint() const { return QSize( 0, 200 ); }
 
@@ -42,8 +47,11 @@ public slots:
     virtual void onShown( QWidget*, bool animated );
     virtual void onHidden( QWidget*, bool animated );
 
+    virtual void show();
+    virtual void hide();
+
 private:
-    PlaylistView* m_queue;
+    Ui::QueueView* ui;
 };
 
 #endif // QUEUEVIEW_H

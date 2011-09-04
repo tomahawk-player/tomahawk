@@ -41,8 +41,9 @@ using namespace Tomahawk;
 ContextWidget::ContextWidget( QWidget* parent )
     : QWidget( parent )
     , ui( new Ui::ContextWidget )
-    , m_minHeight( 24 )
+    , m_minHeight( 22 )
     , m_currentView( 0 )
+    , m_visible( false )
 {
     ui->setupUi( this );
     TomahawkUtils::unmarginLayout( layout() );
@@ -78,10 +79,6 @@ ContextWidget::ContextWidget( QWidget* parent )
 
     ui->contextView->hide();
 
-    QPalette p = palette();
-    p.setBrush( QPalette::Window, QColor( 0x70, 0x70, 0x70 ) );
-    setPalette( p );
-
     QPalette whitePal = ui->toggleButton->palette();
     whitePal.setColor( QPalette::Foreground, Qt::white );
     ui->toggleButton->setPalette( whitePal );
@@ -94,6 +91,10 @@ ContextWidget::ContextWidget( QWidget* parent )
 
     setAutoFillBackground( true );
     setFixedHeight( m_minHeight );
+
+    QPalette pal = palette();
+    pal.setBrush( QPalette::Window, QColor( 0x70, 0x70, 0x70 ) );
+    setPalette( pal );
 
     connect( ui->toggleButton, SIGNAL( clicked() ), SLOT( toggleSize() ) );
 
@@ -247,6 +248,7 @@ ContextWidget::toggleSize()
     else
     {
         ui->toggleButton->setText( tr( "Open Dashboard" ) );
+        m_visible = false;
         ui->contextView->hide();
 
         m_timeLine->setFrameRange( m_minHeight, height() );
@@ -269,6 +271,7 @@ ContextWidget::onAnimationFinished()
     if ( m_timeLine->direction() == QTimeLine::Forward )
     {
         setFixedHeight( m_maxHeight );
+        m_visible = true;
         ui->contextView->show();
 
         fadeOut( false );
@@ -284,10 +287,20 @@ ContextWidget::onAnimationFinished()
 
 
 void
+ContextWidget::paintEvent( QPaintEvent* e )
+{
+    QWidget::paintEvent( e );
+}
+
+
+void
 ContextWidget::resizeEvent( QResizeEvent* e )
 {
     QWidget::resizeEvent( e );
 
-    m_scene->setSceneRect( ui->contextView->viewport()->rect() );
-    layoutViews( false );
+    if ( m_visible )
+    {
+        m_scene->setSceneRect( ui->contextView->viewport()->rect() );
+        layoutViews( false );
+    }
 }
