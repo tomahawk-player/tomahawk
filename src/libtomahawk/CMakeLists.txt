@@ -431,6 +431,7 @@ set( libUI ${libUI}
     widgets/infowidgets/AlbumInfoWidget.ui
     playlist/topbar/topbar.ui
     playlist/infobar/infobar.ui
+    playlist/queueview.ui
     context/ContextWidget.ui
 )
 

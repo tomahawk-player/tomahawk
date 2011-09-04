@@ -151,7 +151,7 @@ AnimatedWidget::AnimatedWidget( AnimatedSplitter* parent )
 {
     m_timeLine = new QTimeLine( ANIMATION_TIME, this );
     m_timeLine->setUpdateInterval( 20 );
-    m_timeLine->setEasingCurve( QEasingCurve::OutBack );
+    m_timeLine->setEasingCurve( QEasingCurve::OutCubic );
 
     connect( m_timeLine, SIGNAL( frameChanged( int ) ), SLOT( onAnimationStep( int ) ) );
     connect( m_timeLine, SIGNAL( finished() ), SLOT( onAnimationFinished() ) );

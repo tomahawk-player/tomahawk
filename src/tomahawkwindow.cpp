@@ -200,16 +200,6 @@ TomahawkWindow::setupSideBar()
     TransferView* transferView = new TransferView( m_sidebar );
     PipelineStatusView* pipelineView = new PipelineStatusView( m_sidebar );
 
-    m_queueButton = new QPushButton();
-    m_queueButton->setSizePolicy( QSizePolicy::Preferred, QSizePolicy::Fixed );
-    m_queueButton->setText( tr( "Click to show queue" ) );
-    #ifdef Q_OS_MAC
-    // QPushButtons on mac have lots of weird layouting issues. Fix them by forcing the widget rect for layout calculations
-    m_queueButton->setAttribute( Qt::WA_LayoutUsesWidgetRect );
-    #endif
-
-    connect( m_queueButton, SIGNAL( clicked() ), SLOT( showQueue() ) );
-
     m_queueView = new QueueView( m_sidebar );
     m_queueModel = new PlaylistModel( m_queueView );
     m_queueModel->setStyle( PlaylistModel::Short );
@@ -230,7 +220,6 @@ TomahawkWindow::setupSideBar()
     m_sidebar->hide( 4, false );
 
     sidebarWidget->layout()->addWidget( m_sidebar );
-    sidebarWidget->layout()->addWidget( m_queueButton );
     sidebarWidget->setContentsMargins( 0, 0, 0, 0 );
     sidebarWidget->layout()->setContentsMargins( 0, 0, 0, 0 );
     sidebarWidget->layout()->setMargin( 0 );
@@ -699,11 +688,7 @@ TomahawkWindow::showQueue()
         return;
     }
 
-    m_queueButton->setText( tr( "Click to hide queue" ) );
-    disconnect( m_queueButton, SIGNAL( clicked() ), this, SLOT( showQueue() ) );
-    connect( m_queueButton, SIGNAL( clicked() ), SLOT( hideQueue() ) );
-
-    m_sidebar->show( 4 );
+    m_queueView->show();
 }
 
 
@@ -717,11 +702,7 @@ TomahawkWindow::hideQueue()
         return;
     }
 
-    m_queueButton->setText( tr( "Click to show queue" ) );
-    disconnect( m_queueButton, SIGNAL( clicked() ), this, SLOT( hideQueue() ) );
-    connect( m_queueButton, SIGNAL( clicked() ), SLOT( showQueue() ) );
-
-    m_sidebar->hide( 4 );
+    m_queueView->hide();
 }
 
 
