@@ -468,7 +468,7 @@ TrackView::updateHoverIndex( const QPoint& pos )
         repaint();
     }
 
-    if ( m_model->style() == TrackModel::Short )
+    if ( m_model->style() == TrackModel::Short || m_model->style() == TrackModel::ShortWithAvatars )
         return;
 
     if ( idx.column() == TrackModel::Artist || idx.column() == TrackModel::Album )
@@ -519,8 +519,11 @@ void
 TrackView::mousePressEvent( QMouseEvent* event )
 {
     QTreeView::mousePressEvent( event );
-    QModelIndex idx = indexAt( event->pos() );
 
+    if ( m_model->style() == TrackModel::Short || m_model->style() == TrackModel::ShortWithAvatars )
+        return;
+
+    QModelIndex idx = indexAt( event->pos() );
     if ( event->pos().x() > header()->sectionViewportPosition( idx.column() ) + header()->sectionSize( idx.column() ) - 16 &&
          event->pos().x() < header()->sectionViewportPosition( idx.column() ) + header()->sectionSize( idx.column() ) )
     {
