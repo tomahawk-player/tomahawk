@@ -98,6 +98,7 @@ void
 TrackView::setGuid( const QString& guid )
 {
     m_guid = guid;
+    m_header->setGuid( guid );
 }
 
 

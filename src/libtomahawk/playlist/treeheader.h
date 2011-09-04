@@ -19,14 +19,12 @@
 #ifndef TREEHEADER_H
 #define TREEHEADER_H
 
-#include <QHeaderView>
-#include <QSignalMapper>
-
+#include "ViewHeader.h"
 #include "dllmacro.h"
 
 class ArtistView;
 
-class DLLEXPORT TreeHeader : public QHeaderView
+class DLLEXPORT TreeHeader : public ViewHeader
 {
 Q_OBJECT
 
@@ -34,28 +32,8 @@ public:
     explicit TreeHeader( ArtistView* parent = 0 );
     ~TreeHeader();
 
-    int visibleSectionCount() const;
-
-public slots:
-    void toggleVisibility( int index );
-    void checkState();
-
-protected:
-    void contextMenuEvent( QContextMenuEvent* e );
-
-private slots:
-    void onSectionResized();
-    void onToggleResizeColumns();
-
 private:
-    void addColumnToMenu( int index );
-
     ArtistView* m_parent;
-
-    QMenu* m_menu;
-    QSignalMapper* m_sigmap;
-    QList<QAction*> m_visActions;
-    bool m_init;
 };
 
 #endif

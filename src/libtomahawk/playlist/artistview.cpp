@@ -128,6 +128,7 @@ ArtistView::setTreeModel( TreeModel* model )
     connect( m_proxyModel, SIGNAL( filterChanged( QString ) ), SLOT( onFilterChanged( QString ) ) );
     connect( m_proxyModel, SIGNAL( rowsInserted( QModelIndex, int, int ) ), SLOT( onViewChanged() ) );
 
+    guid(); // this will set the guid on the header
     setAcceptDrops( false );
 
     if ( model->columnStyle() == TreeModel::TrackOnly )
@@ -350,7 +351,10 @@ QString
 ArtistView::guid() const
 {
     if ( m_guid.isEmpty() )
+    {
         m_guid = QString( "artistview/%1" ).arg( m_model->columnCount( QModelIndex() ) );
+        m_header->setGuid( m_guid );
+    }
 
     return m_guid;
 }

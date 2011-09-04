@@ -71,9 +71,7 @@ WelcomeWidget::WelcomeWidget( QWidget* parent )
     ui->playlistWidget->setItemDelegate( new PlaylistDelegate() );
     ui->playlistWidget->setModel( model );
     ui->playlistWidget->overlay()->resize( 380, 86 );
-#ifdef Q_OS_MAC
     ui->playlistWidget->setVerticalScrollMode( QAbstractItemView::ScrollPerPixel );
-#endif
 
     connect( model, SIGNAL( emptinessChanged( bool) ), this, SLOT( updatePlaylists() ) );
 
