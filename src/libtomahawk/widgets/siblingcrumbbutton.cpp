@@ -142,6 +142,9 @@ void SiblingCrumbButton::comboboxActivated(int i)
     if( count > 0 ) {
         qDebug() << "activated" << activated.child(0,0).data().toString();
         breadcrumbBar()->currentChangedTriggered(activated.child(0,0));
+    } else {
+        // if it has no children, then emit itself
+        breadcrumbBar()->currentChangedTriggered(activated);
     }
 }
 
