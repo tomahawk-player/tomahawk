@@ -1,4 +1,8 @@
 Version 0.3.0:
+    * Added Charts page, which shows various sources' top hits & artists.
+    * The Collection tree-views can now be filtered.
+    * Moved the song queue below to the left, below the sidebar.
+    * Added Footnotes, a contextual view that you can slide it.
     * Show recently added playlists in dashboard rather than recently opened
       playlists.
     * Added MPRIS 2.1 support.
