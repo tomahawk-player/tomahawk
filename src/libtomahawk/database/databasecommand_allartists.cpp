@@ -45,7 +45,7 @@ DatabaseCommand_AllArtists::exec( DatabaseImpl* dbi )
 
     if ( !m_filter.isEmpty() )
     {
-        filterToken = QString( "AND file_join.track = track.id AND ( artist.name LIKE :filter OR track.name LIKE :filter )" );
+        filterToken = QString( "AND file_join.track = track.id AND ( artist.name LIKE :filterA OR track.name LIKE :filterT )" );
         tables = "artist, track, file, file_join";
     }
     else
@@ -66,7 +66,10 @@ DatabaseCommand_AllArtists::exec( DatabaseImpl* dbi )
 
     query.prepare( sql );
     if ( !m_filter.isEmpty() )
-        query.bindValue( ":filter", QString( "%%1%" ).arg( m_filter ) );
+    {
+        query.bindValue( ":filterA", QString( "%%1%" ).arg( m_filter ) );
+        query.bindValue( ":filterT", QString( "%%1%" ).arg( m_filter ) );
+    }
 
     query.exec();
 
