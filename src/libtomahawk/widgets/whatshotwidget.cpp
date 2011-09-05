@@ -145,7 +145,7 @@ WhatsHotWidget::fetchData()
     requestData.type = Tomahawk::InfoSystem::InfoChartTracks;
     Tomahawk::InfoSystem::InfoSystem::instance()->getInfo( requestData );
     */
-    tDebug() << "WhatsHot: requested InfoChartArtists+Tracks";
+    tDebug() << "WhatsHot: requested InfoChartCapabilities";
 }
 
 
@@ -190,25 +190,28 @@ WhatsHotWidget::infoSystemInfo( Tomahawk::InfoSystem::InfoRequestData requestDat
             ui->breadCrumbLeft->currentChangedTriggered(m_crumbModelLeft->index(0,0).child(0,0));
             break;
         }
-        case InfoSystem::InfoChartArtists:
+        case InfoSystem::InfoChart:
         {
-            const QStringList artists = returnedData["artists"].toStringList();
-            tDebug() << "WhatsHot: got artists! " << artists.size();
-            tDebug() << artists;
-            foreach ( const QString& artist, artists )
-            {
-                m_artistsModel->addArtists( Artist::get( artist ) );
-            }
-            break;
-        }
-        case InfoSystem::InfoChartTracks:
-        {
-            const QList<Tomahawk::InfoSystem::ArtistTrackPair> tracks = returnedData["tracks"].value<QList<Tomahawk::InfoSystem::ArtistTrackPair> >();
-            tDebug() << "WhatsHot: got tracks! " << tracks.size();
-            foreach ( const Tomahawk::InfoSystem::ArtistTrackPair& track, tracks )
-            {
-                query_ptr query = Query::get( track.artist, track.track, QString(), uuid() );
-                m_tracksModel->append( query );
+            if( !returnedData.contains("type") )
+                break;
+            const QString type = returnedData["type"].toString();
+            if( !returnedData.contains(type) )
+                break;
+            tDebug() << "WhatsHot: got chart! " << type;
+            if( type == "artists" ) {
+                const QStringList artists = returnedData["artists"].toStringList();
+                tDebug() << "WhatsHot: got artists! " << artists.size();
+                foreach ( const QString& artist, artists )
+                    m_artistsModel->addArtists( Artist::get( artist ) );
+            } else if( type == "tracks" ) {
+                const QList<Tomahawk::InfoSystem::ArtistTrackPair> tracks = returnedData["tracks"].value<QList<Tomahawk::InfoSystem::ArtistTrackPair> >();
+                tDebug() << "WhatsHot: got tracks! " << tracks.size();
+                foreach ( const Tomahawk::InfoSystem::ArtistTrackPair& track, tracks ) {
+                    query_ptr query = Query::get( track.artist, track.track, QString(), uuid() );
+                    m_tracksModel->append( query );
+                }
+            } else {
+                tDebug() << "WhatsHot: got unknown chart type" << type;
             }
             break;
         }
@@ -245,9 +248,16 @@ QStandardItem*
 WhatsHotWidget::parseNode(QStandardItem* parentItem, const QString &label, const QVariant &data)
 {
     tDebug() << "WhatsHot:: parsing " << label;
-    QStandardItem *sourceItem = new QStandardItem(label);
 
-    if( data.canConvert<QVariantMap>() ) {
+    QStandardItem *sourceItem = new QStandardItem(label);
+    if( data.canConvert<QList<Tomahawk::InfoSystem::Chart> >() ) {
+        QList<Tomahawk::InfoSystem::Chart> charts = data.value<QList<Tomahawk::InfoSystem::Chart> >();
+        foreach( Tomahawk::InfoSystem::Chart chart, charts) {
+            QStandardItem *childItem= new QStandardItem(chart.label);
+            childItem->setData(chart.id);
+            sourceItem->appendRow(childItem);
+        }
+    } else if( data.canConvert<QVariantMap>() ) {
         QVariantMap dataMap = data.toMap();
         foreach(const QString childLabel,dataMap.keys()) {
             QStandardItem *childItem  = parseNode( sourceItem, childLabel, dataMap[childLabel] );

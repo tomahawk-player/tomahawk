@@ -22,6 +22,7 @@
 #include <QSettings>
 #include <QCryptographicHash>
 #include <QNetworkConfiguration>
+#include <QDomElement>
 
 #include "album.h"
 #include "typedefs.h"
@@ -49,7 +50,7 @@ LastFmPlugin::LastFmPlugin()
     : InfoPlugin()
     , m_scrobbler( 0 )
 {
-    m_supportedGetTypes << InfoAlbumCoverArt << InfoArtistImages << InfoArtistSimilars << InfoArtistSongs << InfoChartArtists << InfoChartTracks << InfoChartCapabilities;
+    m_supportedGetTypes << InfoAlbumCoverArt << InfoArtistImages << InfoArtistSimilars << InfoArtistSongs << InfoChart << InfoChartCapabilities;
     m_supportedPushTypes << InfoSubmitScrobble << InfoSubmitNowPlaying << InfoLove << InfoUnLove;
 
 /*
@@ -150,13 +151,10 @@ LastFmPlugin::getInfo( uint requestId, Tomahawk::InfoSystem::InfoRequestData req
             fetchTopTracks( requestId, requestData );
             break;
 
-        case InfoChartArtists:
-            fetchChartArtists( requestId, requestData );
+        case InfoChart:
+            fetchChart( requestId, requestData );
             break;
 
-        case InfoChartTracks:
-            fetchChartTracks( requestId, requestData );
-            break;
         case InfoChartCapabilities:
             fetchChartCapabilities( requestId, requestData );
             break;
@@ -312,7 +310,7 @@ LastFmPlugin::fetchTopTracks( uint requestId, Tomahawk::InfoSystem::InfoRequestD
 }
 
 void
-LastFmPlugin::fetchChartArtists( uint requestId, Tomahawk::InfoSystem::InfoRequestData requestData )
+LastFmPlugin::fetchChart( uint requestId, Tomahawk::InfoSystem::InfoRequestData requestData )
 {
     if ( !requestData.input.canConvert< Tomahawk::InfoSystem::InfoCriteriaHash >() )
     {
@@ -321,33 +319,16 @@ LastFmPlugin::fetchChartArtists( uint requestId, Tomahawk::InfoSystem::InfoReque
     }
     InfoCriteriaHash hash = requestData.input.value< Tomahawk::InfoSystem::InfoCriteriaHash >();
     Tomahawk::InfoSystem::InfoCriteriaHash criteria;
-    if ( hash.contains( "country" ) )
-    {
-        criteria["country"] = hash["country"];
-    }
-
-    emit getCachedInfo( requestId, criteria, 2419200000, requestData );
-}
-
-
-void
-LastFmPlugin::fetchChartTracks( uint requestId, Tomahawk::InfoSystem::InfoRequestData requestData )
-{
-    if ( !requestData.input.canConvert< Tomahawk::InfoSystem::InfoCriteriaHash >() )
+    if ( !hash.contains( "chart_id" ) )
     {
         dataError( requestId, requestData );
         return;
-    }
-    InfoCriteriaHash hash = requestData.input.value< Tomahawk::InfoSystem::InfoCriteriaHash >();
-    Tomahawk::InfoSystem::InfoCriteriaHash criteria;
-    if ( hash.contains( "country" ) )
-    {
-        criteria["country"] = hash["country"];
+    } else {
+        criteria["chart_id"] = hash["chart_id"];
     }
 
-    emit getCachedInfo( requestId, criteria, 2419200000, requestData );
+    emit getCachedInfo( requestId, criteria, 0, requestData );
 }
-
 
 void
 LastFmPlugin::fetchChartCapabilities( uint requestId, Tomahawk::InfoSystem::InfoRequestData requestData )
@@ -360,7 +341,7 @@ LastFmPlugin::fetchChartCapabilities( uint requestId, Tomahawk::InfoSystem::Info
     InfoCriteriaHash hash = requestData.input.value< Tomahawk::InfoSystem::InfoCriteriaHash >();
     Tomahawk::InfoSystem::InfoCriteriaHash criteria;
 
-    emit getCachedInfo( requestId, criteria, 2419200000, requestData );
+    emit getCachedInfo( requestId, criteria, 0, requestData );
 }
 
 void
@@ -420,57 +401,38 @@ LastFmPlugin::notInCacheSlot( uint requestId, QHash<QString, QString> criteria, 
 
     switch ( requestData.type )
     {
-        case InfoChartArtists:
+        case InfoChart:
         {
-            tDebug() << "LastfmPlugin: InfoChartArtists notin cache, fetching";
+            tDebug() << "LastfmPlugin: InfoChart not in cache, fetching";
             QMap<QString, QString> args;
-            if( criteria.contains( "country" ) ) {
-                args["method"] = "geo.getTopArtists";
-                args["country"] = criteria["country"];
-            } else {
-                args["method"] = "chart.getTopArtists";
-            }
+            args["method"] = criteria["chart_id"];
             args["limit"] = "100";
             QNetworkReply* reply = lastfm::ws::get(args);
             reply->setProperty( "requestId", requestId );
             reply->setProperty( "requestData", QVariant::fromValue< Tomahawk::InfoSystem::InfoRequestData >( requestData ) );
 
-            connect( reply, SIGNAL( finished() ), SLOT( chartTopArtistsReturned() ) );
-            return;
-        }
-
-        case InfoChartTracks:
-        {
-            tDebug() << "LastfmPlugin: InfoChartTracks not in cache, fetching";
-            QMap<QString, QString> args;
-            if( criteria.contains( "country" ) ) {
-                args["method"] = "geo.getTopTracks";
-                args["country"] = criteria["country"];
-            } else {
-                args["method"] = "chart.getTopTracks";
-            }
-            args["limit"] = "100";
-            QNetworkReply* reply = lastfm::ws::get(args);
-            reply->setProperty( "requestId", requestId );
-            reply->setProperty( "requestData", QVariant::fromValue< Tomahawk::InfoSystem::InfoRequestData >( requestData ) );
-
-            connect( reply, SIGNAL( finished() ), SLOT( chartTopTracksReturned() ) );
+            connect( reply, SIGNAL( finished() ), SLOT( chartReturned() ) );
             return;
         }
 
         case InfoChartCapabilities:
         {
-            tDebug() << "LastfmPlugin: InfoChartCapabilities not in cache, fetching";
-            QString json("{'Last.fm': {'Tracks': ['Top Tracks','Hyped Tracks','Most Loved Tracks'],"
-                         "'Artists': ['Top Artists', 'Hyped Artists']}}");
-            json.replace("'", "\"");
-            QJson::Parser parser;
-            bool ok = false;
-            QVariantMap result = parser.parse (json.toUtf8(), &ok).toMap();
-            if(!ok) {
-                tDebug() << "Lastfm Plugin: parsing json failed";
-                return;
-            }
+            QList<Chart> track_charts;
+            track_charts.append(Chart("chart.getTopTracks", "Top Tracks", "tracks"));
+            track_charts.append(Chart("chart.getLovedTracks", "Loved Tracks", "tracks"));
+            track_charts.append(Chart("chart.getHypedTracks", "Hyped Tracks", "tracks"));
+
+            QList<Chart> artist_charts;
+            artist_charts.append(Chart("chart.getTopArtists", "Top Artists", "artists"));
+            artist_charts.append(Chart("chart.getHypedArtists", "Hyped Artists", "artists"));
+
+            QVariantMap charts;
+            charts.insert("Tracks", QVariant::fromValue<QList<Chart> >(track_charts));
+            charts.insert("Artists", QVariant::fromValue<QList<Chart> >(artist_charts));
+
+            QVariantMap result;
+            result.insert("Last.fm", QVariant::fromValue<QVariantMap>(charts));
+
             emit info(
                 requestId,
                 requestData,
@@ -571,57 +533,38 @@ LastFmPlugin::similarArtistsReturned()
 }
 
 void
-LastFmPlugin::chartTopArtistsReturned()
+LastFmPlugin::chartReturned()
 {
-    tDebug() << "LastfmPlugin: InfoChartArtists data returned!";
+    tDebug() << "LastfmPlugin: InfoChart data returned!";
     QNetworkReply* reply = qobject_cast<QNetworkReply*>( sender() );
-    QList<lastfm::Artist> list = lastfm::Artist::list( reply );
-    QStringList al;
-
-    tDebug() << "\tgot " << list.size() << " artists";
-
-    foreach ( const lastfm::Artist& a, list )
-        al << a.toString();
 
     QVariantMap returnedData;
-    returnedData["artists"] = al;
 
-    Tomahawk::InfoSystem::InfoRequestData requestData = reply->property( "requestData" ).value< Tomahawk::InfoSystem::InfoRequestData >();
+    if( replyIsTracks( reply) ) {
+        QList<lastfm::Track> tracks = parseTrackList( reply );
+        QList<ArtistTrackPair> top_tracks;
+        foreach( const lastfm::Track &t, tracks ) {
+            ArtistTrackPair pair;
+            pair.artist = t.artist().toString();
+            pair.track = t.title();
+            top_tracks << pair;
+        }
+        tDebug() << "LastFmPlugin:" << "\tgot " << top_tracks.size() << " tracks";
+        returnedData["tracks"] = QVariant::fromValue( top_tracks );
+        returnedData["type"] = "tracks";
 
-    emit info(
-        reply->property( "requestId" ).toUInt(),
-        requestData,
-        returnedData
-    );
-
-    Tomahawk::InfoSystem::InfoCriteriaHash origData = requestData.input.value< Tomahawk::InfoSystem::InfoCriteriaHash>();
-    Tomahawk::InfoSystem::InfoCriteriaHash criteria;
-    if( origData.contains("country") )
-        criteria["country"] = origData["country"];
-    emit updateCache( criteria, 2419200000, requestData.type, returnedData );
-}
-
-void
-LastFmPlugin::chartTopTracksReturned()
-{
-    tDebug() << "LastfmPlugin: InfoChartTracks data returned!";
-    QNetworkReply* reply = qobject_cast<QNetworkReply*>( sender() );
-    QList<lastfm::Track> tracks = parseTrackList( reply );
-
-    QList<ArtistTrackPair> top_tracks;
-
-    foreach( const lastfm::Track &t, tracks ) {
-        ArtistTrackPair pair;
-        pair.artist = t.artist().toString();
-        pair.track = t.title();
-        top_tracks << pair;
+    } else if( replyIsArtists( reply ) ) {
+        QList<lastfm::Artist> list = lastfm::Artist::list( reply );
+        QStringList al;
+        tDebug() << "LastFmPlugin:"<< "\tgot " << list.size() << " artists";
+        foreach ( const lastfm::Artist& a, list )
+            al << a.toString();
+        returnedData["artists"] = al;
+        returnedData["type"] = "artists";
+    } else {
+        tDebug() << "LastfmPlugin:: got non tracks and non artists";
     }
 
-    tDebug() << "\tgot " << top_tracks.size() << " tracks";
-
-    QVariantMap returnedData;
-    returnedData["tracks"] = QVariant::fromValue( top_tracks );
-
     Tomahawk::InfoSystem::InfoRequestData requestData = reply->property( "requestData" ).value< Tomahawk::InfoSystem::InfoRequestData >();
 
     emit info(
@@ -629,12 +572,7 @@ LastFmPlugin::chartTopTracksReturned()
         requestData,
         returnedData
     );
-
-    Tomahawk::InfoSystem::InfoCriteriaHash origData = requestData.input.value< Tomahawk::InfoSystem::InfoCriteriaHash>();
-    Tomahawk::InfoSystem::InfoCriteriaHash criteria;
-    if( origData.contains("country") )
-        criteria["country"] = origData["country"];
-    emit updateCache( criteria, 0, requestData.type, returnedData );
+    // TODO update cache
 }
 
 void
@@ -885,3 +823,32 @@ LastFmPlugin::parseTrackList( QNetworkReply * reply )
     return tracks;
 }
 
+bool
+LastFmPlugin::replyIsTracks( QNetworkReply *reply )
+{
+    try {
+        lastfm::XmlQuery lfm = lastfm::ws::parse(reply);
+        QDomElement e(lfm["tracks"]);
+        return !e.isNull();
+    }
+    catch (lastfm::ws::ParseError& e)
+    {
+        qWarning() << e.what();
+        return false;
+    }
+}
+
+bool
+LastFmPlugin::replyIsArtists( QNetworkReply *reply )
+{
+    try {
+        lastfm::XmlQuery lfm = lastfm::ws::parse(reply);
+        QDomElement e(lfm["artists"]);
+        return !e.isNull();
+    }
+    catch (lastfm::ws::ParseError& e)
+    {
+        qWarning() << e.what();
+        return false;
+    }
+}
