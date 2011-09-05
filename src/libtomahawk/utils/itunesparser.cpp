@@ -60,7 +60,7 @@ void
 ItunesParser::lookupUrl( const QString& link )
 {
     qDebug() << Q_FUNC_INFO;
-    if( link.contains( "album" ) && link.contains( "?i="))
+    if( link.contains( "album" ) )// && link.contains( "?i="))
         lookupTrack(link);
 
     else return; // We only support tracks and playlists
@@ -72,22 +72,37 @@ ItunesParser::lookupTrack( const QString& link )
 {
 
     tDebug() << "Got a QString " << link;
-    if ( !link.contains( "album" ) && !link.contains( "?i=" )) // we only support track links atm
+    if ( !link.contains( "album" ) ) //&& !link.contains( "?i=" )) // we only support track links atm
         return;
 
-     QRegExp rxlen("(\\d+)(?:\\?i=)(\\d+)(?:\\s*)");
-     QString albumId;
-     QString trackId;
-     int pos = rxlen.indexIn(link);
+    // Itunes uri parsing, using regex
+    // (\d+)(?:\?i=*)(\d+) = AlbumId and trackId
+    // (\d+)(?:\s*) = albumId
+    QRegExp rxAlbumTrack( "(\\d+)(?:\\?i=*)(\\d+)" );
+    QRegExp rxAlbum( "(\\d+)(?:\\s*)" );
+    QString albumId, trackId;
+
+    // Doing a parse on regex in 2 stages,
+    // first, look if we have both album and track id
+     int pos = rxAlbumTrack.indexIn(link);
+
      if (pos > -1) {
-         albumId = rxlen.cap(1);
-         trackId = rxlen.cap(2);
-     }else return;
+         albumId = rxAlbumTrack.cap(1);
+         trackId = rxAlbumTrack.cap(2);
+     }else{
+
+         // Second, if we dont have trackId, check for just albumid
+         int pos = rxAlbum.indexIn(link);
+         if (pos > -1) {
+             albumId = rxAlbum.cap(1);
+         }else return;
+
+     }
 
     qDebug() << "Got Itunes link with Albumid " << albumId << "and trackid " <<trackId;
     tLog() << "Parsing itunes track:" << link;
 
-    QUrl url = QUrl( QString( "http://ax.phobos.apple.com.edgesuite.net/WebObjects/MZStoreServices.woa/wa/wsLookup?id=%1&entity=song" ).arg( trackId ) );
+    QUrl url = QUrl( QString( "http://ax.phobos.apple.com.edgesuite.net/WebObjects/MZStoreServices.woa/wa/wsLookup?id=%1&entity=song" ).arg( ( trackId.isEmpty() ? albumId : trackId ) ) );
     tDebug() << "Looking up..." << url.toString();
 
     QNetworkReply* reply = TomahawkUtils::nam()->get( QNetworkRequest( url ) );
@@ -121,27 +136,27 @@ ItunesParser::itunesTrackLookupFinished()
             checkTrackFinished();
             return;
         }
-
-
-        QString title, artist, album;
         QVariantList itunesResponse = res.value( "results" ).toList();
 
-        // Bad parsing?
         foreach(QVariant itune, itunesResponse){
+            QString title, artist, album;
+            if( !itune.toMap().value( "wrapperType" ).toString().contains( "track" ) )
+                continue;
 
             title = itune.toMap().value( "trackName" ).toString();
             artist = itune.toMap().value( "artistName" ).toString();
             album = itune.toMap().value( "collectionName" ).toString();
+            if ( title.isEmpty() && artist.isEmpty() ) // don't have enough...
+            {
+                tLog() << "Didn't get an artist and track name from itunes, not enough to build a query on. Aborting" << title << artist << album;
+
+            }else{
+
+                Tomahawk::query_ptr q = Tomahawk::Query::get( artist, title, album, uuid(), true );
+                m_tracks << q;
+            }
         }
 
-        if ( title.isEmpty() && artist.isEmpty() ) // don't have enough...
-        {
-            tLog() << "Didn't get an artist and track name from itunes, not enough to build a query on. Aborting" << title << artist << album;
-            return;
-        }
-
-        Tomahawk::query_ptr q = Tomahawk::Query::get( artist, title, album, uuid(), true );
-        m_tracks << q;
 
     } else
     {
