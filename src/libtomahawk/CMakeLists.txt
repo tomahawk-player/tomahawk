@@ -182,6 +182,7 @@ set( libSources
     utils/xspfgenerator.cpp
     utils/jspfloader.cpp
     utils/spotifyparser.cpp
+    utils/itunesparser.cpp
     utils/rdioparser.cpp
     utils/shortenedlinkparser.cpp
     utils/stylehelper.cpp
@@ -386,6 +387,7 @@ set( libHeaders
     utils/xspfgenerator.h
     utils/jspfloader.h
     utils/spotifyparser.h
+    utils/itunesparser.h
     utils/rdioparser.h
     utils/shortenedlinkparser.h
 

@@ -24,6 +24,7 @@
 #include "source.h"
 
 #include "utils/spotifyparser.h"
+#include "utils/itunesparser.h"
 #include "utils/rdioparser.h"
 #include "utils/shortenedlinkparser.h"
 #include "utils/logger.h"
@@ -112,12 +113,19 @@ DropJob::acceptsMimeData( const QMimeData* data, DropJob::DropTypes acceptedType
       )
         return true;
 
-    // crude check for spotify tracks
+    // crude check for spotify playlists
     if ( data->hasFormat( "text/plain" ) && data->data( "text/plain" ).contains( "spotify" )
          && data->data( "text/plain" ).contains( "playlist" )
          && ( acceptedType.testFlag(DropJob::Playlist) || acceptedType.testFlag(DropJob::All) )
        )
               return true;
+
+    // crude check for itunes tracks
+    if ( data->hasFormat( "text/plain" ) && data->data( "text/plain" ).contains( "itunes" )
+         && data->data( "text/plain" ).contains( "album" )
+         && ( acceptedType.testFlag(DropJob::Track) || acceptedType.testFlag(DropJob::All) )
+       )
+        return true;
 
     // crude check for spotify tracks
     if ( data->hasFormat( "text/plain" ) && data->data( "text/plain" ).contains( "spotify" )
@@ -184,7 +192,7 @@ DropJob::tracksFromMimeData( const QMimeData* data, bool allowDuplicates, bool o
 void
 DropJob::parseMimeData( const QMimeData *data )
 {
-
+    qDebug() << Q_FUNC_INFO << data->hasText();
 
     if(dropTypes() & DropJob::Playlist)
         qDebug() << Q_FUNC_INFO << "DropType is Playlist";
@@ -465,10 +473,20 @@ DropJob::handleTrackUrls( const QString& urls )
     qDebug() << Q_FUNC_INFO << urls;
 
 
+
     if ( urls.contains( "open.spotify.com/user") ||
          urls.contains( "spotify:user" ) )
             handleSpPlaylist( urls, dropAction() );
 
+    else if ( urls.contains( "itunes.apple.com") )
+    {
+        QStringList tracks = urls.split(QRegExp("\\s+"), QString::SkipEmptyParts);
+
+        tDebug() << "Got a list of itunes urls!" << tracks;
+        ItunesParser* itunes = new ItunesParser( tracks, this );
+        connect( itunes, SIGNAL( tracks( QList<Tomahawk::query_ptr> ) ), this, SLOT( onTracksAdded( QList< Tomahawk::query_ptr > ) ) );
+        m_queryCount++;
+    }
     else if ( urls.contains( "open.spotify.com/track") ||
          urls.contains( "spotify:track" ) )
     {
