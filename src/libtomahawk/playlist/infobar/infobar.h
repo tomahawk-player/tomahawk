@@ -47,6 +47,9 @@ public slots:
     void setLongDescription( const QString& s );
     void setPixmap( const QPixmap& p );
 
+    void setFilter( const QString& filter );
+    void setFilterAvailable( bool b );
+
 signals:
     void filterTextChanged( const QString& filter );
 

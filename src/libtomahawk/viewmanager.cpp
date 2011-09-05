@@ -630,7 +630,7 @@ ViewManager::updateView()
         connect( currentPlaylistInterface()->object(), SIGNAL( shuffleModeChanged( bool ) ),
                                                        SIGNAL( shuffleModeChanged( bool ) ) );
 
-//        m_topbar->setFilter( currentPlaylistInterface()->filter() );
+        m_infobar->setFilter( currentPlaylistInterface()->filter() );
     }
 
     if ( currentPage()->showStatsBar() && currentPlaylistInterface() )
