@@ -3,8 +3,10 @@
 
 #include <QWidget>
 
+#include "dllmacro.h"
+
 class QSearchFieldPrivate;
-class QSearchField : public QWidget
+class DLLEXPORT QSearchField : public QWidget
 {
     Q_OBJECT
 public:

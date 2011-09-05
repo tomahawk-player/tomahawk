@@ -18,7 +18,7 @@
 
 #include "tomahawkapp.h"
 
-#include "kdsingleapplicationguard/kdsingleapplicationguard.h"
+#include "thirdparty/kdsingleapplicationguard/kdsingleapplicationguard.h"
 
 #include <QTranslator>
 

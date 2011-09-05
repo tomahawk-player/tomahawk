@@ -76,28 +76,14 @@ ViewManager::ViewManager( QObject* parent )
     s_instance = this;
 
     m_widget->setLayout( new QVBoxLayout() );
-
-//    m_topbar = new TopBar();
     m_infobar = new InfoBar();
     m_stack = new QStackedWidget();
-
-/*    m_splitter = new AnimatedSplitter();
-    m_splitter->setOrientation( Qt::Vertical );
-    m_splitter->setChildrenCollapsible( false );
-    m_splitter->setGreedyWidget( 0 );
-    m_splitter->addWidget( m_stack );*/
-
-//    m_splitter->addWidget( m_queueView );
-//    m_splitter->hide( 1, false );
 
     m_contextWidget = new ContextWidget();
 
     m_widget->layout()->addWidget( m_infobar );
-//    m_widget->layout()->addWidget( m_topbar );
-//    m_widget->layout()->addWidget( m_splitter );
     m_widget->layout()->addWidget( m_stack );
     m_widget->layout()->addWidget( m_contextWidget );
-//    m_widget->layout()->addWidget( m_queueButton );
 
     m_superCollectionView = new ArtistView();
     m_superCollectionModel = new TreeModel( m_superCollectionView );
@@ -122,11 +108,10 @@ ViewManager::ViewManager( QObject* parent )
     connect( AudioEngine::instance(), SIGNAL( playlistChanged( Tomahawk::PlaylistInterface* ) ), this, SLOT( playlistInterfaceChanged( Tomahawk::PlaylistInterface* ) ) );
 
     connect( &m_filterTimer, SIGNAL( timeout() ), SLOT( applyFilter() ) );
-
-/*    connect( m_topbar, SIGNAL( filterTextChanged( QString ) ), SLOT( setFilter( QString ) ) );
-    connect( m_topbar, SIGNAL( flatMode() ), SLOT( setTableMode() ) );
-    connect( m_topbar, SIGNAL( artistMode() ), SLOT( setTreeMode() ) );
-    connect( m_topbar, SIGNAL( albumMode() ), SLOT( setAlbumMode() ) );*/
+    connect( m_infobar, SIGNAL( filterTextChanged( QString ) ), SLOT( setFilter( QString ) ) );
+/*    connect( m_infobar, SIGNAL( flatMode() ), SLOT( setTableMode() ) );
+    connect( m_infobar, SIGNAL( artistMode() ), SLOT( setTreeMode() ) );
+    connect( m_infobar, SIGNAL( albumMode() ), SLOT( setAlbumMode() ) );*/
 }
 
 

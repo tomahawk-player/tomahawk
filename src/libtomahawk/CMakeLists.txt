@@ -207,10 +207,10 @@ set( libSources
     widgets/headerbreadcrumb.cpp
     widgets/siblingcrumbbutton.cpp
 
-    kdsingleapplicationguard/kdsingleapplicationguard.cpp
-    kdsingleapplicationguard/kdsharedmemorylocker.cpp
-    kdsingleapplicationguard/kdtoolsglobal.cpp
-    kdsingleapplicationguard/kdlockedsharedmemorypointer.cpp
+    thirdparty/kdsingleapplicationguard/kdsingleapplicationguard.cpp
+    thirdparty/kdsingleapplicationguard/kdsharedmemorylocker.cpp
+    thirdparty/kdsingleapplicationguard/kdtoolsglobal.cpp
+    thirdparty/kdsingleapplicationguard/kdlockedsharedmemorypointer.cpp
 )
 
 set( libHeaders
@@ -407,7 +407,8 @@ set( libHeaders
     widgets/headerbreadcrumb.h
     widgets/siblingcrumbbutton.h
 
-    kdsingleapplicationguard/kdsingleapplicationguard.h
+    thirdparty/kdsingleapplicationguard/kdsingleapplicationguard.h
+    thirdparty/Qocoa/qsearchfield.h
 )
 
 set( libHeaders_NoMOC
@@ -499,7 +500,8 @@ IF( APPLE )
     SET( libSources ${libSources}
       infosystem/infoplugins/mac/adium.mm
       infosystem/infoplugins/mac/adiumplugin.cpp
-      utils/tomahawkutils_mac.mm )
+      utils/tomahawkutils_mac.mm
+      thirdparty/Qocoa/qsearchfield_mac.mm )
 
     SET( libHeaders ${libHeaders}
       infosystem/infoplugins/mac/adium.h
@@ -515,6 +517,8 @@ IF( APPLE )
 
         /System/Library/Frameworks/AppKit.framework
     )
+ELSE( APPLE )
+    SET( libSources ${libSources} thirdparty/Qocoa/qsearchfield.cpp )
 ENDIF( APPLE )
 
 IF(LIBLASTFM_FOUND)

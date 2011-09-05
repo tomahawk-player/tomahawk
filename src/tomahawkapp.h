@@ -41,7 +41,7 @@
 #include "network/servent.h"
 
 #include "utils/tomahawkutils.h"
-#include "kdsingleapplicationguard/kdsingleapplicationguard.h"
+#include "thirdparty/kdsingleapplicationguard/kdsingleapplicationguard.h"
 
 class AudioEngine;
 class Database;

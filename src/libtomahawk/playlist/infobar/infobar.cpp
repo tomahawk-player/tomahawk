@@ -22,7 +22,7 @@
 #include <QLabel>
 #include <QPixmap>
 
-#include "context/ContextWidget.h"
+#include "thirdparty/Qocoa/qsearchfield.h"
 #include "utils/tomahawkutils.h"
 #include "utils/logger.h"
 
@@ -69,6 +69,13 @@ InfoBar::InfoBar( QWidget* parent )
     ui->longDescriptionLabel->setText( QString() );
     ui->imageLabel->setText( QString() );
 
+    m_searchWidget = new QSearchField( this );
+    m_searchWidget->setPlaceholderText( "Filter..." );
+    m_searchWidget->setMinimumWidth( 180 );
+    connect( m_searchWidget, SIGNAL( textChanged( QString ) ), this, SLOT( onFilterEdited() ) );
+
+    ui->horizontalLayout->addWidget( m_searchWidget );
+
     setAutoFillBackground( true );
 }
 
@@ -114,6 +121,13 @@ void
 InfoBar::setPixmap( const QPixmap& p )
 {
     ui->imageLabel->setPixmap( p.scaledToHeight( IMAGE_HEIGHT, Qt::SmoothTransformation ) );
+}
+
+
+void
+InfoBar::onFilterEdited()
+{
+    emit filterTextChanged( m_searchWidget->text() );
 }
 
 

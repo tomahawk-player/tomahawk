@@ -22,10 +22,10 @@
 #include <QWidget>
 
 #include "dllmacro.h"
-
 #include "query.h"
 
 class QTimeLine;
+class QSearchField;
 class ContextWidget;
 
 namespace Ui
@@ -47,12 +47,20 @@ public slots:
     void setLongDescription( const QString& s );
     void setPixmap( const QPixmap& p );
 
+signals:
+    void filterTextChanged( const QString& filter );
+
 protected:
     void changeEvent( QEvent* e );
     void resizeEvent( QResizeEvent* e );
 
+private slots:
+    void onFilterEdited();
+
 private:
     Ui::InfoBar* ui;
+
+    QSearchField* m_searchWidget;
 };
 
 #endif // INFOBAR_H

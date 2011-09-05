@@ -47,6 +47,7 @@
 #include "widgets/newplaylistwidget.h"
 #include "widgets/searchwidget.h"
 #include "widgets/playlisttypeselectordlg.h"
+#include "thirdparty/Qocoa/qsearchfield.h"
 
 #include "audiocontrols.h"
 #include "settingsdialog.h"
@@ -66,7 +67,6 @@
 #endif
 
 #include "utils/logger.h"
-#include "Qocoa/qsearchfield.h"
 
 using namespace Tomahawk;
 

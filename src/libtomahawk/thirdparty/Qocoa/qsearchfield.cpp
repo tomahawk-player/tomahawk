@@ -29,7 +29,7 @@ THE SOFTWARE.
 #include "playlist/topbar/searchlineedit.h"
 #include "utils/tomahawkutils.h"
 
-class QSearchFieldPrivate
+class DLLEXPORT QSearchFieldPrivate
 {
 public:
     QSearchFieldPrivate(SearchLineEdit *lineEdit) : lineEdit(lineEdit) {}
