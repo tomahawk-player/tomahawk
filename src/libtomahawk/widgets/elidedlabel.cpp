@@ -23,6 +23,7 @@
 #include <QFontMetrics>
 #include <QApplication>
 #include <QRect>
+#include <QTextLayout>
 
 #include "utils/logger.h"
 
@@ -37,7 +38,7 @@ ElidedLabel::ElidedLabel( QWidget* parent, Qt::WindowFlags flags )
 ElidedLabel::ElidedLabel( const QString& text, QWidget* parent, Qt::WindowFlags flags )
     : QFrame( parent, flags )
 {
-    init(text);
+    init( text );
 }
 
 
@@ -130,6 +131,8 @@ ElidedLabel::init( const QString& txt )
     m_align = Qt::AlignLeft;
     m_mode = Qt::ElideMiddle;
     m_margin = 0;
+    m_multiLine = false;
+
     setContentsMargins( 0, 0, 0, 0 );
 }
 
@@ -176,8 +179,35 @@ ElidedLabel::paintEvent( QPaintEvent* event )
     QRect r = contentsRect();
     r.adjust( m_margin, m_margin, -m_margin, -m_margin );
 
-    const QString elidedText = fontMetrics().elidedText( m_text, m_mode, r.width() );
-    p.drawText( r, m_align, elidedText );
+    if ( m_multiLine )
+    {
+        QTextLayout textLayout( m_text );
+        textLayout.setFont( p.font() );
+        int widthUsed = 0;
+        int lineCount = 0;
+        int lineLimit = r.height() / fontMetrics().height();
+
+        textLayout.beginLayout();
+        while ( ++lineCount < lineLimit )
+        {
+            QTextLine line = textLayout.createLine();
+            if ( !line.isValid() )
+                break;
+
+            line.setLineWidth( r.width() );
+            widthUsed += line.naturalTextWidth();
+        }
+        textLayout.endLayout();
+        widthUsed += r.width();
+
+        const QString elidedText = fontMetrics().elidedText( m_text, Qt::ElideRight, widthUsed );
+        p.drawText( r, Qt::AlignLeft | Qt::AlignTop | Qt::TextWordWrap, elidedText );
+    }
+    else
+    {
+        const QString elidedText = fontMetrics().elidedText( m_text, m_mode, r.width() );
+        p.drawText( r, m_align, elidedText );
+    }
 }
 
 

@@ -57,6 +57,7 @@ public:
 
 public slots:
     void setText( const QString& text );
+    void setWordWrap( bool b ) { m_multiLine = b; }
 
 signals:
     void clicked();
@@ -74,6 +75,7 @@ private:
     Qt::Alignment m_align;
     Qt::TextElideMode m_mode;
     int m_margin;
+    bool m_multiLine;
 };
 
 #endif // ELIDEDLABEL_H

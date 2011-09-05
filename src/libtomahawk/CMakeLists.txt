@@ -171,7 +171,6 @@ set( libSources
 
     utils/tomahawkutils.cpp
     utils/querylabel.cpp
-    utils/elidedlabel.cpp
     utils/imagebutton.cpp
     utils/logger.cpp
     utils/proxystyle.cpp
@@ -185,6 +184,7 @@ set( libSources
     utils/shortenedlinkparser.cpp
     utils/stylehelper.cpp
 
+    widgets/elidedlabel.cpp
     widgets/newplaylistwidget.cpp
     widgets/searchwidget.cpp
     widgets/SeekSlider.cpp
@@ -371,7 +371,6 @@ set( libHeaders
     playlist/dynamic/database/DatabaseGenerator.h
 
     utils/querylabel.h
-    utils/elidedlabel.h
     utils/animatedcounterlabel.h
     utils/imagebutton.h
     utils/widgetdragfilter.h
@@ -384,6 +383,7 @@ set( libHeaders
     utils/shortenedlinkparser.h
     utils/stylehelper.h
 
+    widgets/elidedlabel.h
     widgets/newplaylistwidget.h
     widgets/searchwidget.h
     widgets/SeekSlider.h

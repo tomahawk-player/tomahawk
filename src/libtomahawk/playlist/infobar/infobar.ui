@@ -121,7 +121,7 @@
         <enum>QLayout::SetMaximumSize</enum>
        </property>
        <item>
-        <widget class="QLabel" name="longDescriptionLabel">
+        <widget class="ElidedLabel" name="longDescriptionLabel">
          <property name="sizePolicy">
           <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
            <horstretch>0</horstretch>
@@ -174,7 +174,7 @@
   <customwidget>
    <class>ElidedLabel</class>
    <extends>QLabel</extends>
-   <header>utils/elidedlabel.h</header>
+   <header>widgets/elidedlabel.h</header>
   </customwidget>
  </customwidgets>
  <resources/>
