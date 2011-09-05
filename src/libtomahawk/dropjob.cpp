@@ -123,6 +123,16 @@ DropJob::acceptsMimeData( const QMimeData* data, DropJob::DropTypes acceptedType
     // crude check for itunes tracks
     if ( data->hasFormat( "text/plain" ) && data->data( "text/plain" ).contains( "itunes" )
          && data->data( "text/plain" ).contains( "album" )
+         && ( acceptedType.testFlag(DropJob::Track)
+              || acceptedType.testFlag(DropJob::Album)
+              || acceptedType.testFlag(DropJob::All)
+            )
+       )
+        return true;
+
+    // crude check for itunes artist
+    if ( data->hasFormat( "text/plain" ) && data->data( "text/plain" ).contains( "itunes" )
+         && data->data( "text/plain" ).contains( "artist" )
          && ( acceptedType.testFlag(DropJob::Track) || acceptedType.testFlag(DropJob::All) )
        )
         return true;

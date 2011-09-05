@@ -23,12 +23,12 @@
 
 #include "dllmacro.h"
 #include "typedefs.h"
-
 #include <QObject>
 #include <QSet>
 #include <QtCore/QStringList>
 
 class QNetworkReply;
+class TrackModel;
 namespace Tomahawk
 {
 
@@ -45,17 +45,17 @@ public:
     explicit ItunesParser( const QStringList& trackUrls, QObject* parent = 0, bool createNewPl = false);
     virtual ~ItunesParser();
 
+
 signals:
     void track( const Tomahawk::query_ptr& track );
     void tracks( const QList< Tomahawk::query_ptr > tracks );
     void playlist( const Tomahawk::query_ptr& playlist );
 
 private slots:
-    void itunesTrackLookupFinished();
+    void itunesResponseLookupFinished();
 
 private:
-    void lookupUrl( const QString& url );
-    void lookupTrack( const QString& track );
+    void lookupItunesUri( const QString& track );
     void checkTrackFinished();
 
     bool m_single;

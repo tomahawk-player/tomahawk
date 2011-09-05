@@ -19,7 +19,6 @@
  */
 
 #include "itunesparser.h"
-
 #include "utils/logger.h"
 #include "utils/tomahawkutils.h"
 #include "query.h"
@@ -38,8 +37,10 @@ ItunesParser::ItunesParser( const QStringList& Urls, QObject* parent, bool creat
 
 {
     m_createNewPlaylist = createNewPlaylist;
-    foreach ( const QString& url, Urls )
-        lookupUrl( url );
+    foreach ( const QString& url, Urls ){
+
+        lookupItunesUri( url );
+    }
 }
 
 ItunesParser::ItunesParser( const QString& Url, QObject* parent, bool createNewPlaylist )
@@ -47,7 +48,7 @@ ItunesParser::ItunesParser( const QString& Url, QObject* parent, bool createNewP
     , m_single( true )
 {
     m_createNewPlaylist = createNewPlaylist;
-    lookupUrl( Url );
+    lookupItunesUri( Url );
 }
 
 ItunesParser::~ItunesParser()
@@ -55,64 +56,50 @@ ItunesParser::~ItunesParser()
 
 }
 
-
 void
-ItunesParser::lookupUrl( const QString& link )
+ItunesParser::lookupItunesUri( const QString& link )
 {
-    qDebug() << Q_FUNC_INFO;
-    if( link.contains( "album" ) )// && link.contains( "?i="))
-        lookupTrack(link);
-
-    else return; // We only support tracks and playlists
-
-}
-
-void
-ItunesParser::lookupTrack( const QString& link )
-{
-
-    tDebug() << "Got a QString " << link;
-    if ( !link.contains( "album" ) ) //&& !link.contains( "?i=" )) // we only support track links atm
-        return;
 
     // Itunes uri parsing, using regex
     // (\d+)(?:\?i=*)(\d+) = AlbumId and trackId
-    // (\d+)(?:\s*) = albumId
+    // (\d+)(?:\s*) = id
     QRegExp rxAlbumTrack( "(\\d+)(?:\\?i=*)(\\d+)" );
-    QRegExp rxAlbum( "(\\d+)(?:\\s*)" );
-    QString albumId, trackId;
+    QRegExp rxId( "(\\d+)(?:\\s*)" );
+    QString id, trackId;
 
     // Doing a parse on regex in 2 stages,
     // first, look if we have both album and track id
      int pos = rxAlbumTrack.indexIn(link);
-
      if (pos > -1) {
-         albumId = rxAlbumTrack.cap(1);
+         id = rxAlbumTrack.cap(1);
          trackId = rxAlbumTrack.cap(2);
      }else{
 
-         // Second, if we dont have trackId, check for just albumid
-         int pos = rxAlbum.indexIn(link);
+         // Second, if we dont have trackId, check for just Id
+         int pos = rxId.indexIn(link);
          if (pos > -1) {
-             albumId = rxAlbum.cap(1);
+             id = rxId.cap(1);
          }else return;
 
      }
 
-    qDebug() << "Got Itunes link with Albumid " << albumId << "and trackid " <<trackId;
+    qDebug() << "Got Itunes link with id " << id << "and trackid" <<trackId;
     tLog() << "Parsing itunes track:" << link;
 
-    QUrl url = QUrl( QString( "http://ax.phobos.apple.com.edgesuite.net/WebObjects/MZStoreServices.woa/wa/wsLookup?id=%1&entity=song" ).arg( ( trackId.isEmpty() ? albumId : trackId ) ) );
-    tDebug() << "Looking up..." << url.toString();
+    QUrl url;
+    if( link.contains( "artist" ) )
+        url = QUrl( QString( "http://ax.phobos.apple.com.edgesuite.net/WebObjects/MZStoreServices.woa/wa/wsLookup?id=%1&entity=song&limit=30" ).arg( id ) );
+    else url = QUrl( QString( "http://ax.phobos.apple.com.edgesuite.net/WebObjects/MZStoreServices.woa/wa/wsLookup?id=%1&entity=song" ).arg( ( trackId.isEmpty() ? id : trackId ) ) );
+
+    qDebug() << "Looking up..." << url.toString();
 
     QNetworkReply* reply = TomahawkUtils::nam()->get( QNetworkRequest( url ) );
-    connect( reply, SIGNAL( finished() ), this, SLOT( itunesTrackLookupFinished() ) );
-
+    connect( reply, SIGNAL( finished() ), this, SLOT( itunesResponseLookupFinished() ) );
     m_queries.insert( reply );
 
 }
 void
-ItunesParser::itunesTrackLookupFinished()
+ItunesParser::itunesResponseLookupFinished()
 {
     QNetworkReply* r = qobject_cast< QNetworkReply* >( sender() );
     Q_ASSERT( r );
@@ -140,27 +127,27 @@ ItunesParser::itunesTrackLookupFinished()
 
         foreach(QVariant itune, itunesResponse){
             QString title, artist, album;
-            if( !itune.toMap().value( "wrapperType" ).toString().contains( "track" ) )
-                continue;
+            if( itune.toMap().value( "wrapperType" ).toString().contains( "track" ) ){
 
-            title = itune.toMap().value( "trackName" ).toString();
-            artist = itune.toMap().value( "artistName" ).toString();
-            album = itune.toMap().value( "collectionName" ).toString();
-            if ( title.isEmpty() && artist.isEmpty() ) // don't have enough...
-            {
-                tLog() << "Didn't get an artist and track name from itunes, not enough to build a query on. Aborting" << title << artist << album;
+                title = itune.toMap().value( "trackName" ).toString();
+                artist = itune.toMap().value( "artistName" ).toString();
+                album = itune.toMap().value( "collectionName" ).toString();
+                if ( title.isEmpty() && artist.isEmpty() ) // don't have enough...
+                {
+                    tLog() << "Didn't get an artist and track name from itunes, not enough to build a query on. Aborting" << title << artist << album;
 
-            }else{
+                }else{
 
-                Tomahawk::query_ptr q = Tomahawk::Query::get( artist, title, album, uuid(), true );
-                m_tracks << q;
+                    Tomahawk::query_ptr q = Tomahawk::Query::get( artist, title, album, uuid(), true );
+                    m_tracks << q;
+                }
             }
         }
 
 
     } else
     {
-        tLog() << "Error in network request to Spotify for track decoding:" << r->errorString();
+        tLog() << "Error in network request to Itunes for track decoding:" << r->errorString();
     }
 
     checkTrackFinished();
