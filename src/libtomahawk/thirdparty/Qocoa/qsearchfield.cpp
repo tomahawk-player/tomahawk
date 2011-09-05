@@ -51,10 +51,17 @@ QSearchField::QSearchField(QWidget *parent) : QWidget(parent)
     TomahawkUtils::unmarginLayout(layout);
     setContentsMargins(0, 0, 0, 0);
 
-    lineEdit->setStyleSheet( "QLineEdit { border: 1px solid gray; border-radius: 6px; margin-right: 2px; }" );
+    lineEdit->setStyleSheet( "QLineEdit { border: 1px solid gray; border-radius: 6px; }" );
+
+#ifdef Q_OS_MAC
     lineEdit->setContentsMargins(0, 0, 0, 0);
     lineEdit->setMinimumHeight(27);
     setFixedHeight(27);
+#else
+    lineEdit->setContentsMargins(2, 2, 2, 2);
+    lineEdit->setMinimumHeight(27);
+#endif
+
 }
 
 void QSearchField::setText(const QString &text)

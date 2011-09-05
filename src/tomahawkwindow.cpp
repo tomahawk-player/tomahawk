@@ -193,7 +193,7 @@ TomahawkWindow::setupSideBar()
     m_sidebar->setChildrenCollapsible( false );
 
     m_searchWidget = new QSearchField( m_sidebar );
-    m_searchWidget->setPlaceholderText( "Global Search..." );
+    m_searchWidget->setPlaceholderText( tr( "Global Search..." ) );
     connect( m_searchWidget, SIGNAL( returnPressed() ), this, SLOT( onFilterEdited() ) );
 
     m_sourcetree = new SourceTreeView();

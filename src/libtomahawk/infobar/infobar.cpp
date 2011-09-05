@@ -71,7 +71,7 @@ InfoBar::InfoBar( QWidget* parent )
     ui->imageLabel->setText( QString() );
 
     m_searchWidget = new QSearchField( this );
-    m_searchWidget->setPlaceholderText( "Filter..." );
+    m_searchWidget->setPlaceholderText( tr( "Filter..." ) );
     m_searchWidget->setMinimumWidth( 180 );
     connect( m_searchWidget, SIGNAL( textChanged( QString ) ), this, SLOT( onFilterEdited() ) );
 
