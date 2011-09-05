@@ -364,8 +364,7 @@ TrackView::onFilterChanged( const QString& )
     if ( selectedIndexes().count() )
         scrollTo( selectedIndexes().at( 0 ), QAbstractItemView::PositionAtCenter );
 
-    if ( !proxyModel()->filter().isEmpty() && !proxyModel()->trackCount() &&
-         model()->trackCount() )
+    if ( !proxyModel()->filter().isEmpty() && !proxyModel()->trackCount() && model()->trackCount() )
     {
         m_overlay->setText( tr( "Sorry, your filter '%1' did not match any results." ).arg( proxyModel()->filter() ) );
         m_overlay->show();

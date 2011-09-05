@@ -60,7 +60,7 @@ public:
     virtual QPixmap pixmap() const { return QPixmap( RESPATH "images/music-icon.png" ); }
 
     virtual bool showStatsBar() const { return false; }
-    virtual bool showFilter() const { return false; }
+    virtual bool showFilter() const { return true; }
 
     virtual void setShowModes( bool b ) { m_showModes = b; }
     virtual bool showModes() const { return m_showModes; }

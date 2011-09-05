@@ -63,10 +63,12 @@ TreeProxyModel::setSourceTreeModel( TreeModel* sourceModel )
 void
 TreeProxyModel::setFilter( const QString& pattern )
 {
-    qDebug() << Q_FUNC_INFO;
+    PlaylistInterface::setFilter( pattern );
     setFilterRegExp( pattern );
+    m_model->setFilter( pattern );
 
     emit filterChanged( pattern );
+    emit trackCountChanged( trackCount() );
 }
 
 
@@ -110,8 +112,7 @@ TreeProxyModel::filterAcceptsRow( int sourceRow, const QModelIndex& sourceParent
         m_cache.insertMulti( sourceParent, pi->result() );
     }
 
-    if ( filterRegExp().isEmpty() )
-        return true;
+    return true;
 
     QStringList sl = filterRegExp().pattern().split( " ", QString::SkipEmptyParts );
     bool found = true;
@@ -241,7 +242,7 @@ TreeProxyModel::textForItem( TreeModelItem* item ) const
 {
     if ( !item )
         return QString();
-    
+
     if ( !item->artist().isNull() )
     {
         return item->artist()->name();

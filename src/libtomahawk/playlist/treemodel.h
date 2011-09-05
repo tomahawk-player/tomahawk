@@ -99,6 +99,9 @@ public:
     virtual void setTitle( const QString& title ) { m_title = title; }
     virtual void setDescription( const QString& description ) { m_description = description; }
 
+    virtual QString filter() const { return m_filter; }
+    virtual void setFilter( const QString& pattern );
+
     TreeModelItem* itemFromIndex( const QModelIndex& index ) const
     {
         if ( index.isValid() )
@@ -153,6 +156,7 @@ private:
 
     Tomahawk::collection_ptr m_collection;
     QHash<qlonglong, QPersistentModelIndex> m_coverHash;
+    QString m_filter;
 };
 
 #endif // ALBUMMODEL_H

@@ -54,6 +54,7 @@ public:
     virtual Tomahawk::result_ptr siblingItem( int direction );
     virtual Tomahawk::result_ptr siblingItem( int direction, bool readOnly );
 
+    virtual QString filter() const { return filterRegExp().pattern(); }
     virtual void setFilter( const QString& pattern );
 
     virtual PlaylistInterface::RepeatMode repeatMode() const { return m_repeatMode; }

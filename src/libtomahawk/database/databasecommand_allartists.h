@@ -54,6 +54,7 @@ public:
     void setLimit( unsigned int amount ) { m_amount = amount; }
     void setSortOrder( DatabaseCommand_AllArtists::SortOrder order ) { m_sortOrder = order; }
     void setSortDescending( bool descending ) { m_sortDescending = descending; }
+    void setFilter( const QString& filter ) { m_filter = filter; }
 
 signals:
     void artists( const QList<Tomahawk::artist_ptr>& );
@@ -64,6 +65,7 @@ private:
     unsigned int m_amount;
     DatabaseCommand_AllArtists::SortOrder m_sortOrder;
     bool m_sortDescending;
+    QString m_filter;
 };
 
 #endif // DATABASECOMMAND_ALLARTISTS_H

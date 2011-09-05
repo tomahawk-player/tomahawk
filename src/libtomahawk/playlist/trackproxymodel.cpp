@@ -65,7 +65,6 @@ TrackProxyModel::setSourceTrackModel( TrackModel* sourceModel )
 void
 TrackProxyModel::setFilter( const QString& pattern )
 {
-    qDebug() << Q_FUNC_INFO;
     PlaylistInterface::setFilter( pattern );
     setFilterRegExp( pattern );
 

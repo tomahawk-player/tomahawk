@@ -29,7 +29,7 @@ DatabaseCommand_AllArtists::exec( DatabaseImpl* dbi )
 {
     TomahawkSqlQuery query = dbi->newquery();
     QList<Tomahawk::artist_ptr> al;
-    QString orderToken, sourceToken;
+    QString orderToken, sourceToken, filterToken, tables;
 
     switch ( m_sortOrder )
     {
@@ -41,20 +41,33 @@ DatabaseCommand_AllArtists::exec( DatabaseImpl* dbi )
     }
 
     if ( !m_collection.isNull() )
-        sourceToken = QString( "AND file.source %1 " ).arg( m_collection->source()->isLocal() ? "IS NULL" : QString( "= %1" ).arg( m_collection->source()->id() ) );
+        sourceToken = QString( "AND file.source %1" ).arg( m_collection->source()->isLocal() ? "IS NULL" : QString( "= %1" ).arg( m_collection->source()->id() ) );
+
+    if ( !m_filter.isEmpty() )
+    {
+        filterToken = QString( "AND file_join.track = track.id AND ( artist.name LIKE :filter OR track.name LIKE :filter )" );
+        tables = "artist, track, file, file_join";
+    }
+    else
+        tables = "artist, file, file_join";
 
     QString sql = QString(
             "SELECT DISTINCT artist.id, artist.name "
-            "FROM artist, file, file_join "
+            "FROM %1 "
             "WHERE file.id = file_join.file "
             "AND file_join.artist = artist.id "
-            "%1 %2 %3 %4"
-            ).arg( sourceToken )
+            "%2 %3 %4 %5 %6"
+            ).arg( tables )
+             .arg( sourceToken )
+             .arg( filterToken )
              .arg( m_sortOrder > 0 ? QString( "ORDER BY %1" ).arg( orderToken ) : QString() )
              .arg( m_sortDescending ? "DESC" : QString() )
              .arg( m_amount > 0 ? QString( "LIMIT 0, %1" ).arg( m_amount ) : QString() );
 
     query.prepare( sql );
+    if ( !m_filter.isEmpty() )
+        query.bindValue( ":filter", QString( "%%1%" ).arg( m_filter ) );
+
     query.exec();
 
     while( query.next() )
