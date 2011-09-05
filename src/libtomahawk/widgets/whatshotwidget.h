@@ -81,8 +81,11 @@ private slots:
     void checkQueries();
     void infoSystemInfo( Tomahawk::InfoSystem::InfoRequestData requestData, QVariant output );
     void infoSystemFinished( QString target );
+    void leftCrumbIndexChanged( QModelIndex );
 
 private:
+    void setLeftViewArtists();
+    void setLeftViewTracks();
     QStandardItem* parseNode(QStandardItem* parentItem, const QString &label, const QVariant &data);
     Ui::WhatsHotWidget *ui;
 

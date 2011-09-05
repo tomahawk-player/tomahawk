@@ -53,10 +53,10 @@ WhatsHotWidget::WhatsHotWidget( QWidget* parent )
     ui->setupUi( this );
 
     TomahawkUtils::unmarginLayout( layout() );
-    TomahawkUtils::unmarginLayout( ui->verticalLayout->layout() );
-    TomahawkUtils::unmarginLayout( ui->verticalLayout_2->layout() );
+    TomahawkUtils::unmarginLayout( ui->stackLeft->layout() );
+    TomahawkUtils::unmarginLayout( ui->horizontalLayout->layout() );
+    TomahawkUtils::unmarginLayout( ui->horizontalLayout_2->layout() );
     TomahawkUtils::unmarginLayout( ui->breadCrumbLeft->layout() );
-    TomahawkUtils::unmarginLayout( ui->breadCrumbRight->layout() );
 
 
     //set crumb widgets
@@ -70,41 +70,42 @@ WhatsHotWidget::WhatsHotWidget( QWidget* parent )
     //ui->breadCrumbLeft->setSelectionModel(selectionModelLeft);
     ui->breadCrumbLeft->setUseAnimation(true);
 
-    ui->breadCrumbRight->setButtonFactory(crumbFactory);
+    connect(ui->breadCrumbLeft, SIGNAL(currentIndexChanged(QModelIndex)), SLOT(leftCrumbIndexChanged(QModelIndex)));
+
+    /*ui->breadCrumbRight->setButtonFactory(crumbFactory);
     ui->breadCrumbRight->setRootIcon(QIcon( RESPATH "images/charts.png" ));
     ui->breadCrumbRight->setModel(m_crumbModelLeft);
-    ui->breadCrumbRight->setUseAnimation(true);
+    ui->breadCrumbRight->setUseAnimation(true);*/
 
 
-    m_tracksModel = new PlaylistModel( ui->tracksView );
+    m_tracksModel = new PlaylistModel( ui->tracksViewLeft );
     m_tracksModel->setStyle( TrackModel::Short );
 
-    ui->tracksView->setFrameShape( QFrame::NoFrame );
-    ui->tracksView->setAttribute( Qt::WA_MacShowFocusRect, 0 );
-    ui->tracksView->overlay()->setEnabled( false );
-    ui->tracksView->setTrackModel( m_tracksModel );
-    ui->tracksView->setHeaderHidden( true );
-    ui->tracksView->setHorizontalScrollBarPolicy( Qt::ScrollBarAlwaysOff );
+    ui->tracksViewLeft->setFrameShape( QFrame::NoFrame );
+    ui->tracksViewLeft->setAttribute( Qt::WA_MacShowFocusRect, 0 );
+    ui->tracksViewLeft->overlay()->setEnabled( false );
+    ui->tracksViewLeft->setTrackModel( m_tracksModel );
+    ui->tracksViewLeft->setHeaderHidden( true );
+    ui->tracksViewLeft->setHorizontalScrollBarPolicy( Qt::ScrollBarAlwaysOff );
 
-
-    m_artistsModel = new TreeModel( ui->artistsView );
+    m_artistsModel = new TreeModel( this );
     m_artistsModel->setColumnStyle( TreeModel::TrackOnly );
 
-    m_artistsProxy = new TreeProxyModel( ui->artistsView );
+
+    m_artistsProxy = new TreeProxyModel( ui->artistsViewLeft );
     m_artistsProxy->setFilterCaseSensitivity( Qt::CaseInsensitive );
     m_artistsProxy->setDynamicSortFilter( true );
 
-    ui->artistsView->setProxyModel( m_artistsProxy );
-    ui->artistsView->setTreeModel( m_artistsModel );
-    ui->artistsView->setFrameShape( QFrame::NoFrame );
-    ui->artistsView->setAttribute( Qt::WA_MacShowFocusRect, 0 );
+    ui->artistsViewLeft->setProxyModel( m_artistsProxy );
+    ui->artistsViewLeft->setTreeModel( m_artistsModel );
+    ui->artistsViewLeft->setFrameShape( QFrame::NoFrame );
+    ui->artistsViewLeft->setAttribute( Qt::WA_MacShowFocusRect, 0 );
 
 
-    m_artistsProxy->sort( -1 ); // disable sorting, must be called after artistsView->setTreeModel
+    m_artistsProxy->sort( -1 ); // disable sorting, must be called after artistsViewLeft->setTreeModel
 
-    ui->artistsView->setHorizontalScrollBarPolicy( Qt::ScrollBarAlwaysOff );
-    ui->artistsView->header()->setVisible( false );
-
+    ui->artistsViewLeft->setHorizontalScrollBarPolicy( Qt::ScrollBarAlwaysOff );
+    ui->artistsViewLeft->header()->setVisible( false );
 
     m_timer = new QTimer( this );
     connect( m_timer, SIGNAL( timeout() ), SLOT( checkQueries() ) );
@@ -139,12 +140,6 @@ WhatsHotWidget::fetchData()
     requestData.type = Tomahawk::InfoSystem::InfoChartCapabilities;
     Tomahawk::InfoSystem::InfoSystem::instance()->getInfo( requestData );
 
-    /*requestData.type = Tomahawk::InfoSystem::InfoChartArtists;
-    Tomahawk::InfoSystem::InfoSystem::instance()->getInfo( requestData );
-
-    requestData.type = Tomahawk::InfoSystem::InfoChartTracks;
-    Tomahawk::InfoSystem::InfoSystem::instance()->getInfo( requestData );
-    */
     tDebug() << "WhatsHot: requested InfoChartCapabilities";
 }
 
@@ -162,7 +157,7 @@ WhatsHotWidget::infoSystemInfo( Tomahawk::InfoSystem::InfoRequestData requestDat
 {
     if ( requestData.caller != s_whatsHotIdentifier )
     {
-//        tDebug() << "Info of wrong type or not with our identifier";
+        tDebug() << "WhatsHot::" << "Info of wrong type or not with our identifier";
         return;
     }
 
@@ -184,7 +179,7 @@ WhatsHotWidget::infoSystemInfo( Tomahawk::InfoSystem::InfoRequestData requestDat
             }
             KBreadcrumbSelectionModel *selectionModelLeft = new KBreadcrumbSelectionModel(new QItemSelectionModel(m_crumbModelLeft, this), this);
             ui->breadCrumbLeft->setSelectionModel(selectionModelLeft);
-            ui->breadCrumbRight->setSelectionModel(selectionModelLeft);
+            //ui->breadCrumbRight->setSelectionModel(selectionModelLeft);
             //HACK ALERT - we want the second crumb to expand right away, so we
             //force it here. We should find a more elegant want to do this
             ui->breadCrumbLeft->currentChangedTriggered(m_crumbModelLeft->index(0,0).child(0,0));
@@ -197,15 +192,20 @@ WhatsHotWidget::infoSystemInfo( Tomahawk::InfoSystem::InfoRequestData requestDat
             const QString type = returnedData["type"].toString();
             if( !returnedData.contains(type) )
                 break;
-            tDebug() << "WhatsHot: got chart! " << type;
+            const QString side = requestData.customData["whatshot_side"].toString();
+            tDebug() << "WhatsHot: got chart! " << type << " on " << side;
             if( type == "artists" ) {
+                setLeftViewArtists();
                 const QStringList artists = returnedData["artists"].toStringList();
                 tDebug() << "WhatsHot: got artists! " << artists.size();
+                m_artistsModel->clear();
                 foreach ( const QString& artist, artists )
                     m_artistsModel->addArtists( Artist::get( artist ) );
             } else if( type == "tracks" ) {
+                setLeftViewTracks();
                 const QList<Tomahawk::InfoSystem::ArtistTrackPair> tracks = returnedData["tracks"].value<QList<Tomahawk::InfoSystem::ArtistTrackPair> >();
                 tDebug() << "WhatsHot: got tracks! " << tracks.size();
+                m_tracksModel->clear();
                 foreach ( const Tomahawk::InfoSystem::ArtistTrackPair& track, tracks ) {
                     query_ptr query = Query::get( track.artist, track.track, QString(), uuid() );
                     m_tracksModel->append( query );
@@ -227,6 +227,33 @@ WhatsHotWidget::infoSystemFinished( QString target )
     Q_UNUSED( target );
 }
 
+
+void
+WhatsHotWidget::leftCrumbIndexChanged( QModelIndex index )
+{
+    qDebug() << "WhatsHot:: left crumb changed" << index.data();
+    QStandardItem* item = m_crumbModelLeft->itemFromIndex(index);
+    if( !item )
+        return;
+    if( !item->data().isValid() )
+        return;
+
+
+    const QString chartId = item->data().toString();
+
+    Tomahawk::InfoSystem::InfoCriteriaHash criteria;
+    criteria.insert("chart_id", chartId);
+
+    Tomahawk::InfoSystem::InfoRequestData requestData;
+    QVariantMap customData;
+    customData.insert("whatshot_side", "left");
+    requestData.caller = s_whatsHotIdentifier;
+    requestData.customData = customData;
+    requestData.input = QVariant::fromValue< Tomahawk::InfoSystem::InfoCriteriaHash >( criteria );
+
+    requestData.type = Tomahawk::InfoSystem::InfoChart;
+    Tomahawk::InfoSystem::InfoSystem::instance()->getInfo( requestData );
+}
 
 void
 WhatsHotWidget::changeEvent( QEvent* e )
@@ -275,4 +302,16 @@ WhatsHotWidget::parseNode(QStandardItem* parentItem, const QString &label, const
         sourceItem->appendRow(childItem);
     }
     return sourceItem;
+}
+
+void
+WhatsHotWidget::setLeftViewArtists()
+{
+    ui->stackLeft->setCurrentIndex(1);
+}
+
+void
+WhatsHotWidget::setLeftViewTracks()
+{
+    ui->stackLeft->setCurrentIndex(0);
 }
