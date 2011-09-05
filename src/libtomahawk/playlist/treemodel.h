@@ -64,8 +64,10 @@ public:
     virtual int trackCount() const { return rowCount( QModelIndex() ); }
     virtual int albumCount() const { return rowCount( QModelIndex() ); }
 
-    virtual int rowCount( const QModelIndex& parent ) const;
-    virtual int columnCount( const QModelIndex& parent ) const;
+    virtual bool hasChildren( const QModelIndex& parent = QModelIndex() ) const;
+
+    virtual int rowCount( const QModelIndex& parent = QModelIndex() ) const;
+    virtual int columnCount( const QModelIndex& parent = QModelIndex() ) const;
 
     virtual void clear();
 
@@ -100,6 +102,9 @@ public:
     virtual QString description() const { return m_description; }
     virtual void setTitle( const QString& title ) { m_title = title; }
     virtual void setDescription( const QString& description ) { m_description = description; }
+
+    QModelIndex indexFromArtist( const Tomahawk::artist_ptr& artist ) const;
+    QModelIndex indexFromAlbum( const Tomahawk::album_ptr& album ) const;
 
     TreeModelItem* itemFromIndex( const QModelIndex& index ) const
     {

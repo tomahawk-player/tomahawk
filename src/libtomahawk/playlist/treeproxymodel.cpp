@@ -22,12 +22,14 @@
 
 #include "query.h"
 #include "database/database.h"
+#include "database/databasecommand_allalbums.h"
 #include "utils/logger.h"
 
 
 TreeProxyModel::TreeProxyModel( QObject* parent )
     : QSortFilterProxyModel( parent )
     , PlaylistInterface( this )
+    , m_artistsFilterCmd( 0 )
     , m_model( 0 )
     , m_repeatMode( PlaylistInterface::NoRepeat )
     , m_shuffled( false )
@@ -54,38 +56,120 @@ TreeProxyModel::setSourceTreeModel( TreeModel* sourceModel )
 {
     m_model = sourceModel;
 
-    if ( m_model && m_model->metaObject()->indexOfSignal( "trackCountChanged(uint)" ) > -1 )
-        connect( m_model, SIGNAL( trackCountChanged( unsigned int ) ), SIGNAL( sourceTrackCountChanged( unsigned int ) ) );
+    if ( m_model )
+    {
+        if ( m_model->metaObject()->indexOfSignal( "trackCountChanged(uint)" ) > -1 )
+            connect( m_model, SIGNAL( trackCountChanged( unsigned int ) ), SIGNAL( sourceTrackCountChanged( unsigned int ) ) );
+
+        connect( m_model, SIGNAL( rowsInserted( QModelIndex, int, int ) ), SLOT( onRowsInserted( QModelIndex, int, int ) ) );
+    }
 
     QSortFilterProxyModel::setSourceModel( sourceModel );
 }
 
 
 void
-TreeProxyModel::setFilter( const QString& pattern )
+TreeProxyModel::onRowsInserted( const QModelIndex& parent, int /* start */, int /* end */ )
 {
-    m_filter = pattern;
+    if ( m_filter.isEmpty() )
+        return;
+    if ( sender() != m_model )
+        return;
 
-    DatabaseCommand_AllArtists* cmd = new DatabaseCommand_AllArtists( m_model->collection() );
-    cmd->setFilter( pattern );
+    TreeModelItem* pi = m_model->itemFromIndex( m_model->index( parent.row(), 0, parent.parent() ) );
+    if ( pi->artist().isNull() )
+        return;
 
-    connect( cmd, SIGNAL( artists( QList<Tomahawk::artist_ptr> ) ),
-                    SLOT( onFilterArtists( QList<Tomahawk::artist_ptr> ) ) );
+    DatabaseCommand_AllAlbums* cmd = new DatabaseCommand_AllAlbums( m_model->collection() );
+    cmd->setArtist( pi->artist() );
+    cmd->setFilter( m_filter );
+
+    connect( cmd, SIGNAL( albums( QList<Tomahawk::album_ptr>, QVariant ) ),
+                    SLOT( onFilterAlbums( QList<Tomahawk::album_ptr> ) ) );
 
     Database::instance()->enqueue( QSharedPointer<DatabaseCommand>( cmd ) );
 }
 
 
 void
+TreeProxyModel::setFilter( const QString& pattern )
+{
+    emit filteringStarted();
+
+    m_filter = pattern;
+    m_albumsFilter.clear();
+
+    if ( m_artistsFilterCmd )
+    {
+        disconnect( m_artistsFilterCmd, SIGNAL( artists( QList<Tomahawk::artist_ptr> ) ),
+                    this,                 SLOT( onFilterArtists( QList<Tomahawk::artist_ptr> ) ) );
+    }
+
+    if ( m_filter.isEmpty() )
+    {
+        filterFinished();
+    }
+    else
+    {
+        DatabaseCommand_AllArtists* cmd = new DatabaseCommand_AllArtists( m_model->collection() );
+        cmd->setFilter( pattern );
+        m_artistsFilterCmd = cmd;
+
+        connect( cmd, SIGNAL( artists( QList<Tomahawk::artist_ptr> ) ),
+                        SLOT( onFilterArtists( QList<Tomahawk::artist_ptr> ) ) );
+
+        Database::instance()->enqueue( QSharedPointer<DatabaseCommand>( cmd ) );
+    }
+}
+
+
+void
 TreeProxyModel::onFilterArtists( const QList<Tomahawk::artist_ptr>& artists )
 {
+    bool finished = true;
     m_artistsFilter = artists;
 
+    foreach ( const Tomahawk::artist_ptr& artist, artists )
+    {
+        QModelIndex idx = m_model->indexFromArtist( artist );
+        if ( m_model->rowCount( idx ) )
+        {
+            finished = false;
+
+            DatabaseCommand_AllAlbums* cmd = new DatabaseCommand_AllAlbums( m_model->collection() );
+            cmd->setArtist( artist );
+            cmd->setFilter( m_filter );
+
+            connect( cmd, SIGNAL( albums( QList<Tomahawk::album_ptr>, QVariant ) ),
+                            SLOT( onFilterAlbums( QList<Tomahawk::album_ptr> ) ) );
+
+            Database::instance()->enqueue( QSharedPointer<DatabaseCommand>( cmd ) );
+        }
+    }
+
+    if ( finished )
+        filterFinished();
+}
+
+
+void
+TreeProxyModel::onFilterAlbums( const QList<Tomahawk::album_ptr>& albums )
+{
+    m_albumsFilter << albums;
+    filterFinished();
+}
+
+
+void
+TreeProxyModel::filterFinished()
+{
+    m_artistsFilterCmd = 0;
     PlaylistInterface::setFilter( m_filter );
     setFilterRegExp( m_filter );
 
     emit filterChanged( m_filter );
     emit trackCountChanged( trackCount() );
+    emit filteringFinished();
 }
 
 
@@ -103,7 +187,8 @@ TreeProxyModel::filterAcceptsRow( int sourceRow, const QModelIndex& sourceParent
             if ( result->track() == pi->result()->track() &&
                ( result->albumpos() == pi->result()->albumpos() || result->albumpos() == 0 ) )
             {
-                return ( result.data() == pi->result().data() );
+                if ( result.data() != pi->result().data() )
+                    return false;
             }
         }
 
@@ -125,27 +210,34 @@ TreeProxyModel::filterAcceptsRow( int sourceRow, const QModelIndex& sourceParent
             }
         }
 
-        tDebug() << "Accepting:" << pi->result()->toString() << pi->result()->collection()->source()->id();
+//        tDebug() << "Accepting:" << pi->result()->toString() << pi->result()->collection()->source()->id();
         m_cache.insertMulti( sourceParent, pi->result() );
     }
 
-    if ( !filterRegExp().isEmpty() && !pi->artist().isNull() )
-    {
-        return m_artistsFilter.contains( pi->artist() );
-    }
-    return true;
+    if ( m_filter.isEmpty() )
+        return true;
 
-    QStringList sl = filterRegExp().pattern().split( " ", QString::SkipEmptyParts );
-    bool found = true;
+    if ( !pi->artist().isNull() )
+        return m_artistsFilter.contains( pi->artist() );
+    if ( !pi->album().isNull() )
+        return m_albumsFilter.contains( pi->album() );
+
+    QStringList sl = m_filter.split( " ", QString::SkipEmptyParts );
     foreach( const QString& s, sl )
     {
-        if ( !textForItem( pi ).contains( s, Qt::CaseInsensitive ) )
+        QString album;
+        if ( !pi->result()->album().isNull() )
+            album = pi->result()->album()->name();
+
+        if ( !pi->result()->track().contains( s, Qt::CaseInsensitive ) &&
+             !album.contains( s, Qt::CaseInsensitive ) &&
+             !pi->result()->album()->artist()->name().contains( s, Qt::CaseInsensitive ) )
         {
-            found = false;
+            return false;
         }
     }
 
-    return found;
+    return true;
 }
 
 

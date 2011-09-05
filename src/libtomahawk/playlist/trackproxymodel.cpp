@@ -181,6 +181,7 @@ TrackProxyModel::currentItem() const
     return Tomahawk::result_ptr();
 }
 
+
 bool
 TrackProxyModel::filterAcceptsRow( int sourceRow, const QModelIndex& sourceParent ) const
 {

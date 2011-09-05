@@ -25,6 +25,7 @@
 
 #include "audio/audioengine.h"
 #include "dynamic/widgets/LoadingSpinner.h"
+#include "widgets/overlaywidget.h"
 
 #include "tomahawksettings.h"
 #include "treeheader.h"
@@ -40,6 +41,7 @@ using namespace Tomahawk;
 ArtistView::ArtistView( QWidget* parent )
     : QTreeView( parent )
     , m_header( new TreeHeader( this ) )
+    , m_overlay( new OverlayWidget( this ) )
     , m_model( 0 )
     , m_proxyModel( 0 )
 //    , m_delegate( 0 )
@@ -124,6 +126,8 @@ ArtistView::setTreeModel( TreeModel* model )
 
     connect( m_model, SIGNAL( loadingStarted() ), m_loadingSpinner, SLOT( fadeIn() ) );
     connect( m_model, SIGNAL( loadingFinished() ), m_loadingSpinner, SLOT( fadeOut() ) );
+    connect( m_proxyModel, SIGNAL( filteringStarted() ), SLOT( onFilteringStarted() ) );
+    connect( m_proxyModel, SIGNAL( filteringFinished() ), m_loadingSpinner, SLOT( fadeOut() ) );
 
     connect( m_proxyModel, SIGNAL( filterChanged( QString ) ), SLOT( onFilterChanged( QString ) ) );
     connect( m_proxyModel, SIGNAL( rowsInserted( QModelIndex, int, int ) ), SLOT( onViewChanged() ) );
@@ -206,12 +210,20 @@ ArtistView::onFilterChanged( const QString& )
 
     if ( !proxyModel()->filter().isEmpty() && !proxyModel()->trackCount() && model()->trackCount() )
     {
-/*        m_overlay->setText( tr( "Sorry, your filter '%1' did not match any results." ).arg( proxyModel()->filter() ) );
-        m_overlay->show();*/
+        m_overlay->setText( tr( "Sorry, your filter '%1' did not match any results." ).arg( proxyModel()->filter() ) );
+        m_overlay->show();
     }
-/*    else
+    else
         if ( model()->trackCount() )
-            m_overlay->hide();*/
+            m_overlay->hide();
+}
+
+
+void
+ArtistView::onFilteringStarted()
+{
+    m_overlay->hide();
+    m_loadingSpinner->fadeIn();
 }
 
 

@@ -26,6 +26,8 @@
 
 #include "dllmacro.h"
 
+class DatabaseCommand_AllArtists;
+
 class DLLEXPORT TreeProxyModel : public QSortFilterProxyModel, public Tomahawk::PlaylistInterface
 {
 Q_OBJECT
@@ -71,6 +73,8 @@ signals:
     void sourceTrackCountChanged( unsigned int tracks );
 
     void filterChanged( const QString& filter );
+    void filteringStarted();
+    void filteringFinished();
 
     void nextTrackReady();
 
@@ -83,14 +87,21 @@ protected:
     bool lessThan( const QModelIndex& left, const QModelIndex& right ) const;
 
 private slots:
+    void onRowsInserted( const QModelIndex& parent, int start, int end );
+
     void onFilterArtists( const QList<Tomahawk::artist_ptr>& artists );
+    void onFilterAlbums( const QList<Tomahawk::album_ptr>& albums );
 
 private:
+    void filterFinished();
     QString textForItem( TreeModelItem* item ) const;
 
     mutable QMap< QPersistentModelIndex, Tomahawk::result_ptr > m_cache;
 
     QList<Tomahawk::artist_ptr> m_artistsFilter;
+    QList<Tomahawk::album_ptr> m_albumsFilter;
+    DatabaseCommand_AllArtists* m_artistsFilterCmd;
+
     QString m_filter;
 
     TreeModel* m_model;

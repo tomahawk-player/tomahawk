@@ -21,6 +21,7 @@
 #include <QSqlQuery>
 
 #include "databaseimpl.h"
+#include "utils/tomahawkutils.h"
 #include "utils/logger.h"
 
 
@@ -29,7 +30,7 @@ DatabaseCommand_AllAlbums::execForArtist( DatabaseImpl* dbi )
 {
     TomahawkSqlQuery query = dbi->newquery();
     QList<Tomahawk::album_ptr> al;
-    QString orderToken, sourceToken;
+    QString orderToken, sourceToken, filterToken, tables;
 
     switch ( m_sortOrder )
     {
@@ -43,17 +44,33 @@ DatabaseCommand_AllAlbums::execForArtist( DatabaseImpl* dbi )
     if ( !m_collection.isNull() )
         sourceToken = QString( "AND file.source %1 " ).arg( m_collection->source()->isLocal() ? "IS NULL" : QString( "= %1" ).arg( m_collection->source()->id() ) );
 
+    if ( !m_filter.isEmpty() )
+    {
+        QString filtersql;
+        QStringList sl = m_filter.split( " ", QString::SkipEmptyParts );
+        foreach( QString s, sl )
+        {
+            filtersql += QString( " AND ( artist.name LIKE '%%1%' OR album.name LIKE '%%1%' OR track.name LIKE '%%1%' )" ).arg( TomahawkUtils::sqlEscape( s ) );
+        }
+
+        filterToken = QString( "AND artist.id = file_join.artist AND file_join.track = track.id %1" ).arg( filtersql );
+        tables = "artist, track, file, file_join";
+    }
+    else
+        tables = "file, file_join";
+
     QString sql = QString(
         "SELECT DISTINCT album.id, album.name "
-        "FROM file, file_join "
+        "FROM %1 "
         "LEFT OUTER JOIN album "
         "ON file_join.album = album.id "
         "WHERE file.id = file_join.file "
-        "AND file_join.artist = %1 "
-        "%2 "
-        "%3 %4 %5"
-        ).arg( m_artist->id() )
+        "AND file_join.artist = %2 "
+        "%3 %4 %5 %6 %7"
+        ).arg( tables )
+         .arg( m_artist->id() )
          .arg( sourceToken )
+         .arg( filterToken )
          .arg( m_sortOrder > 0 ? QString( "ORDER BY %1" ).arg( orderToken ) : QString() )
          .arg( m_sortDescending ? "DESC" : QString() )
          .arg( m_amount > 0 ? QString( "LIMIT 0, %1" ).arg( m_amount ) : QString() );

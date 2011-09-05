@@ -190,6 +190,20 @@ TreeModel::fetchMore( const QModelIndex& parent )
 }
 
 
+bool
+TreeModel::hasChildren( const QModelIndex& parent ) const
+{
+    TreeModelItem* parentItem = itemFromIndex( parent );
+    if ( !parentItem )
+        return false;
+
+    if ( parentItem == m_rootItem )
+        return true;
+
+    return ( !parentItem->artist().isNull() || !parentItem->album().isNull() );
+}
+
+
 int
 TreeModel::rowCount( const QModelIndex& parent ) const
 {
@@ -199,12 +213,6 @@ TreeModel::rowCount( const QModelIndex& parent ) const
     TreeModelItem* parentItem = itemFromIndex( parent );
     if ( !parentItem )
         return 0;
-
-    if ( !parentItem->artist().isNull() || !parentItem->album().isNull() )
-    {
-        if ( !parentItem->children.count() )
-            return 1;
-    }
 
     return parentItem->children.count();
 }
@@ -667,8 +675,6 @@ TreeModel::onArtistsAdded( const QList<Tomahawk::artist_ptr>& artists )
 void
 TreeModel::onAlbumsAdded( const QList<Tomahawk::album_ptr>& albums, const QVariant& data )
 {
-    qDebug() << Q_FUNC_INFO << albums.count() << data.toInt();
-
     emit loadingFinished();
     if ( !albums.count() )
         return;
@@ -681,11 +687,7 @@ TreeModel::onAlbumsAdded( const QList<Tomahawk::album_ptr>& albums, const QVaria
     crows.first = c;
     crows.second = c + albums.count() - 1;
 
-    if ( parent.isValid() )
-        crows.second -= 1;
-
-    if ( !parent.isValid() || crows.second > 0 )
-        emit beginInsertRows( parent, crows.first, crows.second );
+    emit beginInsertRows( parent, crows.first, crows.second );
 
     TreeModelItem* albumitem = 0;
     foreach( const album_ptr& album, albums )
@@ -697,18 +699,13 @@ TreeModel::onAlbumsAdded( const QList<Tomahawk::album_ptr>& albums, const QVaria
         getCover( albumitem->index );
     }
 
-    if ( !parent.isValid() || crows.second > 0 )
-        emit endInsertRows();
-    else
-        emit dataChanged( albumitem->index, albumitem->index.sibling( albumitem->index.row(), columnCount( QModelIndex() ) - 1 ) );
+    emit endInsertRows();
 }
 
 
 void
 TreeModel::onTracksAdded( const QList<Tomahawk::query_ptr>& tracks, const QVariant& data )
 {
-    qDebug() << Q_FUNC_INFO << tracks.count();
-
     emit loadingFinished();
     if ( !tracks.count() )
         return;
@@ -723,11 +720,7 @@ TreeModel::onTracksAdded( const QList<Tomahawk::query_ptr>& tracks, const QVaria
     crows.first = c;
     crows.second = c + tracks.count() - 1;
 
-    if ( parent.isValid() )
-        crows.second -= 1;
-
-    if ( !parent.isValid() || crows.second > 0 )
-        emit beginInsertRows( parent, crows.first, crows.second );
+    emit beginInsertRows( parent, crows.first, crows.second );
 
     TreeModelItem* item = 0;
     foreach( const query_ptr& query, tracks )
@@ -739,10 +732,7 @@ TreeModel::onTracksAdded( const QList<Tomahawk::query_ptr>& tracks, const QVaria
         connect( item, SIGNAL( dataChanged() ), SLOT( onDataChanged() ) );
     }
 
-    if ( !parent.isValid() || crows.second > 0 )
-        emit endInsertRows();
-
-    emit dataChanged( item->index.sibling( 0, 0 ), item->index.sibling( item->index.row(), columnCount( QModelIndex() ) - 1 ) );
+    emit endInsertRows();
 }
 
 
@@ -825,4 +815,28 @@ void
 TreeModel::setColumnStyle( TreeModel::ColumnStyle style )
 {
     m_columnStyle = style;
+}
+
+
+QModelIndex
+TreeModel::indexFromArtist( const Tomahawk::artist_ptr& artist ) const
+{
+    for ( int i = 0; i < rowCount(); i++ )
+    {
+        QModelIndex idx = index( i, 0, QModelIndex() );
+        TreeModelItem* item = itemFromIndex( idx );
+        if ( item && item->artist() == artist )
+        {
+            return idx;
+        }
+    }
+
+    return QModelIndex();
+}
+
+
+QModelIndex
+TreeModel::indexFromAlbum( const Tomahawk::album_ptr& album ) const
+{
+    return QModelIndex();
 }

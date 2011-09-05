@@ -157,7 +157,6 @@ WhatsHotWidget::infoSystemInfo( Tomahawk::InfoSystem::InfoRequestData requestDat
 {
     if ( requestData.caller != s_whatsHotIdentifier )
     {
-        tDebug() << "WhatsHot::" << "Info of wrong type or not with our identifier";
         return;
     }
 

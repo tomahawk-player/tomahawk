@@ -31,6 +31,7 @@
 
 class TreeHeader;
 class LoadingSpinner;
+class OverlayWidget;
 
 class DLLEXPORT ArtistView : public QTreeView, public Tomahawk::ViewPage
 {
@@ -47,7 +48,8 @@ public:
 
     TreeModel* model() const { return m_model; }
     TreeProxyModel* proxyModel() const { return m_proxyModel; }
-//    PlaylistItemDelegate* delegate() { return m_delegate; }
+    OverlayWidget* overlay() const { return m_overlay; }
+    //    PlaylistItemDelegate* delegate() { return m_delegate; }
 
     void setModel( QAbstractItemModel* model );
     void setTreeModel( TreeModel* model );
@@ -79,6 +81,7 @@ protected:
 
 private slots:
     void onFilterChanged( const QString& filter );
+    void onFilteringStarted();
     void onViewChanged();
     void onScrollTimeout();
 
@@ -87,11 +90,12 @@ private slots:
 
 private:
     TreeHeader* m_header;
+    OverlayWidget* m_overlay;
     TreeModel* m_model;
     TreeProxyModel* m_proxyModel;
 //    PlaylistItemDelegate* m_delegate;
-
     LoadingSpinner* m_loadingSpinner;
+
     QModelIndex m_contextMenuIndex;
     Tomahawk::ContextMenu* m_contextMenu;
 
