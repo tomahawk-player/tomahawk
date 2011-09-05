@@ -175,6 +175,13 @@ appLogDir()
 
 
 QString
+sqlEscape( QString sql )
+{
+    return sql.replace( "'", "''" );
+}
+
+
+QString
 timeToString( int seconds )
 {
     int hrs  = seconds / 60 / 60;

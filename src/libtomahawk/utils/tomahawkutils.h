@@ -75,6 +75,7 @@ namespace TomahawkUtils
     DLLEXPORT QDir appDataDir();
     DLLEXPORT QDir appLogDir();
 
+    DLLEXPORT QString sqlEscape( QString sql );
     DLLEXPORT QString timeToString( int seconds );
     DLLEXPORT QString ageToString( const QDateTime& time );
     DLLEXPORT QString filesizeToString( unsigned int size );

@@ -21,6 +21,7 @@
 #include <QSqlQuery>
 
 #include "databaseimpl.h"
+#include "utils/tomahawkutils.h"
 #include "utils/logger.h"
 
 
@@ -45,8 +46,14 @@ DatabaseCommand_AllArtists::exec( DatabaseImpl* dbi )
 
     if ( !m_filter.isEmpty() )
     {
-        filterToken = QString( "AND file_join.album = album.id AND file_join.track = track.id "
-                               "AND ( artist.name LIKE :filterA OR album.name LIKE :filterB OR track.name LIKE :filterC )" );
+        QString filtersql;
+        QStringList sl = m_filter.split( " ", QString::SkipEmptyParts );
+        foreach( QString s, sl )
+        {
+            filtersql += QString( " AND ( artist.name LIKE '%%1%' OR album.name LIKE '%%1%' OR track.name LIKE '%%1%' )" ).arg( TomahawkUtils::sqlEscape( s ) );
+        }
+
+        filterToken = QString( "AND file_join.album = album.id AND file_join.track = track.id %1" ).arg( filtersql );
         tables = "artist, track, album, file, file_join";
     }
     else
@@ -66,13 +73,6 @@ DatabaseCommand_AllArtists::exec( DatabaseImpl* dbi )
              .arg( m_amount > 0 ? QString( "LIMIT 0, %1" ).arg( m_amount ) : QString() );
 
     query.prepare( sql );
-    if ( !m_filter.isEmpty() )
-    {
-        query.bindValue( ":filterA", QString( "%%1%" ).arg( m_filter ) );
-        query.bindValue( ":filterB", QString( "%%1%" ).arg( m_filter ) );
-        query.bindValue( ":filterC", QString( "%%1%" ).arg( m_filter ) );
-    }
-
     query.exec();
 
     while( query.next() )
