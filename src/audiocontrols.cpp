@@ -24,18 +24,16 @@
 #include <QMouseEvent>
 
 #include "audio/audioengine.h"
-#include "viewmanager.h"
 #include "playlist/playlistview.h"
 #include "database/database.h"
 #include "database/databasecommand_socialaction.h"
-
-#include "album.h"
-
-#include "utils/imagebutton.h"
+#include "widgets/imagebutton.h"
 #include "utils/tomahawkutils.h"
 #include "utils/logger.h"
-#include <globalactionmanager.h>
+#include "album.h"
 #include "dropjob.h"
+#include "globalactionmanager.h"
+#include "viewmanager.h"
 
 using namespace Tomahawk;
 
@@ -90,7 +88,7 @@ AudioControls::AudioControls( QWidget* parent )
 
     ui->ownerLabel->setForegroundRole( QPalette::Dark );
     ui->metaDataArea->setStyleSheet( "QWidget#metaDataArea {\nborder-width: 4px;\nborder-image: url(" RESPATH "images/now-playing-panel.png) 4 4 4 4 stretch stretch; }" );
-    
+
     ui->seekSlider->setEnabled( true );
     ui->volumeSlider->setRange( 0, 100 );
     ui->volumeSlider->setValue( AudioEngine::instance()->volume() );
@@ -99,7 +97,7 @@ AudioControls::AudioControls( QWidget* parent )
     ui->seekSlider->setTimeLine( &m_sliderTimeLine );
 
     connect( &m_sliderTimeLine,    SIGNAL( frameChanged( int ) ), ui->seekSlider, SLOT( setValue( int ) ) );
-    
+
     connect( ui->seekSlider,       SIGNAL( valueChanged( int ) ), AudioEngine::instance(), SLOT( seek( int ) ) );
     connect( ui->volumeSlider,     SIGNAL( valueChanged( int ) ), AudioEngine::instance(), SLOT( setVolume( int ) ) );
     connect( ui->prevButton,       SIGNAL( clicked() ), AudioEngine::instance(), SLOT( previous() ) );
@@ -189,7 +187,7 @@ AudioControls::onPlaybackStarted( const Tomahawk::result_ptr& result )
 
     if ( result.isNull() )
         return;
-    
+
     if ( m_currentTrack.isNull() || ( !m_currentTrack.isNull() && m_currentTrack.data()->id() != result.data()->id() ) )
         onPlaybackLoading( result );
 
@@ -197,7 +195,7 @@ AudioControls::onPlaybackStarted( const Tomahawk::result_ptr& result )
 
     if ( duration == -1 )
         duration = result.data()->duration() * 1000;
-    
+
     ui->seekSlider->setRange( 0, duration );
     ui->seekSlider->setValue( 0 );
 
@@ -208,7 +206,7 @@ AudioControls::onPlaybackStarted( const Tomahawk::result_ptr& result )
     m_seekMsecs = -1;
 
     ui->seekSlider->setVisible( true );
-    
+
     Tomahawk::InfoSystem::InfoCriteriaHash trackInfo;
     trackInfo["artist"] = result->artist()->name();
     trackInfo["album"] = result->album()->name();
@@ -374,7 +372,7 @@ AudioControls::onPlaybackTimer( qint64 msElapsed )
     const int seconds = msElapsed / 1000;
     ui->timeLabel->setText( TomahawkUtils::timeToString( seconds ) );
     ui->timeLeftLabel->setText( "-" + TomahawkUtils::timeToString( m_currentTrack->duration() - seconds ) );
-    
+
     if ( m_sliderTimeLine.currentTime() > msElapsed || m_seekMsecs != -1 )
     {
         m_sliderTimeLine.setPaused( true );

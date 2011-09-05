@@ -21,7 +21,7 @@
 
 #include <QPushButton>
 
-#include "utils/animatedsplitter.h"
+#include "widgets/animatedsplitter.h"
 #include "playlistview.h"
 
 #include "dllmacro.h"

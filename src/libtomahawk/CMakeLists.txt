@@ -170,12 +170,9 @@ set( libSources
     network/controlconnection.cpp
 
     utils/tomahawkutils.cpp
-    utils/querylabel.cpp
-    utils/imagebutton.cpp
     utils/logger.cpp
     utils/proxystyle.cpp
     utils/widgetdragfilter.cpp
-    utils/animatedsplitter.cpp
     utils/xspfloader.cpp
     utils/xspfgenerator.cpp
     utils/jspfloader.cpp
@@ -184,6 +181,9 @@ set( libSources
     utils/shortenedlinkparser.cpp
     utils/stylehelper.cpp
 
+    widgets/querylabel.cpp
+    widgets/imagebutton.cpp
+    widgets/animatedsplitter.cpp
     widgets/elidedlabel.cpp
     widgets/newplaylistwidget.cpp
     widgets/searchwidget.cpp
@@ -370,11 +370,7 @@ set( libHeaders
     playlist/dynamic/database/DatabaseControl.h
     playlist/dynamic/database/DatabaseGenerator.h
 
-    utils/querylabel.h
-    utils/animatedcounterlabel.h
-    utils/imagebutton.h
     utils/widgetdragfilter.h
-    utils/animatedsplitter.h
     utils/xspfloader.h
     utils/xspfgenerator.h
     utils/jspfloader.h
@@ -383,6 +379,10 @@ set( libHeaders
     utils/shortenedlinkparser.h
     utils/stylehelper.h
 
+    widgets/querylabel.h
+    widgets/animatedcounterlabel.h
+    widgets/imagebutton.h
+    widgets/animatedsplitter.h
     widgets/elidedlabel.h
     widgets/newplaylistwidget.h
     widgets/searchwidget.h

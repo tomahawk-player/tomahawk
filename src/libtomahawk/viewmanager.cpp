@@ -23,7 +23,6 @@
 
 #include "audio/audioengine.h"
 #include "context/ContextWidget.h"
-#include "utils/animatedsplitter.h"
 #include "infobar/infobar.h"
 #include "topbar/topbar.h"
 
@@ -49,6 +48,7 @@
 #include "widgets/infowidgets/ArtistInfoWidget.h"
 #include "widgets/infowidgets/AlbumInfoWidget.h"
 #include "widgets/newplaylistwidget.h"
+#include "widgets/animatedsplitter.h"
 
 #include "utils/logger.h"
 
