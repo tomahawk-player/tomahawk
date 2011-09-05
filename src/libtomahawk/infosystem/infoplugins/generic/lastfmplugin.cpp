@@ -403,8 +403,9 @@ LastFmPlugin::notInCacheSlot( uint requestId, QHash<QString, QString> criteria, 
     {
         case InfoChart:
         {
-            tDebug() << "LastfmPlugin: InfoChart not in cache, fetching";
+            tDebug() << "LastFmPlugin: InfoChart not in cache, fetching";
             QMap<QString, QString> args;
+            tDebug() << "LastFmPlugin: " << "args chart_id" << criteria["chart_id"];
             args["method"] = criteria["chart_id"];
             args["limit"] = "100";
             QNetworkReply* reply = lastfm::ws::get(args);
@@ -539,8 +540,11 @@ LastFmPlugin::chartReturned()
     QNetworkReply* reply = qobject_cast<QNetworkReply*>( sender() );
 
     QVariantMap returnedData;
+    const QRegExp tracks_rx( "chart\\.\\S+tracks\\S*", Qt::CaseInsensitive );
+    const QRegExp artists_rx( "chart\\.\\S+artists\\S*", Qt::CaseInsensitive );
+    const QString url = reply->url().toString();
 
-    if( replyIsTracks( reply) ) {
+    if( url.contains( tracks_rx ) ) {
         QList<lastfm::Track> tracks = parseTrackList( reply );
         QList<ArtistTrackPair> top_tracks;
         foreach( const lastfm::Track &t, tracks ) {
@@ -553,7 +557,7 @@ LastFmPlugin::chartReturned()
         returnedData["tracks"] = QVariant::fromValue( top_tracks );
         returnedData["type"] = "tracks";
 
-    } else if( replyIsArtists( reply ) ) {
+    } else if( url.contains( artists_rx ) ) {
         QList<lastfm::Artist> list = lastfm::Artist::list( reply );
         QStringList al;
         tDebug() << "LastFmPlugin:"<< "\tgot " << list.size() << " artists";
@@ -823,32 +827,3 @@ LastFmPlugin::parseTrackList( QNetworkReply * reply )
     return tracks;
 }
 
-bool
-LastFmPlugin::replyIsTracks( QNetworkReply *reply )
-{
-    try {
-        lastfm::XmlQuery lfm = lastfm::ws::parse(reply);
-        QDomElement e(lfm["tracks"]);
-        return !e.isNull();
-    }
-    catch (lastfm::ws::ParseError& e)
-    {
-        qWarning() << e.what();
-        return false;
-    }
-}
-
-bool
-LastFmPlugin::replyIsArtists( QNetworkReply *reply )
-{
-    try {
-        lastfm::XmlQuery lfm = lastfm::ws::parse(reply);
-        QDomElement e(lfm["artists"]);
-        return !e.isNull();
-    }
-    catch (lastfm::ws::ParseError& e)
-    {
-        qWarning() << e.what();
-        return false;
-    }
-}

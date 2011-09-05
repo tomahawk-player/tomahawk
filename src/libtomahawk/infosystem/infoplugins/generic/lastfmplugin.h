@@ -78,8 +78,6 @@ private:
     void dataError( uint requestId, Tomahawk::InfoSystem::InfoRequestData requestData );
 
     QList<lastfm::Track> parseTrackList( QNetworkReply * reply );
-    bool replyIsTracks( QNetworkReply *reply );
-    bool replyIsArtists( QNetworkReply *reply );
 
     lastfm::MutableTrack m_track;
     lastfm::Audioscrobbler* m_scrobbler;
