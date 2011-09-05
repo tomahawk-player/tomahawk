@@ -1,5 +1,7 @@
 /* === This file is part of Tomahawk Player - <http://tomahawk-player.org> ===
  *
+ *   Written by Hugo Lindström <hugolm84@gmail.com>
+ *   But based on Leo Franchi's work from spotifyParser
  *   Copyright 2010-2011, Leo Franchi <lfranchi@kde.org>
  *
  *   Tomahawk is free software: you can redistribute it and/or modify
