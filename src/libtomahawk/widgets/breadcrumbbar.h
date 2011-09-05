@@ -131,6 +131,7 @@ public:
 
 signals:
     void rootClicked();
+    void currentIndexChanged(QModelIndex);
 
 protected:
     /**

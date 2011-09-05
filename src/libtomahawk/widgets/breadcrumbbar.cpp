@@ -308,6 +308,7 @@ void BreadcrumbBar::currentChangedTriggered(QModelIndex const& index)
 {
     Q_ASSERT(m_selectionModel);
     m_selectionModel->setCurrentIndex( index, QItemSelectionModel::SelectCurrent);
+    emit currentIndexChanged(index);
 }
 
 void BreadcrumbBar::resizeEvent ( QResizeEvent * event )
