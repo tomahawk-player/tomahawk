@@ -55,7 +55,6 @@ signals:
 
 protected:
     void changeEvent( QEvent* e );
-    void resizeEvent( QResizeEvent* e );
 
 private slots:
     void onFilterEdited();

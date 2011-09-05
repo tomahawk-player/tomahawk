@@ -77,6 +77,13 @@ InfoBar::InfoBar( QWidget* parent )
 
     ui->horizontalLayout->addWidget( m_searchWidget );
 
+    QLinearGradient gradient = QLinearGradient( QPoint( 0, 0 ), QPoint( 500, 200 ) ); //HACK
+    gradient.setColorAt( 0.0, QColor( 100, 100, 100 ) );
+    gradient.setColorAt( 0.8, QColor( 63, 63, 63 ) );
+
+    QPalette p = palette();
+    p.setBrush( QPalette::Window, QBrush( gradient ) );
+    setPalette( p );
     setAutoFillBackground( true );
 
     connect( ViewManager::instance(), SIGNAL( filterAvailable( bool ) ), SLOT( setFilterAvailable( bool ) ) );
@@ -161,19 +168,4 @@ InfoBar::changeEvent( QEvent* e )
         default:
             break;
     }
-}
-
-
-void
-InfoBar::resizeEvent( QResizeEvent* e )
-{
-    QWidget::resizeEvent( e );
-
-    QLinearGradient gradient = QLinearGradient( contentsRect().topLeft(), contentsRect().bottomRight() );
-    gradient.setColorAt( 0.0, QColor( 100, 100, 100 ) );
-    gradient.setColorAt( 1.0, QColor( 63, 63, 63 ) );
-
-    QPalette p = palette();
-    p.setBrush( QPalette::Window, QBrush( gradient ) );
-    setPalette( p );
 }
