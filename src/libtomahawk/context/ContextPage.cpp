@@ -54,11 +54,13 @@ ContextProxyPage::setPage( Tomahawk::ContextPage* page )
 {
     m_page = page;
 
+#ifdef Q_OS_LINUX //FIXME: why do we need this? maybe it's only oxygen style misbehaving?
     QGraphicsWebView* testWebView = qobject_cast<QGraphicsWebView*>( page->widget() );
     if ( testWebView )
     {
         setContentsMargins( 4, 4, 4, 4 );
     }
+#endif
 
     QGraphicsLinearLayout* layout = new QGraphicsLinearLayout();
     layout->setContentsMargins( 4, 20, 4, 4 );
