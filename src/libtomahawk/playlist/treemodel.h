@@ -81,6 +81,8 @@ public:
 
     virtual QPersistentModelIndex currentItem() { return m_currentIndex; }
 
+    Tomahawk::collection_ptr collection() const { return m_collection; }
+
     void addAllCollections();
     void addCollection( const Tomahawk::collection_ptr& collection );
     void addFilteredCollection( const Tomahawk::collection_ptr& collection, unsigned int amount, DatabaseCommand_AllArtists::SortOrder order );
@@ -98,9 +100,6 @@ public:
     virtual QString description() const { return m_description; }
     virtual void setTitle( const QString& title ) { m_title = title; }
     virtual void setDescription( const QString& description ) { m_description = description; }
-
-    virtual QString filter() const { return m_filter; }
-    virtual void setFilter( const QString& pattern );
 
     TreeModelItem* itemFromIndex( const QModelIndex& index ) const
     {
@@ -154,9 +153,10 @@ private:
     QString m_description;
     ColumnStyle m_columnStyle;
 
+    QList<Tomahawk::artist_ptr> m_artistsFilter;
+
     Tomahawk::collection_ptr m_collection;
     QHash<qlonglong, QPersistentModelIndex> m_coverHash;
-    QString m_filter;
 };
 
 #endif // ALBUMMODEL_H

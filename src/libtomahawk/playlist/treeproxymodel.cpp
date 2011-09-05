@@ -21,6 +21,7 @@
 #include <QListView>
 
 #include "query.h"
+#include "database/database.h"
 #include "utils/logger.h"
 
 
@@ -63,11 +64,27 @@ TreeProxyModel::setSourceTreeModel( TreeModel* sourceModel )
 void
 TreeProxyModel::setFilter( const QString& pattern )
 {
-    PlaylistInterface::setFilter( pattern );
-    setFilterRegExp( pattern );
-    m_model->setFilter( pattern );
+    m_filter = pattern;
 
-    emit filterChanged( pattern );
+    DatabaseCommand_AllArtists* cmd = new DatabaseCommand_AllArtists( m_model->collection() );
+    cmd->setFilter( pattern );
+
+    connect( cmd, SIGNAL( artists( QList<Tomahawk::artist_ptr> ) ),
+                    SLOT( onFilterArtists( QList<Tomahawk::artist_ptr> ) ) );
+
+    Database::instance()->enqueue( QSharedPointer<DatabaseCommand>( cmd ) );
+}
+
+
+void
+TreeProxyModel::onFilterArtists( const QList<Tomahawk::artist_ptr>& artists )
+{
+    m_artistsFilter = artists;
+
+    PlaylistInterface::setFilter( m_filter );
+    setFilterRegExp( m_filter );
+
+    emit filterChanged( m_filter );
     emit trackCountChanged( trackCount() );
 }
 
@@ -112,6 +129,10 @@ TreeProxyModel::filterAcceptsRow( int sourceRow, const QModelIndex& sourceParent
         m_cache.insertMulti( sourceParent, pi->result() );
     }
 
+    if ( !filterRegExp().isEmpty() && !pi->artist().isNull() )
+    {
+        return m_artistsFilter.contains( pi->artist() );
+    }
     return true;
 
     QStringList sl = filterRegExp().pattern().split( " ", QString::SkipEmptyParts );

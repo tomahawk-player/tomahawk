@@ -82,7 +82,6 @@ DatabaseCommand_AllArtists::exec( DatabaseImpl* dbi )
         al << artist;
     }
 
-    if ( al.count() )
-        emit artists( al );
+    emit artists( al );
     emit done();
 }

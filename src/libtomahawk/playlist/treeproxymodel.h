@@ -82,10 +82,16 @@ protected:
     bool filterAcceptsRow( int sourceRow, const QModelIndex& sourceParent ) const;
     bool lessThan( const QModelIndex& left, const QModelIndex& right ) const;
 
+private slots:
+    void onFilterArtists( const QList<Tomahawk::artist_ptr>& artists );
+
 private:
     QString textForItem( TreeModelItem* item ) const;
 
     mutable QMap< QPersistentModelIndex, Tomahawk::result_ptr > m_cache;
+
+    QList<Tomahawk::artist_ptr> m_artistsFilter;
+    QString m_filter;
 
     TreeModel* m_model;
     RepeatMode m_repeatMode;

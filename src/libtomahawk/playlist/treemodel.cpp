@@ -528,7 +528,6 @@ TreeModel::addAllCollections()
 
     emit loadingStarted();
     DatabaseCommand_AllArtists* cmd = new DatabaseCommand_AllArtists();
-    cmd->setFilter( m_filter );
 
     connect( cmd, SIGNAL( artists( QList<Tomahawk::artist_ptr> ) ),
                     SLOT( onArtistsAdded( QList<Tomahawk::artist_ptr> ) ) );
@@ -579,7 +578,6 @@ TreeModel::addTracks( const album_ptr& album, const QModelIndex& parent )
     emit loadingStarted();
     DatabaseCommand_AllTracks* cmd = new DatabaseCommand_AllTracks( m_collection );
     cmd->setAlbum( album.data() );
-//    cmd->setArtist( album->artist().data() );
 
     QList< QVariant > rows;
     rows << parent.row();
@@ -602,7 +600,6 @@ TreeModel::addCollection( const collection_ptr& collection )
 
     m_collection = collection;
     DatabaseCommand_AllArtists* cmd = new DatabaseCommand_AllArtists( collection );
-    cmd->setFilter( m_filter );
 
     connect( cmd, SIGNAL( artists( QList<Tomahawk::artist_ptr> ) ),
                     SLOT( onArtistsAdded( QList<Tomahawk::artist_ptr> ) ) );
@@ -644,6 +641,7 @@ TreeModel::addFilteredCollection( const collection_ptr& collection, unsigned int
 void
 TreeModel::onArtistsAdded( const QList<Tomahawk::artist_ptr>& artists )
 {
+    emit loadingFinished();
     if ( !artists.count() )
         return;
 
@@ -663,7 +661,6 @@ TreeModel::onArtistsAdded( const QList<Tomahawk::artist_ptr>& artists )
     }
 
     emit endInsertRows();
-    emit loadingFinished();
 }
 
 
@@ -782,19 +779,6 @@ TreeModel::infoSystemInfo( Tomahawk::InfoSystem::InfoRequestData requestData, QV
 
         emit dataChanged( ai->index, ai->index.sibling( ai->index.row(), columnCount( QModelIndex() ) - 1 ) );
     }
-}
-
-
-void
-TreeModel::setFilter( const QString& pattern )
-{
-    m_filter = pattern;
-    clear();
-
-    if ( !m_collection.isNull() )
-        addCollection( m_collection );
-    else
-        addAllCollections();
 }
 
 
