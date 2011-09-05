@@ -68,7 +68,6 @@ ContextProxyPage::setPage( Tomahawk::ContextPage* page )
     setLayout( layout );
 
     page->widget()->installEventFilter( this );
-    page->widget()->installSceneEventFilter( this );
 }
 
 
