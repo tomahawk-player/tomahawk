@@ -95,6 +95,8 @@ set( libSources
     database/databasecommand_genericselect.cpp
     database/database.cpp
 
+    infobar/infobar.cpp
+
     infosystem/infosystemcache.cpp
     infosystem/infosystem.cpp
     infosystem/infosystemworker.cpp
@@ -136,8 +138,6 @@ set( libSources
     playlist/topbar/searchlineedit.cpp
     playlist/topbar/lineedit.cpp
     playlist/topbar/searchbutton.cpp
-
-    playlist/infobar/infobar.cpp
 
     playlist/dynamic/DynamicPlaylist.cpp
     playlist/dynamic/DynamicControl.cpp
@@ -296,6 +296,8 @@ set( libHeaders
     database/databasecommand_loadsocialactions.h
     database/databasecommand_genericselect.h
 
+    infobar/infobar.h
+
     infosystem/infosystem.h
     infosystem/infosystemworker.h
     infosystem/infosystemcache.h
@@ -348,8 +350,6 @@ set( libHeaders
     playlist/topbar/lineedit.h
     playlist/topbar/lineedit_p.h
     playlist/topbar/searchbutton.h
-
-    playlist/infobar/infobar.h
 
     playlist/dynamic/DynamicPlaylist.h
     playlist/dynamic/DynamicControl.h
@@ -433,9 +433,9 @@ set( libUI ${libUI}
     widgets/infowidgets/ArtistInfoWidget.ui
     widgets/infowidgets/AlbumInfoWidget.ui
     playlist/topbar/topbar.ui
-    playlist/infobar/infobar.ui
     playlist/queueview.ui
     context/ContextWidget.ui
+    infobar/infobar.ui
 )
 
 include_directories( . ${CMAKE_CURRENT_BINARY_DIR} ${CMAKE_CURRENT_BINARY_DIR}/.. ..
