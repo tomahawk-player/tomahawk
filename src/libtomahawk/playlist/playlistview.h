@@ -23,7 +23,7 @@
 #include "playlist/playlistmodel.h"
 #include "trackview.h"
 #include "viewpage.h"
-
+#include "dropjob.h"
 #include "dllmacro.h"
 
 class DLLEXPORT PlaylistView : public TrackView, public Tomahawk::ViewPage
@@ -46,9 +46,9 @@ public:
     virtual QString title() const { return playlistModel()->title(); }
     virtual QString description() const { return m_model->description(); }
     virtual QPixmap pixmap() const { return QPixmap( RESPATH "images/playlist-icon.png" ); }
-
     virtual bool jumpToCurrentTrack();
     virtual bool isTemporaryPage() const;
+
 
 signals:
     void nameChanged( const QString& title );
@@ -56,10 +56,14 @@ signals:
 
 protected:
     void keyPressEvent( QKeyEvent* event );
+    virtual void dragEnterEvent( QDragEnterEvent* event );
+    virtual void dragLeaveEvent( QDragLeaveEvent* /*event*/ ) { m_dragging = false; setDirtyRegion( m_dropRect ); }
+    virtual void dragMoveEvent( QDragMoveEvent* event );
+    virtual void dropEvent( QDropEvent* event );
+    void paintEvent( QPaintEvent* event );
 
 private slots:
     void onTrackCountChanged( unsigned int tracks );
-
     void onMenuTriggered( int action );
     void deleteItems();
 
@@ -68,9 +72,12 @@ private slots:
 
 private:
     PlaylistModel* m_model;
-
+    bool m_resizing;
+    bool m_dragging;
+    QRect m_dropRect;
     QString m_customTitle;
     QString m_customDescripton;
+
 };
 
 #endif // PLAYLISTVIEW_H
