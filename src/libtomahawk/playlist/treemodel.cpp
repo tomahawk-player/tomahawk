@@ -39,7 +39,7 @@ TreeModel::TreeModel( QObject* parent )
     , m_rootItem( new TreeModelItem( 0, this ) )
     , m_columnStyle( AllColumns )
 {
-    qDebug() << Q_FUNC_INFO;
+    setIcon( QPixmap( RESPATH "images/music-icon.png" ) );
 
     connect( AudioEngine::instance(), SIGNAL( finished( Tomahawk::result_ptr ) ), SLOT( onPlaybackFinished( Tomahawk::result_ptr ) ), Qt::DirectConnection );
     connect( AudioEngine::instance(), SIGNAL( stopped() ), SLOT( onPlaybackStopped() ), Qt::DirectConnection );
@@ -614,7 +614,9 @@ TreeModel::addCollection( const collection_ptr& collection )
 
     Database::instance()->enqueue( QSharedPointer<DatabaseCommand>( cmd ) );
 
-    setIcon( collection->source()->avatar() );
+    if ( !collection->source()->avatar().isNull() )
+        setIcon( collection->source()->avatar() );
+
     if ( collection->source()->isLocal() )
         setTitle( tr( "Your Collection" ) );
     else
