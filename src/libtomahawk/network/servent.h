@@ -63,7 +63,7 @@ public:
         QTimer::singleShot( AUTH_TIMEOUT, this, SLOT( authTimeout() ) ) ;
     }
 
-    Connection* _conn;
+    QWeakPointer<Connection> _conn;
     bool _outbound;
     bool _disowned;
     msg_ptr _msg;

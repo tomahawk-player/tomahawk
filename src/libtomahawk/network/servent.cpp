@@ -443,7 +443,7 @@ Servent::socketConnected()
 
 //    qDebug() << "Servent::SocketConnected" << thread() << "socket:" << sock;
 
-    Connection* conn = sock->_conn;
+    Connection* conn = sock->_conn.data();
     handoverSocket( conn, sock );
 }
 
@@ -472,28 +472,31 @@ void Servent::handoverSocket( Connection* conn, QTcpSocketExtra* sock )
 void
 Servent::socketError( QAbstractSocket::SocketError e )
 {
-    qDebug() << Q_FUNC_INFO;
     QTcpSocketExtra* sock = (QTcpSocketExtra*)sender();
-    if( !sock )
+    if ( !sock )
     {
         tLog() << "SocketError, sock is null";
         return;
     }
 
-    Connection* conn = sock->_conn;
-    if ( !conn )
+    if ( !sock->_conn.isNull() )
+    {
+        Connection* conn = sock->_conn.data();
+        tLog() << "Servent::SocketError:" << e << conn->id() << conn->name();
+
+        if ( !sock->_disowned )
+        {
+            // connection will delete if we already transferred ownership, otherwise:
+            sock->deleteLater();
+        }
+
+        conn->markAsFailed(); // will emit failed, then finished
+    }
+    else
     {
         tLog() << "SocketError, connection is null";
-        return;
-    }
-
-    tLog() << "Servent::SocketError:" << e << conn->id() << conn->name();
-    if( !sock->_disowned )
-    {
-        // connection will delete if we already transferred ownership, otherwise:
         sock->deleteLater();
     }
-    conn->markAsFailed(); // will emit failed, then finished
 }
 
 
