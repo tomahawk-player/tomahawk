@@ -51,6 +51,7 @@ signals:
     void tracks( const QList< Tomahawk::query_ptr > tracks );
     void playlist( const Tomahawk::query_ptr& playlist );
 
+
 private slots:
     void itunesResponseLookupFinished();
 

@@ -127,11 +127,13 @@ ItunesParser::itunesResponseLookupFinished()
 
         foreach(QVariant itune, itunesResponse){
             QString title, artist, album;
-            if( itune.toMap().value( "wrapperType" ).toString().contains( "track" ) ){
+            QVariantMap ituneMap = itune.toMap();
 
-                title = itune.toMap().value( "trackName" ).toString();
-                artist = itune.toMap().value( "artistName" ).toString();
-                album = itune.toMap().value( "collectionName" ).toString();
+            if( ituneMap.value( "wrapperType" ).toString().contains( "track" ) ){
+
+                title = ituneMap.value( "trackName" ).toString();
+                artist = ituneMap.value( "artistName" ).toString();
+                album = ituneMap.value( "collectionName" ).toString();
                 if ( title.isEmpty() && artist.isEmpty() ) // don't have enough...
                 {
                     tLog() << "Didn't get an artist and track name from itunes, not enough to build a query on. Aborting" << title << artist << album;
