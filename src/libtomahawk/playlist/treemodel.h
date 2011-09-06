@@ -100,8 +100,10 @@ public:
 
     virtual QString title() const { return m_title; }
     virtual QString description() const { return m_description; }
+    virtual QPixmap icon() const { return m_icon; }
     virtual void setTitle( const QString& title ) { m_title = title; }
     virtual void setDescription( const QString& description ) { m_description = description; }
+    virtual void setIcon( const QPixmap& pixmap ) { m_icon = pixmap; }
 
     QModelIndex indexFromArtist( const Tomahawk::artist_ptr& artist ) const;
     QModelIndex indexFromAlbum( const Tomahawk::album_ptr& album ) const;
@@ -156,6 +158,7 @@ private:
 
     QString m_title;
     QString m_description;
+    QPixmap m_icon;
     ColumnStyle m_columnStyle;
 
     QList<Tomahawk::artist_ptr> m_artistsFilter;

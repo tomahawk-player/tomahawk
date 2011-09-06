@@ -614,6 +614,7 @@ TreeModel::addCollection( const collection_ptr& collection )
 
     Database::instance()->enqueue( QSharedPointer<DatabaseCommand>( cmd ) );
 
+    setIcon( collection->source()->avatar() );
     if ( collection->source()->isLocal() )
         setTitle( tr( "Your Collection" ) );
     else
