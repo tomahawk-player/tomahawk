@@ -117,13 +117,13 @@ Query::updateSortNames()
 {
     if ( isFullTextQuery() )
     {
-        m_artistSortname = DatabaseImpl::sortname( m_fullTextQuery );
-        m_albumSortname = m_artistSortname;
-        m_trackSortname = m_artistSortname;
+        m_artistSortname = DatabaseImpl::sortname( m_fullTextQuery, true );
+        m_albumSortname = DatabaseImpl::sortname( m_fullTextQuery );
+        m_trackSortname = m_albumSortname;
     }
     else
     {
-        m_artistSortname = DatabaseImpl::sortname( m_artist );
+        m_artistSortname = DatabaseImpl::sortname( m_artist, true );
         m_albumSortname = DatabaseImpl::sortname( m_album );
         m_trackSortname = DatabaseImpl::sortname( m_track );
     }
@@ -393,7 +393,7 @@ float
 Query::howSimilar( const Tomahawk::result_ptr& r )
 {
     // result values
-    const QString rArtistname = DatabaseImpl::sortname( r->artist()->name() );
+    const QString rArtistname = r->artist()->sortname();
     const QString rAlbumname  = DatabaseImpl::sortname( r->album()->name() );
     const QString rTrackname  = DatabaseImpl::sortname( r->track() );
 

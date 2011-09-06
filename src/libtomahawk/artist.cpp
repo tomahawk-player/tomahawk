@@ -75,6 +75,7 @@ Artist::Artist( unsigned int id, const QString& name )
     , m_currentItem( 0 )
     , m_currentTrack( 0 )
 {
+    m_sortname = DatabaseImpl::sortname( name, true );
 }
 
 

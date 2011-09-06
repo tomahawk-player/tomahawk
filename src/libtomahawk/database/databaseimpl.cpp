@@ -448,9 +448,16 @@ DatabaseImpl::getTrackFids( int tid )
 
 
 QString
-DatabaseImpl::sortname( const QString& str )
+DatabaseImpl::sortname( const QString& str, bool replaceArticle )
 {
-    return str.toLower().trimmed().replace( QRegExp("[\\s]{2,}"), " " );
+    QString s = str.toLower().trimmed().replace( QRegExp( "[\\s]{2,}" ), " " );
+
+    if ( replaceArticle && s.startsWith( "the " ) )
+    {
+        s = s.right( s.length() - 4 );
+    }
+
+    return s;
 }
 
 

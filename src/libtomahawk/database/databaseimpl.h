@@ -59,7 +59,7 @@ public:
     QList< QPair<int, float> > searchTable( const QString& table, const QString& name, uint limit = 10 );
     QList< int > getTrackFids( int tid );
 
-    static QString sortname( const QString& str );
+    static QString sortname( const QString& str, bool replaceArticle = false );
 
     QVariantMap artist( int id );
     QVariantMap album( int id );

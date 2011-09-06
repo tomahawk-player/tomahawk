@@ -360,15 +360,15 @@ TreeProxyModel::textForItem( TreeModelItem* item ) const
 
     if ( !item->artist().isNull() )
     {
-        return item->artist()->name();
+        return DatabaseImpl::sortname( item->artist()->name(), true );
     }
     else if ( !item->album().isNull() )
     {
-        return item->album()->name();
+        return DatabaseImpl::sortname( item->album()->name() );
     }
     else if ( !item->result().isNull() )
     {
-        return item->result()->track();
+        return DatabaseImpl::sortname( item->result()->track() );
     }
 
     return QString();

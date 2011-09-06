@@ -309,8 +309,8 @@ TrackProxyModel::lessThan( const QModelIndex& left, const QModelIndex& right ) c
     const Tomahawk::query_ptr& q1 = p1->query();
     const Tomahawk::query_ptr& q2 = p2->query();
 
-    QString artist1 = q1->artist();
-    QString artist2 = q2->artist();
+    QString artist1 = q1->artistSortname();
+    QString artist2 = q2->artistSortname();
     QString album1 = q1->album();
     QString album2 = q2->album();
     QString track1 = q1->track();
@@ -324,7 +324,7 @@ TrackProxyModel::lessThan( const QModelIndex& left, const QModelIndex& right ) c
     if ( q1->numResults() )
     {
         const Tomahawk::result_ptr& r = q1->results().at( 0 );
-        artist1 = r->artist()->name();
+        artist1 = r->artist()->sortname();
         album1 = r->album()->name();
         track1 = r->track();
         albumpos1 = r->albumpos();
@@ -336,7 +336,7 @@ TrackProxyModel::lessThan( const QModelIndex& left, const QModelIndex& right ) c
     if ( q2->numResults() )
     {
         const Tomahawk::result_ptr& r = q2->results().at( 0 );
-        artist2 = r->artist()->name();
+        artist2 = r->artist()->sortname();
         album2 = r->album()->name();
         track2 = r->track();
         albumpos2 = r->albumpos();

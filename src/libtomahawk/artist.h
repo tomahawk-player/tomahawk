@@ -45,6 +45,7 @@ public:
 
     unsigned int id() const { return m_id; }
     QString name() const { return m_name; }
+    QString sortname() const { return m_sortname; }
 
     virtual QList<Tomahawk::query_ptr> tracks();
 
@@ -80,6 +81,7 @@ private slots:
 private:
     unsigned int m_id;
     QString m_name;
+    QString m_sortname;
 
     QList<Tomahawk::query_ptr> m_queries;
     result_ptr m_currentItem;

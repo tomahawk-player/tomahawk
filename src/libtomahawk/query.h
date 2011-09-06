@@ -91,6 +91,9 @@ public:
     QString toString() const;
 
     QString resultHint() const { return m_resultHint; }
+    QString artistSortname() const { return m_artistSortname; }
+    QString albumSortname() const { return m_albumSortname; }
+    QString trackSortname() const { return m_trackSortname; }
     QString artist() const { return m_artist; }
     QString album() const { return m_album; }
     QString track() const { return m_track; }
