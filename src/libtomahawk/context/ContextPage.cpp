@@ -54,7 +54,7 @@ ContextProxyPage::setPage( Tomahawk::ContextPage* page )
 {
     m_page = page;
 
-#ifdef Q_OS_LINUX //FIXME: why do we need this? maybe it's only oxygen style misbehaving?
+#ifdef Q_WS_X11 //FIXME: why do we need this? maybe it's only oxygen style misbehaving?
     QGraphicsWebView* testWebView = qobject_cast<QGraphicsWebView*>( page->widget() );
     if ( testWebView )
     {

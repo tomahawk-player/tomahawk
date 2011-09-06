@@ -71,7 +71,7 @@ SourceTreeView::SourceTreeView( QWidget* parent )
     setSortingEnabled( true );
     sortByColumn( 0, Qt::AscendingOrder );
 
-#ifdef Q_OS_MAC
+#ifdef Q_WS_MAC
     setVerticalScrollMode( QTreeView::ScrollPerPixel );
 #endif
 

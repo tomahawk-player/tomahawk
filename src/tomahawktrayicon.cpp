@@ -49,7 +49,7 @@ TomahawkTrayIcon::TomahawkTrayIcon( QObject* parent )
     m_prevAction = m_contextMenu->addAction( tr( "Previous Track" ) );
     m_nextAction = m_contextMenu->addAction( tr( "Next Track" ) );
 
-#ifdef Q_OS_MAC
+#ifdef Q_WS_MAC
     // On mac you can close the windows while leaving the app open. We then need a way to show the main window again
     m_contextMenu->addSeparator();
     m_showWindowAction = m_contextMenu->addAction( tr( "Hide Tomahawk Window" ) );
@@ -148,7 +148,7 @@ TomahawkTrayIcon::refreshToolTip()
         tip = tr( "Currently not playing." );
     }
 
-    #ifdef WIN32
+    #ifdef Q_WS_WIN
         // Good old crappy Win32
         tip.replace( "&", "&&&" );
     #endif

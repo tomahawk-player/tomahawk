@@ -30,7 +30,7 @@ public:
     DelegateConfigWrapper( QWidget* conf, const QString& title, QWidget* parent, Qt::WindowFlags flags = 0 ) : QDialog( parent, flags ), m_widget( conf )
     {
         m_widget->setWindowFlags( Qt::Sheet );
-#ifdef Q_OS_MAC
+#ifdef Q_WS_MAC
         m_widget->setVisible( true );
 #endif
 
@@ -47,7 +47,7 @@ public:
 
         setLayout( v );
 
-#ifdef Q_OS_MAC
+#ifdef Q_WS_MAC
         setSizeGripEnabled( false );
         setMinimumSize( sizeHint() );
         setMaximumSize( sizeHint() ); // to remove the resize grip on osx this is the only way
@@ -86,7 +86,8 @@ public slots:
         m_widget->setVisible( false );
     }
 
-    void updateSizeHint() {
+    void updateSizeHint()
+    {
         hide();
         setSizeGripEnabled( false );
         setMinimumSize( sizeHint() );

@@ -112,7 +112,7 @@ SipHandler::findPluginFactories()
     QList< QDir > pluginDirs;
 
     QDir appDir( qApp->applicationDirPath() );
-    #ifdef Q_OS_MAC
+    #ifdef Q_WS_MAC
     if ( appDir.dirName() == "MacOS" )
     {
         // Development convenience-hack

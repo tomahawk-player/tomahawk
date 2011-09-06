@@ -184,7 +184,7 @@ SourceDelegate::paint( QPainter* painter, const QStyleOptionViewItem& option, co
             QRect figRect = o.rect.adjusted( o.rect.width() - figWidth - 8, 0, -13, -o.rect.height() + 16 );
             int hd = ( option.rect.height() - figRect.height() ) / 2;
             figRect.adjust( 0, hd, 0, hd );
-#ifdef Q_OS_WIN
+#ifdef Q_WS_WIN
             figRect.adjust( -3, 0, 3, 0 );
 #endif
             painter->setFont( bold );

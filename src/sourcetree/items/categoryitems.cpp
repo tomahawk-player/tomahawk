@@ -69,7 +69,7 @@ CategoryAddItem::activate()
         case SourcesModel::PlaylistsCategory: {
 
             PlaylistTypeSelectorDlg* playlistSelectorDlg = new PlaylistTypeSelectorDlg( TomahawkApp::instance()->mainWindow(), Qt::Sheet );
-#ifndef Q_OS_MAC
+#ifndef Q_WS_MAC
             playlistSelectorDlg->setModal( true );
 #endif
             connect( playlistSelectorDlg, SIGNAL( finished( int ) ), this, SLOT( dialogClosed( int ) ) );

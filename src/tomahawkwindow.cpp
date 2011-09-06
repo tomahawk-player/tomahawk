@@ -62,7 +62,7 @@
 #include "playlist/queueview.h"
 #include "tomahawkapp.h"
 
-#ifdef Q_OS_WIN32
+#ifdef Q_WS_WIN
 #include <qtsparkle/Updater>
 #endif
 
@@ -167,7 +167,7 @@ TomahawkWindow::applyPlatformTweaks()
     if ( !QString( qApp->style()->metaObject()->className() ).toLower().contains( "qtcurve" ) )
         qApp->setStyle( new ProxyStyle() );
 
-#ifdef Q_OS_MAC
+#ifdef Q_WS_MAC
     setUnifiedTitleAndToolBarOnMac( true );
     delete ui->hline1;
     delete ui->hline2;
@@ -224,7 +224,7 @@ TomahawkWindow::setupSideBar()
     sidebarWidget->layout()->setContentsMargins( 0, 0, 0, 0 );
     sidebarWidget->layout()->setMargin( 0 );
 
-#ifndef Q_OS_MAC
+#ifndef Q_WS_MAC
     sidebarWidget->layout()->setSpacing( 0 );
 #endif
 
@@ -246,11 +246,11 @@ TomahawkWindow::setupUpdateCheck()
     ui->menu_Help->insertSeparator( ui->actionAboutTomahawk );
 #endif
 
-#if defined( Q_OS_DARWIN ) && defined( HAVE_SPARKLE )
+#if defined( Q_WS_MAC ) && defined( HAVE_SPARKLE )
     QAction* checkForUpdates = ui->menu_Help->addAction( tr( "Check For Updates..." ) );
     checkForUpdates->setMenuRole( QAction::ApplicationSpecificRole );
     connect( checkForUpdates, SIGNAL( triggered( bool ) ), SLOT( checkForUpdates() ) );
-#elif defined( WIN32 )
+#elif defined( Q_WS_WIN )
     QUrl updaterUrl;
 
     if ( qApp->arguments().contains( "--debug" ) )
@@ -305,7 +305,7 @@ TomahawkWindow::setupSignals()
     connect( ui->actionNext, SIGNAL( triggered() ), AudioEngine::instance(), SLOT( next() ) );
     connect( ui->actionPrevious, SIGNAL( triggered() ), AudioEngine::instance(), SLOT( previous() ) );
 
-#if defined( Q_OS_DARWIN )
+#if defined( Q_WS_MAC )
     connect( ui->actionMinimize, SIGNAL( triggered() ), SLOT( minimize() ) );
     connect( ui->actionZoom, SIGNAL( triggered() ), SLOT( maximize() ) );
 #else
@@ -369,7 +369,7 @@ TomahawkWindow::showEvent( QShowEvent* e )
 {
     QMainWindow::showEvent( e );
 
-#if defined( Q_OS_DARWIN )
+#if defined( Q_WS_MAC )
     ui->actionMinimize->setDisabled( false );
     ui->actionZoom->setDisabled( false );
 #endif
@@ -381,7 +381,7 @@ TomahawkWindow::hideEvent( QHideEvent* e )
 {
     QMainWindow::hideEvent( e );
 
-#if defined( Q_OS_DARWIN )
+#if defined( Q_WS_MAC )
     ui->actionMinimize->setDisabled( true );
     ui->actionZoom->setDisabled( true );
 #endif
@@ -533,7 +533,7 @@ void
 TomahawkWindow::createPlaylist()
 {
     PlaylistTypeSelectorDlg* playlistSelectorDlg = new PlaylistTypeSelectorDlg( TomahawkApp::instance()->mainWindow(), Qt::Sheet );
-#ifndef Q_OS_MAC
+#ifndef Q_WS_MAC
     playlistSelectorDlg->setModal( true );
 #endif
     connect( playlistSelectorDlg, SIGNAL( finished( int ) ), this, SLOT( playlistCreateDialogFinished( int ) ) );

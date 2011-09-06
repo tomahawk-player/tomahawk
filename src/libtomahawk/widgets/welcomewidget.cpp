@@ -226,7 +226,7 @@ PlaylistDelegate::paint( QPainter* painter, const QStyleOptionViewItem& option, 
     QTextOption to;
     to.setAlignment( Qt::AlignCenter );
     QFont font = opt.font;
-#ifdef Q_OS_MAC
+#ifdef Q_WS_MAC
     font.setPointSize( font.pointSize() - 2 );
 #endif
 
@@ -262,9 +262,9 @@ PlaylistDelegate::paint( QPainter* painter, const QStyleOptionViewItem& option, 
     painter->setFont( font2 );
 
     QRect rectText = option.rect.adjusted( 66, 20, -100, -8 );
-#ifdef Q_OS_MAC
+#ifdef Q_WS_MAC
     rectText.adjust( 0, 1, 0, 0 );
-#elif defined Q_OS_WIN
+#elif defined Q_WS_WIN
     rectText.adjust( 0, 2, 0, 0 );
 #endif
 

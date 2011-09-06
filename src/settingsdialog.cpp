@@ -559,7 +559,7 @@ SettingsDialog::openResolverConfig( const QString& resolver )
     Tomahawk::ExternalResolver* r = TomahawkApp::instance()->resolverForPath( resolver );
     if( r && r->configUI() )
     {
-#ifndef Q_OS_MAC
+#ifndef Q_WS_MAC
         DelegateConfigWrapper dialog( r->configUI(), "Resolver Configuration", this );
         QWeakPointer< DelegateConfigWrapper > watcher( &dialog );
         int ret = dialog.exec();
@@ -611,7 +611,7 @@ SettingsDialog::openSipConfig( SipPlugin* p )
 {
     if( p->configWidget() )
     {
-#ifndef Q_OS_MAC
+#ifndef Q_WS_MAC
         DelegateConfigWrapper dialog( p->configWidget(), QString("%1 Configuration" ).arg( p->friendlyName() ), this );
         QWeakPointer< DelegateConfigWrapper > watcher( &dialog );
         int ret = dialog.exec();
@@ -665,7 +665,7 @@ SettingsDialog::sipFactoryClicked( SipPluginFactory* factory )
     bool added = false;
     if( p->configWidget() )
     {
-#ifdef Q_OS_MAC
+#ifdef Q_WS_MAC
         // on osx a sheet needs to be non-modal
         DelegateConfigWrapper* dialog = new DelegateConfigWrapper( p->configWidget(), QString("%1 Config" ).arg( p->friendlyName() ), this, Qt::Sheet );
         dialog->setProperty( "sipplugin", QVariant::fromValue< QObject* >( p ) );

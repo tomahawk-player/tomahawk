@@ -74,7 +74,7 @@ AudioEngine::AudioEngine()
     connect( m_audioOutput, SIGNAL( volumeChanged( qreal ) ), this, SLOT( onVolumeChanged( qreal ) ) );
 
     onVolumeChanged( m_audioOutput->volume() );
-#ifdef Q_OS_MAC
+#ifdef Q_WS_MAC
     // On mac, phonon volume is independent from system volume, so the onVolumeChanged call above just sets our volume to 100%.
     // Since it's indendent, we'll set it to 75% since that's nicer
     setVolume( 75 );
@@ -208,7 +208,7 @@ AudioEngine::canGoNext()
 
     if ( m_queue && m_queue->trackCount() )
         return true;
-    
+
     if ( m_playlist.isNull() )
         return false;
 
@@ -224,7 +224,7 @@ AudioEngine::canGoNext()
         tDebug( LOGEXTRA ) << Q_FUNC_INFO << "catch up";
         return false;
     }
-    
+
     return m_playlist.data()->hasNextItem();
 }
 
@@ -429,7 +429,7 @@ AudioEngine::loadTrack( const Tomahawk::result_ptr& result )
                 else
                 {
                     QString furl = m_currentTrack->url();
-#ifdef Q_OS_WIN32
+#ifdef Q_WS_WIN
                     if ( furl.startsWith( "file://" ) )
                         furl = furl.right( furl.length() - 7 );
 #endif

@@ -53,7 +53,7 @@ QSearchField::QSearchField(QWidget *parent) : QWidget(parent)
 
     lineEdit->setStyleSheet( "QLineEdit { border: 1px solid gray; border-radius: 6px; }" );
 
-#ifdef Q_OS_MAC
+#ifdef Q_WS_MAC
     lineEdit->setContentsMargins(0, 0, 0, 0);
     lineEdit->setMinimumHeight(27);
     setFixedHeight(27);

@@ -30,7 +30,7 @@
 #include <QtNetwork/QNetworkAccessManager>
 #include <QtNetwork/QNetworkProxy>
 
-#ifdef WIN32
+#ifdef Q_WS_WIN
     #include <windows.h>
     #include <shlobj.h>
 #endif
@@ -135,7 +135,7 @@ appDataDir()
 {
     QString path;
 
-    #ifdef WIN32
+    #ifdef Q_WS_WIN
         if ( ( QSysInfo::WindowsVersion & QSysInfo::WV_DOS_based ) == 0 )
         {
             // Use this for non-DOS-based Windowses
@@ -419,7 +419,7 @@ drawBackgroundAndNumbers( QPainter* painter, const QString& text, const QRect& f
 
     painter->setPen( origpen );
 
-#ifdef Q_OS_MAC
+#ifdef Q_WS_MAC
     figRect.adjust( -1, 0, 0, 0 );
 #endif
 
@@ -567,7 +567,7 @@ tomahawkWindow()
 }
 
 
-#ifndef Q_OS_MAC
+#ifndef Q_WS_MAC
 void
 bringToFront()
 {
