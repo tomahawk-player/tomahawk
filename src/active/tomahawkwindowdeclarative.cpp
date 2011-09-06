@@ -47,6 +47,12 @@ TomahawkWindowDeclarative::~TomahawkWindowDeclarative()
 }
 
 
+void TomahawkWindowDeclarative::play(const QModelIndex& index)
+{
+  
+}
+
+
 void
 TomahawkWindowDeclarative::loadQml()
 {
