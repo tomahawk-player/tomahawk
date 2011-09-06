@@ -22,8 +22,6 @@
 #include "sourcelist.h"
 #include "utils/logger.h"
 
-#define MINSCORE 0.5
-
 using namespace Tomahawk;
 
 
@@ -171,12 +169,6 @@ DatabaseCommand_Resolve::resolve( DatabaseImpl* lib )
         }
 
         result->setAttributes( attr );
-
-        float score = how_similar( m_query, result );
-        result->setScore( score );
-        if ( score < MINSCORE )
-            continue;
-
         result->setCollection( s->collection() );
         res << result;
     }
@@ -305,123 +297,4 @@ DatabaseCommand_Resolve::fullTextResolve( DatabaseImpl* lib )
     }
 
     emit results( m_query->id(), res );
-}
-
-
-// TODO make clever (ft. featuring live (stuff) etc)
-float
-DatabaseCommand_Resolve::how_similar( const Tomahawk::query_ptr& q, const Tomahawk::result_ptr& r )
-{
-    // query values
-    const QString qArtistname = DatabaseImpl::sortname( q->artist() );
-    const QString qAlbumname  = DatabaseImpl::sortname( q->album() );
-    const QString qTrackname  = DatabaseImpl::sortname( q->track() );
-
-    // result values
-    const QString rArtistname = DatabaseImpl::sortname( r->artist()->name() );
-    const QString rAlbumname  = DatabaseImpl::sortname( r->album()->name() );
-    const QString rTrackname  = DatabaseImpl::sortname( r->track() );
-
-    // normal edit distance
-    int artdist = levenshtein( qArtistname, rArtistname );
-    int albdist = levenshtein( qAlbumname, rAlbumname );
-    int trkdist = levenshtein( qTrackname, rTrackname );
-
-    // max length of name
-    int mlart = qMax( qArtistname.length(), rArtistname.length() );
-    int mlalb = qMax( qAlbumname.length(), rAlbumname.length() );
-    int mltrk = qMax( qTrackname.length(), rTrackname.length() );
-
-    // distance scores
-    float dcart = (float)( mlart - artdist ) / mlart;
-    float dcalb = (float)( mlalb - albdist ) / mlalb;
-    float dctrk = (float)( mltrk - trkdist ) / mltrk;
-
-    // don't penalize for missing album name
-    if( qAlbumname.length() == 0 )
-        dcalb = 1.0;
-
-    // weighted, so album match is worth less than track title
-    float combined = ( dcart*4 + dcalb + dctrk*5 ) / 10;
-    return combined;
-}
-
-
-int
-DatabaseCommand_Resolve::levenshtein( const QString& source, const QString& target )
-{
-    // Step 1
-    const int n = source.length();
-    const int m = target.length();
-
-    if ( n == 0 )
-        return m;
-    if ( m == 0 )
-        return n;
-
-    // Good form to declare a TYPEDEF
-    typedef QVector< QVector<int> > Tmatrix;
-    Tmatrix matrix;
-    matrix.resize( n + 1 );
-
-    // Size the vectors in the 2.nd dimension. Unfortunately C++ doesn't
-    // allow for allocation on declaration of 2.nd dimension of vec of vec
-    for ( int i = 0; i <= n; i++ )
-    {
-      QVector<int> tmp;
-      tmp.resize( m + 1 );
-      matrix.insert( i, tmp );
-    }
-
-    // Step 2
-    for ( int i = 0; i <= n; i++ )
-      matrix[i][0] = i;
-    for ( int j = 0; j <= m; j++ )
-      matrix[0][j] = j;
-
-    // Step 3
-    for ( int i = 1; i <= n; i++ )
-    {
-      const QChar s_i = source[i - 1];
-
-      // Step 4
-      for ( int j = 1; j <= m; j++ )
-      {
-        const QChar t_j = target[j - 1];
-
-        // Step 5
-        int cost;
-        if ( s_i == t_j )
-          cost = 0;
-        else
-          cost = 1;
-
-        // Step 6
-        const int above = matrix[i - 1][j];
-        const int left = matrix[i][j - 1];
-        const int diag = matrix[i - 1][j - 1];
-
-        int cell = ( ((left + 1) > (diag + cost)) ? diag + cost : left + 1 );
-        if( above + 1 < cell )
-            cell = above + 1;
-
-        // Step 6A: Cover transposition, in addition to deletion,
-        // insertion and substitution. This step is taken from:
-        // Berghel, Hal ; Roach, David : "An Extension of Ukkonen's
-        // Enhanced Dynamic Programming ASM Algorithm"
-        // (http://www.acm.org/~hlb/publications/asm/asm.html)
-        if ( i > 2 && j > 2 )
-        {
-          int trans = matrix[i - 2][j - 2] + 1;
-
-          if ( source[ i - 2 ] != t_j ) trans++;
-          if ( s_i != target[ j - 2 ] ) trans++;
-          if ( cell > trans) cell = trans;
-        }
-        matrix[i][j] = cell;
-      }
-    }
-
-    // Step 7
-    return matrix[n][m];
 }

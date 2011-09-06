@@ -324,7 +324,6 @@ QtScriptResolver::parseResultVariantList( const QVariantList& reslist )
         rp->setBitrate( m.value( "bitrate" ).toUInt() );
         rp->setUrl( m.value( "url" ).toString() );
         rp->setSize( m.value( "size" ).toUInt() );
-        rp->setScore( m.value( "score" ).toFloat() * ( (float)weight() / 100.0 ) );
         rp->setRID( uuid() );
         rp->setFriendlySource( name() );
 

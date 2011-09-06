@@ -75,14 +75,15 @@ public:
     QString fullTextQuery() const { return m_fullTextQuery; }
     bool isFullTextQuery() const { return !m_fullTextQuery.isEmpty(); }
     bool resolvingFinished() const { return m_resolveFinished; }
+    float howSimilar( const Tomahawk::result_ptr& r );
 
     QPair< Tomahawk::source_ptr, unsigned int > playedBy() const { return m_playedBy; }
     Tomahawk::Resolver* currentResolver() const;
     QList< QWeakPointer< Tomahawk::Resolver > > resolvedBy() const { return m_resolvers; }
 
-    void setArtist( const QString& artist ) { m_artist = artist; }
-    void setAlbum( const QString& album ) { m_album = album; }
-    void setTrack( const QString& track ) { m_track = track; }
+    void setArtist( const QString& artist ) { m_artist = artist; updateSortNames(); }
+    void setAlbum( const QString& album ) { m_album = album; updateSortNames(); }
+    void setTrack( const QString& track ) { m_track = track; updateSortNames(); }
     void setResultHint( const QString& resultHint ) { m_resultHint = resultHint; }
     void setDuration( int duration ) { m_duration = duration; }
 
@@ -122,16 +123,24 @@ private slots:
     void refreshResults();
 
 private:
-    void setCurrentResolver( Tomahawk::Resolver* resolver );
+    void init();
 
+    void setCurrentResolver( Tomahawk::Resolver* resolver );
     void clearResults();
     void checkResults();
+
+    void updateSortNames();
+    static int levenshtein( const QString& source, const QString& target );
 
     QList< Tomahawk::result_ptr > m_results;
     bool m_solved;
     bool m_playable;
     bool m_resolveFinished;
     mutable QID m_qid;
+
+    QString m_artistSortname;
+    QString m_albumSortname;
+    QString m_trackSortname;
 
     QString m_artist;
     QString m_album;

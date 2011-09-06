@@ -24,6 +24,7 @@
 #include "database/databasecommand_logplayback.h"
 #include "database/databasecommand_playbackhistory.h"
 #include "database/databasecommand_loadplaylistentries.h"
+#include "album.h"
 #include "collection.h"
 #include "pipeline.h"
 #include "resolver.h"
@@ -61,15 +62,13 @@ Query::get( const QString& query, const QID& qid )
 
 
 Query::Query( const QString& artist, const QString& track, const QString& album, const QID& qid, bool autoResolve )
-    : m_solved( false )
-    , m_playable( false )
-    , m_resolveFinished( false )
-    , m_qid( qid )
+    : m_qid( qid )
     , m_artist( artist )
     , m_album( album )
     , m_track( track )
-    , m_duration( -1 )
 {
+    init();
+
     if ( autoResolve )
     {
         connect( Database::instance(), SIGNAL( indexReady() ), SLOT( refreshResults() ), Qt::QueuedConnection );
@@ -83,13 +82,11 @@ Query::Query( const QString& artist, const QString& track, const QString& album,
 
 
 Query::Query( const QString& query, const QID& qid )
-    : m_solved( false )
-    , m_playable( false )
-    , m_resolveFinished( false )
-    , m_qid( qid )
+    : m_qid( qid )
     , m_fullTextQuery( query )
-    , m_duration( -1 )
 {
+    init();
+
     if ( !qid.isEmpty() )
     {
         connect( Database::instance(), SIGNAL( indexReady() ), SLOT( refreshResults() ), Qt::QueuedConnection );
@@ -100,6 +97,36 @@ Query::Query( const QString& query, const QID& qid )
 Query::~Query()
 {
     qDebug() << Q_FUNC_INFO << toString();
+}
+
+
+void
+Query::init()
+{
+    m_resolveFinished = false;
+    m_solved = false;
+    m_playable = false;
+    m_duration = -1;
+
+    updateSortNames();
+}
+
+
+void
+Query::updateSortNames()
+{
+    if ( isFullTextQuery() )
+    {
+        m_artistSortname = DatabaseImpl::sortname( m_fullTextQuery );
+        m_albumSortname = m_artistSortname;
+        m_trackSortname = m_artistSortname;
+    }
+    else
+    {
+        m_artistSortname = DatabaseImpl::sortname( m_artist );
+        m_albumSortname = DatabaseImpl::sortname( m_album );
+        m_trackSortname = DatabaseImpl::sortname( m_track );
+    }
 }
 
 
@@ -358,4 +385,126 @@ QString
 Query::toString() const
 {
     return QString( "Query(%1, %2 - %3)" ).arg( id() ).arg( artist() ).arg( track() );
+}
+
+
+// TODO make clever (ft. featuring live (stuff) etc)
+float
+Query::howSimilar( const Tomahawk::result_ptr& r )
+{
+    // result values
+    const QString rArtistname = DatabaseImpl::sortname( r->artist()->name() );
+    const QString rAlbumname  = DatabaseImpl::sortname( r->album()->name() );
+    const QString rTrackname  = DatabaseImpl::sortname( r->track() );
+
+    // normal edit distance
+    int artdist = levenshtein( m_artistSortname, rArtistname );
+    int albdist = levenshtein( m_albumSortname, rAlbumname );
+    int trkdist = levenshtein( m_trackSortname, rTrackname );
+
+    // max length of name
+    int mlart = qMax( m_artistSortname.length(), rArtistname.length() );
+    int mlalb = qMax( m_albumSortname.length(), rAlbumname.length() );
+    int mltrk = qMax( m_trackSortname.length(), rTrackname.length() );
+
+    // distance scores
+    float dcart = (float)( mlart - artdist ) / mlart;
+    float dcalb = (float)( mlalb - albdist ) / mlalb;
+    float dctrk = (float)( mltrk - trkdist ) / mltrk;
+
+    if ( isFullTextQuery() )
+    {
+        float res = qMax( dcart, dcalb );
+        return qMax( res, dctrk );
+    }
+    else
+    {
+        // don't penalize for missing album name
+        if ( m_albumSortname.isEmpty() || rAlbumname.isEmpty() )
+            dcalb = 1.0;
+
+        // weighted, so album match is worth less than track title
+        float combined = ( dcart * 4 + dcalb + dctrk * 5 ) / 10;
+        return combined;
+    }
+}
+
+
+int
+Query::levenshtein( const QString& source, const QString& target )
+{
+    // Step 1
+    const int n = source.length();
+    const int m = target.length();
+
+    if ( n == 0 )
+        return m;
+    if ( m == 0 )
+        return n;
+
+    // Good form to declare a TYPEDEF
+    typedef QVector< QVector<int> > Tmatrix;
+    Tmatrix matrix;
+    matrix.resize( n + 1 );
+
+    // Size the vectors in the 2.nd dimension. Unfortunately C++ doesn't
+    // allow for allocation on declaration of 2.nd dimension of vec of vec
+    for ( int i = 0; i <= n; i++ )
+    {
+        QVector<int> tmp;
+        tmp.resize( m + 1 );
+        matrix.insert( i, tmp );
+    }
+
+    // Step 2
+    for ( int i = 0; i <= n; i++ )
+        matrix[i][0] = i;
+    for ( int j = 0; j <= m; j++ )
+        matrix[0][j] = j;
+
+    // Step 3
+    for ( int i = 1; i <= n; i++ )
+    {
+        const QChar s_i = source[i - 1];
+
+        // Step 4
+        for ( int j = 1; j <= m; j++ )
+        {
+            const QChar t_j = target[j - 1];
+
+            // Step 5
+            int cost;
+            if ( s_i == t_j )
+                cost = 0;
+            else
+                cost = 1;
+
+            // Step 6
+            const int above = matrix[i - 1][j];
+            const int left = matrix[i][j - 1];
+            const int diag = matrix[i - 1][j - 1];
+
+            int cell = ( ( ( left + 1 ) > ( diag + cost ) ) ? diag + cost : left + 1 );
+            if ( above + 1 < cell )
+                cell = above + 1;
+
+            // Step 6A: Cover transposition, in addition to deletion,
+            // insertion and substitution. This step is taken from:
+            // Berghel, Hal ; Roach, David : "An Extension of Ukkonen's
+            // Enhanced Dynamic Programming ASM Algorithm"
+            // (http://www.acm.org/~hlb/publications/asm/asm.html)
+            if ( i > 2 && j > 2 )
+            {
+                int trans = matrix[i - 2][j - 2] + 1;
+
+                if ( source[ i - 2 ] != t_j ) trans++;
+                if ( s_i != target[ j - 2 ] ) trans++;
+                if ( cell > trans ) cell = trans;
+            }
+            matrix[i][j] = cell;
+        }
+    }
+
+    // Step 7
+    return matrix[n][m];
 }

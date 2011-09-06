@@ -48,9 +48,6 @@ private:
     void resolve( DatabaseImpl* lib );
 
     Tomahawk::query_ptr m_query;
-
-    float how_similar( const Tomahawk::query_ptr& q, const Tomahawk::result_ptr& r );
-    static int levenshtein( const QString& source, const QString& target );
 };
 
 #endif // DATABASECOMMAND_RESOLVE_H

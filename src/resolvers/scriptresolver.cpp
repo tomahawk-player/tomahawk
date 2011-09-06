@@ -44,16 +44,16 @@ ScriptResolver::ScriptResolver( const QString& exe )
     connect( &m_proc, SIGNAL( readyReadStandardOutput() ), SLOT( readStdout() ) );
     connect( &m_proc, SIGNAL( finished( int, QProcess::ExitStatus ) ), SLOT( cmdExited( int, QProcess::ExitStatus ) ) );
 
-    QString pathToCheck = filePath();
+    QString runPath = filePath();
 #ifdef WIN32
     // have to enclose in quotes if path contains spaces on windows...
-    setFilePath( QString( "\"%1\"" ).arg( filePath() ) );
+    runPath = QString( "\"%1\"" ).arg( filePath() );
 #endif
 
-    if( !QFile::exists( pathToCheck ) )
+    if ( !QFile::exists( filePath() ) )
         m_error = Tomahawk::ExternalResolver::FileNotFound;
     else
-        m_proc.start( filePath() );
+        m_proc.start( runPath );
 
     if ( !TomahawkUtils::nam() )
         return;
@@ -69,7 +69,7 @@ ScriptResolver::~ScriptResolver()
 
     Tomahawk::Pipeline::instance()->removeResolver( this );
 
-    if( !m_configWidget.isNull() )
+    if ( !m_configWidget.isNull() )
         delete m_configWidget.data();
 }
 
@@ -77,11 +77,11 @@ ScriptResolver::~ScriptResolver()
 void
 ScriptResolver::sendConfig()
 {
-
     // Send a configutaion message with any information the resolver might need
     // For now, only the proxy information is sent
     QVariantMap m;
     m.insert( "_msgtype", "config" );
+
     TomahawkUtils::NetworkProxyFactory* factory = dynamic_cast<TomahawkUtils::NetworkProxyFactory*>( TomahawkUtils::nam()->proxyFactory() );
     QNetworkProxy proxy = factory->proxy();
     QString proxyType = ( proxy.type() == QNetworkProxy::Socks5Proxy ? "socks5" : "none" );
@@ -90,11 +90,13 @@ ScriptResolver::sendConfig()
     m.insert( "proxyport", proxy.port() );
     m.insert( "proxyuser", proxy.user() );
     m.insert( "proxypass", proxy.password() );
+
     // QJson sucks
     QVariantList hosts;
     foreach ( const QString& host, factory->noProxyHosts() )
         hosts << host;
     m.insert( "noproxyhosts", hosts );
+
     QByteArray data = m_serializer.serialize( m );
     sendMsg( data );
 }
@@ -103,7 +105,7 @@ ScriptResolver::sendConfig()
 void
 ScriptResolver::reload()
 {
-    if( !QFile::exists( filePath() ) )
+    if ( !QFile::exists( filePath() ) )
         m_error = Tomahawk::ExternalResolver::FileNotFound;
     else
     {
@@ -132,29 +134,28 @@ ScriptResolver::error() const
 void
 ScriptResolver::readStdout()
 {
-//    qDebug() << Q_FUNC_INFO << m_proc.bytesAvailable();
-
-    if( m_msgsize == 0 )
+    if ( m_msgsize == 0 )
     {
-        if( m_proc.bytesAvailable() < 4 ) return;
+        if ( m_proc.bytesAvailable() < 4 )
+            return;
+
         quint32 len_nbo;
         m_proc.read( (char*) &len_nbo, 4 );
         m_msgsize = qFromBigEndian( len_nbo );
-//        qDebug() << Q_FUNC_INFO << "msgsize" << m_msgsize;
     }
 
-    if( m_msgsize > 0 )
+    if ( m_msgsize > 0 )
     {
         m_msg.append( m_proc.read( m_msgsize - m_msg.length() ) );
     }
 
-    if( m_msgsize == (quint32) m_msg.length() )
+    if ( m_msgsize == (quint32) m_msg.length() )
     {
         handleMsg( m_msg );
         m_msgsize = 0;
         m_msg.clear();
 
-        if( m_proc.bytesAvailable() )
+        if ( m_proc.bytesAvailable() )
             QTimer::singleShot( 0, this, SLOT( readStdout() ) );
     }
 }
@@ -164,7 +165,7 @@ void
 ScriptResolver::sendMsg( const QByteArray& msg )
 {
 //     qDebug() << Q_FUNC_INFO << m_ready << msg << msg.length();
-    if( !m_proc.isOpen() )
+    if ( !m_proc.isOpen() )
         return;
 
     quint32 len;
@@ -181,7 +182,7 @@ ScriptResolver::handleMsg( const QByteArray& msg )
 
     bool ok;
     QVariant v = m_parser.parse( msg, &ok );
-    if( !ok || v.type() != QVariant::Map )
+    if ( !ok || v.type() != QVariant::Map )
     {
         Q_ASSERT(false);
         return;
@@ -189,18 +190,18 @@ ScriptResolver::handleMsg( const QByteArray& msg )
     QVariantMap m = v.toMap();
     QString msgtype = m.value( "_msgtype" ).toString();
 
-    if( msgtype == "settings" )
+    if ( msgtype == "settings" )
     {
         doSetup( m );
         return;
     }
-    else if( msgtype == "confwidget" )
+    else if ( msgtype == "confwidget" )
     {
         setupConfWidget( m );
         return;
     }
 
-    if( msgtype == "results" )
+    if ( msgtype == "results" )
     {
         const QString qid = m.value( "qid" ).toString();
         QList< Tomahawk::result_ptr > results;
@@ -220,7 +221,6 @@ ScriptResolver::handleMsg( const QByteArray& msg )
             rp->setBitrate( m.value( "bitrate" ).toUInt() );
             rp->setUrl( m.value( "url" ).toString() );
             rp->setSize( m.value( "size" ).toUInt() );
-            rp->setScore( m.value( "score" ).toFloat() * ( (float)weight() / 100.0 ) );
             rp->setRID( uuid() );
             rp->setFriendlySource( m_name );
 
@@ -252,7 +252,7 @@ ScriptResolver::cmdExited( int code, QProcess::ExitStatus status )
     tLog() << Q_FUNC_INFO << "SCRIPT EXITED, code" << code << "status" << status << filePath();
     Tomahawk::Pipeline::instance()->removeResolver( this );
 
-    if( m_stopped )
+    if ( m_stopped )
     {
         tLog() << "*** Script resolver stopped ";
         emit finished();
@@ -260,7 +260,7 @@ ScriptResolver::cmdExited( int code, QProcess::ExitStatus status )
         return;
     }
 
-    if( m_num_restarts < 10 )
+    if ( m_num_restarts < 10 )
     {
         m_num_restarts++;
         tLog() << "*** Restart num" << m_num_restarts;
@@ -326,7 +326,7 @@ ScriptResolver::setupConfWidget( const QVariantMap& m )
     else
         uiData = QByteArray::fromBase64( uiData );
 
-    if( m.contains( "images" ) )
+    if ( m.contains( "images" ) )
         uiData = fixDataImagePaths( uiData, compressed, m[ "images" ].toMap() );
     m_configWidget = QWeakPointer< QWidget >( widgetFromData( uiData, 0 ) );
 
@@ -344,7 +344,7 @@ ScriptResolver::saveConfig()
     QVariant widgets = configMsgFromWidget( m_configWidget.data() );
     m.insert( "widgets", widgets );
     QByteArray data = m_serializer.serialize( m );
-//     qDebug() << "Got widgets and data;" << widgets << data;
+
     sendMsg( data );
 }
 
@@ -352,7 +352,7 @@ ScriptResolver::saveConfig()
 QWidget*
 ScriptResolver::configUI() const
 {
-    if( m_configWidget.isNull() )
+    if ( m_configWidget.isNull() )
         return 0;
     else
         return m_configWidget.data();
@@ -363,6 +363,5 @@ void
 ScriptResolver::stop()
 {
     m_stopped = true;
-//    qDebug() << "KILLING PROCESS!";
     m_proc.kill();
 }

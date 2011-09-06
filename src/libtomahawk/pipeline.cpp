@@ -28,6 +28,7 @@
 #define DEFAULT_CONCURRENT_QUERIES 4
 #define MAX_CONCURRENT_QUERIES 16
 #define CLEANUP_TIMEOUT 5 * 60 * 1000
+#define MINSCORE 0.5
 
 using namespace Tomahawk;
 
@@ -174,12 +175,23 @@ Pipeline::reportResults( QID qid, const QList< result_ptr >& results )
         tDebug() << "Result arrived too late for:" << qid;
         return;
     }
-
     const query_ptr& q = m_qids.value( qid );
-    if ( !results.isEmpty() )
+
+    QList< result_ptr > cleanResults;
+    foreach( const result_ptr& r, results )
     {
-        q->addResults( results );
-        foreach( const result_ptr& r, q->results() )
+        float score = q->howSimilar( r );
+        r->setScore( score );
+        if ( !q->isFullTextQuery() && score < MINSCORE )
+            continue;
+
+        cleanResults << r;
+    }
+
+    if ( !cleanResults.isEmpty() )
+    {
+        q->addResults( cleanResults );
+        foreach( const result_ptr& r, cleanResults )
         {
             m_rids.insert( r->id(), r );
         }
