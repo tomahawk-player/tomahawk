@@ -23,10 +23,10 @@
 #include "query.h"
 
 #include "infosystem/infosystem.h"
-
 #include <QObject>
 #include <QStringList>
 #include <QMimeData>
+
 
 class DLLEXPORT DropJob : public QObject
 {
@@ -58,8 +58,8 @@ public:
 
         enum DropAction {
 
-                  Append =     0x0,
-                  Create =     0x1
+                Append =    0x00,
+                Create =    0x01
 
               };
         Q_DECLARE_FLAGS(DropActions, DropAction)
@@ -85,9 +85,7 @@ signals:
 
 private slots:
     void expandedUrls( QStringList );
-
     void onTracksAdded( const QList<Tomahawk::query_ptr>& );
-
     void infoSystemInfo( Tomahawk::InfoSystem::InfoRequestData requestData, QVariant output );
 
 private:
