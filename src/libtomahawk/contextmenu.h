@@ -39,8 +39,8 @@ public:
        ActionQueue =        2,
        ActionDelete =       4,
        ActionCopyLink =     8,
-       ActionAddToPlaylist = 9,
-       ActionAddTrackToPl =  5
+       ActionAddToPlaylist = 9
+
     };
 
     explicit ContextMenu( QWidget* parent = 0 );

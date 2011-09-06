@@ -36,7 +36,7 @@ ContextMenu::ContextMenu( QWidget* parent )
     m_sigmap = new QSignalMapper( this );
     connect( m_sigmap, SIGNAL( mapped( int ) ), SLOT( onTriggered( int ) ) );
 
-    m_supportedActions = ActionPlay | ActionQueue | ActionCopyLink | ActionAddToPlaylist | ActionAddTrackToPl;
+    m_supportedActions = ActionPlay | ActionQueue | ActionCopyLink | ActionAddToPlaylist;
 }
 
 ContextMenu::~ContextMenu()
