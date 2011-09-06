@@ -103,6 +103,8 @@ TreeProxyModel::setFilter( const QString& pattern )
     {
         disconnect( m_artistsFilterCmd, SIGNAL( artists( QList<Tomahawk::artist_ptr> ) ),
                     this,                 SLOT( onFilterArtists( QList<Tomahawk::artist_ptr> ) ) );
+
+        m_artistsFilterCmd = 0;
     }
 
     if ( m_filter.isEmpty() )
