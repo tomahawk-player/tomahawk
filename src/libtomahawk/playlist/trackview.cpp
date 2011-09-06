@@ -251,7 +251,7 @@ TrackView::dragEnterEvent( QDragEnterEvent* event )
         m_dragging = true;
         m_dropRect = QRect();
 
-        qDebug() << "Accepting Drag Event";
+        qDebug() << Q_FUNC_INFO << "Accepting Drag Event";
         event->acceptProposedAction();
     }
 }
@@ -310,12 +310,12 @@ TrackView::dropEvent( QDropEvent* event )
     }
     else
     {
-        if ( DropJob::acceptsMimeData( event->mimeData() ) )
+        if ( DropJob::acceptsMimeData( event->mimeData()) )
         {
             const QPoint pos = event->pos();
             const QModelIndex index = indexAt( pos );
 
-            qDebug() << "Drop Event accepted at row:" << index.row();
+            qDebug() << Q_FUNC_INFO << "Drop Event accepted at row:" << index.row();
             event->acceptProposedAction();
 
             if ( !model()->isReadOnly() )
