@@ -45,6 +45,9 @@ signals:
     void shown( QWidget*, bool animated );
     void hidden( QWidget*, bool animated );
 
+protected:
+    virtual QSplitterHandle* createHandle();
+
 private slots:
     void onShowRequest();
     void onHideRequest();
@@ -54,6 +57,24 @@ private slots:
 private:
     int m_greedyIndex;
 };
+
+
+class DLLEXPORT AnimatedSplitterHandle : public QSplitterHandle
+{
+Q_OBJECT
+public:
+    explicit AnimatedSplitterHandle( Qt::Orientation orientation, QSplitter* parent )
+        : QSplitterHandle( orientation, parent )
+    {
+        setCursor( Qt::ArrowCursor );
+    }
+
+    virtual QSize sizeHint() const
+    {
+        return QSize( 0, 0 );
+    }
+};
+
 
 class DLLEXPORT AnimatedWidget : public QWidget
 {

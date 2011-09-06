@@ -391,7 +391,6 @@ TomahawkWindow::hideEvent( QHideEvent* e )
 void
 TomahawkWindow::showSettingsDialog()
 {
-    qDebug() << Q_FUNC_INFO;
     SettingsDialog win;
     win.exec();
 }
@@ -399,7 +398,6 @@ TomahawkWindow::showSettingsDialog()
 
 void TomahawkWindow::showDiagnosticsDialog()
 {
-    qDebug() << Q_FUNC_INFO;
     DiagnosticsDialog win;
     win.exec();
 }

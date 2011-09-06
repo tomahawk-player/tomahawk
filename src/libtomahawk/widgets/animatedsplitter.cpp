@@ -145,6 +145,13 @@ AnimatedSplitter::setGreedyWidget( int index )
 }
 
 
+QSplitterHandle*
+AnimatedSplitter::createHandle()
+{
+    return new AnimatedSplitterHandle( orientation(), this );
+}
+
+
 AnimatedWidget::AnimatedWidget( AnimatedSplitter* parent )
     : m_parent( parent )
     , m_isHidden( false )
