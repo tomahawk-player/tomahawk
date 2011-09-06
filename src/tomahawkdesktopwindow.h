@@ -117,9 +117,6 @@ private:
     PlaylistModel* m_queueModel;
     QueueView* m_queueView;
     AnimatedSplitter* m_sidebar;
-
-    Tomahawk::result_ptr m_currentTrack;
-    QString m_windowTitle;
 };
 
 #endif // TOMAHAWKDESKTOPWINDOW_H

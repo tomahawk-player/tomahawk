@@ -50,10 +50,10 @@ private slots:
     virtual void minimize();
     virtual void maximize();
 
-private:
+protected:
+    QString m_windowTitle;
     TomahawkTrayIcon* m_trayIcon;
     Tomahawk::result_ptr m_currentTrack;
-    QString m_windowTitle;
 };
 
 #endif // TOMAHAWKWINDOW_H
