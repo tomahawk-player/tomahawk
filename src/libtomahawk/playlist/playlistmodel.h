@@ -70,13 +70,11 @@ public:
 
     void remove( unsigned int row, bool moreToCome = false );
     virtual void removeIndex( const QModelIndex& index, bool moreToCome = false );
-
     bool isTemporary() const;
 
 signals:
     void repeatModeChanged( Tomahawk::PlaylistInterface::RepeatMode mode );
     void shuffleModeChanged( bool enabled );
-
     void itemSizeChanged( const QModelIndex& index );
     void playlistDeleted();
     void playlistChanged();

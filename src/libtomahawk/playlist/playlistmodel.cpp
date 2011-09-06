@@ -322,6 +322,7 @@ PlaylistModel::onTracksInserted( unsigned int row, const QList<Tomahawk::query_p
 void
 PlaylistModel::onDataChanged()
 {
+    qDebug() << Q_FUNC_INFO;
     TrackModelItem* p = (TrackModelItem*)sender();
     if ( p && p->index.isValid() )
         emit dataChanged( p->index, p->index.sibling( p->index.row(), columnCount() - 1 ) );
