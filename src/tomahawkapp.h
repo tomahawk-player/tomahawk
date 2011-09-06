@@ -65,7 +65,8 @@ namespace Tomahawk
 #endif
 
 #ifndef TOMAHAWK_HEADLESS
-class TomahawkWindow;
+class TomahawkDesktopWindow;
+class AudioControls;
 #endif
 
 #ifdef TOUCHMAHAWK
@@ -91,7 +92,8 @@ public:
 
 #ifndef TOMAHAWK_HEADLESS
     AudioControls* audioControls();
-    TomahawkWindow* mainWindow() const { return m_mainwindow; }
+    TomahawkWindow* mainWindow() const;
+    TomahawkDesktopWindow* desktopWindow() const;
 #endif
 
 #ifdef TOUCHMAHAWK
@@ -144,7 +146,7 @@ private:
 #endif
 
 #ifndef TOMAHAWK_HEADLESS
-    TomahawkWindow* m_mainwindow;
+    TomahawkDesktopWindow* m_mainwindow;
 #endif
 
 #ifdef TOUCHMAHAWK

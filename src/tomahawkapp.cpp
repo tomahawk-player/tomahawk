@@ -64,7 +64,7 @@
 #include "config.h"
 
 #ifndef TOMAHAWK_HEADLESS
-    #include "tomahawkwindow.h"
+    #include "tomahawkdesktopwindow.h"
     #include "settingsdialog.h"
     #include <QMessageBox>
 #endif
@@ -223,7 +223,7 @@ TomahawkApp::init()
     if ( !m_headless )
     {
         tDebug() << "Init MainWindow.";
-        m_mainwindow = new TomahawkWindow();
+        m_mainwindow = new TomahawkDesktopWindow();
         m_mainwindow->setWindowTitle( "Tomahawk" );
         m_mainwindow->setObjectName( "TH_Main_Window" );
 
@@ -339,6 +339,20 @@ AudioControls*
 TomahawkApp::audioControls()
 {
     return m_mainwindow->audioControls();
+}
+
+
+TomahawkWindow*
+TomahawkApp::mainWindow() const
+{
+    // why does static_casdt<TomahawkWindow*> not work here?!
+    return (TomahawkWindow*) ( m_mainwindow );
+}
+
+TomahawkDesktopWindow*
+TomahawkApp::desktopWindow() const
+{
+    return m_mainwindow;
 }
 #endif
 

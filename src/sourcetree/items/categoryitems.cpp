@@ -30,6 +30,8 @@
 #include "utils/logger.h"
 #include "dropjob.h"
 
+#include "tomahawkdesktopwindow.h"
+
 using namespace Tomahawk;
 
 
@@ -78,7 +80,7 @@ CategoryAddItem::activate()
             break;
         }
         case SourcesModel::StationsCategory:
-            APP->mainWindow()->createStation();
+            APP->desktopWindow()->createStation();
             break;
     }
 }
@@ -100,7 +102,7 @@ CategoryAddItem::dialogClosed( int ret )
 
     } else if ( playlistSelectorDlg->playlistTypeIsAuto() && ret ) {
        // create Auto Playlist
-       APP->mainWindow()->createAutomaticPlaylist( playlistName );
+       APP->desktopWindow()->createAutomaticPlaylist( playlistName );
     } else if ( !ret ) {
         model()->viewPageActivated( ViewManager::instance()->currentPage() );
     }
@@ -281,7 +283,7 @@ CategoryAddItem::parsedDroppedTracks( const QList< query_ptr >& tracks )
         ViewManager::instance()->show( newpl );
 
         // Give a shot to try to rename it. The playlist has to be created first. ugly.
-        QTimer::singleShot( 300, APP->mainWindow()->sourceTreeView(), SLOT( renamePlaylist() ) );
+        QTimer::singleShot( 300, APP->desktopWindow()->sourceTreeView(), SLOT( renamePlaylist() ) );
     } else if( m_categoryType == SourcesModel::StationsCategory ) {
         // seed the playlist with these song filters
         QString name = tracks.isEmpty() ? tr( "New Station" ) : tr( "%1 Station" ).arg( tracks.first()->track() );
@@ -300,7 +302,7 @@ CategoryAddItem::parsedDroppedTracks( const QList< query_ptr >& tracks )
 
         ViewManager::instance()->show( newpl );
         // Give a shot to try to rename it. The playlist has to be created first. ugly.
-        QTimer::singleShot( 300, APP->mainWindow()->sourceTreeView(), SLOT( renamePlaylist() ) );
+        QTimer::singleShot( 300, APP->desktopWindow()->sourceTreeView(), SLOT( renamePlaylist() ) );
     }
 }
 

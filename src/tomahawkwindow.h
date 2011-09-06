@@ -20,112 +20,38 @@
 #define TOMAHAWKWINDOW_H
 
 #include <QMainWindow>
-#include <QVariantMap>
-#include <QPushButton>
-#include <QString>
-#include <QStackedWidget>
 
 #include "result.h"
 
-class QSearchField;
-class SipPlugin;
-class SourceTreeView;
-class QAction;
-
-class MusicScanner;
-class AudioControls;
 class TomahawkTrayIcon;
-class PlaylistModel;
-class QueueView;
-class AnimatedSplitter;
 
-namespace Ui
-{
-    class TomahawkWindow;
-    class GlobalSearchWidget;
-}
 
 class TomahawkWindow : public QMainWindow
 {
-Q_OBJECT
+    Q_OBJECT
 
 public:
     TomahawkWindow( QWidget* parent = 0 );
     ~TomahawkWindow();
 
-    AudioControls* audioControls() { return m_audioControls; }
-    SourceTreeView* sourceTreeView() const { return m_sourcetree; }
-
-    void setWindowTitle( const QString& title );
+    virtual void setWindowTitle( const QString& title );
 
 protected:
-    void changeEvent( QEvent* e );
-    void closeEvent( QCloseEvent* e );
-    void showEvent( QShowEvent* e );
-    void hideEvent( QHideEvent* e );
+    virtual void changeEvent( QEvent* e );
+    virtual void closeEvent( QCloseEvent* e );
+    virtual void showEvent( QShowEvent* e );
+    virtual void hideEvent( QHideEvent* e );
 
-public slots:
-    void createAutomaticPlaylist( QString );
-    void createStation();
-    void createPlaylist();
-    void loadSpiff();
-    void showSettingsDialog();
-    void showDiagnosticsDialog();
-    void updateCollectionManually();
-    void rescanCollectionManually();
-    void pluginMenuAdded(QMenu*);
-    void pluginMenuRemoved(QMenu*);
-    void showOfflineSources();
+    virtual void retranslateUi();
+    virtual void loadSettings();
+    virtual void saveSettings();
 
 private slots:
-    void onSipConnected();
-    void onSipDisconnected();
-    void onSipError();
-
-    void addPeerManually();
-
-    void onPlaybackLoading( const Tomahawk::result_ptr& result );
-
-    void audioStarted();
-    void audioStopped();
-
-    void showAboutTomahawk();
-    void checkForUpdates();
-
-    void onSipPluginAdded( SipPlugin* p );
-    void onSipPluginRemoved( SipPlugin* p );
-
-    void onSearch( const QString& search );
-    void onFilterEdited();
-
-    void showQueue();
-    void hideQueue();
-
-    void minimize();
-    void maximize();
-
-    void playlistCreateDialogFinished( int ret );
+    virtual void minimize();
+    virtual void maximize();
 
 private:
-    void loadSettings();
-    void saveSettings();
-
-    void applyPlatformTweaks();
-    void setupSignals();
-    void setupSideBar();
-    void setupUpdateCheck();
-
-    Ui::TomahawkWindow* ui;
-    QSearchField* m_searchWidget;
-    AudioControls* m_audioControls;
     TomahawkTrayIcon* m_trayIcon;
-    SourceTreeView* m_sourcetree;
-    QPushButton* m_statusButton;
-    QPushButton* m_queueButton;
-    PlaylistModel* m_queueModel;
-    QueueView* m_queueView;
-    AnimatedSplitter* m_sidebar;
-
     Tomahawk::result_ptr m_currentTrack;
     QString m_windowTitle;
 };

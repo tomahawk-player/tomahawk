@@ -78,6 +78,7 @@ SET( tomahawkSourcesGui ${tomahawkSourcesGui}
      settingslistdelegate.cpp
      resolversmodel.cpp
      tomahawkwindow.cpp
+     tomahawkdesktopwindow.cpp
 )
 
 SET( tomahawkHeaders ${tomahawkHeaders}
@@ -126,10 +127,11 @@ SET( tomahawkHeadersGui ${tomahawkHeadersGui}
      resolversmodel.h
      delegateconfigwrapper.h
      tomahawkwindow.h
+     tomahawkdesktopwindow.h
 )
 
 SET( tomahawkUI ${tomahawkUI}
-     tomahawkwindow.ui
+     tomahawkdesktopwindow.ui
      diagnosticsdialog.ui
      stackedsettingsdialog.ui
      proxydialog.ui
