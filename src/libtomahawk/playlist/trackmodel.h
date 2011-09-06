@@ -95,7 +95,6 @@ public:
     virtual void append( const Tomahawk::album_ptr& album ) = 0;
 
     TrackModelItem* itemFromIndex( const QModelIndex& index ) const;
-
     TrackModelItem* m_rootItem;
 
 signals:

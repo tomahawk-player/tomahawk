@@ -353,7 +353,6 @@ TrackModel::removeIndexes( const QList<QModelIndex>& indexes )
     }
 }
 
-
 TrackModelItem*
 TrackModel::itemFromIndex( const QModelIndex& index ) const
 {
