@@ -48,8 +48,6 @@ WelcomeWidget::WelcomeWidget( QWidget* parent )
 {
     ui->setupUi( this );
 
-    ui->splitter->setHandleWidth( 1 );
-    ui->splitter_2->setHandleWidth( 1 );
     ui->splitter_2->setStretchFactor( 0, 2 );
     ui->splitter_2->setStretchFactor( 0, 1 );
 

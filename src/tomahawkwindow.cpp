@@ -234,7 +234,6 @@ TomahawkWindow::setupSideBar()
     ui->splitter->setStretchFactor( 0, 1 );
     ui->splitter->setStretchFactor( 1, 3 );
     ui->splitter->setCollapsible( 1, false );
-    ui->splitter->setHandleWidth( 1 );
 
     ui->actionShowOfflineSources->setChecked( TomahawkSettings::instance()->showOfflineSources() );
 }

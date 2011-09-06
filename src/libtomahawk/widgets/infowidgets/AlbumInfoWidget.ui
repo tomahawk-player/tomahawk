@@ -15,21 +15,29 @@
   </property>
   <layout class="QVBoxLayout" name="verticalLayout_2">
    <item>
-    <widget class="ArtistView" name="tracksView"/>
-   </item>
-   <item>
-    <layout class="QVBoxLayout" name="verticalLayout">
-     <item>
-      <widget class="HeaderLabel" name="albumsLabel">
-       <property name="text">
-        <string>Other Albums by Artist</string>
-       </property>
-      </widget>
-     </item>
-     <item>
-      <widget class="AlbumView" name="albumsView"/>
-     </item>
-    </layout>
+    <widget class="QSplitter" name="splitter">
+     <property name="orientation">
+      <enum>Qt::Vertical</enum>
+     </property>
+     <property name="handleWidth">
+      <number>1</number>
+     </property>
+     <widget class="ArtistView" name="tracksView"/>
+     <widget class="QWidget" name="">
+      <layout class="QVBoxLayout" name="verticalLayout">
+       <item>
+        <widget class="HeaderLabel" name="albumsLabel">
+         <property name="text">
+          <string>Other Albums by Artist</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="AlbumView" name="albumsView"/>
+       </item>
+      </layout>
+     </widget>
+    </widget>
    </item>
   </layout>
  </widget>

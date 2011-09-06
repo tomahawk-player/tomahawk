@@ -29,6 +29,7 @@
 #include "widgets/overlaywidget.h"
 
 using namespace Tomahawk;
+
 QString SocialPlaylistWidget::s_popularAlbumsQuery = "SELECT * from album";
 QString SocialPlaylistWidget::s_mostPlayedPlaylistsQuery = "asd";
 QString SocialPlaylistWidget::s_topForeignTracksQuery = "select track.name, artist.name, count(*) as counter from (select track from playback_log group by track, source), track, artist where track not in (select track from playback_log where source is null group by track) and track.id = track and artist.id = track.artist group by track order by counter desc";
@@ -41,9 +42,6 @@ SocialPlaylistWidget::SocialPlaylistWidget ( QWidget* parent )
 {
     ui->setupUi( this );
 
-
-    ui->splitter->setHandleWidth( 1 );
-    ui->splitter_2->setHandleWidth( 1 );
     ui->splitter_2->setStretchFactor( 0, 2 );
     ui->splitter_2->setStretchFactor( 0, 1 );
 
@@ -92,10 +90,12 @@ SocialPlaylistWidget::SocialPlaylistWidget ( QWidget* parent )
     fetchFromDB();
 }
 
+
 SocialPlaylistWidget::~SocialPlaylistWidget()
 {
 
 }
+
 
 void
 SocialPlaylistWidget::fetchFromDB()
@@ -120,6 +120,8 @@ SocialPlaylistWidget::playlistInterface() const
 {
     return 0;
 }
+
+
 /*
 void
 SocialPlaylistWidget::createPlaylist()
@@ -135,6 +137,7 @@ SocialPlaylistWidget::createPlaylist()
     connect( m_coolQuery1.data(), SIGNAL( created() ), this, SLOT( playlist1Created() ) );
 }*/
 
+
 void
 SocialPlaylistWidget::popularAlbumsFetched( QList< album_ptr > albums )
 {
@@ -142,6 +145,7 @@ SocialPlaylistWidget::popularAlbumsFetched( QList< album_ptr > albums )
 
     m_popularNewAlbumsModel->addAlbums( albums );
 }
+
 
 void
 SocialPlaylistWidget::topForeignTracksFetched( QList< query_ptr > tracks )
