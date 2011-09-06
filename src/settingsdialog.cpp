@@ -52,6 +52,7 @@
 #include "ui_proxydialog.h"
 #include "ui_stackedsettingsdialog.h"
 #include <playlist/dynamic/widgets/LoadingSpinner.h>
+#include "GetNewStuffDialog.h"
 
 static QString
 md5( const QByteArray& src )
@@ -189,6 +190,7 @@ SettingsDialog::SettingsDialog( QWidget *parent )
     m_resolversModel = new ResolversModel( s->allScriptResolvers(), s->enabledScriptResolvers(), this );
     ui->scriptList->setModel( m_resolversModel );
 
+    connect( ui->getMoreResolvers, SIGNAL( clicked() ), this, SLOT( getMoreResolvers() ) );
     connect( ui->scriptList->selectionModel(), SIGNAL( selectionChanged( QItemSelection,QItemSelection ) ), this, SLOT( scriptSelectionChanged() ) );
     connect( ui->addScript, SIGNAL( clicked( bool ) ), this, SLOT( addScriptResolver() ) );
     connect( ui->removeScript, SIGNAL( clicked( bool ) ), this, SLOT( removeScriptResolver() ) );
@@ -538,6 +540,21 @@ SettingsDialog::removeScriptResolver()
     }
 }
 
+void
+SettingsDialog::getMoreResolvers()
+{
+#ifdef Q_OS_MAC
+    GetNewStuffDialog* diag = new GetNewStuffDialog( this, Qt::Sheet );
+    connect( diag, SIGNAL( finished( int ) ), this, SLOT( getMoreResolversFinished(int)));
+
+    diag->show();
+#else
+    GetNewStuffDialog diag( this );
+    int ret = diag.exec();
+#endif
+
+}
+
 
 void
 SettingsDialog::scriptSelectionChanged()
@@ -550,6 +567,12 @@ SettingsDialog::scriptSelectionChanged()
     {
         ui->removeScript->setEnabled( false );
     }
+}
+
+void
+SettingsDialog::getMoreResolversFinished( int ret )
+{
+
 }
 
 

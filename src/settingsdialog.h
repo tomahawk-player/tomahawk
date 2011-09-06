@@ -84,6 +84,9 @@ private slots:
     void addScriptResolver();
     void scriptSelectionChanged();
     void removeScriptResolver();
+    void getMoreResolvers();
+    void getMoreResolversFinished( int );
+
     void openResolverConfig( const QString& );
     void sipItemClicked ( const QModelIndex& );
     void openSipConfig( SipPlugin* );

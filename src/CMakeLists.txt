@@ -78,6 +78,11 @@ SET( tomahawkSourcesGui ${tomahawkSourcesGui}
      settingslistdelegate.cpp
      resolversmodel.cpp
      tomahawkwindow.cpp
+
+     GetNewStuffDialog.cpp
+     GetNewStuffDelegate.cpp
+     GetNewStuffModel.cpp
+     AtticaManager.cpp
 )
 
 SET( tomahawkHeaders ${tomahawkHeaders}
@@ -126,6 +131,11 @@ SET( tomahawkHeadersGui ${tomahawkHeadersGui}
      resolversmodel.h
      delegateconfigwrapper.h
      tomahawkwindow.h
+
+     GetNewStuffDialog.h
+     GetNewStuffDelegate.h
+     GetNewStuffModel.h
+     AtticaManager.h
 )
 
 SET( tomahawkUI ${tomahawkUI}
@@ -135,6 +145,8 @@ SET( tomahawkUI ${tomahawkUI}
      proxydialog.ui
 
      audiocontrols.ui
+
+     GetNewStuffDialog.ui
 )
 
 INCLUDE_DIRECTORIES(
@@ -194,6 +206,10 @@ IF(QCA2_FOUND)
     INCLUDE_DIRECTORIES( ${QCA2_INCLUDE_DIR} )
 ENDIF(QCA2_FOUND)
 
+IF(LIBATTICA_FOUND)
+    INCLUDE_DIRECTORIES( ${LIBATTICA_INCLUDE_DIR} )
+ENDIF(LIBATTICA_FOUND)
+
 kde4_add_app_icon( tomahawkSources "${CMAKE_SOURCE_DIR}/data/icons/tomahawk-icon-*.png" )
 qt4_add_resources( RC_SRCS "../resources.qrc" )
 qt4_wrap_cpp( tomahawkMoc ${tomahawkHeaders} )
@@ -237,6 +253,11 @@ ENDIF(GLOOX_FOUND)
 IF(QCA2_FOUND)
     SET(LINK_LIBRARIES ${LINK_LIBRARIES} ${QCA2_LIBRARIES} )
 ENDIF(QCA2_FOUND)
+
+IF(LIBATTICA_FOUND)
+    SET(LINK_LIBRARIES ${LINK_LIBRARIES} ${LIBATTICA_LIBRARIES} )
+ENDIF(LIBATTICA_FOUND)
+
 
 TARGET_LINK_LIBRARIES( tomahawk
     ${LINK_LIBRARIES}

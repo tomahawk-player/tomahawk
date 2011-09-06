@@ -53,6 +53,7 @@
 #include "globalactionmanager.h"
 #include "database/localcollection.h"
 #include "musicscanner.h"
+#include "AtticaManager.h"
 
 #include "audio/audioengine.h"
 #include "utils/xspfloader.h"
@@ -231,6 +232,9 @@ TomahawkApp::init()
     tDebug() << "Init Pipeline.";
     initPipeline();
 
+    // load remote list of resolvers able to be installed
+    AtticaManager::instance();
+
     if ( arguments().contains( "--http" ) || TomahawkSettings::instance()->value( "network/http", true ).toBool() )
     {
         initHTTP();
@@ -274,6 +278,8 @@ TomahawkApp::~TomahawkApp()
 #ifndef TOMAHAWK_HEADLESS
     delete m_mainwindow;
 #endif
+
+    delete AtticaManager::instance();
 
     if ( !m_audioEngine.isNull() )
         delete m_audioEngine.data();

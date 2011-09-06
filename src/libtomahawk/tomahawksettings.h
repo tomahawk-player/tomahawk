@@ -184,7 +184,10 @@ public:
     QStringList enabledScriptResolvers() const;
     void setEnabledScriptResolvers( const QStringList& resolvers );
 
-    // Default paths
+    QStringList atticaInstalledResolvers( const QStringList& resolvers ) const;
+    void addAtticaInstalledResolver( const QString& resolver );
+    void removeAtticaInstalledResolver( const QString& resolver );
+
     QString scriptDefaultPath() const;
     void setScriptDefaultPath( const QString& path );
     QString playlistDefaultPath() const;
