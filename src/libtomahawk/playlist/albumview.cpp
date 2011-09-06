@@ -212,5 +212,5 @@ AlbumView::startDrag( Qt::DropActions supportedActions )
     drag->setPixmap( p );
     drag->setHotSpot( QPoint( -20, -20 ) );
 
-    Qt::DropAction action = drag->exec( supportedActions, Qt::CopyAction );
+    /* Qt::DropAction action = */ drag->exec( supportedActions, Qt::CopyAction );
 }
