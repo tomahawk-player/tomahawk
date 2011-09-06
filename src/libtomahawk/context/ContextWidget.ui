@@ -35,7 +35,7 @@
       </sizepolicy>
      </property>
      <property name="text">
-      <string>Dashboard</string>
+      <string>Footnotes</string>
      </property>
      <property name="alignment">
       <set>Qt::AlignCenter</set>

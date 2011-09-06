@@ -87,7 +87,6 @@ ContextWidget::ContextWidget( QWidget* parent )
     boldFont.setPixelSize( 12 );
     boldFont.setBold( true );
     ui->toggleButton->setFont( boldFont );
-    ui->toggleButton->setText( tr( "Open Dashboard" ) );
 
     setAutoFillBackground( true );
     setFixedHeight( m_minHeight );
@@ -239,15 +238,12 @@ ContextWidget::toggleSize()
 
     if ( height() == m_minHeight )
     {
-        ui->toggleButton->setText( tr( "Close Dashboard" ) );
-
         m_timeLine->setFrameRange( height(), m_maxHeight );
         m_timeLine->setDirection( QTimeLine::Forward );
         m_timeLine->start();
     }
     else
     {
-        ui->toggleButton->setText( tr( "Open Dashboard" ) );
         m_visible = false;
         ui->contextView->hide();
 
