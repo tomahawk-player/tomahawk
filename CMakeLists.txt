@@ -158,9 +158,12 @@ macro_optional_find_package(KDE4Installed)
 
 # macro_optional_find_package(KDE4)
 IF(KDE4_FOUND)
-    #KDE4 adds and removes some compiler flags that we don't like
-    STRING( REPLACE "-std=iso9899:1990" "" CLEAN_C_FLAGS ${CMAKE_C_FLAGS} )
-    SET( CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fexceptions" )
+    IF( CMAKE_C_FLAGS )
+        # KDE4 adds and removes some compiler flags that we don't like
+        # (only for gcc not for clang e.g.)
+        STRING( REPLACE "-std=iso9899:1990" "" CLEAN_C_FLAGS ${CMAKE_C_FLAGS} )
+        SET( CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fexceptions" )
+    ENDIF()
 ELSE()
     SET( CLEAN_C_FLAGS ${CMAKE_C_FLAGS} )
 ENDIF()
