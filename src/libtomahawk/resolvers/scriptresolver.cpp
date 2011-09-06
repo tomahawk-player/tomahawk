@@ -298,7 +298,6 @@ ScriptResolver::cmdExited( int code, QProcess::ExitStatus status )
     }
 }
 
-
 void
 ScriptResolver::resolve( const Tomahawk::query_ptr& query )
 {

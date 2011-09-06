@@ -27,6 +27,7 @@ class PlaylistModel;
 class SourcesModel;
 class SourcesProxyModel;
 class SourceDelegate;
+class ResolversModel;
 
 class SourceTreeView : public QTreeView
 {
@@ -53,6 +54,7 @@ private slots:
     void expandRequest( const QPersistentModelIndex& idx );
 
     void loadPlaylist();
+    void addToSpotify();
     void deletePlaylist( const QModelIndex& = QModelIndex() );
     void copyPlaylistLink();
     void addToLocal();
@@ -98,6 +100,7 @@ private:
 
     bool m_dragging;
     QRect m_dropRect;
+    ResolversModel* m_resolversModel;
     QPersistentModelIndex m_dropIndex;
 };
 
