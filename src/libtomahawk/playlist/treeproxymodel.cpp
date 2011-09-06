@@ -360,7 +360,7 @@ TreeProxyModel::textForItem( TreeModelItem* item ) const
 
     if ( !item->artist().isNull() )
     {
-        return DatabaseImpl::sortname( item->artist()->name(), true );
+        return item->artist()->sortname();
     }
     else if ( !item->album().isNull() )
     {
