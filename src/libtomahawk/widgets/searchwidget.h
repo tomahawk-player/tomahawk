@@ -50,6 +50,7 @@ public:
 
     virtual QString title() const { return QString( tr( "Search: %1" ) ).arg( m_search ); }
     virtual QString description() const { return tr( "Results for '%1'" ).arg( m_search ); }
+    virtual QPixmap pixmap() const { return QPixmap( RESPATH "images/search-icon.png" ); }
 
     virtual bool showStatsBar() const { return false; }
 
