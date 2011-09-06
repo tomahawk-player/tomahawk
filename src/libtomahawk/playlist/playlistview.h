@@ -56,11 +56,7 @@ signals:
 
 protected:
     void keyPressEvent( QKeyEvent* event );
-    virtual void dragEnterEvent( QDragEnterEvent* event );
-    virtual void dragLeaveEvent( QDragLeaveEvent* /*event*/ ) { m_dragging = false; setDirtyRegion( m_dropRect ); }
-    virtual void dragMoveEvent( QDragMoveEvent* event );
-    virtual void dropEvent( QDropEvent* event );
-    void paintEvent( QPaintEvent* event );
+
 
 private slots:
     void onTrackCountChanged( unsigned int tracks );
