@@ -22,22 +22,30 @@
 #include <QPixmapCache>
 #include <QApplication>
 
-QColor StyleHelper::headerUpperColor()
+
+QColor
+StyleHelper::headerUpperColor()
 {
     return QColor( 80, 80, 80 );
 }
 
-QColor StyleHelper::headerLowerColor()
+
+QColor
+StyleHelper::headerLowerColor()
 {
     return QColor( 72, 72, 72 );
 }
 
-QColor StyleHelper::headerHighlightColor()
+
+QColor
+StyleHelper::headerHighlightColor()
 {
     return QColor( "#333" );
 }
 
-void StyleHelper::horizontalHeader(QPainter *painter, const QRect &r)
+
+void
+StyleHelper::horizontalHeader( QPainter* painter, const QRect& r )
 {
     QRect upperHalf( 0, 0, r.width(), r.height() / 2 );
     QRect lowerHalf( 0, upperHalf.height(), r.width(), r.height() );
@@ -58,7 +66,9 @@ void StyleHelper::horizontalHeader(QPainter *painter, const QRect &r)
     }
 }
 
-QColor StyleHelper::headerTextColor()
+
+QColor
+StyleHelper::headerTextColor()
 {
     return Qt::white;
 }
@@ -71,40 +81,46 @@ QColor StyleHelper::headerTextColor()
  * Copyright (C) 2011 Nokia Corporation and/or its subsidiary(-ies).
  * Contact: Nokia Corporation (qt-info@nokia.com)
  */
-void StyleHelper::drawArrow(QStyle::PrimitiveElement element, QPainter *p, const QStyleOption *opt)
+void StyleHelper::drawArrow( QStyle::PrimitiveElement element, QPainter* p, const QStyleOption* opt )
 {
-
-    if (opt->rect.width() <= 1 || opt->rect.height() <= 1)
+    if ( opt->rect.width() <= 1 || opt->rect.height() <= 1 )
         return;
+
     QRect r = opt->rect;
-    int size = qMin(r.height(), r.width());
+    int size = qMin( r.height(), r.width() );
     QPixmap pixmap;
     QString pixmapName;
-    pixmapName.sprintf("arrow-%s-%d-%d-%d-%lld",
-                       "$qt_ia",
-                       uint(opt->state), element,
-                       size, opt->palette.cacheKey());
-    if (!QPixmapCache::find(pixmapName, pixmap)) {
-        int border = size/5;
-        int sqsize = 2*(size/2);
-        QImage image(sqsize, sqsize, QImage::Format_ARGB32);
-        image.fill(0);
-        QPainter imagePainter(&image);
-        imagePainter.setRenderHint(QPainter::Antialiasing, true);
+
+    pixmapName.sprintf( "arrow-%s-%d-%d-%d-%lld", "$qt_ia", uint(opt->state), element, size, opt->palette.cacheKey() );
+    if ( !QPixmapCache::find( pixmapName, pixmap) )
+    {
+        int border = size / 5;
+        int sqsize = 2 * ( size / 2 );
+
+        QImage image( sqsize, sqsize, QImage::Format_ARGB32 );
+        image.fill( 0 );
+        QPainter imagePainter( &image );
+        imagePainter.setRenderHint( QPainter::Antialiasing, true );
         QPolygon a;
-        switch (element) {
+
+        switch ( element )
+        {
             case QStyle::PE_IndicatorArrowUp:
-                a.setPoints(3, border, sqsize/2,  sqsize/2, border,  sqsize - border, sqsize/2);
+                a.setPoints( 3, border, sqsize / 2, sqsize / 2, border, sqsize - border, sqsize / 2 );
                 break;
+
             case QStyle::PE_IndicatorArrowDown:
-                a.setPoints(3, border, sqsize/2,  sqsize/2, sqsize - border,  sqsize - border, sqsize/2);
+                a.setPoints( 3, border, sqsize / 2, sqsize / 2, sqsize - border,  sqsize - border, sqsize / 2 );
                 break;
+
             case QStyle::PE_IndicatorArrowRight:
-                a.setPoints(3, sqsize - border, sqsize/2,  sqsize/2, border,  sqsize/2, sqsize - border);
+                a.setPoints( 3, sqsize - border, sqsize / 2, sqsize / 2, border, sqsize / 2, sqsize - border );
                 break;
+
             case QStyle::PE_IndicatorArrowLeft:
-                a.setPoints(3, border, sqsize/2,  sqsize/2, border,  sqsize/2, sqsize - border);
+                a.setPoints( 3, border, sqsize / 2, sqsize / 2, border, sqsize / 2, sqsize - border );
                 break;
+
             default:
                 break;
         }
@@ -112,40 +128,46 @@ void StyleHelper::drawArrow(QStyle::PrimitiveElement element, QPainter *p, const
         int bsx = 0;
         int bsy = 0;
 
-        if (opt->state & QStyle::State_Sunken) {
-            bsx = qApp->style()->pixelMetric(QStyle::PM_ButtonShiftHorizontal);
-            bsy = qApp->style()->pixelMetric(QStyle::PM_ButtonShiftVertical);
+        if ( opt->state & QStyle::State_Sunken )
+        {
+            bsx = qApp->style()->pixelMetric( QStyle::PM_ButtonShiftHorizontal );
+            bsy = qApp->style()->pixelMetric( QStyle::PM_ButtonShiftVertical );
         }
 
         QRect bounds = a.boundingRect();
         int sx = sqsize / 2 - bounds.center().x() - 1;
         int sy = sqsize / 2 - bounds.center().y() - 1;
-        imagePainter.translate(sx + bsx, sy + bsy);
-        imagePainter.setPen(opt->palette.buttonText().color());
-        imagePainter.setBrush(opt->palette.buttonText());
+        imagePainter.translate( sx + bsx, sy + bsy );
+        imagePainter.setPen( opt->palette.buttonText().color() );
+        imagePainter.setBrush( opt->palette.buttonText() );
 
-        if (!(opt->state & QStyle::State_Enabled)) {
-            QColor foreGround(150, 150, 150, 150);
-            imagePainter.setBrush(opt->palette.mid().color());
-            imagePainter.setPen(opt->palette.mid().color());
-        } else {
-            QColor shadow(0, 0, 0, 100);
-            imagePainter.translate(0, 1);
-            imagePainter.setPen(shadow);
-            imagePainter.setBrush(shadow);
-            QColor foreGround(255, 255, 255, 210);
-            imagePainter.drawPolygon(a);
-            imagePainter.translate(0, -1);
-            imagePainter.setPen(foreGround);
-            imagePainter.setBrush(foreGround);
+        if ( !( opt->state & QStyle::State_Enabled ) )
+        {
+            QColor foreGround( 150, 150, 150, 150 );
+            imagePainter.setBrush( opt->palette.mid().color() );
+            imagePainter.setPen( opt->palette.mid().color() );
+        }
+        else
+        {
+            QColor shadow( 0, 0, 0, 100 );
+            imagePainter.translate( 0, 1 );
+            imagePainter.setPen( shadow );
+            imagePainter.setBrush( shadow );
+            QColor foreGround( 255, 255, 255, 210 );
+            imagePainter.drawPolygon( a );
+            imagePainter.translate( 0, -1 );
+            imagePainter.setPen( foreGround );
+            imagePainter.setBrush( foreGround );
         }
 
-        imagePainter.drawPolygon(a);
+        imagePainter.drawPolygon( a );
         imagePainter.end();
-        pixmap = QPixmap::fromImage(image);
-        QPixmapCache::insert(pixmapName, pixmap);
+
+        pixmap = QPixmap::fromImage( image );
+        QPixmapCache::insert( pixmapName, pixmap );
     }
-    int xOffset = r.x() + (r.width() - size)/2;
-    int yOffset = r.y() + (r.height() - size)/2;
-    p->drawPixmap(xOffset, yOffset, pixmap);
+
+    int xOffset = r.x() + ( r.width() - size ) / 2;
+    int yOffset = r.y() + ( r.height() - size ) / 2;
+    p->drawPixmap( xOffset, yOffset, pixmap );
 }

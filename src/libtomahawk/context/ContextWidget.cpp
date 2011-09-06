@@ -92,7 +92,7 @@ ContextWidget::ContextWidget( QWidget* parent )
     setFixedHeight( m_minHeight );
 
     QPalette pal = palette();
-    pal.setBrush( QPalette::Window, QColor( 0x70, 0x70, 0x70 ) );
+    pal.setBrush( QPalette::Window, StyleHelper::headerLowerColor() );
     setPalette( pal );
 
     connect( ui->toggleButton, SIGNAL( clicked() ), SLOT( toggleSize() ) );

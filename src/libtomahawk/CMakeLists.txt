@@ -377,7 +377,6 @@ set( libHeaders
     utils/spotifyparser.h
     utils/rdioparser.h
     utils/shortenedlinkparser.h
-    utils/stylehelper.h
 
     widgets/querylabel.h
     widgets/animatedcounterlabel.h

@@ -19,7 +19,6 @@
 #ifndef STYLEHELPER_H
 #define STYLEHELPER_H
 
-
 #include <QColor>
 #include <QStyle>
 #include <QStyleOption>
@@ -55,14 +54,15 @@ public:
     /**
      * Draws a header background on a painter with the specified rectangle
      */
-    static void horizontalHeader(QPainter *painter, const QRect &rect);
+    static void horizontalHeader( QPainter* painter, const QRect& rect );
+
     /**
      * Draws a styled arrow that looks good on a Header (from qwindowstyle.cpp)
      * \copyright {  Licensed under the GPL v3+
      *               Copyright (C) 2011 Nokia Corporation and/or its subsidiary(-ies).
      *               Contact: Nokia Corporation (qt-info@nokia.com) }
      */
-    static void drawArrow(QStyle::PrimitiveElement, QPainter *painter, const QStyleOption *opt);
+    static void drawArrow( QStyle::PrimitiveElement, QPainter* painter, const QStyleOption* opt );
 };
 
 #endif // STYLEHELPER_H
