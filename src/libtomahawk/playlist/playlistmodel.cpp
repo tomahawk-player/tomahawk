@@ -419,6 +419,14 @@ PlaylistModel::parsedDroppedTracks( QList< query_ptr > tracks )
         }
         emit endInsertRows();
 
+        // Work around Qt-on-mac bug where drags from outside the app are Qt::MoveAction
+        // instead of Qt::CopyAction
+        // Samething seems to be applying to Linux
+        // However, this workaround updates the playlist revision on reorder aswell...
+#ifdef Q_WS_MAC
+        if ( m_dropStorage.action & Qt::CopyAction || m_dropStorage.action & Qt::MoveAction )
+#else
+#ifdef Q_OS_LINUX
         if ( m_dropStorage.action & Qt::CopyAction || m_dropStorage.action & Qt::MoveAction )
         {
             onPlaylistChanged();

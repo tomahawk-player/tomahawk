@@ -267,7 +267,7 @@ SourceTreeView::addToSpotify(  )
         PlaylistItem* item = itemFromIndex< PlaylistItem >( idx );
         playlist_ptr playlist = item->playlist();
         qDebug() << Q_FUNC_INFO << "Static playlist" << playlist->title();
-        // Do something with playlist -> spotify
+        // Do something with playlist -> spotify()
 
     } else if( type == SourcesModel::AutomaticPlaylist || type == SourcesModel::Station )
     {

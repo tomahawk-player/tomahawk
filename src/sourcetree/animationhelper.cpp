@@ -68,7 +68,7 @@ void AnimationHelper::setSize( const QSize& size )
 {
     m_size = size;
     emit sizeChanged();
-    qDebug() << "animaton setting size to" << size;
+    //qDebug() << "animaton setting size to" << size;
 }
 
 void AnimationHelper::expand()
