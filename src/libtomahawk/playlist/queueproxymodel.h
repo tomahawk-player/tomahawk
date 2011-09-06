@@ -24,13 +24,14 @@
 #include "dllmacro.h"
 
 class QMetaData;
+class TrackView;
 
 class DLLEXPORT QueueProxyModel : public PlaylistProxyModel
 {
 Q_OBJECT
 
 public:
-    explicit QueueProxyModel( QObject* parent = 0 );
+    explicit QueueProxyModel( TrackView* parent = 0 );
     ~QueueProxyModel();
 
     virtual Tomahawk::result_ptr siblingItem( int itemsAway );
@@ -38,6 +39,7 @@ public:
     using PlaylistProxyModel::siblingItem;
 
 private slots:
+    void onIndexActivated( const QModelIndex& index );
     void onTrackCountChanged( unsigned int count );
 };
 

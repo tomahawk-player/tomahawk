@@ -39,7 +39,7 @@ QueueView::QueueView( AnimatedSplitter* parent )
 
     setHiddenSize( QSize( 0, 22 ) );
 
-    ui->queue->setProxyModel( new QueueProxyModel( this ) );
+    ui->queue->setProxyModel( new QueueProxyModel( ui->queue ) );
     ui->queue->setSizePolicy( QSizePolicy::Preferred, QSizePolicy::Ignored );
     ui->queue->setFrameShape( QFrame::NoFrame );
     ui->queue->setAttribute( Qt::WA_MacShowFocusRect, 0 );

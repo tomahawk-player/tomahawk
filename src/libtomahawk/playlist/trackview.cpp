@@ -183,6 +183,8 @@ TrackView::onItemActivated( const QModelIndex& index )
         m_proxyModel->setCurrentIndex( index );
         AudioEngine::instance()->playItem( m_proxyModel, item->query()->results().first() );
     }
+
+    emit itemActivated( index );
 }
 
 

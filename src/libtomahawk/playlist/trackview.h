@@ -40,7 +40,7 @@ class DLLEXPORT TrackView : public QTreeView
 Q_OBJECT
 
 public:
-explicit TrackView( QWidget* parent = 0 );
+    explicit TrackView( QWidget* parent = 0 );
     ~TrackView();
 
     virtual QString guid() const { return m_guid; }
@@ -66,10 +66,13 @@ explicit TrackView( QWidget* parent = 0 );
     void setUpdatesContextView( bool b ) { m_updateContextView = b; }
 
 public slots:
-    void onItemActivated( const QModelIndex& index );
+    virtual void onItemActivated( const QModelIndex& index );
 
     void playItem();
     void onMenuTriggered( int action );
+
+signals:
+    void itemActivated( const QModelIndex& index );
 
 protected:
     virtual void resizeEvent( QResizeEvent* event );

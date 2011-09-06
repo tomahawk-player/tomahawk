@@ -18,17 +18,19 @@
 
 #include "queueproxymodel.h"
 
+#include "playlist/trackview.h"
 #include "viewmanager.h"
 #include "utils/logger.h"
 
 using namespace Tomahawk;
 
 
-QueueProxyModel::QueueProxyModel( QObject* parent )
+QueueProxyModel::QueueProxyModel( TrackView* parent )
     : PlaylistProxyModel( parent )
 {
     qDebug() << Q_FUNC_INFO;
 
+    connect( parent, SIGNAL( itemActivated( QModelIndex ) ), this, SLOT( onIndexActivated( QModelIndex ) ) );
     connect( this, SIGNAL( sourceTrackCountChanged( unsigned int ) ), this, SLOT( onTrackCountChanged( unsigned int ) ) );
 }
 
@@ -38,11 +40,17 @@ QueueProxyModel::~QueueProxyModel()
 }
 
 
+void
+QueueProxyModel::onIndexActivated( const QModelIndex& index )
+{
+    setCurrentIndex( QModelIndex() );
+    removeIndex( index );
+}
+
+
 Tomahawk::result_ptr
 QueueProxyModel::siblingItem( int itemsAway )
 {
-    qDebug() << Q_FUNC_INFO << rowCount( QModelIndex() );
-
     setCurrentIndex( QModelIndex() );
     Tomahawk::result_ptr res = PlaylistProxyModel::siblingItem( itemsAway );
 
