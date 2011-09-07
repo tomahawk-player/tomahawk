@@ -448,7 +448,7 @@ SourceTreeView::dragLeaveEvent( QDragLeaveEvent* event )
     setDirtyRegion( m_dropRect );
 
     m_delegate->dragLeaveEvent();
-    dataChanged(m_dropIndex, m_dropIndex);
+    dataChanged( m_dropIndex, m_dropIndex );
     m_dropIndex = QPersistentModelIndex();
 }
 
@@ -594,10 +594,9 @@ SourceTreeView::itemFromIndex( const QModelIndex& index ) const
     return item;
 }
 
+
 void
 SourceTreeView::update( const QModelIndex &index )
 {
-//    updateGeometries();
-//    QTreeView::update( index );
     dataChanged( index, index );
 }

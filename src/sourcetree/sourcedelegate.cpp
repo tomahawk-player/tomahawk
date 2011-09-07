@@ -35,6 +35,7 @@
 
 #define TREEVIEW_INDENT_ADD -7
 
+
 SourceDelegate::SourceDelegate( QAbstractItemView* parent )
     : QStyledItemDelegate( parent )
     , m_parent( parent )
@@ -45,11 +46,11 @@ SourceDelegate::SourceDelegate( QAbstractItemView* parent )
     m_dropTypeMap.insert( 3, SourceTreeItem::DropTypeLocalItems );
     m_dropTypeMap.insert( 4, SourceTreeItem::DropTypeTop50 );
 
-    m_dropTypeTextMap.insert( 0, "Track" );
-    m_dropTypeTextMap.insert( 1, "Album" );
-    m_dropTypeTextMap.insert( 2, "Artist" );
-    m_dropTypeTextMap.insert( 3, "Local" );
-    m_dropTypeTextMap.insert( 4, "Top 10" );
+    m_dropTypeTextMap.insert( 0, tr( "Track" ) );
+    m_dropTypeTextMap.insert( 1, tr( "Album" ) );
+    m_dropTypeTextMap.insert( 2, tr( "Artist" ) );
+    m_dropTypeTextMap.insert( 3, tr( "Local" ) );
+    m_dropTypeTextMap.insert( 4, tr( "Top 10" ) );
 
     m_dropTypeImageMap.insert( 0, QPixmap( ":/data/images/drop-song.png" ).scaledToWidth( 32, Qt::SmoothTransformation ) );
     m_dropTypeImageMap.insert( 1, QPixmap( ":/data/images/drop-album.png" ).scaledToWidth( 32, Qt::SmoothTransformation ) );
@@ -60,10 +61,12 @@ SourceDelegate::SourceDelegate( QAbstractItemView* parent )
     m_dropMimeData = new QMimeData();
 }
 
+
 SourceDelegate::~SourceDelegate()
 {
     delete m_dropMimeData;
 }
+
 
 QSize
 SourceDelegate::sizeHint( const QStyleOptionViewItem& option, const QModelIndex& index ) const
@@ -198,8 +201,8 @@ SourceDelegate::paint( QPainter* painter, const QStyleOptionViewItem& option, co
 
         painter->restore();
     }
-    else if ( (type == SourcesModel::StaticPlaylist || type == SourcesModel::CategoryAdd )
-              && m_expandedMap.contains( index ) && m_expandedMap.value( index )->partlyExpanded() && dropTypeCount( item ) > 0 )
+    else if ( ( type == SourcesModel::StaticPlaylist || type == SourcesModel::CategoryAdd ) &&
+              m_expandedMap.contains( index ) && m_expandedMap.value( index )->partlyExpanded() && dropTypeCount( item ) > 0 )
     {
         // Let Qt paint the original item. We add our stuff after it
         o.state &= ~QStyle::State_Selected;
@@ -218,7 +221,6 @@ SourceDelegate::paint( QPainter* painter, const QStyleOptionViewItem& option, co
             cursorInRect = true;
 
         // draw the background
-
         QLinearGradient linearGradient( itemsRect.topLeft(), itemsRect.bottomLeft() );
         linearGradient.setColorAt( 0.0, Qt::white );
 //        linearGradient.setColorAt( 0.8, QColor( 0xd6, 0xd6, 0xd6 ) ); // light grey
@@ -240,8 +242,6 @@ SourceDelegate::paint( QPainter* painter, const QStyleOptionViewItem& option, co
         // adjust to one single entry
         itemsRect.adjust( 0, 0, -itemsRect.width() + itemWidth, 0 );
 
-        int count = 0;
-
         pen.setColor( Qt::white );
         painter->setPen( pen );
 
@@ -256,11 +256,11 @@ SourceDelegate::paint( QPainter* painter, const QStyleOptionViewItem& option, co
 
         SourceTreeItem::DropTypes dropTypes = item->supportedDropTypes( m_dropMimeData );
 
+        int count = 0;
         for ( int i = 0; i < 5; ++i )
         {
             if ( !dropTypes.testFlag( m_dropTypeMap.value( i ) ) )
                 continue;
-
 
             if ( count > 0 )
                 itemsRect.adjust( itemWidth, 0, itemWidth, 0 );
@@ -289,9 +289,7 @@ SourceDelegate::paint( QPainter* painter, const QStyleOptionViewItem& option, co
             count++;
         }
 
-
         painter->restore();
-
     }
     else
     {
@@ -338,6 +336,7 @@ SourceDelegate::paint( QPainter* painter, const QStyleOptionViewItem& option, co
 #endif
 }
 
+
 void
 SourceDelegate::updateEditorGeometry( QWidget* editor, const QStyleOptionViewItem& option, const QModelIndex& index ) const
 {
@@ -346,8 +345,9 @@ SourceDelegate::updateEditorGeometry( QWidget* editor, const QStyleOptionViewIte
     else
         QStyledItemDelegate::updateEditorGeometry( editor, option, index );
 
-    editor->setGeometry( editor->geometry().adjusted( 2*TREEVIEW_INDENT_ADD, 0, 0, 0 ) );
+    editor->setGeometry( editor->geometry().adjusted( 2 * TREEVIEW_INDENT_ADD, 0, 0, 0 ) );
 }
+
 
 bool
 SourceDelegate::editorEvent ( QEvent* event, QAbstractItemModel* model, const QStyleOptionViewItem& option, const QModelIndex& index )
@@ -375,6 +375,7 @@ SourceDelegate::editorEvent ( QEvent* event, QAbstractItemModel* model, const QS
     return QStyledItemDelegate::editorEvent ( event, model, option, index );
 }
 
+
 int
 SourceDelegate::dropTypeCount( SourceTreeItem* item ) const
 {
@@ -397,14 +398,16 @@ SourceDelegate::dropTypeCount( SourceTreeItem* item ) const
     return menuCount;
 }
 
+
 SourceTreeItem::DropType
 SourceDelegate::hoveredDropType() const
 {
     return m_hoveredDropType;
 }
 
+
 void
-SourceDelegate::hovered(const QModelIndex &index, const QMimeData *mimeData)
+SourceDelegate::hovered( const QModelIndex& index, const QMimeData* mimeData )
 {
     if ( !index.isValid() )
     {
@@ -414,6 +417,7 @@ SourceDelegate::hovered(const QModelIndex &index, const QMimeData *mimeData)
         }
         return;
     }
+
     if ( !m_expandedMap.contains( index ) )
     {
         foreach ( AnimationHelper *helper, m_expandedMap )
@@ -430,20 +434,21 @@ SourceDelegate::hovered(const QModelIndex &index, const QMimeData *mimeData)
 
         m_expandedMap.insert( m_newDropHoverIndex, new AnimationHelper( m_newDropHoverIndex ) );
         connect( m_expandedMap.value( m_newDropHoverIndex ), SIGNAL( finished( QModelIndex ) ), SLOT( animationFinished( QModelIndex ) ) );
-
     }
     else
         qDebug() << "expandedMap already contains index" << index;
 }
 
+
 void
 SourceDelegate::dragLeaveEvent()
 {
-    foreach ( AnimationHelper *helper, m_expandedMap )
+    foreach ( AnimationHelper* helper, m_expandedMap )
     {
         helper->collapse( true );
     }
 }
+
 
 void
 SourceDelegate::animationFinished( const QModelIndex& index )
