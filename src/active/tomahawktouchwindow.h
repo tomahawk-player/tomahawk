@@ -34,8 +34,9 @@ public:
     TomahawkTouchWindow();
      ~TomahawkTouchWindow();
 
-public slots:
-    void play( const QModelIndex& index );
+
+    Q_INVOKABLE void play( const QModelIndex& index );
+    Q_INVOKABLE void activateItem( const QModelIndex& index );
 
 private slots:
     void loadQml();

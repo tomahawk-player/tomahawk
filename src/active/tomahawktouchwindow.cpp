@@ -22,6 +22,7 @@
 #include "audio/audioengine.h"
 #include "globalactionmanager.h"
 #include "sourcesmodel.h"
+#include "items/sourcetreeitem.h"
 
 
 #include <QFileSystemWatcher>
@@ -55,6 +56,15 @@ void TomahawkTouchWindow::play(const QModelIndex& index)
 }
 
 
+void TomahawkTouchWindow::activateItem(const QModelIndex& index)
+{
+    tLog() << Q_FUNC_INFO << index;
+    SourceTreeItem* item = qobject_cast< SourceTreeItem* >( s_sourcesModel->data( index, SourcesModel::SourceTreeItemRole ).value< SourceTreeItem* >() );
+    item->activate();
+}
+
+
+
 void
 TomahawkTouchWindow::loadQml()
 {
@@ -76,6 +86,7 @@ TomahawkTouchWindow::loadQml()
     QDeclarativeContext* context = m_view->rootContext();
 
     tLog()<< Q_FUNC_INFO << "make objects accessible from qml";
+    context->setContextProperty( "touchWindow", this );
     context->setContextProperty( "audioEngine", AudioEngine::instance() );
     context->setContextProperty( "globalActionManager", GlobalActionManager::instance() );
     context->setContextProperty( "sourcesModel", s_sourcesModel );
