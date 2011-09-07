@@ -26,8 +26,9 @@
 #include "database/database.h"
 #include "database/databasecommand_playbackhistory.h"
 #include "dynamic/GeneratorInterface.h"
-#include "utils/logger.h"
 #include "dropjob.h"
+#include "utils/tomahawkutils.h"
+#include "utils/logger.h"
 
 using namespace Tomahawk;
 
@@ -98,7 +99,9 @@ PlaylistModel::loadPlaylist( const Tomahawk::playlist_ptr& playlist, bool loadEn
 
     setReadOnly( !m_playlist->author()->isLocal() );
     setTitle( playlist->title() );
-    setDescription( tr( "A playlist by %1" ).arg( playlist->author()->isLocal() ? tr( "you" ) : playlist->author()->friendlyName() ) );
+    setDescription( tr( "A playlist by %1, created %2 ago" )
+                  .arg( playlist->author()->isLocal() ? tr( "you" ) : playlist->author()->friendlyName() )
+                  .arg( TomahawkUtils::ageToString( QDateTime::fromTime_t( playlist->createdOn() ) ) ) );
 
     m_isTemporary = false;
     if ( !loadEntries )
