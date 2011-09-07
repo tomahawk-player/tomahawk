@@ -4,12 +4,12 @@ SET( touchmahawkSources ${final_src} )
 #LIST( REMOVE_ITEM touchmahawkSources "main.cpp"  )
 
 SET( touchmahawkHeaders
-    active/tomahawkwindowdeclarative.h
+    active/tomahawktouchwindow.h
 )
 
 SET( touchmahawkSources
     ${touchmahawkSources}
-    active/tomahawkwindowdeclarative.cpp
+    active/tomahawktouchwindow.cpp
 
 #   active/main.cpp
 )

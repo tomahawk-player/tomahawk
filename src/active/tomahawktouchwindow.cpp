@@ -16,7 +16,7 @@
  *   along with Tomahawk. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include "active/tomahawkwindowdeclarative.h"
+#include "active/tomahawktouchwindow.h"
 
 #include "utils/logger.h"
 #include "audio/audioengine.h"
@@ -27,7 +27,7 @@
 
 #define QMLGUI "/home/domme/dev/sources/tomahawk-qml"
 
-TomahawkWindowDeclarative::TomahawkWindowDeclarative()
+TomahawkTouchWindow::TomahawkTouchWindow()
     : m_view(0)
 {
     QFileSystemWatcher* watcher = new QFileSystemWatcher;
@@ -41,20 +41,20 @@ TomahawkWindowDeclarative::TomahawkWindowDeclarative()
 }
 
 
-TomahawkWindowDeclarative::~TomahawkWindowDeclarative()
+TomahawkTouchWindow::~TomahawkTouchWindow()
 {
 
 }
 
 
-void TomahawkWindowDeclarative::play(const QModelIndex& index)
+void TomahawkTouchWindow::play(const QModelIndex& index)
 {
-  
+
 }
 
 
 void
-TomahawkWindowDeclarative::loadQml()
+TomahawkTouchWindow::loadQml()
 {
     tLog() << Q_FUNC_INFO;
     qmlRegisterType<AudioEngine>("org.tomahawkplayer.qmlcomponents", 1, 0, "AudioEngine");

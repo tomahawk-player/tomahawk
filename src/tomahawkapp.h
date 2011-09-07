@@ -70,7 +70,7 @@ class AudioControls;
 #endif
 
 #ifdef TOUCHMAHAWK
-class TomahawkWindowDeclarative;
+class TomahawkTouchWindow;
 #endif
 
 
@@ -97,7 +97,7 @@ public:
 #endif
 
 #ifdef TOUCHMAHAWK
-    TomahawkWindowDeclarative* declarativeWindow() const { return m_declarativeWindow; }
+    TomahawkTouchWindow* declarativeWindow() const { return m_declarativeWindow; }
 #endif
 
     void enableScriptResolver( const QString& scriptPath );
@@ -150,7 +150,7 @@ private:
 #endif
 
 #ifdef TOUCHMAHAWK
-    TomahawkWindowDeclarative* m_declarativeWindow;
+    TomahawkTouchWindow* m_declarativeWindow;
 #endif
 
     bool m_headless;

@@ -70,7 +70,7 @@
 #endif
 
 #ifdef TOUCHMAHAWK
-    #include "active/tomahawkwindowdeclarative.h"
+    #include "active/tomahawktouchwindow.h"
 #endif
 
 // should go to a plugin actually
@@ -230,7 +230,7 @@ TomahawkApp::init()
 #ifndef TOUCHMAHAWK
         m_mainwindow->show();
 #else
-        m_declarativeWindow = new TomahawkWindowDeclarative();
+        m_declarativeWindow = new TomahawkTouchWindow();
         m_declarativeWindow->setWindowTitle( "Touch-ma-hawk" );
         m_declarativeWindow->show();
 #endif // TOUCHMAHAWK

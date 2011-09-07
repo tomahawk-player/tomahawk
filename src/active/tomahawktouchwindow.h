@@ -16,32 +16,26 @@
  *   along with Tomahawk. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef TOMAHAWKWINDOWDECLARATIVE_H
-#define TOMAHAWKWINDOWDECLARATIVE_H
+#ifndef TOMAHAWKTOUCHWINDOW_H
+#define TOMAHAWKTOUCHWINDOW_H
+
+#include "tomahawkwindow.h"
 
 #include <QtDeclarative>
-#include <QMainWindow>
 
-class TomahawkWindowDeclarative;
+class TomahawkTouchWindow;
 class QFileSystemWatcher;
 
-
-class TomahawkWindowDeclarative : public QMainWindow
+class TomahawkTouchWindow : public TomahawkWindow
 {
     Q_OBJECT
 
 public:
-     TomahawkWindowDeclarative();
-     ~TomahawkWindowDeclarative();
+    TomahawkTouchWindow();
+     ~TomahawkTouchWindow();
 
 public slots:
     void play( const QModelIndex& index );
-
-// protected:
-//     void changeEvent( QEvent* e );
-//     void closeEvent( QCloseEvent* e );
-//     void showEvent( QShowEvent* e );
-//     void hideEvent( QHideEvent* e );
 
 private slots:
     void loadQml();
@@ -52,5 +46,5 @@ private:
 
 };
 
-#endif // TOMAHAWKWINDOWDECLARATIVE_H
+#endif // TOMAHAWKTOUCHWINDOW_H
 
