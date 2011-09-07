@@ -24,6 +24,7 @@
 #include "tomahawktrayicon.h"
 #include "tomahawkapp.h"
 #include "sourcetree/sourcesmodel.h"
+#include "viewmanager.h"
 
 #include <QCloseEvent>
 
@@ -36,6 +37,9 @@ TomahawkWindow::TomahawkWindow( QWidget* parent )
     , m_trayIcon( new TomahawkTrayIcon( this ) )
 {
     setWindowIcon( QIcon( RESPATH "icons/tomahawk-icon-128x128.png" ) );
+
+    if( !ViewManager::instance() )
+        new ViewManager( this );
 
     if( !s_sourcesModel )
         s_sourcesModel = new SourcesModel( this );

@@ -77,9 +77,8 @@ TomahawkDesktopWindow::TomahawkDesktopWindow( QWidget* parent )
     , m_searchWidget( 0 )
     , m_audioControls( new AudioControls( this ) )
 {
-    ViewManager* vm = new ViewManager( this );
-    connect( vm, SIGNAL( showQueueRequested() ), SLOT( showQueue() ) );
-    connect( vm, SIGNAL( hideQueueRequested() ), SLOT( hideQueue() ) );
+    connect( ViewManager::instance(), SIGNAL( showQueueRequested() ), SLOT( showQueue() ) );
+    connect( ViewManager::instance(), SIGNAL( hideQueueRequested() ), SLOT( hideQueue() ) );
 
     ui->setupUi( this );
     applyPlatformTweaks();
@@ -96,7 +95,7 @@ TomahawkDesktopWindow::TomahawkDesktopWindow( QWidget* parent )
 
     // set initial state
     onSipDisconnected();
-    vm->setQueue( m_queueView );
+    ViewManager::instance()->setQueue( m_queueView );
     ViewManager::instance()->showWelcomePage();
 }
 
