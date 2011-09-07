@@ -183,7 +183,7 @@ DBSyncConnection::fetchOpsData( const QString& sinceguid )
 {
     changeState( FETCHING );
 
-    tLog() << "Sending a FETCHOPS cmd since:" << sinceguid;
+    tLog() << "Sending a FETCHOPS cmd since:" << sinceguid << "- source:" << m_source->id();
 
     QVariantMap msg;
     msg.insert( "method", "fetchops" );
