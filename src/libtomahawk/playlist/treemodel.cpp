@@ -49,6 +49,11 @@ TreeModel::TreeModel( QObject* parent )
                SLOT( infoSystemInfo( Tomahawk::InfoSystem::InfoRequestData, QVariant ) ) );
 
     connect( Tomahawk::InfoSystem::InfoSystem::instance(), SIGNAL( finished( QString ) ), SLOT( infoSystemFinished( QString ) ) );
+
+    QHash<int, QByteArray> roles;
+    roles[NameRole] = "name";
+    roles[IsPlayingRole] = "isPlaying";
+    setRoleNames(roles);
 }
 
 
@@ -277,16 +282,24 @@ TreeModel::data( const QModelIndex& index, int role ) const
         return QSize( 128, 0 );
     }
 
-    if ( role != Qt::DisplayRole ) // && role != Qt::ToolTipRole )
+
+    if ( role != Qt::DisplayRole && !roleNames().contains( role ) ) // && role != Qt::ToolTipRole )
         return QVariant();
 
-    if ( !entry->artist().isNull() && index.column() == Name )
+    if ( role == IsPlayingRole )
+        return entry->isPlaying();
+
+    if ( !entry->artist().isNull() && ( index.column() == Name || role == NameRole ) )
     {
         return entry->artist()->name();
     }
-    else if ( !entry->album().isNull() && index.column() == Name )
+    else if ( !entry->album().isNull() && ( index.column() == Name || role == NameRole ) )
     {
         return entry->album()->name();
+    }
+    else if ( role = NameRole )
+    {
+        return entry->result()->track();
     }
     else
     {

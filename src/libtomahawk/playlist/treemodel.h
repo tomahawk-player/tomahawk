@@ -50,6 +50,11 @@ public:
         AlbumPosition
     };
 
+    enum Roles {
+        NameRole = Qt::UserRole + 1,
+        IsPlayingRole
+    };
+
     enum ColumnStyle // Default style is AllColumns
     { AllColumns = 0, TrackOnly };
 
