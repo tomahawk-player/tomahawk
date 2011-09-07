@@ -23,6 +23,7 @@
 
 #include "result.h"
 
+class SourcesModel;
 class TomahawkTrayIcon;
 
 
@@ -51,6 +52,8 @@ private slots:
     virtual void maximize();
 
 protected:
+    static SourcesModel* s_sourcesModel;
+
     QString m_windowTitle;
     TomahawkTrayIcon* m_trayIcon;
     Tomahawk::result_ptr m_currentTrack;

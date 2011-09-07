@@ -174,7 +174,7 @@ TomahawkDesktopWindow::setupSideBar()
     m_searchWidget->setPlaceholderText( "Global Search..." );
     connect( m_searchWidget, SIGNAL( returnPressed() ), this, SLOT( onFilterEdited() ) );
 
-    m_sourcetree = new SourceTreeView();
+    m_sourcetree = new SourceTreeView( this, s_sourcesModel );
     TransferView* transferView = new TransferView( m_sidebar );
     PipelineStatusView* pipelineView = new PipelineStatusView( m_sidebar );
 

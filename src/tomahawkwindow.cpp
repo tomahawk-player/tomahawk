@@ -23,17 +23,22 @@
 #include "tomahawksettings.h"
 #include "tomahawktrayicon.h"
 #include "tomahawkapp.h"
+#include "sourcetree/sourcesmodel.h"
 
 #include <QCloseEvent>
 
 using namespace Tomahawk;
 
+SourcesModel* TomahawkWindow::s_sourcesModel = 0;
 
 TomahawkWindow::TomahawkWindow( QWidget* parent )
     : QMainWindow( parent )
     , m_trayIcon( new TomahawkTrayIcon( this ) )
 {
     setWindowIcon( QIcon( RESPATH "icons/tomahawk-icon-128x128.png" ) );
+
+    if( !s_sourcesModel )
+        s_sourcesModel = new SourcesModel( this );
 }
 
 

@@ -48,7 +48,7 @@
 using namespace Tomahawk;
 
 
-SourceTreeView::SourceTreeView( QWidget* parent )
+SourceTreeView::SourceTreeView( QWidget* parent, SourcesModel* model )
     : QTreeView( parent )
     , m_dragging( false )
 {
@@ -85,7 +85,7 @@ SourceTreeView::SourceTreeView( QWidget* parent )
     setContextMenuPolicy( Qt::CustomContextMenu );
     connect( this, SIGNAL( customContextMenuRequested( QPoint ) ), SLOT( onCustomContextMenu( QPoint ) ) );
 
-    m_model = new SourcesModel( this );
+    m_model = model;
     m_proxyModel = new SourcesProxyModel( m_model, this );
     connect( m_proxyModel, SIGNAL( selectRequest( QPersistentModelIndex ) ), this, SLOT( selectRequest( QPersistentModelIndex ) ) );
     connect( m_proxyModel, SIGNAL( expandRequest( QPersistentModelIndex ) ), this, SLOT( expandRequest( QPersistentModelIndex ) ) );
