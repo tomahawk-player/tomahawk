@@ -23,7 +23,11 @@
 #include "globalactionmanager.h"
 #include "sourcesmodel.h"
 #include "items/sourcetreeitem.h"
+#include "items/collectionitem.h"
+#include "viewmanager.h"
 
+
+#include "libtomahawk/playlist/treemodel.h""
 
 #include <QFileSystemWatcher>
 #include <QtDeclarative>
@@ -61,6 +65,15 @@ void TomahawkTouchWindow::activateItem(const QModelIndex& index)
     tLog() << Q_FUNC_INFO << index;
     SourceTreeItem* item = qobject_cast< SourceTreeItem* >( s_sourcesModel->data( index, SourcesModel::SourceTreeItemRole ).value< SourceTreeItem* >() );
     item->activate();
+
+    CollectionItem* collectionItem = qobject_cast< CollectionItem* >( item );
+    if( collectionItem )
+    {
+        tLog() << "Activate collectionItem!";
+        Tomahawk::collection_ptr collection = collectionItem->source()->collection();
+
+        m_view->rootContext()->setContextProperty( "currentPlaylistTreeModel", ViewManager::instance()->treeModelForCollection( collection ) );
+    }
 }
 
 
@@ -90,6 +103,7 @@ TomahawkTouchWindow::loadQml()
     context->setContextProperty( "audioEngine", AudioEngine::instance() );
     context->setContextProperty( "globalActionManager", GlobalActionManager::instance() );
     context->setContextProperty( "sourcesModel", s_sourcesModel );
+    context->setContextProperty( "currentPlaylistTreeModel", 0 );
 
     tLog()<< Q_FUNC_INFO << "set source";
     m_view->setSource( QUrl::fromLocalFile( QMLGUI "/main.qml" ) );
