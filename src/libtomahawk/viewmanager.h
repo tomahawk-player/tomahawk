@@ -104,6 +104,12 @@ public:
     // linked to the sidebar. call it right after creating the playlist
     PlaylistView* createPageForPlaylist( const Tomahawk::playlist_ptr& pl );
 
+
+    // outsource to a modelManager (?)
+    CollectionFlatModel* flatModelForCollection( const Tomahawk::collection_ptr& collection );
+    TreeModel* treeModelForCollection( const Tomahawk::collection_ptr& collection );
+    AlbumModel* albumModelForCollection( const Tomahawk::collection_ptr& collection );
+
 signals:
     void numSourcesChanged( unsigned int sources );
     void numTracksChanged( unsigned int tracks );
@@ -201,6 +207,11 @@ private:
     QHash< Tomahawk::album_ptr, QWeakPointer<AlbumInfoWidget> > m_albumViews;
     QHash< Tomahawk::playlist_ptr, QWeakPointer<PlaylistView> > m_playlistViews;
     QHash< Tomahawk::source_ptr, QWeakPointer<SourceInfoWidget> > m_sourceViews;
+
+    QHash< Tomahawk::collection_ptr, QWeakPointer<CollectionFlatModel> > m_collectionFlatModels;
+    QHash< Tomahawk::collection_ptr, QWeakPointer<TreeModel> > m_collectionTreeModels;
+    QHash< Tomahawk::collection_ptr, QWeakPointer<AlbumModel> > m_collectionAlbumModels;
+
 
     QList<Tomahawk::ViewPage*> m_pageHistory;
 

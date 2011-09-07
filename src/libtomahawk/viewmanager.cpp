@@ -246,12 +246,9 @@ ViewManager::show( const Tomahawk::collection_ptr& collection )
         if ( !m_collectionViews.contains( collection ) || m_collectionViews.value( collection ).isNull() )
         {
             view = new CollectionView();
-            CollectionFlatModel* model = new CollectionFlatModel();
-            view->setTrackModel( model );
+            view->setTrackModel( flatModelForCollection( collection ) );
             view->setFrameShape( QFrame::NoFrame );
             view->setAttribute( Qt::WA_MacShowFocusRect, 0 );
-
-            model->addCollection( collection );
 
             m_collectionViews.insert( collection, view );
         }
@@ -270,12 +267,9 @@ ViewManager::show( const Tomahawk::collection_ptr& collection )
         if ( !m_treeViews.contains( collection ) || m_treeViews.value( collection ).isNull() )
         {
             view = new ArtistView();
-            TreeModel* model = new TreeModel();
-            view->setTreeModel( model );
+            view->setTreeModel( treeModelForCollection( collection ) );
             view->setFrameShape( QFrame::NoFrame );
             view->setAttribute( Qt::WA_MacShowFocusRect, 0 );
-
-            model->addCollection( collection );
 
             m_treeViews.insert( collection, view );
         }
@@ -294,11 +288,9 @@ ViewManager::show( const Tomahawk::collection_ptr& collection )
         if ( !m_collectionAlbumViews.contains( collection ) || m_collectionAlbumViews.value( collection ).isNull() )
         {
             aview = new AlbumView();
-            AlbumModel* amodel = new AlbumModel( aview );
-            aview->setAlbumModel( amodel );
+            aview->setAlbumModel( albumModelForCollection( collection ) );
             aview->setFrameShape( QFrame::NoFrame );
             aview->setAttribute( Qt::WA_MacShowFocusRect, 0 );
-            amodel->addCollection( collection );
 
             m_collectionAlbumViews.insert( collection, aview );
         }
@@ -861,6 +853,69 @@ ViewManager::collectionForInterface( Tomahawk::PlaylistInterface* interface ) co
     }
 
     return collection_ptr();
+}
+
+
+CollectionFlatModel*
+ViewManager::flatModelForCollection( const collection_ptr& collection )
+{
+    CollectionFlatModel* model = 0;
+    if ( !m_collectionFlatModels.contains( collection ) || m_collectionFlatModels.value( collection ).isNull() )
+    {
+        model = new CollectionFlatModel();
+        model->addCollection( collection );
+
+        m_collectionFlatModels.insert( collection, QWeakPointer<CollectionFlatModel>( model ) );
+    }
+    else
+    {
+        model = m_collectionFlatModels.value( collection ).data();
+    }
+
+
+    return model;
+}
+
+
+TreeModel*
+ViewManager::treeModelForCollection( const collection_ptr& collection )
+{
+    TreeModel* model = 0;
+    if ( !m_collectionTreeModels.contains( collection ) || m_collectionTreeModels.value( collection ).isNull() )
+    {
+        model = new TreeModel();
+        model->addCollection( collection );
+
+        m_collectionTreeModels.insert( collection, QWeakPointer<TreeModel>( model ) );
+    }
+    else
+    {
+        model = m_collectionTreeModels.value( collection ).data();
+    }
+
+
+    return model;
+}
+
+
+AlbumModel*
+ViewManager::albumModelForCollection( const collection_ptr& collection )
+{
+    AlbumModel* model = 0;
+    if ( !m_collectionAlbumModels.contains( collection ) || m_collectionAlbumModels.value( collection ).isNull() )
+    {
+        model = new AlbumModel();
+        model->addCollection( collection );
+
+        m_collectionAlbumModels.insert( collection, QWeakPointer<AlbumModel>( model ) );
+    }
+    else
+    {
+        model = m_collectionAlbumModels.value( collection ).data();
+    }
+
+
+    return model;
 }
 
 
