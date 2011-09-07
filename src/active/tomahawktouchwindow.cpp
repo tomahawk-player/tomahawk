@@ -81,5 +81,7 @@ TomahawkTouchWindow::loadQml()
 
     context->setContextProperty( "globalActionManager", GlobalActionManager::instance() );
 
+    context->setContextProperty( "sourcesModel", s_sourcesModel );
+
     tLog()<< Q_FUNC_INFO << "finished";
 }
