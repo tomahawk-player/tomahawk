@@ -21,6 +21,8 @@
 #include "utils/logger.h"
 #include "audio/audioengine.h"
 #include "globalactionmanager.h"
+#include "sourcesmodel.h"
+
 
 #include <QFileSystemWatcher>
 #include <QtDeclarative>
@@ -70,18 +72,14 @@ TomahawkTouchWindow::loadQml()
     tLog()<< Q_FUNC_INFO << "clear component cache";
     m_view->engine()->clearComponentCache();
 
-    tLog()<< Q_FUNC_INFO << "set source";
-    m_view->setSource( QUrl::fromLocalFile( QMLGUI "/main.qml" ) );
-
     tLog()<< Q_FUNC_INFO << "set context property";
     QDeclarativeContext* context = m_view->rootContext();
-    //context->setContextProperty( "myModel", m_superCollectionProxyModel );
 
+    tLog()<< Q_FUNC_INFO << "make objects accessible from qml";
     context->setContextProperty( "audioEngine", AudioEngine::instance() );
-
     context->setContextProperty( "globalActionManager", GlobalActionManager::instance() );
-
     context->setContextProperty( "sourcesModel", s_sourcesModel );
 
-    tLog()<< Q_FUNC_INFO << "finished";
+    tLog()<< Q_FUNC_INFO << "set source";
+    m_view->setSource( QUrl::fromLocalFile( QMLGUI "/main.qml" ) );
 }

@@ -55,6 +55,10 @@ SourcesModel::SourcesModel( QObject* parent )
     connect( SourceList::instance(), SIGNAL( sourceAdded( Tomahawk::source_ptr ) ), SLOT( onSourceAdded( Tomahawk::source_ptr ) ) );
     connect( SourceList::instance(), SIGNAL( sourceRemoved( Tomahawk::source_ptr ) ), SLOT( onSourceRemoved( Tomahawk::source_ptr ) ) );
     connect( ViewManager::instance(), SIGNAL( viewPageActivated( Tomahawk::ViewPage* ) ), this, SLOT( viewPageActivated( Tomahawk::ViewPage* ) ) );
+
+    QHash<int, QByteArray> roles;
+    roles[Qt::DisplayRole] = "name";
+    setRoleNames(roles);
 }
 
 
