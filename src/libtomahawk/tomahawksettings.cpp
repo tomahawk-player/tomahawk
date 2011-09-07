@@ -863,6 +863,20 @@ TomahawkSettings::setScriptDefaultPath( const QString& path )
 }
 
 
+QString
+TomahawkSettings::playlistDefaultPath() const
+{
+    return value( "playlists/defaultpath", QDir::homePath() ).toString();
+}
+
+
+void
+TomahawkSettings::setPlaylistDefaultPath( const QString& path )
+{
+    setValue( "playlists/defaultpath", path );
+}
+
+
 bool
 TomahawkSettings::nowPlayingEnabled() const
 {

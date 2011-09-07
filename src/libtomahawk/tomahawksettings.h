@@ -184,8 +184,11 @@ public:
     QStringList enabledScriptResolvers() const;
     void setEnabledScriptResolvers( const QStringList& resolvers );
 
+    // Default paths
     QString scriptDefaultPath() const;
     void setScriptDefaultPath( const QString& path );
+    QString playlistDefaultPath() const;
+    void setPlaylistDefaultPath( const QString& path );
 
     // Now-Playing Settings
     // For now, just Adium. Soon, the world!

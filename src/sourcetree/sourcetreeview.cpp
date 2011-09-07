@@ -258,7 +258,8 @@ SourceTreeView::deletePlaylist( const QModelIndex& idxIn )
         PlaylistItem* item = itemFromIndex< PlaylistItem >( idx );
         playlist_ptr playlist = item->playlist();
         Playlist::remove( playlist );
-    } else if( type == SourcesModel::AutomaticPlaylist || type == SourcesModel::Station )
+    }
+    else if( type == SourcesModel::AutomaticPlaylist || type == SourcesModel::Station )
     {
         DynamicPlaylistItem* item = itemFromIndex< DynamicPlaylistItem >( idx );
         dynplaylist_ptr playlist = item->dynPlaylist();
@@ -280,13 +281,20 @@ SourceTreeView::copyPlaylistLink()
         DynamicPlaylistItem* item = itemFromIndex< DynamicPlaylistItem >( m_contextMenuIndex );
         dynplaylist_ptr playlist = item->dynPlaylist();
         GlobalActionManager::instance()->copyPlaylistToClipboard( playlist );
-    } else if ( type == SourcesModel::StaticPlaylist )
+    }
+    else if ( type == SourcesModel::StaticPlaylist )
     {
         PlaylistItem* item = itemFromIndex< PlaylistItem >( m_contextMenuIndex );
         playlist_ptr playlist = item->playlist();
 
-        QString filename = QFileDialog::getSaveFileName( this, tr( "Save XSPF" ), QDir::homePath(), tr( "Playlists (*.xspf)" ) );
-        GlobalActionManager::instance()->savePlaylistToFile( playlist, filename );
+        QString filename = QFileDialog::getSaveFileName( TomahawkUtils::tomahawkWindow(), tr( "Save XSPF" ),
+                                                         TomahawkSettings::instance()->playlistDefaultPath(), tr( "Playlists (*.xspf)" ) );
+        if ( !filename.isEmpty() )
+        {
+            QFileInfo playlistAbsoluteFilePath = filename;
+            TomahawkSettings::instance()->setPlaylistDefaultPath( playlistAbsoluteFilePath.absolutePath() );
+            GlobalActionManager::instance()->savePlaylistToFile( playlist, filename );
+        }
     }
 }
 
