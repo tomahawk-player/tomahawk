@@ -25,6 +25,7 @@
 #include "tomahawkapp.h"
 #include "sourcetree/sourcesmodel.h"
 #include "viewmanager.h"
+#include "audio/audioengine.h"
 
 #include <QCloseEvent>
 
@@ -43,6 +44,8 @@ TomahawkWindow::TomahawkWindow( QWidget* parent )
 
     if( !s_sourcesModel )
         s_sourcesModel = new SourcesModel( this );
+
+    setupSignals();
 }
 
 
@@ -197,8 +200,27 @@ TomahawkWindow::maximize()
 }
 
 
+
+void
+TomahawkWindow::onPlaybackLoading( const Tomahawk::result_ptr& result )
+{
+    m_currentTrack = result;
+    setWindowTitle( m_windowTitle );
+}
+
+
+
 void
 TomahawkWindow::retranslateUi()
 {
 
+}
+
+
+void
+TomahawkWindow::setupSignals()
+{
+    // <From AudioEngine>
+    connect( AudioEngine::instance(), SIGNAL( loading( const Tomahawk::result_ptr& ) ),
+             SLOT( onPlaybackLoading( const Tomahawk::result_ptr& ) ) );
 }

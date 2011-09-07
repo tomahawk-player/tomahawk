@@ -51,6 +51,12 @@ private slots:
     virtual void minimize();
     virtual void maximize();
 
+    void onPlaybackLoading( const Tomahawk::result_ptr& result );
+
+
+private:
+    void setupSignals();
+
 protected:
     static SourcesModel* s_sourcesModel;
 

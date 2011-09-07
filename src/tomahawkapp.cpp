@@ -231,7 +231,6 @@ TomahawkApp::init()
         m_mainwindow->show();
 #else
         m_declarativeWindow = new TomahawkTouchWindow();
-        m_declarativeWindow->setWindowTitle( "Touch-ma-hawk" );
         m_declarativeWindow->show();
 #endif // TOUCHMAHAWK
 

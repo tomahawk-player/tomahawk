@@ -257,8 +257,6 @@ TomahawkDesktopWindow::setupSignals()
              m_audioControls,           SLOT( onShuffleModeChanged( bool ) ) );
 
     // <From AudioEngine>
-    connect( AudioEngine::instance(), SIGNAL( loading( const Tomahawk::result_ptr& ) ),
-             SLOT( onPlaybackLoading( const Tomahawk::result_ptr& ) ) );
     connect( AudioEngine::instance(), SIGNAL( started( Tomahawk::result_ptr ) ), SLOT( audioStarted() ) );
     connect( AudioEngine::instance(), SIGNAL( resumed()), SLOT( audioStarted() ) );
     connect( AudioEngine::instance(), SIGNAL( paused() ), SLOT( audioStopped() ) );
@@ -496,13 +494,6 @@ TomahawkDesktopWindow::audioStopped()
     ui->actionPlay->setText( tr( "Play" ) );
 }
 
-
-void
-TomahawkDesktopWindow::onPlaybackLoading( const Tomahawk::result_ptr& result )
-{
-    m_currentTrack = result;
-    setWindowTitle( m_windowTitle );
-}
 
 void
 TomahawkDesktopWindow::onSipConnected()
