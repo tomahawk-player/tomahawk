@@ -1,4 +1,6 @@
 Version 0.3.0:
+    * Fixed Tomahawk preventing system shutdown / logut.
+    * Ignore leading 'The' when sorting artists.
     * Added Charts page, which shows various sources' top hits & artists.
     * The Collection tree-views can now be filtered.
     * Moved the song queue below to the left, below the sidebar.
