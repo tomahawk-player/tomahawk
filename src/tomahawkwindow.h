@@ -59,9 +59,9 @@ private:
 
 protected:
     static SourcesModel* s_sourcesModel;
+    static TomahawkTrayIcon* s_trayIcon;
 
     QString m_windowTitle;
-    TomahawkTrayIcon* m_trayIcon;
     Tomahawk::result_ptr m_currentTrack;
 };
 

@@ -32,10 +32,10 @@
 using namespace Tomahawk;
 
 SourcesModel* TomahawkWindow::s_sourcesModel = 0;
+TomahawkTrayIcon* TomahawkWindow::s_trayIcon = 0;
 
 TomahawkWindow::TomahawkWindow( QWidget* parent )
     : QMainWindow( parent )
-    , m_trayIcon( new TomahawkTrayIcon( this ) )
 {
     setWindowIcon( QIcon( RESPATH "icons/tomahawk-icon-128x128.png" ) );
 
@@ -44,6 +44,9 @@ TomahawkWindow::TomahawkWindow( QWidget* parent )
 
     if( !s_sourcesModel )
         s_sourcesModel = new SourcesModel( this );
+
+    if( !s_trayIcon )
+        s_trayIcon = new TomahawkTrayIcon( this );
 
     setupSignals();
 }
@@ -127,7 +130,7 @@ TomahawkWindow::closeEvent( QCloseEvent* e )
         return;
     }
 #else
-    m_trayIcon->setShowHideWindow( false );
+    s_trayIcon->setShowHideWindow( false );
 #endif
 
     e->accept();
