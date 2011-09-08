@@ -297,7 +297,7 @@ TreeModel::data( const QModelIndex& index, int role ) const
     {
         return entry->album()->name();
     }
-    else if ( role = NameRole )
+    else if ( role == NameRole )
     {
         return entry->result()->track();
     }
