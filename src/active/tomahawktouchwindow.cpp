@@ -112,6 +112,9 @@ TomahawkTouchWindow::loadQml()
     context->setContextProperty( "audioEngine", AudioEngine::instance() );
     context->setContextProperty( "globalActionManager", GlobalActionManager::instance() );
     context->setContextProperty( "sourcesModel", s_sourcesModel );
+
+    // don't start in an undefined state
+    delete m_currentPlaylistTreeModel;
     context->setContextProperty( "currentPlaylistTreeModel", m_currentPlaylistTreeModel );
 
     tLog()<< Q_FUNC_INFO << "set source";
