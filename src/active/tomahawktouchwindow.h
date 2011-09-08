@@ -25,6 +25,7 @@
 
 class TomahawkTouchWindow;
 class QFileSystemWatcher;
+class TreeProxyModel;
 
 class TomahawkTouchWindow : public TomahawkWindow
 {
@@ -45,6 +46,7 @@ private:
     QDeclarativeView* m_view;
     QFileSystemWatcher* m_watcher;
 
+    TreeProxyModel* m_currentPlaylistTreeModel;
 };
 
 #endif // TOMAHAWKTOUCHWINDOW_H
