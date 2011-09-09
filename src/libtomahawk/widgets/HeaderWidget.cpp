@@ -18,25 +18,29 @@
 
 #include "HeaderWidget.h"
 
-
 #include "utils/stylehelper.h"
 
 #include <QStyle>
 #include <QStylePainter>
 #include <QStyleOption>
 
-HeaderWidget::HeaderWidget(QWidget *parent) : QWidget(parent)
+
+HeaderWidget::HeaderWidget( QWidget* parent )
+    : QWidget( parent )
 {
 }
+
 
 HeaderWidget::~HeaderWidget()
 {
 }
 
-void HeaderWidget::paintEvent(QPaintEvent *e)
+
+void
+HeaderWidget::paintEvent( QPaintEvent* e )
 {
-    QStylePainter p(this);
+    QStylePainter p( this );
     QRect r = e->rect();
 
-    StyleHelper::horizontalHeader(&p, r);
+    StyleHelper::horizontalHeader( &p, r );
 }

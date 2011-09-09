@@ -31,7 +31,7 @@ MusicBrainzPlugin::MusicBrainzPlugin()
     : InfoPlugin()
 {
     qDebug() << Q_FUNC_INFO;
-    m_supportedGetTypes << Tomahawk::InfoSystem::InfoArtistReleases;
+    m_supportedGetTypes << Tomahawk::InfoSystem::InfoArtistReleases << Tomahawk::InfoSystem::InfoAlbumSongs;
 }
 
 
@@ -44,7 +44,6 @@ MusicBrainzPlugin::~MusicBrainzPlugin()
 void
 MusicBrainzPlugin::namChangedSlot( QNetworkAccessManager *nam )
 {
-    qDebug() << Q_FUNC_INFO;
     if ( !nam )
         return;
 
@@ -55,8 +54,6 @@ MusicBrainzPlugin::namChangedSlot( QNetworkAccessManager *nam )
 void
 MusicBrainzPlugin::getInfo( uint requestId, Tomahawk::InfoSystem::InfoRequestData requestData )
 {
-    qDebug() << Q_FUNC_INFO;
-
     if ( !requestData.input.canConvert< Tomahawk::InfoSystem::InfoCriteriaHash >() )
     {
         emit info( requestId, requestData, QVariant() );
@@ -69,16 +66,39 @@ MusicBrainzPlugin::getInfo( uint requestId, Tomahawk::InfoSystem::InfoRequestDat
         return;
     }
 
-    if ( requestData.type == InfoArtistReleases )
+    switch ( requestData.type )
     {
-        QString requestString( "http://musicbrainz.org/ws/2/artist" );
-        QUrl url( requestString );
-        url.addQueryItem( "query", hash["artist"] );
-        QNetworkReply* reply = m_nam.data()->get( QNetworkRequest( url ) );
-        reply->setProperty( "requestId", requestId );
-        reply->setProperty( "requestData", QVariant::fromValue< Tomahawk::InfoSystem::InfoRequestData >( requestData ) );
+        case InfoArtistReleases:
+        {
+            QString requestString( "http://musicbrainz.org/ws/2/artist" );
+            QUrl url( requestString );
+            url.addQueryItem( "query", hash["artist"] );
+            QNetworkReply* reply = m_nam.data()->get( QNetworkRequest( url ) );
+            reply->setProperty( "requestId", requestId );
+            reply->setProperty( "requestData", QVariant::fromValue< Tomahawk::InfoSystem::InfoRequestData >( requestData ) );
 
-        connect( reply, SIGNAL( finished() ), SLOT( artistSearchSlot() ) );
+            connect( reply, SIGNAL( finished() ), SLOT( artistSearchSlot() ) );
+            break;
+        }
+
+        case InfoAlbumSongs:
+        {
+            QString requestString( "http://musicbrainz.org/ws/2/artist" );
+            QUrl url( requestString );
+            url.addQueryItem( "query", hash["artist"] );
+            QNetworkReply* reply = m_nam.data()->get( QNetworkRequest( url ) );
+            reply->setProperty( "requestId", requestId );
+            reply->setProperty( "requestData", QVariant::fromValue< Tomahawk::InfoSystem::InfoRequestData >( requestData ) );
+
+            connect( reply, SIGNAL( finished() ), SLOT( albumSearchSlot() ) );
+            break;
+        }
+
+        default:
+        {
+            Q_ASSERT( false );
+            break;
+        }
     }
 }
 
@@ -86,7 +106,6 @@ MusicBrainzPlugin::getInfo( uint requestId, Tomahawk::InfoSystem::InfoRequestDat
 bool
 MusicBrainzPlugin::isValidTrackData( uint requestId, Tomahawk::InfoSystem::InfoRequestData requestData )
 {
-    qDebug() << Q_FUNC_INFO;
     if ( requestData.input.isNull() || !requestData.input.isValid() || !requestData.input.canConvert< QVariantMap >() )
     {
         emit info( requestId, requestData, QVariant() );
@@ -113,7 +132,6 @@ MusicBrainzPlugin::isValidTrackData( uint requestId, Tomahawk::InfoSystem::InfoR
 void
 MusicBrainzPlugin::artistSearchSlot()
 {
-    qDebug() << Q_FUNC_INFO;
     QNetworkReply* oldReply = qobject_cast<QNetworkReply*>( sender() );
     if ( !oldReply )
         return; //timeout will handle it
@@ -131,17 +149,89 @@ MusicBrainzPlugin::artistSearchSlot()
     QString requestString( "http://musicbrainz.org/ws/2/release?status=official&type=album|ep" );
     QUrl url( requestString );
     url.addQueryItem( "artist", artist_id );
+
     QNetworkReply* newReply = m_nam.data()->get( QNetworkRequest( url ) );
     newReply->setProperty( "requestId", oldReply->property( "requestId" ) );
     newReply->setProperty( "requestData", oldReply->property( "requestData" ) );
-    connect( newReply, SIGNAL( finished() ), SLOT( albumSearchSlot() ) );
+    connect( newReply, SIGNAL( finished() ), SLOT( albumFoundSlot() ) );
 }
 
 
 void
 MusicBrainzPlugin::albumSearchSlot()
 {
-    qDebug() << Q_FUNC_INFO;
+    QNetworkReply* oldReply = qobject_cast<QNetworkReply*>( sender() );
+    if ( !oldReply )
+        return; //timeout will handle it
+
+    QDomDocument doc;
+    doc.setContent( oldReply->readAll() );
+    QDomNodeList domNodeList = doc.elementsByTagName( "artist" );
+    if ( domNodeList.isEmpty() )
+    {
+        emit info( oldReply->property( "requestId" ).toUInt(), oldReply->property( "requestData" ).value< Tomahawk::InfoSystem::InfoRequestData >(), QVariant() );
+        return;
+    }
+
+    QString artist_id = domNodeList.at( 0 ).toElement().attribute( "id" );
+    QString requestString( "http://musicbrainz.org/ws/2/release?status=official&type=album|ep" );
+    QUrl url( requestString );
+    url.addQueryItem( "artist", artist_id );
+
+    QNetworkReply* newReply = m_nam.data()->get( QNetworkRequest( url ) );
+    newReply->setProperty( "requestId", oldReply->property( "requestId" ) );
+    newReply->setProperty( "requestData", oldReply->property( "requestData" ) );
+    connect( newReply, SIGNAL( finished() ), SLOT( tracksSearchSlot() ) );
+}
+
+
+void
+MusicBrainzPlugin::tracksSearchSlot()
+{
+    QNetworkReply* oldReply = qobject_cast<QNetworkReply*>( sender() );
+    if ( !oldReply )
+        return; //timeout will handle it
+
+    QDomDocument doc;
+    doc.setContent( oldReply->readAll() );
+    QDomNodeList domNodeList = doc.elementsByTagName( "release" );
+    if ( domNodeList.isEmpty() )
+    {
+        emit info( oldReply->property( "requestId" ).toUInt(), oldReply->property( "requestData" ).value< Tomahawk::InfoSystem::InfoRequestData >(), QVariant() );
+        return;
+    }
+
+    Tomahawk::InfoSystem::InfoRequestData requestData = oldReply->property( "requestData" ).value< Tomahawk::InfoSystem::InfoRequestData >();
+    InfoCriteriaHash hash = requestData.input.value< Tomahawk::InfoSystem::InfoCriteriaHash >();
+
+    QDomElement element;
+    for ( int i = 0; i < domNodeList.count(); i++ )
+    {
+        QDomNodeList albumNodeList = domNodeList.at( i ).toElement().elementsByTagName( "title" );
+        if ( albumNodeList.at( 0 ).toElement().text() == hash["album"] )
+            element = domNodeList.at( i ).toElement();
+    }
+
+    if ( element.isNull() )
+    {
+        emit info( oldReply->property( "requestId" ).toUInt(), oldReply->property( "requestData" ).value< Tomahawk::InfoSystem::InfoRequestData >(), QVariant() );
+        return;
+    }
+
+    QString release_id = element.attribute( "id" );
+    QString requestString = QString( "http://musicbrainz.org/ws/2/release/%1?inc=recordings" ).arg( release_id );
+    QUrl url( requestString );
+
+    QNetworkReply* newReply = m_nam.data()->get( QNetworkRequest( url ) );
+    newReply->setProperty( "requestId", oldReply->property( "requestId" ) );
+    newReply->setProperty( "requestData", oldReply->property( "requestData" ) );
+    connect( newReply, SIGNAL( finished() ), SLOT( tracksFoundSlot() ) );
+}
+
+
+void
+MusicBrainzPlugin::albumFoundSlot()
+{
     QNetworkReply* reply = qobject_cast< QNetworkReply* >( sender() );
     if ( !reply )
         return; //timeout will handle it
@@ -163,6 +253,55 @@ MusicBrainzPlugin::albumSearchSlot()
             albums << album;
     }
 
-    qDebug() << Q_FUNC_INFO << "Found albums:" << albums;
-    emit info( reply->property( "requestId" ).toUInt(), reply->property( "requestData" ).value< Tomahawk::InfoSystem::InfoRequestData >(), QVariant( albums ) );
+    Tomahawk::InfoSystem::InfoRequestData requestData = reply->property( "requestData" ).value< Tomahawk::InfoSystem::InfoRequestData >();
+    QVariantMap returnedData;
+    returnedData["albums"] = albums;
+    emit info( reply->property( "requestId" ).toUInt(), requestData, returnedData );
+
+    Tomahawk::InfoSystem::InfoCriteriaHash origData = requestData.input.value< Tomahawk::InfoSystem::InfoCriteriaHash>();
+    Tomahawk::InfoSystem::InfoCriteriaHash criteria;
+    criteria["artist"] = origData["artist"];
+    emit updateCache( criteria, 0, requestData.type, returnedData );
+}
+
+
+void
+MusicBrainzPlugin::tracksFoundSlot()
+{
+    QNetworkReply* reply = qobject_cast< QNetworkReply* >( sender() );
+    if ( !reply )
+        return; //timeout will handle it
+
+    QDomDocument doc;
+    doc.setContent( reply->readAll() );
+    QDomNodeList domNodeList = doc.elementsByTagName( "recording" );
+    if ( domNodeList.isEmpty() )
+    {
+        emit info( reply->property( "requestId" ).toUInt(), reply->property( "requestData" ).value< Tomahawk::InfoSystem::InfoRequestData >(), QVariant() );
+        return;
+    }
+
+    QStringList tracks;
+    for ( int i = 0; i < domNodeList.count(); i++ )
+    {
+        QDomNodeList trackNodeList = domNodeList.at( i ).toElement().elementsByTagName( "title" );
+
+        for ( int j = 0; j < trackNodeList.count(); j++ )
+        {
+            QString track = trackNodeList.at( j ).toElement().text();
+            if ( !tracks.contains( track ) )
+                tracks << track;
+        }
+    }
+
+    Tomahawk::InfoSystem::InfoRequestData requestData = reply->property( "requestData" ).value< Tomahawk::InfoSystem::InfoRequestData >();
+    QVariantMap returnedData;
+    returnedData["tracks"] = tracks;
+    emit info( reply->property( "requestId" ).toUInt(), requestData, returnedData );
+
+    Tomahawk::InfoSystem::InfoCriteriaHash origData = requestData.input.value< Tomahawk::InfoSystem::InfoCriteriaHash>();
+    Tomahawk::InfoSystem::InfoCriteriaHash criteria;
+    criteria["artist"] = origData["artist"];
+    criteria["album"] = origData["album"];
+    emit updateCache( criteria, 0, requestData.type, returnedData );
 }

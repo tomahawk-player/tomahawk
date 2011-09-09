@@ -18,7 +18,6 @@
 
 #include "combobox.h"
 
-
 #include "utils/stylehelper.h"
 
 #include <QStyle>
@@ -26,36 +25,41 @@
 #include <QStylePainter>
 #include <QStyleOptionComboBox>
 
-ComboBox::ComboBox(QWidget *parent) : QComboBox(parent)
+
+ComboBox::ComboBox( QWidget* parent )
+    : QComboBox( parent )
 {
 }
+
 
 ComboBox::~ComboBox()
 {
 }
 
-void ComboBox::paintEvent(QPaintEvent *)
+
+void
+ComboBox::paintEvent( QPaintEvent* )
 {
-    QStylePainter p(this);
-    p.setPen(palette().color(QPalette::Text));
+    QStylePainter p( this );
+    p.setPen( palette().color( QPalette::Text ) );
     QStyleOptionComboBox cb;
-    initStyleOption(&cb);
+    initStyleOption( &cb );
     QRect r = cb.rect;
 
+    StyleHelper::horizontalHeader( &p, r );
 
-    StyleHelper::horizontalHeader(&p, r);
-   
-    if( cb.state & QStyle::State_MouseOver ) {
-        QRect highlightRect(r);
-        QSize shrink(3,4);
-        QSize hS(highlightRect.size());
+    if ( cb.state & QStyle::State_MouseOver )
+    {
+        QRect highlightRect( r );
+        QSize shrink( 3, 4 );
+        QSize hS( highlightRect.size() );
         hS -= shrink;
-        highlightRect.setSize(hS);
-        highlightRect.translate(0,2);
+        highlightRect.setSize( hS );
+        highlightRect.translate( 0, 2 );
         p.save();
-        p.setRenderHint(QPainter::Antialiasing);
+        p.setRenderHint( QPainter::Antialiasing );
         p.setBrush( StyleHelper::headerHighlightColor() );
-        p.drawRoundedRect(highlightRect, 10.0, 10.0);
+        p.drawRoundedRect( highlightRect, 10.0, 10.0 );
         p.restore();
     }
 
@@ -65,15 +69,13 @@ void ComboBox::paintEvent(QPaintEvent *)
     p.setBrush( StyleHelper::headerTextColor() );
     p.drawText( r, cb.currentText, to );
 
-
     bool reverse = cb.direction == Qt::RightToLeft;
     int menuButtonWidth = 12;
     int left = !reverse ? r.right() - menuButtonWidth : r.left();
     int right = !reverse ? r.right() : r.left() + menuButtonWidth;
-    QRect arrowRect((left + right) / 2 + (reverse ? 6 : -6), r.center().y() - 3, 9, 9);
+    QRect arrowRect( ( left + right ) / 2 + ( reverse ? 6 : -6 ), r.center().y() - 3, 9, 9 ); //FIXME: no consts please
 
     QStyleOption arrowOpt = cb;
     arrowOpt.rect = arrowRect;
-    StyleHelper::drawArrow(QStyle::PE_IndicatorArrowDown, &p, &arrowOpt);
-
+    StyleHelper::drawArrow( QStyle::PE_IndicatorArrowDown, &p, &arrowOpt );
 }

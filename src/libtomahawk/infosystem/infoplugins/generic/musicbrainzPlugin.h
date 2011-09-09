@@ -61,6 +61,10 @@ virtual void notInCacheSlot( uint requestId, Tomahawk::InfoSystem::InfoCriteriaH
 private slots:
     void artistSearchSlot();
     void albumSearchSlot();
+    void tracksSearchSlot();
+
+    void albumFoundSlot();
+    void tracksFoundSlot();
 
 private:
     bool isValidTrackData( uint requestId, Tomahawk::InfoSystem::InfoRequestData requestData );

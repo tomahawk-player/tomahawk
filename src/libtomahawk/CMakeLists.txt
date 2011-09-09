@@ -197,6 +197,7 @@ set( libSources
     widgets/HeaderLabel.cpp
     widgets/HeaderWidget.cpp
     widgets/combobox.cpp
+    widgets/ToggleButton.cpp
     widgets/SocialPlaylistWidget.cpp
     widgets/infowidgets/sourceinfowidget.cpp
     widgets/infowidgets/ArtistInfoWidget.cpp
@@ -395,6 +396,7 @@ set( libHeaders
     widgets/HeaderLabel.h
     widgets/HeaderWidget.h
     widgets/combobox.h
+    widgets/ToggleButton.h
     widgets/SocialPlaylistWidget.h
     widgets/infowidgets/sourceinfowidget.h
     widgets/infowidgets/ArtistInfoWidget.h

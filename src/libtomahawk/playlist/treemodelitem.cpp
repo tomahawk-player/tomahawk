@@ -135,3 +135,108 @@ TreeModelItem::TreeModelItem( const Tomahawk::result_ptr& result, TreeModelItem*
 
     toberemoved = false;
 }
+
+
+TreeModelItem::TreeModelItem( const Tomahawk::query_ptr& query, TreeModelItem* parent, int row )
+    : QObject( parent )
+    , m_query( query )
+{
+    this->parent = parent;
+    fetchingMore = false;
+    m_isPlaying = false;
+
+    if ( parent )
+    {
+        if ( row < 0 )
+        {
+            parent->children.append( this );
+            row = parent->children.count() - 1;
+        }
+        else
+        {
+            parent->children.insert( row, this );
+        }
+
+        this->model = parent->model;
+    }
+
+    toberemoved = false;
+
+    connect( query.data(), SIGNAL( resultsAdded( QList<Tomahawk::result_ptr> ) ),
+                             SLOT( onResultsChanged() ) );
+
+    connect( query.data(), SIGNAL( resultsRemoved( Tomahawk::result_ptr ) ),
+                             SLOT( onResultsChanged() ) );
+
+    connect( query.data(), SIGNAL( resultsChanged() ),
+                             SLOT( onResultsChanged() ) );
+}
+
+
+void
+TreeModelItem::onResultsChanged()
+{
+    if ( m_query->numResults() )
+        m_result = m_query->results().first();
+    else
+        m_result = result_ptr();
+
+    emit dataChanged();
+}
+
+
+QString
+TreeModelItem::name() const
+{
+    if ( !m_artist.isNull() )
+    {
+        return m_artist->name();
+    }
+    else if ( !m_album.isNull() )
+    {
+        return m_album->name();
+    }
+    else if ( !m_result.isNull() )
+    {
+        return m_result->track();
+    }
+    else if ( !m_query.isNull() )
+    {
+        return m_query->track();
+    }
+
+    Q_ASSERT( false );
+    return QString();
+}
+
+
+QString
+TreeModelItem::artistName() const
+{
+    if ( !m_result.isNull() )
+    {
+        return m_result->artist()->name();
+    }
+    else if ( !m_query.isNull() )
+    {
+        return m_query->artist();
+    }
+
+    return QString();
+}
+
+
+QString
+TreeModelItem::albumName() const
+{
+    if ( !m_result.isNull() && !m_result->album().isNull() )
+    {
+        return m_result->album()->name();
+    }
+    else if ( !m_query.isNull() )
+    {
+        return m_query->album();
+    }
+
+    return QString();
+}

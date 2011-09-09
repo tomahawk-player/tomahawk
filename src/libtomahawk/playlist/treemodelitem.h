@@ -39,15 +39,21 @@ public:
     explicit TreeModelItem( const Tomahawk::artist_ptr& artist, TreeModelItem* parent = 0, int row = -1 );
     explicit TreeModelItem( const Tomahawk::album_ptr& album, TreeModelItem* parent = 0, int row = -1 );
     explicit TreeModelItem( const Tomahawk::result_ptr& result, TreeModelItem* parent = 0, int row = -1 );
+    explicit TreeModelItem( const Tomahawk::query_ptr& query, TreeModelItem* parent = 0, int row = -1 );
 
     const Tomahawk::artist_ptr& artist() const { return m_artist; };
     const Tomahawk::album_ptr& album() const { return m_album; };
     const Tomahawk::result_ptr& result() const { return m_result; };
+    const Tomahawk::query_ptr& query() const { return m_query; };
 
     bool isPlaying() { return m_isPlaying; }
     void setIsPlaying( bool b ) { m_isPlaying = b; emit dataChanged(); }
 
     void setCover( const QPixmap& cover ) { this->cover = cover; emit dataChanged(); }
+
+    QString name() const;
+    QString artistName() const;
+    QString albumName() const;
 
     TreeModelItem* parent;
     QList<TreeModelItem*> children;
@@ -63,10 +69,14 @@ public:
 signals:
     void dataChanged();
 
+private slots:
+    void onResultsChanged();
+
 private:
     Tomahawk::artist_ptr m_artist;
     Tomahawk::album_ptr m_album;
     Tomahawk::result_ptr m_result;
+    Tomahawk::query_ptr m_query;
 
     bool m_isPlaying;
 };

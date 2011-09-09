@@ -66,13 +66,26 @@
        </layout>
       </widget>
      </widget>
-     <widget class="QWidget" name="">
-      <layout class="QVBoxLayout" name="verticalLayout">
+     <widget class="QWidget" name="layoutWidget2">
+      <layout class="QVBoxLayout" name="verticalLayout_5">
        <item>
-        <widget class="HeaderLabel" name="label_3">
-         <property name="text">
-          <string>Albums</string>
-         </property>
+        <widget class="HeaderWidget" name="albumHeader" native="true">
+         <layout class="QHBoxLayout" name="horizontalLayout">
+          <item>
+           <widget class="HeaderLabel" name="label_3">
+            <property name="text">
+             <string>Albums</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="ToggleButton" name="button">
+            <property name="text">
+             <string>Official Releases Only</string>
+            </property>
+           </widget>
+          </item>
+         </layout>
         </widget>
        </item>
        <item>
@@ -94,6 +107,16 @@
    <class>HeaderLabel</class>
    <extends>QLabel</extends>
    <header location="global">widgets/HeaderLabel.h</header>
+  </customwidget>
+  <customwidget>
+   <class>HeaderWidget</class>
+   <extends>QWidget</extends>
+   <header location="global">widgets/HeaderWidget.h</header>
+  </customwidget>
+  <customwidget>
+   <class>ToggleButton</class>
+   <extends>QPushButton</extends>
+   <header location="global">widgets/ToggleButton.h</header>
   </customwidget>
   <customwidget>
    <class>ArtistView</class>

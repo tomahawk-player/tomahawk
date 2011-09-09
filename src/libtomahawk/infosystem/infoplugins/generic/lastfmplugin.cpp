@@ -419,20 +419,20 @@ LastFmPlugin::notInCacheSlot( uint requestId, QHash<QString, QString> criteria, 
         case InfoChartCapabilities:
         {
             QList<Chart> track_charts;
-            track_charts.append(Chart("chart.getTopTracks", "Top Tracks", "tracks"));
-            track_charts.append(Chart("chart.getLovedTracks", "Loved Tracks", "tracks"));
-            track_charts.append(Chart("chart.getHypedTracks", "Hyped Tracks", "tracks"));
+            track_charts.append( Chart( "chart.getTopTracks", "Top Tracks", "tracks" ) );
+            track_charts.append( Chart( "chart.getLovedTracks", "Loved Tracks", "tracks" ) );
+            track_charts.append( Chart( "chart.getHypedTracks", "Hyped Tracks", "tracks" ) );
 
             QList<Chart> artist_charts;
-            artist_charts.append(Chart("chart.getTopArtists", "Top Artists", "artists"));
-            artist_charts.append(Chart("chart.getHypedArtists", "Hyped Artists", "artists"));
+            artist_charts.append( Chart( "chart.getTopArtists", "Top Artists", "artists" ) );
+            artist_charts.append( Chart( "chart.getHypedArtists", "Hyped Artists", "artists" ) );
 
             QVariantMap charts;
-            charts.insert("Tracks", QVariant::fromValue<QList<Chart> >(track_charts));
-            charts.insert("Artists", QVariant::fromValue<QList<Chart> >(artist_charts));
+            charts.insert( "Tracks", QVariant::fromValue<QList<Chart> >( track_charts ) );
+            charts.insert( "Artists", QVariant::fromValue<QList<Chart> >( artist_charts ) );
 
             QVariantMap result;
-            result.insert("Last.fm", QVariant::fromValue<QVariantMap>(charts));
+            result.insert( "Last.fm", QVariant::fromValue<QVariantMap>( charts ) );
 
             emit info(
                 requestId,
@@ -533,6 +533,7 @@ LastFmPlugin::similarArtistsReturned()
     emit updateCache( criteria, 2419200000, requestData.type, returnedData );
 }
 
+
 void
 LastFmPlugin::chartReturned()
 {
@@ -544,7 +545,8 @@ LastFmPlugin::chartReturned()
     const QRegExp artists_rx( "chart\\.\\S+artists\\S*", Qt::CaseInsensitive );
     const QString url = reply->url().toString();
 
-    if( url.contains( tracks_rx ) ) {
+    if ( url.contains( tracks_rx ) )
+    {
         QList<lastfm::Track> tracks = parseTrackList( reply );
         QList<ArtistTrackPair> top_tracks;
         foreach( const lastfm::Track &t, tracks ) {
@@ -557,7 +559,9 @@ LastFmPlugin::chartReturned()
         returnedData["tracks"] = QVariant::fromValue( top_tracks );
         returnedData["type"] = "tracks";
 
-    } else if( url.contains( artists_rx ) ) {
+    }
+    else if ( url.contains( artists_rx ) )
+    {
         QList<lastfm::Artist> list = lastfm::Artist::list( reply );
         QStringList al;
         tDebug() << "LastFmPlugin:"<< "\tgot " << list.size() << " artists";
@@ -565,7 +569,9 @@ LastFmPlugin::chartReturned()
             al << a.toString();
         returnedData["artists"] = al;
         returnedData["type"] = "artists";
-    } else {
+    }
+    else
+    {
         tDebug() << "LastfmPlugin:: got non tracks and non artists";
     }
 
@@ -578,6 +584,7 @@ LastFmPlugin::chartReturned()
     );
     // TODO update cache
 }
+
 
 void
 LastFmPlugin::topTracksReturned()

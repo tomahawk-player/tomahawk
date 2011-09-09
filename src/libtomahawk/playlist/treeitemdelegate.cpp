@@ -69,9 +69,9 @@ TreeItemDelegate::paint( QPainter* painter, const QStyleOptionViewItem& option, 
     {
         text = item->album()->name();
     }
-    else if ( !item->result().isNull() )
+    else if ( !item->result().isNull() || !item->query().isNull() )
     {
-        float opacity = item->result()->score();
+        float opacity = item->result().isNull() ? 0.0 : item->result()->score();
         opacity = qMax( (float)0.3, opacity );
         QColor textColor = TomahawkUtils::alphaBlend( option.palette.color( QPalette::Foreground ), option.palette.color( QPalette::Background ), opacity );
 

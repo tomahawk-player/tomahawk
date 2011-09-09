@@ -29,15 +29,15 @@
 #include "utils/tomahawkutils.h"
 #include "utils/logger.h"
 
-static QString s_tmInfoIdentifier = QString( "TREEMODEL" );
-
 using namespace Tomahawk;
 
 
 TreeModel::TreeModel( QObject* parent )
     : QAbstractItemModel( parent )
     , m_rootItem( new TreeModelItem( 0, this ) )
+    , m_infoId( uuid() )
     , m_columnStyle( AllColumns )
+    , m_mode( Database )
 {
     setIcon( QPixmap( RESPATH "images/music-icon.png" ) );
 
@@ -100,7 +100,7 @@ TreeModel::getCover( const QModelIndex& index )
     trackInfo["pptr"] = QString::number( (qlonglong)item );
     m_coverHash.insert( (qlonglong)item, index );
 
-    requestData.caller = s_tmInfoIdentifier;
+    requestData.caller = m_infoId;
     requestData.input = QVariant::fromValue< Tomahawk::InfoSystem::InfoCriteriaHash >( trackInfo );
     requestData.customData = QVariantMap();
     Tomahawk::InfoSystem::InfoSystem::instance()->getInfo( requestData );
@@ -261,7 +261,7 @@ TreeModel::data( const QModelIndex& index, int role ) const
 
     if ( role == Qt::SizeHintRole )
     {
-        if ( !entry->result().isNull() )
+        if ( !entry->result().isNull() || !entry->query().isNull() )
         {
             return QSize( 128, 20 );
         }
@@ -288,7 +288,7 @@ TreeModel::data( const QModelIndex& index, int role ) const
     {
         return entry->album()->name();
     }
-    else
+    else if ( !entry->result().isNull() )
     {
         const result_ptr& result = entry->result();
         switch( index.column() )
@@ -321,6 +321,10 @@ TreeModel::data( const QModelIndex& index, int role ) const
             default:
                 return QVariant();
         }
+    }
+    else if ( !entry->query().isNull() && index.column() == Name )
+    {
+        return entry->query()->track();
     }
 
     return QVariant();
@@ -408,7 +412,7 @@ TreeModel::mimeData( const QModelIndexList &indexes ) const
     // lets try with album only
     fail = false;
     resultData.clear();
-    foreach ( const QModelIndex& i, indexes)
+    foreach ( const QModelIndex& i, indexes )
     {
         if ( i.column() > 0 || indexes.contains( i.parent() ) )
             continue;
@@ -436,11 +440,10 @@ TreeModel::mimeData( const QModelIndexList &indexes ) const
         return mimeData;
     }
 
-
     // lets try with tracks only
     fail = false;
     resultData.clear();
-    foreach ( const QModelIndex& i, indexes)
+    foreach ( const QModelIndex& i, indexes )
     {
         if ( i.column() > 0 || indexes.contains( i.parent() ) )
             continue;
@@ -549,8 +552,6 @@ TreeModel::addAllCollections()
 void
 TreeModel::addArtists( const artist_ptr& artist )
 {
-    qDebug() << Q_FUNC_INFO;
-
     if ( artist.isNull() )
         return;
 
@@ -565,37 +566,70 @@ TreeModel::addArtists( const artist_ptr& artist )
 void
 TreeModel::addAlbums( const artist_ptr& artist, const QModelIndex& parent )
 {
-    qDebug() << Q_FUNC_INFO;
-
     emit loadingStarted();
-    DatabaseCommand_AllAlbums* cmd = new DatabaseCommand_AllAlbums( m_collection, artist );
-    cmd->setData( parent.row() );
 
-    connect( cmd, SIGNAL( albums( QList<Tomahawk::album_ptr>, QVariant ) ),
-                    SLOT( onAlbumsAdded( QList<Tomahawk::album_ptr>, QVariant ) ) );
+    if ( m_mode == Database )
+    {
+        DatabaseCommand_AllAlbums* cmd = new DatabaseCommand_AllAlbums( m_collection, artist );
+        cmd->setData( parent.row() );
 
-    Database::instance()->enqueue( QSharedPointer<DatabaseCommand>( cmd ) );
+        connect( cmd, SIGNAL( albums( QList<Tomahawk::album_ptr>, QVariant ) ),
+                        SLOT( onAlbumsAdded( QList<Tomahawk::album_ptr>, QVariant ) ) );
+
+        Database::instance()->enqueue( QSharedPointer<DatabaseCommand>( cmd ) );
+    }
+    else if ( m_mode == InfoSystem )
+    {
+        Tomahawk::InfoSystem::InfoCriteriaHash artistInfo;
+        artistInfo["artist"] = artist->name();
+
+        Tomahawk::InfoSystem::InfoRequestData requestData;
+        requestData.caller = m_infoId;
+        requestData.customData["row"] = parent.row();
+        requestData.input = QVariant::fromValue< Tomahawk::InfoSystem::InfoCriteriaHash >( artistInfo );
+        requestData.type = Tomahawk::InfoSystem::InfoArtistReleases;
+        Tomahawk::InfoSystem::InfoSystem::instance()->getInfo( requestData );
+    }
+    else
+        Q_ASSERT( false );
 }
 
 
 void
 TreeModel::addTracks( const album_ptr& album, const QModelIndex& parent )
 {
-    qDebug() << Q_FUNC_INFO;
-
     emit loadingStarted();
-    DatabaseCommand_AllTracks* cmd = new DatabaseCommand_AllTracks( m_collection );
-    cmd->setAlbum( album.data() );
 
     QList< QVariant > rows;
     rows << parent.row();
     rows << parent.parent().row();
-    cmd->setData( QVariant( rows ) );
 
-    connect( cmd, SIGNAL( tracks( QList<Tomahawk::query_ptr>, QVariant ) ),
-                    SLOT( onTracksAdded( QList<Tomahawk::query_ptr>, QVariant ) ) );
+    if ( m_mode == Database )
+    {
+        DatabaseCommand_AllTracks* cmd = new DatabaseCommand_AllTracks( m_collection );
+        cmd->setAlbum( album.data() );
+        cmd->setData( QVariant( rows ) );
 
-    Database::instance()->enqueue( QSharedPointer<DatabaseCommand>( cmd ) );
+        connect( cmd, SIGNAL( tracks( QList<Tomahawk::query_ptr>, QVariant ) ),
+                        SLOT( onTracksAdded( QList<Tomahawk::query_ptr>, QVariant ) ) );
+
+        Database::instance()->enqueue( QSharedPointer<DatabaseCommand>( cmd ) );
+    }
+    else if ( m_mode == InfoSystem )
+    {
+        Tomahawk::InfoSystem::InfoCriteriaHash artistInfo;
+        artistInfo["artist"] = album->artist()->name();
+        artistInfo["album"] = album->name();
+
+        Tomahawk::InfoSystem::InfoRequestData requestData;
+        requestData.caller = m_infoId;
+        requestData.customData["rows"] = QVariant( rows );
+        requestData.input = QVariant::fromValue< Tomahawk::InfoSystem::InfoCriteriaHash >( artistInfo );
+        requestData.type = Tomahawk::InfoSystem::InfoAlbumSongs;
+        Tomahawk::InfoSystem::InfoSystem::instance()->getInfo( requestData );
+    }
+    else
+        Q_ASSERT( false );
 }
 
 
@@ -714,6 +748,7 @@ TreeModel::onTracksAdded( const QList<Tomahawk::query_ptr>& tracks, const QVaria
         return;
 
     QList< QVariant > rows = data.toList();
+    tDebug() << "Adding to:" << rows;
 
     QModelIndex parent = index( rows.first().toUInt(), 0, index( rows.at( 1 ).toUInt(), 0, QModelIndex() ) );
     TreeModelItem* parentItem = itemFromIndex( parent );
@@ -728,8 +763,11 @@ TreeModel::onTracksAdded( const QList<Tomahawk::query_ptr>& tracks, const QVaria
     TreeModelItem* item = 0;
     foreach( const query_ptr& query, tracks )
     {
-        qDebug() << query->toString();
-        item = new TreeModelItem( query->results().first(), parentItem );
+        if ( query->numResults() )
+            item = new TreeModelItem( query->results().first(), parentItem );
+        else
+            item = new TreeModelItem( query, parentItem );
+
         item->index = createIndex( parentItem->children.count() - 1, 0, item );
 
         connect( item, SIGNAL( dataChanged() ), SLOT( onDataChanged() ) );
@@ -742,35 +780,84 @@ TreeModel::onTracksAdded( const QList<Tomahawk::query_ptr>& tracks, const QVaria
 void
 TreeModel::infoSystemInfo( Tomahawk::InfoSystem::InfoRequestData requestData, QVariant output )
 {
-    if ( requestData.caller != s_tmInfoIdentifier ||
-       ( requestData.type != Tomahawk::InfoSystem::InfoAlbumCoverArt && requestData.type != Tomahawk::InfoSystem::InfoArtistImages ) )
+    if ( requestData.caller != m_infoId )
     {
         return;
     }
 
-    if ( !output.canConvert< QVariantMap >() )
+    switch ( requestData.type )
     {
-        qDebug() << "Cannot convert fetched art from a QByteArray";
-        return;
-    }
+        case Tomahawk::InfoSystem::InfoAlbumCoverArt:
+        case Tomahawk::InfoSystem::InfoArtistImages:
+        {
+            Tomahawk::InfoSystem::InfoCriteriaHash pptr = requestData.input.value< Tomahawk::InfoSystem::InfoCriteriaHash >();
+            QVariantMap returnedData = output.value< QVariantMap >();
+            const QByteArray ba = returnedData["imgbytes"].toByteArray();
+            if ( ba.length() )
+            {
+                QPixmap pm;
+                pm.loadFromData( ba );
+                bool ok;
+                qlonglong p = pptr["pptr"].toLongLong( &ok );
+                TreeModelItem* ai = itemFromIndex( m_coverHash.take( p ) );
+                if ( !ai )
+                    return;
 
-    Tomahawk::InfoSystem::InfoCriteriaHash pptr = requestData.input.value< Tomahawk::InfoSystem::InfoCriteriaHash >();
-    QVariantMap returnedData = output.value< QVariantMap >();
-    const QByteArray ba = returnedData["imgbytes"].toByteArray();
-    if ( ba.length() )
-    {
-        QPixmap pm;
-        pm.loadFromData( ba );
-        bool ok;
-        qlonglong p = pptr["pptr"].toLongLong( &ok );
-        TreeModelItem* ai = itemFromIndex( m_coverHash.take( p ) );
-        if ( !ai )
-            return;
+                if ( !pm.isNull() )
+                    ai->cover = pm;
 
-        if ( !pm.isNull() )
-            ai->cover = pm;
+                emit dataChanged( ai->index, ai->index.sibling( ai->index.row(), columnCount( QModelIndex() ) - 1 ) );
+            }
 
-        emit dataChanged( ai->index, ai->index.sibling( ai->index.row(), columnCount( QModelIndex() ) - 1 ) );
+            break;
+        }
+
+        case Tomahawk::InfoSystem::InfoArtistReleases:
+        {
+            QVariantMap returnedData = output.value< QVariantMap >();
+            QStringList albums = returnedData[ "albums" ].toStringList();
+            QList<album_ptr> al;
+
+            InfoSystem::InfoCriteriaHash inputInfo;
+            inputInfo = requestData.input.value< InfoSystem::InfoCriteriaHash >();
+            artist_ptr artist = Artist::get( inputInfo[ "artist" ], false );
+            Q_ASSERT( !artist.isNull() );
+
+            foreach ( const QString& albumName, albums )
+            {
+                int albumId = 0;
+                Tomahawk::album_ptr album = Tomahawk::Album::get( albumId, albumName, artist );
+                al << album;
+            }
+            onAlbumsAdded( al, requestData.customData[ "row" ] );
+
+            break;
+        }
+
+        case Tomahawk::InfoSystem::InfoAlbumSongs:
+        {
+            QVariantMap returnedData = output.value< QVariantMap >();
+            QStringList tracks = returnedData[ "tracks" ].toStringList();
+            QList<query_ptr> ql;
+
+            InfoSystem::InfoCriteriaHash inputInfo;
+            inputInfo = requestData.input.value< InfoSystem::InfoCriteriaHash >();
+
+            foreach ( const QString& trackName, tracks )
+            {
+                query_ptr query = Query::get( inputInfo[ "artist" ], trackName, inputInfo[ "album" ], uuid() );
+                ql << query;
+            }
+            onTracksAdded( ql, requestData.customData[ "rows" ] );
+
+            break;
+        }
+
+        default:
+        {
+            Q_ASSERT( false );
+            break;
+        }
     }
 }
 
@@ -779,7 +866,6 @@ void
 TreeModel::infoSystemFinished( QString target )
 {
     Q_UNUSED( target );
-//    qDebug() << Q_FUNC_INFO;
 }
 
 
@@ -834,12 +920,5 @@ TreeModel::indexFromArtist( const Tomahawk::artist_ptr& artist ) const
         }
     }
 
-    return QModelIndex();
-}
-
-
-QModelIndex
-TreeModel::indexFromAlbum( const Tomahawk::album_ptr& album ) const
-{
     return QModelIndex();
 }

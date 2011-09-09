@@ -25,7 +25,6 @@
 
 #include "dllmacro.h"
 
-
 /**
  * \class HeaderWidget
  * \brief A QWidget subclass with a background for use in headers.
@@ -35,16 +34,10 @@ class DLLEXPORT HeaderWidget : public QWidget
 Q_OBJECT
 
 public:
-    HeaderWidget(QWidget *parent = 0);
+    HeaderWidget( QWidget* parent = 0 );
     virtual ~HeaderWidget();
 
-    virtual void paintEvent(QPaintEvent *);
-
-
-private:
-
-
+    virtual void paintEvent( QPaintEvent* );
 };
-
 
 #endif

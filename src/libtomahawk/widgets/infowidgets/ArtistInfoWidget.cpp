@@ -26,6 +26,7 @@
 #include "database/databasecommand_alltracks.h"
 #include "database/databasecommand_allalbums.h"
 
+#include "utils/stylehelper.h"
 #include "utils/tomahawkutils.h"
 #include "utils/logger.h"
 
@@ -52,8 +53,11 @@ ArtistInfoWidget::ArtistInfoWidget( const Tomahawk::artist_ptr& artist, QWidget*
     TomahawkUtils::unmarginLayout( layout() );
     TomahawkUtils::unmarginLayout( ui->layoutWidget->layout() );
     TomahawkUtils::unmarginLayout( ui->layoutWidget1->layout() );
+    TomahawkUtils::unmarginLayout( ui->layoutWidget2->layout() );
+    TomahawkUtils::unmarginLayout( ui->albumHeader->layout() );
 
     m_albumsModel = new TreeModel( ui->albums );
+    m_albumsModel->setMode( TreeModel::InfoSystem );
     ui->albums->setTreeModel( m_albumsModel );
 
     m_relatedModel = new TreeModel( ui->relatedArtists );
@@ -64,7 +68,13 @@ ArtistInfoWidget::ArtistInfoWidget( const Tomahawk::artist_ptr& artist, QWidget*
     m_topHitsModel->setStyle( TrackModel::Short );
     ui->topHits->setTrackModel( m_topHitsModel );
 
+    ui->albumHeader->setContentsMargins( 0, 0, 4, 0 );
+    ui->button->setFixedWidth( 200 );
+    ui->button->setDown( true );
+
     m_pixmap = QPixmap( RESPATH "images/no-album-art-placeholder.png" ).scaledToWidth( 48, Qt::SmoothTransformation );
+
+    connect( ui->button, SIGNAL( toggled( bool ) ), SLOT( onModeToggle( bool ) ) );
 
     connect( Tomahawk::InfoSystem::InfoSystem::instance(),
              SIGNAL( info( Tomahawk::InfoSystem::InfoRequestData, QVariant ) ),
@@ -83,8 +93,18 @@ ArtistInfoWidget::~ArtistInfoWidget()
 
 
 void
+ArtistInfoWidget::onModeToggle( bool officialReleases )
+{
+    m_albumsModel->setMode( officialReleases ? TreeModel::InfoSystem : TreeModel::Database );
+    m_albumsModel->clear();
+    m_albumsModel->addAlbums( m_artist, QModelIndex() );
+}
+
+
+void
 ArtistInfoWidget::load( const artist_ptr& artist )
 {
+    m_artist = artist;
     m_title = artist->name();
     m_albumsModel->addAlbums( artist, QModelIndex() );
 
@@ -108,9 +128,6 @@ ArtistInfoWidget::load( const artist_ptr& artist )
     Tomahawk::InfoSystem::InfoSystem::instance()->getInfo( requestData );
 
     requestData.type = Tomahawk::InfoSystem::InfoArtistSongs;
-    Tomahawk::InfoSystem::InfoSystem::instance()->getInfo( requestData );
-
-    requestData.type = Tomahawk::InfoSystem::InfoArtistReleases;
     Tomahawk::InfoSystem::InfoSystem::instance()->getInfo( requestData );
 }
 

@@ -50,8 +50,11 @@ public:
         AlbumPosition
     };
 
-    enum ColumnStyle // Default style is AllColumns
+    enum ColumnStyle
     { AllColumns = 0, TrackOnly };
+
+    enum ModelMode
+    { Database = 0, InfoSystem };
 
     explicit TreeModel( QObject* parent = 0 );
     virtual ~TreeModel();
@@ -65,15 +68,16 @@ public:
     virtual int albumCount() const { return rowCount( QModelIndex() ); }
 
     virtual bool hasChildren( const QModelIndex& parent = QModelIndex() ) const;
-
     virtual int rowCount( const QModelIndex& parent = QModelIndex() ) const;
     virtual int columnCount( const QModelIndex& parent = QModelIndex() ) const;
 
-    virtual void clear();
+    virtual ModelMode mode() const { return m_mode; }
+    virtual void setMode( ModelMode mode ) { m_mode = mode; }
 
     virtual QVariant data( const QModelIndex& index, int role = Qt::DisplayRole ) const;
     virtual QVariant headerData( int section, Qt::Orientation orientation, int role ) const;
 
+    virtual void clear();
     virtual void removeIndex( const QModelIndex& index );
     virtual void removeIndexes( const QList<QModelIndex>& indexes );
 
@@ -106,8 +110,6 @@ public:
     virtual void setIcon( const QPixmap& pixmap ) { m_icon = pixmap; }
 
     QModelIndex indexFromArtist( const Tomahawk::artist_ptr& artist ) const;
-    QModelIndex indexFromAlbum( const Tomahawk::album_ptr& album ) const;
-
     TreeModelItem* itemFromIndex( const QModelIndex& index ) const
     {
         if ( index.isValid() )
@@ -155,11 +157,13 @@ private slots:
 private:
     QPersistentModelIndex m_currentIndex;
     TreeModelItem* m_rootItem;
+    QString m_infoId;
 
     QString m_title;
     QString m_description;
     QPixmap m_icon;
     ColumnStyle m_columnStyle;
+    ModelMode m_mode;
 
     QList<Tomahawk::artist_ptr> m_artistsFilter;
 

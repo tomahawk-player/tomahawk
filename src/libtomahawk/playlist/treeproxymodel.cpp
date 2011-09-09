@@ -181,7 +181,7 @@ TreeProxyModel::filterAcceptsRow( int sourceRow, const QModelIndex& sourceParent
     TreeModelItem* pi = sourceModel()->itemFromIndex( sourceModel()->index( sourceRow, 0, sourceParent ) );
     Q_ASSERT( pi );
 
-    if ( !pi->result().isNull() )
+    if ( m_model->mode() == TreeModel::Database && !pi->result().isNull() )
     {
         QList< Tomahawk::result_ptr > rl = m_cache.values( sourceParent );
         foreach ( const Tomahawk::result_ptr& result, rl )
@@ -201,7 +201,7 @@ TreeProxyModel::filterAcceptsRow( int sourceRow, const QModelIndex& sourceParent
 
             TreeModelItem* ti = sourceModel()->itemFromIndex( sourceModel()->index( i, 0, sourceParent ) );
 
-            if ( ti->result()->track() == pi->result()->track() &&
+            if ( ti->name() == pi->name() &&
                ( ti->result()->albumpos() == pi->result()->albumpos() || ti->result()->albumpos() == 0 ) )
             {
                 if ( !pi->result()->isOnline() && ti->result()->isOnline() )
@@ -227,13 +227,9 @@ TreeProxyModel::filterAcceptsRow( int sourceRow, const QModelIndex& sourceParent
     QStringList sl = m_filter.split( " ", QString::SkipEmptyParts );
     foreach( const QString& s, sl )
     {
-        QString album;
-        if ( !pi->result()->album().isNull() )
-            album = pi->result()->album()->name();
-
-        if ( !pi->result()->track().contains( s, Qt::CaseInsensitive ) &&
-             !album.contains( s, Qt::CaseInsensitive ) &&
-             !pi->result()->album()->artist()->name().contains( s, Qt::CaseInsensitive ) )
+        if ( !pi->name().contains( s, Qt::CaseInsensitive ) &&
+             !pi->albumName().contains( s, Qt::CaseInsensitive ) &&
+             !pi->artistName().contains( s, Qt::CaseInsensitive ) )
         {
             return false;
         }
@@ -252,6 +248,11 @@ TreeProxyModel::lessThan( const QModelIndex& left, const QModelIndex& right ) co
     if ( !p1 )
         return true;
     if ( !p2 )
+        return false;
+
+    if ( !p1->result().isNull() && p2->result().isNull() )
+        return true;
+    if ( p1->result().isNull() && !p2->result().isNull() )
         return false;
 
     const QString& lefts = textForItem( p1 );
@@ -369,6 +370,10 @@ TreeProxyModel::textForItem( TreeModelItem* item ) const
     else if ( !item->result().isNull() )
     {
         return DatabaseImpl::sortname( item->result()->track() );
+    }
+    else if ( !item->query().isNull() )
+    {
+        return item->query()->track();
     }
 
     return QString();

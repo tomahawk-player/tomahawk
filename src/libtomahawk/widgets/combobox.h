@@ -33,16 +33,10 @@ class DLLEXPORT ComboBox : public QComboBox
 Q_OBJECT
 
 public:
-    ComboBox(QWidget *parent = 0);
+    ComboBox( QWidget* parent = 0 );
     virtual ~ComboBox();
 
-    virtual void paintEvent(QPaintEvent *);
-
-
-private:
-
-
+    virtual void paintEvent( QPaintEvent* );
 };
-
 
 #endif
