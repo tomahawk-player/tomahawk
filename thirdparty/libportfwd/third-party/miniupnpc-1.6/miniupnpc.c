@@ -16,6 +16,10 @@
 #endif
 #endif
 
+#ifdef __APPLE__
+#define _DARWIN_C_SOURCE
+#endif
+
 #include <stdlib.h>
 #include <stdio.h>
 #include <string.h>
