@@ -184,7 +184,7 @@ public:
     QStringList enabledScriptResolvers() const;
     void setEnabledScriptResolvers( const QStringList& resolvers );
 
-    QStringList atticaInstalledResolvers( const QStringList& resolvers ) const;
+    QStringList atticaInstalledResolvers() const;
     void addAtticaInstalledResolver( const QString& resolver );
     void removeAtticaInstalledResolver( const QString& resolver );
 

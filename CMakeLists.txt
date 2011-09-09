@@ -108,6 +108,20 @@ macro_log_feature(QCA2_FOUND "QCA2" "Provides encryption and signing functions r
 macro_optional_find_package(LibAttica)
 macro_log_feature(LIBATTICA_FOUND "libattica" "Provides support for automatic fetching and managing of resolvers from the tomahawk website" "https://projects.kde.org/projects/kdesupport/attica" FALSE "" "")
 
+macro_optional_find_package(QuaZip)
+macro_log_feature(QuaZip_FOUND "QuaZip" "Provides support for extracting downloaded resolvers autmatically. Will build internal copy instead." "http://quazip.sourceforge.net/" FALSE "" "")
+
+IF( NOT QuaZip_FOUND )
+    add_subdirectory( ${THIRDPARTY_DIR}/quazip )
+    SET( QuaZip_INCLUDE_DIR  ${CMAKE_CURRENT_BINARY_DIR} )
+    SET( QuaZip_LIBRARY quazip )
+    SET( QuaZip_LIBRARIES ${QuaZip_LIBRARY} )
+    SET( QuaZip_FOUND  true )
+
+    # copy headers to build/quazip so we can use proper includes inside the code
+    FILE( COPY ${CMAKE_SOURCE_DIR}/thirdparty/quazip/quazip/ DESTINATION ${CMAKE_BINARY_DIR}/quazip )
+ENDIF()
+
 # required
 #While we distribute our own liblastfm2, don't need to look for it
 #macro_optional_find_package(LibLastFm 0.3.3)

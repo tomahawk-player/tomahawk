@@ -849,23 +849,23 @@ TomahawkSettings::setEnabledScriptResolvers( const QStringList& resolvers )
 }
 
 void
-TomahawkSettings::addAtticaInstalledResolver ( const QString& resolver )
+TomahawkSettings::addAtticaInstalledResolver( const QString& resolver )
 {
-    QStringList resolvers = value( "script/atticainstalled", QStringList() );
+    QStringList resolvers = value( "script/atticainstalled", QStringList() ).toStringList();
     resolvers << resolver;
     setValue( "script/atticainstalled", resolvers );
 }
 
 QStringList
-TomahawkSettings::atticaInstalledResolvers ( const QStringList& resolvers ) const
+TomahawkSettings::atticaInstalledResolvers() const
 {
-    return value( "script/atticainstalled", QString() );
+    return value( "script/atticainstalled", QString() ).toStringList();
 }
 
 void
 TomahawkSettings::removeAtticaInstalledResolver( const QString& resolver )
 {
-    QStringList resolvers = value( "script/atticainstalled", QStringList() );
+    QStringList resolvers = value( "script/atticainstalled", QStringList() ).toStringList();
     resolvers.removeAll( resolver );
     setValue( "script/atticainstalled", resolvers );
 }
