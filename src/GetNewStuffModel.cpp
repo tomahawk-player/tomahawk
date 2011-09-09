@@ -28,12 +28,12 @@
 GetNewStuffModel::GetNewStuffModel( QObject* parent )
     : QAbstractListModel ( parent )
 {
-    m_clicked = false;
 
     if ( AtticaManager::instance()->resolversLoaded() )
         m_contentList = AtticaManager::instance()->resolvers();
 
     connect( AtticaManager::instance(), SIGNAL( resolversReloaded( Attica::Content::List ) ), this, SLOT( resolversReloaded( Attica::Content::List ) ) );
+    connect( AtticaManager::instance(), SIGNAL( resolverStateChanged( QString ) ), this, SLOT( resolverStateChanged( QString ) ) );
 
 }
 
@@ -47,6 +47,20 @@ GetNewStuffModel::resolversReloaded( const Attica::Content::List& resolvers )
     beginResetModel();
     m_contentList = resolvers;
     endResetModel();
+}
+
+void
+GetNewStuffModel::resolverStateChanged( const QString& resolverId )
+{
+    for ( int i = 0; i < m_contentList.count(); i++ )
+    {
+        const Attica::Content resolver = m_contentList[ i ];
+        if ( resolver.id() == resolverId )
+        {
+            QModelIndex idx = index( i, 0, QModelIndex() );
+            emit dataChanged( idx, idx );
+        }
+    }
 }
 
 
@@ -80,7 +94,7 @@ GetNewStuffModel::data( const QModelIndex& index, int role ) const
         case AuthorRole:
             return resolver.author();
         case StateRole:
-            return m_clicked ? Installed : Uninstalled;
+            return (int)AtticaManager::instance()->resolverState( resolver );
     }
     return QVariant();
 }
@@ -94,8 +108,32 @@ GetNewStuffModel::rowCount( const QModelIndex& parent ) const
 bool
 GetNewStuffModel::setData( const QModelIndex &index, const QVariant &value, int role )
 {
+    if ( !hasIndex( index.row(), index.column(), index.parent() ) )
+        return false;
+
     // the install/uninstall button was clicked
-    m_clicked = !m_clicked;
+    const Attica::Content resolver = m_contentList[ index.row() ];
+
+    AtticaManager::ResolverState state = AtticaManager::instance()->resolverState( resolver );
+
+    switch( state )
+    {
+        case AtticaManager::Uninstalled:
+            // install
+            AtticaManager::instance()->installResolver( resolver );
+            break;
+        case AtticaManager::Installing:
+        case AtticaManager::Upgrading:
+            // Do nothing, busy
+            break;
+        case AtticaManager::Installed:
+            // Uninstall
+            AtticaManager::instance()->uninstallResolver( resolver );
+            break;
+        case AtticaManager::NeedsUpgrade:
+            // TODO
+            break;
+    };
     emit dataChanged( index, index );
 
     return true;

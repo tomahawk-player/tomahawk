@@ -24,6 +24,7 @@
 #include <QtGui/QPainter>
 #include <QApplication>
 #include <QMouseEvent>
+#include "AtticaManager.h"
 
 #define PADDING 4
 
@@ -103,20 +104,20 @@ GetNewStuffDelegate::paint( QPainter* painter, const QStyleOptionViewItem& optio
     // Go from right edge now, stars, install button, and downloaded info
 
     // install / status button
-    GetNewStuffModel::States state = static_cast< GetNewStuffModel::States >( index.data( GetNewStuffModel::StateRole ).toInt() );
+    AtticaManager::ResolverState state = static_cast< AtticaManager::ResolverState >( index.data( GetNewStuffModel::StateRole ).toInt() );
     QString actionText;
     switch( state )
     {
-        case GetNewStuffModel::Uninstalled:
+        case AtticaManager::Uninstalled:
             actionText = tr( "Install" );
             break;
-        case GetNewStuffModel::Installing:
+        case AtticaManager::Installing:
             actionText = tr( "Installing" );
             break;
-        case GetNewStuffModel::Failed:
+        case AtticaManager::Failed:
             actionText = tr( "Failed" );
             break;
-        case GetNewStuffModel::Installed:
+        case AtticaManager::Installed:
             actionText = tr( "Uninstall" );
             break;
     }

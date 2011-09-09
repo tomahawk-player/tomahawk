@@ -44,13 +44,6 @@ public:
         ResolverType = 0,
     };
 
-    enum States {
-        Uninstalled = 0,
-        Installing = 1,
-        Failed = 2,
-        Installed = 3
-    };
-
     explicit GetNewStuffModel( QObject* parent = 0 );
     virtual ~GetNewStuffModel();
 
@@ -60,10 +53,9 @@ public:
 
 private slots:
     void resolversReloaded( const Attica::Content::List& );
+    void resolverStateChanged( const QString& resolverId );
 
 private:
-    bool m_clicked;
-
     Attica::Content::List m_contentList;
 };
 

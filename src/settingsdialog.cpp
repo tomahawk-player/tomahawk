@@ -53,6 +53,7 @@
 #include "ui_stackedsettingsdialog.h"
 #include <playlist/dynamic/widgets/LoadingSpinner.h>
 #include "GetNewStuffDialog.h"
+#include "AtticaManager.h"
 
 static QString
 md5( const QByteArray& src )
@@ -194,6 +195,8 @@ SettingsDialog::SettingsDialog( QWidget *parent )
     connect( ui->scriptList->selectionModel(), SIGNAL( selectionChanged( QItemSelection,QItemSelection ) ), this, SLOT( scriptSelectionChanged() ) );
     connect( ui->addScript, SIGNAL( clicked( bool ) ), this, SLOT( addScriptResolver() ) );
     connect( ui->removeScript, SIGNAL( clicked( bool ) ), this, SLOT( removeScriptResolver() ) );
+    connect( AtticaManager::instance(), SIGNAL( resolverInstalled( QString ) ), this, SLOT( atticaResolverInstalled( QString ) ) );
+    connect( AtticaManager::instance(), SIGNAL( resolverUninstalled( QString ) ), this, SLOT( atticaResolverUninstalled( QString ) ) );
 
     connect( ui->buttonBrowse_2, SIGNAL( clicked() ),  SLOT( showPathSelector() ) );
     connect( ui->proxyButton,  SIGNAL( clicked() ),  SLOT( showProxySettings() ) );
@@ -553,6 +556,18 @@ SettingsDialog::getMoreResolvers()
     int ret = diag.exec();
 #endif
 
+}
+
+void
+SettingsDialog::atticaResolverInstalled( const QString& resolverId )
+{
+    m_resolversModel->addResolver( AtticaManager::instance()->pathFromId( resolverId ) );
+}
+
+void
+SettingsDialog::atticaResolverUninstalled ( const QString& resolverId )
+{
+    m_resolversModel->removeResolver( AtticaManager::instance()->pathFromId( resolverId ) );
 }
 
 

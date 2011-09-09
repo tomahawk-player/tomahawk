@@ -86,6 +86,8 @@ private slots:
     void removeScriptResolver();
     void getMoreResolvers();
     void getMoreResolversFinished( int );
+    void atticaResolverInstalled( const QString& );
+    void atticaResolverUninstalled( const QString& );
 
     void openResolverConfig( const QString& );
     void sipItemClicked ( const QModelIndex& );

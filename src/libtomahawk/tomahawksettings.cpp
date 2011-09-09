@@ -36,6 +36,28 @@ using namespace Tomahawk;
 
 TomahawkSettings* TomahawkSettings::s_instance = 0;
 
+inline QDataStream& operator<<(QDataStream& out, const AtticaManager::StateHash& states)
+{
+    out << (quint32)states.count();
+    foreach( const QString& key, states.keys() )
+        out << key << (qint32)states[ key ];
+    return out;
+}
+
+inline QDataStream& operator>>(QDataStream& in, AtticaManager::StateHash& states)
+{
+    quint32 count = 0;
+    in >> count;
+    for ( uint i = 0; i < count; i++ )
+    {
+        QString key;
+        qint32 val;
+        in >> key;
+        in >> val;
+        states[ key ] = (AtticaManager::ResolverState)val;
+    }
+    return in;
+}
 
 TomahawkSettings*
 TomahawkSettings::instance()
@@ -70,6 +92,9 @@ TomahawkSettings::TomahawkSettings( QObject* parent )
         // insert upgrade code here as required
         setValue( "configversion", VERSION );
     }
+
+    qRegisterMetaType< AtticaManager::StateHash >( "AtticaManager::StateHash" );
+    qRegisterMetaTypeStreamOperators<AtticaManager::StateHash>("AtticaManager::StateHash");
 }
 
 
@@ -849,27 +874,33 @@ TomahawkSettings::setEnabledScriptResolvers( const QStringList& resolvers )
 }
 
 void
-TomahawkSettings::addAtticaInstalledResolver( const QString& resolver )
+TomahawkSettings::setAtticaResolverState( const QString& resolver, AtticaManager::ResolverState state )
 {
-    QStringList resolvers = value( "script/atticainstalled", QStringList() ).toStringList();
-    resolvers << resolver;
-    setValue( "script/atticainstalled", resolvers );
+    AtticaManager::StateHash resolvers = value( "script/resolverstates" ).value< AtticaManager::StateHash >();
+    resolvers.insert( resolver, state );
+    setValue( "script/atticaresolverstates", QVariant::fromValue< AtticaManager::StateHash >( resolvers ) );
 }
 
-QStringList
-TomahawkSettings::atticaInstalledResolvers() const
+AtticaManager::StateHash
+TomahawkSettings::atticaResolverStates() const
 {
-    return value( "script/atticainstalled", QString() ).toStringList();
+    return value( "script/atticaresolverstates" ).value< AtticaManager::StateHash >();
 }
 
 void
-TomahawkSettings::removeAtticaInstalledResolver( const QString& resolver )
+TomahawkSettings::setAtticaResolverStates( const AtticaManager::StateHash states )
 {
-    QStringList resolvers = value( "script/atticainstalled", QStringList() ).toStringList();
-    resolvers.removeAll( resolver );
-    setValue( "script/atticainstalled", resolvers );
+    setValue( "script/atticaresolverstates", QVariant::fromValue< AtticaManager::StateHash >( states ) );
 }
 
+
+void
+TomahawkSettings::removeAtticaResolverState ( const QString& resolver )
+{
+    AtticaManager::StateHash resolvers = value( "script/atticaresolverstates" ).value< AtticaManager::StateHash >();
+    resolvers.remove( resolver );
+    setValue( "script/atticaresolverstates", QVariant::fromValue< AtticaManager::StateHash >( resolvers ) );
+}
 
 QString
 TomahawkSettings::scriptDefaultPath() const

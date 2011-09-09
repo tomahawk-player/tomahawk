@@ -23,8 +23,10 @@
 
 #include "dllmacro.h"
 
+#include "AtticaManager.h"
 #include "playlist.h"
 
+class AtticaManager;
 /**
  * Convenience wrapper around QSettings for tomahawk-specific config
  */
@@ -184,9 +186,11 @@ public:
     QStringList enabledScriptResolvers() const;
     void setEnabledScriptResolvers( const QStringList& resolvers );
 
-    QStringList atticaInstalledResolvers() const;
-    void addAtticaInstalledResolver( const QString& resolver );
-    void removeAtticaInstalledResolver( const QString& resolver );
+    AtticaManager::StateHash atticaResolverStates() const;
+    void setAtticaResolverStates( const AtticaManager::StateHash states );
+
+    void setAtticaResolverState( const QString& resolver, AtticaManager::ResolverState state );
+    void removeAtticaResolverState( const QString& resolver );
 
     QString scriptDefaultPath() const;
     void setScriptDefaultPath( const QString& path );
@@ -209,5 +213,7 @@ private:
 
     static TomahawkSettings* s_instance;
 };
+
+Q_DECLARE_METATYPE(AtticaManager::StateHash);
 
 #endif
