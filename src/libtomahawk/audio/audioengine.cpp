@@ -165,14 +165,17 @@ AudioEngine::stop()
     if ( !m_playlist.isNull() )
         m_playlist.data()->reset();
 
-    setCurrentTrack( Tomahawk::result_ptr() );
+    emit timerPercentage( ( (double)m_timeElapsed / (double)m_currentTrack->duration() ) * 100.0 );
     emit stopped();
+    setCurrentTrack( Tomahawk::result_ptr() );
 
     Tomahawk::InfoSystem::InfoTypeMap map;
     map[ Tomahawk::InfoSystem::InfoNowStopped ] = QVariant();
 
     if ( m_waitingOnNewTrack )
+    {
         sendWaitingNotification();
+    }
     else if ( TomahawkSettings::instance()->verboseNotifications() )
     {
         QVariantMap stopInfo;
@@ -193,6 +196,7 @@ AudioEngine::previous()
         loadPreviousTrack();
 }
 
+
 void
 AudioEngine::next()
 {
@@ -201,6 +205,7 @@ AudioEngine::next()
     if( canGoNext() )
         loadNextTrack();
 }
+
 
 bool
 AudioEngine::canGoNext()
@@ -229,6 +234,7 @@ AudioEngine::canGoNext()
     return m_playlist.data()->hasNextItem();
 }
 
+
 bool
 AudioEngine::canGoPrevious()
 {
@@ -242,6 +248,7 @@ AudioEngine::canGoPrevious()
     return true;
 }
 
+
 bool
 AudioEngine::canSeek()
 {
@@ -252,6 +259,7 @@ AudioEngine::canSeek()
     */
     return !m_playlist.isNull() && ( m_playlist.data()->seekRestrictions() != PlaylistInterface::NoSeek ) && phononCanSeek;
 }
+
 
 void
 AudioEngine::seek( qint64 ms )
@@ -270,11 +278,13 @@ AudioEngine::seek( qint64 ms )
     }
 }
 
+
 void
 AudioEngine::seek( int ms )
 {
     seek( (qint64) ms );
 }
+
 
 void
 AudioEngine::setVolume( int percentage )
@@ -626,22 +636,25 @@ AudioEngine::onStateChanged( Phonon::State newState, Phonon::State oldState )
 void
 AudioEngine::timerTriggered( qint64 time )
 {
+    emit timerMilliSeconds( time );
+
     if ( m_timeElapsed != time / 1000 )
     {
         m_timeElapsed = time / 1000;
         emit timerSeconds( m_timeElapsed );
 
-        if ( m_currentTrack->duration() == 0 )
+        if ( !m_currentTrack.isNull() )
         {
-            emit timerPercentage( 0 );
-        }
-        else
-        {
-            emit timerPercentage( ( (double)m_timeElapsed / (double)m_currentTrack->duration() ) * 100.0 );
+            if ( m_currentTrack->duration() == 0 )
+            {
+                emit timerPercentage( 0 );
+            }
+            else
+            {
+                emit timerPercentage( ( (double)m_timeElapsed / (double)m_currentTrack->duration() ) * 100.0 );
+            }
         }
     }
-
-    emit timerMilliSeconds( time );
 }
 
 
