@@ -50,6 +50,7 @@ protected:
 
 private slots:
     void animationFinished( const QModelIndex& );
+
 private:
     QAbstractItemView* m_parent;
     mutable int m_iconHeight;
@@ -63,6 +64,7 @@ private:
     QMap< int, QString > m_dropTypeTextMap;
     QMap< int, QPixmap > m_dropTypeImageMap;
 
+    mutable QLinearGradient m_gradient;
 };
 
 #endif // SOURCEDELEGATE_H

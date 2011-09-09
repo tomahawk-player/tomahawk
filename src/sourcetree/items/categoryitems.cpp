@@ -39,6 +39,7 @@ CategoryAddItem::CategoryAddItem( SourcesModel* model, SourceTreeItem* parent, S
     : SourceTreeItem( model, parent, SourcesModel::CategoryAdd )
     , m_categoryType( type )
 {
+    m_icon = QIcon( RESPATH "images/add.png" );
 }
 
 
@@ -125,7 +126,7 @@ CategoryAddItem::flags() const
 QIcon
 CategoryAddItem::icon() const
 {
-    return QIcon( RESPATH "images/add.png" );
+    return m_icon;
 }
 
 

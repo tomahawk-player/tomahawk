@@ -54,6 +54,7 @@ private slots:
 private:
     bool m_loaded;
     Tomahawk::playlist_ptr m_playlist;
+    QIcon m_icon;
 };
 Q_DECLARE_OPERATORS_FOR_FLAGS(PlaylistItem::DropTypes)
 
@@ -74,6 +75,7 @@ public:
     virtual QIcon icon() const;
 
     virtual SourceTreeItem* activateCurrent();
+
 private slots:
     void onDynamicPlaylistLoaded( Tomahawk::DynamicPlaylistRevision revision );
 
@@ -81,6 +83,9 @@ private:
     void checkReparentHackNeeded( const Tomahawk::DynamicPlaylistRevision& rev );
 
     Tomahawk::dynplaylist_ptr m_dynplaylist;
+
+    QIcon m_stationIcon;
+    QIcon m_automaticPlaylistIcon;
 };
 
 

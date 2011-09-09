@@ -74,7 +74,9 @@ SourceDelegate::sizeHint( const QStyleOptionViewItem& option, const QModelIndex&
     SourceTreeItem *item = index.data( SourcesModel::SourceTreeItemRole ).value< SourceTreeItem* >();
 
     if ( index.data( SourcesModel::SourceTreeItemTypeRole ).toInt() == SourcesModel::Collection )
+    {
         return QSize( option.rect.width(), 44 );
+    }
     else if ( m_expandedMap.contains( index ) )
     {
         if ( !m_expandedMap.value( index )->initialized() )
@@ -214,24 +216,24 @@ SourceDelegate::paint( QPainter* painter, const QStyleOptionViewItem& option, co
 
         // Get whole rect for the menu
         QRect itemsRect = option.rect.adjusted( -option.rect.x(), m_expandedMap.value( index )->originalSize().height(), 0, 0 );
-
         QPoint cursorPos = m_parent->mapFromGlobal( QCursor::pos() );
-        bool cursorInRect = false;
-        if ( itemsRect.contains( cursorPos ) )
-            cursorInRect = true;
+        bool cursorInRect = itemsRect.contains( cursorPos );
 
         // draw the background
-        QLinearGradient linearGradient( itemsRect.topLeft(), itemsRect.bottomLeft() );
-        linearGradient.setColorAt( 0.0, Qt::white );
-//        linearGradient.setColorAt( 0.8, QColor( 0xd6, 0xd6, 0xd6 ) ); // light grey
-//        linearGradient.setColorAt( 1.0, QColor( 0xf4, 0x17, 0x05 ) ); // dark red
-//        linearGradient.setColorAt( 1.0, QColor( 0xb1, 0xb1, 0xb1 ) ); // not so light but still not dark grey
-        linearGradient.setColorAt( 0.9, QColor( 0x88, 0x88, 0x88 ) );
-        linearGradient.setColorAt( 1.0, QColor( 0x99, 0x99, 0x99 ) ); // dark grey
+        if ( m_gradient.finalStop() != itemsRect.bottomLeft() )
+        {
+            m_gradient = QLinearGradient( itemsRect.topLeft(), itemsRect.bottomLeft() );
+            m_gradient.setColorAt( 0.0, Qt::white );
+            //        m_gradient.setColorAt( 0.8, QColor( 0xd6, 0xd6, 0xd6 ) ); // light grey
+            //        m_gradient.setColorAt( 1.0, QColor( 0xf4, 0x17, 0x05 ) ); // dark red
+            //        m_gradient.setColorAt( 1.0, QColor( 0xb1, 0xb1, 0xb1 ) ); // not so light but still not dark grey
+            m_gradient.setColorAt( 0.9, QColor( 0x88, 0x88, 0x88 ) );
+            m_gradient.setColorAt( 1.0, QColor( 0x99, 0x99, 0x99 ) ); // dark grey
+        }
 
         QPen pen = painter->pen();
         painter->setPen( QPen( Qt::NoPen ) );
-        painter->setBrush( linearGradient );
+        painter->setBrush( m_gradient );
         painter->drawRect( itemsRect );
 
         // calculate sizes for the icons
@@ -253,7 +255,6 @@ SourceDelegate::paint( QPainter* painter, const QStyleOptionViewItem& option, co
 
         QRect textRect;
         QRect imageRect;
-
         SourceTreeItem::DropTypes dropTypes = item->supportedDropTypes( m_dropMimeData );
 
         int count = 0;
@@ -303,11 +304,11 @@ SourceDelegate::paint( QPainter* painter, const QStyleOptionViewItem& option, co
             {
                 // draw close icon
                 int padding = 3;
-                m_iconHeight = ( o3.rect.height() - 2*padding );
+                m_iconHeight = ( o3.rect.height() - 2 * padding );
                 QPixmap p( RESPATH "images/list-remove.png" );
                 p = p.scaledToHeight( m_iconHeight, Qt::SmoothTransformation );
 
-                QRect r ( o3.rect.right() - padding - m_iconHeight, padding + o3.rect.y(), m_iconHeight, m_iconHeight );
+                QRect r( o3.rect.right() - padding - m_iconHeight, padding + o3.rect.y(), m_iconHeight, m_iconHeight );
                 painter->drawPixmap( r, p );
             }
         }

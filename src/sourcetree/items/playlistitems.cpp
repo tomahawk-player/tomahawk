@@ -43,6 +43,8 @@ PlaylistItem::PlaylistItem( SourcesModel* mdl, SourceTreeItem* parent, const pla
     connect( pl.data(), SIGNAL( changed() ),
              SIGNAL( updated() ), Qt::QueuedConnection );
 
+    m_icon = QIcon( RESPATH "images/playlist-icon.png" );
+
     if( ViewManager::instance()->pageForPlaylist( pl ) )
         model()->linkSourceItemToPage( this, ViewManager::instance()->pageForPlaylist( pl ) );
 }
@@ -213,7 +215,7 @@ PlaylistItem::parsedDroppedTracks( const QList< query_ptr >& tracks)
 QIcon
 PlaylistItem::icon() const
 {
-    return QIcon( RESPATH "images/playlist-icon.png" );
+    return m_icon;
 }
 
 
@@ -254,6 +256,9 @@ DynamicPlaylistItem::DynamicPlaylistItem( SourcesModel* mdl, SourceTreeItem* par
 
     connect( pl.data(), SIGNAL( dynamicRevisionLoaded( Tomahawk::DynamicPlaylistRevision ) ),
              SLOT( onDynamicPlaylistLoaded( Tomahawk::DynamicPlaylistRevision ) ), Qt::QueuedConnection );
+
+    m_stationIcon = QIcon( RESPATH "images/station.png" );
+    m_automaticPlaylistIcon = QIcon( RESPATH "images/automatic-playlist.png" );
 
     if( ViewManager::instance()->pageForDynPlaylist( pl ) )
         model()->linkSourceItemToPage( this, ViewManager::instance()->pageForDynPlaylist( pl ) );
@@ -379,10 +384,13 @@ DynamicPlaylistItem::willAcceptDrag( const QMimeData* data ) const
 QIcon
 DynamicPlaylistItem::icon() const
 {
-    if( m_dynplaylist->mode() == OnDemand ) {
-        return QIcon( RESPATH "images/station.png" );
-    } else {
-        return QIcon( RESPATH "images/automatic-playlist.png" );
+    if ( m_dynplaylist->mode() == OnDemand )
+    {
+        return m_stationIcon;
+    }
+    else
+    {
+        return m_automaticPlaylistIcon;
     }
 }
 

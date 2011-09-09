@@ -185,7 +185,7 @@ CollectionItem::activate()
 QIcon
 CollectionItem::icon() const
 {
-    if( m_source.isNull() )
+    if ( m_source.isNull() )
        return m_superCol;
     else
     {
