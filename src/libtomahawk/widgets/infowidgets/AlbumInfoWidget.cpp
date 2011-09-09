@@ -49,6 +49,8 @@ AlbumInfoWidget::AlbumInfoWidget( const Tomahawk::album_ptr& album, QWidget* par
     ui->tracksView->setAttribute( Qt::WA_MacShowFocusRect, 0 );
 
     TomahawkUtils::unmarginLayout( layout() );
+    TomahawkUtils::unmarginLayout( ui->verticalLayout );
+    TomahawkUtils::unmarginLayout( ui->verticalLayout_2 );
 
     m_albumsModel = new AlbumModel( ui->albumsView );
     ui->albumsView->setAlbumModel( m_albumsModel );
