@@ -70,7 +70,7 @@ ArtistInfoWidget::ArtistInfoWidget( const Tomahawk::artist_ptr& artist, QWidget*
 
     ui->albumHeader->setContentsMargins( 0, 0, 4, 0 );
     ui->button->setFixedWidth( 200 );
-    ui->button->setDown( true );
+    ui->button->setChecked( true );
 
     m_pixmap = QPixmap( RESPATH "images/no-album-art-placeholder.png" ).scaledToWidth( 48, Qt::SmoothTransformation );
 

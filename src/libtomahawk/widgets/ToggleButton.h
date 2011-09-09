@@ -36,17 +36,8 @@ public:
     ToggleButton( QWidget* parent = 0 );
     virtual ~ToggleButton();
 
-public slots:
-    void setDown( bool b );
-
 protected:
     virtual void paintEvent( QPaintEvent* );
-
-private slots:
-    void onToggled();
-
-private:
-    bool m_toggled;
 };
 
 #endif

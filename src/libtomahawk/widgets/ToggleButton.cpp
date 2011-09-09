@@ -25,37 +25,19 @@
 
 ToggleButton::ToggleButton( QWidget* parent )
     : QPushButton( parent )
-    , m_toggled( false )
 {
     setStyleSheet( QString( "QPushButton { color: white; background-color: %1; border-style: outset; border-width: 1px; border-radius: 4px; border-color: white; font: bold; } "
+                            "QPushButton:checked { background-color: %2; border-style: inset; }"
                             "QPushButton:pressed { background-color: %2; border-style: inset; }" )
                       .arg( StyleHelper::headerUpperColor().name() )
                       .arg( StyleHelper::headerLowerColor().darker().name() ) );
 
-    connect( this, SIGNAL( released() ), SLOT( onToggled() ) );
+    setCheckable( true );
 }
 
 
 ToggleButton::~ToggleButton()
 {
-}
-
-
-void
-ToggleButton::setDown( bool b )
-{
-    m_toggled = b;
-    QPushButton::setDown( b );
-}
-
-
-void
-ToggleButton::onToggled()
-{
-    m_toggled ^= true;
-    setDown( m_toggled );
-
-    emit toggled( m_toggled );
 }
 
 
