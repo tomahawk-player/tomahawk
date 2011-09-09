@@ -22,6 +22,8 @@
 #include <QDialog>
 #include <QModelIndex>
 
+#include "config.h"
+
 class LoadingSpinner;
 class QListWidgetItem;
 class Ui_StackedSettingsDialog;

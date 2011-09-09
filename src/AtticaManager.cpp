@@ -161,7 +161,7 @@ AtticaManager::payloadFetched()
 
         if( !resolverPath.isEmpty() )
         {
-//             TomahawkApp::instance()->enableScriptResolver( resolverPath );
+            TomahawkApp::instance()->enableScriptResolver( resolverPath );
             m_resolverStates[ resolverId ] = Installed;
             TomahawkSettings::instance()->setAtticaResolverState( resolverId, Installed );
             emit resolverInstalled( resolverId );
@@ -249,13 +249,24 @@ AtticaManager::uninstallResolver( const Content& resolver )
 {
     TomahawkApp::instance()->disableScriptResolver( resolver.id() );
     m_resolverStates[ resolver.id() ] = Uninstalled;
+    TomahawkSettings::instance()->setAtticaResolverState( resolver.id(), Uninstalled );
 
     emit resolverUninstalled( resolver.id() );
     emit resolverStateChanged( resolver.id() );
 
     // uninstalling is easy... just delete it! :)
     QDir resolverDir = TomahawkUtils::appDataDir();
-    resolverDir.cd( QString( "atticaresolvers/%1" ).arg( resolver.id() ) );
+    if ( !resolverDir.cd( QString( "atticaresolvers/%1" ).arg( resolver.id() ) ) )
+        return;
+
+    if ( resolver.id().isEmpty() )
+        return;
+
+    // sanity check
+    if ( !resolverDir.absolutePath().contains( "atticaresolvers" ) ||
+         !resolverDir.absolutePath().contains( resolver.id() ) )
+        return;
+
     removeDirectory( resolverDir.absolutePath() );
 
 }
@@ -266,6 +277,7 @@ AtticaManager::removeDirectory( const QString& dir ) const
 {
     const QDir aDir(dir);
 
+    tLog() << "Deleting DIR:" << dir;
     bool has_err = false;
     if (aDir.exists()) {
         foreach(const QFileInfo& entry, aDir.entryInfoList(QDir::NoDotAndDotDot | QDir::Dirs | QDir::Files | QDir::NoSymLinks)) {
