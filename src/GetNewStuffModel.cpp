@@ -71,7 +71,6 @@ GetNewStuffModel::data( const QModelIndex& index, int role ) const
         return QVariant();
 
     Attica::Content resolver = m_contentList[ index.row() ];
-    // TODO use attica
     switch ( role )
     {
         case Qt::DisplayRole:
