@@ -3,8 +3,8 @@ CMAKE_MINIMUM_REQUIRED(VERSION 2.6 FATAL_ERROR)
 SET(CMAKE_VERBOSE_MAKEFILE ON)
 #SET(CMAKE_INSTALL_PREFIX ".")
 
-SET(MINIUPNP_DIR    "third-party/miniupnpc-1.4.20100609/")
-SET(NATPMP_DIR      "third-party/libnatpmp-20100202")
+SET(MINIUPNP_DIR    "third-party/miniupnpc-1.6/")
+SET(NATPMP_DIR      "third-party/libnatpmp-20100808")
 
 ADD_DEFINITIONS(-Wall -O2 -DNDEBUG)
 IF(WIN32)
@@ -27,6 +27,9 @@ ADD_LIBRARY(tomahawk_portfwd SHARED
         ${MINIUPNP_DIR}/miniupnpc.c
         ${MINIUPNP_DIR}/miniwget.c
         ${MINIUPNP_DIR}/minixml.c
+        ${MINIUPNP_DIR}/minixmlvalid.c
+        ${MINIUPNP_DIR}/portlistingparse.c
+        ${MINIUPNP_DIR}/receivedata.c
         #${MINIUPNP_DIR}/minixmlvalid.c - contains main() like upnp.c, so building a shared lib fails
         #${MINIUPNP_DIR}/upnpc.c
         ${MINIUPNP_DIR}/upnpcommands.c

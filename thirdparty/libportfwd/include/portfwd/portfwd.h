@@ -16,7 +16,7 @@
  */
 
 #ifndef LIBPORTFWD_PORTFWD_H
-#define LIBPORTFWD_PORTFWD_H true
+#define LIBPORTFWD_PORTFWD_H
 
 #include "portfwddllmacro.h"
 
@@ -24,8 +24,9 @@
 #include <stdlib.h>
 #include <string.h>
 #include <cstdio>
+#include <list>
 #include <iostream>
-//fwd:
+
 struct UPNPUrls;
 struct IGDdatas;
 
@@ -34,24 +35,27 @@ class PORTFWDDLLEXPORT Portfwd
     public:
         Portfwd();
         ~Portfwd();
+
         /// timeout: milliseconds to wait for a router to respond
         /// 2000 is typically enough.
-        bool init(unsigned int timeout);
+        bool init( unsigned int timeout );
         void get_status();
-        bool add(unsigned short port, unsigned short internal_port );
-        bool remove(unsigned short port);
-        
-        const std::string& external_ip() const 
-        { return m_externalip; }
-        const std::string& lan_ip() const 
-        { return m_lanip; }
+
+        bool add( unsigned short port, unsigned short internal_port );
+        bool remove( unsigned short port );
+
+        void addBlockedDevice( const std::string& ip );
+
+        const std::string& external_ip() const { return m_externalip; }
+        const std::string& lan_ip() const { return m_lanip; }
         unsigned int max_upstream_bps() const { return m_upbps; }
         unsigned int max_downstream_bps() const { return m_downbps; }
 
     protected:
-        struct UPNPUrls* urls;
-        struct IGDdatas* data;
-        
+        struct UPNPUrls* m_urls;
+        struct IGDdatas* m_data;
+
+        std::list<std::string> m_blockedips;
         std::string m_lanip, m_externalip;
         unsigned int m_upbps, m_downbps;
 };
