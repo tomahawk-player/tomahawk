@@ -567,7 +567,7 @@ SettingsDialog::getMoreResolvers()
 void
 SettingsDialog::atticaResolverInstalled( const QString& resolverId )
 {
-    m_resolversModel->addResolver( AtticaManager::instance()->pathFromId( resolverId ) );
+    m_resolversModel->addResolver( AtticaManager::instance()->pathFromId( resolverId ), true );
 }
 
 void
