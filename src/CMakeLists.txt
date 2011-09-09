@@ -78,11 +78,6 @@ SET( tomahawkSourcesGui ${tomahawkSourcesGui}
      settingslistdelegate.cpp
      resolversmodel.cpp
      tomahawkwindow.cpp
-
-     GetNewStuffDialog.cpp
-     GetNewStuffDelegate.cpp
-     GetNewStuffModel.cpp
-     AtticaManager.cpp
 )
 
 SET( tomahawkHeaders ${tomahawkHeaders}
@@ -132,9 +127,6 @@ SET( tomahawkHeadersGui ${tomahawkHeadersGui}
      delegateconfigwrapper.h
      tomahawkwindow.h
 
-     GetNewStuffDialog.h
-     GetNewStuffDelegate.h
-     GetNewStuffModel.h
      AtticaManager.h
 )
 
@@ -208,6 +200,8 @@ IF(QCA2_FOUND)
 ENDIF(QCA2_FOUND)
 
 IF(LIBATTICA_FOUND)
+    SET( tomahawkSources ${tomahawkSources} AtticaManager.cpp GetNewStuffDialog.cpp GetNewStuffDelegate.cpp GetNewStuffModel.cpp )
+    SET( tomahawkHeaders ${tomahawkHeaders}  GetNewStuffDialog.h GetNewStuffDelegate.h GetNewStuffModel.h )
     INCLUDE_DIRECTORIES( ${LIBATTICA_INCLUDE_DIR} )
 ENDIF(LIBATTICA_FOUND)
 

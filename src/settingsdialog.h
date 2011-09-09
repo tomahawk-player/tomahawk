@@ -86,8 +86,10 @@ private slots:
     void removeScriptResolver();
     void getMoreResolvers();
     void getMoreResolversFinished( int );
+#ifdef LIBATTICA_FOUND
     void atticaResolverInstalled( const QString& );
     void atticaResolverUninstalled( const QString& );
+#endif
 
     void openResolverConfig( const QString& );
     void sipItemClicked ( const QModelIndex& );

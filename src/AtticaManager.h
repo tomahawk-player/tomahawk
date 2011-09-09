@@ -20,10 +20,13 @@
 #define ATTICAMANAGER_H
 
 #include <QObject>
+#include <QHash>
+
+#ifdef LIBATTICA_FOUND
 #include <attica/provider.h>
 #include <attica/providermanager.h>
 #include <attica/content.h>
-
+#endif
 
 class AtticaManager : public QObject
 {
@@ -48,8 +51,9 @@ public:
     }
 
     explicit AtticaManager ( QObject* parent = 0 );
-    virtual ~AtticaManager();
+    virtual ~AtticaManager() {}
 
+#ifdef LIBATTICA_FOUND
     bool resolversLoaded() const;
 
     Attica::Content::List resolvers() const;
@@ -81,6 +85,7 @@ private:
     Attica::Provider m_resolverProvider;
     Attica::Content::List m_resolvers;
     StateHash m_resolverStates;
+#endif
 
     static AtticaManager* s_instance;
 };

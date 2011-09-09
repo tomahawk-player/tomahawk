@@ -191,13 +191,18 @@ SettingsDialog::SettingsDialog( QWidget *parent )
     m_resolversModel = new ResolversModel( s->allScriptResolvers(), s->enabledScriptResolvers(), this );
     ui->scriptList->setModel( m_resolversModel );
 
+#ifdef LIBATTICA_FOUND
     connect( ui->getMoreResolvers, SIGNAL( clicked() ), this, SLOT( getMoreResolvers() ) );
+
+    connect( AtticaManager::instance(), SIGNAL( resolverInstalled( QString ) ), this, SLOT( atticaResolverInstalled( QString ) ) );
+    connect( AtticaManager::instance(), SIGNAL( resolverUninstalled( QString ) ), this, SLOT( atticaResolverUninstalled( QString ) ) );
+#else
+    ui->getMoreResolvers->hide();
+#endif
+
     connect( ui->scriptList->selectionModel(), SIGNAL( selectionChanged( QItemSelection,QItemSelection ) ), this, SLOT( scriptSelectionChanged() ) );
     connect( ui->addScript, SIGNAL( clicked( bool ) ), this, SLOT( addScriptResolver() ) );
     connect( ui->removeScript, SIGNAL( clicked( bool ) ), this, SLOT( removeScriptResolver() ) );
-    connect( AtticaManager::instance(), SIGNAL( resolverInstalled( QString ) ), this, SLOT( atticaResolverInstalled( QString ) ) );
-    connect( AtticaManager::instance(), SIGNAL( resolverUninstalled( QString ) ), this, SLOT( atticaResolverUninstalled( QString ) ) );
-
     connect( ui->buttonBrowse_2, SIGNAL( clicked() ),  SLOT( showPathSelector() ) );
     connect( ui->proxyButton,  SIGNAL( clicked() ),  SLOT( showProxySettings() ) );
     connect( ui->checkBoxStaticPreferred, SIGNAL( toggled(bool) ), SLOT( toggleUpnp(bool) ) );
@@ -546,18 +551,19 @@ SettingsDialog::removeScriptResolver()
 void
 SettingsDialog::getMoreResolvers()
 {
-#ifdef Q_OS_MAC
+#if defined(Q_WS_MAC) && defined(LIBATTICA_FOUND)
     GetNewStuffDialog* diag = new GetNewStuffDialog( this, Qt::Sheet );
     connect( diag, SIGNAL( finished( int ) ), this, SLOT( getMoreResolversFinished(int)));
 
     diag->show();
-#else
+#elif defined(LIBATTICA_FOUND)
     GetNewStuffDialog diag( this );
     int ret = diag.exec();
 #endif
 
 }
 
+#ifdef LIBATTICA_FOUND
 void
 SettingsDialog::atticaResolverInstalled( const QString& resolverId )
 {
@@ -569,7 +575,7 @@ SettingsDialog::atticaResolverUninstalled ( const QString& resolverId )
 {
     m_resolversModel->removeResolver( AtticaManager::instance()->pathFromId( resolverId ) );
 }
-
+#endif
 
 void
 SettingsDialog::scriptSelectionChanged()

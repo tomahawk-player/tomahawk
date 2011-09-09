@@ -232,8 +232,10 @@ TomahawkApp::init()
     tDebug() << "Init Pipeline.";
     initPipeline();
 
+#ifdef LIBATTICA_FOUND
     // load remote list of resolvers able to be installed
     AtticaManager::instance();
+#endif
 
     if ( arguments().contains( "--http" ) || TomahawkSettings::instance()->value( "network/http", true ).toBool() )
     {
@@ -279,7 +281,9 @@ TomahawkApp::~TomahawkApp()
     delete m_mainwindow;
 #endif
 
+#ifdef LIBATTICA_FOUND
     delete AtticaManager::instance();
+#endif
 
     if ( !m_audioEngine.isNull() )
         delete m_audioEngine.data();

@@ -43,11 +43,6 @@ AtticaManager::AtticaManager( QObject* parent )
     m_manager.addProviderFile( QUrl( "http://bakery.tomahawk-player.org:10480/resolvers/providers.xml" ) );
 }
 
-AtticaManager::~AtticaManager()
-{
-
-}
-
 Content::List
 AtticaManager::resolvers() const
 {
