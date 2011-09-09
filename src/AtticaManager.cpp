@@ -161,7 +161,8 @@ AtticaManager::payloadFetched()
 
         if( !resolverPath.isEmpty() )
         {
-            TomahawkApp::instance()->enableScriptResolver( resolverPath );
+            // Do the install / add to tomahawk
+            TomahawkApp::instance()->addScriptResolver( resolverPath, true );
             m_resolverStates[ resolverId ] = Installed;
             TomahawkSettings::instance()->setAtticaResolverState( resolverId, Installed );
             emit resolverInstalled( resolverId );
@@ -243,33 +244,62 @@ AtticaManager::extractPayload( const QString& filename, const QString& resolverI
     return QString( QFile( resolverDir.absolutePath() + "/contents/code/main.js" ).fileName() );
 }
 
+void
+AtticaManager::uninstallResolver( const QString& pathToResolver )
+{
+    // User manually removed a resolver not through attica dialog, simple remove
+    QRegExp r( ".*([^/]*)/contents/code/main.js" );
+    r.indexIn( pathToResolver );
+    const QString& atticaId = r.cap( 1 );
+    tDebug() << "Got resolver ID to remove:" << atticaId;
+    if ( !atticaId.isEmpty() ) // this is an attica-installed resolver, mark as uninstalled
+    {
+        foreach ( const Content& resolver, m_resolvers )
+        {
+            if ( resolver.id() == atticaId ) // this is the one
+            {
+                m_resolverStates[ atticaId ] = Uninstalled;
+                TomahawkSettings::instance()->setAtticaResolverState( atticaId, Uninstalled );
+
+                doResolverRemove( atticaId );
+            }
+        }
+    }
+}
+
 
 void
 AtticaManager::uninstallResolver( const Content& resolver )
 {
-    TomahawkApp::instance()->disableScriptResolver( resolver.id() );
-    m_resolverStates[ resolver.id() ] = Uninstalled;
-    TomahawkSettings::instance()->setAtticaResolverState( resolver.id(), Uninstalled );
-
     emit resolverUninstalled( resolver.id() );
     emit resolverStateChanged( resolver.id() );
 
+    TomahawkApp::instance()->removeScriptResolver( pathFromId( resolver.id() ) );
+    m_resolverStates[ resolver.id() ] = Uninstalled;
+    TomahawkSettings::instance()->setAtticaResolverState( resolver.id(), Uninstalled );
+
+    doResolverRemove( resolver.id() );
+}
+
+void
+AtticaManager::doResolverRemove( const QString& id ) const
+{
     // uninstalling is easy... just delete it! :)
     QDir resolverDir = TomahawkUtils::appDataDir();
-    if ( !resolverDir.cd( QString( "atticaresolvers/%1" ).arg( resolver.id() ) ) )
+    if ( !resolverDir.cd( QString( "atticaresolvers/%1" ).arg( id ) ) )
         return;
 
-    if ( resolver.id().isEmpty() )
+    if ( id.isEmpty() )
         return;
 
     // sanity check
     if ( !resolverDir.absolutePath().contains( "atticaresolvers" ) ||
-         !resolverDir.absolutePath().contains( resolver.id() ) )
+        !resolverDir.absolutePath().contains( id ) )
         return;
 
     removeDirectory( resolverDir.absolutePath() );
-
 }
+
 
 // taken from util/fileutils.cpp in kdevplatform
 bool

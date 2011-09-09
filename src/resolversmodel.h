@@ -1,6 +1,6 @@
 /* === This file is part of Tomahawk Player - <http://tomahawk-player.org> ===
  *
- *   Copyright 2010-2011, Christian Muehlhaeuser <muesli@tomahawk-player.org>
+ *   Copyright 2010-2011, Leo Franchi <lfranchi@kde.org>
  *
  *   Tomahawk is free software: you can redistribute it and/or modify
  *   it under the terms of the GNU General Public License as published by
@@ -35,7 +35,7 @@ public:
         ErrorState = Qt::UserRole + 18
     };
 
-    explicit ResolversModel( const QStringList& allResolvers, const QStringList& enabledResolvers, QObject* parent = 0 );
+    explicit ResolversModel( QObject* parent = 0 );
     virtual ~ResolversModel();
 
     virtual QVariant data( const QModelIndex& index, int role = Qt::DisplayRole ) const;
@@ -45,19 +45,15 @@ public:
     virtual bool setData(const QModelIndex& index, const QVariant& value, int role = Qt::EditRole);
 
     void addResolver( const QString& resolver, bool enable = false );
+    void atticaResolverInstalled ( const QString& resolverId );
     void removeResolver( const QString& resolver );
 
-    QStringList allResolvers() const;
-    QStringList enabledResolvers() const;
-
+    void saveScriptResolvers();
 private slots:
     void resolverChanged();
 
 private:
     void addInstalledResolvers();
-
-    QStringList m_allResolvers;
-    QStringList m_enabledResolvers;
 };
 
 #endif // RESOLVERSMODEL_H

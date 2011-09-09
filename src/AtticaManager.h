@@ -63,6 +63,7 @@ public:
 
     void installResolver( const Attica::Content& resolver );
     void uninstallResolver( const Attica::Content& resolver );
+    void uninstallResolver( const QString& pathToResolver );
     QString pathFromId( const QString& resolverId ) const;
 
 signals:
@@ -80,6 +81,7 @@ private slots:
 
 private:
     QString extractPayload( const QString& filename, const QString& resolverId ) const;
+    void doResolverRemove( const QString& id ) const;
     bool removeDirectory( const QString& dir ) const;
 
     Attica::ProviderManager m_manager;

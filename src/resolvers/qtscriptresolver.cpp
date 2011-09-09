@@ -163,7 +163,7 @@ ScriptEngine::javaScriptConsoleMessage( const QString& message, int lineNumber, 
 QtScriptResolver::QtScriptResolver( const QString& scriptPath )
     : Tomahawk::ExternalResolver( scriptPath )
     , m_ready( false )
-    , m_stopped( false )
+    , m_stopped( true )
     , m_error( Tomahawk::ExternalResolver::NoError )
     , m_resolverHelper( new QtScriptResolverHelper( scriptPath, this ) )
 {
@@ -179,7 +179,6 @@ QtScriptResolver::QtScriptResolver( const QString& scriptPath )
     {
         init();
     }
-
 }
 
 
@@ -189,6 +188,11 @@ QtScriptResolver::~QtScriptResolver()
     delete m_engine;
 }
 
+bool
+QtScriptResolver::running() const
+{
+    return m_ready && !m_stopped;
+}
 
 void
 QtScriptResolver::reload()
@@ -247,7 +251,16 @@ QtScriptResolver::init()
     qDebug() << "JS" << filePath() << "READY," << "name" << m_name << "weight" << m_weight << "timeout" << m_timeout;
 
     m_ready = true;
-    Tomahawk::Pipeline::instance()->addResolver( this );
+}
+
+void
+QtScriptResolver::start()
+{
+    m_stopped = false;
+    if ( m_ready )
+        Tomahawk::Pipeline::instance()->addResolver( this );
+    else
+        init();
 }
 
 
@@ -359,7 +372,8 @@ void
 QtScriptResolver::stop()
 {
     m_stopped = true;
-    emit finished();
+    Tomahawk::Pipeline::instance()->removeResolver( this );
+    emit stopped();
 }
 
 

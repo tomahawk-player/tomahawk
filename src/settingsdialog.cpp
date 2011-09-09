@@ -1,6 +1,7 @@
 /* === This file is part of Tomahawk Player - <http://tomahawk-player.org> ===
  *
  *   Copyright 2010-2011, Christian Muehlhaeuser <muesli@tomahawk-player.org>
+ *   Copyright 2010-2011, Leo Franchi <lfranchi@kde.org>
  *
  *   Tomahawk is free software: you can redistribute it and/or modify
  *   it under the terms of the GNU General Public License as published by
@@ -188,7 +189,7 @@ SettingsDialog::SettingsDialog( QWidget *parent )
     ResolverConfigDelegate* del = new ResolverConfigDelegate( this );
     connect( del, SIGNAL( openConfig( QString ) ), this, SLOT( openResolverConfig( QString ) ) );
     ui->scriptList->setItemDelegate( del );
-    m_resolversModel = new ResolversModel( s->allScriptResolvers(), s->enabledScriptResolvers(), this );
+    m_resolversModel = new ResolversModel( this );
     ui->scriptList->setModel( m_resolversModel );
 
 #ifdef LIBATTICA_FOUND
@@ -239,8 +240,7 @@ SettingsDialog::~SettingsDialog()
         s->setLastFmUsername( ui->lineEditLastfmUsername->text() );
         s->setLastFmPassword( ui->lineEditLastfmPassword->text() );
 
-        s->setAllScriptResolvers( m_resolversModel->allResolvers() );
-        s->setEnabledScriptResolvers( m_resolversModel->enabledResolvers() );
+        m_resolversModel->saveScriptResolvers();
 
         s->applyChanges();
     }
@@ -527,8 +527,8 @@ SettingsDialog::addScriptResolver()
     QString resolver = QFileDialog::getOpenFileName( this, tr( "Load script resolver file" ), TomahawkSettings::instance()->scriptDefaultPath() );
     if( !resolver.isEmpty() )
     {
-        TomahawkApp::instance()->enableScriptResolver( resolver );
         m_resolversModel->addResolver( resolver, true );
+
         QFileInfo resolverAbsoluteFilePath = resolver;
         TomahawkSettings::instance()->setScriptDefaultPath( resolverAbsoluteFilePath.absolutePath() );
     }
@@ -542,9 +542,8 @@ SettingsDialog::removeScriptResolver()
     if( !ui->scriptList->selectionModel()->selectedIndexes().isEmpty() )
     {
         QString resolver = ui->scriptList->selectionModel()->selectedIndexes().first().data( ResolversModel::ResolverPath ).toString();
+        AtticaManager::instance()->uninstallResolver( resolver );
         m_resolversModel->removeResolver( resolver );
-
-        TomahawkApp::instance()->disableScriptResolver( resolver );
     }
 }
 
@@ -567,7 +566,7 @@ SettingsDialog::getMoreResolvers()
 void
 SettingsDialog::atticaResolverInstalled( const QString& resolverId )
 {
-    m_resolversModel->addResolver( AtticaManager::instance()->pathFromId( resolverId ), true );
+    m_resolversModel->atticaResolverInstalled( resolverId );
 }
 
 void
