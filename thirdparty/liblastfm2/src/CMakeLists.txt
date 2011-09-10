@@ -62,6 +62,7 @@ set(SOURCES
 set(MOC_HEADERS
   scrobble/Audioscrobbler.h
   types/Track.h
+  types/Xspf.h
   radio/RadioTuner.h
   ws/NetworkConnectionMonitor.h
   ws/InternetConnectionMonitor.h
