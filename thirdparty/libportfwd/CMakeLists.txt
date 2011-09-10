@@ -16,9 +16,11 @@ INCLUDE_DIRECTORIES( ${MINIUPNP_DIR} include ${QT_INCLUDES} )
 SET( CMAKE_C_FLAGS ${CLEAN_C_FLAGS} )
 
 ADD_DEFINITIONS( -DPORTFWDDLLEXPORT_PRO )
+if (CMAKE_SYSTEM_NAME STREQUAL "Darwin")
+  ADD_DEFINITIONS( -DMACOSX -D_DARWIN_C_SOURCE )
+endif ()
 
 ADD_LIBRARY(tomahawk_portfwd SHARED
-
         # the needed bits of miniupnpc (no python module, no tests, no cli)
         ${MINIUPNP_DIR}/connecthostport.c
         ${MINIUPNP_DIR}/igd_desc_parse.c
@@ -57,6 +59,6 @@ INSTALL( TARGETS tomahawk_portfwd
 #              )
 #TARGET_LINK_LIBRARIES(portfwd-demo portfwd)
 
-# INSTALL(TARGETS portfwd ARCHIVE DESTINATION lib${LIB_SUFFIX})
+#INSTALL(TARGETS portfwd ARCHIVE DESTINATION lib${LIB_SUFFIX})
 #INSTALL(TARGETS portfwd-demo RUNTIME DESTINATION bin)
 #INSTALL(DIRECTORY include/portfwd DESTINATION include PATTERN "*~" EXCLUDE)
