@@ -36,8 +36,6 @@ using namespace Tomahawk;
 void
 DatabaseCommand_DeleteFiles::postCommitHook()
 {
-//    qDebug() << Q_FUNC_INFO;
-
     if ( !m_files.count() )
         return;
 
@@ -66,7 +64,7 @@ DatabaseCommand_DeleteFiles::exec( DatabaseImpl* dbi )
     TomahawkSqlQuery delquery = dbi->newquery();
     QString lastPath;
 
-    if ( !m_dir.path().isEmpty() && source()->isLocal() )
+    if ( m_dir.path() != QString( "." ) && source()->isLocal() )
     {
         qDebug() << "Deleting" << m_dir.path() << "from db for localsource" << srcid;
         TomahawkSqlQuery dirquery = dbi->newquery();
@@ -110,7 +108,7 @@ DatabaseCommand_DeleteFiles::exec( DatabaseImpl* dbi )
             deleted++;
         }
     }
-    else
+    else if ( !m_ids.isEmpty() && source()->isLocal() )
     {
         delquery.prepare( QString( "DELETE FROM file WHERE source %1 AND url = ?" )
                              .arg( source()->isLocal() ? "IS NULL" : QString( "= %1" ).arg( source()->id() ) ) );
