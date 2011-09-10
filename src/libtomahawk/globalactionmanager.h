@@ -53,7 +53,7 @@ public:
     /// Takes a spotify link and performs the default open action on it
     bool openRdioLink( const QString& link );
 
-    void copyToClipboard( const Tomahawk::query_ptr& query ) const;
+    void copyToClipboard( const Tomahawk::query_ptr& query );
     QString copyPlaylistToClipboard( const Tomahawk::dynplaylist_ptr& playlist );
     void savePlaylistToFile( const Tomahawk::playlist_ptr& playlist, const QString& filename );
 
@@ -105,8 +105,7 @@ private:
     Tomahawk::playlist_ptr m_toShow;
     Tomahawk::query_ptr m_waitingToBookmark;
     Tomahawk::query_ptr m_waitingToPlay;
-
-    QWeakPointer<QNetworkAccessManager> m_nam;
+    QUrl m_clipboardLongUrl;
 
     static GlobalActionManager* s_instance;
 };

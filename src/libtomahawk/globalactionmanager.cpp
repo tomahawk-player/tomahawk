@@ -207,12 +207,10 @@ GlobalActionManager::xspfCreated( const QByteArray& xspf )
 
 
 void
-GlobalActionManager::copyToClipboard( const query_ptr& query ) const
+GlobalActionManager::copyToClipboard( const query_ptr& query )
 {
-    QClipboard* cb = QApplication::clipboard();
-    QByteArray data = openLinkFromQuery( query ).toEncoded();
-    data.replace( "'", "%27" ); // QUrl doesn't encode ', which it doesn't have to. Some apps don't like ' though, and want %27. Both are valid.
-    cb->setText( data );
+    m_clipboardLongUrl = openLinkFromQuery( query );
+    GlobalActionManager::instance()->shortenLink( m_clipboardLongUrl );
 }
 
 
@@ -800,6 +798,7 @@ GlobalActionManager::shortenLinkRequestFinished()
 {
     qDebug() << Q_FUNC_INFO;
     QNetworkReply *reply = qobject_cast<QNetworkReply*>( sender() );
+    bool error = false;
 
     // NOTE: this should never happen
     if( !reply )
@@ -809,30 +808,38 @@ GlobalActionManager::shortenLinkRequestFinished()
     }
 
     // Check for the redirect attribute, as this should be the shortened link
-
     QVariant urlVariant = reply->attribute( QNetworkRequest::RedirectionTargetAttribute );
 
     // NOTE: this should never happen
     if( urlVariant.isNull() || !urlVariant.isValid() )
-    {
-        emit shortLinkReady( reply->request().url(), QUrl( "" ) );
-        reply->deleteLater();
-        return;
-    }
+        error = true;
 
+    QUrl longUrl = reply->request().url();
     QUrl shortUrl = urlVariant.toUrl();
 
     // NOTE: this should never happen
     if( !shortUrl.isValid() )
-    {
-        emit shortLinkReady( reply->request().url(), QUrl( "" ) );
-        reply->deleteLater();
-        return;
-    }
+        error = true;
 
     // Success!  Here is the short link
+    if ( m_clipboardLongUrl == reply->request().url() )
+    {
+        QClipboard* cb = QApplication::clipboard();
 
-    emit shortLinkReady( reply->request().url(), shortUrl );
+        QByteArray data = error ? longUrl.toEncoded() : shortUrl.toEncoded();
+        data.replace( "'", "%27" ); // QUrl doesn't encode ', which it doesn't have to. Some apps don't like ' though, and want %27. Both are valid.
+        cb->setText( data );
+
+        m_clipboardLongUrl.clear();
+    }
+    else
+    {
+        if ( !error )
+            emit shortLinkReady( longUrl, shortUrl );
+        else
+            emit shortLinkReady( longUrl, QUrl( "" ) );
+    }
+
     reply->deleteLater();
 }
 
