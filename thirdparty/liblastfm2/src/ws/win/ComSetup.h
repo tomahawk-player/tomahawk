@@ -22,8 +22,8 @@
 #define _WIN32_WINNT 0x0400
 #endif
 
+#include <objbase.h>
 #include "winable.h"
-//#include <objbase.h>
 //#include <atlbase.h>
 //#include <atlcom.h>
 
