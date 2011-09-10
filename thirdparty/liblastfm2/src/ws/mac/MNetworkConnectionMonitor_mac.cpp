@@ -24,6 +24,8 @@
 #include <QPointer>
 #include <SystemConfiguration/SCNetworkReachability.h>
 
+#include "../ws.h"
+
 MNetworkConnectionMonitor* context = 0;
 
 MNetworkConnectionMonitor::MNetworkConnectionMonitor( QObject* parent ) :
