@@ -19,7 +19,6 @@
 */
 
 #include "MNetworkConnectionMonitor.h"
-#include "ws/ws.h"
 
 #include <QPointer>
 #include <SystemConfiguration/SCNetworkReachability.h>
