@@ -121,7 +121,9 @@ lastfm::ws::post( QMap<QString, QString> params, bool sk )
                + '&';
     }
 
-    return nam()->post( QNetworkRequest(baseUrl()), query );
+    QNetworkRequest req( baseUrl() );
+    req.setHeader( QNetworkRequest::ContentTypeHeader, "application/x-www-form-urlencoded" );
+    return nam()->post( req, query );
 }
 
 
