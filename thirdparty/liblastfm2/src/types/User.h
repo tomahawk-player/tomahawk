@@ -42,7 +42,9 @@ namespace lastfm
 
         User( const class XmlQuery& xml );
 
+        lastfm::User& operator=( const lastfm::User& that ) { m_name = that.name(); m_images = that.m_images; m_realName = that.m_realName; m_match = that.m_match; return *this; }
         bool operator==(const lastfm::User& that) const { return m_name == that.m_name; }
+        bool operator<(const lastfm::User& that) const { return m_name < that.m_name; }
 
         operator QString() const { return m_name; }
         QString name() const { return m_name; }
@@ -52,14 +54,16 @@ namespace lastfm
         QNetworkReply* getTopTags() const;
 
         /** use User::list() on the response to get a QList<User> */
-        QNetworkReply* getFriends(int perPage = 50, int page = 1) const;
-        QNetworkReply* getNeighbours() const;
+        QNetworkReply* getFriends(  bool recentTracks = false, int limit = 50, int page = 1 ) const;
+        QNetworkReply* getFriendsListeningNow( int limit = 50, int page = 1 ) const;
+        QNetworkReply* getNeighbours( int limit = 50, int page = 1 ) const;
     
         QNetworkReply* getPlaylists() const;
-        QNetworkReply* getTopArtists() const;
-        QNetworkReply* getRecentTracks() const;
+        QNetworkReply* getTopArtists( QString period = "overall", int limit = 50, int page = 1 ) const;
+        QNetworkReply* getRecentTracks( int limit = 50, int page = 1 ) const;
         QNetworkReply* getRecentArtists() const;
-        QNetworkReply* getRecentStations() const;
+        QNetworkReply* getRecentStations(  int limit = 10, int page = 1  ) const;
+        QNetworkReply* getRecommendedArtists( int limit = 50, int page = 1 ) const;
     
         static UserList list( QNetworkReply* );
 
@@ -90,6 +94,35 @@ namespace lastfm
         QMap<QString, QString> params( const QString& method ) const;
     };
 
+    class LASTFM_DLLEXPORT Gender
+    {
+        QString s;
+
+    public:
+        Gender() :s(/*confused!*/){}
+
+        Gender( const QString& ss ) :s( ss.toLower() )
+        {}
+
+        bool known() const { return male() || female(); }
+        bool male() const { return s == "m"; }
+        bool female() const { return s == "f"; }
+
+        QString toString() const
+        {
+            QString result;
+
+            if (male())
+                result = QObject::tr( "m" );
+            else if (female())
+                result = QObject::tr( "f" );
+            else
+                result = QObject::tr( "n" ); // as in neuter
+
+            return result;
+        }
+    };
+
 
     /** The Extended User contains extra information about a user's account */
     class LASTFM_DLLEXPORT UserDetails : public User
@@ -109,6 +142,8 @@ namespace lastfm
         bool canBootstrap() const{ return m_canBootstrap; }
         quint32 scrobbleCount() const{ return m_scrobbles; }
         QDateTime dateRegistered() const { return m_registered; }
+        Gender gender() const { return m_gender; }
+        QString country() const { return m_country; }
 
         void setScrobbleCount( quint32 scrobblesCount );
         void setDateRegistered( const QDateTime& date );
@@ -127,39 +162,7 @@ namespace lastfm
         // static QNetworkReply* getRecommendedArtists();
 
     protected:
-            
-        class Gender
-        {
-            QString s;
-
-        public:
-            Gender() :s(/*confused!*/){}
-
-            Gender( const QString& ss ) :s( ss.toLower() )
-            {}
-     
-            bool known() const { return male() || female(); }
-            bool male() const { return s == "m"; }
-            bool female() const { return s == "f"; }
-     
-            QString toString() const
-            {
-                #define tr QObject::tr
-                QStringList list;
-                if (male())
-                    list << tr("boy") << tr("lad") << tr("chap") << tr("guy");
-                else if (female())
-                    // I'm not sexist, it's just I'm gutless and couldn't think
-                    // of any other non offensive terms for women!
-                    list << tr("girl") << tr("lady") << tr("lass");
-                else 
-                    return tr("person");
-                
-                return list.value( QDateTime::currentDateTime().toTime_t() % list.count() );
-                #undef tr
-            }
-        } m_gender;
-
+        Gender m_gender;
         unsigned short m_age;
         unsigned int m_scrobbles;
         QDateTime m_registered;

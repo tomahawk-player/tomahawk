@@ -818,19 +818,21 @@ LastFmPlugin::createScrobbler()
 
 
 QList<lastfm::Track>
-LastFmPlugin::parseTrackList( QNetworkReply * reply )
+LastFmPlugin::parseTrackList( QNetworkReply* reply )
 {
     QList<lastfm::Track> tracks;
     try {
-        lastfm::XmlQuery lfm = lastfm::ws::parse(reply);
-        foreach (lastfm::XmlQuery xq, lfm.children( "track" )) {
+        lastfm::XmlQuery lfm = reply->readAll();
+        foreach ( lastfm::XmlQuery xq, lfm.children( "track" ) )
+        {
             tracks.append( lastfm::Track( xq ) );
         }
     }
-    catch (lastfm::ws::ParseError& e)
+    catch( lastfm::ws::ParseError& e )
     {
         qWarning() << e.what();
     }
+
     return tracks;
 }
 

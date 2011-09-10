@@ -25,14 +25,23 @@
 
 namespace lastfm
 {
-    class LASTFM_DLLEXPORT Xspf
+    class LASTFM_DLLEXPORT Xspf : public QObject
     {
+        Q_OBJECT
     public:
         /** pass in the playlist node! */
-        Xspf( const class QDomElement& playlist_node );
+        Xspf( const class QDomElement& playlist_node, QObject* parent );
 
-        QList<Track> tracks() const { return m_tracks; }
         QString title() const{ return m_title; }
+
+        bool isEmpty() const { return m_tracks.isEmpty(); }
+        Track takeFirst() { return m_tracks.takeFirst(); }
+
+    signals:
+        void expired();
+
+    private slots:
+        void onExpired();
 
     private:
         QList<Track> m_tracks;

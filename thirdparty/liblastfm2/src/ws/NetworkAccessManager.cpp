@@ -1,5 +1,5 @@
 /*
-   Copyright 2009 Last.fm Ltd.
+   Copyright 2009 Last.fm Ltd. 
       - Primarily authored by Max Howell, Jono Cole and Doug Mansell
 
    This file is part of liblastfm.
@@ -34,11 +34,11 @@
 
 static struct NetworkAccessManagerInit
 {
-    // We do this upfront because then our Firehose QTcpSocket will have a proxy
+    // We do this upfront because then our Firehose QTcpSocket will have a proxy 
     // set by default. As well as any plain QNetworkAcessManager stuff, and the
     // scrobbler
-    // In theory we should do this every request in case the configuration
-    // changes but that is fairly unlikely use case, init? Maybe we should
+    // In theory we should do this every request in case the configuration 
+    // changes but that is fairly unlikely use case, init? Maybe we should 
     // anyway..
 
     NetworkAccessManagerInit()
@@ -50,7 +50,7 @@ static struct NetworkAccessManagerInit
         // at two seconds, so that hangs startup
         if (!s.fAutoDetect && s.lpszProxy)
         {
-            QUrl url( QString::fromUtf16((const unsigned short*)s.lpszProxy) );
+            QUrl url( QString::fromUtf16(s.lpszProxy) );
             QNetworkProxy proxy( QNetworkProxy::HttpProxy );
             proxy.setHostName( url.host() );
             proxy.setPort( url.port() );
@@ -69,10 +69,10 @@ static struct NetworkAccessManagerInit
         }
     #endif
     }
-} init;
+} init;    
 
 
-namespace lastfm
+namespace lastfm 
 {
     LASTFM_DLLEXPORT QByteArray UserAgent;
 }
@@ -106,12 +106,12 @@ lastfm::NetworkAccessManager::~NetworkAccessManager()
 
 QNetworkProxy
 lastfm::NetworkAccessManager::proxy( const QNetworkRequest& request )
-{
+{   
     Q_UNUSED( request );
-
+    
 #ifdef WIN32
     IeSettings s;
-    if (s.fAutoDetect)
+    if (s.fAutoDetect) 
     {
         if (!m_pac) {
             m_pac = new Pac;
@@ -122,9 +122,9 @@ lastfm::NetworkAccessManager::proxy( const QNetworkRequest& request )
             }
         }
         return m_pac->resolve( request, s.lpszAutoConfigUrl );
-    }
+    } 
 #endif
-
+    
     return QNetworkProxy::applicationProxy();
 }
 
@@ -136,7 +136,7 @@ lastfm::NetworkAccessManager::createRequest( Operation op, const QNetworkRequest
 
     request.setAttribute( QNetworkRequest::CacheLoadControlAttribute, QNetworkRequest::PreferCache );
     request.setRawHeader( "User-Agent", lastfm::UserAgent );
-
+    
 #ifdef WIN32
     // PAC proxies can vary by domain, so we have to check everytime :(
     QNetworkProxy proxy = this->proxy( request );
@@ -152,7 +152,7 @@ void
 lastfm::NetworkAccessManager::onConnectivityChanged( bool up )
 {
     Q_UNUSED( up );
-
+    
 #ifdef WIN32
     if (up && m_pac) m_pac->resetFailedState();
 #endif

@@ -21,6 +21,7 @@
 #define LASTFM_XMLQUERY_H
 
 #include <lastfm/global.h>
+#include <lastfm/ws.h>
 #include <QDomDocument>
 #include <QDomElement>
 
@@ -44,7 +45,7 @@ namespace lastfm
           * Notice the lfm node is not referenced, that is because it is the
           * document-element of the XML document.
           */
-        XmlQuery( const QByteArray& );
+        XmlQuery( const QByteArray& ) throw( lastfm::ws::ParseError );
         
         XmlQuery( const QDomElement& e, const char* name = "" ) : e( e )
         {

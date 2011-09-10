@@ -1,5 +1,5 @@
 /*
-   Copyright 2009 Last.fm Ltd.
+   Copyright 2009 Last.fm Ltd. 
       - Primarily authored by Max Howell, Jono Cole and Doug Mansell
 
    This file is part of liblastfm.
@@ -20,7 +20,7 @@
 #ifndef WMISINK_WIN_H
 #define WMISINK_WIN_H
 
-#include "wbemcli.h"
+#include "WbemCli.h"
 
 // Sink object for WMI NDIS notifications
 class WmiSink : public IWbemObjectSink

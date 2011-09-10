@@ -1,5 +1,5 @@
 /*
-   Copyright 2009 Last.fm Ltd.
+   Copyright 2009 Last.fm Ltd. 
       - Primarily authored by Max Howell, Jono Cole and Doug Mansell
 
    This file is part of liblastfm.
@@ -24,14 +24,14 @@
 #include <windows.h>
 #include <winhttp.h>
 class QNetworkRequest;
-
+ 
 namespace lastfm
 {
-    /** @brief simple wrapper to do per url automatic proxy detection
+    /** @brief simple wrapper to do per url automatic proxy detection 
       * @author <doug@last.fm>
       */
     class Pac
-    {
+    {    
         HINTERNET m_hSession;
         bool m_bFailed;
 
@@ -49,4 +49,4 @@ namespace lastfm
     };
 }
 
-#endif
+#endif 

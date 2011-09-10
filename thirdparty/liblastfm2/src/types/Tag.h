@@ -37,6 +37,9 @@ namespace lastfm
     
         operator QString() const { return m_name; }
         QString name() const { return m_name; }
+
+        lastfm::Tag operator=( const Tag& that ) const { return Tag( that.name() ); }
+        bool operator<( const Tag& that ) const { return this->m_name < that.m_name; }
     
         /** the global tag page at www.last.fm */
         QUrl www() const;

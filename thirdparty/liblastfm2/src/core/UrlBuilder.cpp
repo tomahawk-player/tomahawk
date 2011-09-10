@@ -36,7 +36,7 @@ lastfm::UrlBuilder::url() const
 QByteArray //static
 lastfm::UrlBuilder::encode( QString s )
 {
-    foreach (QChar c, QList<QChar>() << '&' << '/' << ';' << '+' << '#' << '%')
+    foreach (QChar c, QList<QChar>() << '%' << '&' << '/' << ';' << '+' << '#' << '"')
         if (s.contains( c ))
             // the middle step may seem odd but this is what the site does
             // eg. search for the exact string "Radiohead 2 + 2 = 5"

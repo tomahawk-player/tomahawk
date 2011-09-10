@@ -23,6 +23,7 @@
 #include "../core/XmlQuery.h"
 #include <QStringList>
 #include <lastfm/UserList>
+#include <QAbstractNetworkCache>
 
 using lastfm::User;
 using lastfm::UserList;
@@ -63,11 +64,22 @@ User::params(const QString& method) const
 
 
 QNetworkReply*
-User::getFriends( int perPage, int page ) const
+User::getFriends( bool recentTracks, int limit, int page ) const
 {
     QMap<QString, QString> map = params( "getFriends" );
-    map["limit"] = QString::number(perPage);
-    map["page"] = QString::number(page);
+    map["limit"] = QString::number( limit );
+    map["page"] = QString::number( page );
+    if ( recentTracks ) map["recenttracks"] = "1";
+    return ws::get( map );
+}
+
+
+QNetworkReply*
+User::getFriendsListeningNow( int limit, int page ) const
+{
+    QMap<QString, QString> map = params( "getFriendsListeningNow" );
+    map["limit"] = QString::number( limit );
+    map["page"] = QString::number( page );
     return ws::get( map );
 }
 
@@ -80,9 +92,13 @@ User::getTopTags() const
 
 
 QNetworkReply*
-User::getTopArtists() const
+User::getTopArtists( QString period, int limit, int page ) const
 {
-    return ws::get( params( "getTopArtists" ) );
+    QMap<QString, QString> map = params( "getTopArtists" );
+    map["period"] = period;
+    map["limit"] = QString::number( limit );
+    map["page"] = QString::number( page );
+    return ws::get( map );
 }
 
 
@@ -94,21 +110,46 @@ User::getRecentArtists() const
 
 
 QNetworkReply*
-User::getRecentTracks() const
+User::getRecentTracks( int limit , int page ) const
 {
-    return ws::get( params( "getRecentTracks" ) );
-}
+    QMap<QString, QString> map = params( "getRecentTracks" );
+    map["limit"] = QString::number( limit );
+    map["page"] = QString::number( page );
 
-QNetworkReply* 
-User::getRecentStations() const
-{
-    return ws::post( params( "getRecentStations" ) );
+    QAbstractNetworkCache* cache = lastfm::nam()->cache();
+    if ( cache )
+        cache->remove( lastfm::ws::url( map ) );
+
+    return ws::get( map );
 }
 
 QNetworkReply*
-User::getNeighbours() const
+User::getRecentStations( int limit, int page ) const
 {
-    return ws::get( params( "getNeighbours" ) );
+    QMap<QString, QString> map = params( "getRecentStations" );
+    map["limit"] = QString::number( limit );
+    map["page"] = QString::number( page );
+    return ws::get( map );
+}
+
+
+QNetworkReply*
+User::getRecommendedArtists( int limit, int page ) const
+{
+    QMap<QString, QString> map = params( "getRecommendedArtists" );
+    map["limit"] = QString::number( limit );
+    map["page"] = QString::number( page );
+    return ws::get( map );
+}
+
+
+QNetworkReply*
+User::getNeighbours( int limit, int page ) const
+{
+    QMap<QString, QString> map = params( "getNeighbours" );
+    map["limit"] = QString::number( limit );
+    map["page"] = QString::number( page );
+    return ws::get( map );
 }
 
 
@@ -124,7 +165,7 @@ User::list( QNetworkReply* r )
 {
     UserList users;
     try {
-        XmlQuery lfm = ws::parse(r);
+        XmlQuery lfm = r->readAll();
         foreach (XmlQuery e, lfm.children( "user" ))
         {
             User u( e );
@@ -185,7 +226,7 @@ UserDetails::UserDetails( QNetworkReply* reply )
 {
     try
     {
-        XmlQuery user = XmlQuery(ws::parse(reply))["user"];
+        XmlQuery user = XmlQuery( reply->readAll() )["user"];
         m_age = user["age"].text().toUInt();
         m_scrobbles = user["playcount"].text().toUInt();
         m_registered = QDateTime::fromTime_t(user["registered"].attribute("unixtime").toUInt());
@@ -209,25 +250,15 @@ UserDetails::UserDetails( QNetworkReply* reply )
 QString
 UserDetails::getInfoString() const
 {
-    #define tr QObject::tr
-;
-
     QString text;
-    if (m_gender.known() && m_age > 0 && m_scrobbles > 0)
-    {
-        text = tr("A %1, %2 years of age with %L3 scrobbles")
-                .arg( m_gender.toString() )
-                .arg( m_age )
-                .arg( m_scrobbles );
-    }
-    else if (m_scrobbles > 0)
-    {
-        text = tr("%L1 scrobbles").arg( m_scrobbles );
-    }    
+
+    text = QObject::tr("%1").arg( m_realName.isEmpty() ? m_name : m_realName );
+    if ( m_age ) text.append( QObject::tr(", %1").arg( m_age ) );
+    if ( m_gender.known() ) text.append( QObject::tr(", %1").arg( m_gender.toString() ) );
+    if ( !m_country.isEmpty() ) text.append( QObject::tr(", %1").arg( m_country ) );
+    if ( m_scrobbles ) text.append( QObject::tr(", %L1 scrobbles").arg( m_scrobbles ) );
 
     return text;
-    
-    #undef tr
 }
 
 void 

@@ -112,6 +112,7 @@ namespace lastfm
         LASTFM_DLLEXPORT QString host();
 
         /** the map needs a method entry, as per http://last.fm/api */
+        LASTFM_DLLEXPORT QUrl url( QMap<QString, QString> );
         LASTFM_DLLEXPORT QNetworkReply* get( QMap<QString, QString> );
         /** generates api sig, includes api key, and posts, don't add the api
           * key yourself as well--it'll break */
@@ -121,29 +122,16 @@ namespace lastfm
         class ParseError : public std::runtime_error
         {
             Error e;
+            QString m_message;
         public:
-            explicit ParseError(Error e) : std::runtime_error("lastfm::ws::Error"), e(e)
+            explicit ParseError( Error e, QString message )
+                :std::runtime_error("lastfm::ws::Error"), e(e), m_message(message)
             {}
             Error enumValue() const { return e; }
-        };
+            QString message() const { return m_message; }
 
-        /** Generally you don't use this, eg. if you called Artist::getInfo(),
-          * use the Artist::getInfo( QNetworkReply* ) function to get the
-          * results, you have to pass a QDomDocument because QDomElements stop
-          * existing when the parent DomDocument is deleted. 
-          *
-          * The QByteArray is basically reply->readAll(), so all this function
-          * does is sanity check the response and throw if it is bad.
-          *
-          * Thus if you don't care about errors just do: reply->readAll() 
-          *
-          * Not caring about errors is often fine with Qt as you just get null
-          * strings and that instead, and you can handle those as you go.
-          *
-          * The QByteArray is an XML document. You can parse it with QDom or
-          * use our much more convenient lastfm::XmlQuery.
-          */
-        LASTFM_DLLEXPORT QByteArray parse( QNetworkReply* reply ) throw( ParseError );
+            ~ParseError() throw() {;}
+        };
         
         /** returns the expiry date of this HTTP response */
         LASTFM_DLLEXPORT QDateTime expires( QNetworkReply* );

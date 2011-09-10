@@ -19,7 +19,7 @@
 */
 
 #include "MNetworkConnectionMonitor.h"
-#include "../ws.h"
+#include "ws/ws.h"
 
 #include <QPointer>
 #include <SystemConfiguration/SCNetworkReachability.h>
@@ -57,8 +57,6 @@ MNetworkConnectionMonitor::callback( SCNetworkReachabilityRef target,
         b = false;
     else
         b = flags & (kSCNetworkFlagsReachable | kSCNetworkFlagsTransientConnection | kSCNetworkFlagsConnectionAutomatic);
-
-    qDebug() << "Can reach " LASTFM_WS_HOSTNAME ":" << b << ", flags:" << flags;
 
     // basically, avoids telling everyone that we're up already on startup
     if (up == b)

@@ -1,5 +1,5 @@
 /*
-   Copyright 2009 Last.fm Ltd.
+   Copyright 2009 Last.fm Ltd. 
       - Primarily authored by Max Howell, Jono Cole and Doug Mansell
 
    This file is part of liblastfm.
@@ -26,7 +26,6 @@
   */
 struct IeSettings : WINHTTP_CURRENT_USER_IE_PROXY_CONFIG
 {
-#ifndef WIN32
     IeSettings()
     {
         if (!WinHttpGetIEProxyConfigForCurrentUser(this)) {
@@ -34,14 +33,11 @@ struct IeSettings : WINHTTP_CURRENT_USER_IE_PROXY_CONFIG
             lpszAutoConfigUrl = lpszProxy = lpszProxyBypass = 0;
         }
     }
-#endif
-
-#ifndef WIN32
+    
     ~IeSettings()
     {
         if (lpszAutoConfigUrl) GlobalFree(lpszAutoConfigUrl);
         if (lpszProxy) GlobalFree(lpszProxy);
         if (lpszProxyBypass) GlobalFree(lpszProxyBypass);
     }
-#endif
 };

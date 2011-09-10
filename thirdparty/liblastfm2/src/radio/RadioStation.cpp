@@ -23,14 +23,182 @@
 #include "RadioStation.h"
 #include "../core/XmlQuery.h"
 
-QRegExp rxDisco("opt:discovery\\|(\\S+)", Qt::CaseSensitive, QRegExp::RegExp2);
-QRegExp rxRep("opt:rep\\|([\\d\\.]+)", Qt::CaseSensitive, QRegExp::RegExp2);
-QRegExp rxMainstr("opt:mainstr\\|([\\d\\.]+)", Qt::CaseSensitive, QRegExp::RegExp2);
-
 
 const float k_defaultRep(0.5);
 const float k_defaultMainstr(0.5);
 const bool k_defaultDisco(false);
+
+lastfm::RadioStation
+lastfm::RadioStation::library( const lastfm::User& user )
+{
+    QList<lastfm::User> users;
+    users << user;
+    return library( users );
+}
+
+lastfm::RadioStation
+lastfm::RadioStation::library( QList<lastfm::User>& users )
+{
+    RadioStation s( libraryStr( users ) );
+    if( users.count() == 1 ) 
+        s.setTitle( QObject::tr( "%1%2s Library Radio").arg( lastfm::ws::Username, QChar(0x2019) ));
+
+    else {
+        QString title;
+        for( QList<lastfm::User>::const_iterator i = users.begin(); i != users.end(); i++ ) {
+            if( i == users.end() - 1 )
+                title += " and " + *i;
+            else
+                title += ", " + *i;
+        }
+
+        s.setTitle( title );
+    }
+
+    return s;
+}
+
+
+lastfm::RadioStation
+lastfm::RadioStation::recommendations( const lastfm::User& user )
+{
+    RadioStation s( recommendationsStr( user ) );
+    
+    s.setTitle( QObject::tr( "%1%2s Recommended Radio").arg( lastfm::ws::Username, QChar(0x2019) ));
+
+    return s;
+}
+
+lastfm::RadioStation
+lastfm::RadioStation::friends( const lastfm::User& user )
+{
+    RadioStation s( friendsStr( user ) );
+
+    s.setTitle( QObject::tr( "%1%2s Friends Radio").arg( lastfm::ws::Username, QChar(0x2019) ));
+
+    return s; 
+}
+
+lastfm::RadioStation
+lastfm::RadioStation::neighbourhood( const lastfm::User& user )
+{
+    RadioStation s( neighbourhoodStr( user ) );
+    s.setTitle( QObject::tr( "%1%2s Neighbours%2 Radio").arg( lastfm::ws::Username, QChar(0x2019) ));
+    return s;
+}
+
+
+lastfm::RadioStation
+lastfm::RadioStation::tag( const lastfm::Tag& tag )
+{
+    QList<lastfm::Tag> tags;
+    tags << tag;
+    return lastfm::RadioStation::tag( tags );
+}
+
+
+lastfm::RadioStation
+lastfm::RadioStation::tag( QList<lastfm::Tag>& tag )
+{
+    return RadioStation( tagStr( tag ) );
+}
+
+
+lastfm::RadioStation
+lastfm::RadioStation::similar( const lastfm::Artist& artist )
+{
+    QList<lastfm::Artist> artists;
+    artists << artist;
+    return similar( artists );
+}
+
+
+lastfm::RadioStation
+lastfm::RadioStation::similar( QList<lastfm::Artist>& artists )
+{
+    return RadioStation( similarStr( artists ) );
+}
+
+
+lastfm::RadioStation
+lastfm::RadioStation::mix( const lastfm::User& user )
+{
+    RadioStation s( mixStr( user ) );
+    s.setTitle( QObject::tr( "%1%2s Mix Radio").arg( lastfm::ws::Username, QChar(0x2019) ) );
+    return s;
+}
+
+
+QString
+lastfm::RadioStation::url() const
+{
+    return m_url.toString() + (m_tagFilter.isEmpty() ? "" : "/tag/" + m_tagFilter);
+}
+
+
+void
+lastfm::RadioStation::setTitle( const QString& s )
+{
+    // Stop the radio station getting renamed when the web services don't know what it's called
+    if ( !m_title.isEmpty() && s.compare( "a radio station", Qt::CaseInsensitive ) == 0 )
+        return;
+
+    QString title = s.trimmed();
+
+    if ( title.compare( QObject::tr("%1%2s Library Radio").arg( lastfm::ws::Username, QChar(0x2019) ), Qt::CaseInsensitive ) == 0 )
+        title = QObject::tr("My Library Radio");
+    else if ( title.compare( QObject::tr("%1%2s Mix Radio").arg( lastfm::ws::Username, QChar(0x2019) ), Qt::CaseInsensitive ) == 0  )
+        title = QObject::tr("My Mix Radio");
+    else if ( title.compare( QObject::tr("%1%2s Recommended Radio").arg( lastfm::ws::Username, QChar(0x2019) ), Qt::CaseInsensitive ) == 0  )
+        title = QObject::tr("My Recommended Radio");
+    else if ( title.compare( QObject::tr("%1%2s Friends%2 Radio").arg( lastfm::ws::Username, QChar(0x2019) ), Qt::CaseInsensitive ) == 0  )
+        title = QObject::tr("My Friends%1 Radio").arg( QChar( 0x2019 ) );
+    else if ( title.compare( QObject::tr("%1%2s Friends Radio").arg( lastfm::ws::Username, QChar(0x2019) ), Qt::CaseInsensitive ) == 0  )
+        title = QObject::tr("My Friends%1 Radio").arg( QChar( 0x2019 ) );
+    else if ( title.compare( QObject::tr("%1%2s Neighbours%2 Radio").arg( lastfm::ws::Username, QChar(0x2019) ), Qt::CaseInsensitive ) == 0  )
+        title = QObject::tr("My Neighbours%1 Radio").arg( QChar( 0x2019 ) );
+    else if ( title.compare( QObject::tr("%1%2s Neighbours Radio").arg( lastfm::ws::Username ), Qt::CaseInsensitive ) == 0  )
+        title = QObject::tr("My Neighbours%1 Radio").arg( QChar( 0x2019 ) );
+
+    m_title = title;
+}
+
+
+QString
+lastfm::RadioStation::title() const
+{
+    return m_title; // + (m_tagFilter.isEmpty() ? "" : ": " + m_tagFilter);
+}
+
+
+void
+lastfm::RadioStation::setTagFilter( const QString& tag )
+{
+    m_tagFilter = tag;
+}
+
+
+QNetworkReply*
+lastfm::RadioStation::getSampleArtists( int limit ) const
+{
+    QMap<QString, QString> map;
+    map["method"] = "radio.getSampleArtists";
+    map["station"] = m_url.toString();
+    map["limit"] = QString::number( limit );
+    return ws::get( map );
+}
+
+
+QNetworkReply*
+lastfm::RadioStation::getTagSuggestions( int limit ) const
+{
+    QMap<QString, QString> map;
+    map["method"] = "radio.getTagSuggestions";
+    map["station"] = m_url.toString();
+    map["limit"] = QString::number( limit );
+    return ws::get( map );
+}
+
 
 //static 
 QList<lastfm::RadioStation> 
@@ -38,7 +206,7 @@ lastfm::RadioStation::list( QNetworkReply* r )
 {
     QList<lastfm::RadioStation> result;
     try {
-        foreach (XmlQuery xq, XmlQuery(ws::parse(r)).children("station")) {
+        foreach (XmlQuery xq, XmlQuery( r->readAll() ).children("station")) {
             lastfm::RadioStation rs( QUrl::fromPercentEncoding( xq["url"].text().toUtf8() ) );
             rs.setTitle(xq["name"].text());
             result.append(rs);
@@ -51,151 +219,119 @@ lastfm::RadioStation::list( QNetworkReply* r )
     return result;
 }
 
+
+bool
+lastfm::RadioStation::operator==( const RadioStation& that ) const
+{
+    return this->m_url == that.m_url && this->m_tagFilter == that.m_tagFilter;
+}
+
+
 void
 lastfm::RadioStation::setString( const QString& string )
 {
-    QString replaceString( string );
-    QString decodedString = QUrl::fromPercentEncoding( replaceString.replace( QChar('+'), QChar(' ') ).toUtf8() );
+    // If it's a tag filtered station then extract that part
+    QString tempString = string;
 
-    QRegExp rxRql(              "lastfm:\\/\\/rql\\/(.+)$" );
-    QRegExp rxPersonal(         "lastfm:\\/\\/user\\/(.+)\\/personal" );
-    QRegExp rxRecommended(      "lastfm://user/(.+)\\/recommended" );
-    QRegExp rxNeighbours(       "lastfm:\\/\\/user\\/(.+)\\/neighbours" );
-    QRegExp rxLoved(            "lastfm:\\/\\/user\\/(.+)\\/loved" );
-    QRegExp rxGlobalTags(       "lastfm:\\/\\/globaltags\\/(.+)" );
-    QRegExp rxSimilarArtists(   "lastfm:\\/\\/artist\\/(.+)\\/similarartists" );
-    QRegExp rxUserTags(         "lastfm:\\/\\/usertags\\/(.+)\\/(.+)" );
-    QRegExp rxPlaylist(         "lastfm:\\/\\/playlist/(.+)\\/shuffle" );
-
-    if (rxRql.indexIn(decodedString) == 0)
-        setRql( QByteArray::fromBase64( rxRql.capturedTexts()[1].toAscii() ) );
-    else if (rxPersonal.indexIn(decodedString) == 0)
-        setRql( libraryStr( rxPersonal.capturedTexts()[1] ) );
-    else if ( rxRecommended.indexIn(decodedString) == 0)
-        setRql( recommendationsStr( rxRecommended.capturedTexts()[1] ) );
-    else if ( rxNeighbours.indexIn(decodedString) == 0)
-        setRql( neighbourhoodStr( rxNeighbours.capturedTexts()[1] ) );
-    else if ( rxLoved.indexIn(decodedString) == 0)
-        setRql( lovedTracksStr( rxLoved.capturedTexts()[1] ) );
-    else if ( rxGlobalTags.indexIn(decodedString) == 0)
-        setRql( globalTagStr( rxGlobalTags.capturedTexts()[1] ) );
-    else if ( rxSimilarArtists.indexIn(decodedString) == 0)
-        setRql( similarStr( rxSimilarArtists.capturedTexts()[1] ) );
-    else if ( rxUserTags.indexIn(decodedString) == 0)
-        setRql( userTagStr( rxUserTags.capturedTexts()[1], rxUserTags.capturedTexts()[2] ) );
-    else if ( rxPlaylist.indexIn(decodedString) == 0)
-        setRql( playlistStr( rxPlaylist.capturedTexts()[1].toInt() ) );
-    else
+    if ( !tempString.startsWith("lastfm://tag/") )
     {
-        m_url = string;
+        int index = tempString.indexOf("/tag/");
+
+        if ( index != -1 )
+        {
+            m_tagFilter = tempString.mid( index + 5, tempString.count() - (index + 5) );
+            tempString = tempString.mid( 0, index );
+        }
     }
+
+    m_url = tempString;
 }
 
-bool
+
+void
 lastfm::RadioStation::setRep(float rep)
 {
-    if ( m_rql.isEmpty() )
-        return false;
-
-    int indexIn = rxRep.indexIn(m_rql);
-
-    if ( indexIn != -1 )
-    {
-        if (rep != k_defaultRep)
-            m_rql.replace( indexIn, rxRep.capturedTexts()[0].length(), QString("opt:rep|%1").arg(rep) );
-        else
-            m_rql.replace( indexIn, rxRep.capturedTexts()[0].length(), "" );
-    }
-    else
-    {
-        // the rql doesn't have rep in it
-        // so append it to the end
-        if (rep != k_defaultRep)
-            m_rql.append( QString(" opt:rep|%1").arg(rep) );
-    }
-
-    setRql(m_rql);
-
-    return true;
+    m_rep = rep;
 }
 
-bool
+
+void
 lastfm::RadioStation::setMainstr(float mainstr)
 {
-    if ( m_rql.isEmpty() )
-        return false;
-
-    int indexIn = rxMainstr.indexIn(m_rql);
-
-    if ( indexIn != -1 )
-    {
-        if (mainstr != k_defaultMainstr)
-            m_rql.replace( indexIn, rxMainstr.capturedTexts()[0].length(), QString("opt:mainstr|%1").arg(mainstr) );
-        else
-            m_rql.replace( indexIn, rxMainstr.capturedTexts()[0].length(), "" );
-    }
-    else
-    {
-        // the rql doesn't have rep in it
-        // so append it to the end
-        if ( mainstr != k_defaultMainstr )
-            m_rql.append( QString(" opt:mainstr|%1").arg(mainstr) );
-    }
-
-    setRql(m_rql);
-
-    return true;
+    m_mainstr = mainstr;
 }
 
-bool
+
+void
 lastfm::RadioStation::setDisco(bool disco)
 {
-    if ( m_rql.isEmpty() )
-        return false;
-
-    int indexIn = rxDisco.indexIn(m_rql);
-
-    if ( indexIn != -1 )
-    {
-        if (disco)
-            m_rql.replace( indexIn, rxDisco.capturedTexts()[0].length(), "opt:discovery|true" );
-        else
-            m_rql.replace( indexIn, rxDisco.capturedTexts()[0].length(), "" );
-    }
-    else
-    {
-        // the rql doesn't have disco in it
-        // so append it to the end if it is set
-
-        if (disco)
-            m_rql.append( " opt:discovery|true" );
-    }
-
-    setRql(m_rql);
-
-    return true;
+    m_disco = disco;
 }
+
 
 float lastfm::RadioStation::rep() const
 {
-    if ( rxRep.indexIn(m_rql) != -1 )
-        return rxRep.capturedTexts()[1].toFloat();
-
-    return k_defaultRep;
+    return m_rep;
 }
+
 
 float lastfm::RadioStation::mainstr() const
 {
-    if ( rxMainstr.indexIn(m_rql) != -1 )
-        return rxMainstr.capturedTexts()[1].toFloat();
-
-    return k_defaultMainstr;
+    return m_mainstr;
 }
+
 
 bool lastfm::RadioStation::disco() const
 {
-    if ( rxDisco.indexIn(m_rql) != -1 )
-        return rxDisco.capturedTexts()[1] == "true";
+    return m_disco;
+}
 
-    return k_defaultDisco;
+
+QString lastfm::RadioStation::libraryStr( QList<lastfm::User>& users )
+{
+    qSort(users.begin(), users.end());
+
+    QString url = (users.count() > 1) ? "lastfm://users/" : "lastfm://user/";
+
+    url.append( users[0].name() );
+
+    for ( int i = 1 ; i < users.count() ; ++i )
+        url.append( "," + users[i].name() );
+
+    url.append("/personal");
+
+    return url;
+}
+
+
+QString lastfm::RadioStation::tagStr( QList<lastfm::Tag>& tags )
+{
+    qSort(tags.begin(), tags.end());
+
+    QString url = (tags.count() > 1) ? "lastfm://tag/" : "lastfm://globaltags/";
+
+    url.append( tags[0].name() );
+
+    for ( int i = 1 ; i < tags.count() ; ++i )
+        url.append( "*" + tags[i].name() );
+
+    return url;
+}
+
+
+QString lastfm::RadioStation::similarStr( QList<lastfm::Artist>& artists )
+{
+    qSort(artists.begin(), artists.end());
+
+    QString url = (artists.count() > 1) ? "lastfm://artistnames/" : "lastfm://artist/";
+
+    url.append( artists[0].name() );
+
+    for ( int i = 1 ; i < artists.count() ; ++i )
+        url.append( "," + artists[i].name() );
+
+    if (artists.count() == 1)
+        url.append( "/similarartists" );
+
+    return url;
 }

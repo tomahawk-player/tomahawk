@@ -18,14 +18,55 @@
    along with liblastfm.  If not, see <http://www.gnu.org/licenses/>.
 */
 #include "XmlQuery.h"
+
+#include <QCoreApplication>
 #include <QStringList>
+
 using lastfm::XmlQuery;
 
 
-XmlQuery::XmlQuery( const QByteArray& bytes )
-{
-    domdoc.setContent(bytes);
-    e = domdoc.documentElement();
+XmlQuery::XmlQuery( const QByteArray& bytes ) throw( lastfm::ws::ParseError )
+{  
+    try
+    {
+        if ( !bytes.size() )
+            throw lastfm::ws::ParseError( lastfm::ws::MalformedResponse, "No data" );
+
+        if( !domdoc.setContent( bytes ) )
+            throw lastfm::ws::ParseError( lastfm::ws::MalformedResponse, "Invalid XML" );
+
+        e = domdoc.documentElement();
+
+        if (e.isNull())
+            throw lastfm::ws::ParseError( lastfm::ws::MalformedResponse, "Lfm is null" );
+
+        QString const status = e.attribute( "status" );
+        QDomElement error = e.firstChildElement( "error" );
+        uint const n = e.childNodes().count();
+
+        // no elements beyond the lfm is perfectably acceptable <-- wtf?
+        // if (n == 0) // nothing useful in the response
+        if (status == "failed" || (n == 1 && !error.isNull()) )
+            throw error.isNull()
+                    ? lastfm::ws::ParseError( lastfm::ws::MalformedResponse, "" )
+                    : lastfm::ws::ParseError( lastfm::ws::Error( error.attribute( "code" ).toUInt() ), error.text() );
+
+    }
+    catch ( lastfm::ws::ParseError e )
+    {
+        switch ( e.enumValue() )
+        {
+            case lastfm::ws::OperationFailed:
+            case lastfm::ws::InvalidApiKey:
+            case lastfm::ws::InvalidSessionKey:
+                // NOTE will never be received during the LoginDialog stage
+                // since that happens before this slot is registered with
+                // QMetaObject in App::App(). Neat :)
+                QMetaObject::invokeMethod( qApp, "onWsError", Q_ARG( lastfm::ws::Error, e.enumValue() ) );
+            default:
+                throw e;
+        }
+    }
 }
 
 

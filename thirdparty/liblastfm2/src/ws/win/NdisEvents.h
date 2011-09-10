@@ -1,5 +1,5 @@
 /*
-   Copyright 2009 Last.fm Ltd.
+   Copyright 2009 Last.fm Ltd. 
       - Primarily authored by Max Howell, Jono Cole and Doug Mansell
 
    This file is part of liblastfm.
@@ -21,8 +21,8 @@
 #define NDIS_EVENTS_H
 
 #include <windows.h>
-//#include <atlbase.h>
-//#include <WbemCli.h>
+#include <atlbase.h>
+#include <WbemCli.h>
 
 class NdisEvents
 {
@@ -35,8 +35,8 @@ public:
     virtual void onConnectionDown(BSTR name) = 0;
 
 private:
-    //CComPtr<IWbemLocator> m_pLocator;
-    //CComPtr<IWbemServices> m_pServices;
+    CComPtr<IWbemLocator> m_pLocator;
+    CComPtr<IWbemServices> m_pServices;
     class WmiSink *m_pSink;
 };
 

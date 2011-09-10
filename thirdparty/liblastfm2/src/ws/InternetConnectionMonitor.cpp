@@ -43,6 +43,8 @@ lastfm::InternetConnectionMonitor::InternetConnectionMonitor( QObject *parent )
 void
 lastfm::InternetConnectionMonitor::onFinished( QNetworkReply* reply )
 {
+    if( reply->attribute( QNetworkRequest::SourceIsFromCacheAttribute).toBool() ) return;
+
     switch( reply->error() )
     {
         case QNetworkReply::NoError:
@@ -51,6 +53,7 @@ lastfm::InternetConnectionMonitor::onFinished( QNetworkReply* reply )
                 m_up = true;
                 emit up();
                 emit connectivityChanged( m_up );
+                qDebug() << "Internet connection is reachable :)";
             }
             break;
         case QNetworkReply::HostNotFoundError:
@@ -78,9 +81,10 @@ lastfm::InternetConnectionMonitor::onNetworkUp()
 #ifdef Q_OS_MAC
     // We don't need to check on mac as the
     // check is done as part of the reach api
-    m_up = true;
+        m_up = true;
     emit up();
     emit connectivityChanged( m_up );
+    qDebug() << "Internet connection is reachable :)";
 #else
     qDebug() << "Network seems to be up again. Let's try if there's internet connection!";
     lastfm::nam()->head( QNetworkRequest( QUrl( tr( "http://www.last.fm/" ) ) ) );
@@ -90,7 +94,7 @@ lastfm::InternetConnectionMonitor::onNetworkUp()
 void
 lastfm::InternetConnectionMonitor::onNetworkDown()
 {
-    qDebug() << "Internet is down :( boo!!";
+    qDebug() << "Internet is unreachable :(";
     m_up = false;
     emit down();
     emit connectivityChanged( m_up );

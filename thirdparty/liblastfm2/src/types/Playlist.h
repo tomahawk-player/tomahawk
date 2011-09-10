@@ -45,8 +45,6 @@ namespace lastfm
 
         static QNetworkReply* create( const QString& title, const QString& description = "" );
         static QNetworkReply* fetch( const QUrl& url );
-    
-        static Xspf fetch( QNetworkReply* );
     };
 }
 

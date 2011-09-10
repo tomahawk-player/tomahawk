@@ -17,13 +17,58 @@
    You should have received a copy of the GNU General Public License
    along with liblastfm.  If not, see <http://www.gnu.org/licenses/>.
 */
+
+#include <QFileInfo>
+#include <QStringList>
+#include <QAbstractNetworkCache>
+
 #include "Track.h"
 #include "User.h"
 #include "../core/UrlBuilder.h"
 #include "../core/XmlQuery.h"
 #include "../ws/ws.h"
-#include <QFileInfo>
-#include <QStringList>
+
+
+lastfm::TrackContext::TrackContext()
+    :m_type( Unknown )
+{
+
+}
+
+lastfm::TrackContext::TrackContext( const QString& type, const QList<QString>& values )
+    :m_type( getType( type ) ), m_values( values )
+{
+}
+
+lastfm::TrackContext::Type
+lastfm::TrackContext::getType( const QString& typeString )
+{
+    Type type = Unknown;
+
+    if ( typeString == "artist" )
+        type = Artist;
+    else if ( typeString == "user" )
+        type = User;
+    else if ( typeString == "neighbour" )
+        type = Neighbour;
+    else if ( typeString == "friend" )
+        type = Friend;
+
+    return type;
+}
+
+lastfm::TrackContext::Type
+lastfm::TrackContext::type() const
+{
+    return m_type;
+}
+
+
+QList<QString>
+lastfm::TrackContext::values() const
+{
+    return m_values;
+}
 
 
 lastfm::TrackData::TrackData()
@@ -33,9 +78,9 @@ lastfm::TrackData::TrackData()
                rating( 0 ),
                fpid( -1 ),
                loved( false ),
+               null( false ),
                scrobbleStatus( Track::Null ),
-               scrobbleError( Track::None ),
-               null( false )
+               scrobbleError( Track::None )
 {}
 
 lastfm::Track::Track()
@@ -51,32 +96,11 @@ lastfm::Track::Track( const QDomElement& e )
     d = new TrackData;
 
     if (e.isNull()) { d->null = true; return; }
-
-    //TODO: not sure of lastfm's xml changed, but <track> nodes have
-    // <artist><name>Artist Name</name><mbid>..<url></artist>
-    // as children isntead of <artist>Artist Name<artist>
-    // we detect both here.
-    QDomNode artistName = e.namedItem( "artist" ).namedItem( "name" );
-    if( artistName.isNull() ) {
-        d->artist = e.namedItem( "artist" ).toElement().text();
-    } else {
-        d->artist = artistName.toElement().text();
-    }
-
+    
+    d->artist = e.namedItem( "artist" ).toElement().text();
     d->albumArtist = e.namedItem( "albumArtist" ).toElement().text();
     d->album =  e.namedItem( "album" ).toElement().text();
-
-
-    //TODO: not sure if lastfm xml's changed, or if chart.getTopTracks uses
-    //a different format, but the title is stored at
-    //<track><name>Title</name>...
-    //we detect both here.
-    QDomNode trackTitle = e.namedItem( "name" );
-    if( trackTitle.isNull() )
-        d->title = e.namedItem( "track" ).toElement().text();
-    else
-        d->title = trackTitle.toElement().text();
-
+    d->title = e.namedItem( "track" ).toElement().text();
     d->correctedArtist = e.namedItem( "correctedArtist" ).toElement().text();
     d->correctedAlbumArtist = e.namedItem( "correctedAlbumArtist" ).toElement().text();
     d->correctedAlbum =  e.namedItem( "correctedAlbum" ).toElement().text();
@@ -108,9 +132,16 @@ lastfm::Track::Track( const QDomElement& e )
 void
 lastfm::TrackData::onLoveFinished()
 {
-    XmlQuery lfm = static_cast<QNetworkReply*>(sender())->readAll();
-    if ( lfm.attribute( "status" ) == "ok")
-        loved = true;
+    try
+    {
+        XmlQuery lfm = static_cast<QNetworkReply*>(sender())->readAll();
+        if ( lfm.attribute( "status" ) == "ok")
+            loved = true;
+
+    }
+    catch (...)
+    {
+    }
     emit loveToggled( loved );
 }
 
@@ -118,35 +149,51 @@ lastfm::TrackData::onLoveFinished()
 void
 lastfm::TrackData::onUnloveFinished()
 {
-    XmlQuery lfm = static_cast<QNetworkReply*>(sender())->readAll();
-    if ( lfm.attribute( "status" ) == "ok")
-        loved = false;
+    try
+    {
+        XmlQuery lfm = static_cast<QNetworkReply*>(sender())->readAll();
+        if ( lfm.attribute( "status" ) == "ok")
+            loved = false;
+    }
+    catch (...)
+    {
+    }
+
     emit loveToggled( loved );
 }
 
 void
 lastfm::TrackData::onGotInfo()
 {
-    lastfm::XmlQuery lfm( static_cast<QNetworkReply*>(sender())->readAll() );
+    const QByteArray data = static_cast<QNetworkReply*>(sender())->readAll();
 
-    QString imageUrl = lfm["track"]["image size=small"].text();
-    if ( !imageUrl.isEmpty() ) m_images[lastfm::Small] = imageUrl;
-    imageUrl = lfm["track"]["image size=medium"].text();
-    if ( !imageUrl.isEmpty() ) m_images[lastfm::Medium] = imageUrl;
-    imageUrl = lfm["track"]["image size=large"].text();
-    if ( !imageUrl.isEmpty() ) m_images[lastfm::Large] = imageUrl;
-    imageUrl = lfm["track"]["image size=extralarge"].text();
-    if ( !imageUrl.isEmpty() ) m_images[lastfm::ExtraLarge] = imageUrl;
-    imageUrl = lfm["track"]["image size=mega"].text();
-    if ( !imageUrl.isEmpty() ) m_images[lastfm::Mega] = imageUrl;
+    try
+    {
+        lastfm::XmlQuery lfm( data );
 
-    loved = lfm["track"]["userloved"].text().toInt();
+        QString imageUrl = lfm["track"]["image size=small"].text();
+        if ( !imageUrl.isEmpty() ) m_images[lastfm::Small] = imageUrl;
+        imageUrl = lfm["track"]["image size=medium"].text();
+        if ( !imageUrl.isEmpty() ) m_images[lastfm::Medium] = imageUrl;
+        imageUrl = lfm["track"]["image size=large"].text();
+        if ( !imageUrl.isEmpty() ) m_images[lastfm::Large] = imageUrl;
+        imageUrl = lfm["track"]["image size=extralarge"].text();
+        if ( !imageUrl.isEmpty() ) m_images[lastfm::ExtraLarge] = imageUrl;
+        imageUrl = lfm["track"]["image size=mega"].text();
+        if ( !imageUrl.isEmpty() ) m_images[lastfm::Mega] = imageUrl;
 
-    emit gotInfo( lfm );
-    emit loveToggled( loved );
+        loved = lfm["track"]["userloved"].text().toInt();
+
+        emit gotInfo( data );
+        emit loveToggled( loved );
+    }
+    catch (...)
+    {
+        emit gotInfo( data );
+    }
 
     // you should connect everytime you call getInfo
-    disconnect( this, SIGNAL(gotInfo(const XmlQuery&)), 0, 0);
+    disconnect( this, SIGNAL(gotInfo(const QByteArray&)), 0, 0);
 }
 
 
@@ -311,6 +358,21 @@ lastfm::Track::share( const QStringList& recipients, const QString& message, boo
 
 
 void
+lastfm::Track::invalidateGetInfo()
+{
+    // invalidate the track.getInfo cache
+    QAbstractNetworkCache* cache = lastfm::nam()->cache();
+    if ( cache )
+    {
+        QMap<QString, QString> map = params("getInfo", true);
+        if (!lastfm::ws::Username.isEmpty()) map["username"] = lastfm::ws::Username;
+        if (!lastfm::ws::SessionKey.isEmpty()) map["sk"] = lastfm::ws::SessionKey;
+        cache->remove( lastfm::ws::url( map ) );
+    }
+}
+
+
+void
 lastfm::MutableTrack::setFromLfm( const XmlQuery& lfm )
 {
     QString imageUrl = lfm["track"]["image size=small"].text();
@@ -329,12 +391,20 @@ lastfm::MutableTrack::setFromLfm( const XmlQuery& lfm )
     d->forceLoveToggled( d->loved );
 }
 
+void
+lastfm::MutableTrack::setImageUrl( lastfm::ImageSize size, const QString& url )
+{
+    d->m_images[size] = url;
+}
+
 
 void
 lastfm::MutableTrack::love()
 {
     QNetworkReply* reply = ws::post(params("love"));
     QObject::connect( reply, SIGNAL(finished()), signalProxy(), SLOT(onLoveFinished()));
+
+    invalidateGetInfo();
 }
 
 
@@ -343,8 +413,9 @@ lastfm::MutableTrack::unlove()
 {
     QNetworkReply* reply = ws::post(params("unlove"));
     QObject::connect( reply, SIGNAL(finished()), signalProxy(), SLOT(onUnloveFinished()));
-}
 
+    invalidateGetInfo();
+}
 
 QNetworkReply*
 lastfm::MutableTrack::ban()
@@ -390,12 +461,21 @@ lastfm::Track::getTags() const
 }
 
 void
-lastfm::Track::getInfo(const QString& user, const QString& sk) const
+lastfm::Track::getInfo() const
 {
     QMap<QString, QString> map = params("getInfo", true);
-    if (!user.isEmpty()) map["username"] = user;
-    if (!sk.isEmpty()) map["sk"] = sk;
+    if (!lastfm::ws::Username.isEmpty()) map["username"] = lastfm::ws::Username;
+    if (!lastfm::ws::SessionKey.isEmpty()) map["sk"] = lastfm::ws::SessionKey;
     QObject::connect( ws::get( map ), SIGNAL(finished()), d.data(), SLOT(onGotInfo()));
+}
+
+
+QNetworkReply*
+lastfm::Track::getBuyLinks( const QString& country ) const
+{
+    QMap<QString, QString> map = params( "getBuyLinks", true );
+    map["country"] = country;
+    return ws::get( map );
 }
 
 
@@ -424,10 +504,27 @@ lastfm::Track::removeTag( const QString& tag ) const
 QNetworkReply*
 lastfm::Track::updateNowPlaying() const
 {
+    return updateNowPlaying(duration());
+}
+
+QNetworkReply* 
+lastfm::Track::updateNowPlaying( int duration ) const
+{
     QMap<QString, QString> map = params("updateNowPlaying");
-    map["duration"] = QString::number( duration() );
+    map["duration"] = QString::number( duration );
     if ( !album().isNull() ) map["album"] = album();
     map["context"] = extra("playerId");
+
+    qDebug() << map;
+
+    return ws::post(map);
+}
+
+QNetworkReply* 
+lastfm::Track::removeNowPlaying() const
+{
+    QMap<QString, QString> map;
+    map["method"] = "track.removeNowPlaying";
 
     qDebug() << map;
 
@@ -477,7 +574,7 @@ lastfm::Track::scrobble(const QList<lastfm::Track>& tracks)
 QUrl
 lastfm::Track::www() const
 {
-    return UrlBuilder( "music" ).slash( d->artist ).slash( album().isNull() ? QString("_") : album()).slash( d->title ).url();
+    return UrlBuilder( "music" ).slash( artist( Corrected ) ).slash( album(  Corrected  ).isNull() ? QString("_") : album( Corrected )).slash( title( Corrected ) ).url();
 }
 
 

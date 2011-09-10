@@ -94,11 +94,11 @@ Artist::getEvents(int limit) const
 }
 
 QNetworkReply* 
-Artist::getInfo(const QString& user, const QString& sk) const
+Artist::getInfo() const
 {
     QMap<QString, QString> map = params("getInfo");
-    if (!user.isEmpty()) map["username"] = user;
-    if (!sk.isEmpty()) map["sk"] = sk;
+    if (!lastfm::ws::Username.isEmpty()) map["username"] = lastfm::ws::Username;
+    if (!lastfm::ws::SessionKey.isEmpty()) map["sk"] = lastfm::ws::SessionKey;
     return ws::get( map );
 }
 
@@ -124,9 +124,11 @@ Artist::getTopTracks() const
 
 
 QNetworkReply* 
-Artist::getSimilar() const
+Artist::getSimilar( int limit ) const
 {
-    return ws::get( params("getSimilar") );
+    QMap<QString, QString> map = params("getSimilar");
+    if ( limit != -1 ) map["limit"] = QString::number( limit );
+    return ws::get( map );
 }
 
 
@@ -145,7 +147,7 @@ Artist::getSimilar( QNetworkReply* r )
     QMap<int, QString> artists;
     try
     {
-        XmlQuery lfm = ws::parse(r);        
+        XmlQuery lfm = r->readAll();
         foreach (XmlQuery e, lfm.children( "artist" ))
         {
             // convert floating percentage to int in range 0 to 10,000
@@ -167,7 +169,7 @@ Artist::getTopTracks( QNetworkReply* r )
     QStringList tracks;
     try
     {
-        XmlQuery lfm = ws::parse(r);        
+        XmlQuery lfm = r->readAll();
         foreach (XmlQuery e, lfm.children( "track" ))
         {
             tracks << e["name"].text();
@@ -186,7 +188,7 @@ Artist::list( QNetworkReply* r )
 {
     QList<Artist> artists;
     try {
-        XmlQuery lfm = ws::parse(r);
+        XmlQuery lfm = r->readAll();
         foreach (XmlQuery xq, lfm.children( "artist" )) {
             Artist artist( xq );
             artists += artist;
@@ -204,7 +206,7 @@ Artist
 Artist::getInfo( QNetworkReply* r )
 {
     try {
-        XmlQuery lfm = ws::parse(r);
+        XmlQuery lfm = r->readAll();
         Artist artist = lfm["artist"]["name"].text();
         artist.m_images = images( lfm["artist"] );
         return artist;

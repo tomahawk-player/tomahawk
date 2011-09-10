@@ -1,5 +1,5 @@
 /*
-   Copyright 2009 Last.fm Ltd.
+   Copyright 2009 Last.fm Ltd. 
       - Primarily authored by Max Howell, Jono Cole and Doug Mansell
 
    This file is part of liblastfm.
@@ -25,15 +25,11 @@
 #include <QDomElement>
 #include <QLocale>
 #include <QStringList>
-#include <QThread>
-#include <QMutex>
 #include <QUrl>
+static QNetworkAccessManager* nam = 0;
 
-static QMap< QThread*, QNetworkAccessManager* > threadNamHash;
-static QSet< QThread* > ourNamSet;
-static QMutex namAccessMutex;
 
-QString
+QString 
 lastfm::ws::host()
 {
     QStringList const args = QCoreApplication::arguments();
@@ -47,18 +43,18 @@ lastfm::ws::host()
     return LASTFM_WS_HOSTNAME;
 }
 
-static QUrl url()
+static QUrl baseUrl()
 {
     QUrl url;
     url.setScheme( "http" );
     url.setHost( lastfm::ws::host() );
-    url.setPath( "/2.0/" );
+    url.setEncodedPath( "/2.0/" );
     return url;
 }
 
 static QString iso639()
-{
-    return QLocale().name().left( 2 ).toLower();
+{ 
+    return QLocale().name().left( 2 ).toLower(); 
 }
 
 void autograph( QMap<QString, QString>& params )
@@ -86,11 +82,11 @@ static void sign( QMap<QString, QString>& params, bool sk = true )
 }
 
 
-QNetworkReply*
-lastfm::ws::get( QMap<QString, QString> params )
+QUrl
+lastfm::ws::url( QMap<QString, QString> params )
 {
     sign( params );
-    QUrl url = ::url();
+    QUrl url = ::baseUrl();
     // Qt setQueryItems doesn't encode a bunch of stuff, so we do it manually
     QMapIterator<QString, QString> i( params );
     while (i.hasNext()) {
@@ -100,16 +96,21 @@ lastfm::ws::get( QMap<QString, QString> params )
         url.addEncodedQueryItem( key, value );
     }
 
-    qDebug() << url;
+    return url;
+}
 
-    return nam()->get( QNetworkRequest(url) );
+
+QNetworkReply*
+lastfm::ws::get( QMap<QString, QString> params )
+{
+    return nam()->get( QNetworkRequest( url( params ) ) );
 }
 
 
 QNetworkReply*
 lastfm::ws::post( QMap<QString, QString> params, bool sk )
-{
-    sign( params, sk );
+{   
+    sign( params, sk ); 
     QByteArray query;
     QMapIterator<QString, QString> i( params );
     while (i.hasNext()) {
@@ -120,117 +121,24 @@ lastfm::ws::post( QMap<QString, QString> params, bool sk )
                + '&';
     }
 
-    QNetworkRequest req(url());
-    req.setHeader( QNetworkRequest::ContentTypeHeader, "application/x-www-form-urlencoded" );
-    return nam()->post( req, query );
-}
-
-
-QByteArray
-lastfm::ws::parse( QNetworkReply* reply ) throw( ParseError )
-{
-    try
-    {
-        QByteArray data = reply->readAll();
-
-        if (!data.size())
-            throw MalformedResponse;
-
-        QDomDocument xml;
-        xml.setContent( data );
-        QDomElement lfm = xml.documentElement();
-
-        if (lfm.isNull())
-            throw MalformedResponse;
-
-        QString const status = lfm.attribute( "status" );
-        QDomElement error = lfm.firstChildElement( "error" );
-        uint const n = lfm.childNodes().count();
-
-        // no elements beyond the lfm is perfectably acceptable <-- wtf?
-        // if (n == 0) // nothing useful in the response
-        if (status == "failed" || (n == 1 && !error.isNull()) )
-            throw error.isNull()
-                    ? MalformedResponse
-                    : Error( error.attribute( "code" ).toUInt() );
-
-        switch (reply->error())
-        {
-            case QNetworkReply::RemoteHostClosedError:
-            case QNetworkReply::ConnectionRefusedError:
-            case QNetworkReply::TimeoutError:
-            case QNetworkReply::ContentAccessDenied:
-            case QNetworkReply::ContentOperationNotPermittedError:
-            case QNetworkReply::UnknownContentError:
-            case QNetworkReply::ProtocolInvalidOperationError:
-            case QNetworkReply::ProtocolFailure:
-                throw TryAgainLater;
-
-            case QNetworkReply::NoError:
-            default:
-                break;
-        }
-
-        //FIXME pretty wasteful to parse XML document twice..
-        return data;
-    }
-    catch (Error e)
-    {
-        switch (e)
-        {
-            case OperationFailed:
-            case InvalidApiKey:
-            case InvalidSessionKey:
-                // NOTE will never be received during the LoginDialog stage
-                // since that happens before this slot is registered with
-                // QMetaObject in App::App(). Neat :)
-                QMetaObject::invokeMethod( qApp, "onWsError", Q_ARG( lastfm::ws::Error, e ) );
-            default:
-                throw ParseError(e);
-        }
-    }
-
-    // bit dodgy, but prolly for the best
-    reply->deleteLater();
+    return nam()->post( QNetworkRequest(baseUrl()), query );
 }
 
 
 QNetworkAccessManager*
 lastfm::nam()
-{
-    QMutexLocker l( &namAccessMutex );
-    QThread* thread = QThread::currentThread();
-    if ( !threadNamHash.contains( thread ) )
-    {
-        NetworkAccessManager* newNam = new NetworkAccessManager();
-        threadNamHash[thread] = newNam;
-        ourNamSet.insert( thread );
-        return newNam;
-    }
-    return threadNamHash[thread];
+{    
+    if (!::nam) ::nam = new NetworkAccessManager( qApp );
+    return ::nam;
 }
 
 
 void
 lastfm::setNetworkAccessManager( QNetworkAccessManager* nam )
 {
-    if ( !nam )
-        return;
-
-    QMutexLocker l( &namAccessMutex );
-    QThread* thread = QThread::currentThread();
-    QNetworkAccessManager* oldNam = 0;
-    if ( threadNamHash.contains( thread ) && ourNamSet.contains( thread ) )
-        oldNam = threadNamHash[thread];
-
-    if ( oldNam == nam )
-        return;
-
-    threadNamHash[thread] = nam;
-    ourNamSet.remove( thread );
-
-    if ( oldNam )
-        delete oldNam;
+    delete ::nam;
+    ::nam = nam;
+    nam->setParent( qApp ); // ensure it isn't deleted out from under us
 }
 
 
@@ -288,7 +196,7 @@ namespace lastfm
         const char* ApiKey;
 
         /** if this is found set to "" we conjure ourselves a suitable one */
-        const char* UserAgent = 0;
+        const char* UserAgent = 0;   
     }
 }
 

@@ -33,6 +33,31 @@
 
 namespace lastfm {
 
+class LASTFM_DLLEXPORT TrackContext
+{
+public:
+    enum Type
+    {
+        Unknown,
+        User,
+        Friend,
+        Neighbour,
+        Artist
+    };
+
+    TrackContext();
+    TrackContext( const QString& type, const QList<QString>& values );
+
+    Type type() const;
+    QList<QString> values() const;
+private:
+    static Type getType( const QString& type );
+
+private:
+    Type m_type;
+    QList<QString> m_values;
+};
+
 class TrackData : public QObject, public QSharedData
 {
     Q_OBJECT
@@ -51,6 +76,7 @@ public:
     QString correctedAlbumArtist;
     QString correctedAlbum;
     QString correctedTitle;
+    TrackContext context;
     uint trackNumber;
     uint duration;
     short source;
@@ -63,6 +89,7 @@ public:
     QMap<lastfm::ImageSize, QUrl> m_images;
     short scrobbleStatus;
     short scrobbleError;
+    QString scrobbleErrorText;
 
     //FIXME I hate this, but is used for radio trackauth etc.
     QMap<QString,QString> extras;
@@ -83,11 +110,10 @@ signals:
     void loveToggled( bool love );
     void loveFinished();
     void unlovedFinished();
-    void gotInfo( const XmlQuery& );
+    void gotInfo( const QByteArray& );
     void scrobbleStatusChanged();
     void corrected( QString correction );
 };
-
 
 
 /** Our track type. It's quite good, you may want to use it as your track type
@@ -191,6 +217,7 @@ public:
 
     ScrobbleStatus scrobbleStatus() const { return static_cast<ScrobbleStatus>(d->scrobbleStatus); }
     ScrobbleError scrobbleError() const { return static_cast<ScrobbleError>(d->scrobbleError); }
+    QString scrobbleErrorText() const { return d->scrobbleErrorText; }
 
     /** default separator is an en-dash */
     QString toString() const { return toString( Corrected ); }
@@ -198,6 +225,8 @@ public:
     QString toString( const QChar& separator, Corrections corrections = Original ) const;
     /** the standard representation of this object as an XML node */
     QDomElement toDomElement( class QDomDocument& ) const;
+
+    TrackContext context() const { return d->context; }
     
     QString extra( const QString& key ) const{ return d->extras[ key ]; }
 
@@ -219,7 +248,8 @@ public:
     QNetworkReply* getTags() const; // for the logged in user
     QNetworkReply* getTopTags() const;
     QNetworkReply* getTopFans() const;
-    void getInfo(const QString& user = "", const QString& sk = "") const;
+    void getInfo() const;
+    QNetworkReply* getBuyLinks( const QString& country ) const;
 
     /** you can only add 10 tags, we submit everything you give us, but the
       * docs state 10 only. Will return 0 if the list is empty. */
@@ -229,6 +259,8 @@ public:
 
     /** scrobble the track */
     QNetworkReply* updateNowPlaying() const;
+    QNetworkReply* updateNowPlaying( int duration ) const;
+    QNetworkReply* removeNowPlaying() const;
     QNetworkReply* scrobble() const;
     static QNetworkReply* scrobble(const QList<lastfm::Track>& tracks);
 
@@ -238,7 +270,7 @@ public:
 protected:
     QExplicitlySharedDataPointer<TrackData> d;
     QMap<QString, QString> params( const QString& method, bool use_mbid = false ) const;
-    
+    void invalidateGetInfo();
 private:
     Track( TrackData* that_d ) : d( that_d )
     {}
@@ -272,6 +304,7 @@ public:
     }
 
     void setFromLfm( const XmlQuery& lfm );
+    void setImageUrl( lastfm::ImageSize size, const QString& url );
     
     void setArtist( QString artist ) { d->artist = artist.trimmed(); }
     void setAlbumArtist( QString albumArtist ) { d->albumArtist = albumArtist.trimmed(); }
@@ -293,6 +326,7 @@ public:
         d->forceScrobbleStatusChanged();
     }
     void setScrobbleError( ScrobbleError scrobbleError ) { d->scrobbleError = scrobbleError; }
+    void setScrobbleErrorText( const QString& scrobbleErrorText ) { d->scrobbleErrorText = scrobbleErrorText; }
     
     /** you also must scrobble this track for the love to become permenant */
     void love();
@@ -304,6 +338,8 @@ public:
     void setExtra( const QString& key, const QString& value ) { d->extras[key] = value; }
     void removeExtra( QString key ) { d->extras.remove( key ); }
     void setTimeStamp( const QDateTime& dt ) { d->time = dt; }
+
+    void setContext( TrackContext context ) { d->context = context;}
 };
 
 
