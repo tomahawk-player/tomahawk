@@ -138,7 +138,7 @@ lastfm::nam()
     QThread* thread = QThread::currentThread();
     if ( !threadNamHash.contains( thread ) )
     {
-        NetworkAccessManager* newNam = new NetworkAccessManager( qApp );
+        NetworkAccessManager* newNam = new NetworkAccessManager();
         threadNamHash[thread] = newNam;
         ourNamSet.insert( thread );
         return newNam;
