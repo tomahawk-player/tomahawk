@@ -1,5 +1,5 @@
 /*
-   Copyright 2009 Last.fm Ltd. 
+   Copyright 2009 Last.fm Ltd.
       - Primarily authored by Max Howell, Jono Cole and Doug Mansell
 
    This file is part of liblastfm.
@@ -26,10 +26,14 @@
 #include <QLocale>
 #include <QStringList>
 #include <QUrl>
-static QNetworkAccessManager* nam = 0;
+#include <QThread>
+#include <QMutex>
 
+static QMap< QThread*, QNetworkAccessManager* > threadNamHash;
+static QSet< QThread* > ourNamSet;
+static QMutex namAccessMutex;
 
-QString 
+QString
 lastfm::ws::host()
 {
     QStringList const args = QCoreApplication::arguments();
@@ -53,8 +57,8 @@ static QUrl baseUrl()
 }
 
 static QString iso639()
-{ 
-    return QLocale().name().left( 2 ).toLower(); 
+{
+    return QLocale().name().left( 2 ).toLower();
 }
 
 void autograph( QMap<QString, QString>& params )
@@ -109,8 +113,8 @@ lastfm::ws::get( QMap<QString, QString> params )
 
 QNetworkReply*
 lastfm::ws::post( QMap<QString, QString> params, bool sk )
-{   
-    sign( params, sk ); 
+{
+    sign( params, sk );
     QByteArray query;
     QMapIterator<QString, QString> i( params );
     while (i.hasNext()) {
@@ -129,18 +133,40 @@ lastfm::ws::post( QMap<QString, QString> params, bool sk )
 
 QNetworkAccessManager*
 lastfm::nam()
-{    
-    if (!::nam) ::nam = new NetworkAccessManager( qApp );
-    return ::nam;
+{
+    QMutexLocker l( &namAccessMutex );
+    QThread* thread = QThread::currentThread();
+    if ( !threadNamHash.contains( thread ) )
+    {
+        NetworkAccessManager* newNam = new NetworkAccessManager( qApp );
+        threadNamHash[thread] = newNam;
+        ourNamSet.insert( thread );
+        return newNam;
+    }
+    return threadNamHash[thread];
 }
 
 
 void
 lastfm::setNetworkAccessManager( QNetworkAccessManager* nam )
 {
-    delete ::nam;
-    ::nam = nam;
-    nam->setParent( qApp ); // ensure it isn't deleted out from under us
+    if ( !nam )
+        return;
+
+    QMutexLocker l( &namAccessMutex );
+    QThread* thread = QThread::currentThread();
+    QNetworkAccessManager* oldNam = 0;
+    if ( threadNamHash.contains( thread ) && ourNamSet.contains( thread ) )
+        oldNam = threadNamHash[thread];
+
+    if ( oldNam == nam )
+        return;
+
+    threadNamHash[thread] = nam;
+    ourNamSet.remove( thread );
+
+    if ( oldNam )
+        delete oldNam;
 }
 
 
@@ -198,7 +224,7 @@ namespace lastfm
         const char* ApiKey;
 
         /** if this is found set to "" we conjure ourselves a suitable one */
-        const char* UserAgent = 0;   
+        const char* UserAgent = 0;
     }
 }
 
