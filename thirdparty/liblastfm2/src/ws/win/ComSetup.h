@@ -23,7 +23,6 @@
 #endif
 
 #include "winable.h"
-
 //#include <objbase.h>
 //#include <atlbase.h>
 //#include <atlcom.h>
@@ -39,7 +38,7 @@ public:
     {
         HRESULT hr = CoInitialize(0);
         m_bComInitialised = SUCCEEDED(hr);
-        _ASSERT(m_bComInitialised);
+        //_ASSERT(m_bComInitialised);
         if (m_bComInitialised) {
             setupSecurity();
         }
@@ -47,10 +46,10 @@ public:
     
     void setupSecurity()
     {
-        CSecurityDescriptor sd;
-        sd.InitializeFromThreadToken();
-        HRESULT hr = CoInitializeSecurity(sd, -1, NULL, NULL, RPC_C_AUTHN_LEVEL_PKT, RPC_C_IMP_LEVEL_IMPERSONATE, NULL, EOAC_NONE, NULL); 
-        _ASSERT(SUCCEEDED(hr));
+        //CSecurityDescriptor sd;
+        //sd.InitializeFromThreadToken();
+        //HRESULT hr = CoInitializeSecurity(sd, -1, NULL, NULL, RPC_C_AUTHN_LEVEL_PKT, RPC_C_IMP_LEVEL_IMPERSONATE, NULL, EOAC_NONE, NULL); 
+        //_ASSERT(SUCCEEDED(hr));
     }
     
     ~ComSetup()

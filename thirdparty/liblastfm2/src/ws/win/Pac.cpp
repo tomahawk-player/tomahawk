@@ -74,8 +74,8 @@ lastfm::Pac::Pac()
 
 lastfm::Pac::~Pac()
 {
-    if (m_hSession)
-        WinHttpCloseHandle(m_hSession);
+/*    if (m_hSession)
+        WinHttpCloseHandle(m_hSession);*/
 }
 
 QNetworkProxy
@@ -87,7 +87,7 @@ lastfm::Pac::resolve(const QNetworkRequest &request, const wchar_t* pacUrl)
     if (!m_hSession)
     {
         QByteArray user_agent = request.rawHeader("user-agent");
-        m_hSession = WinHttpOpen(CA2W(user_agent), WINHTTP_ACCESS_TYPE_NO_PROXY, 0, 0, WINHTTP_FLAG_ASYNC);
+        //m_hSession = WinHttpOpen(CA2W(user_agent), WINHTTP_ACCESS_TYPE_NO_PROXY, 0, 0, WINHTTP_FLAG_ASYNC);
     }
     if (m_hSession)
     {
@@ -96,29 +96,29 @@ lastfm::Pac::resolve(const QNetworkRequest &request, const wchar_t* pacUrl)
         memset(&opts, 0, sizeof(opts));
         if (pacUrl) 
         {
-            opts.dwFlags = WINHTTP_AUTOPROXY_CONFIG_URL;
-            opts.lpszAutoConfigUrl = pacUrl;
+            // opts.dwFlags = WINHTTP_AUTOPROXY_CONFIG_URL;
+            // opts.lpszAutoConfigUrl = pacUrl;
         } 
         else
         {
-            opts.dwFlags = WINHTTP_AUTOPROXY_AUTO_DETECT;
-            opts.dwAutoDetectFlags = WINHTTP_AUTO_DETECT_TYPE_DHCP | WINHTTP_AUTO_DETECT_TYPE_DNS_A;
+            // opts.dwFlags = WINHTTP_AUTOPROXY_AUTO_DETECT;
+            // opts.dwAutoDetectFlags = WINHTTP_AUTO_DETECT_TYPE_DHCP | WINHTTP_AUTO_DETECT_TYPE_DNS_A;
         }
         opts.fAutoLogonIfChallenged = TRUE;
         
-        if (WinHttpGetProxyForUrl(m_hSession, request.url().toString().utf16(), &opts, &info)) {
+        if (WinHttpGetProxyForUrl(m_hSession, (const WCHAR*)request.url().toString().utf16(), &opts, &info)) {
             if (info.lpszProxy) 
             {
-                QList<QNetworkProxy> proxies = parsePacResult(QString::fromUtf16(info.lpszProxy));
+                QList<QNetworkProxy> proxies = parsePacResult(QString::fromUtf16((const ushort*)info.lpszProxy));
                 if (!proxies.empty())
                 {
                     out = proxies.at(0);
                 }
-                GlobalFree(info.lpszProxy);
+                GlobalFree((void*)info.lpszProxy);
             }
             if (info.lpszProxyBypass)
             {
-                GlobalFree(info.lpszProxyBypass);
+                GlobalFree((void*)info.lpszProxyBypass);
             }
         } else {
             m_bFailed = true;

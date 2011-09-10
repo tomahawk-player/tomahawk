@@ -32,10 +32,10 @@ NdisEvents::NdisEvents()
 
 NdisEvents::~NdisEvents()
 {
-    if (m_pSink)
-        m_pSink->disconnect();
-    if (m_pServices && m_pSink)
-        m_pServices->CancelAsyncCall(m_pSink);
+//    if (m_pSink)
+//        m_pSink->disconnect();
+//    if (m_pServices && m_pSink)
+//        m_pServices->CancelAsyncCall(m_pSink);
     // and reference counting will take care of the WmiSink object
 }
 
@@ -47,7 +47,7 @@ NdisEvents::registerForNdisEvents()
         return hr;
 
     // Connect to the root\wmi namespace with the current user.
-    hr = m_pLocator->ConnectServer(CComBSTR("ROOT\\WMI"),       // strNetworkResource
+    hr = 0; /*m_pLocator->ConnectServer(CComBSTR("ROOT\\WMI"),       // strNetworkResource
                                     NULL,               // strUser
                                     NULL,               // strPassword
                                     NULL,               // strLocale  
@@ -55,11 +55,11 @@ NdisEvents::registerForNdisEvents()
                                     CComBSTR(""),       // strAuthority               
                                     NULL,               // pCtx
                                     &m_pServices
-                                    );
+                                    );*/
     if (FAILED(hr))
         return hr;
 
-    m_pSink = new WmiSink(this);
+//    m_pSink = new WmiSink(this);
 
     //////////////////////////
 
@@ -75,12 +75,12 @@ NdisEvents::registerForNdisEvents()
     // MSNdis_StatusProtocolUnbind
     // MSNdis_StatusMediaSpecificIndication
 
-    CComBSTR wql("WQL");
+/*    CComBSTR wql("WQL");
     CComBSTR query("SELECT * FROM MSNdis_StatusMediaDisconnect");
     hr = m_pServices->ExecNotificationQueryAsync(wql, query, 0, 0, m_pSink);
 
     query = "SELECT * FROM MSNdis_StatusMediaConnect";
-    hr = m_pServices->ExecNotificationQueryAsync(wql, query, 0, 0, m_pSink);
+    hr = m_pServices->ExecNotificationQueryAsync(wql, query, 0, 0, m_pSink);*/
 
     return S_OK;
 }

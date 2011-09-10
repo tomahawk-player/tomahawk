@@ -35,8 +35,8 @@ public:
     virtual void onConnectionDown(BSTR name) = 0;
 
 private:
-    CComPtr<IWbemLocator> m_pLocator;
-    CComPtr<IWbemServices> m_pServices;
+//    CComPtr<IWbemLocator> m_pLocator;
+//    CComPtr<IWbemServices> m_pServices;
     class WmiSink *m_pSink;
 };
 
