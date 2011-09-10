@@ -110,7 +110,7 @@ DatabaseWorker::doWork()
     try
     {
         {
-            tDebug() << "Executing cmd:" << cmd->guid();
+//            tDebug() << "Executing cmd:" << cmd->guid();
             cmd->_exec( m_dbimpl ); // runs actual SQL stuff
 
             if ( cmd->loggable() )
@@ -180,7 +180,7 @@ DatabaseWorker::doWork()
         if( cmd->doesMutates() )
             m_dbimpl->database().rollback();
 
-//        Q_ASSERT( false );
+        Q_ASSERT( false );
     }
     catch(...)
     {

@@ -46,7 +46,7 @@
 using namespace Tomahawk;
 
 
-DBSyncConnection::DBSyncConnection( Servent* s, source_ptr src )
+DBSyncConnection::DBSyncConnection( Servent* s, const source_ptr& src )
     : Connection( s )
     , m_source( src )
     , m_state( UNKNOWN )
@@ -205,8 +205,8 @@ DBSyncConnection::handleMsg( msg_ptr msg )
          msg->is( Msg::DBOP ) &&
          msg->payload() == "ok" )
     {
-//        qDebug() << "No ops to apply, we are synced.";
         changeState( SYNCED );
+
         // calc the collection stats, to updates the "X tracks" in the sidebar etc
         // this is done automatically if you run a dbcmd to add files.
         DatabaseCommand_CollectionStats* cmd = new DatabaseCommand_CollectionStats( m_source );
@@ -233,18 +233,9 @@ DBSyncConnection::handleMsg( msg_ptr msg )
         if ( !cmd )
         {
             qDebug() << "UNKNOWN DBOP CMD";
-
-            if ( !msg->is( Msg::FRAGMENT ) ) // last msg in this batch
-                lastOpApplied();
             return;
         }
         QSharedPointer<DatabaseCommand> cmdsp = QSharedPointer<DatabaseCommand>(cmd);
-
-        if ( !msg->is( Msg::FRAGMENT ) ) // last msg in this batch
-        {
-            changeState( SAVING ); // just DB work left to complete
-            connect( cmd, SIGNAL( finished() ), SLOT( lastOpApplied() ) );
-        }
 
         if ( m_recentTempOps.contains( cmd->guid() ) )
         {
@@ -260,7 +251,13 @@ DBSyncConnection::handleMsg( msg_ptr msg )
         else
             m_recentTempOps << cmd->guid();
 
-        Database::instance()->enqueue( cmdsp );
+        m_cmds << cmdsp;
+
+        if ( !msg->is( Msg::FRAGMENT ) ) // last msg in this batch
+        {
+            changeState( SAVING ); // just DB work left to complete
+            executeCommands();
+        }
         return;
     }
 
@@ -285,11 +282,26 @@ DBSyncConnection::handleMsg( msg_ptr msg )
 
 
 void
-DBSyncConnection::lastOpApplied()
+DBSyncConnection::executeCommands()
 {
-    changeState( SYNCED );
-    // check again, until peer responds we have no new ops to process
-    check();
+    while ( !m_cmds.isEmpty() )
+    {
+        QSharedPointer<DatabaseCommand> cmd = m_cmds.takeFirst();
+        connect( cmd.data(), SIGNAL( finished() ), SLOT( onCommandFinished() ) );
+        Database::instance()->enqueue( cmd );
+    }
+}
+
+
+void
+DBSyncConnection::onCommandFinished()
+{
+    if ( m_cmds.isEmpty() )
+    {
+        changeState( SYNCED );
+        // check again, until peer responds we have no new ops to process
+        check();
+    }
 }
 
 
@@ -315,13 +327,14 @@ DBSyncConnection::sendOpsData( QString sinceguid, QString lastguid, QList< dbop_
     if ( m_lastSentOp == lastguid )
         ops.clear();
 
-    qDebug() << Q_FUNC_INFO << sinceguid << lastguid << "Num ops to send:" << ops.length();
     m_lastSentOp = lastguid;
     if ( ops.length() == 0 )
     {
         sendMsg( Msg::factory( "ok", Msg::DBOP ) );
         return;
     }
+
+    qDebug() << Q_FUNC_INFO << sinceguid << lastguid << "Num ops to send:" << ops.length();
 
     int i;
     for( i = 0; i < ops.length(); ++i )

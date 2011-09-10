@@ -23,8 +23,8 @@
 #include <QMetaType>
 #include <QTime>
 #include <QSqlQuery>
+#include <QVariant>
 
-#include "source.h"
 #include "typedefs.h"
 #include "database/op.h"
 
@@ -106,5 +106,7 @@ private:
 };
 
 Q_DECLARE_METATYPE( DatabaseCommand )
+
+#include "source.h"
 
 #endif // DATABASECOMMAND_H

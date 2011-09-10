@@ -19,6 +19,7 @@
 #include "portfwdthread.h"
 
 #include <QApplication>
+#include <QNetworkInterface>
 #include <QStringList>
 #include <QTime>
 #include <QTimer>
@@ -52,6 +53,14 @@ PortFwdThread::work()
 {
     qsrand( QTime( 0, 0, 0 ).secsTo( QTime::currentTime() ) );
     m_portfwd = new Portfwd();
+
+    foreach( QHostAddress ha, QNetworkInterface::allAddresses() )
+    {
+        if( ha.toString() == "127.0.0.1" ) continue;
+        if( ha.toString().contains( ":" ) ) continue; //ipv6
+
+        m_portfwd->addBlockedDevice( ha.toString().toStdString() );
+    }
 
     // try and pick an available port:
     if( m_portfwd->init( 2000 ) )

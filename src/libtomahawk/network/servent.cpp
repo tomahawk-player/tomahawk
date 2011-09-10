@@ -441,7 +441,7 @@ Servent::socketConnected()
 {
     QTcpSocketExtra* sock = (QTcpSocketExtra*)sender();
 
-//    qDebug() << "Servent::SocketConnected" << thread() << "socket:" << sock;
+    tDebug() << "Servent::SocketConnected" << thread() << "socket:" << sock;
 
     Connection* conn = sock->_conn.data();
     handoverSocket( conn, sock );
@@ -536,7 +536,7 @@ Servent::connectToPeer( const QString& ha, int port, const QString &key, Connect
     if ( ( ha == m_externalAddress.toString() || ha == m_externalHostname ) &&
          ( port == m_externalPort ) )
     {
-        qDebug() << "ERROR: Tomahawk won't try to connect to" << ha << ":" << port << ": identified as ourselves.";
+        tDebug() << "ERROR: Tomahawk won't try to connect to" << ha << ":" << port << ": identified as ourselves.";
         return;
     }
 
