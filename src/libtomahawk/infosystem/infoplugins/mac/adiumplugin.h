@@ -60,6 +60,8 @@ public slots:
     }
 
 private slots:
+    void shortLinkReady( QUrl longUrl, QUrl shortUrl );
+
     void clearStatus();
     void settingsChanged();
 
@@ -75,6 +77,10 @@ private:
     bool m_active;
     QString m_beforeStatus;
     QString m_afterStatus;
+
+    QString m_currentTitle;
+    QString m_currentArtist;
+    QUrl m_currentLongUrl;
 
     QTimer* m_pauseTimer;
     QWeakPointer<QNetworkAccessManager> m_nam;

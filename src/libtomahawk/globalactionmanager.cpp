@@ -24,12 +24,15 @@
 #include <QUrl>
 #include <QtNetwork/QNetworkAccessManager>
 #include <QtNetwork/QNetworkReply>
+#include <QtNetwork/QNetworkConfiguration>
+#include <QtNetwork/QNetworkProxy>
 
 #include "artist.h"
 #include "album.h"
 #include "sourcelist.h"
 #include "pipeline.h"
 #include "viewmanager.h"
+#include "tomahawksettings.h"
 #include "audio/audioengine.h"
 #include "database/localcollection.h"
 #include "playlist/dynamic/GeneratorInterface.h"
@@ -64,6 +67,8 @@ GlobalActionManager::instance()
 GlobalActionManager::GlobalActionManager( QObject* parent )
     : QObject( parent )
 {
+    newNam();
+    connect( TomahawkSettings::instance(), SIGNAL( changed() ), SLOT( newNam() ) );
 }
 
 GlobalActionManager::~GlobalActionManager()
@@ -104,12 +109,23 @@ GlobalActionManager::openLink( const QString& title, const QString& artist, cons
     return link;
 }
 
-QUrl
-GlobalActionManager::openShortTomahawkLink( const QString& title, const QString& artist, const QString& album ) const
+void
+GlobalActionManager::shortenLink( const QUrl& url ) const
 {
-    QUrl longLink = openLink( title, artist, album );
+    qDebug() << Q_FUNC_INFO;
+    QNetworkRequest request;
+    request.setUrl( url );
 
+    if( m_nam.isNull() )
+    {
+        emit shortLinkReady( QUrl( "" ), QUrl( "" ) );
+        return;
+    }
 
+    QNetworkReply *reply = m_nam.data()->get( request );
+    connect( reply, SIGNAL( finished() ), this, SLOT( shortenLinkRequestFinished() ) );
+    connect( reply, SIGNAL( error( QNetworkReply::NetworkError ) ),
+            this, SLOT( shortenLinkRequestError( QNetworkReply::NetworkError ) ) );
 }
 
 QString
@@ -698,6 +714,37 @@ GlobalActionManager::playNow( const query_ptr& q )
     connect( q.data(), SIGNAL( resolvingFinished( bool ) ), this, SLOT( waitingForResolved( bool ) ) );
 }
 
+void
+GlobalActionManager::newNam()
+{
+    QNetworkAccessManager *oldNam = TomahawkUtils::nam();
+
+//    qDebug() << Q_FUNC_INFO << "No nam exists, or it's a different thread, creating a new one";
+    QNetworkAccessManager* newNam;
+#ifdef LIBLASTFM_FOUND
+    newNam = new lastfm::NetworkAccessManager( this );
+#else
+    newNam = new QNetworkAccessManager( this );
+#endif
+    if ( !m_nam.isNull() )
+        delete m_nam.data();
+
+    if ( !oldNam )
+        oldNam = new QNetworkAccessManager();
+
+    TomahawkUtils::NetworkProxyFactory* oldProxyFactory = TomahawkUtils::proxyFactory();
+    if ( !oldProxyFactory )
+        oldProxyFactory = new TomahawkUtils::NetworkProxyFactory();
+
+    newNam->setConfiguration( oldNam->configuration() );
+    newNam->setNetworkAccessible( oldNam->networkAccessible() );
+    TomahawkUtils::NetworkProxyFactory* newProxyFactory = new TomahawkUtils::NetworkProxyFactory();
+    newProxyFactory->setNoProxyHosts( oldProxyFactory->noProxyHosts() );
+    newProxyFactory->setProxy( oldProxyFactory->proxy() );
+    newNam->setProxyFactory( newProxyFactory );
+    m_nam = QWeakPointer< QNetworkAccessManager >( newNam );
+}
+
 bool
 GlobalActionManager::playRdio( const QUrl& url )
 {
@@ -757,7 +804,53 @@ bool GlobalActionManager::handleBookmarkCommand(const QUrl& url)
     return false;
 }
 
+void
+GlobalActionManager::shortenLinkRequestFinished()
+{
+    qDebug() << Q_FUNC_INFO;
+    QNetworkReply *reply = qobject_cast<QNetworkReply*>( sender() );
 
+    // NOTE: this should never happen
+    if( !reply )
+    {
+        emit shortLinkReady( QUrl( "" ), QUrl( "" ) );
+        reply->deleteLater();
+        return;
+    }
+
+    // Check for the redirect attribute, as this should be the shortened link
+
+    QVariant urlVariant = reply->attribute( QNetworkRequest::RedirectionTargetAttribute );
+
+    // NOTE: this should never happen
+    if( urlVariant.isNull() || !urlVariant.isValid() )
+    {
+        emit shortLinkReady( reply->request().url(), QUrl( "" ) );
+        reply->deleteLater();
+        return;
+    }
+
+    QUrl shortUrl = urlVariant.toUrl();
+
+    // NOTE: this should never happen
+    if( !shortUrl.isValid() )
+    {
+        emit shortLinkReady( reply->request().url(), QUrl( "" ) );
+        reply->deleteLater();
+        return;
+    }
+
+    // Success!  Here is the short link
+
+    emit shortLinkReady( reply->request().url(), shortUrl );
+    reply->deleteLater();
+}
+
+void
+GlobalActionManager::shortenLinkRequestError( QNetworkReply::NetworkError )
+{
+    qDebug() << Q_FUNC_INFO;
+}
 
 void
 GlobalActionManager::bookmarkPlaylistCreated( const playlist_ptr& pl )

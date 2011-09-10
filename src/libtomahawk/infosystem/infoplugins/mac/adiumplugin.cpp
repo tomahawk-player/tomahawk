@@ -73,6 +73,9 @@ AdiumPlugin::AdiumPlugin()
     m_pauseTimer->setSingleShot( true );
     connect( m_pauseTimer, SIGNAL( timeout() ),
              this, SLOT( clearStatus() ) );
+
+    connect( GlobalActionManager::instance(), SIGNAL( shortLinkReady( QUrl, QUrl ) ),
+             SLOT( shortLinkReady( QUrl, QUrl ) ) );
 }
 
 
@@ -83,6 +86,35 @@ AdiumPlugin::~AdiumPlugin()
       setStatus( "" );
 }
 
+void
+AdiumPlugin::shortLinkReady( QUrl longUrl, QUrl shortUrl )
+{
+    // The URL we received is either from a previous track, or not requested by us
+    if( longUrl != m_currentLongUrl )
+        return;
+
+    // Build the core of the now-playing string
+    QString nowPlaying = "";
+    nowPlaying.append( m_currentArtist );
+    nowPlaying.append(" - ");
+    nowPlaying.append( m_currentTitle );
+    nowPlaying.replace( "\"", "\\\"" );  // Escape quotes, or Applescript gets confused
+
+    // We failed to get the short URL, just update the status with the metadata
+    if( ( longUrl.toString() == "" ) || ( shortUrl.toString() == "" ) )
+    {
+        qDebug() << "nowPlaying: " << nowPlaying;
+        setStatus( nowPlaying );
+        return;
+    }
+
+    // Add the short URL
+    nowPlaying.append( " " );
+    nowPlaying.append( shortUrl.toEncoded() );
+    qDebug() << "nowPlaying: " << nowPlaying;
+    setStatus( nowPlaying );
+
+}
 
 void
 AdiumPlugin::clearStatus()
@@ -133,13 +165,7 @@ AdiumPlugin::pushInfo( QString caller, Tomahawk::InfoSystem::InfoType type, QVar
 void
 AdiumPlugin::namChangedSlot( QNetworkAccessManager* nam )
 {
-    m_nam = QWeakPointer<QNetworkAccessManager>( nam );
-
-    if( !m_nam.isNull() )
-    {
-        connect( m_nam.data(), SIGNAL( finished( QNetworkReply* ) ),
-                this, SLOT( replyFinished( QNetworkReply* ) ) );
-    }
+    Q_UNUSED( nam )
 }
 
 /** Audio state slots */
@@ -155,16 +181,12 @@ AdiumPlugin::audioStarted( const QVariant &input )
     if ( !hash.contains( "title" ) || !hash.contains( "artist" ) )
         return;
 
-    QString nowPlaying = "";
-    nowPlaying.append( hash["artist"] );
-    nowPlaying.append(" - ");
-    nowPlaying.append( hash["title"] );
-    nowPlaying.append( " " );
-    // Escape quotes, or Applescript gets confused
-    nowPlaying.replace( "\"", "\\\"" );
-    nowPlaying.append( openLinkFromHash( hash ).toEncoded() );
-    qDebug() << "nowPlaying: " << nowPlaying;
-    setStatus( nowPlaying );
+    m_currentTitle = hash["title"];
+    m_currentArtist = hash["artist"];
+
+    // Request a short URL
+    m_currentLongUrl = openLinkFromHash( hash ).toEncoded();
+    GlobalActionManager::instance()->shortenLink( m_currentLongUrl );
 }
 
 QUrl
@@ -209,3 +231,4 @@ AdiumPlugin::audioResumed( const QVariant &input )
     qDebug() << Q_FUNC_INFO;
     audioStarted( input );
 }
+
