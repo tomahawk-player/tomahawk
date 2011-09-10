@@ -652,7 +652,7 @@ TreeModel::addCollection( const collection_ptr& collection )
         setIcon( collection->source()->avatar() );
 
     if ( collection->source()->isLocal() )
-        setTitle( tr( "Your Collection" ) );
+        setTitle( tr( "My Collection" ) );
     else
         setTitle( tr( "Collection of %1" ).arg( collection->source()->friendlyName() ) );
 }
@@ -677,7 +677,7 @@ TreeModel::addFilteredCollection( const collection_ptr& collection, unsigned int
     Database::instance()->enqueue( QSharedPointer<DatabaseCommand>( cmd ) );
 
     if ( collection->source()->isLocal() )
-        setTitle( tr( "Your Collection" ) );
+        setTitle( tr( "My Collection" ) );
     else
         setTitle( tr( "Collection of %1" ).arg( collection->source()->friendlyName() ) );
 }

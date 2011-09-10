@@ -83,7 +83,7 @@ CollectionFlatModel::addCollection( const collection_ptr& collection, bool sendN
     }
 
     if ( collection->source()->isLocal() )
-        setTitle( tr( "Your Collection" ) );
+        setTitle( tr( "My Collection" ) );
     else
         setTitle( tr( "Collection of %1" ).arg( collection->source()->friendlyName() ) );
 }

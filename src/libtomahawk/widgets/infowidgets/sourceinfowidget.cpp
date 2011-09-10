@@ -67,7 +67,15 @@ SourceInfoWidget::SourceInfoWidget( const Tomahawk::source_ptr& source, QWidget*
     m_recentAlbumModel->addFilteredCollection( source->collection(), 20, DatabaseCommand_AllAlbums::ModificationTime );
 
     m_title = tr( "New Additions" );
-    m_description = tr( "Recent activity from %1" ).arg( source->isLocal() ? tr( "Your Collection" ) : source->friendlyName() );
+    if ( source->isLocal() )
+    {
+        m_description = tr( "My recent activity" );
+    }
+    else
+    {
+        m_description = tr( "Recent activity from %1" ).arg(  source->friendlyName() );
+    }
+
     m_pixmap.load( RESPATH "images/new-additions.png" );
 }
 
