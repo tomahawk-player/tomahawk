@@ -106,7 +106,7 @@ lastfm::Pac::resolve(const QNetworkRequest &request, const wchar_t* pacUrl)
         }
         opts.fAutoLogonIfChallenged = TRUE;
         
-        if (WinHttpGetProxyForUrl(m_hSession, (const WCHAR*)request.url().toString().utf16(), &opts, &info)) {
+/*        if (WinHttpGetProxyForUrl(m_hSession, (const WCHAR*)request.url().toString().utf16(), &opts, &info)) {
             if (info.lpszProxy) 
             {
                 QList<QNetworkProxy> proxies = parsePacResult(QString::fromUtf16((const ushort*)info.lpszProxy));
@@ -122,7 +122,7 @@ lastfm::Pac::resolve(const QNetworkRequest &request, const wchar_t* pacUrl)
             }
         } else {
             m_bFailed = true;
-        }
+        }*/
     }
 
     return out;
