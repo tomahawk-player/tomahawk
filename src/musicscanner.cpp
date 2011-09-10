@@ -186,25 +186,25 @@ MusicScanner::startScan()
     //bear in mind that simply passing in the top-level of a defined collection means it will not return items that need
     //to be removed that aren't in that root any longer -- might have to do the filtering in setMTimes based on strings
     DatabaseCommand_DirMtimes *cmd = new DatabaseCommand_DirMtimes();
-    connect( cmd, SIGNAL( done( QMap<QString, unsigned int> ) ),
-                    SLOT( setDirMtimes( QMap<QString, unsigned int> ) ) );
+    connect( cmd, SIGNAL( done( QMap< QString, unsigned int > ) ),
+                    SLOT( setDirMtimes( QMap< QString, unsigned int > ) ) );
 
-    Database::instance()->enqueue( QSharedPointer<DatabaseCommand>(cmd) );
+    Database::instance()->enqueue( QSharedPointer< DatabaseCommand >( cmd ) );
 }
 
 
 void
-MusicScanner::setDirMtimes( const QMap<QString, unsigned int>& m )
+MusicScanner::setDirMtimes( const QMap< QString, unsigned int >& m )
 {
     tDebug( LOGVERBOSE ) << Q_FUNC_INFO << m.count();
     m_dirmtimes = m;
     if ( m_mode == TomahawkSettings::Files )
     {
         DatabaseCommand_FileMtimes *cmd = new DatabaseCommand_FileMtimes();
-        connect( cmd, SIGNAL( done( QMap<QString, QMap< unsigned int, unsigned int > > ) ),
-                    SLOT( setFileMtimes( QMap<QString, QMap< unsigned int, unsigned int > > ) ) );
+        connect( cmd, SIGNAL( done( QMap< QString, QMap< unsigned int, unsigned int > > ) ),
+                    SLOT( setFileMtimes( QMap< QString, QMap< unsigned int, unsigned int > > ) ) );
 
-        Database::instance()->enqueue( QSharedPointer<DatabaseCommand>(cmd) );
+        Database::instance()->enqueue( QSharedPointer< DatabaseCommand >( cmd ) );
         return;
     }
     scan();
@@ -212,7 +212,7 @@ MusicScanner::setDirMtimes( const QMap<QString, unsigned int>& m )
 
 
 void
-MusicScanner::setFileMtimes( const QMap<QString, QMap< unsigned int, unsigned int > >& m )
+MusicScanner::setFileMtimes( const QMap< QString, QMap< unsigned int, unsigned int > >& m )
 {
     tDebug( LOGVERBOSE ) << Q_FUNC_INFO << m.count();
     m_filemtimes = m;
@@ -239,8 +239,8 @@ MusicScanner::scan()
                             SLOT( scanFile( QFileInfo ) ), Qt::QueuedConnection );
 
     // queued, so will only fire after all dirs have been scanned:
-    connect( m_dirLister.data(), SIGNAL( finished( QMap<QString, unsigned int> ) ),
-                            SLOT( listerFinished( QMap<QString, unsigned int> ) ), Qt::QueuedConnection );
+    connect( m_dirLister.data(), SIGNAL( finished( QMap< QString, unsigned int > ) ),
+                            SLOT( listerFinished( QMap< QString, unsigned int > ) ), Qt::QueuedConnection );
 
     m_dirListerThreadController->start();
     QMetaObject::invokeMethod( m_dirLister.data(), "go" );
