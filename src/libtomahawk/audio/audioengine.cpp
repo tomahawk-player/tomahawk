@@ -158,14 +158,17 @@ void
 AudioEngine::stop()
 {
     tDebug( LOGEXTRA ) << Q_FUNC_INFO;
+    if ( isStopped() )
+        return;
 
     setState( Stopped );
     m_mediaObject->stop();
 
     if ( !m_playlist.isNull() )
         m_playlist.data()->reset();
+    if ( !m_currentTrack.isNull() )
+        emit timerPercentage( ( (double)m_timeElapsed / (double)m_currentTrack->duration() ) * 100.0 );
 
-    emit timerPercentage( ( (double)m_timeElapsed / (double)m_currentTrack->duration() ) * 100.0 );
     emit stopped();
     setCurrentTrack( Tomahawk::result_ptr() );
 
