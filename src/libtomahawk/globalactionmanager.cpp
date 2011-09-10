@@ -837,7 +837,7 @@ GlobalActionManager::shortenLinkRequestFinished()
         if ( !error )
             emit shortLinkReady( longUrl, shortUrl );
         else
-            emit shortLinkReady( longUrl, QUrl( "" ) );
+            emit shortLinkReady( longUrl, longUrl );
     }
 
     reply->deleteLater();

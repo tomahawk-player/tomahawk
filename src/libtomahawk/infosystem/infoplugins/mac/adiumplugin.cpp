@@ -101,9 +101,8 @@ AdiumPlugin::shortLinkReady( QUrl longUrl, QUrl shortUrl )
     nowPlaying.replace( "\"", "\\\"" );  // Escape quotes, or Applescript gets confused
 
     // We failed to get the short URL, just update the status with the metadata
-    if( ( longUrl.toString() == "" ) || ( shortUrl.toString() == "" ) )
+    if( ( longUrl.toString() == "" ) )
     {
-        qDebug() << "nowPlaying: " << nowPlaying;
         setStatus( nowPlaying );
         return;
     }
@@ -111,7 +110,6 @@ AdiumPlugin::shortLinkReady( QUrl longUrl, QUrl shortUrl )
     // Add the short URL
     nowPlaying.append( " " );
     nowPlaying.append( shortUrl.toEncoded() );
-    qDebug() << "nowPlaying: " << nowPlaying;
     setStatus( nowPlaying );
 
 }
