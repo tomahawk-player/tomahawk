@@ -55,24 +55,27 @@ GlobalActionManager* GlobalActionManager::s_instance = 0;
 
 using namespace Tomahawk;
 
+
 GlobalActionManager*
 GlobalActionManager::instance()
 {
-    if( !s_instance )
+    if ( !s_instance )
         s_instance = new GlobalActionManager;
 
     return s_instance;
 }
 
+
 GlobalActionManager::GlobalActionManager( QObject* parent )
     : QObject( parent )
 {
-    newNam();
-    connect( TomahawkSettings::instance(), SIGNAL( changed() ), SLOT( newNam() ) );
 }
 
+
 GlobalActionManager::~GlobalActionManager()
-{}
+{
+}
+
 
 QUrl
 GlobalActionManager::openLinkFromQuery( const query_ptr& query ) const
@@ -94,6 +97,7 @@ GlobalActionManager::openLinkFromQuery( const query_ptr& query ) const
     return openLink( title, artist, album );
 }
 
+
 QUrl
 GlobalActionManager::openLink( const QString& title, const QString& artist, const QString& album ) const
 {
@@ -109,24 +113,25 @@ GlobalActionManager::openLink( const QString& title, const QString& artist, cons
     return link;
 }
 
-void
-GlobalActionManager::shortenLink( const QUrl& url ) const
-{
-    qDebug() << Q_FUNC_INFO;
-    QNetworkRequest request;
-    request.setUrl( url );
 
-    if( m_nam.isNull() )
+void
+GlobalActionManager::shortenLink( const QUrl& url )
+{
+    if ( QThread::currentThread() != thread() )
     {
-        emit shortLinkReady( QUrl( "" ), QUrl( "" ) );
+        qDebug() << "Reinvoking in correct thread:" << Q_FUNC_INFO;
+        QMetaObject::invokeMethod( this, "shortenLink", Qt::QueuedConnection, Q_ARG( QUrl, url ) );
         return;
     }
 
-    QNetworkReply *reply = m_nam.data()->get( request );
-    connect( reply, SIGNAL( finished() ), this, SLOT( shortenLinkRequestFinished() ) );
-    connect( reply, SIGNAL( error( QNetworkReply::NetworkError ) ),
-            this, SLOT( shortenLinkRequestError( QNetworkReply::NetworkError ) ) );
+    QNetworkRequest request;
+    request.setUrl( url );
+
+    QNetworkReply *reply = TomahawkUtils::nam()->get( request );
+    connect( reply, SIGNAL( finished() ), SLOT( shortenLinkRequestFinished() ) );
+    connect( reply, SIGNAL( error( QNetworkReply::NetworkError ) ), SLOT( shortenLinkRequestError( QNetworkReply::NetworkError ) ) );
 }
+
 
 QString
 GlobalActionManager::copyPlaylistToClipboard( const dynplaylist_ptr& playlist )
@@ -172,6 +177,7 @@ GlobalActionManager::copyPlaylistToClipboard( const dynplaylist_ptr& playlist )
     return link.toString();
 }
 
+
 void
 GlobalActionManager::savePlaylistToFile( const playlist_ptr& playlist, const QString& filename )
 {
@@ -180,6 +186,7 @@ GlobalActionManager::savePlaylistToFile( const playlist_ptr& playlist, const QSt
 
     connect( g, SIGNAL( generated( QByteArray ) ), this, SLOT( xspfCreated( QByteArray ) ) );
 }
+
 
 void
 GlobalActionManager::xspfCreated( const QByteArray& xspf )
@@ -274,6 +281,7 @@ GlobalActionManager::parseTomahawkLink( const QString& urlIn )
     }
 }
 
+
 bool
 GlobalActionManager::handlePlaylistCommand( const QUrl& url )
 {
@@ -314,6 +322,7 @@ GlobalActionManager::handlePlaylistCommand( const QUrl& url )
     return false;
 }
 
+
 bool
 GlobalActionManager::handleCollectionCommand( const QUrl& url )
 {
@@ -330,6 +339,7 @@ GlobalActionManager::handleCollectionCommand( const QUrl& url )
     return false;
 }
 
+
 bool
 GlobalActionManager::handleOpenCommand(const QUrl& url)
 {
@@ -341,6 +351,7 @@ GlobalActionManager::handleOpenCommand(const QUrl& url)
     // TODO user configurable in the UI
     return doQueueAdd( parts, url.queryItems() );
 }
+
 
 void
 GlobalActionManager::handleOpenTrack ( const query_ptr& q )
@@ -373,6 +384,7 @@ GlobalActionManager::handleQueueCommand( const QUrl& url )
 
     return false;
 }
+
 
 bool
 GlobalActionManager::doQueueAdd( const QStringList& parts, const QList< QPair< QString, QString > >& queryItems )
@@ -432,6 +444,7 @@ GlobalActionManager::doQueueAdd( const QStringList& parts, const QList< QPair< Q
     return false;
 }
 
+
 bool
 GlobalActionManager::queueSpotify( const QStringList& , const QList< QPair< QString, QString > >& queryItems )
 {
@@ -452,6 +465,7 @@ GlobalActionManager::queueSpotify( const QStringList& , const QList< QPair< QStr
 
     return true;
 }
+
 
 bool
 GlobalActionManager::queueRdio( const QStringList& , const QList< QPair< QString, QString > >& queryItems )
@@ -474,6 +488,7 @@ GlobalActionManager::queueRdio( const QStringList& , const QList< QPair< QString
     return true;
 }
 
+
 bool
 GlobalActionManager::handleSearchCommand( const QUrl& url )
 {
@@ -495,11 +510,13 @@ GlobalActionManager::handleSearchCommand( const QUrl& url )
     return true;
 }
 
+
 bool
 GlobalActionManager::handleAutoPlaylistCommand( const QUrl& url )
 {
     return !loadDynamicPlaylist( url, false ).isNull();
 }
+
 
 dynplaylist_ptr
 GlobalActionManager::loadDynamicPlaylist( const QUrl& url, bool station )
@@ -651,6 +668,7 @@ GlobalActionManager::handleStationCommand( const QUrl& url )
     return !loadDynamicPlaylist( url, true ).isNull();
 }
 
+
 bool
 GlobalActionManager::handlePlayCommand( const QUrl& url )
 {
@@ -692,6 +710,7 @@ GlobalActionManager::handlePlayCommand( const QUrl& url )
     return false;
 }
 
+
 bool
 GlobalActionManager::playSpotify( const QUrl& url )
 {
@@ -705,6 +724,7 @@ GlobalActionManager::playSpotify( const QUrl& url )
     return true;
 }
 
+
 void
 GlobalActionManager::playNow( const query_ptr& q )
 {
@@ -714,36 +734,6 @@ GlobalActionManager::playNow( const query_ptr& q )
     connect( q.data(), SIGNAL( resolvingFinished( bool ) ), this, SLOT( waitingForResolved( bool ) ) );
 }
 
-void
-GlobalActionManager::newNam()
-{
-    QNetworkAccessManager *oldNam = TomahawkUtils::nam();
-
-//    qDebug() << Q_FUNC_INFO << "No nam exists, or it's a different thread, creating a new one";
-    QNetworkAccessManager* newNam;
-#ifdef LIBLASTFM_FOUND
-    newNam = new lastfm::NetworkAccessManager( this );
-#else
-    newNam = new QNetworkAccessManager( this );
-#endif
-    if ( !m_nam.isNull() )
-        delete m_nam.data();
-
-    if ( !oldNam )
-        oldNam = new QNetworkAccessManager();
-
-    TomahawkUtils::NetworkProxyFactory* oldProxyFactory = TomahawkUtils::proxyFactory();
-    if ( !oldProxyFactory )
-        oldProxyFactory = new TomahawkUtils::NetworkProxyFactory();
-
-    newNam->setConfiguration( oldNam->configuration() );
-    newNam->setNetworkAccessible( oldNam->networkAccessible() );
-    TomahawkUtils::NetworkProxyFactory* newProxyFactory = new TomahawkUtils::NetworkProxyFactory();
-    newProxyFactory->setNoProxyHosts( oldProxyFactory->noProxyHosts() );
-    newProxyFactory->setProxy( oldProxyFactory->proxy() );
-    newNam->setProxyFactory( newProxyFactory );
-    m_nam = QWeakPointer< QNetworkAccessManager >( newNam );
-}
 
 bool
 GlobalActionManager::playRdio( const QUrl& url )
@@ -804,6 +794,7 @@ bool GlobalActionManager::handleBookmarkCommand(const QUrl& url)
     return false;
 }
 
+
 void
 GlobalActionManager::shortenLinkRequestFinished()
 {
@@ -845,6 +836,7 @@ GlobalActionManager::shortenLinkRequestFinished()
     reply->deleteLater();
 }
 
+
 void
 GlobalActionManager::shortenLinkRequestError( QNetworkReply::NetworkError error )
 {
@@ -864,12 +856,14 @@ GlobalActionManager::shortenLinkRequestError( QNetworkReply::NetworkError error 
     emit shortLinkReady( QUrl( "" ), QUrl( "" ) );
 }
 
+
 void
 GlobalActionManager::bookmarkPlaylistCreated( const playlist_ptr& pl )
 {
     Q_ASSERT( !m_waitingToBookmark.isNull() );
     doBookmark( pl, m_waitingToBookmark );
 }
+
 
 void
 GlobalActionManager::doBookmark( const playlist_ptr& pl, const query_ptr& q )
@@ -894,6 +888,7 @@ GlobalActionManager::doBookmark( const playlist_ptr& pl, const query_ptr& q )
     m_waitingToBookmark.clear();
 }
 
+
 void
 GlobalActionManager::showPlaylist()
 {
@@ -904,6 +899,7 @@ GlobalActionManager::showPlaylist()
 
     m_toShow.clear();
 }
+
 
 void
 GlobalActionManager::waitingForResolved( bool /* success */ )
@@ -924,6 +920,7 @@ GlobalActionManager::waitingForResolved( bool /* success */ )
     }
 }
 
+
 QString
 GlobalActionManager::hostname() const
 {
@@ -941,6 +938,7 @@ GlobalActionManager::openSpotifyLink( const QString& link )
 
     return true;
 }
+
 
 bool
 GlobalActionManager::openRdioLink( const QString& link )

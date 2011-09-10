@@ -252,6 +252,9 @@ TomahawkApp::init()
     {
         m_scanManager.data()->runScan( true );
     }
+
+    // Make sure to init GAM in the gui thread
+    GlobalActionManager::instance();
 }
 
 

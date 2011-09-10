@@ -45,7 +45,7 @@ public:
     QUrl openLinkFromQuery( const Tomahawk::query_ptr& query ) const;
     QUrl openLink( const QString& title, const QString& artist, const QString& album ) const;
 
-    void shortenLink( const QUrl& url ) const;
+    void shortenLink( const QUrl& url );
 
     /// Takes a spotify link and performs the default open action on it
     bool openSpotifyLink( const QString& link );
@@ -79,8 +79,6 @@ private slots:
 
     void playNow( const Tomahawk::query_ptr& );
 
-    /// Network Access Manager
-    void newNam();
 private:
     explicit GlobalActionManager( QObject* parent = 0 );
     void doBookmark( const Tomahawk::playlist_ptr& pl, const Tomahawk::query_ptr& q );
