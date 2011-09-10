@@ -185,7 +185,7 @@ AdiumPlugin::audioStarted( const QVariant &input )
     m_currentArtist = hash["artist"];
 
     // Request a short URL
-    m_currentLongUrl = openLinkFromHash( hash ).toEncoded();
+    m_currentLongUrl = openLinkFromHash( hash );
     GlobalActionManager::instance()->shortenLink( m_currentLongUrl );
 }
 
