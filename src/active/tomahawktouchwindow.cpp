@@ -78,10 +78,21 @@ void TomahawkTouchWindow::activateItem(const QModelIndex& index)
         tLog() << "Activate collectionItem!";
         Tomahawk::collection_ptr collection = collectionItem->source()->collection();
 
-        delete m_currentPlaylistTreeModel;
-        m_currentPlaylistTreeModel = new TreeProxyModel();
-        m_currentPlaylistTreeModel->setSourceTreeModel( ViewManager::instance()->treeModelForCollection( collection ) );
-        m_view->rootContext()->setContextProperty( "currentPlaylistTreeModel", m_currentPlaylistTreeModel );
+        TreeModel* model = ViewManager::instance()->treeModelForCollection( collection );
+        TreeProxyModel* proxyModel = m_modelProxyModels.value( model );
+        if( !proxyModel )
+        {
+            proxyModel = new TreeProxyModel();
+            //m_currentPlaylistTreeModel->setDynamicSortFilter( true );
+            proxyModel->setSourceTreeModel( model );
+            proxyModel->sort(TreeModel::Name, Qt::AscendingOrder );
+            //m_currentPlaylistTreeModel->setShowModes( false );
+            //m_currentPlaylistTreeModel->setSortRole(  );
+        }
+
+        m_currentPlaylistTreeModel = proxyModel;
+        emit currentTreeModelChanged();
+        //m_view->rootContext()->setContextProperty( "currentPlaylistTreeModel", m_currentPlaylistTreeModel );
     }
 }
 
@@ -92,6 +103,7 @@ TomahawkTouchWindow::loadQml()
 {
     tLog() << Q_FUNC_INFO;
     qmlRegisterType<AudioEngine>("org.tomahawkplayer.qmlcomponents", 1, 0, "AudioEngine");
+    qmlRegisterType<TreeProxyModel>("org.tomahawkplayer.qmlcomponents", 1, 0, "TreeProxyModel");
 
     if( !m_view )
     {
@@ -114,8 +126,8 @@ TomahawkTouchWindow::loadQml()
     context->setContextProperty( "sourcesModel", s_sourcesModel );
 
     // don't start in an undefined state
-    delete m_currentPlaylistTreeModel;
-    context->setContextProperty( "currentPlaylistTreeModel", m_currentPlaylistTreeModel );
+    m_currentPlaylistTreeModel = 0;
+    //context->setContextProperty( "currentPlaylistTreeModel", m_currentPlaylistTreeModel );
 
     tLog()<< Q_FUNC_INFO << "set source";
     m_view->setSource( QUrl::fromLocalFile( QMLGUI "/main.qml" ) );

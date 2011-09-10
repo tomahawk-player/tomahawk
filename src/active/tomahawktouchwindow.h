@@ -25,11 +25,13 @@
 
 class TomahawkTouchWindow;
 class QFileSystemWatcher;
+class TreeModel;
 class TreeProxyModel;
 
 class TomahawkTouchWindow : public TomahawkWindow
 {
     Q_OBJECT
+    Q_PROPERTY( TreeProxyModel* currentTreeModel READ currentTreeModel NOTIFY currentTreeModelChanged )
 
 public:
     TomahawkTouchWindow();
@@ -39,14 +41,21 @@ public:
     Q_INVOKABLE void play( const QModelIndex& index );
     Q_INVOKABLE void activateItem( const QModelIndex& index );
 
+signals:
+    void currentTreeModelChanged();
+
 private slots:
     void loadQml();
 
 private:
+    TreeProxyModel* currentTreeModel() { return m_currentPlaylistTreeModel; }
+
+
     QDeclarativeView* m_view;
     QFileSystemWatcher* m_watcher;
 
     TreeProxyModel* m_currentPlaylistTreeModel;
+    QHash< TreeModel*, TreeProxyModel* > m_modelProxyModels;
 };
 
 #endif // TOMAHAWKTOUCHWINDOW_H
