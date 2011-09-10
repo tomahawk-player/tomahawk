@@ -814,7 +814,6 @@ GlobalActionManager::shortenLinkRequestFinished()
     if( !reply )
     {
         emit shortLinkReady( QUrl( "" ), QUrl( "" ) );
-        reply->deleteLater();
         return;
     }
 
@@ -847,9 +846,22 @@ GlobalActionManager::shortenLinkRequestFinished()
 }
 
 void
-GlobalActionManager::shortenLinkRequestError( QNetworkReply::NetworkError )
+GlobalActionManager::shortenLinkRequestError( QNetworkReply::NetworkError error )
 {
     qDebug() << Q_FUNC_INFO;
+    qDebug() << "Network Error: " << error;
+
+    QNetworkReply *reply = qobject_cast<QNetworkReply*>( sender() );
+
+    // NOTE: this should never happen
+    if( !reply )
+    {
+        emit shortLinkReady( QUrl( "" ), QUrl( "" ) );
+        return;
+    }
+
+    reply->deleteLater();
+    emit shortLinkReady( QUrl( "" ), QUrl( "" ) );
 }
 
 void
