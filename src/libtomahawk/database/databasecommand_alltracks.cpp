@@ -91,24 +91,23 @@ DatabaseCommand_AllTracks::exec( DatabaseImpl* dbi )
 
     while( query.next() )
     {
-        Tomahawk::result_ptr result = Tomahawk::result_ptr( new Tomahawk::Result() );
         Tomahawk::source_ptr s;
+        QString url = query.value( 7 ).toString();
 
-        if( query.value( 8 ).toUInt() == 0 )
+        if ( query.value( 8 ).toUInt() == 0 )
         {
             s = SourceList::instance()->getLocal();
-            result->setUrl( query.value( 7 ).toString() );
         }
         else
         {
             s = SourceList::instance()->get( query.value( 8 ).toUInt() );
-            if( s.isNull() )
+            if ( s.isNull() )
             {
                 Q_ASSERT( false );
                 continue;
             }
 
-            result->setUrl( QString( "servent://%1\t%2" ).arg( s->userName() ).arg( query.value( 7 ).toString() ) );
+            url = QString( "servent://%1\t%2" ).arg( s->userName() ).arg( url );
         }
 
         QString artist, track, album;
@@ -116,6 +115,7 @@ DatabaseCommand_AllTracks::exec( DatabaseImpl* dbi )
         album = query.value( 2 ).toString();
         track = query.value( 3 ).toString();
 
+        Tomahawk::result_ptr result = Tomahawk::Result::get( url );
         Tomahawk::query_ptr qry = Tomahawk::Query::get( artist, track, album );
         Tomahawk::artist_ptr artistptr = Tomahawk::Artist::get( query.value( 12 ).toUInt(), artist );
         Tomahawk::album_ptr albumptr = Tomahawk::Album::get( query.value( 13 ).toUInt(), album, artistptr );

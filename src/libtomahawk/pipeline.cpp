@@ -117,6 +117,8 @@ Pipeline::resolve( const QList<query_ptr>& qlist, bool prioritized, bool tempora
         int i = 0;
         foreach( const query_ptr& q, qlist )
         {
+            if ( q->resolvingFinished() )
+                continue;
             if ( m_queries_pending.contains( q ) )
                 continue;
             if ( m_qidsState.contains( q->id() ) )

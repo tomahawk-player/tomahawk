@@ -393,7 +393,7 @@ TrackModel::ensureResolved()
     {
         query_ptr query = itemFromIndex( index( i, 0, QModelIndex() ) )->query();
 
-        if ( !query->numResults() )
+        if ( !query->resolvingFinished() )
             Pipeline::instance()->resolve( query );
     }
 }

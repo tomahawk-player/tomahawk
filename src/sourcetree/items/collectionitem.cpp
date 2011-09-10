@@ -48,12 +48,12 @@ CollectionItem::CollectionItem(  SourcesModel* mdl, SourceTreeItem* parent, cons
 {
     m_lovedTracksItem = new GenericPageItem( model(), this, ( m_source.isNull() ? tr( "Top Loved Tracks" ) : tr( "Loved Tracks" ) ), QIcon( RESPATH "images/loved_playlist.png" ),
                                              boost::bind( &CollectionItem::lovedTracksClicked, this ),
-                                             boost::bind( &CollectionItem::getLovedTracksPage, this )
-    );
+                                             boost::bind( &CollectionItem::getLovedTracksPage, this ) );
     m_lovedTracksItem->setSortValue( -250 );
 
-
-    if( m_source.isNull() ) { // super collection
+    if ( m_source.isNull() )
+    {
+        // super collection
         connect( ViewManager::instance(), SIGNAL( tempPageActivated( Tomahawk::ViewPage*) ), this, SLOT( tempPageActivated( Tomahawk::ViewPage* ) ) );
 
                 // add misc children of root node
@@ -84,8 +84,7 @@ CollectionItem::CollectionItem(  SourcesModel* mdl, SourceTreeItem* parent, cons
 
     m_sourceInfoItem = new GenericPageItem( model(), this, tr( "New Additions" ), QIcon( RESPATH "images/new-additions.png" ),
                                             boost::bind( &CollectionItem::sourceInfoClicked, this ),
-                                            boost::bind( &CollectionItem::getSourceInfoPage, this )
-                                          );
+                                            boost::bind( &CollectionItem::getSourceInfoPage, this ) );
     m_sourceInfoItem->setSortValue( -300 );
 
     // create category items if there are playlists to show, or stations to show
@@ -238,9 +237,11 @@ CollectionItem::playlistDeletedInternal( SourceTreeItem* parent, const T& p )
 {
     Q_ASSERT( parent ); // How can we delete playlists if we have none?
     int curCount = parent->children().count();
-    for( int i = 0; i < curCount; i++ ) {
+    for( int i = 0; i < curCount; i++ )
+    {
         PlaylistItem* pl = qobject_cast< PlaylistItem* >( parent->children().at( i ) );
-        if( pl && pl->playlist() == p ) {
+        if( pl && pl->playlist() == p )
+        {
             parent->beginRowsRemoved( i, i );
             parent->removeChild( pl );
             parent->endRowsRemoved();
@@ -324,7 +325,9 @@ CollectionItem::onAutoPlaylistsAdded( const QList< dynplaylist_ptr >& playlists 
     if( playlists.isEmpty() )
         return;
 
-    if( !m_playlists ) { // add the category too
+    if( !m_playlists )
+    {
+        // add the category too
         int cur = children().count();
         beginRowsAdded( cur, cur );
         m_playlists = new CategoryItem( model(), this, SourcesModel::PlaylistsCategory, source()->isLocal() );
@@ -351,7 +354,9 @@ CollectionItem::onStationsAdded( const QList< dynplaylist_ptr >& stations )
     if( stations.isEmpty() )
         return;
 
-    if( !m_stations ) { // add the category too
+    if( !m_stations )
+    {
+        // add the category too
         int cur = children().count();
         beginRowsAdded( cur, cur );
         m_stations = new CategoryItem( model(), this, SourcesModel::StationsCategory, source()->isLocal() );
@@ -397,6 +402,7 @@ CollectionItem::tempPageActivated( Tomahawk::ViewPage* v )
     emit selectRequest( tempPage );
 }
 
+
 ViewPage*
 CollectionItem::sourceInfoClicked()
 {
@@ -414,6 +420,7 @@ CollectionItem::getSourceInfoPage() const
     return m_sourceInfoPage;
 }
 
+
 ViewPage*
 CollectionItem::coolPlaylistsClicked()
 {
@@ -427,11 +434,13 @@ CollectionItem::coolPlaylistsClicked()
     return m_coolPlaylistsPage;
 }
 
+
 ViewPage*
 CollectionItem::getCoolPlaylistsPage() const
 {
     return m_coolPlaylistsPage;
 }
+
 
 ViewPage*
 CollectionItem::lovedTracksClicked()
@@ -442,6 +451,7 @@ CollectionItem::lovedTracksClicked()
     ViewManager::instance()->show( m_lovedTracksPage );
     return m_lovedTracksPage;
 }
+
 
 ViewPage*
 CollectionItem::getLovedTracksPage() const

@@ -32,8 +32,28 @@
 using namespace Tomahawk;
 
 
-Result::Result()
+Tomahawk::result_ptr
+Result::get( const QString& url )
+{
+    static QHash< QString, result_ptr > s_results;
+    static QMutex s_mutex;
+
+    QMutexLocker lock( &s_mutex );
+    if ( s_results.contains( url ) )
+    {
+        return s_results.value( url );
+    }
+
+    result_ptr r = result_ptr( new Result( url ) );
+    s_results.insert( url, r );
+
+    return r;
+}
+
+
+Result::Result( const QString& url )
     : QObject()
+    , m_url( url )
     , m_duration( 0 )
     , m_bitrate( 0 )
     , m_size( 0 )
@@ -142,6 +162,11 @@ Tomahawk::query_ptr
 Result::toQuery() const
 {
     Tomahawk::query_ptr query = Tomahawk::Query::get( artist()->name(), track(), album()->name() );
+    QList<Tomahawk::result_ptr> rl;
+    rl << Result::get( m_url );
+
+    query->addResults( rl );
+    query->setResolveFinished( true );
     return query;
 }
 

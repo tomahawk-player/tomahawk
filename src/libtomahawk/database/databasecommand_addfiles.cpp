@@ -193,7 +193,7 @@ DatabaseCommand_AddFiles::exec( DatabaseImpl* dbi )
 
         Tomahawk::artist_ptr artistptr = Tomahawk::Artist::get( artistid, artist );
         Tomahawk::album_ptr albumptr = Tomahawk::Album::get( albumid, album, artistptr );
-        Tomahawk::result_ptr result = Tomahawk::result_ptr( new Tomahawk::Result() );
+        Tomahawk::result_ptr result = Tomahawk::Result::get( url );
         result->setModificationTime( mtime );
         result->setSize( size );
         result->setMimetype( mimetype );
@@ -206,7 +206,6 @@ DatabaseCommand_AddFiles::exec( DatabaseImpl* dbi )
         result->setAttributes( attr );
         result->setCollection( source()->collection() );
         result->setScore( 1.0 );
-        result->setUrl( url );
         result->setId( trackid );
 
         QList<Tomahawk::result_ptr> results;

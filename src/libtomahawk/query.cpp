@@ -165,6 +165,7 @@ Query::addResults( const QList< Tomahawk::result_ptr >& newresults )
 void
 Query::refreshResults()
 {
+    setResolveFinished( false );
     Pipeline::instance()->resolve( id() );
 }
 

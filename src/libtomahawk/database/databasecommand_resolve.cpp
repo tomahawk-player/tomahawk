@@ -118,29 +118,28 @@ DatabaseCommand_Resolve::resolve( DatabaseImpl* lib )
     files_query.prepare( sql );
     files_query.exec();
 
-    while( files_query.next() )
+    while ( files_query.next() )
     {
-        Tomahawk::result_ptr result( new Tomahawk::Result() );
         source_ptr s;
+        QString url = files_query.value( 0 ).toString();
 
-        const QString url_str = files_query.value( 0 ).toString();
-        if( files_query.value( 13 ).toUInt() == 0 )
+        if ( files_query.value( 13 ).toUInt() == 0 )
         {
             s = SourceList::instance()->getLocal();
-            result->setUrl( url_str );
         }
         else
         {
             s = SourceList::instance()->get( files_query.value( 13 ).toUInt() );
             if( s.isNull() )
             {
-                qDebug() << "WTF: Could not find source" << files_query.value( 13 ).toUInt();
+                qDebug() << "Could not find source" << files_query.value( 13 ).toUInt();
                 continue;
             }
 
-            result->setUrl( QString( "servent://%1\t%2" ).arg( s->userName() ).arg( url_str ) );
+            url = QString( "servent://%1\t%2" ).arg( s->userName() ).arg( url );
         }
 
+        Tomahawk::result_ptr result = Tomahawk::Result::get( url );
         Tomahawk::artist_ptr artist = Tomahawk::Artist::get( files_query.value( 15 ).toUInt(), files_query.value( 10 ).toString() );
         Tomahawk::album_ptr album = Tomahawk::Album::get( files_query.value( 16 ).toUInt(), files_query.value( 11 ).toString(), artist );
 
@@ -233,27 +232,26 @@ DatabaseCommand_Resolve::fullTextResolve( DatabaseImpl* lib )
 
     while( files_query.next() )
     {
-        Tomahawk::result_ptr result( new Tomahawk::Result() );
         source_ptr s;
+        QString url = files_query.value( 0 ).toString();
 
-        const QString url_str = files_query.value( 0 ).toString();
-        if( files_query.value( 13 ).toUInt() == 0 )
+        if ( files_query.value( 13 ).toUInt() == 0 )
         {
             s = SourceList::instance()->getLocal();
-            result->setUrl( url_str );
         }
         else
         {
             s = SourceList::instance()->get( files_query.value( 13 ).toUInt() );
             if( s.isNull() )
             {
-                qDebug() << "WTF: Could not find source" << files_query.value( 13 ).toUInt();
+                qDebug() << "Could not find source" << files_query.value( 13 ).toUInt();
                 continue;
             }
 
-            result->setUrl( QString( "servent://%1\t%2" ).arg( s->userName() ).arg( url_str ) );
+            url = QString( "servent://%1\t%2" ).arg( s->userName() ).arg( url );
         }
 
+        Tomahawk::result_ptr result = Tomahawk::Result::get( url );
         Tomahawk::artist_ptr artist = Tomahawk::Artist::get( files_query.value( 15 ).toUInt(), files_query.value( 10 ).toString() );
         Tomahawk::album_ptr album = Tomahawk::Album::get( files_query.value( 16 ).toUInt(), files_query.value( 11 ).toString(), artist );
 

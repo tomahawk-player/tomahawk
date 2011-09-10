@@ -56,7 +56,7 @@ friend class ::DatabaseCommand_AddFiles;
 friend class ::DatabaseCommand_LoadFile;
 
 public:
-    explicit Result();
+    static Tomahawk::result_ptr get( const QString& url );
     virtual ~Result();
 
     QVariant toVariant() const;
@@ -92,7 +92,6 @@ public:
     void setArtist( const Tomahawk::artist_ptr& artist );
     void setAlbum( const Tomahawk::album_ptr& album );
     void setTrack( const QString& track ) { m_track = track; }
-    void setUrl( const QString& url ) { m_url = url; }
     void setMimetype( const QString& mimetype ) { m_mimetype = mimetype; }
     void setDuration( unsigned int duration ) { m_duration = duration; }
     void setBitrate( unsigned int bitrate ) { m_bitrate = bitrate; }
@@ -124,6 +123,9 @@ private slots:
     void onOnline();
 
 private:
+    // private constructor
+    explicit Result( const QString& url );
+
     void updateAttributes();
     void parseSocialActions();
 

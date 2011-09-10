@@ -212,14 +212,13 @@ ScriptResolver::handleMsg( const QByteArray& msg )
             QVariantMap m = rv.toMap();
             qDebug() << "Found result:" << m;
 
-            Tomahawk::result_ptr rp( new Tomahawk::Result() );
+            Tomahawk::result_ptr rp = Tomahawk::Result::get( m.value( "url" ).toString() );
             Tomahawk::artist_ptr ap = Tomahawk::Artist::get( 0, m.value( "artist" ).toString() );
             rp->setArtist( ap );
             rp->setAlbum( Tomahawk::Album::get( 0, m.value( "album" ).toString(), ap ) );
             rp->setTrack( m.value( "track" ).toString() );
             rp->setDuration( m.value( "duration" ).toUInt() );
             rp->setBitrate( m.value( "bitrate" ).toUInt() );
-            rp->setUrl( m.value( "url" ).toString() );
             rp->setSize( m.value( "size" ).toUInt() );
             rp->setRID( uuid() );
             rp->setFriendlySource( m_name );

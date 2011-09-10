@@ -213,7 +213,7 @@ DatabaseImpl::cleanSql( const QString& sql )
 Tomahawk::result_ptr
 DatabaseImpl::file( int fid )
 {
-    Tomahawk::result_ptr r = Tomahawk::result_ptr( new Tomahawk::Result() );
+    Tomahawk::result_ptr r;
     TomahawkSqlQuery query = newquery();
     query.exec( QString( "SELECT url, mtime, size, md5, mimetype, duration, bitrate, "
                          "file_join.artist, file_join.album, file_join.track, "
@@ -228,8 +228,8 @@ DatabaseImpl::file( int fid )
     if ( query.next() )
     {
         Tomahawk::source_ptr s;
+        QString url = query.value( 0 ).toString();
 
-        const QString url_str = query.value( 0 ).toString();
         if ( query.value( 13 ).toUInt() == 0 )
         {
             s = SourceList::instance()->getLocal();
@@ -242,13 +242,13 @@ DatabaseImpl::file( int fid )
                 return r;
             }
 
-            r->setUrl( QString( "servent://%1\t%2" ).arg( s->userName() ).arg( url_str ) );
+            url = QString( "servent://%1\t%2" ).arg( s->userName() ).arg( url );
         }
 
+        r = Tomahawk::Result::get( url );
         Tomahawk::artist_ptr artist = Tomahawk::Artist::get( query.value( 7 ).toUInt(), query.value( 10 ).toString() );
         Tomahawk::album_ptr album = Tomahawk::Album::get( query.value( 8 ).toUInt(), query.value( 11 ).toString(), artist );
 
-        r->setUrl( query.value( 0 ).toString() );
         r->setModificationTime( query.value( 1 ).toUInt() );
         r->setSize( query.value( 2 ).toUInt() );
         r->setMimetype( query.value( 4 ).toString() );
@@ -556,7 +556,6 @@ DatabaseImpl::resultFromHint( const Tomahawk::query_ptr& origquery )
         return res;
     }
 
-    res = Tomahawk::result_ptr( new Tomahawk::Result() );
     bool searchlocal = s->isLocal();
 
     QString sql = QString( "SELECT "
@@ -587,12 +586,11 @@ DatabaseImpl::resultFromHint( const Tomahawk::query_ptr& origquery )
     if( query.next() )
     {
         Tomahawk::source_ptr s;
+        QString url = query.value( 0 ).toString();
 
-        const QString url_str = query.value( 0 ).toString();
         if ( query.value( 13 ).toUInt() == 0 )
         {
             s = SourceList::instance()->getLocal();
-            res->setUrl( url_str );
         }
         else
         {
@@ -602,9 +600,10 @@ DatabaseImpl::resultFromHint( const Tomahawk::query_ptr& origquery )
                 return res;
             }
 
-            res->setUrl( QString( "servent://%1\t%2" ).arg( s->userName() ).arg( url_str ) );
+            url = QString( "servent://%1\t%2" ).arg( s->userName() ).arg( url );
         }
 
+        res = Tomahawk::Result::get( url );
         Tomahawk::artist_ptr artist = Tomahawk::Artist::get( query.value( 15 ).toUInt(), query.value( 10 ).toString() );
         Tomahawk::album_ptr album = Tomahawk::Album::get( query.value( 16 ).toUInt(), query.value( 11 ).toString(), artist );
 
