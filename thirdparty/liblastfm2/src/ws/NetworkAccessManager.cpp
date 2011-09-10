@@ -50,7 +50,7 @@ static struct NetworkAccessManagerInit
         // at two seconds, so that hangs startup
         if (!s.fAutoDetect && s.lpszProxy)
         {
-            QUrl url( QString::fromUtf16(s.lpszProxy) );
+            QUrl url( QString::fromUtf16((const unsigned short*)s.lpszProxy) );
             QNetworkProxy proxy( QNetworkProxy::HttpProxy );
             proxy.setHostName( url.host() );
             proxy.setPort( url.port() );
