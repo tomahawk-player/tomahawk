@@ -26,6 +26,7 @@
 #include "musicscanner.h"
 #include "tomahawksettings.h"
 #include "utils/tomahawkutils.h"
+#include "libtomahawk/sourcelist.h"
 
 #include "database/database.h"
 #include "database/databasecommand_dirmtimes.h"
@@ -177,5 +178,6 @@ ScanManager::scannerFinished()
         m_musicScannerThreadController = 0;
     }
     m_scanTimer->start();
+    SourceList::instance()->getLocal()->scanningFinished( 0 );
     emit finished();
 }

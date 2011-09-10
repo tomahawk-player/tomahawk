@@ -253,7 +253,6 @@ MusicScanner::listerFinished( const QMap<QString, unsigned int>& newmtimes  )
     tDebug( LOGVERBOSE ) << Q_FUNC_INFO;
 
     // any remaining stuff that wasnt emitted as a batch:
-    SourceList::instance()->getLocal()->scanningFinished( m_scanned );
     foreach( QString key, m_filemtimes.keys() )
     {
         m_filesToDelete << m_filemtimes[ key ].keys().first();
