@@ -20,7 +20,7 @@
 #ifndef WMISINK_WIN_H
 #define WMISINK_WIN_H
 
-#include "WbemCli.h"
+#include "wbemcli.h"
 
 // Sink object for WMI NDIS notifications
 class WmiSink : public IWbemObjectSink

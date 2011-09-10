@@ -21,8 +21,8 @@
 #define NDIS_EVENTS_H
 
 #include <windows.h>
-#include <atlbase.h>
-#include <WbemCli.h>
+//#include <atlbase.h>
+//#include <WbemCli.h>
 
 class NdisEvents
 {

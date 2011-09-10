@@ -22,9 +22,11 @@
 #define _WIN32_WINNT 0x0400
 #endif
 
-#include <objbase.h>
-#include <atlbase.h>
-#include <atlcom.h>
+#include "winable.h"
+
+//#include <objbase.h>
+//#include <atlbase.h>
+//#include <atlcom.h>
 
 
 /** @brief WsConnectionMonitor needs Com to work as early as possible so we do this

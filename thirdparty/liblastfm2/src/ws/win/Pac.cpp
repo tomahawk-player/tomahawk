@@ -21,8 +21,9 @@
 #include <QNetworkRequest>
 #include <QStringList>
 #include <QUrl>
-#include <atlbase.h>
-#include <atlconv.h>
+#include <winhttp.h>
+//#include <atlbase.h>
+//#include <atlconv.h>
 
 
 static bool
