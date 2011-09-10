@@ -55,11 +55,13 @@ SourceList::getLocal()
     return m_local;
 }
 
+
 void
 SourceList::setWebSource( const source_ptr& websrc )
 {
     m_dummy = websrc;
 }
+
 
 const
 source_ptr SourceList::webSource() const
@@ -169,7 +171,7 @@ SourceList::get( int id ) const
     QMutexLocker lock( &m_mut );
 
     if ( id == 0 )
-        return SourceList::instance()->getLocal();
+        return m_local;
     else
         return m_sources.value( m_sources_id2name.value( id ) );
 }
