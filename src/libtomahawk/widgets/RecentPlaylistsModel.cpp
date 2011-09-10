@@ -84,7 +84,7 @@ RecentPlaylistsModel::onReady()
 
 
 void
-RecentPlaylistsModel::playlistsLoaded ( const QList<DatabaseCommand_LoadAllSortedPlaylists::SourcePlaylistPair>& playlistGuids )
+RecentPlaylistsModel::playlistsLoaded( const QList<DatabaseCommand_LoadAllSortedPlaylists::SourcePlaylistPair>& playlistGuids )
 {
     beginResetModel();
     m_playlists.clear();
@@ -157,7 +157,8 @@ RecentPlaylistsModel::data( const QModelIndex& index, int role ) const
                 return RecentlyPlayedPlaylistsModel::AutoPlaylist;
             else if ( dynp->mode() == OnDemand )
                 return RecentlyPlayedPlaylistsModel::Station;
-        } else
+        }
+        else
         {
             return RecentlyPlayedPlaylistsModel::StaticPlaylist;
         }
