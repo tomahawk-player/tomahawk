@@ -42,7 +42,7 @@ NdisEvents::~NdisEvents()
 HRESULT
 NdisEvents::registerForNdisEvents()
 {
-    HRESULT hr = m_pLocator.CoCreateInstance(CLSID_WbemLocator);
+    HRESULT hr = 0; // m_pLocator.CoCreateInstance(CLSID_WbemLocator);
     if (FAILED(hr))
         return hr;
 
