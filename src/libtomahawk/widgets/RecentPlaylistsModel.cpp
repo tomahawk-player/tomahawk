@@ -29,6 +29,8 @@
 #include "RecentlyPlayedPlaylistsModel.h"
 #include <network/servent.h>
 
+#define REFRESH_TIMEOUT 1000
+
 using namespace Tomahawk;
 
 
@@ -36,15 +38,31 @@ RecentPlaylistsModel::RecentPlaylistsModel( unsigned int maxPlaylists, QObject* 
     : QAbstractListModel( parent )
     , m_maxPlaylists( maxPlaylists )
 {
+    m_timer = new QTimer( this );
+
+    connect( m_timer, SIGNAL( timeout() ), SLOT( onRefresh() ) );
     connect( SourceList::instance(), SIGNAL( ready() ), SLOT( onReady() ) );
 
     // Load recent playlists initially
-    refresh();
+    onRefresh();
 }
+
 
 void
 RecentPlaylistsModel::refresh()
 {
+    if ( m_timer->isActive() )
+        m_timer->stop();
+    m_timer->start( REFRESH_TIMEOUT );
+}
+
+
+void
+RecentPlaylistsModel::onRefresh()
+{
+    if ( m_timer->isActive() )
+        m_timer->stop();
+
     DatabaseCommand_LoadAllSortedPlaylists* cmd = new DatabaseCommand_LoadAllSortedPlaylists( source_ptr() );
     cmd->setLimit( 15 );
     cmd->setSortOrder( DatabaseCommand_LoadAllPlaylists::ModificationTime );
@@ -53,6 +71,7 @@ RecentPlaylistsModel::refresh()
     Database::instance()->enqueue( QSharedPointer< DatabaseCommand >( cmd ) );
 }
 
+
 void
 RecentPlaylistsModel::onReady()
 {
@@ -60,7 +79,7 @@ RecentPlaylistsModel::onReady()
         onSourceAdded( s );
 
     connect( SourceList::instance(), SIGNAL( sourceAdded( Tomahawk::source_ptr ) ), this, SLOT( onSourceAdded( Tomahawk::source_ptr ) ), Qt::QueuedConnection );
-    refresh();
+    onRefresh();
 }
 
 
@@ -160,6 +179,7 @@ RecentPlaylistsModel::data( const QModelIndex& index, int role ) const
     }
 }
 
+
 void
 RecentPlaylistsModel::updatePlaylist()
 {
@@ -176,6 +196,7 @@ RecentPlaylistsModel::updatePlaylist()
     }
 }
 
+
 void
 RecentPlaylistsModel::onSourceAdded( const Tomahawk::source_ptr& source )
 {
@@ -187,6 +208,7 @@ RecentPlaylistsModel::onSourceAdded( const Tomahawk::source_ptr& source )
     connect( source->collection().data(), SIGNAL( autoPlaylistsDeleted(QList<Tomahawk::dynplaylist_ptr>) ), SLOT( onDynPlaylistsRemoved( QList<Tomahawk::dynplaylist_ptr> ) ) );
     connect( source->collection().data(), SIGNAL( stationsDeleted(QList<Tomahawk::dynplaylist_ptr>) ), SLOT( onDynPlaylistsRemoved( QList<Tomahawk::dynplaylist_ptr> ) ) );
 }
+
 
 void
 RecentPlaylistsModel::sourceOnline()
@@ -204,12 +226,14 @@ RecentPlaylistsModel::sourceOnline()
     }
 }
 
+
 void
 RecentPlaylistsModel::onDynPlaylistsRemoved( QList< dynplaylist_ptr > playlists )
 {
     QList< playlist_ptr > pls;
     foreach( const dynplaylist_ptr& p, playlists )
         pls << p;
+
     onPlaylistsRemoved( pls );
 }
 
@@ -217,8 +241,10 @@ RecentPlaylistsModel::onDynPlaylistsRemoved( QList< dynplaylist_ptr > playlists 
 void
 RecentPlaylistsModel::onPlaylistsRemoved( QList< playlist_ptr > playlists )
 {
-    foreach( const playlist_ptr& pl, playlists ) {
-        if( m_playlists.contains( pl ) ) {
+    foreach( const playlist_ptr& pl, playlists )
+    {
+        if( m_playlists.contains( pl ) )
+        {
             m_artists.remove( pl );
 
             int idx = m_playlists.indexOf( pl );

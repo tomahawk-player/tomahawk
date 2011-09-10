@@ -21,6 +21,7 @@
 #define RECENTLPLAYLISTSMODEL_H
 
 #include <QModelIndex>
+#include <QTimer>
 
 #include "playlist.h"
 #include "database/databasecommand_loadallsortedplaylists.h"
@@ -36,12 +37,13 @@ public:
 
 public slots:
     void refresh();
-     void onReady();
+    void onReady();
 
 signals:
     void emptinessChanged( bool isEmpty );
 
 private slots:
+    void onRefresh();
     void playlistsLoaded( const QList<DatabaseCommand_LoadAllSortedPlaylists::SourcePlaylistPair>& playlistGuids );
 
     void onPlaylistsRemoved( QList< Tomahawk::playlist_ptr > playlists );
@@ -50,10 +52,12 @@ private slots:
 
     void sourceOnline();
     void onSourceAdded( const Tomahawk::source_ptr& source );
+
 private:
     QList< Tomahawk::playlist_ptr > m_playlists;
     mutable QHash< Tomahawk::playlist_ptr, QString > m_artists;
     unsigned int m_maxPlaylists;
+    QTimer* m_timer;
 };
 
 #endif // RECENTLPLAYLISTSMODEL_H

@@ -73,7 +73,7 @@ SourceInfoWidget::SourceInfoWidget( const Tomahawk::source_ptr& source, QWidget*
     }
     else
     {
-        m_description = tr( "Recent activity from %1" ).arg(  source->friendlyName() );
+        m_description = tr( "Recent activity from %1" ).arg( source->friendlyName() );
     }
 
     m_pixmap.load( RESPATH "images/new-additions.png" );

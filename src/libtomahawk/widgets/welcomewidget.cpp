@@ -88,7 +88,7 @@ WelcomeWidget::WelcomeWidget( QWidget* parent )
     connect( SourceList::instance(), SIGNAL( ready() ), SLOT( updateRecentTracks() ) );
     connect( SourceList::instance(), SIGNAL( sourceAdded( Tomahawk::source_ptr ) ), SLOT( onSourceAdded( Tomahawk::source_ptr ) ) );
     connect( ui->playlistWidget, SIGNAL( activated( QModelIndex ) ), SLOT( onPlaylistActivated( QModelIndex ) ) );
-    connect( AudioEngine::instance() ,SIGNAL( playlistChanged( Tomahawk::PlaylistInterface* ) ), this, SLOT( updatePlaylists() ), Qt::QueuedConnection );
+    connect( AudioEngine::instance() ,SIGNAL( playlistChanged( Tomahawk::PlaylistInterface* ) ), SLOT( updatePlaylists() ), Qt::QueuedConnection );
 }
 
 
@@ -106,6 +106,7 @@ WelcomeWidget::updateRecentTracks()
     connect( SourceList::instance()->getLocal().data(), SIGNAL( stats( QVariantMap ) ), this, SLOT( updateRecentAdditions() ) );
 }
 
+
 void
 WelcomeWidget::updateRecentAdditions()
 {
@@ -116,19 +117,6 @@ WelcomeWidget::updateRecentAdditions()
 void
 WelcomeWidget::updatePlaylists()
 {
-//     ui->playlistWidget->clear();
-
-//     QList<Tomahawk::playlist_ptr> playlists = TomahawkSettings::instance()->recentlyPlayedPlaylists();
-/*
-    foreach( const Tomahawk::playlist_ptr& playlist, playlists )
-    {
-        connect( playlist.data(), SIGNAL( revisionLoaded( Tomahawk::PlaylistRevision ) ), SLOT( refresh() ) );
-
-        PlaylistWidgetItem* item = new PlaylistWidgetItem( playlist );
-        ui->playlistWidget->addItem( item );
-        item->setData( Qt::DisplayRole, playlist->title() );
-    }*/
-
     int num = ui->playlistWidget->model()->rowCount( QModelIndex() );
     if ( num == 0 )
     {
@@ -150,7 +138,9 @@ WelcomeWidget::onSourceAdded( const Tomahawk::source_ptr& source )
 void
 WelcomeWidget::checkQueries()
 {
-    m_timer->stop();
+    if ( m_timer->isActive() )
+        m_timer->stop();
+
     m_tracksModel->ensureResolved();
 }
 
