@@ -21,8 +21,10 @@
 
 #include "infosystem/infosystem.h"
 
+#include <QNetworkAccessManager>
 #include <QObject>
 #include <QVariant>
+#include <QWeakPointer>
 
 class QTimer;
 
@@ -48,7 +50,7 @@ protected slots:
     void pushInfo( QString caller, Tomahawk::InfoSystem::InfoType type, QVariant input );
 
 public slots:
-    void namChangedSlot( QNetworkAccessManager* /*nam*/ ) {} // unused
+    void namChangedSlot( QNetworkAccessManager* nam );
 
     virtual void notInCacheSlot( uint requestId, const Tomahawk::InfoSystem::InfoCriteriaHash criteria, Tomahawk::InfoSystem::InfoRequestData requestData )
     {
@@ -75,6 +77,7 @@ private:
     QString m_afterStatus;
 
     QTimer* m_pauseTimer;
+    QWeakPointer<QNetworkAccessManager> m_nam;
 
 };
 

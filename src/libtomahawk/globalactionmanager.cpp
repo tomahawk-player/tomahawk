@@ -104,6 +104,14 @@ GlobalActionManager::openLink( const QString& title, const QString& artist, cons
     return link;
 }
 
+QUrl
+GlobalActionManager::openShortTomahawkLink( const QString& title, const QString& artist, const QString& album ) const
+{
+    QUrl longLink = openLink( title, artist, album );
+
+
+}
+
 QString
 GlobalActionManager::copyPlaylistToClipboard( const dynplaylist_ptr& playlist )
 {

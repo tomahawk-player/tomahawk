@@ -130,6 +130,18 @@ AdiumPlugin::pushInfo( QString caller, Tomahawk::InfoSystem::InfoType type, QVar
     m_pauseTimer->stop();
 }
 
+void
+AdiumPlugin::namChangedSlot( QNetworkAccessManager* nam )
+{
+    m_nam = QWeakPointer<QNetworkAccessManager>( nam );
+
+    if( !m_nam.isNull() )
+    {
+        connect( m_nam.data(), SIGNAL( finished( QNetworkReply* ) ),
+                this, SLOT( replyFinished( QNetworkReply* ) ) );
+    }
+}
+
 /** Audio state slots */
 void
 AdiumPlugin::audioStarted( const QVariant &input )

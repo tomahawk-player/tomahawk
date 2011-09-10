@@ -25,8 +25,11 @@
 #include "playlist/dynamic/DynamicPlaylist.h"
 #include "dllmacro.h"
 
+#include <QNetworkAccessManager>
 #include <QObject>
 #include <QUrl>
+#include <QWeakPointer>
+
 
 /**
  * Handles global actions such as parsing and creation of links, mime data handling, etc
@@ -40,6 +43,8 @@ public:
 
     QUrl openLinkFromQuery( const Tomahawk::query_ptr& query ) const;
     QUrl openLink( const QString& title, const QString& artist, const QString& album ) const;
+
+    QUrl shortenLink( const QString& link );
 
     /// Takes a spotify link and performs the default open action on it
     bool openSpotifyLink( const QString& link );
@@ -58,6 +63,9 @@ public slots:
     Tomahawk::dynplaylist_ptr loadDynamicPlaylist( const QUrl& url, bool station );
 
     void handleOpenTrack( const Tomahawk::query_ptr& qry );
+
+signals:
+    void shortLinkReady( QUrl url );
 
 private slots:
     void bookmarkPlaylistCreated( const Tomahawk::playlist_ptr& pl );
@@ -92,6 +100,8 @@ private:
     Tomahawk::playlist_ptr m_toShow;
     Tomahawk::query_ptr m_waitingToBookmark;
     Tomahawk::query_ptr m_waitingToPlay;
+
+    QWeakPointer<QNetworkAccessManager> m_nam;
 
     static GlobalActionManager* s_instance;
 };
