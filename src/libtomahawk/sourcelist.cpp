@@ -167,7 +167,11 @@ source_ptr
 SourceList::get( int id ) const
 {
     QMutexLocker lock( &m_mut );
-    return m_sources.value( m_sources_id2name.value( id ) );
+
+    if ( id == 0 )
+        return SourceList::instance()->getLocal();
+    else
+        return m_sources.value( m_sources_id2name.value( id ) );
 }
 
 
