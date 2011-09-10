@@ -253,11 +253,12 @@ MusicScanner::listerFinished( const QMap<QString, unsigned int>& newmtimes  )
     tDebug( LOGVERBOSE ) << Q_FUNC_INFO;
 
     // any remaining stuff that wasnt emitted as a batch:
-    if( m_scannedfiles.length() )
+    SourceList::instance()->getLocal()->scanningFinished( m_scanned );
+    foreach( QString key, m_filemtimes.keys() )
     {
-        SourceList::instance()->getLocal()->scanningFinished( m_scanned );
-        commitBatch( m_scannedfiles, m_filesToDelete );
+        m_filesToDelete << m_filemtimes[ key ].keys().first();
     }
+    commitBatch( m_scannedfiles, m_filesToDelete );
 
     // remove obsolete / stale files
     foreach ( const QString& path, m_dirmtimes.keys() )
@@ -323,7 +324,10 @@ MusicScanner::scanFile( const QFileInfo& fi )
     if ( m_mode == TomahawkSettings::Files && m_filemtimes.contains( "file://" + fi.canonicalFilePath() ) )
     {
         if ( fi.lastModified().toUTC().toTime_t() == m_filemtimes.value( "file://" + fi.canonicalFilePath() ).values().first() )
+        {
+            m_filemtimes.remove( "file://" + fi.canonicalFilePath() );
             return;
+        }
 
         m_filesToDelete << m_filemtimes.value( "file://" + fi.canonicalFilePath() ).keys().first();
     }
