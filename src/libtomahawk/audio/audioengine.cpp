@@ -195,7 +195,7 @@ AudioEngine::previous()
 {
     tDebug( LOGEXTRA ) << Q_FUNC_INFO;
 
-    if( canGoPrevious() )
+    if ( canGoPrevious() )
         loadPreviousTrack();
 }
 
@@ -205,7 +205,7 @@ AudioEngine::next()
 {
     tDebug( LOGEXTRA ) << Q_FUNC_INFO;
 
-    if( canGoNext() )
+    if ( canGoNext() )
         loadNextTrack();
 }
 
@@ -525,19 +525,21 @@ AudioEngine::loadNextTrack()
 
     if ( !m_playlist.isNull() && result.isNull() )
     {
-        tDebug( LOGEXTRA ) << Q_FUNC_INFO << " loading playlist's next item";
+        tDebug( LOGEXTRA ) << Q_FUNC_INFO << "Loading playlist's next item";
         result = m_playlist.data()->nextItem();
+        m_currentTrackPlaylist = m_playlist;
     }
 
     if ( !result.isNull() )
     {
-        tDebug( LOGEXTRA ) << Q_FUNC_INFO << " got next item, loading track";
+        tDebug( LOGEXTRA ) << Q_FUNC_INFO << "Got next item, loading track";
         loadTrack( result );
     }
     else
     {
         if ( !m_playlist.isNull() && m_playlist.data()->retryMode() == Tomahawk::PlaylistInterface::Retry )
             m_waitingOnNewTrack = true;
+
         stop();
     }
 }
