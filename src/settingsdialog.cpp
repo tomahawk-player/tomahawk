@@ -123,27 +123,23 @@ SettingsDialog::SettingsDialog( QWidget *parent )
 
     ui->staticHostName->setText( s->externalHostname() );
     ui->staticPort->setValue( s->externalPort() );
-
     ui->proxyButton->setVisible( true );
-
-    // MUSIC SCANNER
-    //FIXME: MULTIPLECOLLECTIONDIRS
-    if ( s->scannerPaths().count() )
-        ui->lineEditMusicPath_2->setText( s->scannerPaths().first() );
-    else
-    {
-        ui->lineEditMusicPath_2->setText( QDesktopServices::storageLocation( QDesktopServices::MusicLocation ) );
-    }
 
     ui->checkBoxWatchForChanges->setChecked( s->watchForChanges() );
     ui->scannerTimeSpinBox->setValue( s->scannerTime() );
     connect( ui->checkBoxWatchForChanges, SIGNAL( clicked( bool ) ), SLOT( updateScanOptionsView() ) );
     connect( ui->scannerDirModeButton, SIGNAL( clicked( bool ) ), SLOT( updateScanOptionsView() ) );
     connect( ui->scannerFileModeButton, SIGNAL( clicked( bool ) ), SLOT( updateScanOptionsView() ) );
+
     if ( s->scannerMode() == TomahawkSettings::Files )
+    {
         ui->scannerFileModeButton->setChecked( true );
+    }
     else
+    {
         ui->scannerDirModeButton->setChecked( true );
+    }
+
     if ( ui->checkBoxWatchForChanges->isChecked() )
     {
         ui->scanTimeLabel->show();
@@ -163,11 +159,16 @@ SettingsDialog::SettingsDialog( QWidget *parent )
         ui->scanInformationLabelDirs->hide();
     }
 
+    foreach ( const QString& dir, TomahawkSettings::instance()->scannerPaths() )
+    {
+        tDebug() << "FOO:" << dir;
+        ui->dirTree->checkPath( dir, Qt::Checked );
+    }
+
     // NOW PLAYING
 #ifdef Q_WS_MAC
     ui->checkBoxEnableAdium->setChecked( s->nowPlayingEnabled() );
 #else
-    ui->nowPlaying->hide();
     ui->checkBoxEnableAdium->hide();
 #endif
 
@@ -175,7 +176,7 @@ SettingsDialog::SettingsDialog( QWidget *parent )
     ui->checkBoxEnableLastfm->setChecked( s->scrobblingEnabled() );
     ui->lineEditLastfmUsername->setText( s->lastFmUsername() );
     ui->lineEditLastfmPassword->setText(s->lastFmPassword() );
-    connect( ui->pushButtonTestLastfmLogin, SIGNAL( clicked( bool) ), this, SLOT( testLastFmLogin() ) );
+    connect( ui->pushButtonTestLastfmLogin, SIGNAL( clicked( bool) ), SLOT( testLastFmLogin() ) );
 
 #ifdef Q_WS_MAC // FIXME
     ui->pushButtonTestLastfmLogin->setVisible( false );
@@ -184,19 +185,18 @@ SettingsDialog::SettingsDialog( QWidget *parent )
     // SCRIPT RESOLVER
     ui->removeScript->setEnabled( false );
     ResolverConfigDelegate* del = new ResolverConfigDelegate( this );
-    connect( del, SIGNAL( openConfig( QString ) ), this, SLOT( openResolverConfig( QString ) ) );
+    connect( del, SIGNAL( openConfig( QString ) ), SLOT( openResolverConfig( QString ) ) );
     ui->scriptList->setItemDelegate( del );
     m_resolversModel = new ResolversModel( s->allScriptResolvers(), s->enabledScriptResolvers(), this );
     ui->scriptList->setModel( m_resolversModel );
 
-    connect( ui->scriptList->selectionModel(), SIGNAL( selectionChanged( QItemSelection,QItemSelection ) ), this, SLOT( scriptSelectionChanged() ) );
-    connect( ui->addScript, SIGNAL( clicked( bool ) ), this, SLOT( addScriptResolver() ) );
-    connect( ui->removeScript, SIGNAL( clicked( bool ) ), this, SLOT( removeScriptResolver() ) );
+    connect( ui->scriptList->selectionModel(), SIGNAL( selectionChanged( QItemSelection,QItemSelection ) ), SLOT( scriptSelectionChanged() ) );
+    connect( ui->addScript, SIGNAL( clicked( bool ) ), SLOT( addScriptResolver() ) );
+    connect( ui->removeScript, SIGNAL( clicked( bool ) ), SLOT( removeScriptResolver() ) );
 
-    connect( ui->buttonBrowse_2, SIGNAL( clicked() ),  SLOT( showPathSelector() ) );
     connect( ui->proxyButton,  SIGNAL( clicked() ),  SLOT( showProxySettings() ) );
     connect( ui->checkBoxStaticPreferred, SIGNAL( toggled(bool) ), SLOT( toggleUpnp(bool) ) );
-    connect( this,             SIGNAL( rejected() ), SLOT( onRejected() ) );
+    connect( this, SIGNAL( rejected() ), SLOT( onRejected() ) );
 
     ui->listWidget->setCurrentRow( 0 );
     ui->listWidget->setItemDelegate(new SettingsListDelegate());
@@ -218,7 +218,7 @@ SettingsDialog::~SettingsDialog()
         s->setExternalHostname( ui->staticHostName->text() );
         s->setExternalPort( ui->staticPort->value() );
 
-        s->setScannerPaths( QStringList( ui->lineEditMusicPath_2->text() ) );
+        s->setScannerPaths( ui->dirTree->getCheckedPaths() );
         s->setWatchForChanges( ui->checkBoxWatchForChanges->isChecked() );
         s->setScannerTime( ui->scannerTimeSpinBox->value() );
         s->setScannerMode( ui->scannerFileModeButton->isChecked() ? TomahawkSettings::Files : TomahawkSettings::Dirs );
@@ -334,7 +334,7 @@ SettingsDialog::setupSipButtons()
 void
 SettingsDialog::changePage( QListWidgetItem* current, QListWidgetItem* previous )
 {
-    if( !current )
+    if ( !current )
         current = previous;
 
     ui->stackedWidget->setCurrentIndex( ui->listWidget->row(current) );
@@ -353,7 +353,7 @@ SettingsDialog::showPathSelector()
     if ( path.isEmpty() )
         return;
 
-    ui->lineEditMusicPath_2->setText( path );
+//    ui->lineEditMusicPath_2->setText( path );
 }
 
 

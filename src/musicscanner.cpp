@@ -40,19 +40,21 @@ DirLister::go()
 {
     tLog() << Q_FUNC_INFO << "Recursive? :" << (m_recursive ? "true" : "false");
     tLog() << Q_FUNC_INFO << "Manual full? :" << (m_manualFull ? "true" : "false");
-    if( !m_recursive )
+
+    if ( !m_recursive )
     {
-        foreach( QString dir, m_dirs )
+        foreach ( const QString& dir, m_dirs )
         {
-            if( m_dirmtimes.contains( dir ) )
+            if ( m_dirmtimes.contains( dir ) )
             {
                 tDebug( LOGEXTRA ) << "Removing" << dir << "from m_dirmtimes because it's specifically requested";
                 m_dirmtimes.remove( dir );
             }
+
             QStringList filtered = QStringList( m_dirmtimes.keys() ).filter( dir );
-            foreach( QString filteredDir, filtered )
+            foreach ( const QString& filteredDir, filtered )
             {
-                if( !QDir( filteredDir ).exists() )
+                if ( !QDir( filteredDir ).exists() )
                 {
                     tDebug( LOGEXTRA ) << "Removing" << filteredDir << "from m_dirmtimes because it does not exist";
                     m_dirmtimes.remove( filteredDir );
@@ -62,7 +64,7 @@ DirLister::go()
         m_newdirmtimes = m_dirmtimes;
     }
 
-    foreach( QString dir, m_dirs )
+    foreach ( const QString& dir, m_dirs )
     {
         m_opcount++;
         QMetaObject::invokeMethod( this, "scanDir", Qt::QueuedConnection, Q_ARG( QDir, QDir( dir, 0 ) ), Q_ARG( int, 0 ), Q_ARG( DirLister::Mode, ( m_recursive ? DirLister::Recursive : DirLister::NonRecursive ) ) );
@@ -83,7 +85,7 @@ DirLister::scanDir( QDir dir, int depth, DirLister::Mode mode )
     }
 
     tDebug( LOGVERBOSE ) << "DirLister::scanDir scanning:" << dir.canonicalPath() << "with mode" << mode;
-    if( !dir.exists() )
+    if ( !dir.exists() )
     {
         tDebug( LOGVERBOSE ) << "Dir no longer exists, not scanning";
 
@@ -104,7 +106,7 @@ DirLister::scanDir( QDir dir, int depth, DirLister::Mode mode )
     }
     else
     {
-        if( m_manualFull ||
+        if ( m_manualFull ||
                 ( m_mode == TomahawkSettings::Dirs
                     && ( m_dirmtimes.contains( dir.canonicalPath() ) || !m_recursive )
                     && mtime != m_dirmtimes.value( dir.canonicalPath() ) ) )
@@ -116,17 +118,18 @@ DirLister::scanDir( QDir dir, int depth, DirLister::Mode mode )
         dir.setFilter( QDir::Files | QDir::Readable | QDir::NoDotAndDotDot );
         dir.setSorting( QDir::Name );
         dirs = dir.entryInfoList();
-        foreach( const QFileInfo& di, dirs )
+
+        foreach ( const QFileInfo& di, dirs )
             emit fileToScan( di );
     }
     dir.setFilter( QDir::Dirs | QDir::Readable | QDir::NoDotAndDotDot );
     dirs = dir.entryInfoList();
 
-    foreach( const QFileInfo& di, dirs )
+    foreach ( const QFileInfo& di, dirs )
     {
         const QString canonical = di.canonicalFilePath();
         const bool haveDi = m_dirmtimes.contains( canonical );
-        if( !m_newdirmtimes.contains( canonical ) && ( mode == DirLister::Recursive || !haveDi ) ) {
+        if ( !m_newdirmtimes.contains( canonical ) && ( mode == DirLister::Recursive || !haveDi ) ) {
             m_opcount++;
             QMetaObject::invokeMethod( this, "scanDir", Qt::QueuedConnection, Q_ARG( QDir, di.canonicalFilePath() ), Q_ARG( int, depth + 1 ), Q_ARG( DirLister::Mode, DirLister::Recursive ) );
         }
@@ -149,12 +152,12 @@ MusicScanner::MusicScanner( const QStringList& dirs, TomahawkSettings::ScannerMo
 {
     m_ext2mime.insert( "mp3", TomahawkUtils::extensionToMimetype( "mp3" ) );
     m_ext2mime.insert( "ogg", TomahawkUtils::extensionToMimetype( "ogg" ) );
-    m_ext2mime.insert( "flac", TomahawkUtils::extensionToMimetype( "flac" ) );
     m_ext2mime.insert( "mpc", TomahawkUtils::extensionToMimetype( "mpc" ) );
     m_ext2mime.insert( "wma", TomahawkUtils::extensionToMimetype( "wma" ) );
     m_ext2mime.insert( "aac", TomahawkUtils::extensionToMimetype( "aac" ) );
     m_ext2mime.insert( "m4a", TomahawkUtils::extensionToMimetype( "m4a" ) );
     m_ext2mime.insert( "mp4", TomahawkUtils::extensionToMimetype( "mp4" ) );
+    m_ext2mime.insert( "flac", TomahawkUtils::extensionToMimetype( "flac" ) );
 }
 
 
@@ -236,11 +239,11 @@ MusicScanner::scan()
     m_dirLister.data()->moveToThread( m_dirListerThreadController );
 
     connect( m_dirLister.data(), SIGNAL( fileToScan( QFileInfo ) ),
-                            SLOT( scanFile( QFileInfo ) ), Qt::QueuedConnection );
+                                   SLOT( scanFile( QFileInfo ) ), Qt::QueuedConnection );
 
     // queued, so will only fire after all dirs have been scanned:
     connect( m_dirLister.data(), SIGNAL( finished( QMap< QString, unsigned int > ) ),
-                            SLOT( listerFinished( QMap< QString, unsigned int > ) ), Qt::QueuedConnection );
+                                   SLOT( listerFinished( QMap< QString, unsigned int > ) ), Qt::QueuedConnection );
 
     m_dirListerThreadController->start();
     QMetaObject::invokeMethod( m_dirLister.data(), "go" );
@@ -253,7 +256,7 @@ MusicScanner::listerFinished( const QMap<QString, unsigned int>& newmtimes  )
     tDebug( LOGVERBOSE ) << Q_FUNC_INFO;
 
     // any remaining stuff that wasnt emitted as a batch:
-    foreach( QString key, m_filemtimes.keys() )
+    foreach( const QString& key, m_filemtimes.keys() )
     {
         m_filesToDelete << m_filemtimes[ key ].keys().first();
     }
@@ -273,7 +276,7 @@ MusicScanner::listerFinished( const QMap<QString, unsigned int>& newmtimes  )
                          "( scanned" << m_scanned << "skipped" << m_skipped << ")";
 
     tDebug( LOGEXTRA ) << "Skipped the following files (no tags / no valid audio):";
-    foreach( const QString& s, m_skippedFiles )
+    foreach ( const QString& s, m_skippedFiles )
         tDebug( LOGEXTRA ) << s;
 
     // save mtimes, then quit thread
@@ -350,16 +353,16 @@ MusicScanner::readFile( const QFileInfo& fi )
 {
     const QString suffix = fi.suffix().toLower();
 
-    if ( ! m_ext2mime.contains( suffix ) )
+    if ( !m_ext2mime.contains( suffix ) )
     {
         m_skipped++;
         return QVariantMap(); // invalid extension
     }
 
     if ( m_scanned )
-        if( m_scanned % 3 == 0 )
+        if ( m_scanned % 3 == 0 )
             SourceList::instance()->getLocal()->scanningProgress( m_scanned );
-    if( m_scanned % 100 == 0 )
+    if ( m_scanned % 100 == 0 )
         tDebug( LOGINFO ) << "Scan progress:" << m_scanned << fi.canonicalFilePath();
 
     #ifdef COMPLEX_TAGLIB_FILENAME

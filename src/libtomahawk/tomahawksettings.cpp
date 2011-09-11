@@ -180,34 +180,13 @@ TomahawkSettings::infoSystemCacheVersion() const
 QStringList
 TomahawkSettings::scannerPaths()
 {
-    //FIXME: After enough time, remove this hack (and make const)
-    #ifndef TOMAHAWK_HEADLESS
-    if( value( "scanner/paths" ).isNull() )
-    {
-        if ( !value( "scannerpath" ).isNull() )
-            setValue( "scanner/paths", QStringList( value( "scannerpath" ).toString() ) );
-        else if ( !value( "scannerpaths" ).isNull() )
-            setValue( "scanner/paths", value( "scannerpaths" ) );
-        sync();
-        remove( "scannerpath" );
-        remove( "scannerpaths" );
-        sync();
-    }
-    return value( "scanner/paths", QDesktopServices::storageLocation( QDesktopServices::MusicLocation ) ).toStringList();
-    #else
-    if( value( "scanner/paths" ).isNull() )
-    {
-        if ( !value( "scannerpath" ).isNull() )
-            setValue( "scanner/paths", QStringList( value( "scannerpath" ).toString() ) );
-        else if ( !value( "scannerpaths" ).isNull() )
-            setValue( "scanner/paths", value( "scannerpaths" ) );
-        sync();
-        remove( "scannerpath" );
-        remove( "scannerpaths" );
-        sync();
-    }
-    return value( "scanner/paths", "" ).toStringList();
-    #endif
+    QString musicLocation;
+
+#ifndef TOMAHAWK_HEADLESS
+    musicLocation = QDesktopServices::storageLocation( QDesktopServices::MusicLocation );
+#endif
+
+    return value( "scanner/paths", musicLocation ).toStringList();
 }
 
 

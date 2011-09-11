@@ -181,6 +181,7 @@ set( libSources
     utils/shortenedlinkparser.cpp
     utils/stylehelper.cpp
 
+    widgets/checkdirtree.cpp
     widgets/querylabel.cpp
     widgets/imagebutton.cpp
     widgets/animatedsplitter.cpp
@@ -379,6 +380,7 @@ set( libHeaders
     utils/rdioparser.h
     utils/shortenedlinkparser.h
 
+    widgets/checkdirtree.h
     widgets/querylabel.h
     widgets/animatedcounterlabel.h
     widgets/imagebutton.h
