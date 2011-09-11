@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>808</width>
-    <height>464</height>
+    <width>641</width>
+    <height>393</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -85,7 +85,7 @@
      <item>
       <widget class="QStackedWidget" name="stackedWidget">
        <property name="currentIndex">
-        <number>1</number>
+        <number>0</number>
        </property>
        <widget class="QWidget" name="accountsPage">
         <layout class="QVBoxLayout" name="verticalLayout_11">
@@ -434,6 +434,13 @@
              <widget class="QLabel" name="label">
               <property name="text">
                <string>Script resolvers search for a given track to make it playable.</string>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QPushButton" name="getMoreResolvers">
+              <property name="text">
+               <string>Get more resolvers...</string>
               </property>
              </widget>
             </item>

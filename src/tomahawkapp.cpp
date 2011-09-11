@@ -53,6 +53,7 @@
 #include "globalactionmanager.h"
 #include "database/localcollection.h"
 #include "musicscanner.h"
+#include "AtticaManager.h"
 
 #include "audio/audioengine.h"
 #include "utils/xspfloader.h"
@@ -231,6 +232,11 @@ TomahawkApp::init()
     tDebug() << "Init Pipeline.";
     initPipeline();
 
+#ifdef LIBATTICA_FOUND
+    // load remote list of resolvers able to be installed
+    AtticaManager::instance();
+#endif
+
     if ( arguments().contains( "--http" ) || TomahawkSettings::instance()->value( "network/http", true ).toBool() )
     {
         initHTTP();
@@ -263,10 +269,7 @@ TomahawkApp::~TomahawkApp()
     tLog() << "Shutting down Tomahawk...";
 
     // stop script resolvers
-    foreach( Tomahawk::ExternalResolver* r, m_scriptResolvers.values() )
-    {
-        delete r;
-    }
+    qDeleteAll( m_scriptResolvers );
     m_scriptResolvers.clear();
 
     if ( !m_servent.isNull() )
@@ -276,6 +279,10 @@ TomahawkApp::~TomahawkApp()
 
 #ifndef TOMAHAWK_HEADLESS
     delete m_mainwindow;
+#endif
+
+#ifdef LIBATTICA_FOUND
+    delete AtticaManager::instance();
 #endif
 
     if ( !m_audioEngine.isNull() )
@@ -442,32 +449,58 @@ TomahawkApp::initPipeline()
     Pipeline::instance()->addResolver( new DatabaseResolver( 100 ) );
 
     // load script resolvers
-    foreach( QString resolver, TomahawkSettings::instance()->enabledScriptResolvers() )
-        enableScriptResolver( resolver );
+    QStringList enabled = TomahawkSettings::instance()->enabledScriptResolvers();
+    foreach ( QString resolver, TomahawkSettings::instance()->allScriptResolvers() )
+    {
+        const bool enable = enabled.contains( resolver );
+        addScriptResolver( resolver, enable );
+    }
 }
 
 
-void
-TomahawkApp::enableScriptResolver( const QString& path )
+Tomahawk::ExternalResolver*
+TomahawkApp::addScriptResolver( const QString& path, bool start )
 {
     const QFileInfo fi( path );
+    ExternalResolver* res = 0;
     if ( fi.suffix() == "js" || fi.suffix() == "script" )
-        m_scriptResolvers.insert( path, new QtScriptResolver( path ) );
+        res = new QtScriptResolver( path );
     else
-        m_scriptResolvers.insert( path, new ScriptResolver( path ) );
+        res = new ScriptResolver( path );
+    m_scriptResolvers << res;
+
+    if ( start )
+        res->start();
+
+    return res;
 }
 
 
 void
-TomahawkApp::disableScriptResolver( const QString& path )
+TomahawkApp::stopScriptResolver( const QString& path )
 {
-    if ( m_scriptResolvers.contains( path ) )
+    foreach ( ExternalResolver* res, m_scriptResolvers )
     {
-        Tomahawk::ExternalResolver* r = m_scriptResolvers.take( path );
+        if ( res->filePath() == path )
+            res->stop();
+    }
+}
 
-        connect( r, SIGNAL( finished() ), r, SLOT( deleteLater() ) );
+void
+TomahawkApp::removeScriptResolver( const QString& scriptPath )
+{
+    ExternalResolver* r = 0;
+    foreach ( ExternalResolver* res, m_scriptResolvers )
+    {
+        if ( res->filePath() == scriptPath )
+            r = res;
+    }
+    m_scriptResolvers.removeAll( r );
+
+    if ( r )
+    {
         r->stop();
-        return;
+        connect( r, SIGNAL( stopped() ), r, SLOT( deleteLater() ) );
     }
 }
 
@@ -475,7 +508,12 @@ TomahawkApp::disableScriptResolver( const QString& path )
 Tomahawk::ExternalResolver*
 TomahawkApp::resolverForPath( const QString& scriptPath )
 {
-    return m_scriptResolvers.value( scriptPath, 0 );
+    foreach ( ExternalResolver* res, m_scriptResolvers )
+    {
+        if ( res->filePath() == scriptPath )
+            return res;
+    }
+    return 0;
 }
 
 

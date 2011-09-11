@@ -126,6 +126,8 @@ SET( tomahawkHeadersGui ${tomahawkHeadersGui}
      resolversmodel.h
      delegateconfigwrapper.h
      tomahawkwindow.h
+
+     AtticaManager.h
 )
 
 SET( tomahawkUI ${tomahawkUI}
@@ -135,6 +137,8 @@ SET( tomahawkUI ${tomahawkUI}
      proxydialog.ui
 
      audiocontrols.ui
+
+     GetNewStuffDialog.ui
 )
 
 INCLUDE_DIRECTORIES(
@@ -161,6 +165,7 @@ INCLUDE_DIRECTORIES(
     ${QJSON_INCLUDE_DIR}
     ${LIBECHONEST_INCLUDE_DIR}
     ${LIBECHONEST_INCLUDE_DIR}/..
+    ${QuaZip_INCLUDE_DIR}
 )
 
 SET( OS_SPECIFIC_LINK_LIBRARIES "" )
@@ -193,6 +198,12 @@ ADD_SUBDIRECTORY( sip )
 IF(QCA2_FOUND)
     INCLUDE_DIRECTORIES( ${QCA2_INCLUDE_DIR} )
 ENDIF(QCA2_FOUND)
+
+IF(LIBATTICA_FOUND)
+    SET( tomahawkSources ${tomahawkSources} AtticaManager.cpp GetNewStuffDialog.cpp GetNewStuffDelegate.cpp GetNewStuffModel.cpp )
+    SET( tomahawkHeaders ${tomahawkHeaders}  GetNewStuffDialog.h GetNewStuffDelegate.h GetNewStuffModel.h )
+    INCLUDE_DIRECTORIES( ${LIBATTICA_INCLUDE_DIR} )
+ENDIF(LIBATTICA_FOUND)
 
 kde4_add_app_icon( tomahawkSources "${CMAKE_SOURCE_DIR}/data/icons/tomahawk-icon-*.png" )
 qt4_add_resources( RC_SRCS "../resources.qrc" )
@@ -238,6 +249,11 @@ IF(QCA2_FOUND)
     SET(LINK_LIBRARIES ${LINK_LIBRARIES} ${QCA2_LIBRARIES} )
 ENDIF(QCA2_FOUND)
 
+IF(LIBATTICA_FOUND)
+    SET(LINK_LIBRARIES ${LINK_LIBRARIES} ${LIBATTICA_LIBRARIES} )
+ENDIF(LIBATTICA_FOUND)
+
+
 TARGET_LINK_LIBRARIES( tomahawk
     ${LINK_LIBRARIES}
     ${TOMAHAWK_LIBRARIES}
@@ -249,6 +265,7 @@ TARGET_LINK_LIBRARIES( tomahawk
     ${QXTWEB_LIBRARIES}
     ${QJSON_LIBRARIES}
     ${TAGLIB_LIBRARIES}
+    ${QuaZip_LIBRARIES}
 )
 
 IF( APPLE )

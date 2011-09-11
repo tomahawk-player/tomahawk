@@ -54,6 +54,12 @@ public slots:
     virtual void resolve( const Tomahawk::query_ptr& query ) = 0;
 };
 
+/**
+ * Generic resolver object, used to manage a resolver that Tomahawk knows about
+ *
+ * You *must* start() a resolver after creating an ExternalResolver in order to use it,
+ * otherwise it will not do anything.
+ */
 class DLLEXPORT ExternalResolver : public Resolver
 {
 Q_OBJECT
@@ -73,8 +79,10 @@ public:
 
     virtual void reload() {} // Reloads from file (especially useful to check if file now exists)
     virtual ErrorState error() const;
+    virtual bool running() const = 0;
 
 public slots:
+    virtual void start() = 0;
     virtual void stop() = 0;
 
 signals:

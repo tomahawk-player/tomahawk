@@ -128,14 +128,16 @@ public:
     virtual void saveConfig();
 
     virtual ExternalResolver::ErrorState error() const;
+    virtual bool running() const;
     virtual void reload();
 
 public slots:
     virtual void resolve( const Tomahawk::query_ptr& query );
     virtual void stop();
+virtual void start();
 
 signals:
-    void finished();
+    void stopped();
 
 private:
     void init();

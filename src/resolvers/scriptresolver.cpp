@@ -36,10 +36,10 @@ ScriptResolver::ScriptResolver( const QString& exe )
     , m_num_restarts( 0 )
     , m_msgsize( 0 )
     , m_ready( false )
-    , m_stopped( false )
+    , m_stopped( true )
     , m_error( Tomahawk::ExternalResolver::NoError )
 {
-    tLog() << Q_FUNC_INFO << "Loading script resolver:" << exe;
+    tLog() << Q_FUNC_INFO << "Created script resolver:" << exe;
     connect( &m_proc, SIGNAL( readyReadStandardError() ), SLOT( readStderr() ) );
     connect( &m_proc, SIGNAL( readyReadStandardOutput() ), SLOT( readStdout() ) );
     connect( &m_proc, SIGNAL( finished( int, QProcess::ExitStatus ) ), SLOT( cmdExited( int, QProcess::ExitStatus ) ) );
@@ -71,6 +71,16 @@ ScriptResolver::~ScriptResolver()
 
     if ( !m_configWidget.isNull() )
         delete m_configWidget.data();
+}
+
+void
+ScriptResolver::start()
+{
+    m_stopped = false;
+    if ( m_ready )
+        Tomahawk::Pipeline::instance()->addResolver( this );
+    else
+        sendConfig();
 }
 
 
@@ -116,13 +126,17 @@ ScriptResolver::reload()
     }
 }
 
+bool
+ScriptResolver::running() const
+{
+    return !m_stopped;
+}
 
 void
 ScriptResolver::readStderr()
 {
     tLog() << "SCRIPT_STDERR" << filePath() << m_proc.readAllStandardError();
 }
-
 
 ScriptResolver::ErrorState
 ScriptResolver::error() const
@@ -254,7 +268,7 @@ ScriptResolver::cmdExited( int code, QProcess::ExitStatus status )
     if ( m_stopped )
     {
         tLog() << "*** Script resolver stopped ";
-        emit finished();
+        emit stopped();
 
         return;
     }
@@ -309,7 +323,9 @@ ScriptResolver::doSetup( const QVariantMap& m )
     qDebug() << "SCRIPT" << filePath() << "READY," << "name" << m_name << "weight" << m_weight << "timeout" << m_timeout;
 
     m_ready = true;
-    Tomahawk::Pipeline::instance()->addResolver( this );
+
+    if ( !m_stopped )
+        Tomahawk::Pipeline::instance()->addResolver( this );
 }
 
 
@@ -362,5 +378,5 @@ void
 ScriptResolver::stop()
 {
     m_stopped = true;
-    m_proc.kill();
+    Tomahawk::Pipeline::instance()->removeResolver( this );
 }

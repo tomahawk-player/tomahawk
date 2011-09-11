@@ -39,6 +39,7 @@ public:
     explicit ScriptResolver( const QString& exe );
     virtual ~ScriptResolver();
 
+
     virtual QString name() const            { return m_name; }
     virtual unsigned int weight() const     { return m_weight; }
     virtual unsigned int preference() const { return m_preference; }
@@ -50,12 +51,14 @@ public:
     virtual ExternalResolver::ErrorState error() const;
     virtual void reload();
 
+    virtual bool running() const;
 signals:
-    void finished();
+    void stopped();
 
 public slots:
     virtual void stop();
     virtual void resolve( const Tomahawk::query_ptr& query );
+    virtual void start();
 
 private slots:
     void readStderr();

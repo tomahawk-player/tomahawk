@@ -1,6 +1,7 @@
 /* === This file is part of Tomahawk Player - <http://tomahawk-player.org> ===
  *
  *   Copyright 2010-2011, Christian Muehlhaeuser <muesli@tomahawk-player.org>
+ *   Copyright 2010-2011, Leo Franchi <lfranchi@kde.org>
  *
  *   Tomahawk is free software: you can redistribute it and/or modify
  *   it under the terms of the GNU General Public License as published by
@@ -52,6 +53,8 @@
 #include "ui_proxydialog.h"
 #include "ui_stackedsettingsdialog.h"
 #include <playlist/dynamic/widgets/LoadingSpinner.h>
+#include "GetNewStuffDialog.h"
+#include "AtticaManager.h"
 
 static QString
 md5( const QByteArray& src )
@@ -190,13 +193,21 @@ SettingsDialog::SettingsDialog( QWidget *parent )
     ResolverConfigDelegate* del = new ResolverConfigDelegate( this );
     connect( del, SIGNAL( openConfig( QString ) ), SLOT( openResolverConfig( QString ) ) );
     ui->scriptList->setItemDelegate( del );
-    m_resolversModel = new ResolversModel( s->allScriptResolvers(), s->enabledScriptResolvers(), this );
+    m_resolversModel = new ResolversModel( this );
     ui->scriptList->setModel( m_resolversModel );
 
-    connect( ui->scriptList->selectionModel(), SIGNAL( selectionChanged( QItemSelection,QItemSelection ) ), SLOT( scriptSelectionChanged() ) );
-    connect( ui->addScript, SIGNAL( clicked( bool ) ), SLOT( addScriptResolver() ) );
-    connect( ui->removeScript, SIGNAL( clicked( bool ) ), SLOT( removeScriptResolver() ) );
+#ifdef LIBATTICA_FOUND
+    connect( ui->getMoreResolvers, SIGNAL( clicked() ), this, SLOT( getMoreResolvers() ) );
 
+    connect( AtticaManager::instance(), SIGNAL( resolverInstalled( QString ) ), this, SLOT( atticaResolverInstalled( QString ) ) );
+    connect( AtticaManager::instance(), SIGNAL( resolverUninstalled( QString ) ), this, SLOT( atticaResolverUninstalled( QString ) ) );
+#else
+    ui->getMoreResolvers->hide();
+#endif
+
+    connect( ui->scriptList->selectionModel(), SIGNAL( selectionChanged( QItemSelection,QItemSelection ) ), this, SLOT( scriptSelectionChanged() ) );
+    connect( ui->addScript, SIGNAL( clicked( bool ) ), this, SLOT( addScriptResolver() ) );
+    connect( ui->removeScript, SIGNAL( clicked( bool ) ), this, SLOT( removeScriptResolver() ) );
     connect( ui->proxyButton,  SIGNAL( clicked() ),  SLOT( showProxySettings() ) );
     connect( ui->checkBoxStaticPreferred, SIGNAL( toggled(bool) ), SLOT( toggleUpnp(bool) ) );
     connect( this, SIGNAL( rejected() ), SLOT( onRejected() ) );
@@ -232,8 +243,7 @@ SettingsDialog::~SettingsDialog()
         s->setLastFmUsername( ui->lineEditLastfmUsername->text() );
         s->setLastFmPassword( ui->lineEditLastfmPassword->text() );
 
-        s->setAllScriptResolvers( m_resolversModel->allResolvers() );
-        s->setEnabledScriptResolvers( m_resolversModel->enabledResolvers() );
+        m_resolversModel->saveScriptResolvers();
 
         s->applyChanges();
     }
@@ -504,8 +514,8 @@ SettingsDialog::addScriptResolver()
     QString resolver = QFileDialog::getOpenFileName( this, tr( "Load script resolver file" ), TomahawkSettings::instance()->scriptDefaultPath() );
     if( !resolver.isEmpty() )
     {
-        TomahawkApp::instance()->enableScriptResolver( resolver );
         m_resolversModel->addResolver( resolver, true );
+
         QFileInfo resolverAbsoluteFilePath = resolver;
         TomahawkSettings::instance()->setScriptDefaultPath( resolverAbsoluteFilePath.absolutePath() );
     }
@@ -519,12 +529,41 @@ SettingsDialog::removeScriptResolver()
     if( !ui->scriptList->selectionModel()->selectedIndexes().isEmpty() )
     {
         QString resolver = ui->scriptList->selectionModel()->selectedIndexes().first().data( ResolversModel::ResolverPath ).toString();
+#ifdef LIBATTICA_FOUND
+        AtticaManager::instance()->uninstallResolver( resolver );
+#endif
         m_resolversModel->removeResolver( resolver );
-
-        TomahawkApp::instance()->disableScriptResolver( resolver );
     }
 }
 
+void
+SettingsDialog::getMoreResolvers()
+{
+#if defined(Q_WS_MAC) && defined(LIBATTICA_FOUND)
+    GetNewStuffDialog* diag = new GetNewStuffDialog( this, Qt::Sheet );
+    connect( diag, SIGNAL( finished( int ) ), this, SLOT( getMoreResolversFinished(int)));
+
+    diag->show();
+#elif defined(LIBATTICA_FOUND)
+    GetNewStuffDialog diag( this );
+    int ret = diag.exec();
+#endif
+
+}
+
+#ifdef LIBATTICA_FOUND
+void
+SettingsDialog::atticaResolverInstalled( const QString& resolverId )
+{
+    m_resolversModel->atticaResolverInstalled( resolverId );
+}
+
+void
+SettingsDialog::atticaResolverUninstalled ( const QString& resolverId )
+{
+    m_resolversModel->removeResolver( AtticaManager::instance()->pathFromId( resolverId ) );
+}
+#endif
 
 void
 SettingsDialog::scriptSelectionChanged()
@@ -537,6 +576,12 @@ SettingsDialog::scriptSelectionChanged()
     {
         ui->removeScript->setEnabled( false );
     }
+}
+
+void
+SettingsDialog::getMoreResolversFinished( int ret )
+{
+
 }
 
 

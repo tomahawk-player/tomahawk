@@ -22,6 +22,8 @@
 #include <QDialog>
 #include <QModelIndex>
 
+#include "config.h"
+
 class LoadingSpinner;
 class QListWidgetItem;
 class Ui_StackedSettingsDialog;
@@ -82,6 +84,13 @@ private slots:
     void addScriptResolver();
     void scriptSelectionChanged();
     void removeScriptResolver();
+    void getMoreResolvers();
+    void getMoreResolversFinished( int );
+#ifdef LIBATTICA_FOUND
+    void atticaResolverInstalled( const QString& );
+    void atticaResolverUninstalled( const QString& );
+#endif
+
     void openResolverConfig( const QString& );
     void sipItemClicked ( const QModelIndex& );
     void openSipConfig( SipPlugin* );
