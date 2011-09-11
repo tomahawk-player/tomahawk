@@ -22,6 +22,7 @@
 #include <QModelIndex>
 
 #include <attica/content.h>
+#include <QPixmap>
 
 class GetNewStuffModel: public QAbstractListModel
 {

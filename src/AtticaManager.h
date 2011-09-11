@@ -28,6 +28,7 @@
 #include <attica/provider.h>
 #include <attica/providermanager.h>
 #include <attica/content.h>
+#include <QPixmap>
 #endif
 
 class AtticaManager : public QObject
@@ -53,13 +54,14 @@ public:
     }
 
     explicit AtticaManager ( QObject* parent = 0 );
-    virtual ~AtticaManager() {}
+    virtual ~AtticaManager();
 
 #ifdef LIBATTICA_FOUND
     bool resolversLoaded() const;
 
     Attica::Content::List resolvers() const;
     ResolverState resolverState( const Attica::Content& resolver ) const;
+    QPixmap iconForResolver( const Attica::Content& id ); // Looks up in icon cache
 
     void installResolver( const Attica::Content& resolver );
     void uninstallResolver( const Attica::Content& resolver );
@@ -79,6 +81,9 @@ private slots:
     void resolverDownloadFinished( Attica::BaseJob* );
     void payloadFetched();
 
+    void loadPixmapsFromCache();
+    void savePixmapsToCache();
+
 private:
     QString extractPayload( const QString& filename, const QString& resolverId ) const;
     void doResolverRemove( const QString& id ) const;
@@ -88,10 +93,14 @@ private:
 
     Attica::Provider m_resolverProvider;
     Attica::Content::List m_resolvers;
+    QHash<QString, QPixmap> m_resolversIconCache;
+
     StateHash m_resolverStates;
 #endif
 
     static AtticaManager* s_instance;
+    public slots:
+     void resolverIconFetched();
 };
 
 #endif // ATTICAMANAGER_H

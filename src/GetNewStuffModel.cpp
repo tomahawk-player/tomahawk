@@ -76,7 +76,7 @@ GetNewStuffModel::data( const QModelIndex& index, int role ) const
         case Qt::DisplayRole:
             return resolver.name();
         case Qt::DecorationRole:
-            return QVariant::fromValue< QPixmap >( QPixmap( RESPATH "images/delegate-add.png" ) );
+            return QVariant::fromValue< QPixmap >( AtticaManager::instance()->iconForResolver( resolver ) );
         case DownloadUrlRole:
             // TODO
             return QUrl();

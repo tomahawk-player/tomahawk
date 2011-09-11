@@ -41,7 +41,57 @@ AtticaManager::AtticaManager( QObject* parent )
 
     // resolvers
     m_manager.addProviderFile( QUrl( "http://bakery.tomahawk-player.org:10480/resolvers/providers.xml" ) );
+    QTimer::singleShot( 0, this, SLOT( loadPixmapsFromCache() ) );
 }
+
+AtticaManager::~AtticaManager()
+{
+    savePixmapsToCache();
+}
+
+void
+AtticaManager::loadPixmapsFromCache()
+{
+    QDir cacheDir = TomahawkUtils::appDataDir();
+    if ( !cacheDir.cd( "atticacache" ) ) // doesn't exist, no cache
+        return;
+
+    foreach ( const QString& file, cacheDir.entryList( QStringList() << "*.png", QDir::Files | QDir::NoSymLinks ) )
+    {
+        // load all the pixmaps
+        QFileInfo info( file );
+        QPixmap icon( cacheDir.absoluteFilePath( file ) );
+        m_resolversIconCache[ info.baseName() ] = icon;
+    }
+}
+
+void
+AtticaManager::savePixmapsToCache()
+{
+    QDir cacheDir = TomahawkUtils::appDataDir();
+    if ( !cacheDir.cd( "atticacache" ) ) // doesn't exist, create
+    {
+        cacheDir.mkdir( "atticacache" );
+        cacheDir.cd( "atticache" );
+    }
+
+    foreach( const QString& id, m_resolversIconCache.keys() )
+    {
+        const QString filename = cacheDir.absoluteFilePath( QString( "%1.png" ).arg( id ) );
+        if ( !m_resolversIconCache[ id ].save( filename ) )
+        {
+            tLog() << "Failed to open cache file for writing:" << filename;
+            continue;
+        }
+    }
+}
+
+QPixmap
+AtticaManager::iconForResolver( const Content& resolver )
+{
+    return m_resolversIconCache.value( resolver.id(), QPixmap() );
+}
+
 
 Content::List
 AtticaManager::resolvers() const
@@ -99,7 +149,40 @@ AtticaManager::resolversList( BaseJob* j )
 
     m_resolvers = job->itemList();
     m_resolverStates = TomahawkSettings::instance()->atticaResolverStates();
+
+    // load icon cache from disk, and fetch any we are missing
+    foreach ( Content resolver, m_resolvers )
+    {
+        if ( !m_resolversIconCache.contains( resolver.id() ) && !resolver.icons().isEmpty() )
+        {
+            QNetworkReply* fetch = TomahawkUtils::nam()->get( QNetworkRequest( resolver.icons().first().url() ) );
+            fetch->setProperty( "resolverId", resolver.id() );
+
+            connect( fetch, SIGNAL( finished() ), this, SLOT( resolverIconFetched() ) );
+        }
+    }
 }
+
+void
+AtticaManager::resolverIconFetched()
+{
+    QNetworkReply* reply = qobject_cast< QNetworkReply* >( sender() );
+    Q_ASSERT( reply );
+
+    const QString resolverId = reply->property( "resolverId" ).toString();
+
+    if ( !reply->error() == QNetworkReply::NoError )
+    {
+        tLog() << "Failed to fetch resolver icon image:" << reply->errorString();
+        return;
+    }
+
+    QByteArray data = reply->readAll();
+    QPixmap icon;
+    icon.loadFromData( data );
+    m_resolversIconCache[ resolverId ] = icon;
+}
+
 
 void
 AtticaManager::installResolver( const Content& resolver )
