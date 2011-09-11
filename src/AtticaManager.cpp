@@ -136,7 +136,7 @@ AtticaManager::providerAdded( const Provider& provider )
     {
         m_resolverProvider = provider;
 
-        ListJob< Content >* job = m_resolverProvider.searchContents( Category::List(), QString(), Provider::Rating );
+        ListJob< Content >* job = m_resolverProvider.searchContents( Category::List(), QString(), Provider::Downloads );
         connect( job, SIGNAL( finished( Attica::BaseJob* ) ), this, SLOT( resolversList( Attica::BaseJob* ) ) );
         job->start();
     }
@@ -153,7 +153,7 @@ AtticaManager::resolversList( BaseJob* j )
     // load icon cache from disk, and fetch any we are missing
     foreach ( Content resolver, m_resolvers )
     {
-        if ( !m_resolversIconCache.contains( resolver.id() ) && !resolver.icons().isEmpty() )
+        if ( !m_resolversIconCache.contains( resolver.id() ) && !resolver.icons().isEmpty() && !resolver.icons().first().url().isEmpty() )
         {
             QNetworkReply* fetch = TomahawkUtils::nam()->get( QNetworkRequest( resolver.icons().first().url() ) );
             fetch->setProperty( "resolverId", resolver.id() );
