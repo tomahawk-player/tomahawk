@@ -72,6 +72,9 @@ SettingsDialog::SettingsDialog( QWidget *parent )
     ui->setupUi( this );
     TomahawkSettings* s = TomahawkSettings::instance();
 
+    TomahawkUtils::unmarginLayout( layout() );
+    ui->stackedWidget->setContentsMargins( 4, 4, 4, 0 );
+
     ui->addSipButton->setFixedWidth( 42 );
     ui->removeSipButton->setFixedWidth( ui->addSipButton->width() );
     ui->addScript->setFixedWidth( 42 );
@@ -88,7 +91,8 @@ SettingsDialog::SettingsDialog( QWidget *parent )
     ui->listWidget->setFrameShadow( QFrame::Sunken );
     setContentsMargins( 4, 4, 4, 4 );
 #else
-    ui->verticalLayout->removeItem( ui->verticalSpacer_3 );
+    ui->listWidget->setFixedWidth( 83 );
+    setContentsMargins( 0, 4, 4, 4 );
 #endif
 
 #ifdef Q_WS_MAC
