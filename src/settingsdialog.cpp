@@ -542,7 +542,9 @@ SettingsDialog::removeScriptResolver()
     if( !ui->scriptList->selectionModel()->selectedIndexes().isEmpty() )
     {
         QString resolver = ui->scriptList->selectionModel()->selectedIndexes().first().data( ResolversModel::ResolverPath ).toString();
+#ifdef LIBATTICA_FOUND
         AtticaManager::instance()->uninstallResolver( resolver );
+#endif
         m_resolversModel->removeResolver( resolver );
     }
 }

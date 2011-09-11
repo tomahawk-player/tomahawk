@@ -54,9 +54,15 @@ public:
     }
 
     explicit AtticaManager ( QObject* parent = 0 );
+#ifdef LIBATTICA_FOUND
+
     virtual ~AtticaManager();
+#else
+    virtual ~AtticaManager() {}
+#endif
 
 #ifdef LIBATTICA_FOUND
+
     bool resolversLoaded() const;
 
     Attica::Content::List resolvers() const;
@@ -83,6 +89,7 @@ private slots:
 
     void loadPixmapsFromCache();
     void savePixmapsToCache();
+    void resolverIconFetched();
 
 private:
     QString extractPayload( const QString& filename, const QString& resolverId ) const;
@@ -99,8 +106,6 @@ private:
 #endif
 
     static AtticaManager* s_instance;
-    public slots:
-     void resolverIconFetched();
 };
 
 #endif // ATTICAMANAGER_H

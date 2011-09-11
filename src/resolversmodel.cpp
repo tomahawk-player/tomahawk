@@ -23,6 +23,7 @@
 #include "tomahawksettings.h"
 #include "tomahawkapp.h"
 #include "resolver.h"
+#include "config.h"
 
 #include "utils/logger.h"
 
@@ -138,6 +139,7 @@ ResolversModel::addResolver( const QString& resolver, bool enable )
 void
 ResolversModel::atticaResolverInstalled( const QString& resolverId )
 {
+#ifdef LIBATTICA_FOUND
     Tomahawk::ExternalResolver* r = APP->resolverForPath( AtticaManager::instance()->pathFromId( resolverId ) );
     if ( !r )
         return;
@@ -147,6 +149,7 @@ ResolversModel::atticaResolverInstalled( const QString& resolverId )
         beginInsertRows( QModelIndex(), idx, idx );
         endInsertRows();
     }
+#endif
 }
 
 
