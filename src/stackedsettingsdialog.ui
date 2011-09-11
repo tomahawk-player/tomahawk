@@ -14,17 +14,8 @@
    <string>Tomahawk Settings</string>
   </property>
   <layout class="QVBoxLayout" name="verticalLayout_12">
-   <property name="leftMargin">
-    <number>0</number>
-   </property>
-   <property name="topMargin">
-    <number>2</number>
-   </property>
-   <property name="rightMargin">
-    <number>0</number>
-   </property>
-   <property name="bottomMargin">
-    <number>2</number>
+   <property name="margin">
+    <number>4</number>
    </property>
    <item>
     <layout class="QHBoxLayout" name="horizontalLayout">
@@ -33,16 +24,10 @@
        <item>
         <widget class="QListWidget" name="listWidget">
          <property name="sizePolicy">
-          <sizepolicy hsizetype="Fixed" vsizetype="Expanding">
+          <sizepolicy hsizetype="Preferred" vsizetype="Expanding">
            <horstretch>0</horstretch>
            <verstretch>0</verstretch>
           </sizepolicy>
-         </property>
-         <property name="maximumSize">
-          <size>
-           <width>200</width>
-           <height>16777215</height>
-          </size>
          </property>
          <property name="focusPolicy">
           <enum>Qt::NoFocus</enum>
