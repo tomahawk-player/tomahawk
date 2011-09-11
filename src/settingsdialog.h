@@ -73,8 +73,6 @@ protected:
 private slots:
     void onRejected();
 
-    void showPathSelector();
-
     void toggleUpnp( bool preferStaticEnabled );
     void showProxySettings();
 

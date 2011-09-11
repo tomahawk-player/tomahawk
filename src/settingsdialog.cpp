@@ -161,7 +161,6 @@ SettingsDialog::SettingsDialog( QWidget *parent )
 
     foreach ( const QString& dir, TomahawkSettings::instance()->scannerPaths() )
     {
-        tDebug() << "FOO:" << dir;
         ui->dirTree->checkPath( dir, Qt::Checked );
     }
 
@@ -338,22 +337,6 @@ SettingsDialog::changePage( QListWidgetItem* current, QListWidgetItem* previous 
         current = previous;
 
     ui->stackedWidget->setCurrentIndex( ui->listWidget->row(current) );
-}
-
-
-void
-SettingsDialog::showPathSelector()
-{
-    QString path = QFileDialog::getExistingDirectory(
-                   this,
-                   tr( "Select Music Folder" ),
-                   QDesktopServices::storageLocation( QDesktopServices::MusicLocation )
-                   );
-
-    if ( path.isEmpty() )
-        return;
-
-//    ui->lineEditMusicPath_2->setText( path );
 }
 
 
