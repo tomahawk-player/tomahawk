@@ -45,8 +45,6 @@ Source::Source( int id, const QString& username )
     , m_avatar( 0 )
     , m_fancyAvatar( 0 )
 {
-    qDebug() << Q_FUNC_INFO << id << username;
-
     m_scrubFriendlyName = qApp->arguments().contains( "--demo" );
 
     if ( id == 0 )

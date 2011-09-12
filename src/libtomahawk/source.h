@@ -102,6 +102,8 @@ public slots:
 
 private slots:
     void dbLoaded( unsigned int id, const QString& fname );
+    QString lastCmdGuid() const { return m_lastCmdGuid; }
+    void setLastCmdGuid( const QString& guid ) { m_lastCmdGuid = guid; }
 
     void setOffline();
     void setOnline();
@@ -114,12 +116,15 @@ private slots:
 private:
     void reportSocialAttributesChanged();
 
-    bool m_isLocal;
-    bool m_online;
-    QString m_username, m_friendlyname;
-    int m_id;
     QList< QSharedPointer<Collection> > m_collections;
     QVariantMap m_stats;
+    QString m_lastCmdGuid;
+
+    bool m_isLocal;
+    bool m_online;
+    QString m_username;
+    QString m_friendlyname;
+    int m_id;
     bool m_scrubFriendlyName;
 
     Tomahawk::query_ptr m_currentTrack;

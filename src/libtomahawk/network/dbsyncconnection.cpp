@@ -133,6 +133,7 @@ DBSyncConnection::check()
         return;
     }
 
+    Q_ASSERT( m_cmds.isEmpty() );
     m_uscache.clear();
     m_us.clear();
 
@@ -143,10 +144,16 @@ DBSyncConnection::check()
     connect( cmd_us, SIGNAL( done( QVariantMap ) ), SLOT( gotUs( QVariantMap ) ) );
     Database::instance()->enqueue( QSharedPointer<DatabaseCommand>(cmd_us) );
 
-    Q_ASSERT( m_cmds.isEmpty() );
-    DatabaseCommand_CollectionStats* cmd_them = new DatabaseCommand_CollectionStats( m_source );
-    connect( cmd_them, SIGNAL( done( QVariantMap ) ), SLOT( gotThem( QVariantMap ) ) );
-    Database::instance()->enqueue( QSharedPointer<DatabaseCommand>(cmd_them) );
+    if ( m_source->lastCmdGuid().isEmpty() )
+    {
+        DatabaseCommand_CollectionStats* cmd_them = new DatabaseCommand_CollectionStats( m_source );
+        connect( cmd_them, SIGNAL( done( QVariantMap ) ), SLOT( gotThem( QVariantMap ) ) );
+        Database::instance()->enqueue( QSharedPointer<DatabaseCommand>(cmd_them) );
+    }
+    else
+    {
+        fetchOpsData( m_source->lastCmdGuid() );
+    }
 
     // restarts idle countdown
     m_timer.start();
@@ -267,6 +274,9 @@ DBSyncConnection::executeCommands()
     if ( !m_cmds.isEmpty() )
     {
         QSharedPointer<DatabaseCommand> cmd = m_cmds.takeFirst();
+        if ( !cmd->singletonCmd() )
+            m_source->setLastCmdGuid( cmd->guid() );
+
         connect( cmd.data(), SIGNAL( finished() ), SLOT( executeCommands() ) );
         Database::instance()->enqueue( cmd );
     }
