@@ -54,6 +54,7 @@ ArtistInfoWidget::ArtistInfoWidget( const Tomahawk::artist_ptr& artist, QWidget*
     TomahawkUtils::unmarginLayout( ui->layoutWidget->layout() );
     TomahawkUtils::unmarginLayout( ui->layoutWidget1->layout() );
     TomahawkUtils::unmarginLayout( ui->layoutWidget2->layout() );
+    TomahawkUtils::unmarginLayout( ui->verticalLayout_5->layout() );
     TomahawkUtils::unmarginLayout( ui->albumHeader->layout() );
 
     m_albumsModel = new TreeModel( ui->albums );
