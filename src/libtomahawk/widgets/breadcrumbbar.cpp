@@ -31,6 +31,7 @@
 
 #include "utils/logger.h"
 
+
 BreadcrumbBar::BreadcrumbBar(BreadcrumbButtonFactory *buttonFactory, QWidget *parent)
     : QWidget(parent)
     , m_model(0)
@@ -52,6 +53,7 @@ BreadcrumbBar::BreadcrumbBar(BreadcrumbButtonFactory *buttonFactory, QWidget *pa
     setMinimumWidth(100);
     show();
 }
+
 
 BreadcrumbBar::BreadcrumbBar(QWidget *parent)
     : QWidget(parent)
@@ -75,19 +77,24 @@ BreadcrumbBar::BreadcrumbBar(QWidget *parent)
     show();
 }
 
+
 BreadcrumbBar::~BreadcrumbBar()
 {
 }
+
+
 void BreadcrumbBar::setButtonFactory(BreadcrumbButtonFactory *buttonFactory)
 {
-    tDebug() << "Breadcrumbbar:: got me some button factory!";
+    tDebug( LOGVERBOSE ) << "Breadcrumbbar:: got me some button factory!";
     m_buttonFactory = buttonFactory;
 }
+
 
 BreadcrumbButtonFactory* BreadcrumbBar::buttonFactory() const
 {
     return m_buttonFactory;
 }
+
 
 void BreadcrumbBar::appendButton(BreadcrumbButtonBase *widget, int stretch)
 {
@@ -110,6 +117,7 @@ void BreadcrumbBar::appendButton(BreadcrumbButtonBase *widget, int stretch)
     }
 }
 
+
 void BreadcrumbBar::deleteAnimationFinished()
 {
     QPropertyAnimation *anim = qobject_cast<QPropertyAnimation*>(sender());
@@ -120,6 +128,7 @@ void BreadcrumbBar::deleteAnimationFinished()
     obj->deleteLater();
     anim->deleteLater();
 }
+
 
 void BreadcrumbBar::deleteButton(BreadcrumbButtonBase *widget)
 {
@@ -144,13 +153,16 @@ void BreadcrumbBar::deleteButton(BreadcrumbButtonBase *widget)
         widget->deleteLater();
     }
 }
+
+
 void BreadcrumbBar::updateButtons()
 {
-    tDebug() << "Breadcrumbbar:: updateButtons" << m_buttonFactory << m_selectionModel ;
-    if(m_selectionModel )
-        tDebug() <<"Breadcrumbbar:: update buttoms current index"<< m_selectionModel->currentIndex().isValid();
-    if (!m_buttonFactory || !m_selectionModel || !m_selectionModel->currentIndex().isValid()) {
-        tDebug() << "Breadcrumb:: updatebuttons failed!";
+    tDebug( LOGVERBOSE ) << "Breadcrumbbar:: updateButtons" << m_buttonFactory << m_selectionModel ;
+    if ( m_selectionModel )
+        tDebug( LOGVERBOSE ) <<"Breadcrumbbar:: update buttoms current index"<< m_selectionModel->currentIndex().isValid();
+    if ( !m_buttonFactory || !m_selectionModel || !m_selectionModel->currentIndex().isValid() )
+    {
+        tDebug( LOGVERBOSE ) << "Breadcrumb:: updatebuttons failed!";
         return;
     }
 
@@ -165,7 +177,7 @@ void BreadcrumbBar::updateButtons()
         indexes.prepend(index);
         index = index.parent();
     }
-    tDebug() << "BreadcrumbBar::updateButtons:: " << index.data().toString();
+    tDebug( LOGVERBOSE ) << "BreadcrumbBar::updateButtons:: " << index.data().toString();
     indexes.prepend(index);
 
     int count = indexes.size(), i = 0;
@@ -205,6 +217,7 @@ void BreadcrumbBar::updateButtons()
     adjustSize();
 }
 
+
 void BreadcrumbBar::collapseButtons()
 {
     foreach (BreadcrumbButtonBase *button, m_navButtons) {
@@ -224,6 +237,7 @@ void BreadcrumbBar::collapseButtons()
     }
 }
 
+
 void BreadcrumbBar::clearButtons()
 {
     foreach (BreadcrumbButtonBase *button, m_navButtons)
@@ -234,10 +248,12 @@ void BreadcrumbBar::clearButtons()
     m_navButtons.clear();
 }
 
+
 void BreadcrumbBar::currentIndexChanged()
 {
     updateButtons();
 }
+
 
 void BreadcrumbBar::setRootIcon(const QIcon &icon)
 {
@@ -252,6 +268,7 @@ void BreadcrumbBar::setRootIcon(const QIcon &icon)
     connect(button, SIGNAL(clicked()), this, SIGNAL(rootClicked()));
 }
 
+
 void BreadcrumbBar::setRootText(const QString &text)
 {
     //TODO: implement this
@@ -263,15 +280,18 @@ void BreadcrumbBar::setRootText(const QString &text)
     m_layout->insertSpacing(2,5);*/
 }
 
+
 void BreadcrumbBar::setUseAnimation(bool use)
 {
     m_useAnimation = use;
 }
 
+
 bool BreadcrumbBar::useAnimation() const
 {
     return m_useAnimation;
 }
+
 
 void BreadcrumbBar::setModel(QAbstractItemModel *model)
 {
@@ -279,10 +299,12 @@ void BreadcrumbBar::setModel(QAbstractItemModel *model)
     updateButtons();
 }
 
+
 QAbstractItemModel* BreadcrumbBar::model()
 {
     return m_model;
 }
+
 
 void BreadcrumbBar::setSelectionModel(QItemSelectionModel *selectionModel)
 {
@@ -294,15 +316,18 @@ void BreadcrumbBar::setSelectionModel(QItemSelectionModel *selectionModel)
     updateButtons();
 }
 
+
 QItemSelectionModel* BreadcrumbBar::selectionModel()
 {
     return m_selectionModel;
 }
 
+
 QModelIndex BreadcrumbBar::currentIndex()
 {
     return m_selectionModel->currentIndex();
 }
+
 
 void BreadcrumbBar::currentChangedTriggered(QModelIndex const& index)
 {
@@ -310,6 +335,7 @@ void BreadcrumbBar::currentChangedTriggered(QModelIndex const& index)
     m_selectionModel->setCurrentIndex( index, QItemSelectionModel::SelectCurrent);
     emit currentIndexChanged(index);
 }
+
 
 void BreadcrumbBar::resizeEvent ( QResizeEvent * event )
 {

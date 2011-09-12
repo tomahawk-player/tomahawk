@@ -213,7 +213,7 @@ AudioEngine::next()
 bool
 AudioEngine::canGoNext()
 {
-    tDebug( LOGEXTRA ) << Q_FUNC_INFO;
+    tDebug( LOGVERBOSE ) << Q_FUNC_INFO;
 
     if ( m_queue && m_queue->trackCount() )
         return true;
@@ -267,13 +267,13 @@ AudioEngine::canSeek()
 void
 AudioEngine::seek( qint64 ms )
 {
-    if( !canSeek() )
+    if ( !canSeek() )
     {
-        qDebug() << "Could not seek!";
+        tDebug( LOGEXTRA ) << "Could not seek!";
         return;
     }
 
-    if( isPlaying() || isPaused() )
+    if ( isPlaying() || isPaused() )
     {
         tDebug( LOGVERBOSE ) << Q_FUNC_INFO << ms;
         m_mediaObject->seek( ms );

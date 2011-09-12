@@ -540,7 +540,6 @@ DatabaseImpl::resultFromHint( const Tomahawk::query_ptr& origquery )
     else
     {
 //        Q_ASSERT( false );
-        tDebug() << "We don't support non-servent / non-file result-hints yet.";
 /*        res = Tomahawk::result_ptr( new Tomahawk::Result() );
         s = SourceList::instance()->webSource();
         res->setUrl( url );

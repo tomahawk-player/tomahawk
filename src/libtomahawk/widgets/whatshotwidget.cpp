@@ -46,6 +46,7 @@ using namespace Tomahawk;
 
 static QString s_whatsHotIdentifier = QString( "WhatsHotWidget" );
 
+
 WhatsHotWidget::WhatsHotWidget( QWidget* parent )
     : QWidget( parent )
     , ui( new Ui::WhatsHotWidget )
@@ -127,6 +128,7 @@ WhatsHotWidget::~WhatsHotWidget()
     delete ui;
 }
 
+
 void
 WhatsHotWidget::fetchData()
 {
@@ -140,7 +142,7 @@ WhatsHotWidget::fetchData()
     requestData.type = Tomahawk::InfoSystem::InfoChartCapabilities;
     Tomahawk::InfoSystem::InfoSystem::instance()->getInfo( requestData );
 
-    tDebug() << "WhatsHot: requested InfoChartCapabilities";
+    tDebug( LOGVERBOSE ) << "WhatsHot: requested InfoChartCapabilities";
 }
 
 
@@ -160,20 +162,21 @@ WhatsHotWidget::infoSystemInfo( Tomahawk::InfoSystem::InfoRequestData requestDat
         return;
     }
 
-    tDebug() << "WhatsHot: got something...";
+    tDebug( LOGVERBOSE ) << "WhatsHot: got something...";
     QVariantMap returnedData = output.toMap();
     switch ( requestData.type )
     {
         case InfoSystem::InfoChartCapabilities:
         {
-            tDebug() << "WhatsHot:: info chart capabilities";
+            tDebug( LOGVERBOSE ) << "WhatsHot:: info chart capabilities";
             QStandardItem *rootItem= m_crumbModelLeft->invisibleRootItem();
-            tDebug() << "WhatsHot:: " << returnedData.keys();
+            tDebug( LOGVERBOSE ) << "WhatsHot:: " << returnedData.keys();
 
-            foreach(const QString label, returnedData.keys()) {
-                tDebug() << "WhatsHot:: parsing " << label;
+            foreach( const QString label, returnedData.keys() )
+            {
+                tDebug( LOGVERBOSE ) << "WhatsHot:: parsing " << label;
                 QStandardItem *childItem = parseNode( rootItem, label, returnedData[label] );
-                tDebug() << "WhatsHot:: appending" << childItem->text();
+                tDebug( LOGVERBOSE ) << "WhatsHot:: appending" << childItem->text();
                 rootItem->appendRow(childItem);
             }
             KBreadcrumbSelectionModel *selectionModelLeft = new KBreadcrumbSelectionModel(new QItemSelectionModel(m_crumbModelLeft, this), this);
@@ -192,28 +195,36 @@ WhatsHotWidget::infoSystemInfo( Tomahawk::InfoSystem::InfoRequestData requestDat
             if( !returnedData.contains(type) )
                 break;
             const QString side = requestData.customData["whatshot_side"].toString();
-            tDebug() << "WhatsHot: got chart! " << type << " on " << side;
-            if( type == "artists" ) {
+
+            tDebug( LOGVERBOSE ) << "WhatsHot: got chart! " << type << " on " << side;
+            if( type == "artists" )
+            {
                 setLeftViewArtists();
                 const QStringList artists = returnedData["artists"].toStringList();
-                tDebug() << "WhatsHot: got artists! " << artists.size();
+                tDebug( LOGVERBOSE ) << "WhatsHot: got artists! " << artists.size();
                 m_artistsModel->clear();
                 foreach ( const QString& artist, artists )
                     m_artistsModel->addArtists( Artist::get( artist ) );
-            } else if( type == "tracks" ) {
+            }
+            else if( type == "tracks" )
+            {
                 setLeftViewTracks();
                 const QList<Tomahawk::InfoSystem::ArtistTrackPair> tracks = returnedData["tracks"].value<QList<Tomahawk::InfoSystem::ArtistTrackPair> >();
-                tDebug() << "WhatsHot: got tracks! " << tracks.size();
+                tDebug( LOGVERBOSE ) << "WhatsHot: got tracks! " << tracks.size();
                 m_tracksModel->clear();
-                foreach ( const Tomahawk::InfoSystem::ArtistTrackPair& track, tracks ) {
+                foreach ( const Tomahawk::InfoSystem::ArtistTrackPair& track, tracks )
+                {
                     query_ptr query = Query::get( track.artist, track.track, QString(), uuid() );
                     m_tracksModel->append( query );
                 }
-            } else {
-                tDebug() << "WhatsHot: got unknown chart type" << type;
+            }
+            else
+            {
+                tDebug( LOGVERBOSE ) << "WhatsHot: got unknown chart type" << type;
             }
             break;
         }
+
         default:
             return;
     }
@@ -230,7 +241,7 @@ WhatsHotWidget::infoSystemFinished( QString target )
 void
 WhatsHotWidget::leftCrumbIndexChanged( QModelIndex index )
 {
-    qDebug() << "WhatsHot:: left crumb changed" << index.data();
+    tDebug( LOGVERBOSE ) << "WhatsHot:: left crumb changed" << index.data();
     QStandardItem* item = m_crumbModelLeft->itemFromIndex(index);
     if( !item )
         return;
@@ -254,6 +265,7 @@ WhatsHotWidget::leftCrumbIndexChanged( QModelIndex index )
     Tomahawk::InfoSystem::InfoSystem::instance()->getInfo( requestData );
 }
 
+
 void
 WhatsHotWidget::changeEvent( QEvent* e )
 {
@@ -273,41 +285,51 @@ WhatsHotWidget::changeEvent( QEvent* e )
 QStandardItem*
 WhatsHotWidget::parseNode(QStandardItem* parentItem, const QString &label, const QVariant &data)
 {
-    tDebug() << "WhatsHot:: parsing " << label;
+    tDebug( LOGVERBOSE ) << "WhatsHot:: parsing " << label;
 
     QStandardItem *sourceItem = new QStandardItem(label);
-    if( data.canConvert<QList<Tomahawk::InfoSystem::Chart> >() ) {
+    if( data.canConvert<QList<Tomahawk::InfoSystem::Chart> >() )
+    {
         QList<Tomahawk::InfoSystem::Chart> charts = data.value<QList<Tomahawk::InfoSystem::Chart> >();
-        foreach( Tomahawk::InfoSystem::Chart chart, charts) {
+        foreach( Tomahawk::InfoSystem::Chart chart, charts)
+        {
             QStandardItem *childItem= new QStandardItem(chart.label);
             childItem->setData(chart.id);
             sourceItem->appendRow(childItem);
         }
-    } else if( data.canConvert<QVariantMap>() ) {
+    } else if( data.canConvert<QVariantMap>() )
+    {
         QVariantMap dataMap = data.toMap();
-        foreach(const QString childLabel,dataMap.keys()) {
+        foreach(const QString childLabel,dataMap.keys())
+        {
             QStandardItem *childItem  = parseNode( sourceItem, childLabel, dataMap[childLabel] );
             sourceItem->appendRow(childItem);
         }
-    } else if ( data.canConvert<QVariantList>() ) {
+    } else if ( data.canConvert<QVariantList>() )
+    {
         QVariantList dataList = data.toList();
 
-        foreach(const QVariant value, dataList) {
+        foreach(const QVariant value, dataList)
+        {
             QStandardItem *childItem= new QStandardItem(value.toString());
             sourceItem->appendRow(childItem);
         }
-    } else {
+    }
+    else
+    {
         QStandardItem *childItem= new QStandardItem(data.toString());
         sourceItem->appendRow(childItem);
     }
     return sourceItem;
 }
 
+
 void
 WhatsHotWidget::setLeftViewArtists()
 {
     ui->stackLeft->setCurrentIndex(1);
 }
+
 
 void
 WhatsHotWidget::setLeftViewTracks()
