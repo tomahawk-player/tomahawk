@@ -65,7 +65,9 @@ ScriptResolver::ScriptResolver( const QString& exe )
 
 ScriptResolver::~ScriptResolver()
 {
-    stop();
+    disconnect( &m_proc, SIGNAL( finished( int, QProcess::ExitStatus ) ), this, SLOT( cmdExited( int, QProcess::ExitStatus ) ) );
+
+    m_proc.kill();
     m_proc.waitForFinished();
 
     Tomahawk::Pipeline::instance()->removeResolver( this );
