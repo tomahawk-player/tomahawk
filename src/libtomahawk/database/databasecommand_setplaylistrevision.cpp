@@ -213,5 +213,6 @@ DatabaseCommand_SetPlaylistRevision::exec( DatabaseImpl* lib )
     else
     {
         qDebug() << "Not updating current revision, optimistic locking fail";
+        Q_ASSERT( false );
     }
 }
