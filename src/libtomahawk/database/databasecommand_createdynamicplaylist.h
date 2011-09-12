@@ -19,10 +19,8 @@
 #ifndef DATABASECOMMAND_CREATEDYNAMICPLAYLIST_H
 #define DATABASECOMMAND_CREATEDYNAMICPLAYLIST_H
 
-#include "databaseimpl.h"
-#include "databasecommand_createplaylist.h"
-#include "dynamic/DynamicPlaylist.h"
 #include "typedefs.h"
+#include "databasecommand_createplaylist.h"
 
 /**
  * Create a new dynamic playlist in the database, based on an existing playlist.
@@ -47,7 +45,6 @@ public:
     virtual bool doesMutates() const { return true; }
 
     virtual bool loggable() const { return m_autoLoad; }
-
 
     QVariant playlistV() const
     {

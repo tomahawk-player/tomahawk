@@ -22,7 +22,6 @@
 #include <QVariantMap>
 
 #include "databasecommand.h"
-#include "source.h"
 #include "typedefs.h"
 
 #include "dllmacro.h"

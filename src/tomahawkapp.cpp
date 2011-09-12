@@ -43,6 +43,7 @@
 #include "playlist/dynamic/GeneratorFactory.h"
 #include "playlist/dynamic/echonest/EchonestGenerator.h"
 #include "playlist/dynamic/database/DatabaseGenerator.h"
+#include "network/servent.h"
 #include "web/api_v1.h"
 #include "sourcelist.h"
 #include "shortcuthandler.h"
@@ -52,6 +53,7 @@
 #include "database/localcollection.h"
 #include "musicscanner.h"
 #include "AtticaManager.h"
+#include "pipeline.h"
 
 #include "audio/audioengine.h"
 #include "utils/xspfloader.h"

@@ -20,7 +20,9 @@
 
 #include "utils/tomahawkutils.h"
 #include "utils/logger.h"
+#include "artist.h"
 #include "album.h"
+#include "query.h"
 
 using namespace Tomahawk;
 

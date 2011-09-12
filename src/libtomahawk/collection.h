@@ -31,10 +31,9 @@
 #include <QList>
 #include <QSharedPointer>
 
+#include "typedefs.h"
 #include "functimeout.h"
 #include "playlist.h"
-#include "source.h"
-#include "typedefs.h"
 #include "playlist/dynamic/DynamicPlaylist.h"
 
 #include "dllmacro.h"

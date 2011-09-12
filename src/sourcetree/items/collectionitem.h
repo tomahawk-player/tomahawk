@@ -24,7 +24,9 @@
 class TemporaryPageItem;
 class GenericPageItem;
 class CategoryItem;
-namespace Tomahawk {
+
+namespace Tomahawk
+{
     class ViewPage;
 }
 

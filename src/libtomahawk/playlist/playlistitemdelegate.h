@@ -22,10 +22,10 @@
 #include <QStyledItemDelegate>
 #include <QTextOption>
 
-#include "trackmodel.h"
-
 #include "dllmacro.h"
 
+class TrackModel;
+class TrackModelItem;
 class TrackProxyModel;
 class TrackView;
 

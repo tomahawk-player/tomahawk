@@ -23,15 +23,13 @@
 #include <QPixmap>
 
 #include "album.h"
-#include "collection.h"
 #include "playlistinterface.h"
 #include "database/databasecommand_allalbums.h"
 #include "infosystem/infosystem.h"
 
-#include "albumitem.h"
-
 #include "dllmacro.h"
 
+class AlbumItem;
 class QMetaData;
 
 class DLLEXPORT AlbumModel : public QAbstractItemModel

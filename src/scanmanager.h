@@ -1,5 +1,5 @@
 /* === This file is part of Tomahawk Player - <http://tomahawk-player.org> ===
- * 
+ *
  *   Copyright 2010-2011, Christian Muehlhaeuser <muesli@tomahawk-player.org>
  *
  *   Tomahawk is free software: you can redistribute it and/or modify
@@ -25,7 +25,6 @@
 #include <QStringList>
 #include <QWeakPointer>
 
-#include "dllmacro.h"
 #include <QSet>
 
 class MusicScanner;
@@ -45,26 +44,26 @@ public:
 
 signals:
     void finished();
-    
+
 public slots:
     void runScan( bool manualFull = false );
     void runDirScan( const QStringList& paths, bool manualFull );
 
 private slots:
     void scannerFinished();
-    
+
     void runStartupScan();
     void scanTimerTimeout();
 
     void onSettingsChanged();
-    
+
 private:
     static ScanManager* s_instance;
-    
+
     QWeakPointer< MusicScanner > m_scanner;
     QThread* m_musicScannerThreadController;
     QStringList m_currScannerPaths;
-    
+
     QTimer* m_scanTimer;
 };
 

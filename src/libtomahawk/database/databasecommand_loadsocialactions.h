@@ -26,19 +26,18 @@
 #include "sourcelist.h"
 #include "typedefs.h"
 #include "artist.h"
-#include "result.h"
 
 #include "dllmacro.h"
 
 /**
  * \class DatabaseCommand_LoadSocialActions
  * \brief Database command used to load social actions from the database.
- * 
+ *
  * This Database command allows Tomahawk to load social actions from
  * the local database. The loaded social actions can be used to create
  * dynamic playlists, generate statistics and provide data to share with
  * friends on tomahawk.
- * 
+ *
  * \see DatabaseCommand_SocialAction
  */
 class DLLEXPORT DatabaseCommand_LoadSocialActions : public DatabaseCommand
@@ -48,20 +47,20 @@ Q_OBJECT
 public:
     /**
      * \brief Default constructor for DatabaseCommand_LoadSocialActions.
-     * 
+     *
      * Constructs an empty database command for loading social actions.
-     */ 
+     */
     explicit DatabaseCommand_LoadSocialActions( QObject* parent = 0 )
         : DatabaseCommand( parent )
     {}
-    
+
     /**
      * \brief Overloaded constructor for DatabaseCommand_LoadSocialAction.
      * \param result Pointer to a Tomahawk::Result.
      * \param parent Parent class.
-     * 
+     *
      * Constructor which creates a new database command for loading all social actions.
-     */ 
+     */
     explicit DatabaseCommand_LoadSocialActions( Tomahawk::Result* result, QObject* parent = 0 )
         : DatabaseCommand( parent ), m_result( result )
     {
@@ -69,7 +68,7 @@ public:
         setArtist( result->artist()->name() );
         setTrack( result->track() );
     }
-    
+
     /**
      * \brief Returns the name of this database command.
      * \return QString containing the database command name 'loadsocialaction'.
@@ -79,21 +78,21 @@ public:
     /**
      * \brief Executes the database command.
      * \param dbi Database instance.
-     * 
+     *
      * This method prepares an sql query to load the social actions
      * from the database into a list of all social actions.
-     * 
+     *
      * \see Result::setAllSocialActions()
      */
     virtual void exec( DatabaseImpl* );
-    
+
     /**
      * \brief Returns the artist associated with this database command.
      * \return Name of the artist.
      * \see setArtist()
      */
     QString artist() const { return m_artist; }
-    
+
     /**
      * \brief Sets the artist name for this database command.
      * \param s QString containing the artist name.
@@ -107,29 +106,29 @@ public:
      * \see setTrack()
      */
     QString track() const { return m_track; }
-    
+
     /**
      * \brief Sets the track name associated with this database command.
      * \param track QString containing the track name.
      * \see track()
-     */ 
+     */
     void setTrack( const QString& s ) { m_track = s; }
-    
+
 signals:
-    
+
     /**
      * \brief Emitted when the database command has finished the Query successfully
-     * 
+     *
      * \param QList of all social actions
      * \see QList
      */
     void done( QList< Tomahawk::SocialAction >& allSocialActions );
-    
+
 private:
     Tomahawk::Result* m_result;
     QString m_artist;
     QString m_track;
-   
+
 };
 
 #endif // DATABASECOMMAND_LOADSOCIALACTIONS_H

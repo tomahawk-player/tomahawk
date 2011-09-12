@@ -17,9 +17,13 @@
  */
 
 #include "playlist/dynamic/DynamicModel.h"
+
 #include "GeneratorInterface.h"
+#include "pipeline.h"
+#include "query.h"
+#include "source.h"
 #include "audio/audioengine.h"
-#include <pipeline.h>
+
 #include "utils/logger.h"
 
 using namespace Tomahawk;

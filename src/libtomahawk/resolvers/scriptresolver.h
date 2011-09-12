@@ -25,10 +25,8 @@
 #include <qjson/serializer.h>
 #include <qjson/qobjecthelper.h>
 
-#include "resolver.h"
 #include "query.h"
-#include "result.h"
-#include "source.h"
+#include "resolver.h"
 
 #include "dllmacro.h"
 
@@ -42,7 +40,6 @@ public:
     explicit ScriptResolver( const QString& exe );
     virtual ~ScriptResolver();
 
-
     virtual QString name() const            { return m_name; }
     virtual unsigned int weight() const     { return m_weight; }
     virtual unsigned int preference() const { return m_preference; }
@@ -55,6 +52,7 @@ public:
     virtual void reload();
 
     virtual bool running() const;
+
 signals:
     void stopped();
 

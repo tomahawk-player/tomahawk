@@ -21,12 +21,13 @@
 
 #include <QListView>
 #include <QSortFilterProxyModel>
+#include <QTimer>
 
-#include "albummodel.h"
-#include "albumproxymodel.h"
 #include "viewpage.h"
-
 #include "dllmacro.h"
+#include "albumproxymodel.h"
+
+class AlbumModel;
 
 class DLLEXPORT AlbumView : public QListView, public Tomahawk::ViewPage
 {

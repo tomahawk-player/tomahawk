@@ -31,6 +31,8 @@
 #include <QString>
 #include <QDateTime>
 #include <QTimer>
+#include <QMutex>
+#include <QMutexLocker>
 #include <QWeakPointer>
 
 // descend dir tree comparing dir mtimes to last known mtime

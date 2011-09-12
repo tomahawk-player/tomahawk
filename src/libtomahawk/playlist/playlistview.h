@@ -26,8 +26,6 @@
 
 #include "dllmacro.h"
 
-class PlaylistModel;
-
 class DLLEXPORT PlaylistView : public TrackView, public Tomahawk::ViewPage
 {
 Q_OBJECT

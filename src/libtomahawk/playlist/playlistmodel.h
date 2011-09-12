@@ -22,12 +22,10 @@
 #include <QList>
 #include <QHash>
 
-#include "trackmodelitem.h"
-#include "trackmodel.h"
-#include "collection.h"
-#include "query.h"
 #include "typedefs.h"
+#include "trackmodel.h"
 #include "playlist.h"
+#include "query.h"
 #include "playlistinterface.h"
 
 #include "dllmacro.h"

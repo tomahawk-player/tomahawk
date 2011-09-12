@@ -24,9 +24,11 @@
 #include <QScrollBar>
 
 #include "audio/audioengine.h"
-
 #include "tomahawksettings.h"
+#include "artist.h"
+#include "albumitem.h"
 #include "albumitemdelegate.h"
+#include "albummodel.h"
 #include "viewmanager.h"
 #include "utils/logger.h"
 

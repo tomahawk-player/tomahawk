@@ -21,9 +21,7 @@
 
 #include "breadcrumbbar.h"
 
-
 class QPaintEvent;
-
 
 /**
  * \brief a bread crumb widget with Tomahawk's distinctive header style

@@ -23,9 +23,7 @@
 #include <QSharedPointer>
 
 #include "typedefs.h"
-
 #include "playlistinterface.h"
-
 #include "dllmacro.h"
 
 namespace Tomahawk

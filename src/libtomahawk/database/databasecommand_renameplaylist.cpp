@@ -20,8 +20,10 @@
 
 #include <QSqlQuery>
 
-#include "network/servent.h"
+#include "databaseimpl.h"
 #include "collection.h"
+#include "source.h"
+#include "network/servent.h"
 #include "utils/logger.h"
 
 using namespace Tomahawk;
@@ -38,8 +40,6 @@ DatabaseCommand_RenamePlaylist::DatabaseCommand_RenamePlaylist( const source_ptr
 void
 DatabaseCommand_RenamePlaylist::exec( DatabaseImpl* lib )
 {
-    qDebug() << Q_FUNC_INFO;
-
     TomahawkSqlQuery cre = lib->newquery();
 
     QString sql = QString( "UPDATE playlist SET title = :title WHERE guid = :id AND source %1" )
@@ -58,13 +58,6 @@ DatabaseCommand_RenamePlaylist::exec( DatabaseImpl* lib )
 void
 DatabaseCommand_RenamePlaylist::postCommitHook()
 {
-    qDebug() << Q_FUNC_INFO << "..reporting..";
-    if ( source().isNull() || source()->collection().isNull() )
-    {
-        qDebug() << "Source has gone offline, not emitting to GUI.";
-        return;
-    }
-
     playlist_ptr playlist = source()->collection()->playlist( m_playlistguid );
     // fallback, check for auto and stations too
     if( playlist.isNull() )

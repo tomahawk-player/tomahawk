@@ -25,8 +25,6 @@
 
 #include "playlistinterface.h"
 #include "infosystem/infosystem.h"
-#include "playlist.h"
-#include "result.h"
 #include "viewpage.h"
 
 #include "utils/tomahawkutils.h"
@@ -86,7 +84,7 @@ private slots:
 private:
     void setLeftViewArtists();
     void setLeftViewTracks();
-    QStandardItem* parseNode(QStandardItem* parentItem, const QString &label, const QVariant &data);
+    QStandardItem* parseNode( QStandardItem* parentItem, const QString &label, const QVariant &data );
     Ui::WhatsHotWidget *ui;
 
     PlaylistModel* m_tracksModel;

@@ -21,8 +21,6 @@
 
 #include <QWidget>
 
-#include "album.h"
-#include "result.h"
 #include "playlistinterface.h"
 #include "viewpage.h"
 

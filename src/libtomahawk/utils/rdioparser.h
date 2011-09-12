@@ -23,7 +23,6 @@
 #include <QStringList>
 
 #include "query.h"
-#include "source.h"
 
 class QNetworkReply;
 namespace Tomahawk

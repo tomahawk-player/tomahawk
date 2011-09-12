@@ -25,7 +25,6 @@
 
 #include "database/databasecommandloggable.h"
 #include "typedefs.h"
-#include "query.h"
 
 #include "dllmacro.h"
 

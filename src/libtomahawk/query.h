@@ -24,8 +24,8 @@
 #include <QList>
 #include <QVariant>
 
-#include "result.h"
 #include "typedefs.h"
+#include "result.h"
 
 #include "dllmacro.h"
 

@@ -1,5 +1,5 @@
 /* === This file is part of Tomahawk Player - <http://tomahawk-player.org> ===
- * 
+ *
  *   Copyright 2010-2011, Christian Muehlhaeuser <muesli@tomahawk-player.org>
  *
  *   Tomahawk is free software: you can redistribute it and/or modify
@@ -21,9 +21,9 @@
 
 #include <QWidget>
 #include <QAbstractItemView>
+#include <QTimer>
 
 #include "dllmacro.h"
-#include <QTimer>
 
 class DLLEXPORT OverlayWidget : public QWidget
 {

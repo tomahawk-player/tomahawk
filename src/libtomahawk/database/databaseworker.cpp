@@ -22,8 +22,11 @@
 #include <QTime>
 #include <QSqlQuery>
 
-#include "database/database.h"
-#include "database/databasecommandloggable.h"
+#include "source.h"
+#include "database.h"
+#include "databaseimpl.h"
+#include "databasecommandloggable.h"
+#include "tomahawksqlquery.h"
 #include "utils/logger.h"
 
 #ifndef QT_NO_DEBUG

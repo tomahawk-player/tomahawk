@@ -23,10 +23,11 @@
 #include "artist.h"
 #include "album.h"
 #include "collection.h"
+#include "source.h"
 #include "database/database.h"
 #include "databasecommand_collectionstats.h"
 #include "databaseimpl.h"
-#include "network/controlconnection.h"
+#include "network/servent.h"
 #include "utils/logger.h"
 
 using namespace Tomahawk;

@@ -1,5 +1,5 @@
 /* === This file is part of Tomahawk Player - <http://tomahawk-player.org> ===
- * 
+ *
  *   Copyright 2010-2011, Christian Muehlhaeuser <muesli@tomahawk-player.org>
  *
  *   Tomahawk is free software: you can redistribute it and/or modify
@@ -41,6 +41,7 @@ public:
     virtual QString commandname() const { return "loadplaylistentries"; }
 
     QString revisionGuid() const { return m_revguid; }
+
 signals:
     void done( const QString& rev,
                const QList<QString>& orderedguid,
@@ -51,12 +52,12 @@ signals:
 
 protected:
     void generateEntries( DatabaseImpl* dbi );
-    
+
     QStringList m_guids;
     QMap< QString, Tomahawk::plentry_ptr > m_entrymap;
     bool m_islatest;
     QStringList m_oldentries;
-    
+
 private:
     QString m_revguid;
 };

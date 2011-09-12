@@ -30,6 +30,7 @@
 #include "tomahawksettings.h"
 #include "treeheader.h"
 #include "treeitemdelegate.h"
+#include "treemodel.h"
 #include "viewmanager.h"
 #include "utils/logger.h"
 

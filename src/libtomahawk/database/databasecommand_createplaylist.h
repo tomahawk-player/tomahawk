@@ -19,10 +19,9 @@
 #ifndef DATABASECOMMAND_CREATEPLAYLIST_H
 #define DATABASECOMMAND_CREATEPLAYLIST_H
 
-#include "databaseimpl.h"
-#include "databasecommandloggable.h"
-#include "playlist.h"
 #include "typedefs.h"
+#include "databasecommandloggable.h"
+#include "qjson/qobjecthelper.h"
 
 #include "dllmacro.h"
 
@@ -62,6 +61,7 @@ protected:
     void setPlaylist( const Tomahawk::playlist_ptr& playlist ) { m_playlist = playlist; }
 
     QVariant m_v;
+
 private:
     Tomahawk::playlist_ptr m_playlist;
     bool m_report; // call Playlist::reportCreated?

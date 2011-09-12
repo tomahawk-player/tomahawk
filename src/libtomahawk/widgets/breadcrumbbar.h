@@ -20,7 +20,6 @@
 #ifndef BREADCRUMBBAR_H
 #define BREADCRUMBBAR_H
 
-
 #include "breadcrumbbuttonbase.h"
 
 #include <QModelIndex>

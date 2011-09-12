@@ -24,6 +24,7 @@
 
 #include "bufferiodevice.h"
 #include "network/controlconnection.h"
+#include "network/servent.h"
 #include "database/databasecommand_loadfile.h"
 #include "database/database.h"
 #include "sourcelist.h"

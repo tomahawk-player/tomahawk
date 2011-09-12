@@ -26,7 +26,6 @@
 #include "databasecommand.h"
 #include "databasecommand_loadplaylistentries.h"
 #include "playlist.h"
-#include "dynamic/DynamicControl.h"
 
 class DatabaseCommand_LoadDynamicPlaylistEntries : public DatabaseCommand_LoadPlaylistEntries
 {

@@ -30,31 +30,32 @@ class QNetworkReply;
 namespace Tomahawk
 {
 
-    /**
-     * Small class to parse whitelisted shortened links into the redirected urls
-     *
-     * Connect to urls() to get the result
-     *
-     */
-    class DLLEXPORT ShortenedLinkParser : public QObject
-    {
-        Q_OBJECT
-    public:
-        explicit ShortenedLinkParser( const QStringList& urls, QObject* parent = 0 );
-        virtual ~ShortenedLinkParser();
+/**
+ * Small class to parse whitelisted shortened links into the redirected urls
+ *
+ * Connect to urls() to get the result
+ *
+ */
+class DLLEXPORT ShortenedLinkParser : public QObject
+{
+    Q_OBJECT
+public:
+    explicit ShortenedLinkParser( const QStringList& urls, QObject* parent = 0 );
+    virtual ~ShortenedLinkParser();
 
-    signals:
-        void urls( const QStringList& urls );
+public slots:
+    void lookupFinished();
 
-    private:
-        void lengthenUrl( const QString& url );
-        void checkFinished();
+signals:
+    void urls( const QStringList& urls );
 
-        QStringList m_links;
-        QSet< QNetworkReply* > m_queries;
-        public slots:
-         void lookupFinished();
-    };
+private:
+    void lengthenUrl( const QString& url );
+    void checkFinished();
+
+    QStringList m_links;
+    QSet< QNetworkReply* > m_queries;
+};
 
 }
 

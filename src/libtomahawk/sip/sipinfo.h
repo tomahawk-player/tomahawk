@@ -23,7 +23,7 @@
 #include <QHostInfo>
 
 #include "utils/logger.h"
-#include "../dllmacro.h"
+#include "dllmacro.h"
 
 class SipInfoPrivate;
 

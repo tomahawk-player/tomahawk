@@ -22,10 +22,6 @@
 #include <QTreeView>
 #include <QMenu>
 
-#include "source.h"
-#include "sourcetree/sourcesmodel.h"
-#include "sourcetree/sourcedelegate.h"
-
 class CollectionModel;
 class PlaylistModel;
 class SourcesModel;
@@ -65,6 +61,7 @@ private slots:
     void latchOff();
 
     void onCustomContextMenu( const QPoint& pos );
+
 protected:
 //    void drawBranches( QPainter* painter, const QRect& rect, const QModelIndex& index ) const {}
     void drawRow( QPainter* painter, const QStyleOptionViewItem& option, const QModelIndex& index ) const;

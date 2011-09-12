@@ -26,7 +26,6 @@
 #include "viewmanager.h"
 #include "trackmodel.h"
 #include "trackproxymodel.h"
-
 #include "audio/audioengine.h"
 #include "context/ContextWidget.h"
 #include "widgets/overlaywidget.h"
@@ -34,6 +33,7 @@
 #include "utils/tomahawkutils.h"
 #include "utils/logger.h"
 #include "dropjob.h"
+#include "artist.h"
 
 using namespace Tomahawk;
 

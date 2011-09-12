@@ -22,6 +22,7 @@
 #include <QSettings>
 #include <QCryptographicHash>
 
+#include "artist.h"
 #include "album.h"
 #include "typedefs.h"
 #include "audio/audioengine.h"

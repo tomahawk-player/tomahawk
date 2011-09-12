@@ -25,7 +25,8 @@
 #include "tomahawksqlquery.h"
 #include "dynamic/DynamicControl.h"
 #include "dynamic/GeneratorInterface.h"
-#include <dynamic/GeneratorFactory.h>
+#include "dynamic/GeneratorFactory.h"
+#include "qjson/parser.h"
 #include "utils/logger.h"
 
 using namespace Tomahawk;

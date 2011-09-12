@@ -23,7 +23,8 @@
 #include <QDateTime>
 #include <QTimer>
 
-#include <playlist.h>
+#include "playlist.h"
+#include "query.h"
 #include "utils/logger.h"
 
 using namespace Tomahawk;

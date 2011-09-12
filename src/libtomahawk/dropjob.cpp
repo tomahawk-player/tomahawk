@@ -21,6 +21,7 @@
 
 #include "artist.h"
 #include "album.h"
+#include "source.h"
 
 #include "utils/spotifyparser.h"
 #include "utils/rdioparser.h"

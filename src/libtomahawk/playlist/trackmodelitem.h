@@ -24,7 +24,6 @@
 #include <QPersistentModelIndex>
 #include <QAbstractItemModel>
 
-#include "query.h"
 #include "typedefs.h"
 
 #include "dllmacro.h"

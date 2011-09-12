@@ -26,9 +26,11 @@
 #include <QVariant>
 #include <QtDBus/QtDBus>
 
-namespace Tomahawk {
+namespace Tomahawk
+{
 
-namespace InfoSystem {
+namespace InfoSystem
+{
 
 class MprisPlugin : public InfoPlugin
 {
@@ -41,7 +43,7 @@ public:
     // MPRIS DBus Methods
 
     // org.mpris.MediaPlayer2
-    
+
     Q_PROPERTY(bool CanQuit READ canQuit)
     bool canQuit() const;
 
@@ -159,7 +161,7 @@ signals:
 
 private:
     // Get Info
-    
+
     // Push Info
     void audioStarted( const QVariant &input );
     void audioFinished( const QVariant &input );
@@ -171,11 +173,9 @@ private:
     void notifyPropertyChanged( const QString& interface, const QString& propertyName );
     QString m_playbackStatus;
     QTemporaryFile *m_coverTempFile;
-
 };
 
 };
-
 
 }
 

@@ -18,6 +18,9 @@
 
 #include "database.h"
 
+#include "databasecommand.h"
+#include "databaseimpl.h"
+#include "databaseworker.h"
 #include "utils/logger.h"
 
 #define DEFAULT_WORKER_THREADS 4

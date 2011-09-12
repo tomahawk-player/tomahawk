@@ -23,14 +23,13 @@
 #include <QList>
 #include <QVariant>
 #include <QSharedPointer>
+#include <QQueue>
 
-#include "query.h"
 #include "typedefs.h"
-
+#include "result.h"
 #include "playlistinterface.h"
 
 #include "dllmacro.h"
-#include <QQueue>
 
 class DatabaseCommand_LoadAllPlaylists;
 class DatabaseCommand_LoadAllSortedPlaylists;
@@ -77,7 +76,6 @@ public:
 
     source_ptr lastSource() const;
     void setLastSource( source_ptr s );
-
 
 private:
     QString m_guid;

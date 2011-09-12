@@ -22,7 +22,6 @@
 #include <QWidget>
 
 #include "dllmacro.h"
-#include "query.h"
 
 class QTimeLine;
 class QSearchField;

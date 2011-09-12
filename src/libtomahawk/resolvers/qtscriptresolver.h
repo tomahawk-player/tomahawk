@@ -21,7 +21,6 @@
 
 #include "resolver.h"
 #include "query.h"
-#include "result.h"
 #include "utils/tomahawkutils.h"
 #include "config.h"
 
@@ -136,7 +135,7 @@ public:
 public slots:
     virtual void resolve( const Tomahawk::query_ptr& query );
     virtual void stop();
-virtual void start();
+    virtual void start();
 
 signals:
     void stopped();

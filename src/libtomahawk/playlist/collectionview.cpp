@@ -21,7 +21,8 @@
 #include <QDragEnterEvent>
 #include <QPainter>
 
-#include "playlist/collectionproxymodel.h"
+#include "collectionproxymodel.h"
+#include "trackmodel.h"
 #include "widgets/overlaywidget.h"
 #include "utils/logger.h"
 

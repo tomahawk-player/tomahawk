@@ -1,5 +1,5 @@
 /* === This file is part of Tomahawk Player - <http://tomahawk-player.org> ===
- * 
+ *
  *   Copyright 2010-2011, Christian Muehlhaeuser <muesli@tomahawk-player.org>
  *
  *   Tomahawk is free software: you can redistribute it and/or modify
@@ -22,6 +22,7 @@
 #include <QObject>
 #include <QVariantMap>
 #include <QMap>
+#include <QDir>
 
 #include "databasecommand.h"
 
@@ -37,7 +38,7 @@ public:
     explicit DatabaseCommand_FileMtimes( const QString& prefix = QString(), QObject* parent = 0 )
         : DatabaseCommand( parent ), m_prefix( prefix )
     {}
-    
+
     explicit DatabaseCommand_FileMtimes( const QStringList& prefixes, QObject* parent = 0 )
     : DatabaseCommand( parent ), m_prefixes( prefixes )
     {}

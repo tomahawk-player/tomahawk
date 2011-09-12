@@ -24,6 +24,7 @@
 #include <QTimer>
 
 #include "playlist.h"
+#include "source.h"
 #include "database/databasecommand_loadallsortedplaylists.h"
 
 class RecentPlaylistsModel : public QAbstractListModel

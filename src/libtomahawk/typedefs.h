@@ -22,6 +22,8 @@
 #include <QSharedPointer>
 #include <QUuid>
 
+template <typename T> class QSharedPointer;
+
 namespace Tomahawk
 {
     class Artist;

@@ -19,11 +19,11 @@
 #ifndef ARTISTVIEW_H
 #define ARTISTVIEW_H
 
-#include <QTreeView>
 #include <QSortFilterProxyModel>
+#include <QTreeView>
+#include <QTimer>
 
 #include "contextmenu.h"
-#include "treemodel.h"
 #include "treeproxymodel.h"
 #include "viewpage.h"
 
@@ -32,6 +32,7 @@
 class TreeHeader;
 class LoadingSpinner;
 class OverlayWidget;
+class TreeModel;
 
 class DLLEXPORT ArtistView : public QTreeView, public Tomahawk::ViewPage
 {

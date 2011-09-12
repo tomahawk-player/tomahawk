@@ -20,6 +20,7 @@
 
 #include <QTreeView>
 
+#include "artist.h"
 #include "album.h"
 #include "query.h"
 #include "utils/logger.h"

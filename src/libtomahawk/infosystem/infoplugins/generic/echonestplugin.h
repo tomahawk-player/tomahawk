@@ -25,8 +25,10 @@
 #include <QObject>
 
 class QNetworkReply;
-namespace Echonest {
-class Artist;
+
+namespace Echonest
+{
+    class Artist;
 }
 
 namespace Tomahawk

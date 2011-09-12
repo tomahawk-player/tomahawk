@@ -19,8 +19,6 @@
 #ifndef RESULT_H
 #define RESULT_H
 
-#include <qvariant.h>
-
 #include <QObject>
 #include <QVariant>
 

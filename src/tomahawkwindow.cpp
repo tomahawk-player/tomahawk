@@ -41,6 +41,7 @@
 #include "viewmanager.h"
 #include "sip/SipHandler.h"
 #include "sourcetree/sourcetreeview.h"
+#include "network/servent.h"
 #include "utils/proxystyle.h"
 #include "utils/xspfloader.h"
 #include "widgets/animatedsplitter.h"
@@ -48,6 +49,10 @@
 #include "widgets/searchwidget.h"
 #include "widgets/playlisttypeselectordlg.h"
 #include "thirdparty/Qocoa/qsearchfield.h"
+#include "playlist/dynamic/GeneratorInterface.h"
+#include "playlist/playlistmodel.h"
+#include "playlist/playlistview.h"
+#include "playlist/queueview.h"
 
 #include "audiocontrols.h"
 #include "settingsdialog.h"
@@ -57,9 +62,7 @@
 #include "PipelineStatusView.h"
 #include "transferview.h"
 #include "tomahawktrayicon.h"
-#include "playlist/dynamic/GeneratorInterface.h"
 #include "scanmanager.h"
-#include "playlist/queueview.h"
 #include "tomahawkapp.h"
 
 #ifdef Q_WS_WIN

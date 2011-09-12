@@ -22,8 +22,6 @@
 #include <QWidget>
 #include <QTimer>
 
-#include "album.h"
-#include "result.h"
 #include "playlistinterface.h"
 #include "viewpage.h"
 

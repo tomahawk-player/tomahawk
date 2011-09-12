@@ -20,11 +20,12 @@
 #define COLLECTIONVIEW_H
 
 #include "trackproxymodel.h"
-#include "trackmodel.h"
 #include "trackview.h"
 #include "viewpage.h"
 
 #include "dllmacro.h"
+
+class TrackModel;
 
 class DLLEXPORT CollectionView : public TrackView, public Tomahawk::ViewPage
 {

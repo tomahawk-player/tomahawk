@@ -23,7 +23,9 @@
 #include "database/databasecommand_collectionstats.h"
 #include "dbsyncconnection.h"
 #include "sourcelist.h"
-#include <sip/SipHandler.h>
+#include "network/dbsyncconnection.h"
+#include "network/servent.h"
+#include "sip/SipHandler.h"
 #include "utils/logger.h"
 
 #define TCP_TIMEOUT 600

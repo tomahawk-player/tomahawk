@@ -20,11 +20,7 @@
 #define DATABASECOMMAND_SETDYNAMICPLAYLISTREVISION_H
 
 #include "databasecommand_setplaylistrevision.h"
-#include "databaseimpl.h"
-#include "collection.h"
-#include "playlist.h"
 #include "dynamic/GeneratorInterface.h"
-#include "network/servent.h"
 
 using namespace Tomahawk;
 

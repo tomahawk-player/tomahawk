@@ -1,5 +1,5 @@
 /* === This file is part of Tomahawk Player - <http://tomahawk-player.org> ===
- * 
+ *
  *   Copyright 2010-2011, Christian Muehlhaeuser <muesli@tomahawk-player.org>
  *
  *   Tomahawk is free software: you can redistribute it and/or modify
@@ -19,7 +19,6 @@
 #ifndef DATABASECOMMAND_CLIENTAUTHVALID_H
 #define DATABASECOMMAND_CLIENTAUTHVALID_H
 
-#include "databaseimpl.h"
 #include "databasecommand.h"
 #include "dllmacro.h"
 
@@ -39,11 +38,11 @@ public:
 
     virtual void exec( DatabaseImpl* lib );
     virtual bool doesMutates() const { return false; }
-    
+
 signals:
     // if auth is invalid name is empty
     void authValid( const QString& clientToken, const QString& name, bool valid );
-    
+
 private:
     QString m_clientToken;
 };

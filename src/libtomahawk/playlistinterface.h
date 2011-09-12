@@ -23,9 +23,7 @@
 #include <QWidget>
 
 #include "typedefs.h"
-
 #include "dllmacro.h"
-#include "result.h"
 #include "utils/logger.h"
 
 namespace Tomahawk

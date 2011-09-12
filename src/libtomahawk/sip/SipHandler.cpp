@@ -28,6 +28,7 @@
 
 #include "database/database.h"
 #include "network/controlconnection.h"
+#include "network/servent.h"
 #include "sourcelist.h"
 #include "tomahawksettings.h"
 #include "utils/logger.h"

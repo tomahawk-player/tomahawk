@@ -20,7 +20,9 @@
 
 #include "collection.h"
 #include "database/database.h"
+#include "database/databaseimpl.h"
 #include "database/databasecommand_alltracks.h"
+#include "query.h"
 
 #include "utils/logger.h"
 

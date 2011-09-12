@@ -1,5 +1,5 @@
 /* === This file is part of Tomahawk Player - <http://tomahawk-player.org> ===
- * 
+ *
  *   Copyright 2010-2011, Christian Muehlhaeuser <muesli@tomahawk-player.org>
  *
  *   Tomahawk is free software: you can redistribute it and/or modify
@@ -56,7 +56,7 @@ public:
     const QSharedPointer<QIODevice>& iodevice() { return m_iodev; }
     ControlConnection* controlConnection() const { return m_cc; }
 
-	Tomahawk::source_ptr source() const;
+    Tomahawk::source_ptr source() const;
     Tomahawk::result_ptr track() const { return m_result; }
     qint64 transferRate() const { return m_transferRate; }
 

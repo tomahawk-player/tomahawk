@@ -25,8 +25,8 @@
 
 #include "playlistinterface.h"
 
-#include "playlist.h"
-#include "result.h"
+#include "query.h"
+#include "source.h"
 #include "viewpage.h"
 
 #include "utils/tomahawkutils.h"

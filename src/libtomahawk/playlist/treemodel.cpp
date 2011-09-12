@@ -22,6 +22,7 @@
 #include <QMimeData>
 #include <QNetworkReply>
 
+#include "source.h"
 #include "audio/audioengine.h"
 #include "database/databasecommand_allalbums.h"
 #include "database/databasecommand_alltracks.h"

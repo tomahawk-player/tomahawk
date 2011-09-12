@@ -1,5 +1,5 @@
 /* === This file is part of Tomahawk Player - <http://tomahawk-player.org> ===
- * 
+ *
  *   Copyright 2010-2011, Christian Muehlhaeuser <muesli@tomahawk-player.org>
  *
  *   Tomahawk is free software: you can redistribute it and/or modify
@@ -31,7 +31,6 @@
 #define MSGPROCESSOR_H
 
 #include <QObject>
-#include "msg.h"
 #include <QtConcurrentRun>
 #include <QFuture>
 #include <QFutureWatcher>
@@ -39,6 +38,8 @@
 #include <qjson/parser.h>
 #include <qjson/serializer.h>
 #include <qjson/qobjecthelper.h>
+
+#include "msg.h"
 
 class MsgProcessor : public QObject
 {

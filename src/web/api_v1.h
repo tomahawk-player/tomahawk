@@ -21,11 +21,9 @@
 
 // See: http://doc.libqxt.org/tip/qxtweb.html
 
-#include "query.h"
-#include "pipeline.h"
-
 #include "QxtHttpServerConnector"
 #include "QxtHttpSessionManager"
+#include "QxtWebContent"
 #include "QxtWebSlotService"
 #include "QxtWebPageEvent"
 
@@ -36,13 +34,6 @@
 #include <QFile>
 #include <QSharedPointer>
 #include <QStringList>
-
-#include "network/servent.h"
-#include "utils/tomahawkutils.h"
-#include <database/databasecommand_addclientauth.h>
-#include <qxtwebcontent.h>
-#include <database/database.h>
-#include <database/databasecommand_clientauthvalid.h>
 
 class Api_v1 : public QxtWebSlotService
 {

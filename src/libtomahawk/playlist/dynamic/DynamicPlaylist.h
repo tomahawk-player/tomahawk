@@ -23,8 +23,8 @@
 #include <QList>
 #include <QSharedPointer>
 
-#include "playlist.h"
 #include "typedefs.h"
+#include "playlist.h"
 #include "playlist/dynamic/DynamicControl.h"
 #include "playlist/dynamic/DynamicPlaylistRevision.h"
 

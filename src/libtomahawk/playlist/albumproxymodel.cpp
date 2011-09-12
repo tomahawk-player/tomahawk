@@ -20,6 +20,8 @@
 
 #include <QListView>
 
+#include "artist.h"
+#include "albumitem.h"
 #include "query.h"
 #include "utils/logger.h"
 

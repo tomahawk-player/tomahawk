@@ -24,10 +24,11 @@
 #include "items/collectionitem.h"
 #include "items/playlistitems.h"
 #include "items/categoryitems.h"
+#include "items/temporarypageitem.h"
 
 #include "utils/tomahawkutils.h"
-#include "items/temporarypageitem.h"
 #include "animationhelper.h"
+#include "source.h"
 
 #include <QApplication>
 #include <QPainter>

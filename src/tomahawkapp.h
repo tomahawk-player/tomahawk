@@ -24,28 +24,24 @@
 #include "headlesscheck.h"
 #include "config.h"
 
-#include "mac/tomahawkapp_mac.h" // for PlatforInterface
-
 #include <QRegExp>
 #include <QFile>
 #include <QSettings>
 #include <QDir>
+#include <QPersistentModelIndex>
 
 #include "QxtHttpServerConnector"
 #include "QxtHttpSessionManager"
 
+#include "mac/tomahawkapp_mac.h" // for PlatforInterface
 #include "typedefs.h"
-#include "playlist.h"
-#include "source.h"
-#include "resolver.h"
-#include "network/servent.h"
-
 #include "utils/tomahawkutils.h"
 #include "thirdparty/kdsingleapplicationguard/kdsingleapplicationguard.h"
 
 class AudioEngine;
 class Database;
 class ScanManager;
+class Servent;
 class SipHandler;
 class TomahawkSettings;
 class XMPPBot;

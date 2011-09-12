@@ -25,8 +25,9 @@
 #include "genericpageitems.h"
 #include "utils/tomahawkutils.h"
 #include "utils/logger.h"
-#include <widgets/SocialPlaylistWidget.h>
-#include <playlist/customplaylistview.h>
+#include "widgets/SocialPlaylistWidget.h"
+#include "playlist/customplaylistview.h"
+#include "source.h"
 #include "temporarypageitem.h"
 
 /// CollectionItem

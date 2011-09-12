@@ -16,7 +16,6 @@
  *   along with Tomahawk. If not, see <http://www.gnu.org/licenses/>.
  */
 
-
 #ifndef JSPFLOADER_H
 #define JSPFLOADER_H
 
@@ -30,6 +29,7 @@
 #include "typedefs.h"
 
 #include "dllmacro.h"
+
 namespace Tomahawk
 {
 

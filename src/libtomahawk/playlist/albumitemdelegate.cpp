@@ -22,6 +22,7 @@
 #include <QPainter>
 #include <QAbstractItemView>
 
+#include "artist.h"
 #include "query.h"
 #include "result.h"
 

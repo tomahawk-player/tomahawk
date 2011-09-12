@@ -22,6 +22,7 @@
 #include <QSqlQuery>
 
 #include "playlist.h"
+#include "source.h"
 #include "databaseimpl.h"
 #include "utils/logger.h"
 

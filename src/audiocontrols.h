@@ -29,6 +29,7 @@
 class QDropEvent;
 class QDragEnterEvent;
 class QDragMoveEvent;
+
 namespace Ui
 {
     class AudioControls;

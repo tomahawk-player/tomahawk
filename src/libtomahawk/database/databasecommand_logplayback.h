@@ -25,9 +25,8 @@
 #include "database/databasecommandloggable.h"
 #include "sourcelist.h"
 #include "typedefs.h"
-#include "query.h"
-#include "result.h"
 #include "artist.h"
+#include "query.h"
 
 #include "dllmacro.h"
 

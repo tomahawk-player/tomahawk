@@ -20,9 +20,12 @@
 
 #include <QSqlQuery>
 
+#include "source.h"
+#include "databaseimpl.h"
 #include "tomahawksqlquery.h"
 #include "dynamic/DynamicPlaylist.h"
 #include "dynamic/DynamicControl.h"
+#include "network/servent.h"
 #include "utils/logger.h"
 
 

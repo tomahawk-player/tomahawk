@@ -1,5 +1,5 @@
 /* === This file is part of Tomahawk Player - <http://tomahawk-player.org> ===
- * 
+ *
  *   Copyright 2010-2011, Christian Muehlhaeuser <muesli@tomahawk-player.org>
  *
  *   Tomahawk is free software: you can redistribute it and/or modify
@@ -23,7 +23,6 @@
 #include <QSharedPointer>
 
 #include "typedefs.h"
-#include "collection.h"
 #include "playlistinterface.h"
 
 #include "dllmacro.h"
@@ -71,7 +70,7 @@ signals:
     void trackCountChanged( unsigned int tracks );
     void sourceTrackCountChanged( unsigned int tracks );
     void nextTrackReady();
-    
+
 private slots:
     void onSourcePlaybackStarted( const Tomahawk::query_ptr& query );
     void resolvingFinished( bool hasResults );

@@ -22,8 +22,10 @@
 #include <QAbstractItemModel>
 #include <QPixmap>
 
+#include "artist.h"
 #include "album.h"
-#include "collection.h"
+#include "query.h"
+#include "result.h"
 #include "playlistinterface.h"
 #include "database/databasecommand_allartists.h"
 

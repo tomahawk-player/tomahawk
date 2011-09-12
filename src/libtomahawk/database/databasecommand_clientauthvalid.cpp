@@ -18,6 +18,8 @@
 
 #include "databasecommand_clientauthvalid.h"
 
+#include "databaseimpl.h"
+#include "tomahawksqlquery.h"
 #include "utils/logger.h"
 
 

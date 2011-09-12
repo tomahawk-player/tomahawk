@@ -19,7 +19,7 @@
 #ifndef DATABASECOMMAND_LOADALLSORTEDPLAYLISTS_H
 #define DATABASECOMMAND_LOADALLSORTEDPLAYLISTS_H
 
-#include "libtomahawk/database/databasecommand.h"
+#include "databasecommand.h"
 #include "databasecommand_loadallplaylists.h"
 
 /**

@@ -27,6 +27,7 @@
 #include "source.h"
 #include "sourcelist.h"
 
+#include "trackmodel.h"
 #include "trackmodelitem.h"
 #include "trackproxymodel.h"
 #include "trackview.h"

@@ -20,8 +20,9 @@
 
 #include <QSqlQuery>
 
-#include "dynamic/DynamicPlaylist.h"
 #include "databaseimpl.h"
+#include "source.h"
+#include "dynamic/DynamicPlaylist.h"
 #include "utils/logger.h"
 
 using namespace Tomahawk;

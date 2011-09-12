@@ -20,7 +20,6 @@
 #define COLLAPSIBLE_CONTROLS_H
 
 #include "typedefs.h"
-#include "source.h"
 
 #include <QWidget>
 
@@ -30,6 +29,7 @@ class QTimeLine;
 class QToolButton;
 class ElidedLabel;
 class QStackedLayout;
+
 namespace Tomahawk
 {
 

@@ -21,6 +21,8 @@
 #include <QSqlQuery>
 
 #include "databaseimpl.h"
+#include "query.h"
+#include "qjson/parser.h"
 #include "utils/logger.h"
 
 using namespace Tomahawk;

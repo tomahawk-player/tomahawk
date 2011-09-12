@@ -22,11 +22,14 @@
 #include <QSharedPointer>
 #include <QVariant>
 
-#include "database/databaseimpl.h"
-#include "database/databasecommand.h"
-#include "database/databaseworker.h"
+#include "artist.h"
+#include "album.h"
 
 #include "dllmacro.h"
+
+class DatabaseCommand;
+class DatabaseImpl;
+class DatabaseWorker;
 
 /*
     This class is really a firewall/pimpl - the public functions of LibraryImpl

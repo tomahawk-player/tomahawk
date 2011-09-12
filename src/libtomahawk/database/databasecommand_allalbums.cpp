@@ -20,7 +20,9 @@
 
 #include <QSqlQuery>
 
+#include "artist.h"
 #include "databaseimpl.h"
+#include "source.h"
 #include "utils/tomahawkutils.h"
 #include "utils/logger.h"
 

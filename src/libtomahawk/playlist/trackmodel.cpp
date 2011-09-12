@@ -18,12 +18,14 @@
 
 #include "trackmodel.h"
 
+#include <QDateTime>
 #include <QMimeData>
 #include <QTreeView>
 
 #include "audio/audioengine.h"
 #include "utils/tomahawkutils.h"
 
+#include "artist.h"
 #include "album.h"
 #include "pipeline.h"
 #include "utils/logger.h"

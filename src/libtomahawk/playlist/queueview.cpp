@@ -25,6 +25,7 @@
 #include "playlist/queueproxymodel.h"
 #include "widgets/overlaywidget.h"
 #include "utils/logger.h"
+#include "playlistview.h"
 
 using namespace Tomahawk;
 

@@ -21,12 +21,15 @@
 #include <QSqlQuery>
 #include <QSqlDriver>
 
+#include "databaseimpl.h"
+#include "tomahawksqlquery.h"
 #include "dynamic/DynamicPlaylist.h"
 #include "dynamic/DynamicControl.h"
 #include "dynamic/GeneratorInterface.h"
 
-#include "network/servent.h"
+#include "source.h"
 #include "viewmanager.h"
+#include "network/servent.h"
 #include "utils/logger.h"
 
 using namespace Tomahawk;

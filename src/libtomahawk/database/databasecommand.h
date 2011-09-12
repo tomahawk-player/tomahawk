@@ -107,6 +107,4 @@ private:
 
 Q_DECLARE_METATYPE( DatabaseCommand )
 
-#include "source.h"
-
 #endif // DATABASECOMMAND_H

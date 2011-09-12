@@ -22,9 +22,10 @@
 #include <QPushButton>
 
 #include "widgets/animatedsplitter.h"
-#include "playlistview.h"
 
 #include "dllmacro.h"
+
+class PlaylistView;
 
 namespace Ui
 {

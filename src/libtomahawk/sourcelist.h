@@ -23,8 +23,8 @@
 #include <QMutex>
 #include <QMap>
 
-#include "source.h"
 #include "typedefs.h"
+#include "source.h"
 
 #include "dllmacro.h"
 

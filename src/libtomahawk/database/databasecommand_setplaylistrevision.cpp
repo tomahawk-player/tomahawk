@@ -20,6 +20,8 @@
 
 #include <QSqlQuery>
 
+#include "source.h"
+#include "databaseimpl.h"
 #include "tomahawksqlquery.h"
 #include "network/servent.h"
 #include "utils/logger.h"

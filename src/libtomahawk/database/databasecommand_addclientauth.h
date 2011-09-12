@@ -1,5 +1,5 @@
 /* === This file is part of Tomahawk Player - <http://tomahawk-player.org> ===
- * 
+ *
  *   Copyright 2010-2011, Christian Muehlhaeuser <muesli@tomahawk-player.org>
  *
  *   Tomahawk is free software: you can redistribute it and/or modify
@@ -19,11 +19,12 @@
 #ifndef DATABASECOMMAND_ADDCLIENTAUTH_H
 #define DATABASECOMMAND_ADDCLIENTAUTH_H
 
-#include "databaseimpl.h"
 #include "databasecommand.h"
 #include "dllmacro.h"
 
 #include <QObject>
+
+class DatabaseImpl;
 
 class DLLEXPORT DatabaseCommand_AddClientAuth : public DatabaseCommand
 {
@@ -39,7 +40,7 @@ public:
 
     virtual void exec( DatabaseImpl* lib );
     virtual bool doesMutates() const { return true; }
-    
+
 private:
     QString m_clientToken, m_website, m_name, m_userAgent;
 };

@@ -21,7 +21,6 @@
 
 #include "items/sourcetreeitem.h"
 
-
 class TemporaryPageItem : public SourceTreeItem
 {
     Q_OBJECT

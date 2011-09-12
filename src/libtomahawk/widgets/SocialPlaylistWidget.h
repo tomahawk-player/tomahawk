@@ -35,8 +35,6 @@
 
 #include "dllmacro.h"
 #include "typedefs.h"
-#include "playlist/dynamic/DynamicPlaylist.h"
-#include "source.h"
 
 class AlbumModel;
 class PlaylistModel;
@@ -82,7 +80,6 @@ private:
     Ui_SocialPlaylistWidget *ui;
     PlaylistModel* m_topForeignTracksModel;
     AlbumModel* m_popularNewAlbumsModel;
-
 
     QString m_title;
     QString m_description;

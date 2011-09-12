@@ -30,7 +30,6 @@
 #include <qjson/qobjecthelper.h>
 
 #include "databasecommand.h"
-#include "databaseimpl.h"
 
 class Database;
 class DatabaseCommandLoggable;

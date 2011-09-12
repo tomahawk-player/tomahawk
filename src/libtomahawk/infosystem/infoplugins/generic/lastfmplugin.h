@@ -20,7 +20,6 @@
 
 #include "infosystem/infosystem.h"
 #include "infosystem/infosystemworker.h"
-#include "result.h"
 
 #include <lastfm/Track>
 #include <lastfm/Audioscrobbler>

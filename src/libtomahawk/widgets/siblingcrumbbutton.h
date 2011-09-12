@@ -30,7 +30,6 @@
 #include <QSize>
 #include <QMenu>
 
-
 /**
  * \brief A factory for sibling crumb buttons
  */

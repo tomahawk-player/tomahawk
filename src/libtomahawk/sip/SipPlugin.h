@@ -27,7 +27,6 @@
 #include <QMenu>
 #include <QNetworkProxy>
 
-
 #include "dllmacro.h"
 
 class SipPlugin;
@@ -113,7 +112,7 @@ signals:
 
     void addMenu( QMenu* menu );
     void removeMenu( QMenu* menu );
-    
+
     void dataError( bool );
 
 private slots:

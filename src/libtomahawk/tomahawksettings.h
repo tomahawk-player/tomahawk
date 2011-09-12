@@ -26,7 +26,6 @@
 #include "AtticaManager.h"
 #include "playlist.h"
 
-class AtticaManager;
 /**
  * Convenience wrapper around QSettings for tomahawk-specific config
  */
@@ -201,7 +200,6 @@ public:
     // For now, just Adium. Soon, the world!
     bool nowPlayingEnabled() const; // false by default
     void setNowPlayingEnabled( bool enable );
-
 
 signals:
     void changed();

@@ -21,14 +21,13 @@
 #define RESOLVERCONFIGDELEGATE_H
 
 #include "configdelegatebase.h"
-#include "source.h"
 
 class ResolverConfigDelegate : public ConfigDelegateBase
 {
     Q_OBJECT
 public:
-    explicit ResolverConfigDelegate(QObject* parent = 0);
-    virtual void paint(QPainter* painter, const QStyleOptionViewItem& option, const QModelIndex& index) const;
+    explicit ResolverConfigDelegate( QObject* parent = 0 );
+    virtual void paint( QPainter* painter, const QStyleOptionViewItem& option, const QModelIndex& index ) const;
 
     virtual QRect checkRectForIndex( const QStyleOptionViewItem &option, const QModelIndex &idx ) const;
     virtual QRect configRectForIndex( const QStyleOptionViewItem& option, const QModelIndex& idx ) const;

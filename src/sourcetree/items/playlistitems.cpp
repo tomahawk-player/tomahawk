@@ -29,6 +29,7 @@
 #include "utils/tomahawkutils.h"
 #include "utils/logger.h"
 #include "dropjob.h"
+#include "source.h"
 
 using namespace Tomahawk;
 

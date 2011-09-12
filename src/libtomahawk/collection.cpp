@@ -21,8 +21,7 @@
 #include <QMetaObject>
 #include <QGenericArgument>
 
-#include "dynamic/DynamicPlaylist.h"
-#include "playlist.h"
+#include "source.h"
 
 #include "utils/logger.h"
 

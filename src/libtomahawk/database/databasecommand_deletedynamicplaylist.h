@@ -1,5 +1,5 @@
 /* === This file is part of Tomahawk Player - <http://tomahawk-player.org> ===
- * 
+ *
  *   Copyright 2010-2011, Christian Muehlhaeuser <muesli@tomahawk-player.org>
  *
  *   Tomahawk is free software: you can redistribute it and/or modify
@@ -19,27 +19,25 @@
 #ifndef DATABASECOMMAND_DELETEDYNAMICPLAYLIST_H
 #define DATABASECOMMAND_DELETEDYNAMICPLAYLIST_H
 
-#include "databaseimpl.h"
 #include "databasecommand_deleteplaylist.h"
-#include "source.h"
 #include "typedefs.h"
 
 class DatabaseCommand_DeleteDynamicPlaylist : public DatabaseCommand_DeletePlaylist
 {
-    Q_OBJECT    
+    Q_OBJECT
 public:
     explicit DatabaseCommand_DeleteDynamicPlaylist( QObject* parent = 0 )
     : DatabaseCommand_DeletePlaylist( parent )
     {}
-    
+
     explicit DatabaseCommand_DeleteDynamicPlaylist( const Tomahawk::source_ptr& source, const QString& playlistguid );
-    
+
     QString commandname() const { return "deletedynamicplaylist"; }
-    
+
     virtual void exec( DatabaseImpl* lib );
     virtual void postCommitHook();
     virtual bool doesMutates() const { return true; }
-   
+
 };
 
 #endif // DATABASECOMMAND_DELETEDYNAMICPLAYLIST_H

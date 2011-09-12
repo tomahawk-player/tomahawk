@@ -17,6 +17,7 @@
  *   along with Tomahawk. If not, see <http://www.gnu.org/licenses/>.
  */
 
+#include "settingsdialog.h"
 #include "config.h"
 
 #include <QCryptographicHash>
@@ -33,29 +34,28 @@
 #include <lastfm/XmlQuery>
 #endif
 
-#include "settingsdialog.h"
-
+#include "AtticaManager.h"
 #include "tomahawkapp.h"
-#include "musicscanner.h"
 #include "tomahawksettings.h"
-#include "sip/SipHandler.h"
-#include "database/database.h"
-#include "scanmanager.h"
+#include "delegateconfigwrapper.h"
+#include "GetNewStuffDialog.h"
+#include "musicscanner.h"
 #include "pipeline.h"
+#include "resolver.h"
 #include "resolverconfigdelegate.h"
 #include "resolversmodel.h"
-#include "delegateconfigwrapper.h"
-#include "sip/SipModel.h"
-#include "sipconfigdelegate.h"
+#include "scanmanager.h"
 #include "settingslistdelegate.h"
-
+#include "sipconfigdelegate.h"
+#include "database/database.h"
+#include "network/servent.h"
+#include "playlist/dynamic/widgets/LoadingSpinner.h"
+#include "sip/SipHandler.h"
+#include "sip/SipModel.h"
 #include "utils/logger.h"
 
 #include "ui_proxydialog.h"
 #include "ui_stackedsettingsdialog.h"
-#include <playlist/dynamic/widgets/LoadingSpinner.h>
-#include "GetNewStuffDialog.h"
-#include "AtticaManager.h"
 
 static QString
 md5( const QByteArray& src )

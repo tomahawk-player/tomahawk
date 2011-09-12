@@ -1,5 +1,5 @@
 /* === This file is part of Tomahawk Player - <http://tomahawk-player.org> ===
- * 
+ *
  *   Copyright 2010-2011, Christian Muehlhaeuser <muesli@tomahawk-player.org>
  *
  *   Tomahawk is free software: you can redistribute it and/or modify
@@ -20,9 +20,8 @@
 #define DATABASECOMMAND_SETPLAYLISTREVISION_H
 
 #include "databasecommandloggable.h"
-#include "databaseimpl.h"
-#include "collection.h"
 #include "playlist.h"
+#include "qjson/qobjecthelper.h"
 
 #include "dllmacro.h"
 
@@ -99,7 +98,7 @@ protected:
     QString m_playlistguid;
     QString m_newrev, m_oldrev;
     QMap<QString, Tomahawk::plentry_ptr> m_addedmap;
-    
+
     QString m_currentRevision;
 private:
     QVariantList m_orderedguids;

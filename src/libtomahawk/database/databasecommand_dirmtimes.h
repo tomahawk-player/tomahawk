@@ -1,5 +1,5 @@
 /* === This file is part of Tomahawk Player - <http://tomahawk-player.org> ===
- * 
+ *
  *   Copyright 2010-2011, Christian Muehlhaeuser <muesli@tomahawk-player.org>
  *
  *   Tomahawk is free software: you can redistribute it and/or modify
@@ -21,6 +21,7 @@
 
 #include <QObject>
 #include <QVariantMap>
+#include <QDir>
 #include <QMap>
 
 #include "databasecommand.h"
@@ -37,7 +38,7 @@ public:
     explicit DatabaseCommand_DirMtimes( const QString& prefix = QString(), QObject* parent = 0 )
         : DatabaseCommand( parent ), m_prefix( prefix ), m_update( false )
     {}
-    
+
     explicit DatabaseCommand_DirMtimes( const QStringList& prefixes, QObject* parent = 0 )
     : DatabaseCommand( parent ), m_prefixes( prefixes ), m_update( false )
     {}
@@ -57,7 +58,7 @@ public slots:
 
 private:
     void execSelectPath( DatabaseImpl *dbi, const QDir& path, QMap<QString, unsigned int> &mtimes );
-        
+
     void execSelect( DatabaseImpl* dbi );
     void execUpdate( DatabaseImpl* dbi );
     QString m_prefix;

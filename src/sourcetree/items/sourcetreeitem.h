@@ -16,16 +16,13 @@
     51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 */
 
-
 #ifndef SOURCETREEITEM_H
 #define SOURCETREEITEM_H
 
-#include "sourcesmodel.h"
-#include "typedefs.h"
-#include "playlist.h"
-#include "playlist/dynamic/DynamicPlaylist.h"
-#include "source.h"
 #include <QIcon>
+
+#include "typedefs.h"
+#include "sourcesmodel.h"
 
 class QMimeData;
 class SourceTreeItem : public QObject

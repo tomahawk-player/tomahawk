@@ -19,8 +19,6 @@
 #ifndef DATABASERESOLVER_H
 #define DATABASERESOLVER_H
 
-#include "pipeline.h"
-
 #include "resolver.h"
 #include "result.h"
 

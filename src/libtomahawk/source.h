@@ -23,9 +23,10 @@
 #include <QSharedPointer>
 #include <QVariantMap>
 
+#include "typedefs.h"
 #include "network/dbsyncconnection.h"
 #include "collection.h"
-#include "typedefs.h"
+#include "query.h"
 
 #include "dllmacro.h"
 
@@ -84,8 +85,8 @@ signals:
     void online();
     void offline();
 
-    void collectionAdded( QSharedPointer<Collection> );
-    void collectionRemoved( QSharedPointer<Collection> );
+    void collectionAdded( const collection_ptr& collection );
+    void collectionRemoved( const collection_ptr& collection );
 
     void stats( const QVariantMap& );
     void usernameChanged( const QString& );

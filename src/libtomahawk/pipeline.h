@@ -27,15 +27,13 @@
 
 #include "typedefs.h"
 #include "query.h"
-#include "result.h"
-#include "resolver.h"
 
 #include "dllmacro.h"
 
 namespace Tomahawk
 {
-
 class Resolver;
+class ExternalResolver;
 
 class DLLEXPORT Pipeline : public QObject
 {

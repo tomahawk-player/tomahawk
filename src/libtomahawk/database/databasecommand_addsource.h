@@ -1,5 +1,5 @@
 /* === This file is part of Tomahawk Player - <http://tomahawk-player.org> ===
- * 
+ *
  *   Copyright 2010-2011, Christian Muehlhaeuser <muesli@tomahawk-player.org>
  *
  *   Tomahawk is free software: you can redistribute it and/or modify
@@ -35,6 +35,7 @@ public:
     virtual void exec( DatabaseImpl* lib );
     virtual bool doesMutates() const { return true; }
     virtual QString commandname() const { return "addsource"; }
+
 signals:
     void done( unsigned int, const QString& );
 

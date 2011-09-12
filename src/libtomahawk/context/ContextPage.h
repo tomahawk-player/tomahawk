@@ -24,12 +24,12 @@
 #include <QStyleOptionGraphicsItem>
 
 #include "typedefs.h"
-#include "playlistinterface.h"
-#include "utils/stylehelper.h"
 #include "utils/tomahawkutils.h"
 
 #include "dllmacro.h"
 #include <signal.h>
+
+class PlaylistInterface;
 
 namespace Tomahawk
 {

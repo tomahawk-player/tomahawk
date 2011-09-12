@@ -18,6 +18,9 @@
 
 #include "databasecommand_loadops.h"
 
+#include "databaseimpl.h"
+#include "tomahawksqlquery.h"
+#include "source.h"
 #include "utils/logger.h"
 
 

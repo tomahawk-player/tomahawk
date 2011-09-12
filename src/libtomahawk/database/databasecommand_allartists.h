@@ -22,10 +22,8 @@
 #include <QObject>
 #include <QVariantMap>
 
-#include "databasecommand.h"
-#include "album.h"
-#include "collection.h"
 #include "typedefs.h"
+#include "databasecommand.h"
 
 #include "dllmacro.h"
 

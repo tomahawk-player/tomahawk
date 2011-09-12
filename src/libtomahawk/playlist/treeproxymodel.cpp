@@ -20,8 +20,10 @@
 
 #include <QListView>
 
+#include "source.h"
 #include "query.h"
 #include "database/database.h"
+#include "database/databaseimpl.h"
 #include "database/databasecommand_allalbums.h"
 #include "utils/logger.h"
 

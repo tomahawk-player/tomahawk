@@ -1,5 +1,5 @@
 /* === This file is part of Tomahawk Player - <http://tomahawk-player.org> ===
- * 
+ *
  *   Copyright 2010-2011, Christian Muehlhaeuser <muesli@tomahawk-player.org>
  *
  *   Tomahawk is free software: you can redistribute it and/or modify
@@ -19,12 +19,12 @@
 #ifndef DATABASECOMMAND_RENAMEPLAYLIST_H
 #define DATABASECOMMAND_RENAMEPLAYLIST_H
 
-#include "databaseimpl.h"
-#include "databasecommandloggable.h"
-#include "source.h"
 #include "typedefs.h"
+#include "databasecommandloggable.h"
 
 #include "dllmacro.h"
+
+class DatabaseImpl;
 
 class DLLEXPORT DatabaseCommand_RenamePlaylist : public DatabaseCommandLoggable
 {

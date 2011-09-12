@@ -24,8 +24,7 @@
 #include <QPersistentModelIndex>
 #include <QPixmap>
 
-#include "result.h"
-
+#include "typedefs.h"
 #include "dllmacro.h"
 
 class DLLEXPORT TreeModelItem : public QObject

@@ -26,7 +26,8 @@
 #include "database/database.h"
 #include "databasecommand_collectionstats.h"
 #include "databaseimpl.h"
-#include "network/controlconnection.h"
+#include "network/dbsyncconnection.h"
+#include "network/servent.h"
 #include "sourcelist.h"
 
 #include "utils/logger.h"

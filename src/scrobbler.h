@@ -19,10 +19,8 @@
 #ifndef TOMAHAWK_SCROBBLER_H
 #define TOMAHAWK_SCROBBLER_H
 
-#include "result.h"
-
 #include "lastfm/ScrobblePoint"
-
+#include "result.h"
 #include "infosystem/infosystem.h"
 
 #include <QObject>
