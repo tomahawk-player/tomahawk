@@ -271,17 +271,8 @@ TomahawkApp::~TomahawkApp()
     if ( !m_scanManager.isNull() )
         delete m_scanManager.data();
 
-#ifndef TOMAHAWK_HEADLESS
-    delete m_mainwindow;
-#endif
-
-#ifdef LIBATTICA_FOUND
-    delete AtticaManager::instance();
-#endif
-
     if ( !m_audioEngine.isNull() )
         delete m_audioEngine.data();
-
     if ( !m_infoSystem.isNull() )
         delete m_infoSystem.data();
 
@@ -289,13 +280,18 @@ TomahawkApp::~TomahawkApp()
 
     delete SipHandler::instance();
 
-    if ( !m_scanManager.isNull() )
-        delete m_scanManager.data();
     if ( !m_database.isNull() )
         delete m_database.data();
 
     Pipeline::instance()->stop();
     delete Pipeline::instance();
+
+#ifndef TOMAHAWK_HEADLESS
+    delete m_mainwindow;
+#endif
+#ifdef LIBATTICA_FOUND
+    delete AtticaManager::instance();
+#endif
 
     tLog() << "Finished shutdown.";
 }

@@ -30,7 +30,6 @@
 DatabaseWorker::DatabaseWorker( DatabaseImpl* lib, Database* db, bool mutates )
     : QThread()
     , m_dbimpl( lib )
-    , m_abort( false )
     , m_outstanding( 0 )
 {
     Q_UNUSED( db );
@@ -44,12 +43,12 @@ DatabaseWorker::DatabaseWorker( DatabaseImpl* lib, Database* db, bool mutates )
 
 DatabaseWorker::~DatabaseWorker()
 {
-    qDebug() << Q_FUNC_INFO << m_outstanding;
+    tDebug() << Q_FUNC_INFO << m_outstanding;
 
-    if ( m_commands.count() )
-        qDebug() << "Outstanding db commands to finish:" << m_commands;
+    if ( m_outstanding )
+        tDebug() << "Outstanding db commands to finish:" << m_commands;
 
-    quit();
+    thread()->quit();
     wait();
 }
 

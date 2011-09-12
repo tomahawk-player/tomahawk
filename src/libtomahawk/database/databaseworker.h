@@ -1,5 +1,5 @@
 /* === This file is part of Tomahawk Player - <http://tomahawk-player.org> ===
- * 
+ *
  *   Copyright 2010-2011, Christian Muehlhaeuser <muesli@tomahawk-player.org>
  *
  *   Tomahawk is free software: you can redistribute it and/or modify
@@ -48,7 +48,7 @@ public:
 
 public slots:
     void enqueue( const QSharedPointer<DatabaseCommand>& );
-    
+
 protected:
     void run();
 
@@ -61,8 +61,6 @@ private:
     QMutex m_mut;
     DatabaseImpl* m_dbimpl;
     QList< QSharedPointer<DatabaseCommand> > m_commands;
-
-    bool m_abort;
     int m_outstanding;
 
     QJson::Serializer m_serializer;
