@@ -179,7 +179,7 @@ DatabaseCommand_SetPlaylistRevision::exec( DatabaseImpl* lib )
 
     qDebug() << "Currentrevision:" << m_currentRevision << "oldrev:" << m_oldrev;
     // if optimistic locking is ok, update current revision to this new one
-    if( m_currentRevision == m_oldrev )
+    if ( m_currentRevision == m_oldrev )
     {
         qDebug() << "updating current revision, optimistic locking ok";
 
@@ -210,9 +210,9 @@ DatabaseCommand_SetPlaylistRevision::exec( DatabaseImpl* lib )
             m_previous_rev_orderedguids = v.toStringList();
         }
     }
-    else
+    else if ( !m_oldrev.isEmpty() )
     {
-        qDebug() << "Not updating current revision, optimistic locking fail";
+        tDebug() << "Not updating current revision, optimistic locking fail";
         Q_ASSERT( false );
     }
 }
