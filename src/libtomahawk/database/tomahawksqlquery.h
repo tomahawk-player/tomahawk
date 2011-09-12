@@ -59,7 +59,7 @@ public:
 
         int e = t.elapsed();
         if ( e >= TOMAHAWK_QUERY_THRESHOLD )
-            tLog() << "TomahawkSqlQuery (" << lastQuery() << ") finished in" << t.elapsed() << "ms";
+            tLog( LOGVERBOSE ) << "TomahawkSqlQuery (" << lastQuery() << ") finished in" << t.elapsed() << "ms";
 
         return ret;
     }

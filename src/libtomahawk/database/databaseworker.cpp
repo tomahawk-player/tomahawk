@@ -26,6 +26,9 @@
 #include "database/databasecommandloggable.h"
 #include "utils/logger.h"
 
+#ifndef QT_NO_DEBUG
+    //#define DEBUG_TIMING TRUE
+#endif
 
 DatabaseWorker::DatabaseWorker( DatabaseImpl* lib, Database* db, bool mutates )
     : QThread()
@@ -46,7 +49,12 @@ DatabaseWorker::~DatabaseWorker()
     tDebug() << Q_FUNC_INFO << m_outstanding;
 
     if ( m_outstanding )
-        tDebug() << "Outstanding db commands to finish:" << m_commands;
+    {
+        foreach ( const QSharedPointer<DatabaseCommand>& cmd, m_commands )
+        {
+            tDebug() << "Outstanding db command to finish:" << cmd->guid() << cmd->commandname();
+        }
+    }
 
     thread()->quit();
     wait();
@@ -91,8 +99,10 @@ DatabaseWorker::doWork()
 
      */
 
+#ifdef DEBUG_TIMING
     QTime timer;
     timer.start();
+#endif
 
     QSharedPointer<DatabaseCommand> cmd;
     {
@@ -160,10 +170,16 @@ DatabaseWorker::doWork()
                 }
             }
 
-            //uint duration = timer.elapsed();
-            //qDebug() << "DBCmd Duration:" << duration << "ms, now running postcommit for" << cmd->commandname();
+#ifdef DEBUG_TIMING
+            uint duration = timer.elapsed();
+            tDebug() << "DBCmd Duration:" << duration << "ms, now running postcommit for" << cmd->commandname();
+#endif
+
             cmd->postCommit();
-            //qDebug() << "Post commit finished for"<<  cmd->commandname();
+
+#ifdef DEBUG_TIMING
+            tDebug() << "Post commit finished in" << timer.elapsed() - duration << "ms for" << cmd->commandname();
+#endif
         }
     }
     catch( const char * msg )

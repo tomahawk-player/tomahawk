@@ -337,7 +337,7 @@ Pipeline::shunt( const query_ptr& q )
 
     if ( r )
     {
-        tDebug() << "Dispatching to resolver" << r->name() << q->toString() << q->solved() << q->id();
+        tLog( LOGEXTRA ) << "Dispatching to resolver" << r->name() << q->toString() << q->solved() << q->id();
 
         q->setCurrentResolver( r );
         r->resolve( q );

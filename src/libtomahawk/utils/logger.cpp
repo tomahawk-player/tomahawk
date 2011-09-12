@@ -72,7 +72,7 @@ log( const char *msg, unsigned int debugLevel, bool toDisk = true )
         logfile.flush();
     }
 
-    if ( debugLevel <= LOGVERBOSE || (int)debugLevel <= s_threshold )
+    if ( debugLevel <= LOGEXTRA || (int)debugLevel <= s_threshold )
     {
         cout << msg << endl;
         cout.flush();
