@@ -5,3 +5,7 @@ include(FindPackageHandleStandardArgs)
 find_package_handle_standard_args(quazip DEFAULT_MSG QuaZip_LIBRARY QuaZip_INCLUDE_DIR)
 set(QuaZip_LIBRARIES ${QuaZip_LIBRARY})
 mark_as_advanced(QuaZip_LIBRARY QuaZip_INCLUDE_DIR)
+
+if(QuaZip_LIBRARY AND QuaZip_INCLUDE_DIR)
+   set(QuaZip_FOUND TRUE)
+endif()
