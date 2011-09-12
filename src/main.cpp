@@ -28,32 +28,10 @@
     static pascal OSErr appleEventHandler( const AppleEvent*, AppleEvent*, long );
 #endif
 
-#ifdef Q_OS_LINUX
-    #include "client/linux/handler/exception_handler.h"
-
-    static bool
-    dumpCallback( const char* dump_path, const char* minidump_id, void* /* context */, bool succeeded )
-    {
-        printf( "Tomahawk crashed - Dump path: %s/%s.dmp\n", dump_path, minidump_id );
-        return succeeded;
-    }
-
-    void
-    crash()
-    {
-        volatile int* a = (int*)(NULL);
-        *a = 1;
-    }
-#endif
-
 
 int
 main( int argc, char *argv[] )
 {
-#ifdef Q_OS_LINUX
-    google_breakpad::ExceptionHandler eh( "/tmp", NULL, dumpCallback, NULL, true );
-#endif
-
 #ifdef Q_WS_MAC
       // Do Mac specific startup to get media keys working.
       // This must go before QApplication initialisation.

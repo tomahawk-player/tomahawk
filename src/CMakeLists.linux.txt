@@ -1,7 +1,7 @@
 SET( OS_SPECIFIC_LINK_LIBRARIES
      ${OS_SPECIFIC_LINK_LIBRARIES}
      tomahawklib
-     breakpad_client
+#     breakpad_client
 )
 
 FILE( GLOB _icons "${CMAKE_SOURCE_DIR}/data/icons/tomahawk-icon-*.png" )
