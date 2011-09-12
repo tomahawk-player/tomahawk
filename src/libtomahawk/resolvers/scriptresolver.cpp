@@ -37,6 +37,7 @@ ScriptResolver::ScriptResolver( const QString& exe )
     , m_msgsize( 0 )
     , m_ready( false )
     , m_stopped( true )
+    , m_configSent( false )
     , m_error( Tomahawk::ExternalResolver::NoError )
 {
     tLog() << Q_FUNC_INFO << "Created script resolver:" << exe;
@@ -79,8 +80,9 @@ ScriptResolver::start()
     m_stopped = false;
     if ( m_ready )
         Tomahawk::Pipeline::instance()->addResolver( this );
-    else
+    else if ( !m_configSent )
         sendConfig();
+    // else, we've sent our config msg so are waiting for the resolver to react
 }
 
 
@@ -91,6 +93,8 @@ ScriptResolver::sendConfig()
     // For now, only the proxy information is sent
     QVariantMap m;
     m.insert( "_msgtype", "config" );
+
+    m_configSent = true;
 
     TomahawkUtils::NetworkProxyFactory* factory = dynamic_cast<TomahawkUtils::NetworkProxyFactory*>( TomahawkUtils::nam()->proxyFactory() );
     QNetworkProxy proxy = factory->proxy();
@@ -323,6 +327,7 @@ ScriptResolver::doSetup( const QVariantMap& m )
     qDebug() << "SCRIPT" << filePath() << "READY," << "name" << m_name << "weight" << m_weight << "timeout" << m_timeout;
 
     m_ready = true;
+    m_configSent = false;
 
     if ( !m_stopped )
         Tomahawk::Pipeline::instance()->addResolver( this );

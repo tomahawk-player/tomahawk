@@ -82,7 +82,7 @@ private:
     quint32 m_msgsize;
     QByteArray m_msg;
 
-    bool m_ready, m_stopped;
+    bool m_ready, m_stopped, m_configSent;
     ExternalResolver::ErrorState m_error;
 
     QJson::Parser m_parser;

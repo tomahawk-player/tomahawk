@@ -51,7 +51,7 @@ Pipeline::Pipeline( QObject* parent )
     s_instance = this;
 
     m_maxConcurrentQueries = qBound( DEFAULT_CONCURRENT_QUERIES, QThread::idealThreadCount(), MAX_CONCURRENT_QUERIES );
-    qDebug() << Q_FUNC_INFO << "Using" << m_maxConcurrentQueries << "threads";
+    tDebug() << Q_FUNC_INFO << "Using" << m_maxConcurrentQueries << "threads";
 
     m_temporaryQueryTimer.setInterval( CLEANUP_TIMEOUT );
     connect( &m_temporaryQueryTimer, SIGNAL( timeout() ), SLOT( onTemporaryQueryTimer() ) );
@@ -79,7 +79,7 @@ Pipeline::databaseReady()
 void
 Pipeline::start()
 {
-    qDebug() << Q_FUNC_INFO << "Shunting this many pending queries:" << m_queries_pending.size();
+    tDebug() << Q_FUNC_INFO << "Shunting this many pending queries:" << m_queries_pending.size();
     m_running = true;
 
     shuntNext();
@@ -108,7 +108,7 @@ Pipeline::addResolver( Resolver* r )
 {
     QMutexLocker lock( &m_mut );
 
-    qDebug() << "Adding resolver" << r->name();
+    tDebug() << "Adding resolver" << r->name();
     m_resolvers.append( r );
     emit resolverAdded( r );
 }
@@ -448,7 +448,7 @@ void
 Pipeline::onTemporaryQueryTimer()
 {
     QMutexLocker lock( &m_mut );
-    qDebug() << Q_FUNC_INFO;
+    tDebug() << Q_FUNC_INFO;
     m_temporaryQueryTimer.stop();
 
     for ( int i = m_queries_temporary.count() - 1; i >= 0; i-- )
