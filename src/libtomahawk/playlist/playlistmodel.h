@@ -85,7 +85,7 @@ private slots:
     void onDataChanged();
 
     void onRevisionLoaded( Tomahawk::PlaylistRevision revision );
-    void onPlaylistChanged( bool waitForUpdate = true );
+    void onPlaylistChanged();
 
     void onTracksAdded( const QList<Tomahawk::query_ptr>& tracks );
     void onTracksInserted( unsigned int row, const QList<Tomahawk::query_ptr>& tracks );
@@ -97,7 +97,7 @@ private:
     QList<Tomahawk::plentry_ptr> playlistEntries() const;
 
     Tomahawk::playlist_ptr m_playlist;
-    bool m_waitForUpdate, m_isTemporary;
+    bool m_isTemporary;
     QList< Tomahawk::Query* > m_waitingForResolved;
 
     DropStorageData m_dropStorage;

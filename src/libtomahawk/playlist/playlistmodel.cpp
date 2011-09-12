@@ -25,6 +25,7 @@
 #include "album.h"
 #include "pipeline.h"
 #include "source.h"
+#include "sourcelist.h"
 #include "database/database.h"
 #include "database/databasecommand_playbackhistory.h"
 #include "dynamic/GeneratorInterface.h"
@@ -37,7 +38,6 @@ using namespace Tomahawk;
 
 PlaylistModel::PlaylistModel( QObject* parent )
     : TrackModel( parent )
-    , m_waitForUpdate( false )
     , m_isTemporary( false )
 {
     qDebug() << Q_FUNC_INFO;
@@ -331,14 +331,7 @@ PlaylistModel::onDataChanged()
 void
 PlaylistModel::onRevisionLoaded( Tomahawk::PlaylistRevision revision )
 {
-    qDebug() << Q_FUNC_INFO;
-
-    if ( m_waitForUpdate )
-    {
-        qDebug() << m_playlist->currentrevision() << revision.revisionguid;
-        m_waitForUpdate = false;
-    }
-    else
+    if ( m_playlist->author() != SourceList::instance()->getLocal() )
         loadPlaylist( m_playlist );
 }
 
@@ -425,7 +418,7 @@ PlaylistModel::parsedDroppedTracks( QList< query_ptr > tracks )
 
         if ( m_dropStorage.action & Qt::CopyAction || m_dropStorage.action & Qt::MoveAction )
         {
-            onPlaylistChanged( true );
+            onPlaylistChanged();
             emit trackCountChanged( rowCount( QModelIndex() ) );
         }
 
@@ -437,7 +430,7 @@ PlaylistModel::parsedDroppedTracks( QList< query_ptr > tracks )
 
 
 void
-PlaylistModel::onPlaylistChanged( bool waitForUpdate )
+PlaylistModel::onPlaylistChanged()
 {
     qDebug() << Q_FUNC_INFO;
 
@@ -445,13 +438,11 @@ PlaylistModel::onPlaylistChanged( bool waitForUpdate )
         return;
 
     QList<plentry_ptr> l = playlistEntries();
-
     foreach( const plentry_ptr& ple, l )
     {
         qDebug() << "updateinternal:" << ple->query()->toString();
     }
 
-    m_waitForUpdate = waitForUpdate;
     QString newrev = uuid();
     if( dynplaylist_ptr dynplaylist = m_playlist.dynamicCast<Tomahawk::DynamicPlaylist>() )
     {
@@ -463,7 +454,8 @@ PlaylistModel::onPlaylistChanged( bool waitForUpdate )
         {
             dynplaylist->createNewRevision( newrev, dynplaylist->currentrevision(), dynplaylist->type(), dynplaylist->generator()->controls(), l );
         }
-    } else
+    }
+    else
     {
         m_playlist->createNewRevision( newrev, m_playlist->currentrevision(), l );
     }
@@ -511,7 +503,7 @@ PlaylistModel::removeIndex( const QModelIndex& index, bool moreToCome )
 
     if ( !moreToCome && !m_playlist.isNull() )
     {
-        onPlaylistChanged( true );
+        onPlaylistChanged();
     }
 }
 
