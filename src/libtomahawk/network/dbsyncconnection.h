@@ -70,8 +70,7 @@ private slots:
 
     void fetchOpsData( const QString& sinceguid );
     void sendOpsData( QString sinceguid, QString lastguid, QList< dbop_ptr > ops );
-
-    void onCommandFinished();
+    void executeCommands();
 
     void check();
     void idleTimeout();
@@ -79,15 +78,12 @@ private slots:
 private:
     void synced();
     void changeState( State newstate );
-    void executeCommands();
 
     Tomahawk::source_ptr m_source;
     QVariantMap m_us, m_uscache;
 
     QList< QSharedPointer<DatabaseCommand> > m_cmds;
-    QString m_lastop;
     QString m_lastSentOp;
-    QStringList m_recentTempOps;
 
     State m_state;
     QTimer m_timer;

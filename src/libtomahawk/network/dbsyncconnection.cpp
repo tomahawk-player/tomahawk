@@ -143,14 +143,9 @@ DBSyncConnection::check()
     connect( cmd_us, SIGNAL( done( QVariantMap ) ), SLOT( gotUs( QVariantMap ) ) );
     Database::instance()->enqueue( QSharedPointer<DatabaseCommand>(cmd_us) );
 
-    if ( m_lastop.isEmpty() )
-    {
-        DatabaseCommand_CollectionStats* cmd_them = new DatabaseCommand_CollectionStats( m_source );
-        connect( cmd_them, SIGNAL( done( QVariantMap ) ), SLOT( gotThem( QVariantMap ) ) );
-        Database::instance()->enqueue( QSharedPointer<DatabaseCommand>(cmd_them) );
-    }
-    else
-        fetchOpsData( m_lastop );
+    DatabaseCommand_CollectionStats* cmd_them = new DatabaseCommand_CollectionStats( m_source );
+    connect( cmd_them, SIGNAL( done( QVariantMap ) ), SLOT( gotThem( QVariantMap ) ) );
+    Database::instance()->enqueue( QSharedPointer<DatabaseCommand>(cmd_them) );
 
     // restarts idle countdown
     m_timer.start();
@@ -172,9 +167,7 @@ DBSyncConnection::gotUs( const QVariantMap& m )
 void
 DBSyncConnection::gotThem( const QVariantMap& m )
 {
-    m_lastop = m.value( "lastop" ).toString();
-
-    fetchOpsData( m_lastop );
+    fetchOpsData( m.value( "lastop" ).toString() );
 }
 
 
@@ -235,22 +228,8 @@ DBSyncConnection::handleMsg( msg_ptr msg )
             qDebug() << "UNKNOWN DBOP CMD";
             return;
         }
+
         QSharedPointer<DatabaseCommand> cmdsp = QSharedPointer<DatabaseCommand>(cmd);
-
-        if ( m_recentTempOps.contains( cmd->guid() ) )
-        {
-            qDebug() << "Ignoring dupe temporary command:" << cmd->guid();
-            return;
-        }
-
-        if ( !cmd->singletonCmd() )
-        {
-            m_lastop = cmd->guid();
-            m_recentTempOps.clear();
-        }
-        else
-            m_recentTempOps << cmd->guid();
-
         m_cmds << cmdsp;
 
         if ( !msg->is( Msg::FRAGMENT ) ) // last msg in this batch
@@ -271,7 +250,7 @@ DBSyncConnection::handleMsg( msg_ptr msg )
 
     if ( m.value( "method" ).toString() == "trigger" )
     {
-//        qDebug() << "Got trigger msg on dbsyncconnection, checking for new stuff.";
+        tLog( LOGVERBOSE ) << "Got trigger msg on dbsyncconnection, checking for new stuff.";
         check();
         return;
     }
@@ -284,19 +263,13 @@ DBSyncConnection::handleMsg( msg_ptr msg )
 void
 DBSyncConnection::executeCommands()
 {
-    while ( !m_cmds.isEmpty() )
+    if ( !m_cmds.isEmpty() )
     {
         QSharedPointer<DatabaseCommand> cmd = m_cmds.takeFirst();
-        connect( cmd.data(), SIGNAL( finished() ), SLOT( onCommandFinished() ) );
+        connect( cmd.data(), SIGNAL( finished() ), SLOT( executeCommands() ) );
         Database::instance()->enqueue( cmd );
     }
-}
-
-
-void
-DBSyncConnection::onCommandFinished()
-{
-    if ( m_cmds.isEmpty() )
+    else
     {
         changeState( SYNCED );
         // check again, until peer responds we have no new ops to process
@@ -309,7 +282,7 @@ DBSyncConnection::onCommandFinished()
 void
 DBSyncConnection::sendOps()
 {
-    tLog() << "Will send peer" << m_source->id() << "all ops since" << m_uscache.value( "lastop" ).toString();
+    tLog( LOGVERBOSE ) << "Will send peer" << m_source->id() << "all ops since" << m_uscache.value( "lastop" ).toString();
 
     source_ptr src = SourceList::instance()->getLocal();
 
@@ -334,7 +307,7 @@ DBSyncConnection::sendOpsData( QString sinceguid, QString lastguid, QList< dbop_
         return;
     }
 
-    qDebug() << Q_FUNC_INFO << sinceguid << lastguid << "Num ops to send:" << ops.length();
+    tLog( LOGVERBOSE ) << Q_FUNC_INFO << sinceguid << lastguid << "Num ops to send:" << ops.length();
 
     int i;
     for( i = 0; i < ops.length(); ++i )
