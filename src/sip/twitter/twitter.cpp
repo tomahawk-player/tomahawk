@@ -21,6 +21,7 @@
 #include "twitterconfigwidget.h"
 
 #include <QtPlugin>
+#include <QDateTime>
 #include <QRegExp>
 #include <QNetworkAccessManager>
 #include <QNetworkRequest>
@@ -722,7 +723,7 @@ TwitterPlugin::makeConnection( const QString &screenName, const QVariantHash &pe
         qDebug() << "TwitterPlugin asked to make connection to our own host and port, ignoring " << screenName;
         return;
     }
-    
+
     QString friendlyName = QString( '@' + screenName );
     if ( !Servent::instance()->connectedToSession( peerData["node"].toString() ) )
         Servent::instance()->connectToPeer( peerData["host"].toString(),
