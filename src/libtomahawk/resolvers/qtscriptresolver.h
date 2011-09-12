@@ -36,9 +36,11 @@
 #include <QtCrypto>
 #endif
 
+#include "dllmacro.h"
+
 class QtScriptResolver;
 
-class QtScriptResolverHelper : public QObject
+class DLLEXPORT QtScriptResolverHelper : public QObject
 {
 Q_OBJECT
 
@@ -46,10 +48,10 @@ public:
     QtScriptResolverHelper( const QString& scriptPath, QtScriptResolver* parent );
     void setResolverConfig( const QVariantMap& config );
 
-
     // Return a HMAC (md5) signature of the input text with the desired key
     Q_INVOKABLE QString hmac( const QByteArray& key, const QByteArray& input );
     Q_INVOKABLE QString md5( const QByteArray& input );
+
 public slots:
     QByteArray readRaw( const QString& fileName );
     QString readBase64( const QString& fileName );
@@ -72,7 +74,7 @@ private:
 #endif
 };
 
-class ScriptEngine : public QWebPage
+class DLLEXPORT ScriptEngine : public QWebPage
 {
 Q_OBJECT
 
@@ -110,7 +112,7 @@ private:
 };
 
 
-class QtScriptResolver : public Tomahawk::ExternalResolver
+class DLLEXPORT QtScriptResolver : public Tomahawk::ExternalResolver
 {
 Q_OBJECT
 

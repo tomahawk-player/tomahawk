@@ -41,6 +41,7 @@
 #include "sip/SipHandler.h"
 #include "database/database.h"
 #include "scanmanager.h"
+#include "pipeline.h"
 #include "resolverconfigdelegate.h"
 #include "resolversmodel.h"
 #include "delegateconfigwrapper.h"
@@ -319,7 +320,7 @@ SettingsDialog::createIcons()
     ui->listWidget->setMaximumWidth( maxlen + 8 );
 #endif
 
-    connect( ui->listWidget, SIGNAL( currentItemChanged( QListWidgetItem* ,QListWidgetItem* ) ), this, SLOT( changePage( QListWidgetItem*, QListWidgetItem* ) ) );
+    connect( ui->listWidget, SIGNAL( currentItemChanged( QListWidgetItem*, QListWidgetItem* ) ), SLOT( changePage( QListWidgetItem*, QListWidgetItem* ) ) );
 }
 
 
@@ -588,7 +589,7 @@ SettingsDialog::getMoreResolversFinished( int ret )
 void
 SettingsDialog::openResolverConfig( const QString& resolver )
 {
-    Tomahawk::ExternalResolver* r = TomahawkApp::instance()->resolverForPath( resolver );
+    Tomahawk::ExternalResolver* r = Tomahawk::Pipeline::instance()->resolverForPath( resolver );
     if( r && r->configUI() )
     {
 #ifndef Q_WS_MAC

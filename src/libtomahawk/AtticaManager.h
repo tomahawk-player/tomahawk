@@ -24,6 +24,8 @@
 #include <QObject>
 #include <QHash>
 
+#include "dllmacro.h"
+
 #ifdef LIBATTICA_FOUND
 #include <attica/provider.h>
 #include <attica/providermanager.h>
@@ -31,7 +33,7 @@
 #include <QPixmap>
 #endif
 
-class AtticaManager : public QObject
+class DLLEXPORT AtticaManager : public QObject
 {
     Q_OBJECT
 public:
@@ -46,7 +48,8 @@ public:
 
     typedef QHash< QString, AtticaManager::ResolverState > StateHash;
 
-    static AtticaManager* instance() {
+    static AtticaManager* instance()
+    {
         if ( !s_instance )
             s_instance = new AtticaManager();
 

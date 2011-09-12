@@ -44,8 +44,6 @@
 #include "playlist/dynamic/echonest/EchonestGenerator.h"
 #include "playlist/dynamic/database/DatabaseGenerator.h"
 #include "web/api_v1.h"
-#include "resolvers/scriptresolver.h"
-#include "resolvers/qtscriptresolver.h"
 #include "sourcelist.h"
 #include "shortcuthandler.h"
 #include "scanmanager.h"
@@ -268,10 +266,6 @@ TomahawkApp::~TomahawkApp()
 {
     tLog() << "Shutting down Tomahawk...";
 
-    // stop script resolvers
-    qDeleteAll( m_scriptResolvers );
-    m_scriptResolvers.clear();
-
     if ( !m_servent.isNull() )
         delete m_servent.data();
     if ( !m_scanManager.isNull() )
@@ -447,73 +441,13 @@ TomahawkApp::initPipeline()
 {
     // setup resolvers for local content, and (cached) remote collection content
     Pipeline::instance()->addResolver( new DatabaseResolver( 100 ) );
-
     // load script resolvers
     QStringList enabled = TomahawkSettings::instance()->enabledScriptResolvers();
     foreach ( QString resolver, TomahawkSettings::instance()->allScriptResolvers() )
     {
         const bool enable = enabled.contains( resolver );
-        addScriptResolver( resolver, enable );
+        Pipeline::instance()->addScriptResolver( resolver, enable );
     }
-}
-
-
-Tomahawk::ExternalResolver*
-TomahawkApp::addScriptResolver( const QString& path, bool start )
-{
-    const QFileInfo fi( path );
-    ExternalResolver* res = 0;
-    if ( fi.suffix() == "js" || fi.suffix() == "script" )
-        res = new QtScriptResolver( path );
-    else
-        res = new ScriptResolver( path );
-    m_scriptResolvers << res;
-
-    if ( start )
-        res->start();
-
-    return res;
-}
-
-
-void
-TomahawkApp::stopScriptResolver( const QString& path )
-{
-    foreach ( ExternalResolver* res, m_scriptResolvers )
-    {
-        if ( res->filePath() == path )
-            res->stop();
-    }
-}
-
-void
-TomahawkApp::removeScriptResolver( const QString& scriptPath )
-{
-    ExternalResolver* r = 0;
-    foreach ( ExternalResolver* res, m_scriptResolvers )
-    {
-        if ( res->filePath() == scriptPath )
-            r = res;
-    }
-    m_scriptResolvers.removeAll( r );
-
-    if ( r )
-    {
-        r->stop();
-        connect( r, SIGNAL( stopped() ), r, SLOT( deleteLater() ) );
-    }
-}
-
-
-Tomahawk::ExternalResolver*
-TomahawkApp::resolverForPath( const QString& scriptPath )
-{
-    foreach ( ExternalResolver* res, m_scriptResolvers )
-    {
-        if ( res->filePath() == scriptPath )
-            return res;
-    }
-    return 0;
 }
 
 

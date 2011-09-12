@@ -37,9 +37,6 @@ ENDIF()
 SET( tomahawkSources ${tomahawkSources}
      web/api_v1.cpp
 
-     resolvers/scriptresolver.cpp
-     resolvers/qtscriptresolver.cpp
-
      musicscanner.cpp
      shortcuthandler.cpp
      scanmanager.cpp
@@ -85,9 +82,6 @@ SET( tomahawkHeaders ${tomahawkHeaders}
 
      web/api_v1.h
 
-     resolvers/scriptresolver.h
-     resolvers/qtscriptresolver.h
-
      musicscanner.h
      scanmanager.h
      shortcuthandler.h
@@ -98,6 +92,12 @@ IF(LIBLASTFM_FOUND)
         scrobbler.h
     )
 ENDIF(LIBLASTFM_FOUND)
+
+IF(LIBATTICA_FOUND)
+    SET( tomahawkSources ${tomahawkSources} GetNewStuffDialog.cpp GetNewStuffDelegate.cpp GetNewStuffModel.cpp )
+    SET( tomahawkHeaders ${tomahawkHeaders} GetNewStuffDialog.h GetNewStuffDelegate.h GetNewStuffModel.h )
+    INCLUDE_DIRECTORIES( ${LIBATTICA_INCLUDE_DIR} )
+ENDIF(LIBATTICA_FOUND)
 
 
 SET( tomahawkHeadersGui ${tomahawkHeadersGui}
@@ -126,8 +126,6 @@ SET( tomahawkHeadersGui ${tomahawkHeadersGui}
      resolversmodel.h
      delegateconfigwrapper.h
      tomahawkwindow.h
-
-     AtticaManager.h
 )
 
 SET( tomahawkUI ${tomahawkUI}
@@ -159,13 +157,13 @@ INCLUDE_DIRECTORIES(
     ${THIRDPARTY_DIR}/qxt/qxtweb-standalone/qxtweb
     ${THIRDPARTY_DIR}/qtweetlib/qtweetlib/src
     ${THIRDPARTY_DIR}/qtweetlib/tomahawk-custom
+    ${THIRDPARTY_DIR}/breakpad
 
     ${TAGLIB_INCLUDES}
     ${PHONON_INCLUDES}
     ${QJSON_INCLUDE_DIR}
     ${LIBECHONEST_INCLUDE_DIR}
     ${LIBECHONEST_INCLUDE_DIR}/..
-    ${QuaZip_INCLUDE_DIR}
 )
 
 SET( OS_SPECIFIC_LINK_LIBRARIES "" )
@@ -198,12 +196,6 @@ ADD_SUBDIRECTORY( sip )
 IF(QCA2_FOUND)
     INCLUDE_DIRECTORIES( ${QCA2_INCLUDE_DIR} )
 ENDIF(QCA2_FOUND)
-
-IF(LIBATTICA_FOUND)
-    SET( tomahawkSources ${tomahawkSources} AtticaManager.cpp GetNewStuffDialog.cpp GetNewStuffDelegate.cpp GetNewStuffModel.cpp )
-    SET( tomahawkHeaders ${tomahawkHeaders}  GetNewStuffDialog.h GetNewStuffDelegate.h GetNewStuffModel.h )
-    INCLUDE_DIRECTORIES( ${LIBATTICA_INCLUDE_DIR} )
-ENDIF(LIBATTICA_FOUND)
 
 kde4_add_app_icon( tomahawkSources "${CMAKE_SOURCE_DIR}/data/icons/tomahawk-icon-*.png" )
 qt4_add_resources( RC_SRCS "../resources.qrc" )
@@ -244,15 +236,9 @@ ENDIF(LIBLASTFM_FOUND)
 IF(GLOOX_FOUND)
     SET(LINK_LIBRARIES ${LINK_LIBRARIES} ${GLOOX_LIBRARIES} )
 ENDIF(GLOOX_FOUND)
-
 IF(QCA2_FOUND)
     SET(LINK_LIBRARIES ${LINK_LIBRARIES} ${QCA2_LIBRARIES} )
 ENDIF(QCA2_FOUND)
-
-IF(LIBATTICA_FOUND)
-    SET(LINK_LIBRARIES ${LINK_LIBRARIES} ${LIBATTICA_LIBRARIES} )
-ENDIF(LIBATTICA_FOUND)
-
 
 TARGET_LINK_LIBRARIES( tomahawk
     ${LINK_LIBRARIES}
@@ -265,7 +251,6 @@ TARGET_LINK_LIBRARIES( tomahawk
     ${QXTWEB_LIBRARIES}
     ${QJSON_LIBRARIES}
     ${TAGLIB_LIBRARIES}
-    ${QuaZip_LIBRARIES}
 )
 
 IF( APPLE )

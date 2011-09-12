@@ -23,6 +23,7 @@
 #include "tomahawksettings.h"
 #include "tomahawkapp.h"
 #include "resolver.h"
+#include "pipeline.h"
 #include "config.h"
 
 #include "utils/logger.h"
@@ -46,7 +47,7 @@ ResolversModel::data( const QModelIndex& index, int role ) const
     if( !index.isValid() || !hasIndex( index.row(), index.column(), QModelIndex() ) )
         return QVariant();
 
-    Tomahawk::ExternalResolver* res = TomahawkApp::instance()->scriptResolvers().at( index.row() );
+    Tomahawk::ExternalResolver* res = Tomahawk::Pipeline::instance()->scriptResolvers().at( index.row() );
     switch( role )
     {
     case Qt::DisplayRole:
@@ -73,7 +74,7 @@ ResolversModel::setData( const QModelIndex& index, const QVariant& value, int ro
     if ( !hasIndex( index.row(), index.column(), QModelIndex() ) )
         return false;
 
-    Tomahawk::ExternalResolver* r = TomahawkApp::instance()->scriptResolvers().at( index.row() );
+    Tomahawk::ExternalResolver* r = Tomahawk::Pipeline::instance()->scriptResolvers().at( index.row() );
     if ( r && r->error() == Tomahawk::ExternalResolver::FileNotFound )  // give it a shot to see if the user manually fixed paths
     {
         r->reload();
@@ -109,7 +110,7 @@ int
 ResolversModel::rowCount( const QModelIndex& parent ) const
 {
     Q_UNUSED( parent );
-    return APP->scriptResolvers().count();
+    return Tomahawk::Pipeline::instance()->scriptResolvers().count();
 }
 
 int
@@ -131,7 +132,7 @@ ResolversModel::addResolver( const QString& resolver, bool enable )
 {
     const int count = rowCount( QModelIndex() );
     beginInsertRows( QModelIndex(), count, count );
-    Tomahawk::ExternalResolver* res = APP->addScriptResolver( resolver, enable );
+    Tomahawk::ExternalResolver* res = Tomahawk::Pipeline::instance()->addScriptResolver( resolver, enable );
     connect( res, SIGNAL( changed() ), this, SLOT( resolverChanged() ) );
     endInsertRows();
 }
@@ -140,10 +141,10 @@ void
 ResolversModel::atticaResolverInstalled( const QString& resolverId )
 {
 #ifdef LIBATTICA_FOUND
-    Tomahawk::ExternalResolver* r = APP->resolverForPath( AtticaManager::instance()->pathFromId( resolverId ) );
+    Tomahawk::ExternalResolver* r = Tomahawk::Pipeline::instance()->resolverForPath( AtticaManager::instance()->pathFromId( resolverId ) );
     if ( !r )
         return;
-    const int idx = APP->scriptResolvers().indexOf( r );
+    const int idx = Tomahawk::Pipeline::instance()->scriptResolvers().indexOf( r );
     if ( idx >= 0 )
     {
         beginInsertRows( QModelIndex(), idx, idx );
@@ -156,12 +157,12 @@ ResolversModel::atticaResolverInstalled( const QString& resolverId )
 void
 ResolversModel::removeResolver( const QString& resolver )
 {
-    const int idx = APP->scriptResolvers().indexOf( APP->resolverForPath( resolver ) );
+    const int idx = Tomahawk::Pipeline::instance()->scriptResolvers().indexOf( Tomahawk::Pipeline::instance()->resolverForPath( resolver ) );
     if ( idx < 0 )
         return;
 
     beginRemoveRows( QModelIndex(), idx, idx );
-    APP->removeScriptResolver( resolver );
+    Tomahawk::Pipeline::instance()->removeScriptResolver( resolver );
     endRemoveRows();
 }
 
@@ -171,10 +172,10 @@ ResolversModel::resolverChanged()
     Tomahawk::ExternalResolver* res = qobject_cast< Tomahawk::ExternalResolver* >( sender() );
     Q_ASSERT( res );
 
-    if ( APP->scriptResolvers().contains( res ) )
+    if ( Tomahawk::Pipeline::instance()->scriptResolvers().contains( res ) )
     {
         qDebug() << "Got resolverChanged signal, does it have a config UI yet?" << res->configUI();
-        const QModelIndex idx = index( APP->scriptResolvers().indexOf( res ), 0, QModelIndex() );
+        const QModelIndex idx = index( Tomahawk::Pipeline::instance()->scriptResolvers().indexOf( res ), 0, QModelIndex() );
         emit dataChanged( idx, idx );
     }
 }
@@ -199,13 +200,13 @@ ResolversModel::addInstalledResolvers()
             if ( fileName.contains( "_tomahawkresolver" ) ) {
                 const QString path = pluginDir.absoluteFilePath( fileName );
                 bool found = false;
-                foreach ( Tomahawk::ExternalResolver* res, APP->scriptResolvers() )
+                foreach ( Tomahawk::ExternalResolver* res, Tomahawk::Pipeline::instance()->scriptResolvers() )
                 {
                     if ( res->filePath() == path )
                         found = true;
                 }
                 if ( !found ) {
-                    APP->addScriptResolver( path, false );
+                    Tomahawk::Pipeline::instance()->addScriptResolver( path, false );
                 }
             }
         }
@@ -216,7 +217,7 @@ void
 ResolversModel::saveScriptResolvers()
 {
     QStringList enabled, all;
-    foreach ( Tomahawk::ExternalResolver* res, APP->scriptResolvers() )
+    foreach ( Tomahawk::ExternalResolver* res, Tomahawk::Pipeline::instance()->scriptResolvers() )
     {
         all << res->filePath();
         if ( res->running() )

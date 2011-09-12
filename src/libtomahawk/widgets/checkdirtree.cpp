@@ -24,7 +24,6 @@
 CheckDirModel::CheckDirModel( QWidget* parent )
     : QDirModel( parent )
 {
-    setLazyChildCount( false );
 }
 
 

@@ -30,8 +30,11 @@
 #include "result.h"
 #include "source.h"
 
+#include "dllmacro.h"
+
 class QWidget;
-class ScriptResolver : public Tomahawk::ExternalResolver
+
+class DLLEXPORT ScriptResolver : public Tomahawk::ExternalResolver
 {
 Q_OBJECT
 

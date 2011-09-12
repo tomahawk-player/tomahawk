@@ -22,6 +22,8 @@
 
 #include "functimeout.h"
 #include "database/database.h"
+#include "resolvers/scriptresolver.h"
+#include "resolvers/qtscriptresolver.h"
 
 #include "utils/logger.h"
 
@@ -59,6 +61,10 @@ Pipeline::Pipeline( QObject* parent )
 Pipeline::~Pipeline()
 {
     m_running = false;
+
+    // stop script resolvers
+    qDeleteAll( m_scriptResolvers );
+    m_scriptResolvers.clear();
 }
 
 
@@ -105,6 +111,67 @@ Pipeline::addResolver( Resolver* r )
     qDebug() << "Adding resolver" << r->name();
     m_resolvers.append( r );
     emit resolverAdded( r );
+}
+
+
+Tomahawk::ExternalResolver*
+Pipeline::addScriptResolver( const QString& path, bool start )
+{
+    ExternalResolver* res = 0;
+    const QFileInfo fi( path );
+
+    if ( fi.suffix() == "js" || fi.suffix() == "script" )
+        res = new QtScriptResolver( path );
+    else
+        res = new ScriptResolver( path );
+
+    m_scriptResolvers << res;
+    if ( start )
+        res->start();
+
+    return res;
+}
+
+
+void
+Pipeline::stopScriptResolver( const QString& path )
+{
+    foreach ( ExternalResolver* res, m_scriptResolvers )
+    {
+        if ( res->filePath() == path )
+            res->stop();
+    }
+}
+
+
+void
+Pipeline::removeScriptResolver( const QString& scriptPath )
+{
+    ExternalResolver* r = 0;
+    foreach ( ExternalResolver* res, m_scriptResolvers )
+    {
+        if ( res->filePath() == scriptPath )
+            r = res;
+    }
+    m_scriptResolvers.removeAll( r );
+
+    if ( r )
+    {
+        r->stop();
+        connect( r, SIGNAL( stopped() ), r, SLOT( deleteLater() ) );
+    }
+}
+
+
+ExternalResolver*
+Pipeline::resolverForPath( const QString& scriptPath )
+{
+    foreach ( ExternalResolver* res, m_scriptResolvers )
+    {
+        if ( res->filePath() == scriptPath )
+            return res;
+    }
+    return 0;
 }
 
 

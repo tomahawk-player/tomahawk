@@ -159,6 +159,9 @@ set( libSources
     playlist/dynamic/database/DatabaseControl.cpp
     playlist/dynamic/database/DatabaseGenerator.cpp
 
+    resolvers/scriptresolver.cpp
+    resolvers/qtscriptresolver.cpp
+
     network/bufferiodevice.cpp
     network/msgprocessor.cpp
     network/streamconnection.cpp
@@ -232,6 +235,7 @@ set( libHeaders
     globalactionmanager.h
     contextmenu.h
     dropjob.h
+    AtticaManager.h
 
     artist.h
     album.h
@@ -372,6 +376,9 @@ set( libHeaders
     playlist/dynamic/database/DatabaseControl.h
     playlist/dynamic/database/DatabaseGenerator.h
 
+    resolvers/scriptresolver.h
+    resolvers/qtscriptresolver.h
+
     utils/widgetdragfilter.h
     utils/xspfloader.h
     utils/xspfgenerator.h
@@ -456,8 +463,18 @@ include_directories( . ${CMAKE_CURRENT_BINARY_DIR} ${CMAKE_CURRENT_BINARY_DIR}/.
 
     ${LIBPORTFWD_INCLUDE_DIR}
     ${THIRDPARTY_DIR}/qxt/qxtweb-standalone/qxtweb
-
+    ${QuaZip_INCLUDE_DIR}
 )
+
+IF(QCA2_FOUND)
+    INCLUDE_DIRECTORIES( ${QCA2_INCLUDE_DIR} )
+ENDIF(QCA2_FOUND)
+
+IF(LIBATTICA_FOUND)
+    SET( libSources ${libSources} AtticaManager.cpp )
+    SET( libHeaders ${libHeaders} AtticaManager.h )
+    INCLUDE_DIRECTORIES( ${LIBATTICA_INCLUDE_DIR} )
+ENDIF(LIBATTICA_FOUND)
 
 IF( UNIX AND NOT APPLE )
     SET( libSources ${libSources}
@@ -533,9 +550,17 @@ qt4_wrap_cpp( libMoc ${libHeaders} )
 
 SET( libSources ${libSources} ${libUI_H} ${libHeaders_NoMOC} )
 
-add_library( tomahawklib SHARED ${libSources} ${libMoc} )
+ADD_LIBRARY( tomahawklib SHARED ${libSources} ${libMoc} )
 
-target_link_libraries( tomahawklib
+IF(QCA2_FOUND)
+    SET(LINK_LIBRARIES ${LINK_LIBRARIES} ${QCA2_LIBRARIES} )
+ENDIF(QCA2_FOUND)
+
+IF(LIBATTICA_FOUND)
+    SET( LINK_LIBRARIES ${LINK_LIBRARIES} ${LIBATTICA_LIBRARIES} ${QuaZip_LIBRARIES} )
+ENDIF(LIBATTICA_FOUND)
+
+TARGET_LINK_LIBRARIES( tomahawklib
     # Thirdparty shipped with tomahawk
     ${LIBPORTFWD_LIBRARIES}
 

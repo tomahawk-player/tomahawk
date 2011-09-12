@@ -90,13 +90,6 @@ public:
     TomahawkWindow* mainWindow() const { return m_mainwindow; }
 #endif
 
-    Tomahawk::ExternalResolver* addScriptResolver( const QString& scriptPath, bool start = true );
-    void stopScriptResolver( const QString& scriptPath );
-    void removeScriptResolver( const QString& scriptPath );
-    QList< Tomahawk::ExternalResolver* > scriptResolvers() const { return m_scriptResolvers; }
-
-    Tomahawk::ExternalResolver* resolverForPath( const QString& scriptPath );
-
     // PlatformInterface
     virtual bool loadUrl( const QString& url );
 
@@ -123,7 +116,6 @@ private:
     void loadPlugins();
 
     QList<Tomahawk::collection_ptr> m_collections;
-    QList<Tomahawk::ExternalResolver*> m_scriptResolvers;
 
     QWeakPointer<Database> m_database;
     QWeakPointer<ScanManager> m_scanManager;

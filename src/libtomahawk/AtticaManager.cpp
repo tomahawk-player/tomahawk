@@ -18,22 +18,25 @@
 
 #include "AtticaManager.h"
 
-#include "utils/logger.h"
-#include "tomahawksettings.h"
 #include "utils/tomahawkutils.h"
+#include "tomahawksettings.h"
+#include "pipeline.h"
 
 #include <attica/downloaditem.h>
 #include <quazip/quazip.h>
 #include <quazip/quazipfile.h>
 
 #include <QNetworkReply>
-#include <QtCore/qtemporaryfile.h>
+#include <QTemporaryFile>
 #include <QDir>
-#include "tomahawkapp.h"
+#include <QTimer>
+
+#include "utils/logger.h"
 
 using namespace Attica;
 
 AtticaManager* AtticaManager::s_instance = 0;
+
 
 AtticaManager::AtticaManager( QObject* parent )
 {
@@ -44,10 +47,12 @@ AtticaManager::AtticaManager( QObject* parent )
     QTimer::singleShot( 0, this, SLOT( loadPixmapsFromCache() ) );
 }
 
+
 AtticaManager::~AtticaManager()
 {
     savePixmapsToCache();
 }
+
 
 void
 AtticaManager::loadPixmapsFromCache()
@@ -64,6 +69,7 @@ AtticaManager::loadPixmapsFromCache()
         m_resolversIconCache[ info.baseName() ] = icon;
     }
 }
+
 
 void
 AtticaManager::savePixmapsToCache()
@@ -86,6 +92,7 @@ AtticaManager::savePixmapsToCache()
     }
 }
 
+
 QPixmap
 AtticaManager::iconForResolver( const Content& resolver )
 {
@@ -99,6 +106,7 @@ AtticaManager::resolvers() const
     return m_resolvers;
 }
 
+
 AtticaManager::ResolverState
 AtticaManager::resolverState ( const Content& resolver ) const
 {
@@ -110,11 +118,13 @@ AtticaManager::resolverState ( const Content& resolver ) const
     return m_resolverStates[ resolver.id() ];
 }
 
+
 bool
 AtticaManager::resolversLoaded() const
 {
     return !m_resolvers.isEmpty();
 }
+
 
 QString
 AtticaManager::pathFromId( const QString& resolverId ) const
@@ -142,6 +152,7 @@ AtticaManager::providerAdded( const Provider& provider )
     }
 }
 
+
 void
 AtticaManager::resolversList( BaseJob* j )
 {
@@ -162,6 +173,7 @@ AtticaManager::resolversList( BaseJob* j )
         }
     }
 }
+
 
 void
 AtticaManager::resolverIconFetched()
@@ -199,6 +211,7 @@ AtticaManager::installResolver( const Content& resolver )
     job->start();
 }
 
+
 void
 AtticaManager::resolverDownloadFinished ( BaseJob* j )
 {
@@ -217,9 +230,8 @@ AtticaManager::resolverDownloadFinished ( BaseJob* j )
     {
         tLog() << "Failed to do resolver download job!" << job->metadata().error();
     }
-
-
 }
+
 
 void
 AtticaManager::payloadFetched()
@@ -242,10 +254,10 @@ AtticaManager::payloadFetched()
         QString resolverId = reply->property( "resolverId" ).toString();
         QString resolverPath = extractPayload( f.fileName(), resolverId );
 
-        if( !resolverPath.isEmpty() )
+        if ( !resolverPath.isEmpty() )
         {
             // Do the install / add to tomahawk
-            TomahawkApp::instance()->addScriptResolver( resolverPath, true );
+            Tomahawk::Pipeline::instance()->addScriptResolver( resolverPath, true );
             m_resolverStates[ resolverId ] = Installed;
             TomahawkSettings::instance()->setAtticaResolverState( resolverId, Installed );
             emit resolverInstalled( resolverId );
@@ -257,6 +269,7 @@ AtticaManager::payloadFetched()
         tLog() << "Failed to download attica payload...:" << reply->errorString();
     }
 }
+
 
 QString
 AtticaManager::extractPayload( const QString& filename, const QString& resolverId ) const
@@ -327,6 +340,7 @@ AtticaManager::extractPayload( const QString& filename, const QString& resolverI
     return QString( QFile( resolverDir.absolutePath() + "/contents/code/main.js" ).fileName() );
 }
 
+
 void
 AtticaManager::uninstallResolver( const QString& pathToResolver )
 {
@@ -357,12 +371,13 @@ AtticaManager::uninstallResolver( const Content& resolver )
     emit resolverUninstalled( resolver.id() );
     emit resolverStateChanged( resolver.id() );
 
-    TomahawkApp::instance()->removeScriptResolver( pathFromId( resolver.id() ) );
+    Tomahawk::Pipeline::instance()->removeScriptResolver( pathFromId( resolver.id() ) );
     m_resolverStates[ resolver.id() ] = Uninstalled;
     TomahawkSettings::instance()->setAtticaResolverState( resolver.id(), Uninstalled );
 
     doResolverRemove( resolver.id() );
 }
+
 
 void
 AtticaManager::doResolverRemove( const QString& id ) const
