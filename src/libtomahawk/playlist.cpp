@@ -589,7 +589,10 @@ Playlist::checkRevisionQueue()
         if ( item.oldRev != currentrevision() && item.applyToTip ) // this was applied to the then-latest, but the already-running operation changed it so it's out of date now. fix it
         {
             if ( item.oldRev == item.newRev )
+            {
+                checkRevisionQueue();
                 return;
+            }
 
             item.oldRev = currentrevision();
         }
