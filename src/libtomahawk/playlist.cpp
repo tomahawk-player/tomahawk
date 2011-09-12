@@ -372,6 +372,7 @@ Playlist::setRevision( const QString& rev,
     {
         // add initial tracks
         createNewRevision( uuid(), currentrevision(), m_initEntries );
+        m_initEntries.clear();
     }
     else
         emit revisionLoaded( pr );
@@ -491,7 +492,6 @@ Playlist::onResolvingFinished()
 {
     if ( m_locallyChanged )
     {
-        qDebug() << Q_FUNC_INFO;
         m_locallyChanged = false;
         createNewRevision( currentrevision(), currentrevision(), m_entries );
     }
@@ -578,14 +578,19 @@ Playlist::setBusy( bool b )
     emit changed();
 }
 
+
 void
 Playlist::checkRevisionQueue()
 {
     if ( !m_revisionQueue.isEmpty() )
     {
         RevisionQueueItem item = m_revisionQueue.dequeue();
+
         if ( item.oldRev != currentrevision() && item.applyToTip ) // this was applied to the then-latest, but the already-running operation changed it so it's out of date now. fix it
         {
+            if ( item.oldRev == item.newRev )
+                return;
+
             item.oldRev = currentrevision();
         }
         createNewRevision( item.newRev, item.oldRev, item.entries );
