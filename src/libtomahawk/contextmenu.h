@@ -38,8 +38,7 @@ public:
        ActionPlay =         1,
        ActionQueue =        2,
        ActionDelete =       4,
-       ActionCopyLink =     8,
-       ActionAddToPlaylist = 9
+       ActionCopyLink =     8
 
     };
 
@@ -64,21 +63,18 @@ public:
 
 signals:
     void triggered( int action );
-    void clicked( int action );
 
 private slots:
     void onTriggered( int action );
-    void onClicked( int action );
     void copyLink();
     void addToQueue();
-    void onAction(const QString& what);
+
 private:
     QSignalMapper* m_sigmap;
     int m_supportedActions;
 
     QList<Tomahawk::query_ptr> m_queries;
     QList<Tomahawk::artist_ptr> m_artists;
-    playlist_ptr m_playlist;
     QList<Tomahawk::album_ptr> m_albums;
 };
 

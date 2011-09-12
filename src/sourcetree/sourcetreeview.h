@@ -27,7 +27,6 @@ class PlaylistModel;
 class SourcesModel;
 class SourcesProxyModel;
 class SourceDelegate;
-class ResolversModel;
 
 class SourceTreeView : public QTreeView
 {
@@ -35,7 +34,7 @@ Q_OBJECT
 
 public:
     explicit SourceTreeView( QWidget* parent = 0 );
-    //static bool acceptsMimeData( const QMimeData* data, bool playlistOnly = true );
+
 public slots:
     void showOfflineSources( bool offlineSourcesShown );
 
@@ -54,7 +53,6 @@ private slots:
     void expandRequest( const QPersistentModelIndex& idx );
 
     void loadPlaylist();
-    void addToSpotify();
     void deletePlaylist( const QModelIndex& = QModelIndex() );
     void copyPlaylistLink();
     void addToLocal();
@@ -65,7 +63,6 @@ private slots:
     void onCustomContextMenu( const QPoint& pos );
 
 protected:
-//    void drawBranches( QPainter* painter, const QRect& rect, const QModelIndex& index ) const {}
     void drawRow( QPainter* painter, const QStyleOptionViewItem& option, const QModelIndex& index ) const;
 
     virtual void paintEvent( QPaintEvent* event );
@@ -81,7 +78,7 @@ private:
 
     template< typename T >
     T* itemFromIndex( const QModelIndex& index ) const;
-    //void parseMimeData( const QMimeData* data );
+
     SourcesModel* m_model;
     SourcesProxyModel* m_proxyModel;
     QModelIndex m_contextMenuIndex;
@@ -100,7 +97,6 @@ private:
 
     bool m_dragging;
     QRect m_dropRect;
-    ResolversModel* m_resolversModel;
     QPersistentModelIndex m_dropIndex;
 };
 

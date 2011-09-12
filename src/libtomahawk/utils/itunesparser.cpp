@@ -31,23 +31,22 @@
 
 using namespace Tomahawk;
 
-ItunesParser::ItunesParser( const QStringList& Urls, QObject* parent, bool createNewPlaylist)
+ItunesParser::ItunesParser( const QStringList& urls, QObject* parent )
     : QObject ( parent )
     , m_single( false )
 
 {
-    m_createNewPlaylist = createNewPlaylist;
-    foreach ( const QString& url, Urls ){
+    foreach ( const QString& url, urls )
+    {
 
         lookupItunesUri( url );
     }
 }
 
-ItunesParser::ItunesParser( const QString& Url, QObject* parent, bool createNewPlaylist )
+ItunesParser::ItunesParser( const QString& Url, QObject* parent )
     : QObject ( parent )
     , m_single( true )
 {
-    m_createNewPlaylist = createNewPlaylist;
     lookupItunesUri( Url );
 }
 
@@ -69,17 +68,21 @@ ItunesParser::lookupItunesUri( const QString& link )
 
     // Doing a parse on regex in 2 stages,
     // first, look if we have both album and track id
-     int pos = rxAlbumTrack.indexIn(link);
-     if (pos > -1) {
-         id = rxAlbumTrack.cap(1);
-         trackId = rxAlbumTrack.cap(2);
-     }else{
-
+     int pos = rxAlbumTrack.indexIn( link );
+     if ( pos > -1 ) {
+         id = rxAlbumTrack.cap( 1 );
+         trackId = rxAlbumTrack.cap( 2 );
+     }
+     else
+     {
          // Second, if we dont have trackId, check for just Id
-         int pos = rxId.indexIn(link);
-         if (pos > -1) {
-             id = rxId.cap(1);
-         }else return;
+         int pos = rxId.indexIn( link );
+         if ( pos > -1 )
+         {
+             id = rxId.cap( 1 );
+         }
+         else
+             return;
 
      }
 
@@ -89,7 +92,8 @@ ItunesParser::lookupItunesUri( const QString& link )
     QUrl url;
     if( link.contains( "artist" ) )
         url = QUrl( QString( "http://ax.phobos.apple.com.edgesuite.net/WebObjects/MZStoreServices.woa/wa/wsLookup?id=%1&entity=song&limit=30" ).arg( id ) );
-    else url = QUrl( QString( "http://ax.phobos.apple.com.edgesuite.net/WebObjects/MZStoreServices.woa/wa/wsLookup?id=%1&entity=song" ).arg( ( trackId.isEmpty() ? id : trackId ) ) );
+    else
+        url = QUrl( QString( "http://ax.phobos.apple.com.edgesuite.net/WebObjects/MZStoreServices.woa/wa/wsLookup?id=%1&entity=song" ).arg( ( trackId.isEmpty() ? id : trackId ) ) );
 
     qDebug() << "Looking up..." << url.toString();
 
@@ -125,11 +129,13 @@ ItunesParser::itunesResponseLookupFinished()
         }
         QVariantList itunesResponse = res.value( "results" ).toList();
 
-        foreach(QVariant itune, itunesResponse){
+        foreach ( QVariant itune, itunesResponse )
+        {
             QString title, artist, album;
             QVariantMap ituneMap = itune.toMap();
 
-            if( ituneMap.value( "wrapperType" ).toString().contains( "track" ) ){
+            if ( ituneMap.value( "wrapperType" ).toString().contains( "track" ) )
+            {
 
                 title = ituneMap.value( "trackName" ).toString();
                 artist = ituneMap.value( "artistName" ).toString();
@@ -146,7 +152,6 @@ ItunesParser::itunesResponseLookupFinished()
             }
         }
 
-
     } else
     {
         tLog() << "Error in network request to Itunes for track decoding:" << r->errorString();
@@ -154,7 +159,6 @@ ItunesParser::itunesResponseLookupFinished()
 
     checkTrackFinished();
 }
-
 
 
 void

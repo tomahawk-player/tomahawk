@@ -97,6 +97,7 @@ private slots:
     void initServent();
     void initSIP();
 
+    void spotifyApiCheckFinished();
 private:
     void registerMetaTypes();
 
@@ -108,8 +109,6 @@ private:
     void initPipeline();
 
     void initHTTP();
-
-    void loadPlugins();
 
     QList<Tomahawk::collection_ptr> m_collections;
 

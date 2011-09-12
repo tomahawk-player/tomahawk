@@ -23,7 +23,6 @@
 #include "playlist/playlistmodel.h"
 #include "trackview.h"
 #include "viewpage.h"
-#include "dropjob.h"
 #include "dllmacro.h"
 
 class DLLEXPORT PlaylistView : public TrackView, public Tomahawk::ViewPage
@@ -68,9 +67,6 @@ private slots:
 
 private:
     PlaylistModel* m_model;
-    bool m_resizing;
-    bool m_dragging;
-    QRect m_dropRect;
     QString m_customTitle;
     QString m_customDescripton;
 

@@ -27,7 +27,7 @@
 #include <QStyledItemDelegate>
 #include <QSize>
 #include <QFileDialog>
-#include "libtomahawk/pipeline.h"
+
 #include "playlist.h"
 #include "viewmanager.h"
 #include "sourcesproxymodel.h"
@@ -40,7 +40,6 @@
 #include "tomahawksettings.h"
 #include "globalactionmanager.h"
 #include "dropjob.h"
-#include "resolversmodel.h"
 #include "utils/logger.h"
 #include "items/genericpageitems.h"
 #include "items/temporarypageitem.h"
@@ -160,16 +159,6 @@ SourceTreeView::setupMenus()
     m_copyPlaylistAction = m_playlistMenu.addAction( tr( "&Copy Link" ) );
     m_deletePlaylistAction = m_playlistMenu.addAction( tr( "&Delete %1" ).arg( SourcesModel::rowTypeToString( type ) ) );
 
-    // Add a menu for spotify export
-    TomahawkSettings* settings = TomahawkSettings::instance();
-    foreach(QString resolver, settings->enabledScriptResolvers() ){
-        if( resolver.contains( "spotify" ) ){
-            QAction *m_addToSpotify = m_playlistMenu.addAction( tr( "Add to &Spotify" ) );
-            connect( m_addToSpotify, SIGNAL( triggered() ), SLOT( addToSpotify() ) );
-            break;
-        }
-    }
-
     QString addToText = QString( "Add to my %1" );
     if ( type == SourcesModel::StaticPlaylist )
         addToText = addToText.arg( "Playlists" );
@@ -251,36 +240,6 @@ SourceTreeView::loadPlaylist()
 {
     onItemActivated( m_contextMenuIndex );
 }
-
-void
-SourceTreeView::addToSpotify(  )
-{
-    qDebug() << Q_FUNC_INFO;
-
-    QModelIndex idx = m_contextMenuIndex;
-    if ( !idx.isValid() )
-        return;
-
-    SourcesModel::RowType type = ( SourcesModel::RowType )model()->data( idx, SourcesModel::SourceTreeItemTypeRole ).toInt();
-    if ( type == SourcesModel::StaticPlaylist )
-    {
-        PlaylistItem* item = itemFromIndex< PlaylistItem >( idx );
-        playlist_ptr playlist = item->playlist();
-        qDebug() << Q_FUNC_INFO << "Static playlist" << playlist->title();
-        // Do something with playlist -> spotify()
-
-    } else if( type == SourcesModel::AutomaticPlaylist || type == SourcesModel::Station )
-    {
-        DynamicPlaylistItem* item = itemFromIndex< DynamicPlaylistItem >( idx );
-        dynplaylist_ptr playlist = item->dynPlaylist();
-        qDebug() << Q_FUNC_INFO << "Dynamic playlist" << playlist->title();
-    }
-
-
-
-}
-
-
 
 void
 SourceTreeView::deletePlaylist( const QModelIndex& idxIn )
@@ -533,20 +492,18 @@ SourceTreeView::dragMoveEvent( QDragMoveEvent* event )
             event->setDropAction( Qt::CopyAction );
             event->accept();
         }
-        else{
-
-                qDebug() << Q_FUNC_INFO << "Ignoring";
-                event->ignore();
-            }
-        }else if ( DropJob::acceptsMimeData( event->mimeData(),  DropJob::Playlist, DropJob::Create ) )
-
+        else
         {
-            // Should maybe ignore, but we are just dropping
-            // a playlist in the container, not on a specific playlist
-            event->setDropAction( Qt::CopyAction );
-            event->accept();
+            qDebug() << Q_FUNC_INFO << "Ignoring";
+            event->ignore();
         }
-     setDirtyRegion( m_dropRect );
+    }
+    else if ( DropJob::acceptsMimeData( event->mimeData(),  DropJob::Playlist, DropJob::Create ) )
+    {
+        event->setDropAction( Qt::CopyAction );
+        event->accept();
+    }
+    setDirtyRegion( m_dropRect );
 }
 
 
@@ -569,7 +526,6 @@ SourceTreeView::dropEvent( QDropEvent* event )
     // Need to fake the dropevent because the treeview would reject it if it is outside the item (on the tree)
     if ( pos.x() < 100 )
     {
-        qDebug() << Q_FUNC_INFO << "New Event";
         QDropEvent* newEvent = new QDropEvent( pos + QPoint( 100, 0 ), event->possibleActions(), event->mimeData(), event->mouseButtons(), event->keyboardModifiers(), event->type() );
         QTreeView::dropEvent( newEvent );
         delete newEvent;
@@ -582,6 +538,7 @@ SourceTreeView::dropEvent( QDropEvent* event )
         dropThis->setDropTypes( DropJob::Playlist );
         dropThis->setDropAction( DropJob::Create );
         dropThis->parseMimeData( event->mimeData() );
+
         QTreeView::dropEvent( event );
     }
 

@@ -45,40 +45,53 @@ public:
      */
 
     enum DropType {
+        None =      0x00,
+        Playlist =  0x01,
+        Track =     0x02,
+        Album =     0x04,
+        Artist =    0x08,
 
-                None =      0x00,
-                Playlist =  0x01,
-                Track =     0x02,
-                Album =     0x04,
-                Artist =    0x08,
-                All =       0x10
-            };
+        All =       0xFF
+    };
+    Q_DECLARE_FLAGS(DropTypes, DropType)
 
-        Q_DECLARE_FLAGS(DropTypes, DropType)
+    enum DropAction {
+        Append = 0,
+        Create
+    };
 
-        enum DropAction {
+    /**
+     * Returns if the caller should accept this mimetype.
+     *
+     * \param data The mimetype object to check
+     * \param type The type of drop content to accept
+     * \param action What action is requested from the content, if not all data types support all actions
+     */
+    static bool acceptsMimeData( const QMimeData* data, DropJob::DropTypes type = All, DropAction action = Append );
 
-                Append =    0x00,
-                Create =    0x01
-
-              };
-        Q_DECLARE_FLAGS(DropActions, DropAction)
-
-
-    static bool acceptsMimeData( const QMimeData* data, DropJob::DropTypes type = All, DropJob::DropActions action = Append );
     static QStringList mimeTypes();
 
-    virtual void setDropTypes( DropTypes types ) { m_dropTypes = types; }
-    virtual void setDropAction( DropAction action ) { m_dropAction = action; }
-    virtual DropTypes dropTypes() const { return m_dropTypes; }
-    virtual DropAction dropAction() const { return m_dropAction; }
+    /// Set the drop types that should be extracted from this drop
+    void setDropTypes( DropTypes types ) { m_dropTypes = types; }
+
+    /// Set the action that the drop should do. For example, if dropping a playlist, Create will create a new playlist but Append will generate the raw tracks
+    void setDropAction( DropAction action ) { m_dropAction = action; }
+
+    DropTypes dropTypes() const { return m_dropTypes; }
+    DropAction dropAction() const { return m_dropAction; }
+
+    /**
+     * Begin the parsing of the mime data. The resulting tracks are exposed in the various signals
+     */
     void parseMimeData( const QMimeData* data );
+
     void setGetWholeArtists( bool getWholeArtists );
     void setGetWholeAlbums( bool getWholeAlbums );
     void tracksFromMimeData( const QMimeData* data, bool allowDuplicates = false, bool onlyLocal = false, bool top10 = false );
-    void handleXspf( const QString& file, bool createNewPlaylist = false );
-    void handleSpPlaylist( const QString& url, bool createNewPlaylist = false );
+    void handleXspf( const QString& file );
+    void handleSpPlaylist( const QString& url );
 
+    static void setCanParseSpotifyPlaylists( bool parseable ) { s_canParseSpotifyPlaylists = parseable; }
 signals:
     /// QMimeData parsing results
     void tracks( const QList< Tomahawk::query_ptr >& tracks );
@@ -115,9 +128,11 @@ private:
     bool m_top10;
     DropTypes m_dropTypes;
     DropAction m_dropAction;
-    bool DropAction();
 
     QList< Tomahawk::query_ptr > m_resultList;
+
+    static bool s_canParseSpotifyPlaylists;
 };
+
 Q_DECLARE_OPERATORS_FOR_FLAGS(DropJob::DropTypes)
 #endif // DROPJOB_H

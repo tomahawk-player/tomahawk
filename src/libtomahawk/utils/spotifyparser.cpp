@@ -29,21 +29,23 @@
 
 using namespace Tomahawk;
 
-SpotifyParser::SpotifyParser( const QStringList& Urls, QObject* parent, bool createNewPlaylist)
+SpotifyParser::SpotifyParser( const QStringList& Urls, bool createNewPlaylist, QObject* parent )
     : QObject ( parent )
     , m_single( false )
+    , m_trackMode( true )
+    , m_createNewPlaylist( createNewPlaylist )
 
 {
-    m_createNewPlaylist = createNewPlaylist;
     foreach ( const QString& url, Urls )
         lookupUrl( url );
 }
 
-SpotifyParser::SpotifyParser( const QString& Url, QObject* parent, bool createNewPlaylist )
+SpotifyParser::SpotifyParser( const QString& Url, bool createNewPlaylist, QObject* parent )
     : QObject ( parent )
     , m_single( true )
+    , m_trackMode( true )
+    , m_createNewPlaylist( createNewPlaylist )
 {
-    m_createNewPlaylist = createNewPlaylist;
     lookupUrl( Url );
 }
 
@@ -56,12 +58,18 @@ SpotifyParser::~SpotifyParser()
 void
 SpotifyParser::lookupUrl( const QString& link )
 {
-
     if( link.contains( "track" ) )
-        lookupTrack(link);
+    {
+        m_trackMode = true;
+        lookupTrack( link );
+    }
     else if( link.contains( "playlist" ) )
+    {
+        m_trackMode = false;
         lookupPlaylist( link );
-    else return; // We only support tracks and playlists
+    }
+    else
+        return; // We only support tracks and playlists
 
 }
 
@@ -72,9 +80,8 @@ SpotifyParser::lookupPlaylist( const QString& link )
     if ( !link.contains( "spotify:user:" ) ) // we only support playlist here
         return;
 
-    QString uri = link;
-    tLog() << "Parsing Spotify Playlist URI:" << uri;
-    QUrl url = QUrl( QString( "http://www.trushuffle.com:5512/playlist/%1" ).arg( uri ) );
+    tLog() << "Parsing Spotify Playlist URI:" << link;
+    QUrl url = QUrl( QString( SPOTIFY_PLAYLIST_API_URL "/playlist/%1" ).arg( link ) );
     tDebug() << "Looking up URL..." << url.toString();
 
     QNetworkReply* reply = TomahawkUtils::nam()->get( QNetworkRequest( url ) );
@@ -100,10 +107,8 @@ SpotifyParser::lookupTrack( const QString& link )
         uri = QString( "spotify:track:%1" ).arg( hash );
     }
 
-    tLog() << "Parsing Spotify Track URI:" << uri;
-
     QUrl url = QUrl( QString( "http://ws.spotify.com/lookup/1/.json?uri=%1" ).arg( uri ) );
-    tDebug() << "Looking up..." << url.toString();
+    tLog() << "Looking up spotify track information..." << url.toString();
 
     QNetworkReply* reply = TomahawkUtils::nam()->get( QNetworkRequest( url ) );
     connect( reply, SIGNAL( finished() ), this, SLOT( spotifyTrackLookupFinished() ) );
@@ -118,6 +123,7 @@ SpotifyParser::spotifyPlaylistLookupFinished()
 {
     QNetworkReply* r = qobject_cast< QNetworkReply* >( sender() );
     Q_ASSERT( r );
+
     m_queries.remove( r );
     r->deleteLater();
 
@@ -132,28 +138,25 @@ SpotifyParser::spotifyPlaylistLookupFinished()
             tLog() << "Failed to parse json from Spotify playlist lookup:" << p.errorString() << "On line" << p.errorLine();
             checkTrackFinished();
             return;
-        } else if ( !res.contains( "tracks" ) )
+        }
+        else if ( !res.contains( "tracks" ) )
         {
-            tLog() << "No 'tracks' item in the spotify playlist lookup result... not doing anything";
+            tLog() << "No tracks' item in the spotify playlist lookup result... not doing anything";
             checkTrackFinished();
             return;
         }
 
         QVariantList trackResponse = res.value( "tracks" ).toList();
-        if(!trackResponse.isEmpty()){
+        if ( !trackResponse.isEmpty() )
+        {
            m_title = res.value( "title" ).toString();
            m_creator = res.value( "creator" ).toString();
            qDebug() << "playlist owner: " << m_creator;
         }
-        foreach(QVariant track, trackResponse){
 
-            QString title, artist, album;
-            title = track.toMap().value( "title" ).toString();
-            artist = track.toMap().value( "artists" ).toList().first().toString();
-            album = track.toMap().value( "album" ).toString();
-            Tomahawk::query_ptr q = Tomahawk::Query::get( artist, title, album, uuid(), true );
-            m_tracks << q;
-
+        foreach( QVariant track, trackResponse )
+        {
+            lookupTrack( track.toString() );
         }
 
     } else
@@ -218,7 +221,10 @@ SpotifyParser::spotifyTrackLookupFinished()
         tLog() << "Error in network request to Spotify for track decoding:" << r->errorString();
     }
 
-    checkTrackFinished();
+    if ( m_trackMode )
+        checkTrackFinished();
+    else
+        checkPlaylistFinished();
 }
 
 void
@@ -226,7 +232,7 @@ SpotifyParser::checkPlaylistFinished()
 {
     if ( m_queries.isEmpty() ) // we're done
     {
-        if(m_createNewPlaylist)
+        if( m_createNewPlaylist )
             m_playlist = Playlist::create( SourceList::instance()->getLocal(),
                                        uuid(),
                                        m_title,

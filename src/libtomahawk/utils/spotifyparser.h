@@ -27,6 +27,8 @@
 #include <QSet>
 #include <QtCore/QStringList>
 
+#define SPOTIFY_PLAYLIST_API_URL "http://spotikea.tomahawk-player.org:10380"
+
 class QNetworkReply;
 namespace Tomahawk
 {
@@ -40,8 +42,8 @@ class DLLEXPORT SpotifyParser : public QObject
 {
     Q_OBJECT
 public:
-    explicit SpotifyParser( const QString& trackUrl, QObject* parent = 0, bool createNewPl = false );
-    explicit SpotifyParser( const QStringList& trackUrls, QObject* parent = 0, bool createNewPl = false);
+    explicit SpotifyParser( const QString& trackUrl, bool createNewPlaylist = false, QObject* parent = 0 );
+    explicit SpotifyParser( const QStringList& trackUrls, bool createNewPlaylist = false, QObject* parent = 0 );
     virtual ~SpotifyParser();
 
 signals:
@@ -59,7 +61,9 @@ private:
     void lookupPlaylist( const QString& playlist );
     void checkTrackFinished();
     void checkPlaylistFinished();
+
     bool m_single;
+    bool m_trackMode;
     bool m_createNewPlaylist;
     QList< query_ptr > m_tracks;
     QSet< QNetworkReply* > m_queries;

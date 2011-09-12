@@ -54,6 +54,8 @@
 #include "musicscanner.h"
 #include "AtticaManager.h"
 #include "pipeline.h"
+#include "utils/spotifyparser.h"
+#include "dropjob.h"
 
 #include "audio/audioengine.h"
 #include "utils/xspfloader.h"
@@ -80,6 +82,7 @@
 
 #include <sys/resource.h>
 #include <sys/sysctl.h>
+#include <thirdparty/jreen/bot/bot.h>
 #endif
 
 
@@ -261,6 +264,10 @@ TomahawkApp::init()
 
     // Make sure to init GAM in the gui thread
     GlobalActionManager::instance();
+
+    // check if our spotify playlist api server is up and running, and enable spotify playlist drops if so
+    QNetworkReply* r = TomahawkUtils::nam()->get( QNetworkRequest( QUrl( SPOTIFY_PLAYLIST_API_URL "/playlist/test" ) ) );
+    connect( r, SIGNAL( finished() ), this, SLOT( spotifyApiCheckFinished() ) );
 }
 
 
@@ -499,6 +506,18 @@ TomahawkApp::initSIP()
         //SipHandler::instance()->refreshProxy();
         SipHandler::instance()->loadFromConfig( true );
     }
+}
+
+void
+TomahawkApp::spotifyApiCheckFinished()
+{
+    QNetworkReply* reply = qobject_cast< QNetworkReply* >( sender() );
+    Q_ASSERT( reply );
+
+    if ( reply->error() == QNetworkReply::ContentNotFoundError )
+        DropJob::setCanParseSpotifyPlaylists( true );
+    else
+        DropJob::setCanParseSpotifyPlaylists( false );
 }
 
 

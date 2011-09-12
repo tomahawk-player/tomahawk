@@ -89,7 +89,7 @@ TrackView::TrackView( QWidget* parent )
 
 TrackView::~TrackView()
 {
-    qDebug() << Q_FUNC_INFO;
+    tDebug() << Q_FUNC_INFO;
 
     delete m_header;
 }
@@ -119,7 +119,7 @@ void
 TrackView::setModel( QAbstractItemModel* model )
 {
     Q_UNUSED( model );
-    qDebug() << "Explicitly use setTrackModel instead";
+    tDebug() << "Explicitly use setTrackModel instead";
     Q_ASSERT( false );
 }
 
@@ -180,7 +180,7 @@ TrackView::onItemActivated( const QModelIndex& index )
     TrackModelItem* item = m_model->itemFromIndex( m_proxyModel->mapToSource( index ) );
     if ( item && !item->query().isNull() && item->query()->numResults() )
     {
-        qDebug() << "Result activated:" << item->query()->toString() << item->query()->results().first()->url();
+        tDebug() << "Result activated:" << item->query()->toString() << item->query()->results().first()->url();
         m_proxyModel->setCurrentIndex( index );
         AudioEngine::instance()->playItem( m_proxyModel, item->query()->results().first() );
     }
@@ -207,7 +207,7 @@ TrackView::keyPressEvent( QKeyEvent* event )
 void
 TrackView::onItemResized( const QModelIndex& index )
 {
-    qDebug() << Q_FUNC_INFO;
+    tDebug() << Q_FUNC_INFO;
     m_delegate->updateRowSize( index );
 }
 
@@ -243,7 +243,7 @@ TrackView::resizeEvent( QResizeEvent* event )
 void
 TrackView::dragEnterEvent( QDragEnterEvent* event )
 {
-    qDebug() << Q_FUNC_INFO;
+    tDebug() << Q_FUNC_INFO;
     QTreeView::dragEnterEvent( event );
 
     if ( DropJob::acceptsMimeData( event->mimeData() ) )
@@ -251,7 +251,6 @@ TrackView::dragEnterEvent( QDragEnterEvent* event )
         m_dragging = true;
         m_dropRect = QRect();
 
-        qDebug() << Q_FUNC_INFO << "Accepting Drag Event";
         event->acceptProposedAction();
     }
 }
@@ -306,7 +305,7 @@ TrackView::dropEvent( QDropEvent* event )
 
     if ( event->isAccepted() )
     {
-        qDebug() << "Ignoring accepted event!";
+        tDebug() << "Ignoring accepted event!";
     }
     else
     {
@@ -315,7 +314,7 @@ TrackView::dropEvent( QDropEvent* event )
             const QPoint pos = event->pos();
             const QModelIndex index = indexAt( pos );
 
-            qDebug() << Q_FUNC_INFO << "Drop Event accepted at row:" << index.row();
+            tDebug() << Q_FUNC_INFO << "Drop Event accepted at row:" << index.row();
             event->acceptProposedAction();
 
             if ( !model()->isReadOnly() )
@@ -395,7 +394,7 @@ TrackView::startDrag( Qt::DropActions supportedActions )
     if ( indexes.count() == 0 )
         return;
 
-    qDebug() << "Dragging" << indexes.count() << "indexes";
+    tDebug() << "Dragging" << indexes.count() << "indexes";
     QMimeData* data = m_proxyModel->mimeData( indexes );
     if ( !data )
         return;

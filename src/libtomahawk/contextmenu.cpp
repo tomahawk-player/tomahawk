@@ -36,7 +36,7 @@ ContextMenu::ContextMenu( QWidget* parent )
     m_sigmap = new QSignalMapper( this );
     connect( m_sigmap, SIGNAL( mapped( int ) ), SLOT( onTriggered( int ) ) );
 
-    m_supportedActions = ActionPlay | ActionQueue | ActionCopyLink | ActionAddToPlaylist;
+    m_supportedActions = ActionPlay | ActionQueue | ActionCopyLink;
 }
 
 ContextMenu::~ContextMenu()
@@ -76,25 +76,6 @@ ContextMenu::setQueries( const QList<Tomahawk::query_ptr>& queries )
 
     if ( m_supportedActions & ActionQueue )
         m_sigmap->setMapping( addAction( tr( "Add to &Queue" ) ), ActionQueue );
-
-
-
-    if ( m_supportedActions & ActionAddToPlaylist ){
-
-        QList<playlist_ptr> p = SourceList::instance()->getLocal()->collection()->playlists();
-        QMenu *addTo = new QMenu("Add to");
-            for(int i = 0; i< p.count(); i++){
-                m_sigmap->setMapping( addTo->addAction( p[i]->title() ), p[i]->guid() );
-                m_sigmap->setMapping( addMenu( addTo ), ActionAddToPlaylist );
-            }
-
-            foreach ( QAction* action, addTo->actions() )
-                connect( action, SIGNAL( triggered() ), m_sigmap, SLOT( map() ) );
-
-            connect(m_sigmap, SIGNAL(mapped(QString)),
-                     this, SLOT(onAction(QString)));
-
-    }
 
     addSeparator();
 
@@ -204,22 +185,6 @@ ContextMenu::setArtist( const Tomahawk::artist_ptr& artist )
     setArtists( artists );
 }
 
-
-void
-ContextMenu::onClicked( int action )
-{
-    qDebug() << Q_FUNC_INFO << "Action:" << action;
-}
-
-void
-ContextMenu::onAction( const QString& what )
-{
-    playlist_ptr p = SourceList::instance()->getLocal()->collection()->playlist( what );
-    p->addEntries( m_queries, p->currentrevision());
-    qDebug() << Q_FUNC_INFO << "Adding track to guid" << what << "With title" << p->title();
-}
-
-
 void
 ContextMenu::onTriggered( int action )
 {
@@ -262,7 +227,6 @@ void ContextMenu::addToQueue()
 void
 ContextMenu::copyLink()
 {
-    qDebug() << Q_FUNC_INFO;
     if ( m_queries.count() )
     {
         GlobalActionManager::instance()->copyToClipboard( m_queries.first() );

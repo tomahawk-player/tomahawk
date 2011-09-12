@@ -29,11 +29,12 @@
 
 class QNetworkReply;
 class TrackModel;
+
 namespace Tomahawk
 {
 
 /**
- * Small class to parse spotify links into query_ptrs
+ * Small class to parse itunes links into query_ptrs
  *
  * Connect to the signals to get the results
  */
@@ -41,16 +42,13 @@ class DLLEXPORT ItunesParser : public QObject
 {
     Q_OBJECT
 public:
-    explicit ItunesParser( const QString& trackUrl, QObject* parent = 0, bool createNewPl = false );
-    explicit ItunesParser( const QStringList& trackUrls, QObject* parent = 0, bool createNewPl = false);
+    explicit ItunesParser( const QString& trackUrl, QObject* parent = 0 );
+    explicit ItunesParser( const QStringList& trackUrls, QObject* parent = 0 );
     virtual ~ItunesParser();
-
 
 signals:
     void track( const Tomahawk::query_ptr& track );
     void tracks( const QList< Tomahawk::query_ptr > tracks );
-    void playlist( const Tomahawk::query_ptr& playlist );
-
 
 private slots:
     void itunesResponseLookupFinished();
@@ -60,7 +58,6 @@ private:
     void checkTrackFinished();
 
     bool m_single;
-    bool m_createNewPlaylist;
     QList< query_ptr > m_tracks;
     QSet< QNetworkReply* > m_queries;
     QString m_title, m_info, m_creator;
