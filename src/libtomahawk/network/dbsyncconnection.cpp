@@ -143,16 +143,10 @@ DBSyncConnection::check()
     connect( cmd_us, SIGNAL( done( QVariantMap ) ), SLOT( gotUs( QVariantMap ) ) );
     Database::instance()->enqueue( QSharedPointer<DatabaseCommand>(cmd_us) );
 
-    if ( !m_cmds.isEmpty() )
-    {
-        fetchOpsData( m_cmds.last()->guid() );
-    }
-    else
-    {
-        DatabaseCommand_CollectionStats* cmd_them = new DatabaseCommand_CollectionStats( m_source );
-        connect( cmd_them, SIGNAL( done( QVariantMap ) ), SLOT( gotThem( QVariantMap ) ) );
-        Database::instance()->enqueue( QSharedPointer<DatabaseCommand>(cmd_them) );
-    }
+    Q_ASSERT( m_cmds.isEmpty() );
+    DatabaseCommand_CollectionStats* cmd_them = new DatabaseCommand_CollectionStats( m_source );
+    connect( cmd_them, SIGNAL( done( QVariantMap ) ), SLOT( gotThem( QVariantMap ) ) );
+    Database::instance()->enqueue( QSharedPointer<DatabaseCommand>(cmd_them) );
 
     // restarts idle countdown
     m_timer.start();
