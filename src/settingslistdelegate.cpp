@@ -29,9 +29,9 @@ SettingsListDelegate::SettingsListDelegate(QObject *parent) :
 {
 }
 
+
 void SettingsListDelegate::paint(QPainter *painter, const QStyleOptionViewItem &option, const QModelIndex &index) const
 {
-
     painter->save();
 
     QStyleOptionViewItemV4 opt = option;
@@ -42,7 +42,6 @@ void SettingsListDelegate::paint(QPainter *painter, const QStyleOptionViewItem &
     // On mac draw our own selection rect as we don't get one from osx (around the whole icon or around just text)
     if ( opt.state & QStyle::State_Selected )
     {
-        painter->save();
         painter->setRenderHint( QPainter::Antialiasing );
 
         QPainterPath p;
@@ -53,8 +52,6 @@ void SettingsListDelegate::paint(QPainter *painter, const QStyleOptionViewItem &
         painter->setPen( border );
         painter->drawPath( p );
         painter->fillPath( p, fill );
-
-        painter->restore();
     }
 #else
     if ( ( option.state & QStyle::State_Selected ) == QStyle::State_Selected )
@@ -62,7 +59,6 @@ void SettingsListDelegate::paint(QPainter *painter, const QStyleOptionViewItem &
         painter->setPen( option.palette.color( QPalette::HighlightedText ) );
     }
 #endif
-
 
     int horizontalOffset = ( option.rect.width() - option.decorationSize.width() ) /2;
     QRect iconRect = option.rect.adjusted( horizontalOffset, 6, -horizontalOffset, -option.rect.height() + 6 + option.decorationSize.height() );
