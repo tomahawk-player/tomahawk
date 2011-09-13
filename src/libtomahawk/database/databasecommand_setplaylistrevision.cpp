@@ -26,6 +26,8 @@
 #include "network/servent.h"
 #include "utils/logger.h"
 
+using namespace Tomahawk;
+
 
 DatabaseCommand_SetPlaylistRevision::DatabaseCommand_SetPlaylistRevision(
                       const source_ptr& s,
@@ -90,8 +92,6 @@ DatabaseCommand_SetPlaylistRevision::postCommitHook()
 void
 DatabaseCommand_SetPlaylistRevision::exec( DatabaseImpl* lib )
 {
-    using namespace Tomahawk;
-
     // get the current revision for this playlist
     // this also serves to check the playlist exists.
     TomahawkSqlQuery chkq = lib->newquery();
@@ -100,7 +100,7 @@ DatabaseCommand_SetPlaylistRevision::exec( DatabaseImpl* lib )
     if( chkq.exec() && chkq.next() )
     {
         m_currentRevision = chkq.value( 0 ).toString();
-        qDebug() << Q_FUNC_INFO << "pl guid" << m_playlistguid << " curr rev" << m_currentRevision;
+        qDebug() << Q_FUNC_INFO << "pl guid" << m_playlistguid << "- curr rev" << m_currentRevision;
     }
     else
     {
@@ -181,7 +181,7 @@ DatabaseCommand_SetPlaylistRevision::exec( DatabaseImpl* lib )
     // if optimistic locking is ok, update current revision to this new one
     if ( m_currentRevision == m_oldrev )
     {
-        qDebug() << "updating current revision, optimistic locking ok";
+        qDebug() << "Updating current revision, optimistic locking ok";
 
         TomahawkSqlQuery query2 = lib->newquery();
         query2.prepare( "UPDATE playlist SET currentrevision = ? WHERE guid = ?" );
@@ -199,12 +199,11 @@ DatabaseCommand_SetPlaylistRevision::exec( DatabaseImpl* lib )
                                "WHERE guid = :guid" );
         query_entries.bindValue( ":guid", m_oldrev );
         query_entries.exec();
-        if( query_entries.next() )
+        if ( query_entries.next() )
         {
-            // entries should be a list of strings:
             bool ok;
             QJson::Parser parser;
-            QVariant v = parser.parse( query_entries.value(0).toByteArray(), &ok );
+            QVariant v = parser.parse( query_entries.value( 0 ).toByteArray(), &ok );
             Q_ASSERT( ok && v.type() == QVariant::List ); //TODO
 
             m_previous_rev_orderedguids = v.toStringList();

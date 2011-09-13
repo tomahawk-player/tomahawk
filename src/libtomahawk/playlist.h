@@ -142,8 +142,8 @@ public:
                                           bool shared,
                                           const QList<Tomahawk::query_ptr>& queries = QList<Tomahawk::query_ptr>() );
 
-    static bool remove( const playlist_ptr& playlist );
-    bool rename( const QString& title );
+    static void remove( const playlist_ptr& playlist );
+    void rename( const QString& title );
 
     virtual void loadRevision( const QString& rev = "" );
 

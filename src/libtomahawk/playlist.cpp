@@ -41,6 +41,7 @@ using namespace Tomahawk;
 PlaylistEntry::PlaylistEntry() {}
 PlaylistEntry::~PlaylistEntry() {}
 
+
 void
 PlaylistEntry::setQueryVariant( const QVariant& v )
 {
@@ -92,7 +93,6 @@ Playlist::Playlist( const source_ptr& author )
     : m_source( author )
     , m_lastmodified( 0 )
 {
-    qDebug() << Q_FUNC_INFO << "JSON";
 }
 
 
@@ -116,10 +116,7 @@ Playlist::Playlist( const source_ptr& src,
     , m_lastmodified( lastmod )
     , m_createdOn( createdOn )
     , m_shared( shared )
-    , m_currentItem( 0 )
-    , m_busy( false )
 {
-    qDebug() << Q_FUNC_INFO << "1" << title;
     init();
 }
 
@@ -140,11 +137,8 @@ Playlist::Playlist( const source_ptr& author,
     , m_lastmodified( 0 )
     , m_createdOn( 0 ) // will be set by db command
     , m_shared( shared )
-    , m_currentItem ( 0 )
     , m_initEntries( entries )
-    , m_busy( false )
 {
-    qDebug() << Q_FUNC_INFO << "2" << title;
     init();
 }
 
@@ -152,8 +146,9 @@ Playlist::Playlist( const source_ptr& author,
 void
 Playlist::init()
 {
-   m_locallyChanged = false;
-   connect( Pipeline::instance(), SIGNAL( idle() ), SLOT( onResolvingFinished() ) );
+    m_busy = false;
+    m_locallyChanged = false;
+    connect( Pipeline::instance(), SIGNAL( idle() ), SLOT( onResolvingFinished() ) );
 }
 
 
@@ -185,7 +180,6 @@ Playlist::create( const source_ptr& author,
     playlist_ptr playlist( new Playlist( author, guid, title, info, creator, shared, entries ) );
 
     // save to DB in the background
-    // Hope this doesn't cause any problems..
     // Watch for the created() signal if you need to be sure it's written.
     //
     // When a playlist is created it will reportCreated(), adding it to the
@@ -221,7 +215,7 @@ Playlist::load( const QString& guid )
 }
 
 
-bool
+void
 Playlist::remove( const playlist_ptr& playlist )
 {
     playlist->aboutToBeDeleted( playlist );
@@ -231,18 +225,14 @@ Playlist::remove( const playlist_ptr& playlist )
 
     DatabaseCommand_DeletePlaylist* cmd = new DatabaseCommand_DeletePlaylist( playlist->author(), playlist->guid() );
     Database::instance()->enqueue( QSharedPointer<DatabaseCommand>(cmd) );
-
-    return true; // FIXME
 }
 
 
-bool
+void
 Playlist::rename( const QString& title )
 {
     DatabaseCommand_RenamePlaylist* cmd = new DatabaseCommand_RenamePlaylist( author(), guid(), title );
     Database::instance()->enqueue( QSharedPointer<DatabaseCommand>(cmd) );
-
-    return true; // FIXME
 }
 
 
@@ -586,8 +576,9 @@ Playlist::checkRevisionQueue()
     {
         RevisionQueueItem item = m_revisionQueue.dequeue();
 
-        if ( item.oldRev != currentrevision() && item.applyToTip ) // this was applied to the then-latest, but the already-running operation changed it so it's out of date now. fix it
+        if ( item.oldRev != currentrevision() && item.applyToTip )
         {
+            // this was applied to the then-latest, but the already-running operation changed it so it's out of date now. fix it
             if ( item.oldRev == item.newRev )
             {
                 checkRevisionQueue();

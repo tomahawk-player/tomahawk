@@ -99,6 +99,7 @@ private:
     Tomahawk::playlist_ptr m_playlist;
     bool m_isTemporary;
     QList< Tomahawk::Query* > m_waitingForResolved;
+    QStringList m_waitForRevision;
 
     DropStorageData m_dropStorage;
 };

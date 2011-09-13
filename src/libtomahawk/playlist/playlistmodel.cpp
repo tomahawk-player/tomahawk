@@ -331,8 +331,10 @@ PlaylistModel::onDataChanged()
 void
 PlaylistModel::onRevisionLoaded( Tomahawk::PlaylistRevision revision )
 {
-    if ( m_playlist->author() != SourceList::instance()->getLocal() )
+    if ( !m_waitForRevision.contains( revision.revisionguid ) )
         loadPlaylist( m_playlist );
+    else
+        m_waitForRevision.removeAll( revision.revisionguid );
 }
 
 
@@ -432,25 +434,20 @@ PlaylistModel::parsedDroppedTracks( QList< query_ptr > tracks )
 void
 PlaylistModel::onPlaylistChanged()
 {
-    qDebug() << Q_FUNC_INFO;
-
     if ( m_playlist.isNull() )
         return;
 
     QList<plentry_ptr> l = playlistEntries();
-    foreach( const plentry_ptr& ple, l )
-    {
-        qDebug() << "updateinternal:" << ple->query()->toString();
-    }
-
     QString newrev = uuid();
-    if( dynplaylist_ptr dynplaylist = m_playlist.dynamicCast<Tomahawk::DynamicPlaylist>() )
+    m_waitForRevision << newrev;
+
+    if ( dynplaylist_ptr dynplaylist = m_playlist.dynamicCast<Tomahawk::DynamicPlaylist>() )
     {
-        if( dynplaylist->mode() == OnDemand )
+        if ( dynplaylist->mode() == OnDemand )
         {
             dynplaylist->createNewRevision( newrev );
         }
-        else if( dynplaylist->mode() == Static )
+        else if ( dynplaylist->mode() == Static )
         {
             dynplaylist->createNewRevision( newrev, dynplaylist->currentrevision(), dynplaylist->type(), dynplaylist->generator()->controls(), l );
         }

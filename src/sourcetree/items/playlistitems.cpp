@@ -196,12 +196,13 @@ PlaylistItem::dropMimeData( const QMimeData* data, Qt::DropAction action )
     else
         dj->tracksFromMimeData( data, false, false );
 
-    // TODO cant' know if it works or not yet...
+    // TODO can't know if it works or not yet...
     return true;
 }
 
+
 void
-PlaylistItem::parsedDroppedTracks( const QList< query_ptr >& tracks)
+PlaylistItem::parsedDroppedTracks( const QList< query_ptr >& tracks )
 {
     qDebug() << "adding" << tracks.count() << "tracks";
     if ( tracks.count() && !m_playlist.isNull() && m_playlist->author()->isLocal() )
