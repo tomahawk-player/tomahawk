@@ -134,6 +134,7 @@ protected:
     void incomingConnection( int sd );
 
 public slots:
+    void setInternalAddress();
     void setExternalAddress( QHostAddress ha, unsigned int port );
 
     void socketError( QAbstractSocket::SocketError );

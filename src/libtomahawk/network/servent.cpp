@@ -136,26 +136,10 @@ Servent::startListening( QHostAddress ha, bool upnp, int port )
     if ( mode == TomahawkSettings::Upnp && !upnp )
         mode = TomahawkSettings::Lan;
 
-    switch( mode )
+    switch ( mode )
     {
         case TomahawkSettings::Lan:
-            foreach( QHostAddress ha, QNetworkInterface::allAddresses() )
-            {
-                if( ha.toString() == "127.0.0.1" ) continue;
-                if( ha.toString().contains( ":" ) ) continue; //ipv6
-
-                if ( qApp->arguments().contains( "--lanhack" ) )
-                {
-                    tLog() << "LANHACK: set external address to lan address" << ha.toString();
-                    QMetaObject::invokeMethod( this, "setExternalAddress", Qt::QueuedConnection, Q_ARG( QHostAddress, ha ), Q_ARG( unsigned int, m_port ) );
-                }
-                else
-                {
-                    m_ready = true;
-                    emit ready();
-                }
-                break;
-            }
+            setInternalAddress();
             break;
 
         case TomahawkSettings::Upnp:
@@ -179,13 +163,38 @@ Servent::createConnectionKey( const QString& name, const QString &nodeid, const 
     QString _key = ( key.isEmpty() ? uuid() : key );
     ControlConnection* cc = new ControlConnection( this );
     cc->setName( name.isEmpty() ? QString( "KEY(%1)" ).arg( key ) : name );
-    if( !nodeid.isEmpty() )
+    if ( !nodeid.isEmpty() )
         cc->setId( nodeid );
     cc->setOnceOnly( onceOnly );
 
     tDebug( LOGVERBOSE ) << "Creating connection key with name of" << cc->name() << "and id of" << cc->id() << "and key of" << _key << "; key is once only? :" << (onceOnly ? "true" : "false");
     registerOffer( _key, cc );
     return _key;
+}
+
+
+void
+Servent::setInternalAddress()
+{
+    foreach ( QHostAddress ha, QNetworkInterface::allAddresses() )
+    {
+        if ( ha.toString() == "127.0.0.1" )
+            continue;
+        if ( ha.toString().contains( ":" ) )
+            continue; //ipv6
+
+        if ( qApp->arguments().contains( "--lanhack" ) )
+        {
+            tLog() << "LANHACK: set external address to lan address" << ha.toString();
+            setExternalAddress( ha, m_port );
+        }
+        else
+        {
+            m_ready = true;
+            emit ready();
+        }
+        break;
+    }
 }
 
 
@@ -198,6 +207,7 @@ Servent::setExternalAddress( QHostAddress ha, unsigned int port )
         if ( ip.startsWith( "10." ) || ip.startsWith( "172.16." ) || ip.startsWith( "192.168." ) )
         {
             tDebug() << Q_FUNC_INFO << "Tried to set an invalid ip as external address!";
+            setInternalAddress();
             return;
         }
 
