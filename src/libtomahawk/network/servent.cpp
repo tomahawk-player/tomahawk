@@ -241,7 +241,7 @@ Servent::setExternalAddress( QHostAddress ha, unsigned int port )
 void
 Servent::registerOffer( const QString& key, Connection* conn )
 {
-    m_offers[key] = QPointer<Connection>(conn);
+    m_offers[key] = QWeakPointer<Connection>(conn);
 }
 
 
@@ -629,7 +629,7 @@ Servent::claimOffer( ControlConnection* cc, const QString &nodeid, const QString
 
     if( m_offers.contains( key ) )
     {
-        QPointer<Connection> conn = m_offers.value( key );
+        QWeakPointer<Connection> conn = m_offers.value( key );
         if( conn.isNull() )
         {
             // This can happen if it's a streamconnection, but the audioengine has
@@ -642,21 +642,21 @@ Servent::claimOffer( ControlConnection* cc, const QString &nodeid, const QString
         if( !nodeid.isEmpty() )
         {
             // If there isn't a nodeid it's not the first connection and will already have been stopped
-            if( !checkACL( conn, nodeid, true ) )
+            if( !checkACL( conn.data(), nodeid, true ) )
             {
                 tLog() << "Connection not allowed due to ACL";
                 return NULL;
             }
         }
 
-        if( conn->onceOnly() )
+        if( conn.data()->onceOnly() )
         {
             m_offers.remove( key );
             return conn.data();
         }
         else
         {
-            return conn->clone();
+            return conn.data()->clone();
         }
     }
     else if ( noauth )

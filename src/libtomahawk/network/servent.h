@@ -158,7 +158,7 @@ private:
 
     QJson::Parser parser;
     QList< ControlConnection* > m_controlconnections; // canonical list of authed peers
-    QMap< QString, QPointer<Connection> > m_offers;
+    QMap< QString, QWeakPointer<Connection> > m_offers;
     int m_port, m_externalPort;
     QHostAddress m_externalAddress;
     QString m_externalHostname;
