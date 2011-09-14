@@ -82,7 +82,6 @@
 
 #include <sys/resource.h>
 #include <sys/sysctl.h>
-#include <thirdparty/jreen/bot/bot.h>
 #endif
 
 
