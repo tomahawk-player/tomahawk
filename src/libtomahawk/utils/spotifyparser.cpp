@@ -213,7 +213,7 @@ SpotifyParser::spotifyTrackLookupFinished()
             return;
         }
 
-        Tomahawk::query_ptr q = Tomahawk::Query::get( artist, title, album, uuid(), true );
+        Tomahawk::query_ptr q = Tomahawk::Query::get( artist, title, album, uuid(), m_trackMode );
         m_tracks << q;
 
     } else
