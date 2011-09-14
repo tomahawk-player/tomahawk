@@ -25,8 +25,8 @@
 #include "dllmacro.h"
 
 /**
- * \class PushButton
- * \brief A styled push-button that has a header background.
+ * \class ToggleButton
+ * \brief A styled toggle-button that has a header background.
  */
 class DLLEXPORT ToggleButton : public QPushButton
 {
@@ -35,6 +35,9 @@ Q_OBJECT
 public:
     ToggleButton( QWidget* parent = 0 );
     virtual ~ToggleButton();
+
+public slots:
+    virtual void setText( const QString& text );
 
 protected:
     virtual void paintEvent( QPaintEvent* );

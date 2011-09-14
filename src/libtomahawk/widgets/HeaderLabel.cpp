@@ -74,7 +74,7 @@ HeaderLabel::paintEvent( QPaintEvent* /* event */ )
 {
     QPainter p( this );
     QRect r = contentsRect();
-    StyleHelper::horizontalHeader(&p, r);
+    StyleHelper::horizontalHeader( &p, r );
 
     QTextOption to( alignment() | Qt::AlignVCenter );
     r.adjust( 8, 0, -8, 0 );

@@ -54,7 +54,6 @@ ArtistInfoWidget::ArtistInfoWidget( const Tomahawk::artist_ptr& artist, QWidget*
     TomahawkUtils::unmarginLayout( ui->layoutWidget->layout() );
     TomahawkUtils::unmarginLayout( ui->layoutWidget1->layout() );
     TomahawkUtils::unmarginLayout( ui->layoutWidget2->layout() );
-    TomahawkUtils::unmarginLayout( ui->verticalLayout_5->layout() );
     TomahawkUtils::unmarginLayout( ui->albumHeader->layout() );
 
     m_albumsModel = new TreeModel( ui->albums );
@@ -70,7 +69,6 @@ ArtistInfoWidget::ArtistInfoWidget( const Tomahawk::artist_ptr& artist, QWidget*
     ui->topHits->setTrackModel( m_topHitsModel );
 
     ui->albumHeader->setContentsMargins( 0, 0, 4, 0 );
-    ui->button->setFixedWidth( 200 );
     ui->button->setChecked( true );
 
     m_pixmap = QPixmap( RESPATH "images/no-album-art-placeholder.png" ).scaledToWidth( 48, Qt::SmoothTransformation );
