@@ -45,12 +45,23 @@ DatabaseCommand_CreatePlaylist::DatabaseCommand_CreatePlaylist( const source_ptr
 {
 }
 
+DatabaseCommand_CreatePlaylist::~DatabaseCommand_CreatePlaylist()
+{}
 
 void
 DatabaseCommand_CreatePlaylist::exec( DatabaseImpl* lib )
 {
     createPlaylist( lib, false );
 }
+
+QVariant
+DatabaseCommand_CreatePlaylist::playlistV() const
+{
+    if( m_v.isNull() )
+        return QJson::QObjectHelper::qobject2qvariant( (QObject*)m_playlist.data() );
+    else
+        return m_v;
+ }
 
 
 void

@@ -28,6 +28,8 @@
 
 using namespace Tomahawk;
 
+Album::Album() {}
+Album::~Album() {}
 
 album_ptr
 Album::get( const Tomahawk::artist_ptr& artist, const QString& name, bool autoCreate )
@@ -98,6 +100,11 @@ Album::siblingItem( int itemsAway )
     return m_currentItem;
 }
 
+result_ptr
+Album::currentItem() const
+{
+    return m_currentItem;
+}
 
 bool
 Album::hasNextItem()
@@ -110,6 +117,11 @@ Album::hasNextItem()
     return true;
 }
 
+artist_ptr
+Album::artist() const
+{
+    return m_artist;
+}
 
 QList<Tomahawk::query_ptr>
 Album::tracks()

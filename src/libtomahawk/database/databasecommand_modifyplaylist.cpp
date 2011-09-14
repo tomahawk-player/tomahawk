@@ -19,6 +19,7 @@
 #include "databasecommand_modifyplaylist.h"
 
 #include "utils/logger.h"
+#include "playlist.h"
 
 using namespace Tomahawk;
 
@@ -31,6 +32,8 @@ DatabaseCommand_ModifyPlaylist::DatabaseCommand_ModifyPlaylist( Playlist* playli
 {
 }
 
+DatabaseCommand_ModifyPlaylist::~DatabaseCommand_ModifyPlaylist()
+{}
 
 void
 DatabaseCommand_ModifyPlaylist::exec( DatabaseImpl* lib )

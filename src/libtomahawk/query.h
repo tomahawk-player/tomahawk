@@ -77,7 +77,7 @@ public:
     bool resolvingFinished() const { return m_resolveFinished; }
     float howSimilar( const Tomahawk::result_ptr& r );
 
-    QPair< Tomahawk::source_ptr, unsigned int > playedBy() const { return m_playedBy; }
+    QPair< Tomahawk::source_ptr, unsigned int > playedBy() const;
     Tomahawk::Resolver* currentResolver() const;
     QList< QWeakPointer< Tomahawk::Resolver > > resolvedBy() const { return m_resolvers; }
 
@@ -126,6 +126,8 @@ private slots:
     void refreshResults();
 
 private:
+    Query();
+
     void init();
 
     void setCurrentResolver( Tomahawk::Resolver* resolver );

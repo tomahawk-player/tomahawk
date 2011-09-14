@@ -37,6 +37,7 @@ class DatabaseCommand_CreateDynamicPlaylist : public DatabaseCommand_CreatePlayl
 public:
     explicit DatabaseCommand_CreateDynamicPlaylist( QObject* parent = 0 );
     explicit DatabaseCommand_CreateDynamicPlaylist( const Tomahawk::source_ptr& author, const Tomahawk::dynplaylist_ptr& playlist, bool autoLoad = true );
+    virtual ~DatabaseCommand_CreateDynamicPlaylist();
 
     QString commandname() const { return "createdynamicplaylist"; }
 
@@ -46,13 +47,7 @@ public:
 
     virtual bool loggable() const { return m_autoLoad; }
 
-    QVariant playlistV() const
-    {
-        if( m_v.isNull() )
-            return QJson::QObjectHelper::qobject2qvariant( (QObject*)m_playlist.data() );
-        else
-            return m_v;
-    }
+    QVariant playlistV() const;
 
     void setPlaylistV( const QVariant& v )
     {

@@ -39,18 +39,10 @@ class DLLEXPORT XSPFLoader : public QObject
 Q_OBJECT
 
 public:
-    explicit XSPFLoader( bool autoCreate = true, QObject* parent = 0 )
-        : QObject( parent )
-        , m_autoCreate( autoCreate )
-        , m_NS("http://xspf.org/ns/0/")
-    {}
+    explicit XSPFLoader( bool autoCreate = true, QObject* parent = 0 );
 
-    virtual ~XSPFLoader()
-    {
-        qDebug() << Q_FUNC_INFO;
-    }
-
-    QList< Tomahawk::query_ptr > entries() const { return m_entries; }
+    virtual ~XSPFLoader();
+    QList< Tomahawk::query_ptr > entries() const;
 
     void setOverrideTitle( const QString& newTitle );
 

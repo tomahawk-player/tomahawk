@@ -32,6 +32,8 @@ DatabaseCommand_Resolve::DatabaseCommand_Resolve( const query_ptr& query )
 {
 }
 
+DatabaseCommand_Resolve::~DatabaseCommand_Resolve()
+{}
 
 void
 DatabaseCommand_Resolve::exec( DatabaseImpl* lib )

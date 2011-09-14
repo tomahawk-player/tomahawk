@@ -37,7 +37,7 @@ public:
     };
 
     explicit CustomPlaylistView( PlaylistType type, const source_ptr& s, QWidget* parent = 0 );
-    virtual ~CustomPlaylistView() {}
+    virtual ~CustomPlaylistView();
 
     virtual bool showFilter() const { return false; }
     virtual bool showStatsBar() const { return false; }

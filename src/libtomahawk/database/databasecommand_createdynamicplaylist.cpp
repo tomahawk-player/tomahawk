@@ -52,6 +52,17 @@ DatabaseCommand_CreateDynamicPlaylist::DatabaseCommand_CreateDynamicPlaylist( co
     tDebug() << Q_FUNC_INFO << "creating dynamiccreatecommand 2";
 }
 
+DatabaseCommand_CreateDynamicPlaylist::~DatabaseCommand_CreateDynamicPlaylist()
+{}
+
+QVariant
+DatabaseCommand_CreateDynamicPlaylist::playlistV() const
+{
+        if( m_v.isNull() )
+            return QJson::QObjectHelper::qobject2qvariant( (QObject*)m_playlist.data() );
+        else
+            return m_v;
+}
 
 void
 DatabaseCommand_CreateDynamicPlaylist::exec( DatabaseImpl* lib )

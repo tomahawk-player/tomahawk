@@ -43,7 +43,7 @@ namespace Tomahawk
 {
 
 class DynamicModel;
-
+class DynamicControl;
 class DynamicSetupWidget;
 class DynamicView;
 class CollapsibleControls;

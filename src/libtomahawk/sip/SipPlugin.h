@@ -60,8 +60,9 @@ public:
     enum SipErrorCode { AuthError, ConnectionError }; // Placeholder for errors, to be defined
     enum ConnectionState { Disconnected, Connecting, Connected, Disconnecting };
 
+    SipPlugin();
     explicit SipPlugin( const QString& pluginId, QObject* parent = 0 );
-    virtual ~SipPlugin() {}
+    virtual ~SipPlugin();
 
     // plugin id is "pluginfactoryname_someuniqueid".  get it from SipPluginFactory::generateId
     QString pluginId() const;

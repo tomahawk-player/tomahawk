@@ -27,8 +27,8 @@
 #include <QToolButton>
 #include <QPropertyAnimation>
 
-#include <echonest/Playlist.h>
-#include <dynamic/widgets/DynamicWidget.h>
+#include "echonest/Playlist.h"
+#include "dynamic/widgets/DynamicWidget.h"
 
 #include "utils/tomahawkutils.h"
 #include "utils/logger.h"

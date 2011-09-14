@@ -22,4 +22,4 @@
 
 void script( const char* status );
 
-#endif ADIUM_TOMAHAWK_H
+#endif

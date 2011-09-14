@@ -38,14 +38,11 @@ class DLLEXPORT JSPFLoader : public QObject
 Q_OBJECT
 
 public:
-    explicit JSPFLoader( bool autoCreate = true, QObject* parent = 0 )
-        : QObject( parent )
-        , m_autoCreate( autoCreate )
-    {}
+    explicit JSPFLoader( bool autoCreate = true, QObject* parent = 0 );
 
-    virtual ~JSPFLoader() {}
+    virtual ~JSPFLoader();
 
-    QList< Tomahawk::query_ptr > entries() const { return m_entries; }
+    QList< Tomahawk::query_ptr > entries() const;
     void setOverrideTitle( const QString& newTitle ) { m_overrideTitle = newTitle; }
 
 signals:

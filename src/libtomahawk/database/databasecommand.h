@@ -47,10 +47,7 @@ public:
     explicit DatabaseCommand( QObject* parent = 0 );
     explicit DatabaseCommand( const Tomahawk::source_ptr& src, QObject* parent = 0 );
 
-    DatabaseCommand( const DatabaseCommand &other )
-        : QObject( other.parent() )
-    {
-    }
+    DatabaseCommand( const DatabaseCommand &other );
 
     virtual ~DatabaseCommand();
 
@@ -69,8 +66,8 @@ public:
     void postCommit() { postCommitHook(); emit committed(); }
     virtual void postCommitHook(){};
 
-    void setSource( const Tomahawk::source_ptr& s ) { m_source = s; }
-    const Tomahawk::source_ptr& source() const { return m_source; }
+    void setSource( const Tomahawk::source_ptr& s );
+    const Tomahawk::source_ptr& source() const;
 
     virtual bool loggable() const { return false; }
     virtual bool singletonCmd() const { return false; }

@@ -30,6 +30,15 @@
 
 using namespace Tomahawk;
 
+XSPFLoader::XSPFLoader( bool autoCreate, QObject *parent )
+    : QObject( parent )
+    , m_autoCreate( autoCreate )
+    , m_NS("http://xspf.org/ns/0/")
+{}
+
+
+XSPFLoader::~XSPFLoader()
+{}
 
 void
 XSPFLoader::setOverrideTitle( const QString& newTitle )
@@ -37,6 +46,11 @@ XSPFLoader::setOverrideTitle( const QString& newTitle )
     m_overrideTitle = newTitle;
 }
 
+QList< Tomahawk::query_ptr >
+XSPFLoader::entries() const
+{
+    return m_entries;
+}
 
 void
 XSPFLoader::load( const QUrl& url )

@@ -36,13 +36,8 @@ public:
         ModificationTime = 1
     };
 
-    explicit DatabaseCommand_AllArtists( const Tomahawk::collection_ptr& collection = Tomahawk::collection_ptr(), QObject* parent = 0 )
-        : DatabaseCommand( parent )
-        , m_collection( collection )
-        , m_amount( 0 )
-        , m_sortOrder( DatabaseCommand_AllArtists::None )
-        , m_sortDescending( false )
-    {}
+    explicit DatabaseCommand_AllArtists( const Tomahawk::collection_ptr& collection = Tomahawk::collection_ptr(), QObject* parent = 0 );
+    virtual ~DatabaseCommand_AllArtists();
 
     virtual void exec( DatabaseImpl* );
 

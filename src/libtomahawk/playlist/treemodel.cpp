@@ -73,6 +73,11 @@ TreeModel::clear()
     }
 }
 
+Tomahawk::collection_ptr
+TreeModel::collection() const
+{
+    return m_collection;
+}
 
 void
 TreeModel::getCover( const QModelIndex& index )

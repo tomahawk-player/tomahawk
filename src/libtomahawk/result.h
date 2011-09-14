@@ -123,6 +123,7 @@ private slots:
 private:
     // private constructor
     explicit Result( const QString& url );
+    Result();
 
     void updateAttributes();
     void parseSocialActions();

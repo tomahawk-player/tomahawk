@@ -170,6 +170,12 @@ Collection::station( const QString& guid )
     return m_stations.value( guid, dynplaylist_ptr() );
 }
 
+QList< query_ptr >
+Collection::tracks() const
+{
+    return m_tracks;
+}
+
 
 void
 Collection::setPlaylists( const QList<Tomahawk::playlist_ptr>& plists )

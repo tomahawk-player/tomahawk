@@ -24,7 +24,7 @@
 #include <QMap>
 
 #include "databasecommand.h"
-
+#include "result.h"
 #include "dllmacro.h"
 
 class DLLEXPORT DatabaseCommand_LoadFile : public DatabaseCommand

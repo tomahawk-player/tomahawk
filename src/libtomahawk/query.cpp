@@ -432,6 +432,12 @@ Query::howSimilar( const Tomahawk::result_ptr& r )
 }
 
 
+QPair< Tomahawk::source_ptr, unsigned int >
+Query::playedBy() const
+{
+    return m_playedBy;
+}
+
 int
 Query::levenshtein( const QString& source, const QString& target )
 {

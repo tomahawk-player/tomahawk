@@ -21,7 +21,10 @@
 #include "globalactionmanager.h"
 #include "playlistview.h"
 #include "viewmanager.h"
-
+#include "query.h"
+#include "source.h"
+#include "artist.h"
+#include "album.h"
 #include "utils/logger.h"
 
 using namespace Tomahawk;
@@ -36,6 +39,8 @@ ContextMenu::ContextMenu( QWidget* parent )
     m_supportedActions = ActionPlay | ActionQueue | ActionCopyLink;
 }
 
+ContextMenu::~ContextMenu()
+{}
 
 void
 ContextMenu::clear()
@@ -47,6 +52,11 @@ ContextMenu::clear()
     m_artists.clear();
 }
 
+unsigned int
+ContextMenu::itemCount() const
+{
+   return  m_queries.count() + m_artists.count() + m_albums.count();
+}
 
 void
 ContextMenu::setQueries( const QList<Tomahawk::query_ptr>& queries )

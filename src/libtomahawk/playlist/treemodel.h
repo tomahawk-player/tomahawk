@@ -89,7 +89,7 @@ public:
 
     virtual QPersistentModelIndex currentItem() { return m_currentIndex; }
 
-    Tomahawk::collection_ptr collection() const { return m_collection; }
+    Tomahawk::collection_ptr collection() const;
 
     void addAllCollections();
     void addCollection( const Tomahawk::collection_ptr& collection );

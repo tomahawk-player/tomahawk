@@ -32,6 +32,7 @@ set( libSources
     globalactionmanager.cpp
     contextmenu.cpp
     dropjob.cpp
+    playlistinterface.cpp
 
     sip/SipPlugin.cpp
     sip/SipHandler.cpp
@@ -145,6 +146,7 @@ set( libSources
     playlist/dynamic/GeneratorInterface.cpp
     playlist/dynamic/DynamicView.cpp
     playlist/dynamic/DynamicModel.cpp
+    playlist/dynamic/DynamicPlaylistRevision.cpp
     playlist/dynamic/echonest/EchonestGenerator.cpp
     playlist/dynamic/echonest/EchonestControl.cpp
     playlist/dynamic/echonest/EchonestSteerer.cpp

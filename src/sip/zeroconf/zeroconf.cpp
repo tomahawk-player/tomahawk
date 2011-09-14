@@ -30,6 +30,8 @@ ZeroconfFactory::createPlugin( const QString& pluginId )
     return new ZeroconfPlugin( pluginId.isEmpty() ? generateId() : pluginId );
 }
 
+ZeroconfPlugin::ZeroconfPlugin() : SipPlugin( "") {}
+
 ZeroconfPlugin::ZeroconfPlugin ( const QString& pluginId )
     : SipPlugin( pluginId )
     , m_zeroconf( 0 )
@@ -38,6 +40,8 @@ ZeroconfPlugin::ZeroconfPlugin ( const QString& pluginId )
 {
     qDebug() << Q_FUNC_INFO;
 }
+
+ZeroconfPlugin::~ZeroconfPlugin() {}
 
 const QString
 ZeroconfPlugin::name() const

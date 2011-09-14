@@ -61,6 +61,19 @@ AlbumProxyModel::setSourceAlbumModel( AlbumModel* sourceModel )
     QSortFilterProxyModel::setSourceModel( sourceModel );
 }
 
+QList< Tomahawk::query_ptr >
+AlbumProxyModel::tracks()
+{
+     Q_ASSERT( FALSE );
+    QList<Tomahawk::query_ptr> queries;
+    return queries;
+}
+
+Tomahawk::result_ptr
+AlbumProxyModel::currentItem() const
+{
+     return Tomahawk::result_ptr();
+}
 
 void
 AlbumProxyModel::setFilter( const QString& pattern )

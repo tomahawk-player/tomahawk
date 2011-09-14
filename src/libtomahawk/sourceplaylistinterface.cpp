@@ -35,6 +35,8 @@ SourcePlaylistInterface::SourcePlaylistInterface( Tomahawk::source_ptr& source )
     connect( source.data(), SIGNAL( playbackStarted( const Tomahawk::query_ptr& ) ), SLOT( onSourcePlaybackStarted( const Tomahawk::query_ptr& ) ) );
 }
 
+SourcePlaylistInterface::~SourcePlaylistInterface()
+{}
 
 Tomahawk::result_ptr
 SourcePlaylistInterface::siblingItem( int itemsAway )
@@ -65,6 +67,11 @@ SourcePlaylistInterface::nextItem()
     return m_currentItem;
 }
 
+result_ptr
+SourcePlaylistInterface::currentItem() const
+{
+    return m_currentItem;
+}
 
 bool
 SourcePlaylistInterface::hasNextItem()
@@ -81,6 +88,13 @@ QList<Tomahawk::query_ptr>
 SourcePlaylistInterface::tracks()
 {
     return m_source->collection()->tracks();
+}
+
+
+source_ptr
+SourcePlaylistInterface::source() const
+{
+    return m_source;
 }
 
 

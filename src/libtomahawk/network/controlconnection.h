@@ -45,7 +45,7 @@ public:
 
     DBSyncConnection* dbSyncConnection();
 
-    Tomahawk::source_ptr source() const { return m_source; }
+    Tomahawk::source_ptr source() const;
 
 protected:
     virtual void setup();

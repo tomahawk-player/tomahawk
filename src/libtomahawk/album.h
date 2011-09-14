@@ -38,10 +38,11 @@ public:
     static album_ptr get( unsigned int id, const QString& name, const Tomahawk::artist_ptr& artist );
 
     Album( unsigned int id, const QString& name, const Tomahawk::artist_ptr& artist );
+    ~Album();
 
     unsigned int id() const { return m_id; }
     QString name() const { return m_name; }
-    artist_ptr artist() const { return m_artist; }
+    artist_ptr artist() const;
 
     QList<Tomahawk::query_ptr> tracks();
 
@@ -51,7 +52,7 @@ public:
     virtual Tomahawk::result_ptr siblingItem( int itemsAway );
 
     virtual bool hasNextItem();
-    virtual Tomahawk::result_ptr currentItem() const { return m_currentItem; }
+    virtual Tomahawk::result_ptr currentItem() const;
 
     virtual PlaylistInterface::RepeatMode repeatMode() const { return PlaylistInterface::NoRepeat; }
     virtual bool shuffled() const { return false; }
@@ -75,6 +76,8 @@ private slots:
     void onTracksAdded( const QList<Tomahawk::query_ptr>& tracks );
 
 private:
+    Album();
+
     unsigned int m_id;
     QString m_name;
 

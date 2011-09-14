@@ -32,9 +32,10 @@
 #include <QWidget>
 
 #include "viewpage.h"
-
 #include "dllmacro.h"
 #include "typedefs.h"
+#include "album.h"
+#include "query.h"
 
 class AlbumModel;
 class PlaylistModel;

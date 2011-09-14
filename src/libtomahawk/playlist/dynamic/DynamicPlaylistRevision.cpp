@@ -16,27 +16,21 @@
  *   along with Tomahawk. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef DYNAMIC_PLAYLIST_REVISION_H
-#define DYNAMIC_PLAYLIST_REVISION_H
+#include "DynamicPlaylistRevision.h"
 
-#include "playlist.h"
-#include "dllmacro.h"
+#include "dynamic/DynamicControl.h"
 
-namespace Tomahawk
+using namespace Tomahawk;
+
+DynamicPlaylistRevision::DynamicPlaylistRevision(const PlaylistRevision &other)
 {
-
-struct DLLEXPORT DynamicPlaylistRevision : PlaylistRevision
-{
-public:
-
-    QList< dyncontrol_ptr > controls;
-    Tomahawk::GeneratorMode mode;
-    QString type;
-
-    DynamicPlaylistRevision( const PlaylistRevision& other );
-    DynamicPlaylistRevision();
-};
-
+    revisionguid = other.revisionguid;
+    oldrevisionguid = other.oldrevisionguid;
+    newlist = other.newlist;
+    added = other.added;
+    removed = other.removed;
+    applied = other.applied;
 }
 
-#endif
+DynamicPlaylistRevision::DynamicPlaylistRevision()
+{}

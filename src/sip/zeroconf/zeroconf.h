@@ -48,18 +48,16 @@ class SIPDLLEXPORT ZeroconfPlugin : public SipPlugin
     Q_OBJECT
 
 public:
+    ZeroconfPlugin();
     ZeroconfPlugin( const QString& pluginId );
 
-    virtual ~ZeroconfPlugin()
-    {
-        qDebug() << Q_FUNC_INFO;
-    }
+    virtual ~ZeroconfPlugin();
 
     virtual const QString name() const;
     virtual const QString friendlyName() const;
     virtual const QString accountName() const;
     virtual ConnectionState connectionState() const;
-    virtual bool isValid() const { return true; };
+    virtual bool isValid() const { return true; }
     virtual QIcon icon() const;
     virtual void checkSettings() {}
 

@@ -24,10 +24,10 @@
 
 #include "artist.h"
 #include "album.h"
+#include "databasecommand.h"
 
 #include "dllmacro.h"
 
-class DatabaseCommand;
 class DatabaseImpl;
 class DatabaseWorker;
 

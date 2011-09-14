@@ -25,6 +25,7 @@
 #include "result.h"
 #include "playlistinterface.h"
 #include "infosystem/infosystem.h"
+#include "query.h"
 
 class QDropEvent;
 class QDragEnterEvent;

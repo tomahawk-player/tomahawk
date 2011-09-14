@@ -26,6 +26,23 @@
 #include "utils/tomahawkutils.h"
 #include "utils/logger.h"
 
+DatabaseCommand_AllAlbums::DatabaseCommand_AllAlbums( const Tomahawk::collection_ptr &collection, const Tomahawk::artist_ptr &artist, QObject *parent )
+  : DatabaseCommand( parent )
+  , m_collection( collection )
+  , m_artist( artist )
+  , m_amount( 0 )
+  , m_sortOrder( DatabaseCommand_AllAlbums::None )
+  , m_sortDescending( false )
+{}
+
+DatabaseCommand_AllAlbums::~DatabaseCommand_AllAlbums()
+{}
+
+void
+DatabaseCommand_AllAlbums::setArtist( const Tomahawk::artist_ptr &artist )
+{
+    m_artist = artist;
+}
 
 void
 DatabaseCommand_AllAlbums::execForArtist( DatabaseImpl* dbi )

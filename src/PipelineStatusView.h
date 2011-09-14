@@ -23,6 +23,7 @@
 
 #include "typedefs.h"
 #include "widgets/animatedsplitter.h"
+#include "query.h"
 
 class StreamConnection;
 

@@ -40,11 +40,8 @@ public:
     enum SkipRestrictions { NoSkipRestrictions, NoSkipForwards, NoSkipBackwards, NoSkip };
     enum RetryMode { NoRetry, Retry };
 
-    PlaylistInterface( QObject* parent = 0 ) : m_object( parent )
-    {
-        qRegisterMetaType<Tomahawk::PlaylistInterface::RepeatMode>( "Tomahawk::PlaylistInterface::RepeatMode" );
-    }
-    virtual ~PlaylistInterface() {}
+    explicit PlaylistInterface( QObject* parent = 0 );
+    virtual ~PlaylistInterface();
 
     virtual QList< Tomahawk::query_ptr > tracks() = 0;
 
@@ -52,9 +49,9 @@ public:
     virtual int trackCount() const = 0;
 
     virtual Tomahawk::result_ptr currentItem() const = 0;
-    virtual Tomahawk::result_ptr previousItem() { return siblingItem( -1 ); }
+    virtual Tomahawk::result_ptr previousItem();
     virtual bool hasNextItem() { return true; }
-    virtual Tomahawk::result_ptr nextItem() { return siblingItem( 1 ); }
+    virtual Tomahawk::result_ptr nextItem();
     virtual Tomahawk::result_ptr siblingItem( int itemsAway ) = 0;
 
     virtual PlaylistInterface::RepeatMode repeatMode() const = 0;
@@ -99,6 +96,8 @@ signals:
     virtual void nextTrackReady() = 0;
 
 private:
+    Q_DISABLE_COPY( PlaylistInterface )
+
     QObject* m_object;
     Tomahawk::playlistinterface_ptr m_sharedPtr;
 

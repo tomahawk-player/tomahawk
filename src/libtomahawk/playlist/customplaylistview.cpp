@@ -51,6 +51,8 @@ CustomPlaylistView::CustomPlaylistView( CustomPlaylistView::PlaylistType type, c
     }
 }
 
+CustomPlaylistView::~CustomPlaylistView()
+{}
 
 void
 CustomPlaylistView::generateTracks()

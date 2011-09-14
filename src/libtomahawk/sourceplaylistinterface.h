@@ -36,6 +36,7 @@ Q_OBJECT
 
 public:
     SourcePlaylistInterface( Tomahawk::source_ptr& source );
+    ~SourcePlaylistInterface();
 
     QList<Tomahawk::query_ptr> tracks();
 
@@ -45,7 +46,7 @@ public:
     virtual Tomahawk::result_ptr siblingItem( int itemsAway );
     virtual bool hasNextItem();
     virtual Tomahawk::result_ptr nextItem();
-    virtual Tomahawk::result_ptr currentItem() const { return m_currentItem; }
+    virtual Tomahawk::result_ptr currentItem() const;
 
     virtual PlaylistInterface::RepeatMode repeatMode() const { return PlaylistInterface::NoRepeat; }
     virtual PlaylistInterface::SeekRestrictions seekRestrictions() const { return PlaylistInterface::NoSeek; }
@@ -56,7 +57,7 @@ public:
     virtual bool shuffled() const { return false; }
     virtual void setFilter( const QString& /*pattern*/ ) {}
 
-    virtual Tomahawk::source_ptr source() const { return m_source; }
+    virtual Tomahawk::source_ptr source() const;
 
     virtual void reset();
 
@@ -76,6 +77,8 @@ private slots:
     void resolvingFinished( bool hasResults );
 
 private:
+    SourcePlaylistInterface();
+
     Tomahawk::source_ptr m_source;
     Tomahawk::result_ptr m_currentItem;
     bool m_gotNextItem;

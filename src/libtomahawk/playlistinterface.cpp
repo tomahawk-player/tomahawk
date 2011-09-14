@@ -1,6 +1,6 @@
 /* === This file is part of Tomahawk Player - <http://tomahawk-player.org> ===
  *
- *   Copyright 2010-2011, Leo Franchi <lfranchi@kde.org>
+ *   Copyright 2011, Leo Franchi <lfranchi@kde.org>
  *
  *   Tomahawk is free software: you can redistribute it and/or modify
  *   it under the terms of the GNU General Public License as published by
@@ -16,27 +16,30 @@
  *   along with Tomahawk. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef DYNAMIC_PLAYLIST_REVISION_H
-#define DYNAMIC_PLAYLIST_REVISION_H
+#include "playlistinterface.h"
 
-#include "playlist.h"
-#include "dllmacro.h"
+#include "result.h"
 
-namespace Tomahawk
+using namespace Tomahawk;
+
+PlaylistInterface::PlaylistInterface (QObject *parent )
+    : m_object( parent )
 {
-
-struct DLLEXPORT DynamicPlaylistRevision : PlaylistRevision
-{
-public:
-
-    QList< dyncontrol_ptr > controls;
-    Tomahawk::GeneratorMode mode;
-    QString type;
-
-    DynamicPlaylistRevision( const PlaylistRevision& other );
-    DynamicPlaylistRevision();
-};
-
+    qRegisterMetaType<Tomahawk::PlaylistInterface::RepeatMode>( "Tomahawk::PlaylistInterface::RepeatMode" );
 }
 
-#endif
+PlaylistInterface::~PlaylistInterface()
+{
+}
+
+result_ptr
+PlaylistInterface::previousItem()
+{
+     return siblingItem( -1 );
+}
+
+result_ptr
+PlaylistInterface::nextItem()
+{
+     return siblingItem( 1 );
+}

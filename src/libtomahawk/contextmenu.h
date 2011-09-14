@@ -37,6 +37,7 @@ public:
     { ActionPlay = 1, ActionQueue = 2, ActionDelete = 4, ActionCopyLink = 8 };
 
     explicit ContextMenu( QWidget* parent = 0 );
+    virtual ~ContextMenu();
 
     int supportedActions() const { return m_supportedActions; }
     void setSupportedActions( int actions ) { m_supportedActions = actions; }
@@ -52,7 +53,7 @@ public:
 
     void clear();
 
-    unsigned int itemCount() const { return m_queries.count() + m_artists.count() + m_albums.count(); }
+    unsigned int itemCount() const;
 
 signals:
     void triggered( int action );

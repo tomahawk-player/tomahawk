@@ -25,6 +25,7 @@
 #include "databasecommand.h"
 #include "collection.h"
 #include "typedefs.h"
+#include "query.h"
 
 #include "dllmacro.h"
 

@@ -120,6 +120,12 @@ Artist::hasNextItem()
     return true;
 }
 
+result_ptr
+Artist::currentItem() const
+{
+    return m_currentItem;
+}
+
 
 QList<Tomahawk::query_ptr>
 Artist::tracks()

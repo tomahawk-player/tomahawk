@@ -49,6 +49,10 @@ DatabaseCommand::DatabaseCommand( const source_ptr& src, QObject* parent )
     //qDebug() << Q_FUNC_INFO;
 }
 
+DatabaseCommand::DatabaseCommand( const DatabaseCommand& other )
+    : QObject( other.parent() )
+{
+}
 
 DatabaseCommand::~DatabaseCommand()
 {
@@ -67,6 +71,18 @@ DatabaseCommand::_exec( DatabaseImpl* lib )
     //qDebug() << "FINISHED" << thread();
 }
 
+
+void
+DatabaseCommand::setSource( const Tomahawk::source_ptr& s )
+{
+    m_source = s;
+}
+
+const Tomahawk::source_ptr&
+DatabaseCommand::source() const
+{
+    return m_source;
+}
 
 DatabaseCommand*
 DatabaseCommand::factory( const QVariant& op, const source_ptr& source )

@@ -22,7 +22,7 @@
 #include <QSharedPointer>
 #include <QUuid>
 
-template <typename T> class QSharedPointer;
+//template <typename T> class QSharedPointer;
 
 namespace Tomahawk
 {

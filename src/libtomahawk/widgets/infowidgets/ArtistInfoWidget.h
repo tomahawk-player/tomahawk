@@ -31,6 +31,7 @@
 
 #include <QWidget>
 
+#include "typedefs.h"
 #include "playlistinterface.h"
 #include "viewpage.h"
 #include "infosystem/infosystem.h"

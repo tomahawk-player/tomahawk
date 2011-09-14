@@ -34,6 +34,7 @@
 #include "utils/logger.h"
 #include "dropjob.h"
 #include "artist.h"
+#include "album.h"
 
 using namespace Tomahawk;
 

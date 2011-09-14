@@ -31,6 +31,8 @@ SipPluginFactory::generateId()
     return factoryId() + "_" + uniq;
 }
 
+SipPlugin::SipPlugin() : QObject() {}
+SipPlugin::~SipPlugin() {}
 
 SipPlugin::SipPlugin( const QString& pluginId, QObject* parent )
     : QObject( parent )

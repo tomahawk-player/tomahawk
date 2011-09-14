@@ -34,6 +34,22 @@
 
 using namespace Tomahawk;
 
+JSPFLoader::JSPFLoader( bool autoCreate, QObject *parent )
+    : QObject( parent )
+    , m_autoCreate( autoCreate )
+{}
+
+JSPFLoader::~JSPFLoader()
+{
+}
+
+QList< Tomahawk::query_ptr >
+JSPFLoader::entries() const
+{
+    return m_entries;
+}
+
+
 void
 JSPFLoader::load( const QUrl& url )
 {

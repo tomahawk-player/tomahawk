@@ -33,6 +33,7 @@ Q_PROPERTY( QVariant playlist READ playlistV WRITE setPlaylistV )
 public:
     explicit DatabaseCommand_CreatePlaylist( QObject* parent = 0 );
     explicit DatabaseCommand_CreatePlaylist( const Tomahawk::source_ptr& author, const Tomahawk::playlist_ptr& playlist );
+    virtual ~DatabaseCommand_CreatePlaylist();
 
     QString commandname() const { return "createplaylist"; }
 
@@ -40,13 +41,7 @@ public:
     virtual void postCommitHook();
     virtual bool doesMutates() const { return true; }
 
-    QVariant playlistV() const
-    {
-        if( m_v.isNull() )
-            return QJson::QObjectHelper::qobject2qvariant( (QObject*)m_playlist.data() );
-        else
-            return m_v;
-    }
+    QVariant playlistV() const;
 
     void setPlaylistV( const QVariant& v )
     {
@@ -58,7 +53,7 @@ protected:
 
     virtual bool report() { return m_report; }
 
-    void setPlaylist( const Tomahawk::playlist_ptr& playlist ) { m_playlist = playlist; }
+    void setPlaylist( const Tomahawk::playlist_ptr& playlist );
 
     QVariant m_v;
 

@@ -32,6 +32,7 @@ class DLLEXPORT DatabaseCommand_Resolve : public DatabaseCommand
 Q_OBJECT
 public:
     explicit DatabaseCommand_Resolve( const Tomahawk::query_ptr& query );
+    virtual ~DatabaseCommand_Resolve();
 
     virtual QString commandname() const { return "dbresolve"; }
     virtual bool doesMutates() const { return false; }
@@ -44,6 +45,8 @@ signals:
 public slots:
 
 private:
+    DatabaseCommand_Resolve();
+
     void fullTextResolve( DatabaseImpl* lib );
     void resolve( DatabaseImpl* lib );
 
