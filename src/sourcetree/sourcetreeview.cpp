@@ -69,10 +69,7 @@ SourceTreeView::SourceTreeView( QWidget* parent )
     setIndentation( 14 );
     setSortingEnabled( true );
     sortByColumn( 0, Qt::AscendingOrder );
-
-#ifdef Q_WS_MAC
     setVerticalScrollMode( QTreeView::ScrollPerPixel );
-#endif
 
     // TODO animation conflicts with the expanding-playlists-when-collection-is-null
     // so investigate
