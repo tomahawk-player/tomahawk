@@ -115,6 +115,8 @@ RecentPlaylistsModel::playlistsLoaded( const QList<DatabaseCommand_LoadAllSorted
     }
 
     endResetModel();
+
+    emit emptinessChanged( m_playlists.isEmpty() );
 }
 
 

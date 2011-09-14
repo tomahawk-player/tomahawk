@@ -70,8 +70,9 @@ WelcomeWidget::WelcomeWidget( QWidget* parent )
     ui->playlistWidget->setModel( model );
     ui->playlistWidget->overlay()->resize( 380, 86 );
     ui->playlistWidget->setVerticalScrollMode( QAbstractItemView::ScrollPerPixel );
+    updatePlaylists();
 
-    connect( model, SIGNAL( emptinessChanged( bool) ), this, SLOT( updatePlaylists() ) );
+    connect( model, SIGNAL( emptinessChanged( bool ) ), this, SLOT( updatePlaylists() ) );
 
     m_tracksModel = new PlaylistModel( ui->tracksView );
     m_tracksModel->setStyle( TrackModel::ShortWithAvatars );
@@ -88,7 +89,6 @@ WelcomeWidget::WelcomeWidget( QWidget* parent )
     connect( SourceList::instance(), SIGNAL( ready() ), SLOT( updateRecentTracks() ) );
     connect( SourceList::instance(), SIGNAL( sourceAdded( Tomahawk::source_ptr ) ), SLOT( onSourceAdded( Tomahawk::source_ptr ) ) );
     connect( ui->playlistWidget, SIGNAL( activated( QModelIndex ) ), SLOT( onPlaylistActivated( QModelIndex ) ) );
-    connect( AudioEngine::instance() ,SIGNAL( playlistChanged( Tomahawk::PlaylistInterface* ) ), SLOT( updatePlaylists() ), Qt::QueuedConnection );
 }
 
 
