@@ -67,7 +67,8 @@ Q_OBJECT
 public:
     enum ErrorState {
         NoError,
-        FileNotFound
+        FileNotFound,
+        FailedToLoad
     };
 
     ExternalResolver( const QString& filePath ) { m_filePath = filePath; }

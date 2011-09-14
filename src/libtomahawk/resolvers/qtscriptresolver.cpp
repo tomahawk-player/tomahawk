@@ -170,6 +170,8 @@ QtScriptResolver::QtScriptResolver( const QString& scriptPath )
     tLog() << Q_FUNC_INFO << "Loading JS resolver:" << scriptPath;
 
     m_engine = new ScriptEngine( this );
+    m_name = QFileInfo( filePath() ).baseName();
+
     if ( !QFile::exists( filePath() ) )
     {
         tLog() << Q_FUNC_INFO << "Failed loading JavaScript resolver:" << scriptPath;

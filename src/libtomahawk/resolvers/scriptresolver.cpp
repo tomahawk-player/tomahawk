@@ -59,6 +59,9 @@ ScriptResolver::ScriptResolver( const QString& exe )
     if ( !TomahawkUtils::nam() )
         return;
 
+    // set the name to the binary, if we launch properly we'll get the name the resolver reports
+    m_name = QFileInfo( filePath() ).baseName();
+
     sendConfig();
 }
 
@@ -125,8 +128,8 @@ ScriptResolver::reload()
         m_error = Tomahawk::ExternalResolver::FileNotFound;
     else
     {
-        m_proc.start( filePath() );
         m_error = Tomahawk::ExternalResolver::NoError;
+        m_proc.start( filePath() );
 
         sendConfig();
     }
@@ -270,6 +273,9 @@ ScriptResolver::cmdExited( int code, QProcess::ExitStatus status )
     m_ready = false;
     tLog() << Q_FUNC_INFO << "SCRIPT EXITED, code" << code << "status" << status << filePath();
     Tomahawk::Pipeline::instance()->removeResolver( this );
+
+    m_error = ExternalResolver::FailedToLoad;
+    emit changed();
 
     if ( m_stopped )
     {

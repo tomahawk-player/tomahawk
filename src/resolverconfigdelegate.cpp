@@ -53,7 +53,9 @@ ResolverConfigDelegate::paint( QPainter* painter, const QStyleOptionViewItem& op
     path.setItalic( true );
     path.setPointSize( path.pointSize() - 1 );
 
-    const bool fileFound = (Tomahawk::ExternalResolver::ErrorState)index.data( ResolversModel::ErrorState ).toInt() == Tomahawk::ExternalResolver::FileNotFound;
+    const bool error =  (Tomahawk::ExternalResolver::ErrorState)index.data( ResolversModel::ErrorState ).toInt() != Tomahawk::ExternalResolver::NoError;
+    const bool fileNotFound = (Tomahawk::ExternalResolver::ErrorState)index.data( ResolversModel::ErrorState ).toInt() == Tomahawk::ExternalResolver::FileNotFound;
+    const bool failedToLoad = (Tomahawk::ExternalResolver::ErrorState)index.data( ResolversModel::ErrorState ).toInt() == Tomahawk::ExternalResolver::FailedToLoad;
 
     QFontMetrics bfm( name );
     QFontMetrics sfm( path );
@@ -97,14 +99,20 @@ ResolverConfigDelegate::paint( QPainter* painter, const QStyleOptionViewItem& op
     painter->save();
     painter->setFont( path );
     QString pathStr = index.data( ResolversModel::ResolverPath ).toString();
-    if( fileFound )
+    if( error )
     {
         painter->setPen( QColor( Qt::red ).lighter( 150 ) );
-        pathStr = tr( "Not found: %1" ).arg( pathStr );
-    } else
-    {
+    } else {
         painter->setPen( Qt::gray );
     }
+
+    if( fileNotFound ) {
+        pathStr = tr( "Not found: %1" ).arg( pathStr );
+    } else if ( failedToLoad )
+    {
+        pathStr = tr( "Failed to load: %1" ).arg( pathStr );
+    }
+
     textRect.moveTop(  itemRect.height() / 2 + top );
     pathStr = sfm.elidedText( pathStr, Qt::ElideMiddle, textRect.width() );
     painter->drawText( textRect, pathStr );
