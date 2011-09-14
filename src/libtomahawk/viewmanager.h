@@ -23,6 +23,7 @@
 #include <QHash>
 #include <QStackedWidget>
 
+#include "artist.h"
 #include "collection.h"
 #include "playlistinterface.h"
 #include "playlist/queueview.h"

@@ -22,9 +22,11 @@
 #include <QObject>
 #include <QVariantMap>
 
+#include "album.h"
+#include "artist.h"
+#include "collection.h"
 #include "typedefs.h"
 #include "databasecommand.h"
-#include "album.h"
 
 #include "dllmacro.h"
 

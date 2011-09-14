@@ -22,6 +22,7 @@
 #include <QObject>
 #include <QVariantMap>
 
+#include "artist.h"
 #include "typedefs.h"
 #include "databasecommand.h"
 

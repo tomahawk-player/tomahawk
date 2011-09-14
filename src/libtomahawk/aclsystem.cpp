@@ -21,7 +21,7 @@
 #include <QMutexLocker>
 #include <QVariant>
 
-#include <tomahawksettings.h>
+#include "tomahawksettings.h"
 
 #include "utils/logger.h"
 
