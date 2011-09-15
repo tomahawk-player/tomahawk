@@ -276,6 +276,7 @@ Section "Tomahawk Player" SEC_TOMAHAWK_PLAYER
         File "${INSTALL_PATH}\bin\libqxtweb-standalone.dll"
         File "${INSTALL_PATH}\bin\libtomahawk_portfwd.dll"
         File "${INSTALL_PATH}\bin\libtomahawk_lastfm2.dll"
+        File "${INSTALL_PATH}\bin\libquazip.dll"
         File "${INSTALL_PATH}\bin\libtomahawklib.dll"
         File "${INSTALL_PATH}\lib\libtomahawk_sip*.dll"
    !endif
@@ -344,7 +345,6 @@ Section "Tomahawk Player" SEC_TOMAHAWK_PLAYER
    File "${MING_BIN}\libogg-0.dll" ; OGG, FLAC
    File "${MING_BIN}\libvorbis-0.dll" ; OGG
    File "${MING_BIN}\libvorbisenc-2.dll" ; OGG
-
 
 
    ; Other
