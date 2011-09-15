@@ -6,7 +6,9 @@ set( CMAKE_MODULE_PATH
      ${CMAKE_CURRENT_SOURCE_DIR}/cmake/modules
 )
 
-add_definitions(-DSTDC_HEADERS -std=gnu++98)
+if( CMAKE_COMPILER_IS_GNUCXX )
+    add_definitions(-DSTDC_HEADERS -std=gnu++98)
+endif()
 
 if(${CMAKE_BUILD_TYPE} MATCHES "Release")
   add_definitions(-DNDEBUG)
