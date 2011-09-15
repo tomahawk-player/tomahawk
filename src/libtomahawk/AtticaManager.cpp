@@ -65,8 +65,14 @@ AtticaManager::loadPixmapsFromCache()
     {
         // load all the pixmaps
         QFileInfo info( file );
+        if ( !m_resolverStates.contains( info.baseName() ) )
+        {
+            tLog() << "Found resolver icon cached for resolver we no longer see in synchrotron repo:" << info.baseName();
+            continue;
+        }
+
         QPixmap icon( cacheDir.absoluteFilePath( file ) );
-        m_resolversIconCache[ info.baseName() ] = icon;
+        m_resolverStates[ info.baseName() ].pixmap = icon;
     }
 }
 
@@ -81,10 +87,10 @@ AtticaManager::savePixmapsToCache()
         cacheDir.cd( "atticache" );
     }
 
-    foreach( const QString& id, m_resolversIconCache.keys() )
+    foreach( const QString& id, m_resolverStates.keys() )
     {
         const QString filename = cacheDir.absoluteFilePath( QString( "%1.png" ).arg( id ) );
-        if ( !m_resolversIconCache[ id ].save( filename ) )
+        if ( !m_resolverStates[ id ].pixmap.save( filename ) )
         {
             tLog() << "Failed to open cache file for writing:" << filename;
             continue;
@@ -96,7 +102,7 @@ AtticaManager::savePixmapsToCache()
 QPixmap
 AtticaManager::iconForResolver( const Content& resolver )
 {
-    return m_resolversIconCache.value( resolver.id(), QPixmap() );
+    return m_resolverStates.value( resolver.id() ).pixmap;
 }
 
 
@@ -115,7 +121,7 @@ AtticaManager::resolverState ( const Content& resolver ) const
         return AtticaManager::Uninstalled;
     }
 
-    return m_resolverStates[ resolver.id() ];
+    return m_resolverStates[ resolver.id() ].state;
 }
 
 
@@ -129,13 +135,10 @@ AtticaManager::resolversLoaded() const
 QString
 AtticaManager::pathFromId( const QString& resolverId ) const
 {
-    foreach( const Content& content, m_resolvers )
-    {
-        if ( content.id() == resolverId )
-            return QString( "%1/%2/contents/code/main.js" ).arg( TomahawkUtils::appDataDir().absolutePath() ).arg( QString( "atticaresolvers/%1" ).arg( resolverId ) );
-    }
+    if ( !m_resolverStates.contains( resolverId ) )
+        return QString();
 
-    return QString();
+    return m_resolverStates.value( resolverId ).scriptPath;
 }
 
 
@@ -164,7 +167,10 @@ AtticaManager::resolversList( BaseJob* j )
     // load icon cache from disk, and fetch any we are missing
     foreach ( Content resolver, m_resolvers )
     {
-        if ( !m_resolversIconCache.contains( resolver.id() ) && !resolver.icons().isEmpty() && !resolver.icons().first().url().isEmpty() )
+        if ( !m_resolverStates.contains( resolver.id() ) )
+            m_resolverStates.insert( resolver.id(), Resolver() );
+
+        if ( m_resolverStates.value( resolver.id() ).pixmap.isNull() && !resolver.icons().isEmpty() && !resolver.icons().first().url().isEmpty() )
         {
             QNetworkReply* fetch = TomahawkUtils::nam()->get( QNetworkRequest( resolver.icons().first().url() ) );
             fetch->setProperty( "resolverId", resolver.id() );
@@ -172,6 +178,8 @@ AtticaManager::resolversList( BaseJob* j )
             connect( fetch, SIGNAL( finished() ), this, SLOT( resolverIconFetched() ) );
         }
     }
+
+    checkForUpdates();
 }
 
 
@@ -192,16 +200,24 @@ AtticaManager::resolverIconFetched()
     QByteArray data = reply->readAll();
     QPixmap icon;
     icon.loadFromData( data );
-    m_resolversIconCache[ resolverId ] = icon;
+    m_resolverStates[ resolverId ].pixmap = icon;
 }
 
+void
+AtticaManager::checkForUpdates()
+{
+    // look for any newever
+
+}
 
 void
 AtticaManager::installResolver( const Content& resolver )
 {
     Q_ASSERT( !resolver.id().isNull() );
 
-    m_resolverStates[ resolver.id() ] = Installing;
+    m_resolverStates[ resolver.id() ].state = Installing;
+    m_resolverStates[ resolver.id() ].scriptPath = resolver.attribute( "mainscript" );
+    m_resolverStates[ resolver.id() ].version = resolver.version();
     emit resolverStateChanged( resolver.id() );
 
     ItemJob< DownloadItem >* job = m_resolverProvider.downloadLink( resolver.id() );
@@ -252,13 +268,17 @@ AtticaManager::payloadFetched()
         f.close();
 
         QString resolverId = reply->property( "resolverId" ).toString();
-        QString resolverPath = extractPayload( f.fileName(), resolverId );
+        QDir dir( extractPayload( f.fileName(), resolverId ) );
+        QString resolverPath = dir.absoluteFilePath( m_resolverStates[ resolverId ].scriptPath );
 
         if ( !resolverPath.isEmpty() )
         {
+            // update with absolute, not relative, path
+            m_resolverStates[ resolverId ].scriptPath = resolverPath;
+
             // Do the install / add to tomahawk
             Tomahawk::Pipeline::instance()->addScriptResolver( resolverPath, true );
-            m_resolverStates[ resolverId ] = Installed;
+            m_resolverStates[ resolverId ].state = Installed;
             TomahawkSettings::instance()->setAtticaResolverState( resolverId, Installed );
             emit resolverInstalled( resolverId );
             emit resolverStateChanged( resolverId );
@@ -336,8 +356,7 @@ AtticaManager::extractPayload( const QString& filename, const QString& resolverI
 
     } while ( zipFile.goToNextFile() );
 
-    // The path is *always* resovlerid/contents/code/main.js
-    return QString( QFile( resolverDir.absolutePath() + "/contents/code/main.js" ).fileName() );
+    return resolverDir.absolutePath();
 }
 
 
@@ -355,7 +374,7 @@ AtticaManager::uninstallResolver( const QString& pathToResolver )
         {
             if ( resolver.id() == atticaId ) // this is the one
             {
-                m_resolverStates[ atticaId ] = Uninstalled;
+                m_resolverStates[ atticaId ].state = Uninstalled;
                 TomahawkSettings::instance()->setAtticaResolverState( atticaId, Uninstalled );
 
                 doResolverRemove( atticaId );
@@ -372,7 +391,7 @@ AtticaManager::uninstallResolver( const Content& resolver )
     emit resolverStateChanged( resolver.id() );
 
     Tomahawk::Pipeline::instance()->removeScriptResolver( pathFromId( resolver.id() ) );
-    m_resolverStates[ resolver.id() ] = Uninstalled;
+    m_resolverStates[ resolver.id() ].state = Uninstalled;
     TomahawkSettings::instance()->setAtticaResolverState( resolver.id(), Uninstalled );
 
     doResolverRemove( resolver.id() );

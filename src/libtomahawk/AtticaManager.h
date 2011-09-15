@@ -46,7 +46,17 @@ public:
         Failed
     };
 
-    typedef QHash< QString, AtticaManager::ResolverState > StateHash;
+    struct Resolver {
+        QString version, scriptPath;
+        ResolverState state;
+        QPixmap pixmap;
+
+        Resolver( const QString& v, const QString& path, ResolverState s )
+            : version( v ), scriptPath( path ), state( s ) {}
+        Resolver() : state( Uninstalled ) {}
+    };
+
+    typedef QHash< QString, AtticaManager::Resolver > StateHash;
 
     static AtticaManager* instance()
     {
@@ -94,6 +104,8 @@ private slots:
     void savePixmapsToCache();
     void resolverIconFetched();
 
+    void checkForUpdates();
+
 private:
     QString extractPayload( const QString& filename, const QString& resolverId ) const;
     void doResolverRemove( const QString& id ) const;
@@ -103,8 +115,6 @@ private:
 
     Attica::Provider m_resolverProvider;
     Attica::Content::List m_resolvers;
-    QHash<QString, QPixmap> m_resolversIconCache;
-
     StateHash m_resolverStates;
 #endif
 

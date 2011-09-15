@@ -40,7 +40,10 @@ inline QDataStream& operator<<(QDataStream& out, const AtticaManager::StateHash&
 {
     out << (quint32)states.count();
     foreach( const QString& key, states.keys() )
-        out << key << (qint32)states[ key ];
+    {
+        AtticaManager::Resolver resolver = states[ key ];
+        out << key << resolver.version << resolver.scriptPath << (qint32)resolver.state;
+    }
     return out;
 }
 
@@ -50,11 +53,13 @@ inline QDataStream& operator>>(QDataStream& in, AtticaManager::StateHash& states
     in >> count;
     for ( uint i = 0; i < count; i++ )
     {
-        QString key;
-        qint32 val;
+        QString key, version, scriptPath;
+        qint32 state;
         in >> key;
-        in >> val;
-        states[ key ] = (AtticaManager::ResolverState)val;
+        in >> version;
+        in >> scriptPath;
+        in >> state;
+        states[ key ] = AtticaManager::Resolver( version, scriptPath, (AtticaManager::ResolverState)state );
     }
     return in;
 }
@@ -856,7 +861,9 @@ void
 TomahawkSettings::setAtticaResolverState( const QString& resolver, AtticaManager::ResolverState state )
 {
     AtticaManager::StateHash resolvers = value( "script/atticaresolverstates" ).value< AtticaManager::StateHash >();
-    resolvers.insert( resolver, state );
+    AtticaManager::Resolver r = resolvers.value( resolver );
+    r.state = state;
+    resolvers.insert( resolver, r );
     setValue( "script/atticaresolverstates", QVariant::fromValue< AtticaManager::StateHash >( resolvers ) );
 
     sync();
