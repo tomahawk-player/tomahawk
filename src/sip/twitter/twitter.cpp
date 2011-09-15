@@ -71,12 +71,7 @@ TwitterPlugin::TwitterPlugin( const QString& pluginId )
     qDebug() << Q_FUNC_INFO;
 
     if ( Database::instance()->dbid() != twitterSavedDbid() )
-    {
-        setTwitterCachedDirectMessagesSinceId( 0 );
-        setTwitterCachedFriendsSinceId( 0 );
-        setTwitterCachedMentionsSinceId( 0 );
         setTwitterCachedPeers( QVariantHash() );
-    }
 
     setTwitterSavedDbid( Database::instance()->dbid() );
 
@@ -169,22 +164,11 @@ TwitterPlugin::connectPlugin( bool startup )
     qDebug() << Q_FUNC_INFO;
 
     m_cachedPeers = twitterCachedPeers();
-    QList<QString> peerlist = m_cachedPeers.keys();
-    qStableSort( peerlist.begin(), peerlist.end() );
-    foreach( QString screenName, peerlist )
-    {
-        QVariantHash cachedPeer = m_cachedPeers[screenName].toHash();
-        if ( cachedPeer.contains( "onod" ) && cachedPeer["onod"] != Database::instance()->dbid() )
-        {
-            m_cachedPeers.remove( screenName );
-            syncConfig();
-        }
-        foreach( QString prop, cachedPeer.keys() )
-            qDebug() << "TwitterPlugin : " << screenName << ", key " << prop << ", value " << ( cachedPeer[prop].canConvert< QString >() ? cachedPeer[prop].toString() : QString::number( cachedPeer[prop].toInt() ) );
+    QStringList peerList = m_cachedPeers.keys();
+    qStableSort( peerList.begin(), peerList.end() );
 
-        QMetaObject::invokeMethod( this, "registerOffer", Q_ARG( QString, screenName ), Q_ARG( QVariantHash, cachedPeer ) );
-    }
-
+    registerOffers( peerList );
+    
     if ( twitterOAuthToken().isEmpty() || twitterOAuthTokenSecret().isEmpty() )
     {
         qDebug() << "TwitterPlugin has empty Twitter credentials; not connecting";
@@ -340,6 +324,48 @@ TwitterPlugin::checkTimerFired()
         m_mentions.data()->fetch( m_cachedMentionsSinceId, 0, 800 );
 }
 
+
+void
+TwitterPlugin::registerOffers( const QStringList &peerList )
+{
+    foreach( QString screenName, peerList )
+    {
+        QVariantHash peerData = m_cachedPeers[screenName].toHash();
+
+        if ( peerData.contains( "onod" ) && peerData["onod"] != Database::instance()->dbid() )
+        {
+            m_cachedPeers.remove( screenName );
+            syncConfig();
+        }
+        
+        if ( Servent::instance()->connectedToSession( peerData["node"].toString() ) )
+        {
+            peerData["lastseen"] = QDateTime::currentMSecsSinceEpoch();
+            m_cachedPeers[screenName] = peerData;
+            syncConfig();
+            qDebug() << Q_FUNC_INFO << " already connected";
+            continue;
+        }
+        else if ( QDateTime::currentMSecsSinceEpoch() - peerData["lastseen"].toLongLong() > 1209600000 ) // 2 weeks
+        {
+            qDebug() << Q_FUNC_INFO << " aging peer " << screenName << " out of cache";
+            m_cachedPeers.remove( screenName );
+            syncConfig();
+            m_cachedAvatars.remove( screenName );
+            continue;
+        }
+        
+        if ( !peerData.contains( "host" ) || !peerData.contains( "port" ) || !peerData.contains( "pkey" ) )
+        {
+            qDebug() << "TwitterPlugin does not have host, port and/or pkey values for " << screenName << " (this is usually *not* a bug or problem but a normal part of the process)";
+            continue;
+        }
+        
+        QMetaObject::invokeMethod( this, "registerOffer", Q_ARG( QString, screenName ), Q_ARG( QVariantHash, peerData ) );
+    }
+}
+
+
 void
 TwitterPlugin::connectTimerFired()
 {
@@ -357,39 +383,9 @@ TwitterPlugin::connectTimerFired()
 
     qDebug() << Q_FUNC_INFO << " continuing";
     QString myScreenName = twitterScreenName();
-    QList<QString> peerlist = m_cachedPeers.keys();
-    qStableSort( peerlist.begin(), peerlist.end() );
-    foreach( QString screenName, peerlist )
-    {
-        qDebug() << Q_FUNC_INFO << " checking peer " << screenName;
-        QVariantHash peerData = m_cachedPeers[screenName].toHash();
-
-        if ( Servent::instance()->connectedToSession( peerData["node"].toString() ) )
-        {
-            peerData["lastseen"] = QDateTime::currentMSecsSinceEpoch();
-            m_cachedPeers[screenName] = peerData;
-            syncConfig();
-            qDebug() << Q_FUNC_INFO << " already connected";
-            continue;
-        }
-
-        if ( QDateTime::currentMSecsSinceEpoch() - peerData["lastseen"].toLongLong() > 1209600000 ) // 2 weeks
-        {
-            qDebug() << Q_FUNC_INFO << " aging peer " << screenName << " out of cache";
-            m_cachedPeers.remove( screenName );
-            syncConfig();
-            m_cachedAvatars.remove( screenName );
-            continue;
-        }
-
-        if ( !peerData.contains( "host" ) || !peerData.contains( "port" ) || !peerData.contains( "pkey" ) )
-        {
-            qDebug() << "TwitterPlugin does not have host, port and/or pkey values for " << screenName << " (this is usually *not* a bug or problem but a normal part of the process)";
-            continue;
-        }
-
-        QMetaObject::invokeMethod( this, "registerOffer", Q_ARG( QString, screenName ), Q_ARG( QVariantHash, peerData ) );
-    }
+    QStringList peerList = m_cachedPeers.keys();
+    qStableSort( peerList.begin(), peerList.end() );
+    registerOffers( peerList );
 }
 
 void
