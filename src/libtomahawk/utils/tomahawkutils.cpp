@@ -642,4 +642,12 @@ createAvatarFrame( const QPixmap &avatar )
     return frame;
 }
 
+
+void
+crash()
+{
+    volatile int* a = (int*)(NULL);
+    *a = 1;
+}
+
 } // ns

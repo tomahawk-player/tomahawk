@@ -19,8 +19,11 @@
 #include "tomahawkapp.h"
 
 #include "thirdparty/kdsingleapplicationguard/kdsingleapplicationguard.h"
-
 #include <QTranslator>
+
+#ifdef Q_OS_LINUX
+    #include "breakpad/BreakPad.h"
+#endif
 
 #ifdef Q_WS_MAC
     #include "tomahawkapp_mac.h"
@@ -32,6 +35,10 @@
 int
 main( int argc, char *argv[] )
 {
+#ifdef Q_OS_LINUX
+    new BreakPad( "/tmp" );
+#endif
+
 #ifdef Q_WS_MAC
       // Do Mac specific startup to get media keys working.
       // This must go before QApplication initialisation.

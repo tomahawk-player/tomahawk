@@ -100,6 +100,12 @@ TomahawkWindow::TomahawkWindow( QWidget* parent )
     loadSettings();
     setupSignals();
 
+    if ( qApp->arguments().contains( "--debug" ) )
+    {
+        ui->menu_Help->addSeparator();
+        ui->menu_Help->addAction( "Crash now...", this, SLOT( crashNow() ) );
+    }
+
     // set initial state
     onSipDisconnected();
     vm->setQueue( m_queueView );
@@ -731,4 +737,11 @@ TomahawkWindow::maximize()
     {
         showMaximized();
     }
+}
+
+
+void
+TomahawkWindow::crashNow()
+{
+    TomahawkUtils::crash();
 }

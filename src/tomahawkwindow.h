@@ -106,6 +106,8 @@ private slots:
 
     void playlistCreateDialogFinished( int ret );
 
+    void crashNow();
+
 private:
     void loadSettings();
     void saveSettings();

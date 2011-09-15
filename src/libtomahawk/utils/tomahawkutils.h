@@ -99,6 +99,8 @@ namespace TomahawkUtils
     DLLEXPORT void bringToFront();
 
     DLLEXPORT QPixmap createAvatarFrame( const QPixmap &avatar );
+
+    DLLEXPORT void crash();
 }
 
 #endif // TOMAHAWKUTILS_H
