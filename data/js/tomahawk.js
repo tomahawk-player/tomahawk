@@ -184,6 +184,21 @@ Tomahawk.syncRequest = function(url)
 	}
 };
 
+Tomahawk.asyncRequest = function(url, callback)
+{
+    var xmlHttpRequest = new XMLHttpRequest();
+    xmlHttpRequest.open('GET', url, true);
+    xmlHttpRequest.onreadystatechange = function() {
+        if (xmlHttpRequest.readyState == 4 && xmlHttpRequest.status == 200) {
+            callback.call(window, xmlHttpRequest);
+        } else if (xmlHttpRequest.readyState === 4) {
+            Tomahawk.log("Failed to do GET request: to: " + url);
+            Tomahawk.log("Status Code was: " + xmlHttpRequest.status);
+        }
+    }
+    xmlHttpRequest.send(null);
+};
+
 /**
 *
 * Secure Hash Algorithm (SHA256)
