@@ -288,6 +288,7 @@ Section "Tomahawk Player" SEC_TOMAHAWK_PLAYER
         File "${BUILD_PATH}\libqxtweb-standalone.dll"
         File "${BUILD_PATH}\libtomahawk_portfwd.dll"
         File "${BUILD_PATH}\libtomahawk_lastfm2.dll"
+        File "${BUILD_PATH}\libquazip.dll"
         File "${BUILD_PATH}\libtomahawk_sip*.dll"
    !endif
 
