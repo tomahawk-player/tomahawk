@@ -298,7 +298,7 @@ DynamicPlaylist::loadRevision( const QString& rev )
 }
 
 
-bool
+void
 DynamicPlaylist::remove( const Tomahawk::dynplaylist_ptr& playlist )
 {
     playlist->aboutToBeDeleted( playlist );
@@ -307,8 +307,6 @@ DynamicPlaylist::remove( const Tomahawk::dynplaylist_ptr& playlist )
 
     DatabaseCommand_DeletePlaylist* cmd = new DatabaseCommand_DeleteDynamicPlaylist( playlist->author(), playlist->guid() );
     Database::instance()->enqueue( QSharedPointer<DatabaseCommand>(cmd) );
-
-    return false;
 }
 
 
@@ -532,8 +530,9 @@ DynamicPlaylist::checkRevisionQueue()
     if ( !m_revisionQueue.isEmpty() )
     {
         DynQueueItem item = m_revisionQueue.dequeue();
-        if ( item.oldRev != currentrevision() && item.applyToTip ) // this was applied to the then-latest, but the already-running operation changed it so it's out of date now. fix it
+        if ( item.oldRev != currentrevision() && item.applyToTip )
         {
+            // this was applied to the then-latest, but the already-running operation changed it so it's out of date now. fix it
             item.oldRev = currentrevision();
         }
         if( item.mode == Static )

@@ -87,7 +87,7 @@ public:
                                              bool autoLoad = true
                                            );
 
-    static bool remove( const dynplaylist_ptr& playlist );
+    static void remove( const dynplaylist_ptr& playlist );
     virtual void loadRevision( const QString& rev = "" );
 
     // :-( int becuase qjson chokes on my enums
