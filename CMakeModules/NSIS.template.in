@@ -370,6 +370,7 @@ Section "Tomahawk Player" SEC_TOMAHAWK_PLAYER
    File "${MING_LIB}\libclucene-shared.dll"
 
    File "${MING_BIN}\libqtsparkle.dll"
+   File "${MING_BIN}\libattica.dll"
 SectionEnd
 
 SectionGroup "Shortcuts"
