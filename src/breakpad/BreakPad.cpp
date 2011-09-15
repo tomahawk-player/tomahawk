@@ -60,7 +60,7 @@ LaunchUploader( const char* dump_dir, const char* minidump_id, void* that, bool 
 
 
 BreakPad::BreakPad( const QString& path )
-    : google_breakpad::ExceptionHandler( path.toStdString(), 0, LaunchUploader, this, true )
+    : google_breakpad::ExceptionHandler( path.toStdString(), 0, LaunchUploader, this, true, 0 )
 {
 }
 

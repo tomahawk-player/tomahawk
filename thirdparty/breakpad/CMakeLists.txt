@@ -15,13 +15,36 @@ endif(${CMAKE_BUILD_TYPE} MATCHES "Release")
 IF(UNIX)
   IF(APPLE)
 
+    SET( breakpadSources
+         client/mac/crash_generation/crash_generation_client.cc
+         client/mac/crash_generation/crash_generation_server.cc
+         client/mac/handler/breakpad_nlist_64.cc
+         client/mac/handler/dynamic_images.cc
+         client/mac/handler/exception_handler.cc
+         client/mac/handler/minidump_generator.cc
+         client/mac/handler/protected_memory_allocator.cc
+#         client/mac/Framework/Breakpad.mm
+#         client/mac/Framework/OnDemandServer.mm
+         common/mac/file_id.cc
+         common/mac/macho_id.cc
+         common/mac/macho_reader.cc
+         common/mac/macho_utilities.cc
+         common/mac/macho_walker.cc
+         common/mac/string_utilities.cc
+         common/string_conversion.cc
+         common/convert_UTF.c
+         common/md5.c
+         common/mac/dump_syms.mm
+         common/mac/MachIPC.mm
+         common/mac/SimpleStringDictionary.mm
+         client/minidump_file_writer.cc
+    )
 
   ELSE(APPLE)
 
     SET( breakpadSources
          client/linux/crash_generation/crash_generation_client.cc
          client/linux/crash_generation/crash_generation_server.cc
-#         client/linux/sender/google_crash_report_sender.cc
          client/linux/minidump_writer/minidump_writer.cc
          client/linux/minidump_writer/linux_dumper.cc
          client/linux/handler/exception_handler.cc

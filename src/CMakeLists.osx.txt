@@ -1,10 +1,11 @@
-SET( TOMAHAWK_LIBRARIES  tomahawklib )
+SET( TOMAHAWK_LIBRARIES tomahawklib )
 
 SET( OS_SPECIFIC_LINK_LIBRARIES
     ${OS_SPECIFIC_LINK_LIBRARIES}
     ${COREAUDIO_LIBRARY}
     ${COREFOUNDATION_LIBRARY}
 
+    crypto
     SPMediaKeyTap
 
     /System/Library/Frameworks/AppKit.framework

@@ -18,3 +18,8 @@ ADD_DEFINITIONS( ${QT_DEFINITIONS} )
 
 ADD_EXECUTABLE( CrashReporter ${crashreporter_SOURCES} ${crashreporter_HEADERS_MOC} ${crashreporter_UI_HEADERS} ${crashreporter_RC_RCC} )
 TARGET_LINK_LIBRARIES( CrashReporter ${QT_LIBRARIES} )
+
+IF(APPLE)
+  FILE(COPY ${CMAKE_BINARY_DIR}/CrashReporter
+       DESTINATION "${CMAKE_BINARY_DIR}/tomahawk.app/Contents/MacOS")
+ENDIF(APPLE)

@@ -21,7 +21,7 @@
 #include "thirdparty/kdsingleapplicationguard/kdsingleapplicationguard.h"
 #include <QTranslator>
 
-#ifdef Q_OS_LINUX
+#ifndef Q_WS_WIN
     #include "breakpad/BreakPad.h"
 #endif
 
@@ -35,7 +35,7 @@
 int
 main( int argc, char *argv[] )
 {
-#ifdef Q_OS_LINUX
+#ifndef Q_WS_WIN
     new BreakPad( "/tmp" );
 #endif
 
