@@ -855,9 +855,11 @@ TomahawkSettings::setEnabledScriptResolvers( const QStringList& resolvers )
 void
 TomahawkSettings::setAtticaResolverState( const QString& resolver, AtticaManager::ResolverState state )
 {
-    AtticaManager::StateHash resolvers = value( "script/resolverstates" ).value< AtticaManager::StateHash >();
+    AtticaManager::StateHash resolvers = value( "script/atticaresolverstates" ).value< AtticaManager::StateHash >();
     resolvers.insert( resolver, state );
     setValue( "script/atticaresolverstates", QVariant::fromValue< AtticaManager::StateHash >( resolvers ) );
+
+    sync();
 }
 
 AtticaManager::StateHash
