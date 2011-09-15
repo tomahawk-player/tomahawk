@@ -110,6 +110,7 @@ SettingsDialog::SettingsDialog( QWidget *parent )
     SipConfigDelegate* sipdel = new SipConfigDelegate( this );
     ui->accountsView->setItemDelegate( sipdel );
     ui->accountsView->setContextMenuPolicy( Qt::CustomContextMenu );
+    ui->accountsView->setVerticalScrollMode( QAbstractItemView::ScrollPerPixel );
 
     connect( ui->accountsView, SIGNAL( clicked( QModelIndex ) ), this, SLOT( sipItemClicked( QModelIndex ) ) );
     connect( sipdel, SIGNAL( openConfig( SipPlugin* ) ), this, SLOT( openSipConfig( SipPlugin* ) ) );
@@ -196,6 +197,7 @@ SettingsDialog::SettingsDialog( QWidget *parent )
     ui->scriptList->setItemDelegate( del );
     m_resolversModel = new ResolversModel( this );
     ui->scriptList->setModel( m_resolversModel );
+    ui->scriptList->setVerticalScrollMode( QAbstractItemView::ScrollPerPixel );
 
 #ifdef LIBATTICA_FOUND
     connect( ui->getMoreResolvers, SIGNAL( clicked() ), this, SLOT( getMoreResolvers() ) );
