@@ -51,6 +51,7 @@ LaunchUploader( const char* dump_dir, const char* minidump_id, void* that, bool 
 
         // execl replaces this process, so no more code will be executed
         // unless it failed. If it failed, then we should return false.
+        printf( "Error: Can't launch CrashReporter!\n" );
         return false;
     }
 
@@ -60,7 +61,11 @@ LaunchUploader( const char* dump_dir, const char* minidump_id, void* that, bool 
 
 
 BreakPad::BreakPad( const QString& path )
+#ifdef Q_OS_LINUX
+    : google_breakpad::ExceptionHandler( path.toStdString(), 0, LaunchUploader, this, true )
+#else
     : google_breakpad::ExceptionHandler( path.toStdString(), 0, LaunchUploader, this, true, 0 )
+#endif
 {
 }
 
