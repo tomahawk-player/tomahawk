@@ -500,6 +500,11 @@ try:
   FixPlugin('spotify_tomahawkresolver', '../MacOS')
 except:
   print 'Failed to find spotify resolver'
+  
+try:
+  FixPlugin('CrashReporter', '../MacOS')
+except:
+  print 'Failed to find CrashReporter'
 
 for plugin in QT_PLUGINS:
   FixPlugin(FindQtPlugin(plugin), os.path.dirname(plugin))
