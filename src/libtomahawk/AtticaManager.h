@@ -23,6 +23,7 @@
 
 #include <QObject>
 #include <QHash>
+#include <QPixmap>
 
 #include "dllmacro.h"
 
@@ -30,7 +31,6 @@
 #include <attica/provider.h>
 #include <attica/providermanager.h>
 #include <attica/content.h>
-#include <QPixmap>
 #endif
 
 class DLLEXPORT AtticaManager : public QObject
