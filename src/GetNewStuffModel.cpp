@@ -130,7 +130,7 @@ GetNewStuffModel::setData( const QModelIndex &index, const QVariant &value, int 
             AtticaManager::instance()->uninstallResolver( resolver );
             break;
         case AtticaManager::NeedsUpgrade:
-            // TODO
+            AtticaManager::instance()->upgradeResolver( resolver );
             break;
     };
     emit dataChanged( index, index );

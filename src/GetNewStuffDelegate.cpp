@@ -114,11 +114,17 @@ GetNewStuffDelegate::paint( QPainter* painter, const QStyleOptionViewItem& optio
         case AtticaManager::Installing:
             actionText = tr( "Installing" );
             break;
+        case AtticaManager::Upgrading:
+            actionText = tr( "Upgrading" );
+            break;
         case AtticaManager::Failed:
             actionText = tr( "Failed" );
             break;
         case AtticaManager::Installed:
             actionText = tr( "Uninstall" );
+            break;
+        case AtticaManager::NeedsUpgrade:
+            actionText = tr( "Upgrade" );
             break;
     }
 

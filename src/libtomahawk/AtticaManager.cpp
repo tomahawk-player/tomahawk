@@ -206,8 +206,73 @@ AtticaManager::resolverIconFetched()
 void
 AtticaManager::checkForUpdates()
 {
-    // look for any newever
+    // look for any newer. m_resolvers has list from server, and m_resolverStates will contain any locally installed ones
+    foreach ( const QString& id, m_resolverStates.keys() )
+    {
+        Resolver r = m_resolverStates[ id ];
+        if ( r.state == Installed || r.state == NeedsUpgrade )
+        {
+            foreach ( const Content& upstream, m_resolvers )
+            {
+                if ( id == upstream.id() && // the right one
+                     !upstream.version().isEmpty() ) // valid version
+                {
+                    if ( newerVersion( r.version, upstream.version() ) )
+                    {
+                        m_resolverStates[ id ].state = NeedsUpgrade;
+                    }
+                }
+            }
+        }
+    }
+}
 
+bool
+AtticaManager::newerVersion( const QString& older, const QString& newer ) const
+{
+    // Dumb version comparison. Expects two strings, X.Y and Z.V. Returns true if Z > v || Z == V && V > Y
+    // DOES NOT support X.Y.Z version strings
+    if ( older.isEmpty() || newer.isEmpty() )
+        return false;
+
+    QPair<int, int> oldVer, newVer;
+    QStringList parts = older.split( "." );
+
+    if ( parts.size() == 1 )
+    {
+        oldVer.first = parts[ 0 ].toInt();
+        oldVer.second = 0;
+    }
+    else if ( parts.size() == 2 )
+    {
+        oldVer.first = parts[ 0 ].toInt();
+        oldVer.second = parts[ 1 ].toInt();;
+    }
+    else
+        return false;
+
+    parts = newer.split( "." );
+    if ( parts.size() == 1 )
+    {
+        newVer.first = parts[ 0 ].toInt();
+        newVer.second = 0;
+    }
+    else if ( parts.size() == 2 )
+    {
+        newVer.first = parts[ 0 ].toInt();
+        newVer.second = parts[ 1 ].toInt();;
+    }
+    else
+        return false;
+
+    // Do the comparison
+    if ( newVer.first > oldVer.first )
+        return true;
+    if ( newVer.first == oldVer.first &&
+         newVer.second > oldVer.second )
+        return true;
+
+    return false;
 }
 
 void
@@ -215,7 +280,9 @@ AtticaManager::installResolver( const Content& resolver )
 {
     Q_ASSERT( !resolver.id().isNull() );
 
-    m_resolverStates[ resolver.id() ].state = Installing;
+    if ( m_resolverStates[ resolver.id() ].state != Upgrading )
+        m_resolverStates[ resolver.id() ].state = Installing;
+
     m_resolverStates[ resolver.id() ].scriptPath = resolver.attribute( "mainscript" );
     m_resolverStates[ resolver.id() ].version = resolver.version();
     emit resolverStateChanged( resolver.id() );
@@ -225,6 +292,22 @@ AtticaManager::installResolver( const Content& resolver )
     job->setProperty( "resolverId", resolver.id() );
 
     job->start();
+}
+
+void
+AtticaManager::upgradeResolver( const Content& resolver )
+{
+    Q_ASSERT( m_resolverStates.contains( resolver.id() ) );
+    Q_ASSERT( m_resolverStates[ resolver.id() ].state == NeedsUpgrade );
+
+    if ( !m_resolverStates.contains( resolver.id() ) || m_resolverStates[ resolver.id() ].state != NeedsUpgrade )
+        return;
+
+    m_resolverStates[ resolver.id() ].state = Upgrading;
+    emit resolverStateChanged( resolver.id() );
+
+    uninstallResolver( resolver );
+    installResolver( resolver );
 }
 
 
@@ -279,7 +362,7 @@ AtticaManager::payloadFetched()
             // Do the install / add to tomahawk
             Tomahawk::Pipeline::instance()->addScriptResolver( resolverPath, true );
             m_resolverStates[ resolverId ].state = Installed;
-            TomahawkSettings::instance()->setAtticaResolverState( resolverId, Installed );
+            TomahawkSettings::instance()->setAtticaResolverStates( m_resolverStates );
             emit resolverInstalled( resolverId );
             emit resolverStateChanged( resolverId );
         }
@@ -387,13 +470,16 @@ AtticaManager::uninstallResolver( const QString& pathToResolver )
 void
 AtticaManager::uninstallResolver( const Content& resolver )
 {
-    emit resolverUninstalled( resolver.id() );
-    emit resolverStateChanged( resolver.id() );
+    if ( m_resolverStates[ resolver.id() ].state != Upgrading )
+    {
+        emit resolverUninstalled( resolver.id() );
+        emit resolverStateChanged( resolver.id() );
+
+        m_resolverStates[ resolver.id() ].state = Uninstalled;
+        TomahawkSettings::instance()->setAtticaResolverState( resolver.id(), Uninstalled );
+    }
 
     Tomahawk::Pipeline::instance()->removeScriptResolver( pathFromId( resolver.id() ) );
-    m_resolverStates[ resolver.id() ].state = Uninstalled;
-    TomahawkSettings::instance()->setAtticaResolverState( resolver.id(), Uninstalled );
-
     doResolverRemove( resolver.id() );
 }
 

@@ -83,6 +83,7 @@ public:
     QPixmap iconForResolver( const Attica::Content& id ); // Looks up in icon cache
 
     void installResolver( const Attica::Content& resolver );
+    void upgradeResolver( const Attica::Content& resolver );
     void uninstallResolver( const Attica::Content& resolver );
     void uninstallResolver( const QString& pathToResolver );
     QString pathFromId( const QString& resolverId ) const;
@@ -105,6 +106,7 @@ private slots:
     void resolverIconFetched();
 
     void checkForUpdates();
+    bool newerVersion( const QString& older, const QString& newer ) const;
 
 private:
     QString extractPayload( const QString& filename, const QString& resolverId ) const;
