@@ -36,14 +36,12 @@
 #include "playlist.h"
 #include "query.h"
 #include "artist.h"
-
 #include "audio/audioengine.h"
 #include "viewmanager.h"
 #include "sip/SipHandler.h"
 #include "sourcetree/sourcetreeview.h"
 #include "network/servent.h"
 #include "utils/proxystyle.h"
-#include "utils/xspfloader.h"
 #include "widgets/animatedsplitter.h"
 #include "widgets/newplaylistwidget.h"
 #include "widgets/searchwidget.h"
@@ -496,7 +494,24 @@ TomahawkWindow::loadSpiff()
         return;
 
     XSPFLoader* loader = new XSPFLoader;
+    connect( loader, SIGNAL( error( XSPFLoader::XSPFErrorCode ) ), SLOT( onXSPFError( XSPFLoader::XSPFErrorCode ) ) );
     loader->load( QUrl::fromUserInput( urlstr ) );
+}
+
+
+void
+TomahawkWindow::onXSPFError( XSPFLoader::XSPFErrorCode error )
+{
+    switch ( error )
+    {
+        case XSPFLoader::ParseError:
+            QMessageBox::critical( this, tr( "XSPF Error" ), tr( "This is not a valid XSPF playlist." ) );
+            break;
+
+        case XSPFLoader::InvalidTrackError:
+            QMessageBox::warning( this, tr( "Failed to save tracks" ), tr( "Some tracks in the playlist do not contain an artist and a title. They will be ignored." ), QMessageBox::Ok );
+            break;
+    }
 }
 
 

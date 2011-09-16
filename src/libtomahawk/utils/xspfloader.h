@@ -39,6 +39,7 @@ class DLLEXPORT XSPFLoader : public QObject
 Q_OBJECT
 
 public:
+    enum XSPFErrorCode { ParseError, InvalidTrackError };
     explicit XSPFLoader( bool autoCreate = true, QObject* parent = 0 );
 
     virtual ~XSPFLoader();
@@ -48,6 +49,7 @@ public:
 
 signals:
     void failed();
+    void error( XSPFLoader::XSPFErrorCode error );
     void ok( const Tomahawk::playlist_ptr& );
 
 public slots:

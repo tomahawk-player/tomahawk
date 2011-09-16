@@ -26,6 +26,7 @@
 #include <QStackedWidget>
 
 #include "result.h"
+#include "utils/xspfloader.h"
 
 class QSearchField;
 class SipPlugin;
@@ -81,6 +82,8 @@ private slots:
     void onSipConnected();
     void onSipDisconnected();
     void onSipError();
+
+    void onXSPFError( XSPFLoader::XSPFErrorCode error );
 
     void addPeerManually();
 

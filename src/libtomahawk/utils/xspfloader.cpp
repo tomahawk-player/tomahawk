@@ -34,7 +34,9 @@ XSPFLoader::XSPFLoader( bool autoCreate, QObject *parent )
     : QObject( parent )
     , m_autoCreate( autoCreate )
     , m_NS("http://xspf.org/ns/0/")
-{}
+{
+    qRegisterMetaType< XSPFErrorCode >("XSPFErrorCode");
+}
 
 
 XSPFLoader::~XSPFLoader()
@@ -124,14 +126,22 @@ XSPFLoader::gotBody()
     QString origTitle;
     QDomNodeList tracklist;
     QDomElement n = docElement.firstChildElement();
-    for ( ; !n.isNull(); n = n.nextSiblingElement() ) {
-        if (n.namespaceURI() == m_NS && n.localName() == "title") {
+    for ( ; !n.isNull(); n = n.nextSiblingElement() )
+    {
+        if (n.namespaceURI() == m_NS && n.localName() == "title")
+        {
             origTitle = n.text();
-        } else if (n.namespaceURI() == m_NS && n.localName() == "creator") {
+        }
+        else if (n.namespaceURI() == m_NS && n.localName() == "creator")
+        {
             m_creator = n.text();
-        } else if (n.namespaceURI() == m_NS && n.localName() == "info") {
+        }
+        else if (n.namespaceURI() == m_NS && n.localName() == "info")
+        {
             m_info = n.text();
-        } else if (n.namespaceURI() == m_NS && n.localName() == "trackList") {
+        }
+        else if (n.namespaceURI() == m_NS && n.localName() == "trackList")
+        {
             tracklist = n.childNodes();
         }
     }
@@ -151,17 +161,28 @@ XSPFLoader::gotBody()
         QDomElement n = e.firstChildElement();
         for ( ; !n.isNull(); n = n.nextSiblingElement() )
         {
-            if (n.namespaceURI() == m_NS && n.localName() == "duration") {
+            if (n.namespaceURI() == m_NS && n.localName() == "duration")
+            {
                 duration = n.text();
-            } else if (n.namespaceURI() == m_NS && n.localName() == "annotation") {
+            }
+            else if (n.namespaceURI() == m_NS && n.localName() == "annotation")
+            {
                 annotation = n.text();
-            } else if (n.namespaceURI() == m_NS && n.localName() == "creator") {
+            }
+            else if (n.namespaceURI() == m_NS && n.localName() == "creator")
+            {
                 artist = n.text();
-            } else if (n.namespaceURI() == m_NS && n.localName() == "album") {
+            }
+            else if (n.namespaceURI() == m_NS && n.localName() == "album")
+            {
                 album = n.text();
-            } else if (n.namespaceURI() == m_NS && n.localName() == "title") {
+            }
+            else if (n.namespaceURI() == m_NS && n.localName() == "title")
+            {
                 track = n.text();
-            } else if (n.namespaceURI() == m_NS && n.localName() == "url") {
+            }
+            else if (n.namespaceURI() == m_NS && n.localName() == "url")
+            {
                 url = n.text();
             }
         }
@@ -170,7 +191,7 @@ XSPFLoader::gotBody()
         {
             if( !shownError )
             {
-                QMessageBox::warning( 0, tr( "Failed to save tracks" ), tr( "Some tracks in the playlist do not contain an artist and a title. They will be ignored." ), QMessageBox::Ok );
+                emit error( InvalidTrackError );
                 shownError = true;
             }
             continue;
@@ -186,17 +207,10 @@ XSPFLoader::gotBody()
 
     if ( origTitle.isEmpty() && m_entries.isEmpty() )
     {
+        emit error( ParseError );
         if ( m_autoCreate )
-        {
-            QMessageBox::critical( 0, tr( "XSPF Error" ), tr( "This is not a valid XSPF playlist." ) );
             deleteLater();
-            return;
-        }
-        else
-        {
-            emit failed();
-            return;
-        }
+        return;
     }
 
     if ( m_autoCreate )
