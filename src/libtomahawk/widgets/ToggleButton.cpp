@@ -31,7 +31,7 @@ ToggleButton::ToggleButton( QWidget* parent )
 {
     QFont f( font() );
     f.setBold( true );
-    f.setPixelSize( 10 );
+    f.setPixelSize( 12 );
 
     setFont( f );
     setFixedHeight( sizeHint().height() + 8 );
@@ -81,11 +81,7 @@ ToggleButton::paintEvent( QPaintEvent* event )
 
     {
         QRect highlightRect( r );
-        QSize shrink( 2, 4 );
-        QSize hS( highlightRect.size() );
-        hS -= shrink;
-        highlightRect.setSize( hS );
-        highlightRect.translate( 0, 2 );
+        highlightRect.adjust( 0, 2, 0, -3 );
 
         if ( isChecked() )
         {
