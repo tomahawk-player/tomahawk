@@ -187,7 +187,7 @@ DatabaseWorker::doWork()
     }
     catch( const char * msg )
     {
-        qDebug() << endl
+        tLog() << endl
                  << "*ERROR* processing databasecommand:"
                  << cmd->commandname()
                  << msg
@@ -245,7 +245,7 @@ DatabaseWorker::logOp( DatabaseCommandLoggable* command )
 
     if ( command->singletonCmd() )
     {
-        qDebug() << "Singleton command, deleting previous oplog commands";
+        tDebug() << "Singleton command, deleting previous oplog commands";
 
         TomahawkSqlQuery oplogdelquery = m_dbimpl->newquery();
         oplogdelquery.prepare( QString( "DELETE FROM oplog WHERE source %1 AND singleton = 'true' AND command = ?" )
@@ -255,7 +255,7 @@ DatabaseWorker::logOp( DatabaseCommandLoggable* command )
         oplogdelquery.exec();
     }
 
-    qDebug() << "Saving to oplog:" << command->commandname()
+    tDebug() << "Saving to oplog:" << command->commandname()
              << "bytes:" << ba.length()
              << "guid:" << command->guid();
 
@@ -268,7 +268,7 @@ DatabaseWorker::logOp( DatabaseCommandLoggable* command )
     oplogquery.bindValue( 5, ba );
     if( !oplogquery.exec() )
     {
-        qDebug() << "Error saving to oplog";
+        tLog() << "Error saving to oplog";
         throw "Failed to save to oplog";
     }
 }
