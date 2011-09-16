@@ -39,7 +39,7 @@ class DLLEXPORT XSPFLoader : public QObject
 Q_OBJECT
 
 public:
-    enum XSPFErrorCode { ParseError, InvalidTrackError };
+    enum XSPFErrorCode { ParseError, InvalidTrackError, FetchError };
     explicit XSPFLoader( bool autoCreate = true, QObject* parent = 0 );
 
     virtual ~XSPFLoader();
@@ -48,7 +48,6 @@ public:
     void setOverrideTitle( const QString& newTitle );
 
 signals:
-    void failed();
     void error( XSPFLoader::XSPFErrorCode error );
     void ok( const Tomahawk::playlist_ptr& );
 

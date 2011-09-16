@@ -41,17 +41,20 @@ XSPFLoader::XSPFLoader( bool autoCreate, QObject *parent )
 XSPFLoader::~XSPFLoader()
 {}
 
+
 void
 XSPFLoader::setOverrideTitle( const QString& newTitle )
 {
     m_overrideTitle = newTitle;
 }
 
+
 QList< Tomahawk::query_ptr >
 XSPFLoader::entries() const
 {
     return m_entries;
 }
+
 
 void
 XSPFLoader::load( const QUrl& url )
@@ -72,14 +75,13 @@ XSPFLoader::load( const QUrl& url )
 void
 XSPFLoader::load( QFile& file )
 {
-    if( file.open( QFile::ReadOnly ) )
+    if ( file.open( QFile::ReadOnly ) )
     {
         m_body = file.readAll();
         gotBody();
     }
     else
     {
-        qDebug() << "Failed to open xspf file";
         reportError();
     }
 }
@@ -88,8 +90,7 @@ XSPFLoader::load( QFile& file )
 void
 XSPFLoader::reportError()
 {
-    qDebug() << Q_FUNC_INFO;
-    emit failed();
+    emit error( FetchError );
     deleteLater();
 }
 
@@ -97,7 +98,6 @@ XSPFLoader::reportError()
 void
 XSPFLoader::networkLoadFinished()
 {
-    qDebug() << Q_FUNC_INFO;
     QNetworkReply* reply = qobject_cast<QNetworkReply*>(sender());
     m_body = reply->readAll();
     gotBody();
@@ -105,9 +105,8 @@ XSPFLoader::networkLoadFinished()
 
 
 void
-XSPFLoader::networkError( QNetworkReply::NetworkError e )
+XSPFLoader::networkError( QNetworkReply::NetworkError /* error */ )
 {
-    qDebug() << Q_FUNC_INFO << e;
     reportError();
 }
 
@@ -115,8 +114,6 @@ XSPFLoader::networkError( QNetworkReply::NetworkError e )
 void
 XSPFLoader::gotBody()
 {
-    qDebug() << Q_FUNC_INFO;
-
     QDomDocument xmldoc;
     bool namespaceProcessing = true;
     xmldoc.setContent( m_body, namespaceProcessing );
@@ -127,19 +124,19 @@ XSPFLoader::gotBody()
     QDomElement n = docElement.firstChildElement();
     for ( ; !n.isNull(); n = n.nextSiblingElement() )
     {
-        if (n.namespaceURI() == m_NS && n.localName() == "title")
+        if ( n.namespaceURI() == m_NS && n.localName() == "title" )
         {
             origTitle = n.text();
         }
-        else if (n.namespaceURI() == m_NS && n.localName() == "creator")
+        else if ( n.namespaceURI() == m_NS && n.localName() == "creator" )
         {
             m_creator = n.text();
         }
-        else if (n.namespaceURI() == m_NS && n.localName() == "info")
+        else if ( n.namespaceURI() == m_NS && n.localName() == "info" )
         {
             m_info = n.text();
         }
-        else if (n.namespaceURI() == m_NS && n.localName() == "trackList")
+        else if ( n.namespaceURI() == m_NS && n.localName() == "trackList" )
         {
             tracklist = n.childNodes();
         }
@@ -148,7 +145,7 @@ XSPFLoader::gotBody()
     m_title = origTitle;
     if ( m_title.isEmpty() )
         m_title = tr( "New Playlist" );
-    if( !m_overrideTitle.isEmpty() )
+    if ( !m_overrideTitle.isEmpty() )
         m_title = m_overrideTitle;
 
     bool shownError = false;
@@ -160,35 +157,35 @@ XSPFLoader::gotBody()
         QDomElement n = e.firstChildElement();
         for ( ; !n.isNull(); n = n.nextSiblingElement() )
         {
-            if (n.namespaceURI() == m_NS && n.localName() == "duration")
+            if ( n.namespaceURI() == m_NS && n.localName() == "duration" )
             {
                 duration = n.text();
             }
-            else if (n.namespaceURI() == m_NS && n.localName() == "annotation")
+            else if ( n.namespaceURI() == m_NS && n.localName() == "annotation" )
             {
                 annotation = n.text();
             }
-            else if (n.namespaceURI() == m_NS && n.localName() == "creator")
+            else if ( n.namespaceURI() == m_NS && n.localName() == "creator" )
             {
                 artist = n.text();
             }
-            else if (n.namespaceURI() == m_NS && n.localName() == "album")
+            else if ( n.namespaceURI() == m_NS && n.localName() == "album" )
             {
                 album = n.text();
             }
-            else if (n.namespaceURI() == m_NS && n.localName() == "title")
+            else if ( n.namespaceURI() == m_NS && n.localName() == "title" )
             {
                 track = n.text();
             }
-            else if (n.namespaceURI() == m_NS && n.localName() == "url")
+            else if ( n.namespaceURI() == m_NS && n.localName() == "url" )
             {
                 url = n.text();
             }
         }
 
-        if( artist.isEmpty() || track.isEmpty() )
+        if ( artist.isEmpty() || track.isEmpty() )
         {
-            if( !shownError )
+            if ( !shownError )
             {
                 emit error( InvalidTrackError );
                 shownError = true;
@@ -198,7 +195,7 @@ XSPFLoader::gotBody()
 
         query_ptr q = Tomahawk::Query::get( artist, track, album, uuid() );
         q->setDuration( duration.toInt() / 1000 );
-        if( !url.isEmpty() )
+        if ( !url.isEmpty() )
             q->setResultHint( url );
 
         m_entries << q;
