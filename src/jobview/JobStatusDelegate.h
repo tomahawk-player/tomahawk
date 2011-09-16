@@ -1,7 +1,6 @@
 /* === This file is part of Tomahawk Player - <http://tomahawk-player.org> ===
  *
- *   Copyright 2010-2011, Christian Muehlhaeuser <muesli@tomahawk-player.org>
- *   Copyright 2011, Leo Franchi <lfranchi@kde.org>
+ *   Copyright 2010-2011, Leo Franchi <lfranchi@kde.org>
  *
  *   Tomahawk is free software: you can redistribute it and/or modify
  *   it under the terms of the GNU General Public License as published by
@@ -17,35 +16,23 @@
  *   along with Tomahawk. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef JOBSTATUSVIEW_H
-#define JOBSTATUSVIEW_H
+#ifndef JOBSTATUSDELEGATE_H
+#define JOBSTATUSDELEGATE_H
 
-#include <QTreeWidget>
+#include <QStyledItemDelegate>
 
-#include "typedefs.h"
-#include "widgets/animatedsplitter.h"
-#include "query.h"
+class QPainter;
 
-class StreamConnection;
-
-class JobStatusView : public AnimatedWidget
+class JobStatusDelegate : public QStyledItemDelegate
 {
-Q_OBJECT
+    Q_OBJECT
 
 public:
-    explicit JobStatusView( AnimatedSplitter* parent );
-    virtual ~JobStatusView()
-    {
-    }
+    explicit JobStatusDelegate ( QObject* parent = 0 );
+    virtual ~JobStatusDelegate();
 
-    QSize sizeHint() const;
-
-private slots:
-    void onPipelineUpdate( const Tomahawk::query_ptr& query = Tomahawk::query_ptr() );
-
-private:
-    QTreeView* m_tree;
-    AnimatedSplitter* m_parent;
+    virtual void paint( QPainter* painter, const QStyleOptionViewItem& option, const QModelIndex& index ) const;
+    virtual QSize sizeHint( const QStyleOptionViewItem& option, const QModelIndex& index ) const;
 };
 
-#endif // JOBSTATUSVIEW_H
+#endif // JOBSTATUSDELEGATE_H

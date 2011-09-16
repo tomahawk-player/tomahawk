@@ -57,7 +57,7 @@
 #include "diagnosticsdialog.h"
 #include "tomahawksettings.h"
 #include "sourcelist.h"
-#include "PipelineStatusView.h"
+#include "jobview/JobStatusView.h"
 #include "transferview.h"
 #include "tomahawktrayicon.h"
 #include "scanmanager.h"
@@ -68,6 +68,7 @@
 #endif
 
 #include "utils/logger.h"
+#include "jobview/JobStatusModel.h"
 
 using namespace Tomahawk;
 
@@ -205,7 +206,9 @@ TomahawkWindow::setupSideBar()
 
     m_sourcetree = new SourceTreeView();
     TransferView* transferView = new TransferView( m_sidebar );
-    PipelineStatusView* pipelineView = new PipelineStatusView( m_sidebar );
+    JobStatusView* jobsView = new JobStatusView( m_sidebar );
+    m_jobsModel = new JobStatusModel( jobsView );
+    jobsView->setModel( m_jobsModel );
 
     m_queueView = new QueueView( m_sidebar );
     m_queueModel = new PlaylistModel( m_queueView );
@@ -217,7 +220,7 @@ TomahawkWindow::setupSideBar()
     m_sidebar->addWidget( m_searchWidget );
     m_sidebar->addWidget( m_sourcetree );
     m_sidebar->addWidget( transferView );
-    m_sidebar->addWidget( pipelineView );
+    m_sidebar->addWidget( jobsView );
     m_sidebar->addWidget( m_queueView );
 
     m_sidebar->setGreedyWidget( 1 );

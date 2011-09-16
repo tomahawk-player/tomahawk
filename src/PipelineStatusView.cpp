@@ -1,6 +1,7 @@
 /* === This file is part of Tomahawk Player - <http://tomahawk-player.org> ===
  *
  *   Copyright 2010-2011, Christian Muehlhaeuser <muesli@tomahawk-player.org>
+ *   Copyright 2011, Leo Franchi <lfranchi@kde.org>
  *
  *   Tomahawk is free software: you can redistribute it and/or modify
  *   it under the terms of the GNU General Public License as published by
@@ -16,7 +17,7 @@
  *   along with Tomahawk. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include "PipelineStatusView.h"
+#include "JobStatusView.h"
 
 #include <QHeaderView>
 #include <QVBoxLayout>
@@ -28,7 +29,7 @@
 using namespace Tomahawk;
 
 
-PipelineStatusView::PipelineStatusView( AnimatedSplitter* parent )
+JobStatusView::JobStatusView( AnimatedSplitter* parent )
     : AnimatedWidget( parent )
     , m_parent( parent )
 {
@@ -76,7 +77,7 @@ PipelineStatusView::PipelineStatusView( AnimatedSplitter* parent )
 
 
 void
-PipelineStatusView::onPipelineUpdate( const query_ptr& query )
+JobStatusView::onPipelineUpdate( const query_ptr& query )
 {
     QTreeWidgetItem* ti = m_tree->invisibleRootItem()->child( 0 );
 
@@ -100,7 +101,7 @@ PipelineStatusView::onPipelineUpdate( const query_ptr& query )
 
 
 QSize
-PipelineStatusView::sizeHint() const
+JobStatusView::sizeHint() const
 {
     unsigned int y = 0;
     y += m_tree->header()->height();

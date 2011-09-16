@@ -20,12 +20,12 @@
 #ifndef JOBSTATUSVIEW_H
 #define JOBSTATUSVIEW_H
 
-#include <QTreeWidget>
-
 #include "typedefs.h"
 #include "widgets/animatedsplitter.h"
-#include "query.h"
 
+class QAbstractItemModel;
+class QListView;
+class JobStatusModel;
 class StreamConnection;
 
 class JobStatusView : public AnimatedWidget
@@ -40,11 +40,13 @@ public:
 
     QSize sizeHint() const;
 
+    void setModel( QAbstractItemModel* model );
+
 private slots:
-    void onPipelineUpdate( const Tomahawk::query_ptr& query = Tomahawk::query_ptr() );
+    void checkCount();
 
 private:
-    QTreeView* m_tree;
+    QListView* m_view;
     AnimatedSplitter* m_parent;
 };
 

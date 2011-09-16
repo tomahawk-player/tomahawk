@@ -115,5 +115,6 @@
         <file>data/images/drop-top-songs.png</file>
         <file>data/images/drop-song.png</file>
         <file>data/images/drop-album.png</file>
+	<file>data/images/spotify-logo.jpg</file>
     </qresource>
 </RCC>

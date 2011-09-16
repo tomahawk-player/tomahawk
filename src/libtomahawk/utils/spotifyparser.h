@@ -22,6 +22,7 @@
 #include "dllmacro.h"
 #include "typedefs.h"
 #include "query.h"
+#include "jobview/JobStatusItem.h"
 
 #include <QObject>
 #include <QSet>
@@ -69,6 +70,29 @@ private:
     QSet< QNetworkReply* > m_queries;
     QString m_title, m_info, m_creator;
     Tomahawk::playlist_ptr m_playlist;
+
+    static QPixmap s_pixmap;
+};
+
+class DLLEXPORT SpotifyJobNotifier : public JobStatusItem
+{
+    Q_OBJECT
+
+    friend class SpotifyParser;
+public:
+    SpotifyJobNotifier( const QString& type, const QPixmap& pixmap );
+    virtual ~SpotifyJobNotifier();
+
+    virtual QString rightColumnText() const;
+    virtual QString mainText() const;
+    virtual QPixmap icon() const { return m_icon; }
+    virtual QString type() const { return m_type; }
+    virtual bool collapseItem() const { return true; }
+
+private:
+    void set
+    QPixmap m_icon;
+    QString m_type;
 };
 
 }

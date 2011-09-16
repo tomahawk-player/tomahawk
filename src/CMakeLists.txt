@@ -63,10 +63,13 @@ SET( tomahawkSourcesGui ${tomahawkSourcesGui}
      sourcetree/items/genericpageitems.cpp
      sourcetree/items/temporarypageitem.cpp
 
+     jobview/JobStatusView.cpp
+     jobview/JobStatusModel.cpp
+     jobview/JobStatusDelegate.cpp
+     jobview/PipelineStatusItem.cpp
 #     breakpad/BreakPad.cpp
 
      transferview.cpp
-     PipelineStatusView.cpp
      tomahawktrayicon.cpp
      audiocontrols.cpp
      settingsdialog.cpp
@@ -115,8 +118,13 @@ SET( tomahawkHeadersGui ${tomahawkHeadersGui}
      sourcetree/items/genericpageitems.h
      sourcetree/items/temporarypageitem.h
 
+     jobview/JobStatusView.h
+     jobview/JobStatusModel.h
+     jobview/JobStatusDelegate.h
+     jobview/JobStatusItem.h
+     jobview/PipelineStatusItem.h
+
      transferview.h
-     PipelineStatusView.h
      tomahawktrayicon.h
      audiocontrols.h
      settingsdialog.h

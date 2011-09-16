@@ -29,6 +29,32 @@
 
 using namespace Tomahawk;
 
+QPixmap SpotifyParser::s_pixmap = QPixmap();
+
+SpotifyJobNotifier::SpotifyJobNotifier( const QString &type, const QPixmap& pixmap )
+    : JobStatusItem()
+    , m_type( type )
+    , m_icon( pixmap )
+{
+}
+
+SpotifyJobNotifier::~SpotifyJobNotifier()
+{}
+
+QString
+SpotifyJobNotifier::rightColumnText() const
+{
+
+}
+
+QString
+SpotifyJobNotifier::mainText() const
+{
+
+}
+
+
+
 SpotifyParser::SpotifyParser( const QStringList& Urls, bool createNewPlaylist, QObject* parent )
     : QObject ( parent )
     , m_single( false )
@@ -46,6 +72,9 @@ SpotifyParser::SpotifyParser( const QString& Url, bool createNewPlaylist, QObjec
     , m_trackMode( true )
     , m_createNewPlaylist( createNewPlaylist )
 {
+    if ( s_pixmap.isNull() )
+        s_pixmap.load( RESPATH "images/spotify-logo.jpg" );
+
     lookupUrl( Url );
 }
 
