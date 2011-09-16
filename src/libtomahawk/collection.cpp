@@ -171,7 +171,7 @@ Collection::station( const QString& guid )
 }
 
 QList< query_ptr >
-Collection::tracks() const
+Collection::tracks()
 {
     return m_tracks;
 }
