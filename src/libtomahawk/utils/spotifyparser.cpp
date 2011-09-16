@@ -230,6 +230,7 @@ SpotifyParser::spotifyTrackLookupFinished()
 void
 SpotifyParser::checkPlaylistFinished()
 {
+    tDebug() << "Checking for spotify batch playlist job finished" << m_queries.isEmpty() << m_createNewPlaylist;
     if ( m_queries.isEmpty() ) // we're done
     {
         if( m_createNewPlaylist )
@@ -252,6 +253,7 @@ SpotifyParser::checkPlaylistFinished()
 void
 SpotifyParser::checkTrackFinished()
 {
+    tDebug() << "Checking for spotify batch track job finished" << m_queries.isEmpty();
     if ( m_queries.isEmpty() ) // we're done
     {
         if ( m_single && !m_tracks.isEmpty() )
