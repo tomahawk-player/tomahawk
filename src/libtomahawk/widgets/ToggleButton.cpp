@@ -96,7 +96,7 @@ ToggleButton::paintEvent( QPaintEvent* event )
             p.setBrush( StyleHelper::headerUpperColor() );
         }
 
-        p.drawRoundedRect( highlightRect, 10.0, 10.0 );
+        p.drawRoundedRect( highlightRect, 4.0, 4.0 );
     }
 
     QTextOption to( Qt::AlignCenter );
