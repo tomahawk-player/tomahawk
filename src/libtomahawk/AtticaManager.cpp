@@ -39,6 +39,7 @@ AtticaManager* AtticaManager::s_instance = 0;
 
 
 AtticaManager::AtticaManager( QObject* parent )
+    : QObject( parent )
 {
     connect( &m_manager, SIGNAL( providerAdded( Attica::Provider ) ), this, SLOT( providerAdded( Attica::Provider ) ) );
 
@@ -71,7 +72,7 @@ AtticaManager::loadPixmapsFromCache()
             continue;
         }
 
-        QPixmap icon( cacheDir.absoluteFilePath( file ) );
+        QPixmap* icon = new QPixmap( cacheDir.absoluteFilePath( file ) );
         m_resolverStates[ info.baseName() ].pixmap = icon;
     }
 }
@@ -89,8 +90,11 @@ AtticaManager::savePixmapsToCache()
 
     foreach( const QString& id, m_resolverStates.keys() )
     {
+        if ( !m_resolverStates[ id ].pixmap )
+            continue;
+
         const QString filename = cacheDir.absoluteFilePath( QString( "%1.png" ).arg( id ) );
-        if ( !m_resolverStates[ id ].pixmap.save( filename ) )
+        if ( !m_resolverStates[ id ].pixmap->save( filename ) )
         {
             tLog() << "Failed to open cache file for writing:" << filename;
             continue;
@@ -102,7 +106,10 @@ AtticaManager::savePixmapsToCache()
 QPixmap
 AtticaManager::iconForResolver( const Content& resolver )
 {
-    return m_resolverStates.value( resolver.id() ).pixmap;
+    if ( !m_resolverStates[ resolver.id() ].pixmap )
+        return QPixmap();
+
+    return *m_resolverStates.value( resolver.id() ).pixmap;
 }
 
 
@@ -170,7 +177,7 @@ AtticaManager::resolversList( BaseJob* j )
         if ( !m_resolverStates.contains( resolver.id() ) )
             m_resolverStates.insert( resolver.id(), Resolver() );
 
-        if ( m_resolverStates.value( resolver.id() ).pixmap.isNull() && !resolver.icons().isEmpty() && !resolver.icons().first().url().isEmpty() )
+        if ( !m_resolverStates.value( resolver.id() ).pixmap && !resolver.icons().isEmpty() && !resolver.icons().first().url().isEmpty() )
         {
             QNetworkReply* fetch = TomahawkUtils::nam()->get( QNetworkRequest( resolver.icons().first().url() ) );
             fetch->setProperty( "resolverId", resolver.id() );
@@ -198,8 +205,8 @@ AtticaManager::resolverIconFetched()
     }
 
     QByteArray data = reply->readAll();
-    QPixmap icon;
-    icon.loadFromData( data );
+    QPixmap* icon = new QPixmap;
+    icon->loadFromData( data );
     m_resolverStates[ resolverId ].pixmap = icon;
 }
 

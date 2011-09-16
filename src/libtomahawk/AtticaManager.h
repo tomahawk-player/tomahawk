@@ -49,11 +49,11 @@ public:
     struct Resolver {
         QString version, scriptPath;
         ResolverState state;
-        QPixmap pixmap;
+        QPixmap* pixmap;
 
         Resolver( const QString& v, const QString& path, ResolverState s )
-            : version( v ), scriptPath( path ), state( s ) {}
-        Resolver() : state( Uninstalled ) {}
+            : version( v ), scriptPath( path ), state( s ), pixmap( 0 ) {}
+        Resolver() : state( Uninstalled ), pixmap( 0 ) {}
     };
 
     typedef QHash< QString, AtticaManager::Resolver > StateHash;
