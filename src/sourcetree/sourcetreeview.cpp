@@ -529,7 +529,7 @@ SourceTreeView::dropEvent( QDropEvent* event )
     }
     else
     {
-        // In current event, parse sourceTreeView mime instead of playlistitems
+        // if it's a playlist drop, accept it anywhere in the sourcetree by manually parsing it.
         qDebug() << Q_FUNC_INFO << "Current Event";
         DropJob *dropThis = new DropJob;
         dropThis->setDropTypes( DropJob::Playlist );

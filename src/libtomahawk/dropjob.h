@@ -56,7 +56,8 @@ public:
     Q_DECLARE_FLAGS(DropTypes, DropType)
 
     enum DropAction {
-        Append = 0,
+        Default = 0,
+        Append,
         Create
     };
 

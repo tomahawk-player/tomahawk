@@ -370,6 +370,9 @@ DropJob::handleXspf( const QString& fileUrl )
 {
     tDebug() << Q_FUNC_INFO << "Got xspf playlist!!" << fileUrl;
 
+    if ( dropAction() == Default )
+        setDropAction( Create );
+
     // Doing like so on *nix, dont know really how files are
     // passed on others.
     // TODO look in to!
@@ -394,6 +397,9 @@ DropJob::handleSpPlaylist( const QString& url )
         playlistUri.replace( "/", ":" );
         playlistUri = "spotify:" + playlistUri;
     }
+
+    if ( dropAction() == Default )
+        setDropAction( Create );
 
     tDebug() << "Got a spotify playlist uri in dropjob!" << playlistUri;
     SpotifyParser* spot = new SpotifyParser( playlistUri, dropAction() == Create, this );
