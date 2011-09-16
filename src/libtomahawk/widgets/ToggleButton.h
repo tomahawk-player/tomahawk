@@ -19,7 +19,7 @@
 #ifndef TOGGLEBUTTON_H
 #define TOGGLEBUTTON_H
 
-#include <QPushButton>
+#include <QLabel>
 #include <QPaintEvent>
 
 #include "dllmacro.h"
@@ -28,7 +28,7 @@
  * \class ToggleButton
  * \brief A styled toggle-button that has a header background.
  */
-class DLLEXPORT ToggleButton : public QPushButton
+class DLLEXPORT ToggleButton : public QLabel
 {
 Q_OBJECT
 
@@ -36,11 +36,23 @@ public:
     ToggleButton( QWidget* parent = 0 );
     virtual ~ToggleButton();
 
+    QSize minimumSizeHint() const { return sizeHint(); }
+
+    bool isChecked() const { return m_checked; }
+
 public slots:
     virtual void setText( const QString& text );
+    virtual void setChecked( bool b ) { m_checked = b; }
+
+signals:
+    void clicked();
 
 protected:
     virtual void paintEvent( QPaintEvent* );
+    void mouseReleaseEvent( QMouseEvent* event );
+
+private:
+    bool m_checked;
 };
 
 #endif

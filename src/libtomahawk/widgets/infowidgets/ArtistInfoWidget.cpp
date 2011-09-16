@@ -73,7 +73,7 @@ ArtistInfoWidget::ArtistInfoWidget( const Tomahawk::artist_ptr& artist, QWidget*
 
     m_pixmap = QPixmap( RESPATH "images/no-album-art-placeholder.png" ).scaledToWidth( 48, Qt::SmoothTransformation );
 
-    connect( ui->button, SIGNAL( toggled( bool ) ), SLOT( onModeToggle( bool ) ) );
+    connect( ui->button, SIGNAL( clicked() ), SLOT( onModeToggle() ) );
 
     connect( Tomahawk::InfoSystem::InfoSystem::instance(),
              SIGNAL( info( Tomahawk::InfoSystem::InfoRequestData, QVariant ) ),
@@ -92,9 +92,9 @@ ArtistInfoWidget::~ArtistInfoWidget()
 
 
 void
-ArtistInfoWidget::onModeToggle( bool officialReleases )
+ArtistInfoWidget::onModeToggle()
 {
-    m_albumsModel->setMode( officialReleases ? TreeModel::InfoSystem : TreeModel::Database );
+    m_albumsModel->setMode( ui->button->isChecked() ? TreeModel::InfoSystem : TreeModel::Database );
     m_albumsModel->clear();
     m_albumsModel->addAlbums( m_artist, QModelIndex() );
 }

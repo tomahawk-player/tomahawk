@@ -89,7 +89,7 @@ private slots:
     void infoSystemInfo( Tomahawk::InfoSystem::InfoRequestData requestData, QVariant output );
     void infoSystemFinished( QString target );
 
-    void onModeToggle( bool officialReleases );
+    void onModeToggle();
 
 private:
     Ui::ArtistInfoWidget *ui;

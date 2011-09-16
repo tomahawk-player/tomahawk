@@ -26,18 +26,16 @@
 
 
 ToggleButton::ToggleButton( QWidget* parent )
-    : QPushButton( parent )
+    : QLabel( parent )
+    , m_checked( false )
 {
     QFont f( font() );
     f.setBold( true );
-    f.setPixelSize( 11 );
+    f.setPixelSize( 10 );
+
     setFont( f );
+    setFixedHeight( sizeHint().height() + 8 );
 
-    HeaderLabel* hl = new HeaderLabel( (QWidget*)0 );
-    setFixedHeight( hl->sizeHint().height() + 8 );
-    delete hl;
-
-    setCheckable( true );
     setCursor( Qt::PointingHandCursor );
 }
 
@@ -50,20 +48,30 @@ ToggleButton::~ToggleButton()
 void
 ToggleButton::setText( const QString& s )
 {
-    QPushButton::setText( s );
+    QLabel::setText( s );
     setFixedWidth( fontMetrics().width( text() ) + 32 );
+}
+
+
+void
+ToggleButton::mouseReleaseEvent( QMouseEvent* event )
+{
+    QFrame::mouseReleaseEvent( event );
+
+    m_checked ^= true;
+    update();
+
+    emit clicked();
 }
 
 
 void
 ToggleButton::paintEvent( QPaintEvent* event )
 {
-    QStylePainter p( this );
+    QPainter p( this );
 
     p.save();
-    QStyleOptionButton cb;
-    initStyleOption( &cb );
-    QRect r = cb.rect;
+    QRect r = contentsRect();
     StyleHelper::horizontalHeader( &p, r );
     p.restore();
 
@@ -83,7 +91,7 @@ ToggleButton::paintEvent( QPaintEvent* event )
         {
             p.setBrush( StyleHelper::headerHighlightColor() );
         }
-        else if ( cb.state & QStyle::State_MouseOver )
+        else if ( false )
         {
             p.setBrush( StyleHelper::headerLowerColor() );
         }
@@ -98,7 +106,7 @@ ToggleButton::paintEvent( QPaintEvent* event )
     QTextOption to( Qt::AlignCenter );
     r.adjust( 8, 0, -8, 0 );
     p.setBrush( StyleHelper::headerTextColor() );
-    p.drawText( r, cb.text, to );
+    p.drawText( r, text(), to );
 
     p.restore();
 }
