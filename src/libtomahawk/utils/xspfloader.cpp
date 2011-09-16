@@ -20,7 +20,6 @@
 
 #include <QApplication>
 #include <QDomDocument>
-#include <QMessageBox>
 
 #include "utils/tomahawkutils.h"
 #include "utils/logger.h"
