@@ -57,7 +57,6 @@ public:
 
     AudioControls* audioControls() { return m_audioControls; }
     SourceTreeView* sourceTreeView() const { return m_sourcetree; }
-    JobStatusModel* jobsModel() const { return m_jobsModel; }
 
     void setWindowTitle( const QString& title );
 

@@ -22,17 +22,22 @@
 
 #include "typedefs.h"
 #include "widgets/animatedsplitter.h"
+#include "dllmacro.h"
 
 class QAbstractItemModel;
 class QListView;
 class JobStatusModel;
 class StreamConnection;
 
-class JobStatusView : public AnimatedWidget
+class DLLEXPORT JobStatusView : public AnimatedWidget
 {
 Q_OBJECT
 
 public:
+    static JobStatusView* instance() {
+        return s_instance;
+    }
+
     explicit JobStatusView( AnimatedSplitter* parent );
     virtual ~JobStatusView()
     {
@@ -40,14 +45,19 @@ public:
 
     QSize sizeHint() const;
 
-    void setModel( QAbstractItemModel* model );
+    void setModel( JobStatusModel* model );
+
+    JobStatusModel* model() { return m_model; }
 
 private slots:
     void checkCount();
 
 private:
     QListView* m_view;
+    JobStatusModel* m_model;
     AnimatedSplitter* m_parent;
+
+    static JobStatusView* s_instance;
 };
 
 #endif // JOBSTATUSVIEW_H

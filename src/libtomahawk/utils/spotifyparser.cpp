@@ -22,6 +22,9 @@
 #include "utils/tomahawkutils.h"
 #include "query.h"
 #include "sourcelist.h"
+#include "jobview/JobStatusView.h"
+#include "jobview/JobStatusModel.h"
+
 #include <qjson/parser.h>
 
 #include <QtNetwork/QNetworkAccessManager>
@@ -29,14 +32,23 @@
 
 using namespace Tomahawk;
 
-QPixmap SpotifyParser::s_pixmap = QPixmap();
+QPixmap* SpotifyParser::s_pixmap = 0;
 
-SpotifyJobNotifier::SpotifyJobNotifier( const QString &type, const QPixmap& pixmap )
+SpotifyJobNotifier::SpotifyJobNotifier( QNetworkReply* job )
     : JobStatusItem()
-    , m_type( type )
-    , m_icon( pixmap )
+    , m_type( "track" )
+    , m_job( job )
+{
+    connect( job, SIGNAL( finished() ), this, SLOT( setFinished()) );
+}
+
+SpotifyJobNotifier::SpotifyJobNotifier()
+    : JobStatusItem()
+    , m_type( "playlist" )
+    , m_job( 0 )
 {
 }
+
 
 SpotifyJobNotifier::~SpotifyJobNotifier()
 {}
@@ -44,15 +56,27 @@ SpotifyJobNotifier::~SpotifyJobNotifier()
 QString
 SpotifyJobNotifier::rightColumnText() const
 {
-
+    return QString();
 }
+
+QPixmap
+SpotifyJobNotifier::icon() const
+{
+    return SpotifyParser::pixmap();
+}
+
 
 QString
 SpotifyJobNotifier::mainText() const
 {
-
+    return tr( "Parsing Spotify %1" ).arg( m_type );
 }
 
+void
+SpotifyJobNotifier::setFinished()
+{
+    emit finished();
+}
 
 
 SpotifyParser::SpotifyParser( const QStringList& Urls, bool createNewPlaylist, QObject* parent )
@@ -60,6 +84,7 @@ SpotifyParser::SpotifyParser( const QStringList& Urls, bool createNewPlaylist, Q
     , m_single( false )
     , m_trackMode( true )
     , m_createNewPlaylist( createNewPlaylist )
+    , m_playlistJob( 0 )
 
 {
     foreach ( const QString& url, Urls )
@@ -71,16 +96,13 @@ SpotifyParser::SpotifyParser( const QString& Url, bool createNewPlaylist, QObjec
     , m_single( true )
     , m_trackMode( true )
     , m_createNewPlaylist( createNewPlaylist )
+    , m_playlistJob( 0 )
 {
-    if ( s_pixmap.isNull() )
-        s_pixmap.load( RESPATH "images/spotify-logo.jpg" );
-
     lookupUrl( Url );
 }
 
 SpotifyParser::~SpotifyParser()
 {
-
 }
 
 
@@ -116,6 +138,9 @@ SpotifyParser::lookupPlaylist( const QString& link )
     QNetworkReply* reply = TomahawkUtils::nam()->get( QNetworkRequest( url ) );
     connect( reply, SIGNAL( finished() ), this, SLOT( spotifyPlaylistLookupFinished() ) );
 
+    m_playlistJob = new SpotifyJobNotifier();
+    JobStatusView::instance()->model()->addJob( m_playlistJob );
+
     m_queries.insert( reply );
 }
 
@@ -141,6 +166,9 @@ SpotifyParser::lookupTrack( const QString& link )
 
     QNetworkReply* reply = TomahawkUtils::nam()->get( QNetworkRequest( url ) );
     connect( reply, SIGNAL( finished() ), this, SLOT( spotifyTrackLookupFinished() ) );
+
+    SpotifyJobNotifier* j = new SpotifyJobNotifier( reply );
+    JobStatusView::instance()->model()->addJob( j );
 
     m_queries.insert( reply );
 
@@ -262,6 +290,8 @@ SpotifyParser::checkPlaylistFinished()
     tDebug() << "Checking for spotify batch playlist job finished" << m_queries.isEmpty() << m_createNewPlaylist;
     if ( m_queries.isEmpty() ) // we're done
     {
+        if ( m_playlistJob )
+            m_playlistJob->setFinished();
         if( m_createNewPlaylist )
             m_playlist = Playlist::create( SourceList::instance()->getLocal(),
                                        uuid(),
@@ -293,4 +323,13 @@ SpotifyParser::checkTrackFinished()
         deleteLater();
     }
 
+}
+
+QPixmap
+SpotifyParser::pixmap()
+{
+    if ( !s_pixmap )
+        s_pixmap = new QPixmap( RESPATH "images/spotify-logo.jpg" );
+
+    return *s_pixmap;
 }

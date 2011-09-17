@@ -34,6 +34,31 @@ class QNetworkReply;
 namespace Tomahawk
 {
 
+class DLLEXPORT SpotifyJobNotifier : public JobStatusItem
+{
+    Q_OBJECT
+public:
+    // track
+    SpotifyJobNotifier( QNetworkReply* job );
+    // playlist
+    SpotifyJobNotifier();
+    virtual ~SpotifyJobNotifier();
+
+    virtual QString rightColumnText() const;
+    virtual QString mainText() const;
+    virtual QPixmap icon() const;
+    virtual QString type() const { return m_type; }
+    virtual bool collapseItem() const { return true; }
+
+public slots:
+    void setFinished();
+
+private:
+    QString m_type;
+    QNetworkReply* m_job;
+};
+
+
 /**
  * Small class to parse spotify links into query_ptrs
  *
@@ -43,6 +68,7 @@ class DLLEXPORT SpotifyParser : public QObject
 {
     Q_OBJECT
 public:
+    friend class SpotifyJobNotifier;
     explicit SpotifyParser( const QString& trackUrl, bool createNewPlaylist = false, QObject* parent = 0 );
     explicit SpotifyParser( const QStringList& trackUrls, bool createNewPlaylist = false, QObject* parent = 0 );
     virtual ~SpotifyParser();
@@ -57,6 +83,8 @@ private slots:
     void spotifyPlaylistLookupFinished();
 
 private:
+    static QPixmap pixmap();
+
     void lookupUrl( const QString& url );
     void lookupTrack( const QString& track );
     void lookupPlaylist( const QString& playlist );
@@ -70,29 +98,9 @@ private:
     QSet< QNetworkReply* > m_queries;
     QString m_title, m_info, m_creator;
     Tomahawk::playlist_ptr m_playlist;
+    SpotifyJobNotifier* m_playlistJob;
 
-    static QPixmap s_pixmap;
-};
-
-class DLLEXPORT SpotifyJobNotifier : public JobStatusItem
-{
-    Q_OBJECT
-
-    friend class SpotifyParser;
-public:
-    SpotifyJobNotifier( const QString& type, const QPixmap& pixmap );
-    virtual ~SpotifyJobNotifier();
-
-    virtual QString rightColumnText() const;
-    virtual QString mainText() const;
-    virtual QPixmap icon() const { return m_icon; }
-    virtual QString type() const { return m_type; }
-    virtual bool collapseItem() const { return true; }
-
-private:
-    void set
-    QPixmap m_icon;
-    QString m_type;
+    static QPixmap* s_pixmap;
 };
 
 }

@@ -34,11 +34,14 @@
 
 using namespace Tomahawk;
 
+JobStatusView* JobStatusView::s_instance = 0;
 
 JobStatusView::JobStatusView( AnimatedSplitter* parent )
     : AnimatedWidget( parent )
     , m_parent( parent )
 {
+    s_instance = this;
+
     setHiddenSize( QSize( 0, 0 ) );
     setLayout( new QVBoxLayout() );
     m_view = new QListView( this );
@@ -73,8 +76,9 @@ JobStatusView::JobStatusView( AnimatedSplitter* parent )
 }
 
 void
-JobStatusView::setModel( QAbstractItemModel* m )
+JobStatusView::setModel( JobStatusModel* m )
 {
+    m_model = m;
     m_view->setModel( m );
     m_view->setItemDelegate( new JobStatusDelegate( m_view ) );
 
@@ -89,6 +93,8 @@ JobStatusView::checkCount()
         emit hideWidget();
     else if ( isHidden() && m_view->model()->rowCount() > 0 )
         emit showWidget();
+
+    emit sizeChanged( sizeHint() );
 
 }
 

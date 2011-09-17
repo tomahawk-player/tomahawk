@@ -178,13 +178,7 @@ DropJob::parseMimeData( const QMimeData *data )
     else if ( data->hasFormat( "text/plain" ) )
     {
         const QString plainData = QString::fromUtf8( data->data( "text/plain" ) );
-
-        if ( plainData.contains( "xspf" ) )
-            handleXspf( data->data( "text/plain" ).trimmed() );
-        else if ( plainData.contains( "spotify" ) && plainData.contains( "playlist" ) && s_canParseSpotifyPlaylists )
-            handleSpPlaylist( plainData );
-        else
-            handleTrackUrls ( plainData );
+        handleAllUrls( plainData );
     }
 
     m_resultList.append( results );
@@ -416,6 +410,18 @@ DropJob::handleSpPlaylist( const QString& url )
 }
 
 void
+DropJob::handleAllUrls( const QString& urls )
+{
+    if ( urls.contains( "xspf" ) )
+        handleXspf( urls );
+    else if ( urls.contains( "spotify" ) && urls.contains( "playlist" ) && s_canParseSpotifyPlaylists )
+        handleSpPlaylist( urls );
+    else
+        handleTrackUrls ( urls );
+}
+
+
+void
 DropJob::handleTrackUrls( const QString& urls )
 {
     // TODO REMOVE HACK
@@ -471,7 +477,7 @@ void
 DropJob::expandedUrls( QStringList urls )
 {
     m_queryCount--;
-    handleTrackUrls( urls.join( "\n" ) );
+    handleAllUrls( urls.join( "\n" ) );
 }
 
 void

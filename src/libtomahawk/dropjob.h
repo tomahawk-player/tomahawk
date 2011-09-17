@@ -105,7 +105,7 @@ private slots:
 private:
     /// handle parsing mime data
 
-
+    void handleAllUrls( const QString& urls );
     void handleTrackUrls( const QString& urls );
     QList< Tomahawk::query_ptr > tracksFromQueryList( const QMimeData* d );
     QList< Tomahawk::query_ptr > tracksFromResultList( const QMimeData* d );

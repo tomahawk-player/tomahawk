@@ -22,6 +22,7 @@
 #include "pipeline.h"
 #include "tomahawkapp.h"
 #include "JobStatusModel.h"
+#include "JobStatusView.h"
 
 PipelineStatusItem::PipelineStatusItem()
     : JobStatusItem()
@@ -76,6 +77,6 @@ PipelineStatusManager::resolving( const Tomahawk::query_ptr& p )
     {
         // No current query item and we're resolving something, so show it
         m_curItem = QWeakPointer< PipelineStatusItem >( new PipelineStatusItem );
-        APP->mainWindow()->jobsModel()->addJob( m_curItem.data() );
+        JobStatusView::instance()->model()->addJob( m_curItem.data() );
     }
 }

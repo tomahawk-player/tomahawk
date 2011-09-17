@@ -19,10 +19,12 @@
 #ifndef JOBSTATUSMODEL_H
 #define JOBSTATUSMODEL_H
 
+#include "dllmacro.h"
+
 #include <QModelIndex>
 
 class JobStatusItem;
-class JobStatusModel : public QAbstractListModel
+class DLLEXPORT JobStatusModel : public QAbstractListModel
 {
     Q_OBJECT
 public:

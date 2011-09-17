@@ -17,7 +17,9 @@
  */
 
 #include "JobStatusModel.h"
+
 #include "JobStatusItem.h"
+#include "utils/logger.h"
 
 JobStatusModel::JobStatusModel( QObject* parent )
     : QAbstractListModel ( parent )
@@ -34,11 +36,15 @@ JobStatusModel::~JobStatusModel()
 void
 JobStatusModel::addJob( JobStatusItem* item )
 {
+    connect( item, SIGNAL( statusChanged() ), this, SLOT( itemUpdated() ) );
+    connect( item, SIGNAL( finished() ), this, SLOT( itemFinished() ) );
+
     if ( item->collapseItem() )
     {
         if ( m_collapseCount.contains( item->type() ) )
         {
             m_collapseCount[ item->type() ].append( item );
+            qDebug() << "Adding item:" << item << "TO COLLAPSE ONLY";
             return; // we're done, no new rows
         }
         else
@@ -47,9 +53,7 @@ JobStatusModel::addJob( JobStatusItem* item )
         }
 
     }
-
-    connect( item, SIGNAL( statusChanged() ), this, SLOT( itemUpdated() ) );
-    connect( item, SIGNAL( finished() ), this, SLOT( itemFinished() ) );
+    qDebug() << "Adding item:" << item;
 
     beginInsertRows( QModelIndex(), 0, 0 );
     m_items.prepend( item );
@@ -108,15 +112,36 @@ JobStatusModel::itemFinished()
     JobStatusItem* item = qobject_cast< JobStatusItem* >( sender() );
     Q_ASSERT( item );
 
+//     tDebug() << "Got item finished:" << item->type() << item->mainText() << item;
+//     foreach( JobStatusItem* item, m_items )
+//     {
+//         qDebug() << "ITEM #:" << item;
+//     }
+//     foreach( const QString& str, m_collapseCount.keys() )
+//     {
+//         tDebug() << "\t" << str;
+//         foreach( JobStatusItem* chain, m_collapseCount[ str ] )
+//             qDebug() << "\t\t" << chain;
+//     }
     if ( m_collapseCount.contains( item->type() ) )
     {
+        const int indexOf = m_items.indexOf( m_collapseCount[ item->type() ].first() );
+//         tDebug() << "index in main list of collapsed irst item:" << indexOf;
+        if ( m_collapseCount[ item->type() ].first() == item &&
+             m_items.contains( m_collapseCount[ item->type() ].first() ) && m_collapseCount[ item->type() ].size() > 1 )
+        {
+            // the placeholder we use that links m_items and m_collapsecount is done, so choose another one
+            m_items.replace( m_items.indexOf( m_collapseCount[ item->type() ].first() ), m_collapseCount[ item->type() ][ 1 ] );
+//             qDebug() << "Replaced" << m_collapseCount[ item->type() ].first() << "with:" << m_collapseCount[ item->type() ][ 1 ] << m_items;
+        }
         m_collapseCount[ item->type() ].removeAll( item );
+//         tDebug() << "New collapse count list:" << m_collapseCount[ item->type() ];
         if ( m_collapseCount[ item->type() ].isEmpty() )
             m_collapseCount.remove( item->type() );
         else
         {
             // One less to count, but item is still there
-            const QModelIndex idx = index( m_items.indexOf( m_collapseCount[ item->type() ].first() ), 0, QModelIndex() );
+            const QModelIndex idx = index( indexOf, 0, QModelIndex() );
             emit dataChanged( idx, idx );
             return;
         }

@@ -215,6 +215,11 @@ set( libSources
     widgets/headerbreadcrumb.cpp
     widgets/siblingcrumbbutton.cpp
 
+    jobview/JobStatusView.cpp
+    jobview/JobStatusModel.cpp
+    jobview/JobStatusDelegate.cpp
+    jobview/PipelineStatusItem.cpp
+
     thirdparty/kdsingleapplicationguard/kdsingleapplicationguard.cpp
     thirdparty/kdsingleapplicationguard/kdsharedmemorylocker.cpp
     thirdparty/kdsingleapplicationguard/kdtoolsglobal.cpp
@@ -420,6 +425,12 @@ set( libHeaders
     widgets/breadcrumbbuttonbase.h
     widgets/headerbreadcrumb.h
     widgets/siblingcrumbbutton.h
+
+    jobview/JobStatusView.h
+    jobview/JobStatusModel.h
+    jobview/JobStatusDelegate.h
+    jobview/JobStatusItem.h
+    jobview/PipelineStatusItem.h
 
     thirdparty/kdsingleapplicationguard/kdsingleapplicationguard.h
     thirdparty/Qocoa/qsearchfield.h
