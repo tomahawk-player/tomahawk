@@ -112,7 +112,7 @@ macro_log_feature(QuaZip_FOUND "QuaZip" "Provides support for extracting downloa
 
 IF( NOT QuaZip_FOUND )
     add_subdirectory( ${CMAKE_SOURCE_DIR}/src/libtomahawk/thirdparty/quazip )
-    SET( QuaZip_INCLUDE_DIR ${CMAKE_CURRENT_BINARY_DIR}/libtomahawk/thirdparty )
+    SET( QuaZip_INCLUDE_DIR ${CMAKE_CURRENT_BINARY_DIR}/libtomahawk/thirdparty/quazip )
     SET( QuaZip_LIBRARY quazip )
     SET( QuaZip_LIBRARIES ${QuaZip_LIBRARY} )
     SET( QuaZip_FOUND true )
