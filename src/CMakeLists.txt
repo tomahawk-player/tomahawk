@@ -65,7 +65,6 @@ SET( tomahawkSourcesGui ${tomahawkSourcesGui}
 
 #     breakpad/BreakPad.cpp
 
-     transferview.cpp
      tomahawktrayicon.cpp
      audiocontrols.cpp
      settingsdialog.cpp
@@ -114,7 +113,6 @@ SET( tomahawkHeadersGui ${tomahawkHeadersGui}
      sourcetree/items/genericpageitems.h
      sourcetree/items/temporarypageitem.h
 
-     transferview.h
      tomahawktrayicon.h
      audiocontrols.h
      settingsdialog.h

@@ -1,6 +1,6 @@
 /* === This file is part of Tomahawk Player - <http://tomahawk-player.org> ===
  *
- *   Copyright 2010-2011, Christian Muehlhaeuser <muesli@tomahawk-player.org>
+ *   Copyright 2010-2011, Leo Franchi <lfranchi@kde.org>
  *
  *   Tomahawk is free software: you can redistribute it and/or modify
  *   it under the terms of the GNU General Public License as published by
@@ -16,40 +16,30 @@
  *   along with Tomahawk. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef TRANSFERVIEW_H
-#define TRANSFERVIEW_H
+#ifndef DATABASECOMMAND_LATCHED_H
+#define DATABASECOMMAND_LATCHED_H
 
-#include <QTreeWidget>
+#include "database/databasecommandloggable.h"
 
-#include "typedefs.h"
-#include "widgets/animatedsplitter.h"
+class DatabaseImpl;
 
-class StreamConnection;
-
-class TransferView : public AnimatedWidget
+class DatabaseCommand_Latched : public DatabaseCommandLoggable
 {
-Q_OBJECT
-
+    Q_OBJECT
 public:
-    explicit TransferView( AnimatedSplitter* parent );
-    virtual ~TransferView()
-    {
-    }
+    enum LatchAction {
+        LatchedOn = 0,
+        LatchedOff
+    };
 
-    QSize sizeHint() const;
+    explicit DatabaseCommand_Latched( QObject* parent = 0 );
+    explicit DatabaseCommand_Latched( const Tomahawk::source_ptr& s, QObject* parent = 0 );
 
-signals:
-
-private slots:
-    void streamRegistered( StreamConnection* sc );
-    void streamFinished( StreamConnection* sc );
-
-    void onTransferUpdate();
-
-private:
-    QHash< StreamConnection*, QPersistentModelIndex > m_index;
-    QTreeWidget* m_tree;
-    AnimatedSplitter* m_parent;
+    virtual bool doesMutates() const { return true; }
+    virtual void exec( DatabaseImpl* );
+    virtual void postCommitHook();
+    virtual bool singletonCmd() const;
+    virtual bool localOnly() const;
 };
 
-#endif // TRANSFERVIEW_H
+#endif // DATABASECOMMAND_LATCHED_H

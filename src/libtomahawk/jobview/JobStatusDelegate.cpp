@@ -18,9 +18,11 @@
 
 #include "JobStatusDelegate.h"
 
+#include "JobStatusModel.h"
+#include "utils/logger.h"
+
 #include <QPainter>
 #include <QApplication>
-#include "JobStatusModel.h"
 
 #define ROW_HEIGHT 20
 #define PADDING 2
@@ -43,12 +45,12 @@ JobStatusDelegate::paint( QPainter* painter, const QStyleOptionViewItem& option,
     initStyleOption( &opt, index );
     QFontMetrics fm( opt.font );
 
+    opt.state &= ~QStyle::State_MouseOver;
     QApplication::style()->drawPrimitive( QStyle::PE_PanelItemViewItem, &opt, painter, opt.widget );
 
+//     painter->drawLine( opt.rect.topLeft(), opt.rect.topRight() );
+
     painter->setRenderHint( QPainter::Antialiasing );
-
-    painter->drawLine( opt.rect.topLeft(), opt.rect.topRight() );
-
     const QRect iconRect( PADDING, PADDING + opt.rect.y(), ROW_HEIGHT - 2*PADDING, ROW_HEIGHT - 2*PADDING );
     QPixmap p = index.data( Qt::DecorationRole ).value< QPixmap >();
     p = p.scaled( iconRect.size(), Qt::KeepAspectRatio, Qt::SmoothTransformation );
@@ -66,7 +68,7 @@ JobStatusDelegate::paint( QPainter* painter, const QStyleOptionViewItem& option,
         rightEdge = rRect.left();
     }
 
-    const int mainW = rightEdge - iconRect.right();
+    const int mainW = rightEdge - PADDING - iconRect.right();
     QString mainText = index.data( Qt::DisplayRole ).toString();
     mainText = fm.elidedText( mainText, Qt::ElideRight, mainW  );
     painter->drawText( QRect( iconRect.right() + 2*PADDING, PADDING + opt.rect.y(), mainW, opt.rect.height() - 2*PADDING ), Qt::AlignLeft | Qt::AlignVCenter, mainText );

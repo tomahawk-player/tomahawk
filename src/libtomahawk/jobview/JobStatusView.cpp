@@ -31,6 +31,7 @@
 #include <QVBoxLayout>
 #include <QListView>
 #include <QAbstractItemModel>
+#include "TransferStatusItem.h"
 
 using namespace Tomahawk;
 
@@ -73,6 +74,7 @@ JobStatusView::JobStatusView( AnimatedSplitter* parent )
     hideWidget();
 
     new PipelineStatusManager( this );
+    new TransferStatusManager( this );
 }
 
 void
