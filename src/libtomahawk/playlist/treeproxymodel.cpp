@@ -191,8 +191,7 @@ TreeProxyModel::filterAcceptsRow( int sourceRow, const QModelIndex& sourceParent
             if ( result->track() == pi->result()->track() &&
                ( result->albumpos() == pi->result()->albumpos() || result->albumpos() == 0 ) )
             {
-                if ( result.data() != pi->result().data() )
-                    return false;
+                return ( result.data() == pi->result().data() );
             }
         }
 
@@ -213,30 +212,31 @@ TreeProxyModel::filterAcceptsRow( int sourceRow, const QModelIndex& sourceParent
                     return false;
             }
         }
-
-//        tDebug() << "Accepting:" << pi->result()->toString() << pi->result()->collection()->source()->id();
-        m_cache.insertMulti( sourceParent, pi->result() );
     }
 
+    bool accepted = false;
     if ( m_filter.isEmpty() )
-        return true;
+        accepted = true;
+    else if ( !pi->artist().isNull() )
+        accepted = m_artistsFilter.contains( pi->artist() );
+    else if ( !pi->album().isNull() )
+        accepted = m_albumsFilter.contains( pi->album() );
 
-    if ( !pi->artist().isNull() )
-        return m_artistsFilter.contains( pi->artist() );
-    if ( !pi->album().isNull() )
-        return m_albumsFilter.contains( pi->album() );
-
-    QStringList sl = m_filter.split( " ", QString::SkipEmptyParts );
-    foreach( const QString& s, sl )
+    if ( !accepted )
     {
-        if ( !pi->name().contains( s, Qt::CaseInsensitive ) &&
-             !pi->albumName().contains( s, Qt::CaseInsensitive ) &&
-             !pi->artistName().contains( s, Qt::CaseInsensitive ) )
+        QStringList sl = m_filter.split( " ", QString::SkipEmptyParts );
+        foreach( const QString& s, sl )
         {
-            return false;
+            if ( !pi->name().contains( s, Qt::CaseInsensitive ) &&
+                 !pi->albumName().contains( s, Qt::CaseInsensitive ) &&
+                 !pi->artistName().contains( s, Qt::CaseInsensitive ) )
+            {
+                return false;
+            }
         }
     }
 
+    m_cache.insertMulti( sourceParent, pi->result() );
     return true;
 }
 
