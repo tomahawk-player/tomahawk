@@ -23,8 +23,8 @@
 #include "pipeline.h"
 
 #include <attica/downloaditem.h>
-#include <quazip/quazip.h>
-#include <quazip/quazipfile.h>
+#include <quazip.h>
+#include <quazipfile.h>
 
 #include <QNetworkReply>
 #include <QTemporaryFile>
