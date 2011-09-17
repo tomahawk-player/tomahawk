@@ -35,10 +35,6 @@
 int
 main( int argc, char *argv[] )
 {
-#ifndef Q_WS_WIN
-    new BreakPad( "/tmp" );
-#endif
-
 #ifdef Q_WS_MAC
       // Do Mac specific startup to get media keys working.
       // This must go before QApplication initialisation.
@@ -50,6 +46,11 @@ main( int argc, char *argv[] )
 #endif
 
     TomahawkApp a( argc, argv );
+
+#ifndef Q_WS_WIN
+    new BreakPad( "/tmp" );
+#endif
+
     KDSingleApplicationGuard guard( &a, KDSingleApplicationGuard::AutoKillOtherInstances );
     QObject::connect( &guard, SIGNAL( instanceStarted( KDSingleApplicationGuard::Instance ) ), &a, SLOT( instanceStarted( KDSingleApplicationGuard::Instance )  ) );
 

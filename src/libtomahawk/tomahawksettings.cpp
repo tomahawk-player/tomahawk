@@ -36,6 +36,7 @@ using namespace Tomahawk;
 
 TomahawkSettings* TomahawkSettings::s_instance = 0;
 
+
 inline QDataStream& operator<<(QDataStream& out, const AtticaManager::StateHash& states)
 {
     out << (quint32)states.count();
@@ -46,6 +47,7 @@ inline QDataStream& operator<<(QDataStream& out, const AtticaManager::StateHash&
     }
     return out;
 }
+
 
 inline QDataStream& operator>>(QDataStream& in, AtticaManager::StateHash& states)
 {
@@ -63,6 +65,7 @@ inline QDataStream& operator>>(QDataStream& in, AtticaManager::StateHash& states
     }
     return in;
 }
+
 
 TomahawkSettings*
 TomahawkSettings::instance()

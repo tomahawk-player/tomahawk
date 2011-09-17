@@ -18,7 +18,9 @@
 
 #include "BreakPad.h"
 
+#include <QCoreApplication>
 #include <QString>
+#include <string.h>
 
 #ifndef WIN32
 #include <unistd.h>
@@ -35,6 +37,7 @@ LaunchUploader( const char* dump_dir, const char* minidump_id, void* that, bool 
     if ( !succeeded )
         return false;
 
+    const char* crashReporter = static_cast<BreakPad*>(that)->crashReporter();
     pid_t pid = fork();
 
     if ( pid == -1 ) // fork failed
@@ -42,8 +45,8 @@ LaunchUploader( const char* dump_dir, const char* minidump_id, void* that, bool 
     if ( pid == 0 )
     {
         // we are the fork
-        execl( CRASH_REPORTER_BINARY,
-               CRASH_REPORTER_BINARY,
+        execl( crashReporter,
+               crashReporter,
                dump_dir,
                minidump_id,
                minidump_id,
@@ -67,6 +70,14 @@ BreakPad::BreakPad( const QString& path )
     : google_breakpad::ExceptionHandler( path.toStdString(), 0, LaunchUploader, this, true, 0 )
 #endif
 {
+    QString reporter = QString( "%1/%2" ).arg( qApp->applicationDirPath() ).arg( CRASH_REPORTER_BINARY );
+
+    char* creporter;
+    std::string sreporter = reporter.toStdString();
+    creporter = new char[ sreporter.size() + 1 ];
+    strcpy( creporter, sreporter.c_str() );
+
+    m_crashReporter = creporter;
 }
 
 
@@ -82,12 +93,12 @@ LaunchUploader( const wchar_t* dump_dir, const wchar_t* minidump_id, void* that,
     // DON'T USE THE HEAP!!!
     // So that indeed means, no QStrings, no qDebug(), no QAnything, seriously!
 
-    const char* m_product_name = static_cast<BreakPad*>(that)->productName();
+    const char* productName = static_cast<BreakPad*>(that)->productName();
 
-    // convert m_product_name to widechars, which sadly means the product name must be Latin1
-    wchar_t product_name[ 256 ];
+    // convert productName to widechars, which sadly means the product name must be Latin1
+    wchar_t productName[ 256 ];
     char* out = (char*)product_name;
-    const char* in = m_product_name - 1;
+    const char* in = productName - 1;
     do {
         *out++ = *++in; //latin1 chars fit in first byte of each wchar
         *out++ = '\0';  //every second byte is NULL

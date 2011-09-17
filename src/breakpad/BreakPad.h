@@ -28,7 +28,8 @@
 
 class BreakPad : public google_breakpad::ExceptionHandler
 {
-    const char* m_product_name; // yes! It MUST be const char[]
+    const char* m_productName; // yes! It MUST be const char[]
+    const char* m_crashReporter; // again, const char[]
 
 public:
     BreakPad( const QString &dump_write_dirpath );
@@ -36,8 +37,11 @@ public:
     ~BreakPad()
     {}
 
-    void setProductName( const char* s ) { m_product_name = s; };
-    const char* productName() const { return m_product_name; }
+    void setProductName( const char* s ) { m_productName = s; };
+    const char* productName() const { return m_productName; }
+
+    void setCrashReporter( const char* s ) { m_crashReporter = s; };
+    const char* crashReporter() const { return m_crashReporter; }
 };
 
 #undef char
