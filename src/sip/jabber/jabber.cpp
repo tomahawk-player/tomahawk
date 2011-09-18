@@ -76,15 +76,17 @@ JabberPlugin::JabberPlugin( const QString& pluginId )
     m_ui->setupUi( m_configWidget.data() );
     m_configWidget.data()->setVisible( false );
 
-    m_ui->jabberUsername->setText( accountName() );
-    m_ui->jabberPassword->setText( readPassword() );
-    m_ui->jabberServer->setText( readServer() );
-    m_ui->jabberPort->setValue( readPort() );
-    m_ui->jidExistsLabel->hide();
     m_currentUsername = accountName();
     m_currentServer = readServer();
     m_currentPassword = readPassword();
     m_currentPort = readPort();
+    
+    m_ui->jabberUsername->setText( m_currentUsername );
+    m_ui->jabberPassword->setText( m_currentPassword );
+    m_ui->jabberServer->setText( m_currentServer );
+    m_ui->jabberPort->setValue( m_currentPort );
+    m_ui->jidExistsLabel->hide();
+    
 
     connect( m_ui->jabberUsername, SIGNAL( textChanged( QString ) ), SLOT( onCheckJidExists( QString ) ) );
     // setup JID object
@@ -481,19 +483,35 @@ void
 JabberPlugin::checkSettings()
 {
     bool reconnect = false;
-    if ( m_currentUsername != accountName() )
+    
+    QString username, password, server;
+    int port;
+    
+    username = accountName();
+    password = readPassword();
+    server = readServer();
+    port = readPort();
+    
+    if ( m_currentUsername != username )
+    {
+        m_currentUsername = username;
         reconnect = true;
-    if ( m_currentPassword != readPassword() )
+    }
+    if ( m_currentPassword != password )
+    {
+        m_currentPassword = password;
         reconnect = true;
-    if ( m_currentServer != readServer() )
+    }
+    if ( m_currentServer != server )
+    {
+        m_currentServer = server;
         reconnect = true;
+    }
     if ( m_currentPort != readPort() )
+    {
+        m_currentPort = port;
         reconnect = true;
-
-    m_currentUsername = accountName();
-    m_currentPassword = readPassword();
-    m_currentServer = readServer();
-    m_currentPort = readPort();
+    }
 
     if ( !m_currentUsername.contains( '@' ) )
     {
@@ -505,11 +523,6 @@ JabberPlugin::checkSettings()
     {
         qDebug() << Q_FUNC_INFO << "Reconnecting jreen plugin...";
         disconnectPlugin();
-
-        m_currentUsername = accountName();
-        m_currentPassword = readPassword();
-        m_currentServer = readServer();
-        m_currentPort = readPort();
 
         setupClientHelper();
 
