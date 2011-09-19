@@ -138,7 +138,7 @@ bool
 PlaylistItem::willAcceptDrag( const QMimeData* data ) const
 {
     Q_UNUSED( data );
-    return !m_playlist.isNull() && m_playlist->author()->isLocal();
+    return !m_playlist.isNull() && m_playlist->author()->isLocal() && DropJob::acceptsMimeData( data, DropJob::Track );
 }
 
 PlaylistItem::DropTypes
@@ -175,7 +175,12 @@ PlaylistItem::dropMimeData( const QMimeData* data, Qt::DropAction action )
         data->data( "application/tomahawk.playlist.id" ) == m_playlist->guid() )
         return false; // don't allow dropping on ourselves
 
+    if ( !DropJob::acceptsMimeData( data, DropJob::Track ) )
+        return false;
+
     DropJob *dj = new DropJob();
+    dj->setDropTypes( DropJob::Track );
+
     connect( dj, SIGNAL( tracks( QList< Tomahawk::query_ptr > ) ), this, SLOT( parsedDroppedTracks( QList< Tomahawk::query_ptr > ) ) );
 
     if ( dropType() == DropTypeAllFromArtist )
