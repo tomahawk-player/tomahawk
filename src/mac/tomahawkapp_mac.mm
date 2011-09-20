@@ -20,8 +20,9 @@
 
 #include "macdelegate.h"
 #include "macshortcuthandler.h"
-#include "tomahawkapp.h"
 #include "config.h"
+
+#include "AvailabilityMacros.h"
 
 #import <AppKit/NSApplication.h>
 #import <Foundation/NSAutoreleasePool.h>
@@ -38,6 +39,10 @@
 
 #ifdef HAVE_SPARKLE
 #import <Sparkle/SUUpdater.h>
+#endif
+
+#if defined(MAC_OS_X_VERSION_10_7)
+#include "tomahawkapp.h"
 #endif
 
 #include <QDebug>
@@ -236,7 +241,8 @@ void Tomahawk::checkForUpdates() {
 
 void Tomahawk::enableFullscreen()
 {
-#if MAC_OS_X_VERSION_MAX_ALLOWED >= MAC_OS_X_VERSION_10_7
+#if defined(MAC_OS_X_VERSION_10_7)
+    qDebug() << "Enabling Lion Full-screeen";
     NSView *nsview = (NSView *)APP->mainWindow()->winId();
     NSWindow *nswindow = [nsview window];
     [nswindow setCollectionBehavior:NSWindowCollectionBehaviorFullScreenPrimary];
