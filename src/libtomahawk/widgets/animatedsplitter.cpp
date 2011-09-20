@@ -247,3 +247,26 @@ AnimatedWidget::onAnimationFinished()
         setFixedHeight( hiddenSize().height() );
     }
 }
+
+QSize
+AnimatedSplitterHandle::sizeHint() const
+{
+    // Re-calculate our position if the items in the splitter changed, or if we haven't calculated it yet
+    if ( m_indexInSplitter == -1 || m_lastCount != splitter()->count() )
+    {
+        for ( int i = 0; i < splitter()->count(); i++ )
+        {
+            if ( splitter()->handle( i ) == this )
+            {
+                m_indexInSplitter = i;
+            }
+        }
+        m_lastCount = splitter()->count();
+    }
+
+    // sizeHint is 0,0 if widget below handle has size 0 or is hidden
+    if ( splitter()->widget( m_indexInSplitter )->height() == 0 )
+        return QSize( 0, 0 );
+    else
+        return QSize( 1, 1 );
+}

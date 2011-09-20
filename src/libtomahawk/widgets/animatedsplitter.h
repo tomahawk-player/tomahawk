@@ -65,14 +65,17 @@ Q_OBJECT
 public:
     explicit AnimatedSplitterHandle( Qt::Orientation orientation, QSplitter* parent )
         : QSplitterHandle( orientation, parent )
+        , m_indexInSplitter( -1 )
+        , m_lastCount( -1 )
     {
         setCursor( Qt::ArrowCursor );
     }
 
-    virtual QSize sizeHint() const
-    {
-        return QSize( 0, 0 );
-    }
+    virtual QSize sizeHint() const;
+
+private:
+    mutable int m_indexInSplitter;
+    mutable int m_lastCount;
 };
 
 
