@@ -188,6 +188,11 @@ SourceList::get( const QString& username, const QString& friendlyName )
     QMutexLocker lock( &m_mut );
 
     source_ptr source;
+    if ( Database::instance()->dbid() == username )
+    {
+        return m_local;
+    }
+
     if ( !m_sources.contains( username ) )
     {
         source = source_ptr( new Source( -1, username ) );

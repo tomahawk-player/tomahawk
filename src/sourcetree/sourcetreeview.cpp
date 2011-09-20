@@ -99,6 +99,8 @@ SourceTreeView::SourceTreeView( QWidget* parent )
 
     showOfflineSources( TomahawkSettings::instance()->showOfflineSources() );
 
+    connect( AudioEngine::instance(), SIGNAL( playlistChanged( Tomahawk::PlaylistInterface* ) ), this, SLOT( playlistChanged( Tomahawk::PlaylistInterface* ) ) );
+
     // Light-blue sourcetree on osx
 #ifdef Q_WS_MAC
     setStyleSheet( "SourceTreeView:active { background: #DDE4EB; } "
@@ -363,9 +365,30 @@ SourceTreeView::latchOn()
     cmd->setTimestamp( QDateTime::currentDateTime().toTime_t() );
     Database::instance()->enqueue( QSharedPointer< DatabaseCommand >( cmd ) );
 
+    m_latch = source->getPlaylistInterface();
     AudioEngine::instance()->playItem( source->getPlaylistInterface().data(), source->getPlaylistInterface()->nextItem() );
 }
 
+void
+SourceTreeView::playlistChanged( PlaylistInterface* newInterface )
+{
+    // If we were latched on and changed, send the listening along stop
+    if ( !m_latch.isNull() )
+    {
+        SourcePlaylistInterface* sourcepi = dynamic_cast< SourcePlaylistInterface* >( m_latch.data() );
+        Q_ASSERT( sourcepi );
+
+        const source_ptr source = sourcepi->source();
+        DatabaseCommand_SocialAction* cmd = new DatabaseCommand_SocialAction();
+        cmd->setSource( SourceList::instance()->getLocal() );
+        cmd->setAction( "latchOff");
+        cmd->setComment( source->userName() );
+        cmd->setTimestamp( QDateTime::currentDateTime().toTime_t() );
+        Database::instance()->enqueue( QSharedPointer< DatabaseCommand >( cmd ) );
+
+        m_latch.clear();
+    }
+}
 
 void
 SourceTreeView::latchOff()
@@ -381,13 +404,6 @@ SourceTreeView::latchOff()
 
     const CollectionItem* item = itemFromIndex< CollectionItem >( m_contextMenuIndex );
     const source_ptr source = item->source();
-
-    DatabaseCommand_SocialAction* cmd = new DatabaseCommand_SocialAction();
-    cmd->setSource( SourceList::instance()->getLocal() );
-    cmd->setAction( "latchOff");
-    cmd->setComment( source->userName() );
-    cmd->setTimestamp( QDateTime::currentDateTime().toTime_t() );
-    Database::instance()->enqueue( QSharedPointer< DatabaseCommand >( cmd ) );
 
     AudioEngine::instance()->playItem( source->getPlaylistInterface().data(), source->getPlaylistInterface()->nextItem() );
 

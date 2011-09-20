@@ -22,6 +22,7 @@
 #include "sourcelist.h"
 #include "JobStatusView.h"
 #include "JobStatusModel.h"
+#include "utils/tomahawkutils.h"
 
 LatchedStatusItem::LatchedStatusItem( const Tomahawk::source_ptr& from, const Tomahawk::source_ptr& to, LatchedStatusManager* parent )
     : JobStatusItem()
@@ -64,6 +65,8 @@ LatchedStatusManager::LatchedStatusManager( QObject* parent )
 {
     connect( SourceList::instance(), SIGNAL( sourceLatchedOn( Tomahawk::source_ptr, Tomahawk::source_ptr ) ), this, SLOT( latchedOn( Tomahawk::source_ptr, Tomahawk::source_ptr ) ) );
     connect( SourceList::instance(), SIGNAL( sourceLatchedOff( Tomahawk::source_ptr, Tomahawk::source_ptr ) ), this, SLOT( latchedOff( Tomahawk::source_ptr, Tomahawk::source_ptr ) ) );
+
+    m_pixmap.load( RESPATH "images/headphones.png" );
 }
 
 void

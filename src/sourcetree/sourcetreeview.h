@@ -19,8 +19,14 @@
 #ifndef SOURCETREEVIEW_H
 #define SOURCETREEVIEW_H
 
+#include "typedefs.h"
+
 #include <QTreeView>
 #include <QMenu>
+
+namespace Tomahawk {
+    class PlaylistInterface;
+}
 
 class CollectionModel;
 class PlaylistModel;
@@ -59,6 +65,7 @@ private slots:
 
     void latchOn();
     void latchOff();
+    void playlistChanged( Tomahawk::PlaylistInterface* );
 
     void onCustomContextMenu( const QPoint& pos );
 
@@ -94,6 +101,7 @@ private:
     QAction* m_addToLocalAction;
     QAction* m_latchOnAction;
     QAction* m_latchOffAction;
+    Tomahawk::playlistinterface_ptr m_latch;
 
     bool m_dragging;
     QRect m_dropRect;
