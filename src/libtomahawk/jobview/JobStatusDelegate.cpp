@@ -24,7 +24,8 @@
 #include <QPainter>
 #include <QApplication>
 
-#define ROW_HEIGHT 20
+#define ROW_HEIGHT 15
+#define ICON_PADDING 1
 #define PADDING 2
 JobStatusDelegate::JobStatusDelegate( QObject* parent )
     : QStyledItemDelegate ( parent )
@@ -51,7 +52,7 @@ JobStatusDelegate::paint( QPainter* painter, const QStyleOptionViewItem& option,
 //     painter->drawLine( opt.rect.topLeft(), opt.rect.topRight() );
 
     painter->setRenderHint( QPainter::Antialiasing );
-    const QRect iconRect( PADDING, PADDING + opt.rect.y(), ROW_HEIGHT - 2*PADDING, ROW_HEIGHT - 2*PADDING );
+    const QRect iconRect( ICON_PADDING, ICON_PADDING + opt.rect.y(), ROW_HEIGHT - 2*ICON_PADDING, ROW_HEIGHT - 2*ICON_PADDING );
     QPixmap p = index.data( Qt::DecorationRole ).value< QPixmap >();
     p = p.scaled( iconRect.size(), Qt::KeepAspectRatio, Qt::SmoothTransformation );
     painter->drawPixmap( iconRect, p );
