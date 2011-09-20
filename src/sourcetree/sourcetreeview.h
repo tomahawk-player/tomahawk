@@ -37,6 +37,7 @@ Q_OBJECT
 
 public:
     explicit SourceTreeView( QWidget* parent = 0 );
+    ~SourceTreeView();
 
 public slots:
     void showOfflineSources( bool offlineSourcesShown );

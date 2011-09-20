@@ -110,6 +110,8 @@ SourceTreeView::SourceTreeView( QWidget* parent )
 
 }
 
+SourceTreeView::~SourceTreeView()
+{}
 
 void
 SourceTreeView::setupMenus()
