@@ -43,6 +43,7 @@ void setShortcutHandler(Tomahawk::MacShortcutHandler* engine);
 // used for opening files with tomahawk
 void setApplicationHandler(PlatformInterface* handler);
 void checkForUpdates();
+void enableFullscreen();
 
 };
 

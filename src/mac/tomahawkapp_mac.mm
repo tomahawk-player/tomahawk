@@ -20,6 +20,7 @@
 
 #include "macdelegate.h"
 #include "macshortcuthandler.h"
+#include "tomahawkapp.h"
 #include "config.h"
 
 #import <AppKit/NSApplication.h>
@@ -230,5 +231,14 @@ void Tomahawk::setApplicationHandler(Tomahawk::PlatformInterface* handler) {
 void Tomahawk::checkForUpdates() {
 #ifdef HAVE_SPARKLE
   [[SUUpdater sharedUpdater] checkForUpdates: NSApp];
+#endif
+}
+
+void Tomahawk::enableFullscreen()
+{
+#if MAC_OS_X_VERSION_MAX_ALLOWED >= MAC_OS_X_VERSION_10_7
+    NSView *nsview = (NSView *)APP->mainWindow()->winId();
+    NSWindow *nswindow = [nsview window];
+    [nswindow setCollectionBehavior:NSWindowCollectionBehaviorFullScreenPrimary];
 #endif
 }
