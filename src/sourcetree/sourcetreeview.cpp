@@ -372,6 +372,10 @@ SourceTreeView::latchOn()
 void
 SourceTreeView::playlistChanged( PlaylistInterface* newInterface )
 {
+    // If we were latched on and changed, send the listening along stop
+    if ( m_latch.isNull() )
+        return;
+
     const PlaylistInterface* pi = AudioEngine::instance()->playlist();
     bool listeningAlong = false;
     source_ptr newSource;
@@ -386,26 +390,22 @@ SourceTreeView::playlistChanged( PlaylistInterface* newInterface )
         }
     }
 
-    // If we were latched on and changed, send the listening along stop
-    if ( !m_latch.isNull() )
-    {
-        SourcePlaylistInterface* origsourcepi = dynamic_cast< SourcePlaylistInterface* >( m_latch.data() );
-        Q_ASSERT( origsourcepi );
-        const source_ptr source = origsourcepi->source();
+    SourcePlaylistInterface* origsourcepi = dynamic_cast< SourcePlaylistInterface* >( m_latch.data() );
+    Q_ASSERT( origsourcepi );
+    const source_ptr source = origsourcepi->source();
 
-        // if we're currently listening along to the same source, no change
-        if ( listeningAlong && ( !origsourcepi->source().isNull() && origsourcepi->source()->id() == newSource->id() ) )
-            return;
+    // if we're currently listening along to the same source, no change
+    if ( listeningAlong && ( !origsourcepi->source().isNull() && origsourcepi->source()->id() == newSource->id() ) )
+        return;
 
-        DatabaseCommand_SocialAction* cmd = new DatabaseCommand_SocialAction();
-        cmd->setSource( SourceList::instance()->getLocal() );
-        cmd->setAction( "latchOff");
-        cmd->setComment( source->userName() );
-        cmd->setTimestamp( QDateTime::currentDateTime().toTime_t() );
-        Database::instance()->enqueue( QSharedPointer< DatabaseCommand >( cmd ) );
+    DatabaseCommand_SocialAction* cmd = new DatabaseCommand_SocialAction();
+    cmd->setSource( SourceList::instance()->getLocal() );
+    cmd->setAction( "latchOff");
+    cmd->setComment( source->userName() );
+    cmd->setTimestamp( QDateTime::currentDateTime().toTime_t() );
+    Database::instance()->enqueue( QSharedPointer< DatabaseCommand >( cmd ) );
 
-        m_latch.clear();
-    }
+    m_latch.clear();
 }
 
 void
