@@ -20,13 +20,10 @@
 #define SOURCETREEVIEW_H
 
 #include "typedefs.h"
+#include "sourceplaylistinterface.h"
 
 #include <QTreeView>
 #include <QMenu>
-
-namespace Tomahawk {
-    class PlaylistInterface;
-}
 
 class CollectionModel;
 class PlaylistModel;

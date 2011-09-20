@@ -372,13 +372,31 @@ SourceTreeView::latchOn()
 void
 SourceTreeView::playlistChanged( PlaylistInterface* newInterface )
 {
+    const PlaylistInterface* pi = AudioEngine::instance()->playlist();
+    bool listeningAlong = false;
+    source_ptr newSource;
+
+    if ( pi && dynamic_cast< const SourcePlaylistInterface* >( pi ) )
+    {
+        const SourcePlaylistInterface* sourcepi = dynamic_cast< const SourcePlaylistInterface* >( pi );
+        if ( !AudioEngine::instance()->state() == AudioEngine::Stopped )
+        {
+            listeningAlong = true;
+            newSource = sourcepi->source();
+        }
+    }
+
     // If we were latched on and changed, send the listening along stop
     if ( !m_latch.isNull() )
     {
-        SourcePlaylistInterface* sourcepi = dynamic_cast< SourcePlaylistInterface* >( m_latch.data() );
-        Q_ASSERT( sourcepi );
+        SourcePlaylistInterface* origsourcepi = dynamic_cast< SourcePlaylistInterface* >( m_latch.data() );
+        Q_ASSERT( origsourcepi );
+        const source_ptr source = origsourcepi->source();
 
-        const source_ptr source = sourcepi->source();
+        // if we're currently listening along to the same source, no change
+        if ( listeningAlong && ( !origsourcepi->source().isNull() && origsourcepi->source()->id() == newSource->id() ) )
+            return;
+
         DatabaseCommand_SocialAction* cmd = new DatabaseCommand_SocialAction();
         cmd->setSource( SourceList::instance()->getLocal() );
         cmd->setAction( "latchOff");
