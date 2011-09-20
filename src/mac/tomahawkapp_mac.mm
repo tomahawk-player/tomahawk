@@ -1,6 +1,6 @@
 /* === This file is part of Tomahawk Player - <http://tomahawk-player.org> ===
  *
- *   Copyright 2010-2011, Christian Muehlhaeuser <muesli@tomahawk-player.org>
+ *   Copyright 2010-2011, Leo Franchi <lfranchi@kde.org>
  *
  *   Tomahawk is free software: you can redistribute it and/or modify
  *   it under the terms of the GNU General Public License as published by
@@ -21,6 +21,7 @@
 #include "macdelegate.h"
 #include "macshortcuthandler.h"
 #include "config.h"
+#include "tomahawkwindow.h"
 
 #include "AvailabilityMacros.h"
 
@@ -41,14 +42,8 @@
 #import <Sparkle/SUUpdater.h>
 #endif
 
-#if defined(MAC_OS_X_VERSION_10_7)
-#include "tomahawkapp.h"
-#endif
-
 #include <QDebug>
-
-// Capture global media keys on Mac (Cocoa only!)
-// See: http://www.rogueamoeba.com/utm/2007/09/29/apple-keyboard-media-key-event-handling/
+#include <QApplication>
 
 @interface MacApplication :NSApplication {
     AppDelegate* delegate_;
@@ -243,8 +238,17 @@ void Tomahawk::enableFullscreen()
 {
 #if defined(MAC_OS_X_VERSION_10_7)
     qDebug() << "Enabling Lion Full-screeen";
-    NSView *nsview = (NSView *)APP->mainWindow()->winId();
-    NSWindow *nswindow = [nsview window];
-    [nswindow setCollectionBehavior:NSWindowCollectionBehaviorFullScreenPrimary];
+    // Can't include tomahawkapp.h in a .mm file, pulls in infosystem.h which uses
+    // the objc keyword 'id'
+    foreach( QWidget* w, QApplication::topLevelWidgets() )
+    {
+        if ( qobject_cast< TomahawkWindow* >( w ) )
+        {
+            NSView *nsview = (NSView *)w->winId();
+            NSWindow *nswindow = [nsview window];
+            [nswindow setCollectionBehavior:NSWindowCollectionBehaviorFullScreenPrimary];
+        }
+    }
+
 #endif
 }
