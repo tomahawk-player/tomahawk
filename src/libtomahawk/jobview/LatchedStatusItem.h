@@ -56,6 +56,7 @@ public:
 private slots:
     void latchedOn( const Tomahawk::source_ptr&, const Tomahawk::source_ptr& );
     void latchedOff( const Tomahawk::source_ptr&, const Tomahawk::source_ptr& );
+    void sourceOffline();
 
 private:
     QPixmap m_pixmap;

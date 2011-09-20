@@ -80,8 +80,25 @@ LatchedStatusManager::latchedOn( const Tomahawk::source_ptr& from, const Tomahaw
         LatchedStatusItem* item = new LatchedStatusItem( from, to, this );
         m_jobs[ from->userName() ] = item;
         JobStatusView::instance()->model()->addJob( item );
+
+        connect( from.data(), SIGNAL( offline() ), this, SLOT( sourceOffline() ), Qt::UniqueConnection );
     }
 }
+
+void
+LatchedStatusManager::sourceOffline()
+{
+    Tomahawk::Source* s = qobject_cast< Tomahawk::Source* >( sender() );
+    Q_ASSERT( s );
+
+    if ( m_jobs.contains( s->userName() ) )
+    {
+        QWeakPointer< LatchedStatusItem> job = m_jobs.take( s->userName() ).data();
+        if ( !job.isNull() )
+            job.data()->stop();
+    }
+}
+
 
 void
 LatchedStatusManager::latchedOff( const Tomahawk::source_ptr& from, const Tomahawk::source_ptr& to )
