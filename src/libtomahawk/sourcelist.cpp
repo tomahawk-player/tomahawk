@@ -112,6 +112,9 @@ SourceList::setLocal( const Tomahawk::source_ptr& localSrc )
         m_local = localSrc;
     }
 
+
+    connect( localSrc.data(), SIGNAL( latchedOn( Tomahawk::source_ptr ) ), this, SLOT( latchedOn( Tomahawk::source_ptr ) ) );
+    connect( localSrc.data(), SIGNAL( latchedOff( Tomahawk::source_ptr ) ), this, SLOT( latchedOff( Tomahawk::source_ptr ) ) );
     emit sourceAdded( localSrc );
 }
 
@@ -131,6 +134,8 @@ SourceList::add( const source_ptr& source )
     collection_ptr coll( new RemoteCollection( source ) );
     source->addCollection( coll );
 
+    connect( source.data(), SIGNAL( latchedOn( Tomahawk::source_ptr ) ), this, SLOT( latchedOn( Tomahawk::source_ptr ) ) );
+    connect( source.data(), SIGNAL( latchedOff( Tomahawk::source_ptr ) ), this, SLOT( latchedOff( Tomahawk::source_ptr ) ) );
     emit sourceAdded( source );
 }
 
@@ -211,3 +216,23 @@ SourceList::count() const
     QMutexLocker lock( &m_mut );
     return m_sources.size();
 }
+
+void
+SourceList::latchedOff( const source_ptr& to )
+{
+    Source* s = qobject_cast< Source* >( sender() );
+    const source_ptr source = m_sources[ s->userName() ];
+
+    emit sourceLatchedOff( source, to );
+}
+
+void
+SourceList::latchedOn( const source_ptr& to )
+{
+
+    Source* s = qobject_cast< Source* >( sender() );
+    const source_ptr source = m_sources[ s->userName() ];
+
+    emit sourceLatchedOn( source, to );
+}
+

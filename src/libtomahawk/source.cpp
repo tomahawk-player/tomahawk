@@ -31,6 +31,7 @@
 
 #include "utils/logger.h"
 #include "utils/tomahawkutils.h"
+#include "database/databasecommand_socialaction.h"
 
 using namespace Tomahawk;
 
@@ -309,8 +310,21 @@ Source::trackTimerFired()
 }
 
 void
-Source::reportSocialAttributesChanged()
+Source::reportSocialAttributesChanged( DatabaseCommand_SocialAction* action )
 {
     emit socialAttributesChanged();
+
+    if ( action->action() == "latchOn" )
+    {
+        const source_ptr to = SourceList::instance()->get( action->comment() );
+        if ( !to.isNull() )
+            emit latchedOn( to );
+    }
+    else if ( action->action() == "latchOff" )
+    {
+        const source_ptr from = SourceList::instance()->get( action->comment() );
+        if ( !from.isNull() )
+            emit latchedOff( from );
+    }
 }
 

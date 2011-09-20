@@ -60,10 +60,15 @@ signals:
     void sourceAdded( const Tomahawk::source_ptr& );
     void sourceRemoved( const Tomahawk::source_ptr& );
 
+    void sourceLatchedOn( const Tomahawk::source_ptr& from, const Tomahawk::source_ptr& to );
+    void sourceLatchedOff( const Tomahawk::source_ptr& from, const Tomahawk::source_ptr& to );
+
 private slots:
     void setSources( const QList<Tomahawk::source_ptr>& sources );
     void sourceSynced();
 
+    void latchedOn( const Tomahawk::source_ptr& );
+    void latchedOff( const Tomahawk::source_ptr& );
 private:
     void add( const Tomahawk::source_ptr& source );
 

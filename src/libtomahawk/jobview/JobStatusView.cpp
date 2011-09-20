@@ -32,6 +32,7 @@
 #include <QListView>
 #include <QAbstractItemModel>
 #include "TransferStatusItem.h"
+#include "LatchedStatusItem.h"
 
 using namespace Tomahawk;
 
@@ -75,6 +76,7 @@ JobStatusView::JobStatusView( AnimatedSplitter* parent )
 
     new PipelineStatusManager( this );
     new TransferStatusManager( this );
+    new LatchedStatusManager( this );
 }
 
 void

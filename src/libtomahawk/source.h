@@ -98,6 +98,9 @@ signals:
 
     void socialAttributesChanged();
 
+    void latchedOn( const Tomahawk::source_ptr& to );
+    void latchedOff( const Tomahawk::source_ptr& from );
+
 public slots:
     void setStats( const QVariantMap& m );
 
@@ -115,7 +118,7 @@ private slots:
     void trackTimerFired();
 
 private:
-    void reportSocialAttributesChanged();
+    void reportSocialAttributesChanged( DatabaseCommand_SocialAction* action );
 
     QList< QSharedPointer<Collection> > m_collections;
     QVariantMap m_stats;

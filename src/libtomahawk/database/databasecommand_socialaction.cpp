@@ -37,7 +37,7 @@ DatabaseCommand_SocialAction::postCommitHook()
         Servent::instance()->triggerDBSync();
     }
 
-    source()->reportSocialAttributesChanged();
+    source()->reportSocialAttributesChanged( this );
 }
 
 
@@ -52,16 +52,19 @@ DatabaseCommand_SocialAction::exec( DatabaseImpl* dbi )
 
     QVariant srcid = source()->isLocal() ? QVariant( QVariant::Int ) : source()->id();
 
-    bool autoCreate = true;
-    int artid = dbi->artistId( m_artist, autoCreate );
-    if ( artid < 1 )
-        return;
+    int trkid = -2;
+    if ( !m_result.isNull() && !m_artist.isNull() && !m_track.isEmpty() )
+    {
+        bool autoCreate = true;
+        int artid = dbi->artistId( m_artist, autoCreate );
+        if ( artid < 1 )
+            return;
 
-    autoCreate = true; // artistId overwrites autoCreate (reference)
-    int trkid = dbi->trackId( artid, m_track, autoCreate );
-    if ( trkid < 1 )
-        return;
-
+        autoCreate = true; // artistId overwrites autoCreate (reference)
+        trkid = dbi->trackId( artid, m_track, autoCreate );
+        if ( trkid < 1 )
+            return;
+    }
 
     // update if it already exists
     TomahawkSqlQuery find = dbi->newquery();
@@ -82,7 +85,7 @@ DatabaseCommand_SocialAction::exec( DatabaseImpl* dbi )
         query.prepare( "INSERT  INTO social_attributes(id, source, k, v, timestamp) "
                        "VALUES (?, ?, ?, ?, ?)" );
 
-        query.bindValue( 0, trkid );
+        query.bindValue( 0, trkid >= -1 ? trkid : QVariant() );
         query.bindValue( 1, srcid );
         query.bindValue( 2, m_action );
         query.bindValue( 3, m_comment );

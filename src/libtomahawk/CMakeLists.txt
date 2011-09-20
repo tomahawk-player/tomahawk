@@ -220,6 +220,7 @@ set( libSources
     jobview/JobStatusDelegate.cpp
     jobview/PipelineStatusItem.cpp
     jobview/TransferStatusItem.cpp
+    jobview/LatchedStatusItem.cpp
 
     thirdparty/kdsingleapplicationguard/kdsingleapplicationguard.cpp
     thirdparty/kdsingleapplicationguard/kdsharedmemorylocker.cpp
@@ -433,6 +434,7 @@ set( libHeaders
     jobview/JobStatusItem.h
     jobview/PipelineStatusItem.h
     jobview/TransferStatusItem.h
+    jobview/LatchedStatusItem.h
 
     thirdparty/kdsingleapplicationguard/kdsingleapplicationguard.h
     thirdparty/Qocoa/qsearchfield.h
