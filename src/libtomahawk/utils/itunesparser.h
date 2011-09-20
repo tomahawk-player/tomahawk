@@ -23,6 +23,8 @@
 
 #include "dllmacro.h"
 #include "typedefs.h"
+#include "query.h"
+
 #include <QObject>
 #include <QSet>
 #include <QtCore/QStringList>
