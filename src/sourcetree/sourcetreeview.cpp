@@ -100,6 +100,7 @@ SourceTreeView::SourceTreeView( QWidget* parent )
     showOfflineSources( TomahawkSettings::instance()->showOfflineSources() );
 
     connect( AudioEngine::instance(), SIGNAL( playlistChanged( Tomahawk::PlaylistInterface* ) ), this, SLOT( playlistChanged( Tomahawk::PlaylistInterface* ) ) );
+    connect( AudioEngine::instance(), SIGNAL( stopped() ), this, SLOT( playlistChanged() ) );
 
     // Light-blue sourcetree on osx
 #ifdef Q_WS_MAC
@@ -365,7 +366,7 @@ SourceTreeView::latchOn()
     cmd->setTimestamp( QDateTime::currentDateTime().toTime_t() );
     Database::instance()->enqueue( QSharedPointer< DatabaseCommand >( cmd ) );
 
-    m_latch = source->getPlaylistInterface();
+    m_waitingToPlayLatch = source;
     AudioEngine::instance()->playItem( source->getPlaylistInterface().data(), source->getPlaylistInterface()->nextItem() );
 }
 
@@ -374,7 +375,15 @@ SourceTreeView::playlistChanged( PlaylistInterface* newInterface )
 {
     // If we were latched on and changed, send the listening along stop
     if ( m_latch.isNull() )
+    {
+        if ( m_waitingToPlayLatch.isNull() )
+            return;
+
+        m_latch = m_waitingToPlayLatch->getPlaylistInterface();
+        m_waitingToPlayLatch.clear();
+
         return;
+    }
 
     const PlaylistInterface* pi = AudioEngine::instance()->playlist();
     bool listeningAlong = false;

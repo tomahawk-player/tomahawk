@@ -62,7 +62,7 @@ private slots:
 
     void latchOn();
     void latchOff();
-    void playlistChanged( Tomahawk::PlaylistInterface* );
+    void playlistChanged( Tomahawk::PlaylistInterface* = 0 );
 
     void onCustomContextMenu( const QPoint& pos );
 
@@ -98,6 +98,8 @@ private:
     QAction* m_addToLocalAction;
     QAction* m_latchOnAction;
     QAction* m_latchOffAction;
+
+    Tomahawk::source_ptr m_waitingToPlayLatch;
     Tomahawk::playlistinterface_ptr m_latch;
 
     bool m_dragging;
