@@ -329,7 +329,7 @@ QPixmap
 SpotifyParser::pixmap()
 {
     if ( !s_pixmap )
-        s_pixmap = new QPixmap( RESPATH "images/spotify-logo.jpg" );
+        s_pixmap = new QPixmap( RESPATH "images/spotify-logo.png" );
 
     return *s_pixmap;
 }
