@@ -24,7 +24,7 @@
 #include <QPainter>
 #include <QApplication>
 
-#define ROW_HEIGHT 15
+#define ROW_HEIGHT 20
 #define ICON_PADDING 1
 #define PADDING 2
 JobStatusDelegate::JobStatusDelegate( QObject* parent )
