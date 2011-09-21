@@ -69,7 +69,7 @@ JobStatusDelegate::paint( QPainter* painter, const QStyleOptionViewItem& option,
         rightEdge = rRect.left();
     }
 
-    const int mainW = rightEdge - PADDING - iconRect.right();
+    const int mainW = rightEdge - 3*PADDING - iconRect.right();
     QString mainText = index.data( Qt::DisplayRole ).toString();
     mainText = fm.elidedText( mainText, Qt::ElideRight, mainW  );
     painter->drawText( QRect( iconRect.right() + 2*PADDING, PADDING + opt.rect.y(), mainW, opt.rect.height() - 2*PADDING ), Qt::AlignLeft | Qt::AlignVCenter, mainText );
