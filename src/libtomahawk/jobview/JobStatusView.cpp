@@ -98,8 +98,6 @@ JobStatusView::checkCount()
     else if ( isHidden() && m_view->model()->rowCount() > 0 )
         emit showWidget();
 
-    emit sizeChanged( sizeHint() );
-
 }
 
 
