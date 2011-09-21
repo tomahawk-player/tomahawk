@@ -23,8 +23,6 @@
 #include "config.h"
 #include "tomahawkwindow.h"
 
-#include "AvailabilityMacros.h"
-
 #import <AppKit/NSApplication.h>
 #import <Foundation/NSAutoreleasePool.h>
 #import <Foundation/NSBundle.h>
@@ -236,7 +234,7 @@ void Tomahawk::checkForUpdates() {
 
 void Tomahawk::enableFullscreen()
 {
-#if defined(MAC_OS_X_VERSION_10_7)
+#ifdef LION
     qDebug() << "Enabling Lion Full-screeen";
     // Can't include tomahawkapp.h in a .mm file, pulls in infosystem.h which uses
     // the objc keyword 'id'

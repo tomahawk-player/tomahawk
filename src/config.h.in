@@ -11,6 +11,7 @@
 #define CMAKE_INSTALL_PREFIX "${CMAKE_INSTALL_PREFIX}"
 #define CMAKE_SYSTEM "${CMAKE_SYSTEM}"
 
+#cmakedefine LION
 #cmakedefine SNOW_LEOPARD
 #cmakedefine LEOPARD
 #cmakedefine HAVE_SPARKLE
