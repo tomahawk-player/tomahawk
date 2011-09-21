@@ -110,6 +110,15 @@ SourcesModel::data( const QModelIndex& index, int role ) const
         return itemFromIndex( index )->peerSortValue();
     case SourcesModel::IDRole:
         return itemFromIndex( index )->IDValue();
+    case SourcesModel::LatchedOnRole:
+    {
+        if ( itemFromIndex( index )->type() == Collection )
+        {
+            CollectionItem* cItem = qobject_cast< CollectionItem* >( itemFromIndex( index ) );
+            return cItem->localLatchedOn();
+        }
+        return false;
+    }
     }
     return QVariant();
 }

@@ -53,13 +53,15 @@ SourceDelegate::SourceDelegate( QAbstractItemView* parent )
     m_dropTypeTextMap.insert( 3, tr( "Local" ) );
     m_dropTypeTextMap.insert( 4, tr( "Top 10" ) );
 
-    m_dropTypeImageMap.insert( 0, QPixmap( ":/data/images/drop-song.png" ).scaledToWidth( 32, Qt::SmoothTransformation ) );
-    m_dropTypeImageMap.insert( 1, QPixmap( ":/data/images/drop-album.png" ).scaledToWidth( 32, Qt::SmoothTransformation ) );
-    m_dropTypeImageMap.insert( 2, QPixmap( ":/data/images/drop-all-songs.png" ).scaledToHeight( 32, Qt::SmoothTransformation ) );
-    m_dropTypeImageMap.insert( 3, QPixmap( ":/data/images/drop-local-songs.png" ).scaledToWidth( 32, Qt::SmoothTransformation ) );
-    m_dropTypeImageMap.insert( 4, QPixmap( ":/data/images/drop-top-songs.png" ).scaledToWidth( 32, Qt::SmoothTransformation ) );
+    m_dropTypeImageMap.insert( 0, QPixmap( RESPATH "images/drop-song.png" ).scaledToWidth( 32, Qt::SmoothTransformation ) );
+    m_dropTypeImageMap.insert( 1, QPixmap( RESPATH "images/drop-album.png" ).scaledToWidth( 32, Qt::SmoothTransformation ) );
+    m_dropTypeImageMap.insert( 2, QPixmap( RESPATH "images/drop-all-songs.png" ).scaledToHeight( 32, Qt::SmoothTransformation ) );
+    m_dropTypeImageMap.insert( 3, QPixmap( RESPATH "images/drop-local-songs.png" ).scaledToWidth( 32, Qt::SmoothTransformation ) );
+    m_dropTypeImageMap.insert( 4, QPixmap( RESPATH "images/drop-top-songs.png" ).scaledToWidth( 32, Qt::SmoothTransformation ) );
 
     m_dropMimeData = new QMimeData();
+
+    m_headphones.load( RESPATH "images/headphones.png" );
 }
 
 
@@ -156,7 +158,16 @@ SourceDelegate::paint( QPainter* painter, const QStyleOptionViewItem& option, co
         QRect iconRect = option.rect.adjusted( 4, 6, -option.rect.width() + option.rect.height() - 12 + 4, -6 );
 
         QPixmap avatar = colItem->icon().pixmap( iconRect.size() );
-        painter->drawPixmap( iconRect, avatar.scaledToHeight( iconRect.height(), Qt::SmoothTransformation ) );
+        if ( index.data( SourcesModel::LatchedOnRole ).toBool() && !m_headphones.isNull() )
+        {
+            // Draw headphones around the source
+            painter->drawPixmap( iconRect, avatar.scaledToHeight( iconRect.height(), Qt::SmoothTransformation ) );
+//             painter->drawPixmap( iconRect, m_headphones.scaledToHeight( iconRect.height(), Qt::SmoothTransformation ) );
+//             QRect inHeadphones = iconRect.adjusted( 5, 10, -5, 0);
+//             painter->drawPixmap( inHeadphones, avatar.scaledToHeight( inHeadphones.height(), Qt::SmoothTransformation ) );
+        }
+        else
+            painter->drawPixmap( iconRect, avatar.scaledToHeight( iconRect.height(), Qt::SmoothTransformation ) );
 
         if ( ( option.state & QStyle::State_Selected ) == QStyle::State_Selected )
         {

@@ -64,7 +64,8 @@ public:
         SourceTreeItemRole      = Qt::UserRole + 10,
         SourceTreeItemTypeRole  = Qt::UserRole + 11,
         SortRole                = Qt::UserRole + 12,
-        IDRole                  = Qt::UserRole + 13
+        IDRole                  = Qt::UserRole + 13,
+        LatchedOnRole                  = Qt::UserRole + 14
     };
 
     SourcesModel( QObject* parent = 0 );

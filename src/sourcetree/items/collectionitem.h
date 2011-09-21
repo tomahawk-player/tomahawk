@@ -42,6 +42,8 @@ public:
     virtual int peerSortValue() const;
     virtual int IDValue() const;
 
+    virtual bool localLatchedOn() const { return m_latchedOn; }
+
     Tomahawk::source_ptr source() const;
 
     CategoryItem* stationsCategory() const { return m_stations; }
@@ -56,6 +58,9 @@ private slots:
     void onAutoPlaylistDeleted( const Tomahawk::dynplaylist_ptr& playlists );
     void onStationsAdded( const QList<Tomahawk::dynplaylist_ptr>& stations );
     void onStationDeleted( const Tomahawk::dynplaylist_ptr& stations );
+
+    void latchedOn( const Tomahawk::source_ptr&, const Tomahawk::source_ptr& );
+    void latchedOff( const Tomahawk::source_ptr&, const Tomahawk::source_ptr& );
 
     void requestExpanding();
 
@@ -79,6 +84,7 @@ private:
     QPixmap m_superCol, m_defaultAvatar;
     CategoryItem* m_playlists;
     CategoryItem* m_stations;
+    bool m_latchedOn;
 
     QList< TemporaryPageItem* > m_tempItems;
     GenericPageItem* m_sourceInfoItem;

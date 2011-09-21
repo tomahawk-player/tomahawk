@@ -29,6 +29,7 @@
 #include "playlist/customplaylistview.h"
 #include "source.h"
 #include "temporarypageitem.h"
+#include <sourcelist.h>
 
 /// CollectionItem
 
@@ -39,6 +40,7 @@ CollectionItem::CollectionItem(  SourcesModel* mdl, SourceTreeItem* parent, cons
     , m_source( source )
     , m_playlists( 0 )
     , m_stations( 0 )
+    , m_latchedOn( false )
     , m_sourceInfoItem( 0   )
     , m_coolPlaylistsItem( 0 )
     , m_lovedTracksItem()
@@ -118,6 +120,8 @@ CollectionItem::CollectionItem(  SourcesModel* mdl, SourceTreeItem* parent, cons
     connect( source.data(), SIGNAL( stateChanged() ), this, SIGNAL( updated() ) );
     connect( source.data(), SIGNAL( offline() ), this, SIGNAL( updated() ) );
     connect( source.data(), SIGNAL( online() ), this, SIGNAL( updated() ) );
+    connect( SourceList::instance(), SIGNAL( sourceLatchedOn( Tomahawk::source_ptr, Tomahawk::source_ptr ) ), this, SLOT( latchedOn( Tomahawk::source_ptr, Tomahawk::source_ptr ) ) );
+    connect( SourceList::instance(), SIGNAL( sourceLatchedOff( Tomahawk::source_ptr, Tomahawk::source_ptr ) ), this, SLOT( latchedOff( Tomahawk::source_ptr, Tomahawk::source_ptr ) ) );
 
     connect( source->collection().data(), SIGNAL( playlistsAdded( QList<Tomahawk::playlist_ptr> ) ),
              SLOT( onPlaylistsAdded( QList<Tomahawk::playlist_ptr> ) ), Qt::QueuedConnection );
@@ -193,6 +197,26 @@ CollectionItem::icon() const
             return m_defaultAvatar;
         else
             return m_source->avatar( Source::FancyStyle );
+    }
+}
+
+void
+CollectionItem::latchedOff( const source_ptr& from, const source_ptr& to )
+{
+    if ( from->isLocal() && m_source == to )
+    {
+        m_latchedOn = false;
+        emit updated();
+    }
+}
+
+void
+CollectionItem::latchedOn( const source_ptr& from, const source_ptr& to )
+{
+    if ( from->isLocal() && m_source == to )
+    {
+        m_latchedOn = true;
+        emit updated();
     }
 }
 
