@@ -360,6 +360,7 @@ SourceTreeView::doLatchOn( const source_ptr& source )
 
     PlaylistInterface* pi = AudioEngine::instance()->playlist();
 
+    bool catchUp = false;
     if ( pi && dynamic_cast< SourcePlaylistInterface* >( pi ) )
     {
         SourcePlaylistInterface* sourcepi = dynamic_cast< SourcePlaylistInterface* >( pi );
@@ -367,7 +368,8 @@ SourceTreeView::doLatchOn( const source_ptr& source )
         {
             //it's a catch-up -- logic in audioengine should take care of it
             AudioEngine::instance()->next();
-            return;
+            catchUp = true;
+            m_latch = sourcepi->getSharedPointer();
         }
     }
 
@@ -378,8 +380,11 @@ SourceTreeView::doLatchOn( const source_ptr& source )
     cmd->setTimestamp( QDateTime::currentDateTime().toTime_t() );
     Database::instance()->enqueue( QSharedPointer< DatabaseCommand >( cmd ) );
 
-    m_waitingToPlayLatch = source;
-    AudioEngine::instance()->playItem( source->getPlaylistInterface().data(), source->getPlaylistInterface()->nextItem() );
+    if ( !catchUp )
+    {
+        m_waitingToPlayLatch = source;
+        AudioEngine::instance()->playItem( source->getPlaylistInterface().data(), source->getPlaylistInterface()->nextItem() );
+    }
 }
 
 void
