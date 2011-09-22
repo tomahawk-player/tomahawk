@@ -61,7 +61,8 @@ SourceDelegate::SourceDelegate( QAbstractItemView* parent )
 
     m_dropMimeData = new QMimeData();
 
-    m_headphones.load( RESPATH "images/headphones.png" );
+    m_headphonesOff.load( RESPATH "images/headphones-off.png" );
+    m_headphonesOn.load( RESPATH "images/headphones-sidebar.png" );
 }
 
 
@@ -158,16 +159,7 @@ SourceDelegate::paint( QPainter* painter, const QStyleOptionViewItem& option, co
         QRect iconRect = option.rect.adjusted( 4, 6, -option.rect.width() + option.rect.height() - 12 + 4, -6 );
 
         QPixmap avatar = colItem->icon().pixmap( iconRect.size() );
-        if ( index.data( SourcesModel::LatchedOnRole ).toBool() && !m_headphones.isNull() )
-        {
-            // Draw headphones around the source
-            painter->drawPixmap( iconRect, avatar.scaledToHeight( iconRect.height(), Qt::SmoothTransformation ) );
-//             painter->drawPixmap( iconRect, m_headphones.scaledToHeight( iconRect.height(), Qt::SmoothTransformation ) );
-//             QRect inHeadphones = iconRect.adjusted( 5, 10, -5, 0);
-//             painter->drawPixmap( inHeadphones, avatar.scaledToHeight( inHeadphones.height(), Qt::SmoothTransformation ) );
-        }
-        else
-            painter->drawPixmap( iconRect, avatar.scaledToHeight( iconRect.height(), Qt::SmoothTransformation ) );
+        painter->drawPixmap( iconRect, avatar.scaledToHeight( iconRect.height(), Qt::SmoothTransformation ) );
 
         if ( ( option.state & QStyle::State_Selected ) == QStyle::State_Selected )
         {
@@ -180,16 +172,38 @@ SourceDelegate::paint( QPainter* painter, const QStyleOptionViewItem& option, co
         QString text = painter->fontMetrics().elidedText( name, Qt::ElideRight, textRect.width() );
         painter->drawText( textRect, text );
 
+        bool isPlaying = false;
         QString desc = status ? colItem->source()->textStatus() : tr( "Offline" );
         if ( colItem->source().isNull() )
             desc = tr( "All available tracks" );
         if ( status && desc.isEmpty() && !colItem->source()->currentTrack().isNull() )
+        {
             desc = colItem->source()->currentTrack()->artist() + " - " + colItem->source()->currentTrack()->track();
+            isPlaying = true;
+        }
         if ( desc.isEmpty() )
             desc = tr( "Online" );
 
         textRect = option.rect.adjusted( iconRect.width() + 8, painter->fontMetrics().height() + 6, -figWidth - 24, -4 );
         painter->setFont( normal );
+        if ( isPlaying )
+        {
+            // Show a listen icon
+            QPixmap pm;
+            if ( index.data( SourcesModel::LatchedOnRole ).toBool() )
+            {
+                // Currently listening along
+                pm = m_headphonesOn;
+            } else {
+                pm = m_headphonesOff;
+            }
+            QRect pmRect = textRect;
+            pmRect.setTop( pmRect.bottom() - painter->fontMetrics().height() );
+            pmRect.setRight( pmRect.left() + pmRect.height() );
+//             tDebug() << "DOING HEADPHONES RECT:" << pmRect;
+            painter->drawPixmap( pmRect, pm.scaledToHeight( pmRect.height(), Qt::SmoothTransformation ) );
+            textRect.adjust( pmRect.width() + 3, 0, 0, 0 );
+        }
         text = painter->fontMetrics().elidedText( desc, Qt::ElideRight, textRect.width() );
         QTextOption to( Qt::AlignBottom );
         painter->drawText( textRect, text, to );
@@ -382,6 +396,30 @@ SourceDelegate::editorEvent ( QEvent* event, QAbstractItemModel* model, const QS
 
             if ( r.contains( ev->pos() ) )
                 gpi->removeFromList();
+        } else if ( type == SourcesModel::Collection )
+        {
+            CollectionItem* colItem = qobject_cast< CollectionItem* >( index.data( SourcesModel::SourceTreeItemRole ).value< SourceTreeItem* >() );
+            Q_ASSERT( colItem );
+            if ( !colItem->source()->currentTrack().isNull() )
+            {
+                QMouseEvent* ev = static_cast< QMouseEvent* >( event );
+
+                QStyleOptionViewItemV4 o = option;
+                initStyleOption( &o, index );
+                QFontMetrics fm( o.font );
+                const int height = fm.height() + 3;
+
+                QRect headphonesRect( option.rect.height() + 10, o.rect.bottom() - height, height, height );
+//                 tDebug() << "CHECKING CLICK RECT:" << headphonesRect;
+                if ( headphonesRect.contains( ev->pos() ) )
+                {
+                    if ( index.data( SourcesModel::LatchedOnRole ).toBool() )
+                        // unlatch
+                        emit latchOff( colItem->source() );
+                    else
+                        emit latchOn( colItem->source() );
+                }
+            }
         }
     }
 

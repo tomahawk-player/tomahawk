@@ -108,7 +108,7 @@ MprisPlugin::canRaise() const
     return false;
 }
 
-bool 
+bool
 MprisPlugin::hasTrackList() const
 {
     qDebug() << Q_FUNC_INFO;
@@ -121,7 +121,7 @@ MprisPlugin::identity() const
     return QString("Tomahawk");
 }
 
-QString 
+QString
 MprisPlugin::desktopEntry() const
 {
     return QString("tomahawk");
@@ -178,7 +178,7 @@ MprisPlugin::canPause() const
     return AudioEngine::instance()->currentTrack();
 }
 
-bool 
+bool
 MprisPlugin::canPlay() const
 {
     // If there is a currently playing track, or if there is a playlist with at least 1 track, you can hit play
@@ -348,7 +348,7 @@ MprisPlugin::Next()
     AudioEngine::instance()->next();
 }
 
-void 
+void
 MprisPlugin::OpenUri( const QString &Uri )
 {
     if( Uri.contains( "tomahawk://" ) )
@@ -369,7 +369,7 @@ MprisPlugin::Play()
     AudioEngine::instance()->play();
 }
 
-void 
+void
 MprisPlugin::PlayPause()
 {
     AudioEngine::instance()->playPause();

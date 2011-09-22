@@ -62,7 +62,10 @@ private slots:
     void addToLocal();
 
     void latchOn();
+    void doLatchOn( const Tomahawk::source_ptr& idx );
     void latchOff();
+    void doLatchOff( const Tomahawk::source_ptr& idx );
+
     void playlistChanged( Tomahawk::PlaylistInterface* = 0 );
 
     void onCustomContextMenu( const QPoint& pos );

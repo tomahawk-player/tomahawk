@@ -78,6 +78,9 @@ SourceTreeView::SourceTreeView( QWidget* parent )
 //     setAnimated( true );
 
     m_delegate = new SourceDelegate( this );
+    connect( m_delegate, SIGNAL( latchOn( Tomahawk::source_ptr ) ), this, SLOT( doLatchOn( Tomahawk::source_ptr ) ), Qt::QueuedConnection );
+    connect( m_delegate, SIGNAL( latchOff( Tomahawk::source_ptr ) ), this, SLOT( doLatchOff( Tomahawk::source_ptr ) ), Qt::QueuedConnection );
+
     setItemDelegate( m_delegate );
 
     setContextMenuPolicy( Qt::CustomContextMenu );
@@ -337,9 +340,7 @@ SourceTreeView::addToLocal()
 void
 SourceTreeView::latchOn()
 {
-    qDebug() << Q_FUNC_INFO;
-    QModelIndex idx = m_contextMenuIndex;
-    if ( !idx.isValid() )
+    if ( !m_contextMenuIndex.isValid() )
         return;
 
     SourcesModel::RowType type = ( SourcesModel::RowType )model()->data( m_contextMenuIndex, SourcesModel::SourceTreeItemTypeRole ).toInt();
@@ -348,6 +349,15 @@ SourceTreeView::latchOn()
 
     CollectionItem* item = itemFromIndex< CollectionItem >( m_contextMenuIndex );
     source_ptr source = item->source();
+
+    doLatchOn( source );
+}
+
+void
+SourceTreeView::doLatchOn( const source_ptr& source )
+{
+    qDebug() << Q_FUNC_INFO;
+
     PlaylistInterface* pi = AudioEngine::instance()->playlist();
 
     if ( pi && dynamic_cast< SourcePlaylistInterface* >( pi ) )
@@ -371,6 +381,17 @@ SourceTreeView::latchOn()
     m_waitingToPlayLatch = source;
     AudioEngine::instance()->playItem( source->getPlaylistInterface().data(), source->getPlaylistInterface()->nextItem() );
 }
+
+void
+SourceTreeView::doLatchOff( const source_ptr& source )
+{
+    AudioEngine::instance()->playItem( source->getPlaylistInterface().data(), source->getPlaylistInterface()->nextItem() );
+
+
+    AudioEngine::instance()->stop();
+    AudioEngine::instance()->setPlaylist( 0 );
+}
+
 
 void
 SourceTreeView::playlistChanged( PlaylistInterface* newInterface )
@@ -423,8 +444,7 @@ void
 SourceTreeView::latchOff()
 {
     qDebug() << Q_FUNC_INFO;
-    QModelIndex idx = m_contextMenuIndex;
-    if ( !idx.isValid() )
+    if ( !m_contextMenuIndex.isValid() )
         return;
 
     SourcesModel::RowType type = ( SourcesModel::RowType )model()->data( m_contextMenuIndex, SourcesModel::SourceTreeItemTypeRole ).toInt();
@@ -434,11 +454,7 @@ SourceTreeView::latchOff()
     const CollectionItem* item = itemFromIndex< CollectionItem >( m_contextMenuIndex );
     const source_ptr source = item->source();
 
-    AudioEngine::instance()->playItem( source->getPlaylistInterface().data(), source->getPlaylistInterface()->nextItem() );
-
-
-    AudioEngine::instance()->stop();
-    AudioEngine::instance()->setPlaylist( 0 );
+    doLatchOff( source );
 }
 
 

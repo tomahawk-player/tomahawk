@@ -119,5 +119,7 @@
         <file>data/images/uploading.png</file>
         <file>data/images/downloading.png</file>
         <file>data/images/headphones.png</file>
+        <file>data/images/headphones-off.png</file>
+        <file>data/images/headphones-sidebar.png</file>
     </qresource>
 </RCC>
