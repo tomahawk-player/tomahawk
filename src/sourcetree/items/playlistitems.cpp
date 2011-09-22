@@ -138,7 +138,7 @@ bool
 PlaylistItem::willAcceptDrag( const QMimeData* data ) const
 {
     Q_UNUSED( data );
-    return !m_playlist.isNull() && m_playlist->author()->isLocal() && DropJob::acceptsMimeData( data, DropJob::Track );
+    return !m_playlist.isNull() && m_playlist->author()->isLocal() && DropJob::acceptsMimeData( data, DropJob::Track ) && !m_playlist->busy();
 }
 
 PlaylistItem::DropTypes
@@ -168,6 +168,9 @@ bool
 PlaylistItem::dropMimeData( const QMimeData* data, Qt::DropAction action )
 {
     Q_UNUSED( action );
+
+    if ( m_playlist->busy() )
+        return false;
 
     QList< Tomahawk::query_ptr > queries;
 
