@@ -164,6 +164,11 @@ ArtistView::onItemActivated( const QModelIndex& index )
             m_model->setCurrentItem( item->index );
             AudioEngine::instance()->playItem( m_proxyModel, item->result() );
         }
+        else if ( !item->query().isNull() && item->query()->results().count() )
+        {
+            m_model->setCurrentItem( item->index );
+            AudioEngine::instance()->playItem( m_proxyModel, item->query()->results().first() );
+        }
     }
 }
 
