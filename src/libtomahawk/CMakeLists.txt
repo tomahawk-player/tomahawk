@@ -191,6 +191,7 @@ set( libSources
     utils/rdioparser.cpp
     utils/shortenedlinkparser.cpp
     utils/stylehelper.cpp
+    utils/qnr_iodevicestream.cpp
 
     widgets/checkdirtree.cpp
     widgets/querylabel.cpp
@@ -407,6 +408,7 @@ set( libHeaders
     utils/itunesparser.h
     utils/rdioparser.h
     utils/shortenedlinkparser.h
+    utils/qnr_iodevicestream.h
 
     widgets/checkdirtree.h
     widgets/querylabel.h
