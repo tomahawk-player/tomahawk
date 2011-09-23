@@ -186,7 +186,7 @@ SourceDelegate::paint( QPainter* painter, const QStyleOptionViewItem& option, co
 
         textRect = option.rect.adjusted( iconRect.width() + 8, painter->fontMetrics().height() + 6, -figWidth - 24, -4 );
         painter->setFont( normal );
-        if ( isPlaying )
+        if ( isPlaying || ( !colItem->source().isNull() && colItem->source()->isLocal() ) )
         {
             // Show a listen icon
             QPixmap pm;
@@ -194,15 +194,19 @@ SourceDelegate::paint( QPainter* painter, const QStyleOptionViewItem& option, co
             {
                 // Currently listening along
                 pm = m_headphonesOn;
-            } else {
+            } else if ( !colItem->source()->isLocal() ) {
                 pm = m_headphonesOff;
             }
-            QRect pmRect = textRect;
-            pmRect.setTop( pmRect.bottom() - painter->fontMetrics().height() );
-            pmRect.setRight( pmRect.left() + pmRect.height() );
-//             tDebug() << "DOING HEADPHONES RECT:" << pmRect;
-            painter->drawPixmap( pmRect, pm.scaledToHeight( pmRect.height(), Qt::SmoothTransformation ) );
-            textRect.adjust( pmRect.width() + 3, 0, 0, 0 );
+
+            if ( !pm.isNull() )
+            {
+                QRect pmRect = textRect;
+                pmRect.setTop( pmRect.bottom() - painter->fontMetrics().height() - 3 );
+                pmRect.setRight( pmRect.left() + pmRect.height() );
+    //             tDebug() << "DOING HEADPHONES RECT:" << pmRect;
+                painter->drawPixmap( pmRect, pm.scaledToHeight( pmRect.height(), Qt::SmoothTransformation ) );
+                textRect.adjust( pmRect.width() + 3, 0, 0, 0 );
+            }
         }
         text = painter->fontMetrics().elidedText( desc, Qt::ElideRight, textRect.width() );
         QTextOption to( Qt::AlignBottom );
@@ -401,7 +405,7 @@ SourceDelegate::editorEvent ( QEvent* event, QAbstractItemModel* model, const QS
         {
             CollectionItem* colItem = qobject_cast< CollectionItem* >( index.data( SourcesModel::SourceTreeItemRole ).value< SourceTreeItem* >() );
             Q_ASSERT( colItem );
-            if ( !colItem->source().isNull() && !colItem->source()->currentTrack().isNull() )
+            if ( !colItem->source().isNull() && !colItem->source()->currentTrack().isNull() && !colItem->source()->isLocal() )
             {
                 QMouseEvent* ev = static_cast< QMouseEvent* >( event );
 

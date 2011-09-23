@@ -203,7 +203,7 @@ CollectionItem::icon() const
 void
 CollectionItem::latchedOff( const source_ptr& from, const source_ptr& to )
 {
-    if ( from->isLocal() && m_source == to )
+    if ( from->isLocal() && ( m_source == to || m_source == from ) )
     {
         m_latchedOn = false;
         emit updated();
@@ -213,7 +213,7 @@ CollectionItem::latchedOff( const source_ptr& from, const source_ptr& to )
 void
 CollectionItem::latchedOn( const source_ptr& from, const source_ptr& to )
 {
-    if ( from->isLocal() && m_source == to )
+    if ( from->isLocal() && ( m_source == to || m_source == from ) )
     {
         m_latchedOn = true;
         emit updated();
