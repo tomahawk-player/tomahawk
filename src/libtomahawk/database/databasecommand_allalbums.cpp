@@ -81,8 +81,7 @@ DatabaseCommand_AllAlbums::execForArtist( DatabaseImpl* dbi )
     QString sql = QString(
         "SELECT DISTINCT album.id, album.name "
         "FROM %1 "
-        "LEFT OUTER JOIN album "
-        "ON file_join.album = album.id "
+        "LEFT OUTER JOIN album ON file_join.album = album.id "
         "WHERE file.id = file_join.file "
         "AND file_join.artist = %2 "
         "%3 %4 %5 %6 %7"
@@ -137,8 +136,7 @@ DatabaseCommand_AllAlbums::execForCollection( DatabaseImpl* dbi )
     QString sql = QString(
         "SELECT DISTINCT album.id, album.name, album.artist, artist.name "
         "FROM album, file, file_join "
-        "LEFT OUTER JOIN artist "
-        "ON album.artist = artist.id "
+        "LEFT OUTER JOIN artist ON album.artist = artist.id "
         "WHERE file.id = file_join.file "
         "AND file_join.album = album.id "
         "%1 "

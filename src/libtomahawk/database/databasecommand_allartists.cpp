@@ -43,7 +43,7 @@ DatabaseCommand_AllArtists::exec( DatabaseImpl* dbi )
 {
     TomahawkSqlQuery query = dbi->newquery();
     QList<Tomahawk::artist_ptr> al;
-    QString orderToken, sourceToken, filterToken, tables;
+    QString orderToken, sourceToken, filterToken, tables, joins;
 
     switch ( m_sortOrder )
     {
@@ -66,8 +66,9 @@ DatabaseCommand_AllArtists::exec( DatabaseImpl* dbi )
             filtersql += QString( " AND ( artist.name LIKE '%%1%' OR album.name LIKE '%%1%' OR track.name LIKE '%%1%' )" ).arg( TomahawkUtils::sqlEscape( s ) );
         }
 
-        filterToken = QString( "AND file_join.album = album.id AND file_join.track = track.id %1" ).arg( filtersql );
-        tables = "artist, track, album, file, file_join";
+        filterToken = QString( "AND file_join.track = track.id %1" ).arg( filtersql );
+        joins = "LEFT JOIN album ON album.id = file_join.album";
+        tables = "artist, track, file, file_join";
     }
     else
         tables = "artist, file, file_join";
@@ -75,10 +76,12 @@ DatabaseCommand_AllArtists::exec( DatabaseImpl* dbi )
     QString sql = QString(
             "SELECT DISTINCT artist.id, artist.name "
             "FROM %1 "
+            "%2 "
             "WHERE file.id = file_join.file "
             "AND file_join.artist = artist.id "
-            "%2 %3 %4 %5 %6"
+            "%3 %4 %5 %6 %7"
             ).arg( tables )
+             .arg( joins )
              .arg( sourceToken )
              .arg( filterToken )
              .arg( m_sortOrder > 0 ? QString( "ORDER BY %1" ).arg( orderToken ) : QString() )

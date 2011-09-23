@@ -159,7 +159,9 @@ TreeProxyModel::onFilterArtists( const QList<Tomahawk::artist_ptr>& artists )
 void
 TreeProxyModel::onFilterAlbums( const QList<Tomahawk::album_ptr>& albums )
 {
-    m_albumsFilter << albums;
+    foreach ( const Tomahawk::album_ptr& album, albums )
+        m_albumsFilter << album->id();
+
     filterFinished();
 }
 
@@ -220,7 +222,7 @@ TreeProxyModel::filterAcceptsRow( int sourceRow, const QModelIndex& sourceParent
     else if ( !pi->artist().isNull() )
         accepted = m_artistsFilter.contains( pi->artist() );
     else if ( !pi->album().isNull() )
-        accepted = m_albumsFilter.contains( pi->album() );
+        accepted = m_albumsFilter.contains( pi->album()->id() );
 
     if ( !accepted )
     {

@@ -99,7 +99,7 @@ private:
     mutable QMap< QPersistentModelIndex, Tomahawk::result_ptr > m_cache;
 
     QList<Tomahawk::artist_ptr> m_artistsFilter;
-    QList<Tomahawk::album_ptr> m_albumsFilter;
+    QList<int> m_albumsFilter;
     DatabaseCommand_AllArtists* m_artistsFilterCmd;
 
     QString m_filter;
