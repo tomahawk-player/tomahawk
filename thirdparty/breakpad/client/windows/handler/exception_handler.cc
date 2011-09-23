@@ -27,7 +27,7 @@
 // (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
 // OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-#include <ObjBase.h>
+#include <objbase.h>
 
 #include <algorithm>
 #include <cassert>
@@ -866,10 +866,11 @@ BOOL CALLBACK ExceptionHandler::MinidumpWriteDumpCallback(
     return TRUE;
 
     // Stop receiving cancel callbacks.
-  case CancelCallback:
-    callback_output->CheckCancel = FALSE;
-    callback_output->Cancel = FALSE;
-    return TRUE;
+//FIXME: CancelCallback is missing in our mingw headers currently, but it's present in trunk, so we need to comment this in as soon as mingw is updated in opensuse (domme)
+//   case CancelCallback:
+//     callback_output->CheckCancel = FALSE;
+//     callback_output->Cancel = FALSE;
+//     return TRUE;
   }
   // Ignore other callback types.
   return FALSE;
