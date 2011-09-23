@@ -148,7 +148,35 @@ WelcomeWidget::checkQueries()
 void
 WelcomeWidget::onPlaybackFinished( const Tomahawk::query_ptr& query )
 {
-    m_tracksModel->insert( 0, query );
+    int count = m_tracksModel->trackCount();
+    int playtime = query->playedBy().second;
+
+    if ( count )
+    {
+        TrackModelItem* oldestItem = m_tracksModel->itemFromIndex( m_tracksModel->index( count - 1, 0, QModelIndex() ) );
+        if ( oldestItem->query()->playedBy().second >= playtime )
+            return;
+
+        TrackModelItem* youngestItem = m_tracksModel->itemFromIndex( m_tracksModel->index( 0, 0, QModelIndex() ) );
+        if ( youngestItem->query()->playedBy().second <= playtime )
+            m_tracksModel->insert( 0, query );
+        else
+        {
+            for ( int i = 0; i < count - 1; i++ )
+            {
+                TrackModelItem* item1 = m_tracksModel->itemFromIndex( m_tracksModel->index( i, 0, QModelIndex() ) );
+                TrackModelItem* item2 = m_tracksModel->itemFromIndex( m_tracksModel->index( i + 1, 0, QModelIndex() ) );
+
+                if ( item1->query()->playedBy().second >= playtime && item2->query()->playedBy().second <= playtime )
+                {
+                    m_tracksModel->insert( i + 1, query );
+                    break;
+                }
+            }
+        }
+    }
+    else
+        m_tracksModel->insert( 0, query );
 
     if ( m_tracksModel->trackCount() > HISTORY_TRACK_ITEMS )
         m_tracksModel->remove( HISTORY_TRACK_ITEMS );
@@ -162,8 +190,6 @@ WelcomeWidget::onPlaybackFinished( const Tomahawk::query_ptr& query )
 void
 WelcomeWidget::onPlaylistActivated( const QModelIndex& item )
 {
-    qDebug() << Q_FUNC_INFO;
-
     Tomahawk::playlist_ptr pl = item.data( RecentlyPlayedPlaylistsModel::PlaylistRole ).value< Tomahawk::playlist_ptr >();
     if( Tomahawk::dynplaylist_ptr dynplaylist = pl.dynamicCast< Tomahawk::DynamicPlaylist >() )
         ViewManager::instance()->show( dynplaylist );

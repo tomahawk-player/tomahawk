@@ -396,7 +396,8 @@ SourceDelegate::editorEvent ( QEvent* event, QAbstractItemModel* model, const QS
 
             if ( r.contains( ev->pos() ) )
                 gpi->removeFromList();
-        } else if ( type == SourcesModel::Collection )
+        }
+        else if ( type == SourcesModel::Collection )
         {
             CollectionItem* colItem = qobject_cast< CollectionItem* >( index.data( SourcesModel::SourceTreeItemRole ).value< SourceTreeItem* >() );
             Q_ASSERT( colItem );

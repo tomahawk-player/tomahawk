@@ -26,14 +26,16 @@
 #include "network/servent.h"
 #include "utils/logger.h"
 
+#define STARTED_THRESHOLD 600   // Don't advertise tracks older than X seconds as currently playing
+#define FINISHED_THRESHOLD 10   // Don't store tracks played less than X seconds in the playback log
+#define SUBMISSION_THRESHOLD 20 // Don't broadcast playback logs when a track was played less than X seconds
+
 using namespace Tomahawk;
 
 
 void
 DatabaseCommand_LogPlayback::postCommitHook()
 {
-    qDebug() << Q_FUNC_INFO;
-
     connect( this, SIGNAL( trackPlaying( Tomahawk::query_ptr ) ),
              source().data(), SLOT( onPlaybackStarted( Tomahawk::query_ptr ) ), Qt::QueuedConnection );
     connect( this, SIGNAL( trackPlayed( Tomahawk::query_ptr ) ),
@@ -53,13 +55,11 @@ DatabaseCommand_LogPlayback::postCommitHook()
 
     if ( m_action == Finished )
     {
-        tDebug( LOGEXTRA ) << Q_FUNC_INFO << " logging finished from source " << source().data()->id();
         emit trackPlayed( q );
     }
     // if the play time is more than 10 minutes in the past, ignore
-    else if ( m_action == Started && QDateTime::fromTime_t( playtime() ).secsTo( QDateTime::currentDateTime() ) < 600 )
+    else if ( m_action == Started && QDateTime::fromTime_t( playtime() ).secsTo( QDateTime::currentDateTime() ) < STARTED_THRESHOLD )
     {
-        tDebug( LOGEXTRA ) << Q_FUNC_INFO << " logging started from source " << source().data()->id();
         emit trackPlaying( q );
     }
 
@@ -73,12 +73,11 @@ DatabaseCommand_LogPlayback::postCommitHook()
 void
 DatabaseCommand_LogPlayback::exec( DatabaseImpl* dbi )
 {
-    qDebug() << Q_FUNC_INFO;
     Q_ASSERT( !source().isNull() );
 
     if ( m_action != Finished )
         return;
-    if ( m_secsPlayed < 10 )
+    if ( m_secsPlayed < FINISHED_THRESHOLD )
         return;
 
     TomahawkSqlQuery query = dbi->newquery();
@@ -86,9 +85,7 @@ DatabaseCommand_LogPlayback::exec( DatabaseImpl* dbi )
                    "VALUES (?, ?, ?, ?)" );
 
     QVariant srcid = source()->isLocal() ? QVariant( QVariant::Int ) : source()->id();
-
     qDebug() << "Logging playback of" << m_artist << "-" << m_track << "for source" << srcid;
-
     query.bindValue( 0, srcid );
 
     bool autoCreate = true;
@@ -113,7 +110,7 @@ bool
 DatabaseCommand_LogPlayback::localOnly() const
 {
     if ( m_action == Finished )
-        return m_secsPlayed < 20;
+        return m_secsPlayed < SUBMISSION_THRESHOLD;
 
     return false;
 }

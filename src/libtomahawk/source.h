@@ -77,6 +77,7 @@ public:
 
     Tomahawk::query_ptr currentTrack() const { return m_currentTrack; }
     QString textStatus() const { return m_textStatus; }
+    DBSyncConnection::State state() const { return m_state; }
 
     Tomahawk::playlistinterface_ptr getPlaylistInterface();
 
@@ -133,6 +134,7 @@ private:
 
     Tomahawk::query_ptr m_currentTrack;
     QString m_textStatus;
+    DBSyncConnection::State m_state;
     QTimer m_currentTrackTimer;
 
     ControlConnection* m_cc;

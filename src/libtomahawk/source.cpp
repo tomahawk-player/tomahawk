@@ -42,6 +42,7 @@ Source::Source( int id, const QString& username )
     , m_online( false )
     , m_username( username )
     , m_id( id )
+    , m_state( DBSyncConnection::UNKNOWN )
     , m_cc( 0 )
     , m_avatar( 0 )
     , m_fancyAvatar( 0 )
@@ -256,6 +257,7 @@ Source::onStateChanged( DBSyncConnection::State newstate, DBSyncConnection::Stat
             msg = QString();
     }
 
+    m_state = newstate;
     m_textStatus = msg;
     emit stateChanged();
 }
@@ -301,6 +303,7 @@ Source::onPlaybackFinished( const Tomahawk::query_ptr& query )
     m_currentTrackTimer.start();
 }
 
+
 void
 Source::trackTimerFired()
 {
@@ -308,6 +311,7 @@ Source::trackTimerFired()
 
     emit stateChanged();
 }
+
 
 void
 Source::reportSocialAttributesChanged( DatabaseCommand_SocialAction* action )
