@@ -329,7 +329,7 @@ TreeProxyModel::siblingItem( int itemsAway, bool readOnly )
             break;
 
         TreeModelItem* item = itemFromIndex( mapToSource( idx ) );
-        if ( item && item->result()->isOnline() )
+        if ( item && !item->result().isNull() && item->result()->isOnline() )
         {
             qDebug() << "Next PlaylistItem found:" << item->result()->url();
             if ( !readOnly )
