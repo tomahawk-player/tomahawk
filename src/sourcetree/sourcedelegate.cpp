@@ -400,7 +400,7 @@ SourceDelegate::editorEvent ( QEvent* event, QAbstractItemModel* model, const QS
         {
             CollectionItem* colItem = qobject_cast< CollectionItem* >( index.data( SourcesModel::SourceTreeItemRole ).value< SourceTreeItem* >() );
             Q_ASSERT( colItem );
-            if ( !colItem->source()->currentTrack().isNull() )
+            if ( !colItem->source().isNull() && !colItem->source()->currentTrack().isNull() )
             {
                 QMouseEvent* ev = static_cast< QMouseEvent* >( event );
 
