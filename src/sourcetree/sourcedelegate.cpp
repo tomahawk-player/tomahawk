@@ -201,7 +201,7 @@ SourceDelegate::paint( QPainter* painter, const QStyleOptionViewItem& option, co
             if ( !pm.isNull() )
             {
                 QRect pmRect = textRect;
-                pmRect.setTop( pmRect.bottom() - painter->fontMetrics().height() - 3 );
+                pmRect.setTop( pmRect.bottom() - painter->fontMetrics().height() + 3 );
                 pmRect.setRight( pmRect.left() + pmRect.height() );
     //             tDebug() << "DOING HEADPHONES RECT:" << pmRect;
                 painter->drawPixmap( pmRect, pm.scaledToHeight( pmRect.height(), Qt::SmoothTransformation ) );
@@ -405,6 +405,7 @@ SourceDelegate::editorEvent ( QEvent* event, QAbstractItemModel* model, const QS
         {
             CollectionItem* colItem = qobject_cast< CollectionItem* >( index.data( SourcesModel::SourceTreeItemRole ).value< SourceTreeItem* >() );
             Q_ASSERT( colItem );
+
             if ( !colItem->source().isNull() && !colItem->source()->currentTrack().isNull() && !colItem->source()->isLocal() )
             {
                 QMouseEvent* ev = static_cast< QMouseEvent* >( event );
