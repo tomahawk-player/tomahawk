@@ -51,6 +51,9 @@ public:
     Q_INVOKABLE QString hmac( const QByteArray& key, const QByteArray& input );
     Q_INVOKABLE QString md5( const QByteArray& input );
 
+    Q_INVOKABLE void addCustomUrlHandler( const QString& protocol, const QString& callbackFuncName );
+
+    QSharedPointer<QIODevice> customIODeviceFactory( const Tomahawk::result_ptr& result );
 public slots:
     QByteArray readRaw( const QString& fileName );
     QString readBase64( const QString& fileName );
@@ -64,8 +67,9 @@ public slots:
 
     void addTrackResults( const QVariantMap& results );
 
+
 private:
-    QString m_scriptPath;
+    QString m_scriptPath, m_urlCallback;
     QVariantMap m_resolverConfig;
     QtScriptResolver* m_resolver;
 #ifdef QCA2_FOUND
@@ -115,7 +119,7 @@ class DLLEXPORT QtScriptResolver : public Tomahawk::ExternalResolver
 {
 Q_OBJECT
 
-friend class QtScriptResolverHelper;
+friend class ::QtScriptResolverHelper;
 
 public:
     explicit QtScriptResolver( const QString& scriptPath );

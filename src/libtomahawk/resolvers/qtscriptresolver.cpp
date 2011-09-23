@@ -28,6 +28,9 @@
 #include <QCryptographicHash>
 
 #include "utils/logger.h"
+#include <network/servent.h>
+#include <QNetworkRequest>
+#include <QNetworkReply>
 
 // FIXME: bloody hack, remove this for 0.3
 // this one adds new functionality to old resolvers
@@ -106,6 +109,7 @@ QtScriptResolverHelper::log( const QString& message )
 void
 QtScriptResolverHelper::addTrackResults( const QVariantMap& results )
 {
+    qDebug() << "Resolver reporting results:" << results;
     QList< Tomahawk::result_ptr > tracks = m_resolver->parseResultVariantList( results.value("results").toList() );
 
     QString qid = results.value("qid").toString();
@@ -151,6 +155,30 @@ QtScriptResolverHelper::md5( const QByteArray& input )
     QByteArray const digest = QCryptographicHash::hash( input, QCryptographicHash::Md5 );
     return QString::fromLatin1( digest.toHex() );
 }
+
+void
+QtScriptResolverHelper::addCustomUrlHandler( const QString& protocol, const QString& callbackFuncName )
+{
+    boost::function<QSharedPointer<QIODevice>(Tomahawk::result_ptr)> fac = boost::bind( &QtScriptResolverHelper::customIODeviceFactory, this, _1 );
+    Servent::instance()->registerIODeviceFactory( protocol, fac );
+
+    m_urlCallback = callbackFuncName;
+}
+
+QSharedPointer< QIODevice >
+QtScriptResolverHelper::customIODeviceFactory( const Tomahawk::result_ptr& result )
+{
+    QString getUrl = QString( "Tomahawk.resolver.instance.%1( '%2' );" ).arg( m_urlCallback )
+                                                                        .arg( QString( QUrl( result->url() ).toEncoded() ) );
+
+    QString urlStr = m_resolver->m_engine->mainFrame()->evaluateJavaScript( getUrl ).toString();
+    QUrl url = QUrl::fromEncoded( urlStr.toUtf8() );
+    QNetworkRequest req( url );
+    tDebug() << "Creating a QNetowrkReply with url:" << req.url().toString();
+    QNetworkReply* reply = TomahawkUtils::nam()->get( req );
+    return QSharedPointer<QIODevice>( reply, &QObject::deleteLater );
+}
+
 
 void
 ScriptEngine::javaScriptConsoleMessage( const QString& message, int lineNumber, const QString& sourceID )
