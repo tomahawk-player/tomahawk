@@ -24,6 +24,8 @@
 
 #include "../sipdllmacro.h"
 
+#include <QtCore/QTimer>
+
 #define MYNAME "Local Network"
 
 class SIPDLLEXPORT ZeroconfFactory : public SipPluginFactory
@@ -65,6 +67,8 @@ public slots:
     virtual bool connectPlugin( bool startup );
     void disconnectPlugin();
 
+    void advertise();
+
     void sendMsg( const QString& , const QString&  ) {}
     void broadcastMsg( const QString & ) {}
     void addContact( const QString &, const QString&  ) {}
@@ -76,6 +80,7 @@ private:
     TomahawkZeroconf* m_zeroconf;
     ConnectionState m_state;
     QVector<QStringList> m_cachedNodes;
+    QTimer m_advertisementTimer;
 };
 
 #endif

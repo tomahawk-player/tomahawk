@@ -20,6 +20,8 @@
 
 #include <QtPlugin>
 
+#include <QtCore/QTimer>
+
 #include "tomahawksettings.h"
 #include "utils/logger.h"
 
@@ -39,6 +41,9 @@ ZeroconfPlugin::ZeroconfPlugin ( const QString& pluginId )
     , m_cachedNodes()
 {
     qDebug() << Q_FUNC_INFO;
+    m_advertisementTimer.setInterval( 60000 );
+    m_advertisementTimer.setSingleShot( false );
+    connect( &m_advertisementTimer, SIGNAL( timeout() ), this, SLOT( advertise() ) );
 }
 
 ZeroconfPlugin::~ZeroconfPlugin() {}
@@ -75,16 +80,14 @@ ZeroconfFactory::icon() const
 
 
 bool
-ZeroconfPlugin::connectPlugin( bool startup )
+ZeroconfPlugin::connectPlugin( bool /*startup*/ )
 {
-    Q_UNUSED( startup );
-
     delete m_zeroconf;
     m_zeroconf = new TomahawkZeroconf( Servent::instance()->port(), this );
     QObject::connect( m_zeroconf, SIGNAL( tomahawkHostFound( QString, int, QString, QString ) ),
                                     SLOT( lanHostFound( QString, int, QString, QString ) ) );
 
-    m_zeroconf->advertise();
+    advertise();
     m_state = Connected;
 
     foreach( const QStringList& nodeSet, m_cachedNodes )
@@ -93,12 +96,16 @@ ZeroconfPlugin::connectPlugin( bool startup )
             Servent::instance()->connectToPeer( nodeSet[0], nodeSet[1].toInt(), "whitelist", nodeSet[2], nodeSet[3] );
     }
     m_cachedNodes.clear();
+
+    m_advertisementTimer.start();
+    
     return true;
 }
 
 void
 ZeroconfPlugin::disconnectPlugin()
 {
+    m_advertisementTimer.stop();
     m_state = Disconnected;
 
     delete m_zeroconf;
@@ -109,6 +116,13 @@ QIcon
 ZeroconfPlugin::icon() const
 {
     return QIcon( ":/zeroconf-icon.png" );
+}
+
+
+void
+ZeroconfPlugin::advertise()
+{
+    m_zeroconf->advertise();
 }
 
 
