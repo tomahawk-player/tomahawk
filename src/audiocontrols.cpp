@@ -153,11 +153,11 @@ AudioControls::AudioControls( QWidget* parent )
 
     m_dragAnimation = new QPropertyAnimation( this, "dropAreaSize", this );
     m_dragAnimation->setStartValue( 0 );
-    m_dragAnimation->setDuration( 500 );
+    m_dragAnimation->setDuration( 300 );
     m_dragAnimation->setEasingCurve( QEasingCurve::Linear );
     connect( m_dragAnimation, SIGNAL( finished() ), SLOT(dragAnimationFinished()));
 
-    m_dropAreaCollapseTimer.setInterval( 500 );
+    m_dropAreaCollapseTimer.setInterval( 300 );
     m_dropAreaCollapseTimer.setSingleShot( true );
     connect( &m_dropAreaCollapseTimer, SIGNAL( timeout() ), this, SLOT( collapseDropMenu() ) );
 
