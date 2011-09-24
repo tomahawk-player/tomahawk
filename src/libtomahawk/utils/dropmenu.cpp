@@ -32,6 +32,17 @@ DropMenu::addEntry( DropMenuEntry *entry, bool isDefault )
         m_defaultEntry = entry;
 }
 
+void
+DropMenu::setFilter(DropJob::DropFlags shownEntries)
+{
+    foreach( DropMenuEntry *entry, m_entries )
+    {
+        if( ( entry->dropFlags() & shownEntries ) != DropJob::DropFlagsNone )
+            entry->setVisible( true );
+        else
+            entry->setVisible( false );
+    }
+}
 
 bool
 DropMenu::hovered() const
@@ -67,6 +78,7 @@ DropMenu::entryLeft( DropMenuEntry *entry )
     entry->setActive( false );
     m_defaultEntry->setActive( true );
     m_activeEntry = m_defaultEntry;
+    emit mouseLeft();
 }
 
 

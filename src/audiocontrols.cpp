@@ -162,6 +162,7 @@ AudioControls::AudioControls( QWidget* parent )
     connect( &m_dropAreaCollapseTimer, SIGNAL( timeout() ), this, SLOT( collapseDropMenu() ) );
 
     connect( ui->metaDataDropArea, SIGNAL( dropReceived( QDropEvent* ) ), this, SLOT( dropReceived( QDropEvent* ) ) );
+    connect( ui->metaDataDropArea, SIGNAL( mouseLeft() ), &m_dropAreaCollapseTimer, SLOT( start() ) );
 
     DropMenuEntry *trackEntry = new DropMenuEntry( QPixmap(":/data/images/drop-song.png" ).scaledToWidth( 32, Qt::SmoothTransformation ),
                                                    "Track",
@@ -611,6 +612,21 @@ AudioControls::dragEnterEvent( QDragEnterEvent* e )
 
         m_dropAreaCollapseTimer.stop();
 
+        DropJob::DropFlags flags = DropJob::DropFlagsNone;
+
+        if ( e->mimeData()->hasFormat( "application/tomahawk.query.list" )
+            || e->mimeData()->hasFormat( "application/tomahawk.result.list" )
+            || e->mimeData()->hasFormat( "application/tomahawk.result" ) )
+            flags = DropJob::DropFlagsAll;
+
+        if ( e->mimeData()->hasFormat( "application/tomahawk.metadata.album" ) )
+             flags = DropJob::DropFlagAlbum | DropJob::DropFlagArtist | DropJob::DropFlagLocal | DropJob::DropFlagTop10;
+
+        if ( e->mimeData()->hasFormat( "application/tomahawk.metadata.artist" ) )
+            flags = DropJob::DropFlagArtist | DropJob::DropFlagLocal | DropJob::DropFlagTop10;
+
+        ui->metaDataDropArea->setFilter( flags );
+
         if( !m_dropAreaExpanded )
         {
             m_dragAnimation->stop();
@@ -635,6 +651,7 @@ AudioControls::dragMoveEvent( QDragMoveEvent* /* e */ )
 void
 AudioControls::dragLeaveEvent( QDragLeaveEvent * )
 {
+    qDebug() << "******************************** dragLeaveEvent" << ui->metaDataDropArea->hovered();
     if( !ui->metaDataDropArea->hovered() )
         m_dropAreaCollapseTimer.start();
 }
@@ -643,6 +660,10 @@ AudioControls::dragLeaveEvent( QDragLeaveEvent * )
 void
 AudioControls::collapseDropMenu()
 {
+    // Check if the menu is hovered now...
+    if( ui->metaDataDropArea->hovered() )
+        return;
+
     m_dropAreaExpanded = false;
 
     m_dragAnimation->stop();

@@ -18,6 +18,8 @@ public:
 
     void addEntry( DropMenuEntry *entry, bool isDefault = false );
 
+    void setFilter( DropJob::DropFlags shownEntries );
+
 
     /** @brief Returns true if the mouse is somewhere over the contained entries */
     bool hovered() const;
@@ -26,6 +28,7 @@ public:
 
 signals:
     void dropReceived( QDropEvent *event );
+    void mouseLeft();
 
 private slots:
     void entryHovered( DropMenuEntry* entry );
