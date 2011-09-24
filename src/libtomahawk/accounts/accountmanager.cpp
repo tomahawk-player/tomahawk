@@ -144,13 +144,21 @@ void
 AccountManager::loadFromConfig()
 {
     QStringList pluginIds = TomahawkSettings::instance()->accountPlugins();
+
+    //FIXME: this is just for debugging
+    if ( pluginIds.isEmpty() )
+    {
+        Account* account = m_accountFactories[ "twitteraccount" ]->createAccount();
+        addAccountPlugin( account );
+    }
+    
     foreach( const QString& pluginId, pluginIds )
     {
         QString pluginFactory = factoryFromId( pluginId );
         if( m_accountFactories.contains( pluginFactory ) )
         {
-            Account* a = loadPlugin( pluginId );
-            addAccountPlugin( a );
+            Account* account = loadPlugin( pluginId );
+            addAccountPlugin( account );
         }
     }
 }
@@ -173,6 +181,7 @@ AccountManager::loadPlugin( const QString& pluginId )
 void
 AccountManager::addAccountPlugin( Account* account )
 {
+    tDebug() << Q_FUNC_INFO << "adding account plugin";
     m_accounts.append( account );
 
     foreach( AccountType type, account->types() )

@@ -113,8 +113,10 @@ protected:
             {
                 case InfoType:
                     m_types << "InfoType";
+                    break;
                 case SipType:
                     m_types << "SipType";
+                    break;
             }
         }
         syncConfig();
