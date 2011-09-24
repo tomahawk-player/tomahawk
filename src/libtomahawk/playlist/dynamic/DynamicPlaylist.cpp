@@ -1,6 +1,6 @@
 /* === This file is part of Tomahawk Player - <http://tomahawk-player.org> ===
  *
- *   Copyright 2010-2011, Christian Muehlhaeuser <muesli@tomahawk-player.org>
+ *   Copyright 2010-2011, Leo Franchi <lfranchi@kde.org>
  *
  *   Tomahawk is free software: you can redistribute it and/or modify
  *   it under the terms of the GNU General Public License as published by
@@ -347,7 +347,7 @@ DynamicPlaylist::addEntries(const QList< query_ptr >& queries, const QString& ol
 {
     Q_ASSERT( m_generator->mode() == Static );
 
-    QList<plentry_ptr> el = addEntriesInternal( queries );
+    QList<plentry_ptr> el = entriesFromQueries( queries );
 
     QString newrev = uuid();
     createNewRevision( newrev, oldrev, m_generator->type(), m_generator->controls(), el );

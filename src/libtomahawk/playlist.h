@@ -196,6 +196,7 @@ public:
 
     virtual void setFilter( const QString& /*pattern*/ ) {}
 
+    QList<plentry_ptr> entriesFromQueries( const QList<Tomahawk::query_ptr>& queries );
 signals:
     /// emitted when the playlist revision changes (whenever the playlist changes)
     void revisionLoaded( Tomahawk::PlaylistRevision );
@@ -222,7 +223,6 @@ signals:
     void sourceTrackCountChanged( unsigned int tracks );
 
     void nextTrackReady();
-
 public slots:
     // want to update the playlist from the model?
     // generate a newrev using uuid() and call this:
@@ -267,7 +267,6 @@ protected:
                                      bool is_newest_rev,
                                      const QMap< QString, Tomahawk::plentry_ptr >& addedmap );
 
-    QList<plentry_ptr> addEntriesInternal( const QList<Tomahawk::query_ptr>& queries );
 
 private slots:
     void onResultsFound( const QList<Tomahawk::result_ptr>& results );

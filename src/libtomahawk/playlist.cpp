@@ -503,7 +503,7 @@ Playlist::addEntry( const query_ptr& query, const QString& oldrev )
 void
 Playlist::addEntries( const QList<query_ptr>& queries, const QString& oldrev )
 {
-    QList<plentry_ptr> el = addEntriesInternal( queries );
+    QList<plentry_ptr> el = entriesFromQueries( queries );
 
     QString newrev = uuid();
     createNewRevision( newrev, oldrev, el );
@@ -511,7 +511,7 @@ Playlist::addEntries( const QList<query_ptr>& queries, const QString& oldrev )
 
 
 QList<plentry_ptr>
-Playlist::addEntriesInternal( const QList<Tomahawk::query_ptr>& queries )
+Playlist::entriesFromQueries( const QList<Tomahawk::query_ptr>& queries )
 {
     QList<plentry_ptr> el = entries();
     foreach( const query_ptr& query, queries )
