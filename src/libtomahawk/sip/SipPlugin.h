@@ -82,7 +82,7 @@ public:
     virtual const QStringList peersOnline() const;
 
 public slots:
-    virtual bool connectPlugin( bool startup = false ) = 0;
+    virtual bool connectPlugin() = 0;
     virtual void disconnectPlugin() = 0;
     virtual void checkSettings() = 0;
 

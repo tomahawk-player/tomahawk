@@ -17,7 +17,7 @@
  */
 
 #include "twitterconfigwidget.h"
-#include "twitter.h"
+#include "twittersip.h"
 #include "ui_twitterconfigwidget.h"
 
 #include "tomahawksettings.h"
@@ -123,7 +123,7 @@ TwitterConfigWidget::authenticateVerifyReply( const QTweetUser &user )
     ui->twitterUserTweetLineEdit->setVisible( false );
     ui->twitterTweetGotTomahawkButton->setText( tr( "Tweet!" ) );
 
-    m_plugin->connectPlugin( false );
+    m_plugin->connectPlugin();
 
     emit twitterAuthed( true );
     emit sizeHintChanged();

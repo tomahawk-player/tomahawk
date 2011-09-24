@@ -97,9 +97,6 @@ public:
     void setSipPlugins( const QStringList& plugins );
     QStringList sipPlugins() const;
 
-    void setBookmarkPlaylist( const QString& guid );
-    QString bookmarkPlaylist() const;
-
     // just the enabled sip plugins.
     void setEnabledSipPlugins( const QStringList& list );
     QStringList enabledSipPlugins() const;
@@ -108,6 +105,15 @@ public:
 
     void addSipPlugin( const QString& pluginId, bool enable = true );
     void removeSipPlugin( const QString& pluginId );
+
+    void setAccountPlugins( const QStringList& plugins );
+    QStringList accountPlugins() const;
+    void addAccountPlugin( const QString& pluginId );
+    void removeAccountPlugin( const QString& pluginId );
+
+    
+    void setBookmarkPlaylist( const QString& guid );
+    QString bookmarkPlaylist() const;
 
     /// Network settings
     enum ExternalAddressMode { Lan, Upnp };

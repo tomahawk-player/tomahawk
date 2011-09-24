@@ -16,7 +16,7 @@
  *   along with Tomahawk. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include "twitter.h"
+#include "twittersip.h"
 
 #include "twitterconfigwidget.h"
 
@@ -158,9 +158,8 @@ QWidget* TwitterPlugin::configWidget()
 }
 
 bool
-TwitterPlugin::connectPlugin( bool startup )
+TwitterPlugin::connectPlugin()
 {
-    Q_UNUSED( startup );
     qDebug() << Q_FUNC_INFO;
 
     m_cachedPeers = twitterCachedPeers();
@@ -810,7 +809,7 @@ TwitterPlugin::checkSettings()
     if ( m_state == Disconnected )
         return;
     disconnectPlugin();
-    connectPlugin( false );
+    connectPlugin();
 }
 
 

@@ -193,9 +193,8 @@ JabberPlugin::icon() const
 
 
 bool
-JabberPlugin::connectPlugin( bool startup )
+JabberPlugin::connectPlugin()
 {
-    Q_UNUSED( startup );
     qDebug() << Q_FUNC_INFO;
 
     if(m_client->isConnected())
@@ -527,7 +526,7 @@ JabberPlugin::checkSettings()
         setupClientHelper();
 
         qDebug() << Q_FUNC_INFO << "Updated settings";
-        connectPlugin( false );
+        connectPlugin();
     }
 }
 

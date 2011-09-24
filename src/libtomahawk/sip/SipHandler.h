@@ -41,9 +41,9 @@ public:
     QList< SipPlugin* > allPlugins() const;
     QList< SipPlugin* > enabledPlugins() const;
     QList< SipPlugin* > connectedPlugins() const;
-    void loadFromConfig( bool startup = false );
+    void loadFromConfig();
 
-    void addSipPlugin( SipPlugin* p, bool enable = true, bool connectImmediately = true );
+    void addSipPlugin( SipPlugin* p, bool enable = true );
     void removeSipPlugin( SipPlugin* p );
 
     bool hasPluginType( const QString& factoryId ) const;
@@ -60,7 +60,7 @@ public slots:
     void enablePlugin( SipPlugin* p );
     void disablePlugin( SipPlugin* p );
 
-    void connectPlugin( bool startup = false, const QString &pluginId = QString() );
+    void connectPlugin( const QString &pluginId = QString() );
     void disconnectPlugin( const QString &pluginId = QString() );
     void connectAll();
     void disconnectAll();

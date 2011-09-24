@@ -7,13 +7,13 @@ add_definitions( -DQT_SHARED )
 add_definitions( -DSIPDLLEXPORT_PRO )
 
 set( twitterSources
-    twitter.cpp
+    twittersip.cpp
     twitterconfigwidget.cpp
     tomahawkoauthtwitter.cpp
 )
 
 set( twitterHeaders
-    twitter.h
+    twittersip.h
     twitterconfigwidget.h
     tomahawkoauthtwitter.h
 )

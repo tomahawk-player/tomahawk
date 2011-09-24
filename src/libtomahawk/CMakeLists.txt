@@ -34,6 +34,8 @@ set( libSources
     dropjob.cpp
     playlistinterface.cpp
 
+    accounts/accountmanager.cpp
+
     sip/SipPlugin.cpp
     sip/SipHandler.cpp
     sip/SipModel.cpp
@@ -251,6 +253,8 @@ set( libHeaders
     album.h
     playlist.h
 
+    accounts/accountmanager.h
+
     sip/SipPlugin.h
     sip/SipHandler.h
     sip/SipModel.h
@@ -442,6 +446,8 @@ set( libHeaders
 
 set( libHeaders_NoMOC
     viewpage.h
+
+    accounts/account.h
 
     infosystem/infoplugins/unix/imageconverter.h
 

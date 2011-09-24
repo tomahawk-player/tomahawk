@@ -266,14 +266,14 @@ SipHandler::checkSettings()
 
 
 void
-SipHandler::addSipPlugin( SipPlugin* p, bool enabled, bool startup )
+SipHandler::addSipPlugin( SipPlugin* p, bool enabled )
 {
     m_allPlugins << p;
 
     hookUpPlugin( p );
     if ( enabled )
     {
-        p->connectPlugin( startup );
+        p->connectPlugin();
         m_enabledPlugins << p;
     }
 
@@ -308,7 +308,7 @@ SipHandler::hasPluginType( const QString& factoryId ) const
 
 
 void
-SipHandler::loadFromConfig( bool startup )
+SipHandler::loadFromConfig()
 {
     QStringList pluginIds = TomahawkSettings::instance()->sipPlugins();
     QStringList enabled = TomahawkSettings::instance()->enabledSipPlugins();
@@ -318,7 +318,7 @@ SipHandler::loadFromConfig( bool startup )
         if( m_pluginFactories.contains( pluginFactory ) )
         {
             SipPlugin* p = loadPlugin( pluginId );
-            addSipPlugin( p, enabled.contains( pluginId ), startup );
+            addSipPlugin( p, enabled.contains( pluginId ) );
         }
     }
     m_connected = true;
@@ -371,7 +371,7 @@ SipHandler::enablePlugin( SipPlugin* p )
 
 
 void
-SipHandler::connectPlugin( bool startup, const QString &pluginId )
+SipHandler::connectPlugin( const QString &pluginId )
 {
 #ifndef TOMAHAWK_HEADLESS
     if ( !TomahawkSettings::instance()->acceptedLegalWarning() )
@@ -394,7 +394,7 @@ SipHandler::connectPlugin( bool startup, const QString &pluginId )
         {
             Q_ASSERT( m_enabledPlugins.contains( sip ) ); // make sure the plugin we're connecting is enabled. should always be the case
             //each sip should refreshProxy() or take care of that function in some other way during connection
-            sip->connectPlugin( startup );
+            sip->connectPlugin();
         }
     }
 }

@@ -650,6 +650,38 @@ TomahawkSettings::removeSipPlugin( const QString& pluginId )
 }
 
 
+QStringList
+TomahawkSettings::accountPlugins() const
+{
+    return value( "accounts/allplugins", QStringList() ).toStringList();
+}
+
+
+void
+TomahawkSettings::setAccountPlugins( const QStringList& plugins )
+{
+    setValue( "accounts/allplugins", plugins );
+}
+
+
+void
+TomahawkSettings::addAccountPlugin( const QString& pluginId )
+{
+    QStringList list = accountPlugins();
+    list << pluginId;
+    setAccountPlugins( list );
+}
+
+
+void
+TomahawkSettings::removeAccountPlugin( const QString& pluginId )
+{
+    QStringList list = accountPlugins();
+    list.removeAll( pluginId );
+    setAccountPlugins( list );
+}
+
+
 TomahawkSettings::ExternalAddressMode
 TomahawkSettings::externalAddressMode() const
 {

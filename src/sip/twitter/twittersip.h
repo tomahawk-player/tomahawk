@@ -73,7 +73,7 @@ public:
     virtual QWidget* configWidget();
 
 public slots:
-    virtual bool connectPlugin( bool startup );
+    virtual bool connectPlugin();
     void disconnectPlugin();
     void checkSettings();
     void refreshProxy();

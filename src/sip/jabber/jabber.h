@@ -88,7 +88,7 @@ signals:
     void jidChanged( const QString& );
 
 public slots:
-    virtual bool connectPlugin( bool startup );
+    virtual bool connectPlugin();
     void disconnectPlugin();
     void checkSettings();
     void sendMsg( const QString& to, const QString& msg );
