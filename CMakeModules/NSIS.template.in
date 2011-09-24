@@ -273,6 +273,8 @@ Section "Tomahawk Player" SEC_TOMAHAWK_PLAYER
         ;Main executable.
         File "${INSTALL_PATH}\bin\tomahawk.exe"
 
+        File "${INSTALL_PATH}\bin\CrashReporter.exe"
+
         File "${INSTALL_PATH}\bin\libqxtweb-standalone.dll"
         File "${INSTALL_PATH}\bin\libtomahawk_portfwd.dll"
         File "${INSTALL_PATH}\bin\libtomahawk_lastfm2.dll"
@@ -283,6 +285,8 @@ Section "Tomahawk Player" SEC_TOMAHAWK_PLAYER
    !ifndef INSTALL_PATH
         ;Main executable.
         File "${BUILD_PATH}\tomahawk.exe"
+
+        File "${BUILD_PATH}\CrashReporter.exe"
 
         File "${BUILD_PATH}\libtomahawklib.dll"
         File "${BUILD_PATH}\libqxtweb-standalone.dll"
