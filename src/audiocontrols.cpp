@@ -189,51 +189,6 @@ AudioControls::AudioControls( QWidget* parent )
                                                    DropJob::DropFlagArtist | DropJob::DropFlagTop10 );
     ui->metaDataDropArea->addEntry( top10Entry );
 
-//    QLabel* dropTrackImage = new QLabel;
-//    dropTrackImage->setAlignment( Qt::AlignHCenter );
-//    dropTrackImage->setPixmap( QPixmap(":/data/images/drop-song.png" ).scaledToWidth( 32, Qt::SmoothTransformation ) );
-//    dropMenuLayout->addWidget( dropTrackImage, 0, 0 );
-
-//    QLabel* dropAlbumImage = new QLabel;
-//    dropAlbumImage->setAlignment( Qt::AlignHCenter );
-//    dropAlbumImage->setPixmap( QPixmap( ":/data/images/drop-album.png" ).scaledToWidth( 32, Qt::SmoothTransformation ) );
-//    dropMenuLayout->addWidget( dropAlbumImage, 0, 1 );
-
-//    QLabel* dropArtistImage = new QLabel;
-//    dropArtistImage->setAlignment( Qt::AlignHCenter );
-//    dropArtistImage->setPixmap( QPixmap( ":/data/images/drop-all-songs.png" ).scaledToWidth( 32, Qt::SmoothTransformation ) );
-//    dropMenuLayout->addWidget( dropArtistImage, 0, 2 );
-
-//    QLabel* dropLocalImage = new QLabel;
-//    dropLocalImage->setAlignment( Qt::AlignHCenter );
-//    dropLocalImage->setPixmap( QPixmap( ":/data/images/drop-local-songs.png" ).scaledToWidth( 32, Qt::SmoothTransformation ) );
-//    dropMenuLayout->addWidget( dropLocalImage, 0, 3 );
-
-//    QLabel* dropTop10Image = new QLabel;
-//    dropTop10Image->setAlignment( Qt::AlignHCenter );
-//    dropTop10Image->setPixmap( QPixmap( ":/data/images/drop-top-songs.png" ).scaledToWidth( 32, Qt::SmoothTransformation ) );
-//    dropMenuLayout->addWidget( dropTop10Image, 0, 4 );
-
-//    QLabel* dropAllText = new QLabel( "Track" );
-//    dropAllText->setAlignment( Qt::AlignHCenter );
-//    dropMenuLayout->addWidget( dropAllText, 1, 0 );
-
-//    QLabel* dropAlbumText = new QLabel( "Album" );
-//    dropAlbumText->setAlignment( Qt::AlignHCenter );
-//    dropMenuLayout->addWidget( dropAlbumText, 1, 1 );
-
-//    QLabel* dropArtistText = new QLabel( "Artist" );
-//    dropArtistText->setAlignment( Qt::AlignHCenter );
-//    dropMenuLayout->addWidget( dropArtistText, 1, 2 );
-
-//    QLabel* dropLocalText = new QLabel( "Local" );
-//    dropLocalText->setAlignment( Qt::AlignHCenter );
-//    dropMenuLayout->addWidget( dropLocalText, 1, 3 );
-
-//    QLabel* dropTop10Text = new QLabel( "Top 10" );
-//    dropTop10Text->setAlignment( Qt::AlignHCenter );
-//    dropMenuLayout->addWidget( dropTop10Text, 1, 4 );
-
 }
 
 
