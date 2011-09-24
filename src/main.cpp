@@ -21,9 +21,7 @@
 #include "thirdparty/kdsingleapplicationguard/kdsingleapplicationguard.h"
 #include <QTranslator>
 
-#ifndef Q_WS_WIN
-    #include "breakpad/BreakPad.h"
-#endif
+#include "breakpad/BreakPad.h"
 
 #ifdef Q_WS_MAC
     #include "tomahawkapp_mac.h"
