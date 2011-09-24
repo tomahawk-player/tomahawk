@@ -46,10 +46,7 @@ main( int argc, char *argv[] )
 #endif
 
     TomahawkApp a( argc, argv );
-
-#ifndef Q_WS_WIN
-    new BreakPad( "/tmp" );
-#endif
+    new BreakPad( QDir::tempPath() );
 
     KDSingleApplicationGuard guard( &a, KDSingleApplicationGuard::AutoKillOtherInstances );
     QObject::connect( &guard, SIGNAL( instanceStarted( KDSingleApplicationGuard::Instance ) ), &a, SLOT( instanceStarted( KDSingleApplicationGuard::Instance )  ) );
