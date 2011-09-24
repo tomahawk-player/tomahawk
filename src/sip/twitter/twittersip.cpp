@@ -86,9 +86,6 @@ TwitterPlugin::TwitterPlugin( const QString& pluginId )
     m_connectTimer.setInterval( 180000 );
     m_connectTimer.setSingleShot( false );
     connect( &m_connectTimer, SIGNAL( timeout() ), SLOT( connectTimerFired() ) );
-
-    m_configWidget = QWeakPointer< TwitterConfigWidget >( new TwitterConfigWidget( this, 0 ) );
-    connect( m_configWidget.data(), SIGNAL( twitterAuthed( bool ) ), SLOT( configDialogAuthedSignalSlot( bool ) ) );
 }
 
 

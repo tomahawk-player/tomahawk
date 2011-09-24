@@ -253,6 +253,7 @@ set( libHeaders
     album.h
     playlist.h
 
+    accounts/account.h
     accounts/accountmanager.h
 
     sip/SipPlugin.h

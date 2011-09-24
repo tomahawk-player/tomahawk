@@ -38,7 +38,9 @@ class DLLEXPORT AccountManager : public QObject
     Q_OBJECT
     
 public:
-    explicit AccountManager();
+    static AccountManager* instance();
+        
+    explicit AccountManager( QObject *parent );
     virtual ~AccountManager();
 
     QStringList findPluginFactories();
@@ -50,12 +52,15 @@ public:
     Account* loadPlugin( const QString &pluginId );
     QString factoryFromId( const QString& pluginId ) const;
     
-    //QSet< Account > getAccounts( Tomahawk::Accounts::AccountType type );
+    QList< Account* > getAccounts() { return m_accounts; };
+    QList< Account* > getAccounts( Tomahawk::Accounts::AccountType type ) { return m_accountsByAccountType[ type ]; }
 
 private:
-    QSet< Account* > m_accounts;
+    QList< Account* > m_accounts;
+    QHash< AccountType, QList< Account* > > m_accountsByAccountType;
     QHash< QString, AccountFactory* > m_accountFactories;
-    
+
+    static AccountManager* s_instance;
 };
 
 };

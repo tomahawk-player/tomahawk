@@ -31,9 +31,20 @@ namespace Accounts
 {
 
 
-AccountManager::AccountManager()
-    : QObject()
+AccountManager* AccountManager::s_instance = 0;
+
+
+AccountManager*
+AccountManager::instance()
 {
+    return s_instance;
+}
+
+
+AccountManager::AccountManager( QObject *parent )
+    : QObject( parent )
+{
+    s_instance = this;
     loadPluginFactories( findPluginFactories() );
 }
 
@@ -70,7 +81,7 @@ AccountManager::findPluginFactories()
     pluginDirs << appDir << libDir << lib64Dir << QDir( qApp->applicationDirPath() );
     foreach ( const QDir& pluginDir, pluginDirs )
     {
-        qDebug() << "Checking directory for plugins:" << pluginDir;
+        tDebug() << Q_FUNC_INFO << "Checking directory for plugins:" << pluginDir;
         foreach ( QString fileName, pluginDir.entryList( QStringList() << "*tomahawk_account_*.so" << "*tomahawk_account_*.dylib" << "*tomahawk_account_*.dll", QDir::Files ) )
         {
             if ( fileName.startsWith( "libtomahawk_account" ) )
@@ -94,7 +105,7 @@ AccountManager::loadPluginFactories( const QStringList& paths )
         if ( !QLibrary::isLibrary( fileName ) )
             continue;
 
-        qDebug() << "Trying to load plugin:" << fileName;
+        tDebug() << Q_FUNC_INFO << "Trying to load plugin:" << fileName;
         loadPluginFactory( fileName );
     }
 }
@@ -114,17 +125,17 @@ AccountManager::loadPluginFactory( const QString& path )
     QObject* plugin = loader.instance();
     if ( !plugin )
     {
-        qDebug() << "Error loading plugin:" << loader.errorString();
+        tDebug() << Q_FUNC_INFO << "Error loading plugin:" << loader.errorString();
     }
 
     AccountFactory* accountfactory = qobject_cast<AccountFactory*>( plugin );
     if ( accountfactory )
     {
-        qDebug() << "Loaded plugin factory:" << loader.fileName() << accountfactory->factoryId() << accountfactory->prettyName();
+        tDebug() << Q_FUNC_INFO << "Loaded plugin factory:" << loader.fileName() << accountfactory->factoryId() << accountfactory->prettyName();
         m_accountFactories[ accountfactory->factoryId() ] = accountfactory;
     } else
     {
-        qDebug() << "Loaded invalid plugin.." << loader.fileName();
+        tDebug() << Q_FUNC_INFO << "Loaded invalid plugin.." << loader.fileName();
     }
 }
 
@@ -162,9 +173,11 @@ AccountManager::loadPlugin( const QString& pluginId )
 void
 AccountManager::addAccountPlugin( Account* account )
 {
-    m_accounts << account;
+    m_accounts.append( account );
 
-    //FIXME:
+    foreach( AccountType type, account->types() )
+        m_accountsByAccountType[ type ].append( account );
+    //TODO:
     //emit pluginAdded( account );
 }
 

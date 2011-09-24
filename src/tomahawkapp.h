@@ -53,6 +53,11 @@ namespace Tomahawk
     {
         class InfoSystem;
     }
+
+    namespace Accounts
+    {
+        class AccountManager;
+    }
 }
 
 #ifdef LIBLASTFM_FOUND
@@ -119,6 +124,7 @@ private:
     QWeakPointer<Tomahawk::InfoSystem::InfoSystem> m_infoSystem;
     QWeakPointer<XMPPBot> m_xmppBot;
     QWeakPointer<Tomahawk::ShortcutHandler> m_shortcutHandler;
+    QWeakPointer< Tomahawk::Accounts::AccountManager > m_accountManager;
     bool m_scrubFriendlyName;
 
 #ifdef LIBLASTFM_FOUND
@@ -139,3 +145,7 @@ Q_DECLARE_METATYPE( QPersistentModelIndex );
 
 #endif // TOMAHAWKAPP_H
 
+
+struct A;
+
+struct A;

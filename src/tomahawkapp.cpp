@@ -35,6 +35,7 @@
 #include "album.h"
 #include "collection.h"
 #include "infosystem/infosystem.h"
+#include "accounts/accountmanager.h"
 #include "database/database.h"
 #include "database/databasecollection.h"
 #include "database/databasecommand_collectionstats.h"
@@ -212,6 +213,10 @@ TomahawkApp::init()
         connect( m_shortcutHandler.data(), SIGNAL( mute() ), m_audioEngine.data(), SLOT( mute() ) );
     }
 
+    tDebug() << "Init AccountManager.";
+    m_accountManager = QWeakPointer< Tomahawk::Accounts::AccountManager >( new Tomahawk::Accounts::AccountManager( this ) );
+    Tomahawk::Accounts::AccountManager::instance()->loadFromConfig();
+    
     tDebug() << "Init InfoSystem.";
     m_infoSystem = QWeakPointer<Tomahawk::InfoSystem::InfoSystem>( new Tomahawk::InfoSystem::InfoSystem( this ) );
 
@@ -499,6 +504,12 @@ TomahawkApp::initServent()
 void
 TomahawkApp::initSIP()
 {
+    foreach ( Tomahawk::Accounts::Account* account, Tomahawk::Accounts::AccountManager::instance()->getAccounts() )
+    {
+        if ( account->configurationWidget() )
+            account->configurationWidget()->show();
+    }
+    
     //FIXME: jabber autoconnect is really more, now that there is sip -- should be renamed and/or split out of jabber-specific settings
     if ( !arguments().contains( "--nosip" ) )
     {
