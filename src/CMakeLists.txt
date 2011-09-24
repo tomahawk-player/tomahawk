@@ -63,7 +63,7 @@ SET( tomahawkSourcesGui ${tomahawkSourcesGui}
      sourcetree/items/genericpageitems.cpp
      sourcetree/items/temporarypageitem.cpp
 
-#     breakpad/BreakPad.cpp
+     breakpad/BreakPad.cpp
 
      tomahawktrayicon.cpp
      audiocontrols.cpp
