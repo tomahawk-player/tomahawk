@@ -434,6 +434,8 @@ MprisPlugin::Stop()
 void
 MprisPlugin::getInfo( uint requestId, Tomahawk::InfoSystem::InfoRequestData requestData )
 {
+  Q_UNUSED( requestId );
+  Q_UNUSED( requestData );
   qDebug() << Q_FUNC_INFO;
 
   return;
@@ -442,6 +444,7 @@ MprisPlugin::getInfo( uint requestId, Tomahawk::InfoSystem::InfoRequestData requ
 void
 MprisPlugin::pushInfo( QString caller, Tomahawk::InfoSystem::InfoType type, QVariant input )
 {
+    Q_UNUSED( caller );
     qDebug() << Q_FUNC_INFO;
     bool isPlayingInfo = false;
 
@@ -476,7 +479,8 @@ MprisPlugin::pushInfo( QString caller, Tomahawk::InfoSystem::InfoType type, QVar
 void
 MprisPlugin::stateChanged( AudioState newState, AudioState oldState )
 {
-
+    Q_UNUSED( newState );
+    Q_UNUSED( oldState );
 }
 
 /** Audio state slots */
@@ -504,6 +508,7 @@ MprisPlugin::audioStarted( const QVariant &input )
 void
 MprisPlugin::audioFinished( const QVariant &input )
 {
+    Q_UNUSED( input );
     //qDebug() << Q_FUNC_INFO;
 }
 

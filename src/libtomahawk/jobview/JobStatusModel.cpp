@@ -63,6 +63,7 @@ JobStatusModel::addJob( JobStatusItem* item )
 Qt::ItemFlags
 JobStatusModel::flags( const QModelIndex& index ) const
 {
+    Q_UNUSED( index );
     // Don't let the items be selectable
     return Qt::ItemIsEnabled;
 }
@@ -102,6 +103,7 @@ JobStatusModel::data( const QModelIndex& index, int role ) const
 int
 JobStatusModel::rowCount( const QModelIndex& parent ) const
 {
+    Q_UNUSED( parent );
     return m_items.count();
 }
 

@@ -401,6 +401,7 @@ SourceTreeView::doLatchOff( const source_ptr& source )
 void
 SourceTreeView::playlistChanged( PlaylistInterface* newInterface )
 {
+    Q_UNUSED( newInterface );
     // If we were latched on and changed, send the listening along stop
     if ( m_latch.isNull() )
     {

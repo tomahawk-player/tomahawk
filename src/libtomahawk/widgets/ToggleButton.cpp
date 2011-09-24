@@ -68,6 +68,8 @@ ToggleButton::mouseReleaseEvent( QMouseEvent* event )
 void
 ToggleButton::paintEvent( QPaintEvent* event )
 {
+    Q_UNUSED( event );
+    
     QPainter p( this );
 
     p.save();

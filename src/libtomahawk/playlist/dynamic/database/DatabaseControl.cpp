@@ -40,6 +40,7 @@ DatabaseControl::DatabaseControl( const QString& sql, const QString& summary, co
     , m_sql( sql )
     , m_sqlSummary( summary )
 {
+    Q_UNUSED( parent );
     setType( "database" );
 }
 
@@ -72,6 +73,7 @@ QString DatabaseControl::matchString() const
 
 void DatabaseControl::setInput ( const QString& input )
 {
+    Q_UNUSED( input );
     // TODO
     updateWidgets();
 }

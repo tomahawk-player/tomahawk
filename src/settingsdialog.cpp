@@ -550,6 +550,7 @@ SettingsDialog::getMoreResolvers()
 #elif defined(LIBATTICA_FOUND)
     GetNewStuffDialog diag( this );
     int ret = diag.exec();
+    Q_UNUSED( ret );
 #endif
 
 }
@@ -584,7 +585,7 @@ SettingsDialog::scriptSelectionChanged()
 void
 SettingsDialog::getMoreResolversFinished( int ret )
 {
-
+    Q_UNUSED( ret );
 }
 
 

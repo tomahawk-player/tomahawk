@@ -32,48 +32,48 @@
 #include "utils/logger.h"
 
 
-BreadcrumbBar::BreadcrumbBar(BreadcrumbButtonFactory *buttonFactory, QWidget *parent)
-    : QWidget(parent)
-    , m_model(0)
-    , m_selectionModel(0)
-    , m_layout(new QHBoxLayout(this))
-    , m_buttonFactory(buttonFactory)
-    , m_useAnimation(false)
+BreadcrumbBar::BreadcrumbBar( BreadcrumbButtonFactory *buttonFactory, QWidget *parent )
+    : QWidget( parent )
+    , m_buttonFactory( buttonFactory )
+    , m_model( 0 )
+    , m_selectionModel( 0 )
+    , m_layout( new QHBoxLayout( this ) )
+    , m_useAnimation( false )
 
 {
-    m_layout->setSpacing(0);
-    m_layout->setMargin(0);
-    m_layout->setAlignment(Qt::AlignLeft);
+    m_layout->setSpacing( 0 );
+    m_layout->setMargin( 0 );
+    m_layout->setAlignment( Qt::AlignLeft );
 
-    setAutoFillBackground(false);
-    setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed);
+    setAutoFillBackground( false );
+    setSizePolicy( QSizePolicy::Expanding, QSizePolicy::Fixed );
 
-    setLayoutDirection(Qt::LeftToRight);
-    setLayout(m_layout);
-    setMinimumWidth(100);
+    setLayoutDirection( Qt::LeftToRight );
+    setLayout( m_layout );
+    setMinimumWidth( 100 );
     show();
 }
 
 
-BreadcrumbBar::BreadcrumbBar(QWidget *parent)
-    : QWidget(parent)
-    , m_model(0)
-    , m_selectionModel(0)
-    , m_layout(new QHBoxLayout(this))
-    , m_buttonFactory(0)
-    , m_useAnimation(false)
+BreadcrumbBar::BreadcrumbBar( QWidget *parent )
+    : QWidget( parent )
+    , m_buttonFactory( 0 )
+    , m_model( 0 )
+    , m_selectionModel( 0 )
+    , m_layout( new QHBoxLayout( this ) )
+    , m_useAnimation( false )
 
 {
-    m_layout->setSpacing(0);
-    m_layout->setMargin(0);
-    m_layout->setAlignment(Qt::AlignLeft);
+    m_layout->setSpacing( 0 );
+    m_layout->setMargin( 0 );
+    m_layout->setAlignment( Qt::AlignLeft );
 
-    setAutoFillBackground(false);
-    setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed);
+    setAutoFillBackground( false );
+    setSizePolicy( QSizePolicy::Expanding, QSizePolicy::Fixed );
 
-    setLayoutDirection(Qt::LeftToRight);
-    setLayout(m_layout);
-    setMinimumWidth(100);
+    setLayoutDirection( Qt::LeftToRight );
+    setLayout( m_layout );
+    setMinimumWidth( 100 );
     show();
 }
 
@@ -339,5 +339,6 @@ void BreadcrumbBar::currentChangedTriggered(QModelIndex const& index)
 
 void BreadcrumbBar::resizeEvent ( QResizeEvent * event )
 {
+    Q_UNUSED( event );
     collapseButtons();
 }

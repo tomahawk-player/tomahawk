@@ -65,7 +65,7 @@ PipelineStatusItem::resolving( const Tomahawk::query_ptr& query )
 }
 
 PipelineStatusManager::PipelineStatusManager( QObject* parent )
-    : QObject(parent)
+    : QObject( parent )
 {
     connect( Tomahawk::Pipeline::instance(), SIGNAL( resolving( Tomahawk::query_ptr ) ), this, SLOT( resolving( Tomahawk::query_ptr ) ) );
 }
@@ -73,6 +73,7 @@ PipelineStatusManager::PipelineStatusManager( QObject* parent )
 void
 PipelineStatusManager::resolving( const Tomahawk::query_ptr& p )
 {
+    Q_UNUSED( p );
     if ( m_curItem.isNull() )
     {
         // No current query item and we're resolving something, so show it

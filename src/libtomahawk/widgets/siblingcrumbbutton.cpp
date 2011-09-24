@@ -44,10 +44,10 @@ SiblingCrumbButton::SiblingCrumbButton(
 //    QTimer::singleShot(0, this, SLOT(activateSelf()));
 }
 
-void SiblingCrumbButton::setIndex(QModelIndex index)
+void SiblingCrumbButton::setIndex( QModelIndex index )
 {
     m_index = index;
-    setText(index.data().toString());
+    setText( index.data().toString() );
     qDebug() << "i am " << text();
     fillCombo();
 }
@@ -57,8 +57,9 @@ QModelIndex SiblingCrumbButton::index() const
     return m_index;
 }
 
-void SiblingCrumbButton::setActive(bool active)
+void SiblingCrumbButton::setActive( bool active )
 {
+    Q_UNUSED( active );
 }
 
 bool SiblingCrumbButton::isActive() const
@@ -70,19 +71,19 @@ QSize SiblingCrumbButton::sizeHint() const
 {
     // our width = width of combo + 20px for right-arrow and spacing
     const int padding = hasChildren() ? 20 : 5;
-    return m_combo->sizeHint() + QSize(padding,0);
+    return m_combo->sizeHint() + QSize( padding, 0 );
 }
 
-void SiblingCrumbButton::paintEvent(QPaintEvent *event)
+void SiblingCrumbButton::paintEvent( QPaintEvent *event )
 {
-    Q_UNUSED(event);
+    Q_UNUSED( event );
 
-    QPainter p(this);
+    QPainter p( this );
     QStyleOption opt;
-    opt.initFrom(this);
+    opt.initFrom( this );
     QRect r = opt.rect;
 
-    StyleHelper::horizontalHeader(&p, r); // draw the background
+    StyleHelper::horizontalHeader( &p, r ); // draw the background
 
     if( !hasChildren() )
         return;
@@ -93,31 +94,31 @@ void SiblingCrumbButton::paintEvent(QPaintEvent *event)
     int left = !reverse ? r.right()-rightSpacing - menuButtonWidth : r.left();
     int right = !reverse ? r.right()-rightSpacing : r.left() + menuButtonWidth;
     int height = sizeHint().height();
-    QRect arrowRect((left + right) / 2 + (reverse ? 6 : -6), 0, height, height);
+    QRect arrowRect( ( left + right ) / 2 + ( reverse ? 6 : -6 ), 0, height, height );
 
     QStyleOption arrowOpt = opt;
     arrowOpt.rect = arrowRect;
 
 
-    QLine l1(left, 0, right, height/2);
-    QLine l2(left, height, right, height/2);
+    QLine l1( left, 0, right, height/2 );
+    QLine l2( left, height, right, height/2 );
 
 
-    p.setRenderHint(QPainter::Antialiasing, true);
+    p.setRenderHint( QPainter::Antialiasing, true );
 
     // Draw the shadow
-    QColor shadow(0, 0, 0, 100);
-    p.translate(0, -1);
-    p.setPen(shadow);
-    p.drawLine(l1);
-    p.drawLine(l2);
+    QColor shadow( 0, 0, 0, 100 );
+    p.translate( 0, -1 );
+    p.setPen( shadow );
+    p.drawLine( l1 );
+    p.drawLine( l2 );
 
     // Draw the main arrow
-    QColor foreGround("#747474");
-    p.translate(0, 1);
-    p.setPen(foreGround);
-    p.drawLine(l1);
-    p.drawLine(l2);
+    QColor foreGround( "#747474" );
+    p.translate( 0, 1 );
+    p.setPen( foreGround );
+    p.drawLine( l1 );
+    p.drawLine( l2 );
 }
 
 void SiblingCrumbButton::fillCombo()

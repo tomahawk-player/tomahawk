@@ -101,12 +101,15 @@ GetNewStuffModel::data( const QModelIndex& index, int role ) const
 int
 GetNewStuffModel::rowCount( const QModelIndex& parent ) const
 {
+    Q_UNUSED( parent );
     return m_contentList.count();
 }
 
 bool
 GetNewStuffModel::setData( const QModelIndex &index, const QVariant &value, int role )
 {
+    Q_UNUSED( value );
+    Q_UNUSED( role );
     if ( !hasIndex( index.row(), index.column(), index.parent() ) )
         return false;
 
@@ -131,6 +134,9 @@ GetNewStuffModel::setData( const QModelIndex &index, const QVariant &value, int 
             break;
         case AtticaManager::NeedsUpgrade:
             AtticaManager::instance()->upgradeResolver( resolver );
+            break;
+        default:
+            //FIXME -- this handles e.g. Failed
             break;
     };
     emit dataChanged( index, index );

@@ -511,6 +511,9 @@ TomahawkWindow::onXSPFError( XSPFLoader::XSPFErrorCode error )
         case XSPFLoader::InvalidTrackError:
             QMessageBox::warning( this, tr( "Failed to save tracks" ), tr( "Some tracks in the playlist do not contain an artist and a title. They will be ignored." ), QMessageBox::Ok );
             break;
+        default:
+            //FIXME: This includes FetchError
+            break;
     }
 }
 

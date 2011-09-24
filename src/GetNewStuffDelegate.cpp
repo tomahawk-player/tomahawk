@@ -177,7 +177,6 @@ GetNewStuffDelegate::paint( QPainter* painter, const QStyleOptionViewItem& optio
     int rating = index.data( GetNewStuffModel::RatingRole ).toInt();
     const int paddingBetweenStars = 2;
     const int ratingWidth = 5 * ( m_ratingStarPositive.width() + paddingBetweenStars );
-    const int ratingY = ( btnRect.y() - ( btnRect.top() - opt.rect.y() ) / 2 ) - m_ratingStarNegative.height() / 2;
     int runningEdge = ( btnRect.right() - btnRect.width() / 2 ) - ratingWidth / 2;
     for ( int i = 1; i < 6; i++ )
     {
@@ -230,12 +229,15 @@ GetNewStuffDelegate::paint( QPainter* painter, const QStyleOptionViewItem& optio
 QSize
 GetNewStuffDelegate::sizeHint( const QStyleOptionViewItem& option, const QModelIndex& index ) const
 {
+    Q_UNUSED( option );
+    Q_UNUSED( index );
     return QSize( 200, SIZEHINT_HEIGHT );
 }
 
 bool
 GetNewStuffDelegate::editorEvent( QEvent* event, QAbstractItemModel* model, const QStyleOptionViewItem& option, const QModelIndex& index )
 {
+    Q_UNUSED( option );
     if ( event->type() == QEvent::MouseButtonRelease && m_cachedButtonRects.contains( QPair<int, int>( index.row(), index.column() ) ) )
     {
         QRect rect = m_cachedButtonRects[ QPair<int, int>( index.row(), index.column() ) ];

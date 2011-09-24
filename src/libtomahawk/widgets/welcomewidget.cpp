@@ -149,7 +149,7 @@ void
 WelcomeWidget::onPlaybackFinished( const Tomahawk::query_ptr& query )
 {
     int count = m_tracksModel->trackCount();
-    int playtime = query->playedBy().second;
+    unsigned int playtime = query->playedBy().second;
 
     if ( count )
     {

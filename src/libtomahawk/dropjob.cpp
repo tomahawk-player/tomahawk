@@ -67,6 +67,7 @@ DropJob::mimeTypes()
 bool
 DropJob::acceptsMimeData( const QMimeData* data, DropJob::DropTypes acceptedType, DropJob::DropAction acceptedAction )
 {
+    Q_UNUSED( acceptedAction );
     if ( data->hasFormat( "application/tomahawk.query.list" )
         || data->hasFormat( "application/tomahawk.plentry.list" )
         || data->hasFormat( "application/tomahawk.result.list" )
