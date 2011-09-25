@@ -66,9 +66,6 @@ public:
     explicit SettingsDialog( QWidget* parent = 0 );
     ~SettingsDialog();
 
-signals:
-    void settingsChanged();
-
 protected:
     void changeEvent( QEvent* e );
 

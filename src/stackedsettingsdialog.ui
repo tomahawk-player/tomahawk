@@ -212,6 +212,13 @@
             <item>
              <layout class="QVBoxLayout" name="verticalLayout_16">
               <item>
+               <widget class="QCheckBox" name="enableEchonestCatalog">
+                <property name="text">
+                 <string>Upload catalog to The Echo Nest to enable recommended radios.</string>
+                </property>
+               </widget>
+              </item>
+              <item>
                <widget class="QCheckBox" name="checkBoxWatchForChanges">
                 <property name="sizePolicy">
                  <sizepolicy hsizetype="Fixed" vsizetype="Fixed">

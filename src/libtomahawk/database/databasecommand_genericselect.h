@@ -24,6 +24,9 @@
 #include "databasecommand.h"
 #include "typedefs.h"
 
+#include <QStringList>
+#include <QMetaType>
+
 #include "dllmacro.h"
 
 /**
@@ -60,6 +63,7 @@ public:
     };
 
     explicit DatabaseCommand_GenericSelect( const QString& sqlSelect, QueryType type, int limitResults = -1, QObject* parent = 0 );
+    explicit DatabaseCommand_GenericSelect( const QString& sqlSelect, QueryType type, bool rawData, QObject* parent = 0 );
     virtual void exec( DatabaseImpl* lib );
     virtual bool doesMutates() const { return false; }
 
@@ -70,10 +74,14 @@ signals:
     void artists( const QList< Tomahawk::artist_ptr >& artists );
     void albums( const QList< Tomahawk::album_ptr >& albums );
 
+    void rawData( const QList< QStringList >& data );
 private:
     QString m_sqlSelect;
     QueryType m_queryType;
     int m_limit;
+    bool m_raw;
 };
+
+Q_DECLARE_METATYPE(QList<QStringList>);
 
 #endif // DATABASECOMMAND_GENERICSELECT_H

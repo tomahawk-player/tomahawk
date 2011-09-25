@@ -1,0 +1,71 @@
+/* === This file is part of Tomahawk Player - <http://tomahawk-player.org> ===
+ *
+ *   Copyright 2010-2011, Leo Franchi <lfranchi@kde.org>
+ *
+ *   Tomahawk is free software: you can redistribute it and/or modify
+ *   it under the terms of the GNU General Public License as published by
+ *   the Free Software Foundation, either version 3 of the License, or
+ *   (at your option) any later version.
+ *
+ *   Tomahawk is distributed in the hope that it will be useful,
+ *   but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ *   GNU General Public License for more details.
+ *
+ *   You should have received a copy of the GNU General Public License
+ *   along with Tomahawk. If not, see <http://www.gnu.org/licenses/>.
+ */
+
+#ifndef ECHONESTCATALOGSYNCHRONIZER_H
+#define ECHONESTCATALOGSYNCHRONIZER_H
+
+#include <echonest/Catalog.h>
+
+#include <QObject>
+
+namespace Tomahawk
+{
+
+class EchonestCatalogSynchronizer : public QObject
+{
+    Q_OBJECT
+public:
+    static EchonestCatalogSynchronizer* instance() {
+        if ( !s_instance )
+        {
+            s_instance = new EchonestCatalogSynchronizer;
+        }
+
+        return s_instance;
+    }
+
+    explicit EchonestCatalogSynchronizer(QObject *parent = 0);
+
+    Echonest::Catalog songCatalog() const { return m_songCatalog; }
+    Echonest::Catalog artistCatalog() const { return m_artistCatalog; }
+
+signals:
+
+private slots:
+    void checkSettingsChanged();
+
+    void songCreateFinished();
+    void artistCreateFinished();
+    void songUpdateFinished();
+
+    void checkTicket();
+
+    void rawTracks( const QList< QStringList >& tracks );
+private:
+    void uploadDb();
+
+    bool m_syncing;
+
+    Echonest::Catalog m_songCatalog;
+    Echonest::Catalog m_artistCatalog;
+
+    static EchonestCatalogSynchronizer* s_instance;
+};
+
+}
+#endif // ECHONESTCATALOGSYNCHRONIZER_H

@@ -25,6 +25,7 @@
 #include "playlist/dynamic/GeneratorInterface.h"
 #include "playlist/dynamic/GeneratorFactory.h"
 #include "playlist/dynamic/DynamicControl.h"
+#include "database/databasecommand_collectionattributes.h"
 
 #include "dllmacro.h"
 
@@ -61,6 +62,8 @@ public:
 
     static QStringList styles();
     static QStringList moods();
+    static QStringList userCatalogs();
+    static QByteArray catalogId( const QString& collectionId );
 
 signals:
     void paramsGenerated( const Echonest::DynamicPlaylist::PlaylistParams& );
@@ -80,6 +83,7 @@ private slots:
 
     void stylesReceived();
     void moodsReceived();
+    void collectionAttributes(PairList);
 
     void songLookupFinished();
 private:
@@ -100,6 +104,9 @@ private:
     static QStringList s_moods;
     static QNetworkReply* s_stylesJob;
     static QNetworkReply* s_moodsJob;
+
+    static bool s_catalogsFetched;
+    static QHash< QString, QString > s_catalogs;
 
     // used for the intermediary song id lookup
     QSet< QNetworkReply* > m_waiting;

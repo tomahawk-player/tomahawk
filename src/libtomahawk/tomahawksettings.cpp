@@ -473,6 +473,20 @@ TomahawkSettings::setShowOfflineSources( bool show )
     setValue( "collection/sources/showoffline", show );
 }
 
+bool
+TomahawkSettings::enableEchonestCatalogs() const
+{
+    return value( "collection/enable_catalogs", false ).toBool();
+}
+
+void
+TomahawkSettings::setEnableEchonestCatalogs( bool enable )
+{
+    setValue( "collection/enable_catalogs", enable );
+
+    emit changed();
+}
+
 QByteArray
 TomahawkSettings::playlistColumnSizes( const QString& playlistid ) const
 {

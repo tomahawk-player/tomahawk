@@ -35,6 +35,8 @@ set( libSources
     playlistinterface.cpp
     LatchManager.cpp
 
+    EchonestCatalogSynchronizer.cpp
+
     sip/SipPlugin.cpp
     sip/SipHandler.cpp
     sip/SipModel.cpp
@@ -95,6 +97,8 @@ set( libSources
     database/databasecommand_socialaction.cpp
     database/databasecommand_loadsocialactions.cpp
     database/databasecommand_genericselect.cpp
+    database/databasecommand_setcollectionattributes.cpp
+    database/databasecommand_collectionattributes.cpp
     database/database.cpp
 
     infobar/infobar.cpp
@@ -253,6 +257,8 @@ set( libHeaders
     album.h
     playlist.h
 
+    EchonestCatalogSynchronizer.h
+
     sip/SipPlugin.h
     sip/SipHandler.h
     sip/SipModel.h
@@ -313,6 +319,8 @@ set( libHeaders
     database/databasecommand_socialaction.h
     database/databasecommand_loadsocialactions.h
     database/databasecommand_genericselect.h
+    database/databasecommand_setcollectionattributes.h
+    database/databasecommand_collectionattributes.h
 
     infobar/infobar.h
 
