@@ -208,7 +208,6 @@ Tomahawk::EchonestControl::updateWidgets()
         {
             combo->addItem( str, EchonestGenerator::catalogId( str ) );
         }
-        combo->addItem( "lfranchi@gmail.com", "CATNEQO132A15A6C7A" );
 
         m_matchString = match->text();
         m_matchData = match->text();

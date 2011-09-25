@@ -1,5 +1,5 @@
 /*
-    This file was automatically generated from ./schema.sql on Sun Sep 25 10:36:01 EDT 2011.
+    This file was automatically generated from schema.sql on Thu Sep 29 17:28:17 EDT 2011.
 */
 
 static const char * tomahawk_schema_sql = 
@@ -156,7 +156,7 @@ static const char * tomahawk_schema_sql =
 "    id INTEGER REFERENCES source(id) ON DELETE CASCADE ON UPDATE CASCADE DEFERRABLE INITIALLY DEFERRED, "
 "    k TEXT NOT NULL,"
 "    v TEXT NOT NULL"
-"};"
+");"
 "CREATE TABLE IF NOT EXISTS social_attributes ("
 "    id INTEGER REFERENCES track(id) ON DELETE CASCADE ON UPDATE CASCADE DEFERRABLE INITIALLY DEFERRED,   "
 "    source INTEGER REFERENCES source(id) ON DELETE CASCADE ON UPDATE CASCADE, "

@@ -118,6 +118,9 @@ EchonestCatalogSynchronizer::artistCreateFinished()
     QNetworkReply* r = qobject_cast< QNetworkReply* >( sender() );
     Q_ASSERT( r );
 
+    // We don't support artist catalogs at the moment
+    return;
+    /*
     try
     {
         m_artistCatalog = Echonest::Catalog::parseCreate( r );
@@ -131,38 +134,72 @@ EchonestCatalogSynchronizer::artistCreateFinished()
     {
         tLog() << "Echonest threw an exception parsing artist catalog create:" << e.what();
         return;
-    }
+    }*/
 }
 
 void
 EchonestCatalogSynchronizer::rawTracks( const QList< QStringList >& tracks )
 {
     tDebug() << "Got raw tracks, num:" << tracks.size();
-    Echonest::CatalogUpdateEntries entries( tracks.size() );
-    for ( int i = 0; i < tracks.size(); i++ )
+
+//     int limit = ( tracks.size() < 1000 ) ? tracks.size() : 1000;
+
+    int cur = 0;
+    while ( cur < tracks.size() )
     {
-        if ( tracks[ i ][ 0 ].isEmpty() || tracks[ i ][ 1 ].isEmpty() )
-            continue;
+        int prev = cur;
+        cur = ( cur + 2000 > tracks.size() ) ? tracks.size() : cur + 2000;
 
-        Echonest::CatalogUpdateEntry entry;
-        entry.setAction( Echonest::CatalogTypes::Update );
-        entry.setSongName( tracks[ i ][ 0 ] );
-        entry.setArtistName( tracks[ i ][ 1 ] );
-        entry.setRelease( tracks[ i ][ 2 ] );
-        entry.setItemId( uuid().toUtf8() );
-
-        entries.append( entry );
+        tDebug() << "Enqueueing a batch of tracks to upload to echonest catalog:" << cur - prev;
+        Echonest::CatalogUpdateEntries entries( cur - prev );
+        for ( int i = prev; i < cur; i++ )
+        {
+            if ( tracks[i][0].isEmpty() || tracks[i][1].isEmpty() )
+                continue;
+            entries.append( entryFromTrack( tracks[i] ) );
+        }
+        m_queuedUpdates.enqueue( entries );
     }
+
+    doUploadJob();
+
+}
+
+void
+EchonestCatalogSynchronizer::doUploadJob()
+{
+    if ( m_queuedUpdates.isEmpty() )
+        return;
+
+    Echonest::CatalogUpdateEntries entries = m_queuedUpdates.dequeue();
 
     QNetworkReply* updateJob = m_songCatalog.update( entries );
     connect( updateJob, SIGNAL( finished() ), this, SLOT( songUpdateFinished() ) );
 }
+
+
+Echonest::CatalogUpdateEntry
+EchonestCatalogSynchronizer::entryFromTrack( const QStringList& track ) const
+{
+    //qDebug() << "UPLOADING:" << track[0] << track[1] << track[2];
+    Echonest::CatalogUpdateEntry entry;
+    entry.setAction( Echonest::CatalogTypes::Update );
+    entry.setSongName( escape( track[ 0 ] ) );
+    entry.setArtistName( escape( track[ 1 ] ) );
+    entry.setRelease( escape( track[ 2 ] ) );
+    entry.setItemId( uuid().toUtf8() );
+
+    return entry;
+}
+
 
 void
 EchonestCatalogSynchronizer::songUpdateFinished()
 {
     QNetworkReply* r = qobject_cast< QNetworkReply* >( sender() );
     Q_ASSERT( r );
+
+    doUploadJob();
 
     try
     {
@@ -192,4 +229,10 @@ EchonestCatalogSynchronizer::checkTicket()
         tLog() << "Echonest threw an exception parsing catalog create:" << e.what();
         return;
     }
+}
+
+QByteArray
+EchonestCatalogSynchronizer::escape( const QString &in ) const
+{
+    return QUrl::toPercentEncoding( in );
 }

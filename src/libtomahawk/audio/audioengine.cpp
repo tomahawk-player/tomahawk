@@ -19,6 +19,7 @@
 #include "audioengine.h"
 
 #include <QUrl>
+#include <QNetworkReply>
 
 #include "playlistinterface.h"
 #include "sourceplaylistinterface.h"
@@ -27,6 +28,7 @@
 #include "database/database.h"
 #include "database/databasecommand_logplayback.h"
 #include "network/servent.h"
+#include "utils/qnr_iodevicestream.h"
 
 #include "album.h"
 
@@ -424,7 +426,10 @@ AudioEngine::loadTrack( const Tomahawk::result_ptr& result )
 
             if ( !isHttpResult( m_currentTrack->url() ) && !isLocalResult( m_currentTrack->url() ) )
             {
-                m_mediaObject->setCurrentSource( io.data() );
+                if ( QNetworkReply* qnr_io = qobject_cast< QNetworkReply* >( io.data() ) )
+                    m_mediaObject->setCurrentSource( new QNR_IODeviceStream( qnr_io, this ) );
+                else
+                    m_mediaObject->setCurrentSource( io.data() );
                 m_mediaObject->currentSource().setAutoDelete( false );
                 m_isPlayingHttp = false;
             }

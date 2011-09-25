@@ -15,7 +15,7 @@
  *   You should have received a copy of the GNU General Public License
  *   along with Tomahawk. If not, see <http://www.gnu.org/licenses/>.
  */
-#include "DatabaseCommand_CollectionAttributes.h"
+#include "databasecommand_collectionattributes.h"
 
 #include "databaseimpl.h"
 #include "source.h"
@@ -44,7 +44,7 @@ DatabaseCommand_CollectionAttributes::exec( DatabaseImpl *lib )
     else if ( m_type == DatabaseCommand_SetCollectionAttributes::EchonestArtistCatalog )
         typeStr = "echonest_artist";
 
-    QString queryStr = QString( "SELECT k, v FROM collection_attributes WHERE k = \"%1\"" ).arg( typeStr );
+    QString queryStr = QString( "SELECT id, v FROM collection_attributes WHERE k = \"%1\"" ).arg( typeStr );
     qDebug() << "Doing queryL" << queryStr;
     query.exec( queryStr );
     PairList data;
@@ -55,5 +55,5 @@ DatabaseCommand_CollectionAttributes::exec( DatabaseImpl *lib )
         part.second = query.value( 1 ).toString();
         data << part;
     }
-    emit data;
+    emit collectionAttributes( data );
 }

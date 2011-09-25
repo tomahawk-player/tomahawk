@@ -19,14 +19,17 @@
 #ifndef ECHONESTCATALOGSYNCHRONIZER_H
 #define ECHONESTCATALOGSYNCHRONIZER_H
 
+#include "dllmacro.h"
+
 #include <echonest/Catalog.h>
 
 #include <QObject>
+#include <QQueue>
 
 namespace Tomahawk
 {
 
-class EchonestCatalogSynchronizer : public QObject
+class DLLEXPORT EchonestCatalogSynchronizer : public QObject
 {
     Q_OBJECT
 public:
@@ -58,11 +61,17 @@ private slots:
     void rawTracks( const QList< QStringList >& tracks );
 private:
     void uploadDb();
+    QByteArray escape( const QString& in ) const;
+
+    Echonest::CatalogUpdateEntry entryFromTrack( const QStringList& ) const;
+    void doUploadJob();
 
     bool m_syncing;
 
     Echonest::Catalog m_songCatalog;
     Echonest::Catalog m_artistCatalog;
+
+    QQueue< Echonest::CatalogUpdateEntries > m_queuedUpdates;
 
     static EchonestCatalogSynchronizer* s_instance;
 };

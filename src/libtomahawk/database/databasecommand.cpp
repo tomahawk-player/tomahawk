@@ -31,6 +31,7 @@
 #include "databasecommand_socialaction.h"
 
 #include "utils/logger.h"
+#include "databasecommand_setcollectionattributes.h"
 
 
 DatabaseCommand::DatabaseCommand( QObject* parent )
@@ -162,6 +163,13 @@ DatabaseCommand::factory( const QVariant& op, const source_ptr& source )
     else if( name == "socialaction" )
     {
         DatabaseCommand_SocialAction * cmd = new DatabaseCommand_SocialAction;
+        cmd->setSource( source );
+        QJson::QObjectHelper::qvariant2qobject( op.toMap(), cmd );
+        return cmd;
+    }
+    else if( name == "setcollectionattributes" )
+    {
+        DatabaseCommand_SetCollectionAttributes * cmd = new DatabaseCommand_SetCollectionAttributes;
         cmd->setSource( source );
         QJson::QObjectHelper::qvariant2qobject( op.toMap(), cmd );
         return cmd;

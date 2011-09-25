@@ -25,6 +25,7 @@
 #include "database/databasecommand_collectionattributes.h"
 #include "database/database.h"
 #include "utils/logger.h"
+#include "sourcelist.h"
 #include <QFile>
 #include <QDir>
 
@@ -386,7 +387,11 @@ EchonestGenerator::collectionAttributes(PairList data)
     QPair<QString, QString> part;
     foreach ( part, data )
     {
-        s_catalogs.insert( part.first, part.second );
+        if ( SourceList::instance()->get( part.first.toInt() ).isNull() )
+            continue;
+
+        const QString name = SourceList::instance()->get( part.first.toInt() )->friendlyName();
+        s_catalogs.insert( name, part.second );
     }
 }
 
@@ -441,7 +446,8 @@ EchonestGenerator::appendRadioType( Echonest::DynamicPlaylist::PlaylistParams& p
     /// 5. song-radio: If all the artist entries are Similar To. If some were but not all, error out.
     bool someCatalog = false;
     foreach( const dyncontrol_ptr& control, m_controls ) {
-        someCatalog = true;
+        if ( control->selectedType() == "Catalog Radio" )
+            someCatalog = true;
     }
     if( someCatalog )
         params.append( Echonest::DynamicPlaylist::PlaylistParamData( Echonest::DynamicPlaylist::Type, Echonest::DynamicPlaylist::CatalogRadioType ) );

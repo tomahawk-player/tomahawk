@@ -25,6 +25,10 @@
 
 class DatabaseCommand_SetCollectionAttributes : public DatabaseCommandLoggable
 {
+    Q_OBJECT
+    Q_PROPERTY( QByteArray     id                    READ id          WRITE setId )
+    Q_PROPERTY( int           type                   READ type        WRITE setType )
+
 public:
     enum AttributeType {
         EchonestSongCatalog = 0,
@@ -32,10 +36,18 @@ public:
     };
 
     DatabaseCommand_SetCollectionAttributes( const Tomahawk::source_ptr& source, AttributeType type, const QByteArray& id );
+    DatabaseCommand_SetCollectionAttributes() {} // JSON
     virtual void exec( DatabaseImpl* lib );
     virtual bool doesMutates() const { return true; }
+    virtual void postCommitHook();
 
-    virtual QString commandname() const { return "saveechonestcatalog"; }
+    virtual QString commandname() const { return "setcollectionattributes"; }
+
+    void setId( const QByteArray& id ) { m_id = id; }
+    QByteArray id() const { return m_id; }
+
+    void setType( int type ) { m_type = (AttributeType)type; }
+    int type() const { return (int)m_type; }
 
 private:
     AttributeType m_type;

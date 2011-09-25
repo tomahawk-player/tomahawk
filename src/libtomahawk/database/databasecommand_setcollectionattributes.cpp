@@ -15,15 +15,16 @@
  *   You should have received a copy of the GNU General Public License
  *   along with Tomahawk. If not, see <http://www.gnu.org/licenses/>.
  */
-#include "DatabaseCommand_SetCollectionAttributes.h"
+#include "databasecommand_setcollectionattributes.h"
 
 #include "databaseimpl.h"
 #include "source.h"
+#include "network/servent.h"
 
 DatabaseCommand_SetCollectionAttributes::DatabaseCommand_SetCollectionAttributes( const Tomahawk::source_ptr& source, AttributeType type, const QByteArray& id )
     : DatabaseCommandLoggable( source )
-    , m_id( id )
     , m_type( type )
+    , m_id( id )
 {
 }
 
@@ -44,7 +45,16 @@ DatabaseCommand_SetCollectionAttributes::exec( DatabaseImpl *lib )
     else if ( m_type == EchonestArtistCatalog )
         typeStr = "echonest_artist";
 
-    QString queryStr = QString( "REPLACE INTO collection_attributes ( id, k, v ) VALUES( %1, \"%2\", \"%3\" )" ).arg( sourceStr ).arg( typeStr ).arg( QString::fromUtf8( m_id ) );
+    TomahawkSqlQuery delQuery = lib->newquery();
+    delQuery.exec( QString( "DELETE FROM collection_attributes WHERE id %1" ).arg( source()->isLocal() ? QString("IS NULL") : QString( "= %1" ).arg( source()->id() )));
+
+    QString queryStr = QString( "INSERT INTO collection_attributes ( id, k, v ) VALUES( %1, \"%2\", \"%3\" )" ).arg( sourceStr ).arg( typeStr ).arg( QString::fromUtf8( m_id ) );
     qDebug() << "Doing query:" << queryStr;
     query.exec( queryStr );
+}
+
+void
+DatabaseCommand_SetCollectionAttributes::postCommitHook()
+{
+    Servent::instance()->triggerDBSync();
 }
