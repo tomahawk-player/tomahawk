@@ -54,7 +54,7 @@ JobStatusDelegate::paint( QPainter* painter, const QStyleOptionViewItem& option,
     painter->setRenderHint( QPainter::Antialiasing );
     const QRect iconRect( ICON_PADDING, ICON_PADDING + opt.rect.y(), ROW_HEIGHT - 2*ICON_PADDING, ROW_HEIGHT - 2*ICON_PADDING );
     QPixmap p = index.data( Qt::DecorationRole ).value< QPixmap >();
-    p = p.scaled( iconRect.size(), Qt::KeepAspectRatio, Qt::SmoothTransformation );
+    p = p.scaledToHeight( iconRect.height(), Qt::SmoothTransformation );
     painter->drawPixmap( iconRect, p );
 
     // draw right column if there is one

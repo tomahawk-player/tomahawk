@@ -66,7 +66,7 @@ LatchedStatusManager::LatchedStatusManager( QObject* parent )
     connect( SourceList::instance(), SIGNAL( sourceLatchedOn( Tomahawk::source_ptr, Tomahawk::source_ptr ) ), this, SLOT( latchedOn( Tomahawk::source_ptr, Tomahawk::source_ptr ) ) );
     connect( SourceList::instance(), SIGNAL( sourceLatchedOff( Tomahawk::source_ptr, Tomahawk::source_ptr ) ), this, SLOT( latchedOff( Tomahawk::source_ptr, Tomahawk::source_ptr ) ) );
 
-    m_pixmap.load( RESPATH "images/headphones.png" );
+    m_pixmap.load( RESPATH "images/headphones-bigger.png" );
 }
 
 void
