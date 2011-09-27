@@ -38,11 +38,11 @@ bool DropJob::s_canParseSpotifyPlaylists = false;
 DropJob::DropJob( QObject *parent )
     : QObject( parent )
     , m_queryCount( 0 )
-    , m_dropAction( Default )
     , m_onlyLocal( false )
     , m_getWholeArtists( false )
     , m_getWholeAlbums( false )
     , m_top10( false )
+    , m_dropAction( Default )
 {
 }
 
