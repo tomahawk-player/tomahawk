@@ -31,13 +31,13 @@
 
 using namespace Tomahawk;
 
+static QHash< QString, QWeakPointer< Result > > s_results;
+static QMutex s_mutex;
+
 
 Tomahawk::result_ptr
 Result::get( const QString& url )
 {
-    static QHash< QString, result_ptr > s_results;
-    static QMutex s_mutex;
-
     QMutexLocker lock( &s_mutex );
     if ( s_results.contains( url ) )
     {
@@ -68,6 +68,11 @@ Result::Result( const QString& url )
 
 Result::~Result()
 {
+    QMutexLocker lock( &s_mutex );
+    if ( s_results.contains( m_url ) )
+    {
+        s_results.remove( m_url );
+    }
 }
 
 
