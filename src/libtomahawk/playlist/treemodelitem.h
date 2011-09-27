@@ -42,8 +42,8 @@ public:
 
     const Tomahawk::artist_ptr& artist() const { return m_artist; };
     const Tomahawk::album_ptr& album() const { return m_album; };
-    const Tomahawk::result_ptr& result() const { return m_result; };
     const Tomahawk::query_ptr& query() const { return m_query; };
+    const Tomahawk::result_ptr& result() const;
 
     bool isPlaying() { return m_isPlaying; }
     void setIsPlaying( bool b ) { m_isPlaying = b; emit dataChanged(); }
