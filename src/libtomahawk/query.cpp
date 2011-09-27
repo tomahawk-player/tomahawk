@@ -182,8 +182,11 @@ Query::refreshResults()
 {
     tDebug() << "Re-resolving query:" << toString() << s_queries.contains( id() );
 
-    m_resolveFinished = false;
-    Pipeline::instance()->resolve( s_queries.value( id() ) );
+    if ( m_resolveFinished )
+    {
+        m_resolveFinished = false;
+        Pipeline::instance()->resolve( s_queries.value( id() ) );
+    }
 }
 
 
@@ -231,7 +234,7 @@ Query::onResolvingFinished()
 void
 Query::onResolverAdded()
 {
-    if ( m_resolveFinished && !solved() )
+    if ( !solved() )
     {
         refreshResults();
     }
@@ -241,7 +244,7 @@ Query::onResolverAdded()
 void
 Query::onResolverRemoved()
 {
-    if ( m_resolveFinished && !solved() )
+    if ( !solved() )
     {
         refreshResults();
     }
