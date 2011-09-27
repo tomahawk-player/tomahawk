@@ -25,6 +25,7 @@
 #include "network/controlconnection.h"
 #include "database/databasecommand_addsource.h"
 #include "database/databasecommand_sourceoffline.h"
+#include "database/databasecommand_updatesearchindex.h"
 #include "database/database.h"
 
 #include <QCoreApplication>
@@ -42,6 +43,7 @@ Source::Source( int id, const QString& username )
     , m_online( false )
     , m_username( username )
     , m_id( id )
+    , m_updateIndexWhenSynced( false )
     , m_state( DBSyncConnection::UNKNOWN )
     , m_cc( 0 )
     , m_avatar( 0 )
@@ -235,23 +237,43 @@ Source::onStateChanged( DBSyncConnection::State newstate, DBSyncConnection::Stat
     switch( newstate )
     {
         case DBSyncConnection::CHECKING:
+        {
             msg = tr( "Checking" );
             break;
+        }
         case DBSyncConnection::FETCHING:
+        {
             msg = tr( "Fetching" );
             break;
+        }
         case DBSyncConnection::PARSING:
+        {
             msg = tr( "Parsing" );
             break;
+        }
         case DBSyncConnection::SAVING:
+        {
             msg = tr( "Saving" );
             break;
+        }
         case DBSyncConnection::SYNCED:
+        {
+            if ( m_updateIndexWhenSynced )
+            {
+                m_updateIndexWhenSynced = false;
+
+                DatabaseCommand* cmd = new DatabaseCommand_UpdateSearchIndex();
+                Database::instance()->enqueue( QSharedPointer<DatabaseCommand>( cmd ) );
+            }
+
             msg = QString();
             break;
+        }
         case DBSyncConnection::SCANNING:
+        {
             msg = tr( "Scanning (%L1 tracks)" ).arg( info );
             break;
+        }
 
         default:
             msg = QString();
@@ -332,3 +354,9 @@ Source::reportSocialAttributesChanged( DatabaseCommand_SocialAction* action )
     }
 }
 
+
+void
+Source::updateIndexWhenSynced()
+{
+    m_updateIndexWhenSynced = true;
+}

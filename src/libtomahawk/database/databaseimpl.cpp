@@ -131,14 +131,6 @@ DatabaseImpl::loadIndex()
 }
 
 
-void
-DatabaseImpl::updateSearchIndex()
-{
-    DatabaseCommand* cmd = new DatabaseCommand_UpdateSearchIndex();
-    Database::instance()->enqueue( QSharedPointer<DatabaseCommand>( cmd ) );
-}
-
-
 bool
 DatabaseImpl::updateSchema( int oldVersion )
 {

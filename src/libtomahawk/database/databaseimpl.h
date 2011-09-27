@@ -72,9 +72,6 @@ public:
         return left.second > right.second;
     }
 
-    // indexes entries from "table" where id >= pkey
-    void updateSearchIndex();
-
     QString dbid() const { return m_dbid; }
 
     void loadIndex();
