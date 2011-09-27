@@ -39,6 +39,10 @@ DropJob::DropJob( QObject *parent )
     : QObject( parent )
     , m_queryCount( 0 )
     , m_dropAction( Default )
+    , m_onlyLocal( false )
+    , m_getWholeArtists( false )
+    , m_getWholeAlbums( false )
+    , m_top10( false )
 {
 }
 
@@ -61,6 +65,7 @@ DropJob::mimeTypes()
               << "application/tomahawk.metadata.album"
               << "application/tomahawk.mixed"
               << "text/plain";
+
     return mimeTypes;
 }
 

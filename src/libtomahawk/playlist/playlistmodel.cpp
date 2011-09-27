@@ -365,8 +365,10 @@ PlaylistModel::dropMimeData( const QMimeData* data, Qt::DropAction action, int r
     m_dropStorage.row = row;
     m_dropStorage.parent = QPersistentModelIndex( parent );
     m_dropStorage.action = action;
-    DropJob *dj = new DropJob();
-    dj->setDropAction( DropJob::Append );
+
+    DropJob* dj = new DropJob();
+    if ( action & Qt::CopyAction )
+        dj->setDropAction( DropJob::Append );
 
     connect( dj, SIGNAL( tracks( QList< Tomahawk::query_ptr > ) ), this, SLOT( parsedDroppedTracks( QList< Tomahawk::query_ptr > ) ) );
     dj->tracksFromMimeData( data );
