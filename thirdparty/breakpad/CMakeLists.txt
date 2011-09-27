@@ -66,7 +66,7 @@ IF(UNIX)
 ENDIF(UNIX)
 
 IF(WIN32)
-    ADD_DEFINITIONS( -DUNICODE )
+    ADD_DEFINITIONS( -DUNICODE -fshort-wchar )
     SET( breakpadSources
         client/windows/handler/exception_handler.cc
         client/windows/crash_generation/crash_generation_client.cc
@@ -77,5 +77,9 @@ ENDIF(WIN32)
 
 INCLUDE_DIRECTORIES(.)
 ADD_DEFINITIONS( -fPIC )
-ADD_LIBRARY( tomahawk_breakpad STATIC ${breakpadSources} )
+IF(WIN32)
+    ADD_LIBRARY( tomahawk_breakpad SHARED ${breakpadSources} )
+ELSE()
+    ADD_LIBRARY( tomahawk_breakpad STATIC ${breakpadSources} )
+ENDIF()
 TARGET_LINK_LIBRARIES( tomahawk_breakpad )
