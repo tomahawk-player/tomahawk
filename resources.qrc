@@ -121,5 +121,6 @@
         <file>data/images/headphones.png</file>
         <file>data/images/headphones-off.png</file>
         <file>data/images/headphones-sidebar.png</file>
+        <file>data/images/headphones-bigger.png</file>
     </qresource>
 </RCC>
