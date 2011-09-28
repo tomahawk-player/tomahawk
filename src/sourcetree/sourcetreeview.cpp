@@ -349,8 +349,8 @@ SourceTreeView::latchOnOrCatchUp()
 
     if ( m_latchManager->isLatched( source ) )
         emit catchUpRequest();
-
-    emit latchRequest( source );
+    else
+        emit latchRequest( source );
 }
 
 void

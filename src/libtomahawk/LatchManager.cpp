@@ -88,28 +88,9 @@ LatchManager::playlistChanged( PlaylistInterface* )
     }
 
     // We're current latched, and the user changed playlist, so stop
-    const PlaylistInterface* pi = AudioEngine::instance()->playlist();
-    bool listeningAlong = false;
-    source_ptr newSource;
-
-    if ( pi && dynamic_cast< const SourcePlaylistInterface* >( pi ) )
-    {
-        // Check if we're listening along to someone, to make sure it's not the same person
-        const SourcePlaylistInterface* sourcepi = dynamic_cast< const SourcePlaylistInterface* >( pi );
-        if ( !AudioEngine::instance()->state() == AudioEngine::Stopped )
-        {
-            listeningAlong = true;
-            newSource = sourcepi->source();
-        }
-    }
-
     SourcePlaylistInterface* origsourcepi = dynamic_cast< SourcePlaylistInterface* >( m_latchedInterface.data() );
     Q_ASSERT( origsourcepi );
     const source_ptr source = origsourcepi->source();
-
-    // if we're currently listening along to the same source, no change
-    if ( listeningAlong && ( !origsourcepi->source().isNull() && origsourcepi->source()->id() == newSource->id() ) )
-        return;
 
     DatabaseCommand_SocialAction* cmd = new DatabaseCommand_SocialAction();
     cmd->setSource( SourceList::instance()->getLocal() );
