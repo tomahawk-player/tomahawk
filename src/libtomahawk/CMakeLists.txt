@@ -33,6 +33,7 @@ set( libSources
     contextmenu.cpp
     dropjob.cpp
     playlistinterface.cpp
+    LatchManager.cpp
 
     sip/SipPlugin.cpp
     sip/SipHandler.cpp
@@ -246,6 +247,7 @@ set( libHeaders
     contextmenu.h
     dropjob.h
     AtticaManager.h
+    LatchManager.h
 
     artist.h
     album.h

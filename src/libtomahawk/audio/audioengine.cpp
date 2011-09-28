@@ -561,7 +561,10 @@ AudioEngine::playItem( Tomahawk::PlaylistInterface* playlist, const Tomahawk::re
     else if ( !m_playlist.isNull() && m_playlist.data()->retryMode() == PlaylistInterface::Retry )
     {
         m_waitingOnNewTrack = true;
-        stop();
+        if ( isStopped() )
+            sendWaitingNotification();
+        else
+            stop();
     }
 }
 
