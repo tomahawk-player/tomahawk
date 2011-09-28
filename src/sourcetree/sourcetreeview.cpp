@@ -153,14 +153,6 @@ SourceTreeView::setupMenus()
                 m_latchOffAction = m_latchMenu.addAction( tr( "&Stop Listening Along" ) );
                 connect( m_latchOffAction,       SIGNAL( triggered() ), SLOT( latchOff() ) );
             }
-//             PlaylistInterface* pi = AudioEngine::instance()->playlist();
-//             if ( pi && dynamic_cast< SourcePlaylistInterface* >( pi ) )
-//             {
-//                 SourcePlaylistInterface* sourcepi = dynamic_cast< SourcePlaylistInterface* >( pi );
-//                 if ( !sourcepi->source().isNull() && sourcepi->source()->id() == source->id() && !AudioEngine::instance()->state() == AudioEngine::Stopped )
-//                 {
-//                 }
-//             }
         }
     }
 
