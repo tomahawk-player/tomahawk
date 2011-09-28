@@ -128,7 +128,7 @@ Result::id() const
 bool
 Result::isOnline() const
 {
-    return ( !collection().isNull() && collection()->source()->isOnline() );
+    return ( ( !collection().isNull() && collection()->source()->isOnline() ) || collection().isNull() );
 }
 
 
