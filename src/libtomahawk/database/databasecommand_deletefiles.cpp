@@ -132,7 +132,7 @@ DatabaseCommand_DeleteFiles::exec( DatabaseImpl* dbi )
         }
 
         foreach( const QVariant& id, m_ids )
-                m_files << QString( "servent://%1\t%2" ).arg( source()->userName() ).arg( id.toString() );
+            m_files << QString( "servent://%1\t%2" ).arg( source()->userName() ).arg( id.toString() );
     }
 
     if ( m_deleteAll )
