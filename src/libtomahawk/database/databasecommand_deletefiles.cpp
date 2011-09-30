@@ -120,8 +120,21 @@ DatabaseCommand_DeleteFiles::exec( DatabaseImpl* dbi )
     }
     else
     {
-        foreach( const QVariant& id, m_ids )
-            m_files << QString( "servent://%1\t%2" ).arg( source()->userName() ).arg( id.toString() );
+        if ( m_deleteAll )
+        {
+            TomahawkSqlQuery dirquery = dbi->newquery();
+            
+            dirquery.prepare( QString( "SELECT url FROM file WHERE source = %1" ).arg( source()->id() ) );
+            
+            dirquery.exec();
+            while ( dirquery.next() )
+                m_files << dirquery.value( 0 ).toString();
+        }
+        else
+        {
+            foreach( const QVariant& id, m_ids )
+                m_files << QString( "servent://%1\t%2" ).arg( source()->userName() ).arg( id.toString() );
+        }
     }
 
     if ( m_deleteAll )
@@ -148,10 +161,7 @@ DatabaseCommand_DeleteFiles::exec( DatabaseImpl* dbi )
 
         QString idstring;
         foreach( const QVariant& id, m_ids )
-        {
-            if ( source()->isLocal() )
                 idstring.append( '"' + id.toString() + "\", " );
-        }
         idstring.chop( 3 ); //remove the trailing "\", "
 
         delquery.bindValue( 0, idstring );
