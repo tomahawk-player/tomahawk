@@ -28,6 +28,7 @@
 #include "sourcelist.h"
 #include <QFile>
 #include <QDir>
+#include <EchonestCatalogSynchronizer.h>
 
 using namespace Tomahawk;
 
@@ -37,8 +38,7 @@ QStringList EchonestGenerator::s_styles = QStringList();
 QNetworkReply* EchonestGenerator::s_moodsJob = 0;
 QNetworkReply* EchonestGenerator::s_stylesJob = 0;
 
-bool EchonestGenerator::s_catalogsFetched = false;
-QHash< QString, QString > EchonestGenerator::s_catalogs = QHash< QString, QString >();
+CatalogManager* EchonestGenerator::s_catalogs = 0;
 
 
 EchonestFactory::EchonestFactory()
@@ -63,16 +63,52 @@ EchonestFactory::createControl( const QString& controlType )
 QStringList
 EchonestFactory::typeSelectors() const
 {
-    QStringList types =  QStringList() << "Artist" << "Artist Description" << "Song" << "Mood" << "Style" << "Variety" << "Tempo" << "Duration" << "Loudness"
+    QStringList types =  QStringList() << "Artist" << "Artist Description" << "User Radio" << "Song" << "Mood" << "Style" << "Variety" << "Tempo" << "Duration" << "Loudness"
                           << "Danceability" << "Energy" << "Artist Familiarity" << "Artist Hotttnesss" << "Song Hotttnesss"
                           << "Longitude" << "Latitude" <<  "Mode" << "Key" << "Sorting";
 
-    if ( TomahawkSettings::instance()->enableEchonestCatalogs() )
-    {
-        types.insert( 2, "Catalog Radio" );
-        types.insert( 3, "Adventurousness" );
-    }
     return types;
+}
+
+CatalogManager::CatalogManager( QObject* parent )
+    : QObject( parent )
+{
+    connect( EchonestCatalogSynchronizer::instance(), SIGNAL( knownCatalogsChanged() ), this, SLOT( doCatalogUpdate() ) );
+    connect( SourceList::instance(), SIGNAL( ready() ), this, SLOT( doCatalogUpdate() ) );
+
+    doCatalogUpdate();
+}
+
+void
+CatalogManager::collectionAttributes( const PairList& data )
+{
+    QPair<QString, QString> part;
+    m_catalogs.clear();
+
+    foreach ( part, data )
+    {
+        if ( SourceList::instance()->get( part.first.toInt() ).isNull() )
+            continue;
+
+        const QString name = SourceList::instance()->get( part.first.toInt() )->friendlyName();
+        m_catalogs.insert( name, part.second );
+    }
+
+    emit catalogsUpdated();
+}
+
+void
+CatalogManager::doCatalogUpdate()
+{
+    QSharedPointer< DatabaseCommand > cmd( new DatabaseCommand_CollectionAttributes( DatabaseCommand_SetCollectionAttributes::EchonestSongCatalog ) );
+    connect( cmd.data(), SIGNAL( collectionAttributes( PairList ) ), this, SLOT( collectionAttributes( PairList ) ) );
+    Database::instance()->enqueue( cmd );
+}
+
+QHash< QString, QString >
+CatalogManager::catalogs() const
+{
+    return m_catalogs;
 }
 
 
@@ -86,17 +122,13 @@ EchonestGenerator::EchonestGenerator ( QObject* parent )
     m_logo.load( RESPATH "/images/echonest_logo.png" );
 
     loadStylesAndMoods();
-    if ( s_catalogs.isEmpty() && TomahawkSettings::instance()->enableEchonestCatalogs() )
-    {
-        if ( !s_catalogsFetched )
-        {
-            QSharedPointer< DatabaseCommand > cmd( new DatabaseCommand_CollectionAttributes( DatabaseCommand_SetCollectionAttributes::EchonestSongCatalog ) );
-            connect( cmd.data(), SIGNAL(collectionAttributes(PairList)),
-                     this, SLOT(collectionAttributes(PairList) ) );
-            Database::instance()->enqueue( cmd );
-            s_catalogsFetched = true;
-        }
-    }
+
+    // TODO Yes this is a race condition. If multiple threads initialize echonestgenerator at the exact same time we could run into some issues.
+    // not dealing with that right now.
+    if ( s_catalogs == 0 )
+        s_catalogs = new CatalogManager( this );
+
+    connect( s_catalogs, SIGNAL( catalogsUpdated() ), this, SLOT( knownCatalogsChanged() ) );
 //    qDebug() << "ECHONEST:" << m_logo.size();
 }
 
@@ -118,6 +150,16 @@ EchonestGenerator::createControl( const QString& type )
 QPixmap EchonestGenerator::logo()
 {
     return m_logo;
+}
+
+void
+EchonestGenerator::knownCatalogsChanged()
+{
+    // Refresh all contrls
+    foreach( const dyncontrol_ptr& control, m_controls )
+    {
+        control.staticCast< EchonestControl >()->updateWidgetsFromData();
+    }
 }
 
 
@@ -381,30 +423,17 @@ EchonestGenerator::resetSteering()
     m_steerData.second = QString();
 }
 
-void
-EchonestGenerator::collectionAttributes(PairList data)
-{
-    QPair<QString, QString> part;
-    foreach ( part, data )
-    {
-        if ( SourceList::instance()->get( part.first.toInt() ).isNull() )
-            continue;
-
-        const QString name = SourceList::instance()->get( part.first.toInt() )->friendlyName();
-        s_catalogs.insert( name, part.second );
-    }
-}
 
 QByteArray
 EchonestGenerator::catalogId(const QString &collectionId)
 {
-    return s_catalogs.value( collectionId ).toUtf8();
+    return s_catalogs->catalogs().value( collectionId ).toUtf8();
 }
 
 QStringList
 EchonestGenerator::userCatalogs()
 {
-    return s_catalogs.keys();
+    return s_catalogs->catalogs().keys();
 }
 
 bool
@@ -446,7 +475,7 @@ EchonestGenerator::appendRadioType( Echonest::DynamicPlaylist::PlaylistParams& p
     /// 5. song-radio: If all the artist entries are Similar To. If some were but not all, error out.
     bool someCatalog = false;
     foreach( const dyncontrol_ptr& control, m_controls ) {
-        if ( control->selectedType() == "Catalog Radio" )
+        if ( control->selectedType() == "User Radio" )
             someCatalog = true;
     }
     if( someCatalog )

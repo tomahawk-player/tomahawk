@@ -29,6 +29,7 @@
 #include "EchonestGenerator.h"
 
 #include "utils/logger.h"
+#include <sourcelist.h>
 
 
 QHash< QString, QStringList > Tomahawk::EchonestControl::s_suggestCache = QHash< QString, QStringList >();
@@ -198,7 +199,7 @@ Tomahawk::EchonestControl::updateWidgets()
         input->hide();
         m_match = QWeakPointer< QWidget >( match );
         m_input = QWeakPointer< QWidget >( input );
-    } else if( selectedType() == "Catalog Radio" ) {
+    } else if( selectedType() == "User Radio" ) {
         m_currentType = Echonest::DynamicPlaylist::SourceCatalog;
 
         QLabel* match = new QLabel( tr( "from user" ) );
@@ -208,6 +209,12 @@ Tomahawk::EchonestControl::updateWidgets()
         {
             combo->addItem( str, EchonestGenerator::catalogId( str ) );
         }
+
+        if ( EchonestGenerator::userCatalogs().isEmpty() )
+            combo->addItem( tr( "No users with Echo Nest Catalogs enabled. Try enabling option in Collection settings" ) );
+
+        if ( combo->findData( m_data.second ) < 0 )
+            combo->setCurrentIndex( 0 );
 
         m_matchString = match->text();
         m_matchData = match->text();
@@ -493,7 +500,7 @@ Tomahawk::EchonestControl::updateData()
         updateFromComboAndSlider();
     } else if( selectedType() == "Danceability" || selectedType() == "Energy" || selectedType() == "Artist Familiarity" || selectedType() == "Artist Hotttnesss" || selectedType() == "Song Hotttnesss" ) {
         updateFromComboAndSlider( true );
-    } else if( selectedType() == "Mode" || selectedType() == "Key" || selectedType() == "Mood" || selectedType() == "Style" || selectedType() == "Catalog Radio" ) {
+    } else if( selectedType() == "Mode" || selectedType() == "Key" || selectedType() == "Mood" || selectedType() == "Style" || selectedType() == "User Radio" ) {
         updateFromLabelAndCombo();
     } else if( selectedType() == "Sorting" ) {
         QComboBox* match = qobject_cast<QComboBox*>( m_match.data() );
@@ -556,6 +563,26 @@ Tomahawk::EchonestControl::updateWidgetsFromData()
         QLineEdit* edit = qobject_cast<QLineEdit*>( m_input.data() );
         if( edit )
             edit->setText( m_data.second.toString() );
+    } else if ( selectedType() == "User Radio"  )
+    {
+        QComboBox* combo = qobject_cast< QComboBox* >( m_input.data() );
+        if ( combo )
+        {
+            combo->clear();
+
+            foreach( const QString& str, EchonestGenerator::userCatalogs() )
+            {
+                combo->addItem( str, EchonestGenerator::catalogId( str ) );
+            }
+
+            if ( EchonestGenerator::userCatalogs().isEmpty() )
+                combo->addItem( tr( "No users with Echo Nest Catalogs enabled. Try enabling option in Collection settings" ) );
+
+            if ( combo->findData( m_data.second ) < 0 )
+                combo->setCurrentIndex( 0 );
+
+            combo->setCurrentIndex( combo->findData( m_data.second ) );
+        }
     } else if( selectedType() == "Variety" || selectedType() == "Adventurousness" ) {
         LabeledSlider* s = qobject_cast<LabeledSlider*>( m_input.data() );
         if( s )
@@ -564,7 +591,7 @@ Tomahawk::EchonestControl::updateWidgetsFromData()
         updateToComboAndSlider();
     } else if( selectedType() == "Danceability" || selectedType() == "Energy" || selectedType() == "Artist Familiarity" || selectedType() == "Artist Hotttnesss" || selectedType() == "Song Hotttnesss" ) {
         updateToComboAndSlider( true );
-    } else if( selectedType() == "Mode" || selectedType() == "Key" || selectedType() == "Mood" || selectedType() == "Style" || selectedType() == "Catalog Radio" ) {
+    } else if( selectedType() == "Mode" || selectedType() == "Key" || selectedType() == "Mood" || selectedType() == "Style") {
         updateToLabelAndCombo();
     } else if( selectedType() == "Sorting" ) {
         QComboBox* match = qobject_cast<QComboBox*>( m_match.data() );
@@ -714,6 +741,24 @@ Tomahawk::EchonestControl::calculateSummary()
             summary = QString( "similar to ~%1" ).arg( m_data.second.toString() );
     } else if( selectedType() == "Artist Description" ) {
         summary = QString( "with genre ~%1" ).arg( m_data.second.toString() );
+    } else if( selectedType() == "User Radio" ) {
+        QComboBox* b = qobject_cast< QComboBox* >( m_input.data() );
+        if ( b )
+        {
+            if ( b->currentText().isEmpty() || b->itemData( b->currentIndex() ).isNull() )
+                summary = "from no one";
+            else
+            {
+                QString subSum;
+                if ( b->currentText() == "My Collection" )
+                    subSum = "my";
+                else
+                    subSum = b->currentText();
+                summary = QString( "from %1 radio" ).arg( subSum );
+            }
+        }
+        else
+            summary = "from no one";
     } else if( selectedType() == "Artist Description" || selectedType() == "Song" ) {
         summary = QString( "similar to ~%1" ).arg( m_data.second.toString() );
     } else if( selectedType() == "Variety" || selectedType() == "Danceability" || selectedType() == "Artist Hotttnesss" || selectedType() == "Energy" || selectedType() == "Artist Familiarity" || selectedType() == "Song Hotttnesss" ) {

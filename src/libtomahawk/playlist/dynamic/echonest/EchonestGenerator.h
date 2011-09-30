@@ -34,6 +34,25 @@ namespace Tomahawk
 
 class EchonestSteerer;
 
+class CatalogManager : public QObject
+{
+    Q_OBJECT
+public:
+    CatalogManager( QObject* parent );
+
+    QHash< QString, QString > catalogs() const;
+
+signals:
+   void catalogsUpdated();
+
+private slots:
+    void doCatalogUpdate();
+    void collectionAttributes( const PairList& );
+
+private:
+    QHash< QString, QString > m_catalogs;
+};
+
 class DLLEXPORT EchonestFactory : public GeneratorFactoryInterface
 {
 public:
@@ -83,7 +102,7 @@ private slots:
 
     void stylesReceived();
     void moodsReceived();
-    void collectionAttributes(PairList);
+    void knownCatalogsChanged();
 
     void songLookupFinished();
 private:
@@ -105,8 +124,7 @@ private:
     static QNetworkReply* s_stylesJob;
     static QNetworkReply* s_moodsJob;
 
-    static bool s_catalogsFetched;
-    static QHash< QString, QString > s_catalogs;
+    static CatalogManager* s_catalogs;
 
     // used for the intermediary song id lookup
     QSet< QNetworkReply* > m_waiting;

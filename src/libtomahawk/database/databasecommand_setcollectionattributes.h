@@ -28,6 +28,7 @@ class DatabaseCommand_SetCollectionAttributes : public DatabaseCommandLoggable
     Q_OBJECT
     Q_PROPERTY( QByteArray     id                    READ id          WRITE setId )
     Q_PROPERTY( int           type                   READ type        WRITE setType )
+    Q_PROPERTY( bool          del                    READ del         WRITE setDel )
 
 public:
     enum AttributeType {
@@ -38,8 +39,7 @@ public:
     DatabaseCommand_SetCollectionAttributes( AttributeType type, const QByteArray& id );
     // Delete all attributes for the source+type
     DatabaseCommand_SetCollectionAttributes( AttributeType type, bool toDelete );
-
-    DatabaseCommand_SetCollectionAttributes() {} // JSON
+    DatabaseCommand_SetCollectionAttributes() : m_delete( false ) {} // JSON
     virtual void exec( DatabaseImpl* lib );
     virtual bool doesMutates() const { return true; }
     virtual void postCommitHook();
@@ -52,6 +52,8 @@ public:
     void setType( int type ) { m_type = (AttributeType)type; }
     int type() const { return (int)m_type; }
 
+    void setDel( bool del ) { m_delete = del; }
+    bool del() const { return m_delete; }
 private:
     bool m_delete;
     AttributeType m_type;

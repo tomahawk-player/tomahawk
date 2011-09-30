@@ -21,6 +21,7 @@
 #include "source.h"
 #include "network/servent.h"
 #include "sourcelist.h"
+#include "EchonestCatalogSynchronizer.h"
 
 DatabaseCommand_SetCollectionAttributes::DatabaseCommand_SetCollectionAttributes( AttributeType type, const QByteArray& id )
     : DatabaseCommandLoggable( )
@@ -72,5 +73,10 @@ DatabaseCommand_SetCollectionAttributes::exec( DatabaseImpl *lib )
 void
 DatabaseCommand_SetCollectionAttributes::postCommitHook()
 {
-    Servent::instance()->triggerDBSync();
+    if ( m_type == EchonestSongCatalog ||
+         m_type == EchonestArtistCatalog )
+        Tomahawk::EchonestCatalogSynchronizer::instance()->knownCatalogsChanged();
+
+    if ( source()->isLocal() )
+        Servent::instance()->triggerDBSync();
 }

@@ -50,6 +50,7 @@ public:
     Echonest::Catalog artistCatalog() const { return m_artistCatalog; }
 
 signals:
+    void knownCatalogsChanged();
 
 private slots:
     void checkSettingsChanged();
@@ -83,6 +84,8 @@ private:
     QQueue< QList< QPair< QID, QString > > > m_queuedTrackInfo;
 
     static EchonestCatalogSynchronizer* s_instance;
+
+    friend class ::DatabaseCommand_SetCollectionAttributes;
 };
 
 }

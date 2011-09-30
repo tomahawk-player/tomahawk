@@ -22,6 +22,7 @@
 #include <echonest/Playlist.h>
 
 #include "dynamic/DynamicControl.h"
+
 #include <QTimer>
 
 namespace Tomahawk

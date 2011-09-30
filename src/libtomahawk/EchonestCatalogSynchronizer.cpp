@@ -369,5 +369,12 @@ EchonestCatalogSynchronizer::trackAttributes( PairList attributes )
 QByteArray
 EchonestCatalogSynchronizer::escape( const QString &in ) const
 {
-    return QUrl::toPercentEncoding( in );
+    // TODO echonest chokes on some chars in the output. But if we percent-encode those chars it works
+    // We can't percent-encode the whole string, because then any UTF-8 chars that have been url-encoded, fail.
+    // God this sucks. It's going to break...
+    QString clean = in;
+    clean.replace( "&", "%25" );
+    clean.replace( ";", "%3B" );
+    return clean.toUtf8();
+    //return QUrl::toPercentEncoding( in. );
 }
