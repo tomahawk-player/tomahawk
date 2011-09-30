@@ -136,7 +136,39 @@ ScanManager::runScan( bool manualFull )
     if ( !Database::instance() || ( Database::instance() && !Database::instance()->isReady() ) )
         return;
 
-    runDirScan( TomahawkSettings::instance()->scannerPaths(), manualFull );
+    if ( !manualFull )
+    {
+        runDirScan( TomahawkSettings::instance()->scannerPaths(), false );
+        return;
+    }
+
+    DatabaseCommand_DirMtimes *cmd = new DatabaseCommand_DirMtimes( QMap<QString, unsigned int>() );
+    connect( cmd, SIGNAL( done( QMap< QString, unsigned int > ) ),
+                          SLOT( mtimesDeleted( QMap< QString, unsigned int > ) ) );
+
+    Database::instance()->enqueue( QSharedPointer< DatabaseCommand >( cmd ) );   
+}
+
+
+void
+ScanManager::mtimesDeleted( QMap< QString, unsigned int > returnedMap )
+{
+    Q_UNUSED( returnedMap );
+    qDebug() << Q_FUNC_INFO;
+    DatabaseCommand_DeleteFiles *cmd = new DatabaseCommand_DeleteFiles( SourceList::instance()->getLocal() );
+    connect( cmd, SIGNAL( done( const QStringList&, const Tomahawk::collection_ptr& ) ),
+                          SLOT( filesDeleted( const QStringList&, const Tomahawk::collection_ptr& ) ) );
+    
+    Database::instance()->enqueue( QSharedPointer< DatabaseCommand >( cmd ) );
+}
+
+
+void
+ScanManager::filesDeleted( const QStringList& files, const Tomahawk::collection_ptr& collection )
+{
+    Q_UNUSED( files );
+    Q_UNUSED( collection );
+    runDirScan( TomahawkSettings::instance()->scannerPaths(), true );
 }
 
 
@@ -148,12 +180,11 @@ ScanManager::runDirScan( const QStringList& paths, bool manualFull )
     if ( !Database::instance() || ( Database::instance() && !Database::instance()->isReady() ) )
         return;
 
-    if ( paths.isEmpty() || manualFull )
+    if ( paths.isEmpty() )
     {
         Database::instance()->enqueue( QSharedPointer< DatabaseCommand >( new DatabaseCommand_DeleteFiles( SourceList::instance()->getLocal() ) ) );
         Database::instance()->enqueue( QSharedPointer< DatabaseCommand >( new DatabaseCommand_DirMtimes( QMap<QString, unsigned int>() ) ) );
-        if ( paths.isEmpty() )
-            return;
+        return;
     }
 
     if ( !m_musicScannerThreadController && m_scanner.isNull() ) //still running if these are not zero

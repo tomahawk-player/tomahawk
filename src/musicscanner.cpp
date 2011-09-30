@@ -46,7 +46,7 @@ DirLister::go()
         {
             if ( m_dirmtimes.contains( dir ) )
             {
-                tDebug( LOGEXTRA ) << "Removing" << dir << "from m_dirmtimes because it's specifically requested";
+                tDebug( LOGEXTRA ) << "Removing" << dir << "from m_dirmtimes because it's specifically requested (so we want to be sure to scan it)";
                 m_dirmtimes.remove( dir );
             }
 
@@ -63,6 +63,7 @@ DirLister::go()
         m_newdirmtimes = m_dirmtimes;
     }
 
+    tDebug( LOGEXTRA ) << "m_dirmtimes = " << m_dirmtimes;
     foreach ( const QString& dir, m_dirs )
     {
         m_opcount++;
@@ -101,10 +102,11 @@ DirLister::scanDir( QDir dir, int depth, DirLister::Mode mode )
 
     if ( m_mode == TomahawkSettings::Dirs && m_dirmtimes.contains( dir.canonicalPath() ) && mtime == m_dirmtimes.value( dir.canonicalPath() ) )
     {
-        // dont scan this dir, unchanged since last time.
+        tDebug( LOGVERBOSE ) << "Dir unchanged";
     }
     else
     {
+        tDebug( LOGVERBOSE ) << "Dir changed";
         if ( m_mode == TomahawkSettings::Dirs
                     && ( m_dirmtimes.contains( dir.canonicalPath() ) || !m_recursive )
                     && mtime != m_dirmtimes.value( dir.canonicalPath() ) )
@@ -207,7 +209,8 @@ MusicScanner::setDirMtimes( const QMap< QString, unsigned int >& m )
         Database::instance()->enqueue( QSharedPointer< DatabaseCommand >( cmd ) );
         return;
     }
-    scan();
+    else
+        scan();
 }
 
 

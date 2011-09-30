@@ -19,12 +19,13 @@
 #ifndef SCANMANAGER_H
 #define SCANMANAGER_H
 
+#include "typedefs.h"
+
 #include <QHash>
 #include <QMap>
 #include <QObject>
 #include <QStringList>
 #include <QWeakPointer>
-
 #include <QSet>
 
 class MusicScanner;
@@ -56,6 +57,9 @@ private slots:
     void scanTimerTimeout();
 
     void onSettingsChanged();
+
+    void mtimesDeleted( QMap< QString, unsigned int > returnedMap );
+    void filesDeleted( const QStringList& files, const Tomahawk::collection_ptr& collection );
 
 private:
     static ScanManager* s_instance;
