@@ -32,6 +32,7 @@
 
 #include "utils/logger.h"
 #include "databasecommand_setcollectionattributes.h"
+#include "databasecommand_settrackattributes.h"
 
 
 DatabaseCommand::DatabaseCommand( QObject* parent )
@@ -170,6 +171,13 @@ DatabaseCommand::factory( const QVariant& op, const source_ptr& source )
     else if( name == "setcollectionattributes" )
     {
         DatabaseCommand_SetCollectionAttributes * cmd = new DatabaseCommand_SetCollectionAttributes;
+        cmd->setSource( source );
+        QJson::QObjectHelper::qvariant2qobject( op.toMap(), cmd );
+        return cmd;
+    }
+    else if( name == "settrackattributes" )
+    {
+        DatabaseCommand_SetTrackAttributes * cmd = new DatabaseCommand_SetTrackAttributes;
         cmd->setSource( source );
         QJson::QObjectHelper::qvariant2qobject( op.toMap(), cmd );
         return cmd;

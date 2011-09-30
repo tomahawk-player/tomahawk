@@ -24,7 +24,6 @@ DatabaseCommand_CollectionAttributes::DatabaseCommand_CollectionAttributes( Data
     : DatabaseCommand()
     , m_type( type )
 {
-    qRegisterMetaType< PairList >("PairList");
 }
 
 void

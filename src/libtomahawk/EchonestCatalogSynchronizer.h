@@ -20,6 +20,8 @@
 #define ECHONESTCATALOGSYNCHRONIZER_H
 
 #include "dllmacro.h"
+#include "query.h"
+#include "database/databasecommand_trackattributes.h"
 
 #include <echonest/Catalog.h>
 
@@ -51,19 +53,25 @@ signals:
 
 private slots:
     void checkSettingsChanged();
+    void tracksAdded( const QList<Tomahawk::query_ptr>& );
+    void tracksRemoved( const QList<Tomahawk::query_ptr>& );
 
+    // Echonest slots
     void songCreateFinished();
     void artistCreateFinished();
     void songUpdateFinished();
+    void catalogDeleted();
 
     void checkTicket();
 
-    void rawTracks( const QList< QStringList >& tracks );
+    void rawTracksAdd( const QList< QStringList >& tracks );
+
+    void trackAttributes( PairList );
 private:
     void uploadDb();
     QByteArray escape( const QString& in ) const;
 
-    Echonest::CatalogUpdateEntry entryFromTrack( const QStringList& ) const;
+    Echonest::CatalogUpdateEntry entryFromTrack( const QStringList&, Echonest::CatalogTypes::Action action ) const;
     void doUploadJob();
 
     bool m_syncing;
@@ -72,6 +80,7 @@ private:
     Echonest::Catalog m_artistCatalog;
 
     QQueue< Echonest::CatalogUpdateEntries > m_queuedUpdates;
+    QQueue< QList< QPair< QID, QString > > > m_queuedTrackInfo;
 
     static EchonestCatalogSynchronizer* s_instance;
 };

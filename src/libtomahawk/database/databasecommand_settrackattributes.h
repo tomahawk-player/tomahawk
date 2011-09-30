@@ -16,46 +16,42 @@
  *   along with Tomahawk. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef DATABASECOMMAND_SETCOLLECTIONATTRIBUTES
-#define DATABASECOMMAND_SETCOLLECTIONATTRIBUTES
+#ifndef DATABASECOMMAND_SETTRACKATTRIBUTES
+#define DATABASECOMMAND_SETTRACKATTRIBUTES
 
 #include "typedefs.h"
 #include "databasecommandloggable.h"
+
 #include <QByteArray>
 
-class DatabaseCommand_SetCollectionAttributes : public DatabaseCommandLoggable
+class DatabaseCommand_SetTrackAttributes : public DatabaseCommandLoggable
 {
     Q_OBJECT
-    Q_PROPERTY( QByteArray     id                    READ id          WRITE setId )
-    Q_PROPERTY( int           type                   READ type        WRITE setType )
-
 public:
     enum AttributeType {
-        EchonestSongCatalog = 0,
-        EchonestArtistCatalog = 1
+        EchonestCatalogId = 0,
     };
 
-    DatabaseCommand_SetCollectionAttributes( AttributeType type, const QByteArray& id );
-    // Delete all attributes for the source+type
-    DatabaseCommand_SetCollectionAttributes( AttributeType type, bool toDelete );
+    // Takes a list of <track_id, value> pairs. key is always type
+    DatabaseCommand_SetTrackAttributes( AttributeType type, QList< QPair< Tomahawk::QID, QString > > ids, bool toDelete = false );
+    // Deletes *all tracks with attribute*
+    DatabaseCommand_SetTrackAttributes( AttributeType type );
+    DatabaseCommand_SetTrackAttributes() {} // JSON
 
-    DatabaseCommand_SetCollectionAttributes() {} // JSON
     virtual void exec( DatabaseImpl* lib );
     virtual bool doesMutates() const { return true; }
-    virtual void postCommitHook();
+    virtual bool loggable() const { return m_loggable; }
 
-    virtual QString commandname() const { return "setcollectionattributes"; }
-
-    void setId( const QByteArray& id ) { m_id = id; }
-    QByteArray id() const { return m_id; }
+    virtual QString commandname() const { return "settrackattributes"; }
 
     void setType( int type ) { m_type = (AttributeType)type; }
     int type() const { return (int)m_type; }
 
 private:
-    bool m_delete;
+    bool m_loggable, m_delete;
+
     AttributeType m_type;
-    QByteArray m_id;
+    QList< QPair< Tomahawk::QID, QString > > m_tracks;
 };
 
-#endif // DATABASECOMMAND_SETCOLLECTIONATTRIBUTES
+#endif // DATABASECOMMAND_SETTRACKATTRIBUTES

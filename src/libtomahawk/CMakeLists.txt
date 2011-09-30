@@ -99,6 +99,8 @@ set( libSources
     database/databasecommand_genericselect.cpp
     database/databasecommand_setcollectionattributes.cpp
     database/databasecommand_collectionattributes.cpp
+    database/databasecommand_trackattributes.cpp
+    database/databasecommand_settrackattributes.cpp
     database/database.cpp
 
     infobar/infobar.cpp
@@ -322,6 +324,8 @@ set( libHeaders
     database/databasecommand_genericselect.h
     database/databasecommand_setcollectionattributes.h
     database/databasecommand_collectionattributes.h
+    database/databasecommand_trackattributes.h
+    database/databasecommand_settrackattributes.h
 
     infobar/infobar.h
 

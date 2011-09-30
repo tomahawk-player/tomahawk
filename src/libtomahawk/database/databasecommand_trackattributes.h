@@ -16,30 +16,36 @@
  *   along with Tomahawk. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef DATABASECOMMAND_COLLECTIONATTRIBUTES_H
-#define DATABASECOMMAND_COLLECTIONATTRIBUTES_H
+#ifndef DATABASECOMMAND_TRACKATTRIBUTES_H
+#define DATABASECOMMAND_TRACKATTRIBUTES_H
 
 #include "typedefs.h"
 #include "databasecommand.h"
-#include "databasecommand_setcollectionattributes.h"
+#include "databasecommand_collectionattributes.h"
+#include "databasecommand_settrackattributes.h"
 #include <QByteArray>
 
-class DatabaseCommand_CollectionAttributes : public DatabaseCommand
+class DatabaseCommand_TrackAttributes : public DatabaseCommand
 {
     Q_OBJECT
 public:
 
-    DatabaseCommand_CollectionAttributes( DatabaseCommand_SetCollectionAttributes::AttributeType type );
+    // Get all tracks with this attribute
+    DatabaseCommand_TrackAttributes( DatabaseCommand_SetTrackAttributes::AttributeType type );
+    // Get the specific tracks with this attribute
+    DatabaseCommand_TrackAttributes( DatabaseCommand_SetTrackAttributes::AttributeType type, const QList< Tomahawk::QID > ids );
+
     virtual void exec( DatabaseImpl* lib );
     virtual bool doesMutates() const { return false; }
 
-    virtual QString commandname() const { return "collectionattributes"; }
+    virtual QString commandname() const { return "trackattributes"; }
 
 signals:
-    void collectionAttributes( PairList );
+    void trackAttributes( PairList );
 
 private:
-    DatabaseCommand_SetCollectionAttributes::AttributeType m_type;
+    DatabaseCommand_SetTrackAttributes::AttributeType m_type;
+    QList< Tomahawk::QID > m_ids;
 };
 
 #endif

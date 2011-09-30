@@ -47,6 +47,7 @@ DatabaseCommand_DeleteFiles::postCommitHook()
     connect( this, SIGNAL( notify( QStringList ) ),
              coll,   SLOT( delTracks( QStringList ) ), Qt::QueuedConnection );
 
+    tDebug() << "Notifying of deleted tracks:" << m_files.size();
     emit notify( m_files );
 
     if( source()->isLocal() )

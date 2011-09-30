@@ -20,13 +20,23 @@
 #include "databaseimpl.h"
 #include "source.h"
 #include "network/servent.h"
+#include "sourcelist.h"
 
-DatabaseCommand_SetCollectionAttributes::DatabaseCommand_SetCollectionAttributes( const Tomahawk::source_ptr& source, AttributeType type, const QByteArray& id )
-    : DatabaseCommandLoggable( source )
+DatabaseCommand_SetCollectionAttributes::DatabaseCommand_SetCollectionAttributes( AttributeType type, const QByteArray& id )
+    : DatabaseCommandLoggable( )
+    , m_delete( false )
     , m_type( type )
     , m_id( id )
 {
 }
+
+DatabaseCommand_SetCollectionAttributes::DatabaseCommand_SetCollectionAttributes( DatabaseCommand_SetCollectionAttributes::AttributeType type, bool toDelete )
+    : DatabaseCommandLoggable()
+    , m_delete( toDelete )
+    , m_type( type )
+{
+}
+
 
 void
 DatabaseCommand_SetCollectionAttributes::exec( DatabaseImpl *lib )
@@ -34,6 +44,9 @@ DatabaseCommand_SetCollectionAttributes::exec( DatabaseImpl *lib )
     TomahawkSqlQuery query = lib->newquery();
 
     QString sourceStr;
+    if ( source().isNull() )
+        setSource( SourceList::instance()->getLocal() );
+
     if ( source().isNull() || source()->isLocal() )
         sourceStr = "NULL";
     else
@@ -47,6 +60,9 @@ DatabaseCommand_SetCollectionAttributes::exec( DatabaseImpl *lib )
 
     TomahawkSqlQuery delQuery = lib->newquery();
     delQuery.exec( QString( "DELETE FROM collection_attributes WHERE id %1" ).arg( source()->isLocal() ? QString("IS NULL") : QString( "= %1" ).arg( source()->id() )));
+
+    if ( m_delete )
+        return;
 
     QString queryStr = QString( "INSERT INTO collection_attributes ( id, k, v ) VALUES( %1, \"%2\", \"%3\" )" ).arg( sourceStr ).arg( typeStr ).arg( QString::fromUtf8( m_id ) );
     qDebug() << "Doing query:" << queryStr;
