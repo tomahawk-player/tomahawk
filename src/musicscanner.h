@@ -50,8 +50,8 @@ public:
         MTimeOnly
     };
 
-    DirLister( const QStringList& dirs, const QMap<QString, unsigned int>& dirmtimes, TomahawkSettings::ScannerMode mode, bool manualFull, bool recursive )
-        : QObject(), m_dirs( dirs ), m_dirmtimes( dirmtimes ), m_mode( mode ), m_manualFull( manualFull ), m_recursive( recursive ), m_opcount( 0 ), m_deleting( false )
+    DirLister( const QStringList& dirs, const QMap<QString, unsigned int>& dirmtimes, TomahawkSettings::ScannerMode mode, bool recursive )
+        : QObject(), m_dirs( dirs ), m_dirmtimes( dirmtimes ), m_mode( mode ), m_recursive( recursive ), m_opcount( 0 ), m_deleting( false )
     {
         qDebug() << Q_FUNC_INFO;
     }
@@ -76,7 +76,6 @@ private:
     QStringList m_dirs;
     QMap<QString, unsigned int> m_dirmtimes;
     TomahawkSettings::ScannerMode m_mode;
-    bool m_manualFull;
     bool m_recursive;
 
     QMap<QString, unsigned int> m_newdirmtimes;
@@ -92,7 +91,7 @@ class MusicScanner : public QObject
 Q_OBJECT
 
 public:
-    MusicScanner( const QStringList& dirs, TomahawkSettings::ScannerMode mode, bool manualFull, bool recursive = true, quint32 bs = 0 );
+    MusicScanner( const QStringList& dirs, TomahawkSettings::ScannerMode mode, bool recursive = true, quint32 bs = 0 );
     ~MusicScanner();
 
 signals:
@@ -127,7 +126,6 @@ private:
 
     QVariantList m_scannedfiles;
     QVariantList m_filesToDelete;
-    bool m_manualFull;
     bool m_recursive;
     quint32 m_batchsize;
 

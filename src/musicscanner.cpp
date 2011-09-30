@@ -39,7 +39,6 @@ void
 DirLister::go()
 {
     tLog() << Q_FUNC_INFO << "Recursive? :" << (m_recursive ? "true" : "false");
-    tLog() << Q_FUNC_INFO << "Manual full? :" << (m_manualFull ? "true" : "false");
 
     if ( !m_recursive )
     {
@@ -100,16 +99,15 @@ DirLister::scanDir( QDir dir, int depth, DirLister::Mode mode )
     const uint mtime = QFileInfo( dir.canonicalPath() ).lastModified().toUTC().toTime_t();
     m_newdirmtimes.insert( dir.canonicalPath(), mtime );
 
-    if ( !m_manualFull && m_mode == TomahawkSettings::Dirs && m_dirmtimes.contains( dir.canonicalPath() ) && mtime == m_dirmtimes.value( dir.canonicalPath() ) )
+    if ( m_mode == TomahawkSettings::Dirs && m_dirmtimes.contains( dir.canonicalPath() ) && mtime == m_dirmtimes.value( dir.canonicalPath() ) )
     {
         // dont scan this dir, unchanged since last time.
     }
     else
     {
-        if ( m_manualFull ||
-                ( m_mode == TomahawkSettings::Dirs
+        if ( m_mode == TomahawkSettings::Dirs
                     && ( m_dirmtimes.contains( dir.canonicalPath() ) || !m_recursive )
-                    && mtime != m_dirmtimes.value( dir.canonicalPath() ) ) )
+                    && mtime != m_dirmtimes.value( dir.canonicalPath() ) )
         {
             tDebug( LOGINFO ) << "Deleting database file entries from" << dir.canonicalPath();
             Database::instance()->enqueue( QSharedPointer<DatabaseCommand>( new DatabaseCommand_DeleteFiles( dir, SourceList::instance()->getLocal() ) ) );
@@ -141,11 +139,10 @@ DirLister::scanDir( QDir dir, int depth, DirLister::Mode mode )
 }
 
 
-MusicScanner::MusicScanner( const QStringList& dirs, TomahawkSettings::ScannerMode mode, bool manualFull, bool recursive, quint32 bs )
+MusicScanner::MusicScanner( const QStringList& dirs, TomahawkSettings::ScannerMode mode, bool recursive, quint32 bs )
     : QObject()
     , m_dirs( dirs )
-    , m_mode( manualFull ? TomahawkSettings::Dirs : mode )
-    , m_manualFull( manualFull )
+    , m_mode( mode )
     , m_recursive( recursive )
     , m_batchsize( bs )
     , m_dirListerThreadController( 0 )
@@ -235,7 +232,7 @@ MusicScanner::scan()
 
     m_dirListerThreadController = new QThread( this );
 
-    m_dirLister = QWeakPointer< DirLister >( new DirLister( m_dirs, m_dirmtimes, m_mode, m_manualFull, m_recursive ) );
+    m_dirLister = QWeakPointer< DirLister >( new DirLister( m_dirs, m_dirmtimes, m_mode, m_recursive ) );
     m_dirLister.data()->moveToThread( m_dirListerThreadController );
 
     connect( m_dirLister.data(), SIGNAL( fileToScan( QFileInfo ) ),
