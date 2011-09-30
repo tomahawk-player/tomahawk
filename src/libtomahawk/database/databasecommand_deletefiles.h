@@ -79,7 +79,6 @@ private:
     QDir m_dir;
     QVariantList m_ids;
     bool m_deleteAll;
-    QHash< QString, QString > m_localUrlMapping;
 };
 
 #endif // DATABASECOMMAND_DELETEFILES_H
