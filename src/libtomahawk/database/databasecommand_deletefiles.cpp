@@ -107,6 +107,16 @@ DatabaseCommand_DeleteFiles::exec( DatabaseImpl* dbi )
             while ( dirquery.next() )
                 m_files << dirquery.value( 1 ).toString();
         }
+        else if ( m_deleteAll )
+        {
+            TomahawkSqlQuery dirquery = dbi->newquery();
+            
+            dirquery.prepare( QString( "SELECT url FROM file WHERE source IS NULL" ) );
+            
+            dirquery.exec();
+            while ( dirquery.next() )
+                m_files << dirquery.value( 0 ).toString();
+        }
     }
     else
     {
