@@ -71,13 +71,13 @@ DatabaseCommand_DeleteFiles::exec( DatabaseImpl* dbi )
             qDebug() << "Deleting" << m_dir.path() << "from db for localsource" << srcid;
             TomahawkSqlQuery dirquery = dbi->newquery();
 
-            dirquery.prepare( QString( "SELECT url FROM file WHERE source IS NULL AND url LIKE ?" ) );
+            dirquery.prepare( QString( "SELECT id, url FROM file WHERE source IS NULL AND url LIKE ?" ) );
             dirquery.bindValue( 0, "file://" + m_dir.canonicalPath() + "/%" );
             dirquery.exec();
 
             while ( dirquery.next() )
             {
-                QFileInfo fi( dirquery.value( 0 ).toString().mid( 7 ) ); // remove file://
+                QFileInfo fi( dirquery.value( 1 ).toString().mid( 7 ) ); // remove file://
                 if ( fi.canonicalPath() != m_dir.canonicalPath() )
                 {
                     if ( lastPath != fi.canonicalPath() )
@@ -87,15 +87,16 @@ DatabaseCommand_DeleteFiles::exec( DatabaseImpl* dbi )
                     continue;
                 }
 
-                m_files << dirquery.value( 0 ).toString();
+                m_files << dirquery.value( 1 ).toString();
                 m_ids << dirquery.value( 0 ).toUInt();
+                m_localUrlMapping[ dirquery.value( 0 ).toString() ] = dirquery.value( 1 ).toString();;
             }
         }
         else if ( !m_ids.isEmpty() )
         {
             TomahawkSqlQuery dirquery = dbi->newquery();
 
-            dirquery.prepare( QString( "SELECT url FROM file WHERE source IS NULL AND id IN ( ? )" ) );
+            dirquery.prepare( QString( "SELECT id, url FROM file WHERE source IS NULL AND id IN ( ? )" ) );
 
             QString idstring;
             foreach( const QVariant& id, m_ids )
@@ -105,7 +106,10 @@ DatabaseCommand_DeleteFiles::exec( DatabaseImpl* dbi )
             dirquery.bindValue( 0, idstring );
             dirquery.exec();
             while ( dirquery.next() )
-                m_files << dirquery.value( 0 ).toString();
+            {
+                m_files << dirquery.value( 1 ).toString();
+                m_localUrlMapping[ dirquery.value( 0 ).toString() ] = dirquery.value( 1 ).toString();;
+            }
         }
     }
     else
@@ -137,8 +141,13 @@ DatabaseCommand_DeleteFiles::exec( DatabaseImpl* dbi )
 
         QString idstring;
         foreach( const QVariant& id, m_ids )
-            idstring.append( id.toString() + ", " );
-        idstring.chop( 2 ); //remove the trailing ", "
+        {
+            if ( source()->isLocal() )
+                idstring.append( '"' + m_localUrlMapping[ id.toString() ] + "\", " );
+            else
+                idstring.append( '"' + id.toString() + "\", " );
+        }
+        idstring.chop( 3 ); //remove the trailing "\", "
 
         delquery.bindValue( 0, idstring );
         if( !delquery.exec() )
