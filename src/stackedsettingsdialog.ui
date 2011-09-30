@@ -85,7 +85,7 @@
      <item>
       <widget class="QStackedWidget" name="stackedWidget">
        <property name="currentIndex">
-        <number>0</number>
+        <number>1</number>
        </property>
        <widget class="QWidget" name="accountsPage">
         <layout class="QVBoxLayout" name="verticalLayout_11">
@@ -213,8 +213,14 @@
              <layout class="QVBoxLayout" name="verticalLayout_16">
               <item>
                <widget class="QCheckBox" name="enableEchonestCatalog">
+                <property name="toolTip">
+                 <string>The Echo Nest supports keeping track of your catalog metadata
+ and using it to craft personalized radios. Enabling this option
+ will allow you (and all your friends) to create automatic playlists
+ and stations based on your personal taste profile.</string>
+                </property>
                 <property name="text">
-                 <string>Upload catalog to The Echo Nest to enable recommended radios.</string>
+                 <string>Upload collection list to The Echo Nest to enable user radio</string>
                 </property>
                </widget>
               </item>
