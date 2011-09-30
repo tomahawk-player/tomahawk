@@ -30,6 +30,7 @@
 
 #include "database/database.h"
 #include "database/databasecommand_dirmtimes.h"
+#include "database/databasecommand_deletefiles.h"
 
 #include "utils/logger.h"
 
@@ -146,6 +147,9 @@ ScanManager::runDirScan( const QStringList& paths, bool manualFull )
 
     if ( !Database::instance() || ( Database::instance() && !Database::instance()->isReady() ) )
         return;
+
+    if ( paths.isEmpty() )
+        Database::instance()->enqueue( QSharedPointer<DatabaseCommand>( new DatabaseCommand_DeleteFiles( SourceList::instance()->getLocal() ) ) );
 
     if ( !m_musicScannerThreadController && m_scanner.isNull() ) //still running if these are not zero
     {

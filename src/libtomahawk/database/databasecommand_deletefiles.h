@@ -32,20 +32,27 @@ class DLLEXPORT DatabaseCommand_DeleteFiles : public DatabaseCommandLoggable
 {
 Q_OBJECT
 Q_PROPERTY( QVariantList ids READ ids WRITE setIds )
+Q_PROPERTY( bool deleteAll READ deleteAll WRITE setDeleteAll )
 
 public:
     explicit DatabaseCommand_DeleteFiles( QObject* parent = 0 )
         : DatabaseCommandLoggable( parent )
     {}
 
+    explicit DatabaseCommand_DeleteFiles( const Tomahawk::source_ptr& source, QObject* parent = 0 )
+    : DatabaseCommandLoggable( parent ), m_deleteAll( true )
+    {
+        setSource( source );
+    }
+
     explicit DatabaseCommand_DeleteFiles( const QDir& dir, const Tomahawk::source_ptr& source, QObject* parent = 0 )
-    : DatabaseCommandLoggable( parent ), m_dir( dir )
+    : DatabaseCommandLoggable( parent ), m_dir( dir ), m_deleteAll( false )
     {
         setSource( source );
     }
 
     explicit DatabaseCommand_DeleteFiles( const QVariantList& ids, const Tomahawk::source_ptr& source, QObject* parent = 0 )
-    : DatabaseCommandLoggable( parent ), m_ids( ids )
+    : DatabaseCommandLoggable( parent ), m_ids( ids ), m_deleteAll( false )
     {
         setSource( source );
     }
@@ -54,23 +61,24 @@ public:
 
     virtual void exec( DatabaseImpl* );
     virtual bool doesMutates() const { return true; }
-    virtual bool localOnly() const { return m_files.isEmpty(); }
+    virtual bool localOnly() const { return false; }
     virtual void postCommitHook();
-
-    QStringList files() const { return m_files; }
-    void setFiles( const QStringList& f ) { m_files = f; }
 
     QVariantList ids() const { return m_ids; }
     void setIds( const QVariantList& i ) { m_ids = i; }
+
+    bool deleteAll() const { return m_deleteAll; }
+    void setDeleteAll( const bool deleteAll ) { m_deleteAll = deleteAll; }
 
 signals:
     void done( const QStringList&, const Tomahawk::collection_ptr& );
     void notify( const QStringList& );
 
 private:
-    QDir m_dir;
     QStringList m_files;
+    QDir m_dir;
     QVariantList m_ids;
+    bool m_deleteAll;
 };
 
 #endif // DATABASECOMMAND_DELETEFILES_H
