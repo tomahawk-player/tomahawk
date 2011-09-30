@@ -149,7 +149,10 @@ ScanManager::runDirScan( const QStringList& paths, bool manualFull )
         return;
 
     if ( paths.isEmpty() )
+    {
         Database::instance()->enqueue( QSharedPointer<DatabaseCommand>( new DatabaseCommand_DeleteFiles( SourceList::instance()->getLocal() ) ) );
+        return;
+    }
 
     if ( !m_musicScannerThreadController && m_scanner.isNull() ) //still running if these are not zero
     {
