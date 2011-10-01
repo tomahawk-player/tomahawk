@@ -28,8 +28,6 @@
 
 #include <echonest/CatalogUpdateEntry.h>
 #include <echonest/Config.h>
-#include "database/databasecommand_settrackattributes.h"
-#include "database/databasecommand_trackattributes.h"
 
 using namespace Tomahawk;
 
@@ -48,20 +46,21 @@ EchonestCatalogSynchronizer::EchonestCatalogSynchronizer( QObject *parent )
 
     const QByteArray artist = TomahawkSettings::instance()->value( "collection/artistCatalog" ).toByteArray();
     const QByteArray song = TomahawkSettings::instance()->value( "collection/songCatalog" ).toByteArray();
+
     if ( !artist.isEmpty() )
         m_artistCatalog.setId( artist );
     if ( !song.isEmpty() )
         m_songCatalog.setId( song );
 
     // Sanity check
-    if ( !m_songCatalog.id().isEmpty() && !m_syncing )
+    if ( !song.isEmpty() && !m_syncing )
     {
         // Not syncing but have a catalog id... lets fix this
         QNetworkReply* r = m_songCatalog.deleteCatalog();
         connect( r, SIGNAL( finished() ), this, SLOT( catalogDeleted() ) );
         r->setProperty( "type", "song" );
     }
-    if ( !m_artistCatalog.id().isEmpty() && !m_syncing )
+    if ( !artist.isEmpty() && !m_syncing )
     {
         QNetworkReply* r = m_artistCatalog.deleteCatalog();
         connect( r, SIGNAL( finished() ), this, SLOT( catalogDeleted() ) );
@@ -82,6 +81,7 @@ EchonestCatalogSynchronizer::checkSettingsChanged()
     } else if ( !TomahawkSettings::instance()->enableEchonestCatalogs() && m_syncing )
     {
 
+        tDebug() << "FOund echonest change, doing catalog deletes!";
         // delete all track nums and catalog ids from our peers
         {
             DatabaseCommand_SetTrackAttributes* cmd = new DatabaseCommand_SetTrackAttributes( DatabaseCommand_SetTrackAttributes::EchonestCatalogId );
@@ -212,17 +212,14 @@ EchonestCatalogSynchronizer::rawTracksAdd( const QList< QStringList >& tracks )
 
         tDebug() << "Enqueueing a batch of tracks to upload to echonest catalog:" << cur - prev;
         Echonest::CatalogUpdateEntries entries;
-        QList< QPair< QID, QString > > inserted;
         for ( int i = prev; i < cur; i++ )
         {
             if ( tracks[i][1].isEmpty() || tracks[i][2].isEmpty() )
                 continue;
             entries.append( entryFromTrack( tracks[i], Echonest::CatalogTypes::Update ) );
-            inserted << QPair< QID, QString >( tracks[i][0], entries.last().itemId() );
         }
         tDebug() << "Done queuing:" << entries.size() << "tracks";
         m_queuedUpdates.enqueue( entries );
-        m_queuedTrackInfo.enqueue( inserted );
     }
 
     doUploadJob();
@@ -249,10 +246,10 @@ EchonestCatalogSynchronizer::entryFromTrack( const QStringList& track, Echonest:
     //qDebug() << "UPLOADING:" << track[0] << track[1] << track[2];
     Echonest::CatalogUpdateEntry entry;
     entry.setAction( action );
+    entry.setItemId(track[ 0 ].toLatin1() ); // track dbid
     entry.setSongName( escape( track[ 1 ] ) );
     entry.setArtistName( escape( track[ 2 ] ) );
     entry.setRelease( escape( track[ 3 ] ) );
-    entry.setItemId( uuid().toUtf8() );
 
     return entry;
 }
@@ -263,14 +260,6 @@ EchonestCatalogSynchronizer::songUpdateFinished()
 {
     QNetworkReply* r = qobject_cast< QNetworkReply* >( sender() );
     Q_ASSERT( r );
-
-    QList< QPair< QID, QString > > ids = m_queuedTrackInfo.dequeue();
-    if ( r->error() == QNetworkReply::NoError )
-    {
-        // Save the ids of each track in the echonest catalog to our db, so we can keep track of them
-        DatabaseCommand_SetTrackAttributes* cmd = new DatabaseCommand_SetTrackAttributes( DatabaseCommand_SetTrackAttributes::EchonestCatalogId, ids );
-        Database::instance()->enqueue( QSharedPointer< DatabaseCommand >( cmd ) );
-    }
 
     try
     {
@@ -333,38 +322,32 @@ EchonestCatalogSynchronizer::tracksRemoved( const QList< query_ptr >& tracks )
     if ( !m_syncing || m_songCatalog.id().isEmpty() || tracks.isEmpty() )
         return;
 
-    // get the catalog ids, if they exist, otherwise we can't do anything with them.
-    QList< QID > qids;
+
+    Echonest::CatalogUpdateEntries entries;
+    entries.reserve( tracks.size() );
+
     foreach ( const query_ptr& q, tracks )
     {
-        qids << q->id();
-    }
+        QByteArray itemId;
+        if ( q->results().size() > 0 )
+        {
+            // Should always be the case, should have the local result from the db that we are deleting!
+            itemId = QString::number( q->results().first()->dbid() ).toLatin1();
+        }
+        else
+        {
+            tLog() << "Got deleted query_ptr with no local result! Wtf!" << q->track() << q->artist() << q->results();
+            continue;
+        }
 
-    DatabaseCommand_TrackAttributes* cmd = new DatabaseCommand_TrackAttributes( DatabaseCommand_SetTrackAttributes::EchonestCatalogId, qids );
-    connect( cmd, SIGNAL( trackAttributes( PairList ) ), this, SLOT( trackAttributes( PairList ) ) );
-    Database::instance()->enqueue( QSharedPointer< DatabaseCommand >( cmd ) );
-}
-
-void
-EchonestCatalogSynchronizer::trackAttributes( PairList attributes )
-{
-//     QString actionStr = cmd->property( "action" ).toString();
-    Echonest::CatalogTypes::Action action;
-//     if ( actionStr == "delete" )
-        action = Echonest::CatalogTypes::Delete;
-
-    Echonest::CatalogUpdateEntries entries( attributes.size() );
-    QPair< QID, QString > track;
-    foreach ( track, attributes )
-    {
-        Echonest::CatalogUpdateEntry e( action );
-        e.setItemId( track.second.toUtf8() );
+        tDebug() << "Deleting item with id:" << itemId;
+        Echonest::CatalogUpdateEntry e( Echonest::CatalogTypes::Delete );
+        e.setItemId( itemId );
         entries.append( e );
     }
 
     m_songCatalog.update( entries );
 }
-
 
 QByteArray
 EchonestCatalogSynchronizer::escape( const QString &in ) const

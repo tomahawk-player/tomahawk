@@ -66,8 +66,6 @@ private slots:
     void checkTicket();
 
     void rawTracksAdd( const QList< QStringList >& tracks );
-
-    void trackAttributes( PairList );
 private:
     void uploadDb();
     QByteArray escape( const QString& in ) const;
@@ -81,7 +79,6 @@ private:
     Echonest::Catalog m_artistCatalog;
 
     QQueue< Echonest::CatalogUpdateEntries > m_queuedUpdates;
-    QQueue< QList< QPair< QID, QString > > > m_queuedTrackInfo;
 
     static EchonestCatalogSynchronizer* s_instance;
 
