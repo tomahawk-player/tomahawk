@@ -367,8 +367,17 @@ PlaylistModel::dropMimeData( const QMimeData* data, Qt::DropAction action, int r
     m_dropStorage.action = action;
 
     DropJob* dj = new DropJob();
+
+    // On mac, drags from outside the app are still Qt::MoveActions instead of Qt::CopyAction by default
+    // so check if the drag originated in this playlist to determine whether or not to copy
+#ifdef Q_WS_MAC
+    if ( !data->hasFormat( "application/tomahawk.playlist.id" ) ||
+        data->data( "application/tomahawk.playlist.id" ) != m_playlist->guid() )
+        dj->setDropAction( DropJob::Append );
+#else
     if ( action & Qt::CopyAction )
         dj->setDropAction( DropJob::Append );
+#endif
 
     connect( dj, SIGNAL( tracks( QList< Tomahawk::query_ptr > ) ), this, SLOT( parsedDroppedTracks( QList< Tomahawk::query_ptr > ) ) );
     dj->tracksFromMimeData( data );

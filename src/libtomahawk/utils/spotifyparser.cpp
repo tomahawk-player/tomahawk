@@ -108,7 +108,7 @@ SpotifyParser::lookupSpotifyBrowse( const QString& link )
     if ( link.contains( "spotify:track" ) )
         type = DropJob::Track;
 
-    m_browseJob = new DropJobNotifier( pixmap(), QString( "Spotify" ).arg( (int)type ), type, reply );
+    m_browseJob = new DropJobNotifier( pixmap(), "Spotify", type, reply );
     JobStatusView::instance()->model()->addJob( m_browseJob );
 
     m_queries.insert( reply );
@@ -165,19 +165,12 @@ SpotifyParser::spotifyBrowseFinished()
             checkTrackFinished();
             return;
         }
-        else if ( res.contains( "trackCount" ) && res.value( "trackCount" ).toInt() < 0 )
-        {
-            tLog() << "No tracks' item in the spotify browse result... not doing anything";
-            checkTrackFinished();
-            return;
-        }
 
         QVariantMap resultResponse = res.value( res.value( "type" ).toString() ).toMap();
 
 
         if ( !resultResponse.isEmpty() )
         {
-
             m_title = resultResponse.value( "name" ).toString();
             m_single = false;
 
@@ -185,17 +178,17 @@ SpotifyParser::spotifyBrowseFinished()
                 m_creator = resultResponse.value( "creator" ).toString();
 
             // TODO for now only take the first artist
-                foreach ( QVariant result, resultResponse.value( "result" ).toList() )
-                {
-                    QVariantMap trackResult = result.toMap();
+            foreach ( QVariant result, resultResponse.value( "result" ).toList() )
+            {
+                QVariantMap trackResult = result.toMap();
 
-                    QString title, artist, album;
+                QString title, artist, album;
 
-                    title = trackResult.value( "title", QString() ).toString();
-                    artist = trackResult.value( "artist", QString() ).toString();
-                    album = trackResult.value( "album", QString() ).toString();
+                title = trackResult.value( "title", QString() ).toString();
+                artist = trackResult.value( "artist", QString() ).toString();
+                album = trackResult.value( "album", QString() ).toString();
 
-                    if ( title.isEmpty() && artist.isEmpty() ) // don't have enough...
+                if ( title.isEmpty() && artist.isEmpty() ) // don't have enough...
                 {
                     tLog() << "Didn't get an artist and track name from spotify, not enough to build a query on. Aborting" << title << artist << album;
                     return;
@@ -203,7 +196,7 @@ SpotifyParser::spotifyBrowseFinished()
 
                 Tomahawk::query_ptr q = Tomahawk::Query::get( artist, title, album, uuid(), m_trackMode );
                 m_tracks << q;
-                }
+            }
 
         }
 
