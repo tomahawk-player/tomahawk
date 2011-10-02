@@ -481,13 +481,13 @@ SourceTreeView::dragMoveEvent( QDragMoveEvent* event )
 
         if ( accept )
         {
-            //qDebug() << Q_FUNC_INFO << "Accepting";
+            //tDebug() << Q_FUNC_INFO << "Accepting";
             event->setDropAction( Qt::CopyAction );
             event->accept();
         }
         else
         {
-            qDebug() << Q_FUNC_INFO << "Ignoring";
+//             tDebug() << Q_FUNC_INFO << "Ignoring";
             event->ignore();
         }
     }
