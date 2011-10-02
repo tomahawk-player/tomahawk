@@ -1,6 +1,7 @@
 /* === This file is part of Tomahawk Player - <http://tomahawk-player.org> ===
  *
  *   Copyright 2010-2011, Leo Franchi <lfranchi@kde.org>
+ *   Copyright 2010-2011, Hugo Lindström <hugolm84@gmail.com>
  *
  *   Tomahawk is free software: you can redistribute it and/or modify
  *   it under the terms of the GNU General Public License as published by
@@ -22,6 +23,7 @@
 #include "utils/tomahawkutils.h"
 #include "query.h"
 #include "sourcelist.h"
+#include "dropjob.h"
 #include "jobview/JobStatusView.h"
 #include "jobview/JobStatusModel.h"
 
@@ -29,62 +31,18 @@
 
 #include <QtNetwork/QNetworkAccessManager>
 #include <QtNetwork/QNetworkReply>
+#include "dropjobnotifier.h"
 
 using namespace Tomahawk;
 
 QPixmap* SpotifyParser::s_pixmap = 0;
-
-SpotifyJobNotifier::SpotifyJobNotifier( QNetworkReply* job )
-    : JobStatusItem()
-    , m_type( "track" )
-    , m_job( job )
-{
-    connect( job, SIGNAL( finished() ), this, SLOT( setFinished()) );
-}
-
-SpotifyJobNotifier::SpotifyJobNotifier()
-    : JobStatusItem()
-    , m_type( "playlist" )
-    , m_job( 0 )
-{
-}
-
-
-SpotifyJobNotifier::~SpotifyJobNotifier()
-{}
-
-QString
-SpotifyJobNotifier::rightColumnText() const
-{
-    return QString();
-}
-
-QPixmap
-SpotifyJobNotifier::icon() const
-{
-    return SpotifyParser::pixmap();
-}
-
-
-QString
-SpotifyJobNotifier::mainText() const
-{
-    return tr( "Parsing Spotify %1" ).arg( m_type );
-}
-
-void
-SpotifyJobNotifier::setFinished()
-{
-    emit finished();
-}
-
 
 SpotifyParser::SpotifyParser( const QStringList& Urls, bool createNewPlaylist, QObject* parent )
     : QObject ( parent )
     , m_single( false )
     , m_trackMode( true )
     , m_createNewPlaylist( createNewPlaylist )
-    , m_playlistJob( 0 )
+    , m_browseJob( 0 )
 
 {
     foreach ( const QString& url, Urls )
@@ -96,7 +54,7 @@ SpotifyParser::SpotifyParser( const QString& Url, bool createNewPlaylist, QObjec
     , m_single( true )
     , m_trackMode( true )
     , m_createNewPlaylist( createNewPlaylist )
-    , m_playlistJob( 0 )
+    , m_browseJob( 0 )
 {
     lookupUrl( Url );
 }
@@ -114,32 +72,44 @@ SpotifyParser::lookupUrl( const QString& link )
         m_trackMode = true;
         lookupTrack( link );
     }
-    else if( link.contains( "playlist" ) )
+    else if( link.contains( "playlist" ) ||  link.contains( "album" ) || link.contains( "artist" ) )
     {
-        m_trackMode = false;
-        lookupPlaylist( link );
+        if( !m_createNewPlaylist )
+            m_trackMode = true;
+        else
+            m_trackMode = false;
+
+        lookupSpotifyBrowse( link );
     }
     else
-        return; // We only support tracks and playlists
+        return; // Not valid spotify item
 
 }
 
 
 void
-SpotifyParser::lookupPlaylist( const QString& link )
+SpotifyParser::lookupSpotifyBrowse( const QString& link )
 {
-    if ( !link.contains( "spotify:user:" ) ) // we only support playlist here
-        return;
-
-    tLog() << "Parsing Spotify Playlist URI:" << link;
-    QUrl url = QUrl( QString( SPOTIFY_PLAYLIST_API_URL "/playlist/%1" ).arg( link ) );
+    tLog() << "Parsing Spotify Browse URI:" << link;
+    QUrl url = QUrl( QString( SPOTIFY_PLAYLIST_API_URL "/browse/%1" ).arg( link ) );
     tDebug() << "Looking up URL..." << url.toString();
 
     QNetworkReply* reply = TomahawkUtils::nam()->get( QNetworkRequest( url ) );
-    connect( reply, SIGNAL( finished() ), this, SLOT( spotifyPlaylistLookupFinished() ) );
+    connect( reply, SIGNAL( finished() ), this, SLOT( spotifyBrowseFinished() ) );
 
-    m_playlistJob = new SpotifyJobNotifier();
-    JobStatusView::instance()->model()->addJob( m_playlistJob );
+    DropJob::DropType type;
+
+    if ( link.contains( "spotify:user" ) )
+        type = DropJob::Playlist;
+    if ( link.contains( "spotify:artist" ) )
+        type = DropJob::Artist;
+    if ( link.contains( "spotify:album" ) )
+        type = DropJob::Album;
+    if ( link.contains( "spotify:track" ) )
+        type = DropJob::Track;
+
+    m_browseJob = new DropJobNotifier( pixmap(), QString( "Spotify" ).arg( (int)type ), type, reply );
+    JobStatusView::instance()->model()->addJob( m_browseJob );
 
     m_queries.insert( reply );
 }
@@ -147,7 +117,6 @@ SpotifyParser::lookupPlaylist( const QString& link )
 void
 SpotifyParser::lookupTrack( const QString& link )
 {
-
     tDebug() << "Got a QString " << link;
     if ( !link.contains( "track" )) // we only support track links atm
         return;
@@ -162,12 +131,12 @@ SpotifyParser::lookupTrack( const QString& link )
     }
 
     QUrl url = QUrl( QString( "http://ws.spotify.com/lookup/1/.json?uri=%1" ).arg( uri ) );
-    tLog() << "Looking up spotify track information..." << url.toString();
+    tDebug() << "Looking up URL..." << url.toString();
 
     QNetworkReply* reply = TomahawkUtils::nam()->get( QNetworkRequest( url ) );
     connect( reply, SIGNAL( finished() ), this, SLOT( spotifyTrackLookupFinished() ) );
 
-    SpotifyJobNotifier* j = new SpotifyJobNotifier( reply );
+    DropJobNotifier* j = new DropJobNotifier( pixmap(), QString( "Spotify" ), DropJob::Track, reply );
     JobStatusView::instance()->model()->addJob( j );
 
     m_queries.insert( reply );
@@ -176,7 +145,7 @@ SpotifyParser::lookupTrack( const QString& link )
 
 
 void
-SpotifyParser::spotifyPlaylistLookupFinished()
+SpotifyParser::spotifyBrowseFinished()
 {
     QNetworkReply* r = qobject_cast< QNetworkReply* >( sender() );
     Q_ASSERT( r );
@@ -192,28 +161,50 @@ SpotifyParser::spotifyPlaylistLookupFinished()
 
         if ( !ok )
         {
-            tLog() << "Failed to parse json from Spotify playlist lookup:" << p.errorString() << "On line" << p.errorLine();
+            tLog() << "Failed to parse json from Spotify browse item :" << p.errorString() << "On line" << p.errorLine();
             checkTrackFinished();
             return;
         }
-        else if ( !res.contains( "tracks" ) )
+        else if ( res.contains( "trackCount" ) && res.value( "trackCount" ).toInt() < 0 )
         {
-            tLog() << "No tracks' item in the spotify playlist lookup result... not doing anything";
+            tLog() << "No tracks' item in the spotify browse result... not doing anything";
             checkTrackFinished();
             return;
         }
 
-        QVariantList trackResponse = res.value( "tracks" ).toList();
-        if ( !trackResponse.isEmpty() )
-        {
-           m_title = res.value( "title" ).toString();
-           m_creator = res.value( "creator" ).toString();
-           qDebug() << "playlist owner: " << m_creator;
-        }
+        QVariantMap resultResponse = res.value( res.value( "type" ).toString() ).toMap();
 
-        foreach( QVariant track, trackResponse )
+
+        if ( !resultResponse.isEmpty() )
         {
-            lookupTrack( track.toString() );
+
+            m_title = resultResponse.value( "name" ).toString();
+            m_single = false;
+
+            if ( res.value( "type" ).toString() == "playlist" )
+                m_creator = resultResponse.value( "creator" ).toString();
+
+            // TODO for now only take the first artist
+                foreach ( QVariant result, resultResponse.value( "result" ).toList() )
+                {
+                    QVariantMap trackResult = result.toMap();
+
+                    QString title, artist, album;
+
+                    title = trackResult.value( "title", QString() ).toString();
+                    artist = trackResult.value( "artist", QString() ).toString();
+                    album = trackResult.value( "album", QString() ).toString();
+
+                    if ( title.isEmpty() && artist.isEmpty() ) // don't have enough...
+                {
+                    tLog() << "Didn't get an artist and track name from spotify, not enough to build a query on. Aborting" << title << artist << album;
+                    return;
+                }
+
+                Tomahawk::query_ptr q = Tomahawk::Query::get( artist, title, album, uuid(), m_trackMode );
+                m_tracks << q;
+                }
+
         }
 
     } else
@@ -221,7 +212,10 @@ SpotifyParser::spotifyPlaylistLookupFinished()
         tLog() << "Error in network request to Spotify for track decoding:" << r->errorString();
     }
 
-    checkPlaylistFinished();
+    if ( m_trackMode )
+        checkTrackFinished();
+    else
+        checkBrowseFinished();
 }
 
 
@@ -272,7 +266,6 @@ SpotifyParser::spotifyTrackLookupFinished()
 
         Tomahawk::query_ptr q = Tomahawk::Query::get( artist, title, album, uuid(), m_trackMode );
         m_tracks << q;
-
     } else
     {
         tLog() << "Error in network request to Spotify for track decoding:" << r->errorString();
@@ -281,18 +274,20 @@ SpotifyParser::spotifyTrackLookupFinished()
     if ( m_trackMode )
         checkTrackFinished();
     else
-        checkPlaylistFinished();
+        checkBrowseFinished();
+
 }
 
 void
-SpotifyParser::checkPlaylistFinished()
+SpotifyParser::checkBrowseFinished()
 {
     tDebug() << "Checking for spotify batch playlist job finished" << m_queries.isEmpty() << m_createNewPlaylist;
     if ( m_queries.isEmpty() ) // we're done
     {
-        if ( m_playlistJob )
-            m_playlistJob->setFinished();
-        if( m_createNewPlaylist )
+        if ( m_browseJob )
+            m_browseJob->setFinished();
+
+        if( m_createNewPlaylist && !m_tracks.isEmpty() )
             m_playlist = Playlist::create( SourceList::instance()->getLocal(),
                                        uuid(),
                                        m_title,
@@ -301,12 +296,13 @@ SpotifyParser::checkPlaylistFinished()
                                        false,
                                        m_tracks );
 
-        else if ( !m_tracks.isEmpty() && !m_createNewPlaylist)
+        else if ( m_single && !m_tracks.isEmpty() )
+            emit track( m_tracks.first() );
+        else if ( !m_single && !m_tracks.isEmpty() )
             emit tracks( m_tracks );
 
         deleteLater();
     }
-
 }
 
 void
@@ -315,6 +311,9 @@ SpotifyParser::checkTrackFinished()
     tDebug() << "Checking for spotify batch track job finished" << m_queries.isEmpty();
     if ( m_queries.isEmpty() ) // we're done
     {
+        if ( m_browseJob )
+            m_browseJob->setFinished();
+
         if ( m_single && !m_tracks.isEmpty() )
             emit track( m_tracks.first() );
         else if ( !m_single && !m_tracks.isEmpty() )
@@ -326,7 +325,7 @@ SpotifyParser::checkTrackFinished()
 }
 
 QPixmap
-SpotifyParser::pixmap()
+SpotifyParser::pixmap() const
 {
     if ( !s_pixmap )
         s_pixmap = new QPixmap( RESPATH "images/spotify-logo.png" );

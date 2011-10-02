@@ -194,6 +194,7 @@ set( libSources
     utils/shortenedlinkparser.cpp
     utils/stylehelper.cpp
     utils/qnr_iodevicestream.cpp
+    utils/dropjobnotifier.cpp
 
     widgets/checkdirtree.cpp
     widgets/querylabel.cpp
@@ -413,6 +414,7 @@ set( libHeaders
     utils/rdioparser.h
     utils/shortenedlinkparser.h
     utils/qnr_iodevicestream.h
+    utils/dropjobnotifier.h
 
     widgets/checkdirtree.h
     widgets/querylabel.h

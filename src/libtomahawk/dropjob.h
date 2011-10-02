@@ -90,8 +90,9 @@ public:
     void setGetWholeAlbums( bool getWholeAlbums );
     void tracksFromMimeData( const QMimeData* data, bool allowDuplicates = false, bool onlyLocal = false, bool top10 = false );
     void handleXspf( const QString& file );
-    void handleSpPlaylist( const QString& url );
+    void handleSpotifyUrl( const QString& url );
 
+    static bool canParseSpotifyPlaylists() { return s_canParseSpotifyPlaylists; }
     static void setCanParseSpotifyPlaylists( bool parseable ) { s_canParseSpotifyPlaylists = parseable; }
 signals:
     /// QMimeData parsing results

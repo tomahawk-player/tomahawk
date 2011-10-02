@@ -1,6 +1,7 @@
 /* === This file is part of Tomahawk Player - <http://tomahawk-player.org> ===
  *
  *   Copyright 2010-2011, Leo Franchi <lfranchi@kde.org>
+ *   Copyright 2010-2011, Hugo Lindström <hugolm84@gmail.com>
  *
  *   Tomahawk is free software: you can redistribute it and/or modify
  *   it under the terms of the GNU General Public License as published by
@@ -30,40 +31,18 @@
 
 #define SPOTIFY_PLAYLIST_API_URL "http://spotikea.tomahawk-player.org:10380"
 
-class QNetworkReply;
-namespace Tomahawk
-{
-
-class DLLEXPORT SpotifyJobNotifier : public JobStatusItem
-{
-    Q_OBJECT
-public:
-    // track
-    SpotifyJobNotifier( QNetworkReply* job );
-    // playlist
-    SpotifyJobNotifier();
-    virtual ~SpotifyJobNotifier();
-
-    virtual QString rightColumnText() const;
-    virtual QString mainText() const;
-    virtual QPixmap icon() const;
-    virtual QString type() const { return m_type; }
-    virtual bool collapseItem() const { return true; }
-
-public slots:
-    void setFinished();
-
-private:
-    QString m_type;
-    QNetworkReply* m_job;
-};
-
-
 /**
  * Small class to parse spotify links into query_ptrs
  *
  * Connect to the signals to get the results
  */
+
+class QNetworkReply;
+namespace Tomahawk
+{
+
+class DropJobNotifier;
+
 class DLLEXPORT SpotifyParser : public QObject
 {
     Q_OBJECT
@@ -73,6 +52,7 @@ public:
     explicit SpotifyParser( const QStringList& trackUrls, bool createNewPlaylist = false, QObject* parent = 0 );
     virtual ~SpotifyParser();
 
+
 signals:
     void track( const Tomahawk::query_ptr& track );
     void tracks( const QList< Tomahawk::query_ptr > tracks );
@@ -80,16 +60,16 @@ signals:
 
 private slots:
     void spotifyTrackLookupFinished();
-    void spotifyPlaylistLookupFinished();
+    void spotifyBrowseFinished();
 
 private:
-    static QPixmap pixmap();
+    QPixmap pixmap() const;
 
     void lookupUrl( const QString& url );
     void lookupTrack( const QString& track );
-    void lookupPlaylist( const QString& playlist );
+    void lookupSpotifyBrowse( const QString& playlist );
     void checkTrackFinished();
-    void checkPlaylistFinished();
+    void checkBrowseFinished();
 
     bool m_single;
     bool m_trackMode;
@@ -98,7 +78,7 @@ private:
     QSet< QNetworkReply* > m_queries;
     QString m_title, m_info, m_creator;
     Tomahawk::playlist_ptr m_playlist;
-    SpotifyJobNotifier* m_playlistJob;
+    DropJobNotifier* m_browseJob;
 
     static QPixmap* s_pixmap;
 };
