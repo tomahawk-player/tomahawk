@@ -413,6 +413,7 @@ DropJob::handleSpotifyUrl( const QString& url )
 
     tDebug() << "Got a spotify browse uri in dropjob!" << browseUri;
     SpotifyParser* spot = new SpotifyParser( browseUri, dropAction() == Create, this );
+    spot->setSingleMode( false );
 
     /// This currently supports draging and dropping a spotify playlist and artist
     if ( dropAction() == Append )

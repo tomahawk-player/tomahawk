@@ -52,6 +52,10 @@ public:
     explicit SpotifyParser( const QStringList& trackUrls, bool createNewPlaylist = false, QObject* parent = 0 );
     virtual ~SpotifyParser();
 
+    // if true, emits track(), if false, emits tracks().
+    // only matters if you're using the QStrin constructor and explicityl dont' want
+    // the single track signal
+    void setSingleMode( bool single ) { m_single = single; }
 
 signals:
     void track( const Tomahawk::query_ptr& track );
