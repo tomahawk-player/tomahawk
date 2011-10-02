@@ -147,6 +147,7 @@ void
 Playlist::init()
 {
     m_busy = false;
+    m_deleted = false;
     m_locallyChanged = false;
     connect( Pipeline::instance(), SIGNAL( idle() ), SLOT( onResolvingFinished() ) );
 }
@@ -248,6 +249,7 @@ void
 Playlist::reportDeleted( const Tomahawk::playlist_ptr& self )
 {
     Q_ASSERT( self.data() == this );
+    m_deleted = true;
     m_source->collection()->deletePlaylist( self );
 
     emit deleted( self );
@@ -480,7 +482,7 @@ Playlist::onResultsFound( const QList<Tomahawk::result_ptr>& results )
 void
 Playlist::onResolvingFinished()
 {
-    if ( m_locallyChanged )
+    if ( m_locallyChanged && !m_deleted )
     {
         m_locallyChanged = false;
         createNewRevision( currentrevision(), currentrevision(), m_entries );
