@@ -46,9 +46,6 @@ ItunesParser::ItunesParser( const QStringList& urls, QObject* parent )
 
         lookupItunesUri( url );
     }
-
-    if ( !s_pixmap )
-        s_pixmap = new QPixmap( );
 }
 
 ItunesParser::ItunesParser( const QString& Url, QObject* parent )
@@ -56,9 +53,6 @@ ItunesParser::ItunesParser( const QString& Url, QObject* parent )
     , m_single( true )
 {
     lookupItunesUri( Url );
-
-    if ( !s_pixmap )
-        s_pixmap = new QPixmap( RESPATH "images/itunes.png" );
 }
 
 ItunesParser::~ItunesParser()
@@ -114,7 +108,7 @@ ItunesParser::lookupItunesUri( const QString& link )
     QNetworkReply* reply = TomahawkUtils::nam()->get( QNetworkRequest( url ) );
     connect( reply, SIGNAL( finished() ), this, SLOT( itunesResponseLookupFinished() ) );
 
-    DropJobNotifier* j = new DropJobNotifier( *s_pixmap, QString( "Itunes" ), type, reply );
+    DropJobNotifier* j = new DropJobNotifier( pixmap(), QString( "Itunes" ), type, reply );
     JobStatusView::instance()->model()->addJob( j );
 
     m_queries.insert( reply );
@@ -192,4 +186,13 @@ ItunesParser::checkTrackFinished()
         deleteLater();
     }
 
+}
+
+QPixmap
+ItunesParser::pixmap() const
+{
+    if ( !s_pixmap )
+        s_pixmap = new QPixmap( RESPATH "images/itunes.png" );
+
+    return *s_pixmap;
 }

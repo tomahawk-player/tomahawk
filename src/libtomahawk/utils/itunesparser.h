@@ -57,6 +57,7 @@ private slots:
     void itunesResponseLookupFinished();
 
 private:
+    QPixmap pixmap() const;
     void lookupItunesUri( const QString& track );
     void checkTrackFinished();
 
